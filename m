@@ -2,78 +2,153 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A274CCA479
-	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 16:59:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9D5CC433EF
+	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 17:04:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbiF1Q7C (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jun 2022 12:59:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
+        id S231295AbiF1REA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jun 2022 13:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234374AbiF1Q5l (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Jun 2022 12:57:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F87C4B
-        for <bpf@vger.kernel.org>; Tue, 28 Jun 2022 09:57:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A1197B81F12
-        for <bpf@vger.kernel.org>; Tue, 28 Jun 2022 16:57:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9E45C3411D;
-        Tue, 28 Jun 2022 16:57:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656435426;
-        bh=p3m/6+7abQz9q+v+S2ODjPD287P1BvhsQalggyw4wQk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KAA0lwBWxG+0QZn2Rcy0cxpeLyVmMV3WV3T6HuyC1RfSo4Z8nYxEDJVNna140vF0r
-         GyFiyP/h41MTuga+z8QKPrwixh9mb4g5TyxVbjuo9ifczz+5q4VwyEPgIPt6gBKz2H
-         MJLopkWButrG63/LIuYearHl0U+KBK6OyF1W4LGz3k9/k3syfsi7URa4vtdUb4Wkvl
-         3qfLioxglaBSEJnVTpJ5exbJ75MdxUdty292LUiOBJ9XlpVQwQwgVm7mgavWAyMOgs
-         3SVBjXTY1pplKEimRys80ZPmKXGZGK5D+Et9ZVH0V6ttXr6yl2cEnhW1H/WHQlAfim
-         fQjU0/MVZ/BMQ==
-Date:   Tue, 28 Jun 2022 09:57:03 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        Mykola Lysenko <mykolal@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jiri Olsa <jolsa@kernel.org>, KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Quentin Monnet <quentin@isovalent.com>
-Subject: Re: [PATCH bpf] bpf, docs: Better scale maintenance of BPF
- subsystem
-Message-ID: <20220628095703.1b01fc4e@kernel.org>
-In-Reply-To: <ac8da400-f403-7817-414d-d3001c82dc4c@iogearbox.net>
-References: <5bdc73e7f5a087299589944fa074563cdf2c2c1a.1656353995.git.daniel@iogearbox.net>
-        <20220627122535.6020f23e@kicinski-fedora-PC1C0HJN>
-        <CAADnVQLOS4kvmcp+aaX6gtDUCUfoL906K+Y4KUZOsYBDso_xMw@mail.gmail.com>
-        <20220627133027.1e141f11@kernel.org>
-        <CAADnVQKf8huK_bdGPQzOZwXJD7aqr-2a3jFPfhYrEz8BD115qw@mail.gmail.com>
-        <ac8da400-f403-7817-414d-d3001c82dc4c@iogearbox.net>
+        with ESMTP id S232474AbiF1RDs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Jun 2022 13:03:48 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A51511824
+        for <bpf@vger.kernel.org>; Tue, 28 Jun 2022 10:03:47 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id c4so11615587plc.8
+        for <bpf@vger.kernel.org>; Tue, 28 Jun 2022 10:03:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OU8WUB6QZv3fzXCyA8VX1te4xsGWLQRtBW2oFDLfWyA=;
+        b=eVenewKW8iLFOd58gS2pf8kiu9IT31PyyWl0pIqOay7A39me1hIT/dn429X1+DGUvG
+         a4XO7Uu7NawQiEuEy+Fu4WDtDcGBkEJsrqx6e+rN1RJWdjfQWsOOJ87Gw5on0mUvd9X2
+         o1CUXjq7cS/9DbN9Vr2KTCQHKVGih4hN+2S6Nx/hjhb34cwcYTj/qQwAYvhe3seoA9Qr
+         B+HN/qy1RyTnpSl6cQMVF6uAkuOSWLrp1k5Esb3pS6bl2Lq6Xy1De45xGNok8bDaiYXA
+         RO+Dn8y90jzlMvb5XcW+Z3GJnVEcnUKrUdI4aR54B+ETduHp6t0nYtvILDAt7pWnSV/U
+         DtwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OU8WUB6QZv3fzXCyA8VX1te4xsGWLQRtBW2oFDLfWyA=;
+        b=BRCxb94uFNPIGU/2gEm30jkO7OhLR+/f0Jzw2kyqwfpE0Rv20GedWU9fSvuiSvhz88
+         19V4eKN/hcEzNjMtz84DWE7GkTV4Fp+sbp1JJDRVS9OP2xQ/WRmZ9G2pF1jjQnaS/oUa
+         XTy+ZIUnTbBJYME5AZs+efxAVWij+pAVrdqZtkWso2KExlKD9NMudUL6blKwg/NaBNfv
+         zHh+VjmXlfem9Un8AP5Cvcz+5fBKC4Q/w6mGVgD0SeDHxwtboMOiNNkYPhE5E8MUC2xH
+         uqT3aDUcUtRlLae7QqRTb996eFZo42mvRZsAov0Ely//QTyZKrEXAxxrdfF8K63mrIZO
+         uJBg==
+X-Gm-Message-State: AJIora+XkIFP+sggyBsxMJNUOxZj2czqd2qsXUdII3TFHW+/YV6GeE2F
+        AFIkd02WKKwMpgiMLFv2NLU=
+X-Google-Smtp-Source: AGRyM1ui/q1saVihJEUNQmGeDO5B6I9PqLvtGxAYvreR9CUUZffg3O2W//t5c0Vd2JfQidUWwVszJg==
+X-Received: by 2002:a17:902:6bc6:b0:16a:569d:33da with SMTP id m6-20020a1709026bc600b0016a569d33damr5737146plt.59.1656435827001;
+        Tue, 28 Jun 2022 10:03:47 -0700 (PDT)
+Received: from MacBook-Pro-3.local ([2620:10d:c090:500::1:50])
+        by smtp.gmail.com with ESMTPSA id 9-20020a170902c20900b0015e8d4eb1dfsm9607528pll.41.2022.06.28.10.03.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 10:03:46 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 10:03:43 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Christoph Lameter <cl@gentwo.de>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        David Miller <davem@davemloft.net>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>, bpf <bpf@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>,
+        linux-mm <linux-mm@kvack.org>, Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH bpf-next 0/5] bpf: BPF specific memory allocator.
+Message-ID: <20220628170343.ng46xfwi32vefiyp@MacBook-Pro-3.local>
+References: <YrlWLLDdvDlH0C6J@infradead.org>
+ <alpine.DEB.2.22.394.2206280213510.280764@gentwo.de>
+ <CAADnVQKfLE6mwh8BrijgJeLL60DNaGgVy9b133vZ6edZmugong@mail.gmail.com>
+ <alpine.DEB.2.22.394.2206281550210.328950@gentwo.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.22.394.2206281550210.328950@gentwo.de>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 28 Jun 2022 10:59:02 +0200 Daniel Borkmann wrote:
-> +BPF [MISC]
-> +L:     bpf@vger.kernel.org
-> +S:     Odd Fixes
-> +K:     (?:\b|_)bpf(?:\b|_)
-> +
->   BROADCOM B44 10/100 ETHERNET DRIVER
->   M:     Michael Chan <michael.chan@broadcom.com>
->   L:     netdev@vger.kernel.org
->=20
-> If there are no objections, I can fold this in..
+On Tue, Jun 28, 2022 at 03:57:54PM +0200, Christoph Lameter wrote:
+> On Mon, 27 Jun 2022, Alexei Starovoitov wrote:
+> 
+> > On Mon, Jun 27, 2022 at 5:17 PM Christoph Lameter <cl@gentwo.de> wrote:
+> > >
+> > > > From: Alexei Starovoitov <ast@kernel.org>
+> > > >
+> > > > Introduce any context BPF specific memory allocator.
+> > > >
+> > > > Tracing BPF programs can attach to kprobe and fentry. Hence they
+> > > > run in unknown context where calling plain kmalloc() might not be safe.
+> > > > Front-end kmalloc() with per-cpu per-bucket cache of free elements.
+> > > > Refill this cache asynchronously from irq_work.
+> > >
+> > > GFP_ATOMIC etc is not going to work for you?
+> >
+> > slab_alloc_node->slab_alloc->local_lock_irqsave
+> > kprobe -> bpf prog -> slab_alloc_node -> deadlock.
+> > In other words, the slow path of slab allocator takes locks.
+> 
+> That is a relatively new feature due to RT logic support. without RT this
+> would be a simple irq disable.
 
-=F0=9F=91=8C=F0=9F=91=8C=F0=9F=91=8C
+Not just RT.
+It's a slow path:
+        if (IS_ENABLED(CONFIG_PREEMPT_RT) ||
+            unlikely(!object || !slab || !node_match(slab, node))) {
+              local_unlock_irqrestore(&s->cpu_slab->lock,...);
+and that's not the only lock in there.
+new_slab->allocate_slab... alloc_pages grabbing more locks.
 
-Thanks Daniel!
+> Generally doing slab allocation  while debugging slab allocation is not
+> something that can work. Can we exempt RT locks/irqsave or slab alloc from
+> BPF tracing?
+
+People started doing lock profiling with bpf back in 2017.
+People do rcu profiling now and attaching bpf progs to all kinds of low level
+kernel internals: page alloc, etc.
+
+> I would assume that other key items of kernel logic will have similar
+> issues.
+
+We're _not_ asking for any changes from mm/slab side.
+Things were working all these years. We're making them more efficient now
+by getting rid of 'lets prealloc everything' approach.
+
+> > Which makes it unsafe to use from tracing bpf progs.
+> > That's why we preallocated all elements in bpf maps,
+> > so there are no calls to mm or rcu logic.
+> > bpf specific allocator cannot use locks at all.
+> > try_lock approach could have been used in alloc path,
+> > but free path cannot fail with try_lock.
+> > Hence the algorithm in this patch is purely lockless.
+> > bpf prog can attach to spin_unlock_irqrestore and
+> > safely do bpf_mem_alloc.
+> 
+> That is generally safe unless you get into reetrance issues with memory
+> allocation.
+
+Right. Generic slab/mm/page_alloc/rcu are not ready for reentrance and
+are not safe from NMI either.
+That's why we're added all kinds of safey mechanisms in bpf layers.
+
+> Which begs the question:
+> 
+> What happens if I try to use BPF to trace *your* shiny new memory
+
+'shiny and new' is overstatement. It's a trivial lock less freelist layer
+on top of kmalloc. Please read the patch.
+
+> allocation functions in the BPF logic like bpf_mem_alloc? How do you stop
+> that from happening?
+
+here is the comment in the patch:
+/* notrace is necessary here and in other functions to make sure
+ * bpf programs cannot attach to them and cause llist corruptions.
+ */
