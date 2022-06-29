@@ -2,159 +2,143 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 794F3CCA483
-	for <bpf@archiver.kernel.org>; Wed, 29 Jun 2022 07:01:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EF90C433EF
+	for <bpf@archiver.kernel.org>; Wed, 29 Jun 2022 07:03:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232988AbiF2HB5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 29 Jun 2022 03:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40388 "EHLO
+        id S232953AbiF2HDZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 29 Jun 2022 03:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232876AbiF2G74 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 29 Jun 2022 02:59:56 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB69B36B55;
-        Tue, 28 Jun 2022 23:58:30 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=37;SR=0;TI=SMTPD_---0VHmYPBX_1656485900;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VHmYPBX_1656485900)
-          by smtp.aliyun-inc.com;
-          Wed, 29 Jun 2022 14:58:21 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     virtualization@lists.linux-foundation.org
-Cc:     Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vadim Pasternak <vadimp@nvidia.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        linux-um@lists.infradead.org, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, bpf@vger.kernel.org,
-        kangjie.xu@linux.alibaba.com
-Subject: [PATCH v11 39/40] virtio_net: support tx queue resize
-Date:   Wed, 29 Jun 2022 14:56:55 +0800
-Message-Id: <20220629065656.54420-40-xuanzhuo@linux.alibaba.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220629065656.54420-1-xuanzhuo@linux.alibaba.com>
-References: <20220629065656.54420-1-xuanzhuo@linux.alibaba.com>
-MIME-Version: 1.0
-X-Git-Hash: 3fdaf102dd89
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S232672AbiF2HDE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 29 Jun 2022 03:03:04 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7D13BBCE;
+        Wed, 29 Jun 2022 00:00:26 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id x1-20020a17090abc8100b001ec7f8a51f5so18432197pjr.0;
+        Wed, 29 Jun 2022 00:00:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=FKirbHGv5NE/OGlSscdI5eG/5EMr2lgsHSJcWhi887Q=;
+        b=goBcePxgKcTn948PlfCdpZwfDfETzd2hGB4Pi1rtLCrg3LyScUNbU/6527qUqly074
+         eWl9f+RNsQMjv+r9OoFM8PlJPNAjOHZT2zelvBLwz2ov6/865bFPv6nsCbo02Wy6rg2q
+         FkDUdK9oV/ky9ZcHCSmd6O2fizd++Py6bmLWAegUYMgFBwEWKLcuR6pLK5IV9R0/78qx
+         cKtWJEe2V9ViWbLJgAfQCW2/ohnroJxOJpLPvnomctSQbqwX3kG8r3AHaYm9QjVKz153
+         hWZ755dA2/7Hx9IqIKrgQzZ0khNcb9jZZDqryk55XTmjxWrG7addv6AQQWtLQx7RCVA8
+         ahCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=FKirbHGv5NE/OGlSscdI5eG/5EMr2lgsHSJcWhi887Q=;
+        b=KIRagy8K1MtFmewiLeAf6fU3VHNLdCSYdEUyDi2WjZ0Fr++INPL86tPaG+p6b+08lJ
+         Bpf7AlohLwAcCYC9HHZNp33Zv1oopc9OhvpHvSYc95MsDK4M2XreWu4AcchYTZlQYZJV
+         WImQkO7bsAKBa3y+FwqWvArC0goa6N9dYT2TQ0avUvDfcr5chy/OYHhL6uFjCj54YnKz
+         VcXvuUtSVujI4Ptt/2TN7BgXKYINMX4PVz14CS+iTj6+jlsZOtRd3G3F/Sz4nuIFNMOd
+         hBjoMhXx0ma+DSH7Ryj8lCkn69HoKNPdo+z0hbPYWPKxrc6IWshjHTU+dF3HczWxW1Jo
+         +xjw==
+X-Gm-Message-State: AJIora8DDqDe3rH9ElrtFj2z+4UOAVafnK+v99bcBlq6Z0YKTy9rfrwD
+        8PV5KfbbjslOor7hzPxaTl4=
+X-Google-Smtp-Source: AGRyM1tT72CXyzhWfLUwxOjz4tkjA09Aw1cSPowmdrMLA5o7vMNq1tJD9r9rvKq73Kuv/1CSzYk86Q==
+X-Received: by 2002:a17:902:8690:b0:16a:61e9:b9ca with SMTP id g16-20020a170902869000b0016a61e9b9camr7690250plo.126.1656486026094;
+        Wed, 29 Jun 2022 00:00:26 -0700 (PDT)
+Received: from localhost ([98.97.119.237])
+        by smtp.gmail.com with ESMTPSA id jf17-20020a17090b175100b001ec86a0490csm1141594pjb.32.2022.06.29.00.00.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jun 2022 00:00:25 -0700 (PDT)
+Date:   Wed, 29 Jun 2022 00:00:15 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Julien Salleyron <julien.salleyron@gmail.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Marc Vertes <mvertes@free.fr>
+Message-ID: <62bbf87f16223_2181420853@john.notmuch>
+In-Reply-To: <20220628103424.5330e046@kernel.org>
+References: <20220628152505.298790-1-julien.salleyron@gmail.com>
+ <20220628103424.5330e046@kernel.org>
+Subject: Re: [PATCH] net: tls: fix tls with sk_redirect using a BPF verdict.
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch implements the resize function of the tx queues.
-Based on this function, it is possible to modify the ring num of the
-queue.
+Jakub Kicinski wrote:
+> On Tue, 28 Jun 2022 17:25:05 +0200 Julien Salleyron wrote:
+> > This patch allows to use KTLS on a socket where we apply sk_redirect using a BPF
+> > verdict program.
+> > 
 
-Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
----
- drivers/net/virtio_net.c | 48 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+You'll also need a signed-off-by.
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 6ab16fd193e5..fd358462f802 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -135,6 +135,9 @@ struct send_queue {
- 	struct virtnet_sq_stats stats;
- 
- 	struct napi_struct napi;
-+
-+	/* Record whether sq is in reset state. */
-+	bool reset;
- };
- 
- /* Internal representation of a receive virtqueue */
-@@ -279,6 +282,7 @@ struct padded_vnet_hdr {
- };
- 
- static void virtnet_rq_free_unused_buf(struct virtqueue *vq, void *buf);
-+static void virtnet_sq_free_unused_buf(struct virtqueue *vq, void *buf);
- 
- static bool is_xdp_frame(void *ptr)
- {
-@@ -1603,6 +1607,11 @@ static void virtnet_poll_cleantx(struct receive_queue *rq)
- 		return;
- 
- 	if (__netif_tx_trylock(txq)) {
-+		if (READ_ONCE(sq->reset)) {
-+			__netif_tx_unlock(txq);
-+			return;
-+		}
-+
- 		do {
- 			virtqueue_disable_cb(sq->vq);
- 			free_old_xmit_skbs(sq, true);
-@@ -1868,6 +1877,45 @@ static int virtnet_rx_resize(struct virtnet_info *vi,
- 	return err;
- }
- 
-+static int virtnet_tx_resize(struct virtnet_info *vi,
-+			     struct send_queue *sq, u32 ring_num)
-+{
-+	struct netdev_queue *txq;
-+	int err, qindex;
-+
-+	qindex = sq - vi->sq;
-+
-+	virtnet_napi_tx_disable(&sq->napi);
-+
-+	txq = netdev_get_tx_queue(vi->dev, qindex);
-+
-+	/* 1. wait all ximt complete
-+	 * 2. fix the race of netif_stop_subqueue() vs netif_start_subqueue()
-+	 */
-+	__netif_tx_lock_bh(txq);
-+
-+	/* Prevent rx poll from accessing sq. */
-+	WRITE_ONCE(sq->reset, true);
-+
-+	/* Prevent the upper layer from trying to send packets. */
-+	netif_stop_subqueue(vi->dev, qindex);
-+
-+	__netif_tx_unlock_bh(txq);
-+
-+	err = virtqueue_resize(sq->vq, ring_num, virtnet_sq_free_unused_buf);
-+	if (err)
-+		netdev_err(vi->dev, "resize tx fail: tx queue index: %d err: %d\n", qindex, err);
-+
-+	/* Memory barrier before set reset and start subqueue. */
-+	smp_mb();
-+
-+	WRITE_ONCE(sq->reset, false);
-+	netif_tx_wake_queue(txq);
-+
-+	virtnet_napi_tx_enable(vi, sq->vq, &sq->napi);
-+	return err;
-+}
-+
- /*
-  * Send command via the control virtqueue and check status.  Commands
-  * supported by the hypervisor, as indicated by feature bits, should
--- 
-2.31.0
+> > Without this patch, we see that the data received after the redirection are
+> > decrypted but with an incorrect offset and length. It seems to us that the
+> > offset and length are correct in the stream-parser data, but finally not applied
+> > in the skb. We have simply applied those values to the skb.
+> > 
+> > In the case of regular sockets, we saw a big performance improvement from
+> > applying redirect. This is not the case now with KTLS, may be related to the
+> > following point.
+> 
+> It's because kTLS does a very expensive reallocation and copy for the
+> non-zerocopy case (which currently means all of TLS 1.3). I have
+> code almost ready to fix that (just needs to be reshuffled into
+> upstreamable patches). Brings us up from 5.9 Gbps to 8.4 Gbps per CPU
+> on my test box with 16k records. Probably much more than that with
+> smaller records.
 
+Also on my list open-ssl support is lacking ktls support for both
+direction in tls1.3 iirc. We have a couple test workloads pinned on
+1.2 for example which really isn't great.
+
+> 
+> > It is still necessary to perform a read operation (never triggered) from user
+> > space despite the redirection. It makes no sense, since this read operation is
+> > not necessary on regular sockets without KTLS.
+> > 
+> > We do not see how to fix this problem without a change of architecture, for
+> > example by performing TLS decrypt directly inside the BPF verdict program.
+> > 
+> > An example program can be found at
+> > https://github.com/juliens/ktls-bpf_redirect-example/
+> > 
+> > Co-authored-by: Marc Vertes <mvertes@free.fr>
+> > ---
+> >  net/tls/tls_sw.c                           | 6 ++++++
+> >  tools/testing/selftests/bpf/test_sockmap.c | 8 +++-----
+> >  2 files changed, 9 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+> > index 0513f82b8537..a409f8a251db 100644
+> > --- a/net/tls/tls_sw.c
+> > +++ b/net/tls/tls_sw.c
+> > @@ -1839,8 +1839,14 @@ int tls_sw_recvmsg(struct sock *sk,
+> >  			if (bpf_strp_enabled) {
+> >  				/* BPF may try to queue the skb */
+> >  				__skb_unlink(skb, &ctx->rx_list);
+> > +
+> >  				err = sk_psock_tls_strp_read(psock, skb);
+> > +
+> >  				if (err != __SK_PASS) {
+> > +                    if (err == __SK_REDIRECT) {
+> > +                        skb->data += rxm->offset;
+> > +                        skb->len = rxm->full_len;
+> > +                    }
+> 
+> IDK what this is trying to do but I certainly depends on the fact 
+> we run skb_cow_data() and is not "generally correct" :S
+
+Ah also we are not handling partially consumed correctly either.
+Seems we might pop off the skb even when we need to continue;
+
+Maybe look at how skb_copy_datagram_msg() goes below because it
+fixes the skb copy up with the rxm->offset. But, also we need to
+do this repair before sk_psock_tls_strp_read I think so that
+the BPF program reads the correct data in all cases? I guess
+your sample program (and selftests for that matter) just did
+the redirect without reading the data?
+
+Thanks!
