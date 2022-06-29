@@ -2,99 +2,103 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4654EC43334
-	for <bpf@archiver.kernel.org>; Wed, 29 Jun 2022 12:53:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9927C43334
+	for <bpf@archiver.kernel.org>; Wed, 29 Jun 2022 13:16:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbiF2Mxi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 29 Jun 2022 08:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53212 "EHLO
+        id S233233AbiF2NQZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 29 Jun 2022 09:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiF2Mxh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 29 Jun 2022 08:53:37 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E40917A8E;
-        Wed, 29 Jun 2022 05:53:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656507217; x=1688043217;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=NBFLWofkDnaYU8CY8LB/55jv2/b16mClVdfs49+iIRA=;
-  b=CHXuJrSoscC+u878y2OHeU9ILhyQoZkUfRWpQPHkp0efBS6Sh7Hjn/kw
-   hVJXQWpoWSoS10L46WE3M6gO8Y3lr9nuqmKrH5de8zIKSx0qBq+oRwWyq
-   ufGG34pDvLbGXaXpPPc3y+lGfr/t9G212GdrV7FnseKKNmLuuR8+A7O2R
-   /Zt6CiCKDFwmlVe5GTumQSRFzjZ7s5Cw++cmqL8tn935uWkv4FPhK3gs3
-   47iHI2+WFpLue0Xqdqc866Ybk/wdXitR8Xn3apZuYKPpgBQOcY2JwDxR5
-   LYM1w4e5MgYqcNbp3HVjkj7bHiA/mPIcigI6eOSxejsH83zh70IsIvlpK
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="346014091"
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="346014091"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 05:53:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="588299334"
-Received: from boxer.igk.intel.com (HELO boxer) ([10.102.20.173])
-  by orsmga007.jf.intel.com with ESMTP; 29 Jun 2022 05:53:35 -0700
-Date:   Wed, 29 Jun 2022 14:53:34 +0200
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>
-Subject: Re: [PATCH bpf] xsk: mark napi_id on sendmsg()
-Message-ID: <YrxLTiOIpD44JM7R@boxer>
-References: <20220629105752.933839-1-maciej.fijalkowski@intel.com>
- <CAJ+HfNj0FU=DBNdwD3HODbevcP-btoaeCCGCfn2Y5eP2WoEXHA@mail.gmail.com>
+        with ESMTP id S232700AbiF2NQY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 29 Jun 2022 09:16:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395D027B1C;
+        Wed, 29 Jun 2022 06:16:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F1FC9B821C3;
+        Wed, 29 Jun 2022 13:16:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95813C34114;
+        Wed, 29 Jun 2022 13:16:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656508581;
+        bh=6IU1XrSYARkGipC60LKfAg+b+o4r72bV4w14yxcxkxw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mSLXPFYnZhAgn70ObSDbnWGCQIW+sXL6Vx1seEwPvobuwLCjrCpu0QzDAHsxG5SOl
+         y11US1LqHYZcgUVGiX+QNmExqMHa98yf+3xYX4JqwIXaGZ7Y1lgrFZCa8dWiLK0dur
+         7QCgvyttEvQElGhqm0qPTN/5IgRkJAi3/YLRweR4Wc6I+lnTro59z/2utHNjKhhK7T
+         NRq4+ysdcJ13kDPNLw18J3+h0IPiXHprAt4WZmmxlZDd8hBl6a4rzX2Q7KhhsMFnaw
+         02/UhygGD6A/YGmRJ2UOd6Xu4UTQNJqtBGRkV3Ax0bMWqvSpkkmRZS7vunE9AJq5sl
+         0/7jdbExFF+cA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 5B5814096F; Wed, 29 Jun 2022 10:16:18 -0300 (-03)
+Date:   Wed, 29 Jun 2022 10:16:18 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com
+Subject: Re: [PATCH dwarves v3 0/2] btf: support BTF_KIND_ENUM64
+Message-ID: <YrxQoivj32s+h34F@kernel.org>
+References: <20220629071213.3178592-1-yhs@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJ+HfNj0FU=DBNdwD3HODbevcP-btoaeCCGCfn2Y5eP2WoEXHA@mail.gmail.com>
+In-Reply-To: <20220629071213.3178592-1-yhs@fb.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 02:45:11PM +0200, Björn Töpel wrote:
-> On Wed, 29 Jun 2022 at 12:58, Maciej Fijalkowski
-> <maciej.fijalkowski@intel.com> wrote:
-> >
-> > When application runs in zero copy busy poll mode and does not receive a
-> > single packet but only sends them, it is currently impossible to get
-> > into napi_busy_loop() as napi_id is only marked on Rx side in
-> > xsk_rcv_check(). In there, napi_id is being taken from xdp_rxq_info
-> > carried by xdp_buff. From Tx perspective, we do not have access to it.
-> > What we have handy is the xsk pool.
+Em Wed, Jun 29, 2022 at 12:12:13AM -0700, Yonghong Song escreveu:
+> Add support for enum64. For 64-bit enumerator value,
+> previously, the value is truncated into 32bit, e.g.,
+> for the following enum in linux uapi bpf.h,
+>   enum {
+>         BPF_F_INDEX_MASK                = 0xffffffffULL,
+>         BPF_F_CURRENT_CPU               = BPF_F_INDEX_MASK,
+>   /* BPF_FUNC_perf_event_output for sk_buff input context. */
+>         BPF_F_CTXLEN_MASK               = (0xfffffULL << 32),
+>   };    
 > 
-> The fact that the napi_id is not set unless set from the ingress side
-> is actually "by design". It's CONFIG_NET_RX_BUSY_POLL after all. I
-> followed the semantics of the regular busy-polling sockets. So, I
-> wouldn't say it's a fix! The busy-polling in sendmsg is really just
-> about "driving the RX busy-polling from another socket syscall".
+> BPF_F_CTXLEN_MASK will be encoded with 0 with BTF_KIND_ENUM
+> after pahole dwarf-to-btf conversion.
+> With this patch, the BPF_F_CTXLEN_MASK will be encoded properly
+> with BTF_KIND_ENUM64.
+> 
+> This patch is on top of tmp.master since tmp.master has not
+> been sync'ed with master branch yet.
+> 
+> Changelogs:
+>   v2 -> v3:
+>     - pass struct type/conf_load pointers to btf_encoder__add_enum[_value]
+>       to make code easier to understand.
 
-I just felt that busy polling for txonly apps was broken, hence the
-'fixing' flavour. I can send it just as improvement to bpf-next.
+Yeah, that is more clear indeed.
 
-> 
-> That being said, I definitely see that this is useful for AF_XDP
-> sockets, but keep in mind that it sort of changes the behavior from
-> regular sockets. And we'll get different behavior for
-> copy-mode/zero-copy mode.
-> 
-> TL;DR, I think it's a good addition. One small nit below:
-> 
-> > +                       __sk_mark_napi_id_once(sk, xs->pool->heads[0].xdp.rxq->napi_id);
-> 
-> Please hide this hideous pointer chasing in something neater:
-> xsk_pool_get_napi_id() or something.
+- Arnaldo
 
-Would it make sense to introduce napi_id to xsk_buff_pool then?
-xp_set_rxq_info() could be setting it. We are sure that napi_id is the
-same for whole pool (each xdp_buff_xsk's rxq info).
+>   v1 -> v2:
+>     - Add flag --skip_encoding_btf_enum64 to disable newly-added functionality.
+> 
+> Yonghong Song (2):
+>   libbpf: Sync with latest libbpf repo
+>   btf: Support BTF_KIND_ENUM64
+> 
+>  btf_encoder.c     | 67 +++++++++++++++++++++++++++++++++++------------
+>  btf_encoder.h     |  2 +-
+>  dwarf_loader.c    | 12 +++++++++
+>  dwarves.h         |  4 ++-
+>  dwarves_fprintf.c |  6 ++++-
+>  lib/bpf           |  2 +-
+>  pahole.c          | 10 ++++++-
+>  7 files changed, 81 insertions(+), 22 deletions(-)
+> 
+> -- 
+> 2.30.2
 
-> 
-> 
-> Björn
+-- 
+
+- Arnaldo
