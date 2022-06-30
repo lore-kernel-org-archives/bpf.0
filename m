@@ -2,133 +2,71 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22209C433EF
-	for <bpf@archiver.kernel.org>; Thu, 30 Jun 2022 15:29:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94CA7C43334
+	for <bpf@archiver.kernel.org>; Thu, 30 Jun 2022 15:41:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234996AbiF3P3w (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 30 Jun 2022 11:29:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39704 "EHLO
+        id S230225AbiF3Plq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 30 Jun 2022 11:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232771AbiF3P3v (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 30 Jun 2022 11:29:51 -0400
-X-Greylist: delayed 483 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 30 Jun 2022 08:29:50 PDT
-Received: from novek.ru (unknown [213.148.174.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A53CE38BEE
-        for <bpf@vger.kernel.org>; Thu, 30 Jun 2022 08:29:50 -0700 (PDT)
-Received: from [10.120.40.106] (static-qvn-qvt-113043.business.bouyguestelecom.com [89.83.113.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by novek.ru (Postfix) with ESMTPSA id 2B8FA500E92;
-        Thu, 30 Jun 2022 18:20:06 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 novek.ru 2B8FA500E92
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=novek.ru; s=mail;
-        t=1656602406; bh=azbLJz9lx+ReNAytpxhJDM/MYNNJHaeq9TUY+VLzcnM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=bL5sVi3iosD0yPhnZ7/pYQ+KJ+i3I/YXKtVUp5oAlQ8GmejV6ZwmFXHUhcQQBUKdO
-         6rNZzD4qe8r9fUCsDOmUtyVti8Sa2+DKHNGPvgx6eBDCuEsVGS6BgBAGDzGxeEPrT6
-         6rjZJx4SWZsB6RVhmSScDVk5zO99MeDGN6q9/i14=
-Message-ID: <367e0ed7-1314-da6d-ee97-3ae2044e3346@novek.ru>
-Date:   Thu, 30 Jun 2022 16:21:42 +0100
+        with ESMTP id S235834AbiF3Plq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 30 Jun 2022 11:41:46 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FEF33BBD6
+        for <bpf@vger.kernel.org>; Thu, 30 Jun 2022 08:41:45 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id q9so27912164wrd.8
+        for <bpf@vger.kernel.org>; Thu, 30 Jun 2022 08:41:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:from:to:subject
+         :content-transfer-encoding;
+        bh=08P6bq7um69CgFJcK8RfFuaLGTo4ycgPn1AeuKP6N2s=;
+        b=M6tzKji5SzZk8VSQVzIQs1KDUcvVMuJm5tQWhktko68AVm06Nv3H0pG+gZxCjQbzGR
+         O252I43uUl6CpMcnszF7WW2l1zv0OF7hlf38kzUp81E9E3rcjESfjk/1LLytkbm+QlMD
+         MoyDuTCjv4hc+M152hLnjuL5+03pNQXakxof+a0TfvzQlKeT3XutB2zy0a02yyKwsWa7
+         8gnaPyrFnzRuOyBUd30OPCGB+VNGpzdqRh/EiViive2ei0uI0eltpOf8UDM3g1ciRm68
+         fFOYvYwjmnHeSYYv7UMMUlyiFPPd4qd9ec1N04WYIODV56FoVtg2lP/rccLpdGlvJdCo
+         koUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:from:to:subject
+         :content-transfer-encoding;
+        bh=08P6bq7um69CgFJcK8RfFuaLGTo4ycgPn1AeuKP6N2s=;
+        b=YFqanwxbm98+XFnsdZ6pE8RhqKSD6E+vY7c4efioRmgTE5I0vN+Iu8yv9zdk1aCGmE
+         Z5A0pJTTgreAYhpx+0CSAoAH8fajepjE7OJ/Vb9zgnkdntKQmCIMCA9G9OpKT0HoW9gj
+         9hgL1mB0OmOeGqqOE1+6vGBimxGakXafPCkYZ2uQnA67IYU/euQYNZTaE8y9BgZ9v8Sq
+         tFL4jxrouhAVfsvfTd6nuXUCX1YtmlMwfa8BSnd6AChUkF4kqsk8sAptNcnt3JG4gfAp
+         eld6Kv7rgpj9fFoVk9HHAuVRSx+9k21/eYr+LPvccLzUwWX7sENMQTZ9G8oNYuHj6eCz
+         PInA==
+X-Gm-Message-State: AJIora/1ptSazBPWSTvQSJrVOxBzBjtJRP2r3u1gb+SnuTSGHOEse9c2
+        gVBF36JvtRpiQfcbjufDs1ygJ1pFeUQ=
+X-Google-Smtp-Source: AGRyM1s/3u7dCkD2PsERePUxMXB2MS9ZetTXvrykOxNTQfO5qB5QIpHohiu5MQKOVaIqNicTTVE2Dw==
+X-Received: by 2002:a05:6000:3cd:b0:21b:8e8d:470f with SMTP id b13-20020a05600003cd00b0021b8e8d470fmr8830300wrg.387.1656603703789;
+        Thu, 30 Jun 2022 08:41:43 -0700 (PDT)
+Received: from DESKTOP-L1U6HLH ([39.53.244.205])
+        by smtp.gmail.com with ESMTPSA id t5-20020a1c4605000000b0039db31f6372sm3047996wma.2.2022.06.30.08.41.42
+        for <bpf@vger.kernel.org>
+        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
+        Thu, 30 Jun 2022 08:41:43 -0700 (PDT)
+Message-ID: <62bdc437.1c69fb81.7ffb7.6d30@mx.google.com>
+Date:   Thu, 30 Jun 2022 08:41:43 -0700 (PDT)
+X-Google-Original-Date: 30 Jun 2022 11:41:45 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] net: tls: fix tls with sk_redirect using a BPF verdict.
-Content-Language: en-US
-To:     John Fastabend <john.fastabend@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Julien Salleyron <julien.salleyron@gmail.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Marc Vertes <mvertes@free.fr>
-References: <20220628152505.298790-1-julien.salleyron@gmail.com>
- <20220628103424.5330e046@kernel.org> <62bbf87f16223_2181420853@john.notmuch>
-From:   Vadim Fedorenko <vfedorenko@novek.ru>
-In-Reply-To: <62bbf87f16223_2181420853@john.notmuch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From:   pride.dreamlandestimation@gmail.com
+To:     bpf@vger.kernel.org
+Subject: Estimating Services
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 29.06.2022 08:00, John Fastabend wrote:
-> Jakub Kicinski wrote:
->> On Tue, 28 Jun 2022 17:25:05 +0200 Julien Salleyron wrote:
->>> This patch allows to use KTLS on a socket where we apply sk_redirect using a BPF
->>> verdict program.
->>>
-> 
-> You'll also need a signed-off-by.
-> 
->>> Without this patch, we see that the data received after the redirection are
->>> decrypted but with an incorrect offset and length. It seems to us that the
->>> offset and length are correct in the stream-parser data, but finally not applied
->>> in the skb. We have simply applied those values to the skb.
->>>
->>> In the case of regular sockets, we saw a big performance improvement from
->>> applying redirect. This is not the case now with KTLS, may be related to the
->>> following point.
->>
->> It's because kTLS does a very expensive reallocation and copy for the
->> non-zerocopy case (which currently means all of TLS 1.3). I have
->> code almost ready to fix that (just needs to be reshuffled into
->> upstreamable patches). Brings us up from 5.9 Gbps to 8.4 Gbps per CPU
->> on my test box with 16k records. Probably much more than that with
->> smaller records.
-> 
-> Also on my list open-ssl support is lacking ktls support for both
-> direction in tls1.3 iirc. We have a couple test workloads pinned on
-> 1.2 for example which really isn't great.
->
-
-AFAIK in-kernel TLS 1.3 is supported in OpenSSL 3.0, I implemented TX part long 
-time ago and was fixing some parts while it was 3.0-alpha. Not sure about RX.
-Or are you talking about zero-copy implementation?
-
->>
->>> It is still necessary to perform a read operation (never triggered) from user
->>> space despite the redirection. It makes no sense, since this read operation is
->>> not necessary on regular sockets without KTLS.
->>>
->>> We do not see how to fix this problem without a change of architecture, for
->>> example by performing TLS decrypt directly inside the BPF verdict program.
->>>
->>> An example program can be found at
->>> https://github.com/juliens/ktls-bpf_redirect-example/
->>>
->>> Co-authored-by: Marc Vertes <mvertes@free.fr>
->>> ---
->>>   net/tls/tls_sw.c                           | 6 ++++++
->>>   tools/testing/selftests/bpf/test_sockmap.c | 8 +++-----
->>>   2 files changed, 9 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
->>> index 0513f82b8537..a409f8a251db 100644
->>> --- a/net/tls/tls_sw.c
->>> +++ b/net/tls/tls_sw.c
->>> @@ -1839,8 +1839,14 @@ int tls_sw_recvmsg(struct sock *sk,
->>>   			if (bpf_strp_enabled) {
->>>   				/* BPF may try to queue the skb */
->>>   				__skb_unlink(skb, &ctx->rx_list);
->>> +
->>>   				err = sk_psock_tls_strp_read(psock, skb);
->>> +
->>>   				if (err != __SK_PASS) {
->>> +                    if (err == __SK_REDIRECT) {
->>> +                        skb->data += rxm->offset;
->>> +                        skb->len = rxm->full_len;
->>> +                    }
->>
->> IDK what this is trying to do but I certainly depends on the fact
->> we run skb_cow_data() and is not "generally correct" :S
-> 
-> Ah also we are not handling partially consumed correctly either.
-> Seems we might pop off the skb even when we need to continue;
-> 
-> Maybe look at how skb_copy_datagram_msg() goes below because it
-> fixes the skb copy up with the rxm->offset. But, also we need to
-> do this repair before sk_psock_tls_strp_read I think so that
-> the BPF program reads the correct data in all cases? I guess
-> your sample program (and selftests for that matter) just did
-> the redirect without reading the data?
-> 
-> Thanks!
+Hi,=0D=0A=0D=0AWe provide estimation & quantities takeoff service=
+s. We are providing 98-100 accuracy in our estimates and take-off=
+s. Please tell us if you need any estimating services regarding y=
+our projects.=0D=0A=0D=0ASend over the plans and mention the exac=
+t scope of work and shortly we will get back with a proposal on w=
+hich our charges and turnaround time will be mentioned=0D=0A=0D=0A=
+You may ask for sample estimates and take-offs. Thanks.=0D=0A=0D=0A=
+Kind Regards=0D=0APride Millard=0D=0ADreamland Estimation, LLC
 
