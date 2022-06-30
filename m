@@ -2,75 +2,124 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A469BC433EF
-	for <bpf@archiver.kernel.org>; Thu, 30 Jun 2022 14:34:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3D6DC43334
+	for <bpf@archiver.kernel.org>; Thu, 30 Jun 2022 14:34:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235330AbiF3Oep (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 30 Jun 2022 10:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39868 "EHLO
+        id S237122AbiF3Oe5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 30 Jun 2022 10:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237060AbiF3Oeb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 30 Jun 2022 10:34:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837B54882B
-        for <bpf@vger.kernel.org>; Thu, 30 Jun 2022 07:20:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 21F86622EF
-        for <bpf@vger.kernel.org>; Thu, 30 Jun 2022 14:20:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 82736C341CC;
-        Thu, 30 Jun 2022 14:20:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656598814;
-        bh=zUHRdsmmSzFiR0jSbWET6AgBIVsQBcQani9kWaOzRVI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=X3BZWCUWYcfCZYFolaV4piHYwi0f9aIExf4akvNrJtBp2NAanyq/ucako3nmipBYn
-         GwB+AuSjv5UwsABHS2H04Khx9jn5Y7ti2Nt1E3t1G1tqeyCLFuO819U8Wg5e1mzl/T
-         Jw0T+du+HrcBsNnHwIvhMeXG0uNfWlRA2i7cE9cHwRdOBbwIN48eofDFm6x+F/7dc1
-         wDo15JFh83zn+wV6oUYMFiaZa05Zkj7JoL4qVgqHyeAYoZYgNE3vA7XbeMHKzKLVhK
-         Xtfi0cx7huccbuK9kvnA4Ca5tPf6U3J4a13DScN7flMR5fMgllYDZtdV5GVZujN+O6
-         UHuSu52XuzgEA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 66326E49FA0;
-        Thu, 30 Jun 2022 14:20:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S236180AbiF3Oej (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 30 Jun 2022 10:34:39 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4DD677EE;
+        Thu, 30 Jun 2022 07:20:35 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id e132so3062334pgc.5;
+        Thu, 30 Jun 2022 07:20:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZoOONB+6KTZ21PhWkviaVKZOS2lsC8jyZZGjusxKNh4=;
+        b=I+iZ8i/D9epTvcx4pI6w8Gu0S7GXlt288tFF5mTuhax7rgWHyuM0WMLermz+fhgIfT
+         daxT/ECuysrwbjuj36f8fekDNkex23H9nEzzjhNPZohNlXJLLwo+91JEDHvvndTLyX9D
+         fWNSOGyBDmOy8cwm0KRFoM7ga5dHuHuBYV/pEn7co6v1RRqmVIqpRFsy4zmAcgiM2Ubw
+         WaE1KUEDaUbwvmA8xfWPG5ryXhVWgfEOtb7cp+pp1oNCoH5FDeJFOhgctxcYIq1rGIAn
+         /rfShey01ewSi8R+RpIRJs06PkZBjqm/9eIMgIYXqP/RWBlE6RSQEARj1UHWhsDF7Jn/
+         D76g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZoOONB+6KTZ21PhWkviaVKZOS2lsC8jyZZGjusxKNh4=;
+        b=vMyqV3sSCp8gwnxX+J49M3f32fs5eXCorM7aHfBcDoenBTimFMEqsXCxl6ke6YWOrh
+         rvGP0Wssm/bCsZf7Hooj3ThRsBeUsW+6ZeZg4o8O0JY+GEZc+hN7yMrB+8bGzmP8C1zR
+         RkaaH16xZMid3DJmTQKZwCV7FOnGmX1SxigKCYTujSsFVatqJBKfJEeimOE16gb+Megw
+         wQ/eOi+noIU90A6KsnkRFXjVjYLM8FnB5K3022gYVavBmOYs4Bgcp1A6xshZJ8pXgo0e
+         eL/rVfvYU00yIz1tR+uac8GX2epjEJ8bNOmp7WC6R3S9nahXAOKBXD0FEoLqTeBY+DKL
+         M3CA==
+X-Gm-Message-State: AJIora+51nSjYj4JVJoitDFASJsejgEnO24+snBsEfZAsZt7ySrbEzYu
+        3Y/yVkNNHCTGdIj9N+OiUaLThENjMxOfoBc3JQU=
+X-Google-Smtp-Source: AGRyM1ukpqNyJHnjXREZdnq7pTqkcOAhbVW7upHxfkpLBRdKhsNzSlMk6xhkG/xT8wBuQajEgx04hDVn5nnWwauz5Bc=
+X-Received: by 2002:aa7:999a:0:b0:525:6023:8c03 with SMTP id
+ k26-20020aa7999a000000b0052560238c03mr16042113pfh.86.1656598835031; Thu, 30
+ Jun 2022 07:20:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpftool: remove attach_type_name forward declaration
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165659881441.5783.17234494591426370818.git-patchwork-notify@kernel.org>
-Date:   Thu, 30 Jun 2022 14:20:14 +0000
-References: <20220630093638.25916-1-tklauser@distanz.ch>
-In-Reply-To: <20220630093638.25916-1-tklauser@distanz.ch>
-To:     Tobias Klauser <tklauser@distanz.ch>
-Cc:     quentin@isovalent.com, bpf@vger.kernel.org
+References: <20220630093717.8664-1-magnus.karlsson@gmail.com> <fa929729-6122-195f-aa4b-e5d3fedb1887@redhat.com>
+In-Reply-To: <fa929729-6122-195f-aa4b-e5d3fedb1887@redhat.com>
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+Date:   Thu, 30 Jun 2022 16:20:24 +0200
+Message-ID: <CAJ8uoz2KmpVf7nkJXUsHhmOtS2Td+rMOX8-PRqzz9QxJB-tZ3g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests, bpf: remove AF_XDP samples
+To:     Jesper Dangaard Brouer <jbrouer@redhat.com>
+Cc:     "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Network Development <netdev@vger.kernel.org>,
+        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        bpf <bpf@vger.kernel.org>, Xdp <xdp-newbies@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+On Thu, Jun 30, 2022 at 3:44 PM Jesper Dangaard Brouer
+<jbrouer@redhat.com> wrote:
+>
+>
+> On 30/06/2022 11.37, Magnus Karlsson wrote:
+> > From: Magnus Karlsson <magnus.karlsson@intel.com>
+> >
+> > Remove the AF_XDP samples from samples/bpf as they are dependent on
+> > the AF_XDP support in libbpf. This support has now been removed in the
+> > 1.0 release, so these samples cannot be compiled anymore. Please start
+> > to use libxdp instead. It is backwards compatible with the AF_XDP
+> > support that was offered in libbpf. New samples can be found in the
+> > various xdp-project repositories connected to libxdp and by googling.
+> >
+> > Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+>
+> Will you (or Maciej) be submitting these samples to XDP-tools[1] which
+> is the current home for libxdp or maybe BPF-examples[2] ?
+>
+>   [1] https://github.com/xdp-project/xdp-tools
+>   [2] https://github.com/xdp-project/bpf-examples
+>
+> I know Toke is ready to take over maintaining these, but we will
+> appreciate someone to open a PR with this code...
+>
+> > ---
+> >   MAINTAINERS                     |    2 -
+> >   samples/bpf/Makefile            |    9 -
+> >   samples/bpf/xdpsock.h           |   19 -
+> >   samples/bpf/xdpsock_ctrl_proc.c |  190 ---
+> >   samples/bpf/xdpsock_kern.c      |   24 -
+> >   samples/bpf/xdpsock_user.c      | 2019 -------------------------------
+> >   samples/bpf/xsk_fwd.c           | 1085 -----------------
+>
+> The code in samples/bpf/xsk_fwd.c is interesting, because it contains a
+> buffer memory manager, something I've seen people struggle with getting
+> right and performant (at the same time).
 
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+I can push xsk_fwd to BPF-examples. Though I do think that xdpsock has
+become way too big to serve as a sample. It slowly turned into a catch
+all demonstrating every single feature of AF_XDP. We need a minimal
+example and then likely other samples for other features that should
+be demoed. So I suggest that xdpsock dies here and we start over with
+something minimal and use xsk_fwd for the forwarding and mempool
+example.
 
-On Thu, 30 Jun 2022 11:36:38 +0200 you wrote:
-> The attach_type_name definition was removed in commit 1ba5ad36e00f
-> ("bpftool: Use libbpf_bpf_attach_type_str"). Remove its forward
-> declaration in main.h as well.
-> 
-> Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
-> ---
->  tools/bpf/bpftool/main.h | 2 --
->  1 file changed, 2 deletions(-)
+Toke, I think you told me at Recipes in Paris that someone from RedHat
+was working on an example. Did I remember correctly?
 
-Here is the summary with links:
-  - [bpf-next] bpftool: remove attach_type_name forward declaration
-    https://git.kernel.org/bpf/bpf-next/c/b0cbd6154a9a
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> You can get my ACK if someone commits to port this to [1] or [2], or a
+> 3rd place that have someone what will maintain this in the future.
+>
+> --Jesper
+>
