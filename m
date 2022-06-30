@@ -2,45 +2,59 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3448C433EF
-	for <bpf@archiver.kernel.org>; Thu, 30 Jun 2022 15:21:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C14AC43334
+	for <bpf@archiver.kernel.org>; Thu, 30 Jun 2022 15:26:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235208AbiF3PVP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 30 Jun 2022 11:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
+        id S234330AbiF3P0A (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 30 Jun 2022 11:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235238AbiF3PVO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 30 Jun 2022 11:21:14 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B251B381B9;
-        Thu, 30 Jun 2022 08:21:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656602473; x=1688138473;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IV4NsOLZ4pseLjE+Zgo99/IZslsFn8JpLQVKMjQpu2s=;
-  b=mWkAN/kVzTURRBM8V4BDAg3hUO9Nu8Lm4efh9/iesXOlkTL2xcIsqzz6
-   SYnoH4yw/FF0a/VWICxdiTcCjBY9nEcMHZeNS8PKqBzmL7iELdoxGEeVL
-   cNsZD+EVGy2YJGvjbcLvSlirGpirRpzEpsHjWWcPPTk01ukVly0A5BBgS
-   Sg6W+sj+gpCBYvSg1wIkogwDN/+QDEke8MOCNy3qDHM0CSmNTdrTbHlMe
-   A3CUtHlBq6tJJ1/d6A7TESXoCrMQlCwG0fgO6MZaN4soLd3dr/dvu55Zf
-   BgVzJqWXwK45ZIGOPCd1GrvucFqMMjO4MRBAKY8Q/6L36LPa40Edag34v
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="279923360"
-X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
-   d="scan'208";a="279923360"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 08:21:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
-   d="scan'208";a="918087557"
-Received: from boxer.igk.intel.com (HELO boxer) ([10.102.20.173])
-  by fmsmga005.fm.intel.com with ESMTP; 30 Jun 2022 08:21:09 -0700
-Date:   Thu, 30 Jun 2022 17:21:08 +0200
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+        with ESMTP id S234026AbiF3PZz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 30 Jun 2022 11:25:55 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05B329814
+        for <bpf@vger.kernel.org>; Thu, 30 Jun 2022 08:25:53 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-3177f4ce3e2so182727357b3.5
+        for <bpf@vger.kernel.org>; Thu, 30 Jun 2022 08:25:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=b1HHuJRU/PzgASK5LVwUbv/TAJnPbu4jGG6I27QsOqY=;
+        b=K7z0kaXZV+Vs0mudhBZ7v5I4hJ8K2IoRajqCVJXAvPAUEz8uwvT8kGg0TdLJ301AZC
+         JKYyEQwIY2IUACWR8lS97iGRrC3WGn0tOXHUT16Ho/0modgYkovGX6yeA4tUtBtJfS0z
+         Zlme6FyIJLdzNxUkBOwb8Mg7cC00jhPzMIFSa5h9jSd6wzE5flCIjTdT1UreW/ZMi4jZ
+         yZ1Hp5lhZBiHrqx3mTXl95L0gizbbmnSXYD/Qa7zF5btYwTA0Hz3lZxHv2AbyPMVnZzl
+         OM/jrbRauDoW2DR/7klV31KWRREq37PILkOqdgt1n2sU2VQbdKdICAxeJsewdFtutPMr
+         WhbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=b1HHuJRU/PzgASK5LVwUbv/TAJnPbu4jGG6I27QsOqY=;
+        b=yvTHqowBaH/90aGKQwfZ71NCg+QHsoTU6Qn4I7jDC6eaCN+1DeaXe6itjhssNAhtPD
+         zRlaKo/+gTe6SkdEyFPZUWIBaOvZHL/L9ZQniNfsizHNoI0/DI3HLyYF1l+okWjqpvGX
+         MepW/OxiE/SVLk0IJvVk4z/WNMt/e36G5GkNFYX/20meRS06NefN9yPv8dQcjQJPS+GH
+         sQCxfAGdPjmxZ1hayHdatVPgLERZ0I9Py3lE4E//zxONRES7C0IFdi1+4v1X3ILjl7Ic
+         +vregcdkMTBtRYDDB13OKlnlc/yKX1e2kgJA9zrm6H5wT4k38vtkbpMpxrXsxM3IIenU
+         ztUA==
+X-Gm-Message-State: AJIora9uzNL+c4MS71jFdcxop7yrt4KyrzPeiEkoxWQaR9QSKh2pkwEz
+        9OcYwqzEqsfoUvWiMmyuAiUSz6e8C9eqGpzH0hwwjg==
+X-Google-Smtp-Source: AGRyM1uuJ9rW4KbHFrPXVR1zK2ZCcPA3iz7q8YM9loeKl8FGUB46bzc9Tsz6h5bvkfR24CeeTCDnuPbW+dVmdEVQjFQ=
+X-Received: by 2002:a0d:df50:0:b0:317:9c40:3b8b with SMTP id
+ i77-20020a0ddf50000000b003179c403b8bmr11226355ywe.332.1656602752755; Thu, 30
+ Jun 2022 08:25:52 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220629085836.18042-1-fmdefrancesco@gmail.com>
+ <Yr12jl1nEqqVI3TT@boxer> <CAKgT0UfGM8nCZnnYjWPKT+JXOwVJx1xj6n7ssGi41vH4GrUy0Q@mail.gmail.com>
+In-Reply-To: <CAKgT0UfGM8nCZnnYjWPKT+JXOwVJx1xj6n7ssGi41vH4GrUy0Q@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 30 Jun 2022 17:25:40 +0200
+Message-ID: <CANn89iK6g+4Fy2VMV7=feUAOUDHu-J38be+oU76yp+zGH6xCJQ@mail.gmail.com>
+Subject: Re: [Intel-wired-lan] [PATCH] ixgbe: Use kmap_local_page in ixgbe_check_lbtest_frame()
 To:     Alexander Duyck <alexander.duyck@gmail.com>
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+Cc:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
@@ -48,28 +62,20 @@ Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
         John Fastabend <john.fastabend@gmail.com>,
         Jesse Brandeburg <jesse.brandeburg@intel.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
         Netdev <netdev@vger.kernel.org>,
         Jakub Kicinski <kuba@kernel.org>, bpf <bpf@vger.kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Ira Weiny <ira.weiny@intel.com>,
         "David S. Miller" <davem@davemloft.net>,
         LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [Intel-wired-lan] [PATCH] ixgbe: Use kmap_local_page in
- ixgbe_check_lbtest_frame()
-Message-ID: <Yr2/ZAYgOAGQopZJ@boxer>
-References: <20220629085836.18042-1-fmdefrancesco@gmail.com>
- <Yr12jl1nEqqVI3TT@boxer>
- <CAKgT0UfGM8nCZnnYjWPKT+JXOwVJx1xj6n7ssGi41vH4GrUy0Q@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKgT0UfGM8nCZnnYjWPKT+JXOwVJx1xj6n7ssGi41vH4GrUy0Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 08:17:24AM -0700, Alexander Duyck wrote:
+On Thu, Jun 30, 2022 at 5:17 PM Alexander Duyck
+<alexander.duyck@gmail.com> wrote:
+>
 > On Thu, Jun 30, 2022 at 3:10 AM Maciej Fijalkowski
 > <maciej.fijalkowski@intel.com> wrote:
 > >
@@ -89,20 +95,17 @@ On Thu, Jun 30, 2022 at 08:17:24AM -0700, Alexander Duyck wrote:
 > > page_address() ?
 > >
 > > Alex?
-> 
+>
 > The page_address function only works on architectures that have access
 > to all of physical memory via virtual memory addresses. The kmap
 > function is meant to take care of highmem which will need to be mapped
 > before it can be accessed.
-> 
+>
 > For non-highmem pages kmap just calls the page_address function.
 > https://elixir.bootlin.com/linux/latest/source/include/linux/highmem-internal.h#L40
 
-I knew the second part but not the first, thanks.
-So basically it is advised to convert the page_address() usage in similar
-loopback testing code that other Intel drivers have, I'll do that later.
 
-> 
-> Thanks,
-> 
-> - Alex
+Sure, but drivers/net/ethernet/intel/ixgbe/ixgbe_main.c is allocating
+pages that are not highmem ?
+
+This kmap() does not seem needed.
