@@ -2,98 +2,83 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86F03C433EF
-	for <bpf@archiver.kernel.org>; Thu, 30 Jun 2022 14:03:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22EE8C43334
+	for <bpf@archiver.kernel.org>; Thu, 30 Jun 2022 14:34:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236063AbiF3OC7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 30 Jun 2022 10:02:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44954 "EHLO
+        id S235988AbiF3Oeo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 30 Jun 2022 10:34:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236568AbiF3OCm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 30 Jun 2022 10:02:42 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003EA68A32
-        for <bpf@vger.kernel.org>; Thu, 30 Jun 2022 06:53:03 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id r1so17087004plo.10
-        for <bpf@vger.kernel.org>; Thu, 30 Jun 2022 06:53:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=q1WyPKAWTYMQhNa1H/wwyGLjKjFkJeSD1KyHDnw1/zA=;
-        b=e15+1F8sCKCdG8lpWLjOCpzFM5c/6WB0j4+9XsUniFLdn/E7hcfxtkmrpXxRjSpuUS
-         gKNWSee0Sq0TIXoQENdoMGf+z+s7M360B5rj60Cr6TezjTQF06QwHg7RA7gRUmXTIb85
-         txll3Xf3qGTN0kQdKd/Fiugo+QvL/l08oVSUqYN1GmgwTcafaRMdlRJVhc6Bar7VoWRM
-         7qETxlQ/6JEwCfK4OR7oB1UnxZM0/UCVpwcvxTPVdbIFnGqeMvSP2tyU7j8XZXKZyddI
-         9F+TQZxePoA3ityyqI1t63fluwyGZlKsbQqnx4WBriBH5okFTkZ/1u6ULbitPqGNVfJN
-         shDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=q1WyPKAWTYMQhNa1H/wwyGLjKjFkJeSD1KyHDnw1/zA=;
-        b=KkDJNYD5h5CGoSabxJwLYLX1jtolQarAB2gc3VP+wM/rDXSsa5tot9+Uu5Q020Bwtt
-         8hc7aoInGSa38Cmpb6CybYAsLFjPN3nIbpePPBzkHjsJjrLcjgQPGy2rrMYKO4bG1mqs
-         HslodUB2j2Du3Tp8S/fveaX1tUzNsUzLpbcJpLVCVlu+rMXfjwYZSkIojVorrXXLnvM+
-         N/qGKKf6PNr2ddTe4MYM+Vm4/LFaoslmpz/pviLDHQjYImG3y3NW63/Brs5yKnVb2KJD
-         jdywabmR4itX+YCqVXdFPDDEgz6dPTY8suOvYH3YD/pWJJPGCNqKM9XPHuyB/M8TgeD9
-         mKxQ==
-X-Gm-Message-State: AJIora9r0n0YwpvypzpIGKsUx+5eqMmuHAurVDuysNJg8Nkgs7BxPL0Z
-        0ZxSazjWOXXQvDhLSQJo/4JMWRn6Y7U=
-X-Google-Smtp-Source: AGRyM1tf0sFi6BmOY9a6B8zBV9W+29QG5MiMWXBqc4bWMzvWpUdykvtYbba03axHHjTKd+Fr1CBqVQ==
-X-Received: by 2002:a17:90b:278e:b0:1ee:f086:9c9d with SMTP id pw14-20020a17090b278e00b001eef0869c9dmr12014117pjb.182.1656597182982;
-        Thu, 30 Jun 2022 06:53:02 -0700 (PDT)
-Received: from localhost.localdomain ([119.28.83.143])
-        by smtp.gmail.com with ESMTPSA id jf3-20020a170903268300b0016a17e5fc6esm13500310plb.104.2022.06.30.06.53.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 06:53:02 -0700 (PDT)
-From:   Hengqi Chen <hengqi.chen@gmail.com>
-To:     bpf@vger.kernel.org, andrii@kernel.org
-Cc:     hengqi.chen@gmail.com
-Subject: [PATCH bpf-next] libbpf: Allow attach USDT BPF program without specifying binary path
-Date:   Thu, 30 Jun 2022 21:52:50 +0800
-Message-Id: <20220630135250.241795-1-hengqi.chen@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S237063AbiF3Oeb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 30 Jun 2022 10:34:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABCF50708;
+        Thu, 30 Jun 2022 07:20:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2891A622F9;
+        Thu, 30 Jun 2022 14:20:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7C37CC341CB;
+        Thu, 30 Jun 2022 14:20:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656598814;
+        bh=NHpZJJxerMp/V3SI99bfmObIYCbgF39n92fkVdF3ACw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=DvnY9c54XCrQcYp6CBSVLhYc9jF5DWLjHPqqRKRlBRNWKln9Ij5SdH4IVU8PtDBwd
+         v5UgAXaYi7xf6OSPnvhcC2G1zd3eI7rqRyOuY6smIiAg28uMW3+6ob5bvbOaydYY2W
+         HzenzwzpTVNH24FJR3bVgFjrBKCUMFsEWNSyXjjgvqW4DI2cuerPMqJo4eeLTrMHjQ
+         QcKkEAjyAi70blyhLxaFZfXBCouoG9rtlFaCB42BIZfh35MzimkawEkAK7JEr1og7D
+         jV+0Ptql2QqNRlJaSPmPUnGftKCF8oUH8jMaUOynsLvho4RLWEHyaEshwDXfVK8YXY
+         ys3Gabl0jGHKQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5CD61E49BBA;
+        Thu, 30 Jun 2022 14:20:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2 0/2] bpftool: Add command to list BPF types,
+ helpers
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165659881437.5783.4681054959379123186.git-patchwork-notify@kernel.org>
+Date:   Thu, 30 Jun 2022 14:20:14 +0000
+References: <20220629203637.138944-1-quentin@isovalent.com>
+In-Reply-To: <20220629203637.138944-1-quentin@isovalent.com>
+To:     Quentin Monnet <quentin@isovalent.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, libbpf requires specifying binary path when attach USDT BPF program
-manually. This is not necessary because we can infer that from /proc/$PID/exe.
-This also avoids coredump when user do not provide binary path.
+Hello:
 
-Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
----
- tools/lib/bpf/libbpf.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+This series was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 8a45a84eb9b2..4ee9b6a0944e 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -10686,7 +10686,19 @@ struct bpf_link *bpf_program__attach_usdt(const struct bpf_program *prog,
- 		return libbpf_err_ptr(-EINVAL);
- 	}
+On Wed, 29 Jun 2022 21:36:35 +0100 you wrote:
+> Now that bpftool relies on libbpf to get a "standard" textual
+> representation for program, map, link, and attach types, we can make it
+> list all these types (plus BPF helpers) that it knows from compilation
+> time.
+> 
+> The first use case for this feature is to help with bash completion. It
+> also provides a simple way for scripts to iterate over existing BPF types,
+> using the canonical names known to libbpf.
+> 
+> [...]
 
--	if (!strchr(binary_path, '/')) {
-+	if (!binary_path) {
-+		if (pid < 0) {
-+			pr_warn("prog '%s': missing attach target, pid or binary path required\n",
-+				prog->name);
-+			return libbpf_err_ptr(-EINVAL);
-+		}
-+		if (!pid)
-+			binary_path = "/proc/self/exe";
-+		else {
-+			snprintf(resolved_path, sizeof(resolved_path), "/proc/%d/exe", pid);
-+			binary_path = resolved_path;
-+		}
-+	} else if (!strchr(binary_path, '/')) {
- 		err = resolve_full_path(binary_path, resolved_path, sizeof(resolved_path));
- 		if (err) {
- 			pr_warn("prog '%s': failed to resolve full path for '%s': %d\n",
---
-2.30.2
+Here is the summary with links:
+  - [bpf-next,v2,1/2] bpftool: Add feature list (prog/map/link/attach types, helpers)
+    https://git.kernel.org/bpf/bpf-next/c/27b3f7055343
+  - [bpf-next,v2,2/2] bpftool: Use feature list in bash completion
+    https://git.kernel.org/bpf/bpf-next/c/6d304871e3ef
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
