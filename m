@@ -2,125 +2,135 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A109C43334
-	for <bpf@archiver.kernel.org>; Fri,  1 Jul 2022 15:14:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17D89C43334
+	for <bpf@archiver.kernel.org>; Fri,  1 Jul 2022 15:16:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbiGAPO2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 1 Jul 2022 11:14:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42626 "EHLO
+        id S230497AbiGAPQ3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 1 Jul 2022 11:16:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232117AbiGAPM0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 1 Jul 2022 11:12:26 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E573FDB5
-        for <bpf@vger.kernel.org>; Fri,  1 Jul 2022 08:12:22 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id s10so2943991ljh.12
-        for <bpf@vger.kernel.org>; Fri, 01 Jul 2022 08:12:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=anyfinetworks-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=j3JH4pKNrGtnMgZRKEvSiQHteuS1mmuigNZWQ3Oqn08=;
-        b=4uwG6v0AQHR4D1gzzZIw3AOzmhWDI4BkF8vKgSuhEGpnNgkXu247DbgQRCFrLaZW7U
-         GhaVzMHo6IHVMOOw1Sbp2kf+rqNezxqhTr4GPJknafYvxbl1L6j8opdLluTNuTs4WrNG
-         uJx6cQO+IcyOj1kIshx+67Xbi9Vek/aztRz7iItzJKLFIo8JJdkMto/Jn1JGwVypWu40
-         sN6Aab6yQnUzCjLPJX2xw9uS5ArVzKj1tqPb2NC/Lm5gqtHACutmFdQMW/w3q/Hjh+1/
-         0H+LZaktJQQzRtoWpL8geEmOxQcu4P0eEPSXoFRfV/esuKchKXF4FweABHm2UE5iOeYc
-         AnTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=j3JH4pKNrGtnMgZRKEvSiQHteuS1mmuigNZWQ3Oqn08=;
-        b=3Z3QH3xShZKS4P1u5TEe51gxSGrvRQHvDFpmxFzfuxibgvj9UlQ8gmEgeDG06Nx8FI
-         AjJkFjfkGFaXGJhrE55GcKIf5yzB2Vr+X/7lzMWyIjiKW5pja8uAMijERgUsLWRXx56D
-         1IME8qb3LzzgPMPvakv0UmrYmpjs/GTFsZC7I3Dg3Swo6ljz/v1xvkCE7I/bRFecKQTG
-         8B+1Bljv3c0XRXbAO88Brc0M0DV+ZktQYTtiS/Q0/oX0Wr2S383ggUA6dHZrc52JEcKq
-         b+rfzHC7OqQ4LburUVL63QdcqKRC2QNvSaiyBmRVw9KhwD9pQsciYb2Prt/CQT5H+rPE
-         IIuQ==
-X-Gm-Message-State: AJIora8lIOtSex6ry/TxXfiDqtCYbB1OS0UNGR8gHE8+HgNCQmukaNbQ
-        A8a7/KC/yhyDIykYUHgV8YrHVA==
-X-Google-Smtp-Source: AGRyM1tS7F69x6Dfw0B3DZ3fGSunFgO3JCe/PLKe4uRHdHZFNSdUHfIP2lRuYA5UR3n9n3M6d4aivw==
-X-Received: by 2002:a05:651c:895:b0:250:c5ec:bc89 with SMTP id d21-20020a05651c089500b00250c5ecbc89mr8270940ljq.251.1656688340510;
-        Fri, 01 Jul 2022 08:12:20 -0700 (PDT)
-Received: from anpc2.lan ([62.119.107.74])
-        by smtp.gmail.com with ESMTPSA id b22-20020a056512305600b0047da6e495b1sm3664351lfb.4.2022.07.01.08.12.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 08:12:19 -0700 (PDT)
-From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, hawk@kernel.org, john.fastabend@gmail.com
-Cc:     song@kernel.org, martin.lau@linux.dev, yhs@fb.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, Freysteinn.Alfredsson@kau.se, toke@redhat.com,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Subject: [PATCH bpf v2] xdp: Fix spurious packet loss in generic XDP TX path
-Date:   Fri,  1 Jul 2022 17:12:00 +0200
-Message-Id: <20220701151200.2033129-1-johan.almbladh@anyfinetworks.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220701094256.1970076-1-johan.almbladh@anyfinetworks.com>
-References: <20220701094256.1970076-1-johan.almbladh@anyfinetworks.com>
+        with ESMTP id S230521AbiGAPQ2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 1 Jul 2022 11:16:28 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BC430F7D;
+        Fri,  1 Jul 2022 08:16:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1656688587; x=1688224587;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=XFBVO6SXrO3FNt7nyhFxNsDwduLPRRwR8Ddld4oarBA=;
+  b=pO03cPW4b+OBmQTnv4drWTE/971ObouaPTu8Atnljj9izaY2pi1yx5xZ
+   mriUWBD5z3vzaChQQGjx2lHYAJVWYosQjJfpA4AT6GnDXDiRa3Gfw5nqQ
+   qS8JvSzM6APAv3/XFXKtJAHuO9IH3t0dVxdsJ50DffJDQgkxEysmvO6TG
+   +ltM91ajkzbgJmqmh8t+MYjG7OS9k+uPBXA76+J29r1W4dFcLXUbVUxpc
+   5hVbfPO3AAc9Z84Nb01txnMzScMEaZwTQH9AR3aDkv9rGqNMSQdx9QESC
+   BZLBCE8zpJ0i1u7Yo1RaD+T8GAtRLnMIY50xZVFmSHh6129Lbudc48i2u
+   A==;
+X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
+   d="scan'208";a="102673275"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Jul 2022 08:16:26 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 1 Jul 2022 08:16:25 -0700
+Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Fri, 1 Jul 2022 08:16:06 -0700
+From:   Arun Ramadoss <arun.ramadoss@microchip.com>
+To:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+CC:     Woojung Huh <woojung.huh@microchip.com>,
+        <UNGLinuxDriver@microchip.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        "Song Liu" <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+Subject: [Patch net-next v15 13/13] net: dsa: microchip: add LAN937x in the ksz spi probe
+Date:   Fri, 1 Jul 2022 20:46:00 +0530
+Message-ID: <20220701151600.31805-1-arun.ramadoss@microchip.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220701144652.10526-1-arun.ramadoss@microchip.com>
+References: <20220701144652.10526-1-arun.ramadoss@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The byte queue limits (BQL) mechanism is intended to move queuing from
-the driver to the network stack in order to reduce latency caused by
-excessive queuing in hardware. However, when transmitting or redirecting
-a packet using generic XDP, the qdisc layer is bypassed and there are no
-additional queues. Since netif_xmit_stopped() also takes BQL limits into
-account, but without having any alternative queuing, packets are
-silently dropped.
+This patch add the LAN937x part support in the existing ksz_spi_probe.
 
-This patch modifies the drop condition to only consider cases when the
-driver itself cannot accept any more packets. This is analogous to the
-condition in __dev_direct_xmit(). Dropped packets are also counted on
-the device.
-
-Bypassing the qdisc layer in the generic XDP TX path means that XDP
-packets are able to starve other packets going through a qdisc, and
-DDOS attacks will be more effective. In-driver-XDP use dedicated TX
-queues, so they do not have this starvation issue.
-
-Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
 ---
- net/core/dev.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/net/dsa/microchip/ksz_spi.c | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 8e6f22961206..00fb9249357f 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -4863,7 +4863,10 @@ static u32 netif_receive_generic_xdp(struct sk_buff *skb,
- }
- 
- /* When doing generic XDP we have to bypass the qdisc layer and the
-- * network taps in order to match in-driver-XDP behavior.
-+ * network taps in order to match in-driver-XDP behavior. This also means
-+ * that XDP packets are able to starve other packets going through a qdisc,
-+ * and DDOS attacks will be more effective. In-driver-XDP use dedicated TX
-+ * queues, so they do not have this starvation issue.
-  */
- void generic_xdp_tx(struct sk_buff *skb, struct bpf_prog *xdp_prog)
- {
-@@ -4875,10 +4878,12 @@ void generic_xdp_tx(struct sk_buff *skb, struct bpf_prog *xdp_prog)
- 	txq = netdev_core_pick_tx(dev, skb, NULL);
- 	cpu = smp_processor_id();
- 	HARD_TX_LOCK(dev, txq, cpu);
--	if (!netif_xmit_stopped(txq)) {
-+	if (!netif_xmit_frozen_or_drv_stopped(txq)) {
- 		rc = netdev_start_xmit(skb, dev, txq, 0);
- 		if (dev_xmit_complete(rc))
- 			free_skb = false;
-+	} else {
-+		dev_core_stats_tx_dropped_inc(dev);
- 	}
- 	HARD_TX_UNLOCK(dev, txq);
- 	if (free_skb) {
+diff --git a/drivers/net/dsa/microchip/ksz_spi.c b/drivers/net/dsa/microchip/ksz_spi.c
+index 69fabb190f26..4844830dca72 100644
+--- a/drivers/net/dsa/microchip/ksz_spi.c
++++ b/drivers/net/dsa/microchip/ksz_spi.c
+@@ -166,6 +166,26 @@ static const struct of_device_id ksz_dt_ids[] = {
+ 		.compatible = "microchip,ksz9567",
+ 		.data = &ksz_switch_chips[KSZ9567]
+ 	},
++	{
++		.compatible = "microchip,lan9370",
++		.data = &ksz_switch_chips[LAN9370]
++	},
++	{
++		.compatible = "microchip,lan9371",
++		.data = &ksz_switch_chips[LAN9371]
++	},
++	{
++		.compatible = "microchip,lan9372",
++		.data = &ksz_switch_chips[LAN9372]
++	},
++	{
++		.compatible = "microchip,lan9373",
++		.data = &ksz_switch_chips[LAN9373]
++	},
++	{
++		.compatible = "microchip,lan9374",
++		.data = &ksz_switch_chips[LAN9374]
++	},
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, ksz_dt_ids);
+@@ -182,6 +202,11 @@ static const struct spi_device_id ksz_spi_ids[] = {
+ 	{ "ksz9563" },
+ 	{ "ksz8563" },
+ 	{ "ksz9567" },
++	{ "lan9370" },
++	{ "lan9371" },
++	{ "lan9372" },
++	{ "lan9373" },
++	{ "lan9374" },
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(spi, ksz_spi_ids);
+@@ -206,6 +231,7 @@ MODULE_ALIAS("spi:ksz9893");
+ MODULE_ALIAS("spi:ksz9563");
+ MODULE_ALIAS("spi:ksz8563");
+ MODULE_ALIAS("spi:ksz9567");
++MODULE_ALIAS("spi:lan937x");
+ MODULE_AUTHOR("Tristram Ha <Tristram.Ha@microchip.com>");
+ MODULE_DESCRIPTION("Microchip ksz Series Switch SPI Driver");
+ MODULE_LICENSE("GPL");
 -- 
-2.30.2
+2.36.1
 
