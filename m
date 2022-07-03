@@ -2,112 +2,115 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F301CCA47B
-	for <bpf@archiver.kernel.org>; Sat,  2 Jul 2022 15:40:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F43CC433EF
+	for <bpf@archiver.kernel.org>; Sun,  3 Jul 2022 03:02:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232160AbiGBPkT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 2 Jul 2022 11:40:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42888 "EHLO
+        id S229563AbiGCDCT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 2 Jul 2022 23:02:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232195AbiGBPkS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 2 Jul 2022 11:40:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA776DECE;
-        Sat,  2 Jul 2022 08:40:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FBF260F84;
-        Sat,  2 Jul 2022 15:40:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C82F5C341CB;
-        Sat,  2 Jul 2022 15:40:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656776415;
-        bh=UOxg5grFLnvv0/PiESstgBIltLpmrZ2+w1OXDuPpnRU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=uCO3dLdXYtC6XFt/qoS2h0ZjN6rwCAeqxEgo0MA184fKcQ1z8qJ+YK38g/tcA7Sx1
-         I3u1usuuhTjIJ47KwC6gSGbDLNHlCxW3WZ2ZLNIGmfpTzv4pEJRUstTPdj7Dt5rwNY
-         Z4uDyDk+0fXrS3lCfvb/nJzjdjDUfY9YqRKvJyZvP7NmogSoj/D6BRTsZtFEARv12F
-         9r6dqO8jpB3kY4yMNGb1hnPaJwa7xx2fU++wMvH5XXgo5wsUfnDR946R688t2LW0M4
-         j5CCl+RCoPzh0zW1rCjgG1KrA6w8qtvA644Iwk5iUk7WyNYWRWnENA68L3/RZLW7ob
-         KnYXcVaxDGyAw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AD521E49F61;
-        Sat,  2 Jul 2022 15:40:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229486AbiGCDCS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 2 Jul 2022 23:02:18 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E257658F;
+        Sat,  2 Jul 2022 20:02:16 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 08D7C320024A;
+        Sat,  2 Jul 2022 23:02:12 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Sat, 02 Jul 2022 23:02:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
+        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1656817332; x=1656903732; bh=7AKJuzsinJ
+        qtMyImb2EF1FXvx4qWYBiZUiMMR+YJV5w=; b=MKvjDYTy8LvWquKxl2eb7Jwv0M
+        hlEXviOSScMt+MAlo5Sx+TaerCZjQ0HYx3UsY9U7lLDaT5sOjjDfskfYICvcxxGY
+        62TlAC1M718uniJNwC4Q/rd/VxDfF3XlyMTGY+LCrqn7ryzoo8gFKcJ5r4Ise5CT
+        sETRIjJ0FbfWMixyRHr89m/bJ5pE99T4k0iMM+JEnvHSlbU5L5MXh1khsyIkORpY
+        gBIzcdqxUjJ0L62fjh7tMUkcJmzOpxqs3g8X2krkq4i1vc6l3AUSjacobUSEYWoN
+        d5da0FAUdRaoddwjFlxXu6jUPggCbZTvrLfExvQ0pdzh2WstkuhaZut5ZB9g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1656817332; x=1656903732; bh=7AKJuzsinJqtMyImb2EF1FXvx4qW
+        YBiZUiMMR+YJV5w=; b=LgqCI7fBBaCKDWxrnPNfy1zNXSEjFxxXS9tqQuOdI+is
+        DGkrIurcfzRsRohYbn/yHG7cpO1kLW6NQadFBPmYF6rlkfX6FJJB63yp8gk1KjFa
+        7f+sQAxUw9qSXCxlNPNJB7ktqzUNFslOZ7ayn5YuXRW2F2hs5bn7YhfKkudsXxRf
+        sTbKbRKChyg3jmQFbHVmcDcsD1zZH1qN4xJUmuhp+DBSs37Az53EPUHJoHJ7Po/h
+        kNJa5o+jvq8Nz1Urq647aHHnlsTlNhQyEVKlVQkQ3lVtrmZYyo8+XXrRwN99zDpo
+        ZbrbllrqFFOcauw38CJYxrlvt7jgCnizVnE76IKBjQ==
+X-ME-Sender: <xms:swbBYjJ0Fw6w6_AAyRQEUSALrHVHuko54OLgr5V1Mq82da4YE-JmBw>
+    <xme:swbBYnKBb9QwXxql10xkBht9RIDoly2wk7IUTGQ2AoRrgN-nTOktBnY4bQ8CGrBqR
+    CrhBaiVy7HSARWieg>
+X-ME-Received: <xmr:swbBYrvhPsrJZFmq_u1O0fHD-ApqEwIAMVQCtrHdSMwvoM3xCuSACX7RT8Fnh-kK-TaEcuCgWPsVMlx2-NiRpSnCm_rvdt43wOvptYFRffhCsQzf526T-T--i0ZZ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehiedgieejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehnughr
+    vghsucfhrhgvuhhnugcuoegrnhgurhgvshesrghnrghrrgiivghlrdguvgeqnecuggftrf
+    grthhtvghrnhepvdfffeevhfetveffgeeiteefhfdtvdffjeevhfeuteegleduheetvedu
+    ieettddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghnughrvghssegrnhgrrhgriigvlhdruggv
+X-ME-Proxy: <xmx:swbBYsaK2yLHO8XqG8L9_3bwQnoTu0n9xhCzpjTyu02o5gXvtXTFAw>
+    <xmx:swbBYqa-8_T1-5FuaMmf7mB14H7u8IvDkmB2uEsiR41fEh13F6VG3w>
+    <xmx:swbBYgDt_36TZ7coT0OA9hUoqwGVz9JpljrSINHHZ19hMq733Zfr6Q>
+    <xmx:tAbBYnRG_0xcwjVqBsDDjPDTBXBjzNyMzdZLGpEnAKMoA-xj-aBjxw>
+Feedback-ID: id4a34324:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 2 Jul 2022 23:02:11 -0400 (EDT)
+Date:   Sat, 2 Jul 2022 20:02:10 -0700
+From:   Andres Freund <andres@anarazel.de>
+To:     Song Liu <song@kernel.org>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kernel-team@fb.com, peterz@infradead.org,
+        x86@kernel.org, iii@linux.ibm.com, Song Liu <songliubraving@fb.com>
+Subject: Re: [PATCH v9 bpf-next 9/9] bpf, x86_64: use
+ bpf_jit_binary_pack_alloc
+Message-ID: <20220703030210.pmjft7qc2eajzi6c@alap3.anarazel.de>
+References: <20220204185742.271030-1-song@kernel.org>
+ <20220204185742.271030-10-song@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [Patch net-next v15 00/13] net: dsa: microchip: DSA Driver support
- for LAN937x
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165677641570.21073.132055092852251986.git-patchwork-notify@kernel.org>
-Date:   Sat, 02 Jul 2022 15:40:15 +0000
-References: <20220701144652.10526-1-arun.ramadoss@microchip.com>
-In-Reply-To: <20220701144652.10526-1-arun.ramadoss@microchip.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux@armlinux.org.uk,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220204185742.271030-10-song@kernel.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+Hi,
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Fri, 1 Jul 2022 20:16:39 +0530 you wrote:
-> LAN937x is a Multi-Port 100BASE-T1 Ethernet Physical Layer switch
-> compliant with the IEEE 802.3bw-2015 specification. The device provides
-> 100 Mbit/s transmit and receive capability over a single Unshielded
-> Twisted Pair (UTP) cable. LAN937x is successive revision of KSZ series
-> switch.
-> This series of patches provide the DSA driver support for
-> Microchip LAN937X switch through MII/RMII interface. The RGMII interface
-> support will be added in the follow up series.  LAN937x uses the most of
-> functionality of KSZ9477.
+On 2022-02-04 10:57:42 -0800, Song Liu wrote:
+> From: Song Liu <songliubraving@fb.com>
 > 
-> [...]
+> Use bpf_jit_binary_pack_alloc in x86_64 jit. The jit engine first writes
+> the program to the rw buffer. When the jit is done, the program is copied
+> to the final location with bpf_jit_binary_pack_finalize.
+> 
+> Note that we need to do bpf_tail_call_direct_fixup after finalize.
+> Therefore, the text_live = false logic in __bpf_arch_text_poke is no
+> longer needed.
 
-Here is the summary with links:
-  - [net-next,v15,01/13] dt-bindings: net: make internal-delay-ps based on phy-mode
-    https://git.kernel.org/netdev/net-next/c/528f7f1fadf1
-  - [net-next,v15,02/13] dt-bindings: net: dsa: dt bindings for microchip lan937x
-    https://git.kernel.org/netdev/net-next/c/8926d94e5c50
-  - [net-next,v15,03/13] net: dsa: tag_ksz: add tag handling for Microchip LAN937x
-    https://git.kernel.org/netdev/net-next/c/092f875131dc
-  - [net-next,v15,04/13] net: dsa: microchip: generic access to ksz9477 static and reserved table
-    https://git.kernel.org/netdev/net-next/c/457c182af597
-  - [net-next,v15,05/13] net: dsa: microchip: add DSA support for microchip LAN937x
-    https://git.kernel.org/netdev/net-next/c/55ab6ffaf378
-  - [net-next,v15,06/13] net: dsa: microchip: lan937x: add dsa_tag_protocol
-    https://git.kernel.org/netdev/net-next/c/99b16df0cd52
-  - [net-next,v15,07/13] net: dsa: microchip: lan937x: add phy read and write support
-    https://git.kernel.org/netdev/net-next/c/ffaf1de2f62d
-  - [net-next,v15,08/13] net: dsa: microchip: lan937x: register mdio-bus
-    https://git.kernel.org/netdev/net-next/c/a50b35366c64
-  - [net-next,v15,09/13] net: dsa: microchip: lan937x: add MTU and fast_age support
-    https://git.kernel.org/netdev/net-next/c/ab8823688f9e
-  - [net-next,v15,10/13] net: dsa: microchip: lan937x: add phylink_get_caps support
-    https://git.kernel.org/netdev/net-next/c/c14e878d4a4f
-  - [net-next,v15,11/13] net: dsa: microchip: lan937x: add phylink_mac_link_up support
-    https://git.kernel.org/netdev/net-next/c/f597d3ad75b8
-  - [net-next,v15,12/13] net: dsa: microchip: lan937x: add phylink_mac_config support
-    https://git.kernel.org/netdev/net-next/c/a0cb1aa43825
-  - [net-next,v15,13/13] net: dsa: microchip: add LAN937x in the ksz spi probe
-    https://git.kernel.org/netdev/net-next/c/c8fac9d0aa5a
+I think this broke bpf_jit_enable = 2. I just tried to use that, to verify I
+didn't break tools/bpf/bpf_jit_disasm, and I just see output like
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Jul 02 18:34:40 awork3 kernel: flen=142 proglen=735 pass=5 image=00000000d076e0db from=sshd pid=440127
+Jul 02 18:34:40 awork3 kernel: JIT code: 00000000: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc
+Jul 02 18:34:40 awork3 kernel: JIT code: 00000010: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc
+Jul 02 18:34:40 awork3 kernel: JIT code: 00000020: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc
+Jul 02 18:34:40 awork3 kernel: JIT code: 00000030: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc
+...
 
+while bpftool keeps showing reasonable content. The 'cc' content only started
+with a later commit, but I think this is the commit that broke bpf_jit_enable
+== 2.
 
+At the time bpf_jit_dump() is called bpf_jit_binary_pack_alloc() pointed image to
+ro_header->image, but that's not yet written to, because
+bpf_jit_binary_pack_finalize() hasn't been called.
+
+Greetings,
+
+Andres Freund
