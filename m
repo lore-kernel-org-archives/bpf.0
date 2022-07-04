@@ -2,86 +2,91 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2E1CCCA473
-	for <bpf@archiver.kernel.org>; Sun,  3 Jul 2022 22:51:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A48E8CCA481
+	for <bpf@archiver.kernel.org>; Mon,  4 Jul 2022 01:14:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbiGCWvJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 3 Jul 2022 18:51:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37558 "EHLO
+        id S232951AbiGDBOX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 3 Jul 2022 21:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbiGCWvI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 3 Jul 2022 18:51:08 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4BE389A;
-        Sun,  3 Jul 2022 15:51:07 -0700 (PDT)
-Date:   Sun, 3 Jul 2022 15:50:59 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1656888664;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=x1aMEnERkcYXRuDziS0Zc8C87mC49RuzSVJcPFqy0W4=;
-        b=NdeXq3Q0aH+DxBKSCS1GbadzG/ojBzsDFkJu1dEehs/A4VIcHKeDcfyrAAnIt+xW787Q2Y
-        llJrgKxTG0lCaWhR1V20IxPimKLEoF19Q8mA27pxNl262HKIDQydxfIJM2PNiE+uDGrGfC
-        m9H4YfvK0CIGGgqwrCL8m/lvsv4A7zw=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Yafang Shao <laoar.shao@gmail.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
-        bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH] mm: memcontrol: do not miss MEMCG_MAX events for
- enforced allocations
-Message-ID: <YsIdU0xJeQWR2DwL@castle>
-References: <20220702033521.64630-1-roman.gushchin@linux.dev>
- <CALvZod7TGhWtcRD6HeEx90T2+Rod-yamq9i+WbEQUKwNFTi-1A@mail.gmail.com>
- <YsBmoqEBCa7ra7w2@castle>
- <CALvZod6zCHKyjd8Ewr02xcHRWrxR_82my6mmTgsRp3HceqsBcg@mail.gmail.com>
+        with ESMTP id S233125AbiGDBOH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 3 Jul 2022 21:14:07 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8B76395;
+        Sun,  3 Jul 2022 18:14:05 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lbnps1K8czkX55;
+        Mon,  4 Jul 2022 09:12:37 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 4 Jul 2022 09:14:01 +0800
+Received: from [127.0.0.1] (10.67.101.149) by kwepemm600017.china.huawei.com
+ (7.193.23.234) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 4 Jul
+ 2022 09:14:01 +0800
+Subject: Re: [PATCH net-next v2] net: page_pool: optimize page pool page
+ allocation in NUMA scenario
+To:     Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Guangbin Huang <huangguangbin2@huawei.com>
+References: <20220629133305.15012-1-huangguangbin2@huawei.com>
+ <20220630211534.6d1c32da@kernel.org>
+ <728b4c15-8114-e253-5d45-a5610882f891@redhat.com>
+CC:     <brouer@redhat.com>, <hawk@kernel.org>,
+        <ilias.apalodimas@linaro.org>, <davem@davemloft.net>,
+        <edumazet@google.com>, <pabeni@redhat.com>, <lorenzo@kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <lipeng321@huawei.com>,
+        <chenhao288@hisilicon.com>
+From:   "wangjie (L)" <wangjie125@huawei.com>
+Message-ID: <5fbe43df-7469-f8af-97a2-ad5f20efa889@huawei.com>
+Date:   Mon, 4 Jul 2022 09:14:00 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALvZod6zCHKyjd8Ewr02xcHRWrxR_82my6mmTgsRp3HceqsBcg@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+In-Reply-To: <728b4c15-8114-e253-5d45-a5610882f891@redhat.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.101.149]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Jul 02, 2022 at 10:36:28PM -0700, Shakeel Butt wrote:
-> On Sat, Jul 2, 2022 at 8:39 AM Roman Gushchin <roman.gushchin@linux.dev> wrote:
-> >
-> > On Fri, Jul 01, 2022 at 10:50:40PM -0700, Shakeel Butt wrote:
-> > > On Fri, Jul 1, 2022 at 8:35 PM Roman Gushchin <roman.gushchin@linux.dev> wrote:
-> > > >
-> > > > Yafang Shao reported an issue related to the accounting of bpf
-> > > > memory: if a bpf map is charged indirectly for memory consumed
-> > > > from an interrupt context and allocations are enforced, MEMCG_MAX
-> > > > events are not raised.
-> > > >
-> > > > It's not/less of an issue in a generic case because consequent
-> > > > allocations from a process context will trigger the reclaim and
-> > > > MEMCG_MAX events. However a bpf map can belong to a dying/abandoned
-> > > > memory cgroup, so it might never happen.
-> > >
-> > > The patch looks good but the above sentence is confusing. What might
-> > > never happen? Reclaim or MAX event on dying memcg?
-> >
-> > Direct reclaim and MAX events. I agree it might be not clear without
-> > looking into the code. How about something like this?
-> >
-> > "It's not/less of an issue in a generic case because consequent
-> > allocations from a process context will trigger the direct reclaim
-> > and MEMCG_MAX events will be raised. However a bpf map can belong
-> > to a dying/abandoned memory cgroup, so there will be no allocations
-> > from a process context and no MEMCG_MAX events will be triggered."
-> >
-> 
-> SGTM and you can add:
-> 
-> Acked-by: Shakeel Butt <shakeelb@google.com>
 
-Thank you!
+
+On 2022/7/1 15:56, Jesper Dangaard Brouer wrote:
+>
+> On 01/07/2022 06.15, Jakub Kicinski wrote:
+>> On Wed, 29 Jun 2022 21:33:05 +0800 Guangbin Huang wrote:
+>>> +#ifdef CONFIG_NUMA
+>>> +    pref_nid = (pool->p.nid == NUMA_NO_NODE) ? numa_mem_id() :
+>>> pool->p.nid;
+>>> +#else
+>>> +    /* Ignore pool->p.nid setting if !CONFIG_NUMA */
+>>> +    pref_nid = NUMA_NO_NODE;
+>>> +#endif
+>>
+>> Please factor this out to a helper, this is a copy of the code from
+>> page_pool_refill_alloc_cache() and #ifdefs are a little yuck.
+>>
+>
+> I would say simply use 'pool->p.nid' in the call to
+> alloc_pages_bulk_array_node() and drop this optimization (that was
+> copy-pasted from fast-path).
+>
+> The optimization avoids one reading from memory compile time depending
+> on CONFIG_NUMA.  It is *not* worth doing in this code path which is even
+> named "slow" (__page_pool_alloc_pages_slow).
+>
+> --Jesper
+>
+Simply use pool->p.nid looks simply and makes sense in both scenario. I 
+will rewrite and test the patch in next version.
+>
+> .
+>
+
