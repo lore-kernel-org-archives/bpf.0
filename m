@@ -2,123 +2,81 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE2C2C43334
-	for <bpf@archiver.kernel.org>; Tue,  5 Jul 2022 08:32:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71D5DC433EF
+	for <bpf@archiver.kernel.org>; Tue,  5 Jul 2022 10:00:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230355AbiGEIca (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Jul 2022 04:32:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41502 "EHLO
+        id S230074AbiGEKAP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Jul 2022 06:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbiGEIcY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Jul 2022 04:32:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 922D79D
-        for <bpf@vger.kernel.org>; Tue,  5 Jul 2022 01:32:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657009938;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eGZRoN7EHBvepMcuQHMt3bqC6hyW9024ptQrr+mX7IE=;
-        b=gcj6OTsJXwV/dVNE0kvf3v0Jubz2mo5LhoBlxUuzKl/jQtVr05rquC8P1/ffR5uZXK1KZQ
-        UX0b7I0RekNQUZ/ZVlplpPrKgcSHdSvhDMHFtGk7SKsJ6/HR203QVLvFHZzeuUzxO74S3K
-        WmzcDoZB407hdPgNo/NnSCK5oYKZJgs=
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
- [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-53-b4fBVrNHPfKrOg8ya0w6cw-1; Tue, 05 Jul 2022 04:32:16 -0400
-X-MC-Unique: b4fBVrNHPfKrOg8ya0w6cw-1
-Received: by mail-pl1-f197.google.com with SMTP id d10-20020a170902ceca00b0016bea2dc145so1905823plg.7
-        for <bpf@vger.kernel.org>; Tue, 05 Jul 2022 01:32:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eGZRoN7EHBvepMcuQHMt3bqC6hyW9024ptQrr+mX7IE=;
-        b=MO6JUqqBglM5cVRFBEswc1EKr4Ud/zEchM1Ow+qqtw5TrS5OesyZKO0E35gFnAH6gY
-         HKSFRa0bhBdBiweFgiYeIXP2fD84W/sSpmPqJfrUp5IEhWY2NCIQ46skvQl2GhNMHbSv
-         a+cD/RERGTiX2osFiLqupXtfK+lB6k8x+uZk0po3ez2eY09PFVfdBOD0nDVl18mXqrIq
-         xPnPdLu5QvSBwdVCLS78NuGEH3vgW730ccFE2GIFlwKH3Wc2CoaxfbfL5gaWchG/2z4Z
-         j43jW31b8EplZigs3PlCJsGq88bXnfNPC3dZlCe+PSZc3OQb+VeqqpvC6fcre1/FBzfV
-         680A==
-X-Gm-Message-State: AJIora+5EsMoT9bRjIpd1ledjIQhTWmqUpdrRzWlgr0e87YTw13Oi7Go
-        4hsvWaDfTlmDttgT89azFGFtvsYGH1EO7GadqU39CmxsayWGsO2igbexSRSHTceWZE2oQdtY+RG
-        hejRCrN1223FSuNpwMBt7H2xysmf+
-X-Received: by 2002:a05:6a00:b8c:b0:525:6391:1139 with SMTP id g12-20020a056a000b8c00b0052563911139mr39710888pfj.80.1657009935150;
-        Tue, 05 Jul 2022 01:32:15 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uUaDGsY7+TnzJghxlXsA77S7sFPvo+7W8qCvgKDgB6BIssAztlbrH+6w6Cgc3pBbuB11oHx2dwgc+9O+VO5RU=
-X-Received: by 2002:a05:6a00:b8c:b0:525:6391:1139 with SMTP id
- g12-20020a056a000b8c00b0052563911139mr39710867pfj.80.1657009934870; Tue, 05
- Jul 2022 01:32:14 -0700 (PDT)
+        with ESMTP id S229978AbiGEKAO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Jul 2022 06:00:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B2A1086;
+        Tue,  5 Jul 2022 03:00:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90E4E619A9;
+        Tue,  5 Jul 2022 10:00:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E40B0C341CB;
+        Tue,  5 Jul 2022 10:00:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657015213;
+        bh=NNs/Sfb/Zmnb/a+ZLP2b/3jAoI/7bLbn0FZIBanY5Mk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=jRxUjEd445TIxHLH17oLJNDelmTmqvXcMn/ISyuHIDwLH2PdAEx7em9WrQYTEilrT
+         4+4OfuXunpRpl52rwJ4ussO2XRgqv+SqAps7Bo+L908yJlgIgZgp1u837zSnQL8ZWN
+         85UvVdKYHQ+kD3K+mVR4eNIAx3tUon/aZDqF4+oKNNzk+NVs3iC5R0jabebchmh3/j
+         lk9T6FMZoolh0mYeYJfy/pThqKyokvSPXEBM4nHUxXPDUpBFmgun8euIA4wjYa5/GQ
+         ItaNeqRhwNy0DoC5KD89Y0jkMOIhKdnFX1oTP/heuEmhMFebEv+bReZMzQmkDvLY7P
+         9mC9+ESvPLISA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C5281E45BDB;
+        Tue,  5 Jul 2022 10:00:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <CANoWsw=eP+kYHvT+AUwY=8D=QDrwHz=1_6he8vz0t+Tc1PVVBQ@mail.gmail.com>
- <6e86e8c4-4eaf-3e4e-ee72-035a215b48d3@iogearbox.net> <xunyr135ytxr.fsf@redhat.com>
- <CANoWswmar9ELFGiqNeG7SCuaciaoNWEq2E+YaRq5J4fwRqfuZg@mail.gmail.com> <CAM1=_QTEAA4vzVHJV3-fcLOGqAcef8q6U7bg5LbH-CKehuQLxw@mail.gmail.com>
-In-Reply-To: <CAM1=_QTEAA4vzVHJV3-fcLOGqAcef8q6U7bg5LbH-CKehuQLxw@mail.gmail.com>
-From:   Yauheni Kaliuta <ykaliuta@redhat.com>
-Date:   Tue, 5 Jul 2022 11:31:58 +0300
-Message-ID: <CANoWswnQK4NfvmNjN9DZpeq5ry4qXra9m1hSrBexT83CzUuR0w@mail.gmail.com>
-Subject: Re: test_kmod.sh fails with constant blinding
-To:     Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Cc:     bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] selftests, bpf: remove AF_XDP samples
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165701521280.30326.4501585517121524437.git-patchwork-notify@kernel.org>
+Date:   Tue, 05 Jul 2022 10:00:12 +0000
+References: <20220630093717.8664-1-magnus.karlsson@gmail.com>
+In-Reply-To: <20220630093717.8664-1-magnus.karlsson@gmail.com>
+To:     Magnus Karlsson <magnus.karlsson@gmail.com>
+Cc:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, netdev@vger.kernel.org,
+        maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com,
+        andrii@kernel.org, hawk@kernel.org, toke@redhat.com,
+        bpf@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi, Johan!
+Hello:
 
-On Tue, Jul 5, 2022 at 11:06 AM Johan Almbladh
-<johan.almbladh@anyfinetworks.com> wrote:
->
-> On Mon, Jul 4, 2022 at 10:22 AM Yauheni Kaliuta <ykaliuta@redhat.com> wrote:
-> >
-> > Hi!
-> >
-> > On Fri, Jul 1, 2022 at 2:05 PM Yauheni Kaliuta <ykaliuta@redhat.com> wrote:
-> > > >>>>> On Thu, 30 Jun 2022 22:57:37 +0200, Daniel Borkmann  wrote:
-> > >
-> > >  > On 6/30/22 3:19 PM, Yauheni Kaliuta wrote:
-> > >  >> Hi!
-> > >  >> test_kmod.sh fails for hardened 2 check with
-> > >  >> test_bpf: #964 Staggered jumps: JMP_JA FAIL to select_runtime
-> > >  >> err=-524
-> > >  >> (-ERANGE during constant blinding)
-> > >  >> Did I miss something?
-> > >
-> > >  > That could be expected if one of bpf_adj_delta_to_imm() / bpf_adj_delta_to_off()
-> > >  > fails given the targets go out of range.
-> > >
-> > > I believe that, but how to fix the test? It should not fail.
-> > >
-> > >  > How do the generated insn look?
-> > >
-> > > The instruction when it fails is
-> > >
-> > > (gdb) p/x insn[0]
-> > > $8 = {code = 0xb7, dst_reg = 0x0, src_reg = 0x0, off = 0x0, imm = 0x2aaa}
-> > >
-> > > And it's rewritten as
-> > >
-> > > (gdb) p rewritten
-> > > $9 = 3
-> > > (gdb) p/x insn_buff[0]
-> > > $10 = {code = 0xb7, dst_reg = 0xb, src_reg = 0x0, off = 0x0, imm = 0x68ad0283}
-> > > (gdb) p/x insn_buff[1]
-> > > $11 = {code = 0xa7, dst_reg = 0xb, src_reg = 0x0, off = 0x0, imm = 0x68ad2829}
-> > > (gdb) p/x insn_buff[2]
-> > > $12 = {code = 0xbf, dst_reg = 0x0, src_reg = 0xb, off = 0x0, imm = 0x0}
-> > >
-> > > IIUC.
-> > >
-> >
-> > Johan, what do you think?
->
-> Hmm, I can take a look at it. What is the target arch?
->
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-It fails even on x86.
+On Thu, 30 Jun 2022 11:37:17 +0200 you wrote:
+> From: Magnus Karlsson <magnus.karlsson@intel.com>
+> 
+> Remove the AF_XDP samples from samples/bpf as they are dependent on
+> the AF_XDP support in libbpf. This support has now been removed in the
+> 1.0 release, so these samples cannot be compiled anymore. Please start
+> to use libxdp instead. It is backwards compatible with the AF_XDP
+> support that was offered in libbpf. New samples can be found in the
+> various xdp-project repositories connected to libxdp and by googling.
+> 
+> [...]
 
+Here is the summary with links:
+  - [bpf-next] selftests, bpf: remove AF_XDP samples
+    https://git.kernel.org/bpf/bpf-next/c/cfb5a2dbf141
+
+You are awesome, thank you!
 -- 
-WBR, Yauheni
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
