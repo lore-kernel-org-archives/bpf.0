@@ -2,291 +2,202 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DEDEC433EF
-	for <bpf@archiver.kernel.org>; Tue,  5 Jul 2022 17:24:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1005C43334
+	for <bpf@archiver.kernel.org>; Tue,  5 Jul 2022 18:22:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231574AbiGERYd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Jul 2022 13:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46162 "EHLO
+        id S229739AbiGESWN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Jul 2022 14:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232261AbiGERYb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Jul 2022 13:24:31 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0A61F2E4
-        for <bpf@vger.kernel.org>; Tue,  5 Jul 2022 10:24:30 -0700 (PDT)
+        with ESMTP id S229482AbiGESWM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Jul 2022 14:22:12 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163F2140BB;
+        Tue,  5 Jul 2022 11:22:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657041870; x=1688577870;
+  t=1657045330; x=1688581330;
   h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=GHdpSs+ZFr1Q9sR5fIhsOAFFumrq0TS9Nx+ZappXW4M=;
-  b=gU6sqwbf245XCY3+SFGnPIyskpvXcTkR+wHmlGnOF3YpF0jfB28cgOtq
-   BekpKC7NGJSpCtAvyZH7jf6T78TiGCgeJ9rIOPCzWHfbynVy9XIgBNH23
-   sXL35BXNdEtU7h2vDBgimSLSSMoAYU0H3rV7TPwJDYubx3dvIcc1k6Vsp
-   0ABg6e1CjtsE1Fpba3+jJCGdSJ9xNA6Im5ULxjr853cEczizoUUE9zMYO
-   2qEZxfyCIUYqEmjth5glUN0tGt6BoJQD5BkrMwx0C+plap58c4hRAzPJe
-   vJn9LhnSlHzNfFS4B/zeVsAHrwGwm3GUrG961yEf+/0BcImmMAa75lqAa
+   in-reply-to:mime-version;
+  bh=aIm1GEPIFUQ/81YyBX4efJ2+309sKtxv4UX3qSdeuOA=;
+  b=oAGf1VIy3q5lIRhsu6sqFIchMYSCDfHv+/3SQbXcs4QF/p6KiJIWdiiR
+   mzCEOw4KD5Q0hD+2KUS597EWwY1hLUHuUGJxFVeJfrXEtmesu0Dqn8ROY
+   JeyPGWQ+KmSFJ0W7bUgLQVm3rGpOL/LDLQNqeyRW8p92lfZqEE82hwnhL
+   i7jQgA9BwaSWrQqYLhdTUGghW9BmD739AG4efPgRrfUmf/paBD/vpk8gl
+   Uw2yYyf1ue10ZWMW9M/HZWOo7Xo4kw/pwYYpSxYyP66ohfN845EjBHp0t
+   PV27PK5fPeYXw0J2Zx/TDyMfMGWPPLhQNT2rsgRSbWFmPwoeXL8JVQf1H
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="345093663"
+X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="284169307"
 X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
-   d="scan'208";a="345093663"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 10:24:09 -0700
+   d="scan'208";a="284169307"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 11:22:10 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
-   d="scan'208";a="543034666"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga003.jf.intel.com with ESMTP; 05 Jul 2022 10:24:09 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+   d="scan'208";a="769750827"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga005.jf.intel.com with ESMTP; 05 Jul 2022 11:22:11 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Tue, 5 Jul 2022 10:24:09 -0700
-Received: from orsmsx604.amr.corp.intel.com (10.22.229.17) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ 15.1.2308.27; Tue, 5 Jul 2022 11:22:10 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Tue, 5 Jul 2022 10:24:08 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
+ 15.1.2308.27; Tue, 5 Jul 2022 11:22:10 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Tue, 5 Jul 2022 10:24:08 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.169)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ 15.1.2308.27 via Frontend Transport; Tue, 5 Jul 2022 11:22:10 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.177)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Tue, 5 Jul 2022 10:24:07 -0700
+ 15.1.2308.27; Tue, 5 Jul 2022 11:22:10 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MVqTAVz1r7w+yHu2RxpJL1Md7tF7qF5yhMISGQOEKMWTy+JTR6yLOI5H/1nqPQNUYQTaFT1g7BI7vlKjmkYd+2aS551sZMsxU/VJKZ1u+/EbZL7X+0x3e3n97EUaiDhxE7HJlNhwsUNRJFrvpuxWKVFra3XUGKqj21ghL21gUvVr9FyA+TRHWZfUXOx+uMy1aFb/TTbydhp8W7BJ8Q40LD2BROFaIHx9fmUCB3jybKiv44t7kg/DMQ/icex2YE7YreZg4OjRuJQtkX7CZDuGjHA9BUipz6Mfi2Cl9MlRkOuEqknaGw4gf4GtoMCQkNUwyBHNBLgsv9JwfLGQQkTAFA==
+ b=QqG7FgE7Teq2dqUEaIyEMJ72s/cUfhn+8lBpBHrA7b9d6repzh9zq1uUnwIu+Atf4Es4bc2AjvPMDT7j+lPHbpBNKYDdiE5HqVtGtnxO4+rBq913+84jRxx6wsRk9KM9UBFdQ3m49hoXhNF3rZBDdKnwgurCkFfPC04VVhXa09UqW0mh2yE1VuUhTsm7fPvFfYdZh9SjcbfV1IPE4z/bU53QV9LC8KSr+ROyXMseRHdc0MUoOkeTxCkncY3hFN0VKSNsAUDrJOTCbOLF1L1+laDZmLCk2+Jtjg8w9SgBJ9of5Vu847poapl+14Bj97D3iav9ZgOFUBzX5yij10S1qQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZWCzwDgjku402XxZU+2V9DkS4m18yZl1HjYxtEn1YvI=;
- b=OlFN2NXnHbsROrFcffGRlJDSwcgTA/sNGZAhkTrcs3szkr0yzczbaFUUgUhaT3pMt9UW1hQo9Of9KvdxIq7v+hXokVMkuDPxQrJLp1+l6hQZKVy2UW+ykW5h/Yt2hJUHp0yOmi8K1EMCzGfRKKNzo1HSKJrGv8nomFvlTlILQcm0J41WxxYbfH6x9K4Fe7WXhSGz8Sg6uIkrERdJxN2S0A0lBB/yrcyvaSRBlJ3bNchOF6YjFN0L7GN7ZONDcxGTSQwji1DU61dsPQcqDp7kIixEoG8o0kHWcDnveJRv/WzkWtfaBKrX8gLTG7F7zq+wgs2gSWB0QG5rijkmvhAWHw==
+ bh=bKEgrhQfLL27TPI3NBy2qLjWj1+7HLvcvlI3BXVLyac=;
+ b=hLgRe0QUNEdEIEvl4PeqSd/DzQkAS38m4lgpjA7tl7xPXdg2p2edAxfhalDhsRqYQhg/gRkZ3nPSNXumFjJ7IUapdrg7mLcpiCKFIWl6LMzboc8U1gGCJLfBmjUyuW9JwAM+Bi+h1NMJOgLFKd5xE6YwQJJbzdTCc0ms3paf4bMZWmBdpPtF1nNgPUx4Q8ntw69oDtVomjpnzMap3SmHt0F1eoYbB9RZWyKxqOroCgRsNi5gs358YWcrdjYXJBMX5ScFahL6PZpuq9ST33eQiUGNM5xcpcXlfNsHTm1c0QP4JYkt95KWdvDOA0fPrOP3JxC9K64UtSOsL6z2qgeiwg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CH0PR11MB5460.namprd11.prod.outlook.com (2603:10b6:610:d3::9)
- by BN6PR11MB1298.namprd11.prod.outlook.com (2603:10b6:404:48::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.17; Tue, 5 Jul
- 2022 17:24:05 +0000
-Received: from CH0PR11MB5460.namprd11.prod.outlook.com
- ([fe80::e091:7098:edc1:feea]) by CH0PR11MB5460.namprd11.prod.outlook.com
- ([fe80::e091:7098:edc1:feea%5]) with mapi id 15.20.5395.022; Tue, 5 Jul 2022
- 17:24:05 +0000
-Date:   Tue, 5 Jul 2022 19:07:26 +0200
-From:   Larysa Zaremba <larysa.zaremba@intel.com>
-To:     Jesper Dangaard Brouer <jbrouer@redhat.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-CC:     Toke Hoiland-Jorgensen <toke@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>, <brouer@redhat.com>,
-        "xdp-hints@xdp-project.net" <xdp-hints@xdp-project.net>,
-        "Lobakin, Alexandr" <alexandr.lobakin@intel.com>
-Subject: Re: [PATCH RFC bpf-next 5/9] xdp: controlling XDP-hints from
- BPF-prog via helper
-Message-ID: <YsRvzu4/cTmz8xmm@lincoln>
-References: <DM4PR11MB54718267242004151337602F97BE9@DM4PR11MB5471.namprd11.prod.outlook.com>
- <b8085a4d-5ede-3cc0-a177-ad97fe08ce25@redhat.com>
-Content-Type: text/plain; charset="iso-8859-1"
+Received: from DM4PR11MB6311.namprd11.prod.outlook.com (2603:10b6:8:a6::21) by
+ CH0PR11MB5444.namprd11.prod.outlook.com (2603:10b6:610:d3::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5395.15; Tue, 5 Jul 2022 18:22:09 +0000
+Received: from DM4PR11MB6311.namprd11.prod.outlook.com
+ ([fe80::f188:57e2:349e:51da]) by DM4PR11MB6311.namprd11.prod.outlook.com
+ ([fe80::f188:57e2:349e:51da%7]) with mapi id 15.20.5395.021; Tue, 5 Jul 2022
+ 18:22:08 +0000
+Date:   Tue, 5 Jul 2022 11:21:59 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+CC:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        "John Fastabend" <john.fastabend@gmail.com>,
+        <intel-wired-lan@lists.osuosl.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        Alexander Duyck <alexander.duyck@gmail.com>
+Subject: Re: [PATCH] ixgbe: Don't call kmap() on page allocated with
+ GFP_ATOMIC
+Message-ID: <YsSBR5nJovFMHGcB@iweiny-desk3>
+References: <20220704140129.6463-1-fmdefrancesco@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b8085a4d-5ede-3cc0-a177-ad97fe08ce25@redhat.com>
-X-ClientProxiedBy: LO2P265CA0381.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:a3::33) To CH0PR11MB5460.namprd11.prod.outlook.com
- (2603:10b6:610:d3::9)
+In-Reply-To: <20220704140129.6463-1-fmdefrancesco@gmail.com>
+X-ClientProxiedBy: SJ0PR05CA0001.namprd05.prod.outlook.com
+ (2603:10b6:a03:33b::6) To DM4PR11MB6311.namprd11.prod.outlook.com
+ (2603:10b6:8:a6::21)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b6945fa2-14c7-4dd2-f2e7-08da5eab2930
-X-MS-TrafficTypeDiagnostic: BN6PR11MB1298:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Office365-Filtering-Correlation-Id: 2d933dc5-8c89-4b51-c902-08da5eb3458b
+X-MS-TrafficTypeDiagnostic: CH0PR11MB5444:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: efsv5UXC2qgWJOKxm6sFqg45Vb0cYb6XB2zq6eHFhbdx/mWBpGPM42d0bPWz1qKg5XcisDsuqrJL967dyFXgC7QhwkCmCUcLnHKxOa/UtidL+1gq4nyqremNoZMnLG1HNAxpq0ILAqC7RV6cjmIWmTb5YcKe6WN2LH0/bj24hB7MP6HnUD1UIifCLQKnxqTOUjh0MITX5NERSO7plFA4zx2knBZNkDXn2Mp5f1etziODCxzya+01pOqooy6bugOAn3Hw5+oEzhXEcgBc2CYJdrDnZ+6Q8O4g1vz5Xii2ydQVH4DhsnIzqgDKr6+z51FEeD1t/+RHswVR838/6UmJP6q1KT8bIu1qVoWdmGGKxZBTtAPkZbSiCSf7bAldJaQYrst1l3K4ISJjQmCX5lSGkUXY7SdGemVgQHhI48R/ClDKsRVm2R3tRqt3sEimejOT0PFGVvx43XJwgNciLwsUQc6hrVddILNOhPJWzAzxWWnllta7KpCJvWInz7ciba/Pa2WKMgbg/gm3qPdIp8iM7+wM5F3Jg6Kz+yQhddt9Frhw1ep8cFx/KmJBief+tHDoSG4tprAcHGTCvpVTym1RqRMC+k2oAGDCqxipOt/gm/8cXepEwLBI7Cn4TvkP7tkT83fiEPkAKFjUv3lx/zvKfC9iHSMcUiRpKWvLQ6PsjFwoNkdWpJWQkP/2fUmPxKr9OA06fMJSb0MUhCHqYaFyYsND18tXKBfreOfPvDAMp5S4WxYqcC4Gx6hTQJG34GEGNz8xqEFJxsfYH//ymZAQL23i1DeM8R6aaJt22OJDGpbZA0wERp+y0VDTPZeFhSNa
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR11MB5460.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(396003)(39860400002)(346002)(366004)(376002)(136003)(107886003)(186003)(38100700002)(66574015)(316002)(54906003)(8676002)(4326008)(83380400001)(110136005)(66476007)(66556008)(66946007)(6486002)(5660300002)(8936002)(86362001)(6506007)(9686003)(44832011)(478600001)(966005)(82960400001)(33716001)(26005)(6512007)(41300700001)(2906002)(6666004);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: 3tj4T7UJS3+jPHIbeAPfb2NtX8fum9ry+qaJd76yIhkAZ7MdzTnAj3lP/vnahJBvqnJ8p5Cwm4ENMdGcd6HzjrDXXjU5gLiuL4CWGYf0O8jwIjCnCrWPVSj0vLMrpK7Ixbk6i1hR586G67zm4yqOjgbXUiwOSZuhaiMeuOalkRzndY1UVso2XE6FZvoKYwyScTNuBTxaoBqfllYZwBMMzJ2GQvPHvHU8gIgTLmReE+mzSY14qK9q9v8B4jJd9riCQPfKtzY2kU4UL/yYQzGLfXFZct2rZsZx236kmdD8jVqtspSf14/jFuqqlcRvXT7Sxh41ZpUVvRfdRSaPwm/LYDBM6ED3BqlUrIcX0cWPThvRh15gytyWEqQzmpuopXf3gGrdTj3x41KTzTw8vcOeeBNqgvlGPVDbObYO2wwa7OTGla/Sn2cYcGm+2V1g7+Z0SuEZqw0Vo5p+n3S/ec6+kkkOReMJJ5V0LVudt8CtZ1aOlVPwfhZycaAwGizh0uL/brVaUdaOf0gYNJAXFN0s6p2q/N/8fEFnoH04R//a87mAZ+fKFfrj24TMJdBJDy00ue7ZQkoudDXvo/KNZQyZTl/V7Ao3smce2De8jctwLhDndFIdufpQmYmQSEoVV0L8TlU76GoiC7r9Vb7XF9Zx/qaajWfFkYNciwC4W+cASk1x4+i/cZbJn1FdwvsVzhXuRBNqZZFBHHzxJIb5GfIZYluFNY0mtKfnvhwZmUf76LJkesjbAu1dQVt1Bj4D5pBv
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6311.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(366004)(396003)(39860400002)(136003)(346002)(376002)(6506007)(9686003)(66556008)(66476007)(8676002)(4326008)(6512007)(66946007)(38100700002)(7416002)(5660300002)(2906002)(86362001)(44832011)(82960400001)(8936002)(33716001)(478600001)(6486002)(41300700001)(6666004)(83380400001)(54906003)(6916009)(316002)(186003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?ZmYJNLY43z31IUwkIUEVs5TvbF5s9DjNf+AJFcdt/7zHPqm2j6JC31qAkn?=
- =?iso-8859-1?Q?/5qwkk0FuybsIIbRqh/6Ephkaxk+nwTWj3wM1DU6yipqu5ePlSH/E5X/Lu?=
- =?iso-8859-1?Q?3kStGuxDBvdI0DGwTlW5VpOOz8OigEZ2c//5ZIoMMenfPb0PrQr6RhWk1P?=
- =?iso-8859-1?Q?wTIQrtr3obLTo1RaFEYvDbODW1rEea1JEMF7Q53tNgl8kuzbcJF6F0X2Ng?=
- =?iso-8859-1?Q?cEGqv4namTBiRiYzm2u1ieMjBxPha7JtJuAswtpECLcXG46tqlAMyBFFxT?=
- =?iso-8859-1?Q?sC1qmBjf+HC+f84NAqCABazk4kO1Y1R32H2bSJMtd+h+IR9gQUSN6K8l5a?=
- =?iso-8859-1?Q?6M7+UtSwByhBzgbWpz4fIkYvemll1qeymlTj7uZbMfXln4487RX++4KgMV?=
- =?iso-8859-1?Q?6FjYsMYoaZqYiFN2s4JXNcpZhCg21Cp8uOgdCmHL9KJ2A0yf+/63Pkisk3?=
- =?iso-8859-1?Q?xPnyEnvEB23ltl8khr4XKCmY6njTD3qy9GFo8VdQSUlDB2nDwPpCrRjRf+?=
- =?iso-8859-1?Q?HiOvQ0TVFo5uTp+us9j7I1Pkkz1dLz8DQ/E5rOZCylv//pYlyxmDgukcQM?=
- =?iso-8859-1?Q?JHvuvRZF1E9kSlzs1dlRrEbPvABqxUaG+RUKlv17Z5kM90jqQS4Wo1tv1G?=
- =?iso-8859-1?Q?3Ogq8qIYzYgJ4R32Dtfp+13ymmXZppRXF4sWVCzFTpWo9HeBYv3hB+FNtq?=
- =?iso-8859-1?Q?wpXGB0bZkkjg7dTrOoN55VY5bd5uApnTe8Cp9hKpZAqZsfjhfY27/eFQYr?=
- =?iso-8859-1?Q?aJiQ+MT1KtShBeFz5W/pQ8hHZ09MOE2ynXpqT3fRF+D6bMmj+UyOXZJYpK?=
- =?iso-8859-1?Q?l0qrK/JEGeO68CE7HTIQfXR5dXcuNDkNILZkNGF5izegNC6N4G3uQkMede?=
- =?iso-8859-1?Q?A4sge/0Md0jNLkq/XPPe7dN5LAnTfwFleeCf2DYXJSPoo4ivoMZJ51EOs/?=
- =?iso-8859-1?Q?FF+8DPyieRu4EzWEYe6Ab8+3nM5FDARV3Ny0YQYsalT7mdZBeSJ6cpx/Ms?=
- =?iso-8859-1?Q?mOXStF6EnbnHHDoV2RInaR7Ur11M454CYg4/A/AvRcr6AuNS4MXbfSRVQP?=
- =?iso-8859-1?Q?ZGZ8eTsuvRy7O4shK/FbN0+T/TgTHa4C+kC9jA09AeMMaySy5J/F7H1cX9?=
- =?iso-8859-1?Q?AAFdt3Z/REWeaZQTrRcWyTB7zOwl+YGtQ3VrrG2pvv5ov+mWwnGD/tk94K?=
- =?iso-8859-1?Q?Fq3ftukKVryqTTbcHpTyYTRxrO20VG1Eyh4IvJWKvtCRQiMrknuNVi7Pkr?=
- =?iso-8859-1?Q?LWz3ur/Nlj97cbFIZMrR/WrBZMS7daT9lMuAY/pkeIy+Bk1baFf1Uvjico?=
- =?iso-8859-1?Q?N+BYHRL/C3uWRcKl5oOQ3E2tICamAhHqI2ZV1aij6EGtNQJ3oro+F/BRxn?=
- =?iso-8859-1?Q?2ZyaDiaofcnEml0y52sTHm+m/zrRbv/zi21O7ysTHdz3SbGAAKyh096Y4d?=
- =?iso-8859-1?Q?CArqz7Q+Gg5BQsI50uQNNlcEnfHQLkxm4x3CeoSEpE5m2FImUvjgTVTXtg?=
- =?iso-8859-1?Q?n06GWMwCnvHIAfsx3dARwRRQBdd6Mk0m6c4x0monkna/v+7zVDGjX7bh4m?=
- =?iso-8859-1?Q?3XHSxCu/6Y4L4s68UaCK0qvq0qVbhN40iK5WiDvLt1aKxPDpYzAg8fQs63?=
- =?iso-8859-1?Q?V7vWmQIY2UrgJZLM+sxrsdrF/2GYxIZsOfnlEwAmsUNyGobVO4lc30EQ?=
- =?iso-8859-1?Q?=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: b6945fa2-14c7-4dd2-f2e7-08da5eab2930
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR11MB5460.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?EIYyKp/A0C5lOkLEzgtBLLRZ6f7wlFtk1qUdKIZaLaE/av2ZrAA+LFLeXMoq?=
+ =?us-ascii?Q?U34evaYna43DuAWz22tipT+FAUVz2s9bsn+l8w/1bvUHjmJRcj5tfry+rLfy?=
+ =?us-ascii?Q?0aBgdC4bo3GpQ17iQU6FHfJDTuAdixotGOGLzPUOaNqDE56lcAnHSM/Am5Rv?=
+ =?us-ascii?Q?4lDbcvZO4rMGa0LkfvIAttKfSHEo6U2JYqA2dbmGRCqlKRQtMW52H1gtr8XP?=
+ =?us-ascii?Q?83lwNCaL2bWPMSWqXiNqpHwAXlegL1scCnbdOdOh/24S+jd1RilIlOtrHB88?=
+ =?us-ascii?Q?DBsJzCHaKTGK47DLfml34P76cnuwZDxy1rtxCuPGNn5H+Q2X9F2Ai3byEiGS?=
+ =?us-ascii?Q?vOcmj2beqq3Q4w4Dk1rUXRmG/JwgBYVaD2BrJkpCcBzLPzccnTQ7oYv3mqvl?=
+ =?us-ascii?Q?QLKMoUYjkja+hygf54/vQ4c8yE9iR7AvG2Z3RPFdeBz5AthmL1aiJm3pxdi1?=
+ =?us-ascii?Q?8GU9c3867zV2JfxKXicZv2racTnwrXNDHV5SI7DO2T5gtfb1eG108yqpH7Zg?=
+ =?us-ascii?Q?gIXaiMvPPs6rKtFdBOhqYLWYiWgB1olU8m+7fyVthfS+R/FACH+DfNkIunm0?=
+ =?us-ascii?Q?rKj9R0etEVo2XwRCVqLBCvwOoIUzyOLDSvplq8x2LZuTzkK1i/DHXdPljUu/?=
+ =?us-ascii?Q?8JtWBiGpldz9sPonCO0qAseiKuTU1rob1RPI4iHkauKx8Ahks/Z+VZng3taY?=
+ =?us-ascii?Q?oyjISJ8QBQ+dwZKZdyVwthX5Y0UHr1hiQPma6mdxjF2mW/F223X9MFU4E0mu?=
+ =?us-ascii?Q?iZ5SSWVaSc2bDe5rcoBMbXPS33OFd3UW479p93e9Pd802GFWAXXyYRF7vaar?=
+ =?us-ascii?Q?LsN2nuc6+GFd65vt/cPbtHAqvIInvNrucLHsca3CygqeqV01RP4J7H6o3Ij7?=
+ =?us-ascii?Q?2UvJRATtSgd47SnoxoobfDfTRBw7IpRGB2FH5Fx+HtGSejDApa6UZsAXLqcu?=
+ =?us-ascii?Q?oIrlcrb7c/GTWe/dIUK5AiASDa5i1fQfsULUsAPICzlJZ2l3C7NU3OInEGos?=
+ =?us-ascii?Q?tSerRKA2QwZ9bW0d873lT6G98kRMCwJ4TcZfTo2jh8UpZX7f8e8yjduBxYTn?=
+ =?us-ascii?Q?zjO3799L1huX6Ys7zEUafioYjL4duaRGG9Tjmv/0qRriGJA4OPRoSkqOJmbG?=
+ =?us-ascii?Q?TnBZ9NFGSsWUsnt2rCRmM/A2qShDsl8kd9TiuLrnfKdT9GguC/BeTGPKc0Ku?=
+ =?us-ascii?Q?XUmoVdAeAA1YyZFaAExeaalCDCOiuIjr7pV3YMLeRYJ8SaNXYUSc0Fe5uCB7?=
+ =?us-ascii?Q?cVOp2JHcHoHxHjHXVhmMzS7frrhq26KrrTPYidt7gjtDkzqnSQAI99hfuuS8?=
+ =?us-ascii?Q?stE1/0YYl/rFOXNULgN2IMmXOo7t0IQCzdwB9z/y1eMPp0boC1wreBGQNwTN?=
+ =?us-ascii?Q?W9QMjrH9uMwkZZiTPBZ+XhW/6E2nIHZ9R5b7ZnHoBwnhGYFHBSgYAcZ1dZBB?=
+ =?us-ascii?Q?IYvTGUPGSkf3gAtz8bxroRmS96x/YEizybZTy1ybECzolhHx/IoUrRNL6JdS?=
+ =?us-ascii?Q?dAbZgEVOVJZLSBl28oCW2EaZ/TLD7Echnyy2xc2ZAaX8zIVn3rQf8U75qTIg?=
+ =?us-ascii?Q?RLE+tKiAWpbrmzLYRUYdr0ZtL61UNPT7QbBnoA6EbevLLMuoQawItb9vjAR5?=
+ =?us-ascii?Q?PQHGjk6/Wdyvpg69YK1jI7lq9CTYnRhzamVzilSvJWiV?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2d933dc5-8c89-4b51-c902-08da5eb3458b
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6311.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2022 17:24:05.2182
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2022 18:22:08.7635
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: eyaYY4PwYN2VX78d3xPqBv6+eilrAPuKamMc7etOncOs5VtfrjS1n8ushEGFQw1OzwyuWp39uxth+EdfisrfA6s1yxYdGDISrKCg3Ue7WXY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1298
+X-MS-Exchange-CrossTenant-UserPrincipalName: NW/hgAuzwLByyKKMkWAGrHXYO0VAK3/XfIb+2oqcvr7Pic3MkQJG/ktqPYOo11+O1F1SB5Y1ov8wiqmsTq0+aw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5444
 X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 08:26:15PM +0200, Jesper Dangaard Brouer wrote:
-> 
-> 
-> On 04/07/2022 13.00, Zaremba, Larysa wrote:
-> > Toke Høiland-Jørgensen <toke@redhat.com> writes:
-> > > 
-> > > Jesper Dangaard Brouer <jbrouer@redhat.com> writes:
-> > > 
-> > > > On 29/06/2022 16.20, Toke Høiland-Jørgensen wrote:
-> > > > > Jesper Dangaard Brouer <brouer@redhat.com> writes:
-> > > > > 
-> > > > > > XDP BPF-prog's need a way to interact with the XDP-hints. This
-> > > > > > patch introduces a BPF-helper function, that allow XDP BPF-prog's
-> > > > > > to interact with the XDP-hints.
-> > > > > > 
-> > > > > > BPF-prog can query if any XDP-hints have been setup and if this is
-> > > > > > compatible with the xdp_hints_common struct. If XDP-hints are
-> > > > > > available the BPF "origin" is returned (see enum
-> > > > > > xdp_hints_btf_origin) as BTF can come from different sources or
-> > > > > > origins e.g. vmlinux, module or local.
-> > > > > 
-> > > > > I'm not sure I quite understand what this origin is supposed to be
-> > > > > good for?
-> > > > 
-> > > > Some background info on BTF is needed here: BTF_ID numbers are not
-> > > > globally unique identifiers, thus we need to know where it originate
-> > > > from, to make it unique (as we store this BTF_ID in XDP-hints).
-> > > > 
-> > > > There is a connection between origin "vmlinux" and "module", which
-> > > > is that vmlinux will start at ID=1 and end at a max ID number.
-> > > > Modules refer to ID's in "vmlinux", and for this to work, they will
-> > > > shift their own numbering to start after ID=max-vmlinux-id.
-> > > > 
-> > > > Origin "local" is for BTF information stored in the BPF-ELF object file.
-> > > > Their numbering starts at ID=1.  The use-case is that a BPF-prog
-> > > > want to extend the kernel drivers BTF-layout, and e.g. add a
-> > > > RX-timestamp like [1].  Then BPF-prog can check if it knows module's
-> > > > BTF_ID and then extend via bpf_xdp_adjust_meta, and update BTF_ID in
-> > > > XDP-hints and call the helper (I introduced) marking this as origin
-> > > > "local" for kernel to know this is no-longer origin "module".
-> > > 
-> > > Right, I realise that :)
-> > > 
-> > > My point was that just knowing "this is a BTF ID coming from a module"
-> > > is not terribly useful; you could already figure that out by just
-> > > looking at the ID and seeing if it's larger than the maximum ID in vmlinux BTF.
-> > > 
-> > > Rather, what we need is a way to identify *which* module the BTF ID
-> > > comes from; and luckily, the kernel assigns a unique ID to every BTF
-> > > *object* as well as to each type ID within that object. These can be
-> > > dumped by bpftool:
-> > > 
-> > > # bpftool btf
-> > > bpftool btf
-> > > [sudo] password for alrua:
-> > > 1: name [vmlinux]  size 4800187B
-> > > 2: name [serio]  size 2588B
-> > > 3: name [i8042]  size 11786B
-> > > 4: name [rng_core]  size 8184B
-> > > [...]
-> > > 2062: name <anon>  size 36965B
-> > > 	pids bpftool(547298)
-> > > 
-> > > IDs 2-4 are module BTF objects, and that last one is the ID of a BTF
-> > > object loaded along with a BPF program by bpftool itself... So we *do*
-> > > in fact have a unique ID, by combining the BTF object ID with the type
-> > > ID; this is what Alexander is proposing to put into the xdp-hints
-> > > struct as well (combining the two IDs into a single u64).
-> 
-> Thanks for the explanation. I think I understand it now, and I agree
-> that we should extend/combining the two IDs into a single u64.
-> 
-> To Andrii, what is the right terminology when talking about these two
-> different BTF-ID's:
-> 
-> - BTF object ID and BTF type ID?
-> 
-> - Where BTF *object* ID are the IDs we see above from 'bpftool btf',
->   where vmlinux=1 and module's IDs will start after 1.
-> 
-> - Where BTF *type* ID are the IDs the individual data "types" within a
->   BTF "object" (e.g. struct xdp_hints_common that BPF-prog's can get
->   via calling bpf_core_type_id_kernel()).
-> 
+On Mon, Jul 04, 2022 at 04:01:29PM +0200, Fabio M. De Francesco wrote:
+> Pages allocated with GFP_ATOMIC cannot come from Highmem. This is why
+> there is no need to call kmap() on them.
 
-AFAIK, that's the most correct way of distinguish one from another in 
-conversation.
+I'm still not 100% sure where this page gets allocated but AFAICT it is
+allocated in ixgbe_alloc_mapped_page() which calls dev_alloc_pages() for the
+allocation which is where the GFP_ATOMIC is specified.
 
-Would be still great, if Andrii could confirm that.
+I think I would add this detail here.
 
-I should mention that out patch makes bpf_core_type_id_kernel() return 
-u64 (BTF obj ID + BTF type ID), but your statement is true for current 
-libbpf version.
+That said, and assuming my analysis is correct, the code looks fine so:
+
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
 
 > 
-> > That's correct, concept was previously discussed [1]. The ID of BTF object wasn't
-> > exposed in CO-RE allocations though, we've changed it in the first 4 patches.
-> > The main logic is in "libbpf: factor out BTF loading from load_module_btfs()"
-> > and "libbpf: patch module BTF ID into BPF insns".
-> > 
-> > We have a sample that wasn't included eventually, but can possibly
-> > give a general understanding of our approach [2].
-> > 
-> > [1] https://lore.kernel.org/all/CAEf4BzZO=7MKWfx2OCwEc+sKkfPZYzaELuobi4q5p1bOKk4AQQ@mail.gmail.com/
-> > [2] https://github.com/alobakin/linux/pull/16/files#diff-c5983904cbe0c280453d59e8a1eefb56c67018c38d5da0c1122abc86225fc7c9
-> > 
-> (appreciate the links)
+> Therefore, don't call kmap() on rx_buffer->page() and instead use a
+> plain page_address() to get the kernel address.
 > 
-> I wonder how these BTF object IDs gets resolved for my "local" category?
-> (Origin "local" is for BTF information stored in the BPF-ELF object file)
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> Suggested-by: Alexander Duyck <alexander.duyck@gmail.com>
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> ---
+>  drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 > 
-> Note: For "local" BTF type IDs BPF-prog resolve these via
-> bpf_core_type_id_local() (why I choose the term "local").
+> diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
+> index 628d0eb0599f..71196fd92f81 100644
+> --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
+> +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
+> @@ -1966,15 +1966,13 @@ static bool ixgbe_check_lbtest_frame(struct ixgbe_rx_buffer *rx_buffer,
+>  
+>  	frame_size >>= 1;
+>  
+> -	data = kmap(rx_buffer->page) + rx_buffer->page_offset;
+> +	data = page_address(rx_buffer->page) + rx_buffer->page_offset;
+>  
+>  	if (data[3] != 0xFF ||
+>  	    data[frame_size + 10] != 0xBE ||
+>  	    data[frame_size + 12] != 0xAF)
+>  		match = false;
+>  
+> -	kunmap(rx_buffer->page);
+> -
+>  	return match;
+>  }
+>  
+> -- 
+> 2.36.1
 > 
-
-Every program during CO-RE relocs sees a single local BTF obj, in which 
-BTF type IDs start from 1 and correspond to all data types used in 
-program. So local BTF obj and type IDs inside are valid only in single 
-program, therefore u32 type ID returned by bpf_core_type_id_local() is 
-enough.
-
-Local IDs are not resolved, they are just assigned during compilation. 
-After program load with CO-RE each local type gets a resolved
-vmlinux/module BTF obj pointer and an ID of a type inside this BTF obj 
-that is similar enough.
-
-Both local and target type IDs are mainly needed just for comfortable 
-iteration inside libbpf, so they are just a side product that is only 
-patched in, if we use bpf_core_type_id_local/target() inside a program 
-for testing purposes.
-
-> --Jesper
-> 
-> p.s. For unknown reasons lore.kernel.org did match Larysa's reply with the
-> patchset thread here[3].
-> 
->  [3] https://lore.kernel.org/bpf/165643378969.449467.13237011812569188299.stgit@firesoul/#r
-> 
-> 
-
-- Larysa
