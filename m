@@ -2,51 +2,52 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C016C43334
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2AE2CCA47C
 	for <bpf@archiver.kernel.org>; Tue,  5 Jul 2022 10:00:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbiGEKAR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Jul 2022 06:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53978 "EHLO
+        id S230462AbiGEKAS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Jul 2022 06:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiGEKAQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Jul 2022 06:00:16 -0400
+        with ESMTP id S229978AbiGEKAR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Jul 2022 06:00:17 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8754325D6;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4002C5;
         Tue,  5 Jul 2022 03:00:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 34CBBB8173F;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67253B81749;
         Tue,  5 Jul 2022 10:00:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EBC37C341CF;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F28CDC341CE;
         Tue,  5 Jul 2022 10:00:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1657015213;
-        bh=78ksWqfiWLicUtwIUduk+lCOxEwssJXumFPveTIH1og=;
+        bh=uyjhZ0+OrDJr4bdp2Xz/rqbgxHPp2h4uCgPTZOGNsBU=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=bMD8XRaU+DJI+6pQvI4VwlpkhevhVPItFr1WM4gM8iv2B2H8Wv4iV605B3bppg8Jz
-         IvfrD+XXdU7VfT7nkVhUZ5nyxjMMp6DqQKcSwFe2Hg/VVr+OE+ADFg9S2fg0fzbAMm
-         hv57Z0w+shNGCf/MUaaYb4p8QA3BjhDTntwA5aIvWEKhxlFi1ftbWzjZmuWN4+eUCN
-         N1yLhymEOl5AD+0Mfw7L52pNtq5QpA3Bg5QgjmGbf/N9czJPN8OXIa5G8SSqzB2S92
-         +niJU9PEBVR33yOak9/ssMXVYWyaaEQzmT/1+058XtGLsw72HZScglk1LhHIRC+lyR
-         qL9MxxQwF4t7g==
+        b=KXss+XSRPUWNPeo4G46/sYL0eRytVJFK4c7dNX5+J8Mjee6wRpMjkVKz0ejR92xyP
+         YStWpoFI5c6z16tR5rUqqWeBisfzRhjXJ1CF0CafAU323SqQGxF3hcifBO6CsAbv57
+         o0CjD3yUIAEnWamIm/XLJljTSR8SfoWeM5XeH+dXxJi1pWxT6Ql8yaHtZfT2DhE3h1
+         e/xXcGcR5b+mOrCOaLD1Pcr/yTjwoRo9MuirzXkyh9aUfuR0g4Ha2ihqChJQEbnr4N
+         M/59X4sLa2hrRgO97cFq4DZrAyJhkRgs/ZMPwdoZO/8fvOhOQgV2eXL/mHTHhJWAQ5
+         cwPirv5DbQNaA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CDAEDE45BDF;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D5B6AE45BDD;
         Tue,  5 Jul 2022 10:00:12 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf: omit superfluous address family check in
- __bpf_skc_lookup
+Subject: Re: [PATCH bpf-next] bpftool: Rename "bpftool feature list" into "...
+ feature list_builtins"
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165701521283.30326.9772990999417260206.git-patchwork-notify@kernel.org>
+Message-Id: <165701521287.30326.7702263018188523764.git-patchwork-notify@kernel.org>
 Date:   Tue, 05 Jul 2022 10:00:12 +0000
-References: <20220630082618.15649-1-tklauser@distanz.ch>
-In-Reply-To: <20220630082618.15649-1-tklauser@distanz.ch>
-To:     Tobias Klauser <tklauser@distanz.ch>
-Cc:     martin.lau@linux.dev, daniel@iogearbox.net,
-        john.fastabend@gmail.com, bpf@vger.kernel.org,
+References: <20220701093805.16920-1-quentin@isovalent.com>
+In-Reply-To: <20220701093805.16920-1-quentin@isovalent.com>
+To:     Quentin Monnet <quentin@isovalent.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, bpf@vger.kernel.org,
         netdev@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
@@ -57,19 +58,22 @@ Hello:
 This patch was applied to bpf/bpf-next.git (master)
 by Daniel Borkmann <daniel@iogearbox.net>:
 
-On Thu, 30 Jun 2022 10:26:18 +0200 you wrote:
-> family is only set to either AF_INET or AF_INET6 based on len. In all
-> other cases we return early. Thus the check against AF_UNSPEC can be
-> omitted.
+On Fri,  1 Jul 2022 10:38:05 +0100 you wrote:
+> To make it more explicit that the features listed with "bpftool feature
+> list" are known to bpftool, but not necessary available on the system
+> (as opposed to the probed features), rename the "feature list" command
+> into "feature list_builtins".
 > 
-> Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
-> ---
->  net/core/filter.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+> Note that "bpftool feature list" still works as before given that we
+> recognise arguments from their prefixes; but the real name of the
+> subcommand, in particular as displayed in the man page or the
+> interactive help, will now include "_builtins".
+> 
+> [...]
 
 Here is the summary with links:
-  - [bpf-next] bpf: omit superfluous address family check in __bpf_skc_lookup
-    https://git.kernel.org/bpf/bpf-next/c/2064a132c0de
+  - [bpf-next] bpftool: Rename "bpftool feature list" into "... feature list_builtins"
+    https://git.kernel.org/bpf/bpf-next/c/990a6194f7e1
 
 You are awesome, thank you!
 -- 
