@@ -2,44 +2,47 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06A85C433EF
-	for <bpf@archiver.kernel.org>; Tue,  5 Jul 2022 22:50:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0CFDC433EF
+	for <bpf@archiver.kernel.org>; Tue,  5 Jul 2022 22:50:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233055AbiGEWuA convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 5 Jul 2022 18:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45120 "EHLO
+        id S233070AbiGEWuB convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 5 Jul 2022 18:50:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiGEWtq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Jul 2022 18:49:46 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7A11C121
-        for <bpf@vger.kernel.org>; Tue,  5 Jul 2022 15:48:38 -0700 (PDT)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 265JH2Pb006834
+        with ESMTP id S233076AbiGEWtr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Jul 2022 18:49:47 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194A91EC5E
+        for <bpf@vger.kernel.org>; Tue,  5 Jul 2022 15:48:39 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 265JJTx9022959
         for <bpf@vger.kernel.org>; Tue, 5 Jul 2022 15:48:38 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h4uajsa72-1
+        by m0001303.ppops.net (PPS) with ESMTPS id 3h4ubnh77y-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 05 Jul 2022 15:48:37 -0700
+        for <bpf@vger.kernel.org>; Tue, 05 Jul 2022 15:48:38 -0700
 Received: from twshared3657.05.prn5.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.28; Tue, 5 Jul 2022 15:48:36 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 55D8A1BF1EBEC; Tue,  5 Jul 2022 15:48:25 -0700 (PDT)
+        id C202E1BF1EC0B; Tue,  5 Jul 2022 15:48:31 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 0/3] Fix few compiler warnings in selftests and libbpf
-Date:   Tue, 5 Jul 2022 15:48:15 -0700
-Message-ID: <20220705224818.4026623-1-andrii@kernel.org>
+Subject: [PATCH bpf-next 3/3] libbpf: remove unnecessary usdt_rel_ip assignments
+Date:   Tue, 5 Jul 2022 15:48:18 -0700
+Message-ID: <20220705224818.4026623-4-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20220705224818.4026623-1-andrii@kernel.org>
+References: <20220705224818.4026623-1-andrii@kernel.org>
 X-FB-Internal: Safe
-X-Proofpoint-GUID: peIj0Dg2gjQLWFMQAZ3okSDkt0m3HI6F
-X-Proofpoint-ORIG-GUID: peIj0Dg2gjQLWFMQAZ3okSDkt0m3HI6F
+Content-Type: text/plain
+X-Proofpoint-GUID: I5LCKSRh4POpHY7zmSX6xYiZ3F337s7f
+X-Proofpoint-ORIG-GUID: I5LCKSRh4POpHY7zmSX6xYiZ3F337s7f
+Content-Transfer-Encoding: 8BIT
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-07-05_18,2022-06-28_01,2022-06-22_01
@@ -47,21 +50,33 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Few small patches fixing compiler warning issues detected by Coverity or by
-building selftests in -O2 mode.
+Coverity detected that usdt_rel_ip is unconditionally overwritten
+anyways, so there is no need to unnecessarily initialize it with unused
+value. Clean this up.
 
-Andrii Nakryiko (3):
-  selftests/bpf: fix bogus uninitialized variable warning
-  selftests/bpf: fix few more compiler warnings
-  libbpf: remove unnecessary usdt_rel_ip assignments
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/lib/bpf/usdt.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
- tools/lib/bpf/usdt.c                                       | 6 ++----
- tools/testing/selftests/bpf/network_helpers.c              | 2 +-
- tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c | 4 ++--
- tools/testing/selftests/bpf/prog_tests/usdt.c              | 2 +-
- tools/testing/selftests/bpf/prog_tests/xdp_synproxy.c      | 2 +-
- 5 files changed, 7 insertions(+), 9 deletions(-)
-
+diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+index 5159207cbfd9..d18e37982344 100644
+--- a/tools/lib/bpf/usdt.c
++++ b/tools/lib/bpf/usdt.c
+@@ -652,11 +652,9 @@ static int collect_usdt_targets(struct usdt_manager *man, Elf *elf, const char *
+ 		 *
+ 		 *   [0] https://sourceware.org/systemtap/wiki/UserSpaceProbeImplementation
+ 		 */
+-		usdt_rel_ip = usdt_abs_ip = note.loc_addr;
+-		if (base_addr) {
++		usdt_abs_ip = note.loc_addr;
++		if (base_addr)
+ 			usdt_abs_ip += base_addr - note.base_addr;
+-			usdt_rel_ip += base_addr - note.base_addr;
+-		}
+ 
+ 		/* When attaching uprobes (which is what USDTs basically are)
+ 		 * kernel expects file offset to be specified, not a relative
 -- 
 2.30.2
 
