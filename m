@@ -2,116 +2,210 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B47CC43334
-	for <bpf@archiver.kernel.org>; Tue,  5 Jul 2022 22:50:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67FD7C43334
+	for <bpf@archiver.kernel.org>; Wed,  6 Jul 2022 00:26:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232711AbiGEWuM convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 5 Jul 2022 18:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44304 "EHLO
+        id S229714AbiGFA0b convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 5 Jul 2022 20:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232989AbiGEWtw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Jul 2022 18:49:52 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9021F60B
-        for <bpf@vger.kernel.org>; Tue,  5 Jul 2022 15:48:44 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 265JJHLp016533
-        for <bpf@vger.kernel.org>; Tue, 5 Jul 2022 15:48:43 -0700
+        with ESMTP id S229828AbiGFA0b (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Jul 2022 20:26:31 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC4A1208F
+        for <bpf@vger.kernel.org>; Tue,  5 Jul 2022 17:26:30 -0700 (PDT)
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 265JLi74027187
+        for <bpf@vger.kernel.org>; Tue, 5 Jul 2022 17:26:29 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h4ubusa64-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h4uck1u8s-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 05 Jul 2022 15:48:43 -0700
-Received: from twshared0725.22.frc3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 05 Jul 2022 17:26:29 -0700
+Received: from twshared5413.23.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Tue, 5 Jul 2022 15:48:42 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 993891BF1EC04; Tue,  5 Jul 2022 15:48:29 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 2/3] selftests/bpf: fix few more compiler warnings
-Date:   Tue, 5 Jul 2022 15:48:17 -0700
-Message-ID: <20220705224818.4026623-3-andrii@kernel.org>
+ 15.1.2375.28; Tue, 5 Jul 2022 17:26:28 -0700
+Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
+        id A9F779BD2636; Tue,  5 Jul 2022 17:26:17 -0700 (PDT)
+From:   Song Liu <song@kernel.org>
+To:     <bpf@vger.kernel.org>
+CC:     <daniel@iogearbox.net>, <kernel-team@fb.com>, <ast@kernel.org>,
+        <andrii@kernel.org>, Song Liu <song@kernel.org>,
+        <syzbot+2f649ec6d2eea1495a8f@syzkaller.appspotmail.com>,
+        <syzbot+87f65c75f4a72db05445@syzkaller.appspotmail.com>
+Subject: [PATCH bpf] bpf, x86: fix freeing of not-finalized bpf_prog_pack
+Date:   Tue, 5 Jul 2022 17:26:12 -0700
+Message-ID: <20220706002612.4013790-1-song@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220705224818.4026623-1-andrii@kernel.org>
-References: <20220705224818.4026623-1-andrii@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: hB85bzjYv-XGYEEB8IMB-rF46Ev7SUMP
-X-Proofpoint-GUID: hB85bzjYv-XGYEEB8IMB-rF46Ev7SUMP
+X-Proofpoint-GUID: 0Z0lOV2nMjxVBxwcu6iZMJ89pYPPTA6T
+X-Proofpoint-ORIG-GUID: 0Z0lOV2nMjxVBxwcu6iZMJ89pYPPTA6T
+Content-Transfer-Encoding: 8BIT
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-05_18,2022-06-28_01,2022-06-22_01
+ definitions=2022-07-05_20,2022-06-28_01,2022-06-22_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When compiling with -O2, GCC detects few problems with selftests/bpf, so
-fix all of them. Two are real issues (uninitialized err and nums
-out-of-bounds access), but two other uninitialized variables warnings
-are due to GCC not being able to prove that variables are indeed
-initialized under conditions under which they are used.
+syzbot reported a few issues with bpf_prog_pack [1], [2]. These are
+triggered when the program passed initial JIT in jit_subprogs(), but
+failed final pass of JIT. At this point, bpf_jit_binary_pack_free() is
+called before bpf_jit_binary_pack_finalize(), and the whole 2MB page is
+freed.
 
-Fix all 4 cases, though.
+Fix this with a custom bpf_jit_free() for x86_64, which calls
+bpf_jit_binary_pack_finalize() if necessary. Also, with custom
+bpf_jit_free(), bpf_prog_aux->use_bpf_prog_pack is not needed any more,
+remove it.
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Fixes: 1022a5498f6f ("bpf, x86_64: Use bpf_jit_binary_pack_alloc")
+[1] https://syzkaller.appspot.com/bug?extid=2f649ec6d2eea1495a8f
+[2] https://syzkaller.appspot.com/bug?extid=87f65c75f4a72db05445
+Reported-by: syzbot+2f649ec6d2eea1495a8f@syzkaller.appspotmail.com
+Reported-by: syzbot+87f65c75f4a72db05445@syzkaller.appspotmail.com
+Signed-off-by: Song Liu <song@kernel.org>
 ---
- tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c | 4 ++--
- tools/testing/selftests/bpf/prog_tests/usdt.c              | 2 +-
- tools/testing/selftests/bpf/prog_tests/xdp_synproxy.c      | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ arch/x86/net/bpf_jit_comp.c | 25 +++++++++++++++++++++++++
+ include/linux/bpf.h         |  1 -
+ include/linux/filter.h      |  8 ++++++++
+ kernel/bpf/core.c           | 29 ++++++++++++-----------------
+ 4 files changed, 45 insertions(+), 18 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-index 586dc52d6fb9..a8cb8a96ddaf 100644
---- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-@@ -329,7 +329,7 @@ static int get_syms(char ***symsp, size_t *cntp)
- 	struct hashmap *map;
- 	char buf[256];
- 	FILE *f;
--	int err;
-+	int err = 0;
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index c98b8c0ed3b8..c3dca4c97e48 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -2492,3 +2492,28 @@ void *bpf_arch_text_copy(void *dst, void *src, size_t len)
+ 		return ERR_PTR(-EINVAL);
+ 	return dst;
+ }
++
++void bpf_jit_free(struct bpf_prog *prog)
++{
++	if (prog->jited) {
++		struct x64_jit_data *jit_data = prog->aux->jit_data;
++		struct bpf_binary_header *hdr;
++
++		/*
++		 * If we fail the final pass of JIT (from jit_subprogs),
++		 * the program may not be finalized yet. Call finalize here
++		 * before freeing it.
++		 */
++		if (jit_data) {
++			bpf_jit_binary_pack_finalize(prog, jit_data->header,
++						     jit_data->rw_header);
++			kvfree(jit_data->addrs);
++			kfree(jit_data);
++		}
++		hdr = bpf_jit_binary_pack_hdr(prog);
++		bpf_jit_binary_pack_free(hdr, NULL);
++		WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(prog));
++	}
++
++	bpf_prog_unlock_free(prog);
++}
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 2b914a56a2c5..7424cf234ae0 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1025,7 +1025,6 @@ struct bpf_prog_aux {
+ 	bool sleepable;
+ 	bool tail_call_reachable;
+ 	bool xdp_has_frags;
+-	bool use_bpf_prog_pack;
+ 	/* BTF_KIND_FUNC_PROTO for valid attach_btf_id */
+ 	const struct btf_type *attach_func_proto;
+ 	/* function name for valid attach_btf_id */
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index ed0c0ff42ad5..5005bf2d30bd 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -1060,6 +1060,14 @@ u64 bpf_jit_alloc_exec_limit(void);
+ void *bpf_jit_alloc_exec(unsigned long size);
+ void bpf_jit_free_exec(void *addr);
+ void bpf_jit_free(struct bpf_prog *fp);
++struct bpf_binary_header *
++bpf_jit_binary_pack_hdr(const struct bpf_prog *fp);
++
++static inline bool bpf_prog_kallsyms_verify_off(const struct bpf_prog *fp)
++{
++	return list_empty(&fp->aux->ksym.lnode) ||
++	       fp->aux->ksym.lnode.prev == LIST_POISON2;
++}
  
- 	/*
- 	 * The available_filter_functions contains many duplicates,
-@@ -404,7 +404,7 @@ static void test_bench_attach(void)
- 	double attach_delta, detach_delta;
- 	struct bpf_link *link = NULL;
- 	char **syms = NULL;
--	size_t cnt, i;
-+	size_t cnt = 0, i;
+ struct bpf_binary_header *
+ bpf_jit_binary_pack_alloc(unsigned int proglen, u8 **ro_image,
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 5f6f3f829b36..360ceb817639 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -647,12 +647,6 @@ static bool bpf_prog_kallsyms_candidate(const struct bpf_prog *fp)
+ 	return fp->jited && !bpf_prog_was_classic(fp);
+ }
  
- 	if (!ASSERT_OK(get_syms(&syms, &cnt), "get_syms"))
- 		return;
-diff --git a/tools/testing/selftests/bpf/prog_tests/usdt.c b/tools/testing/selftests/bpf/prog_tests/usdt.c
-index 5f733d50b0d7..9ad9da0f215e 100644
---- a/tools/testing/selftests/bpf/prog_tests/usdt.c
-+++ b/tools/testing/selftests/bpf/prog_tests/usdt.c
-@@ -12,7 +12,7 @@ int lets_test_this(int);
- 
- static volatile int idx = 2;
- static volatile __u64 bla = 0xFEDCBA9876543210ULL;
--static volatile short nums[] = {-1, -2, -3, };
-+static volatile short nums[] = {-1, -2, -3, -4};
- 
- static volatile struct {
- 	int x;
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_synproxy.c b/tools/testing/selftests/bpf/prog_tests/xdp_synproxy.c
-index fb77a123fe89..874a846e298c 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_synproxy.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_synproxy.c
-@@ -63,7 +63,7 @@ static bool expect_str(char *buf, size_t size, const char *str, const char *name
- static void test_synproxy(bool xdp)
+-static bool bpf_prog_kallsyms_verify_off(const struct bpf_prog *fp)
+-{
+-	return list_empty(&fp->aux->ksym.lnode) ||
+-	       fp->aux->ksym.lnode.prev == LIST_POISON2;
+-}
+-
+ void bpf_prog_kallsyms_add(struct bpf_prog *fp)
  {
- 	int server_fd = -1, client_fd = -1, accept_fd = -1;
--	char *prog_id, *prog_id_end;
-+	char *prog_id = NULL, *prog_id_end;
- 	struct nstoken *ns = NULL;
- 	FILE *ctrl_file = NULL;
- 	char buf[CMD_OUT_BUF_SIZE];
+ 	if (!bpf_prog_kallsyms_candidate(fp) ||
+@@ -1150,7 +1144,6 @@ int bpf_jit_binary_pack_finalize(struct bpf_prog *prog,
+ 		bpf_prog_pack_free(ro_header);
+ 		return PTR_ERR(ptr);
+ 	}
+-	prog->aux->use_bpf_prog_pack = true;
+ 	return 0;
+ }
+ 
+@@ -1174,17 +1167,23 @@ void bpf_jit_binary_pack_free(struct bpf_binary_header *ro_header,
+ 	bpf_jit_uncharge_modmem(size);
+ }
+ 
++struct bpf_binary_header *
++bpf_jit_binary_pack_hdr(const struct bpf_prog *fp)
++{
++	unsigned long real_start = (unsigned long)fp->bpf_func;
++	unsigned long addr;
++
++	addr = real_start & BPF_PROG_CHUNK_MASK;
++	return (void *)addr;
++}
++
+ static inline struct bpf_binary_header *
+ bpf_jit_binary_hdr(const struct bpf_prog *fp)
+ {
+ 	unsigned long real_start = (unsigned long)fp->bpf_func;
+ 	unsigned long addr;
+ 
+-	if (fp->aux->use_bpf_prog_pack)
+-		addr = real_start & BPF_PROG_CHUNK_MASK;
+-	else
+-		addr = real_start & PAGE_MASK;
+-
++	addr = real_start & PAGE_MASK;
+ 	return (void *)addr;
+ }
+ 
+@@ -1197,11 +1196,7 @@ void __weak bpf_jit_free(struct bpf_prog *fp)
+ 	if (fp->jited) {
+ 		struct bpf_binary_header *hdr = bpf_jit_binary_hdr(fp);
+ 
+-		if (fp->aux->use_bpf_prog_pack)
+-			bpf_jit_binary_pack_free(hdr, NULL /* rw_buffer */);
+-		else
+-			bpf_jit_binary_free(hdr);
+-
++		bpf_jit_binary_free(hdr);
+ 		WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(fp));
+ 	}
+ 
 -- 
 2.30.2
 
