@@ -2,159 +2,251 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BE74C433EF
-	for <bpf@archiver.kernel.org>; Wed,  6 Jul 2022 23:23:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86AA8C433EF
+	for <bpf@archiver.kernel.org>; Wed,  6 Jul 2022 23:26:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233939AbiGFXXP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 Jul 2022 19:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37408 "EHLO
+        id S232370AbiGFX0N (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 Jul 2022 19:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234169AbiGFXXL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 6 Jul 2022 19:23:11 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8185C2BB29
-        for <bpf@vger.kernel.org>; Wed,  6 Jul 2022 16:23:10 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id r18so21073562edb.9
-        for <bpf@vger.kernel.org>; Wed, 06 Jul 2022 16:23:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=a0ZFkLPHJzfEYXmetfXf9lMt20DN6mMWrCB9iVapBS4=;
-        b=VRNLmRhuPzknCE/58AeA5wYE/FE0RwkgkDron0lnlL8uTOJX5wCFBXan3bT+Gj8DBV
-         PqrVg0reJw6m4buFrEN7BjhIh3DXPRF1sB21BCpza2RLAZNQfdh42mTPqwnkjc7FIGEm
-         l94iUH0eaciOD68py/6rurX3WMGfXVfs3Xm/w+8F0fw71I+zIyCqwN0gkA9ysAodZBsC
-         KmXpcF5y77I4+gw4DPhmJpiOe8T18/HeIkz6KX1Ti8Y6iGp0+nHy8alTVHZBr7NWy5ze
-         W2K4TVY8gXUIWCkav6IBzw7HEtRRWMIPI3N2uOGxEnNw23CHERDrfwqoCFpSRJ+Jjzd2
-         WFlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=a0ZFkLPHJzfEYXmetfXf9lMt20DN6mMWrCB9iVapBS4=;
-        b=rtH64HX1V7oWLIrCvFMW6O7spTc737CK839SHphINfOns0dTJcVbA1KNHlSoqCH1WT
-         DWxwhj7r32h1Pvo86qlHdlQD1uBMfCzk+vBO2iTNLonm3JZbJY2xfYIRjfHTgCJpv1Aw
-         izwOprgcfujlmTzDek1564jmAHunPGe9QHD7US4qeqLyuNmLMiVozJU200uzeMNLjvlt
-         biWBunPlxPq6OVu5MUZZ+tvRtz/+7uqfBECWhNklccY48OHznfvTRbU9yVpvxyK/k4n4
-         ONWHk73yLmFqnjG4kFk5ySSIh0uLowvsaOmuOdzsv2b56WO+AEetwtfyM0hf569BnkmK
-         Epig==
-X-Gm-Message-State: AJIora80mBc+k5pZ0YlUSIMQtCVK1kJY+d45sqYR9TRsijk7hg0dYCou
-        3morpo3eLYsExBVImxGM4ZYNJHGT4Jrw/YcxGyzN3ASQ
-X-Google-Smtp-Source: AGRyM1sl9m2uuD9+jE5b+KRE+yam2Lcab6zQrnxfA3ccMLJcM8hZA38bv3nM4Jo4A4fNpS+7wdd+cpFA4AvUTgO42yM=
-X-Received: by 2002:a05:6402:2cd:b0:43a:70f7:1af2 with SMTP id
- b13-20020a05640202cd00b0043a70f71af2mr20127796edx.357.1657149788960; Wed, 06
- Jul 2022 16:23:08 -0700 (PDT)
+        with ESMTP id S234278AbiGFX0L (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 6 Jul 2022 19:26:11 -0400
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5772C644
+        for <bpf@vger.kernel.org>; Wed,  6 Jul 2022 16:26:10 -0700 (PDT)
+Received: by devbig010.atn6.facebook.com (Postfix, from userid 115148)
+        id B34CCE977FC4; Wed,  6 Jul 2022 16:25:56 -0700 (PDT)
+From:   Joanne Koong <joannelkoong@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     andrii@kernel.org, daniel@iogearbox.net, ast@kernel.org,
+        Joanne Koong <joannelkoong@gmail.com>
+Subject: [PATCH bpf-next v1] bpf: Add flags arg to bpf_dynptr_read and bpf_dynptr_write APIs
+Date:   Wed,  6 Jul 2022 16:25:47 -0700
+Message-Id: <20220706232547.4016651-1-joannelkoong@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220706155848.4939-1-laoar.shao@gmail.com> <20220706155848.4939-2-laoar.shao@gmail.com>
- <CAADnVQJEK+Puyz8b4eUV3H7Z+OtrvHd4MU42OsPiBodMQxEw-g@mail.gmail.com>
- <YsXd2Tah+irhth9t@castle> <CAADnVQ+c_2Q6GxH3E0iD0RkOy2H2-UhuYL4V3v2BTQ6sZNxQAA@mail.gmail.com>
- <YsYSjAUGUkERUZ4q@castle>
-In-Reply-To: <YsYSjAUGUkERUZ4q@castle>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 6 Jul 2022 16:22:50 -0700
-Message-ID: <CAADnVQLiY=u2ii5g8ANRppzxfLGBrMSALtguNG=KdmGV8+xt0g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: Make non-preallocated allocation low priority
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Yafang Shao <laoar.shao@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Hao Luo <haoluo@google.com>, bpf <bpf@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jul 6, 2022 at 3:54 PM Roman Gushchin <roman.gushchin@linux.dev> wrote:
->
-> On Wed, Jul 06, 2022 at 03:11:46PM -0700, Alexei Starovoitov wrote:
-> > On Wed, Jul 6, 2022 at 12:09 PM Roman Gushchin <roman.gushchin@linux.dev> wrote:
-> > >
-> > > On Wed, Jul 06, 2022 at 09:47:32AM -0700, Alexei Starovoitov wrote:
-> > > > On Wed, Jul 6, 2022 at 8:59 AM Yafang Shao <laoar.shao@gmail.com> wrote:
-> > > > >
-> > > > > GFP_ATOMIC doesn't cooperate well with memcg pressure so far, especially
-> > > > > if we allocate too much GFP_ATOMIC memory. For example, when we set the
-> > > > > memcg limit to limit a non-preallocated bpf memory, the GFP_ATOMIC can
-> > > > > easily break the memcg limit by force charge. So it is very dangerous to
-> > > > > use GFP_ATOMIC in non-preallocated case. One way to make it safe is to
-> > > > > remove __GFP_HIGH from GFP_ATOMIC, IOW, use (__GFP_ATOMIC |
-> > > > > __GFP_KSWAPD_RECLAIM) instead, then it will be limited if we allocate
-> > > > > too much memory.
-> > > > >
-> > > > > We introduced BPF_F_NO_PREALLOC is because full map pre-allocation is
-> > > > > too memory expensive for some cases. That means removing __GFP_HIGH
-> > > > > doesn't break the rule of BPF_F_NO_PREALLOC, but has the same goal with
-> > > > > it-avoiding issues caused by too much memory. So let's remove it.
-> > > > >
-> > > > > The force charge of GFP_ATOMIC was introduced in
-> > > > > commit 869712fd3de5 ("mm: memcontrol: fix network errors from failing
-> > > > > __GFP_ATOMIC charges") by checking __GFP_ATOMIC, then got improved in
-> > > > > commit 1461e8c2b6af ("memcg: unify force charging conditions") by
-> > > > > checking __GFP_HIGH (that is no problem because both __GFP_HIGH and
-> > > > > __GFP_ATOMIC are set in GFP_AOMIC). So, if we want to fix it in memcg,
-> > > > > we have to carefully verify all the callsites. Now that we can fix it in
-> > > > > BPF, we'd better not modify the memcg code.
-> > > > >
-> > > > > This fix can also apply to other run-time allocations, for example, the
-> > > > > allocation in lpm trie, local storage and devmap. So let fix it
-> > > > > consistently over the bpf code
-> > > > >
-> > > > > __GFP_KSWAPD_RECLAIM doesn't cooperate well with memcg pressure neither
-> > > > > currently. But the memcg code can be improved to make
-> > > > > __GFP_KSWAPD_RECLAIM work well under memcg pressure if desired.
-> > > >
-> > > > Could you elaborate ?
-> > > >
-> > > > > It also fixes a typo in the comment.
-> > > > >
-> > > > > Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-> > > > > Reviewed-by: Roman Gushchin <roman.gushchin@linux.dev>
-> > > >
-> > > > Roman, do you agree with this change ?
-> > >
-> > > Yes, removing __GFP_HIGH makes sense to me. I can imagine we might want
-> > > it for *some* bpf allocations, but applying it unconditionally looks wrong.
-> >
-> > Yeah. It's a difficult trade-off to make without having the data
-> > to decide whether removing __GFP_HIGH can cause issues or not,
->
-> Yeah, the change looks reasonable, but it's hard to say without giving
-> it a good testing in (something close to) a production environment.
->
-> > but do you agree that __GFP_HIGH doesn't cooperate well with memcg ?
-> > If so it's a bug on memcg side, right?
->
-> No. Historically we allowed high-prio allocations to exceed the memcg limit
-> because otherwise there were too many stability and performance issues.
-> It's not a memcg bug, it's a way to avoid exposing ENOMEM handling bugs all over
-> the kernel code. Without memory cgroups GFP_ATOMIC allocations rarely fail
-> and a lot of code paths in the kernel are not really ready for it (at least
-> it was the case several years ago, maybe things are better now).
->
-> But it was usually thought in the context of small(ish) allocations which do not
-> change the global memory usage picture. Subsequent "normal" allocations are
-> triggering reclaim/OOM, so from a user's POV the limit works as expected.
->
-> But with the ownership model and size of bpf maps it's a different story:
-> if a bpf map belongs to an abandoned cgroup, it might consume a lot of memory
-> and there will be no "normal" allocations. So cgroup memory limit will be never
-> applied. It's a valid issue, I agree with Yafang here.
+Commit 13bbbfbea759 ("bpf: Add bpf_dynptr_read and bpf_dynptr_write")
+added the bpf_dynptr_write and bpf_dynptr_read APIs.
 
-Understood.
+However, it will be useful for some dynptr types to pass in flags as
+well (eg when writing to a skb, the user may like to invalidate the
+hash or recompute the checksum).
 
-> > but we should probably
-> > apply this band-aid on bpf side to fix the bleeding.
-> > Later we can add a knob to allow __GFP_HIGH usage on demand from
-> > bpf prog.
->
-> Yes, it sounds like a good idea. I have to think what's the best approach
-> here, it's not obvious for me.
+This patch adds a "u64 flags" arg to the bpf_dynptr_read and
+bpf_dynptr_write APIs.
 
-Ok. Applied this patch for now.
+Signed-off-by: Joanne Koong <joannelkoong@gmail.com>
+Fixes: 13bbbfbea759 ("bpf: Add bpf_dynptr_read and bpf_dynptr_write")
+---
+ include/uapi/linux/bpf.h                           | 11 +++++++----
+ kernel/bpf/helpers.c                               | 12 ++++++++----
+ tools/include/uapi/linux/bpf.h                     | 11 +++++++----
+ tools/testing/selftests/bpf/progs/dynptr_fail.c    | 10 +++++-----
+ tools/testing/selftests/bpf/progs/dynptr_success.c |  4 ++--
+ 5 files changed, 29 insertions(+), 19 deletions(-)
+
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 379e68fb866f..3dd13fe738b9 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -5226,22 +5226,25 @@ union bpf_attr {
+  *	Return
+  *		Nothing. Always succeeds.
+  *
+- * long bpf_dynptr_read(void *dst, u32 len, struct bpf_dynptr *src, u32 =
+offset)
++ * long bpf_dynptr_read(void *dst, u32 len, struct bpf_dynptr *src, u32 =
+offset, u64 flags)
+  *	Description
+  *		Read *len* bytes from *src* into *dst*, starting from *offset*
+  *		into *src*.
++ *		*flags* is currently unused.
+  *	Return
+  *		0 on success, -E2BIG if *offset* + *len* exceeds the length
+- *		of *src*'s data, -EINVAL if *src* is an invalid dynptr.
++ *		of *src*'s data, -EINVAL if *src* is an invalid dynptr or if
++ *		*flags* is not 0.
+  *
+- * long bpf_dynptr_write(struct bpf_dynptr *dst, u32 offset, void *src, =
+u32 len)
++ * long bpf_dynptr_write(struct bpf_dynptr *dst, u32 offset, void *src, =
+u32 len, u64 flags)
+  *	Description
+  *		Write *len* bytes from *src* into *dst*, starting from *offset*
+  *		into *dst*.
++ *		*flags* is currently unused.
+  *	Return
+  *		0 on success, -E2BIG if *offset* + *len* exceeds the length
+  *		of *dst*'s data, -EINVAL if *dst* is an invalid dynptr or if *dst*
+- *		is a read-only dynptr.
++ *		is a read-only dynptr or if *flags* is not 0.
+  *
+  * void *bpf_dynptr_data(struct bpf_dynptr *ptr, u32 offset, u32 len)
+  *	Description
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index a1c84d256f83..1f961f9982d2 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1497,11 +1497,12 @@ static const struct bpf_func_proto bpf_dynptr_fro=
+m_mem_proto =3D {
+ 	.arg4_type	=3D ARG_PTR_TO_DYNPTR | DYNPTR_TYPE_LOCAL | MEM_UNINIT,
+ };
+=20
+-BPF_CALL_4(bpf_dynptr_read, void *, dst, u32, len, struct bpf_dynptr_ker=
+n *, src, u32, offset)
++BPF_CALL_5(bpf_dynptr_read, void *, dst, u32, len, struct bpf_dynptr_ker=
+n *, src,
++	   u32, offset, u64, flags)
+ {
+ 	int err;
+=20
+-	if (!src->data)
++	if (!src->data || flags)
+ 		return -EINVAL;
+=20
+ 	err =3D bpf_dynptr_check_off_len(src, offset, len);
+@@ -1521,13 +1522,15 @@ static const struct bpf_func_proto bpf_dynptr_rea=
+d_proto =3D {
+ 	.arg2_type	=3D ARG_CONST_SIZE_OR_ZERO,
+ 	.arg3_type	=3D ARG_PTR_TO_DYNPTR,
+ 	.arg4_type	=3D ARG_ANYTHING,
++	.arg5_type	=3D ARG_ANYTHING,
+ };
+=20
+-BPF_CALL_4(bpf_dynptr_write, struct bpf_dynptr_kern *, dst, u32, offset,=
+ void *, src, u32, len)
++BPF_CALL_5(bpf_dynptr_write, struct bpf_dynptr_kern *, dst, u32, offset,=
+ void *, src,
++	   u32, len, u64, flags)
+ {
+ 	int err;
+=20
+-	if (!dst->data || bpf_dynptr_is_rdonly(dst))
++	if (!dst->data || flags || bpf_dynptr_is_rdonly(dst))
+ 		return -EINVAL;
+=20
+ 	err =3D bpf_dynptr_check_off_len(dst, offset, len);
+@@ -1547,6 +1550,7 @@ static const struct bpf_func_proto bpf_dynptr_write=
+_proto =3D {
+ 	.arg2_type	=3D ARG_ANYTHING,
+ 	.arg3_type	=3D ARG_PTR_TO_MEM | MEM_RDONLY,
+ 	.arg4_type	=3D ARG_CONST_SIZE_OR_ZERO,
++	.arg5_type	=3D ARG_ANYTHING,
+ };
+=20
+ BPF_CALL_3(bpf_dynptr_data, struct bpf_dynptr_kern *, ptr, u32, offset, =
+u32, len)
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+index 379e68fb866f..3dd13fe738b9 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -5226,22 +5226,25 @@ union bpf_attr {
+  *	Return
+  *		Nothing. Always succeeds.
+  *
+- * long bpf_dynptr_read(void *dst, u32 len, struct bpf_dynptr *src, u32 =
+offset)
++ * long bpf_dynptr_read(void *dst, u32 len, struct bpf_dynptr *src, u32 =
+offset, u64 flags)
+  *	Description
+  *		Read *len* bytes from *src* into *dst*, starting from *offset*
+  *		into *src*.
++ *		*flags* is currently unused.
+  *	Return
+  *		0 on success, -E2BIG if *offset* + *len* exceeds the length
+- *		of *src*'s data, -EINVAL if *src* is an invalid dynptr.
++ *		of *src*'s data, -EINVAL if *src* is an invalid dynptr or if
++ *		*flags* is not 0.
+  *
+- * long bpf_dynptr_write(struct bpf_dynptr *dst, u32 offset, void *src, =
+u32 len)
++ * long bpf_dynptr_write(struct bpf_dynptr *dst, u32 offset, void *src, =
+u32 len, u64 flags)
+  *	Description
+  *		Write *len* bytes from *src* into *dst*, starting from *offset*
+  *		into *dst*.
++ *		*flags* is currently unused.
+  *	Return
+  *		0 on success, -E2BIG if *offset* + *len* exceeds the length
+  *		of *dst*'s data, -EINVAL if *dst* is an invalid dynptr or if *dst*
+- *		is a read-only dynptr.
++ *		is a read-only dynptr or if *flags* is not 0.
+  *
+  * void *bpf_dynptr_data(struct bpf_dynptr *ptr, u32 offset, u32 len)
+  *	Description
+diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/test=
+ing/selftests/bpf/progs/dynptr_fail.c
+index d811cff73597..0a26c243e6e9 100644
+--- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
++++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+@@ -140,12 +140,12 @@ int use_after_invalid(void *ctx)
+=20
+ 	bpf_ringbuf_reserve_dynptr(&ringbuf, sizeof(read_data), 0, &ptr);
+=20
+-	bpf_dynptr_read(read_data, sizeof(read_data), &ptr, 0);
++	bpf_dynptr_read(read_data, sizeof(read_data), &ptr, 0, 0);
+=20
+ 	bpf_ringbuf_submit_dynptr(&ptr, 0);
+=20
+ 	/* this should fail */
+-	bpf_dynptr_read(read_data, sizeof(read_data), &ptr, 0);
++	bpf_dynptr_read(read_data, sizeof(read_data), &ptr, 0, 0);
+=20
+ 	return 0;
+ }
+@@ -338,7 +338,7 @@ int invalid_helper2(void *ctx)
+ 	get_map_val_dynptr(&ptr);
+=20
+ 	/* this should fail */
+-	bpf_dynptr_read(read_data, sizeof(read_data), (void *)&ptr + 8, 0);
++	bpf_dynptr_read(read_data, sizeof(read_data), (void *)&ptr + 8, 0, 0);
+=20
+ 	return 0;
+ }
+@@ -377,7 +377,7 @@ int invalid_write2(void *ctx)
+ 	memcpy((void *)&ptr + 8, &x, sizeof(x));
+=20
+ 	/* this should fail */
+-	bpf_dynptr_read(read_data, sizeof(read_data), &ptr, 0);
++	bpf_dynptr_read(read_data, sizeof(read_data), &ptr, 0, 0);
+=20
+ 	bpf_ringbuf_submit_dynptr(&ptr, 0);
+=20
+@@ -473,7 +473,7 @@ int invalid_read2(void *ctx)
+ 	get_map_val_dynptr(&ptr);
+=20
+ 	/* this should fail */
+-	bpf_dynptr_read(read_data, sizeof(read_data), (void *)&ptr + 1, 0);
++	bpf_dynptr_read(read_data, sizeof(read_data), (void *)&ptr + 1, 0, 0);
+=20
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/bpf/progs/dynptr_success.c b/tools/t=
+esting/selftests/bpf/progs/dynptr_success.c
+index d67be48df4b2..a3a6103c8569 100644
+--- a/tools/testing/selftests/bpf/progs/dynptr_success.c
++++ b/tools/testing/selftests/bpf/progs/dynptr_success.c
+@@ -43,10 +43,10 @@ int test_read_write(void *ctx)
+ 	bpf_ringbuf_reserve_dynptr(&ringbuf, sizeof(write_data), 0, &ptr);
+=20
+ 	/* Write data into the dynptr */
+-	err =3D err ?: bpf_dynptr_write(&ptr, 0, write_data, sizeof(write_data)=
+);
++	err =3D bpf_dynptr_write(&ptr, 0, write_data, sizeof(write_data), 0);
+=20
+ 	/* Read the data that was written into the dynptr */
+-	err =3D err ?: bpf_dynptr_read(read_data, sizeof(read_data), &ptr, 0);
++	err =3D err ?: bpf_dynptr_read(read_data, sizeof(read_data), &ptr, 0, 0=
+);
+=20
+ 	/* Ensure the data we read matches the data we wrote */
+ 	for (i =3D 0; i < sizeof(read_data); i++) {
+--=20
+2.30.2
+
