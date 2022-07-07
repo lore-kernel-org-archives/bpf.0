@@ -2,134 +2,89 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 043D5C433EF
-	for <bpf@archiver.kernel.org>; Thu,  7 Jul 2022 13:08:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4493EC43334
+	for <bpf@archiver.kernel.org>; Thu,  7 Jul 2022 13:37:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232161AbiGGNIy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 7 Jul 2022 09:08:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34900 "EHLO
+        id S235976AbiGGNhj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 7 Jul 2022 09:37:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234163AbiGGNIx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 7 Jul 2022 09:08:53 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F169C2AD1;
-        Thu,  7 Jul 2022 06:08:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657199332; x=1688735332;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=CRQwTIU46Zf+tRTgOEouZdo6fiCXwghgpIo4sXDIGQM=;
-  b=OSgbIudo7evzdl0g2EdQCnltcROYeTu1DdgoqtEhSOTeHFTMw+2D1uEJ
-   ANRraI3G4NKFeESffnW/9hnqWbltEo6At6aiNddHC8hCjYYizVF/isnnv
-   QohZl8ajtSamnZLZtUVR7082yZWEcWYnsWh5DU4oOBjM5gxRdLrgQmY17
-   pAD2DiSRggoy6wnPBQKZezTNhB2w1nnblRlqFA+6kkzA7pqbRAk9WW/wz
-   aLXaoqjchYR6wZftdh5CsoYf9Ebgm2oP4NdT3mXjs4Z82B+Xw60Jc+nUP
-   /RtPT6puJbPhlenMgmzC7G1oYPSPTd/RFsMW1FU7S2h6LiCGC+vJdvGZ8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="284044239"
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="284044239"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 06:08:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="683304324"
-Received: from boxer.igk.intel.com ([10.102.20.173])
-  by FMSMGA003.fm.intel.com with ESMTP; 07 Jul 2022 06:08:50 -0700
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org
-Cc:     netdev@vger.kernel.org, magnus.karlsson@intel.com,
-        bjorn@kernel.org, kuba@kernel.org,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v2 bpf-next] xsk: mark napi_id on sendmsg()
-Date:   Thu,  7 Jul 2022 15:08:42 +0200
-Message-Id: <20220707130842.49408-1-maciej.fijalkowski@intel.com>
-X-Mailer: git-send-email 2.33.1
+        with ESMTP id S235519AbiGGNhi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 7 Jul 2022 09:37:38 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C6D2655A;
+        Thu,  7 Jul 2022 06:37:37 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Ldy6t2L1czTgpp;
+        Thu,  7 Jul 2022 21:33:58 +0800 (CST)
+Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 7 Jul 2022 21:37:35 +0800
+Received: from k04.huawei.com (10.67.174.115) by
+ dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 7 Jul 2022 21:37:35 +0800
+From:   Pu Lehui <pulehui@huawei.com>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, "Pu Lehui" <pulehui@huawei.com>
+Subject: [PATCH bpf-next] samples: bpf: Fix cross-compiling error about bpftool
+Date:   Thu, 7 Jul 2022 22:08:11 +0800
+Message-ID: <20220707140811.603590-1-pulehui@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.115]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500019.china.huawei.com (7.185.36.180)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When application runs in busy poll mode and does not receive a single
-packet but only sends them, it is currently
-impossible to get into napi_busy_loop() as napi_id is only marked on Rx
-side in xsk_rcv_check(). In there, napi_id is being taken from
-xdp_rxq_info carried by xdp_buff. From Tx perspective, we do not have
-access to it. What we have handy is the xsk pool.
+Currently, when cross compiling bpf samples, the host side
+cannot use arch-specific bpftool to generate vmlinux.h or
+skeleton. We need to compile the bpftool with the host
+compiler.
 
-Xsk pool works on a pool of internal xdp_buff wrappers called
-xdp_buff_xsk. AF_XDP ZC enabled drivers call xp_set_rxq_info() so each
-of xdp_buff_xsk has a valid pointer to xdp_rxq_info of underlying queue.
-Therefore, on Tx side, napi_id can be pulled from
-xs->pool->heads[0].xdp.rxq->napi_id. Hide this pointer chase under
-helper function, xsk_pool_get_napi_id().
-
-Do this only for sockets working in ZC mode as otherwise rxq pointers
-would not be initialized.
-
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
 ---
+ samples/bpf/Makefile | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-v2:
-* target bpf-next instead of bpf and don't treat it as fix (Bjorn)
-* hide pointer chasing under helper function (Bjorn)
-
- include/net/xdp_sock_drv.h | 14 ++++++++++++++
- net/xdp/xsk.c              |  5 ++++-
- 2 files changed, 18 insertions(+), 1 deletion(-)
-
-diff --git a/include/net/xdp_sock_drv.h b/include/net/xdp_sock_drv.h
-index 4aa031849668..4277b0dcee05 100644
---- a/include/net/xdp_sock_drv.h
-+++ b/include/net/xdp_sock_drv.h
-@@ -44,6 +44,15 @@ static inline void xsk_pool_set_rxq_info(struct xsk_buff_pool *pool,
- 	xp_set_rxq_info(pool, rxq);
- }
+diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+index 5002a5b9a7da..fe54a8c8f312 100644
+--- a/samples/bpf/Makefile
++++ b/samples/bpf/Makefile
+@@ -1,4 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
++-include tools/scripts/Makefile.include
  
-+static inline unsigned int xsk_pool_get_napi_id(struct xsk_buff_pool *pool)
-+{
-+#ifdef CONFIG_NET_RX_BUSY_POLL
-+	return pool->heads[0].xdp.rxq->napi_id;
-+#else
-+	return 0;
-+#endif
-+}
-+
- static inline void xsk_pool_dma_unmap(struct xsk_buff_pool *pool,
- 				      unsigned long attrs)
- {
-@@ -198,6 +207,11 @@ static inline void xsk_pool_set_rxq_info(struct xsk_buff_pool *pool,
- {
- }
+ BPF_SAMPLES_PATH ?= $(abspath $(srctree)/$(src))
+ TOOLS_PATH := $(BPF_SAMPLES_PATH)/../../tools
+@@ -283,11 +284,10 @@ $(LIBBPF): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OU
+ BPFTOOLDIR := $(TOOLS_PATH)/bpf/bpftool
+ BPFTOOL_OUTPUT := $(abspath $(BPF_SAMPLES_PATH))/bpftool
+ BPFTOOL := $(BPFTOOL_OUTPUT)/bpftool
+-$(BPFTOOL): $(LIBBPF) $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile) | $(BPFTOOL_OUTPUT)
++$(BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile) | $(BPFTOOL_OUTPUT)
+ 	    $(MAKE) -C $(BPFTOOLDIR) srctree=$(BPF_SAMPLES_PATH)/../../ \
+-		OUTPUT=$(BPFTOOL_OUTPUT)/ \
+-		LIBBPF_OUTPUT=$(LIBBPF_OUTPUT)/ \
+-		LIBBPF_DESTDIR=$(LIBBPF_DESTDIR)/
++		ARCH= CROSS_COMPILE= CC=$(HOSTCC) LD=$(HOSTLD) \
++		OUTPUT=$(BPFTOOL_OUTPUT)/
  
-+static inline unsigned int xsk_pool_get_napi_id(struct xsk_buff_pool *pool)
-+{
-+	return 0;
-+}
-+
- static inline void xsk_pool_dma_unmap(struct xsk_buff_pool *pool,
- 				      unsigned long attrs)
- {
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 19ac872a6624..86a97da7e50b 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -637,8 +637,11 @@ static int __xsk_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len
- 	if (unlikely(need_wait))
- 		return -EOPNOTSUPP;
- 
--	if (sk_can_busy_loop(sk))
-+	if (sk_can_busy_loop(sk)) {
-+		if (xs->zc)
-+			__sk_mark_napi_id_once(sk, xsk_pool_get_napi_id(xs->pool));
- 		sk_busy_loop(sk, 1); /* only support non-blocking sockets */
-+	}
- 
- 	if (xs->zc && xsk_no_wakeup(sk))
- 		return 0;
+ $(LIBBPF_OUTPUT) $(BPFTOOL_OUTPUT):
+ 	$(call msg,MKDIR,$@)
 -- 
-2.27.0
+2.25.1
 
