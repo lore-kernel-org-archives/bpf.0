@@ -2,75 +2,80 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EE1DCCA479
-	for <bpf@archiver.kernel.org>; Thu,  7 Jul 2022 14:04:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1994CCA47F
+	for <bpf@archiver.kernel.org>; Thu,  7 Jul 2022 14:40:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235106AbiGGOEZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 7 Jul 2022 10:04:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32864 "EHLO
+        id S235938AbiGGOkS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 7 Jul 2022 10:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235588AbiGGOEL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 7 Jul 2022 10:04:11 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6632CDDE;
-        Thu,  7 Jul 2022 07:04:10 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id bi22-20020a05600c3d9600b003a04de22ab6so10788507wmb.1;
-        Thu, 07 Jul 2022 07:04:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:to:cc:references:subject
-         :content-language:from:in-reply-to:content-transfer-encoding;
-        bh=jEk7NQXnrRcwYUUJ7a7WbG8rsOi2ymPcZ84wetxtqz0=;
-        b=AOWvIcbSWkXTHu2AyWWwMx0Pcw9RfA0RIOMce0F6xF6TWRm+4arX8XHMnUQ1BDsrND
-         uji0RSPNHvFYEYbbsLOcsIOfnFGVx2zMm/ypEOAtp4/Z9i4tVIXPoY1daT73KwPJVSsb
-         SF/uGsXEYDl1kb9O+mHm2zyGS+fDNJQg2iqdT/zO3yD63ffwrnN5oGKs0yXlfGxlnSIu
-         xLhiZZcZPbNw2Xvb0UKq/I50jszmSrD5n4PCPROVHv8k5qqqZBXguXUcijEzYe+Ur4M5
-         2A3/A2rStZHOk3vY+heAGPCqamUWuK5XAaJGZKkQmoMA6wAIpNWSqL+OAX83Q9tJ5wqb
-         knkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:to:cc
-         :references:subject:content-language:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jEk7NQXnrRcwYUUJ7a7WbG8rsOi2ymPcZ84wetxtqz0=;
-        b=WlYKpeYxO6WSB3lfoKb18SGSeAjsfbiQguA72GTz9ZwKNdiCNCtRGlvowKwol8f3mH
-         j4EOH4qHdR98A5SvApVrajNX8BtfFUD+n/ykqPHn7GK0SfRxtWwK1yF/KNDYGAcOlQNR
-         OmVRrdmvmBgNOE/MpK7DrXrMRGpmQBZ9g5GV7IQ5x1DBAy2SLC83gj+aTusoHYZRZymb
-         RDfuq2vVu6b8dnSQKhOqYjn0nHLKNh32gTJTxPa7INiNHFzbzShzgkPaj+8gioJdUTLU
-         Vches5BbUkY0xzthUEyL1WvogtFbHs6TV3hhrH+DkR4SsrohuSer9wXLfbvTq6cnyxxA
-         qj4g==
-X-Gm-Message-State: AJIora9QtheoFZrJL42fW+XEqlQzRnOHx/kj8PpS6773UysIcMOKOj7S
-        bXN0HuCoKi5iRpvSs9sQF44=
-X-Google-Smtp-Source: AGRyM1ufjsg/wTW3PHpDdJTz6e2emaA2g04EF1PgS0QMd/gU63XDp1oe2Z/NS8DgwtI15WHr6GXYtw==
-X-Received: by 2002:a05:600c:354d:b0:3a0:5847:9a1 with SMTP id i13-20020a05600c354d00b003a0584709a1mr4561497wmq.142.1657202648588;
-        Thu, 07 Jul 2022 07:04:08 -0700 (PDT)
-Received: from ?IPV6:2a01:cb04:613:1800:e04b:ee8c:3bc3:648e? (2a01cb0406131800e04bee8c3bc3648e.ipv6.abo.wanadoo.fr. [2a01:cb04:613:1800:e04b:ee8c:3bc3:648e])
-        by smtp.gmail.com with ESMTPSA id l14-20020a05600c4f0e00b003a199ed4f44sm19990769wmq.27.2022.07.07.07.04.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Jul 2022 07:04:08 -0700 (PDT)
-Message-ID: <ee708c61-474a-ce89-3e8d-4c2e0bee30e4@gmail.com>
-Date:   Thu, 7 Jul 2022 16:04:07 +0200
+        with ESMTP id S235920AbiGGOkR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 7 Jul 2022 10:40:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734AC3137F;
+        Thu,  7 Jul 2022 07:40:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 25F94B8223D;
+        Thu,  7 Jul 2022 14:40:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BBFB4C341C8;
+        Thu,  7 Jul 2022 14:40:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657204813;
+        bh=34u7DPSKmpE5fX07+/IcUMCSp/wl3YlsOsPTKAV+eWY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=psAHJ2oofxLByDMXZljGLCV7ngRX1rsHcz0fr3J2D8w5iH+i55aWTENQUvgEp1K49
+         faFDP5/Tg+ZnGlxT7T2WaTelM9qH1peEKRsEOYvB3Nq3OnyiJ2mnog/43rYpu55D5g
+         m8O4CDmD9a6ZoVHgbz1zmxQ84usNm3i1vb8cvrdBtdhLgsbhMDZOJAbKhjxLZ7jLTH
+         ZddWnXPk1nPScLeK39EXc5nM50taRQiDca3vTUj/s1aWDQBMoAsv/jLlc1pabvMUJC
+         4p2Pkk0TzhNJIwqfhf1ZPKJXFB+2RgNvzdTDsRzlofCinqISNVDqTeU3XUPJTjhloR
+         zeHAFDh6cs/dg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 95B66E45BDA;
+        Thu,  7 Jul 2022 14:40:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-To:     dlan@gentoo.org
-Cc:     andrii@kernel.org, aou@eecs.berkeley.edu, ast@kernel.org,
-        bjorn@kernel.org, bpf@vger.kernel.org, chenhengqi@outlook.com,
-        daniel@iogearbox.net, john.fastabend@gmail.com, kafai@fb.com,
-        kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com,
-        songliubraving@fb.com, yhs@fb.com
-References: <20220706140204.47926-1-dlan@gentoo.org>
-Subject: Re: [PATCH] riscv, libbpf: use a0 for RC register
-Content-Language: en-US
-From:   Amjad Ouled-Ameur <ouledameur.amjad@gmail.com>
-In-Reply-To: <20220706140204.47926-1-dlan@gentoo.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v4 bpf-next] selftests/bpf: Add benchmark for local_storage
+ RCU Tasks Trace usage
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165720481360.13867.14770965317150614583.git-patchwork-notify@kernel.org>
+Date:   Thu, 07 Jul 2022 14:40:13 +0000
+References: <20220705190018.3239050-1-davemarchevsky@fb.com>
+In-Reply-To: <20220705190018.3239050-1-davemarchevsky@fb.com>
+To:     Dave Marchevsky <davemarchevsky@fb.com>
+Cc:     bpf@vger.kernel.org, rcu@vger.kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, paulmck@kernel.org,
+        kafai@fb.com, edumazet@google.com, kernel-team@fb.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Acked-by: Amjad OULED-AMEUR <ouledameur.amjad@gmail.com>
+Hello:
+
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
+
+On Tue, 5 Jul 2022 12:00:18 -0700 you wrote:
+> This benchmark measures grace period latency and kthread cpu usage of
+> RCU Tasks Trace when many processes are creating/deleting BPF
+> local_storage. Intent here is to quantify improvement on these metrics
+> after Paul's recent RCU Tasks patches [0].
+> 
+> Specifically, fork 15k tasks which call a bpf prog that creates/destroys
+> task local_storage and sleep in a loop, resulting in many
+> call_rcu_tasks_trace calls.
+> 
+> [...]
+
+Here is the summary with links:
+  - [v4,bpf-next] selftests/bpf: Add benchmark for local_storage RCU Tasks Trace usage
+    https://git.kernel.org/bpf/bpf-next/c/2b4b2621fd64
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
