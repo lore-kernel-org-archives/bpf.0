@@ -2,143 +2,125 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 285EAC433EF
-	for <bpf@archiver.kernel.org>; Mon, 11 Jul 2022 08:33:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA521C433EF
+	for <bpf@archiver.kernel.org>; Mon, 11 Jul 2022 08:35:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbiGKIdb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 Jul 2022 04:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39818 "EHLO
+        id S230071AbiGKIfu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 Jul 2022 04:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230283AbiGKIdJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 11 Jul 2022 04:33:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7408B205D8
-        for <bpf@vger.kernel.org>; Mon, 11 Jul 2022 01:32:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657528367;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YEy+JbF4/MHQmoWPD6TNS3XHUSO00yIucme0xMgXZWk=;
-        b=fAwMgcXMiNQ0l79r4CuJVa2Pyd6VV2IAeocUQ0ErsKEu7B56qbxfL/mDAmlboTGVwTNrs9
-        HbssiJCB7b36I0xtSrhZ7bL7/j+kUAKU69ixY8vbOno5uCcH5by8OlKFzxv7iMwwUov2Cp
-        jTzwgT6F7AtOqrsWmQ84/VDmptK1o30=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-584-C_R0PKqGPtiBMFNB8fnwxA-1; Mon, 11 Jul 2022 04:32:23 -0400
-X-MC-Unique: C_R0PKqGPtiBMFNB8fnwxA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3097C80029D;
-        Mon, 11 Jul 2022 08:32:23 +0000 (UTC)
-Received: from shodan.usersys.redhat.com (unknown [10.43.17.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 097E01121314;
-        Mon, 11 Jul 2022 08:32:22 +0000 (UTC)
-Received: by shodan.usersys.redhat.com (Postfix, from userid 1000)
-        id F1F241C0258; Mon, 11 Jul 2022 10:32:21 +0200 (CEST)
-From:   Artem Savkov <asavkov@redhat.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Artem Savkov <asavkov@redhat.com>
-Subject: [RFC PATCH bpf-next 2/4] bpf: add BPF_F_DESTRUCTIVE flag for BPF_PROG_LOAD
-Date:   Mon, 11 Jul 2022 10:32:18 +0200
-Message-Id: <20220711083220.2175036-3-asavkov@redhat.com>
-In-Reply-To: <20220711083220.2175036-1-asavkov@redhat.com>
-References: <20220711083220.2175036-1-asavkov@redhat.com>
+        with ESMTP id S230214AbiGKIfQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 11 Jul 2022 04:35:16 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C9E1FCE0
+        for <bpf@vger.kernel.org>; Mon, 11 Jul 2022 01:34:36 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id eq6so5328610edb.6
+        for <bpf@vger.kernel.org>; Mon, 11 Jul 2022 01:34:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zVsdFhUo/y1FuxKjOyMz039zl2+UqQrPtby1P9RoyAM=;
+        b=T/UklHYdaG8UESRyYnk3lIeSGKWvgP4jDScMbIkxjZvZn/SkM9I6t8/aM6j/tR/jsk
+         Rn9+8fhm5OSNbh1oAmYBS1ikHBA5lFbeILfAxJrWUME1xwkRtpCIdSpjFU5n/uLS6UMo
+         J1b9Ob7Ee+6w8c/1UBNDE75SBZoFReFX9WggrIiyBECeqv654be/ODUJzARNcsgONGCa
+         xXgU3vS3Kyw7WHqLcketz1YAW6mSwr1WdAETUAh5wVfKvK4c/dNz35DuEU17dg72QX64
+         Pnh/9eF81MgKq1MQBaWfUT40lz7+MDaKZA7ww5TO1Q8xoV9gABfij3xc8cpBl4u67BZ5
+         nBrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zVsdFhUo/y1FuxKjOyMz039zl2+UqQrPtby1P9RoyAM=;
+        b=zEuMGN8/OFfQtMrN38JEQzHtmx/n13N+eMcqVjtn1S3lEzeqk4Ym8qMdGJkapyIyTP
+         8Xlh1aQRnTVpgheBdRAHuywG5+vCb3jktK7xKdSbBtp1jtPcTNnssNOv+XUEhtH/iNDh
+         u9GuSJLLsm++09bBBH6R0MXycAUauTQtd/lNSWin5PNfyJ8wxKLfA8q/aK6myV65HVVR
+         gwTeuCUsbjA+N5RRTkdQsJUF+75I51tiCX4hrof+puniTz6/FWNoRDIF8aZ12otnk65x
+         gYxEc8rKvf7RiL+44pThZZdplER8osZNJLLsVq2Vabr/c9T8ae4fH8rfx+elVLiZptu6
+         XZig==
+X-Gm-Message-State: AJIora/KBvBvOIpIooDsctaYmGpK1b3R5gtH3ghuI5pEC+4wUBrIFOs7
+        OMS16ilaAhkGmWTnvbMyjqA=
+X-Google-Smtp-Source: AGRyM1ttv1bKQzJDpv5ESKuU9NIyYpnL49rUVDcELnlcWMZAKhM4AJHtfXYwaqXKl2D3tWYA7Tn25w==
+X-Received: by 2002:a05:6402:2812:b0:43a:9041:d5db with SMTP id h18-20020a056402281200b0043a9041d5dbmr22806155ede.208.1657528475458;
+        Mon, 11 Jul 2022 01:34:35 -0700 (PDT)
+Received: from krava ([151.14.22.253])
+        by smtp.gmail.com with ESMTPSA id c9-20020aa7d609000000b0043a75f62155sm3951577edr.86.2022.07.11.01.34.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 01:34:35 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Mon, 11 Jul 2022 10:34:32 +0200
+To:     Donald Chan <hoiho.chan@gmail.com>
+Cc:     bpf@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org
+Subject: Re: Missing .BTF section in vmlinux (x86_64) when building on Yocto
+Message-ID: <YsvgmAK0LJbpCQ/G@krava>
+References: <CAJQ9wQ_tU-zy-f9rFk_sqiqh7y7WDz2tyYW6EJNzii6Y7AE3SQ@mail.gmail.com>
+ <CAJQ9wQ_b=ssxO4RaQ4tLc723ubOXCaTUpmghebc94bYWQ+cBsg@mail.gmail.com>
+ <YsvPDfSE6wflDtpA@krava>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YsvPDfSE6wflDtpA@krava>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a BPF_F_DESTRUCTIVE will be required to be supplied to
-BPF_PROG_LOAD for programs to utilize destructive helpers such as
-bpf_panic().
+On Mon, Jul 11, 2022 at 09:19:45AM +0200, Jiri Olsa wrote:
+> On Sun, Jul 10, 2022 at 10:57:01PM -0700, Donald Chan wrote:
+> > Hi,
+> > 
+> > I am trying to enable CONFIG_DEBUG_INFO_BTF when building a
+> > Yocto-based Linux kernel....but it is failing with this error:
+> > 
+> > |   LD      .tmp_vmlinux.btf
+> > |   BTF     .btf.vmlinux.bin.o
+> > |   LD      .tmp_vmlinux.kallsyms1
+> > |   KSYMS   .tmp_vmlinux.kallsyms1.S
+> > |   AS      .tmp_vmlinux.kallsyms1.S
+> > |   LD      .tmp_vmlinux.kallsyms2
+> > |   KSYMS   .tmp_vmlinux.kallsyms2.S
+> > |   AS      .tmp_vmlinux.kallsyms2.S
+> > |   LD      vmlinux
+> > |   BTFIDS  vmlinux
+> > | FAILED: load BTF from vmlinux: No such file or directory
+> > 
+> > I dug deeper and it seems that the resolve_btfids utility is not able
+> > to find any relevant .BTF section (at btf__parse from function
+> > symbols_resolve).
+> > 
+> > Dumped the vmlinux and also confirmed there is only .BTF_ids section:
+> > 
+> >   [2993] .rela___ksymtab_g RELA             0000000000000000  17174de0
+> >        0000000000000048  0000000000000018   I      22807   2992     8
+> >   [2994] .BTF_ids          PROGBITS         0000000000000000  0105c504
+> >        00000000000000fc  0000000000000000   A       0     0     1
+> > 
+> > What could be wrong? Sample config is available at
+> > https://gist.github.com/hoiho-amzn/964eb0cf2b4459f6775d7af1da7b4056
 
-Signed-off-by: Artem Savkov <asavkov@redhat.com>
----
- include/linux/bpf.h            | 1 +
- include/uapi/linux/bpf.h       | 6 ++++++
- kernel/bpf/syscall.c           | 4 +++-
- tools/include/uapi/linux/bpf.h | 6 ++++++
- 4 files changed, 16 insertions(+), 1 deletion(-)
+I compiled x86_64 bpf-next/master kernel with your config with no problems,
+could you share more details? like:
+  - version of dwarves/pahole
+  - clang/gcc? versions
+  - V=1 compile log
+  - command line options
+  - tree/branch you're on
+  - anything else ;-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 77972724bed7..43c008e3587a 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1041,6 +1041,7 @@ struct bpf_prog_aux {
- 	bool sleepable;
- 	bool tail_call_reachable;
- 	bool xdp_has_frags;
-+	bool destructive;
- 	bool use_bpf_prog_pack;
- 	/* BTF_KIND_FUNC_PROTO for valid attach_btf_id */
- 	const struct btf_type *attach_func_proto;
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index e81362891596..4423874b5da4 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1121,6 +1121,12 @@ enum bpf_link_type {
-  */
- #define BPF_F_XDP_HAS_FRAGS	(1U << 5)
- 
-+/* If BPF_F_DESTRUCTIVE is used in BPF_PROG_LOAD command, the loaded program
-+ * will be able to perform destructive operations such as calling bpf_panic()
-+ * helper.
-+ */
-+#define BPF_F_DESTRUCTIVE	(1U << 6)
-+
- /* link_create.kprobe_multi.flags used in LINK_CREATE command for
-  * BPF_TRACE_KPROBE_MULTI attach type to create return probe.
-  */
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 1ce6541d90e1..779feac2dc7d 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2449,7 +2449,8 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
- 				 BPF_F_TEST_STATE_FREQ |
- 				 BPF_F_SLEEPABLE |
- 				 BPF_F_TEST_RND_HI32 |
--				 BPF_F_XDP_HAS_FRAGS))
-+				 BPF_F_XDP_HAS_FRAGS |
-+				 BPF_F_DESTRUCTIVE))
- 		return -EINVAL;
- 
- 	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) &&
-@@ -2536,6 +2537,7 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
- 	prog->aux->offload_requested = !!attr->prog_ifindex;
- 	prog->aux->sleepable = attr->prog_flags & BPF_F_SLEEPABLE;
- 	prog->aux->xdp_has_frags = attr->prog_flags & BPF_F_XDP_HAS_FRAGS;
-+	prog->aux->destructive = attr->prog_flags & BPF_F_DESTRUCTIVE;
- 
- 	err = security_bpf_prog_alloc(prog->aux);
- 	if (err)
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index e81362891596..4423874b5da4 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1121,6 +1121,12 @@ enum bpf_link_type {
-  */
- #define BPF_F_XDP_HAS_FRAGS	(1U << 5)
- 
-+/* If BPF_F_DESTRUCTIVE is used in BPF_PROG_LOAD command, the loaded program
-+ * will be able to perform destructive operations such as calling bpf_panic()
-+ * helper.
-+ */
-+#define BPF_F_DESTRUCTIVE	(1U << 6)
-+
- /* link_create.kprobe_multi.flags used in LINK_CREATE command for
-  * BPF_TRACE_KPROBE_MULTI attach type to create return probe.
-  */
--- 
-2.35.3
+thanks,
+jirka
 
+> > 
+> > The issue exists on x86_64, I also have tried armv7 with the same
+> > result so doesn't seem to be arch-specific.
+> 
+> hi,
+> do you use any special command line options?
+> what tree/branch are you on?
+> 
+> thanks,
+> jirka
+> 
+> > 
+> > Thanks
+> > Donald
