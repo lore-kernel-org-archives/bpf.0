@@ -2,102 +2,107 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E814CCA47B
-	for <bpf@archiver.kernel.org>; Mon, 11 Jul 2022 21:48:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DDEACCA47F
+	for <bpf@archiver.kernel.org>; Mon, 11 Jul 2022 21:48:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231166AbiGKVsV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 Jul 2022 17:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60914 "EHLO
+        id S230105AbiGKVsU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 Jul 2022 17:48:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiGKVsT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 11 Jul 2022 17:48:19 -0400
+        with ESMTP id S231166AbiGKVsS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 11 Jul 2022 17:48:18 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4017365578
-        for <bpf@vger.kernel.org>; Mon, 11 Jul 2022 14:48:19 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26BLWf02027654
-        for <bpf@vger.kernel.org>; Mon, 11 Jul 2022 14:48:19 -0700
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F2382443
+        for <bpf@vger.kernel.org>; Mon, 11 Jul 2022 14:48:17 -0700 (PDT)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26BLWf9r028436
+        for <bpf@vger.kernel.org>; Mon, 11 Jul 2022 14:48:17 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : subject :
- date : message-id : content-type : content-transfer-encoding :
- mime-version; s=facebook; bh=kPOZbpQ7pUdiRyIrdhQ4UMiY/IFlfQdXFwCpX9F1RFw=;
- b=IAvl5s1IYVNMMZQZTsYuzoIiUPgUGYiL94HPfcgEcTNHgvsSfLeffjBtZEtfNsyEXACJ
- DjUNKUrlUYSJZI4mLDBm81g8GpsqgH1/75KJm+NTSzZ25Ure/c+0WW0+Vbs7Idqs/Amk
- jHwkHen7piulVcUX5iRKbFmzb5phZsKTFOg= 
-Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam04lp2170.outbound.protection.outlook.com [104.47.73.170])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h76srm60k-4
+ date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=PjhTR0NdHUghZjZ7cWUS4LAULJYW+PLGtuDjSa2NSOY=;
+ b=d3rOvQgrLfCD9GogYzCJ+evoMOj9/MZ1ra5qo38oYvjDClpoRpfqfr2ceUH4o22XWhvN
+ Lq0G2HvTi1D8OERA3aA61XoEV0hs9xD9DTswrDLb3Xb/vAftP5KAxbbkQKERgFdy3fJi
+ C8AvmEWE97m7IhkN0rZeh4s7OjcM1tNdFQI= 
+Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2046.outbound.protection.outlook.com [104.47.51.46])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h79043syk-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 11 Jul 2022 14:48:18 -0700
+        for <bpf@vger.kernel.org>; Mon, 11 Jul 2022 14:48:17 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DrjClCnnueUBfpil2KNJzm+qaQQhnpIGNQs/Wh9HlUd23szm1J3gPg9M7PHgql/txNmLnqhetaz3VHmjfJ2CGwrB9lZELNqJJZ4Zs1yGJvKQFkrFTYMVWsODe0TMjC9CDLc+r3AH39YEoO9bWFhaEjtvI8XbHHfoJaoaToj2rZV1RgU3tIb+rl8INeloPwXR5AaCR+2/E//WlV0JJi3XuBolTgcsvtecUB5ByuOEiieazXcDdnX50awSezGsiCkF/SZYz+9VIReE1BkZKFxefClGF50tc9RGFcG4tTsl+ic+6ici0PxtifDKEeXoJu+NUwZMi4CG70xojAWYigsgyw==
+ b=WISi7YAGgi3XsMczleb8FETNhg4Hl1CjappqHI8ESGODHHmINPizO9xoN4tzGF7moLNYmAWdgL4ljgUGWVhIgDSmi61i1h85j1xgrWpVurekO3xVYSHZ92XFbzeYZw7+65TYIDanyKCah5TAGUjTuTvIny65nKRSsfAmNRmK39DzZwIqCad7L6e/MheRsSJDhVUbQPWfqeTcPesk8/vPyjpP7bVYAsSbmcl+ZY5v7tEwV5JYyvIu5senEBOzgD0KYJZLf+NcJmvf3G6GCSX4lvOLJZVtKfW5yRTc/6rPieE+RE3QpHFhpOFbs0nRDmk36D5VBIghooSg6zpkWkyzDA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kPOZbpQ7pUdiRyIrdhQ4UMiY/IFlfQdXFwCpX9F1RFw=;
- b=idbTzRxZQiPh6zJHe/RuChrACjcfJzTFYR+tY+4Y94Rn6QxdHqTzYnMitO2TPp7yWfGOzGM4kAJSuFVHNHfPGoDKmDuFJjkbb5GEM6uFlLiTtGlkbMFOvusPH91bcu5MWUlAwCFagVXVAlZIRMzWgCcCQrlHZhNLEGIQO1VOtIGC7QvOOO6kEKCn8N0uJnOOtSgHgcCfO9eBA4L3+l+pqwQhxjkLDJg1CeZivHNZYCWNntO0evg/RaykZcJCp9VcXX4fwaQSPAIvVMnRzCHzteHFtg8LBzIouc9OVi4tRhRET+y+TekskGExgA5EetYkFzWgi6U12OYDUDXdW5fDSg==
+ bh=PjhTR0NdHUghZjZ7cWUS4LAULJYW+PLGtuDjSa2NSOY=;
+ b=P5esYG2x0Yxk9yv8bzQtE41NCq0shBRtoJj5DAyjyqPqWKrweaeqNjSd7zQVebCNA7Y0tc8zpnDWehk4mfbVpLOswkQP3BQqcom6vkiozH/4klUWU628xdN8jPtRd1x6JXEo3wWiFQSohiKQM/pXdIeYuED0bHlv200dkY1FhTtlr7/W0JISHL1Ue00AEi8aq9z0NYgiihyhU+BO14nJ/sO/rot6Q3KSViDd3RdU4VRnlqmTA0cZ+RBauWN/r0ansCf7G7o+j9P2mkw6hKWa1SgkB0G/1afkIkc7oW6cQZK9m+mVsMpJO9Xy3TWQxaMvr9ifjJMeThONudo6eeswOA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
  header.d=fb.com; arc=none
 Received: from SJ0PR15MB5154.namprd15.prod.outlook.com (2603:10b6:a03:423::6)
- by MN2PR15MB3375.namprd15.prod.outlook.com (2603:10b6:208:39::27) with
+ by DM6PR15MB2522.namprd15.prod.outlook.com (2603:10b6:5:1a9::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.26; Mon, 11 Jul
- 2022 21:48:15 +0000
+ 2022 21:48:13 +0000
 Received: from SJ0PR15MB5154.namprd15.prod.outlook.com
  ([fe80::ac52:e8fa:831f:237e]) by SJ0PR15MB5154.namprd15.prod.outlook.com
  ([fe80::ac52:e8fa:831f:237e%9]) with mapi id 15.20.5395.020; Mon, 11 Jul 2022
- 21:48:15 +0000
+ 21:48:13 +0000
 From:   Delyan Kratunov <delyank@fb.com>
 To:     "daniel@iogearbox.net" <daniel@iogearbox.net>,
         "ast@kernel.org" <ast@kernel.org>,
         "andrii@kernel.org" <andrii@kernel.org>,
         "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: [PATCH RFC bpf-next 0/3] Execution context callbacks
-Thread-Topic: [PATCH RFC bpf-next 0/3] Execution context callbacks
-Thread-Index: AQHYlW/snznW93TcsEKe6oR5OxPAGA==
-Date:   Mon, 11 Jul 2022 21:48:15 +0000
-Message-ID: <cover.1657576063.git.delyank@fb.com>
+Subject: [PATCH RFC bpf-next 1/3] bpf: allow maps to hold bpf_delayed_work
+ fields
+Thread-Topic: [PATCH RFC bpf-next 1/3] bpf: allow maps to hold
+ bpf_delayed_work fields
+Thread-Index: AQHYlW/rlnricuCpGUCEoXjJ7Q5oaA==
+Date:   Mon, 11 Jul 2022 21:48:13 +0000
+Message-ID: <37859ca03aaaba23f60288de044a3a10d52a79b4.1657576063.git.delyank@fb.com>
+References: <cover.1657576063.git.delyank@fb.com>
+In-Reply-To: <cover.1657576063.git.delyank@fb.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 4e69568c-59ea-4722-1744-08da63870f1a
-x-ms-traffictypediagnostic: MN2PR15MB3375:EE_
+x-ms-office365-filtering-correlation-id: 87be4845-ad38-4fda-2392-08da63870e29
+x-ms-traffictypediagnostic: DM6PR15MB2522:EE_
 x-fb-source: Internal
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Kz2HTrekfibfPP2Lufr6DSaxU3zdNYgWExkn5NtPlB4dr01RehUqnZKy4pCUK1el3lxrHreYq8e0rNBb/wIPDHnWE0M8vFkcEdLIb3hvLWITsdPRuxXvdyS239frSe1h8w+PyADWmVMJur/wi4Z7T6LSLkB8VyVQOj4MyeG89uOkhzAbPzvc1M7mFkqe9X/3NnDfZ/ANRU6jQW4Vf2qHbWybyrpQU8NM5A44Ai9GKNhdbMWrKSpsEzic6Tnwz0iDYX0QKEa3ht6yn9y7fllaWrwsGcPSfMbKrp2lZp1tN667cOfA8SUw0mXhayflQmnZ/bhbT7GOQHLc9fwVzgmkxjfjLSSztF0ZLcNYKtU5ZesGgYSQFxpLrvcMNxnjVKiBjh6+DoXEBmwEBpvkMk2RThS99SfIruOfiv327y957Dc5NGnNgXH8xupM1cum3CKjd7oRgL2rWbhYFdWWVYwIrbJJwZV8BWw1p/ST8P/QNAHokGm4RPkNhF0PBwjNcaEzn7KLvUlAZ2k/d/Cm3RJ+D4HZp4YkYBHvacvGlKo44RZ9XQHvwxZm2aUGMuhdSj3J5CFMXRgTi4IZN5XaaN2VG9oxRuCAqjvkHbBg7WxFJOrR3YYnPZ/t0P+KCUuLJJ8uZOMwh4EGwXbSoPtAa7cWL5x1c9PpmTYJYjyJvIc5SHrlgy51I3AJYqVH1/KtKod33w+G0Q8uI+kf5gHT4v9ws+BwXAa+hukO/b6RROM8md60sHgC0RrlxxdKzkdZAadhSd9fk0Qpd5+YFVv6EacEoRUGOg0NTnBLc+0OX3ZxruYv4J0IE//6+Y8Dv/yBvZeL
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR15MB5154.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(396003)(136003)(376002)(346002)(39860400002)(38100700002)(2616005)(38070700005)(122000001)(186003)(66476007)(83380400001)(8676002)(66446008)(76116006)(5660300002)(8936002)(66556008)(66946007)(64756008)(2906002)(41300700001)(6512007)(71200400001)(478600001)(110136005)(91956017)(316002)(6506007)(6486002)(36756003)(86362001);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: 9tHNUfUad+11PBNWSpZQNzvt8lXJSgnn22mErionW3ig21aYQPGvNF/0f1mvaGLyWZC9lzwJru2P8jsQDMgZhPEasdCe4o0rEBqfAbOPz1wsCIF7ncR5ady39bHTg1UwCbeV2T99rTUcqEG38AzAhNa8LMJ2TqGG4pQeFw6OO9b5LYxE7YeN+17c3W0fMWNf9ccW3fUOMohOmxV9GHLoRx4bBqQAcJaTWfjsZ8uACDr7ofR5dIJM7QAMBWipeSjZBdykpgy4VR3q4TIxIhOJqmgngonLrjCN39xb1LblTsFImdOulIQHmLVNqMTCuUCwzPhqAWaGyy0GtpxOo5mitHfZLnJBKqHR+U7ta7p39ABnaXH0yKdbVcIan4E+JsEfaGXz3RCYGjyYhv1clY1U9MBut7o9+IGcfWrvti0uJ1gJKRyvN/L2bpXD+bKOLQycfDN+VtUZzk8wQ83EEyKugT2Ot+TQ3s/E2bysdkE5L74LcgFoLmPQlaMEkefjwiR3xvCPiEfe6YqKt0SjFw0Mau4rvm7b6MKJ5UhK1SMWAQ5CmDQLf2RWGGs+/8YwtpaPdymO71lq+kwoPE6uLzqRr2E8E2tFWsX/rhyFS5yltgq0OQQqUdHSjgCS9Fu6QAmDUhjM7uOuh2kzlJSjHr2Wr1SxzGzv9pNladMQRWow/zD0M2xwxuQ4a0FCf17FB6n0GWhpCv1cZJBpQqHTtw/GwJgtE/lFoYpuR9axOXPyOmpypeWqOT/U1tb6Twcr+aTaEVL+IC7J/93ZZW0R45ubsVRrYw4i+LindX/G9YUy/fgat3pBsVf7G0i6iD+bLivL
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR15MB5154.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(366004)(346002)(39860400002)(376002)(38100700002)(186003)(122000001)(83380400001)(71200400001)(2616005)(36756003)(64756008)(8676002)(66476007)(316002)(110136005)(76116006)(66946007)(66446008)(91956017)(2906002)(6506007)(478600001)(41300700001)(6512007)(6486002)(38070700005)(8936002)(5660300002)(66556008)(86362001);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?PB7q4wBsnOpk6N0rT2d0esvQV09zkc41J7D5vf4GgTVFew+jxGRQTPhMui?=
- =?iso-8859-1?Q?y2tbViqItKAdvUyimYLomNYapaqrGg1N7m1XZNjM1EabGh9Q949cUpxGix?=
- =?iso-8859-1?Q?LuG3G45aFL1VmlGCZTV7qvDedKib/J66Tf/hK5VIcjgw8mSJQtFK3/g9t5?=
- =?iso-8859-1?Q?2MOGkUF0wvABRzdMif5tqMlkoAKn0582AssP8jvJ2XnqXsLVN7kI5ispPU?=
- =?iso-8859-1?Q?Q+EdFZAj3RFLC/I7P+KjYN/j5jgTEkjtS83Gn0UvSyht2Tmu3/FBfB9agq?=
- =?iso-8859-1?Q?K7PsRop+hwidseDwH/4/oW+1Rq9o3yj7DzGEs0Fl1dEenrixM2qbXFhMri?=
- =?iso-8859-1?Q?bZeFT5kDHRmCBwVos5N4T67zyYDUKMdKWTmqXb6VfByTpHJFN9Uds2UAvA?=
- =?iso-8859-1?Q?v4srLWM1t6JvVDHuTuy/wOFbuACE7Ya2KQKHQC2zrhDIpOpJRb92dnQGbF?=
- =?iso-8859-1?Q?5A4YDckI0xFC4FwEa4QE1Ku6MdW9Ap7LCfXyG1sNfjPvwYgt4dFGtRxC1C?=
- =?iso-8859-1?Q?KNj+X4fcn/eGbFk/oOe2Ywd7NV0M3ICxW/AQLBvuLyv3iR76yDq4mgOwh+?=
- =?iso-8859-1?Q?rO8qwK2BeUwM5lPy4w7OGAe+A1slOpA0DCWmQUfcAOV334AP58CjcF5aDh?=
- =?iso-8859-1?Q?o6ssz4dWsVn4wk5mrdSZuuGquQp+XWUzwCwMzSzbDnNEnOw3ygWw2V7Rpt?=
- =?iso-8859-1?Q?cfjSqXzffdMDI8XAQfTT2677iJyCSn67auutZLp24QSd91lag9qzdB8a5u?=
- =?iso-8859-1?Q?1APZpKfaYL1VYoJUNkiT/UpkdopoOhHtZ3oUxttWRjvzFEbeKWR1YxsMoa?=
- =?iso-8859-1?Q?AUXtfE4/CTKURroUu/kE/2gasXuhqWn2A0mH3/GVU11OcczCd65/v9Nj+s?=
- =?iso-8859-1?Q?VYNppQWRRi/iC2JbgEJ7++YLpL3eWYdebrj4Ia0rubd22AJKlzQaithudG?=
- =?iso-8859-1?Q?o+fv+agOnYWmk0k8XEIq8ceACIcTVawqCTRL/gPbBQ+X4E4ZmdENmLTUbh?=
- =?iso-8859-1?Q?HQBMWpTddBGuLBe3V01rx2yTVWemXcFFzFLSQ3Uz6ZvRB0fB9vDDAZDtUj?=
- =?iso-8859-1?Q?FeArYdMVS8zo45XgjDYgI8g6bzneuI8szoC1QLFCyPY4TO8WQPga4REhZx?=
- =?iso-8859-1?Q?DtKaaqc9KfEwGR2xvum1mhokAqabp1/yD+RMlCagOBHYygpk+Xe04sf5uv?=
- =?iso-8859-1?Q?XAqvB4nYGbAdE8W9zSUNAr/Pilx1TctE0/KQ7gTcQROuKm0tv2rOKcVhqB?=
- =?iso-8859-1?Q?+mYD8/yTYhuupASvLPCW5wACsVO0k3i0QnpXOpq6+m/oFdqiNLelAmbZP4?=
- =?iso-8859-1?Q?zokWCY9ZLEuSKCUDKYij+qh0ddYtzIdpHzWq3mfjTejeavb7rJ9/2JZnG5?=
- =?iso-8859-1?Q?KBx9RjhG5H8hkfwDG+IAwbRpHUEvRC60MeHJ32dhUNzjg/N7VJDM7LWMcW?=
- =?iso-8859-1?Q?c83Axeipxx0e7Daa339JEHwhPxRFzuxw3omriCB6IC0RnYwn2ZWjCQVUkx?=
- =?iso-8859-1?Q?AEOMebfsgr3lI7OtngGs4KJJ32FpzSa0sGbaLDoigZeZhjfLhUwRvEYlSK?=
- =?iso-8859-1?Q?C8gz5npqo60TQyNXy1qZrBytIjAL45B2EAY8APjT0wlIITf85UDWpepKQR?=
- =?iso-8859-1?Q?vugyCPOnrKBUbqdHckFlj+NoMl+gf4XTF5tABYA11vKQC0EesAOFiCCA?=
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?4RI+VQyfh0je5eoFiEEs9H/nxesXGU1HQHVnTK9saVuYO2NEN4SAW6OjLn?=
+ =?iso-8859-1?Q?+nYMEGXNPjn59iHjnCSS5OlK7FtBJ6PPRQ+9OFQ8FM1rRBQt64WCDKZGw7?=
+ =?iso-8859-1?Q?JdGyVYU3/vDG+JAXETtJlLFnJxrKs9n88VfnsOO7PgIV6uYNBMezkvN8ty?=
+ =?iso-8859-1?Q?ooVdnIT3LhWcjHhHlpy63WGhiXZSk/o1yN70oeaPC3T4V3zE6bzHhQQHuJ?=
+ =?iso-8859-1?Q?x0yD3Jkm7zADjynJcBHPqMUDX7Nnbz8U+77ECv1XI9nAtkUmd/WhqrWetb?=
+ =?iso-8859-1?Q?NkQV1jK1JdSHhinyP7lcbuRbLAJ30l9ZoQZgD+iYosZrngDN++SvtoJ0PN?=
+ =?iso-8859-1?Q?SeEG5yLBxKwD7pJZBxKjXReMvwOFqvq22kHyN1sPmmd50i8Tx2ua/v49z5?=
+ =?iso-8859-1?Q?wFLIrZsZnTmBooFn18g24m6+j6WyazonEB7tilzyGGmTSFFyLVAWAj6t38?=
+ =?iso-8859-1?Q?O1rTtuQ+QLz4RScFYWbMBPzUZzLnP6IMPk9QHiaUeIfu+DcazMIz/8zxDa?=
+ =?iso-8859-1?Q?Nl2iXnip+sY/YInu8Cu31WutXoiInPrZCOkH1R5P83LsmEEIxA6aCew7Xg?=
+ =?iso-8859-1?Q?ybF9j+abwSL/vGqNRwDUOGyzuJ+zP+PGzUTaCAJqAgbsT+lvU6vfkhREyC?=
+ =?iso-8859-1?Q?ZnTFYioS8o6nZ9Dnr4RZXLehmoVtAz9TD0woqSShssdvHxjdWtBKu+Ko+w?=
+ =?iso-8859-1?Q?20cWMFHQCzRTdQqbapAX4nbyEb2MWNSrhaJnx6q8SyHq8Xd9zFzxmUAbV1?=
+ =?iso-8859-1?Q?0hnNlKn2ZA20/UHg+Id6ilXJpptN4Zh8o/QBwJwFNIOxUgmu/o4lcTP6sm?=
+ =?iso-8859-1?Q?FWg2gzPuK2Hb5tL8YR9dQKVTM6Ib1gBFU4sYbE5IOFZ5BznBQHC/xncsCB?=
+ =?iso-8859-1?Q?29AmlxBF0x555R1WZ97/PAvpsMRRU99cRYOKmEVjxsl3E0IhHTtFfJnksT?=
+ =?iso-8859-1?Q?FCXc3HJCeS+lIaNsj9aBZ8jHaYD6T0D0LYYEgEbgj84DxCmyjc+VDvPfRX?=
+ =?iso-8859-1?Q?Rsq3NNxw96yAkv4bJe/hHSK9h4R+QjDjiSzg3NW2yOOfI3J1BpkPMW2wcm?=
+ =?iso-8859-1?Q?fIoyOJBHwFNeKQCRiLAb2D5LvU1XNzM0XNYFpxcBm4swi7JWXfEwbgBpz7?=
+ =?iso-8859-1?Q?PtJPlWxdMYisoG6H1Mbfecr4CbhzfrDuCaR2bQAyWxBvIYdQ/kIpIcb8IQ?=
+ =?iso-8859-1?Q?L15VyH831ORG+bxjbreMYTBuS7jpZ+E9cghEglgw+4rJxhPB76CoehZyiq?=
+ =?iso-8859-1?Q?Yo3Vlblfv3rh/nQAw1VRYRk/nH2bEo6Mv2LG+f3Z/HpYx1oWFzBkbFiL/h?=
+ =?iso-8859-1?Q?7n8ZT691ThdruAYpiLsgZcxhKaSqV974gB2P+xualOEdNdYyOEvr1Pxdpg?=
+ =?iso-8859-1?Q?dqfS7CfZooEDk1qByfctK99dMYnZy0NRnDXFkRMa1Rtvqehw9zFnWMgz4U?=
+ =?iso-8859-1?Q?mbXxUlbxJV2tnIhK+A9iJWwpGW1i07giI8h4mbmVUxOm4xYtfX6MEOYuhL?=
+ =?iso-8859-1?Q?R+K+fqfcG3pbLRWKUqBsyYEJ9YVjL5xa1hxv7h97yp7AyhZkhiykLOIMO2?=
+ =?iso-8859-1?Q?41Xfrll1qkvuYZUu9gp+H+M4rS+STAte86fY816cEzh7GbE2kt/kF6wcV0?=
+ =?iso-8859-1?Q?zy9xRqCNLl8hC4EWGLR6XseHLcdbj2Y2bdz5npoAgCZEU+nT5ZkxIjiA?=
  =?iso-8859-1?Q?=3D=3D?=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
@@ -105,16 +110,16 @@ MIME-Version: 1.0
 X-OriginatorOrg: fb.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: SJ0PR15MB5154.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4e69568c-59ea-4722-1744-08da63870f1a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jul 2022 21:48:15.0824
+X-MS-Exchange-CrossTenant-Network-Message-Id: 87be4845-ad38-4fda-2392-08da63870e29
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jul 2022 21:48:13.5345
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: tzqQm+yOSCWcep8aT5IoSY/Z0wYvxkvxEQZaG6Zznwj87/7wwg1dB2lemcoJiymN
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR15MB3375
-X-Proofpoint-ORIG-GUID: wcj4QEoBsNNWbq3t9d3CODFA25ljSBY4
-X-Proofpoint-GUID: wcj4QEoBsNNWbq3t9d3CODFA25ljSBY4
+X-MS-Exchange-CrossTenant-userprincipalname: 6XjTa58iBFAB4u9QlB/aVTTIhOc9RIGwlHePUkuSuYgXp00XxSxohQYtf9nUMQtG
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR15MB2522
+X-Proofpoint-ORIG-GUID: 8AX_I2ZistJpvsoIIGLjiEHt-fyyy_IU
+X-Proofpoint-GUID: 8AX_I2ZistJpvsoIIGLjiEHt-fyyy_IU
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-07-11_25,2022-07-08_01,2022-06-22_01
@@ -122,85 +127,265 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-BPF developers are sometimes faced with surprising limitations of the execu=
-tion context
-their code runs in. NMI is particularly problematic though userspace data a=
-ccess as a whole
-has come up as well (e.g. build id not being available).
+Similarly to bpf_timer, bpf_delayed_work represents a callback that will
+be executed at a later time, in a different execution context.
 
-This series adds bpf_delayed_work_submit which takes a callback function an=
-d a context pointer
-and is able to execute the callback from (initially) a hardirq context.
+Its treatment in maps is practically the same as timers (to a degree
+that perhaps calls for refactoring), except releasing the work does not
+need to release any resources - we will wait for pending executions in
+the program destruction path.
 
-This is an RFC to answer a few questions on direction:
+Signed-off-by: Delyan Kratunov <delyank@fb.com>
+---
+ include/linux/bpf.h            |  9 ++++++++-
+ include/linux/btf.h            |  1 +
+ include/uapi/linux/bpf.h       |  8 ++++++++
+ kernel/bpf/btf.c               | 21 +++++++++++++++++++++
+ kernel/bpf/syscall.c           | 24 ++++++++++++++++++++++--
+ kernel/bpf/verifier.c          |  9 +++++++++
+ tools/include/uapi/linux/bpf.h |  8 ++++++++
+ 7 files changed, 77 insertions(+), 3 deletions(-)
 
-1. Naming is intentionally bad and something I'd like to bikeshed a bit.
-"bpf_(defer|submit)_work" was my first instinct but that has workqueue conn=
-otations in the kernel.
-
-2. The callback arguments need to be in a map. We can currently express hel=
-per arguments taking a
-pointer to a map value but not a pointer to _within_ a map value. Should we=
- add a new argument
-type or should we just pass the map value pointer to the callback?
-
-3. A lot of the map handling code is verbatim from bpf_timer. This feels ic=
-ky but I'm not sure if it
-justifies a refactor quite yet. Opinions welcome.
-
-4. This functionality is implemented as a single helper call (no matching b=
-pf_delayed_work_init). In practice,
-this means that we can't implement the map->usercnt check that bpf_timer_st=
-art performs to ensure the
-map is referenced from userspace. However, given that a) we wait for pendin=
-g work before releasing the
-bpf_prog, b) the map will be in the bpf_prog's used_maps, and c) the map fr=
-ee path does not need to release
-any external resources, and d) the bpf_delayed_work items bump the prog ref=
-cnt, I think we can keep this mechanism
-a single call.
-
-I'd like to get this right from the start, so do let me know if I'm missing=
- potential execution
-contexts that we can't really wait to drain from the bpf_prog free path.
-
-5. This mechanism generalizes to other contexts (e.g., sleepable context on=
- the way back to userspace
-a-la set_thread_flag(TIF_UPROBE)), by means of adding the bpf_delayed_work =
-items to other llist_heads.
-E.g., we can keep the llist_heads in task_local_storage or in per-cpu struc=
-tures. I can't think of
-anything that requires a more complicated approach (or reserved space in th=
-e structs) but do let me
-know if I'm wrong.
-
-6. Lastly, the llist approach was dictated by the NMI constraints. RCU list=
-s are out because they need
-to synchronize_rcu when splicing from one head to another.
-
-Thanks,
-Delyan
-
-Delyan Kratunov (3):
-  bpf: allow maps to hold bpf_delayed_work fields
-  bpf: add delayed_work mechanism
-  selftests: delayed_work tests
-
- include/linux/bpf.h                           |  22 ++-
- include/linux/btf.h                           |   1 +
- include/uapi/linux/bpf.h                      |  36 +++++
- kernel/bpf/btf.c                              |  21 +++
- kernel/bpf/core.c                             |   8 ++
- kernel/bpf/helpers.c                          |  92 ++++++++++++
- kernel/bpf/syscall.c                          |  24 +++-
- kernel/bpf/verifier.c                         | 132 +++++++++++++++++-
- scripts/bpf_doc.py                            |   2 +
- tools/include/uapi/linux/bpf.h                |  35 +++++
- .../selftests/bpf/prog_tests/delayed_work.c   |  29 ++++
- .../selftests/bpf/progs/delayed_irqwork.c     |  59 ++++++++
- 12 files changed, 457 insertions(+), 4 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/delayed_work.c
- create mode 100644 tools/testing/selftests/bpf/progs/delayed_irqwork.c
-
---
-2.36.1=
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 0edd7d2c0064..ad9d2cfb0411 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -164,7 +164,8 @@ enum {
+ 	BPF_MAP_VALUE_OFF_MAX =3D 8,
+ 	BPF_MAP_OFF_ARR_MAX   =3D BPF_MAP_VALUE_OFF_MAX +
+ 				1 + /* for bpf_spin_lock */
+-				1,  /* for bpf_timer */
++				1 + /* for bpf_timer */
++				1,  /* for bpf_delayed_work */
+ };
+=20
+ enum bpf_kptr_type {
+@@ -212,6 +213,7 @@ struct bpf_map {
+ 	int spin_lock_off; /* >=3D0 valid offset, <0 error */
+ 	struct bpf_map_value_off *kptr_off_tab;
+ 	int timer_off; /* >=3D0 valid offset, <0 error */
++	int delayed_work_off; /* >=3D0 valid offset, <0 error */
+ 	u32 id;
+ 	int numa_node;
+ 	u32 btf_key_type_id;
+@@ -256,6 +258,11 @@ static inline bool map_value_has_timer(const struct bp=
+f_map *map)
+ 	return map->timer_off >=3D 0;
+ }
+=20
++static inline bool map_value_has_delayed_work(const struct bpf_map *map)
++{
++	return map->delayed_work_off >=3D 0;
++}
++
+ static inline bool map_value_has_kptrs(const struct bpf_map *map)
+ {
+ 	return !IS_ERR_OR_NULL(map->kptr_off_tab);
+diff --git a/include/linux/btf.h b/include/linux/btf.h
+index 1bfed7fa0428..2b8f473a6aa0 100644
+--- a/include/linux/btf.h
++++ b/include/linux/btf.h
+@@ -132,6 +132,7 @@ bool btf_member_is_reg_int(const struct btf *btf, const=
+ struct btf_type *s,
+ 			   u32 expected_offset, u32 expected_size);
+ int btf_find_spin_lock(const struct btf *btf, const struct btf_type *t);
+ int btf_find_timer(const struct btf *btf, const struct btf_type *t);
++int btf_find_delayed_work(const struct btf *btf, const struct btf_type *t)=
+;
+ struct bpf_map_value_off *btf_parse_kptrs(const struct btf *btf,
+ 					  const struct btf_type *t);
+ bool btf_type_is_void(const struct btf_type *t);
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index e81362891596..d68fc4f472f1 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -6691,6 +6691,14 @@ struct bpf_dynptr {
+ 	__u64 :64;
+ } __attribute__((aligned(8)));
+=20
++struct bpf_delayed_work {
++	__u64 :64;
++	__u64 :64;
++	__u64 :64;
++	__u64 :64;
++	__u64 :64;
++} __attribute__((aligned(8)));
++
+ struct bpf_sysctl {
+ 	__u32	write;		/* Sysctl is being read (=3D 0) or written (=3D 1).
+ 				 * Allows 1,2,4-byte read, but no write.
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index f08037c31dd7..e4ab52cc25fe 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -3196,6 +3196,7 @@ enum btf_field_type {
+ 	BTF_FIELD_SPIN_LOCK,
+ 	BTF_FIELD_TIMER,
+ 	BTF_FIELD_KPTR,
++	BTF_FIELD_DELAYED_WORK,
+ };
+=20
+ enum {
+@@ -3283,6 +3284,7 @@ static int btf_find_struct_field(const struct btf *bt=
+f, const struct btf_type *t
+ 		switch (field_type) {
+ 		case BTF_FIELD_SPIN_LOCK:
+ 		case BTF_FIELD_TIMER:
++		case BTF_FIELD_DELAYED_WORK:
+ 			ret =3D btf_find_struct(btf, member_type, off, sz,
+ 					      idx < info_cnt ? &info[idx] : &tmp);
+ 			if (ret < 0)
+@@ -3333,6 +3335,7 @@ static int btf_find_datasec_var(const struct btf *btf=
+, const struct btf_type *t,
+ 		switch (field_type) {
+ 		case BTF_FIELD_SPIN_LOCK:
+ 		case BTF_FIELD_TIMER:
++		case BTF_FIELD_DELAYED_WORK:
+ 			ret =3D btf_find_struct(btf, var_type, off, sz,
+ 					      idx < info_cnt ? &info[idx] : &tmp);
+ 			if (ret < 0)
+@@ -3375,6 +3378,11 @@ static int btf_find_field(const struct btf *btf, con=
+st struct btf_type *t,
+ 		sz =3D sizeof(struct bpf_timer);
+ 		align =3D __alignof__(struct bpf_timer);
+ 		break;
++	case BTF_FIELD_DELAYED_WORK:
++		name =3D "bpf_delayed_work";
++		sz =3D sizeof(struct bpf_delayed_work);
++		align =3D __alignof__(struct bpf_delayed_work);
++		break;
+ 	case BTF_FIELD_KPTR:
+ 		name =3D NULL;
+ 		sz =3D sizeof(u64);
+@@ -3421,6 +3429,19 @@ int btf_find_timer(const struct btf *btf, const stru=
+ct btf_type *t)
+ 	return info.off;
+ }
+=20
++int btf_find_delayed_work(const struct btf *btf, const struct btf_type *t)
++{
++	struct btf_field_info info;
++	int ret;
++
++	ret =3D btf_find_field(btf, t, BTF_FIELD_DELAYED_WORK, &info, 1);
++	if (ret < 0)
++		return ret;
++	if (!ret)
++		return -ENOENT;
++	return info.off;
++}
++
+ struct bpf_map_value_off *btf_parse_kptrs(const struct btf *btf,
+ 					  const struct btf_type *t)
+ {
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 7d5af5b99f0d..041972305344 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -914,10 +914,11 @@ static int bpf_map_alloc_off_arr(struct bpf_map *map)
+ 	bool has_spin_lock =3D map_value_has_spin_lock(map);
+ 	bool has_timer =3D map_value_has_timer(map);
+ 	bool has_kptrs =3D map_value_has_kptrs(map);
++	bool has_delayed_work =3D map_value_has_delayed_work(map);
+ 	struct bpf_map_off_arr *off_arr;
+ 	u32 i;
+=20
+-	if (!has_spin_lock && !has_timer && !has_kptrs) {
++	if (!has_spin_lock && !has_timer && !has_kptrs && !has_delayed_work) {
+ 		map->off_arr =3D NULL;
+ 		return 0;
+ 	}
+@@ -953,6 +954,13 @@ static int bpf_map_alloc_off_arr(struct bpf_map *map)
+ 		}
+ 		off_arr->cnt +=3D tab->nr_off;
+ 	}
++	if (has_delayed_work) {
++		i =3D off_arr->cnt;
++
++		off_arr->field_off[i] =3D map->delayed_work_off;
++		off_arr->field_sz[i] =3D sizeof(struct bpf_delayed_work);
++		off_arr->cnt++;
++	}
+=20
+ 	if (off_arr->cnt =3D=3D 1)
+ 		return 0;
+@@ -1014,6 +1022,16 @@ static int map_check_btf(struct bpf_map *map, const =
+struct btf *btf,
+ 			return -EOPNOTSUPP;
+ 	}
+=20
++	map->delayed_work_off =3D btf_find_delayed_work(btf, value_type);
++	if (map_value_has_delayed_work(map)) {
++		if (map->map_flags & BPF_F_RDONLY_PROG)
++			return -EACCES;
++		if (map->map_type !=3D BPF_MAP_TYPE_HASH &&
++		    map->map_type !=3D BPF_MAP_TYPE_LRU_HASH &&
++		    map->map_type !=3D BPF_MAP_TYPE_ARRAY)
++			return -EOPNOTSUPP;
++	}
++
+ 	map->kptr_off_tab =3D btf_parse_kptrs(btf, value_type);
+ 	if (map_value_has_kptrs(map)) {
+ 		if (!bpf_capable()) {
+@@ -1095,6 +1113,7 @@ static int map_create(union bpf_attr *attr)
+=20
+ 	map->spin_lock_off =3D -EINVAL;
+ 	map->timer_off =3D -EINVAL;
++	map->delayed_work_off =3D -EINVAL;
+ 	if (attr->btf_key_type_id || attr->btf_value_type_id ||
+ 	    /* Even the map's value is a kernel's struct,
+ 	     * the bpf_prog.o must have BTF to begin with
+@@ -1863,7 +1882,8 @@ static int map_freeze(const union bpf_attr *attr)
+ 		return PTR_ERR(map);
+=20
+ 	if (map->map_type =3D=3D BPF_MAP_TYPE_STRUCT_OPS ||
+-	    map_value_has_timer(map) || map_value_has_kptrs(map)) {
++	    map_value_has_timer(map) || map_value_has_kptrs(map) ||
++	    map_value_has_delayed_work(map)) {
+ 		fdput(f);
+ 		return -ENOTSUPP;
+ 	}
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 2859901ffbe3..9fd311b7a1ff 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3817,6 +3817,15 @@ static int check_map_access(struct bpf_verifier_env =
+*env, u32 regno,
+ 			return -EACCES;
+ 		}
+ 	}
++	if (map_value_has_delayed_work(map) && src =3D=3D ACCESS_DIRECT) {
++		u32 t =3D map->delayed_work_off;
++
++		if (reg->smin_value + off < t + sizeof(struct bpf_delayed_work) &&
++		     t < reg->umax_value + off + size) {
++			verbose(env, "bpf_delayed_work cannot be accessed directly by load/stor=
+e regno=3D%d off=3D%d\n", regno, off);
++			return -EACCES;
++		}
++	}
+ 	if (map_value_has_kptrs(map)) {
+ 		struct bpf_map_value_off *tab =3D map->kptr_off_tab;
+ 		int i;
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.=
+h
+index e81362891596..d68fc4f472f1 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -6691,6 +6691,14 @@ struct bpf_dynptr {
+ 	__u64 :64;
+ } __attribute__((aligned(8)));
+=20
++struct bpf_delayed_work {
++	__u64 :64;
++	__u64 :64;
++	__u64 :64;
++	__u64 :64;
++	__u64 :64;
++} __attribute__((aligned(8)));
++
+ struct bpf_sysctl {
+ 	__u32	write;		/* Sysctl is being read (=3D 0) or written (=3D 1).
+ 				 * Allows 1,2,4-byte read, but no write.
+--=20
+2.36.1
