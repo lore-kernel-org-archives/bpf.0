@@ -2,107 +2,122 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7E7DC43334
-	for <bpf@archiver.kernel.org>; Mon, 11 Jul 2022 09:29:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C99A7CCA483
+	for <bpf@archiver.kernel.org>; Mon, 11 Jul 2022 09:53:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231248AbiGKJ3s (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 Jul 2022 05:29:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41510 "EHLO
+        id S234008AbiGKJx2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 Jul 2022 05:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232614AbiGKJ3U (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:29:20 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16EE26B275;
-        Mon, 11 Jul 2022 02:16:22 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id ss3so1730936ejc.11;
-        Mon, 11 Jul 2022 02:16:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eTTFKgH7hQtkU//+CmCIZWi4/NIjeedPCrqlPOr90W0=;
-        b=XsHyUDFbnP3JUpUBo6IGZB42A+qynNMNTRaQ/PqHgOsAVE9ICzuqSQ+dPcRn5soSrT
-         GXwyfgmLLC15MccjDYbPhtf5U+H9GbpDgvv1qWaUhzyFwnwELCHl0hdWMRMZ3GR1Sv7/
-         6Wnj5yPHTbxVzcIL6X5UHdgO/D1cKuMFwt2WlvXBIwLP0QB0ZGBKhya/QmWSpRIZhTp6
-         Zdvbb6q/DRMJZhA7dNdied/FH1tKWPfStMeqlFBS3OsqQzvkFiFoovdMe3eHvRsUrtKA
-         4YtDuAANgveMffp6+gwprp/wiF5aondeK4RuIgheN45AQ5wE/8/oziGoOpy4kF/15EaC
-         NZRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eTTFKgH7hQtkU//+CmCIZWi4/NIjeedPCrqlPOr90W0=;
-        b=XxkfvavMfkThwiPe8hwBZkC13rFsbA5DdmoJPCztCIvy+OQDL6PKwHrXZisUg1Xwl8
-         g5ulc8oZFC1bDnxmXh0efTQyMKRFY7Mod6L8vjkHdIzmyy9JPv10rzAJG88Qy351K2o0
-         kcXkVx/3M3A7wvaRjWyPU528BN77QbhAEOok6LdYiEpzRHfzRecd3DVf+FAGNKbKmSpe
-         JrmrYr8e4TLqYPB3oZVMnuYFf4laNymYMHU69t53HpX64NQakNEpuc0ACJha3gtp6xJy
-         sQbat/SrOCpwhGWJ2MfM8IooeQgptQr+L4jDLsS7xua+KlwXkQLQlE707KdTaAIw2WBB
-         rIHQ==
-X-Gm-Message-State: AJIora+OmEeLZxpo22r57HNXsTLhxPUIGVqVLgRKk299/Pl2XT+xLy+u
-        QakVBOo6KQu3cDdeAMjEqlY=
-X-Google-Smtp-Source: AGRyM1vyTdIavT8V7fN4xYPLAmk+pYeFH25gLXVUvcFm5e5YYgzRTa32QNKf7AhSCgFocjJwX5XFgw==
-X-Received: by 2002:a17:907:6818:b0:72b:5bac:c3a3 with SMTP id qz24-20020a170907681800b0072b5bacc3a3mr2444303ejc.139.1657530980872;
-        Mon, 11 Jul 2022 02:16:20 -0700 (PDT)
-Received: from krava ([151.14.22.253])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170906211100b006fefd1d5c2bsm2495099ejt.148.2022.07.11.02.16.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 02:16:20 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Mon, 11 Jul 2022 11:16:18 +0200
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Yonghong Song <yhs@fb.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com
-Subject: Re: [PATCH dwarves v3 0/2] btf: support BTF_KIND_ENUM64
-Message-ID: <YsvqYhbee6WpBckl@krava>
-References: <20220629071213.3178592-1-yhs@fb.com>
- <YrzH1ABPYmKSEogS@kernel.org>
+        with ESMTP id S233809AbiGKJxF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 11 Jul 2022 05:53:05 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C6A7ADD51;
+        Mon, 11 Jul 2022 02:25:26 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9865415BF;
+        Mon, 11 Jul 2022 02:25:25 -0700 (PDT)
+Received: from [10.57.43.82] (unknown [10.57.43.82])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4E3E43F73D;
+        Mon, 11 Jul 2022 02:25:22 -0700 (PDT)
+Message-ID: <8d282e87-c1c8-f7a0-631b-8d569c2154a6@arm.com>
+Date:   Mon, 11 Jul 2022 10:25:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrzH1ABPYmKSEogS@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 2/8] perf evsel: Do not request ptrauth sample field if
+ not supported
+Content-Language: en-US
+To:     Vince Weaver <vincent.weaver@maine.edu>,
+        Andrew Kilroy <andrew.kilroy@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Tom Rix <trix@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, llvm@lists.linux.dev
+References: <20220704145333.22557-1-andrew.kilroy@arm.com>
+ <20220704145333.22557-3-andrew.kilroy@arm.com>
+ <d67dff7-73c3-e5a-eb7b-f132e8f565cc@maine.edu>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <d67dff7-73c3-e5a-eb7b-f132e8f565cc@maine.edu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 06:44:52PM -0300, Arnaldo Carvalho de Melo wrote:
-> Em Wed, Jun 29, 2022 at 12:12:13AM -0700, Yonghong Song escreveu:
-> > Add support for enum64. For 64-bit enumerator value,
-> > previously, the value is truncated into 32bit, e.g.,
-> > for the following enum in linux uapi bpf.h,
-> >   enum {
-> >         BPF_F_INDEX_MASK                = 0xffffffffULL,
-> >         BPF_F_CURRENT_CPU               = BPF_F_INDEX_MASK,
-> >   /* BPF_FUNC_perf_event_output for sk_buff input context. */
-> >         BPF_F_CTXLEN_MASK               = (0xfffffULL << 32),
-> >   };    
-> 
-> Applied, added the entry for skip generating enums to the man page,
-> added support to the pahole BTF loader, used the new pahole to build
-> bpf-next/master, all seems ok, pushing to next on git.kernel.org so that
-> the libbpf github CI can give it a go.
-> 
-> To build with torvalds/master one has to add --skip_encoding_btf_enum64,
-> I think, haven't tested with it, without it isn't working, libbpf
-> complains at that btfids tool.
-> 
-> Please check/test what is in there now:
-> 
->   git://git.kernel.org/pub/scm/devel/pahole/pahole.git next
->   https://git.kernel.org/pub/scm/devel/pahole/pahole.git/log/?h=next
-> 
-> Unless someone screams I plan pushing out a new release, update fedora
-> packages, etc early next week its overdue by now.
 
-I used this new pahole in kernel build and it looks ok,
-but I'm getting following warning:
 
-  BTFIDS  vmlinux
-WARN: resolve_btfids: unresolved symbol mptcp_sock
+On 06/07/2022 17:01, Vince Weaver wrote:
+> On Mon, 4 Jul 2022, Andrew Kilroy wrote:
+> 
+>> A subsequent patch alters perf to perf_event_open with the
+>> PERF_SAMPLE_ARCH_1 bit on.
+>>
+>> This patch deals with the case where the kernel does not know about the
+>> PERF_SAMPLE_ARCH_1 bit, and does not know to send the pointer
+>> authentication masks.  In this case the perf_event_open system call
+>> returns -EINVAL (-22) and perf exits with an error.
+>>
+>> This patch causes userspace process to re-attempt the perf_event_open
+>> system call but without asking for the PERF_SAMPLE_ARCH_1 sample
+>> field, allowing the perf_event_open system call to succeed.
+> 
+> So in this case you are leaking ARM64-specific info into the generic 
+> perf_event_open() call?  Is there any way the kernel could implement this 
+> without userspace having to deal with the issue?
 
-might be specific to my .config, I'll check and let you know
+Hi Vince,
 
-jirka
+The alternative to this change is just to call it "PERF_SAMPLE_POINTER_AUTH_MASK"
+and then it's not Arm specific, it's just that only Arm implements it for now.
+This is definitely an option.
+
+But if no platform ever implements something similar then that bit is wasted.
+The intention of adding "PERF_SAMPLE_ARCH_1" was to prevent wasting that bit.
+But as you say, maybe making it arch specific isn't the right way either.
+
+I wouldn't say the perf_event_open call is currently generic though, lots of
+it already requires knowledge of the current platform, and searching for 'x86'
+in the docs for it gives 10 matches.
+
+> 
+> There are a few recent ARM64 perf_event related patches that are pushing 
+> ARM specific interfaces into the generic code, with the apparent 
+> assumption that it will just be implemented in the userspace perf tool.  
+> However there are a number of outside-the-kernel codebases that also use 
+> perf_event_open() and it seems a bit onerous if all of them have to start 
+> adding a lot of extra ARM64-specific code, especially because as far as I 
+
+Because pointer auth is a hardware feature, other tools have no choice but
+to implement this if they do Dwarf based stack unwinding. There is no way
+around that. The pointers are stored mangled and they don't make sense
+without masking them. GDB has already implemented support for it. If they
+don't do Dwarf based stack unwinding then they can carry on as they are
+and everything will still work.
+
+> can tell there haven't been any documentation patches included for the 
+> Makefile.
+
+We plan to update the docs for the syscall, but it's in another repo, and
+we'll wait for this change to be finalised first. I'm not sure what you
+mean about the Makefile?
+
+Thanks
+James
+
+> 
+> The other recent change that's annoying for userspace is the addition of 
+> the ARM-specific /proc/sys/kernel/perf_user_access that duplicates 
+> functionality found in /sys/devices/cpu/rdpmc
+> 
+> Vince Weaver
+> vincent.weaver@maine.edu
