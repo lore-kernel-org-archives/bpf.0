@@ -2,58 +2,31 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0159C43334
-	for <bpf@archiver.kernel.org>; Mon, 11 Jul 2022 14:48:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5715AC43334
+	for <bpf@archiver.kernel.org>; Mon, 11 Jul 2022 14:59:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231623AbiGKOsp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 Jul 2022 10:48:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42726 "EHLO
+        id S230250AbiGKO7T (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 Jul 2022 10:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231438AbiGKOso (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 11 Jul 2022 10:48:44 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF915F57
-        for <bpf@vger.kernel.org>; Mon, 11 Jul 2022 07:48:40 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id z12so7331543wrq.7
-        for <bpf@vger.kernel.org>; Mon, 11 Jul 2022 07:48:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=OeIwrghjWv1itdsEcBmUCDSZH1m4e3A3+aJ94H0DMKA=;
-        b=mi5bzmfy76j/A0JqIGs4L9rTEq0UWTfjTNwH3NpU3XTt27ad7yjuV7drDTaywqs6A+
-         4+PQPa4vsJKRy6zcuawPUL65Zf2/19jaUHFTHnDHJHoeYqW25gy1LmILfUYjWKW86eWD
-         FdIkLUsvTwlzo4+ghyC3YeigJia/vQ2OWjAv0x/qmIllC6gdLkN6JHZa70zbttJAJAfv
-         e9d7JAzmuIQlfoZFZpczZcL4OKiCrJGT8QxC7Ew3F+fgtuD6T9nlF+Qb1/zAgoj4rnQx
-         w7l9P5A7lTiEzPIA+YBAS9jO5qh1tsVoyq5mcISyDKbf1uPs08WSzfO8ZO+gwos0AU8D
-         l5JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OeIwrghjWv1itdsEcBmUCDSZH1m4e3A3+aJ94H0DMKA=;
-        b=3Yxa+JViwHIINR2cgrJAQrcmKLAhoDCZMmDUme3NBFVn0CuqO7uyzN29XVoK9xBdtO
-         6oOAV62AJrxe15thg/e/HrMHzUTUv3bSabZIB+Vgrwq/ffgZnQopBpkzIxYPi1yPCsl3
-         o3HfdCI0u4UqA/u+TLoXVWf/UbhUR4XfJBn+ysA8Lv7ktBg/tUvMaSuipXgUvJHuZ6FT
-         MoSVX92J941NfUHeZYsacjtHtR4PHaZvqMeh0JMDmC/2K/WwEXqMa9rPPWd0RrjHOOn+
-         oteb5zD1wg7BInp35wKNcnj5lGNrmc/jpnrgoOzlaidCcLUSMB2cwV5cIjdffbdEJuVn
-         0o2g==
-X-Gm-Message-State: AJIora+0K3FXY+kLwCoJeSH7tfta7Z+in8ojShzMOvQV6kC2YZPj+xnC
-        kUTVfla84IFBMk68w7Vnarz1uA==
-X-Google-Smtp-Source: AGRyM1vscC01dfCS/5xXseWFralreHKQW/CSj8vShH3qf6EqRgbWjqqNp17PAFhHjKV/myPWE6uc+g==
-X-Received: by 2002:a5d:6e5c:0:b0:21d:7ba1:3601 with SMTP id j28-20020a5d6e5c000000b0021d7ba13601mr17597477wrz.554.1657550918856;
-        Mon, 11 Jul 2022 07:48:38 -0700 (PDT)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id b17-20020adff911000000b0021d819c8f6dsm5922653wrr.39.2022.07.11.07.48.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 07:48:38 -0700 (PDT)
-Date:   Mon, 11 Jul 2022 15:48:13 +0100
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Xu Kuohai <xukuohai@huawei.com>
-Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Will Deacon <will@kernel.org>, KP Singh <kpsingh@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
+        with ESMTP id S231904AbiGKO7N (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 11 Jul 2022 10:59:13 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D247852459;
+        Mon, 11 Jul 2022 07:59:12 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LhRmN5Sn5zhZ6J;
+        Mon, 11 Jul 2022 22:56:36 +0800 (CST)
+Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 11 Jul
+ 2022 22:59:08 +0800
+From:   Xu Kuohai <xukuohai@huawei.com>
+To:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Will Deacon <will@kernel.org>, KP Singh <kpsingh@kernel.org>
+CC:     Mark Rutland <mark.rutland@arm.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -67,7 +40,7 @@ Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         David Ahern <dsahern@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
         "H . Peter Anvin" <hpa@zytor.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
@@ -75,47 +48,110 @@ Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         James Morse <james.morse@arm.com>,
         Hou Tao <houtao1@huawei.com>,
         Jason Wang <wangborong@cdjrlc.com>
-Subject: Re: [PATCH bpf-next v7 4/4] bpf, arm64: bpf trampoline for arm64
-Message-ID: <Ysw4LaMuNZQsoQXp@myrica>
-References: <20220708093032.1832755-1-xukuohai@huawei.com>
- <20220708093032.1832755-5-xukuohai@huawei.com>
- <YswQQG7CUoTXCbDa@myrica>
- <4852eba8-9fd0-6894-934c-ab89c0c7cea9@huawei.com>
- <Ysw1nSxQUghvY/eY@myrica>
- <893b2d5f-16e9-0b1d-4ae6-8199e0f4ccf8@huawei.com>
+Subject: [PATCH bpf-next v9 1/4] bpf: Remove is_valid_bpf_tramp_flags()
+Date:   Mon, 11 Jul 2022 11:08:20 -0400
+Message-ID: <20220711150823.2128542-2-xukuohai@huawei.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220711150823.2128542-1-xukuohai@huawei.com>
+References: <20220711150823.2128542-1-xukuohai@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <893b2d5f-16e9-0b1d-4ae6-8199e0f4ccf8@huawei.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.197]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 10:40:42PM +0800, Xu Kuohai wrote:
-> On 7/11/2022 10:37 PM, Jean-Philippe Brucker wrote:
-> > On Mon, Jul 11, 2022 at 10:16:00PM +0800, Xu Kuohai wrote:
-> >>>> +	if (save_ret)
-> >>>> +		emit(A64_STR64I(p->jited ? r0 : A64_R(0), A64_SP, retval_off),
-> >>>> +		     ctx);
-> >>>
-> >>> This should be only A64_R(0), not r0. r0 happens to equal A64_R(0) when
-> >>> jitted due to the way build_epilogue() builds the function at the moment,
-> >>> but we shouldn't rely on that.
-> >>>
-> >>
-> >> looks like I misunderstood something, will change it to:
-> >>
-> >> /* store return value, which is held in x0 for interpreter and in
-> >>  * bpf register r0 for JIT,
-> > 
-> > It's simpler than that: in both cases the return value is in x0 because
-> > the function follows the procedure call standard. You could drop the
-> > comment to avoid confusion and only do the change to A64_R(0)
-> > 
-> 
-> OK, will send v9 since v8 was just sent
+Before generating bpf trampoline, x86 calls is_valid_bpf_tramp_flags()
+to check the input flags. This check is architecture independent.
+So, to be consistent with x86, arm64 should also do this check
+before generating bpf trampoline.
 
-Right sorry about this, I could have been clearer
+However, the BPF_TRAMP_F_XXX flags are not used by user code and the
+flags argument is almost constant at compile time, so this run time
+check is a bit redundant.
 
-Thanks,
-Jean
+Remove is_valid_bpf_tramp_flags() and add some comments to the usage of
+BPF_TRAMP_F_XXX flags, as suggested by Alexei.
+
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+Acked-by: Song Liu <songliubraving@fb.com>
+Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+---
+ arch/x86/net/bpf_jit_comp.c | 20 --------------------
+ kernel/bpf/bpf_struct_ops.c |  3 +++
+ kernel/bpf/trampoline.c     |  3 +++
+ 3 files changed, 6 insertions(+), 20 deletions(-)
+
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index b88f43c9f050..d2614f1bf838 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -1936,23 +1936,6 @@ static int invoke_bpf_mod_ret(const struct btf_func_model *m, u8 **pprog,
+ 	return 0;
+ }
+ 
+-static bool is_valid_bpf_tramp_flags(unsigned int flags)
+-{
+-	if ((flags & BPF_TRAMP_F_RESTORE_REGS) &&
+-	    (flags & BPF_TRAMP_F_SKIP_FRAME))
+-		return false;
+-
+-	/*
+-	 * BPF_TRAMP_F_RET_FENTRY_RET is only used by bpf_struct_ops,
+-	 * and it must be used alone.
+-	 */
+-	if ((flags & BPF_TRAMP_F_RET_FENTRY_RET) &&
+-	    (flags & ~BPF_TRAMP_F_RET_FENTRY_RET))
+-		return false;
+-
+-	return true;
+-}
+-
+ /* Example:
+  * __be16 eth_type_trans(struct sk_buff *skb, struct net_device *dev);
+  * its 'struct btf_func_model' will be nr_args=2
+@@ -2031,9 +2014,6 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
+ 	if (nr_args > 6)
+ 		return -ENOTSUPP;
+ 
+-	if (!is_valid_bpf_tramp_flags(flags))
+-		return -EINVAL;
+-
+ 	/* Generated trampoline stack layout:
+ 	 *
+ 	 * RBP + 8         [ return address  ]
+diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
+index 7e0068c3399c..84b2d9dba79a 100644
+--- a/kernel/bpf/bpf_struct_ops.c
++++ b/kernel/bpf/bpf_struct_ops.c
+@@ -341,6 +341,9 @@ int bpf_struct_ops_prepare_trampoline(struct bpf_tramp_links *tlinks,
+ 
+ 	tlinks[BPF_TRAMP_FENTRY].links[0] = link;
+ 	tlinks[BPF_TRAMP_FENTRY].nr_links = 1;
++	/* BPF_TRAMP_F_RET_FENTRY_RET is only used by bpf_struct_ops,
++	 * and it must be used alone.
++	 */
+ 	flags = model->ret_size > 0 ? BPF_TRAMP_F_RET_FENTRY_RET : 0;
+ 	return arch_prepare_bpf_trampoline(NULL, image, image_end,
+ 					   model, flags, tlinks, NULL);
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 6cd226584c33..fd69812412ca 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -360,6 +360,9 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr)
+ 
+ 	if (tlinks[BPF_TRAMP_FEXIT].nr_links ||
+ 	    tlinks[BPF_TRAMP_MODIFY_RETURN].nr_links)
++		/* NOTE: BPF_TRAMP_F_RESTORE_REGS and BPF_TRAMP_F_SKIP_FRAME
++		 * should not be set together.
++		 */
+ 		flags = BPF_TRAMP_F_CALL_ORIG | BPF_TRAMP_F_SKIP_FRAME;
+ 
+ 	if (ip_arg)
+-- 
+2.30.2
+
