@@ -2,17 +2,17 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 913F9CCA47B
-	for <bpf@archiver.kernel.org>; Mon, 11 Jul 2022 08:32:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1099CC433EF
+	for <bpf@archiver.kernel.org>; Mon, 11 Jul 2022 08:32:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbiGKIcc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 Jul 2022 04:32:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39524 "EHLO
+        id S230148AbiGKIcd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 Jul 2022 04:32:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbiGKIc3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S230150AbiGKIc3 (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 11 Jul 2022 04:32:29 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E5121F623
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E9E91F627
         for <bpf@vger.kernel.org>; Mon, 11 Jul 2022 01:32:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1657528347;
@@ -20,25 +20,25 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=M0PhMaVhgVmMUL6iKuE1xZ83zlO0I8KTf8X7DkJEHvo=;
-        b=cE6Cyo154gPfqV2oNSWZCJvbZNBHaRe86/WdB+c5QmO/7srPRlutXbwEfbCpir4m74Ty09
-        ycD4AIC+1wRDW/QTVaY2NeUPKTR1TEfXuEY7NK8IwO+OMJXA1xWZxivUaF3QhrgIVeEiSC
-        9Dn5+bOGiNm0Ss3EdZBuMj98LojWGeM=
+        bh=rOvdknNIUIgwtUuGLKnWKb2uga4ygZMa7e3xZ51+vSU=;
+        b=gL5I/FXBsw3FXI5gLgigiPlGuxle2AVzG5kc9MzYtaKuvfTCekJoCOpjAZyrytw55AGplc
+        8SwUbJjnqaKThUiSxYjFbxQ/RgsZFpTlyuB5YbdqIL2AxEaqlf51EgxgrLIBa9ZF9fQBkV
+        x3gm/8pN/k/gpK9Al6sgALrvMCLiC6A=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-267-8gpMUgCwOzeGFlvL8H0TJw-1; Mon, 11 Jul 2022 04:32:23 -0400
-X-MC-Unique: 8gpMUgCwOzeGFlvL8H0TJw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+ us-mta-267-9CPImoJYPOyARge6nMgrWQ-1; Mon, 11 Jul 2022 04:32:23 -0400
+X-MC-Unique: 9CPImoJYPOyARge6nMgrWQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2F86880418F;
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4D1B18041B5;
         Mon, 11 Jul 2022 08:32:23 +0000 (UTC)
 Received: from shodan.usersys.redhat.com (unknown [10.43.17.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 09AFF141511A;
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 09A5F2026D64;
         Mon, 11 Jul 2022 08:32:22 +0000 (UTC)
 Received: by shodan.usersys.redhat.com (Postfix, from userid 1000)
-        id E7A1D1C0151; Mon, 11 Jul 2022 10:32:21 +0200 (CEST)
+        id 061281C03BC; Mon, 11 Jul 2022 10:32:22 +0200 (CEST)
 From:   Artem Savkov <asavkov@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -47,106 +47,177 @@ To:     Alexei Starovoitov <ast@kernel.org>,
 Cc:     linux-kernel@vger.kernel.org,
         Andrea Arcangeli <aarcange@redhat.com>,
         Artem Savkov <asavkov@redhat.com>
-Subject: [RFC PATCH bpf-next 1/4] bpf: add a sysctl to enable destructive bpf helpers
-Date:   Mon, 11 Jul 2022 10:32:17 +0200
-Message-Id: <20220711083220.2175036-2-asavkov@redhat.com>
+Subject: [RFC PATCH bpf-next 4/4] selftests/bpf: bpf_panic selftest
+Date:   Mon, 11 Jul 2022 10:32:20 +0200
+Message-Id: <20220711083220.2175036-5-asavkov@redhat.com>
 In-Reply-To: <20220711083220.2175036-1-asavkov@redhat.com>
 References: <20220711083220.2175036-1-asavkov@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a kernel.destructive_bpf_enabled sysctl knob to allow enabling bpf
-helpers that can be destructive to the system. One such helper,
-bpf_panic(), is added later in the series.
+Add a selftest for bpf_panic() checking that the program will only load
+if all the prerequisites are met.
 
 Signed-off-by: Artem Savkov <asavkov@redhat.com>
 ---
- include/linux/bpf.h  |  6 ++++++
- kernel/bpf/syscall.c | 29 +++++++++++++++++++++++++++++
- 2 files changed, 35 insertions(+)
+ .../selftests/bpf/prog_tests/bpf_panic.c      | 144 ++++++++++++++++++
+ 1 file changed, 144 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_panic.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 0edd7d2c0064..77972724bed7 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1641,6 +1641,7 @@ bpf_map_alloc_percpu(const struct bpf_map *map, size_t size, size_t align,
- #endif
- 
- extern int sysctl_unprivileged_bpf_disabled;
-+extern int sysctl_destructive_bpf_enabled;
- 
- static inline bool bpf_allow_ptr_leaks(void)
- {
-@@ -1926,6 +1927,11 @@ static inline bool unprivileged_ebpf_enabled(void)
- 	return !sysctl_unprivileged_bpf_disabled;
- }
- 
-+static inline bool destructive_ebpf_enabled(void)
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_panic.c b/tools/testing/selftests/bpf/prog_tests/bpf_panic.c
+new file mode 100644
+index 000000000000..9d008c0a5140
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_panic.c
+@@ -0,0 +1,144 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2022 Red Hat, Inc. */
++
++#include <test_progs.h>
++#include <bpf/btf.h>
++
++#include "cap_helpers.h"
++
++static int sysctl_get(const char *sysctl_path, char *old_val)
 +{
-+	return sysctl_destructive_bpf_enabled;
-+}
++	int ret = 0;
++	FILE *fp;
 +
- #else /* !CONFIG_BPF_SYSCALL */
- static inline struct bpf_prog *bpf_prog_get(u32 ufd)
- {
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 7d5af5b99f0d..1ce6541d90e1 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -57,6 +57,8 @@ static DEFINE_SPINLOCK(link_idr_lock);
- int sysctl_unprivileged_bpf_disabled __read_mostly =
- 	IS_BUILTIN(CONFIG_BPF_UNPRIV_DEFAULT_OFF) ? 2 : 0;
- 
-+int sysctl_destructive_bpf_enabled __read_mostly = 0;
++	fp = fopen(sysctl_path, "r");
++	if (!fp)
++		return -errno;
 +
- static const struct bpf_map_ops * const bpf_map_types[] = {
- #define BPF_PROG_TYPE(_id, _name, prog_ctx_type, kern_ctx_type)
- #define BPF_MAP_TYPE(_id, _ops) \
-@@ -5226,6 +5228,24 @@ static int bpf_unpriv_handler(struct ctl_table *table, int write,
- 	return ret;
- }
- 
-+static int bpf_destructive_handler(struct ctl_table *table, int write,
-+				   void *buffer, size_t *lenp, loff_t *ppos)
-+{
-+	int ret, destructive_enable = *(int *)table->data;
-+	struct ctl_table tmp = *table;
++	if (fscanf(fp, "%s", old_val) <= 0)
++		ret = -ENOENT;
 +
-+	if (write && !capable(CAP_SYS_ADMIN))
-+		return -EPERM;
-+
-+	tmp.data = &destructive_enable;
-+	ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
-+	if (write && !ret) {
-+		*(int *)table->data = destructive_enable;
-+	}
++	fclose(fp);
 +
 +	return ret;
 +}
 +
- static struct ctl_table bpf_syscall_table[] = {
- 	{
- 		.procname	= "unprivileged_bpf_disabled",
-@@ -5236,6 +5256,15 @@ static struct ctl_table bpf_syscall_table[] = {
- 		.extra1		= SYSCTL_ZERO,
- 		.extra2		= SYSCTL_TWO,
- 	},
-+	{
-+		.procname	= "destructive_bpf_enabled",
-+		.data		= &sysctl_destructive_bpf_enabled,
-+		.maxlen		= sizeof(sysctl_destructive_bpf_enabled),
-+		.mode		= 0644,
-+		.proc_handler	= bpf_destructive_handler,
-+		.extra1		= SYSCTL_ZERO,
-+		.extra2		= SYSCTL_ONE,
-+	},
- 	{
- 		.procname	= "bpf_stats_enabled",
- 		.data		= &bpf_stats_enabled_key.key,
++static int sysctl_set(const char *sysctl_path, const char *new_val)
++{
++	int ret = 0;
++	FILE *fp;
++
++	fp = fopen(sysctl_path, "w");
++	if (!fp)
++		return -errno;
++
++	if (fprintf(fp, "%s", new_val) < 0)
++		ret = -errno;
++
++	fclose(fp);
++
++	return ret;
++}
++
++static char bpf_vlog[UINT_MAX >> 8];
++
++static void test_bpf_panic_conditions(void)
++{
++	int fd_prog;
++	int map_fd;
++	struct bpf_insn prog_insns[] = {
++		BPF_LD_MAP_VALUE(BPF_REG_1, 0, 0),
++		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_panic),
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	};
++	const size_t prog_insn_cnt = sizeof(prog_insns) / sizeof(struct bpf_insn);
++	LIBBPF_OPTS(bpf_prog_load_opts, load_opts);
++	LIBBPF_OPTS(bpf_map_create_opts, map_create_opts);
++	int attach_btf_id;
++	__u64 save_caps = 0;
++
++	if (!ASSERT_OK(sysctl_set("/proc/sys/kernel/destructive_bpf_enabled",
++			 "1"), "set destructive_bpf_enabled"))
++		return;
++
++	load_opts.log_level = 1;
++	load_opts.log_buf = bpf_vlog;
++	load_opts.log_size = sizeof(bpf_vlog);
++	load_opts.expected_attach_type = BPF_TRACE_FENTRY;
++
++	attach_btf_id = libbpf_find_vmlinux_btf_id("dentry_open", load_opts.expected_attach_type);
++	if (!ASSERT_GE(attach_btf_id, 0, "attach_btf_id"))
++		return;
++
++	load_opts.attach_btf_id = attach_btf_id;
++
++	map_create_opts.map_flags = BPF_F_RDONLY_PROG;
++	map_fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, NULL, 4, 8, 1, &map_create_opts);
++	if (!ASSERT_GE(map_fd, 0, "bpf_map_create"))
++		return;
++	ASSERT_OK(bpf_map_freeze(map_fd), "bpf_map_freeze");
++
++	prog_insns[0].imm = map_fd;
++
++	fd_prog = bpf_prog_load(BPF_PROG_TYPE_TRACING, "bpf_panic", "GPL", prog_insns, prog_insn_cnt, &load_opts);
++
++	if (ASSERT_EQ(fd_prog, -EACCES, "BPF_F_DESTRUCTIVE required")) {
++		if (!ASSERT_OK_PTR(
++				strstr(bpf_vlog, "require BPF_F_DESTRUCTIVE"),
++				"BPF_F_DESTRUCTIVE verifier log")) {
++			printf("verifier log:\n%s\n", bpf_vlog);
++		}
++	}
++
++	load_opts.prog_flags = BPF_F_DESTRUCTIVE;
++	fd_prog = bpf_prog_load(BPF_PROG_TYPE_TRACING, "bpf_panic", "GPL", prog_insns, prog_insn_cnt, &load_opts);
++
++	if (ASSERT_GE(fd_prog, 0, "successful load")) {
++		close(fd_prog);
++	} else {
++		printf("verifier log:\n%s\n", bpf_vlog);
++	}
++
++
++	if (ASSERT_OK(cap_disable_effective(1ULL << CAP_SYS_BOOT, &save_caps), "disable caps")) {
++		fd_prog = bpf_prog_load(BPF_PROG_TYPE_TRACING, "bpf_panic", "GPL", prog_insns, prog_insn_cnt, &load_opts);
++		ASSERT_EQ(fd_prog, -EINVAL, "CAP_SYS_BOOT required");
++		if (!ASSERT_OK_PTR(
++				strstr(bpf_vlog, "unknown func bpf_panic"),
++				"CAP_SYS_BOOT verifier log")) {
++			printf("verifier log:\n%s\n", bpf_vlog);
++		}
++		cap_enable_effective(save_caps, NULL);
++	}
++
++	if (ASSERT_OK(sysctl_set("/proc/sys/kernel/destructive_bpf_enabled",
++			 "0"), "unset destructive_bpf_enabled")) {
++		fd_prog = bpf_prog_load(BPF_PROG_TYPE_TRACING, "bpf_panic", "GPL", prog_insns, prog_insn_cnt, &load_opts);
++		ASSERT_EQ(fd_prog, -EINVAL, "!destructive_bpf_enabled");
++		if (!ASSERT_OK_PTR(
++				strstr(bpf_vlog, "unknown func bpf_panic"),
++				"!destructive_bpf_enabled verifier log")) {
++			printf("verifier log:\n%s\n", bpf_vlog);
++		}
++	}
++	close(map_fd);
++}
++
++void test_bpf_panic(void)
++{
++	char destructive_bpf_enabled_orig[32] = {};
++
++	if (!ASSERT_OK(sysctl_get("/proc/sys/kernel/destructive_bpf_enabled",
++			 destructive_bpf_enabled_orig), "read destructive_bpf_enabled"))
++		goto cleanup;
++
++	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
++	if (test__start_subtest("bpf_panic_conditions"))
++		test_bpf_panic_conditions();
++
++cleanup:
++	if (strlen(destructive_bpf_enabled_orig) > 0)
++		sysctl_set("/proc/sys/kernel/destructive_bpf_enabled",
++				destructive_bpf_enabled_orig);
++}
 -- 
 2.35.3
 
