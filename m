@@ -2,116 +2,151 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 569D3C43334
-	for <bpf@archiver.kernel.org>; Mon, 11 Jul 2022 08:12:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 913F9CCA47B
+	for <bpf@archiver.kernel.org>; Mon, 11 Jul 2022 08:32:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbiGKIM1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 Jul 2022 04:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
+        id S230128AbiGKIcc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 Jul 2022 04:32:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbiGKIM1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 11 Jul 2022 04:12:27 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A284B1D0CF
-        for <bpf@vger.kernel.org>; Mon, 11 Jul 2022 01:12:25 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id v16so5905983wrd.13
-        for <bpf@vger.kernel.org>; Mon, 11 Jul 2022 01:12:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MPFKY/bHlsQhtgUJcy9UK+LhK0GjolHXo8PsK9MTO74=;
-        b=3dWItNH/NrG2UXqFVsxOXWN+q2qqBj4vzooK3M0fqc0NW7nFtkiqcvWaIp93vV4X5t
-         cvuXswhlr6y8zqUrdIAnLYVuT0/bBNWWTBvXhoMuA9ghuCH4JYnL2Co6bcDvoOC4NyNL
-         9bCZmbb8jxOvLj1zTcOoMyjoZjIdOAHWBXpO4ssyke6GlXpC73oLnxfit7nnRfO6iB7i
-         256ylzPv5rvMS0FCWr1MXcdyFEWc5plJLs5nVT7L83L2EGX4IHqfxBkkHMgW6NlmQk7h
-         zCrXXf4WDBzabyhGC8I3ECzVLJqbg7Zl72pFR5tKA6tbrSzAQECZD2fYwxRbLLd9YFX/
-         FFbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MPFKY/bHlsQhtgUJcy9UK+LhK0GjolHXo8PsK9MTO74=;
-        b=K0KquDb0lKnh0dlE6PYtJw9zectUNyYwDMlBYBmxuTWQ6ydKLo9E9tc3l0uzj1YKWC
-         0ceKYtoQl2hMBCrBW8N61PGvDhZQxiq+gaGRvyuMCsr5Lc3Jth7ju0I7P1RcPP55h/ej
-         WgrHb2qyKss8LEUdOiCFS9qceK2xjfWQYvDpdASaMdWSGk9cpQimdUXc6EIb7KIL5I58
-         xyvPNCULOQfijOm0sALeOWxDtLjvbYXXl8+YWSjsspFFExxyuMqhWKL69U7AxWEyKdNm
-         s4GMQbc1tSi/lg1inbXtlq/4C0j4kTBYCIldR8KO2HSpIbUYNv7Kt0vmy24cJlU9eFUv
-         tpMg==
-X-Gm-Message-State: AJIora8xJRkeUm3+Qfc2PzrVhDQE9uQ7TPhPAEAI0z/SE4YzvFUOSto4
-        Vmi9SKyKLdVax8o3PVQ8YxFgnw==
-X-Google-Smtp-Source: AGRyM1tyUmKFNUbH8YgWNHHNsuw6XFvycdzRT3nCgIcwAJdtGiyuk4Xct3kq4NBg+aexVIJb1PXCpg==
-X-Received: by 2002:adf:e111:0:b0:21d:665e:2fa5 with SMTP id t17-20020adfe111000000b0021d665e2fa5mr16086610wrz.652.1657527144170;
-        Mon, 11 Jul 2022 01:12:24 -0700 (PDT)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id n4-20020a5d6604000000b0021d650e4df4sm5159809wru.87.2022.07.11.01.12.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 01:12:23 -0700 (PDT)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+        with ESMTP id S230131AbiGKIc3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 11 Jul 2022 04:32:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E5121F623
+        for <bpf@vger.kernel.org>; Mon, 11 Jul 2022 01:32:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657528347;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=M0PhMaVhgVmMUL6iKuE1xZ83zlO0I8KTf8X7DkJEHvo=;
+        b=cE6Cyo154gPfqV2oNSWZCJvbZNBHaRe86/WdB+c5QmO/7srPRlutXbwEfbCpir4m74Ty09
+        ycD4AIC+1wRDW/QTVaY2NeUPKTR1TEfXuEY7NK8IwO+OMJXA1xWZxivUaF3QhrgIVeEiSC
+        9Dn5+bOGiNm0Ss3EdZBuMj98LojWGeM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-267-8gpMUgCwOzeGFlvL8H0TJw-1; Mon, 11 Jul 2022 04:32:23 -0400
+X-MC-Unique: 8gpMUgCwOzeGFlvL8H0TJw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2F86880418F;
+        Mon, 11 Jul 2022 08:32:23 +0000 (UTC)
+Received: from shodan.usersys.redhat.com (unknown [10.43.17.22])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 09AFF141511A;
+        Mon, 11 Jul 2022 08:32:22 +0000 (UTC)
+Received: by shodan.usersys.redhat.com (Postfix, from userid 1000)
+        id E7A1D1C0151; Mon, 11 Jul 2022 10:32:21 +0200 (CEST)
+From:   Artem Savkov <asavkov@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>
-Cc:     mptcp@lists.linux.dev,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2] bpf: Fix 'dubious one-bit signed bitfield' warnings
-Date:   Mon, 11 Jul 2022 10:12:00 +0200
-Message-Id: <20220711081200.2081262-1-matthieu.baerts@tessares.net>
-X-Mailer: git-send-email 2.36.1
+        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Artem Savkov <asavkov@redhat.com>
+Subject: [RFC PATCH bpf-next 1/4] bpf: add a sysctl to enable destructive bpf helpers
+Date:   Mon, 11 Jul 2022 10:32:17 +0200
+Message-Id: <20220711083220.2175036-2-asavkov@redhat.com>
+In-Reply-To: <20220711083220.2175036-1-asavkov@redhat.com>
+References: <20220711083220.2175036-1-asavkov@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Our CI[1] reported these warnings when using Sparse:
+Add a kernel.destructive_bpf_enabled sysctl knob to allow enabling bpf
+helpers that can be destructive to the system. One such helper,
+bpf_panic(), is added later in the series.
 
-  $ touch net/mptcp/bpf.c
-  $ make C=1 net/mptcp/bpf.o
-  net/mptcp/bpf.c: note: in included file:
-  include/linux/bpf_verifier.h:348:26: error: dubious one-bit signed bitfield
-  include/linux/bpf_verifier.h:349:29: error: dubious one-bit signed bitfield
-
-Set them as 'unsigned' to avoid warnings.
-
-[1] https://github.com/multipath-tcp/mptcp_net-next/actions/runs/2643588487
-
-Fixes: 1ade23711971 ("bpf: Inline calls to bpf_loop when callback is known")
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+Signed-off-by: Artem Savkov <asavkov@redhat.com>
 ---
+ include/linux/bpf.h  |  6 ++++++
+ kernel/bpf/syscall.c | 29 +++++++++++++++++++++++++++++
+ 2 files changed, 35 insertions(+)
 
-Notes:
-    v2: switch from 'bool' to 'unsigned int' (Yonghong Song)
-
- include/linux/bpf_verifier.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 81b19669efba..2e3bad8640dc 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -345,10 +345,10 @@ struct bpf_verifier_state_list {
- };
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 0edd7d2c0064..77972724bed7 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1641,6 +1641,7 @@ bpf_map_alloc_percpu(const struct bpf_map *map, size_t size, size_t align,
+ #endif
  
- struct bpf_loop_inline_state {
--	int initialized:1; /* set to true upon first entry */
--	int fit_for_inline:1; /* true if callback function is the same
--			       * at each call and flags are always zero
--			       */
-+	unsigned int initialized:1; /* set to true upon first entry */
-+	unsigned int fit_for_inline:1; /* true if callback function is the same
-+					* at each call and flags are always zero
-+					*/
- 	u32 callback_subprogno; /* valid when fit_for_inline is true */
- };
+ extern int sysctl_unprivileged_bpf_disabled;
++extern int sysctl_destructive_bpf_enabled;
  
+ static inline bool bpf_allow_ptr_leaks(void)
+ {
+@@ -1926,6 +1927,11 @@ static inline bool unprivileged_ebpf_enabled(void)
+ 	return !sysctl_unprivileged_bpf_disabled;
+ }
+ 
++static inline bool destructive_ebpf_enabled(void)
++{
++	return sysctl_destructive_bpf_enabled;
++}
++
+ #else /* !CONFIG_BPF_SYSCALL */
+ static inline struct bpf_prog *bpf_prog_get(u32 ufd)
+ {
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 7d5af5b99f0d..1ce6541d90e1 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -57,6 +57,8 @@ static DEFINE_SPINLOCK(link_idr_lock);
+ int sysctl_unprivileged_bpf_disabled __read_mostly =
+ 	IS_BUILTIN(CONFIG_BPF_UNPRIV_DEFAULT_OFF) ? 2 : 0;
+ 
++int sysctl_destructive_bpf_enabled __read_mostly = 0;
++
+ static const struct bpf_map_ops * const bpf_map_types[] = {
+ #define BPF_PROG_TYPE(_id, _name, prog_ctx_type, kern_ctx_type)
+ #define BPF_MAP_TYPE(_id, _ops) \
+@@ -5226,6 +5228,24 @@ static int bpf_unpriv_handler(struct ctl_table *table, int write,
+ 	return ret;
+ }
+ 
++static int bpf_destructive_handler(struct ctl_table *table, int write,
++				   void *buffer, size_t *lenp, loff_t *ppos)
++{
++	int ret, destructive_enable = *(int *)table->data;
++	struct ctl_table tmp = *table;
++
++	if (write && !capable(CAP_SYS_ADMIN))
++		return -EPERM;
++
++	tmp.data = &destructive_enable;
++	ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
++	if (write && !ret) {
++		*(int *)table->data = destructive_enable;
++	}
++
++	return ret;
++}
++
+ static struct ctl_table bpf_syscall_table[] = {
+ 	{
+ 		.procname	= "unprivileged_bpf_disabled",
+@@ -5236,6 +5256,15 @@ static struct ctl_table bpf_syscall_table[] = {
+ 		.extra1		= SYSCTL_ZERO,
+ 		.extra2		= SYSCTL_TWO,
+ 	},
++	{
++		.procname	= "destructive_bpf_enabled",
++		.data		= &sysctl_destructive_bpf_enabled,
++		.maxlen		= sizeof(sysctl_destructive_bpf_enabled),
++		.mode		= 0644,
++		.proc_handler	= bpf_destructive_handler,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_ONE,
++	},
+ 	{
+ 		.procname	= "bpf_stats_enabled",
+ 		.data		= &bpf_stats_enabled_key.key,
 -- 
-2.36.1
+2.35.3
 
