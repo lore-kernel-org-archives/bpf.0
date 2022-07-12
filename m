@@ -2,41 +2,41 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A12A0C433EF
-	for <bpf@archiver.kernel.org>; Tue, 12 Jul 2022 15:03:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ECEB6CCA485
+	for <bpf@archiver.kernel.org>; Tue, 12 Jul 2022 15:04:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233533AbiGLPDT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Jul 2022 11:03:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53736 "EHLO
+        id S233900AbiGLPEU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Jul 2022 11:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbiGLPCl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Jul 2022 11:02:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7BA0DBF55E
-        for <bpf@vger.kernel.org>; Tue, 12 Jul 2022 07:59:48 -0700 (PDT)
+        with ESMTP id S232343AbiGLPDS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Jul 2022 11:03:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 05C15C1661
+        for <bpf@vger.kernel.org>; Tue, 12 Jul 2022 08:00:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657637981;
+        s=mimecast20190719; t=1657637992;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ADxek73ShDBJ+eTKrRQlmTsuIvUuVWEOpUtdVj+yOnQ=;
-        b=DiG/iAyA0qy4uB95lP68EasCn9t/IlmPhIihU3RbrtLT+/fQHwPNwwPdvwWvgWvv38zJQs
-        RU78qWqHpM6MrsTPCmOrOjYIwHklNkGteF6sIr1k7xvZ3bjMRmq8+BnxGkegO29pFs5Vk6
-        DOSSJzCPgSm8qA0mc5l+efKZpqH86KU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=sDyJbpla095ZdIh1wOr/pZ1lgYGgX9BL+70zcgFgJjs=;
+        b=AOqYGWI49b3fGTtAR4RsJ6VXQ7mQtnP2JK93yT76svl65RYMq4+UnfKFDo6kTQxfvxyemA
+        tLaxiW2/AE2wtd5p9a4c3jhT84n57j6AvA+O+iR6/wkT4Pz5moDueQ0bXT7+F5EKhgzxi8
+        htF6RCb6rHAv9otCtkkXUK9pvWmu4kk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-502-xN97oc9BPeaRnOOKq0WxpQ-1; Tue, 12 Jul 2022 10:59:38 -0400
-X-MC-Unique: xN97oc9BPeaRnOOKq0WxpQ-1
+ us-mta-613--sFTqWtRNyGORwjKH6Qy-w-1; Tue, 12 Jul 2022 10:59:47 -0400
+X-MC-Unique: -sFTqWtRNyGORwjKH6Qy-w-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0E622382C965;
-        Tue, 12 Jul 2022 14:59:37 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7F0D71019C8A;
+        Tue, 12 Jul 2022 14:59:45 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.195.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B6BD72166B26;
-        Tue, 12 Jul 2022 14:59:33 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 915C72166B26;
+        Tue, 12 Jul 2022 14:59:41 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -54,9 +54,9 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v6 09/23] HID: core: store the unique system identifier in hid_device
-Date:   Tue, 12 Jul 2022 16:58:36 +0200
-Message-Id: <20220712145850.599666-10-benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v6 11/23] HID: convert defines of HID class requests into a proper enum
+Date:   Tue, 12 Jul 2022 16:58:38 +0200
+Message-Id: <20220712145850.599666-12-benjamin.tissoires@redhat.com>
 In-Reply-To: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
 References: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
@@ -66,56 +66,117 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This unique identifier is currently used only for ensuring uniqueness in
-sysfs. However, this could be handful for userspace to refer to a specific
-hid_device by this id.
+This allows to export the type in BTF and so in the automatically
+generated vmlinux.h. It will also add some static checks on the users
+when we change the ll driver API (see not below).
 
-2 use cases are in my mind: LEDs (and their naming convention), and
-HID-BPF.
+Note that we need to also do change in the ll_driver API, but given
+that this will have a wider impact outside of this tree, we leave this
+as a TODO for the future.
 
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
 ---
 
-no changes in v6
-
-new in v5
+new in v6
 ---
- drivers/hid/hid-core.c | 4 +++-
- include/linux/hid.h    | 2 ++
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ drivers/hid/hid-core.c   |  6 +++---
+ include/linux/hid.h      |  9 +++++----
+ include/uapi/linux/hid.h | 14 ++++++++------
+ 3 files changed, 16 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-index 00154a1cd2d8..11874d264728 100644
+index 1c9c15a12f24..b2257f3a93d1 100644
 --- a/drivers/hid/hid-core.c
 +++ b/drivers/hid/hid-core.c
-@@ -2739,10 +2739,12 @@ int hid_add_device(struct hid_device *hdev)
- 			hid_warn(hdev, "bad device descriptor (%d)\n", ret);
- 	}
- 
-+	hdev->id = atomic_inc_return(&id);
-+
- 	/* XXX hack, any other cleaner solution after the driver core
- 	 * is converted to allow more than 20 bytes as the device name? */
- 	dev_set_name(&hdev->dev, "%04X:%04X:%04X.%04X", hdev->bus,
--		     hdev->vendor, hdev->product, atomic_inc_return(&id));
-+		     hdev->vendor, hdev->product, hdev->id);
- 
- 	hid_debug_register(hdev, dev_name(&hdev->dev));
- 	ret = device_add(&hdev->dev);
+@@ -1921,7 +1921,7 @@ static struct hid_report *hid_get_report(struct hid_report_enum *report_enum,
+  * DO NOT USE in hid drivers directly, but through hid_hw_request instead.
+  */
+ int __hid_request(struct hid_device *hid, struct hid_report *report,
+-		int reqtype)
++		enum hid_class_request reqtype)
+ {
+ 	char *buf;
+ 	int ret;
+@@ -2353,7 +2353,7 @@ EXPORT_SYMBOL_GPL(hid_hw_close);
+  * @reqtype: hid request type
+  */
+ void hid_hw_request(struct hid_device *hdev,
+-		    struct hid_report *report, int reqtype)
++		    struct hid_report *report, enum hid_class_request reqtype)
+ {
+ 	if (hdev->ll_driver->request)
+ 		return hdev->ll_driver->request(hdev, report, reqtype);
+@@ -2378,7 +2378,7 @@ EXPORT_SYMBOL_GPL(hid_hw_request);
+  */
+ int hid_hw_raw_request(struct hid_device *hdev,
+ 		       unsigned char reportnum, __u8 *buf,
+-		       size_t len, enum hid_report_type rtype, int reqtype)
++		       size_t len, enum hid_report_type rtype, enum hid_class_request reqtype)
+ {
+ 	if (len < 1 || len > HID_MAX_BUFFER_SIZE || !buf)
+ 		return -EINVAL;
 diff --git a/include/linux/hid.h b/include/linux/hid.h
-index 4363a63b9775..a43dd17bc78f 100644
+index b1a33dbbc78e..8677ae38599e 100644
 --- a/include/linux/hid.h
 +++ b/include/linux/hid.h
-@@ -658,6 +658,8 @@ struct hid_device {							/* device report descriptor */
- 	struct list_head debug_list;
- 	spinlock_t  debug_list_lock;
- 	wait_queue_head_t debug_wait;
-+
-+	unsigned int id;						/* system unique id */
- };
+@@ -923,7 +923,7 @@ struct hid_field *hidinput_get_led_field(struct hid_device *hid);
+ unsigned int hidinput_count_leds(struct hid_device *hid);
+ __s32 hidinput_calc_abs_res(const struct hid_field *field, __u16 code);
+ void hid_output_report(struct hid_report *report, __u8 *data);
+-int __hid_request(struct hid_device *hid, struct hid_report *rep, int reqtype);
++int __hid_request(struct hid_device *hid, struct hid_report *rep, enum hid_class_request reqtype);
+ u8 *hid_alloc_report_buf(struct hid_report *report, gfp_t flags);
+ struct hid_device *hid_allocate_device(void);
+ struct hid_report *hid_register_report(struct hid_device *device,
+@@ -1100,10 +1100,11 @@ void hid_hw_stop(struct hid_device *hdev);
+ int __must_check hid_hw_open(struct hid_device *hdev);
+ void hid_hw_close(struct hid_device *hdev);
+ void hid_hw_request(struct hid_device *hdev,
+-		    struct hid_report *report, int reqtype);
++		    struct hid_report *report, enum hid_class_request reqtype);
+ int hid_hw_raw_request(struct hid_device *hdev,
+ 		       unsigned char reportnum, __u8 *buf,
+-		       size_t len, enum hid_report_type rtype, int reqtype);
++		       size_t len, enum hid_report_type rtype,
++		       enum hid_class_request reqtype);
+ int hid_hw_output_report(struct hid_device *hdev, __u8 *buf, size_t len);
  
- #define to_hid_device(pdev) \
+ /**
+@@ -1131,7 +1132,7 @@ static inline int hid_hw_power(struct hid_device *hdev, int level)
+  * @reqtype: hid request type
+  */
+ static inline int hid_hw_idle(struct hid_device *hdev, int report, int idle,
+-		int reqtype)
++		enum hid_class_request reqtype)
+ {
+ 	if (hdev->ll_driver->idle)
+ 		return hdev->ll_driver->idle(hdev, report, idle, reqtype);
+diff --git a/include/uapi/linux/hid.h b/include/uapi/linux/hid.h
+index b25b0bacaff2..a4dcb34386e3 100644
+--- a/include/uapi/linux/hid.h
++++ b/include/uapi/linux/hid.h
+@@ -58,12 +58,14 @@ enum hid_report_type {
+  * HID class requests
+  */
+ 
+-#define HID_REQ_GET_REPORT		0x01
+-#define HID_REQ_GET_IDLE		0x02
+-#define HID_REQ_GET_PROTOCOL		0x03
+-#define HID_REQ_SET_REPORT		0x09
+-#define HID_REQ_SET_IDLE		0x0A
+-#define HID_REQ_SET_PROTOCOL		0x0B
++enum hid_class_request {
++	HID_REQ_GET_REPORT		= 0x01,
++	HID_REQ_GET_IDLE		= 0x02,
++	HID_REQ_GET_PROTOCOL		= 0x03,
++	HID_REQ_SET_REPORT		= 0x09,
++	HID_REQ_SET_IDLE		= 0x0A,
++	HID_REQ_SET_PROTOCOL		= 0x0B,
++};
+ 
+ /*
+  * HID class descriptor types
 -- 
 2.36.1
 
