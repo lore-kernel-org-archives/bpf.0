@@ -2,41 +2,41 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD3B0CCA47C
-	for <bpf@archiver.kernel.org>; Tue, 12 Jul 2022 15:07:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98464CCA482
+	for <bpf@archiver.kernel.org>; Tue, 12 Jul 2022 15:07:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234034AbiGLPHb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Jul 2022 11:07:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36356 "EHLO
+        id S234036AbiGLPHg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Jul 2022 11:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbiGLPGX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Jul 2022 11:06:23 -0400
+        with ESMTP id S233969AbiGLPGa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Jul 2022 11:06:30 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 31757BAA9B
-        for <bpf@vger.kernel.org>; Tue, 12 Jul 2022 08:01:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 76904C4476
+        for <bpf@vger.kernel.org>; Tue, 12 Jul 2022 08:01:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657638036;
+        s=mimecast20190719; t=1657638039;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=FgPb1yfv9B32xgkaX5+oDU5OXhR5x9/eHCMAL1/HRjY=;
-        b=RZbLtWtG/r4T2uop5Gw1HEyYnVUwAiZ2fc2sigaMKrfceYIODJeXWvPZz/C1h0nM774iRG
-        UG2/Zxv/cBrViLEffkyV0Pqd77C8sTFierzayLyHsWCCjw7KRgoURnIIFJAvybZf+queNX
-        9QZAYh54ysQJpuLDwOvZoIVvUP6gaGM=
+        bh=wOlWhIV+XudVrWBL1T1J9aTKgqmOIUwoY2JjAr1+xlU=;
+        b=KDJEbkEKipvl/jz7QL8cymGKWLASfEUkG1wUCZ7R1oZbeZp153xVI7dAJ7Tqft//0xY7IY
+        EepVVnjp7HVPwHZw18vsv/2M8uhqC3u3u5+pRuXloOxgS04DW/f6vbWvOa076wC6nVQlyy
+        DUsWlHOPxlVmlqQ8bcNY4zGgD82M8hc=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-350-mtZEntoHN_quYBfv2RqONA-1; Tue, 12 Jul 2022 11:00:24 -0400
-X-MC-Unique: mtZEntoHN_quYBfv2RqONA-1
+ us-mta-84-LzZXomZJMP2mco42OnRMGQ-1; Tue, 12 Jul 2022 11:00:35 -0400
+X-MC-Unique: LzZXomZJMP2mco42OnRMGQ-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 76362803918;
-        Tue, 12 Jul 2022 15:00:21 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 250F0802D2C;
+        Tue, 12 Jul 2022 15:00:34 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.195.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E6F732166B26;
-        Tue, 12 Jul 2022 15:00:16 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C27502166B26;
+        Tue, 12 Jul 2022 15:00:30 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -54,206 +54,475 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v6 19/23] selftests/bpf: add report descriptor fixup tests
-Date:   Tue, 12 Jul 2022 16:58:46 +0200
-Message-Id: <20220712145850.599666-20-benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v6 22/23] HID: bpf: add Surface Dial example
+Date:   Tue, 12 Jul 2022 16:58:49 +0200
+Message-Id: <20220712145850.599666-23-benjamin.tissoires@redhat.com>
 In-Reply-To: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
 References: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Simple report descriptor override in HID: replace part of the report
-descriptor from a static definition in the bpf kernel program.
-
-Note that this test should be run last because we disconnect/reconnect
-the device, meaning that it changes the overall uhid device.
+Add a more complete HID-BPF example.
 
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
 ---
 
-no changes in v6
-
-changes in v5:
-- amended for the new API
-
-not in v4
-
-changes in v3:
-- added a comment to mention that this test needs to be run last
-
-changes in v2:
-- split the series by bpf/libbpf/hid/selftests and samples
+new in v6
 ---
- tools/testing/selftests/bpf/prog_tests/hid.c | 76 ++++++++++++++++++++
- tools/testing/selftests/bpf/progs/hid.c      | 53 ++++++++++++++
- 2 files changed, 129 insertions(+)
+ samples/bpf/.gitignore             |   1 +
+ samples/bpf/Makefile               |   6 +-
+ samples/bpf/hid_surface_dial.bpf.c | 161 +++++++++++++++++++++
+ samples/bpf/hid_surface_dial.c     | 216 +++++++++++++++++++++++++++++
+ 4 files changed, 383 insertions(+), 1 deletion(-)
+ create mode 100644 samples/bpf/hid_surface_dial.bpf.c
+ create mode 100644 samples/bpf/hid_surface_dial.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/hid.c b/tools/testing/selftests/bpf/prog_tests/hid.c
-index 19172d3e0f44..9dc5f0038472 100644
---- a/tools/testing/selftests/bpf/prog_tests/hid.c
-+++ b/tools/testing/selftests/bpf/prog_tests/hid.c
-@@ -9,6 +9,7 @@
- #include <dirent.h>
- #include <poll.h>
- #include <stdbool.h>
-+#include <linux/hidraw.h>
- #include <linux/uhid.h>
+diff --git a/samples/bpf/.gitignore b/samples/bpf/.gitignore
+index 65440bd618b2..6a1079d3d064 100644
+--- a/samples/bpf/.gitignore
++++ b/samples/bpf/.gitignore
+@@ -3,6 +3,7 @@ cpustat
+ fds_example
+ hbm
+ hid_mouse
++hid_surface_dial
+ ibumad
+ lathist
+ lwt_len_hist
+diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+index e67c1a0fed1c..d1e40aff0e55 100644
+--- a/samples/bpf/Makefile
++++ b/samples/bpf/Makefile
+@@ -58,6 +58,7 @@ tprogs-y += xdp_redirect
+ tprogs-y += xdp_monitor
  
- static unsigned char rdesc[] = {
-@@ -769,6 +770,73 @@ static int test_hid_user_raw_request_call(int uhid_fd, int dev_id)
- 	return ret;
- }
+ tprogs-y += hid_mouse
++tprogs-y += hid_surface_dial
  
-+/*
-+ * Attach hid_rdesc_fixup to the given uhid device,
-+ * retrieve and open the matching hidraw node,
-+ * check that the hidraw report descriptor has been updated.
+ # Libbpf dependencies
+ LIBBPF_SRC = $(TOOLS_PATH)/lib/bpf
+@@ -122,6 +123,7 @@ xdp_monitor-objs := xdp_monitor_user.o $(XDP_SAMPLE)
+ xdp_router_ipv4-objs := xdp_router_ipv4_user.o $(XDP_SAMPLE)
+ 
+ hid_mouse-objs := hid_mouse.o
++hid_surface_dial-objs := hid_surface_dial.o
+ 
+ # Tell kbuild to always build the programs
+ always-y := $(tprogs-y)
+@@ -345,6 +347,7 @@ $(obj)/hbm.o: $(src)/hbm.h
+ $(obj)/hbm_edt_kern.o: $(src)/hbm.h $(src)/hbm_kern.h
+ 
+ $(obj)/hid_mouse.o: $(obj)/hid_mouse.skel.h
++$(obj)/hid_surface_dial.o: $(obj)/hid_surface_dial.skel.h
+ 
+ # Override includes for xdp_sample_user.o because $(srctree)/usr/include in
+ # TPROGS_CFLAGS causes conflicts
+@@ -431,9 +434,10 @@ $(BPF_SKELS_LINKED): $(BPF_OBJS_LINKED) $(BPFTOOL)
+ 	$(Q)$(BPFTOOL) gen skeleton $(@:.skel.h=.lbpf.o) name $(notdir $(@:.skel.h=)) > $@
+ 
+ # Generate BPF skeletons for non XDP progs
+-OTHER_BPF_SKELS := hid_mouse.skel.h
++OTHER_BPF_SKELS := hid_mouse.skel.h hid_surface_dial.skel.h
+ 
+ hid_mouse.skel.h-deps := hid_mouse.bpf.o
++hid_surface_dial.skel.h-deps := hid_surface_dial.bpf.o
+ 
+ OTHER_BPF_SRCS_LINKED := $(patsubst %.skel.h,%.bpf.c, $(OTHER_BPF_SKELS))
+ OTHER_BPF_OBJS_LINKED := $(patsubst %.bpf.c,$(obj)/%.bpf.o, $(OTHER_BPF_SRCS_LINKED))
+diff --git a/samples/bpf/hid_surface_dial.bpf.c b/samples/bpf/hid_surface_dial.bpf.c
+new file mode 100644
+index 000000000000..16c821d3decf
+--- /dev/null
++++ b/samples/bpf/hid_surface_dial.bpf.c
+@@ -0,0 +1,161 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright (c) 2022 Benjamin Tissoires
 + */
-+static int test_rdesc_fixup(void)
-+{
-+	struct hidraw_report_descriptor rpt_desc = {0};
-+	struct test_params params;
-+	int err, uhid_fd, desc_size, hidraw_fd = -1, ret = -1;
-+	int dev_id;
-+	void *uhid_err;
-+	pthread_t tid;
-+	bool started = false;
 +
-+	dev_id = rand() % 1024;
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
 +
-+	uhid_fd = setup_uhid(dev_id);
-+	if (!ASSERT_GE(uhid_fd, 0, "setup uhid"))
-+		return uhid_fd;
++#define HID_UP_BUTTON		0x0009
++#define HID_GD_WHEEL		0x0038
 +
-+	err = prep_test(dev_id, "hid_rdesc_fixup", &params);
-+	if (!ASSERT_EQ(err, 0, "prep_test(hid_rdesc_fixup)"))
-+		goto cleanup;
++/* following are kfuncs exported by HID for HID-BPF */
++extern __u8 *hid_bpf_get_data(struct hid_bpf_ctx *ctx,
++			      unsigned int offset,
++			      const size_t __sz) __ksym;
++extern int hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, u32 flags) __ksym;
++extern struct hid_bpf_ctx *hid_bpf_allocate_context(unsigned int hid_id) __ksym;
++extern void hid_bpf_release_context(struct hid_bpf_ctx *ctx) __ksym;
++extern int hid_bpf_hw_request(struct hid_bpf_ctx *ctx,
++			      __u8 *data,
++			      size_t buf__sz,
++			      enum hid_report_type type,
++			      enum hid_class_request reqtype) __ksym;
 +
-+	err = uhid_start_listener(&tid, uhid_fd);
-+	ASSERT_OK(err, "uhid_start_listener");
-+
-+	started = true;
-+
-+	hidraw_fd = params.hidraw_fd;
-+
-+	/* check that hid_rdesc_fixup() was executed */
-+	ASSERT_EQ(params.skel->data->callback2_check, 0x21, "callback_check2");
-+
-+	/* read the exposed report descriptor from hidraw */
-+	err = ioctl(hidraw_fd, HIDIOCGRDESCSIZE, &desc_size);
-+	if (!ASSERT_GE(err, 0, "HIDIOCGRDESCSIZE"))
-+		goto cleanup;
-+
-+	/* ensure the new size of the rdesc is bigger than the old one */
-+	if (!ASSERT_GT(desc_size, sizeof(rdesc), "new_rdesc_size"))
-+		goto cleanup;
-+
-+	rpt_desc.size = desc_size;
-+	err = ioctl(hidraw_fd, HIDIOCGRDESC, &rpt_desc);
-+	if (!ASSERT_GE(err, 0, "HIDIOCGRDESC"))
-+		goto cleanup;
-+
-+	if (!ASSERT_EQ(rpt_desc.value[4], 0x42, "hid_rdesc_fixup"))
-+		goto cleanup;
-+
-+	ret = 0;
-+
-+cleanup:
-+	cleanup_test(&params);
-+
-+	if (started) {
-+		destroy(uhid_fd);
-+		pthread_join(tid, &uhid_err);
-+		err = (int)(long)uhid_err;
-+		CHECK_FAIL(err);
-+	}
-+
-+	return ret;
-+}
-+
- void serial_test_hid_bpf(void)
- {
- 	int err, uhid_fd;
-@@ -799,6 +867,14 @@ void serial_test_hid_bpf(void)
- 	err = test_hid_user_raw_request_call(uhid_fd, dev_id);
- 	ASSERT_OK(err, "hid_user_raw_request");
- 
-+	/*
-+	 * this test should be run last because we disconnect/reconnect
-+	 * the device, meaning that it changes the overall uhid device
-+	 * and messes up with the thread that reads uhid events.
-+	 */
-+	err = test_rdesc_fixup();
-+	ASSERT_OK(err, "hid_rdesc_fixup");
-+
- 	destroy(uhid_fd);
- 
- 	pthread_join(tid, &uhid_err);
-diff --git a/tools/testing/selftests/bpf/progs/hid.c b/tools/testing/selftests/bpf/progs/hid.c
-index 0be319c11575..863c37ddf5ff 100644
---- a/tools/testing/selftests/bpf/progs/hid.c
-+++ b/tools/testing/selftests/bpf/progs/hid.c
-@@ -99,3 +99,56 @@ int hid_user_raw_request(struct hid_hw_request_syscall_args *args)
- 
- 	return 0;
- }
-+
-+static const __u8 rdesc[] = {
-+	0x05, 0x01,				/* USAGE_PAGE (Generic Desktop) */
-+	0x09, 0x32,				/* USAGE (Z) */
-+	0x95, 0x01,				/* REPORT_COUNT (1) */
-+	0x81, 0x06,				/* INPUT (Data,Var,Rel) */
-+
-+	0x06, 0x00, 0xff,			/* Usage Page (Vendor Defined Page 1) */
-+	0x19, 0x01,				/* USAGE_MINIMUM (1) */
-+	0x29, 0x03,				/* USAGE_MAXIMUM (3) */
-+	0x15, 0x00,				/* LOGICAL_MINIMUM (0) */
-+	0x25, 0x01,				/* LOGICAL_MAXIMUM (1) */
-+	0x95, 0x03,				/* REPORT_COUNT (3) */
-+	0x75, 0x01,				/* REPORT_SIZE (1) */
-+	0x91, 0x02,				/* Output (Data,Var,Abs) */
-+	0x95, 0x01,				/* REPORT_COUNT (1) */
-+	0x75, 0x05,				/* REPORT_SIZE (5) */
-+	0x91, 0x01,				/* Output (Cnst,Var,Abs) */
-+
-+	0x06, 0x00, 0xff,			/* Usage Page (Vendor Defined Page 1) */
-+	0x19, 0x06,				/* USAGE_MINIMUM (6) */
-+	0x29, 0x08,				/* USAGE_MAXIMUM (8) */
-+	0x15, 0x00,				/* LOGICAL_MINIMUM (0) */
-+	0x25, 0x01,				/* LOGICAL_MAXIMUM (1) */
-+	0x95, 0x03,				/* REPORT_COUNT (3) */
-+	0x75, 0x01,				/* REPORT_SIZE (1) */
-+	0xb1, 0x02,				/* Feature (Data,Var,Abs) */
-+	0x95, 0x01,				/* REPORT_COUNT (1) */
-+	0x75, 0x05,				/* REPORT_SIZE (5) */
-+	0x91, 0x01,				/* Output (Cnst,Var,Abs) */
-+
-+	0xc0,				/* END_COLLECTION */
-+	0xc0,			/* END_COLLECTION */
++struct attach_prog_args {
++	int prog_fd;
++	unsigned int hid;
++	int retval;
 +};
 +
-+SEC("?fmod_ret/hid_bpf_rdesc_fixup")
-+int BPF_PROG(hid_rdesc_fixup, struct hid_bpf_ctx *hid_ctx)
++SEC("syscall")
++int attach_prog(struct attach_prog_args *ctx)
 +{
-+	__u8 *data = hid_bpf_get_data(hid_ctx, 0 /* offset */, 4096 /* size */);
++	ctx->retval = hid_bpf_attach_prog(ctx->hid,
++					  ctx->prog_fd,
++					  0);
++	return 0;
++}
++
++SEC("fmod_ret/hid_bpf_device_event")
++int BPF_PROG(hid_event, struct hid_bpf_ctx *hctx)
++{
++	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 9 /* size */);
 +
 +	if (!data)
 +		return 0; /* EPERM check */
 +
-+	callback2_check = data[4];
++	/* Touch */
++	data[1] &= 0xfd;
 +
-+	/* insert rdesc at offset 73 */
-+	__builtin_memcpy(&data[73], rdesc, sizeof(rdesc));
++	/* X */
++	data[4] = 0;
++	data[5] = 0;
 +
-+	/* Change Usage Vendor globally */
-+	data[4] = 0x42;
++	/* Y */
++	data[6] = 0;
++	data[7] = 0;
 +
-+	return sizeof(rdesc) + 73;
++	return 0;
++}
++
++/* 72 == 360 / 5 -> 1 report every 5 degrees */
++int resolution = 72;
++int physical = 5;
++
++struct haptic_syscall_args {
++	unsigned int hid;
++	int retval;
++};
++
++static __u8 haptic_data[8];
++
++SEC("syscall")
++int set_haptic(struct haptic_syscall_args *args)
++{
++	struct hid_bpf_ctx *ctx;
++	const size_t size = sizeof(haptic_data);
++	u16 *res;
++	int ret;
++
++	if (size > sizeof(haptic_data))
++		return -7; /* -E2BIG */
++
++	ctx = hid_bpf_allocate_context(args->hid);
++	if (!ctx)
++		return -1; /* EPERM check */
++
++	haptic_data[0] = 1;  /* report ID */
++
++	ret = hid_bpf_hw_request(ctx, haptic_data, size, HID_FEATURE_REPORT, HID_REQ_GET_REPORT);
++
++	bpf_printk("probed/remove event ret value: %d", ret);
++	bpf_printk("buf: %02x %02x %02x",
++		   haptic_data[0],
++		   haptic_data[1],
++		   haptic_data[2]);
++	bpf_printk("     %02x %02x %02x",
++		   haptic_data[3],
++		   haptic_data[4],
++		   haptic_data[5]);
++	bpf_printk("     %02x %02x",
++		   haptic_data[6],
++		   haptic_data[7]);
++
++	/* whenever resolution multiplier is not 3600, we have the fixed report descriptor */
++	res = (u16 *)&haptic_data[1];
++	if (*res != 3600) {
++//		haptic_data[1] = 72; /* resolution multiplier */
++//		haptic_data[2] = 0;  /* resolution multiplier */
++//		haptic_data[3] = 0;  /* Repeat Count */
++		haptic_data[4] = 3;  /* haptic Auto Trigger */
++//		haptic_data[5] = 5;  /* Waveform Cutoff Time */
++//		haptic_data[6] = 80; /* Retrigger Period */
++//		haptic_data[7] = 0;  /* Retrigger Period */
++	} else {
++		haptic_data[4] = 0;
++	}
++
++	ret = hid_bpf_hw_request(ctx, haptic_data, size, HID_FEATURE_REPORT, HID_REQ_SET_REPORT);
++
++	bpf_printk("set haptic ret value: %d -> %d", ret, haptic_data[4]);
++
++	args->retval = ret;
++
++	hid_bpf_release_context(ctx);
++
++	return 0;
++}
++
++/* Convert REL_DIAL into REL_WHEEL */
++SEC("fmod_ret/hid_bpf_rdesc_fixup")
++int BPF_PROG(hid_rdesc_fixup, struct hid_bpf_ctx *hctx)
++{
++	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 4096 /* size */);
++	__u16 *res, *phys;
++
++	if (!data)
++		return 0; /* EPERM check */
++
++	/* Convert TOUCH into a button */
++	data[31] = HID_UP_BUTTON;
++	data[33] = 2;
++
++	/* Convert REL_DIAL into REL_WHEEL */
++	data[45] = HID_GD_WHEEL;
++
++	/* Change Resolution Multiplier */
++	phys = (__u16 *)&data[61];
++	*phys = physical;
++	res = (__u16 *)&data[66];
++	*res = resolution;
++
++	/* Convert X,Y from Abs to Rel */
++	data[88] = 0x06;
++	data[98] = 0x06;
++
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
++u32 _version SEC("version") = 1;
+diff --git a/samples/bpf/hid_surface_dial.c b/samples/bpf/hid_surface_dial.c
+new file mode 100644
+index 000000000000..b901c578afac
+--- /dev/null
++++ b/samples/bpf/hid_surface_dial.c
+@@ -0,0 +1,216 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright (c) 2022 Benjamin Tissoires
++ */
++
++
++/* not sure why but this doesn't get preoperly imported */
++#define __must_check
++
++#include <assert.h>
++#include <errno.h>
++#include <fcntl.h>
++#include <libgen.h>
++#include <signal.h>
++#include <stdbool.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/resource.h>
++#include <unistd.h>
++
++#include <linux/bpf.h>
++#include <linux/errno.h>
++
++#include "bpf_util.h"
++#include <bpf/bpf.h>
++#include <bpf/libbpf.h>
++
++#include "hid_surface_dial.skel.h"
++
++static bool running = true;
++
++struct attach_prog_args {
++	int prog_fd;
++	unsigned int hid;
++	int retval;
++};
++
++struct haptic_syscall_args {
++	unsigned int hid;
++	int retval;
++};
++
++static void int_exit(int sig)
++{
++	running = false;
++	exit(0);
++}
++
++static void usage(const char *prog)
++{
++	fprintf(stderr,
++		"%s: %s [OPTIONS] /sys/bus/hid/devices/0BUS:0VID:0PID:00ID\n\n"
++		"  OPTIONS:\n"
++		"    -r N\t set the given resolution to the device (number of ticks per 360°)\n\n",
++		__func__, prog);
++}
++
++static int get_hid_id(const char *path)
++{
++	const char *str_id, *dir;
++	char uevent[1024];
++	int fd;
++
++	memset(uevent, 0, sizeof(uevent));
++	snprintf(uevent, sizeof(uevent) - 1, "%s/uevent", path);
++
++	fd = open(uevent, O_RDONLY | O_NONBLOCK);
++	if (fd < 0)
++		return -ENOENT;
++
++	close(fd);
++
++	dir = basename((char *)path);
++
++	str_id = dir + sizeof("0003:0001:0A37.");
++	return (int)strtol(str_id, NULL, 16);
++}
++
++static int attach_prog(struct hid_surface_dial_lskel *skel, struct bpf_program *prog, int hid_id)
++{
++	struct attach_prog_args args = {
++		.hid = hid_id,
++		.retval = -1,
++	};
++	int attach_fd, err;
++	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, tattr,
++			    .ctx_in = &args,
++			    .ctx_size_in = sizeof(args),
++	);
++
++	attach_fd = bpf_program__fd(skel->progs.attach_prog);
++	if (attach_fd < 0) {
++		fprintf(stderr, "can't locate attach prog: %m\n");
++		return 1;
++	}
++
++	args.prog_fd = bpf_program__fd(prog);
++	err = bpf_prog_test_run_opts(attach_fd, &tattr);
++	if (err) {
++		fprintf(stderr, "can't attach prog to hid device %d: %m (err: %d)\n",
++			hid_id, err);
++		return 1;
++	}
++	return 0;
++}
++
++static int set_haptic(struct hid_surface_dial_lskel *skel, int hid_id)
++{
++	struct haptic_syscall_args args = {
++		.hid = hid_id,
++		.retval = -1,
++	};
++	int haptic_fd, err;
++	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, tattr,
++			    .ctx_in = &args,
++			    .ctx_size_in = sizeof(args),
++	);
++
++	haptic_fd = bpf_program__fd(skel->progs.set_haptic);
++	if (haptic_fd < 0) {
++		fprintf(stderr, "can't locate haptic prog: %m\n");
++		return 1;
++	}
++
++	err = bpf_prog_test_run_opts(haptic_fd, &tattr);
++	if (err) {
++		fprintf(stderr, "can't set haptic configuration to hid device %d: %m (err: %d)\n",
++			hid_id, err);
++		return 1;
++	}
++	return 0;
++}
++
++int main(int argc, char **argv)
++{
++	struct hid_surface_dial_lskel *skel;
++	struct bpf_program *prog;
++	const char *optstr = "r:";
++	const char *sysfs_path;
++	int opt, hid_id, resolution = 72;
++
++	while ((opt = getopt(argc, argv, optstr)) != -1) {
++		switch (opt) {
++		case 'r':
++			{
++				char *endp = NULL;
++				long l = -1;
++
++				if (optarg) {
++					l = strtol(optarg, &endp, 10);
++					if (endp && *endp)
++						l = -1;
++				}
++
++				if (l < 0) {
++					fprintf(stderr,
++						"invalid r option %s - expecting a number\n",
++						optarg ? optarg : "");
++					exit(EXIT_FAILURE);
++				};
++
++				resolution = (int) l;
++				break;
++			}
++		default:
++			usage(basename(argv[0]));
++			return 1;
++		}
++	}
++
++	if (optind == argc) {
++		usage(basename(argv[0]));
++		return 1;
++	}
++
++	sysfs_path = argv[optind];
++	if (!sysfs_path) {
++		perror("sysfs");
++		return 1;
++	}
++
++	skel = hid_surface_dial_lskel__open_and_load();
++	if (!skel) {
++		fprintf(stderr, "%s  %s:%d", __func__, __FILE__, __LINE__);
++		return -1;
++	}
++
++	hid_id = get_hid_id(sysfs_path);
++	if (hid_id < 0) {
++		fprintf(stderr, "can not open HID device: %m\n");
++		return 1;
++	}
++
++	skel->data->resolution = resolution;
++	skel->data->physical = (int)(resolution / 72);
++
++	bpf_object__for_each_program(prog, *skel->skeleton->obj) {
++		/* ignore syscalls */
++		if (bpf_program__get_type(prog) != BPF_PROG_TYPE_TRACING)
++			continue;
++
++		attach_prog(skel, prog, hid_id);
++	}
++
++	signal(SIGINT, int_exit);
++	signal(SIGTERM, int_exit);
++
++	set_haptic(skel, hid_id);
++
++	while (running)
++		;
++
++	hid_surface_dial_lskel__destroy(skel);
++
++	return 0;
 +}
 -- 
 2.36.1
