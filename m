@@ -2,213 +2,97 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78D7AC433EF
-	for <bpf@archiver.kernel.org>; Tue, 12 Jul 2022 14:15:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B509C43334
+	for <bpf@archiver.kernel.org>; Tue, 12 Jul 2022 14:59:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232539AbiGLOPf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Jul 2022 10:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58402 "EHLO
+        id S233467AbiGLO7b (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Jul 2022 10:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232828AbiGLOPS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Jul 2022 10:15:18 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB6A6069E;
-        Tue, 12 Jul 2022 07:15:17 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id os14so14581199ejb.4;
-        Tue, 12 Jul 2022 07:15:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tWItqk3wKGTm6WgbY9A7GkDr3k6MBq4Cfj9YjBA7C+A=;
-        b=dbDeGGjHPxkW99VXoRzj5pHkeKOMsNh7lfKZKM3DFGIfpr+vvXKCLLf0AnJk1dp4wu
-         /wQwYCpnEHa5TuLdisWFS0zLKO8nugzb6nVe/zFViKm+xAjGh3/EnA/X5UaNb4VqAFU3
-         KZlJHxBhvpQBVox2oHobDA+xsH5Givu2CYxItL3uhYI3Bm1Gat31QSWOxO9Al9vweRWX
-         hyDp/vDDClC7IQlupNNp4fLoiGRR/n7bKFb20cPzcqKQJP1pT24CoGBXmGra5swP22Oz
-         T80hG3KFYnsVsM5jyBfK6JsBgLMsshR+Ir2oBI/OVj5dTv1eb7oYAd6rN1DzLAOfSCrA
-         V+lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tWItqk3wKGTm6WgbY9A7GkDr3k6MBq4Cfj9YjBA7C+A=;
-        b=vjeLVM84JHQqgzJm70/2zImbP8wGFldMJLnMKbH5KP843LTBeVODqmlJddSiqJ5xLJ
-         SRYoNpSqrBfxALTZjxrtKx0SzRCmNRMBlNppP2iAo72Aga7h6Jllx6v809HzmsL+rOl9
-         GVzlajx+0EPX5DGPl6LZN8Z9X6OY+kal04OHPV6qEyuZH7qNITZE3apfFr8TK6Mc5nvh
-         wfemCoy12EyjpbtQ9nbf46dj/2T2vZe01uumRfsdDJpmbgDMFNICqJyP4bD7I/d+sYiV
-         LXdlQchp2F8mDTYXW+l9BJcKk59zzW6LrTF+vspHilXHes7mGBznDMrZmpbo0RM+jpiQ
-         eQuQ==
-X-Gm-Message-State: AJIora+kqHa0N5WOu3cylwojMyg0lQbRHry4Yq51KD1cSEjdJa984HdU
-        WP2S5STnBhuLQlrzQIt7XSY=
-X-Google-Smtp-Source: AGRyM1tfPkl8g9DLNiM7KMvFfqFOrLfXPnQoDPKx4C1S+6KswdSZCSXUX1tGhOtCyVIK3P+DCvI5Sg==
-X-Received: by 2002:a17:907:1c12:b0:72b:4a03:2290 with SMTP id nc18-20020a1709071c1200b0072b4a032290mr14031693ejc.163.1657635315637;
-        Tue, 12 Jul 2022 07:15:15 -0700 (PDT)
-Received: from krava ([151.14.22.253])
-        by smtp.gmail.com with ESMTPSA id l10-20020a1709060cca00b00704fa2748ffsm3888352ejh.99.2022.07.12.07.15.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 07:15:15 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Tue, 12 Jul 2022 16:15:11 +0200
-To:     xiaolinkui <xiaolinkui@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Linkui Xiao <xiaolinkui@kylinos.cn>
-Subject: Re: [PATCH] samples: bpf: Replace sizeof(arr)/sizeof(arr[0]) with
- ARRAY_SIZE
-Message-ID: <Ys2B77DB7Fq33VA3@krava>
-References: <20220712072302.13761-1-xiaolinkui@kylinos.cn>
+        with ESMTP id S233814AbiGLO7L (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Jul 2022 10:59:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C46D11759E
+        for <bpf@vger.kernel.org>; Tue, 12 Jul 2022 07:59:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657637948;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rNMMrtYTZ3r/ojhGFO/7q3Z/iBX3TiYjKv+1Pm5Rw30=;
+        b=iFmYXe5r++vZduRtpfA/6nm501f9yFVRaGSHHbbvdHA1ppIqWvFFrf/HRdKNiExha/9Wsd
+        GjcP3qvvg8ORb/M9B24Si3qtSDZ4EE6YbapFU9CYPKGTIXPFr2ReyPLZq8eh3xw81PaupJ
+        U4qgj/3ge1Nq2Vgl8aUdhStHDPSIPnk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-205-dsndXIpmPdCnppEJ8jRctg-1; Tue, 12 Jul 2022 10:59:05 -0400
+X-MC-Unique: dsndXIpmPdCnppEJ8jRctg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6940685A585;
+        Tue, 12 Jul 2022 14:59:04 +0000 (UTC)
+Received: from plouf.redhat.com (unknown [10.39.195.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 65A852166B26;
+        Tue, 12 Jul 2022 14:59:01 +0000 (UTC)
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>
+Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v6 01/23] selftests/bpf: fix config for CLS_BPF
+Date:   Tue, 12 Jul 2022 16:58:28 +0200
+Message-Id: <20220712145850.599666-2-benjamin.tissoires@redhat.com>
+In-Reply-To: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
+References: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220712072302.13761-1-xiaolinkui@kylinos.cn>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 03:23:02PM +0800, xiaolinkui wrote:
-> From: Linkui Xiao<xiaolinkui@kylinos.cn>
-> 
-> The ARRAY_SIZE macro is more compact and more formal in linux source.
-> 
-> Signed-off-by: Linkui Xiao<xiaolinkui@kylinos.cn>
+When running test_progs under the VM (with vmtest.sh), some tests are
+failing because the classifier bpf is not available.
 
-LGTM
+Given that the script doesn't load that particular module, make it
+part of vmlinux.
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
-jirka
+---
 
-> ---
->  samples/bpf/fds_example.c          | 3 ++-
->  samples/bpf/sock_example.c         | 3 ++-
->  samples/bpf/test_cgrp2_attach.c    | 3 ++-
->  samples/bpf/test_lru_dist.c        | 2 +-
->  samples/bpf/test_map_in_map_user.c | 4 +++-
->  samples/bpf/tracex5_user.c         | 3 ++-
->  6 files changed, 12 insertions(+), 6 deletions(-)
-> 
-> diff --git a/samples/bpf/fds_example.c b/samples/bpf/fds_example.c
-> index 16dbf49e0f19..88a26f3ce201 100644
-> --- a/samples/bpf/fds_example.c
-> +++ b/samples/bpf/fds_example.c
-> @@ -17,6 +17,7 @@
->  #include <bpf/libbpf.h>
->  #include "bpf_insn.h"
->  #include "sock_example.h"
-> +#include "bpf_util.h"
->  
->  #define BPF_F_PIN	(1 << 0)
->  #define BPF_F_GET	(1 << 1)
-> @@ -52,7 +53,7 @@ static int bpf_prog_create(const char *object)
->  		BPF_MOV64_IMM(BPF_REG_0, 1),
->  		BPF_EXIT_INSN(),
->  	};
-> -	size_t insns_cnt = sizeof(insns) / sizeof(struct bpf_insn);
-> +	size_t insns_cnt = ARRAY_SIZE(insns);
->  	struct bpf_object *obj;
->  	int err;
->  
-> diff --git a/samples/bpf/sock_example.c b/samples/bpf/sock_example.c
-> index a88f69504c08..5b66f2401b96 100644
-> --- a/samples/bpf/sock_example.c
-> +++ b/samples/bpf/sock_example.c
-> @@ -29,6 +29,7 @@
->  #include <bpf/bpf.h>
->  #include "bpf_insn.h"
->  #include "sock_example.h"
-> +#include "bpf_util.h"
->  
->  char bpf_log_buf[BPF_LOG_BUF_SIZE];
->  
-> @@ -58,7 +59,7 @@ static int test_sock(void)
->  		BPF_MOV64_IMM(BPF_REG_0, 0), /* r0 = 0 */
->  		BPF_EXIT_INSN(),
->  	};
-> -	size_t insns_cnt = sizeof(prog) / sizeof(struct bpf_insn);
-> +	size_t insns_cnt = ARRAY_SIZE(prog);
->  	LIBBPF_OPTS(bpf_prog_load_opts, opts,
->  		.log_buf = bpf_log_buf,
->  		.log_size = BPF_LOG_BUF_SIZE,
-> diff --git a/samples/bpf/test_cgrp2_attach.c b/samples/bpf/test_cgrp2_attach.c
-> index 6d90874b09c3..68ce69457afe 100644
-> --- a/samples/bpf/test_cgrp2_attach.c
-> +++ b/samples/bpf/test_cgrp2_attach.c
-> @@ -31,6 +31,7 @@
->  #include <bpf/bpf.h>
->  
->  #include "bpf_insn.h"
-> +#include "bpf_util.h"
->  
->  enum {
->  	MAP_KEY_PACKETS,
-> @@ -70,7 +71,7 @@ static int prog_load(int map_fd, int verdict)
->  		BPF_MOV64_IMM(BPF_REG_0, verdict), /* r0 = verdict */
->  		BPF_EXIT_INSN(),
->  	};
-> -	size_t insns_cnt = sizeof(prog) / sizeof(struct bpf_insn);
-> +	size_t insns_cnt = ARRAY_SIZE(prog);
->  	LIBBPF_OPTS(bpf_prog_load_opts, opts,
->  		.log_buf = bpf_log_buf,
->  		.log_size = BPF_LOG_BUF_SIZE,
-> diff --git a/samples/bpf/test_lru_dist.c b/samples/bpf/test_lru_dist.c
-> index be98ccb4952f..5efb91763d65 100644
-> --- a/samples/bpf/test_lru_dist.c
-> +++ b/samples/bpf/test_lru_dist.c
-> @@ -523,7 +523,7 @@ int main(int argc, char **argv)
->  		return -1;
->  	}
->  
-> -	for (f = 0; f < sizeof(map_flags) / sizeof(*map_flags); f++) {
-> +	for (f = 0; f < ARRAY_SIZE(map_flags); f++) {
->  		test_lru_loss0(BPF_MAP_TYPE_LRU_HASH, map_flags[f]);
->  		test_lru_loss1(BPF_MAP_TYPE_LRU_HASH, map_flags[f]);
->  		test_parallel_lru_loss(BPF_MAP_TYPE_LRU_HASH, map_flags[f],
-> diff --git a/samples/bpf/test_map_in_map_user.c b/samples/bpf/test_map_in_map_user.c
-> index e8b4cc184ac9..652ec720533d 100644
-> --- a/samples/bpf/test_map_in_map_user.c
-> +++ b/samples/bpf/test_map_in_map_user.c
-> @@ -12,6 +12,8 @@
->  #include <bpf/bpf.h>
->  #include <bpf/libbpf.h>
->  
-> +#include "bpf_util.h"
-> +
->  static int map_fd[7];
->  
->  #define PORT_A		(map_fd[0])
-> @@ -28,7 +30,7 @@ static const char * const test_names[] = {
->  	"Hash of Hash",
->  };
->  
-> -#define NR_TESTS (sizeof(test_names) / sizeof(*test_names))
-> +#define NR_TESTS ARRAY_SIZE(test_names)
->  
->  static void check_map_id(int inner_map_fd, int map_in_map_fd, uint32_t key)
->  {
-> diff --git a/samples/bpf/tracex5_user.c b/samples/bpf/tracex5_user.c
-> index e910dc265c31..9d7d79f0d47d 100644
-> --- a/samples/bpf/tracex5_user.c
-> +++ b/samples/bpf/tracex5_user.c
-> @@ -8,6 +8,7 @@
->  #include <bpf/bpf.h>
->  #include <bpf/libbpf.h>
->  #include "trace_helpers.h"
-> +#include "bpf_util.h"
->  
->  #ifdef __mips__
->  #define	MAX_ENTRIES  6000 /* MIPS n64 syscalls start at 5000 */
-> @@ -24,7 +25,7 @@ static void install_accept_all_seccomp(void)
->  		BPF_STMT(BPF_RET+BPF_K, SECCOMP_RET_ALLOW),
->  	};
->  	struct sock_fprog prog = {
-> -		.len = (unsigned short)(sizeof(filter)/sizeof(filter[0])),
-> +		.len = (unsigned short)ARRAY_SIZE(filter),
->  		.filter = filter,
->  	};
->  	if (prctl(PR_SET_SECCOMP, 2, &prog))
-> -- 
-> 2.17.1
-> 
+new in v6
+---
+ tools/testing/selftests/bpf/config | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index c05904d631ec..c69c119f4bb7 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -1,6 +1,6 @@
+ CONFIG_BPF=y
+ CONFIG_BPF_SYSCALL=y
+-CONFIG_NET_CLS_BPF=m
++CONFIG_NET_CLS_BPF=y
+ CONFIG_BPF_EVENTS=y
+ CONFIG_TEST_BPF=m
+ CONFIG_CGROUP_BPF=y
+-- 
+2.36.1
+
