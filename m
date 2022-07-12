@@ -2,41 +2,41 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B7AFC433EF
-	for <bpf@archiver.kernel.org>; Tue, 12 Jul 2022 15:06:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73CF6CCA483
+	for <bpf@archiver.kernel.org>; Tue, 12 Jul 2022 15:07:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233574AbiGLPGb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Jul 2022 11:06:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36564 "EHLO
+        id S233972AbiGLPG5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Jul 2022 11:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233973AbiGLPGF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Jul 2022 11:06:05 -0400
+        with ESMTP id S233934AbiGLPGJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Jul 2022 11:06:09 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C012C25B9
-        for <bpf@vger.kernel.org>; Tue, 12 Jul 2022 08:00:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BE2EEC4454
+        for <bpf@vger.kernel.org>; Tue, 12 Jul 2022 08:00:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657638022;
+        s=mimecast20190719; t=1657638030;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=yZy/kU520bjEz6wDtwvraJBCu2Or6TJf8DYrrvVCTDk=;
-        b=L3f2CBTh3fLGe/XPTa/bu1DIkCyuLoWRPusbWSO1PXcycULEwQxmJ72A/o2501U1Mv6IRE
-        RAtlhRj2Or7H/BLqrx8k+StZeLFYiLgQs5+kpbMQxB1Yl1XJzDugk2Szpv71m0Yllsdjoq
-        UMSs5o9qHSBAYjN1s3+wLXdERFcmzfo=
+        bh=Q8dXz6b/DOSuY5GaqvWbS8BSlIKE2T77GDZKhhpp3ow=;
+        b=AlRAyVJArC1yaOP4D4hQv3bZTTvAjD1yiSujyxddMzThdladHKjb9SWO2fP8OiRitPCYW/
+        hWdH63Dc368Lvl2q760Dwwfvv6kFE7ujzVeX+/Q5T/EJ7Hpy4+rYDjjnZphNPr86Z4detI
+        jUxWMzZyb9CkXD3QPJAfs3VCEAx9oIE=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-604-htrWjFIJNIO5wdNKO8appg-1; Tue, 12 Jul 2022 11:00:18 -0400
-X-MC-Unique: htrWjFIJNIO5wdNKO8appg-1
+ us-mta-674-Ag1wr6N3MRuCNEi-z8-SwQ-1; Tue, 12 Jul 2022 11:00:27 -0400
+X-MC-Unique: Ag1wr6N3MRuCNEi-z8-SwQ-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 83EAB802D2C;
-        Tue, 12 Jul 2022 15:00:16 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3499285A589;
+        Tue, 12 Jul 2022 15:00:26 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.195.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 35E142166B26;
-        Tue, 12 Jul 2022 15:00:12 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C99772166B2A;
+        Tue, 12 Jul 2022 15:00:21 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -54,9 +54,9 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v6 18/23] HID: bpf: allow to change the report descriptor
-Date:   Tue, 12 Jul 2022 16:58:45 +0200
-Message-Id: <20220712145850.599666-19-benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v6 20/23] selftests/bpf: Add a test for BPF_F_INSERT_HEAD
+Date:   Tue, 12 Jul 2022 16:58:47 +0200
+Message-Id: <20220712145850.599666-21-benjamin.tissoires@redhat.com>
 In-Reply-To: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
 References: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
@@ -66,239 +66,245 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a new tracepoint hid_bpf_rdesc_fixup() so we can trigger a
-report descriptor fixup in the bpf world.
-
-Whenever the program gets attached/detached, the device is reconnected
-meaning that userspace will see it disappearing and reappearing with
-the new report descriptor.
+Insert 3 programs to check that we are doing the correct thing:
+'2', '1', '3' are inserted, but '1' is supposed to be executed first.
 
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
 ---
 
 changes in v6:
-- use BTF_ID to get the btf_id of hid_bpf_rdesc_fixup
+- fixed copy/paste in ASSERT_OK and test execution order
 
 changes in v5:
-- adapted for new API
+- use the new API
 
 not in v4
 
 changes in v3:
-- ensure the ctx.size is properly bounded by allocated size
-- s/link_attached/post_link_attach/
-- removed the switch statement with only one case
+- use the new hid_get_data API
 
-changes in v2:
-- split the series by bpf/libbpf/hid/selftests and samples
+new in v2
 ---
- drivers/hid/bpf/hid_bpf_dispatch.c  | 77 ++++++++++++++++++++++++++++-
- drivers/hid/bpf/hid_bpf_dispatch.h  |  1 +
- drivers/hid/bpf/hid_bpf_jmp_table.c |  7 +++
- drivers/hid/hid-core.c              |  3 +-
- include/linux/hid_bpf.h             |  8 +++
- 5 files changed, 94 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/hid.c | 107 +++++++++++++++++++
+ tools/testing/selftests/bpf/progs/hid.c      |  54 +++++++++-
+ 2 files changed, 160 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dispatch.c
-index 8348f5ae17f8..bcaeb65ed2a8 100644
---- a/drivers/hid/bpf/hid_bpf_dispatch.c
-+++ b/drivers/hid/bpf/hid_bpf_dispatch.c
-@@ -85,6 +85,63 @@ dispatch_hid_bpf_device_event(struct hid_device *hdev, enum hid_report_type type
- }
- EXPORT_SYMBOL_GPL(dispatch_hid_bpf_device_event);
+diff --git a/tools/testing/selftests/bpf/prog_tests/hid.c b/tools/testing/selftests/bpf/prog_tests/hid.c
+index 9dc5f0038472..a86e16554e68 100644
+--- a/tools/testing/selftests/bpf/prog_tests/hid.c
++++ b/tools/testing/selftests/bpf/prog_tests/hid.c
+@@ -9,6 +9,7 @@
+ #include <dirent.h>
+ #include <poll.h>
+ #include <stdbool.h>
++#include <linux/hid_bpf.h>
+ #include <linux/hidraw.h>
+ #include <linux/uhid.h>
  
-+/**
-+ * hid_bpf_rdesc_fixup - Called when the probe function parses the report
-+ * descriptor of the HID device
-+ *
-+ * @ctx: The HID-BPF context
-+ *
-+ * @return 0 on success and keep processing; a positive value to change the
-+ * incoming size buffer; a negative error code to interrupt the processing
-+ * of this event
-+ *
-+ * Declare an %fmod_ret tracing bpf program to this function and attach this
-+ * program through hid_bpf_attach_prog() to have this helper called before any
-+ * parsing of the report descriptor by HID.
-+ */
-+/* never used by the kernel but declared so we can load and attach a tracepoint */
-+__weak noinline int hid_bpf_rdesc_fixup(struct hid_bpf_ctx *ctx)
-+{
-+	return 0;
-+}
-+ALLOW_ERROR_INJECTION(hid_bpf_rdesc_fixup, ERRNO);
-+
-+u8 *call_hid_bpf_rdesc_fixup(struct hid_device *hdev, u8 *rdesc, unsigned int *size)
-+{
-+	int ret;
-+	struct hid_bpf_ctx_kern ctx_kern = {
-+		.ctx = {
-+			.hid = hdev,
-+			.size = *size,
-+			.allocated_size = HID_MAX_DESCRIPTOR_SIZE,
-+		},
-+	};
-+
-+	ctx_kern.data = kmemdup(rdesc, ctx_kern.ctx.allocated_size, GFP_KERNEL);
-+	if (!ctx_kern.data)
-+		goto ignore_bpf;
-+
-+	ret = hid_bpf_prog_run(hdev, HID_BPF_PROG_TYPE_RDESC_FIXUP, &ctx_kern);
-+	if (ret < 0)
-+		goto ignore_bpf;
-+
-+	if (ret) {
-+		if (ret > ctx_kern.ctx.allocated_size)
-+			goto ignore_bpf;
-+
-+		*size = ret;
-+	}
-+
-+	rdesc = krealloc(ctx_kern.data, *size, GFP_KERNEL);
-+
-+	return rdesc;
-+
-+ ignore_bpf:
-+	kfree(ctx_kern.data);
-+	return kmemdup(rdesc, *size, GFP_KERNEL);
-+}
-+EXPORT_SYMBOL_GPL(call_hid_bpf_rdesc_fixup);
-+
- /**
-  * hid_bpf_get_data - Get the kernel memory pointer associated with the context @ctx
-  *
-@@ -188,6 +245,14 @@ static int hid_bpf_allocate_event_data(struct hid_device *hdev)
- 	return __hid_bpf_allocate_data(hdev, &hdev->bpf.device_data, &hdev->bpf.allocated_data);
- }
- 
-+int hid_bpf_reconnect(struct hid_device *hdev)
-+{
-+	if (!test_and_set_bit(ffs(HID_STAT_REPROBED), &hdev->status))
-+		return device_reprobe(&hdev->dev);
-+
-+	return 0;
-+}
-+
- /**
-  * hid_bpf_attach_prog - Attach the given @prog_fd to the given HID device
-  *
-@@ -229,7 +294,17 @@ hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, __u32 flags)
- 			return err;
- 	}
- 
--	return __hid_bpf_attach_prog(hdev, prog_type, prog_fd, flags);
-+	err = __hid_bpf_attach_prog(hdev, prog_type, prog_fd, flags);
-+	if (err)
-+		return err;
-+
-+	if (prog_type == HID_BPF_PROG_TYPE_RDESC_FIXUP) {
-+		err = hid_bpf_reconnect(hdev);
-+		if (err)
-+			return err;
-+	}
-+
-+	return 0;
- }
- 
- /**
-diff --git a/drivers/hid/bpf/hid_bpf_dispatch.h b/drivers/hid/bpf/hid_bpf_dispatch.h
-index 98c378e18b2b..1d1d5bcccbd7 100644
---- a/drivers/hid/bpf/hid_bpf_dispatch.h
-+++ b/drivers/hid/bpf/hid_bpf_dispatch.h
-@@ -18,6 +18,7 @@ int __hid_bpf_attach_prog(struct hid_device *hdev, enum hid_bpf_prog_type prog_t
- void __hid_bpf_destroy_device(struct hid_device *hdev);
- int hid_bpf_prog_run(struct hid_device *hdev, enum hid_bpf_prog_type type,
- 		     struct hid_bpf_ctx_kern *ctx_kern);
-+int hid_bpf_reconnect(struct hid_device *hdev);
- 
- struct bpf_prog;
- 
-diff --git a/drivers/hid/bpf/hid_bpf_jmp_table.c b/drivers/hid/bpf/hid_bpf_jmp_table.c
-index 0f20deab81ff..3a5ab70d1a95 100644
---- a/drivers/hid/bpf/hid_bpf_jmp_table.c
-+++ b/drivers/hid/bpf/hid_bpf_jmp_table.c
-@@ -59,12 +59,15 @@ static DECLARE_WORK(release_work, hid_bpf_release_progs);
- 
- BTF_ID_LIST(hid_bpf_btf_ids)
- BTF_ID(func, hid_bpf_device_event)			/* HID_BPF_PROG_TYPE_DEVICE_EVENT */
-+BTF_ID(func, hid_bpf_rdesc_fixup)			/* HID_BPF_PROG_TYPE_RDESC_FIXUP */
- 
- static int hid_bpf_max_programs(enum hid_bpf_prog_type type)
- {
- 	switch (type) {
- 	case HID_BPF_PROG_TYPE_DEVICE_EVENT:
- 		return HID_BPF_MAX_PROGS_PER_DEV;
-+	case HID_BPF_PROG_TYPE_RDESC_FIXUP:
-+		return 1;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -234,6 +237,10 @@ static void hid_bpf_release_progs(struct work_struct *work)
- 				if (next->hdev == hdev && next->type == type)
- 					next->hdev = NULL;
- 			}
-+
-+			/* if type was rdesc fixup, reconnect device */
-+			if (type == HID_BPF_PROG_TYPE_RDESC_FIXUP)
-+				hid_bpf_reconnect(hdev);
- 		}
- 	}
- 
-diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-index 356d3822f17d..42aed754123c 100644
---- a/drivers/hid/hid-core.c
-+++ b/drivers/hid/hid-core.c
-@@ -1218,7 +1218,8 @@ int hid_open_report(struct hid_device *device)
- 		return -ENODEV;
- 	size = device->dev_rsize;
- 
--	buf = kmemdup(start, size, GFP_KERNEL);
-+	/* call_hid_bpf_rdesc_fixup() ensures we work on a copy of rdesc */
-+	buf = call_hid_bpf_rdesc_fixup(device, start, &size);
- 	if (buf == NULL)
- 		return -ENOMEM;
- 
-diff --git a/include/linux/hid_bpf.h b/include/linux/hid_bpf.h
-index ade0def154b6..4f5eb27a188b 100644
---- a/include/linux/hid_bpf.h
-+++ b/include/linux/hid_bpf.h
-@@ -59,6 +59,7 @@ struct hid_bpf_ctx {
- 
- /* Following functions are tracepoints that BPF programs can attach to */
- int hid_bpf_device_event(struct hid_bpf_ctx *ctx);
-+int hid_bpf_rdesc_fixup(struct hid_bpf_ctx *ctx);
- 
- /* Following functions are kfunc that we export to BPF programs */
- /* available everywhere in HID-BPF */
-@@ -82,6 +83,7 @@ void hid_bpf_release_context(struct hid_bpf_ctx *ctx);
- enum hid_bpf_prog_type {
- 	HID_BPF_PROG_TYPE_UNDEF = -1,
- 	HID_BPF_PROG_TYPE_DEVICE_EVENT,			/* an event is emitted from the device */
-+	HID_BPF_PROG_TYPE_RDESC_FIXUP,
- 	HID_BPF_PROG_TYPE_MAX,
+@@ -83,6 +84,7 @@ static u8 feature_data[] = { 1, 2 };
+ struct attach_prog_args {
+ 	int prog_fd;
+ 	unsigned int hid;
++	unsigned int flags;
+ 	int retval;
  };
  
-@@ -125,6 +127,7 @@ int hid_bpf_connect_device(struct hid_device *hdev);
- void hid_bpf_disconnect_device(struct hid_device *hdev);
- void hid_bpf_destroy_device(struct hid_device *hid);
- void hid_bpf_device_init(struct hid_device *hid);
-+u8 *call_hid_bpf_rdesc_fixup(struct hid_device *hdev, u8 *rdesc, unsigned int *size);
- #else /* CONFIG_BPF */
- static inline u8 *dispatch_hid_bpf_device_event(struct hid_device *hid, int type, u8 *data,
- 						u32 *size, int interrupt) { return 0; }
-@@ -132,6 +135,11 @@ static inline int hid_bpf_connect_device(struct hid_device *hdev) { return 0; }
- static inline void hid_bpf_disconnect_device(struct hid_device *hdev) {}
- static inline void hid_bpf_destroy_device(struct hid_device *hid) {}
- static inline void hid_bpf_device_init(struct hid_device *hid) {}
-+static inline u8 *call_hid_bpf_rdesc_fixup(struct hid_device *hdev, u8 *rdesc, unsigned int *size)
+@@ -770,6 +772,109 @@ static int test_hid_user_raw_request_call(int uhid_fd, int dev_id)
+ 	return ret;
+ }
+ 
++/*
++ * Attach hid_insert{0,1,2} to the given uhid device,
++ * retrieve and open the matching hidraw node,
++ * inject one event in the uhid device,
++ * check that the programs have been inserted in the correct order.
++ */
++static int test_hid_attach_flags(int uhid_fd, int dev_id)
 +{
-+	return kmemdup(rdesc, *size, GFP_KERNEL);
++	struct hid *hid_skel = NULL;
++	u8 buf[64] = {0};
++	int hidraw_fd = -1;
++	int hid_id, attach_fd, err = -EINVAL;
++	struct attach_prog_args args = {
++		.retval = -1,
++	};
++	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, tattr,
++			    .ctx_in = &args,
++			    .ctx_size_in = sizeof(args),
++	);
++
++	/* locate the uevent file of the created device */
++	hid_id = get_hid_id(dev_id);
++	if (!ASSERT_GE(hid_id, 0, "locate uhid device id"))
++		goto cleanup;
++
++	args.hid = hid_id;
++
++	hid_skel = hid__open();
++	if (!ASSERT_OK_PTR(hid_skel, "hid_skel_open"))
++		goto cleanup;
++
++	bpf_program__set_autoload(hid_skel->progs.hid_test_insert1, true);
++	bpf_program__set_autoload(hid_skel->progs.hid_test_insert2, true);
++	bpf_program__set_autoload(hid_skel->progs.hid_test_insert3, true);
++
++	err = hid__load(hid_skel);
++	if (!ASSERT_OK(err, "hid_skel_load"))
++		goto cleanup;
++
++	attach_fd = bpf_program__fd(hid_skel->progs.attach_prog);
++	if (!ASSERT_GE(attach_fd, 0, "locate attach_prog")) {
++		err = attach_fd;
++		goto cleanup;
++	}
++
++	/* attach hid_test_insert2 program */
++	args.prog_fd = bpf_program__fd(hid_skel->progs.hid_test_insert2);
++	args.flags = HID_BPF_FLAG_NONE;
++	args.retval = 1;
++	err = bpf_prog_test_run_opts(attach_fd, &tattr);
++	if (!ASSERT_EQ(args.retval, 0, "attach_hid_test_insert2"))
++		goto cleanup;
++
++	/* then attach hid_test_insert1 program before the previous*/
++	args.prog_fd = bpf_program__fd(hid_skel->progs.hid_test_insert1);
++	args.flags = HID_BPF_FLAG_INSERT_HEAD;
++	args.retval = 1;
++	err = bpf_prog_test_run_opts(attach_fd, &tattr);
++	if (!ASSERT_EQ(args.retval, 0, "attach_hid_test_insert1"))
++		goto cleanup;
++
++	/* finally attach hid_test_insert3 at the end */
++	args.prog_fd = bpf_program__fd(hid_skel->progs.hid_test_insert3);
++	args.flags = HID_BPF_FLAG_NONE;
++	args.retval = 1;
++	err = bpf_prog_test_run_opts(attach_fd, &tattr);
++	if (!ASSERT_EQ(args.retval, 0, "attach_hid_test_insert3"))
++		goto cleanup;
++
++	hidraw_fd = open_hidraw(dev_id);
++	if (!ASSERT_GE(hidraw_fd, 0, "open_hidraw"))
++		goto cleanup;
++
++	/* inject one event */
++	buf[0] = 1;
++	send_event(uhid_fd, buf, 6);
++
++	/* read the data from hidraw */
++	memset(buf, 0, sizeof(buf));
++	err = read(hidraw_fd, buf, sizeof(buf));
++	if (!ASSERT_EQ(err, 6, "read_hidraw"))
++		goto cleanup;
++
++	if (!ASSERT_EQ(buf[1], 1, "hid_test_insert1"))
++		goto cleanup;
++
++	if (!ASSERT_EQ(buf[2], 2, "hid_test_insert2"))
++		goto cleanup;
++
++	if (!ASSERT_EQ(buf[3], 3, "hid_test_insert3"))
++		goto cleanup;
++
++	err = 0;
++
++ cleanup:
++	if (hidraw_fd >= 0)
++		close(hidraw_fd);
++
++	hid__destroy(hid_skel);
++
++	return err;
 +}
 +
- #endif /* CONFIG_BPF */
+ /*
+  * Attach hid_rdesc_fixup to the given uhid device,
+  * retrieve and open the matching hidraw node,
+@@ -866,6 +971,8 @@ void serial_test_hid_bpf(void)
+ 	ASSERT_OK(err, "hid_change_report");
+ 	err = test_hid_user_raw_request_call(uhid_fd, dev_id);
+ 	ASSERT_OK(err, "hid_user_raw_request");
++	err = test_hid_attach_flags(uhid_fd, dev_id);
++	ASSERT_OK(err, "hid_attach_flags");
  
- #endif /* __HID_BPF_H */
+ 	/*
+ 	 * this test should be run last because we disconnect/reconnect
+diff --git a/tools/testing/selftests/bpf/progs/hid.c b/tools/testing/selftests/bpf/progs/hid.c
+index 863c37ddf5ff..92cf57d2be3e 100644
+--- a/tools/testing/selftests/bpf/progs/hid.c
++++ b/tools/testing/selftests/bpf/progs/hid.c
+@@ -21,6 +21,7 @@ extern int hid_bpf_hw_request(struct hid_bpf_ctx *ctx,
+ struct attach_prog_args {
+ 	int prog_fd;
+ 	unsigned int hid;
++	unsigned int flags;
+ 	int retval;
+ };
+ 
+@@ -60,7 +61,7 @@ int attach_prog(struct attach_prog_args *ctx)
+ {
+ 	ctx->retval = hid_bpf_attach_prog(ctx->hid,
+ 					  ctx->prog_fd,
+-					  0);
++					  ctx->flags);
+ 	return 0;
+ }
+ 
+@@ -152,3 +153,54 @@ int BPF_PROG(hid_rdesc_fixup, struct hid_bpf_ctx *hid_ctx)
+ 
+ 	return sizeof(rdesc) + 73;
+ }
++
++SEC("?fmod_ret/hid_bpf_device_event")
++int BPF_PROG(hid_test_insert1, struct hid_bpf_ctx *hid_ctx)
++{
++	__u8 *data = hid_bpf_get_data(hid_ctx, 0 /* offset */, 4 /* size */);
++
++	if (!data)
++		return 0; /* EPERM check */
++
++	/* we need to be run first */
++	if (data[2] || data[3])
++		return -1;
++
++	data[1] = 1;
++
++	return 0;
++}
++
++SEC("?fmod_ret/hid_bpf_device_event")
++int BPF_PROG(hid_test_insert2, struct hid_bpf_ctx *hid_ctx)
++{
++	__u8 *data = hid_bpf_get_data(hid_ctx, 0 /* offset */, 4 /* size */);
++
++	if (!data)
++		return 0; /* EPERM check */
++
++	/* after insert0 and before insert2 */
++	if (!data[1] || data[3])
++		return -1;
++
++	data[2] = 2;
++
++	return 0;
++}
++
++SEC("?fmod_ret/hid_bpf_device_event")
++int BPF_PROG(hid_test_insert3, struct hid_bpf_ctx *hid_ctx)
++{
++	__u8 *data = hid_bpf_get_data(hid_ctx, 0 /* offset */, 4 /* size */);
++
++	if (!data)
++		return 0; /* EPERM check */
++
++	/* at the end */
++	if (!data[1] || !data[2])
++		return -1;
++
++	data[3] = 3;
++
++	return 0;
++}
 -- 
 2.36.1
 
