@@ -2,22 +2,22 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99CA7CCA47F
-	for <bpf@archiver.kernel.org>; Tue, 12 Jul 2022 18:28:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56895C43334
+	for <bpf@archiver.kernel.org>; Tue, 12 Jul 2022 18:28:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233396AbiGLS2U (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Jul 2022 14:28:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51262 "EHLO
+        id S233583AbiGLS2W (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Jul 2022 14:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiGLS2U (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Jul 2022 14:28:20 -0400
+        with ESMTP id S229590AbiGLS2V (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Jul 2022 14:28:21 -0400
 Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.6.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B75C7657
-        for <bpf@vger.kernel.org>; Tue, 12 Jul 2022 11:28:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C32FBDB88
+        for <bpf@vger.kernel.org>; Tue, 12 Jul 2022 11:28:19 -0700 (PDT)
 Received: from localhost.localdomain ([160.80.103.126])
-        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 26CHxCBt005871
+        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 26CHxCBr005871
         (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 12 Jul 2022 19:59:14 +0200
+        Tue, 12 Jul 2022 19:59:12 +0200
 From:   Andrea Mayer <andrea.mayer@uniroma2.it>
 To:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
@@ -41,12 +41,10 @@ Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
         Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
         Anton Makarov <anton.makarov11235@gmail.com>,
         Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: [net 2/3] seg6: fix skb checksum in SRv6 End.B6 and End.B6.Encaps behaviors
-Date:   Tue, 12 Jul 2022 19:58:36 +0200
-Message-Id: <20220712175837.16267-3-andrea.mayer@uniroma2.it>
+Subject: [net 0/3] seg6: fix skb checksum for SRH encapsulation/insertion 
+Date:   Tue, 12 Jul 2022 19:58:34 +0200
+Message-Id: <20220712175837.16267-1-andrea.mayer@uniroma2.it>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220712175837.16267-1-andrea.mayer@uniroma2.it>
-References: <20220712175837.16267-1-andrea.mayer@uniroma2.it>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
@@ -55,43 +53,52 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The SRv6 End.B6 and End.B6.Encaps behaviors rely on functions
-seg6_do_srh_{encap,inline}() to, respectively: i) encapsulate the
-packet within an outer IPv6 header with the specified Segment Routing
-Header (SRH); ii) insert the specified SRH directly after the IPv6
-header of the packet.
+The Linux kernel supports Segment Routing Header (SRH)
+encapsulation/insertion operations by providing the capability to: i)
+encapsulate a packet in an outer IPv6 header with a specified SRH; ii)
+insert a specified SRH directly after the IPv6 header of the packet.
+Note that the insertion operation is also referred to as 'injection'.
 
-This patch removes the initialization of the IPv6 header payload length
-from the input_action_end_b6{_encap}() functions, as it is now handled
-properly by seg6_do_srh_{encap,inline}() to avoid corruption of the skb
-checksum.
+The two operations are respectively supported by seg6_do_srh_encap() and
+seg6_do_srh_inline(), which operate on the skb associated to the packet as
+needed (e.g. adding the necessary headers and initializing them, while
+taking care to recalculate the skb checksum).
 
-Fixes: 140f04c33bbc ("ipv6: sr: implement several seg6local actions")
-Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
----
- net/ipv6/seg6_local.c | 2 --
- 1 file changed, 2 deletions(-)
+seg6_do_srh_encap() and seg6_do_srh_inline() do not initialize the payload
+length of the IPv6 header, which is carried out by the caller functions.
+However, this approach causes the corruption of the skb checksum which
+needs to be updated only after initialization of headers is completed
+(thanks to Paolo Abeni for detecting this issue).
 
-diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
-index 98a34287439c..2cd4a8d3b30a 100644
---- a/net/ipv6/seg6_local.c
-+++ b/net/ipv6/seg6_local.c
-@@ -826,7 +826,6 @@ static int input_action_end_b6(struct sk_buff *skb, struct seg6_local_lwt *slwt)
- 	if (err)
- 		goto drop;
- 
--	ipv6_hdr(skb)->payload_len = htons(skb->len - sizeof(struct ipv6hdr));
- 	skb_set_transport_header(skb, sizeof(struct ipv6hdr));
- 
- 	seg6_lookup_nexthop(skb, NULL, 0);
-@@ -858,7 +857,6 @@ static int input_action_end_b6_encap(struct sk_buff *skb,
- 	if (err)
- 		goto drop;
- 
--	ipv6_hdr(skb)->payload_len = htons(skb->len - sizeof(struct ipv6hdr));
- 	skb_set_transport_header(skb, sizeof(struct ipv6hdr));
- 
- 	seg6_lookup_nexthop(skb, NULL, 0);
+The patchset fixes the skb checksum corruption by moving the IPv6 header
+payload length initialization from the callers of seg6_do_srh_encap() and
+seg6_do_srh_inline() directly into these functions.
+
+This patchset is organized as follows:
+ - patch 1/3, seg6: fix skb checksum evaluation in SRH
+   encapsulation/insertion;
+    (* SRH encapsulation/insertion available since v4.10)
+   
+ - patch 2/3, seg6: fix skb checksum in SRv6 End.B6 and End.B6.Encaps
+   behaviors;
+    (* SRv6 End.B6 and End.B6.Encaps behaviors available since v4.14)
+
+ - patch 3/3, seg6: bpf: fix skb checksum in bpf_push_seg6_encap();
+    (* bpf IPv6 Segment Routing helpers available since v4.18)
+
+Thank you all,
+Andrea
+
+Andrea Mayer (3):
+  seg6: fix skb checksum evaluation in SRH encapsulation/insertion
+  seg6: fix skb checksum in SRv6 End.B6 and End.B6.Encaps behaviors
+  seg6: bpf: fix skb checksum in bpf_push_seg6_encap()
+
+ net/core/filter.c        | 1 -
+ net/ipv6/seg6_iptunnel.c | 5 ++++-
+ net/ipv6/seg6_local.c    | 2 --
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
 -- 
 2.20.1
 
