@@ -2,148 +2,142 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2A21C433EF
-	for <bpf@archiver.kernel.org>; Tue, 12 Jul 2022 09:12:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04536C43334
+	for <bpf@archiver.kernel.org>; Tue, 12 Jul 2022 09:48:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232060AbiGLJML (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Jul 2022 05:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40178 "EHLO
+        id S232693AbiGLJsZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Jul 2022 05:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbiGLJMK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Jul 2022 05:12:10 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FEC9CE29
-        for <bpf@vger.kernel.org>; Tue, 12 Jul 2022 02:12:06 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id m16so9250734edb.11
-        for <bpf@vger.kernel.org>; Tue, 12 Jul 2022 02:12:06 -0700 (PDT)
+        with ESMTP id S232535AbiGLJsY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Jul 2022 05:48:24 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6524FA5E40
+        for <bpf@vger.kernel.org>; Tue, 12 Jul 2022 02:48:23 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id r10so4225191wrv.4
+        for <bpf@vger.kernel.org>; Tue, 12 Jul 2022 02:48:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=TcU10Oc13Ma8WmzWLlaWLrS5D5s+as3wCo0nvvq46k0=;
-        b=cJZTDn2H0RfCFScGvHtGuEeHOPvQBYHknliZU3fQ1B73tfhi7pmjnFVlbkbhhUjIh1
-         sfZms2buwqSCNrIvG77EBxUoX4r/dtokoRm+LpA6cD7qTUV3b3SBxr066VXAjLfKJdIX
-         IIQO1Sw32m65mrLV6csITMatqbstsOyrIvnOQivM5kvgs+xnJkC5S0HTaFiNRTb8JVDv
-         owqdBel14LSSgJMsY6S2MVyk3QW1O+Nc5vL0XBpJk75VMpPwUi33CHRVKlrV28O9Elgl
-         hisbC/Zy5j+AJWjafCjc8PZsY7Vf9uj+RLNoXRSlqOhR48KiXckpZLjRsm9KL2XPMCHt
-         R7Cg==
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=WcPIJHWyToGVlIzDYOdfUB4mbv1ws7QerB6L3JMPYZ0=;
+        b=qTn9s6H2hO+MfqMpLno3oo6tu+sKBx1LyvIZ9q4T2q6toceAyIopXU8BLiLSSJh8Y5
+         gOMGN/tva7VtKfi/E7zxIfu4EygB4KXSzlahhUZABzcp0mb8n22EtrxNnN2uhka+jt3F
+         jM7yPbQN2NxmfGSx3Zu+dILeI4CqzzLaJYElYWrxe9g/4rWz4fFvP6zYieOJNN1aUE0B
+         KtcyVselTQRu9d1tyguKxAQcYRrhkv0zB4zefB0/vdgeqLAqu+U4hiqadhnGm6thgaYC
+         hSBVL+vaVO61bTPDOqmObpLN88sGQJxNa8oHy271N7jyFymCls6oJoecMFJUm1XLOrLW
+         PNoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TcU10Oc13Ma8WmzWLlaWLrS5D5s+as3wCo0nvvq46k0=;
-        b=1sw9L/A0LFfIGnJhzBFdhpiLvJAZRVN80PCh7TEDVEshUfm8KG/sz2cwyuDZ4TkMA4
-         LEXMmI4nCnLuQWP9FNEqfYXpEfPKIE2rH7js3/H+T+m8GdXQAfYVLB0TXlA19wPeHBli
-         rOlq/fRCIi+ekDCAjq0oTA682sMjMT1ADlhOtaH3PbHv+avDscAgbOIKF+PkCu7SNJpE
-         QZSnNY/OF75zotSuq1j4+HnXH+9hekEgcXdEbx6Zk+Wb0LztyflkyHHhMcIDsS2q+lao
-         6r6PUwbeDlwwpbU0hMZNeHQcgrMpX4AN3y+RsLHJmGuf91KaaRXQkhvz1eeQi0Yxx9M1
-         C9Qg==
-X-Gm-Message-State: AJIora8yRPjD4GmXR/V68jW5UPASAEt+07bD872ca5FABXctheSpy/8B
-        +rEymkzX9Y1Wx4ItY8ML/zI=
-X-Google-Smtp-Source: AGRyM1vVitQ2a1J2jhr2B9GasGXrG49nXuk3nR+M5cni0pZk2j54SiJOgRujq6XZyEKHWmotC8EYgg==
-X-Received: by 2002:a05:6402:50d0:b0:43a:df6d:6f4d with SMTP id h16-20020a05640250d000b0043adf6d6f4dmr8307257edb.72.1657617124987;
-        Tue, 12 Jul 2022 02:12:04 -0700 (PDT)
-Received: from krava ([151.14.22.253])
-        by smtp.gmail.com with ESMTPSA id r11-20020a170906a20b00b0072b2378027csm3550955ejy.26.2022.07.12.02.12.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 02:12:04 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Tue, 12 Jul 2022 11:12:01 +0200
-To:     Donald Chan <hoiho.chan@gmail.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>, bpf@vger.kernel.org,
-        daniel@iogearbox.net, ast@kernel.org
-Subject: Re: Missing .BTF section in vmlinux (x86_64) when building on Yocto
-Message-ID: <Ys064c3WpREp+Lem@krava>
-References: <CAJQ9wQ_tU-zy-f9rFk_sqiqh7y7WDz2tyYW6EJNzii6Y7AE3SQ@mail.gmail.com>
- <CAJQ9wQ_b=ssxO4RaQ4tLc723ubOXCaTUpmghebc94bYWQ+cBsg@mail.gmail.com>
- <YsvPDfSE6wflDtpA@krava>
- <YsvgmAK0LJbpCQ/G@krava>
- <CAJQ9wQ-9WR4RY-Fb-22Y-0Tcwri_v7FVRYMNiJCJMrqqiAU9Rw@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WcPIJHWyToGVlIzDYOdfUB4mbv1ws7QerB6L3JMPYZ0=;
+        b=IQ7/tEXZMk795NJkveqURd5PdRGvznetAbMkEiX0DxojCf8JBZPdFg/gedkQptzqYh
+         83xxLROzeWeJTkEbOzkivS27P3yU5VbcIUbViImUVEOH66jIoLxq+y3bg8cp57Jp4HHM
+         MNkBEJKdjugdTIt4qs1K6/QzEfDlQCcwK98gOE0Xdq57Q0nyiTkbRWyTgNQv4mhbRJN8
+         vjT+RkM8KcGg4QCo++1M/s3X4NUffKwTF3lXRWs1Re3JNsmLnsaLRQGWiYPYgX558XmM
+         M5sV+x9bb9sfxQtfaTZViRdIYoB9p6yLaib/6K7v/UU8AAywiuaLjoo3jJdcwvrNl5fq
+         inNA==
+X-Gm-Message-State: AJIora9j2046IKgFfoLlsniDZZIYKIaGY8ov0ckFlmJN5l+deemnZ5gH
+        YDTJo2v78VTi5oDgpplKUqv1+g==
+X-Google-Smtp-Source: AGRyM1t8KGr5XoQft8lPqDZI8l7AxfbF/t6JDU+4e6F9ndr5oYREAwYjj1hvJgKWw4r5YUmX41ahuA==
+X-Received: by 2002:a5d:6d49:0:b0:21b:a3ba:30b5 with SMTP id k9-20020a5d6d49000000b0021ba3ba30b5mr21773949wri.513.1657619301745;
+        Tue, 12 Jul 2022 02:48:21 -0700 (PDT)
+Received: from [192.168.178.32] ([51.155.200.13])
+        by smtp.gmail.com with ESMTPSA id n68-20020a1c2747000000b0039c96b97359sm9024370wmn.37.2022.07.12.02.48.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jul 2022 02:48:21 -0700 (PDT)
+Message-ID: <a443a6f9-fd6f-d283-ce00-68d72b40539d@isovalent.com>
+Date:   Tue, 12 Jul 2022 10:48:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJQ9wQ-9WR4RY-Fb-22Y-0Tcwri_v7FVRYMNiJCJMrqqiAU9Rw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.1
+Subject: Re: [PATCH v2] bpf/scripts: Generate GCC compatible helpers
+Content-Language: en-GB
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        James Hilliard <james.hilliard1@gmail.com>
+Cc:     Yonghong Song <yhs@fb.com>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Networking <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev
+References: <20220706172814.169274-1-james.hilliard1@gmail.com>
+ <a0bddf0b-e8c4-46ce-b7c6-a22809af1677@fb.com>
+ <CADvTj4ovwExtM-bWUpJELy-OqsT=J9stmqbAXto8ds2n+G8mfw@mail.gmail.com>
+ <CAEf4BzYwRyXG1zE5BK1ZXmxLh+ZPU0=yQhNhpqr0JmfNA30tdQ@mail.gmail.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <CAEf4BzYwRyXG1zE5BK1ZXmxLh+ZPU0=yQhNhpqr0JmfNA30tdQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 02:53:58PM -0700, Donald Chan wrote:
-> On Mon, Jul 11, 2022 at 1:34 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> >
-> > On Mon, Jul 11, 2022 at 09:19:45AM +0200, Jiri Olsa wrote:
-> > > On Sun, Jul 10, 2022 at 10:57:01PM -0700, Donald Chan wrote:
-> > > > Hi,
-> > > >
-> > > > I am trying to enable CONFIG_DEBUG_INFO_BTF when building a
-> > > > Yocto-based Linux kernel....but it is failing with this error:
-> > > >
-> > > > |   LD      .tmp_vmlinux.btf
-> > > > |   BTF     .btf.vmlinux.bin.o
-> > > > |   LD      .tmp_vmlinux.kallsyms1
-> > > > |   KSYMS   .tmp_vmlinux.kallsyms1.S
-> > > > |   AS      .tmp_vmlinux.kallsyms1.S
-> > > > |   LD      .tmp_vmlinux.kallsyms2
-> > > > |   KSYMS   .tmp_vmlinux.kallsyms2.S
-> > > > |   AS      .tmp_vmlinux.kallsyms2.S
-> > > > |   LD      vmlinux
-> > > > |   BTFIDS  vmlinux
-> > > > | FAILED: load BTF from vmlinux: No such file or directory
-> > > >
-> > > > I dug deeper and it seems that the resolve_btfids utility is not able
-> > > > to find any relevant .BTF section (at btf__parse from function
-> > > > symbols_resolve).
-> > > >
-> > > > Dumped the vmlinux and also confirmed there is only .BTF_ids section:
-> > > >
-> > > >   [2993] .rela___ksymtab_g RELA             0000000000000000  17174de0
-> > > >        0000000000000048  0000000000000018   I      22807   2992     8
-> > > >   [2994] .BTF_ids          PROGBITS         0000000000000000  0105c504
-> > > >        00000000000000fc  0000000000000000   A       0     0     1
-> > > >
-> > > > What could be wrong? Sample config is available at
-> > > > https://gist.github.com/hoiho-amzn/964eb0cf2b4459f6775d7af1da7b4056
-> >
-> > I compiled x86_64 bpf-next/master kernel with your config with no problems,
-> > could you share more details? like:
-> >   - version of dwarves/pahole
+On 12/07/2022 05:40, Andrii Nakryiko wrote:
+> CC Quentin as well
 > 
-> $ pahole --version
-> v1.22
+> On Mon, Jul 11, 2022 at 5:11 PM James Hilliard
+> <james.hilliard1@gmail.com> wrote:
+>>
+>> On Mon, Jul 11, 2022 at 5:36 PM Yonghong Song <yhs@fb.com> wrote:
+>>>
+>>>
+>>>
+>>> On 7/6/22 10:28 AM, James Hilliard wrote:
+>>>> The current bpf_helper_defs.h helpers are llvm specific and don't work
+>>>> correctly with gcc.
+>>>>
+>>>> GCC appears to required kernel helper funcs to have the following
+>>>> attribute set: __attribute__((kernel_helper(NUM)))
+>>>>
+>>>> Generate gcc compatible headers based on the format in bpf-helpers.h.
+>>>>
+>>>> This adds conditional blocks for GCC while leaving clang codepaths
+>>>> unchanged, for example:
+>>>>       #if __GNUC__ && !__clang__
+>>>>       void *bpf_map_lookup_elem(void *map, const void *key) __attribute__((kernel_helper(1)));
+>>>>       #else
+>>>>       static void *(*bpf_map_lookup_elem)(void *map, const void *key) = (void *) 1;
+>>>>       #endif
+>>>
+>>> It does look like that gcc kernel_helper attribute is better than
+>>> '(void *) 1' style. The original clang uses '(void *) 1' style is
+>>> just for simplicity.
+>>
+>> Isn't the original style going to be needed for backwards compatibility with
+>> older clang versions for a while?
 > 
-> >   - clang/gcc? versions
-> >   - V=1 compile log
-> >   - command line options
+> I'm curious, is there any added benefit to having this special
+> kernel_helper attribute vs what we did in Clang for a long time? Did
+> GCC do it just to be different and require workarounds like this or
+> there was some technical benefit to this?
 > 
-> I will need some more time to gather the logs. Hopefully the pahole
-> and kernel branch will give some initial clue.
+> This duplication of definitions with #if for each one looks really
+> awful, IMO. I'd rather have a macro invocation like below (or
+> something along those lines) for each helper:
 > 
-> >   - tree/branch you're on
+> BPF_HELPER_DEF(2, void *, bpf_map_update_elem, void *map, const void
+> *key, const void *value, __u64 flags);
 > 
-> This is from Yocto and they use 5.15 -
-> https://git.yoctoproject.org/linux-yocto/tree/?h=v5.15/standard/base&id=ebfb1822e9f9726d8c587fc0f60cfed43fa0873e
+> And then define BPF_HELPER_DEF() once based on whether it's Clang or GCC.
 
-could you test that on either bpf/master or bpf-next/master tree?
+Hi, for what it's worth I agree with Andrii, I would rather avoid the
+#if/else/endif and dual definition for each helper in the header, using
+a macro should keep it more readable indeed. The existing one
+(BPF_HELPER(return_type, name, args, id)) can likely be adapted.
 
-jirka
+Also I note that contrarily to clang's helpers, you don't declare GCC's
+as "static" (although I'm not sure of the effect of declaring them
+static in this case).
 
-> 
-> >   - anything else ;-)
-> >
-> > thanks,
-> > jirka
-> >
-> > > >
-> > > > The issue exists on x86_64, I also have tried armv7 with the same
-> > > > result so doesn't seem to be arch-specific.
-> > >
-> > > hi,
-> > > do you use any special command line options?
-> > > what tree/branch are you on?
-> > >
-> > > thanks,
-> > > jirka
-> > >
-> > > >
-> > > > Thanks
-> > > > Donald
+Thanks,
+Quentin
