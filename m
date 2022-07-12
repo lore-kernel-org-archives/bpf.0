@@ -2,143 +2,72 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6AEAC43334
-	for <bpf@archiver.kernel.org>; Tue, 12 Jul 2022 00:46:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DDB89C43334
+	for <bpf@archiver.kernel.org>; Tue, 12 Jul 2022 02:37:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231669AbiGLAqb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 Jul 2022 20:46:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48658 "EHLO
+        id S230139AbiGLChs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 Jul 2022 22:37:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231209AbiGLAqa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 11 Jul 2022 20:46:30 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12A711801
-        for <bpf@vger.kernel.org>; Mon, 11 Jul 2022 17:46:29 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id v187so819355oie.7
-        for <bpf@vger.kernel.org>; Mon, 11 Jul 2022 17:46:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=n5kMTrqrcfHrmKxG8hArJ37L+VVCpUgbyOgwfhcz1Sw=;
-        b=z4TFP5V49s89UIg/I8NR91nyr+bTjZqZmeo0m2947oEIRU7RwhQ2+wtOR4GFCA++ya
-         USG19Ba75gbiKvD8YVHzEp4dP5B03vqiHifZ6ENraxmJokihk9gozdSDRuikHeJlrwk7
-         qaPur/LN22d13MrK9B2Fgh4lEb/rEjRlmA5FfA0UkNsiIRmjRca0nXesgJ4mKvnCqsnr
-         1RsVQM81tOldtXncqF6eoFwIm/8+zYg8Iu3UhOw+zHYG7n+4THKZSHK5Qvyk2xOXTsuv
-         XL8YVK0r2UUmJ0pij5myz6xKuh/02yhvA4FcoSvjKWCOawPA+nXWhTbY98+KDXkDE56+
-         CCaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=n5kMTrqrcfHrmKxG8hArJ37L+VVCpUgbyOgwfhcz1Sw=;
-        b=MzpMWmO0L0WtxQFchDklq+3TpITd/eEV3nmMAIB5yWAuZjDBDPp2W6ypmjX2Fu+BYH
-         x+T5hIMlkRykTpQL8Hmy3S1Dffe9r/gII/7cJEa9JBJNtmeUayoy4McwuUePgkzx3u/V
-         KqwlwdqlD+KoNdIXpvOE6joAP/5Mc/MXLSxaxqOt7hWSBbTpYoIPI9mjFqqxQOGLVfy9
-         KhENpC9JdKkVndmko4vzFSGOz+ulv7ipilPwTxVdvd4pI8qR07tqBTImmClzdkRTCBv8
-         9pxCzX3UJKwf25saX9PTZ45ljJ41Y8EZp9MYcCe+rDqhUaDBQFcVlR8ZvAkzjrKuX+4Q
-         ZNzQ==
-X-Gm-Message-State: AJIora/khR66o/s6Jhn2HV6oF33kjudwf0ylU28TpiAG1z+fkrQjduop
-        48Qxrpyr06MLjI0c2bFIVfXeIV/XT8J/EzLntY8ffHjR9xdCjpM9
-X-Google-Smtp-Source: AGRyM1vyKotPCRlJSTeSQVU+4vgg884Z4by1hCukBiE7rYt2sBbEhJurNk/x9wdrEj9MtmglPNc/40ufyE3Wz4Zbf4o=
-X-Received: by 2002:a05:6808:1928:b0:339:f15a:ec8f with SMTP id
- bf40-20020a056808192800b00339f15aec8fmr638770oib.35.1657586789238; Mon, 11
- Jul 2022 17:46:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAAYibXiJTyGwXZf8h4tTJSFyP8dB5_4sjGDrr=Ag4fe4KA71rA@mail.gmail.com>
- <CAAYibXj-8jJKOFkKuFHoVbn2nux-CbNH1EF=H4NEdZ76vF1rnQ@mail.gmail.com> <CA+khW7gMsE1iqmzibvHUCMUvfD5Rku46GaazwyvktGnHennDxg@mail.gmail.com>
-In-Reply-To: <CA+khW7gMsE1iqmzibvHUCMUvfD5Rku46GaazwyvktGnHennDxg@mail.gmail.com>
-From:   "Hao Xiang ." <hao.xiang@bytedance.com>
-Date:   Mon, 11 Jul 2022 17:46:18 -0700
-Message-ID: <CAAYibXj84S1X9w784XWNGupSxnSHKhYT5mWfgdOCVOQZxj7Yig@mail.gmail.com>
-Subject: Re: [External] Re: Questions about querying map object information
-To:     Hao Luo <haoluo@google.com>
-Cc:     bpf@vger.kernel.org, Chuang <horenchuang@bytedance.com>,
-        Yifei Ma <yifeima@bytedance.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        with ESMTP id S229780AbiGLChs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 11 Jul 2022 22:37:48 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70838E4C7;
+        Mon, 11 Jul 2022 19:37:46 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LhlGt72WJzcfdB;
+        Tue, 12 Jul 2022 10:35:34 +0800 (CST)
+Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 12 Jul 2022 10:37:45 +0800
+Received: from k04.huawei.com (10.67.174.115) by
+ dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 12 Jul 2022 10:37:44 +0800
+From:   Pu Lehui <pulehui@huawei.com>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Andrii Nakryiko <andrii@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "Jean-Philippe Brucker" <jean-philippe@linaro.org>,
+        Pu Lehui <pulehui@huawei.com>
+Subject: [PATCH bpf-next 0/3] Use lightweigt version of bpftool
+Date:   Tue, 12 Jul 2022 11:08:10 +0800
+Message-ID: <20220712030813.865410-1-pulehui@huawei.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.115]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500019.china.huawei.com (7.185.36.180)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Hao,
+Currently, samples/bpf, tools/runqslower and bpf/iterators use bpftool
+for vmlinux.h, skeleton, and static linking only. We can  use lightweight
+bootstrap version of bpftool to handle these, and it will be faster. 
 
-I am not talking to myself :-) Thanks for addressing the question.
-Please see inline.
+Pu Lehui (3):
+  samples: bpf: Fix cross-compiling error by using bootstrap bpftool
+  tools: runqslower: build and use lightweight bootstrap version of
+    bpftool
+  bpf: iterators: build and use lightweight bootstrap version of bpftool
 
-On Mon, Jul 11, 2022 at 4:35 PM Hao Luo <haoluo@google.com> wrote:
->
-> Hi Hao Xiang,
->
-> On Mon, Jul 11, 2022 at 3:50 PM Hao Xiang . <hao.xiang@bytedance.com> wrote:
-> >
-> > Ping...
-> >
-> > Can someone please help to shed some light on this?
-> >
-> > Thanks, Hao
-> >
-> > On Sun, Jul 3, 2022 at 3:33 PM Hao Xiang . <hao.xiang@bytedance.com> wrote:
-> > >
-> > > Hi everyone,
-> > >
-> > > I am super new to bpf and the open source community in general. Please
-> > > bear with me asking some basic questions.
-> > > We are working on a bpf monitoring tool to track the CPU and memory
-> > > usage for all bpf programs loaded in the system. We were able to get
-> > > CPU usage per bpf program with the BPF_OBJ_GET_INFO_BY_ID syscall on a
-> > > bpf prog object. We are trying to do the same on a map object to query
-> > > for per map memory usage. The information returned from bpf_map_info
-> > > only contains things like max_entries, key_size, value_size, which can
-> > > be used to calculate estimated memory allocation size. But we are also
-> > > interested in knowing how much memory is actually being used by our
-> > > program. For instance, one of our bpf program uses a map with type
-> > > hashtable. The hashtable is created with a chunk of pre-allocated
-> > > memory based on the max_entres, key_size and value size. The
-> > > pre-allocated size is useful information to know but so is the current
-> > > number of entries in the hashtable. We used to run into a performance
-> > > issue where our bpf map's max_entries is set to be too small and we
-> > > end up totally exhausting the pre-allocated memory. So knowing things
-> > > like current entry count VS max entry count of a hashtable is useful
-> > > information for us.
-> > > With that being said, we have a few questions and hopefully we can get
-> > > some help from the community.
-> > > 1) We couldn't find anything in bpf_map_info to give us the current
-> > > entry count of a hashtable. I read that bpf_map_info returns
-> > > information about a map object in general. So it makes total sense to
-> > > not have information of a particular map type. But is there an
-> > > existing place we can get the per map type information (eg, the
-> > > current entry count of a hashtable, the number of elements pushed to a
-> > > stack, etc)?
->
-> cc more BPF experts for their comments.
->
-> > I agree with you that knowing the current space usage of a map is
-> > quite helpful. In my understanding, a naive and inefficient way to
-> > estimate space usage is iterating the map and counting the map
-> > elements. That's doable, but may not be the best method though.
-> > Regarding auto-adjusting map size, I remember Andrii talked about
-> > resizable hash maps, maybe he can tell you more [1].
->
-> I agree it's doable to get the map count by iterating through the map. I just
-> looked through the code and realized that it's quite heavy doing it that way.
-> Basically we will have to make N bpf syscalls where N = used count. Our monitor
-> program wants to retrieve the current usage in a higher frequency and the underlying
-> cost looks pretty significant. Other than that, is it expected that a user process who
-> can do BPF_OBJ_GET_INFO_BY_FD requires the same privilege as someone
-> who can do BPF_MAP_GET_NEXT_KEY? I would expect that only the process
-> talking to the bpf prog can update/delete/get keys of a map but a process who only
-> wants to monitor the prog/map requires less privilege?
->
->
-> [1] http://vger.kernel.org/bpfconf2022_material/lsfmmbpf2022-algs.pdf
->
-> > > 2) If there isn't an existing place to return map type specific
-> > > information, would it make sense to extend the structure bpf_map_info
-> > > with a union at the end and have that union to contain per map type
-> > > specific information?
-> > >
-> > > Thanks, Hao
+ kernel/bpf/preload/iterators/Makefile | 13 +++++++++----
+ samples/bpf/Makefile                  | 16 +++++++++++-----
+ tools/bpf/runqslower/Makefile         | 10 ++++++++--
+ 3 files changed, 28 insertions(+), 11 deletions(-)
+
+-- 
+2.25.1
+
