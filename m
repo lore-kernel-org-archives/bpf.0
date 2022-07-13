@@ -2,81 +2,81 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B542C433EF
-	for <bpf@archiver.kernel.org>; Wed, 13 Jul 2022 11:18:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28093C433EF
+	for <bpf@archiver.kernel.org>; Wed, 13 Jul 2022 11:18:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235958AbiGMLSe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 Jul 2022 07:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42740 "EHLO
+        id S231351AbiGMLSf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 Jul 2022 07:18:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbiGMLSa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 Jul 2022 07:18:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 37866100CE4
-        for <bpf@vger.kernel.org>; Wed, 13 Jul 2022 04:18:29 -0700 (PDT)
+        with ESMTP id S236084AbiGMLS3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 13 Jul 2022 07:18:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 91E20100CF5
+        for <bpf@vger.kernel.org>; Wed, 13 Jul 2022 04:18:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657711108;
+        s=mimecast20190719; t=1657711106;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=m9jsaBAn6wtBTsWqUwNNR/1YQePbJoUZIk07ulDT2Uw=;
-        b=F+TrH/FIrSKMdctE1aDtLYDHLrqhBjTt0tm9Et53Ua+c4qhcrS2gejh53Ftgqa8SvvSDIE
-        L72J3cjejDq8PzC10VbWJzHS4wemVdgCgUscFa2Y9Rr+2kv2C4JxkBOnmRsj8WVOWPmG1+
-        YENSma4iibEZ7pwQsD4bb2MkN/4hZL0=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=BDuTtgPYXERcYe6YSrw64YmlYChWKjHDpeR4it4TBh0=;
+        b=cfYIunHcx/lRCCUjPuBoQ1mDXnmTKFwRtT9S9lV+fUiAUfNr5N3d6XxyiR7wIFNN7vfYI1
+        RpDwcIu6kG95FjdOLkXUy2ftJxMKo0MQq4l+YjhO+yWuujxKONc3HIt22KLkXo/tzpDxy4
+        pAKmCJxANIzmY5qYwGeZA/3oC3PS8pE=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-613-9wPDzZg-OjGt-FYq0Q9ziw-1; Wed, 13 Jul 2022 07:18:27 -0400
-X-MC-Unique: 9wPDzZg-OjGt-FYq0Q9ziw-1
-Received: by mail-ed1-f69.google.com with SMTP id m13-20020a056402430d00b0043ac2f27d83so7895227edc.20
-        for <bpf@vger.kernel.org>; Wed, 13 Jul 2022 04:18:27 -0700 (PDT)
+ us-mta-178-DpUYj9ApOgOc0Qum7BO_QA-1; Wed, 13 Jul 2022 07:18:25 -0400
+X-MC-Unique: DpUYj9ApOgOc0Qum7BO_QA-1
+Received: by mail-ed1-f72.google.com with SMTP id b15-20020a056402278f00b0043acaf76f8dso6767891ede.21
+        for <bpf@vger.kernel.org>; Wed, 13 Jul 2022 04:18:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=m9jsaBAn6wtBTsWqUwNNR/1YQePbJoUZIk07ulDT2Uw=;
-        b=6m6c1tRlZYKJTUM211um1MXE0I3VKkdaG+W32ACf1E643Sm3GSY7D6cfDwHAk4bBRD
-         e8V3LSAEdtn8L/46KHjB7sha+s4lSaKK2GmWLzUNJibsCsYQiBbm9Lxo/coL2H/VypSX
-         7z71t8jQuDD+aP2i9AfOaIKordLu1gk8mlC2OaLpJcu2XwEYBUJm3IUX/mEYC1p2usk4
-         5c14aQfyjUlQhm3jHCsPOV35+9/ehpNzWSpDV1szrtQ0yAxTbmw9L6nbuhHbLj4y5I5L
-         sKbFVdBCkN2ZhqXiToa9Ve8P+VQiwhy0H9Nvid2VMMibKQAvK2TGtkiBhKCk37TEuta5
-         TZ9g==
-X-Gm-Message-State: AJIora+rsK3omGCQCAD6Qc0auCJauSoAjGB74xFztGaASLiOtqw4s8gA
-        IeYdnIstpLYPA7F+iyMZHxS0pN76NRYzuLrvYmKwmYkB1Lm3LhBLUPSntS5kOcr5NKOR3Qg/uBt
-        BTCM9BxCNAtJ5
-X-Received: by 2002:a17:906:149:b0:712:c9:7981 with SMTP id 9-20020a170906014900b0071200c97981mr2887989ejh.218.1657711105357;
-        Wed, 13 Jul 2022 04:18:25 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1te/ajeNjxiFGlAqADULantLtM8t2h0ppxDuqVUdOm+9mP2gmmnpL+ygeIfuvRq4o5c+z1fyA==
-X-Received: by 2002:a17:906:149:b0:712:c9:7981 with SMTP id 9-20020a170906014900b0071200c97981mr2887900ejh.218.1657711104296;
+        bh=BDuTtgPYXERcYe6YSrw64YmlYChWKjHDpeR4it4TBh0=;
+        b=U+1xEjqzq+e2xiw05m/BuvU+5G9M06EcanwXYrXQWFK4OYp+CqqFExg2Q2keJi+ITb
+         RQx/nPqbpL0DJ3QB7juLKxLGUwYzsQugkp9MJgw2C2MaAAGlGwTZMekfKwFfeU1/oHJW
+         55T6yJ9MUfhnzL//RsU9rh5crBr3OF/xP49ck3w2CGInDzJb6MzYYSDkyyuHLwH2/52J
+         PeJbZaTb5XcXYvvpoM2FIDpdCs9VIDJ3dJZzEn+ANRg5JybN+FADG47XRab94uqnYib2
+         L4F1BvgjBi3y84MMKoKkKJfwH+SF00wCF4cqzqe/jOd8exTecAfby5jeesRKYMZxAb8F
+         auwg==
+X-Gm-Message-State: AJIora97Txr9VFWquoGsY0wpcIabYndwl9dEkXGqYhBZJqFeiwhArHgc
+        /etLBSf9zCfu7cEFaXKUc8/er1zeHqVYcCCs72MIGvG49lg8FmjGXfg6YY4IwzE3xpq3RCR42Gi
+        HVi5I70uziSym
+X-Received: by 2002:a17:907:7b92:b0:72b:67fb:8985 with SMTP id ne18-20020a1709077b9200b0072b67fb8985mr2760320ejc.569.1657711104134;
         Wed, 13 Jul 2022 04:18:24 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id fd9-20020a1709072a0900b006fed062c68esm4807773ejc.182.2022.07.13.04.18.22
+X-Google-Smtp-Source: AGRyM1sXNO5rg/tDHkU+OLM52NxMejHM8BDcFzfxdTh7py1+Z9YBRZeZ/+C2bPXp9t6qVrBQAFx22g==
+X-Received: by 2002:a17:907:7b92:b0:72b:67fb:8985 with SMTP id ne18-20020a1709077b9200b0072b67fb8985mr2760280ejc.569.1657711103712;
+        Wed, 13 Jul 2022 04:18:23 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id b4-20020a17090630c400b006fe0abb00f0sm4839488ejb.209.2022.07.13.04.18.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 13 Jul 2022 04:18:22 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 3E4794D990D; Wed, 13 Jul 2022 13:14:37 +0200 (CEST)
+        id 210254D9920; Wed, 13 Jul 2022 13:14:41 +0200 (CEST)
 From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <martin.lau@linux.dev>,
         Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
 Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>, netdev@vger.kernel.org,
         bpf@vger.kernel.org,
         Freysteinn Alfredsson <freysteinn.alfredsson@kau.se>,
         Cong Wang <xiyou.wangcong@gmail.com>,
         =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Subject: [RFC PATCH 09/17] bpf: Introduce pkt_uid member for PTR_TO_PACKET
-Date:   Wed, 13 Jul 2022 13:14:17 +0200
-Message-Id: <20220713111430.134810-10-toke@redhat.com>
+Subject: [RFC PATCH 17/17] samples/bpf: Add queueing support to xdp_fwd sample
+Date:   Wed, 13 Jul 2022 13:14:25 +0200
+Message-Id: <20220713111430.134810-18-toke@redhat.com>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220713111430.134810-1-toke@redhat.com>
 References: <20220713111430.134810-1-toke@redhat.com>
@@ -87,214 +87,443 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Add support for queueing packets before forwarding them to the xdp_fwd
+sample. This is meant to serve as an example (for the RFC series) of how
+one could add queueing to a forwarding application. It doesn't actually
+implement any fancy queueing algorithms, it just uses the queue maps to do
+simple FIFO queueing, instantiating one queue map per interface.
 
-Add a new member in PTR_TO_PACKET specific register state, namely
-pkt_uid. This is used to classify packet pointers into different sets,
-and the invariant is that any pkt pointers not belonging to the same
-set, i.e. not sharing same pkt_uid, won't be allowed for comparison with
-each other. During range propagation in __find_good_pkt_pointers, we now
-need to take care to skip packet pointers with a different pkt_uid.
-
-This change is necessary so that we can dequeue multiple XDP frames in a
-single program, obtain packet pointers using their xdp_md fake struct,
-and prevent confusion wrt comparison of packet pointers pointing into
-different frames. Attaching a pkt_uid to the PTR_TO_PACKET type prevents
-these, and also allows user to see which frame a packet pointer belongs
-to in the verbose verifier log (by matching pkt_uid and ref_obj_id of
-the referenced xdp_md obtained from bpf_packet_dequeue).
-
-regsafe is updated to match non-zero pkt_uid using the idmap to ensure
-it rejects distinct pkt_uid pkt pointers.
-
-We also replace memset of reg->raw to set range to 0. In commit
-0962590e5533 ("bpf: fix partial copy of map_ptr when dst is scalar"),
-the copying was changed to use raw so that all possible members of type
-specific register state are copied, since at that point the type of
-register is not known. But inside the reg_is_pkt_pointer block, there is
-no need to memset the whole 'raw' struct, since we also have a pkt_uid
-member that we now want to preserve after copying from one register to
-another, for pkt pointers. A test for this case has been included to
-prevent regressions.
-
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- include/linux/bpf_verifier.h |  8 ++++-
- kernel/bpf/verifier.c        | 59 +++++++++++++++++++++++++++---------
- 2 files changed, 52 insertions(+), 15 deletions(-)
+ samples/bpf/xdp_fwd_kern.c |  65 +++++++++++-
+ samples/bpf/xdp_fwd_user.c | 200 +++++++++++++++++++++++++++----------
+ 2 files changed, 205 insertions(+), 60 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 2e3bad8640dc..93b69dbf3d19 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -50,7 +50,13 @@ struct bpf_reg_state {
- 	s32 off;
- 	union {
- 		/* valid when type == PTR_TO_PACKET */
--		int range;
-+		struct {
-+			int range;
-+			/* To distinguish packet pointers backed by different
-+			 * packets, to prevent pkt pointer comparisons.
-+			 */
-+			u32 pkt_uid;
-+		};
+diff --git a/samples/bpf/xdp_fwd_kern.c b/samples/bpf/xdp_fwd_kern.c
+index 54c099cbd639..125adb02c658 100644
+--- a/samples/bpf/xdp_fwd_kern.c
++++ b/samples/bpf/xdp_fwd_kern.c
+@@ -23,6 +23,14 @@
  
- 		/* valid when type == CONST_PTR_TO_MAP | PTR_TO_MAP_VALUE |
- 		 *   PTR_TO_MAP_VALUE_OR_NULL
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 68f98d76bc78..f319e9392587 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -431,6 +431,12 @@ static bool type_is_pkt_pointer(enum bpf_reg_type type)
- 	       type == PTR_TO_PACKET_META;
+ #define IPV6_FLOWINFO_MASK              cpu_to_be32(0x0FFFFFFF)
+ 
++struct pifo_map {
++	__uint(type, BPF_MAP_TYPE_PIFO_XDP);
++	__uint(key_size, sizeof(__u32));
++	__uint(value_size, sizeof(__u32));
++	__uint(max_entries, 1024);
++	__uint(map_extra, 8192); /* range */
++} pmap SEC(".maps");
++
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_DEVMAP);
+ 	__uint(key_size, sizeof(int));
+@@ -30,6 +38,13 @@ struct {
+ 	__uint(max_entries, 64);
+ } xdp_tx_ports SEC(".maps");
+ 
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
++	__uint(key_size, sizeof(__u32));
++	__uint(max_entries, 64);
++	__array(values, struct pifo_map);
++} pifo_maps SEC(".maps");
++
+ /* from include/net/ip.h */
+ static __always_inline int ip_decrease_ttl(struct iphdr *iph)
+ {
+@@ -40,7 +55,7 @@ static __always_inline int ip_decrease_ttl(struct iphdr *iph)
+ 	return --iph->ttl;
  }
  
-+static bool type_is_pkt_pointer_any(enum bpf_reg_type type)
-+{
-+	return type_is_pkt_pointer(type) ||
-+	       type == PTR_TO_PACKET_END;
+-static __always_inline int xdp_fwd_flags(struct xdp_md *ctx, u32 flags)
++static __always_inline int xdp_fwd_flags(struct xdp_md *ctx, u32 flags, bool queue)
+ {
+ 	void *data_end = (void *)(long)ctx->data_end;
+ 	void *data = (void *)(long)ctx->data;
+@@ -137,22 +152,62 @@ static __always_inline int xdp_fwd_flags(struct xdp_md *ctx, u32 flags)
+ 
+ 		memcpy(eth->h_dest, fib_params.dmac, ETH_ALEN);
+ 		memcpy(eth->h_source, fib_params.smac, ETH_ALEN);
++
++		if (queue) {
++			void *ptr;
++			int ret;
++
++			ptr = bpf_map_lookup_elem(&pifo_maps, &fib_params.ifindex);
++			if (!ptr)
++				return XDP_DROP;
++
++			ret = bpf_redirect_map(ptr, 0, 0);
++			if (ret == XDP_REDIRECT)
++				bpf_schedule_iface_dequeue(ctx, fib_params.ifindex, 0);
++			return ret;
++		}
++
+ 		return bpf_redirect_map(&xdp_tx_ports, fib_params.ifindex, 0);
+ 	}
+ 
+ 	return XDP_PASS;
+ }
+ 
+-SEC("xdp_fwd")
++SEC("xdp")
+ int xdp_fwd_prog(struct xdp_md *ctx)
+ {
+-	return xdp_fwd_flags(ctx, 0);
++	return xdp_fwd_flags(ctx, 0, false);
+ }
+ 
+-SEC("xdp_fwd_direct")
++SEC("xdp")
+ int xdp_fwd_direct_prog(struct xdp_md *ctx)
+ {
+-	return xdp_fwd_flags(ctx, BPF_FIB_LOOKUP_DIRECT);
++	return xdp_fwd_flags(ctx, BPF_FIB_LOOKUP_DIRECT, false);
 +}
 +
- static bool type_is_sk_pointer(enum bpf_reg_type type)
- {
- 	return type == PTR_TO_SOCKET ||
-@@ -861,6 +867,8 @@ static void print_verifier_state(struct bpf_verifier_env *env,
- 				verbose_a("off=%d", reg->off);
- 			if (type_is_pkt_pointer(t))
- 				verbose_a("r=%d", reg->range);
-+			if (type_is_pkt_pointer_any(t) && reg->pkt_uid)
-+				verbose_a("pkt_uid=%d", reg->pkt_uid);
- 			else if (base_type(t) == CONST_PTR_TO_MAP ||
- 				 base_type(t) == PTR_TO_MAP_KEY ||
- 				 base_type(t) == PTR_TO_MAP_VALUE)
-@@ -1394,8 +1402,7 @@ static bool reg_is_pkt_pointer(const struct bpf_reg_state *reg)
- 
- static bool reg_is_pkt_pointer_any(const struct bpf_reg_state *reg)
- {
--	return reg_is_pkt_pointer(reg) ||
--	       reg->type == PTR_TO_PACKET_END;
-+	return type_is_pkt_pointer_any(reg->type);
++SEC("xdp")
++int xdp_fwd_queue(struct xdp_md *ctx)
++{
++	return xdp_fwd_flags(ctx, 0, true);
++}
++
++SEC("dequeue")
++void *xdp_dequeue(struct dequeue_ctx *ctx)
++{
++	__u32 ifindex = ctx->egress_ifindex;
++	struct xdp_md *pkt;
++	__u64 prio = 0;
++	void *pifo_ptr;
++
++	pifo_ptr = bpf_map_lookup_elem(&pifo_maps, &ifindex);
++	if (!pifo_ptr)
++		return NULL;
++
++	pkt = (void *)bpf_packet_dequeue(ctx, pifo_ptr, 0, &prio);
++	if (!pkt)
++		return NULL;
++
++	return pkt;
  }
  
- /* Unmodified PTR_TO_PACKET[_META,_END] register from ctx access. */
-@@ -6575,14 +6582,17 @@ static void release_reg_references(struct bpf_verifier_env *env,
- 	struct bpf_reg_state *regs = state->regs, *reg;
- 	int i;
+ char _license[] SEC("license") = "GPL";
+diff --git a/samples/bpf/xdp_fwd_user.c b/samples/bpf/xdp_fwd_user.c
+index 84f57f1209ce..ec3f29d0babe 100644
+--- a/samples/bpf/xdp_fwd_user.c
++++ b/samples/bpf/xdp_fwd_user.c
+@@ -11,6 +11,7 @@
+  * General Public License for more details.
+  */
  
--	for (i = 0; i < MAX_BPF_REG; i++)
--		if (regs[i].ref_obj_id == ref_obj_id)
-+	for (i = 0; i < MAX_BPF_REG; i++) {
-+		if (regs[i].ref_obj_id == ref_obj_id ||
-+		    (reg_is_pkt_pointer_any(&regs[i]) && regs[i].pkt_uid == ref_obj_id))
- 			mark_reg_unknown(env, regs, i);
++#include "linux/if_link.h"
+ #include <linux/bpf.h>
+ #include <linux/if_link.h>
+ #include <linux/limits.h>
+@@ -29,66 +30,122 @@
+ 
+ static __u32 xdp_flags = XDP_FLAGS_UPDATE_IF_NOEXIST;
+ 
+-static int do_attach(int idx, int prog_fd, int map_fd, const char *name)
++#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
++
++const char *redir_prog_names[] = {
++	"xdp_fwd_prog",
++	"xdp_fwd_direct_", /* name truncated to BPF_OBJ_NAME_LEN */
++	"xdp_fwd_queue",
++};
++
++const char *dequeue_prog_names[] = {
++	"xdp_dequeue"
++};
++
++static int do_attach(int idx, int redir_prog_fd, int dequeue_prog_fd,
++		     int redir_map_fd, int pifos_map_fd, const char *name)
+ {
+ 	int err;
+ 
+-	err = bpf_xdp_attach(idx, prog_fd, xdp_flags, NULL);
++	if (pifos_map_fd > -1) {
++		LIBBPF_OPTS(bpf_map_create_opts, map_opts, .map_extra = 8192);
++		char map_name[BPF_OBJ_NAME_LEN];
++		int pifo_fd;
++
++		snprintf(map_name, sizeof(map_name), "pifo_%d", idx);
++		map_name[BPF_OBJ_NAME_LEN - 1] = '\0';
++
++		pifo_fd = bpf_map_create(BPF_MAP_TYPE_PIFO_XDP, map_name,
++					 sizeof(__u32), sizeof(__u32), 10240, &map_opts);
++		if (pifo_fd < 0) {
++			err = -errno;
++			printf("ERROR: Couldn't create PIFO map: %s\n", strerror(-err));
++			return err;
++		}
++
++		err = bpf_map_update_elem(pifos_map_fd, &idx, &pifo_fd, 0);
++		if (err)
++			printf("ERROR: failed adding PIFO map for device %s\n", name);
 +	}
++
++	if (dequeue_prog_fd > -1) {
++		LIBBPF_OPTS(bpf_xdp_attach_opts, prog_opts, .old_prog_fd = -1);
++
++		err = bpf_xdp_attach(idx, dequeue_prog_fd,
++				     (XDP_FLAGS_DEQUEUE_MODE | XDP_FLAGS_REPLACE),
++				     &prog_opts);
++		if (err < 0) {
++			printf("ERROR: failed to attach dequeue program to %s\n", name);
++			return err;
++		}
++	}
++
++	err = bpf_xdp_attach(idx, redir_prog_fd, xdp_flags, NULL);
+ 	if (err < 0) {
+-		printf("ERROR: failed to attach program to %s\n", name);
++		printf("ERROR: failed to attach redir program to %s\n", name);
+ 		return err;
+ 	}
  
- 	bpf_for_each_spilled_reg(i, state, reg) {
- 		if (!reg)
- 			continue;
--		if (reg->ref_obj_id == ref_obj_id)
-+		if (reg->ref_obj_id == ref_obj_id ||
-+		    (reg_is_pkt_pointer_any(reg) && reg->pkt_uid == ref_obj_id))
- 			__mark_reg_unknown(env, reg);
- 	}
- }
-@@ -8200,7 +8210,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 		if (reg_is_pkt_pointer(ptr_reg)) {
- 			dst_reg->id = ++env->id_gen;
- 			/* something was added to pkt_ptr, set range to zero */
--			memset(&dst_reg->raw, 0, sizeof(dst_reg->raw));
-+			dst_reg->range = 0;
- 		}
- 		break;
- 	case BPF_SUB:
-@@ -8260,7 +8270,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 			dst_reg->id = ++env->id_gen;
- 			/* something was added to pkt_ptr, set range to zero */
- 			if (smin_val < 0)
--				memset(&dst_reg->raw, 0, sizeof(dst_reg->raw));
-+				dst_reg->range = 0;
- 		}
- 		break;
- 	case BPF_AND:
-@@ -9287,7 +9297,8 @@ static void __find_good_pkt_pointers(struct bpf_func_state *state,
+ 	/* Adding ifindex as a possible egress TX port */
+-	err = bpf_map_update_elem(map_fd, &idx, &idx, 0);
++	err = bpf_map_update_elem(redir_map_fd, &idx, &idx, 0);
+ 	if (err)
+ 		printf("ERROR: failed using device %s as TX-port\n", name);
  
- 	for (i = 0; i < MAX_BPF_REG; i++) {
- 		reg = &state->regs[i];
--		if (reg->type == type && reg->id == dst_reg->id)
-+		if (reg->type == type && reg->id == dst_reg->id &&
-+		    reg->pkt_uid == dst_reg->pkt_uid)
- 			/* keep the maximum range already checked */
- 			reg->range = max(reg->range, new_range);
- 	}
-@@ -9295,7 +9306,8 @@ static void __find_good_pkt_pointers(struct bpf_func_state *state,
- 	bpf_for_each_spilled_reg(i, state, reg) {
- 		if (!reg)
- 			continue;
--		if (reg->type == type && reg->id == dst_reg->id)
-+		if (reg->type == type && reg->id == dst_reg->id &&
-+		    reg->pkt_uid == dst_reg->pkt_uid)
- 			reg->range = max(reg->range, new_range);
- 	}
- }
-@@ -9910,6 +9922,14 @@ static void mark_ptr_or_null_regs(struct bpf_verifier_state *vstate, u32 regno,
- 		__mark_ptr_or_null_regs(vstate->frame[i], id, is_null);
+ 	return err;
  }
  
-+static bool is_bad_pkt_comparison(const struct bpf_reg_state *dst_reg,
-+				  const struct bpf_reg_state *src_reg)
++static bool should_detach(__u32 prog_fd, const char **prog_names, int num_prog_names)
 +{
-+	if (!reg_is_pkt_pointer_any(dst_reg) || !reg_is_pkt_pointer_any(src_reg))
++	struct bpf_prog_info prog_info = {};
++	__u32 info_len = sizeof(prog_info);
++	int err, i;
++
++	err = bpf_obj_get_info_by_fd(prog_fd, &prog_info, &info_len);
++	if (err) {
++		printf("ERROR: bpf_obj_get_info_by_fd failed (%s)\n",
++		       strerror(errno));
 +		return false;
-+	return dst_reg->pkt_uid != src_reg->pkt_uid;
++	}
++
++	for (i = 0; i < num_prog_names; i++)
++		if (!strcmp(prog_info.name, prog_names[i]))
++			return true;
++
++	return false;
 +}
 +
- static bool try_match_pkt_pointers(const struct bpf_insn *insn,
- 				   struct bpf_reg_state *dst_reg,
- 				   struct bpf_reg_state *src_reg,
-@@ -9923,6 +9943,9 @@ static bool try_match_pkt_pointers(const struct bpf_insn *insn,
- 	if (BPF_CLASS(insn->code) == BPF_JMP32)
- 		return false;
+ static int do_detach(int ifindex, const char *ifname, const char *app_name)
+ {
+ 	LIBBPF_OPTS(bpf_xdp_attach_opts, opts);
+-	struct bpf_prog_info prog_info = {};
+-	char prog_name[BPF_OBJ_NAME_LEN];
+-	__u32 info_len, curr_prog_id;
+-	int prog_fd;
+-	int err = 1;
++	LIBBPF_OPTS(bpf_xdp_query_opts, query_opts);
++	int prog_fd, err = 1;
++	__u32 curr_prog_id;
  
-+	if (is_bad_pkt_comparison(dst_reg, src_reg))
-+		return false;
+-	if (bpf_xdp_query_id(ifindex, xdp_flags, &curr_prog_id)) {
++	if (bpf_xdp_query(ifindex, xdp_flags, &query_opts)) {
+ 		printf("ERROR: bpf_xdp_query_id failed (%s)\n",
+ 		       strerror(errno));
+ 		return err;
+ 	}
+ 
++	curr_prog_id = (xdp_flags & XDP_FLAGS_SKB_MODE) ? query_opts.skb_prog_id
++								: query_opts.drv_prog_id;
+ 	if (!curr_prog_id) {
+ 		printf("ERROR: flags(0x%x) xdp prog is not attached to %s\n",
+ 		       xdp_flags, ifname);
+ 		return err;
+ 	}
+ 
+-	info_len = sizeof(prog_info);
+ 	prog_fd = bpf_prog_get_fd_by_id(curr_prog_id);
+ 	if (prog_fd < 0) {
+ 		printf("ERROR: bpf_prog_get_fd_by_id failed (%s)\n",
+ 		       strerror(errno));
+-		return prog_fd;
+-	}
+-
+-	err = bpf_obj_get_info_by_fd(prog_fd, &prog_info, &info_len);
+-	if (err) {
+-		printf("ERROR: bpf_obj_get_info_by_fd failed (%s)\n",
+-		       strerror(errno));
+-		goto close_out;
++		return err;
+ 	}
+-	snprintf(prog_name, sizeof(prog_name), "%s_prog", app_name);
+-	prog_name[BPF_OBJ_NAME_LEN - 1] = '\0';
+ 
+-	if (strcmp(prog_info.name, prog_name)) {
++	if (!should_detach(prog_fd, redir_prog_names, ARRAY_SIZE(redir_prog_names))) {
+ 		printf("ERROR: %s isn't attached to %s\n", app_name, ifname);
+-		err = 1;
+-		goto close_out;
++		close(prog_fd);
++		return 1;
+ 	}
+ 
+ 	opts.old_prog_fd = prog_fd;
+@@ -96,11 +153,34 @@ static int do_detach(int ifindex, const char *ifname, const char *app_name)
+ 	if (err < 0)
+ 		printf("ERROR: failed to detach program from %s (%s)\n",
+ 		       ifname, strerror(errno));
+-	/* TODO: Remember to cleanup map, when adding use of shared map
 +
- 	switch (BPF_OP(insn->code)) {
- 	case BPF_JGT:
- 		if ((dst_reg->type == PTR_TO_PACKET &&
-@@ -10220,11 +10243,17 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 		mark_ptr_or_null_regs(other_branch, insn->dst_reg,
- 				      opcode == BPF_JEQ);
- 	} else if (!try_match_pkt_pointers(insn, dst_reg, &regs[insn->src_reg],
--					   this_branch, other_branch) &&
--		   is_pointer_value(env, insn->dst_reg)) {
--		verbose(env, "R%d pointer comparison prohibited\n",
--			insn->dst_reg);
--		return -EACCES;
-+					   this_branch, other_branch)) {
-+		if (is_pointer_value(env, insn->dst_reg)) {
-+			verbose(env, "R%d pointer comparison prohibited\n",
-+				insn->dst_reg);
-+			return -EACCES;
++	close(prog_fd);
++
++	if (query_opts.dequeue_prog_id) {
++		prog_fd = bpf_prog_get_fd_by_id(query_opts.dequeue_prog_id);
++		if (prog_fd < 0) {
++			printf("ERROR: bpf_prog_get_fd_by_id failed (%s)\n",
++			       strerror(errno));
++			return err;
 +		}
-+		if (is_bad_pkt_comparison(dst_reg, &regs[insn->src_reg])) {
-+			verbose(env, "R%d, R%d pkt pointer comparison prohibited\n",
-+				insn->dst_reg, insn->src_reg);
-+			return -EACCES;
++
++		if (!should_detach(prog_fd, dequeue_prog_names, ARRAY_SIZE(dequeue_prog_names))) {
++			close(prog_fd);
++			return err;
++		}
++
++		opts.old_prog_fd = prog_fd;
++		err = bpf_xdp_detach(ifindex,
++				     (XDP_FLAGS_DEQUEUE_MODE | XDP_FLAGS_REPLACE),
++				     &opts);
++		if (err < 0)
++			printf("ERROR: failed to detach dequeue program from %s (%s)\n",
++			       ifname, strerror(errno));
++	}
++
++	/* todo: Remember to cleanup map, when adding use of shared map
+ 	 *  bpf_map_delete_elem((map_fd, &idx);
+ 	 */
+-close_out:
+-	close(prog_fd);
+ 	return err;
+ }
+ 
+@@ -112,24 +192,23 @@ static void usage(const char *prog)
+ 		"    -d    detach program\n"
+ 		"    -S    use skb-mode\n"
+ 		"    -F    force loading prog\n"
+-		"    -D    direct table lookups (skip fib rules)\n",
++		"    -D    direct table lookups (skip fib rules)\n"
++		"    -Q    direct table lookups (skip fib rules)\n",
+ 		prog);
+ }
+ 
+ int main(int argc, char **argv)
+ {
+-	const char *prog_name = "xdp_fwd";
+-	struct bpf_program *prog = NULL;
+-	struct bpf_program *pos;
+-	const char *sec_name;
+-	int prog_fd = -1, map_fd = -1;
++	int redir_prog_fd = -1, dequeue_prog_fd = -1, redir_map_fd = -1, pifos_map_fd = -1;
++	const char *prog_name = "xdp_fwd_prog";
+ 	char filename[PATH_MAX];
+ 	struct bpf_object *obj;
+ 	int opt, i, idx, err;
++	bool queue = false;
+ 	int attach = 1;
+ 	int ret = 0;
+ 
+-	while ((opt = getopt(argc, argv, ":dDSF")) != -1) {
++	while ((opt = getopt(argc, argv, ":dDQSF")) != -1) {
+ 		switch (opt) {
+ 		case 'd':
+ 			attach = 0;
+@@ -141,7 +220,11 @@ int main(int argc, char **argv)
+ 			xdp_flags &= ~XDP_FLAGS_UPDATE_IF_NOEXIST;
+ 			break;
+ 		case 'D':
+-			prog_name = "xdp_fwd_direct";
++			prog_name = "xdp_fwd_direct_prog";
++			break;
++		case 'Q':
++			prog_name = "xdp_fwd_queue";
++			queue = true;
+ 			break;
+ 		default:
+ 			usage(basename(argv[0]));
+@@ -170,9 +253,6 @@ int main(int argc, char **argv)
+ 		if (libbpf_get_error(obj))
+ 			return 1;
+ 
+-		prog = bpf_object__next_program(obj, NULL);
+-		bpf_program__set_type(prog, BPF_PROG_TYPE_XDP);
+-
+ 		err = bpf_object__load(obj);
+ 		if (err) {
+ 			printf("Does kernel support devmap lookup?\n");
+@@ -181,25 +261,34 @@ int main(int argc, char **argv)
+ 			 */
+ 			return 1;
+ 		}
+-
+-		bpf_object__for_each_program(pos, obj) {
+-			sec_name = bpf_program__section_name(pos);
+-			if (sec_name && !strcmp(sec_name, prog_name)) {
+-				prog = pos;
+-				break;
+-			}
+-		}
+-		prog_fd = bpf_program__fd(prog);
+-		if (prog_fd < 0) {
+-			printf("program not found: %s\n", strerror(prog_fd));
++		redir_prog_fd = bpf_program__fd(bpf_object__find_program_by_name(obj,
++										 prog_name));
++		if (redir_prog_fd < 0) {
++			printf("program not found: %s\n", strerror(redir_prog_fd));
+ 			return 1;
+ 		}
+-		map_fd = bpf_map__fd(bpf_object__find_map_by_name(obj,
+-							"xdp_tx_ports"));
+-		if (map_fd < 0) {
+-			printf("map not found: %s\n", strerror(map_fd));
++
++		redir_map_fd = bpf_map__fd(bpf_object__find_map_by_name(obj,
++									"xdp_tx_ports"));
++		if (redir_map_fd < 0) {
++			printf("map not found: %s\n", strerror(redir_map_fd));
+ 			return 1;
+ 		}
++
++		if (queue) {
++			dequeue_prog_fd = bpf_program__fd(bpf_object__find_program_by_name(obj,
++											   "xdp_dequeue"));
++			if (dequeue_prog_fd < 0) {
++				printf("dequeue program not found: %s\n",
++				       strerror(-dequeue_prog_fd));
++				return 1;
++			}
++			pifos_map_fd = bpf_map__fd(bpf_object__find_map_by_name(obj, "pifo_maps"));
++			if (pifos_map_fd < 0) {
++				printf("map not found: %s\n", strerror(-pifos_map_fd));
++				return 1;
++			}
 +		}
  	}
- 	if (env->log.level & BPF_LOG_LEVEL)
- 		print_insn_state(env, this_branch->frame[this_branch->curframe]);
-@@ -11514,6 +11543,8 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
- 		/* id relations must be preserved */
- 		if (rold->id && !check_ids(rold->id, rcur->id, idmap))
- 			return false;
-+		if (rold->pkt_uid && !check_ids(rold->pkt_uid, rcur->pkt_uid, idmap))
-+			return false;
- 		/* new val must satisfy old val knowledge */
- 		return range_within(rold, rcur) &&
- 		       tnum_in(rold->var_off, rcur->var_off);
+ 
+ 	for (i = optind; i < argc; ++i) {
+@@ -212,11 +301,12 @@ int main(int argc, char **argv)
+ 			return 1;
+ 		}
+ 		if (!attach) {
+-			err = do_detach(idx, argv[i], prog_name);
++			err = do_detach(idx, argv[i], argv[0]);
+ 			if (err)
+ 				ret = err;
+ 		} else {
+-			err = do_attach(idx, prog_fd, map_fd, argv[i]);
++			err = do_attach(idx, redir_prog_fd, dequeue_prog_fd,
++					redir_map_fd, pifos_map_fd, argv[i]);
+ 			if (err)
+ 				ret = err;
+ 		}
 -- 
 2.37.0
 
