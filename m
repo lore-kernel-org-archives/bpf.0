@@ -2,60 +2,60 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7963CCCA479
-	for <bpf@archiver.kernel.org>; Wed, 13 Jul 2022 11:15:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A97ECCA482
+	for <bpf@archiver.kernel.org>; Wed, 13 Jul 2022 11:15:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235972AbiGMLPP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 Jul 2022 07:15:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38882 "EHLO
+        id S235957AbiGMLPR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 Jul 2022 07:15:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235068AbiGMLO5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S236014AbiGMLO5 (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 13 Jul 2022 07:14:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2EB49100CDE
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 61340100CE0
         for <bpf@vger.kernel.org>; Wed, 13 Jul 2022 04:14:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657710884;
+        s=mimecast20190719; t=1657710885;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4n1qURFuPsutSWvym+I4lZuwTMswVOZqrEfLZaagqYk=;
-        b=gEBYMVVeaSgbugTNlxPYe3EfaZxFtE6l2TZ4bSxV80x2EBLkOqz5EZfF4Q12bmn9bGf0pC
-        ch/qygPOt6jXXZgkX4IAZS7NwN+I7IuAKA+xSUQ3C4O0CTX+W0aSBzTmX+kLtutqEJj+Lx
-        NdyEfNzMvDTgBLmfdn6pXrtNOP/FttM=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=5uTN0iYXNQJ821H3571k1jB4mSJSAImIFfOFFCQD7EA=;
+        b=bm3OVUlkZaWPCIZmcDJ2zWFaazJZk4TxUsf7lAwDB4O+1+wsD95e9XVdByQuwQKU7rr3KS
+        tIZH5Ot4oe3yzpfYpYBYUYOlA10c7u3xTP4zCf9qbruNPneoMtHnTY/lhF44AjWKbmOpE8
+        NwBcynSCrgSQfbGq8eS16wPHcPAlMCg=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-53-vDvI68JwMyKqQIUKp6kCHQ-1; Wed, 13 Jul 2022 07:14:36 -0400
-X-MC-Unique: vDvI68JwMyKqQIUKp6kCHQ-1
-Received: by mail-ed1-f69.google.com with SMTP id h17-20020a056402281100b0043aa5c0493dso8202803ede.16
-        for <bpf@vger.kernel.org>; Wed, 13 Jul 2022 04:14:36 -0700 (PDT)
+ us-mta-312-uYgWSJKYNuyyC4ylC4hFKA-1; Wed, 13 Jul 2022 07:14:44 -0400
+X-MC-Unique: uYgWSJKYNuyyC4ylC4hFKA-1
+Received: by mail-ed1-f72.google.com with SMTP id c9-20020a05640227c900b0043ad14b1fa0so6003680ede.1
+        for <bpf@vger.kernel.org>; Wed, 13 Jul 2022 04:14:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4n1qURFuPsutSWvym+I4lZuwTMswVOZqrEfLZaagqYk=;
-        b=o8RTTzHsjAZBcl8MnkhxIUXsPy/T6Bfs+myDAI1Ewlel1mjodtTfG8LidWTc624QGE
-         48LVe14VTt+Z4nMFrm5n1hUUuUqkYkjSsy2Ro71skd0K+hSveade32tqI6Qh/nBfwW7y
-         F7trovod4RbrDEZlZN/4MHNkH4v6G/UA2KeOLQPvztCtwCL43DEim/PmqrKmE8izAvwl
-         iX6nAYhIySNFdUkqsG+4OH8lgaKSl6VhJQEHj5GcHYX8ZubKgtfbCsuMAJlDY3IxccW4
-         Cth+0JOv8ZYPwo/41S75LwalGgAzXfShTMgVqKTWBsQAOe9TTA3fKRnCYUtzX3JC/nAo
-         LQTQ==
-X-Gm-Message-State: AJIora+yckmTK8S1IEnL8zTN+ZRR+sgADPFwUTk9PJhxkIDxWfkoGqmr
-        L6PemfyVBkGP3wVzVdzY/vPlJvLCpolN2BtWhBXhUWjTwLJMMPF3JlWC8AOm2dcMxGQGh8nFb+0
-        n6B7EBKKVfo+R
-X-Received: by 2002:a05:6402:1741:b0:433:4e4d:bfb4 with SMTP id v1-20020a056402174100b004334e4dbfb4mr4142728edx.7.1657710874840;
-        Wed, 13 Jul 2022 04:14:34 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1si2uz3D1uFgcQn/a15w/KYB8f1OJeDy20jWcOcf1lbhsMDY+nfRwNBrz+qStsMJhXbmtsn4Q==
-X-Received: by 2002:a05:6402:1741:b0:433:4e4d:bfb4 with SMTP id v1-20020a056402174100b004334e4dbfb4mr4142677edx.7.1657710874490;
-        Wed, 13 Jul 2022 04:14:34 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id kv20-20020a17090778d400b0072af6f166c2sm4907118ejc.82.2022.07.13.04.14.33
+        bh=5uTN0iYXNQJ821H3571k1jB4mSJSAImIFfOFFCQD7EA=;
+        b=PgP2N6/uvwvlLm8vXNFi1+GW10rVOWWVbQvsMvFVhe91f8HUn2EVSiuHzSMA3zUSY4
+         Iu8aOgv2m9ooUC3bWiXsJ/5CLBUTnvTxKW+fTWsljfMZTg+THzPLwKDYyJbjk8aSjHua
+         JLljzpnEFG5+IjPWsIu5OrKChFnjSNBauuhxYQ5qKhUp+nv2jNEkezqqbC+JH9dddFXh
+         AeoQMYld1XP+YYEP6pvaaNnzXFsRbBecr2jQnkpIuphd4Ew41cdIvkQCgIzCuikUMrPf
+         c1RVV4bLggdplwuCn8LW9VjkdWwc3VP54tlDbhuYhi5TWgXIL8BPigYkAvVnkQZCULJz
+         nlGQ==
+X-Gm-Message-State: AJIora86m5gaOiTAXOgk8V8Y1o8qwHd5oeeNaI0Xs9Ts0F12mnQAq3WR
+        DEZsEqH6JhMSv2ziEwFjkR6BW57oULgHCo786nLMKNjdAv1IaRBJzEx1kDgNpmjw+cYF4kbu0QM
+        mtXkXwC+CuoRe
+X-Received: by 2002:a17:907:96a4:b0:72b:647e:30fd with SMTP id hd36-20020a17090796a400b0072b647e30fdmr2783274ejc.723.1657710879623;
+        Wed, 13 Jul 2022 04:14:39 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1s+UMwr1jDtKqGwgGJgq+K7hLtOvFBF7ZuxlDiEr1YBHhUDN+xlRVuVdg/F1JB6u+6X7oIh0g==
+X-Received: by 2002:a17:907:96a4:b0:72b:647e:30fd with SMTP id hd36-20020a17090796a400b0072b647e30fdmr2783103ejc.723.1657710877318;
+        Wed, 13 Jul 2022 04:14:37 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id p20-20020a056402155400b0043a896048basm7787960edx.85.2022.07.13.04.14.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 04:14:34 -0700 (PDT)
+        Wed, 13 Jul 2022 04:14:36 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 5912D4D98FF; Wed, 13 Jul 2022 13:14:33 +0200 (CEST)
+        id 7A6D74D9905; Wed, 13 Jul 2022 13:14:35 +0200 (CEST)
 From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -65,24 +65,15 @@ To:     Alexei Starovoitov <ast@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
 Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>, netdev@vger.kernel.org,
         bpf@vger.kernel.org,
         Freysteinn Alfredsson <freysteinn.alfredsson@kau.se>,
         Cong Wang <xiyou.wangcong@gmail.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: [RFC PATCH 02/17] bpf: Expand map key argument of bpf_redirect_map to u64
-Date:   Wed, 13 Jul 2022 13:14:10 +0200
-Message-Id: <20220713111430.134810-3-toke@redhat.com>
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Subject: [RFC PATCH 05/17] pifomap: Add queue rotation for continuously increasing rank mode
+Date:   Wed, 13 Jul 2022 13:14:13 +0200
+Message-Id: <20220713111430.134810-6-toke@redhat.com>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220713111430.134810-1-toke@redhat.com>
 References: <20220713111430.134810-1-toke@redhat.com>
@@ -93,179 +84,246 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We want to be able to support 64-bit indexes for PIFO maps, so expand the
-width of the 'key' argument to the bpf_redirect_map() helper. Since BPF
-registers are always 64-bit, this should be safe to do after the fact.
+Amend the PIFO map so it can operate in a mode that allows the range to
+increase continuously. This works by allocating two underlying queues, and
+queueing entries into the second one if the first one overflows. When the
+primary queue runs empty, if there are entries in the secondary queue, swap
+the two queues and shift the operating range of the new secondary queue to
+be after the (new) primary. This way the queue can support a continuously
+increasing rank, for instance to index by timestamps.
 
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- include/linux/bpf.h      |  2 +-
- include/linux/filter.h   | 12 ++++++------
- include/uapi/linux/bpf.h |  2 +-
- kernel/bpf/cpumap.c      |  4 ++--
- kernel/bpf/devmap.c      |  4 ++--
- kernel/bpf/verifier.c    |  2 +-
- net/core/filter.c        |  4 ++--
- net/xdp/xskmap.c         |  4 ++--
- 8 files changed, 17 insertions(+), 17 deletions(-)
+ kernel/bpf/pifomap.c | 96 ++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 75 insertions(+), 21 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 2b21f2a3452f..d877d9825e77 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -132,7 +132,7 @@ struct bpf_map_ops {
- 	struct bpf_local_storage __rcu ** (*map_owner_storage_ptr)(void *owner);
+diff --git a/kernel/bpf/pifomap.c b/kernel/bpf/pifomap.c
+index 5040f532e5d8..62633c2c7419 100644
+--- a/kernel/bpf/pifomap.c
++++ b/kernel/bpf/pifomap.c
+@@ -6,6 +6,7 @@
+ #include <linux/bpf.h>
+ #include <linux/bitops.h>
+ #include <linux/btf_ids.h>
++#include <linux/minmax.h>
+ #include <net/xdp.h>
+ #include <linux/filter.h>
+ #include <trace/events/xdp.h>
+@@ -44,7 +45,8 @@ struct bpf_pifo_queue {
  
- 	/* Misc helpers.*/
--	int (*map_redirect)(struct bpf_map *map, u32 ifindex, u64 flags);
-+	int (*map_redirect)(struct bpf_map *map, u64 key, u64 flags);
+ struct bpf_pifo_map {
+ 	struct bpf_map map;
+-	struct bpf_pifo_queue *queue;
++	struct bpf_pifo_queue *q_primary;
++	struct bpf_pifo_queue *q_secondary;
+ 	unsigned long num_queued;
+ 	spinlock_t lock; /* protects enqueue / dequeue */
  
- 	/* map_meta_equal must be implemented for maps that can be
- 	 * used as an inner map.  It is a runtime check to ensure
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 4c1a8b247545..10167ab1ef95 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -637,13 +637,13 @@ struct bpf_nh_params {
- };
- 
- struct bpf_redirect_info {
--	u32 flags;
--	u32 tgt_index;
-+	u64 tgt_index;
- 	void *tgt_value;
- 	struct bpf_map *map;
-+	u32 flags;
-+	u32 kern_flags;
- 	u32 map_id;
- 	enum bpf_map_type map_type;
--	u32 kern_flags;
- 	struct bpf_nh_params nh;
- };
- 
-@@ -1486,7 +1486,7 @@ static inline bool bpf_sk_lookup_run_v6(struct net *net, int protocol,
+@@ -71,6 +73,12 @@ static bool pifo_map_is_full(struct bpf_pifo_map *pifo)
+ 	return pifo->num_queued >= pifo->map.max_entries;
  }
- #endif /* IS_ENABLED(CONFIG_IPV6) */
  
--static __always_inline int __bpf_xdp_redirect_map(struct bpf_map *map, u32 ifindex,
-+static __always_inline int __bpf_xdp_redirect_map(struct bpf_map *map, u64 index,
- 						  u64 flags, const u64 flag_mask,
- 						  void *lookup_elem(struct bpf_map *map, u32 key))
++static bool pifo_queue_is_empty(struct bpf_pifo_queue *queue)
++{
++	/* first word in bitmap is always the top-level map */
++	return !queue->bitmap[0];
++}
++
+ static void pifo_queue_free(struct bpf_pifo_queue *q)
  {
-@@ -1497,7 +1497,7 @@ static __always_inline int __bpf_xdp_redirect_map(struct bpf_map *map, u32 ifind
- 	if (unlikely(flags & ~(action_mask | flag_mask)))
- 		return XDP_ABORTED;
+ 	bpf_map_area_free(q->buckets);
+@@ -79,7 +87,7 @@ static void pifo_queue_free(struct bpf_pifo_queue *q)
+ 	kfree(q);
+ }
  
--	ri->tgt_value = lookup_elem(map, ifindex);
-+	ri->tgt_value = lookup_elem(map, index);
- 	if (unlikely(!ri->tgt_value) && !(flags & BPF_F_BROADCAST)) {
- 		/* If the lookup fails we want to clear out the state in the
- 		 * redirect_info struct completely, so that if an eBPF program
-@@ -1509,7 +1509,7 @@ static __always_inline int __bpf_xdp_redirect_map(struct bpf_map *map, u32 ifind
- 		return flags & action_mask;
+-static struct bpf_pifo_queue *pifo_queue_alloc(u32 range, int numa_node)
++static struct bpf_pifo_queue *pifo_queue_alloc(u32 range, u32 min_rank, int numa_node)
+ {
+ 	u32 num_longs = 0, offset = 0, i, lvl, levels;
+ 	struct bpf_pifo_queue *q;
+@@ -112,6 +120,7 @@ static struct bpf_pifo_queue *pifo_queue_alloc(u32 range, int numa_node)
+ 	}
+ 	q->levels = levels;
+ 	q->range = range;
++	q->min_rank = min_rank;
+ 	return q;
+ 
+ err:
+@@ -131,10 +140,14 @@ static int pifo_map_init_map(struct bpf_pifo_map *pifo, union bpf_attr *attr,
+ 
+ 	bpf_map_init_from_attr(&pifo->map, attr);
+ 
+-	pifo->queue = pifo_queue_alloc(range, pifo->map.numa_node);
+-	if (!pifo->queue)
++	pifo->q_primary = pifo_queue_alloc(range, 0, pifo->map.numa_node);
++	if (!pifo->q_primary)
+ 		return -ENOMEM;
+ 
++	pifo->q_secondary = pifo_queue_alloc(range, range, pifo->map.numa_node);
++	if (!pifo->q_secondary)
++		goto err_queue;
++
+ 	if (attr->map_type == BPF_MAP_TYPE_PIFO_GENERIC) {
+ 		size_t cache_size;
+ 		int i;
+@@ -144,7 +157,7 @@ static int pifo_map_init_map(struct bpf_pifo_map *pifo, union bpf_attr *attr,
+ 		pifo->elem_cache = bpf_map_area_alloc(cache_size,
+ 						      pifo->map.numa_node);
+ 		if (!pifo->elem_cache)
+-			goto err_queue;
++			goto err;
+ 
+ 		for (i = 0; i < attr->max_entries; i++)
+ 			pifo->elem_cache->elements[i] = (void *)&pifo->elements[i * elem_size];
+@@ -153,8 +166,10 @@ static int pifo_map_init_map(struct bpf_pifo_map *pifo, union bpf_attr *attr,
+ 
+ 	return 0;
+ 
++err:
++	pifo_queue_free(pifo->q_secondary);
+ err_queue:
+-	pifo_queue_free(pifo->queue);
++	pifo_queue_free(pifo->q_primary);
+ 	return err;
+ }
+ 
+@@ -238,9 +253,12 @@ static void pifo_map_free(struct bpf_map *map)
+ 
+ 	synchronize_rcu();
+ 
+-	if (map->map_type == BPF_MAP_TYPE_PIFO_XDP)
+-		pifo_queue_flush(pifo->queue);
+-	pifo_queue_free(pifo->queue);
++	if (map->map_type == BPF_MAP_TYPE_PIFO_XDP) {
++		pifo_queue_flush(pifo->q_primary);
++		pifo_queue_flush(pifo->q_secondary);
++	}
++	pifo_queue_free(pifo->q_primary);
++	pifo_queue_free(pifo->q_secondary);
+ 	bpf_map_area_free(pifo->elem_cache);
+ 	bpf_map_area_free(pifo);
+ }
+@@ -249,7 +267,7 @@ static int pifo_map_get_next_key(struct bpf_map *map, void *key, void *next_key)
+ {
+ 	struct bpf_pifo_map *pifo = container_of(map, struct bpf_pifo_map, map);
+ 	u32 index = key ? *(u32 *)key : U32_MAX, offset;
+-	struct bpf_pifo_queue *queue = pifo->queue;
++	struct bpf_pifo_queue *queue = pifo->q_primary;
+ 	unsigned long idx, flags;
+ 	u32 *next = next_key;
+ 	int ret = -ENOENT;
+@@ -261,15 +279,27 @@ static int pifo_map_get_next_key(struct bpf_map *map, void *key, void *next_key)
+ 	else
+ 		offset = index - queue->min_rank + 1;
+ 
+-	if (offset >= queue->range)
+-		goto out;
++	if (offset >= queue->range) {
++		offset -= queue->range;
++		queue = pifo->q_secondary;
++
++		if (offset >= queue->range)
++			goto out;
++	}
+ 
++search:
+ 	idx = find_next_bit(queue->lvl_bitmap[queue->levels - 1],
+ 			    queue->range, offset);
+-	if (idx == queue->range)
++	if (idx == queue->range) {
++		if (queue == pifo->q_primary) {
++			queue = pifo->q_secondary;
++			offset = 0;
++			goto search;
++		}
+ 		goto out;
++	}
+ 
+-	*next = idx;
++	*next = idx + queue->min_rank;
+ 	ret = 0;
+ out:
+ 	spin_unlock_irqrestore(&pifo->lock, flags);
+@@ -316,7 +346,7 @@ static void pifo_item_set_next(union bpf_pifo_item *item, void *next, bool xdp)
+ static int __pifo_map_enqueue(struct bpf_pifo_map *pifo, union bpf_pifo_item *item,
+ 			      u64 rank, bool xdp)
+ {
+-	struct bpf_pifo_queue *queue = pifo->queue;
++	struct bpf_pifo_queue *queue = pifo->q_primary;
+ 	struct bpf_pifo_bucket *bucket;
+ 	u64 q_index;
+ 
+@@ -331,8 +361,16 @@ static int __pifo_map_enqueue(struct bpf_pifo_map *pifo, union bpf_pifo_item *it
+ 	pifo_item_set_next(item, NULL, xdp);
+ 
+ 	q_index = rank - queue->min_rank;
+-	if (unlikely(q_index >= queue->range))
+-		q_index = queue->range - 1;
++	if (unlikely(q_index >= queue->range)) {
++		/* If we overflow the primary queue, enqueue into secondary, and
++		 * if we overflow that enqueue as the last item
++		 */
++		q_index -= queue->range;
++		queue = pifo->q_secondary;
++
++		if (q_index >= queue->range)
++			q_index = queue->range - 1;
++	}
+ 
+ 	bucket = &queue->buckets[q_index];
+ 	if (likely(!bucket->head)) {
+@@ -380,7 +418,7 @@ static unsigned long pifo_find_first_bucket(struct bpf_pifo_queue *queue)
+ static union bpf_pifo_item *__pifo_map_dequeue(struct bpf_pifo_map *pifo,
+ 					       u64 flags, u64 *rank, bool xdp)
+ {
+-	struct bpf_pifo_queue *queue = pifo->queue;
++	struct bpf_pifo_queue *queue = pifo->q_primary;
+ 	struct bpf_pifo_bucket *bucket;
+ 	union bpf_pifo_item *item;
+ 	unsigned long bucket_idx;
+@@ -392,6 +430,17 @@ static union bpf_pifo_item *__pifo_map_dequeue(struct bpf_pifo_map *pifo,
+ 		return NULL;
  	}
  
--	ri->tgt_index = ifindex;
-+	ri->tgt_index = index;
- 	ri->map_id = map->id;
- 	ri->map_type = map->map_type;
- 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 379e68fb866f..aec623f60048 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -2607,7 +2607,7 @@ union bpf_attr {
-  * 	Return
-  * 		0 on success, or a negative error in case of failure.
-  *
-- * long bpf_redirect_map(struct bpf_map *map, u32 key, u64 flags)
-+ * long bpf_redirect_map(struct bpf_map *map, u64 key, u64 flags)
-  * 	Description
-  * 		Redirect the packet to the endpoint referenced by *map* at
-  * 		index *key*. Depending on its type, this *map* can contain
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index f4860ac756cd..2e7ee53ae3e4 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -668,9 +668,9 @@ static int cpu_map_get_next_key(struct bpf_map *map, void *key, void *next_key)
- 	return 0;
- }
- 
--static int cpu_map_redirect(struct bpf_map *map, u32 ifindex, u64 flags)
-+static int cpu_map_redirect(struct bpf_map *map, u64 index, u64 flags)
++	if (!pifo->num_queued) {
++		*rank = -ENOENT;
++		return NULL;
++	}
++
++	if (unlikely(pifo_queue_is_empty(queue))) {
++		swap(pifo->q_primary, pifo->q_secondary);
++		pifo->q_secondary->min_rank = pifo->q_primary->min_rank + pifo->q_primary->range;
++		queue = pifo->q_primary;
++	}
++
+ 	bucket_idx = pifo_find_first_bucket(queue);
+ 	if (bucket_idx == -1) {
+ 		*rank = -ENOENT;
+@@ -437,7 +486,7 @@ struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags, u64 *rank)
+ static void *pifo_map_lookup_elem(struct bpf_map *map, void *key)
  {
--	return __bpf_xdp_redirect_map(map, ifindex, flags, 0,
-+	return __bpf_xdp_redirect_map(map, index, flags, 0,
- 				      __cpu_map_lookup_elem);
- }
+ 	struct bpf_pifo_map *pifo = container_of(map, struct bpf_pifo_map, map);
+-	struct bpf_pifo_queue *queue = pifo->queue;
++	struct bpf_pifo_queue *queue = pifo->q_primary;
+ 	struct bpf_pifo_bucket *bucket;
+ 	u32 rank =  *(u32 *)key, idx;
  
-diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
-index c2867068e5bd..980f8928e977 100644
---- a/kernel/bpf/devmap.c
-+++ b/kernel/bpf/devmap.c
-@@ -992,14 +992,14 @@ static int dev_map_hash_update_elem(struct bpf_map *map, void *key, void *value,
- 					 map, key, value, map_flags);
- }
+@@ -445,8 +494,13 @@ static void *pifo_map_lookup_elem(struct bpf_map *map, void *key)
+ 		return NULL;
  
--static int dev_map_redirect(struct bpf_map *map, u32 ifindex, u64 flags)
-+static int dev_map_redirect(struct bpf_map *map, u64 ifindex, u64 flags)
- {
- 	return __bpf_xdp_redirect_map(map, ifindex, flags,
- 				      BPF_F_BROADCAST | BPF_F_EXCLUDE_INGRESS,
- 				      __dev_map_lookup_elem);
- }
+ 	idx = rank - queue->min_rank;
+-	if (idx >= queue->range)
+-		return NULL;
++	if (idx >= queue->range) {
++		idx -= queue->range;
++		queue = pifo->q_secondary;
++
++		if (idx >= queue->range)
++			return NULL;
++	}
  
--static int dev_hash_map_redirect(struct bpf_map *map, u32 ifindex, u64 flags)
-+static int dev_hash_map_redirect(struct bpf_map *map, u64 ifindex, u64 flags)
- {
- 	return __bpf_xdp_redirect_map(map, ifindex, flags,
- 				      BPF_F_BROADCAST | BPF_F_EXCLUDE_INGRESS,
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 328cfab3af60..039f7b61c305 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -14183,7 +14183,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 			BUILD_BUG_ON(!__same_type(ops->map_peek_elem,
- 				     (int (*)(struct bpf_map *map, void *value))NULL));
- 			BUILD_BUG_ON(!__same_type(ops->map_redirect,
--				     (int (*)(struct bpf_map *map, u32 ifindex, u64 flags))NULL));
-+				     (int (*)(struct bpf_map *map, u64 index, u64 flags))NULL));
- 			BUILD_BUG_ON(!__same_type(ops->map_for_each_callback,
- 				     (int (*)(struct bpf_map *map,
- 					      bpf_callback_t callback_fn,
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 4ef77ec5255e..e23e53ed1b04 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -4408,10 +4408,10 @@ static const struct bpf_func_proto bpf_xdp_redirect_proto = {
- 	.arg2_type      = ARG_ANYTHING,
- };
- 
--BPF_CALL_3(bpf_xdp_redirect_map, struct bpf_map *, map, u32, ifindex,
-+BPF_CALL_3(bpf_xdp_redirect_map, struct bpf_map *, map, u64, key,
- 	   u64, flags)
- {
--	return map->ops->map_redirect(map, ifindex, flags);
-+	return map->ops->map_redirect(map, key, flags);
- }
- 
- static const struct bpf_func_proto bpf_xdp_redirect_map_proto = {
-diff --git a/net/xdp/xskmap.c b/net/xdp/xskmap.c
-index acc8e52a4f5f..771d0fa90ef5 100644
---- a/net/xdp/xskmap.c
-+++ b/net/xdp/xskmap.c
-@@ -231,9 +231,9 @@ static int xsk_map_delete_elem(struct bpf_map *map, void *key)
- 	return 0;
- }
- 
--static int xsk_map_redirect(struct bpf_map *map, u32 ifindex, u64 flags)
-+static int xsk_map_redirect(struct bpf_map *map, u64 index, u64 flags)
- {
--	return __bpf_xdp_redirect_map(map, ifindex, flags, 0,
-+	return __bpf_xdp_redirect_map(map, index, flags, 0,
- 				      __xsk_map_lookup_elem);
- }
- 
+ 	bucket = &queue->buckets[idx];
+ 	/* FIXME: what happens if this changes while userspace is reading the
 -- 
 2.37.0
 
