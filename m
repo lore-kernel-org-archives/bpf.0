@@ -2,83 +2,83 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FCA6CCA485
-	for <bpf@archiver.kernel.org>; Wed, 13 Jul 2022 11:15:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1597ACCA482
+	for <bpf@archiver.kernel.org>; Wed, 13 Jul 2022 11:14:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236127AbiGMLO6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 Jul 2022 07:14:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38916 "EHLO
+        id S236062AbiGMLO5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 Jul 2022 07:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235978AbiGMLO4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 Jul 2022 07:14:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C93A0100CD1
-        for <bpf@vger.kernel.org>; Wed, 13 Jul 2022 04:14:45 -0700 (PDT)
+        with ESMTP id S229579AbiGMLOz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 13 Jul 2022 07:14:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AAA5EEDB51
+        for <bpf@vger.kernel.org>; Wed, 13 Jul 2022 04:14:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657710884;
+        s=mimecast20190719; t=1657710882;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wuR8FXFo94ahyoYDajY486Whyu+YAqAq0MCiFtSIImw=;
-        b=J6YD9I6HMHG99my4lUaA13GN/gsqDmXskrCkaUG6CC1PQBLGOEPB4KAtHRTLFaQUuz6Cyc
-        407gzjKW789UDAPr8lUd3sbbT/t5yOq0iuQ+1/7XIAp7/5SfqKuW8YP2kLX/iWIK19/SrC
-        AFKi9jMil95q9k015bFN8AYvYJ43jCU=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=+fSAWDEGpl8ZiSP+HMH8zwUMV3ceUvwVsG+k+DjufDg=;
+        b=B2mkIY0i14fpQ8rPrDj/g+EYvxsflUVrJQaiNh/swnsydNFlHkW2rbC4X7/8o0Uso9TR46
+        HCKBpCwKVwAwdy+bcPjXkXTSdyCNBeJzUAmY7L0YOj2/uyxYmoio4CmIPAmJCG14Rwhi4H
+        WibsaPujSnJrD1eW//xbt83Mo0bAkJw=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-593-H5EEISPRMVawdN3DHXGQPg-1; Wed, 13 Jul 2022 07:14:43 -0400
-X-MC-Unique: H5EEISPRMVawdN3DHXGQPg-1
-Received: by mail-ej1-f69.google.com with SMTP id nc23-20020a1709071c1700b0072b94109144so762219ejc.2
-        for <bpf@vger.kernel.org>; Wed, 13 Jul 2022 04:14:43 -0700 (PDT)
+ us-mta-444-Sh3SkPv4M_GqsUtSz3bmgg-1; Wed, 13 Jul 2022 07:14:41 -0400
+X-MC-Unique: Sh3SkPv4M_GqsUtSz3bmgg-1
+Received: by mail-ej1-f70.google.com with SMTP id sg42-20020a170907a42a00b0072e3fc6cdd1so52368ejc.13
+        for <bpf@vger.kernel.org>; Wed, 13 Jul 2022 04:14:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wuR8FXFo94ahyoYDajY486Whyu+YAqAq0MCiFtSIImw=;
-        b=MIpLns08lLl3wCLVG1oJKcfVTEqY8wPfvvyE2kwM3CQXHScu6flK5InRfcG2k0fKEd
-         Q5yWrGQ6HUFgLI9lYltLSadhR8TYiQiCxuXLdpvd7jYfB260FTpmj1BYPauAb43OILy4
-         UPgBmtfOkRGG1P0qFsrw/1kvuItkoD1caVDEa/eOAgiy4FjpUX1D3r3YAdZu3c6khBIA
-         DyN+nH6mMrVy6QpQQOPgC7HxpG7DdW1WwBlHL2orhw5l15I4r9bV65DIoYMoNsyqVdmq
-         CcTTrmNgFnvq7YGoDkDXpn6zRhWK7LIcRRnByagdPoJEbS3vTILYTBgTkOkcBrtfJ8ng
-         ha+g==
-X-Gm-Message-State: AJIora93oh/6rPgI4417pFSmWHsVDacPSm5dB/qpCv8F8VIW4xxSJ/dZ
-        PyDz5GUQVMSuvUQamVva4OkuEmGniBrwl2NhmzHzNyfrCe5qflIDvsZ5JxUIOwL9oug9zW09J1J
-        9LQ/8+dkErUej
-X-Received: by 2002:a05:6402:1bda:b0:43a:55d7:9f2f with SMTP id ch26-20020a0564021bda00b0043a55d79f2fmr4005440edb.360.1657710881960;
-        Wed, 13 Jul 2022 04:14:41 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vGpIBjNSgB/AtD/xtNF900ucY1jjJYDN6RHNmEioUCGKOiES+fu5fHCZFnL6rPgI98Qa+g/A==
-X-Received: by 2002:a05:6402:1bda:b0:43a:55d7:9f2f with SMTP id ch26-20020a0564021bda00b0043a55d79f2fmr4005396edb.360.1657710881587;
-        Wed, 13 Jul 2022 04:14:41 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id j20-20020a170906411400b00726e108b566sm4872706ejk.173.2022.07.13.04.14.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        bh=+fSAWDEGpl8ZiSP+HMH8zwUMV3ceUvwVsG+k+DjufDg=;
+        b=YOmIvZVrP3ebkbC30ylF8YLc8cD/Qj5Pk/M5BqCXIVp+doJJ+QQ7dC/rXPHGU1deyB
+         oDJw+PjNAxUzBnanJ5QlV/aKO29DI+Xgj9RiblODtOQurMA6037vj1qioAx9IZzrjBaS
+         NZ8HBpdcX8q98P33CUKQXdUCFxZNB6itSWmzD8Nq8D7GldfowfI7S6ttepQ3r0u0S9Qn
+         YnC5imU06uBcZMkamMTDT0h9h5BIGu6ilBosdDv07bvAPmQ1fWNrg+n3exT5h6aW3rxK
+         BMVfs+gtCG/B8RwJZB2IiHQ2p/RMyjb0JAOjkzOZiEOOwzl0LV9R2HXMOT8MPNkUgLv7
+         FJAA==
+X-Gm-Message-State: AJIora/VI5nCv+tTk1fmzV5IsbCzzgV0rRI+DRoO7jOaBy9V6/fwcaqZ
+        kD4nKulYnu8DytlP4MoGfx52CiuGxhjmJlXTEz9fxfPf6fpSV5ClnuwSvz9hovmD1Gmxt04IrX0
+        Zw3uOsARQgPnh
+X-Received: by 2002:a17:906:6a0f:b0:72b:64ce:289d with SMTP id qw15-20020a1709066a0f00b0072b64ce289dmr2770250ejc.663.1657710879439;
         Wed, 13 Jul 2022 04:14:39 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sCdKO4zWgqJ8EJISzFR2q6vt/cCdrOMboNj75zsLVfKWzKMpG+zCuE3s699AavLwI24PA7pg==
+X-Received: by 2002:a17:906:6a0f:b0:72b:64ce:289d with SMTP id qw15-20020a1709066a0f00b0072b64ce289dmr2770210ejc.663.1657710879048;
+        Wed, 13 Jul 2022 04:14:39 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id 26-20020a170906311a00b0070e238ff66fsm4825119ejx.96.2022.07.13.04.14.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 04:14:36 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id E35B34D990B; Wed, 13 Jul 2022 13:14:36 +0200 (CEST)
+        id 3A14F4D9907; Wed, 13 Jul 2022 13:14:36 +0200 (CEST)
 From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <martin.lau@linux.dev>,
         Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>
 Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>, netdev@vger.kernel.org,
         bpf@vger.kernel.org,
         Freysteinn Alfredsson <freysteinn.alfredsson@kau.se>,
         Cong Wang <xiyou.wangcong@gmail.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: [RFC PATCH 08/17] bpf: Add helpers to dequeue from a PIFO map
-Date:   Wed, 13 Jul 2022 13:14:16 +0200
-Message-Id: <20220713111430.134810-9-toke@redhat.com>
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Subject: [RFC PATCH 06/17] xdp: Add dequeue program type for getting packets from a PIFO
+Date:   Wed, 13 Jul 2022 13:14:14 +0200
+Message-Id: <20220713111430.134810-7-toke@redhat.com>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220713111430.134810-1-toke@redhat.com>
 References: <20220713111430.134810-1-toke@redhat.com>
@@ -89,199 +89,273 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This adds a new helper to dequeue a packet from a PIFO map,
-bpf_packet_dequeue(). The helper returns a refcounted pointer to the packet
-dequeued from the map; the reference must be released either by dropping
-the packet (using bpf_packet_drop()), or by returning it to the caller.
+Add a new BPF_PROG_TYPE_DEQUEUE, which will be executed by a new device
+hook to retrieve queued packets for transmission. The API of the dequeue
+program is simple: it takes a context object containing as its sole member
+the ifindex of the device it is being executed on. The program can return a
+pointer to a packet, or NULL to indicate it has nothing to transmit at this
+time. Packet pointers are obtained by dequeueing them from a PIFO
+map (using a helper added in a subsequent commit).
+
+This commit adds dequeue program type and the ability to run it using the
+bpf_prog_run() syscall (returning the dequeued packet to userspace); a
+subsequent commit introduces the network stack hook to attach and execute
+dequeue programs.
 
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- include/uapi/linux/bpf.h       | 19 +++++++++++++++
- kernel/bpf/verifier.c          | 13 +++++++---
- net/core/filter.c              | 43 +++++++++++++++++++++++++++++++++-
- tools/include/uapi/linux/bpf.h | 19 +++++++++++++++
- 4 files changed, 90 insertions(+), 4 deletions(-)
+ include/linux/bpf.h            |  9 ++++++
+ include/linux/bpf_types.h      |  2 ++
+ include/net/xdp.h              |  4 +++
+ include/uapi/linux/bpf.h       |  5 ++++
+ kernel/bpf/syscall.c           |  1 +
+ net/bpf/test_run.c             | 33 +++++++++++++++++++++
+ net/core/filter.c              | 53 ++++++++++++++++++++++++++++++++++
+ tools/include/uapi/linux/bpf.h |  5 ++++
+ 8 files changed, 112 insertions(+)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 974fb5882305..d44382644391 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -5341,6 +5341,23 @@ union bpf_attr {
-  *		**-EACCES** if the SYN cookie is not valid.
-  *
-  *		**-EPROTONOSUPPORT** if CONFIG_IPV6 is not builtin.
-+ *
-+ * long bpf_packet_dequeue(void *ctx, struct bpf_map *map, u64 flags, u64 *rank)
-+ *	Description
-+ *		Dequeue the packet at the head of the PIFO in *map* and return a pointer
-+ *		to the packet (or NULL if the PIFO is empty).
-+ *	Return
-+ *		On success, a pointer to the packet, or NULL if the PIFO is empty. The
-+ *		packet pointer must be freed using *bpf_packet_drop()* or returning
-+ *		the packet pointer. The *rank* pointer will be set to the rank of
-+ *		the dequeued packet on success, or a negative error code on error.
-+ *
-+ * long bpf_packet_drop(void *ctx, void *pkt)
-+ *	Description
-+ *		Drop *pkt*, which must be a reference previously returned by
-+ *		*bpf_packet_dequeue()* (and checked to not be NULL).
-+ *	Return
-+ *		This always succeeds and returns zero.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5551,6 +5568,8 @@ union bpf_attr {
- 	FN(tcp_raw_gen_syncookie_ipv6),	\
- 	FN(tcp_raw_check_syncookie_ipv4),	\
- 	FN(tcp_raw_check_syncookie_ipv6),	\
-+	FN(packet_dequeue),		\
-+	FN(packet_drop),		\
- 	/* */
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index ea994acebb81..6ea5d6d188cf 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1864,6 +1864,8 @@ int array_map_alloc_check(union bpf_attr *attr);
  
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e3662460a095..68f98d76bc78 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -483,7 +483,8 @@ static bool may_be_acquire_function(enum bpf_func_id func_id)
- 		func_id == BPF_FUNC_sk_lookup_udp ||
- 		func_id == BPF_FUNC_skc_lookup_tcp ||
- 		func_id == BPF_FUNC_map_lookup_elem ||
--	        func_id == BPF_FUNC_ringbuf_reserve;
-+		func_id == BPF_FUNC_ringbuf_reserve ||
-+		func_id == BPF_FUNC_packet_dequeue;
+ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 			  union bpf_attr __user *uattr);
++int bpf_prog_test_run_dequeue(struct bpf_prog *prog, const union bpf_attr *kattr,
++			      union bpf_attr __user *uattr);
+ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 			  union bpf_attr __user *uattr);
+ int bpf_prog_test_run_tracing(struct bpf_prog *prog,
+@@ -2107,6 +2109,13 @@ static inline int bpf_prog_test_run_xdp(struct bpf_prog *prog,
+ 	return -ENOTSUPP;
  }
  
- static bool is_acquire_function(enum bpf_func_id func_id,
-@@ -495,7 +496,8 @@ static bool is_acquire_function(enum bpf_func_id func_id,
- 	    func_id == BPF_FUNC_sk_lookup_udp ||
- 	    func_id == BPF_FUNC_skc_lookup_tcp ||
- 	    func_id == BPF_FUNC_ringbuf_reserve ||
--	    func_id == BPF_FUNC_kptr_xchg)
-+	    func_id == BPF_FUNC_kptr_xchg ||
-+	    func_id == BPF_FUNC_packet_dequeue)
- 		return true;
- 
- 	if (func_id == BPF_FUNC_map_lookup_elem &&
-@@ -6276,7 +6278,8 @@ static int check_map_func_compatibility(struct bpf_verifier_env *env,
- 			goto error;
- 		break;
- 	case BPF_MAP_TYPE_PIFO_XDP:
--		if (func_id != BPF_FUNC_redirect_map)
-+		if (func_id != BPF_FUNC_redirect_map &&
-+		    func_id != BPF_FUNC_packet_dequeue)
- 			goto error;
- 		break;
- 	default:
-@@ -6385,6 +6388,10 @@ static int check_map_func_compatibility(struct bpf_verifier_env *env,
- 		if (map->map_type != BPF_MAP_TYPE_TASK_STORAGE)
- 			goto error;
- 		break;
-+	case BPF_FUNC_packet_dequeue:
-+		if (map->map_type != BPF_MAP_TYPE_PIFO_XDP)
-+			goto error;
-+		break;
- 	default:
- 		break;
- 	}
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 30bd3a6aedab..893b75515859 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -4430,6 +4430,40 @@ static const struct bpf_func_proto bpf_xdp_redirect_map_proto = {
- 	.arg3_type      = ARG_ANYTHING,
++static inline int bpf_prog_test_run_dequeue(struct bpf_prog *prog,
++					    const union bpf_attr *kattr,
++					    union bpf_attr __user *uattr)
++{
++	return -ENOTSUPP;
++}
++
+ static inline int bpf_prog_test_run_skb(struct bpf_prog *prog,
+ 					const union bpf_attr *kattr,
+ 					union bpf_attr __user *uattr)
+diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
+index 26ef981a8aa5..e6bc962befb7 100644
+--- a/include/linux/bpf_types.h
++++ b/include/linux/bpf_types.h
+@@ -10,6 +10,8 @@ BPF_PROG_TYPE(BPF_PROG_TYPE_SCHED_ACT, tc_cls_act,
+ 	      struct __sk_buff, struct sk_buff)
+ BPF_PROG_TYPE(BPF_PROG_TYPE_XDP, xdp,
+ 	      struct xdp_md, struct xdp_buff)
++BPF_PROG_TYPE(BPF_PROG_TYPE_DEQUEUE, dequeue,
++	      struct dequeue_ctx, struct dequeue_data)
+ #ifdef CONFIG_CGROUP_BPF
+ BPF_PROG_TYPE(BPF_PROG_TYPE_CGROUP_SKB, cg_skb,
+ 	      struct __sk_buff, struct sk_buff)
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index 7c694fb26f34..728ce943d352 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -85,6 +85,10 @@ struct xdp_buff {
+ 	u32 flags; /* supported values defined in xdp_buff_flags */
  };
  
-+BTF_ID_LIST_SINGLE(xdp_md_btf_ids, struct, xdp_md)
-+
-+BPF_CALL_4(bpf_packet_dequeue, struct dequeue_data *, ctx, struct bpf_map *, map,
-+	   u64, flags, u64 *, rank)
-+{
-+	return (unsigned long)pifo_map_dequeue(map, flags, rank);
-+}
-+
-+static const struct bpf_func_proto bpf_packet_dequeue_proto = {
-+	.func           = bpf_packet_dequeue,
-+	.gpl_only       = false,
-+	.ret_type       = RET_PTR_TO_BTF_ID_OR_NULL,
-+	.ret_btf_id	= xdp_md_btf_ids,
-+	.arg1_type      = ARG_PTR_TO_CTX,
-+	.arg2_type      = ARG_CONST_MAP_PTR,
-+	.arg3_type      = ARG_ANYTHING,
-+	.arg4_type      = ARG_PTR_TO_LONG,
++struct dequeue_data {
++	struct xdp_txq_info *txq;
 +};
 +
-+BPF_CALL_2(bpf_packet_drop, struct dequeue_data *, ctx, struct xdp_frame *, pkt)
-+{
-+	xdp_return_frame(pkt);
-+	return 0;
-+}
-+
-+static const struct bpf_func_proto bpf_packet_drop_proto = {
-+	.func           = bpf_packet_drop,
-+	.gpl_only       = false,
-+	.ret_type       = RET_INTEGER,
-+	.arg1_type      = ARG_PTR_TO_CTX,
-+	.arg2_type      = ARG_PTR_TO_BTF_ID | OBJ_RELEASE,
-+	.arg2_btf_id	= xdp_md_btf_ids,
+ static __always_inline bool xdp_buff_has_frags(struct xdp_buff *xdp)
+ {
+ 	return !!(xdp->flags & XDP_FLAGS_HAS_FRAGS);
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index f0947ddee784..974fb5882305 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -954,6 +954,7 @@ enum bpf_prog_type {
+ 	BPF_PROG_TYPE_LSM,
+ 	BPF_PROG_TYPE_SK_LOOKUP,
+ 	BPF_PROG_TYPE_SYSCALL, /* a program that can execute syscalls */
++	BPF_PROG_TYPE_DEQUEUE,
+ };
+ 
+ enum bpf_attach_type {
+@@ -5961,6 +5962,10 @@ struct xdp_md {
+ 	__u32 egress_ifindex;  /* txq->dev->ifindex */
+ };
+ 
++struct dequeue_ctx {
++	__u32 egress_ifindex;
 +};
 +
- static unsigned long bpf_skb_copy(void *dst_buff, const void *skb,
- 				  unsigned long off, unsigned long len)
- {
-@@ -8065,7 +8099,14 @@ xdp_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- static const struct bpf_func_proto *
- dequeue_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- {
--	return bpf_base_func_proto(func_id);
-+	switch (func_id) {
-+	case BPF_FUNC_packet_dequeue:
-+		return &bpf_packet_dequeue_proto;
-+	case BPF_FUNC_packet_drop:
-+		return &bpf_packet_drop_proto;
-+	default:
-+		return bpf_base_func_proto(func_id);
-+	}
+ /* DEVMAP map-value layout
+  *
+  * The struct data-layout of map-value is a configuration interface.
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 31899882e513..c4af9119b68a 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2370,6 +2370,7 @@ bpf_prog_load_check_attach(enum bpf_prog_type prog_type,
+ 		default:
+ 			return -EINVAL;
+ 		}
++	case BPF_PROG_TYPE_DEQUEUE:
+ 	case BPF_PROG_TYPE_SYSCALL:
+ 	case BPF_PROG_TYPE_EXT:
+ 		if (expected_attach_type)
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index f05d13717430..a7f479a19fe0 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -1390,6 +1390,39 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 	return ret;
  }
  
++int bpf_prog_test_run_dequeue(struct bpf_prog *prog, const union bpf_attr *kattr,
++			      union bpf_attr __user *uattr)
++{
++	struct xdp_txq_info txq = { .dev = current->nsproxy->net_ns->loopback_dev };
++	u32 repeat = kattr->test.repeat, duration, size;
++	struct dequeue_data ctx = { .txq = &txq };
++	struct xdp_buff xdp = {};
++	struct xdp_frame *pkt;
++	int ret = -EINVAL;
++	u64 retval;
++
++	if (prog->expected_attach_type)
++		return -EINVAL;
++
++	if (kattr->test.data_in || kattr->test.data_size_in ||
++	    kattr->test.ctx_in || kattr->test.ctx_out || repeat > 1)
++		return -EINVAL;
++
++	ret = bpf_test_run(prog, &ctx, repeat, &retval, &duration, false);
++	if (ret)
++		return ret;
++	if (!retval)
++		return bpf_test_finish(kattr, uattr, NULL, NULL, 0, retval, duration);
++
++	pkt = (void *)(unsigned long)retval;
++	xdp_convert_frame_to_buff(pkt, &xdp);
++	size = xdp.data_end - xdp.data_meta;
++	/* We set retval == 1 if pkt != NULL, otherwise 0 */
++	ret = bpf_test_finish(kattr, uattr, xdp.data_meta, NULL, size, !!retval, duration);
++	xdp_return_frame(pkt);
++	return ret;
++}
++
+ static int verify_user_bpf_flow_keys(struct bpf_flow_keys *ctx)
+ {
+ 	/* make sure the fields we don't use are zeroed */
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 8e6ea17a29db..30bd3a6aedab 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -8062,6 +8062,12 @@ xdp_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 	}
+ }
+ 
++static const struct bpf_func_proto *
++dequeue_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
++{
++	return bpf_base_func_proto(func_id);
++}
++
  const struct bpf_func_proto bpf_sock_map_update_proto __weak;
+ const struct bpf_func_proto bpf_sock_hash_update_proto __weak;
+ 
+@@ -8776,6 +8782,20 @@ void bpf_warn_invalid_xdp_action(struct net_device *dev, struct bpf_prog *prog,
+ }
+ EXPORT_SYMBOL_GPL(bpf_warn_invalid_xdp_action);
+ 
++static bool dequeue_is_valid_access(int off, int size,
++				    enum bpf_access_type type,
++				    const struct bpf_prog *prog,
++				    struct bpf_insn_access_aux *info)
++{
++	if (type == BPF_WRITE)
++		return false;
++	switch (off) {
++	case offsetof(struct dequeue_ctx, egress_ifindex):
++		return true;
++	}
++	return false;
++}
++
+ static bool sock_addr_is_valid_access(int off, int size,
+ 				      enum bpf_access_type type,
+ 				      const struct bpf_prog *prog,
+@@ -9835,6 +9855,28 @@ static u32 xdp_convert_ctx_access(enum bpf_access_type type,
+ 	return insn - insn_buf;
+ }
+ 
++static u32 dequeue_convert_ctx_access(enum bpf_access_type type,
++				      const struct bpf_insn *si,
++				      struct bpf_insn *insn_buf,
++				      struct bpf_prog *prog, u32 *target_size)
++{
++	struct bpf_insn *insn = insn_buf;
++
++	switch (si->off) {
++	case offsetof(struct dequeue_ctx, egress_ifindex):
++		*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct dequeue_data, txq),
++				      si->dst_reg, si->src_reg,
++				      offsetof(struct dequeue_data, txq));
++		*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct xdp_txq_info, dev),
++				      si->dst_reg, si->dst_reg,
++				      offsetof(struct xdp_txq_info, dev));
++		*insn++ = BPF_LDX_MEM(BPF_W, si->dst_reg, si->dst_reg,
++				      offsetof(struct net_device, ifindex));
++		break;
++	}
++	return insn - insn_buf;
++}
++
+ /* SOCK_ADDR_LOAD_NESTED_FIELD() loads Nested Field S.F.NF where S is type of
+  * context Structure, F is Field in context structure that contains a pointer
+  * to Nested Structure of type NS that has the field NF.
+@@ -10687,6 +10729,17 @@ const struct bpf_prog_ops xdp_prog_ops = {
+ 	.test_run		= bpf_prog_test_run_xdp,
+ };
+ 
++const struct bpf_verifier_ops dequeue_verifier_ops = {
++	.get_func_proto		= dequeue_func_proto,
++	.is_valid_access	= dequeue_is_valid_access,
++	.convert_ctx_access	= dequeue_convert_ctx_access,
++	.gen_prologue		= bpf_noop_prologue,
++};
++
++const struct bpf_prog_ops dequeue_prog_ops = {
++	.test_run		= bpf_prog_test_run_dequeue,
++};
++
+ const struct bpf_verifier_ops cg_skb_verifier_ops = {
+ 	.get_func_proto		= cg_skb_func_proto,
+ 	.is_valid_access	= cg_skb_is_valid_access,
 diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 4dd8a563f85d..1dab68a89e18 100644
+index 623421377f6e..4dd8a563f85d 100644
 --- a/tools/include/uapi/linux/bpf.h
 +++ b/tools/include/uapi/linux/bpf.h
-@@ -5341,6 +5341,23 @@ union bpf_attr {
-  *		**-EACCES** if the SYN cookie is not valid.
-  *
-  *		**-EPROTONOSUPPORT** if CONFIG_IPV6 is not builtin.
-+ *
-+ * long bpf_packet_dequeue(void *ctx, struct bpf_map *map, u64 flags, u64 *rank)
-+ *	Description
-+ *		Dequeue the packet at the head of the PIFO in *map* and return a pointer
-+ *		to the packet (or NULL if the PIFO is empty).
-+ *	Return
-+ *		On success, a pointer to the packet, or NULL if the PIFO is empty. The
-+ *		packet pointer must be freed using *bpf_packet_drop()* or returning
-+ *		the packet pointer. The *rank* pointer will be set to the rank of
-+ *		the dequeued packet on success, or a negative error code on error.
-+ *
-+ * long bpf_packet_drop(void *ctx, void *pkt)
-+ *	Description
-+ *		Drop *pkt*, which must be a reference previously returned by
-+ *		*bpf_packet_dequeue()* (and checked to not be NULL).
-+ *	Return
-+ *		This always succeeds and returns zero.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5551,6 +5568,8 @@ union bpf_attr {
- 	FN(tcp_raw_gen_syncookie_ipv6),	\
- 	FN(tcp_raw_check_syncookie_ipv4),	\
- 	FN(tcp_raw_check_syncookie_ipv6),	\
-+	FN(packet_dequeue),		\
-+	FN(packet_drop),		\
- 	/* */
+@@ -954,6 +954,7 @@ enum bpf_prog_type {
+ 	BPF_PROG_TYPE_LSM,
+ 	BPF_PROG_TYPE_SK_LOOKUP,
+ 	BPF_PROG_TYPE_SYSCALL, /* a program that can execute syscalls */
++	BPF_PROG_TYPE_DEQUEUE,
+ };
  
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+ enum bpf_attach_type {
+@@ -5961,6 +5962,10 @@ struct xdp_md {
+ 	__u32 egress_ifindex;  /* txq->dev->ifindex */
+ };
+ 
++struct dequeue_ctx {
++	__u32 egress_ifindex;
++};
++
+ /* DEVMAP map-value layout
+  *
+  * The struct data-layout of map-value is a configuration interface.
 -- 
 2.37.0
 
