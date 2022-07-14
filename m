@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F74CC43334
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B5ADC433EF
 	for <bpf@archiver.kernel.org>; Thu, 14 Jul 2022 07:08:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234002AbiGNHIM convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 14 Jul 2022 03:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45964 "EHLO
+        id S234446AbiGNHIN convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 14 Jul 2022 03:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbiGNHIL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 14 Jul 2022 03:08:11 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B271D2CDEF
+        with ESMTP id S234379AbiGNHIM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 14 Jul 2022 03:08:12 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32442DA90
         for <bpf@vger.kernel.org>; Thu, 14 Jul 2022 00:08:10 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26E6xWQ0012153
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26E6xH5x009007
         for <bpf@vger.kernel.org>; Thu, 14 Jul 2022 00:08:10 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h9h5g1csw-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h9h5csbxy-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 14 Jul 2022 00:08:09 -0700
+        for <bpf@vger.kernel.org>; Thu, 14 Jul 2022 00:08:10 -0700
 Received: from twshared14818.18.frc3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.28; Thu, 14 Jul 2022 00:08:08 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 7ECC21C50A195; Thu, 14 Jul 2022 00:07:58 -0700 (PDT)
+        id 74CD61C50A1DF; Thu, 14 Jul 2022 00:08:04 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v2 bpf-next 1/5] libbpf: generalize virtual __kconfig externs and use it for USDT
-Date:   Thu, 14 Jul 2022 00:07:51 -0700
-Message-ID: <20220714070755.3235561-2-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 4/5] libbpf: add ksyscall/kretsyscall sections support for syscall kprobes
+Date:   Thu, 14 Jul 2022 00:07:54 -0700
+Message-ID: <20220714070755.3235561-5-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220714070755.3235561-1-andrii@kernel.org>
 References: <20220714070755.3235561-1-andrii@kernel.org>
@@ -41,8 +41,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: R_BhUyIF9Ma6i4Rfwp33sSpndNR6LEgd
-X-Proofpoint-ORIG-GUID: R_BhUyIF9Ma6i4Rfwp33sSpndNR6LEgd
+X-Proofpoint-GUID: EW3wclvenuh0G783DGT3Ik6L_ghyVnTg
+X-Proofpoint-ORIG-GUID: EW3wclvenuh0G783DGT3Ik6L_ghyVnTg
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-07-14_04,2022-07-13_03,2022-06-22_01
@@ -50,281 +50,308 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Libbpf supports single virtual __kconfig extern currently: LINUX_KERNEL_VERSION.
-LINUX_KERNEL_VERSION isn't coming from /proc/kconfig.gz and is intead
-customly filled out by libbpf.
+Add SEC("ksyscall")/SEC("ksyscall/<syscall_name>") and corresponding
+kretsyscall variants (for return kprobes) to allow users to kprobe
+syscall functions in kernel. These special sections allow to ignore
+complexities and differences between kernel versions and host
+architectures when it comes to syscall wrapper and corresponding
+__<arch>_sys_<syscall> vs __se_sys_<syscall> differences, depending on
+whether host kernel has CONFIG_ARCH_HAS_SYSCALL_WRAPPER (though libbpf
+itself doesn't rely on /proc/config.gz for detecting this, see
+BPF_KSYSCALL patch for how it's done internally).
 
-This patch generalizes this approach to support more such virtual
-__kconfig externs. One such extern added in this patch is
-LINUX_HAS_BPF_COOKIE which is used for BPF-side USDT supporting code in
-usdt.bpf.h instead of using CO-RE-based enum detection approach for
-detecting bpf_get_attach_cookie() BPF helper. This allows to remove
-otherwise not needed CO-RE dependency and keeps user-space and BPF-side
-parts of libbpf's USDT support strictly in sync in terms of their
-feature detection.
+Combined with the use of BPF_KSYSCALL() macro, this allows to just
+specify intended syscall name and expected input arguments and leave
+dealing with all the variations to libbpf.
 
-We'll use similar approach for syscall wrapper detection for
-BPF_KSYSCALL() BPF-side macro in follow up patch.
+In addition to SEC("ksyscall+") and SEC("kretsyscall+") add
+bpf_program__attach_ksyscall() API which allows to specify syscall name
+at runtime and provide associated BPF cookie value.
 
-Generally, currently libbpf reserves CONFIG_ prefix for Kconfig values
-and LINUX_ for virtual libbpf-backed externs. In the future we might
-extend the set of prefixes that are supported. This can be done without
-any breaking changes, as currently any __kconfig extern with
-unrecognized name is rejected.
+At the moment SEC("ksyscall") and bpf_program__attach_ksyscall() do not
+handle all the calling convention quirks for mmap(), clone() and compat
+syscalls. It also only attaches to "native" syscall interfaces. If host
+system supports compat syscalls or defines 32-bit syscalls in 64-bit
+kernel, such syscall interfaces won't be attached to by libbpf.
 
-For LINUX_xxx externs we support the normal "weak rule": if libbpf
-doesn't recognize given LINUX_xxx extern but such extern is marked as
-__weak, it is not rejected and defaults to zero.  This follows
-CONFIG_xxx handling logic and will allow BPF applications to
-opportunistically use newer libbpf virtual externs without breaking on
-older libbpf versions unnecessarily.
+These limitations may or may not change in the future. Therefore it is
+recommended to use SEC("kprobe") for these syscalls or if working with
+compat and 32-bit interfaces is required.
 
 Tested-by: Alan Maguire <alan.maguire@oracle.com>
-Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/libbpf.c   | 95 +++++++++++++++++++++++++++-------------
- tools/lib/bpf/usdt.bpf.h | 16 +------
- 2 files changed, 66 insertions(+), 45 deletions(-)
+ tools/lib/bpf/libbpf.c          | 117 +++++++++++++++++++++++++++++---
+ tools/lib/bpf/libbpf.h          |  46 +++++++++++++
+ tools/lib/bpf/libbpf.map        |   1 +
+ tools/lib/bpf/libbpf_internal.h |   2 +
+ 4 files changed, 157 insertions(+), 9 deletions(-)
 
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 68da1aca406c..ee3176859e76 100644
+index eb35a20a33f6..ba96760936f8 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -1694,7 +1694,7 @@ static int set_kcfg_value_tri(struct extern_desc *ext, void *ext_val,
- 	switch (ext->kcfg.type) {
- 	case KCFG_BOOL:
- 		if (value == 'm') {
--			pr_warn("extern (kcfg) %s=%c should be tristate or char\n",
-+			pr_warn("extern (kcfg) '%s': value '%c' implies tristate or char type\n",
- 				ext->name, value);
- 			return -EINVAL;
- 		}
-@@ -1715,7 +1715,7 @@ static int set_kcfg_value_tri(struct extern_desc *ext, void *ext_val,
- 	case KCFG_INT:
- 	case KCFG_CHAR_ARR:
- 	default:
--		pr_warn("extern (kcfg) %s=%c should be bool, tristate, or char\n",
-+		pr_warn("extern (kcfg) '%s': value '%c' implies bool, tristate, or char type\n",
- 			ext->name, value);
- 		return -EINVAL;
- 	}
-@@ -1729,7 +1729,8 @@ static int set_kcfg_value_str(struct extern_desc *ext, char *ext_val,
- 	size_t len;
+@@ -4670,6 +4670,8 @@ static int probe_kern_btf_enum64(void)
+ 					     strs, sizeof(strs)));
+ }
  
- 	if (ext->kcfg.type != KCFG_CHAR_ARR) {
--		pr_warn("extern (kcfg) %s=%s should be char array\n", ext->name, value);
-+		pr_warn("extern (kcfg) '%s': value '%s' implies char array type\n",
-+			ext->name, value);
- 		return -EINVAL;
- 	}
- 
-@@ -1743,7 +1744,7 @@ static int set_kcfg_value_str(struct extern_desc *ext, char *ext_val,
- 	/* strip quotes */
- 	len -= 2;
- 	if (len >= ext->kcfg.sz) {
--		pr_warn("extern (kcfg) '%s': long string config %s of (%zu bytes) truncated to %d bytes\n",
-+		pr_warn("extern (kcfg) '%s': long string '%s' of (%zu bytes) truncated to %d bytes\n",
- 			ext->name, value, len, ext->kcfg.sz - 1);
- 		len = ext->kcfg.sz - 1;
- 	}
-@@ -1800,13 +1801,20 @@ static bool is_kcfg_value_in_range(const struct extern_desc *ext, __u64 v)
- static int set_kcfg_value_num(struct extern_desc *ext, void *ext_val,
- 			      __u64 value)
- {
--	if (ext->kcfg.type != KCFG_INT && ext->kcfg.type != KCFG_CHAR) {
--		pr_warn("extern (kcfg) %s=%llu should be integer\n",
-+	if (ext->kcfg.type != KCFG_INT && ext->kcfg.type != KCFG_CHAR &&
-+	    ext->kcfg.type != KCFG_BOOL) {
-+		pr_warn("extern (kcfg) '%s': value '%llu' implies integer, char, or boolean type\n",
- 			ext->name, (unsigned long long)value);
- 		return -EINVAL;
- 	}
-+	if (ext->kcfg.type == KCFG_BOOL && value > 1) {
-+		pr_warn("extern (kcfg) '%s': value '%llu' isn't boolean compatible\n",
-+			ext->name, (unsigned long long)value);
-+		return -EINVAL;
++static int probe_kern_syscall_wrapper(void);
 +
+ enum kern_feature_result {
+ 	FEAT_UNKNOWN = 0,
+ 	FEAT_SUPPORTED = 1,
+@@ -4738,6 +4740,9 @@ static struct kern_feature_desc {
+ 	[FEAT_BTF_ENUM64] = {
+ 		"BTF_KIND_ENUM64 support", probe_kern_btf_enum64,
+ 	},
++	[FEAT_SYSCALL_WRAPPER] = {
++		"Kernel using syscall wrapper", probe_kern_syscall_wrapper,
++	},
+ };
+ 
+ bool kernel_supports(const struct bpf_object *obj, enum kern_feature_id feat_id)
+@@ -8421,6 +8426,7 @@ int bpf_program__set_log_buf(struct bpf_program *prog, char *log_buf, size_t log
+ 
+ static int attach_kprobe(const struct bpf_program *prog, long cookie, struct bpf_link **link);
+ static int attach_uprobe(const struct bpf_program *prog, long cookie, struct bpf_link **link);
++static int attach_ksyscall(const struct bpf_program *prog, long cookie, struct bpf_link **link);
+ static int attach_usdt(const struct bpf_program *prog, long cookie, struct bpf_link **link);
+ static int attach_tp(const struct bpf_program *prog, long cookie, struct bpf_link **link);
+ static int attach_raw_tp(const struct bpf_program *prog, long cookie, struct bpf_link **link);
+@@ -8441,6 +8447,8 @@ static const struct bpf_sec_def section_defs[] = {
+ 	SEC_DEF("uretprobe.s+",		KPROBE, 0, SEC_SLEEPABLE, attach_uprobe),
+ 	SEC_DEF("kprobe.multi+",	KPROBE,	BPF_TRACE_KPROBE_MULTI, SEC_NONE, attach_kprobe_multi),
+ 	SEC_DEF("kretprobe.multi+",	KPROBE,	BPF_TRACE_KPROBE_MULTI, SEC_NONE, attach_kprobe_multi),
++	SEC_DEF("ksyscall+",		KPROBE,	0, SEC_NONE, attach_ksyscall),
++	SEC_DEF("kretsyscall+",		KPROBE, 0, SEC_NONE, attach_ksyscall),
+ 	SEC_DEF("usdt+",		KPROBE,	0, SEC_NONE, attach_usdt),
+ 	SEC_DEF("tc",			SCHED_CLS, 0, SEC_NONE),
+ 	SEC_DEF("classifier",		SCHED_CLS, 0, SEC_NONE),
+@@ -9797,7 +9805,7 @@ static int perf_event_open_probe(bool uprobe, bool retprobe, const char *name,
+ {
+ 	struct perf_event_attr attr = {};
+ 	char errmsg[STRERR_BUFSIZE];
+-	int type, pfd, err;
++	int type, pfd;
+ 
+ 	if (ref_ctr_off >= (1ULL << PERF_UPROBE_REF_CTR_OFFSET_BITS))
+ 		return -EINVAL;
+@@ -9833,14 +9841,7 @@ static int perf_event_open_probe(bool uprobe, bool retprobe, const char *name,
+ 		      pid < 0 ? -1 : pid /* pid */,
+ 		      pid == -1 ? 0 : -1 /* cpu */,
+ 		      -1 /* group_fd */, PERF_FLAG_FD_CLOEXEC);
+-	if (pfd < 0) {
+-		err = -errno;
+-		pr_warn("%s perf_event_open() failed: %s\n",
+-			uprobe ? "uprobe" : "kprobe",
+-			libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
+-		return err;
+-	}
+-	return pfd;
++	return pfd >= 0 ? pfd : -errno;
+ }
+ 
+ static int append_to_file(const char *file, const char *fmt, ...)
+@@ -9945,6 +9946,60 @@ static int perf_event_kprobe_open_legacy(const char *probe_name, bool retprobe,
+ 	return err;
+ }
+ 
++static const char *arch_specific_syscall_pfx(void)
++{
++#if defined(__x86_64__)
++	return "x64";
++#elif defined(__i386__)
++	return "ia32";
++#elif defined(__s390x__)
++	return "s390x";
++#elif defined(__s390__)
++	return "s390";
++#elif defined(__arm__)
++	return "arm";
++#elif defined(__aarch64__)
++	return "arm64";
++#elif defined(__mips__)
++	return "mips";
++#elif defined(__riscv)
++	return "riscv";
++#else
++	return NULL;
++#endif
++}
++
++static int probe_kern_syscall_wrapper(void)
++{
++	char syscall_name[64];
++	const char *ksys_pfx;
++
++	ksys_pfx = arch_specific_syscall_pfx();
++	if (!ksys_pfx)
++		return 0;
++
++	snprintf(syscall_name, sizeof(syscall_name), "__%s_sys_bpf", ksys_pfx);
++
++	if (determine_kprobe_perf_type() >= 0) {
++		int pfd;
++
++		pfd = perf_event_open_probe(false, false, syscall_name, 0, getpid(), 0);
++		if (pfd >= 0)
++			close(pfd);
++
++		return pfd >= 0 ? 1 : 0;
++	} else { /* legacy mode */
++		char probe_name[128];
++
++		gen_kprobe_legacy_event_name(probe_name, sizeof(probe_name), syscall_name, 0);
++		if (add_kprobe_event_legacy(probe_name, false, syscall_name, 0) < 0)
++			return 0;
++
++		(void)remove_kprobe_event_legacy(probe_name, false);
++		return 1;
 +	}
- 	if (!is_kcfg_value_in_range(ext, value)) {
--		pr_warn("extern (kcfg) %s=%llu value doesn't fit in %d bytes\n",
-+		pr_warn("extern (kcfg) '%s': value '%llu' doesn't fit in %d bytes\n",
- 			ext->name, (unsigned long long)value, ext->kcfg.sz);
- 		return -ERANGE;
- 	}
-@@ -1870,16 +1878,19 @@ static int bpf_object__process_kconfig_line(struct bpf_object *obj,
- 		/* assume integer */
- 		err = parse_u64(value, &num);
- 		if (err) {
--			pr_warn("extern (kcfg) %s=%s should be integer\n",
--				ext->name, value);
-+			pr_warn("extern (kcfg) '%s': value '%s' isn't a valid integer\n", ext->name, value);
- 			return err;
- 		}
-+		if (ext->kcfg.type != KCFG_INT && ext->kcfg.type != KCFG_CHAR) {
-+			pr_warn("extern (kcfg) '%s': value '%s' implies integer type\n", ext->name, value);
-+			return -EINVAL;
-+		}
- 		err = set_kcfg_value_num(ext, ext_val, num);
- 		break;
- 	}
- 	if (err)
- 		return err;
--	pr_debug("extern (kcfg) %s=%s\n", ext->name, value);
-+	pr_debug("extern (kcfg) '%s': set to %s\n", ext->name, value);
- 	return 0;
++}
++
+ struct bpf_link *
+ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
+ 				const char *func_name,
+@@ -10030,6 +10085,29 @@ struct bpf_link *bpf_program__attach_kprobe(const struct bpf_program *prog,
+ 	return bpf_program__attach_kprobe_opts(prog, func_name, &opts);
  }
  
-@@ -3687,7 +3698,7 @@ static int bpf_object__collect_externs(struct bpf_object *obj)
- 			ext->kcfg.type = find_kcfg_type(obj->btf, t->type,
- 						        &ext->kcfg.is_signed);
- 			if (ext->kcfg.type == KCFG_UNKNOWN) {
--				pr_warn("extern (kcfg) '%s' type is unsupported\n", ext_name);
-+				pr_warn("extern (kcfg) '%s': type is unsupported\n", ext_name);
- 				return -ENOTSUP;
- 			}
- 		} else if (strcmp(sec_name, KSYMS_SEC) == 0) {
-@@ -7287,14 +7298,14 @@ static int kallsyms_cb(unsigned long long sym_addr, char sym_type,
- 		return 0;
- 
- 	if (ext->is_set && ext->ksym.addr != sym_addr) {
--		pr_warn("extern (ksym) '%s' resolution is ambiguous: 0x%llx or 0x%llx\n",
-+		pr_warn("extern (ksym) '%s': resolution is ambiguous: 0x%llx or 0x%llx\n",
- 			sym_name, ext->ksym.addr, sym_addr);
- 		return -EINVAL;
- 	}
- 	if (!ext->is_set) {
- 		ext->is_set = true;
- 		ext->ksym.addr = sym_addr;
--		pr_debug("extern (ksym) %s=0x%llx\n", sym_name, sym_addr);
-+		pr_debug("extern (ksym) '%s': set to 0x%llx\n", sym_name, sym_addr);
- 	}
- 	return 0;
- }
-@@ -7498,28 +7509,50 @@ static int bpf_object__resolve_externs(struct bpf_object *obj,
- 	for (i = 0; i < obj->nr_extern; i++) {
- 		ext = &obj->externs[i];
- 
--		if (ext->type == EXT_KCFG &&
--		    strcmp(ext->name, "LINUX_KERNEL_VERSION") == 0) {
--			void *ext_val = kcfg_data + ext->kcfg.data_off;
--			__u32 kver = get_kernel_version();
-+		if (ext->type == EXT_KSYM) {
-+			if (ext->ksym.type_id)
-+				need_vmlinux_btf = true;
-+			else
-+				need_kallsyms = true;
-+			continue;
-+		} else if (ext->type == EXT_KCFG) {
-+			void *ext_ptr = kcfg_data + ext->kcfg.data_off;
-+			__u64 value = 0;
- 
--			if (!kver) {
--				pr_warn("failed to get kernel version\n");
-+			/* Kconfig externs need actual /proc/config.gz */
-+			if (str_has_pfx(ext->name, "CONFIG_")) {
-+				need_config = true;
-+				continue;
-+			}
++struct bpf_link *bpf_program__attach_ksyscall(const struct bpf_program *prog,
++					      const char *syscall_name,
++					      const struct bpf_ksyscall_opts *opts)
++{
++	LIBBPF_OPTS(bpf_kprobe_opts, kprobe_opts);
++	char func_name[128];
 +
-+			/* Virtual kcfg externs are customly handled by libbpf */
-+			if (strcmp(ext->name, "LINUX_KERNEL_VERSION") == 0) {
-+				value = get_kernel_version();
-+				if (!value) {
-+					pr_warn("extern (kcfg) '%s': failed to get kernel version\n", ext->name);
-+					return -EINVAL;
-+				}
-+			} else if (strcmp(ext->name, "LINUX_HAS_BPF_COOKIE") == 0) {
-+				value = kernel_supports(obj, FEAT_BPF_COOKIE);
-+			} else if (!str_has_pfx(ext->name, "LINUX_") || !ext->is_weak) {
-+				/* Currently libbpf supports only CONFIG_ and LINUX_ prefixed
-+				 * __kconfig externs, where LINUX_ ones are virtual and filled out
-+				 * customly by libbpf (their values don't come from Kconfig).
-+				 * If LINUX_xxx variable is not recognized by libbpf, but is marked
-+				 * __weak, it defaults to zero value, just like for CONFIG_xxx
-+				 * externs.
-+				 */
-+				pr_warn("extern (kcfg) '%s': unrecognized virtual extern\n", ext->name);
- 				return -EINVAL;
- 			}
--			err = set_kcfg_value_num(ext, ext_val, kver);
++	if (!OPTS_VALID(opts, bpf_ksyscall_opts))
++		return libbpf_err_ptr(-EINVAL);
 +
-+			err = set_kcfg_value_num(ext, ext_ptr, value);
- 			if (err)
- 				return err;
--			pr_debug("extern (kcfg) %s=0x%x\n", ext->name, kver);
--		} else if (ext->type == EXT_KCFG && str_has_pfx(ext->name, "CONFIG_")) {
--			need_config = true;
--		} else if (ext->type == EXT_KSYM) {
--			if (ext->ksym.type_id)
--				need_vmlinux_btf = true;
--			else
--				need_kallsyms = true;
-+			pr_debug("extern (kcfg) '%s': set to 0x%llx\n",
-+				 ext->name, (long long)value);
- 		} else {
--			pr_warn("unrecognized extern '%s'\n", ext->name);
-+			pr_warn("extern '%s': unrecognized extern kind\n", ext->name);
- 			return -EINVAL;
- 		}
- 	}
-@@ -7555,10 +7588,10 @@ static int bpf_object__resolve_externs(struct bpf_object *obj,
- 		ext = &obj->externs[i];
- 
- 		if (!ext->is_set && !ext->is_weak) {
--			pr_warn("extern %s (strong) not resolved\n", ext->name);
-+			pr_warn("extern '%s' (strong): not resolved\n", ext->name);
- 			return -ESRCH;
- 		} else if (!ext->is_set) {
--			pr_debug("extern %s (weak) not resolved, defaulting to zero\n",
-+			pr_debug("extern '%s' (weak): not resolved, defaulting to zero\n",
- 				 ext->name);
- 		}
- 	}
-diff --git a/tools/lib/bpf/usdt.bpf.h b/tools/lib/bpf/usdt.bpf.h
-index 4181fddb3687..4f2adc0bd6ca 100644
---- a/tools/lib/bpf/usdt.bpf.h
-+++ b/tools/lib/bpf/usdt.bpf.h
-@@ -6,7 +6,6 @@
- #include <linux/errno.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
--#include <bpf/bpf_core_read.h>
- 
- /* Below types and maps are internal implementation details of libbpf's USDT
-  * support and are subjects to change. Also, bpf_usdt_xxx() API helpers should
-@@ -30,14 +29,6 @@
- #ifndef BPF_USDT_MAX_IP_CNT
- #define BPF_USDT_MAX_IP_CNT (4 * BPF_USDT_MAX_SPEC_CNT)
- #endif
--/* We use BPF CO-RE to detect support for BPF cookie from BPF side. This is
-- * the only dependency on CO-RE, so if it's undesirable, user can override
-- * BPF_USDT_HAS_BPF_COOKIE to specify whether to BPF cookie is supported or not.
-- */
--#ifndef BPF_USDT_HAS_BPF_COOKIE
--#define BPF_USDT_HAS_BPF_COOKIE \
--	bpf_core_enum_value_exists(enum bpf_func_id___usdt, BPF_FUNC_get_attach_cookie___usdt)
--#endif
- 
- enum __bpf_usdt_arg_type {
- 	BPF_USDT_ARG_CONST,
-@@ -83,15 +74,12 @@ struct {
- 	__type(value, __u32);
- } __bpf_usdt_ip_to_spec_id SEC(".maps") __weak;
- 
--/* don't rely on user's BPF code to have latest definition of bpf_func_id */
--enum bpf_func_id___usdt {
--	BPF_FUNC_get_attach_cookie___usdt = 0xBAD, /* value doesn't matter */
--};
-+extern const _Bool LINUX_HAS_BPF_COOKIE __kconfig;
- 
- static __always_inline
- int __bpf_usdt_spec_id(struct pt_regs *ctx)
++	if (kernel_supports(prog->obj, FEAT_SYSCALL_WRAPPER)) {
++		snprintf(func_name, sizeof(func_name), "__%s_sys_%s",
++			 arch_specific_syscall_pfx(), syscall_name);
++	} else {
++		snprintf(func_name, sizeof(func_name), "__se_sys_%s", syscall_name);
++	}
++
++	kprobe_opts.retprobe = OPTS_GET(opts, retprobe, false);
++	kprobe_opts.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
++
++	return bpf_program__attach_kprobe_opts(prog, func_name, &kprobe_opts);
++}
++
+ /* Adapted from perf/util/string.c */
+ static bool glob_match(const char *str, const char *pat)
  {
--	if (!BPF_USDT_HAS_BPF_COOKIE) {
-+	if (!LINUX_HAS_BPF_COOKIE) {
- 		long ip = PT_REGS_IP(ctx);
- 		int *spec_id_ptr;
+@@ -10200,6 +10278,27 @@ static int attach_kprobe(const struct bpf_program *prog, long cookie, struct bpf
+ 	return libbpf_get_error(*link);
+ }
+ 
++static int attach_ksyscall(const struct bpf_program *prog, long cookie, struct bpf_link **link)
++{
++	LIBBPF_OPTS(bpf_ksyscall_opts, opts);
++	const char *syscall_name;
++
++	*link = NULL;
++
++	/* no auto-attach for SEC("ksyscall") and SEC("kretsyscall") */
++	if (strcmp(prog->sec_name, "ksyscall") == 0 || strcmp(prog->sec_name, "kretsyscall") == 0)
++		return 0;
++
++	opts.retprobe = str_has_pfx(prog->sec_name, "kretsyscall/");
++	if (opts.retprobe)
++		syscall_name = prog->sec_name + sizeof("kretsyscall/") - 1;
++	else
++		syscall_name = prog->sec_name + sizeof("ksyscall/") - 1;
++
++	*link = bpf_program__attach_ksyscall(prog, syscall_name, &opts);
++	return *link ? 0 : -errno;
++}
++
+ static int attach_kprobe_multi(const struct bpf_program *prog, long cookie, struct bpf_link **link)
+ {
+ 	LIBBPF_OPTS(bpf_kprobe_multi_opts, opts);
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index e4d5353f757b..d10234aaa8df 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -457,6 +457,52 @@ bpf_program__attach_kprobe_multi_opts(const struct bpf_program *prog,
+ 				      const char *pattern,
+ 				      const struct bpf_kprobe_multi_opts *opts);
+ 
++struct bpf_ksyscall_opts {
++	/* size of this struct, for forward/backward compatiblity */
++	size_t sz;
++	/* custom user-provided value fetchable through bpf_get_attach_cookie() */
++	__u64 bpf_cookie;
++	/* attach as return probe? */
++	bool retprobe;
++	size_t :0;
++};
++#define bpf_ksyscall_opts__last_field retprobe
++
++/**
++ * @brief **bpf_program__attach_ksyscall()** attaches a BPF program
++ * to kernel syscall handler of a specified syscall. Optionally it's possible
++ * to request to install retprobe that will be triggered at syscall exit. It's
++ * also possible to associate BPF cookie (though options).
++ *
++ * Libbpf automatically will determine correct full kernel function name,
++ * which depending on system architecture and kernel version/configuration
++ * could be of the form __<arch>_sys_<syscall> or __se_sys_<syscall>, and will
++ * attach specified program using kprobe/kretprobe mechanism.
++ *
++ * **bpf_program__attach_ksyscall()** is an API counterpart of declarative
++ * **SEC("ksyscall/<syscall>")** annotation of BPF programs.
++ *
++ * At the moment **SEC("ksyscall")** and **bpf_program__attach_ksyscall()** do
++ * not handle all the calling convention quirks for mmap(), clone() and compat
++ * syscalls. It also only attaches to "native" syscall interfaces. If host
++ * system supports compat syscalls or defines 32-bit syscalls in 64-bit
++ * kernel, such syscall interfaces won't be attached to by libbpf.
++ *
++ * These limitations may or may not change in the future. Therefore it is
++ * recommended to use SEC("kprobe") for these syscalls or if working with
++ * compat and 32-bit interfaces is required.
++ *
++ * @param prog BPF program to attach
++ * @param syscall_name Symbolic name of the syscall (e.g., "bpf")
++ * @param opts Additional options (see **struct bpf_ksyscall_opts**)
++ * @return Reference to the newly created BPF link; or NULL is returned on
++ * error, error code is stored in errno
++ */
++LIBBPF_API struct bpf_link *
++bpf_program__attach_ksyscall(const struct bpf_program *prog,
++			     const char *syscall_name,
++			     const struct bpf_ksyscall_opts *opts);
++
+ struct bpf_uprobe_opts {
+ 	/* size of this struct, for forward/backward compatiblity */
+ 	size_t sz;
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 94b589ecfeaa..63c059a02a0d 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -356,6 +356,7 @@ LIBBPF_0.8.0 {
+ LIBBPF_1.0.0 {
+ 	global:
+ 		bpf_prog_query_opts;
++		bpf_program__attach_ksyscall;
+ 		btf__add_enum64;
+ 		btf__add_enum64_value;
+ 		libbpf_bpf_attach_type_str;
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index 9cd7829cbe41..f01dbab49da9 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -352,6 +352,8 @@ enum kern_feature_id {
+ 	FEAT_BPF_COOKIE,
+ 	/* BTF_KIND_ENUM64 support and BTF_KIND_ENUM kflag support */
+ 	FEAT_BTF_ENUM64,
++	/* Kernel uses syscall wrapper (CONFIG_ARCH_HAS_SYSCALL_WRAPPER) */
++	FEAT_SYSCALL_WRAPPER,
+ 	__FEAT_CNT,
+ };
  
 -- 
 2.30.2
