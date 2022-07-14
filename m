@@ -2,105 +2,139 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3629ACCA47B
-	for <bpf@archiver.kernel.org>; Thu, 14 Jul 2022 10:16:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B097C433EF
+	for <bpf@archiver.kernel.org>; Thu, 14 Jul 2022 10:19:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237794AbiGNKQk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 Jul 2022 06:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56106 "EHLO
+        id S237030AbiGNKS7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 Jul 2022 06:18:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237801AbiGNKQj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 14 Jul 2022 06:16:39 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586DB120A5;
-        Thu, 14 Jul 2022 03:16:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=0Gkk0NC34K+apqrYO+RTe0+nfUNqT3lfjLteCbnILho=; b=UFnSe+fhAVY6yhXjV2wPJ61iZ8
-        2Zw0OYv0osZnIIxvRy4gbl9Ye5kgg+qtQKMQkvhFyAK32I4SIz8biMp+cQChL4nwYrIOG6C9ex0Ef
-        f8U+9j9tY1bXIkJVNz+BPOChOnGQrY3uTbXPb+H8mB29/YqRxwsKepdNGgjXhQGGRQAiaiCXQXaCR
-        fpHfR8jE+VDhlrnJsDgRZjQMdGT1qeIdRxvz6Re/H0sOAKr8FKrB+YaDbMcUjAbbDYwWHaeq77Jdg
-        /X5bj3osOCoUykMSaOAx17CzfJkkDvSFWE1X4eNNlbC4Qk3E0NHW17ULmCJInK+jjxGJdV7o3rS7d
-        pVljFdig==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oBvsy-009HkF-C2; Thu, 14 Jul 2022 10:15:56 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E144A980120; Thu, 14 Jul 2022 12:10:36 +0200 (CEST)
-Date:   Thu, 14 Jul 2022 12:10:36 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "anil.s.keshavamurthy@intel.com" <anil.s.keshavamurthy@intel.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "dave@stgolabs.net" <dave@stgolabs.net>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        Kernel Team <Kernel-team@fb.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Subject: Re: [PATCH bpf-next 1/3] mm/vmalloc: introduce vmalloc_exec which
- allocates RO+X memory
-Message-ID: <Ys/rnFf/ewPA85Iz@worktop.programming.kicks-ass.net>
-References: <20220713071846.3286727-1-song@kernel.org>
- <20220713071846.3286727-2-song@kernel.org>
- <Ys6cWUMHO8XwyYgr@hirez.programming.kicks-ass.net>
- <7C927986-3665-4BD6-A339-D3FE4A71E3D4@fb.com>
- <Ys8qfRwkTbUYwmKM@worktop.programming.kicks-ass.net>
- <78A18945-0841-4CCE-8A33-6C09ECBFF7E1@fb.com>
+        with ESMTP id S230233AbiGNKS6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 14 Jul 2022 06:18:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E101A21261
+        for <bpf@vger.kernel.org>; Thu, 14 Jul 2022 03:18:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657793935;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=268TOJBBQftVNNNkXRfzqZnsqQ0xNHshbtk7uW04UqU=;
+        b=c9WyXtaS4hL68ugqBY0XbTzpLxDOgfK1Hb7skA16Z1k6l0n8AJLtUWX0p559n2ksEycbxC
+        Pcl03bvFDEWqnQq8IN8QikXEcHhfoLzR6eu6/NvjqpYmaoRdEw6Gcezoh6KggLd/EuyVhh
+        4t1qxmfEdLbLzAj7gdK3PQfrvJbVmi0=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-493-x0NIsz6LNOOTeS_TxF8YwQ-1; Thu, 14 Jul 2022 06:18:54 -0400
+X-MC-Unique: x0NIsz6LNOOTeS_TxF8YwQ-1
+Received: by mail-ed1-f72.google.com with SMTP id n8-20020a05640205c800b00434fb0c150cso1194448edx.19
+        for <bpf@vger.kernel.org>; Thu, 14 Jul 2022 03:18:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=268TOJBBQftVNNNkXRfzqZnsqQ0xNHshbtk7uW04UqU=;
+        b=CAr783qZvgYn21+dAKjepuiv+Dk6XZVuxx2F8sZQDDOigtwFNqkqPZjqr1xeh1JGen
+         j62iFm0uN5JV21A8f02QJOclycvP0i28GE39LgNBVNgrPDtwAzQaawnqvsezJ0srAAGi
+         RQpeUK7DaxtTwcskHbuMszEab26KJeSLh+Jcj8F0xIb8Iw8QQOCqhYWi/ffMNfa/fXBF
+         X704Wbqc53X1Zy3MonQ+u101f+OQFil1pN1VO7WbhctFmuGZZ2L5b8ETMxc2OQJofMK7
+         KSEsxBZYTWZRB2TELuaiRvqfGJGjoFrZmC8LA/PqQRK4lQjogjV79+BlZ1BkTcPVwQaF
+         PiZg==
+X-Gm-Message-State: AJIora/ozC9T36+GmCSRHucTO+OkYhd0cKv3F+4fCwUkLguoNwKiiWyK
+        +TOevAw5xx6f/MPq9nTw3NAFKWqDy/E1gSwvFBzUN4k/o92xLk/bmmdAuiNVvk3P1gnnlxbRHU2
+        Kp5Rt4mYvE8GI
+X-Received: by 2002:a05:6402:2788:b0:43a:e0aa:97f4 with SMTP id b8-20020a056402278800b0043ae0aa97f4mr11179471ede.329.1657793933132;
+        Thu, 14 Jul 2022 03:18:53 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vRF8ktMAL2EwVubBg1iy8EgoyJJJlqL2+W4RGBTwBRBIpP18bORBGo8OlSmvTGbMSpyKtDhw==
+X-Received: by 2002:a05:6402:2788:b0:43a:e0aa:97f4 with SMTP id b8-20020a056402278800b0043ae0aa97f4mr11179435ede.329.1657793932798;
+        Thu, 14 Jul 2022 03:18:52 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id g13-20020aa7d1cd000000b00435a742e350sm772178edp.75.2022.07.14.03.18.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 03:18:52 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 89B594D9B20; Thu, 14 Jul 2022 12:18:51 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Freysteinn Alfredsson <freysteinn.alfredsson@kau.se>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Subject: Re: [RFC PATCH 16/17] selftests/bpf: Add test for XDP queueing
+ through PIFO maps
+In-Reply-To: <CAEf4BzaZL=fQrvPDGg+VVoWqRRLD0g-3jfeAbAb6M_zEa4nFMg@mail.gmail.com>
+References: <20220713111430.134810-1-toke@redhat.com>
+ <20220713111430.134810-17-toke@redhat.com>
+ <CAEf4BzaZL=fQrvPDGg+VVoWqRRLD0g-3jfeAbAb6M_zEa4nFMg@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Thu, 14 Jul 2022 12:18:51 +0200
+Message-ID: <87y1wwngj8.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <78A18945-0841-4CCE-8A33-6C09ECBFF7E1@fb.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 09:20:55PM +0000, Song Liu wrote:
-> 
-> 
-> > On Jul 13, 2022, at 1:26 PM, Peter Zijlstra <peterz@infradead.org> wrote:
-> > 
-> > On Wed, Jul 13, 2022 at 03:48:35PM +0000, Song Liu wrote:
-> > 
-> >>> So how about instead we separate them? Then much of the problem goes
-> >>> away, you don't need to track these 2M chunks at all.
-> >> 
-> >> If we manage the memory in < 2MiB granularity, either 4kB or smaller, 
-> >> we still need some way to track which parts are being used, no? I mean
-> >> the bitmap.  
-> > 
-> > I was thinking the vmalloc vmap_area tree could help out there.
-> 
-> Interesting. vmap_area tree indeed keeps a lot of useful information. 
-> 
-> Currently, powerpc supports CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC, 
+Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
 
-Only PPC32; and it's due to a constraint in their MMU vs page
-protections.
+> On Wed, Jul 13, 2022 at 4:15 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@re=
+dhat.com> wrote:
+>>
+>> This adds selftests for both variants of the generic PIFO map type, and =
+for
+>> the dequeue program type. The XDP test uses bpf_prog_run() to run an XDP
+>> program that puts packets into a PIFO map, and then adds tests that pull
+>> them back out again through bpf_prog_run() of a dequeue program, as well=
+ as
+>> by attaching a dequeue program to a veth device and scheduling transmiss=
+ion
+>> there.
+>>
+>> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+>> ---
+>>  .../selftests/bpf/prog_tests/pifo_map.c       | 125 ++++++++++++++
+>>  .../bpf/prog_tests/xdp_pifo_test_run.c        | 154 ++++++++++++++++++
+>>  tools/testing/selftests/bpf/progs/pifo_map.c  |  54 ++++++
+>>  .../selftests/bpf/progs/test_xdp_pifo.c       | 110 +++++++++++++
+>>  4 files changed, 443 insertions(+)
+>>  create mode 100644 tools/testing/selftests/bpf/prog_tests/pifo_map.c
+>>  create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_pifo_test=
+_run.c
+>>  create mode 100644 tools/testing/selftests/bpf/progs/pifo_map.c
+>>  create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_pifo.c
+>>
+>
+> [...]
+>
+>> +__u16 pkt_count =3D 0;
+>> +__u16 drop_above =3D 2;
+>> +
+>> +SEC("dequeue")
+>
+> "dequeue" seems like a way too generic term, why not "xdp_dequeue" or
+> something like that? Isn't this XDP specific program?
 
-> which leaves module_alloc just for module text. If this works, we get
-> separation between RO+X and RW memory. What would it take to enable
-> CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC for x86_64? 
+Well, depending on how close the qdisc/xdp APIs end up being we may be
+able to reuse the program type but have subtypes (so we could have
+"dequeue/xdp" and "dequeue/skb" for instance). But if that doesn't pan
+out I do see your point that "dequeue" is a bit too generic; will change
+it to 'xdp_dequeue' in that case...
 
-The VM_TOPDOWN_VMAP flag and ensuring the data and code regions never
-overlap. Once you have that you can enable it.
+-Toke
 
-Specifically the problem is that data needs to be in the s32 immediate
-range just like code, so we're constrained to the module range. Given
-that constraint, the easiest solution is to use the different ends of
-that range.
