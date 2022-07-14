@@ -2,44 +2,47 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C219C433EF
-	for <bpf@archiver.kernel.org>; Thu, 14 Jul 2022 07:08:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 061FDCCA47B
+	for <bpf@archiver.kernel.org>; Thu, 14 Jul 2022 07:08:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233255AbiGNHIC convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 14 Jul 2022 03:08:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45848 "EHLO
+        id S231300AbiGNHIE convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 14 Jul 2022 03:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbiGNHIB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 14 Jul 2022 03:08:01 -0400
+        with ESMTP id S234379AbiGNHIE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 14 Jul 2022 03:08:04 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17A82CDDA
-        for <bpf@vger.kernel.org>; Thu, 14 Jul 2022 00:08:00 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26E6xB5r003570
-        for <bpf@vger.kernel.org>; Thu, 14 Jul 2022 00:08:00 -0700
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3622DA82
+        for <bpf@vger.kernel.org>; Thu, 14 Jul 2022 00:08:03 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26E6x9se028540
+        for <bpf@vger.kernel.org>; Thu, 14 Jul 2022 00:08:03 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h9h5c99xv-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hae0w03wt-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 14 Jul 2022 00:08:00 -0700
-Received: from twshared5413.23.frc3.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 14 Jul 2022 00:08:03 -0700
+Received: from twshared35153.14.frc2.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 14 Jul 2022 00:07:59 -0700
+ 15.1.2375.28; Thu, 14 Jul 2022 00:08:02 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 6BC181C50A18F; Thu, 14 Jul 2022 00:07:56 -0700 (PDT)
+        id 9348B1C50A1A8; Thu, 14 Jul 2022 00:08:00 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v2 bpf-next 0/5] Add SEC("ksyscall") support
-Date:   Thu, 14 Jul 2022 00:07:50 -0700
-Message-ID: <20220714070755.3235561-1-andrii@kernel.org>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v2 bpf-next 2/5] selftests/bpf: add test of __weak unknown virtual __kconfig extern
+Date:   Thu, 14 Jul 2022 00:07:52 -0700
+Message-ID: <20220714070755.3235561-3-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220714070755.3235561-1-andrii@kernel.org>
+References: <20220714070755.3235561-1-andrii@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: cdD8hYTzyVDqSKpEkMwIdFRAYF38SJP0
-X-Proofpoint-ORIG-GUID: cdD8hYTzyVDqSKpEkMwIdFRAYF38SJP0
+X-Proofpoint-GUID: 9toHzQ-tRg7kjzEbJ0D5Jb6cysTd2irn
+X-Proofpoint-ORIG-GUID: 9toHzQ-tRg7kjzEbJ0D5Jb6cysTd2irn
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-07-14_04,2022-07-13_03,2022-06-22_01
@@ -47,56 +50,101 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add SEC("ksyscall")/SEC("kretsyscall") sections and corresponding
-bpf_program__attach_ksyscall() API that simplifies tracing kernel syscalls
-through kprobe mechanism. Kprobing syscalls isn't trivial due to varying
-syscall handler names in the kernel and various ways syscall argument are
-passed, depending on kernel architecture and configuration. SEC("ksyscall")
-allows user to not care about such details and just get access to syscall
-input arguments, while libbpf takes care of necessary feature detection logic.
+Exercise libbpf's logic for unknown __weak virtual __kconfig externs.
+USDT selftests are already excercising non-weak known virtual extern
+already (LINUX_HAS_BPF_COOKIE), so no need to add explicit tests for it.
 
-There are still more quirks that are not straightforward to hide completely
-(see comments about mmap(), clone() and compat syscalls), so in such more
-advanced scenarios user might need to fall back to plain SEC("kprobe")
-approach, but for absolute majority of users SEC("ksyscall") is a big
-improvement.
+Tested-by: Alan Maguire <alan.maguire@oracle.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ .../selftests/bpf/prog_tests/core_extern.c      | 17 +++++++----------
+ .../selftests/bpf/progs/test_core_extern.c      |  3 +++
+ 2 files changed, 10 insertions(+), 10 deletions(-)
 
-As part of this patch set libbpf adds two more virtual __kconfig externs, in
-addition to existing LINUX_KERNEL_VERSION: LINUX_HAS_BPF_COOKIE and
-LINUX_HAS_SYSCALL_WRAPPER, which let's libbpf-provided BPF-side code minimize
-external dependencies and assumptions and let's user-space part of libbpf to
-perform all the feature detection logic. This benefits USDT support code,
-which now doesn't depend on BPF CO-RE for its functionality.
-
-v1->v2:
-  - normalize extern variable-related warn and debug message formats (Alan);
-rfc->v1:
-  - drop dependency on kallsyms and speed up SYSCALL_WRAPPER detection (Alexei);
-  - drop dependency on /proc/config.gz in bpf_tracing.h (Yaniv);
-  - add doc comment and ephasize mmap(), clone() and compat quirks that are
-    not supported (Ilya);
-  - use mechanism similar to LINUX_KERNEL_VERSION to also improve USDT code.
-
-Andrii Nakryiko (5):
-  libbpf: generalize virtual __kconfig externs and use it for USDT
-  selftests/bpf: add test of __weak unknown virtual __kconfig extern
-  libbpf: improve BPF_KPROBE_SYSCALL macro and rename it to BPF_KSYSCALL
-  libbpf: add ksyscall/kretsyscall sections support for syscall kprobes
-  selftests/bpf: use BPF_KSYSCALL and SEC("ksyscall") in selftests
-
- tools/lib/bpf/bpf_tracing.h                   |  51 +++--
- tools/lib/bpf/libbpf.c                        | 214 ++++++++++++++----
- tools/lib/bpf/libbpf.h                        |  46 ++++
- tools/lib/bpf/libbpf.map                      |   1 +
- tools/lib/bpf/libbpf_internal.h               |   2 +
- tools/lib/bpf/usdt.bpf.h                      |  16 +-
- .../selftests/bpf/prog_tests/core_extern.c    |  17 +-
- .../selftests/bpf/progs/bpf_syscall_macro.c   |   6 +-
- .../selftests/bpf/progs/test_attach_probe.c   |  15 +-
- .../selftests/bpf/progs/test_core_extern.c    |   3 +
- .../selftests/bpf/progs/test_probe_user.c     |  27 +--
- 11 files changed, 289 insertions(+), 109 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/core_extern.c b/tools/testing/selftests/bpf/prog_tests/core_extern.c
+index 1931a158510e..63a51e9f3630 100644
+--- a/tools/testing/selftests/bpf/prog_tests/core_extern.c
++++ b/tools/testing/selftests/bpf/prog_tests/core_extern.c
+@@ -39,6 +39,7 @@ static struct test_case {
+ 		       "CONFIG_STR=\"abracad\"\n"
+ 		       "CONFIG_MISSING=0",
+ 		.data = {
++			.unkn_virt_val = 0,
+ 			.bpf_syscall = false,
+ 			.tristate_val = TRI_MODULE,
+ 			.bool_val = true,
+@@ -121,7 +122,7 @@ static struct test_case {
+ void test_core_extern(void)
+ {
+ 	const uint32_t kern_ver = get_kernel_version();
+-	int err, duration = 0, i, j;
++	int err, i, j;
+ 	struct test_core_extern *skel = NULL;
+ 	uint64_t *got, *exp;
+ 	int n = sizeof(*skel->data) / sizeof(uint64_t);
+@@ -136,19 +137,17 @@ void test_core_extern(void)
+ 			continue;
+ 
+ 		skel = test_core_extern__open_opts(&opts);
+-		if (CHECK(!skel, "skel_open", "skeleton open failed\n"))
++		if (!ASSERT_OK_PTR(skel, "skel_open"))
+ 			goto cleanup;
+ 		err = test_core_extern__load(skel);
+ 		if (t->fails) {
+-			CHECK(!err, "skel_load",
+-			      "shouldn't succeed open/load of skeleton\n");
++			ASSERT_ERR(err, "skel_load_should_fail");
+ 			goto cleanup;
+-		} else if (CHECK(err, "skel_load",
+-				 "failed to open/load skeleton\n")) {
++		} else if (!ASSERT_OK(err, "skel_load")) {
+ 			goto cleanup;
+ 		}
+ 		err = test_core_extern__attach(skel);
+-		if (CHECK(err, "attach_raw_tp", "failed attach: %d\n", err))
++		if (!ASSERT_OK(err, "attach_raw_tp"))
+ 			goto cleanup;
+ 
+ 		usleep(1);
+@@ -158,9 +157,7 @@ void test_core_extern(void)
+ 		got = (uint64_t *)skel->data;
+ 		exp = (uint64_t *)&t->data;
+ 		for (j = 0; j < n; j++) {
+-			CHECK(got[j] != exp[j], "check_res",
+-			      "result #%d: expected %llx, but got %llx\n",
+-			       j, (__u64)exp[j], (__u64)got[j]);
++			ASSERT_EQ(got[j], exp[j], "result");
+ 		}
+ cleanup:
+ 		test_core_extern__destroy(skel);
+diff --git a/tools/testing/selftests/bpf/progs/test_core_extern.c b/tools/testing/selftests/bpf/progs/test_core_extern.c
+index 3ac3603ad53d..a3c7c1042f35 100644
+--- a/tools/testing/selftests/bpf/progs/test_core_extern.c
++++ b/tools/testing/selftests/bpf/progs/test_core_extern.c
+@@ -11,6 +11,7 @@
+ static int (*bpf_missing_helper)(const void *arg1, int arg2) = (void *) 999;
+ 
+ extern int LINUX_KERNEL_VERSION __kconfig;
++extern int LINUX_UNKNOWN_VIRTUAL_EXTERN __kconfig __weak;
+ extern bool CONFIG_BPF_SYSCALL __kconfig; /* strong */
+ extern enum libbpf_tristate CONFIG_TRISTATE __kconfig __weak;
+ extern bool CONFIG_BOOL __kconfig __weak;
+@@ -22,6 +23,7 @@ extern const char CONFIG_STR[8] __kconfig __weak;
+ extern uint64_t CONFIG_MISSING __kconfig __weak;
+ 
+ uint64_t kern_ver = -1;
++uint64_t unkn_virt_val = -1;
+ uint64_t bpf_syscall = -1;
+ uint64_t tristate_val = -1;
+ uint64_t bool_val = -1;
+@@ -38,6 +40,7 @@ int handle_sys_enter(struct pt_regs *ctx)
+ 	int i;
+ 
+ 	kern_ver = LINUX_KERNEL_VERSION;
++	unkn_virt_val = LINUX_UNKNOWN_VIRTUAL_EXTERN;
+ 	bpf_syscall = CONFIG_BPF_SYSCALL;
+ 	tristate_val = CONFIG_TRISTATE;
+ 	bool_val = CONFIG_BOOL;
 -- 
 2.30.2
 
