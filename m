@@ -2,34 +2,34 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37495C43334
-	for <bpf@archiver.kernel.org>; Thu, 14 Jul 2022 19:16:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25FEEC433EF
+	for <bpf@archiver.kernel.org>; Thu, 14 Jul 2022 19:17:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239145AbiGNTQ5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 Jul 2022 15:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53568 "EHLO
+        id S239326AbiGNTRB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 Jul 2022 15:17:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiGNTQ4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 14 Jul 2022 15:16:56 -0400
+        with ESMTP id S229504AbiGNTRA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 14 Jul 2022 15:17:00 -0400
 Received: from sinmsgout03.his.huawei.com (sinmsgout03.his.huawei.com [119.8.177.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E5632DA88
-        for <bpf@vger.kernel.org>; Thu, 14 Jul 2022 12:16:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724EF2DA88
+        for <bpf@vger.kernel.org>; Thu, 14 Jul 2022 12:16:59 -0700 (PDT)
 Received: from fraeml714-chm.china.huawei.com (unknown [172.18.156.149])
-        by sinmsgout03.his.huawei.com (SkyGuard) with ESMTP id 4LkPN121Rgz9xGNy;
-        Fri, 15 Jul 2022 03:15:45 +0800 (CST)
+        by sinmsgout03.his.huawei.com (SkyGuard) with ESMTP id 4LkPN45YDmz9v7BW;
+        Fri, 15 Jul 2022 03:15:48 +0800 (CST)
 Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
  fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 14 Jul 2022 21:16:48 +0200
+ 15.1.2375.24; Thu, 14 Jul 2022 21:16:50 +0200
 From:   Roberto Sassu <roberto.sassu@huawei.com>
 To:     <ast@kernel.org>, <daniel@iogearbox.net>,
         <john.fastabend@gmail.com>, <andrii@kernel.org>,
         <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
         <kpsingh@kernel.org>
 CC:     <bpf@vger.kernel.org>, Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH v8 06/12] KEYS: Move KEY_LOOKUP_ to include/linux/key.h
-Date:   Thu, 14 Jul 2022 21:14:49 +0200
-Message-ID: <20220714191455.2101834-7-roberto.sassu@huawei.com>
+Subject: [RFC][PATCH v8 08/12] bpf: Add bpf_verify_pkcs7_signature() kfunc
+Date:   Thu, 14 Jul 2022 21:14:51 +0200
+Message-ID: <20220714191455.2101834-9-roberto.sassu@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220714191455.2101834-1-roberto.sassu@huawei.com>
 References: <20220714191455.2101834-1-roberto.sassu@huawei.com>
@@ -44,43 +44,152 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In preparation for the patch that introduces the bpf_lookup_user_key() eBPF
-kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be able to
-validate the kfunc parameters.
+Add the bpf_verify_pkcs7_signature() kfunc, to give eBPF security modules
+the ability to check the validity of a signature against supplied data, by
+using user-provided or system-provided keys as trust anchor.
+
+The new kfunc makes it possible to enforce mandatory policies, as eBPF
+programs might be allowed to make security decisions only based on data
+sources the system administrator approves.
+
+The caller should provide both the data to be verified and the signature as
+eBPF dynamic pointers (to minimize the number of parameters) and,
+alternatively, a keyring obtained from bpf_lookup_user_key(), or a
+pre-determined keyring ID with values defined in
+include/linux/verification.h.
+
+The two keyring parameters have to be provided separately: the
+pre-determined IDs exist only in the context of verify_pkcs7_signature().
+They should not be passed to the bpf_lookup_user_key() kfunc, or to a new
+kfunc doing type casting to a struct key (like: ((struct key *)2UL) in
+include/linux/verification.h), as otherwise, each kfunc accepting a struct
+key would have to check if it is a valid pointer or not.
+
+Finally, bpf_verify_pkcs7_signature() completes the permission check
+deferred by bpf_lookup_user_key(), by calling key_validate().
+key_task_permission() is already called by the PKCS#7 code.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- include/linux/key.h      | 3 +++
- security/keys/internal.h | 2 --
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ kernel/trace/bpf_trace.c | 86 +++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 85 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/key.h b/include/linux/key.h
-index 7febc4881363..a297e075038c 100644
---- a/include/linux/key.h
-+++ b/include/linux/key.h
-@@ -88,6 +88,9 @@ enum key_need_perm {
- 	KEY_DEFER_PERM_CHECK,	/* Special: permission check is deferred */
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index bffca9465574..c09ed20d7314 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -21,6 +21,7 @@
+ #include <linux/bsearch.h>
+ #include <linux/sort.h>
+ #include <linux/key.h>
++#include <linux/verification.h>
+ 
+ #include <net/bpf_sk_storage.h>
+ 
+@@ -1234,6 +1235,75 @@ noinline __weak void bpf_key_put(struct key *key)
+ 	key_put(key);
+ }
+ 
++#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
++/**
++ * bpf_verify_pkcs7_signature - verify a PKCS#7 signature
++ * @data_ptr: data to verify
++ * @sig_ptr: signature of the data
++ * @user_keyring__maybe_null: user-defined keyring for sig ver (alternative)
++ * @system_keyring: system-defined keyring for sig ver (alternative)
++ *
++ * Verify the PKCS#7 signature *sig_ptr* against the supplied *data_ptr*
++ * alternatively with keys in *user_keyring__maybe_null* or *system_keyring*.
++ * Either one of the two must be provided. Respectively, NULL or UINT64_MAX
++ * must be passed to signal to the kfunc that the parameter is not used.
++ *
++ * *user_keyring__maybe_null* is a key pointer obtained from
++ * bpf_lookup_user_key(), while *system_keyring* is a pre-determined ID with
++ * values defined in include/linux/verification.h: 0 for the primary keyring
++ * (immutable keyring of system keys); 1 for both the primary and secondary
++ * keyring (where keys can be added only if they are vouched for by existing
++ * keys in those keyrings); 2 for the platform keyring (primarily used by the
++ * integrity subsystem to verify a kexec'ed kerned image and, possibly,
++ * the initramfs signature).
++ *
++ * Return: 0 on success, a negative value on error.
++ */
++noinline __weak int bpf_verify_pkcs7_signature(struct bpf_dynptr_kern *data_ptr,
++					struct bpf_dynptr_kern *sig_ptr,
++					struct key *user_keyring__maybe_null,
++					u64 system_keyring)
++{
++	struct key *trusted_keyring;
++	int ret;
++
++	/* Either user_keyring__maybe_null or system_keyring must be specified. */
++	if ((user_keyring__maybe_null && system_keyring != U64_MAX) ||
++	    (!user_keyring__maybe_null && system_keyring == U64_MAX))
++		return -EINVAL;
++
++	if (user_keyring__maybe_null) {
++		/*
++		 * Do the permission check deferred in bpf_lookup_user_key().
++		 *
++		 * A call to key_task_permission() here would be redundant, as
++		 * it is already done by keyring_search() called by
++		 * find_asymmetric_key().
++		 */
++		ret = key_validate(user_keyring__maybe_null);
++		if (ret < 0)
++			return ret;
++
++		trusted_keyring = user_keyring__maybe_null;
++		goto verify;
++	}
++
++	/* Keep in sync with defs in include/linux/verification.h. */
++	if (system_keyring > (unsigned long)VERIFY_USE_PLATFORM_KEYRING)
++		return -EINVAL;
++
++	trusted_keyring = (struct key *)(unsigned long)system_keyring;
++verify:
++	return verify_pkcs7_signature(data_ptr->data,
++				      bpf_dynptr_get_size(data_ptr),
++				      sig_ptr->data,
++				      bpf_dynptr_get_size(sig_ptr),
++				      trusted_keyring,
++				      VERIFYING_UNSPECIFIED_SIGNATURE, NULL,
++				      NULL);
++}
++#endif /* CONFIG_SYSTEM_DATA_VERIFICATION */
++
+ __diag_pop();
+ 
+ BTF_SET_START(key_kfunc_ids)
+@@ -1257,12 +1327,26 @@ static const struct btf_kfunc_id_set bpf_key_kfunc_set = {
+ 	.release_set = &key_put_kfunc_ids,
+ 	.ret_null_set = &key_lookup_kfunc_ids,
+ };
+-#endif /* CONFIG_KEYS */
+ 
++#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
++BTF_SET_START(verify_sig_kfunc_ids)
++BTF_ID(func, bpf_verify_pkcs7_signature)
++BTF_SET_END(verify_sig_kfunc_ids)
++
++static const struct btf_kfunc_id_set bpf_verify_sig_kfunc_set = {
++	.owner = THIS_MODULE,
++	.check_set = &verify_sig_kfunc_ids,
++	.sleepable_set = &verify_sig_kfunc_ids,
++};
++#endif /* CONFIG_SYSTEM_DATA_VERIFICATION */
++#endif /* CONFIG_KEYS */
+ 
+ const struct btf_kfunc_id_set *kfunc_sets[] = {
+ #ifdef CONFIG_KEYS
+ 	&bpf_key_kfunc_set,
++#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
++	&bpf_verify_sig_kfunc_set,
++#endif /* CONFIG_SYSTEM_DATA_VERIFICATION */
+ #endif /* CONFIG_KEYS */
  };
  
-+#define KEY_LOOKUP_CREATE	0x01
-+#define KEY_LOOKUP_PARTIAL	0x02
-+
- struct seq_file;
- struct user_struct;
- struct signal_struct;
-diff --git a/security/keys/internal.h b/security/keys/internal.h
-index 9b9cf3b6fcbb..3c1e7122076b 100644
---- a/security/keys/internal.h
-+++ b/security/keys/internal.h
-@@ -165,8 +165,6 @@ extern struct key *request_key_and_link(struct key_type *type,
- 
- extern bool lookup_user_key_possessed(const struct key *key,
- 				      const struct key_match_data *match_data);
--#define KEY_LOOKUP_CREATE	0x01
--#define KEY_LOOKUP_PARTIAL	0x02
- 
- extern long join_session_keyring(const char *name);
- extern void key_change_session_keyring(struct callback_head *twork);
 -- 
 2.25.1
 
