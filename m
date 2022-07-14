@@ -2,39 +2,39 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1BF6CCA47B
-	for <bpf@archiver.kernel.org>; Thu, 14 Jul 2022 19:21:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 846D3C433EF
+	for <bpf@archiver.kernel.org>; Thu, 14 Jul 2022 19:21:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229458AbiGNTVi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 Jul 2022 15:21:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56956 "EHLO
+        id S232159AbiGNTVj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 Jul 2022 15:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232159AbiGNTVi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S240097AbiGNTVi (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 14 Jul 2022 15:21:38 -0400
-X-Greylist: delayed 356 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 14 Jul 2022 12:21:37 PDT
 Received: from sinsgout.his.huawei.com (sinsgout.his.huawei.com [119.8.179.247])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FEB43332
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59FC643E42
         for <bpf@vger.kernel.org>; Thu, 14 Jul 2022 12:21:37 -0700 (PDT)
 Received: from sinmsgout01.his.huawei.com (unknown [172.28.115.139])
-        by sinsgout.his.huawei.com (SkyGuard) with ESMTP id 4LkPN16dzjz3h03s
-        for <bpf@vger.kernel.org>; Fri, 15 Jul 2022 03:15:45 +0800 (CST)
+        by sinsgout.his.huawei.com (SkyGuard) with ESMTP id 4LkPNH3Cd2z3h0ql
+        for <bpf@vger.kernel.org>; Fri, 15 Jul 2022 03:15:59 +0800 (CST)
 Received: from fraeml714-chm.china.huawei.com (unknown [172.18.156.147])
-        by sinmsgout01.his.huawei.com (SkyGuard) with ESMTP id 4LkPGD2NQwz9xFB2;
-        Fri, 15 Jul 2022 03:10:44 +0800 (CST)
+        by sinmsgout01.his.huawei.com (SkyGuard) with ESMTP id 4LkPGK4zYQz9ttCk;
+        Fri, 15 Jul 2022 03:10:49 +0800 (CST)
 Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
  fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 14 Jul 2022 21:15:32 +0200
+ 15.1.2375.24; Thu, 14 Jul 2022 21:15:35 +0200
 From:   Roberto Sassu <roberto.sassu@huawei.com>
 To:     <ast@kernel.org>, <daniel@iogearbox.net>,
         <john.fastabend@gmail.com>, <andrii@kernel.org>,
         <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
         <kpsingh@kernel.org>
-CC:     <bpf@vger.kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [RFC][PATCH v8 01/12] btf: Add a new kfunc set which allows to mark a function to be sleepable
-Date:   Thu, 14 Jul 2022 21:14:44 +0200
-Message-ID: <20220714191455.2101834-2-roberto.sassu@huawei.com>
+CC:     <bpf@vger.kernel.org>, Roberto Sassu <roberto.sassu@huawei.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: [RFC][PATCH v8 04/12] btf: Introduce __maybe_null suffix for kfunc parameter declaration
+Date:   Thu, 14 Jul 2022 21:14:47 +0200
+Message-ID: <20220714191455.2101834-5-roberto.sassu@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220714191455.2101834-1-roberto.sassu@huawei.com>
 References: <20220714191455.2101834-1-roberto.sassu@huawei.com>
@@ -49,78 +49,134 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Since kfuncs don't have a prototype defined, the BTF code has to infer the
+information in a different way. For example, naming a parameter with the
+__sz suffix is currently the way to declare such parameter as a memory
+size.
 
-This allows to declare a kfunc as sleepable and prevents its use in
-a non sleepable program.
+Another feature not available without a prototype was flagging an argument
+as PTR_MAYBE_NULL, meaning that the function is trusted to correctly handle
+a NULL pointer.
 
-Acked-by: KP Singh <kpsingh@kernel.org>
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Signed-off-by: KP Singh <kpsingh@kernel.org>
+Similarly to the __sz suffix, introduce the __maybe_null suffix to have an
+equivalent feature of setting the PTR_MAYBE_NULL flag.
+
+Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- include/linux/btf.h |  2 ++
- kernel/bpf/btf.c    | 12 ++++++++++--
- 2 files changed, 12 insertions(+), 2 deletions(-)
+ kernel/bpf/btf.c | 48 ++++++++++++++++++++++++++++++++++--------------
+ 1 file changed, 34 insertions(+), 14 deletions(-)
 
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index 1bfed7fa0428..6e7517573d9e 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -18,6 +18,7 @@ enum btf_kfunc_type {
- 	BTF_KFUNC_TYPE_RELEASE,
- 	BTF_KFUNC_TYPE_RET_NULL,
- 	BTF_KFUNC_TYPE_KPTR_ACQUIRE,
-+	BTF_KFUNC_TYPE_SLEEPABLE,
- 	BTF_KFUNC_TYPE_MAX,
- };
- 
-@@ -37,6 +38,7 @@ struct btf_kfunc_id_set {
- 			struct btf_id_set *release_set;
- 			struct btf_id_set *ret_null_set;
- 			struct btf_id_set *kptr_acquire_set;
-+			struct btf_id_set *sleepable_set;
- 		};
- 		struct btf_id_set *sets[BTF_KFUNC_TYPE_MAX];
- 	};
 diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 4423045b8ff3..2a28ead92841 100644
+index 9e94571d1626..80e3098fcb48 100644
 --- a/kernel/bpf/btf.c
 +++ b/kernel/bpf/btf.c
-@@ -6177,7 +6177,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
- 	struct bpf_verifier_log *log = &env->log;
- 	u32 i, nargs, ref_id, ref_obj_id = 0;
- 	bool is_kfunc = btf_is_kernel(btf);
--	bool rel = false, kptr_get = false;
-+	bool rel = false, kptr_get = false, sleepable = false;
- 	const char *func_name, *ref_tname;
- 	const struct btf_type *t, *ref_t;
- 	const struct btf_param *args;
-@@ -6208,9 +6208,10 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
- 	}
- 
- 	if (is_kfunc) {
--		/* Only kfunc can be release func */
- 		rel = btf_kfunc_id_set_contains(btf, resolve_prog_type(env->prog),
- 						BTF_KFUNC_TYPE_RELEASE, func_id);
-+		sleepable = btf_kfunc_id_set_contains(btf, resolve_prog_type(env->prog),
-+						      BTF_KFUNC_TYPE_SLEEPABLE, func_id);
- 		kptr_get = btf_kfunc_id_set_contains(btf, resolve_prog_type(env->prog),
- 						     BTF_KFUNC_TYPE_KPTR_ACQUIRE, func_id);
- 	}
-@@ -6410,6 +6411,13 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
- 			func_name);
- 		return -EINVAL;
- 	}
-+
-+	if (sleepable && !env->prog->aux->sleepable) {
-+		bpf_log(log, "kernel function %s is sleepable but the program is not\n",
-+			func_name);
-+		return -EINVAL;
-+	}
-+
- 	/* returns argument register number > 0 in case of reference release kfunc */
- 	return rel ? ref_regno : 0;
+@@ -6142,18 +6142,13 @@ static bool __btf_type_is_scalar_struct(struct bpf_verifier_log *log,
+ 	return true;
  }
+ 
+-static bool is_kfunc_arg_mem_size(const struct btf *btf,
+-				  const struct btf_param *arg,
+-				  const struct bpf_reg_state *reg)
++static bool btf_param_match_suffix(const struct btf *btf,
++				   const struct btf_param *arg,
++				   const char *suffix)
+ {
+-	int len, sfx_len = sizeof("__sz") - 1;
+-	const struct btf_type *t;
++	int len, sfx_len = strlen(suffix);
+ 	const char *param_name;
+ 
+-	t = btf_type_skip_modifiers(btf, arg->type, NULL);
+-	if (!btf_type_is_scalar(t) || reg->type != SCALAR_VALUE)
+-		return false;
+-
+ 	/* In the future, this can be ported to use BTF tagging */
+ 	param_name = btf_name_by_offset(btf, arg->name_off);
+ 	if (str_is_empty(param_name))
+@@ -6162,12 +6157,25 @@ static bool is_kfunc_arg_mem_size(const struct btf *btf,
+ 	if (len < sfx_len)
+ 		return false;
+ 	param_name += len - sfx_len;
+-	if (strncmp(param_name, "__sz", sfx_len))
++	if (strncmp(param_name, suffix, sfx_len))
+ 		return false;
+ 
+ 	return true;
+ }
+ 
++static bool is_kfunc_arg_mem_size(const struct btf *btf,
++				  const struct btf_param *arg,
++				  const struct bpf_reg_state *reg)
++{
++	const struct btf_type *t;
++
++	t = btf_type_skip_modifiers(btf, arg->type, NULL);
++	if (!btf_type_is_scalar(t) || reg->type != SCALAR_VALUE)
++		return false;
++
++	return btf_param_match_suffix(btf, arg, "__sz");
++}
++
+ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+ 				    const struct btf *btf, u32 func_id,
+ 				    struct bpf_reg_state *regs,
+@@ -6302,8 +6310,12 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+ 					i, btf_type_str(t));
+ 				return -EINVAL;
+ 			}
+-		} else if (is_kfunc && (reg->type == PTR_TO_BTF_ID ||
+-			   (reg2btf_ids[base_type(reg->type)] && !type_flag(reg->type)))) {
++		} else if (is_kfunc && ((reg->type == PTR_TO_BTF_ID ||
++			   (reg2btf_ids[base_type(reg->type)] && !type_flag(reg->type))) ||
++			   (btf_param_match_suffix(btf, &args[i], "__maybe_null") &&
++			    (reg->type == PTR_TO_BTF_ID_OR_NULL ||
++			    (reg2btf_ids[base_type(reg->type)] &&
++			     type_flag(reg->type) == PTR_MAYBE_NULL))))) {
+ 			const struct btf_type *reg_ref_t;
+ 			const struct btf *reg_btf;
+ 			const char *reg_ref_tname;
+@@ -6316,7 +6328,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+ 				return -EINVAL;
+ 			}
+ 
+-			if (reg->type == PTR_TO_BTF_ID) {
++			if (base_type(reg->type) == PTR_TO_BTF_ID) {
+ 				reg_btf = reg->btf;
+ 				reg_ref_id = reg->btf_id;
+ 				/* Ensure only one argument is referenced PTR_TO_BTF_ID */
+@@ -6354,6 +6366,10 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+ 			if (is_kfunc) {
+ 				bool arg_mem_size = i + 1 < nargs && is_kfunc_arg_mem_size(btf, &args[i + 1], &regs[regno + 1]);
+ 				bool arg_dynptr = !strcmp(ref_tname, "bpf_dynptr_kern");
++				bool arg_null_ok = btf_param_match_suffix(btf, &args[i],
++									  "__maybe_null") &&
++						   reg->type == SCALAR_VALUE &&
++						   tnum_equals_const(reg->var_off, 0);
+ 
+ 				/* Permit pointer to mem, but only when argument
+ 				 * type is pointer to scalar, or struct composed
+@@ -6363,7 +6379,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+ 				 */
+ 				if (!btf_type_is_scalar(ref_t) &&
+ 				    !__btf_type_is_scalar_struct(log, btf, ref_t, 0) &&
+-				    !arg_dynptr &&
++				    !arg_dynptr && !arg_null_ok &&
+ 				    (arg_mem_size ? !btf_type_is_void(ref_t) : 1)) {
+ 					bpf_log(log,
+ 						"arg#%d pointer type %s %s must point to %sscalar, or struct with scalar\n",
+@@ -6371,6 +6387,10 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+ 					return -EINVAL;
+ 				}
+ 
++				/* kfunc accepts NULL pointer. */
++				if (arg_null_ok)
++					continue;
++
+ 				/* Assume initialized dynptr. */
+ 				if (arg_dynptr) {
+ 					if (!is_dynptr_reg_valid_init(env, reg,
 -- 
 2.25.1
 
