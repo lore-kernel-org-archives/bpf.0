@@ -2,89 +2,84 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 933DAC433EF
-	for <bpf@archiver.kernel.org>; Thu, 14 Jul 2022 06:00:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1A5CC433EF
+	for <bpf@archiver.kernel.org>; Thu, 14 Jul 2022 06:05:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233737AbiGNGA0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 Jul 2022 02:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58608 "EHLO
+        id S231311AbiGNGFr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 Jul 2022 02:05:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232740AbiGNGAX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 14 Jul 2022 02:00:23 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B6F1AF3C
-        for <bpf@vger.kernel.org>; Wed, 13 Jul 2022 23:00:22 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id v12so1031484edc.10
-        for <bpf@vger.kernel.org>; Wed, 13 Jul 2022 23:00:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=i/a1DNPG1XpJxTmdBTuR/N+mtKXMn43pTOzy1NXZdhk=;
-        b=bhFOeobxREV3c9dSFdKTjHod3yibkT2J3tKT6K8IdU9qfcOOHwvXs3uDgm3/igJbvH
-         hLjb8z78VSlo0BY9IbAv/nS83SWSGZCi6U2j5DsPctCAX5PMB3iT7qCLOpOtIkoMqsvT
-         OTmVgSGuYkRDuUVD4xGnHly6zX5Bee8loHHwGl9dify4ch085CFQ+yR3vl5RrHfQLc/Q
-         D6hQvN7vTBSSgQfTdZqGvCklxqdbRD5shiwccZbMJFUDg1yQY/risJVZhzBfI0qIXTwf
-         QX14oyn1DZpZjARq9GT6eqzaWjjyzpRGmvjpTzRm26WhEdREMFApTVpqS8H/fvTxbSEn
-         Ex5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=i/a1DNPG1XpJxTmdBTuR/N+mtKXMn43pTOzy1NXZdhk=;
-        b=BCJjOYTN6Vcub9P17zLZzZ6MxurwILhFajSnTEZ+ZAqngtPW40gGVx613MtJe+s4Et
-         eJn3UMVVt1eeE8p9UC7r5XRy2kMGPdImmqBjQ2B/Iz431dV8yuD2MIdERGic82nRKTi5
-         mjXyuxlWyFhK+qCH7OZxBAmtcjnW2C0H74sh4JrZj5Fvu4a89kJhgmpFQUW4uujAdYZY
-         5wvA6kmt0RNfSQXvXFc0/aTR590tYl8jxakGteaLvt7tFqvOejb3Mm84JOrnKCN4KZnd
-         uPAG8SwTs2TV7p03f8+zcjW5uLek+tmBPJOLiQxnyVGdJ4s1zm5reRcuofld7dVfs9Fn
-         BDoA==
-X-Gm-Message-State: AJIora82Fci2kKNCDDkyEPaQagfy/3owQX8zMECViDD65iEH3GLaGNXZ
-        lnBFyQkxYCXAVWHmJDfeaJjWG1uEjqTEwZn8mcU=
-X-Google-Smtp-Source: AGRyM1vDe+vvYmKJVs8WXqKU9hSMDi74p2CkCNZmosZyegP4LYorEAvBShmq5lpdj6eHEJ/i9m3wc2Iaw3SHAVqeaQ4=
-X-Received: by 2002:aa7:d053:0:b0:43a:a164:2c3 with SMTP id
- n19-20020aa7d053000000b0043aa16402c3mr9974977edo.333.1657778421297; Wed, 13
- Jul 2022 23:00:21 -0700 (PDT)
+        with ESMTP id S230061AbiGNGFq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 14 Jul 2022 02:05:46 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7A42F001;
+        Wed, 13 Jul 2022 23:05:44 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lk3nl0b2bzkX1F;
+        Thu, 14 Jul 2022 14:03:23 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
+ (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 14 Jul
+ 2022 14:05:27 +0800
+From:   Zhengchao Shao <shaozhengchao@huawei.com>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <hawk@kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
+        <shaozhengchao@huawei.com>
+Subject: [PATCH v2,bpf-next] bpf: Don't redirect packets with invalid pkt_len
+Date:   Thu, 14 Jul 2022 14:09:59 +0800
+Message-ID: <20220714060959.25232-1-shaozhengchao@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20220713222544.2355143-1-indu.bhagat@oracle.com>
-In-Reply-To: <20220713222544.2355143-1-indu.bhagat@oracle.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 13 Jul 2022 23:00:10 -0700
-Message-ID: <CAEf4BzYqL_p61f_2HXSNuCSXPGxWbq7+kvZvmVGGgdLY1Z1ZWA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] docs/bpf: Update documentation for BTF_KIND_FUNC
-To:     Indu Bhagat <indu.bhagat@oracle.com>
-Cc:     bpf <bpf@vger.kernel.org>, Yonghong Song <yhs@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 3:37 PM Indu Bhagat <indu.bhagat@oracle.com> wrote:
->
-> The vlen bits in the BTF type of kind BTF_KIND_FUNC are used to convey the
-> linkage information for functions.
->
-> Signed-off-by: Indu Bhagat <indu.bhagat@oracle.com>
-> ---
->  Documentation/bpf/btf.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
-> index f49aeef62d0c..b3a9d5ac882c 100644
-> --- a/Documentation/bpf/btf.rst
-> +++ b/Documentation/bpf/btf.rst
-> @@ -369,7 +369,7 @@ No additional type data follow ``btf_type``.
->    * ``name_off``: offset to a valid C identifier
->    * ``info.kind_flag``: 0
->    * ``info.kind``: BTF_KIND_FUNC
-> -  * ``info.vlen``: 0
-> +  * ``info.vlen``: linkage information (static=0, global=1)
+Syzbot found an issue [1]: fq_codel_drop() try to drop a flow whitout any
+skbs, that is, the flow->head is null.
+The root cause, as the [2] says, is because that bpf_prog_test_run_skb()
+run a bpf prog which redirects empty skbs.
+So we should determine whether the length of the packet modified by bpf
+prog is valid before forwarding it directly.
 
-there is also extern=2, but I think we should just refer to enum
-btf_func_linkage, defined in UAPI (include/uapi/linux/btf.h) ?
+LINK: [1] https://syzkaller.appspot.com/bug?id=0b84da80c2917757915afa89f7738a9d16ec96c5
+LINK: [2] https://www.spinics.net/lists/netdev/msg777503.html
 
->    * ``type``: a BTF_KIND_FUNC_PROTO type
->
->  No additional type data follow ``btf_type``.
-> --
-> 2.31.1
->
+Reported-by: syzbot+7a12909485b94426aceb@syzkaller.appspotmail.com
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+---
+v1: should not check len in fast path
+
+ net/bpf/test_run.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 2ca96acbc50a..750d7d173a20 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -1152,6 +1152,12 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 	ret = convert___skb_to_skb(skb, ctx);
+ 	if (ret)
+ 		goto out;
++
++	if (skb->len == 0) {
++		ret = -EINVAL;
++		goto out;
++	}
++
+ 	ret = bpf_test_run(prog, skb, repeat, &retval, &duration, false);
+ 	if (ret)
+ 		goto out;
+-- 
+2.17.1
+
