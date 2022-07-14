@@ -2,34 +2,34 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC4AAC43334
-	for <bpf@archiver.kernel.org>; Thu, 14 Jul 2022 19:17:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 598EDCCA47B
+	for <bpf@archiver.kernel.org>; Thu, 14 Jul 2022 19:17:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239423AbiGNTRB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 Jul 2022 15:17:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53606 "EHLO
+        id S239496AbiGNTRC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 Jul 2022 15:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbiGNTRA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 14 Jul 2022 15:17:00 -0400
+        with ESMTP id S239294AbiGNTRB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 14 Jul 2022 15:17:01 -0400
 Received: from sinmsgout03.his.huawei.com (sinmsgout03.his.huawei.com [119.8.177.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D790A3D5BC
-        for <bpf@vger.kernel.org>; Thu, 14 Jul 2022 12:16:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373843DBDA
+        for <bpf@vger.kernel.org>; Thu, 14 Jul 2022 12:17:00 -0700 (PDT)
 Received: from fraeml714-chm.china.huawei.com (unknown [172.18.156.149])
-        by sinmsgout03.his.huawei.com (SkyGuard) with ESMTP id 4LkPN30Kfjz9xGP0;
-        Fri, 15 Jul 2022 03:15:46 +0800 (CST)
+        by sinmsgout03.his.huawei.com (SkyGuard) with ESMTP id 4LkPN63gVvz9xGP4;
+        Fri, 15 Jul 2022 03:15:50 +0800 (CST)
 Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
  fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 14 Jul 2022 21:16:49 +0200
+ 15.1.2375.24; Thu, 14 Jul 2022 21:16:50 +0200
 From:   Roberto Sassu <roberto.sassu@huawei.com>
 To:     <ast@kernel.org>, <daniel@iogearbox.net>,
         <john.fastabend@gmail.com>, <andrii@kernel.org>,
         <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
         <kpsingh@kernel.org>
 CC:     <bpf@vger.kernel.org>, Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH v8 07/12] bpf: Add bpf_lookup_user_key() and bpf_key_put() kfuncs
-Date:   Thu, 14 Jul 2022 21:14:50 +0200
-Message-ID: <20220714191455.2101834-8-roberto.sassu@huawei.com>
+Subject: [RFC][PATCH v8 09/12] selftests/bpf: Test kfuncs with __maybe_null suffix
+Date:   Thu, 14 Jul 2022 21:14:52 +0200
+Message-ID: <20220714191455.2101834-10-roberto.sassu@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220714191455.2101834-1-roberto.sassu@huawei.com>
 References: <20220714191455.2101834-1-roberto.sassu@huawei.com>
@@ -44,139 +44,120 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add the bpf_lookup_user_key() and bpf_key_put() kfuncs, to respectively
-search a key with a given serial and flags, and release the reference count
-of the found key.
+Extend the test in kfunc_call_test.c to call the newly defined functions
+bpf_kfunc_call_test4() and bpf_kfunc_call_test_mem_len_pass2(), which have
+a parameter with the __maybe_null suffix. Ensure that the eBPF program is
+executed successfully.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- kernel/trace/bpf_trace.c | 106 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 106 insertions(+)
+ net/bpf/test_run.c                              | 11 +++++++++++
+ .../selftests/bpf/prog_tests/kfunc_call.c       |  4 ++++
+ .../selftests/bpf/progs/kfunc_call_test.c       | 17 +++++++++++++++++
+ 3 files changed, 32 insertions(+)
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 68e5cdd24cef..bffca9465574 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -20,6 +20,7 @@
- #include <linux/fprobe.h>
- #include <linux/bsearch.h>
- #include <linux/sort.h>
-+#include <linux/key.h>
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 2ca96acbc50a..22b4efe72ce9 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -551,6 +551,11 @@ struct sock * noinline bpf_kfunc_call_test3(struct sock *sk)
+ 	return sk;
+ }
  
- #include <net/bpf_sk_storage.h>
- 
-@@ -1181,6 +1182,111 @@ static const struct bpf_func_proto bpf_get_func_arg_cnt_proto = {
- 	.arg1_type	= ARG_PTR_TO_CTX,
++struct sock *noinline bpf_kfunc_call_test4(struct sock *sk__maybe_null)
++{
++	return sk__maybe_null;
++}
++
+ struct prog_test_member1 {
+ 	int a;
  };
+@@ -683,6 +688,10 @@ noinline void bpf_kfunc_call_test_mem_len_pass1(void *mem, int mem__sz)
+ {
+ }
  
-+#ifdef CONFIG_KEYS
-+__diag_push();
-+__diag_ignore_all("-Wmissing-prototypes",
-+		  "kfuncs which will be used in BPF programs");
-+
-+/**
-+ * bpf_lookup_user_key - lookup a key by its serial
-+ * @serial: key serial
-+ * @flags: lookup-specific flags
-+ *
-+ * Search a key with a given *serial* and the provided *flags*. The
-+ * returned key, if found, has the reference count incremented by
-+ * one, and must be passed to bpf_key_put() when done with it.
-+ * Permission checks are deferred to the time the key is used by
-+ * one of the available key-specific kfunc.
-+ *
-+ * Set *flags* with 1 to attempt creating a requested special
-+ * keyring (e.g. session keyring), if it doesn't yet exist. Set
-+ * *flags* to 2 to lookup a key without waiting for the key
-+ * construction, and to retrieve uninstantiated keys (keys without
-+ * data attached to them).
-+ *
-+ * Return: a key pointer if the key is found, a NULL pointer otherwise.
-+ */
-+noinline __weak struct key *bpf_lookup_user_key(u32 serial, u64 flags)
++noinline void bpf_kfunc_call_test_mem_len_pass2(u64 *mem__maybe_null)
 +{
-+	key_ref_t key_ref;
-+
-+	/* Keep in sync with include/linux/key.h. */
-+	if (flags > (KEY_LOOKUP_PARTIAL << 1) - 1)
-+		return NULL;
-+
-+	/* Permission check is deferred until actual kfunc using the key. */
-+	key_ref = lookup_user_key(serial, flags, KEY_DEFER_PERM_CHECK);
-+	if (IS_ERR(key_ref))
-+		return NULL;
-+
-+	return key_ref_to_ptr(key_ref);
 +}
 +
-+/**
-+ * bpf_key_put - release a key reference
-+ * @key: key whose reference is released
-+ *
-+ * Decrement the reference count of *key* obtained with the
-+ * bpf_lookup_user_key() kfunc.
-+ */
-+noinline __weak void bpf_key_put(struct key *key)
+ noinline void bpf_kfunc_call_test_mem_len_fail1(void *mem, int len)
+ {
+ }
+@@ -699,6 +708,7 @@ BTF_SET_START(test_sk_check_kfunc_ids)
+ BTF_ID(func, bpf_kfunc_call_test1)
+ BTF_ID(func, bpf_kfunc_call_test2)
+ BTF_ID(func, bpf_kfunc_call_test3)
++BTF_ID(func, bpf_kfunc_call_test4)
+ BTF_ID(func, bpf_kfunc_call_test_acquire)
+ BTF_ID(func, bpf_kfunc_call_memb_acquire)
+ BTF_ID(func, bpf_kfunc_call_test_release)
+@@ -712,6 +722,7 @@ BTF_ID(func, bpf_kfunc_call_test_fail1)
+ BTF_ID(func, bpf_kfunc_call_test_fail2)
+ BTF_ID(func, bpf_kfunc_call_test_fail3)
+ BTF_ID(func, bpf_kfunc_call_test_mem_len_pass1)
++BTF_ID(func, bpf_kfunc_call_test_mem_len_pass2)
+ BTF_ID(func, bpf_kfunc_call_test_mem_len_fail1)
+ BTF_ID(func, bpf_kfunc_call_test_mem_len_fail2)
+ BTF_SET_END(test_sk_check_kfunc_ids)
+diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+index c00eb974eb85..4b90abb950b5 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
++++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+@@ -30,6 +30,10 @@ static void test_main(void)
+ 	ASSERT_OK(err, "bpf_prog_test_run(test2)");
+ 	ASSERT_EQ(topts.retval, 3, "test2-retval");
+ 
++	prog_fd = skel->progs.kfunc_call_test4.prog_fd;
++	err = bpf_prog_test_run_opts(prog_fd, &topts);
++	ASSERT_OK(err, "bpf_prog_test_run(test4)");
++
+ 	prog_fd = skel->progs.kfunc_call_test_ref_btf_id.prog_fd;
+ 	err = bpf_prog_test_run_opts(prog_fd, &topts);
+ 	ASSERT_OK(err, "bpf_prog_test_run(test_ref_btf_id)");
+diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test.c b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
+index 5aecbb9fdc68..258fa89f23b2 100644
+--- a/tools/testing/selftests/bpf/progs/kfunc_call_test.c
++++ b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
+@@ -6,6 +6,7 @@
+ extern int bpf_kfunc_call_test2(struct sock *sk, __u32 a, __u32 b) __ksym;
+ extern __u64 bpf_kfunc_call_test1(struct sock *sk, __u32 a, __u64 b,
+ 				  __u32 c, __u64 d) __ksym;
++extern struct sock *bpf_kfunc_call_test4(struct sock *sk__maybe_null) __ksym;
+ 
+ extern struct prog_test_ref_kfunc *bpf_kfunc_call_test_acquire(unsigned long *sp) __ksym;
+ extern void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p) __ksym;
+@@ -13,8 +14,23 @@ extern void bpf_kfunc_call_test_pass_ctx(struct __sk_buff *skb) __ksym;
+ extern void bpf_kfunc_call_test_pass1(struct prog_test_pass1 *p) __ksym;
+ extern void bpf_kfunc_call_test_pass2(struct prog_test_pass2 *p) __ksym;
+ extern void bpf_kfunc_call_test_mem_len_pass1(void *mem, int len) __ksym;
++extern void bpf_kfunc_call_test_mem_len_pass2(u64 *mem__maybe_null) __ksym;
+ extern void bpf_kfunc_call_test_mem_len_fail2(__u64 *mem, int len) __ksym;
+ 
++SEC("tc")
++int kfunc_call_test4(struct __sk_buff *skb)
 +{
-+	key_put(key);
-+}
++	struct bpf_sock *sk = skb->sk;
 +
-+__diag_pop();
++	if (!sk)
++		return -1;
 +
-+BTF_SET_START(key_kfunc_ids)
-+BTF_ID(func, bpf_lookup_user_key)
-+BTF_ID(func, bpf_key_put)
-+BTF_SET_END(key_kfunc_ids)
++	sk = bpf_sk_fullsock(sk);
 +
-+BTF_SET_START(key_lookup_kfunc_ids)
-+BTF_ID(func, bpf_lookup_user_key)
-+BTF_SET_END(key_lookup_kfunc_ids)
-+
-+BTF_SET_START(key_put_kfunc_ids)
-+BTF_ID(func, bpf_key_put)
-+BTF_SET_END(key_put_kfunc_ids)
-+
-+static const struct btf_kfunc_id_set bpf_key_kfunc_set = {
-+	.owner = THIS_MODULE,
-+	.check_set = &key_kfunc_ids,
-+	.sleepable_set = &key_lookup_kfunc_ids,
-+	.acquire_set = &key_lookup_kfunc_ids,
-+	.release_set = &key_put_kfunc_ids,
-+	.ret_null_set = &key_lookup_kfunc_ids,
-+};
-+#endif /* CONFIG_KEYS */
-+
-+
-+const struct btf_kfunc_id_set *kfunc_sets[] = {
-+#ifdef CONFIG_KEYS
-+	&bpf_key_kfunc_set,
-+#endif /* CONFIG_KEYS */
-+};
-+
-+static int __init bpf_kfuncs_init(void)
-+{
-+	int ret, i;
-+
-+	for (i = 0; i < ARRAY_SIZE(kfunc_sets); i++) {
-+		ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING,
-+						kfunc_sets[i]);
-+		if (!ret)
-+			continue;
-+
-+		ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_LSM,
-+						kfunc_sets[i]);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
++	bpf_kfunc_call_test4((struct sock *)sk);
 +	return 0;
 +}
 +
-+late_initcall(bpf_kfuncs_init);
-+
- static const struct bpf_func_proto *
- bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ SEC("tc")
+ int kfunc_call_test2(struct __sk_buff *skb)
  {
+@@ -87,6 +103,7 @@ int kfunc_call_test_pass(struct __sk_buff *skb)
+ 	bpf_kfunc_call_test_mem_len_pass1(&c, sizeof(c));
+ 	bpf_kfunc_call_test_mem_len_pass1(&d, sizeof(d));
+ 	bpf_kfunc_call_test_mem_len_pass1(&e, sizeof(e));
++	bpf_kfunc_call_test_mem_len_pass2(NULL);
+ 	bpf_kfunc_call_test_mem_len_fail2(&b, -1);
+ 
+ 	return 0;
 -- 
 2.25.1
 
