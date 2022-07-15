@@ -2,176 +2,103 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39D83CCA480
-	for <bpf@archiver.kernel.org>; Fri, 15 Jul 2022 17:16:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1195CCA482
+	for <bpf@archiver.kernel.org>; Fri, 15 Jul 2022 17:35:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232628AbiGORP7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 Jul 2022 13:15:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53212 "EHLO
+        id S230041AbiGORfL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 15 Jul 2022 13:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231844AbiGORP6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 15 Jul 2022 13:15:58 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262CC43E6C
-        for <bpf@vger.kernel.org>; Fri, 15 Jul 2022 10:15:56 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id a5so7558474wrx.12
-        for <bpf@vger.kernel.org>; Fri, 15 Jul 2022 10:15:56 -0700 (PDT)
+        with ESMTP id S229906AbiGORfJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 15 Jul 2022 13:35:09 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C9F52FF8;
+        Fri, 15 Jul 2022 10:35:09 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id h145so4371254iof.9;
+        Fri, 15 Jul 2022 10:35:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=84fRZgCz92llVayL94uIYfOOoekmnLfcLxc8caTvIgY=;
-        b=h0nQ8qozKUh6SyN8sVHhYXhN4mpA6OERYW+1YeemAtoM7v1y04G/BhBqBlunC+naMi
-         mczuTXBbdY3rWClDHF/OS33EgQrHz958/LgB56MYMZNwtL8XSUL6ncLJIDfPQ73Er0tu
-         t7SKr6ogxaWRn49czq67zyTPLpmeVUioLRSigWqQm+0fYFvRA2S9zyaK9W/HLaHFhoMd
-         htIjytD03QJpWgclOMDXzXC+ee4d/eK/JDgwa2Ol5UwUVagfPDZXKD2KfVB3KACtaROG
-         eX7oPz/ll0NlSVxH2bT+WOWKfO5IsagttQCJEtHwchNDLQDWLiNUZnwJbXVdvGSLhc3o
-         i/QQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=x4PyeC7DknSEozr2Rop+Ti8Cfi6yj/0ATtSdVUySwnQ=;
+        b=J1aj53+wNAbEw+IHLK8Z72Y/0Gb/enxKDEJoJCi4kEwUPHNRFo1YVnepiO7k9zjt0O
+         XHj/bdo8LBMk4vsZSQCkVyZLljQkF9AJ5WZNAUlNeAbOWqnC7NE7Ig1U0k5XSWExGfcp
+         KTbUI0jK/K60oYXEtB0xjO2Xgsc1ZwN52sJBRBqM2mjIYxC04NpLbVRz0Wipph4hVYjh
+         KmTDvSI/H1NUeQ6Rp/UrbYqXkCPmifNCWfHwBJP4lDUS8G0fZLZ3a23QFbjrUy5K2xUw
+         jCw2h1G86t5Rsy5e8H6ztxYSpGBE9pc6bA14zrda8bPbR2rDcjfadcynVp+5sLL9xHDQ
+         Wz9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=84fRZgCz92llVayL94uIYfOOoekmnLfcLxc8caTvIgY=;
-        b=DGzDlvTKdgYc5I9dwXCPVlSSU2bWRELgLPMxUQb67K6yoH60D7oJEFq/1QNx7kWw0X
-         FCnj/nIJBjVMeGgOCI8gt3nD0E2hf/BStCcPlV6Z5gHHd6fS0oWx7KTfjuxSSculrqtA
-         KJeW5r6Pqh83fHV/dlk2AkGgfhufr2okqb47VX1wmXCub2jr5Tx++XCls7fZYW127rno
-         /7hCG2IJAgCMPBPqtDQv1JQGycPE5/nGc8Pz3Zf6OEMJKK45x9BfKFjmR/z8Wqx8J5FB
-         pH7Hs7s4KEs5PsSCVrzQClFhDOlbFwMApJVA5EO6L6MOJ+FN+aRAbjUJgDATvWKnM3KY
-         FTmg==
-X-Gm-Message-State: AJIora/LUPmkUTHizj3CBligAsnDkd5/i4xoVmWJ9qbkwPw6vkz/udm4
-        QILxdaS/P7e4nt0ueAMWXfjU8PUBpIg=
-X-Google-Smtp-Source: AGRyM1tn+dDQyVesSFRTelVYWIeHmfg3hxesG2GFGjxVUGdCtdu6Wy15PplYRfC4cpFFSYEGQt23Lg==
-X-Received: by 2002:a5d:5606:0:b0:21d:dfb5:f15e with SMTP id l6-20020a5d5606000000b0021ddfb5f15emr2359127wrv.404.1657905354310;
-        Fri, 15 Jul 2022 10:15:54 -0700 (PDT)
-Received: from localhost.localdomain ([2a0d:6fc2:4af0:cc00:f99d:5d19:6e17:dc3a])
-        by smtp.gmail.com with ESMTPSA id i15-20020a5d438f000000b0021d4d6355efsm4223502wrq.109.2022.07.15.10.15.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 10:15:53 -0700 (PDT)
-From:   Jon Doron <arilou@gmail.com>
-To:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net
-Cc:     Jon Doron <jond@wiz.io>
-Subject: [PATCH bpf-next v4] libbpf: perfbuf: Add API to get the ring buffer
-Date:   Fri, 15 Jul 2022 20:15:40 +0300
-Message-Id: <20220715171540.134813-1-arilou@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x4PyeC7DknSEozr2Rop+Ti8Cfi6yj/0ATtSdVUySwnQ=;
+        b=sOa+sAk9v9E6m9IH8Mhml8EWLiZtYHLpFSvh5QX9FQ/hpyAHEw0pyE8bzViZIv1S8c
+         HVw3k2gSYnfGIMdhImDfl8YT+1/VYqybOrRGrq4bypp6qKKMqXlA6m5BFdLn6daRAjky
+         1tcAekFGNeSJww6xarRFYWLR6fMAGb9i1uQzmUHefhtF2ZElNohIrOHxEmoWaMbefa+F
+         vMBbNI9KF0E17nrLbFa8WcbvgBnbmQNvBUYsP4vFzhJPW8dEuC7UOcneJb7/osP2nmX7
+         p7p32C+OW7q60L4MeDI/PxHq+YjAOFiYYX0q18orVx+IgDCH9H0C006QcLbfu9uCKH7m
+         Al6Q==
+X-Gm-Message-State: AJIora9gJD/H6DRUVXZpYQAYQWTUcDR6C3fq5AIy4AiGPUl44digTrv3
+        5E0Ia+AcwnGjY1pEXoqLgcyqmzeE6A+dSKIKAqkj90wg/9g=
+X-Google-Smtp-Source: AGRyM1vXy8j20gHUEsoo8QWPuQvHey3I1meuQx56FZHopAnVEj3jwYjJHzssCdwlGyl/uj0ZRucTt5XsKmZhobZWFis=
+X-Received: by 2002:a05:6602:2e8d:b0:64f:b683:c70d with SMTP id
+ m13-20020a0566022e8d00b0064fb683c70dmr7236737iow.62.1657906508386; Fri, 15
+ Jul 2022 10:35:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220712145850.599666-1-benjamin.tissoires@redhat.com> <20220714213912.zrotlequhpgxzdl4@MacBook-Pro-3.local>
+In-Reply-To: <20220714213912.zrotlequhpgxzdl4@MacBook-Pro-3.local>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Fri, 15 Jul 2022 19:34:32 +0200
+Message-ID: <CAP01T746cSrRgYME75O-NZvf+4NQNvtU8ZhGf5XGmXRqY6jQzQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 00/23] Introduce eBPF support for HID devices
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jon Doron <jond@wiz.io>
+On Thu, 14 Jul 2022 at 23:39, Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Tue, Jul 12, 2022 at 04:58:27PM +0200, Benjamin Tissoires wrote:
+> > Hi,
+> >
+> > and after a little bit of time, here comes the v6 of the HID-BPF series.
+> >
+> > Again, for a full explanation of HID-BPF, please refer to the last patch
+> > in this series (23/23).
+> >
+> > This version sees some improvements compared to v5 on top of the
+> > usual addressing of the previous comments:
+> > - now I think every eBPF core change has a matching selftest added
+> > - the kfuncs declared in syscall can now actually access the memory of
+> >   the context
+> > - the code to retrieve the BTF ID of the various HID hooks is much
+> >   simpler (just a plain use of the BTF_ID() API instead of
+> >   loading/unloading of a tracing program)
+> > - I also added my HID Surface Dial example that I use locally to provide
+> >   a fuller example to users
+>
+> Looking great.
+> Before another respin to address bits in patch 12 let's land the first ~8 patches,
+> since they're generic useful improvements.
+>
+> Kumar, could you please help review the verifier bits?
 
-Add support for writing a custom event reader, by exposing the ring
-buffer.
-
-With the new API perf_buffer__buffer() you will get access to the
-raw mmaped()'ed per-cpu underlying memory of the ring buffer.
-
-This region contains both the perf buffer data and header
-(struct perf_event_mmap_page), which manages the ring buffer
-state (head/tail positions, when accessing the head/tail position
-it's important to take into consideration SMP).
-With this type of low level access one can implement different types of
-consumers here are few simple examples where this API helps with:
-
-1. perf_event_read_simple is allocating using malloc, perhaps you want
-   to handle the wrap-around in some other way.
-2. Since perf buf is per-cpu then the order of the events is not
-   guarnteed, for example:
-   Given 3 events where each event has a timestamp t0 < t1 < t2,
-   and the events are spread on more than 1 CPU, then we can end
-   up with the following state in the ring buf:
-   CPU[0] => [t0, t2]
-   CPU[1] => [t1]
-   When you consume the events from CPU[0], you could know there is
-   a t1 missing, (assuming there are no drops, and your event data
-   contains a sequential index).
-   So now one can simply do the following, for CPU[0], you can store
-   the address of t0 and t2 in an array (without moving the tail, so
-   there data is not perished) then move on the CPU[1] and set the
-   address of t1 in the same array.
-   So you end up with something like:
-   void **arr[] = [&t0, &t1, &t2], now you can consume it orderely
-   and move the tails as you process in order.
-3. Assuming there are multiple CPUs and we want to start draining the
-   messages from them, then we can "pick" with which one to start with
-   according to the remaining free space in the ring buffer.
-
-Signed-off-by: Jon Doron <jond@wiz.io>
----
- tools/lib/bpf/libbpf.c   | 16 ++++++++++++++++
- tools/lib/bpf/libbpf.h   | 16 ++++++++++++++++
- tools/lib/bpf/libbpf.map |  2 ++
- 3 files changed, 34 insertions(+)
-
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index e89cc9c885b3..c18bdb9b6e85 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -12485,6 +12485,22 @@ int perf_buffer__buffer_fd(const struct perf_buffer *pb, size_t buf_idx)
- 	return cpu_buf->fd;
- }
- 
-+int perf_buffer__buffer(struct perf_buffer *pb, int buf_idx, void **buf, size_t *buf_size)
-+{
-+	struct perf_cpu_buf *cpu_buf;
-+
-+	if (buf_idx >= pb->cpu_cnt)
-+		return libbpf_err(-EINVAL);
-+
-+	cpu_buf = pb->cpu_bufs[buf_idx];
-+	if (!cpu_buf)
-+		return libbpf_err(-ENOENT);
-+
-+	*buf = cpu_buf->base;
-+	*buf_size = pb->mmap_size;
-+	return 0;
-+}
-+
- /*
-  * Consume data from perf ring buffer corresponding to slot *buf_idx* in
-  * PERF_EVENT_ARRAY BPF map without waiting/polling. If there is no data to
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 9e9a3fd3edd8..9cd9fc1a16d2 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -1381,6 +1381,22 @@ LIBBPF_API int perf_buffer__consume(struct perf_buffer *pb);
- LIBBPF_API int perf_buffer__consume_buffer(struct perf_buffer *pb, size_t buf_idx);
- LIBBPF_API size_t perf_buffer__buffer_cnt(const struct perf_buffer *pb);
- LIBBPF_API int perf_buffer__buffer_fd(const struct perf_buffer *pb, size_t buf_idx);
-+/**
-+ * @brief **perf_buffer__buffer()** returns the per-cpu raw mmap()'ed underlying
-+ * memory region of the ring buffer.
-+ * This ring buffer can be used to implement a custom events consumer.
-+ * The ring buffer starts with the *struct perf_event_mmap_page*, which
-+ * holds the ring buffer managment fields, when accessing the header
-+ * structure it's important to be SMP aware.
-+ * You can refer to *perf_event_read_simple* for a simple example.
-+ * @param pb the perf buffer structure
-+ * @param buf_idx the buffer index to retreive
-+ * @param buf (out) gets the base pointer of the mmap()'ed memory
-+ * @param buf_size (out) gets the size of the mmap()'ed region
-+ * @return 0 on success, negative error code for failure
-+ */
-+LIBBPF_API int perf_buffer__buffer(struct perf_buffer *pb, int buf_idx, void **buf,
-+				   size_t *buf_size);
- 
- typedef enum bpf_perf_event_ret
- 	(*bpf_perf_event_print_t)(struct perf_event_header *hdr,
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 52973cffc20c..75cf9d4c871b 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -461,5 +461,7 @@ LIBBPF_0.8.0 {
- } LIBBPF_0.7.0;
- 
- LIBBPF_1.0.0 {
-+	global:
-+		perf_buffer__buffer;
- 	local: *;
- };
--- 
-2.36.1
-
+Sure, I'll take a look.
