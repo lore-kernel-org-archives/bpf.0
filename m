@@ -2,76 +2,102 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58642C433EF
-	for <bpf@archiver.kernel.org>; Fri, 15 Jul 2022 17:00:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1402C433EF
+	for <bpf@archiver.kernel.org>; Fri, 15 Jul 2022 17:15:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235294AbiGORAQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 Jul 2022 13:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43926 "EHLO
+        id S229787AbiGORP6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 15 Jul 2022 13:15:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235179AbiGORAP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 15 Jul 2022 13:00:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1444748C81;
-        Fri, 15 Jul 2022 10:00:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9842062221;
-        Fri, 15 Jul 2022 17:00:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 03EACC3411E;
-        Fri, 15 Jul 2022 17:00:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657904414;
-        bh=59SMOYcIxex69oPIZWV3vb2UlzKW91XVO+5IKX3eiYk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=FZ3JgAIwIPbqZ//HdqSydyrv4FNlea8VsZwbukMKnpTs+gq6F/eepKi7cSOCmNDgd
-         72QpndIxueiIU3iVewTl6FApGP5ARUN04+2vtHORuMoVa0NRIQKkF7G5lJLhM74vpv
-         IhEg4YAXJ6GPi0YPgoRBOPfl6fHVYLnAX4UNRgJ1Gnk9bImui1xIPTcib8YY0TuChg
-         lR3C+hI2fIhxKGo09Bg4WEvTl6l35GRa/vOGiaru5kNoXomUj3tP11ZhvGkSAQBegm
-         33MD27Gn20YGujKuR5HqXl5E7YAw9NHNlf6/KscqP30ojWUELEX62QZVTkigyPmYNZ
-         v3ZPJoDvYML5A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DCCE2E45230;
-        Fri, 15 Jul 2022 17:00:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229560AbiGORP5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 15 Jul 2022 13:15:57 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FF24333F
+        for <bpf@vger.kernel.org>; Fri, 15 Jul 2022 10:15:55 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 8-20020a05600c024800b003a2fe343db1so3415734wmj.1
+        for <bpf@vger.kernel.org>; Fri, 15 Jul 2022 10:15:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=fpicviDv92d17eZ1c7+rexcLir2xBn7O3KmN0Kzxfro=;
+        b=UsPBSJRfmKSsPNeL3N72N6j2SQUo01hlJU2ux3y9cLehp6fsxKs1PXgrJZ+cz7Gmgb
+         JkNqaSxCMH9nf6fZP14uguh+M5eHFTqBe6JhJYpBo/J2GzbsZfW1UzY+B0CIiTW9Dqvy
+         qLAjdjctG+wbU9nkMzarTluwuO8Sc9dBpW9PqkG73uNVF/ZiTZ29ttfNsGaX7p/yhIOs
+         La2uu/vzBds0lAHxILy5ujM+HvwGG4V3b+LLpBTuBrUJZkYT1LJ42Gj8u1VtSvl13FaU
+         ADF/qRTPaXxXALqTN+FH4PQCGGHoqAjCE39skMtpYo4L+AEocC65M356N/dyODgDhADt
+         cKNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fpicviDv92d17eZ1c7+rexcLir2xBn7O3KmN0Kzxfro=;
+        b=XMUViih98Bs3XwVKD+E/uklSx/qK7DYxrwhbUb3yvyYLihQWRcR0YkWfWP3XFpmp0A
+         4cR3b/mmKijhlmfdwHC9c/Ptv2gb4v+pTwLGhLKodtc73weZYREh+MSbdHcWhyRO9McM
+         Xj/yrG0d/tlW28SxzPpskAMc6jklbQov6f98MMWCsWae9mCxiTbFfI82e2DV8NTB/Dr1
+         YyTZ0bxUlsQpnT5lSAkm+YvKaCDTbTsZ+0CRRKBMBAFxAtfWqLm07OtqOEMy+Ut10c36
+         ytgTMoBz07E5fRpurABb2S/p+Fw2FXp8nkdwQG86M9HWXUtZbCQQ3JjQJ/VUGpoCnAjb
+         TOxw==
+X-Gm-Message-State: AJIora+sPrGPsiFd+MLGVHi7MZ636Ec6Xc9pS0L7dadhkxJksmFX1MN3
+        4dWTgIB/ZKrMYt4lfvGWcT620w==
+X-Google-Smtp-Source: AGRyM1srOvCAxL5rNPwCPwV3iadtGRLjhcptNZRRVwLonHjWJkzvBYZ4nYe7xGrUVTV1L4NwYd+qcg==
+X-Received: by 2002:a1c:750e:0:b0:3a2:b42f:ec2c with SMTP id o14-20020a1c750e000000b003a2b42fec2cmr21460710wmc.153.1657905354184;
+        Fri, 15 Jul 2022 10:15:54 -0700 (PDT)
+Received: from [192.168.178.32] ([51.155.200.13])
+        by smtp.gmail.com with ESMTPSA id p19-20020a05600c359300b003a300452f7fsm7847323wmq.32.2022.07.15.10.15.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Jul 2022 10:15:53 -0700 (PDT)
+Message-ID: <21cec7bd-e4fb-73f7-a6a6-7f52c03ae7e9@isovalent.com>
+Date:   Fri, 15 Jul 2022 18:15:52 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] bpf: fix check against plain integer v 'NULL'
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165790441390.797.4433680438081515423.git-patchwork-notify@kernel.org>
-Date:   Fri, 15 Jul 2022 17:00:13 +0000
-References: <20220714100322.260467-1-ben.dooks@sifive.com>
-In-Reply-To: <20220714100322.260467-1-ben.dooks@sifive.com>
-To:     Ben Dooks <ben.dooks@sifive.com>
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        sudip.mukherjee@sifive.com, jude.onyenegecha@sifive.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH bpf-next v2 0/3] Use lightweigt version of bpftool
+Content-Language: en-GB
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Pu Lehui <pulehui@huawei.com>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+References: <20220714024612.944071-1-pulehui@huawei.com>
+ <CAEf4BzZ_L+94O00mMDUh8ps8RTF=kcvX1zS5ocK8fPk4uw-_kg@mail.gmail.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <CAEf4BzZ_L+94O00mMDUh8ps8RTF=kcvX1zS5ocK8fPk4uw-_kg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
-
-On Thu, 14 Jul 2022 11:03:22 +0100 you wrote:
-> When checking with sparse, btf_show_type_value() is causing a
-> warning about checking integer vs NULL when the macro is passed
-> a pointer, due to the 'value != 0' check. Stop sparse complaining
-> about any type-casting by adding a cast to the typeof(value).
+On 15/07/2022 17:56, Andrii Nakryiko wrote:
+> On Wed, Jul 13, 2022 at 7:16 PM Pu Lehui <pulehui@huawei.com> wrote:
+>>
+>> Currently, samples/bpf, tools/runqslower and bpf/iterators use bpftool
+>> for vmlinux.h, skeleton, and static linking only. We can uselightweight
+>> bootstrap version of bpftool to handle these, and it will be faster.
+>>
+>> v2:
+>> - make libbpf and bootstrap bpftool independent. and make it simple.
+>>
 > 
-> This fixes the following sparse warnings:
-> 
-> [...]
+> Quentin, does this patch set look good to you?
 
-Here is the summary with links:
-  - bpf: fix check against plain integer v 'NULL'
-    https://git.kernel.org/bpf/bpf-next/c/a2a5580fcbf8
+[Apologies, the mail server has been filtering Pu's emails as spam for
+some reason and I had missed the discussion :s]
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Looks OK to me:
+Acked-by: Quentin Monnet <quentin@isovalent.com>
 
+Although I'm a bit sorry to see the sharing of libbpf between bpftool
+and libbpf go away. But OK. We can maybe reintroduce it through
+bpftool's Makefile or a separate include Makefile in the future.
 
+Quentin
