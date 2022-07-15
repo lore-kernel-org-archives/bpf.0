@@ -2,101 +2,91 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80EB4C43334
-	for <bpf@archiver.kernel.org>; Fri, 15 Jul 2022 19:18:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57D4BCCA483
+	for <bpf@archiver.kernel.org>; Fri, 15 Jul 2022 19:28:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229789AbiGOTSh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 Jul 2022 15:18:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53856 "EHLO
+        id S229772AbiGOT2m convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 15 Jul 2022 15:28:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiGOTSg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 15 Jul 2022 15:18:36 -0400
-Received: from maynard.decadent.org.uk (maynard.decadent.org.uk [95.217.213.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE7560506;
-        Fri, 15 Jul 2022 12:18:35 -0700 (PDT)
-Received: from [91.187.115.177] (helo=deadeye)
-        by maynard with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ben@decadent.org.uk>)
-        id 1oCQpc-000793-9X; Fri, 15 Jul 2022 21:18:32 +0200
-Received: from ben by deadeye with local (Exim 4.96)
-        (envelope-from <ben@decadent.org.uk>)
-        id 1oCQpb-0058Ah-1E;
-        Fri, 15 Jul 2022 21:18:31 +0200
-Message-ID: <60c84caf421d831ce6661c60503c1c56ef55e0ce.camel@decadent.org.uk>
-Subject: Re: [PATCH v2 0/5] tools: fix compilation failure caused by
- init_disassemble_info API changes
-From:   Ben Hutchings <ben@decadent.org.uk>
-To:     Andres Freund <andres@anarazel.de>
-Cc:     sedat.dilek@gmail.com, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>
-Date:   Fri, 15 Jul 2022 21:18:26 +0200
-In-Reply-To: <20220715191641.go6xbmhic3kafcsc@awork3.anarazel.de>
-References: <20220622231624.t63bkmkzphqvh3kx@alap3.anarazel.de>
-         <20220703212551.1114923-1-andres@anarazel.de>
-         <CA+icZUVDzogiyG=8sCuxdW4aaby_kRwToit2tg-A4D3VorVKnA@mail.gmail.com>
-         <5afd3b45e9b95fa5023790c24f8a1b0b4ce1ca7c.camel@decadent.org.uk>
-         <20220715191641.go6xbmhic3kafcsc@awork3.anarazel.de>
-Content-Type: multipart/signed; micalg="pgp-sha512";
-        protocol="application/pgp-signature"; boundary="=-mSANknzUMiXSAkb0/rhn"
-User-Agent: Evolution 3.44.2-1 
+        with ESMTP id S231229AbiGOT2l (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 15 Jul 2022 15:28:41 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE34616D
+        for <bpf@vger.kernel.org>; Fri, 15 Jul 2022 12:28:39 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26FGGwva020294
+        for <bpf@vger.kernel.org>; Fri, 15 Jul 2022 12:28:39 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3havksnh7x-8
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 15 Jul 2022 12:28:38 -0700
+Received: from twshared6447.05.prn5.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Fri, 15 Jul 2022 12:28:33 -0700
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id C5C051C63B027; Fri, 15 Jul 2022 12:28:29 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: test eager BPF ringbuf size adjustment logic
+Date:   Fri, 15 Jul 2022 12:24:56 -0700
+Message-ID: <20220715192456.1151015-2-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220715192456.1151015-1-andrii@kernel.org>
+References: <20220715192456.1151015-1-andrii@kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 91.187.115.177
-X-SA-Exim-Mail-From: ben@decadent.org.uk
-X-SA-Exim-Scanned: No (on maynard); SAEximRunCond expanded to false
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: Y2zDUB99DJIEyVnsBSeXur969L70KCd0
+X-Proofpoint-GUID: Y2zDUB99DJIEyVnsBSeXur969L70KCd0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-15_10,2022-07-15_01,2022-06-22_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Add test validating that libbpf adjusts (and reflects adjusted) ringbuf
+size early, before bpf_object is loaded. Also make sure we can't
+successfully resize ringbuf map after bpf_object is loaded.
 
---=-mSANknzUMiXSAkb0/rhn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ .../testing/selftests/bpf/prog_tests/ringbuf_multi.c  | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-On Fri, 2022-07-15 at 12:16 -0700, Andres Freund wrote:
-> Hi,
->=20
-> On 2022-07-14 15:25:44 +0200, Ben Hutchings wrote:
-> > Thanks, I meant to send that fix upstream but got distracted.  It
-> > should really be folded into "tools perf: Fix compilation error with
-> > new binutils".
->=20
-> I'll try to send a new version out soon. I think the right process is to =
-add
-> Signed-off-by: Ben Hutchings <benh@debian.org>
-> to the patch I squash it with?
+diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf_multi.c b/tools/testing/selftests/bpf/prog_tests/ringbuf_multi.c
+index eb5f7f5aa81a..1455911d9fcb 100644
+--- a/tools/testing/selftests/bpf/prog_tests/ringbuf_multi.c
++++ b/tools/testing/selftests/bpf/prog_tests/ringbuf_multi.c
+@@ -50,6 +50,13 @@ void test_ringbuf_multi(void)
+ 	if (CHECK(!skel, "skel_open", "skeleton open failed\n"))
+ 		return;
+ 
++	/* validate ringbuf size adjustment logic */
++	ASSERT_EQ(bpf_map__max_entries(skel->maps.ringbuf1), page_size, "rb1_size_before");
++	ASSERT_OK(bpf_map__set_max_entries(skel->maps.ringbuf1, page_size + 1), "rb1_resize");
++	ASSERT_EQ(bpf_map__max_entries(skel->maps.ringbuf1), 2 * page_size, "rb1_size_after");
++	ASSERT_OK(bpf_map__set_max_entries(skel->maps.ringbuf1, page_size), "rb1_reset");
++	ASSERT_EQ(bpf_map__max_entries(skel->maps.ringbuf1), page_size, "rb1_size_final");
++
+ 	proto_fd = bpf_map_create(BPF_MAP_TYPE_RINGBUF, NULL, 0, 0, page_size, NULL);
+ 	if (CHECK(proto_fd < 0, "bpf_map_create", "bpf_map_create failed\n"))
+ 		goto cleanup;
+@@ -65,6 +72,10 @@ void test_ringbuf_multi(void)
+ 	close(proto_fd);
+ 	proto_fd = -1;
+ 
++	/* make sure we can't resize ringbuf after object load */
++	if (!ASSERT_ERR(bpf_map__set_max_entries(skel->maps.ringbuf1, 3 * page_size), "rb1_resize_after_load"))
++		goto cleanup;
++
+ 	/* only trigger BPF program for current process */
+ 	skel->bss->pid = getpid();
+ 
+-- 
+2.30.2
 
-Yes, OK.
-
-Ben.
-
---=20
-Ben Hutchings
-Unix is many things to many people,
-but it's never been everything to anybody.
-
---=-mSANknzUMiXSAkb0/rhn
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEErCspvTSmr92z9o8157/I7JWGEQkFAmLRvYIACgkQ57/I7JWG
-EQn0Jw//UXpZFfBVI3IopQFG3f+rCI9Nc7QeIdIH4GlTfJVyZgFquHHWtkc63WRx
-f7UvUQn1NyKTk72RBKFDIwWhJ1gEocdRrdHFvnYAADjDV5WhuObdfm3kC5V6EWKo
-h39XJsxvmRrvQUThrxq3JNCzqFZJ1e/4cwT1kAPeCYbUINZ3cMquc4oSXqHIJse3
-wtJ/dF73IiMhda6RkLPUTjQ5MBOrQoXMnp9gGwxp8UCiyWZ5+1LNolouGYLJUUGr
-fAYdKDzHyQwEbSMACyOEi9mW1IvuakxccKhE5u+RS1E5TJAmaVH681HuqXaLOHMm
-h1FNljqGyNPvQ08dTEtspVfY2XwHtJZFtWwulRki5MpMLmQBgSg3rY0mzSEfQB1O
-K8C3po2ZM7/djGpn1hGyKX5qcfOEA7UXxFn8PJtO7AKkxWblQrj3I7RzHOd3oTe7
-zwdZNF1F3QEw8C371T/CkHmism+aB2qV+FzfyNaen6tk5hUGHbt2NWXDzEIQHYFU
-lufYapsbBNkNGnZVz68N4A5anysNV5Mxb7So7n3fHfvEJdmWzxwAKvX1ixfaEZaX
-tNm0KOudouKoxqSNZDFeXby8WAff3R2pJyWmlqwWx5RIlVWnOAHyguuQvq6O7d3+
-gqVxDU6LsjjNSg0eImU6LDd2bMKnAtj0TE+YUKHxihlQ+r5b79Q=
-=mawm
------END PGP SIGNATURE-----
-
---=-mSANknzUMiXSAkb0/rhn--
