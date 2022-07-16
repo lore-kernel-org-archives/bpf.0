@@ -2,29 +2,29 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 709D5CCA481
-	for <bpf@archiver.kernel.org>; Sat, 16 Jul 2022 12:20:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A3CAC43334
+	for <bpf@archiver.kernel.org>; Sat, 16 Jul 2022 12:20:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231241AbiGPMUx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 16 Jul 2022 08:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58674 "EHLO
+        id S231528AbiGPMUy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 16 Jul 2022 08:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiGPMUv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 16 Jul 2022 08:20:51 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA77E1AF35;
-        Sat, 16 Jul 2022 05:20:49 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LlS2P5CQpzlVmJ;
-        Sat, 16 Jul 2022 20:19:09 +0800 (CST)
+        with ESMTP id S230339AbiGPMUw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 16 Jul 2022 08:20:52 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C6E1AF38;
+        Sat, 16 Jul 2022 05:20:50 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LlS1D2zrMz19TvR;
+        Sat, 16 Jul 2022 20:18:08 +0800 (CST)
 Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.24; Sat, 16 Jul 2022 20:20:47 +0800
 Received: from k04.huawei.com (10.67.174.115) by
  dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 16 Jul 2022 20:20:47 +0800
+ 15.1.2375.24; Sat, 16 Jul 2022 20:20:46 +0800
 From:   Pu Lehui <pulehui@huawei.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
@@ -38,9 +38,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         KP Singh <kpsingh@kernel.org>,
         "Jean-Philippe Brucker" <jean-philippe@linaro.org>,
         Pu Lehui <pulehui@huawei.com>
-Subject: [PATCH bpf-next 5/5] selftests/bpf: Remove the casting about jited_ksyms and jited_linfo
-Date:   Sat, 16 Jul 2022 20:51:08 +0800
-Message-ID: <20220716125108.1011206-6-pulehui@huawei.com>
+Subject: [PATCH bpf-next 1/5] bpf: Unify memory address casting operation style
+Date:   Sat, 16 Jul 2022 20:51:04 +0800
+Message-ID: <20220716125108.1011206-2-pulehui@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220716125108.1011206-1-pulehui@huawei.com>
 References: <20220716125108.1011206-1-pulehui@huawei.com>
@@ -55,54 +55,106 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We have unified data extension operation of jited_ksyms and jited_linfo
-into zero extension, so there's no need to cast u64 memory address to
-long data type.
+Memory addresses are conceptually unsigned, (unsigned long) casting
+makes more sense, so let's make a change for conceptual uniformity
+and there is no functional change.
 
 Signed-off-by: Pu Lehui <pulehui@huawei.com>
 ---
- tools/testing/selftests/bpf/prog_tests/btf.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ kernel/bpf/core.c     | 2 +-
+ kernel/bpf/helpers.c  | 6 +++---
+ kernel/bpf/syscall.c  | 2 +-
+ kernel/bpf/verifier.c | 6 +++---
+ 4 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
-index e852a9df779d..db10fa1745d1 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf.c
-@@ -6613,8 +6613,9 @@ static int test_get_linfo(const struct prog_info_raw_test *test,
- 	}
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index cfb8a50a9f12..e14b399dd408 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1954,7 +1954,7 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
+ 		CONT;							\
+ 	LDX_PROBE_MEM_##SIZEOP:						\
+ 		bpf_probe_read_kernel(&DST, sizeof(SIZE),		\
+-				      (const void *)(long) (SRC + insn->off));	\
++				      (const void *)(unsigned long) (SRC + insn->off));	\
+ 		DST = *((SIZE *)&DST);					\
+ 		CONT;
  
- 	if (CHECK(jited_linfo[0] != jited_ksyms[0],
--		  "jited_linfo[0]:%lx != jited_ksyms[0]:%lx",
--		  (long)(jited_linfo[0]), (long)(jited_ksyms[0]))) {
-+		  "jited_linfo[0]:%llx != jited_ksyms[0]:%llx",
-+		  (unsigned long long)(jited_linfo[0]),
-+		  (unsigned long long)(jited_ksyms[0]))) {
- 		err = -1;
- 		goto done;
- 	}
-@@ -6632,16 +6633,17 @@ static int test_get_linfo(const struct prog_info_raw_test *test,
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index a1c84d256f83..92c01dd007a6 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -903,7 +903,7 @@ int bpf_bprintf_prepare(char *fmt, u32 fmt_size, const u64 *raw_args,
+ 					err = snprintf(tmp_buf,
+ 						       (tmp_buf_end - tmp_buf),
+ 						       "%pB",
+-						       (void *)(long)raw_args[num_spec]);
++						       (void *)(unsigned long)raw_args[num_spec]);
+ 					tmp_buf += (err + 1);
+ 				}
+ 
+@@ -929,7 +929,7 @@ int bpf_bprintf_prepare(char *fmt, u32 fmt_size, const u64 *raw_args,
+ 				goto out;
+ 			}
+ 
+-			unsafe_ptr = (char *)(long)raw_args[num_spec];
++			unsafe_ptr = (char *)(unsigned long)raw_args[num_spec];
+ 			err = copy_from_kernel_nofault(cur_ip, unsafe_ptr,
+ 						       sizeof_cur_ip);
+ 			if (err < 0)
+@@ -966,7 +966,7 @@ int bpf_bprintf_prepare(char *fmt, u32 fmt_size, const u64 *raw_args,
+ 				goto out;
+ 			}
+ 
+-			unsafe_ptr = (char *)(long)raw_args[num_spec];
++			unsafe_ptr = (char *)(unsigned long)raw_args[num_spec];
+ 			err = bpf_trace_copy_string(tmp_buf, unsafe_ptr,
+ 						    fmt_ptype,
+ 						    tmp_buf_end - tmp_buf);
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 83c7136c5788..d1380473e620 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -5108,7 +5108,7 @@ BPF_CALL_3(bpf_sys_bpf, int, cmd, union bpf_attr *, attr, u32, attr_size)
+ 			bpf_prog_put(prog);
+ 			return -EBUSY;
+ 		}
+-		attr->test.retval = bpf_prog_run(prog, (void *) (long) attr->test.ctx_in);
++		attr->test.retval = bpf_prog_run(prog, (void *) (unsigned long) attr->test.ctx_in);
+ 		__bpf_prog_exit_sleepable(prog, 0 /* bpf_prog_run does runtime stats */, &run_ctx);
+ 		bpf_prog_put(prog);
+ 		return 0;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index c59c3df0fea6..d91f17598833 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4445,7 +4445,7 @@ static int bpf_map_direct_read(struct bpf_map *map, int off, int size, u64 *val)
+ 	err = map->ops->map_direct_value_addr(map, &addr, off);
+ 	if (err)
+ 		return err;
+-	ptr = (void *)(long)addr + off;
++	ptr = (void *)(unsigned long)addr + off;
+ 
+ 	switch (size) {
+ 	case sizeof(u8):
+@@ -6113,7 +6113,7 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 			return err;
  		}
  
- 		if (CHECK(jited_linfo[i] <= jited_linfo[i - 1],
--			  "jited_linfo[%u]:%lx <= jited_linfo[%u]:%lx",
--			  i, (long)jited_linfo[i],
--			  i - 1, (long)(jited_linfo[i - 1]))) {
-+			  "jited_linfo[%u]:%llx <= jited_linfo[%u]:%llx",
-+			  i, (unsigned long long)jited_linfo[i],
-+			  i - 1, (unsigned long long)(jited_linfo[i - 1]))) {
- 			err = -1;
- 			goto done;
- 		}
+-		str_ptr = (char *)(long)(map_addr);
++		str_ptr = (char *)(unsigned long)(map_addr);
+ 		if (!strnchr(str_ptr + map_off, map->value_size - map_off, 0)) {
+ 			verbose(env, "string is not zero-terminated\n");
+ 			return -EINVAL;
+@@ -7099,7 +7099,7 @@ static int check_bpf_snprintf_call(struct bpf_verifier_env *env,
+ 		verbose(env, "verifier bug\n");
+ 		return -EFAULT;
+ 	}
+-	fmt = (char *)(long)fmt_addr + fmt_map_off;
++	fmt = (char *)(unsigned long)fmt_addr + fmt_map_off;
  
- 		if (CHECK(jited_linfo[i] - cur_func_ksyms > cur_func_len,
--			  "jited_linfo[%u]:%lx - %lx > %u",
--			  i, (long)jited_linfo[i], (long)cur_func_ksyms,
-+			  "jited_linfo[%u]:%llx - %llx > %u",
-+			  i, (unsigned long long)jited_linfo[i],
-+			  (unsigned long long)cur_func_ksyms,
- 			  cur_func_len)) {
- 			err = -1;
- 			goto done;
+ 	/* We are also guaranteed that fmt+fmt_map_off is NULL terminated, we
+ 	 * can focus on validating the format specifiers.
 -- 
 2.25.1
 
