@@ -2,29 +2,29 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A3CAC43334
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43FA6CCA483
 	for <bpf@archiver.kernel.org>; Sat, 16 Jul 2022 12:20:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231528AbiGPMUy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S231487AbiGPMUy (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Sat, 16 Jul 2022 08:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58678 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230339AbiGPMUw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 16 Jul 2022 08:20:52 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C6E1AF38;
-        Sat, 16 Jul 2022 05:20:50 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LlS1D2zrMz19TvR;
-        Sat, 16 Jul 2022 20:18:08 +0800 (CST)
+        with ESMTP id S229931AbiGPMUv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 16 Jul 2022 08:20:51 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C14F1A838;
+        Sat, 16 Jul 2022 05:20:49 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LlS385lDNzFq21;
+        Sat, 16 Jul 2022 20:19:48 +0800 (CST)
 Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.24; Sat, 16 Jul 2022 20:20:47 +0800
 Received: from k04.huawei.com (10.67.174.115) by
  dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 16 Jul 2022 20:20:46 +0800
+ 15.1.2375.24; Sat, 16 Jul 2022 20:20:47 +0800
 From:   Pu Lehui <pulehui@huawei.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
@@ -38,9 +38,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         KP Singh <kpsingh@kernel.org>,
         "Jean-Philippe Brucker" <jean-philippe@linaro.org>,
         Pu Lehui <pulehui@huawei.com>
-Subject: [PATCH bpf-next 1/5] bpf: Unify memory address casting operation style
-Date:   Sat, 16 Jul 2022 20:51:04 +0800
-Message-ID: <20220716125108.1011206-2-pulehui@huawei.com>
+Subject: [PATCH bpf-next 4/5] samples: bpf: Unify memory address casting operation style
+Date:   Sat, 16 Jul 2022 20:51:07 +0800
+Message-ID: <20220716125108.1011206-5-pulehui@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220716125108.1011206-1-pulehui@huawei.com>
 References: <20220716125108.1011206-1-pulehui@huawei.com>
@@ -61,100 +61,489 @@ and there is no functional change.
 
 Signed-off-by: Pu Lehui <pulehui@huawei.com>
 ---
- kernel/bpf/core.c     | 2 +-
- kernel/bpf/helpers.c  | 6 +++---
- kernel/bpf/syscall.c  | 2 +-
- kernel/bpf/verifier.c | 6 +++---
- 4 files changed, 8 insertions(+), 8 deletions(-)
+ samples/bpf/parse_simple.c               |  4 +-
+ samples/bpf/parse_varlen.c               |  4 +-
+ samples/bpf/tc_l2_redirect_kern.c        | 16 ++++----
+ samples/bpf/test_cgrp2_tc_kern.c         |  4 +-
+ samples/bpf/test_lwt_bpf.c               |  4 +-
+ samples/bpf/xdp_adjust_tail_kern.c       | 12 +++---
+ samples/bpf/xdp_fwd_kern.c               |  4 +-
+ samples/bpf/xdp_redirect.bpf.c           |  4 +-
+ samples/bpf/xdp_redirect_cpu.bpf.c       | 48 ++++++++++++------------
+ samples/bpf/xdp_redirect_map.bpf.c       |  8 ++--
+ samples/bpf/xdp_redirect_map_multi.bpf.c |  4 +-
+ samples/bpf/xdp_router_ipv4.bpf.c        |  4 +-
+ samples/bpf/xdp_rxq_info_kern.c          |  4 +-
+ samples/bpf/xdp_sample_pkts_kern.c       |  4 +-
+ samples/bpf/xdp_tx_iptunnel_kern.c       | 20 +++++-----
+ 15 files changed, 72 insertions(+), 72 deletions(-)
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index cfb8a50a9f12..e14b399dd408 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1954,7 +1954,7 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
- 		CONT;							\
- 	LDX_PROBE_MEM_##SIZEOP:						\
- 		bpf_probe_read_kernel(&DST, sizeof(SIZE),		\
--				      (const void *)(long) (SRC + insn->off));	\
-+				      (const void *)(unsigned long) (SRC + insn->off));	\
- 		DST = *((SIZE *)&DST);					\
- 		CONT;
+diff --git a/samples/bpf/parse_simple.c b/samples/bpf/parse_simple.c
+index 4a486cb1e0df..9a58865079ce 100644
+--- a/samples/bpf/parse_simple.c
++++ b/samples/bpf/parse_simple.c
+@@ -26,11 +26,11 @@ struct eth_hdr {
+ SEC("simple")
+ int handle_ingress(struct __sk_buff *skb)
+ {
+-	void *data = (void *)(long)skb->data;
++	void *data = (void *)(unsigned long)skb->data;
+ 	struct eth_hdr *eth = data;
+ 	struct iphdr *iph = data + sizeof(*eth);
+ 	struct udphdr *udp = data + sizeof(*eth) + sizeof(*iph);
+-	void *data_end = (void *)(long)skb->data_end;
++	void *data_end = (void *)(unsigned long)skb->data_end;
  
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index a1c84d256f83..92c01dd007a6 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -903,7 +903,7 @@ int bpf_bprintf_prepare(char *fmt, u32 fmt_size, const u64 *raw_args,
- 					err = snprintf(tmp_buf,
- 						       (tmp_buf_end - tmp_buf),
- 						       "%pB",
--						       (void *)(long)raw_args[num_spec]);
-+						       (void *)(unsigned long)raw_args[num_spec]);
- 					tmp_buf += (err + 1);
- 				}
+ 	/* single length check */
+ 	if (data + sizeof(*eth) + sizeof(*iph) + sizeof(*udp) > data_end)
+diff --git a/samples/bpf/parse_varlen.c b/samples/bpf/parse_varlen.c
+index d8623846e810..54e725efd576 100644
+--- a/samples/bpf/parse_varlen.c
++++ b/samples/bpf/parse_varlen.c
+@@ -112,9 +112,9 @@ static int parse_ipv6(void *data, uint64_t nh_off, void *data_end)
+ SEC("varlen")
+ int handle_ingress(struct __sk_buff *skb)
+ {
+-	void *data = (void *)(long)skb->data;
++	void *data = (void *)(unsigned long)skb->data;
+ 	struct ethhdr *eth = data;
+-	void *data_end = (void *)(long)skb->data_end;
++	void *data_end = (void *)(unsigned long)skb->data_end;
+ 	uint64_t h_proto, nh_off;
  
-@@ -929,7 +929,7 @@ int bpf_bprintf_prepare(char *fmt, u32 fmt_size, const u64 *raw_args,
- 				goto out;
- 			}
+ 	nh_off = sizeof(*eth);
+diff --git a/samples/bpf/tc_l2_redirect_kern.c b/samples/bpf/tc_l2_redirect_kern.c
+index fd2fa0004330..a3e10e43d560 100644
+--- a/samples/bpf/tc_l2_redirect_kern.c
++++ b/samples/bpf/tc_l2_redirect_kern.c
+@@ -59,9 +59,9 @@ SEC("l2_to_iptun_ingress_forward")
+ int _l2_to_iptun_ingress_forward(struct __sk_buff *skb)
+ {
+ 	struct bpf_tunnel_key tkey = {};
+-	void *data = (void *)(long)skb->data;
++	void *data = (void *)(unsigned long)skb->data;
+ 	struct eth_hdr *eth = data;
+-	void *data_end = (void *)(long)skb->data_end;
++	void *data_end = (void *)(unsigned long)skb->data_end;
+ 	int key = 0, *ifindex;
  
--			unsafe_ptr = (char *)(long)raw_args[num_spec];
-+			unsafe_ptr = (char *)(unsigned long)raw_args[num_spec];
- 			err = copy_from_kernel_nofault(cur_ip, unsafe_ptr,
- 						       sizeof_cur_ip);
- 			if (err < 0)
-@@ -966,7 +966,7 @@ int bpf_bprintf_prepare(char *fmt, u32 fmt_size, const u64 *raw_args,
- 				goto out;
- 			}
+ 	int ret;
+@@ -110,9 +110,9 @@ SEC("l2_to_iptun_ingress_redirect")
+ int _l2_to_iptun_ingress_redirect(struct __sk_buff *skb)
+ {
+ 	struct bpf_tunnel_key tkey = {};
+-	void *data = (void *)(long)skb->data;
++	void *data = (void *)(unsigned long)skb->data;
+ 	struct eth_hdr *eth = data;
+-	void *data_end = (void *)(long)skb->data_end;
++	void *data_end = (void *)(unsigned long)skb->data_end;
+ 	int key = 0, *ifindex;
  
--			unsafe_ptr = (char *)(long)raw_args[num_spec];
-+			unsafe_ptr = (char *)(unsigned long)raw_args[num_spec];
- 			err = bpf_trace_copy_string(tmp_buf, unsafe_ptr,
- 						    fmt_ptype,
- 						    tmp_buf_end - tmp_buf);
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 83c7136c5788..d1380473e620 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -5108,7 +5108,7 @@ BPF_CALL_3(bpf_sys_bpf, int, cmd, union bpf_attr *, attr, u32, attr_size)
- 			bpf_prog_put(prog);
- 			return -EBUSY;
- 		}
--		attr->test.retval = bpf_prog_run(prog, (void *) (long) attr->test.ctx_in);
-+		attr->test.retval = bpf_prog_run(prog, (void *) (unsigned long) attr->test.ctx_in);
- 		__bpf_prog_exit_sleepable(prog, 0 /* bpf_prog_run does runtime stats */, &run_ctx);
- 		bpf_prog_put(prog);
- 		return 0;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index c59c3df0fea6..d91f17598833 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4445,7 +4445,7 @@ static int bpf_map_direct_read(struct bpf_map *map, int off, int size, u64 *val)
- 	err = map->ops->map_direct_value_addr(map, &addr, off);
- 	if (err)
- 		return err;
--	ptr = (void *)(long)addr + off;
-+	ptr = (void *)(unsigned long)addr + off;
+ 	int ret;
+@@ -151,9 +151,9 @@ SEC("l2_to_ip6tun_ingress_redirect")
+ int _l2_to_ip6tun_ingress_redirect(struct __sk_buff *skb)
+ {
+ 	struct bpf_tunnel_key tkey = {};
+-	void *data = (void *)(long)skb->data;
++	void *data = (void *)(unsigned long)skb->data;
+ 	struct eth_hdr *eth = data;
+-	void *data_end = (void *)(long)skb->data_end;
++	void *data_end = (void *)(unsigned long)skb->data_end;
+ 	int key = 0, *ifindex;
  
- 	switch (size) {
- 	case sizeof(u8):
-@@ -6113,7 +6113,7 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 			return err;
- 		}
+ 	if (data + sizeof(*eth) > data_end)
+@@ -206,9 +206,9 @@ SEC("drop_non_tun_vip")
+ int _drop_non_tun_vip(struct __sk_buff *skb)
+ {
+ 	struct bpf_tunnel_key tkey = {};
+-	void *data = (void *)(long)skb->data;
++	void *data = (void *)(unsigned long)skb->data;
+ 	struct eth_hdr *eth = data;
+-	void *data_end = (void *)(long)skb->data_end;
++	void *data_end = (void *)(unsigned long)skb->data_end;
  
--		str_ptr = (char *)(long)(map_addr);
-+		str_ptr = (char *)(unsigned long)(map_addr);
- 		if (!strnchr(str_ptr + map_off, map->value_size - map_off, 0)) {
- 			verbose(env, "string is not zero-terminated\n");
- 			return -EINVAL;
-@@ -7099,7 +7099,7 @@ static int check_bpf_snprintf_call(struct bpf_verifier_env *env,
- 		verbose(env, "verifier bug\n");
- 		return -EFAULT;
- 	}
--	fmt = (char *)(long)fmt_addr + fmt_map_off;
-+	fmt = (char *)(unsigned long)fmt_addr + fmt_map_off;
+ 	if (data + sizeof(*eth) > data_end)
+ 		return TC_ACT_OK;
+diff --git a/samples/bpf/test_cgrp2_tc_kern.c b/samples/bpf/test_cgrp2_tc_kern.c
+index 4dd532a312b9..c1468609ab14 100644
+--- a/samples/bpf/test_cgrp2_tc_kern.c
++++ b/samples/bpf/test_cgrp2_tc_kern.c
+@@ -41,10 +41,10 @@ struct bpf_elf_map SEC("maps") test_cgrp2_array_pin = {
+ SEC("filter")
+ int handle_egress(struct __sk_buff *skb)
+ {
+-	void *data = (void *)(long)skb->data;
++	void *data = (void *)(unsigned long)skb->data;
+ 	struct eth_hdr *eth = data;
+ 	struct ipv6hdr *ip6h = data + sizeof(*eth);
+-	void *data_end = (void *)(long)skb->data_end;
++	void *data_end = (void *)(unsigned long)skb->data_end;
+ 	char dont_care_msg[] = "dont care %04x %d\n";
+ 	char pass_msg[] = "pass\n";
+ 	char reject_msg[] = "reject\n";
+diff --git a/samples/bpf/test_lwt_bpf.c b/samples/bpf/test_lwt_bpf.c
+index 1b568575ad11..dd1883415931 100644
+--- a/samples/bpf/test_lwt_bpf.c
++++ b/samples/bpf/test_lwt_bpf.c
+@@ -67,8 +67,8 @@ int do_test_cb(struct __sk_buff *skb)
+ SEC("test_data")
+ int do_test_data(struct __sk_buff *skb)
+ {
+-	void *data = (void *)(long)skb->data;
+-	void *data_end = (void *)(long)skb->data_end;
++	void *data = (void *)(unsigned long)skb->data;
++	void *data_end = (void *)(unsigned long)skb->data_end;
+ 	struct iphdr *iph = data;
  
- 	/* We are also guaranteed that fmt+fmt_map_off is NULL terminated, we
- 	 * can focus on validating the format specifiers.
+ 	if (data + sizeof(*iph) > data_end) {
+diff --git a/samples/bpf/xdp_adjust_tail_kern.c b/samples/bpf/xdp_adjust_tail_kern.c
+index ffdd548627f0..7a182e133e6a 100644
+--- a/samples/bpf/xdp_adjust_tail_kern.c
++++ b/samples/bpf/xdp_adjust_tail_kern.c
+@@ -73,8 +73,8 @@ static __always_inline int send_icmp4_too_big(struct xdp_md *xdp)
+ 
+ 	if (bpf_xdp_adjust_head(xdp, 0 - headroom))
+ 		return XDP_DROP;
+-	void *data = (void *)(long)xdp->data;
+-	void *data_end = (void *)(long)xdp->data_end;
++	void *data = (void *)(unsigned long)xdp->data;
++	void *data_end = (void *)(unsigned long)xdp->data_end;
+ 
+ 	if (data + (ICMP_TOOBIG_SIZE + headroom) > data_end)
+ 		return XDP_DROP;
+@@ -119,8 +119,8 @@ static __always_inline int send_icmp4_too_big(struct xdp_md *xdp)
+ 
+ static __always_inline int handle_ipv4(struct xdp_md *xdp)
+ {
+-	void *data_end = (void *)(long)xdp->data_end;
+-	void *data = (void *)(long)xdp->data;
++	void *data_end = (void *)(unsigned long)xdp->data_end;
++	void *data = (void *)(unsigned long)xdp->data;
+ 	int pckt_size = data_end - data;
+ 	int offset;
+ 
+@@ -136,8 +136,8 @@ static __always_inline int handle_ipv4(struct xdp_md *xdp)
+ SEC("xdp_icmp")
+ int _xdp_icmp(struct xdp_md *xdp)
+ {
+-	void *data_end = (void *)(long)xdp->data_end;
+-	void *data = (void *)(long)xdp->data;
++	void *data_end = (void *)(unsigned long)xdp->data_end;
++	void *data = (void *)(unsigned long)xdp->data;
+ 	struct ethhdr *eth = data;
+ 	__u16 h_proto;
+ 
+diff --git a/samples/bpf/xdp_fwd_kern.c b/samples/bpf/xdp_fwd_kern.c
+index 54c099cbd639..022f9fb926b8 100644
+--- a/samples/bpf/xdp_fwd_kern.c
++++ b/samples/bpf/xdp_fwd_kern.c
+@@ -42,8 +42,8 @@ static __always_inline int ip_decrease_ttl(struct iphdr *iph)
+ 
+ static __always_inline int xdp_fwd_flags(struct xdp_md *ctx, u32 flags)
+ {
+-	void *data_end = (void *)(long)ctx->data_end;
+-	void *data = (void *)(long)ctx->data;
++	void *data_end = (void *)(unsigned long)ctx->data_end;
++	void *data = (void *)(unsigned long)ctx->data;
+ 	struct bpf_fib_lookup fib_params;
+ 	struct ethhdr *eth = data;
+ 	struct ipv6hdr *ip6h;
+diff --git a/samples/bpf/xdp_redirect.bpf.c b/samples/bpf/xdp_redirect.bpf.c
+index 7c02bacfe96b..12969f2d58c7 100644
+--- a/samples/bpf/xdp_redirect.bpf.c
++++ b/samples/bpf/xdp_redirect.bpf.c
+@@ -19,8 +19,8 @@ const volatile int ifindex_out;
+ SEC("xdp")
+ int xdp_redirect_prog(struct xdp_md *ctx)
+ {
+-	void *data_end = (void *)(long)ctx->data_end;
+-	void *data = (void *)(long)ctx->data;
++	void *data_end = (void *)(unsigned long)ctx->data_end;
++	void *data = (void *)(unsigned long)ctx->data;
+ 	u32 key = bpf_get_smp_processor_id();
+ 	struct ethhdr *eth = data;
+ 	struct datarec *rec;
+diff --git a/samples/bpf/xdp_redirect_cpu.bpf.c b/samples/bpf/xdp_redirect_cpu.bpf.c
+index 87c54bfdbb70..46261792d74d 100644
+--- a/samples/bpf/xdp_redirect_cpu.bpf.c
++++ b/samples/bpf/xdp_redirect_cpu.bpf.c
+@@ -96,8 +96,8 @@ bool parse_eth(struct ethhdr *eth, void *data_end,
+ static __always_inline
+ u16 get_dest_port_ipv4_udp(struct xdp_md *ctx, u64 nh_off)
+ {
+-	void *data_end = (void *)(long)ctx->data_end;
+-	void *data     = (void *)(long)ctx->data;
++	void *data_end = (void *)(unsigned long)ctx->data_end;
++	void *data     = (void *)(unsigned long)ctx->data;
+ 	struct iphdr *iph = data + nh_off;
+ 	struct udphdr *udph;
+ 
+@@ -116,8 +116,8 @@ u16 get_dest_port_ipv4_udp(struct xdp_md *ctx, u64 nh_off)
+ static __always_inline
+ int get_proto_ipv4(struct xdp_md *ctx, u64 nh_off)
+ {
+-	void *data_end = (void *)(long)ctx->data_end;
+-	void *data     = (void *)(long)ctx->data;
++	void *data_end = (void *)(unsigned long)ctx->data_end;
++	void *data     = (void *)(unsigned long)ctx->data;
+ 	struct iphdr *iph = data + nh_off;
+ 
+ 	if (iph + 1 > data_end)
+@@ -128,8 +128,8 @@ int get_proto_ipv4(struct xdp_md *ctx, u64 nh_off)
+ static __always_inline
+ int get_proto_ipv6(struct xdp_md *ctx, u64 nh_off)
+ {
+-	void *data_end = (void *)(long)ctx->data_end;
+-	void *data     = (void *)(long)ctx->data;
++	void *data_end = (void *)(unsigned long)ctx->data_end;
++	void *data     = (void *)(unsigned long)ctx->data;
+ 	struct ipv6hdr *ip6h = data + nh_off;
+ 
+ 	if (ip6h + 1 > data_end)
+@@ -167,8 +167,8 @@ int  xdp_prognum0_no_touch(struct xdp_md *ctx)
+ SEC("xdp")
+ int  xdp_prognum1_touch_data(struct xdp_md *ctx)
+ {
+-	void *data_end = (void *)(long)ctx->data_end;
+-	void *data     = (void *)(long)ctx->data;
++	void *data_end = (void *)(unsigned long)ctx->data_end;
++	void *data     = (void *)(unsigned long)ctx->data;
+ 	u32 key = bpf_get_smp_processor_id();
+ 	struct ethhdr *eth = data;
+ 	struct datarec *rec;
+@@ -209,8 +209,8 @@ int  xdp_prognum1_touch_data(struct xdp_md *ctx)
+ SEC("xdp")
+ int  xdp_prognum2_round_robin(struct xdp_md *ctx)
+ {
+-	void *data_end = (void *)(long)ctx->data_end;
+-	void *data     = (void *)(long)ctx->data;
++	void *data_end = (void *)(unsigned long)ctx->data_end;
++	void *data     = (void *)(unsigned long)ctx->data;
+ 	u32 key = bpf_get_smp_processor_id();
+ 	struct datarec *rec;
+ 	u32 cpu_dest = 0;
+@@ -254,8 +254,8 @@ int  xdp_prognum2_round_robin(struct xdp_md *ctx)
+ SEC("xdp")
+ int  xdp_prognum3_proto_separate(struct xdp_md *ctx)
+ {
+-	void *data_end = (void *)(long)ctx->data_end;
+-	void *data     = (void *)(long)ctx->data;
++	void *data_end = (void *)(unsigned long)ctx->data_end;
++	void *data     = (void *)(unsigned long)ctx->data;
+ 	u32 key = bpf_get_smp_processor_id();
+ 	struct ethhdr *eth = data;
+ 	u8 ip_proto = IPPROTO_UDP;
+@@ -320,8 +320,8 @@ int  xdp_prognum3_proto_separate(struct xdp_md *ctx)
+ SEC("xdp")
+ int  xdp_prognum4_ddos_filter_pktgen(struct xdp_md *ctx)
+ {
+-	void *data_end = (void *)(long)ctx->data_end;
+-	void *data     = (void *)(long)ctx->data;
++	void *data_end = (void *)(unsigned long)ctx->data_end;
++	void *data     = (void *)(unsigned long)ctx->data;
+ 	u32 key = bpf_get_smp_processor_id();
+ 	struct ethhdr *eth = data;
+ 	u8 ip_proto = IPPROTO_UDP;
+@@ -396,8 +396,8 @@ int  xdp_prognum4_ddos_filter_pktgen(struct xdp_md *ctx)
+ static __always_inline
+ u32 get_ipv4_hash_ip_pair(struct xdp_md *ctx, u64 nh_off)
+ {
+-	void *data_end = (void *)(long)ctx->data_end;
+-	void *data     = (void *)(long)ctx->data;
++	void *data_end = (void *)(unsigned long)ctx->data_end;
++	void *data     = (void *)(unsigned long)ctx->data;
+ 	struct iphdr *iph = data + nh_off;
+ 	u32 cpu_hash;
+ 
+@@ -413,8 +413,8 @@ u32 get_ipv4_hash_ip_pair(struct xdp_md *ctx, u64 nh_off)
+ static __always_inline
+ u32 get_ipv6_hash_ip_pair(struct xdp_md *ctx, u64 nh_off)
+ {
+-	void *data_end = (void *)(long)ctx->data_end;
+-	void *data     = (void *)(long)ctx->data;
++	void *data_end = (void *)(unsigned long)ctx->data_end;
++	void *data     = (void *)(unsigned long)ctx->data;
+ 	struct ipv6hdr *ip6h = data + nh_off;
+ 	u32 cpu_hash;
+ 
+@@ -437,8 +437,8 @@ u32 get_ipv6_hash_ip_pair(struct xdp_md *ctx, u64 nh_off)
+ SEC("xdp")
+ int  xdp_prognum5_lb_hash_ip_pairs(struct xdp_md *ctx)
+ {
+-	void *data_end = (void *)(long)ctx->data_end;
+-	void *data     = (void *)(long)ctx->data;
++	void *data_end = (void *)(unsigned long)ctx->data_end;
++	void *data     = (void *)(unsigned long)ctx->data;
+ 	u32 key = bpf_get_smp_processor_id();
+ 	struct ethhdr *eth = data;
+ 	struct datarec *rec;
+@@ -494,8 +494,8 @@ int  xdp_prognum5_lb_hash_ip_pairs(struct xdp_md *ctx)
+ SEC("xdp/cpumap")
+ int xdp_redirect_cpu_devmap(struct xdp_md *ctx)
+ {
+-	void *data_end = (void *)(long)ctx->data_end;
+-	void *data = (void *)(long)ctx->data;
++	void *data_end = (void *)(unsigned long)ctx->data_end;
++	void *data = (void *)(unsigned long)ctx->data;
+ 	struct ethhdr *eth = data;
+ 	u64 nh_off;
+ 
+@@ -522,8 +522,8 @@ int xdp_redirect_cpu_drop(struct xdp_md *ctx)
+ SEC("xdp/devmap")
+ int xdp_redirect_egress_prog(struct xdp_md *ctx)
+ {
+-	void *data_end = (void *)(long)ctx->data_end;
+-	void *data = (void *)(long)ctx->data;
++	void *data_end = (void *)(unsigned long)ctx->data_end;
++	void *data = (void *)(unsigned long)ctx->data;
+ 	struct ethhdr *eth = data;
+ 	u64 nh_off;
+ 
+diff --git a/samples/bpf/xdp_redirect_map.bpf.c b/samples/bpf/xdp_redirect_map.bpf.c
+index 8557c278df77..df8e9de0833f 100644
+--- a/samples/bpf/xdp_redirect_map.bpf.c
++++ b/samples/bpf/xdp_redirect_map.bpf.c
+@@ -37,8 +37,8 @@ const volatile __u8 tx_mac_addr[ETH_ALEN];
+ 
+ static __always_inline int xdp_redirect_map(struct xdp_md *ctx, void *redirect_map)
+ {
+-	void *data_end = (void *)(long)ctx->data_end;
+-	void *data = (void *)(long)ctx->data;
++	void *data_end = (void *)(unsigned long)ctx->data_end;
++	void *data = (void *)(unsigned long)ctx->data;
+ 	u32 key = bpf_get_smp_processor_id();
+ 	struct ethhdr *eth = data;
+ 	struct datarec *rec;
+@@ -71,8 +71,8 @@ int xdp_redirect_map_native(struct xdp_md *ctx)
+ SEC("xdp/devmap")
+ int xdp_redirect_map_egress(struct xdp_md *ctx)
+ {
+-	void *data_end = (void *)(long)ctx->data_end;
+-	void *data = (void *)(long)ctx->data;
++	void *data_end = (void *)(unsigned long)ctx->data_end;
++	void *data = (void *)(unsigned long)ctx->data;
+ 	u8 *mac_addr = (u8 *) tx_mac_addr;
+ 	struct ethhdr *eth = data;
+ 	u64 nh_off;
+diff --git a/samples/bpf/xdp_redirect_map_multi.bpf.c b/samples/bpf/xdp_redirect_map_multi.bpf.c
+index 8b2fd4ec2c76..361b7ed1b34e 100644
+--- a/samples/bpf/xdp_redirect_map_multi.bpf.c
++++ b/samples/bpf/xdp_redirect_map_multi.bpf.c
+@@ -56,8 +56,8 @@ int xdp_redirect_map_native(struct xdp_md *ctx)
+ SEC("xdp/devmap")
+ int xdp_devmap_prog(struct xdp_md *ctx)
+ {
+-	void *data_end = (void *)(long)ctx->data_end;
+-	void *data = (void *)(long)ctx->data;
++	void *data_end = (void *)(unsigned long)ctx->data_end;
++	void *data = (void *)(unsigned long)ctx->data;
+ 	u32 key = ctx->egress_ifindex;
+ 	struct ethhdr *eth = data;
+ 	__be64 *mac;
+diff --git a/samples/bpf/xdp_router_ipv4.bpf.c b/samples/bpf/xdp_router_ipv4.bpf.c
+index 0643330d1d2e..5a2a942decf9 100644
+--- a/samples/bpf/xdp_router_ipv4.bpf.c
++++ b/samples/bpf/xdp_router_ipv4.bpf.c
+@@ -73,8 +73,8 @@ struct {
+ SEC("xdp")
+ int xdp_router_ipv4_prog(struct xdp_md *ctx)
+ {
+-	void *data_end = (void *)(long)ctx->data_end;
+-	void *data = (void *)(long)ctx->data;
++	void *data_end = (void *)(unsigned long)ctx->data_end;
++	void *data = (void *)(unsigned long)ctx->data;
+ 	struct ethhdr *eth = data;
+ 	u64 nh_off = sizeof(*eth);
+ 	struct datarec *rec;
+diff --git a/samples/bpf/xdp_rxq_info_kern.c b/samples/bpf/xdp_rxq_info_kern.c
+index 5e7459f9bf3e..0df286e2f30d 100644
+--- a/samples/bpf/xdp_rxq_info_kern.c
++++ b/samples/bpf/xdp_rxq_info_kern.c
+@@ -74,8 +74,8 @@ void swap_src_dst_mac(void *data)
+ SEC("xdp_prog0")
+ int  xdp_prognum0(struct xdp_md *ctx)
+ {
+-	void *data_end = (void *)(long)ctx->data_end;
+-	void *data     = (void *)(long)ctx->data;
++	void *data_end = (void *)(unsigned long)ctx->data_end;
++	void *data     = (void *)(unsigned long)ctx->data;
+ 	struct datarec *rec, *rxq_rec;
+ 	int ingress_ifindex;
+ 	struct config *config;
+diff --git a/samples/bpf/xdp_sample_pkts_kern.c b/samples/bpf/xdp_sample_pkts_kern.c
+index 9cf76b340dd7..78a8150ecd33 100644
+--- a/samples/bpf/xdp_sample_pkts_kern.c
++++ b/samples/bpf/xdp_sample_pkts_kern.c
+@@ -15,8 +15,8 @@ struct {
+ SEC("xdp_sample")
+ int xdp_sample_prog(struct xdp_md *ctx)
+ {
+-	void *data_end = (void *)(long)ctx->data_end;
+-	void *data = (void *)(long)ctx->data;
++	void *data_end = (void *)(unsigned long)ctx->data_end;
++	void *data = (void *)(unsigned long)ctx->data;
+ 
+ 	/* Metadata will be in the perf event before the packet data. */
+ 	struct S {
+diff --git a/samples/bpf/xdp_tx_iptunnel_kern.c b/samples/bpf/xdp_tx_iptunnel_kern.c
+index 0e2bca3a3fff..f3f11ff12858 100644
+--- a/samples/bpf/xdp_tx_iptunnel_kern.c
++++ b/samples/bpf/xdp_tx_iptunnel_kern.c
+@@ -76,8 +76,8 @@ static __always_inline void set_ethhdr(struct ethhdr *new_eth,
+ 
+ static __always_inline int handle_ipv4(struct xdp_md *xdp)
+ {
+-	void *data_end = (void *)(long)xdp->data_end;
+-	void *data = (void *)(long)xdp->data;
++	void *data_end = (void *)(unsigned long)xdp->data_end;
++	void *data = (void *)(unsigned long)xdp->data;
+ 	struct iptnl_info *tnl;
+ 	struct ethhdr *new_eth;
+ 	struct ethhdr *old_eth;
+@@ -112,8 +112,8 @@ static __always_inline int handle_ipv4(struct xdp_md *xdp)
+ 	if (bpf_xdp_adjust_head(xdp, 0 - (int)sizeof(struct iphdr)))
+ 		return XDP_DROP;
+ 
+-	data = (void *)(long)xdp->data;
+-	data_end = (void *)(long)xdp->data_end;
++	data = (void *)(unsigned long)xdp->data;
++	data_end = (void *)(unsigned long)xdp->data_end;
+ 
+ 	new_eth = data;
+ 	iph = data + sizeof(*new_eth);
+@@ -151,8 +151,8 @@ static __always_inline int handle_ipv4(struct xdp_md *xdp)
+ 
+ static __always_inline int handle_ipv6(struct xdp_md *xdp)
+ {
+-	void *data_end = (void *)(long)xdp->data_end;
+-	void *data = (void *)(long)xdp->data;
++	void *data_end = (void *)(unsigned long)xdp->data_end;
++	void *data = (void *)(unsigned long)xdp->data;
+ 	struct iptnl_info *tnl;
+ 	struct ethhdr *new_eth;
+ 	struct ethhdr *old_eth;
+@@ -184,8 +184,8 @@ static __always_inline int handle_ipv6(struct xdp_md *xdp)
+ 	if (bpf_xdp_adjust_head(xdp, 0 - (int)sizeof(struct ipv6hdr)))
+ 		return XDP_DROP;
+ 
+-	data = (void *)(long)xdp->data;
+-	data_end = (void *)(long)xdp->data_end;
++	data = (void *)(unsigned long)xdp->data;
++	data_end = (void *)(unsigned long)xdp->data_end;
+ 
+ 	new_eth = data;
+ 	ip6h = data + sizeof(*new_eth);
+@@ -215,8 +215,8 @@ static __always_inline int handle_ipv6(struct xdp_md *xdp)
+ SEC("xdp.frags")
+ int _xdp_tx_iptunnel(struct xdp_md *xdp)
+ {
+-	void *data_end = (void *)(long)xdp->data_end;
+-	void *data = (void *)(long)xdp->data;
++	void *data_end = (void *)(unsigned long)xdp->data_end;
++	void *data = (void *)(unsigned long)xdp->data;
+ 	struct ethhdr *eth = data;
+ 	__u16 h_proto;
+ 
 -- 
 2.25.1
 
