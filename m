@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2829CCA486
-	for <bpf@archiver.kernel.org>; Mon, 18 Jul 2022 19:30:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82863C433EF
+	for <bpf@archiver.kernel.org>; Mon, 18 Jul 2022 19:31:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235330AbiGRTaC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Jul 2022 15:30:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46830 "EHLO
+        id S234464AbiGRTah (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Jul 2022 15:30:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236095AbiGRT3N (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Jul 2022 15:29:13 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326A52A279;
-        Mon, 18 Jul 2022 12:29:02 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id g9so9551028qvq.7;
-        Mon, 18 Jul 2022 12:29:01 -0700 (PDT)
+        with ESMTP id S235933AbiGRT3P (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Jul 2022 15:29:15 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4812DA8E;
+        Mon, 18 Jul 2022 12:29:05 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id e5so9537614qts.1;
+        Mon, 18 Jul 2022 12:29:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=9jRBPxHetNaAYvNL/Zbk4Gz5JHeIZjINC1YVksHLpK0=;
-        b=UWtmw4bkYSqZCrwkTdXvOJn0HuT45kCRhfcR25N1KZz4XPy5uHeP36ClHVvtxuQ0ml
-         eR5MjNl5qmX49XbhugFRX9Q90pk0oydAsfvrCtMgEq6H+FFLr5M39bqMJV/2aDTL8QMd
-         Mr5FnWMOsu+Oj9iWEBqUquNtUmVGFIUMVcfpkrmO4P1SAV9L6D4GUGE/7pXbBYWmGSvp
-         yCoqENUMPT3+KVmnijAAPfz650MZZj/EIkfrWSELI+A5ssy2P71glhClbjpPNPVxkZHm
-         vYHQO4TP3f3Ii52Sn3fr1U56mheGEatDLvDKTJFdhaq7zhn6Qn+rmyN5Vn2ChEuVs68B
-         RCtQ==
+        bh=tA2rl8RctZ6HL9V5x9xFMH8oSgBBwUuElKQvWOHzbeI=;
+        b=hP/RxbCCEkxGibcmzYfoczVfz2LGpVvZkrG5wlu75XNiAI1BfNZJPMtwQd0PYtFa4k
+         9sqDaS6kmGHiRQpzGl3YHVh0l8qAJUfrnfctlEXZsk+yJaCHbydmsJ/FIeyIMRe2QYYS
+         AB02g9p+c9CoMw9OrSZ9omO4Oxfqs9oeUUaFdWEZpJcv2MJ7cdtPYz3Fd8zBnbGvz1Iw
+         o7jHZpB3NBZRj1mxkRUcREMvO38UFX1tl3lIgHvmj+MBAc2h6f3RXJF3Q60pUT+dIr1T
+         Zgt4vkyg0W1HEu5nB4dG2ctBT26OjozQ53zCuCaHayZmI0SZj41p5lheZfaXVwMwGzSd
+         cd+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=9jRBPxHetNaAYvNL/Zbk4Gz5JHeIZjINC1YVksHLpK0=;
-        b=MMDx0q0vzdkhzCXSzUyTA2uNgME5QBkLeAYGw4UHdXWcW4RHJ0q/TFPGVHBcWCxIvD
-         9xqy/+nl60LJmSv3Uw3Cz3Z0FfNszUBVVWDsXYenoNgG6Ie9Z5D7FPN1A38/2MhDSdW4
-         lEWFdxJSeznu03Q983i/0J/basWTnsMpyuPi9kgIhOzTqLajyInzXuAm6EgRbFJY+ukQ
-         mfJOC3IHSmKUFd0oKx/dIe7djaINEcssl5XzPKalPvdftIJu/LyjFyFbw+zYf6Z8w4zg
-         q4Z2TFHBwH158mr912fa0sFWOrSQcGrh9i3jbQkOSCDEBeQ1rNWWtuhgOvEJhjWbTNVO
-         CTfg==
-X-Gm-Message-State: AJIora9wNTh+BQcgvqtVvER3Gao1hq8DCUJQILkw8LKDezQpVBNq3vIG
-        YIPVz83tpV07cJ+jOV4t1ZMo0IG4G88Teg==
-X-Google-Smtp-Source: AGRyM1tJL6xF5uFJZtWlPYKjynWj22iMoR4ixYcMYqU4mAIXJGlgzVLwHxDXYCNM6iwonqEgJ0BPsw==
-X-Received: by 2002:a05:6214:d8c:b0:473:5a78:cdd3 with SMTP id e12-20020a0562140d8c00b004735a78cdd3mr22081665qve.105.1658172540532;
-        Mon, 18 Jul 2022 12:29:00 -0700 (PDT)
+        bh=tA2rl8RctZ6HL9V5x9xFMH8oSgBBwUuElKQvWOHzbeI=;
+        b=qtjOuBinv1cjHReODh9T0bjPhnyu5jC0QelJgxKYx3Arsce7Yigf0yxIcSts23lfb1
+         pAury/y9BIhoIkAzApCV9F8JcplIbrVrqxQ97D7k8HVFm4X8zsSVVnVUkbjOdBj0yAc3
+         9E6VSQROy+f/KIr8zpVMmc4O4oX6Dv8+4TKehi0lA6Amg6uWCqk+qxa7IoE4vpAzwGV/
+         C2NNz1w4gmz0xDH1ZpGl0lnPaaGycQ077ZA38BKll8euwrmSG6eh/Xblm5QoATD914I9
+         Lq699aNuQA7exlALJUyr7hvZaGobg4OvvJUf5/s7+fMsWI00X4J3leqy2UKgY+Jzmjef
+         ffNg==
+X-Gm-Message-State: AJIora+QaTfqUYwF0qSHYlCkEyEoFJFW/ZybbU+sSRvjRdmjbCEffEla
+        4WF1dBbWJ7Bt/jgFgtH7eF14EZ224ObACw==
+X-Google-Smtp-Source: AGRyM1vQmvbkX1kTEORONuNSMwS4ZWos+Eg2Ylq19DBEaI61zIn7vgC2XHqbVwUo3RPShBlZ/+yVwg==
+X-Received: by 2002:ac8:5790:0:b0:31e:f69a:1b9e with SMTP id v16-20020ac85790000000b0031ef69a1b9emr2408133qta.103.1658172544528;
+        Mon, 18 Jul 2022 12:29:04 -0700 (PDT)
 Received: from localhost ([2601:4c1:c100:1230:ab01:d009:465a:5ab1])
-        by smtp.gmail.com with ESMTPSA id y14-20020a37640e000000b006b5869c1525sm11450264qkb.21.2022.07.18.12.28.59
+        by smtp.gmail.com with ESMTPSA id v17-20020ac85791000000b0031ee2080c73sm6310369qta.54.2022.07.18.12.29.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 12:28:59 -0700 (PDT)
+        Mon, 18 Jul 2022 12:29:04 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     linux-kernel@vger.kernel.org,
         Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -90,9 +90,9 @@ To:     linux-kernel@vger.kernel.org,
         Vlastimil Babka <vbabka@suse.cz>, Yonghong Song <yhs@fb.com>,
         Yury Norov <yury.norov@gmail.com>, linux-mm@kvack.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH 12/16] time: optimize tick_check_percpu()
-Date:   Mon, 18 Jul 2022 12:28:40 -0700
-Message-Id: <20220718192844.1805158-13-yury.norov@gmail.com>
+Subject: [PATCH 15/16] sched/topology: optimize topology_span_sane()
+Date:   Mon, 18 Jul 2022 12:28:43 -0700
+Message-Id: <20220718192844.1805158-16-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220718192844.1805158-1-yury.norov@gmail.com>
 References: <20220718192844.1805158-1-yury.norov@gmail.com>
@@ -102,58 +102,75 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-tick_check_percpu() calls cpumask_equal() even if
-curdev->cpumask == cpumask_of(cpu). Fix it.
+topology_span_sane() checks if cpu == i before calling
+	cpumask_equal(tl->mask(cpu), tl->mask(i)).
 
-Caught with CONFIG_DEBUG_BITMAP:
-[    0.077622] Call trace:
-[    0.077637]  __bitmap_check_params+0x144/0x250
-[    0.077675]  tick_check_replacement+0xac/0x320
-[    0.077716]  tick_check_new_device+0x50/0x110
-[    0.077747]  clockevents_register_device+0x74/0x1c0
-[    0.077779]  dummy_timer_starting_cpu+0x6c/0x80
-[    0.077817]  cpuhp_invoke_callback+0x104/0x20c
-[    0.077856]  cpuhp_invoke_callback_range+0x70/0xf0
-[    0.077890]  notify_cpu_starting+0xac/0xcc
-[    0.077921]  secondary_start_kernel+0xe4/0x154
-[    0.077951]  __secondary_switched+0xa0/0xa4
-[    0.077992] ---[ end trace 0000000000000000 ]---
-[    0.078021] b1:	ffffbfec4703b890
-[    0.078031] b2:	ffffbfec4703b890
-[    0.078043] b3:	0
-[    0.078052] nbits:	256
-[    0.078065] start:	0
-[    0.078075] off:	0
-[    0.078086] Bitmap: parameters check failed
-[    0.078095] include/linux/bitmap.h [419]: bitmap_equal
+However, tl->mask(cpu) and tl->mask(i) may point to the same cpumask
+even if i != cpu. Fix the check accordingly.
+
+While here, move tl->mask(cpu) out of the loop, and make the in-loop
+code calculating tl->mask(i) only once.
+
+Catched with CONFIG_DEBUG_BITMAP:
+[    0.867917] Call Trace:
+[    0.868209]  <TASK>
+[    0.868471]  build_sched_domains+0x36f/0x1a40
+[    0.868576]  sched_init_smp+0x44/0xba
+[    0.869012]  ? mtrr_aps_init+0x84/0xa0
+[    0.869465]  kernel_init_freeable+0x12e/0x26e
+[    0.869982]  ? rest_init+0xd0/0xd0
+[    0.870406]  kernel_init+0x16/0x120
+[    0.870821]  ret_from_fork+0x22/0x30
+[    0.871244]  </TASK>
+[    0.871502] ---[ end trace 0000000000000000 ]---
+[    0.872040] b1:              ffffffffb1fd3480
+[    0.872041] b2:              ffffffffb1fd3480
+[    0.872041] b3:              0
+[    0.872042] nbits:   256
+[    0.872042] start:   0
+[    0.872042] off:     0
+[    0.872043] Bitmap: parameters check failed
+[    0.872043] include/linux/bitmap.h [427]: bitmap_equal
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- kernel/time/tick-common.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ kernel/sched/topology.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/time/tick-common.c b/kernel/time/tick-common.c
-index fdd5ae1a074b..7205f76f8d10 100644
---- a/kernel/time/tick-common.c
-+++ b/kernel/time/tick-common.c
-@@ -290,13 +290,15 @@ static bool tick_check_percpu(struct clock_event_device *curdev,
+diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+index 05b6c2ad90b9..ad32d0a43424 100644
+--- a/kernel/sched/topology.c
++++ b/kernel/sched/topology.c
+@@ -2211,6 +2211,8 @@ static struct sched_domain *build_sched_domain(struct sched_domain_topology_leve
+ static bool topology_span_sane(struct sched_domain_topology_level *tl,
+ 			      const struct cpumask *cpu_map, int cpu)
  {
- 	if (!cpumask_test_cpu(cpu, newdev->cpumask))
- 		return false;
--	if (cpumask_equal(newdev->cpumask, cpumask_of(cpu)))
-+	if (newdev->cpumask == cpumask_of(cpu) ||
-+			cpumask_equal(newdev->cpumask, cpumask_of(cpu)))
- 		return true;
- 	/* Check if irq affinity can be set */
- 	if (newdev->irq >= 0 && !irq_can_set_affinity(newdev->irq))
- 		return false;
- 	/* Prefer an existing cpu local device */
--	if (curdev && cpumask_equal(curdev->cpumask, cpumask_of(cpu)))
-+	if (curdev && (curdev->cpumask == cpumask_of(cpu) ||
-+			cpumask_equal(curdev->cpumask, cpumask_of(cpu))))
- 		return false;
- 	return true;
- }
++	const struct cpumask *mc = tl->mask(cpu);
++	const struct cpumask *mi;
+ 	int i;
+ 
+ 	/* NUMA levels are allowed to overlap */
+@@ -2226,14 +2228,18 @@ static bool topology_span_sane(struct sched_domain_topology_level *tl,
+ 	for_each_cpu(i, cpu_map) {
+ 		if (i == cpu)
+ 			continue;
++
++		mi = tl->mask(i);
++		if (mi == mc)
++			continue;
++
+ 		/*
+ 		 * We should 'and' all those masks with 'cpu_map' to exactly
+ 		 * match the topology we're about to build, but that can only
+ 		 * remove CPUs, which only lessens our ability to detect
+ 		 * overlaps
+ 		 */
+-		if (!cpumask_equal(tl->mask(cpu), tl->mask(i)) &&
+-		    cpumask_intersects(tl->mask(cpu), tl->mask(i)))
++		if (!cpumask_equal(mc, mi) && cpumask_intersects(mc, mi))
+ 			return false;
+ 	}
+ 
 -- 
 2.34.1
 
