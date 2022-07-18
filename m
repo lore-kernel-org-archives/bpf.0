@@ -2,23 +2,23 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4B39CCA487
-	for <bpf@archiver.kernel.org>; Mon, 18 Jul 2022 12:59:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61EE8CCA489
+	for <bpf@archiver.kernel.org>; Mon, 18 Jul 2022 12:59:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234722AbiGRM70 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Jul 2022 08:59:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
+        id S234606AbiGRM7Z (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Jul 2022 08:59:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233894AbiGRM7Y (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S234222AbiGRM7Y (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 18 Jul 2022 08:59:24 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DD010A2;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4A563C1;
         Mon, 18 Jul 2022 05:59:22 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LmhlT5bmbzVftZ;
-        Mon, 18 Jul 2022 20:55:33 +0800 (CST)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lmhn86dkJzkX7K;
+        Mon, 18 Jul 2022 20:57:00 +0800 (CST)
 Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.24; Mon, 18 Jul 2022 20:59:20 +0800
 Received: from k04.huawei.com (10.67.174.115) by
@@ -38,10 +38,12 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         KP Singh <kpsingh@kernel.org>,
         "Jean-Philippe Brucker" <jean-philippe@linaro.org>,
         Pu Lehui <pulehui@huawei.com>
-Subject: [PATCH bpf-next v2 0/5] cleanup for data casting
-Date:   Mon, 18 Jul 2022 21:29:33 +0800
-Message-ID: <20220718132938.1031864-1-pulehui@huawei.com>
+Subject: [PATCH bpf-next v2 2/5] libbpf: Unify memory address casting operation style
+Date:   Mon, 18 Jul 2022 21:29:35 +0800
+Message-ID: <20220718132938.1031864-3-pulehui@huawei.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220718132938.1031864-1-pulehui@huawei.com>
+References: <20220718132938.1031864-1-pulehui@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -53,106 +55,127 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Previously, we found that memory address casting in libbpf
-was not appropriate [0]. Memory addresses are conceptually
-unsigned, (unsigned long) casting makes more sense. With the
-suggestion of Daniel, we applied this cleanup to the entire
-bpf, and there is no functional change.
+Memory addresses are conceptually unsigned, (unsigned long) casting
+makes more sense, so let's make a change for conceptual uniformity
+and there is no functional change.
 
-[0] https://lore.kernel.org/bpf/a31efed5-a436-49c9-4126-902303df9766@iogearbox.net/
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+---
+ tools/lib/bpf/bpf_prog_linfo.c | 8 ++++----
+ tools/lib/bpf/btf.c            | 7 ++++---
+ tools/lib/bpf/skel_internal.h  | 4 ++--
+ tools/lib/bpf/usdt.c           | 4 ++--
+ 4 files changed, 12 insertions(+), 11 deletions(-)
 
-v2:
-- update subject and commit msg of patch 5.
-- attach ack of Yonghong.
-
-v1: https://lore.kernel.org/bpf/20220716125108.1011206-1-pulehui@huawei.com/
-
-Pu Lehui (5):
-  bpf: Unify memory address casting operation style
-  libbpf: Unify memory address casting operation style
-  selftests: bpf: Unify memory address casting operation style
-  samples: bpf: Unify memory address casting operation style
-  selftests/bpf: Change the casting about jited_ksyms and jited_linfo
-
- kernel/bpf/core.c                             |  2 +-
- kernel/bpf/helpers.c                          |  6 +--
- kernel/bpf/syscall.c                          |  2 +-
- kernel/bpf/verifier.c                         |  6 +--
- samples/bpf/parse_simple.c                    |  4 +-
- samples/bpf/parse_varlen.c                    |  4 +-
- samples/bpf/tc_l2_redirect_kern.c             | 16 +++----
- samples/bpf/test_cgrp2_tc_kern.c              |  4 +-
- samples/bpf/test_lwt_bpf.c                    |  4 +-
- samples/bpf/xdp_adjust_tail_kern.c            | 12 ++---
- samples/bpf/xdp_fwd_kern.c                    |  4 +-
- samples/bpf/xdp_redirect.bpf.c                |  4 +-
- samples/bpf/xdp_redirect_cpu.bpf.c            | 48 +++++++++----------
- samples/bpf/xdp_redirect_map.bpf.c            |  8 ++--
- samples/bpf/xdp_redirect_map_multi.bpf.c      |  4 +-
- samples/bpf/xdp_router_ipv4.bpf.c             |  4 +-
- samples/bpf/xdp_rxq_info_kern.c               |  4 +-
- samples/bpf/xdp_sample_pkts_kern.c            |  4 +-
- samples/bpf/xdp_tx_iptunnel_kern.c            | 20 ++++----
- tools/lib/bpf/bpf_prog_linfo.c                |  8 ++--
- tools/lib/bpf/btf.c                           |  7 +--
- tools/lib/bpf/skel_internal.h                 |  4 +-
- tools/lib/bpf/usdt.c                          |  4 +-
- tools/testing/selftests/bpf/bench.c           |  4 +-
- .../selftests/bpf/prog_tests/bpf_obj_id.c     | 10 ++--
- .../selftests/bpf/prog_tests/bpf_tcp_ca.c     |  2 +-
- tools/testing/selftests/bpf/prog_tests/btf.c  | 20 ++++----
- .../bpf/prog_tests/core_read_macros.c         |  8 ++--
- .../selftests/bpf/prog_tests/hashmap.c        |  8 ++--
- .../selftests/bpf/prog_tests/ringbuf.c        |  4 +-
- .../selftests/bpf/prog_tests/ringbuf_multi.c  |  4 +-
- .../bpf/prog_tests/sockopt_inherit.c          |  2 +-
- tools/testing/selftests/bpf/progs/bpf_flow.c  | 10 ++--
- tools/testing/selftests/bpf/progs/core_kern.c |  4 +-
- .../selftests/bpf/progs/fexit_bpf2bpf.c       |  8 ++--
- tools/testing/selftests/bpf/progs/pyperf.h    |  4 +-
- .../testing/selftests/bpf/progs/skb_pkt_end.c |  4 +-
- .../selftests/bpf/progs/sockmap_parse_prog.c  |  8 ++--
- .../bpf/progs/sockmap_verdict_prog.c          |  4 +-
- .../bpf/progs/test_btf_skc_cls_ingress.c      |  8 ++--
- .../selftests/bpf/progs/test_check_mtu.c      | 16 +++----
- .../selftests/bpf/progs/test_cls_redirect.c   |  8 ++--
- tools/testing/selftests/bpf/progs/test_l4lb.c |  6 +--
- .../selftests/bpf/progs/test_l4lb_noinline.c  |  6 +--
- .../selftests/bpf/progs/test_lwt_seg6local.c  | 10 ++--
- .../bpf/progs/test_migrate_reuseport.c        |  4 +-
- .../selftests/bpf/progs/test_pkt_access.c     |  8 ++--
- .../bpf/progs/test_queue_stack_map.h          |  4 +-
- .../selftests/bpf/progs/test_seg6_loop.c      |  8 ++--
- .../selftests/bpf/progs/test_sk_assign.c      |  8 ++--
- .../selftests/bpf/progs/test_sk_lookup_kern.c |  4 +-
- .../selftests/bpf/progs/test_sockmap_kern.h   | 12 ++---
- .../selftests/bpf/progs/test_tc_dtime.c       |  2 +-
- .../testing/selftests/bpf/progs/test_tc_edt.c |  6 +--
- .../selftests/bpf/progs/test_tc_neigh.c       |  2 +-
- .../selftests/bpf/progs/test_tc_neigh_fib.c   |  2 +-
- .../bpf/progs/test_tcp_check_syncookie_kern.c |  8 ++--
- .../selftests/bpf/progs/test_tunnel_kern.c    | 12 ++---
- .../selftests/bpf/progs/test_verif_scale1.c   |  4 +-
- .../selftests/bpf/progs/test_verif_scale2.c   |  4 +-
- .../selftests/bpf/progs/test_verif_scale3.c   |  4 +-
- tools/testing/selftests/bpf/progs/test_xdp.c  | 20 ++++----
- .../bpf/progs/test_xdp_adjust_tail_grow.c     |  4 +-
- .../bpf/progs/test_xdp_adjust_tail_shrink.c   |  4 +-
- .../selftests/bpf/progs/test_xdp_bpf2bpf.c    |  4 +-
- .../bpf/progs/test_xdp_context_test_run.c     |  4 +-
- .../bpf/progs/test_xdp_devmap_helpers.c       |  4 +-
- .../bpf/progs/test_xdp_do_redirect.c          | 14 +++---
- .../selftests/bpf/progs/test_xdp_loop.c       | 20 ++++----
- .../selftests/bpf/progs/test_xdp_noinline.c   | 28 +++++------
- .../bpf/progs/test_xdp_update_frags.c         |  4 +-
- .../selftests/bpf/progs/test_xdp_vlan.c       | 16 +++----
- .../bpf/progs/test_xdp_with_devmap_helpers.c  |  4 +-
- .../bpf/progs/xdp_redirect_multi_kern.c       |  8 ++--
- .../selftests/bpf/progs/xdp_synproxy_kern.c   | 16 +++----
- .../testing/selftests/bpf/progs/xdping_kern.c | 12 ++---
- tools/testing/selftests/bpf/progs/xdpwall.c   |  4 +-
- 77 files changed, 301 insertions(+), 298 deletions(-)
-
+diff --git a/tools/lib/bpf/bpf_prog_linfo.c b/tools/lib/bpf/bpf_prog_linfo.c
+index 5c503096ef43..5cf41a563ef5 100644
+--- a/tools/lib/bpf/bpf_prog_linfo.c
++++ b/tools/lib/bpf/bpf_prog_linfo.c
+@@ -127,7 +127,7 @@ struct bpf_prog_linfo *bpf_prog_linfo__new(const struct bpf_prog_info *info)
+ 	prog_linfo->raw_linfo = malloc(data_sz);
+ 	if (!prog_linfo->raw_linfo)
+ 		goto err_free;
+-	memcpy(prog_linfo->raw_linfo, (void *)(long)info->line_info, data_sz);
++	memcpy(prog_linfo->raw_linfo, (void *)(unsigned long)info->line_info, data_sz);
+ 
+ 	nr_jited_func = info->nr_jited_ksyms;
+ 	if (!nr_jited_func ||
+@@ -148,7 +148,7 @@ struct bpf_prog_linfo *bpf_prog_linfo__new(const struct bpf_prog_info *info)
+ 	if (!prog_linfo->raw_jited_linfo)
+ 		goto err_free;
+ 	memcpy(prog_linfo->raw_jited_linfo,
+-	       (void *)(long)info->jited_line_info, data_sz);
++	       (void *)(unsigned long)info->jited_line_info, data_sz);
+ 
+ 	/* Number of jited_line_info per jited func */
+ 	prog_linfo->nr_jited_linfo_per_func = malloc(nr_jited_func *
+@@ -166,8 +166,8 @@ struct bpf_prog_linfo *bpf_prog_linfo__new(const struct bpf_prog_info *info)
+ 		goto err_free;
+ 
+ 	if (dissect_jited_func(prog_linfo,
+-			       (__u64 *)(long)info->jited_ksyms,
+-			       (__u32 *)(long)info->jited_func_lens))
++			       (__u64 *)(unsigned long)info->jited_ksyms,
++			       (__u32 *)(unsigned long)info->jited_func_lens))
+ 		goto err_free;
+ 
+ 	return prog_linfo;
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index 2d14f1a52d7a..61e2ac2b6891 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -1568,7 +1568,7 @@ static int btf_rewrite_str(__u32 *str_off, void *ctx)
+ 		return 0;
+ 
+ 	if (p->str_off_map &&
+-	    hashmap__find(p->str_off_map, (void *)(long)*str_off, &mapped_off)) {
++	    hashmap__find(p->str_off_map, (void *)(unsigned long)*str_off, &mapped_off)) {
+ 		*str_off = (__u32)(long)mapped_off;
+ 		return 0;
+ 	}
+@@ -1581,7 +1581,8 @@ static int btf_rewrite_str(__u32 *str_off, void *ctx)
+ 	 * performing expensive string comparisons.
+ 	 */
+ 	if (p->str_off_map) {
+-		err = hashmap__append(p->str_off_map, (void *)(long)*str_off, (void *)(long)off);
++		err = hashmap__append(p->str_off_map, (void *)(unsigned long)*str_off,
++				      (void *)(unsigned long)off);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -3133,7 +3134,7 @@ static long hash_combine(long h, long value)
+ static int btf_dedup_table_add(struct btf_dedup *d, long hash, __u32 type_id)
+ {
+ 	return hashmap__append(d->dedup_table,
+-			       (void *)hash, (void *)(long)type_id);
++			       (void *)hash, (void *)(unsigned long)type_id);
+ }
+ 
+ static int btf_dedup_hypot_map_add(struct btf_dedup *d,
+diff --git a/tools/lib/bpf/skel_internal.h b/tools/lib/bpf/skel_internal.h
+index bd6f4505e7b1..e2803e7cd6d9 100644
+--- a/tools/lib/bpf/skel_internal.h
++++ b/tools/lib/bpf/skel_internal.h
+@@ -146,7 +146,7 @@ static inline void *skel_finalize_map_data(__u64 *init_val, size_t mmap_sz, int
+ 	struct bpf_map *map;
+ 	void *addr = NULL;
+ 
+-	kvfree((void *) (long) *init_val);
++	kvfree((void *) (unsigned long) *init_val);
+ 	*init_val = ~0ULL;
+ 
+ 	/* At this point bpf_load_and_run() finished without error and
+@@ -197,7 +197,7 @@ static inline void *skel_finalize_map_data(__u64 *init_val, size_t mmap_sz, int
+ {
+ 	void *addr;
+ 
+-	addr = mmap((void *) (long) *init_val, mmap_sz, flags, MAP_SHARED | MAP_FIXED, fd, 0);
++	addr = mmap((void *) (unsigned long) *init_val, mmap_sz, flags, MAP_SHARED | MAP_FIXED, fd, 0);
+ 	if (addr == (void *) -1)
+ 		return NULL;
+ 	return addr;
+diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+index d18e37982344..3e54b47f9e1b 100644
+--- a/tools/lib/bpf/usdt.c
++++ b/tools/lib/bpf/usdt.c
+@@ -915,7 +915,7 @@ static int allocate_spec_id(struct usdt_manager *man, struct hashmap *specs_hash
+ 		*spec_id = man->free_spec_ids[man->free_spec_cnt - 1];
+ 
+ 		/* cache spec ID for current spec string for future lookups */
+-		err = hashmap__add(specs_hash, target->spec_str, (void *)(long)*spec_id);
++		err = hashmap__add(specs_hash, target->spec_str, (void *)(unsigned long)*spec_id);
+ 		if (err)
+ 			 return err;
+ 
+@@ -928,7 +928,7 @@ static int allocate_spec_id(struct usdt_manager *man, struct hashmap *specs_hash
+ 		*spec_id = man->next_free_spec_id;
+ 
+ 		/* cache spec ID for current spec string for future lookups */
+-		err = hashmap__add(specs_hash, target->spec_str, (void *)(long)*spec_id);
++		err = hashmap__add(specs_hash, target->spec_str, (void *)(unsigned long)*spec_id);
+ 		if (err)
+ 			 return err;
+ 
 -- 
 2.25.1
 
