@@ -2,193 +2,160 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61555C43334
-	for <bpf@archiver.kernel.org>; Mon, 18 Jul 2022 12:50:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43A13C43334
+	for <bpf@archiver.kernel.org>; Mon, 18 Jul 2022 12:59:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234435AbiGRMum (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Jul 2022 08:50:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
+        id S234287AbiGRM7Z (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Jul 2022 08:59:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233493AbiGRMum (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Jul 2022 08:50:42 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719DD6397;
-        Mon, 18 Jul 2022 05:50:40 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 1F56033BE8;
-        Mon, 18 Jul 2022 12:50:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1658148639; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9QeNU7i1Z8jOANG2Muly2d9TTzEZo5jKEBQhnd4Wbho=;
-        b=aXCE0L5kmo7kN4TNty5IXSebf6+/gMTsHbMU8UHhLiD5s6Q/GymEAj8WT2fCYooe+u+H3E
-        8nzTlsJbn7jQhxaPDdbi1pWLoddkmSVa0BJt6HMf381Wq3CsFTB4fA5yx7Pe5rFABuYmRx
-        s4bd2JA1tX19hRCZ+8nHXLxtMpYt9yQ=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id BD6AD2C141;
-        Mon, 18 Jul 2022 12:50:38 +0000 (UTC)
-Date:   Mon, 18 Jul 2022 14:50:36 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Song Liu <song@kernel.org>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        live-patching@vger.kernel.org, daniel@iogearbox.net,
-        kernel-team@fb.com, jolsa@kernel.org, rostedt@goodmis.org
-Subject: Re: [PATCH v3 bpf-next 1/4] ftrace: add
- modify_ftrace_direct_multi_nolock
-Message-ID: <YtVXHDfV8HDwAm6G@alley>
-References: <20220718001405.2236811-1-song@kernel.org>
- <20220718001405.2236811-2-song@kernel.org>
+        with ESMTP id S234250AbiGRM7Y (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Jul 2022 08:59:24 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A151463DF;
+        Mon, 18 Jul 2022 05:59:22 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lmhnw1n0CzlVlh;
+        Mon, 18 Jul 2022 20:57:40 +0800 (CST)
+Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 18 Jul 2022 20:59:20 +0800
+Received: from k04.huawei.com (10.67.174.115) by
+ dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 18 Jul 2022 20:59:20 +0800
+From:   Pu Lehui <pulehui@huawei.com>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "Jean-Philippe Brucker" <jean-philippe@linaro.org>,
+        Pu Lehui <pulehui@huawei.com>
+Subject: [PATCH bpf-next v2 1/5] bpf: Unify memory address casting operation style
+Date:   Mon, 18 Jul 2022 21:29:34 +0800
+Message-ID: <20220718132938.1031864-2-pulehui@huawei.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220718132938.1031864-1-pulehui@huawei.com>
+References: <20220718132938.1031864-1-pulehui@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220718001405.2236811-2-song@kernel.org>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.115]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500019.china.huawei.com (7.185.36.180)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun 2022-07-17 17:14:02, Song Liu wrote:
-> This is similar to modify_ftrace_direct_multi, but does not acquire
-> direct_mutex. This is useful when direct_mutex is already locked by the
-> user.
-> 
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -5691,22 +5691,8 @@ int unregister_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
-> @@ -5717,12 +5703,8 @@ int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
->  	int i, size;
->  	int err;
->  
-> -	if (check_direct_multi(ops))
-> +	if (WARN_ON_ONCE(!mutex_is_locked(&direct_mutex)))
->  		return -EINVAL;
+Memory addresses are conceptually unsigned, (unsigned long) casting
+makes more sense, so let's make a change for conceptual uniformity
+and there is no functional change.
 
-IMHO, it is better to use:
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+Acked-by: Yonghong Song <yhs@fb.com>
+---
+ kernel/bpf/core.c     | 2 +-
+ kernel/bpf/helpers.c  | 6 +++---
+ kernel/bpf/syscall.c  | 2 +-
+ kernel/bpf/verifier.c | 6 +++---
+ 4 files changed, 8 insertions(+), 8 deletions(-)
 
-	lockdep_assert_held_once(&direct_mutex);
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index cfb8a50a9f12..e14b399dd408 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1954,7 +1954,7 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
+ 		CONT;							\
+ 	LDX_PROBE_MEM_##SIZEOP:						\
+ 		bpf_probe_read_kernel(&DST, sizeof(SIZE),		\
+-				      (const void *)(long) (SRC + insn->off));	\
++				      (const void *)(unsigned long) (SRC + insn->off));	\
+ 		DST = *((SIZE *)&DST);					\
+ 		CONT;
+ 
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index a1c84d256f83..92c01dd007a6 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -903,7 +903,7 @@ int bpf_bprintf_prepare(char *fmt, u32 fmt_size, const u64 *raw_args,
+ 					err = snprintf(tmp_buf,
+ 						       (tmp_buf_end - tmp_buf),
+ 						       "%pB",
+-						       (void *)(long)raw_args[num_spec]);
++						       (void *)(unsigned long)raw_args[num_spec]);
+ 					tmp_buf += (err + 1);
+ 				}
+ 
+@@ -929,7 +929,7 @@ int bpf_bprintf_prepare(char *fmt, u32 fmt_size, const u64 *raw_args,
+ 				goto out;
+ 			}
+ 
+-			unsafe_ptr = (char *)(long)raw_args[num_spec];
++			unsafe_ptr = (char *)(unsigned long)raw_args[num_spec];
+ 			err = copy_from_kernel_nofault(cur_ip, unsafe_ptr,
+ 						       sizeof_cur_ip);
+ 			if (err < 0)
+@@ -966,7 +966,7 @@ int bpf_bprintf_prepare(char *fmt, u32 fmt_size, const u64 *raw_args,
+ 				goto out;
+ 			}
+ 
+-			unsafe_ptr = (char *)(long)raw_args[num_spec];
++			unsafe_ptr = (char *)(unsigned long)raw_args[num_spec];
+ 			err = bpf_trace_copy_string(tmp_buf, unsafe_ptr,
+ 						    fmt_ptype,
+ 						    tmp_buf_end - tmp_buf);
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 83c7136c5788..d1380473e620 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -5108,7 +5108,7 @@ BPF_CALL_3(bpf_sys_bpf, int, cmd, union bpf_attr *, attr, u32, attr_size)
+ 			bpf_prog_put(prog);
+ 			return -EBUSY;
+ 		}
+-		attr->test.retval = bpf_prog_run(prog, (void *) (long) attr->test.ctx_in);
++		attr->test.retval = bpf_prog_run(prog, (void *) (unsigned long) attr->test.ctx_in);
+ 		__bpf_prog_exit_sleepable(prog, 0 /* bpf_prog_run does runtime stats */, &run_ctx);
+ 		bpf_prog_put(prog);
+ 		return 0;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index c59c3df0fea6..d91f17598833 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4445,7 +4445,7 @@ static int bpf_map_direct_read(struct bpf_map *map, int off, int size, u64 *val)
+ 	err = map->ops->map_direct_value_addr(map, &addr, off);
+ 	if (err)
+ 		return err;
+-	ptr = (void *)(long)addr + off;
++	ptr = (void *)(unsigned long)addr + off;
+ 
+ 	switch (size) {
+ 	case sizeof(u8):
+@@ -6113,7 +6113,7 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 			return err;
+ 		}
+ 
+-		str_ptr = (char *)(long)(map_addr);
++		str_ptr = (char *)(unsigned long)(map_addr);
+ 		if (!strnchr(str_ptr + map_off, map->value_size - map_off, 0)) {
+ 			verbose(env, "string is not zero-terminated\n");
+ 			return -EINVAL;
+@@ -7099,7 +7099,7 @@ static int check_bpf_snprintf_call(struct bpf_verifier_env *env,
+ 		verbose(env, "verifier bug\n");
+ 		return -EFAULT;
+ 	}
+-	fmt = (char *)(long)fmt_addr + fmt_map_off;
++	fmt = (char *)(unsigned long)fmt_addr + fmt_map_off;
+ 
+ 	/* We are also guaranteed that fmt+fmt_map_off is NULL terminated, we
+ 	 * can focus on validating the format specifiers.
+-- 
+2.25.1
 
-It will always catch the problem when called without the lock and
-lockdep is enabled.
-
-> -	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
-> -		return -EINVAL;
-> -
-> -	mutex_lock(&direct_mutex);
->  
->  	/* Enable the tmp_ops to have the same functions as the direct ops */
->  	ftrace_ops_init(&tmp_ops);
-> @@ -5730,7 +5712,7 @@ int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
->  
->  	err = register_ftrace_function(&tmp_ops);
->  	if (err)
-> -		goto out_direct;
-> +		return err;
->  
->  	/*
->  	 * Now the ftrace_ops_list_func() is called to do the direct callers.
-> @@ -5754,7 +5736,64 @@ int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
->  	/* Removing the tmp_ops will add the updated direct callers to the functions */
->  	unregister_ftrace_function(&tmp_ops);
->  
-> - out_direct:
-> +	return err;
-> +}
-> +
-> +/**
-> + * modify_ftrace_direct_multi_nolock - Modify an existing direct 'multi' call
-> + * to call something else
-> + * @ops: The address of the struct ftrace_ops object
-> + * @addr: The address of the new trampoline to call at @ops functions
-> + *
-> + * This is used to unregister currently registered direct caller and
-> + * register new one @addr on functions registered in @ops object.
-> + *
-> + * Note there's window between ftrace_shutdown and ftrace_startup calls
-> + * where there will be no callbacks called.
-> + *
-> + * Caller should already have direct_mutex locked, so we don't lock
-> + * direct_mutex here.
-> + *
-> + * Returns: zero on success. Non zero on error, which includes:
-> + *  -EINVAL - The @ops object was not properly registered.
-> + */
-> +int modify_ftrace_direct_multi_nolock(struct ftrace_ops *ops, unsigned long addr)
-> +{
-> +	if (check_direct_multi(ops))
-> +		return -EINVAL;
-> +	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
-> +		return -EINVAL;
-> +
-> +	return __modify_ftrace_direct_multi(ops, addr);
-> +}
-> +EXPORT_SYMBOL_GPL(modify_ftrace_direct_multi_nolock);
-> +
-> +/**
-> + * modify_ftrace_direct_multi - Modify an existing direct 'multi' call
-> + * to call something else
-> + * @ops: The address of the struct ftrace_ops object
-> + * @addr: The address of the new trampoline to call at @ops functions
-> + *
-> + * This is used to unregister currently registered direct caller and
-> + * register new one @addr on functions registered in @ops object.
-> + *
-> + * Note there's window between ftrace_shutdown and ftrace_startup calls
-> + * where there will be no callbacks called.
-> + *
-> + * Returns: zero on success. Non zero on error, which includes:
-> + *  -EINVAL - The @ops object was not properly registered.
-> + */
-> +int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
-> +{
-> +	int err;
-> +
-> +	if (check_direct_multi(ops))
-> +		return -EINVAL;
-> +	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
-> +		return -EINVAL;
-> +
-> +	mutex_lock(&direct_mutex);
-> +	err = __modify_ftrace_direct_multi(ops, addr);
->  	mutex_unlock(&direct_mutex);
->  	return err;
->  }
-
-I would personally do:
-
-int __modify_ftrace_direct_multi(struct ftrace_ops *ops,
-			unsigned long addr, bool lock)
-{
-	int err;
-
-	if (check_direct_multi(ops))
-		return -EINVAL;
-	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
-		return -EINVAL;
-
-	if (lock)
-		mutex_lock(&direct_mutex);
-
-	err = __modify_ftrace_direct_multi(ops, addr);
-
-	if (lock)
-		mutex_unlock(&direct_mutex);
-
-	return err;
-}
-
-int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
-{
-	__modify_ftrace_direct_multi(ops, addr, true);
-}
-
-int modify_ftrace_direct_multi_nolock(struct ftrace_ops *ops, unsigned long addr)
-{
-	__modify_ftrace_direct_multi(ops, addr, false);
-}
-
-To avoid duplication of the checks. But it is a matter of taste.
-
-Best Regards,
-Petr
