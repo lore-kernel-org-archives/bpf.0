@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16066C43334
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34D22CCA481
 	for <bpf@archiver.kernel.org>; Mon, 18 Jul 2022 19:29:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234824AbiGRT3A (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Jul 2022 15:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45922 "EHLO
+        id S234486AbiGRT3B (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Jul 2022 15:29:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiGRT24 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Jul 2022 15:28:56 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8449A1AB;
-        Mon, 18 Jul 2022 12:28:54 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id cw12so9538577qvb.12;
-        Mon, 18 Jul 2022 12:28:54 -0700 (PDT)
+        with ESMTP id S235947AbiGRT2w (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Jul 2022 15:28:52 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5081D2BFE;
+        Mon, 18 Jul 2022 12:28:51 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id bz13so3157863qtb.7;
+        Mon, 18 Jul 2022 12:28:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=kggq/8QR9J7+hQqC85Z7UvjwISsJybPyVWycNM36A94=;
-        b=dhlOzRWSRCVDeB5G/ojYUTukZ+P2gcdtsU+jMLUstlXFlOrTp2ph3aG0NXBV8ztstI
-         OXMYLzx6YxjDhp2P9YRr9zilu9HXR7fY5pvPhtwR3iRWzZwfVtgG9lVHCT2ZTqpw0+Ml
-         +OgpMDSbWao5AC6+qrMwM3Db0YqXaBy6MaEv7wnj6amC+iUAq4cv2bT0A4L8zdy5Euao
-         VAKc32hcR8GaNzT5A9JfavcEovAoouxP/ve/GxdRAbv82Ya4GcKRYbxbQkMPkB47IqRX
-         kYT71Abd+YiP5O3A8ckxB+XNkCs6wKALUnGT5t/3o7qzxFLs7cpnxkdiCIV74UJKfkcN
-         7sOw==
+        bh=h/b9Gor8OmaVbqlus0N8Yerswqy364XPSWWiuokjuPU=;
+        b=fqFJufaEGeNpfSwDeHLXACT8OnWWXz+SS1j38SVvv2XI3V7V8WDZtxIfdvIaKQ8y9v
+         0B0WY2lTYT/i7+LGAA/Ip2Q7u/fJdoSJt/07tIAob70ImqR7TtZlTUPoT1LuMgFcuWY4
+         7HFka6L2jlYH/h5SMQBpAZF9w4mMJC5VPkP+4naKoLuGj5PEwF6S3Vgsnqe9/5kDZX5n
+         E1qaAdoAy7EOEd3ji4eGl8J7TIvZC5UE2R5Le3yIwidlKTaWO/goPl8ml+dCO0JT7Ivy
+         7rMLL+xDqIc/xTUV4ajY3ZNx4vpyBfXc91TeNvsl4Lz9YhlMBkra7r0yzMzayL5h8PUk
+         nvoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=kggq/8QR9J7+hQqC85Z7UvjwISsJybPyVWycNM36A94=;
-        b=5BW/VUyenp3yQB7XiN74Oc7DdLNRhDtEqS6KBgj8nRDvJ5mk+E8AtO6eSsJs3MzDKq
-         pmT0yinkz2c6d5PqbIxALQuPmTLADje39rMa1AwssWKLf4RqKePJWmKUVtynesXBidj/
-         4jh5W9phBVQioPcVKT5BIh7csacLSvxxNMkm+SU7b3N0nLTSoLXInGballCL8Xa/yOwo
-         Nu0X7m1uiNZTCJ53d096p5M9B2dPeKJD00c/9IWwvjxpZlel7M3x/IcAmiBXB9SpKJeF
-         ISmBQ8WnZTmy9vpYZI/XCE06PEwG7j1QlOK1f9e4/FJSazt4i6ZJ7p0geysA1jGKyTBb
-         fBwA==
-X-Gm-Message-State: AJIora/8Rk2zN6TMWvKdn4/qJj5xtpZAlrS0Kk9zy8eQjLscICYysakW
-        EBNKdArLoiGIDMreheeGB3KEzSca+XfB/g==
-X-Google-Smtp-Source: AGRyM1u3EM0rXTHhAD/Z1aIEbA912gwLNc43tN+zBsepF5isd7Swws3o9Azy4V52O5TNXWBcbJiNlg==
-X-Received: by 2002:a05:6214:246f:b0:473:5145:d906 with SMTP id im15-20020a056214246f00b004735145d906mr22495118qvb.126.1658172533740;
-        Mon, 18 Jul 2022 12:28:53 -0700 (PDT)
+        bh=h/b9Gor8OmaVbqlus0N8Yerswqy364XPSWWiuokjuPU=;
+        b=H1IGxrZocn1L1esbYq2CGQZz58XNJecCBmV2ErVkRaobHnabTvabDSKGDxpXRAyOZ0
+         +VcCtN9JmReKwliaFj5JUdqpfoaB9Y1IIr2fQu+d8xw0OovdYwATLJSFJlwkN6RJnt0n
+         oV7WBh3YpQ30WtSP/bSfY8su9IpHLtwUtS/OAOkAhzjwaZKte4onZG1Ui27ko1B/j4pP
+         OMAy2yM6PxlrEwmpoghmDqXZdvGszUpEGoXQ5lHz5fi8uclZFHTId2ZOLq42efOQfKXr
+         lOCjNjqnOOSkiKfXyhcVS0iULhEarcedj95aTAPY+QoFN/dQ5g8ilhbhbSBRVmBncyse
+         KmnQ==
+X-Gm-Message-State: AJIora94bnyIKu0vOi4OaLrgFIxMwJ47ZcSk11ZFA6jV+HMA1TDajSSF
+        yiRqIltMQFVCIEpNpnO1Qdx7cJH7psfVOA==
+X-Google-Smtp-Source: AGRyM1uaGs+CAqWH8avpKeUoD3vmIQkUBNKvCB+RRyAV1xF9WVdeoxP71d/HveDQuxFH6mXJfEXYcA==
+X-Received: by 2002:a05:622a:198b:b0:31e:ec25:8ead with SMTP id u11-20020a05622a198b00b0031eec258eadmr5759733qtc.423.1658172530262;
+        Mon, 18 Jul 2022 12:28:50 -0700 (PDT)
 Received: from localhost ([2601:4c1:c100:1230:ab01:d009:465a:5ab1])
-        by smtp.gmail.com with ESMTPSA id i21-20020a05620a405500b006b5f4b7b088sm1783681qko.108.2022.07.18.12.28.53
+        by smtp.gmail.com with ESMTPSA id x27-20020a05620a0b5b00b006b5e43466ebsm4634117qkg.59.2022.07.18.12.28.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 12:28:53 -0700 (PDT)
+        Mon, 18 Jul 2022 12:28:49 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     linux-kernel@vger.kernel.org,
         Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -90,9 +90,9 @@ To:     linux-kernel@vger.kernel.org,
         Vlastimil Babka <vbabka@suse.cz>, Yonghong Song <yhs@fb.com>,
         Yury Norov <yury.norov@gmail.com>, linux-mm@kvack.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH 06/16] lib/test_bitmap: delete meaningless test for bitmap_cut
-Date:   Mon, 18 Jul 2022 12:28:34 -0700
-Message-Id: <20220718192844.1805158-7-yury.norov@gmail.com>
+Subject: [PATCH 03/16] lib/test_bitmap: don't test bitmap_set if nbits == 0
+Date:   Mon, 18 Jul 2022 12:28:31 -0700
+Message-Id: <20220718192844.1805158-4-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220718192844.1805158-1-yury.norov@gmail.com>
 References: <20220718192844.1805158-1-yury.norov@gmail.com>
@@ -102,43 +102,27 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-One of bitmap_cut() tests passed it with:
-	nbits = BITS_PER_LONG;
-	first = BITS_PER_LONG;
-	cut = BITS_PER_LONG;
-
-This test is useless because the range to cut is not inside the
-bitmap. This should normally raise an error, but bitmap_cut() is
-void and returns nothing.
-
-To check if the test is passed, it just tests that the memory is
-not touched by bitmap_cut(), which is probably not correct, because
-if a function is passed with wrong parameters, it's too optimistic 
-to expect a correct, or even sane behavior.
-
-Now that we have bitmap_check_params(), there's a tool to detect such
-things in real code, and we can drop the test.
+Don't test bitmap_set(bitmap, start, 0) as it's useless, most probably
+a sign of error in real code, and makes CONFIG_DEBUG_BITMAP barking.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- lib/test_bitmap.c | 4 ----
- 1 file changed, 4 deletions(-)
+ lib/test_bitmap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
-index 8bd279a7633f..c1ea449aae2d 100644
+index 98754ff9fe68..2a70393ac011 100644
 --- a/lib/test_bitmap.c
 +++ b/lib/test_bitmap.c
-@@ -707,10 +707,6 @@ static struct test_bitmap_cut test_cut[] = {
- 	{ 15, 16, 32, { 0xa5a5a5a5UL, }, { 0x0000a5a5UL, }, },
- 	{ 16, 15, 32, { 0xa5a5a5a5UL, }, { 0x0001a5a5UL, }, },
+@@ -622,7 +622,7 @@ static void noinline __init test_mem_optimisations(void)
+ 	unsigned int start, nbits;
  
--	{ BITS_PER_LONG, BITS_PER_LONG, BITS_PER_LONG,
--		{ 0xa5a5a5a5UL, 0xa5a5a5a5UL, },
--		{ 0xa5a5a5a5UL, 0xa5a5a5a5UL, },
--	},
- 	{ 1, BITS_PER_LONG - 1, BITS_PER_LONG,
- 		{ 0xa5a5a5a5UL, 0xa5a5a5a5UL, },
- 		{ 0x00000001UL, 0x00000001UL, },
+ 	for (start = 0; start < 1024; start += 8) {
+-		for (nbits = 0; nbits < 1024 - start; nbits += 8) {
++		for (nbits = 1; nbits < 1024 - start; nbits += 8) {
+ 			memset(bmap1, 0x5a, sizeof(bmap1));
+ 			memset(bmap2, 0x5a, sizeof(bmap2));
+ 
 -- 
 2.34.1
 
