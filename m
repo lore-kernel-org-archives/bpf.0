@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93137C43334
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C815FCCA486
 	for <bpf@archiver.kernel.org>; Mon, 18 Jul 2022 19:31:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbiGRTad (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Jul 2022 15:30:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
+        id S235192AbiGRTai (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Jul 2022 15:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235948AbiGRT3P (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Jul 2022 15:29:15 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928CF2F67A;
-        Mon, 18 Jul 2022 12:29:06 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id b21so6415857qte.12;
-        Mon, 18 Jul 2022 12:29:06 -0700 (PDT)
+        with ESMTP id S235832AbiGRT3O (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Jul 2022 15:29:14 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0432D1E3;
+        Mon, 18 Jul 2022 12:29:04 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id m6so9543539qvq.10;
+        Mon, 18 Jul 2022 12:29:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=Y6DPpRFLDofGUL30b8+74GM4qwE4L2Zyq6sG1ZF6ebc=;
-        b=dJrCdDdqoGBgCDi7uWoyd5h17sRa80Fs9GLm+P5DflfdZGuXJIVujeqX7lMRY06I8S
-         t67bwzKyDstdRzhhUJT0vfUUmKANMlnUrNgw70sKglBzGUmW7C376hy4i3UQnjZifkek
-         /9+PVCJu47AzGcSDT0BMA8vnweK45F4w3DfYiIC12NYsnjiEIPVVk5+271whtyjRYaNN
-         N9ewHE3z8dFgGz8xroMMjlLM9s5XJQjkXW67JbGA6OgtOLqZ6+prLIpP2wjU2YHGx838
-         2Rnf2t9y4v4gfPTyeAgE+qUm/m8zeflm6dFi7d626bdAey5662yUyGEU3mpx0x/jNXL7
-         +mkg==
+        bh=/K1YhC0xN+k7O2FGj/yOUKehgh1HnqMHevQj0FQmavI=;
+        b=hncdckdd/8keGq0BbMkUSkVvo58eaSfk46icZhjcfux7VapB1d8lOZsIlqh8gYAlwO
+         nsH6TNRxQKop1KFXKAjUK6jXGpI96ZhzGYzEb1l58Uuid0BejJtLScjUXd1FwD7d6d0I
+         n6nBpJsBMCWPJZOY2isxybjgVNgOUtIwy5syFw6dhjVkH48EFPjJXnsXMjILmWWh6aNt
+         1XjXQ+KmT1tei8OVv0kOBxiaSSBAGf1jRYjjXWTW/jEj/bm8gP4G3KDncFs30f51O1n9
+         KoibE09XlnBMUE30LzuwHeutbdP4Gw0vPBuJAXfM44toJn9n4BYblu9g3pXR4SHa5Cz4
+         j6aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Y6DPpRFLDofGUL30b8+74GM4qwE4L2Zyq6sG1ZF6ebc=;
-        b=wP3GvDwFVRs9H7qvilG90HR6AhLNHDEI3Ycr/eTJnlFFRodczLlKLQEUG10y6tH+I0
-         DJEiWk6pHoWhVVU0SwmnMnufq+CNxOP5qMA8WsvSbDrZDmQeBJTM7P7EKy+PKFD53Fv6
-         tFha0hoP6UpOCJB2ZE3aVkOuA8e8zJ0rIwt8t53t3ZPjAjsreiFjUiMmvv21bz9kTsnq
-         xliJ1ISaCQWGvb4d7BE+yiiuVA+0P6OhudhRnwO7/rJa10YS13aopyQJE5lP4HiXIdNU
-         rgmZu1vtoFXPTLPStQCJceeGK5mrqSxGFYEBsXpDO5fi6jwfd7cO5HYcv+UoDoevWeM3
-         If5g==
-X-Gm-Message-State: AJIora8psmcXV9HAwuiLH0yCdAn75ZXcyaPfj8SShXWg0JVMJpEIV5QI
-        LjsManDY5d9RlMCl2NxspXCk8rKoATnkwQ==
-X-Google-Smtp-Source: AGRyM1syCvkoM65NB7O+4/9AZzHgi6k/66P3Xg8nH/ToRSp+ANBXlBuAKKOv4tS6vWWn7KIVfqErdQ==
-X-Received: by 2002:a05:622a:1211:b0:31e:ba39:41e8 with SMTP id y17-20020a05622a121100b0031eba3941e8mr22777530qtx.189.1658172545549;
-        Mon, 18 Jul 2022 12:29:05 -0700 (PDT)
+        bh=/K1YhC0xN+k7O2FGj/yOUKehgh1HnqMHevQj0FQmavI=;
+        b=1hsppSoi2ihKjmjPsCy+fDCVQq+lzVFsc/JfIYZ/HJn7JWk82VTaA14TsWON25hg18
+         WVPYJNICoIFtcmTuyxVQ8prv/pwuWkBWckx26KBsjG316GtlXK3jFetOHihXpHIUcZF3
+         nHz6FbE/H29W2E0VlmV2RP1+V2F2wGkHRlunDjHofHTuFb12VoZ4biK+xPH1R02Eu2mo
+         0Km8k6s/OY5sHoAefCSUav2wG7qUd36p7copYVcasv1cuzmLgbBI4g41HMkfHaGcyPYK
+         BFkBRGLmhQw4YjlByy+CldPOuzQASabNxl0FBluyvlMxp04cY0OX0t2QS8QWJ5eL/fmJ
+         7Mpw==
+X-Gm-Message-State: AJIora+zmkzVeUO+3yuEbLkjClwFriNLYb7Jum0UjD3uf9gjsqRGXsOx
+        /s90bE6B4IaeyOHa0bMAGXRcKVLn7thrDw==
+X-Google-Smtp-Source: AGRyM1uDAtG39PkyBUTwcaTq2/uDHYY4DcIItWFReB0uOGieqEEzLgaz94Wt8f3sFC0ByQPjoqZW6g==
+X-Received: by 2002:a05:6214:226d:b0:473:339e:3264 with SMTP id gs13-20020a056214226d00b00473339e3264mr22107594qvb.41.1658172543484;
+        Mon, 18 Jul 2022 12:29:03 -0700 (PDT)
 Received: from localhost ([2601:4c1:c100:1230:ab01:d009:465a:5ab1])
-        by smtp.gmail.com with ESMTPSA id dm1-20020a05620a1d4100b006b5c87e9eb1sm11659333qkb.102.2022.07.18.12.29.05
+        by smtp.gmail.com with ESMTPSA id bb31-20020a05622a1b1f00b0031ef21aec36sm2216383qtb.32.2022.07.18.12.29.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 12:29:05 -0700 (PDT)
+        Mon, 18 Jul 2022 12:29:03 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     linux-kernel@vger.kernel.org,
         Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -90,9 +90,9 @@ To:     linux-kernel@vger.kernel.org,
         Vlastimil Babka <vbabka@suse.cz>, Yonghong Song <yhs@fb.com>,
         Yury Norov <yury.norov@gmail.com>, linux-mm@kvack.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH 16/16] lib: create CONFIG_DEBUG_BITMAP parameter
-Date:   Mon, 18 Jul 2022 12:28:44 -0700
-Message-Id: <20220718192844.1805158-17-yury.norov@gmail.com>
+Subject: [PATCH 14/16] mm/percpu: optimize pcpu_alloc_area()
+Date:   Mon, 18 Jul 2022 12:28:42 -0700
+Message-Id: <20220718192844.1805158-15-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220718192844.1805158-1-yury.norov@gmail.com>
 References: <20220718192844.1805158-1-yury.norov@gmail.com>
@@ -102,32 +102,58 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Create CONFIG_DEBUG_BITMAP parameter to let people use
-new option. Default is N.
+Don't call bitmap_clear() to clear 0 bits.
+
+bitmap_clear() can handle 0-length requests properly, but it's not covered
+with static optimizations, and falls to __bitmap_set(). So we are paying a
+function call + prologue work cost just for nothing.
+
+Caught with CONFIG_DEBUG_BITMAP:
+[   45.571799]  <TASK>
+[   45.571801]  pcpu_alloc_area+0x194/0x340
+[   45.571806]  pcpu_alloc+0x2fb/0x8b0
+[   45.571811]  ? kmem_cache_alloc_trace+0x177/0x2a0
+[   45.571815]  __percpu_counter_init+0x22/0xa0
+[   45.571819]  fprop_local_init_percpu+0x14/0x30
+[   45.571823]  wb_get_create+0x15d/0x5f0
+[   45.571828]  cleanup_offline_cgwb+0x73/0x210
+[   45.571831]  cleanup_offline_cgwbs_workfn+0xcf/0x200
+[   45.571835]  process_one_work+0x1e5/0x3b0
+[   45.571839]  worker_thread+0x50/0x3a0
+[   45.571843]  ? rescuer_thread+0x390/0x390
+[   45.571846]  kthread+0xe8/0x110
+[   45.571849]  ? kthread_complete_and_exit+0x20/0x20
+[   45.571853]  ret_from_fork+0x22/0x30
+[   45.571858]  </TASK>
+[   45.571859] ---[ end trace 0000000000000000 ]---
+[   45.571860] b1:		ffffa8d5002e1000
+[   45.571861] b2:		0
+[   45.571861] b3:		0
+[   45.571862] nbits:	44638
+[   45.571863] start:	44638
+[   45.571864] off:	0
+[   45.571864] percpu: Bitmap: parameters check failed
+[   45.571865] percpu: include/linux/bitmap.h [538]: bitmap_clear
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- lib/Kconfig.debug | 7 +++++++
- 1 file changed, 7 insertions(+)
+ mm/percpu.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 2e24db4bff19..cde1b5b7bb9d 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -533,6 +533,13 @@ config DEBUG_FORCE_WEAK_PER_CPU
+diff --git a/mm/percpu.c b/mm/percpu.c
+index 3633eeefaa0d..f720f7c36b91 100644
+--- a/mm/percpu.c
++++ b/mm/percpu.c
+@@ -1239,7 +1239,8 @@ static int pcpu_alloc_area(struct pcpu_chunk *chunk, int alloc_bits,
  
- endmenu # "Compiler options"
+ 	/* update boundary map */
+ 	set_bit(bit_off, chunk->bound_map);
+-	bitmap_clear(chunk->bound_map, bit_off + 1, alloc_bits - 1);
++	if (alloc_bits > 1)
++		bitmap_clear(chunk->bound_map, bit_off + 1, alloc_bits - 1);
+ 	set_bit(bit_off + alloc_bits, chunk->bound_map);
  
-+config DEBUG_BITMAP
-+	bool "Debug bitmaps"
-+	help
-+	  Say Y here if you want to check bitmap functions parameters at
-+	  the runtime. Enable CONFIG_DEBUG_BITMAP only for debugging because
-+	  it may affect performance.
-+
- menu "Generic Kernel Debugging Instruments"
- 
- config MAGIC_SYSRQ
+ 	chunk->free_bytes -= alloc_bits * PCPU_MIN_ALLOC_SIZE;
 -- 
 2.34.1
 
