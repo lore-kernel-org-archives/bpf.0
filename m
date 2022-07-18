@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94935C433EF
-	for <bpf@archiver.kernel.org>; Mon, 18 Jul 2022 19:28:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63FB8C433EF
+	for <bpf@archiver.kernel.org>; Mon, 18 Jul 2022 19:28:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbiGRT2x (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Jul 2022 15:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45864 "EHLO
+        id S235956AbiGRT2y (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Jul 2022 15:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235605AbiGRT2u (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Jul 2022 15:28:50 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE1AD5A;
-        Mon, 18 Jul 2022 12:28:48 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id r21so8832283qtn.11;
-        Mon, 18 Jul 2022 12:28:48 -0700 (PDT)
+        with ESMTP id S235932AbiGRT2v (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Jul 2022 15:28:51 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F4125D3;
+        Mon, 18 Jul 2022 12:28:50 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id e16so5626142qka.5;
+        Mon, 18 Jul 2022 12:28:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:mime-version
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=OWEXlSbAfAwywlnXDil6CYNW0FSVu9hGAT+NA18MHDQ=;
-        b=EdkRpor4TlGyKnTLZL6ybUgdj9y+RP1U2qMx+qo2WRbae6kczgkFok4CRrhKnmECjE
-         BkNDZq/325XPSSByV3oQf/TzCJs5c0+pyMopjHMn+DloZPH4YCia6agETBzkZ9O2R63r
-         Sfzc43oRP8KkOnmqDB65zJIgv4o3qXdvG+V6aFbNWCQKf1EsDN37x+1WeR3Nt4oMt769
-         2KPNHOqvnz2G/wmJSU5SWhdVktHz7N8FZU6k1/q5lT1ljCiNPCjqMSlIUzNrNatzQ0XQ
-         lFN5p4uVklAw74PmFXTeVo1V90esQebTmWviZEGmWjkKyWhJEsnO56dg/6lR7uMiRsY9
-         6e6w==
+        bh=mds6TiJm2i/ciGRewHyQeRgrE3/eBxBJskgGjRCv8jE=;
+        b=K+OO8GlSGfFoQ4u6Xgs/Jnqm5tx2JRuUl5xIk00RjcP+K/hkgRPZinOZ2EttuW5q5q
+         hvFsBf0zmTfoBNpetZrWb+DCskXNBQW9Wr6HHqY575HwOkPBTVw4HS1BOky1KOrpEXOd
+         tmKdebqLU2VTtvGMLQNsyBADet1rY6Vweu3mXy+o5kaVdj+jOz5T0mr49UwAGgGr8XLe
+         3JUtC9totttIeVL+NIKb0V3FiTtHU0zLxxZcy7PTaZsjaTiDd2H+U0uKvVz7FW8SLQbu
+         DM4pMj5FgVTxaD/374QNS1ulsCavtIMeCQ9ntw6jXlM51lUnIbkhUR+mDJzqNU9A/tqz
+         2SoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=OWEXlSbAfAwywlnXDil6CYNW0FSVu9hGAT+NA18MHDQ=;
-        b=xNIInG5c2bWBb6+jh8vjLB9TXOaFJCqOShYcUtaShzC8kNkCVfSUZYaF6EWt0mEpCC
-         FGxgi09S3hWEKX9/1Y+g7eiZgVDeDBBV+CcSTpQeqcuZO6lyaF26Z5LhS1lprb5InFcS
-         MtvUaaUkR92xJCSM+JpK/WcMp6p6gEnH2DviyJQkST0W+6rNfIp4ULcMILLmXNdniGCw
-         cMrP4NcaG6kY4oqW+wipyyVf2hBu1G/pf+DwtOh6Le3ZEbSxTlGRGOJpzsfZzvM7AFBp
-         S1mJ4ZoMh5i5AylPXKBxbBPqvQfQXjgtccovPYqQkL3zQYkvpHxQU2K+NecEzMBrA24C
-         lQPQ==
-X-Gm-Message-State: AJIora+87SjU8KiEY+5e8rwMGYuXoOXaOg8241qpdvaEzeDKgTKVxTSB
-        SI7WBLAszBuvethKqyyYkdSTeZYYNxLkbg==
-X-Google-Smtp-Source: AGRyM1vqDidU2mj3mjL1nyFt/o9b/6DrRe9boOZKOh5cfsbupafmIWKyPwSd3R9NQ0P+as9cY9uNww==
-X-Received: by 2002:a05:622a:58d:b0:317:ca0d:91a5 with SMTP id c13-20020a05622a058d00b00317ca0d91a5mr21815757qtb.601.1658172526705;
-        Mon, 18 Jul 2022 12:28:46 -0700 (PDT)
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=mds6TiJm2i/ciGRewHyQeRgrE3/eBxBJskgGjRCv8jE=;
+        b=c7ZWtbA9TDGQ75fVfWDU8r7rrJy+9I9pDimY0wD9nVzps8ZXPM4g0/QUkxjfX3/z97
+         Ax0aO8Y/9WNe4+dFxTSD9BedoTjjoSWYQ5cYjlVZHrv4hWdiD31/IB3MzeS+Wjr3jaH7
+         fXM/UuMsoQN0NOE8UREanC4JmFqfQJJ+NS72S09iQgHI3DnCsJyg9LtBBnEUI1rjdjoQ
+         uy75CqD4ZzppFSNDxoPXalnPvQQpP5qujqz8pWEAZVY6ZK4zS3JRpKT1k5xZ2NEeJlxK
+         OfzIMkhefswYYeQngx6K319npTu8k/egvJCufw97rh+Ciggqz1iv0ehKq1sBA3/yRdH1
+         AI0w==
+X-Gm-Message-State: AJIora+I+qWcbWtvXUZDyqCea7wJRh2qKo2zUAh1ZwdS+wfjaK7c/S6O
+        Xpdw3xjJpFTCx5LbpifQWGRBW9UgsvUJDw==
+X-Google-Smtp-Source: AGRyM1sjmRb0z/jF/I9QRHkB+Qs97iyonIxrkCMHXwc46LvQcGE4P1mvDuBHw7JATaMF3VYkVo9uoA==
+X-Received: by 2002:a37:8245:0:b0:6b5:9078:267 with SMTP id e66-20020a378245000000b006b590780267mr17879707qkd.684.1658172529164;
+        Mon, 18 Jul 2022 12:28:49 -0700 (PDT)
 Received: from localhost ([2601:4c1:c100:1230:ab01:d009:465a:5ab1])
-        by smtp.gmail.com with ESMTPSA id q9-20020ac84509000000b0031eb3af3ffesm9650206qtn.52.2022.07.18.12.28.45
+        by smtp.gmail.com with ESMTPSA id cc12-20020a05622a410c00b00316a384447fsm7028960qtb.16.2022.07.18.12.28.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 12:28:46 -0700 (PDT)
+        Mon, 18 Jul 2022 12:28:48 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     linux-kernel@vger.kernel.org,
         Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -90,63 +90,48 @@ To:     linux-kernel@vger.kernel.org,
         Vlastimil Babka <vbabka@suse.cz>, Yonghong Song <yhs@fb.com>,
         Yury Norov <yury.norov@gmail.com>, linux-mm@kvack.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH 00/16] Introduce DEBUG_BITMAP config option and bitmap_check_params()
-Date:   Mon, 18 Jul 2022 12:28:28 -0700
-Message-Id: <20220718192844.1805158-1-yury.norov@gmail.com>
+Subject: [PATCH 02/16] lib/bitmap: don't call bitmap_set() with len == 0
+Date:   Mon, 18 Jul 2022 12:28:30 -0700
+Message-Id: <20220718192844.1805158-3-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220718192844.1805158-1-yury.norov@gmail.com>
+References: <20220718192844.1805158-1-yury.norov@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Bitmap functions are often a part of hot paths, and we can't put argument
-sanity checks inside them. Sometimes wrong parameters combination cause
-bug reports that are pretty hard to investigate:
-https://lore.kernel.org/linux-mm/YsbpTNmDaam8pl+f@xsang-OptiPlex-9020/
+bitmap_parselist() format allows passing 0-length regions, but because
+len == 0 is not covered by small_const_nbits() macro, we have to call
+__bitmap_set() and do some prologue calculations just for nothing.
 
-And sometimes we can optimize caller code. For example, to avoid copying
-of bitmap if source and destination are the same.
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+---
+ lib/bitmap.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-It's quite tricky to detect such places unless we've covered all bitmap
-API calls with the parameters checker.
-
-This series:
- - introduces bitmap_check_params() with a couple of common-used wrappers;
- - clears all bitmap warnings found for x86_64, arm64 and powerpc64 in
-   boot test.
-
-Yury Norov (16):
-  lib/bitmap: add bitmap_check_params()
-  lib/bitmap: don't call bitmap_set() with len == 0
-  lib/test_bitmap: don't test bitmap_set if nbits == 0
-  lib/test_bitmap: test test_bitmap_arr{32,64} starting from nbits == 1
-  lib/test_bitmap: disable compile-time test if DEBUG_BITMAP() is
-    enabled
-  lib/test_bitmap: delete meaningless test for bitmap_cut
-  smp: optimize smp_call_function_many_cond()
-  smp: optimize smp_call_function_many_cond() for more
-  irq: don't copy cpu affinity mask if source is equal to destination
-  sched: optimize __set_cpus_allowed_ptr_locked()
-  time: optimize tick_check_preferred()
-  time: optimize tick_check_percpu()
-  time: optimize tick_setup_device()
-  mm/percpu: optimize pcpu_alloc_area()
-  sched/topology: optimize topology_span_sane()
-  lib: create CONFIG_DEBUG_BITMAP parameter
-
- include/linux/bitmap.h    |  95 +++++++++++++++++++++++++++
- kernel/irq/manage.c       |   3 +-
- kernel/sched/core.c       |   3 +-
- kernel/sched/topology.c   |  10 ++-
- kernel/smp.c              |  35 ++++++++--
- kernel/time/tick-common.c |  18 ++++--
- lib/Kconfig.debug         |   7 ++
- lib/bitmap.c              | 132 ++++++++++++++++++++++++++++++++++----
- lib/test_bitmap.c         |  12 ++--
- mm/percpu.c               |   3 +-
- 10 files changed, 281 insertions(+), 37 deletions(-)
-
+diff --git a/lib/bitmap.c b/lib/bitmap.c
+index cd4dd848ea6a..790df2ea02df 100644
+--- a/lib/bitmap.c
++++ b/lib/bitmap.c
+@@ -712,10 +712,13 @@ struct region {
+ 
+ static void bitmap_set_region(const struct region *r, unsigned long *bitmap)
+ {
+-	unsigned int start;
++	unsigned int start, len;
+ 
+-	for (start = r->start; start <= r->end; start += r->group_len)
+-		bitmap_set(bitmap, start, min(r->end - start + 1, r->off));
++	for (start = r->start; start <= r->end; start += r->group_len) {
++		len = min(r->end - start + 1, r->off);
++		if (len > 0)
++			bitmap_set(bitmap, start, len);
++	}
+ }
+ 
+ static int bitmap_check_region(const struct region *r)
 -- 
 2.34.1
 
