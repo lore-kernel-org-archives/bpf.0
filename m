@@ -2,122 +2,89 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05851C433EF
-	for <bpf@archiver.kernel.org>; Mon, 18 Jul 2022 05:55:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 220FFC43334
+	for <bpf@archiver.kernel.org>; Mon, 18 Jul 2022 06:52:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233401AbiGRFzO convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 18 Jul 2022 01:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
+        id S229680AbiGRGwo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Jul 2022 02:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233399AbiGRFzN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Jul 2022 01:55:13 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9B413F07
-        for <bpf@vger.kernel.org>; Sun, 17 Jul 2022 22:55:12 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26I0E1DF026860
-        for <bpf@vger.kernel.org>; Sun, 17 Jul 2022 22:55:12 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hbrnqf36w-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sun, 17 Jul 2022 22:55:11 -0700
-Received: from twshared30313.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Sun, 17 Jul 2022 22:55:08 -0700
-Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
-        id 87035A4C01FF; Sun, 17 Jul 2022 22:54:57 -0700 (PDT)
-From:   Song Liu <song@kernel.org>
-To:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <live-patching@vger.kernel.org>
-CC:     <daniel@iogearbox.net>, <kernel-team@fb.com>, <jolsa@kernel.org>,
-        <rostedt@goodmis.org>, Song Liu <song@kernel.org>
-Subject: [PATCH v4 bpf-next 3/4] bpf, x64: Allow to use caller address from stack
-Date:   Sun, 17 Jul 2022 22:54:48 -0700
-Message-ID: <20220718055449.3960512-4-song@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220718055449.3960512-1-song@kernel.org>
-References: <20220718055449.3960512-1-song@kernel.org>
+        with ESMTP id S233331AbiGRGwo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Jul 2022 02:52:44 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942E013CEA;
+        Sun, 17 Jul 2022 23:52:43 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id i8-20020a17090a4b8800b001ef8a65bfbdso11729267pjh.1;
+        Sun, 17 Jul 2022 23:52:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iu4eZkSUg9htDp8O1YLYQnfgTwR8YljHuFYC1Yxzk9E=;
+        b=QzJCh9JDGMisPXu/LXl0+eezRxA9jPyoxxOc7VbWhdKWfuhgbYJ2DU2niOooCwf+iY
+         0JaU4qHBJi5ltuvFD3O/EqqJfP2bQ5uWSFiAfgbFW5HbB1Vg1RCvPXfeX6hjRGnAWoVQ
+         nYMzFhM8v7aIY6Rn4SBkXcwB4K43ctqsJj5weILHrT6ChcmXUS3VphMsJZ6xRJu47Wtc
+         NxyVMb/SPbQWwnlmECIuiWrS4MIRQZ9S3RM3NHESq0EMjZtF10ZS4z9DlN86IXsn3zns
+         n3+wKvzfmN42w1A9rDQU0euaeSiEROXm42JrY42wdHZVJgmFkgEjYMbxVyEp+idaZ5oz
+         RMZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iu4eZkSUg9htDp8O1YLYQnfgTwR8YljHuFYC1Yxzk9E=;
+        b=Wj3N9tglBFCINPpLnSwWrVaHwb+pSPupaRtt7LX3m3inhmJMsKsVH0kqIQ+3lWJvdn
+         VW04wawBtkJRNWVAdTTZLT8GFHr4BS8ldnXwUMsM7siziJfTYffj4HoRLbuVOqm8MRDn
+         9263tIy0tRvWBBLCPNCwh5aZwUIj7MvyXK3B+y9te0VYQoFWnVzY0XdOeE4nqTUsD8lX
+         5/P4TQnIBR0MtHyQdCemVnk1ehSJ4U2cL2ns1DVM30DXHwjKB93/595+Mlh7ZcmamyBZ
+         AHNaMWfxDosm5eepKnH9QIaAInzijYJ1/VG1TOy7fKSv6Qzc4sjffdctw4c90Kz6UZnq
+         vbQA==
+X-Gm-Message-State: AJIora9M84y8eps1kfNs0NAdje4ffdOfOIzKMzLbwFFGOqSdwJ4Y5/Ro
+        jKZizmT93ONSk6cD9L3L51E=
+X-Google-Smtp-Source: AGRyM1vQlDS5XDp3UnzR+fWjt2qwDzXq1bgCCBK/kWbxKF1filBoq8V2cf3Jb8N4cdxq+moRVR0PWg==
+X-Received: by 2002:a17:902:d4c2:b0:16b:ffc5:9705 with SMTP id o2-20020a170902d4c200b0016bffc59705mr26574882plg.142.1658127163114;
+        Sun, 17 Jul 2022 23:52:43 -0700 (PDT)
+Received: from Kk1r0a.localdomain ([110.187.198.47])
+        by smtp.gmail.com with ESMTPSA id f7-20020a170902ce8700b0016bf8048bd2sm8597911plg.175.2022.07.17.23.52.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Jul 2022 23:52:42 -0700 (PDT)
+From:   Kuee K1r0a <liulin063@gmail.com>
+To:     ast@kernel.org
+Cc:     daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kuee K1r0a <liulin063@gmail.com>
+Subject: [PATCH] bpf: Fix typo in comments in verifier
+Date:   Mon, 18 Jul 2022 14:52:31 +0800
+Message-Id: <20220718065231.26852-1-liulin063@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: ROHoK3mlq8_HHIZc7199HNvF1DTUZfTu
-X-Proofpoint-ORIG-GUID: ROHoK3mlq8_HHIZc7199HNvF1DTUZfTu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-18_04,2022-07-15_01,2022-06-22_01
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jiri Olsa <jolsa@kernel.org>
+Replace 'then' with 'than'.
 
-Currently we call the original function by using the absolute address
-given at the JIT generation. That's not usable when having trampoline
-attached to multiple functions, or the target address changes dynamically
-(in case of live patch). In such cases we need to take the return address
-from the stack.
-
-Adding support to retrieve the original function address from the stack
-by adding new BPF_TRAMP_F_ORIG_STACK flag for arch_prepare_bpf_trampoline
-function.
-
-Basically we take the return address of the 'fentry' call:
-
-   function + 0: call fentry    # stores 'function + 5' address on stack
-   function + 5: ...
-
-The 'function + 5' address will be used as the address for the
-original function to call.
-
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-Signed-off-by: Song Liu <song@kernel.org>
+Fixes: f4d7e40a5b71 ("bpf: introduce function calls (verification)")
+Signed-off-by: Kuee K1r0a <liulin063@gmail.com>
 ---
- arch/x86/net/bpf_jit_comp.c | 13 +++++++++----
- include/linux/bpf.h         |  5 +++++
- 2 files changed, 14 insertions(+), 4 deletions(-)
+ kernel/bpf/verifier.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 54c7f46c453f..e1b0c5ed0b7c 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -2119,10 +2119,15 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
- 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
- 		restore_regs(m, &prog, nr_args, regs_off);
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 0efbac0fd126..4da1a7c7657a 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -1167,7 +1167,7 @@ static int copy_verifier_state(struct bpf_verifier_state *dst_state,
+ 		return -ENOMEM;
+ 	dst_state->jmp_history_cnt = src->jmp_history_cnt;
  
--		/* call original function */
--		if (emit_call(&prog, orig_call, prog)) {
--			ret = -EINVAL;
--			goto cleanup;
-+		if (flags & BPF_TRAMP_F_ORIG_STACK) {
-+			emit_ldx(&prog, BPF_DW, BPF_REG_0, BPF_REG_FP, 8);
-+			EMIT2(0xff, 0xd0); /* call *rax */
-+		} else {
-+			/* call original function */
-+			if (emit_call(&prog, orig_call, prog)) {
-+				ret = -EINVAL;
-+				goto cleanup;
-+			}
- 		}
- 		/* remember return value in a stack for bpf prog to access */
- 		emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_0, -8);
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index a5bf00649995..7496842a4671 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -751,6 +751,11 @@ struct btf_func_model {
- /* Return the return value of fentry prog. Only used by bpf_struct_ops. */
- #define BPF_TRAMP_F_RET_FENTRY_RET	BIT(4)
- 
-+/* Get original function from stack instead of from provided direct address.
-+ * Makes sense for trampolines with fexit or fmod_ret programs.
-+ */
-+#define BPF_TRAMP_F_ORIG_STACK		BIT(5)
-+
- /* Each call __bpf_prog_enter + call bpf_func + call __bpf_prog_exit is ~50
-  * bytes on x86.
-  */
+-	/* if dst has more stack frames then src frame, free them */
++	/* if dst has more stack frames than src frame, free them */
+ 	for (i = src->curframe + 1; i <= dst_state->curframe; i++) {
+ 		free_func_state(dst_state->frame[i]);
+ 		dst_state->frame[i] = NULL;
 -- 
-2.30.2
+2.25.1
 
