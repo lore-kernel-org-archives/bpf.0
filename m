@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1871CCCA48D
-	for <bpf@archiver.kernel.org>; Mon, 18 Jul 2022 19:29:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44107C43334
+	for <bpf@archiver.kernel.org>; Mon, 18 Jul 2022 19:30:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235248AbiGRT3Q (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Jul 2022 15:29:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46658 "EHLO
+        id S234676AbiGRTaA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Jul 2022 15:30:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236001AbiGRT3D (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Jul 2022 15:29:03 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DB4B841;
-        Mon, 18 Jul 2022 12:28:57 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id r2so9570577qta.0;
-        Mon, 18 Jul 2022 12:28:57 -0700 (PDT)
+        with ESMTP id S236092AbiGRT3N (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Jul 2022 15:29:13 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66F76263;
+        Mon, 18 Jul 2022 12:29:00 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id c24so4029775qkm.4;
+        Mon, 18 Jul 2022 12:29:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=RIuxtr8d+TB6goTZIrQnEqj0NYsoVNuGdOrD+16hKvE=;
-        b=K6FLy4kdLZiOyB3bLUhszl5Zd1puGwKh81hdQ6rMAxhulKYqedp7eUmoIZR0afJcpb
-         nkiXT9uXP0O9WHgoCSQ2IR/sDvIeb+YkvalAFfr8I5dYLsp+gO1RFi5HdpTv9xwEjdQ2
-         auToBt5qQGIID9AHzaDc+sYfyIwWA0/KGjjZxYfmJ39gMRAk2oUkonyTSXkmCxoD4Fux
-         yUPBSSyh4zYo4dxNsy901oFcH5LCqM2CA0xbWm/ZpSmbLWp+HfPmCnB1q1t1r0vv+BNU
-         aNYNiAkMVnc3um9vm7dDymoR9WWvElT0wUSR1fdH1muLCWOWVQ3EyjMKXAO1Br2kBR00
-         Vx+A==
+        bh=D0vGYuUrWK1A1pC+aGb2diJW4SXv6dDhykR2E3SvFc8=;
+        b=acjdcKpDdV2PdvNi+eoEwihWKcpSrRAsrDHiFJG9tElETVBRpRl1BHIlBTcqTpJ1PZ
+         dqPhoWLauRERrZA0j1cq0xNk0IkyjS+bk910OJd6v3ZC939j06bzpOv+oySvXXxzwccG
+         DuquVnf7VDRuglTdL1A81oCQPyP9OiRPuTo9rV8rvvWPSirAXqZUVdJ9cVJF+N/tZAut
+         cn4mvdBOyL7FeaLStoJT+VMKK5o0ToUzvTPwDDD4B5R4znOjfgPiLRfaP8jZoSwV2fdJ
+         sN1KlbxFCs/ArEXTCRiHuBowwklPVPJUzv5nXSPFafZGnOR76aQqVOuKje8NqcNeZoVw
+         N+xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=RIuxtr8d+TB6goTZIrQnEqj0NYsoVNuGdOrD+16hKvE=;
-        b=gFWudZYVFqtuqMOmd4NJn95F2VqDGSm/mEU00IG7Tpmca2mgfOQP+1zvT1teLn7IkI
-         /8Nk4GljTzgGPvvNArlWptwhruF9LwJxgzYRRexoR7v1jmjRZ0ogd3qx9u0IuFuCjSQi
-         XB3+qwwaa2tF+VoDPzKOmezyC6deOvOhNOaVS/8O+h3ewkdwwkna1JUe9dR1F03edH9/
-         rk0C3IkeybFG1vGjO4uz/3zG8xG3yNrGitbjA82ew92Q0HzIn84ZOxkxcop892TpceIE
-         frsOpSoY7zGma+ELq0xRcaFO18efr55C3aXgDNjec5WTYBn0LTLXpGFpYcZBmdBhgRGD
-         Bvlw==
-X-Gm-Message-State: AJIora/DWbkpU1xWxTqBtLbwy4G0aCM34cNnZehS6wTrqhlovXJ7WAaj
-        jFF6xLXN3O/AbF14imNAV6HtbGd4whNqaQ==
-X-Google-Smtp-Source: AGRyM1t1sw1jCN1ieW37kpkYQIAyMtVdPUyvBuYOD3/FMPrCUNrO4liqD1XLniGG0iHGpMVX+tZbUg==
-X-Received: by 2002:ac8:7e89:0:b0:31e:e0dd:9084 with SMTP id w9-20020ac87e89000000b0031ee0dd9084mr10850238qtj.37.1658172535998;
-        Mon, 18 Jul 2022 12:28:55 -0700 (PDT)
+        bh=D0vGYuUrWK1A1pC+aGb2diJW4SXv6dDhykR2E3SvFc8=;
+        b=og/igHkWFYrWYeZz6vUsN6Pdr0D5z/e1KOxkdUYo6DWB+bdBTFUXXOihxAyekf8vOF
+         P1A35YKN+9HI7Hd/SpAhGNd+lfFT/+0ZsGA1oRse/UfbOytoQNvS3q7XdPfq0p5ZRXLp
+         rsZ/YrypKSy5pB8uBGBheq3N5vL98D8Aon8a+/9LgMJnmH6fB3oy/QYD/1+WfsVHrfPM
+         KMIh7ZHZEsia2jX71oU9Ez6dt75XpHp31aENPTvJZV3R5YLPqd7Oot7V8FlF9q/ZCUeQ
+         hp5UZk1KzMyud4GgalBHYC+z33IzrqM90WIH7Raedb28Im/IINmZfzx78nU92272hAA8
+         KeEA==
+X-Gm-Message-State: AJIora/4GaZwBYEP3zbBM4aCA+E75Cy8yAv+dsfDo967NsxhT3C88kmA
+        lA6VGDptmtPOJ8DLdCNcq3lDtZAsJS6tAQ==
+X-Google-Smtp-Source: AGRyM1sfjfCy0QR9NsI2tMcO46D+TGA9UPgSgzjARo5pB7cKyOwUWXXbOFws+xYx88TQYg8ZRSCfgg==
+X-Received: by 2002:a37:648f:0:b0:6b5:ccd2:3ff9 with SMTP id y137-20020a37648f000000b006b5ccd23ff9mr11422805qkb.139.1658172539175;
+        Mon, 18 Jul 2022 12:28:59 -0700 (PDT)
 Received: from localhost ([2601:4c1:c100:1230:ab01:d009:465a:5ab1])
-        by smtp.gmail.com with ESMTPSA id bi14-20020a05620a318e00b006b5f85f8fa8sm1114706qkb.125.2022.07.18.12.28.55
+        by smtp.gmail.com with ESMTPSA id ez12-20020a05622a4c8c00b0031eb0bb5c3csm9878869qtb.28.2022.07.18.12.28.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 12:28:55 -0700 (PDT)
+        Mon, 18 Jul 2022 12:28:58 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     linux-kernel@vger.kernel.org,
         Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -90,9 +90,9 @@ To:     linux-kernel@vger.kernel.org,
         Vlastimil Babka <vbabka@suse.cz>, Yonghong Song <yhs@fb.com>,
         Yury Norov <yury.norov@gmail.com>, linux-mm@kvack.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH 08/16] smp: optimize smp_call_function_many_cond() for more
-Date:   Mon, 18 Jul 2022 12:28:36 -0700
-Message-Id: <20220718192844.1805158-9-yury.norov@gmail.com>
+Subject: [PATCH 11/16] time: optimize tick_check_preferred()
+Date:   Mon, 18 Jul 2022 12:28:39 -0700
+Message-Id: <20220718192844.1805158-12-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220718192844.1805158-1-yury.norov@gmail.com>
 References: <20220718192844.1805158-1-yury.norov@gmail.com>
@@ -102,61 +102,57 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-smp_call_function_many_cond() is often passed with cpu_online_mask.
-If it's the case, we can use cpumask_copy instead of cpumask_and, which
-is faster.
+tick_check_preferred() calls cpumask_equal() even if
+curdev->cpumask == newdev->cpumask. Fix it.
 
 Caught with CONFIG_DEBUG_BITMAP:
-[    7.830337] Call trace:
-[    7.830397]  __bitmap_check_params+0x1d8/0x260
-[    7.830499]  smp_call_function_many_cond+0x1e8/0x45c
-[    7.830607]  kick_all_cpus_sync+0x44/0x80
-[    7.830698]  bpf_int_jit_compile+0x34c/0x5cc
-[    7.830796]  bpf_prog_select_runtime+0x118/0x190
-[    7.830900]  bpf_prepare_filter+0x3dc/0x51c
-[    7.830995]  __get_filter+0xd4/0x170
-[    7.831145]  sk_attach_filter+0x18/0xb0
-[    7.831236]  sock_setsockopt+0x5b0/0x1214
-[    7.831330]  __sys_setsockopt+0x144/0x170
-[    7.831431]  __arm64_sys_setsockopt+0x2c/0x40
-[    7.831541]  invoke_syscall+0x48/0x114
-[    7.831634]  el0_svc_common.constprop.0+0x44/0xfc
-[    7.831745]  do_el0_svc+0x30/0xc0
-[    7.831825]  el0_svc+0x2c/0x84
-[    7.831899]  el0t_64_sync_handler+0xbc/0x140
-[    7.831999]  el0t_64_sync+0x18c/0x190
-[    7.832086] ---[ end trace 0000000000000000 ]---
-[    7.832375] b1:		ffff24d1ffd98a48
-[    7.832385] b2:		ffffa65533a29a38
-[    7.832393] b3:		ffffa65533a29a38
-[    7.832400] nbits:	256
-[    7.832407] start:	0
-[    7.832412] off:	0
-[    7.832418] smp: Bitmap: parameters check failed
-[    7.832432] smp: include/linux/bitmap.h [363]: bitmap_and
+[    0.079109] Call trace:
+[    0.079124]  __bitmap_check_params+0x144/0x250
+[    0.079161]  tick_check_replacement+0x1a4/0x320
+[    0.079203]  tick_check_new_device+0x50/0x110
+[    0.079237]  clockevents_register_device+0x74/0x1c0
+[    0.079268]  dummy_timer_starting_cpu+0x6c/0x80
+[    0.079310]  cpuhp_invoke_callback+0x104/0x20c
+[    0.079353]  cpuhp_invoke_callback_range+0x70/0xf0
+[    0.079401]  notify_cpu_starting+0xac/0xcc
+[    0.079434]  secondary_start_kernel+0xe4/0x154
+[    0.079471]  __secondary_switched+0xa0/0xa4
+[    0.079516] ---[ end trace 0000000000000000 ]---
+[    0.079542] b1:	ffffbfec4703b890
+[    0.079553] b2:	ffffbfec4703b890
+[    0.079566] b3:	0
+[    0.079576] nbits:	256
+[    0.079588] start:	0
+[    0.079598] off:	0
+[    0.079609] Bitmap: parameters check failed
+[    0.079619] include/linux/bitmap.h [419]: bitmap_equal
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- kernel/smp.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ kernel/time/tick-common.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/smp.c b/kernel/smp.c
-index 7ed2b9b12f74..f96fdf944b4a 100644
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -942,7 +942,11 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
- 
- 	if (run_remote) {
- 		cfd = this_cpu_ptr(&cfd_data);
--		cpumask_and(cfd->cpumask, mask, cpu_online_mask);
-+		if (mask == cpu_online_mask)
-+			cpumask_copy(cfd->cpumask, cpu_online_mask);
-+		else
-+			cpumask_and(cfd->cpumask, mask, cpu_online_mask);
+diff --git a/kernel/time/tick-common.c b/kernel/time/tick-common.c
+index 46789356f856..fdd5ae1a074b 100644
+--- a/kernel/time/tick-common.c
++++ b/kernel/time/tick-common.c
+@@ -316,9 +316,13 @@ static bool tick_check_preferred(struct clock_event_device *curdev,
+ 	 * Use the higher rated one, but prefer a CPU local device with a lower
+ 	 * rating than a non-CPU local device
+ 	 */
+-	return !curdev ||
+-		newdev->rating > curdev->rating ||
+-	       !cpumask_equal(curdev->cpumask, newdev->cpumask);
++	if (!curdev || newdev->rating > curdev->rating)
++		return true;
 +
- 		__cpumask_clear_cpu(this_cpu, cfd->cpumask);
++	if (newdev->cpumask == curdev->cpumask)
++		return false;
++
++	return !cpumask_equal(curdev->cpumask, newdev->cpumask);
+ }
  
- 		cpumask_clear(cfd->cpumask_ipi);
+ /*
 -- 
 2.34.1
 
