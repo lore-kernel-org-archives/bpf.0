@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 159D8CCA48A
-	for <bpf@archiver.kernel.org>; Mon, 18 Jul 2022 19:29:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E5DCC43334
+	for <bpf@archiver.kernel.org>; Mon, 18 Jul 2022 19:29:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233849AbiGRT3O (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Jul 2022 15:29:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46342 "EHLO
+        id S235997AbiGRT3P (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Jul 2022 15:29:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235860AbiGRT25 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Jul 2022 15:28:57 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B91B26F5;
-        Mon, 18 Jul 2022 12:28:55 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id o1so9549566qkg.9;
-        Mon, 18 Jul 2022 12:28:55 -0700 (PDT)
+        with ESMTP id S236066AbiGRT3M (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Jul 2022 15:29:12 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 536D09FFF;
+        Mon, 18 Jul 2022 12:28:59 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id l14so7163873qtv.4;
+        Mon, 18 Jul 2022 12:28:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=m9V57xphOJe8FxCe80bZ1J3RuFelVtvXoENVWMfISb4=;
-        b=B0XuB+yAeTJmK6B+vnHnd3BO8yIPsZ8lCES1PpoVp7Ti9ESY8L/5LseEzml+iCgDqI
-         1YlvnrUUgNx4DD7RQwT4vms4g+VmvWZpGoAnJNKJ0UYr9HyWBXYZufeEWv7Vuwxy/4nI
-         qIrQ27tmeRvKsD0HQGA4yMLWkqHFveDpBWb4zZNi9MJuv/+VtQRCqaE5PFi0tfV7R98a
-         9bkurHLXilYTf8+/4Z6M5WqsGBng481jqtXDo5QizTdcTOcHRejuVHRFGd14+vBFF67B
-         NUB7Epima9nbyqEkq0yYEeKIgt/HN7ct0hLat+eWTlW+qrZnqyzPXV06pMIjXg2GHmsY
-         vUnQ==
+        bh=3XYQv40S3S5GPzbQg2pMTtfGv4eD74y+tQ/YBLA8hPI=;
+        b=TByPl+Xwiw2xqd6sHhrukw9bBi6aYZ9/z4hJI5n//rUO3S0J3LYVyW846tuoecx0/P
+         +mwSlwBGZWSeexadVQp08LKtTu3yhD9GwqRpcIaZI+JTvwBTqsldLUYP7cMYJCj0qmee
+         qzWvSzxAj6hHk8lfZ/znqRQjr8YYK6LhI35e/XjH607M4tjQzo2HZoBMdEmvG4Au2nUw
+         7VRp/BbOQlyMaiQHsMqpMueyXN70vJlljWT7heZMwoRcxsr+t7a84MhXDH0oqg1RW59u
+         ELUqUPatBeLpVq9tLx/9dMB7Lb9eBn1unJzFEZ12o7YFpej8nHIclhzYzEdXcPOn0e7U
+         PU/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=m9V57xphOJe8FxCe80bZ1J3RuFelVtvXoENVWMfISb4=;
-        b=x2W7Yce8qD7GAnd11x8NoHIrMk5s0ETIBCgK/MKrwAaTqwnjMN5gvLv3sWOQ7zwmfs
-         V3zPrRgb2ayJ95ctGN2m2w2cQKCKu7toIN2lGU0+SA7AqBL9aSVNPSEcK9xsBq3bA/t1
-         exa2Sw22nksud25LoouCuhj++9DC5lxutwbM/WgLn/F1mecuhWcFZ2fiHWJuZiAMm5mH
-         OPl9FzyPClpwbCq2KxhAiSdlltG7tAQFXp1FIIG9CUewmqeoCWRg5lsVr73AIei1hBKr
-         iWP3VOPgS8HjVCEN5LjHChIJcSh9JxYcykPhsWmHybwtyoXgknkhx4KmU/V4OQS8Bb5C
-         aWJg==
-X-Gm-Message-State: AJIora8MDHGoaHeRScbu8fbfB9W1NrBoVPI4Bcwv+3uL97NgiDZjOuIO
-        0Eh20ChSsEW/tes+grOp2kpfqF82KyFafg==
-X-Google-Smtp-Source: AGRyM1vQdCay2nDpE1RIgzYmRYjdYqMGFdzO6hLEN38y55+zWOu2X7pBEMBNCfY35RCjup6wtifAoA==
-X-Received: by 2002:a05:620a:468e:b0:6b5:af5b:6e5f with SMTP id bq14-20020a05620a468e00b006b5af5b6e5fmr18034173qkb.288.1658172534753;
-        Mon, 18 Jul 2022 12:28:54 -0700 (PDT)
+        bh=3XYQv40S3S5GPzbQg2pMTtfGv4eD74y+tQ/YBLA8hPI=;
+        b=1yUGvr2KBbqt5mRt3sIUdBoE7U9UOY1OOtJdKm7DB3fRXRnzF4GUHPeWf5rF/wis59
+         RgX746WJf7x+5ec+hvNPHEr7fxGIzR5wwk74H962dXLqvvYDIb5u/vIfdzUNVwAMLwBI
+         knubeXMJkCJAtNPNkAizd+iYqLNKS8E5hbIkfgRCRgpFwd8VK/3kwIhPmSCodzre0HC5
+         Plj3JGItNcTFI3mjnXkoWwwsqPwTVeUfBgawFXy1MF5l+bCvFdgtijLS+YR8dtr7linD
+         tyVPlNcXTcM1Td6WgGq9royTv3TlHF9gVCGKRQSbIfoNX1M23XnETn64waKqiTFBfrv8
+         r8Vw==
+X-Gm-Message-State: AJIora/RS7m8GyI6AgiG0CwcUGy31uSqwfbWkDDRX98yJMJ0iRDP52kf
+        rUZszc0DqVYRQh47lqtanuxSIBj8Jwe0CQ==
+X-Google-Smtp-Source: AGRyM1sbR5MtKZUL9t8F0KGlqcEkHR0jVinkErRs9JvmFXVZhVXEvlih/lkWGgZ5SUq5r6VMJWzeKg==
+X-Received: by 2002:ac8:5cca:0:b0:31e:f51f:dd97 with SMTP id s10-20020ac85cca000000b0031ef51fdd97mr3070736qta.47.1658172538023;
+        Mon, 18 Jul 2022 12:28:58 -0700 (PDT)
 Received: from localhost ([2601:4c1:c100:1230:ab01:d009:465a:5ab1])
-        by smtp.gmail.com with ESMTPSA id x6-20020a05620a258600b006a65c58db99sm12736880qko.64.2022.07.18.12.28.54
+        by smtp.gmail.com with ESMTPSA id m13-20020ac8688d000000b0031bf484079esm8937407qtq.18.2022.07.18.12.28.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 12:28:54 -0700 (PDT)
+        Mon, 18 Jul 2022 12:28:57 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     linux-kernel@vger.kernel.org,
         Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -90,9 +90,9 @@ To:     linux-kernel@vger.kernel.org,
         Vlastimil Babka <vbabka@suse.cz>, Yonghong Song <yhs@fb.com>,
         Yury Norov <yury.norov@gmail.com>, linux-mm@kvack.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH 07/16] smp: optimize smp_call_function_many_cond()
-Date:   Mon, 18 Jul 2022 12:28:35 -0700
-Message-Id: <20220718192844.1805158-8-yury.norov@gmail.com>
+Subject: [PATCH 10/16] sched: optimize __set_cpus_allowed_ptr_locked()
+Date:   Mon, 18 Jul 2022 12:28:38 -0700
+Message-Id: <20220718192844.1805158-11-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220718192844.1805158-1-yury.norov@gmail.com>
 References: <20220718192844.1805158-1-yury.norov@gmail.com>
@@ -102,95 +102,46 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-smp_call_function_many_cond() is often passed with cpu_online_mask.
-If this is the case, we can use num_online_cpus(), which is O(1)
-instead of cpumask_{first,next}(), which is O(N).
-
-It can be optimized further: if cpu_online_mask has 0 or single bit
-set (depending on cpu_online(this_cpu), we can return result without
-AND'ing with user's mask.
+Don't call cpumask_subset(new_mask, cpu_allowed_mask) if new_mask
+is cpu_allowed_mask.
 
 Caught with CONFIG_DEBUG_BITMAP:
-[    7.830337] Call trace:
-[    7.830397]  __bitmap_check_params+0x1d8/0x260
-[    7.830499]  smp_call_function_many_cond+0x1e8/0x45c
-[    7.830607]  kick_all_cpus_sync+0x44/0x80
-[    7.830698]  bpf_int_jit_compile+0x34c/0x5cc
-[    7.830796]  bpf_prog_select_runtime+0x118/0x190
-[    7.830900]  bpf_prepare_filter+0x3dc/0x51c
-[    7.830995]  __get_filter+0xd4/0x170
-[    7.831145]  sk_attach_filter+0x18/0xb0
-[    7.831236]  sock_setsockopt+0x5b0/0x1214
-[    7.831330]  __sys_setsockopt+0x144/0x170
-[    7.831431]  __arm64_sys_setsockopt+0x2c/0x40
-[    7.831541]  invoke_syscall+0x48/0x114
-[    7.831634]  el0_svc_common.constprop.0+0x44/0xfc
-[    7.831745]  do_el0_svc+0x30/0xc0
-[    7.831825]  el0_svc+0x2c/0x84
-[    7.831899]  el0t_64_sync_handler+0xbc/0x140
-[    7.831999]  el0t_64_sync+0x18c/0x190
-[    7.832086] ---[ end trace 0000000000000000 ]---
-[    7.832375] b1:		ffff24d1ffd98a48
-[    7.832385] b2:		ffffa65533a29a38
-[    7.832393] b3:		ffffa65533a29a38
-[    7.832400] nbits:	256
-[    7.832407] start:	0
-[    7.832412] off:	0
-[    7.832418] smp: Bitmap: parameters check failed
-[    7.832432] smp: include/linux/bitmap.h [363]: bitmap_and
+[    0.132174] Call trace:
+[    0.132189]  __bitmap_check_params+0x144/0x250
+[    0.132216]  __set_cpus_allowed_ptr_locked+0x8c/0x2c0
+[    0.132241]  sched_init_smp+0x80/0xd8
+[    0.132273]  kernel_init_freeable+0x12c/0x28c
+[    0.132299]  kernel_init+0x28/0x13c
+[    0.132325]  ret_from_fork+0x10/0x20
+[    0.132354] ---[ end trace 0000000000000000 ]---
+[    0.132378] b1:	ffffcd0c07819a58
+[    0.132388] b2:	ffffcd0c07819a58
+[    0.132397] b3:	0
+[    0.132405] nbits:	256
+[    0.132414] start:	0
+[    0.132422] off:	0
+[    0.132444] Bitmap: parameters check failed
+[    0.132467] include/linux/bitmap.h [468]: bitmap_subset
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- kernel/smp.c | 29 +++++++++++++++++++++++------
- 1 file changed, 23 insertions(+), 6 deletions(-)
+ kernel/sched/core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/smp.c b/kernel/smp.c
-index dd215f439426..7ed2b9b12f74 100644
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -880,6 +880,28 @@ EXPORT_SYMBOL_GPL(smp_call_function_any);
- #define SCF_WAIT	(1U << 0)
- #define SCF_RUN_LOCAL	(1U << 1)
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index da0bf6fe9ecd..d6424336ef2d 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -2874,7 +2874,8 @@ static int __set_cpus_allowed_ptr_locked(struct task_struct *p,
+ 		cpu_valid_mask = cpu_online_mask;
+ 	}
  
-+/* Check if we need remote execution, i.e., any CPU excluding this one. */
-+static inline bool __need_remote_exec(const struct cpumask *mask, unsigned int this_cpu)
-+{
-+	unsigned int cpu;
-+
-+	switch (num_online_cpus()) {
-+	case 0:
-+		return false;
-+	case 1:
-+		return cpu_online(this_cpu) ? false : true;
-+	default:
-+		if (mask == cpu_online_mask)
-+			return true;
-+	}
-+
-+	cpu = cpumask_first_and(mask, cpu_online_mask);
-+	if (cpu == this_cpu)
-+		cpu = cpumask_next_and(cpu, mask, cpu_online_mask);
-+
-+	return cpu < nr_cpu_ids;
-+}
-+
- static void smp_call_function_many_cond(const struct cpumask *mask,
- 					smp_call_func_t func, void *info,
- 					unsigned int scf_flags,
-@@ -916,12 +938,7 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
- 	if ((scf_flags & SCF_RUN_LOCAL) && cpumask_test_cpu(this_cpu, mask))
- 		run_local = true;
- 
--	/* Check if we need remote execution, i.e., any CPU excluding this one. */
--	cpu = cpumask_first_and(mask, cpu_online_mask);
--	if (cpu == this_cpu)
--		cpu = cpumask_next_and(cpu, mask, cpu_online_mask);
--	if (cpu < nr_cpu_ids)
--		run_remote = true;
-+	run_remote = __need_remote_exec(mask, this_cpu);
- 
- 	if (run_remote) {
- 		cfd = this_cpu_ptr(&cfd_data);
+-	if (!kthread && !cpumask_subset(new_mask, cpu_allowed_mask)) {
++	if (!kthread && new_mask != cpu_allowed_mask &&
++			!cpumask_subset(new_mask, cpu_allowed_mask)) {
+ 		ret = -EINVAL;
+ 		goto out;
+ 	}
 -- 
 2.34.1
 
