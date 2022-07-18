@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44107C43334
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87688CCA485
 	for <bpf@archiver.kernel.org>; Mon, 18 Jul 2022 19:30:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234676AbiGRTaA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Jul 2022 15:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46824 "EHLO
+        id S236080AbiGRTaB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Jul 2022 15:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236092AbiGRT3N (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S236099AbiGRT3N (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 18 Jul 2022 15:29:13 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66F76263;
-        Mon, 18 Jul 2022 12:29:00 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id c24so4029775qkm.4;
-        Mon, 18 Jul 2022 12:29:00 -0700 (PDT)
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D74A44A;
+        Mon, 18 Jul 2022 12:29:03 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id l14so7164036qtv.4;
+        Mon, 18 Jul 2022 12:29:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=D0vGYuUrWK1A1pC+aGb2diJW4SXv6dDhykR2E3SvFc8=;
-        b=acjdcKpDdV2PdvNi+eoEwihWKcpSrRAsrDHiFJG9tElETVBRpRl1BHIlBTcqTpJ1PZ
-         dqPhoWLauRERrZA0j1cq0xNk0IkyjS+bk910OJd6v3ZC939j06bzpOv+oySvXXxzwccG
-         DuquVnf7VDRuglTdL1A81oCQPyP9OiRPuTo9rV8rvvWPSirAXqZUVdJ9cVJF+N/tZAut
-         cn4mvdBOyL7FeaLStoJT+VMKK5o0ToUzvTPwDDD4B5R4znOjfgPiLRfaP8jZoSwV2fdJ
-         sN1KlbxFCs/ArEXTCRiHuBowwklPVPJUzv5nXSPFafZGnOR76aQqVOuKje8NqcNeZoVw
-         N+xw==
+        bh=nMdR+AEtByh2Sj3uhRet9r/mYlLTue7hiNXqJ4zPF7A=;
+        b=ThZjcWWpivQL4LIMCYMLUyqh5o5kXMqBz+8OT2okIYTlrj/edxwBb2dbQa9UPOmtF6
+         4kSD+ZK2zlONe0lcAJjESBk9Nh+IMF2AWtzKWASNF/7e6AOQFfgrht6kvwCXXaBw+ZJ/
+         TuekgFubFOIx/+8XhYbzZTP0R9y2FHpWi0c1TNSBFoZBSAURAUsk02B8TI4+roOQrfEb
+         rqvV8Zlz0kLm2wnKF7Eb5xNF8jQ/LSP7mPfSKTCz8rO9Som4BkQVoJkslp7Xj+XOaxbI
+         /IAz4pqpN4giyGSLVmRa+JZ33lWzIiVJrwXSuZTIP487wCG2DZbEQ+zSsLJzYmv+Cs+/
+         XhuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=D0vGYuUrWK1A1pC+aGb2diJW4SXv6dDhykR2E3SvFc8=;
-        b=og/igHkWFYrWYeZz6vUsN6Pdr0D5z/e1KOxkdUYo6DWB+bdBTFUXXOihxAyekf8vOF
-         P1A35YKN+9HI7Hd/SpAhGNd+lfFT/+0ZsGA1oRse/UfbOytoQNvS3q7XdPfq0p5ZRXLp
-         rsZ/YrypKSy5pB8uBGBheq3N5vL98D8Aon8a+/9LgMJnmH6fB3oy/QYD/1+WfsVHrfPM
-         KMIh7ZHZEsia2jX71oU9Ez6dt75XpHp31aENPTvJZV3R5YLPqd7Oot7V8FlF9q/ZCUeQ
-         hp5UZk1KzMyud4GgalBHYC+z33IzrqM90WIH7Raedb28Im/IINmZfzx78nU92272hAA8
-         KeEA==
-X-Gm-Message-State: AJIora/4GaZwBYEP3zbBM4aCA+E75Cy8yAv+dsfDo967NsxhT3C88kmA
-        lA6VGDptmtPOJ8DLdCNcq3lDtZAsJS6tAQ==
-X-Google-Smtp-Source: AGRyM1sfjfCy0QR9NsI2tMcO46D+TGA9UPgSgzjARo5pB7cKyOwUWXXbOFws+xYx88TQYg8ZRSCfgg==
-X-Received: by 2002:a37:648f:0:b0:6b5:ccd2:3ff9 with SMTP id y137-20020a37648f000000b006b5ccd23ff9mr11422805qkb.139.1658172539175;
-        Mon, 18 Jul 2022 12:28:59 -0700 (PDT)
+        bh=nMdR+AEtByh2Sj3uhRet9r/mYlLTue7hiNXqJ4zPF7A=;
+        b=qLIGhyV2409m4CxitSPQKxY9DA+HrMefJE9hJcR0YL9nXimwMT+/yC9S8rFm0jyXTI
+         cqE1A37T4LeI0Hlnqzak0YXGFTysI9GPy23KR3DRuUeJFFVtc2LtYSg2e5Hy0kwKTBly
+         Na4QKhuGB4H/vTeMJMKynqt2/m3n3rZWXNlo45RzihQEgF3lNlCb5+ScuufZLyt/cdPQ
+         2jFiwqWLQzoX+SASXBM2NieCTL/4YT1LqKodzyJy7ZyNivFYsC3oquo741CarDlhCH8q
+         TSenN/RPrWNnaaA/8Fr1DnWNQyWS5jpaC7hpRl75lNYV1VCSOvcXsj7dRenG4Mzzwlsa
+         GAPA==
+X-Gm-Message-State: AJIora+diTQeF2YOz/Bz+t5JYP55yN4z66jwxlmMPaYipdQp9JkXlDtb
+        ILUnKVMNIEJxQ5aybK7CGAY6KIef0Tm29w==
+X-Google-Smtp-Source: AGRyM1vJb89RwvBBeMzFkakUtULOUGREDepYG3L9kNDYRN+9fj+cWruAf8vfYMA3CaqjYR907kc98w==
+X-Received: by 2002:a05:622a:213:b0:31e:c569:220e with SMTP id b19-20020a05622a021300b0031ec569220emr22576563qtx.436.1658172542486;
+        Mon, 18 Jul 2022 12:29:02 -0700 (PDT)
 Received: from localhost ([2601:4c1:c100:1230:ab01:d009:465a:5ab1])
-        by smtp.gmail.com with ESMTPSA id ez12-20020a05622a4c8c00b0031eb0bb5c3csm9878869qtb.28.2022.07.18.12.28.58
+        by smtp.gmail.com with ESMTPSA id n18-20020a05620a295200b006b5e45ff82csm5125690qkp.93.2022.07.18.12.29.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 12:28:58 -0700 (PDT)
+        Mon, 18 Jul 2022 12:29:02 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     linux-kernel@vger.kernel.org,
         Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -90,9 +90,9 @@ To:     linux-kernel@vger.kernel.org,
         Vlastimil Babka <vbabka@suse.cz>, Yonghong Song <yhs@fb.com>,
         Yury Norov <yury.norov@gmail.com>, linux-mm@kvack.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH 11/16] time: optimize tick_check_preferred()
-Date:   Mon, 18 Jul 2022 12:28:39 -0700
-Message-Id: <20220718192844.1805158-12-yury.norov@gmail.com>
+Subject: [PATCH 13/16] time: optimize tick_setup_device()
+Date:   Mon, 18 Jul 2022 12:28:41 -0700
+Message-Id: <20220718192844.1805158-14-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220718192844.1805158-1-yury.norov@gmail.com>
 References: <20220718192844.1805158-1-yury.norov@gmail.com>
@@ -102,57 +102,50 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-tick_check_preferred() calls cpumask_equal() even if
-curdev->cpumask == newdev->cpumask. Fix it.
+tick_setup_device() calls cpumask_equal(newdev->cpumask, cpumask)
+even if newdev->cpumask == cpumask. Fix it.
 
 Caught with CONFIG_DEBUG_BITMAP:
-[    0.079109] Call trace:
-[    0.079124]  __bitmap_check_params+0x144/0x250
-[    0.079161]  tick_check_replacement+0x1a4/0x320
-[    0.079203]  tick_check_new_device+0x50/0x110
-[    0.079237]  clockevents_register_device+0x74/0x1c0
-[    0.079268]  dummy_timer_starting_cpu+0x6c/0x80
-[    0.079310]  cpuhp_invoke_callback+0x104/0x20c
-[    0.079353]  cpuhp_invoke_callback_range+0x70/0xf0
-[    0.079401]  notify_cpu_starting+0xac/0xcc
-[    0.079434]  secondary_start_kernel+0xe4/0x154
-[    0.079471]  __secondary_switched+0xa0/0xa4
-[    0.079516] ---[ end trace 0000000000000000 ]---
-[    0.079542] b1:	ffffbfec4703b890
-[    0.079553] b2:	ffffbfec4703b890
-[    0.079566] b3:	0
-[    0.079576] nbits:	256
-[    0.079588] start:	0
-[    0.079598] off:	0
-[    0.079609] Bitmap: parameters check failed
-[    0.079619] include/linux/bitmap.h [419]: bitmap_equal
+[    0.070960] Call trace:
+[    0.070974]  __bitmap_check_params+0x144/0x250
+[    0.071008]  tick_setup_device+0x70/0x1a0
+[    0.071040]  tick_check_new_device+0xc0/0x110
+[    0.071066]  clockevents_register_device+0x74/0x1c0
+[    0.071090]  clockevents_config_and_register+0x2c/0x3c
+[    0.071114]  arch_timer_starting_cpu+0x170/0x470
+[    0.071147]  cpuhp_invoke_callback+0x104/0x20c
+[    0.071180]  cpuhp_invoke_callback_range+0x70/0xf0
+[    0.071205]  notify_cpu_starting+0xac/0xcc
+[    0.071229]  secondary_start_kernel+0xe4/0x154
+[    0.071259]  __secondary_switched+0xa0/0xa4
+[    0.071297] ---[ end trace 0000000000000000 ]---
+[    0.071328] b1:	ffffa1f27323b890
+[    0.071339] b2:	ffffa1f27323b890
+[    0.071348] b3:	0
+[    0.071356] nbits:	256
+[    0.071366] start:	0
+[    0.071374] off:	0
+[    0.071383] Bitmap: parameters check failed
+[    0.071390] include/linux/bitmap.h [419]: bitmap_equal
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- kernel/time/tick-common.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ kernel/time/tick-common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/kernel/time/tick-common.c b/kernel/time/tick-common.c
-index 46789356f856..fdd5ae1a074b 100644
+index 7205f76f8d10..7b2da8ef09ef 100644
 --- a/kernel/time/tick-common.c
 +++ b/kernel/time/tick-common.c
-@@ -316,9 +316,13 @@ static bool tick_check_preferred(struct clock_event_device *curdev,
- 	 * Use the higher rated one, but prefer a CPU local device with a lower
- 	 * rating than a non-CPU local device
+@@ -255,7 +255,7 @@ static void tick_setup_device(struct tick_device *td,
+ 	 * When the device is not per cpu, pin the interrupt to the
+ 	 * current cpu:
  	 */
--	return !curdev ||
--		newdev->rating > curdev->rating ||
--	       !cpumask_equal(curdev->cpumask, newdev->cpumask);
-+	if (!curdev || newdev->rating > curdev->rating)
-+		return true;
-+
-+	if (newdev->cpumask == curdev->cpumask)
-+		return false;
-+
-+	return !cpumask_equal(curdev->cpumask, newdev->cpumask);
- }
+-	if (!cpumask_equal(newdev->cpumask, cpumask))
++	if (newdev->cpumask != cpumask && !cpumask_equal(newdev->cpumask, cpumask))
+ 		irq_set_affinity(newdev->irq, cpumask);
  
- /*
+ 	/*
 -- 
 2.34.1
 
