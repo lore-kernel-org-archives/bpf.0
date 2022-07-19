@@ -2,81 +2,76 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7A96C43334
-	for <bpf@archiver.kernel.org>; Tue, 19 Jul 2022 16:50:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19AE8CCA483
+	for <bpf@archiver.kernel.org>; Tue, 19 Jul 2022 16:50:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231350AbiGSQuT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Jul 2022 12:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45812 "EHLO
+        id S232259AbiGSQuV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Jul 2022 12:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232259AbiGSQuS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 Jul 2022 12:50:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A31491CA
-        for <bpf@vger.kernel.org>; Tue, 19 Jul 2022 09:50:17 -0700 (PDT)
+        with ESMTP id S234207AbiGSQuT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 19 Jul 2022 12:50:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9FDE43E60
+        for <bpf@vger.kernel.org>; Tue, 19 Jul 2022 09:50:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 92F3661A56
-        for <bpf@vger.kernel.org>; Tue, 19 Jul 2022 16:50:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BF256C341CB;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 56CC7B81C3A
+        for <bpf@vger.kernel.org>; Tue, 19 Jul 2022 16:50:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D0240C341CA;
         Tue, 19 Jul 2022 16:50:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1658249415;
-        bh=bZkciFgXkcWsiApsDI3rFVX79hFcNLhqPeuEp19L2n4=;
+        bh=nQZTXb5MYjTruDpqpQXtpzZOe8xKLBa4ygGAVdLhYlM=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=iRbT+h5aFjGWx0b491Lo461XsybG7vyEvBEzLh9Ti7DiRTqLhEx684+fn6PCD2ner
-         eXkSGzgd8pSCPOGN9cm+pizpBlQX9DmS+VirCsuPIGaEaeSkTMCBw2vVr2kLtEDyxa
-         Mxj5nBRoG07omIMlOqiVkE5ecBQrYHoElFlN7lA9NOdZ52UlVLfAjTI8XjaUsLClsi
-         CbKsYRAPO/siszpoxKSXetewF2dkWgYtuvcuAgdHBCMk/QD7KrvVoEfB4hA17yWm+2
-         O88ENU74Ix3rqXlE8aGtvib/0BRUE/lgNayrD0emrcl2+OV/9DG7iwK7qR3wT/DKXb
-         UgISFEDJLqQkg==
+        b=pRtnkFh19IUHQb9Rn3/2HHPTIUBb7D0+vhS5vpeiW426rr6DIIuJ6JaLcXveWeTrE
+         dSULoCI4KuYj8geUJCM1VQfFJqfi45vm6I26vSatJhAAiEcn2EuEm6ul32fW3XloPX
+         JMbMwgzFBA5CxWwCyprhG2gg0jo9TJ2ooeViJrhESBvcpb4l7GAbyRIuXilEdtXCEh
+         Aim5ZNaTgMkN4UC/nDI14eyaCUUFhuX24YoVpYWz6Eu+iOiziQHMp1yX7Y2hcmdesp
+         hQpawYGXk5V2TC08Xb3DbMT7fj2BReBz3+0XEukmy7kMDmysIHslCWJdFDW46IHTEp
+         yGXqDWM86kdnA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A0D30D9DDDB;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B2AF0E451B7;
         Tue, 19 Jul 2022 16:50:15 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 bpf-next 0/5] Add SEC("ksyscall") support
+Subject: Re: [PATCH bpf-next] bpf: fix lsm_cgroup build errors on esoteric configs
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165824941564.16633.11728582955522641826.git-patchwork-notify@kernel.org>
+Message-Id: <165824941572.16633.16900941104439247615.git-patchwork-notify@kernel.org>
 Date:   Tue, 19 Jul 2022 16:50:15 +0000
-References: <20220714070755.3235561-1-andrii@kernel.org>
-In-Reply-To: <20220714070755.3235561-1-andrii@kernel.org>
-To:     Andrii Nakryiko <andrii@kernel.org>
+References: <20220714185404.3647772-1-sdf@google.com>
+In-Reply-To: <20220714185404.3647772-1-sdf@google.com>
+To:     Stanislav Fomichev <sdf@google.com>
 Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        kernel-team@fb.com
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        haoluo@google.com, jolsa@kernel.org, lkp@intel.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 Hello:
 
-This series was applied to bpf/bpf-next.git (master)
+This patch was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Thu, 14 Jul 2022 00:07:50 -0700 you wrote:
-> Add SEC("ksyscall")/SEC("kretsyscall") sections and corresponding
-> bpf_program__attach_ksyscall() API that simplifies tracing kernel syscalls
-> through kprobe mechanism. Kprobing syscalls isn't trivial due to varying
-> syscall handler names in the kernel and various ways syscall argument are
-> passed, depending on kernel architecture and configuration. SEC("ksyscall")
-> allows user to not care about such details and just get access to syscall
-> input arguments, while libbpf takes care of necessary feature detection logic.
+On Thu, 14 Jul 2022 11:54:04 -0700 you wrote:
+> This particular ones is about having the following:
+>  CONFIG_BPF_LSM=y
+>  # CONFIG_CGROUP_BPF is not set
+> 
+> Also, add __maybe_unused to the args for the !CONFIG_NET cases.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Stanislav Fomichev <sdf@google.com>
 > 
 > [...]
 
 Here is the summary with links:
-  - [v2,bpf-next,1/5] libbpf: generalize virtual __kconfig externs and use it for USDT
-    https://git.kernel.org/bpf/bpf-next/c/55d00c37ebc3
-  - [v2,bpf-next,2/5] selftests/bpf: add test of __weak unknown virtual __kconfig extern
-    https://git.kernel.org/bpf/bpf-next/c/ce6dc74a0a4a
-  - [v2,bpf-next,3/5] libbpf: improve BPF_KPROBE_SYSCALL macro and rename it to BPF_KSYSCALL
-    https://git.kernel.org/bpf/bpf-next/c/6f5d467d55f0
-  - [v2,bpf-next,4/5] libbpf: add ksyscall/kretsyscall sections support for syscall kprobes
-    https://git.kernel.org/bpf/bpf-next/c/708ac5bea0ce
-  - [v2,bpf-next,5/5] selftests/bpf: use BPF_KSYSCALL and SEC("ksyscall") in selftests
-    https://git.kernel.org/bpf/bpf-next/c/d814ed62d3d2
+  - [bpf-next] bpf: fix lsm_cgroup build errors on esoteric configs
+    https://git.kernel.org/bpf/bpf-next/c/3908fcddc65d
 
 You are awesome, thank you!
 -- 
