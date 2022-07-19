@@ -2,138 +2,125 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2904C433EF
-	for <bpf@archiver.kernel.org>; Mon, 18 Jul 2022 21:50:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D830C433EF
+	for <bpf@archiver.kernel.org>; Tue, 19 Jul 2022 00:19:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236251AbiGRVuk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Jul 2022 17:50:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41930 "EHLO
+        id S233993AbiGSATq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Jul 2022 20:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233484AbiGRVui (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Jul 2022 17:50:38 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1998FDA
-        for <bpf@vger.kernel.org>; Mon, 18 Jul 2022 14:50:37 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id c3so10937681pfb.13
-        for <bpf@vger.kernel.org>; Mon, 18 Jul 2022 14:50:37 -0700 (PDT)
+        with ESMTP id S236278AbiGSATp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Jul 2022 20:19:45 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D635233E3B
+        for <bpf@vger.kernel.org>; Mon, 18 Jul 2022 17:19:43 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id d16so19300775wrv.10
+        for <bpf@vger.kernel.org>; Mon, 18 Jul 2022 17:19:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=u27wz2PCMuVYYB7HICVQ28Lin1veQrrJpBv68Mte6sw=;
-        b=pAHT/4wQsN1037mdKqH7SN5eIImP9H7JRUFzZk0usOzy7EyhEqSdAq3FdYP0CKGk9O
-         PzZZI1eqUkRw98kEjDWtZ8PlnBGXc0uAMeOjt9RwhyFdXXPWHI6SrKjLlY8F1/UZAj73
-         BIC3PJzt5KgRRffqUio2MipR4fON7lsjaV3Z+/J6x73skVJo76PnF3KRsm881BwVrVuC
-         lgWUNIoq++vT+vpzMiIIGnq4zme7LRjKEYtPXh2n2BSI2DlSeSurJobLpmKmmvjGIP09
-         opxEkY5g+9TucHWoKYqC2JwmiDlcvSbUHWtXtHTMMwdTIfd97DV2bXA3YzV4Num8Wc7h
-         p0qw==
+        bh=A/tfmTl8rXDFpYRGXN4+L+UsANM+7IsYT4VqGSMDHfM=;
+        b=YsSa6GugGINKY6fPTPL9pliswrcB1UYTnSQSyvHufKXAKsnNqjgbZf/MrzBAVFkpkV
+         3efUWwnPZNgyam4zbFiZvkF6DwmWKFdS4gCpQebSh57I/6VOBjSSfsjowVXVPiw71gNH
+         de+i+jDRoJXPnuWcTFjPOCu7w5EYVFWAUjK8xRxu3vg0KbHaPYzSIuS0CLG8vyC+lneJ
+         h4Ng6A/IL8PySfzmZtqDJZ+vkSLiZB+gEobBhwgUXPRZxEZxNCQ3mkTA+krKy7w5UpLY
+         vLso/ZSSkedxwIUPkoCsvkpFvozIoqB8yMpsstKN1pibqE18Si1uau6Mu0kK3kRsror3
+         2GFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=u27wz2PCMuVYYB7HICVQ28Lin1veQrrJpBv68Mte6sw=;
-        b=TzC5VDoMI+cz4Ymd+byNLRIVix+Q8BWQz1ICN8QKgSE8ECEcHzWFt27XvkHCyw0c6j
-         PfOKi0DPWg1VfoYTYQG71TG9+LWaWeCwsnJO/RQoXbzYaVa8vnUOzyjbvGlMe8wGqbDX
-         XOkaxwMrCITDbh/ghoI7/kNLacZqD+vP/gT8bZ6TsP/3lSsyEaFvow0ZlBUA6mibgwAj
-         3JwouvNFtx7uurC3hz43F/iFz8JaFU/6MDo6LaUX6q7mVDKvndHTSNu0cDIzWeGUr5h8
-         DawmhsE96GKjPCOEhvgI4fJIoCGf28cwegGlrPb+GXFJiGbwqfrqVDBDjQPzmUY16+iz
-         qLSg==
-X-Gm-Message-State: AJIora++ghQiRb+cfcyxREtPt16OEWih/x2+Zx8PkhoCEIUvctzk/bOm
-        zLNeRkCovN4HuoI/DY2FBzj6i7emLK0XUWOdJO1+3g==
-X-Google-Smtp-Source: AGRyM1tlTCM/JJii+zM5EszvzDhrl5iKnWO79jqEL8k8xRiUlrm/pBfOTtdspOniakM/eRek/7LlMk+VK50EyjYx/PY=
-X-Received: by 2002:a63:85c6:0:b0:412:a94c:16d0 with SMTP id
- u189-20020a6385c6000000b00412a94c16d0mr26759268pgd.253.1658181037079; Mon, 18
- Jul 2022 14:50:37 -0700 (PDT)
+        bh=A/tfmTl8rXDFpYRGXN4+L+UsANM+7IsYT4VqGSMDHfM=;
+        b=3X3wiyDsekLJyj7fnGjUU+3g8X3naw41CR04TbVLvP4n4m/T2s0i7tqxWJ/4iDzOBs
+         uP4QOCPiTwLFMTytzm1h3CpGpMY+PboIRAAOni8eJKdhjyssCPcFxKkqOQoQk3MzYMnE
+         9gLf0uastksyQJTsPEdNSSNNFVUAFalN/sMrQKGqKqgK/HLZBYRMRM+dn5+mkp3CqYX5
+         ip18tPEk0Ikri/qbfDGkgZzOskW4pgZGsy6YBmptpwCLFGSqvf6BGHVCWXfykowq2Wue
+         YXegYByjLPglrRGe1vVuc4ShBcnIWkPZAF8tkww3dr0DoqD4JrWt1ZCrZ/Bfm2g9g+Gt
+         2bYA==
+X-Gm-Message-State: AJIora8uNmBKttQ2NCQ7H3J8+oV+bkDqgVUHF7AVMQmNEhwMIzWcmrNY
+        U7eez1MGH+1svbyMyiTjlvYY0tpOOZI40GXXJo68Bg==
+X-Google-Smtp-Source: AGRyM1u7d1r2Bbb6nhCQBRvfKeZJGVEGRNOp/QpyZlEJg/hAAoSmdJGRxsGTEeAkJzI4ZjA4LDyHE6jEsWuJDXBvTtM=
+X-Received: by 2002:a5d:64a3:0:b0:21d:adaa:ce4c with SMTP id
+ m3-20020a5d64a3000000b0021dadaace4cmr24585254wrp.161.1658189982235; Mon, 18
+ Jul 2022 17:19:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220718214633.3951533-1-jevburton.kernel@gmail.com>
-In-Reply-To: <20220718214633.3951533-1-jevburton.kernel@gmail.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Mon, 18 Jul 2022 14:50:26 -0700
-Message-ID: <CAKH8qBuAR2A4wyL7Xe_OY-pq_VaRRrP_e-P5py=rwf22mfr1VA@mail.gmail.com>
-Subject: Re: [PATCH] [PATCH bpf-next] libbpf: Add bpf_obj_get_opts()
-To:     Joe Burton <jevburton.kernel@gmail.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+References: <20220709000439.243271-1-yosryahmed@google.com>
+ <20220709000439.243271-9-yosryahmed@google.com> <b4936952-2fe7-656c-2d0d-69044265392a@fb.com>
+ <9c6a0ba3-2730-eb56-0f96-e5d236e46660@fb.com> <CAJD7tkZUfNqD8z6Cv7vi1TxpwKTXhDn_yweDHnRr++9iJs+=ew@mail.gmail.com>
+ <CAJD7tkb8-scb1sstre0LRhY3dgfUJhGvSR=DgEqfwcVtBwb+5w@mail.gmail.com>
+In-Reply-To: <CAJD7tkb8-scb1sstre0LRhY3dgfUJhGvSR=DgEqfwcVtBwb+5w@mail.gmail.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Mon, 18 Jul 2022 17:19:30 -0700
+Message-ID: <CA+khW7i_SCDoMgtVWw=E5RkJBmSvqo+KFjVp3_X+LZ9wyfqO7g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 8/8] bpf: add a selftest for cgroup
+ hierarchical stats collection
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        KP Singh <kpsingh@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Joe Burton <jevburton@google.com>
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 2:46 PM Joe Burton <jevburton.kernel@gmail.com> wrote:
+On Mon, Jul 18, 2022 at 12:34 PM Yosry Ahmed <yosryahmed@google.com> wrote:
 >
-> From: Joe Burton <jevburton@google.com>
+[...]
 >
-> Add an extensible variant of bpf_obj_get() capable of setting the
-> `file_flags` parameter.
->
-> This parameter is needed to enable unprivileged access to BPF maps.
-> Without a method like this, users must manually make the syscall.
->
-> Signed-off-by: Joe Burton <jevburton@google.com>
-> ---
->  tools/lib/bpf/bpf.c | 10 ++++++++++
->  tools/lib/bpf/bpf.h |  9 +++++++++
+> I think I figured this one out (the CI failure). I set max_entries for
+> the maps in the test to 10, because I have 1 entry per-cgroup, and I
+> have less than 10 cgroups. When I run the test with other tests I
+> *think* there are other cgroups that are being created, so the number
+> exceeds 10, and some of the entries for the test cgroups cannot be
+> created.
 
-Needs a libbpf.map change as well?
+Using hashmap to store per-cgroup data is only a short-term solution.
+We should work on extending cgroup-local storage to tracing programs.
+Maybe as a follow-up change once cgroup_iter is merged.
 
->  2 files changed, 19 insertions(+)
+> in the bpf trace produced by my test, and the error turned out to be
+> -E2BIG. I increased max_entries to 100 and it seems to be consistently
+> passing when run with all the other tests, using both test_progs and
+> test_progs-no_alu32.
 >
-> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-> index 5eb0df90eb2b..5acb0e8bd13c 100644
-> --- a/tools/lib/bpf/bpf.c
-> +++ b/tools/lib/bpf/bpf.c
-> @@ -578,12 +578,22 @@ int bpf_obj_pin(int fd, const char *pathname)
->  }
+> Please find a diff attached fixing this problem and a few other nits:
+> - Return meaningful exit codes from the reclaimer() child process and
+> check them in induce_vmscan().
+> - Make buf and path variables static in get_cgroup_vmscan_delay()
+> - Print error code in bpf trace when we fail to create a bpf map entry.
+> - Print 0 instead of -1 when we can't find a map entry, to avoid
+> underflowing the unsigned counters in the test.
 >
->  int bpf_obj_get(const char *pathname)
-> +{
-> +       LIBBPF_OPTS(bpf_obj_get_opts, opts);
-> +       return bpf_obj_get_opts(pathname, &opts);
-> +}
-> +
-> +int bpf_obj_get_opts(const char *pathname, const struct bpf_obj_get_opts *opts)
->  {
->         union bpf_attr attr;
->         int fd;
+> Let me know if this diff works or not, and if I need to send a new
+> version with the diff or not. Also let me know if this fixes the
+> failures that you have been seeing locally (which looked different
+> from the CI failures).
 >
-> +       if (!OPTS_VALID(opts, bpf_obj_get_opts))
-> +               return libbpf_err(-EINVAL);
-> +
->         memset(&attr, 0, sizeof(attr));
->         attr.pathname = ptr_to_u64((void *)pathname);
-> +       attr.file_flags = OPTS_GET(opts, file_flags, 0);
+
+Yosry, I also need to address Yonghong's comments in the cgroup_iter
+patch, so we need to send v4 anyway.
+
+Hao
+
+> Thanks!
 >
->         fd = sys_bpf_fd(BPF_OBJ_GET, &attr, sizeof(attr));
->         return libbpf_err_errno(fd);
-> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-> index 88a7cc4bd76f..f31b493b5f9a 100644
-> --- a/tools/lib/bpf/bpf.h
-> +++ b/tools/lib/bpf/bpf.h
-> @@ -270,8 +270,17 @@ LIBBPF_API int bpf_map_update_batch(int fd, const void *keys, const void *values
->                                     __u32 *count,
->                                     const struct bpf_map_batch_opts *opts);
->
-> +struct bpf_obj_get_opts {
-> +       size_t sz; /* size of this struct for forward/backward compatibility */
-> +
-> +       __u32 file_flags;
-> +};
-> +#define bpf_obj_get_opts__last_field file_flags
-> +
->  LIBBPF_API int bpf_obj_pin(int fd, const char *pathname);
->  LIBBPF_API int bpf_obj_get(const char *pathname);
-> +LIBBPF_API int bpf_obj_get_opts(const char *pathname,
-> +                               const struct bpf_obj_get_opts *opts);
->
->  struct bpf_prog_attach_opts {
->         size_t sz; /* size of this struct for forward/backward compatibility */
-> --
-> 2.37.0.170.g444d1eabd0-goog
->
+[...]
