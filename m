@@ -2,43 +2,42 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDE74C433EF
-	for <bpf@archiver.kernel.org>; Wed, 20 Jul 2022 11:47:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99BC2CCA485
+	for <bpf@archiver.kernel.org>; Wed, 20 Jul 2022 11:47:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240767AbiGTLrD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Jul 2022 07:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57128 "EHLO
+        id S240790AbiGTLrE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Jul 2022 07:47:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236043AbiGTLrB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S232856AbiGTLrB (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 20 Jul 2022 07:47:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1FF6772BF9
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3849672ECD
         for <bpf@vger.kernel.org>; Wed, 20 Jul 2022 04:47:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1658317619;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lA7Q8pZdMZk71xzbbtvh8iXkLjx/zYBnA6KK+qZ4XXo=;
-        b=N/S7D28t3HQdcFFkKJFZ2vs/8ar+20LIsDfOsskFV6ghiq9wRp1U+ZJRRZ/n1Pw5STycDx
-        5/BEd7RCybQDYpyCsrWoRrPQkHSO0Zm53s41tno0/HHRU7MzY8D/VsXMsfJVxgQbwqSbMw
-        RSA5CckgES3Yipwe8W5ecLVaASyQqk0=
+         content-transfer-encoding:content-transfer-encoding;
+        bh=z3KFlTHyS29ABxq7E7+mqrxJZKNMmdmSRTF2Gmd+qak=;
+        b=IWv2Nx+OWaasC8K/CuGjN/F39W2zsq+ooO9jiDw1MxYRDDZv3170G2JHHOruSp9d6mnaJe
+        ojNeVhJwQu1Gcm5y6U28y07EE7lTx8BrPG/ON4LdOGFURzKpChvqUThggiTuagv1MVcrb7
+        6bFffTUKQleME0KNq2DVB8+Gv0iHYQc=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-437-JHw3_Jd-MXiaA_9JcFo3vA-1; Wed, 20 Jul 2022 07:46:56 -0400
-X-MC-Unique: JHw3_Jd-MXiaA_9JcFo3vA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+ us-mta-14-rSDRWVgIOImHt2fqhC-V9g-1; Wed, 20 Jul 2022 07:46:55 -0400
+X-MC-Unique: rSDRWVgIOImHt2fqhC-V9g-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 682B585A581;
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 66FD7804191;
         Wed, 20 Jul 2022 11:46:55 +0000 (UTC)
 Received: from shodan.usersys.redhat.com (unknown [10.43.17.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id EF9CE2026D64;
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id EF4CB2166B26;
         Wed, 20 Jul 2022 11:46:54 +0000 (UTC)
 Received: by shodan.usersys.redhat.com (Postfix, from userid 1000)
-        id 079301C0323; Wed, 20 Jul 2022 13:46:54 +0200 (CEST)
+        id E102B1C029C; Wed, 20 Jul 2022 13:46:53 +0200 (CEST)
 From:   Artem Savkov <asavkov@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -49,158 +48,56 @@ Cc:     linux-kernel@vger.kernel.org,
         Daniel Vacek <dvacek@redhat.com>,
         Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>,
         Artem Savkov <asavkov@redhat.com>
-Subject: [PATCH bpf-next 3/4] selftests/bpf: add destructive kfunc tests
-Date:   Wed, 20 Jul 2022 13:46:51 +0200
-Message-Id: <20220720114652.3020467-4-asavkov@redhat.com>
-In-Reply-To: <20220720114652.3020467-1-asavkov@redhat.com>
-References: <20220720114652.3020467-1-asavkov@redhat.com>
+Subject: [PATCH bpf-next 0/4] destructive bpf kfuncs (was: bpf_panic)
+Date:   Wed, 20 Jul 2022 13:46:48 +0200
+Message-Id: <20220720114652.3020467-1-asavkov@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add tests checking that programs calling destructive kfuncs can only do
-so if they have BPF_F_DESTRUCTIVE flag set and CAP_SYS_BOOT
-capabilities.
+eBPF is often used for kernel debugging, and one of the widely used and
+powerful debugging techniques is post-mortem debugging with a full memory dump.
+Triggering a panic at exactly the right moment allows the user to get such a
+dump and thus a better view at the system's state. Right now the only way to
+do this in BPF is to signal userspace to trigger kexec/panic. This is
+suboptimal as going through userspace requires context changes and adds
+significant delays taking system further away from "the right moment". On a
+single-cpu system the situation is even worse because BPF program won't even be
+able to block the thread of interest.
 
-Signed-off-by: Artem Savkov <asavkov@redhat.com>
----
+This patchset tries to solve this problem by allowing properly marked tracing
+bpf programs to call crash_kexec() kernel function.
+
+This is a continuation of bpf_panic patchset with initial feedback taken into
+account.
+
+Changes from RFC:
+ - sysctl knob dropped
+ - using crash_kexec() instead of panic()
+ - using kfuncs instead of adding a new helper
+
+Artem Savkov (4):
+  bpf: add BPF_F_DESTRUCTIVE flag for BPF_PROG_LOAD
+  bpf: add destructive kfunc set
+  selftests/bpf: add destructive kfunc tests
+  bpf: export crash_kexec() as destructive kfunc
+
+ include/linux/bpf.h                           |  1 +
+ include/linux/btf.h                           |  2 +
+ include/uapi/linux/bpf.h                      |  6 +++
+ kernel/bpf/syscall.c                          |  4 +-
+ kernel/bpf/verifier.c                         | 12 ++++++
+ kernel/kexec_core.c                           | 22 ++++++++++
  net/bpf/test_run.c                            | 12 +++++-
+ tools/include/uapi/linux/bpf.h                |  6 +++
  .../selftests/bpf/prog_tests/kfunc_call.c     | 41 +++++++++++++++++++
  .../bpf/progs/kfunc_call_destructive.c        | 14 +++++++
- 3 files changed, 66 insertions(+), 1 deletion(-)
+ 10 files changed, 118 insertions(+), 2 deletions(-)
  create mode 100644 tools/testing/selftests/bpf/progs/kfunc_call_destructive.c
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 2ca96acbc50a0..dc267fa308f92 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -691,6 +691,10 @@ noinline void bpf_kfunc_call_test_mem_len_fail2(u64 *mem, int len)
- {
- }
- 
-+noinline void bpf_kfunc_call_test_destructive(void)
-+{
-+}
-+
- __diag_pop();
- 
- ALLOW_ERROR_INJECTION(bpf_modify_return_test, ERRNO);
-@@ -714,6 +718,7 @@ BTF_ID(func, bpf_kfunc_call_test_fail3)
- BTF_ID(func, bpf_kfunc_call_test_mem_len_pass1)
- BTF_ID(func, bpf_kfunc_call_test_mem_len_fail1)
- BTF_ID(func, bpf_kfunc_call_test_mem_len_fail2)
-+BTF_ID(func, bpf_kfunc_call_test_destructive)
- BTF_SET_END(test_sk_check_kfunc_ids)
- 
- BTF_SET_START(test_sk_acquire_kfunc_ids)
-@@ -738,6 +743,10 @@ BTF_SET_START(test_sk_kptr_acquire_kfunc_ids)
- BTF_ID(func, bpf_kfunc_call_test_kptr_get)
- BTF_SET_END(test_sk_kptr_acquire_kfunc_ids)
- 
-+BTF_SET_START(test_sk_destructive_kfunc_ids)
-+BTF_ID(func, bpf_kfunc_call_test_destructive)
-+BTF_SET_END(test_sk_destructive_kfunc_ids)
-+
- static void *bpf_test_init(const union bpf_attr *kattr, u32 user_size,
- 			   u32 size, u32 headroom, u32 tailroom)
- {
-@@ -1622,7 +1631,8 @@ static const struct btf_kfunc_id_set bpf_prog_test_kfunc_set = {
- 	.acquire_set      = &test_sk_acquire_kfunc_ids,
- 	.release_set      = &test_sk_release_kfunc_ids,
- 	.ret_null_set     = &test_sk_ret_null_kfunc_ids,
--	.kptr_acquire_set = &test_sk_kptr_acquire_kfunc_ids
-+	.kptr_acquire_set = &test_sk_kptr_acquire_kfunc_ids,
-+	.destructive_set  = &test_sk_destructive_kfunc_ids,
- };
- 
- BTF_ID_LIST(bpf_prog_test_dtor_kfunc_ids)
-diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-index c00eb974eb85e..1c2c4fdfba88b 100644
---- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-@@ -5,6 +5,9 @@
- #include "kfunc_call_test.lskel.h"
- #include "kfunc_call_test_subprog.skel.h"
- #include "kfunc_call_test_subprog.lskel.h"
-+#include "kfunc_call_destructive.skel.h"
-+
-+#include "cap_helpers.h"
- 
- static void test_main(void)
- {
-@@ -86,6 +89,41 @@ static void test_subprog_lskel(void)
- 	kfunc_call_test_subprog_lskel__destroy(skel);
- }
- 
-+static int test_destructive_open_and_load(int set_flag)
-+{
-+	struct kfunc_call_destructive *skel;
-+	int err;
-+
-+	skel = kfunc_call_destructive__open();
-+	if (!ASSERT_OK_PTR(skel, "prog_open"))
-+		return -1;
-+
-+	if (set_flag)
-+		bpf_program__set_flags(skel->progs.kfunc_destructive_test,
-+				bpf_program__flags(skel->progs.kfunc_destructive_test) | BPF_F_DESTRUCTIVE);
-+
-+	err = kfunc_call_destructive__load(skel);
-+
-+	kfunc_call_destructive__destroy(skel);
-+
-+	return err;
-+}
-+
-+static void test_destructive(void)
-+{
-+	__u64 save_caps = 0;
-+
-+	ASSERT_EQ(test_destructive_open_and_load(0), -13, "no_flag_failure");
-+	ASSERT_OK(test_destructive_open_and_load(1), "succesful_load");
-+
-+	if (!ASSERT_OK(cap_disable_effective(1ULL << CAP_SYS_BOOT, &save_caps), "drop_caps"))
-+		return;
-+
-+	ASSERT_EQ(test_destructive_open_and_load(1), -13, "no_caps_failure");
-+
-+	cap_enable_effective(save_caps, NULL);
-+}
-+
- void test_kfunc_call(void)
- {
- 	if (test__start_subtest("main"))
-@@ -96,4 +134,7 @@ void test_kfunc_call(void)
- 
- 	if (test__start_subtest("subprog_lskel"))
- 		test_subprog_lskel();
-+
-+	if (test__start_subtest("destructive"))
-+		test_destructive();
- }
-diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_destructive.c b/tools/testing/selftests/bpf/progs/kfunc_call_destructive.c
-new file mode 100644
-index 0000000000000..767472bc5a97b
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/kfunc_call_destructive.c
-@@ -0,0 +1,14 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+
-+extern void bpf_kfunc_call_test_destructive(void) __ksym;
-+
-+SEC("tc")
-+int kfunc_destructive_test(void)
-+{
-+	bpf_kfunc_call_test_destructive();
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
 -- 
 2.35.3
 
