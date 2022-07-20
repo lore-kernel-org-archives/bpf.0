@@ -2,119 +2,94 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC3C3C43334
-	for <bpf@archiver.kernel.org>; Wed, 20 Jul 2022 03:11:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8956AC43334
+	for <bpf@archiver.kernel.org>; Wed, 20 Jul 2022 03:42:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241823AbiGTDLM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Jul 2022 23:11:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37370 "EHLO
+        id S236659AbiGTDmX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Jul 2022 23:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241912AbiGTDIn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 Jul 2022 23:08:43 -0400
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2008A743F5;
-        Tue, 19 Jul 2022 20:06:13 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=37;SR=0;TI=SMTPD_---0VJuvIvC_1658286367;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VJuvIvC_1658286367)
-          by smtp.aliyun-inc.com;
-          Wed, 20 Jul 2022 11:06:08 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     virtualization@lists.linux-foundation.org
-Cc:     Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vadim Pasternak <vadimp@nvidia.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        linux-um@lists.infradead.org, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, bpf@vger.kernel.org,
-        kangjie.xu@linux.alibaba.com
-Subject: [PATCH v12 38/40] virtio_net: support rx queue resize
-Date:   Wed, 20 Jul 2022 11:04:34 +0800
-Message-Id: <20220720030436.79520-39-xuanzhuo@linux.alibaba.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220720030436.79520-1-xuanzhuo@linux.alibaba.com>
-References: <20220720030436.79520-1-xuanzhuo@linux.alibaba.com>
+        with ESMTP id S235442AbiGTDmW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 19 Jul 2022 23:42:22 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF61568DD7;
+        Tue, 19 Jul 2022 20:42:21 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id m16so22121304edb.11;
+        Tue, 19 Jul 2022 20:42:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=A0OoNPUELJ/dSSGDR8KkMHB3StJZhXQRZj0KnIM+IGw=;
+        b=VIIQ8U7Ufmij10zNk1oSmGlrHgsRYf6ziCUT9ukZw+92okO4rvvYurKnINAnisfPY8
+         0ZkRGXTuG3TZHqpSf+Yb24NFQXc8FKn5Yxr5ToqW5YOisen5BM0jA4BkAi1nEOVboUKv
+         CDfQmgyb70nB7SuzyrdRXuN2GJCqDLO6aUZcpq3HBbTRCxqXxa8lu8BbRI4xBXn/OEYu
+         HEoXkWjXalBSN8lDiD3yOZBi7uIf94FxDvs8CxhGKaqEtV5KNYKeMh20OD7SruiqZfU8
+         flVsia8L19D9lubBjfV23ssib4wBRc2c8/ypUmwnkqumwe/EroUmngt1LYe1Q4djaioR
+         aZRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=A0OoNPUELJ/dSSGDR8KkMHB3StJZhXQRZj0KnIM+IGw=;
+        b=2d+M7zLKRo7kNI+id1MJBKMTxeG5vuzBRn0TBZikSgWrgKtYIk6dNlTKI/0n4jFTw0
+         8bgj2J+m7eEr3KME8Uehk1Qbx6pIzvgz7TgzjTn0EsLJsjPizYkRfht4H2LoPkeOiLv4
+         R2otr9alBPUSDGMuQIafZevHWzcbCts+QsMNCiyizgztHz9SZCa54DAzMqyG600pI8AL
+         97+l0g7kQ/pan0Tk6OTQh8UzD1v3imkF95LyBAfDz6kyh8a1ceIOzXn6/LaXcUMX70/J
+         oaf/VseAhQbIp5ZICCn2a4D6N11dg82yTzRsygno6LC0EdE9ntUsCNEgc6H5NpP+qF5/
+         +Hlg==
+X-Gm-Message-State: AJIora/84UyPDRFsLe2FfZ+HoMlipYBSCGfv6pUfZyE08gb8O/99U971
+        412GAUqSxejL1TrzcTIDaKqJ1qsuk55Ra2DS5lywjewQ
+X-Google-Smtp-Source: AGRyM1uInEkRlcwDbWJT8P/mXmZxsWQh0YNxSyLjjh0wFjK/WSWbHSm7Fqm00GFFtN9vBjiFWwqgLZGh7Zw4p11lHJM=
+X-Received: by 2002:aa7:d053:0:b0:43a:a164:2c3 with SMTP id
+ n19-20020aa7d053000000b0043aa16402c3mr47940490edo.333.1658288540354; Tue, 19
+ Jul 2022 20:42:20 -0700 (PDT)
 MIME-Version: 1.0
-X-Git-Hash: 366032b2ffac
-Content-Transfer-Encoding: 8bit
+References: <20220720115956.3c27492f@canb.auug.org.au>
+In-Reply-To: <20220720115956.3c27492f@canb.auug.org.au>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 19 Jul 2022 20:42:09 -0700
+Message-ID: <CAADnVQ+xFuff3TRhzrPWkJD+MA16MdRvcprcniX4yzxL5Z+=UA@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the bpf-next tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch implements the resize function of the rx queues.
-Based on this function, it is possible to modify the ring num of the
-queue.
+On Tue, Jul 19, 2022 at 7:00 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the bpf-next tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+>
+> ld: warning: discarding dynamic section .glink
+> ld: warning: discarding dynamic section .plt
+> ld: linkage table error against `bpf_trampoline_unlink_cgroup_shim'
+> ld: stubs don't match calculated size
+> ld: can not build stubs: bad value
+> ld: kernel/bpf/cgroup.o: in function `.bpf_cgroup_link_release.part.0':
+> cgroup.c:(.text+0x2fc4): undefined reference to `.bpf_trampoline_unlink_cgroup_shim'
+> ld: kernel/bpf/cgroup.o: in function `.cgroup_bpf_release':
+> cgroup.c:(.text+0x33b0): undefined reference to `.bpf_trampoline_unlink_cgroup_shim'
+> ld: cgroup.c:(.text+0x33c0): undefined reference to `.bpf_trampoline_unlink_cgroup_shim'
+>
+> Caused by commit
+>
+>   3908fcddc65d ("bpf: fix lsm_cgroup build errors on esoteric configs")
+>
+> I have reverted that commit for today.
 
-Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
----
- drivers/net/virtio_net.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+Argh.
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index fe4dc43c05a1..1115a8b59a08 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -278,6 +278,8 @@ struct padded_vnet_hdr {
- 	char padding[12];
- };
- 
-+static void virtnet_rq_free_unused_buf(struct virtqueue *vq, void *buf);
-+
- static bool is_xdp_frame(void *ptr)
- {
- 	return (unsigned long)ptr & VIRTIO_XDP_FLAG;
-@@ -1846,6 +1848,26 @@ static netdev_tx_t start_xmit(struct sk_buff *skb, struct net_device *dev)
- 	return NETDEV_TX_OK;
- }
- 
-+static int virtnet_rx_resize(struct virtnet_info *vi,
-+			     struct receive_queue *rq, u32 ring_num)
-+{
-+	int err, qindex;
-+
-+	qindex = rq - vi->rq;
-+
-+	napi_disable(&rq->napi);
-+
-+	err = virtqueue_resize(rq->vq, ring_num, virtnet_rq_free_unused_buf);
-+	if (err)
-+		netdev_err(vi->dev, "resize rx fail: rx queue index: %d err: %d\n", qindex, err);
-+
-+	if (!try_fill_recv(vi, rq, GFP_KERNEL))
-+		schedule_delayed_work(&vi->refill, 0);
-+
-+	virtnet_napi_enable(rq->vq, &rq->napi);
-+	return err;
-+}
-+
- /*
-  * Send command via the control virtqueue and check status.  Commands
-  * supported by the hypervisor, as indicated by feature bits, should
--- 
-2.31.0
+Stan,
 
+please take a look.
