@@ -2,43 +2,43 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BCAF3C43334
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED5DFCCA485
 	for <bpf@archiver.kernel.org>; Wed, 20 Jul 2022 11:47:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240816AbiGTLrH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S240692AbiGTLrH (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Wed, 20 Jul 2022 07:47:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57194 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240786AbiGTLrE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 Jul 2022 07:47:04 -0400
+        with ESMTP id S240511AbiGTLrB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 Jul 2022 07:47:01 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E15DBC23
-        for <bpf@vger.kernel.org>; Wed, 20 Jul 2022 04:47:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5566B72ECF
+        for <bpf@vger.kernel.org>; Wed, 20 Jul 2022 04:47:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658317622;
+        s=mimecast20190719; t=1658317619;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Ps3HbKw+ZKHP03+QBxxOuT2PvyOYzR9awecLsiV/Aw0=;
-        b=BbfoiJ1BNL8hXT3tf3nND4S4jilE3oH9qBK7mm6RmUhjYXwOyvo9H/kvF538odnIZS2d9L
-        qWBBLeoqaQgMFQ8cpZp5b1t5dG9sIu9wwzlFw6ym3xFVIdtouicjDW9eXhpLmhpb7scbqN
-        /DYDo8h+r39gwe2T3rsy2Cf9A2HeQxc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=Xmw0qJN/J7YRsfD4NK6d4JdhY2WGiXTb+5lcFAP4Rtw=;
+        b=W223zgZFV3kQfES1DCQfmPKzeUOTguIIE2DoHG87xZC8ct+gFTujdxawM7pMsR6AqPzddj
+        mLLWIdYJD54ZYP8Zovldk7Vi8gJVxQbRmvmrRckbTFFpHvoMCAa4KiGTRaIhtffHc/XqV4
+        /6ncnQF+YAkAAsTlJAQfvAnDiI58VZ0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-493-yLGXJffjNHS7mIBDvdxJKQ-1; Wed, 20 Jul 2022 07:46:56 -0400
-X-MC-Unique: yLGXJffjNHS7mIBDvdxJKQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+ us-mta-379-myivAjZ3NSicRo3ogUQlrg-1; Wed, 20 Jul 2022 07:46:56 -0400
+X-MC-Unique: myivAjZ3NSicRo3ogUQlrg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6711F811E75;
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 694631C0514E;
         Wed, 20 Jul 2022 11:46:55 +0000 (UTC)
 Received: from shodan.usersys.redhat.com (unknown [10.43.17.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id EF4E51121314;
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id EFEC22166B29;
         Wed, 20 Jul 2022 11:46:54 +0000 (UTC)
 Received: by shodan.usersys.redhat.com (Postfix, from userid 1000)
-        id ED36F1C022D; Wed, 20 Jul 2022 13:46:53 +0200 (CEST)
+        id 0B7061C03BC; Wed, 20 Jul 2022 13:46:54 +0200 (CEST)
 From:   Artem Savkov <asavkov@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -49,97 +49,62 @@ Cc:     linux-kernel@vger.kernel.org,
         Daniel Vacek <dvacek@redhat.com>,
         Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>,
         Artem Savkov <asavkov@redhat.com>
-Subject: [PATCH bpf-next 1/4] bpf: add BPF_F_DESTRUCTIVE flag for BPF_PROG_LOAD
-Date:   Wed, 20 Jul 2022 13:46:49 +0200
-Message-Id: <20220720114652.3020467-2-asavkov@redhat.com>
+Subject: [PATCH bpf-next 4/4] bpf: export crash_kexec() as destructive kfunc
+Date:   Wed, 20 Jul 2022 13:46:52 +0200
+Message-Id: <20220720114652.3020467-5-asavkov@redhat.com>
 In-Reply-To: <20220720114652.3020467-1-asavkov@redhat.com>
 References: <20220720114652.3020467-1-asavkov@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a BPF_F_DESTRUCTIVE flag which will be required to be supplied
-during BPF_PROG_LOAD for programs to be able to call destructive kfuncs.
+Allow properly marked bpf programs to call crash_kexec().
 
 Signed-off-by: Artem Savkov <asavkov@redhat.com>
 ---
- include/linux/bpf.h            | 1 +
- include/uapi/linux/bpf.h       | 6 ++++++
- kernel/bpf/syscall.c           | 4 +++-
- tools/include/uapi/linux/bpf.h | 6 ++++++
- 4 files changed, 16 insertions(+), 1 deletion(-)
+ kernel/kexec_core.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index a5bf00649995e..7b404d0b80aef 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1044,6 +1044,7 @@ struct bpf_prog_aux {
- 	bool sleepable;
- 	bool tail_call_reachable;
- 	bool xdp_has_frags;
-+	bool destructive;
- 	/* BTF_KIND_FUNC_PROTO for valid attach_btf_id */
- 	const struct btf_type *attach_func_proto;
- 	/* function name for valid attach_btf_id */
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 379e68fb866fc..ae81ad2e658dd 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1122,6 +1122,12 @@ enum bpf_link_type {
-  */
- #define BPF_F_XDP_HAS_FRAGS	(1U << 5)
+diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+index 4d34c78334ce4..a21fe8d326a8e 100644
+--- a/kernel/kexec_core.c
++++ b/kernel/kexec_core.c
+@@ -39,6 +39,8 @@
+ #include <linux/hugetlb.h>
+ #include <linux/objtool.h>
+ #include <linux/kmsg_dump.h>
++#include <linux/btf.h>
++#include <linux/btf_ids.h>
  
-+/* If BPF_F_DESTRUCTIVE is used in BPF_PROG_LOAD command, the loaded program
-+ * will be able to perform destructive operations such as calling bpf_panic()
-+ * helper.
-+ */
-+#define BPF_F_DESTRUCTIVE	(1U << 6)
+ #include <asm/page.h>
+ #include <asm/sections.h>
+@@ -1238,3 +1240,23 @@ void __weak arch_kexec_protect_crashkres(void)
+ 
+ void __weak arch_kexec_unprotect_crashkres(void)
+ {}
 +
- /* link_create.kprobe_multi.flags used in LINK_CREATE command for
-  * BPF_TRACE_KPROBE_MULTI attach type to create return probe.
-  */
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 83c7136c5788d..86927521d0ea2 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2467,7 +2467,8 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
- 				 BPF_F_TEST_STATE_FREQ |
- 				 BPF_F_SLEEPABLE |
- 				 BPF_F_TEST_RND_HI32 |
--				 BPF_F_XDP_HAS_FRAGS))
-+				 BPF_F_XDP_HAS_FRAGS |
-+				 BPF_F_DESTRUCTIVE))
- 		return -EINVAL;
- 
- 	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) &&
-@@ -2554,6 +2555,7 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
- 	prog->aux->offload_requested = !!attr->prog_ifindex;
- 	prog->aux->sleepable = attr->prog_flags & BPF_F_SLEEPABLE;
- 	prog->aux->xdp_has_frags = attr->prog_flags & BPF_F_XDP_HAS_FRAGS;
-+	prog->aux->destructive = attr->prog_flags & BPF_F_DESTRUCTIVE;
- 
- 	err = security_bpf_prog_alloc(prog->aux);
- 	if (err)
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 379e68fb866fc..ae81ad2e658dd 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1122,6 +1122,12 @@ enum bpf_link_type {
-  */
- #define BPF_F_XDP_HAS_FRAGS	(1U << 5)
- 
-+/* If BPF_F_DESTRUCTIVE is used in BPF_PROG_LOAD command, the loaded program
-+ * will be able to perform destructive operations such as calling bpf_panic()
-+ * helper.
-+ */
-+#define BPF_F_DESTRUCTIVE	(1U << 6)
++#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
++BTF_SET_START(kexec_btf_ids)
++BTF_ID(func, crash_kexec)
++BTF_SET_END(kexec_btf_ids)
 +
- /* link_create.kprobe_multi.flags used in LINK_CREATE command for
-  * BPF_TRACE_KPROBE_MULTI attach type to create return probe.
-  */
++static const struct btf_kfunc_id_set kexec_kfunc_set = {
++	.owner			= THIS_MODULE,
++	.check_set		= &kexec_btf_ids,
++	.destructive_set	= &kexec_btf_ids,
++};
++
++static int __init crash_kfunc_init(void)
++{
++	register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &kexec_kfunc_set);
++	return 0;
++}
++
++subsys_initcall(crash_kfunc_init);
++#endif
 -- 
 2.35.3
 
