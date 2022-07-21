@@ -2,81 +2,108 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65763CCA479
-	for <bpf@archiver.kernel.org>; Thu, 21 Jul 2022 12:30:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26E27C43334
+	for <bpf@archiver.kernel.org>; Thu, 21 Jul 2022 12:39:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232543AbiGUMaS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Jul 2022 08:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37836 "EHLO
+        id S233630AbiGUMji (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Jul 2022 08:39:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231470AbiGUMaR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 Jul 2022 08:30:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73A9E028;
-        Thu, 21 Jul 2022 05:30:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E825B8245B;
-        Thu, 21 Jul 2022 12:30:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 01998C341CB;
-        Thu, 21 Jul 2022 12:30:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658406614;
-        bh=txJSRKRpmnX/OM6BcK0maKHWdxc+gPKeeMEv/+ncWoY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=gEK4hCBrgRRkf9suhs08jS3KR8RD4vbPqoLeOGqQUsh/hFr/VAr8P/XqOV0frPKeM
-         QDKBjGznza3thyLUEr4WtvOz100R2+HAC5uWmYRJxWb3XBrnXmMKETZitY7BGYvCKL
-         MdsWn4AoFglbOxzlR/WJmt3mRLecBSIb4dB5GuwX9jl7kxX7aFgxD56CUNpueBRoyX
-         Ftdv0HQZGR/4BnGgXwuhjj/DecyZt4pDUO4oIIdBECmtZAvMuHnah9UG63yXODhYO6
-         l7rPVANbyQ2Cb4Z1p6Nfue4kVRrnoasnbWFTDSAFh9cmrlmNugZkp33v5S+c8bnmnt
-         DcyvC8da0B+WA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DB682E451B0;
-        Thu, 21 Jul 2022 12:30:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S232164AbiGUMjh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 Jul 2022 08:39:37 -0400
+X-Greylist: delayed 1200 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Jul 2022 05:39:35 PDT
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CB07538E;
+        Thu, 21 Jul 2022 05:39:35 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4LpWRs64fYz6S3Md;
+        Thu, 21 Jul 2022 20:03:21 +0800 (CST)
+Received: from k01.huawei.com (unknown [10.67.174.197])
+        by APP1 (Coremail) with SMTP id cCh0CgAnLWHKQNliUh8JBA--.48026S2;
+        Thu, 21 Jul 2022 20:04:27 +0800 (CST)
+From:   Xu Kuohai <xukuohai@huaweicloud.com>
+To:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Will Deacon <will@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Zi Shen Lim <zlim.lnx@gmail.com>
+Subject: [PATCH bpf-next] bpf, arm64: Fix compile error in dummy_tramp()
+Date:   Thu, 21 Jul 2022 08:13:19 -0400
+Message-Id: <20220721121319.2999259-1-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] libbpf: fix sign expansion bug in btf_dump_get_enum_value()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165840661389.30255.12097142217891066504.git-patchwork-notify@kernel.org>
-Date:   Thu, 21 Jul 2022 12:30:13 +0000
-References: <YtZ+LpgPADm7BeEd@kili>
-In-Reply-To: <YtZ+LpgPADm7BeEd@kili>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     andrii@kernel.org, yhs@fb.com, ast@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
+X-CM-TRANSID: cCh0CgAnLWHKQNliUh8JBA--.48026S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFyxCF15uw18tFWfAF45trb_yoW8GF1kpw
+        1UCrnxC3yqgF4DGa4rXa1fXF15tF4qqFWa9rW2grW5tF9FvryUGr4fKw1kWrZxJr1Fva1r
+        AFWjkwn5A3Wvv3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r106r1rM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
+        IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
+        z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU13rcDUUUUU==
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+From: Xu Kuohai <xukuohai@huawei.com>
 
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+dummy_tramp() uses "lr" to refer to the x30 register, but some assembler
+does not recognize "lr" and reports a build failure:
 
-On Tue, 19 Jul 2022 12:49:34 +0300 you wrote:
-> The code here is supposed to take a signed int and store it in a
-> signed long long.  Unfortunately, the way that the type promotion works
-> with this conditional statement is that it takes a signed int, type
-> promotes it to a __u32, and then stores that as a signed long long.
-> The result is never negative.
-> 
-> Fixes: d90ec262b35b ("libbpf: Add enum64 support for btf_dump")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> 
-> [...]
+/tmp/cc52xO0c.s: Assembler messages:
+/tmp/cc52xO0c.s:8: Error: operand 1 should be an integer register -- `mov lr,x9'
+/tmp/cc52xO0c.s:7: Error: undefined symbol lr used as an immediate value
+make[2]: *** [scripts/Makefile.build:250: arch/arm64/net/bpf_jit_comp.o] Error 1
+make[1]: *** [scripts/Makefile.build:525: arch/arm64/net] Error 2
 
-Here is the summary with links:
-  - libbpf: fix sign expansion bug in btf_dump_get_enum_value()
-    https://git.kernel.org/bpf/bpf-next/c/c6018fc6e7b6
+So replace "lr" with "x30" to fix it.
 
-You are awesome, thank you!
+Fixes: b2ad54e1533e ("bpf, arm64: Implement bpf_arch_text_poke() for arm64")
+Reported-by: Jon Hunter <jonathanh@nvidia.com>
+Tested-by: Jon Hunter <jonathanh@nvidia.com>
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+---
+ arch/arm64/net/bpf_jit_comp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index dcc572b7d4da..7ca8779ae34f 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -610,8 +610,8 @@ asm (
+ #if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL)
+ "	bti j\n" /* dummy_tramp is called via "br x10" */
+ #endif
+-"	mov x10, lr\n"
+-"	mov lr, x9\n"
++"	mov x10, x30\n"
++"	mov x30, x9\n"
+ "	ret x10\n"
+ "	.size dummy_tramp, .-dummy_tramp\n"
+ "	.popsection\n"
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.30.2
 
