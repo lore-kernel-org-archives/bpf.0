@@ -2,41 +2,41 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19FD9C433EF
-	for <bpf@archiver.kernel.org>; Thu, 21 Jul 2022 15:38:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85926CCA487
+	for <bpf@archiver.kernel.org>; Thu, 21 Jul 2022 15:38:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233023AbiGUPil (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Jul 2022 11:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53160 "EHLO
+        id S233036AbiGUPim (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Jul 2022 11:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232880AbiGUPiM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S232508AbiGUPiM (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 21 Jul 2022 11:38:12 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 313EA1B7B2
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9F4988E16
         for <bpf@vger.kernel.org>; Thu, 21 Jul 2022 08:37:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658417833;
+        s=mimecast20190719; t=1658417834;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+z1Ihx9mTCDl3+jZLhIJJx4i0FAUXWpu2kMBWXZWZrQ=;
-        b=jDqMBVKR6lP+Pchjn7k+9OfiuIeFUlYM7irV+X7XpZxZqat86MNIi/n1ClwLlr58FOPVbF
-        3NBNwaGJ2p3iVD+iojr3yqs2+lq8s3ZvRJNgUngAc4A8Tduzr1BJLPcTTHf7EXkrZolR93
-        FhVMpjprXG8EOPz45effGTShIiuKbyc=
+        bh=q1ugzeeQImQSGGFdeXfOpKhPDeYLIbJhcbUeYAyYDFI=;
+        b=AWxXbQ4B9AStCqXh1dSvL38Amy1vlE6xKEaJ5UU9yGJL1dNLfuAZjaMEkJe3PTCdfreyPR
+        moNVKLswW0KLcWc+QRiIa2dc6L2ohVYgeok3DbfWOCO8wbKYlBvxB+X6cpAfix/yp8PmJw
+        SssEeOb4gmvKPnFWZ2QsHxk+/SGSevE=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-171-IoSRKAN5Nem-UVdz8jAjBw-1; Thu, 21 Jul 2022 11:37:07 -0400
-X-MC-Unique: IoSRKAN5Nem-UVdz8jAjBw-1
+ us-mta-627-sr70ccOfNYSgI9Vj21KGzg-1; Thu, 21 Jul 2022 11:36:57 -0400
+X-MC-Unique: sr70ccOfNYSgI9Vj21KGzg-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 285912804065;
-        Thu, 21 Jul 2022 15:37:06 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ACFC02804067;
+        Thu, 21 Jul 2022 15:36:55 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.194.200])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F39EF2166B29;
-        Thu, 21 Jul 2022 15:37:02 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5DDA32166B26;
+        Thu, 21 Jul 2022 15:36:52 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -55,9 +55,9 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v7 10/24] HID: export hid_report_type to uapi
-Date:   Thu, 21 Jul 2022 17:36:11 +0200
-Message-Id: <20220721153625.1282007-11-benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v7 07/24] bpf: prepare for more bpf syscall to be used from kernel and user space.
+Date:   Thu, 21 Jul 2022 17:36:08 +0200
+Message-Id: <20220721153625.1282007-8-benjamin.tissoires@redhat.com>
 In-Reply-To: <20220721153625.1282007-1-benjamin.tissoires@redhat.com>
 References: <20220721153625.1282007-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
@@ -67,18 +67,12 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When we are dealing with eBPF, we need to have access to the report type.
-Currently our implementation differs from the USB standard, making it
-impossible for users to know the exact value besides hardcoding it
-themselves.
+Add BPF_MAP_GET_FD_BY_ID and BPF_MAP_DELETE_PROG.
 
-And instead of a blank define, convert it as an enum.
+Only BPF_MAP_GET_FD_BY_ID needs to be amended to be able
+to access the bpf pointer either from the userspace or the kernel.
 
-Note that we need to also do change in the ll_driver API, but given
-that this will have a wider impact outside of this tree, we leave this
-as a TODO for the future.
-
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Acked-by: Yonghong Song <yhs@fb.com>
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
 ---
@@ -86,163 +80,58 @@ Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 no changes in v7
 
 changes in v6:
-- add missing change for hid_hw_raw_request()
+- commit description change
 
 new in v5
 ---
- drivers/hid/hid-core.c   | 13 +++++++------
- include/linux/hid.h      | 24 ++++++++----------------
- include/uapi/linux/hid.h | 12 ++++++++++++
- 3 files changed, 27 insertions(+), 22 deletions(-)
+ kernel/bpf/syscall.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-index 11874d264728..1c9c15a12f24 100644
---- a/drivers/hid/hid-core.c
-+++ b/drivers/hid/hid-core.c
-@@ -55,7 +55,7 @@ MODULE_PARM_DESC(ignore_special_drivers, "Ignore any special drivers and handle
-  */
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 83c7136c5788..776c7a37c433 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -1437,9 +1437,9 @@ static int map_update_elem(union bpf_attr *attr, bpfptr_t uattr)
  
- struct hid_report *hid_register_report(struct hid_device *device,
--				       unsigned int type, unsigned int id,
-+				       enum hid_report_type type, unsigned int id,
- 				       unsigned int application)
+ #define BPF_MAP_DELETE_ELEM_LAST_FIELD key
+ 
+-static int map_delete_elem(union bpf_attr *attr)
++static int map_delete_elem(union bpf_attr *attr, bpfptr_t uattr)
  {
- 	struct hid_report_enum *report_enum = device->report_enum + type;
-@@ -967,7 +967,7 @@ static const char * const hid_report_names[] = {
-  * parsing.
-  */
- struct hid_report *hid_validate_values(struct hid_device *hid,
--				       unsigned int type, unsigned int id,
-+				       enum hid_report_type type, unsigned int id,
- 				       unsigned int field_index,
- 				       unsigned int report_counts)
- {
-@@ -1954,8 +1954,8 @@ int __hid_request(struct hid_device *hid, struct hid_report *report,
- }
- EXPORT_SYMBOL_GPL(__hid_request);
+-	void __user *ukey = u64_to_user_ptr(attr->key);
++	bpfptr_t ukey = make_bpfptr(attr->key, uattr.is_kernel);
+ 	int ufd = attr->map_fd;
+ 	struct bpf_map *map;
+ 	struct fd f;
+@@ -1459,7 +1459,7 @@ static int map_delete_elem(union bpf_attr *attr)
+ 		goto err_put;
+ 	}
  
--int hid_report_raw_event(struct hid_device *hid, int type, u8 *data, u32 size,
--		int interrupt)
-+int hid_report_raw_event(struct hid_device *hid, enum hid_report_type type, u8 *data, u32 size,
-+			 int interrupt)
- {
- 	struct hid_report_enum *report_enum = hid->report_enum + type;
- 	struct hid_report *report;
-@@ -2019,7 +2019,8 @@ EXPORT_SYMBOL_GPL(hid_report_raw_event);
-  *
-  * This is data entry for lower layers.
-  */
--int hid_input_report(struct hid_device *hid, int type, u8 *data, u32 size, int interrupt)
-+int hid_input_report(struct hid_device *hid, enum hid_report_type type, u8 *data, u32 size,
-+		     int interrupt)
- {
- 	struct hid_report_enum *report_enum;
- 	struct hid_driver *hdrv;
-@@ -2377,7 +2378,7 @@ EXPORT_SYMBOL_GPL(hid_hw_request);
-  */
- int hid_hw_raw_request(struct hid_device *hdev,
- 		       unsigned char reportnum, __u8 *buf,
--		       size_t len, unsigned char rtype, int reqtype)
-+		       size_t len, enum hid_report_type rtype, int reqtype)
- {
- 	if (len < 1 || len > HID_MAX_BUFFER_SIZE || !buf)
- 		return -EINVAL;
-diff --git a/include/linux/hid.h b/include/linux/hid.h
-index a43dd17bc78f..b1a33dbbc78e 100644
---- a/include/linux/hid.h
-+++ b/include/linux/hid.h
-@@ -314,15 +314,6 @@ struct hid_item {
- #define HID_BAT_ABSOLUTESTATEOFCHARGE	0x00850065
+-	key = __bpf_copy_key(ukey, map->key_size);
++	key = ___bpf_copy_key(ukey, map->key_size);
+ 	if (IS_ERR(key)) {
+ 		err = PTR_ERR(key);
+ 		goto err_put;
+@@ -4942,7 +4942,7 @@ static int __sys_bpf(int cmd, bpfptr_t uattr, unsigned int size)
+ 		err = map_update_elem(&attr, uattr);
+ 		break;
+ 	case BPF_MAP_DELETE_ELEM:
+-		err = map_delete_elem(&attr);
++		err = map_delete_elem(&attr, uattr);
+ 		break;
+ 	case BPF_MAP_GET_NEXT_KEY:
+ 		err = map_get_next_key(&attr);
+@@ -5077,8 +5077,10 @@ BPF_CALL_3(bpf_sys_bpf, int, cmd, union bpf_attr *, attr, u32, attr_size)
  
- #define HID_VD_ASUS_CUSTOM_MEDIA_KEYS	0xff310076
--/*
-- * HID report types --- Ouch! HID spec says 1 2 3!
-- */
--
--#define HID_INPUT_REPORT	0
--#define HID_OUTPUT_REPORT	1
--#define HID_FEATURE_REPORT	2
--
--#define HID_REPORT_TYPES	3
- 
- /*
-  * HID connect requests
-@@ -509,7 +500,7 @@ struct hid_report {
- 	struct list_head hidinput_list;
- 	struct list_head field_entry_list;		/* ordered list of input fields */
- 	unsigned int id;				/* id of this report */
--	unsigned int type;				/* report type */
-+	enum hid_report_type type;			/* report type */
- 	unsigned int application;			/* application usage for this report */
- 	struct hid_field *field[HID_MAX_FIELDS];	/* fields of the report */
- 	struct hid_field_entry *field_entries;		/* allocated memory of input field_entry */
-@@ -926,7 +917,8 @@ extern int hidinput_connect(struct hid_device *hid, unsigned int force);
- extern void hidinput_disconnect(struct hid_device *);
- 
- int hid_set_field(struct hid_field *, unsigned, __s32);
--int hid_input_report(struct hid_device *, int type, u8 *, u32, int);
-+int hid_input_report(struct hid_device *hid, enum hid_report_type type, u8 *data, u32 size,
-+		     int interrupt);
- struct hid_field *hidinput_get_led_field(struct hid_device *hid);
- unsigned int hidinput_count_leds(struct hid_device *hid);
- __s32 hidinput_calc_abs_res(const struct hid_field *field, __u16 code);
-@@ -935,11 +927,11 @@ int __hid_request(struct hid_device *hid, struct hid_report *rep, int reqtype);
- u8 *hid_alloc_report_buf(struct hid_report *report, gfp_t flags);
- struct hid_device *hid_allocate_device(void);
- struct hid_report *hid_register_report(struct hid_device *device,
--				       unsigned int type, unsigned int id,
-+				       enum hid_report_type type, unsigned int id,
- 				       unsigned int application);
- int hid_parse_report(struct hid_device *hid, __u8 *start, unsigned size);
- struct hid_report *hid_validate_values(struct hid_device *hid,
--				       unsigned int type, unsigned int id,
-+				       enum hid_report_type type, unsigned int id,
- 				       unsigned int field_index,
- 				       unsigned int report_counts);
- 
-@@ -1111,7 +1103,7 @@ void hid_hw_request(struct hid_device *hdev,
- 		    struct hid_report *report, int reqtype);
- int hid_hw_raw_request(struct hid_device *hdev,
- 		       unsigned char reportnum, __u8 *buf,
--		       size_t len, unsigned char rtype, int reqtype);
-+		       size_t len, enum hid_report_type rtype, int reqtype);
- int hid_hw_output_report(struct hid_device *hdev, __u8 *buf, size_t len);
- 
- /**
-@@ -1184,8 +1176,8 @@ static inline u32 hid_report_len(struct hid_report *report)
- 	return DIV_ROUND_UP(report->size, 8) + (report->id > 0);
- }
- 
--int hid_report_raw_event(struct hid_device *hid, int type, u8 *data, u32 size,
--		int interrupt);
-+int hid_report_raw_event(struct hid_device *hid, enum hid_report_type type, u8 *data, u32 size,
-+			 int interrupt);
- 
- /* HID quirks API */
- unsigned long hid_lookup_quirk(const struct hid_device *hdev);
-diff --git a/include/uapi/linux/hid.h b/include/uapi/linux/hid.h
-index b34492a87a8a..b25b0bacaff2 100644
---- a/include/uapi/linux/hid.h
-+++ b/include/uapi/linux/hid.h
-@@ -42,6 +42,18 @@
- #define USB_INTERFACE_PROTOCOL_KEYBOARD	1
- #define USB_INTERFACE_PROTOCOL_MOUSE	2
- 
-+/*
-+ * HID report types --- Ouch! HID spec says 1 2 3!
-+ */
-+
-+enum hid_report_type {
-+	HID_INPUT_REPORT		= 0,
-+	HID_OUTPUT_REPORT		= 1,
-+	HID_FEATURE_REPORT		= 2,
-+
-+	HID_REPORT_TYPES,
-+};
-+
- /*
-  * HID class requests
-  */
+ 	switch (cmd) {
+ 	case BPF_MAP_CREATE:
++	case BPF_MAP_DELETE_ELEM:
+ 	case BPF_MAP_UPDATE_ELEM:
+ 	case BPF_MAP_FREEZE:
++	case BPF_MAP_GET_FD_BY_ID:
+ 	case BPF_PROG_LOAD:
+ 	case BPF_BTF_LOAD:
+ 	case BPF_LINK_CREATE:
 -- 
 2.36.1
 
