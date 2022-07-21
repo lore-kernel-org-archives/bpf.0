@@ -2,41 +2,41 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85926CCA487
-	for <bpf@archiver.kernel.org>; Thu, 21 Jul 2022 15:38:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1116ECCA488
+	for <bpf@archiver.kernel.org>; Thu, 21 Jul 2022 15:39:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233036AbiGUPim (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Jul 2022 11:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53120 "EHLO
+        id S232499AbiGUPjg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Jul 2022 11:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232508AbiGUPiM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 Jul 2022 11:38:12 -0400
+        with ESMTP id S233082AbiGUPjL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 Jul 2022 11:39:11 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9F4988E16
-        for <bpf@vger.kernel.org>; Thu, 21 Jul 2022 08:37:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D44CC88F06
+        for <bpf@vger.kernel.org>; Thu, 21 Jul 2022 08:37:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658417834;
+        s=mimecast20190719; t=1658417854;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=q1ugzeeQImQSGGFdeXfOpKhPDeYLIbJhcbUeYAyYDFI=;
-        b=AWxXbQ4B9AStCqXh1dSvL38Amy1vlE6xKEaJ5UU9yGJL1dNLfuAZjaMEkJe3PTCdfreyPR
-        moNVKLswW0KLcWc+QRiIa2dc6L2ohVYgeok3DbfWOCO8wbKYlBvxB+X6cpAfix/yp8PmJw
-        SssEeOb4gmvKPnFWZ2QsHxk+/SGSevE=
+        bh=+w7mjnwOlINJMKCuWIn64MJoJuBpfG6APw9NPBjcvFw=;
+        b=PXzZuubmEarPUJRMtd+yGqtWW0pyOHPPlSUzdbxtwUMu4FGpgmlMjqbrC50HGs+TYKFCBu
+        /RteaylY/vrqsG6AYq5YZOk5fqzyiut9lwvZRU0nqWpC/0QK8740vhmGH0Igj6gKw96WtG
+        qE70LKQoPO27qkxWLGAcrTRbtsL7scY=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-627-sr70ccOfNYSgI9Vj21KGzg-1; Thu, 21 Jul 2022 11:36:57 -0400
-X-MC-Unique: sr70ccOfNYSgI9Vj21KGzg-1
+ us-mta-215-vGkUN8vHOoeMb4-OVYfjpw-1; Thu, 21 Jul 2022 11:37:28 -0400
+X-MC-Unique: vGkUN8vHOoeMb4-OVYfjpw-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ACFC02804067;
-        Thu, 21 Jul 2022 15:36:55 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BFD213817A75;
+        Thu, 21 Jul 2022 15:37:26 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.194.200])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5DDA32166B26;
-        Thu, 21 Jul 2022 15:36:52 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9E1312166B26;
+        Thu, 21 Jul 2022 15:37:23 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -55,9 +55,9 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v7 07/24] bpf: prepare for more bpf syscall to be used from kernel and user space.
-Date:   Thu, 21 Jul 2022 17:36:08 +0200
-Message-Id: <20220721153625.1282007-8-benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v7 16/24] selftests/bpf/hid: add test to change the report size
+Date:   Thu, 21 Jul 2022 17:36:17 +0200
+Message-Id: <20220721153625.1282007-17-benjamin.tissoires@redhat.com>
 In-Reply-To: <20220721153625.1282007-1-benjamin.tissoires@redhat.com>
 References: <20220721153625.1282007-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
@@ -67,71 +67,134 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add BPF_MAP_GET_FD_BY_ID and BPF_MAP_DELETE_PROG.
+Use a different report with a bigger size and ensures we are doing
+things properly.
 
-Only BPF_MAP_GET_FD_BY_ID needs to be amended to be able
-to access the bpf pointer either from the userspace or the kernel.
-
-Acked-by: Yonghong Song <yhs@fb.com>
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
 ---
 
 no changes in v7
 
-changes in v6:
-- commit description change
+no changes in v6
 
 new in v5
 ---
- kernel/bpf/syscall.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/hid.c | 60 ++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/hid.c      | 15 ++++-
+ 2 files changed, 74 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 83c7136c5788..776c7a37c433 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1437,9 +1437,9 @@ static int map_update_elem(union bpf_attr *attr, bpfptr_t uattr)
+diff --git a/tools/testing/selftests/bpf/prog_tests/hid.c b/tools/testing/selftests/bpf/prog_tests/hid.c
+index 719d220c8d86..47bc0a30c275 100644
+--- a/tools/testing/selftests/bpf/prog_tests/hid.c
++++ b/tools/testing/selftests/bpf/prog_tests/hid.c
+@@ -17,6 +17,17 @@ static unsigned char rdesc[] = {
+ 	0xa1, 0x01,		/* COLLECTION (Application) */
+ 	0x09, 0x01,			/* Usage (Vendor Usage 0x01) */
+ 	0xa1, 0x00,			/* COLLECTION (Physical) */
++	0x85, 0x02,				/* REPORT_ID (2) */
++	0x19, 0x01,				/* USAGE_MINIMUM (1) */
++	0x29, 0x08,				/* USAGE_MAXIMUM (3) */
++	0x15, 0x00,				/* LOGICAL_MINIMUM (0) */
++	0x25, 0xff,				/* LOGICAL_MAXIMUM (255) */
++	0x95, 0x08,				/* REPORT_COUNT (8) */
++	0x75, 0x08,				/* REPORT_SIZE (8) */
++	0x81, 0x02,				/* INPUT (Data,Var,Abs) */
++	0xc0,				/* END_COLLECTION */
++	0x09, 0x01,			/* Usage (Vendor Usage 0x01) */
++	0xa1, 0x00,			/* COLLECTION (Physical) */
+ 	0x85, 0x01,				/* REPORT_ID (1) */
+ 	0x06, 0x00, 0xff,			/* Usage Page (Vendor Defined Page 1) */
+ 	0x19, 0x01,				/* USAGE_MINIMUM (1) */
+@@ -635,6 +646,53 @@ static int test_attach_detach(int uhid_fd, int dev_id)
+ 	return ret;
+ }
  
- #define BPF_MAP_DELETE_ELEM_LAST_FIELD key
- 
--static int map_delete_elem(union bpf_attr *attr)
-+static int map_delete_elem(union bpf_attr *attr, bpfptr_t uattr)
++/*
++ * Attach hid_change_report_id to the given uhid device,
++ * retrieve and open the matching hidraw node,
++ * inject one event in the uhid device,
++ * check that the program sees it and can change the data
++ */
++static int test_hid_change_report(int uhid_fd, int dev_id)
++{
++	struct test_params params;
++	int err, hidraw_fd = -1;
++	u8 buf[10] = {0};
++	int ret = -1;
++
++	err = prep_test(dev_id, "hid_change_report_id", &params);
++	if (!ASSERT_EQ(err, 0, "prep_test(hid_change_report_id)"))
++		goto cleanup;
++
++	hidraw_fd = params.hidraw_fd;
++
++	/* inject one event */
++	buf[0] = 1;
++	buf[1] = 42;
++	send_event(uhid_fd, buf, 6);
++
++	/* read the data from hidraw */
++	memset(buf, 0, sizeof(buf));
++	err = read(hidraw_fd, buf, sizeof(buf));
++	if (!ASSERT_EQ(err, 9, "read_hidraw"))
++		goto cleanup;
++
++	if (!ASSERT_EQ(buf[0], 2, "hid_change_report_id"))
++		goto cleanup;
++
++	if (!ASSERT_EQ(buf[1], 42, "hid_change_report_id"))
++		goto cleanup;
++
++	if (!ASSERT_EQ(buf[2], 0, "leftovers_from_previous_test"))
++		goto cleanup;
++
++	ret = 0;
++
++cleanup:
++	cleanup_test(&params);
++
++	return ret;
++}
++
+ void serial_test_hid_bpf(void)
  {
--	void __user *ukey = u64_to_user_ptr(attr->key);
-+	bpfptr_t ukey = make_bpfptr(attr->key, uattr.is_kernel);
- 	int ufd = attr->map_fd;
- 	struct bpf_map *map;
- 	struct fd f;
-@@ -1459,7 +1459,7 @@ static int map_delete_elem(union bpf_attr *attr)
- 		goto err_put;
- 	}
+ 	int err, uhid_fd;
+@@ -660,6 +718,8 @@ void serial_test_hid_bpf(void)
+ 	ASSERT_OK(err, "hid");
+ 	err = test_attach_detach(uhid_fd, dev_id);
+ 	ASSERT_OK(err, "hid_attach_detach");
++	err = test_hid_change_report(uhid_fd, dev_id);
++	ASSERT_OK(err, "hid_change_report");
  
--	key = __bpf_copy_key(ukey, map->key_size);
-+	key = ___bpf_copy_key(ukey, map->key_size);
- 	if (IS_ERR(key)) {
- 		err = PTR_ERR(key);
- 		goto err_put;
-@@ -4942,7 +4942,7 @@ static int __sys_bpf(int cmd, bpfptr_t uattr, unsigned int size)
- 		err = map_update_elem(&attr, uattr);
- 		break;
- 	case BPF_MAP_DELETE_ELEM:
--		err = map_delete_elem(&attr);
-+		err = map_delete_elem(&attr, uattr);
- 		break;
- 	case BPF_MAP_GET_NEXT_KEY:
- 		err = map_get_next_key(&attr);
-@@ -5077,8 +5077,10 @@ BPF_CALL_3(bpf_sys_bpf, int, cmd, union bpf_attr *, attr, u32, attr_size)
+ 	destroy(uhid_fd);
  
- 	switch (cmd) {
- 	case BPF_MAP_CREATE:
-+	case BPF_MAP_DELETE_ELEM:
- 	case BPF_MAP_UPDATE_ELEM:
- 	case BPF_MAP_FREEZE:
-+	case BPF_MAP_GET_FD_BY_ID:
- 	case BPF_PROG_LOAD:
- 	case BPF_BTF_LOAD:
- 	case BPF_LINK_CREATE:
+diff --git a/tools/testing/selftests/bpf/progs/hid.c b/tools/testing/selftests/bpf/progs/hid.c
+index fc0a4241643a..ee7529c47ad8 100644
+--- a/tools/testing/selftests/bpf/progs/hid.c
++++ b/tools/testing/selftests/bpf/progs/hid.c
+@@ -32,7 +32,20 @@ int BPF_PROG(hid_first_event, struct hid_bpf_ctx *hid_ctx)
+ 
+ 	rw_data[2] = rw_data[1] + 5;
+ 
+-	return 0;
++	return hid_ctx->size;
++}
++
++SEC("?fmod_ret/hid_bpf_device_event")
++int BPF_PROG(hid_change_report_id, struct hid_bpf_ctx *hid_ctx)
++{
++	__u8 *rw_data = hid_bpf_get_data(hid_ctx, 0 /* offset */, 3 /* size */);
++
++	if (!rw_data)
++		return 0; /* EPERM check */
++
++	rw_data[0] = 2;
++
++	return 9;
+ }
+ 
+ SEC("syscall")
 -- 
 2.36.1
 
