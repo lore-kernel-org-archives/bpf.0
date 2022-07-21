@@ -2,39 +2,58 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BB5EC43334
-	for <bpf@archiver.kernel.org>; Thu, 21 Jul 2022 11:59:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BA90C43334
+	for <bpf@archiver.kernel.org>; Thu, 21 Jul 2022 12:15:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232164AbiGUL7W (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Jul 2022 07:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41082 "EHLO
+        id S230047AbiGUMPA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Jul 2022 08:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232158AbiGUL7V (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 Jul 2022 07:59:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202963340B;
-        Thu, 21 Jul 2022 04:59:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CBC97B82443;
-        Thu, 21 Jul 2022 11:59:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 806D0C3411E;
-        Thu, 21 Jul 2022 11:59:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658404757;
-        bh=ggHG6nD7013O5l8BLxi1J8dB0HMzHRPWFaAq8WtsKf4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k0VzyS05s/qO/GLUCmqIQcQ620cwKH/qf1ycY0IbyfQgiucVn/Hz30Epfdg1TfTWC
-         JfqKANjEkZt09LBApojiFDRMWD4s3kgce7EBKKZrErkyI0RPpZshbQwHdV1pNon8yF
-         9YIUeH15Qv2QGquouDjOCVT65dVFa9FIFYK8AsDZ5/GMSZy5nY5ZDuHSqZvt3NxVqt
-         loMecXcx5znRYvXg7hCRoYYPHrmyq+Sjeq9oK+lDhq26hEa36aiIhjWrNx/HAwMyp9
-         bpnyJ8BaC5tCb1JcDmZDuGTFxR/Zu39/0bifRl/gRTUCa0Da5kMhXi8QyHsBrbPK4Z
-         fE/Mkn4Lvvymw==
-Date:   Thu, 21 Jul 2022 12:59:09 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S229497AbiGUMO7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 Jul 2022 08:14:59 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79CEA863F4;
+        Thu, 21 Jul 2022 05:14:58 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id m8so1887068edd.9;
+        Thu, 21 Jul 2022 05:14:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=VSbWBr2PqZxxIcgEaWX5b/CKC10J1bxUMK1hG4Jb/vc=;
+        b=NGpJOVfwssqjngg2xYTFLZrZBj/N8tDxK1KV8Ddk6vAjmjQBTwUtLzC+UgGiY9WO9X
+         XccwZUffn8Vf53j0La4f05uzhgM7UBJ+/bV0tu5F6tAt4iegfs+2PAppV1fxV9lBfbyn
+         vuPi56tV/3xg5tVp1u6Ch2TqX8ErgBvHAJEaJPrnZ4qnvveI4TC5REiAoJDqUwWXK6U4
+         HBuavEfhc2b75fQ57IKbg9hrJUxb5RR5pshno53klRULSV1RTirbyuCBYpSCpURHqEll
+         Od3eaFXHdHBn5PTQr5R4m10GdOd+8B3V7ZbqLY5+K0KFyRsaLG4EXSIer0EDig0UfGst
+         zJmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=VSbWBr2PqZxxIcgEaWX5b/CKC10J1bxUMK1hG4Jb/vc=;
+        b=j7HwctSvlT0exgr414DhF1NmI/KvNSRfPextccJ1To/ck1Wkt9sVhRJ9YSSWiShplw
+         ZlHMpjfA9be7G7ivIYOz6KHlK3gmyWRKLxHAoQqg8UcQqyPr0xi0mWtnw0ABcHi7WuBH
+         bi8pWnRJnqMUtzFQ+lTsmiDKdGRf9DoaIZH7AqshtCa53ARGnV6IKOTe1QDteGzTJswJ
+         N7ucNtaTJaeCaitrDUGAvZRd88BQCV0zngOyXei9fo7lDoUQO3CGR4lHHVKr6gLMg8e9
+         JMh87nmCx+PG5ZWsmoqaezgUM1XiPbj3hZGpyeXzNGrp14YW3hneSx1XvVMqJjqVFvGL
+         RRGw==
+X-Gm-Message-State: AJIora8+IQioW4Lfnr50jQ8BS2CWlnQcBeZLXa9LUW0nMqAECqn0cnXh
+        KD3JEhxrTQV6RAaTFVwXuvc=
+X-Google-Smtp-Source: AGRyM1vild5GzH+uGoclyDv0swbm3SShGCYbdIa8XwTOLqm8EYX2jhkQZkrvG6L1KMDPV6OSk29Mqw==
+X-Received: by 2002:a05:6402:518b:b0:43a:dc65:35f8 with SMTP id q11-20020a056402518b00b0043adc6535f8mr57668291edd.185.1658405697000;
+        Thu, 21 Jul 2022 05:14:57 -0700 (PDT)
+Received: from krava ([193.85.244.190])
+        by smtp.gmail.com with ESMTPSA id kw26-20020a170907771a00b0072124df085bsm817249ejc.15.2022.07.21.05.14.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 05:14:56 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Thu, 21 Jul 2022 14:14:53 +0200
+To:     Lee Jones <lee@kernel.org>
+Cc:     Jiri Olsa <olsajiri@gmail.com>, linux-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         John Fastabend <john.fastabend@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
@@ -45,84 +64,97 @@ Cc:     linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Hao Luo <haoluo@google.com>, bpf@vger.kernel.org
 Subject: Re: [PATCH 1/1] bpf: Drop unprotected find_vpid() in favour of
  find_get_pid()
-Message-ID: <Ytk/jT+zyNZpafgn@google.com>
+Message-ID: <YtlDPYQWDcORbP0o@krava>
 References: <20220721111430.416305-1-lee@kernel.org>
  <Ytk+/npvvDGg9pBP@krava>
+ <Ytk/jT+zyNZpafgn@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Ytk+/npvvDGg9pBP@krava>
+In-Reply-To: <Ytk/jT+zyNZpafgn@google.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 21 Jul 2022, Jiri Olsa wrote:
-
-> On Thu, Jul 21, 2022 at 12:14:30PM +0100, Lee Jones wrote:
-> > The documentation for find_pid() clearly states:
-> > 
-> >   "Must be called with the tasklist_lock or rcu_read_lock() held."
-> > 
-> > Presently we do neither.
-> > 
-> > In an ideal world we would wrap the in-lined call to find_vpid() along
-> > with get_pid_task() in the suggested rcu_read_lock() and have done.
-> > However, looking at get_pid_task()'s internals, it already does that
-> > independently, so this would lead to deadlock.
+On Thu, Jul 21, 2022 at 12:59:09PM +0100, Lee Jones wrote:
+> On Thu, 21 Jul 2022, Jiri Olsa wrote:
 > 
-> hm, we can have nested rcu_read_lock calls, right?
+> > On Thu, Jul 21, 2022 at 12:14:30PM +0100, Lee Jones wrote:
+> > > The documentation for find_pid() clearly states:
 
-I assumed not, but that might be an oversight on my part.
+typo find_vpid
 
-Would that be your preference?
+> > > 
+> > >   "Must be called with the tasklist_lock or rcu_read_lock() held."
+> > > 
+> > > Presently we do neither.
 
-> > Instead, we'll use find_get_pid() which searches for the vpid, then
-> > takes a reference to it preventing early free, all within the safety
-> > of rcu_read_lock().  Once we have our reference we can safely make use
-> > of it up until the point it is put.
+just curious, did you see crash related to this or you just spot that
+
+> > > 
+> > > In an ideal world we would wrap the in-lined call to find_vpid() along
+> > > with get_pid_task() in the suggested rcu_read_lock() and have done.
+> > > However, looking at get_pid_task()'s internals, it already does that
+> > > independently, so this would lead to deadlock.
 > > 
-> > Cc: Alexei Starovoitov <ast@kernel.org>
-> > Cc: Daniel Borkmann <daniel@iogearbox.net>
-> > Cc: John Fastabend <john.fastabend@gmail.com>
-> > Cc: Andrii Nakryiko <andrii@kernel.org>
-> > Cc: Martin KaFai Lau <martin.lau@linux.dev>
-> > Cc: Song Liu <song@kernel.org>
-> > Cc: Yonghong Song <yhs@fb.com>
-> > Cc: KP Singh <kpsingh@kernel.org>
-> > Cc: Stanislav Fomichev <sdf@google.com>
-> > Cc: Hao Luo <haoluo@google.com>
-> > Cc: Jiri Olsa <jolsa@kernel.org>
-> > Cc: bpf@vger.kernel.org
-> > Fixes: 41bdc4b40ed6f ("bpf: introduce bpf subcommand BPF_TASK_FD_QUERY")
-> > Signed-off-by: Lee Jones <lee@kernel.org>
-> > ---
-> >  kernel/bpf/syscall.c | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> > index 83c7136c5788d..c20cff30581c4 100644
-> > --- a/kernel/bpf/syscall.c
-> > +++ b/kernel/bpf/syscall.c
-> > @@ -4385,6 +4385,7 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
-> >  	const struct perf_event *event;
-> >  	struct task_struct *task;
-> >  	struct file *file;
-> > +	struct pid *ppid;
-> >  	int err;
-> >  
-> >  	if (CHECK_ATTR(BPF_TASK_FD_QUERY))
-> > @@ -4396,7 +4397,9 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
-> >  	if (attr->task_fd_query.flags != 0)
-> >  		return -EINVAL;
-> >  
-> > -	task = get_pid_task(find_vpid(pid), PIDTYPE_PID);
-> > +	ppid = find_get_pid(pid);
-> > +	task = get_pid_task(ppid, PIDTYPE_PID);
-> > +	put_pid(ppid);
-> >  	if (!task)
-> >  		return -ENOENT;
-> >  
+> > hm, we can have nested rcu_read_lock calls, right?
+> 
+> I assumed not, but that might be an oversight on my part.
+> 
+> Would that be your preference?
 
--- 
-Lee Jones [李琼斯]
+seems simpler than calling get/put for ppid
+
+jirka
+
+> 
+> > > Instead, we'll use find_get_pid() which searches for the vpid, then
+> > > takes a reference to it preventing early free, all within the safety
+> > > of rcu_read_lock().  Once we have our reference we can safely make use
+> > > of it up until the point it is put.
+> > > 
+> > > Cc: Alexei Starovoitov <ast@kernel.org>
+> > > Cc: Daniel Borkmann <daniel@iogearbox.net>
+> > > Cc: John Fastabend <john.fastabend@gmail.com>
+> > > Cc: Andrii Nakryiko <andrii@kernel.org>
+> > > Cc: Martin KaFai Lau <martin.lau@linux.dev>
+> > > Cc: Song Liu <song@kernel.org>
+> > > Cc: Yonghong Song <yhs@fb.com>
+> > > Cc: KP Singh <kpsingh@kernel.org>
+> > > Cc: Stanislav Fomichev <sdf@google.com>
+> > > Cc: Hao Luo <haoluo@google.com>
+> > > Cc: Jiri Olsa <jolsa@kernel.org>
+> > > Cc: bpf@vger.kernel.org
+> > > Fixes: 41bdc4b40ed6f ("bpf: introduce bpf subcommand BPF_TASK_FD_QUERY")
+> > > Signed-off-by: Lee Jones <lee@kernel.org>
+> > > ---
+> > >  kernel/bpf/syscall.c | 5 ++++-
+> > >  1 file changed, 4 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> > > index 83c7136c5788d..c20cff30581c4 100644
+> > > --- a/kernel/bpf/syscall.c
+> > > +++ b/kernel/bpf/syscall.c
+> > > @@ -4385,6 +4385,7 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
+> > >  	const struct perf_event *event;
+> > >  	struct task_struct *task;
+> > >  	struct file *file;
+> > > +	struct pid *ppid;
+> > >  	int err;
+> > >  
+> > >  	if (CHECK_ATTR(BPF_TASK_FD_QUERY))
+> > > @@ -4396,7 +4397,9 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
+> > >  	if (attr->task_fd_query.flags != 0)
+> > >  		return -EINVAL;
+> > >  
+> > > -	task = get_pid_task(find_vpid(pid), PIDTYPE_PID);
+> > > +	ppid = find_get_pid(pid);
+> > > +	task = get_pid_task(ppid, PIDTYPE_PID);
+> > > +	put_pid(ppid);
+> > >  	if (!task)
+> > >  		return -ENOENT;
+> > >  
+> 
+> -- 
+> Lee Jones [李琼斯]
