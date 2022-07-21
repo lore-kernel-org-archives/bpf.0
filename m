@@ -2,190 +2,194 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14261C43334
-	for <bpf@archiver.kernel.org>; Thu, 21 Jul 2022 15:11:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61061CCA487
+	for <bpf@archiver.kernel.org>; Thu, 21 Jul 2022 15:37:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231374AbiGUPLE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Jul 2022 11:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57304 "EHLO
+        id S232650AbiGUPhE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Jul 2022 11:37:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbiGUPKw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 Jul 2022 11:10:52 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E5B326CF
-        for <bpf@vger.kernel.org>; Thu, 21 Jul 2022 08:10:48 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id a13so2006334ljr.11
-        for <bpf@vger.kernel.org>; Thu, 21 Jul 2022 08:10:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=MnsWlVxaF7Srg+TkrPklfprDn+x//MhQnX3HOcVLJO4=;
-        b=YjtCr2Gxh3gc1gRMcK3focPeBKwSklW36B92yHY52Npm0KqCkcpp7uxPAqeLZlcoM7
-         pg2McOfr+qWhBXUDA+s6LySq2uo2SB6WIYxhNeppJgNKclhCD40nmJuCuJFpaZZ4neNd
-         LOCoFE0IUSiaR99TeNxhYYgk54I+VUk71sJyQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=MnsWlVxaF7Srg+TkrPklfprDn+x//MhQnX3HOcVLJO4=;
-        b=xuurqZIh7uzytiB0TCLLHGJ2miUEUPY2S4C1MkiLEB/1kPHLwdKQsx8PrBsVr5sI1X
-         gY6MG0hanYxwFt54DDmunQ0hLMBmJIlX568Y+0iAS0xXgLkEDAJwUnaINeC2MG5HsHzx
-         my61TBog/UzxT3doDyEC+yXR1RJ4Ovm7hIMuz3miAY6lIIq4qVd7fQ5kChET1dhE2ywd
-         3jNybzYF50uXI2hcPzOYkJua2px6REMm7w1oJ4JZs8ieDwR+uy4XVtJjQnpuzxlhaPae
-         F4iy/Y2gdPpDLwHPfuA99xTStDrOZniYVixoL7a44jLjrtaamgsasNUBN47R8BbN/muD
-         QsLA==
-X-Gm-Message-State: AJIora9ggOgoy8BuqVfXdTyT/Asi0GeREd4VkmEIcR+F35Spdvzlw79D
-        ncfjzzvYjGxxiO57Hry2KTDezg==
-X-Google-Smtp-Source: AGRyM1tvjhR0FO0Zu1Zzqqh0d/4relKQA1AMwtEQp6yiNfEwOJdQS/pbOh+iUlFZU1uCy1k7Xwof2w==
-X-Received: by 2002:a05:651c:150b:b0:25d:ead1:dfa1 with SMTP id e11-20020a05651c150b00b0025dead1dfa1mr359331ljf.172.1658416245175;
-        Thu, 21 Jul 2022 08:10:45 -0700 (PDT)
-Received: from mrprec.home (2a01-110f-4304-1700-37e6-7a9a-2637-d666.aa.ipv6.supernova.orange.pl. [2a01:110f:4304:1700:37e6:7a9a:2637:d666])
-        by smtp.gmail.com with ESMTPSA id f3-20020a056512228300b00489dbecbd0csm205508lfu.189.2022.07.21.08.10.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 08:10:44 -0700 (PDT)
-From:   Marek Majkowski <marek@cloudflare.com>
-To:     netdev@vger.kernel.org
-Cc:     bpf@vger.kernel.org, kernel-team@cloudflare.com,
-        ivan@cloudflare.com, edumazet@google.com, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org,
-        Marek Majkowski <marek@cloudflare.com>
-Subject: [PATCH net-next 1/2] RTAX_INITRWND should be able to bring the rcv_ssthresh above 64KiB
-Date:   Thu, 21 Jul 2022 17:10:40 +0200
-Message-Id: <20220721151041.1215017-2-marek@cloudflare.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220721151041.1215017-1-marek@cloudflare.com>
-References: <20220721151041.1215017-1-marek@cloudflare.com>
+        with ESMTP id S232529AbiGUPgm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 Jul 2022 11:36:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 06B761CFEE
+        for <bpf@vger.kernel.org>; Thu, 21 Jul 2022 08:36:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658417796;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=E9vNgely/RNeXoTi/6KXKEKS3Vm4HrmO6DZ21V4RiOg=;
+        b=SkxTaCGJP5nkoCaxcouCFAWIhO7INSfXbcfMsitpUyu/lEpw7GT+RxrSXABcqFId33Quj5
+        NBgm2ZrmZafcqXgqPegf3f12lKd0K7j4sUEWF5z8Iy3YNCDN/jjRBKUoB7Xndyx2JN5TUM
+        DFSh0jFMfImCy86MLiAB5Iy7KVVq8LA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-443-yU1vkqs-P36TDaFyBVoQAw-1; Thu, 21 Jul 2022 11:36:32 -0400
+X-MC-Unique: yU1vkqs-P36TDaFyBVoQAw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7B00B1019C8D;
+        Thu, 21 Jul 2022 15:36:31 +0000 (UTC)
+Received: from plouf.redhat.com (unknown [10.39.194.200])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5DCC42166B26;
+        Thu, 21 Jul 2022 15:36:28 +0000 (UTC)
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>
+Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v7 00/24] Introduce eBPF support for HID devices
+Date:   Thu, 21 Jul 2022 17:36:01 +0200
+Message-Id: <20220721153625.1282007-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We already support RTAX_INITRWND / initrwnd path attribute:
+Hi,
 
- $ ip route change local 127.0.0.0/8 dev lo initrwnd 1024
+here comes the v7 of the HID-BPF series.
 
-However normally, the initial advertised receive window is limited to
-64KiB by rcv_ssthresh, regardless of initrwnd. This patch changes
-that, bumping up rcv_ssthresh to value derived from initrwnd. This
-allows for larger initial advertised receive windows, which is useful
-for specific types of TCP flows: big BDP ones, where there is a lot of
-data to send immediately after the flow is established.
+Again, for a full explanation of HID-BPF, please refer to the last patch
+in this series (24/24).
 
-There are three places where we initialize sockets:
- - tcp_output:tcp_connect_init
- - tcp_minisocks:tcp_openreq_init_rwin
- - syncookies
+This version sees some minor improvements compared to v6, only
+focusing on the reviews I got.
 
-In the first two we already have a call to `tcp_rwnd_init_bpf` and
-`dst_metric(RTAX_INITRWND)` which retrieve the bpf/path initrwnd
-attribute. We use this value to bring `rcv_ssthresh` up, potentially
-above the traditional 64KiB.
+I also wanted to mention that I have started working on the userspace
+side to "see" how the BPF programs would look when automatically loaded.
+See the udev-hid-bpf project[0] for the code.
 
-With higher initial `rcv_ssthresh` the receiver will open the receive
-window more aggresively, which can improve large BDP flows - large
-throughput and latency.
+The idea is to define the HID-BPF userspace programs so we can reuse
+the same semantic in the kernel.
+I am quite happy with the results: this looks pretty similar to a kernel
+module in term of design. The .bpf.c file is a standalone compilation
+unit, and instead of having a table of ids, the filename is used (based
+on the modalias). This allows to have a "probe" like function that we
+can run to decide if the program needs to be attached or not.
 
-This patch does not cover the syncookies case.
+All in all, the end result is that we can write the bpf program, compile
+it locally, and send the result to the user. The user needs to drop the
+.bpf.o in a local folder, and udev-hid-bpf will pick it up the next time
+the device is plugged in. No other operations is required.
 
-Signed-off-by: Marek Majkowski <marek@cloudflare.com>
----
- include/net/inet_sock.h  |  1 +
- net/ipv4/tcp_minisocks.c |  8 ++++++--
- net/ipv4/tcp_output.c    | 10 ++++++++--
- 3 files changed, 15 insertions(+), 4 deletions(-)
+Next step will be to drop the same source file in the kernel source
+tree, and have some magic to automatically load the compiled program
+when the device is loaded.
 
-diff --git a/include/net/inet_sock.h b/include/net/inet_sock.h
-index daead5fb389a..bc68c9b70942 100644
---- a/include/net/inet_sock.h
-+++ b/include/net/inet_sock.h
-@@ -89,6 +89,7 @@ struct inet_request_sock {
- 				no_srccheck: 1,
- 				smc_ok	   : 1;
- 	u32                     ir_mark;
-+	u32                     rcv_ssthresh;
- 	union {
- 		struct ip_options_rcu __rcu	*ireq_opt;
- #if IS_ENABLED(CONFIG_IPV6)
-diff --git a/net/ipv4/tcp_minisocks.c b/net/ipv4/tcp_minisocks.c
-index 6854bb1fb32b..89ba2a30a012 100644
---- a/net/ipv4/tcp_minisocks.c
-+++ b/net/ipv4/tcp_minisocks.c
-@@ -360,6 +360,7 @@ void tcp_openreq_init_rwin(struct request_sock *req,
- 	u32 window_clamp;
- 	__u8 rcv_wscale;
- 	u32 rcv_wnd;
-+	int adj_mss;
- 	int mss;
- 
- 	mss = tcp_mss_clamp(tp, dst_metric_advmss(dst));
-@@ -378,15 +379,18 @@ void tcp_openreq_init_rwin(struct request_sock *req,
- 	else if (full_space < rcv_wnd * mss)
- 		full_space = rcv_wnd * mss;
- 
-+	adj_mss = mss - (ireq->tstamp_ok ? TCPOLEN_TSTAMP_ALIGNED : 0);
-+
- 	/* tcp_full_space because it is guaranteed to be the first packet */
- 	tcp_select_initial_window(sk_listener, full_space,
--		mss - (ireq->tstamp_ok ? TCPOLEN_TSTAMP_ALIGNED : 0),
-+		adj_mss,
- 		&req->rsk_rcv_wnd,
- 		&req->rsk_window_clamp,
- 		ireq->wscale_ok,
- 		&rcv_wscale,
- 		rcv_wnd);
- 	ireq->rcv_wscale = rcv_wscale;
-+	ireq->rcv_ssthresh = max(req->rsk_rcv_wnd, rcv_wnd * adj_mss);
- }
- EXPORT_SYMBOL(tcp_openreq_init_rwin);
- 
-@@ -502,7 +506,7 @@ struct sock *tcp_create_openreq_child(const struct sock *sk,
- 	newtp->rx_opt.tstamp_ok = ireq->tstamp_ok;
- 	newtp->rx_opt.sack_ok = ireq->sack_ok;
- 	newtp->window_clamp = req->rsk_window_clamp;
--	newtp->rcv_ssthresh = req->rsk_rcv_wnd;
-+	newtp->rcv_ssthresh = ireq->rcv_ssthresh;
- 	newtp->rcv_wnd = req->rsk_rcv_wnd;
- 	newtp->rx_opt.wscale_ok = ireq->wscale_ok;
- 	if (newtp->rx_opt.wscale_ok) {
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index 18c913a2347a..0f2d4174ea59 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -3642,6 +3642,7 @@ static void tcp_connect_init(struct sock *sk)
- 	struct tcp_sock *tp = tcp_sk(sk);
- 	__u8 rcv_wscale;
- 	u32 rcv_wnd;
-+	u32 mss;
- 
- 	/* We'll fix this up when we get a response from the other end.
- 	 * See tcp_input.c:tcp_rcv_state_process case TCP_SYN_SENT.
-@@ -3679,8 +3680,10 @@ static void tcp_connect_init(struct sock *sk)
- 	if (rcv_wnd == 0)
- 		rcv_wnd = dst_metric(dst, RTAX_INITRWND);
- 
-+	mss = tp->advmss - (tp->rx_opt.ts_recent_stamp ?
-+			    tp->tcp_header_len - sizeof(struct tcphdr) : 0);
- 	tcp_select_initial_window(sk, tcp_full_space(sk),
--				  tp->advmss - (tp->rx_opt.ts_recent_stamp ? tp->tcp_header_len - sizeof(struct tcphdr) : 0),
-+				  mss,
- 				  &tp->rcv_wnd,
- 				  &tp->window_clamp,
- 				  sock_net(sk)->ipv4.sysctl_tcp_window_scaling,
-@@ -3688,7 +3691,10 @@ static void tcp_connect_init(struct sock *sk)
- 				  rcv_wnd);
- 
- 	tp->rx_opt.rcv_wscale = rcv_wscale;
--	tp->rcv_ssthresh = tp->rcv_wnd;
-+	if (rcv_wnd)
-+		tp->rcv_ssthresh = max(tp->rcv_wnd, rcv_wnd * mss);
-+	else
-+		tp->rcv_ssthresh = tp->rcv_wnd;
- 
- 	sk->sk_err = 0;
- 	sock_reset_flag(sk, SOCK_DONE);
+Cheers,
+Benjamin
+
+[0] https://gitlab.freedesktop.org/bentiss/udev-hid-bpf (warning: probably
+not the best rust code ever)
+
+Benjamin Tissoires (24):
+  selftests/bpf: fix config for CLS_BPF
+  bpf/verifier: allow kfunc to read user provided context
+  bpf/verifier: do not clear meta in check_mem_size
+  selftests/bpf: add test for accessing ctx from syscall program type
+  bpf/verifier: allow kfunc to return an allocated mem
+  selftests/bpf: Add tests for kfunc returning a memory pointer
+  bpf: prepare for more bpf syscall to be used from kernel and user
+    space.
+  libbpf: add map_get_fd_by_id and map_delete_elem in light skeleton
+  HID: core: store the unique system identifier in hid_device
+  HID: export hid_report_type to uapi
+  HID: convert defines of HID class requests into a proper enum
+  HID: Kconfig: split HID support and hid-core compilation
+  HID: initial BPF implementation
+  selftests/bpf: add tests for the HID-bpf initial implementation
+  HID: bpf: allocate data memory for device_event BPF programs
+  selftests/bpf/hid: add test to change the report size
+  HID: bpf: introduce hid_hw_request()
+  selftests/bpf: add tests for bpf_hid_hw_request
+  HID: bpf: allow to change the report descriptor
+  selftests/bpf: add report descriptor fixup tests
+  selftests/bpf: Add a test for BPF_F_INSERT_HEAD
+  samples/bpf: add new hid_mouse example
+  HID: bpf: add Surface Dial example
+  Documentation: add HID-BPF docs
+
+ Documentation/hid/hid-bpf.rst                 | 512 +++++++++
+ Documentation/hid/index.rst                   |   1 +
+ drivers/Makefile                              |   2 +-
+ drivers/hid/Kconfig                           |  20 +-
+ drivers/hid/Makefile                          |   2 +
+ drivers/hid/bpf/Kconfig                       |  18 +
+ drivers/hid/bpf/Makefile                      |  11 +
+ drivers/hid/bpf/entrypoints/Makefile          |  93 ++
+ drivers/hid/bpf/entrypoints/README            |   4 +
+ drivers/hid/bpf/entrypoints/entrypoints.bpf.c |  66 ++
+ .../hid/bpf/entrypoints/entrypoints.lskel.h   | 682 ++++++++++++
+ drivers/hid/bpf/hid_bpf_dispatch.c            | 553 ++++++++++
+ drivers/hid/bpf/hid_bpf_dispatch.h            |  28 +
+ drivers/hid/bpf/hid_bpf_jmp_table.c           | 577 ++++++++++
+ drivers/hid/hid-core.c                        |  49 +-
+ include/linux/bpf.h                           |   9 +-
+ include/linux/btf.h                           |  10 +
+ include/linux/hid.h                           |  38 +-
+ include/linux/hid_bpf.h                       | 148 +++
+ include/uapi/linux/hid.h                      |  26 +-
+ include/uapi/linux/hid_bpf.h                  |  25 +
+ kernel/bpf/btf.c                              |  91 +-
+ kernel/bpf/syscall.c                          |  10 +-
+ kernel/bpf/verifier.c                         |  65 +-
+ net/bpf/test_run.c                            |  23 +
+ samples/bpf/.gitignore                        |   2 +
+ samples/bpf/Makefile                          |  27 +
+ samples/bpf/hid_mouse.bpf.c                   | 134 +++
+ samples/bpf/hid_mouse.c                       | 147 +++
+ samples/bpf/hid_surface_dial.bpf.c            | 161 +++
+ samples/bpf/hid_surface_dial.c                | 212 ++++
+ tools/include/uapi/linux/hid.h                |  62 ++
+ tools/include/uapi/linux/hid_bpf.h            |  25 +
+ tools/lib/bpf/skel_internal.h                 |  23 +
+ tools/testing/selftests/bpf/Makefile          |   5 +-
+ tools/testing/selftests/bpf/config            |   5 +-
+ tools/testing/selftests/bpf/prog_tests/hid.c  | 990 ++++++++++++++++++
+ .../selftests/bpf/prog_tests/kfunc_call.c     |  76 ++
+ tools/testing/selftests/bpf/progs/hid.c       | 206 ++++
+ .../selftests/bpf/progs/kfunc_call_test.c     | 125 +++
+ 40 files changed, 5184 insertions(+), 79 deletions(-)
+ create mode 100644 Documentation/hid/hid-bpf.rst
+ create mode 100644 drivers/hid/bpf/Kconfig
+ create mode 100644 drivers/hid/bpf/Makefile
+ create mode 100644 drivers/hid/bpf/entrypoints/Makefile
+ create mode 100644 drivers/hid/bpf/entrypoints/README
+ create mode 100644 drivers/hid/bpf/entrypoints/entrypoints.bpf.c
+ create mode 100644 drivers/hid/bpf/entrypoints/entrypoints.lskel.h
+ create mode 100644 drivers/hid/bpf/hid_bpf_dispatch.c
+ create mode 100644 drivers/hid/bpf/hid_bpf_dispatch.h
+ create mode 100644 drivers/hid/bpf/hid_bpf_jmp_table.c
+ create mode 100644 include/linux/hid_bpf.h
+ create mode 100644 include/uapi/linux/hid_bpf.h
+ create mode 100644 samples/bpf/hid_mouse.bpf.c
+ create mode 100644 samples/bpf/hid_mouse.c
+ create mode 100644 samples/bpf/hid_surface_dial.bpf.c
+ create mode 100644 samples/bpf/hid_surface_dial.c
+ create mode 100644 tools/include/uapi/linux/hid.h
+ create mode 100644 tools/include/uapi/linux/hid_bpf.h
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/hid.c
+ create mode 100644 tools/testing/selftests/bpf/progs/hid.c
+
 -- 
-2.25.1
+2.36.1
 
