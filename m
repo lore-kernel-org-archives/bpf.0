@@ -2,402 +2,155 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C41BC43334
-	for <bpf@archiver.kernel.org>; Thu, 21 Jul 2022 15:43:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4639C433EF
+	for <bpf@archiver.kernel.org>; Thu, 21 Jul 2022 15:47:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233171AbiGUPnE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Jul 2022 11:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35602 "EHLO
+        id S232859AbiGUPrF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Jul 2022 11:47:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233244AbiGUPmg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 Jul 2022 11:42:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 877BA8AB3A
-        for <bpf@vger.kernel.org>; Thu, 21 Jul 2022 08:38:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658417921;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5uLFJKvCAwMcRyJLEMeXT27yTzQIQVCPf4An483OOII=;
-        b=ZP6wgqLht8mFED5Jxav2MtX1T3xVPIUucntzdwJ5eY885l8qU0Rk1iRcZClQ/Sl9YxlJ6S
-        FDy6XLPaIxVWtJhK+XWDJYV2YVq64pfIcdCQgO0P594qXPStYj/3Eyx502A+UjWPj8uCm2
-        Wl3DzX0BdXNQqK80OTWvv+uVZr7BDmA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-619-0Mu-pWrUOIOqP3e-u8mjQw-1; Thu, 21 Jul 2022 11:37:22 -0400
-X-MC-Unique: 0Mu-pWrUOIOqP3e-u8mjQw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9815B1C1F1E3;
-        Thu, 21 Jul 2022 15:36:48 +0000 (UTC)
-Received: from plouf.redhat.com (unknown [10.39.194.200])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5E20B2166B26;
-        Thu, 21 Jul 2022 15:36:45 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>
-Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v7 05/24] bpf/verifier: allow kfunc to return an allocated mem
-Date:   Thu, 21 Jul 2022 17:36:06 +0200
-Message-Id: <20220721153625.1282007-6-benjamin.tissoires@redhat.com>
-In-Reply-To: <20220721153625.1282007-1-benjamin.tissoires@redhat.com>
-References: <20220721153625.1282007-1-benjamin.tissoires@redhat.com>
+        with ESMTP id S232847AbiGUPqy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 Jul 2022 11:46:54 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1BBC8AED6;
+        Thu, 21 Jul 2022 08:43:16 -0700 (PDT)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26LCsALU017692;
+        Thu, 21 Jul 2022 08:41:15 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=4ocVO5ur3EUFuUg/3NEJrYxFD/K59ocCF64tpx1SNGA=;
+ b=M+DlHjrCYSSb6faq9BvXYxo2hrP9mFHGOrFosad0SjldOBJZ6PZHBPxfJFLt03muFppC
+ Sm1HGNWPnlzG+UemCNH8kbCLNR6RdHUblW5zP+7o5aHHp5TmpJ/3SCNjXfJpSWsYio5R
+ Vd+5FFaSb7WZLazp1AgCoi8Zp8HPYyg8mhc= 
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2171.outbound.protection.outlook.com [104.47.56.171])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hf77415y6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Jul 2022 08:41:15 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Md37ZHiR6ahbdmUemY60/+udhHQrcJr+atAr1MvTuIbNvJyY1xmjd7IYKE4pXOl+0BZZev4NtD3fXv29REsLrZTeZEvaUsAIRxdLI7ckcjEaR9cItmXLxnGXgS+I/Y79jshHicvqpMJ0m+FVf1okK6AQMttOLDHh0ioEBUL6aaBNLeljyP0yS3i7ZNNKuoc14gwrlxM9DqhyIRXqlLIEtLnkOyDT11fxZ67XC0L7SoeNN7unLPv782SJJCVLO66mU0e9ZaIgxw/yIR9WZa6xTuL2JRL/lPjeCBt0DWEM7xv10Si4ijU8WNiHpAOzqhUG+45UkbcJe/DB8V15c+6mUg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4ocVO5ur3EUFuUg/3NEJrYxFD/K59ocCF64tpx1SNGA=;
+ b=F5VFhgV7cYrJakbMr/+yZa4f1fIqr82R/QIIT1xFX6CH+mp8GYwaXjJPdUYTs0kq9e3TooRHyTxVoIYAibJyjeKpypB3MeWqahTuJbw/NG9neZLh2SEMmU5N9USwk1gADVQ5p93thd7qN2t0SO4Hh3I4u2/gtZqFoRTmwXBW0ne6mjoEjckREglDzjB07RtZUaF2u9qy5xP84fLxnq9JvMG0j2BiR2KTRrzNi3xv43Yqi0ekiwBBXLBoBnK/VKPsjkn878UUpBUrY8x4z7zoImoNBo+nfXmdPXCGCdMhEQJN1yNav9KKAcBgpHivj6CXlF2GvSYw1OhgdfXY7iGDNg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from MW4PR15MB4475.namprd15.prod.outlook.com (2603:10b6:303:104::16)
+ by SJ0PR15MB4171.namprd15.prod.outlook.com (2603:10b6:a03:2ed::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19; Thu, 21 Jul
+ 2022 15:41:14 +0000
+Received: from MW4PR15MB4475.namprd15.prod.outlook.com
+ ([fe80::a88e:613f:76a7:a5a2]) by MW4PR15MB4475.namprd15.prod.outlook.com
+ ([fe80::a88e:613f:76a7:a5a2%9]) with mapi id 15.20.5458.019; Thu, 21 Jul 2022
+ 15:41:13 +0000
+Date:   Thu, 21 Jul 2022 08:41:10 -0700
+From:   Martin KaFai Lau <kafai@fb.com>
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     corbet@lwn.net, bhe@redhat.com, vgoyal@redhat.com,
+        dyoung@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        william.gray@linaro.org, dhowells@redhat.com, peterz@infradead.org,
+        mingo@redhat.com, will@kernel.org, longman@redhat.com,
+        boqun.feng@gmail.com, tglx@linutronix.de, bigeasy@linutronix.de,
+        kexec@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-cachefs@redhat.com
+Subject: Re: [PATCH v2] docs: Fix typo in comment
+Message-ID: <20220721154110.fqp7n6f7ij22vayp@kafai-mbp.dhcp.thefacebook.com>
+References: <20220721015605.20651-1-slark_xiao@163.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220721015605.20651-1-slark_xiao@163.com>
+X-ClientProxiedBy: SJ0PR03CA0197.namprd03.prod.outlook.com
+ (2603:10b6:a03:2ef::22) To MW4PR15MB4475.namprd15.prod.outlook.com
+ (2603:10b6:303:104::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 64a307c0-99a7-4206-f7c8-08da6b2f714f
+X-MS-TrafficTypeDiagnostic: SJ0PR15MB4171:EE_
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: v6da6v6fqHTGTxNkZvzqkdIAn74F3NqYZ5QWtIiSaGTJxfTEtvNuj78nhXDCUpxDe7VXpl2mVvej53ZCQg9QGFMyhngW+hMSj/9MkZUWBUbkoT+WDEjolOYpWfO+Ub8QjYiNALCezBA7W67lQyOj+o2lFGCMnIfNNp6VN+Yg7QGBSym30BpPZADPu5FVWR15rAZ09FKNTve55bzF9EYsk71PjEMcjAEedB4pAZnZezBZgAC+VhHcVe6Hm33VJqR7ycMpVKXw10yjGeXmB4EEssrR0NNAXYKlrsebXtyffj9r7qZEw0df0Bb9e89CNbu1FhA/SrU7y+7I+xSNyQuaZsZiRAq2FzN/oTx13Tjku2EgC4tJJWauIIcliC0ux8StwuUFAwil57NZzM1YIhiI4h8UAQrvNEjrHNHD8VZHWcPbICVBu8Se7DhVx15PducuJ+VN/rdyYriXoPHTa5qMP9+okbf5CCeTyaqh9ArQ51Mo5mJWyLKHqkTVsGMOFNtL4XzybjlAhz/1z9eu6RX4F8KVYTgNNHOyqrho3mzyZndcgmiVM9vBi1LjzBpDSn5B6SD7+ZaQFypVFDJ8fldmYBOG9Ai1knBWbdzhGuMhqt8umXVQApoyo1XX8j3g4NT41qiEN9sLF6U6djzkxMMioYEg/OXxfSEN3OTecKGkL59d0s5f0G1QSomFGzQR0JMYbqHhl4crIb9ad3v/SXLc/mrRmnjpnhya5St1d1bIHFXFQH0Mg/CKkY6Ng+gI/nWD
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR15MB4475.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(396003)(136003)(346002)(376002)(39860400002)(6486002)(4326008)(316002)(66556008)(66946007)(8676002)(66476007)(1076003)(6916009)(186003)(83380400001)(6506007)(41300700001)(9686003)(86362001)(6512007)(52116002)(478600001)(2906002)(7416002)(5660300002)(8936002)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Y50bti7IYrS6TXknATzz2o5HnK7uvWEw4nQWZNQflXsJyW4Qgwr+NWNiSIrn?=
+ =?us-ascii?Q?QVGH4eXQIGB5dgB9wjQ/NmNnfrOBmSK286/wJFCcGlITKc51xM98pmelzd/Y?=
+ =?us-ascii?Q?zLxBgZFiC1ilpCfh33LJAqGDvzYAsjeXx3TQJq+aOD0lB3AJYRQ03eAzL1dW?=
+ =?us-ascii?Q?Gbeqgtx4rDXSf9DoZ33z1drnWubTuqgZJkuI3HThhz+CXviAzFjAAggapdPO?=
+ =?us-ascii?Q?bxelLViWoWHGFVS90riswoYUnI2Rb4YEI2zldctfSQKEdVsxKgmX78aZG52G?=
+ =?us-ascii?Q?ZoSxrq8+pheXzvu/+uhxvHXn6ivrnN6aH/c1wHiKQhIwPPK66u3iWv7Ffpa8?=
+ =?us-ascii?Q?In+C9r6YKM9+nYE2n9V/cuCnd+7wlvtzfGi4aJgKZ2csKbKaMpP4aeYfJhiH?=
+ =?us-ascii?Q?asIRp4RoQRUziJScD5CO2siAMqjNI9x7UC5Q5vOartyFR5kjcJjx5VYhdFgB?=
+ =?us-ascii?Q?NaDyt/iE89G371MpP7OtPkVtFTZvqmRXRCUcBbV2Vf5Mv1AdjjCXP6ETGCco?=
+ =?us-ascii?Q?6ZwerdPS/PJiHT6aLP6vQ5YlSgWlmeXuQ+6VlE5EdwVE5lPYeH/q3dG/XU35?=
+ =?us-ascii?Q?1ZS8A6d7gqikvb/Bh6HcBpOcZ99ct7ZE1rTE819p30Xu7H9rhcEMFzV/I/tw?=
+ =?us-ascii?Q?W7UMP5D36lO3F2Xt4MfxWFeKCU6fSeckHJAT61TXOR/7pC7GDhWPQbTYiI2T?=
+ =?us-ascii?Q?Y2AQDeaXcE/WwpRvh6j5xYdppFgyEKE6qiM+gmfgi97BQfgkYaRqdvvvKLg6?=
+ =?us-ascii?Q?S+19QJWypsYGCoqRLCivppYI4BW5uQHsFwGpokRksm3M3V+iuwX6QS1aPsJq?=
+ =?us-ascii?Q?u8CNRLDlM4a4Tu5n4cspT2tl8oyaj7VYPBBVqfK4uqS5anbmBdDFtWv9o0Gi?=
+ =?us-ascii?Q?TEPiJN13Qq/ZLA5cxn7jGLCCtLeU4sxvZqrwrgvk+cU2cOAo1DDKLhFQg8G0?=
+ =?us-ascii?Q?c+zb/+Lpcr8VHYG+y6NdZdLuteygtrjN26TjyC7nzVFlBvvrdXcOwSpAWifY?=
+ =?us-ascii?Q?bDXYrk1tQdOeFebrG7kqw+UEEhMEDwYKLt0rAiXIagcThUsQX0AfpPYa14RR?=
+ =?us-ascii?Q?JLVxB5LsQZBmLfNONleTTb/teIviM4QY5CDJM11Kh9f9MB7qJuFpb3TjCNFJ?=
+ =?us-ascii?Q?IDuj3+it2dPI/tXMD8LHhQDVmFjziofpycEhu7lcMR3td3uljXrPbsZN09KV?=
+ =?us-ascii?Q?MxS8Xxkva+LK7jW3pxXaCxqu7swE21dYlOov2eMfmvtAA8vCWwAlJgvknmgN?=
+ =?us-ascii?Q?rSFXBlHp/x2pzEb+/agizrIqG7xBUZhviJMJwAJCu16qzILKKxD2972qyHC9?=
+ =?us-ascii?Q?9vtRlPKOFsb6EvviIxr3Rgg4a5dQPirduc6cx6B20qXfhs6GJgTZKsXwE3KW?=
+ =?us-ascii?Q?Tqco6l8Rn7wPocJtfAkwZef97sEoEJP0w5KIr8yfuGcu7CBndo3pzMGLAzy6?=
+ =?us-ascii?Q?53NFvY8hdBH28r8JVVwNY3mxI/1kqsYCCX5pTQqE3gWZuFKKSFu+WWNprQvN?=
+ =?us-ascii?Q?kIG3T9p0ELkSUAzLKlEbEvqJhb4KWaIaJbT+QwbzbAzeynf1kiQsIYQR40nW?=
+ =?us-ascii?Q?71iFuftSc26YrZBfoEkKIExRnVeb6zN37x9xzWs1pGf0OQyZmG55QRSB9aXL?=
+ =?us-ascii?Q?SA=3D=3D?=
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 64a307c0-99a7-4206-f7c8-08da6b2f714f
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR15MB4475.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2022 15:41:13.8328
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: W4c6jqoGS6MtFsesIccWYXcaM5yTb/ZdpKcykwgEZeh24H4Jhrb87KsuxVf22HhH
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR15MB4171
+X-Proofpoint-GUID: D50t2j6ItDEkUXXW0HIQlceq6v22raip
+X-Proofpoint-ORIG-GUID: D50t2j6ItDEkUXXW0HIQlceq6v22raip
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-21_18,2022-07-20_01,2022-06-22_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-For drivers (outside of network), the incoming data is not statically
-defined in a struct. Most of the time the data buffer is kzalloc-ed
-and thus we can not rely on eBPF and BTF to explore the data.
+On Thu, Jul 21, 2022 at 09:56:05AM +0800, Slark Xiao wrote:
+> diff --git a/Documentation/bpf/map_cgroup_storage.rst b/Documentation/bpf/map_cgroup_storage.rst
+> index cab9543017bf..8e5fe532c07e 100644
+> --- a/Documentation/bpf/map_cgroup_storage.rst
+> +++ b/Documentation/bpf/map_cgroup_storage.rst
+> @@ -31,7 +31,7 @@ The map uses key of type of either ``__u64 cgroup_inode_id`` or
+>      };
+>  
+>  ``cgroup_inode_id`` is the inode id of the cgroup directory.
+> -``attach_type`` is the the program's attach type.
+> +``attach_type`` is the program's attach type.
+>  
+>  Linux 5.9 added support for type ``__u64 cgroup_inode_id`` as the key type.
+>  When this key type is used, then all attach types of the particular cgroup and
+> @@ -155,7 +155,7 @@ However, the BPF program can still only associate with one map of each type
+>  ``BPF_MAP_TYPE_CGROUP_STORAGE`` or more than one
+>  ``BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE``.
+>  
+> -In all versions, userspace may use the the attach parameters of cgroup and
+> +In all versions, userspace may use the attach parameters of cgroup and
+>  attach type pair in ``struct bpf_cgroup_storage_key`` as the key to the BPF map
+>  APIs to read or update the storage for a given attachment. For Linux 5.9
+>  attach type shared storages, only the first value in the struct, cgroup inode
+For the bpf changes,
 
-This commit allows to return an arbitrary memory, previously allocated by
-the driver.
-An interesting extra point is that the kfunc can mark the exported
-memory region as read only or read/write.
-
-So, when a kfunc is not returning a pointer to a struct but to a plain
-type, we can consider it is a valid allocated memory assuming that:
-- one of the arguments is either called rdonly_buf_size or
-  rdwr_buf_size
-- and this argument is a const from the caller point of view
-
-We can then use this parameter as the size of the allocated memory.
-
-The memory is either read-only or read-write based on the name
-of the size parameter.
-
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-
----
-
-changes in v7:
-- ensures btf_type_is_struct_ptr() checks for a ptr first
-  (squashed from next commit)
-- remove multiple_ref_obj_id need
-- use btf_type_skip_modifiers instead of manually doing it in
-  btf_type_is_struct_ptr()
-- s/strncmp/strcmp/ in btf_is_kfunc_arg_mem_size()
-- check for tnum_is_const when retrieving the size value
-- have only one check for "Ensure only one argument is referenced
-  PTR_TO_BTF_ID"
-- add some more context to the commit message
-
-changes in v6:
-- code review from Kartikeya:
-  - remove comment change that had no reasons to be
-  - remove handling of PTR_TO_MEM with kfunc releases
-  - introduce struct bpf_kfunc_arg_meta
-  - do rdonly/rdwr_buf_size check in btf_check_kfunc_arg_match
-  - reverted most of the changes in verifier.c
-  - make sure kfunc acquire is using a struct pointer, not just a plain
-    pointer
-  - also forward ref_obj_id to PTR_TO_MEM in kfunc to not use after free
-    the allocated memory
-
-changes in v5:
-- updated PTR_TO_MEM comment in btf.c to match upstream
-- make it read-only or read-write based on the name of size
-
-new in v4
-
-change btf.h
-
-fix allow kfunc to return an allocated mem
----
- include/linux/bpf.h   |  9 ++++-
- include/linux/btf.h   | 10 +++++
- kernel/bpf/btf.c      | 91 ++++++++++++++++++++++++++++++++++++-------
- kernel/bpf/verifier.c | 42 ++++++++++++++------
- 4 files changed, 125 insertions(+), 27 deletions(-)
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 11950029284f..6af8ef505315 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1919,12 +1919,19 @@ int btf_distill_func_proto(struct bpf_verifier_log *log,
- 			   const char *func_name,
- 			   struct btf_func_model *m);
- 
-+struct bpf_kfunc_arg_meta {
-+	u64 r0_size;
-+	bool r0_rdonly;
-+	int ref_obj_id;
-+};
-+
- struct bpf_reg_state;
- int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
- 				struct bpf_reg_state *regs);
- int btf_check_kfunc_arg_match(struct bpf_verifier_env *env,
- 			      const struct btf *btf, u32 func_id,
--			      struct bpf_reg_state *regs);
-+			      struct bpf_reg_state *regs,
-+			      struct bpf_kfunc_arg_meta *meta);
- int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog,
- 			  struct bpf_reg_state *reg);
- int btf_check_type_match(struct bpf_verifier_log *log, const struct bpf_prog *prog,
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index 1bfed7fa0428..f6f06d699422 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -420,4 +420,14 @@ static inline int register_btf_id_dtor_kfuncs(const struct btf_id_dtor_kfunc *dt
- }
- #endif
- 
-+static inline bool btf_type_is_struct_ptr(struct btf *btf, const struct btf_type *t)
-+{
-+	if (!btf_type_is_ptr(t))
-+		return false;
-+
-+	t = btf_type_skip_modifiers(btf, t->type, NULL);
-+
-+	return btf_type_is_struct(t);
-+}
-+
- #endif
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 5869f03bcb6e..ea1c4b0e3e88 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -6169,10 +6169,36 @@ static bool is_kfunc_arg_mem_size(const struct btf *btf,
- 	return true;
- }
- 
-+static bool btf_is_kfunc_arg_mem_size(const struct btf *btf,
-+				      const struct btf_param *arg,
-+				      const struct bpf_reg_state *reg,
-+				      const char *name)
-+{
-+	int len, target_len = strlen(name);
-+	const struct btf_type *t;
-+	const char *param_name;
-+
-+	t = btf_type_skip_modifiers(btf, arg->type, NULL);
-+	if (!btf_type_is_scalar(t) || reg->type != SCALAR_VALUE)
-+		return false;
-+
-+	param_name = btf_name_by_offset(btf, arg->name_off);
-+	if (str_is_empty(param_name))
-+		return false;
-+	len = strlen(param_name);
-+	if (len != target_len)
-+		return false;
-+	if (strcmp(param_name, name))
-+		return false;
-+
-+	return true;
-+}
-+
- static int btf_check_func_arg_match(struct bpf_verifier_env *env,
- 				    const struct btf *btf, u32 func_id,
- 				    struct bpf_reg_state *regs,
--				    bool ptr_to_mem_ok)
-+				    bool ptr_to_mem_ok,
-+				    struct bpf_kfunc_arg_meta *kfunc_meta)
- {
- 	enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
- 	struct bpf_verifier_log *log = &env->log;
-@@ -6226,6 +6252,35 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
- 
- 		t = btf_type_skip_modifiers(btf, args[i].type, NULL);
- 		if (btf_type_is_scalar(t)) {
-+			if (is_kfunc && kfunc_meta) {
-+				bool is_buf_size = false;
-+
-+				/* check for any const scalar parameter of name "rdonly_buf_size"
-+				 * or "rdwr_buf_size"
-+				 */
-+				if (btf_is_kfunc_arg_mem_size(btf, &args[i], reg,
-+							      "rdonly_buf_size")) {
-+					kfunc_meta->r0_rdonly = true;
-+					is_buf_size = true;
-+				} else if (btf_is_kfunc_arg_mem_size(btf, &args[i], reg,
-+								     "rdwr_buf_size"))
-+					is_buf_size = true;
-+
-+				if (is_buf_size) {
-+					if (kfunc_meta->r0_size) {
-+						bpf_log(log, "2 or more rdonly/rdwr_buf_size parameters for kfunc");
-+						return -EINVAL;
-+					}
-+
-+					if (!tnum_is_const(reg->var_off)) {
-+						bpf_log(log, "R%d is not a const\n", regno);
-+						return -EINVAL;
-+					}
-+
-+					kfunc_meta->r0_size = reg->var_off.value;
-+				}
-+			}
-+
- 			if (reg->type == SCALAR_VALUE)
- 				continue;
- 			bpf_log(log, "R%d is not a scalar\n", regno);
-@@ -6247,6 +6302,19 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
- 		if (ret < 0)
- 			return ret;
- 
-+		if (is_kfunc && reg->type == PTR_TO_BTF_ID) {
-+			/* Ensure only one argument is referenced PTR_TO_BTF_ID */
-+			if (reg->ref_obj_id) {
-+				if (ref_obj_id) {
-+					bpf_log(log, "verifier internal error: more than one arg with ref_obj_id R%d %u %u\n",
-+						regno, reg->ref_obj_id, ref_obj_id);
-+					return -EFAULT;
-+				}
-+				ref_regno = regno;
-+				ref_obj_id = reg->ref_obj_id;
-+			}
-+		}
-+
- 		/* kptr_get is only true for kfunc */
- 		if (i == 0 && kptr_get) {
- 			struct bpf_map_value_off_desc *off_desc;
-@@ -6319,16 +6387,6 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
- 			if (reg->type == PTR_TO_BTF_ID) {
- 				reg_btf = reg->btf;
- 				reg_ref_id = reg->btf_id;
--				/* Ensure only one argument is referenced PTR_TO_BTF_ID */
--				if (reg->ref_obj_id) {
--					if (ref_obj_id) {
--						bpf_log(log, "verifier internal error: more than one arg with ref_obj_id R%d %u %u\n",
--							regno, reg->ref_obj_id, ref_obj_id);
--						return -EFAULT;
--					}
--					ref_regno = regno;
--					ref_obj_id = reg->ref_obj_id;
--				}
- 			} else {
- 				reg_btf = btf_vmlinux;
- 				reg_ref_id = *reg2btf_ids[base_type(reg->type)];
-@@ -6411,6 +6469,10 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
- 			func_name);
- 		return -EINVAL;
- 	}
-+
-+	if (kfunc_meta && ref_obj_id)
-+		kfunc_meta->ref_obj_id = ref_obj_id;
-+
- 	/* returns argument register number > 0 in case of reference release kfunc */
- 	return rel ? ref_regno : 0;
- }
-@@ -6442,7 +6504,7 @@ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
- 		return -EINVAL;
- 
- 	is_global = prog->aux->func_info_aux[subprog].linkage == BTF_FUNC_GLOBAL;
--	err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global);
-+	err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global, NULL);
- 
- 	/* Compiler optimizations can remove arguments from static functions
- 	 * or mismatched type can be passed into a global function.
-@@ -6455,9 +6517,10 @@ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
- 
- int btf_check_kfunc_arg_match(struct bpf_verifier_env *env,
- 			      const struct btf *btf, u32 func_id,
--			      struct bpf_reg_state *regs)
-+			      struct bpf_reg_state *regs,
-+			      struct bpf_kfunc_arg_meta *meta)
- {
--	return btf_check_func_arg_match(env, btf, func_id, regs, true);
-+	return btf_check_func_arg_match(env, btf, func_id, regs, true, meta);
- }
- 
- /* Convert BTF of a function into bpf_reg_state if possible
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 92714299831c..8e760cccab0a 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -7578,6 +7578,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- {
- 	const struct btf_type *t, *func, *func_proto, *ptr_type;
- 	struct bpf_reg_state *regs = cur_regs(env);
-+	struct bpf_kfunc_arg_meta meta = { 0 };
- 	const char *func_name, *ptr_type_name;
- 	u32 i, nargs, func_id, ptr_type_id;
- 	int err, insn_idx = *insn_idx_p;
-@@ -7609,7 +7610,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 					BTF_KFUNC_TYPE_ACQUIRE, func_id);
- 
- 	/* Check the arguments */
--	err = btf_check_kfunc_arg_match(env, desc_btf, func_id, regs);
-+	err = btf_check_kfunc_arg_match(env, desc_btf, func_id, regs, &meta);
- 	if (err < 0)
- 		return err;
- 	/* In case of release function, we get register number of refcounted
-@@ -7630,7 +7631,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 	/* Check return type */
- 	t = btf_type_skip_modifiers(desc_btf, func_proto->type, NULL);
- 
--	if (acq && !btf_type_is_ptr(t)) {
-+	if (acq && !btf_type_is_struct_ptr(desc_btf, t)) {
- 		verbose(env, "acquire kernel function does not return PTR_TO_BTF_ID\n");
- 		return -EINVAL;
- 	}
-@@ -7642,17 +7643,34 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		ptr_type = btf_type_skip_modifiers(desc_btf, t->type,
- 						   &ptr_type_id);
- 		if (!btf_type_is_struct(ptr_type)) {
--			ptr_type_name = btf_name_by_offset(desc_btf,
--							   ptr_type->name_off);
--			verbose(env, "kernel function %s returns pointer type %s %s is not supported\n",
--				func_name, btf_type_str(ptr_type),
--				ptr_type_name);
--			return -EINVAL;
-+			if (!meta.r0_size) {
-+				ptr_type_name = btf_name_by_offset(desc_btf,
-+								   ptr_type->name_off);
-+				verbose(env,
-+					"kernel function %s returns pointer type %s %s is not supported\n",
-+					func_name,
-+					btf_type_str(ptr_type),
-+					ptr_type_name);
-+				return -EINVAL;
-+			}
-+
-+			mark_reg_known_zero(env, regs, BPF_REG_0);
-+			regs[BPF_REG_0].type = PTR_TO_MEM;
-+			regs[BPF_REG_0].mem_size = meta.r0_size;
-+
-+			if (meta.r0_rdonly)
-+				regs[BPF_REG_0].type |= MEM_RDONLY;
-+
-+			/* Ensures we don't access the memory after a release_reference() */
-+			if (meta.ref_obj_id)
-+				regs[BPF_REG_0].ref_obj_id = meta.ref_obj_id;
-+		} else {
-+			mark_reg_known_zero(env, regs, BPF_REG_0);
-+			regs[BPF_REG_0].btf = desc_btf;
-+			regs[BPF_REG_0].type = PTR_TO_BTF_ID;
-+			regs[BPF_REG_0].btf_id = ptr_type_id;
- 		}
--		mark_reg_known_zero(env, regs, BPF_REG_0);
--		regs[BPF_REG_0].btf = desc_btf;
--		regs[BPF_REG_0].type = PTR_TO_BTF_ID;
--		regs[BPF_REG_0].btf_id = ptr_type_id;
-+
- 		if (btf_kfunc_id_set_contains(desc_btf, resolve_prog_type(env->prog),
- 					      BTF_KFUNC_TYPE_RET_NULL, func_id)) {
- 			regs[BPF_REG_0].type |= PTR_MAYBE_NULL;
--- 
-2.36.1
-
+Acked-by: Martin KaFai Lau <kafai@fb.com>
