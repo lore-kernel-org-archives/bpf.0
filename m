@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EBCF6C43334
-	for <bpf@archiver.kernel.org>; Fri, 22 Jul 2022 18:35:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8ED97C433EF
+	for <bpf@archiver.kernel.org>; Fri, 22 Jul 2022 18:35:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234547AbiGVSfO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Jul 2022 14:35:14 -0400
+        id S235934AbiGVSfQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Jul 2022 14:35:16 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236366AbiGVSfM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Jul 2022 14:35:12 -0400
+        with ESMTP id S235739AbiGVSfP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Jul 2022 14:35:15 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5422DB1CA
-        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 11:35:10 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26MHu43L003229
-        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 11:35:10 -0700
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2B2222A7
+        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 11:35:13 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26M6LSkC011327
+        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 11:35:13 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=EZUgqNntwmRMvAGD1nbOqMdiHHe+FBcGIfNMuR3ugLk=;
- b=JuX3sEVXgdZ4XaCv05dubBattM1PKfyuZER4f1dROlXxE5aGgcy6VlWJij0DmlZWVDWt
- CpLG4gn3VmcG4Nx+CvpcVums9oZS11SABoNNeG0w5d7K2U7gmiLbTfxRGh1QSlWjgI+G
- vG/0JkBALQ0OBs41E9GZwNGQqTGoZQ+7orI= 
+ bh=vWJ04e9HlRIugBxVyk5DZsLK/c/mhW8RV268HwXg76A=;
+ b=ddT5W0rZ1pHh/+L3rmzt2RETlcJHPigdf1BtkN4kfVlUTwNxPx98zaNsB84ieC6BP+eV
+ l+7T/Nwbywgoz7N364BmGlDiDMePaybK3Y49Z4yOw/gjX6YSlqQZ51as42C4bAmkX4/2
+ dsIwm7zlW7+dFQ/r0/JNNsZHAw4MGIo6g0Q= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hg0qp87jh-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hfphrbkut-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 11:35:09 -0700
-Received: from twshared1866.09.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 11:35:13 -0700
+Received: from twshared25107.07.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Fri, 22 Jul 2022 11:35:08 -0700
+ 15.1.2375.28; Fri, 22 Jul 2022 11:35:12 -0700
 Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
-        id 3FE93AB6F1A8; Fri, 22 Jul 2022 11:34:51 -0700 (PDT)
+        id 480DAAB6F1AD; Fri, 22 Jul 2022 11:34:52 -0700 (PDT)
 From:   Dave Marchevsky <davemarchevsky@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -41,9 +41,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Kernel Team <kernel-team@fb.com>, Tejun Heo <tj@kernel.org>,
         Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [RFC PATCH bpf-next 09/11] bpf: Add CONDITIONAL_RELEASE type flag
-Date:   Fri, 22 Jul 2022 11:34:36 -0700
-Message-ID: <20220722183438.3319790-10-davemarchevsky@fb.com>
+Subject: [RFC PATCH bpf-next 11/11] selftests/bpf: Add rbtree map tests
+Date:   Fri, 22 Jul 2022 11:34:38 -0700
+Message-ID: <20220722183438.3319790-12-davemarchevsky@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220722183438.3319790-1-davemarchevsky@fb.com>
 References: <20220722183438.3319790-1-davemarchevsky@fb.com>
@@ -51,8 +51,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: VrT7hGowEHTA2RIAJ0aJ1Yf-MrCb0CwC
-X-Proofpoint-GUID: VrT7hGowEHTA2RIAJ0aJ1Yf-MrCb0CwC
+X-Proofpoint-ORIG-GUID: ldDKxP-4pYW3dnpEVLIzUFYbEywDLCpo
+X-Proofpoint-GUID: ldDKxP-4pYW3dnpEVLIzUFYbEywDLCpo
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-07-22_06,2022-07-21_02,2022-06-22_01
@@ -60,379 +60,593 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently if a helper proto has an arg with OBJ_RELEASE flag, the verifie=
-r
-assumes the 'release' logic in the helper will always succeed, and
-therefore always clears the arg reg, other regs w/ same
-ref_obj_id, and releases the reference. This poses a problem for
-'release' helpers which may not always succeed.
-
-For example, bpf_rbtree_add will fail to add the passed-in node to a
-bpf_rbtree if the rbtree's lock is not held when the helper is called.
-In this case the helper returns NULL and the calling bpf program must
-release the node in another way before terminating to avoid leaking
-memory. An example of such logic:
-
-1  struct node_data *node =3D bpf_rbtree_alloc_node(&rbtree, ...);
-2  struct node_data *ret =3D bpf_rbtree_add(&rbtree, node);
-3  if (!ret) {
-4    bpf_rbtree_free_node(node);
-5    return 0;
-6  }
-7  bpf_trace_printk("%d\n", ret->id);
-
-However, current verifier logic does not allow this: after line 2,
-ref_obj_id of reg holding 'node' (BPF_REG_2) will be released via
-release_reference function, which will mark BPF_REG_2 and any other reg
-with same ref_obj_id as unknown. As a result neither ret nor node will
-point to anything useful if line 3's check passes. Additionally, since th=
-e
-reference is unconditionally released, the program would pass the
-verifier without the null check.
-
-This patch adds 'conditional release' semantics so that the verifier can
-handle the above example correctly. The CONDITIONAL_RELEASE type flag
-works in concert with the existing OBJ_RELEASE flag - the latter is used
-to tag an argument, while the new type flag is used to tag return type.
-
-If a helper has an OBJ_RELEASE arg type and CONDITIONAL_RELEASE return
-type, the helper is considered to use its return value to indicate
-success or failure of the release operation. NULL is returned if release
-fails, non-null otherwise.
-
-For my concrete usecase - bpf_rbtree_add - CONDITIONAL_RELEASE works in
-concert with OBJ_NON_OWNING_REF: successful release results in a non-owni=
-ng
-reference being returned, allowing line 7 in above example.
-
-Instead of unconditionally releasing the OBJ_RELEASE reference when
-doing check_helper_call, for CONDITIONAL_RELEASE helpers the verifier
-will wait until the return value is checked for null.
-  If not null: the reference is released
-
-  If null: no reference is released. Since other regs w/ same ref_obj_id
-           were not marked unknown by check_helper_call, they can be
-           used to release the reference via other means (line 4 above),
-
-It's necessary to prevent conditionally-released ref_obj_id regs from
-being used between the release helper and null check. For example:
-
-1  struct node_data *node =3D bpf_rbtree_alloc_node(&rbtree, ...);
-2  struct node_data *ret =3D bpf_rbtree_add(&rbtree, node);
-3  do_something_with_a_node(node);
-4  if (!ret) {
-5    bpf_rbtree_free_node(node);
-6    return 0;
-7  }
-
-Line 3 shouldn't be allowed since node may have been released. The
-verifier tags all regs with ref_obj_id of the conditionally-released arg
-in the period between the helper call and null check for this reason.
-
-Why no matching CONDITIONAL_ACQUIRE type flag? Existing verifier logic
-already treats acquire of an _OR_NULL type as a conditional acquire.
-Consider this code:
-
-1  struct thing *i =3D acquire_helper_that_returns_thing_or_null();
-2  if (!i)
-3    return 0;
-4  manipulate_thing(i);
-5  release_thing(i);
-
-After line 1, BPF_REG_0 will have an _OR_NULL type and a ref_obj_id set.
-When the verifier sees line 2's conditional jump, existing logic in
-mark_ptr_or_null_regs, specifically the if:
-
-  if (ref_obj_id && ref_obj_id =3D=3D id && is_null)
-          /* regs[regno] is in the " =3D=3D NULL" branch.
-           * No one could have freed the reference state before
-           * doing the NULL check.
-           */
-           WARN_ON_ONCE(release_reference_state(state, id));
-
-will release the reference in the is_null state.
-
-[ TODO: Either need to remove WARN_ON_ONCE there without adding
-CONDITIONAL_ACQUIRE flag or add the flag and don't WARN_ON_ONCE if it's
-set. Left out of first pass for simplicity's sake. ]
+Add tests demonstrating happy path of rbtree map usage as well as
+exercising numerous failure paths and conditions. Structure of failing
+test runner is based on dynptr tests.
 
 Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
 ---
- include/linux/bpf.h          |   3 +
- include/linux/bpf_verifier.h |   1 +
- kernel/bpf/rbtree.c          |   2 +-
- kernel/bpf/verifier.c        | 122 +++++++++++++++++++++++++++++++----
- 4 files changed, 113 insertions(+), 15 deletions(-)
+ .../selftests/bpf/prog_tests/rbtree_map.c     | 164 ++++++++++++
+ .../testing/selftests/bpf/progs/rbtree_map.c  | 111 ++++++++
+ .../selftests/bpf/progs/rbtree_map_fail.c     | 236 ++++++++++++++++++
+ .../bpf/progs/rbtree_map_load_fail.c          |  24 ++
+ 4 files changed, 535 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/rbtree_map.c
+ create mode 100644 tools/testing/selftests/bpf/progs/rbtree_map.c
+ create mode 100644 tools/testing/selftests/bpf/progs/rbtree_map_fail.c
+ create mode 100644 tools/testing/selftests/bpf/progs/rbtree_map_load_fai=
+l.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index c9c4b4fb019c..a601ab30a2b1 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -413,6 +413,9 @@ enum bpf_type_flag {
- 	MEM_FIXED_SIZE		=3D BIT(10 + BPF_BASE_TYPE_BITS),
-=20
- 	OBJ_NON_OWNING_REF	=3D BIT(11 + BPF_BASE_TYPE_BITS),
+diff --git a/tools/testing/selftests/bpf/prog_tests/rbtree_map.c b/tools/=
+testing/selftests/bpf/prog_tests/rbtree_map.c
+new file mode 100644
+index 000000000000..17cadcd05ee4
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/rbtree_map.c
+@@ -0,0 +1,164 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
 +
-+	CONDITIONAL_RELEASE	=3D BIT(12 + BPF_BASE_TYPE_BITS),
++#include <sys/syscall.h>
++#include <test_progs.h>
++#include "rbtree_map.skel.h"
++#include "rbtree_map_fail.skel.h"
++#include "rbtree_map_load_fail.skel.h"
 +
- 	__BPF_TYPE_FLAG_MAX,
- 	__BPF_TYPE_LAST_FLAG	=3D __BPF_TYPE_FLAG_MAX - 1,
- };
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 9c017575c034..bdc8c48c2343 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -313,6 +313,7 @@ struct bpf_verifier_state {
- 	u32 insn_idx;
- 	u32 curframe;
- 	u32 active_spin_lock;
-+	u32 active_cond_ref_obj_id;
- 	bool speculative;
-=20
- 	/* first and last insn idx of this verifier state */
-diff --git a/kernel/bpf/rbtree.c b/kernel/bpf/rbtree.c
-index 34864fc83209..dcf8f69d4ada 100644
---- a/kernel/bpf/rbtree.c
-+++ b/kernel/bpf/rbtree.c
-@@ -111,7 +111,7 @@ BPF_CALL_3(bpf_rbtree_add, struct bpf_map *, map, voi=
-d *, value, void *, cb)
- const struct bpf_func_proto bpf_rbtree_add_proto =3D {
- 	.func =3D bpf_rbtree_add,
- 	.gpl_only =3D true,
--	.ret_type =3D RET_PTR_TO_BTF_ID_OR_NULL | OBJ_NON_OWNING_REF,
-+	.ret_type =3D RET_PTR_TO_BTF_ID_OR_NULL | OBJ_NON_OWNING_REF | CONDITIO=
-NAL_RELEASE,
- 	.arg1_type =3D ARG_CONST_MAP_PTR,
- 	.arg2_type =3D ARG_PTR_TO_BTF_ID | OBJ_RELEASE,
- 	.arg2_btf_id =3D &bpf_rbtree_btf_ids[0],
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 4f46b2dfbc4b..f80e161170de 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -472,6 +472,11 @@ static bool type_is_non_owning_ref(u32 type)
- 	return type & OBJ_NON_OWNING_REF;
- }
-=20
-+static bool type_is_cond_release(u32 type)
-+{
-+	return type & CONDITIONAL_RELEASE;
-+}
++static size_t log_buf_sz =3D 1048576; /* 1 MB */
++static char obj_log_buf[1048576];
 +
- static bool type_may_be_null(u32 type)
- {
- 	return type & PTR_MAYBE_NULL;
-@@ -600,6 +605,15 @@ static const char *reg_type_str(struct bpf_verifier_=
-env *env,
- 			postfix_idx +=3D strlcpy(postfix + postfix_idx, "_non_own", 32 - post=
-fix_idx);
- 	}
-=20
-+	if (type_is_cond_release(type)) {
-+		if (base_type(type) =3D=3D PTR_TO_BTF_ID)
-+			postfix_idx +=3D strlcpy(postfix + postfix_idx, "cond_rel_",
-+					       32 - postfix_idx);
-+		else
-+			postfix_idx +=3D strlcpy(postfix + postfix_idx, "_cond_rel",
-+					       32 - postfix_idx);
-+	}
-+
- 	if (type & MEM_RDONLY)
- 		strncpy(prefix, "rdonly_", 32);
- 	if (type & MEM_ALLOC)
-@@ -1211,6 +1225,7 @@ static int copy_verifier_state(struct bpf_verifier_=
-state *dst_state,
- 	dst_state->speculative =3D src->speculative;
- 	dst_state->curframe =3D src->curframe;
- 	dst_state->active_spin_lock =3D src->active_spin_lock;
-+	dst_state->active_cond_ref_obj_id =3D src->active_cond_ref_obj_id;
- 	dst_state->branches =3D src->branches;
- 	dst_state->parent =3D src->parent;
- 	dst_state->first_insn_idx =3D src->first_insn_idx;
-@@ -1418,6 +1433,7 @@ static void mark_ptr_not_null_reg(struct bpf_reg_st=
-ate *reg)
- 		return;
- 	}
-=20
-+	reg->type &=3D ~CONDITIONAL_RELEASE;
- 	reg->type &=3D ~PTR_MAYBE_NULL;
- }
-=20
-@@ -6635,24 +6651,78 @@ static void release_reg_references(struct bpf_ver=
-ifier_env *env,
- 	}
- }
-=20
-+static int __release_reference(struct bpf_verifier_env *env, struct bpf_=
-verifier_state *vstate,
-+			       int ref_obj_id)
-+{
-+	int err;
-+	int i;
-+
-+	err =3D release_reference_state(vstate->frame[vstate->curframe], ref_ob=
-j_id);
-+	if (err)
-+		return err;
-+
-+	for (i =3D 0; i <=3D vstate->curframe; i++)
-+		release_reg_references(env, vstate->frame[i], ref_obj_id);
-+	return 0;
-+}
-+
- /* The pointer with the specified id has released its reference to kerne=
-l
-  * resources. Identify all copies of the same pointer and clear the refe=
-rence.
-  */
- static int release_reference(struct bpf_verifier_env *env,
- 			     int ref_obj_id)
- {
--	struct bpf_verifier_state *vstate =3D env->cur_state;
--	int err;
-+	return __release_reference(env, env->cur_state, ref_obj_id);
-+}
-+
-+static void tag_reference_cond_release_regs(struct bpf_verifier_env *env=
++static struct {
++	const char *prog_name;
++	const char *expected_err_msg;
++} rbtree_prog_load_fail_tests[] =3D {
++	{"rb_node__field_store", "only read is supported"},
++	{"rb_node__alloc_no_add", "Unreleased reference id=3D2 alloc_insn=3D3"}=
 ,
-+					    struct bpf_func_state *state,
-+					    int ref_obj_id,
-+					    bool remove)
-+{
-+	struct bpf_reg_state *regs =3D state->regs, *reg;
- 	int i;
-=20
--	err =3D release_reference_state(cur_func(env), ref_obj_id);
--	if (err)
--		return err;
-+	for (i =3D 0; i < MAX_BPF_REG; i++)
-+		if (regs[i].ref_obj_id =3D=3D ref_obj_id) {
-+			if (remove)
-+				regs[i].type &=3D ~CONDITIONAL_RELEASE;
-+			else
-+				regs[i].type |=3D CONDITIONAL_RELEASE;
-+		}
++	{"rb_node__two_alloc_one_add", "Unreleased reference id=3D2 alloc_insn=3D=
+3"},
++	{"rb_node__remove_no_free", "Unreleased reference id=3D5 alloc_insn=3D2=
+8"},
++	{"rb_tree__add_wrong_type", "rbtree: R2 is of type task_struct but node=
+_data is expected"},
++	{"rb_tree__conditional_release_helper_usage",
++		"R2 type=3Dptr_cond_rel_ expected=3Dptr_"},
++};
 +
-+	bpf_for_each_spilled_reg(i, state, reg) {
-+		if (!reg)
++void test_rbtree_map_load_fail(void)
++{
++	struct rbtree_map_load_fail *skel;
++
++	skel =3D rbtree_map_load_fail__open_and_load();
++	if (!ASSERT_ERR_PTR(skel, "rbtree_map_load_fail__open_and_load"))
++		rbtree_map_load_fail__destroy(skel);
++}
++
++static void verify_fail(const char *prog_name, const char *expected_err_=
+msg)
++{
++	LIBBPF_OPTS(bpf_object_open_opts, opts);
++	struct rbtree_map_fail *skel;
++	struct bpf_program *prog;
++	int err;
++
++	opts.kernel_log_buf =3D obj_log_buf;
++	opts.kernel_log_size =3D log_buf_sz;
++	opts.kernel_log_level =3D 1;
++
++	skel =3D rbtree_map_fail__open_opts(&opts);
++	if (!ASSERT_OK_PTR(skel, "rbtree_map_fail__open_opts"))
++		goto cleanup;
++
++	prog =3D bpf_object__find_program_by_name(skel->obj, prog_name);
++	if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
++		goto cleanup;
++
++	bpf_program__set_autoload(prog, true);
++	err =3D rbtree_map_fail__load(skel);
++	if (!ASSERT_ERR(err, "unexpected load success"))
++		goto cleanup;
++
++	if (!ASSERT_OK_PTR(strstr(obj_log_buf, expected_err_msg), "expected_err=
+_msg")) {
++		fprintf(stderr, "Expected err_msg: %s\n", expected_err_msg);
++		fprintf(stderr, "Verifier output: %s\n", obj_log_buf);
++	}
++
++cleanup:
++	rbtree_map_fail__destroy(skel);
++}
++
++void test_rbtree_map_alloc_node__size_too_small(void)
++{
++	struct rbtree_map_fail *skel;
++	struct bpf_program *prog;
++	struct bpf_link *link;
++	int err;
++
++	skel =3D rbtree_map_fail__open();
++	if (!ASSERT_OK_PTR(skel, "rbtree_map_fail__open"))
++		goto cleanup;
++
++	prog =3D skel->progs.alloc_node__size_too_small;
++	bpf_program__set_autoload(prog, true);
++
++	err =3D rbtree_map_fail__load(skel);
++	if (!ASSERT_OK(err, "unexpected load fail"))
++		goto cleanup;
++
++	link =3D bpf_program__attach(skel->progs.alloc_node__size_too_small);
++	if (!ASSERT_OK_PTR(link, "link"))
++		goto cleanup;
++
++	syscall(SYS_getpgid);
++
++	ASSERT_EQ(skel->bss->size_too_small__alloc_fail, 1, "alloc_fail");
++
++	bpf_link__destroy(link);
++cleanup:
++	rbtree_map_fail__destroy(skel);
++}
++
++void test_rbtree_map_add_node__no_lock(void)
++{
++	struct rbtree_map_fail *skel;
++	struct bpf_program *prog;
++	struct bpf_link *link;
++	int err;
++
++	skel =3D rbtree_map_fail__open();
++	if (!ASSERT_OK_PTR(skel, "rbtree_map_fail__open"))
++		goto cleanup;
++
++	prog =3D skel->progs.add_node__no_lock;
++	bpf_program__set_autoload(prog, true);
++
++	err =3D rbtree_map_fail__load(skel);
++	if (!ASSERT_OK(err, "unexpected load fail"))
++		goto cleanup;
++
++	link =3D bpf_program__attach(skel->progs.add_node__no_lock);
++	if (!ASSERT_OK_PTR(link, "link"))
++		goto cleanup;
++
++	syscall(SYS_getpgid);
++
++	ASSERT_EQ(skel->bss->no_lock_add__fail, 1, "alloc_fail");
++
++	bpf_link__destroy(link);
++cleanup:
++	rbtree_map_fail__destroy(skel);
++}
++
++void test_rbtree_map_prog_load_fail(void)
++{
++	int i;
++
++	for (i =3D 0; i < ARRAY_SIZE(rbtree_prog_load_fail_tests); i++) {
++		if (!test__start_subtest(rbtree_prog_load_fail_tests[i].prog_name))
 +			continue;
-+		if (reg->ref_obj_id =3D=3D ref_obj_id) {
-+			if (remove)
-+				reg->type &=3D ~CONDITIONAL_RELEASE;
-+			else
-+				reg->type |=3D CONDITIONAL_RELEASE;
-+		}
++
++		verify_fail(rbtree_prog_load_fail_tests[i].prog_name,
++			    rbtree_prog_load_fail_tests[i].expected_err_msg);
 +	}
 +}
 +
-+static void tag_reference_cond_release(struct bpf_verifier_env *env,
-+				       int ref_obj_id)
++void test_rbtree_map(void)
 +{
-+	struct bpf_verifier_state *vstate =3D env->cur_state;
-+	int i;
-=20
- 	for (i =3D 0; i <=3D vstate->curframe; i++)
--		release_reg_references(env, vstate->frame[i], ref_obj_id);
-+		tag_reference_cond_release_regs(env, vstate->frame[i],
-+						ref_obj_id, false);
++	struct rbtree_map *skel;
++	struct bpf_link *link;
++
++	skel =3D rbtree_map__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "rbtree_map__open_and_load"))
++		goto cleanup;
++
++	link =3D bpf_program__attach(skel->progs.check_rbtree);
++	if (!ASSERT_OK_PTR(link, "link"))
++		goto cleanup;
++
++	for (int i =3D 0; i < 100; i++)
++		syscall(SYS_getpgid);
++
++	ASSERT_EQ(skel->bss->calls, 100, "calls_equal");
++
++	bpf_link__destroy(link);
++cleanup:
++	rbtree_map__destroy(skel);
 +}
-=20
--	return 0;
-+static void untag_reference_cond_release(struct bpf_verifier_env *env,
-+					 struct bpf_verifier_state *vstate,
-+					 int ref_obj_id)
+diff --git a/tools/testing/selftests/bpf/progs/rbtree_map.c b/tools/testi=
+ng/selftests/bpf/progs/rbtree_map.c
+new file mode 100644
+index 000000000000..0cd467838f6e
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/rbtree_map.c
+@@ -0,0 +1,111 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++struct node_data {
++	struct rb_node node;
++	__u32 one;
++	__u32 two;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_RBTREE);
++	__type(value, struct node_data);
++} rbtree SEC(".maps");
++
++long calls;
++
++static bool less(struct rb_node *a, const struct rb_node *b)
 +{
-+	int i;
++	struct node_data *node_a;
++	struct node_data *node_b;
 +
-+	for (i =3D 0; i <=3D vstate->curframe; i++)
-+		tag_reference_cond_release_regs(env, vstate->frame[i],
-+						ref_obj_id, true);
- }
-=20
- static void clear_non_owning_ref_regs(struct bpf_verifier_env *env,
-@@ -7406,7 +7476,17 @@ static int check_helper_call(struct bpf_verifier_e=
-nv *env, struct bpf_insn *insn
- 		if (arg_type_is_dynptr(fn->arg_type[meta.release_regno - BPF_REG_1]))
- 			err =3D unmark_stack_slots_dynptr(env, &regs[meta.release_regno]);
- 		else if (meta.ref_obj_id)
--			err =3D release_reference(env, meta.ref_obj_id);
-+			if (type_is_cond_release(fn->ret_type)) {
-+				if (env->cur_state->active_cond_ref_obj_id) {
-+					verbose(env, "can't handle >1 cond_release\n");
-+					return err;
-+				}
-+				env->cur_state->active_cond_ref_obj_id =3D meta.ref_obj_id;
-+				tag_reference_cond_release(env, meta.ref_obj_id);
-+				err =3D 0;
-+			} else {
-+				err =3D release_reference(env, meta.ref_obj_id);
-+			}
- 		/* meta.ref_obj_id can only be 0 if register that is meant to be
- 		 * released is NULL, which must be > R0.
- 		 */
-@@ -10040,8 +10120,8 @@ static void __mark_ptr_or_null_regs(struct bpf_fu=
-nc_state *state, u32 id,
- /* The logic is similar to find_good_pkt_pointers(), both could eventual=
-ly
-  * be folded together at some point.
-  */
--static void mark_ptr_or_null_regs(struct bpf_verifier_state *vstate, u32=
- regno,
--				  bool is_null)
-+static int mark_ptr_or_null_regs(struct bpf_verifier_state *vstate, u32 =
-regno,
-+				 bool is_null, struct bpf_verifier_env *env)
- {
- 	struct bpf_func_state *state =3D vstate->frame[vstate->curframe];
- 	struct bpf_reg_state *regs =3D state->regs;
-@@ -10056,8 +10136,19 @@ static void mark_ptr_or_null_regs(struct bpf_ver=
-ifier_state *vstate, u32 regno,
- 		 */
- 		WARN_ON_ONCE(release_reference_state(state, id));
-=20
-+	if (type_is_cond_release(regs[regno].type)) {
-+		if (!is_null) {
-+			__release_reference(env, vstate, vstate->active_cond_ref_obj_id);
-+			vstate->active_cond_ref_obj_id =3D 0;
-+		} else {
-+			untag_reference_cond_release(env, vstate, vstate->active_cond_ref_obj=
-_id);
-+			vstate->active_cond_ref_obj_id =3D 0;
-+		}
++	node_a =3D container_of(a, struct node_data, node);
++	node_b =3D container_of(b, struct node_data, node);
++
++	return node_a->one < node_b->one;
++}
++
++// Key =3D node_datq
++static int cmp(const void *key, const struct rb_node *b)
++{
++	struct node_data *node_a;
++	struct node_data *node_b;
++
++	node_a =3D container_of(key, struct node_data, node);
++	node_b =3D container_of(b, struct node_data, node);
++
++	return node_b->one - node_a->one;
++}
++
++// Key =3D just node_data.one
++static int cmp2(const void *key, const struct rb_node *b)
++{
++	__u32 one;
++	struct node_data *node_b;
++
++	one =3D *(__u32 *)key;
++	node_b =3D container_of(b, struct node_data, node);
++
++	return node_b->one - one;
++}
++
++SEC("fentry/" SYS_PREFIX "sys_getpgid")
++int check_rbtree(void *ctx)
++{
++	struct node_data *node, *found, *ret;
++	struct node_data popped;
++	struct node_data search;
++	__u32 search2;
++
++	node =3D bpf_rbtree_alloc_node(&rbtree, sizeof(struct node_data));
++	if (!node)
++		return 0;
++
++	node->one =3D calls;
++	node->two =3D 6;
++	bpf_rbtree_lock(bpf_rbtree_get_lock(&rbtree));
++
++	ret =3D (struct node_data *)bpf_rbtree_add(&rbtree, node, less);
++	if (!ret) {
++		bpf_rbtree_free_node(&rbtree, node);
++		goto unlock_ret;
 +	}
- 	for (i =3D 0; i <=3D vstate->curframe; i++)
- 		__mark_ptr_or_null_regs(vstate->frame[i], id, is_null);
 +
++	bpf_rbtree_unlock(bpf_rbtree_get_lock(&rbtree));
++
++	bpf_rbtree_lock(bpf_rbtree_get_lock(&rbtree));
++
++	search.one =3D calls;
++	found =3D (struct node_data *)bpf_rbtree_find(&rbtree, &search, cmp);
++	if (!found)
++		goto unlock_ret;
++
++	int node_ct =3D 0;
++	struct node_data *iter =3D (struct node_data *)bpf_rbtree_first(&rbtree=
+);
++
++	while (iter) {
++		node_ct++;
++		iter =3D (struct node_data *)bpf_rbtree_next(&rbtree, iter);
++	}
++
++	ret =3D (struct node_data *)bpf_rbtree_remove(&rbtree, found);
++	if (!ret)
++		goto unlock_ret;
++
++	bpf_rbtree_unlock(bpf_rbtree_get_lock(&rbtree));
++
++	bpf_rbtree_free_node(&rbtree, ret);
++
++	__sync_fetch_and_add(&calls, 1);
 +	return 0;
- }
-=20
- static bool try_match_pkt_pointers(const struct bpf_insn *insn,
-@@ -10365,10 +10456,10 @@ static int check_cond_jmp_op(struct bpf_verifie=
-r_env *env,
- 		/* Mark all identical registers in each branch as either
- 		 * safe or unknown depending R =3D=3D 0 or R !=3D 0 conditional.
- 		 */
--		mark_ptr_or_null_regs(this_branch, insn->dst_reg,
--				      opcode =3D=3D BPF_JNE);
--		mark_ptr_or_null_regs(other_branch, insn->dst_reg,
--				      opcode =3D=3D BPF_JEQ);
-+		err =3D mark_ptr_or_null_regs(this_branch, insn->dst_reg,
-+					    opcode =3D=3D BPF_JNE, env);
-+		err =3D mark_ptr_or_null_regs(other_branch, insn->dst_reg,
-+					    opcode =3D=3D BPF_JEQ, env);
- 	} else if (!try_match_pkt_pointers(insn, dst_reg, &regs[insn->src_reg],
- 					   this_branch, other_branch) &&
- 		   is_pointer_value(env, insn->dst_reg)) {
-@@ -11809,6 +11900,9 @@ static bool states_equal(struct bpf_verifier_env =
-*env,
- 	if (old->active_spin_lock !=3D cur->active_spin_lock)
- 		return false;
-=20
-+	if (old->active_cond_ref_obj_id !=3D cur->active_cond_ref_obj_id)
-+		return false;
 +
- 	/* for states to be equal callsites have to be the same
- 	 * and all frame states need to be equivalent
- 	 */
++unlock_ret:
++	bpf_rbtree_unlock(bpf_rbtree_get_lock(&rbtree));
++	return 0;
++}
++
++char _license[] SEC("license") =3D "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/rbtree_map_fail.c b/tools/=
+testing/selftests/bpf/progs/rbtree_map_fail.c
+new file mode 100644
+index 000000000000..287c8db080d8
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/rbtree_map_fail.c
+@@ -0,0 +1,236 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++struct node_data {
++	struct rb_node node;
++	__u32 one;
++	__u32 two;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_RBTREE);
++	__type(value, struct node_data);
++} rbtree SEC(".maps");
++
++long calls;
++
++static bool less(struct rb_node *a, const struct rb_node *b)
++{
++	struct node_data *node_a;
++	struct node_data *node_b;
++
++	node_a =3D container_of(a, struct node_data, node);
++	node_b =3D container_of(b, struct node_data, node);
++
++	return node_a->one < node_b->one;
++}
++
++// Key =3D node_datq
++static int cmp(const void *key, const struct rb_node *b)
++{
++	struct node_data *node_a;
++	struct node_data *node_b;
++
++	node_a =3D container_of(key, struct node_data, node);
++	node_b =3D container_of(b, struct node_data, node);
++
++	return node_b->one - node_a->one;
++}
++
++long size_too_small__alloc_fail;
++
++SEC("?fentry/" SYS_PREFIX "sys_getpgid")
++int alloc_node__size_too_small(void *ctx)
++{
++	struct node_data *node, *ret;
++
++	node =3D bpf_rbtree_alloc_node(&rbtree, sizeof(char));
++	if (!node) {
++		size_too_small__alloc_fail++;
++		return 0;
++	}
++
++	bpf_rbtree_lock(bpf_rbtree_get_lock(&rbtree));
++	/* will never execute, alloc_node should fail */
++	node->one =3D 1;
++	ret =3D bpf_rbtree_add(&rbtree, node, less);
++	if (!ret) {
++		bpf_rbtree_free_node(&rbtree, node);
++		goto unlock_ret;
++	}
++
++unlock_ret:
++	bpf_rbtree_unlock(bpf_rbtree_get_lock(&rbtree));
++	return 0;
++}
++
++long no_lock_add__fail;
++
++SEC("?fentry/" SYS_PREFIX "sys_getpgid")
++int add_node__no_lock(void *ctx)
++{
++	struct node_data *node, *ret;
++
++	node =3D bpf_rbtree_alloc_node(&rbtree, sizeof(struct node_data));
++	if (!node)
++		return 0;
++
++	node->one =3D 1;
++	ret =3D bpf_rbtree_add(&rbtree, node, less);
++	if (!ret) {
++		no_lock_add__fail++;
++		/* will always execute, rbtree_add should fail
++		 * because no lock held
++		 */
++		bpf_rbtree_free_node(&rbtree, node);
++	}
++
++unlock_ret:
++	return 0;
++}
++
++SEC("?fentry/" SYS_PREFIX "sys_getpgid")
++int rb_node__field_store(void *ctx)
++{
++	struct node_data *node;
++
++	node =3D bpf_rbtree_alloc_node(&rbtree, sizeof(struct node_data));
++	if (!node)
++		return 0;
++
++	/* Only rbtree_map helpers can modify rb_node field */
++	node->node.rb_left =3D NULL;
++	return 0;
++}
++
++SEC("?fentry/" SYS_PREFIX "sys_getpgid")
++int rb_node__alloc_no_add(void *ctx)
++{
++	struct node_data *node;
++
++	node =3D bpf_rbtree_alloc_node(&rbtree, sizeof(struct node_data));
++	if (!node)
++		return 0;
++	/* The node alloc'd above is never added to the rbtree. It must be
++	 * added or free'd before prog terminates.
++	 */
++
++	node->one =3D 42;
++	return 0;
++}
++
++SEC("?fentry/" SYS_PREFIX "sys_getpgid")
++int rb_node__two_alloc_one_add(void *ctx)
++{
++	struct node_data *node, *ret;
++
++	node =3D bpf_rbtree_alloc_node(&rbtree, sizeof(struct node_data));
++	if (!node)
++		return 0;
++	node->one =3D 1;
++	/* The node alloc'd above is never added to the rbtree. It must be
++	 * added or free'd before prog terminates.
++	 */
++
++	node =3D bpf_rbtree_alloc_node(&rbtree, sizeof(struct node_data));
++	if (!node)
++		return 0;
++	node->one =3D 42;
++
++	bpf_rbtree_lock(bpf_rbtree_get_lock(&rbtree));
++
++	ret =3D bpf_rbtree_add(&rbtree, node, less);
++	if (!ret) {
++		bpf_rbtree_free_node(&rbtree, node);
++		goto unlock_ret;
++	}
++
++unlock_ret:
++	bpf_rbtree_unlock(bpf_rbtree_get_lock(&rbtree));
++	return 0;
++}
++
++SEC("?fentry/" SYS_PREFIX "sys_getpgid")
++int rb_node__remove_no_free(void *ctx)
++{
++	struct node_data *node, *ret;
++
++	node =3D bpf_rbtree_alloc_node(&rbtree, sizeof(struct node_data));
++	if (!node)
++		return 0;
++	node->one =3D 42;
++
++	bpf_rbtree_lock(bpf_rbtree_get_lock(&rbtree));
++
++	ret =3D bpf_rbtree_add(&rbtree, node, less);
++	if (!ret) {
++		bpf_rbtree_free_node(&rbtree, node);
++		goto unlock_ret;
++	}
++
++	ret =3D bpf_rbtree_remove(&rbtree, ret);
++	if (!ret)
++		goto unlock_ret;
++	/* At this point we've successfully acquired a reference from
++	 * bpf_rbtree_remove. It must be released via rbtree_add or
++	 * rbtree_free_node before prog terminates.
++	 */
++
++unlock_ret:
++	bpf_rbtree_unlock(bpf_rbtree_get_lock(&rbtree));
++	return 0;
++}
++
++SEC("?fentry/" SYS_PREFIX "sys_getpgid")
++int rb_tree__add_wrong_type(void *ctx)
++{
++	/* Can't add a task_struct to rbtree
++	 */
++	struct task_struct *task;
++	struct node_data *ret;
++
++	task =3D bpf_get_current_task_btf();
++
++	bpf_rbtree_lock(bpf_rbtree_get_lock(&rbtree));
++
++	ret =3D bpf_rbtree_add(&rbtree, task, less);
++	/* Verifier should fail at bpf_rbtree_add, so don't bother handling
++	 * failure.
++	 */
++
++	bpf_rbtree_unlock(bpf_rbtree_get_lock(&rbtree));
++	return 0;
++}
++
++SEC("?fentry/" SYS_PREFIX "sys_getpgid")
++int rb_tree__conditional_release_helper_usage(void *ctx)
++{
++	struct node_data *node, *ret;
++
++	node =3D bpf_rbtree_alloc_node(&rbtree, sizeof(struct node_data));
++	if (!node)
++		return 0;
++	node->one =3D 42;
++
++	bpf_rbtree_lock(bpf_rbtree_get_lock(&rbtree));
++
++	ret =3D bpf_rbtree_add(&rbtree, node, less);
++	/* Verifier should fail when trying to use CONDITIONAL_RELEASE
++	 * type in a helper
++	 */
++	bpf_rbtree_free_node(&rbtree, node);
++	if (!ret) {
++		bpf_rbtree_free_node(&rbtree, node);
++		goto unlock_ret;
++	}
++
++unlock_ret:
++	bpf_rbtree_unlock(bpf_rbtree_get_lock(&rbtree));
++	return 0;
++}
++
++char _license[] SEC("license") =3D "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/rbtree_map_load_fail.c b/t=
+ools/testing/selftests/bpf/progs/rbtree_map_load_fail.c
+new file mode 100644
+index 000000000000..036558eedd66
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/rbtree_map_load_fail.c
+@@ -0,0 +1,24 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++
++struct node_data_no_rb_node {
++	__u64 one;
++	__u64 two;
++	__u64 three;
++	__u64 four;
++	__u64 five;
++	__u64 six;
++	__u64 seven;
++};
++
++/* Should fail because value struct has no rb_node
++ */
++struct {
++	__uint(type, BPF_MAP_TYPE_RBTREE);
++	__type(value, struct node_data_no_rb_node);
++} rbtree_fail_no_rb_node SEC(".maps");
++
++char _license[] SEC("license") =3D "GPL";
 --=20
 2.30.2
 
