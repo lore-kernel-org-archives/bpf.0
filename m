@@ -2,123 +2,115 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD69BC433EF
-	for <bpf@archiver.kernel.org>; Fri, 22 Jul 2022 18:00:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA30EC433EF
+	for <bpf@archiver.kernel.org>; Fri, 22 Jul 2022 18:01:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233965AbiGVSAE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Jul 2022 14:00:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51358 "EHLO
+        id S235960AbiGVSBq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Jul 2022 14:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235960AbiGVSAD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Jul 2022 14:00:03 -0400
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90BD47436E
-        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 11:00:02 -0700 (PDT)
-Received: by devbig010.atn6.facebook.com (Postfix, from userid 115148)
-        id CC09CF52A4C1; Fri, 22 Jul 2022 10:59:47 -0700 (PDT)
-From:   Joanne Koong <joannelkoong@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     kafai@fb.com, jolsa@kernel.org, haoluo@google.com,
-        andrii@kernel.org, daniel@iogearbox.net, ast@kernel.org,
-        Joanne Koong <joannelkoong@gmail.com>
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: add extra test for using dynptr data slice after release
-Date:   Fri, 22 Jul 2022 10:58:07 -0700
-Message-Id: <20220722175807.4038317-2-joannelkoong@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220722175807.4038317-1-joannelkoong@gmail.com>
-References: <20220722175807.4038317-1-joannelkoong@gmail.com>
+        with ESMTP id S235478AbiGVSBp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Jul 2022 14:01:45 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D6713F93
+        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 11:01:44 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id mf4so9880650ejc.3
+        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 11:01:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Z5OsmFRI7KetDyQg13TteOeKfaFUdYSP/HSjomYs1Ns=;
+        b=l3oNEeijTmjUQb9L0ABv3EuQAzeAezydv2C7ujGkj76yzWinfZZaZI3Kw+vE2IMykj
+         c2JG/RXGwHi5ofwjO7dW0rSJFJhrhmNbta9ZZQ6J14rbyLlfa5Yd2L8widhNWUu1qSV3
+         92WLSFIc3H3847Mvy7WRdYX63Bvksr+Eq4mKEwuQzVQOXVBNBRumikzATF8MtM/nifMc
+         w/cTAFgx9NGoXoermcc9myOWTqJTHIUe3mNEaLMcazwIlnN5vDSnWviDptJViToTM6Mq
+         afDUtbbmZtSmQFGg1Cz4/p7LoJIvB9R4H2E4EZTs5qXMHhVt7xTlODSKLMXYaSmn6pF1
+         X5xA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Z5OsmFRI7KetDyQg13TteOeKfaFUdYSP/HSjomYs1Ns=;
+        b=ZYhndEa+Ju7cfS4AjjekREyba+7EONSoehRiqzZgkqXgK7H7YyGv2kahA0flLcFzFv
+         Xs2VP9/BwBHy9LdYYt+/TywgVWFQqnCm+HE4NN8o61ysh5eY9SDQ2CtCl9KaRz2RC++S
+         aEFmSpkhvvsoQc0/f8TtbfVFS7IQMpvUCeRqhSEOFnLJFcGGS4qHhtYdSc2TwY3y3a2b
+         R/o8N7V1/A+lz3w4VKr1UP2GByzUT2AYSrH2uA7AcvXeIfJnD0qnEI0j3V6Qu1+79i27
+         alrPqemkAPrEH3Mnc4ORDcXUzhVxtlG5yHCrJ7n9woSZ4G8RVX41QoX5j3oxJkIgN/C/
+         wT9w==
+X-Gm-Message-State: AJIora8Rs1zFt14pHMQuLWLaIk5HPU7lBk1Jtl/MKkRj5OVd3AZDncP0
+        lZKdK0xsSut6ZVRGKaVw0ND5BKDioIdnuf3JcM+wKK2S
+X-Google-Smtp-Source: AGRyM1vKJo2f5aVVRdOF/JaPPzvj4lPn7yaNwRNBAmMkyIB8JO42xnL+4az4QDmEJmDEQ0KpDKOQez5s4s7zAKMzEoI=
+X-Received: by 2002:a17:906:a089:b0:72f:826b:e084 with SMTP id
+ q9-20020a170906a08900b0072f826be084mr853459ejy.708.1658512902798; Fri, 22 Jul
+ 2022 11:01:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+References: <20220722171836.2852247-1-roberto.sassu@huawei.com>
+ <20220722171836.2852247-8-roberto.sassu@huawei.com> <CAKH8qBuU4TORtzu-SQg-2y8iAgFe31fLBX2joby2eWJdoXGd2A@mail.gmail.com>
+In-Reply-To: <CAKH8qBuU4TORtzu-SQg-2y8iAgFe31fLBX2joby2eWJdoXGd2A@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 22 Jul 2022 11:01:31 -0700
+Message-ID: <CAADnVQ+9xYy+tAiTrQudS+gTo-VxqUs4y576-DNCbPKASv9RXg@mail.gmail.com>
+Subject: Re: [RFC][PATCH v3 07/15] libbpf: Introduce bpf_obj_get_opts()
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Joe Burton <jevburton.kernel@gmail.com>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add an additional test, "data_slice_use_after_release2", for ensuring
-that data slices are correctly invalidated by the verifier after the
-dynptr whose ref obj id they track is released. In particular, this
-tests data slice invalidation for dynptrs located at a non-zero offset
-from the frame pointer.
+On Fri, Jul 22, 2022 at 10:58 AM Stanislav Fomichev <sdf@google.com> wrote:
+>
+> On Fri, Jul 22, 2022 at 10:20 AM Roberto Sassu <roberto.sassu@huawei.com> wrote:
+> >
+> > Introduce bpf_obj_get_opts(), to let the caller pass the needed permissions
+> > for the operation. Keep the existing bpf_obj_get() to request read-write
+> > permissions.
+> >
+> > bpf_obj_get() allows the caller to get a file descriptor from a pinned
+> > object with the provided pathname. Specifying permissions has only effect
+> > on maps (for links, the permission must be always read-write).
+> >
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >  tools/lib/bpf/bpf.c      | 12 +++++++++++-
+> >  tools/lib/bpf/bpf.h      |  2 ++
+> >  tools/lib/bpf/libbpf.map |  1 +
+> >  3 files changed, 14 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+> > index 5f2785a4c358..0df088890864 100644
+> > --- a/tools/lib/bpf/bpf.c
+> > +++ b/tools/lib/bpf/bpf.c
+> > @@ -577,18 +577,28 @@ int bpf_obj_pin(int fd, const char *pathname)
+> >         return libbpf_err_errno(ret);
+> >  }
+> >
+> > -int bpf_obj_get(const char *pathname)
+> > +int bpf_obj_get_opts(const char *pathname,
+> > +                    const struct bpf_get_fd_opts *opts)
+>
+> I'm still not sure whether it's a good idea to mix get_fd with
+> obj_get/pin operations? [1] seems more clear.
 
-Signed-off-by: Joanne Koong <joannelkoong@gmail.com>
----
- .../testing/selftests/bpf/prog_tests/dynptr.c |  3 +-
- .../testing/selftests/bpf/progs/dynptr_fail.c | 38 ++++++++++++++++++-
- 2 files changed, 39 insertions(+), 2 deletions(-)
++1
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/dynptr.c b/tools/test=
-ing/selftests/bpf/prog_tests/dynptr.c
-index 3c7aa82b98e2..bcf80b9f7c27 100644
---- a/tools/testing/selftests/bpf/prog_tests/dynptr.c
-+++ b/tools/testing/selftests/bpf/prog_tests/dynptr.c
-@@ -22,7 +22,8 @@ static struct {
- 	{"add_dynptr_to_map2", "invalid indirect read from stack"},
- 	{"data_slice_out_of_bounds_ringbuf", "value is outside of the allowed m=
-emory range"},
- 	{"data_slice_out_of_bounds_map_value", "value is outside of the allowed=
- memory range"},
--	{"data_slice_use_after_release", "invalid mem access 'scalar'"},
-+	{"data_slice_use_after_release1", "invalid mem access 'scalar'"},
-+	{"data_slice_use_after_release2", "invalid mem access 'scalar'"},
- 	{"data_slice_missing_null_check1", "invalid mem access 'mem_or_null'"},
- 	{"data_slice_missing_null_check2", "invalid mem access 'mem_or_null'"},
- 	{"invalid_helper1", "invalid indirect read from stack"},
-diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/test=
-ing/selftests/bpf/progs/dynptr_fail.c
-index d811cff73597..a8ee58ba3a84 100644
---- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
-+++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-@@ -248,7 +248,7 @@ int data_slice_out_of_bounds_map_value(void *ctx)
-=20
- /* A data slice can't be used after it has been released */
- SEC("?raw_tp/sys_nanosleep")
--int data_slice_use_after_release(void *ctx)
-+int data_slice_use_after_release1(void *ctx)
- {
- 	struct bpf_dynptr ptr;
- 	struct sample *sample;
-@@ -272,6 +272,42 @@ int data_slice_use_after_release(void *ctx)
- 	return 0;
- }
-=20
-+/* A data slice can't be used after it has been released.
-+ *
-+ * This tests the case where the data slice tracks a dynptr (ptr2)
-+ * that is at a non-zero offset from the frame pointer (ptr1 is at fp,
-+ * ptr2 is at fp - 16).
-+ */
-+SEC("?raw_tp/sys_nanosleep")
-+int data_slice_use_after_release2(void *ctx)
-+{
-+	struct bpf_dynptr ptr1, ptr2;
-+	struct sample *sample;
-+
-+	bpf_ringbuf_reserve_dynptr(&ringbuf, 64, 0, &ptr1);
-+	bpf_ringbuf_reserve_dynptr(&ringbuf, sizeof(*sample), 0, &ptr2);
-+
-+	sample =3D bpf_dynptr_data(&ptr2, 0, sizeof(*sample));
-+	if (!sample)
-+		goto done;
-+
-+	sample->pid =3D 23;
-+
-+	bpf_ringbuf_submit_dynptr(&ptr2, 0);
-+
-+	/* this should fail */
-+	sample->pid =3D 23;
-+
-+	bpf_ringbuf_submit_dynptr(&ptr1, 0);
-+
-+	return 0;
-+
-+done:
-+	bpf_ringbuf_discard_dynptr(&ptr2, 0);
-+	bpf_ringbuf_discard_dynptr(&ptr1, 0);
-+	return 0;
-+}
-+
- /* A data slice must be first checked for NULL */
- SEC("?raw_tp/sys_nanosleep")
- int data_slice_missing_null_check1(void *ctx)
---=20
-2.30.2
+> It just so happens that (differently named) flags in BPF_OBJ_GET and
+> BPF_XXX_GET_FD_BY_ID align, but maybe we shouldn't depend on it?
+>
+> Also, it seems only bpf_map_get_fd_by_id currently accepts flags? So
+> this sharing makes even more sense?
 
++1
+
+Roberto, the patch set is broken in many ways.
