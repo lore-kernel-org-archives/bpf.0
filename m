@@ -2,119 +2,78 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46197C433EF
-	for <bpf@archiver.kernel.org>; Fri, 22 Jul 2022 17:51:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EBF1C43334
+	for <bpf@archiver.kernel.org>; Fri, 22 Jul 2022 17:55:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235881AbiGVRvy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Jul 2022 13:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39632 "EHLO
+        id S235970AbiGVRze (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Jul 2022 13:55:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236334AbiGVRv0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Jul 2022 13:51:26 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DFA255AF
-        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 10:50:30 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id b21-20020a05600c4e1500b003a32bc8612fso2892350wmq.3
-        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 10:50:30 -0700 (PDT)
+        with ESMTP id S232383AbiGVRzd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Jul 2022 13:55:33 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EFA186DF
+        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 10:55:32 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id g17so5179653plh.2
+        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 10:55:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gUTDStGbNNw1f/BTAauOJuxuHrm/bJ5Do+y2MoJFquA=;
-        b=Ew6/AHGD9JmeBb3RRlzM2HRqhGhbZX1gLPxyfbOLnHm7krtjtVsgu1gPvDAnbCexP/
-         hHUFF9gXmeyog/wnl+8F4z52le24cuf6m+6dpZamYs16B2PvRP54pBayNDl3lgQQB/kp
-         hKycIP0bVMhP9givw1kievFqR4ER331GbkItxSRvtJZwOe7StGhXfkCEYqi0AMsv4XnX
-         qtb9R1lAO9qDKvGZuqDxMKuolAevLHQIV1Pzi1ckspKF3KunAYZNdGiY8rUIPNP/Nl4D
-         Slkv9aCN48TELd8pjAVcxtPY+gs5PC1ewbVxR1H/Qmrq/zhPqHAFBUsMneVTDNhdIFqU
-         JVcg==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=x9mUgUlLelfiYpMAS0AawhxvSmSAgtwPkT+u5kRHeFg=;
+        b=pztXqAAeYfPTwlfJaqOsWmhBDxF0DUp1mc7zYxX0zBCOc0tqnCj75ShwrLEt4A8GaZ
+         BtPKOKx+Ppg0P1OzoeiKi80lLLZizk2FTsrCxt+DOBbrQiFhD4dAZU0JXKBxohf2JpSh
+         1FTLEVOPYPilavW+3h0o849QFdt09hDP30NRyTT1kYaOa5E9m0bn+BomHPmN76vY2tNZ
+         o6AQfLJdfX626drd5dCQB7MIT/5ie+eqHyPgy85C5ea41VXy57Ew/g6L/yciYnLm7n68
+         u75S+huuwtVNouOnXttw3ZAFh+2LIL5IMygbDeVZoI394G/6A2iA31O0fp1K9qL0iox+
+         uuXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gUTDStGbNNw1f/BTAauOJuxuHrm/bJ5Do+y2MoJFquA=;
-        b=OKQBqoNNXSSCYbDPkmqcRxs4FKZK54BEKBDR1vcdw9RfZFLYmh8zwwGVWTqI0NUEbb
-         EP/OzU45LK4Ho2/4S62r/Rixejq5OF8jigG1Rk2dCc+T49+HepnOuhJpn9IEjCCcMex8
-         CufMhJpMClsyzIrSmHOivxySP5dUqae7qYUJTE/+JvwSb9a0Koh0pCEqw9Tj14IcMRT8
-         UWRXLIFLWhbIoslzxo01t03QmLl0cf1Id07PTQq1M3p06OChcP7Cr7sHUn0cWp5AV/HM
-         jTPhVzLim4N5vF3GyI4IEu83Rhs6iJyPUO3olYc27Lgbz/6p0daTdE+j7Bx9jkBtXyV1
-         DsqQ==
-X-Gm-Message-State: AJIora/Cc5Y5xm4nd4uUIwBRf8v36ogBd8XSqQMwl06JmxNH96z1f3Rs
-        m8nlddolHtwIcnYyj0xs++WttemcM6uDouI72SLKUQ==
-X-Google-Smtp-Source: AGRyM1uv7rjlNfppX7jjFHmrlh5E7CeWSii4QxzSGedjuScbMyllP4joA/Xm1z+rpE12bv6p/SH4PuPDii3pHiR4HQQ=
-X-Received: by 2002:a7b:ce8f:0:b0:3a3:150c:d8ff with SMTP id
- q15-20020a7bce8f000000b003a3150cd8ffmr13164181wmj.152.1658512228992; Fri, 22
- Jul 2022 10:50:28 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=x9mUgUlLelfiYpMAS0AawhxvSmSAgtwPkT+u5kRHeFg=;
+        b=GV8xejJFjrQk30ZW7twlgaPY1pgbF0VFyBus8dfQmywuYUnXWZsaspAlFJter/bUpV
+         BsBQ+4NvS8e1PaaHvOBhL9UGPoBq0x5quOrrnVSpdAcOHGoGNOCXboVFqGfm2g6V9gSI
+         5VhKo5ze3jMeIOhfvSP4vbEPo7ejCRrQX/JDhwiDHZ+HjjAe2OyiKtmp7dgsVvcUwkg7
+         8kgp0LGGzx9H7ryiJGaYNl4m15EPpMvUux8cqKwE5jmuTRcwqMGr7v4iGaa4kYRnGpxK
+         DG6Tw2g9Ip7s/TYM3dVzILyoAh1hT9OLvmqqWv01fmUZqVMkaetXDrH816q1BW4Wva6a
+         qewQ==
+X-Gm-Message-State: AJIora/F/4uShE3z3kMIUVB+jcsyOdCKe8d/+PDu/NsuI9DSdw4MMJrS
+        rr9XJNi+Xag7YQQ/fMQ2BXA=
+X-Google-Smtp-Source: AGRyM1uIGD4mxh0INsQk2bi51d2TYys2AfqVTW8QNVhf+yNlNjHVP9BxtXJqA339TAFtO1uFFYVKCg==
+X-Received: by 2002:a17:90a:1943:b0:1ef:8146:f32f with SMTP id 3-20020a17090a194300b001ef8146f32fmr845317pjh.112.1658512532244;
+        Fri, 22 Jul 2022 10:55:32 -0700 (PDT)
+Received: from macbook-pro-3.dhcp.thefacebook.com ([2620:10d:c090:400::5:8bc8])
+        by smtp.gmail.com with ESMTPSA id e12-20020a170902ed8c00b0016cd74dae66sm4021496plj.28.2022.07.22.10.55.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jul 2022 10:55:31 -0700 (PDT)
+Date:   Fri, 22 Jul 2022 10:55:28 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     quentin@isovalent.com, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        jevburton.kernel@gmail.com, bpf@vger.kernel.org
+Subject: Re: [RFC][PATCH v3 02/15] bpf: Set open_flags as last bpf_attr field
+ for bpf_*_get_fd_by_id() funcs
+Message-ID: <20220722175528.26ve4ahnir6su5tu@macbook-pro-3.dhcp.thefacebook.com>
+References: <20220722171836.2852247-1-roberto.sassu@huawei.com>
+ <20220722171836.2852247-3-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-References: <20220722021313.3150035-1-yosryahmed@google.com>
- <20220722021313.3150035-2-yosryahmed@google.com> <CAADnVQ+c7uuVXukguvy9x2HjM9K8rj6LOa_QJ_n+MVB-bOx3uQ@mail.gmail.com>
-In-Reply-To: <CAADnVQ+c7uuVXukguvy9x2HjM9K8rj6LOa_QJ_n+MVB-bOx3uQ@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Fri, 22 Jul 2022 10:49:52 -0700
-Message-ID: <CAJD7tkaSx9Oc3WC1C3BObRRXgsj6gvG6hRj9oL-P_BeWXvjS-A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 1/8] btf: Add a new kfunc set which allows to
- mark a function to be sleepable
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Hao Luo <haoluo@google.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220722171836.2852247-3-roberto.sassu@huawei.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 9:20 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Thu, Jul 21, 2022 at 7:13 PM Yosry Ahmed <yosryahmed@google.com> wrote:
-> >
-> > From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> >
-> > This allows to declare a kfunc as sleepable and prevents its use in
-> > a non sleepable program.
-> >
-> > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> > ---
-> >  include/linux/btf.h |  2 ++
-> >  kernel/bpf/btf.c    | 13 +++++++++++--
-> >  2 files changed, 13 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/include/linux/btf.h b/include/linux/btf.h
-> > index 1bfed7fa0428..6e7517573d9e 100644
-> > --- a/include/linux/btf.h
-> > +++ b/include/linux/btf.h
-> > @@ -18,6 +18,7 @@ enum btf_kfunc_type {
-> >         BTF_KFUNC_TYPE_RELEASE,
-> >         BTF_KFUNC_TYPE_RET_NULL,
-> >         BTF_KFUNC_TYPE_KPTR_ACQUIRE,
-> > +       BTF_KFUNC_TYPE_SLEEPABLE,
-> >         BTF_KFUNC_TYPE_MAX,
-> >  };
->
-> This patch needs refactoring using the new BTF_ID_FLAGS scheme.
-> When you do that please update the Documentation/bpf/kfuncs.rst as well.
->
-> Thanks!
+On Fri, Jul 22, 2022 at 07:18:23PM +0200, Roberto Sassu wrote:
+> The bpf() system call validates the bpf_attr structure received as
+> argument, and considers data until the last field, defined for each
+> operation. The remaing space must be filled with zeros.
+> 
+> Currently, for bpf_*_get_fd_by_id() functions except bpf_map_get_fd_by_id()
+> the last field is *_id. Setting open_flags to BPF_F_RDONLY from user space
+> will result in bpf() rejecting the argument.
 
-Sent v5 rebased on top of the new kfunc flags infrastructure, and
-added documentation for sleepable kfuncs.
+The kernel is doing the right thing. It should not ignore fields.
