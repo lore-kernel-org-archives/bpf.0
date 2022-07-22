@@ -2,118 +2,113 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E4FFC433EF
-	for <bpf@archiver.kernel.org>; Fri, 22 Jul 2022 17:14:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF3B0C43334
+	for <bpf@archiver.kernel.org>; Fri, 22 Jul 2022 17:19:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233662AbiGVROX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Jul 2022 13:14:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35516 "EHLO
+        id S236069AbiGVRTE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Jul 2022 13:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231409AbiGVROW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Jul 2022 13:14:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E53475465D
-        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 10:14:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 73AE16221B
-        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 17:14:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7286DC341C6;
-        Fri, 22 Jul 2022 17:14:19 +0000 (UTC)
-Date:   Fri, 22 Jul 2022 13:14:17 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>
-Subject: Re: [RFC] ftrace: Add support to keep some functions out of ftrace
-Message-ID: <20220722131417.566c2cb9@gandalf.local.home>
-In-Reply-To: <CAADnVQJTT7h3MniVqdBEU=eLwvJhEKNLSjbUAK4sOrhN=zggCQ@mail.gmail.com>
-References: <20220722110811.124515-1-jolsa@kernel.org>
-        <20220722072608.17ef543f@rorschach.local.home>
-        <CAADnVQ+hLnyztCi9aqpptjQk-P+ByAkyj2pjbdD45dsXwpZ0bw@mail.gmail.com>
-        <20220722120854.3cc6ec4b@gandalf.local.home>
-        <20220722122548.2db543ca@gandalf.local.home>
-        <CAADnVQJTT7h3MniVqdBEU=eLwvJhEKNLSjbUAK4sOrhN=zggCQ@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S235584AbiGVRTB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Jul 2022 13:19:01 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9A76555B
+        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 10:19:00 -0700 (PDT)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LqGMQ6wWDz67KmH;
+        Sat, 23 Jul 2022 01:17:06 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 22 Jul 2022 19:18:57 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <quentin@isovalent.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <andrii@kernel.org>, <martin.lau@linux.dev>, <song@kernel.org>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <jevburton.kernel@gmail.com>
+CC:     <bpf@vger.kernel.org>, Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [RFC][PATCH v3 01/15] bpftool: Attempt to link static libraries
+Date:   Fri, 22 Jul 2022 19:18:22 +0200
+Message-ID: <20220722171836.2852247-2-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220722171836.2852247-1-roberto.sassu@huawei.com>
+References: <20220722171836.2852247-1-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.63.22]
+X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 22 Jul 2022 09:53:32 -0700
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-> >
-> > Sounds like a BPF bug to me. Ftrace did nothing to cause this breakage. It
-> > was something BPF must have done. What exactly is BPF doing to ftrace
-> > locations anyway?  
-> 
-> ftrace location?
-> fentry != ftrace.
+Introduce the BPFTOOL_STATIC make variable, to let users build bpftool with
+static libraries (when set to 1). This increases the portability of the
+binary, especially for testing.
 
-It was the entire reason to add that. Basically, Yes, fentry == ftrace!
-BPF can not steal it. Look at the history of it. Everything to do with
-fentry being added to Linux was for ftrace, and ftrace was designed
-specifically for fentry.
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ tools/bpf/bpftool/Makefile | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-The ftrace infrastructure was designed around fentry/mcount. The rest of
-the tracing infrastructure was called "ftrace" for the same reason people
-call distros Linux (and why FSF hates that). Just because it was built
-around the ftrace infrastructure, not the other way around. This is why I
-renamed all the ftrace.h files in include/trace/ to trace_event.h. Because
-calling it ftrace.h was a misnomer.
+diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+index 4b09a5c3b9f1..4628df456245 100644
+--- a/tools/bpf/bpftool/Makefile
++++ b/tools/bpf/bpftool/Makefile
+@@ -98,6 +98,13 @@ FEATURE_TESTS = libbfd libbfd-liberty libbfd-liberty-z \
+ FEATURE_DISPLAY = libbfd libbfd-liberty libbfd-liberty-z \
+ 		  disassembler-four-args libcap clang-bpf-co-re
+ 
++ifeq ($(BPFTOOL_STATIC),1)
++FEATURE_CHECK_LDFLAGS-libbfd = -static
++FEATURE_CHECK_LDFLAGS-libbfd-liberty = -static
++FEATURE_CHECK_LDFLAGS-libbfd-liberty-z = -static
++FEATURE_CHECK_LDFLAGS-libcap = -static
++endif
++
+ check_feat := 1
+ NON_CHECK_FEAT_TARGETS := clean uninstall doc doc-clean doc-install doc-uninstall
+ ifdef MAKECMDGOALS
+@@ -122,8 +129,12 @@ LIBS = $(LIBBPF) -lelf -lz
+ LIBS_BOOTSTRAP = $(LIBBPF_BOOTSTRAP) -lelf -lz
+ ifeq ($(feature-libcap), 1)
+ CFLAGS += -DUSE_LIBCAP
++ifeq ($(BPFTOOL_STATIC),1)
++LIBS += -l:libcap.a
++else
+ LIBS += -lcap
+ endif
++endif
+ 
+ include $(wildcard $(OUTPUT)*.d)
+ 
+@@ -133,6 +144,16 @@ BFD_SRCS = jit_disasm.c
+ 
+ SRCS = $(filter-out $(BFD_SRCS),$(wildcard *.c))
+ 
++ifeq ($(BPFTOOL_STATIC),1)
++ifeq ($(feature-libbfd),1)
++  LIBS += -l:libbfd.a -ldl -l:libopcodes.a
++else ifeq ($(feature-libbfd-liberty),1)
++  LIBS += -l:libbfd.a -ldl -l:libopcodes.a -l:libiberty.a
++else ifeq ($(feature-libbfd-liberty-z),1)
++  LIBS += -l:libbfd.a -ldl -l:libopcodes.a -l:libiberty.a -l:libz.a
++  LIBS := $(filter-out -lz, $(LIBS))
++endif
++else
+ ifeq ($(feature-libbfd),1)
+   LIBS += -lbfd -ldl -lopcodes
+ else ifeq ($(feature-libbfd-liberty),1)
+@@ -140,6 +161,7 @@ else ifeq ($(feature-libbfd-liberty),1)
+ else ifeq ($(feature-libbfd-liberty-z),1)
+   LIBS += -lbfd -ldl -lopcodes -liberty -lz
+ endif
++endif
+ 
+ ifneq ($(filter -lbfd,$(LIBS)),)
+ CFLAGS += -DHAVE_LIBBFD_SUPPORT
+-- 
+2.25.1
 
-> nop5 in the beginning of the function or in the middle of it
-> doesn't mean that it's safe for ftrace to attach there.
-
-How did that nop5 get put there?
-
-Before compilers added support for doing that at compile time (which they
-added *FOR* ftrace), it was ftrace that converted the calls to
-mcount/fentry to nops. In fact, the fentry trampoline exists in ftrace_64.S.
-
-
-> In some cases bpf has custom calling convention
-> like it preserves %rax.
-> In other cases there will be multiple nop5 locations
-> through the function where special care needs to be taken
-> to attach.
-> 
-> > > >
-> > > > If you don't like Jiri's approach please propose something else.  
-> > >
-> > > So, why not mark it as notrace? That will prevent ftrace from looking at it.
-> > >  
-> >
-> > And if for some strange reason you need the mcount/fentry on some internal
-> > BPF infrastructure, the work around is to register two ftrace_ops() that
-> > have filters to that function. In which case ftrace will force the call to
-> > the ftrace iterator loop, and any more ops attached will simply be added to
-> > that loop, and ftrace will no longer touch that location.
-> >
-> > Then you can do whatever you want to it without fear of racing with ftrace.  
-> 
-> Jiri,
-> that sounds like a workable solution.
-> wdyt?
-> 
-> > But other than that, we don't need infrastructure to hide any mcount/fentry
-> > locations from ftrace. Those were add *for* ftrace.  
-> 
-> fentry != ftrace.
-
-I 100% disagree with the above statement.
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/kernel/ftrace_64.S#n134
-
--- Steve
