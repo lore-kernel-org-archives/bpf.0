@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D383C433EF
-	for <bpf@archiver.kernel.org>; Fri, 22 Jul 2022 18:35:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3287C433EF
+	for <bpf@archiver.kernel.org>; Fri, 22 Jul 2022 18:35:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236320AbiGVSfA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Jul 2022 14:35:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48188 "EHLO
+        id S236369AbiGVSfD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Jul 2022 14:35:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233737AbiGVSe6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Jul 2022 14:34:58 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6866E9F046
-        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 11:34:57 -0700 (PDT)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 26MHojlG021276
-        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 11:34:56 -0700
+        with ESMTP id S236337AbiGVSfC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Jul 2022 14:35:02 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3EB7D1D0
+        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 11:35:01 -0700 (PDT)
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26MC8QaD022622
+        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 11:35:01 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=M6+bsJAOH/HHolRF0OT3Ro2hADTYCMnHs8b1X75Oi/I=;
- b=RT0RypMVK5u7EcFBWJdwD9g/wDj6h5J5GST1RQUIBDZdtgy90dbcVfvh3rWgFF9xpDlL
- BBRbbrVePKWTtV1Ea3ZdGirOzrRBgpiVp9nRPDokz8XYwM1nIk1Omn7NeJhmC6GNj3zN
- P+R98fpo/Hy1h33WY/luX1AGAjyVGHiyS+Q= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3hg0n708ym-5
+ bh=jqn5vwtwL09kaoTyW2RH9jm0IjV+NApjPiL6U3y5slE=;
+ b=M35ZnRAglbchLkwNCD9rkiG5sxJbZKJw6QrgK7Ipe335F/b9IrofYyrljVLBuS9JUTjL
+ LxFo8QDHor8dUCsahW3b0PglPlld0lVt08Y8U/NoNOfiJLsfgb06VBh8gTo82xaEX/V0
+ IwivRifMOLxvK1fv1Mn4tUmcaPzSUxaRrQA= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hf7fc10es-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 11:34:56 -0700
-Received: from twshared6324.05.ash7.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 11:35:00 -0700
+Received: from twshared22934.08.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Fri, 22 Jul 2022 11:34:53 -0700
+ 15.1.2375.28; Fri, 22 Jul 2022 11:34:59 -0700
 Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
-        id 00C5DAB6F19E; Fri, 22 Jul 2022 11:34:48 -0700 (PDT)
+        id 256DFAB6F196; Fri, 22 Jul 2022 11:34:47 -0700 (PDT)
 From:   Dave Marchevsky <davemarchevsky@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -41,9 +41,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Kernel Team <kernel-team@fb.com>, Tejun Heo <tj@kernel.org>,
         Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [RFC PATCH bpf-next 05/11] bpf: Add bpf_spin_lock member to rbtree
-Date:   Fri, 22 Jul 2022 11:34:32 -0700
-Message-ID: <20220722183438.3319790-6-davemarchevsky@fb.com>
+Subject: [RFC PATCH bpf-next 02/11] bpf: Add verifier support for custom callback return range
+Date:   Fri, 22 Jul 2022 11:34:29 -0700
+Message-ID: <20220722183438.3319790-3-davemarchevsky@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220722183438.3319790-1-davemarchevsky@fb.com>
 References: <20220722183438.3319790-1-davemarchevsky@fb.com>
@@ -51,8 +51,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: ZJTQRiz7jNL5l7jbM8XuwWKOhNqOArMd
-X-Proofpoint-GUID: ZJTQRiz7jNL5l7jbM8XuwWKOhNqOArMd
+X-Proofpoint-GUID: udvVe_VaQrm_ktf-Nkqrjr2mlp44skz8
+X-Proofpoint-ORIG-GUID: udvVe_VaQrm_ktf-Nkqrjr2mlp44skz8
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-07-22_06,2022-07-21_02,2022-06-22_01
@@ -60,167 +60,72 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds a struct bpf_spin_lock *lock member to bpf_rbtree, as
-well as a bpf_rbtree_get_lock helper which allows bpf programs to access
-the lock.
+Verifier logic to confirm that a callback function returns 0 or 1 was
+added in commit 69c087ba6225b ("bpf: Add bpf_for_each_map_elem() helper")=
+.
+At the time, callback return value was only used to continue or stop
+iteration.
 
-Ideally the bpf_spin_lock would be created independently oustide of the
-tree and associated with it before the tree is used, either as part of
-map definition or via some call like rbtree_init(&rbtree, &lock). Doing
-this in an ergonomic way is proving harder than expected, so for now use
-this workaround.
+In order to support callbacks with a broader return value range, such as
+those added further in this series, add a callback_ret_range to
+bpf_func_state. Verifier's helpers which set in_callback_fn will also
+set the new field, which the verifier will later use to check return
+value bounds.
 
-Why is creating the bpf_spin_lock independently and associating it with
-the tree preferable? Because we want to be able to transfer nodes
-between trees atomically, and for this to work need same lock associated
-with 2 trees.
-
-Further locking-related patches will make it possible for the lock to be
-used in BPF programs and add code which enforces that the lock is held
-when doing any operation on the tree.
+Default to tnum_range(0, 1) instead of using tnum_unknown as a sentinel
+value as the latter would prevent the valid range (0, U64_MAX) being
+used.
 
 Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
 ---
- include/uapi/linux/bpf.h       |  7 +++++++
- kernel/bpf/helpers.c           |  3 +++
- kernel/bpf/rbtree.c            | 24 ++++++++++++++++++++++++
- tools/include/uapi/linux/bpf.h |  7 +++++++
- 4 files changed, 41 insertions(+)
+ include/linux/bpf_verifier.h | 1 +
+ kernel/bpf/verifier.c        | 4 +++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 4688ce88caf4..c677d92de3bc 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -5385,6 +5385,12 @@ union bpf_attr {
-  *	Return
-  *		0
-  *
-+ * void *bpf_rbtree_get_lock(struct bpf_map *map)
-+ *	Description
-+ *		Return the bpf_spin_lock associated with the rbtree
-+ *
-+ *	Return
-+ *		Ptr to lock
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5600,6 +5606,7 @@ union bpf_attr {
- 	FN(rbtree_find),		\
- 	FN(rbtree_remove),		\
- 	FN(rbtree_free_node),		\
-+	FN(rbtree_get_lock),		\
- 	/* */
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 2e3bad8640dc..9c017575c034 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -237,6 +237,7 @@ struct bpf_func_state {
+ 	 */
+ 	u32 async_entry_cnt;
+ 	bool in_callback_fn;
++	struct tnum callback_ret_range;
+ 	bool in_async_callback_fn;
 =20
- /* integer value in 'imm' field of BPF_CALL instruction selects which he=
-lper
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 35eb66d11bf6..257a808bb767 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1587,6 +1587,7 @@ const struct bpf_func_proto bpf_rbtree_add_proto __=
-weak;
- const struct bpf_func_proto bpf_rbtree_find_proto __weak;
- const struct bpf_func_proto bpf_rbtree_remove_proto __weak;
- const struct bpf_func_proto bpf_rbtree_free_node_proto __weak;
-+const struct bpf_func_proto bpf_rbtree_get_lock_proto __weak;
-=20
- const struct bpf_func_proto *
- bpf_base_func_proto(enum bpf_func_id func_id)
-@@ -1686,6 +1687,8 @@ bpf_base_func_proto(enum bpf_func_id func_id)
- 		return &bpf_rbtree_remove_proto;
- 	case BPF_FUNC_rbtree_free_node:
- 		return &bpf_rbtree_free_node_proto;
-+	case BPF_FUNC_rbtree_get_lock:
-+		return &bpf_rbtree_get_lock_proto;
- 	default:
- 		break;
- 	}
-diff --git a/kernel/bpf/rbtree.c b/kernel/bpf/rbtree.c
-index 250d62210804..c6f0a2a083f6 100644
---- a/kernel/bpf/rbtree.c
-+++ b/kernel/bpf/rbtree.c
-@@ -9,6 +9,7 @@
- struct bpf_rbtree {
- 	struct bpf_map map;
- 	struct rb_root_cached root;
-+	struct bpf_spin_lock *lock;
- };
-=20
- BTF_ID_LIST_SINGLE(bpf_rbtree_btf_ids, struct, rb_node);
-@@ -39,6 +40,14 @@ static struct bpf_map *rbtree_map_alloc(union bpf_attr=
- *attr)
-=20
- 	tree->root =3D RB_ROOT_CACHED;
- 	bpf_map_init_from_attr(&tree->map, attr);
-+
-+	tree->lock =3D bpf_map_kzalloc(&tree->map, sizeof(struct bpf_spin_lock)=
-,
-+				     GFP_KERNEL | __GFP_NOWARN);
-+	if (!tree->lock) {
-+		bpf_map_area_free(tree);
-+		return ERR_PTR(-ENOMEM);
-+	}
-+
- 	return &tree->map;
+ 	/* The following fields should be last. See copy_func_state() */
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index c5fbaa9f025a..1f50becce141 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -1745,6 +1745,7 @@ static void init_func_state(struct bpf_verifier_env=
+ *env,
+ 	state->callsite =3D callsite;
+ 	state->frameno =3D frameno;
+ 	state->subprogno =3D subprogno;
++	state->callback_ret_range =3D tnum_range(0, 1);
+ 	init_reg_state(env, state);
+ 	mark_verifier_state_scratched(env);
+ }
+@@ -6880,6 +6881,7 @@ static int set_find_vma_callback_state(struct bpf_v=
+erifier_env *env,
+ 	__mark_reg_not_init(env, &callee->regs[BPF_REG_4]);
+ 	__mark_reg_not_init(env, &callee->regs[BPF_REG_5]);
+ 	callee->in_callback_fn =3D true;
++	callee->callback_ret_range =3D tnum_range(0, 1);
+ 	return 0;
  }
 =20
-@@ -139,6 +148,7 @@ static void rbtree_map_free(struct bpf_map *map)
+@@ -6907,7 +6909,7 @@ static int prepare_func_exit(struct bpf_verifier_en=
+v *env, int *insn_idx)
+ 	caller =3D state->frame[state->curframe];
+ 	if (callee->in_callback_fn) {
+ 		/* enforce R0 return value range [0, 1]. */
+-		struct tnum range =3D tnum_range(0, 1);
++		struct tnum range =3D callee->callback_ret_range;
 =20
- 	bpf_rbtree_postorder_for_each_entry_safe(pos, n, &tree->root.rb_root)
- 		kfree(pos);
-+	kfree(tree->lock);
- 	bpf_map_area_free(tree);
- }
-=20
-@@ -238,6 +248,20 @@ static int rbtree_map_get_next_key(struct bpf_map *m=
-ap, void *key,
- 	return -ENOTSUPP;
- }
-=20
-+BPF_CALL_1(bpf_rbtree_get_lock, struct bpf_map *, map)
-+{
-+	struct bpf_rbtree *tree =3D container_of(map, struct bpf_rbtree, map);
-+
-+	return (u64)tree->lock;
-+}
-+
-+const struct bpf_func_proto bpf_rbtree_get_lock_proto =3D {
-+	.func =3D bpf_rbtree_get_lock,
-+	.gpl_only =3D true,
-+	.ret_type =3D RET_PTR_TO_MAP_VALUE,
-+	.arg1_type =3D ARG_CONST_MAP_PTR,
-+};
-+
- BTF_ID_LIST_SINGLE(bpf_rbtree_map_btf_ids, struct, bpf_rbtree)
- const struct bpf_map_ops rbtree_map_ops =3D {
- 	.map_meta_equal =3D bpf_map_meta_equal,
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index 4688ce88caf4..c677d92de3bc 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -5385,6 +5385,12 @@ union bpf_attr {
-  *	Return
-  *		0
-  *
-+ * void *bpf_rbtree_get_lock(struct bpf_map *map)
-+ *	Description
-+ *		Return the bpf_spin_lock associated with the rbtree
-+ *
-+ *	Return
-+ *		Ptr to lock
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5600,6 +5606,7 @@ union bpf_attr {
- 	FN(rbtree_find),		\
- 	FN(rbtree_remove),		\
- 	FN(rbtree_free_node),		\
-+	FN(rbtree_get_lock),		\
- 	/* */
-=20
- /* integer value in 'imm' field of BPF_CALL instruction selects which he=
-lper
+ 		if (r0->type !=3D SCALAR_VALUE) {
+ 			verbose(env, "R0 not a scalar value\n");
 --=20
 2.30.2
 
