@@ -2,403 +2,289 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC732C43334
-	for <bpf@archiver.kernel.org>; Fri, 22 Jul 2022 17:23:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CAA82C433EF
+	for <bpf@archiver.kernel.org>; Fri, 22 Jul 2022 17:48:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236174AbiGVRXk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Jul 2022 13:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45452 "EHLO
+        id S235813AbiGVRso (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Jul 2022 13:48:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236123AbiGVRXZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Jul 2022 13:23:25 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DDAB9DECE
-        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 10:23:11 -0700 (PDT)
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LqGSF6sBDz67fK4;
-        Sat, 23 Jul 2022 01:21:17 +0800 (CST)
-Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 22 Jul 2022 19:23:08 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <quentin@isovalent.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <andrii@kernel.org>, <martin.lau@linux.dev>, <song@kernel.org>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <jevburton.kernel@gmail.com>
-CC:     <bpf@vger.kernel.org>, Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH v3 15/15] selftests/bpf: Add map access tests
-Date:   Fri, 22 Jul 2022 19:18:36 +0200
-Message-ID: <20220722171836.2852247-16-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220722171836.2852247-1-roberto.sassu@huawei.com>
-References: <20220722171836.2852247-1-roberto.sassu@huawei.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.204.63.22]
-X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
- fraeml714-chm.china.huawei.com (10.206.15.33)
-X-CFilter-Loop: Reflected
+        with ESMTP id S235282AbiGVRsn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Jul 2022 13:48:43 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7B2951F0
+        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 10:48:41 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id x71-20020a63314a000000b00419699fc9afso2620980pgx.1
+        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 10:48:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=UyUTAWXY2X7Ah7B66gjrMw5pytdA/PXbXOomWNvEeu4=;
+        b=ngpBh/IUZHhDQudw0NBRS6eJp0k0g/Snc2g0NBOVsHv/wQcYkt0l+UEhsXKCu+eejM
+         AMhKjqPVoFU9oi2ibluyDp59JcRJNPjsOmboAZJXg6iRUnWCI6FzLg1MLJCRaKfXPHgL
+         2v3eLNBDe6NQ+fs6UjlC8U9dJA7vT70xoNsVGC/R/y13iDAPMt8c1zhgBKZ6KzFnnP+k
+         xBWnbQTX0FnGho2qGQxbcwZqMZjp3agbrQtUuMVfqABDi1t2weAWEHE7Azj10Z5bhY/p
+         hJIypeVjMjYfot2phNe6bY4I+/70xKC2oznTR9+JLBbj8evJPPmv6M0yfl+XCD/CCP8L
+         28zA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=UyUTAWXY2X7Ah7B66gjrMw5pytdA/PXbXOomWNvEeu4=;
+        b=7RtCGFDAuaunRcSRBs2wfLiyYX9ra3UzQEcPYcKrTA1S+juvCMRvS1sOhDuzGUJm4X
+         N6GLLnOyhyfVRGT+bEcUozzXJHD9kotJKPvUPG82SMa09mQkLCl5IuCqCvherQHAADix
+         clCYVkKANMkrx4s6WuZ33GAnknNWV/tcogNm18YuXhYDIl8OE/1MTdn9aG0o/3d9l4tu
+         SmoEtMTbKxStChdjWryCviCOrlIzoJSa2m3ZmrP0EF+C2G0zYjsfapZbANm8b7iVYcmH
+         QMm7ddQ5celjzTy61moIaW3L2hei+vMYKwvBolqrYVT1C1xs+ZHPkuZsl4VlcfdVJigi
+         5oKg==
+X-Gm-Message-State: AJIora+s/PXQ5TeZ2GPfS9SltrHos2J7cyoTF4cJ9AVOQWZLUyI6/Xao
+        kgpkzUT01sMF7nYJpBGEzjnpMaBkZnasi7EK
+X-Google-Smtp-Source: AGRyM1v3LSHWNM0kw8aCul8CF8SYWemX3ff4Lm/DVrdYY2CQrbZa1lAcuHv2KYtIfRt9JYeXkKIvcmu2l/k7pNJi
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
+ (user=yosryahmed job=sendgmr) by 2002:aa7:888a:0:b0:52b:17e8:fd1 with SMTP id
+ z10-20020aa7888a000000b0052b17e80fd1mr907090pfe.46.1658512121117; Fri, 22 Jul
+ 2022 10:48:41 -0700 (PDT)
+Date:   Fri, 22 Jul 2022 17:48:21 +0000
+Message-Id: <20220722174829.3422466-1-yosryahmed@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
+Subject: [PATCH bpf-next v5 0/8] bpf: rstat: cgroup hierarchical stats
+From:   Yosry Ahmed <yosryahmed@google.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Hao Luo <haoluo@google.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        KP Singh <kpsingh@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "=?UTF-8?q?Michal=20Koutn=C3=BD?=" <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, cgroups@vger.kernel.org,
+        Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Check the correctness of permission requests on two maps, one with
-read-only access, and one with read-write access. Accesses are enforced
-with a small eBPF program implementing the bpf_map security hook.
+This patch series allows for using bpf to collect hierarchical cgroup
+stats efficiently by integrating with the rstat framework. The rstat
+framework provides an efficient way to collect cgroup stats percpu and
+propagate them through the cgroup hierarchy.
 
-Ensure that read-like operations can be still executed on a read-only map,
-unlike before where they were denied due to the requestor unnecessarily
-specifying read-write permissions.
+The stats are exposed to userspace in textual form by reading files in
+bpffs, similar to cgroupfs stats by using a cgroup_iter program.
+cgroup_iter is a type of bpf_iter. It walks over cgroups in three modes:
+- walking a cgroup's descendants in pre-order.
+- walking a cgroup's descendants in post-order.
+- walking a cgroup's ancestors.
 
-Also ensure that the read-write map can be still accessed when requesting
-a write-like operation, unlike before where the search would stop at the
-read-only map due to not having sufficient permissions.
+When attaching cgroup_iter, one needs to set a cgroup to the iter_link
+created from attaching. This cgroup is passed as a file descriptor and
+serves as the starting point of the walk.
 
-Do the tests programmatically, with the new functions added to libbpf
-accepting the opts parameter, and with the bpftool binary.
+One can also terminate the walk early by returning 1 from the iter
+program.
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Note that because walking cgroup hierarchy holds cgroup_mutex, the iter
+program is called with cgroup_mutex held.
+
+** Background on rstat for stats collection **
+(I am using a subscriber analogy that is not commonly used)
+
+The rstat framework maintains a tree of cgroups that have updates and
+which cpus have updates. A subscriber to the rstat framework maintains
+their own stats. The framework is used to tell the subscriber when
+and what to flush, for the most efficient stats propagation. The
+workflow is as follows:
+
+- When a subscriber updates a cgroup on a cpu, it informs the rstat
+  framework by calling cgroup_rstat_updated(cgrp, cpu).
+
+- When a subscriber wants to read some stats for a cgroup, it asks
+  the rstat framework to initiate a stats flush (propagation) by calling
+  cgroup_rstat_flush(cgrp).
+
+- When the rstat framework initiates a flush, it makes callbacks to
+  subscribers to aggregate stats on cpus that have updates, and
+  propagate updates to their parent.
+
+Currently, the main subscribers to the rstat framework are cgroup
+subsystems (e.g. memory, block). This patch series allow bpf programs to
+become subscribers as well.
+
+This patch series includes a resend of a patch from the mailing list by
+Benjamin Tissoires to support sleepable kfuncs [1], modified to use the
+new kfunc flags infrastructure.
+
+Patches in this series are organized as follows:
+* Patch 1 is the updated sleepable kfuncs patch.
+* Patch 2 enables the use of cgroup_get_from_file() in cgroup1.
+  This is useful because it enables cgroup_iter to work with cgroup1, and
+  allows the entire stat collection workflow to be cgroup1-compatible.
+* Patches 3-5 introduce cgroup_iter prog, and a selftest.
+* Patches 6-8 allow bpf programs to integrate with rstat by adding the
+  necessary hook points and kfunc. A comprehensive selftest that
+  demonstrates the entire workflow for using bpf and rstat to
+  efficiently collect and output cgroup stats is added.
+
 ---
- tools/testing/selftests/bpf/Makefile          |   3 +-
- .../bpf/prog_tests/map_check_access.c         | 186 ++++++++++++++++++
- .../bpf/progs/test_map_check_access.c         | 112 +++++++++++
- 3 files changed, 300 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/map_check_access.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_map_check_access.c
+Changelog:
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 8d59ec7f4c2d..a4f0b6f5c9f1 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -501,6 +501,7 @@ $(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)			\
- 	$(Q)$$(CC) $$(CFLAGS) $$(filter %.a %.o,$$^) $$(LDLIBS) -o $$@
- 	$(Q)$(RESOLVE_BTFIDS) --btf $(TRUNNER_OUTPUT)/btf_data.o $$@
- 	$(Q)ln -sf $(if $2,..,.)/tools/build/bpftool/bootstrap/bpftool $(if $2,$2/)bpftool
-+	$(Q)ln -sf $(if $2,..,.)/tools/build/bpftool/bpftool $(if $2,$2/)bpftool_nobootstrap
- 
- endef
- 
-@@ -595,7 +596,7 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
- 
- EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)	\
- 	prog_tests/tests.h map_tests/tests.h verifier/tests.h		\
--	feature bpftool							\
-+	feature bpftool bpftool_nobootstrap				\
- 	$(addprefix $(OUTPUT)/,*.o *.skel.h *.lskel.h *.subskel.h	\
- 			       no_alu32 bpf_gcc bpf_testmod.ko		\
- 			       liburandom_read.so)
-diff --git a/tools/testing/selftests/bpf/prog_tests/map_check_access.c b/tools/testing/selftests/bpf/prog_tests/map_check_access.c
-new file mode 100644
-index 000000000000..c2d801503a87
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/map_check_access.c
-@@ -0,0 +1,186 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ */
-+
-+#include <sys/stat.h>
-+#include <test_progs.h>
-+
-+#include "test_map_check_access.skel.h"
-+
-+#define PINNED_MAP_PATH "/sys/fs/bpf/test_map_check_access_map"
-+#define PINNED_ITER_PATH "/sys/fs/bpf/test_map_check_access_iter"
-+#define BPFTOOL_PATH "./bpftool_nobootstrap"
-+#define MAX_CMD_SIZE 1024
-+
-+enum check_types { CHECK_NONE, CHECK_PINNED, CHECK_METADATA, CHECK_PERF };
-+
-+struct bpftool_command {
-+	char str[MAX_CMD_SIZE];
-+	enum check_types check;
-+	bool failure;
-+};
-+
-+struct bpftool_command bpftool_commands[] = {
-+	{ .str = BPFTOOL_PATH " map list" },
-+	{ .str = BPFTOOL_PATH " map show name data_input" },
-+	{ .str = BPFTOOL_PATH " map -f show pinned " PINNED_MAP_PATH,
-+	  .check = CHECK_PINNED },
-+	{ .str = "rm -f " PINNED_MAP_PATH },
-+	{ .str = BPFTOOL_PATH " map dump name data_input" },
-+	{ .str = BPFTOOL_PATH " map lookup name data_input key 0 0 0 0" },
-+	{ .str = BPFTOOL_PATH
-+	  " map update name data_input key 0 0 0 0 value 0 0 0 0 2> /dev/null",
-+	  .failure = true },
-+	{ .str = BPFTOOL_PATH
-+	  " map update name data_input_mim key 0 0 0 0 value name data_input" },
-+	{ .str = BPFTOOL_PATH
-+	  " map update name data_input_w key 0 0 0 0 value 0 0 0 0" },
-+	{ .str = BPFTOOL_PATH " iter pin test_map_check_access.o "
-+		 PINNED_ITER_PATH " map name data_input" },
-+	{ .str = "cat " PINNED_ITER_PATH },
-+	{ .str = "rm -f " PINNED_ITER_PATH },
-+	{ .str = BPFTOOL_PATH " prog show name check_access",
-+	  .check = CHECK_METADATA },
-+	{ .str = BPFTOOL_PATH " btf show" },
-+	{ .str = BPFTOOL_PATH " btf dump map name data_input" },
-+	{ .str = BPFTOOL_PATH " map pin name data_input " PINNED_MAP_PATH },
-+	{ .str = BPFTOOL_PATH " struct_ops show name dummy_2" },
-+	{ .str = BPFTOOL_PATH " struct_ops dump name dummy_2" },
-+	{ .str = BPFTOOL_PATH " map event_pipe name data_input_perf",
-+	  .check = CHECK_PERF },
-+};
-+
-+static int _run_bpftool(struct bpftool_command *command)
-+{
-+	char output[1024] = { 0 };
-+	FILE *fp;
-+	int ret;
-+
-+	fp = popen(command->str, "r");
-+	if (!fp)
-+		return -errno;
-+
-+	fread(output, sizeof(output) - 1, sizeof(*output), fp);
-+
-+	ret = pclose(fp);
-+	if (WEXITSTATUS(ret) && !command->failure)
-+		return WEXITSTATUS(ret);
-+
-+	ret = 0;
-+
-+	switch (command->check) {
-+	case CHECK_PINNED:
-+		if (!strstr(output, PINNED_MAP_PATH))
-+			ret = -ENOENT;
-+		break;
-+	case CHECK_METADATA:
-+		if (!strstr(output, "test_var"))
-+			ret = -ENOENT;
-+		break;
-+	case CHECK_PERF:
-+		if (strncmp(output, "==", 2))
-+			ret = -ENOENT;
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+void test_map_check_access(void)
-+{
-+	struct test_map_check_access *skel;
-+	struct bpf_map_info info_m = { 0 };
-+	struct bpf_map *map;
-+	__u32 len = sizeof(info_m);
-+	int ret, zero = 0, fd, i;
-+
-+	DECLARE_LIBBPF_OPTS(bpf_get_fd_opts, opts_rdonly,
-+		.flags = BPF_F_RDONLY,
-+	);
-+
-+	skel = test_map_check_access__open();
-+	if (!ASSERT_OK_PTR(skel, "test_map_check_access__open"))
-+		return;
-+
-+	bpf_program__set_autoload(skel->progs.dump_bpf_hash_map, false);
-+
-+	ret = test_map_check_access__load(skel);
-+	if (!ASSERT_OK(ret, "test_map_check_access__load"))
-+		goto close_prog;
-+
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_iter"))
-+		goto close_prog;
-+
-+	ret = test_map_check_access__attach(skel);
-+	if (!ASSERT_OK(ret, "test_map_check_access__attach"))
-+		goto close_prog;
-+
-+	map = bpf_object__find_map_by_name(skel->obj, "data_input");
-+	if (!ASSERT_OK_PTR(map, "bpf_object__find_map_by_name"))
-+		goto close_prog;
-+
-+	ret = bpf_obj_get_info_by_fd(bpf_map__fd(map), &info_m, &len);
-+	if (!ASSERT_OK(ret, "bpf_obj_get_info_by_fd"))
-+		goto close_prog;
-+
-+	fd = bpf_map_get_fd_by_id(info_m.id);
-+	if (!ASSERT_LT(fd, 0, "bpf_map_get_fd_by_id"))
-+		goto close_prog;
-+
-+	fd = bpf_map_get_fd_by_id_opts(info_m.id, NULL);
-+	if (!ASSERT_LT(fd, 0, "bpf_map_get_fd_by_id_opts"))
-+		goto close_prog;
-+
-+	fd = bpf_map_get_fd_by_id_opts(info_m.id, &opts_rdonly);
-+	if (!ASSERT_GE(fd, 0, "bpf_map_get_fd_by_id_opts"))
-+		goto close_prog;
-+
-+	ret = bpf_map_lookup_elem(fd, &zero, &len);
-+	if (!ASSERT_OK(ret, "bpf_map_lookup_elem")) {
-+		close(fd);
-+		goto close_prog;
-+	}
-+
-+	ret = bpf_map_update_elem(fd, &zero, &len, BPF_ANY);
-+
-+	close(fd);
-+
-+	if (!ASSERT_LT(ret, 0, "bpf_map_update_elem"))
-+		goto close_prog;
-+
-+	ret = bpf_map_update_elem(bpf_map__fd(map), &zero, &len, BPF_ANY);
-+	if (!ASSERT_OK(ret, "bpf_map_update_elem"))
-+		goto close_prog;
-+
-+	ret = bpf_map__pin(map, PINNED_MAP_PATH);
-+	if (!ASSERT_OK(ret, "bpf_map__pin"))
-+		goto close_prog;
-+
-+	fd = bpf_obj_get_opts(PINNED_MAP_PATH, &opts_rdonly);
-+	if (!ASSERT_GE(fd, 0, "bpf_obj_get_opts"))
-+		goto close_prog;
-+
-+	close(fd);
-+
-+	fd = bpf_obj_get_opts(PINNED_MAP_PATH, NULL);
-+	if (!ASSERT_LT(fd, 0, "bpf_obj_get_opts")) {
-+		close(fd);
-+		goto close_prog;
-+	}
-+
-+	for (i = 0; i < ARRAY_SIZE(bpftool_commands); i++) {
-+		ret = _run_bpftool(&bpftool_commands[i]);
-+		if (!ASSERT_OK(ret, bpftool_commands[i].str))
-+			goto close_prog;
-+	}
-+
-+close_prog:
-+	test_map_check_access__destroy(skel);
-+	unlink(PINNED_MAP_PATH);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_map_check_access.c b/tools/testing/selftests/bpf/progs/test_map_check_access.c
-new file mode 100644
-index 000000000000..6b8f0bf8f77e
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_map_check_access.c
-@@ -0,0 +1,112 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ * Copyright (C) 2021. Huawei Technologies Co., Ltd
-+ * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ */
-+
-+#include "vmlinux.h"
-+#include <errno.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+/* From include/linux/mm.h. */
-+#define FMODE_WRITE	0x2
-+
-+const char bpf_metadata_test_var[] SEC(".rodata") = "test_var";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} data_input SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} data_input_w SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
-+	__uint(max_entries, 1);
-+	__uint(map_flags, 0);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+	__array(values, struct {
-+		__uint(type, BPF_MAP_TYPE_ARRAY);
-+		__uint(max_entries, 1);
-+		__type(key, int);
-+		__type(value, int);
-+	});
-+} data_input_mim SEC(".maps") = {
-+	.values = { (void *)&data_input },
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
-+	__type(key, int);
-+	__type(value, int);
-+} data_input_perf SEC(".maps");
-+
-+char _license[] SEC("license") = "GPL";
-+
-+SEC("iter/bpf_map_elem")
-+int dump_bpf_hash_map(struct bpf_iter__bpf_map_elem *ctx)
-+{
-+	struct seq_file *seq = ctx->meta->seq;
-+	struct bpf_map *map = ctx->map;
-+	u32 *key = ctx->key;
-+	u32 *val = ctx->value;
-+
-+	if (key == (void *)0 || val == (void *)0)
-+		return 0;
-+
-+	BPF_SEQ_PRINTF(seq, "%d: (%x) (%llx)\n", map->id, *key, *val);
-+	return 0;
-+}
-+
-+SEC("lsm/bpf_map")
-+int BPF_PROG(check_access, struct bpf_map *map, fmode_t fmode)
-+{
-+	if (map != (struct bpf_map *)&data_input)
-+		return 0;
-+
-+	if (fmode & FMODE_WRITE)
-+		return -EACCES;
-+
-+	return 0;
-+}
-+
-+SEC("struct_ops/test_1")
-+int BPF_PROG(test_1, struct bpf_dummy_ops_state *state)
-+{
-+	return 0;
-+}
-+
-+SEC("struct_ops/test_2")
-+int BPF_PROG(test_2, struct bpf_dummy_ops_state *state, int a1,
-+	     unsigned short a2, char a3, unsigned long a4)
-+{
-+	return 0;
-+}
-+
-+SEC(".struct_ops")
-+struct bpf_dummy_ops dummy_2 = {
-+	.test_1 = (void *)test_1,
-+	.test_2 = (void *)test_2,
-+};
-+
-+SEC("tp/raw_syscalls/sys_enter")
-+int handle_sys_enter(void *ctx)
-+{
-+	int cpu = bpf_get_smp_processor_id();
-+
-+	bpf_perf_event_output(ctx, &data_input_perf, BPF_F_CURRENT_CPU,
-+			      &cpu, sizeof(cpu));
-+	return 0;
-+}
+v4 -> v5:
+- Rebased on top of new kfunc flags infrastructure, updated patch 1 and
+  patch 6 accordingly.
+- Added docs for sleepable kfuncs.
+
+v3 -> v4:
+- cgroup_iter:
+  * reorder fields in bpf_link_info to avoid break uapi (Yonghong)
+  * comment the behavior when cgroup_fd=0 (Yonghong)
+  * comment on the limit of number of cgroups supported by cgroup_iter.
+    (Yonghong)
+- cgroup_hierarchical_stats selftest:
+  * Do not return -1 if stats are not found (causes overflow in userspace).
+  * Check if child process failed to join cgroup.
+  * Make buf and path arrays in get_cgroup_vmscan_delay() static.
+  * Increase the test map sizes to accomodate cgroups that are not
+    created by the test.
+
+v2 -> v3:
+- cgroup_iter:
+  * Added conditional compilation of cgroup_iter.c in kernel/bpf/Makefile
+    (kernel test) and dropped the !CONFIG_CGROUP patch.
+  * Added validation of traversal_order when attaching (Yonghong).
+  * Fixed previous wording "two modes" to "three modes" (Yonghong).
+  * Fixed the btf_dump selftest broken by this patch (Yonghong).
+  * Fixed ctx_arg_info[0] to use "PTR_TO_BTF_ID_OR_NULL" instead of
+    "PTR_TO_BTF_ID", because the "cgroup" pointer passed to iter prog can
+     be null.
+- Use __diag_push to eliminate __weak noinline warning in
+  bpf_rstat_flush().
+- cgroup_hierarchical_stats selftest:
+  * Added write_cgroup_file_parent() helper.
+  * Added error handling for failed map updates.
+  * Added null check for cgroup in vmscan_flush.
+  * Fixed the signature of vmscan_[start/end].
+  * Correctly return error code when attaching trace programs fail.
+  * Make sure all links are destroyed correctly and not leaking in
+    cgroup_hierarchical_stats selftest.
+  * Use memory.reclaim instead of memory.high as a more reliable way to
+    invoke reclaim.
+  * Eliminated sleeps, the test now runs faster.
+
+v1 -> v2:
+- Redesign of cgroup_iter from v1, based on Alexei's idea [2]:
+  * supports walking cgroup subtree.
+  * supports walking ancestors of a cgroup. (Andrii)
+  * supports terminating the walk early.
+  * uses fd instead of cgroup_id as parameter for iter_link. Using fd is
+    a convention in bpf.
+  * gets cgroup's ref at attach time and deref at detach.
+  * brought back cgroup1 support for cgroup_iter.
+- Squashed the patches adding the rstat flush hook points and kfuncs
+  (Tejun).
+- Added a comment explaining why bpf_rstat_flush() needs to be weak
+  (Tejun).
+- Updated the final selftest with the new cgroup_iter design.
+- Changed CHECKs in the selftest with ASSERTs (Yonghong, Andrii).
+- Removed empty line at the end of the selftest (Yonghong).
+- Renamed test files to cgroup_hierarchical_stats.c.
+- Reordered CGROUP_PATH params order to match struct declaration
+  in the selftest (Michal).
+- Removed memory_subsys_enabled() and made sure memcg controller
+  enablement checks make sense and are documented (Michal).
+
+RFC v2 -> v1:
+- Instead of introducing a new program type for rstat flushing, add an
+  empty hook point, bpf_rstat_flush(), and use fentry bpf programs to
+  attach to it and flush bpf stats.
+- Instead of using helpers, use kfuncs for rstat functions.
+- These changes simplify the patchset greatly, with minimal changes to
+  uapi.
+
+RFC v1 -> RFC v2:
+- Instead of rstat flush programs attach to subsystems, they now attach
+  to rstat (global flushers, not per-subsystem), based on discussions
+  with Tejun. The first patch is entirely rewritten.
+- Pass cgroup pointers to rstat flushers instead of cgroup ids. This is
+  much more flexibility and less likely to need a uapi update later.
+- rstat helpers are now only defined if CGROUP_CONFIG.
+- Most of the code is now only defined if CGROUP_CONFIG and
+  CONFIG_BPF_SYSCALL.
+- Move rstat helper protos from bpf_base_func_proto() to
+  tracing_prog_func_proto().
+- rstat helpers argument (cgroup pointer) is now ARG_PTR_TO_BTF_ID, not
+  ARG_ANYTHING.
+- Rewrote the selftest to use the cgroup helpers.
+- Dropped bpf_map_lookup_percpu_elem (already added by Feng).
+- Dropped patch to support cgroup v1 for cgroup_iter.
+- Dropped patch to define some cgroup_put() when !CONFIG_CGROUP. The
+  code that calls it is no longer compiled when !CONFIG_CGROUP.
+
+cgroup_iter was originally introduced in a different patch series[3].
+Hao and I agreed that it fits better as part of this series.
+RFC v1 of this patch series had the following changes from [3]:
+- Getting the cgroup's reference at the time at attaching, instead of
+  at the time when iterating. (Yonghong)
+- Remove .init_seq_private and .fini_seq_private callbacks for
+  cgroup_iter. They are not needed now. (Yonghong)
+
+[1] https://lore.kernel.org/bpf/20220421140740.459558-5-benjamin.tissoires@redhat.com/
+[2] https://lore.kernel.org/bpf/20220520221919.jnqgv52k4ajlgzcl@MBP-98dd607d3435.dhcp.thefacebook.com/
+[3] https://lore.kernel.org/lkml/20220225234339.2386398-9-haoluo@google.com/
+---
+
+Benjamin Tissoires (1):
+  btf: Add a new kfunc flag which allows to mark a function to be
+    sleepable
+
+Hao Luo (3):
+  bpf, iter: Fix the condition on p when calling stop.
+  bpf: Introduce cgroup iter
+  selftests/bpf: Test cgroup_iter.
+
+Yosry Ahmed (4):
+  cgroup: enable cgroup_get_from_file() on cgroup1
+  cgroup: bpf: enable bpf programs to integrate with rstat
+  selftests/bpf: extend cgroup helpers
+  bpf: add a selftest for cgroup hierarchical stats collection
+
+ Documentation/bpf/kfuncs.rst                  |   6 +
+ include/linux/bpf.h                           |   8 +
+ include/linux/btf.h                           |   1 +
+ include/uapi/linux/bpf.h                      |  30 ++
+ kernel/bpf/Makefile                           |   3 +
+ kernel/bpf/bpf_iter.c                         |   5 +
+ kernel/bpf/btf.c                              |   9 +
+ kernel/bpf/cgroup_iter.c                      | 252 ++++++++++++
+ kernel/cgroup/cgroup.c                        |   5 -
+ kernel/cgroup/rstat.c                         |  49 +++
+ tools/include/uapi/linux/bpf.h                |  30 ++
+ tools/testing/selftests/bpf/cgroup_helpers.c  | 201 ++++++++--
+ tools/testing/selftests/bpf/cgroup_helpers.h  |  19 +-
+ .../selftests/bpf/prog_tests/btf_dump.c       |   4 +-
+ .../prog_tests/cgroup_hierarchical_stats.c    | 364 ++++++++++++++++++
+ .../selftests/bpf/prog_tests/cgroup_iter.c    | 190 +++++++++
+ tools/testing/selftests/bpf/progs/bpf_iter.h  |   7 +
+ .../bpf/progs/cgroup_hierarchical_stats.c     | 239 ++++++++++++
+ .../testing/selftests/bpf/progs/cgroup_iter.c |  39 ++
+ 19 files changed, 1407 insertions(+), 54 deletions(-)
+ create mode 100644 kernel/bpf/cgroup_iter.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_hierarchical_stats.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_iter.c
+ create mode 100644 tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c
+ create mode 100644 tools/testing/selftests/bpf/progs/cgroup_iter.c
+
 -- 
-2.25.1
+2.37.1.359.gd136c6c3e2-goog
 
