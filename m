@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03DEAC43334
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96E10CCA47C
 	for <bpf@archiver.kernel.org>; Fri, 22 Jul 2022 18:35:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236370AbiGVSfE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S233737AbiGVSfE (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Fri, 22 Jul 2022 14:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48284 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236337AbiGVSfD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S236366AbiGVSfD (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 22 Jul 2022 14:35:03 -0400
 Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924409FE28
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C6C9FE1A
         for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 11:35:02 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26MC5lv5009346
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26MC8QaF022622
         for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 11:35:01 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=El6VgYnyfGvGeh+dXySVuzhUz+VLV/enjODNirwpF9o=;
- b=S0S//wXvt3CDLh/8usnfVlm0gr4kyTDyvhv/MejExuljYQmMK7oq2dXROQiTAWdwFL61
- M9/z2Wk0qbkKybqB5kSDpWHrTI1SMDvD6eAwK1SCN6sXOUfzPQCluT2G3Rps9a3w2loI
- azg3gEfnsExYcELsWrQyPWDyxpDWfHf5Stw= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hej1w09cd-1
+ bh=1y1r6kY8FMLTpTnnl89OSJNgwHtRLzSDIWIoWncIqwU=;
+ b=ITFhu94pamM3xYoIQSICqVo/Irp96ZUCw1iPYfgiYhAq0i6OLx6y3GoGG0mcVZXJA2jP
+ 0dovpB9oWv0wWoxgFuqukVjxz14OZ12m8GNlgI9OcX8iKDidTj9Cl+hqC6Me0jjIA+6c
+ Ob8nSXL6xANgBwxRCFpHXKoHSfe9CmRrjpY= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hf7fc10es-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 11:35:01 -0700
-Received: from twshared10560.18.frc3.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+Received: from twshared25107.07.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.28; Fri, 22 Jul 2022 11:35:00 -0700
 Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
-        id 2F95BAB6F1A3; Fri, 22 Jul 2022 11:34:50 -0700 (PDT)
+        id D66F6AB6F199; Fri, 22 Jul 2022 11:34:47 -0700 (PDT)
 From:   Dave Marchevsky <davemarchevsky@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -41,9 +41,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Kernel Team <kernel-team@fb.com>, Tejun Heo <tj@kernel.org>,
         Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [RFC PATCH bpf-next 07/11] bpf: Enforce spinlock hold for bpf_rbtree_{add,remove,find}
-Date:   Fri, 22 Jul 2022 11:34:34 -0700
-Message-ID: <20220722183438.3319790-8-davemarchevsky@fb.com>
+Subject: [RFC PATCH bpf-next 03/11] bpf: Add rb_node_off to bpf_map
+Date:   Fri, 22 Jul 2022 11:34:30 -0700
+Message-ID: <20220722183438.3319790-4-davemarchevsky@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220722183438.3319790-1-davemarchevsky@fb.com>
 References: <20220722183438.3319790-1-davemarchevsky@fb.com>
@@ -51,8 +51,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: jODMBEAaQGOE6mjf3Np9aqlP5c5WjPym
-X-Proofpoint-ORIG-GUID: jODMBEAaQGOE6mjf3Np9aqlP5c5WjPym
+X-Proofpoint-GUID: RrDwewK-_3DYQtZudeDukARh_oHwys-y
+X-Proofpoint-ORIG-GUID: RrDwewK-_3DYQtZudeDukARh_oHwys-y
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-07-22_06,2022-07-21_02,2022-06-22_01
@@ -60,65 +60,148 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The bpf program calling these helpers must hold the spinlock associated
-with the rbtree map when doing so. Otherwise, a concurrent add/remove
-operation could corrupt the tree while {add,remove,find} are walking it
-with callback or pivoting after update.
+Similarly to other protected fields which might be in a map value -
+bpf_spin_lock and bpf_timer - keep track of existence and offset of
+struct rb_node within map value struct. This will allow later patches in
+this series to prevent writes to rb_node field.
+
+Allowing bpf programs to modify the rbtree node struct's rb_node field
+would allow parent and children node pointers to be changed, which could
+corrupt an otherwise-valid rbtree.
 
 Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
 ---
- kernel/bpf/rbtree.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ include/linux/bpf.h  |  6 ++++++
+ include/linux/btf.h  |  1 +
+ kernel/bpf/btf.c     | 21 +++++++++++++++++++++
+ kernel/bpf/syscall.c |  3 +++
+ 4 files changed, 31 insertions(+)
 
-diff --git a/kernel/bpf/rbtree.c b/kernel/bpf/rbtree.c
-index bf2e30af82ec..5b1ab73e164f 100644
---- a/kernel/bpf/rbtree.c
-+++ b/kernel/bpf/rbtree.c
-@@ -14,6 +14,11 @@ struct bpf_rbtree {
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index a97751d845c9..eb8c550db0e2 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -214,6 +214,7 @@ struct bpf_map {
+ 	int spin_lock_off; /* >=3D0 valid offset, <0 error */
+ 	struct bpf_map_value_off *kptr_off_tab;
+ 	int timer_off; /* >=3D0 valid offset, <0 error */
++	int rb_node_off; /* >=3D0 valid offset, <0 error */
+ 	u32 id;
+ 	int numa_node;
+ 	u32 btf_key_type_id;
+@@ -263,6 +264,11 @@ static inline bool map_value_has_kptrs(const struct =
+bpf_map *map)
+ 	return !IS_ERR_OR_NULL(map->kptr_off_tab);
+ }
 =20
- BTF_ID_LIST_SINGLE(bpf_rbtree_btf_ids, struct, rb_node);
-=20
-+static bool __rbtree_lock_held(struct bpf_rbtree *tree)
++static inline bool map_value_has_rb_node(const struct bpf_map *map)
 +{
-+	return spin_is_locked((spinlock_t *)tree->lock);
++	return map->rb_node_off >=3D 0;
 +}
 +
- static int rbtree_map_alloc_check(union bpf_attr *attr)
+ static inline void check_and_init_map_value(struct bpf_map *map, void *d=
+st)
  {
- 	if (attr->max_entries || !attr->btf_value_type_id)
-@@ -93,6 +98,9 @@ BPF_CALL_3(bpf_rbtree_add, struct bpf_map *, map, void =
-*, value, void *, cb)
- 	struct bpf_rbtree *tree =3D container_of(map, struct bpf_rbtree, map);
- 	struct rb_node *node =3D (struct rb_node *)value;
+ 	if (unlikely(map_value_has_spin_lock(map)))
+diff --git a/include/linux/btf.h b/include/linux/btf.h
+index cdb376d53238..1d8b1bcf0396 100644
+--- a/include/linux/btf.h
++++ b/include/linux/btf.h
+@@ -152,6 +152,7 @@ bool btf_member_is_reg_int(const struct btf *btf, con=
+st struct btf_type *s,
+ 			   u32 expected_offset, u32 expected_size);
+ int btf_find_spin_lock(const struct btf *btf, const struct btf_type *t);
+ int btf_find_timer(const struct btf *btf, const struct btf_type *t);
++int btf_find_rb_node(const struct btf *btf, const struct btf_type *t);
+ struct bpf_map_value_off *btf_parse_kptrs(const struct btf *btf,
+ 					  const struct btf_type *t);
+ bool btf_type_is_void(const struct btf_type *t);
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 7ac971ea98d1..3a7096da7f20 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -3195,6 +3195,7 @@ enum btf_field_type {
+ 	BTF_FIELD_SPIN_LOCK,
+ 	BTF_FIELD_TIMER,
+ 	BTF_FIELD_KPTR,
++	BTF_FIELD_RB_NODE,
+ };
 =20
-+	if (!__rbtree_lock_held(tree))
-+		return (u64)NULL;
+ enum {
+@@ -3282,6 +3283,7 @@ static int btf_find_struct_field(const struct btf *=
+btf, const struct btf_type *t
+ 		switch (field_type) {
+ 		case BTF_FIELD_SPIN_LOCK:
+ 		case BTF_FIELD_TIMER:
++		case BTF_FIELD_RB_NODE:
+ 			ret =3D btf_find_struct(btf, member_type, off, sz,
+ 					      idx < info_cnt ? &info[idx] : &tmp);
+ 			if (ret < 0)
+@@ -3332,6 +3334,7 @@ static int btf_find_datasec_var(const struct btf *b=
+tf, const struct btf_type *t,
+ 		switch (field_type) {
+ 		case BTF_FIELD_SPIN_LOCK:
+ 		case BTF_FIELD_TIMER:
++		case BTF_FIELD_RB_NODE:
+ 			ret =3D btf_find_struct(btf, var_type, off, sz,
+ 					      idx < info_cnt ? &info[idx] : &tmp);
+ 			if (ret < 0)
+@@ -3374,6 +3377,11 @@ static int btf_find_field(const struct btf *btf, c=
+onst struct btf_type *t,
+ 		sz =3D sizeof(struct bpf_timer);
+ 		align =3D __alignof__(struct bpf_timer);
+ 		break;
++	case BTF_FIELD_RB_NODE:
++		name =3D "rb_node";
++		sz =3D sizeof(struct rb_node);
++		align =3D __alignof__(struct rb_node);
++		break;
+ 	case BTF_FIELD_KPTR:
+ 		name =3D NULL;
+ 		sz =3D sizeof(u64);
+@@ -3420,6 +3428,19 @@ int btf_find_timer(const struct btf *btf, const st=
+ruct btf_type *t)
+ 	return info.off;
+ }
+=20
++int btf_find_rb_node(const struct btf *btf, const struct btf_type *t)
++{
++	struct btf_field_info info;
++	int ret;
 +
- 	if (WARN_ON_ONCE(!RB_EMPTY_NODE(node)))
- 		return (u64)NULL;
-=20
-@@ -114,6 +122,9 @@ BPF_CALL_3(bpf_rbtree_find, struct bpf_map *, map, vo=
-id *, key, void *, cb)
++	ret =3D btf_find_field(btf, t, BTF_FIELD_RB_NODE, &info, 1);
++	if (ret < 0)
++		return ret;
++	if (!ret)
++		return -ENOENT;
++	return info.off;
++}
++
+ struct bpf_map_value_off *btf_parse_kptrs(const struct btf *btf,
+ 					  const struct btf_type *t)
  {
- 	struct bpf_rbtree *tree =3D container_of(map, struct bpf_rbtree, map);
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 83c7136c5788..3947fbd137af 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -1052,6 +1052,8 @@ static int map_check_btf(struct bpf_map *map, const=
+ struct btf *btf,
+ 		}
+ 	}
 =20
-+	if (!__rbtree_lock_held(tree))
-+		return (u64)NULL;
++	map->rb_node_off =3D btf_find_rb_node(btf, value_type);
 +
- 	return (u64)rb_find(key, &tree->root.rb_root,
- 			    (int (*)(const void *key,
- 				     const struct rb_node *))cb);
-@@ -206,6 +217,9 @@ BPF_CALL_2(bpf_rbtree_remove, struct bpf_map *, map, =
-void *, value)
- 	struct bpf_rbtree *tree =3D container_of(map, struct bpf_rbtree, map);
- 	struct rb_node *node =3D (struct rb_node *)value;
+ 	if (map->ops->map_check_btf) {
+ 		ret =3D map->ops->map_check_btf(map, btf, key_type, value_type);
+ 		if (ret < 0)
+@@ -1115,6 +1117,7 @@ static int map_create(union bpf_attr *attr)
 =20
-+	if (!__rbtree_lock_held(tree))
-+		return (u64)NULL;
-+
- 	if (WARN_ON_ONCE(RB_EMPTY_NODE(node)))
- 		return (u64)NULL;
-=20
+ 	map->spin_lock_off =3D -EINVAL;
+ 	map->timer_off =3D -EINVAL;
++	map->rb_node_off =3D -EINVAL;
+ 	if (attr->btf_key_type_id || attr->btf_value_type_id ||
+ 	    /* Even the map's value is a kernel's struct,
+ 	     * the bpf_prog.o must have BTF to begin with
 --=20
 2.30.2
 
