@@ -2,78 +2,154 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EBF1C43334
-	for <bpf@archiver.kernel.org>; Fri, 22 Jul 2022 17:55:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EBBBC43334
+	for <bpf@archiver.kernel.org>; Fri, 22 Jul 2022 17:58:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235970AbiGVRze (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Jul 2022 13:55:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47926 "EHLO
+        id S235781AbiGVR6k (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Jul 2022 13:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232383AbiGVRzd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Jul 2022 13:55:33 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EFA186DF
-        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 10:55:32 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id g17so5179653plh.2
-        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 10:55:32 -0700 (PDT)
+        with ESMTP id S236020AbiGVR6j (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Jul 2022 13:58:39 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB1C85FAF
+        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 10:58:38 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id w7so5139676ply.12
+        for <bpf@vger.kernel.org>; Fri, 22 Jul 2022 10:58:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=x9mUgUlLelfiYpMAS0AawhxvSmSAgtwPkT+u5kRHeFg=;
-        b=pztXqAAeYfPTwlfJaqOsWmhBDxF0DUp1mc7zYxX0zBCOc0tqnCj75ShwrLEt4A8GaZ
-         BtPKOKx+Ppg0P1OzoeiKi80lLLZizk2FTsrCxt+DOBbrQiFhD4dAZU0JXKBxohf2JpSh
-         1FTLEVOPYPilavW+3h0o849QFdt09hDP30NRyTT1kYaOa5E9m0bn+BomHPmN76vY2tNZ
-         o6AQfLJdfX626drd5dCQB7MIT/5ie+eqHyPgy85C5ea41VXy57Ew/g6L/yciYnLm7n68
-         u75S+huuwtVNouOnXttw3ZAFh+2LIL5IMygbDeVZoI394G/6A2iA31O0fp1K9qL0iox+
-         uuXQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AuKD7y/rXaAroCkDZ0udhQpHRESGG3CPv4qWM1HMdBI=;
+        b=DIFYoLnIylEpQmGfMjGZ7qr7Npk8helFn1Xtfs+m7pc2F62Pmd8+RhhWtVC2Oi1leq
+         SqpIUVeX/m8an1I6nd8DLTXhdvB6AGRTBMezTXfVcTdThAU3+5MGVeBgD0MoZ4C9+H3Q
+         9p1vQZCNdDYNfVBEJmedBrLQ6BmP9v3BJJ/MkrCyv3fZegK35xkTLen7Tp3vobpcnJL6
+         51srSeARQN+AYz76i+ZvLuoZf1TF161NHuhgYLuG208kZfGeyFu4+uhcY2Q27hPhYm7e
+         BO9Xqlu98dsK+jFMjwvYEEEZ2Yc5pTlATj65bkMqPRIIzoydENsJ105WyK0Joipg9aH/
+         YA0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=x9mUgUlLelfiYpMAS0AawhxvSmSAgtwPkT+u5kRHeFg=;
-        b=GV8xejJFjrQk30ZW7twlgaPY1pgbF0VFyBus8dfQmywuYUnXWZsaspAlFJter/bUpV
-         BsBQ+4NvS8e1PaaHvOBhL9UGPoBq0x5quOrrnVSpdAcOHGoGNOCXboVFqGfm2g6V9gSI
-         5VhKo5ze3jMeIOhfvSP4vbEPo7ejCRrQX/JDhwiDHZ+HjjAe2OyiKtmp7dgsVvcUwkg7
-         8kgp0LGGzx9H7ryiJGaYNl4m15EPpMvUux8cqKwE5jmuTRcwqMGr7v4iGaa4kYRnGpxK
-         DG6Tw2g9Ip7s/TYM3dVzILyoAh1hT9OLvmqqWv01fmUZqVMkaetXDrH816q1BW4Wva6a
-         qewQ==
-X-Gm-Message-State: AJIora/F/4uShE3z3kMIUVB+jcsyOdCKe8d/+PDu/NsuI9DSdw4MMJrS
-        rr9XJNi+Xag7YQQ/fMQ2BXA=
-X-Google-Smtp-Source: AGRyM1uIGD4mxh0INsQk2bi51d2TYys2AfqVTW8QNVhf+yNlNjHVP9BxtXJqA339TAFtO1uFFYVKCg==
-X-Received: by 2002:a17:90a:1943:b0:1ef:8146:f32f with SMTP id 3-20020a17090a194300b001ef8146f32fmr845317pjh.112.1658512532244;
-        Fri, 22 Jul 2022 10:55:32 -0700 (PDT)
-Received: from macbook-pro-3.dhcp.thefacebook.com ([2620:10d:c090:400::5:8bc8])
-        by smtp.gmail.com with ESMTPSA id e12-20020a170902ed8c00b0016cd74dae66sm4021496plj.28.2022.07.22.10.55.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jul 2022 10:55:31 -0700 (PDT)
-Date:   Fri, 22 Jul 2022 10:55:28 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AuKD7y/rXaAroCkDZ0udhQpHRESGG3CPv4qWM1HMdBI=;
+        b=6QjI/NJeZ/Orx7jRZij17pJqAbCOdTi5MLBVtWprHTkhJZUCxpIZLhpkQSNxJKEvaG
+         U/tgfNWjBFdntzDvz1vlCIYJA9Rx1i8w2Bsh0V4F2mtTEQ7BIEj0u/H2nVKe2z86zE1J
+         ndII+z/uX0bkqPxuewsWNRR2QW+iP4jG4oA5nFrmGZZ2R1iBWB0Kb4oLDUV4j91/EG2c
+         fbWQoRD2na8DLbwVxdQtGa1mrsO3Gm0ADGFEKWwqqwYtV+uwynGhcrdJMnNvW3iIOBKn
+         4hXE6Phg0KrzQaOYP1/3UL8o1HytxLauDmwmFXFYdcwj85AoMjeWRt6D5QeyFXV3bP93
+         g2LQ==
+X-Gm-Message-State: AJIora+GDVHyYwQU+6qlMSIoQfaIUe0T8/cfjv5lrbawQU8n1VZTltQx
+        gdryxdrWv9uQF+9auYubA03UIBo9GRUcZHIxkPqQNg==
+X-Google-Smtp-Source: AGRyM1t0ESclAhXBPSI/3lXbthg2P5d0oZMfTpS8M/ow50DxaEpt8Mg6NJdoPEXy7c0xKgBPhgTnuRlh/CU6Teep7ug=
+X-Received: by 2002:a17:90b:4b01:b0:1f0:1aa7:928 with SMTP id
+ lx1-20020a17090b4b0100b001f01aa70928mr789324pjb.195.1658512717338; Fri, 22
+ Jul 2022 10:58:37 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220722171836.2852247-1-roberto.sassu@huawei.com> <20220722171836.2852247-8-roberto.sassu@huawei.com>
+In-Reply-To: <20220722171836.2852247-8-roberto.sassu@huawei.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Fri, 22 Jul 2022 10:58:26 -0700
+Message-ID: <CAKH8qBuU4TORtzu-SQg-2y8iAgFe31fLBX2joby2eWJdoXGd2A@mail.gmail.com>
+Subject: Re: [RFC][PATCH v3 07/15] libbpf: Introduce bpf_obj_get_opts()
 To:     Roberto Sassu <roberto.sassu@huawei.com>
 Cc:     quentin@isovalent.com, ast@kernel.org, daniel@iogearbox.net,
         andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
         jevburton.kernel@gmail.com, bpf@vger.kernel.org
-Subject: Re: [RFC][PATCH v3 02/15] bpf: Set open_flags as last bpf_attr field
- for bpf_*_get_fd_by_id() funcs
-Message-ID: <20220722175528.26ve4ahnir6su5tu@macbook-pro-3.dhcp.thefacebook.com>
-References: <20220722171836.2852247-1-roberto.sassu@huawei.com>
- <20220722171836.2852247-3-roberto.sassu@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220722171836.2852247-3-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 07:18:23PM +0200, Roberto Sassu wrote:
-> The bpf() system call validates the bpf_attr structure received as
-> argument, and considers data until the last field, defined for each
-> operation. The remaing space must be filled with zeros.
-> 
-> Currently, for bpf_*_get_fd_by_id() functions except bpf_map_get_fd_by_id()
-> the last field is *_id. Setting open_flags to BPF_F_RDONLY from user space
-> will result in bpf() rejecting the argument.
+On Fri, Jul 22, 2022 at 10:20 AM Roberto Sassu <roberto.sassu@huawei.com> wrote:
+>
+> Introduce bpf_obj_get_opts(), to let the caller pass the needed permissions
+> for the operation. Keep the existing bpf_obj_get() to request read-write
+> permissions.
+>
+> bpf_obj_get() allows the caller to get a file descriptor from a pinned
+> object with the provided pathname. Specifying permissions has only effect
+> on maps (for links, the permission must be always read-write).
+>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  tools/lib/bpf/bpf.c      | 12 +++++++++++-
+>  tools/lib/bpf/bpf.h      |  2 ++
+>  tools/lib/bpf/libbpf.map |  1 +
+>  3 files changed, 14 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+> index 5f2785a4c358..0df088890864 100644
+> --- a/tools/lib/bpf/bpf.c
+> +++ b/tools/lib/bpf/bpf.c
+> @@ -577,18 +577,28 @@ int bpf_obj_pin(int fd, const char *pathname)
+>         return libbpf_err_errno(ret);
+>  }
+>
+> -int bpf_obj_get(const char *pathname)
+> +int bpf_obj_get_opts(const char *pathname,
+> +                    const struct bpf_get_fd_opts *opts)
 
-The kernel is doing the right thing. It should not ignore fields.
+I'm still not sure whether it's a good idea to mix get_fd with
+obj_get/pin operations? [1] seems more clear.
+It just so happens that (differently named) flags in BPF_OBJ_GET and
+BPF_XXX_GET_FD_BY_ID align, but maybe we shouldn't depend on it?
+
+Also, it seems only bpf_map_get_fd_by_id currently accepts flags? So
+this sharing makes even more sense?
+
+[1] https://lore.kernel.org/bpf/20220719194028.4180569-1-jevburton.kernel@gmail.com/
+
+
+
+
+
+>  {
+>         union bpf_attr attr;
+>         int fd;
+>
+> +       if (!OPTS_VALID(opts, bpf_get_fd_opts))
+> +               return libbpf_err(-EINVAL);
+> +
+>         memset(&attr, 0, sizeof(attr));
+>         attr.pathname = ptr_to_u64((void *)pathname);
+> +       attr.file_flags = OPTS_GET(opts, flags, 0);
+>
+>         fd = sys_bpf_fd(BPF_OBJ_GET, &attr, sizeof(attr));
+>         return libbpf_err_errno(fd);
+>  }
+>
+> +int bpf_obj_get(const char *pathname)
+> +{
+> +       return bpf_obj_get_opts(pathname, NULL);
+> +}
+> +
+>  int bpf_prog_attach(int prog_fd, int target_fd, enum bpf_attach_type type,
+>                     unsigned int flags)
+>  {
+> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+> index b75fd9d37bad..e0c5018cc131 100644
+> --- a/tools/lib/bpf/bpf.h
+> +++ b/tools/lib/bpf/bpf.h
+> @@ -279,6 +279,8 @@ struct bpf_get_fd_opts {
+>  };
+>  #define bpf_get_fd_opts__last_field flags
+>
+> +LIBBPF_API int bpf_obj_get_opts(const char *pathname,
+> +                               const struct bpf_get_fd_opts *opts);
+>  LIBBPF_API int bpf_obj_get(const char *pathname);
+>
+>  struct bpf_prog_attach_opts {
+> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> index dba97d2ef8a9..55516b19e22f 100644
+> --- a/tools/lib/bpf/libbpf.map
+> +++ b/tools/lib/bpf/libbpf.map
+> @@ -368,4 +368,5 @@ LIBBPF_1.0.0 {
+>                 bpf_map_get_fd_by_id_opts;
+>                 bpf_btf_get_fd_by_id_opts;
+>                 bpf_link_get_fd_by_id_opts;
+> +               bpf_obj_get_opts;
+>  };
+> --
+> 2.25.1
+>
