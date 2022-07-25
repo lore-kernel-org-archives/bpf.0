@@ -2,154 +2,107 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB3CEC43334
-	for <bpf@archiver.kernel.org>; Mon, 25 Jul 2022 13:57:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB1F9C433EF
+	for <bpf@archiver.kernel.org>; Mon, 25 Jul 2022 14:31:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiGYN5O (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 25 Jul 2022 09:57:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39886 "EHLO
+        id S235523AbiGYObP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 25 Jul 2022 10:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232697AbiGYN5N (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 25 Jul 2022 09:57:13 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21DB812D33
-        for <bpf@vger.kernel.org>; Mon, 25 Jul 2022 06:57:09 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id k25-20020a056830169900b0061c6f68f451so8690942otr.9
-        for <bpf@vger.kernel.org>; Mon, 25 Jul 2022 06:57:09 -0700 (PDT)
+        with ESMTP id S235267AbiGYObO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 25 Jul 2022 10:31:14 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802ACBC1B
+        for <bpf@vger.kernel.org>; Mon, 25 Jul 2022 07:31:11 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id h8so16232305wrw.1
+        for <bpf@vger.kernel.org>; Mon, 25 Jul 2022 07:31:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+l85BsyJSU0UbHlmYMEOxONRkWum9Iis0lj7YjgVouo=;
-        b=dWdcUyQoIWk8uY6m8Acu/6HDsqLWDHzisKnne/RysGVugfZ5HKopOqqUvUSB54/4Rt
-         j/gBUlP2+2c7V9+Dko1QRuiFheGBOpKFcbrV46N4/z+JT8TxMwjN0gR5u9K3qKD9R7l6
-         ObkJQXyJa8I7owcWJxg7fumn3XAkwAHq67YL7IXKmIS3xettfQ3Et2ccEaC7rq6kBiKL
-         PQ8qWETGGw4h+UG/8upVqTuDqcF99cyOwepu1Zhl0edMRik6FCZBiqDQjq62liQbU+S+
-         /E72R4reieefw2bx13pxMm2yGNXpuW79nTNtf2gBFiYeHageOerRolZ06Y2/B2gO57j/
-         ro7g==
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=SZEdKt3NPH9qVcYSfhPFXnFmaQRMdCaZikV9avg1yi0=;
+        b=t4pUXQKxvv8PcOIu7CyQckFVJpxcGcEAiGGw/qdtQp6uBiE5Ebj8l0IVuodTkoNbdv
+         t796lVFBHvD6Bo0jt3KpkiE4/tMfzD6kJYAnPpSxX74DrDbl7UctNhLFnB62L+Wqwxkr
+         DbmRADXPd+iw7tPiHv8SJ9oik4uUtT9uzbfywlorjNn+a/nPvpkucZAyen1qdkSE2Epk
+         41F2l0BZQCv9TH1NF7eOiD/+WUMUD2XsU1ktPCXgFT6HyGgyeoUtzqBvocE6mqtveWZg
+         N1nv1lnre53hq9h/ARC//VgS/LMRfaPxVTFytyHOdctToDY4ACow0jxX2/fKJeBXPPwI
+         KEgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+l85BsyJSU0UbHlmYMEOxONRkWum9Iis0lj7YjgVouo=;
-        b=l4XVYVNX//Mmo/vJggRMQrRISyIxhxdXzh+B1dLNYlYnF2CSZmsnkRjFSn4Ip+CGq9
-         i5jbhCnJFCwQmuz+ZGU/t1SeLXnuAXZyAltzE7ZPpqYLFndb483YLH/2tiFvRpRn9EDY
-         7Gvt3OjdVfeWdru/qJG98Qxf9XdSl0QN31s8zun5vTgV3LcuR0YT1GIT4NINwox8JNgq
-         lyfwRMUkNLAm6ZUxQSXG6m+7s1L/XH7B+7kHpMgsq+JPVsN3k83Dtd7DHJA6WTMf2iTS
-         dGH56/ZObouBsJZfazVR0JkWkHKJLNccF/12Avrqd09VjXke6Jx+52IqcjsnUO4i7nn1
-         CumQ==
-X-Gm-Message-State: AJIora9DwWs6CU6brXW3QuDWZdda7TJDwGrLyKs58opapLtFxOZ2uilT
-        p6m03iIUrxkCjgH1GGg1nF30kQ==
-X-Google-Smtp-Source: AGRyM1viWeGZygpCAGA/0LqaHJ3iwJEX7OK5ms8z7lEOosaUtO+XSEMo/iWU3So71mv+MCTq135fvw==
-X-Received: by 2002:a05:6830:43aa:b0:61c:b46d:c88a with SMTP id s42-20020a05683043aa00b0061cb46dc88amr4981097otv.19.1658757428382;
-        Mon, 25 Jul 2022 06:57:08 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id d24-20020a05680805d800b0032f63c4638esm4935090oij.2.2022.07.25.06.57.06
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=SZEdKt3NPH9qVcYSfhPFXnFmaQRMdCaZikV9avg1yi0=;
+        b=WkR5Q7YhrBbLCIIVlgV46Gkpteo+kezIN+j65LjPXQIHNw3YQ/ZfoPtAR+eq9LQ3XG
+         zXdt5tWnLCyfjigbR+s3XM7nGldnQAXgX5Z3lbr2aIccoR2Io8D5Bwx8sGrICqTzA+X2
+         IO5o4SnhYXFcc/O3qRhxZ4M+E9mrMIHVaw2nX3Xrgmo2Q/nbLwQ2PqI/c13z2G/adW8T
+         Are4XCR7MXWvSbMsBxnsUrCoXwZIZDpleV2Cczib9LMLR98iiWa2aTbjdTENvfZWSP3D
+         kKJCrWTqihmersDT/ycNTS6SdsrUGFN295kHyomKqyvkDbnzZluPLKhZ8Qe8/gKLldwU
+         Z0KQ==
+X-Gm-Message-State: AJIora9PlYdaCedyOBBw0UeZC1vOse9M00U/2UcN8yFgK/ZN/xrzDvBO
+        T0iiTYlZxgYousHsn5pzcC9c
+X-Google-Smtp-Source: AGRyM1tpPv6YnuXAkVsy6GXpaTyBFZoFtb4i/hhr6ApqgqnCEamHq8kadea+LusdLhkAxvcSAHDANg==
+X-Received: by 2002:a05:6000:1f0c:b0:21e:8979:1f20 with SMTP id bv12-20020a0560001f0c00b0021e89791f20mr3457759wrb.714.1658759470075;
+        Mon, 25 Jul 2022 07:31:10 -0700 (PDT)
+Received: from Mem (pop.92-184-116-22.mobile.abo.orange.fr. [92.184.116.22])
+        by smtp.gmail.com with ESMTPSA id m39-20020a05600c3b2700b003a2e1883a27sm22975495wms.18.2022.07.25.07.31.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 06:57:07 -0700 (PDT)
-Date:   Mon, 25 Jul 2022 09:57:04 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Joe Perches <joe@perches.com>
-Cc:     Baoquan He <bhe@redhat.com>, Randy Dunlap <rdunlap@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Slark Xiao <slark_xiao@163.com>, kafai <kafai@fb.com>,
-        vgoyal <vgoyal@redhat.com>, dyoung <dyoung@redhat.com>,
-        ast <ast@kernel.org>, daniel <daniel@iogearbox.net>,
-        andrii <andrii@kernel.org>, "martin.lau" <martin.lau@linux.dev>,
-        song <song@kernel.org>, yhs <yhs@fb.com>,
-        "john.fastabend" <john.fastabend@gmail.com>,
-        kpsingh <kpsingh@kernel.org>, sdf <sdf@google.com>,
-        haoluo <haoluo@google.com>, jolsa <jolsa@kernel.org>,
-        dhowells <dhowells@redhat.com>, peterz <peterz@infradead.org>,
-        mingo <mingo@redhat.com>, will <will@kernel.org>,
-        longman <longman@redhat.com>,
-        "boqun.feng" <boqun.feng@gmail.com>, tglx <tglx@linutronix.de>,
-        bigeasy <bigeasy@linutronix.de>,
-        kexec <kexec@lists.infradead.org>,
-        linux-doc <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        linux-cachefs <linux-cachefs@redhat.com>
-Subject: Re: [PATCH v2] docs: Fix typo in comment
-Message-ID: <Yt6hMD+HIaERgrqg@fedora>
-References: <20220721015605.20651-1-slark_xiao@163.com>
- <20220721154110.fqp7n6f7ij22vayp@kafai-mbp.dhcp.thefacebook.com>
- <21cac0ea.18f.182218041f7.Coremail.slark_xiao@163.com>
- <874jzamhxe.fsf@meer.lwn.net>
- <6ca59494-cc64-d85c-98e8-e9bef2a04c15@infradead.org>
- <YtnlAg6Qhf7fwXXW@MiWiFi-R3L-srv>
- <5bd85a7241e6ccac7fe5647cb9cf7ef22b228943.camel@perches.com>
+        Mon, 25 Jul 2022 07:31:09 -0700 (PDT)
+Date:   Mon, 25 Jul 2022 16:31:07 +0200
+From:   Paul Chaignon <paul@isovalent.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Kaixi Fan <fankaixi.li@bytedance.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Yonghong Song <yhs@fb.com>
+Subject: [PATCH bpf-next v3 0/5] bpf: Allow any source IP in
+ bpf_skb_set_tunnel_key
+Message-ID: <cover.1658759380.git.paul@isovalent.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="DTlmFVa4wvwu5Zvn"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5bd85a7241e6ccac7fe5647cb9cf7ef22b228943.camel@perches.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Commit 26101f5ab6bd ("bpf: Add source ip in "struct bpf_tunnel_key"")
+added support for getting and setting the outer source IP of encapsulated
+packets via the bpf_skb_{get,set}_tunnel_key BPF helper. This change
+allows BPF programs to set any IP address as the source, including for
+example the IP address of a container running on the same host.
 
---DTlmFVa4wvwu5Zvn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In that last case, however, the encapsulated packets are dropped when
+looking up the route because the source IP address isn't assigned to any
+interface on the host. To avoid this, we need to set the
+FLOWI_FLAG_ANYSRC flag.
 
-On Mon, Jul 25, 2022 at 06:52:15AM -0700, Joe Perches wrote:
-> On Fri, 2022-07-22 at 07:45 +0800, Baoquan He wrote:
-> > On 07/21/22 at 11:40am, Randy Dunlap wrote:
-> > > On 7/21/22 11:36, Jonathan Corbet wrote:
-> > > > "Slark Xiao" <slark_xiao@163.com> writes:
-> > > > > May I know the maintainer of one subsystem could merge the changes
-> > > > > contains lots of subsystem?  I also know this could be filtered by
-> > > > > grep and sed command, but that patch would have dozens of maintai=
-ners
-> > > > > and reviewers.
-> > > >=20
-> > > > Certainly I don't think I can merge a patch touching 166 files acro=
-ss
-> > > > the tree.  This will need to be broken down by subsystem, and you m=
-ay
-> > > > well find that there are some maintainers who don't want to deal wi=
-th
-> > > > this type of minor fix.
-> > >=20
-> > > We have also seen cases where "the the" should be replaced by "then t=
-he"
-> > > or some other pair of words, so some of these changes could fall into
-> > > that category.
-> >=20
-> > It's possible. I searched in Documentation and went through each place,
-> > seems no typo of "then the". Below patch should clean up all the 'the t=
-he'
-> > typo under Documentation.
-> []
-> > The fix is done with below command:
-> > sed -i "s/the the /the /g" `git grep -l "the the " Documentation`
->=20
-> This command misses entries at EOL:
->=20
-> Documentation/trace/histogram.rst:  Here's an example where we use a comp=
-ound key composed of the the
->=20
-> Perhaps a better conversion would be 's/\bthe the\b/the/g'
+Changes in v3:
+  - Rebased on top of bpf-next.
+  - Reworked the last patch, for the selftests. Several changes were
+    required to the existing vxlan_tunnel test to be able to test the
+    change in the bpf_skb_set_tunnel_key helper.
+  - Apart from the rebase, only the last selftests patch changed, so
+    I kept the Reviewed-by and Acked-by tags on other patches.
+Changes in v2:
+  - Removed changes to IPv6 code paths as they are unnecessary.
 
-It would be good to check for instances that cross newlines as well;
-i.e. "the" at the end of a line followed by "the" at the start of the
-next line. However, this would require some thought to properly account
-for comment blocks ("*") and other similar prefixes that should be
-ignored.
+Paul Chaignon (5):
+  ip_tunnels: Add new flow flags field to ip_tunnel_key
+  vxlan: Use ip_tunnel_key flow flags in route lookups
+  geneve: Use ip_tunnel_key flow flags in route lookups
+  bpf: Set flow flag to allow any source IP in bpf_tunnel_key
+  selftests/bpf: Don't assign outer source IP to host
 
-William Breathitt Gray
+ drivers/net/geneve.c                          |  1 +
+ drivers/net/vxlan/vxlan_core.c                | 11 ++-
+ include/net/ip_tunnels.h                      |  1 +
+ net/core/filter.c                             |  1 +
+ .../selftests/bpf/prog_tests/test_tunnel.c    | 17 +++-
+ .../selftests/bpf/progs/test_tunnel_kern.c    | 80 ++++++++++++++++---
+ 6 files changed, 96 insertions(+), 15 deletions(-)
 
---DTlmFVa4wvwu5Zvn
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+2.25.1
 
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCYt6hMAAKCRC1SFbKvhIj
-K7XjAP9mCPlMDtWSBhCoUhLhlZfaG0XycbJFaNDw81dAkUz2RQD+Kobc2FhQZM+x
-KR+ZpOFEIOreTL3gE48zETF6lxcxUAI=
-=FuCv
------END PGP SIGNATURE-----
-
---DTlmFVa4wvwu5Zvn--
