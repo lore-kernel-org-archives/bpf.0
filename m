@@ -2,46 +2,46 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDB3BC00140
-	for <bpf@archiver.kernel.org>; Tue, 26 Jul 2022 17:11:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75C08C00144
+	for <bpf@archiver.kernel.org>; Tue, 26 Jul 2022 17:12:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238462AbiGZRL6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Jul 2022 13:11:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43992 "EHLO
+        id S230074AbiGZRMD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Jul 2022 13:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiGZRL5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Jul 2022 13:11:57 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50E113F85
-        for <bpf@vger.kernel.org>; Tue, 26 Jul 2022 10:11:56 -0700 (PDT)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26QGtQUk012140
-        for <bpf@vger.kernel.org>; Tue, 26 Jul 2022 10:11:56 -0700
+        with ESMTP id S238837AbiGZRMC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 26 Jul 2022 13:12:02 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E226B1D0EF
+        for <bpf@vger.kernel.org>; Tue, 26 Jul 2022 10:12:01 -0700 (PDT)
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26QGXxLu002852
+        for <bpf@vger.kernel.org>; Tue, 26 Jul 2022 10:12:01 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=hZGvQPYIDtsNxLbVmfzmqVqDuTF5iehhIOecZNPxwEg=;
- b=ndJJFzExrXVK2T5soTo4ZVy63MP5090RIXzOsQtM1B5ig+RYUWaEgNFZlPrA8wbpdbO1
- WueB3Yks2o1uUKvLIFSQVdXq4/AjUGUMMd8wDki79P/uuDdfqUl4aP4+kpH6Q/iSqu1y
- zGB8MkKUa18JZUnwr7Rz7QdA4OqXjyxm7KI= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hhxbwr2y2-1
+ bh=DxciTCI/czOxJ3Xm+YNnXqXfIqv74dD4skpZ7aRuGZU=;
+ b=E9xu7kroeG+OZONUEjcNwa+e3U0QhTmrvL5p0AKFDixbDM0qKPyjpikgzrpIkxTo5e5a
+ T6fZfJl70DKE1zmhxWEZ7Os6L513KUazL9TNlX4ardfX/hEWDtRnXksBvPVS2pGYcNHN
+ n69dmo20pc5vvxNqaUc9eHbZI/pSv/LYiTQ= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hj9jmbum7-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 26 Jul 2022 10:11:56 -0700
-Received: from twshared22413.18.frc3.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 26 Jul 2022 10:12:01 -0700
+Received: from twshared25107.07.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Tue, 26 Jul 2022 10:11:55 -0700
+ 15.1.2375.28; Tue, 26 Jul 2022 10:12:00 -0700
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id 523ADD40E958; Tue, 26 Jul 2022 10:11:46 -0700 (PDT)
+        id CC1F6D40EA66; Tue, 26 Jul 2022 10:11:56 -0700 (PDT)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Subject: [RFC PATCH bpf-next 3/7] bpf: x86: Rename stack_size to regs_off in {save,restore}_regs()
-Date:   Tue, 26 Jul 2022 10:11:46 -0700
-Message-ID: <20220726171146.710941-1-yhs@fb.com>
+Subject: [RFC PATCH bpf-next 5/7] bpf: arm64: No support of struct value argument
+Date:   Tue, 26 Jul 2022 10:11:56 -0700
+Message-ID: <20220726171156.713564-1-yhs@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220726171129.708371-1-yhs@fb.com>
 References: <20220726171129.708371-1-yhs@fb.com>
@@ -49,8 +49,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: gZOzY25r719MlfZyHWa9q7ebJxuMjX2S
-X-Proofpoint-ORIG-GUID: gZOzY25r719MlfZyHWa9q7ebJxuMjX2S
+X-Proofpoint-GUID: Y2RkAzblWRaIzqWYP8gefLhnWJfvLWum
+X-Proofpoint-ORIG-GUID: Y2RkAzblWRaIzqWYP8gefLhnWJfvLWum
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-07-26_05,2022-07-26_01,2022-06-22_01
@@ -58,57 +58,31 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Rename argument 'stack_size' to 'regs_off' in save_regs() and
-restore_regs() since in reality 'stack_size' represents a particular
-stack offset and 'regs_off' is the one in the caller argument.
-Leter, another stack offset will be added to these two functions
-for saving and restoring struct argument values.
+ARM64 does not support struct value argument for trampoline based
+bpf programs yet.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- arch/x86/net/bpf_jit_comp.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/arm64/net/bpf_jit_comp.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index c1f6c1c51d99..2657b58001cf 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -1749,7 +1749,7 @@ st:			if (is_imm8(insn->off))
- }
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.=
+c
+index 7ca8779ae34f..27bda6b755ae 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -1982,6 +1982,10 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_i=
+mage *im, void *image,
+ 	if (nargs > 8)
+ 		return -ENOTSUPP;
 =20
- static void save_regs(const struct btf_func_model *m, u8 **prog, int nr_=
-args,
--		      int stack_size)
-+		      int regs_off)
- {
- 	int i;
- 	/* Store function arguments to stack.
-@@ -1761,11 +1761,11 @@ static void save_regs(const struct btf_func_model=
- *m, u8 **prog, int nr_args,
- 		emit_stx(prog, bytes_to_bpf_size(m->arg_size[i]),
- 			 BPF_REG_FP,
- 			 i =3D=3D 5 ? X86_REG_R9 : BPF_REG_1 + i,
--			 -(stack_size - i * 8));
-+			 -(regs_off - i * 8));
- }
-=20
- static void restore_regs(const struct btf_func_model *m, u8 **prog, int =
-nr_args,
--			 int stack_size)
-+			 int regs_off)
- {
- 	int i;
-=20
-@@ -1778,7 +1778,7 @@ static void restore_regs(const struct btf_func_mode=
-l *m, u8 **prog, int nr_args,
- 		emit_ldx(prog, bytes_to_bpf_size(m->arg_size[i]),
- 			 i =3D=3D 5 ? X86_REG_R9 : BPF_REG_1 + i,
- 			 BPF_REG_FP,
--			 -(stack_size - i * 8));
-+			 -(regs_off - i * 8));
- }
-=20
- static int invoke_bpf_prog(const struct btf_func_model *m, u8 **pprog,
++	/* don't support struct argument */
++	if (m->struct_arg_bsize[0])
++		return -ENOTSUPP;
++
+ 	ret =3D prepare_trampoline(&ctx, im, tlinks, orig_call, nargs, flags);
+ 	if (ret < 0)
+ 		return ret;
 --=20
 2.30.2
 
