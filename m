@@ -2,91 +2,86 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 493D4C433EF
-	for <bpf@archiver.kernel.org>; Tue, 26 Jul 2022 10:50:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4D4DC43334
+	for <bpf@archiver.kernel.org>; Tue, 26 Jul 2022 11:20:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238789AbiGZKug (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Jul 2022 06:50:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45996 "EHLO
+        id S238851AbiGZLUN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Jul 2022 07:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238779AbiGZKue (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Jul 2022 06:50:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905E226AC6;
-        Tue, 26 Jul 2022 03:50:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 48EDAB815BA;
-        Tue, 26 Jul 2022 10:50:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E6DB3C341CD;
-        Tue, 26 Jul 2022 10:50:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658832631;
-        bh=O9JFBzsVxC1Y8I7S6QbE/gHIKDcVYivp+KctWv0gM9I=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=SMs/O01ReJV0CME6WqfVFjU5LnZsK5L+wK2JMLMpH+rQcU7US3SUMYb3ers9LHnqi
-         YeO/7/09VCcv2WhrF1EyubyWAs9P9iqxMLC9Fk7oeFp6v6ngRgTQXDRJlhwicvMpNU
-         TmSPoyEpU7eiwLYlv5mFxPockVlUr60V76DsnTAb2ipqfSk6gAvKihqffyW87hMIQB
-         YL+ox3614BGmO5NeYQ5RJa3XL+puzWMqT4fCWOZWmj7a5IJYEPC1DtcSrDhB4pCX0q
-         0o01gDMifGV0EZrr+yKySt9IzNSnymJCwWdTVyO8GSlhql9aRsmiJml1uZA+ty2mx5
-         D+7l9Fes7Sr6g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CBFBAE450B1;
-        Tue, 26 Jul 2022 10:50:30 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229759AbiGZLUE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 26 Jul 2022 07:20:04 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF383244A
+        for <bpf@vger.kernel.org>; Tue, 26 Jul 2022 04:20:03 -0700 (PDT)
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oGIbY-0009Zn-IR; Tue, 26 Jul 2022 13:20:00 +0200
+Received: from [2a01:118f:505:3400:57f9:d43a:5622:24a8] (helo=linux-4.home)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oGIbY-000IeF-9r; Tue, 26 Jul 2022 13:20:00 +0200
+Subject: Re: [PATCH bpf-next v1 1/1] bpf: Fix bpf_xdp_pointer return pointer
+To:     Joanne Koong <joannelkoong@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Lorenzo Bianconi <lorenzo@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>
+References: <20220722220105.2065466-1-joannelkoong@gmail.com>
+ <20220725201658.t55raspwmj2eguek@kafai-mbp.dhcp.thefacebook.com>
+ <CAJnrk1ac5GzwCL_ZSGcX9nPqokJG63K2khjKbgW5maYm66mLPw@mail.gmail.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <d76023cb-aeb5-59fc-e987-65db550aac97@iogearbox.net>
+Date:   Tue, 26 Jul 2022 13:19:58 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3 0/5] bpf: Allow any source IP in
- bpf_skb_set_tunnel_key
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165883263082.5700.11737632699729605210.git-patchwork-notify@kernel.org>
-Date:   Tue, 26 Jul 2022 10:50:30 +0000
-References: <cover.1658759380.git.paul@isovalent.com>
-In-Reply-To: <cover.1658759380.git.paul@isovalent.com>
-To:     Paul Chaignon <paul@isovalent.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org, martin.lau@linux.dev,
-        john.fastabend@gmail.com, fankaixi.li@bytedance.com,
-        razor@blackwall.org, yhs@fb.com
+In-Reply-To: <CAJnrk1ac5GzwCL_ZSGcX9nPqokJG63K2khjKbgW5maYm66mLPw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26613/Tue Jul 26 09:56:56 2022)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+On 7/25/22 11:55 PM, Joanne Koong wrote:
+> On Mon, Jul 25, 2022 at 1:17 PM Martin KaFai Lau <kafai@fb.com> wrote:
+>>
+>> On Fri, Jul 22, 2022 at 03:01:05PM -0700, Joanne Koong wrote:
+>>> For the case where offset + len == size, bpf_xdp_pointer should return a
+>>> valid pointer to the addr because that access is permitted. We should
+>>> only return NULL in the case where offset + len exceeds size.
+>>>
+>>> Fixes: 3f364222d032 ("net: xdp: introduce bpf_xdp_pointer utility routine")
+>>> Signed-off-by: Joanne Koong <joannelkoong@gmail.com>
+>>> ---
+>>>   net/core/filter.c | 2 +-
+>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/net/core/filter.c b/net/core/filter.c
+>>> index 289614887ed5..4307a75eeb4c 100644
+>>> --- a/net/core/filter.c
+>>> +++ b/net/core/filter.c
+>>> @@ -3918,7 +3918,7 @@ static void *bpf_xdp_pointer(struct xdp_buff *xdp, u32 offset, u32 len)
+>>>                offset -= frag_size;
+>>>        }
+>>>   out:
+>>> -     return offset + len < size ? addr + offset : NULL;
+>>> +     return offset + len <= size ? addr + offset : NULL;
+>> This fix should be for the bpf tree.
+> Ah I see. To confirm my understanding, fixes should always go to the
+> bpf tree (unless it's fixing a patch that only resides in the bpf-next
+> tree), correct?
 
-This series was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+Yes, correct. Given we're really late in the cycle with rc8 my preference is to
+only queue really urgent fixes to bpf tree at this point. This one I just took
+to bpf-next given merge window is opening this Sun, thus this will go to Linus'
+tree with just few days offset anyway.
 
-On Mon, 25 Jul 2022 16:31:07 +0200 you wrote:
-> Commit 26101f5ab6bd ("bpf: Add source ip in "struct bpf_tunnel_key"")
-> added support for getting and setting the outer source IP of encapsulated
-> packets via the bpf_skb_{get,set}_tunnel_key BPF helper. This change
-> allows BPF programs to set any IP address as the source, including for
-> example the IP address of a container running on the same host.
-> 
-> In that last case, however, the encapsulated packets are dropped when
-> looking up the route because the source IP address isn't assigned to any
-> interface on the host. To avoid this, we need to set the
-> FLOWI_FLAG_ANYSRC flag.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,v3,1/5] ip_tunnels: Add new flow flags field to ip_tunnel_key
-    https://git.kernel.org/bpf/bpf-next/c/451ef36bd229
-  - [bpf-next,v3,2/5] vxlan: Use ip_tunnel_key flow flags in route lookups
-    https://git.kernel.org/bpf/bpf-next/c/7e2fb8bc7ef6
-  - [bpf-next,v3,3/5] geneve: Use ip_tunnel_key flow flags in route lookups
-    https://git.kernel.org/bpf/bpf-next/c/861396ac0b47
-  - [bpf-next,v3,4/5] bpf: Set flow flag to allow any source IP in bpf_tunnel_key
-    https://git.kernel.org/bpf/bpf-next/c/b8fff748521c
-  - [bpf-next,v3,5/5] selftests/bpf: Don't assign outer source IP to host
-    https://git.kernel.org/bpf/bpf-next/c/1115169f47ae
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Thanks,
+Daniel
