@@ -2,111 +2,334 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F03FBC04A68
-	for <bpf@archiver.kernel.org>; Thu, 28 Jul 2022 09:03:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C1CAC3F6B0
+	for <bpf@archiver.kernel.org>; Thu, 28 Jul 2022 09:04:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235422AbiG1JDJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Jul 2022 05:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43904 "EHLO
+        id S235177AbiG1JE4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Jul 2022 05:04:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235426AbiG1JDD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 Jul 2022 05:03:03 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3EB06582D
-        for <bpf@vger.kernel.org>; Thu, 28 Jul 2022 02:02:54 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id q14so959721iod.3
-        for <bpf@vger.kernel.org>; Thu, 28 Jul 2022 02:02:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OzCybkHASBbHe8t6haWwO/x1XlmpXfIOQlEyCQdl7ug=;
-        b=UcS5L0GsEVBoIzMJBr77747QG+/oLsfF5DNQ1QGPJW736IQ56LzEQLgM/nqE/NzELp
-         0JWuRl4aZv/+o3MlKmpZYdkHv7xqR6Fd/rps0j678oCaGeiw+QNlQcg1w7QC+79qQeRQ
-         GTmr+ZPbpA0urSgtCqHA/KB9dbwBbBOz1ban3iBEbTZocnPrYNBgUwTwDUpjKZmYiBNy
-         0lsXwtMtHRbOSUwuu8dMWjJz95zk8Wae7fLkZLmTtKjKqGqMxJO1giIXHAp7qqoWPtgt
-         Us9zwufvRl439TwtsVKNBN9amDh6wXnOwk3bDYVOJ9CUTpom//Xal8QA6puHyRSYt41Q
-         zPYg==
+        with ESMTP id S234026AbiG1JEz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Jul 2022 05:04:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62C3265666
+        for <bpf@vger.kernel.org>; Thu, 28 Jul 2022 02:04:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658999093;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DE+7ye1yGql++GLaeEI3m8GcZZJm0NhK1cN8F4iHjXQ=;
+        b=TyqEgzjYGV8D00yhp8ci+WZMssXVO2TnYOJdyp+SXVe5TmTYyJCW2/KoIr1mVW6cOozQvr
+        UyYOCv3jpSW6J6WdZ177fjdWQ/eD3jQOwve0RdW3EHSKab3Jnqv3NvzXKSbeuYAXW5pQKb
+        XT6Qi8/ya/AuHpm26NF4Aiswz4xC+f0=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-47-4gwJLpVGNsmozN9MZMy-kg-1; Thu, 28 Jul 2022 05:04:49 -0400
+X-MC-Unique: 4gwJLpVGNsmozN9MZMy-kg-1
+Received: by mail-ej1-f69.google.com with SMTP id gt38-20020a1709072da600b0072f21d7d12dso430789ejc.7
+        for <bpf@vger.kernel.org>; Thu, 28 Jul 2022 02:04:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OzCybkHASBbHe8t6haWwO/x1XlmpXfIOQlEyCQdl7ug=;
-        b=yH/NIGr0febYZ4dUwC2RK6ZrIOu1OffZQAfNH0Jehe0BHUQopYoq/cI49KODmqfylU
-         7pvgidoV5I5VRtmOeflL5sw4Hnneqty4T4r5TyNKjQKGIAdsKwt+sPZxXW0+Hng7HhRy
-         rTc6TrJWFgDwfqWZj/22QQ5BcL8rm35CZAQdiYB4SqB4uLCia7GIYtmuyczmYzp0vGe6
-         RpNhszlJonuHL9DDofVgmvT7vXDHDfmBKpAS3n4B97/rVmOJgsaIB5szntBSHJDNSqZJ
-         3J0u7o+bHd5i71iQWqsxaWzWJ0/UUjvQZ6SUN0KmY051TzW90Vv0ge3Gb2WQ9fwuc5/4
-         ZlMw==
-X-Gm-Message-State: AJIora+nnd5oDUwmJfF+Ze+3DyvgSlpDADv+Y6d2rNgKHq0fwszxfNDD
-        eemTMITWKaix8gQseOhLZ8z2dcMuvof8YGtuqwUXzrY6xuY=
-X-Google-Smtp-Source: AGRyM1uoWjOy+eS9N6E3zvMjZhKPtDt84gy9+81SwlqOTjfbN6x7bCZlW6oAOH6d1ZXJqhHXy7FGKKtbMgsRz6DKVjE=
-X-Received: by 2002:a05:6638:3807:b0:341:709f:31a7 with SMTP id
- i7-20020a056638380700b00341709f31a7mr10844213jav.206.1658998973210; Thu, 28
- Jul 2022 02:02:53 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=DE+7ye1yGql++GLaeEI3m8GcZZJm0NhK1cN8F4iHjXQ=;
+        b=JWL5FZo/U9vadP5/RAz2+GxrmoiJ3nZ/M4DlLIotlQ++hISp/VihrSPrkBHfuEM4yS
+         c6A7/xasWY9AUdJ98MkqllC1PrMjXrBTD2BVk6F3wdJUJsTMT/ZQVk09XT5rKHRU05l/
+         Yd1qucwwCk0TbDwPWa0/OQpLJLsylJ1md0GcLfGbEPqGAzEBY0upQPcMqE1YdpQ6tu/A
+         2hiVfqgONgVmdQK0wh0ggVRs72otCTs9AAowMkm6jKgnY3urZtylGhTdgdZGOs6THLLN
+         GP+kDJSDbQuOK8r1P6e7MFV8TY86ZN4B6+rRBjqttff/ZIGKGEm7ngpc8/fhgpi/UeC5
+         rNgA==
+X-Gm-Message-State: AJIora/VJNSyEhvN75tAx72fbnaYGkZIQuVMaLEwQqF5rpDYTvdWvNpY
+        ZcjE14Q0YRHNYaUTsGwKwsOfts8m4ka7koqPxoFDlCS8NzkxsXKKJPdO5rXPSHFKHOX9ts8B9rp
+        Q7ozA1zKbiOw+g6Payt8B8KXAuX1I
+X-Received: by 2002:a05:6402:e8d:b0:43b:b989:67a7 with SMTP id h13-20020a0564020e8d00b0043bb98967a7mr26870693eda.365.1658999088581;
+        Thu, 28 Jul 2022 02:04:48 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1s1w+ifPe5brXP86zsuwWmOU7w3VBKz6YZbGZMkO1Ncvx95MYfD9EAWpCCUuuHrp8ACTACnKlnhDk4GL3uXFGk=
+X-Received: by 2002:a05:6402:e8d:b0:43b:b989:67a7 with SMTP id
+ h13-20020a0564020e8d00b0043bb98967a7mr26870656eda.365.1658999088045; Thu, 28
+ Jul 2022 02:04:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220727081559.24571-1-memxor@gmail.com> <20220727081559.24571-2-memxor@gmail.com>
- <fd75bc5ed2564f558000284c44c89632@huawei.com> <34ee6960df604501a5348eac7b1c5768@huawei.com>
- <CAP01T762iv6bok3K6fQ4aBisUcWg5zhjbKzbXFqX=Z+cvd5tew@mail.gmail.com>
-In-Reply-To: <CAP01T762iv6bok3K6fQ4aBisUcWg5zhjbKzbXFqX=Z+cvd5tew@mail.gmail.com>
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date:   Thu, 28 Jul 2022 11:02:15 +0200
-Message-ID: <CAP01T75TmR_+hOs+T8rwbNMXd6T8+WSgheC3uKoLOud3-4to5g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 1/2] bpf: Add support for per-parameter
- trusted args
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+References: <20220726072225.19884-1-xuanzhuo@linux.alibaba.com>
+ <20220726072225.19884-17-xuanzhuo@linux.alibaba.com> <15aa26f2-f8af-5dbd-f2b2-9270ad873412@redhat.com>
+ <1658907413.1860468-2-xuanzhuo@linux.alibaba.com> <CACGkMEvxsOfiiaWWAR8P68GY1yfwgTvaAbHk1JF7pTw-o2k25w@mail.gmail.com>
+ <1658992162.584327-1-xuanzhuo@linux.alibaba.com> <CACGkMEv-KYieHKXY_Qn0nfcnLMOSF=TowF5PwLKOxESL3KQ40Q@mail.gmail.com>
+ <1658995783.1026692-1-xuanzhuo@linux.alibaba.com>
+In-Reply-To: <1658995783.1026692-1-xuanzhuo@linux.alibaba.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Thu, 28 Jul 2022 17:04:36 +0800
+Message-ID: <CACGkMEv6Ptn4zj_F-ww3Nay-VPmCNrXLaf5U98PvupAvo44FpA@mail.gmail.com>
+Subject: Re: [PATCH v13 16/42] virtio_ring: split: introduce virtqueue_resize_split()
+To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Vadim Pasternak <vadimp@nvidia.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        linux-um@lists.infradead.org, netdev <netdev@vger.kernel.org>,
+        platform-driver-x86@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        kvm <kvm@vger.kernel.org>,
+        "open list:XDP (eXpress Data Path)" <bpf@vger.kernel.org>,
+        Kangjie Xu <kangjie.xu@linux.alibaba.com>,
+        virtualization <virtualization@lists.linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 28 Jul 2022 at 10:45, Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+On Thu, Jul 28, 2022 at 4:18 PM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrot=
+e:
 >
-> On Thu, 28 Jul 2022 at 10:18, Roberto Sassu <roberto.sassu@huawei.com> wrote:
-> >
-> > > From: Roberto Sassu [mailto:roberto.sassu@huawei.com]
-> > > Sent: Thursday, July 28, 2022 9:46 AM
-> > > > From: Kumar Kartikeya Dwivedi [mailto:memxor@gmail.com]
-> > > > Sent: Wednesday, July 27, 2022 10:16 AM
-> > > > Similar to how we detect mem, size pairs in kfunc, teach verifier to
-> > > > treat __ref suffix on argument name to imply that it must be a trusted
-> > > > arg when passed to kfunc, similar to the effect of KF_TRUSTED_ARGS flag
-> > > > but limited to the specific parameter. This is required to ensure that
-> > > > kfunc that operate on some object only work on acquired pointers and not
-> > > > normal PTR_TO_BTF_ID with same type which can be obtained by pointer
-> > > > walking. Release functions need not specify such suffix on release
-> > > > arguments as they are already expected to receive one referenced
-> > > > argument.
+> On Thu, 28 Jul 2022 15:42:50 +0800, Jason Wang <jasowang@redhat.com> wrot=
+e:
+> > On Thu, Jul 28, 2022 at 3:24 PM Xuan Zhuo <xuanzhuo@linux.alibaba.com> =
+wrote:
 > > >
-> > > Thanks, Kumar. I will try it.
+> > > On Thu, 28 Jul 2022 10:38:51 +0800, Jason Wang <jasowang@redhat.com> =
+wrote:
+> > > > On Wed, Jul 27, 2022 at 3:44 PM Xuan Zhuo <xuanzhuo@linux.alibaba.c=
+om> wrote:
+> > > > >
+> > > > > On Wed, 27 Jul 2022 11:12:19 +0800, Jason Wang <jasowang@redhat.c=
+om> wrote:
+> > > > > >
+> > > > > > =E5=9C=A8 2022/7/26 15:21, Xuan Zhuo =E5=86=99=E9=81=93:
+> > > > > > > virtio ring split supports resize.
+> > > > > > >
+> > > > > > > Only after the new vring is successfully allocated based on t=
+he new num,
+> > > > > > > we will release the old vring. In any case, an error is retur=
+ned,
+> > > > > > > indicating that the vring still points to the old vring.
+> > > > > > >
+> > > > > > > In the case of an error, re-initialize(virtqueue_reinit_split=
+()) the
+> > > > > > > virtqueue to ensure that the vring can be used.
+> > > > > > >
+> > > > > > > Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+> > > > > > > Acked-by: Jason Wang <jasowang@redhat.com>
+> > > > > > > ---
+> > > > > > >   drivers/virtio/virtio_ring.c | 34 +++++++++++++++++++++++++=
++++++++++
+> > > > > > >   1 file changed, 34 insertions(+)
+> > > > > > >
+> > > > > > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/vi=
+rtio_ring.c
+> > > > > > > index b6fda91c8059..58355e1ac7d7 100644
+> > > > > > > --- a/drivers/virtio/virtio_ring.c
+> > > > > > > +++ b/drivers/virtio/virtio_ring.c
+> > > > > > > @@ -220,6 +220,7 @@ static struct virtqueue *__vring_new_virt=
+queue(unsigned int index,
+> > > > > > >                                            void (*callback)(s=
+truct virtqueue *),
+> > > > > > >                                            const char *name);
+> > > > > > >   static struct vring_desc_extra *vring_alloc_desc_extra(unsi=
+gned int num);
+> > > > > > > +static void vring_free(struct virtqueue *_vq);
+> > > > > > >
+> > > > > > >   /*
+> > > > > > >    * Helpers.
+> > > > > > > @@ -1117,6 +1118,39 @@ static struct virtqueue *vring_create_=
+virtqueue_split(
+> > > > > > >     return vq;
+> > > > > > >   }
+> > > > > > >
+> > > > > > > +static int virtqueue_resize_split(struct virtqueue *_vq, u32=
+ num)
+> > > > > > > +{
+> > > > > > > +   struct vring_virtqueue_split vring_split =3D {};
+> > > > > > > +   struct vring_virtqueue *vq =3D to_vvq(_vq);
+> > > > > > > +   struct virtio_device *vdev =3D _vq->vdev;
+> > > > > > > +   int err;
+> > > > > > > +
+> > > > > > > +   err =3D vring_alloc_queue_split(&vring_split, vdev, num,
+> > > > > > > +                                 vq->split.vring_align,
+> > > > > > > +                                 vq->split.may_reduce_num);
+> > > > > > > +   if (err)
+> > > > > > > +           goto err;
+> > > > > >
+> > > > > >
+> > > > > > I think we don't need to do anything here?
+> > > > >
+> > > > > Am I missing something?
+> > > >
+> > > > I meant it looks to me most of the virtqueue_reinit() is unnecessar=
+y.
+> > > > We probably only need to reinit avail/used idx there.
+> > >
+> > >
+> > > In this function, we can indeed remove some code.
+> > >
+> > > >       static void virtqueue_reinit_split(struct vring_virtqueue *vq=
+)
+> > > >       {
+> > > >               int size, i;
+> > > >
+> > > >               memset(vq->split.vring.desc, 0, vq->split.queue_size_=
+in_bytes);
+> > > >
+> > > >               size =3D sizeof(struct vring_desc_state_split) * vq->=
+split.vring.num;
+> > > >               memset(vq->split.desc_state, 0, size);
+> > > >
+> > > >               size =3D sizeof(struct vring_desc_extra) * vq->split.=
+vring.num;
+> > > >               memset(vq->split.desc_extra, 0, size);
+> > >
+> > > These memsets can be removed, and theoretically it will not cause any
+> > > exceptions.
 > >
-> > Uhm. I realized that I was already using another suffix,
-> > __maybe_null, to indicate that a caller can pass NULL as
-> > argument.
+> > Yes, otherwise we have bugs in detach_buf().
 > >
-> > Wouldn't probably work well with two suffixes.
+> > >
+> > > >
+> > > >
+> > > >
+> > > >               for (i =3D 0; i < vq->split.vring.num - 1; i++)
+> > > >                       vq->split.desc_extra[i].next =3D i + 1;
+> > >
+> > > This can also be removed, but we need to record free_head that will b=
+een update
+> > > inside virtqueue_init().
 > >
+> > We can simply keep free_head unchanged? Otherwise it's a bug somewhere =
+I guess.
+> >
+> >
+> > >
+> > > >
+> > > >               virtqueue_init(vq, vq->split.vring.num);
+> > >
+> > > There are some operations in this, which can also be skipped, such as=
+ setting
+> > > use_dma_api. But I think calling this function directly will be more =
+convenient
+> > > for maintenance.
+> >
+> > I don't see anything that is necessary here.
 >
-> Then you can maybe extend it to parse two suffixes at most (for now atleast)?
+> These three are currently inside virtqueue_init()
 >
-> > Have you considered to extend BTF_ID_FLAGS to take five
-> > extra arguments, to set flags for each kfunc parameter?
-> >
->
-> I didn't understand this. Flags parameter is an OR of the flags you
-> set, why would we want to extend it to take 5 args?
-> You can just or f1 | f2 | f3 | f4 | f5, as many as you want.
+> vq->last_used_idx =3D 0;
+> vq->event_triggered =3D false;
+> vq->num_added =3D 0;
 
-Oh, so you mean having 5 more args to indicate flags on each
-parameter? It is possible, but I think the scheme for now works ok. If
-you extend it to parse two suffixes, it should be fine. Yes, the
-variable name would be ugly, but you can just make a copy into a
-properly named one. This is the best we can do without switching to
-BTF tags. We can revisit this when we start having 4 or 5 tags on a
-single parameter.
+Right. Let's keep it there.
 
-To make it a bit less verbose you could probably call maybe_null just null?
+(Though it's kind of strange that the last_used_idx is not initialized
+at the same place with avail_idx/flags_shadow, we can optimize it on
+top).
+
+Thanks
+
+>
+> Thanks.
+>
+>
+> >
+> > >
+> > >
+> > > >               virtqueue_vring_init_split(&vq->split, vq);
+> > >
+> > > virtqueue_vring_init_split() is necessary.
+> >
+> > Right.
+> >
+> > >
+> > > >       }
+> > >
+> > > Another method, we can take out all the variables to be reinitialized
+> > > separately, and repackage them into a new function. I don=E2=80=99t t=
+hink it=E2=80=99s worth
+> > > it, because this path will only be reached if the memory allocation f=
+ails, which
+> > > is a rare occurrence. In this case, doing so will increase the cost o=
+f
+> > > maintenance. If you think so also, I will remove the above memset in =
+the next
+> > > version.
+> >
+> > I agree.
+> >
+> > Thanks
+> >
+> > >
+> > > Thanks.
+> > >
+> > >
+> > > >
+> > > > Thanks
+> > > >
+> > > > >
+> > > > > >
+> > > > > >
+> > > > > > > +
+> > > > > > > +   err =3D vring_alloc_state_extra_split(&vring_split);
+> > > > > > > +   if (err) {
+> > > > > > > +           vring_free_split(&vring_split, vdev);
+> > > > > > > +           goto err;
+> > > > > >
+> > > > > >
+> > > > > > I suggest to move vring_free_split() into a dedicated error lab=
+el.
+> > > > >
+> > > > > Will change.
+> > > > >
+> > > > > Thanks.
+> > > > >
+> > > > >
+> > > > > >
+> > > > > > Thanks
+> > > > > >
+> > > > > >
+> > > > > > > +   }
+> > > > > > > +
+> > > > > > > +   vring_free(&vq->vq);
+> > > > > > > +
+> > > > > > > +   virtqueue_vring_init_split(&vring_split, vq);
+> > > > > > > +
+> > > > > > > +   virtqueue_init(vq, vring_split.vring.num);
+> > > > > > > +   virtqueue_vring_attach_split(vq, &vring_split);
+> > > > > > > +
+> > > > > > > +   return 0;
+> > > > > > > +
+> > > > > > > +err:
+> > > > > > > +   virtqueue_reinit_split(vq);
+> > > > > > > +   return -ENOMEM;
+> > > > > > > +}
+> > > > > > > +
+> > > > > > >
+> > > > > > >   /*
+> > > > > > >    * Packed ring specific functions - *_packed().
+> > > > > >
+> > > > >
+> > > >
+> > >
+> >
+>
+
