@@ -2,195 +2,342 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43F5BC04A68
-	for <bpf@archiver.kernel.org>; Thu, 28 Jul 2022 11:01:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2DA6C19F29
+	for <bpf@archiver.kernel.org>; Thu, 28 Jul 2022 11:27:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235080AbiG1LBJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Jul 2022 07:01:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59390 "EHLO
+        id S235965AbiG1L1u (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Jul 2022 07:27:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235108AbiG1LBI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 Jul 2022 07:01:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8286212625
-        for <bpf@vger.kernel.org>; Thu, 28 Jul 2022 04:01:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659006065;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kyxBpp965wmr06G0VQP020eXN9raG+vyvYPqb07HnQM=;
-        b=hKDLAu3o/G0RdKvA9/w4eF/TstpTdsL2eAlxZxOOhdCCoELlFoEmCk9LM2kMr97lUn0A5u
-        0g79rbESERAR7bdnhvClHcKFvud9meVMm0qdWT22gfTQrPbgp32n5mocr4V/OVs17oiISk
-        7CzFLKZSRmICdAWCYXJbhWeFuWA2asc=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-646-xsfhlyOeNfuIwCbuD2AO8w-1; Thu, 28 Jul 2022 07:01:04 -0400
-X-MC-Unique: xsfhlyOeNfuIwCbuD2AO8w-1
-Received: by mail-lj1-f199.google.com with SMTP id k1-20020a2e9201000000b0025dd56bd7a4so296254ljg.17
-        for <bpf@vger.kernel.org>; Thu, 28 Jul 2022 04:01:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kyxBpp965wmr06G0VQP020eXN9raG+vyvYPqb07HnQM=;
-        b=6pEw5mS0+T+Sa1O+XAUc6YkZYtmWyKTjQOZBr2cJzKL2xHJJVS1Jhf0ajNwwrjbeLS
-         HK5FSX4LTRImGKZUsUcPTEgowqnFwxH+kHEVvj0V5iKSy2GGM5T8b6t5Zo4ydo+5oXxQ
-         68dgFxBcoHwjxFTSQm9S3Koc6gu+x58MBx3qt4+Qhk6Q8l3bnxq327QdCy1YHqQq+h+U
-         Fr2U3UMi5vUUPctVhIe5aPhfmaNKA9W+HVFMe+HcIC+ZiOFiiE1kfQD8WG3M6CQ6LmFR
-         FPeIm1f5x7EWSH+bs+ryo9OvTBpMs7zTbsC9/IkDOQdxS8oDkpBGsqhVPyyNVaWzaUxE
-         /sSw==
-X-Gm-Message-State: AJIora+nxXHtbM7tjurLu8ZZTGHnGYM+ZYDOc1OF5yYRLKWN/3UppnAP
-        JKuP4xXnnI8yZDNuUNykxOV7J1TQ025UVDPkNywQsPAvwrV8azuhv7D8WZ8kx3Yf7K/XhZe7AVx
-        p4OD5hJ04vaeY+VYl3do7BnD0t90j
-X-Received: by 2002:a2e:888d:0:b0:25e:332:1358 with SMTP id k13-20020a2e888d000000b0025e03321358mr6613329lji.262.1659006061593;
-        Thu, 28 Jul 2022 04:01:01 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uSq0lz9bommcbsykN1bL0E7qJp3ukiI/PVqxpP83I6RYIWvQIoUYSxuhpu2abh3/olyBi1q6vJbBfk1d6C5bs=
-X-Received: by 2002:a2e:888d:0:b0:25e:332:1358 with SMTP id
- k13-20020a2e888d000000b0025e03321358mr6613316lji.262.1659006061280; Thu, 28
- Jul 2022 04:01:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <CA+QYu4qw6LecuxwAESLBvzEpj9Uv4LobX0rofDgVk_3YHjY7Fw@mail.gmail.com>
- <0051a5c0-aa9f-423e-bba3-6d5732402692@huaweicloud.com> <CAPhsuW63ms5bULxcyQroLcRABxwx=6Q0ps189S1AH5jizyzZNA@mail.gmail.com>
-In-Reply-To: <CAPhsuW63ms5bULxcyQroLcRABxwx=6Q0ps189S1AH5jizyzZNA@mail.gmail.com>
-From:   Bruno Goncalves <bgoncalv@redhat.com>
-Date:   Thu, 28 Jul 2022 13:00:50 +0200
-Message-ID: <CA+QYu4pbMA+ci-daYMjsHFegac0iq+h5UynJO5ASnyA179OChA@mail.gmail.com>
-Subject: Re: [aarch64] pc : ftrace_set_filter_ip+0x24/0xa0 - lr : bpf_trampoline_update.constprop.0+0x428/0x4a0
-To:     Song Liu <song@kernel.org>
-Cc:     Xu Kuohai <xukuohai@huaweicloud.com>,
-        CKI Project <cki-project@redhat.com>,
-        Song Liu <songliubraving@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+        with ESMTP id S235485AbiG1L1p (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Jul 2022 07:27:45 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9DF294;
+        Thu, 28 Jul 2022 04:27:42 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=36;SR=0;TI=SMTPD_---0VKfSKFm_1659007656;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VKfSKFm_1659007656)
+          by smtp.aliyun-inc.com;
+          Thu, 28 Jul 2022 19:27:37 +0800
+Message-ID: <1659001321.5738833-2-xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH v13 16/42] virtio_ring: split: introduce virtqueue_resize_split()
+Date:   Thu, 28 Jul 2022 17:42:01 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Vadim Pasternak <vadimp@nvidia.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        linux-um@lists.infradead.org, netdev <netdev@vger.kernel.org>,
+        platform-driver-x86@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        kvm <kvm@vger.kernel.org>,
+        "open list:XDP (eXpress Data Path)" <bpf@vger.kernel.org>,
+        Kangjie Xu <kangjie.xu@linux.alibaba.com>,
+        virtualization <virtualization@lists.linux-foundation.org>
+References: <20220726072225.19884-1-xuanzhuo@linux.alibaba.com>
+ <20220726072225.19884-17-xuanzhuo@linux.alibaba.com>
+ <15aa26f2-f8af-5dbd-f2b2-9270ad873412@redhat.com>
+ <1658907413.1860468-2-xuanzhuo@linux.alibaba.com>
+ <CACGkMEvxsOfiiaWWAR8P68GY1yfwgTvaAbHk1JF7pTw-o2k25w@mail.gmail.com>
+ <1658992162.584327-1-xuanzhuo@linux.alibaba.com>
+ <CACGkMEv-KYieHKXY_Qn0nfcnLMOSF=TowF5PwLKOxESL3KQ40Q@mail.gmail.com>
+ <1658995783.1026692-1-xuanzhuo@linux.alibaba.com>
+ <CACGkMEv6Ptn4zj_F-ww3Nay-VPmCNrXLaf5U98PvupAvo44FpA@mail.gmail.com>
+In-Reply-To: <CACGkMEv6Ptn4zj_F-ww3Nay-VPmCNrXLaf5U98PvupAvo44FpA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 28 Jul 2022 at 06:04, Song Liu <song@kernel.org> wrote:
+On Thu, 28 Jul 2022 17:04:36 +0800, Jason Wang <jasowang@redhat.com> wrote:
+> On Thu, Jul 28, 2022 at 4:18 PM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wr=
+ote:
+> >
+> > On Thu, 28 Jul 2022 15:42:50 +0800, Jason Wang <jasowang@redhat.com> wr=
+ote:
+> > > On Thu, Jul 28, 2022 at 3:24 PM Xuan Zhuo <xuanzhuo@linux.alibaba.com=
+> wrote:
+> > > >
+> > > > On Thu, 28 Jul 2022 10:38:51 +0800, Jason Wang <jasowang@redhat.com=
+> wrote:
+> > > > > On Wed, Jul 27, 2022 at 3:44 PM Xuan Zhuo <xuanzhuo@linux.alibaba=
+.com> wrote:
+> > > > > >
+> > > > > > On Wed, 27 Jul 2022 11:12:19 +0800, Jason Wang <jasowang@redhat=
+.com> wrote:
+> > > > > > >
+> > > > > > > =E5=9C=A8 2022/7/26 15:21, Xuan Zhuo =E5=86=99=E9=81=93:
+> > > > > > > > virtio ring split supports resize.
+> > > > > > > >
+> > > > > > > > Only after the new vring is successfully allocated based on=
+ the new num,
+> > > > > > > > we will release the old vring. In any case, an error is ret=
+urned,
+> > > > > > > > indicating that the vring still points to the old vring.
+> > > > > > > >
+> > > > > > > > In the case of an error, re-initialize(virtqueue_reinit_spl=
+it()) the
+> > > > > > > > virtqueue to ensure that the vring can be used.
+> > > > > > > >
+> > > > > > > > Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+> > > > > > > > Acked-by: Jason Wang <jasowang@redhat.com>
+> > > > > > > > ---
+> > > > > > > >   drivers/virtio/virtio_ring.c | 34 +++++++++++++++++++++++=
++++++++++++
+> > > > > > > >   1 file changed, 34 insertions(+)
+> > > > > > > >
+> > > > > > > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/=
+virtio_ring.c
+> > > > > > > > index b6fda91c8059..58355e1ac7d7 100644
+> > > > > > > > --- a/drivers/virtio/virtio_ring.c
+> > > > > > > > +++ b/drivers/virtio/virtio_ring.c
+> > > > > > > > @@ -220,6 +220,7 @@ static struct virtqueue *__vring_new_vi=
+rtqueue(unsigned int index,
+> > > > > > > >                                            void (*callback)=
+(struct virtqueue *),
+> > > > > > > >                                            const char *name=
+);
+> > > > > > > >   static struct vring_desc_extra *vring_alloc_desc_extra(un=
+signed int num);
+> > > > > > > > +static void vring_free(struct virtqueue *_vq);
+> > > > > > > >
+> > > > > > > >   /*
+> > > > > > > >    * Helpers.
+> > > > > > > > @@ -1117,6 +1118,39 @@ static struct virtqueue *vring_creat=
+e_virtqueue_split(
+> > > > > > > >     return vq;
+> > > > > > > >   }
+> > > > > > > >
+> > > > > > > > +static int virtqueue_resize_split(struct virtqueue *_vq, u=
+32 num)
+> > > > > > > > +{
+> > > > > > > > +   struct vring_virtqueue_split vring_split =3D {};
+> > > > > > > > +   struct vring_virtqueue *vq =3D to_vvq(_vq);
+> > > > > > > > +   struct virtio_device *vdev =3D _vq->vdev;
+> > > > > > > > +   int err;
+> > > > > > > > +
+> > > > > > > > +   err =3D vring_alloc_queue_split(&vring_split, vdev, num,
+> > > > > > > > +                                 vq->split.vring_align,
+> > > > > > > > +                                 vq->split.may_reduce_num);
+> > > > > > > > +   if (err)
+> > > > > > > > +           goto err;
+> > > > > > >
+> > > > > > >
+> > > > > > > I think we don't need to do anything here?
+> > > > > >
+> > > > > > Am I missing something?
+> > > > >
+> > > > > I meant it looks to me most of the virtqueue_reinit() is unnecess=
+ary.
+> > > > > We probably only need to reinit avail/used idx there.
+> > > >
+> > > >
+> > > > In this function, we can indeed remove some code.
+> > > >
+> > > > >       static void virtqueue_reinit_split(struct vring_virtqueue *=
+vq)
+> > > > >       {
+> > > > >               int size, i;
+> > > > >
+> > > > >               memset(vq->split.vring.desc, 0, vq->split.queue_siz=
+e_in_bytes);
+> > > > >
+> > > > >               size =3D sizeof(struct vring_desc_state_split) * vq=
+->split.vring.num;
+> > > > >               memset(vq->split.desc_state, 0, size);
+> > > > >
+> > > > >               size =3D sizeof(struct vring_desc_extra) * vq->spli=
+t.vring.num;
+> > > > >               memset(vq->split.desc_extra, 0, size);
+> > > >
+> > > > These memsets can be removed, and theoretically it will not cause a=
+ny
+> > > > exceptions.
+> > >
+> > > Yes, otherwise we have bugs in detach_buf().
+> > >
+> > > >
+> > > > >
+> > > > >
+> > > > >
+> > > > >               for (i =3D 0; i < vq->split.vring.num - 1; i++)
+> > > > >                       vq->split.desc_extra[i].next =3D i + 1;
+> > > >
+> > > > This can also be removed, but we need to record free_head that will=
+ been update
+> > > > inside virtqueue_init().
+> > >
+> > > We can simply keep free_head unchanged? Otherwise it's a bug somewher=
+e I guess.
+> > >
+> > >
+> > > >
+> > > > >
+> > > > >               virtqueue_init(vq, vq->split.vring.num);
+> > > >
+> > > > There are some operations in this, which can also be skipped, such =
+as setting
+> > > > use_dma_api. But I think calling this function directly will be mor=
+e convenient
+> > > > for maintenance.
+> > >
+> > > I don't see anything that is necessary here.
+> >
+> > These three are currently inside virtqueue_init()
+> >
+> > vq->last_used_idx =3D 0;
+> > vq->event_triggered =3D false;
+> > vq->num_added =3D 0;
 >
-> On Wed, Jul 27, 2022 at 8:18 PM Xu Kuohai <xukuohai@huaweicloud.com> wrote:
-> >
-> > On 7/27/2022 6:40 PM, Bruno Goncalves wrote:
-> > > Hello,
-> > >
-> > > Recently we started to hit the following panic when testing the
-> > > net-next tree on aarch64. The first commit that we hit this is
-> > > "b3fce974d423".
-> > >
-> > > [   44.517109] audit: type=1334 audit(1658859870.268:59): prog-id=19 op=LOAD
-> > > [   44.622031] Unable to handle kernel NULL pointer dereference at
-> > > virtual address 0000000000000010
-> > > [   44.624321] Mem abort info:
-> > > [   44.625049]   ESR = 0x0000000096000004
-> > > [   44.625935]   EC = 0x25: DABT (current EL), IL = 32 bits
-> > > [   44.627182]   SET = 0, FnV = 0
-> > > [   44.627930]   EA = 0, S1PTW = 0
-> > > [   44.628684]   FSC = 0x04: level 0 translation fault
-> > > [   44.629788] Data abort info:
-> > > [   44.630474]   ISV = 0, ISS = 0x00000004
-> > > [   44.631362]   CM = 0, WnR = 0
-> > > [   44.632041] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000100ab5000
-> > > [   44.633494] [0000000000000010] pgd=0000000000000000, p4d=0000000000000000
-> > > [   44.635202] Internal error: Oops: 96000004 [#1] SMP
-> > > [   44.636452] Modules linked in: xfs crct10dif_ce ghash_ce virtio_blk
-> > > virtio_console virtio_mmio qemu_fw_cfg
-> > > [   44.638713] CPU: 2 PID: 1 Comm: systemd Not tainted 5.19.0-rc7 #1
-> > > [   44.640164] Hardware name: QEMU KVM Virtual Machine, BIOS 0.0.0 02/06/2015
-> > > [   44.641799] pstate: 00400005 (nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > > [   44.643404] pc : ftrace_set_filter_ip+0x24/0xa0
-> > > [   44.644659] lr : bpf_trampoline_update.constprop.0+0x428/0x4a0
-> > > [   44.646118] sp : ffff80000803b9f0
-> > > [   44.646950] x29: ffff80000803b9f0 x28: ffff0b5d80364400 x27: ffff80000803bb48
-> > > [   44.648721] x26: ffff8000085ad000 x25: ffff0b5d809d2400 x24: 0000000000000000
-> > > [   44.650493] x23: 00000000ffffffed x22: ffff0b5dd7ea0900 x21: 0000000000000000
-> > > [   44.652279] x20: 0000000000000000 x19: 0000000000000000 x18: ffffffffffffffff
-> > > [   44.654067] x17: 0000000000000000 x16: 0000000000000000 x15: ffffffffffffffff
-> > > [   44.655787] x14: ffff0b5d809d2498 x13: ffff0b5d809d2432 x12: 0000000005f5e100
-> > > [   44.657535] x11: abcc77118461cefd x10: 000000000000005f x9 : ffffa7219cb5b190
-> > > [   44.659254] x8 : ffffa7219c8e0000 x7 : 0000000000000000 x6 : ffffa7219db075e0
-> > > [   44.661066] x5 : ffffa7219d3130e0 x4 : ffffa7219cab9da0 x3 : 0000000000000000
-> > > [   44.662837] x2 : 0000000000000000 x1 : ffffa7219cb7a5c0 x0 : 0000000000000000
-> > > [   44.664675] Call trace:
-> > > [   44.665274]  ftrace_set_filter_ip+0x24/0xa0
-> > > [   44.666327]  bpf_trampoline_update.constprop.0+0x428/0x4a0
-> > > [   44.667696]  __bpf_trampoline_link_prog+0xcc/0x1c0
-> > > [   44.668834]  bpf_trampoline_link_prog+0x40/0x64
-> > > [   44.669919]  bpf_tracing_prog_attach+0x120/0x490
-> > > [   44.671011]  link_create+0xe0/0x2b0
-> > > [   44.671869]  __sys_bpf+0x484/0xd30
-> > > [   44.672706]  __arm64_sys_bpf+0x30/0x40
-> > > [   44.673678]  invoke_syscall+0x78/0x100
-> > > [   44.674623]  el0_svc_common.constprop.0+0x4c/0xf4
-> > > [   44.675783]  do_el0_svc+0x38/0x4c
-> > > [   44.676624]  el0_svc+0x34/0x100
-> > > [   44.677429]  el0t_64_sync_handler+0x11c/0x150
-> > > [   44.678532]  el0t_64_sync+0x190/0x194
-> > > [   44.679439] Code: 2a0203f4 f90013f5 2a0303f5 f9001fe1 (f9400800)
-> > > [   44.680959] ---[ end trace 0000000000000000 ]---
-> > > [   44.682111] Kernel panic - not syncing: Oops: Fatal exception
-> > > [   44.683488] SMP: stopping secondary CPUs
-> > > [   44.684551] Kernel Offset: 0x2721948e0000 from 0xffff800008000000
-> > > [   44.686095] PHYS_OFFSET: 0xfffff4a380000000
-> > > [   44.687144] CPU features: 0x010,00022811,19001080
-> > > [   44.688308] Memory Limit: none
-> > > [   44.689082] ---[ end Kernel panic - not syncing: Oops: Fatal exception ]---
-> > >
-> > > more logs:
-> > > https://s3.us-east-1.amazonaws.com/arr-cki-prod-datawarehouse-public/datawarehouse-public/2022/07/26/redhat:597047279/build_aarch64_redhat:597047279_aarch64/tests/1/results_0001/console.log/console.log
-> > >
-> > > https://datawarehouse.cki-project.org/kcidb/tests/4529120
-> > >
-> > > CKI issue tracker: https://datawarehouse.cki-project.org/issue/1434
-> > >
+> Right. Let's keep it there.
 >
-> Thanks for the report. I assume the build doesn't have
-> CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS.Does the tracker have
-> a link to the config file?
+> (Though it's kind of strange that the last_used_idx is not initialized
+> at the same place with avail_idx/flags_shadow, we can optimize it on
+> top).
 
-my apologies, I forgot to add a link to the config used:
-https://gitlab.com/api/v4/projects/18194050/jobs/2771087853/artifacts/artifacts/kernel-net-next-aarch64-35d099da41967f114c6472b838e12014706c26e7.config
+I put free_head =3D 0 in the attach function, it is only necessary to set
+free_head =3D 0 when a new state/extra is attached.
 
-Bruno
-> >
-> > Hello,
-> >
-> > It's caused by a NULL tr->fops passed to ftrace_set_filter_ip:
-> >
-> > if (tr->func.ftrace_managed) {
-> >          ftrace_set_filter_ip(tr->fops, (unsigned long)ip, 0, 0);
-> >          ret = register_ftrace_direct_multi(tr->fops, (long)new_addr);
-> > }
-> >
-> > Could you test it with the following patch?
-> >
-> > --- a/kernel/bpf/trampoline.c
-> > +++ b/kernel/bpf/trampoline.c
-> > @@ -255,8 +255,15 @@ static int register_fentry(struct bpf_trampoline *tr, void *new_addr)
-> >                  return -ENOENT;
-> >
-> >          if (tr->func.ftrace_managed) {
-> > -               ftrace_set_filter_ip(tr->fops, (unsigned long)ip, 0, 0);
-> > -               ret = register_ftrace_direct_multi(tr->fops,(long)new_addr);
-> > +               if (tr->fops)
-> > +                       ret = ftrace_set_filter_ip(tr->fops, (unsigned long)ip,
-> > +                                                  0, 0);
-> > +               else
-> > +                       ret = -ENOTSUPP;
-> > +
-> > +               if (!ret)
-> > +                       ret = register_ftrace_direct_multi(tr->fops,
-> > +                                                          (long)new_addr);
-> >          } else {
-> >                  ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, NULL, new_addr);
-> >          }
+In this way, when we call virtqueue_init(), we don't have to worry about
+free_head being modified.
+
+Rethinking this problem, I think virtqueue_init() can be rewritten and some
+variables that will not change are removed from it. (use_dma_api, event,
+weak_barriers)
+
++static void virtqueue_init(struct vring_virtqueue *vq, u32 num)
++{
++       vq->vq.num_free =3D num;
++
++       if (vq->packed_ring)
++               vq->last_used_idx =3D 0 | (1 << VRING_PACKED_EVENT_F_WRAP_C=
+TR);
++       else
++               vq->last_used_idx =3D 0;
++
++       vq->event_triggered =3D false;
++       vq->num_added =3D 0;
++
++#ifdef DEBUG
++       vq->in_use =3D false;
++       vq->last_add_time_valid =3D false;
++#endif
++}
++
+
+Thanks.
+
+
+>
+> Thanks
+>
 > >
 > > Thanks.
+> >
+> >
+> > >
+> > > >
+> > > >
+> > > > >               virtqueue_vring_init_split(&vq->split, vq);
+> > > >
+> > > > virtqueue_vring_init_split() is necessary.
+> > >
+> > > Right.
+> > >
+> > > >
+> > > > >       }
+> > > >
+> > > > Another method, we can take out all the variables to be reinitializ=
+ed
+> > > > separately, and repackage them into a new function. I don=E2=80=99t=
+ think it=E2=80=99s worth
+> > > > it, because this path will only be reached if the memory allocation=
+ fails, which
+> > > > is a rare occurrence. In this case, doing so will increase the cost=
+ of
+> > > > maintenance. If you think so also, I will remove the above memset i=
+n the next
+> > > > version.
+> > >
+> > > I agree.
+> > >
+> > > Thanks
+> > >
+> > > >
+> > > > Thanks.
+> > > >
+> > > >
+> > > > >
+> > > > > Thanks
+> > > > >
+> > > > > >
+> > > > > > >
+> > > > > > >
+> > > > > > > > +
+> > > > > > > > +   err =3D vring_alloc_state_extra_split(&vring_split);
+> > > > > > > > +   if (err) {
+> > > > > > > > +           vring_free_split(&vring_split, vdev);
+> > > > > > > > +           goto err;
+> > > > > > >
+> > > > > > >
+> > > > > > > I suggest to move vring_free_split() into a dedicated error l=
+abel.
+> > > > > >
+> > > > > > Will change.
+> > > > > >
+> > > > > > Thanks.
+> > > > > >
+> > > > > >
+> > > > > > >
+> > > > > > > Thanks
+> > > > > > >
+> > > > > > >
+> > > > > > > > +   }
+> > > > > > > > +
+> > > > > > > > +   vring_free(&vq->vq);
+> > > > > > > > +
+> > > > > > > > +   virtqueue_vring_init_split(&vring_split, vq);
+> > > > > > > > +
+> > > > > > > > +   virtqueue_init(vq, vring_split.vring.num);
+> > > > > > > > +   virtqueue_vring_attach_split(vq, &vring_split);
+> > > > > > > > +
+> > > > > > > > +   return 0;
+> > > > > > > > +
+> > > > > > > > +err:
+> > > > > > > > +   virtqueue_reinit_split(vq);
+> > > > > > > > +   return -ENOMEM;
+> > > > > > > > +}
+> > > > > > > > +
+> > > > > > > >
+> > > > > > > >   /*
+> > > > > > > >    * Packed ring specific functions - *_packed().
+> > > > > > >
+> > > > > >
+> > > > >
+> > > >
+> > >
+> >
 >
-> The fix looks good to me. Thanks!
-> Acked-by: Song Liu <songliubraving@fb.com>
->
-> Song
->
-
