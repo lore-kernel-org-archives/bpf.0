@@ -2,56 +2,55 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0CD1C04A68
-	for <bpf@archiver.kernel.org>; Thu, 28 Jul 2022 07:06:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FE5AC04A68
+	for <bpf@archiver.kernel.org>; Thu, 28 Jul 2022 07:19:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234708AbiG1HGH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Jul 2022 03:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35640 "EHLO
+        id S232183AbiG1HTQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Jul 2022 03:19:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234876AbiG1HFn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 Jul 2022 03:05:43 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737B95FAEF
-        for <bpf@vger.kernel.org>; Thu, 28 Jul 2022 00:04:52 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26S17uT9010636;
-        Thu, 28 Jul 2022 00:04:39 -0700
+        with ESMTP id S231701AbiG1HTO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Jul 2022 03:19:14 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6706E201AA
+        for <bpf@vger.kernel.org>; Thu, 28 Jul 2022 00:19:12 -0700 (PDT)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 26S3UOd1027665;
+        Thu, 28 Jul 2022 00:18:55 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
  subject : to : cc : references : from : in-reply-to : content-type :
  content-transfer-encoding : mime-version; s=facebook;
- bh=LzfX+0IZYmZph4hoYJJr60ZQlG3AFR1vvvIGdYG1VV8=;
- b=adMxb8vcXkVsZPKrMXw/zCzRYLS9iBQ3/ye9SZFT46ZEnlJj1Yv56jQb/nQeg/mi3s7q
- EaqWwixraOMb4uqmqggUMuZpwigppP3Luh14+r68C27VVTD3EItBDmRdUiL0sBXjy16u
- tVV/Hhh4/m7OgLWVmyh+EAD6uM8aY2BymuA= 
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2172.outbound.protection.outlook.com [104.47.59.172])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hk3ck7g5c-1
+ bh=zoOq8GEBfRZBGZ5nPAjBvyk7Ky1hcmDufAy12Ea5DXY=;
+ b=KQldtqG5Z88GEvh6+vuriIFfbS5OPW+ihX3UEE0oLmA10DKlVZgP2qKbyFPmcIA7z0s+
+ 72EphjRcghoH49u45oaZkL6RIZp3kRKkHXezuzFl3jxZMcMSMbRwteBblhGO6qqqlbkO
+ fNn16ymZdQMfC9LTZBqdVI7DaaTdegexliU= 
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2170.outbound.protection.outlook.com [104.47.55.170])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3hkjkmru1n-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 28 Jul 2022 00:04:38 -0700
+        Thu, 28 Jul 2022 00:18:54 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Nu6akkh13Ng/LTPwajHF3Mi309z/v5NmQXtDBAUBeqqjzrEyb7cJ8zbArf5yY/T/0TGEp/wNISFsTUGvZWErpKs3I3Chfq3b7wjeCB3gBpoV8UEPrBGxyGP91a1Nnl2jEirO2JMLk+lpoxt1tfmbdXtIUxhR1/rHIyzD0BlIqJDUe4dvxKiLFOxwePGBQZvuH5SMKKPJZk47lzBv65Ontv09GaFqTsdZdF13PWvkU4bvgjUIkmVUnXJoRyaGqVeNy4kmKW+HK9muZwJXClYGdhNZiyA2C5DHcx7WcsLpUVWRZx8lq+2N1Xn8YPp82Sbv2e+gqwcZW9K0CUr3KqxTjw==
+ b=h5mJBXMvz2YyVDsf591G6B3Y1vrNQpEMq7o9yeWSz3GMvxAC7lSMqP1GsgNO4Ggrtd8KTpvoBj/EG5BzdVb+YWnasut2wMR/AP9e09SD8q0cgkBur4ash4SxbSaIE+C8pnYTuRPidtxuhNf1wZCwErIRa5g8776pUA3wko+PGeRdIelQJZkWbQRsFvOy6kTRecwCxunRXhyiHECY1EH4vlLpEHDTnrc1Sg5NvMIo0uoLuUXs+WwTFQgfV05YWmaI1BPoKMQCxt9VP1H/3dm2bxHdqV4nXaBNxSSSwkz+AYz5OHnWCEYu5F6WjUXhn7rzD5QnEriAIuZtFBhaWQ8iNQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LzfX+0IZYmZph4hoYJJr60ZQlG3AFR1vvvIGdYG1VV8=;
- b=fIJnQ7moOhjM5eYA+3GK3B5smoSx8Ttjwueiyow3tK0rkemU1tuOqP9JyC3oT7awgu1E/9QoaKnWz6SB7rOdQmYFkjMJB9kF3I/LtjR1cSchVIt6NFm8lfVontl2bhZRFzShXSl5YB6SdadRZd7B10LTiJHLtNDnyVJjLJpJZtuDoZ0x79x+dDa9DJ3OFtdrJswfw1+QRIoJioPk2MrTr48qotaOQgrhd4+C+sqhxKLsBV0uZRIP4hJUjvnBvR65WoNvNn5jg+nhVOa+VBF/IY/A5GTyDxJ3oFADctAVrfGDnSdIpA7sjobtXOjkf+vRIKqISvzfokqi06LI2ggcBA==
+ bh=zoOq8GEBfRZBGZ5nPAjBvyk7Ky1hcmDufAy12Ea5DXY=;
+ b=ZA3wKxajGCqx/Tyj5snOHMvuI1FtkGamPptUMtmkKBtqtvpQKdO3so8/FcrId2u5/kbRQ5i57RZRvSx+3FfgFcBJcQaNLYCZBcKMR9pLF+nDIZqBYudpvaMdJu0tvz3ocX67JqmKYAS+Q1XoIMd8UDRrdgQ66Tju8Xaig0QEixA5TnyNJgRbf9dzv76nMyVgajLrM1OxltTUzLTUnOjTjOnHcKOv0vkkQgvHpAb5/5YUzHnX1SCd5SPCEmvHkdJ9HLiQRZ5gWAJzW1MC80YJmCWgtANIxiQDLYkMJ1z+0FV3s5P0GzjGa4d5JXbcksIBh8vM+nHtHrNfUjgFxGStDg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
  header.d=fb.com; arc=none
 Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by MN2PR15MB2878.namprd15.prod.outlook.com (2603:10b6:208:e9::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.25; Thu, 28 Jul
- 2022 07:04:35 +0000
+ by DM5PR15MB1804.namprd15.prod.outlook.com (2603:10b6:4:58::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5458.25; Thu, 28 Jul 2022 07:18:51 +0000
 Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
  ([fe80::9568:e5d9:b8ab:bb23]) by SN6PR1501MB2064.namprd15.prod.outlook.com
  ([fe80::9568:e5d9:b8ab:bb23%6]) with mapi id 15.20.5458.024; Thu, 28 Jul 2022
- 07:04:35 +0000
-Message-ID: <e7d884ee-e0d3-02b2-c3d4-3c7bac8f13fc@fb.com>
-Date:   Thu, 28 Jul 2022 00:04:33 -0700
+ 07:18:51 +0000
+Message-ID: <be9fa91f-820e-27d0-f66b-9c2e1164681c@fb.com>
+Date:   Thu, 28 Jul 2022 00:18:49 -0700
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
  Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [RFC PATCH bpf-next 00/11] bpf: Introduce rbtree map
+Subject: Re: [RFC PATCH bpf-next 11/11] selftests/bpf: Add rbtree map tests
 Content-Language: en-US
 To:     Dave Marchevsky <davemarchevsky@fb.com>, bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -59,74 +58,75 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Kernel Team <kernel-team@fb.com>, Tejun Heo <tj@kernel.org>
 References: <20220722183438.3319790-1-davemarchevsky@fb.com>
+ <20220722183438.3319790-12-davemarchevsky@fb.com>
 From:   Yonghong Song <yhs@fb.com>
-In-Reply-To: <20220722183438.3319790-1-davemarchevsky@fb.com>
+In-Reply-To: <20220722183438.3319790-12-davemarchevsky@fb.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR13CA0015.namprd13.prod.outlook.com
- (2603:10b6:a03:2c0::20) To SN6PR1501MB2064.namprd15.prod.outlook.com
+X-ClientProxiedBy: SJ0PR03CA0019.namprd03.prod.outlook.com
+ (2603:10b6:a03:33a::24) To SN6PR1501MB2064.namprd15.prod.outlook.com
  (2603:10b6:805:d::27)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 338f452c-410d-43e4-a75d-08da70676deb
-X-MS-TrafficTypeDiagnostic: MN2PR15MB2878:EE_
+X-MS-Office365-Filtering-Correlation-Id: 053a55da-a22d-4eb1-b409-08da70696c09
+X-MS-TrafficTypeDiagnostic: DM5PR15MB1804:EE_
 X-FB-Source: Internal
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JR+NQthk9RbNNZWEE15ZS8SV7y0TTjeR6VoxpMy8z6+POE/nhbxDQMR9CQ7dlZ2vJd4UWkgP9/0Yqw2VdPz+JuwW91CZtO0XjBDxJnvQBGWuyEHqb43E/Tm9j4QQkqXFAxIwDH5OYyuBjtMp1LFTP2P3LEAyav5leKFKuBZ7xGDx5SjH/taiJM36344bUXD7QsLmR2Gz4JDWjDoOqs+CqLCKLN1xJZcc4z4ixeCL7F4PItiinYnEGYMxU4u3MkSItV8lRROm/m9JJDnOt7KWFNWt/TkXEA70sjILfds6RCU51zADgiQRk/K6TNs2Lufelhsc84IPjIMmap8w65xyefmPqHSBjVIdlu6q2IG4TdLCi788XLBZLMR1K3L8isexkah5LACpGDgMNALCKP4NdVeFCIppXLGDmpw27OqLOwWAjqYLzgxcBmErZh6aWNir1llnGJfC6t1jWdjyYPXT3tjo67ZkAcI/JqekpstcyRJJSMGC+HcvShuDuC+aurqMJ5wnhKa/F4A9Vuc9kB+A31hVAUHBHfS3O8HSuNxQNqH6DpdzH7toHRg9Yjnr4tsSIigPycGmOAvgSRM5pOVJ4Kdy39m5j9eIEu7iXkjwsJuP3L87iRVMpdv9GXSypPYi7yIAIJwZC6ozOGWKwW/lOEo+Py1R1bqI++zPmV7UacrzYo7A/72b2DTWoYRHrheqGyLygmLJjXr4mp/Cma04iqBttiZo96pIoSRwu7TbziRktlwscK13C9ECLbEEjsuA+X2N8MO+ZtqZnGx98n/iwPnVXplhyszEKU2BPEBMkNHz2pezlQ38T8GMfgH/Zsb0Vgy5BvM8iiCQyJHjHRDTCQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(366004)(376002)(39860400002)(346002)(396003)(2616005)(66946007)(4326008)(8676002)(66476007)(66556008)(5660300002)(2906002)(36756003)(8936002)(6486002)(38100700002)(31696002)(53546011)(6506007)(86362001)(478600001)(6512007)(41300700001)(83380400001)(186003)(31686004)(316002)(54906003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: WE7uX2+7+jqBRMbIy9UIVOmIsgDTGQ4Gv55HwOR6fqaTAJn7RCVNbIxiSfp1tGlnSZjHgeWk2OVYY3CrN36QHPtuMOIUwkPDYaZywSm4b1q+S5hDOkK3B5sOKDMNEyoDuvh/ZSk81ah2k/xqFDStztAIRfXDAmhRnhOD4iMhxAVUL4xdpW33X6rtAixOVNBXp79/FJoh2cq6lNVWjOk4VzW7s3IViFMazjYeXIi+B8lVL+q7OXGB9N0tm5sJ41QIQmFKzlPiIY28lsL1ZHk5rB0SFeAmeMvhO0BZP1CAZtckYjLDNOJe1vNLu5c7b1LpsiL+u1mgVO0d2OrWiMIUBDirvBIOfn68cH/oJOmvJOV2q8E8as4CeFBldVwwS5awK+tyfcej85NcXTPWzwGOp/0J253FlLjNduXKXQPZu19r0WQJWUOYIzRldYWkrVOwCgxOCvrPxdTtg7SfHSMoKbscuV+KvcVakCKeUB8j+8rEgU56za5Gmlrxm2YisHp8Dqu1pYg1igr8rgECB54ED9YJj38svbKRWS1IXcz9l1RJb863OlKpvK+g+gy47BufqJLyfUjGtSBjImZdJek2XM/4uD2k6FoXR0xn7Pqpq52frbMKNnQ4b+EkdMIdpVk9+C9fO3e5fNOsW1pxur+JJGFYEPy9/nFdPB6RoU/3F5JvmYK2bhIEhMi+4rvJu4gMGpHVDJuU4N2ZsmNovCrKYPcj0qnNbB53kKOa8KIzUVwAEyG1rzb/idL7AmKZnPa84pWp+2xEo7Sj0tKlzTPNjhOvrf6EM7Fe7g56DaBgXFCiZQN/dIp7gvpq4+HlWf04MVGA8CiElefbo9V7YaO+EQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(366004)(376002)(346002)(396003)(53546011)(8936002)(8676002)(4326008)(66556008)(66476007)(36756003)(66946007)(5660300002)(2906002)(2616005)(38100700002)(6486002)(186003)(83380400001)(41300700001)(86362001)(31696002)(6506007)(6512007)(54906003)(478600001)(31686004)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SE9Vc05BRzBGck1OQ0FMQXJwY3BMd0FrQ1BQb0VjajNkSkV2R0psSGNFUEVx?=
- =?utf-8?B?cFVTSjlVd3pSN2g3T3VwR0w3aTk1eTVkMFJhdmYwY0xMUkhoakIyd2pGOGdO?=
- =?utf-8?B?NmwzOWZ4QmRJSncxVkEydm1GeEc5YW8vMHd2cnprNHdZeGgrdWJFS0FrbWZ5?=
- =?utf-8?B?ZHJmcS9jRWZianFkRjFyWWhoeU52ZDJWL3NJTnNFbEdndEt2VWJ1ZUNRUW9r?=
- =?utf-8?B?WVBUQWhjTm1hOWRkU1c4M3NhWDM3MFAzVDBPKy9Nb25kc2RNbjIwVnNMUE4v?=
- =?utf-8?B?THJFeitNODh2V3J6d004R28rVzFJYUhYTUdXZU1IZ29HU3NKUytyM2VyN0Z2?=
- =?utf-8?B?WERtbkZtOXBlQ2NnaDR5MHJSQ0JkZ0RSSVJnYXBnaUtqMmRHMDhrRDB4Skpq?=
- =?utf-8?B?UGIxU0N0b2tyenhJbnl2MFNDdmplS2srOGIxaWlVeTNGM1FWZVExcHhMamw2?=
- =?utf-8?B?OCtRSUNlTkFoMUFEeDh1WFFpNU1teU1DNVZSUFZ0Y0M3YjVGSVpzYUtRR3l0?=
- =?utf-8?B?WkxSUWN3d2lMZlBPWVRpcmxOeDVHMUFGTmZPcWwvemw2RUM5S2tJNklrT2hv?=
- =?utf-8?B?VDlUQzNkY0NxbXFrSVNHbEVQcWhSSnJzbWFQa01KSkhZcURPc09zTjduZW1r?=
- =?utf-8?B?SjArQ1UxN3F5V2ttS2dXVVhtMFpYaGpjODFCVXBHRktwTm11MkpZK21qWGZj?=
- =?utf-8?B?bXloUjVQaWxkNFhKR0dITmRUOEVNeXE0WjRRZXk5QUpZWmxHdU0ycEN5RGE3?=
- =?utf-8?B?RzBIOW05MDRmNDBzcVc0VjA3Tk52ZTVhMGxQK2VqYVo3TjIvaGJCaTVyRVF2?=
- =?utf-8?B?WTdkVGJzRVA4RjlnSEpNMjdGYU5jNDIzUkdmUlhvUUJBRFA5SS9WblhSUnE1?=
- =?utf-8?B?L1VLZG1KWmdtK1ZQNjFkbTJDK2h6b0VGdTVxN3FkaEg2UWJYWHU3MVNDd1M4?=
- =?utf-8?B?M2lGb2ZXUkIwdzc3M2lRejducVZVQkdRNm1QcVNaaG9HR1NHQ0IwNmVTU1Jh?=
- =?utf-8?B?TTJsOHpqQ01Ca1B2bnNoRlJpTEQvU1ZPa1NpdUtUYjh0alR6aENpOU8rOTAz?=
- =?utf-8?B?cmEyNVJLNmp4Vnh1ejY2TUdJR2wvN1dLSzBiYngvNHpCUlBuV3llNWNSUmRE?=
- =?utf-8?B?R2ZSMi9UM2VtSytXSFR2bW5wT0NZbDRUZ09sdWVtTjNGVkpjQUJwQW1kUDI5?=
- =?utf-8?B?M0RaYWt0Y0xpVjQ0ZjFaS1h0Rm5tNUpBYjh6UlBXNHRiZUpXRGQ3UHUxZ2Zh?=
- =?utf-8?B?bE1YYXNqcWZiaFdIRGtpL1NHSnVzaUR0UlRicmhHN1BadHVhU3QrQzhjTjN0?=
- =?utf-8?B?eEgrdlhUcjV5bDhlTUxZMmhBV29VMXBTemYwVUpGSGoxK3FPVWJ2K2JKOGIw?=
- =?utf-8?B?TlVyN25nWFdqSko1enhjbkdwSjZUMkd4RkI0QnBxemlycS8waTM0eU9YM2VW?=
- =?utf-8?B?MHlBR1dic1RSWm5icjNLZlpvaHNmQjNSQzB2TTk2dDROVWtnamZ1VFpiNUh2?=
- =?utf-8?B?amdnai9ZVmVSQ3h2c0I3eDBiU0ZWWGxkZm5tZ2lZbDkwd1V2TVlQS3EyalF2?=
- =?utf-8?B?YmZUNTJqcEJ6U0xaVS9GUHo5ZTI5YlArRFdwSzdLN3ZlV2JFb0xKTlJtZGdk?=
- =?utf-8?B?RmtRWEVqVXhEejVVMXF0Z05iMlJ5UUZXQ2FZK1RHblAyc0RZY3dNU3hON1gy?=
- =?utf-8?B?LzlqT1BydE5tTC9PbzVrT3NJd25oQzFNSVBEaFNNc1hXenRkd2E1V3JyRk1H?=
- =?utf-8?B?SXYxN29EUDVCUTNndWc3aVdMcWdWZSt0dlgxbUpaU0RCWmwyVFRWa3hYU1BR?=
- =?utf-8?B?SzVXTDFTMGpUamlrYUlxeGN1V2NyUVpPQ0liYWtaSFFVeHdZRDdtdW9INWxz?=
- =?utf-8?B?Nlh6SDVUU01XV3lvOUlXK3RjT3dpcjBaaEZHUkZ5M1ZIYXFMaUVoNDM0TlZr?=
- =?utf-8?B?a0g3ZDBSVStWWlNUdDBaTlR4bWxZSGdtNmtxMnoxaFVWVXRVRlU1MmFNcTVv?=
- =?utf-8?B?Y1NsSnNIa013L1djSTdZTUw3RWpkMmM5YVQ0UkQ3WG9PQlJXTmVRSEhFbGFW?=
- =?utf-8?B?TVRSOU9XZ1NoR1NJN1JWTUxNTUNFRTBWazZGSzFPaXVNT3dDeUprL1RBbm41?=
- =?utf-8?B?N0N3bWZFQndidzRkaTIxOU9zS0haTDJSYVJVdmhOa2g0SUhaazNqMWxGSmw1?=
- =?utf-8?B?b3c9PQ==?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UHZaWlVDMFRTeXB1NG44c1VnSjZPOURJOGpldUQ1VzF3VzdraGNtZFQ1Kyt3?=
+ =?utf-8?B?ZHFOOHBCRUZjV2ZlNWxaNFdLcWZhdjgwL0VUMEpDK0Z3bFN2MnpybGdMcFIw?=
+ =?utf-8?B?T1NOVTcxWjRicGtscldtbW9OZlA2QXNZS3l2SUppU2hLRkVmQld3V2N0YndV?=
+ =?utf-8?B?UUZNaTVCYTN4QmtKbFE0RDgzQXJxb0pqdzJlUGlySlBNRGF3aVhnMnU1eDlj?=
+ =?utf-8?B?c1hJVHN5SEFJcjlBMEZVYWhsbU4razRlVE9DeW5wYm5mVE9OWE5qbUJ0bHV4?=
+ =?utf-8?B?VDNBbmJxdVh1VGFsV0lEV01LRlFzblhLWnlDR3dUYjMxdDBXRnJuRDVuc0Zx?=
+ =?utf-8?B?Ky9zcWd4QzlBc25adm81Z1lVWWtGazJPUVkwMnhwTk9rMm9jRW1ZTzhZVzg2?=
+ =?utf-8?B?aS80UDZJOGUrTXFZeEJKczlVMXBlbDdKN2FUdFdrN0JNNmgyRlNqUHUyaWMy?=
+ =?utf-8?B?bjQxVktYcWF6eVUwTlZ4YTJESGIrSzdrNjczdGhlSEY4NGdPSVkrSjA5a1Zp?=
+ =?utf-8?B?Tkc0ZG1qNlU5VVRZVTBxVCtEOXVyWXpBaTV2WWNqUysvdEt4WW1KRHM5OUJM?=
+ =?utf-8?B?YVI5cStoNjlNcUozaDhCNURiZms2RXlkeWhOWDZqaXoycHNJK1ZuZ3Zqa2Zz?=
+ =?utf-8?B?dWo2NzBlVm5yOW83QWgySUk2T3BnMHd5STNQMm1FMHZzaGNUMDh4dUkzUEV1?=
+ =?utf-8?B?YU5XMzRKL0hqSXpRQnppZEprVzdQdHcrc28xUk9pbHBjQUlRNUl6MjViNG41?=
+ =?utf-8?B?dGVQRU9jSGs0MW5FT3NyR1RPOFlvS1N2K3RTSEVXS0JDUmNpbHRkYWNJdng4?=
+ =?utf-8?B?SFprQ2tQSE0xVndaT3RMb0lsWHBoNjZUUHdLcU90MklUSTRyTkluWE5ZZU9R?=
+ =?utf-8?B?U2RldjBvQXgxUVo0N3hBR21IRHlEUDBCMVBXcWR1d05SRG5mYTJ4VlRSZGlh?=
+ =?utf-8?B?aUprY0N0RENiZWJ2d0cxMFBIUHh3em9aclB1THk3SXA0aU9vb0JKclR5WTRp?=
+ =?utf-8?B?VXFlNU5WY2ZqRkRLT0Vxcm9HVmxGRFBpTWh2ZjRDclZ5Q0dFRHpxMDlXSzNh?=
+ =?utf-8?B?MGRrZ0RIZGRQY1F1TlFLdXVWZ2V4Sm5rZUt6NGJDRkxpZmQ5dWdnZUM5MjNt?=
+ =?utf-8?B?RmZ0Z1lHY3NnemExMHdscllYKzhyY01INWhTcDJ2RENBeWswUzB6T1VYaWVl?=
+ =?utf-8?B?Q2g5NEZBKzh5RVZQMzZnV0lMaU9aRFMxRmo3eHJvaW1ITUZZVmpSOVRjeHJ2?=
+ =?utf-8?B?UEVuRVdwZWMzQ1I3ZncyNnc2eW1Sdkw0REN6MlNsLzNVNmg5ZUorbkhsNzY2?=
+ =?utf-8?B?WGlOTDlGNkFIZ0dCNzlHOGptcEp2eDU4N1gxUTdZam8xS1RFU29menpMdFNJ?=
+ =?utf-8?B?cXkvUmVkT1RBT01FMndJb0ZKZGxnRzludjJMVm1hV0xnQURmbTNXd0dBZDc5?=
+ =?utf-8?B?eXdLNVpiUXNGTVhIc0RwaFYvaGpqTnF5S2ZzbXRQUzdTZGVIZWltWVZmbC8x?=
+ =?utf-8?B?eHRLY05aSlFQTWR6Nm9oVmxmUjBPSUxYZUFpaGlaMDRkQ3ZMcUlIdmNjclhI?=
+ =?utf-8?B?KzRPcE40eWZUcGdvb3hWaHBWbmFia2RpMWJZQllaMVROdlpHKyt6Mms0Tmky?=
+ =?utf-8?B?enBONnM3RmduUVAxbEJHTzlmYm5ySFZCNFdnRldhdkt1Q1JPNENVeWVqSUZp?=
+ =?utf-8?B?dUl4eXhtK2NwZUYzdDA5cHVGdkg5dkFoeUJIdnJIKzRFQk8xbVZtbjJjRWdC?=
+ =?utf-8?B?Rmo4NGhHc0Q0cjlaM28wK2EyUW00UUZHdENmOEltb2MxRmJPNHVPWk4rR0lr?=
+ =?utf-8?B?c0RLVEcwV09ZaW1vdy8rd2VMNVJFTEp2bGZaQlIrMVd1a3U3bks0WnZpejJi?=
+ =?utf-8?B?SjBwQmIybnhOc1BwVTdIL1k1M1kxZU5NSWY5VXFLL0FIRHk1bTZrMXNMUlNL?=
+ =?utf-8?B?VXhxK2l0dHM5dGJEKzF5aEZILzd4M3MyODVRdmJENXFPSXNSei9wS285aTRH?=
+ =?utf-8?B?VmlLdGRIdXB2c3NkRVBGb0NuYy9wTkw0RGhCOHhtNkY3MGRRWmRja1Q5SFRK?=
+ =?utf-8?B?SElkalJEZy9idEg4NWltdkVYd1J6Y1BoWFY0SVpzWFhpWEt3SEt2Um1jRHpP?=
+ =?utf-8?B?MkdxWStPNXRybDh4dGtRM2tPNjU3ZFVUeUNHK2I1NmVDUXl0TjB0LzNraGRG?=
+ =?utf-8?B?Vmc9PQ==?=
 X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 338f452c-410d-43e4-a75d-08da70676deb
+X-MS-Exchange-CrossTenant-Network-Message-Id: 053a55da-a22d-4eb1-b409-08da70696c09
 X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2022 07:04:35.5386
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2022 07:18:51.6079
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pV6ZnD2ebiJGKXpInYm4LmhnRmM1+F49tV1udxeXjiGSwaUV6RiOwvjbiJB1Qe2G
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR15MB2878
-X-Proofpoint-ORIG-GUID: SqJY53KDKP4COhFfw4nGWnD2Veif6f_o
-X-Proofpoint-GUID: SqJY53KDKP4COhFfw4nGWnD2Veif6f_o
+X-MS-Exchange-CrossTenant-UserPrincipalName: sGl7RRV5kjulX5T9ANuyNqYsg794VRp/imRKCzH2NUGjrUS2PU6IEjbuM6vC5DWE
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR15MB1804
+X-Proofpoint-GUID: IHTb_7rZh0ATxi2xZh7jMQrBE7iLYUlk
+X-Proofpoint-ORIG-GUID: IHTb_7rZh0ATxi2xZh7jMQrBE7iLYUlk
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-07-28_01,2022-07-28_01,2022-06-22_01
@@ -137,76 +137,310 @@ X-Mailing-List: bpf@vger.kernel.org
 
 
 On 7/22/22 11:34 AM, Dave Marchevsky wrote:
-> Introduce bpf_rbtree map data structure. As the name implies, rbtree map
-> allows bpf programs to use red-black trees similarly to kernel code.
-> Programs interact with rbtree maps in a much more open-coded way than
-> more classic map implementations. Some example code to demonstrate:
+> Add tests demonstrating happy path of rbtree map usage as well as
+> exercising numerous failure paths and conditions. Structure of failing
+> test runner is based on dynptr tests.
 > 
->    node = bpf_rbtree_alloc_node(&rbtree, sizeof(struct node_data));
->    if (!node)
->      return 0;
+> Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
+> ---
+>   .../selftests/bpf/prog_tests/rbtree_map.c     | 164 ++++++++++++
+>   .../testing/selftests/bpf/progs/rbtree_map.c  | 111 ++++++++
+>   .../selftests/bpf/progs/rbtree_map_fail.c     | 236 ++++++++++++++++++
+>   .../bpf/progs/rbtree_map_load_fail.c          |  24 ++
+>   4 files changed, 535 insertions(+)
+>   create mode 100644 tools/testing/selftests/bpf/prog_tests/rbtree_map.c
+>   create mode 100644 tools/testing/selftests/bpf/progs/rbtree_map.c
+>   create mode 100644 tools/testing/selftests/bpf/progs/rbtree_map_fail.c
+>   create mode 100644 tools/testing/selftests/bpf/progs/rbtree_map_load_fail.c
 > 
->    node->one = calls;
->    node->two = 6;
->    bpf_rbtree_lock(bpf_rbtree_get_lock(&rbtree));
+> diff --git a/tools/testing/selftests/bpf/prog_tests/rbtree_map.c b/tools/testing/selftests/bpf/prog_tests/rbtree_map.c
+> new file mode 100644
+> index 000000000000..17cadcd05ee4
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/rbtree_map.c
+> @@ -0,0 +1,164 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
+> +
+> +#include <sys/syscall.h>
+> +#include <test_progs.h>
+> +#include "rbtree_map.skel.h"
+> +#include "rbtree_map_fail.skel.h"
+> +#include "rbtree_map_load_fail.skel.h"
+> +
+> +static size_t log_buf_sz = 1048576; /* 1 MB */
+> +static char obj_log_buf[1048576];
+> +
+> +static struct {
+> +	const char *prog_name;
+> +	const char *expected_err_msg;
+> +} rbtree_prog_load_fail_tests[] = {
+> +	{"rb_node__field_store", "only read is supported"},
+> +	{"rb_node__alloc_no_add", "Unreleased reference id=2 alloc_insn=3"},
+> +	{"rb_node__two_alloc_one_add", "Unreleased reference id=2 alloc_insn=3"},
+> +	{"rb_node__remove_no_free", "Unreleased reference id=5 alloc_insn=28"},
+> +	{"rb_tree__add_wrong_type", "rbtree: R2 is of type task_struct but node_data is expected"},
+> +	{"rb_tree__conditional_release_helper_usage",
+> +		"R2 type=ptr_cond_rel_ expected=ptr_"},
+> +};
+> +
+> +void test_rbtree_map_load_fail(void)
+> +{
+> +	struct rbtree_map_load_fail *skel;
+> +
+> +	skel = rbtree_map_load_fail__open_and_load();
+> +	if (!ASSERT_ERR_PTR(skel, "rbtree_map_load_fail__open_and_load"))
+> +		rbtree_map_load_fail__destroy(skel);
+> +}
+> +
+> +static void verify_fail(const char *prog_name, const char *expected_err_msg)
+> +{
+> +	LIBBPF_OPTS(bpf_object_open_opts, opts);
+> +	struct rbtree_map_fail *skel;
+> +	struct bpf_program *prog;
+> +	int err;
+> +
+> +	opts.kernel_log_buf = obj_log_buf;
+> +	opts.kernel_log_size = log_buf_sz;
+> +	opts.kernel_log_level = 1;
+> +
+> +	skel = rbtree_map_fail__open_opts(&opts);
+> +	if (!ASSERT_OK_PTR(skel, "rbtree_map_fail__open_opts"))
+> +		goto cleanup;
+> +
+> +	prog = bpf_object__find_program_by_name(skel->obj, prog_name);
+> +	if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
+> +		goto cleanup;
+> +
+> +	bpf_program__set_autoload(prog, true);
+> +	err = rbtree_map_fail__load(skel);
+> +	if (!ASSERT_ERR(err, "unexpected load success"))
+> +		goto cleanup;
+> +
+> +	if (!ASSERT_OK_PTR(strstr(obj_log_buf, expected_err_msg), "expected_err_msg")) {
+> +		fprintf(stderr, "Expected err_msg: %s\n", expected_err_msg);
+> +		fprintf(stderr, "Verifier output: %s\n", obj_log_buf);
+> +	}
+> +
+> +cleanup:
+> +	rbtree_map_fail__destroy(skel);
+> +}
+> +
+> +void test_rbtree_map_alloc_node__size_too_small(void)
+> +{
+> +	struct rbtree_map_fail *skel;
+> +	struct bpf_program *prog;
+> +	struct bpf_link *link;
+> +	int err;
+> +
+> +	skel = rbtree_map_fail__open();
+> +	if (!ASSERT_OK_PTR(skel, "rbtree_map_fail__open"))
+> +		goto cleanup;
+> +
+> +	prog = skel->progs.alloc_node__size_too_small;
+> +	bpf_program__set_autoload(prog, true);
+> +
+> +	err = rbtree_map_fail__load(skel);
+> +	if (!ASSERT_OK(err, "unexpected load fail"))
+> +		goto cleanup;
+> +
+> +	link = bpf_program__attach(skel->progs.alloc_node__size_too_small);
+> +	if (!ASSERT_OK_PTR(link, "link"))
+> +		goto cleanup;
+> +
+> +	syscall(SYS_getpgid);
+> +
+> +	ASSERT_EQ(skel->bss->size_too_small__alloc_fail, 1, "alloc_fail");
+> +
+> +	bpf_link__destroy(link);
+> +cleanup:
+> +	rbtree_map_fail__destroy(skel);
+> +}
+> +
+> +void test_rbtree_map_add_node__no_lock(void)
+> +{
+> +	struct rbtree_map_fail *skel;
+> +	struct bpf_program *prog;
+> +	struct bpf_link *link;
+> +	int err;
+> +
+> +	skel = rbtree_map_fail__open();
+> +	if (!ASSERT_OK_PTR(skel, "rbtree_map_fail__open"))
+> +		goto cleanup;
+> +
+> +	prog = skel->progs.add_node__no_lock;
+> +	bpf_program__set_autoload(prog, true);
+> +
+> +	err = rbtree_map_fail__load(skel);
+> +	if (!ASSERT_OK(err, "unexpected load fail"))
+> +		goto cleanup;
+> +
+> +	link = bpf_program__attach(skel->progs.add_node__no_lock);
+> +	if (!ASSERT_OK_PTR(link, "link"))
+> +		goto cleanup;
+> +
+> +	syscall(SYS_getpgid);
+> +
+> +	ASSERT_EQ(skel->bss->no_lock_add__fail, 1, "alloc_fail");
+> +
+> +	bpf_link__destroy(link);
+> +cleanup:
+> +	rbtree_map_fail__destroy(skel);
+> +}
+> +
+> +void test_rbtree_map_prog_load_fail(void)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(rbtree_prog_load_fail_tests); i++) {
+> +		if (!test__start_subtest(rbtree_prog_load_fail_tests[i].prog_name))
+> +			continue;
+> +
+> +		verify_fail(rbtree_prog_load_fail_tests[i].prog_name,
+> +			    rbtree_prog_load_fail_tests[i].expected_err_msg);
+> +	}
+> +}
+> +
+> +void test_rbtree_map(void)
+> +{
+> +	struct rbtree_map *skel;
+> +	struct bpf_link *link;
+> +
+> +	skel = rbtree_map__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "rbtree_map__open_and_load"))
+> +		goto cleanup;
+> +
+> +	link = bpf_program__attach(skel->progs.check_rbtree);
+> +	if (!ASSERT_OK_PTR(link, "link"))
+> +		goto cleanup;
+> +
+> +	for (int i = 0; i < 100; i++)
+> +		syscall(SYS_getpgid);
+> +
+> +	ASSERT_EQ(skel->bss->calls, 100, "calls_equal");
+> +
+> +	bpf_link__destroy(link);
+> +cleanup:
+> +	rbtree_map__destroy(skel);
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/rbtree_map.c b/tools/testing/selftests/bpf/progs/rbtree_map.c
+> new file mode 100644
+> index 000000000000..0cd467838f6e
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/rbtree_map.c
+> @@ -0,0 +1,111 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
+> +
+> +#include "vmlinux.h"
+> +#include <bpf/bpf_helpers.h>
+> +#include "bpf_misc.h"
+> +
+> +struct node_data {
+> +	struct rb_node node;
+> +	__u32 one;
+> +	__u32 two;
+> +};
+> +
+> +struct {
+> +	__uint(type, BPF_MAP_TYPE_RBTREE);
+> +	__type(value, struct node_data);
+> +} rbtree SEC(".maps");
+> +
+> +long calls;
+> +
+> +static bool less(struct rb_node *a, const struct rb_node *b)
+> +{
+> +	struct node_data *node_a;
+> +	struct node_data *node_b;
+> +
+> +	node_a = container_of(a, struct node_data, node);
+> +	node_b = container_of(b, struct node_data, node);
+> +
+> +	return node_a->one < node_b->one;
+> +}
+> +
+> +// Key = node_datq
+> +static int cmp(const void *key, const struct rb_node *b)
+> +{
+> +	struct node_data *node_a;
+> +	struct node_data *node_b;
+> +
+> +	node_a = container_of(key, struct node_data, node);
+> +	node_b = container_of(b, struct node_data, node);
+> +
+> +	return node_b->one - node_a->one;
+> +}
+> +
+> +// Key = just node_data.one
+> +static int cmp2(const void *key, const struct rb_node *b)
+> +{
+> +	__u32 one;
+> +	struct node_data *node_b;
+> +
+> +	one = *(__u32 *)key;
+> +	node_b = container_of(b, struct node_data, node);
+> +
+> +	return node_b->one - one;
+> +}
+> +
+> +SEC("fentry/" SYS_PREFIX "sys_getpgid")
+> +int check_rbtree(void *ctx)
+> +{
+> +	struct node_data *node, *found, *ret;
+> +	struct node_data popped;
+> +	struct node_data search;
+> +	__u32 search2;
+> +
+> +	node = bpf_rbtree_alloc_node(&rbtree, sizeof(struct node_data));
 
-Can we just do
-      bpf_rbtree_lock(&rbtree)
-      bpf_rbtree_unlock(&rbtree)
-? Looks like the only places bpf_rbtree_get_lock() used are
-as arguments of bpf_rbtree_lock/unlock or bpf_spin_lock/unlock?
+If I understand correctly, bpf_rtbree_alloc_node() may cause reschedule
+inside the function. So, the program should be sleepable, right?
 
-> 
->    ret = (struct node_data *)bpf_rbtree_add(&rbtree, node, less);
->    if (!ret) {
->      bpf_rbtree_free_node(&rbtree, node);
->      goto unlock_ret;
->    }
-> 
-> unlock_ret:
->    bpf_rbtree_unlock(bpf_rbtree_get_lock(&rbtree));
->    return 0;
-> 
-> 
-> This series is in a heavy RFC state, with some added verifier semantics
-> needing improvement before they can be considered safe. I am sending
-> early to gather feedback on approach:
-> 
->    * Does the API seem reasonable and might it be useful for others?
-> 
->    * Do new verifier semantics added in this series make logical sense?
->      Are there any glaring safety holes aside from those called out in
->      individual patches?
-> 
-> Please see individual patches for more in-depth explanation. A quick
-> summary of patches follows:
-> 
-> 
-> Patches 1-3 extend verifier and BTF searching logic in minor ways to
-> prepare for rbtree implementation patch.
->    bpf: Pull repeated reg access bounds check into helper fn
->    bpf: Add verifier support for custom callback return range
->    bpf: Add rb_node_off to bpf_map
-> 
-> 
-> Patch 4 adds basic rbtree map implementation.
->    bpf: Add rbtree map
-> 
-> Note that 'complete' implementation requires concepts and changes
-> introduced in further patches in the series. The series is currently
-> arranged in this way to ease RFC review.
-> 
-> 
-> Patches 5-7 add a spinlock to the rbtree map, with some differing
-> semantics from existing verifier spinlock handling.
->    bpf: Add bpf_spin_lock member to rbtree
->    bpf: Add bpf_rbtree_{lock,unlock} helpers
->    bpf: Enforce spinlock hold for bpf_rbtree_{add,remove,find}
-> 
-> Notably, rbtree's bpf_spin_lock must be held while manipulating the tree
-> via helpers, while existing spinlock verifier logic prevents any helper
-> calls while lock is held. In current state this is worked around by not
-> having the verifier treat rbtree's lock specially in any way. This
-> needs to be improved before leaving RFC state as it's unsafe.
-> 
+> +	if (!node)
+> +		return 0;
+> +
+> +	node->one = calls;
+> +	node->two = 6;
+> +	bpf_rbtree_lock(bpf_rbtree_get_lock(&rbtree));
+> +
+> +	ret = (struct node_data *)bpf_rbtree_add(&rbtree, node, less);
+> +	if (!ret) {
+> +		bpf_rbtree_free_node(&rbtree, node);
+> +		goto unlock_ret;
+> +	}
+> +
+> +	bpf_rbtree_unlock(bpf_rbtree_get_lock(&rbtree));
+> +
+> +	bpf_rbtree_lock(bpf_rbtree_get_lock(&rbtree));
+> +
+> +	search.one = calls;
+> +	found = (struct node_data *)bpf_rbtree_find(&rbtree, &search, cmp);
+> +	if (!found)
+> +		goto unlock_ret;
+> +
+> +	int node_ct = 0;
+> +	struct node_data *iter = (struct node_data *)bpf_rbtree_first(&rbtree);
+> +
+> +	while (iter) {
+> +		node_ct++;
+> +		iter = (struct node_data *)bpf_rbtree_next(&rbtree, iter);
+> +	}
+> +
+> +	ret = (struct node_data *)bpf_rbtree_remove(&rbtree, found);
+> +	if (!ret)
+> +		goto unlock_ret;
+> +
+> +	bpf_rbtree_unlock(bpf_rbtree_get_lock(&rbtree));
+> +
+> +	bpf_rbtree_free_node(&rbtree, ret);
+> +
+> +	__sync_fetch_and_add(&calls, 1);
+> +	return 0;
+> +
+> +unlock_ret:
+> +	bpf_rbtree_unlock(bpf_rbtree_get_lock(&rbtree));
+> +	return 0;
+> +}
+> +
 [...]
