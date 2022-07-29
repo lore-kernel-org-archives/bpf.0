@@ -2,93 +2,127 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77E3CC3F6B0
-	for <bpf@archiver.kernel.org>; Fri, 29 Jul 2022 01:08:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DB5AC00140
+	for <bpf@archiver.kernel.org>; Fri, 29 Jul 2022 03:31:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233043AbiG2BIl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Jul 2022 21:08:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51308 "EHLO
+        id S233912AbiG2DbJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Jul 2022 23:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232867AbiG2BIk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 Jul 2022 21:08:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E19D94BD26
-        for <bpf@vger.kernel.org>; Thu, 28 Jul 2022 18:08:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659056919;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UjK8WA9LgJeF558MQ4KdA6R8ULeQdKQ4U739a03eHPA=;
-        b=M6RoQhtMwQGRPCrsSfJHCyJimfv2Ol5hgW6kjON40NVbn2i6x1cc+ZMHs4MHC1QLJZJdjM
-        GT7XF8Q3eaRqXs1UkV3tlf/R5FkN87pmxl2wW05R8AtXaTNG+sFkN4fpQpBkv2wNKrOnue
-        7Y4CIgow4mW1H8hIJXqJ8FXBmVlIR64=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-182-KERh3ai6P0WoM82ksuelGw-1; Thu, 28 Jul 2022 21:08:33 -0400
-X-MC-Unique: KERh3ai6P0WoM82ksuelGw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 39BCA85A588;
-        Fri, 29 Jul 2022 01:08:32 +0000 (UTC)
-Received: from localhost (ovpn-13-195.pek2.redhat.com [10.72.13.195])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 13655492C3B;
-        Fri, 29 Jul 2022 01:08:31 +0000 (UTC)
-Date:   Fri, 29 Jul 2022 09:08:26 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Slark Xiao <slark_xiao@163.com>
-Cc:     David Howells <dhowells@redhat.com>, corbet@lwn.net,
-        vgoyal@redhat.com, dyoung@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        with ESMTP id S230469AbiG2DbH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Jul 2022 23:31:07 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E091A068;
+        Thu, 28 Jul 2022 20:31:06 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id 15-20020a17090a098f00b001f305b453feso7171590pjo.1;
+        Thu, 28 Jul 2022 20:31:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MxegPP+9eR+tqzB10w9UP7S+nttT/U9nMghcqqAW8Tc=;
+        b=ZuMiPGRjx2u0bWndPQFq3JctNqzjgqzlOstPsDNefFEgX6OnLCGcnYvMLQBvj8/C1v
+         A1YSL7zuNfm3bo5s63cvTnQOW2vqXQ2QaMV2D43USVKnaLc7ORTIC8pbeECuH6nnpsex
+         nk8635x9d7X9W2NgQWvEY5YGg9O1lBvEXHnoVcIq4+OTf44oSFE+N7REcC0F/v5OoiqD
+         Q+D1e1GT0Li23yQevFmaRuQJN4BSQfMFGSJoDP8FSOC5Hf888FTaBHdXIs5lPrXaFeh6
+         mA3h10NXUMjxbDxPj3sycbndDrkWJLubedxSBDzh8YI0SvwH+2m/tMJ0vALy9LXrMPCW
+         vrKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MxegPP+9eR+tqzB10w9UP7S+nttT/U9nMghcqqAW8Tc=;
+        b=gOAyHKsEiVQXxXaPNdVCsbsVWZ9iQzNbi+RDWMvhOjvvPNvzfFCy9Gve4wWbOGwvWO
+         4fVQIpH1ljK3ga+iZqa0akKj45Ecttni8K+t1gr3I7uMnvmf2ToPnZt1RWh6mZZw91p5
+         E68MwThajdxmy0Hw0qb5mgHgILQ9bMPN1hh1io5ap71N3CMaljfmnG9yhjddilwiaqLM
+         hJYDI1WqAd4xWnWcaB6vX8zVzV8Ews3AwLp3qmqpYoAVABbbQdkC0G151f2B4eLjvm6D
+         PaVENRn023E6h/LI/Dqf7ExNgCF8QFNeKjEcv7pXitCs6Mmp7RUEtFBhw51xJ89EmonV
+         4xdg==
+X-Gm-Message-State: ACgBeo0t95UoGoGdcZ5VkCC0BWuN2admLNIqPpDsqRaqtZZgGXpQTS7n
+        eOFidsprAx7xdrUAzn4rQZ0=
+X-Google-Smtp-Source: AA6agR6xpVkKhZ8x+zIF0whAenQYv9jNsIv574ISUsr7qXKwexYM5ARUhkEF/k9AHq0yD20N/VrGTA==
+X-Received: by 2002:a17:90b:1e4f:b0:1f2:b482:bab9 with SMTP id pi15-20020a17090b1e4f00b001f2b482bab9mr1909636pjb.9.1659065466045;
+        Thu, 28 Jul 2022 20:31:06 -0700 (PDT)
+Received: from Kk1r0a.localdomain ([220.158.232.156])
+        by smtp.gmail.com with ESMTPSA id l1-20020a170902ec0100b0016d338160d6sm2145840pld.155.2022.07.28.20.30.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 20:31:05 -0700 (PDT)
+From:   Kuee K1r0a <liulin063@gmail.com>
+To:     ast@kernel.org
+Cc:     daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
         kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, william.gray@linaro.org, peterz@infradead.org,
-        mingo@redhat.com, will@kernel.org, longman@redhat.com,
-        boqun.feng@gmail.com, tglx@linutronix.de, bigeasy@linutronix.de,
-        kexec@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-cachefs@redhat.com
-Subject: Re: [PATCH v2] docs: Fix typo in comment
-Message-ID: <YuMzClsPIl47Ox5/@MiWiFi-R3L-srv>
-References: <YtlyDZEsOZHt6tRs@MiWiFi-R3L-srv>
- <20220721015605.20651-1-slark_xiao@163.com>
- <2778505.1658746506@warthog.procyon.org.uk>
- <Yt6bVIoRa0nIvxei@MiWiFi-R3L-srv>
- <55d366e4.486.1823808de32.Coremail.slark_xiao@163.com>
+        jolsa@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kuee K1r0a <liulin063@gmail.com>
+Subject: [PATCH bpf] bpf: Do more tight ALU bounds tracking
+Date:   Fri, 29 Jul 2022 11:30:33 +0800
+Message-Id: <20220729033033.3022-1-liulin063@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <55d366e4.486.1823808de32.Coremail.slark_xiao@163.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 07/26/22 at 09:04am, Slark Xiao wrote:
-> At 2022-07-25 21:32:04, "Baoquan He" <bhe@redhat.com> wrote:
-> >On 07/25/22 at 11:55am, David Howells wrote:
-> >> Baoquan He <bhe@redhat.com> wrote:
-> >> 
-> >> > sed -i "s/the the /the /g" `git grep -l "the the "`
-> >> 
-> >> You might want to clarify the first "the" with a preceding boundary marker.
-> >> There are some English words ending in "the" that can be used as verbs, though
-> >> I'm not sure you'd find any of them here - clothe for example.
-> >
-> >Right. I plan to split this big one into patches corresponding to
-> >different component as Jonathan suggested, and will consider how to mark
-> >the first 'the' as you suggested, and wrap Slark's pathces which
-> >includes typo fix of "then the".
-> >
-> >Thanks
-> >Baoquan
-> 
-> Actually I have committed all changes which were listed in your previous list.
-> I committed it one by one and checked if any other typo is included.
-> If possible, you can try other double typo issue like "and and " or "or or" or something else.
+32bit bounds and 64bit bounds are updated separately in
+adjust_scalar_min_max_vals() currently, let them learn from each other to
+get more tight bounds tracking. Similar operation can be found in
+reg_set_min_max().
 
-That's good, I take leave this week to be babysitter, please go ahead to
-handle all of them you found out.
+Before:
+
+    func#0 @0
+    0: R1=ctx(off=0,imm=0) R10=fp0
+    0: (b7) r0 = 0                        ; R0_w=0
+    1: (b7) r1 = 0                        ; R1_w=0
+    2: (87) r1 = -r1                      ; R1_w=scalar()
+    3: (87) r1 = -r1                      ; R1_w=scalar()
+    4: (c7) r1 s>>= 63                    ; R1_w=scalar(smin=-1,smax=0)
+    5: (07) r1 += 2                       ; R1_w=scalar(umin=1,umax=2,var_off=(0x0; 0xffffffff))  <--- [*]
+    6: (95) exit
+
+It can be seen that even if the 64bit bounds is clear here, the 32bit
+bounds is still in the state of 'UNKNOWN'.
+
+After:
+
+    func#0 @0
+    0: R1=ctx(off=0,imm=0) R10=fp0
+    0: (b7) r0 = 0                        ; R0_w=0
+    1: (b7) r1 = 0                        ; R1_w=0
+    2: (87) r1 = -r1                      ; R1_w=scalar()
+    3: (87) r1 = -r1                      ; R1_w=scalar()
+    4: (c7) r1 s>>= 63                    ; R1_w=scalar(smin=-1,smax=0)
+    5: (07) r1 += 2                       ; R1_w=scalar(umin=1,umax=2,var_off=(0x0; 0x3))  <--- [*]
+    6: (95) exit
+
+Fixes: 3f50f132d840 ("bpf: Verifier, do explicit ALU32 bounds tracking")
+Signed-off-by: Kuee K1r0a <liulin063@gmail.com>
+---
+ kernel/bpf/verifier.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 0efbac0fd126..888aa50fbdc0 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -8934,10 +8934,13 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
+ 		break;
+ 	}
+ 
+-	/* ALU32 ops are zero extended into 64bit register */
+-	if (alu32)
++	if (alu32) {
++		/* ALU32 ops are zero extended into 64bit register */
+ 		zext_32_to_64(dst_reg);
+-	reg_bounds_sync(dst_reg);
++		__reg_combine_32_into_64(dst_reg);
++	} else {
++		__reg_combine_64_into_32(dst_reg);
++	}
+ 	return 0;
+ }
+ 
+-- 
+2.25.1
 
