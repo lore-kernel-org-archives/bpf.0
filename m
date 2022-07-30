@@ -2,98 +2,110 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B9E7C25B07
-	for <bpf@archiver.kernel.org>; Sat, 30 Jul 2022 19:40:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DCCFC19F2A
+	for <bpf@archiver.kernel.org>; Sat, 30 Jul 2022 21:45:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235776AbiG3Tkq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 30 Jul 2022 15:40:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53628 "EHLO
+        id S233665AbiG3VpL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 30 Jul 2022 17:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235695AbiG3Tko (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 30 Jul 2022 15:40:44 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66485167EF;
-        Sat, 30 Jul 2022 12:40:42 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id F2F5A5C0095;
-        Sat, 30 Jul 2022 15:40:39 -0400 (EDT)
+        with ESMTP id S236125AbiG3VpK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 30 Jul 2022 17:45:10 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDD8B9B;
+        Sat, 30 Jul 2022 14:45:08 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0D99B5C00AB;
+        Sat, 30 Jul 2022 17:45:06 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Sat, 30 Jul 2022 15:40:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm2; t=1659210039; x=1659296439; bh=xOBsPksCdqcov7JXxKD8topM8
-        +c6rpsTvLZgx6AhQ0s=; b=lbHDM+gtO+eqKdhMcQ2TK2stBTVaKgo5REnFwDBaz
-        wYTlVojJDT96vX3RSS69TuvZSmUe/qfaayngWhJkUw8a35+fpEifr9N8J1A/z7BW
-        GlZiCySZ9BhkcOtmAKoaOPhFZtMSMcLjWnuZmVnm36gh7R3EyT0wE3yO8Q2n1OxT
-        TwjsU/s5m1eMejjafbqb2eNOohMdxwfJOfxxXE59+wribqQjW81TcPj+tBK0/gep
-        KxB0lwv1NMkdAR5qhfwR+5frxGGvG7nEsun2jWMejtSPnjaBcWPA8kW95O9tJfuM
-        c9HL5gwLEOGk7TfRbBE9/0KMCPcwKFvvmsmJPfCMQgZTg==
+  by compute3.internal (MEProxy); Sat, 30 Jul 2022 17:45:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
+        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1659217506; x=1659303906; bh=Eb5hutMmuL
+        E5GHhGStTcjZOsHjRPJtci8kgSP4tb0j8=; b=gONVT5kncx3PpM78LjSRH9xmkc
+        8mxKZtHi/l2tMiz1pQqQ+N2EtL2J8b14LRlWfvCu9TKSOgg09GTefNJSBoxDRmid
+        alEtIl/nJWGv8yXxfx/JQlNBhi6AhwzD+gNGpr4qnG98sns/6Kg5MZwaqjDW+I2z
+        X5GQzS1qseS9+Hu79a8wWDpyPUq5SYYgCTW0LqSZgUy9zTr9QXtzuU0LC8BZOn7C
+        ZIKNo3W4keTHhio3zgndjy5smgtUaC17P+uhu6mnhdZ/Z7QS1IrvQ7ZZGqZn1Xls
+        Qvx8EZ7ohuZAig+/y+ISNy848gAApRKdaxDIbqmknr5Z2tK2nlK34gsn6K1g==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1659210039; x=1659296439; bh=xOBsPksCdqcov7JXxKD8topM8+c6rpsTvLZ
-        gx6AhQ0s=; b=zL8KWZv4BMajxJCG+1mY/jjj99YJuqsuuu4qo9FD85NtuZQ66Np
-        jR2nYEYLp/Kmedp2dm7Dz7dwUn8p+Jmz4mxMg3PZLmC3SbxGUcVZ5GOAZ7rPwKh6
-        chvwoAWo7jbl8+EBCuRV20ylvcbm8MXuMYb5IJzPy3nBNXn9qcr847Rc4vOerxh6
-        F52nMvBkWxpv2WQXELQvxvKFRdQB3cIBR64aZ6DE4IbyCc0SZRt9c4revKmy6+4Z
-        jsifinUT/yJAgNIxiUSlBMi20uoIhxjvBX8qiioPrtlndq+gMX6t6HTCq8zZ32KS
-        BQQCO/timaM4aX8c9XWlSw+8kl1x4We+W3w==
-X-ME-Sender: <xms:N4nlYvtkxsJ3B-Ilkle6sJ0ha2hJO0McLpBy3lVTvXaukSsy25QfPw>
-    <xme:N4nlYgedjDY41wdBkF1hZqao6Dr4HJaHaAXbOOaAv-90HjdnjXpJM34c22KqoAA2k
-    srh_Gq3LlFgo7AkiQ>
-X-ME-Received: <xmr:N4nlYix-x1p2dytMk-O0W-OpOOa1WDUPIYkARgEcPlLlEMkj8bqsoyHxJu5rYNo465Hz4WM6vDx7>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdduledgudegudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdejtddmnecujfgurhephf
-    fvvefufffkofgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegu
-    gihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpedvgefgtefgleehhfeufe
-    ekuddvgfeuvdfhgeeljeduudfffffgteeuudeiieekjeenucevlhhushhtvghrufhiiigv
-    pedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:N4nlYuOsv5-84pfZOjPG-Rm6HMJwaD001Dv91X16qyzYsUS7xZ0XPw>
-    <xmx:N4nlYv9SeLHtHhgxn0D4GmTchuEfAdKntyocF8Tp5fXk_y-BI4OCCg>
-    <xmx:N4nlYuUMx9Dy6cAcBdO3RfcYcQauv3c8MHjcYYs0sZrpMpYmHitnhg>
-    <xmx:N4nlYqn4Z8OfMOYSN8zGCXvO8HcKLd4RvtElYhkxcwj_GclyVlFo3A>
-Feedback-ID: i6a694271:Fastmail
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1659217506; x=1659303906; bh=Eb5hutMmuLE5GHhGStTcjZOsHjRP
+        Jtci8kgSP4tb0j8=; b=saYt9nd86EQA5jROmQfJjnJVf2pJhxFE/13xrGANymuJ
+        uDquLrZW/MNLY25F9opBq3Hdl2tMjRjkmSFksf0zn6tP734nZgbZEZLnTjjnv/Yt
+        UBX6v4t1Es/ZyP6lO6sPFxq6VUmNVEhHljJFNgQp+3uDcblz/SwSZA2slPpPuUzf
+        Ry/im9MhyCh54AjYUPXVpXAj5i4DFLX8F1YVmcLFhzqYwJCxzWk6apErqT2+9/up
+        o+wBwRp4F7sfdauY/shH7wBP3WnChwp7LqJ+68FWVvWqnOeysvGjjo6G9OUfHDED
+        NyTTcWAbuJuKgTS6Wh8e+XZK6PZPn84JEDtQU8UpFw==
+X-ME-Sender: <xms:YablYjrBFvFZEflRUaS6AEINBwspuiFFEoWqw3jFRPNSFHho9JUfaQ>
+    <xme:YablYtp9uM1GYT3yt4bbt-UB2rde8JCPctp7zVYIBAaKhDn4pVKJGNNTexSNjFpJi
+    pQr4ZMpTtzgvbBttw>
+X-ME-Received: <xmr:YablYgPK92DvB-3Cuvq7k-zcF90YWZ6rO5FI7gPAVI8b5QaIQWyQX_ianaKvdTQswqmIPzQatrmU4PW4YwhW131ZTtfZr--IU6huEBLVoSu_5JyQfLdbxe8m9Dez>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvtddgtdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehnughr
+    vghsucfhrhgvuhhnugcuoegrnhgurhgvshesrghnrghrrgiivghlrdguvgeqnecuggftrf
+    grthhtvghrnhepvdfffeevhfetveffgeeiteefhfdtvdffjeevhfeuteegleduheetvedu
+    ieettddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghnughrvghssegrnhgrrhgriigvlhdruggv
+X-ME-Proxy: <xmx:YablYm4hpwK90T3BZr7bdPNwb4XZ0rzXEMHlWfnjaSTIEETlf_BMHw>
+    <xmx:YablYi7U3bon--SBVtVy9jbdL_6CtLUTHgEzx6O_HxsTtfvnL824uw>
+    <xmx:YablYuhHY9wiV8cFR5vfiErt3EYbWGWgHpSD0yb5lud3W-F84p6DyA>
+    <xmx:YqblYpYyBWa7EjjFBoMlcgBp0Uio75htJje4KPvLapUGqD_K3WUqCw>
+Feedback-ID: id4a34324:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 30 Jul 2022 15:40:38 -0400 (EDT)
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, memxor@gmail.com
-Cc:     Daniel Xu <dxu@dxuuu.xyz>, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 0/2] Add more bpf_*_ct_lookup() selftests
-Date:   Sat, 30 Jul 2022 14:40:28 -0500
-Message-Id: <cover.1659209738.git.dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.37.1
+ 30 Jul 2022 17:45:05 -0400 (EDT)
+Date:   Sat, 30 Jul 2022 14:45:04 -0700
+From:   Andres Freund <andres@anarazel.de>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Ben Hutchings <ben@decadent.org.uk>, sedat.dilek@gmail.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>
+Subject: Re: [PATCH v2 0/5] tools: fix compilation failure caused by
+ init_disassemble_info API changes
+Message-ID: <20220730214504.itq5cnypwpdpiwdn@awork3.anarazel.de>
+References: <20220622231624.t63bkmkzphqvh3kx@alap3.anarazel.de>
+ <20220703212551.1114923-1-andres@anarazel.de>
+ <CA+icZUVDzogiyG=8sCuxdW4aaby_kRwToit2tg-A4D3VorVKnA@mail.gmail.com>
+ <5afd3b45e9b95fa5023790c24f8a1b0b4ce1ca7c.camel@decadent.org.uk>
+ <20220715191641.go6xbmhic3kafcsc@awork3.anarazel.de>
+ <YuFeBEzSNMNwx47o@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YuFeBEzSNMNwx47o@kernel.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patchset adds more bpf_*_ct_lookup() selftests. The goal is to test
-interaction with netfilter subsystem as well as reading and writing from
-`struct nf_conn`. The first is important when migrating legacy systems
-towards bpf. The latter is important in general to take full advantage
-of connection tracking.
+Hi,
 
-This change will require two changes to BPF CI kconfig:
+On 2022-07-27 12:47:16 -0300, Arnaldo Carvalho de Melo wrote:
+> Em Fri, Jul 15, 2022 at 12:16:41PM -0700, Andres Freund escreveu:
+> > On 2022-07-14 15:25:44 +0200, Ben Hutchings wrote:
+> > > Thanks, I meant to send that fix upstream but got distracted.  It
+> > > should really be folded into "tools perf: Fix compilation error with
+> > > new binutils".
+> > 
+> > I'll try to send a new version out soon. I think the right process is to add
+> > Signed-off-by: Ben Hutchings <benh@debian.org>
+> > to the patch I squash it with?
+> 
+> Hi,
+> 
+> 	How is this going? Any new patch coming soon? :-)
 
-* CONFIG_NF_CONNTRACK_MARK=y
-* CONFIG_NETFILTER_XT_CONNMARK=y
+Sorry - had hoped to finish sending it out before my vacation (and then on the
+flight, but wifi didn't work...). Now back, will work on it asap.
 
-I can put up the PR if this patchset looks good.
+Greetings,
 
-Daniel Xu (2):
-  selftests/bpf: Add existing connection bpf_*_ct_lookup() test
-  selftests/bpf: Add connmark read/write test
-
- .../testing/selftests/bpf/prog_tests/bpf_nf.c | 60 +++++++++++++++++++
- .../testing/selftests/bpf/progs/test_bpf_nf.c | 21 +++++++
- 2 files changed, 81 insertions(+)
-
--- 
-2.37.1
-
+Andres Freund
