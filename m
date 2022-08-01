@@ -2,50 +2,50 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16A91C00140
-	for <bpf@archiver.kernel.org>; Mon,  1 Aug 2022 01:38:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EA44C19F2A
+	for <bpf@archiver.kernel.org>; Mon,  1 Aug 2022 01:38:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238768AbiHABim (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S238783AbiHABim (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Sun, 31 Jul 2022 21:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47998 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232372AbiHABil (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S238735AbiHABil (ORCPT <rfc822;bpf@vger.kernel.org>);
         Sun, 31 Jul 2022 21:38:41 -0400
 Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B4ECE3C;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D59D10B;
         Sun, 31 Jul 2022 18:38:40 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 466F93200564;
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 18EF03200488;
         Sun, 31 Jul 2022 21:38:37 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Sun, 31 Jul 2022 21:38:38 -0400
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Sun, 31 Jul 2022 21:38:37 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1659317916; x=1659404316; bh=vp
-        RNAfXL5V1zkx9Mm9VRQDJhTTBwYjQW/+wuIgKwrR4=; b=C/rVRaw3pMfjaDU97z
-        NV7nbF4UiODq23yETZyiKixJofijwcbLI5f7s5Ml7Eba0dFEWWoxfrB+GSC3Akqx
-        WyBS6180X3ke22n7tUPiVTdvFPrWCFkK+o44p36pbXXu+eBTbEF2Z7Lr7TpgJ1DI
-        FkSYthdmmV/tLkozMgoeDDuzah0wLScOsPuIUfoCbtm/yf756ovblYzLnmisAtOo
-        CkShatdjXohBy6xbWonR5BCcEBxKBVgZaqGvB2f/mZqLOY14aEgrQBxnwPgYQ7vy
-        OCgQdLRzHHJqxy7FUGBIS99KPgoqeiCbGKeOHbNEyzlC4vhFjbtnSvlWIUrXQnH5
-        YNRg==
+        :subject:subject:to:to; s=fm3; t=1659317916; x=1659404316; bh=Kw
+        EB0XSuZowjFupqaLWGnwmCrXRrnoFcU7ypZIYPRKA=; b=ZICyB0JaiDwyMguye1
+        XbE7GSE+iKm5DlkLYNqBmbA0R+9PM/7og1noZqhelyrKxdaexoIqIrH6TDGx9VCj
+        zcUqJPuq5HC423CAXt8JCxhtdzwdQZeOeHDYNTAPj5BsriQsFQoKUKk2FoUYO/eR
+        rBgsv+O6mTOrtwrVLh3vQt+eiudwdAp7RiVEte5VCcL4iP2H1Ozb5YfVmjyK5uBR
+        CT9SSKl5gHLS8pmq6WJS/MnjZamKKIh9xODjb3P5JEFcvtnOIT+yHNvqqNLT39eL
+        x24ijVEsadiKxmbyIbmuODzQ13991sQxkgKDDVbOMGEYyw9uzZ8+w8SiUgSP3WE5
+        HLHw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1659317916; x=1659404316; bh=vpRNAfXL5V1zk
-        x9Mm9VRQDJhTTBwYjQW/+wuIgKwrR4=; b=ZeeaYOJDJYE6CCjqV8mniAQm9DKH6
-        dYv2QCt/t0fnbOOkHzI/pH//dyn7jHndx5F43hdbRt/YSB9iICshrlMecAKpltEE
-        zp30WDego10UxvcWK/kVRQ9BctkiXA4gRqGYrE3nNQo128eVnclOEFolfD/UsVUQ
-        VDOCC6XKNgrutWUg5q+iEv9S5fwD4OQq4r/VRRDBjV55w4smQSX7M6CjYNxEgtZo
-        8zSs0TyOy50rmvKOc9+oxrN3ZdtlVjJEl/c8hLkKqVZ5nTCD8dRBuqXIpP3hEORk
-        ZmQfQ+ipa+xDtCfGiMqchnzwLpTDxofh1B+KcCw7J9G43eRVxS7dyH8Ew==
-X-ME-Sender: <xms:nC7nYlBO8La7XorR0d1gxOS-hooMcOMQZsUxrElU9QQbLFH9v4jraw>
-    <xme:nC7nYjhUY6QDP76LCaeiOn1amfYhwZQlvyVRnerzil2jq8XvljjLPr2fQE1OpNnnK
-    e7kRir4jrT2aNLSUQ>
-X-ME-Received: <xmr:nC7nYgmE9WY_wJw23cDVMAkamF_dCGml7Ylvo603laEyLjRMhoRAuAMj9WqxgfKF2nFYSIXxQyQCUefzIjTA2Et9iMDKyCtwqpOFE6ZSSoQFndFk6fmt54nocdi0>
+        :x-sasl-enc; s=fm3; t=1659317916; x=1659404316; bh=KwEB0XSuZowjF
+        upqaLWGnwmCrXRrnoFcU7ypZIYPRKA=; b=V/odDKolm4jQKEGcR6dsCavrAhH+x
+        CKQgm5OKUsbmeKz1J+BHEOyGWBVSLYygUIseOD2Us6Dy14gLz2E41U1e5YijUiIv
+        SG4Tlotk8kVtWzHv1Ctc8h7K74CpI6rbMEkFkp5sWZfGF7nNC3XAymJQhfgWwNYH
+        tazyzNY6djvchFlFvIYQySu7hZDSrn6mD3QMDGzog9W+9BiVdlPOpBZ+juBRmhtd
+        RulXzxqWkMHTh9q4n8ugvG5RcMFqwkS8BpdYjqCkGKIHDu4+bSx5LWByYqvPe6Vm
+        ims7wvIlGA8uRzaXkIlaU/FD5QnNgOgD6ePMhKmkvzoqhdx2gzzSKh+sg==
+X-ME-Sender: <xms:nC7nYmmEpxogtZEqL3Sl7dhOE5bYAfEQ7E3pnKxR4ODPfSsFKAdcig>
+    <xme:nC7nYt3SC0Ht1cSiAlLBsY4J79Vc17wfuijRJvjMP5GREO_B6pqmfhET9cwA0Othv
+    g0So5Qo6tV7Kr77uw>
+X-ME-Received: <xmr:nC7nYkqul1J0vYVGSS1oy0xxSTgQKoTW7pB_lUcW7C1b4RXRE6-wqGI9IXCigj8IYLGedMsf5HwGLyAyLAWlGzqhTg9kNrINWkHHYxB2EGuMq89_3sOGii8MTWFS>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvvddggedtucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -55,10 +55,10 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvvddggedtucetufdoteggod
     feeugeeinecuffhomhgrihhnpehsohhurhgtvgifrghrvgdrohhrghdpkhgvrhhnvghlrd
     horhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhep
     rghnughrvghssegrnhgrrhgriigvlhdruggv
-X-ME-Proxy: <xmx:nC7nYvy5WDb6OlAoIXb8FdaRiCgXzOv9v_S2oT1SQE9PiclKG7iatQ>
-    <xmx:nC7nYqRccxNffOlpDuwYEEzmwwo6FRPvTsGyBrpy7dqCLsFo12waag>
-    <xmx:nC7nYiZmcA3l8KUdFR2wN_tcJxUTMS0o6070FCAC6PUfx2LnLDjvOg>
-    <xmx:nC7nYpHnTXu3wd3Np36Ub1zwmXjohu0hhbdaBF_n0o4JIYRRcRRmrw>
+X-ME-Proxy: <xmx:nC7nYqkdR44YPFzkL78jcVenUQARuVYi40bh1adCcJtYwNy5mH3_SQ>
+    <xmx:nC7nYk07_Zo4_OQkTruSKmX0tmMrQZLH6gss3bd0i2BTmtVdsOfgsg>
+    <xmx:nC7nYhsK_HIzWKXO39gKt6d9gz55nY3kA6Jj2M2mwSbqRY5uVp7xXA>
+    <xmx:nC7nYurVkh5_GH29WNRhAN7myNEyNUD8OzWllHqRtgyoxzSGLLe1rg>
 Feedback-ID: id4a34324:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
  31 Jul 2022 21:38:36 -0400 (EDT)
@@ -70,12 +70,13 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Sedat Dilek <sedat.dilek@gmail.com>,
         Quentin Monnet <quentin@isovalent.com>,
         Ben Hutchings <benh@debian.org>
-Subject: [PATCH v3 0/8] tools: fix compilation failure caused by init_disassemble_info API changes
-Date:   Sun, 31 Jul 2022 18:38:26 -0700
-Message-Id: <20220801013834.156015-1-andres@anarazel.de>
+Subject: [PATCH v3 4/8] tools perf: Fix compilation error with new binutils
+Date:   Sun, 31 Jul 2022 18:38:30 -0700
+Message-Id: <20220801013834.156015-5-andres@anarazel.de>
 X-Mailer: git-send-email 2.37.0.3.g30cc8d0f14
-In-Reply-To: <20220622231624.t63bkmkzphqvh3kx@alap3.anarazel.de>
+In-Reply-To: <20220801013834.156015-1-andres@anarazel.de>
 References: <20220622231624.t63bkmkzphqvh3kx@alap3.anarazel.de>
+ <20220801013834.156015-1-andres@anarazel.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -83,80 +84,105 @@ List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 binutils changed the signature of init_disassemble_info(), which now causes
-compilation failures for tools/{perf,bpf} on e.g. debian unstable. Relevant
-binutils commit:
+compilation failures for tools/perf/util/annotate.c, e.g. on debian
+unstable. Relevant binutils commit:
 https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=60a3da00bd5407f07
 
-I first fixed this without introducing the compat header, as suggested by
-Quentin, but I thought the amount of repeated boilerplate was a bit too
-much. So instead I introduced a compat header to wrap the API changes. Even
-tools/bpf/bpftool/jit_disasm.c, which needs its own callbacks for json, imo
-looks nicer this way.
+Wire up the feature test and switch to init_disassemble_info_compat(),
+which were introduced in prior commits, fixing the compilation failure.
 
-I'm not regular contributor, so it very well might be my procedures are a
-bit off...
+I verified that perf can still disassemble bpf programs by using bpftrace
+under load, recording a perf trace, and then annotating the bpf "function"
+with and without the changes. With old binutils there's no change in output
+before/after this patch. When comparing the output from old binutils (2.35)
+to new bintuils with the patch (upstream snapshot) there are a few output
+differences, but they are unrelated to this patch. An example hunk is:
 
-I am not sure I added the right [number of] people to CC?
+     1.15 :   55:mov    %rbp,%rdx
+     0.00 :   58:add    $0xfffffffffffffff8,%rdx
+     0.00 :   5c:xor    %ecx,%ecx
+-    1.03 :   5e:callq  0xffffffffe12aca3c
++    1.03 :   5e:call   0xffffffffe12aca3c
+     0.00 :   63:xor    %eax,%eax
+-    2.18 :   65:leaveq
+-    2.82 :   66:retq
++    2.18 :   65:leave
++    2.82 :   66:ret
 
-WRT the feature test: Not sure what the point of the -DPACKAGE='"perf"' is,
-nor why tools/perf/Makefile.config sets some LDFLAGS/CFLAGS that are also
-in feature/Makefile and why -ldl isn't needed in the other places. But...
-
-V2:
-- split patches further, so that tools/bpf and tools/perf part are entirely
-  separate
-- included a bit more information about tests I did in commit messages
-- add a maybe_unused to fprintf_json_styled's style argument
-
-V3:
-- don't include dis-asm-compat.h when building without libbfd
-  (Ben Hutchings)
-- don't include compiler.h in dis-asm-compat.h, use (void) casts instead,
-  to avoid compiler.h include due to potential licensing conflict
-- dual-license dis-asm-compat.h, for better compatibility with the rest of
-  bpftool's code (suggested by Quentin Monnet)
-- don't display feature-disassembler-init-styled test
-  (suggested by Jiri Olsa)
-- don't display feature-disassembler-four-args test, I split this for the
-  different subsystems, but maybe that's overkill? (suggested by Jiri Olsa)
-
-Cc: Alexei Starovoitov <ast@kernel.org>
 Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
 Cc: Sedat Dilek <sedat.dilek@gmail.com>
-Cc: Quentin Monnet <quentin@isovalent.com>
-CC: Ben Hutchings <benh@debian.org>
-Cc: bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Link: https://lore.kernel.org/lkml/20220622181918.ykrs5rsnmx3og4sv@alap3.anarazel.de
-Link: https://lore.kernel.org/lkml/CA+icZUVpr8ZeOKCj4zMMqbFT013KJz2T1csvXg+VSkdvJH1Ubw@mail.gmail.com
+Link: http://lore.kernel.org/lkml/20220622181918.ykrs5rsnmx3og4sv@alap3.anarazel.de
+Signed-off-by: Andres Freund <andres@anarazel.de>
+---
+ tools/perf/Makefile.config | 8 ++++++++
+ tools/perf/util/annotate.c | 7 ++++---
+ 2 files changed, 12 insertions(+), 3 deletions(-)
 
-Andres Freund (8):
-  tools build: Add feature test for init_disassemble_info API changes
-  tools build: Don't display disassembler-four-args feature test
-  tools include: add dis-asm-compat.h to handle version differences
-  tools perf: Fix compilation error with new binutils
-  tools bpf_jit_disasm: Fix compilation error with new binutils
-  tools bpf_jit_disasm: Don't display disassembler-four-args feature
-    test
-  tools bpftool: Fix compilation error with new binutils
-  tools bpftool: Don't display disassembler-four-args feature test
-
- tools/bpf/Makefile                            |  7 ++-
- tools/bpf/bpf_jit_disasm.c                    |  5 +-
- tools/bpf/bpftool/Makefile                    |  8 ++-
- tools/bpf/bpftool/jit_disasm.c                | 42 +++++++++++---
- tools/build/Makefile.feature                  |  4 +-
- tools/build/feature/Makefile                  |  4 ++
- tools/build/feature/test-all.c                |  4 ++
- .../feature/test-disassembler-init-styled.c   | 13 +++++
- tools/include/tools/dis-asm-compat.h          | 55 +++++++++++++++++++
- tools/perf/Makefile.config                    |  8 +++
- tools/perf/util/annotate.c                    |  7 ++-
- 11 files changed, 138 insertions(+), 19 deletions(-)
- create mode 100644 tools/build/feature/test-disassembler-init-styled.c
- create mode 100644 tools/include/tools/dis-asm-compat.h
-
+diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+index 73e0762092fe..ee417c321adb 100644
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -298,6 +298,7 @@ FEATURE_CHECK_LDFLAGS-libpython := $(PYTHON_EMBED_LDOPTS)
+ FEATURE_CHECK_LDFLAGS-libaio = -lrt
+ 
+ FEATURE_CHECK_LDFLAGS-disassembler-four-args = -lbfd -lopcodes -ldl
++FEATURE_CHECK_LDFLAGS-disassembler-init-styled = -lbfd -lopcodes -ldl
+ 
+ CORE_CFLAGS += -fno-omit-frame-pointer
+ CORE_CFLAGS += -ggdb3
+@@ -905,13 +906,16 @@ ifndef NO_LIBBFD
+     ifeq ($(feature-libbfd-liberty), 1)
+       EXTLIBS += -lbfd -lopcodes -liberty
+       FEATURE_CHECK_LDFLAGS-disassembler-four-args += -liberty -ldl
++      FEATURE_CHECK_LDFLAGS-disassembler-init-styled += -liberty -ldl
+     else
+       ifeq ($(feature-libbfd-liberty-z), 1)
+         EXTLIBS += -lbfd -lopcodes -liberty -lz
+         FEATURE_CHECK_LDFLAGS-disassembler-four-args += -liberty -lz -ldl
++        FEATURE_CHECK_LDFLAGS-disassembler-init-styled += -liberty -lz -ldl
+       endif
+     endif
+     $(call feature_check,disassembler-four-args)
++    $(call feature_check,disassembler-init-styled)
+   endif
+ 
+   ifeq ($(feature-libbfd-buildid), 1)
+@@ -1025,6 +1029,10 @@ ifeq ($(feature-disassembler-four-args), 1)
+     CFLAGS += -DDISASM_FOUR_ARGS_SIGNATURE
+ endif
+ 
++ifeq ($(feature-disassembler-init-styled), 1)
++    CFLAGS += -DDISASM_INIT_STYLED
++endif
++
+ ifeq (${IS_64_BIT}, 1)
+   ifndef NO_PERF_READ_VDSO32
+     $(call feature_check,compile-32)
+diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
+index 82cc396ef516..2c6a485c3de5 100644
+--- a/tools/perf/util/annotate.c
++++ b/tools/perf/util/annotate.c
+@@ -1720,6 +1720,7 @@ static int dso__disassemble_filename(struct dso *dso, char *filename, size_t fil
+ #include <bpf/btf.h>
+ #include <bpf/libbpf.h>
+ #include <linux/btf.h>
++#include <tools/dis-asm-compat.h>
+ 
+ static int symbol__disassemble_bpf(struct symbol *sym,
+ 				   struct annotate_args *args)
+@@ -1762,9 +1763,9 @@ static int symbol__disassemble_bpf(struct symbol *sym,
+ 		ret = errno;
+ 		goto out;
+ 	}
+-	init_disassemble_info(&info, s,
+-			      (fprintf_ftype) fprintf);
+-
++	init_disassemble_info_compat(&info, s,
++				     (fprintf_ftype) fprintf,
++				     fprintf_styled);
+ 	info.arch = bfd_get_arch(bfdf);
+ 	info.mach = bfd_get_mach(bfdf);
+ 
 -- 
 2.37.0.3.g30cc8d0f14
 
