@@ -2,221 +2,128 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E29C6C19F2D
-	for <bpf@archiver.kernel.org>; Mon,  1 Aug 2022 01:38:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6A48C00140
+	for <bpf@archiver.kernel.org>; Mon,  1 Aug 2022 01:40:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238819AbiHABiu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 31 Jul 2022 21:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48032 "EHLO
+        id S238735AbiHABkt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 31 Jul 2022 21:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238779AbiHABim (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 31 Jul 2022 21:38:42 -0400
+        with ESMTP id S238949AbiHABkp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 31 Jul 2022 21:40:45 -0400
 Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FB711C04;
-        Sun, 31 Jul 2022 18:38:41 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 02122320070D;
-        Sun, 31 Jul 2022 21:38:39 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Sun, 31 Jul 2022 21:38:41 -0400
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93898120A6;
+        Sun, 31 Jul 2022 18:40:44 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 42D0C3200645;
+        Sun, 31 Jul 2022 21:40:43 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sun, 31 Jul 2022 21:40:43 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1659317919; x=1659404319; bh=oS
-        FTQojBZ/1qGNcUG/xxkjgz71sl82f+LgDJhWiGZqU=; b=pb3sFrip5okyDi1vzq
-        rFD56uavUvzVIs2skzmLy270uvhJbpu8kGI8xaZFis9UFlbRjZ15f+ujPF0aYjxA
-        QhoHz+3AZ1jypYhhAFkwi+Ehl/yD8MYbbugWaddPh+D60NVPw9sErWA0tdD6o9Oy
-        bUUrK+2j7QESs+gMuu+C4V/72OrkVGkTOu3edZ3WGF8x4fq/4JIVU6EGIsoVqUcH
-        cvI/3MeJcXCLXS/oxP5HsJBErzGAsUwsCrUO2EapCztBV89x7Up187hYKoVnF7Cg
-        uOaUhTX4LDe9z+UvOqHRj9eYAiqek1CuO6PUc6TCGCCpsfwWrzVjC0Xpq9vyZtMN
-        4cMQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1659317919; x=1659404319; bh=oSFTQojBZ/1qG
-        NcUG/xxkjgz71sl82f+LgDJhWiGZqU=; b=zXtAJJoKRiKCzdoRvahlX09cNLdj9
-        SPFFWVl01J8A83cBneacsWx+EV3Qaczjh5UuGMkVlUaS8Qqrpbrkyj7LGvSRklgM
-        qFzkZUAJg8apv+mcpyOX8qqCrBg6zXa8CWnHHdqVxhpUqjnE71/DuS7tQhjnlWUn
-        2vZHfgHaxvRasp7G1DZnc+dpXcCwXk95xlo9pqeQM74HMQ1svHMFAdPxt8SidoBV
-        N+9vnJwonnuPUFU0kYkLe5RNSzwDf+czjX1gvAaMHrGJNmip/hjDmoAuJ1oPyFgJ
-        crNabezgQGJLVnOl1rV0Hf0/h5bpYhgcs4f6bYJP5Dne5CcMJuEDp18XA==
-X-ME-Sender: <xms:ny7nYtYpP2i9r921-iEyEYC7DjKFBeE8SXvzPt8i--MeiyZ3-vXYRg>
-    <xme:ny7nYkYwuY_bwAXY8PIkAjgc4-rLF3fphdI2aLNqCEbq7B3sZhTFizs_iX-lCfqfD
-    hAl8NH9djwLtSOoxg>
-X-ME-Received: <xmr:ny7nYv_JIL9nZxrouzuSxipdhhLD71__jGIOcdBTFw5wGxSMTH9MArqzRsmWjHG1q-_MRjGHClnYzkUuCbQ2y79xg7yZFK2GRbaa8m2b2R33jUMM4gXlYJY8Ibfw>
+        :subject:to:to; s=fm3; t=1659318042; x=1659404442; bh=npawDv71rl
+        ZnJaxeFA6Ei4jvOJ58BYEfIDxUEn4gES0=; b=dzeidag36qYQQ75ErjaJGKWcJI
+        nT+Ua5mwJxEijSODxBWHWj0iJYBam5yGOHbwOB3y3qepqctMbQeSb4gc5VzSjrPn
+        v7PsBSr9zClGybsO0cDsuPp8knHtS0c3Bjv8mISSWHDNXSPaf0zoqmdSolXv9CMZ
+        NW9ir5TpT1JxbGwm4djrm86ITrXPMGzwuh+GELrJDoWSK78iusLRHP7o2CM9pbBw
+        qckbvUN2NAD87CXzLSP762moiqBN4H9PhLNGidMNiZ0qrvnBiihUqZ+nTFEu5u9g
+        CNj0XQAEngqkZvMNqKvQcvRjulQkeKcqi8tIpvKWy9NBpXo6sBnRNpWpwR4w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1659318042; x=1659404442; bh=npawDv71rlZnJaxeFA6Ei4jvOJ58
+        BYEfIDxUEn4gES0=; b=f6RMUcIz2ark+IhAivBbuFB0nLWO4w1T2+R/KPHLm/qG
+        pmeXPcDcvyvE6vAKx4qfljfGZuZpeVnD7n+XdoXyDx2z7q8PcIeM3ElxSOvBON3V
+        TyxYSjyaHngVndYxXmLbmPCc3AZGIjY0p9ok2wdADNYbZrj/6xpS7C0uk2Ddkp81
+        grLBujrt3PfIS/asedAOR/i0bVraUoDQ9JUdxDlacT6kxsLdb0mfXRTuGF9xeB4e
+        rDv8jUISu1hhfAsbpmkv9PEOm1UfX8y4hymOP++yr88Nhju3bqIbgOkg1QkN1vIg
+        0QH4LtExM58+ZzITPBqPhB0xcRFXFhH4El24Abf+yg==
+X-ME-Sender: <xms:Gi_nYj1D2Dpd1vxL-N_pKCRExbw1QJMTy78SAG7mDk6QJ3njisgtig>
+    <xme:Gi_nYiGLr4T7Qjm7ohVLWzeH2ipuUd2HTEehnpGnMcFIWYh4wwg_Bnxxl1CTvEAJu
+    kyX8m9rfJoKK9RsDQ>
+X-ME-Received: <xmr:Gi_nYj47ig3iqxrHPHswwcAC9d-KitKFl8CFhHRs6L6ec1E3dudkYOjiZ33ldkZzRZ9kRhYDuD6gUdGSfEs-1gJonLDJBDqKmKwi6jHWdzBq7Jo8lxB91c5rvIWt>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvvddggedtucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomheptehnughr
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehnughr
     vghsucfhrhgvuhhnugcuoegrnhgurhgvshesrghnrghrrgiivghlrdguvgeqnecuggftrf
-    grthhtvghrnhepleejgfdvfefhudektddtveegtdekieegffdtkeeljeetudevffeltdei
-    feeugeeinecuffhomhgrihhnpehsohhurhgtvgifrghrvgdrohhrghdpkhgvrhhnvghlrd
-    horhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhep
-    rghnughrvghssegrnhgrrhgriigvlhdruggv
-X-ME-Proxy: <xmx:ny7nYrqHaHSR4UCJJ_IPf3e82HvCe8BCmDvMHuyjB675Z3_kA2MUqQ>
-    <xmx:ny7nYoqqLiIeoNfkE0ee6WXg4RGwNav9ct1fnL-h1kNk7geOoTnwKA>
-    <xmx:ny7nYhQ1Nd9nNO6TjGAicgjmHVTN37P1Z3PIXPT0__5xwvmVf4CNcg>
-    <xmx:ny7nYpewwtahoNWuoeYXhRwKkDbLLawAEdMjRVYzlyYizYN0Pa-Zig>
+    grthhtvghrnhepleehhfelgfeggfejhedvtdfggeehgfevveetteegkefgteegffekkeev
+    jedufefhnecuffhomhgrihhnpehfvggrthhurhgvrdhinhenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrnhgurhgvshesrghnrghrrgiivghl
+    rdguvg
+X-ME-Proxy: <xmx:Gi_nYo1ZIJuCcBgAZ5NaR6X-ilTp4d3bs6rAgNHYeP9Qy_DfrZ0_6A>
+    <xmx:Gi_nYmGTei3pSggwbq_sXcyri3_6SHGyUYA7dgvNWUefGiuI6fA6gw>
+    <xmx:Gi_nYp-C7PnLYycSmZhwKeZzAI4KmForuqV0xpltlg3oGvsk0po7tw>
+    <xmx:Gi_nYjMlY2KfzTzrRSAkP4yNMu6xwArHkvAS6oNN_A9Ua6ZUdV-g_w>
 Feedback-ID: id4a34324:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 31 Jul 2022 21:38:38 -0400 (EDT)
+ 31 Jul 2022 21:40:42 -0400 (EDT)
+Date:   Sun, 31 Jul 2022 18:40:41 -0700
 From:   Andres Freund <andres@anarazel.de>
-To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
         Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Jiri Olsa <jolsa@kernel.org>,
         Sedat Dilek <sedat.dilek@gmail.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Ben Hutchings <benh@debian.org>
-Subject: [PATCH v3 7/8] tools bpftool: Fix compilation error with new binutils
-Date:   Sun, 31 Jul 2022 18:38:33 -0700
-Message-Id: <20220801013834.156015-8-andres@anarazel.de>
-X-Mailer: git-send-email 2.37.0.3.g30cc8d0f14
-In-Reply-To: <20220801013834.156015-1-andres@anarazel.de>
+        Quentin Monnet <quentin@isovalent.com>
+Subject: Re: [PATCH v2 0/5] tools: fix compilation failure caused by
+ init_disassemble_info API changes
+Message-ID: <20220801014041.24jvobsooyyddvjb@awork3.anarazel.de>
 References: <20220622231624.t63bkmkzphqvh3kx@alap3.anarazel.de>
- <20220801013834.156015-1-andres@anarazel.de>
+ <20220703212551.1114923-1-andres@anarazel.de>
+ <YsKvPW+1RkVvq8aX@krava>
+ <20220704201922.pvrh4cmmjxjn4mkx@awork3.anarazel.de>
+ <YsNl1XdEuxvqb3vx@krava>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YsNl1XdEuxvqb3vx@krava>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-binutils changed the signature of init_disassemble_info(), which now causes
-compilation to fail for tools/bpf/bpftool/jit_disasm.c, e.g. on debian
-unstable. Relevant binutils commit:
-https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=60a3da00bd5407f07
+Hi,
 
-Wire up the feature test and switch to init_disassemble_info_compat(),
-which were introduced in prior commits, fixing the compilation failure.
+On 2022-07-05 00:12:37 +0200, Jiri Olsa wrote:
+> On Mon, Jul 04, 2022 at 01:19:22PM -0700, Andres Freund wrote:
+> > > diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+> > > index ee417c321adb..2aa0bad11f05 100644
+> > > --- a/tools/perf/Makefile.config
+> > > +++ b/tools/perf/Makefile.config
+> > > @@ -914,8 +914,6 @@ ifndef NO_LIBBFD
+> > >          FEATURE_CHECK_LDFLAGS-disassembler-init-styled += -liberty -lz -ldl
+> > >        endif
+> > >      endif
+> > > -    $(call feature_check,disassembler-four-args)
+> > > -    $(call feature_check,disassembler-init-styled)
+> > >    endif
+> > >
+> > >    ifeq ($(feature-libbfd-buildid), 1)
+> > > @@ -1025,6 +1023,9 @@ ifdef HAVE_KVM_STAT_SUPPORT
+> > >      CFLAGS += -DHAVE_KVM_STAT_SUPPORT
+> > >  endif
+> > >
+> > > +$(call feature_check,disassembler-four-args)
+> > > +$(call feature_check,disassembler-init-styled)
+> > > +
+> > >  ifeq ($(feature-disassembler-four-args), 1)
+> > >      CFLAGS += -DDISASM_FOUR_ARGS_SIGNATURE
+> > >  endif
+> >
+> > This I don't understand - why do we want these to run under NO_LIBBFD etc?
+>
+> when I was quickly testing that I did not have any of them detected
+> and got compile fail.. so I moved it to safe place ;-) it might be
+> placed in smarter place
 
-I verified that bpftool can still disassemble bpf programs, both with an
-old and new dis-asm.h API. There are no output changes for plain and json
-formats. When comparing the output from old binutils (2.35)
-to new bintuils with the patch (upstream snapshot) there are a few output
-differences, but they are unrelated to this patch. An example hunk is:
-   2f:	pop    %r14
-   31:	pop    %r13
-   33:	pop    %rbx
--  34:	leaveq
--  35:	retq
-+  34:	leave
-+  35:	ret
+I think that's because you'd removed them from FEATURE_TESTS_BASIC in
+Makefile.feature. In v3 I just sent out I just removed them from
+FEATURE_DISPLAY, without any more "structural" changes in
+tools/perf/Makefile.config. 
 
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Sedat Dilek <sedat.dilek@gmail.com>
-Cc: Quentin Monnet <quentin@isovalent.com>
-Link: http://lore.kernel.org/lkml/20220622181918.ykrs5rsnmx3og4sv@alap3.anarazel.de
-Signed-off-by: Andres Freund <andres@anarazel.de>
----
- tools/bpf/bpftool/Makefile     |  5 +++-
- tools/bpf/bpftool/jit_disasm.c | 42 +++++++++++++++++++++++++++-------
- 2 files changed, 38 insertions(+), 9 deletions(-)
+Greetings,
 
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index c6d2c77d0252..436e671b2657 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -93,7 +93,7 @@ INSTALL ?= install
- RM ?= rm -f
- 
- FEATURE_USER = .bpftool
--FEATURE_TESTS = libbfd disassembler-four-args zlib libcap \
-+FEATURE_TESTS = libbfd disassembler-four-args disassembler-init-styled zlib libcap \
- 	clang-bpf-co-re
- FEATURE_DISPLAY = libbfd disassembler-four-args zlib libcap \
- 	clang-bpf-co-re
-@@ -117,6 +117,9 @@ endif
- ifeq ($(feature-disassembler-four-args), 1)
- CFLAGS += -DDISASM_FOUR_ARGS_SIGNATURE
- endif
-+ifeq ($(feature-disassembler-init-styled), 1)
-+    CFLAGS += -DDISASM_INIT_STYLED
-+endif
- 
- LIBS = $(LIBBPF) -lelf -lz
- LIBS_BOOTSTRAP = $(LIBBPF_BOOTSTRAP) -lelf -lz
-diff --git a/tools/bpf/bpftool/jit_disasm.c b/tools/bpf/bpftool/jit_disasm.c
-index 24734f2249d6..aaf99a0168c9 100644
---- a/tools/bpf/bpftool/jit_disasm.c
-+++ b/tools/bpf/bpftool/jit_disasm.c
-@@ -24,6 +24,7 @@
- #include <sys/stat.h>
- #include <limits.h>
- #include <bpf/libbpf.h>
-+#include <tools/dis-asm-compat.h>
- 
- #include "json_writer.h"
- #include "main.h"
-@@ -39,15 +40,12 @@ static void get_exec_path(char *tpath, size_t size)
- }
- 
- static int oper_count;
--static int fprintf_json(void *out, const char *fmt, ...)
-+static int printf_json(void *out, const char *fmt, va_list ap)
- {
--	va_list ap;
- 	char *s;
- 	int err;
- 
--	va_start(ap, fmt);
- 	err = vasprintf(&s, fmt, ap);
--	va_end(ap);
- 	if (err < 0)
- 		return -1;
- 
-@@ -73,6 +71,32 @@ static int fprintf_json(void *out, const char *fmt, ...)
- 	return 0;
- }
- 
-+static int fprintf_json(void *out, const char *fmt, ...)
-+{
-+	va_list ap;
-+	int r;
-+
-+	va_start(ap, fmt);
-+	r = printf_json(out, fmt, ap);
-+	va_end(ap);
-+
-+	return r;
-+}
-+
-+static int fprintf_json_styled(void *out,
-+			       enum disassembler_style style __maybe_unused,
-+			       const char *fmt, ...)
-+{
-+	va_list ap;
-+	int r;
-+
-+	va_start(ap, fmt);
-+	r = printf_json(out, fmt, ap);
-+	va_end(ap);
-+
-+	return r;
-+}
-+
- void disasm_print_insn(unsigned char *image, ssize_t len, int opcodes,
- 		       const char *arch, const char *disassembler_options,
- 		       const struct btf *btf,
-@@ -99,11 +123,13 @@ void disasm_print_insn(unsigned char *image, ssize_t len, int opcodes,
- 	assert(bfd_check_format(bfdf, bfd_object));
- 
- 	if (json_output)
--		init_disassemble_info(&info, stdout,
--				      (fprintf_ftype) fprintf_json);
-+		init_disassemble_info_compat(&info, stdout,
-+					     (fprintf_ftype) fprintf_json,
-+					     fprintf_json_styled);
- 	else
--		init_disassemble_info(&info, stdout,
--				      (fprintf_ftype) fprintf);
-+		init_disassemble_info_compat(&info, stdout,
-+					     (fprintf_ftype) fprintf,
-+					     fprintf_styled);
- 
- 	/* Update architecture info for offload. */
- 	if (arch) {
--- 
-2.37.0.3.g30cc8d0f14
-
+Andres Freund
