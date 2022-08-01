@@ -2,50 +2,50 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96658C19F2A
-	for <bpf@archiver.kernel.org>; Mon,  1 Aug 2022 01:38:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8B94C00140
+	for <bpf@archiver.kernel.org>; Mon,  1 Aug 2022 01:38:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238807AbiHABip (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 31 Jul 2022 21:38:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48024 "EHLO
+        id S238562AbiHABir (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 31 Jul 2022 21:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238765AbiHABil (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 31 Jul 2022 21:38:41 -0400
+        with ESMTP id S238770AbiHABim (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 31 Jul 2022 21:38:42 -0400
 Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C16BD118;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08FA11A08;
         Sun, 31 Jul 2022 18:38:41 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 0FD61320077A;
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 021123200754;
         Sun, 31 Jul 2022 21:38:39 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Sun, 31 Jul 2022 21:38:40 -0400
+  by compute3.internal (MEProxy); Sun, 31 Jul 2022 21:38:41 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1659317919; x=1659404319; bh=rD
-        7/11Zj88Bzau+Vwi4eZX1L45MuyWwCwsxlNl9bPbo=; b=O9dsZiya22K/CCej90
-        Cq8/IEDMFgPUag4IhOP3cDes6/uEl4K5BaC2oNvcNw4ONIDXI76k7C9Xv6fL/PhC
-        v2vOXHvAv8l8NSvjgRkk1YV9H0RuiR/CL4P92rHj1faQuH2oqULZBG9zIadd3rjI
-        t0C2ZtA/t6zAWaSVNyixIaZgS7s6OCYVVgHxo6797VvSAcCQESkC8nk8dbpR1LBY
-        1+IbXDLqvdZ1XtCu0yKqWhkpC5mUHt4axk43VeGXqySZi/diVNkZ1LZt34ftA/5k
-        E90HQiLOwVWPWJNmc6Z0f9WOrGa4RgiOnCfulQCvV3y4FyTPdzNL7Q3mcUV7QMyU
-        B9UQ==
+        :subject:subject:to:to; s=fm3; t=1659317919; x=1659404319; bh=6n
+        KfbW0v7Y4ArSpwOn82/9CJJgLYAvDqGhJ+A2bxllE=; b=S80hUbKnDlCs5USsr8
+        Hf4qml0BxyECU/jxcok4qIV6+PVzahIaoVATXlFrQuXOSgfJ0QZMofbGz6i+Rsic
+        ugcgY/w4vA3ChjlTSOCCaHZmzgH4crleqNvXInS28ShnrCCM2gsKT6MmV1QPNugb
+        g6Ewv/xz9EFtHglHoBc1se92piDaurQYi9So113BVIcAtyfXHAyWEzeIZa+YuNLj
+        /LA4pvEvP45u0yAgTs0R+2oJTP9zXkWC0oOeIGJyWU0k7wluIeEWBVoigLdNDXOx
+        YqWmG9xBwHHL/0G5VN1ClTicFCPTkUXi1UgACaP4NUYoKI2PRPskdCX1lmLhQPOg
+        yilg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1659317919; x=1659404319; bh=rD7/11Zj88Bza
-        u+Vwi4eZX1L45MuyWwCwsxlNl9bPbo=; b=sp1Z2nGdxv4sx0AYKoO8u8M0Cio12
-        tAasnqd1WoQ67MyQ2hABZz85PZAhwEzmiqeIx+HH4IKZ4RG4DFLA9SHDQw0PhqaR
-        27DtggW/j9xkDL60xELIbwmJDgQzTsdyJ/2o9s5nYvka2qXjvOH4y+F/sa26fV92
-        E61uzA2MXqvMqXmVy7bdPRub+m1DWT7TWzFQ/QSVfFksrDZqY30KE/TqwZjFQ9FP
-        0V9ERXC03ArPHe4yGIn2LPqFtNWwr7AkaflE0VZ7L5kA8uziToVTbJHU1nxtRJB+
-        7MpqCo6j5JHP7AaViTKuas9ILeVYBeCLstKVwqebveLCX3ihW/58O3fdw==
-X-ME-Sender: <xms:ny7nYsQWO4InSOu46Eo-byMlNJzwqyBFOC8th9-3GnFfAzWHboBAGA>
-    <xme:ny7nYpzlQsYwJNu43DEmGJKlEXmGHAAQK28niWHHHnC9-uUEwZw_FTcL1Exv0gEMJ
-    FDTeBsoWYNETA6-AQ>
-X-ME-Received: <xmr:ny7nYp1D9m9A7HQMvMC0XwLJxA6zqo6GbZHOJS7XUDTEmfAnF6Lt13b0sb5hTtnwxAAIIXrSwpC7VXAQwMbjQGrLCloZ6XZ83GNF07IdRJ9Yr3h1JkA89TmLUD9O>
+        :x-sasl-enc; s=fm3; t=1659317919; x=1659404319; bh=6nKfbW0v7Y4Ar
+        SpwOn82/9CJJgLYAvDqGhJ+A2bxllE=; b=KmbnfcWyoxtdB7bJz/kToIkcS///6
+        P9n5Rs1Tev189tItvn3Rx0nI+dKkiaIcQ6tiB0rU7ngEGAhCtu8SCT0KbqY/yiq9
+        XojJREcelboZn1M7abcAxJIijljyapu/iZKhOmJndX3034SSogYIcmJqkK4eq+pi
+        N2g0cfI6HSjJtIlktrqBhBY8RZtrh0UmtQhBEyYSoQvC6kL0ou4F6m61FxIdbchQ
+        vnPoVt272g9oPLoVrf1s8T106mnUyg1ulPqMvjepuO2sbLQ2czfLkrL0MAJVYPKU
+        LRxTqnpmSloeZn1Gg/4EEGkg0pEZRCGoUXK2ejezRWirHsWxgz+98pUKQ==
+X-ME-Sender: <xms:ny7nYkE385Ry_XV-uRF8k1W674TW0l-Xp-dezVU6nMSPUjYydP6swQ>
+    <xme:ny7nYtUIFYU008T8abL63s8nIWdJ-hIjVi5mxEe2Lj2KcYNbTjXj_5yy5SzDk4xKs
+    yaVqQSFucMEn3Fpag>
+X-ME-Received: <xmr:ny7nYuJ4oGElVijAPonH8aiD6hy6TIaa580ZnywTdpdiF7ttwI7LSrLoP94waaE80z7G2MuPFplfELI5yvRZf_aaR926cV1b9ojVy7xdhDxC2sR2Uyd6tBGd0xfk>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvvddggedtucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -55,10 +55,10 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvvddggedtucetufdoteggod
     udejfffhnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
     gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrnhgurhgvshesrghnrghrrgiivghl
     rdguvg
-X-ME-Proxy: <xmx:ny7nYgBEOawl65or0wqzvaIbzjurzR5AEYVdOoQ1ZSSWbIG8T2mb0w>
-    <xmx:ny7nYli4vbP_OG6LIFIctqMfr3VshxKblmTSevqZbsxC6ApPH3nV3g>
-    <xmx:ny7nYsopbb3KR8wIEG7M2bV1YQBDDYtASqNKkSGjx1Vd1SPyx8bd2Q>
-    <xmx:ny7nYtgO4VlMiFWArA1elH-h2wDG_LUL10wCvsgxFZA2blFrVb7MyA>
+X-ME-Proxy: <xmx:ny7nYmHwKW-4AjNeIo9IvDJaC4pvGTX6ZLAaznu_S0OlKJnzRi0tHw>
+    <xmx:ny7nYqVDgvYoM7lH6GVmEf4K2YMH9ocqa3lXx2nEV7hOSDp4kSzadg>
+    <xmx:ny7nYpOnP_Ed98_nzSuZoUWRgkzsafVstw8NDa98JEK6N-U68Um8eg>
+    <xmx:ny7nYsLuEM3pl97nq-iaYUAYItzc2mRPALeoBgpzq2jR9i56zNS8JQ>
 Feedback-ID: id4a34324:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
  31 Jul 2022 21:38:38 -0400 (EDT)
@@ -69,11 +69,10 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Jiri Olsa <jolsa@kernel.org>,
         Sedat Dilek <sedat.dilek@gmail.com>,
         Quentin Monnet <quentin@isovalent.com>,
-        Ben Hutchings <benh@debian.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH v3 6/8] tools bpf_jit_disasm: Don't display disassembler-four-args feature test
-Date:   Sun, 31 Jul 2022 18:38:32 -0700
-Message-Id: <20220801013834.156015-7-andres@anarazel.de>
+        Ben Hutchings <benh@debian.org>
+Subject: [PATCH v3 8/8] tools bpftool: Don't display disassembler-four-args feature test
+Date:   Sun, 31 Jul 2022 18:38:34 -0700
+Message-Id: <20220801013834.156015-9-andres@anarazel.de>
 X-Mailer: git-send-email 2.37.0.3.g30cc8d0f14
 In-Reply-To: <20220801013834.156015-1-andres@anarazel.de>
 References: <20220622231624.t63bkmkzphqvh3kx@alap3.anarazel.de>
@@ -84,33 +83,33 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The feature check does not seem important enough to display. Suggested by
+The feature check does not seem important enough to display. Requested by
 Jiri Olsa.
 
 Cc: Jiri Olsa <jolsa@kernel.org>
 Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
 Cc: Sedat Dilek <sedat.dilek@gmail.com>
 Cc: Quentin Monnet <quentin@isovalent.com>
 Link: http://lore.kernel.org/lkml/20220622181918.ykrs5rsnmx3og4sv@alap3.anarazel.de
 Signed-off-by: Andres Freund <andres@anarazel.de>
 ---
- tools/bpf/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/bpf/bpftool/Makefile | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/tools/bpf/Makefile b/tools/bpf/Makefile
-index 664601ab1705..243b79f2b451 100644
---- a/tools/bpf/Makefile
-+++ b/tools/bpf/Makefile
-@@ -35,7 +35,7 @@ endif
- 
- FEATURE_USER = .bpf
- FEATURE_TESTS = libbfd disassembler-four-args disassembler-init-styled
--FEATURE_DISPLAY = libbfd disassembler-four-args
-+FEATURE_DISPLAY = libbfd
+diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+index 436e671b2657..517df016d54a 100644
+--- a/tools/bpf/bpftool/Makefile
++++ b/tools/bpf/bpftool/Makefile
+@@ -95,8 +95,7 @@ RM ?= rm -f
+ FEATURE_USER = .bpftool
+ FEATURE_TESTS = libbfd disassembler-four-args disassembler-init-styled zlib libcap \
+ 	clang-bpf-co-re
+-FEATURE_DISPLAY = libbfd disassembler-four-args zlib libcap \
+-	clang-bpf-co-re
++FEATURE_DISPLAY = libbfd zlib libcap clang-bpf-co-re
  
  check_feat := 1
- NON_CHECK_FEAT_TARGETS := clean bpftool_clean runqslower_clean resolve_btfids_clean
+ NON_CHECK_FEAT_TARGETS := clean uninstall doc doc-clean doc-install doc-uninstall
 -- 
 2.37.0.3.g30cc8d0f14
 
