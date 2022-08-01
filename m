@@ -2,50 +2,50 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6F33C00140
-	for <bpf@archiver.kernel.org>; Mon,  1 Aug 2022 01:38:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96658C19F2A
+	for <bpf@archiver.kernel.org>; Mon,  1 Aug 2022 01:38:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238800AbiHABio (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 31 Jul 2022 21:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48014 "EHLO
+        id S238807AbiHABip (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 31 Jul 2022 21:38:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238763AbiHABil (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S238765AbiHABil (ORCPT <rfc822;bpf@vger.kernel.org>);
         Sun, 31 Jul 2022 21:38:41 -0400
 Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352FFD117;
-        Sun, 31 Jul 2022 18:38:40 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 89CD43200657;
-        Sun, 31 Jul 2022 21:38:37 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C16BD118;
+        Sun, 31 Jul 2022 18:38:41 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 0FD61320077A;
+        Sun, 31 Jul 2022 21:38:39 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Sun, 31 Jul 2022 21:38:38 -0400
+  by compute4.internal (MEProxy); Sun, 31 Jul 2022 21:38:40 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1659317916; x=1659404316; bh=dV
-        c9P++/u7qpDN8YdVfqt3p7KluPysUuZhmsQzEDFw4=; b=foAdVuru3iETy4FWr2
-        vCW7fzK5U2czaPK9CwCLTo0yDTjCjPqlgRDkD0+/2CLRa3AHDGDcx/kHE8zFnvr+
-        DmS8VZA2WGj3pmWAQM524ACeQlW38CfkRi7Qt3tpmNpmVn1RhqwrH5cXLFcCUztK
-        Ln718HRHlMWb+I4sCpcM0oxxh76oShGccsD2jXEnjYtvvByjYnaRCspZFFdhdUub
-        IxBiJDCtruRwhrV2U6V3L5vAyi36Op9RKZBKBMZPRzLVY3oyWdUa82vaBbLAKHYU
-        eyrSZJB1P/tfQtFhBx3Kn/T5Yk20QjhxYekGP9ceAwjWBPzi0HpodUn5Ic2VuQDu
-        FJ+A==
+        :subject:subject:to:to; s=fm3; t=1659317919; x=1659404319; bh=rD
+        7/11Zj88Bzau+Vwi4eZX1L45MuyWwCwsxlNl9bPbo=; b=O9dsZiya22K/CCej90
+        Cq8/IEDMFgPUag4IhOP3cDes6/uEl4K5BaC2oNvcNw4ONIDXI76k7C9Xv6fL/PhC
+        v2vOXHvAv8l8NSvjgRkk1YV9H0RuiR/CL4P92rHj1faQuH2oqULZBG9zIadd3rjI
+        t0C2ZtA/t6zAWaSVNyixIaZgS7s6OCYVVgHxo6797VvSAcCQESkC8nk8dbpR1LBY
+        1+IbXDLqvdZ1XtCu0yKqWhkpC5mUHt4axk43VeGXqySZi/diVNkZ1LZt34ftA/5k
+        E90HQiLOwVWPWJNmc6Z0f9WOrGa4RgiOnCfulQCvV3y4FyTPdzNL7Q3mcUV7QMyU
+        B9UQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1659317916; x=1659404316; bh=dVc9P++/u7qpD
-        N8YdVfqt3p7KluPysUuZhmsQzEDFw4=; b=UVRAmjU0y2ASWjXq6mgqu1H+5uCag
-        UHnfOps0MrFz7aSRMSX4rYBXFXRiueHV3n3Yj75s+sGAJG1MZvxCL3v+y5ZMyQ2m
-        C19XSGHCuNBfTnOOHXbT1D5rfQNsrqXw+leLjBJ2enUuK5I6bSBgAXuKULIQpvZU
-        D1xRKhLy28alRe8rJOa1H39xM18tdqvkT3R+8wCnGj9D2CZIeCOsQRvewEuOpx/F
-        5cgpmBOUVdAK9CZpqcELGBhg+7pBYEAcosIlnQZ6ARcQCcUdo1JNbL6ZcDpLwtY0
-        hclzScYCLEbkzdWLJeRQpDVbQqCGsqtUNk276eXOJT2W92JFeCeqNAz+g==
-X-ME-Sender: <xms:nC7nYnjYamhK0M0qJz9-UyuKGb3yLk9Um-NAYip_zO8D3N9W7U2YiA>
-    <xme:nC7nYkAXkFpUaAlmQ6nHn7zjVFoMpnXbe3BqDD56vrR_-oUd7CwkLmDVXTCFpuLkh
-    GdOMTGImYHCZNqmZg>
-X-ME-Received: <xmr:nC7nYnG-neouc1lhmU7NrRRb8C0aUnZyN3hQnxO_vIzBexsdQbakEAlkSkWcgZFnPvQIAALqHGKWs7zBkcn0dHQ4q-uLcGZQcTAhTTA50ZMsgPbyhzf5DJl1BC2P>
+        :x-sasl-enc; s=fm3; t=1659317919; x=1659404319; bh=rD7/11Zj88Bza
+        u+Vwi4eZX1L45MuyWwCwsxlNl9bPbo=; b=sp1Z2nGdxv4sx0AYKoO8u8M0Cio12
+        tAasnqd1WoQ67MyQ2hABZz85PZAhwEzmiqeIx+HH4IKZ4RG4DFLA9SHDQw0PhqaR
+        27DtggW/j9xkDL60xELIbwmJDgQzTsdyJ/2o9s5nYvka2qXjvOH4y+F/sa26fV92
+        E61uzA2MXqvMqXmVy7bdPRub+m1DWT7TWzFQ/QSVfFksrDZqY30KE/TqwZjFQ9FP
+        0V9ERXC03ArPHe4yGIn2LPqFtNWwr7AkaflE0VZ7L5kA8uziToVTbJHU1nxtRJB+
+        7MpqCo6j5JHP7AaViTKuas9ILeVYBeCLstKVwqebveLCX3ihW/58O3fdw==
+X-ME-Sender: <xms:ny7nYsQWO4InSOu46Eo-byMlNJzwqyBFOC8th9-3GnFfAzWHboBAGA>
+    <xme:ny7nYpzlQsYwJNu43DEmGJKlEXmGHAAQK28niWHHHnC9-uUEwZw_FTcL1Exv0gEMJ
+    FDTeBsoWYNETA6-AQ>
+X-ME-Received: <xmr:ny7nYp1D9m9A7HQMvMC0XwLJxA6zqo6GbZHOJS7XUDTEmfAnF6Lt13b0sb5hTtnwxAAIIXrSwpC7VXAQwMbjQGrLCloZ6XZ83GNF07IdRJ9Yr3h1JkA89TmLUD9O>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvvddggedtucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -55,13 +55,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvvddggedtucetufdoteggod
     udejfffhnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
     gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrnhgurhgvshesrghnrghrrgiivghl
     rdguvg
-X-ME-Proxy: <xmx:nC7nYkQIU3FELKpzdbueN4mOzZZFWmV_h33ghPg5xeE75C2m8iDTug>
-    <xmx:nC7nYkxhu6wnTw1XiH_7-OJKu5mXwy9OUO6qMEUllSrlachBYNXwnQ>
-    <xmx:nC7nYq5RKQCSOovFLsgml1T7nKqa-_79nHOmcEa8bPr_ehc_32dDJw>
-    <xmx:nC7nYrlLnxq3M8TG7dlQdnWmP6HvBxVWE_8HcxMotV_KbLVXH-OIQA>
+X-ME-Proxy: <xmx:ny7nYgBEOawl65or0wqzvaIbzjurzR5AEYVdOoQ1ZSSWbIG8T2mb0w>
+    <xmx:ny7nYli4vbP_OG6LIFIctqMfr3VshxKblmTSevqZbsxC6ApPH3nV3g>
+    <xmx:ny7nYsopbb3KR8wIEG7M2bV1YQBDDYtASqNKkSGjx1Vd1SPyx8bd2Q>
+    <xmx:ny7nYtgO4VlMiFWArA1elH-h2wDG_LUL10wCvsgxFZA2blFrVb7MyA>
 Feedback-ID: id4a34324:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 31 Jul 2022 21:38:36 -0400 (EDT)
+ 31 Jul 2022 21:38:38 -0400 (EDT)
 From:   Andres Freund <andres@anarazel.de>
 To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -69,10 +69,11 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Jiri Olsa <jolsa@kernel.org>,
         Sedat Dilek <sedat.dilek@gmail.com>,
         Quentin Monnet <quentin@isovalent.com>,
-        Ben Hutchings <benh@debian.org>
-Subject: [PATCH v3 2/8] tools build: Don't display disassembler-four-args feature test
-Date:   Sun, 31 Jul 2022 18:38:28 -0700
-Message-Id: <20220801013834.156015-3-andres@anarazel.de>
+        Ben Hutchings <benh@debian.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH v3 6/8] tools bpf_jit_disasm: Don't display disassembler-four-args feature test
+Date:   Sun, 31 Jul 2022 18:38:32 -0700
+Message-Id: <20220801013834.156015-7-andres@anarazel.de>
 X-Mailer: git-send-email 2.37.0.3.g30cc8d0f14
 In-Reply-To: <20220801013834.156015-1-andres@anarazel.de>
 References: <20220622231624.t63bkmkzphqvh3kx@alap3.anarazel.de>
@@ -88,29 +89,28 @@ Jiri Olsa.
 
 Cc: Jiri Olsa <jolsa@kernel.org>
 Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
 Cc: Sedat Dilek <sedat.dilek@gmail.com>
 Cc: Quentin Monnet <quentin@isovalent.com>
 Link: http://lore.kernel.org/lkml/20220622181918.ykrs5rsnmx3og4sv@alap3.anarazel.de
 Signed-off-by: Andres Freund <andres@anarazel.de>
 ---
- tools/build/Makefile.feature | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ tools/bpf/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/build/Makefile.feature b/tools/build/Makefile.feature
-index 8f6578e4d324..fc6ce0b2535a 100644
---- a/tools/build/Makefile.feature
-+++ b/tools/build/Makefile.feature
-@@ -135,8 +135,7 @@ FEATURE_DISPLAY ?=              \
-          get_cpuid              \
-          bpf			\
-          libaio			\
--         libzstd		\
--         disassembler-four-args
-+         libzstd
+diff --git a/tools/bpf/Makefile b/tools/bpf/Makefile
+index 664601ab1705..243b79f2b451 100644
+--- a/tools/bpf/Makefile
++++ b/tools/bpf/Makefile
+@@ -35,7 +35,7 @@ endif
  
- # Set FEATURE_CHECK_(C|LD)FLAGS-all for all FEATURE_TESTS features.
- # If in the future we need per-feature checks/flags for features not
+ FEATURE_USER = .bpf
+ FEATURE_TESTS = libbfd disassembler-four-args disassembler-init-styled
+-FEATURE_DISPLAY = libbfd disassembler-four-args
++FEATURE_DISPLAY = libbfd
+ 
+ check_feat := 1
+ NON_CHECK_FEAT_TARGETS := clean bpftool_clean runqslower_clean resolve_btfids_clean
 -- 
 2.37.0.3.g30cc8d0f14
 
