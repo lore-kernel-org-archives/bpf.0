@@ -2,147 +2,137 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D582C00140
-	for <bpf@archiver.kernel.org>; Tue,  2 Aug 2022 14:26:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03BF4C3F6B0
+	for <bpf@archiver.kernel.org>; Tue,  2 Aug 2022 14:32:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231271AbiHBO0L (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Aug 2022 10:26:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49014 "EHLO
+        id S237265AbiHBOcY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Aug 2022 10:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230497AbiHBO0K (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Aug 2022 10:26:10 -0400
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBBB56369
-        for <bpf@vger.kernel.org>; Tue,  2 Aug 2022 07:26:09 -0700 (PDT)
-Received: by mail-io1-xd43.google.com with SMTP id x64so10765947iof.1
-        for <bpf@vger.kernel.org>; Tue, 02 Aug 2022 07:26:09 -0700 (PDT)
+        with ESMTP id S234788AbiHBOcX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Aug 2022 10:32:23 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9562A7;
+        Tue,  2 Aug 2022 07:32:22 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id o3so13619167ple.5;
+        Tue, 02 Aug 2022 07:32:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=q+swPFxQ5uod60mgGYeDaGgzkscbLWW/ST1CK9IY86I=;
-        b=o/gjrcOl/LzanEqF5+sqkZ7WZmisvsChdzpjCqlh6de9EuojSIq+CnemUgBR+Wcnon
-         Dp+loS86xlH3BmBHhH/WsZ8x3pYj0yPOjUMgUMhf3z0+g9nh0AZUjbnvwsAliscDaSxH
-         RnsRK5QEkefqBGfLJe6HaE1ytEVtryHdxEt41QtXTBcJRnQc9TI34UHGMvoH2GIAs4iQ
-         x6RF0++2AoOMZeDPH0iP/Q+UuukE0da6wrZiznUxJthv20jnjI6J0rMgKvGgTTUBwfJ8
-         fExgwWfXQG9RBxqTbxv56Nqy44lbGeqxsu2e0dCunkia5MKCiIyZiSAtG/zhHfoiphjq
-         PbQg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=a2I3feE0Mlfc3dQYVR+6wp2Xd8855Ae93uhZIIi/yHM=;
+        b=aesQNlVxD1yT/+g/rcziiqLmKf9Hlm4zQQ8bBvOm0oMfANjlGDpxKqZmpWKm2YnQDm
+         LFZ/MXvbb3s71YM75UkKN4Jt4s/ZWOV3PKtzYjpYxhWxYjfsefJutvUBRtmXRkDT/+fh
+         gvKoiOn1EBsouTWHyg6Ju3+b6aBVDJ1KmwG+DpepedgZHxZgRbFkbSTgUmbcGvP0mIp0
+         y/+m+2Hx6jAYOjwCJ0cO5ZlX1EwegRTdAkUDJY2269qXI/owaAW0twShGzApePCaVe7h
+         D/jqVN4qGJ8AoNxqd1bLBacScqDR+hSIys2eexLd8l1X5EptRGbTSsyq3NtxmxZmQdO6
+         O7+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=q+swPFxQ5uod60mgGYeDaGgzkscbLWW/ST1CK9IY86I=;
-        b=uyp5O930yuje7tzCmdisBTzmlGDwVafqnwvbnj3SV8jcruQe7ES4IWLreENUQC8rn3
-         yzxC5JALknQkHrPycPrdNupU5CKW7BiAIqyStgJUj9hLgslBxFZ5QOA1QK4zUy6QWgHT
-         SDQEyBRcJDV7z+9ZI6MuX7F8zk/4k/wzqqjZsYllaZ/wEItywW39OEpkGXbtPVSpgyuH
-         auYz1I3odrJwfvmZBbMKZOrLDkyLkLL0mrZ6V0ozmmdKrA+Sg3Gif2D3d9lGA41ZGV2E
-         qDfFBrG4eAort45QhSm/FLvEFWX2X5M7oqLqcKGsvPd9u8sXfBnl9WVdP2XAo7K5z9zq
-         btvQ==
-X-Gm-Message-State: AJIora9aTTEzumptEqfReEOUPc7sRewFPTRyPTv/PGpWNKCDgCUrv2O6
-        ahJvEIGL/nD29WYC8PNInsJn8bOL7ZH56szgNwAmBgk9
-X-Google-Smtp-Source: AGRyM1tfjlNj85N032H5uRYd1l9BfaQlcGyiPjv2T0NVb3be5DfQcKI8tfLZ3r7j0rkd2E4zP81REQ6sNaRBRpwihP0=
-X-Received: by 2002:a5d:9da8:0:b0:67c:557:2ab1 with SMTP id
- ay40-20020a5d9da8000000b0067c05572ab1mr7374346iob.18.1659450369172; Tue, 02
- Aug 2022 07:26:09 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=a2I3feE0Mlfc3dQYVR+6wp2Xd8855Ae93uhZIIi/yHM=;
+        b=DplfZWu2I5g6QWxGV4yrpLSf6P8/jGGrl+3HNy6wZykJluMazYLUJ3aOf9oedhiNEK
+         AGxgaLVuomVIgElgdXCYh57lXq9FT/uQ2d2I56FrylPRj254p76RVsO/OqiZzdw+ZMiA
+         Ieh0bNGVrhvNYgeKcP2vlNnVzC4R7N0ytpXRcCMyLEGvo/Y5FIXChho7lGqMVcfCzZww
+         iSXGyiowLomm1EGy8s/sFagsDJKMYOozbzzWYUEVVwOhRgmXbwg9w8otqA83Z4VpTCFR
+         DUP694AgxbUYejerBpHnbMrqqB3n5lovW15QWWqA7sCckZyXxUx9mzHb2X13C0hT7Lvn
+         ZJ7Q==
+X-Gm-Message-State: ACgBeo2zdOAEClkntUsJI45ljvZcicBNDueYSEaOIxb6SwI9iNZdaoWm
+        Gt6COsA9Ue7GlZsl+IcSvk4=
+X-Google-Smtp-Source: AA6agR5f0C9L4dHw1ZGT1V6HsSKE+oSWd0oY5hDNIEcYNyrNHoM+heSlQ+rbuArRCrxHcS4G+noBOA==
+X-Received: by 2002:a17:902:ab96:b0:16a:6db6:2715 with SMTP id f22-20020a170902ab9600b0016a6db62715mr22067267plr.141.1659450741586;
+        Tue, 02 Aug 2022 07:32:21 -0700 (PDT)
+Received: from localhost ([223.104.103.89])
+        by smtp.gmail.com with ESMTPSA id q16-20020a17090311d000b0016be6a554b5sm12172323plh.233.2022.08.02.07.32.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 07:32:21 -0700 (PDT)
+From:   Hawkins Jiawei <yin31149@gmail.com>
+To:     jakub@cloudflare.com
+Cc:     18801353760@163.com, andrii@kernel.org, ast@kernel.org,
+        borisp@nvidia.com, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, edumazet@google.com, guvenc@linux.ibm.com,
+        guwen@linux.alibaba.com, john.fastabend@gmail.com, kafai@fb.com,
+        kgraul@linux.ibm.com, kpsingh@kernel.org, kuba@kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, paskripkin@gmail.com,
+        skhan@linuxfoundation.org, songliubraving@fb.com,
+        syzbot+5f26f85569bd179c18ce@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com, ubraun@linux.ibm.com,
+        wenjia@linux.ibm.com, yhs@fb.com, yin31149@gmail.com
+Subject: Re: [PATCH v2] net/smc: fix refcount bug in sk_psock_get (2)
+Date:   Tue,  2 Aug 2022 22:32:14 +0800
+Message-Id: <20220802143214.5885-1-yin31149@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <87wnbsjpdb.fsf@cloudflare.com>
+References: <87wnbsjpdb.fsf@cloudflare.com>
 MIME-Version: 1.0
-References: <20220726051713.840431-1-kuifeng@fb.com> <20220726051713.840431-2-kuifeng@fb.com>
- <Yt/aXYiVmGKP282Q@krava> <9e6967ec22f410edf7da3dc6e5d7c867431e3a30.camel@fb.com>
- <CAP01T75twVT2ea5Q74viJO+Y9kALbPFw4Yr6hbBfTdok0vAXaw@mail.gmail.com>
- <30a790ad499c9bb4783db91e305ee6546f497ebd.camel@fb.com> <CAP01T75=vMUTqpDHjgb_FokmbbG4VpQCUORUavCs0Z3ujT8Obw@mail.gmail.com>
- <cb91084ff7b92f06759358323c45c312da9fe029.camel@fb.com> <CAP01T7579jeBY8R8wnqamYsYk810S+S2_WHPMx16daK9+AQTCw@mail.gmail.com>
- <3805b621c511ee9bd76c6655d6ba814d1b54ee37.camel@fb.com> <555a171a-9855-e827-878d-e75e533f72ad@fb.com>
- <CAP01T75pO1CgccUuSNWnWgyVnGuhCALMPPWsF=YJr9yfAz4=zA@mail.gmail.com> <CA+khW7jMHURJ2oFQ8b655gncQSbGttHFMA5xuhwHEmh8s5wzdA@mail.gmail.com>
-In-Reply-To: <CA+khW7jMHURJ2oFQ8b655gncQSbGttHFMA5xuhwHEmh8s5wzdA@mail.gmail.com>
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date:   Tue, 2 Aug 2022 16:25:32 +0200
-Message-ID: <CAP01T76UC2Lsk5H8W6Okt5j1MHNtENzwYwGjjL6TGp0QW96_0A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/3] bpf: Parameterize task iterators.
-To:     Hao Luo <haoluo@google.com>
-Cc:     Yonghong Song <yhs@fb.com>, Kui-Feng Lee <kuifeng@fb.com>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "olsajiri@gmail.com" <olsajiri@gmail.com>,
-        "ast@kernel.org" <ast@kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "andrii@kernel.org" <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 28 Jul 2022 at 21:11, Hao Luo <haoluo@google.com> wrote:
->
-> Hi Kumar,
->
-> On Thu, Jul 28, 2022 at 10:53 AM Kumar Kartikeya Dwivedi
-> <memxor@gmail.com> wrote:
-> >
-> > On Thu, 28 Jul 2022 at 19:08, Yonghong Song <yhs@fb.com> wrote:
-> > > > [...]
-> > >
-> > > There is one problem here. The current pidfd_open syscall
-> > > only supports thread-group leader, i.e., main thread, i.e.,
-> > > it won't support any non-main-thread tid's. Yes, thread-group
-> > > leader and other threads should share the same vma and files
-> > > in most of times, but it still possible different threads
-> > > in the same process may have different files which is why
-> > > in current task_iter.c we have:
-> > >                  *tid = pid_nr_ns(pid, ns);
-> > >                  task = get_pid_task(pid, PIDTYPE_PID);
-> > >                  if (!task) {
-> > >                          ++*tid;
-> > >                          goto retry;
-> > >                  } else if (skip_if_dup_files &&
-> > > !thread_group_leader(task) &&
-> > >                             task->files == task->group_leader->files) {
-> > >                          put_task_struct(task);
-> > >                          task = NULL;
-> > >                          ++*tid;
-> > >                          goto retry;
-> > >                  }
-> > >
-> > >
-> > > Each thread (tid) will have some fields different from
-> > > thread-group leader (tgid), e.g., comm and most (if not all)
-> > > scheduling related fields.
-> > >
-> > > So it would be good to support for each tid from the start
-> > > as it is not clear when pidfd_open will support non
-> > > thread-group leader.
-> >
-> > I think this is just a missing feature, not a design limitation. If we
-> > just disable thread pifdfd from waitid and pidfd_send_signal, I think
-> > it is ok to use it elsewhere.
-> >
-> > >
-> > > If it worries wrap around, a reference to the task
-> > > can be held when tid passed to the kernel at link
-> > > create time. This is similar to pid is passed to
-> > > the kernel at pidfd_open syscall. But in practice,
-> > > I think taking the reference during read() should
-> > > also fine. The race always exist anyway.
-> > >
-> > > Kumar, could you give more details about security
-> > > concerns? I am not sure about the tight relationship
-> > > between bpf_iter and security. bpf_iter just for
-> > > iterating kernel data structures.
-> > >
-> >
-> > There is no security 'concern' per se. But having an fd which is used
-> > to set up the iterator just gives a chance to a BPF LSM to easily
-> > isolate permissions to attach the iterator to a task represented by
-> > that fd. i.e. the fd is an object to which this permission can be
-> > bound, the fd can be passed around (to share the same permission with
-> > others but it is limited to the task corresponding to it), etc. The
-> > permission management is even easier and faster once you have a file
-> > local storage map (which I plan to send soon).
-> >
->
-> I like the idea of a file local storage map. I have several questions
-> in mind, but don't want to digress from the discussion under
-> Kui-Feng's patchset. It probably will be clear when seeing your
-> change. Please cc me when you send it out. thanks.
->
+Thanks for your suggestion!
 
-Thanks for the interest! I'll cc you when I send it out.
+On Mon, 1 Aug 2022 at 17:16, Jakub Sitnicki <jakub@cloudflare.com> wrote:
+> This way we would also avoid some confusion. With the change below, the
+> SK_USER_DATA_NOTPSOCK is not *always* set when sk_user_data holds a
+> non-psock pointer. Only when SMC sets it.
+>
+> If we go with the current approach, the rest of sites, execpt for psock,
+> that assign to sk_user_data should be updated to set
+> SK_USER_DATA_NOTPSOCK as well, IMO.
+Yes, as you point out, in this patch, this flag's name should be
+*SK_USER_DATA_NEEDCHECK_NOTPSOCK*, which is more clearly.
+
+To be more specific, we don't need to set this flag for
+every sk_user_data who holds non-psock pointer. Only set the flag for
+the site that has been reported involved with the type-mismatch bug
+like this bug.
+> > During SMC fallback process in connect syscall, kernel will
+> > replaces TCP with SMC. In order to forward wakeup
+> > smc socket waitqueue after fallback, kernel will sets
+> > clcsk->sk_user_data to origin smc socket in
+> > smc_fback_replace_callbacks().
+> > 
+> > Later, in shutdown syscall, kernel will calls
+> > sk_psock_get(), which treats the clcsk->sk_user_data
+> > as sk_psock type, triggering the refcnt warning.
+
+For other sites, this patch is actually transparent to them, because
+the *SK_USER_DATA_NEEDCHECK_NOTPSOCK* flag is always unset. So this
+patch won't affect them, which won't introduce any extra
+potential bugs.
+> +/**
+> + * rcu_dereference_sk_user_data_psock - return psock if sk_user_data points
+> + * to the psock
+> + * @sk: socket
+> + */
+> +static inline
+> +struct sk_psock *rcu_dereference_sk_user_data_psock(const struct sock *sk)
+> +{
+> +	uintptr_t __tmp = (uintptr_t)rcu_dereference(__sk_user_data((sk)));
+> +
+> +	if (__tmp & SK_USER_DATA_NOTPSOCK)
+> +		return NULL;
+> +	return (struct sk_psock *)(__tmp & SK_USER_DATA_PTRMASK);
+> +}
+
+>
+> Hi,
+> Since using psock is not the common case, I'm wondering if it makes more
+> sense to have an inverse flag - SK_USER_DATA_PSOCK. Flag would be set by
+> the psock code on assignment to sk_user_data.
+However, your suggestion seems more elegant. For my patch, as you point
+out, when anyone reports a new type-mismatch bug, the relative assign to
+sk_user_data should be updated to set *SK_USER_DATA_NEEDCHECK_NOTPSOCK*
+flag.
+
+For your suggestion, you seems avoid above situation. What's more, as I
+use git grep to search, there seems no direct access to sk_user_data,
+all via a small amount macros and wrapper functions. So we can keep
+transparent by only update those macros and wrapper functions, which
+also won't introduce any extra potential bugs.
+
+I will patch as you suggest in v3 patch.
