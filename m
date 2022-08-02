@@ -2,80 +2,129 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A074CC00140
-	for <bpf@archiver.kernel.org>; Tue,  2 Aug 2022 17:39:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C865BC3F6B0
+	for <bpf@archiver.kernel.org>; Tue,  2 Aug 2022 17:42:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232689AbiHBRjV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Aug 2022 13:39:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
+        id S232994AbiHBRm5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Aug 2022 13:42:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232109AbiHBRjS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Aug 2022 13:39:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FD64B0F4;
-        Tue,  2 Aug 2022 10:39:17 -0700 (PDT)
+        with ESMTP id S233399AbiHBRm4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Aug 2022 13:42:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2536A4B0D8;
+        Tue,  2 Aug 2022 10:42:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7C55BB81FE5;
-        Tue,  2 Aug 2022 17:39:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 123B2C433B5;
-        Tue,  2 Aug 2022 17:39:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 92BAC6122D;
+        Tue,  2 Aug 2022 17:42:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBADFC433C1;
+        Tue,  2 Aug 2022 17:42:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659461955;
-        bh=D+x8CqdaXbsmhEFhqyxFXaNoVxZF5fkQARi2WHcJmQM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=CaQZluMzk/FwdJj1MolEVOBu/Rep66UaOgD3Casl7Xx0IdzE4yO9ln/B1NjI9AIME
-         R9Napl9UmEvg0AdIQeQdsf7m28/sUSpx+uztV6hUD+oYQYoEPes43yPzbyd5Y6CDQc
-         0peYZG7TyoRfudw+MKGLgs8mfW+x0AA9OFOCwvCpRAAwTswZ4Rp4CTWONaV8mgRk/z
-         ckLQ+bhCf2LWKV6LUpQOzSYYIGUP/H2Hb6+lHygbVyNpgyB6/2hqX3rNdPcaDSGzB8
-         nkGuHZjux34Sl75F++zlGRZR13FEEixVWN9suSvMUvitY/Vj2JKg2hpm+Tia9zzEAm
-         qikbvp073D8Aw==
+        s=k20201202; t=1659462173;
+        bh=ChZheDQxjFbvZYxirITeZHqH1hnlckxoxxSKad+75DA=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ct/fqppZJjAyJCNkVKnk9X0FbEQkii3byC82v6sr9OR8qjCAa/SHBabA2e6GVFt97
+         I33wG7MRx7Vk2dWY181acEqYgJ/UW9nfRlY30CRQJdi/O8+ccx0zykQufqS37584t2
+         7rB7nkuTG1loJMSED1oPbpTvSaTIFTvqgVM8i7Yhqg4JH61glx6beNj/Jtdr1jP+i/
+         hrpWMCAAljV7IOkKpYAuuUVOX6tZz6pD7eyXOBsrKF22YiScPAAccd2Ns8UNREIEXJ
+         5FZP+kMNBMJ66PFxpRBKiRmBSZyADZTAijzreHVvMYEN4Tb6uyKdKsE5BsKAnF30ng
+         FNbi1pxHwfFzg==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id B33F05C0369; Tue,  2 Aug 2022 10:39:14 -0700 (PDT)
+        id 8961F5C0369; Tue,  2 Aug 2022 10:42:52 -0700 (PDT)
+Date:   Tue, 2 Aug 2022 10:42:52 -0700
 From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Cc:     corbet@lwn.net, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, kernel-team@fb.com,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH v3 bpf 1/3] bpf: Update bpf_design_QA.rst to clarify that kprobes is not ABI
-Date:   Tue,  2 Aug 2022 10:39:11 -0700
-Message-Id: <20220802173913.4170192-1-paulmck@kernel.org>
-X-Mailer: git-send-email 2.31.1.189.g2e36527f23
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Kernel Team <kernel-team@fb.com>
+Subject: Re: [PATCH bpf 2/2] bpf: Update bpf_design_QA.rst to clarify that
+ attaching to functions is not ABI
+Message-ID: <20220802174252.GG2860372@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220722180641.2902585-1-paulmck@kernel.org>
+ <20220722180641.2902585-2-paulmck@kernel.org>
+ <d452fcee-2d15-c3b0-cc44-6b880ecc4722@iogearbox.net>
+ <20220722212346.GD2860372@paulmck-ThinkPad-P17-Gen-1>
+ <Yt6JdYSitC6e2lLk@casper.infradead.org>
+ <20220725164005.GG2860372@paulmck-ThinkPad-P17-Gen-1>
+ <CAADnVQKcRv5RJh0aLEg4+xsBepf=24nyHtbN2Q1t8dgZ9U1jRQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAADnVQKcRv5RJh0aLEg4+xsBepf=24nyHtbN2Q1t8dgZ9U1jRQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch updates bpf_design_QA.rst to clarify that the ability to
-attach a BPF program to a given point in the kernel code via kprobes
-does not make that attachment point be part of the Linux kernel's ABI.
+On Mon, Aug 01, 2022 at 10:34:16PM -0700, Alexei Starovoitov wrote:
+> On Mon, Jul 25, 2022 at 9:40 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > On Mon, Jul 25, 2022 at 01:15:49PM +0100, Matthew Wilcox wrote:
+> > > On Fri, Jul 22, 2022 at 02:23:46PM -0700, Paul E. McKenney wrote:
+> > > > On Fri, Jul 22, 2022 at 10:17:57PM +0200, Daniel Borkmann wrote:
+> > > > > Otherwise I think this could be a bit misunderstood, e.g. most of the networking
+> > > > > programs (e.g. XDP, tc, sock_addr) have a fixed framework around them where
+> > > > > attaching programs is part of ABI.
+> > > >
+> > > > Excellent point, thank you!
+> > > >
+> > > > Apologies for the newbie question, but does BTF_ID() mark a function as
+> > > > ABI from the viewpoing of a BPF program calling that function, attaching
+> > > > to that function, or both?  Either way, is it worth mentioning this
+> > > > in this QA entry?
+> > >
+> > > Not necessarily.  For example, __filemap_add_folio has a BTF_ID(), but
+> > > it is not ABI (it's error injection).
+> >
+> > OK, sounds like something to leave out of the QA, then.
+> 
+> Obviously, BTF_ID marking doesn't make the kernel function an abi
+> in any way. Just like EXPORT_SYMBOL_GPL doesn't do it.
+> Documentation/bpf/kfuncs.rst already explains it.
+> Probably worth repeating in the QA part of the doc.
 
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
----
- Documentation/bpf/bpf_design_QA.rst | 6 ++++++
- 1 file changed, 6 insertions(+)
+Like this?
+
+							Thanx, Paul
+
+------------------------------------------------------------------------
+
+commit 9346b452b92fc520a59da655b55d6bc40f9d1d14
+Author: Paul E. McKenney <paulmck@kernel.org>
+Date:   Tue Aug 2 10:31:17 2022 -0700
+
+    bpf: Update bpf_design_QA.rst to clarify that BTF_ID does not ABIify a function
+    
+    This patch updates bpf_design_QA.rst to clarify that mentioning a function
+    to the BTF_ID macro does not make that function become part of the Linux
+    kernel's ABI.
+    
+    Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 
 diff --git a/Documentation/bpf/bpf_design_QA.rst b/Documentation/bpf/bpf_design_QA.rst
-index 437de2a7a5de7..2ed9128cfbec8 100644
+index a06ae8a828e3d..a210b8a4df005 100644
 --- a/Documentation/bpf/bpf_design_QA.rst
 +++ b/Documentation/bpf/bpf_design_QA.rst
-@@ -214,6 +214,12 @@ A: NO. Tracepoints are tied to internal implementation details hence they are
- subject to change and can break with newer kernels. BPF programs need to change
- accordingly when this happens.
- 
-+Q: Are places where kprobes can attach part of the stable ABI?
-+--------------------------------------------------------------
-+A: NO. The places to which kprobes can attach are internal implementation
-+details, which means that they are subject to change and can break with
-+newer kernels. BPF programs need to change accordingly when this happens.
+@@ -291,3 +291,10 @@ The kernel function prototypes will change, and BPF programs attaching to
+ them will need to change.  The BPF compile-once-run-everywhere (CO-RE)
+ should be used in order to make it easier to adapt your BPF programs to
+ different versions of the kernel.
 +
- Q: How much stack space a BPF program uses?
- -------------------------------------------
- A: Currently all program types are limited to 512 bytes of stack
--- 
-2.31.1.189.g2e36527f23
-
++Q: Marking a function with BTF_ID makes that function an ABI?
++-------------------------------------------------------------
++A: NO.
++
++The BTF_ID macro does not cause a function to become part of the ABI
++any more than does the EXPORT_SYMBOL_GPL macro.
