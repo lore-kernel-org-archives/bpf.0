@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42FBFC19F2C
-	for <bpf@archiver.kernel.org>; Wed,  3 Aug 2022 20:49:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC9A8C19F2B
+	for <bpf@archiver.kernel.org>; Wed,  3 Aug 2022 20:49:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238486AbiHCUt3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 Aug 2022 16:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53430 "EHLO
+        id S238757AbiHCUtc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 Aug 2022 16:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238750AbiHCUt1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 Aug 2022 16:49:27 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9AE15C962
-        for <bpf@vger.kernel.org>; Wed,  3 Aug 2022 13:49:25 -0700 (PDT)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 273EnGok001345
-        for <bpf@vger.kernel.org>; Wed, 3 Aug 2022 13:49:25 -0700
+        with ESMTP id S238752AbiHCUtb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 Aug 2022 16:49:31 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F1B5C964
+        for <bpf@vger.kernel.org>; Wed,  3 Aug 2022 13:49:27 -0700 (PDT)
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 273KnOIA017912
+        for <bpf@vger.kernel.org>; Wed, 3 Aug 2022 13:49:27 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=mC+JAYl/FxMi5DwqUDHryY0tLe8yuBp32PcYiqeuywg=;
- b=qaxEcnh3Bh9BheprE0SmaOlxEL+Oi5fvHWgrqfmOF1TzLFUVz/yAr7w6uocL3gEFI2RA
- peZOwYtvNDRs2h2BvNIl5WxV8jnX/RzRkI+11lt3SZgcleYS7hYZyupLs8Y5QemzIKCW
- 2MIO8Ug92jfrWUsE4N/PGZnf0zbw0KzV9F8= 
+ bh=yRFLwGqk94NaXr4KoX+QqXm4ZYNDFsmpZbu64kueqZ4=;
+ b=cqarsKINgjWukgAmJkohWwwGOFJjln4mBM3wf/208f1p1MQTiS8KGaW4DB4Fqvf+Cbwy
+ Xxl3BKtX3zHeoZ4My9XtQTUwYffUhMqHSI24S9Nzp19vvPA6c3sHW66FP59Z05oY2wej
+ CQweViPCEMPqHZHh7sB2eeW2r47x2kxJSGA= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3hqbqx7cs7-3
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hq4b7u51x-7
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 03 Aug 2022 13:49:25 -0700
-Received: from twshared16418.24.frc3.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 03 Aug 2022 13:49:27 -0700
+Received: from twshared20276.35.frc1.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 3 Aug 2022 13:49:22 -0700
+ 15.1.2375.28; Wed, 3 Aug 2022 13:49:25 -0700
 Received: by devbig933.frc1.facebook.com (Postfix, from userid 6611)
-        id 87BB97A3F73D; Wed,  3 Aug 2022 13:46:20 -0700 (PDT)
+        id 7E1D67A3F777; Wed,  3 Aug 2022 13:46:39 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -44,9 +44,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>, <kernel-team@fb.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Stanislav Fomichev <sdf@google.com>
-Subject: [PATCH v2 bpf-next 03/15] bpf: net: Consider in_bpf() when testing capable() in sk_setsockopt()
-Date:   Wed, 3 Aug 2022 13:46:20 -0700
-Message-ID: <20220803204620.3077641-1-kafai@fb.com>
+Subject: [PATCH v2 bpf-next 06/15] bpf: net: Change do_ipv6_setsockopt() to use the sockopt's lock_sock() and capable()
+Date:   Wed, 3 Aug 2022 13:46:39 -0700
+Message-ID: <20220803204639.3078356-1-kafai@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220803204601.3075863-1-kafai@fb.com>
 References: <20220803204601.3075863-1-kafai@fb.com>
@@ -54,8 +54,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: QI9Dt6hpAfmUeSHeW016t-AO5krsTVqy
-X-Proofpoint-GUID: QI9Dt6hpAfmUeSHeW016t-AO5krsTVqy
+X-Proofpoint-ORIG-GUID: VqM7e1Zg1xWeV4QRDnM1cBYpV1lvVH-J
+X-Proofpoint-GUID: VqM7e1Zg1xWeV4QRDnM1cBYpV1lvVH-J
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-03_06,2022-08-02_01,2022-06-22_01
@@ -63,168 +63,81 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When bpf program calling bpf_setsockopt(SOL_SOCKET),
-it could be run in softirq and doesn't make sense to do the capable
-check.  There was a similar situation in bpf_setsockopt(TCP_CONGESTION).
-In commit 8d650cdedaab ("tcp: fix tcp_set_congestion_control() use from b=
-pf hook"),
-tcp_set_congestion_control(..., cap_net_admin) was added to skip
-the cap check for bpf prog.
+Similar to the earlier patch that avoids sk_setsockopt() from
+taking sk lock and doing capable test when called by bpf.  This patch
+changes do_ipv6_setsockopt() to use the sockopt_{lock,release}_sock()
+and sockopt_[ns_]capable().
 
-This patch adds sockopt_ns_capable() and sockopt_capable() for
-the sk_setsockopt() to use.  They will consider the in_bpf()
-before doing the ns_capable() and capable() test.  They are in
-EXPORT_SYMBOL for the ipv6 module to use in a latter patch.
-
-Suggested-by: Stanislav Fomichev <sdf@google.com>
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- include/net/sock.h |  2 ++
- net/core/sock.c    | 38 +++++++++++++++++++++++++-------------
- 2 files changed, 27 insertions(+), 13 deletions(-)
+ net/ipv6/ipv6_sockglue.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/include/net/sock.h b/include/net/sock.h
-index b2ff230860c6..72b78c2b6f83 100644
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -1723,6 +1723,8 @@ static inline void unlock_sock_fast(struct sock *sk=
-, bool slow)
+diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
+index 222f6bf220ba..d23de48ff612 100644
+--- a/net/ipv6/ipv6_sockglue.c
++++ b/net/ipv6/ipv6_sockglue.c
+@@ -327,7 +327,7 @@ static int ipv6_set_opt_hdr(struct sock *sk, int optn=
+ame, sockptr_t optval,
+ 	int err;
 =20
- void sockopt_lock_sock(struct sock *sk);
- void sockopt_release_sock(struct sock *sk);
-+bool sockopt_ns_capable(struct user_namespace *ns, int cap);
-+bool sockopt_capable(int cap);
+ 	/* hop-by-hop / destination options are privileged option */
+-	if (optname !=3D IPV6_RTHDR && !ns_capable(net->user_ns, CAP_NET_RAW))
++	if (optname !=3D IPV6_RTHDR && !sockopt_ns_capable(net->user_ns, CAP_NE=
+T_RAW))
+ 		return -EPERM;
 =20
- /* Used by processes to "lock" a socket state, so that
-  * interrupts and bottom half handlers won't change it
-diff --git a/net/core/sock.c b/net/core/sock.c
-index 82759540ae2c..2d88c06c27b7 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -1056,6 +1056,18 @@ void sockopt_release_sock(struct sock *sk)
- }
- EXPORT_SYMBOL(sockopt_release_sock);
+ 	/* remove any sticky options header with a zero option
+@@ -417,7 +417,7 @@ static int do_ipv6_setsockopt(struct sock *sk, int le=
+vel, int optname,
 =20
-+bool sockopt_ns_capable(struct user_namespace *ns, int cap)
-+{
-+	return in_bpf() || ns_capable(ns, cap);
-+}
-+EXPORT_SYMBOL(sockopt_ns_capable);
-+
-+bool sockopt_capable(int cap)
-+{
-+	return in_bpf() || capable(cap);
-+}
-+EXPORT_SYMBOL(sockopt_capable);
-+
- /*
-  *	This is meant for all protocols to use and covers goings on
-  *	at the socket level. Everything here is generic.
-@@ -1091,7 +1103,7 @@ static int sk_setsockopt(struct sock *sk, int level=
-, int optname,
+ 	if (needs_rtnl)
+ 		rtnl_lock();
+-	lock_sock(sk);
++	sockopt_lock_sock(sk);
 =20
  	switch (optname) {
- 	case SO_DEBUG:
--		if (val && !capable(CAP_NET_ADMIN))
-+		if (val && !sockopt_capable(CAP_NET_ADMIN))
- 			ret =3D -EACCES;
- 		else
- 			sock_valbool_flag(sk, SOCK_DBG, valbool);
-@@ -1135,7 +1147,7 @@ static int sk_setsockopt(struct sock *sk, int level=
-, int optname,
+=20
+@@ -634,8 +634,8 @@ static int do_ipv6_setsockopt(struct sock *sk, int le=
+vel, int optname,
  		break;
 =20
- 	case SO_SNDBUFFORCE:
--		if (!capable(CAP_NET_ADMIN)) {
-+		if (!sockopt_capable(CAP_NET_ADMIN)) {
- 			ret =3D -EPERM;
+ 	case IPV6_TRANSPARENT:
+-		if (valbool && !ns_capable(net->user_ns, CAP_NET_RAW) &&
+-		    !ns_capable(net->user_ns, CAP_NET_ADMIN)) {
++		if (valbool && !sockopt_ns_capable(net->user_ns, CAP_NET_RAW) &&
++		    !sockopt_ns_capable(net->user_ns, CAP_NET_ADMIN)) {
+ 			retv =3D -EPERM;
  			break;
  		}
-@@ -1157,7 +1169,7 @@ static int sk_setsockopt(struct sock *sk, int level=
-, int optname,
+@@ -946,7 +946,7 @@ static int do_ipv6_setsockopt(struct sock *sk, int le=
+vel, int optname,
+ 	case IPV6_IPSEC_POLICY:
+ 	case IPV6_XFRM_POLICY:
+ 		retv =3D -EPERM;
+-		if (!ns_capable(net->user_ns, CAP_NET_ADMIN))
++		if (!sockopt_ns_capable(net->user_ns, CAP_NET_ADMIN))
+ 			break;
+ 		retv =3D xfrm_user_policy(sk, optname, optval, optlen);
  		break;
+@@ -994,14 +994,14 @@ static int do_ipv6_setsockopt(struct sock *sk, int =
+level, int optname,
+ 		break;
+ 	}
 =20
- 	case SO_RCVBUFFORCE:
--		if (!capable(CAP_NET_ADMIN)) {
-+		if (!sockopt_capable(CAP_NET_ADMIN)) {
- 			ret =3D -EPERM;
- 			break;
- 		}
-@@ -1184,8 +1196,8 @@ static int sk_setsockopt(struct sock *sk, int level=
-, int optname,
+-	release_sock(sk);
++	sockopt_release_sock(sk);
+ 	if (needs_rtnl)
+ 		rtnl_unlock();
 =20
- 	case SO_PRIORITY:
- 		if ((val >=3D 0 && val <=3D 6) ||
--		    ns_capable(sock_net(sk)->user_ns, CAP_NET_RAW) ||
--		    ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN))
-+		    sockopt_ns_capable(sock_net(sk)->user_ns, CAP_NET_RAW) ||
-+		    sockopt_ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN))
- 			sk->sk_priority =3D val;
- 		else
- 			ret =3D -EPERM;
-@@ -1330,8 +1342,8 @@ static int sk_setsockopt(struct sock *sk, int level=
-, int optname,
- 			clear_bit(SOCK_PASSSEC, &sock->flags);
- 		break;
- 	case SO_MARK:
--		if (!ns_capable(sock_net(sk)->user_ns, CAP_NET_RAW) &&
--		    !ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN)) {
-+		if (!sockopt_ns_capable(sock_net(sk)->user_ns, CAP_NET_RAW) &&
-+		    !sockopt_ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN)) {
- 			ret =3D -EPERM;
- 			break;
- 		}
-@@ -1339,8 +1351,8 @@ static int sk_setsockopt(struct sock *sk, int level=
-, int optname,
- 		__sock_set_mark(sk, val);
- 		break;
- 	case SO_RCVMARK:
--		if (!ns_capable(sock_net(sk)->user_ns, CAP_NET_RAW) &&
--		    !ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN)) {
-+		if (!sockopt_ns_capable(sock_net(sk)->user_ns, CAP_NET_RAW) &&
-+		    !sockopt_ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN)) {
- 			ret =3D -EPERM;
- 			break;
- 		}
-@@ -1374,7 +1386,7 @@ static int sk_setsockopt(struct sock *sk, int level=
-, int optname,
- #ifdef CONFIG_NET_RX_BUSY_POLL
- 	case SO_BUSY_POLL:
- 		/* allow unprivileged users to decrease the value */
--		if ((val > sk->sk_ll_usec) && !capable(CAP_NET_ADMIN))
-+		if ((val > sk->sk_ll_usec) && !sockopt_capable(CAP_NET_ADMIN))
- 			ret =3D -EPERM;
- 		else {
- 			if (val < 0)
-@@ -1384,13 +1396,13 @@ static int sk_setsockopt(struct sock *sk, int lev=
-el, int optname,
- 		}
- 		break;
- 	case SO_PREFER_BUSY_POLL:
--		if (valbool && !capable(CAP_NET_ADMIN))
-+		if (valbool && !sockopt_capable(CAP_NET_ADMIN))
- 			ret =3D -EPERM;
- 		else
- 			WRITE_ONCE(sk->sk_prefer_busy_poll, valbool);
- 		break;
- 	case SO_BUSY_POLL_BUDGET:
--		if (val > READ_ONCE(sk->sk_busy_poll_budget) && !capable(CAP_NET_ADMIN=
-)) {
-+		if (val > READ_ONCE(sk->sk_busy_poll_budget) && !sockopt_capable(CAP_N=
-ET_ADMIN)) {
- 			ret =3D -EPERM;
- 		} else {
- 			if (val < 0 || val > U16_MAX)
-@@ -1461,7 +1473,7 @@ static int sk_setsockopt(struct sock *sk, int level=
-, int optname,
- 		 * scheduler has enough safe guards.
- 		 */
- 		if (sk_txtime.clockid !=3D CLOCK_MONOTONIC &&
--		    !ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN)) {
-+		    !sockopt_ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN)) {
- 			ret =3D -EPERM;
- 			break;
- 		}
+ 	return retv;
+=20
+ e_inval:
+-	release_sock(sk);
++	sockopt_release_sock(sk);
+ 	if (needs_rtnl)
+ 		rtnl_unlock();
+ 	return -EINVAL;
 --=20
 2.30.2
 
