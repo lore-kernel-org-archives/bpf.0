@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6B7DC19F2C
-	for <bpf@archiver.kernel.org>; Wed,  3 Aug 2022 20:50:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68AA3C19F2B
+	for <bpf@archiver.kernel.org>; Wed,  3 Aug 2022 20:50:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238842AbiHCUup (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 Aug 2022 16:50:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55810 "EHLO
+        id S238823AbiHCUuu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 Aug 2022 16:50:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238838AbiHCUui (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 Aug 2022 16:50:38 -0400
+        with ESMTP id S238832AbiHCUun (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 Aug 2022 16:50:43 -0400
 Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5F11EEC5
-        for <bpf@vger.kernel.org>; Wed,  3 Aug 2022 13:50:18 -0700 (PDT)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 273ErW5b001364
-        for <bpf@vger.kernel.org>; Wed, 3 Aug 2022 13:50:17 -0700
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A823FA2D
+        for <bpf@vger.kernel.org>; Wed,  3 Aug 2022 13:50:21 -0700 (PDT)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 273F4KLW031827
+        for <bpf@vger.kernel.org>; Wed, 3 Aug 2022 13:50:20 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=oLoq0XAqFBD1KiKoxhQcp05Cajd6NWJw8RAKDt/DL0A=;
- b=UMWbUMKeEvPgthmXl7Wq3jj98idKjUKTqMjYgjBzgorqHLYfCpVS+r4LRrSwramnm5ib
- pih6p6FzdDVQL0hi2juqk94U3Cu3JbwdkAM2yP6sSrRcLwD6layggKRsxVMz9sfRFt7C
- pl1bZmhxMMVA5dVRdCMsSWk8Vyk5Wv9doUE= 
+ bh=nmI0Z7q28bbzKSEcKIIdQVilnpN7QtMJ0ha66GUBGbE=;
+ b=nsj6WKLmxVM2Jll2CLmzN9p2o05/8K/IbSGSFyNMg88Og8GhKu8WfnchYsQl4irZ8BCM
+ z5JFrORpdpjo2VNRLjBfVsJHWotIdVvCaJjSKyBeMBDlKQMxTBcuCuWI/s1mGzgswOyZ
+ WnsJA5zUSfH7jQEZC+SuL6MidRoq2Yt3a+s= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3hqbqx7cx2-1
+        by m0089730.ppops.net (PPS) with ESMTPS id 3hq51d2vm0-7
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 03 Aug 2022 13:50:17 -0700
-Received: from twshared14818.18.frc3.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 03 Aug 2022 13:50:20 -0700
+Received: from twshared14818.18.frc3.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.28; Wed, 3 Aug 2022 13:50:16 -0700
 Received: by devbig933.frc1.facebook.com (Postfix, from userid 6611)
-        id 4D7007A3F81B; Wed,  3 Aug 2022 13:47:17 -0700 (PDT)
+        id 477237A3F853; Wed,  3 Aug 2022 13:47:36 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -44,9 +44,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>, <kernel-team@fb.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Stanislav Fomichev <sdf@google.com>
-Subject: [PATCH v2 bpf-next 12/15] bpf: Change bpf_setsockopt(SOL_IP) to reuse do_ip_setsockopt()
-Date:   Wed, 3 Aug 2022 13:47:17 -0700
-Message-ID: <20220803204717.3081496-1-kafai@fb.com>
+Subject: [PATCH v2 bpf-next 15/15] selftests/bpf: bpf_setsockopt tests
+Date:   Wed, 3 Aug 2022 13:47:36 -0700
+Message-ID: <20220803204736.3082620-1-kafai@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220803204601.3075863-1-kafai@fb.com>
 References: <20220803204601.3075863-1-kafai@fb.com>
@@ -54,8 +54,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: L7DYJIjcadWdRSHDWMP4lngaIv3TeHo_
-X-Proofpoint-GUID: L7DYJIjcadWdRSHDWMP4lngaIv3TeHo_
+X-Proofpoint-GUID: gK-W6WKN-4L4TKTS91mi70JO7t5kv09X
+X-Proofpoint-ORIG-GUID: gK-W6WKN-4L4TKTS91mi70JO7t5kv09X
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-03_06,2022-08-02_01,2022-06-22_01
@@ -63,124 +63,720 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-After the prep work in the previous patches,
-this patch removes the dup code from bpf_setsockopt(SOL_IP)
-and reuses the implementation in do_ip_setsockopt().
-
-The existing optname white-list is refactored into a new
-function sol_ip_setsockopt().
-
-NOTE,
-the current bpf_setsockopt(IP_TOS) is quite different from the
-the do_ip_setsockopt(IP_TOS).  For example, it does not take
-the INET_ECN_MASK into the account for tcp and also does not adjust
-sk->sk_priority.  It looks like the current bpf_setsockopt(IP_TOS)
-was referencing the IPV6_TCLASS implementation instead of IP_TOS.
-This patch tries to rectify that by using the do_ip_setsockopt(IP_TOS).
-While this is a behavior change,  the do_ip_setsockopt(IP_TOS) behavior
-is arguably what the user is expecting.  At least, the INET_ECN_MASK bits
-should be masked out for tcp.
+This patch adds tests to exercise optnames that are allowed
+in bpf_setsockopt().
 
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- include/net/ip.h       |  2 ++
- net/core/filter.c      | 40 ++++++++++++++++++++--------------------
- net/ipv4/ip_sockglue.c |  4 ++--
- 3 files changed, 24 insertions(+), 22 deletions(-)
+ .../selftests/bpf/prog_tests/setget_sockopt.c | 125 ++++
+ .../selftests/bpf/progs/setget_sockopt.c      | 547 ++++++++++++++++++
+ 2 files changed, 672 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/setget_sockopt=
+.c
+ create mode 100644 tools/testing/selftests/bpf/progs/setget_sockopt.c
 
-diff --git a/include/net/ip.h b/include/net/ip.h
-index 1c979fd1904c..34fa5b0f0a0e 100644
---- a/include/net/ip.h
-+++ b/include/net/ip.h
-@@ -743,6 +743,8 @@ void ip_cmsg_recv_offset(struct msghdr *msg, struct s=
-ock *sk,
- int ip_cmsg_send(struct sock *sk, struct msghdr *msg,
- 		 struct ipcm_cookie *ipc, bool allow_ipv6);
- DECLARE_STATIC_KEY_FALSE(ip4_min_ttl);
-+int do_ip_setsockopt(struct sock *sk, int level, int optname, sockptr_t =
-optval,
-+		     unsigned int optlen);
- int ip_setsockopt(struct sock *sk, int level, int optname, sockptr_t opt=
-val,
- 		  unsigned int optlen);
- int ip_getsockopt(struct sock *sk, int level, int optname, char __user *=
-optval,
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 0c5361b8906d..d236f71ff501 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -5123,6 +5123,25 @@ static int sol_tcp_setsockopt(struct sock *sk, int=
- optname,
- 				 KERNEL_SOCKPTR(optval), optlen);
- }
-=20
-+static int sol_ip_setsockopt(struct sock *sk, int optname,
-+			     char *optval, int optlen)
+diff --git a/tools/testing/selftests/bpf/prog_tests/setget_sockopt.c b/to=
+ols/testing/selftests/bpf/prog_tests/setget_sockopt.c
+new file mode 100644
+index 000000000000..018611e6b248
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/setget_sockopt.c
+@@ -0,0 +1,125 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) Meta Platforms, Inc. and affiliates. */
++
++#define _GNU_SOURCE
++#include <sched.h>
++#include <linux/socket.h>
++#include <net/if.h>
++
++#include "test_progs.h"
++#include "cgroup_helpers.h"
++#include "network_helpers.h"
++
++#include "setget_sockopt.skel.h"
++
++#define CG_NAME "/setget-sockopt-test"
++
++static const char addr4_str[] =3D "127.0.0.1";
++static const char addr6_str[] =3D "::1";
++static struct setget_sockopt *skel;
++static int cg_fd;
++
++static int create_netns(void)
 +{
-+	if (sk->sk_family !=3D AF_INET)
-+		return -EINVAL;
++	if (!ASSERT_OK(unshare(CLONE_NEWNET), "create netns"))
++		return -1;
 +
-+	switch (optname) {
-+	case IP_TOS:
-+		if (optlen !=3D sizeof(int))
-+			return -EINVAL;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
++	if (!ASSERT_OK(system("ip link set dev lo up"), "set lo up"))
++		return -1;
 +
-+	return do_ip_setsockopt(sk, SOL_IP, optname,
-+				KERNEL_SOCKPTR(optval), optlen);
++	if (!ASSERT_OK(system("ip link add dev binddevtest1 type veth peer name=
+ binddevtest2"),
++		       "add veth"))
++		return -1;
++
++	if (!ASSERT_OK(system("ip link set dev binddevtest1 up"),
++		       "bring veth up"))
++		return -1;
++
++	return 0;
 +}
 +
- static int __bpf_setsockopt(struct sock *sk, int level, int optname,
- 			    char *optval, int optlen)
- {
-@@ -5134,26 +5153,7 @@ static int __bpf_setsockopt(struct sock *sk, int l=
-evel, int optname,
- 	if (level =3D=3D SOL_SOCKET) {
- 		return sol_socket_setsockopt(sk, optname, optval, optlen);
- 	} else if (IS_ENABLED(CONFIG_INET) && level =3D=3D SOL_IP) {
--		if (optlen !=3D sizeof(int) || sk->sk_family !=3D AF_INET)
--			return -EINVAL;
--
--		val =3D *((int *)optval);
--		/* Only some options are supported */
--		switch (optname) {
--		case IP_TOS:
--			if (val < -1 || val > 0xff) {
--				ret =3D -EINVAL;
--			} else {
--				struct inet_sock *inet =3D inet_sk(sk);
--
--				if (val =3D=3D -1)
--					val =3D 0;
--				inet->tos =3D val;
--			}
--			break;
--		default:
--			ret =3D -EINVAL;
--		}
-+		return sol_ip_setsockopt(sk, optname, optval, optlen);
- 	} else if (IS_ENABLED(CONFIG_IPV6) && level =3D=3D SOL_IPV6) {
- 		if (optlen !=3D sizeof(int) || sk->sk_family !=3D AF_INET6)
- 			return -EINVAL;
-diff --git a/net/ipv4/ip_sockglue.c b/net/ipv4/ip_sockglue.c
-index a3c496580e6b..751fa69cb557 100644
---- a/net/ipv4/ip_sockglue.c
-+++ b/net/ipv4/ip_sockglue.c
-@@ -888,8 +888,8 @@ static int compat_ip_mcast_join_leave(struct sock *sk=
-, int optname,
-=20
- DEFINE_STATIC_KEY_FALSE(ip4_min_ttl);
-=20
--static int do_ip_setsockopt(struct sock *sk, int level, int optname,
--		sockptr_t optval, unsigned int optlen)
-+int do_ip_setsockopt(struct sock *sk, int level, int optname,
-+		     sockptr_t optval, unsigned int optlen)
- {
- 	struct inet_sock *inet =3D inet_sk(sk);
- 	struct net *net =3D sock_net(sk);
++static void test_tcp(int family)
++{
++	struct setget_sockopt__bss *bss =3D skel->bss;
++	int sfd, cfd;
++
++	memset(bss, 0, sizeof(*bss));
++
++	sfd =3D start_server(family, SOCK_STREAM,
++			   family =3D=3D AF_INET6 ? addr6_str : addr4_str, 0, 0);
++	if (!ASSERT_GE(sfd, 0, "start_server"))
++		return;
++
++	cfd =3D connect_to_fd(sfd, 0);
++	if (!ASSERT_GE(cfd, 0, "connect_to_fd_server")) {
++		close(sfd);
++		return;
++	}
++	close(sfd);
++	close(cfd);
++
++	ASSERT_EQ(bss->nr_listen, 1, "nr_listen");
++	ASSERT_EQ(bss->nr_connect, 1, "nr_connect");
++	ASSERT_EQ(bss->nr_active, 1, "nr_active");
++	ASSERT_EQ(bss->nr_passive, 1, "nr_passive");
++	ASSERT_EQ(bss->nr_socket_post_create, 2, "nr_socket_post_create");
++	ASSERT_EQ(bss->nr_binddev, 2, "nr_bind");
++}
++
++static void test_udp(int family)
++{
++	struct setget_sockopt__bss *bss =3D skel->bss;
++	int sfd;
++
++	memset(bss, 0, sizeof(*bss));
++
++	sfd =3D start_server(family, SOCK_DGRAM,
++			   family =3D=3D AF_INET6 ? addr6_str : addr4_str, 0, 0);
++	if (!ASSERT_GE(sfd, 0, "start_server"))
++		return;
++	close(sfd);
++
++	ASSERT_GE(bss->nr_socket_post_create, 1, "nr_socket_post_create");
++	ASSERT_EQ(bss->nr_binddev, 1, "nr_bind");
++}
++
++void test_setget_sockopt(void)
++{
++	cg_fd =3D test__join_cgroup(CG_NAME);
++	if (cg_fd < 0)
++		return;
++
++	if (create_netns())
++		goto done;
++
++	skel =3D setget_sockopt__open();
++	if (!ASSERT_OK_PTR(skel, "open skel"))
++		goto done;
++
++	strcpy(skel->rodata->veth, "binddevtest1");
++	skel->rodata->veth_ifindex =3D if_nametoindex("binddevtest1");
++	if (!ASSERT_GT(skel->rodata->veth_ifindex, 0, "if_nametoindex"))
++		goto done;
++
++	if (!ASSERT_OK(setget_sockopt__load(skel), "load skel"))
++		goto done;
++
++	skel->links.skops_sockopt =3D
++		bpf_program__attach_cgroup(skel->progs.skops_sockopt, cg_fd);
++	if (!ASSERT_OK_PTR(skel->links.skops_sockopt, "attach cgroup"))
++		goto done;
++
++	skel->links.socket_post_create =3D
++		bpf_program__attach_cgroup(skel->progs.socket_post_create, cg_fd);
++	if (!ASSERT_OK_PTR(skel->links.socket_post_create, "attach_cgroup"))
++		goto done;
++
++	test_tcp(AF_INET6);
++	test_tcp(AF_INET);
++	test_udp(AF_INET6);
++	test_udp(AF_INET);
++
++done:
++	setget_sockopt__destroy(skel);
++	close(cg_fd);
++}
+diff --git a/tools/testing/selftests/bpf/progs/setget_sockopt.c b/tools/t=
+esting/selftests/bpf/progs/setget_sockopt.c
+new file mode 100644
+index 000000000000..560cf4b92d65
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/setget_sockopt.c
+@@ -0,0 +1,547 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) Meta Platforms, Inc. and affiliates. */
++
++#include <stddef.h>
++#include <stdbool.h>
++#include <sys/types.h>
++#include <sys/socket.h>
++#include <linux/in.h>
++#include <linux/ipv6.h>
++#include <linux/tcp.h>
++#include <linux/socket.h>
++#include <linux/bpf.h>
++#include <linux/if.h>
++#include <linux/types.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include <errno.h>
++
++#ifndef SO_TXREHASH
++#define SO_TXREHASH 74
++#endif
++
++#ifndef TCP_NAGLE_OFF
++#define TCP_NAGLE_OFF 1
++#endif
++
++#ifndef ARRAY_SIZE
++#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
++#endif
++
++extern unsigned long CONFIG_HZ __kconfig;
++
++const volatile char veth[IFNAMSIZ];
++const volatile int veth_ifindex;
++
++int nr_listen;
++int nr_passive;
++int nr_active;
++int nr_connect;
++int nr_binddev;
++int nr_socket_post_create;
++
++struct sockopt_test {
++	int opt;
++	int new;
++	int restore;
++	int expected;
++	int tcp_expected;
++	int flip:1;
++};
++
++static const char cubic_cc[] =3D "cubic";
++static const char reno_cc[] =3D "reno";
++
++static const struct sockopt_test sol_socket_tests[] =3D {
++	{ .opt =3D SO_REUSEADDR, .flip =3D 1, },
++	{ .opt =3D SO_SNDBUF, .new =3D 8123, .expected =3D 8123 * 2, },
++	{ .opt =3D SO_RCVBUF, .new =3D 8123, .expected =3D 8123 * 2, },
++	{ .opt =3D SO_KEEPALIVE, .flip =3D 1, },
++	{ .opt =3D SO_PRIORITY, .new =3D 0xeb9f, .expected =3D 0xeb9f, },
++	{ .opt =3D SO_REUSEPORT, .flip =3D 1, },
++	{ .opt =3D SO_RCVLOWAT, .new =3D 8123, .expected =3D 8123, },
++	{ .opt =3D SO_MARK, .new =3D 0xeb9f, .expected =3D 0xeb9f, },
++	{ .opt =3D SO_MAX_PACING_RATE, .new =3D 0xeb9f, .expected =3D 0xeb9f, }=
+,
++	{ .opt =3D SO_TXREHASH, .flip =3D 1, },
++	{ .opt =3D 0, },
++};
++
++static const struct sockopt_test sol_tcp_tests[] =3D {
++	{ .opt =3D TCP_NODELAY, .flip =3D 1, },
++	{ .opt =3D TCP_MAXSEG, .new =3D 1314, .expected =3D 1314, },
++	{ .opt =3D TCP_KEEPIDLE, .new =3D 123, .expected =3D 123, .restore =3D =
+321, },
++	{ .opt =3D TCP_KEEPINTVL, .new =3D 123, .expected =3D 123, .restore =3D=
+ 321, },
++	{ .opt =3D TCP_KEEPCNT, .new =3D 123, .expected =3D 123, .restore =3D 1=
+24, },
++	{ .opt =3D TCP_SYNCNT, .new =3D 123, .expected =3D 123, .restore =3D 12=
+4, },
++	{ .opt =3D TCP_WINDOW_CLAMP, .new =3D 8123, .expected =3D 8123, .restor=
+e =3D 8124, },
++	{ .opt =3D TCP_CONGESTION, },
++	{ .opt =3D TCP_THIN_LINEAR_TIMEOUTS, .flip =3D 1, },
++	{ .opt =3D TCP_USER_TIMEOUT, .new =3D 123400, .expected =3D 123400, },
++	{ .opt =3D TCP_NOTSENT_LOWAT, .new =3D 1314, .expected =3D 1314, },
++	{ .opt =3D TCP_SAVE_SYN, .new =3D 1, .expected =3D 1, },
++	{ .opt =3D 0, },
++};
++
++static const struct sockopt_test sol_ip_tests[] =3D {
++	{ .opt =3D IP_TOS, .new =3D 0xe1, .expected =3D 0xe1, .tcp_expected =3D=
+ 0xe0, },
++	{ .opt =3D 0, },
++};
++
++static const struct sockopt_test sol_ipv6_tests[] =3D {
++	{ .opt =3D IPV6_TCLASS, .new =3D 0xe1, .expected =3D 0xe1, .tcp_expecte=
+d =3D 0xe0, },
++	{ .opt =3D IPV6_AUTOFLOWLABEL, .flip =3D 1, },
++	{ .opt =3D 0, },
++};
++
++struct sock_common {
++	unsigned short	skc_family;
++	unsigned long	skc_flags;
++	unsigned char	skc_reuse:4;
++	unsigned char	skc_reuseport:1;
++	unsigned char	skc_ipv6only:1;
++	unsigned char	skc_net_refcnt:1;
++} __attribute__((preserve_access_index));
++
++struct sock {
++	struct sock_common	__sk_common;
++	__u16			sk_type;
++	__u16			sk_protocol;
++	int			sk_rcvlowat;
++	__u32			sk_mark;
++	unsigned long		sk_max_pacing_rate;
++	unsigned int		keepalive_time;
++	unsigned int		keepalive_intvl;
++} __attribute__((preserve_access_index));
++
++struct tcp_options_received {
++	__u16 user_mss;
++} __attribute__((preserve_access_index));
++
++struct ipv6_pinfo {
++	__u16			recverr:1,
++				sndflow:1,
++				repflow:1,
++				pmtudisc:3,
++				padding:1,
++				srcprefs:3,
++				dontfrag:1,
++				autoflowlabel:1,
++				autoflowlabel_set:1,
++				mc_all:1,
++				recverr_rfc4884:1,
++				rtalert_isolate:1;
++}  __attribute__((preserve_access_index));
++
++struct inet_sock {
++	/* sk and pinet6 has to be the first two members of inet_sock */
++	struct sock		sk;
++	struct ipv6_pinfo	*pinet6;
++} __attribute__((preserve_access_index));
++
++struct inet_connection_sock {
++	__u32			  icsk_user_timeout;
++	__u8			  icsk_syn_retries;
++} __attribute__((preserve_access_index));
++
++struct tcp_sock {
++	struct inet_connection_sock	inet_conn;
++	struct tcp_options_received rx_opt;
++	__u8	save_syn:2,
++		syn_data:1,
++		syn_fastopen:1,
++		syn_fastopen_exp:1,
++		syn_fastopen_ch:1,
++		syn_data_acked:1,
++		is_cwnd_limited:1;
++	__u32	window_clamp;
++	__u8	nonagle     : 4,
++		thin_lto    : 1,
++		recvmsg_inq : 1,
++		repair      : 1,
++		frto        : 1;
++	__u32	notsent_lowat;
++	__u8	keepalive_probes;
++	unsigned int		keepalive_time;
++	unsigned int		keepalive_intvl;
++} __attribute__((preserve_access_index));
++
++struct socket {
++	struct sock *sk;
++} __attribute__((preserve_access_index));
++
++struct loop_ctx {
++	void *ctx;
++	struct sock *sk;
++};
++
++static int __bpf_getsockopt(void *ctx, struct sock *sk,
++			    int level, int opt, int *optval,
++			    int optlen)
++{
++	if (level =3D=3D SOL_SOCKET) {
++		switch (opt) {
++		case SO_REUSEADDR:
++			*optval =3D !!(sk->__sk_common.skc_reuse);
++			break;
++		case SO_KEEPALIVE:
++			*optval =3D !!(sk->__sk_common.skc_flags & (1UL << 3));
++			break;
++		case SO_RCVLOWAT:
++			*optval =3D sk->sk_rcvlowat;
++			break;
++		case SO_MARK:
++			*optval =3D sk->sk_mark;
++			break;
++		case SO_MAX_PACING_RATE:
++			*optval =3D sk->sk_max_pacing_rate;
++			break;
++		default:
++			return bpf_getsockopt(ctx, level, opt, optval, optlen);
++		}
++		return 0;
++	}
++
++	if (level =3D=3D IPPROTO_TCP) {
++		struct tcp_sock *tp =3D bpf_skc_to_tcp_sock(sk);
++
++		if (!tp)
++			return -1;
++
++		switch (opt) {
++		case TCP_NODELAY:
++			*optval =3D !!(tp->nonagle & TCP_NAGLE_OFF);
++			break;
++		case TCP_MAXSEG:
++			*optval =3D tp->rx_opt.user_mss;
++			break;
++		case TCP_KEEPIDLE:
++			*optval =3D tp->keepalive_time / CONFIG_HZ;
++			break;
++		case TCP_SYNCNT:
++			*optval =3D tp->inet_conn.icsk_syn_retries;
++			break;
++		case TCP_KEEPINTVL:
++			*optval =3D tp->keepalive_intvl / CONFIG_HZ;
++			break;
++		case TCP_KEEPCNT:
++			*optval =3D tp->keepalive_probes;
++			break;
++		case TCP_WINDOW_CLAMP:
++			*optval =3D tp->window_clamp;
++			break;
++		case TCP_THIN_LINEAR_TIMEOUTS:
++			*optval =3D tp->thin_lto;
++			break;
++		case TCP_USER_TIMEOUT:
++			*optval =3D tp->inet_conn.icsk_user_timeout;
++			break;
++		case TCP_NOTSENT_LOWAT:
++			*optval =3D tp->notsent_lowat;
++			break;
++		case TCP_SAVE_SYN:
++			*optval =3D tp->save_syn;
++			break;
++		default:
++			return bpf_getsockopt(ctx, level, opt, optval, optlen);
++		}
++		return 0;
++	}
++
++	if (level =3D=3D IPPROTO_IPV6) {
++		switch (opt) {
++		case IPV6_AUTOFLOWLABEL: {
++			__u16 proto =3D sk->sk_protocol;
++			struct inet_sock *inet_sk;
++
++			if (proto =3D=3D IPPROTO_TCP)
++				inet_sk =3D (struct inet_sock *)bpf_skc_to_tcp_sock(sk);
++			else
++				inet_sk =3D (struct inet_sock *)bpf_skc_to_udp6_sock(sk);
++
++			if (!inet_sk)
++				return -1;
++
++			*optval =3D !!inet_sk->pinet6->autoflowlabel;
++			break;
++		}
++		default:
++			return bpf_getsockopt(ctx, level, opt, optval, optlen);
++		}
++		return 0;
++	}
++
++	return bpf_getsockopt(ctx, level, opt, optval, optlen);
++}
++
++static int bpf_test_sockopt_flip(void *ctx, struct sock *sk,
++				 const struct sockopt_test *t,
++				 int level)
++{
++	int old, tmp, new, opt =3D t->opt;
++
++	opt =3D t->opt;
++
++	if (__bpf_getsockopt(ctx, sk, level, opt, &old, sizeof(old)))
++		return 1;
++	/* kernel initialized txrehash to 255 */
++	if (level =3D=3D SOL_SOCKET && opt =3D=3D SO_TXREHASH && old !=3D 0 && =
+old !=3D 1)
++		old =3D 1;
++
++	new =3D !old;
++	if (bpf_setsockopt(ctx, level, opt, &new, sizeof(new)))
++		return 1;
++	if (__bpf_getsockopt(ctx, sk, level, opt, &tmp, sizeof(tmp)) ||
++	    tmp !=3D new)
++		return 1;
++
++	if (bpf_setsockopt(ctx, level, opt, &old, sizeof(old)))
++		return 1;
++
++	return 0;
++}
++
++static int bpf_test_sockopt_int(void *ctx, struct sock *sk,
++				const struct sockopt_test *t,
++				int level)
++{
++	int old, tmp, new, expected, opt;
++
++	opt =3D t->opt;
++	new =3D t->new;
++	if (sk->sk_type =3D=3D SOCK_STREAM && t->tcp_expected)
++		expected =3D t->tcp_expected;
++	else
++		expected =3D t->expected;
++
++	if (__bpf_getsockopt(ctx, sk, level, opt, &old, sizeof(old)) ||
++	    old =3D=3D new)
++		return 1;
++
++	if (bpf_setsockopt(ctx, level, opt, &new, sizeof(new)))
++		return 1;
++	if (__bpf_getsockopt(ctx, sk, level, opt, &tmp, sizeof(tmp)) ||
++	    tmp !=3D expected)
++		return 1;
++
++	if (t->restore)
++		old =3D t->restore;
++	if (bpf_setsockopt(ctx, level, opt, &old, sizeof(old)))
++		return 1;
++
++	return 0;
++}
++
++static int bpf_test_socket_sockopt(__u32 i, struct loop_ctx *lc)
++{
++	const struct sockopt_test *t;
++
++	if (i >=3D ARRAY_SIZE(sol_socket_tests))
++		return 1;
++
++	t =3D &sol_socket_tests[i];
++	if (!t->opt)
++		return 1;
++
++	if (t->flip)
++		return bpf_test_sockopt_flip(lc->ctx, lc->sk, t, SOL_SOCKET);
++
++	return bpf_test_sockopt_int(lc->ctx, lc->sk, t, SOL_SOCKET);
++}
++
++static int bpf_test_ip_sockopt(__u32 i, struct loop_ctx *lc)
++{
++	const struct sockopt_test *t;
++
++	if (i >=3D ARRAY_SIZE(sol_ip_tests))
++		return 1;
++
++	t =3D &sol_ip_tests[i];
++	if (!t->opt)
++		return 1;
++
++	if (t->flip)
++		return bpf_test_sockopt_flip(lc->ctx, lc->sk, t, IPPROTO_IP);
++
++	return bpf_test_sockopt_int(lc->ctx, lc->sk, t, IPPROTO_IP);
++}
++
++static int bpf_test_ipv6_sockopt(__u32 i, struct loop_ctx *lc)
++{
++	const struct sockopt_test *t;
++
++	if (i >=3D ARRAY_SIZE(sol_ipv6_tests))
++		return 1;
++
++	t =3D &sol_ipv6_tests[i];
++	if (!t->opt)
++		return 1;
++
++	if (t->flip)
++		return bpf_test_sockopt_flip(lc->ctx, lc->sk, t, IPPROTO_IPV6);
++
++	return bpf_test_sockopt_int(lc->ctx, lc->sk, t, IPPROTO_IPV6);
++}
++
++static int bpf_test_tcp_sockopt(__u32 i, struct loop_ctx *lc)
++{
++	const struct sockopt_test *t;
++	struct sock *sk;
++	void *ctx;
++
++	if (i >=3D ARRAY_SIZE(sol_tcp_tests))
++		return 1;
++
++	t =3D &sol_tcp_tests[i];
++	if (!t->opt)
++		return 1;
++
++	ctx =3D lc->ctx;
++	sk =3D lc->sk;
++
++	if (t->opt =3D=3D TCP_CONGESTION) {
++		char old_cc[16], tmp_cc[16];
++		const char *new_cc;
++
++		if (bpf_getsockopt(ctx, IPPROTO_TCP, TCP_CONGESTION, old_cc, sizeof(ol=
+d_cc)))
++			return 1;
++		if (!bpf_strncmp(old_cc, sizeof(old_cc), cubic_cc))
++			new_cc =3D reno_cc;
++		else
++			new_cc =3D cubic_cc;
++		if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_CONGESTION, (void *)new_cc,
++				   sizeof(new_cc)))
++			return 1;
++		if (bpf_getsockopt(ctx, IPPROTO_TCP, TCP_CONGESTION, tmp_cc, sizeof(tm=
+p_cc)))
++			return 1;
++		if (bpf_strncmp(tmp_cc, sizeof(tmp_cc), new_cc))
++			return 1;
++		if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_CONGESTION, old_cc, sizeof(ol=
+d_cc)))
++			return 1;
++		return 0;
++	}
++
++	if (t->flip)
++		return bpf_test_sockopt_flip(ctx, sk, t, IPPROTO_TCP);
++
++	return bpf_test_sockopt_int(ctx, sk, t, IPPROTO_TCP);
++}
++
++static int bpf_test_sockopt(void *ctx, struct sock *sk)
++{
++	struct loop_ctx lc =3D { .ctx =3D ctx, .sk =3D sk, };
++	__u16 family, proto;
++	int n;
++
++	family =3D sk->__sk_common.skc_family;
++	proto =3D sk->sk_protocol;
++
++	n =3D bpf_loop(ARRAY_SIZE(sol_socket_tests), bpf_test_socket_sockopt, &=
+lc, 0);
++	if (n !=3D ARRAY_SIZE(sol_socket_tests))
++		return -1;
++
++	if (proto =3D=3D IPPROTO_TCP) {
++		n =3D bpf_loop(ARRAY_SIZE(sol_tcp_tests), bpf_test_tcp_sockopt, &lc, 0=
+);
++		if (n !=3D ARRAY_SIZE(sol_tcp_tests))
++			return -1;
++	}
++
++	if (family =3D=3D AF_INET) {
++		n =3D bpf_loop(ARRAY_SIZE(sol_ip_tests), bpf_test_ip_sockopt, &lc, 0);
++		if (n !=3D ARRAY_SIZE(sol_ip_tests))
++			return -1;
++	} else {
++		n =3D bpf_loop(ARRAY_SIZE(sol_ipv6_tests), bpf_test_ipv6_sockopt, &lc,=
+ 0);
++		if (n !=3D ARRAY_SIZE(sol_ipv6_tests))
++			return -1;
++	}
++
++	return 0;
++}
++
++static int binddev_test(void *ctx)
++{
++	const char empty_ifname[] =3D "";
++	int ifindex, zero =3D 0;
++
++	if (bpf_setsockopt(ctx, SOL_SOCKET, SO_BINDTODEVICE,
++			   (void *)veth, sizeof(veth)))
++		return -1;
++	if (bpf_getsockopt(ctx, SOL_SOCKET, SO_BINDTOIFINDEX,
++			   &ifindex, sizeof(int)) ||
++	    ifindex !=3D veth_ifindex)
++		return -1;
++
++	if (bpf_setsockopt(ctx, SOL_SOCKET, SO_BINDTODEVICE,
++			   (void *)empty_ifname, sizeof(empty_ifname)))
++		return -1;
++	if (bpf_getsockopt(ctx, SOL_SOCKET, SO_BINDTOIFINDEX,
++			   &ifindex, sizeof(int)) ||
++	    ifindex !=3D 0)
++		return -1;
++
++	if (bpf_setsockopt(ctx, SOL_SOCKET, SO_BINDTOIFINDEX,
++			   (void *)&veth_ifindex, sizeof(int)))
++		return -1;
++	if (bpf_getsockopt(ctx, SOL_SOCKET, SO_BINDTOIFINDEX,
++			   &ifindex, sizeof(int)) ||
++	    ifindex !=3D veth_ifindex)
++		return -1;
++
++	if (bpf_setsockopt(ctx, SOL_SOCKET, SO_BINDTOIFINDEX,
++			   &zero, sizeof(int)))
++		return -1;
++	if (bpf_getsockopt(ctx, SOL_SOCKET, SO_BINDTOIFINDEX,
++			   &ifindex, sizeof(int)) ||
++	    ifindex !=3D 0)
++		return -1;
++
++	return 0;
++}
++
++SEC("lsm_cgroup/socket_post_create")
++int BPF_PROG(socket_post_create, struct socket *sock, int family,
++	     int type, int protocol, int kern)
++{
++	struct sock *sk =3D sock->sk;
++
++	if (!sk)
++		return 1;
++
++	nr_socket_post_create +=3D !bpf_test_sockopt(sk, sk);
++	nr_binddev +=3D !binddev_test(sk);
++
++	return 1;
++}
++
++SEC("sockops")
++int skops_sockopt(struct bpf_sock_ops *skops)
++{
++	struct bpf_sock *bpf_sk =3D skops->sk;
++	struct sock *sk;
++
++	if (!bpf_sk)
++		return 1;
++
++	sk =3D (struct sock *)bpf_skc_to_tcp_sock(bpf_sk);
++	if (!sk)
++		return 1;
++
++	switch (skops->op) {
++	case BPF_SOCK_OPS_TCP_LISTEN_CB:
++		nr_listen +=3D !bpf_test_sockopt(skops, sk);
++		break;
++	case BPF_SOCK_OPS_TCP_CONNECT_CB:
++		nr_connect +=3D !bpf_test_sockopt(skops, sk);
++		break;
++	case BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB:
++		nr_active +=3D !bpf_test_sockopt(skops, sk);
++		break;
++	case BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB:
++		nr_passive +=3D !bpf_test_sockopt(skops, sk);
++		break;
++	}
++
++	return 1;
++}
++
++char _license[] SEC("license") =3D "GPL";
 --=20
 2.30.2
 
