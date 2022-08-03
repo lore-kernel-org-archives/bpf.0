@@ -2,212 +2,237 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B5C3C3F6B0
-	for <bpf@archiver.kernel.org>; Wed,  3 Aug 2022 12:44:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A28B8C3F6B0
+	for <bpf@archiver.kernel.org>; Wed,  3 Aug 2022 13:13:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236418AbiHCMog (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 Aug 2022 08:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46832 "EHLO
+        id S238036AbiHCNNc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 Aug 2022 09:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236060AbiHCMoe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 Aug 2022 08:44:34 -0400
-Received: from mx08-0057a101.pphosted.com (mx08-0057a101.pphosted.com [185.183.31.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 305CB2873B;
-        Wed,  3 Aug 2022 05:44:31 -0700 (PDT)
-Received: from pps.filterd (m0214196.ppops.net [127.0.0.1])
-        by mx07-0057a101.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 273B1u0l010737;
-        Wed, 3 Aug 2022 14:40:49 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=westermo.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- mime-version; s=12052020; bh=+H4HWiDhRR12823TSFO8QNTcgCwPUwhIvczD0g/VySw=;
- b=m7MQCA3DeIGD+9eqOqJK9U2YXur/mgKv5XDEeAQyNpGh9t1JEb9S24E7eRYU2jZbIDJz
- WhxD25Jwcx2iwkvAa0bqmWebzm2+psY3ctcgVFxhJSS/aEB+zZH2hGh1TcKVDRzJiq78
- p21QCIWkfhr9WC8ylcIS+twd466F/Q68dEBigbtVvvos5HDLXRf22iMLVEL1aCMUU8WH
- q2hGP3g83gDE3bINmcp+RjIryfbJJHGARiLfK0bp6fUX4uoYHTH8fCDiRCpj0SMZX8eP
- KvQD9v6NUNTUPFZbgO21RnHlOaE+ujkwsZCLMFHQpgM7so5WXJ2yQD/xVZR1JlKLrwnl Rw== 
-Received: from mail.beijerelectronics.com ([195.67.87.131])
-        by mx07-0057a101.pphosted.com (PPS) with ESMTPS id 3hmrn43vt0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 03 Aug 2022 14:40:48 +0200
-Received: from EX01GLOBAL.beijerelectronics.com (10.101.10.25) by
- EX01GLOBAL.beijerelectronics.com (10.101.10.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.2375.17; Wed, 3 Aug 2022 14:40:48 +0200
-Received: from EUR03-VE1-obe.outbound.protection.outlook.com (104.47.9.56) by
- EX01GLOBAL.beijerelectronics.com (10.101.10.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.2375.17 via Frontend Transport; Wed, 3 Aug 2022 14:40:48 +0200
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KJX5Bz0c0r0Dm445lqAd2b+Q3gQwAN/4EB0dgQOXC1OJYn6loRR4A+UGlSCwsKfpD2PHDTi3Ijm0qUvaMDuzYtW51cBjxQdgP34Qhzz/129tqSjvAQfMPtFayM0FRGywt4C9im7SagCsyXZ+xW+oDUfVPp2Z4gu82ZBcWgcgFO0p0ROb7l/+TbtUoOGvqEj9XOaix5xWY/z7ixp2azIVmG/jKrfWFhcH5eEH2O+vWMUr0bDoPZWPFZ9U+Ou1Ami/eyvPJKLeY3hJSzXwfJ6gqptiEZH+5SU6g+bW/oM/YI1IRnm08TEcPizKAmqie6zgQaF0u09tpzPVteDA03WQ1w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+H4HWiDhRR12823TSFO8QNTcgCwPUwhIvczD0g/VySw=;
- b=A3+cUYDJjvab8LfBEqO/f6XJHe5CkRcp1HlkNNcIeswp6aO6q67+qmdKyaeeYK9LgrTbdRY2ZCN0km3rb58Tb/2GQ0aKwTxDT1UQvJspjkI5puTPqtbgXMqNuq/80A6gGYwoAaz/XuG5Edq1kGUCdYf5oB3ALZkJSnW3YTWoO/lHrnt4byaUCbza2ruO8z0Ost55kjXjSqwk9QPFLeCwU/RXXpr7RIpY65pG+qLHN8ibWPFgcWbCsbiwS3jz7QID3DCrdS3dwD/iGUUe/FMVGpoJAhPOj92XGH6tm3uIR9bV2zSKQuTTTyZu+bRTJt5sC4MYGEACQ+VRwBw3nWaIwA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=westermo.com; dmarc=pass action=none header.from=westermo.com;
- dkim=pass header.d=westermo.com; arc=none
+        with ESMTP id S237916AbiHCNNa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 Aug 2022 09:13:30 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F5C718E00
+        for <bpf@vger.kernel.org>; Wed,  3 Aug 2022 06:13:17 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id p132so19835224oif.9
+        for <bpf@vger.kernel.org>; Wed, 03 Aug 2022 06:13:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=beijerelectronicsab.onmicrosoft.com;
- s=selector1-beijerelectronicsab-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+H4HWiDhRR12823TSFO8QNTcgCwPUwhIvczD0g/VySw=;
- b=P7+TRBZYPniG8AZFPEu7QAfH535MXEDYIvUDQMRhB+UvCs1kde8kJf0yb3iqGwGHDFrKl1WStJvlwBwE5nfoQse24Mn67QBMDD+qdRsB6Cu1gt8NnuEGIkxg2bLIxUhHHb+OiDFp6pxWnIYcoTiqzfLBMXEnbE3a/hLnaMn05AU=
-Received: from DB9P192MB1388.EURP192.PROD.OUTLOOK.COM (2603:10a6:10:296::18)
- by AS1P192MB1469.EURP192.PROD.OUTLOOK.COM (2603:10a6:20b:4ad::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Wed, 3 Aug
- 2022 12:40:46 +0000
-Received: from DB9P192MB1388.EURP192.PROD.OUTLOOK.COM
- ([fe80::582f:a473:b276:fa7f]) by DB9P192MB1388.EURP192.PROD.OUTLOOK.COM
- ([fe80::582f:a473:b276:fa7f%4]) with mapi id 15.20.5482.016; Wed, 3 Aug 2022
- 12:40:46 +0000
-Message-ID: <19ac9568-682b-3e21-1d5b-ccca870910d5@westermo.com>
-Date:   Wed, 3 Aug 2022 14:40:41 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 net 1/4] geneve: do not use RT_TOS for IPv6 flowlabel
-Content-Language: en-US
-To:     Guillaume Nault <gnault@redhat.com>
-CC:     <netdev@vger.kernel.org>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <roopa@nvidia.com>, <eng.alaamohamedsoliman.am@gmail.com>,
-        <bigeasy@linutronix.de>, <saeedm@nvidia.com>, <leon@kernel.org>,
-        <roid@nvidia.com>, <maord@nvidia.com>, <lariel@nvidia.com>,
-        <vladbu@nvidia.com>, <cmi@nvidia.com>, <yoshfuji@linux-ipv6.org>,
-        <dsahern@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <nicolas.dichtel@6wind.com>, <eyal.birger@gmail.com>,
-        <jesse@nicira.com>, <linville@tuxdriver.com>,
-        <daniel@iogearbox.net>, <hadarh@mellanox.com>,
-        <ogerlitz@mellanox.com>, <willemb@google.com>,
-        <martin.varghese@nokia.com>
-References: <20220802120935.1363001-1-matthias.may@westermo.com>
- <20220802120935.1363001-2-matthias.may@westermo.com>
- <20220803113041.GC29408@pc-4.home>
-From:   Matthias May <matthias.may@westermo.com>
-In-Reply-To: <20220803113041.GC29408@pc-4.home>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------MzXFsfKpzOmzykMyAmooPwxj"
-X-ClientProxiedBy: GV3P280CA0094.SWEP280.PROD.OUTLOOK.COM (2603:10a6:150:8::7)
- To DB9P192MB1388.EURP192.PROD.OUTLOOK.COM (2603:10a6:10:296::18)
+        d=cloudflare.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=0qI80nKbtNInC7TnaqV1RRwJ5MKOkQCfQlYI1Abu+68=;
+        b=jtodadUycK+1LkDSYjWv8XqXchbrV8seFLSfpmqa6P3sOQ/of4IOcRUxXS1Bd4JQBX
+         YhmbqlC+yxW9CTOk4i0D6sxWl0tLx5O0b/6PobzrrG7Khc1GwbaSCbDxfaFKRBlVF//X
+         yBzwRrxphm+rRMuCnO5lQIVW1fkXROZV4I73U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=0qI80nKbtNInC7TnaqV1RRwJ5MKOkQCfQlYI1Abu+68=;
+        b=FIu3MJiuVlaSx6LnkVNIujBxSTsHltkt17EfzaD5gDTky3b8hh+W2xriiE8NtJULpj
+         9UlCYUS/AZ/Korl5zxDGkP6srC4/U5hlwgh106aP3h50MKNYE0NJoOxjle4Iwvem5ndY
+         ky9tO95LL6GwM6y2xPomPYIqselaToUhfWYfAA9InTZe4JakHXL/I6XlO9+pY34ihD/Z
+         P4MmvEqWZY7c+y+pbVZ0lI5r6U9Y26Qm74Q0YA7ryv+03jgTFDJNi+B1hsnvD1y/oXmo
+         jzQ58uAQuDYglJ+pwlxgI+FS/WT9OFF2VoSecGw9MZnHDDA7gBSWLQNOMU5hfZO47qDp
+         cBuQ==
+X-Gm-Message-State: ACgBeo0WHRqnN54KXFbdJo8nIquk3ElDtt5K2h8oZWvP9bFx0c0TeOpj
+        oLt8f1YLxIHtaZnSEHHhPmaW7A==
+X-Google-Smtp-Source: AA6agR4YcT+i543RaZOzyZZrxoYafQeMyJMNwQPlZAZ5N2PjqYDcx6ffwBEUmWSpOvruLmyqiKyulA==
+X-Received: by 2002:a05:6808:143:b0:33a:d513:1443 with SMTP id h3-20020a056808014300b0033ad5131443mr1620237oie.43.1659532396382;
+        Wed, 03 Aug 2022 06:13:16 -0700 (PDT)
+Received: from [192.168.0.41] ([184.4.90.121])
+        by smtp.gmail.com with ESMTPSA id t26-20020a0568080b3a00b0033a3e6e7ce9sm3539763oij.10.2022.08.03.06.13.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Aug 2022 06:13:16 -0700 (PDT)
+Message-ID: <11578cfd-3d19-8bda-b36e-5e522e7c4490@cloudflare.com>
+Date:   Wed, 3 Aug 2022 08:13:15 -0500
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f1f9fca5-b49a-4cc8-e65c-08da754d631a
-X-MS-TrafficTypeDiagnostic: AS1P192MB1469:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Bug8v8OX73WeNvU9qUP1GlSWHGdWBx5+43s5MLGyMndzw6wo2ICphYs8u7mReG/RQ1UoPzcKa73OMBUrM6d17T1FKKISWv8Mrii513+MnbLJA1ZyTwmK2v+mQN+vR+NEH+8ySt1lFJ/n1bXLC0rPGRKIF5hWBnubV9NnzIxSvz30Nr4gdodNF/wJQuwGgi4djuQLP6/hOp8VtkFkPxHfhBcnatvKls1C6ispgXNLnl1CY+oLi28u+uzM6MFPTDrI03uoDR9hmPhTC31INxGcPYbTUiAExk8VsLrfO4KgviPXWAM/6jt4Z+0f+uR2oprq2tIft0nbzNj1O3zXZyMkf/+924GeZ2e16FbKoF3dR3RfE4SCevjVdVdkgjM549hzyhZIXNiJdpG8/PibGFSZx7HWMOVanThci6DNBXjyAZ5L7Pgo0y8UB64K1n0V4RRSqXZo2Zx5elE8xA/MBg7SfcLp1vvKauLZOkf1PELMQ4G3Dzg8xDf6PwODG0DvOZa0JBgEhNGQyCniLiI5xE8wZvWiDv7Ve3APJ2kVY5gwIV/LLFo9ZPL9HIqW1H5uD9YfrfurBg9tUR4JMhWrnzJolPw3F7BUirfsGOk8FCLkVaHuHY71xHTu49wZtSj0aQFZENfKnUgPqya/1q+0Sak0q75GGvc+hWAbfiId8MjyTNv1TfjAQolrorK79mseocSf8Y0gkCgdOi7m3y0BcvERVG65c09DYzoR8UB+1pB1jbOjcI7QEn4RZbQ8UeY4VtUmXq0oQw8BT8oDviYjozz/oC4awZt7VGcBdU/IvQ44zk/o5ErCOZIBU2OQYXUhTrwq1GeF/P71kQSgYrpji+wE/I7SS3HQgkc3iKu5/Yb0X3yZfr06+xJ0XwGGiY7Jlt3e
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9P192MB1388.EURP192.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(366004)(346002)(39850400004)(376002)(396003)(83380400001)(186003)(26005)(2616005)(6512007)(4326008)(66556008)(66946007)(2906002)(7416002)(66476007)(36756003)(8676002)(7406005)(31686004)(44832011)(5660300002)(235185007)(8936002)(86362001)(31696002)(6916009)(52116002)(41300700001)(33964004)(6506007)(6666004)(53546011)(316002)(6486002)(478600001)(21480400003)(38350700002)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NTZ2UnMrS29rdDl4ZDlZN3BiUEVQMGFCbUpvZ2VRZ3RGaVhBRTUrM09DOS9m?=
- =?utf-8?B?aFhBTEdwcGtGd3QwU1ZTTlhRM3FMWWwrY0RTZVFFUGszV2RseVA4dkFQTjR0?=
- =?utf-8?B?aDJpQm85QVJ3RHdWLzBqbGFOb0JzZy9RSmVRWWdLdzV0L09FMmJERGhlWmdK?=
- =?utf-8?B?cTdBbW9NaUtCQUhmcDdtS1hJSDRab3cyM2tZTzlsM05oS24wWnlhaDA1bVRj?=
- =?utf-8?B?OFJpVmwzbERqZ05lMkJOUmNGT2lOYzhUYjR5OTRYblRIbis2SnlOaE9BUXRw?=
- =?utf-8?B?VzI4MGxyR1pZMDVubUJaK0VBSkIvVnRLVXdUem1nTk1VajRtQW5RUGhKMFhQ?=
- =?utf-8?B?RDlYbzRSWHIzSldoTGVhbGV4M0lYRFJIdkhUb1MxN0czRXhQWDg4UkFLb1Fk?=
- =?utf-8?B?L0ROK0hOVlViTzJaNUxPR29tWTU0Y1ZkYitER1EvVzlkc0RJNUdIYTcwYWdP?=
- =?utf-8?B?MWowa3o2KzNLUlFpZVpEU0VtdDhaUWRaNlEvWFhvYjA4RGR2bGFUMHVXK0Nz?=
- =?utf-8?B?c0hUU2g0MWZQMDlQb2gybmY1ZytMSGJzS2tqT0RQQ0dwNjdDZjRqc01jNUtL?=
- =?utf-8?B?c2h4MGVmcG5xN200Z1VyQUcvU09TaklNTVBGVHF6dlJMdTBhSTZpalc3SGlr?=
- =?utf-8?B?Nkp6ZjR1QURIckFNTkcrQVV0RmU0VUpDcnFBc0Q2d2VQWWRWSWNjQ0xBakkr?=
- =?utf-8?B?M1VsUmhNTXpSL2xFUldFemh6RTRHU1kydFpYSjA2Q1FLWDJRS2lTbElrcE5t?=
- =?utf-8?B?VldnTm9zTGNIbExZNVA2bFBabE5FZTgyUE1mRzh6ci9zWmpqM3A5Sk1OWGdC?=
- =?utf-8?B?c0h3b0NFVXc3Q3o4RmYybWIxem8rZit1aCt3UkFtMEUwZkZqeUFhWG9VMm94?=
- =?utf-8?B?a0grd2xPZC9RWXpVODVEYWNXMUxjMjhCN2FNenFyMjlhOFpkVkFUZVZDY3Zl?=
- =?utf-8?B?bEVDUFNyOXZjeVZqRXRkU3RKaW1vWVRtVC9ZL1pmRHFoOTNGOFZtZlQrTXpB?=
- =?utf-8?B?V2hUQ1ZRaTVqbDhvSTBGVXdXazV0MXFGN3E2ckttOEZTNzhrSUFLeDFDbDRE?=
- =?utf-8?B?YlV1eHdhWUFFS2hGRDREVXlEMXI0ZUFKUlEyYXRocTJOMmFoWWJRT0ZQNGs4?=
- =?utf-8?B?NEYxaEs2Zkg2amE0bGZsUjBSZndSUEVuTFd3NTUvOWxud29ZeUNjOGtUUHBU?=
- =?utf-8?B?MjJVS0twdTBiQURCZUdyN2dnUGtCMjNSMWlFYXlXUzVPajVhSnlZSEJYK2Ri?=
- =?utf-8?B?dXZlSFdUZG9ja0VaL2FwV1g4cEZLKzdKenFNN25vTENkdHoyL04ycmNkSElt?=
- =?utf-8?B?SC9ycDVkQjBCdXpmV2drN2hFK3lnZHo0Wm02aUtoRjd5TnFRM2ttYTZaakxD?=
- =?utf-8?B?cVlTVUhMUjFURXdiY1cyY01sZjVIMFhwNDh6Sjh4RW5rQVFzQVl1cHd3T3d0?=
- =?utf-8?B?enI4S1ozbzV6YlAvekFhL0VQQjlxS05MS2VqZTZlU0c0cG14aWU4RmpRUVJ1?=
- =?utf-8?B?blhQcnR4Q2N0Q0tHNTUxQlMwbFlqM0o2bENHbGNwRDhQYS81cnp4Z0xzR215?=
- =?utf-8?B?Ly9ldDdEYldnZFRXeDFEUHZSVEJTbWRQV2luci9ZM2NZNlp6Wm1uOFZiMjdo?=
- =?utf-8?B?ekhER2dlSmpjTkM5UlplL0VBeVpPQ3UyR1Y2V0FxNlZvTGN3TEoyNlh1V1Va?=
- =?utf-8?B?eDQ2ZUxJOThRck5qeDhXdjhtUzlXMHJkQXIvZGY1RktVUy9SbXVEc0lBNkd5?=
- =?utf-8?B?ZjBMY3lNWEorOFJJQlFSOVJSZ2RWU241L2hYQlBHVlBpZk90QnRucFN0NDla?=
- =?utf-8?B?VWxYQ0pEWHRUWklZNEpCdHJXTG1vRGxUUXNTS0MzOHdyV2pITTg1U25VSVdT?=
- =?utf-8?B?K1JYY3dGNlVxNUlaVmREYjNlbjRqeTZJL0NySWNORVQvYXFYeHZtUnVJZks5?=
- =?utf-8?B?a3M0ai8valBUK3c3R0syZmdaV1NNN2V5SWp5ekhsZUtXWGJyak5ycmFPQUw1?=
- =?utf-8?B?T3loRHVpTWl2K3I3Qzk1SUNRYlBSb1E0OWc0eC9aZG5ROWRLUE9KRjNDSlQr?=
- =?utf-8?B?dVlsTFBWUDh3Y3R1b2E4NnlTN0F2MkE2bWdDSXFORG5veTdCNFFOM0pXcjA1?=
- =?utf-8?Q?pdpAoB7GTowgVCSPSuTGtRI2B?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: f1f9fca5-b49a-4cc8-e65c-08da754d631a
-X-MS-Exchange-CrossTenant-AuthSource: DB9P192MB1388.EURP192.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Aug 2022 12:40:46.3547
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4b2e9b91-de77-4ca7-8130-c80faee67059
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +VpRQvvYasBrjh8P1YqT/mHLdAWxcHUU86BUcq8W5u4aIwaQuz6YyykzO3EPbh7QPJEhlpiUeck8wO3xXrcdbA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1P192MB1469
-X-OrganizationHeadersPreserved: AS1P192MB1469.EURP192.PROD.OUTLOOK.COM
-X-CrossPremisesHeadersPromoted: EX01GLOBAL.beijerelectronics.com
-X-CrossPremisesHeadersFiltered: EX01GLOBAL.beijerelectronics.com
-X-OriginatorOrg: westermo.com
-X-Proofpoint-GUID: wVam-pPZnJuV_bboyRdROrx7LCKqx2s-
-X-Proofpoint-ORIG-GUID: wVam-pPZnJuV_bboyRdROrx7LCKqx2s-
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 1/4] security, lsm: Introduce security_create_user_ns()
+Content-Language: en-US
+To:     KP Singh <kpsingh@kernel.org>
+Cc:     revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, serge@hallyn.com, paul@paul-moore.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
+        ebiederm@xmission.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
+References: <20220801180146.1157914-1-fred@cloudflare.com>
+ <20220801180146.1157914-2-fred@cloudflare.com>
+ <CACYkzJ4x90DamdN4dRCn1gZuAHLqJNy4MoP=qTX+44Bqx1uxSQ@mail.gmail.com>
+From:   Frederick Lawler <fred@cloudflare.com>
+In-Reply-To: <CACYkzJ4x90DamdN4dRCn1gZuAHLqJNy4MoP=qTX+44Bqx1uxSQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
---------------MzXFsfKpzOmzykMyAmooPwxj
-Content-Type: multipart/mixed; boundary="------------DE6Ztshkf9T9ZU1S4S8NkvkK";
- protected-headers="v1"
-From: Matthias May <matthias.may@westermo.com>
-To: Guillaume Nault <gnault@redhat.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, roopa@nvidia.com,
- eng.alaamohamedsoliman.am@gmail.com, bigeasy@linutronix.de,
- saeedm@nvidia.com, leon@kernel.org, roid@nvidia.com, maord@nvidia.com,
- lariel@nvidia.com, vladbu@nvidia.com, cmi@nvidia.com,
- yoshfuji@linux-ipv6.org, dsahern@kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, linux-rdma@vger.kernel.org, nicolas.dichtel@6wind.com,
- eyal.birger@gmail.com, jesse@nicira.com, linville@tuxdriver.com,
- daniel@iogearbox.net, hadarh@mellanox.com, ogerlitz@mellanox.com,
- willemb@google.com, martin.varghese@nokia.com
-Message-ID: <19ac9568-682b-3e21-1d5b-ccca870910d5@westermo.com>
-Subject: Re: [PATCH v2 net 1/4] geneve: do not use RT_TOS for IPv6 flowlabel
-References: <20220802120935.1363001-1-matthias.may@westermo.com>
- <20220802120935.1363001-2-matthias.may@westermo.com>
- <20220803113041.GC29408@pc-4.home>
-In-Reply-To: <20220803113041.GC29408@pc-4.home>
+On 8/2/22 4:47 PM, KP Singh wrote:
+> On Mon, Aug 1, 2022 at 8:02 PM Frederick Lawler <fred@cloudflare.com> wrote:
+>>
+>> Preventing user namespace (privileged or otherwise) creation comes in a
+>> few of forms in order of granularity:
+>>
+>>          1. /proc/sys/user/max_user_namespaces sysctl
+>>          2. OS specific patch(es)
+>>          3. CONFIG_USER_NS
+>>
+>> To block a task based on its attributes, the LSM hook cred_prepare is a
+>> good candidate for use because it provides more granular control, and
+>> it is called before create_user_ns():
+>>
+>>          cred = prepare_creds()
+>>                  security_prepare_creds()
+>>                          call_int_hook(cred_prepare, ...
+>>          if (cred)
+>>                  create_user_ns(cred)
+>>
+>> Since security_prepare_creds() is meant for LSMs to copy and prepare
+>> credentials, access control is an unintended use of the hook. Therefore
+>> introduce a new function security_create_user_ns() with an accompanying
+>> userns_create LSM hook.
+>>
+>> This hook takes the prepared creds for LSM authors to write policy
+>> against. On success, the new namespace is applied to credentials,
+>> otherwise an error is returned.
+>>
+>> Signed-off-by: Frederick Lawler <fred@cloudflare.com>
+>> Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+> 
+> Reviewed-by: KP Singh <kpsingh@kernel.org>
+> 
+> This looks useful, and I would also like folks to consider the
+> observability aspects of BPF LSM as
+> brought up here:
+> 
+> https://lore.kernel.org/all/CAEiveUdPhEPAk7Y0ZXjPsD=Vb5hn453CHzS9aG-tkyRa8bf_eg@mail.gmail.com/
+> 
+> Frederick, what about adding the observability aspects to the commit
+> description as well.
 
---------------DE6Ztshkf9T9ZU1S4S8NkvkK
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Agreed. I'll include that in v5.
 
-DQpPbiAwMy8wOC8yMDIyIDEzOjMwLCBHdWlsbGF1bWUgTmF1bHQgd3JvdGU6DQo+IE9uIFR1
-ZSwgQXVnIDAyLCAyMDIyIGF0IDAyOjA5OjMyUE0gKzAyMDAsIE1hdHRoaWFzIE1heSB3cm90
-ZToNCj4+IEFjY29yZGluZyB0byBHdWlsbGF1bWUgTmF1bHQgUlRfVE9TIHNob3VsZCBuZXZl
-ciBiZSB1c2VkIGZvciBJUHY2Lg0KPj4NCj4+IEZpeGVzOiAzYTU2Zjg2ZjFiZTZhICgiZ2Vu
-ZXZlOiBoYW5kbGUgaXB2NiBwcmlvcml0eSBsaWtlIGlwdjQgdG9zIikNCj4gDQo+IFdoaWxl
-IEknbSBhdCBpdCwgdGhlIFNIQTEgaXMgbm9ybWFsbHkgdHJ1bmNhdGVkIHRvIDEyIGNoYXJh
-dGVycywgbm90IDEzLg0KPiANCg0KSGkgR3VpbGxhdW1lDQpVcHMsIG1pc3NlZCB0byByZW1v
-dmUgdGhlIGFkZGl0aW9uYWwgY2hhcmFjdGVyIGluIHRoaXMgcGF0Y2guDQpGb3Igc29tZSBy
-ZWFzb24gZ2l0IGJsYW1lIHNob3dzIHRoZSBTSEExIHdpdGggMTMgY2hhcmFjdGVycywgbm90
-IHN1cmUgd2h5Lg0KDQpCUg0KTWF0dGhpYXMNCg==
+> 
+> - KP
+> 
+>>
+>> ---
+>> Changes since v3:
+>> - No changes
+>> Changes since v2:
+>> - Rename create_user_ns hook to userns_create
+>> Changes since v1:
+>> - Changed commit wording
+>> - Moved execution to be after id mapping check
+>> - Changed signature to only accept a const struct cred *
+>> ---
+>>   include/linux/lsm_hook_defs.h | 1 +
+>>   include/linux/lsm_hooks.h     | 4 ++++
+>>   include/linux/security.h      | 6 ++++++
+>>   kernel/user_namespace.c       | 5 +++++
+>>   security/security.c           | 5 +++++
+>>   5 files changed, 21 insertions(+)
+>>
+>> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+>> index eafa1d2489fd..7ff93cb8ca8d 100644
+>> --- a/include/linux/lsm_hook_defs.h
+>> +++ b/include/linux/lsm_hook_defs.h
+>> @@ -223,6 +223,7 @@ LSM_HOOK(int, -ENOSYS, task_prctl, int option, unsigned long arg2,
+>>           unsigned long arg3, unsigned long arg4, unsigned long arg5)
+>>   LSM_HOOK(void, LSM_RET_VOID, task_to_inode, struct task_struct *p,
+>>           struct inode *inode)
+>> +LSM_HOOK(int, 0, userns_create, const struct cred *cred)
+>>   LSM_HOOK(int, 0, ipc_permission, struct kern_ipc_perm *ipcp, short flag)
+>>   LSM_HOOK(void, LSM_RET_VOID, ipc_getsecid, struct kern_ipc_perm *ipcp,
+>>           u32 *secid)
+>> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+>> index 91c8146649f5..54fe534d0e01 100644
+>> --- a/include/linux/lsm_hooks.h
+>> +++ b/include/linux/lsm_hooks.h
+>> @@ -799,6 +799,10 @@
+>>    *     security attributes, e.g. for /proc/pid inodes.
+>>    *     @p contains the task_struct for the task.
+>>    *     @inode contains the inode structure for the inode.
+>> + * @userns_create:
+>> + *     Check permission prior to creating a new user namespace.
+>> + *     @cred points to prepared creds.
+>> + *     Return 0 if successful, otherwise < 0 error code.
+>>    *
+>>    * Security hooks for Netlink messaging.
+>>    *
+>> diff --git a/include/linux/security.h b/include/linux/security.h
+>> index 7fc4e9f49f54..a195bf33246a 100644
+>> --- a/include/linux/security.h
+>> +++ b/include/linux/security.h
+>> @@ -435,6 +435,7 @@ int security_task_kill(struct task_struct *p, struct kernel_siginfo *info,
+>>   int security_task_prctl(int option, unsigned long arg2, unsigned long arg3,
+>>                          unsigned long arg4, unsigned long arg5);
+>>   void security_task_to_inode(struct task_struct *p, struct inode *inode);
+>> +int security_create_user_ns(const struct cred *cred);
+>>   int security_ipc_permission(struct kern_ipc_perm *ipcp, short flag);
+>>   void security_ipc_getsecid(struct kern_ipc_perm *ipcp, u32 *secid);
+>>   int security_msg_msg_alloc(struct msg_msg *msg);
+>> @@ -1185,6 +1186,11 @@ static inline int security_task_prctl(int option, unsigned long arg2,
+>>   static inline void security_task_to_inode(struct task_struct *p, struct inode *inode)
+>>   { }
+>>
+>> +static inline int security_create_user_ns(const struct cred *cred)
+>> +{
+>> +       return 0;
+>> +}
+>> +
+>>   static inline int security_ipc_permission(struct kern_ipc_perm *ipcp,
+>>                                            short flag)
+>>   {
+>> diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
+>> index 5481ba44a8d6..3f464bbda0e9 100644
+>> --- a/kernel/user_namespace.c
+>> +++ b/kernel/user_namespace.c
+>> @@ -9,6 +9,7 @@
+>>   #include <linux/highuid.h>
+>>   #include <linux/cred.h>
+>>   #include <linux/securebits.h>
+>> +#include <linux/security.h>
+>>   #include <linux/keyctl.h>
+>>   #include <linux/key-type.h>
+>>   #include <keys/user-type.h>
+>> @@ -113,6 +114,10 @@ int create_user_ns(struct cred *new)
+>>              !kgid_has_mapping(parent_ns, group))
+>>                  goto fail_dec;
+>>
+>> +       ret = security_create_user_ns(new);
+>> +       if (ret < 0)
+>> +               goto fail_dec;
+>> +
+>>          ret = -ENOMEM;
+>>          ns = kmem_cache_zalloc(user_ns_cachep, GFP_KERNEL);
+>>          if (!ns)
+>> diff --git a/security/security.c b/security/security.c
+>> index 188b8f782220..ec9b4696e86c 100644
+>> --- a/security/security.c
+>> +++ b/security/security.c
+>> @@ -1903,6 +1903,11 @@ void security_task_to_inode(struct task_struct *p, struct inode *inode)
+>>          call_void_hook(task_to_inode, p, inode);
+>>   }
+>>
+>> +int security_create_user_ns(const struct cred *cred)
+>> +{
+>> +       return call_int_hook(userns_create, 0, cred);
+>> +}
+>> +
+>>   int security_ipc_permission(struct kern_ipc_perm *ipcp, short flag)
+>>   {
+>>          return call_int_hook(ipc_permission, 0, ipcp, flag);
+>> --
+>> 2.30.2
+>>
 
---------------DE6Ztshkf9T9ZU1S4S8NkvkK--
-
---------------MzXFsfKpzOmzykMyAmooPwxj
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wnsEABYIACMWIQR34wKNh4Jxr+4dJ/3fdrYEUzwNvgUCYupsyQUDAAAAAAAKCRDfdrYEUzwNvhFz
-AP0TsoZdVoS4Rx9UrNBTb/3AvAO8/qtRTW95UI8fJw1QBAEA+Es0Xor6s0v9XK9nMo4iij00KfH1
-oQWeMmn63uNd4wo=
-=lH8H
------END PGP SIGNATURE-----
-
---------------MzXFsfKpzOmzykMyAmooPwxj--
