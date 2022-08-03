@@ -2,41 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D95CBC19F2B
-	for <bpf@archiver.kernel.org>; Wed,  3 Aug 2022 20:48:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92139C3F6B0
+	for <bpf@archiver.kernel.org>; Wed,  3 Aug 2022 20:49:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238261AbiHCUsZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 Aug 2022 16:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
+        id S238699AbiHCUtR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 Aug 2022 16:49:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236179AbiHCUsY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 Aug 2022 16:48:24 -0400
+        with ESMTP id S238608AbiHCUtQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 Aug 2022 16:49:16 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EEE95C95B
-        for <bpf@vger.kernel.org>; Wed,  3 Aug 2022 13:48:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FE95C94E
+        for <bpf@vger.kernel.org>; Wed,  3 Aug 2022 13:49:15 -0700 (PDT)
 Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 273Fc3LK025765
-        for <bpf@vger.kernel.org>; Wed, 3 Aug 2022 13:48:22 -0700
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 273FC40a025784
+        for <bpf@vger.kernel.org>; Wed, 3 Aug 2022 13:49:15 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=8q51bHPYqZIqK1g3l2p20ghy4BeXezLI9t67HNE+0rw=;
- b=fR7ifT9FnIWrkYaPZIDGPaDiWSH+MS04/NJZnfDskaHKvclwgXD+SIEuPGuVa7ojjfX9
- tjUcjIy6b54Y1uM9+afJbjHixZeQAhAYyPAI3ehEhtQdF6N0Ju3zQIIXoavCkb3KehSR
- Pl8L4LHWjld2bg2Uoy2iQDgedjpR2OcMsHM= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=VUZgVVhMIX53YGS4qTb5dAd/pH/+EGA3XiUK+r4AV0E=;
+ b=THO264EIHWVa7OVh6ZwjNile+fWxqsXVbFxqufYHbxoR6fR/q1V96TGS7JDVdAt/kVp/
+ hj0SRcsjHLekbDOgUwLWsVSimA8yMnitrSF1CQyoQr/+satd2u1108NSr+vnPEPQOjbU
+ xV84Y2BfMm4te613aFTISjmcU60uTc+aXy0= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hpy32mq0x-2
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hpy32mq6p-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 03 Aug 2022 13:48:22 -0700
-Received: from snc-exhub201.TheFacebook.com (2620:10d:c085:21d::7) by
- snc-exhub204.TheFacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 3 Aug 2022 13:48:21 -0700
-Received: from twshared22413.18.frc3.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 03 Aug 2022 13:49:14 -0700
+Received: from twshared20276.35.frc1.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 3 Aug 2022 13:48:21 -0700
+ 15.1.2375.28; Wed, 3 Aug 2022 13:49:14 -0700
 Received: by devbig933.frc1.facebook.com (Postfix, from userid 6611)
-        id A6CD07A3F6B5; Wed,  3 Aug 2022 13:46:01 -0700 (PDT)
+        id 3EED07A3F71E; Wed,  3 Aug 2022 13:46:14 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -47,16 +44,18 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>, <kernel-team@fb.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Stanislav Fomichev <sdf@google.com>
-Subject: [PATCH v2 bpf-next 00/15] bpf: net: Remove duplicated code from bpf_setsockopt()
-Date:   Wed, 3 Aug 2022 13:46:01 -0700
-Message-ID: <20220803204601.3075863-1-kafai@fb.com>
+Subject: [PATCH v2 bpf-next 02/15] bpf: net: Avoid sk_setsockopt() taking sk lock when called from bpf
+Date:   Wed, 3 Aug 2022 13:46:14 -0700
+Message-ID: <20220803204614.3077284-1-kafai@fb.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220803204601.3075863-1-kafai@fb.com>
+References: <20220803204601.3075863-1-kafai@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: JnExU2FhNYeVjnvQse3OjpkogIYg2NpY
-X-Proofpoint-GUID: JnExU2FhNYeVjnvQse3OjpkogIYg2NpY
+X-Proofpoint-ORIG-GUID: tiqDtsaw-dXLPc7BZzWpeqcZ888e2pGt
+X-Proofpoint-GUID: tiqDtsaw-dXLPc7BZzWpeqcZ888e2pGt
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-03_06,2022-08-02_01,2022-06-22_01
@@ -64,74 +63,136 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The code in bpf_setsockopt() is mostly a copy-and-paste from
-the sock_setsockopt(), do_tcp_setsockopt(), do_ipv6_setsockopt(),
-and do_ip_setsockopt().  As the allowed optnames in bpf_setsockopt()
-grows, so are the duplicated code.  The code between the copies
-also slowly drifted.
+Most of the code in bpf_setsockopt(SOL_SOCKET) are duplicated from
+the sk_setsockopt().  The number of supported optnames are
+increasing ever and so as the duplicated code.
 
-This set is an effort to clean this up and reuse the existing
-{sock,do_tcp,do_ipv6,do_ip}_setsockopt() as much as possible.
+One issue in reusing sk_setsockopt() is that the bpf prog
+has already acquired the sk lock.  This patch adds a in_bpf()
+to tell if the sk_setsockopt() is called from a bpf prog.
+The bpf prog calling bpf_setsockopt() is either running in_task()
+or in_serving_softirq().  Both cases have the current->bpf_ctx
+initialized.  Thus, the in_bpf() only needs to test !!current->bpf_ctx.
 
-After the clean up, this set also adds a few allowed optnames
-that we need to the bpf_setsockopt().
+This patch also adds sockopt_{lock,release}_sock() helpers
+for sk_setsockopt() to use.  These helpers will test in_bpf()
+before acquiring/releasing the lock.  They are in EXPORT_SYMBOL
+for the ipv6 module to use in a latter patch.
 
-The initial attempt was to clean up both bpf_setsockopt() and
-bpf_getsockopt() together.  However, the patch set was getting
-too long.  It is beneficial to leave the bpf_getsockopt()
-out for another patch set.  Thus, this set is focusing
-on the bpf_setsockopt().
+Note on the change in sock_setbindtodevice().  sockopt_lock_sock()
+is done in sock_setbindtodevice() instead of doing the lock_sock
+in sock_bindtoindex(..., lock_sk =3D true).
 
-v2:
-- A major change is to use in_bpf() to test if a setsockopt()
-  is called by a bpf prog and use in_bpf() to skip capable
-  check.  Suggested by Stanislav.
-- Instead of passing is_locked through sockptr_t or through an extra
-  argument to sk_setsockopt, v2 uses in_bpf() to skip the lock_sock()
-  also because bpf prog has the lock acquired.
-- No change to the current sockptr_t in this revision
-- s/codes/code/
+Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+---
+ include/linux/bpf.h |  8 ++++++++
+ include/net/sock.h  |  3 +++
+ net/core/sock.c     | 26 +++++++++++++++++++++++---
+ 3 files changed, 34 insertions(+), 3 deletions(-)
 
-Martin KaFai Lau (15):
-  net: Add sk_setsockopt() to take the sk ptr instead of the sock ptr
-  bpf: net: Avoid sk_setsockopt() taking sk lock when called from bpf
-  bpf: net: Consider in_bpf() when testing capable() in sk_setsockopt()
-  bpf: net: Change do_tcp_setsockopt() to use the sockopt's lock_sock()
-    and capable()
-  bpf: net: Change do_ip_setsockopt() to use the sockopt's lock_sock()
-    and capable()
-  bpf: net: Change do_ipv6_setsockopt() to use the sockopt's lock_sock()
-    and capable()
-  bpf: Initialize the bpf_run_ctx in bpf_iter_run_prog()
-  bpf: Embed kernel CONFIG check into the if statement in bpf_setsockopt
-  bpf: Change bpf_setsockopt(SOL_SOCKET) to reuse sk_setsockopt()
-  bpf: Refactor bpf specific tcp optnames to a new function
-  bpf: Change bpf_setsockopt(SOL_TCP) to reuse do_tcp_setsockopt()
-  bpf: Change bpf_setsockopt(SOL_IP) to reuse do_ip_setsockopt()
-  bpf: Change bpf_setsockopt(SOL_IPV6) to reuse do_ipv6_setsockopt()
-  bpf: Add a few optnames to bpf_setsockopt
-  selftests/bpf: bpf_setsockopt tests
-
- include/linux/bpf.h                           |   8 +
- include/net/ip.h                              |   2 +
- include/net/ipv6.h                            |   2 +
- include/net/ipv6_stubs.h                      |   2 +
- include/net/sock.h                            |   7 +
- include/net/tcp.h                             |   2 +
- kernel/bpf/bpf_iter.c                         |   5 +
- net/core/filter.c                             | 377 +++++-------
- net/core/sock.c                               |  77 ++-
- net/ipv4/ip_sockglue.c                        |  16 +-
- net/ipv4/tcp.c                                |  22 +-
- net/ipv6/af_inet6.c                           |   1 +
- net/ipv6/ipv6_sockglue.c                      |  18 +-
- .../selftests/bpf/prog_tests/setget_sockopt.c | 125 ++++
- .../selftests/bpf/progs/setget_sockopt.c      | 547 ++++++++++++++++++
- 15 files changed, 939 insertions(+), 272 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/setget_sockopt=
-.c
- create mode 100644 tools/testing/selftests/bpf/progs/setget_sockopt.c
-
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 20c26aed7896..b905b1b34fe4 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1966,6 +1966,10 @@ static inline bool unprivileged_ebpf_enabled(void)
+ 	return !sysctl_unprivileged_bpf_disabled;
+ }
+=20
++static inline bool in_bpf(void)
++{
++	return !!current->bpf_ctx;
++}
+ #else /* !CONFIG_BPF_SYSCALL */
+ static inline struct bpf_prog *bpf_prog_get(u32 ufd)
+ {
+@@ -2175,6 +2179,10 @@ static inline bool unprivileged_ebpf_enabled(void)
+ 	return false;
+ }
+=20
++static inline bool in_bpf(void)
++{
++	return false;
++}
+ #endif /* CONFIG_BPF_SYSCALL */
+=20
+ void __bpf_free_used_btfs(struct bpf_prog_aux *aux,
+diff --git a/include/net/sock.h b/include/net/sock.h
+index a7273b289188..b2ff230860c6 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -1721,6 +1721,9 @@ static inline void unlock_sock_fast(struct sock *sk=
+, bool slow)
+ 	}
+ }
+=20
++void sockopt_lock_sock(struct sock *sk);
++void sockopt_release_sock(struct sock *sk);
++
+ /* Used by processes to "lock" a socket state, so that
+  * interrupts and bottom half handlers won't change it
+  * from under us. It essentially blocks any incoming
+diff --git a/net/core/sock.c b/net/core/sock.c
+index 20269c37ab3b..82759540ae2c 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -703,7 +703,9 @@ static int sock_setbindtodevice(struct sock *sk, sock=
+ptr_t optval, int optlen)
+ 			goto out;
+ 	}
+=20
+-	return sock_bindtoindex(sk, index, true);
++	sockopt_lock_sock(sk);
++	ret =3D sock_bindtoindex_locked(sk, index);
++	sockopt_release_sock(sk);
+ out:
+ #endif
+=20
+@@ -1036,6 +1038,24 @@ static int sock_reserve_memory(struct sock *sk, in=
+t bytes)
+ 	return 0;
+ }
+=20
++void sockopt_lock_sock(struct sock *sk)
++{
++	if (in_bpf())
++		return;
++
++	lock_sock(sk);
++}
++EXPORT_SYMBOL(sockopt_lock_sock);
++
++void sockopt_release_sock(struct sock *sk)
++{
++	if (in_bpf())
++		return;
++
++	release_sock(sk);
++}
++EXPORT_SYMBOL(sockopt_release_sock);
++
+ /*
+  *	This is meant for all protocols to use and covers goings on
+  *	at the socket level. Everything here is generic.
+@@ -1067,7 +1087,7 @@ static int sk_setsockopt(struct sock *sk, int level=
+, int optname,
+=20
+ 	valbool =3D val ? 1 : 0;
+=20
+-	lock_sock(sk);
++	sockopt_lock_sock(sk);
+=20
+ 	switch (optname) {
+ 	case SO_DEBUG:
+@@ -1496,7 +1516,7 @@ static int sk_setsockopt(struct sock *sk, int level=
+, int optname,
+ 		ret =3D -ENOPROTOOPT;
+ 		break;
+ 	}
+-	release_sock(sk);
++	sockopt_release_sock(sk);
+ 	return ret;
+ }
+=20
 --=20
 2.30.2
 
