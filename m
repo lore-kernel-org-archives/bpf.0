@@ -2,107 +2,115 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03343C19F2B
-	for <bpf@archiver.kernel.org>; Wed,  3 Aug 2022 21:42:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D902C19F2B
+	for <bpf@archiver.kernel.org>; Wed,  3 Aug 2022 22:59:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237044AbiHCVmS convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 3 Aug 2022 17:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54592 "EHLO
+        id S231698AbiHCW7a (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 Aug 2022 18:59:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233950AbiHCVmS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 Aug 2022 17:42:18 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592204D823
-        for <bpf@vger.kernel.org>; Wed,  3 Aug 2022 14:42:17 -0700 (PDT)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 273F7YKT001252
-        for <bpf@vger.kernel.org>; Wed, 3 Aug 2022 14:42:16 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3hqbqx7pty-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 03 Aug 2022 14:42:16 -0700
-Received: from twshared22246.03.prn5.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 3 Aug 2022 14:42:14 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id DE67B1D2FFE58; Wed,  3 Aug 2022 14:42:02 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next] libbpf: reject legacy 'maps' ELF section
-Date:   Wed, 3 Aug 2022 14:42:02 -0700
-Message-ID: <20220803214202.23750-1-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: fajYMYxtIG--aORfPoL5RaTdHj0y-NIT
-X-Proofpoint-GUID: fajYMYxtIG--aORfPoL5RaTdHj0y-NIT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-03_06,2022-08-02_01,2022-06-22_01
+        with ESMTP id S229529AbiHCW73 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 Aug 2022 18:59:29 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29698167DB
+        for <bpf@vger.kernel.org>; Wed,  3 Aug 2022 15:59:29 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id j10-20020a62b60a000000b0052b30f6626bso7057365pff.17
+        for <bpf@vger.kernel.org>; Wed, 03 Aug 2022 15:59:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:from:to:cc;
+        bh=oWv8gQNZioaNWfZY4VWI1UA8rpMmTlOzBEW8u+A5nck=;
+        b=bUlcrVMQa/lRN91UGS5DI7iUwLnJygWcFXBBRrb9CJRuuQCwyxSnWgXatqK3nkQkb6
+         JuS4wuRF/+JgHbA8uWBg0haFCU4xo7TCOzHU6t0BBO9dVuyEbeMaAj4IIzixQhFEO2fo
+         yOdsqm3OSQ4/VLmgLC4HmFhlHhxYW8nXQOCbpOKuLhutzpN/wwHQv1Udzvkj59AOnV23
+         lRVtuUCxR2lQDMDJcB5D51OOLKngIBpzQpby3BJ6Fuoafwj9l3M7XneibSzLSvmw4j9P
+         Uz8Jj48lvUgOczguz6406OZ3urtiNaRR9cL+bEUmZo10aTuOBmfS4gjv7brhAv0W4KRF
+         RhYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:x-gm-message-state:from:to:cc;
+        bh=oWv8gQNZioaNWfZY4VWI1UA8rpMmTlOzBEW8u+A5nck=;
+        b=WuMPyBj67sWkI6c2gmM2OQMsFK8TMroE2PMyiyIc8THRlJRVPV6cC6mxVP8/o20OUb
+         R84JxJeODI8Jvcoh+y/9S1u7fnXu5/hpQUj5LKZCgmsgEo9CMeHAGdkofdoeMijYR6Ww
+         ZckIaIDDhjzkcQjh1QkgCY9DkYtzhFAoAkaUtC0im26TcQrwXY9TMNZJTZK3dowKkb59
+         d/+PT9q8srnHCmeDTsOUL+5MUuXVJGz091qfaPghTwgLJOuln4hzVfbAfHZlmXWLtUvl
+         hVSynpPizgCY4iduQaw0Cy7OIdWmZUYoYHBaDSmZd32kAgz8vPqNItOlwvU4Y+6sq2IT
+         sEQA==
+X-Gm-Message-State: AJIora81ZakPbOAkmP++7CfhGrYt5/Fqh9rKWC+PkJTxmKt3RYPTEg2l
+        3Lo0lW6yTN2v63E8Cww0KJO8QCk=
+X-Google-Smtp-Source: AGRyM1u0wfwdD4zYu+Erg+2ODZS8zzaLZ9lvuiRbhcKzx2wKsGjKnphMFL9KUz7sippixs59xZ/mXTg=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a63:9d48:0:b0:419:f140:2876 with SMTP id
+ i69-20020a639d48000000b00419f1402876mr22758081pgd.303.1659567568543; Wed, 03
+ Aug 2022 15:59:28 -0700 (PDT)
+Date:   Wed, 3 Aug 2022 15:59:26 -0700
+In-Reply-To: <20220803204614.3077284-1-kafai@fb.com>
+Message-Id: <Yur9zosqo4zpVBx5@google.com>
+Mime-Version: 1.0
+References: <20220803204601.3075863-1-kafai@fb.com> <20220803204614.3077284-1-kafai@fb.com>
+Subject: Re: [PATCH v2 bpf-next 02/15] bpf: net: Avoid sk_setsockopt() taking
+ sk lock when called from bpf
+From:   sdf@google.com
+To:     Martin KaFai Lau <kafai@fb.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Miller <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, kernel-team@fb.com,
+        Paolo Abeni <pabeni@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add explicit error message if BPF object file is still using legacy BPF
-map definitions in SEC("maps"). Before this change, if BPF object file
-is still using legacy map definition user will see a bit confusing:
+On 08/03, Martin KaFai Lau wrote:
+> Most of the code in bpf_setsockopt(SOL_SOCKET) are duplicated from
+> the sk_setsockopt().  The number of supported optnames are
+> increasing ever and so as the duplicated code.
 
-libbpf: elf: skipping unrecognized data section(4) maps
-libbpf: prog 'handler': bad map relo against 'server_map' in section 'maps'
+> One issue in reusing sk_setsockopt() is that the bpf prog
+> has already acquired the sk lock.  This patch adds a in_bpf()
+> to tell if the sk_setsockopt() is called from a bpf prog.
+> The bpf prog calling bpf_setsockopt() is either running in_task()
+> or in_serving_softirq().  Both cases have the current->bpf_ctx
+> initialized.  Thus, the in_bpf() only needs to test !!current->bpf_ctx.
 
-Now libbpf will be explicit about rejecting "maps" ELF section:
+> This patch also adds sockopt_{lock,release}_sock() helpers
+> for sk_setsockopt() to use.  These helpers will test in_bpf()
+> before acquiring/releasing the lock.  They are in EXPORT_SYMBOL
+> for the ipv6 module to use in a latter patch.
 
-libbpf: elf: legacy map definitions in 'maps' section are not supported by libbpf v1.0+
+> Note on the change in sock_setbindtodevice().  sockopt_lock_sock()
+> is done in sock_setbindtodevice() instead of doing the lock_sock
+> in sock_bindtoindex(..., lock_sk = true).
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/lib/bpf/libbpf.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+> Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+> ---
+>   include/linux/bpf.h |  8 ++++++++
+>   include/net/sock.h  |  3 +++
+>   net/core/sock.c     | 26 +++++++++++++++++++++++---
+>   3 files changed, 34 insertions(+), 3 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 50d41815f431..d9a3f4383a7a 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -591,7 +591,6 @@ struct elf_state {
- 	size_t strtabidx;
- 	struct elf_sec_desc *secs;
- 	int sec_cnt;
--	int maps_shndx;
- 	int btf_maps_shndx;
- 	__u32 btf_maps_sec_btf_id;
- 	int text_shndx;
-@@ -1272,7 +1271,6 @@ static struct bpf_object *bpf_object__new(const char *path,
- 	 */
- 	obj->efile.obj_buf = obj_buf;
- 	obj->efile.obj_buf_sz = obj_buf_sz;
--	obj->efile.maps_shndx = -1;
- 	obj->efile.btf_maps_shndx = -1;
- 	obj->efile.st_ops_shndx = -1;
- 	obj->kconfig_map_idx = -1;
-@@ -3359,7 +3357,8 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
- 			if (err)
- 				return err;
- 		} else if (strcmp(name, "maps") == 0) {
--			obj->efile.maps_shndx = idx;
-+			pr_warn("elf: legacy map definitions in 'maps' section are not supported by libbpf v1.0+\n");
-+			return -ENOTSUP;
- 		} else if (strcmp(name, MAPS_ELF_SEC) == 0) {
- 			obj->efile.btf_maps_shndx = idx;
- 		} else if (strcmp(name, BTF_ELF_SEC) == 0) {
-@@ -3891,8 +3890,7 @@ static bool bpf_object__shndx_is_data(const struct bpf_object *obj,
- static bool bpf_object__shndx_is_maps(const struct bpf_object *obj,
- 				      int shndx)
- {
--	return shndx == obj->efile.maps_shndx ||
--	       shndx == obj->efile.btf_maps_shndx;
-+	return shndx == obj->efile.btf_maps_shndx;
- }
- 
- static enum libbpf_map_type
--- 
-2.30.2
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 20c26aed7896..b905b1b34fe4 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1966,6 +1966,10 @@ static inline bool unprivileged_ebpf_enabled(void)
+>   	return !sysctl_unprivileged_bpf_disabled;
+>   }
 
+> +static inline bool in_bpf(void)
+> +{
+> +	return !!current->bpf_ctx;
+> +}
+
+Good point on not needing to care about softirq!
+That actually turned even nicer :-)
+
+QQ: do we need to add a comment here about potential false-negatives?
+I see you're adding ctx to the iter, but there is still a bunch of places
+that don't use it.
