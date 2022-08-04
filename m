@@ -2,105 +2,124 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A5FDC19F29
-	for <bpf@archiver.kernel.org>; Thu,  4 Aug 2022 01:44:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF510C19F29
+	for <bpf@archiver.kernel.org>; Thu,  4 Aug 2022 02:55:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232195AbiHDBoV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 Aug 2022 21:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56012 "EHLO
+        id S238601AbiHDCzY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 Aug 2022 22:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbiHDBoV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 Aug 2022 21:44:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC0475D0DD
-        for <bpf@vger.kernel.org>; Wed,  3 Aug 2022 18:44:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 50B7D61764
-        for <bpf@vger.kernel.org>; Thu,  4 Aug 2022 01:44:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74DE5C433D6;
-        Thu,  4 Aug 2022 01:44:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659577459;
-        bh=5PYEIm5njlUAAry2OabjRW1bWaAlXNebD94LSMfq5Lo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=j9fU8oJYRA1jaYdzTJRM/uODC7xQa0k1wJCo2xFJXEh7+itVp6ef9A+rXIepk7bjW
-         D97z3mhf7H2VVezZMEHUhgQfmZT0nDhhakE4G4hS3Xxd32BT1RiYVRt53xX9TKMecr
-         2/lun2U+twXh0u0qOdTTUOiLGELUKc3au9Hpa1tsPHhnPOKuWmgLABMrIBQnrMCizw
-         zgjHMnMctjNMHxN9xgwE9N1HHBhge8yDakSRrxsAPT87XwYAiw75XWU1OKBI9L/8a+
-         AjWAR8KXhMfHZlm09bYlQXJbR8ZA6H6EWvQI3bfaaCIV+RGQISBV8U5bjbZ+LidNS8
-         ONcADtbAzbcag==
-Date:   Wed, 3 Aug 2022 18:44:18 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     Joanne Koong <joannelkoong@gmail.com>, bpf <bpf@vger.kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>
-Subject: Re: [PATCH bpf-next v1 1/3] bpf: Add skb dynptrs
-Message-ID: <20220803184418.38f9ed42@kernel.org>
-In-Reply-To: <20220804012756.2eqvkofecpthzcoi@kafai-mbp.dhcp.thefacebook.com>
-References: <20220726184706.954822-1-joannelkoong@gmail.com>
-        <20220726184706.954822-2-joannelkoong@gmail.com>
-        <20220728233936.hjj2smwey447zqyy@kafai-mbp.dhcp.thefacebook.com>
-        <CAJnrk1b2WoHV=iE3j4n_4=2NBP3GaoeD=v-Zt+p-M9N=LApsuQ@mail.gmail.com>
-        <20220729213919.e7x6acvqnwqwfnzu@kafai-mbp.dhcp.thefacebook.com>
-        <CAJnrk1ZDzM5ir0rpf2kQdW_G4+-woMhULUufdz28DfiB_rqR-A@mail.gmail.com>
-        <20220803162540.19d31294@kernel.org>
-        <20220804012756.2eqvkofecpthzcoi@kafai-mbp.dhcp.thefacebook.com>
+        with ESMTP id S238394AbiHDCzU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 Aug 2022 22:55:20 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F371009
+        for <bpf@vger.kernel.org>; Wed,  3 Aug 2022 19:55:15 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id 130so10347406pfv.13
+        for <bpf@vger.kernel.org>; Wed, 03 Aug 2022 19:55:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NnBrhTD/9+F6uSaHAiOyLvcykArUbtnM77SwXNPOOwI=;
+        b=OUxmBJ8iXta2JV6KXMSf6vXZggE/Ulxlb17cCdrcx1FsZxENjzmmi81U4WfHCBSuHJ
+         jadaCRlzPEgnTEVO2umvDRJWHlscMF9U6TY7I2d9LnaFdZmVypqk0vUomgoeuKT4i97s
+         DFSeDTpK6Uhgsw53JTpU4thA30B/le08i7sTx617zk+dcxHoct0k50BFCwmwV4njqNp8
+         F3/WTeLrbrYJsFsif5hV9szSkR2SWcCn004G7pxyWfC/wL/JWnfjz3QAz0I9zR92lN78
+         QcxwATG05jIsPSNwKKcog6vwZXGcSSSg48inc8KGyV7GhqCDbVgYScMpGC1f++RLi5YI
+         hMDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NnBrhTD/9+F6uSaHAiOyLvcykArUbtnM77SwXNPOOwI=;
+        b=HfBbPPZCf69CmmfEze1v83CX/VqB1uYIhx6O246efaXoKvYRKULL0N/VQ10dnh1FHv
+         ri94wMzJ3m1rSHfV6bcPyNtz3wBo9bd8phQxpMRZfNSVvRP3S+lKu8dtDYncyNk46rEF
+         cRkJ336XMZxkVgSM1fQd8s+XOysgEMCJyoJnGAQWmAD1vdmM5JJqIcL2TFEZ6s9oEtcP
+         n5eAoOjAhXF9fbMFFMjHm1cXu90koFIGKj4h+9VFaW9IRAolK6zbb8agd+oaFkek08+8
+         s/bQ3aPtycY9K2Wr4sN9IvfDEbDRgZ4XL4SbODOO7j88cM1sltMxR3mNsxlTmWr9KN49
+         7LEw==
+X-Gm-Message-State: ACgBeo3ZbFHoP89JwK0WF4QNABWzMANe59410IE6MgD8hLFD6MOH230s
+        Xc/OEqGaLecY4t8NbaLWgDV5C1WdQVfFIVta
+X-Google-Smtp-Source: AA6agR7fgEBYSefDyFI3QpFAj2gEXTkHKfLzx2TEWHFqOTqq05XjaQBQpo4OsxGNVFtlOWDe0AETqg==
+X-Received: by 2002:a63:e343:0:b0:41c:d5cd:a39 with SMTP id o3-20020a63e343000000b0041cd5cd0a39mr273928pgj.512.1659581715140;
+        Wed, 03 Aug 2022 19:55:15 -0700 (PDT)
+Received: from localhost.localdomain ([185.192.68.48])
+        by smtp.gmail.com with ESMTPSA id 126-20020a620684000000b0052e6aaed207sm395554pfg.120.2022.08.03.19.55.08
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 03 Aug 2022 19:55:14 -0700 (PDT)
+From:   Aijun Sun <aijun.sprd@gmail.com>
+X-Google-Original-From: Aijun Sun <aijun.sun@unisoc.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        zlim.lnx@gmail.com
+Cc:     bpf@vger.kernel.org, catalin.marinas@arm.com, will@kernel.org,
+        Aijun Sun <aijun.sun@unisoc.com>
+Subject: [PATCH bpf] bpf, arm64: allocate program buffer using kvcalloc instead of kcalloc
+Date:   Thu,  4 Aug 2022 10:54:42 +0800
+Message-Id: <20220804025442.22524-1-aijun.sun@unisoc.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 3 Aug 2022 18:27:56 -0700 Martin KaFai Lau wrote:
-> On Wed, Aug 03, 2022 at 04:25:40PM -0700, Jakub Kicinski wrote:
-> > The point of skb_header_pointer() is to expose the chunk of the packet
-> > pointed to by [skb, offset, len] as a linear buffer. Potentially coping
-> > it out to a stack buffer *IIF* the header is not contiguous inside the
-> > skb head, which should very rarely happen.
-> > 
-> > Here it seems we return an error so that user must pull if the data is
-> > not linear, which is defeating the purpose. The user of
-> > skb_header_pointer() wants to avoid the copy while _reliably_ getting 
-> > a contiguous pointer. Plus pulling in the header may be far more
-> > expensive than a small copy to the stack.
-> > 
-> > The pointer returned by skb_header_pointer is writable, but it's not
-> > guaranteed that the writes go to the packet, they may go to the
-> > on-stack buffer, so the caller must do some sort of:
-> > 
-> > 	if (data_ptr == stack_buf)
-> > 		skb_store_bits(...);
-> > 
-> > Which we were thinking of wrapping in some sort of flush operation.  
-> Curious on the idea.  don't know whether this is a dynptr helper or
-> should be a specific pkt helper though.
+It is not necessary to allocate contiguous physical memory for BPF
+program buffer using kcalloc. When the BPF program is large more than
+memory page size, kcalloc allocates multiple memory pages from buddy
+system. If the device can not provide sufficient memory, for example
+in low-end android devices[1], memory allocation for BPF program is likely
+failed.
 
-Yeah, I could well pattern matched the dynptr because it sounded
-similar but it's a completely different beast.
+Test cases in lib/test_bpf.c all pass on ARM64 QEMU.
 
-> The idea is to have the prog keeps writing to a ptr (skb->data or stack_buf).
+[1]
+AndroidTestSuit: page allocation failure: order:4,
+mode:0x40dc0(GFP_KERNEL|__GFP_COMP|__GFP_ZERO), nodemask=(null),cpuset=foreground,mems_allowed=0
+Call trace:
+ dump_stack+0xa4/0x114
+ warn_alloc+0xf8/0x14c
+ __alloc_pages_slowpath+0xac8/0xb14
+ __alloc_pages_nodemask+0x194/0x3d0
+ kmalloc_order_trace+0x44/0x1e8
+ __kmalloc+0x29c/0x66c
+ bpf_int_jit_compile+0x17c/0x568
+ bpf_prog_select_runtime+0x4c/0x1b0
+ bpf_prepare_filter+0x5fc/0x6bc
+ bpf_prog_create_from_user+0x118/0x1c0
+ seccomp_set_mode_filter+0x1c4/0x7cc
+ __do_sys_prctl+0x380/0x1424
+ __arm64_sys_prctl+0x20/0x2c
+ el0_svc_common+0xc8/0x22c
+ el0_svc_handler+0x1c/0x28
+ el0_svc+0x8/0x100
 
-To be clear writing is a lot more rare than reading in this case.
+Signed-off-by: Aijun Sun <aijun.sun@unisoc.com>
+---
+ arch/arm64/net/bpf_jit_comp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> When the prog is done, call a bpf helper to flush.  The helper
-> decides if it needs to flush from stack_buf to skb and
-> will take care of the cloned skb ?
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 42f2e9a8616c..80918e60387b 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -1399,7 +1399,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+ 	memset(&ctx, 0, sizeof(ctx));
+ 	ctx.prog = prog;
+ 
+-	ctx.offset = kcalloc(prog->len + 1, sizeof(int), GFP_KERNEL);
++	ctx.offset = kvcalloc(prog->len + 1, sizeof(int), GFP_KERNEL);
+ 	if (ctx.offset == NULL) {
+ 		prog = orig_prog;
+ 		goto out_off;
+@@ -1499,7 +1499,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+ 			ctx.offset[i] *= AARCH64_INSN_SIZE;
+ 		bpf_prog_fill_jited_linfo(prog, ctx.offset + 1);
+ out_off:
+-		kfree(ctx.offset);
++		kvfree(ctx.offset);
+ 		kfree(jit_data);
+ 		prog->aux->jit_data = NULL;
+ 	}
+-- 
+2.29.0
 
-Yeah, I'd think for skb it'd just pull. Normally dealing with skbs
-you'd indeed probably just pull upfront if you knew you're gonna write.
-Hence saving yourself from the unnecessary trip thru the stack. But XDP
-does not have strong pulling support, so if the interface must support
-both then it's the lower common denominator.
-
-> > If I'm reading this right dynptr as implemented here do not provide
-> > such semantics, am I confused in thinking that this is a continuation
-> > of the XDP multi-buff discussion? Is it a completely separate thing
-> > and we'll still need a header_pointer like helper?  
-> Can you share a pointer to the XDP multi-buff discussion?
-
-https://lore.kernel.org/all/20210916095539.4696ae27@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com/
