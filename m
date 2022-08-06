@@ -2,24 +2,24 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAE42C25B0C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F56BC25B06
 	for <bpf@archiver.kernel.org>; Sat,  6 Aug 2022 07:40:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229446AbiHFHk2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S239628AbiHFHk2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Sat, 6 Aug 2022 03:40:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41068 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231222AbiHFHk0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S229446AbiHFHk0 (ORCPT <rfc822;bpf@vger.kernel.org>);
         Sat, 6 Aug 2022 03:40:26 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC691B7F3
-        for <bpf@vger.kernel.org>; Sat,  6 Aug 2022 00:40:23 -0700 (PDT)
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67757A460
+        for <bpf@vger.kernel.org>; Sat,  6 Aug 2022 00:40:24 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4M0DQf4QvkzlBKW
-        for <bpf@vger.kernel.org>; Sat,  6 Aug 2022 15:20:58 +0800 (CST)
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4M0DQW6zmzz6R8K7
+        for <bpf@vger.kernel.org>; Sat,  6 Aug 2022 15:20:51 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP2 (Coremail) with SMTP id Syh0CgDHeVydFu5iXIYHAA--.28679S4;
-        Sat, 06 Aug 2022 15:22:06 +0800 (CST)
+        by APP2 (Coremail) with SMTP id Syh0CgDHeVydFu5iXIYHAA--.28679S11;
+        Sat, 06 Aug 2022 15:22:11 +0800 (CST)
 From:   Hou Tao <houtao@huaweicloud.com>
 To:     bpf@vger.kernel.org
 Cc:     Andrii Nakryiko <andrii@kernel.org>,
@@ -34,28 +34,31 @@ Cc:     Andrii Nakryiko <andrii@kernel.org>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
         Lorenz Bauer <lmb@cloudflare.com>, houtao1@huawei.com
-Subject: [PATCH bpf 0/9] fixes for bpf map iterator
-Date:   Sat,  6 Aug 2022 15:40:10 +0800
-Message-Id: <20220806074019.2756957-1-houtao@huaweicloud.com>
+Subject: [PATCH bpf 7/9] selftests/bpf: Add tests for reading a dangling map iter fd
+Date:   Sat,  6 Aug 2022 15:40:17 +0800
+Message-Id: <20220806074019.2756957-8-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20220806074019.2756957-1-houtao@huaweicloud.com>
+References: <20220806074019.2756957-1-houtao@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgDHeVydFu5iXIYHAA--.28679S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7ArWrGr47Ww1UGw17tw1xuFg_yoW8AFy8pr
-        WfXFy5Kr4xAF4xZrnrZa12kFyrA3yrXa4jqFs5Jr1Ykw1DZa45WrWIkF13uFy3WFn8JryS
-        y3y09r95Ca4xZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1F6r1fM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
-        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI
-        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
-        IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UdxhLUUUUU=
+X-CM-TRANSID: Syh0CgDHeVydFu5iXIYHAA--.28679S11
+X-Coremail-Antispam: 1UD129KBjvJXoWxGF1fuFW3tw1UGr17tw43Jrb_yoW7JFy8pr
+        yxJ390kr4rXws7Xr1kJa1Ykr4Yqa1jqa48G3yrG3y5CrsrXrWagr1xGFW8JFn8JrW0vFna
+        y34ay3yfGrWUAFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBSb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1F6r1fM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
+        14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
+        xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
+        z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2
+        Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+        6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0x
+        vE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAI
+        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
+        IEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUoeOJUUUUU
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 X-CFilter-Loop: Reflected
 Precedence: bulk
@@ -64,50 +67,159 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Hou Tao <houtao1@huawei.com>
 
-Hi,
+After closing both related link fd and map fd, reading the map
+iterator fd to ensure it is OK to do so.
 
-The patchset constitues three fixes for bpf map iterator:
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ .../selftests/bpf/prog_tests/bpf_iter.c       | 90 +++++++++++++++++++
+ 1 file changed, 90 insertions(+)
 
-(1) patch 1~4: fix user-after-free during reading map iterator fd
-It is possible when both the corresponding link fd and map fd are
-closed bfore reading the iterator fd. I had squashed these four patches
-into one, but it was not friendly for stable backport, so I break these
-fixes into 4 single patches in the end. Patch 7 is its testing patch.
-
-(2) patch 5: fix invalidity check for values in sk local storage map
-Patch 8 adds two tests for it.
-
-(3) patch 6: reject sleepable program for non-resched map iterator
-Patch 9 add a test for it.
-
-Please check the individual patches for more details. And comments are
-always welcome.
-
-Regards,
-Tao
-
-Hou Tao (9):
-  bpf: Acquire map uref in .init_seq_private for array map iterator
-  bpf: Acquire map uref in .init_seq_private for hash map iterator
-  bpf: Acquire map uref in .init_seq_private for sock local storage map
-    iterator
-  bpf: Acquire map uref in .init_seq_private for sock{map,hash} iterator
-  bpf: Check the validity of max_rdwr_access for sk storage map iterator
-  bpf: Only allow sleepable program for resched-able iterator
-  selftests/bpf: Add tests for reading a dangling map iter fd
-  selftests/bpf: Add write tests for sk storage map iterator
-  selftests/bpf: Ensure sleepable program is rejected by hash map iter
-
- kernel/bpf/arraymap.c                         |   7 ++
- kernel/bpf/bpf_iter.c                         |  11 +-
- kernel/bpf/hashtab.c                          |   2 +
- net/core/bpf_sk_storage.c                     |  12 +-
- net/core/sock_map.c                           |  20 ++-
- .../selftests/bpf/prog_tests/bpf_iter.c       | 114 +++++++++++++++++-
- .../bpf/progs/bpf_iter_bpf_hash_map.c         |   9 ++
- .../bpf/progs/bpf_iter_bpf_sk_storage_map.c   |  20 ++-
- 8 files changed, 189 insertions(+), 6 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+index a33874b081b6..94c2c8df3fe4 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+@@ -28,6 +28,7 @@
+ #include "bpf_iter_test_kern6.skel.h"
+ #include "bpf_iter_bpf_link.skel.h"
+ #include "bpf_iter_ksym.skel.h"
++#include "bpf_iter_sockmap.skel.h"
+ 
+ static int duration;
+ 
+@@ -67,6 +68,48 @@ static void do_dummy_read(struct bpf_program *prog)
+ 	bpf_link__destroy(link);
+ }
+ 
++static void do_read_map_iter_fd(struct bpf_object_skeleton **skel, struct bpf_program *prog,
++				struct bpf_map *map)
++{
++	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
++	union bpf_iter_link_info linfo;
++	struct bpf_link *link;
++	char buf[16] = {};
++	int iter_fd, len;
++
++	memset(&linfo, 0, sizeof(linfo));
++	linfo.map.map_fd = bpf_map__fd(map);
++	opts.link_info = &linfo;
++	opts.link_info_len = sizeof(linfo);
++	link = bpf_program__attach_iter(prog, &opts);
++	if (!ASSERT_OK_PTR(link, "attach_map_iter"))
++		return;
++
++	iter_fd = bpf_iter_create(bpf_link__fd(link));
++	if (!ASSERT_GE(iter_fd, 0, "create_map_iter")) {
++		bpf_link__destroy(link);
++		return;
++	}
++
++	/* Close link and map fd prematurely */
++	bpf_link__destroy(link);
++	bpf_object__destroy_skeleton(*skel);
++	*skel = NULL;
++
++	/* Let kworker to run first */
++	usleep(100);
++	/* Sock map is freed after two synchronize_rcu() calls, so wait */
++	kern_sync_rcu();
++	kern_sync_rcu();
++
++	/* Read after both map fd and link fd are closed */
++	while ((len = read(iter_fd, buf, sizeof(buf))) > 0)
++		;
++	ASSERT_GE(len, 0, "read_iterator");
++
++	close(iter_fd);
++}
++
+ static int read_fd_into_buffer(int fd, char *buf, int size)
+ {
+ 	int bufleft = size;
+@@ -827,6 +870,20 @@ static void test_bpf_array_map(void)
+ 	bpf_iter_bpf_array_map__destroy(skel);
+ }
+ 
++static void test_bpf_array_map_iter_fd(void)
++{
++	struct bpf_iter_bpf_array_map *skel;
++
++	skel = bpf_iter_bpf_array_map__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "bpf_iter_bpf_array_map__open_and_load"))
++		return;
++
++	do_read_map_iter_fd(&skel->skeleton, skel->progs.dump_bpf_array_map,
++			    skel->maps.arraymap1);
++
++	bpf_iter_bpf_array_map__destroy(skel);
++}
++
+ static void test_bpf_percpu_array_map(void)
+ {
+ 	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
+@@ -1009,6 +1066,20 @@ static void test_bpf_sk_storage_get(void)
+ 	bpf_iter_bpf_sk_storage_helpers__destroy(skel);
+ }
+ 
++static void test_bpf_sk_stoarge_map_iter_fd(void)
++{
++	struct bpf_iter_bpf_sk_storage_map *skel;
++
++	skel = bpf_iter_bpf_sk_storage_map__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "bpf_iter_bpf_sk_storage_map__open_and_load"))
++		return;
++
++	do_read_map_iter_fd(&skel->skeleton, skel->progs.dump_bpf_sk_storage_map,
++			    skel->maps.sk_stg_map);
++
++	bpf_iter_bpf_sk_storage_map__destroy(skel);
++}
++
+ static void test_bpf_sk_storage_map(void)
+ {
+ 	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
+@@ -1217,6 +1288,19 @@ static void test_task_vma(void)
+ 	bpf_iter_task_vma__destroy(skel);
+ }
+ 
++void test_bpf_sockmap_map_iter_fd(void)
++{
++	struct bpf_iter_sockmap *skel;
++
++	skel = bpf_iter_sockmap__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "bpf_iter_sockmap__open_and_load"))
++		return;
++
++	do_read_map_iter_fd(&skel->skeleton, skel->progs.copy, skel->maps.sockmap);
++
++	bpf_iter_sockmap__destroy(skel);
++}
++
+ void test_bpf_iter(void)
+ {
+ 	if (test__start_subtest("btf_id_or_null"))
+@@ -1267,10 +1351,14 @@ void test_bpf_iter(void)
+ 		test_bpf_percpu_hash_map();
+ 	if (test__start_subtest("bpf_array_map"))
+ 		test_bpf_array_map();
++	if (test__start_subtest("bpf_array_map_iter_fd"))
++		test_bpf_array_map_iter_fd();
+ 	if (test__start_subtest("bpf_percpu_array_map"))
+ 		test_bpf_percpu_array_map();
+ 	if (test__start_subtest("bpf_sk_storage_map"))
+ 		test_bpf_sk_storage_map();
++	if (test__start_subtest("bpf_sk_storage_map_iter_fd"))
++		test_bpf_sk_stoarge_map_iter_fd();
+ 	if (test__start_subtest("bpf_sk_storage_delete"))
+ 		test_bpf_sk_storage_delete();
+ 	if (test__start_subtest("bpf_sk_storage_get"))
+@@ -1283,4 +1371,6 @@ void test_bpf_iter(void)
+ 		test_link_iter();
+ 	if (test__start_subtest("ksym"))
+ 		test_ksym_iter();
++	if (test__start_subtest("bpf_sockmap_map_iter_fd"))
++		test_bpf_sockmap_map_iter_fd();
+ }
 -- 
 2.29.2
 
