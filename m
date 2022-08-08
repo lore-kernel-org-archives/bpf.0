@@ -2,76 +2,78 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9660C3F6B0
-	for <bpf@archiver.kernel.org>; Mon,  8 Aug 2022 13:50:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EFD4C00140
+	for <bpf@archiver.kernel.org>; Mon,  8 Aug 2022 14:00:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235611AbiHHNuY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Aug 2022 09:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54670 "EHLO
+        id S243468AbiHHOAT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Aug 2022 10:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237709AbiHHNuT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Aug 2022 09:50:19 -0400
+        with ESMTP id S243477AbiHHOAR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Aug 2022 10:00:17 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A405BE9E
-        for <bpf@vger.kernel.org>; Mon,  8 Aug 2022 06:50:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7781EB89
+        for <bpf@vger.kernel.org>; Mon,  8 Aug 2022 07:00:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3FD78B80EA3
-        for <bpf@vger.kernel.org>; Mon,  8 Aug 2022 13:50:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E3426C433D7;
-        Mon,  8 Aug 2022 13:50:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3089EB80EAD
+        for <bpf@vger.kernel.org>; Mon,  8 Aug 2022 14:00:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C4740C433B5;
+        Mon,  8 Aug 2022 14:00:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659966613;
-        bh=BlcxI7SxWHxvxBiWnJgUeKJePlQEjb8k0CJ7osfR3gg=;
+        s=k20201202; t=1659967213;
+        bh=WgjNVV2EnrEDKMGUqUPIArn3+7YfPgTxaPM+cQjl24M=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=hguBepKGv3lqzJ2O3wsffbLGXWwBy4ikBJIO5PjJI8sHgj/3jyCp2gjkk79MQYqe4
-         53hbIumbhgKewZoDrJr/j4TvKSoaUlgqLv1burHIWZ3tA+KUHoaVGxoZTuFJZGiLF0
-         qsvDV10hozUp+CHK+XMgcl7/CKqKQruioSmY31NunzTBuXEyLH09++DT8MZKlZeye6
-         ZkiMUqQFixBAdKl9CmwHt/y1Enw1u/EJuNbid+BTx8ZyaTTMRl96lzvhVVzGKvubIZ
-         UUQWhWv6Y5/zdXzPJJfdi0xlHda4j+MRmpDPOvuUw5HSi6gT69IwZDmct+AxaHd1gU
-         c63mu6hxyRUpA==
+        b=tjABYboDeLCGKc09KgI1743jTCV+kwHZFwCMwk32DSDkTzk2EurlP29rdPR8V3Bg/
+         o/E+124lff1dCu/0KoMdank4f7GTlNrvNOsuKFpRt2WOmh0rzQj0ShvhJ0ZdNn1otL
+         v7ty5KivYl+0JHweK0FIisHgMZXiL6CtadlaWrNUXAKtkH4/N1klNuEDI704g6+ooH
+         9//Az56Q1YqAsGzP/PGdQwuc+7hQRaADR0CeFelR02N8mmfRWZ2jOg8wBtm7xI5ZM8
+         IdmKUAMHoB+HCoXjVfMyQX/12RI3GvUxV4peBnmxVi0Bzq6wiuQAzSHPslCJ3VSuAO
+         ugLLbOT5x9LEg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C6E62C43140;
-        Mon,  8 Aug 2022 13:50:13 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AC4F1C43142;
+        Mon,  8 Aug 2022 14:00:13 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v1] selftests/bpf: Clean up sys_nanosleep uses
+Subject: Re: [PATCH bpf-next v3 1/2] bpf: use proper target btf when exporting
+ attach_btf_obj_id
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165996661381.25053.9915236911959115703.git-patchwork-notify@kernel.org>
-Date:   Mon, 08 Aug 2022 13:50:13 +0000
-References: <20220805171405.2272103-1-joannelkoong@gmail.com>
-In-Reply-To: <20220805171405.2272103-1-joannelkoong@gmail.com>
-To:     Joanne Koong <joannelkoong@gmail.com>
-Cc:     bpf@vger.kernel.org, andrii@kernel.org, daniel@iogearbox.net,
-        ast@kernel.org
+Message-Id: <165996721370.30475.9351067978243460294.git-patchwork-notify@kernel.org>
+Date:   Mon, 08 Aug 2022 14:00:13 +0000
+References: <20220804201140.1340684-1-sdf@google.com>
+In-Reply-To: <20220804201140.1340684-1-sdf@google.com>
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        haoluo@google.com, jolsa@kernel.org, kafai@fb.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 Hello:
 
-This patch was applied to bpf/bpf-next.git (master)
+This series was applied to bpf/bpf.git (master)
 by Daniel Borkmann <daniel@iogearbox.net>:
 
-On Fri,  5 Aug 2022 10:14:05 -0700 you wrote:
-> This patch cleans up a few things:
+On Thu,  4 Aug 2022 13:11:39 -0700 you wrote:
+> When attaching to program, the program itself might not be attached
+> to anything (and, hence, might not have attach_btf), so we can't
+> unconditionally use 'prog->aux->dst_prog->aux->attach_btf'.
+> Instead, use bpf_prog_get_target_btf to pick proper target btf:
 > 
->   * dynptr_fail.c:
->     There is no sys_nanosleep tracepoint. dynptr_fail only tests
->     that the prog load fails, so just SEC("?raw_tp") suffices here.
-> 
->   * test_bpf_cookie:
->     There is no sys_nanosleep kprobe. The prog is loaded in
->     userspace through bpf_program__attach_kprobe_opts passing in
->     SYS_NANOSLEEP_KPROBE_NAME, so just SEC("k{ret}probe") suffices here.
+> * when attached to dst_prog, use dst_prog->aux->btf
+> * when attached to kernel btf, use prog->aux->attach_btf
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v1] selftests/bpf: Clean up sys_nanosleep uses
-    https://git.kernel.org/bpf/bpf-next/c/5653f55ebd76
+  - [bpf-next,v3,1/2] bpf: use proper target btf when exporting attach_btf_obj_id
+    https://git.kernel.org/bpf/bpf/c/6644aabbd897
+  - [bpf-next,v3,2/2] selftests/bpf: Excercise bpf_obj_get_info_by_fd for bpf2bpf
+    https://git.kernel.org/bpf/bpf/c/ffd5cfca5388
 
 You are awesome, thank you!
 -- 
