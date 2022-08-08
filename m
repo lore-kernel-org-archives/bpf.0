@@ -2,91 +2,99 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B040C00140
-	for <bpf@archiver.kernel.org>; Mon,  8 Aug 2022 18:54:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD73CC25B0C
+	for <bpf@archiver.kernel.org>; Mon,  8 Aug 2022 18:55:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232574AbiHHSyO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Aug 2022 14:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47560 "EHLO
+        id S236733AbiHHSzS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Aug 2022 14:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiHHSyO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Aug 2022 14:54:14 -0400
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5400A10B5
-        for <bpf@vger.kernel.org>; Mon,  8 Aug 2022 11:54:13 -0700 (PDT)
-Received: by mail-io1-xd44.google.com with SMTP id l24so7827756ion.13
-        for <bpf@vger.kernel.org>; Mon, 08 Aug 2022 11:54:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Gu4APyIQFRbZfzkJ5je/Azih0088hFBE2H/T3xQmeVw=;
-        b=k22v6YAS3jtcZ2sgAscRT9pweYjU4LchFUJyhDk6dl+ke6QpWdYU3x0LvDmka68xlD
-         YREfyhdwJbbjUZalbUwYaOGdJ8qrTmME+uP/iQWdS5csQdJTm6f19fwYkfYI6ev9XMlK
-         0unHIiEZi8jOK0h9boXmaHP55OIKoRK7gmPG+bMoPjfSbzzCrN+h+Aoy4iJkhMAfZLAP
-         4kTa7YSjVKsF1GZcsewj4OLfOYzN1PC4lTUD95mHfzWxPRetoUftipNs+VpBYb001041
-         VF2rTrZPFBkXNLJc5XsgqhV5Ll/v7yu3c8BErHJ6wXArKnrqehjo+J+HS/3QAkwALPiN
-         sfKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Gu4APyIQFRbZfzkJ5je/Azih0088hFBE2H/T3xQmeVw=;
-        b=oxPaoLDIqp/EvpfBPQVjDByz2swE2reuQUbJlSSJvgVuGLeyU1VDFGvXBHbJk63qS4
-         w82js/6L5e3TyobDHWsPFsTBnEAnfgmOiuImln9ZIVK/CrvQT/PnCAyjX2bj4Qz+eepI
-         23Qq99lpvG8z5ObZpdTWKa1+1SoSqtcVzIjVV3W1zIiaqFhJ2jPML6eWBr1+Hb05kH4x
-         lPYabIekV5Xq0LBhM7OsYMwhJMq1wDwYk7JxfHNipZXkkuw26zLZsiVuKa3RaGsjYstz
-         v4/Hmo55pAfiltajFY4S9Tc0w1+XHW0vT9Ti/QYaCf8rRFIcF+YEcf+4ajJmItj3ndRL
-         UtpQ==
-X-Gm-Message-State: ACgBeo2eoGU7iDF92RJIOolyH+9JKAuyUXPa3/4RXdDZ8FtYjdFeFFiY
-        dTykNLPePmb5g/egExPu5x4VpurYchLzEFZOvGw=
-X-Google-Smtp-Source: AA6agR5UREtFcHwrTn5qKFyYUr3kSihdeA6wzekuAykF40V20SqrNYwvJ4HgcvE6SorZWMxdvz/tgJuG383xb8d7eDI=
-X-Received: by 2002:a05:6638:210e:b0:343:1748:910 with SMTP id
- n14-20020a056638210e00b0034317480910mr1881804jaj.116.1659984852732; Mon, 08
- Aug 2022 11:54:12 -0700 (PDT)
+        with ESMTP id S236310AbiHHSzQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Aug 2022 14:55:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E432F4C;
+        Mon,  8 Aug 2022 11:55:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41CFCB8105A;
+        Mon,  8 Aug 2022 18:55:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F522C433C1;
+        Mon,  8 Aug 2022 18:55:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659984913;
+        bh=yff99Hl54xIWNYpq9yhdMz/cTBVGMhnzM72x5OvdS2I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lr2xrUztTk+UvlbkoQ8xdaOGPFwA6cmGaHiN802TxIQMgz4mp2+NoAxcYtIuoMPxm
+         hZl4hn/lJbeUllnA30x+R8VUtG2ZQWNnC42uMY5HVBg378RuBJCs62pl86bwFAlxxJ
+         p3+/ow+1G4fVi6aDGqW8Ls9gEP/nb3AR3AEEhjKb+Qasha5QvWXiZ3lIrMDLXhXaJH
+         yiIhBymtEh3dH6djipRGVTNSiP38tidhKPqRewg/1CT4v3H4Dm1Rf+t657vMSMkQkv
+         D8NwyWgU9ZWsnVTUWcnEmhXDi3cbaDp+13VDjgXbPAkQn6DymqvWDK6XHY6TZxxuZP
+         YDmqQlgsWN82g==
+Date:   Mon, 8 Aug 2022 11:55:11 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Lin Ma <linma@zju.edu.cn>
+Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+        john.fastabend@gmail.com, intel-wired-lan@lists.osuosl.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH v0] idb: Add rtnl_lock to avoid data race
+Message-ID: <20220808115511.5b574db2@kernel.org>
+In-Reply-To: <20220808081050.25229-1-linma@zju.edu.cn>
+References: <20220808081050.25229-1-linma@zju.edu.cn>
 MIME-Version: 1.0
-References: <20220808171559.3251090-1-davemarchevsky@fb.com>
-In-Reply-To: <20220808171559.3251090-1-davemarchevsky@fb.com>
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date:   Mon, 8 Aug 2022 20:53:33 +0200
-Message-ID: <CAP01T77pj6nkH=JdBJ3vvWz4gsZO0rejTobbT-hc=MFNfpmCpg@mail.gmail.com>
-Subject: Re: [RESEND PATCH v2 bpf-next] bpf: Cleanup check_refcount_ok
-To:     Dave Marchevsky <davemarchevsky@fb.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Kernel Team <kernel-team@fb.com>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, 8 Aug 2022 at 19:16, Dave Marchevsky <davemarchevsky@fb.com> wrote:
->
-> Discussion around a recently-submitted patch provided historical
-> context for check_refcount_ok [0]. Specifically, the function and its
-> helpers - may_be_acquire_function and arg_type_may_be_refcounted -
-> predate the OBJ_RELEASE type flag and the addition of many more helpers
-> with acquire/release semantics.
->
-> The purpose of check_refcount_ok is to ensure:
->   1) Helper doesn't have multiple uses of return reg's ref_obj_id
->   2) Helper with release semantics only has one arg needing to be
->   released, since that's tracked using meta->ref_obj_id
->
-> With current verifier, it's safe to remove check_refcount_ok and its
-> helpers. Since addition of OBJ_RELEASE type flag, case 2) has been
-> handled by the arg_type_is_release check in check_func_arg. To ensure
-> case 1) won't result in verifier silently prioritizing one use of
-> ref_obj_id, this patch adds a helper_multiple_ref_obj_use check which
-> fails loudly if a helper passes > 1 test for use of ref_obj_id.
->
->   [0]: lore.kernel.org/bpf/20220713234529.4154673-1-davemarchevsky@fb.com
->
-> Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
-> Acked-by: Martin KaFai Lau <kafai@fb.com>
-> Acked-by: Joanne Koong <joannelkoong@gmail.com>
+On Mon,  8 Aug 2022 16:10:50 +0800 Lin Ma wrote:
+> The commit c23d92b80e0b ("igb: Teardown SR-IOV before
+> unregister_netdev()") places the unregister_netdev() call after the
+> igb_disable_sriov() call to avoid functionality issue.
+> 
+> However, it introduces several race conditions when detaching a device.
+> For example, when .remove() is called, the below interleaving leads to
+> use-after-free.
+> 
+>  (FREE from device detaching)      |   (USE from netdev core)
+> igb_remove                         |  igb_ndo_get_vf_config
+>  igb_disable_sriov                 |  vf >= adapter->vfs_allocated_count?
+>   kfree(adapter->vf_data)          |
+>   adapter->vfs_allocated_count = 0 |
+>                                    |    memcpy(... adapter->vf_data[vf]
+> 
+> In short, there are data races between read and write of
+> adapter->vfs_allocated_count. To fix this, we can add a new lock to
+> protect members in adapter object. However, we cau use the existing
+> rtnl_lock just as other drivers do. (See how dpaa2_eth_disconnect_mac is
+> protected in dpaa2_eth_remove function). This patch adopts similar
+> fixes.
+> 
+> Fixes: c23d92b80e0b ("igb: Teardown SR-IOV before unregister_netdev()")
+> Signed-off-by: Lin Ma <linma@zju.edu.cn>
+> ---
+>  drivers/net/ethernet/intel/igb/igb_main.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
+> index d8b836a85cc3..e86ea4de05f8 100644
+> --- a/drivers/net/ethernet/intel/igb/igb_main.c
+> +++ b/drivers/net/ethernet/intel/igb/igb_main.c
+> @@ -3814,7 +3814,9 @@ static void igb_remove(struct pci_dev *pdev)
+>  	igb_release_hw_control(adapter);
+>  
+>  #ifdef CONFIG_PCI_IOV
+> +	rtnl_lock();
+>  	igb_disable_sriov(pdev);
+> +	rtnl_unlock();
+>  #endif
+>  
+>  	unregister_netdev(netdev);
 
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+What about the disable path coming from sysfs? This looks incomplete to
+me. Perhaps take a look at commit 1e53834ce541 ("ixgbe: Add locking to
+prevent panic when setting sriov_numvfs to zero") for some inspiration.
