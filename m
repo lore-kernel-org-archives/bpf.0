@@ -2,101 +2,82 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A5D7C00140
-	for <bpf@archiver.kernel.org>; Mon,  8 Aug 2022 09:46:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F21ACC00140
+	for <bpf@archiver.kernel.org>; Mon,  8 Aug 2022 10:00:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234853AbiHHJqk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Aug 2022 05:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48258 "EHLO
+        id S234041AbiHHKAQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Aug 2022 06:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236737AbiHHJqc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Aug 2022 05:46:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F1B711A17
-        for <bpf@vger.kernel.org>; Mon,  8 Aug 2022 02:46:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659951990;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4t5AWs+u5EvUjx0b8iyElLx44EEba3jEMvid4zYihvo=;
-        b=PPfCkSfzPauwIwtFLMtgC+gkInl3BDnCTr/KsLINQt06aXAIGkO3oQXq3DDOuHGrAmVgpW
-        WBkvaFpqUiadcD/EK+Fz7rJZPtORLWn/NZOG7/LrYxjBw7CQ73Qz2YtvUEB4YkKZ7SxtKn
-        aWFUYzv1JAbINcKFpxusm6WzHV+YdJM=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-158-ZmMVrkOLOHu9aM0VHbZAKw-1; Mon, 08 Aug 2022 05:46:25 -0400
-X-MC-Unique: ZmMVrkOLOHu9aM0VHbZAKw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S235004AbiHHKAP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Aug 2022 06:00:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF882AB;
+        Mon,  8 Aug 2022 03:00:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2375738107F1;
-        Mon,  8 Aug 2022 09:46:25 +0000 (UTC)
-Received: from shodan.usersys.redhat.com (unknown [10.43.17.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id D6D781121314;
-        Mon,  8 Aug 2022 09:46:24 +0000 (UTC)
-Received: by shodan.usersys.redhat.com (Postfix, from userid 1000)
-        id DDF261C0311; Mon,  8 Aug 2022 11:46:23 +0200 (CEST)
-From:   Artem Savkov <asavkov@redhat.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Daniel Vacek <dvacek@redhat.com>,
-        Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>,
-        Daniel Xu <dxu@dxuuu.xyz>, Artem Savkov <asavkov@redhat.com>
-Subject: [PATCH bpf-next v3 2/3] bpf: export crash_kexec() as destructive kfunc
-Date:   Mon,  8 Aug 2022 11:46:22 +0200
-Message-Id: <20220808094623.387348-3-asavkov@redhat.com>
-In-Reply-To: <20220808094623.387348-1-asavkov@redhat.com>
-References: <20220808094623.387348-1-asavkov@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F28C861026;
+        Mon,  8 Aug 2022 10:00:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4F780C433D7;
+        Mon,  8 Aug 2022 10:00:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659952813;
+        bh=46+/XHJPM1jHiZFHHIjiAfA9oHSmiU6V8kiBFMMGHls=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Yv8ta1RritsP71NjAMeuQ7MMzNVtx7vXBxjJSlNsoZ43zEsP/z/4dSAwqOmk5FzDw
+         5MKtxHrg5NuhJMKS3Ku8yERW2O/6dlZkM8tmB0Jm+N1wsvvipe51vijQaLA1Cp04vZ
+         e3Z/hBoJ2kAG3FInwnub+ckjsASu09/DzmW4jX5zY6W1I1f7sBVC4PTuC+TzaR3bat
+         nCDBV0O3G21QWTVRbolq0MwuD9+xJriyCrcIMSUgsg9KUOHhw4IDDb85bM5veE4YyS
+         oGRbrnkPRI2uRxIUfYdsMjmdPf2Bgt7TKE0cAog+lI+xEndX4XcZywVsOLOd/WYAWr
+         aLMefhVo4cEiQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 33E63C43140;
+        Mon,  8 Aug 2022 10:00:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+Subject: Re: [PATCH net] net: bpf: Use the protocol's set_rcvlowat behavior if
+ there is one
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165995281320.20342.8222764157601079891.git-patchwork-notify@kernel.org>
+Date:   Mon, 08 Aug 2022 10:00:13 +0000
+References: <OSZP286MB140479B6DBDB0F13651A55F9959F9@OSZP286MB1404.JPNP286.PROD.OUTLOOK.COM>
+In-Reply-To: <OSZP286MB140479B6DBDB0F13651A55F9959F9@OSZP286MB1404.JPNP286.PROD.OUTLOOK.COM>
+To:     Feng Gao <gfree.wind@outlook.com>
+Cc:     martin.lau@linux.dev, daniel@iogearbox.net,
+        john.fastabend@gmail.com, song@kernel.org, yhs@fb.com,
+        kpsingh@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, gfree.wind@gmail.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Allow properly marked bpf programs to call crash_kexec().
+Hello:
 
-Signed-off-by: Artem Savkov <asavkov@redhat.com>
----
- kernel/bpf/helpers.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 1f961f9982d2..103dbddff41f 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1711,3 +1711,24 @@ bpf_base_func_proto(enum bpf_func_id func_id)
- 		return NULL;
- 	}
- }
-+
-+BTF_SET8_START(tracing_btf_ids)
-+#ifdef CONFIG_KEXEC_CORE
-+BTF_ID_FLAGS(func, crash_kexec, KF_DESTRUCTIVE)
-+#endif
-+BTF_SET8_END(tracing_btf_ids)
-+
-+static const struct btf_kfunc_id_set tracing_kfunc_set = {
-+	.owner = THIS_MODULE,
-+	.set   = &tracing_btf_ids,
-+};
-+
-+static int __init kfunc_init(void)
-+{
-+	if (register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &tracing_kfunc_set))
-+		pr_warn("failed to register kfunc id set for BPF_PROG_TYPE_TRACING\n");
-+
-+	return 0;
-+}
-+
-+late_initcall(kfunc_init);
+On Thu,  4 Aug 2022 23:04:21 +0800 you wrote:
+> From: Gao Feng <gfree.wind@gmail.com>
+> 
+> The commit d1361840f8c5 ("tcp: fix SO_RCVLOWAT and RCVBUF autotuning")
+> add one new (struct proto_ops)->set_rcvlowat method so that a protocol
+> can override the default setsockopt(SO_RCVLOWAT) behavior.
+> 
+> The prior bpf codes don't check and invoke the protos's set_rcvlowat,
+> now correct it.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net] net: bpf: Use the protocol's set_rcvlowat behavior if there is one
+    https://git.kernel.org/netdev/net/c/f574f7f839fc
+
+You are awesome, thank you!
 -- 
-2.37.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
