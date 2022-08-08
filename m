@@ -2,96 +2,49 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A456C19F2D
-	for <bpf@archiver.kernel.org>; Tue,  9 Aug 2022 09:45:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CC2EC19F2D
+	for <bpf@archiver.kernel.org>; Tue,  9 Aug 2022 09:48:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235758AbiHIJpw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Aug 2022 05:45:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39010 "EHLO
+        id S238802AbiHIJsr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Aug 2022 05:48:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232584AbiHIJpw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Aug 2022 05:45:52 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F251F636;
-        Tue,  9 Aug 2022 02:45:50 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M27S100S2zmVY4;
-        Tue,  9 Aug 2022 17:43:44 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by canpemm500010.china.huawei.com
- (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 9 Aug
- 2022 17:45:47 +0800
-From:   Liu Jian <liujian56@huawei.com>
-To:     <john.fastabend@gmail.com>, <jakub@cloudflare.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
-CC:     <liujian56@huawei.com>
-Subject: [PATCH bpf-next v2] skmsg: Fix wrong last sg check in sk_msg_recvmsg()
-Date:   Tue, 9 Aug 2022 17:49:15 +0800
-Message-ID: <20220809094915.150391-1-liujian56@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S238705AbiHIJsq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Aug 2022 05:48:46 -0400
+X-Greylist: delayed 42986 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 09 Aug 2022 02:48:43 PDT
+Received: from cp3.xcloud.pro (ip231.ip-91-134-180.eu [91.134.180.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7B41EADD
+        for <bpf@vger.kernel.org>; Tue,  9 Aug 2022 02:48:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=tecnologicamente.pro; s=mail; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Message-ID:Reply-To:From:Date:Subject:To:Sender:Cc:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Nj/F/58yfXNp9/BLKTYGJCpQvW4JHKnKam4umASa6Jw=; b=CJ7pGf950qnr0ErNoN0s/WebRt
+        ZZjTxIf6irjLwALYYIVVMVeAkInmavWdr0XCw75iJ2C2INiLa0TAjXsAoF5axOWtZS01uWpKxYnRx
+        6c43qyYd3ImyFr9laKrVEkrGYd7Ss5+Yb//hVvekCQJpFQ671rNAj8yM5YTFgO2L0acM=;
+Received: from usrcp3 by cp3.xcloud.pro with local (Exim 4.90_1)
+        (envelope-from <usrcp3@cp3.xcloud.pro>)
+        id 1oLAfW-0007BS-LO
+        for bpf@vger.kernel.org; Mon, 08 Aug 2022 23:52:14 +0200
+To:     bpf@vger.kernel.org
+Subject: =?us-ascii?Q?"Der_Ruckgang_der_Kryptowahrung_macht_Sie_zum_M?=  =?us-ascii?Q?illionar"?=
+Date:   Mon, 8 Aug 2022 21:52:14 +0000
+From:   "tecnologicamente.pro" <info@tecnologicamente.pro>
+Reply-To: info@tecnologicamente.pro
+Message-ID: <2mBYEqxI0hSU2NsUd39CbZezvOaaoURegmccBE64@tecnologicamente.pro>
+X-Mailer: PHPMailer 6.6.0 (https://github.com/PHPMailer/PHPMailer)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix one kernel NULL pointer dereference as below:
+Messaggio/Richiesta:
+FINANZKRISE KANN SIE REICH MACHEN! https://telegra.ph/Deutschland-hat-eine-neue-Einnahmequelle-von-271470-Euro-pro-Woche-08-07
 
-[  224.462334] Call Trace:
-[  224.462394]  __tcp_bpf_recvmsg+0xd3/0x380
-[  224.462441]  ? sock_has_perm+0x78/0xa0
-[  224.462463]  tcp_bpf_recvmsg+0x12e/0x220
-[  224.462494]  inet_recvmsg+0x5b/0xd0
-[  224.462534]  __sys_recvfrom+0xc8/0x130
-[  224.462574]  ? syscall_trace_enter+0x1df/0x2e0
-[  224.462606]  ? __do_page_fault+0x2de/0x500
-[  224.462635]  __x64_sys_recvfrom+0x24/0x30
-[  224.462660]  do_syscall_64+0x5d/0x1d0
-[  224.462709]  entry_SYSCALL_64_after_hwframe+0x65/0xca
-
-In commit 9974d37ea75f ("skmsg: Fix invalid last sg check in
-sk_msg_recvmsg()"), we change last sg check to sg_is_last(),
-but in sockmap redirection case (without stream_parser/stream_verdict/
-skb_verdict), we did not mark the end of the scatterlist. Check the
-sk_msg_alloc, sk_msg_page_add, and bpf_msg_push_data functions, they all
-do not mark the end of sg. They are expected to use sg.end for end
-judgment. So the judgment of '(i != msg_rx->sg.end)' is added back here.
-
-Fixes: 9974d37ea75f ("skmsg: Fix invalid last sg check in sk_msg_recvmsg()")
-Signed-off-by: Liu Jian <liujian56@huawei.com>
----
-v1->v2: change fix commit info in fixes tag and commit message.
- net/core/skmsg.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 81627892bdd4..385ae23580a5 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -462,7 +462,7 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
- 
- 			if (copied == len)
- 				break;
--		} while (!sg_is_last(sge));
-+		} while ((i != msg_rx->sg.end) && !sg_is_last(sge));
- 
- 		if (unlikely(peek)) {
- 			msg_rx = sk_psock_next_msg(psock, msg_rx);
-@@ -472,7 +472,7 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
- 		}
- 
- 		msg_rx->sg.start = i;
--		if (!sge->length && sg_is_last(sge)) {
-+		if (!sge->length && (i == msg_rx->sg.end || sg_is_last(sge))) {
- 			msg_rx = sk_psock_dequeue_msg(psock);
- 			kfree_sk_msg(msg_rx);
- 		}
--- 
-2.17.1
+--
+Questa mail è stata inviata dal modulo di contatto presente su tecnologicamente.pro
 
