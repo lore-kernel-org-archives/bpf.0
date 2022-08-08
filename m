@@ -2,201 +2,233 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 295C7C00140
-	for <bpf@archiver.kernel.org>; Mon,  8 Aug 2022 21:14:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C290C00140
+	for <bpf@archiver.kernel.org>; Mon,  8 Aug 2022 21:56:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236912AbiHHVOi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Aug 2022 17:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45702 "EHLO
+        id S244501AbiHHV4l (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Aug 2022 17:56:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236304AbiHHVOi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Aug 2022 17:14:38 -0400
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2009418352
-        for <bpf@vger.kernel.org>; Mon,  8 Aug 2022 14:14:37 -0700 (PDT)
-Received: by mail-qv1-f54.google.com with SMTP id y11so7281340qvn.3
-        for <bpf@vger.kernel.org>; Mon, 08 Aug 2022 14:14:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=l/Xv5r9OrnZrhHw6KcL8EwEA8t9NUvf7qrtlt1u02IM=;
-        b=WkJhMqmvFBtyfgEP0kQ63D3Pn0IOL03/CWUH+iE8i1K44Hqd1jqS/0aKxED/fYKaFx
-         kjJEcx3N4xmNwIS4rYOIWgnIT8O7B/7E/kuIOdGa4J8uMW/hYgIfrzDWhSMELCouVDDB
-         HRSOF8CDUTwzP5h9F47V+GFoRNpqo2LpOjhDc5OvvlPzsC599UUuCzXtSmOOfkDqobO9
-         MSJ3W+mP4k57GBHpcjMg2w3Zwc4iUO6/57X4GieAIHNnvUMAc+wbK2VCA6Ui0eZF9FZP
-         WfXJ1Tz6/U6Kry+GmfqmJmgavkpu6+MNpaT2q8UwiwCMwXobEDEL3P7f6vP7UkMRlOXl
-         Hqdw==
-X-Gm-Message-State: ACgBeo0k2cKqwHa547GOA9u3tH9ATDyp4aYvlrTW6VmQEAq0Kvss32Et
-        YMWrtCedKPeApTtD70s+xLM=
-X-Google-Smtp-Source: AA6agR6mpSq6B/Smglcj/fXhvKHfUui9BTCYtxXKTzWQX2FAP8pSmxdtOhPjQVWpH2m436/S4cBrUQ==
-X-Received: by 2002:a05:6214:2b0f:b0:478:5319:c4ff with SMTP id jx15-20020a0562142b0f00b004785319c4ffmr16936940qvb.66.1659993276127;
-        Mon, 08 Aug 2022 14:14:36 -0700 (PDT)
-Received: from dev0025.ash9.facebook.com (fwdproxy-ash-013.fbsv.net. [2a03:2880:20ff:d::face:b00c])
-        by smtp.gmail.com with ESMTPSA id h126-20020a375384000000b006b5cb0c512asm9631531qkb.101.2022.08.08.14.14.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 14:14:35 -0700 (PDT)
-Date:   Mon, 8 Aug 2022 14:14:33 -0700
-From:   David Vernet <void@manifault.com>
-To:     Joanne Koong <joannelkoong@gmail.com>
-Cc:     bpf@vger.kernel.org, kafai@fb.com, jolsa@kernel.org,
-        haoluo@google.com, andrii@kernel.org, daniel@iogearbox.net,
-        ast@kernel.org
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: Fix ref_obj_id for dynptr data
- slices in verifier
-Message-ID: <20220808211433.oz3fuvtayfdwrnwi@dev0025.ash9.facebook.com>
-References: <20220722175807.4038317-1-joannelkoong@gmail.com>
+        with ESMTP id S244476AbiHHV4k (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Aug 2022 17:56:40 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA9E1AF08;
+        Mon,  8 Aug 2022 14:56:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659995799; x=1691531799;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vJtYOJwOompnBj4Aqh2odHAundgfNzupycshZfydTio=;
+  b=G160lznxSwOZ01Z4fYtfY+RAGNTVqLCZQFS5xxAUx6Akc9SJiJN1+xEp
+   xFHCfRdQjT3rdf5XxqLUZockUhzF5x7Qfq9nEsKcgEzYS++1y5O5Qy+vj
+   XZQiZXyIGO2v1gpc1aCnJV2prATbfLEY1PR0pktOx+kJAjPlWYNOeahK4
+   L2++CDFoTTekyshNwmArbBAFoLzx8HCXKMarY8p3AHpS8A7HoSb1FFp5O
+   kqX23B2N4cPhAUTz506x4I8tQqH0weEgGASY1AzZbFwquTEJcW+lMlxv6
+   64liKb14Dtz3ylRbd2a8DHzK92ur1i0Mu3sY7KD8iucnMZ4WfaHdea7p4
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="289456662"
+X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
+   d="scan'208";a="289456662"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 14:56:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
+   d="scan'208";a="637473248"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 08 Aug 2022 14:56:34 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oLAji-000MYl-02;
+        Mon, 08 Aug 2022 21:56:34 +0000
+Date:   Tue, 9 Aug 2022 05:55:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Vernet <void@manifault.com>, bpf@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, john.fastabend@gmail.com, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, tj@kernel.org,
+        joannelkoong@gmail.com, linux-kernel@vger.kernel.org,
+        Kernel-team@fb.com
+Subject: Re: [PATCH 3/5] bpf: Add bpf_user_ringbuf_drain() helper
+Message-ID: <202208090505.me3WqXOM-lkp@intel.com>
+References: <20220808155341.2479054-3-void@manifault.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220722175807.4038317-1-joannelkoong@gmail.com>
-User-Agent: NeoMutt/20211029
+In-Reply-To: <20220808155341.2479054-3-void@manifault.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 10:58:06AM -0700, Joanne Koong wrote:
-> When a data slice is obtained from a dynptr (through the bpf_dynptr_data API),
-> the ref obj id of the dynptr must be found and then associated with the data
-> slice.
-> 
-> The ref obj id of the dynptr must be found *before* the caller saved regs are
-> reset. Without this fix, the ref obj id tracking is not correct for
-> dynptrs that are at an offset from the frame pointer.
-> 
-> Please also note that the data slice's ref obj id must be assigned after the
-> ret types are parsed, since RET_PTR_TO_ALLOC_MEM-type return regs get
-> zero-marked.
-> 
-> Fixes: 34d4ef5775f776ec4b0d53a02d588bf3195cada6 ("bpf: Add dynptr data slices");
-> Signed-off-by: Joanne Koong <joannelkoong@gmail.com>
-> ---
+Hi David,
 
-Hi Joanne,
+Thank you for the patch! Perhaps something to improve:
 
-Overall this looks great, thanks. Just a couple small comments / questions.
+[auto build test WARNING on bpf-next/master]
+[also build test WARNING on bpf/master linus/master next-20220808]
+[cannot apply to v5.19]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->  kernel/bpf/verifier.c | 62 ++++++++++++++++++++-----------------------
->  1 file changed, 29 insertions(+), 33 deletions(-)
-> 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index c59c3df0fea6..29987b2ea26f 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -5830,7 +5830,8 @@ static u32 stack_slot_get_id(struct bpf_verifier_env *env, struct bpf_reg_state
->  
->  static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
->  			  struct bpf_call_arg_meta *meta,
-> -			  const struct bpf_func_proto *fn)
-> +			  const struct bpf_func_proto *fn,
-> +			  int func_id)
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Vernet/bpf-Clear-callee-saved-regs-after-updating-REG0/20220808-235558
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220809/202208090505.me3WqXOM-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/70db51b231aeddaa6eecd19afeeebef610ae2686
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Vernet/bpf-Clear-callee-saved-regs-after-updating-REG0/20220808-235558
+        git checkout 70db51b231aeddaa6eecd19afeeebef610ae2686
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash kernel/bpf/
 
-Can we get the func_id from meta instead of adding another argument? It
-looks like the func_id is stored there before we call check_func_arg.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
->  {
->  	u32 regno = BPF_REG_1 + arg;
->  	struct bpf_reg_state *regs = cur_regs(env), *reg = &regs[regno];
-> @@ -6040,23 +6041,33 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
->  			}
->  
->  			meta->uninit_dynptr_regno = regno;
-> -		} else if (!is_dynptr_reg_valid_init(env, reg, arg_type)) {
-> -			const char *err_extra = "";
-> +		} else {
-> +			if (!is_dynptr_reg_valid_init(env, reg, arg_type)) {
-> +				const char *err_extra = "";
->  
-> -			switch (arg_type & DYNPTR_TYPE_FLAG_MASK) {
-> -			case DYNPTR_TYPE_LOCAL:
-> -				err_extra = "local ";
-> -				break;
-> -			case DYNPTR_TYPE_RINGBUF:
-> -				err_extra = "ringbuf ";
-> -				break;
-> -			default:
-> -				break;
-> -			}
-> +				switch (arg_type & DYNPTR_TYPE_FLAG_MASK) {
-> +				case DYNPTR_TYPE_LOCAL:
-> +					err_extra = "local ";
-> +					break;
-> +				case DYNPTR_TYPE_RINGBUF:
-> +					err_extra = "ringbuf ";
-> +					break;
-> +				default:
-> +					break;
-> +				}
->  
-> -			verbose(env, "Expected an initialized %sdynptr as arg #%d\n",
-> -				err_extra, arg + 1);
-> -			return -EINVAL;
-> +				verbose(env, "Expected an initialized %sdynptr as arg #%d\n",
-> +					err_extra, arg + 1);
-> +				return -EINVAL;
-> +			}
-> +			if (func_id == BPF_FUNC_dynptr_data) {
-> +				if (meta->ref_obj_id) {
-> +					verbose(env, "verifier internal error: multiple refcounted args in BPF_FUNC_dynptr_data");
-> +					return -EFAULT;
-> +				}
-> +				/* Find the id of the dynptr we're tracking the reference of */
-> +				meta->ref_obj_id = stack_slot_get_id(env, reg);
-> +			}
->  		}
->  		break;
->  	case ARG_CONST_ALLOC_SIZE_OR_ZERO:
-> @@ -7227,7 +7238,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
->  	meta.func_id = func_id;
->  	/* check args */
->  	for (i = 0; i < MAX_BPF_FUNC_REG_ARGS; i++) {
-> -		err = check_func_arg(env, i, &meta, fn);
-> +		err = check_func_arg(env, i, &meta, fn, func_id);
->  		if (err)
->  			return err;
->  	}
-> @@ -7457,7 +7468,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
->  	if (type_may_be_null(regs[BPF_REG_0].type))
->  		regs[BPF_REG_0].id = ++env->id_gen;
->  
-> -	if (is_ptr_cast_function(func_id)) {
-> +	if (is_ptr_cast_function(func_id) || func_id == BPF_FUNC_dynptr_data) {
+All warnings (new ones prefixed by >>):
 
-Just a nit and my two cents, but IMO, is_ptr_cast_function() feels like a
-bit of an unclear function name. It's only used for this specific if
-statement, so maybe we should change that function name to something like
-is_meta_stored_ref() and just add BPF_FUNC_dynptr_data to that list?
+   kernel/bpf/ringbuf.c: In function '__bpf_user_ringbuf_poll':
+>> kernel/bpf/ringbuf.c:653:15: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+     653 |         hdr = (u32 *)((uintptr_t)rb->data + (cons_pos & rb->mask));
+         |               ^
+   kernel/bpf/ringbuf.c:682:19: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+     682 |         *sample = (void *)((uintptr_t)rb->data +
+         |                   ^
+   kernel/bpf/ringbuf.c: In function '____bpf_user_ringbuf_drain':
+>> kernel/bpf/ringbuf.c:736:40: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     736 |                         ret = callback((u64)&dynptr,
+         |                                        ^
 
->  		/* For release_reference() */
->  		regs[BPF_REG_0].ref_obj_id = meta.ref_obj_id;
->  	} else if (is_acquire_function(func_id, meta.map_ptr)) {
-> @@ -7469,21 +7480,6 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
->  		regs[BPF_REG_0].id = id;
->  		/* For release_reference() */
->  		regs[BPF_REG_0].ref_obj_id = id;
-> -	} else if (func_id == BPF_FUNC_dynptr_data) {
-> -		int dynptr_id = 0, i;
-> -
-> -		/* Find the id of the dynptr we're acquiring a reference to */
-> -		for (i = 0; i < MAX_BPF_FUNC_REG_ARGS; i++) {
-> -			if (arg_type_is_dynptr(fn->arg_type[i])) {
-> -				if (dynptr_id) {
-> -					verbose(env, "verifier internal error: multiple dynptr args in func\n");
-> -					return -EFAULT;
-> -				}
-> -				dynptr_id = stack_slot_get_id(env, &regs[BPF_REG_1 + i]);
-> -			}
-> -		}
-> -		/* For release_reference() */
-> -		regs[BPF_REG_0].ref_obj_id = dynptr_id;
->  	}
->  
->  	do_refine_retval_range(regs, fn->ret_type, func_id, &meta);
-> -- 
-> 2.30.2
-> 
 
-Looks good otherwise, as mentioned above.
+vim +653 kernel/bpf/ringbuf.c
 
-Thanks,
-David
+   626	
+   627	static int __bpf_user_ringbuf_poll(struct bpf_ringbuf *rb, void **sample,
+   628					   u32 *size)
+   629	{
+   630		unsigned long cons_pos, prod_pos;
+   631		u32 sample_len, total_len;
+   632		u32 *hdr;
+   633		int err;
+   634		int busy = 0;
+   635	
+   636		/* If another consumer is already consuming a sample, wait for them to
+   637		 * finish.
+   638		 */
+   639		if (!atomic_try_cmpxchg(&rb->busy, &busy, 1))
+   640			return -EBUSY;
+   641	
+   642		/* Synchronizes with smp_store_release() in user-space. */
+   643		prod_pos = smp_load_acquire(&rb->producer_pos);
+   644		/* Synchronizes with smp_store_release() in
+   645		 * __bpf_user_ringbuf_sample_release().
+   646		 */
+   647		cons_pos = smp_load_acquire(&rb->consumer_pos);
+   648		if (cons_pos >= prod_pos) {
+   649			atomic_set(&rb->busy, 0);
+   650			return -ENODATA;
+   651		}
+   652	
+ > 653		hdr = (u32 *)((uintptr_t)rb->data + (cons_pos & rb->mask));
+   654		sample_len = *hdr;
+   655	
+   656		/* Check that the sample can fit into a dynptr. */
+   657		err = bpf_dynptr_check_size(sample_len);
+   658		if (err) {
+   659			atomic_set(&rb->busy, 0);
+   660			return err;
+   661		}
+   662	
+   663		/* Check that the sample fits within the region advertised by the
+   664		 * consumer position.
+   665		 */
+   666		total_len = sample_len + BPF_RINGBUF_HDR_SZ;
+   667		if (total_len > prod_pos - cons_pos) {
+   668			atomic_set(&rb->busy, 0);
+   669			return -E2BIG;
+   670		}
+   671	
+   672		/* Check that the sample fits within the data region of the ring buffer.
+   673		 */
+   674		if (total_len > rb->mask + 1) {
+   675			atomic_set(&rb->busy, 0);
+   676			return -E2BIG;
+   677		}
+   678	
+   679		/* consumer_pos is updated when the sample is released.
+   680		 */
+   681	
+   682		*sample = (void *)((uintptr_t)rb->data +
+   683				   ((cons_pos + BPF_RINGBUF_HDR_SZ) & rb->mask));
+   684		*size = sample_len;
+   685	
+   686		return 0;
+   687	}
+   688	
+   689	static void
+   690	__bpf_user_ringbuf_sample_release(struct bpf_ringbuf *rb, size_t size,
+   691					  u64 flags)
+   692	{
+   693	
+   694	
+   695		/* To release the ringbuffer, just increment the producer position to
+   696		 * signal that a new sample can be consumed. The busy bit is cleared by
+   697		 * userspace when posting a new sample to the ringbuffer.
+   698		 */
+   699		smp_store_release(&rb->consumer_pos, rb->consumer_pos + size +
+   700				  BPF_RINGBUF_HDR_SZ);
+   701	
+   702		if (flags & BPF_RB_FORCE_WAKEUP || !(flags & BPF_RB_NO_WAKEUP))
+   703			irq_work_queue(&rb->work);
+   704	
+   705		atomic_set(&rb->busy, 0);
+   706	}
+   707	
+   708	BPF_CALL_4(bpf_user_ringbuf_drain, struct bpf_map *, map,
+   709		   void *, callback_fn, void *, callback_ctx, u64, flags)
+   710	{
+   711		struct bpf_ringbuf *rb;
+   712		long num_samples = 0, ret = 0;
+   713		int err;
+   714		bpf_callback_t callback = (bpf_callback_t)callback_fn;
+   715		u64 wakeup_flags = BPF_RB_NO_WAKEUP | BPF_RB_FORCE_WAKEUP;
+   716	
+   717		if (unlikely(flags & ~wakeup_flags))
+   718			return -EINVAL;
+   719	
+   720		/* The two wakeup flags are mutually exclusive. */
+   721		if (unlikely((flags & wakeup_flags) == wakeup_flags))
+   722			return -EINVAL;
+   723	
+   724		rb = container_of(map, struct bpf_ringbuf_map, map)->rb;
+   725		do {
+   726			u32 size;
+   727			void *sample;
+   728	
+   729			err = __bpf_user_ringbuf_poll(rb, &sample, &size);
+   730	
+   731			if (!err) {
+   732				struct bpf_dynptr_kern dynptr;
+   733	
+   734				bpf_dynptr_init(&dynptr, sample, BPF_DYNPTR_TYPE_LOCAL,
+   735						0, size);
+ > 736				ret = callback((u64)&dynptr,
+   737						(u64)(uintptr_t)callback_ctx, 0, 0, 0);
+   738	
+   739				__bpf_user_ringbuf_sample_release(rb, size, flags);
+   740				num_samples++;
+   741			}
+   742		} while (err == 0 && num_samples < 4096 && ret == 0);
+   743	
+   744		return num_samples;
+   745	}
+   746	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
