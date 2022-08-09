@@ -2,117 +2,64 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4039BC19F2D
-	for <bpf@archiver.kernel.org>; Tue,  9 Aug 2022 17:06:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D7C2C3F6B0
+	for <bpf@archiver.kernel.org>; Tue,  9 Aug 2022 17:08:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245268AbiHIRGJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Aug 2022 13:06:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48340 "EHLO
+        id S244861AbiHIRIJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Aug 2022 13:08:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244499AbiHIRGI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Aug 2022 13:06:08 -0400
-Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F1F501114D
-        for <bpf@vger.kernel.org>; Tue,  9 Aug 2022 10:06:04 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.west.internal (Postfix) with ESMTP id AD94C2B05ED3;
-        Tue,  9 Aug 2022 13:00:36 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 09 Aug 2022 13:00:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
-        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1660064436; x=1660071636; bh=3abss+CoOK
-        3R89WSKxwqP2TXwiB32/7eSMUhPqbISCk=; b=XaejAeLV6YtYoP1m1vp3sV6Mvm
-        ZdnaCdwijII0HCmg7+V2+zSm+cbxWQN+hjTZMwOsFOnhZLoaOadd/hCKY8l2KKSA
-        r2zbfCV1TVF1YC4r0Ot1XIf6DtwvplgIyZ9a6lansDZdyUhaLdqFEBaR2XZk9OXW
-        QW6yvyWNlqAhL/iPjWGTsEgHT67PsNu6H3PUbT7YqH6r5Cb3z3tsNgiHeTTO+QOU
-        KGfidGiu8bhPbMIkXB6lbjww7eRM4ZzM4L51Sd4WCjxXha8iHuU5Z8N5+5z4G/Gd
-        VJYlL+AqgIiwkf1IyXmrq03QG1RmAG5gIvgpHas3+vPGqRicFTICI5SFyEWQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660064436; x=1660071636; bh=3abss+CoOK3R89WSKxwqP2TXwiB3
-        2/7eSMUhPqbISCk=; b=jx5UKs5FR/5TTUMznqXpar493S9pJtqfEXAu+xPgH7Hf
-        MzMI2fmjfNSSorTuQHDBOBldR4iyWi0p20MDIXC1elsESVPfa4pS1EdCE0j+H4Rk
-        e83VFx5gzYbW8/ak76uyvnrrbUXBWp+2tuwkhWOkZTyolK3/2SHT0TJG/IOI0Z+y
-        /YK0Jt7QjO3Yt252jTHOQ6lDu/aZXczZQV54hXVol7tZtwr4H2xYc4shrZmhnktB
-        FnOhqT/KWn9asDcS/w6iCF1+uDFgO+eHst6lNEF3oab5C4Sc3BBNEduWRHLfJ3tN
-        FMNN0vMmuJia78raFkiuEvS/OZaOEnCoDMZCvT3eqw==
-X-ME-Sender: <xms:s5LyYiEDWpP3XIu1fhZ7hW2j1tEJ9_YahHqQaupFDOfN-OgJzL7zeg>
-    <xme:s5LyYjUXhWR0e-TA6b-8eUOKkaSSkT6nQqy5uYmdthUlVQ-argdBUNO1bQ92khVDI
-    8w2xl-r8ydMOzLoWg>
-X-ME-Received: <xmr:s5LyYsLXwLEh-ECGcXC1Ahw1aqBqsTEkFHtD7D0JuYwT7If1v9FZ6DQzDGHecyB1KekGFvrIqjOH2ZjdOv3icxrhSfwu5RcPqwtxDRP_1OxcMTTg7YTwTY0ZCkjX>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegtddguddtkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetnhgu
-    rhgvshcuhfhrvghunhguuceorghnughrvghssegrnhgrrhgriigvlhdruggvqeenucggtf
-    frrghtthgvrhhnpedvffefvefhteevffegieetfefhtddvffejvefhueetgeeludehteev
-    udeitedtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpegrnhgurhgvshesrghnrghrrgiivghlrdguvg
-X-ME-Proxy: <xmx:s5LyYsGVr1iRxg22r1viLNcxnBb__ip5V9s1GtYOV80LXV1M2lI-0w>
-    <xmx:s5LyYoXtfSskZTRfN8-H9DAnAI6bCPEWjHlCk_nUNBRQki44lyRM8Q>
-    <xmx:s5LyYvM7hnV60DWPFPbU4RyAdGKRHlSYcm8b5g9E3puupVDX2nWwYQ>
-    <xmx:tJLyYjae09X7G4eUbzBHqTzlMX2xyFBOc1WqctEKF7viDjE_x0rHQYLR4RY>
-Feedback-ID: id4a34324:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 9 Aug 2022 13:00:35 -0400 (EDT)
-Date:   Tue, 9 Aug 2022 10:00:34 -0700
-From:   Andres Freund <andres@anarazel.de>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
-        Daniel Borkmann <daniel@iogearbox.net>, quentin@isovalent.com,
-        ast@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, peterz@infradead.org, mingo@redhat.com,
-        terrelln@fb.com, nathan@kernel.org, ndesaulniers@google.com,
-        bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH 4/4] build: Switch to new openssl API for test-libcrypto
-Message-ID: <20220809170034.hx7fyiosm3tfekwf@awork3.anarazel.de>
-References: <20220719170555.2576993-1-roberto.sassu@huawei.com>
- <20220719170555.2576993-4-roberto.sassu@huawei.com>
- <5f867295-10d2-0085-d1dc-051f56e7136a@iogearbox.net>
- <YvFW/kBL6YA3Tlnc@kernel.org>
- <YvJ6DbzBNsAgNZS4@kernel.org>
- <YvJ7awkCVBYaZ2dd@kernel.org>
+        with ESMTP id S232573AbiHIRIJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Aug 2022 13:08:09 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E644813E26;
+        Tue,  9 Aug 2022 10:08:06 -0700 (PDT)
+Received: (Authenticated sender: hadess@hadess.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id 5E20D100006;
+        Tue,  9 Aug 2022 17:08:01 +0000 (UTC)
+Message-ID: <67583452598f7ceacf5f7f5cee0f53373ea76689.camel@hadess.net>
+Subject: Re: [PATCH 1/2] USB: core: add a way to revoke access to open USB
+ devices
+From:   Bastien Nocera <hadess@hadess.net>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-usb@vger.kernel.org, bpf@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Peter Hutterer <peter.hutterer@who-t.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Date:   Tue, 09 Aug 2022 19:08:01 +0200
+In-Reply-To: <87y1vx2wmk.fsf@email.froward.int.ebiederm.org>
+References: <20220809094300.83116-1-hadess@hadess.net>
+         <20220809094300.83116-2-hadess@hadess.net>
+         <87y1vx2wmk.fsf@email.froward.int.ebiederm.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvJ7awkCVBYaZ2dd@kernel.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+T24gVHVlLCAyMDIyLTA4LTA5IGF0IDExOjQ2IC0wNTAwLCBFcmljIFcuIEJpZWRlcm1hbiB3cm90
+ZToKPiBCYXN0aWVuIE5vY2VyYSA8aGFkZXNzQGhhZGVzcy5uZXQ+IHdyaXRlczoKPiAKPiA+ICvC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKga3VpZF90IGt1aWQ7
+Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oGlmICghcHMgfHwgIXBzLT5jcmVkKQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY29udGludWU7Cj4gPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGt1aWQgPSBwcy0+Y3JlZC0+ZXVp
+ZDsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYg
+KGt1aWQudmFsICE9IGV1aWQpCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoCBeXl5eXl5eXl5eXl5eXl5eXl5eXl4KPiBUaGF0IHRlc3Qgc2hvdWxkIGJlIGlm
+ICghdWlkX2VxKHBzLT5jcmVkLT5ldWlkLCBldWlkKSkKPiAKPiAKPiBUaGUgcG9pbnQgaXMgdGhh
+dCBpbnNpZGUgdGhlIGtlcm5lbCBhbGwgdWlkIGRhdGEgc2hvdWxkIGJlIGRlYWx0IHdpdGgKPiBp
+biB0aGUga3VpZF90IGRhdGEgdHlwZS7CoCBTbyBhcyB0byBhdm9pZCBjb25mdXNpbmcgdWlkcyB3
+aXRoIHNvbWUKPiBvdGhlcgo+IGtpbmQgb2YgaW50ZWdlciBkYXRhLgoKVGhhdCB1aWQgY29tZXMg
+ZnJvbSB1c2VyLXNwYWNlLCBzZWUgcGF0Y2ggMi8yLgoKRG8geW91IGhhdmUgZXhhbXBsZXMgb2Yg
+YWNjZXB0aW5nIGV1aWRzIGZyb20gdXNlci1zcGFjZSBhbmQgc3Rhc2hpbmcKdGhlbSBpbnRvIGt1
+aWRfdD8KCklmIHlvdSBhbHNvIGhhdmUgYW55IGlkZWEgYWJvdXQgdXNlciBuYW1lc3BhY2VzIGFz
+IG1lbnRpb25lZCBpbiB0aGUKY292ZXIgbGV0dGVyIGZvciB0aGlzIHBhdGNoIHNldCwgSSB3b3Vs
+ZCBhcHByZWNpYXRlLgo=
 
-On 2022-08-09 12:21:15 -0300, Arnaldo Carvalho de Melo wrote:
-> So I backtracked, the way it works needs further consideration with
-> regard to the patchkit from Andres, that is already upstream, so it
-> would be good for Roberto to take a look at what is in torvalds/master
-> now and see if we have to removed that styled thing from Andres.
-
-Why would it have to be removed - seems to be fairly independent, leaving the
-line conflicts aside? Or do you just mean folding it into one-big-test? If so,
-that'd make sense, although I'm not sure how ready the infrastructure
-
-
-FWIW, if I would have to maintain these, I'd probably change FEATURE_TESTS,
-FEATURE_DISPLAY into one-item-per-line to make conflicts less common and
-easier to resolve.
-
-
-> Andres, if you could take a look at Roberto's patchkit as well that
-> would be great.
-
-I briefly scanned it, and the only real comment I have mirror's Quentin's,
-namely that it'd be nice to avoid displaying more tests that don't tell the
-user much.
-
-Greetings,
-
-Andres Freund
