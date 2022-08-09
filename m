@@ -2,124 +2,95 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 990CDC3F6B0
-	for <bpf@archiver.kernel.org>; Tue,  9 Aug 2022 17:52:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9ACDC19F2D
+	for <bpf@archiver.kernel.org>; Tue,  9 Aug 2022 18:44:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233963AbiHIRwo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Aug 2022 13:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55128 "EHLO
+        id S1344184AbiHISoG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Aug 2022 14:44:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244985AbiHIRwm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Aug 2022 13:52:42 -0400
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3391A20F40
-        for <bpf@vger.kernel.org>; Tue,  9 Aug 2022 10:52:42 -0700 (PDT)
-Received: by devbig010.atn6.facebook.com (Postfix, from userid 115148)
-        id 4D743102FBCDC; Tue,  9 Aug 2022 10:52:28 -0700 (PDT)
-From:   Joanne Koong <joannelkoong@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     kafai@fb.com, void@manifault.com, andrii@kernel.org,
-        daniel@iogearbox.net, ast@kernel.org,
-        Joanne Koong <joannelkoong@gmail.com>
-Subject: [PATCH bpf-next v3 1/2] bpf: Fix ref_obj_id for dynptr data slices in verifier
-Date:   Tue,  9 Aug 2022 10:52:07 -0700
-Message-Id: <20220809175208.2224443-1-joannelkoong@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S1344412AbiHISnp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Aug 2022 14:43:45 -0400
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDACB2CE29
+        for <bpf@vger.kernel.org>; Tue,  9 Aug 2022 11:18:55 -0700 (PDT)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id 5774E240106
+        for <bpf@vger.kernel.org>; Tue,  9 Aug 2022 20:18:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1660069133; bh=NGCo6G97/D+DFJHZEJlgWxPMh8d5YJ9QKfmC0rdGXPg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=P/mxWtIU+OhwQ0G3Uxiusi2rd9Vegpev4L6kn5k0jNSHX+CTLlDbfJdyydrracDuO
+         qBnDiDVSl6RxS9ARPNktSNfOR0BWvRDacnPGj4Y79+ADCB1zg8chRQ5CxjZtbBIqHs
+         UaOau8SAS0EPEY0qMGuhaNl2krDGRS5oS0x1zTGtae70imGR51kU7xU5wanB9q/26V
+         f/nkyghmxfyOcmS128S7yA/UKAK2IQspLtEi/5TXWLXlFFEsM4t1bcGJsNdtZXE1+2
+         pBQB0k0Tty7yXZt+CTJue2oqXl2HfrVcmX3j6fpiAKlM9kpFVhWNGRmcE8VZw3LzJa
+         7L4WDsRPTyVow==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4M2LtL13Xqz6tn7;
+        Tue,  9 Aug 2022 20:18:49 +0200 (CEST)
+Date:   Tue,  9 Aug 2022 18:18:45 +0000
+From:   Daniel =?utf-8?Q?M=C3=BCller?= <deso@posteo.net>
+To:     Daniel Xu <dxu@dxuuu.xyz>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Fix vmtest.sh getopts
+ optstring
+Message-ID: <20220809181845.bkmrgogdgd3divfj@muellerd-fedora-PC2BDTX9>
+References: <cover.1660064925.git.dxu@dxuuu.xyz>
+ <0f93b56198328b6b4da7b4cf4662d05c3edb5fd2.1660064925.git.dxu@dxuuu.xyz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0f93b56198328b6b4da7b4cf4662d05c3edb5fd2.1660064925.git.dxu@dxuuu.xyz>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When a data slice is obtained from a dynptr (through the bpf_dynptr_data =
-API),
-the ref obj id of the dynptr must be found and then associated with the d=
-ata
-slice.
+On Tue, Aug 09, 2022 at 11:11:10AM -0600, Daniel Xu wrote:
+> Before, you could see the following errors:
+> 
+> ```
+> $ ./vmtest.sh -j
+> ./vmtest.sh: option requires an argument -- j
+> ./vmtest.sh: line 357: OPTARG: unbound variable
+> 
+> $ ./vmtest.sh -z
+> ./vmtest.sh: illegal option -- z
+> ./vmtest.sh: line 357: OPTARG: unbound variable
+> ```
+> 
+> Fix by adding ':' as first character of optstring. Reason is that
+> getopts requires ':' as the first character for OPTARG to be set in the
+> `?` and `:` error cases.
+> 
+> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> ---
+>  tools/testing/selftests/bpf/vmtest.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/vmtest.sh b/tools/testing/selftests/bpf/vmtest.sh
+> index 976ef7585b33..a29aa05ebb3e 100755
+> --- a/tools/testing/selftests/bpf/vmtest.sh
+> +++ b/tools/testing/selftests/bpf/vmtest.sh
+> @@ -333,7 +333,7 @@ main()
+>  	local exit_command="poweroff -f"
+>  	local debug_shell="no"
+>  
+> -	while getopts 'hskid:j:' opt; do
+> +	while getopts ':hskid:j:' opt; do
+>  		case ${opt} in
+>  		i)
+>  			update_image="yes"
+> -- 
+> 2.37.1
+> 
 
-The ref obj id of the dynptr must be found *before* the caller saved regs=
- are
-reset. Without this fix, the ref obj id tracking is not correct for
-dynptrs that are at an offset from the frame pointer.
+I tested with this change and it worked fine for me. One thing to consider
+pointing out more clearly in the description is that ':' as the first character
+of the optstring switches getopts to silent mode. The desire to run in this mode
+seems to have been there all along, as the script takes care of reporting
+errors.
 
-Please also note that the data slice's ref obj id must be assigned after =
-the
-ret types are parsed, since RET_PTR_TO_ALLOC_MEM-type return regs get
-zero-marked.
-
-Fixes: 34d4ef5775f776ec4b0d53a02d588bf3195cada6 ("bpf: Add dynptr data sl=
-ices");
-Signed-off-by: Joanne Koong <joannelkoong@gmail.com>
----
- kernel/bpf/verifier.c | 34 ++++++++++++++++++----------------
- 1 file changed, 18 insertions(+), 16 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 843a966cd02b..671786a56bb6 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -7342,6 +7342,23 @@ static int check_helper_call(struct bpf_verifier_e=
-nv *env, struct bpf_insn *insn
- 			}
- 		}
- 		break;
-+	case BPF_FUNC_dynptr_data:
-+		for (i =3D 0; i < MAX_BPF_FUNC_REG_ARGS; i++) {
-+			if (arg_type_is_dynptr(fn->arg_type[i])) {
-+				if (meta.ref_obj_id) {
-+					verbose(env, "verifier internal error: meta.ref_obj_id already set\=
-n");
-+					return -EFAULT;
-+				}
-+				/* Find the id of the dynptr we're tracking the reference of */
-+				meta.ref_obj_id =3D stack_slot_get_id(env, &regs[BPF_REG_1 + i]);
-+				break;
-+			}
-+		}
-+		if (i =3D=3D MAX_BPF_FUNC_REG_ARGS) {
-+			verbose(env, "verifier internal error: no dynptr in bpf_dynptr_data()=
-\n");
-+			return -EFAULT;
-+		}
-+		break;
- 	}
-=20
- 	if (err)
-@@ -7473,7 +7490,7 @@ static int check_helper_call(struct bpf_verifier_en=
-v *env, struct bpf_insn *insn
- 	if (type_may_be_null(regs[BPF_REG_0].type))
- 		regs[BPF_REG_0].id =3D ++env->id_gen;
-=20
--	if (is_ptr_cast_function(func_id)) {
-+	if (is_ptr_cast_function(func_id) || func_id =3D=3D BPF_FUNC_dynptr_dat=
-a) {
- 		/* For release_reference() */
- 		regs[BPF_REG_0].ref_obj_id =3D meta.ref_obj_id;
- 	} else if (is_acquire_function(func_id, meta.map_ptr)) {
-@@ -7485,21 +7502,6 @@ static int check_helper_call(struct bpf_verifier_e=
-nv *env, struct bpf_insn *insn
- 		regs[BPF_REG_0].id =3D id;
- 		/* For release_reference() */
- 		regs[BPF_REG_0].ref_obj_id =3D id;
--	} else if (func_id =3D=3D BPF_FUNC_dynptr_data) {
--		int dynptr_id =3D 0, i;
--
--		/* Find the id of the dynptr we're acquiring a reference to */
--		for (i =3D 0; i < MAX_BPF_FUNC_REG_ARGS; i++) {
--			if (arg_type_is_dynptr(fn->arg_type[i])) {
--				if (dynptr_id) {
--					verbose(env, "verifier internal error: multiple dynptr args in func=
-\n");
--					return -EFAULT;
--				}
--				dynptr_id =3D stack_slot_get_id(env, &regs[BPF_REG_1 + i]);
--			}
--		}
--		/* For release_reference() */
--		regs[BPF_REG_0].ref_obj_id =3D dynptr_id;
- 	}
-=20
- 	do_refine_retval_range(regs, fn->ret_type, func_id, &meta);
---=20
-2.30.2
-
+Acked-by: Daniel Müller <deso@posteo.net>
