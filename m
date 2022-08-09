@@ -2,132 +2,58 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B567C25B07
-	for <bpf@archiver.kernel.org>; Tue,  9 Aug 2022 06:33:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8DB7C19F2D
+	for <bpf@archiver.kernel.org>; Tue,  9 Aug 2022 06:35:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237666AbiHIGdw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Aug 2022 02:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44510 "EHLO
+        id S237711AbiHIGfU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Aug 2022 02:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237664AbiHIGds (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Aug 2022 02:33:48 -0400
+        with ESMTP id S233465AbiHIGfS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Aug 2022 02:35:18 -0400
 Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950162019F;
-        Mon,  8 Aug 2022 23:33:46 -0700 (PDT)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 278NSHVS009585;
-        Mon, 8 Aug 2022 23:33:31 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=thCvk7XQkvuZj/EhZXx51lNiHa+su9/WN3zSOT5gr28=;
- b=BfYo9kr0gvFr7+kprJk3wloP1BME2v3RVMhe2ZpYbVTzG4gNhTAVTd2rN2AdSANHPk38
- tDocNVGatg50Jbkxt97YCDCjO7w9LkFs8r0/+7swHBIPbfH6G34wwD6LbafzZI98l7Yh
- 0WgvGQ6K+WgMIqkFVsvbu2bVnfPbXYCnmUU= 
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2170.outbound.protection.outlook.com [104.47.57.170])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hsnty7bkm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 08 Aug 2022 23:33:31 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bA8PP9CSu+jWWPj8MOegKlSt6zLwFmp4IVXKNZPKYD9DzDOjUrR4EbnxIzm2OBMhgTCBIbdibEJMQMSgiSpx4GyakEiXzVX+A+yPN8i12XYWGjMjlbx4VAbacKkFlUft1Publa7MXjXXXDcv6cESFji2OrEoa8QXznr1auSjryVC3eKY3iePNHzMfz4xEW5mKrMCaNNHjYRvZJ+45lZB9c+fu2zxTM5ZlHOwhKdKusnyKuZsQAyi1Hx5Hw7Pg467QVFB9KLuLSNXwWiBQDyBNaywcmqEe5epF0drpd9qXxRRRJjtxsb2Z2vYl6arvlUA8AH/6q2y9VIuDytadMhU7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=thCvk7XQkvuZj/EhZXx51lNiHa+su9/WN3zSOT5gr28=;
- b=IbIFM1VPHS8nQuGAF6d+yoCNJVt/OJbj+QszceTR1KJ8ZBW4nKshlvtV+ptGxweLmxtjUyMi9FmAOuy1V2Wi8V9WxxxEhhhbeScnXm5jHblTdLUC+eS2aSB7AiczdtTvNy8wPhT7gcMfcQ06ypYr1uXSgQXCF3ONgKvQzMA0d2dwhr6XqralTMtVdPJtCtgxrO/YsHGg0wnCDqEVdCRh0LJw/oFh1Y1MhVunBSALV8/17UpPsecwgJ002yUgTG79SiMU4LUyzljEwwO8gqAdH9P+dVjJ2aprFHHW/nEl7KvgqafwHX6Q0+1+ImGB0hcvUyxmA25tPApFA6EvEnjv8Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by PH0PR15MB4197.namprd15.prod.outlook.com (2603:10b6:510:24::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Tue, 9 Aug
- 2022 06:33:29 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::de2:b318:f43e:6f55]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::de2:b318:f43e:6f55%3]) with mapi id 15.20.5504.021; Tue, 9 Aug 2022
- 06:33:28 +0000
-Message-ID: <df64d9b9-6b00-379d-3a3d-98041c8789df@fb.com>
-Date:   Mon, 8 Aug 2022 23:33:26 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.12.0
-Subject: Re: [PATCH dwarves] dwarf_loader: encode char type as signed
-Content-Language: en-US
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com
-References: <20220807175309.4186342-1-yhs@fb.com>
- <CAEf4BzZJdqxOS_8VLX73z94GCUBVW4k6hKo3WGHyv4n-jQ-niQ@mail.gmail.com>
-From:   Yonghong Song <yhs@fb.com>
-In-Reply-To: <CAEf4BzZJdqxOS_8VLX73z94GCUBVW4k6hKo3WGHyv4n-jQ-niQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR13CA0208.namprd13.prod.outlook.com
- (2603:10b6:a03:2c3::33) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D9FF30
+        for <bpf@vger.kernel.org>; Mon,  8 Aug 2022 23:35:17 -0700 (PDT)
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 278NSOdL026336
+        for <bpf@vger.kernel.org>; Mon, 8 Aug 2022 23:35:16 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=eYyEg9fTghI+7u/ntaSyzZw7foaQEakc2d5/Ob/j19g=;
+ b=QYA37LiCc5yIJ+g5EcCLc5rpTMMlT4kUQU/wvYlTIbFpN0kIJP7kV7kjDkEx0Iefj+Hl
+ Fj/85m/OgHt0KMVAdvs0FCENJlVyvqm1w1vO1SubMppFbYdRWof5gtg7GP/spgch1EX4
+ IpbUKPSRCovJbKja3pKb7Ell/NdMypvJlE8= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hu774uukm-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 08 Aug 2022 23:35:16 -0700
+Received: from snc-exhub201.TheFacebook.com (2620:10d:c085:21d::7) by
+ snc-exhub203.TheFacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Mon, 8 Aug 2022 23:35:09 -0700
+Received: from twshared30313.14.frc2.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Mon, 8 Aug 2022 23:35:08 -0700
+Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
+        id 08E0C671675F; Mon,  8 Aug 2022 23:35:02 -0700 (PDT)
+From:   Kui-Feng Lee <kuifeng@fb.com>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <andrii@kernel.org>, <kernel-team@fb.com>, <yhs@fb.com>
+CC:     Kui-Feng Lee <kuifeng@fb.com>
+Subject: [PATCH bpf-next v3 1/3] bpf: Parameterize task iterators.
+Date:   Mon, 8 Aug 2022 23:34:59 -0700
+Message-ID: <20220809063501.667610-2-kuifeng@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220809063501.667610-1-kuifeng@fb.com>
+References: <20220809063501.667610-1-kuifeng@fb.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5743460a-c2ee-42bc-56bd-08da79d11228
-X-MS-TrafficTypeDiagnostic: PH0PR15MB4197:EE_
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: C0jnngw1Q2K2KdRLINMsaQtCYAoSG4fwrxXsMQdQv/Ty/nD/BXYI3QSNoAOHdVcVQ7IHwn3VtEV7TfgnIgAQ2AYWAZ8YvIsFcvXJEdSFzJBjNOcEbQ9bJRCXLGuS/x5o81v/mLq9MbgyDkoQ9QQi1dlvZjIhFlHfG2pzTwFc5adeDm4TetnSBxDdQ6+fc7ojHiqzlpsWnjnZ3WkhiHm14zs9SB8ElO0yt0s3z41b5htgzt4BVyXdOZiD7LIzXiwSv07QP6stz/bss0Oe5ckutW3Bsz7FfTVNZ7+73D3n3+lSASxkzEWMNflYSrXTRw0DZEeirmJQMb5bNjY6xTd472evteQnD9mjuWvCo5WmRjp5h+XODyTcMs0u5JHYOQC7gGQ8DKBr5ROqnfrpA/m+hbVvnu4/THdHCPq4gYYgrixtqstFplw270FM2ksZEMyCgF9NUKOYZd6bmKg016Pa7VG4jNXUNWPDnqcAfgFEGanurcacgOJmkiZ2xQPP24BVftO7FuXbsymPl1BfhsxxhykkX9gPMC/OwUcdrLRguTa+dHXixrmCyV0M3ehQDWLkoRZjzxLvddV7PEbvcdulE9mPvn+Rixtl8QDF74pP33jDolCnYfftiLxnVnLLZz06HIFUg6ect+MInhVHcaWATlQke+dVHhOdPOIn9z7he71iP9elFexYIduXrpYBq0aMzcexjSZQ3O8enCVjvPokZeRhU/KKk30/gBtB1VO/Gyb6h92XMOMKCCOeOE3YqlJjKqNqgxMRq6yYXKCmqlO81ulFuGcu6b1LzSUGzyRI/5U3Fc3Qv2LJVaKpDSzM/2nXNLAUJLQyy0YA//jfA/LAFA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(39860400002)(376002)(346002)(366004)(396003)(4326008)(66476007)(66556008)(66946007)(83380400001)(8676002)(6916009)(54906003)(41300700001)(316002)(31686004)(36756003)(6506007)(53546011)(6512007)(186003)(2616005)(2906002)(8936002)(5660300002)(478600001)(6486002)(31696002)(86362001)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d1g5VkdkUW9rT2pyTkE5V3lib21kWnAzWWd6YWpjRmx1OEtrdzhHQUdtZU4w?=
- =?utf-8?B?cmorRXFxeUpza3RIdlRFNE9kbmJDaXJpTDZteFhEWnQ3NGk5MzNjSFFZc0px?=
- =?utf-8?B?eVg0ZjhRcTJvYlZIeDlST1IzV2R2cE1NMkxQV2s3K1RSck1wM29TanVhbXFD?=
- =?utf-8?B?RVVMS0d0WG5rM3llMzNUS0d6Qk5Edk4yNTRpRVI0Y01QaG1EQVEvSUppSllu?=
- =?utf-8?B?Q1V1WlBBNkluZmxZK25FbE41dGpHNGMzb2gwQ1hUWDdsZE4xL1VoOHFTYWh5?=
- =?utf-8?B?U1RiRjUwT2IxUk5GR2JJR1RZWG1QT2NWb2UyVWU5UFZnbGNUTlM5bFhTVDJi?=
- =?utf-8?B?c0xGcU1kR09hbFcrTTVaWGZTTi9BemFWN0h5M0IxaGNrb3E4Ny9HTkh4ejJl?=
- =?utf-8?B?RTh6NjBydm41VUNyTlNLaDBObjhVejhpVDNndEl6dHoyRkhtNitnb0hUbVVX?=
- =?utf-8?B?blB4VDQ4dmdNaU1WS1orWVQ5TVVoa2poSzliSkVSSHdLZllpVDQzZDlBbVY3?=
- =?utf-8?B?R0lnTlByakMvcTNCUUFHZEIzNG02bjY5bHBacTRxWWc5NVNsU25zVmpOVy8v?=
- =?utf-8?B?REFIeUFDQittTlBaTFo0cUFaM3FmSG0ydUN6NndZR3l4dGo5SUNobVhoOEZ0?=
- =?utf-8?B?OU1CMkVNdGJvc1FLUWx2bVpWdlNjeHhTNGM5bkVrV0hqRm13M0thMUxTMVBW?=
- =?utf-8?B?dmNwQjRkZW00citzRWM5MnlEc1dkdDNraUc4aTJpOERyc2plSmdNRG1tTjZG?=
- =?utf-8?B?dURFaVE4ZFVUSTVYSjU2ODNLa0RGWXYyRjNIYy91U3lGQnljVUN3OThZL0NQ?=
- =?utf-8?B?RzlBb0M2WmVKRFFUUXZnTHd6ZmIvTG94bEhRQ21TNlVOY0hhWDd6Qmx4d00v?=
- =?utf-8?B?UUc1aVh4V3JHKy92RHR1UWRLZUhQMUNNa3MwN1FzVWxRU2MwVzlpeVYrem81?=
- =?utf-8?B?UjFnRHdySFFKbUI2MjhOcW9PZlhTRTZoYUR3cjdzM3NPekM4UGx6eDJteUJS?=
- =?utf-8?B?ekI4Y1BWcnVDMWw5NUx6bTFsN1VGZFZZNmhSNWQ2UmM1MmwyZ2xrRy9QY2Fj?=
- =?utf-8?B?dHZhMHZjQ2hVcEt5WitBZVVoRXMwNFRwTUNnaFRVeHkzWlZaT091Unp4OWV1?=
- =?utf-8?B?WU05elkvaHVuQlRCWTdwN2hRb21CejNmelk1TzZEUnpqTlk0MDRGeHBERzhG?=
- =?utf-8?B?SXYzZDNWVU11ckxzUXkySHhLcEttOXVuWWJ6NUNmNlo2Y3o4dVZyODFTemk0?=
- =?utf-8?B?a004Nnl6UjFrVE1NeS9JWXdlcVNrWkhrVGg3ZDRvT1lzejdaK3dIWFpYK3BY?=
- =?utf-8?B?SlZqMFlrb3F5TGQvblVNL0RYNG8ySWNCdDZ6bkhBMlROMjVEQ1psR0ZiSmJR?=
- =?utf-8?B?NkU4V1VTdnhMRWZndGVuL2Y0WTd1VjhONU8valk0cHhsanYyLzRmeVhXa2RR?=
- =?utf-8?B?WStaOTk0Sjk1R05GUXVDR3l2dEJSNnJZYkE3UEU2VlhOU1hJWjF1TjZFVDFm?=
- =?utf-8?B?RHI1ZFVvRnJFQjhlR3MyRWVkemlKc2RHTU44VFh6NmxSRk9oVHBTa2QrNTg1?=
- =?utf-8?B?bnlCR0dOcGVtdnIzRU9YMnF1NjNvdW9tUlVaYjh2ZXRPc0JLMFlySi84ODNT?=
- =?utf-8?B?dlFUKzhZODQremFmZDJ0MklNRnRhclFubHpncmRQVzhodlZwbGo2b3R3SHUw?=
- =?utf-8?B?NjFKZE9EalBqV1JlclpRTm9jZVRBWExROG13MmxxQlZob09NUlF5YisrTU5n?=
- =?utf-8?B?TmJkV2V4eUZ1b3RsL3lkMXZxNHVTSTN6WGFwalYrZFhDWUJFcEhEU3pHTFlJ?=
- =?utf-8?B?VHBlS2dQSVJYQ3ZRK0hlQTg3SWx1ZWlnUDdNb3lDTkFma2pwV2wwb1NTcG1v?=
- =?utf-8?B?WW9id3pUVVRXbkxkd3FtQlFVK1IrdmU4VzNMN2JOMEMzQ005Y1NWNDVvVEVu?=
- =?utf-8?B?emxnK29uWEVlMkw2cnRmOThIYkZCc2oxUW9McTRrMVprRGh4TGd4VXIxMmhq?=
- =?utf-8?B?Q0xmNG9xVHVaZlFXZ2d3Tjg5QjFVZFV5NGRhWHl2Vm00ZlF1ZFAxdkZrK0tB?=
- =?utf-8?B?eGNpUjlBZWU2WUwxVXhDN0lTMFdhTW9yb3hGdU1Fck0zWDRlTndac0w5U0lw?=
- =?utf-8?B?TFJQZFJwdGdNd0dRcmVvb2psRlR5Y0dOSzc3MS82YTJZamRNQk5FaEpidk81?=
- =?utf-8?B?dkE9PQ==?=
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5743460a-c2ee-42bc-56bd-08da79d11228
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2022 06:33:28.7824
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7IwrZhts/DjWvERoym8+ZvwxtWLGQzC7Tb3noP+HSCDcWCXdrKWvD5BfhivXCp2V
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR15MB4197
-X-Proofpoint-GUID: 2xybe6sW8MIIK_VmMjJePwWPgKWY7asw
-X-Proofpoint-ORIG-GUID: 2xybe6sW8MIIK_VmMjJePwWPgKWY7asw
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: _urfrVPgMy36ENxjQ-0J_0YPyC1FX8TH
+X-Proofpoint-ORIG-GUID: _urfrVPgMy36ENxjQ-0J_0YPyC1FX8TH
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-09_03,2022-08-09_01,2022-06-22_01
@@ -135,72 +61,437 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Allow creating an iterator that loops through resources of one task/threa=
+d.
 
+People could only create iterators to loop through all resources of
+files, vma, and tasks in the system, even though they were interested
+in only the resources of a specific task or process.  Passing the
+additional parameters, people can now create an iterator to go
+through all resources or only the resources of a task.
 
-On 8/8/22 3:52 PM, Andrii Nakryiko wrote:
-> On Sun, Aug 7, 2022 at 10:53 AM Yonghong Song <yhs@fb.com> wrote:
->>
->> Currently, the pahole treats 'char' or 'signed char' type
->> as unsigned in BTF generation. The following is an example,
->>    $ cat t.c
->>    signed char a;
->>    char b;
->>    $ clang -O2 -g -c t.c
->>    $ pahole -JV t.o
->>    ...
->>    [1] INT signed char size=1 nr_bits=8 encoding=(none)
->>    [2] INT char size=1 nr_bits=8 encoding=(none)
->> In the above encoding '(none)' implies unsigned type.
->>
->> But if the same program is compiled with bpf target,
->>    $ clang -target bpf -O2 -g -c t.c
->>    $ bpftool btf dump file t.o
->>    [1] INT 'signed char' size=1 bits_offset=0 nr_bits=8 encoding=SIGNED
->>    [2] VAR 'a' type_id=1, linkage=global
->>    [3] INT 'char' size=1 bits_offset=0 nr_bits=8 encoding=SIGNED
->>    [4] VAR 'b' type_id=3, linkage=global
->>    [5] DATASEC '.bss' size=0 vlen=2
->>            type_id=2 offset=0 size=1 (VAR 'a')
->>            type_id=4 offset=0 size=1 (VAR 'b')
->> the 'char' and 'signed char' are encoded as SIGNED integers.
->>
->> Encode 'char' and 'signed char' as SIGNED should be a right to
->> do and it will be consistent with bpf implementation.
->>
->> With this patch,
->>    $ pahole -JV t.o
->>    ...
->>    [1] INT signed char size=1 nr_bits=8 encoding=SIGNED
->>    [2] INT char size=1 nr_bits=8 encoding=SIGNED
->>
->> Signed-off-by: Yonghong Song <yhs@fb.com>
->> ---
-> 
-> LGTM.
-> 
-> Is there a plan to also add CHAR encoding bit?
+Signed-off-by: Kui-Feng Lee <kuifeng@fb.com>
+---
+ include/linux/bpf.h            |   8 ++
+ include/uapi/linux/bpf.h       |  36 +++++++++
+ kernel/bpf/task_iter.c         | 134 +++++++++++++++++++++++++++------
+ tools/include/uapi/linux/bpf.h |  36 +++++++++
+ 4 files changed, 190 insertions(+), 24 deletions(-)
 
-Not yet... Need more thinking about use cases and backward comparability 
-issues.
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 11950029284f..bef81324e5f1 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1718,6 +1718,14 @@ int bpf_obj_get_user(const char __user *pathname, =
+int flags);
+=20
+ struct bpf_iter_aux_info {
+ 	struct bpf_map *map;
++	struct {
++		enum bpf_iter_task_type	type;
++		union {
++			u32 tid;
++			u32 tgid;
++			u32 pid_fd;
++		};
++	} task;
+ };
+=20
+ typedef int (*bpf_iter_attach_target_t)(struct bpf_prog *prog,
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index ffcbf79a556b..3d0b9e34089f 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -87,10 +87,46 @@ struct bpf_cgroup_storage_key {
+ 	__u32	attach_type;		/* program attach type (enum bpf_attach_type) */
+ };
+=20
++/*
++ * The task type of iterators.
++ *
++ * For BPF task iterators, they can be parameterized with various
++ * parameters to visit only some of tasks.
++ *
++ * BPF_TASK_ITER_ALL (default)
++ *	Iterate over resources of every task.
++ *
++ * BPF_TASK_ITER_TID
++ *	Iterate over resources of a task/tid.
++ *
++ * BPF_TASK_ITER_TGID
++ *	Iterate over reosurces of evevry task of a process / task group.
++ *
++ * BPF_TASK_ITER_PIDFD
++ *	Iterate over resources of every task of a process /task group specifi=
+ed by a pidfd.
++ */
++enum bpf_iter_task_type {
++	BPF_TASK_ITER_ALL =3D 0,
++	BPF_TASK_ITER_TID,
++	BPF_TASK_ITER_TGID,
++	BPF_TASK_ITER_PIDFD,
++};
++
+ union bpf_iter_link_info {
+ 	struct {
+ 		__u32	map_fd;
+ 	} map;
++	/*
++	 * Parameters of task iterators.
++	 */
++	struct {
++		enum bpf_iter_task_type	type;
++		union {
++			__u32 tid;
++			__u32 tgid;
++			__u32 pid_fd;
++		};
++	} task;
+ };
+=20
+ /* BPF syscall commands, see bpf(2) man-page for more details. */
+diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
+index 8c921799def4..047d94493117 100644
+--- a/kernel/bpf/task_iter.c
++++ b/kernel/bpf/task_iter.c
+@@ -12,6 +12,12 @@
+=20
+ struct bpf_iter_seq_task_common {
+ 	struct pid_namespace *ns;
++	enum bpf_iter_task_type	type;
++	union {
++		u32 tid;
++		u32 tgid;
++		u32 pid_fd;
++	};
+ };
+=20
+ struct bpf_iter_seq_task_info {
+@@ -22,24 +28,41 @@ struct bpf_iter_seq_task_info {
+ 	u32 tid;
+ };
+=20
+-static struct task_struct *task_seq_get_next(struct pid_namespace *ns,
++static struct task_struct *task_seq_get_next(struct bpf_iter_seq_task_co=
+mmon *common,
+ 					     u32 *tid,
+ 					     bool skip_if_dup_files)
+ {
+ 	struct task_struct *task =3D NULL;
+ 	struct pid *pid;
+=20
++	if (common->type =3D=3D BPF_TASK_ITER_TID) {
++		if (*tid && *tid !=3D common->tid)
++			return NULL;
++		rcu_read_lock();
++		pid =3D find_pid_ns(common->tid, common->ns);
++		if (pid) {
++			task =3D get_pid_task(pid, PIDTYPE_PID);
++			*tid =3D common->tid;
++		}
++		rcu_read_unlock();
++		return task;
++	}
++
+ 	rcu_read_lock();
+ retry:
+-	pid =3D find_ge_pid(*tid, ns);
++	pid =3D find_ge_pid(*tid, common->ns);
+ 	if (pid) {
+-		*tid =3D pid_nr_ns(pid, ns);
++		*tid =3D pid_nr_ns(pid, common->ns);
+ 		task =3D get_pid_task(pid, PIDTYPE_PID);
++
++
+ 		if (!task) {
+ 			++*tid;
+ 			goto retry;
+-		} else if (skip_if_dup_files && !thread_group_leader(task) &&
+-			   task->files =3D=3D task->group_leader->files) {
++		} else if ((skip_if_dup_files && !thread_group_leader(task) &&
++			    task->files =3D=3D task->group_leader->files) ||
++			   (common->type =3D=3D BPF_TASK_ITER_TGID &&
++			    __task_pid_nr_ns(task, PIDTYPE_TGID, common->ns) !=3D common->tgi=
+d)) {
+ 			put_task_struct(task);
+ 			task =3D NULL;
+ 			++*tid;
+@@ -56,7 +79,8 @@ static void *task_seq_start(struct seq_file *seq, loff_=
+t *pos)
+ 	struct bpf_iter_seq_task_info *info =3D seq->private;
+ 	struct task_struct *task;
+=20
+-	task =3D task_seq_get_next(info->common.ns, &info->tid, false);
++	task =3D task_seq_get_next(&info->common, &info->tid, false);
++
+ 	if (!task)
+ 		return NULL;
+=20
+@@ -73,7 +97,8 @@ static void *task_seq_next(struct seq_file *seq, void *=
+v, loff_t *pos)
+ 	++*pos;
+ 	++info->tid;
+ 	put_task_struct((struct task_struct *)v);
+-	task =3D task_seq_get_next(info->common.ns, &info->tid, false);
++
++	task =3D task_seq_get_next(&info->common, &info->tid, false);
+ 	if (!task)
+ 		return NULL;
+=20
+@@ -117,6 +142,50 @@ static void task_seq_stop(struct seq_file *seq, void=
+ *v)
+ 		put_task_struct((struct task_struct *)v);
+ }
+=20
++static int bpf_iter_attach_task(struct bpf_prog *prog,
++				union bpf_iter_link_info *linfo,
++				struct bpf_iter_aux_info *aux)
++{
++	unsigned int flags;
++	struct pid_namespace *ns;
++	struct pid *pid;
++	pid_t tgid;
++
++	if (linfo->task.type =3D=3D BPF_TASK_ITER_ALL && linfo->task.pid_fd !=3D=
+ 0)
++		return -EINVAL;
++
++	aux->task.type =3D linfo->task.type;
++
++	switch (linfo->task.type) {
++	case BPF_TASK_ITER_TID:
++		aux->task.tid =3D linfo->task.tid;
++		break;
++	case BPF_TASK_ITER_TGID:
++		aux->task.tgid =3D linfo->task.tgid;
++		break;
++	case BPF_TASK_ITER_PIDFD:
++		pid =3D pidfd_get_pid(linfo->task.pid_fd, &flags);
++		if (IS_ERR(pid))
++			return PTR_ERR(pid);
++
++		ns =3D task_active_pid_ns(current);
++		if (IS_ERR(ns))
++			return PTR_ERR(ns);
++
++		tgid =3D pid_nr_ns(pid, ns);
++		if (tgid <=3D 0)
++			return -EINVAL;
++
++		aux->task.tgid =3D tgid;
++		aux->task.type =3D BPF_TASK_ITER_TGID;
++		break;
++	default:
++		break;
++	}
++
++	return 0;
++}
++
+ static const struct seq_operations task_seq_ops =3D {
+ 	.start	=3D task_seq_start,
+ 	.next	=3D task_seq_next,
+@@ -137,8 +206,7 @@ struct bpf_iter_seq_task_file_info {
+ static struct file *
+ task_file_seq_get_next(struct bpf_iter_seq_task_file_info *info)
+ {
+-	struct pid_namespace *ns =3D info->common.ns;
+-	u32 curr_tid =3D info->tid;
++	u32 saved_tid =3D info->tid;
+ 	struct task_struct *curr_task;
+ 	unsigned int curr_fd =3D info->fd;
+=20
+@@ -151,21 +219,18 @@ task_file_seq_get_next(struct bpf_iter_seq_task_fil=
+e_info *info)
+ 		curr_task =3D info->task;
+ 		curr_fd =3D info->fd;
+ 	} else {
+-                curr_task =3D task_seq_get_next(ns, &curr_tid, true);
++		curr_task =3D task_seq_get_next(&info->common, &info->tid, true);
+                 if (!curr_task) {
+                         info->task =3D NULL;
+-                        info->tid =3D curr_tid;
+                         return NULL;
+                 }
+=20
+-                /* set info->task and info->tid */
++		/* set info->task */
+ 		info->task =3D curr_task;
+-		if (curr_tid =3D=3D info->tid) {
++		if (saved_tid =3D=3D info->tid)
+ 			curr_fd =3D info->fd;
+-		} else {
+-			info->tid =3D curr_tid;
++		else
+ 			curr_fd =3D 0;
+-		}
+ 	}
+=20
+ 	rcu_read_lock();
+@@ -186,9 +251,15 @@ task_file_seq_get_next(struct bpf_iter_seq_task_file=
+_info *info)
+ 	/* the current task is done, go to the next task */
+ 	rcu_read_unlock();
+ 	put_task_struct(curr_task);
++
++	if (info->common.type =3D=3D BPF_TASK_ITER_TID) {
++		info->task =3D NULL;
++		return NULL;
++	}
++
+ 	info->task =3D NULL;
+ 	info->fd =3D 0;
+-	curr_tid =3D ++(info->tid);
++	saved_tid =3D ++(info->tid);
+ 	goto again;
+ }
+=20
+@@ -269,6 +340,17 @@ static int init_seq_pidns(void *priv_data, struct bp=
+f_iter_aux_info *aux)
+ 	struct bpf_iter_seq_task_common *common =3D priv_data;
+=20
+ 	common->ns =3D get_pid_ns(task_active_pid_ns(current));
++	common->type =3D aux->task.type;
++	switch (common->type) {
++	case BPF_TASK_ITER_TID:
++		common->tid =3D aux->task.tid;
++		break;
++	case BPF_TASK_ITER_TGID:
++		common->tgid =3D aux->task.tgid;
++		break;
++	default:
++		break;
++	}
+ 	return 0;
+ }
+=20
+@@ -307,11 +389,10 @@ enum bpf_task_vma_iter_find_op {
+ static struct vm_area_struct *
+ task_vma_seq_get_next(struct bpf_iter_seq_task_vma_info *info)
+ {
+-	struct pid_namespace *ns =3D info->common.ns;
+ 	enum bpf_task_vma_iter_find_op op;
+ 	struct vm_area_struct *curr_vma;
+ 	struct task_struct *curr_task;
+-	u32 curr_tid =3D info->tid;
++	u32 saved_tid =3D info->tid;
+=20
+ 	/* If this function returns a non-NULL vma, it holds a reference to
+ 	 * the task_struct, and holds read lock on vma->mm->mmap_lock.
+@@ -371,14 +452,13 @@ task_vma_seq_get_next(struct bpf_iter_seq_task_vma_=
+info *info)
+ 		}
+ 	} else {
+ again:
+-		curr_task =3D task_seq_get_next(ns, &curr_tid, true);
++		curr_task =3D task_seq_get_next(&info->common, &info->tid, true);
+ 		if (!curr_task) {
+-			info->tid =3D curr_tid + 1;
++			info->tid++;
+ 			goto finish;
+ 		}
+=20
+-		if (curr_tid !=3D info->tid) {
+-			info->tid =3D curr_tid;
++		if (saved_tid !=3D info->tid) {
+ 			/* new task, process the first vma */
+ 			op =3D task_vma_iter_first_vma;
+ 		} else {
+@@ -430,9 +510,12 @@ task_vma_seq_get_next(struct bpf_iter_seq_task_vma_i=
+nfo *info)
+ 	return curr_vma;
+=20
+ next_task:
++	if (info->common.type =3D=3D BPF_TASK_ITER_TID)
++		goto finish;
++
+ 	put_task_struct(curr_task);
+ 	info->task =3D NULL;
+-	curr_tid++;
++	info->tid++;
+ 	goto again;
+=20
+ finish:
+@@ -533,6 +616,7 @@ static const struct bpf_iter_seq_info task_seq_info =3D=
+ {
+=20
+ static struct bpf_iter_reg task_reg_info =3D {
+ 	.target			=3D "task",
++	.attach_target		=3D bpf_iter_attach_task,
+ 	.feature		=3D BPF_ITER_RESCHED,
+ 	.ctx_arg_info_size	=3D 1,
+ 	.ctx_arg_info		=3D {
+@@ -551,6 +635,7 @@ static const struct bpf_iter_seq_info task_file_seq_i=
+nfo =3D {
+=20
+ static struct bpf_iter_reg task_file_reg_info =3D {
+ 	.target			=3D "task_file",
++	.attach_target		=3D bpf_iter_attach_task,
+ 	.feature		=3D BPF_ITER_RESCHED,
+ 	.ctx_arg_info_size	=3D 2,
+ 	.ctx_arg_info		=3D {
+@@ -571,6 +656,7 @@ static const struct bpf_iter_seq_info task_vma_seq_in=
+fo =3D {
+=20
+ static struct bpf_iter_reg task_vma_reg_info =3D {
+ 	.target			=3D "task_vma",
++	.attach_target		=3D bpf_iter_attach_task,
+ 	.feature		=3D BPF_ITER_RESCHED,
+ 	.ctx_arg_info_size	=3D 2,
+ 	.ctx_arg_info		=3D {
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+index ffcbf79a556b..3d0b9e34089f 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -87,10 +87,46 @@ struct bpf_cgroup_storage_key {
+ 	__u32	attach_type;		/* program attach type (enum bpf_attach_type) */
+ };
+=20
++/*
++ * The task type of iterators.
++ *
++ * For BPF task iterators, they can be parameterized with various
++ * parameters to visit only some of tasks.
++ *
++ * BPF_TASK_ITER_ALL (default)
++ *	Iterate over resources of every task.
++ *
++ * BPF_TASK_ITER_TID
++ *	Iterate over resources of a task/tid.
++ *
++ * BPF_TASK_ITER_TGID
++ *	Iterate over reosurces of evevry task of a process / task group.
++ *
++ * BPF_TASK_ITER_PIDFD
++ *	Iterate over resources of every task of a process /task group specifi=
+ed by a pidfd.
++ */
++enum bpf_iter_task_type {
++	BPF_TASK_ITER_ALL =3D 0,
++	BPF_TASK_ITER_TID,
++	BPF_TASK_ITER_TGID,
++	BPF_TASK_ITER_PIDFD,
++};
++
+ union bpf_iter_link_info {
+ 	struct {
+ 		__u32	map_fd;
+ 	} map;
++	/*
++	 * Parameters of task iterators.
++	 */
++	struct {
++		enum bpf_iter_task_type	type;
++		union {
++			__u32 tid;
++			__u32 tgid;
++			__u32 pid_fd;
++		};
++	} task;
+ };
+=20
+ /* BPF syscall commands, see bpf(2) man-page for more details. */
+--=20
+2.30.2
 
-> 
-> 
->>   dwarf_loader.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/dwarf_loader.c b/dwarf_loader.c
->> index d892bc3..c2ad2a0 100644
->> --- a/dwarf_loader.c
->> +++ b/dwarf_loader.c
->> @@ -560,7 +560,7 @@ static struct base_type *base_type__new(Dwarf_Die *die, struct cu *cu, struct co
->>                  bt->bit_size = attr_numeric(die, DW_AT_byte_size) * 8;
->>                  uint64_t encoding = attr_numeric(die, DW_AT_encoding);
->>                  bt->is_bool = encoding == DW_ATE_boolean;
->> -               bt->is_signed = encoding == DW_ATE_signed;
->> +               bt->is_signed = (encoding == DW_ATE_signed) || (encoding == DW_ATE_signed_char);
->>                  bt->is_varargs = false;
->>                  bt->name_has_encoding = true;
->>                  bt->float_type = encoding_to_float_type(encoding);
->> --
->> 2.30.2
->>
