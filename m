@@ -2,58 +2,135 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8DB7C19F2D
-	for <bpf@archiver.kernel.org>; Tue,  9 Aug 2022 06:35:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8CAFC19F2D
+	for <bpf@archiver.kernel.org>; Tue,  9 Aug 2022 06:36:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237711AbiHIGfU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Aug 2022 02:35:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45828 "EHLO
+        id S231459AbiHIGgo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Aug 2022 02:36:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233465AbiHIGfS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Aug 2022 02:35:18 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D9FF30
-        for <bpf@vger.kernel.org>; Mon,  8 Aug 2022 23:35:17 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 278NSOdL026336
-        for <bpf@vger.kernel.org>; Mon, 8 Aug 2022 23:35:16 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=eYyEg9fTghI+7u/ntaSyzZw7foaQEakc2d5/Ob/j19g=;
- b=QYA37LiCc5yIJ+g5EcCLc5rpTMMlT4kUQU/wvYlTIbFpN0kIJP7kV7kjDkEx0Iefj+Hl
- Fj/85m/OgHt0KMVAdvs0FCENJlVyvqm1w1vO1SubMppFbYdRWof5gtg7GP/spgch1EX4
- IpbUKPSRCovJbKja3pKb7Ell/NdMypvJlE8= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hu774uukm-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 08 Aug 2022 23:35:16 -0700
-Received: from snc-exhub201.TheFacebook.com (2620:10d:c085:21d::7) by
- snc-exhub203.TheFacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Mon, 8 Aug 2022 23:35:09 -0700
-Received: from twshared30313.14.frc2.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Mon, 8 Aug 2022 23:35:08 -0700
-Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
-        id 08E0C671675F; Mon,  8 Aug 2022 23:35:02 -0700 (PDT)
-From:   Kui-Feng Lee <kuifeng@fb.com>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <andrii@kernel.org>, <kernel-team@fb.com>, <yhs@fb.com>
-CC:     Kui-Feng Lee <kuifeng@fb.com>
-Subject: [PATCH bpf-next v3 1/3] bpf: Parameterize task iterators.
-Date:   Mon, 8 Aug 2022 23:34:59 -0700
-Message-ID: <20220809063501.667610-2-kuifeng@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220809063501.667610-1-kuifeng@fb.com>
-References: <20220809063501.667610-1-kuifeng@fb.com>
+        with ESMTP id S237907AbiHIGg2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Aug 2022 02:36:28 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F391205CC
+        for <bpf@vger.kernel.org>; Mon,  8 Aug 2022 23:36:28 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 278NSMhl027569;
+        Mon, 8 Aug 2022 23:36:12 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=yXMu3w5q6xYX2fwm+XLEr8CL5B5+rwfrTa2+z76tt2Y=;
+ b=e0Tv93m3Y+ips3o3AAaKH5XtP6SRw6zTH6U5fyMmaML9ohYHz1/LetvK4BGeRvlpdu+O
+ tfClIfz7Dr048dGnZzeIVHmvJTQoVuR+5wxIG0m3QIii75XGObkN0qgNqrdWTrjAuKCV
+ 6ErOoiBjLtXlbup+ONzXaZDfSXs98OLu/ac= 
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hsp0q7a2w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 08 Aug 2022 23:36:12 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oVGTAhw1DRSABhQQcVXvjuVzpTz5WqXSR8K/Q4vsr7raygyl3PrY5hO96DlCSSiX2h0/BYxDJYdQSzsTDURnTeUcg4+TpC2sv/K2Vz91YSsM2aVU6CX6G53ywq8b1a2xT48O7xL0lXB5DF5WeBc0qZENgv/grSUi8gIU50UenDy55uT8sz2QduiwJ5OXjHwLI9JN+9Hvrqoe6yV8shYvoRnq882Lhtc2dwXchaNXH+8WVeKpHZRex1m2H+lZ57PBWFBnELOh3Uyz/ezvNgwhrqKgmpYgD1uy8w3GlvY2kuHy7mmK2fwiZf5cnP0rnyYokDGehw257w+gDAp3vqrEiQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yXMu3w5q6xYX2fwm+XLEr8CL5B5+rwfrTa2+z76tt2Y=;
+ b=FO2onAM4wPr3RKSzIS0enAd6Oz+TYAc9qv3d6mIyCSELMH6ymKUiCT49TSQjOHcPhxkavzsMng5t6J98/7OuhGwOqQSquqRVzjZNApFyq43zmUCeKXBiMzrzY3/Jz8cbl7DnBCGqPmTVi779LLc6lfGwv0FwMuEH1ZklMkRwyztsx+Ma33IPOcRtzFdHru5EATLQjYv3n+2dFElKnzyT5p7V8/be21thIffNomq96v0eERGcgPi/k4sKwgkfpZ3kq89zJ8OLVO840+LELWBmZbtf7qPB6ECNKQbFJda6ZI71fwzsLHxo3S3l2s3ejp7CMSgww/c2FLyM+vPqHlNLNA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by PH0PR15MB4197.namprd15.prod.outlook.com (2603:10b6:510:24::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Tue, 9 Aug
+ 2022 06:36:09 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::de2:b318:f43e:6f55]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::de2:b318:f43e:6f55%3]) with mapi id 15.20.5504.021; Tue, 9 Aug 2022
+ 06:36:09 +0000
+Message-ID: <b72643b6-831e-9362-c54b-ba6411338c77@fb.com>
+Date:   Mon, 8 Aug 2022 23:36:07 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH bpf-next 2/3] bpf: Perform necessary sign/zero extension
+ for kfunc return values
+Content-Language: en-US
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
+        Tejun Heo <tj@kernel.org>
+References: <20220807175111.4178812-1-yhs@fb.com>
+ <20220807175121.4179410-1-yhs@fb.com>
+ <CAEf4BzaJydVpt+H6abR6udjcQ5Scu07W+LLQyo7jC9et9T=ZOA@mail.gmail.com>
+From:   Yonghong Song <yhs@fb.com>
+In-Reply-To: <CAEf4BzaJydVpt+H6abR6udjcQ5Scu07W+LLQyo7jC9et9T=ZOA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-ClientProxiedBy: BYAPR07CA0073.namprd07.prod.outlook.com
+ (2603:10b6:a03:12b::14) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c777a5dd-2dc3-4c04-c175-08da79d1721f
+X-MS-TrafficTypeDiagnostic: PH0PR15MB4197:EE_
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5vG3YnZ268ffw9unsr7DEzSBhDkJq3DyimvW8j1BDKhFj1BmqQNVsHt4aYaWJYArsA8AruQppaoAepsKnYOq2bhLGi+BAq8p/IbL/bnUUYWmvGgTl3zfeHT0EK4xeBvcDXXCetB09GLBPiSMY3N9U+YHOBK2sBxmZddnRCxSZnyl2RuEq3xEfS4ELs3Nu6bIZP282ehaREahCyZ64WGCdvon0Kk44sihcxhLAulIl2SmKwMLOl0mw3buymGDfSXf7rF9K2jqYsyX8jaATYJhOdmmm9xOttqS4jkOrIRHp8mSo5Qw9VFBGGlKz6R4IYZM1EoPVBCp/URMm2Wr6aBz8XyiUXElEckbzAWzRsezkchBDbcHN1zIszIhSKldHCE1JGKs9coLwKoUMtfOcEGLfXmh0hg56w3Rl5Ubdjx38jTeNrFZ5QZAwKo04kmVzOFED0RJW1Uzn18CSpcz0E2INAPA7YI5sYkZbtGBPRPCqsRq6tZHkoGzH8LZN8/3tbhFL43IkbnqKS6sEpqlb9MQEMWGxBTyD7xGOU05ILIZkrV9xeN4lvPSzfLatMsdDIDSrm4/CJmq5RoP2seC3E+vRhh8RTpFm8zemNZyNuBwTyfjFOU/Zk4w6kWJturQa7vTIccFeX6XvEHVUUagYKJX+SsNQSk60qbWyCFkgdLkGeciG7/JCFGZuocJ/p+BjsKCf+ey/oDdkFt2lPfNdKcPoYZ+SK+7YaeJuEHXHR4HphJrcbwXNgPPiIGpK9SdD/fyQwRkWm4+yhqsQgkVa0CiPEH+h9//d/I/7cTaGBY7dHaOjXYqQeUKt9lKMkLY+BilFZ/aQmgJCHgKgMIUc6IZfUjD2higedc88LDDIJu89HKJJCfLMCXbM+aQeFSK90x4
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(39860400002)(376002)(346002)(366004)(396003)(4326008)(66476007)(66556008)(66946007)(83380400001)(8676002)(6916009)(54906003)(41300700001)(316002)(31686004)(36756003)(6506007)(53546011)(6512007)(186003)(2616005)(2906002)(8936002)(5660300002)(478600001)(966005)(6486002)(31696002)(86362001)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YVVxSTF4MkNMVFhsNlNtaGpDVEV6eUltL2RXSE11NjZhcUxvMy85ZWk4ZjhC?=
+ =?utf-8?B?KzV3akxmcmpIOHRhelZGMkhqcmIrMUR6Ym1kNmIzb08xdVpBcmcrdlpIb0RV?=
+ =?utf-8?B?cmgyYVc5Y01ITFhmWkJVRndsN1hOUDM5dEM4cEVqcFR5YXZ1R2I5OEdmS01n?=
+ =?utf-8?B?UzI5Y1ZtdFh6ZkptSDJXRjl3TUVRdFBWSHJVOHNDSHNtbmpqMndkSWlOcXNn?=
+ =?utf-8?B?enpvUytyc2U3Mm9ra1pwSlIxMVBLeUVJODVpUkRWQVFuSWhsQTdnNmdtcEp6?=
+ =?utf-8?B?alZuZ2VZUjFxTjg5TlJDWVp0Q1UzcXhlL1IzbU8yaW9qQ0lOclNiWEx4YStI?=
+ =?utf-8?B?UkI4WWFFRHR2bXFKZlA5WnU3aEdYK3Y1bVJEWkl2MWdFUS9HU0FaMGNscSs0?=
+ =?utf-8?B?NmRwMWdrNTNBaDNXaUxGQ01nUXlMaXY0NTZpVFdsQUdTb25GR1IvOHBmaFdm?=
+ =?utf-8?B?S1JQNGlXTWNBTzFGV3U3TEpjak1pUGt4OW9VRnF4NVdxdkZ0aW5rL21PblQ0?=
+ =?utf-8?B?MThQS21FOUcycmVTakxRTjMvR0VWWmJuVUpYa2tPeTgralMrUHlwTUw4OVcy?=
+ =?utf-8?B?eEdNREx2SGt0ZFlWVFExZGlxVHU3ZTF3dW91cSszbkRCMEErM3p1YkRjRnk1?=
+ =?utf-8?B?VEF1U1MvNCs0RHJpUnp4bTlNN0NKekdvdnZTYS80Q2hydkJXalRKV1A3cUs1?=
+ =?utf-8?B?VzJQeUhuMmY3Tkw0VzQxZGUwdDBPYXdHNTNreUhlQU9XVnFuNjFqeFRHY3FQ?=
+ =?utf-8?B?ZmE1M0NFMnhXeHdmUFBrL0dIc3NvbVc3Tk1KWnk0dG5zcjdFWGt4M3EvSnZm?=
+ =?utf-8?B?UVBLTTdQWml2S1IxdVBDajdxK0tQMDZOdngzZTBNbkFSVzB5TWFQNGxTY09Q?=
+ =?utf-8?B?enlOcE1xSjN0WTNHQlV6cmtranhadG00Zk9zNW9GVnJ2WG8raXVTZHlTb3dS?=
+ =?utf-8?B?RTFxTTRjKzVOYkRVSlErb2c2U2E2N0xocGtHRUtLMVZneExvdkl2bEtBQjFV?=
+ =?utf-8?B?UC9jY0VZL3VDeWNzVHovMFpGb0NBUGpMbklvcEhScDd5Z2ZuVXdSdFUyOEJT?=
+ =?utf-8?B?VGh1d2Zna3RUWnlzVThORmROWk5hMC9sMURha1ZDZ3ZkajVBa3VXeEMxS3dh?=
+ =?utf-8?B?YlRtYTFKVDdicVhPVUFreVNOMDJTT1pqOHNBNE9meEZXUUplc0llQ0F3QUhQ?=
+ =?utf-8?B?NXQzRjJTcUhETHV1ZU9RSy9rTWZ3dUE4bURpY1Q3SWdGQ25aNEFYNmErVm1Q?=
+ =?utf-8?B?OVdSYzkzdlpRN3U3a0JzOHdhdzB1YXFISndDa05GZldnUlF5QS9wck45eG9C?=
+ =?utf-8?B?eTUxYW1LVzJ3dHV5WGFwTkhrNVR2U0loYWV1REowdnJFZFhIS1FheGM4dk1L?=
+ =?utf-8?B?ajFJcFQxS0JoWmcvYXpSODhoeG0yQzQ4NEkwZ0U1dUNxclc3TE1IaWhBN2FV?=
+ =?utf-8?B?RnZEd25IY1QvOXQ4WnhRVkxHRC9tcHlnV2crbnd3MHlUWkp2ektGR2FNOUVm?=
+ =?utf-8?B?aWxLTFNrajFtV2ZaOUpmWmw3VitKWTh4TWtmdGV0MXpoUWdHc0pzdDEwNWZj?=
+ =?utf-8?B?b016aXBsQTI5N2ZoQ2J6NEszdU5CYXpzUzY4bWJrQzJmSCtiVUJtaW9ScDFP?=
+ =?utf-8?B?cEJvN3V5eDlUT0l6QXR2MTR4cG1rUkNLbnltOUNzZlluSnlEcmdNczdyN2JH?=
+ =?utf-8?B?WTF2WG8wSGlJNG15dGY3SnA1ZXF5UTMrOER5SmRiTnpzRWR1Q2VwdnVjN0NR?=
+ =?utf-8?B?Slgzbmd1UDFibm1KdjloZjhzTEdjUFpBZGZZQjRvSjgrQ0JHWTFDaDlwOUVT?=
+ =?utf-8?B?blRNejIyamVBOXFFOGYzMnVMd0daQi9RbDZmUUs5WFJ4aEl5M0NHYTVUeVEz?=
+ =?utf-8?B?YjZRNFc5TGhFQWRRWk54QUcwV0I4QTBJcVVMVXNpVlFGeGk5RTVtQUNZSDhT?=
+ =?utf-8?B?a2pZU1luYk4wdGlYRWt4WFRiN1U4cE5zclhGQXBzQzZyY0lNcUR2SHh2WkNT?=
+ =?utf-8?B?U0pMVWdSMENBbFJsREx0ZFRXdzNqdjRna3IxVDhWeTVER3FncEIrbzRIZHRW?=
+ =?utf-8?B?TkhZSHQrcmVmM3BxeTdwSUpsZjM5MkdRS2FYeWlUbW55SjhCL0pGMmZIODFo?=
+ =?utf-8?B?RTFFdXcweEJTdU1INFhCWm9OOXFaVENtMzl5VU1tbU9TbmtEdUh0YTRubWcr?=
+ =?utf-8?B?YkE9PQ==?=
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c777a5dd-2dc3-4c04-c175-08da79d1721f
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2022 06:36:09.7405
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4cn9OZI45pvCjAUIJkTUYleex8B5oMHBBeJJUycNuErOAbmlmrViZMDcsECOSOyl
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR15MB4197
+X-Proofpoint-ORIG-GUID: ev7HoVgOanokd1QPzcQqPHBtfG4JpAjt
+X-Proofpoint-GUID: ev7HoVgOanokd1QPzcQqPHBtfG4JpAjt
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: _urfrVPgMy36ENxjQ-0J_0YPyC1FX8TH
-X-Proofpoint-ORIG-GUID: _urfrVPgMy36ENxjQ-0J_0YPyC1FX8TH
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-09_03,2022-08-09_01,2022-06-22_01
@@ -61,437 +138,80 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Allow creating an iterator that loops through resources of one task/threa=
-d.
 
-People could only create iterators to loop through all resources of
-files, vma, and tasks in the system, even though they were interested
-in only the resources of a specific task or process.  Passing the
-additional parameters, people can now create an iterator to go
-through all resources or only the resources of a task.
 
-Signed-off-by: Kui-Feng Lee <kuifeng@fb.com>
----
- include/linux/bpf.h            |   8 ++
- include/uapi/linux/bpf.h       |  36 +++++++++
- kernel/bpf/task_iter.c         | 134 +++++++++++++++++++++++++++------
- tools/include/uapi/linux/bpf.h |  36 +++++++++
- 4 files changed, 190 insertions(+), 24 deletions(-)
+On 8/8/22 4:25 PM, Andrii Nakryiko wrote:
+> On Sun, Aug 7, 2022 at 10:51 AM Yonghong Song <yhs@fb.com> wrote:
+>>
+>> Tejun reported a bpf program kfunc return value mis-handling which
+>> may cause incorrect result. The following is an example to show
+>> the problem.
+>>    $ cat t.c
+>>    unsigned char bar();
+>>    int foo() {
+>>          if (bar() != 10) return 0; else return 1;
+>>    }
+>>    $ clang -target bpf -O2 -c t.c
+>>    $ llvm-objdump -d t.o
+>>    ...
+>>    0000000000000000 <foo>:
+>>         0:       85 10 00 00 ff ff ff ff call -1
+>>         1:       bf 01 00 00 00 00 00 00 r1 = r0
+>>         2:       b7 00 00 00 01 00 00 00 r0 = 1
+>>         3:       15 01 01 00 0a 00 00 00 if r1 == 10 goto +1 <LBB0_2>
+>>         4:       b7 00 00 00 00 00 00 00 r0 = 0
+>>
+>>    0000000000000028 <LBB0_2>:
+>>         5:       95 00 00 00 00 00 00 00 exit
+>>    $
+>>
+>> In the above example, the return type for bar() is 'unsigned char'.
+>> But in the disassembly code, the whole register 'r1' is used to
+>> compare to 10 without truncating upper 56 bits.
+>>
+>> If function bar() is implemented as a bpf function, everything
+>> should be okay since bpf ABI will make sure the caller do
+>> proper truncation of upper 56 bits.
+>>
+>> But if function bar() is implemented as a non-bpf kfunc,
+>> there could a mismatch between bar() implementation and bpf program.
+>> For example, if the host arch is x86_64, the bar() function
+>> may just put the return value in lower 8-bit subregister and all
+>> upper 56 bits could contain garbage. This is not a problem
+>> if bar() is called in x86_64 context as the caller will use
+>> %al to get the value.
+>>
+>> But this could be a problem if bar() is called in bpf context
+>> and there is a mismatch expectation between bpf and native architecture.
+>> Currently, bpf programs use the default llvm ABI ([1], function
+>> isPromotableIntegerTypeForABI()) such that if an integer type size
+>> is less than int type size, it is assumed proper sign or zero
+>> extension has been done to the return value. There will be a problem
+>> if the kfunc return value type is u8/s8/u16/s16.
+> 
+> Reading this I was still confused how (and whether) s32/u32 returns
+> are going to be handled correctly, especially on non-cpuv3 BPF object
+> code. So I played with this a bit and Clang does generate explicit <<
+> and >>/>>= shifts as expected. It might be worth it emphasizing that
+> for 32-bit returns Clang will generate explicit shifts?
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 11950029284f..bef81324e5f1 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1718,6 +1718,14 @@ int bpf_obj_get_user(const char __user *pathname, =
-int flags);
-=20
- struct bpf_iter_aux_info {
- 	struct bpf_map *map;
-+	struct {
-+		enum bpf_iter_task_type	type;
-+		union {
-+			u32 tid;
-+			u32 tgid;
-+			u32 pid_fd;
-+		};
-+	} task;
- };
-=20
- typedef int (*bpf_iter_attach_target_t)(struct bpf_prog *prog,
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index ffcbf79a556b..3d0b9e34089f 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -87,10 +87,46 @@ struct bpf_cgroup_storage_key {
- 	__u32	attach_type;		/* program attach type (enum bpf_attach_type) */
- };
-=20
-+/*
-+ * The task type of iterators.
-+ *
-+ * For BPF task iterators, they can be parameterized with various
-+ * parameters to visit only some of tasks.
-+ *
-+ * BPF_TASK_ITER_ALL (default)
-+ *	Iterate over resources of every task.
-+ *
-+ * BPF_TASK_ITER_TID
-+ *	Iterate over resources of a task/tid.
-+ *
-+ * BPF_TASK_ITER_TGID
-+ *	Iterate over reosurces of evevry task of a process / task group.
-+ *
-+ * BPF_TASK_ITER_PIDFD
-+ *	Iterate over resources of every task of a process /task group specifi=
-ed by a pidfd.
-+ */
-+enum bpf_iter_task_type {
-+	BPF_TASK_ITER_ALL =3D 0,
-+	BPF_TASK_ITER_TID,
-+	BPF_TASK_ITER_TGID,
-+	BPF_TASK_ITER_PIDFD,
-+};
-+
- union bpf_iter_link_info {
- 	struct {
- 		__u32	map_fd;
- 	} map;
-+	/*
-+	 * Parameters of task iterators.
-+	 */
-+	struct {
-+		enum bpf_iter_task_type	type;
-+		union {
-+			__u32 tid;
-+			__u32 tgid;
-+			__u32 pid_fd;
-+		};
-+	} task;
- };
-=20
- /* BPF syscall commands, see bpf(2) man-page for more details. */
-diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-index 8c921799def4..047d94493117 100644
---- a/kernel/bpf/task_iter.c
-+++ b/kernel/bpf/task_iter.c
-@@ -12,6 +12,12 @@
-=20
- struct bpf_iter_seq_task_common {
- 	struct pid_namespace *ns;
-+	enum bpf_iter_task_type	type;
-+	union {
-+		u32 tid;
-+		u32 tgid;
-+		u32 pid_fd;
-+	};
- };
-=20
- struct bpf_iter_seq_task_info {
-@@ -22,24 +28,41 @@ struct bpf_iter_seq_task_info {
- 	u32 tid;
- };
-=20
--static struct task_struct *task_seq_get_next(struct pid_namespace *ns,
-+static struct task_struct *task_seq_get_next(struct bpf_iter_seq_task_co=
-mmon *common,
- 					     u32 *tid,
- 					     bool skip_if_dup_files)
- {
- 	struct task_struct *task =3D NULL;
- 	struct pid *pid;
-=20
-+	if (common->type =3D=3D BPF_TASK_ITER_TID) {
-+		if (*tid && *tid !=3D common->tid)
-+			return NULL;
-+		rcu_read_lock();
-+		pid =3D find_pid_ns(common->tid, common->ns);
-+		if (pid) {
-+			task =3D get_pid_task(pid, PIDTYPE_PID);
-+			*tid =3D common->tid;
-+		}
-+		rcu_read_unlock();
-+		return task;
-+	}
-+
- 	rcu_read_lock();
- retry:
--	pid =3D find_ge_pid(*tid, ns);
-+	pid =3D find_ge_pid(*tid, common->ns);
- 	if (pid) {
--		*tid =3D pid_nr_ns(pid, ns);
-+		*tid =3D pid_nr_ns(pid, common->ns);
- 		task =3D get_pid_task(pid, PIDTYPE_PID);
-+
-+
- 		if (!task) {
- 			++*tid;
- 			goto retry;
--		} else if (skip_if_dup_files && !thread_group_leader(task) &&
--			   task->files =3D=3D task->group_leader->files) {
-+		} else if ((skip_if_dup_files && !thread_group_leader(task) &&
-+			    task->files =3D=3D task->group_leader->files) ||
-+			   (common->type =3D=3D BPF_TASK_ITER_TGID &&
-+			    __task_pid_nr_ns(task, PIDTYPE_TGID, common->ns) !=3D common->tgi=
-d)) {
- 			put_task_struct(task);
- 			task =3D NULL;
- 			++*tid;
-@@ -56,7 +79,8 @@ static void *task_seq_start(struct seq_file *seq, loff_=
-t *pos)
- 	struct bpf_iter_seq_task_info *info =3D seq->private;
- 	struct task_struct *task;
-=20
--	task =3D task_seq_get_next(info->common.ns, &info->tid, false);
-+	task =3D task_seq_get_next(&info->common, &info->tid, false);
-+
- 	if (!task)
- 		return NULL;
-=20
-@@ -73,7 +97,8 @@ static void *task_seq_next(struct seq_file *seq, void *=
-v, loff_t *pos)
- 	++*pos;
- 	++info->tid;
- 	put_task_struct((struct task_struct *)v);
--	task =3D task_seq_get_next(info->common.ns, &info->tid, false);
-+
-+	task =3D task_seq_get_next(&info->common, &info->tid, false);
- 	if (!task)
- 		return NULL;
-=20
-@@ -117,6 +142,50 @@ static void task_seq_stop(struct seq_file *seq, void=
- *v)
- 		put_task_struct((struct task_struct *)v);
- }
-=20
-+static int bpf_iter_attach_task(struct bpf_prog *prog,
-+				union bpf_iter_link_info *linfo,
-+				struct bpf_iter_aux_info *aux)
-+{
-+	unsigned int flags;
-+	struct pid_namespace *ns;
-+	struct pid *pid;
-+	pid_t tgid;
-+
-+	if (linfo->task.type =3D=3D BPF_TASK_ITER_ALL && linfo->task.pid_fd !=3D=
- 0)
-+		return -EINVAL;
-+
-+	aux->task.type =3D linfo->task.type;
-+
-+	switch (linfo->task.type) {
-+	case BPF_TASK_ITER_TID:
-+		aux->task.tid =3D linfo->task.tid;
-+		break;
-+	case BPF_TASK_ITER_TGID:
-+		aux->task.tgid =3D linfo->task.tgid;
-+		break;
-+	case BPF_TASK_ITER_PIDFD:
-+		pid =3D pidfd_get_pid(linfo->task.pid_fd, &flags);
-+		if (IS_ERR(pid))
-+			return PTR_ERR(pid);
-+
-+		ns =3D task_active_pid_ns(current);
-+		if (IS_ERR(ns))
-+			return PTR_ERR(ns);
-+
-+		tgid =3D pid_nr_ns(pid, ns);
-+		if (tgid <=3D 0)
-+			return -EINVAL;
-+
-+		aux->task.tgid =3D tgid;
-+		aux->task.type =3D BPF_TASK_ITER_TGID;
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
- static const struct seq_operations task_seq_ops =3D {
- 	.start	=3D task_seq_start,
- 	.next	=3D task_seq_next,
-@@ -137,8 +206,7 @@ struct bpf_iter_seq_task_file_info {
- static struct file *
- task_file_seq_get_next(struct bpf_iter_seq_task_file_info *info)
- {
--	struct pid_namespace *ns =3D info->common.ns;
--	u32 curr_tid =3D info->tid;
-+	u32 saved_tid =3D info->tid;
- 	struct task_struct *curr_task;
- 	unsigned int curr_fd =3D info->fd;
-=20
-@@ -151,21 +219,18 @@ task_file_seq_get_next(struct bpf_iter_seq_task_fil=
-e_info *info)
- 		curr_task =3D info->task;
- 		curr_fd =3D info->fd;
- 	} else {
--                curr_task =3D task_seq_get_next(ns, &curr_tid, true);
-+		curr_task =3D task_seq_get_next(&info->common, &info->tid, true);
-                 if (!curr_task) {
-                         info->task =3D NULL;
--                        info->tid =3D curr_tid;
-                         return NULL;
-                 }
-=20
--                /* set info->task and info->tid */
-+		/* set info->task */
- 		info->task =3D curr_task;
--		if (curr_tid =3D=3D info->tid) {
-+		if (saved_tid =3D=3D info->tid)
- 			curr_fd =3D info->fd;
--		} else {
--			info->tid =3D curr_tid;
-+		else
- 			curr_fd =3D 0;
--		}
- 	}
-=20
- 	rcu_read_lock();
-@@ -186,9 +251,15 @@ task_file_seq_get_next(struct bpf_iter_seq_task_file=
-_info *info)
- 	/* the current task is done, go to the next task */
- 	rcu_read_unlock();
- 	put_task_struct(curr_task);
-+
-+	if (info->common.type =3D=3D BPF_TASK_ITER_TID) {
-+		info->task =3D NULL;
-+		return NULL;
-+	}
-+
- 	info->task =3D NULL;
- 	info->fd =3D 0;
--	curr_tid =3D ++(info->tid);
-+	saved_tid =3D ++(info->tid);
- 	goto again;
- }
-=20
-@@ -269,6 +340,17 @@ static int init_seq_pidns(void *priv_data, struct bp=
-f_iter_aux_info *aux)
- 	struct bpf_iter_seq_task_common *common =3D priv_data;
-=20
- 	common->ns =3D get_pid_ns(task_active_pid_ns(current));
-+	common->type =3D aux->task.type;
-+	switch (common->type) {
-+	case BPF_TASK_ITER_TID:
-+		common->tid =3D aux->task.tid;
-+		break;
-+	case BPF_TASK_ITER_TGID:
-+		common->tgid =3D aux->task.tgid;
-+		break;
-+	default:
-+		break;
-+	}
- 	return 0;
- }
-=20
-@@ -307,11 +389,10 @@ enum bpf_task_vma_iter_find_op {
- static struct vm_area_struct *
- task_vma_seq_get_next(struct bpf_iter_seq_task_vma_info *info)
- {
--	struct pid_namespace *ns =3D info->common.ns;
- 	enum bpf_task_vma_iter_find_op op;
- 	struct vm_area_struct *curr_vma;
- 	struct task_struct *curr_task;
--	u32 curr_tid =3D info->tid;
-+	u32 saved_tid =3D info->tid;
-=20
- 	/* If this function returns a non-NULL vma, it holds a reference to
- 	 * the task_struct, and holds read lock on vma->mm->mmap_lock.
-@@ -371,14 +452,13 @@ task_vma_seq_get_next(struct bpf_iter_seq_task_vma_=
-info *info)
- 		}
- 	} else {
- again:
--		curr_task =3D task_seq_get_next(ns, &curr_tid, true);
-+		curr_task =3D task_seq_get_next(&info->common, &info->tid, true);
- 		if (!curr_task) {
--			info->tid =3D curr_tid + 1;
-+			info->tid++;
- 			goto finish;
- 		}
-=20
--		if (curr_tid !=3D info->tid) {
--			info->tid =3D curr_tid;
-+		if (saved_tid !=3D info->tid) {
- 			/* new task, process the first vma */
- 			op =3D task_vma_iter_first_vma;
- 		} else {
-@@ -430,9 +510,12 @@ task_vma_seq_get_next(struct bpf_iter_seq_task_vma_i=
-nfo *info)
- 	return curr_vma;
-=20
- next_task:
-+	if (info->common.type =3D=3D BPF_TASK_ITER_TID)
-+		goto finish;
-+
- 	put_task_struct(curr_task);
- 	info->task =3D NULL;
--	curr_tid++;
-+	info->tid++;
- 	goto again;
-=20
- finish:
-@@ -533,6 +616,7 @@ static const struct bpf_iter_seq_info task_seq_info =3D=
- {
-=20
- static struct bpf_iter_reg task_reg_info =3D {
- 	.target			=3D "task",
-+	.attach_target		=3D bpf_iter_attach_task,
- 	.feature		=3D BPF_ITER_RESCHED,
- 	.ctx_arg_info_size	=3D 1,
- 	.ctx_arg_info		=3D {
-@@ -551,6 +635,7 @@ static const struct bpf_iter_seq_info task_file_seq_i=
-nfo =3D {
-=20
- static struct bpf_iter_reg task_file_reg_info =3D {
- 	.target			=3D "task_file",
-+	.attach_target		=3D bpf_iter_attach_task,
- 	.feature		=3D BPF_ITER_RESCHED,
- 	.ctx_arg_info_size	=3D 2,
- 	.ctx_arg_info		=3D {
-@@ -571,6 +656,7 @@ static const struct bpf_iter_seq_info task_vma_seq_in=
-fo =3D {
-=20
- static struct bpf_iter_reg task_vma_reg_info =3D {
- 	.target			=3D "task_vma",
-+	.attach_target		=3D bpf_iter_attach_task,
- 	.feature		=3D BPF_ITER_RESCHED,
- 	.ctx_arg_info_size	=3D 2,
- 	.ctx_arg_info		=3D {
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index ffcbf79a556b..3d0b9e34089f 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -87,10 +87,46 @@ struct bpf_cgroup_storage_key {
- 	__u32	attach_type;		/* program attach type (enum bpf_attach_type) */
- };
-=20
-+/*
-+ * The task type of iterators.
-+ *
-+ * For BPF task iterators, they can be parameterized with various
-+ * parameters to visit only some of tasks.
-+ *
-+ * BPF_TASK_ITER_ALL (default)
-+ *	Iterate over resources of every task.
-+ *
-+ * BPF_TASK_ITER_TID
-+ *	Iterate over resources of a task/tid.
-+ *
-+ * BPF_TASK_ITER_TGID
-+ *	Iterate over reosurces of evevry task of a process / task group.
-+ *
-+ * BPF_TASK_ITER_PIDFD
-+ *	Iterate over resources of every task of a process /task group specifi=
-ed by a pidfd.
-+ */
-+enum bpf_iter_task_type {
-+	BPF_TASK_ITER_ALL =3D 0,
-+	BPF_TASK_ITER_TID,
-+	BPF_TASK_ITER_TGID,
-+	BPF_TASK_ITER_PIDFD,
-+};
-+
- union bpf_iter_link_info {
- 	struct {
- 		__u32	map_fd;
- 	} map;
-+	/*
-+	 * Parameters of task iterators.
-+	 */
-+	struct {
-+		enum bpf_iter_task_type	type;
-+		union {
-+			__u32 tid;
-+			__u32 tgid;
-+			__u32 pid_fd;
-+		};
-+	} task;
- };
-=20
- /* BPF syscall commands, see bpf(2) man-page for more details. */
---=20
-2.30.2
+Yes, I can reword the commit message to emphasize 32-bit return
+value won't be an issue.
 
+> 
+>>
+>> This patch intends to address this issue by doing proper sign or zero
+>> extension for the kfunc return value before it is used later.
+>>
+>>   [1] https://github.com/llvm/llvm-project/blob/main/clang/lib/CodeGen/TargetInfo.cpp
+>>
+>> Reported-by: Tejun Heo <tj@kernel.org>
+>> Signed-off-by: Yonghong Song <yhs@fb.com>
+>> ---
+>>   include/linux/bpf.h   |  2 ++
+>>   kernel/bpf/btf.c      |  9 +++++++++
+>>   kernel/bpf/verifier.c | 35 +++++++++++++++++++++++++++++++++--
+>>   3 files changed, 44 insertions(+), 2 deletions(-)
+>>
+> 
+> [...]
