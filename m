@@ -2,52 +2,54 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0413DC19F2D
-	for <bpf@archiver.kernel.org>; Tue,  9 Aug 2022 19:54:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CD6DC19F2D
+	for <bpf@archiver.kernel.org>; Tue,  9 Aug 2022 19:54:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345087AbiHITym (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Aug 2022 15:54:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51458 "EHLO
+        id S1345207AbiHITyy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Aug 2022 15:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343869AbiHITyl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Aug 2022 15:54:41 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D599D2250A
-        for <bpf@vger.kernel.org>; Tue,  9 Aug 2022 12:54:40 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 279JRMve028517
-        for <bpf@vger.kernel.org>; Tue, 9 Aug 2022 12:54:40 -0700
+        with ESMTP id S1343974AbiHITyt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Aug 2022 15:54:49 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91FFD24F25
+        for <bpf@vger.kernel.org>; Tue,  9 Aug 2022 12:54:48 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 279JTLt3027539
+        for <bpf@vger.kernel.org>; Tue, 9 Aug 2022 12:54:47 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=facebook; bh=Rj/d5govs7wMo1Zf77zLAwQrXn4dNXCRYFIAVoUJwlk=;
- b=iqUa/vxWCBnudncWeuZwXCjHU/udShTy65N2PyZUr/hg3BGDu+oJ7egsT5o4QbXsCiF0
- A3EQbEFOtuyJhrYrU6qNAwjuNT1zLm59I7MeQz7ImGvHRLNi2TwSw3RLk9mJSK2AV4Hz
- XQLaR2fYEtxrbYysPs6NkpK1WLhCtBAouXI= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=SzK659SvLt5FM/u0Ep+17feOmAvDeEFkOXHMoiq6/Jg=;
+ b=ZGuqq3B9igo3jIvorvGqE3Rh3jQ/HLLbiVQiM/8LoDTiMR6YVCHc409xUlPn/ohg+jSU
+ 1+DQS158DL+1K8/JRn2/8nIG/hor6/bUowbnEnySSTDt8rYuPtKoNS7NOXJ+OztsSnzd
+ pjyITXqPv1XhqcSnQCthQyCR41Ef+SDP4VU= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3huwrc07js-5
+        by m0001303.ppops.net (PPS) with ESMTPS id 3huws8r6b7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 09 Aug 2022 12:54:40 -0700
-Received: from twshared30313.14.frc2.facebook.com (2620:10d:c085:208::11) by
+        for <bpf@vger.kernel.org>; Tue, 09 Aug 2022 12:54:47 -0700
+Received: from twshared7570.37.frc1.facebook.com (2620:10d:c085:208::f) by
  mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Tue, 9 Aug 2022 12:54:39 -0700
+ 15.1.2375.28; Tue, 9 Aug 2022 12:54:45 -0700
 Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
-        id E0A7A6778A37; Tue,  9 Aug 2022 12:54:34 -0700 (PDT)
+        id 00D436778A3B; Tue,  9 Aug 2022 12:54:34 -0700 (PDT)
 From:   Kui-Feng Lee <kuifeng@fb.com>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <andrii@kernel.org>, <kernel-team@fb.com>, <yhs@fb.com>
 CC:     Kui-Feng Lee <kuifeng@fb.com>
-Subject: [PATCH bpf-next v4 0/3] Parameterize task iterators.
-Date:   Tue, 9 Aug 2022 12:54:26 -0700
-Message-ID: <20220809195429.1043220-1-kuifeng@fb.com>
+Subject: [PATCH bpf-next v4 2/3] bpf: Handle bpf_link_info for the parameterized task BPF iterators.
+Date:   Tue, 9 Aug 2022 12:54:28 -0700
+Message-ID: <20220809195429.1043220-3-kuifeng@fb.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220809195429.1043220-1-kuifeng@fb.com>
+References: <20220809195429.1043220-1-kuifeng@fb.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: S7aZMiDCEoTIhYB7JO6v1SnIpF-rLZlx
-X-Proofpoint-GUID: S7aZMiDCEoTIhYB7JO6v1SnIpF-rLZlx
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-GUID: B_Y7MDd9zw5ZdqojL6uSsfybhePthrAX
+X-Proofpoint-ORIG-GUID: B_Y7MDd9zw5ZdqojL6uSsfybhePthrAX
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-09_05,2022-08-09_02,2022-06-22_01
@@ -55,56 +57,106 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Allow creating an iterator that loops through resources of one task/thread.
+Add new fields to bpf_link_info that users can query it through
+bpf_obj_get_info_by_fd().
 
-People could only create iterators to loop through all resources of
-files, vma, and tasks in the system, even though they were interested in on=
-ly the
-resources of a specific task or process.  Passing the addintional
-parameters, people can now create an iterator to go through all
-resources or only the resources of a task.
+Signed-off-by: Kui-Feng Lee <kuifeng@fb.com>
+---
+ include/uapi/linux/bpf.h       |  7 +++++++
+ kernel/bpf/task_iter.c         | 19 +++++++++++++++++++
+ tools/include/uapi/linux/bpf.h |  7 +++++++
+ 3 files changed, 33 insertions(+)
 
-Major Changes:
-
- - Add new parameters in bpf_iter_link_info to indicate to go through
-   all tasks or to go through a specific task.
-
- - Change the implementations of BPF iterators of vma, files, and
-   tasks to allow going through only the resources of a specific task.
-
- - Provide the arguments of parameterized task iterators in
-   bpf_link_info.
-
-Differences from v3:
-
- - Fix the test case bpf_iter/test
-
-Differences from v2:
-
- - Supports tid, tgid, and pidfd.
-
- - Change 'type' from __u8 to enum bpf_task_iter_type.
-
-v3: https://lore.kernel.org/bpf/20220809063501.667610-1-kuifeng@fb.com/
-v2: https://lore.kernel.org/bpf/20220801232649.2306614-1-kuifeng@fb.com/
-v1: https://lore.kernel.org/bpf/20220726051713.840431-1-kuifeng@fb.com/
-
-Kui-Feng Lee (3):
-  bpf: Parameterize task iterators.
-  bpf: Handle bpf_link_info for the parameterized task BPF iterators.
-  selftests/bpf: Test parameterized task BPF iterators.
-
- include/linux/bpf.h                           |   8 +
- include/uapi/linux/bpf.h                      |  43 ++++
- kernel/bpf/task_iter.c                        | 153 +++++++++++--
- tools/include/uapi/linux/bpf.h                |  43 ++++
- .../selftests/bpf/prog_tests/bpf_iter.c       | 208 ++++++++++++++++--
- .../selftests/bpf/prog_tests/btf_dump.c       |   2 +-
- .../selftests/bpf/progs/bpf_iter_task.c       |   9 +
- .../selftests/bpf/progs/bpf_iter_task_file.c  |   7 +
- .../selftests/bpf/progs/bpf_iter_task_vma.c   |   6 +-
- 9 files changed, 430 insertions(+), 49 deletions(-)
-
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 3d0b9e34089f..17b945e87973 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -6171,6 +6171,13 @@ struct bpf_link_info {
+ 				struct {
+ 					__u32 map_id;
+ 				} map;
++				struct {
++					enum bpf_iter_task_type type;
++					union {
++						__u32 tid;
++						__u32 tgid;
++					};
++				} task;
+ 			};
+ 		} iter;
+ 		struct  {
+diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
+index 047d94493117..01213329398f 100644
+--- a/kernel/bpf/task_iter.c
++++ b/kernel/bpf/task_iter.c
+@@ -614,6 +614,22 @@ static const struct bpf_iter_seq_info task_seq_info =
+=3D {
+ 	.seq_priv_size		=3D sizeof(struct bpf_iter_seq_task_info),
+ };
+=20
++static int bpf_iter_fill_link_info(const struct bpf_iter_aux_info *aux, =
+struct bpf_link_info *info)
++{
++	switch (aux->task.type) {
++	case BPF_TASK_ITER_TID:
++		info->iter.task.tid =3D aux->task.tid;
++		break;
++	case BPF_TASK_ITER_TGID:
++		info->iter.task.tgid =3D aux->task.tgid;
++		break;
++	default:
++		break;
++	}
++	info->iter.task.type =3D aux->task.type;
++	return 0;
++}
++
+ static struct bpf_iter_reg task_reg_info =3D {
+ 	.target			=3D "task",
+ 	.attach_target		=3D bpf_iter_attach_task,
+@@ -624,6 +640,7 @@ static struct bpf_iter_reg task_reg_info =3D {
+ 		  PTR_TO_BTF_ID_OR_NULL },
+ 	},
+ 	.seq_info		=3D &task_seq_info,
++	.fill_link_info		=3D bpf_iter_fill_link_info,
+ };
+=20
+ static const struct bpf_iter_seq_info task_file_seq_info =3D {
+@@ -645,6 +662,7 @@ static struct bpf_iter_reg task_file_reg_info =3D {
+ 		  PTR_TO_BTF_ID_OR_NULL },
+ 	},
+ 	.seq_info		=3D &task_file_seq_info,
++	.fill_link_info		=3D bpf_iter_fill_link_info,
+ };
+=20
+ static const struct bpf_iter_seq_info task_vma_seq_info =3D {
+@@ -666,6 +684,7 @@ static struct bpf_iter_reg task_vma_reg_info =3D {
+ 		  PTR_TO_BTF_ID_OR_NULL },
+ 	},
+ 	.seq_info		=3D &task_vma_seq_info,
++	.fill_link_info		=3D bpf_iter_fill_link_info,
+ };
+=20
+ BPF_CALL_5(bpf_find_vma, struct task_struct *, task, u64, start,
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+index 3d0b9e34089f..17b945e87973 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -6171,6 +6171,13 @@ struct bpf_link_info {
+ 				struct {
+ 					__u32 map_id;
+ 				} map;
++				struct {
++					enum bpf_iter_task_type type;
++					union {
++						__u32 tid;
++						__u32 tgid;
++					};
++				} task;
+ 			};
+ 		} iter;
+ 		struct  {
 --=20
 2.30.2
 
