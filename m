@@ -2,165 +2,116 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3B44C3F6B0
-	for <bpf@archiver.kernel.org>; Tue,  9 Aug 2022 13:49:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E483C25B0E
+	for <bpf@archiver.kernel.org>; Tue,  9 Aug 2022 13:49:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239519AbiHINtk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Aug 2022 09:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54914 "EHLO
+        id S244345AbiHINtl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Aug 2022 09:49:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244351AbiHINsB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Aug 2022 09:48:01 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D63193C9;
+        with ESMTP id S244316AbiHINsA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Aug 2022 09:48:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4478217053;
         Tue,  9 Aug 2022 06:48:00 -0700 (PDT)
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M2Dph5fjRz687XH;
-        Tue,  9 Aug 2022 21:45:16 +0800 (CST)
-Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 9 Aug 2022 15:47:57 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>, <corbet@lwn.net>,
-        <dhowells@redhat.com>, <jarkko@kernel.org>, <rostedt@goodmis.org>,
-        <mingo@redhat.com>, <paul@paul-moore.com>, <jmorris@namei.org>,
-        <serge@hallyn.com>, <shuah@kernel.org>
-CC:     <bpf@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <keyrings@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v9 07/10] bpf: Add bpf_verify_pkcs7_signature() kfunc
-Date:   Tue, 9 Aug 2022 15:46:00 +0200
-Message-ID: <20220809134603.1769279-8-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220809134603.1769279-1-roberto.sassu@huawei.com>
-References: <20220809134603.1769279-1-roberto.sassu@huawei.com>
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DEF3761166;
+        Tue,  9 Aug 2022 13:47:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3844CC433D6;
+        Tue,  9 Aug 2022 13:47:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660052879;
+        bh=IQQJyPFnttVbNTaUGHXqrE8BpmegNCUFJ0+ReTCTZu8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=l8Cq0hSkuZnyXUQSYfpxa755uy8qEYAkefS/L+mNsEuVZ8voZcMQp1ONL8XI5lXdV
+         TScVJjrMzmGhL9yhSOc9kqn5FuaCmDqJqQWflx1XS8JwJ/Yf1wCoW1UMKv6TXz7i6T
+         YRJjQRFPVHqQB9ZQnu0P06Kb/sPCIxtAaIJdXDR578J84gh3B5IXoK+sdzBEkgwA1l
+         LkYqe9PH+C7Xqj3fNd5who6h4OMiLfoV9l1SECY9iqVL7mfDW2mWP4Ip7OJW2tLw5f
+         gfrE4DjI7moAUCzMydSt7C5+3SalNH2usvfsCNWVmXw4zVKwFmuK/1gNxONvohhZHn
+         F4AEZea/DhO1Q==
+From:   Lee Jones <lee@kernel.org>
+To:     lee@kernel.org
+Cc:     linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, bpf@vger.kernel.org,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: [PATCH v3 1/1] bpf: Drop unprotected find_vpid() in favour of find_get_pid()
+Date:   Tue,  9 Aug 2022 14:47:52 +0100
+Message-Id: <20220809134752.1488608-1-lee@kernel.org>
+X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.204.63.22]
-X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
- fraeml714-chm.china.huawei.com (10.206.15.33)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add the bpf_verify_pkcs7_signature() kfunc, to give eBPF security modules
-the ability to check the validity of a signature against supplied data, by
-using user-provided or system-provided keys as trust anchor.
+The documentation for find_vpid() clearly states:
 
-The new kfunc makes it possible to enforce mandatory policies, as eBPF
-programs might be allowed to make security decisions only based on data
-sources the system administrator approves.
+  "Must be called with the tasklist_lock or rcu_read_lock() held."
 
-The caller should provide the data to be verified and the signature as eBPF
-dynamic pointers (to minimize the number of parameters) and a bpf_key
-structure containing a reference to the keyring with keys trusted for
-signature verification, obtained from bpf_lookup_user_key() or
-bpf_lookup_system_key().
+Presently we do neither.
 
-For bpf_key structures obtained from the former lookup function,
-bpf_verify_pkcs7_signature() completes the permission check deferred by
-that function by calling key_validate(). key_task_permission() is already
-called by the PKCS#7 code.
+Let's use find_get_pid() which searches for the vpid, then takes a
+reference to it preventing early free, all within the safety of
+rcu_read_lock().  Once we have our reference we can safely make use of
+it up until the point it is put.
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Song Liu <song@kernel.org>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: Stanislav Fomichev <sdf@google.com>
+Cc: Hao Luo <haoluo@google.com>
+Cc: bpf@vger.kernel.org
+Fixes: 41bdc4b40ed6f ("bpf: introduce bpf subcommand BPF_TASK_FD_QUERY")
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Lee Jones <lee@kernel.org>
 ---
- kernel/trace/bpf_trace.c | 56 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 33ca4cfe6e26..79ba8c96735a 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -21,6 +21,7 @@
- #include <linux/bsearch.h>
- #include <linux/sort.h>
- #include <linux/key.h>
-+#include <linux/verification.h>
+v1 => v2:
+  * Commit log update - description - no code differences
+
+v2 => v3:
+  * Commit log update - spelling of find_vpid() - no code differences
+
+ kernel/bpf/syscall.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 83c7136c5788d..c20cff30581c4 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -4385,6 +4385,7 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
+ 	const struct perf_event *event;
+ 	struct task_struct *task;
+ 	struct file *file;
++	struct pid *ppid;
+ 	int err;
  
- #include <net/bpf_sk_storage.h>
+ 	if (CHECK_ATTR(BPF_TASK_FD_QUERY))
+@@ -4396,7 +4397,9 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
+ 	if (attr->task_fd_query.flags != 0)
+ 		return -EINVAL;
  
-@@ -1290,6 +1291,47 @@ noinline __weak void bpf_key_put(struct bpf_key *bkey)
- 	kfree(bkey);
- }
- 
-+#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-+/**
-+ * bpf_verify_pkcs7_signature - verify a PKCS#7 signature
-+ * @data_ptr: data to verify
-+ * @sig_ptr: signature of the data
-+ * @trusted_keyring: keyring with keys trusted for signature verification
-+ *
-+ * Verify the PKCS#7 signature *sig_ptr* against the supplied *data_ptr*
-+ * with keys in a keyring referenced by *trusted_keyring*.
-+ *
-+ * Return: 0 on success, a negative value on error.
-+ */
-+noinline __weak int bpf_verify_pkcs7_signature(struct bpf_dynptr_kern *data_ptr,
-+					       struct bpf_dynptr_kern *sig_ptr,
-+					       struct bpf_key *trusted_keyring)
-+{
-+	int ret;
-+
-+	if (trusted_keyring->valid_ptr) {
-+		/*
-+		 * Do the permission check deferred in bpf_lookup_user_key().
-+		 *
-+		 * A call to key_task_permission() here would be redundant, as
-+		 * it is already done by keyring_search() called by
-+		 * find_asymmetric_key().
-+		 */
-+		ret = key_validate(trusted_keyring->key);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	return verify_pkcs7_signature(data_ptr->data,
-+				      bpf_dynptr_get_size(data_ptr),
-+				      sig_ptr->data,
-+				      bpf_dynptr_get_size(sig_ptr),
-+				      trusted_keyring->key,
-+				      VERIFYING_UNSPECIFIED_SIGNATURE, NULL,
-+				      NULL);
-+}
-+#endif /* CONFIG_SYSTEM_DATA_VERIFICATION */
-+
- __diag_pop();
- 
- BTF_SET8_START(key_kfunc_set)
-@@ -1303,11 +1345,25 @@ static const struct btf_kfunc_id_set bpf_key_kfunc_set = {
- 	.owner = THIS_MODULE,
- 	.set = &key_kfunc_set,
- };
-+
-+#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-+BTF_SET8_START(verify_sig_kfunc_set)
-+BTF_ID_FLAGS(func, bpf_verify_pkcs7_signature, KF_SLEEPABLE)
-+BTF_SET8_END(verify_sig_kfunc_set)
-+
-+static const struct btf_kfunc_id_set bpf_verify_sig_kfunc_set = {
-+	.owner = THIS_MODULE,
-+	.set = &verify_sig_kfunc_set,
-+};
-+#endif /* CONFIG_SYSTEM_DATA_VERIFICATION */
- #endif /* CONFIG_KEYS */
- 
- const struct btf_kfunc_id_set *kfunc_sets[] = {
- #ifdef CONFIG_KEYS
- 	&bpf_key_kfunc_set,
-+#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-+	&bpf_verify_sig_kfunc_set,
-+#endif /* CONFIG_SYSTEM_DATA_VERIFICATION */
- #endif /* CONFIG_KEYS */
- };
+-	task = get_pid_task(find_vpid(pid), PIDTYPE_PID);
++	ppid = find_get_pid(pid);
++	task = get_pid_task(ppid, PIDTYPE_PID);
++	put_pid(ppid);
+ 	if (!task)
+ 		return -ENOENT;
  
 -- 
-2.25.1
+2.37.1.559.g78731f0fdb-goog
 
