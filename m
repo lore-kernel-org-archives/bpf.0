@@ -2,104 +2,124 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF4EAC19F2D
-	for <bpf@archiver.kernel.org>; Tue,  9 Aug 2022 17:49:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E2C8C19F2D
+	for <bpf@archiver.kernel.org>; Tue,  9 Aug 2022 17:52:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237621AbiHIRtD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Aug 2022 13:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
+        id S245016AbiHIRwo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Aug 2022 13:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233963AbiHIRtC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Aug 2022 13:49:02 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3F3237D2;
-        Tue,  9 Aug 2022 10:49:01 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a7so23547319ejp.2;
-        Tue, 09 Aug 2022 10:49:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FrHzlixcS1FrSu9iA6VWLEjUzH4K4SCNdB82J7P9I/I=;
-        b=OSubONaK/J343gxVF4lFuOplXjLk5hLPnbz1r0dnlzwS0KIHNtaTcs/DhUzBCip1GC
-         cDq6EciZP0ICzJSoSQ+pJBkd2AB+pPu7V+n5FSXm2gWA19KAvkGNytIPUzfl/Ny6vxyh
-         QYt8UDX1zBmxqJl6SAV/1AsE6jFFHSwy7quxRGKkAFEvc3NGJIk15W/uB4cu69X6beWG
-         x/PRTBPNC1udHeBhJ7a+4rC+JlxLiJYjJm48QV2S5qz3gyZffjMdBRY8yZbmTCpFB0D5
-         1dJjfvFMY3IpsCm00oOkkc4eny6//rNj7GjVm732f750sxr18hIOVFF8F5JlMo3ydMz1
-         aWQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FrHzlixcS1FrSu9iA6VWLEjUzH4K4SCNdB82J7P9I/I=;
-        b=MtcAzIrsgIr46Z/0t5IVKlof+pSBTfJdcQLybhLctHWieIE/wTrMpji11ZDtNWqzVY
-         os1DMbrDMN9LfrkPeeC/96urnfQEGwzdsC88TGGvyN7KxNbYc9ek7h4+323rvLfrNjB+
-         GGvnHLmnsAZ9PQLNBNz63TYAbZT+nQnpXtteCWDlhJengIBf3dZG7okqP1Njkdg3l7x0
-         T1ICPBbvZEAuJvogtI1t8yy/qrMuMbouwi4il+vxEqNX0EO756BXfLJIDzqBxUChUJQg
-         hXXiDf8tIQ6CWK7SDXxcW1AgRU5fMAvifderzbfZCYromfyB4huRBIJG3xeINTxP6cHU
-         orLQ==
-X-Gm-Message-State: ACgBeo0D8kA+iju7aC3mcVpMUVtYjRsagNwL8I1YWvWrD6UlQYHI9l+R
-        nJtfi0WAuP2MoYhpqcMidT9i7+WCntiXbHW19ZI=
-X-Google-Smtp-Source: AA6agR5Y+K1O7OP168yNU1SaAfCHyiXzxJw8I+spUd0Mqp3fh+qgK5QKAu1yxh0w8txty31WvQIbYU7BOGvwYmhjeY4=
-X-Received: by 2002:a17:907:7b94:b0:731:1b11:c241 with SMTP id
- ne20-20020a1709077b9400b007311b11c241mr12654037ejc.676.1660067339882; Tue, 09
- Aug 2022 10:48:59 -0700 (PDT)
+        with ESMTP id S233963AbiHIRwm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Aug 2022 13:52:42 -0400
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14DEF1CFCD
+        for <bpf@vger.kernel.org>; Tue,  9 Aug 2022 10:52:41 -0700 (PDT)
+Received: by devbig010.atn6.facebook.com (Postfix, from userid 115148)
+        id 1044C102FBCEC; Tue,  9 Aug 2022 10:52:28 -0700 (PDT)
+From:   Joanne Koong <joannelkoong@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     kafai@fb.com, void@manifault.com, andrii@kernel.org,
+        daniel@iogearbox.net, ast@kernel.org,
+        Joanne Koong <joannelkoong@gmail.com>
+Subject: [PATCH bpf-next v3 2/2] selftests/bpf: add extra test for using dynptr data slice after release
+Date:   Tue,  9 Aug 2022 10:52:08 -0700
+Message-Id: <20220809175208.2224443-2-joannelkoong@gmail.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220809175208.2224443-1-joannelkoong@gmail.com>
+References: <20220809175208.2224443-1-joannelkoong@gmail.com>
 MIME-Version: 1.0
-References: <20220809105317.436682-1-asavkov@redhat.com> <20220809105317.436682-3-asavkov@redhat.com>
-In-Reply-To: <20220809105317.436682-3-asavkov@redhat.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 9 Aug 2022 10:48:48 -0700
-Message-ID: <CAADnVQKgOR0L0thz6HbkL1x7mwc4eSRHftwsrzE9AxufyGBYZg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 2/3] bpf: export crash_kexec() as destructive kfunc
-To:     Artem Savkov <asavkov@redhat.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Daniel Vacek <dvacek@redhat.com>,
-        Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>,
-        Daniel Xu <dxu@dxuuu.xyz>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 3:53 AM Artem Savkov <asavkov@redhat.com> wrote:
->
-> Allow properly marked bpf programs to call crash_kexec().
->
-> Signed-off-by: Artem Savkov <asavkov@redhat.com>
-> ---
->  kernel/bpf/helpers.c | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
->
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index 1f961f9982d2..103dbddff41f 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -1711,3 +1711,24 @@ bpf_base_func_proto(enum bpf_func_id func_id)
->                 return NULL;
->         }
->  }
-> +
-> +BTF_SET8_START(tracing_btf_ids)
-> +#ifdef CONFIG_KEXEC_CORE
-> +BTF_ID_FLAGS(func, crash_kexec, KF_DESTRUCTIVE)
-> +#endif
-> +BTF_SET8_END(tracing_btf_ids)
-> +
-> +static const struct btf_kfunc_id_set tracing_kfunc_set = {
-> +       .owner = THIS_MODULE,
-> +       .set   = &tracing_btf_ids,
-> +};
-> +
-> +static int __init kfunc_init(void)
-> +{
-> +       if (register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &tracing_kfunc_set))
-> +               pr_warn("failed to register kfunc id set for BPF_PROG_TYPE_TRACING\n");
+Add an additional test, "data_slice_use_after_release2", for ensuring
+that data slices are correctly invalidated by the verifier after the
+dynptr whose ref obj id they track is released. In particular, this
+tests data slice invalidation for dynptrs located at a non-zero offset
+from the frame pointer.
 
-Please drop pr_warn. We don't have it in all other
-places where we do registration.
+Signed-off-by: Joanne Koong <joannelkoong@gmail.com>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
+---
+ .../testing/selftests/bpf/prog_tests/dynptr.c |  3 +-
+ .../testing/selftests/bpf/progs/dynptr_fail.c | 38 ++++++++++++++++++-
+ 2 files changed, 39 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/dynptr.c b/tools/test=
+ing/selftests/bpf/prog_tests/dynptr.c
+index 3c7aa82b98e2..bcf80b9f7c27 100644
+--- a/tools/testing/selftests/bpf/prog_tests/dynptr.c
++++ b/tools/testing/selftests/bpf/prog_tests/dynptr.c
+@@ -22,7 +22,8 @@ static struct {
+ 	{"add_dynptr_to_map2", "invalid indirect read from stack"},
+ 	{"data_slice_out_of_bounds_ringbuf", "value is outside of the allowed m=
+emory range"},
+ 	{"data_slice_out_of_bounds_map_value", "value is outside of the allowed=
+ memory range"},
+-	{"data_slice_use_after_release", "invalid mem access 'scalar'"},
++	{"data_slice_use_after_release1", "invalid mem access 'scalar'"},
++	{"data_slice_use_after_release2", "invalid mem access 'scalar'"},
+ 	{"data_slice_missing_null_check1", "invalid mem access 'mem_or_null'"},
+ 	{"data_slice_missing_null_check2", "invalid mem access 'mem_or_null'"},
+ 	{"invalid_helper1", "invalid indirect read from stack"},
+diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/test=
+ing/selftests/bpf/progs/dynptr_fail.c
+index b5e0a87f0a36..b0f08ff024fb 100644
+--- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
++++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+@@ -248,7 +248,7 @@ int data_slice_out_of_bounds_map_value(void *ctx)
+=20
+ /* A data slice can't be used after it has been released */
+ SEC("?raw_tp")
+-int data_slice_use_after_release(void *ctx)
++int data_slice_use_after_release1(void *ctx)
+ {
+ 	struct bpf_dynptr ptr;
+ 	struct sample *sample;
+@@ -272,6 +272,42 @@ int data_slice_use_after_release(void *ctx)
+ 	return 0;
+ }
+=20
++/* A data slice can't be used after it has been released.
++ *
++ * This tests the case where the data slice tracks a dynptr (ptr2)
++ * that is at a non-zero offset from the frame pointer (ptr1 is at fp,
++ * ptr2 is at fp - 16).
++ */
++SEC("?raw_tp")
++int data_slice_use_after_release2(void *ctx)
++{
++	struct bpf_dynptr ptr1, ptr2;
++	struct sample *sample;
++
++	bpf_ringbuf_reserve_dynptr(&ringbuf, 64, 0, &ptr1);
++	bpf_ringbuf_reserve_dynptr(&ringbuf, sizeof(*sample), 0, &ptr2);
++
++	sample =3D bpf_dynptr_data(&ptr2, 0, sizeof(*sample));
++	if (!sample)
++		goto done;
++
++	sample->pid =3D 23;
++
++	bpf_ringbuf_submit_dynptr(&ptr2, 0);
++
++	/* this should fail */
++	sample->pid =3D 23;
++
++	bpf_ringbuf_submit_dynptr(&ptr1, 0);
++
++	return 0;
++
++done:
++	bpf_ringbuf_discard_dynptr(&ptr2, 0);
++	bpf_ringbuf_discard_dynptr(&ptr1, 0);
++	return 0;
++}
++
+ /* A data slice must be first checked for NULL */
+ SEC("?raw_tp")
+ int data_slice_missing_null_check1(void *ctx)
+--=20
+2.30.2
+
