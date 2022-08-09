@@ -2,52 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 082BBC3F6B0
-	for <bpf@archiver.kernel.org>; Tue,  9 Aug 2022 16:50:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D470C19F2D
+	for <bpf@archiver.kernel.org>; Tue,  9 Aug 2022 16:50:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244985AbiHIQuQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Aug 2022 12:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34262 "EHLO
+        id S244974AbiHIQuS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Aug 2022 12:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243173AbiHIQuP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Aug 2022 12:50:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328422605;
-        Tue,  9 Aug 2022 09:50:15 -0700 (PDT)
+        with ESMTP id S243173AbiHIQuR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Aug 2022 12:50:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA6A9587
+        for <bpf@vger.kernel.org>; Tue,  9 Aug 2022 09:50:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C175C60BC5;
-        Tue,  9 Aug 2022 16:50:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 22FCEC433B5;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 62364B81636
+        for <bpf@vger.kernel.org>; Tue,  9 Aug 2022 16:50:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1BA88C433C1;
         Tue,  9 Aug 2022 16:50:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1660063814;
-        bh=BPQSBqEaQVzFpZHDlwohZzsm0tw/oJ4LWmWRpVos5IM=;
+        bh=hUZc2bB5mu9OXfnDi+3WJFAkvhAJZ1OsqZKG7rENiKQ=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=IAOoCZs07cjAlr8jyRSeGEVSmew3TyUJytSv4FfbPWVc44dCy8W8JsPmMfk1P+q6Q
-         61u2/pdgyc6vg3MeNY0pEfttufH3+IZ3Cctc2eO+LXavqNAro5v2kBfAsmlr8Fc+Vx
-         WkCeS8OiOGBBAKR8/wiBXwlvZPEcmiwNPPPdYEmuazZgDHD1QuphTwv1ZhoIOGD0aP
-         +60kWA1niedGEpXaT75yAeEkAjAeTXhPwpIRsTfGJ3DSrrAU1QvDWVm0j8FEvEOPnp
-         dRtBh1S1dV7iBwIm5sOpekx+VLNYScLimDmvj2PKk/kYlJK1EiMDK/iSHhZhooBJCl
-         6rFwoMTHmGV8w==
+        b=tYnKjfwIY+1Lu/kk2s4GqQNIl9Ao3y5chmHAXRz4Vcx6Rh8E2yCuWGf3+hj4XDQ44
+         Pu9N++awROp/nvPHxN8WSoIiae4Hv7OjB7L8Fds6a7qlr61vkQ1BDmUNXhm+bb+r4Q
+         TQnxP+cxO1TZYH6uUZcYMtlzP4UfkZzgWo4lGxciWMl+/+r+YZT0VqQ0yRaq9qqx3W
+         5lw8xle/Z0B4yQ6hNpmQ86e02up+/EoHhzZMutCt3fxbIo0K3lzOM6ZQn6NmI26JQt
+         aXlbzxE8M3xpKdhtG7NuefYVTkeyWyuLh1VoMrgaU2IMNdvZUpXhQ7x+OvvrgB+ruP
+         0g2vQpiloM9pQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0A214C43142;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 01512C43143;
         Tue,  9 Aug 2022 16:50:14 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] net: netfilter: Remove ifdefs for code shared by BPF
- and ctnetlink
+Subject: Re: [RESEND PATCH v2 bpf-next] bpf: Cleanup check_refcount_ok
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166006381403.15335.8424596913469962895.git-patchwork-notify@kernel.org>
-Date:   Tue, 09 Aug 2022 16:50:14 +0000
-References: <20220725085130.11553-1-memxor@gmail.com>
-In-Reply-To: <20220725085130.11553-1-memxor@gmail.com>
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     bpf@vger.kernel.org, pablo@netfilter.org, ast@kernel.org,
-        andrii@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org
+Message-Id: <166006381399.15335.6790319554919261050.git-patchwork-notify@kernel.org>
+Date:   Tue, 09 Aug 2022 16:50:13 +0000
+References: <20220808171559.3251090-1-davemarchevsky@fb.com>
+In-Reply-To: <20220808171559.3251090-1-davemarchevsky@fb.com>
+To:     Dave Marchevsky <davemarchevsky@fb.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kernel-team@fb.com, memxor@gmail.com,
+        joannelkoong@gmail.com, kafai@fb.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
@@ -57,20 +56,23 @@ Hello:
 This patch was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Mon, 25 Jul 2022 10:51:30 +0200 you wrote:
-> The current ifdefry for code shared by the BPF and ctnetlink side looks
-> ugly. As per Pablo's request, simplify this by unconditionally compiling
-> in the code. This can be revisited when the shared code between the two
-> grows further.
+On Mon, 8 Aug 2022 10:15:59 -0700 you wrote:
+> Discussion around a recently-submitted patch provided historical
+> context for check_refcount_ok [0]. Specifically, the function and its
+> helpers - may_be_acquire_function and arg_type_may_be_refcounted -
+> predate the OBJ_RELEASE type flag and the addition of many more helpers
+> with acquire/release semantics.
 > 
-> Suggested-by: Pablo Neira Ayuso <pablo@netfilter.org>
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> The purpose of check_refcount_ok is to ensure:
+>   1) Helper doesn't have multiple uses of return reg's ref_obj_id
+>   2) Helper with release semantics only has one arg needing to be
+>   released, since that's tracked using meta->ref_obj_id
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next] net: netfilter: Remove ifdefs for code shared by BPF and ctnetlink
-    https://git.kernel.org/bpf/bpf-next/c/6e116280b41b
+  - [RESEND,v2,bpf-next] bpf: Cleanup check_refcount_ok
+    https://git.kernel.org/bpf/bpf-next/c/b2d8ef19c6e7
 
 You are awesome, thank you!
 -- 
