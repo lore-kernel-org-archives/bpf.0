@@ -2,235 +2,117 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6C86C3F6B0
-	for <bpf@archiver.kernel.org>; Tue,  9 Aug 2022 17:04:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4039BC19F2D
+	for <bpf@archiver.kernel.org>; Tue,  9 Aug 2022 17:06:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245324AbiHIREH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Aug 2022 13:04:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46100 "EHLO
+        id S245268AbiHIRGJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Aug 2022 13:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245257AbiHIREF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Aug 2022 13:04:05 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528F519D
-        for <bpf@vger.kernel.org>; Tue,  9 Aug 2022 10:04:04 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id i13so1328359qkm.8
-        for <bpf@vger.kernel.org>; Tue, 09 Aug 2022 10:04:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wK2UgiO0xmPm9gijXHdgykd9J2+++2+6yb4/6WYnghc=;
-        b=Qd2j159QFh2Ba9yZo2y6muhNd/MB6kx1pzreSiNh/IP8NYWmhVkxCntqx++BPMqkYa
-         afojxFFSXsVdw3irQaSLsOSlvHg4zmyHko5zytdVke0ShLA5lXIf5+WJ+saTzEUy8jLk
-         NlJnzoN2xfcUmzN+pImB1NmT9eYiOqGsnNN+s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wK2UgiO0xmPm9gijXHdgykd9J2+++2+6yb4/6WYnghc=;
-        b=AQ5dF5BTPUeK6uW/o/kDMlVo6NmbeqH83WiQPCKHiFI4k+9yPdOQc038ZMrpYHyIVq
-         yOciuKm0/zxTMCUe70H2bguDKcjjFcIzh4RYJ6eUhY16idrI5OX3evHRIvYQ2kWouScm
-         dVp720mR7KO09azQhOD+BQw4gwz9DHSLeJfdlDIYfKSsB3KOsKe0laBxGVOnYrXHDP8l
-         //JVoql87o8ivlW1rgP72HcwJBm18lLpktnvVL3JyygRqO3DTy0oBWDNKSGg5ypXSznC
-         5YSaBmGCjCHQvaKTd4yPyRiDWvYFcQqizoXypK3Ey5fx/llq7oPNAir5rYE0qDXhZ7hd
-         DAFg==
-X-Gm-Message-State: ACgBeo19SIhLH50VJpu5cFCNpuwc/K5AuwHJvTE+bzif6A5nSYVJxaQa
-        Z523c78Yp3n3Fn0/b7Z5s/qeUeVJZH40l7Zm50Q1tw==
-X-Google-Smtp-Source: AA6agR5hqFK/rP1CLKlAqc+pNfT72uqlNlIbvr0GiCDZaizK6zy4eTXbYO7r2AkEzj0Uuu/VQkXwfJzymxc6m94w6eI=
-X-Received: by 2002:a05:620a:371e:b0:6b8:b7a4:42c8 with SMTP id
- de30-20020a05620a371e00b006b8b7a442c8mr18416821qkb.608.1660064643348; Tue, 09
- Aug 2022 10:04:03 -0700 (PDT)
+        with ESMTP id S244499AbiHIRGI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Aug 2022 13:06:08 -0400
+Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F1F501114D
+        for <bpf@vger.kernel.org>; Tue,  9 Aug 2022 10:06:04 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.west.internal (Postfix) with ESMTP id AD94C2B05ED3;
+        Tue,  9 Aug 2022 13:00:36 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 09 Aug 2022 13:00:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
+        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1660064436; x=1660071636; bh=3abss+CoOK
+        3R89WSKxwqP2TXwiB32/7eSMUhPqbISCk=; b=XaejAeLV6YtYoP1m1vp3sV6Mvm
+        ZdnaCdwijII0HCmg7+V2+zSm+cbxWQN+hjTZMwOsFOnhZLoaOadd/hCKY8l2KKSA
+        r2zbfCV1TVF1YC4r0Ot1XIf6DtwvplgIyZ9a6lansDZdyUhaLdqFEBaR2XZk9OXW
+        QW6yvyWNlqAhL/iPjWGTsEgHT67PsNu6H3PUbT7YqH6r5Cb3z3tsNgiHeTTO+QOU
+        KGfidGiu8bhPbMIkXB6lbjww7eRM4ZzM4L51Sd4WCjxXha8iHuU5Z8N5+5z4G/Gd
+        VJYlL+AqgIiwkf1IyXmrq03QG1RmAG5gIvgpHas3+vPGqRicFTICI5SFyEWQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660064436; x=1660071636; bh=3abss+CoOK3R89WSKxwqP2TXwiB3
+        2/7eSMUhPqbISCk=; b=jx5UKs5FR/5TTUMznqXpar493S9pJtqfEXAu+xPgH7Hf
+        MzMI2fmjfNSSorTuQHDBOBldR4iyWi0p20MDIXC1elsESVPfa4pS1EdCE0j+H4Rk
+        e83VFx5gzYbW8/ak76uyvnrrbUXBWp+2tuwkhWOkZTyolK3/2SHT0TJG/IOI0Z+y
+        /YK0Jt7QjO3Yt252jTHOQ6lDu/aZXczZQV54hXVol7tZtwr4H2xYc4shrZmhnktB
+        FnOhqT/KWn9asDcS/w6iCF1+uDFgO+eHst6lNEF3oab5C4Sc3BBNEduWRHLfJ3tN
+        FMNN0vMmuJia78raFkiuEvS/OZaOEnCoDMZCvT3eqw==
+X-ME-Sender: <xms:s5LyYiEDWpP3XIu1fhZ7hW2j1tEJ9_YahHqQaupFDOfN-OgJzL7zeg>
+    <xme:s5LyYjUXhWR0e-TA6b-8eUOKkaSSkT6nQqy5uYmdthUlVQ-argdBUNO1bQ92khVDI
+    8w2xl-r8ydMOzLoWg>
+X-ME-Received: <xmr:s5LyYsLXwLEh-ECGcXC1Ahw1aqBqsTEkFHtD7D0JuYwT7If1v9FZ6DQzDGHecyB1KekGFvrIqjOH2ZjdOv3icxrhSfwu5RcPqwtxDRP_1OxcMTTg7YTwTY0ZCkjX>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegtddguddtkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetnhgu
+    rhgvshcuhfhrvghunhguuceorghnughrvghssegrnhgrrhgriigvlhdruggvqeenucggtf
+    frrghtthgvrhhnpedvffefvefhteevffegieetfefhtddvffejvefhueetgeeludehteev
+    udeitedtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpegrnhgurhgvshesrghnrghrrgiivghlrdguvg
+X-ME-Proxy: <xmx:s5LyYsGVr1iRxg22r1viLNcxnBb__ip5V9s1GtYOV80LXV1M2lI-0w>
+    <xmx:s5LyYoXtfSskZTRfN8-H9DAnAI6bCPEWjHlCk_nUNBRQki44lyRM8Q>
+    <xmx:s5LyYvM7hnV60DWPFPbU4RyAdGKRHlSYcm8b5g9E3puupVDX2nWwYQ>
+    <xmx:tJLyYjae09X7G4eUbzBHqTzlMX2xyFBOc1WqctEKF7viDjE_x0rHQYLR4RY>
+Feedback-ID: id4a34324:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 9 Aug 2022 13:00:35 -0400 (EDT)
+Date:   Tue, 9 Aug 2022 10:00:34 -0700
+From:   Andres Freund <andres@anarazel.de>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
+        Daniel Borkmann <daniel@iogearbox.net>, quentin@isovalent.com,
+        ast@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, peterz@infradead.org, mingo@redhat.com,
+        terrelln@fb.com, nathan@kernel.org, ndesaulniers@google.com,
+        bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH 4/4] build: Switch to new openssl API for test-libcrypto
+Message-ID: <20220809170034.hx7fyiosm3tfekwf@awork3.anarazel.de>
+References: <20220719170555.2576993-1-roberto.sassu@huawei.com>
+ <20220719170555.2576993-4-roberto.sassu@huawei.com>
+ <5f867295-10d2-0085-d1dc-051f56e7136a@iogearbox.net>
+ <YvFW/kBL6YA3Tlnc@kernel.org>
+ <YvJ6DbzBNsAgNZS4@kernel.org>
+ <YvJ7awkCVBYaZ2dd@kernel.org>
 MIME-Version: 1.0
-References: <Yo4xb2w+FHhUtJNw@FVFF77S0Q05N> <0f8fe661-c450-ccd8-761f-dbfff449c533@huawei.com>
- <Yo9REdx3nsgbZunE@FVFF77S0Q05N> <40fda0b0-0efc-ea1b-96d5-e51a4d1593dd@huawei.com>
- <Yp4s7eNGvb2CNtPp@FVFF77S0Q05N.cambridge.arm.com> <55c1b9d6-1d53-9752-fb03-00f60ed15db7@huawei.com>
-In-Reply-To: <55c1b9d6-1d53-9752-fb03-00f60ed15db7@huawei.com>
-From:   Florent Revest <revest@chromium.org>
-Date:   Tue, 9 Aug 2022 19:03:52 +0200
-Message-ID: <CABRcYmKEn7eajowROwZKerngf0eo0jddNzYgFp82tAqgu0BAxg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 1/6] arm64: ftrace: Add ftrace direct call support
-To:     Xu Kuohai <xukuohai@huawei.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        hpa@zytor.com, Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Delyan Kratunov <delyank@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Wang ShaoBo <bobo.shaobowang@huawei.com>,
-        cj.chengjian@huawei.com, huawei.libin@huawei.com,
-        xiexiuqi@huawei.com, liwei391@huawei.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YvJ7awkCVBYaZ2dd@kernel.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jun 9, 2022 at 6:27 AM Xu Kuohai <xukuohai@huawei.com> wrote:
-> On 6/7/2022 12:35 AM, Mark Rutland wrote:
-> > On Thu, May 26, 2022 at 10:48:05PM +0800, Xu Kuohai wrote:
-> >> On 5/26/2022 6:06 PM, Mark Rutland wrote:
-> >>> On Thu, May 26, 2022 at 05:45:03PM +0800, Xu Kuohai wrote:
-> >>>> On 5/25/2022 9:38 PM, Mark Rutland wrote:
-> >>>>> On Wed, May 18, 2022 at 09:16:33AM -0400, Xu Kuohai wrote:
-> >>>>>> As noted in that thread, I have a few concerns which equally apply here:
-> >>>>>
-> >>>>> * Due to the limited range of BL instructions, it's not always possible to
-> >>>>>   patch an ftrace call-site to branch to an arbitrary trampoline. The way this
-> >>>>>   works for ftrace today relies upon knowingthe set of trampolines at
-> >>>>>   compile-time, and allocating module PLTs for those, and that approach cannot
-> >>>>>   work reliably for dynanically allocated trampolines.
-> >>>>
-> >>>> Currently patch 5 returns -ENOTSUPP when long jump is detected, so no
-> >>>> bpf trampoline is constructed for out of range patch-site:
-> >>>>
-> >>>> if (is_long_jump(orig_call, image))
-> >>>>    return -ENOTSUPP;
-> >>>
-> >>> Sure, my point is that in practice that means that (from the user's PoV) this
-> >>> may randomly fail to work, and I'd like something that we can ensure works
-> >>> consistently.
-> >>>
-> >>
-> >> OK, should I suspend this work until you finish refactoring ftrace?
-> >
-> > Yes; I'd appreciate if we could hold on this for a bit.
-> >
-> > I think with some ground work we can avoid most of the painful edge cases and
-> > might be able to avoid the need for custom trampolines.
-> >
->
-> I'v read your WIP code, but unfortunately I didn't find any mechanism to
-> replace bpf trampoline in your code, sorry.
->
-> It looks like bpf trampoline and ftrace works can be done at the same
-> time. I think for now we can just attach bpf trampoline to bpf prog.
-> Once your ftrace work is done, we can add support for attaching bpf
-> trampoline to regular kernel function. Is this OK?
+Hi,
 
-Hey Mark and Xu! :)
+On 2022-08-09 12:21:15 -0300, Arnaldo Carvalho de Melo wrote:
+> So I backtracked, the way it works needs further consideration with
+> regard to the patchkit from Andres, that is already upstream, so it
+> would be good for Roberto to take a look at what is in torvalds/master
+> now and see if we have to removed that styled thing from Andres.
 
-I'm interested in this feature too and would be happy to help.
-
-I've been trying to understand what you both have in mind to figure out a way
-forward, please correct me if I got anything wrong! :)
+Why would it have to be removed - seems to be fairly independent, leaving the
+line conflicts aside? Or do you just mean folding it into one-big-test? If so,
+that'd make sense, although I'm not sure how ready the infrastructure
 
 
-It looks like, currently, there are three places where an indirection to BPF is
-technically possible. Chronologically these are:
-
-- the function's patchsite (currently there are 2 nops, this could become 4
-  nops with Mark's series on per call-site ops)
-
-- the ftrace ops (currently called by iterating over a global list but could be
-  called more directly with Mark's series on per-call-site ops or by
-  dynamically generated branches with Wang's series on dynamic trampolines)
-
-- a ftrace trampoline tail call (currently, this is after restoring a full
-  pt_regs but this could become an args only restoration with Mark's series on
-  DYNAMIC_FTRACE_WITH_ARGS)
+FWIW, if I would have to maintain these, I'd probably change FEATURE_TESTS,
+FEATURE_DISPLAY into one-item-per-line to make conflicts less common and
+easier to resolve.
 
 
-If we first consider the situation when only a BPF program is attached to a
-kernel function:
-- Using the patchsite for indirection (proposed by Xu, same as on x86)
-   Pros:
-   - We have BPF trampolines anyway because they are required for orthogonal
-     features such as calling BPF programs as functions, so jumping into that
-     existing JITed code is straightforward
-   - This has the minimum overhead (eg: these trampolines only save the actual
-     number of args used by the function in ctx and avoid indirect calls)
-   Cons:
-   - If the BPF trampoline is JITed outside BL's limits, attachment can
-     randomly fail
+> Andres, if you could take a look at Roberto's patchkit as well that
+> would be great.
 
-- Using a ftrace op for indirection (proposed by Mark)
-  Pros:
-  - BPF doesn't need to care about BL's range, ftrace_caller will be in range
-  Cons:
-  - The ftrace trampoline would first save all args in an ftrace_regs only for
-    the BPF op to then re-save them in a BPF ctx array (as per BPF calling
-    convention) so we'd effectively have to do the work of saving args twice
-  - BPF currently uses DYNAMIC_FTRACE_WITH_DIRECT_CALLS APIs. Either arm64
-    should implement DIRECT_CALLS with... an indirect call :) (that is, the
-    arch_ftrace_set_direct_caller op would turn back its ftrace_regs into
-    arguments for the BPF trampoline) or BPF would need to use a different
-    ftrace API just on arm64 (to define new ops, which, unless if they would be
-    dynamically JITed, wouldn't be as performant as the existing BPF
-    trampolines)
+I briefly scanned it, and the only real comment I have mirror's Quentin's,
+namely that it'd be nice to avoid displaying more tests that don't tell the
+user much.
 
-- Using a ftrace trampoline tail call for indirection (not discussed yet iiuc)
-  Pros:
-  - BPF also doesn't need to care about BL's range
-  - This also leverages the existing BPF trampolines
-  Cons:
-  - This also does the work of saving/restoring arguments twice
-  - DYNAMIC_FTRACE_WITH_DIRECT_CALLS depends on DYNAMIC_FTRACE_WITH_REGS now
-    although in practice the registers kept by DYNAMIC_FTRACE_WITH_ARGS
-    should be enough to call BPF trampolines
+Greetings,
 
-If we consider the situation when both ftrace ops and BPF programs are attached
-to a kernel function:
-- Using the patchsite for indirection can't solve this
-
-- Using a ftrace op for indirection (proposed by Mark) or using a ftrace
-  trampoline tail call as an indirection (proposed by Xu, same as on x86) have
-  the same pros & cons as in the BPF only situation except that this time we
-  pay the cost of registers saving twice for good reasons (we need args in both
-  ftrace_regs and the BPF ctx array formats anyway)
-
-
-Unless I'm missing something, it sounds like the following approach would work:
-- Always patch patchsites with calls to ftrace trampolines (within BL ranges)
-- Always go through ops and have arch_ftrace_set_direct_caller set
-  ftrace_regs->direct_call (instead of pt_regs->orig_x0 in this patch)
-- If ftrace_regs->direct_call != 0 at the end of the ftrace trampoline, tail
-  call it
-
-Once Mark's series on DYNAMIC_FTRACE_WITH_ARGS is merged, we would need to have
-DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-  depend on DYNAMIC_FTRACE_WITH_REGS || DYNAMIC_FTRACE_WITH_ARGS
-BPF trampolines (the only users of this API now) only care about args to the
-attachment point anyway so I think this would work transparently ?
-
-Once Mark's series on per-callsite ops is merged, the second step (going
-through ops) would be significantly faster in the situation where only one
-program is used, therefore one arch_ftrace_set_direct_caller op.
-
-Once Wang's series on dynamic trampolines is merged, the second step (going
-through ops) would also be significantly faster in the case when multiple ops
-are attached.
-
-
-What are your thoughts? If this sounds somewhat sane, I'm happy to help out
-with the implementation as well :)
-
-Thanks!
-Florent
+Andres Freund
