@@ -2,146 +2,96 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 365F1C19F2D
-	for <bpf@archiver.kernel.org>; Tue,  9 Aug 2022 09:43:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A456C19F2D
+	for <bpf@archiver.kernel.org>; Tue,  9 Aug 2022 09:45:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237793AbiHIJnY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Aug 2022 05:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37310 "EHLO
+        id S235758AbiHIJpw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Aug 2022 05:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238495AbiHIJnR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Aug 2022 05:43:17 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F100B23171;
-        Tue,  9 Aug 2022 02:43:10 -0700 (PDT)
-Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id F11A8FF80F;
-        Tue,  9 Aug 2022 09:43:06 +0000 (UTC)
-From:   Bastien Nocera <hadess@hadess.net>
-To:     linux-usb@vger.kernel.org, bpf@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Peter Hutterer <peter.hutterer@who-t.net>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Bastien Nocera <hadess@hadess.net>
-Subject: [PATCH 2/2] usb: Implement usb_revoke() BPF function
-Date:   Tue,  9 Aug 2022 11:43:00 +0200
-Message-Id: <20220809094300.83116-3-hadess@hadess.net>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220809094300.83116-1-hadess@hadess.net>
-References: <20220809094300.83116-1-hadess@hadess.net>
+        with ESMTP id S232584AbiHIJpw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Aug 2022 05:45:52 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F251F636;
+        Tue,  9 Aug 2022 02:45:50 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M27S100S2zmVY4;
+        Tue,  9 Aug 2022 17:43:44 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by canpemm500010.china.huawei.com
+ (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 9 Aug
+ 2022 17:45:47 +0800
+From:   Liu Jian <liujian56@huawei.com>
+To:     <john.fastabend@gmail.com>, <jakub@cloudflare.com>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
+CC:     <liujian56@huawei.com>
+Subject: [PATCH bpf-next v2] skmsg: Fix wrong last sg check in sk_msg_recvmsg()
+Date:   Tue, 9 Aug 2022 17:49:15 +0800
+Message-ID: <20220809094915.150391-1-liujian56@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This functionality allows a sufficiently privileged user-space process
-to upload a BPF programme that will call to usb_revoke_device() as if
-it were a kernel API.
+Fix one kernel NULL pointer dereference as below:
 
-This functionality will be used by logind to revoke access to devices on
-fast user-switching to start with.
+[  224.462334] Call Trace:
+[  224.462394]  __tcp_bpf_recvmsg+0xd3/0x380
+[  224.462441]  ? sock_has_perm+0x78/0xa0
+[  224.462463]  tcp_bpf_recvmsg+0x12e/0x220
+[  224.462494]  inet_recvmsg+0x5b/0xd0
+[  224.462534]  __sys_recvfrom+0xc8/0x130
+[  224.462574]  ? syscall_trace_enter+0x1df/0x2e0
+[  224.462606]  ? __do_page_fault+0x2de/0x500
+[  224.462635]  __x64_sys_recvfrom+0x24/0x30
+[  224.462660]  do_syscall_64+0x5d/0x1d0
+[  224.462709]  entry_SYSCALL_64_after_hwframe+0x65/0xca
 
-logind, and other session management software, does not have access to
-the file descriptor used by the application so other identifiers
-are used.
+In commit 9974d37ea75f ("skmsg: Fix invalid last sg check in
+sk_msg_recvmsg()"), we change last sg check to sg_is_last(),
+but in sockmap redirection case (without stream_parser/stream_verdict/
+skb_verdict), we did not mark the end of the scatterlist. Check the
+sk_msg_alloc, sk_msg_page_add, and bpf_msg_push_data functions, they all
+do not mark the end of sg. They are expected to use sg.end for end
+judgment. So the judgment of '(i != msg_rx->sg.end)' is added back here.
 
-Signed-off-by: Bastien Nocera <hadess@hadess.net>
+Fixes: 9974d37ea75f ("skmsg: Fix invalid last sg check in sk_msg_recvmsg()")
+Signed-off-by: Liu Jian <liujian56@huawei.com>
 ---
- drivers/usb/core/usb.c | 51 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
+v1->v2: change fix commit info in fixes tag and commit message.
+ net/core/skmsg.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-index 2f71636af6e1..ca394848a51e 100644
---- a/drivers/usb/core/usb.c
-+++ b/drivers/usb/core/usb.c
-@@ -38,6 +38,8 @@
- #include <linux/workqueue.h>
- #include <linux/debugfs.h>
- #include <linux/usb/of.h>
-+#include <linux/btf.h>
-+#include <linux/btf_ids.h>
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index 81627892bdd4..385ae23580a5 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -462,7 +462,7 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
  
- #include <asm/io.h>
- #include <linux/scatterlist.h>
-@@ -438,6 +440,41 @@ static int usb_dev_uevent(struct device *dev, struct kobj_uevent_env *env)
- 	return 0;
- }
+ 			if (copied == len)
+ 				break;
+-		} while (!sg_is_last(sge));
++		} while ((i != msg_rx->sg.end) && !sg_is_last(sge));
  
-+struct usb_revoke_match {
-+	int busnum, devnum; /* -1 to match all devices */
-+	int euid; /* -1 to match all users */
-+};
-+
-+static int
-+__usb_revoke(struct usb_device *udev, void *data)
-+{
-+	struct usb_revoke_match *match = data;
-+
-+	if (match->devnum >= 0 && match->busnum >= 0) {
-+		if (match->busnum != udev->bus->busnum ||
-+		    match->devnum != udev->devnum) {
-+			return 0;
-+		}
-+	}
-+
-+	usb_revoke_for_euid(udev, match->euid);
-+	return 0;
-+}
-+
-+noinline int
-+usb_revoke_device(int busnum, int devnum, unsigned int euid)
-+{
-+	struct usb_revoke_match match;
-+
-+	match.busnum = busnum;
-+	match.devnum = devnum;
-+	match.euid = euid;
-+
-+	usb_for_each_dev(&match, __usb_revoke);
-+
-+	return 0;
-+}
-+
- #ifdef	CONFIG_PM
+ 		if (unlikely(peek)) {
+ 			msg_rx = sk_psock_next_msg(psock, msg_rx);
+@@ -472,7 +472,7 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
+ 		}
  
- /* USB device Power-Management thunks.
-@@ -1004,6 +1041,15 @@ static void usb_debugfs_cleanup(void)
- /*
-  * Init
-  */
-+BTF_SET_START(usbdev_kfunc_ids)
-+BTF_ID(func, usb_revoke_device)
-+BTF_SET_END(usbdev_kfunc_ids)
-+
-+static const struct btf_kfunc_id_set usbdev_kfunc_set = {
-+	.owner     = THIS_MODULE,
-+	.check_set = &usbdev_kfunc_ids,
-+};
-+
- static int __init usb_init(void)
- {
- 	int retval;
-@@ -1035,9 +1081,14 @@ static int __init usb_init(void)
- 	if (retval)
- 		goto hub_init_failed;
- 	retval = usb_register_device_driver(&usb_generic_driver, THIS_MODULE);
-+	if (retval)
-+		goto register_failed;
-+	retval = register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &usbdev_kfunc_set);
- 	if (!retval)
- 		goto out;
-+	usb_deregister_device_driver(&usb_generic_driver);
- 
-+register_failed:
- 	usb_hub_cleanup();
- hub_init_failed:
- 	usb_devio_cleanup();
+ 		msg_rx->sg.start = i;
+-		if (!sge->length && sg_is_last(sge)) {
++		if (!sge->length && (i == msg_rx->sg.end || sg_is_last(sge))) {
+ 			msg_rx = sk_psock_dequeue_msg(psock);
+ 			kfree_sk_msg(msg_rx);
+ 		}
 -- 
-2.37.1
+2.17.1
 
