@@ -2,156 +2,135 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87D10C00140
-	for <bpf@archiver.kernel.org>; Wed, 10 Aug 2022 19:06:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFC48C00140
+	for <bpf@archiver.kernel.org>; Wed, 10 Aug 2022 19:10:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230227AbiHJTG3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 10 Aug 2022 15:06:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40140 "EHLO
+        id S232428AbiHJTKK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 10 Aug 2022 15:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230467AbiHJTG2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 10 Aug 2022 15:06:28 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ECF91056A;
-        Wed, 10 Aug 2022 12:06:27 -0700 (PDT)
-Received: from 226.206.1.85.dynamic.wline.res.cust.swisscom.ch ([85.1.206.226] helo=localhost)
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oLr28-000D8B-Vy; Wed, 10 Aug 2022 21:06:25 +0200
-From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     davem@davemloft.net
-Cc:     kuba@kernel.org, pabeni@redhat.com, edumazet@google.com,
-        daniel@iogearbox.net, ast@kernel.org, andrii@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: pull-request: bpf 2022-08-10
-Date:   Wed, 10 Aug 2022 21:06:24 +0200
-Message-Id: <20220810190624.10748-1-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
+        with ESMTP id S230006AbiHJTKK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 10 Aug 2022 15:10:10 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A7720182
+        for <bpf@vger.kernel.org>; Wed, 10 Aug 2022 12:10:09 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27AGuVUE024568
+        for <bpf@vger.kernel.org>; Wed, 10 Aug 2022 12:10:09 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=KbNPiBvyINSqrjYHIHEGwfeuVoLr7livhup3VUtpPAg=;
+ b=BC4GfZkCZkyctEdNlxP8cNHpdmYxrozt/Xv1bEjE0fx6FPHCnj+fvnNnKkQorzLyvxgC
+ p/XyPErNJgOHOz9sZ9gDl5Od3/3chwBWsXouWqQa1Kwpof4UEEWrRKNmZSjEiK0frw2k
+ mTWHPK0CF0Wjw2kB1rwxOed3A0xA2JSd278= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hvdb1b33c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 10 Aug 2022 12:10:09 -0700
+Received: from twshared14818.18.frc3.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Wed, 10 Aug 2022 12:10:08 -0700
+Received: by devbig933.frc1.facebook.com (Postfix, from userid 6611)
+        id 93FCE7E74DAA; Wed, 10 Aug 2022 12:07:30 -0700 (PDT)
+From:   Martin KaFai Lau <kafai@fb.com>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Miller <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, <kernel-team@fb.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Stanislav Fomichev <sdf@google.com>
+Subject: [PATCH v3 bpf-next 01/15] net: Add sk_setsockopt() to take the sk ptr instead of the sock ptr
+Date:   Wed, 10 Aug 2022 12:07:30 -0700
+Message-ID: <20220810190730.2692700-1-kafai@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220810190724.2692127-1-kafai@fb.com>
+References: <20220810190724.2692127-1-kafai@fb.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26623/Wed Aug 10 09:55:07 2022)
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: 1E2o1FbOsNy875lt2kx6GJFiR6VL_ytx
+X-Proofpoint-ORIG-GUID: 1E2o1FbOsNy875lt2kx6GJFiR6VL_ytx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-10_12,2022-08-10_01,2022-06-22_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi David, hi Jakub, hi Paolo, hi Eric,
+A latter patch refactors bpf_setsockopt(SOL_SOCKET) with the
+sock_setsockopt() to avoid code duplication and code
+drift between the two duplicates.
 
-The following pull-request contains BPF updates for your *net* tree.
+The current sock_setsockopt() takes sock ptr as the argument.
+The very first thing of this function is to get back the sk ptr
+by 'sk =3D sock->sk'.
 
-We've added 23 non-merge commits during the last 7 day(s) which contain
-a total of 19 files changed, 424 insertions(+), 35 deletions(-).
+bpf_setsockopt() could be called when the sk does not have
+the sock ptr created.  Meaning sk->sk_socket is NULL.  For example,
+when a passive tcp connection has just been established but has yet
+been accept()-ed.  Thus, it cannot use the sock_setsockopt(sk->sk_socket)
+or else it will pass a NULL ptr.
 
-The main changes are:
+This patch moves all sock_setsockopt implementation to the newly
+added sk_setsockopt().  The new sk_setsockopt() takes a sk ptr
+and immediately gets the sock ptr by 'sock =3D sk->sk_socket'
 
-1) Several fixes for BPF map iterator such as UAFs along with selftests, from Hou Tao.
+The existing sock_setsockopt(sock) is changed to call
+sk_setsockopt(sock->sk).  All existing callers have both sock->sk
+and sk->sk_socket pointer.
 
-2) Fix BPF syscall program's {copy,strncpy}_from_bpfptr() to not fault, from Jinghao Jia.
+The latter patch will make bpf_setsockopt(SOL_SOCKET) call
+sk_setsockopt(sk) directly.  The bpf_setsockopt(SOL_SOCKET) does
+not use the optnames that require sk->sk_socket, so it will
+be safe.
 
-3) Reject BPF syscall programs calling BPF_PROG_RUN, from Alexei Starovoitov and YiFei Zhu.
+Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+---
+ net/core/sock.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-4) Fix attach_btf_obj_id info to pick proper target BTF, from Stanislav Fomichev.
+diff --git a/net/core/sock.c b/net/core/sock.c
+index 4cb957d934a2..20269c37ab3b 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -1041,12 +1041,12 @@ static int sock_reserve_memory(struct sock *sk, i=
+nt bytes)
+  *	at the socket level. Everything here is generic.
+  */
+=20
+-int sock_setsockopt(struct socket *sock, int level, int optname,
+-		    sockptr_t optval, unsigned int optlen)
++static int sk_setsockopt(struct sock *sk, int level, int optname,
++			 sockptr_t optval, unsigned int optlen)
+ {
+ 	struct so_timestamping timestamping;
++	struct socket *sock =3D sk->sk_socket;
+ 	struct sock_txtime sk_txtime;
+-	struct sock *sk =3D sock->sk;
+ 	int val;
+ 	int valbool;
+ 	struct linger ling;
+@@ -1499,6 +1499,13 @@ int sock_setsockopt(struct socket *sock, int level=
+, int optname,
+ 	release_sock(sk);
+ 	return ret;
+ }
++
++int sock_setsockopt(struct socket *sock, int level, int optname,
++		    sockptr_t optval, unsigned int optlen)
++{
++	return sk_setsockopt(sock->sk, level, optname,
++			     optval, optlen);
++}
+ EXPORT_SYMBOL(sock_setsockopt);
+=20
+ static const struct cred *sk_get_peer_cred(struct sock *sk)
+--=20
+2.30.2
 
-5) BPF design Q/A doc update to clarify what is not stable ABI, from Paul E. McKenney.
-
-6) Fix BPF map's prealloc_lru_pop to not reinitialize, from Kumar Kartikeya Dwivedi.
-
-7) Fix bpf_trampoline_put to avoid leaking ftrace hash, from Jiri Olsa.
-
-8) Fix arm64 JIT to address sparse errors around BPF trampoline, from Xu Kuohai.
-
-9) Fix arm64 JIT to use kvcalloc instead of kcalloc for internal program address
-   offset buffer, from Aijun Sun.
-
-Please consider pulling these changes from:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
-
-Thanks a lot!
-
-Also thanks to reporters, reviewers and testers of commits in this pull-request:
-
-Hao Luo, Jean-Philippe Brucker, kernel test robot, Martin KaFai Lau, Mat 
-Martineau, Song Liu, YiFei Zhu, Yonghong Song
-
-----------------------------------------------------------------
-
-The following changes since commit 4ae97cae07e15d41e5c0ebabba64c6eefdeb0bbe:
-
-  nfp: ethtool: fix the display error of `ethtool -m DEVNAME` (2022-08-03 19:20:54 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git 
-
-for you to fetch changes up to e7c677bdd03d54e9a1bafcaf1faf5c573a506bba:
-
-  Merge branch 'fixes for bpf map iterator' (2022-08-10 10:12:49 -0700)
-
-----------------------------------------------------------------
-Aijun Sun (1):
-      bpf, arm64: Allocate program buffer using kvcalloc instead of kcalloc
-
-Alexei Starovoitov (3):
-      Merge branch 'Don't reinit map value in prealloc_lru_pop'
-      bpf: Disallow bpf programs call prog_run command.
-      Merge branch 'fixes for bpf map iterator'
-
-Hou Tao (9):
-      bpf: Acquire map uref in .init_seq_private for array map iterator
-      bpf: Acquire map uref in .init_seq_private for hash map iterator
-      bpf: Acquire map uref in .init_seq_private for sock local storage map iterator
-      bpf: Acquire map uref in .init_seq_private for sock{map,hash} iterator
-      bpf: Check the validity of max_rdwr_access for sock local storage map iterator
-      bpf: Only allow sleepable program for resched-able iterator
-      selftests/bpf: Add tests for reading a dangling map iter fd
-      selftests/bpf: Add write tests for sk local storage map iterator
-      selftests/bpf: Ensure sleepable program is rejected by hash map iter
-
-Jinghao Jia (1):
-      BPF: Fix potential bad pointer dereference in bpf_sys_bpf()
-
-Jiri Olsa (2):
-      bpf: Cleanup ftrace hash in bpf_trampoline_put
-      mptcp, btf: Add struct mptcp_sock definition when CONFIG_MPTCP is disabled
-
-Kumar Kartikeya Dwivedi (3):
-      bpf: Allow calling bpf_prog_test kfuncs in tracing programs
-      bpf: Don't reinit map value in prealloc_lru_pop
-      selftests/bpf: Add test for prealloc_lru_pop bug
-
-Paul E. McKenney (3):
-      bpf: Update bpf_design_QA.rst to clarify that kprobes is not ABI
-      bpf: Update bpf_design_QA.rst to clarify that attaching to functions is not ABI
-      bpf: Update bpf_design_QA.rst to clarify that BTF_ID does not ABIify a function
-
-Stanislav Fomichev (2):
-      bpf: Use proper target btf when exporting attach_btf_obj_id
-      selftests/bpf: Excercise bpf_obj_get_info_by_fd for bpf2bpf
-
-Xu Kuohai (1):
-      bpf, arm64: Fix bpf trampoline instruction endianness
-
- Documentation/bpf/bpf_design_QA.rst                |  25 +++++
- arch/arm64/net/bpf_jit_comp.c                      |  16 +--
- include/linux/bpfptr.h                             |   8 +-
- include/net/mptcp.h                                |   4 +
- kernel/bpf/arraymap.c                              |   6 ++
- kernel/bpf/bpf_iter.c                              |  11 +-
- kernel/bpf/hashtab.c                               |   8 +-
- kernel/bpf/syscall.c                               |  27 +++--
- kernel/bpf/trampoline.c                            |   5 +-
- net/bpf/test_run.c                                 |   1 +
- net/core/bpf_sk_storage.c                          |  12 ++-
- net/core/sock_map.c                                |  20 +++-
- tools/lib/bpf/skel_internal.h                      |   4 +-
- tools/testing/selftests/bpf/prog_tests/bpf_iter.c  | 116 ++++++++++++++++++++-
- .../selftests/bpf/prog_tests/fexit_bpf2bpf.c       |  95 +++++++++++++++++
- tools/testing/selftests/bpf/prog_tests/lru_bug.c   |  21 ++++
- .../selftests/bpf/progs/bpf_iter_bpf_hash_map.c    |   9 ++
- .../bpf/progs/bpf_iter_bpf_sk_storage_map.c        |  22 +++-
- tools/testing/selftests/bpf/progs/lru_bug.c        |  49 +++++++++
- 19 files changed, 424 insertions(+), 35 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/lru_bug.c
- create mode 100644 tools/testing/selftests/bpf/progs/lru_bug.c
