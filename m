@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 196E2C25B07
-	for <bpf@archiver.kernel.org>; Wed, 10 Aug 2022 19:11:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79572C19F2A
+	for <bpf@archiver.kernel.org>; Wed, 10 Aug 2022 19:11:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232515AbiHJTLN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 10 Aug 2022 15:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44228 "EHLO
+        id S232538AbiHJTLO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 10 Aug 2022 15:11:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232543AbiHJTLM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 10 Aug 2022 15:11:12 -0400
+        with ESMTP id S232561AbiHJTLN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 10 Aug 2022 15:11:13 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C181C21271
-        for <bpf@vger.kernel.org>; Wed, 10 Aug 2022 12:11:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6262127B
+        for <bpf@vger.kernel.org>; Wed, 10 Aug 2022 12:11:12 -0700 (PDT)
 Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27AGuaxR023115
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27AGuae1023127
         for <bpf@vger.kernel.org>; Wed, 10 Aug 2022 12:11:11 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=+bXiOIjkNlIltDmgPAljzsr7ZmN0E3YeaT4u7w/0M+c=;
- b=Euor6hK6oVKVOZBlzbouPbtZEUTimrZKcTpOEEZYVQj3gblAEj5l5JeUArqYclWiyw+c
- BvQpPiWVWzyGyAV63lO/pSg9ASz5u3Lhw2shp+cNAD236nHaRZuNW3UN3xtt3j48R9jh
- 9Pg3OGuOwuQSKdfNg3oQREp9BfCSkdtrPB8= 
+ bh=ujDSiFNfrZwzZNRg+VBbDUDuH+e7gyExwa8XMjgbvIw=;
+ b=MQs6VImvd8mq+m4eO/s/T3ObcgCr2OuP+U2khAX0IY3iJdNqx87O++TL2/hlbuvRPEG8
+ wOqYBJLBg5UOFf9MUpvu3Yy4cf48xRHlUO/GxpxbJU1492/4CidlQ4H8+7ULxfRt+eZN
+ 4fjqhf8M0hG2PQIy2Y80RkK3glEPlUE7MkM= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hvdbau289-13
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hvdbau2ak-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Wed, 10 Aug 2022 12:11:11 -0700
-Received: from twshared30313.14.frc2.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+Received: from twshared16418.24.frc3.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 10 Aug 2022 12:11:08 -0700
+ 15.1.2375.28; Wed, 10 Aug 2022 12:11:10 -0700
 Received: by devbig933.frc1.facebook.com (Postfix, from userid 6611)
-        id 98EEF7E75409; Wed, 10 Aug 2022 12:08:09 -0700 (PDT)
+        id 8C1397E75461; Wed, 10 Aug 2022 12:08:30 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -44,9 +44,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>, <kernel-team@fb.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Stanislav Fomichev <sdf@google.com>
-Subject: [PATCH v3 bpf-next 07/15] bpf: Initialize the bpf_run_ctx in bpf_iter_run_prog()
-Date:   Wed, 10 Aug 2022 12:08:09 -0700
-Message-ID: <20220810190809.2698442-1-kafai@fb.com>
+Subject: [PATCH v3 bpf-next 10/15] bpf: Refactor bpf specific tcp optnames to a new function
+Date:   Wed, 10 Aug 2022 12:08:30 -0700
+Message-ID: <20220810190830.2699795-1-kafai@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220810190724.2692127-1-kafai@fb.com>
 References: <20220810190724.2692127-1-kafai@fb.com>
@@ -54,8 +54,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: XvxtznLx13w6JIDt-TcyuGdFHfuempf0
-X-Proofpoint-GUID: XvxtznLx13w6JIDt-TcyuGdFHfuempf0
+X-Proofpoint-ORIG-GUID: sxyVyhSilmKlZD19kHx266mQqanRodCz
+X-Proofpoint-GUID: sxyVyhSilmKlZD19kHx266mQqanRodCz
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-10_12,2022-08-10_01,2022-06-22_01
@@ -63,60 +63,130 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The bpf-iter-prog for tcp and unix sk can do bpf_setsockopt()
-which needs has_current_bpf_ctx() to decide if it is called by a
-bpf prog.  This patch initializes the bpf_run_ctx in
-bpf_iter_run_prog() for the has_current_bpf_ctx() to use.
+The patch moves all bpf specific tcp optnames (TCP_BPF_XXX)
+to a new function bpf_sol_tcp_setsockopt().  This will make
+the next patch easier to follow.
 
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- include/linux/bpf.h   | 2 +-
- kernel/bpf/bpf_iter.c | 5 +++++
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ net/core/filter.c | 79 ++++++++++++++++++++++++++++++-----------------
+ 1 file changed, 50 insertions(+), 29 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 0a600b2013cc..15ab980e9525 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1967,7 +1967,7 @@ static inline bool unprivileged_ebpf_enabled(void)
+diff --git a/net/core/filter.c b/net/core/filter.c
+index d1f9f8360f60..200e79a1fbfd 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -5049,6 +5049,52 @@ static int sol_socket_setsockopt(struct sock *sk, =
+int optname,
+ 			     KERNEL_SOCKPTR(optval), optlen);
  }
 =20
- /* Not all bpf prog type has the bpf_ctx.
-- * Only trampoline and cgroup-bpf have it.
-+ * Only trampoline, cgroup-bpf, and iter have it.
-  * For the bpf prog type that has initialized the bpf_ctx,
-  * this function can be used to decide if a kernel function
-  * is called by a bpf program.
-diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-index 4b112aa8bba3..6476b2c03527 100644
---- a/kernel/bpf/bpf_iter.c
-+++ b/kernel/bpf/bpf_iter.c
-@@ -685,19 +685,24 @@ struct bpf_prog *bpf_iter_get_info(struct bpf_iter_=
-meta *meta, bool in_stop)
-=20
- int bpf_iter_run_prog(struct bpf_prog *prog, void *ctx)
++static int bpf_sol_tcp_setsockopt(struct sock *sk, int optname,
++				  char *optval, int optlen)
++{
++	struct tcp_sock *tp =3D tcp_sk(sk);
++	unsigned long timeout;
++	int val;
++
++	if (optlen !=3D sizeof(int))
++		return -EINVAL;
++
++	val =3D *(int *)optval;
++
++	/* Only some options are supported */
++	switch (optname) {
++	case TCP_BPF_IW:
++		if (val <=3D 0 || tp->data_segs_out > tp->syn_data)
++			return -EINVAL;
++		tcp_snd_cwnd_set(tp, val);
++		break;
++	case TCP_BPF_SNDCWND_CLAMP:
++		if (val <=3D 0)
++			return -EINVAL;
++		tp->snd_cwnd_clamp =3D val;
++		tp->snd_ssthresh =3D val;
++		break;
++	case TCP_BPF_DELACK_MAX:
++		timeout =3D usecs_to_jiffies(val);
++		if (timeout > TCP_DELACK_MAX ||
++		    timeout < TCP_TIMEOUT_MIN)
++			return -EINVAL;
++		inet_csk(sk)->icsk_delack_max =3D timeout;
++		break;
++	case TCP_BPF_RTO_MIN:
++		timeout =3D usecs_to_jiffies(val);
++		if (timeout > TCP_RTO_MIN ||
++		    timeout < TCP_TIMEOUT_MIN)
++			return -EINVAL;
++		inet_csk(sk)->icsk_rto_min =3D timeout;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
+ static int __bpf_setsockopt(struct sock *sk, int level, int optname,
+ 			    char *optval, int optlen)
  {
-+	struct bpf_run_ctx run_ctx, *old_run_ctx;
- 	int ret;
+@@ -5103,6 +5149,10 @@ static int __bpf_setsockopt(struct sock *sk, int l=
+evel, int optname,
+ 		}
+ 	} else if (IS_ENABLED(CONFIG_INET) && level =3D=3D SOL_TCP &&
+ 		   sk->sk_prot->setsockopt =3D=3D tcp_setsockopt) {
++		if (optname >=3D TCP_BPF_IW)
++			return bpf_sol_tcp_setsockopt(sk, optname,
++						      optval, optlen);
++
+ 		if (optname =3D=3D TCP_CONGESTION) {
+ 			char name[TCP_CA_NAME_MAX];
 =20
- 	if (prog->aux->sleepable) {
- 		rcu_read_lock_trace();
- 		migrate_disable();
- 		might_fault();
-+		old_run_ctx =3D bpf_set_run_ctx(&run_ctx);
- 		ret =3D bpf_prog_run(prog, ctx);
-+		bpf_reset_run_ctx(old_run_ctx);
- 		migrate_enable();
- 		rcu_read_unlock_trace();
- 	} else {
- 		rcu_read_lock();
- 		migrate_disable();
-+		old_run_ctx =3D bpf_set_run_ctx(&run_ctx);
- 		ret =3D bpf_prog_run(prog, ctx);
-+		bpf_reset_run_ctx(old_run_ctx);
- 		migrate_enable();
- 		rcu_read_unlock();
- 	}
+@@ -5113,7 +5163,6 @@ static int __bpf_setsockopt(struct sock *sk, int le=
+vel, int optname,
+ 		} else {
+ 			struct inet_connection_sock *icsk =3D inet_csk(sk);
+ 			struct tcp_sock *tp =3D tcp_sk(sk);
+-			unsigned long timeout;
+=20
+ 			if (optlen !=3D sizeof(int))
+ 				return -EINVAL;
+@@ -5121,34 +5170,6 @@ static int __bpf_setsockopt(struct sock *sk, int l=
+evel, int optname,
+ 			val =3D *((int *)optval);
+ 			/* Only some options are supported */
+ 			switch (optname) {
+-			case TCP_BPF_IW:
+-				if (val <=3D 0 || tp->data_segs_out > tp->syn_data)
+-					ret =3D -EINVAL;
+-				else
+-					tcp_snd_cwnd_set(tp, val);
+-				break;
+-			case TCP_BPF_SNDCWND_CLAMP:
+-				if (val <=3D 0) {
+-					ret =3D -EINVAL;
+-				} else {
+-					tp->snd_cwnd_clamp =3D val;
+-					tp->snd_ssthresh =3D val;
+-				}
+-				break;
+-			case TCP_BPF_DELACK_MAX:
+-				timeout =3D usecs_to_jiffies(val);
+-				if (timeout > TCP_DELACK_MAX ||
+-				    timeout < TCP_TIMEOUT_MIN)
+-					return -EINVAL;
+-				inet_csk(sk)->icsk_delack_max =3D timeout;
+-				break;
+-			case TCP_BPF_RTO_MIN:
+-				timeout =3D usecs_to_jiffies(val);
+-				if (timeout > TCP_RTO_MIN ||
+-				    timeout < TCP_TIMEOUT_MIN)
+-					return -EINVAL;
+-				inet_csk(sk)->icsk_rto_min =3D timeout;
+-				break;
+ 			case TCP_SAVE_SYN:
+ 				if (val < 0 || val > 1)
+ 					ret =3D -EINVAL;
 --=20
 2.30.2
 
