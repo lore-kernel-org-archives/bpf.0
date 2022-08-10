@@ -2,24 +2,24 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 409A3C00140
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85D39C3F6B0
 	for <bpf@archiver.kernel.org>; Wed, 10 Aug 2022 07:48:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231403AbiHJHsI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 10 Aug 2022 03:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41046 "EHLO
+        id S231445AbiHJHsJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 10 Aug 2022 03:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231405AbiHJHri (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 10 Aug 2022 03:47:38 -0400
+        with ESMTP id S231460AbiHJHr6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 10 Aug 2022 03:47:58 -0400
 Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087AC6E89E
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6520E6F559
         for <bpf@vger.kernel.org>; Wed, 10 Aug 2022 00:47:36 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4M2hnw59c5z6T8mc
-        for <bpf@vger.kernel.org>; Wed, 10 Aug 2022 15:46:12 +0800 (CST)
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4M2hnt54JPz6T8cN
+        for <bpf@vger.kernel.org>; Wed, 10 Aug 2022 15:46:10 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP2 (Coremail) with SMTP id Syh0CgDHsb2NYvNiIKmmAA--.61804S13;
-        Wed, 10 Aug 2022 15:47:35 +0800 (CST)
+        by APP2 (Coremail) with SMTP id Syh0CgDHsb2NYvNiIKmmAA--.61804S10;
+        Wed, 10 Aug 2022 15:47:33 +0800 (CST)
 From:   Hou Tao <houtao@huaweicloud.com>
 To:     bpf@vger.kernel.org, Yonghong Song <yhs@fb.com>
 Cc:     Andrii Nakryiko <andrii@kernel.org>,
@@ -34,18 +34,18 @@ Cc:     Andrii Nakryiko <andrii@kernel.org>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
         Lorenz Bauer <oss@lmb.io>, houtao1@huawei.com
-Subject: [PATCH bpf v2 9/9] selftests/bpf: Ensure sleepable program is rejected by hash map iter
-Date:   Wed, 10 Aug 2022 16:05:38 +0800
-Message-Id: <20220810080538.1845898-10-houtao@huaweicloud.com>
+Subject: [PATCH bpf v2 6/9] bpf: Only allow sleepable program for resched-able iterator
+Date:   Wed, 10 Aug 2022 16:05:35 +0800
+Message-Id: <20220810080538.1845898-7-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20220810080538.1845898-1-houtao@huaweicloud.com>
 References: <20220810080538.1845898-1-houtao@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgDHsb2NYvNiIKmmAA--.61804S13
-X-Coremail-Antispam: 1UD129KBjvJXoW7WF4kuw4xuw1DGrykAw45Awb_yoW8CrWUpa
-        s7Xryjkr1fGanrXrnxGrsFgryrtF1kX3yUGF4fKry5Zr4DX3s7Wr1IgF10qF98WrZYvrna
-        v34Sk34rCry8ZwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: Syh0CgDHsb2NYvNiIKmmAA--.61804S10
+X-Coremail-Antispam: 1UD129KBjvJXoW7ury5KryktrW3Zw4rtFWfuFg_yoW8urWUpF
+        Z3WryUAr48Xws7JF4DAa1DuFy5Aw18Wa43WFs7WrsIyanru39rWrWrtF129Fn0qry0yFZa
+        yFWIk34jy3yUZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUUBSb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
         6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
         Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -57,7 +57,7 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7WF4kuw4xuw1DGrykAw45Awb_yoW8CrWUpa
         Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
         6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0x
         vE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAI
-        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2js
+        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
         IEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUFgAwUUUUU
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 X-CFilter-Loop: Reflected
@@ -67,49 +67,58 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Hou Tao <houtao1@huawei.com>
 
-Add a test to ensure sleepable program is rejected by hash map iterator.
+When a sleepable program is attached to a hash map iterator, might_fault()
+will report "BUG: sleeping function called from invalid context..." if
+CONFIG_DEBUG_ATOMIC_SLEEP is enabled. The reason is that rcu_read_lock()
+is held in bpf_hash_map_seq_next() and won't be released until all elements
+are traversed or bpf_hash_map_seq_stop() is called.
+
+Fixing it by reusing BPF_ITER_RESCHED to indicate that only non-sleepable
+program is allowed for iterator without BPF_ITER_RESCHED. We can revise
+bpf_iter_link_attach() later if there are other conditions which may
+cause rcu_read_lock() or spin_lock() issues.
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 Acked-by: Yonghong Song <yhs@fb.com>
 ---
- tools/testing/selftests/bpf/prog_tests/bpf_iter.c        | 6 ++++++
- .../testing/selftests/bpf/progs/bpf_iter_bpf_hash_map.c  | 9 +++++++++
- 2 files changed, 15 insertions(+)
+ kernel/bpf/bpf_iter.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-index 1571a6586b3b..e89685bd587c 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-@@ -679,6 +679,12 @@ static void test_bpf_hash_map(void)
- 			goto out;
- 	}
- 
-+	/* Sleepable program is prohibited for hash map iterator */
-+	linfo.map.map_fd = map_fd;
-+	link = bpf_program__attach_iter(skel->progs.sleepable_dummy_dump, &opts);
-+	if (!ASSERT_ERR_PTR(link, "attach_sleepable_prog_to_iter"))
-+		goto out;
-+
- 	linfo.map.map_fd = map_fd;
- 	link = bpf_program__attach_iter(skel->progs.dump_bpf_hash_map, &opts);
- 	if (!ASSERT_OK_PTR(link, "attach_iter"))
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_hash_map.c b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_hash_map.c
-index 0aa3cd34cbe3..d7a69217fb68 100644
---- a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_hash_map.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_hash_map.c
-@@ -112,3 +112,12 @@ int dump_bpf_hash_map(struct bpf_iter__bpf_map_elem *ctx)
- 
- 	return 0;
+diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
+index 4b112aa8bba3..97bb57493ed5 100644
+--- a/kernel/bpf/bpf_iter.c
++++ b/kernel/bpf/bpf_iter.c
+@@ -68,13 +68,18 @@ static void bpf_iter_done_stop(struct seq_file *seq)
+ 	iter_priv->done_stop = true;
  }
-+
-+SEC("iter.s/bpf_map_elem")
-+int sleepable_dummy_dump(struct bpf_iter__bpf_map_elem *ctx)
+ 
++static inline bool bpf_iter_target_support_resched(const struct bpf_iter_target_info *tinfo)
 +{
-+	if (ctx->meta->seq_num == 0)
-+		BPF_SEQ_PRINTF(ctx->meta->seq, "map dump starts\n");
-+
-+	return 0;
++	return tinfo->reg_info->feature & BPF_ITER_RESCHED;
 +}
++
+ static bool bpf_iter_support_resched(struct seq_file *seq)
+ {
+ 	struct bpf_iter_priv_data *iter_priv;
+ 
+ 	iter_priv = container_of(seq->private, struct bpf_iter_priv_data,
+ 				 target_private);
+-	return iter_priv->tinfo->reg_info->feature & BPF_ITER_RESCHED;
++	return bpf_iter_target_support_resched(iter_priv->tinfo);
+ }
+ 
+ /* maximum visited objects before bailing out */
+@@ -542,6 +547,10 @@ int bpf_iter_link_attach(const union bpf_attr *attr, bpfptr_t uattr,
+ 	if (!tinfo)
+ 		return -ENOENT;
+ 
++	/* Only allow sleepable program for resched-able iterator */
++	if (prog->aux->sleepable && !bpf_iter_target_support_resched(tinfo))
++		return -EINVAL;
++
+ 	link = kzalloc(sizeof(*link), GFP_USER | __GFP_NOWARN);
+ 	if (!link)
+ 		return -ENOMEM;
 -- 
 2.29.2
 
