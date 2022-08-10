@@ -2,24 +2,24 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5199FC25B08
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 014EAC2BB45
 	for <bpf@archiver.kernel.org>; Wed, 10 Aug 2022 07:48:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbiHJHsE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 10 Aug 2022 03:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40938 "EHLO
+        id S231387AbiHJHsG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 10 Aug 2022 03:48:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231360AbiHJHre (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 10 Aug 2022 03:47:34 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68CB6E8BB
-        for <bpf@vger.kernel.org>; Wed, 10 Aug 2022 00:47:31 -0700 (PDT)
+        with ESMTP id S231378AbiHJHrg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 10 Aug 2022 03:47:36 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B8B6E8A8
+        for <bpf@vger.kernel.org>; Wed, 10 Aug 2022 00:47:34 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4M2hnp62fVz6S3gd
-        for <bpf@vger.kernel.org>; Wed, 10 Aug 2022 15:46:06 +0800 (CST)
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4M2hp51mQPzlDgk
+        for <bpf@vger.kernel.org>; Wed, 10 Aug 2022 15:46:21 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP2 (Coremail) with SMTP id Syh0CgDHsb2NYvNiIKmmAA--.61804S4;
-        Wed, 10 Aug 2022 15:47:27 +0800 (CST)
+        by APP2 (Coremail) with SMTP id Syh0CgDHsb2NYvNiIKmmAA--.61804S8;
+        Wed, 10 Aug 2022 15:47:31 +0800 (CST)
 From:   Hou Tao <houtao@huaweicloud.com>
 To:     bpf@vger.kernel.org, Yonghong Song <yhs@fb.com>
 Cc:     Andrii Nakryiko <andrii@kernel.org>,
@@ -34,28 +34,31 @@ Cc:     Andrii Nakryiko <andrii@kernel.org>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
         Lorenz Bauer <oss@lmb.io>, houtao1@huawei.com
-Subject: [PATCH bpf v2 0/9] fixes for bpf map iterator
-Date:   Wed, 10 Aug 2022 16:05:29 +0800
-Message-Id: <20220810080538.1845898-1-houtao@huaweicloud.com>
+Subject: [PATCH bpf v2 4/9] bpf: Acquire map uref in .init_seq_private for sock{map,hash} iterator
+Date:   Wed, 10 Aug 2022 16:05:33 +0800
+Message-Id: <20220810080538.1845898-5-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20220810080538.1845898-1-houtao@huaweicloud.com>
+References: <20220810080538.1845898-1-houtao@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgDHsb2NYvNiIKmmAA--.61804S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7ArWrGr47Ww1UGw17tw1xuFg_yoW8ur1xpr
-        y8JFW5Kr1xAF4xZrnrAa129a45A3yrXa4qqFs5Ar15Cw4DXFy5WrW8KFy3uFy3XFn8Xr1S
-        y3409F95Ca4xZFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
-        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI
-        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
-        IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
-        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
+X-CM-TRANSID: Syh0CgDHsb2NYvNiIKmmAA--.61804S8
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFyUKFyfGr4rWr1DJF45Awb_yoW8KFW8pF
+        yFyr4qkw48XF4j9Fn8Ja9rZwnayFn3Ww1jqFn3Jas5urnrWr4UWF18tFyIkF45Ary8Kry3
+        Jrn29F18J3y7C3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
+        14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
+        xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
+        z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2
+        Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+        6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0x
+        vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY
+        6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
+        CY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU13l1DUUUUU==
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 X-CFilter-Loop: Reflected
 Precedence: bulk
@@ -64,58 +67,78 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Hou Tao <houtao1@huawei.com>
 
-Hi,
+sock_map_iter_attach_target() acquires a map uref, and the uref may be
+released before or in the middle of iterating map elements. For example,
+the uref could be released in sock_map_iter_detach_target() as part of
+bpf_link_release(), or could be released in bpf_map_put_with_uref() as
+part of bpf_map_release().
 
-The patchset constitues three fixes for bpf map iterator:
+Fixing it by acquiring an extra map uref in .init_seq_private and
+releasing it in .fini_seq_private.
 
-(1) patch 1~4: fix user-after-free during reading map iterator fd
-It is possible when both the corresponding link fd and map fd are
-closed bfore reading the iterator fd. I had squashed these four patches
-into one, but it was not friendly for stable backport, so I break these
-fixes into four single patches in the end. Patch 7 is its testing patch.
+Fixes: 0365351524d7 ("net: Allow iterating sockmap and sockhash")
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+Acked-by: Yonghong Song <yhs@fb.com>
+---
+ net/core/sock_map.c | 20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
 
-(2) patch 5: fix invalidity check for values in sk local storage map
-Patch 8 adds two tests for it.
-
-(3) patch 6: reject sleepable program for non-resched map iterator
-Patch 9 add a test for it.
-
-Please check the individual patches for more details. And comments are
-always welcome.
-
-Regards,
-Tao
-
-Changes since v2:
-* patch 1~6: update commit messages (from Yonghong & Martin)
-* patch 7: add more detailed comments (from Yonghong)
-* patch 8: use NULL directly instead of (void *)0
-
-v1: https://lore.kernel.org/bpf/20220806074019.2756957-1-houtao@huaweicloud.com
-
-Hou Tao (9):
-  bpf: Acquire map uref in .init_seq_private for array map iterator
-  bpf: Acquire map uref in .init_seq_private for hash map iterator
-  bpf: Acquire map uref in .init_seq_private for sock local storage map
-    iterator
-  bpf: Acquire map uref in .init_seq_private for sock{map,hash} iterator
-  bpf: Check the validity of max_rdwr_access for sock local storage map
-    iterator
-  bpf: Only allow sleepable program for resched-able iterator
-  selftests/bpf: Add tests for reading a dangling map iter fd
-  selftests/bpf: Add write tests for sk local storage map iterator
-  selftests/bpf: Ensure sleepable program is rejected by hash map iter
-
- kernel/bpf/arraymap.c                         |   6 +
- kernel/bpf/bpf_iter.c                         |  11 +-
- kernel/bpf/hashtab.c                          |   2 +
- net/core/bpf_sk_storage.c                     |  12 +-
- net/core/sock_map.c                           |  20 ++-
- .../selftests/bpf/prog_tests/bpf_iter.c       | 116 +++++++++++++++++-
- .../bpf/progs/bpf_iter_bpf_hash_map.c         |   9 ++
- .../bpf/progs/bpf_iter_bpf_sk_storage_map.c   |  22 +++-
- 8 files changed, 191 insertions(+), 7 deletions(-)
-
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index 028813dfecb0..9a9fb9487d63 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -783,13 +783,22 @@ static int sock_map_init_seq_private(void *priv_data,
+ {
+ 	struct sock_map_seq_info *info = priv_data;
+ 
++	bpf_map_inc_with_uref(aux->map);
+ 	info->map = aux->map;
+ 	return 0;
+ }
+ 
++static void sock_map_fini_seq_private(void *priv_data)
++{
++	struct sock_map_seq_info *info = priv_data;
++
++	bpf_map_put_with_uref(info->map);
++}
++
+ static const struct bpf_iter_seq_info sock_map_iter_seq_info = {
+ 	.seq_ops		= &sock_map_seq_ops,
+ 	.init_seq_private	= sock_map_init_seq_private,
++	.fini_seq_private	= sock_map_fini_seq_private,
+ 	.seq_priv_size		= sizeof(struct sock_map_seq_info),
+ };
+ 
+@@ -1369,18 +1378,27 @@ static const struct seq_operations sock_hash_seq_ops = {
+ };
+ 
+ static int sock_hash_init_seq_private(void *priv_data,
+-				     struct bpf_iter_aux_info *aux)
++				      struct bpf_iter_aux_info *aux)
+ {
+ 	struct sock_hash_seq_info *info = priv_data;
+ 
++	bpf_map_inc_with_uref(aux->map);
+ 	info->map = aux->map;
+ 	info->htab = container_of(aux->map, struct bpf_shtab, map);
+ 	return 0;
+ }
+ 
++static void sock_hash_fini_seq_private(void *priv_data)
++{
++	struct sock_hash_seq_info *info = priv_data;
++
++	bpf_map_put_with_uref(info->map);
++}
++
+ static const struct bpf_iter_seq_info sock_hash_iter_seq_info = {
+ 	.seq_ops		= &sock_hash_seq_ops,
+ 	.init_seq_private	= sock_hash_init_seq_private,
++	.fini_seq_private	= sock_hash_fini_seq_private,
+ 	.seq_priv_size		= sizeof(struct sock_hash_seq_info),
+ };
+ 
 -- 
 2.29.2
 
