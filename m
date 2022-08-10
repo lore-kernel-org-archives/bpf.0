@@ -2,93 +2,97 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3CCEC00140
-	for <bpf@archiver.kernel.org>; Wed, 10 Aug 2022 18:35:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21A50C00140
+	for <bpf@archiver.kernel.org>; Wed, 10 Aug 2022 18:43:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232673AbiHJSew convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 10 Aug 2022 14:34:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39396 "EHLO
+        id S229924AbiHJSnm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 10 Aug 2022 14:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233772AbiHJSeh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 10 Aug 2022 14:34:37 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0C08C47A
-        for <bpf@vger.kernel.org>; Wed, 10 Aug 2022 11:34:33 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27AGuS1A003179
-        for <bpf@vger.kernel.org>; Wed, 10 Aug 2022 11:34:32 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hvdb6asup-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 10 Aug 2022 11:34:32 -0700
-Received: from twshared16308.14.prn3.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 10 Aug 2022 11:34:31 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id A742B1D76C87D; Wed, 10 Aug 2022 11:34:26 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next] libbpf: preserve errno across pr_warn/pr_info/pr_debug
-Date:   Wed, 10 Aug 2022 11:34:25 -0700
-Message-ID: <20220810183425.1998735-1-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: D0zpFhCGFjpa2t_qnDHPb1RPsrMwklba
-X-Proofpoint-GUID: D0zpFhCGFjpa2t_qnDHPb1RPsrMwklba
-Content-Transfer-Encoding: 8BIT
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        with ESMTP id S231286AbiHJSnm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 10 Aug 2022 14:43:42 -0400
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6486BDFE
+        for <bpf@vger.kernel.org>; Wed, 10 Aug 2022 11:43:40 -0700 (PDT)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id 398BD240101
+        for <bpf@vger.kernel.org>; Wed, 10 Aug 2022 20:43:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1660157018; bh=lxSdneT9xc/j7YAZDbzMLwucizn2WLOG5bbXgqLDDUQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=HXyDkRtBjmfRkXm1Reucv/Ul/K8OqPw5pR0Fd10H0WZ7PkDiwVfMhL0quydCxUI5Y
+         dU7NgPhCCB8JwpZ3aAqxCrbrJ7na7Lk8N63MFDDTPBVAtYdUFN+qWAQlsEzl2Ntw5f
+         ou1eIv9NhqJqVfwo/X4Gz+FuDkSv8lEzKMEABaSBTyyN8LQNOyHG9HXXOE6XD76OGR
+         R8f+leIPI93vLO8zEJEU8pCF1zfHvn+DUrSZzWlRtP2oB0k8TjM53qT+7PLgq2TTGK
+         i9jEn4XbOHKOLx51NV4Cu3NtHukR43o2VwjKN8tKWSi5GK6CDZZDZMIDIyqe4lL697
+         fu2PVsLTBEzlg==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4M2zNS0yBPz9rxQ;
+        Wed, 10 Aug 2022 20:43:35 +0200 (CEST)
+Date:   Wed, 10 Aug 2022 18:43:31 +0000
+From:   Daniel =?utf-8?Q?M=C3=BCller?= <deso@posteo.net>
+To:     Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        kernel-team@fb.com
+Subject: Re: [PATCH bpf-next] libbpf: preserve errno across
+ pr_warn/pr_info/pr_debug
+Message-ID: <20220810184331.4hr4ohck7mzr4y5h@muellerd-fedora-PC2BDTX9>
+References: <20220810183425.1998735-1-andrii@kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-10_12,2022-08-10_01,2022-06-22_01
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220810183425.1998735-1-andrii@kernel.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-As suggested in [0], make sure that libbpf_print saves and restored
-errno and as such guaranteed that no matter what actual print callback
-user installs, macros like pr_warn/pr_info/pr_debug are completely
-transparent as far as errno goes.
+On Wed, Aug 10, 2022 at 11:34:25AM -0700, Andrii Nakryiko wrote:
+> As suggested in [0], make sure that libbpf_print saves and restored
+> errno and as such guaranteed that no matter what actual print callback
+> user installs, macros like pr_warn/pr_info/pr_debug are completely
+> transparent as far as errno goes.
+> 
+> While libbpf code is pretty careful about not clobbering important errno
+> values accidentally with pr_warn(), it's a trivial change to make sure
+> that pr_warn can be used anywhere without a risk of clobbering errno.
+> 
+> No functional changes, just future proofing.
+> 
+>   [0] https://github.com/libbpf/libbpf/pull/536
+> 
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
+>  tools/lib/bpf/libbpf.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index f7364ea82ac1..917d975bd4c6 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -223,13 +223,18 @@ __printf(2, 3)
+>  void libbpf_print(enum libbpf_print_level level, const char *format, ...)
+>  {
+>  	va_list args;
+> +	int old_errno;
+>  
+>  	if (!__libbpf_pr)
+>  		return;
+>  
+> +	old_errno = errno;
+> +
+>  	va_start(args, format);
+>  	__libbpf_pr(level, format, args);
+>  	va_end(args);
+> +
+> +	errno = old_errno;
+>  }
+>  
+>  static void pr_perm_msg(int err)
+> -- 
+> 2.30.2
+> 
 
-While libbpf code is pretty careful about not clobbering important errno
-values accidentally with pr_warn(), it's a trivial change to make sure
-that pr_warn can be used anywhere without a risk of clobbering errno.
+The change looks good to me.
 
-No functional changes, just future proofing.
-
-  [0] https://github.com/libbpf/libbpf/pull/536
-
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/lib/bpf/libbpf.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index f7364ea82ac1..917d975bd4c6 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -223,13 +223,18 @@ __printf(2, 3)
- void libbpf_print(enum libbpf_print_level level, const char *format, ...)
- {
- 	va_list args;
-+	int old_errno;
- 
- 	if (!__libbpf_pr)
- 		return;
- 
-+	old_errno = errno;
-+
- 	va_start(args, format);
- 	__libbpf_pr(level, format, args);
- 	va_end(args);
-+
-+	errno = old_errno;
- }
- 
- static void pr_perm_msg(int err)
--- 
-2.30.2
-
+Acked-by: Daniel Müller <deso@posteo.net>
