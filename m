@@ -2,42 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CCD9FC00140
-	for <bpf@archiver.kernel.org>; Wed, 10 Aug 2022 19:11:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55D86C00140
+	for <bpf@archiver.kernel.org>; Wed, 10 Aug 2022 19:11:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232064AbiHJTLI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 10 Aug 2022 15:11:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44092 "EHLO
+        id S232495AbiHJTLN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 10 Aug 2022 15:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbiHJTLH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 10 Aug 2022 15:11:07 -0400
+        with ESMTP id S232515AbiHJTLL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 10 Aug 2022 15:11:11 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF6020F7A
-        for <bpf@vger.kernel.org>; Wed, 10 Aug 2022 12:11:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2022B2124C
+        for <bpf@vger.kernel.org>; Wed, 10 Aug 2022 12:11:11 -0700 (PDT)
 Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27AGueDo023360
-        for <bpf@vger.kernel.org>; Wed, 10 Aug 2022 12:11:06 -0700
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27AGub1l023154
+        for <bpf@vger.kernel.org>; Wed, 10 Aug 2022 12:11:10 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=yRFLwGqk94NaXr4KoX+QqXm4ZYNDFsmpZbu64kueqZ4=;
- b=GEQpx+6zW0EggYzUZfG0//hB7aYK5EC0aKop8sQ+sYtNDAx8BgF6WveKIvpS97ylKudo
- UsuCXt7tZXsuMeeGmiiU5t6LP7zreZ+8ODSYliuliFQumwVzb93pGlId1ldo0q7NZW7h
- AGCnsfifLhSLJbKnXYmsUAAspKEjrVSkLhI= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hvdbau2a4-1
+ bh=oBzZsS9YU5IlPp/uz4kK4qHUrMDYMlhpxpusLRYRTog=;
+ b=OduQfol+rvCpl/gJgoGYkJed3IsqJsQCqJSsxNqq4Wbgzx/cD56Jdt0X02ostWLqSgpa
+ xiRF1VrwiFFkqIPqM9SRlMFe9axY2/Eai2BwgQx66Vy+fcOfaNttbm3PsZ+eAcmHbu8N
+ j4goXdSvvwaA+Uj8s38BypXfq/pKtcWgQmM= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hvdbau28m-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 10 Aug 2022 12:11:06 -0700
-Received: from snc-exhub201.TheFacebook.com (2620:10d:c085:21d::7) by
- snc-exhub204.TheFacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 10 Aug 2022 12:11:05 -0700
-Received: from twshared7570.37.frc1.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 10 Aug 2022 12:11:10 -0700
+Received: from twshared20276.35.frc1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 10 Aug 2022 12:11:04 -0700
+ 15.1.2375.28; Wed, 10 Aug 2022 12:11:07 -0700
 Received: by devbig933.frc1.facebook.com (Postfix, from userid 6611)
-        id A87B57E7539B; Wed, 10 Aug 2022 12:08:03 -0700 (PDT)
+        id E381E7E75445; Wed, 10 Aug 2022 12:08:17 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -48,9 +44,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>, <kernel-team@fb.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Stanislav Fomichev <sdf@google.com>
-Subject: [PATCH v3 bpf-next 06/15] bpf: net: Change do_ipv6_setsockopt() to use the sockopt's lock_sock() and capable()
-Date:   Wed, 10 Aug 2022 12:08:03 -0700
-Message-ID: <20220810190803.2697405-1-kafai@fb.com>
+Subject: [PATCH v3 bpf-next 08/15] bpf: Embed kernel CONFIG check into the if statement in bpf_setsockopt
+Date:   Wed, 10 Aug 2022 12:08:17 -0700
+Message-ID: <20220810190817.2699514-1-kafai@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220810190724.2692127-1-kafai@fb.com>
 References: <20220810190724.2692127-1-kafai@fb.com>
@@ -58,8 +54,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: RIel99xTsh3hWptoGl5YsuyIQ4xbyEtw
-X-Proofpoint-GUID: RIel99xTsh3hWptoGl5YsuyIQ4xbyEtw
+X-Proofpoint-ORIG-GUID: JhRaEhbn8zkfH1FxxOGG45zUYhlPc_MX
+X-Proofpoint-GUID: JhRaEhbn8zkfH1FxxOGG45zUYhlPc_MX
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-10_12,2022-08-10_01,2022-06-22_01
@@ -67,81 +63,62 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Similar to the earlier patch that avoids sk_setsockopt() from
-taking sk lock and doing capable test when called by bpf.  This patch
-changes do_ipv6_setsockopt() to use the sockopt_{lock,release}_sock()
-and sockopt_[ns_]capable().
+This patch moves the "#ifdef CONFIG_XXX" check into the "if/else"
+statement itself.  The change is done for the bpf_setsockopt()
+function only.  It will make the latter patches easier to follow
+without the surrounding ifdef macro.
 
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- net/ipv6/ipv6_sockglue.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ net/core/filter.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
-index 222f6bf220ba..d23de48ff612 100644
---- a/net/ipv6/ipv6_sockglue.c
-+++ b/net/ipv6/ipv6_sockglue.c
-@@ -327,7 +327,7 @@ static int ipv6_set_opt_hdr(struct sock *sk, int optn=
-ame, sockptr_t optval,
- 	int err;
-=20
- 	/* hop-by-hop / destination options are privileged option */
--	if (optname !=3D IPV6_RTHDR && !ns_capable(net->user_ns, CAP_NET_RAW))
-+	if (optname !=3D IPV6_RTHDR && !sockopt_ns_capable(net->user_ns, CAP_NE=
-T_RAW))
- 		return -EPERM;
-=20
- 	/* remove any sticky options header with a zero option
-@@ -417,7 +417,7 @@ static int do_ipv6_setsockopt(struct sock *sk, int le=
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 5669248aff25..01cb4a01b1c1 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -5113,8 +5113,7 @@ static int __bpf_setsockopt(struct sock *sk, int le=
 vel, int optname,
-=20
- 	if (needs_rtnl)
- 		rtnl_lock();
--	lock_sock(sk);
-+	sockopt_lock_sock(sk);
-=20
- 	switch (optname) {
-=20
-@@ -634,8 +634,8 @@ static int do_ipv6_setsockopt(struct sock *sk, int le=
-vel, int optname,
- 		break;
-=20
- 	case IPV6_TRANSPARENT:
--		if (valbool && !ns_capable(net->user_ns, CAP_NET_RAW) &&
--		    !ns_capable(net->user_ns, CAP_NET_ADMIN)) {
-+		if (valbool && !sockopt_ns_capable(net->user_ns, CAP_NET_RAW) &&
-+		    !sockopt_ns_capable(net->user_ns, CAP_NET_ADMIN)) {
- 			retv =3D -EPERM;
- 			break;
+ 		default:
+ 			ret =3D -EINVAL;
  		}
-@@ -946,7 +946,7 @@ static int do_ipv6_setsockopt(struct sock *sk, int le=
+-#ifdef CONFIG_INET
+-	} else if (level =3D=3D SOL_IP) {
++	} else if (IS_ENABLED(CONFIG_INET) && level =3D=3D SOL_IP) {
+ 		if (optlen !=3D sizeof(int) || sk->sk_family !=3D AF_INET)
+ 			return -EINVAL;
+=20
+@@ -5135,8 +5134,7 @@ static int __bpf_setsockopt(struct sock *sk, int le=
 vel, int optname,
- 	case IPV6_IPSEC_POLICY:
- 	case IPV6_XFRM_POLICY:
- 		retv =3D -EPERM;
--		if (!ns_capable(net->user_ns, CAP_NET_ADMIN))
-+		if (!sockopt_ns_capable(net->user_ns, CAP_NET_ADMIN))
- 			break;
- 		retv =3D xfrm_user_policy(sk, optname, optval, optlen);
- 		break;
-@@ -994,14 +994,14 @@ static int do_ipv6_setsockopt(struct sock *sk, int =
-level, int optname,
- 		break;
+ 		default:
+ 			ret =3D -EINVAL;
+ 		}
+-#if IS_ENABLED(CONFIG_IPV6)
+-	} else if (level =3D=3D SOL_IPV6) {
++	} else if (IS_ENABLED(CONFIG_IPV6) && level =3D=3D SOL_IPV6) {
+ 		if (optlen !=3D sizeof(int) || sk->sk_family !=3D AF_INET6)
+ 			return -EINVAL;
+=20
+@@ -5157,8 +5155,7 @@ static int __bpf_setsockopt(struct sock *sk, int le=
+vel, int optname,
+ 		default:
+ 			ret =3D -EINVAL;
+ 		}
+-#endif
+-	} else if (level =3D=3D SOL_TCP &&
++	} else if (IS_ENABLED(CONFIG_INET) && level =3D=3D SOL_TCP &&
+ 		   sk->sk_prot->setsockopt =3D=3D tcp_setsockopt) {
+ 		if (optname =3D=3D TCP_CONGESTION) {
+ 			char name[TCP_CA_NAME_MAX];
+@@ -5250,7 +5247,6 @@ static int __bpf_setsockopt(struct sock *sk, int le=
+vel, int optname,
+ 				ret =3D -EINVAL;
+ 			}
+ 		}
+-#endif
+ 	} else {
+ 		ret =3D -EINVAL;
  	}
-=20
--	release_sock(sk);
-+	sockopt_release_sock(sk);
- 	if (needs_rtnl)
- 		rtnl_unlock();
-=20
- 	return retv;
-=20
- e_inval:
--	release_sock(sk);
-+	sockopt_release_sock(sk);
- 	if (needs_rtnl)
- 		rtnl_unlock();
- 	return -EINVAL;
 --=20
 2.30.2
 
