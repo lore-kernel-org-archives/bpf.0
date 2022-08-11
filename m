@@ -2,98 +2,108 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0B08C2BB45
-	for <bpf@archiver.kernel.org>; Thu, 11 Aug 2022 15:57:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EB46C32762
+	for <bpf@archiver.kernel.org>; Thu, 11 Aug 2022 15:57:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236952AbiHKP53 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 11 Aug 2022 11:57:29 -0400
+        id S237073AbiHKP5b (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 11 Aug 2022 11:57:31 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237050AbiHKPzT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 11 Aug 2022 11:55:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C54897509;
-        Thu, 11 Aug 2022 08:46:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6DE0AB82160;
-        Thu, 11 Aug 2022 15:46:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 930EDC433D6;
-        Thu, 11 Aug 2022 15:46:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660232791;
-        bh=M8+2Regi7w11f9Fs6t96nrt3QoC76Pn7bK09bq3NUaE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m1+Cl5Ja9fRPv5qdcfiNj772cLsun9n2vfkvuXqLHXnDEPKysUkZA41huzA3XcAZl
-         dXSBZo+GObH9dRx0nlLyvr0JRzstZ1wNJ++xdzzF1kqQJ0iLB8ztmxhOLUJ+/lvUkg
-         9YohzlJ2LKHPcsIhwIj0Mc8Zta8GOvoBHrB5gU9ox6/xJCxZVQ++w4STmvT9yXr+ct
-         s2OE0HJS3MFDtrMONUzaROSnBa97JNsU71y8C3xvL+bNGRCip3uy07i7zExBwrp0bQ
-         LSmkqHAPOYyX6sIaFw6/tQ/ZXaGNwprrTZrVDdxetOmfQ3yelnB6c9zYiGhqyaNGIn
-         UnKz5p0i9WV3Q==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Delyan Kratunov <delyank@fb.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, rostedt@goodmis.org,
-        mingo@redhat.com, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.18 36/93] uprobe: gate bpf call behind BPF_EVENTS
-Date:   Thu, 11 Aug 2022 11:41:30 -0400
-Message-Id: <20220811154237.1531313-36-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220811154237.1531313-1-sashal@kernel.org>
-References: <20220811154237.1531313-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S237682AbiHKP5K (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 11 Aug 2022 11:57:10 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8FFA9241
+        for <bpf@vger.kernel.org>; Thu, 11 Aug 2022 08:47:37 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id m5-20020a170902f64500b0016d313f3ce7so11704020plg.23
+        for <bpf@vger.kernel.org>; Thu, 11 Aug 2022 08:47:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:from:to:cc;
+        bh=IuUmi8yK7ttP9DMj21dovzQZGBY13PHX+qXyVjOX3zQ=;
+        b=cLRlgW077jVAPqEiOj0qYsBikpH8O3puBBLslNGoTJgjF+b6BVpcKOPNHdjwOf1qhd
+         WYFRk5UNOu6AaulRni5vLlf7GW5zVXomALlhHClxvCP5XwkyY+3FIvChzlzJWIKHISej
+         3dJtNuIgl6TunDKCi65jDWXH6efqru55AYzfUf+yd3/4nugqcTGRPMaYGmICdKi40VZS
+         eYVqxbDXxqtewL3hR5/7q/aMFBblbiJjNIeHXPa0br4ciHHZZhVqySwVQYNBNeu4g32I
+         3/JPvv40f1szRuqKM7+juNmXs1XeHM1Fkpuw41YVFQv78GctEgqO8glWf/DVbAOYA1t5
+         V6EQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:x-gm-message-state:from:to:cc;
+        bh=IuUmi8yK7ttP9DMj21dovzQZGBY13PHX+qXyVjOX3zQ=;
+        b=x4D5ZK+ktCl+7dBfRulivpBBpTAzOn+WUdE0EEpGr8iM0KFmLGLQaJHtEYY5i8SgjV
+         QHljLJYMXvbY5wrCV2Rqj2S1WGfGS430xO5Pnj3r2XtW9KAxtalEw1MIp5TlA2sP1lza
+         JpfYmTtffex/c/Q+eqPGMYVBA2n0W3ww0VrcBYaKGgK5oscRZSyzwLn3I6vQDVV4mxjE
+         lF8/drbHJqBOj7qNjxCERNPQepnS7pAJPXn5EjAdQMNmRKNsNt0VW/NgdDfZGysIIDVZ
+         GF+dX817kpaZUGvauCh8pnR+lRSqmix4ysnH8nUhUThptos0/OcQjjDcQ122AC+UvP+R
+         J/ZA==
+X-Gm-Message-State: ACgBeo2UwN0k7z4Svpp7bVP6EJOeASFbmeEeQjRpNnaW4XaGyu1qWYY4
+        Zdwpp0V4/mBbiDUsmsdn0+OYnYBzoAHZLA==
+X-Google-Smtp-Source: AA6agR5jU6SuRrnL1iSm+IArLzseac+oOI/Drs50eHZDtXnirQjPsSD2P965Ps18qhwgee7fgN00JA/weOPVFA==
+X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:28b])
+ (user=shakeelb job=sendgmr) by 2002:aa7:8096:0:b0:52d:d5f6:2ea6 with SMTP id
+ v22-20020aa78096000000b0052dd5f62ea6mr32956638pff.0.1660232854787; Thu, 11
+ Aug 2022 08:47:34 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 15:47:31 +0000
+In-Reply-To: <CALOAHbBk+komswLqs0KBg8FeFAYpC20HjXrUeZA-=7cWf6nRUw@mail.gmail.com>
+Message-Id: <20220811154731.3smhom6v4qy2u6rd@google.com>
+Mime-Version: 1.0
+References: <20220810151840.16394-1-laoar.shao@gmail.com> <20220810151840.16394-6-laoar.shao@gmail.com>
+ <20220810170706.ikyrsuzupjwt65h7@google.com> <CALOAHbBk+komswLqs0KBg8FeFAYpC20HjXrUeZA-=7cWf6nRUw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 05/15] bpf: Fix incorrect mem_cgroup_put
+From:   Shakeel Butt <shakeelb@google.com>
+To:     Yafang Shao <laoar.shao@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, jolsa@kernel.org,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Delyan Kratunov <delyank@fb.com>
+On Thu, Aug 11, 2022 at 10:49:13AM +0800, Yafang Shao wrote:
+> On Thu, Aug 11, 2022 at 1:07 AM Shakeel Butt <shakeelb@google.com> wrote:
+> >
+> > On Wed, Aug 10, 2022 at 03:18:30PM +0000, Yafang Shao wrote:
+> > > The memcg may be the root_mem_cgroup, in which case we shouldn't put it.
+> >
+> > No, it is ok to put root_mem_cgroup. css_put already handles the root
+> > cgroups.
+> >
+> 
+> Ah, this commit log doesn't describe the issue clearly. I should improve it.
+> The issue is that in bpf_map_get_memcg() it doesn't get the objcg if
+> map->objcg is NULL (that can happen if the map belongs to the root
+> memcg), so we shouldn't put the objcg if map->objcg is NULL neither in
+> bpf_map_put_memcg().
 
-[ Upstream commit aca80dd95e20f1fa0daa212afc83c9fa0ad239e5 ]
+Sorry I am still not understanding. We are not 'getting' objcg in
+bpf_map_get_memcg(). We are 'getting' memcg from map->objcg and if that
+is NULL the function is returning root memcg and putting root memcg is
+totally fine. Or are you saying that root_mem_cgroup is NULL?
 
-The call into bpf from uprobes needs to be gated now that it doesn't use
-the trace_events.h helpers.
-
-Randy found this as a randconfig build failure on linux-next [1].
-
-  [1]: https://lore.kernel.org/linux-next/2de99180-7d55-2fdf-134d-33198c27cc58@infradead.org/
-
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Delyan Kratunov <delyank@fb.com>
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-Link: https://lore.kernel.org/r/cb8bfbbcde87ed5d811227a393ef4925f2aadb7b.camel@fb.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- kernel/trace/trace_uprobe.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
-index 9711589273cd..c3937c935239 100644
---- a/kernel/trace/trace_uprobe.c
-+++ b/kernel/trace/trace_uprobe.c
-@@ -1343,6 +1343,7 @@ static void __uprobe_perf_func(struct trace_uprobe *tu,
- 	int size, esize;
- 	int rctx;
- 
-+#ifdef CONFIG_BPF_EVENTS
- 	if (bpf_prog_array_valid(call)) {
- 		u32 ret;
- 
-@@ -1352,6 +1353,7 @@ static void __uprobe_perf_func(struct trace_uprobe *tu,
- 		if (!ret)
- 			return;
- 	}
-+#endif /* CONFIG_BPF_EVENTS */
- 
- 	esize = SIZEOF_TRACE_ENTRY(is_ret_probe(tu));
- 
--- 
-2.35.1
-
+> Maybe the change below would be more reasonable ?
+> 
+> +static void bpf_map_put_memcg(const struct bpf_map *map, struct
+> mem_cgroup *memcg)
+> +{
+> +       if (map->objcg)
+> +           mem_cgroup_put(memcg);
+> +}
+> 
+> -- 
+> Regards
+> Yafang
