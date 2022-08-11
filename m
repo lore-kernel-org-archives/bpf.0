@@ -2,48 +2,44 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79BD0C3F6B0
-	for <bpf@archiver.kernel.org>; Thu, 11 Aug 2022 16:21:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BFC8C19F2A
+	for <bpf@archiver.kernel.org>; Thu, 11 Aug 2022 16:21:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237611AbiHKQVU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 11 Aug 2022 12:21:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58588 "EHLO
+        id S237659AbiHKQVV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 11 Aug 2022 12:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237959AbiHKQVD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 11 Aug 2022 12:21:03 -0400
+        with ESMTP id S237716AbiHKQUH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 11 Aug 2022 12:20:07 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A1DB1B8D;
-        Thu, 11 Aug 2022 09:03:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E97AB199;
+        Thu, 11 Aug 2022 09:02:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DEF0060F39;
-        Thu, 11 Aug 2022 16:03:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D871C433D6;
-        Thu, 11 Aug 2022 16:03:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 10570612FC;
+        Thu, 11 Aug 2022 16:02:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 779D1C433D7;
+        Thu, 11 Aug 2022 16:02:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660233804;
-        bh=YQ9TIrcgL3Lgs2QmjYnfZswOi+9m7X4sON/9SPtXGQc=;
+        s=k20201202; t=1660233721;
+        bh=/NfsTPynIzJ7q1vtVPX0fnJ6BQE75dnJVQ0W0eNTezM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WT8oVuhlreUffzqaK+SkZVUnDwPb1Mj2NpNIlAgCVyHITx1VOJcsmr7DMmkmwMbPL
-         x6p5zGIle0y2bo5ct0KVrLArQTJuF/h2MXxqKEUUNbFfJVlgdy0kToeDA0bhk/yt9R
-         YDZC26h0fzDp93xO5SvaCOyIqD40O4PP+W3W6mDHAKbT6MqkvCrRTOC9pUFfHtt4kz
-         blIfD07Rsj7+Gp3xCfOcUHa732Mrg8a552Ye1unnxE/+ZIu3bg6Li2a96T3GYvkzWD
-         nGmyHyC/aDtLPPzrUOA3MDCx2RRUMiKeQqMbmaY3k6FNCwVtbu+UYyrID3fkB55MYM
-         7eiI5vKp/bkPA==
+        b=f/4ly/XjQ3AhQW3PoPmgECBIAonXWiMEx0/0VxglqyLr5wzrjps9At6y1IIPlm2Ux
+         jmpu2PIxlrqQGgZFDH5XQ93DQ9Spw94aTw+sYfb0KgEkPj4DUyWbkSzHmjHVAxEVE9
+         pao4djiAa2BAtc5m841jM0b/CWOMqYri/4XnkgIXO8fXrCULLkkNHLXewa2nWZfMpF
+         BXjyvqYgU0lGYQ8K62EzQyexo2oOLnorP8zD1Stwr1UndlP8pXch5j5qZVQ5vATANO
+         dmvl/NIyclBFN1bJJDntThouxX39SElPlJIjWXJu84oggFDWacoe28sjpejY9cBQx9
+         nSK3qhHMGa86w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jie2x Zhou <jie2x.zhou@intel.com>,
-        kernel test robot <lkp@intel.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+Cc:     James Hilliard <james.hilliard1@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Sasha Levin <sashal@kernel.org>, ast@kernel.org,
-        davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
-        john.fastabend@gmail.com, andrii@kernel.org, shuah@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 59/69] bpf/selftests: Fix couldn't retrieve pinned program in xdp veth test
-Date:   Thu, 11 Aug 2022 11:56:08 -0400
-Message-Id: <20220811155632.1536867-59-sashal@kernel.org>
+        daniel@iogearbox.net, bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 49/69] libbpf: Disable SEC pragma macro on GCC
+Date:   Thu, 11 Aug 2022 11:55:58 -0400
+Message-Id: <20220811155632.1536867-49-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220811155632.1536867-1-sashal@kernel.org>
 References: <20220811155632.1536867-1-sashal@kernel.org>
@@ -55,59 +51,64 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jie2x Zhou <jie2x.zhou@intel.com>
+From: James Hilliard <james.hilliard1@gmail.com>
 
-[ Upstream commit f664f9c6b4a1bb9a10af812df0fbbf6aac28fcc6 ]
+[ Upstream commit 18410251f66aee7e82234073ce6656ca20a732a9 ]
 
-Before change:
+It seems the gcc preprocessor breaks with pragmas when surrounding
+__attribute__.
 
-  selftests: bpf: test_xdp_veth.sh
-  Couldn't retrieve pinned program '/sys/fs/bpf/test_xdp_veth/progs/redirect_map_0': No such file or directory
-  selftests: xdp_veth [SKIP]
-  ok 20 selftests: bpf: test_xdp_veth.sh # SKIP
+Disable these pragmas on GCC due to upstream bugs see:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=55578
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90400
 
-After change:
+Fixes errors like:
+error: expected identifier or '(' before '#pragma'
+  106 | SEC("cgroup/bind6")
+      | ^~~
 
-  PING 10.1.1.33 (10.1.1.33) 56(84) bytes of data.
-  64 bytes from 10.1.1.33: icmp_seq=1 ttl=64 time=0.320 ms
-  --- 10.1.1.33 ping statistics ---
-  1 packets transmitted, 1 received, 0% packet loss, time 0ms
-  rtt min/avg/max/mdev = 0.320/0.320/0.320/0.000 ms
-  selftests: xdp_veth [PASS]
+error: expected '=', ',', ';', 'asm' or '__attribute__' before '#pragma'
+  114 | char _license[] SEC("license") = "GPL";
+      | ^~~
 
-For the test case, the following can be found:
-
-  ls /sys/fs/bpf/test_xdp_veth/progs/redirect_map_0
-  ls: cannot access '/sys/fs/bpf/test_xdp_veth/progs/redirect_map_0': No such file or directory
-  ls /sys/fs/bpf/test_xdp_veth/progs/
-  xdp_redirect_map_0  xdp_redirect_map_1  xdp_redirect_map_2
-
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Jie2x Zhou <jie2x.zhou@intel.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20220719082430.9916-1-jie2x.zhou@intel.com
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20220706111839.1247911-1-james.hilliard1@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/test_xdp_veth.sh | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/lib/bpf/bpf_helpers.h | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/test_xdp_veth.sh b/tools/testing/selftests/bpf/test_xdp_veth.sh
-index a3a1eaee26ea..73a9e1b22290 100755
---- a/tools/testing/selftests/bpf/test_xdp_veth.sh
-+++ b/tools/testing/selftests/bpf/test_xdp_veth.sh
-@@ -103,9 +103,9 @@ bpftool prog loadall \
- bpftool map update pinned $BPF_DIR/maps/tx_port key 0 0 0 0 value 122 0 0 0
- bpftool map update pinned $BPF_DIR/maps/tx_port key 1 0 0 0 value 133 0 0 0
- bpftool map update pinned $BPF_DIR/maps/tx_port key 2 0 0 0 value 111 0 0 0
--ip link set dev veth1 xdp pinned $BPF_DIR/progs/redirect_map_0
--ip link set dev veth2 xdp pinned $BPF_DIR/progs/redirect_map_1
--ip link set dev veth3 xdp pinned $BPF_DIR/progs/redirect_map_2
-+ip link set dev veth1 xdp pinned $BPF_DIR/progs/xdp_redirect_map_0
-+ip link set dev veth2 xdp pinned $BPF_DIR/progs/xdp_redirect_map_1
-+ip link set dev veth3 xdp pinned $BPF_DIR/progs/xdp_redirect_map_2
+diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+index b9987c3efa3c..409b85d1cbd0 100644
+--- a/tools/lib/bpf/bpf_helpers.h
++++ b/tools/lib/bpf/bpf_helpers.h
+@@ -30,12 +30,25 @@
+  * To allow use of SEC() with externs (e.g., for extern .maps declarations),
+  * make sure __attribute__((unused)) doesn't trigger compilation warning.
+  */
++#if __GNUC__ && !__clang__
++
++/*
++ * Pragma macros are broken on GCC
++ * https://gcc.gnu.org/bugzilla/show_bug.cgi?id=55578
++ * https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90400
++ */
++#define SEC(name) __attribute__((section(name), used))
++
++#else
++
+ #define SEC(name) \
+ 	_Pragma("GCC diagnostic push")					    \
+ 	_Pragma("GCC diagnostic ignored \"-Wignored-attributes\"")	    \
+ 	__attribute__((section(name), used))				    \
+ 	_Pragma("GCC diagnostic pop")					    \
  
- ip -n ns1 link set dev veth11 xdp obj xdp_dummy.o sec xdp
- ip -n ns2 link set dev veth22 xdp obj xdp_tx.o sec xdp
++#endif
++
+ /* Avoid 'linux/stddef.h' definition of '__always_inline'. */
+ #undef __always_inline
+ #define __always_inline inline __attribute__((always_inline))
 -- 
 2.35.1
 
