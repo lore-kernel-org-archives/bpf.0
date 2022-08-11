@@ -2,47 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BAFE0C25B0D
-	for <bpf@archiver.kernel.org>; Thu, 11 Aug 2022 15:46:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFB08C19F2A
+	for <bpf@archiver.kernel.org>; Thu, 11 Aug 2022 15:47:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234170AbiHKPqZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 11 Aug 2022 11:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42926 "EHLO
+        id S235749AbiHKPrd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 11 Aug 2022 11:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235247AbiHKPpR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 11 Aug 2022 11:45:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 356158C46E;
-        Thu, 11 Aug 2022 08:39:32 -0700 (PDT)
+        with ESMTP id S236664AbiHKPqD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 11 Aug 2022 11:46:03 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED3224950;
+        Thu, 11 Aug 2022 08:40:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA0D6B82151;
-        Thu, 11 Aug 2022 15:39:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE73FC433D6;
-        Thu, 11 Aug 2022 15:39:27 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 14DD1CE223A;
+        Thu, 11 Aug 2022 15:40:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4334C433D7;
+        Thu, 11 Aug 2022 15:40:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660232369;
-        bh=unky3ptO3FDMumLgteG75EQI1lgFJwkv56YH0pqh2BQ=;
+        s=k20201202; t=1660232419;
+        bh=VSXzN9FQUeQ+9olGNZCgpdskhfdRDBYRp89MGdAkkww=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lZIXKIMivxQxH6dAbtol5a5PPdJVaqyT4nrDSbb8KPJ0aXVoqDFDGffJ3JdZcj/W1
-         cmbWW69h4x9wSc5SwzjNTfZLSbLboWAJWcNiJuq1rmNWudouqGlSJM7I5jKf/OasyM
-         Ue3K/TT77odDeAy96MdIYsgGU4sAxDsLCVPW2gZZKAUOJIf/LYf05bl8t9E5BDBivj
-         iSdHFl7L08/w84K6DY/Jdqyjcvzxne/V2yDJHm2cEE/M9V546tMmFO9e32itfZhrwo
-         eo491eznnDTNdFCe2s7nDHjV9e1OKYs33Wuc5PZpE0KT+GQFRTyNtV9yL8goS1wudf
-         uesQA13KhElSg==
+        b=KJgcbSmzpAh9RyXBp5Z2mPWsSS481N1xvDDb0fgm6epka4YNA1cOkj2L9hjEmjR8r
+         CGgqIrolBIoUdqNlQlN1A/JWD/dOfAGQ4roXMM7ZUhl62z56Cqk881YneRADmCAZyK
+         34rMoa1gCXd9yOSeU/BV1l2nCj1MgJ0maeODckIXg46X/1W7W0Hdjr3XB8obqmE6YC
+         irq80duFLp0TFvt6Cs4sgo01kMXAJOpsS43rryEVceMRpdufpfqtxT8lKvXnUWhgSu
+         oZyrJrBDjqtQWyp9dP1/u4d8HHjRPy5Yt6RZ9nK/XiSCabpTKHCYgs9ZUBSlxgJPB2
+         KEe1sMdbgQ0eg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>,
-        daniel@iogearbox.net, shuah@kernel.org, davem@davemloft.net,
-        kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+Cc:     Zhengchao Shao <shaozhengchao@huawei.com>,
+        syzbot+7a12909485b94426aceb@syzkaller.appspotmail.com,
+        Stanislav Fomichev <sdf@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, daniel@iogearbox.net,
+        andrii@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, imagedong@tencent.com,
+        dsahern@kernel.org, kafai@fb.com, talalahmad@google.com,
+        keescook@chromium.org, asml.silence@gmail.com,
+        bigeasy@linutronix.de, petrm@nvidia.com, bpf@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.19 071/105] selftests/bpf: Do not attach kprobe_multi bench to bpf_dispatcher_xdp_func
-Date:   Thu, 11 Aug 2022 11:27:55 -0400
-Message-Id: <20220811152851.1520029-71-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.19 077/105] bpf: Don't redirect packets with invalid pkt_len
+Date:   Thu, 11 Aug 2022 11:28:01 -0400
+Message-Id: <20220811152851.1520029-77-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220811152851.1520029-1-sashal@kernel.org>
 References: <20220811152851.1520029-1-sashal@kernel.org>
@@ -54,66 +58,77 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jiri Olsa <jolsa@kernel.org>
+From: Zhengchao Shao <shaozhengchao@huawei.com>
 
-[ Upstream commit 7fb27a56b9ebd8a77d9dd188e8a42bff99bc3443 ]
+[ Upstream commit fd1894224407c484f652ad456e1ce423e89bb3eb ]
 
-Alexei reported crash by running test_progs -j on system
-with 32 cpus.
+Syzbot found an issue [1]: fq_codel_drop() try to drop a flow whitout any
+skbs, that is, the flow->head is null.
+The root cause, as the [2] says, is because that bpf_prog_test_run_skb()
+run a bpf prog which redirects empty skbs.
+So we should determine whether the length of the packet modified by bpf
+prog or others like bpf_prog_test is valid before forwarding it directly.
 
-It turned out the kprobe_multi bench test that attaches all
-ftrace-able functions will race with bpf_dispatcher_update,
-that calls bpf_arch_text_poke on bpf_dispatcher_xdp_func,
-which is ftrace-able function.
+LINK: [1] https://syzkaller.appspot.com/bug?id=0b84da80c2917757915afa89f7738a9d16ec96c5
+LINK: [2] https://www.spinics.net/lists/netdev/msg777503.html
 
-Ftrace is not aware of this update so this will cause
-ftrace_bug with:
-
-  WARNING: CPU: 6 PID: 1985 at
-  arch/x86/kernel/ftrace.c:94 ftrace_verify_code+0x27/0x50
-  ...
-  ftrace_replace_code+0xa3/0x170
-  ftrace_modify_all_code+0xbd/0x150
-  ftrace_startup_enable+0x3f/0x50
-  ftrace_startup+0x98/0xf0
-  register_ftrace_function+0x20/0x60
-  register_fprobe_ips+0xbb/0xd0
-  bpf_kprobe_multi_link_attach+0x179/0x430
-  __sys_bpf+0x18a1/0x2440
-  ...
-  ------------[ ftrace bug ]------------
-  ftrace failed to modify
-  [<ffffffff818d9380>] bpf_dispatcher_xdp_func+0x0/0x10
-   actual:   ffffffe9:7b:ffffff9c:77:1e
-  Setting ftrace call site to call ftrace function
-
-It looks like we need some way to hide some functions
-from ftrace, but meanwhile we workaround this by skipping
-bpf_dispatcher_xdp_func from kprobe_multi bench test.
-
-Reported-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Acked-by: Yonghong Song <yhs@fb.com>
-Link: https://lore.kernel.org/bpf/20220714082316.479181-1-jolsa@kernel.org
+Reported-by: syzbot+7a12909485b94426aceb@syzkaller.appspotmail.com
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+Reviewed-by: Stanislav Fomichev <sdf@google.com>
+Link: https://lore.kernel.org/r/20220715115559.139691-1-shaozhengchao@huawei.com
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c | 2 ++
- 1 file changed, 2 insertions(+)
+ include/linux/skbuff.h | 8 ++++++++
+ net/bpf/test_run.c     | 3 +++
+ net/core/dev.c         | 1 +
+ 3 files changed, 12 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-index 5b93d5d0bd93..48681bf73e0b 100644
---- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-@@ -364,6 +364,8 @@ static int get_syms(char ***symsp, size_t *cntp)
- 			continue;
- 		if (!strncmp(name, "rcu_", 4))
- 			continue;
-+		if (!strcmp(name, "bpf_dispatcher_xdp_func"))
-+			continue;
- 		if (!strncmp(name, "__ftrace_invalid_address__",
- 			     sizeof("__ftrace_invalid_address__") - 1))
- 			continue;
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index d3d10556f0fa..2f41364a6791 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -2624,6 +2624,14 @@ static inline void skb_set_tail_pointer(struct sk_buff *skb, const int offset)
+ 
+ #endif /* NET_SKBUFF_DATA_USES_OFFSET */
+ 
++static inline void skb_assert_len(struct sk_buff *skb)
++{
++#ifdef CONFIG_DEBUG_NET
++	if (WARN_ONCE(!skb->len, "%s\n", __func__))
++		DO_ONCE_LITE(skb_dump, KERN_ERR, skb, false);
++#endif /* CONFIG_DEBUG_NET */
++}
++
+ /*
+  *	Add data to an sk_buff
+  */
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 56f059b3c242..42f8de4ebbd7 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -955,6 +955,9 @@ static int convert___skb_to_skb(struct sk_buff *skb, struct __sk_buff *__skb)
+ {
+ 	struct qdisc_skb_cb *cb = (struct qdisc_skb_cb *)skb->cb;
+ 
++	if (!skb->len)
++		return -EINVAL;
++
+ 	if (!__skb)
+ 		return 0;
+ 
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 30a1603a7225..fe487dc6798e 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -4168,6 +4168,7 @@ int __dev_queue_xmit(struct sk_buff *skb, struct net_device *sb_dev)
+ 	bool again = false;
+ 
+ 	skb_reset_mac_header(skb);
++	skb_assert_len(skb);
+ 
+ 	if (unlikely(skb_shinfo(skb)->tx_flags & SKBTX_SCHED_TSTAMP))
+ 		__skb_tstamp_tx(skb, NULL, NULL, skb->sk, SCM_TSTAMP_SCHED);
 -- 
 2.35.1
 
