@@ -2,45 +2,48 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F586C25B06
-	for <bpf@archiver.kernel.org>; Thu, 11 Aug 2022 16:27:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51F7CC25B0C
+	for <bpf@archiver.kernel.org>; Thu, 11 Aug 2022 16:27:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238008AbiHKQ1h (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 11 Aug 2022 12:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44898 "EHLO
+        id S238336AbiHKQ1z (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 11 Aug 2022 12:27:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237833AbiHKQYf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 11 Aug 2022 12:24:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A638727174;
-        Thu, 11 Aug 2022 09:06:28 -0700 (PDT)
+        with ESMTP id S238128AbiHKQ0c (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 11 Aug 2022 12:26:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F38F9F747;
+        Thu, 11 Aug 2022 09:08:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 43C38612F4;
-        Thu, 11 Aug 2022 16:06:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA805C433B5;
-        Thu, 11 Aug 2022 16:06:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BC7A8B821AC;
+        Thu, 11 Aug 2022 16:08:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDFE2C433D6;
+        Thu, 11 Aug 2022 16:08:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660233987;
-        bh=/t+23DdWwxM9jyoCs76D2FiRHmzMiegWHIf2xwQUYjw=;
+        s=k20201202; t=1660234082;
+        bh=fy3VHjvN6ckJiTwIvXjYSIJM0uxtMVkbt09SBSZ2Ih4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TyIHZyjwSlRA/L64Ob4Y9MK28rMXPkiOiFxS8TJlmocnepqDbMQTYz7VAbhZotkoZ
-         9N7wG4ypmtmnv7HhaXSG/WMWQ2Rt6IQKBU2fx+iJdtkRmAh3LWuU08iJKxsXvPC/SW
-         v/ny4qndj5k1cQpEoeBeUJz/HNyYA8nQ9sY3G6c9TB15Z6e/5tbys27x2x6+gtETQ8
-         p3uAhRngXpv5l3GUwk4S5TU8EJMiSZpzyxa9PwaFB2UkyYqFVOBb6coIDb1S6h/kke
-         gs3Sw5SO6renXmVOnZCLdoLUlCCDm75pMbyb6TAqCIXYK8fb1EeLg/s2Lcq4uhRily
-         sogJU6RqXg4Ag==
+        b=E8osoCdwJTMgG30WVjV1iZ2pfN036llMx++L0H3NKi+aVM9cdkO6LkiQNI4vs1JEw
+         /M84W+8/WSwirTtRcGIiBv9vzoaieCpW7wgqqOwh2yGrlRfqauQnBCjjXhUE9xe5BJ
+         kq+ZZg9LgKTXsA+Uf0ypJnbV6lxtJnGpJfQ17RM6JeIg2tqDrqVJRcpiM6aMldvjep
+         nY8H+Rrkvdpk/gyF2KTn5JZ8UjkOpGT6pAfXFqVbIqGXzci9NhG1uWbjkQ8n5uC6bq
+         HbGnJN9uehIydUfQMU+muTAGi5+m2k5dF5PK1LG19OL8OiU8J0ldcbLQmJoTV5HVJj
+         WfAYRSWD5Y+LQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Delyan Kratunov <delyank@fb.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, rostedt@goodmis.org,
-        mingo@redhat.com, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 23/46] uprobe: gate bpf call behind BPF_EVENTS
-Date:   Thu, 11 Aug 2022 12:03:47 -0400
-Message-Id: <20220811160421.1539956-23-sashal@kernel.org>
+Cc:     Jie2x Zhou <jie2x.zhou@intel.com>,
+        kernel test robot <lkp@intel.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sasha Levin <sashal@kernel.org>, ast@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
+        john.fastabend@gmail.com, andrii@kernel.org, shuah@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 40/46] bpf/selftests: Fix couldn't retrieve pinned program in xdp veth test
+Date:   Thu, 11 Aug 2022 12:04:04 -0400
+Message-Id: <20220811160421.1539956-40-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220811160421.1539956-1-sashal@kernel.org>
 References: <20220811160421.1539956-1-sashal@kernel.org>
@@ -52,48 +55,59 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Delyan Kratunov <delyank@fb.com>
+From: Jie2x Zhou <jie2x.zhou@intel.com>
 
-[ Upstream commit aca80dd95e20f1fa0daa212afc83c9fa0ad239e5 ]
+[ Upstream commit f664f9c6b4a1bb9a10af812df0fbbf6aac28fcc6 ]
 
-The call into bpf from uprobes needs to be gated now that it doesn't use
-the trace_events.h helpers.
+Before change:
 
-Randy found this as a randconfig build failure on linux-next [1].
+  selftests: bpf: test_xdp_veth.sh
+  Couldn't retrieve pinned program '/sys/fs/bpf/test_xdp_veth/progs/redirect_map_0': No such file or directory
+  selftests: xdp_veth [SKIP]
+  ok 20 selftests: bpf: test_xdp_veth.sh # SKIP
 
-  [1]: https://lore.kernel.org/linux-next/2de99180-7d55-2fdf-134d-33198c27cc58@infradead.org/
+After change:
 
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Delyan Kratunov <delyank@fb.com>
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-Link: https://lore.kernel.org/r/cb8bfbbcde87ed5d811227a393ef4925f2aadb7b.camel@fb.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+  PING 10.1.1.33 (10.1.1.33) 56(84) bytes of data.
+  64 bytes from 10.1.1.33: icmp_seq=1 ttl=64 time=0.320 ms
+  --- 10.1.1.33 ping statistics ---
+  1 packets transmitted, 1 received, 0% packet loss, time 0ms
+  rtt min/avg/max/mdev = 0.320/0.320/0.320/0.000 ms
+  selftests: xdp_veth [PASS]
+
+For the test case, the following can be found:
+
+  ls /sys/fs/bpf/test_xdp_veth/progs/redirect_map_0
+  ls: cannot access '/sys/fs/bpf/test_xdp_veth/progs/redirect_map_0': No such file or directory
+  ls /sys/fs/bpf/test_xdp_veth/progs/
+  xdp_redirect_map_0  xdp_redirect_map_1  xdp_redirect_map_2
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Jie2x Zhou <jie2x.zhou@intel.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20220719082430.9916-1-jie2x.zhou@intel.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/trace/trace_uprobe.c | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/testing/selftests/bpf/test_xdp_veth.sh | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
-index 9900d4e3808c..4d62342ff970 100644
---- a/kernel/trace/trace_uprobe.c
-+++ b/kernel/trace/trace_uprobe.c
-@@ -1351,6 +1351,7 @@ static void __uprobe_perf_func(struct trace_uprobe *tu,
- 	int size, esize;
- 	int rctx;
+diff --git a/tools/testing/selftests/bpf/test_xdp_veth.sh b/tools/testing/selftests/bpf/test_xdp_veth.sh
+index 995278e684b6..f2ad31558963 100755
+--- a/tools/testing/selftests/bpf/test_xdp_veth.sh
++++ b/tools/testing/selftests/bpf/test_xdp_veth.sh
+@@ -103,9 +103,9 @@ bpftool prog loadall \
+ bpftool map update pinned $BPF_DIR/maps/tx_port key 0 0 0 0 value 122 0 0 0
+ bpftool map update pinned $BPF_DIR/maps/tx_port key 1 0 0 0 value 133 0 0 0
+ bpftool map update pinned $BPF_DIR/maps/tx_port key 2 0 0 0 value 111 0 0 0
+-ip link set dev veth1 xdp pinned $BPF_DIR/progs/redirect_map_0
+-ip link set dev veth2 xdp pinned $BPF_DIR/progs/redirect_map_1
+-ip link set dev veth3 xdp pinned $BPF_DIR/progs/redirect_map_2
++ip link set dev veth1 xdp pinned $BPF_DIR/progs/xdp_redirect_map_0
++ip link set dev veth2 xdp pinned $BPF_DIR/progs/xdp_redirect_map_1
++ip link set dev veth3 xdp pinned $BPF_DIR/progs/xdp_redirect_map_2
  
-+#ifdef CONFIG_BPF_EVENTS
- 	if (bpf_prog_array_valid(call)) {
- 		u32 ret;
- 
-@@ -1360,6 +1361,7 @@ static void __uprobe_perf_func(struct trace_uprobe *tu,
- 		if (!ret)
- 			return;
- 	}
-+#endif /* CONFIG_BPF_EVENTS */
- 
- 	esize = SIZEOF_TRACE_ENTRY(is_ret_probe(tu));
- 
+ ip -n ns1 link set dev veth11 xdp obj xdp_dummy.o sec xdp_dummy
+ ip -n ns2 link set dev veth22 xdp obj xdp_tx.o sec xdp
 -- 
 2.35.1
 
