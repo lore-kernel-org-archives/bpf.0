@@ -2,44 +2,44 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 046B0C2BB9D
-	for <bpf@archiver.kernel.org>; Thu, 11 Aug 2022 15:57:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BAD02C3F6B0
+	for <bpf@archiver.kernel.org>; Thu, 11 Aug 2022 16:03:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237044AbiHKP5a (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 11 Aug 2022 11:57:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48230 "EHLO
+        id S236776AbiHKQDd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 11 Aug 2022 12:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237596AbiHKP45 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 11 Aug 2022 11:56:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D1EA8CC0;
-        Thu, 11 Aug 2022 08:47:32 -0700 (PDT)
+        with ESMTP id S236555AbiHKQDG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 11 Aug 2022 12:03:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88C840BFA;
+        Thu, 11 Aug 2022 08:50:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D9315B82166;
-        Thu, 11 Aug 2022 15:47:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FE0FC433C1;
-        Thu, 11 Aug 2022 15:47:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5065860EFD;
+        Thu, 11 Aug 2022 15:49:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A363FC433D7;
+        Thu, 11 Aug 2022 15:49:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660232848;
-        bh=yBJ2y8HCNBKPJMYF4B5gcb9bH4TcIwSHkzdudjGSQPo=;
+        s=k20201202; t=1660232992;
+        bh=Zdu0pGnp+BN7k6SBK11UDmJyAeMoemju4zLntExZYlI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=abBzRSFB+ieSu9X/v4jkihXd9vEPAd28hIFpeMiZpRj7SEmNvCdj3UC9Zu8JbYTQ9
-         qgNKnO4646skhiEFtUQPJo1gdPw+wuUBgPTOAiR9qoDsHclRnX78BhvxShr5HlOek+
-         U1ZwRPInyHrsf1i9u/OPmBF1yIu3Z/KER7+d0k+g34CDjl0vmlHhzlRPECvlwCzk27
-         N/XlWbDcmNHVJ2bzp5yqo+ZSp410zMWKi3E3xLViCgDiTa2aPnFoGrDN0D9orbhK/i
-         Jc8+X3piTlhEjnMEDFBvEsmsvohtHHcVNzy1BnQlnr2BAD3g1UL6asBQ8frRli14k/
-         DM/cD2P8UkydA==
+        b=meSYX2SRBmuCLzVlIART2SvlRWqjT22D5DwE+HksGDNclirh2TaLoDZlJlxmZqXYj
+         cQ6H/nDlvnudPGCFR1mN60uDTx81E6f88sPcZ4SYTS2LKqfYr/yN5fxa+9Z25eLQHI
+         LHCIRlIWdteAr0ttzXANWgo7absk7xbURVhEa8ccuk5GFmsVnQzgc1KLzlNWJRDllo
+         WvLXZP4JiBV2lV3G+cQUMzgakbu/wEBvYVIE5v44pgIezZQQv21DKUSN/251AwsGBj
+         Goz6iB+PMcqZzStAEMjXgl56Dswf29b4t4u0wR0BF+vAiWhUezVcscfCB97nz7cdvm
+         S4+rijcxc3tTA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, daniel@iogearbox.net,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.18 48/93] libbpf: fix up few libbpf.map problems
-Date:   Thu, 11 Aug 2022 11:41:42 -0400
-Message-Id: <20220811154237.1531313-48-sashal@kernel.org>
+Cc:     James Hilliard <james.hilliard1@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, ast@kernel.org,
+        daniel@iogearbox.net, bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.18 60/93] libbpf: Disable SEC pragma macro on GCC
+Date:   Thu, 11 Aug 2022 11:41:54 -0400
+Message-Id: <20220811154237.1531313-60-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220811154237.1531313-1-sashal@kernel.org>
 References: <20220811154237.1531313-1-sashal@kernel.org>
@@ -51,54 +51,64 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Andrii Nakryiko <andrii@kernel.org>
+From: James Hilliard <james.hilliard1@gmail.com>
 
-[ Upstream commit ab9a5a05dc480f8994eddd31093a8920b08ee71d ]
+[ Upstream commit 18410251f66aee7e82234073ce6656ca20a732a9 ]
 
-Seems like we missed to add 2 APIs to libbpf.map and another API was
-misspelled. Fix it in libbpf.map.
+It seems the gcc preprocessor breaks with pragmas when surrounding
+__attribute__.
 
+Disable these pragmas on GCC due to upstream bugs see:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=55578
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90400
+
+Fixes errors like:
+error: expected identifier or '(' before '#pragma'
+  106 | SEC("cgroup/bind6")
+      | ^~~
+
+error: expected '=', ',', ';', 'asm' or '__attribute__' before '#pragma'
+  114 | char _license[] SEC("license") = "GPL";
+      | ^~~
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/r/20220627211527.2245459-16-andrii@kernel.org
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Link: https://lore.kernel.org/bpf/20220706111839.1247911-1-james.hilliard1@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/bpf/libbpf.map      | 3 ++-
- tools/lib/bpf/libbpf_legacy.h | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ tools/lib/bpf/bpf_helpers.h | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index dd35ee58bfaa..d2476c1aee8c 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -434,10 +434,11 @@ LIBBPF_0.7.0 {
- 		bpf_xdp_detach;
- 		bpf_xdp_query;
- 		bpf_xdp_query_id;
-+		btf_ext__raw_data;
- 		libbpf_probe_bpf_helper;
- 		libbpf_probe_bpf_map_type;
- 		libbpf_probe_bpf_prog_type;
--		libbpf_set_memlock_rlim_max;
-+		libbpf_set_memlock_rlim;
- } LIBBPF_0.6.0;
+diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+index 44df982d2a5c..e1ba0f3bb1ff 100644
+--- a/tools/lib/bpf/bpf_helpers.h
++++ b/tools/lib/bpf/bpf_helpers.h
+@@ -22,12 +22,25 @@
+  * To allow use of SEC() with externs (e.g., for extern .maps declarations),
+  * make sure __attribute__((unused)) doesn't trigger compilation warning.
+  */
++#if __GNUC__ && !__clang__
++
++/*
++ * Pragma macros are broken on GCC
++ * https://gcc.gnu.org/bugzilla/show_bug.cgi?id=55578
++ * https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90400
++ */
++#define SEC(name) __attribute__((section(name), used))
++
++#else
++
+ #define SEC(name) \
+ 	_Pragma("GCC diagnostic push")					    \
+ 	_Pragma("GCC diagnostic ignored \"-Wignored-attributes\"")	    \
+ 	__attribute__((section(name), used))				    \
+ 	_Pragma("GCC diagnostic pop")					    \
  
- LIBBPF_0.8.0 {
-diff --git a/tools/lib/bpf/libbpf_legacy.h b/tools/lib/bpf/libbpf_legacy.h
-index d7bcbd01f66f..a3503c02e4a9 100644
---- a/tools/lib/bpf/libbpf_legacy.h
-+++ b/tools/lib/bpf/libbpf_legacy.h
-@@ -71,8 +71,8 @@ enum libbpf_strict_mode {
- 	 * first BPF program or map creation operation. This is done only if
- 	 * kernel is too old to support memcg-based memory accounting for BPF
- 	 * subsystem. By default, RLIMIT_MEMLOCK limit is set to RLIM_INFINITY,
--	 * but it can be overriden with libbpf_set_memlock_rlim_max() API.
--	 * Note that libbpf_set_memlock_rlim_max() needs to be called before
-+	 * but it can be overriden with libbpf_set_memlock_rlim() API.
-+	 * Note that libbpf_set_memlock_rlim() needs to be called before
- 	 * the very first bpf_prog_load(), bpf_map_create() or bpf_object__load()
- 	 * operation.
- 	 */
++#endif
++
+ /* Avoid 'linux/stddef.h' definition of '__always_inline'. */
+ #undef __always_inline
+ #define __always_inline inline __attribute__((always_inline))
 -- 
 2.35.1
 
