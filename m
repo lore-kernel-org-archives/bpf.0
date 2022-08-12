@@ -2,93 +2,117 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88CF6C00140
-	for <bpf@archiver.kernel.org>; Fri, 12 Aug 2022 04:16:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C5A9C00140
+	for <bpf@archiver.kernel.org>; Fri, 12 Aug 2022 05:24:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234259AbiHLEQf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 12 Aug 2022 00:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39626 "EHLO
+        id S236330AbiHLFYZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 12 Aug 2022 01:24:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbiHLEQe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 12 Aug 2022 00:16:34 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BB1FD37;
-        Thu, 11 Aug 2022 21:16:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660277793; x=1691813793;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xEKQMRYYwNapwWCbuAHmwaEJwzGtEja9gbRJRyakeJ8=;
-  b=UI5+wn2unGkKbMbQFqbbwPfG6sZYpTcUEf5lmGTMXrnC6SgPPTENMyOu
-   xw7HX8vgUKP7Iow5aQUfV5vOsoL8K8Dnosv6T06RXQQc4P1i7WUSAiaIE
-   NgUzPURsio3xDUxmhtHAe3hlhdYI5M+UcB545h26+lyTZppStQq2AXg2v
-   JsOLsdWuD2e7WAQcx3eShxm8WSg/GHXTpSiECI2/PvkFfep21hGVRIl1X
-   FocypV6CesiAx/gwqc+OvX3w1/K1nAzfczHY4YzFwCkCITey3HFLgO1NV
-   MAogkjdxvZTDH+iWtdJCqv2emuL4jlVO6JJJsW2hCcAGqVDA1OdQXoXgc
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="289087908"
-X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
-   d="scan'208";a="289087908"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 21:16:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
-   d="scan'208";a="933578432"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 11 Aug 2022 21:16:31 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oMM62-00007f-1X;
-        Fri, 12 Aug 2022 04:16:30 +0000
-Date:   Fri, 12 Aug 2022 12:16:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Joanne Koong <joannelkoong@gmail.com>, bpf@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, kafai@fb.com, kuba@kernel.org,
-        andrii@kernel.org, daniel@iogearbox.net, ast@kernel.org,
-        netdev@vger.kernel.org, kernel-team@fb.com,
-        Joanne Koong <joannelkoong@gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/3] bpf: Add skb dynptrs
-Message-ID: <202208121214.urSMKXgE-lkp@intel.com>
-References: <20220811230501.2632393-2-joannelkoong@gmail.com>
+        with ESMTP id S231283AbiHLFYY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 12 Aug 2022 01:24:24 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6523A00E4
+        for <bpf@vger.kernel.org>; Thu, 11 Aug 2022 22:24:23 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27BLdn7G029465
+        for <bpf@vger.kernel.org>; Thu, 11 Aug 2022 22:24:23 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=facebook; bh=3jBZ1P7UZZuEt7QT7JQnkK5OeVjwf7sSo5ZT/rN+3Qo=;
+ b=WPXAz+Go0H7ZHudVQhiNjpRAc/W0MLx1m369IGDh1pqqdv4OZvOan20kflJypqRb5e/b
+ A6Zpx5YDK0wqo5mksZsTcG8Wq1kUrnI32hdnED5ZfqvE4/ueO724NO628t8UqJg1YowI
+ yN5MOVESjCVDm0B6/q839qV/xGxMZQs88KY= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hw9vr1x7r-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 11 Aug 2022 22:24:23 -0700
+Received: from twshared6324.05.ash7.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 11 Aug 2022 22:24:21 -0700
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+        id 2C50DDF8C3BB; Thu, 11 Aug 2022 22:24:19 -0700 (PDT)
+From:   Yonghong Song <yhs@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
+Subject: [PATCH bpf-next v2 0/6] bpf: Support struct argument for trampoline base progs
+Date:   Thu, 11 Aug 2022 22:24:19 -0700
+Message-ID: <20220812052419.520522-1-yhs@fb.com>
+X-Mailer: git-send-email 2.30.2
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: a4pca7jhbDCu_KxQcTkJ34THZvNnOWO8
+X-Proofpoint-GUID: a4pca7jhbDCu_KxQcTkJ34THZvNnOWO8
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220811230501.2632393-2-joannelkoong@gmail.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-12_04,2022-08-11_01,2022-06-22_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Joanne,
+Currently struct arguments are not supported for trampoline based progs.
+One of major reason is that struct argument may pass by value which may
+use more than one registers. This breaks trampoline progs where
+each argument is assumed to take one register. bcc community reported the
+issue ([1]) where struct argument is not supported for fentry program.
+  typedef struct {
+        uid_t val;
+  } kuid_t;
+  typedef struct {
+        gid_t val;
+  } kgid_t;
+  int security_path_chown(struct path *path, kuid_t uid, kgid_t gid);
+Inside Meta, we also have a use case to attach to tcp_setsockopt()
+  typedef struct {
+        union {
+                void            *kernel;
+                void __user     *user;
+        };
+        bool            is_kernel : 1;
+  } sockptr_t;
+  int tcp_setsockopt(struct sock *sk, int level, int optname,
+                     sockptr_t optval, unsigned int optlen);
 
-Thank you for the patch! Yet something to improve:
+This patch added struct value support for bpf tracing programs which
+uses trampoline. For x86_64, struct argument size needs to be 16 or less so
+it can fit in one or two registers. struct argument is not supported
+for arm64 in this patch set.
 
-[auto build test ERROR on bpf-next/master]
+ [1] https://github.com/iovisor/bcc/issues/3657
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Joanne-Koong/Add-skb-xdp-dynptrs/20220812-070634
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220812/202208121214.urSMKXgE-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/ecab09dda7739b27ffd6ed6c93753f6dfd9bdcb2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Joanne-Koong/Add-skb-xdp-dynptrs/20220812-070634
-        git checkout ecab09dda7739b27ffd6ed6c93753f6dfd9bdcb2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
+Changelog:
+  rfc v1 -> v2:
+   - changed bpf_func_model struct info fields to
+     arg_flags[] to make it easy to iterate arguments
+     in arch specific {save|restore}_regs() functions.
+   - added fexit tests to test return values with
+     struct arguments.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Yonghong Song (6):
+  bpf: Add struct argument info in btf_func_model
+  bpf: x86: Rename stack_size to regs_off in {save,restore}_regs()
+  bpf: x86: Support in-register struct arguments
+  bpf: arm64: No support of struct argument
+  bpf: Populate struct argument info in btf_func_model
+  selftests/bpf: Add struct argument tests with fentry/fexit programs.
 
-All errors (new ones prefixed by >>):
+ arch/arm64/net/bpf_jit_comp.c                 |   8 +-
+ arch/x86/net/bpf_jit_comp.c                   | 137 ++++++++++++++----
+ include/linux/bpf.h                           |   4 +
+ kernel/bpf/btf.c                              |  30 +++-
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   |  41 ++++++
+ .../selftests/bpf/prog_tests/tracing_struct.c |  55 +++++++
+ .../selftests/bpf/progs/tracing_struct.c      |  93 ++++++++++++
+ 7 files changed, 334 insertions(+), 34 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/tracing_struct.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_struct.c
 
-   /usr/bin/ld: net/core/filter.o: in function `bpf_dynptr_from_skb':
->> filter.c:(.text+0x4e87): undefined reference to `bpf_dynptr_set_null'
->> /usr/bin/ld: filter.c:(.text+0x4e9e): undefined reference to `bpf_dynptr_init'
->> /usr/bin/ld: filter.c:(.text+0x4eae): undefined reference to `bpf_dynptr_set_rdonly'
-   collect2: error: ld returned 1 exit status
+--=20
+2.30.2
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
