@@ -2,56 +2,56 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE4DFC3F6B0
-	for <bpf@archiver.kernel.org>; Fri, 12 Aug 2022 20:28:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B90AC00140
+	for <bpf@archiver.kernel.org>; Fri, 12 Aug 2022 20:28:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235497AbiHLU22 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 12 Aug 2022 16:28:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51510 "EHLO
+        id S235950AbiHLU2d (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 12 Aug 2022 16:28:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbiHLU2N (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 12 Aug 2022 16:28:13 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C52A1D56
-        for <bpf@vger.kernel.org>; Fri, 12 Aug 2022 13:28:11 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-32a115757b6so15773067b3.13
-        for <bpf@vger.kernel.org>; Fri, 12 Aug 2022 13:28:11 -0700 (PDT)
+        with ESMTP id S235951AbiHLU23 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 12 Aug 2022 16:28:29 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F5FB07D6
+        for <bpf@vger.kernel.org>; Fri, 12 Aug 2022 13:28:17 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id l73-20020a25254c000000b006847d635098so1138727ybl.2
+        for <bpf@vger.kernel.org>; Fri, 12 Aug 2022 13:28:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc;
-        bh=LxbW7vCL2TME4dq1WG2aLS0mV6nNyUzQfbiSxHPj2ms=;
-        b=mVkRYUgP1UYTOPLjsXEoRy5wvEjt6vUkn5SyDRgXb/il3Dlme2I0i5bAEFKoy9D0K/
-         Cyf5buUTHlXy/EDAtXlSmTS+J8LT+auDCtrFlxrqcp6NdQEpA01cgxoH0cKAf7epiSNU
-         Xx+rhCDvbvUAy61dbfR6QnaSxYnVCxj3NxIiQnat9wP2Xls6DjHgT6nJ54DY34TrrBDh
-         2F91l+AbMaPmXU1uMTRyGqwPToy6p6/uR/r9+KnYUcm1+64B7bzr+0RpAX+0qIdrl2yp
-         fMopmNtjIDakfjXb4mFf4MedxDS2XSqg832LsEAgMrp2zzp+CWFMr/Hw4I+QwZrgXmF+
-         1y0Q==
+        bh=uV12eGdKe+n9Jqdm1R4Rif6ZW3ISjbMxZHt4ROvBqtk=;
+        b=cowJhBN4RmZfPCHZDpbx6s/29zO3yVrWwhM0dI70IbjeRdTmcaXepcmZIjrq3IN83r
+         31/Zkxt+YLw1kgRPfxDjw7ZVoZJ7+ASNd6QU5XZQ6OiWifg906R5qKollCADwIo2SAJF
+         dbQ5zC+5zpcOgQhNx+vf4ux8d9Zkp3ZDfJ8RNS25EyMyhUEoyzNIku8suoxYFn3y6Gzb
+         uNLmWAdu3Sr4X9QFrFmbpQQ/ObipijbDve3gdW5cVIM0OX9OdcxIyylyiFHyY3nnTcDT
+         UF4tQu7NNa9BN9Edit8KgM6E7dybHNP4Tqcjk+loU4jNTunCkCu8xl/t0BJTe/ZTvQb9
+         W/iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=LxbW7vCL2TME4dq1WG2aLS0mV6nNyUzQfbiSxHPj2ms=;
-        b=ZGuA6szLSzic+nZUe829paU51jcaPDG7sqXemArsE1J8oFeEb3W+St05FVtq5hq7Ze
-         GBwEivPu1b32/Ul9MPWtBtSoMruDcT2wgU2tDwErDxA+VzXCTcFc+PBSHqKv3ceBEMsj
-         KhCilOCVgkCHly1bfR3FsHctfeKbG1ARQWYl6bhCSU81iX92T/Z+vS4CIPbFdVzQ7uue
-         Qc/RIjzQqa3E8ZCMsVEJs95lXsX4fzF0KGO0LtBc2WXIBEREnRKIHarogjoTvPCEWyzp
-         Y/jfObrUJjgGE63vHsRPAEeZbziEOPPj0MrcueZXujyxl0n4mKQsZfozhVCmpeb8ohJ3
-         Oa0Q==
-X-Gm-Message-State: ACgBeo0gKMJTcdMWt/GYRcbwsXE16zuMGVKHR5IC3MkJbL9T+QPXcqJq
-        JqyCCjTMnUC+eeHhR7UEAbGZ9wsJdIc=
-X-Google-Smtp-Source: AA6agR5vZU7UWNdrEfKeWKP3EDFoGO3DA0qV0Oj3p0Jy5XO5lVIaB5F/DGYY+5vYGzjOwPcyydzfc5Pw2uo=
+        bh=uV12eGdKe+n9Jqdm1R4Rif6ZW3ISjbMxZHt4ROvBqtk=;
+        b=JfoIvtO7cj4yIFGZHIx+g42yZy3/9seiXSof+EBixlJJg1pJDCWksY3/T8odCn2RzJ
+         ZE1/EEVk7dQSsGTXIXQmo1kJj1BKBiLpQpr6WAE6ymTqAgPRv/cz/UD1ugXo8ESwlS6h
+         3n0FfSEh3MpK6KgpRXwSEder3L3CoXdUAn0taQ9OKygehdgUE8WlQKGB9ynP2TA2UXZA
+         5805tfKZ4REkpR1AJLzAjDX5wnmifPUtFnKt5cvvcwcW6SmngvTe1Pkjro53K5ykju/u
+         oS9AqtwSsK4y77/Tcv6hf9qjh5IOGmqF43R0qpTNS3fzjCW0FNVnl8UbOeDhLPBTIJJ3
+         pTXA==
+X-Gm-Message-State: ACgBeo0V9gat+tuSFdLzRya4wxStP3Kwozb9ziSJRK9XfeiJxCCYWeeV
+        +JfQ3icLwGIVv7btdbeNZzB8kvblfeA=
+X-Google-Smtp-Source: AA6agR4E+Ia3TBaK880cj9WwMhdSP3yr/F5TTsncj9ZK2cBq2y22i2RDLl9iElkac/ZDlrhhLNOp5UMDlQ0=
 X-Received: from haoluo.svl.corp.google.com ([2620:15c:2d4:203:da3d:b609:da67:694a])
- (user=haoluo job=sendgmr) by 2002:a81:25c6:0:b0:324:294e:6fea with SMTP id
- l189-20020a8125c6000000b00324294e6feamr5368988ywl.426.1660336091103; Fri, 12
- Aug 2022 13:28:11 -0700 (PDT)
-Date:   Fri, 12 Aug 2022 13:27:59 -0700
+ (user=haoluo job=sendgmr) by 2002:a05:6902:120f:b0:676:aaa4:8434 with SMTP id
+ s15-20020a056902120f00b00676aaa48434mr4778762ybu.218.1660336096862; Fri, 12
+ Aug 2022 13:28:16 -0700 (PDT)
+Date:   Fri, 12 Aug 2022 13:28:01 -0700
 In-Reply-To: <20220812202802.3774257-1-haoluo@google.com>
-Message-Id: <20220812202802.3774257-3-haoluo@google.com>
+Message-Id: <20220812202802.3774257-5-haoluo@google.com>
 Mime-Version: 1.0
 References: <20220812202802.3774257-1-haoluo@google.com>
 X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH bpf-next v8 2/5] selftests/bpf: Test cgroup_iter.
+Subject: [PATCH bpf-next v8 4/5] selftests/bpf: extend cgroup helpers
 From:   Hao Luo <haoluo@google.com>
 To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
         cgroups@vger.kernel.org, netdev@vger.kernel.org
@@ -77,342 +77,369 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a selftest for cgroup_iter. The selftest creates a mini cgroup tree
-of the following structure:
+From: Yosry Ahmed <yosryahmed@google.com>
 
-    ROOT (working cgroup)
-     |
-   PARENT
-  /      \
-CHILD1  CHILD2
+This patch extends bpf selft cgroup_helpers [ID] n various ways:
+- Add enable_controllers() that allows tests to enable all or a
+  subset of controllers for a specific cgroup.
+- Add join_cgroup_parent(). The cgroup workdir is based on the pid,
+  therefore a spawned child cannot join the same cgroup hierarchy of the
+  test through join_cgroup(). join_cgroup_parent() is used in child
+  processes to join a cgroup under the parent's workdir.
+- Add write_cgroup_file() and write_cgroup_file_parent() (similar to
+  join_cgroup_parent() above).
+- Add get_root_cgroup() for tests that need to do checks on root cgroup.
+- Distinguish relative and absolute cgroup paths in function arguments.
+  Now relative paths are called relative_path, and absolute paths are
+  called cgroup_path.
 
-and tests the following scenarios:
-
- - invalid cgroup fd.
- - pre-order walk over descendants from PARENT.
- - post-order walk over descendants from PARENT.
- - walk of ancestors from PARENT.
- - process only a single object (i.e. PARENT).
- - early termination.
-
-Acked-by: Yonghong Song <yhs@fb.com>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 Signed-off-by: Hao Luo <haoluo@google.com>
 ---
- .../selftests/bpf/prog_tests/cgroup_iter.c    | 224 ++++++++++++++++++
- tools/testing/selftests/bpf/progs/bpf_iter.h  |   7 +
- .../testing/selftests/bpf/progs/cgroup_iter.c |  39 +++
- 3 files changed, 270 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_iter.c
- create mode 100644 tools/testing/selftests/bpf/progs/cgroup_iter.c
+ tools/testing/selftests/bpf/cgroup_helpers.c | 202 +++++++++++++++----
+ tools/testing/selftests/bpf/cgroup_helpers.h |  19 +-
+ 2 files changed, 174 insertions(+), 47 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter.c b/tools/testing/selftests/bpf/prog_tests/cgroup_iter.c
-new file mode 100644
-index 000000000000..38958c37b9ce
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter.c
-@@ -0,0 +1,224 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Google */
+diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
+index 9d59c3990ca8..e914cc45b766 100644
+--- a/tools/testing/selftests/bpf/cgroup_helpers.c
++++ b/tools/testing/selftests/bpf/cgroup_helpers.c
+@@ -33,49 +33,52 @@
+ #define CGROUP_MOUNT_DFLT		"/sys/fs/cgroup"
+ #define NETCLS_MOUNT_PATH		CGROUP_MOUNT_DFLT "/net_cls"
+ #define CGROUP_WORK_DIR			"/cgroup-test-work-dir"
+-#define format_cgroup_path(buf, path) \
 +
-+#include <test_progs.h>
-+#include <bpf/libbpf.h>
-+#include <bpf/btf.h>
-+#include "cgroup_iter.skel.h"
-+#include "cgroup_helpers.h"
++#define format_cgroup_path_pid(buf, path, pid) \
+ 	snprintf(buf, sizeof(buf), "%s%s%d%s", CGROUP_MOUNT_PATH, \
+-	CGROUP_WORK_DIR, getpid(), path)
++	CGROUP_WORK_DIR, pid, path)
 +
-+#define ROOT           0
-+#define PARENT         1
-+#define CHILD1         2
-+#define CHILD2         3
-+#define NUM_CGROUPS    4
++#define format_cgroup_path(buf, path) \
++	format_cgroup_path_pid(buf, path, getpid())
 +
-+#define PROLOGUE       "prologue\n"
-+#define EPILOGUE       "epilogue\n"
-+
-+static const char *cg_path[] = {
-+	"/", "/parent", "/parent/child1", "/parent/child2"
-+};
-+
-+static int cg_fd[] = {-1, -1, -1, -1};
-+static unsigned long long cg_id[] = {0, 0, 0, 0};
-+static char expected_output[64];
-+
-+static int setup_cgroups(void)
++#define format_parent_cgroup_path(buf, path) \
++	format_cgroup_path_pid(buf, path, getppid())
+ 
+ #define format_classid_path(buf)				\
+ 	snprintf(buf, sizeof(buf), "%s%s", NETCLS_MOUNT_PATH,	\
+ 		 CGROUP_WORK_DIR)
+ 
+-/**
+- * enable_all_controllers() - Enable all available cgroup v2 controllers
+- *
+- * Enable all available cgroup v2 controllers in order to increase
+- * the code coverage.
+- *
+- * If successful, 0 is returned.
+- */
+-static int enable_all_controllers(char *cgroup_path)
++static int __enable_controllers(const char *cgroup_path, const char *controllers)
+ {
+ 	char path[PATH_MAX + 1];
+-	char buf[PATH_MAX];
++	char enable[PATH_MAX + 1];
+ 	char *c, *c2;
+ 	int fd, cfd;
+ 	ssize_t len;
+ 
+-	snprintf(path, sizeof(path), "%s/cgroup.controllers", cgroup_path);
+-	fd = open(path, O_RDONLY);
+-	if (fd < 0) {
+-		log_err("Opening cgroup.controllers: %s", path);
+-		return 1;
+-	}
+-
+-	len = read(fd, buf, sizeof(buf) - 1);
+-	if (len < 0) {
++	/* If not controllers are passed, enable all available controllers */
++	if (!controllers) {
++		snprintf(path, sizeof(path), "%s/cgroup.controllers",
++			 cgroup_path);
++		fd = open(path, O_RDONLY);
++		if (fd < 0) {
++			log_err("Opening cgroup.controllers: %s", path);
++			return 1;
++		}
++		len = read(fd, enable, sizeof(enable) - 1);
++		if (len < 0) {
++			close(fd);
++			log_err("Reading cgroup.controllers: %s", path);
++			return 1;
++		} else if (len == 0) { /* No controllers to enable */
++			close(fd);
++			return 0;
++		}
++		enable[len] = 0;
+ 		close(fd);
+-		log_err("Reading cgroup.controllers: %s", path);
+-		return 1;
++	} else {
++		strncpy(enable, controllers, sizeof(enable));
+ 	}
+-	buf[len] = 0;
+-	close(fd);
+-
+-	/* No controllers available? We're probably on cgroup v1. */
+-	if (len == 0)
+-		return 0;
+ 
+ 	snprintf(path, sizeof(path), "%s/cgroup.subtree_control", cgroup_path);
+ 	cfd = open(path, O_RDWR);
+@@ -84,7 +87,7 @@ static int enable_all_controllers(char *cgroup_path)
+ 		return 1;
+ 	}
+ 
+-	for (c = strtok_r(buf, " ", &c2); c; c = strtok_r(NULL, " ", &c2)) {
++	for (c = strtok_r(enable, " ", &c2); c; c = strtok_r(NULL, " ", &c2)) {
+ 		if (dprintf(cfd, "+%s\n", c) <= 0) {
+ 			log_err("Enabling controller %s: %s", c, path);
+ 			close(cfd);
+@@ -95,6 +98,87 @@ static int enable_all_controllers(char *cgroup_path)
+ 	return 0;
+ }
+ 
++/**
++ * enable_controllers() - Enable cgroup v2 controllers
++ * @relative_path: The cgroup path, relative to the workdir
++ * @controllers: List of controllers to enable in cgroup.controllers format
++ *
++ *
++ * Enable given cgroup v2 controllers, if @controllers is NULL, enable all
++ * available controllers.
++ *
++ * If successful, 0 is returned.
++ */
++int enable_controllers(const char *relative_path, const char *controllers)
 +{
-+	int fd, i = 0;
++	char cgroup_path[PATH_MAX + 1];
 +
-+	for (i = 0; i < NUM_CGROUPS; i++) {
-+		fd = create_and_get_cgroup(cg_path[i]);
-+		if (fd < 0)
-+			return fd;
++	format_cgroup_path(cgroup_path, relative_path);
++	return __enable_controllers(cgroup_path, controllers);
++}
 +
-+		cg_fd[i] = fd;
-+		cg_id[i] = get_cgroup_id(cg_path[i]);
++static int __write_cgroup_file(const char *cgroup_path, const char *file,
++			       const char *buf)
++{
++	char file_path[PATH_MAX + 1];
++	int fd;
++
++	snprintf(file_path, sizeof(file_path), "%s/%s", cgroup_path, file);
++	fd = open(file_path, O_RDWR);
++	if (fd < 0) {
++		log_err("Opening %s", file_path);
++		return 1;
 +	}
++
++	if (dprintf(fd, "%s", buf) <= 0) {
++		log_err("Writing to %s", file_path);
++		close(fd);
++		return 1;
++	}
++	close(fd);
 +	return 0;
 +}
 +
-+static void cleanup_cgroups(void)
++/**
++ * write_cgroup_file() - Write to a cgroup file
++ * @relative_path: The cgroup path, relative to the workdir
++ * @file: The name of the file in cgroupfs to write to
++ * @buf: Buffer to write to the file
++ *
++ * Write to a file in the given cgroup's directory.
++ *
++ * If successful, 0 is returned.
++ */
++int write_cgroup_file(const char *relative_path, const char *file,
++		      const char *buf)
 +{
-+	int i;
++	char cgroup_path[PATH_MAX - 24];
 +
-+	for (i = 0; i < NUM_CGROUPS; i++)
-+		close(cg_fd[i]);
++	format_cgroup_path(cgroup_path, relative_path);
++	return __write_cgroup_file(cgroup_path, file, buf);
 +}
 +
-+static void read_from_cgroup_iter(struct bpf_program *prog, int cgroup_fd,
-+				  int order, const char *testname)
++/**
++ * write_cgroup_file_parent() - Write to a cgroup file in the parent process
++ *                              workdir
++ * @relative_path: The cgroup path, relative to the parent process workdir
++ * @file: The name of the file in cgroupfs to write to
++ * @buf: Buffer to write to the file
++ *
++ * Write to a file in the given cgroup's directory under the parent process
++ * workdir.
++ *
++ * If successful, 0 is returned.
++ */
++int write_cgroup_file_parent(const char *relative_path, const char *file,
++			     const char *buf)
 +{
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	union bpf_iter_link_info linfo;
-+	struct bpf_link *link;
-+	int len, iter_fd;
-+	static char buf[128];
-+	size_t left;
-+	char *p;
++	char cgroup_path[PATH_MAX - 24];
 +
-+	memset(&linfo, 0, sizeof(linfo));
-+	linfo.cgroup.cgroup_fd = cgroup_fd;
-+	linfo.cgroup.order = order;
-+	opts.link_info = &linfo;
-+	opts.link_info_len = sizeof(linfo);
-+
-+	link = bpf_program__attach_iter(prog, &opts);
-+	if (!ASSERT_OK_PTR(link, "attach_iter"))
-+		return;
-+
-+	iter_fd = bpf_iter_create(bpf_link__fd(link));
-+	if (iter_fd < 0)
-+		goto free_link;
-+
-+	memset(buf, 0, sizeof(buf));
-+	left = ARRAY_SIZE(buf);
-+	p = buf;
-+	while ((len = read(iter_fd, p, left)) > 0) {
-+		p += len;
-+		left -= len;
-+	}
-+
-+	ASSERT_STREQ(buf, expected_output, testname);
-+
-+	/* read() after iter finishes should be ok. */
-+	if (len == 0)
-+		ASSERT_OK(read(iter_fd, buf, sizeof(buf)), "second_read");
-+
-+	close(iter_fd);
-+free_link:
-+	bpf_link__destroy(link);
++	format_parent_cgroup_path(cgroup_path, relative_path);
++	return __write_cgroup_file(cgroup_path, file, buf);
 +}
 +
-+/* Invalid cgroup. */
-+static void test_invalid_cgroup(struct cgroup_iter *skel)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	union bpf_iter_link_info linfo;
-+	struct bpf_link *link;
-+
-+	memset(&linfo, 0, sizeof(linfo));
-+	linfo.cgroup.cgroup_fd = (__u32)-1;
-+	opts.link_info = &linfo;
-+	opts.link_info_len = sizeof(linfo);
-+
-+	link = bpf_program__attach_iter(skel->progs.cgroup_id_printer, &opts);
-+	ASSERT_ERR_PTR(link, "attach_iter");
-+	bpf_link__destroy(link);
-+}
-+
-+/* Specifying both cgroup_fd and cgroup_id is invalid. */
-+static void test_invalid_cgroup_spec(struct cgroup_iter *skel)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	union bpf_iter_link_info linfo;
-+	struct bpf_link *link;
-+
-+	memset(&linfo, 0, sizeof(linfo));
-+	linfo.cgroup.cgroup_fd = (__u32)cg_fd[PARENT];
-+	linfo.cgroup.cgroup_id = (__u64)cg_id[PARENT];
-+	opts.link_info = &linfo;
-+	opts.link_info_len = sizeof(linfo);
-+
-+	link = bpf_program__attach_iter(skel->progs.cgroup_id_printer, &opts);
-+	ASSERT_ERR_PTR(link, "attach_iter");
-+	bpf_link__destroy(link);
-+}
-+
-+/* Preorder walk prints parent and child in order. */
-+static void test_walk_preorder(struct cgroup_iter *skel)
-+{
-+	snprintf(expected_output, sizeof(expected_output),
-+		 PROLOGUE "%8llu\n%8llu\n%8llu\n" EPILOGUE,
-+		 cg_id[PARENT], cg_id[CHILD1], cg_id[CHILD2]);
-+
-+	read_from_cgroup_iter(skel->progs.cgroup_id_printer, cg_fd[PARENT],
-+			      BPF_ITER_DESCENDANTS_PRE, "preorder");
-+}
-+
-+/* Postorder walk prints child and parent in order. */
-+static void test_walk_postorder(struct cgroup_iter *skel)
-+{
-+	snprintf(expected_output, sizeof(expected_output),
-+		 PROLOGUE "%8llu\n%8llu\n%8llu\n" EPILOGUE,
-+		 cg_id[CHILD1], cg_id[CHILD2], cg_id[PARENT]);
-+
-+	read_from_cgroup_iter(skel->progs.cgroup_id_printer, cg_fd[PARENT],
-+			      BPF_ITER_DESCENDANTS_POST, "postorder");
-+}
-+
-+/* Walking parents prints parent and then root. */
-+static void test_walk_ancestors_up(struct cgroup_iter *skel)
-+{
-+	/* terminate the walk when ROOT is met. */
-+	skel->bss->terminal_cgroup = cg_id[ROOT];
-+
-+	snprintf(expected_output, sizeof(expected_output),
-+		 PROLOGUE "%8llu\n%8llu\n" EPILOGUE,
-+		 cg_id[PARENT], cg_id[ROOT]);
-+
-+	read_from_cgroup_iter(skel->progs.cgroup_id_printer, cg_fd[PARENT],
-+			      BPF_ITER_ANCESTORS_UP, "ancestors_up");
-+
-+	skel->bss->terminal_cgroup = 0;
-+}
-+
-+/* Early termination prints parent only. */
-+static void test_early_termination(struct cgroup_iter *skel)
-+{
-+	/* terminate the walk after the first element is processed. */
-+	skel->bss->terminate_early = 1;
-+
-+	snprintf(expected_output, sizeof(expected_output),
-+		 PROLOGUE "%8llu\n" EPILOGUE, cg_id[PARENT]);
-+
-+	read_from_cgroup_iter(skel->progs.cgroup_id_printer, cg_fd[PARENT],
-+			      BPF_ITER_DESCENDANTS_PRE, "early_termination");
-+
-+	skel->bss->terminate_early = 0;
-+}
-+
-+/* Waling self prints self only. */
-+static void test_walk_self_only(struct cgroup_iter *skel)
-+{
-+	snprintf(expected_output, sizeof(expected_output),
-+		 PROLOGUE "%8llu\n" EPILOGUE, cg_id[PARENT]);
-+
-+	read_from_cgroup_iter(skel->progs.cgroup_id_printer, cg_fd[PARENT],
-+			      BPF_ITER_SELF_ONLY, "self_only");
-+}
-+
-+void test_cgroup_iter(void)
-+{
-+	struct cgroup_iter *skel = NULL;
-+
-+	if (setup_cgroup_environment())
-+		return;
-+
-+	if (setup_cgroups())
-+		goto out;
-+
-+	skel = cgroup_iter__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "cgroup_iter__open_and_load"))
-+		goto out;
-+
-+	if (test__start_subtest("cgroup_iter__invalid_cgroup"))
-+		test_invalid_cgroup(skel);
-+	if (test__start_subtest("cgroup_iter__invalid_cgroup_spec"))
-+		test_invalid_cgroup_spec(skel);
-+	if (test__start_subtest("cgroup_iter__preorder"))
-+		test_walk_preorder(skel);
-+	if (test__start_subtest("cgroup_iter__postorder"))
-+		test_walk_postorder(skel);
-+	if (test__start_subtest("cgroup_iter__ancestors_up_walk"))
-+		test_walk_ancestors_up(skel);
-+	if (test__start_subtest("cgroup_iter__early_termination"))
-+		test_early_termination(skel);
-+	if (test__start_subtest("cgroup_iter__self_only"))
-+		test_walk_self_only(skel);
-+out:
-+	cgroup_iter__destroy(skel);
-+	cleanup_cgroups();
-+	cleanup_cgroup_environment();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter.h b/tools/testing/selftests/bpf/progs/bpf_iter.h
-index e9846606690d..c41ee80533ca 100644
---- a/tools/testing/selftests/bpf/progs/bpf_iter.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter.h
-@@ -17,6 +17,7 @@
- #define bpf_iter__bpf_sk_storage_map bpf_iter__bpf_sk_storage_map___not_used
- #define bpf_iter__sockmap bpf_iter__sockmap___not_used
- #define bpf_iter__bpf_link bpf_iter__bpf_link___not_used
-+#define bpf_iter__cgroup bpf_iter__cgroup___not_used
- #define btf_ptr btf_ptr___not_used
- #define BTF_F_COMPACT BTF_F_COMPACT___not_used
- #define BTF_F_NONAME BTF_F_NONAME___not_used
-@@ -40,6 +41,7 @@
- #undef bpf_iter__bpf_sk_storage_map
- #undef bpf_iter__sockmap
- #undef bpf_iter__bpf_link
-+#undef bpf_iter__cgroup
- #undef btf_ptr
- #undef BTF_F_COMPACT
- #undef BTF_F_NONAME
-@@ -141,6 +143,11 @@ struct bpf_iter__bpf_link {
- 	struct bpf_link *link;
- };
+ /**
+  * setup_cgroup_environment() - Setup the cgroup environment
+  *
+@@ -133,7 +217,9 @@ int setup_cgroup_environment(void)
+ 		return 1;
+ 	}
  
-+struct bpf_iter__cgroup {
-+	struct bpf_iter_meta *meta;
-+	struct cgroup *cgroup;
-+} __attribute__((preserve_access_index));
-+
- struct btf_ptr {
- 	void *ptr;
- 	__u32 type_id;
-diff --git a/tools/testing/selftests/bpf/progs/cgroup_iter.c b/tools/testing/selftests/bpf/progs/cgroup_iter.c
-new file mode 100644
-index 000000000000..de03997322a7
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/cgroup_iter.c
-@@ -0,0 +1,39 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Google */
-+
-+#include "bpf_iter.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+int terminate_early = 0;
-+u64 terminal_cgroup = 0;
-+
-+static inline u64 cgroup_id(struct cgroup *cgrp)
+-	if (enable_all_controllers(cgroup_workdir))
++	/* Enable all available controllers to increase test coverage */
++	if (__enable_controllers(CGROUP_MOUNT_PATH, NULL) ||
++	    __enable_controllers(cgroup_workdir, NULL))
+ 		return 1;
+ 
+ 	return 0;
+@@ -173,7 +259,7 @@ static int join_cgroup_from_top(const char *cgroup_path)
+ 
+ /**
+  * join_cgroup() - Join a cgroup
+- * @path: The cgroup path, relative to the workdir, to join
++ * @relative_path: The cgroup path, relative to the workdir, to join
+  *
+  * This function expects a cgroup to already be created, relative to the cgroup
+  * work dir, and it joins it. For example, passing "/my-cgroup" as the path
+@@ -182,11 +268,27 @@ static int join_cgroup_from_top(const char *cgroup_path)
+  *
+  * On success, it returns 0, otherwise on failure it returns 1.
+  */
+-int join_cgroup(const char *path)
++int join_cgroup(const char *relative_path)
 +{
-+	return cgrp->kn->id;
++	char cgroup_path[PATH_MAX + 1];
++
++	format_cgroup_path(cgroup_path, relative_path);
++	return join_cgroup_from_top(cgroup_path);
 +}
 +
-+SEC("iter/cgroup")
-+int cgroup_id_printer(struct bpf_iter__cgroup *ctx)
++/**
++ * join_parent_cgroup() - Join a cgroup in the parent process workdir
++ * @relative_path: The cgroup path, relative to parent process workdir, to join
++ *
++ * See join_cgroup().
++ *
++ * On success, it returns 0, otherwise on failure it returns 1.
++ */
++int join_parent_cgroup(const char *relative_path)
+ {
+ 	char cgroup_path[PATH_MAX + 1];
+ 
+-	format_cgroup_path(cgroup_path, path);
++	format_parent_cgroup_path(cgroup_path, relative_path);
+ 	return join_cgroup_from_top(cgroup_path);
+ }
+ 
+@@ -212,9 +314,27 @@ void cleanup_cgroup_environment(void)
+ 	nftw(cgroup_workdir, nftwfunc, WALK_FD_LIMIT, FTW_DEPTH | FTW_MOUNT);
+ }
+ 
++/**
++ * get_root_cgroup() - Get the FD of the root cgroup
++ *
++ * On success, it returns the file descriptor. On failure, it returns -1.
++ * If there is a failure, it prints the error to stderr.
++ */
++int get_root_cgroup(void)
 +{
-+	struct seq_file *seq = ctx->meta->seq;
-+	struct cgroup *cgrp = ctx->cgroup;
++	int fd;
 +
-+	/* epilogue */
-+	if (cgrp == NULL) {
-+		BPF_SEQ_PRINTF(seq, "epilogue\n");
-+		return 0;
++	fd = open(CGROUP_MOUNT_PATH, O_RDONLY);
++	if (fd < 0) {
++		log_err("Opening root cgroup");
++		return -1;
 +	}
-+
-+	/* prologue */
-+	if (ctx->meta->seq_num == 0)
-+		BPF_SEQ_PRINTF(seq, "prologue\n");
-+
-+	BPF_SEQ_PRINTF(seq, "%8llu\n", cgroup_id(cgrp));
-+
-+	if (terminal_cgroup == cgroup_id(cgrp))
-+		return 1;
-+
-+	return terminate_early ? 1 : 0;
++	return fd;
 +}
++
+ /**
+  * create_and_get_cgroup() - Create a cgroup, relative to workdir, and get the FD
+- * @path: The cgroup path, relative to the workdir, to join
++ * @relative_path: The cgroup path, relative to the workdir, to join
+  *
+  * This function creates a cgroup under the top level workdir and returns the
+  * file descriptor. It is idempotent.
+@@ -222,14 +342,14 @@ void cleanup_cgroup_environment(void)
+  * On success, it returns the file descriptor. On failure it returns -1.
+  * If there is a failure, it prints the error to stderr.
+  */
+-int create_and_get_cgroup(const char *path)
++int create_and_get_cgroup(const char *relative_path)
+ {
+ 	char cgroup_path[PATH_MAX + 1];
+ 	int fd;
+ 
+-	format_cgroup_path(cgroup_path, path);
++	format_cgroup_path(cgroup_path, relative_path);
+ 	if (mkdir(cgroup_path, 0777) && errno != EEXIST) {
+-		log_err("mkdiring cgroup %s .. %s", path, cgroup_path);
++		log_err("mkdiring cgroup %s .. %s", relative_path, cgroup_path);
+ 		return -1;
+ 	}
+ 
+@@ -244,13 +364,13 @@ int create_and_get_cgroup(const char *path)
+ 
+ /**
+  * get_cgroup_id() - Get cgroup id for a particular cgroup path
+- * @path: The cgroup path, relative to the workdir, to join
++ * @relative_path: The cgroup path, relative to the workdir, to join
+  *
+  * On success, it returns the cgroup id. On failure it returns 0,
+  * which is an invalid cgroup id.
+  * If there is a failure, it prints the error to stderr.
+  */
+-unsigned long long get_cgroup_id(const char *path)
++unsigned long long get_cgroup_id(const char *relative_path)
+ {
+ 	int dirfd, err, flags, mount_id, fhsize;
+ 	union {
+@@ -261,7 +381,7 @@ unsigned long long get_cgroup_id(const char *path)
+ 	struct file_handle *fhp, *fhp2;
+ 	unsigned long long ret = 0;
+ 
+-	format_cgroup_path(cgroup_workdir, path);
++	format_cgroup_path(cgroup_workdir, relative_path);
+ 
+ 	dirfd = AT_FDCWD;
+ 	flags = 0;
+diff --git a/tools/testing/selftests/bpf/cgroup_helpers.h b/tools/testing/selftests/bpf/cgroup_helpers.h
+index fcc9cb91b211..3358734356ab 100644
+--- a/tools/testing/selftests/bpf/cgroup_helpers.h
++++ b/tools/testing/selftests/bpf/cgroup_helpers.h
+@@ -10,11 +10,18 @@
+ 	__FILE__, __LINE__, clean_errno(), ##__VA_ARGS__)
+ 
+ /* cgroupv2 related */
+-int cgroup_setup_and_join(const char *path);
+-int create_and_get_cgroup(const char *path);
+-unsigned long long get_cgroup_id(const char *path);
+-
+-int join_cgroup(const char *path);
++int enable_controllers(const char *relative_path, const char *controllers);
++int write_cgroup_file(const char *relative_path, const char *file,
++		      const char *buf);
++int write_cgroup_file_parent(const char *relative_path, const char *file,
++			     const char *buf);
++int cgroup_setup_and_join(const char *relative_path);
++int get_root_cgroup(void);
++int create_and_get_cgroup(const char *relative_path);
++unsigned long long get_cgroup_id(const char *relative_path);
++
++int join_cgroup(const char *relative_path);
++int join_parent_cgroup(const char *relative_path);
+ 
+ int setup_cgroup_environment(void);
+ void cleanup_cgroup_environment(void);
+@@ -26,4 +33,4 @@ int join_classid(void);
+ int setup_classid_environment(void);
+ void cleanup_classid_environment(void);
+ 
+-#endif /* __CGROUP_HELPERS_H */
+\ No newline at end of file
++#endif /* __CGROUP_HELPERS_H */
 -- 
 2.37.1.595.g718a3a8f04-goog
 
