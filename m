@@ -2,46 +2,46 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E89BC00140
-	for <bpf@archiver.kernel.org>; Fri, 12 Aug 2022 05:24:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2864AC00140
+	for <bpf@archiver.kernel.org>; Fri, 12 Aug 2022 05:24:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231283AbiHLFYo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 12 Aug 2022 01:24:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34238 "EHLO
+        id S235200AbiHLFYx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 12 Aug 2022 01:24:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiHLFYn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 12 Aug 2022 01:24:43 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C244A00E4
-        for <bpf@vger.kernel.org>; Thu, 11 Aug 2022 22:24:42 -0700 (PDT)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 27BJWxht027709
-        for <bpf@vger.kernel.org>; Thu, 11 Aug 2022 22:24:41 -0700
+        with ESMTP id S229524AbiHLFYw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 12 Aug 2022 01:24:52 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BFBA00E4
+        for <bpf@vger.kernel.org>; Thu, 11 Aug 2022 22:24:51 -0700 (PDT)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27BLdcHA013963
+        for <bpf@vger.kernel.org>; Thu, 11 Aug 2022 22:24:51 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=pcMG6NNKc9675VQ3BVSd4/itHt0rcMDOY+SIOPGt2iI=;
- b=k3jRoeApmtTScrl+1Ps4P3xHefHm1PNytlzYpFHaRw75JOsZzNtILl/z/TOgWjmI4gp3
- 637UbPCnoUfOFMTP4y0jd/xlRTX7bIXYpwU6cwf2KCPVsIxK94WqNilWX4tSIhEcLKDu
- Wv07f9xpCB38Q3m3aTe4F/dNlFELPlJ2HXI= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3hw810tw9h-2
+ bh=W2kitG9IvK8m8vHLDcDAZekjFmUhHc//Sf6vO4wswF4=;
+ b=Tml43IBcRtF4rNYLR9Cb91abwTkh5ln3Q5dx5i8aJ+wL2+XA6ryeYMkn1XgH4T1ypfm1
+ 3iSgYjUgU8buTbaYtRtumB0Dh6AA9S5Id5VWF6/tVL36ExePdUyx3WuICKJFfUPl2b8A
+ kdh7EKNK72D8E1fn7ilHXWCr7QNoTd2559k= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hw9vgsx3y-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 11 Aug 2022 22:24:41 -0700
-Received: from twshared8442.02.ash8.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 11 Aug 2022 22:24:51 -0700
+Received: from twshared0646.06.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 11 Aug 2022 22:24:39 -0700
+ 15.1.2375.31; Thu, 11 Aug 2022 22:24:49 -0700
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id 35404DF8C439; Thu, 11 Aug 2022 22:24:35 -0700 (PDT)
+        id DCFCDDF8C486; Thu, 11 Aug 2022 22:24:45 -0700 (PDT)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next v2 3/6] bpf: x86: Support in-register struct arguments
-Date:   Thu, 11 Aug 2022 22:24:35 -0700
-Message-ID: <20220812052435.523068-1-yhs@fb.com>
+Subject: [PATCH bpf-next v2 5/6] bpf: Populate struct argument info in btf_func_model
+Date:   Thu, 11 Aug 2022 22:24:45 -0700
+Message-ID: <20220812052445.524459-1-yhs@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220812052419.520522-1-yhs@fb.com>
 References: <20220812052419.520522-1-yhs@fb.com>
@@ -49,304 +49,124 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: q8770GVjluNGobIVp9yqNWxRjB2quBe8
-X-Proofpoint-ORIG-GUID: q8770GVjluNGobIVp9yqNWxRjB2quBe8
+X-Proofpoint-ORIG-GUID: aw88Uq-LH8qvDMD22MMOIMoCFwd7toBj
+X-Proofpoint-GUID: aw88Uq-LH8qvDMD22MMOIMoCFwd7toBj
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-12_04,2022-08-11_01,2022-06-22_01
+ definitions=2022-08-12_03,2022-08-11_01,2022-06-22_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In C, struct value can be passed as a function argument.
-For small structs, struct value may be passed in
-one or more registers. For trampoline based bpf programs,
-This would cause complication since one-to-one mapping between
-function argument and arch argument register is not valid
-any more.
-
-To support struct value argument and make bpf programs
-easy to write, the bpf program function parameter is
-changed from struct type to a pointer to struct type.
-The following is a simplified example.
-
-In one of later selftests, we have a bpf_testmod function:
-    struct bpf_testmod_struct_arg_2 {
-        long a;
-        long b;
-    };
-    noinline int
-    bpf_testmod_test_struct_arg_2(int a, struct bpf_testmod_struct_arg_2 =
-b, int c) {
-        bpf_testmod_test_struct_arg_result =3D a + b.a + b.b + c;
-        return bpf_testmod_test_struct_arg_result;
-    }
-
-When a bpf program is attached to the bpf_testmod function
-bpf_testmod_test_struct_arg_2(), the bpf program may look like
-    SEC("fentry/bpf_testmod_test_struct_arg_2")
-    int BPF_PROG(test_struct_arg_3, int a, struct bpf_testmod_struct_arg_=
-2 *b, int c)
-    {
-        t2_a =3D a;
-        t2_b_a =3D b->a;
-        t2_b_b =3D b->b;
-        t2_c =3D c;
-        return 0;
-    }
-
-Basically struct value becomes a pointer to the struct.
-The trampoline stack will be increased to store the stack values and
-the pointer to these values will be saved in the stack slot corresponding
-to that argument. For x86_64, the struct size is limited up to 16 bytes
-so the struct can fit in one or two registers. The struct size of more
-than 16 bytes is not supported now as our current use case is
-for sockptr_t in the argument. We could handle such large struct's
-in the future if we have concrete use cases.
-
-The main changes are in save_regs() and restore_regs(). The following
-illustrated the trampoline asm codes for save_regs() and restore_regs().
-save_regs():
-    /* first argument */
-    mov    DWORD PTR [rbp-0x18],edi
-    /* second argument: struct, save actual values and put the pointer to=
- the slot */
-    lea    rax,[rbp-0x40]
-    mov    QWORD PTR [rbp-0x10],rax
-    mov    QWORD PTR [rbp-0x40],rsi
-    mov    QWORD PTR [rbp-0x38],rdx
-    /* third argument */
-    mov    DWORD PTR [rbp-0x8],esi
-restore_regs():
-    mov    edi,DWORD PTR [rbp-0x18]
-    mov    rsi,QWORD PTR [rbp-0x40]
-    mov    rdx,QWORD PTR [rbp-0x38]
-    mov    esi,DWORD PTR [rbp-0x8]
+Add struct argument support in btf_ctx_access() and btf_distill_func_prot=
+o().
+The arch-specific code will handle whether and how such struct arguments
+are supported.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- arch/x86/net/bpf_jit_comp.c | 137 +++++++++++++++++++++++++++++-------
- 1 file changed, 110 insertions(+), 27 deletions(-)
+ kernel/bpf/btf.c | 30 ++++++++++++++++++++++++------
+ 1 file changed, 24 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 2657b58001cf..2fa7d694c559 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -37,6 +37,11 @@ static u8 *emit_code(u8 *ptr, u32 bytes, unsigned int =
-len)
- #define EMIT3(b1, b2, b3)	EMIT((b1) + ((b2) << 8) + ((b3) << 16), 3)
- #define EMIT4(b1, b2, b3, b4)   EMIT((b1) + ((b2) << 8) + ((b3) << 16) +=
- ((b4) << 24), 4)
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 903719b89238..f38ae0e908fd 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -5339,7 +5339,7 @@ bool btf_ctx_access(int off, int size, enum bpf_acc=
+ess_type type,
+ 	struct bpf_verifier_log *log =3D info->log;
+ 	const struct btf_param *args;
+ 	const char *tag_value;
+-	u32 nr_args, arg;
++	u32 nr_args, arg, curr_tid =3D 0;
+ 	int i, ret;
 =20
-+#define EMIT2_UPDATE_PROG(bytes, len) \
-+	do { *prog =3D emit_code(*prog, bytes, len); } while (0)
-+#define EMIT4_UPDATE_PROG(b1, b2, b3, b4) \
-+	EMIT2_UPDATE_PROG((b1) + ((b2) << 8) + ((b3) << 16) + ((b4) << 24), 4)
-+
- #define EMIT1_off32(b1, off) \
- 	do { EMIT1(b1); EMIT(off, 4); } while (0)
- #define EMIT2_off32(b1, b2, off) \
-@@ -1749,36 +1754,92 @@ st:			if (is_imm8(insn->off))
- }
+ 	if (off % 8) {
+@@ -5385,6 +5385,7 @@ bool btf_ctx_access(int off, int size, enum bpf_acc=
+ess_type type,
+ 			 */
+ 			if (!t)
+ 				return true;
++			curr_tid =3D t->type;
+ 			t =3D btf_type_by_id(btf, t->type);
+ 			break;
+ 		case BPF_MODIFY_RETURN:
+@@ -5394,7 +5395,7 @@ bool btf_ctx_access(int off, int size, enum bpf_acc=
+ess_type type,
+ 			if (!t)
+ 				return false;
 =20
- static void save_regs(const struct btf_func_model *m, u8 **prog, int nr_=
-args,
--		      int regs_off)
-+		      int regs_off, int struct_val_off)
- {
--	int i;
--	/* Store function arguments to stack.
--	 * For a function that accepts two pointers the sequence will be:
--	 * mov QWORD PTR [rbp-0x10],rdi
--	 * mov QWORD PTR [rbp-0x8],rsi
--	 */
--	for (i =3D 0; i < min(nr_args, 6); i++)
--		emit_stx(prog, bytes_to_bpf_size(m->arg_size[i]),
--			 BPF_REG_FP,
--			 i =3D=3D 5 ? X86_REG_R9 : BPF_REG_1 + i,
--			 -(regs_off - i * 8));
-+	int i, j, curr_reg_idx, curr_s_stack_off, s_arg_nregs;
-+
-+	curr_reg_idx =3D curr_s_stack_off =3D 0;
-+	for (i =3D 0; i < nr_args; i++) {
-+		if (!(m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)) {
-+			/* Store function arguments to stack.
-+			 * For a function that accepts two pointers the sequence will be:
-+			 * mov QWORD PTR [rbp-0x10],rdi
-+			 * mov QWORD PTR [rbp-0x8],rsi
-+			 */
-+			emit_stx(prog, bytes_to_bpf_size(m->arg_size[i]),
-+				 BPF_REG_FP,
-+				 curr_reg_idx =3D=3D 5 ? X86_REG_R9 : BPF_REG_1 + curr_reg_idx,
-+				 -(regs_off - i * 8));
-+			curr_reg_idx++;
-+			continue;
-+		}
-+
-+		/* lea rax, [rbp - struct_val_off] */
-+		EMIT4_UPDATE_PROG(0x48, 0x8D, 0x45, -(struct_val_off - curr_s_stack_of=
-f * 8));
-+		/* The struct value is converted to a pointer argument.
-+		 * mov QWORD PTR [rbp - s_arg_idx * 8],rax
-+		 */
-+		emit_stx(prog, bytes_to_bpf_size(8),
-+			 BPF_REG_FP, BPF_REG_0, -(regs_off - i * 8));
-+
-+		/* Save struct registers to stack.
-+		 * For example, argument 1 (second argument) size is 16 which occupies=
- two
-+		 * registers, these two register values will be saved in stack.
-+		 * mov QWORD PTR [rbp-0x40],rsi
-+		 * mov QWORD PTR [rbp-0x38],rdx
-+		 */
-+		s_arg_nregs =3D (m->arg_size[i] + 7) / 8;
-+		for (j =3D 0; j < s_arg_nregs; j++) {
-+			emit_stx(prog, bytes_to_bpf_size(8),
-+				 BPF_REG_FP,
-+				 curr_reg_idx =3D=3D 5 ? X86_REG_R9 : BPF_REG_1 + curr_reg_idx,
-+				 -(struct_val_off - curr_s_stack_off * 8));
-+			curr_reg_idx++;
-+			curr_s_stack_off++;
-+		}
-+	}
- }
-=20
- static void restore_regs(const struct btf_func_model *m, u8 **prog, int =
-nr_args,
--			 int regs_off)
-+			 int regs_off, int struct_val_off)
- {
--	int i;
-+	int i, j, curr_reg_idx, curr_s_stack_off, s_arg_nregs;
-+
-+	curr_reg_idx =3D curr_s_stack_off =3D 0;
-+	for (i =3D 0; i < nr_args; i++) {
-+		if (!(m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)) {
-+			/* Restore struct values from stack.
-+			 * For example, argument 1 (second argument) size is 16 which occupie=
-s two
-+			 * registers, these two register values will be restored to the origi=
-nal
-+			 * registers.
-+			 * mov rsi,QWORD PTR [rbp-0x40]
-+			 * mov rdx,QWORD PTR [rbp-0x38]
-+			 */
-+			emit_ldx(prog, bytes_to_bpf_size(m->arg_size[i]),
-+				 curr_reg_idx  =3D=3D 5 ? X86_REG_R9 : BPF_REG_1 + curr_reg_idx,
-+				 BPF_REG_FP,
-+				 -(regs_off - i * 8));
-+			curr_reg_idx++;
-+			continue;
-+		}
-=20
--	/* Restore function arguments from stack.
--	 * For a function that accepts two pointers the sequence will be:
--	 * EMIT4(0x48, 0x8B, 0x7D, 0xF0); mov rdi,QWORD PTR [rbp-0x10]
--	 * EMIT4(0x48, 0x8B, 0x75, 0xF8); mov rsi,QWORD PTR [rbp-0x8]
--	 */
--	for (i =3D 0; i < min(nr_args, 6); i++)
--		emit_ldx(prog, bytes_to_bpf_size(m->arg_size[i]),
--			 i =3D=3D 5 ? X86_REG_R9 : BPF_REG_1 + i,
--			 BPF_REG_FP,
--			 -(regs_off - i * 8));
-+		/* Restore struct values from stack.
-+		 * For example, argument 1 (second argument) size is 16 which occupies=
- two
-+		 * registers, these two register values will be restored to the origin=
-al
-+		 * registers.
-+		 * mov rsi,QWORD PTR [rbp-0x40]
-+		 * mov rdx,QWORD PTR [rbp-0x38]
-+		 */
-+		s_arg_nregs =3D (m->arg_size[i] + 7) / 8;
-+		for (j =3D 0; j < s_arg_nregs; j++) {
-+			emit_ldx(prog, bytes_to_bpf_size(8),
-+				 curr_reg_idx =3D=3D 5 ? X86_REG_R9 : BPF_REG_1 + curr_reg_idx,
-+				 BPF_REG_FP,
-+				 -(struct_val_off - curr_s_stack_off * 8));
-+			curr_reg_idx++;
-+			curr_s_stack_off++;
-+		}
-+	}
- }
-=20
- static int invoke_bpf_prog(const struct btf_func_model *m, u8 **pprog,
-@@ -2020,6 +2081,7 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_im=
-age *im, void *image, void *i
- 	struct bpf_tramp_links *fentry =3D &tlinks[BPF_TRAMP_FENTRY];
- 	struct bpf_tramp_links *fexit =3D &tlinks[BPF_TRAMP_FEXIT];
- 	struct bpf_tramp_links *fmod_ret =3D &tlinks[BPF_TRAMP_MODIFY_RETURN];
-+	int struct_val_off, extra_nregs =3D 0;
- 	u8 **branches =3D NULL;
- 	u8 *prog;
- 	bool save_ret;
-@@ -2028,6 +2090,20 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_i=
-mage *im, void *image, void *i
- 	if (nr_args > 6)
- 		return -ENOTSUPP;
-=20
-+	for (i =3D 0; i < MAX_BPF_FUNC_ARGS; i++) {
-+		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG) {
-+			/* Only support up to 16 bytes struct which should keep
-+			 * values in registers.
-+			 */
-+			if (m->arg_size[i] > 16)
-+				return -ENOTSUPP;
-+
-+			extra_nregs +=3D (m->arg_size[i] + 7) / 8 - 1;
-+		}
-+	}
-+	if (nr_args + extra_nregs > 6)
-+		return -ENOTSUPP;
-+
- 	/* Generated trampoline stack layout:
- 	 *
- 	 * RBP + 8         [ return address  ]
-@@ -2066,6 +2142,13 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_i=
-mage *im, void *image, void *i
- 	stack_size +=3D (sizeof(struct bpf_tramp_run_ctx) + 7) & ~0x7;
- 	run_ctx_off =3D stack_size;
-=20
-+	/* For structure argument */
-+	for (i =3D 0; i < MAX_BPF_FUNC_ARGS; i++) {
-+		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
-+			stack_size +=3D (m->arg_size[i] + 7) & ~0x7;
-+	}
-+	struct_val_off =3D stack_size;
-+
- 	if (flags & BPF_TRAMP_F_SKIP_FRAME) {
- 		/* skip patched call instruction and point orig_call to actual
- 		 * body of the kernel function.
-@@ -2101,7 +2184,7 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_im=
-age *im, void *image, void *i
- 		emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_0, -ip_off);
+-			t =3D btf_type_skip_modifiers(btf, t->type, NULL);
++			t =3D btf_type_skip_modifiers(btf, t->type, &curr_tid);
+ 			if (!btf_type_is_small_int(t)) {
+ 				bpf_log(log,
+ 					"ret type %s not allowed for fmod_ret\n",
+@@ -5411,15 +5412,25 @@ bool btf_ctx_access(int off, int size, enum bpf_a=
+ccess_type type,
+ 		if (!t)
+ 			/* Default prog with MAX_BPF_FUNC_REG_ARGS args */
+ 			return true;
++		curr_tid =3D args[arg].type;
+ 		t =3D btf_type_by_id(btf, args[arg].type);
  	}
 =20
--	save_regs(m, &prog, nr_args, regs_off);
-+	save_regs(m, &prog, nr_args, regs_off, struct_val_off);
-=20
- 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
- 		/* arg1: mov rdi, im */
-@@ -2131,7 +2214,7 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_im=
-age *im, void *image, void *i
- 	}
-=20
- 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
--		restore_regs(m, &prog, nr_args, regs_off);
-+		restore_regs(m, &prog, nr_args, regs_off, struct_val_off);
-=20
- 		if (flags & BPF_TRAMP_F_ORIG_STACK) {
- 			emit_ldx(&prog, BPF_DW, BPF_REG_0, BPF_REG_FP, 8);
-@@ -2172,7 +2255,7 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_im=
-age *im, void *image, void *i
+ 	/* skip modifiers */
+-	while (btf_type_is_modifier(t))
++	while (btf_type_is_modifier(t)) {
++		curr_tid =3D t->type;
+ 		t =3D btf_type_by_id(btf, t->type);
++	}
+ 	if (btf_type_is_small_int(t) || btf_is_any_enum(t))
+ 		/* accessing a scalar */
+ 		return true;
++	if (__btf_type_is_struct(t) && curr_tid) {
++		info->reg_type =3D PTR_TO_BTF_ID;
++		info->btf =3D btf;
++		info->btf_id =3D curr_tid;
++		return true;
++	}
++
+ 	if (!btf_type_is_ptr(t)) {
+ 		bpf_log(log,
+ 			"func '%s' arg%d '%s' has type %s. Only pointer access is allowed\n",
+@@ -5878,7 +5889,7 @@ static int __get_type_size(struct btf *btf, u32 btf=
+_id,
+ 	if (!t)
+ 		return -EINVAL;
+ 	*ret_type =3D t;
+-	if (btf_type_is_ptr(t))
++	if (btf_type_is_ptr(t) || __btf_type_is_struct(t))
+ 		/* kernel size of pointer. Not BPF's size of pointer*/
+ 		return sizeof(void *);
+ 	if (btf_type_is_int(t) || btf_is_any_enum(t))
+@@ -5901,8 +5912,10 @@ int btf_distill_func_proto(struct bpf_verifier_log=
+ *log,
+ 		/* BTF function prototype doesn't match the verifier types.
+ 		 * Fall back to MAX_BPF_FUNC_REG_ARGS u64 args.
+ 		 */
+-		for (i =3D 0; i < MAX_BPF_FUNC_REG_ARGS; i++)
++		for (i =3D 0; i < MAX_BPF_FUNC_REG_ARGS; i++) {
+ 			m->arg_size[i] =3D 8;
++			m->arg_flags[i] =3D 0;
++		}
+ 		m->ret_size =3D 8;
+ 		m->nr_args =3D MAX_BPF_FUNC_REG_ARGS;
+ 		return 0;
+@@ -5944,7 +5957,12 @@ int btf_distill_func_proto(struct bpf_verifier_log=
+ *log,
+ 				tname);
+ 			return -EINVAL;
  		}
-=20
- 	if (flags & BPF_TRAMP_F_RESTORE_REGS)
--		restore_regs(m, &prog, nr_args, regs_off);
-+		restore_regs(m, &prog, nr_args, regs_off, struct_val_off);
-=20
- 	/* This needs to be done regardless. If there were fmod_ret programs,
- 	 * the return value is only updated on the stack and still needs to be
+-		m->arg_size[i] =3D ret;
++		if (__btf_type_is_struct(t)) {
++			m->arg_flags[i] =3D BTF_FMODEL_STRUCT_ARG;
++			m->arg_size[i] =3D t->size;
++		} else {
++			m->arg_size[i] =3D ret;
++		}
+ 	}
+ 	m->nr_args =3D nargs;
+ 	return 0;
 --=20
 2.30.2
 
