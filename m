@@ -2,162 +2,105 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9976EC25B0F
-	for <bpf@archiver.kernel.org>; Mon, 15 Aug 2022 02:33:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6694C00140
+	for <bpf@archiver.kernel.org>; Mon, 15 Aug 2022 05:16:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232588AbiHOCdH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 14 Aug 2022 22:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59420 "EHLO
+        id S240848AbiHOFQF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Aug 2022 01:16:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbiHOCdG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 14 Aug 2022 22:33:06 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D138613D2B
-        for <bpf@vger.kernel.org>; Sun, 14 Aug 2022 19:33:03 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-10ea9ef5838so6962267fac.3
-        for <bpf@vger.kernel.org>; Sun, 14 Aug 2022 19:33:03 -0700 (PDT)
+        with ESMTP id S240522AbiHOFPq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Aug 2022 01:15:46 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02BA110D
+        for <bpf@vger.kernel.org>; Sun, 14 Aug 2022 22:15:44 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id y3so8301249eda.6
+        for <bpf@vger.kernel.org>; Sun, 14 Aug 2022 22:15:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=rKW04FaMDWlNTKaTacFyl18vVqIzuIE+w07IJVIvyZM=;
-        b=0jUHyBYurBxt6DRoAGI0tPLbdwq8QIJsKw7J6a4Op/+9xD+nIyf0dK0wJ7rPnfTq2i
-         NSJvgBTl+8AkLsBjYlKlyuaxDMkNUlYhs/+z2HQnC5hHxmTcduBCI+AHAwPc+R7t9trj
-         KXAijqp+0i9YdXfrzZqpprg6bYtuy30+eIQM05alUjdeky6TD3PDUne1lBj2I32oWOG6
-         ez2BRA/6nu/5Q4AjgERGga2f76iujz1PeWL9w0Vbht1AOF6TtFmcWZT/4icZI3P+1tiZ
-         12Rp1ZxPzP9Jqw/ddSAaGrl2xTsxCHQJjehriM7ybsI4vUgaqO/2H/uoGhsNDT3ppDQz
-         4jcg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=X5FUbvuxj8PVnyFFSdRMt8SjQRrihFn6knWM+ab3B14=;
+        b=hEqvS5gAgbabob19bw6wrKV0zt4y9lpgzwS3nV6ArZ5VAX+40EyS1/puQiewI9SQn9
+         dpe+u0ZbLNYtHB8I9P/QZUm6wAosGl04oCusZPnpBsJMlwrceMneRGjETPgmT+/K2b9x
+         swmhCJipEYVlpLxkhPWPHwSP6AbXf/uZGDxBVqoHIhq3gOjP3yRLgmHEsWvGuVLFdY+h
+         zGNYiDERpFil76AmTM3oPWm74vfNkq1BwlYe74F3IyTff8OmPrxXG38tbNzBqvMWJpQN
+         b6S1wTGi5FjXKwI8Szq6IMoNAW+sXS/N6QZjiaWENVaKtCfRlrD7Ka8RkKRL1vby6zNQ
+         YvfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=rKW04FaMDWlNTKaTacFyl18vVqIzuIE+w07IJVIvyZM=;
-        b=J+Ltjif6XluZ1THhTd5nuoThmB6ZQLkEDxyLVc2xuBal2lUGRAUqKbLUlTXorro2Pg
-         rtKylmvZPk/ZL4D4xvPH5ALgDJw4H/XHg+aiVroeadKa+1XSMXd7c1potvxvlPAZkA2G
-         OpdVtN5aFdgdZvOFlVz6zR6lxqa7bznbCuB5RUD1u1AuLF9GT7oYLnfgADBeE+gokxY2
-         ZBdsdKssy2crxOZNiPODfExMKnM4jl9Io7tWwsBQvfU0ow/R8PoPrFyAZWMxC7K2aQbH
-         w2kfvgV/ICryn2+gn5LT76Iobz6xqqNrNutFm3WcYnFjkz1TeSX3MsdLvhfof/Dr1qJd
-         Ty4g==
-X-Gm-Message-State: ACgBeo2r4vvL+xjXETqeBsexFo0Fctgtsn5JyTVtwL2IPYTEwfhIkOty
-        nK+e/+Dee2O9lTVKT2XuhvxJwsLNY6EVf0D3RTXd
-X-Google-Smtp-Source: AA6agR7bLEQJ7JYxjJc7rtmw4f9ZOcgrB6hJHBerZqztI0P/WghbS9WDob88ogRFpEs/NuLS6Tn9yZ9JlaNb+LVvaqA=
-X-Received: by 2002:a05:6870:b41e:b0:116:5dc7:192a with SMTP id
- x30-20020a056870b41e00b001165dc7192amr6039900oap.136.1660530782624; Sun, 14
- Aug 2022 19:33:02 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=X5FUbvuxj8PVnyFFSdRMt8SjQRrihFn6knWM+ab3B14=;
+        b=tsOx97qwOP2rAABOp15IWvsEzs7bc2NDKDRS0GrtLkIN1g9UAHqVROdEZHgHYIKGNb
+         tJrtusm7WmLIc4bqtMUZ7f7y9KYBpqEEVRzjRb5JR88xR7KehYtbqsUDKFlyo7kB3JmZ
+         qcOS5otLmY/vePCXd0MzQtkiOJ2SEw/4Lv2ZJ5LjMOl2zP0S0CdRcYQcN3NlL9ayOIBz
+         9ZAgkiYTXlaxlWWPwY5IW8KBP+EumapXXjnMgrqEryJfR3DHi9mbQH/T1UZOrYx50zDF
+         TldAJwBJ+GjDVzTO8PVrjrlrvvagodw1HkQ6hi63RSDiGeGLxOGqjbXvWwqPpFxem4QH
+         7V5A==
+X-Gm-Message-State: ACgBeo3OQ73GvhOtDg4shqUWDrv++muvkqmMpdBKGGaF6Y3ZYwVacinn
+        vyy3jU732mWDKFzOjarHNNm1IwgKhmw=
+X-Google-Smtp-Source: AA6agR77yXBhEhdx1+vRK7z9pkDYKcFtKCEXDkMLJgkVLd8rbN+hCUYuHahYo1UAhWOFXHcN/F1LyA==
+X-Received: by 2002:a05:6402:2989:b0:43e:91be:fd20 with SMTP id eq9-20020a056402298900b0043e91befd20mr13301886edb.109.1660540543151;
+        Sun, 14 Aug 2022 22:15:43 -0700 (PDT)
+Received: from localhost (vpn-253-028.epfl.ch. [128.179.253.28])
+        by smtp.gmail.com with ESMTPSA id ek6-20020a056402370600b0043a61f6c389sm5984852edb.4.2022.08.14.22.15.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Aug 2022 22:15:42 -0700 (PDT)
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH RFC bpf v1 1/3] bpf: Move bpf_loop and bpf_for_each_map_elem under CAP_BPF
+Date:   Mon, 15 Aug 2022 07:15:38 +0200
+Message-Id: <20220815051540.18791-2-memxor@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220815051540.18791-1-memxor@gmail.com>
+References: <20220815051540.18791-1-memxor@gmail.com>
 MIME-Version: 1.0
-References: <20220801180146.1157914-1-fred@cloudflare.com> <87les7cq03.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhRpUxyxkPaTz1scGeRm+i4KviQQA7WismOX2q5agzC+DQ@mail.gmail.com>
- <87wnbia7jh.fsf@email.froward.int.ebiederm.org> <CAHC9VhS3udhEecVYVvHm=tuqiPGh034-xPqXYtFjBk23+p-Szg@mail.gmail.com>
- <20220814155508.GA7991@mail.hallyn.com>
-In-Reply-To: <20220814155508.GA7991@mail.hallyn.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Sun, 14 Aug 2022 22:32:51 -0400
-Message-ID: <CAHC9VhRSCXCM51xpOT95G_WVi=UQ44gNV=uvvG23p8wn16uYSA@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] Introduce security_create_user_ns()
-To:     "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
-        casey@schaufler-ca.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
-Content-Type: text/plain; charset="UTF-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1255; i=memxor@gmail.com; h=from:subject; bh=+8aX5D4a7bbYFTu1lla3mHj6to4wj+b1n2cZKZY+Z1M=; b=owEBbQKS/ZANAwAKAUzgyIZIvxHKAcsmYgBi+dZHqLC7/bIfUbYV40fRjnEBVUXudXYbHBtP1HBC GC+7TlaJAjMEAAEKAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCYvnWRwAKCRBM4MiGSL8RyvaZD/ 4tEElfGgtDfFOUZLBiv0TD0mBhsb9ihf/yo70dAawtguDXef12N9OeNQ4oqn2iKdD04fn/O/crtBnY VMuggfMAnzF5ZI2Mx91tSlnymOEItpg/kC1zkaZ188aQxB5oHN7xt1j6tQiIbgekX1k0E7Dphczena eXvhE6uwqG+SbcKCBvh/jvcqB/vA0SrU7egrdZ0Sw6ZE3sskYRfpNSK4xUrevY1agxiF98x149sZdJ caQKADxysvPhmDyLiUKV2O1246F/cMR76Ali9P3fWGGsd5fVRJEmgd0c0WUrVpnLn1JCDUzCi4NCav CuirbP9NeIJKqIPpnESaeo0bJEzjgFb/ZtlqE6SeXncPLm02p+1EvhE0zRZ9PussV+qkJduIqP84IX Gf+b9LHEQu2iSRD7+XOmXDOrLvU4nsOY0LtcWw1P8TXbXdGKBI+2KMb3AWDSjM1YUbg3Qtn7aVJ7zJ 10ZXMN7Q1HvsKY3FnCsYbCkZo8XNFjUdS/8NA0LWdPvGJoP7CzV7hCwLrHpOmpCRS84XeB2N7i+eWJ F2Kczest9rBWPrrGTj01lImzVnL4a2E2XgDM+XBjrfXSniYlL5g8ldK9yjrjYYqm2O1MYFSNP2+3qz qp9Y38dudgOFCG6S37pW1TlFGIGstz8s7pRFdatDw3qH94lqm2Ke+om5FGdQ==
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, Aug 14, 2022 at 11:55 AM Serge E. Hallyn <serge@hallyn.com> wrote:
-> On Mon, Aug 08, 2022 at 03:16:16PM -0400, Paul Moore wrote:
-> > On Mon, Aug 8, 2022 at 2:56 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> > > Paul Moore <paul@paul-moore.com> writes:
-> > > > On Mon, Aug 1, 2022 at 10:56 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> > > >> Frederick Lawler <fred@cloudflare.com> writes:
-> > > >>
-> > > >> > While creating a LSM BPF MAC policy to block user namespace creation, we
-> > > >> > used the LSM cred_prepare hook because that is the closest hook to prevent
-> > > >> > a call to create_user_ns().
-> > > >>
-> > > >> Re-nack for all of the same reasons.
-> > > >> AKA This can only break the users of the user namespace.
-> > > >>
-> > > >> Nacked-by: "Eric W. Biederman" <ebiederm@xmission.com>
-> > > >>
-> > > >> You aren't fixing what your problem you are papering over it by denying
-> > > >> access to the user namespace.
-> > > >>
-> > > >> Nack Nack Nack.
-> > > >>
-> > > >> Stop.
-> > > >>
-> > > >> Go back to the drawing board.
-> > > >>
-> > > >> Do not pass go.
-> > > >>
-> > > >> Do not collect $200.
-> > > >
-> > > > If you want us to take your comments seriously Eric, you need to
-> > > > provide the list with some constructive feedback that would allow
-> > > > Frederick to move forward with a solution to the use case that has
-> > > > been proposed.  You response above may be many things, but it is
-> > > > certainly not that.
-> > >
-> > > I did provide constructive feedback.  My feedback to his problem
-> > > was to address the real problem of bugs in the kernel.
-> >
-> > We've heard from several people who have use cases which require
-> > adding LSM-level access controls and observability to user namespace
-> > creation.  This is the problem we are trying to solve here; if you do
-> > not like the approach proposed in this patchset please suggest another
-> > implementation that allows LSMs visibility into user namespace
-> > creation.
->
-> Regarding the observability - can someone concisely lay out why just
-> auditing userns creation would not suffice?  Userspace could decide
-> what to report based on whether the creating user_ns == /proc/1/ns/user...
+They would require func_info which needs prog BTF anyway, which requires
+bpf_capable, so just to be double sure move both these helpers taking
+callback under CAP_BPF protection as well.
 
-One of the selling points of the BPF LSM is that it allows for various
-different ways of reporting and logging beyond audit.  However, even
-if it was limited to just audit I believe that provides some useful
-justification as auditing fork()/clone() isn't quite the same and
-could be difficult to do at scale in some configurations.  I haven't
-personally added a BPF LSM program to the kernel so I can't speak to
-the details on what is possible, but I'm sure others on the To/CC line
-could help provide more information if that is important to you.
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ kernel/bpf/helpers.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-> Regarding limiting the tweaking of otherwise-privileged code by
-> unprivileged users, i wonder whether we could instead add smarts to
-> ns_capable().
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 1f961f9982d2..d0e80926bac5 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1633,10 +1633,6 @@ bpf_base_func_proto(enum bpf_func_id func_id)
+ 		return &bpf_ringbuf_submit_dynptr_proto;
+ 	case BPF_FUNC_ringbuf_discard_dynptr:
+ 		return &bpf_ringbuf_discard_dynptr_proto;
+-	case BPF_FUNC_for_each_map_elem:
+-		return &bpf_for_each_map_elem_proto;
+-	case BPF_FUNC_loop:
+-		return &bpf_loop_proto;
+ 	case BPF_FUNC_strncmp:
+ 		return &bpf_strncmp_proto;
+ 	case BPF_FUNC_dynptr_from_mem:
+@@ -1675,6 +1671,10 @@ bpf_base_func_proto(enum bpf_func_id func_id)
+ 		return &bpf_timer_cancel_proto;
+ 	case BPF_FUNC_kptr_xchg:
+ 		return &bpf_kptr_xchg_proto;
++	case BPF_FUNC_for_each_map_elem:
++		return &bpf_for_each_map_elem_proto;
++	case BPF_FUNC_loop:
++		return &bpf_loop_proto;
+ 	default:
+ 		break;
+ 	}
+-- 
+2.34.1
 
-The existing security_capable() hook is eventually called by ns_capable():
-
-  ns_capable()
-    ns_capable_common()
-      security_capable(const struct cred *cred,
-                       struct user_namespace *ns,
-                       int cap,
-                       unsigned int opts);
-
-... I'm not sure what additional smarts would be useful here?
-
-[side note: SELinux does actually distinguish between capability
-checks in the initial user namespace vs child namespaces]
-
-> Point being, uid mapping would still work, but we'd
-> break the "privileged against resources you own" part of user
-> namespaces.  I would want it to default to allow, but then when a
-> 0-day is found which requires reaching ns_capable() code, admins
-> could easily prevent exploitation until reboot from a fixed kernel.
-
-That assumes that everything you care about is behind a capability
-check, which is probably going to be correct in a lot of the cases,
-but I think it would be a mistake to assume that is always going to be
-true.
-
---
-paul-moore.com
