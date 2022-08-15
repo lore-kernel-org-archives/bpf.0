@@ -2,240 +2,251 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25C6EC25B0E
-	for <bpf@archiver.kernel.org>; Mon, 15 Aug 2022 05:16:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88D82C00140
+	for <bpf@archiver.kernel.org>; Mon, 15 Aug 2022 05:29:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232982AbiHOFQH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Aug 2022 01:16:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57832 "EHLO
+        id S231204AbiHOF3d (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Aug 2022 01:29:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240579AbiHOFPr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Aug 2022 01:15:47 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD471128
-        for <bpf@vger.kernel.org>; Sun, 14 Aug 2022 22:15:45 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id kb8so11810575ejc.4
-        for <bpf@vger.kernel.org>; Sun, 14 Aug 2022 22:15:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=52ncQDVoLEQypCLCdmrT3cs77W6vwPXVBdFEABVVW3U=;
-        b=NKLhdjdLtFVLDwKvPoxSVykPcweR1euFbusy/LzFNtXemJfOqCC0jXwfsCuaGqq/x3
-         +U01mtgx0OUAh6JdNr/QBCMW4dPsiDmtsy9VunUBLoHOlGYoSkMk1GbCTFsJXMitIa5n
-         YbvuQd436fviSqCwvv2BvAAZkoEBDxtzwJkACSB70RdgN5LZXQ0t7jlA+Hfkz+vwH5kz
-         08QbKjkgwx8V8zn2Jg9L/AwIkpItoqRmw4VcoPaAYRZmx0sfkNStdJL1u/B+3SlJRHw6
-         k7Vn/sGg5TXC2vwZH/d+0O0W6lmNHYiksVMs9oqbll8sCQTiqXeID3NdE8K/3gF/aApo
-         LlMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=52ncQDVoLEQypCLCdmrT3cs77W6vwPXVBdFEABVVW3U=;
-        b=09rfGvhNAW1q7yaqqK519tF5/N7T0uR32+ond+7Uf7+1mGpSlBZ2d0pSzugDJvqQgx
-         vrtBf+bN/1yW5fgkewpT4yjJYJLd7yX/FC2pWtc8tyvV5o/LKyrLGT8hkhQZDXsitEaq
-         NOEvw1wYvl+eFjCkaDCZMUGRE8B+aK75qOFbsZE5t4TC8BGa0I9Mql/G/7wmVR+NR2JK
-         YNS44hf3KFVJqSSx6ol+xlnuj6wVXrAemQLLQuleyDZsPmrSSAMOLbkkDRrVyJgglEU1
-         nvRrXkFu0hXTMDfaOBib81yENcUyr4S7BQurOUzAdaHujzhm38u/LahLLIOccR7pg+ZE
-         A1wQ==
-X-Gm-Message-State: ACgBeo3EkYA2JOldEDyVoLCjjim8scvH44MJO79hE1EAnZieRATCHX7r
-        XkM25ZwXdHHvO2MK4cejQu6ExzP7YLk=
-X-Google-Smtp-Source: AA6agR6o0S0M/TNsL7n32FSUgm4TIiV2zqc8ca6V7hEO6aE68z6AaKWc8P4hl/6nZ7mqfC1Hv3r93g==
-X-Received: by 2002:a17:907:6818:b0:730:d99f:7b91 with SMTP id qz24-20020a170907681800b00730d99f7b91mr9303979ejc.496.1660540544208;
-        Sun, 14 Aug 2022 22:15:44 -0700 (PDT)
-Received: from localhost (vpn-253-028.epfl.ch. [128.179.253.28])
-        by smtp.gmail.com with ESMTPSA id v1-20020aa7d641000000b004417eeff836sm5994992edr.53.2022.08.14.22.15.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Aug 2022 22:15:43 -0700 (PDT)
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@fb.com>,
+        with ESMTP id S229915AbiHOF3c (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Aug 2022 01:29:32 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461A01582B
+        for <bpf@vger.kernel.org>; Sun, 14 Aug 2022 22:29:31 -0700 (PDT)
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27E41Nr0026595;
+        Sun, 14 Aug 2022 22:29:16 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=buZFJh19S49KUVwuwZTkyEGPyRJEkoIKSPyqMTd+BGQ=;
+ b=fG6zS3LqxqqjUaD9EgGUdWndvYX2J9PxH4eloSFZi2GhP7WEsmYHbbHosNzhyX4AfXNn
+ PCM8dadCkPW10Kq2QWYv7CJtfl/EhK48XUoJqkNq18e7hva4JuWKNoepLDpYGNBInahf
+ pCSKEblf7d79dnS//WAW6Zi/cAu6B7nPrTY= 
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hx9pyg9ya-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 14 Aug 2022 22:29:16 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MqBVplZGso4KWmh9sBmXs51r0FP5rdpwrWEwd2zwbm+Yab4XKX3daHFrJ9XQ9ChYhWRbQCcOdixehmBHN2278R/L6HrmnjI7bt7FhUOXmqZBLsbKxRUCGiH94AjIu+1PWaBaFUTKjJ/9LG4T/d/9UYfANP6tIyiNdK4vsMC/6gTKj2K0/xhhhrgaoR8Cy83SADTQ8gry3E6IZVJS42Yc6cFX8ROh5BXQsbaDABmMIjPBO+vF7kbPu3az6cZbtFgts4Y1wgD3v8wOoGQov/Ci79SgvyYl/nBDc3ktiaiKSE/RAOrogG8l1+9WBiJLfEDEn+PjO0GT+StvHw+7RekyDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=buZFJh19S49KUVwuwZTkyEGPyRJEkoIKSPyqMTd+BGQ=;
+ b=dHtsN11wqKT/k8E8fH1dOtqG7iNRocnZ975ZV3TZQ5ZJwNMFmGg8LPb/jwTs8Q34JGpGB0DlEDW3Iajea9dhwvKtPiX3qodAia8+7qnOPPo2rSbQjpbPiObdPO/wJtAVOZJtbBzhEVvf8g1GfiQdb1KyjRQe+YxHSTs8PwMBms1Jz1PAjyUHKQq57j6UnfJI6QjktwQvPC8p0bHDL8M0eWDcLHmMt/7IV2h6x5gvgaMmc7O/YfpuM+gdjMaUObHXilPCoFcKMxyT6VixUcgKEFEwQDl1Kg2G/1Q+JTEt5hlP/wQPcwqGdTp7RKxW0fUTgaA9t8UCCECy0nVRiNUo1w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by SJ0PR15MB4581.namprd15.prod.outlook.com (2603:10b6:a03:377::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.28; Mon, 15 Aug
+ 2022 05:29:14 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::dde5:25a3:a125:7bc7]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::dde5:25a3:a125:7bc7%2]) with mapi id 15.20.5525.010; Mon, 15 Aug 2022
+ 05:29:14 +0000
+Message-ID: <ddc5550d-b820-6975-a4dc-53e3656a66d0@fb.com>
+Date:   Sun, 14 Aug 2022 22:29:11 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH bpf-next v2 3/6] bpf: x86: Support in-register struct
+ arguments
+Content-Language: en-US
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH RFC bpf v1 2/3] bpf: Fix reference state management for synchronous callbacks
-Date:   Mon, 15 Aug 2022 07:15:39 +0200
-Message-Id: <20220815051540.18791-3-memxor@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220815051540.18791-1-memxor@gmail.com>
-References: <20220815051540.18791-1-memxor@gmail.com>
+        Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com
+References: <20220812052419.520522-1-yhs@fb.com>
+ <20220812052435.523068-1-yhs@fb.com> <YvlZ+ETaaTD3hwrM@krava>
+From:   Yonghong Song <yhs@fb.com>
+In-Reply-To: <YvlZ+ETaaTD3hwrM@krava>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BY3PR03CA0028.namprd03.prod.outlook.com
+ (2603:10b6:a03:39a::33) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7099; i=memxor@gmail.com; h=from:subject; bh=+IBqn92ZFNOVZO9Jc/1W/xdv3IJSIaVeDd6nTi5A5oU=; b=owEBbQKS/ZANAwAKAUzgyIZIvxHKAcsmYgBi+dZIpZoH/oY0RJ0C2k6SLOGWxYi3qCkDRFdS/gwl g/BFeh+JAjMEAAEKAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCYvnWSAAKCRBM4MiGSL8RyrKED/ 4w0mhPDimnYNnz18/iZhEhbDlkaJr7T4+0TXrRrqO3zvw4kAqIMXdQU8V1eZBsYmuX/XDwtAVkhfUJ rNVlticiMYcpfFI8PZFu0wryZyEdMJfS4YvlLMcFsMavb+rGWCRUau6uMS7CbYl0grG+FAvhYTgOlW DCkqOlINXez0VZFkJgtf0IQ9wAH7Lh/K8ny4WPAyfBIyMgz1dzdo+Z5p5japL8UDUEadtyZCuaNrxp bA6JUrlDjcWapzLOaP7BYNIyCYE1bGs+RUUdYSVaitNyIOURmkYt5Mqlg/B7owKZrg1luOQ6N5SYBo KxYFeQe/Zs7jm5tzq//bsAfmf290eC8kM/RKmZ54JuN5JwRu+UMfKoccXwAzgh+O+tcEO2DC0vIg0k QRD+7M+azuMjdNaQG32Yd0FVivpMf9rcNFMuHrms97Aq4U2Tt8qVW1aLclyzLLDhZV4yqRiL1TICdb n4YN/UszI4CL4W+rnpwQCYIb8t2UTsrQz7z307VyR87HF2dhnQcuYXCCHkBQN0D792l6B/LDxIChbF GbpNLFxDngsm9AfITNfrB4LzGdCpUzkJeG8LZHEFtfYwF2yTovf8Q2OoYF46Og3ruK5KuTXYBYgrBk rA7+tUgWQCHZFXWr4oLXn8Ud1Dr/Km42gWoW+bMYY/EGfQjvqa+jx9nP0ffw==
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 21cd525b-4fbb-407b-21d6-08da7e7f171c
+X-MS-TrafficTypeDiagnostic: SJ0PR15MB4581:EE_
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vwKB7v2usbenC6XmpljterTQBmGCN64wnxUIgzxW4/QZ+pOX7IpH/Gi1Xpj0fVozx39PTxItysJRyvuZITsqgvpd9vgH0nNhjy2gCuiqcnbyt7HVD8TRHTbemgGHG4Fn6VMTrl5To6qZ7/MnOEQjQuHYGk7r6s/Cw67s4HhOSY9OJWkR77HxNbpHOkW2wyDKrF8rYPSNrZD2KvOKaxQyVQGtIyasZn072wBVkBRvHSDB4a+I9CHdkO8Bc1Af0BpXCgbkV+eUBP1c+kcyA/0cYvKh3p5q/uRK34I8iqMvY/mU9rD0x+aEptPc7iYxWJE9BwS1kjlt2/ugD7hsBml33Vm3rtj7TYi9IwZv1Nn05vVZbG2jq0SgHh+Hk785piTn3vbkYJR5p8LpRP3ptk5PpTwWxoY3w/YuFBHeFU6tfXJazNW0NUmgS3IIaHRPQRU18ObHnCan1taBPMBlqoxC/CrdnOpJ1AxItF09kZe+/hjbOplQZtR5bB5Mcymq9wqSYfMz4Lj9LJAHSL4pvnYQBfykpo8Tvb1RtkiLWRGRa37BNon2LSkU+YyVYmFtAcUY7YreS5uHZ1GdzmKS/eZAyjK794OD16H1IgONnzEIM4WRdWjsJfOv6wKrOmP942fEy8b9kM2G5jOMfTJ/4kStK7bA9JlCCLt0dfoy6jv8HPveOIQgWqSx1g2/xpaIkdF+Ia4QUcWmXYdZyXHa4nsP9aps4NftLFNjKP/7rU6NpXOGh5jWIWEZr48LoAwvnTj8uOQj9ggXuA+jiTlMEudpCmTMxu9KAAD5533yeOa6ot2F37PadU/lYHE1TnhoeVQawaW3KzgrN0roDaf9/xkA/w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(366004)(346002)(39860400002)(396003)(6486002)(31696002)(478600001)(5660300002)(86362001)(31686004)(2906002)(8936002)(66556008)(4326008)(66946007)(66476007)(8676002)(38100700002)(54906003)(316002)(6916009)(36756003)(2616005)(41300700001)(186003)(83380400001)(53546011)(6506007)(6512007)(6666004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dDBzdVFLdVc3ajhERnd1R1JJNXN2YXNSNHdVMGtCd3loVEZoV1pTN2d6WlRK?=
+ =?utf-8?B?VmpxWmlyVENCT3dka284T0l5SGdDT296ZFBNenBaZytYbW11dXc3QlRERzZC?=
+ =?utf-8?B?Wk54MHdxejBtN2tlN21rbDJ4bEhGK3N2dWhFdEtybHhmYUo0YUZ5a09YQWll?=
+ =?utf-8?B?b29XZ3d2OFRoRTB2TnE3R3o1dzVtRElWWS82YXJOUGlMS3dMb2x6bmJhSmdn?=
+ =?utf-8?B?MjcwK3p2ZzVVZmQvcWFvYlEwKzYrQ2VDNVRDcUtEZXR0cmt0dUJSa2luM3Fi?=
+ =?utf-8?B?aWw0dllMSzM0MjFBN01kczJxM0Q4ek5MVW5aM2FOeWxNTjF4V2pTbnpxNkFH?=
+ =?utf-8?B?UDFwRUVhZTJjUWQwbzR2dFdTTm5ncjNjWjMvU2o3Z2tQdlA2WXlPZjViQmho?=
+ =?utf-8?B?bWR1V0pyVkYvc0U3N21ldnNjZnNQM0prNk1OTStLaHhHMDA3Yk9hTTJkSmpv?=
+ =?utf-8?B?Sm9GUzdiVHR3Zi9xRnVvUW1PdUFVcGxVcjNycHk2eUUrWUw2OFljNFh3VUNQ?=
+ =?utf-8?B?TzhCcWF5SzVHY0QwRkUzc1Bua3VuODR3TUtPSkVqUTlRdFR0Z2wrbTlKc1VB?=
+ =?utf-8?B?MG1NK3ByRndUV2RlS0RXT04rQmZWTll0eUxLbEEvN3d2ZUYyUzB5Y04vZmJZ?=
+ =?utf-8?B?bWtVWUI2bWVCTm0xOHhKR1p2OXBOUEJ5YnFsVVZ2blRnNm03RnVZWVZpUFVv?=
+ =?utf-8?B?ZHF1ZkZRVFR5bTB3dktLTmt0ejRhQXZPSGxwVDdnT0hyYzhFdnNIUkd0bmlx?=
+ =?utf-8?B?VDFFVG4zVVdySjVLVkV1ZVp6TTNYdHdmeUZuTks1dER5L1J3eXZ3endOK1No?=
+ =?utf-8?B?V3RaUmZzc1FHU1EwOGdXbmxjODVDWVRXTTZzWlk0ZGF6Nnp3NGYzclB2SlVC?=
+ =?utf-8?B?dFdTSkhIR1VQSkdpT2lpV0JZT2VWK3pBTUE5SHJsNFBKL2VlRldTT29rdXV4?=
+ =?utf-8?B?UUwvVmIycThubFUzZGFIcHl4NHhWdGRURnJiaC9mVUV1SWtsMkRLTkUyblp1?=
+ =?utf-8?B?MXI1ajdXS0VjZnhQVFNCTUdLdS9FYWVoaGhuWmpITEw5NzFLcXRYbHRWUUho?=
+ =?utf-8?B?ajFnVHBuREFLUnQ1TjFyM2pnZlZIM1RmNkhsMVYyQWlCVkNZaTFTTmNHK1By?=
+ =?utf-8?B?ajhPT05FT1lrbzRMWVRMT0ZveHlBNU1rZ0ZINEFZbG9zL0lsRjcreFVITzZL?=
+ =?utf-8?B?cng2dVJ2YlJmeW1HdGsrOUltakxBZmQ4OGNmOHNQeTJIdGZ1elRXM2Jwckk4?=
+ =?utf-8?B?WnF0Q0ErZmpSMVhzaUwvRzFGbytrUnRwcGl1MnByeHVwUHl1eUdiQXpyK2dJ?=
+ =?utf-8?B?VXJOYTVwMWN0WXhKZkZMYW5wNGhCRkN3TW9ua3hyamxQcWJjeGVVQXJzajB2?=
+ =?utf-8?B?bU5pL0hKNktnVSthYlFPSjlNQjRRRUVGMFZMK3U3d1pRTzRnSTN5KzlmVktQ?=
+ =?utf-8?B?NE1FWi9BRkFqUEZIeGNLYmpUVnRBTytVeDB1YmhpN1JLVEpKY1RlVjlRVm9P?=
+ =?utf-8?B?WFEwVFNKZ09xemZYYzJiVGFUenRSeUVBS243c1N6Q1NDQnkzUFNLQzJBMGNl?=
+ =?utf-8?B?NXpXZ0JsODNGRm1DSVZtVUdmR2tMTkZReUEraDdXeFFnVU8wWGtBR3NGS3hV?=
+ =?utf-8?B?c1FVbjd3UWdxd3BvaEtORDlSTStMNkRVT2dWaGNoTUs0UHZxc21xak9jczdB?=
+ =?utf-8?B?MWhHdzlQK05UY2Z0RkFwNExiemNjQW10TjQzQjRBOXVvM2ZMQVJma1NXc0lp?=
+ =?utf-8?B?MWNEL1M2NGJQeWVnVHBMOEN3V3JneWZBU1NSZGNRand0ZmFuVmdQS3FKT3hv?=
+ =?utf-8?B?VkRzOU9Lb3BxdkxUMjN6NWJxWWJoNEN5Q2d2eURVMkpBcnZuUGFIdDltaWM2?=
+ =?utf-8?B?ZUxLeXpObUl1aGpMemZFWkhKS3RMRTlXbTJybFB2QXIxaGREN2N0RGR5RXZq?=
+ =?utf-8?B?Z0xIMG1WWWNlVGFBTXJsZW9RTlNhSm9lMTM0TXd1anlkWUkrWUxVZEZtRkFl?=
+ =?utf-8?B?Y3RUK0NGbk8vZTdXN1ZYaFRYR2hiQ0s4RnYyRlRGNzhwNmxqZExFM1k0YkYv?=
+ =?utf-8?B?R2FIRTNyU1ZBSjdTd0l4WVVSc1l6Qk5LVTQxb1FIOEJwQnE2NkE5K0d1RFUx?=
+ =?utf-8?Q?RK5W3nCxBaqjDyeFbJ+HGmPnp?=
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 21cd525b-4fbb-407b-21d6-08da7e7f171c
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2022 05:29:14.1731
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vFG1fy9censNv2Md2A2cy0+eMXwBmB+HirwyjZqgwL5kt2NUtDI9d1FxS6T56Ak6
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR15MB4581
+X-Proofpoint-GUID: Zp20pFEOwpoBs4sbOmYaBn4KufQBS8Nx
+X-Proofpoint-ORIG-GUID: Zp20pFEOwpoBs4sbOmYaBn4KufQBS8Nx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-15_03,2022-08-11_01,2022-06-22_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, verifier verifies callback functions (sync and async) as if
-they will be executed once, (i.e. it explores execution state as if the
-function was being called once). The next insn to explore is set to
-start of subprog and the exit from nested frame is handled using
-curframe > 0 and prepare_func_exit. In case of async callback it uses a
-customized variant of push_stack simulating a kind of branch to set up
-custom state and execution context for the async callback.
 
-While this approach is simple and works when callback really will be
-executed only once, it is unsafe for all of our current helpers which
-are for_each style, i.e. they execute the callback multiple times.
 
-A callback releasing acquired references of the caller may do so
-multiple times, but currently verifier sees it as one call inside the
-frame, which then returns to caller. Hence, it thinks it released some
-reference that the cb e.g. got access through callback_ctx (register
-filled inside cb from spilled typed register on stack).
+On 8/14/22 1:24 PM, Jiri Olsa wrote:
+> On Thu, Aug 11, 2022 at 10:24:35PM -0700, Yonghong Song wrote:
+> 
+> SNIP
+> 
+>>   }
+>>   
+>>   static int invoke_bpf_prog(const struct btf_func_model *m, u8 **pprog,
+>> @@ -2020,6 +2081,7 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
+>>   	struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
+>>   	struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
+>>   	struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
+>> +	int struct_val_off, extra_nregs = 0;
+>>   	u8 **branches = NULL;
+>>   	u8 *prog;
+>>   	bool save_ret;
+>> @@ -2028,6 +2090,20 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
+>>   	if (nr_args > 6)
+>>   		return -ENOTSUPP;
+>>   
+>> +	for (i = 0; i < MAX_BPF_FUNC_ARGS; i++) {
+>> +		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG) {
+>> +			/* Only support up to 16 bytes struct which should keep
+>> +			 * values in registers.
+>> +			 */
+> 
+> it seems that if the struct contains 'double' field, it's passed in
+> SSE register, which we don't support is save/restore
 
-Similarly, it may see that an acquire call is unpaired inside the
-callback, so the caller will copy the reference state of callback and
-then will have to release the register with new ref_obj_ids. But again,
-the callback may execute multiple times, but the verifier will only
-account for acquired references for a single symbolic execution of the
-callback.
+That is right.
 
-Note that for async callback case, things are different. While currently
-we have bpf_timer_set_callback which only executes it once, even for
-multiple executions it would be safe, as reference state is NULL and
-check_reference_leak would force program to release state before
-BPF_EXIT. The state is also unaffected by analysis for the caller frame.
-Hence async callback is safe.
+> 
+> we should probably check struct's BTF in btf_distill_func_proto and
+> fail if we found anything else than regular regs types?
 
-To fix this, we disallow callbacks to transfer acquired references back
-to caller. They must be released before callback hits BPF_EXIT, since
-the number of times callback is invoked is not known to the verifier, it
-cannot reliably track how many references will be created. Likewise, it
-is not allowed to release caller reference state, since we don't know
-how many times the callback will be invoked.
+The reason I didn't add float/double checking is that I didn't actually
+find any float/double struct members in either vmlinux.h or in
+arch/x86 directory. Could you help double check as well?
 
-Lastly, now that callback function cannot change reference state it
-copied from its parent, there is no need to copy reference state back to
-the parent, since it won't change. It may be changed for the callee
-frame but that state must match parent reference state by the time
-callee exits, and it is going to be discarded anyway. So skip this copy
-too. To be clear, it won't be incorrect if the copy was done, but it
-would be inefficient and may be confusing to people reading the code.
+> 
+>> +			if (m->arg_size[i] > 16)
+>> +				return -ENOTSUPP;
+>> +
+>> +			extra_nregs += (m->arg_size[i] + 7) / 8 - 1;
+>> +		}
+>> +	}
+>> +	if (nr_args + extra_nregs > 6)
+> 
+> should this value be minus the number of actually found struct arguments?
 
-Fixes: 69c87ba6225 ("bpf: Add bpf_for_each_map_elem() helper")
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- include/linux/bpf_verifier.h | 11 ++++++++++
- kernel/bpf/verifier.c        | 42 ++++++++++++++++++++++++++++--------
- 2 files changed, 44 insertions(+), 9 deletions(-)
+In the above we have
+	extra_nregs += (m->arg_size[i] + 7) / 8 - 1;
+already did the 'minus' part.
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 2e3bad8640dc..1fdddbf3546b 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -212,6 +212,17 @@ struct bpf_reference_state {
- 	 * is used purely to inform the user of a reference leak.
- 	 */
- 	int insn_idx;
-+	/* There can be a case like:
-+	 * main (frame 0)
-+	 *  cb (frame 1)
-+	 *   func (frame 3)
-+	 *    cb (frame 4)
-+	 * Hence for frame 4, if callback_ref just stored boolean, it would be
-+	 * impossible to distinguish nested callback refs. Hence store the
-+	 * frameno and compare that to callback_ref in check_reference_leak when
-+	 * exiting a callback function.
-+	 */
-+	int callback_ref;
- };
- 
- /* state of the program:
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 096fdac70165..3e885ba88b02 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1086,6 +1086,7 @@ static int acquire_reference_state(struct bpf_verifier_env *env, int insn_idx)
- 	id = ++env->id_gen;
- 	state->refs[new_ofs].id = id;
- 	state->refs[new_ofs].insn_idx = insn_idx;
-+	state->refs[new_ofs].callback_ref = state->in_callback_fn ? state->frameno : 0;
- 
- 	return id;
- }
-@@ -1098,6 +1099,9 @@ static int release_reference_state(struct bpf_func_state *state, int ptr_id)
- 	last_idx = state->acquired_refs - 1;
- 	for (i = 0; i < state->acquired_refs; i++) {
- 		if (state->refs[i].id == ptr_id) {
-+			/* Cannot release caller references in callbacks */
-+			if (state->in_callback_fn && state->refs[i].callback_ref != state->frameno)
-+				return -EINVAL;
- 			if (last_idx && i != last_idx)
- 				memcpy(&state->refs[i], &state->refs[last_idx],
- 				       sizeof(*state->refs));
-@@ -6938,10 +6942,17 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
- 		caller->regs[BPF_REG_0] = *r0;
- 	}
- 
--	/* Transfer references to the caller */
--	err = copy_reference_state(caller, callee);
--	if (err)
--		return err;
-+	/* callback_fn frame should have released its own additions to parent's
-+	 * reference state at this point, or check_reference_leak would
-+	 * complain, hence it must be the same as the caller. There is no need
-+	 * to copy it back.
-+	 */
-+	if (!callee->in_callback_fn) {
-+		/* Transfer references to the caller */
-+		err = copy_reference_state(caller, callee);
-+		if (err)
-+			return err;
-+	}
- 
- 	*insn_idx = callee->callsite + 1;
- 	if (env->log.level & BPF_LOG_LEVEL) {
-@@ -7065,13 +7076,20 @@ record_func_key(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
- static int check_reference_leak(struct bpf_verifier_env *env)
- {
- 	struct bpf_func_state *state = cur_func(env);
-+	bool refs_lingering = false;
- 	int i;
- 
-+	if (state->frameno && !state->in_callback_fn)
-+		return 0;
-+
- 	for (i = 0; i < state->acquired_refs; i++) {
-+		if (state->in_callback_fn && state->refs[i].callback_ref != state->frameno)
-+			continue;
- 		verbose(env, "Unreleased reference id=%d alloc_insn=%d\n",
- 			state->refs[i].id, state->refs[i].insn_idx);
-+		refs_lingering = true;
- 	}
--	return state->acquired_refs ? -EINVAL : 0;
-+	return refs_lingering ? -EINVAL : 0;
- }
- 
- static int check_bpf_snprintf_call(struct bpf_verifier_env *env,
-@@ -12332,6 +12350,16 @@ static int do_check(struct bpf_verifier_env *env)
- 					return -EINVAL;
- 				}
- 
-+				/* We must do check_reference_leak here before
-+				 * prepare_func_exit to handle the case when
-+				 * state->curframe > 0, it may be a callback
-+				 * function, for which reference_state must
-+				 * match caller reference state when it exits.
-+				 */
-+				err = check_reference_leak(env);
-+				if (err)
-+					return err;
-+
- 				if (state->curframe) {
- 					/* exit from nested function */
- 					err = prepare_func_exit(env, &env->insn_idx);
-@@ -12341,10 +12369,6 @@ static int do_check(struct bpf_verifier_env *env)
- 					continue;
- 				}
- 
--				err = check_reference_leak(env);
--				if (err)
--					return err;
--
- 				err = check_return_code(env);
- 				if (err)
- 					return err;
--- 
-2.34.1
+> 
+>> +		return -ENOTSUPP;
+>> +
+>>   	/* Generated trampoline stack layout:
+>>   	 *
+>>   	 * RBP + 8         [ return address  ]
+>> @@ -2066,6 +2142,13 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
+>>   	stack_size += (sizeof(struct bpf_tramp_run_ctx) + 7) & ~0x7;
+>>   	run_ctx_off = stack_size;
+>>   
+>> +	/* For structure argument */
+>> +	for (i = 0; i < MAX_BPF_FUNC_ARGS; i++) {
+>> +		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
+>> +			stack_size += (m->arg_size[i] + 7) & ~0x7;
+>> +	}
+>> +	struct_val_off = stack_size;
+> 
+> could you please update the 'Generated trampoline stack layout' table
+> above with this offset
 
+Okay, will do in the next revision.
+
+> 
+> thanks,
+> jirka
+> 
+>> +
+>>   	if (flags & BPF_TRAMP_F_SKIP_FRAME) {
+>>   		/* skip patched call instruction and point orig_call to actual
+>>   		 * body of the kernel function.
+>> @@ -2101,7 +2184,7 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
+>>   		emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_0, -ip_off);
+>>   	}
+>>   
+>> -	save_regs(m, &prog, nr_args, regs_off);
+>> +	save_regs(m, &prog, nr_args, regs_off, struct_val_off);
+>>   
+>>   	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+>>   		/* arg1: mov rdi, im */
+>> @@ -2131,7 +2214,7 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
+>>   	}
+>>   
+>>   	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+>> -		restore_regs(m, &prog, nr_args, regs_off);
+>> +		restore_regs(m, &prog, nr_args, regs_off, struct_val_off);
+>>   
+>>   		if (flags & BPF_TRAMP_F_ORIG_STACK) {
+>>   			emit_ldx(&prog, BPF_DW, BPF_REG_0, BPF_REG_FP, 8);
+>> @@ -2172,7 +2255,7 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
+>>   		}
+>>   
+>>   	if (flags & BPF_TRAMP_F_RESTORE_REGS)
+>> -		restore_regs(m, &prog, nr_args, regs_off);
+>> +		restore_regs(m, &prog, nr_args, regs_off, struct_val_off);
+>>   
+>>   	/* This needs to be done regardless. If there were fmod_ret programs,
+>>   	 * the return value is only updated on the stack and still needs to be
+>> -- 
+>> 2.30.2
+>>
