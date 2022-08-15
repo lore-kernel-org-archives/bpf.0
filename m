@@ -2,102 +2,118 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1EDBC00140
-	for <bpf@archiver.kernel.org>; Mon, 15 Aug 2022 22:02:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C0DBC00140
+	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 00:14:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344310AbiHOWCr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Aug 2022 18:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35172 "EHLO
+        id S1351797AbiHPAOf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Aug 2022 20:14:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350175AbiHOWBx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Aug 2022 18:01:53 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0F7112FB9;
-        Mon, 15 Aug 2022 12:36:10 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2F8FB5C012D;
-        Mon, 15 Aug 2022 15:36:02 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 15 Aug 2022 15:36:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm3; t=1660592162; x=1660678562; bh=DNdw0j1TNN+ttmL1Ka7ho+2gv
-        Y2WjWAZUT+c7H7rzqU=; b=RodAOIGAhqLLlqeYqORk44XOWjF1OWeuc5D1VMEWM
-        EkMC3eUi+bsKfqg1zm3z6OWoum80cIX3lghOplkMrE6N8RFLJk8xsen9+G931dUG
-        rG9AZa19SBA4YXhO43KCii5/xYxCgy1HbUHcvZEzui1RJqJoB6J9Qoy57nSrQWOV
-        m1UwDbmQns3q1j07RRECMY2WV3lIoEPGkTVcXpJ+TBBC/W/kWWRPLM2ERspCvohv
-        Yu5SGrE6GDS2RWchOiTyLqdcx0QIdmDl5ff5TqNQHoCnCQZqV0Rx5VJZ7VEynhXu
-        MvclqllvQ5YkPIw6sz3VNZbKOqfbJCLytavbaslN5CXNg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1660592162; x=1660678562; bh=DNdw0j1TNN+ttmL1Ka7ho+2gvY2WjWAZUT+
-        c7H7rzqU=; b=fK9aE9yOEgbddZ9PS0h4B8avf1ld4C/7wIaJrfiwTEGk+UJLcla
-        swwEsLLxiMPMazbwiiNDFtaz67aDzpKdxKzpT66NFNLP9ujk7OHopwJTNjl1BOr+
-        eOqd2nD3+QdRZVGSZQqvbpZXas2tUdzCTZQQdJbFeDWUTWMOa3QQ8pTywXZUXkjj
-        bihlm4rpb6cHuOft9kMuF0gJtPJmPNjOKgcKz0aP+EOQeuF24OH7hph8XFEu+GkM
-        IsVqOVLfKah4LmcHnE/SbQH1MpdJNRu2PIwY2A7GWsMhwidbJdlnU0C5GMmjWaAU
-        37u65ENo1uYlIQZdhZyeohlKGMA7sWj3GOA==
-X-ME-Sender: <xms:IaD6YvR9T9igMeY6R5BTc-DCXLNcdIAniqH04D-GjYu32Ihv7llqaQ>
-    <xme:IaD6Ygz154Gp7Xmd7i-O2KnJOzFRu1eoKEuBSayHIM-WHja3tVqMDB3ztTMTw4u7Z
-    MP494iZcHdkjP3TIQ>
-X-ME-Received: <xmr:IaD6Yk12XPyi7R-4FLCssOkpz3Tj6g1ZAjtB9YAEB89cfcsyDMKexkTaRElLmYxCPM3MieZo4wQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehvddgudegudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdejtddmnecujfgurhephf
-    fvvefufffkofgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegu
-    gihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpedvgefgtefgleehhfeufe
-    ekuddvgfeuvdfhgeeljeduudfffffgteeuudeiieekjeenucevlhhushhtvghrufhiiigv
-    pedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:IaD6YvD4hp8mezAGDamjoAKG43UkTdSrkmyjo5g-Fw3066fSiN3oGw>
-    <xmx:IaD6YohiowkawBZwduAk7NqU894eDTXK380YQNBKk7rg5NPbusLtNg>
-    <xmx:IaD6YjrAXSvmrbVEezLTtZ3n1Lwc4S6xuzHeEXgamd42Wjh800zsFg>
-    <xmx:IqD6YrM1DHk3MhjV9t3-5iSDRptr0mHGYe6x4m0m8s_Wgv7z5pJhEQ>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 15 Aug 2022 15:36:00 -0400 (EDT)
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, memxor@gmail.com
-Cc:     Daniel Xu <dxu@dxuuu.xyz>, pablo@netfilter.org, fw@strlen.de,
-        netfilter-devel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 0/3] Support direct writes to nf_conn:mark
-Date:   Mon, 15 Aug 2022 13:35:45 -0600
-Message-Id: <cover.1660592020.git.dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.37.1
+        with ESMTP id S1356609AbiHPAMH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Aug 2022 20:12:07 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD7ACCE36
+        for <bpf@vger.kernel.org>; Mon, 15 Aug 2022 13:29:32 -0700 (PDT)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27FIbwYf014763
+        for <bpf@vger.kernel.org>; Mon, 15 Aug 2022 13:29:31 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=zrAu2d6Awa3DTHIWUHb462duCgxHnfPFFfUZlSOGOdk=;
+ b=oyYACSCpPU418kbuX5HnHwP0VwsFL2GVaC6E8GVNeMhNomimS3MT9MlZWIlBSNcHSvMO
+ o3dkrbeWxU6FFw9diVrI2pP5H/d3ZLZPPrGE+O6x+YpP1QjxRPpVlyxC9ORJzPSZnK9M
+ 9MwhhKiWS+SDqcCK7wunnKN5eRWoOqkkn8E= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hyry8t3vw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 15 Aug 2022 13:29:30 -0700
+Received: from twshared22246.03.prn5.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 15 Aug 2022 13:29:30 -0700
+Received: by devbig150.prn5.facebook.com (Postfix, from userid 187975)
+        id BC718DF6F050; Mon, 15 Aug 2022 13:29:18 -0700 (PDT)
+From:   Jie Meng <jmeng@fb.com>
+To:     <netdev@vger.kernel.org>
+CC:     <kafai@fb.com>, <kuba@kernel.org>, <edumazet@google.com>,
+        <bpf@vger.kernel.org>, Jie Meng <jmeng@fb.com>
+Subject: [PATCH net-next] tcp: Make SYN ACK RTO tunable by BPF programs with TFO
+Date:   Mon, 15 Aug 2022 13:29:00 -0700
+Message-ID: <20220815202900.3961097-1-jmeng@fb.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: fvPNfJGLsoNEHDw3r82auZZVrdTVX3iG
+X-Proofpoint-ORIG-GUID: fvPNfJGLsoNEHDw3r82auZZVrdTVX3iG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-15_08,2022-08-15_01,2022-06-22_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Support direct writes to nf_conn:mark from TC and XDP prog types. This
-is useful when applications want to store per-connection metadata. This
-is also particularly useful for applications that run both bpf and
-iptables/nftables because the latter can trivially access this metadata.
+Instead of the hardcoded TCP_TIMEOUT_INIT, this diff calls tcp_timeout_in=
+it
+to initiate req->timeout like the non TFO SYN ACK case.
 
-One example use case would be if a bpf prog is responsible for advanced
-packet classification and iptables/nftables is later used for routing
-due to pre-existing/legacy code.
+Tested using the following packetdrill script, on a host with a BPF
+program that sets the initial connect timeout to 10ms.
 
-Daniel Xu (3):
-  bpf: Remove duplicate PTR_TO_BTF_ID RO check
-  bpf: Add support for writing to nf_conn:mark
-  selftests/bpf: Add tests for writing to nf_conn:mark
+`../../common/defaults.sh`
 
- include/net/netfilter/nf_conntrack_bpf.h      | 18 +++++++
- kernel/bpf/verifier.c                         |  3 --
- net/core/filter.c                             | 34 +++++++++++++
- net/netfilter/nf_conntrack_bpf.c              | 50 +++++++++++++++++++
- .../testing/selftests/bpf/prog_tests/bpf_nf.c |  1 +
- .../testing/selftests/bpf/progs/test_bpf_nf.c |  6 ++-
- .../selftests/bpf/progs/test_bpf_nf_fail.c    | 14 ++++++
- 7 files changed, 121 insertions(+), 5 deletions(-)
+// Initialize connection
+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) =3D 3
+   +0 setsockopt(3, SOL_TCP, TCP_FASTOPEN, [1], 4) =3D 0
+   +0 bind(3, ..., ...) =3D 0
+   +0 listen(3, 1) =3D 0
 
--- 
-2.37.1
+   +0 < S 0:0(0) win 32792 <mss 1000,sackOK,FO TFO_COOKIE>
+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK>
+   +.01 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK>
+   +.02 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK>
+   +.04 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK>
+   +.01 < . 1:1(0) ack 1 win 32792
+
+   +0 accept(3, ..., ...) =3D 4
+
+Signed-off-by: Jie Meng <jmeng@fb.com>
+---
+ net/ipv4/tcp_fastopen.c | 3 ++-
+ net/ipv4/tcp_timer.c    | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/net/ipv4/tcp_fastopen.c b/net/ipv4/tcp_fastopen.c
+index 825b216d11f5..45cc7f1ca296 100644
+--- a/net/ipv4/tcp_fastopen.c
++++ b/net/ipv4/tcp_fastopen.c
+@@ -272,8 +272,9 @@ static struct sock *tcp_fastopen_create_child(struct =
+sock *sk,
+ 	 * The request socket is not added to the ehash
+ 	 * because it's been added to the accept queue directly.
+ 	 */
++	req->timeout =3D tcp_timeout_init(child);
+ 	inet_csk_reset_xmit_timer(child, ICSK_TIME_RETRANS,
+-				  TCP_TIMEOUT_INIT, TCP_RTO_MAX);
++				  req->timeout, TCP_RTO_MAX);
+=20
+ 	refcount_set(&req->rsk_refcnt, 2);
+=20
+diff --git a/net/ipv4/tcp_timer.c b/net/ipv4/tcp_timer.c
+index b4dfb82d6ecb..cb79127f45c3 100644
+--- a/net/ipv4/tcp_timer.c
++++ b/net/ipv4/tcp_timer.c
+@@ -428,7 +428,7 @@ static void tcp_fastopen_synack_timer(struct sock *sk=
+, struct request_sock *req)
+ 	if (!tp->retrans_stamp)
+ 		tp->retrans_stamp =3D tcp_time_stamp(tp);
+ 	inet_csk_reset_xmit_timer(sk, ICSK_TIME_RETRANS,
+-			  TCP_TIMEOUT_INIT << req->num_timeout, TCP_RTO_MAX);
++			  req->timeout << req->num_timeout, TCP_RTO_MAX);
+ }
+=20
+=20
+--=20
+2.30.2
 
