@@ -2,147 +2,162 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F778C25B06
-	for <bpf@archiver.kernel.org>; Mon, 15 Aug 2022 02:30:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9976EC25B0F
+	for <bpf@archiver.kernel.org>; Mon, 15 Aug 2022 02:33:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231705AbiHOCai (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 14 Aug 2022 22:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57908 "EHLO
+        id S232588AbiHOCdH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 14 Aug 2022 22:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbiHOCag (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 14 Aug 2022 22:30:36 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC655599
-        for <bpf@vger.kernel.org>; Sun, 14 Aug 2022 19:30:35 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M5dVw5fgSzmVX4;
-        Mon, 15 Aug 2022 10:28:24 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by canpemm500010.china.huawei.com
- (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 15 Aug
- 2022 10:30:31 +0800
-From:   Liu Jian <liujian56@huawei.com>
-To:     <john.fastabend@gmail.com>, <jakub@cloudflare.com>,
-        <edumazet@google.com>, <davem@davemloft.net>,
-        <yoshfuji@linux-ipv6.org>, <dsahern@kernel.org>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <andrii@kernel.org>, <mykolal@fb.com>,
-        <ast@kernel.org>, <daniel@iogearbox.net>, <martin.lau@linux.dev>,
-        <song@kernel.org>, <yhs@fb.com>, <kpsingh@kernel.org>,
-        <sdf@google.com>, <haoluo@google.com>, <jolsa@kernel.org>,
-        <shuah@kernel.org>, <bpf@vger.kernel.org>
-CC:     <liujian56@huawei.com>
-Subject: [PATCH bpf-next 1/2] sk_msg: Keep reference on socket file while wait_memory
-Date:   Mon, 15 Aug 2022 10:33:42 +0800
-Message-ID: <20220815023343.295094-2-liujian56@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220815023343.295094-1-liujian56@huawei.com>
-References: <20220815023343.295094-1-liujian56@huawei.com>
+        with ESMTP id S230096AbiHOCdG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 14 Aug 2022 22:33:06 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D138613D2B
+        for <bpf@vger.kernel.org>; Sun, 14 Aug 2022 19:33:03 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-10ea9ef5838so6962267fac.3
+        for <bpf@vger.kernel.org>; Sun, 14 Aug 2022 19:33:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=rKW04FaMDWlNTKaTacFyl18vVqIzuIE+w07IJVIvyZM=;
+        b=0jUHyBYurBxt6DRoAGI0tPLbdwq8QIJsKw7J6a4Op/+9xD+nIyf0dK0wJ7rPnfTq2i
+         NSJvgBTl+8AkLsBjYlKlyuaxDMkNUlYhs/+z2HQnC5hHxmTcduBCI+AHAwPc+R7t9trj
+         KXAijqp+0i9YdXfrzZqpprg6bYtuy30+eIQM05alUjdeky6TD3PDUne1lBj2I32oWOG6
+         ez2BRA/6nu/5Q4AjgERGga2f76iujz1PeWL9w0Vbht1AOF6TtFmcWZT/4icZI3P+1tiZ
+         12Rp1ZxPzP9Jqw/ddSAaGrl2xTsxCHQJjehriM7ybsI4vUgaqO/2H/uoGhsNDT3ppDQz
+         4jcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=rKW04FaMDWlNTKaTacFyl18vVqIzuIE+w07IJVIvyZM=;
+        b=J+Ltjif6XluZ1THhTd5nuoThmB6ZQLkEDxyLVc2xuBal2lUGRAUqKbLUlTXorro2Pg
+         rtKylmvZPk/ZL4D4xvPH5ALgDJw4H/XHg+aiVroeadKa+1XSMXd7c1potvxvlPAZkA2G
+         OpdVtN5aFdgdZvOFlVz6zR6lxqa7bznbCuB5RUD1u1AuLF9GT7oYLnfgADBeE+gokxY2
+         ZBdsdKssy2crxOZNiPODfExMKnM4jl9Io7tWwsBQvfU0ow/R8PoPrFyAZWMxC7K2aQbH
+         w2kfvgV/ICryn2+gn5LT76Iobz6xqqNrNutFm3WcYnFjkz1TeSX3MsdLvhfof/Dr1qJd
+         Ty4g==
+X-Gm-Message-State: ACgBeo2r4vvL+xjXETqeBsexFo0Fctgtsn5JyTVtwL2IPYTEwfhIkOty
+        nK+e/+Dee2O9lTVKT2XuhvxJwsLNY6EVf0D3RTXd
+X-Google-Smtp-Source: AA6agR7bLEQJ7JYxjJc7rtmw4f9ZOcgrB6hJHBerZqztI0P/WghbS9WDob88ogRFpEs/NuLS6Tn9yZ9JlaNb+LVvaqA=
+X-Received: by 2002:a05:6870:b41e:b0:116:5dc7:192a with SMTP id
+ x30-20020a056870b41e00b001165dc7192amr6039900oap.136.1660530782624; Sun, 14
+ Aug 2022 19:33:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
+References: <20220801180146.1157914-1-fred@cloudflare.com> <87les7cq03.fsf@email.froward.int.ebiederm.org>
+ <CAHC9VhRpUxyxkPaTz1scGeRm+i4KviQQA7WismOX2q5agzC+DQ@mail.gmail.com>
+ <87wnbia7jh.fsf@email.froward.int.ebiederm.org> <CAHC9VhS3udhEecVYVvHm=tuqiPGh034-xPqXYtFjBk23+p-Szg@mail.gmail.com>
+ <20220814155508.GA7991@mail.hallyn.com>
+In-Reply-To: <20220814155508.GA7991@mail.hallyn.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Sun, 14 Aug 2022 22:32:51 -0400
+Message-ID: <CAHC9VhRSCXCM51xpOT95G_WVi=UQ44gNV=uvvG23p8wn16uYSA@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] Introduce security_create_user_ns()
+To:     "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
+        casey@schaufler-ca.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix the below NULL pointer dereference:
+On Sun, Aug 14, 2022 at 11:55 AM Serge E. Hallyn <serge@hallyn.com> wrote:
+> On Mon, Aug 08, 2022 at 03:16:16PM -0400, Paul Moore wrote:
+> > On Mon, Aug 8, 2022 at 2:56 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> > > Paul Moore <paul@paul-moore.com> writes:
+> > > > On Mon, Aug 1, 2022 at 10:56 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> > > >> Frederick Lawler <fred@cloudflare.com> writes:
+> > > >>
+> > > >> > While creating a LSM BPF MAC policy to block user namespace creation, we
+> > > >> > used the LSM cred_prepare hook because that is the closest hook to prevent
+> > > >> > a call to create_user_ns().
+> > > >>
+> > > >> Re-nack for all of the same reasons.
+> > > >> AKA This can only break the users of the user namespace.
+> > > >>
+> > > >> Nacked-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> > > >>
+> > > >> You aren't fixing what your problem you are papering over it by denying
+> > > >> access to the user namespace.
+> > > >>
+> > > >> Nack Nack Nack.
+> > > >>
+> > > >> Stop.
+> > > >>
+> > > >> Go back to the drawing board.
+> > > >>
+> > > >> Do not pass go.
+> > > >>
+> > > >> Do not collect $200.
+> > > >
+> > > > If you want us to take your comments seriously Eric, you need to
+> > > > provide the list with some constructive feedback that would allow
+> > > > Frederick to move forward with a solution to the use case that has
+> > > > been proposed.  You response above may be many things, but it is
+> > > > certainly not that.
+> > >
+> > > I did provide constructive feedback.  My feedback to his problem
+> > > was to address the real problem of bugs in the kernel.
+> >
+> > We've heard from several people who have use cases which require
+> > adding LSM-level access controls and observability to user namespace
+> > creation.  This is the problem we are trying to solve here; if you do
+> > not like the approach proposed in this patchset please suggest another
+> > implementation that allows LSMs visibility into user namespace
+> > creation.
+>
+> Regarding the observability - can someone concisely lay out why just
+> auditing userns creation would not suffice?  Userspace could decide
+> what to report based on whether the creating user_ns == /proc/1/ns/user...
 
-[   14.471200] Call Trace:
-[   14.471562]  <TASK>
-[   14.471882]  lock_acquire+0x245/0x2e0
-[   14.472416]  ? remove_wait_queue+0x12/0x50
-[   14.473014]  ? _raw_spin_lock_irqsave+0x17/0x50
-[   14.473681]  _raw_spin_lock_irqsave+0x3d/0x50
-[   14.474318]  ? remove_wait_queue+0x12/0x50
-[   14.474907]  remove_wait_queue+0x12/0x50
-[   14.475480]  sk_stream_wait_memory+0x20d/0x340
-[   14.476127]  ? do_wait_intr_irq+0x80/0x80
-[   14.476704]  do_tcp_sendpages+0x287/0x600
-[   14.477283]  tcp_bpf_push+0xab/0x260
-[   14.477817]  tcp_bpf_sendmsg_redir+0x297/0x500
-[   14.478461]  ? __local_bh_enable_ip+0x77/0xe0
-[   14.479096]  tcp_bpf_send_verdict+0x105/0x470
-[   14.479729]  tcp_bpf_sendmsg+0x318/0x4f0
-[   14.480311]  sock_sendmsg+0x2d/0x40
-[   14.480822]  ____sys_sendmsg+0x1b4/0x1c0
-[   14.481390]  ? copy_msghdr_from_user+0x62/0x80
-[   14.482048]  ___sys_sendmsg+0x78/0xb0
-[   14.482580]  ? vmf_insert_pfn_prot+0x91/0x150
-[   14.483215]  ? __do_fault+0x2a/0x1a0
-[   14.483738]  ? do_fault+0x15e/0x5d0
-[   14.484246]  ? __handle_mm_fault+0x56b/0x1040
-[   14.484874]  ? lock_is_held_type+0xdf/0x130
-[   14.485474]  ? find_held_lock+0x2d/0x90
-[   14.486046]  ? __sys_sendmsg+0x41/0x70
-[   14.486587]  __sys_sendmsg+0x41/0x70
-[   14.487105]  ? intel_pmu_drain_pebs_core+0x350/0x350
-[   14.487822]  do_syscall_64+0x34/0x80
-[   14.488345]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+One of the selling points of the BPF LSM is that it allows for various
+different ways of reporting and logging beyond audit.  However, even
+if it was limited to just audit I believe that provides some useful
+justification as auditing fork()/clone() isn't quite the same and
+could be difficult to do at scale in some configurations.  I haven't
+personally added a BPF LSM program to the kernel so I can't speak to
+the details on what is possible, but I'm sure others on the To/CC line
+could help provide more information if that is important to you.
 
-The test scene as following flow:
-thread1                               thread2
------------                           ---------------
- tcp_bpf_sendmsg
-  tcp_bpf_send_verdict
-   tcp_bpf_sendmsg_redir              sock_close
-    tcp_bpf_push_locked                 __sock_release
-     tcp_bpf_push                         //inet_release
-      do_tcp_sendpages                    sock->ops->release
-       sk_stream_wait_memory          	   // tcp_close
-          sk_wait_event                      sk->sk_prot->close
-           release_sock(__sk);
-            ***
+> Regarding limiting the tweaking of otherwise-privileged code by
+> unprivileged users, i wonder whether we could instead add smarts to
+> ns_capable().
 
-                                                lock_sock(sk);
-                                                  __tcp_close
-                                                    sock_orphan(sk)
-                                                      sk->sk_wq  = NULL
-                                                release_sock
-            ****
-           lock_sock(__sk);
-          remove_wait_queue(sk_sleep(sk), &wait);
-             sk_sleep(sk)
-             //NULL pointer dereference
-             &rcu_dereference_raw(sk->sk_wq)->wait
+The existing security_capable() hook is eventually called by ns_capable():
 
-While waiting for memory in thread1, the socket is released with its wait
-queue because thread2 has closed it. This caused by tcp_bpf_send_verdict
-didn't increase the f_count of psock->sk_redir->sk_socket->file in thread1.
+  ns_capable()
+    ns_capable_common()
+      security_capable(const struct cred *cred,
+                       struct user_namespace *ns,
+                       int cap,
+                       unsigned int opts);
 
-Avoid it by keeping a reference to the socket file while redirect sock wait
-send memory. Refer to [1].
+... I'm not sure what additional smarts would be useful here?
 
-[1] https://lore.kernel.org/netdev/20190211090949.18560-1-jakub@cloudflare.com/
+[side note: SELinux does actually distinguish between capability
+checks in the initial user namespace vs child namespaces]
 
-Signed-off-by: Liu Jian <liujian56@huawei.com>
----
- net/ipv4/tcp_bpf.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+> Point being, uid mapping would still work, but we'd
+> break the "privileged against resources you own" part of user
+> namespaces.  I would want it to default to allow, but then when a
+> 0-day is found which requires reaching ns_capable() code, admins
+> could easily prevent exploitation until reboot from a fixed kernel.
 
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index a1626afe87a1..201375829367 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -125,9 +125,17 @@ static int tcp_bpf_push_locked(struct sock *sk, struct sk_msg *msg,
- {
- 	int ret;
- 
-+	/* Hold on to socket wait queue. */
-+	if (sk->sk_socket && sk->sk_socket->file)
-+		get_file(sk->sk_socket->file);
-+
- 	lock_sock(sk);
- 	ret = tcp_bpf_push(sk, msg, apply_bytes, flags, uncharge);
- 	release_sock(sk);
-+
-+	if (sk->sk_socket && sk->sk_socket->file)
-+		fput(sk->sk_socket->file);
-+
- 	return ret;
- }
- 
--- 
-2.17.1
+That assumes that everything you care about is behind a capability
+check, which is probably going to be correct in a lot of the cases,
+but I think it would be a mistake to assume that is always going to be
+true.
 
+--
+paul-moore.com
