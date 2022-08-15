@@ -2,82 +2,88 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 411A9C00140
-	for <bpf@archiver.kernel.org>; Mon, 15 Aug 2022 15:36:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B020C00140
+	for <bpf@archiver.kernel.org>; Mon, 15 Aug 2022 15:39:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232630AbiHOPgR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Aug 2022 11:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52236 "EHLO
+        id S229611AbiHOPjW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Aug 2022 11:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232234AbiHOPgM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Aug 2022 11:36:12 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2371B13D39
-        for <bpf@vger.kernel.org>; Mon, 15 Aug 2022 08:36:12 -0700 (PDT)
+        with ESMTP id S229736AbiHOPjU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Aug 2022 11:39:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862AB13F69;
+        Mon, 15 Aug 2022 08:39:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 73F74CE112D
-        for <bpf@vger.kernel.org>; Mon, 15 Aug 2022 15:36:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B27BFC433C1;
-        Mon, 15 Aug 2022 15:36:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660577768;
-        bh=mGAY0UJmcFjtex+2QDap/OmBluoeoKaXalX+KShTAww=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=fQEGKsZ52hRcRH3CsV9jb9F6oQQRbhDohvS87mzp6YpsSyUKznPCoYxsq7lBDr5cM
-         yS23j1zYUxOM85KoYdWCg3lQXHYkrA9bh7QrIXdMrZuVZIdoGnx07cSK4omnav8SFd
-         UPbTFirD7GkeGE+G8NltpAdqx07iu70TNfQZ6O24SbZYHzVosTfKk3f15cZR4KVklS
-         gUl1OBDGblDn09OcyDzwO4rWoPHovdNJYwgMp7zeI0UEpj80GL0I7pyy2lu05iLOcP
-         St+wY4d5lmM6TWRhHFCmarxGQ/tGdwpib1FdTPebuM+wOk74aY2k8zHeU10X/DfC/v
-         cbNhjTjjjwu3A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9C4D4E2A050;
-        Mon, 15 Aug 2022 15:36:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4161FB80F96;
+        Mon, 15 Aug 2022 15:39:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCB0DC433D6;
+        Mon, 15 Aug 2022 15:39:14 +0000 (UTC)
+Date:   Mon, 15 Aug 2022 11:39:21 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        Network Development <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        bpf <bpf@vger.kernel.org>,
+        Magnus Karlsson <magnus.karlsson@gmail.com>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Edward Cree <ecree@solarflare.com>,
+        Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdl?= =?UTF-8?B?bnNlbg==?= 
+        <thoiland@redhat.com>, Jesper Dangaard Brouer <brouer@redhat.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH bpf-next v4 2/6] bpf: introduce BPF dispatcher
+Message-ID: <20220815113921.5b3305f5@gandalf.local.home>
+In-Reply-To: <20220815111658.58d75672@gandalf.local.home>
+References: <20191211123017.13212-1-bjorn.topel@gmail.com>
+        <20191211123017.13212-3-bjorn.topel@gmail.com>
+        <20220815101303.79ace3f8@gandalf.local.home>
+        <CAADnVQLhHm-gxJXTbWxJN0fFGW_dyVV+5D-JahVA1Wrj2cGu7g@mail.gmail.com>
+        <20220815111658.58d75672@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf: Clear up confusion in bpf_skb_adjust_room()'s
- documentation
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166057776863.2541.17985979200763729909.git-patchwork-notify@kernel.org>
-Date:   Mon, 15 Aug 2022 15:36:08 +0000
-References: <20220812153727.224500-3-quentin@isovalent.com>
-In-Reply-To: <20220812153727.224500-3-quentin@isovalent.com>
-To:     Quentin Monnet <quentin@isovalent.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
-        rumen.telbizov@menlosecurity.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+On Mon, 15 Aug 2022 11:16:58 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
-
-On Fri, 12 Aug 2022 16:37:27 +0100 you wrote:
-> Adding or removing room space _below_ layers 2 or 3, as the description
-> mentions, is ambiguous. This was written with a mental image of the
-> packet with layer 2 at the top, layer 3 under it, and so on. But it has
-> led users to believe that it was on lower layers (before the beginning
-> of the L2 and L3 headers respectively).
+> > It sounds that you've invented nop5 and kernel's ability
+> > to replace nop5 with a jump or call.  
 > 
-> Let's make it more explicit, and specify between which layers the room
-> space is adjusted.
+> Actually I did invent it.
 > 
-> [...]
+>    https://lore.kernel.org/lkml/20080210072109.GR4100@elte.hu/
+> 
+> 
+> I'm the one that introduced the code to convert mcount into the 5 byte nop,
+> and did the research and development to make it work at run time. I had one
+> hiccup along the way that caused the e1000e network card breakage.
+> 
+> The "daemon" approach was horrible, and then I created the recordmcount.pl
+> perl script to accomplish the same thing at compile time.
 
-Here is the summary with links:
-  - [bpf-next] bpf: Clear up confusion in bpf_skb_adjust_room()'s documentation
-    https://git.kernel.org/bpf/bpf-next/c/4961d0772578
+I guess you were not paying attention to my talk at the Kernel Recipes I
+invited you to in 2019. The talk I gave was the history of how fentry came
+about.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+  https://kernel-recipes.org/en/2019/talks/ftrace-where-modifying-a-running-kernel-all-started/
 
+ ;-)
 
+-- Steve
