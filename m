@@ -2,105 +2,162 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 807E2C25B0E
-	for <bpf@archiver.kernel.org>; Mon, 15 Aug 2022 15:34:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A83F5C00140
+	for <bpf@archiver.kernel.org>; Mon, 15 Aug 2022 15:36:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232173AbiHOPeR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Aug 2022 11:34:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47328 "EHLO
+        id S229918AbiHOPgL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Aug 2022 11:36:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230351AbiHOPdm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Aug 2022 11:33:42 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C0B1FCFF
-        for <bpf@vger.kernel.org>; Mon, 15 Aug 2022 08:33:25 -0700 (PDT)
-Received: from sslproxy04.your-server.de ([78.46.152.42])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oNc5b-000BN8-79; Mon, 15 Aug 2022 17:33:15 +0200
-Received: from [85.1.206.226] (helo=linux-4.home)
-        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oNc5a-000ITG-TE; Mon, 15 Aug 2022 17:33:14 +0200
-Subject: Re: [PATCH bpf-next] bpftool: Clear errno after libcap's checks
-To:     Quentin Monnet <quentin@isovalent.com>,
+        with ESMTP id S231318AbiHOPgF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Aug 2022 11:36:05 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDED12AC1
+        for <bpf@vger.kernel.org>; Mon, 15 Aug 2022 08:36:04 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 186-20020a1c02c3000000b003a34ac64bdfso7964683wmc.1
+        for <bpf@vger.kernel.org>; Mon, 15 Aug 2022 08:36:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=aLIgBOFDINfwWT7sgtqg5VHJeqaHc1mZmgglPh0sAyY=;
+        b=cyPux8RNKFujd9roQpwDZOASW6ijxYgslOXdJqm0R8g26Zi+cI2KkwRECN+52orxyE
+         9Zajuq+yuut4empWdcY3rREB4/K16QGTjzy7oXSanZwPZ38kiaBtECuBaxHV2Al1ZfjB
+         9et+JqHCutUlrmNuWXKYwzOKsF3lC7Ryr7L6uZDBCUs+HHVqp3bnojSOvkNOL+rrkXwG
+         C3LlmbixIKyTCijnk4mDaUHQl+CbVxICM4rBfZ6rsMKiJfXTa67r1jTDXqq7EBiBlksa
+         G3RQfHlT+XrmF8Xe3DpJE9Ki3cOeFnEwLboUEr2D94+0v9YwTYQCWzMuIj6/ZV7VTpIx
+         LXjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=aLIgBOFDINfwWT7sgtqg5VHJeqaHc1mZmgglPh0sAyY=;
+        b=cDS+sPSGK5+j1o6ybd7YR0rnfiS1IEEWwps1fjEMQk3LBbSSNh2EnwlB92R5F5MI1p
+         q2hPvkcqSfahVMirgxntjsoUCR7tpn2+TP2baZB8wkecvJaer43/svO2hIDLJUEHsL9T
+         PEA8Vzs2M6zKuBex1XXmuOL7UKnemqqrRhWAA7tb3ipjMICQYvvoU0pFERkhcq7HFLQt
+         PM9XcM1ENLb1GZOhjYw50UHF47yTsMBZ9qxQvM1T9PlI9aWI1PElyOSTLiYfzLwsC5w1
+         FJpXaF2PPoN688cUObBYy3o/ry3C4iihPilNhygmbwX8voDtcy4ws0kr6h+Dx7bSBzlQ
+         xCJg==
+X-Gm-Message-State: ACgBeo0mtj79eVD6dMsjhvtH4pTdomkxeYDsF7wFlfV2QXi8XjaOxGu0
+        p8FCla/hQsuQBd1KJbxOdFvJQ8TCUNJqZg==
+X-Google-Smtp-Source: AA6agR6xIRa3yxAc16EqQ9DGTpZo2oUf/GBOyk4W5fy5KqhiMZ4slGdnFP3TOOY7UKY3cY4CQipzug==
+X-Received: by 2002:a05:600c:b4b:b0:3a5:b76e:1350 with SMTP id k11-20020a05600c0b4b00b003a5b76e1350mr10524905wmr.108.1660577762827;
+        Mon, 15 Aug 2022 08:36:02 -0700 (PDT)
+Received: from [192.168.178.32] ([51.155.200.13])
+        by smtp.gmail.com with ESMTPSA id j3-20020a5d5643000000b0021f138e07acsm7689668wrw.35.2022.08.15.08.36.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Aug 2022 08:36:02 -0700 (PDT)
+Message-ID: <a3c23cfe-061a-1722-8521-26e57b4b2cf4@isovalent.com>
+Date:   Mon, 15 Aug 2022 16:36:01 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCHv2 bpf-next] libbpf: making bpf_prog_load() ignore name if
+ kernel doesn't support
+Content-Language: en-GB
+To:     Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
         bpf@vger.kernel.org
-References: <20220812153727.224500-2-quentin@isovalent.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <dfda4b3e-2935-fd19-ce62-f331c07d6921@iogearbox.net>
-Date:   Mon, 15 Aug 2022 17:33:14 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <20220812153727.224500-2-quentin@isovalent.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+References: <20220813000936.6464-1-liuhangbin@gmail.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <20220813000936.6464-1-liuhangbin@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26628/Mon Aug 15 09:51:41 2022)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 8/12/22 5:37 PM, Quentin Monnet wrote:
-> When bpftool is linked against libcap, the library runs a "constructor"
-> function to compute the number of capabilities of the running kernel
-> [0], at the beginning of the execution of the program. As part of this,
-> it performs multiple calls to prctl(). Some of these may fail, and set
-> errno to a non-zero value:
+On 13/08/2022 01:09, Hangbin Liu wrote:
+> Similar with commit 10b62d6a38f7 ("libbpf: Add names for auxiliary maps"),
+> let's make bpf_prog_load() also ignore name if kernel doesn't support
+> program name.
 > 
->      # strace -e prctl ./bpftool version
->      prctl(PR_CAPBSET_READ, CAP_MAC_OVERRIDE) = 1
->      prctl(PR_CAPBSET_READ, 0x30 /* CAP_??? */) = -1 EINVAL (Invalid argument)
->      prctl(PR_CAPBSET_READ, CAP_CHECKPOINT_RESTORE) = 1
->      prctl(PR_CAPBSET_READ, 0x2c /* CAP_??? */) = -1 EINVAL (Invalid argument)
->      prctl(PR_CAPBSET_READ, 0x2a /* CAP_??? */) = -1 EINVAL (Invalid argument)
->      prctl(PR_CAPBSET_READ, 0x29 /* CAP_??? */) = -1 EINVAL (Invalid argument)
->      ** fprintf added at the top of main(): we have errno == 1
->      ./bpftool v7.0.0
->      using libbpf v1.0
->      features: libbfd, libbpf_strict, skeletons
->      +++ exited with 0 +++
+> To achieve this, we need to call sys_bpf_prog_load() directly in
+> probe_kern_prog_name() to avoid circular dependency. sys_bpf_prog_load()
+> also need to be exported in the libbpf_internal.h file.
 > 
-> Let's clean errno at the beginning of the main() function, to make sure
-> that these checks do not interfere with the batch mode, where we error
-> out if errno is set after a bpftool command.
-> 
-> [0] https://git.kernel.org/pub/scm/libs/libcap/libcap.git/tree/libcap/cap_alloc.c?h=v1.2.65#n20
-> 
-> Signed-off-by: Quentin Monnet <quentin@isovalent.com>
+> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 > ---
->   tools/bpf/bpftool/main.c | 3 +++
->   1 file changed, 3 insertions(+)
+> v2: move sys_bpf_prog_load definition to libbpf_internal.h. memset attr
+>     to 0 specifically to aviod padding.
+> ---
+>  tools/lib/bpf/bpf.c             |  6 ++----
+>  tools/lib/bpf/libbpf.c          | 12 ++++++++++--
+>  tools/lib/bpf/libbpf_internal.h |  3 +++
+>  3 files changed, 15 insertions(+), 6 deletions(-)
 > 
-> diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-> index 451cefc2d0da..c0e2e4fedbe8 100644
-> --- a/tools/bpf/bpftool/main.c
-> +++ b/tools/bpf/bpftool/main.c
-> @@ -435,6 +435,9 @@ int main(int argc, char **argv)
->   
->   	setlinebuf(stdout);
->   
-> +	/* Libcap */
-
-Good catch! The comment is a bit too terse, could you improve it, so that it's
-clear from reading code (w/o digging through git log) why we need to reset errno
-in this location? Thx
-
-> +	errno = 0;
+> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+> index 6a96e665dc5d..575867d69496 100644
+> --- a/tools/lib/bpf/bpf.c
+> +++ b/tools/lib/bpf/bpf.c
+> @@ -84,9 +84,7 @@ static inline int sys_bpf_fd(enum bpf_cmd cmd, union bpf_attr *attr,
+>  	return ensure_good_fd(fd);
+>  }
+>  
+> -#define PROG_LOAD_ATTEMPTS 5
+> -
+> -static inline int sys_bpf_prog_load(union bpf_attr *attr, unsigned int size, int attempts)
+> +int sys_bpf_prog_load(union bpf_attr *attr, unsigned int size, int attempts)
+>  {
+>  	int fd;
+>  
+> @@ -263,7 +261,7 @@ int bpf_prog_load(enum bpf_prog_type prog_type,
+>  	attr.prog_ifindex = OPTS_GET(opts, prog_ifindex, 0);
+>  	attr.kern_version = OPTS_GET(opts, kern_version, 0);
+>  
+> -	if (prog_name)
+> +	if (prog_name && kernel_supports(NULL, FEAT_PROG_NAME))
+>  		libbpf_strlcpy(attr.prog_name, prog_name, sizeof(attr.prog_name));
+>  	attr.license = ptr_to_u64(license);
+>  
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 3f01f5cd8a4c..4a351897bdcc 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -4419,10 +4419,18 @@ static int probe_kern_prog_name(void)
+>  		BPF_MOV64_IMM(BPF_REG_0, 0),
+>  		BPF_EXIT_INSN(),
+>  	};
+> -	int ret, insn_cnt = ARRAY_SIZE(insns);
+> +	union bpf_attr attr;
+> +	int ret;
 > +
->   	last_do_help = do_help;
->   	pretty_output = false;
->   	json_output = false;
-> 
+> +	memset(&attr, 0, sizeof(attr));
+> +	attr.prog_type = BPF_PROG_TYPE_SOCKET_FILTER;
+> +	attr.license = ptr_to_u64("GPL");
+> +	attr.insns = ptr_to_u64(insns);
+> +	attr.insn_cnt = (__u32)ARRAY_SIZE(insns);
+> +	libbpf_strlcpy(attr.prog_name, "test", sizeof(attr.prog_name));
+>  
+>  	/* make sure loading with name works */
+> -	ret = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, "test", "GPL", insns, insn_cnt, NULL);
+> +	ret = sys_bpf_prog_load(&attr, sizeof(attr), PROG_LOAD_ATTEMPTS);
+>  	return probe_fd(ret);
+>  }
+>  
+> diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+> index 4135ae0a2bc3..377642ff51fc 100644
+> --- a/tools/lib/bpf/libbpf_internal.h
+> +++ b/tools/lib/bpf/libbpf_internal.h
+> @@ -573,4 +573,7 @@ static inline bool is_pow_of_2(size_t x)
+>  	return x && (x & (x - 1)) == 0;
+>  }
+>  
+> +#define PROG_LOAD_ATTEMPTS 5
+> +int sys_bpf_prog_load(union bpf_attr *attr, unsigned int size, int attempts);
+> +
+>  #endif /* __LIBBPF_LIBBPF_INTERNAL_H */
 
+Looks good to me, thanks!
+
+Acked-by: Quentin Monnet <quentin@isovalent.com>
