@@ -2,25 +2,25 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31D71C3F6B0
-	for <bpf@archiver.kernel.org>; Mon, 15 Aug 2022 02:30:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD402C25B06
+	for <bpf@archiver.kernel.org>; Mon, 15 Aug 2022 02:30:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbiHOCah (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S232530AbiHOCah (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Sun, 14 Aug 2022 22:30:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57916 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231705AbiHOCah (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 14 Aug 2022 22:30:37 -0400
+        with ESMTP id S230009AbiHOCag (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 14 Aug 2022 22:30:36 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264AC6155
-        for <bpf@vger.kernel.org>; Sun, 14 Aug 2022 19:30:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5035FB8
+        for <bpf@vger.kernel.org>; Sun, 14 Aug 2022 19:30:34 -0700 (PDT)
 Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M5dVw6cFyzmVkp;
-        Mon, 15 Aug 2022 10:28:24 +0800 (CST)
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M5dVt4dmbzmV7n;
+        Mon, 15 Aug 2022 10:28:22 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by canpemm500010.china.huawei.com
  (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 15 Aug
- 2022 10:30:32 +0800
+ 2022 10:30:30 +0800
 From:   Liu Jian <liujian56@huawei.com>
 To:     <john.fastabend@gmail.com>, <jakub@cloudflare.com>,
         <edumazet@google.com>, <davem@davemloft.net>,
@@ -31,12 +31,10 @@ To:     <john.fastabend@gmail.com>, <jakub@cloudflare.com>,
         <sdf@google.com>, <haoluo@google.com>, <jolsa@kernel.org>,
         <shuah@kernel.org>, <bpf@vger.kernel.org>
 CC:     <liujian56@huawei.com>
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Add wait send memory test for sockmap redirect
-Date:   Mon, 15 Aug 2022 10:33:43 +0800
-Message-ID: <20220815023343.295094-3-liujian56@huawei.com>
+Subject: [PATCH bpf-next 0/2] >   Keep reference on socket file while wait send memory
+Date:   Mon, 15 Aug 2022 10:33:41 +0800
+Message-ID: <20220815023343.295094-1-liujian56@huawei.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220815023343.295094-1-liujian56@huawei.com>
-References: <20220815023343.295094-1-liujian56@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.175.101.6]
@@ -47,108 +45,16 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add one test for wait redirect sock's send memory test for sockmap.
+Keep reference on socket file while wait send memory
 
-Signed-off-by: Liu Jian <liujian56@huawei.com>
----
+Liu Jian (2):
+  sk_msg: Keep reference on socket file while wait_memory
+  selftests/bpf: Add wait send memory test for sockmap redirect
+
+ net/ipv4/tcp_bpf.c                         |  8 +++++
  tools/testing/selftests/bpf/test_sockmap.c | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ 2 files changed, 50 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
-index 0fbaccdc8861..95b9b45ad028 100644
---- a/tools/testing/selftests/bpf/test_sockmap.c
-+++ b/tools/testing/selftests/bpf/test_sockmap.c
-@@ -138,6 +138,7 @@ struct sockmap_options {
- 	bool data_test;
- 	bool drop_expected;
- 	bool check_recved_len;
-+	bool tx_wait_mem;
- 	int iov_count;
- 	int iov_length;
- 	int rate;
-@@ -578,6 +579,10 @@ static int msg_loop(int fd, int iov_count, int iov_length, int cnt,
- 			sent = sendmsg(fd, &msg, flags);
- 
- 			if (!drop && sent < 0) {
-+				if (opt->tx_wait_mem && errno == EACCES) {
-+					errno = 0;
-+					goto out_errno;
-+				}
- 				perror("sendmsg loop error");
- 				goto out_errno;
- 			} else if (drop && sent >= 0) {
-@@ -644,6 +649,15 @@ static int msg_loop(int fd, int iov_count, int iov_length, int cnt,
- 				goto out_errno;
- 			}
- 
-+			if (opt->tx_wait_mem) {
-+				FD_ZERO(&w);
-+				FD_SET(fd, &w);
-+				slct = select(max_fd + 1, NULL, NULL, &w, &timeout);
-+				errno = 0;
-+				close(fd);
-+				goto out_errno;
-+			}
-+
- 			errno = 0;
- 			if (peek_flag) {
- 				flags |= MSG_PEEK;
-@@ -752,6 +766,22 @@ static int sendmsg_test(struct sockmap_options *opt)
- 			return err;
- 	}
- 
-+	if (opt->tx_wait_mem) {
-+		struct timeval timeout;
-+		int rxtx_buf_len = 1024;
-+
-+		timeout.tv_sec = 3;
-+		timeout.tv_usec = 0;
-+
-+		err = setsockopt(c2, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(struct timeval));
-+		err |= setsockopt(c2, SOL_SOCKET, SO_SNDBUFFORCE, &rxtx_buf_len, sizeof(int));
-+		err |= setsockopt(p2, SOL_SOCKET, SO_RCVBUFFORCE, &rxtx_buf_len, sizeof(int));
-+		if (err) {
-+			perror("setsockopt failed()");
-+			return errno;
-+		}
-+	}
-+
- 	rxpid = fork();
- 	if (rxpid == 0) {
- 		if (txmsg_pop || txmsg_start_pop)
-@@ -788,6 +818,9 @@ static int sendmsg_test(struct sockmap_options *opt)
- 		return errno;
- 	}
- 
-+	if (opt->tx_wait_mem)
-+		close(c2);
-+
- 	txpid = fork();
- 	if (txpid == 0) {
- 		if (opt->sendpage)
-@@ -1452,6 +1485,14 @@ static void test_txmsg_redir(int cgrp, struct sockmap_options *opt)
- 	test_send(opt, cgrp);
- }
- 
-+static void test_txmsg_redir_wait_sndmem(int cgrp, struct sockmap_options *opt)
-+{
-+	txmsg_redir = 1;
-+	opt->tx_wait_mem = true;
-+	test_send_large(opt, cgrp);
-+	opt->tx_wait_mem = false;
-+}
-+
- static void test_txmsg_drop(int cgrp, struct sockmap_options *opt)
- {
- 	txmsg_drop = 1;
-@@ -1800,6 +1841,7 @@ static int populate_progs(char *bpf_file)
- struct _test test[] = {
- 	{"txmsg test passthrough", test_txmsg_pass},
- 	{"txmsg test redirect", test_txmsg_redir},
-+	{"txmsg test redirect wait send mem", test_txmsg_redir_wait_sndmem},
- 	{"txmsg test drop", test_txmsg_drop},
- 	{"txmsg test ingress redirect", test_txmsg_ingress_redir},
- 	{"txmsg test skb", test_txmsg_skb},
 -- 
 2.17.1
 
