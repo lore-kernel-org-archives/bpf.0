@@ -2,119 +2,113 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8360DC3F6B0
-	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 06:38:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEC4CC3F6B0
+	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 06:38:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbiHPGh6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Aug 2022 02:37:58 -0400
+        id S230115AbiHPGiM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Aug 2022 02:38:12 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbiHPGhk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Aug 2022 02:37:40 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0747A16304F
-        for <bpf@vger.kernel.org>; Mon, 15 Aug 2022 20:27:13 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id dc19so16623710ejb.12
-        for <bpf@vger.kernel.org>; Mon, 15 Aug 2022 20:27:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=ci9V0ccH7yrdscDREP9JziE1sny4lsTm9XGKbaKxzsE=;
-        b=AWAof5gHQz0xpGuyBT2QgdnmvwmRWHIEynw3oQgIJqIsK3CNb4xJe+gU0jPpvrttOa
-         kGmfDHe6Ys8ooFwxLTe9OT5ZVuBJpWKB48FBGQ8kccCD8ZXayDGPy7Nk59wi5SeHBTy+
-         zz5Mth61HPXpu3s5u+yxCHmE2seoKtOFqxLcnVFjb92Z/hOMiV00JRin2Mpij5FqOIJs
-         SLSZ/Vm73qURJTy/AHcQck/U73yYonIYFqhry4bOJNo8kkoCyIqMn7374fC35ddP6Pyu
-         ssh0jzHk4au1xfcVgQGz7S1V870FKncspYXg9NsjEqkWqXtkhNpxgE+Ghv9inzts6Tp0
-         wiqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=ci9V0ccH7yrdscDREP9JziE1sny4lsTm9XGKbaKxzsE=;
-        b=SrV+HTYbSzLV+6bUR5fblOlBPN08IVoD/cuhBvjdBmDII2NT+kkFBH8q41R5ZF2Fs6
-         VPWCvN1ingkNGGEMssmvFothaha22hOTOpRJZhdhudD/jgBJBd5frbsgKPkWrh+lXgH+
-         cy3yJlGLrnKBVWVorvZizfKC7BfDbvOkO/4EX+7bV7Sco80o+EVsbajlrHWlZkybi4Wp
-         ukvWu/TLgQ1Bo/rMVHBm68tacgK/TrGdUn9jo1OQFyDN0I+Ime+gtiY/3Y469hff2sdt
-         jBBFxpxLow2Zs+jEvULfkUOpA11rmVv/QGjH6eEtndhPSMcy+dBthtviNvOziG3o21bL
-         E2LA==
-X-Gm-Message-State: ACgBeo2qLfmvYqIr6la8NDAenihxjYZ+8wu7oLqBCV14VnDRQ8N9oaGG
-        7a3KC/tp85nVLv+2iDZtMXIdHRAiQeE7uSDSEsE=
-X-Google-Smtp-Source: AA6agR6OF0dOaiYdXXon1R3LWzSvArgxp5jMPL0Sb1Ke/3PqGV8ka5UrihCw47wUh00gu+K8FpGxSCync2Q6IENAL+w=
-X-Received: by 2002:a17:907:3d90:b0:730:a937:fb04 with SMTP id
- he16-20020a1709073d9000b00730a937fb04mr12437332ejc.176.1660620431604; Mon, 15
- Aug 2022 20:27:11 -0700 (PDT)
+        with ESMTP id S229772AbiHPGh6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Aug 2022 02:37:58 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1C9C3F6D;
+        Mon, 15 Aug 2022 18:16:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660612605; x=1692148605;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LGPJbg4YSGE8kGvV/+MMwres2qQJGjWYu0L1b7FKRhE=;
+  b=ELRkR2j1k99KuJmwKFAuMd3EZk19xB9XFwD1m3elDOIJ/99+sIdebamR
+   BPlxiwKrSATGt8r0FVnjxTZg2R9AnPplI3rWDKZl93hNRipjow5kb5V3y
+   jZoUzRg5s82gd6CunLWVcSV0iTKD/QIO6FXUx7iYPO4JGCD3q66DZ6I2n
+   dsCBypP0P08a85N7ywODoZLQyacGutLWasCv1Juw7vCsoeTEmlssEY1cp
+   t8d2L6lZzlp/dYoxYTxYNwKE6EcpGn090h7gPqU7pgfMDGt/kPyB8QZzC
+   klr52tGFjSaa8NXxv5oSnV1j9tvcpwIY/mIXXzG9Ne3RrK+YdCwXZngay
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="293368083"
+X-IronPort-AV: E=Sophos;i="5.93,239,1654585200"; 
+   d="scan'208";a="293368083"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 18:16:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,239,1654585200"; 
+   d="scan'208";a="639838790"
+Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 15 Aug 2022 18:16:42 -0700
+Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oNlCD-0001KD-2Z;
+        Tue, 16 Aug 2022 01:16:41 +0000
+Date:   Tue, 16 Aug 2022 09:15:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Xu <dxu@dxuuu.xyz>, bpf@vger.kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
+Cc:     kbuild-all@lists.01.org, Daniel Xu <dxu@dxuuu.xyz>,
+        pablo@netfilter.org, fw@strlen.de, netfilter-devel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 2/3] bpf: Add support for writing to nf_conn:mark
+Message-ID: <202208160931.5FG8tZ8G-lkp@intel.com>
+References: <f850bb7e20950736d9175c61d7e0691098e06182.1660592020.git.dxu@dxuuu.xyz>
 MIME-Version: 1.0
-References: <20220811091526.172610-1-jolsa@kernel.org>
-In-Reply-To: <20220811091526.172610-1-jolsa@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 15 Aug 2022 20:27:00 -0700
-Message-ID: <CAEf4BzaKWQtwki8oDcp+rh8c-kMmZcc1ok+zs=GvMCndN8UnyA@mail.gmail.com>
-Subject: Re: [PATCHv2 bpf-next 0/6] bpf: Fixes for CONFIG_X86_KERNEL_IBT
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f850bb7e20950736d9175c61d7e0691098e06182.1660592020.git.dxu@dxuuu.xyz>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 2:15 AM Jiri Olsa <jolsa@kernel.org> wrote:
->
-> hi,
-> Martynas reported bpf_get_func_ip returning +4 address when
-> CONFIG_X86_KERNEL_IBT option is enabled and I found there are
-> some failing bpf tests when this option is enabled.
->
-> The CONFIG_X86_KERNEL_IBT option adds endbr instruction at the
-> function entry, so the idea is to 'fix' entry ip for kprobe_multi
-> and trampoline probes, because they are placed on the function
-> entry.
->
-> v2 changes:
->   - change kprobes get_func_ip to return zero for kprobes
->     attached within the function body [Andrii]
->   - detect IBT config and properly test kprobe with offset
->     [Andrii]
->
-> v1 changes:
->   - read previous instruction in kprobe_multi link handler
->     and adjust entry_ip for CONFIG_X86_KERNEL_IBT option
->   - split first patch into 2 separate changes
->   - update changelogs
->
-> thanks,
-> jirka
->
->
-> ---
-> Jiri Olsa (6):
->       kprobes: Add new KPROBE_FLAG_ON_FUNC_ENTRY kprobe flag
->       ftrace: Keep the resolved addr in kallsyms_callback
->       bpf: Use given function address for trampoline ip arg
->       bpf: Adjust kprobe_multi entry_ip for CONFIG_X86_KERNEL_IBT
->       bpf: Return value in kprobe get_func_ip only for entry address
->       selftests/bpf: Fix get_func_ip offset test for CONFIG_X86_KERNEL_IBT
->
->  arch/x86/net/bpf_jit_comp.c                               |  9 ++++-----
->  include/linux/kprobes.h                                   |  1 +
->  kernel/kprobes.c                                          |  6 +++++-
->  kernel/trace/bpf_trace.c                                  | 15 ++++++++++++++-
->  kernel/trace/ftrace.c                                     |  3 +--
->  tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c | 62 +++++++++++++++++++++++++++++++++++++++++++++++++++-----------
->  tools/testing/selftests/bpf/progs/get_func_ip_test.c      | 22 ++++++++++------------
->  tools/testing/selftests/bpf/progs/kprobe_multi.c          |  4 +---
->  8 files changed, 87 insertions(+), 35 deletions(-)
+Hi Daniel,
 
-Overall LGTM, please address Peter's questions and request for some
-more comments and context. Few nits to simplify selftests further, but
-looks great. Thanks!
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Xu/Support-direct-writes-to-nf_conn-mark/20220816-060429
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: um-x86_64_defconfig (https://download.01.org/0day-ci/archive/20220816/202208160931.5FG8tZ8G-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/c7b21d163eb9c61514dd86baf4281deb4d4387bb
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daniel-Xu/Support-direct-writes-to-nf_conn-mark/20220816-060429
+        git checkout c7b21d163eb9c61514dd86baf4281deb4d4387bb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=um SUBARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   net/core/filter.c: In function 'tc_cls_act_btf_struct_access':
+>> net/core/filter.c:8723:24: error: implicit declaration of function 'btf_struct_access' [-Werror=implicit-function-declaration]
+    8723 |                 return btf_struct_access(log, btf, t, off, size, atype, next_btf_id,
+         |                        ^~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/btf_struct_access +8723 net/core/filter.c
+
+  8714	
+  8715	static int tc_cls_act_btf_struct_access(struct bpf_verifier_log *log,
+  8716						const struct btf *btf,
+  8717						const struct btf_type *t, int off,
+  8718						int size, enum bpf_access_type atype,
+  8719						u32 *next_btf_id,
+  8720						enum bpf_type_flag *flag)
+  8721	{
+  8722		if (atype == BPF_READ)
+> 8723			return btf_struct_access(log, btf, t, off, size, atype, next_btf_id,
+  8724						 flag);
+  8725	
+  8726		return nf_conntrack_btf_struct_access(log, btf, t, off, size, atype,
+  8727						      next_btf_id, flag);
+  8728	}
+  8729	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
