@@ -2,213 +2,130 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A38A0C3F6B0
-	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 06:39:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 532DEC32772
+	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 07:09:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbiHPGjb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Aug 2022 02:39:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42322 "EHLO
+        id S231748AbiHPHJK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Aug 2022 03:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbiHPGjR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Aug 2022 02:39:17 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92982162E33
-        for <bpf@vger.kernel.org>; Mon, 15 Aug 2022 20:26:05 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id b16so11869217edd.4
-        for <bpf@vger.kernel.org>; Mon, 15 Aug 2022 20:26:05 -0700 (PDT)
+        with ESMTP id S229954AbiHPHIr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Aug 2022 03:08:47 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028472DCE2D;
+        Mon, 15 Aug 2022 20:33:46 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id f22so11856656edc.7;
+        Mon, 15 Aug 2022 20:33:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=Y8tbw2qpZS5I3bS0kR3gjd18wRuqW5eQpj1LMg7fyqM=;
-        b=UgknJ0pCdW6WrWW5zTTBYPK/XEgxsWgmOCk49tIjxlwnVUIN2k9AHOdLu/0BTMC014
-         2E6dnFF3epLNMfzXdYAbzRtxSixehfN8HrUcOAGeBJ6sdAE0Nz+ZFTfMhdezVM1QwaLa
-         XkpyhUPVAKYcYivdN50qxExDBT2QplPG8CvIu1KDSqR5CAihA3Xe7fBqojDmTYP6DD2s
-         tLpy8G/PpnAvUzIPmkVsRf8KkGDGb9+y08BDQdB9dJQt7hXqlEvKpXWlOiPnbKNySqbb
-         9nS4NlkfaZjnR/5975V7JcRVchVYiDyXQFM7SWwWZRrBALazbkK/MZvPqz7hvuqeZhPf
-         OFDg==
+        bh=DEG/KDHanKqZe+WzYjSLFff9rFKakaJDsiFb2U0inBk=;
+        b=mKGK+oC2ul1JQ4Qvo5Z7bjRTwuhNeUSUZT2F104IIcGhRODQI9hKcwqVgyqlen0EUV
+         rR7YVa/tmyKEXPrbCW7inuTp2JtwxxmBA2wzRf3fthldXUdZ+dusMzpr6wggseeFg0zd
+         QFigtZ7xOkE8WtNGuy1VM1OAnLz/Hxthx5BT1fgy9qJB7WcBNlPMMdBDZtNVeJgurf72
+         OEk6PU6vFiyHOLQHL1bTIzpMFdlKfGyx/JLL07DJIH55CHS554o3zH63E+kTteDiwEYM
+         cBIIKMxWuhNo6AlnFOrgnGUj2gH1I1zh49J7XsTCTTmLulb7baETFZY9riKeqpA3OKS1
+         eNgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=Y8tbw2qpZS5I3bS0kR3gjd18wRuqW5eQpj1LMg7fyqM=;
-        b=vBSaFTKQ0q/WfYh7kd7nwkGloAwjjm7qkxjjAgwT+vakfwRaLJQ00qGyWbww8bwwmG
-         h3Rd9hts9Ue9mftbN/gWZ3pqBNUcrS56cLQTnaE/9o3vi0m7uWjA9anR3+5gaLsNXXzX
-         kFcyl9/OT9mNtH0n82AEKwqSO/qDF3+oYN9gUhPGpMU29R0U5FzeVK/YSJmsZ2ZX//Ms
-         mT48xb9t3/R/aQ5m0JaUNvHFrLKpVV0Bx2CnQTsEjZ/zX5o98tbIiKX7b0n61lnBtj7D
-         6CEN1TSsGWy7JkjhfL+R6J84r6yJQPRPdfhVbmW5ECsaA3wDKWFOFEWQwwQlUgloe8Ni
-         690Q==
-X-Gm-Message-State: ACgBeo2kMmLOf34BF15IMhH/wImFqa/MwgY3oEYOcqdsLQ6eMT5ecbIa
-        V+NlOrxqH8MgMO+DSqyJyrE7CfMT2lKv+x59Vro=
-X-Google-Smtp-Source: AA6agR4mPwIeF3rrqNpwWovUy3mUDwYDv1ZvP4oYvPieDall6FAPf7xATJzXdFAKYWgY8qsuOPS1AdELlpusr9hcY4k=
-X-Received: by 2002:a05:6402:28cb:b0:43b:c6d7:ef92 with SMTP id
- ef11-20020a05640228cb00b0043bc6d7ef92mr17387715edb.333.1660620363160; Mon, 15
- Aug 2022 20:26:03 -0700 (PDT)
+        bh=DEG/KDHanKqZe+WzYjSLFff9rFKakaJDsiFb2U0inBk=;
+        b=ZB9FxrTCG5F8FbRWMhzztJkOK1MUWEfxGMw9DK/dEpG4bAxWVXcLjYCuWNY6WKvXj+
+         ZAdRP8YhGcKgLghQGPo79ZBaKmUCvUSsiYi7QF8oKeeBZe0vHURyDvw4H+06Pm+CIHy9
+         NFqawtY/lgNmJaQ6bapbiRCymODTw7RPYejge7LEn33yRPsA5rAx7Xh2bbElNx038kgJ
+         QO2yLiyZ89/tVYaK+M5VUIbeXkK30SB93n9PCFuQfb0n4oDVQQpOcu7T2LyxfH8hYzBe
+         KCyfxQODU2JH2pcNjGB069lc3GkyO/GcKowqcOEfiYZa3siMgkltrFjbJVVzrsjwzj4y
+         XOJQ==
+X-Gm-Message-State: ACgBeo0LWJd9ZP9V67fAhbgC9gUOuRcOL6yIU+3f/vGc782vuxeWyhVj
+        QTd1p9wqUD6gF4f0EeYB0rhB8R3vdqP7VU1DbgM=
+X-Google-Smtp-Source: AA6agR7o6+cbAmbBXWrOEVSD8/8jpNtunHuIYuQyyAHx1LwhKi1/Xxr3KRLSmAnNCs+diMAHKFF+AYFi8krAbUbaSjc=
+X-Received: by 2002:aa7:ccc4:0:b0:43d:9e0e:b7ff with SMTP id
+ y4-20020aa7ccc4000000b0043d9e0eb7ffmr17529084edt.14.1660620825187; Mon, 15
+ Aug 2022 20:33:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220811091526.172610-1-jolsa@kernel.org> <20220811091526.172610-7-jolsa@kernel.org>
-In-Reply-To: <20220811091526.172610-7-jolsa@kernel.org>
+References: <20220810190724.2692127-1-kafai@fb.com> <20220810190809.2698442-1-kafai@fb.com>
+In-Reply-To: <20220810190809.2698442-1-kafai@fb.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 15 Aug 2022 20:25:51 -0700
-Message-ID: <CAEf4BzbXBsL8zrCDEP-+VsKseEQ1fWTRvUkJtwxX5r8q9hf1OA@mail.gmail.com>
-Subject: Re: [PATCHv2 bpf-next 6/6] selftests/bpf: Fix get_func_ip offset test
- for CONFIG_X86_KERNEL_IBT
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+Date:   Mon, 15 Aug 2022 20:33:33 -0700
+Message-ID: <CAEf4BzZqyE9XKePk0pf8U7-3ei17vO8jQiEBH_fTN7vOst+gWg@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf-next 07/15] bpf: Initialize the bpf_run_ctx in bpf_iter_run_prog()
+To:     Martin KaFai Lau <kafai@fb.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+        David Miller <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, kernel-team@fb.com,
+        Paolo Abeni <pabeni@redhat.com>,
+        Stanislav Fomichev <sdf@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 2:16 AM Jiri Olsa <jolsa@kernel.org> wrote:
+On Wed, Aug 10, 2022 at 12:11 PM Martin KaFai Lau <kafai@fb.com> wrote:
 >
-> With CONFIG_X86_KERNEL_IBT enabled the test for kprobe with offset
-> won't work because of the extra endbr instruction.
+> The bpf-iter-prog for tcp and unix sk can do bpf_setsockopt()
+> which needs has_current_bpf_ctx() to decide if it is called by a
+> bpf prog.  This patch initializes the bpf_run_ctx in
+> bpf_iter_run_prog() for the has_current_bpf_ctx() to use.
 >
-> As suggested by Andrii adding CONFIG_X86_KERNEL_IBT detection
-> and using appropriate offset value based on that.
->
-> Also removing test7 program, because it does the same as test6.
->
-> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 > ---
->  .../bpf/prog_tests/get_func_ip_test.c         | 62 +++++++++++++++----
->  .../selftests/bpf/progs/get_func_ip_test.c    | 20 +++---
->  2 files changed, 60 insertions(+), 22 deletions(-)
+>  include/linux/bpf.h   | 2 +-
+>  kernel/bpf/bpf_iter.c | 5 +++++
+>  2 files changed, 6 insertions(+), 1 deletion(-)
 >
-> diff --git a/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c b/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c
-> index 938dbd4d7c2f..a4dab2fa2258 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c
-> @@ -2,7 +2,9 @@
->  #include <test_progs.h>
->  #include "get_func_ip_test.skel.h"
->
-> -void test_get_func_ip_test(void)
-> +static int config_ibt;
-> +
-> +static void test_function_entry(void)
->  {
->         struct get_func_ip_test *skel = NULL;
->         int err, prog_fd;
-> @@ -12,14 +14,6 @@ void test_get_func_ip_test(void)
->         if (!ASSERT_OK_PTR(skel, "get_func_ip_test__open"))
->                 return;
->
-> -       /* test6 is x86_64 specifc because of the instruction
-> -        * offset, disabling it for all other archs
-> -        */
-> -#ifndef __x86_64__
-> -       bpf_program__set_autoload(skel->progs.test6, false);
-> -       bpf_program__set_autoload(skel->progs.test7, false);
-> -#endif
-> -
->         err = get_func_ip_test__load(skel);
->         if (!ASSERT_OK(err, "get_func_ip_test__load"))
->                 goto cleanup;
-> @@ -38,16 +32,62 @@ void test_get_func_ip_test(void)
->
->         ASSERT_OK(err, "test_run");
->
-> +       config_ibt = skel->bss->config_ibt;
-
-skel->bss->config_ibt isn't actually necessary, you can just check
-skel->kconfig->CONFIG_X86_KERNEL_IBT directly. And you won't need to
-trigger BPF program unnecessary, libbpf will fill out kconfig section
-during object/skeleton load phase.
-
-> +       ASSERT_TRUE(config_ibt == 0 || config_ibt == 1, "config_ibt");
-
-you won't need this anymore
-
-> +       printf("%s:config_ibt %d\n", __func__, config_ibt);
-
-and this is just debug leftover
-
-> +
->         ASSERT_EQ(skel->bss->test1_result, 1, "test1_result");
->         ASSERT_EQ(skel->bss->test2_result, 1, "test2_result");
->         ASSERT_EQ(skel->bss->test3_result, 1, "test3_result");
->         ASSERT_EQ(skel->bss->test4_result, 1, "test4_result");
->         ASSERT_EQ(skel->bss->test5_result, 1, "test5_result");
-> +
-
-[...]
-
-> diff --git a/tools/testing/selftests/bpf/progs/get_func_ip_test.c b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-> index 6db70757bc8b..cb8e58183d46 100644
-> --- a/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-> +++ b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-> @@ -2,6 +2,7 @@
->  #include <linux/bpf.h>
->  #include <bpf/bpf_helpers.h>
->  #include <bpf/bpf_tracing.h>
-> +#include <stdbool.h>
->
->  char _license[] SEC("license") = "GPL";
->
-> @@ -13,12 +14,19 @@ extern const void bpf_modify_return_test __ksym;
->  extern const void bpf_fentry_test6 __ksym;
->  extern const void bpf_fentry_test7 __ksym;
->
-> +extern bool CONFIG_X86_KERNEL_IBT __kconfig __weak;
-> +
-> +bool config_ibt;
-> +
->  __u64 test1_result = 0;
->  SEC("fentry/bpf_fentry_test1")
->  int BPF_PROG(test1, int a)
->  {
->         __u64 addr = bpf_get_func_ip(ctx);
->
-> +       /* just to propagate config option value to user space */
-> +       config_ibt = CONFIG_X86_KERNEL_IBT;
-> +
-
-as mentioned above, you shouldn't need it, just read
-CONFIG_X86_KERNEL_IBT directly through skeleton
-
->         test1_result = (const void *) addr == &bpf_fentry_test1;
->         return 0;
->  }
-> @@ -64,7 +72,7 @@ int BPF_PROG(test5, int a, int *b, int ret)
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 0a600b2013cc..15ab980e9525 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1967,7 +1967,7 @@ static inline bool unprivileged_ebpf_enabled(void)
 >  }
 >
->  __u64 test6_result = 0;
-> -SEC("kprobe/bpf_fentry_test6+0x5")
-> +SEC("?kprobe/")
+>  /* Not all bpf prog type has the bpf_ctx.
+> - * Only trampoline and cgroup-bpf have it.
+> + * Only trampoline, cgroup-bpf, and iter have it.
 
-don't leave / at the end (and I thought that libbpf rejects this,
-isn't that a case?...), just SEC("?kprobe")
+Apart from this part which I'd drop, lgtm:
 
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
->  int test6(struct pt_regs *ctx)
+>   * For the bpf prog type that has initialized the bpf_ctx,
+>   * this function can be used to decide if a kernel function
+>   * is called by a bpf program.
+> diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
+> index 4b112aa8bba3..6476b2c03527 100644
+> --- a/kernel/bpf/bpf_iter.c
+> +++ b/kernel/bpf/bpf_iter.c
+> @@ -685,19 +685,24 @@ struct bpf_prog *bpf_iter_get_info(struct bpf_iter_meta *meta, bool in_stop)
+>
+>  int bpf_iter_run_prog(struct bpf_prog *prog, void *ctx)
 >  {
->         __u64 addr = bpf_get_func_ip(ctx);
-> @@ -72,13 +80,3 @@ int test6(struct pt_regs *ctx)
->         test6_result = (const void *) addr == 0;
->         return 0;
->  }
-> -
-> -__u64 test7_result = 0;
-> -SEC("kprobe/bpf_fentry_test7+5")
-> -int test7(struct pt_regs *ctx)
-> -{
-> -       __u64 addr = bpf_get_func_ip(ctx);
-> -
-> -       test7_result = (const void *) addr == 0;
-> -       return 0;
-> -}
+> +       struct bpf_run_ctx run_ctx, *old_run_ctx;
+>         int ret;
+>
+>         if (prog->aux->sleepable) {
+>                 rcu_read_lock_trace();
+>                 migrate_disable();
+>                 might_fault();
+> +               old_run_ctx = bpf_set_run_ctx(&run_ctx);
+>                 ret = bpf_prog_run(prog, ctx);
+> +               bpf_reset_run_ctx(old_run_ctx);
+>                 migrate_enable();
+>                 rcu_read_unlock_trace();
+>         } else {
+>                 rcu_read_lock();
+>                 migrate_disable();
+> +               old_run_ctx = bpf_set_run_ctx(&run_ctx);
+>                 ret = bpf_prog_run(prog, ctx);
+> +               bpf_reset_run_ctx(old_run_ctx);
+>                 migrate_enable();
+>                 rcu_read_unlock();
+>         }
 > --
-> 2.37.1
+> 2.30.2
 >
