@@ -2,136 +2,137 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7D95C19F2D
-	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 03:39:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64700C19F2D
+	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 03:52:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbiHPDjT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Aug 2022 23:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34454 "EHLO
+        id S229549AbiHPDwS convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Mon, 15 Aug 2022 23:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiHPDiw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Aug 2022 23:38:52 -0400
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 426F531E9EE
-        for <bpf@vger.kernel.org>; Mon, 15 Aug 2022 17:10:29 -0700 (PDT)
-Received: by mail-vs1-xe36.google.com with SMTP id q15so8734643vsr.0
-        for <bpf@vger.kernel.org>; Mon, 15 Aug 2022 17:10:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=WUwQUmm86mrg7jfd67SR7hvLt+P/EPMPpiu5qcCEU9Q=;
-        b=DugmTmCfgSIZMobBDrFpw+1hjqm+tCxikmr09GDxF6IEnCqGFIfKr9YR71/fRRv+RU
-         hD3O/AJ0g+/X+LvbrzI/DaUzHkY5HrZ9vcfaBO2I8U+5tJAu6ERtmQXIX3GScSkEfHby
-         mzbNLlBZMu0L9Z2x5ATZQq1x3BCDqzTXpgQYEYXipHfDKlhTZnp3Hzt0vrxg7LKdXE8W
-         RBdQL2hAZmaSVi53Npp11S65EIeNlfJ5oqDuTGJzrARPzlqJg+eUmpffX/0X40Wsppuy
-         2dyMD8Pm2/0oHb71nYYZFvr67JwBtth6ZryclekTp5V1EIKq3IYRNOJ9cha0k5qmnw5l
-         IpyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=WUwQUmm86mrg7jfd67SR7hvLt+P/EPMPpiu5qcCEU9Q=;
-        b=pYVJESkNJfJd9ouEvo5+K7wWMNF0vg1S5kmRbWT2GFFGqt3Cp8inJXxJkRocIj/0a0
-         +tPmB16px6T0f+O/Igl+brDxjUces84UlEwq32r1Z7T8GffRJVbElFFryf9YiR7l4GqE
-         lKRbEi1iV/kcjEbD6TkB6S7Kdyz1MlChmL6djsWanPCh+UknKT9msmUpfU221C2RoBwx
-         sz2XovnGiomf1tn5sf3s0+H0Myqy/FbfOr0JoSmQcIAsYfOwfQkANm7GvVFQc/MHTNN9
-         woWFbiHZbgbKkMKtHN6tzELNjnfvsGOAPgTAk1fwT11pKB9FhzMm6K+e9RcXzVXObJ9p
-         om/w==
-X-Gm-Message-State: ACgBeo3A849QuzDmTffrxjCzcdPRZdPtDMaVM29u1poqrtbQN3mRzktM
-        tltY1ExbXUbQaKkeGaUUiH5C1K8iIAXYE15D6P5kEnlM
-X-Google-Smtp-Source: AA6agR68HRa6sTQ1U6HWBQ4+EiQ/Gq3OUpCCB5mH3Hz1AieeKatpQeZBRXUOLgXZsjFOYdlewdbER9b8tO1+aGwmSlg=
-X-Received: by 2002:a05:6102:3119:b0:388:713c:7eb6 with SMTP id
- e25-20020a056102311900b00388713c7eb6mr7748711vsh.34.1660608626418; Mon, 15
- Aug 2022 17:10:26 -0700 (PDT)
+        with ESMTP id S229552AbiHPDvr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Aug 2022 23:51:47 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D1F338F9A
+        for <bpf@vger.kernel.org>; Mon, 15 Aug 2022 17:20:18 -0700 (PDT)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27FIbvTa014661
+        for <bpf@vger.kernel.org>; Mon, 15 Aug 2022 17:19:42 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hyry8uc36-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 15 Aug 2022 17:19:42 -0700
+Received: from twshared5413.23.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 15 Aug 2022 17:19:40 -0700
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id 665891DAC7DB4; Mon, 15 Aug 2022 17:19:38 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH bpf-next 4/4] selftests/bpf: few fixes for selftests/bpf built in release mode
+Date:   Mon, 15 Aug 2022 17:19:29 -0700
+Message-ID: <20220816001929.369487-5-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220816001929.369487-1-andrii@kernel.org>
+References: <20220816001929.369487-1-andrii@kernel.org>
 MIME-Version: 1.0
-References: <CAK3+h2zUvfa8pQ37h3ZzSx9n34sTPSUAmSR8grvwQU3OtksiTg@mail.gmail.com>
- <CACdoK4LOu7S5GzDwjEBkOyFqEo2uG-0c7AQF7nN0Fif6rbHFKA@mail.gmail.com>
- <CAK3+h2x2dVepRCtt6MDQ-S_0HDxR1V9ZN2tHXHpfCDWuXW88Rw@mail.gmail.com> <CACdoK4+__ROeqa+P5jPvmVXMW4J48d1RUCW6czyZEKJQbv3mSg@mail.gmail.com>
-In-Reply-To: <CACdoK4+__ROeqa+P5jPvmVXMW4J48d1RUCW6czyZEKJQbv3mSg@mail.gmail.com>
-From:   Vincent Li <vincent.mc.li@gmail.com>
-Date:   Mon, 15 Aug 2022 17:10:15 -0700
-Message-ID: <CAK3+h2zH+KoJ1FwYsFVk3H5N0D5JdVMkEh4PzvsRQ5fymCY_Dw@mail.gmail.com>
-Subject: Re: Error: bug: failed to retrieve CAP_BPF status: Invalid argument
-To:     Quentin Monnet <quentin@isovalent.com>
-Cc:     bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: Qm_FC4wrGC7ss6L7a3ol2cHGItPMJseb
+X-Proofpoint-ORIG-GUID: Qm_FC4wrGC7ss6L7a3ol2cHGItPMJseb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-15_08,2022-08-15_01,2022-06-22_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 5:05 PM Quentin Monnet <quentin@isovalent.com> wrote:
->
-> On Mon, 15 Aug 2022 at 23:26, Vincent Li <vincent.mc.li@gmail.com> wrote:
-> >
-> > On Mon, Aug 15, 2022 at 3:18 PM Quentin Monnet <quentin@isovalent.com> wrote:
-> > >
-> > > Hi Vincent,
-> > >
-> > > On Mon, 15 Aug 2022 at 18:46, Vincent Li <vincent.mc.li@gmail.com> wrote:
-> > > >
-> > > > Hi,
-> > > >
-> > > > I compile and run kernel 5.18.0 in Centos 8 from bpf-next in my dev
-> > > > machine, I also compiled bpftool from bpf-next on same machine, when
-> > > > run bpftool on same machine, I got :
-> > > >
-> > > > ./bpftool feature probe
-> > > >
-> > > > Error: bug: failed to retrieve CAP_BPF status: Invalid argument
-> > > >
-> > > > where bpftool to retrieve CAP_BPF ? from running kernel or from somewhere else?
-> > >
-> > > Yes, bpftool calls cap_get_proc() to get the capabilities of the
-> > > current process. From what I understand of your output, it looks like
-> > > capget() returns CAP_BPF: I believe the "0x1c0" value at the end is
-> > > (1<<(CAP_CHECKPOINT_RESTORE-32)) + (1<<(CAP_BPF-32)) +
-> > > (1<<(CAP_PERFMON-32)). You could probably check this with a more
-> > > recent version of strace.
-> > >
-> > > Then assuming you do retrieve CAP_BPF from capget(), I don't know why
-> > > cap_get_flag() in bpftool fails to retrieve the capability state. It
-> > > would be worth running bpftool in GDB to check what happens. The check
-> > > in libcap is here [0] but I don't see where we would fail to provide
-> > > valid arguments. Just in case, could you please let me know what
-> > > version of libcap you're using when compiling bpftool?
-> >
-> > I think I installed libcap through centos distro
-> >
-> > [root@centos-dev ~]# rpm -qi libcap.x86_64
-> >
-> > Name        : libcap
-> >
-> > Version     : 2.26
->
-> So we investigated this on Slack. The issue is related to libcap (and
-> to how libcap is built on CentOS); it is fixed in libcap 2.30 and
-> older.
->
-> For the record, this is the commit that fixed it:
-> https://git.kernel.org/pub/scm/libs/libcap/libcap.git/commit/?id=f1f62a748d7c67361e91e32d26abafbfb03eeee4
->
-> Before this, cap_get_flag() would compare its argument "value" (in our
-> case, CAP_BPF == 39) with __CAP_BITS. This __CAP_BITS constant is
-> defined in libcap/cap_names.h, generated by libcap/_makenames.c from
-> the list in libcap/cap_names.list.h. The latter header file is itself
-> generated in libcap/Makefile from the UAPI header at
-> $(KERNEL_HEADERS)/linux/capability.h, which defaults to the local
-> libcap/include/uapi/linux/capability.h.
->
-> On your CentOS, the libcap version may have been compiled without
-> setting KERNEL_HEADERS to make it point to the correct system UAPI
-> header (or the header could be too old, but looking at it, it seems
-> that it does have CAP_BPF), in which case it defaulted to libcap's
-> version of the header, which in 2.26 stops at CAP_AUDIT (37). In that
-> case, __CAP_BITS is worth 37 and is lower than CAP_BPF, the check in
-> cap_get_flag() fails and we get -EINVAL.
->
-> The commit referenced above changed the comparison for libcap 2.30+ to
-> compare "value" with __CAP_MAXBITS == 64 instead, which works
-> correctly.
->
-> Thanks for the report and the shared debug session!
-> Quentin
+Fix few issues found when building and running test_progs in release
+mode.
 
-Thanks Quentin for your quick response and analysis :)
+First, potentially uninitialized idx variable in xskxceiver,
+force-initialize to zero to satisfy compiler.
+
+Few instances of defining uprobe trigger functions break in release mode
+unless marked as noinline, due to being static. Add noinline to make
+sure everything works.
+
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/testing/selftests/bpf/prog_tests/attach_probe.c | 6 +++---
+ tools/testing/selftests/bpf/prog_tests/bpf_cookie.c   | 2 +-
+ tools/testing/selftests/bpf/prog_tests/task_pt_regs.c | 2 +-
+ tools/testing/selftests/bpf/xskxceiver.c              | 2 +-
+ 4 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+index 0b899d2d8ea7..9566d9d2f6ee 100644
+--- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
++++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+@@ -6,19 +6,19 @@
+ volatile unsigned short uprobe_ref_ctr __attribute__((unused)) __attribute((section(".probes")));
+ 
+ /* uprobe attach point */
+-static void trigger_func(void)
++static noinline void trigger_func(void)
+ {
+ 	asm volatile ("");
+ }
+ 
+ /* attach point for byname uprobe */
+-static void trigger_func2(void)
++static noinline void trigger_func2(void)
+ {
+ 	asm volatile ("");
+ }
+ 
+ /* attach point for byname sleepable uprobe */
+-static void trigger_func3(void)
++static noinline void trigger_func3(void)
+ {
+ 	asm volatile ("");
+ }
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+index 2974b44f80fa..2be2d61954bc 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+@@ -13,7 +13,7 @@
+ #include "kprobe_multi.skel.h"
+ 
+ /* uprobe attach point */
+-static void trigger_func(void)
++static noinline void trigger_func(void)
+ {
+ 	asm volatile ("");
+ }
+diff --git a/tools/testing/selftests/bpf/prog_tests/task_pt_regs.c b/tools/testing/selftests/bpf/prog_tests/task_pt_regs.c
+index 61935e7e056a..f000734a3d1f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/task_pt_regs.c
++++ b/tools/testing/selftests/bpf/prog_tests/task_pt_regs.c
+@@ -4,7 +4,7 @@
+ #include "test_task_pt_regs.skel.h"
+ 
+ /* uprobe attach point */
+-static void trigger_func(void)
++static noinline void trigger_func(void)
+ {
+ 	asm volatile ("");
+ }
+diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
+index 20b44ab32a06..14b4737b223c 100644
+--- a/tools/testing/selftests/bpf/xskxceiver.c
++++ b/tools/testing/selftests/bpf/xskxceiver.c
+@@ -922,7 +922,7 @@ static int __send_pkts(struct ifobject *ifobject, u32 *pkt_nb, struct pollfd *fd
+ {
+ 	struct xsk_socket_info *xsk = ifobject->xsk;
+ 	bool use_poll = ifobject->use_poll;
+-	u32 i, idx, ret, valid_pkts = 0;
++	u32 i, idx = 0, ret, valid_pkts = 0;
+ 
+ 	while (xsk_ring_prod__reserve(&xsk->tx, BATCH_SIZE, &idx) < BATCH_SIZE) {
+ 		if (use_poll) {
+-- 
+2.30.2
+
