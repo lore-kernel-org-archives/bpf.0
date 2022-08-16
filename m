@@ -2,196 +2,211 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AA17C2BB41
-	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 10:24:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA060C32771
+	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 10:45:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234468AbiHPKYF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Aug 2022 06:24:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60068 "EHLO
+        id S235043AbiHPKpK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Aug 2022 06:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234211AbiHPKXg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:23:36 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75ED9116EE6;
-        Tue, 16 Aug 2022 01:13:53 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d16so8523400pll.11;
-        Tue, 16 Aug 2022 01:13:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc;
-        bh=HaNa5Lj7TflIsF441E038f4wpAfhumsnkH45RU607sM=;
-        b=Ww0bVrST1e5NUEUTrrq+iIFizUm7dif9ZWs/qC/0+v0oYqNsPQgUzmHmengaPvV1/s
-         JIBIzjKY729iRHUZMD7mivMzVkjgF4p6SyVWQFs9UFGeOh41T15QyQ4izQR9Ihn3H5FD
-         NyxpBtwQgCV+UL6wGus1uFHVaZ6Mi0HR0CGki6oJqqVF2CJJyQtyTDFUpBjBCapCjBYK
-         c/7jh+DTayooy/abN6tPsz98QnZ8vQOe4iKeKV+AD4VRCX9sNkwiRjwr9QIrmftu/DXM
-         /9Ffo9O8sq9oDuvYw9Vnx6Q0+oy9xTIRkZF2Tf2Siuqhmtv48BphvxP7ooDLwp3GgTtA
-         2F/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=HaNa5Lj7TflIsF441E038f4wpAfhumsnkH45RU607sM=;
-        b=yTjdAh58GdVxgq9lOKpv23YBVfhsfkrhdTFN7FA2KGgYXsC39+3/vuEJkxM5/B0Qi9
-         ytk2Q7rlU5lAis7p+sivX+SHQZ/9a3nFEyY4hxu0zfQ7+5UCpzclLw/vXa8euND32NMm
-         bd8VOXYaatYqfY7n7qaUxxAmH+TPXPkwt5LOoNPRLjhcgqKtyl9WD/RRebsO/0t/8Bg3
-         Z1on0Gds35vDvwRS9aIF4suTOrYKz7+Z4PSj96Aw0jRTj/jSJX0YiJOx1JbkSCS6HhXE
-         3Z7klCHuX5gY+lnal8fHbG0EPiCj4l3hu699e6qJpfOz+9zr9q7I32GqXu8yYacJpZV4
-         Dkug==
-X-Gm-Message-State: ACgBeo31MGM+S/fZNPD4ZLTza7D3tixJ4g/LrBFA8iPsNTMUD1Du+S2c
-        qHR5m7RJ8iaqhwUa8Lr6ORq7Eb4pisrtgYq3fVRD1Uu7v//9gW4=
-X-Google-Smtp-Source: AA6agR7yu8H4/ggphVQvnzGDYaE0m6ytOr7ga/16iVCtxT7N/L8vPgzY1qvU0c8CdIJkIaxTn6om5QAkBJ3RjCObDmY=
-X-Received: by 2002:a17:902:720b:b0:16d:2c4c:b52a with SMTP id
- ba11-20020a170902720b00b0016d2c4cb52amr20409714plb.155.1660637633487; Tue, 16
- Aug 2022 01:13:53 -0700 (PDT)
+        with ESMTP id S235030AbiHPKox (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Aug 2022 06:44:53 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C62D422D9;
+        Tue, 16 Aug 2022 03:05:38 -0700 (PDT)
+Received: from sslproxy04.your-server.de ([78.46.152.42])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oNtRe-000AM5-2C; Tue, 16 Aug 2022 12:05:10 +0200
+Received: from [85.1.206.226] (helo=linux-4.home)
+        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oNtRd-000Rzb-C5; Tue, 16 Aug 2022 12:05:09 +0200
+Subject: Re: [PATCH v11 0/9] bpf: Add kfuncs for PKCS#7 signature verification
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "martin.lau@linux.dev" <martin.lau@linux.dev>,
+        "song@kernel.org" <song@kernel.org>, "yhs@fb.com" <yhs@fb.com>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "sdf@google.com" <sdf@google.com>,
+        "haoluo@google.com" <haoluo@google.com>,
+        "jolsa@kernel.org" <jolsa@kernel.org>,
+        "mykolal@fb.com" <mykolal@fb.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "shuah@kernel.org" <shuah@kernel.org>
+Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220812101902.2846182-1-roberto.sassu@huawei.com>
+ <14032690-e7a9-9d14-1ec1-14dd3503037c@iogearbox.net>
+ <b61eb3b95843409eb6ab03aea4a0ca30@huawei.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <be1fdbba-73ba-3106-622e-57ef5f471a26@iogearbox.net>
+Date:   Tue, 16 Aug 2022 12:05:08 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-From:   Hao Sun <sunhao.th@gmail.com>
-Date:   Tue, 16 Aug 2022 08:13:42 +0800
-Message-ID: <CACkBjsbuxaR6cv0kXJoVnBfL9ZJXjjoUcMpw_Ogc313jSrg14A@mail.gmail.com>
-Subject: KASAN: slab-out-of-bounds Read in __htab_map_lookup_and_delete_batch
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <b61eb3b95843409eb6ab03aea4a0ca30@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26629/Tue Aug 16 09:51:41 2022)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello,
+On 8/16/22 9:12 AM, Roberto Sassu wrote:
+>> From: Daniel Borkmann [mailto:daniel@iogearbox.net]
+>> Sent: Monday, August 15, 2022 6:10 PM
+>> On 8/12/22 12:18 PM, Roberto Sassu wrote:
+>>> One of the desirable features in security is the ability to restrict import
+>>> of data to a given system based on data authenticity. If data import can be
+>>> restricted, it would be possible to enforce a system-wide policy based on
+>>> the signing keys the system owner trusts.
+>>>
+>> [...]
+>>> Changelog
+>>>
+>>> v10:
+>>>    - Introduce key_lookup_flags_check() and system_keyring_id_check() inline
+>>>      functions to check parameters (suggested by KP)
+>>>    - Fix descriptions and comment of key-related kfuncs (suggested by KP)
+>>>    - Register kfunc set only once (suggested by Alexei)
+>>>    - Move needed kernel options to the architecture-independent configuration
+>>>      for testing
+>>
+>> Looks like from BPF CI side, the selftest throws a WARN in test_progs /
+>> test_progs-no_alu32
+>> and subsequently fails with error, ptal:
+>>
+>>     https://github.com/kernel-
+>> patches/bpf/runs/7804422038?check_suite_focus=true
+> 
+> it is due to the missing SHA256 kernel module (not copied to
+> the virtual machine).
+> 
+> I made a small patch in libbpf/ci to change kernel options =m
+> into =y. With that patch, my instance of vmtest gives success
+> (except for z15, which requires adding openssl and keyctl
+> to the virtual machine image).
 
-Last email was not formatted correctly, resend it here. The following
-crash can be triggered on:
+The code in pkcs1pad_verify() triggering the warning is:
 
-HEAD commit: ffcf9c5700e4  x86: link vdso and boot
-git tree: upstream
-console output: https://pastebin.com/raw/ngeVmgpK
-kernel config: https://pastebin.com/raw/3JYdi5mp
-C reproducer: https://paste.ubuntu.com/p/D2sz87PQ4k/
+     [...]
+         if (WARN_ON(req->dst) || WARN_ON(!digest_size) ||
+             !ctx->key_size || sig_size != ctx->key_size)
+                 return -EINVAL;
+     [...]
 
-==================================================================
-BUG: KASAN: slab-out-of-bounds in instrument_copy_to_user
-include/linux/instrumented.h:118 [inline]
-BUG: KASAN: slab-out-of-bounds in _copy_to_user lib/usercopy.c:32 [inline]
-BUG: KASAN: slab-out-of-bounds in _copy_to_user+0x9c/0xc0 lib/usercopy.c:26
-Read of size 54 at addr ffff8881055c0100 by task syz-executor382/8357
+It is not obvious at all to users that sha256 module is missing in their kernel,
+how will they be able to figure it out?
 
-CPU: 1 PID: 8357 Comm: syz-executor382 Not tainted
-5.19.0-13666-gffcf9c5700e4-dirty #15
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x57/0x7d lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:317 [inline]
- print_report.cold+0xe5/0x66d mm/kasan/report.c:433
- kasan_report+0x8a/0x1b0 mm/kasan/report.c:495
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13b/0x190 mm/kasan/generic.c:189
- instrument_copy_to_user include/linux/instrumented.h:118 [inline]
- _copy_to_user lib/usercopy.c:32 [inline]
- _copy_to_user+0x9c/0xc0 lib/usercopy.c:26
- copy_to_user include/linux/uaccess.h:160 [inline]
- __htab_map_lookup_and_delete_batch+0x1169/0x1cf0 kernel/bpf/hashtab.c:1809
- bpf_map_do_batch+0x2d6/0x590 kernel/bpf/syscall.c:4498
- __sys_bpf+0x1193/0x48b0 kernel/bpf/syscall.c:5014
- __do_sys_bpf kernel/bpf/syscall.c:5058 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5056 [inline]
- __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5056
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f797e7e5b9d
-Code: c3 e8 97 2a 00 00 0f 1f 80 00 00 00 00 f3 0f 1e fa 48 89 f8 48
-89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
-01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f797e76ad78 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 00007f797e87a2d0 RCX: 00007f797e7e5b9d
-RDX: 0000000000000038 RSI: 0000000020000680 RDI: 0000000000000019
-RBP: 00007f797e84700c R08: 00007f797e76b700 R09: 0000000000000000
-R10: 00007f797e76b700 R11: 0000000000000246 R12: 00007f797e87a2d8
-R13: 00007f797e87a2dc R14: 00000000200014c0 R15: 00007f797e846008
- </TASK>
+Should the helper be gated if dependency is not available, or return a -EOPNOTSUPP
+if the specific request cannot be satisfied (but others can..)?
 
-Allocated by task 8357:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:437 [inline]
- ____kasan_kmalloc mm/kasan/common.c:516 [inline]
- ____kasan_kmalloc mm/kasan/common.c:475 [inline]
- __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:525
- kasan_kmalloc include/linux/kasan.h:234 [inline]
- __kmalloc_node+0x1e9/0x360 mm/slub.c:4472
- kvmalloc include/linux/slab.h:750 [inline]
- kvmalloc_array include/linux/slab.h:768 [inline]
- __htab_map_lookup_and_delete_batch+0x538/0x1cf0 kernel/bpf/hashtab.c:1680
- bpf_map_do_batch+0x2d6/0x590 kernel/bpf/syscall.c:4498
- __sys_bpf+0x1193/0x48b0 kernel/bpf/syscall.c:5014
- __do_sys_bpf kernel/bpf/syscall.c:5058 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5056 [inline]
- __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5056
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>     [...]
+>>     #235     verif_scale_xdp_loop:OK
+>>     #236     verif_stats:OK
+>>     #237     verif_twfw:OK
+>>     [  760.448652] ------------[ cut here ]------------
+>>     [  760.449506] WARNING: CPU: 3 PID: 930 at crypto/rsa-pkcs1pad.c:544
+>> pkcs1pad_verify+0x184/0x190
+>>     [  760.450806] Modules linked in: bpf_testmod(OE) [last unloaded:
+>> bpf_testmod]
+>>     [  760.452340] CPU: 3 PID: 930 Comm: keyctl Tainted: G           OE      5.19.0-
+>> g9f0260338e31-dirty #1
+>>     [  760.453626] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+>> 1.13.0-1ubuntu1.1 04/01/2014
+>>     [  760.454801] RIP: 0010:pkcs1pad_verify+0x184/0x190
+>>     [  760.455380] Code: 5c 41 5d 41 5e 41 5f 5d c3 cc cc cc cc 48 89 df 89 c6 5b 41
+>> 5c 41 5d 41 5e 41 5f 5d e9 a5 04 00 00 0f 0b b8 ea ff ff ff eb d4 <0f> 0b b8 ea ff
+>> ff ff eb cb 0f 0b 90 0f 1f 44 00 00 53 48 89 fb c7
+>>     [  760.456866] RSP: 0018:ffffad55478dbb58 EFLAGS: 00000246
+>>     [  760.457684] RAX: ffff9b3c43c42458 RBX: ffff9b3c48975b00 RCX:
+>> 0000000000000000
+>>     [  760.458672] RDX: ffffffffa7277438 RSI: ffffffffa5275510 RDI:
+>> 0000000000000000
+>>     [  760.459670] RBP: ffffad55478dbcf8 R08: 0000000000000002 R09:
+>> 0000000000000000
+>>     [  760.460688] R10: ffffad55478dbc20 R11: ffffffffa44dde10 R12:
+>> ffff9b3c43de2e80
+>>     [  760.461695] R13: ffff9b3c58459ea0 R14: ffff9b3c44d59600 R15:
+>> ffffad55478dbc20
+>>     [  760.462270] FS:  00007ff1ee0eb740(0000) GS:ffff9b3cf9cc0000(0000)
+>> knlGS:0000000000000000
+>>     [  760.462722] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>     [  760.463026] CR2: 000055b9a4c17588 CR3: 0000000107bb2000 CR4:
+>> 00000000000006e0
+>>     [  760.464039] Call Trace:
+>>     [  760.464465]  <TASK>
+>>     [  760.464749]  public_key_verify_signature+0x4a2/0x570
+>>     [  760.465623]  x509_check_for_self_signed+0x4e/0xd0
+>>     [  760.465937]  x509_cert_parse+0x193/0x220
+>>     [  760.466656]  x509_key_preparse+0x20/0x1f0
+>>     [  760.466975]  asymmetric_key_preparse+0x43/0x80
+>>     [  760.467552]  key_create_or_update+0x24e/0x510
+>>     [  760.468366]  __x64_sys_add_key+0x19b/0x220
+>>     [  760.468704]  ? syscall_enter_from_user_mode+0x24/0x1f0
+>>     [  760.469056]  do_syscall_64+0x43/0x90
+>>     [  760.469657]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>     [  760.470413] RIP: 0033:0x7ff1edf0ba9d
+>>     [  760.470832] Code: 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 48 89 f8
+>> 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff
+>> ff 73 01 c3 48 8b 0d cb e2 0e 00 f7 d8 64 89 01 48
+>>     [  760.472742] RSP: 002b:00007ffe635e7a18 EFLAGS: 00000246 ORIG_RAX:
+>> 00000000000000f8
+>>     [  760.473355] RAX: ffffffffffffffda RBX: 00007ffe635e7be0 RCX:
+>> 00007ff1edf0ba9d
+>>     [  760.474523] RDX: 000055982fed80c0 RSI: 00007ffe635e7f17 RDI:
+>> 00007ffe635e7f0c
+>>     [  760.475500] RBP: 00007ffe635e7a38 R08: 00000000fffffffd R09:
+>> 0000000000000000
+>>     [  760.475913] R10: 0000000000000355 R11: 0000000000000246 R12:
+>> 0000000000000000
+>>     [  760.476594] R13: 00007ffe635e7bd8 R14: 000055982fed48ae R15:
+>> 000055982fed76e8
+>>     [  760.477579]  </TASK>
+>>     [  760.477769] irq event stamp: 4727
+>>     [  760.477963] hardirqs last  enabled at (4735): [<ffffffffa4101df5>]
+>> __up_console_sem+0x75/0xa0
+>>     [  760.479036] hardirqs last disabled at (4744): [<ffffffffa4a31cca>]
+>> sysvec_apic_timer_interrupt+0xa/0xb0
+>>     [  760.480403] softirqs last  enabled at (4762): [<ffffffffa4085172>]
+>> __irq_exit_rcu+0xb2/0x140
+>>     [  760.480869] softirqs last disabled at (4755): [<ffffffffa4085172>]
+>> __irq_exit_rcu+0xb2/0x140
+>>     [  760.481706] ---[ end trace 0000000000000000 ]---
+>>     Generating a RSA private key
+>>     .+++++
+>>     ..................................................+++++
+>>     writing new private key to '/tmp/verify_sigXdOL5V/signing_key.pem'
+>>     -----
+>>     add_key: Invalid argument
+>>     test_verify_pkcs7_sig:PASS:mkdtemp 0 nsec
+>>     test_verify_pkcs7_sig:FAIL:_run_setup_process unexpected error: 1 (errno
+>> 126)
+>>     #238     verify_pkcs7_sig:FAIL
+>>     #239     vmlinux:OK
+>>     #240     xdp:OK
+>>     #241/1   xdp_adjust_frags/xdp_adjust_frags:OK
+>>     #241     xdp_adjust_frags:OK
+>>     #242/1   xdp_adjust_tail/xdp_adjust_tail_shrink:OK
+>>     #242/2   xdp_adjust_tail/xdp_adjust_tail_grow:OK
+>>     [...]
 
-The buggy address belongs to the object at ffff8881055c0100
- which belongs to the cache kmalloc-64 of size 64
-The buggy address is located 0 bytes inside of
- 64-byte region [ffff8881055c0100, ffff8881055c0140)
-
-The buggy address belongs to the physical page:
-page:ffffea0004157000 refcount:1 mapcount:0 mapping:0000000000000000
-index:0x0 pfn:0x1055c0
-flags: 0x57ff00000000200(slab|node=1|zone=2|lastcpupid=0x7ff)
-raw: 057ff00000000200 0000000000000000 dead000000000122 ffff888010c42640
-raw: 0000000000000000 0000000080200020 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask
-0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 6756, tgid 6756
-(syz-executor382), ts 131529364832, free_ts 131498233118
- set_page_owner include/linux/page_owner.h:31 [inline]
- post_alloc_hook mm/page_alloc.c:2525 [inline]
- prep_new_page+0x2c6/0x350 mm/page_alloc.c:2532
- get_page_from_freelist+0xae9/0x3a80 mm/page_alloc.c:4283
- __alloc_pages+0x321/0x710 mm/page_alloc.c:5515
- alloc_slab_page mm/slub.c:1824 [inline]
- allocate_slab mm/slub.c:1969 [inline]
- new_slab+0x246/0x3a0 mm/slub.c:2029
- ___slab_alloc+0xa50/0x1060 mm/slub.c:3031
- __slab_alloc.isra.0+0x4d/0xa0 mm/slub.c:3118
- slab_alloc_node mm/slub.c:3209 [inline]
- __kmalloc_node+0x2ed/0x360 mm/slub.c:4468
- kmalloc_node include/linux/slab.h:623 [inline]
- __vmalloc_area_node mm/vmalloc.c:3012 [inline]
- __vmalloc_node_range+0x30a/0xf70 mm/vmalloc.c:3196
- alloc_thread_stack_node kernel/fork.c:312 [inline]
- dup_task_struct kernel/fork.c:977 [inline]
- copy_process+0x4069/0x6660 kernel/fork.c:2087
- kernel_clone+0xba/0xba0 kernel/fork.c:2673
- __do_sys_clone+0xa1/0xe0 kernel/fork.c:2807
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1449 [inline]
- free_pcp_prepare+0x5ab/0xd00 mm/page_alloc.c:1499
- free_unref_page_prepare mm/page_alloc.c:3380 [inline]
- free_unref_page+0x19/0x410 mm/page_alloc.c:3476
- __tlb_remove_table arch/x86/include/asm/tlb.h:34 [inline]
- __tlb_remove_table_free mm/mmu_gather.c:114 [inline]
- tlb_remove_table_rcu+0x6e/0xb0 mm/mmu_gather.c:169
- rcu_do_batch kernel/rcu/tree.c:2245 [inline]
- rcu_core+0x785/0x1720 kernel/rcu/tree.c:2505
- __do_softirq+0x1d0/0x908 kernel/softirq.c:571
-
-Memory state around the buggy address:
- ffff8881055c0000: 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc
- ffff8881055c0080: 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc
->ffff8881055c0100: 00 00 00 00 00 05 fc fc fc fc fc fc fc fc fc fc
-                                  ^
- ffff8881055c0180: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff8881055c0200: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
