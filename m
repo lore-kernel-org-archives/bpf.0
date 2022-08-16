@@ -2,125 +2,102 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E819CC2BB41
-	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 08:52:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CFC1C2BB41
+	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 08:54:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231807AbiHPIv7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Aug 2022 04:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60218 "EHLO
+        id S232011AbiHPIyP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Aug 2022 04:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232622AbiHPIvg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Aug 2022 04:51:36 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CE1F619B;
-        Mon, 15 Aug 2022 23:56:38 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id fy5so17228961ejc.3;
-        Mon, 15 Aug 2022 23:56:38 -0700 (PDT)
+        with ESMTP id S232135AbiHPIxr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Aug 2022 04:53:47 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F6712CDEE
+        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 00:01:44 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id k26so17239695ejx.5
+        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 00:01:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:from:to:cc;
-        bh=pyTZytG+72+2/FZ5A1dNsnzW13neVvkCe+2kVkYrp8Q=;
-        b=AV3ifGSEj5rwDb3AbGDo+NVEIw1WNeHbNMtVSKR9X9ruPzZ1XfEv0oy7KrPKo0RQn/
-         H64hT1+5BCeY7aa8v2Ydr11tm4uXivRuo/riY/K5DG8E5GzfPm+1VoChYqdCG2my64d7
-         mc48Axjwqcq/1AkhvPx3ZdYEEJDtRUvvp69/c4dnUkbldDO8A9I96i2O/C+vd5BOwgu2
-         YxTRxBM61+3MOPgE7Epi8XNbGRLilLC6hQqk94BVhDbZ53qiN1sCok933/BAo/vprrr1
-         +FEn0et+6PpudVZBRFIBREcrDjIJdlEZjF9BwIW6S9PlVER95rtLqlx1GVeIHRgWrQWY
-         6nXA==
+        bh=m6ZHyK+/Iux+/YsDxRibeREkrEtoT0lj4fXrnKXJwvg=;
+        b=h37oCKJknx4V/Rcus00RBYx0oJS45ySnEuOUT/Umxl8SHG4ZGFSqZFa3Ulq/lG7e0p
+         u7JSi3aScIxnj+J4c2Pc3pR1+qCdxNTLdQsyOjlH8DDdqtddhq8epxBe9xUfS8I8LrII
+         Zd4bB3dURrphJuZOz9942xXuBqkqMGYTCZkWhfxvRxDCJ37vMsbJIPLJVzS1jaSy9XmU
+         5q4NSKbfFg92d7Wn6k32guTiiBeKhaZwplnRt2qz9GY35NIi0x0dKHdDbapUB3F8g+Qu
+         25hl2bS5POz8GeEpHXoYmwBYEizOBRPmv62BsWehtCIutHHpPX0fGanurYasi8pz1J7f
+         vY2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
-        bh=pyTZytG+72+2/FZ5A1dNsnzW13neVvkCe+2kVkYrp8Q=;
-        b=QFrFsiNsp+6gLzZMdP7gpRjm/XoRnh7z/sQIsoya/jQASdiY9XzU6JoamF8lqoxEMx
-         sDcsWy2N59z8WFEtN/ODN4e1YN39bldpqnpHbwWQPiQLTz6FMtJK0Yqz8rXRoy0Zh79U
-         bLYdgt8urcWqtbjX+tstgFZ/THSk1ZZ4xawGsf/bJlsy7L0P27EYE47tlNX0YJ925tXP
-         GRWqizyXmWnOLty2xneJ5cOVXYHCZSCEL2VSF6EvwdT5CAUdWM6TC4HiSFwLDwEms9wQ
-         6SDIXPfI6dKHORs6VI0HdpxVJLiTX7glcx9SUgnH4IVli1O+Wg4d2hUBVErPSGjs7U30
-         b6Wg==
-X-Gm-Message-State: ACgBeo1kgdzgBed4v0ZdHCHnKKP1DkXPdqFezlzauf7fytc/oBzHSEcP
-        r7LMTs99WZR1jK9p0adMEOI=
-X-Google-Smtp-Source: AA6agR6ZArVqpiETQpMGqtMCRP5KS4v0UE+Nj3hnOVE5nDn7IH2UZNQB7n3kCmxpBJDVtFc2Dii5Vg==
-X-Received: by 2002:a17:907:60c7:b0:731:148b:c515 with SMTP id hv7-20020a17090760c700b00731148bc515mr12509099ejc.724.1660632997158;
-        Mon, 15 Aug 2022 23:56:37 -0700 (PDT)
+        bh=m6ZHyK+/Iux+/YsDxRibeREkrEtoT0lj4fXrnKXJwvg=;
+        b=TjiZx7Bpp8/AOI4nAFWBow8zfoQWK7Hzfw6wWWMM0fJf1egEHo70+EgfGQoBG+AgAN
+         fAwsNBg/dE+m1favuxPCI9COeXgAFctnhyc5Bi/pRhgTqqAq9iIHqmDA8iFpkfeDjPPC
+         47xRedvJlESx5lgNM/v1Dc928swySWG+szScwStr06o9fD4/JXO5o8Dd75436+OI29m7
+         dLziUGKFJifHgXQu1mYQcA/eV8j1ZNsno5axhWw2Efs0uGSgo9iYgjCUpSWq6HTk8KKH
+         B8cKeb9IIJhgU6jsT+sJQ6qEFMbsOQ/2GEwIKAIch/YTSzDpnjPYfBhGXxjDId75SDp3
+         neoA==
+X-Gm-Message-State: ACgBeo3dIyGvqjVNgmmtc5tB8R1gvf7jT3FpPQGiIHXTGcUFCFtTXWlw
+        OWu1mdqAK3zF/6LbcrhYM+Bbz7pJgheFVw==
+X-Google-Smtp-Source: AA6agR7o8nw1CDFkBFN6hiepBpoaRFG0zwt459Eg5+kX1n5KDhN5sviqh3msW61fl7Kdjoo065mmgw==
+X-Received: by 2002:a17:907:a044:b0:730:a18b:5b89 with SMTP id gz4-20020a170907a04400b00730a18b5b89mr12460080ejc.489.1660633303078;
+        Tue, 16 Aug 2022 00:01:43 -0700 (PDT)
 Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id h26-20020a17090619da00b00734bfab4d59sm4985944ejd.170.2022.08.15.23.56.36
+        by smtp.gmail.com with ESMTPSA id i21-20020a17090685d500b0073073ce488asm4961750ejy.45.2022.08.16.00.01.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 23:56:36 -0700 (PDT)
+        Tue, 16 Aug 2022 00:01:42 -0700 (PDT)
 From:   Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Tue, 16 Aug 2022 08:56:33 +0200
+Date:   Tue, 16 Aug 2022 09:01:40 +0200
 To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Jiri Olsa <olsajiri@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, bpf <bpf@vger.kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
         Stanislav Fomichev <sdf@google.com>,
         Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [RFC] ftrace: Add support to keep some functions out of ftrace
-Message-ID: <Yvs/oey1NUlkI30d@krava>
-References: <YvoVgMzMuQbAEayk@krava>
- <Yvo+EpO9dN30G0XE@worktop.programming.kicks-ass.net>
- <CAADnVQJfvn2RYydqgO-nS_K+C8WJL7BdCnR44MiMF4rnAwWM5A@mail.gmail.com>
- <YvpZJQGQdVaa2Oh4@worktop.programming.kicks-ass.net>
- <CAADnVQKyfrFTZOM9F77i0NbaXLZZ7KbvKBvu7p6kgdnRgG+2=Q@mail.gmail.com>
- <Yvpf67eCerqaDmlE@worktop.programming.kicks-ass.net>
- <CAADnVQKX5xJz5N_mVyf7wg4BT8Q2cNh8ze-SxTRfk6KtcFQ0=Q@mail.gmail.com>
- <YvpmAnFldR0iwAFC@worktop.programming.kicks-ass.net>
- <CAADnVQJuDS22o7fi9wPZx9siAWgu1grQXXB02KfasxZ-RPdRSw@mail.gmail.com>
- <Yvpq3JDk8fTgdMv8@worktop.programming.kicks-ass.net>
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Subject: Re: [PATCHv2 bpf-next 1/6] kprobes: Add new
+ KPROBE_FLAG_ON_FUNC_ENTRY kprobe flag
+Message-ID: <YvtA1EHgQi3XQXG/@krava>
+References: <20220811091526.172610-1-jolsa@kernel.org>
+ <20220811091526.172610-2-jolsa@kernel.org>
+ <YvoYlCz0Ej7t9yDV@worktop.programming.kicks-ass.net>
+ <YvobjEIHV3XPSeez@krava>
+ <Yvo+vQ+egjJBOmP+@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yvpq3JDk8fTgdMv8@worktop.programming.kicks-ass.net>
+In-Reply-To: <Yvo+vQ+egjJBOmP+@worktop.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 05:48:44PM +0200, Peter Zijlstra wrote:
-> On Mon, Aug 15, 2022 at 08:35:53AM -0700, Alexei Starovoitov wrote:
-> > On Mon, Aug 15, 2022 at 8:28 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> > >
-> > > On Mon, Aug 15, 2022 at 08:17:42AM -0700, Alexei Starovoitov wrote:
-> > > > It's hiding a fake function from ftrace, since it's not a function
-> > > > and ftrace infra shouldn't show it tracing logs.
-> > > > In other words it's a _notrace_ function with nop5.
-> > >
-> > > Then make it a notrace function with a nop5 in it. That isn't hard.
+On Mon, Aug 15, 2022 at 02:40:29PM +0200, Peter Zijlstra wrote:
+> On Mon, Aug 15, 2022 at 12:10:20PM +0200, Jiri Olsa wrote:
+> > On Mon, Aug 15, 2022 at 11:57:40AM +0200, Peter Zijlstra wrote:
+> > > On Thu, Aug 11, 2022 at 11:15:21AM +0200, Jiri Olsa wrote:
+> > > > Adding KPROBE_FLAG_ON_FUNC_ENTRY kprobe flag to indicate that
+> > > > attach address is on function entry. This is used in following
+> > > > changes in get_func_ip helper to return correct function address.
+> > > 
+> > > IIRC (and I've not digested patch) the intent was to have func+0 mean
+> > > this. x86-IBT is not the only case where this applies, there are
+> > > multiple architectures where function entry is not +0.
 > > 
-> > That's exactly what we're trying to do.
+> > we can have kprobe created by user passing just the address
+> > 
+> > in this case _kprobe_addr still computes the address's offset
+> > from the symbol but does not store it back to 'struct kprobe'
 > 
-> All the while claiming ftrace is broken while it is not.
-> 
-> > Jiri's patch is one way to achieve that.
-> 
-> Fairly horrible way.
-> 
-> > What is your suggestion?
-> 
-> Mailed it already.
-> 
-> > Move it from C to asm ?
-> 
-> Would be much better than proposed IMO.
+> Ah, this is an internal thing to record, in the struct kprobe if the
+> thing is on the function entry or not?
 
-nice, that would be independent of the compiler atributes
-and config checking..  will check on this one ;-)
+yes, exactly.. it's flag saying the kprobe is on function entry
 
-thanks,
 jirka
-
-> 
-> > Make it naked function with explicit inline asm?
-> 
-> Can be made to work but is iffy because the compiler can do horrible
-> things with placing the asm().
