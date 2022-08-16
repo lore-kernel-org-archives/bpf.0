@@ -2,130 +2,105 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 532DEC32772
-	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 07:09:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CD28C2BB41
+	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 07:24:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231748AbiHPHJK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Aug 2022 03:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33764 "EHLO
+        id S231792AbiHPHYp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Aug 2022 03:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbiHPHIr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Aug 2022 03:08:47 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028472DCE2D;
-        Mon, 15 Aug 2022 20:33:46 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id f22so11856656edc.7;
-        Mon, 15 Aug 2022 20:33:46 -0700 (PDT)
+        with ESMTP id S231795AbiHPHY3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Aug 2022 03:24:29 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10312BE419;
+        Mon, 15 Aug 2022 20:29:17 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id gj1so8657859pjb.0;
+        Mon, 15 Aug 2022 20:29:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=DEG/KDHanKqZe+WzYjSLFff9rFKakaJDsiFb2U0inBk=;
-        b=mKGK+oC2ul1JQ4Qvo5Z7bjRTwuhNeUSUZT2F104IIcGhRODQI9hKcwqVgyqlen0EUV
-         rR7YVa/tmyKEXPrbCW7inuTp2JtwxxmBA2wzRf3fthldXUdZ+dusMzpr6wggseeFg0zd
-         QFigtZ7xOkE8WtNGuy1VM1OAnLz/Hxthx5BT1fgy9qJB7WcBNlPMMdBDZtNVeJgurf72
-         OEk6PU6vFiyHOLQHL1bTIzpMFdlKfGyx/JLL07DJIH55CHS554o3zH63E+kTteDiwEYM
-         cBIIKMxWuhNo6AlnFOrgnGUj2gH1I1zh49J7XsTCTTmLulb7baETFZY9riKeqpA3OKS1
-         eNgg==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=jZcr1tOq0vbhHXHGg5bDK0b4NIp4TukEuBKXw3l7dfI=;
+        b=ERJ7vJZeTim5sgAxkYZv/avydlfMQG7+oYbOjD1Hz4D+hI9BkkUQAf6gMcERPk1PLt
+         pXI8XXUL1dLSbcUupVZ34mKpr3G53N3AH4Li7CkPy26KweLx7w6j0zOkjwQSQ/ooCG4Y
+         ZaXo3XEbyYuyrZXV8C98dqsS04a1TIoEkfos7ny5zrenPSG+pCX0l3js3ZIuK5M8ePtG
+         NI5+rCDzCkxwv/OUvFGRef/LU3grXwNHbci0anBlzZwScKFwClCHhJBFIHibxGYboel7
+         p4Xb1o7Kig9IQ6hQrdh8oWXJ60IJ/R2+4D7stmuN+e3L4UYOMjV+1kT6956sKvOkuE0r
+         QQLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=DEG/KDHanKqZe+WzYjSLFff9rFKakaJDsiFb2U0inBk=;
-        b=ZB9FxrTCG5F8FbRWMhzztJkOK1MUWEfxGMw9DK/dEpG4bAxWVXcLjYCuWNY6WKvXj+
-         ZAdRP8YhGcKgLghQGPo79ZBaKmUCvUSsiYi7QF8oKeeBZe0vHURyDvw4H+06Pm+CIHy9
-         NFqawtY/lgNmJaQ6bapbiRCymODTw7RPYejge7LEn33yRPsA5rAx7Xh2bbElNx038kgJ
-         QO2yLiyZ89/tVYaK+M5VUIbeXkK30SB93n9PCFuQfb0n4oDVQQpOcu7T2LyxfH8hYzBe
-         KCyfxQODU2JH2pcNjGB069lc3GkyO/GcKowqcOEfiYZa3siMgkltrFjbJVVzrsjwzj4y
-         XOJQ==
-X-Gm-Message-State: ACgBeo0LWJd9ZP9V67fAhbgC9gUOuRcOL6yIU+3f/vGc782vuxeWyhVj
-        QTd1p9wqUD6gF4f0EeYB0rhB8R3vdqP7VU1DbgM=
-X-Google-Smtp-Source: AA6agR7o6+cbAmbBXWrOEVSD8/8jpNtunHuIYuQyyAHx1LwhKi1/Xxr3KRLSmAnNCs+diMAHKFF+AYFi8krAbUbaSjc=
-X-Received: by 2002:aa7:ccc4:0:b0:43d:9e0e:b7ff with SMTP id
- y4-20020aa7ccc4000000b0043d9e0eb7ffmr17529084edt.14.1660620825187; Mon, 15
- Aug 2022 20:33:45 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=jZcr1tOq0vbhHXHGg5bDK0b4NIp4TukEuBKXw3l7dfI=;
+        b=y9fn12wn980QZoGxjbI65KC9cGQdo9W8r5QhzCV/kEsnT5NJ6HUhSderqRy66BqdZw
+         c/yluF4Eg1paFCtcqEvDYF76IT+/RGt5b3N1mc+tWHP/YbimofrLrqpeLCNUkaW3QHwg
+         oT5hOaRdyfX/NQVK2amtKo2P/GNhtLfzYf076BRopesX1PEcFDthc2w0cnZ4eEBVzRwt
+         BPFneROyH5nlzcx8J9xgdzupkcoKk1XK4ld2520zfRsjkYCkS3TOXQ4TATpmaJIQNTUa
+         Rj0q0T4306OANsYIqNl6tvZLZaj3YvVV+Bd6i1miPJNw2a6ob0kSlvrnSc9Rzu9NqJ7L
+         HCSA==
+X-Gm-Message-State: ACgBeo2kKPUKSvCuyp4tSTcUgwqgUbX8yYFQ/Oylr5YfUgKT+pK9s+np
+        ECi3hIKTU1M08hEzNWK0FKg=
+X-Google-Smtp-Source: AA6agR40lfsWmAPWuJCQp8pcf8t1MyaRAbeI0StBD0MztAVOqdtVvEtKngl93CFdt2d1KdaNYm+k2A==
+X-Received: by 2002:a17:90a:e611:b0:1f4:f03b:affd with SMTP id j17-20020a17090ae61100b001f4f03baffdmr20961637pjy.85.1660620556443;
+        Mon, 15 Aug 2022 20:29:16 -0700 (PDT)
+Received: from Laptop-X1 ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id ci11-20020a17090afc8b00b001fa9e7b0c47sm30110pjb.46.2022.08.15.20.29.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 20:29:15 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 11:29:10 +0800
+From:   Hangbin Liu <liuhangbin@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Quentin Monnet <quentin@isovalent.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCHv2 bpf-next] libbpf: making bpf_prog_load() ignore name if
+ kernel doesn't support
+Message-ID: <YvsPBk4Wo3Iw7spd@Laptop-X1>
+References: <20220813000936.6464-1-liuhangbin@gmail.com>
+ <a3c23cfe-061a-1722-8521-26e57b4b2cf4@isovalent.com>
+ <CAEf4BzbXehQtWnocp5KnArd0dq-Wg0ddPOyJZCwGPLO_L7wByg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220810190724.2692127-1-kafai@fb.com> <20220810190809.2698442-1-kafai@fb.com>
-In-Reply-To: <20220810190809.2698442-1-kafai@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 15 Aug 2022 20:33:33 -0700
-Message-ID: <CAEf4BzZqyE9XKePk0pf8U7-3ei17vO8jQiEBH_fTN7vOst+gWg@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf-next 07/15] bpf: Initialize the bpf_run_ctx in bpf_iter_run_prog()
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        David Miller <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, kernel-team@fb.com,
-        Paolo Abeni <pabeni@redhat.com>,
-        Stanislav Fomichev <sdf@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzbXehQtWnocp5KnArd0dq-Wg0ddPOyJZCwGPLO_L7wByg@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Aug 10, 2022 at 12:11 PM Martin KaFai Lau <kafai@fb.com> wrote:
->
-> The bpf-iter-prog for tcp and unix sk can do bpf_setsockopt()
-> which needs has_current_bpf_ctx() to decide if it is called by a
-> bpf prog.  This patch initializes the bpf_run_ctx in
-> bpf_iter_run_prog() for the has_current_bpf_ctx() to use.
->
-> Signed-off-by: Martin KaFai Lau <kafai@fb.com>
-> ---
->  include/linux/bpf.h   | 2 +-
->  kernel/bpf/bpf_iter.c | 5 +++++
->  2 files changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 0a600b2013cc..15ab980e9525 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1967,7 +1967,7 @@ static inline bool unprivileged_ebpf_enabled(void)
->  }
->
->  /* Not all bpf prog type has the bpf_ctx.
-> - * Only trampoline and cgroup-bpf have it.
-> + * Only trampoline, cgroup-bpf, and iter have it.
+On Mon, Aug 15, 2022 at 02:59:50PM -0700, Andrii Nakryiko wrote:
+> I did a small adjustment to not fill out entire big bpf_attr union
+> completely (and added a bit more meaningful "libbpf_nametest" prog
+> name):
+> 
 
-Apart from this part which I'd drop, lgtm:
+Thanks for the adjustment.
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Hangbin
 
->   * For the bpf prog type that has initialized the bpf_ctx,
->   * this function can be used to decide if a kernel function
->   * is called by a bpf program.
-> diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-> index 4b112aa8bba3..6476b2c03527 100644
-> --- a/kernel/bpf/bpf_iter.c
-> +++ b/kernel/bpf/bpf_iter.c
-> @@ -685,19 +685,24 @@ struct bpf_prog *bpf_iter_get_info(struct bpf_iter_meta *meta, bool in_stop)
->
->  int bpf_iter_run_prog(struct bpf_prog *prog, void *ctx)
+> $ git diff --staged
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 4a351897bdcc..f05dd61a8a7f 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -4415,6 +4415,7 @@ static int probe_fd(int fd)
+> 
+>  static int probe_kern_prog_name(void)
 >  {
-> +       struct bpf_run_ctx run_ctx, *old_run_ctx;
+> +       const size_t attr_sz = offsetofend(union bpf_attr, prog_name);
+>         struct bpf_insn insns[] = {
+>                 BPF_MOV64_IMM(BPF_REG_0, 0),
+>                 BPF_EXIT_INSN(),
+> @@ -4422,12 +4423,12 @@ static int probe_kern_prog_name(void)
+>         union bpf_attr attr;
 >         int ret;
->
->         if (prog->aux->sleepable) {
->                 rcu_read_lock_trace();
->                 migrate_disable();
->                 might_fault();
-> +               old_run_ctx = bpf_set_run_ctx(&run_ctx);
->                 ret = bpf_prog_run(prog, ctx);
-> +               bpf_reset_run_ctx(old_run_ctx);
->                 migrate_enable();
->                 rcu_read_unlock_trace();
->         } else {
->                 rcu_read_lock();
->                 migrate_disable();
-> +               old_run_ctx = bpf_set_run_ctx(&run_ctx);
->                 ret = bpf_prog_run(prog, ctx);
-> +               bpf_reset_run_ctx(old_run_ctx);
->                 migrate_enable();
->                 rcu_read_unlock();
->         }
-> --
-> 2.30.2
->
+> 
+> -       memset(&attr, 0, sizeof(attr));
+> +       memset(&attr, 0, attr_sz);
+>         attr.prog_type = BPF_PROG_TYPE_SOCKET_FILTER;
+>         attr.license = ptr_to_u64("GPL");
+>         attr.insns = ptr_to_u64(insns);
+>         attr.insn_cnt = (__u32)ARRAY_SIZE(insns);
+> -       libbpf_strlcpy(attr.prog_name, "test", sizeof(attr.prog_name));
+> +       libbpf_strlcpy(attr.prog_name, "libbpf_nametest",
+> sizeof(attr.prog_name));
+> 
+> Pushed to bpf-next, thanks!
