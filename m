@@ -2,176 +2,220 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F01BDC32771
-	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 09:02:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08EE7C2BB41
+	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 09:39:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232629AbiHPJCm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Aug 2022 05:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42510 "EHLO
+        id S233321AbiHPJjG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Aug 2022 05:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232155AbiHPJBp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:01:45 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E0D617052;
-        Tue, 16 Aug 2022 00:12:35 -0700 (PDT)
-Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M6Mfk4mGxz67QMh;
-        Tue, 16 Aug 2022 15:07:42 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 16 Aug 2022 09:12:32 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Tue, 16 Aug 2022 09:12:32 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "martin.lau@linux.dev" <martin.lau@linux.dev>,
-        "song@kernel.org" <song@kernel.org>, "yhs@fb.com" <yhs@fb.com>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "sdf@google.com" <sdf@google.com>,
-        "haoluo@google.com" <haoluo@google.com>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "mykolal@fb.com" <mykolal@fb.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "shuah@kernel.org" <shuah@kernel.org>
-CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v11 0/9] bpf: Add kfuncs for PKCS#7 signature verification
-Thread-Topic: [PATCH v11 0/9] bpf: Add kfuncs for PKCS#7 signature
- verification
-Thread-Index: AQHYrjUQ7TU+Vo0VRkmtop3PBwuR+62wBRIAgAEczrA=
-Date:   Tue, 16 Aug 2022 07:12:32 +0000
-Message-ID: <b61eb3b95843409eb6ab03aea4a0ca30@huawei.com>
-References: <20220812101902.2846182-1-roberto.sassu@huawei.com>
- <14032690-e7a9-9d14-1ec1-14dd3503037c@iogearbox.net>
-In-Reply-To: <14032690-e7a9-9d14-1ec1-14dd3503037c@iogearbox.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.221.98.153]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S233691AbiHPJi2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Aug 2022 05:38:28 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479F4119452
+        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 01:00:27 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id l18-20020a6bd112000000b0067cb64ad9b2so5620864iob.20
+        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 01:00:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=/u2jeEEoiyJZpO0ZrnI7yKagwWTGYr7cBjjav6KTDEQ=;
+        b=8QVpPBM0DMmY3Zwa8emz49lvCdo/bDQVdYPwCuflfV3Y705UgjIwuRpCROhFD/kzCJ
+         Xq8sx8DEkze+FYUDymRld+UTQLLCik5qezf6asH6dRXhpdVlcPPnyNzJqlzHNDhmGikS
+         YO9OsP4gx5oLEoS73WdisDGtxyiT0Mqa78xDK3Kcio/Q1QEjZckCdzm7+04SHNW4DXYf
+         kyc4Oaej8K2Le/dgq2AQPKUtq93dgV95I4DKWeVa3piiVLkzC/1kbVg+UxqMR68SFNc3
+         eJcWM/HMVuyFkLT+22n5S/P8gVl3OdLxiXege2rYqivCkJhMJTA1DjdOGPglWXiWJILC
+         SBGA==
+X-Gm-Message-State: ACgBeo3ux7OUax6IbYW9za/VhEKv3ryGEy00Dh9oOh3JWZevPGCQBCur
+        KF8oQJGL1qqgmUbcjQptZ9dBAEKjqzZcYW8JP1ZPsexhmTFC
+X-Google-Smtp-Source: AA6agR758k4dVTcV3GFPZiuhqFH7+ge5uru4PHLGXVTxvhhWRcfxjVGblr3p5btRyPYAJjX7pupVHyDUWWNXSwQqR1eJN/p0CFh8
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+X-Received: by 2002:a92:ca4e:0:b0:2df:1aae:47c4 with SMTP id
+ q14-20020a92ca4e000000b002df1aae47c4mr9068356ilo.57.1660636826976; Tue, 16
+ Aug 2022 01:00:26 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 01:00:26 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002c46ec05e6572415@google.com>
+Subject: [syzbot] KASAN: use-after-free Read in sock_has_perm
+From:   syzbot <syzbot+2f2c6bea25b08dc06f86@syzkaller.appspotmail.com>
+To:     anton@enomsg.org, bpf@vger.kernel.org, ccross@android.com,
+        eparis@parisplace.org, keescook@chromium.org,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com,
+        selinux@vger.kernel.org, stephen.smalley.work@gmail.com,
+        syzkaller-bugs@googlegroups.com, tony.luck@intel.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-PiBGcm9tOiBEYW5pZWwgQm9ya21hbm4gW21haWx0bzpkYW5pZWxAaW9nZWFyYm94Lm5ldF0NCj4g
-U2VudDogTW9uZGF5LCBBdWd1c3QgMTUsIDIwMjIgNjoxMCBQTQ0KPiBPbiA4LzEyLzIyIDEyOjE4
-IFBNLCBSb2JlcnRvIFNhc3N1IHdyb3RlOg0KPiA+IE9uZSBvZiB0aGUgZGVzaXJhYmxlIGZlYXR1
-cmVzIGluIHNlY3VyaXR5IGlzIHRoZSBhYmlsaXR5IHRvIHJlc3RyaWN0IGltcG9ydA0KPiA+IG9m
-IGRhdGEgdG8gYSBnaXZlbiBzeXN0ZW0gYmFzZWQgb24gZGF0YSBhdXRoZW50aWNpdHkuIElmIGRh
-dGEgaW1wb3J0IGNhbiBiZQ0KPiA+IHJlc3RyaWN0ZWQsIGl0IHdvdWxkIGJlIHBvc3NpYmxlIHRv
-IGVuZm9yY2UgYSBzeXN0ZW0td2lkZSBwb2xpY3kgYmFzZWQgb24NCj4gPiB0aGUgc2lnbmluZyBr
-ZXlzIHRoZSBzeXN0ZW0gb3duZXIgdHJ1c3RzLg0KPiA+DQo+IFsuLi5dDQo+ID4gQ2hhbmdlbG9n
-DQo+ID4NCj4gPiB2MTA6DQo+ID4gICAtIEludHJvZHVjZSBrZXlfbG9va3VwX2ZsYWdzX2NoZWNr
-KCkgYW5kIHN5c3RlbV9rZXlyaW5nX2lkX2NoZWNrKCkgaW5saW5lDQo+ID4gICAgIGZ1bmN0aW9u
-cyB0byBjaGVjayBwYXJhbWV0ZXJzIChzdWdnZXN0ZWQgYnkgS1ApDQo+ID4gICAtIEZpeCBkZXNj
-cmlwdGlvbnMgYW5kIGNvbW1lbnQgb2Yga2V5LXJlbGF0ZWQga2Z1bmNzIChzdWdnZXN0ZWQgYnkg
-S1ApDQo+ID4gICAtIFJlZ2lzdGVyIGtmdW5jIHNldCBvbmx5IG9uY2UgKHN1Z2dlc3RlZCBieSBB
-bGV4ZWkpDQo+ID4gICAtIE1vdmUgbmVlZGVkIGtlcm5lbCBvcHRpb25zIHRvIHRoZSBhcmNoaXRl
-Y3R1cmUtaW5kZXBlbmRlbnQgY29uZmlndXJhdGlvbg0KPiA+ICAgICBmb3IgdGVzdGluZw0KPiAN
-Cj4gTG9va3MgbGlrZSBmcm9tIEJQRiBDSSBzaWRlLCB0aGUgc2VsZnRlc3QgdGhyb3dzIGEgV0FS
-TiBpbiB0ZXN0X3Byb2dzIC8NCj4gdGVzdF9wcm9ncy1ub19hbHUzMg0KPiBhbmQgc3Vic2VxdWVu
-dGx5IGZhaWxzIHdpdGggZXJyb3IsIHB0YWw6DQo+IA0KPiAgICBodHRwczovL2dpdGh1Yi5jb20v
-a2VybmVsLQ0KPiBwYXRjaGVzL2JwZi9ydW5zLzc4MDQ0MjIwMzg/Y2hlY2tfc3VpdGVfZm9jdXM9
-dHJ1ZQ0KDQpIaSBEYW5pZWwNCg0KaXQgaXMgZHVlIHRvIHRoZSBtaXNzaW5nIFNIQTI1NiBrZXJu
-ZWwgbW9kdWxlIChub3QgY29waWVkIHRvDQp0aGUgdmlydHVhbCBtYWNoaW5lKS4NCg0KSSBtYWRl
-IGEgc21hbGwgcGF0Y2ggaW4gbGliYnBmL2NpIHRvIGNoYW5nZSBrZXJuZWwgb3B0aW9ucyA9bQ0K
-aW50byA9eS4gV2l0aCB0aGF0IHBhdGNoLCBteSBpbnN0YW5jZSBvZiB2bXRlc3QgZ2l2ZXMgc3Vj
-Y2Vzcw0KKGV4Y2VwdCBmb3IgejE1LCB3aGljaCByZXF1aXJlcyBhZGRpbmcgb3BlbnNzbCBhbmQg
-a2V5Y3RsDQp0byB0aGUgdmlydHVhbCBtYWNoaW5lIGltYWdlKS4NCg0KUm9iZXJ0bw0KDQo+ICAg
-IFsuLi5dDQo+ICAgICMyMzUgICAgIHZlcmlmX3NjYWxlX3hkcF9sb29wOk9LDQo+ICAgICMyMzYg
-ICAgIHZlcmlmX3N0YXRzOk9LDQo+ICAgICMyMzcgICAgIHZlcmlmX3R3Znc6T0sNCj4gICAgWyAg
-NzYwLjQ0ODY1Ml0gLS0tLS0tLS0tLS0tWyBjdXQgaGVyZSBdLS0tLS0tLS0tLS0tDQo+ICAgIFsg
-IDc2MC40NDk1MDZdIFdBUk5JTkc6IENQVTogMyBQSUQ6IDkzMCBhdCBjcnlwdG8vcnNhLXBrY3Mx
-cGFkLmM6NTQ0DQo+IHBrY3MxcGFkX3ZlcmlmeSsweDE4NC8weDE5MA0KPiAgICBbICA3NjAuNDUw
-ODA2XSBNb2R1bGVzIGxpbmtlZCBpbjogYnBmX3Rlc3Rtb2QoT0UpIFtsYXN0IHVubG9hZGVkOg0K
-PiBicGZfdGVzdG1vZF0NCj4gICAgWyAgNzYwLjQ1MjM0MF0gQ1BVOiAzIFBJRDogOTMwIENvbW06
-IGtleWN0bCBUYWludGVkOiBHICAgICAgICAgICBPRSAgICAgIDUuMTkuMC0NCj4gZzlmMDI2MDMz
-OGUzMS1kaXJ0eSAjMQ0KPiAgICBbICA3NjAuNDUzNjI2XSBIYXJkd2FyZSBuYW1lOiBRRU1VIFN0
-YW5kYXJkIFBDIChpNDQwRlggKyBQSUlYLCAxOTk2KSwgQklPUw0KPiAxLjEzLjAtMXVidW50dTEu
-MSAwNC8wMS8yMDE0DQo+ICAgIFsgIDc2MC40NTQ4MDFdIFJJUDogMDAxMDpwa2NzMXBhZF92ZXJp
-ZnkrMHgxODQvMHgxOTANCj4gICAgWyAgNzYwLjQ1NTM4MF0gQ29kZTogNWMgNDEgNWQgNDEgNWUg
-NDEgNWYgNWQgYzMgY2MgY2MgY2MgY2MgNDggODkgZGYgODkgYzYgNWIgNDENCj4gNWMgNDEgNWQg
-NDEgNWUgNDEgNWYgNWQgZTkgYTUgMDQgMDAgMDAgMGYgMGIgYjggZWEgZmYgZmYgZmYgZWIgZDQg
-PDBmPiAwYiBiOCBlYSBmZg0KPiBmZiBmZiBlYiBjYiAwZiAwYiA5MCAwZiAxZiA0NCAwMCAwMCA1
-MyA0OCA4OSBmYiBjNw0KPiAgICBbICA3NjAuNDU2ODY2XSBSU1A6IDAwMTg6ZmZmZmFkNTU0Nzhk
-YmI1OCBFRkxBR1M6IDAwMDAwMjQ2DQo+ICAgIFsgIDc2MC40NTc2ODRdIFJBWDogZmZmZjliM2M0
-M2M0MjQ1OCBSQlg6IGZmZmY5YjNjNDg5NzViMDAgUkNYOg0KPiAwMDAwMDAwMDAwMDAwMDAwDQo+
-ICAgIFsgIDc2MC40NTg2NzJdIFJEWDogZmZmZmZmZmZhNzI3NzQzOCBSU0k6IGZmZmZmZmZmYTUy
-NzU1MTAgUkRJOg0KPiAwMDAwMDAwMDAwMDAwMDAwDQo+ICAgIFsgIDc2MC40NTk2NzBdIFJCUDog
-ZmZmZmFkNTU0NzhkYmNmOCBSMDg6IDAwMDAwMDAwMDAwMDAwMDIgUjA5Og0KPiAwMDAwMDAwMDAw
-MDAwMDAwDQo+ICAgIFsgIDc2MC40NjA2ODhdIFIxMDogZmZmZmFkNTU0NzhkYmMyMCBSMTE6IGZm
-ZmZmZmZmYTQ0ZGRlMTAgUjEyOg0KPiBmZmZmOWIzYzQzZGUyZTgwDQo+ICAgIFsgIDc2MC40NjE2
-OTVdIFIxMzogZmZmZjliM2M1ODQ1OWVhMCBSMTQ6IGZmZmY5YjNjNDRkNTk2MDAgUjE1Og0KPiBm
-ZmZmYWQ1NTQ3OGRiYzIwDQo+ICAgIFsgIDc2MC40NjIyNzBdIEZTOiAgMDAwMDdmZjFlZTBlYjc0
-MCgwMDAwKSBHUzpmZmZmOWIzY2Y5Y2MwMDAwKDAwMDApDQo+IGtubEdTOjAwMDAwMDAwMDAwMDAw
-MDANCj4gICAgWyAgNzYwLjQ2MjcyMl0gQ1M6ICAwMDEwIERTOiAwMDAwIEVTOiAwMDAwIENSMDog
-MDAwMDAwMDA4MDA1MDAzMw0KPiAgICBbICA3NjAuNDYzMDI2XSBDUjI6IDAwMDA1NWI5YTRjMTc1
-ODggQ1IzOiAwMDAwMDAwMTA3YmIyMDAwIENSNDoNCj4gMDAwMDAwMDAwMDAwMDZlMA0KPiAgICBb
-ICA3NjAuNDY0MDM5XSBDYWxsIFRyYWNlOg0KPiAgICBbICA3NjAuNDY0NDY1XSAgPFRBU0s+DQo+
-ICAgIFsgIDc2MC40NjQ3NDldICBwdWJsaWNfa2V5X3ZlcmlmeV9zaWduYXR1cmUrMHg0YTIvMHg1
-NzANCj4gICAgWyAgNzYwLjQ2NTYyM10gIHg1MDlfY2hlY2tfZm9yX3NlbGZfc2lnbmVkKzB4NGUv
-MHhkMA0KPiAgICBbICA3NjAuNDY1OTM3XSAgeDUwOV9jZXJ0X3BhcnNlKzB4MTkzLzB4MjIwDQo+
-ICAgIFsgIDc2MC40NjY2NTZdICB4NTA5X2tleV9wcmVwYXJzZSsweDIwLzB4MWYwDQo+ICAgIFsg
-IDc2MC40NjY5NzVdICBhc3ltbWV0cmljX2tleV9wcmVwYXJzZSsweDQzLzB4ODANCj4gICAgWyAg
-NzYwLjQ2NzU1Ml0gIGtleV9jcmVhdGVfb3JfdXBkYXRlKzB4MjRlLzB4NTEwDQo+ICAgIFsgIDc2
-MC40NjgzNjZdICBfX3g2NF9zeXNfYWRkX2tleSsweDE5Yi8weDIyMA0KPiAgICBbICA3NjAuNDY4
-NzA0XSAgPyBzeXNjYWxsX2VudGVyX2Zyb21fdXNlcl9tb2RlKzB4MjQvMHgxZjANCj4gICAgWyAg
-NzYwLjQ2OTA1Nl0gIGRvX3N5c2NhbGxfNjQrMHg0My8weDkwDQo+ICAgIFsgIDc2MC40Njk2NTdd
-ICBlbnRyeV9TWVNDQUxMXzY0X2FmdGVyX2h3ZnJhbWUrMHg2My8weGNkDQo+ICAgIFsgIDc2MC40
-NzA0MTNdIFJJUDogMDAzMzoweDdmZjFlZGYwYmE5ZA0KPiAgICBbICA3NjAuNDcwODMyXSBDb2Rl
-OiA1YiA0MSA1YyBjMyA2NiAwZiAxZiA4NCAwMCAwMCAwMCAwMCAwMCBmMyAwZiAxZSBmYSA0OCA4
-OSBmOA0KPiA0OCA4OSBmNyA0OCA4OSBkNiA0OCA4OSBjYSA0ZCA4OSBjMiA0ZCA4OSBjOCA0YyA4
-YiA0YyAyNCAwOCAwZiAwNSA8NDg+IDNkIDAxIGYwIGZmDQo+IGZmIDczIDAxIGMzIDQ4IDhiIDBk
-IGNiIGUyIDBlIDAwIGY3IGQ4IDY0IDg5IDAxIDQ4DQo+ICAgIFsgIDc2MC40NzI3NDJdIFJTUDog
-MDAyYjowMDAwN2ZmZTYzNWU3YTE4IEVGTEFHUzogMDAwMDAyNDYgT1JJR19SQVg6DQo+IDAwMDAw
-MDAwMDAwMDAwZjgNCj4gICAgWyAgNzYwLjQ3MzM1NV0gUkFYOiBmZmZmZmZmZmZmZmZmZmRhIFJC
-WDogMDAwMDdmZmU2MzVlN2JlMCBSQ1g6DQo+IDAwMDA3ZmYxZWRmMGJhOWQNCj4gICAgWyAgNzYw
-LjQ3NDUyM10gUkRYOiAwMDAwNTU5ODJmZWQ4MGMwIFJTSTogMDAwMDdmZmU2MzVlN2YxNyBSREk6
-DQo+IDAwMDA3ZmZlNjM1ZTdmMGMNCj4gICAgWyAgNzYwLjQ3NTUwMF0gUkJQOiAwMDAwN2ZmZTYz
-NWU3YTM4IFIwODogMDAwMDAwMDBmZmZmZmZmZCBSMDk6DQo+IDAwMDAwMDAwMDAwMDAwMDANCj4g
-ICAgWyAgNzYwLjQ3NTkxM10gUjEwOiAwMDAwMDAwMDAwMDAwMzU1IFIxMTogMDAwMDAwMDAwMDAw
-MDI0NiBSMTI6DQo+IDAwMDAwMDAwMDAwMDAwMDANCj4gICAgWyAgNzYwLjQ3NjU5NF0gUjEzOiAw
-MDAwN2ZmZTYzNWU3YmQ4IFIxNDogMDAwMDU1OTgyZmVkNDhhZSBSMTU6DQo+IDAwMDA1NTk4MmZl
-ZDc2ZTgNCj4gICAgWyAgNzYwLjQ3NzU3OV0gIDwvVEFTSz4NCj4gICAgWyAgNzYwLjQ3Nzc2OV0g
-aXJxIGV2ZW50IHN0YW1wOiA0NzI3DQo+ICAgIFsgIDc2MC40Nzc5NjNdIGhhcmRpcnFzIGxhc3Qg
-IGVuYWJsZWQgYXQgKDQ3MzUpOiBbPGZmZmZmZmZmYTQxMDFkZjU+XQ0KPiBfX3VwX2NvbnNvbGVf
-c2VtKzB4NzUvMHhhMA0KPiAgICBbICA3NjAuNDc5MDM2XSBoYXJkaXJxcyBsYXN0IGRpc2FibGVk
-IGF0ICg0NzQ0KTogWzxmZmZmZmZmZmE0YTMxY2NhPl0NCj4gc3lzdmVjX2FwaWNfdGltZXJfaW50
-ZXJydXB0KzB4YS8weGIwDQo+ICAgIFsgIDc2MC40ODA0MDNdIHNvZnRpcnFzIGxhc3QgIGVuYWJs
-ZWQgYXQgKDQ3NjIpOiBbPGZmZmZmZmZmYTQwODUxNzI+XQ0KPiBfX2lycV9leGl0X3JjdSsweGIy
-LzB4MTQwDQo+ICAgIFsgIDc2MC40ODA4NjldIHNvZnRpcnFzIGxhc3QgZGlzYWJsZWQgYXQgKDQ3
-NTUpOiBbPGZmZmZmZmZmYTQwODUxNzI+XQ0KPiBfX2lycV9leGl0X3JjdSsweGIyLzB4MTQwDQo+
-ICAgIFsgIDc2MC40ODE3MDZdIC0tLVsgZW5kIHRyYWNlIDAwMDAwMDAwMDAwMDAwMDAgXS0tLQ0K
-PiAgICBHZW5lcmF0aW5nIGEgUlNBIHByaXZhdGUga2V5DQo+ICAgIC4rKysrKw0KPiAgICAuLi4u
-Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLisrKysrDQo+ICAg
-IHdyaXRpbmcgbmV3IHByaXZhdGUga2V5IHRvICcvdG1wL3ZlcmlmeV9zaWdYZE9MNVYvc2lnbmlu
-Z19rZXkucGVtJw0KPiAgICAtLS0tLQ0KPiAgICBhZGRfa2V5OiBJbnZhbGlkIGFyZ3VtZW50DQo+
-ICAgIHRlc3RfdmVyaWZ5X3BrY3M3X3NpZzpQQVNTOm1rZHRlbXAgMCBuc2VjDQo+ICAgIHRlc3Rf
-dmVyaWZ5X3BrY3M3X3NpZzpGQUlMOl9ydW5fc2V0dXBfcHJvY2VzcyB1bmV4cGVjdGVkIGVycm9y
-OiAxIChlcnJubw0KPiAxMjYpDQo+ICAgICMyMzggICAgIHZlcmlmeV9wa2NzN19zaWc6RkFJTA0K
-PiAgICAjMjM5ICAgICB2bWxpbnV4Ok9LDQo+ICAgICMyNDAgICAgIHhkcDpPSw0KPiAgICAjMjQx
-LzEgICB4ZHBfYWRqdXN0X2ZyYWdzL3hkcF9hZGp1c3RfZnJhZ3M6T0sNCj4gICAgIzI0MSAgICAg
-eGRwX2FkanVzdF9mcmFnczpPSw0KPiAgICAjMjQyLzEgICB4ZHBfYWRqdXN0X3RhaWwveGRwX2Fk
-anVzdF90YWlsX3NocmluazpPSw0KPiAgICAjMjQyLzIgICB4ZHBfYWRqdXN0X3RhaWwveGRwX2Fk
-anVzdF90YWlsX2dyb3c6T0sNCj4gICAgWy4uLl0NCg==
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    200e340f2196 Merge tag 'pull-work.dcache' of git://git.ker..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16021dfd080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f2886ebe3c7b3459
+dashboard link: https://syzkaller.appspot.com/bug?extid=2f2c6bea25b08dc06f86
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2f2c6bea25b08dc06f86@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: use-after-free in sock_has_perm+0x258/0x280 security/selinux/hooks.c:4532
+Read of size 8 at addr ffff88807630e480 by task syz-executor.0/8123
+
+CPU: 1 PID: 8123 Comm: syz-executor.0 Not tainted 5.19.0-syzkaller-02972-g200e340f2196 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xeb/0x467 mm/kasan/report.c:313
+ print_report mm/kasan/report.c:429 [inline]
+ kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
+ sock_has_perm+0x258/0x280 security/selinux/hooks.c:4532
+ selinux_socket_setsockopt+0x3e/0x80 security/selinux/hooks.c:4913
+ security_socket_setsockopt+0x50/0xb0 security/security.c:2249
+ __sys_setsockopt+0x107/0x6a0 net/socket.c:2233
+ __do_sys_setsockopt net/socket.c:2266 [inline]
+ __se_sys_setsockopt net/socket.c:2263 [inline]
+ __x64_sys_setsockopt+0xba/0x150 net/socket.c:2263
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f96c7289279
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f96c842f168 EFLAGS: 00000246 ORIG_RAX: 0000000000000036
+RAX: ffffffffffffffda RBX: 00007f96c739c050 RCX: 00007f96c7289279
+RDX: 0000000000000007 RSI: 0000000000000103 RDI: 0000000000000004
+RBP: 00007f96c72e3189 R08: 0000000000000004 R09: 0000000000000000
+R10: 0000000020000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffe7030593f R14: 00007f96c842f300 R15: 0000000000022000
+ </TASK>
+
+Allocated by task 8113:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:437 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:516 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:475 [inline]
+ __kasan_kmalloc+0xa6/0xd0 mm/kasan/common.c:525
+ kasan_kmalloc include/linux/kasan.h:234 [inline]
+ __do_kmalloc mm/slab.c:3696 [inline]
+ __kmalloc+0x209/0x4e0 mm/slab.c:3705
+ kmalloc include/linux/slab.h:605 [inline]
+ sk_prot_alloc+0x110/0x290 net/core/sock.c:1975
+ sk_alloc+0x36/0x770 net/core/sock.c:2028
+ nr_create+0xb2/0x5f0 net/netrom/af_netrom.c:433
+ __sock_create+0x355/0x790 net/socket.c:1515
+ sock_create net/socket.c:1566 [inline]
+ __sys_socket_create net/socket.c:1603 [inline]
+ __sys_socket_create net/socket.c:1588 [inline]
+ __sys_socket+0x12f/0x240 net/socket.c:1636
+ __do_sys_socket net/socket.c:1649 [inline]
+ __se_sys_socket net/socket.c:1647 [inline]
+ __x64_sys_socket+0x6f/0xb0 net/socket.c:1647
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Freed by task 15:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:45
+ kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:367 [inline]
+ ____kasan_slab_free+0x13d/0x180 mm/kasan/common.c:329
+ kasan_slab_free include/linux/kasan.h:200 [inline]
+ __cache_free mm/slab.c:3426 [inline]
+ kfree+0x173/0x390 mm/slab.c:3796
+ sk_prot_free net/core/sock.c:2011 [inline]
+ __sk_destruct+0x5e5/0x710 net/core/sock.c:2097
+ sk_destruct net/core/sock.c:2112 [inline]
+ __sk_free+0x1a4/0x4a0 net/core/sock.c:2123
+ sk_free+0x78/0xa0 net/core/sock.c:2134
+ sock_put include/net/sock.h:1927 [inline]
+ nr_heartbeat_expiry+0x2de/0x460 net/netrom/nr_timer.c:148
+ call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1474
+ expire_timers kernel/time/timer.c:1519 [inline]
+ __run_timers.part.0+0x679/0xa80 kernel/time/timer.c:1790
+ __run_timers kernel/time/timer.c:1768 [inline]
+ run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1803
+ __do_softirq+0x29b/0x9c2 kernel/softirq.c:571
+
+The buggy address belongs to the object at ffff88807630e000
+ which belongs to the cache kmalloc-2k of size 2048
+The buggy address is located 1152 bytes inside of
+ 2048-byte region [ffff88807630e000, ffff88807630e800)
+
+The buggy address belongs to the physical page:
+page:ffffea0001d8c380 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7630e
+flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000200 ffffea00004a5648 ffffea0001e43248 ffff888011840800
+raw: 0000000000000000 ffff88807630e000 0000000100000001 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x3c20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL|__GFP_THISNODE), pid 7307, tgid 7301 (syz-executor.3), ts 520580080833, free_ts 520081225704
+ prep_new_page mm/page_alloc.c:2457 [inline]
+ get_page_from_freelist+0x1298/0x3b80 mm/page_alloc.c:4203
+ __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5431
+ __alloc_pages_node include/linux/gfp.h:587 [inline]
+ kmem_getpages mm/slab.c:1363 [inline]
+ cache_grow_begin+0x75/0x350 mm/slab.c:2569
+ cache_alloc_refill+0x27f/0x380 mm/slab.c:2942
+ ____cache_alloc mm/slab.c:3024 [inline]
+ ____cache_alloc mm/slab.c:3007 [inline]
+ slab_alloc_node mm/slab.c:3227 [inline]
+ kmem_cache_alloc_node_trace+0x51d/0x5b0 mm/slab.c:3611
+ __do_kmalloc_node mm/slab.c:3633 [inline]
+ __kmalloc_node_track_caller+0x38/0x60 mm/slab.c:3648
+ kmalloc_reserve net/core/skbuff.c:354 [inline]
+ __alloc_skb+0xde/0x340 net/core/skbuff.c:426
+ alloc_skb include/linux/skbuff.h:1434 [inline]
+ nlmsg_new include/net/netlink.h:953 [inline]
+ audit_buffer_alloc kernel/audit.c:1782 [inline]
+ audit_log_start.part.0+0x27f/0x740 kernel/audit.c:1900
+ audit_log_start+0x5f/0x90 kernel/audit.c:1856
+ integrity_audit_message+0xf6/0x470 security/integrity/integrity_audit.c:47
+ integrity_audit_msg+0x3d/0x50 security/integrity/integrity_audit.c:32
+ ima_collect_measurement+0x3b7/0x710 security/integrity/ima/ima_api.c:317
+ process_measurement+0xd0d/0x1880 security/integrity/ima/ima_main.c:337
+ ima_file_check+0xac/0x100 security/integrity/ima/ima_main.c:517
+ do_open fs/namei.c:3501 [inline]
+ path_openat+0x1611/0x28f0 fs/namei.c:3632
+ do_filp_open+0x1b6/0x400 fs/namei.c:3659
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1371 [inline]
+ free_pcp_prepare+0x549/0xd20 mm/page_alloc.c:1421
+ free_unref_page_prepare mm/page_alloc.c:3344 [inline]
+ free_unref_page+0x19/0x6a0 mm/page_alloc.c:3439
+ __vunmap+0x85d/0xd30 mm/vmalloc.c:2665
+ free_work+0x58/0x70 mm/vmalloc.c:97
+ process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+
+Memory state around the buggy address:
+ ffff88807630e380: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88807630e400: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff88807630e480: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                   ^
+ ffff88807630e500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88807630e580: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
