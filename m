@@ -2,210 +2,176 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 733FCC32771
-	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 08:54:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F01BDC32771
+	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 09:02:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbiHPIyk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Aug 2022 04:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60194 "EHLO
+        id S232629AbiHPJCm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Aug 2022 05:02:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231393AbiHPIyM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Aug 2022 04:54:12 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B1675488
-        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 00:00:24 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id y3so12299631eda.6
-        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 00:00:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc;
-        bh=vYSbRkDh7WDNcTFq/f9J5mYyoHioqnJ1nlRmfXFQdbA=;
-        b=n59pImx7Tf6JZhDNZYpZ2DCxKjBWues8u8nUZu75fTQUIeZkBxuZ+CXbWP1bshVOLP
-         9vpUVfmNMMqvxt0ZZPtcp7cFjh4DpJ3Hz/IbaSXsgYJz1zNkY/cwXfgZBFtSq1TpPrbq
-         uezLprjiNnukNBf0DkB2z0Oy20vRsjOYUI5H7ssP0qe0rZdviUPxhGDNKH3ONFi9Fbof
-         s1FozsmZFhvI7CPKm5gKOHQTmwfE2w8w05OjqVzdjwPOCcjjOmucMcea0v9tReHgLrpy
-         iQ2+d8Ym3FOqAaNohzGDsbEAgk6dY8eT62PuFKX9OrQYKxZb0086MjAeEI7eTxVoZ2Hi
-         jbcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
-        bh=vYSbRkDh7WDNcTFq/f9J5mYyoHioqnJ1nlRmfXFQdbA=;
-        b=pjgJMDS+rxeyBtZlo2scfRSF+Qrviip/FVuYRKRTbxw6VugUeObNFZRY8nUQ2xEmZE
-         55mgE92FJoDTYgbTuQ+yLIVDv8gW0mTZddNJ+VIxNtiOQvDtYCrAp0UBui9pKgs3nnEl
-         wFnpa3Pi/6yTxxNkrBX19nFgk7E2mmgrQfMTPvSATcdXLR9gHmpucsfe8gWFPXluux82
-         vbd9CxAcgsDk8fraGoTZPF1JQzrVhrpVqER7QwICAZ4PqWgpEp6qszvQc0oI+d6iRsHS
-         sMTM1ilBBMHcmra+uVYUKLH9LgJAp05ScGzzgca8TOkgY9nuYzfZYnk8GF+T4trQasFp
-         Es7g==
-X-Gm-Message-State: ACgBeo0yWgJPzB2rxvHbvrVSGDLnrALTynlDw7WM/ygdZvLUW/4gVpOY
-        gMoCVvP4grmw+hVSEg6rlvo=
-X-Google-Smtp-Source: AA6agR4tiOgVCNJcw8j/Eh5YsinYUjeYyyDNkaYd4jsvaTdW0h+u2258Mg3lyFpKyPIVM9Kt5piBiA==
-X-Received: by 2002:a05:6402:254b:b0:43e:7c6a:f431 with SMTP id l11-20020a056402254b00b0043e7c6af431mr17984031edb.305.1660633222789;
-        Tue, 16 Aug 2022 00:00:22 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id x23-20020aa7dad7000000b0043a85d7d15esm7916491eds.12.2022.08.16.00.00.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 00:00:22 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Tue, 16 Aug 2022 09:00:20 +0200
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Subject: Re: [PATCHv2 bpf-next 6/6] selftests/bpf: Fix get_func_ip offset
- test for CONFIG_X86_KERNEL_IBT
-Message-ID: <YvtAhPyiWDbTzCdA@krava>
-References: <20220811091526.172610-1-jolsa@kernel.org>
- <20220811091526.172610-7-jolsa@kernel.org>
- <CAEf4BzbXBsL8zrCDEP-+VsKseEQ1fWTRvUkJtwxX5r8q9hf1OA@mail.gmail.com>
+        with ESMTP id S232155AbiHPJBp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Aug 2022 05:01:45 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E0D617052;
+        Tue, 16 Aug 2022 00:12:35 -0700 (PDT)
+Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M6Mfk4mGxz67QMh;
+        Tue, 16 Aug 2022 15:07:42 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 16 Aug 2022 09:12:32 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
+ Tue, 16 Aug 2022 09:12:32 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "martin.lau@linux.dev" <martin.lau@linux.dev>,
+        "song@kernel.org" <song@kernel.org>, "yhs@fb.com" <yhs@fb.com>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "sdf@google.com" <sdf@google.com>,
+        "haoluo@google.com" <haoluo@google.com>,
+        "jolsa@kernel.org" <jolsa@kernel.org>,
+        "mykolal@fb.com" <mykolal@fb.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "shuah@kernel.org" <shuah@kernel.org>
+CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v11 0/9] bpf: Add kfuncs for PKCS#7 signature verification
+Thread-Topic: [PATCH v11 0/9] bpf: Add kfuncs for PKCS#7 signature
+ verification
+Thread-Index: AQHYrjUQ7TU+Vo0VRkmtop3PBwuR+62wBRIAgAEczrA=
+Date:   Tue, 16 Aug 2022 07:12:32 +0000
+Message-ID: <b61eb3b95843409eb6ab03aea4a0ca30@huawei.com>
+References: <20220812101902.2846182-1-roberto.sassu@huawei.com>
+ <14032690-e7a9-9d14-1ec1-14dd3503037c@iogearbox.net>
+In-Reply-To: <14032690-e7a9-9d14-1ec1-14dd3503037c@iogearbox.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.221.98.153]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzbXBsL8zrCDEP-+VsKseEQ1fWTRvUkJtwxX5r8q9hf1OA@mail.gmail.com>
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 08:25:51PM -0700, Andrii Nakryiko wrote:
-> On Thu, Aug 11, 2022 at 2:16 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> >
-> > With CONFIG_X86_KERNEL_IBT enabled the test for kprobe with offset
-> > won't work because of the extra endbr instruction.
-> >
-> > As suggested by Andrii adding CONFIG_X86_KERNEL_IBT detection
-> > and using appropriate offset value based on that.
-> >
-> > Also removing test7 program, because it does the same as test6.
-> >
-> > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >  .../bpf/prog_tests/get_func_ip_test.c         | 62 +++++++++++++++----
-> >  .../selftests/bpf/progs/get_func_ip_test.c    | 20 +++---
-> >  2 files changed, 60 insertions(+), 22 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c b/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c
-> > index 938dbd4d7c2f..a4dab2fa2258 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c
-> > @@ -2,7 +2,9 @@
-> >  #include <test_progs.h>
-> >  #include "get_func_ip_test.skel.h"
-> >
-> > -void test_get_func_ip_test(void)
-> > +static int config_ibt;
-> > +
-> > +static void test_function_entry(void)
-> >  {
-> >         struct get_func_ip_test *skel = NULL;
-> >         int err, prog_fd;
-> > @@ -12,14 +14,6 @@ void test_get_func_ip_test(void)
-> >         if (!ASSERT_OK_PTR(skel, "get_func_ip_test__open"))
-> >                 return;
-> >
-> > -       /* test6 is x86_64 specifc because of the instruction
-> > -        * offset, disabling it for all other archs
-> > -        */
-> > -#ifndef __x86_64__
-> > -       bpf_program__set_autoload(skel->progs.test6, false);
-> > -       bpf_program__set_autoload(skel->progs.test7, false);
-> > -#endif
-> > -
-> >         err = get_func_ip_test__load(skel);
-> >         if (!ASSERT_OK(err, "get_func_ip_test__load"))
-> >                 goto cleanup;
-> > @@ -38,16 +32,62 @@ void test_get_func_ip_test(void)
-> >
-> >         ASSERT_OK(err, "test_run");
-> >
-> > +       config_ibt = skel->bss->config_ibt;
-> 
-> skel->bss->config_ibt isn't actually necessary, you can just check
-> skel->kconfig->CONFIG_X86_KERNEL_IBT directly. And you won't need to
-> trigger BPF program unnecessary, libbpf will fill out kconfig section
-> during object/skeleton load phase.
-
-nice, did not know that ;-) will remove it
-
-> 
-> > +       ASSERT_TRUE(config_ibt == 0 || config_ibt == 1, "config_ibt");
-> 
-> you won't need this anymore
-> 
-> > +       printf("%s:config_ibt %d\n", __func__, config_ibt);
-> 
-> and this is just debug leftover
-
-it's intentional to find out quickly what config we are failing on
-
-> 
-> > +
-> >         ASSERT_EQ(skel->bss->test1_result, 1, "test1_result");
-> >         ASSERT_EQ(skel->bss->test2_result, 1, "test2_result");
-> >         ASSERT_EQ(skel->bss->test3_result, 1, "test3_result");
-> >         ASSERT_EQ(skel->bss->test4_result, 1, "test4_result");
-> >         ASSERT_EQ(skel->bss->test5_result, 1, "test5_result");
-> > +
-> 
-> [...]
-> 
-> > diff --git a/tools/testing/selftests/bpf/progs/get_func_ip_test.c b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-> > index 6db70757bc8b..cb8e58183d46 100644
-> > --- a/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-> > +++ b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-> > @@ -2,6 +2,7 @@
-> >  #include <linux/bpf.h>
-> >  #include <bpf/bpf_helpers.h>
-> >  #include <bpf/bpf_tracing.h>
-> > +#include <stdbool.h>
-> >
-> >  char _license[] SEC("license") = "GPL";
-> >
-> > @@ -13,12 +14,19 @@ extern const void bpf_modify_return_test __ksym;
-> >  extern const void bpf_fentry_test6 __ksym;
-> >  extern const void bpf_fentry_test7 __ksym;
-> >
-> > +extern bool CONFIG_X86_KERNEL_IBT __kconfig __weak;
-> > +
-> > +bool config_ibt;
-> > +
-> >  __u64 test1_result = 0;
-> >  SEC("fentry/bpf_fentry_test1")
-> >  int BPF_PROG(test1, int a)
-> >  {
-> >         __u64 addr = bpf_get_func_ip(ctx);
-> >
-> > +       /* just to propagate config option value to user space */
-> > +       config_ibt = CONFIG_X86_KERNEL_IBT;
-> > +
-> 
-> as mentioned above, you shouldn't need it, just read
-> CONFIG_X86_KERNEL_IBT directly through skeleton
-> 
-> >         test1_result = (const void *) addr == &bpf_fentry_test1;
-> >         return 0;
-> >  }
-> > @@ -64,7 +72,7 @@ int BPF_PROG(test5, int a, int *b, int ret)
-> >  }
-> >
-> >  __u64 test6_result = 0;
-> > -SEC("kprobe/bpf_fentry_test6+0x5")
-> > +SEC("?kprobe/")
-> 
-> don't leave / at the end (and I thought that libbpf rejects this,
-> isn't that a case?...), just SEC("?kprobe")
-
-yes, will remove
-
-thanks,
-jirka
+PiBGcm9tOiBEYW5pZWwgQm9ya21hbm4gW21haWx0bzpkYW5pZWxAaW9nZWFyYm94Lm5ldF0NCj4g
+U2VudDogTW9uZGF5LCBBdWd1c3QgMTUsIDIwMjIgNjoxMCBQTQ0KPiBPbiA4LzEyLzIyIDEyOjE4
+IFBNLCBSb2JlcnRvIFNhc3N1IHdyb3RlOg0KPiA+IE9uZSBvZiB0aGUgZGVzaXJhYmxlIGZlYXR1
+cmVzIGluIHNlY3VyaXR5IGlzIHRoZSBhYmlsaXR5IHRvIHJlc3RyaWN0IGltcG9ydA0KPiA+IG9m
+IGRhdGEgdG8gYSBnaXZlbiBzeXN0ZW0gYmFzZWQgb24gZGF0YSBhdXRoZW50aWNpdHkuIElmIGRh
+dGEgaW1wb3J0IGNhbiBiZQ0KPiA+IHJlc3RyaWN0ZWQsIGl0IHdvdWxkIGJlIHBvc3NpYmxlIHRv
+IGVuZm9yY2UgYSBzeXN0ZW0td2lkZSBwb2xpY3kgYmFzZWQgb24NCj4gPiB0aGUgc2lnbmluZyBr
+ZXlzIHRoZSBzeXN0ZW0gb3duZXIgdHJ1c3RzLg0KPiA+DQo+IFsuLi5dDQo+ID4gQ2hhbmdlbG9n
+DQo+ID4NCj4gPiB2MTA6DQo+ID4gICAtIEludHJvZHVjZSBrZXlfbG9va3VwX2ZsYWdzX2NoZWNr
+KCkgYW5kIHN5c3RlbV9rZXlyaW5nX2lkX2NoZWNrKCkgaW5saW5lDQo+ID4gICAgIGZ1bmN0aW9u
+cyB0byBjaGVjayBwYXJhbWV0ZXJzIChzdWdnZXN0ZWQgYnkgS1ApDQo+ID4gICAtIEZpeCBkZXNj
+cmlwdGlvbnMgYW5kIGNvbW1lbnQgb2Yga2V5LXJlbGF0ZWQga2Z1bmNzIChzdWdnZXN0ZWQgYnkg
+S1ApDQo+ID4gICAtIFJlZ2lzdGVyIGtmdW5jIHNldCBvbmx5IG9uY2UgKHN1Z2dlc3RlZCBieSBB
+bGV4ZWkpDQo+ID4gICAtIE1vdmUgbmVlZGVkIGtlcm5lbCBvcHRpb25zIHRvIHRoZSBhcmNoaXRl
+Y3R1cmUtaW5kZXBlbmRlbnQgY29uZmlndXJhdGlvbg0KPiA+ICAgICBmb3IgdGVzdGluZw0KPiAN
+Cj4gTG9va3MgbGlrZSBmcm9tIEJQRiBDSSBzaWRlLCB0aGUgc2VsZnRlc3QgdGhyb3dzIGEgV0FS
+TiBpbiB0ZXN0X3Byb2dzIC8NCj4gdGVzdF9wcm9ncy1ub19hbHUzMg0KPiBhbmQgc3Vic2VxdWVu
+dGx5IGZhaWxzIHdpdGggZXJyb3IsIHB0YWw6DQo+IA0KPiAgICBodHRwczovL2dpdGh1Yi5jb20v
+a2VybmVsLQ0KPiBwYXRjaGVzL2JwZi9ydW5zLzc4MDQ0MjIwMzg/Y2hlY2tfc3VpdGVfZm9jdXM9
+dHJ1ZQ0KDQpIaSBEYW5pZWwNCg0KaXQgaXMgZHVlIHRvIHRoZSBtaXNzaW5nIFNIQTI1NiBrZXJu
+ZWwgbW9kdWxlIChub3QgY29waWVkIHRvDQp0aGUgdmlydHVhbCBtYWNoaW5lKS4NCg0KSSBtYWRl
+IGEgc21hbGwgcGF0Y2ggaW4gbGliYnBmL2NpIHRvIGNoYW5nZSBrZXJuZWwgb3B0aW9ucyA9bQ0K
+aW50byA9eS4gV2l0aCB0aGF0IHBhdGNoLCBteSBpbnN0YW5jZSBvZiB2bXRlc3QgZ2l2ZXMgc3Vj
+Y2Vzcw0KKGV4Y2VwdCBmb3IgejE1LCB3aGljaCByZXF1aXJlcyBhZGRpbmcgb3BlbnNzbCBhbmQg
+a2V5Y3RsDQp0byB0aGUgdmlydHVhbCBtYWNoaW5lIGltYWdlKS4NCg0KUm9iZXJ0bw0KDQo+ICAg
+IFsuLi5dDQo+ICAgICMyMzUgICAgIHZlcmlmX3NjYWxlX3hkcF9sb29wOk9LDQo+ICAgICMyMzYg
+ICAgIHZlcmlmX3N0YXRzOk9LDQo+ICAgICMyMzcgICAgIHZlcmlmX3R3Znc6T0sNCj4gICAgWyAg
+NzYwLjQ0ODY1Ml0gLS0tLS0tLS0tLS0tWyBjdXQgaGVyZSBdLS0tLS0tLS0tLS0tDQo+ICAgIFsg
+IDc2MC40NDk1MDZdIFdBUk5JTkc6IENQVTogMyBQSUQ6IDkzMCBhdCBjcnlwdG8vcnNhLXBrY3Mx
+cGFkLmM6NTQ0DQo+IHBrY3MxcGFkX3ZlcmlmeSsweDE4NC8weDE5MA0KPiAgICBbICA3NjAuNDUw
+ODA2XSBNb2R1bGVzIGxpbmtlZCBpbjogYnBmX3Rlc3Rtb2QoT0UpIFtsYXN0IHVubG9hZGVkOg0K
+PiBicGZfdGVzdG1vZF0NCj4gICAgWyAgNzYwLjQ1MjM0MF0gQ1BVOiAzIFBJRDogOTMwIENvbW06
+IGtleWN0bCBUYWludGVkOiBHICAgICAgICAgICBPRSAgICAgIDUuMTkuMC0NCj4gZzlmMDI2MDMz
+OGUzMS1kaXJ0eSAjMQ0KPiAgICBbICA3NjAuNDUzNjI2XSBIYXJkd2FyZSBuYW1lOiBRRU1VIFN0
+YW5kYXJkIFBDIChpNDQwRlggKyBQSUlYLCAxOTk2KSwgQklPUw0KPiAxLjEzLjAtMXVidW50dTEu
+MSAwNC8wMS8yMDE0DQo+ICAgIFsgIDc2MC40NTQ4MDFdIFJJUDogMDAxMDpwa2NzMXBhZF92ZXJp
+ZnkrMHgxODQvMHgxOTANCj4gICAgWyAgNzYwLjQ1NTM4MF0gQ29kZTogNWMgNDEgNWQgNDEgNWUg
+NDEgNWYgNWQgYzMgY2MgY2MgY2MgY2MgNDggODkgZGYgODkgYzYgNWIgNDENCj4gNWMgNDEgNWQg
+NDEgNWUgNDEgNWYgNWQgZTkgYTUgMDQgMDAgMDAgMGYgMGIgYjggZWEgZmYgZmYgZmYgZWIgZDQg
+PDBmPiAwYiBiOCBlYSBmZg0KPiBmZiBmZiBlYiBjYiAwZiAwYiA5MCAwZiAxZiA0NCAwMCAwMCA1
+MyA0OCA4OSBmYiBjNw0KPiAgICBbICA3NjAuNDU2ODY2XSBSU1A6IDAwMTg6ZmZmZmFkNTU0Nzhk
+YmI1OCBFRkxBR1M6IDAwMDAwMjQ2DQo+ICAgIFsgIDc2MC40NTc2ODRdIFJBWDogZmZmZjliM2M0
+M2M0MjQ1OCBSQlg6IGZmZmY5YjNjNDg5NzViMDAgUkNYOg0KPiAwMDAwMDAwMDAwMDAwMDAwDQo+
+ICAgIFsgIDc2MC40NTg2NzJdIFJEWDogZmZmZmZmZmZhNzI3NzQzOCBSU0k6IGZmZmZmZmZmYTUy
+NzU1MTAgUkRJOg0KPiAwMDAwMDAwMDAwMDAwMDAwDQo+ICAgIFsgIDc2MC40NTk2NzBdIFJCUDog
+ZmZmZmFkNTU0NzhkYmNmOCBSMDg6IDAwMDAwMDAwMDAwMDAwMDIgUjA5Og0KPiAwMDAwMDAwMDAw
+MDAwMDAwDQo+ICAgIFsgIDc2MC40NjA2ODhdIFIxMDogZmZmZmFkNTU0NzhkYmMyMCBSMTE6IGZm
+ZmZmZmZmYTQ0ZGRlMTAgUjEyOg0KPiBmZmZmOWIzYzQzZGUyZTgwDQo+ICAgIFsgIDc2MC40NjE2
+OTVdIFIxMzogZmZmZjliM2M1ODQ1OWVhMCBSMTQ6IGZmZmY5YjNjNDRkNTk2MDAgUjE1Og0KPiBm
+ZmZmYWQ1NTQ3OGRiYzIwDQo+ICAgIFsgIDc2MC40NjIyNzBdIEZTOiAgMDAwMDdmZjFlZTBlYjc0
+MCgwMDAwKSBHUzpmZmZmOWIzY2Y5Y2MwMDAwKDAwMDApDQo+IGtubEdTOjAwMDAwMDAwMDAwMDAw
+MDANCj4gICAgWyAgNzYwLjQ2MjcyMl0gQ1M6ICAwMDEwIERTOiAwMDAwIEVTOiAwMDAwIENSMDog
+MDAwMDAwMDA4MDA1MDAzMw0KPiAgICBbICA3NjAuNDYzMDI2XSBDUjI6IDAwMDA1NWI5YTRjMTc1
+ODggQ1IzOiAwMDAwMDAwMTA3YmIyMDAwIENSNDoNCj4gMDAwMDAwMDAwMDAwMDZlMA0KPiAgICBb
+ICA3NjAuNDY0MDM5XSBDYWxsIFRyYWNlOg0KPiAgICBbICA3NjAuNDY0NDY1XSAgPFRBU0s+DQo+
+ICAgIFsgIDc2MC40NjQ3NDldICBwdWJsaWNfa2V5X3ZlcmlmeV9zaWduYXR1cmUrMHg0YTIvMHg1
+NzANCj4gICAgWyAgNzYwLjQ2NTYyM10gIHg1MDlfY2hlY2tfZm9yX3NlbGZfc2lnbmVkKzB4NGUv
+MHhkMA0KPiAgICBbICA3NjAuNDY1OTM3XSAgeDUwOV9jZXJ0X3BhcnNlKzB4MTkzLzB4MjIwDQo+
+ICAgIFsgIDc2MC40NjY2NTZdICB4NTA5X2tleV9wcmVwYXJzZSsweDIwLzB4MWYwDQo+ICAgIFsg
+IDc2MC40NjY5NzVdICBhc3ltbWV0cmljX2tleV9wcmVwYXJzZSsweDQzLzB4ODANCj4gICAgWyAg
+NzYwLjQ2NzU1Ml0gIGtleV9jcmVhdGVfb3JfdXBkYXRlKzB4MjRlLzB4NTEwDQo+ICAgIFsgIDc2
+MC40NjgzNjZdICBfX3g2NF9zeXNfYWRkX2tleSsweDE5Yi8weDIyMA0KPiAgICBbICA3NjAuNDY4
+NzA0XSAgPyBzeXNjYWxsX2VudGVyX2Zyb21fdXNlcl9tb2RlKzB4MjQvMHgxZjANCj4gICAgWyAg
+NzYwLjQ2OTA1Nl0gIGRvX3N5c2NhbGxfNjQrMHg0My8weDkwDQo+ICAgIFsgIDc2MC40Njk2NTdd
+ICBlbnRyeV9TWVNDQUxMXzY0X2FmdGVyX2h3ZnJhbWUrMHg2My8weGNkDQo+ICAgIFsgIDc2MC40
+NzA0MTNdIFJJUDogMDAzMzoweDdmZjFlZGYwYmE5ZA0KPiAgICBbICA3NjAuNDcwODMyXSBDb2Rl
+OiA1YiA0MSA1YyBjMyA2NiAwZiAxZiA4NCAwMCAwMCAwMCAwMCAwMCBmMyAwZiAxZSBmYSA0OCA4
+OSBmOA0KPiA0OCA4OSBmNyA0OCA4OSBkNiA0OCA4OSBjYSA0ZCA4OSBjMiA0ZCA4OSBjOCA0YyA4
+YiA0YyAyNCAwOCAwZiAwNSA8NDg+IDNkIDAxIGYwIGZmDQo+IGZmIDczIDAxIGMzIDQ4IDhiIDBk
+IGNiIGUyIDBlIDAwIGY3IGQ4IDY0IDg5IDAxIDQ4DQo+ICAgIFsgIDc2MC40NzI3NDJdIFJTUDog
+MDAyYjowMDAwN2ZmZTYzNWU3YTE4IEVGTEFHUzogMDAwMDAyNDYgT1JJR19SQVg6DQo+IDAwMDAw
+MDAwMDAwMDAwZjgNCj4gICAgWyAgNzYwLjQ3MzM1NV0gUkFYOiBmZmZmZmZmZmZmZmZmZmRhIFJC
+WDogMDAwMDdmZmU2MzVlN2JlMCBSQ1g6DQo+IDAwMDA3ZmYxZWRmMGJhOWQNCj4gICAgWyAgNzYw
+LjQ3NDUyM10gUkRYOiAwMDAwNTU5ODJmZWQ4MGMwIFJTSTogMDAwMDdmZmU2MzVlN2YxNyBSREk6
+DQo+IDAwMDA3ZmZlNjM1ZTdmMGMNCj4gICAgWyAgNzYwLjQ3NTUwMF0gUkJQOiAwMDAwN2ZmZTYz
+NWU3YTM4IFIwODogMDAwMDAwMDBmZmZmZmZmZCBSMDk6DQo+IDAwMDAwMDAwMDAwMDAwMDANCj4g
+ICAgWyAgNzYwLjQ3NTkxM10gUjEwOiAwMDAwMDAwMDAwMDAwMzU1IFIxMTogMDAwMDAwMDAwMDAw
+MDI0NiBSMTI6DQo+IDAwMDAwMDAwMDAwMDAwMDANCj4gICAgWyAgNzYwLjQ3NjU5NF0gUjEzOiAw
+MDAwN2ZmZTYzNWU3YmQ4IFIxNDogMDAwMDU1OTgyZmVkNDhhZSBSMTU6DQo+IDAwMDA1NTk4MmZl
+ZDc2ZTgNCj4gICAgWyAgNzYwLjQ3NzU3OV0gIDwvVEFTSz4NCj4gICAgWyAgNzYwLjQ3Nzc2OV0g
+aXJxIGV2ZW50IHN0YW1wOiA0NzI3DQo+ICAgIFsgIDc2MC40Nzc5NjNdIGhhcmRpcnFzIGxhc3Qg
+IGVuYWJsZWQgYXQgKDQ3MzUpOiBbPGZmZmZmZmZmYTQxMDFkZjU+XQ0KPiBfX3VwX2NvbnNvbGVf
+c2VtKzB4NzUvMHhhMA0KPiAgICBbICA3NjAuNDc5MDM2XSBoYXJkaXJxcyBsYXN0IGRpc2FibGVk
+IGF0ICg0NzQ0KTogWzxmZmZmZmZmZmE0YTMxY2NhPl0NCj4gc3lzdmVjX2FwaWNfdGltZXJfaW50
+ZXJydXB0KzB4YS8weGIwDQo+ICAgIFsgIDc2MC40ODA0MDNdIHNvZnRpcnFzIGxhc3QgIGVuYWJs
+ZWQgYXQgKDQ3NjIpOiBbPGZmZmZmZmZmYTQwODUxNzI+XQ0KPiBfX2lycV9leGl0X3JjdSsweGIy
+LzB4MTQwDQo+ICAgIFsgIDc2MC40ODA4NjldIHNvZnRpcnFzIGxhc3QgZGlzYWJsZWQgYXQgKDQ3
+NTUpOiBbPGZmZmZmZmZmYTQwODUxNzI+XQ0KPiBfX2lycV9leGl0X3JjdSsweGIyLzB4MTQwDQo+
+ICAgIFsgIDc2MC40ODE3MDZdIC0tLVsgZW5kIHRyYWNlIDAwMDAwMDAwMDAwMDAwMDAgXS0tLQ0K
+PiAgICBHZW5lcmF0aW5nIGEgUlNBIHByaXZhdGUga2V5DQo+ICAgIC4rKysrKw0KPiAgICAuLi4u
+Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLisrKysrDQo+ICAg
+IHdyaXRpbmcgbmV3IHByaXZhdGUga2V5IHRvICcvdG1wL3ZlcmlmeV9zaWdYZE9MNVYvc2lnbmlu
+Z19rZXkucGVtJw0KPiAgICAtLS0tLQ0KPiAgICBhZGRfa2V5OiBJbnZhbGlkIGFyZ3VtZW50DQo+
+ICAgIHRlc3RfdmVyaWZ5X3BrY3M3X3NpZzpQQVNTOm1rZHRlbXAgMCBuc2VjDQo+ICAgIHRlc3Rf
+dmVyaWZ5X3BrY3M3X3NpZzpGQUlMOl9ydW5fc2V0dXBfcHJvY2VzcyB1bmV4cGVjdGVkIGVycm9y
+OiAxIChlcnJubw0KPiAxMjYpDQo+ICAgICMyMzggICAgIHZlcmlmeV9wa2NzN19zaWc6RkFJTA0K
+PiAgICAjMjM5ICAgICB2bWxpbnV4Ok9LDQo+ICAgICMyNDAgICAgIHhkcDpPSw0KPiAgICAjMjQx
+LzEgICB4ZHBfYWRqdXN0X2ZyYWdzL3hkcF9hZGp1c3RfZnJhZ3M6T0sNCj4gICAgIzI0MSAgICAg
+eGRwX2FkanVzdF9mcmFnczpPSw0KPiAgICAjMjQyLzEgICB4ZHBfYWRqdXN0X3RhaWwveGRwX2Fk
+anVzdF90YWlsX3NocmluazpPSw0KPiAgICAjMjQyLzIgICB4ZHBfYWRqdXN0X3RhaWwveGRwX2Fk
+anVzdF90YWlsX2dyb3c6T0sNCj4gICAgWy4uLl0NCg==
