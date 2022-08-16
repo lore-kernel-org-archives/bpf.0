@@ -2,75 +2,107 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF001C2BB41
-	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 10:46:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FB54C2BB41
+	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 10:51:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231311AbiHPKqV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Aug 2022 06:46:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59404 "EHLO
+        id S233738AbiHPKvx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Aug 2022 06:51:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235027AbiHPKpJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:45:09 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A838852DCB;
-        Tue, 16 Aug 2022 02:54:39 -0700 (PDT)
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oNtHL-0008sY-GS; Tue, 16 Aug 2022 11:54:31 +0200
-Received: from [85.1.206.226] (helo=linux-4.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oNtHL-000Bt7-6s; Tue, 16 Aug 2022 11:54:31 +0200
-Subject: Re: [PATCH bpf-next] xdp: report rx queue index in xdp_frame
-To:     Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        edumazet@google.com, pabeni@redhat.com, hawk@kernel.org,
-        john.fastabend@gmail.com
-References: <181f994e13c816116fa69a1e92c2f69e6330f749.1658746417.git.lorenzo@kernel.org>
- <YvtnOloObaUxpR1O@lore-desk>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <4e717cbe-17a2-dbae-d557-0b29eaa28dae@iogearbox.net>
-Date:   Tue, 16 Aug 2022 11:54:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        with ESMTP id S233821AbiHPKvg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Aug 2022 06:51:36 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7FC47EFD2;
+        Tue, 16 Aug 2022 03:23:47 -0700 (PDT)
+Received: from pwmachine.localnet (85-170-37-153.rev.numericable.fr [85.170.37.153])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 08AD8210DA5E;
+        Tue, 16 Aug 2022 03:23:43 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 08AD8210DA5E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1660645427;
+        bh=YfkkOGSQxA2OzjWDewpNMpQo+oxj7eu+1OSnrSeEK4Y=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=cmrKoiJeQ8xbvJW9ziVMLBaonuTZpJk6d2MfbsVZv0S9trKuNx1i/J1TAv0fcuPTo
+         C6PRgeNl7F48RhkKDnG/hStuNX33PpJcL1UnY9jIVFShckPYpDhF4TyjCNgbFokBOd
+         yHHrU4m7su454KWkXbuqn2UydG56HtdOEBjcnUUI=
+From:   Francis Laniel <flaniel@linux.microsoft.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Geliang Tang <geliang.tang@suse.com>,
+        Hengqi Chen <hengqi.chen@gmail.com>
+Subject: Re: [RFC PATCH v1 1/3] bpf: Make ring buffer overwritable.
+Date:   Tue, 16 Aug 2022 12:23:41 +0200
+Message-ID: <1735233.VLH7GnMWUR@pwmachine>
+In-Reply-To: <CAEf4BzYex03T7aYjLnbkfHb8vUsCHhj_DiMU6KbK29F+DyhXyA@mail.gmail.com>
+References: <20220810171702.74932-1-flaniel@linux.microsoft.com> <20220810171702.74932-2-flaniel@linux.microsoft.com> <CAEf4BzYex03T7aYjLnbkfHb8vUsCHhj_DiMU6KbK29F+DyhXyA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <YvtnOloObaUxpR1O@lore-desk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26629/Tue Aug 16 09:51:41 2022)
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 8/16/22 11:45 AM, Lorenzo Bianconi wrote:
->> Report rx queue index in xdp_frame according to the xdp_buff xdp_rxq_info
->> pointer. xdp_frame queue_index is currently used in cpumap code to covert
->> the xdp_frame into a xdp_buff.
->> xdp_frame size is not increased adding queue_index since an alignment padding
->> in the structure is used to insert queue_index field.
->>
->> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
->> ---
->>   include/net/xdp.h   | 2 ++
->>   kernel/bpf/cpumap.c | 2 +-
->>   2 files changed, 3 insertions(+), 1 deletion(-)
-> 
-> 
-> Hi Alexei and Daniel,
-> 
-> this patch is marked as 'new, archived' in patchwork.
-> Do I need to rebase and repost it?
+Hi.
 
-Yes, please rebase and resend. Perhaps also improve the commit description
-a bit in terms of what it fixes, it's a bit terse to the reader above on
-what effect it has.
 
-Thanks,
-Daniel
+Le lundi 15 ao=FBt 2022, 23:52:22 CEST Andrii Nakryiko a =E9crit :
+> On Wed, Aug 10, 2022 at 10:18 AM Francis Laniel
+>=20
+> <flaniel@linux.microsoft.com> wrote:
+> > By default, BPF ring buffer are size bounded, when producers already
+> > filled the buffer, they need to wait for the consumer to get those data
+> > before adding new ones.
+> > In terms of API, bpf_ringbuf_reserve() returns NULL if the buffer is fu=
+ll.
+> >=20
+> > This patch permits making BPF ring buffer overwritable.
+> > When producers already wrote as many data as the buffer size, they will
+> > begin to over write existing data, so the oldest will be replaced.
+> > As a result, bpf_ringbuf_reserve() never returns NULL.
+>=20
+> Part of BPF ringbuf record (first 8 bytes) stores information like
+> record size and offset in pages to the beginning of ringbuf map
+> metadata. This is used by consumer to know how much data belongs to
+> data record, but also for making sure that
+> bpf_ringbuf_reserve()/bpf_ringbuf_submit() work correctly and don't
+> corrupt kernel memory.
+>=20
+> If we simply allow overwriting this information (and no, spinlock
+> doesn't protect from that, you can have multiple producers writing to
+> different parts of ringbuf data area in parallel after "reserving"
+> their respective records), it completely breaks any sort of
+> correctness, both for user-space consumer and kernel-side producers.
+
+Thank you for your answer.
+My current implementation is indeed wrong as I based it on the wrong=20
+assumption than BPF ring buffer could only store data of the same size...
+With data of different size, we can have the troubles you described.
+
+I will rework my patches and send a new version once polished but I=20
+cannot give an ETA.
+
+> > Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
+> > ---
+> >=20
+> >  include/uapi/linux/bpf.h |  3 +++
+> >  kernel/bpf/ringbuf.c     | 51 +++++++++++++++++++++++++++++++---------
+> >  2 files changed, 43 insertions(+), 11 deletions(-)
+>=20
+> [...]
+
+
+Best regards.
+
+
