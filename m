@@ -2,155 +2,154 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB9F0C25B0E
-	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 11:12:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47A65C28B2B
+	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 11:21:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235238AbiHPLMR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Aug 2022 07:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
+        id S234704AbiHPLVh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Aug 2022 07:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235230AbiHPLLx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Aug 2022 07:11:53 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91603FEE98
-        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 03:18:46 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id w3so12871671edc.2
-        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 03:18:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc;
-        bh=r/KIjrrw0ucqoe9AEe8UtlpiDM6xKYkAr2r68mrfLdY=;
-        b=T1NqdI+Fcs2n1jiLm7JGhxl6x99b9vlORmd+XDjVY8i+StoEU/z7fys64jeGPQFnRg
-         z+AwhzkmDlkuc4ttI5R7lIn7dYM2LISJmaWWwFiqS1mvEEGGEptX1zEE1Q+7E8GPJU/I
-         QUxfoHKpandJD7H1Kvacs4Hg+2Zaz7pZc0A+1ag7PzKocx8GI5aYewqm8rPajUYVkml4
-         ifk/sX2/P2Gz2Y25n4YnB5OZ0hp2Jw5NN7Fg9lSuadBaipsWFDIvDFSYsEJOSx/XXim6
-         /HybUkDeYwpXkgpM43fSS7D0HESVcZOG5zXSbeDj+VuYi3uV9dVGuYKIfqoKHHezcMkj
-         coFg==
+        with ESMTP id S234114AbiHPLVO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Aug 2022 07:21:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B97AC3ED73
+        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 02:45:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660643136;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yvg/jdpiTYU8FTbXqqsbsmwkU/yFqn/1mx8jKK11tYw=;
+        b=TCIyAz5TQKaxtaEA5qsXSygGH7vCf8dm/TcxYwznTigxqylbpjNBJ5M/4Zax2luY01wTP4
+        RvxQfKy1x/ToYoPw6pXLMIUd88GL9Mp8m720xrFOowAxYA9ssyz49HyAwG0wzFeiqeajq/
+        LX3RfVDBRVVsutg2oEpKd6IPC0wrcdg=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-551-_T-D2GA1OvGOrkBrVUAx0A-1; Tue, 16 Aug 2022 05:45:33 -0400
+X-MC-Unique: _T-D2GA1OvGOrkBrVUAx0A-1
+Received: by mail-ed1-f69.google.com with SMTP id z6-20020a05640240c600b0043e1d52fd98so6478803edb.22
+        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 02:45:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
-        bh=r/KIjrrw0ucqoe9AEe8UtlpiDM6xKYkAr2r68mrfLdY=;
-        b=NwxG9tEv2Yqek9hCu8MYhsPKg41iSgR9wP6y5BeX8CEHMZoFez3v9ZNv4wyk2D8eB6
-         o4fxH1tg2jD9Fn71FPUD3fpGRkJcwPX3v1hF4mZEHU/4XyQT98nRCasZYtSTh2ROFC4Z
-         tcqrttl4QFhY7MdykNOC/JKPoh1lMUV0ckvSYrscvihlawxmlicATpq9/RGYKiCFmLsP
-         qTaktfhU/jqHtG12afQ5TdTBmpNUMtB8GyZu7rBwkTcgJXMOq9pjbZ4kKsRrGAiOaGEA
-         ulFiMUIQJ7OnV3Z8P+UrmxyzuWb52/Fu/dLuHoYbQqzAN4rZL/hgEn1cMatSxNU05SuL
-         CMJA==
-X-Gm-Message-State: ACgBeo1aucGvmPfFkki+yNf9FueGzboZ9rOE/j3ivmVljtr2MZo6J5zG
-        EHnc86wAjON19UNGqHr3V2fwiTQHCmPlSA==
-X-Google-Smtp-Source: AA6agR5/KQqHXD2Qh2mXkNqAln1TzEgY3ZCn+6ys/vx2pHTtXa3sRRqXOMClwAVPYCeWBbmj4WHOIA==
-X-Received: by 2002:aa7:cf18:0:b0:43d:34e:11b9 with SMTP id a24-20020aa7cf18000000b0043d034e11b9mr18344543edy.145.1660645124481;
-        Tue, 16 Aug 2022 03:18:44 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id e6-20020a170906504600b007306a4bc9b4sm5122890ejk.38.2022.08.16.03.18.43
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=yvg/jdpiTYU8FTbXqqsbsmwkU/yFqn/1mx8jKK11tYw=;
+        b=CPWxlRKKFA6k0pdec6tI91aJSyv77aF7J6pLPuhUnV4SahZ+VkHvLkY5huYSHk4slu
+         PEyXiZZi/Ejr/xzKkNd2cSNXvnMk2LL2IVTxPu+gDvtqJQGSe4XlY8wYNQViVOYG7vqQ
+         Q+ZQRJjSK9XCgOt0Xfg0aNHP3+UWNVhAepyquocE7vv0U0TEGEjESPVPb8SKty/jLrMJ
+         mO2oeG8Ne+3xR1T54VT9xukY/O1tLYO6oQNRa+UAa2rn4uoatZcmbBQrxF6feiZ6dhSg
+         FEJ/1bKsHelCppFpIlS10E9CYcmLnGY/806H3SOr0tZQNqONBTyuynCoqj74I7VF2zF8
+         465w==
+X-Gm-Message-State: ACgBeo1zD5z6XMtgv/dQl2LYmYQRBIIvt5ND5Bsm3pXNTVoHBZKLPu3M
+        fVigYfsSi3yzVVafs11sHnS3Fz4jXVbNvIsuMimBnk7Nsv1LEOxI5vHrLvtZpwucWZG5ZOsIWjf
+        2hwMmOzGOTu06
+X-Received: by 2002:aa7:cf13:0:b0:43d:603a:b736 with SMTP id a19-20020aa7cf13000000b0043d603ab736mr18868709edy.20.1660643132383;
+        Tue, 16 Aug 2022 02:45:32 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR40EAKTxJPysR9n1WcUKBALU/QpdD7jytJnsqiEczKQBFn1Q2MZfmdgjrIoruj09iUjMFh0lQ==
+X-Received: by 2002:aa7:cf13:0:b0:43d:603a:b736 with SMTP id a19-20020aa7cf13000000b0043d603ab736mr18868704edy.20.1660643132211;
+        Tue, 16 Aug 2022 02:45:32 -0700 (PDT)
+Received: from localhost (net-93-71-3-16.cust.vodafonedsl.it. [93.71.3.16])
+        by smtp.gmail.com with ESMTPSA id e20-20020a50ec94000000b0043c83ac66e3sm8148081edr.92.2022.08.16.02.45.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 03:18:43 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Tue, 16 Aug 2022 12:18:42 +0200
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Subject: Re: [PATCHv2 bpf-next 6/6] selftests/bpf: Fix get_func_ip offset
- test for CONFIG_X86_KERNEL_IBT
-Message-ID: <YvtvAkcnsrho+Xeq@krava>
-References: <20220811091526.172610-1-jolsa@kernel.org>
- <20220811091526.172610-7-jolsa@kernel.org>
- <CAEf4BzbXBsL8zrCDEP-+VsKseEQ1fWTRvUkJtwxX5r8q9hf1OA@mail.gmail.com>
- <YvtAhPyiWDbTzCdA@krava>
+        Tue, 16 Aug 2022 02:45:31 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 11:45:30 +0200
+From:   Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
+To:     Lorenzo Bianconi <lorenzo@kernel.org>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, netdev@vger.kernel.org, davem@davemloft.net,
+        kuba@kernel.org, edumazet@google.com, pabeni@redhat.com,
+        hawk@kernel.org, john.fastabend@gmail.com
+Subject: Re: [PATCH bpf-next] xdp: report rx queue index in xdp_frame
+Message-ID: <YvtnOloObaUxpR1O@lore-desk>
+References: <181f994e13c816116fa69a1e92c2f69e6330f749.1658746417.git.lorenzo@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="IoiytQITDcaWi1MG"
 Content-Disposition: inline
-In-Reply-To: <YvtAhPyiWDbTzCdA@krava>
+In-Reply-To: <181f994e13c816116fa69a1e92c2f69e6330f749.1658746417.git.lorenzo@kernel.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 09:00:20AM +0200, Jiri Olsa wrote:
-> On Mon, Aug 15, 2022 at 08:25:51PM -0700, Andrii Nakryiko wrote:
-> > On Thu, Aug 11, 2022 at 2:16 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> > >
-> > > With CONFIG_X86_KERNEL_IBT enabled the test for kprobe with offset
-> > > won't work because of the extra endbr instruction.
-> > >
-> > > As suggested by Andrii adding CONFIG_X86_KERNEL_IBT detection
-> > > and using appropriate offset value based on that.
-> > >
-> > > Also removing test7 program, because it does the same as test6.
-> > >
-> > > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > > ---
-> > >  .../bpf/prog_tests/get_func_ip_test.c         | 62 +++++++++++++++----
-> > >  .../selftests/bpf/progs/get_func_ip_test.c    | 20 +++---
-> > >  2 files changed, 60 insertions(+), 22 deletions(-)
-> > >
-> > > diff --git a/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c b/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c
-> > > index 938dbd4d7c2f..a4dab2fa2258 100644
-> > > --- a/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c
-> > > +++ b/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c
-> > > @@ -2,7 +2,9 @@
-> > >  #include <test_progs.h>
-> > >  #include "get_func_ip_test.skel.h"
-> > >
-> > > -void test_get_func_ip_test(void)
-> > > +static int config_ibt;
-> > > +
-> > > +static void test_function_entry(void)
-> > >  {
-> > >         struct get_func_ip_test *skel = NULL;
-> > >         int err, prog_fd;
-> > > @@ -12,14 +14,6 @@ void test_get_func_ip_test(void)
-> > >         if (!ASSERT_OK_PTR(skel, "get_func_ip_test__open"))
-> > >                 return;
-> > >
-> > > -       /* test6 is x86_64 specifc because of the instruction
-> > > -        * offset, disabling it for all other archs
-> > > -        */
-> > > -#ifndef __x86_64__
-> > > -       bpf_program__set_autoload(skel->progs.test6, false);
-> > > -       bpf_program__set_autoload(skel->progs.test7, false);
-> > > -#endif
-> > > -
-> > >         err = get_func_ip_test__load(skel);
-> > >         if (!ASSERT_OK(err, "get_func_ip_test__load"))
-> > >                 goto cleanup;
-> > > @@ -38,16 +32,62 @@ void test_get_func_ip_test(void)
-> > >
-> > >         ASSERT_OK(err, "test_run");
-> > >
-> > > +       config_ibt = skel->bss->config_ibt;
-> > 
-> > skel->bss->config_ibt isn't actually necessary, you can just check
-> > skel->kconfig->CONFIG_X86_KERNEL_IBT directly. And you won't need to
-> > trigger BPF program unnecessary, libbpf will fill out kconfig section
-> > during object/skeleton load phase.
-> 
-> nice, did not know that ;-) will remove it
 
-actually.. to get kconfig datasec generated in BTF the CONFIG_X86_KERNEL_IBT
-symbol needs to be used.. so I came up with adding unused function:
+--IoiytQITDcaWi1MG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  int unused(void)
-  {
-        return CONFIG_X86_KERNEL_IBT ? 0 : 1;
-  }
+> Report rx queue index in xdp_frame according to the xdp_buff xdp_rxq_info
+> pointer. xdp_frame queue_index is currently used in cpumap code to covert
+> the xdp_frame into a xdp_buff.
+> xdp_frame size is not increased adding queue_index since an alignment pad=
+ding
+> in the structure is used to insert queue_index field.
+>=20
+> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> ---
+>  include/net/xdp.h   | 2 ++
+>  kernel/bpf/cpumap.c | 2 +-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
 
-but I wonder having the config_ibt variable is better and more clear
 
-thoughts?
+Hi Alexei and Daniel,
 
-thanks,
-jirka
+this patch is marked as 'new, archived' in patchwork.
+Do I need to rebase and repost it?
+
+Regards,
+Lorenzo
+
+>=20
+> diff --git a/include/net/xdp.h b/include/net/xdp.h
+> index 04c852c7a77f..3567866b0af5 100644
+> --- a/include/net/xdp.h
+> +++ b/include/net/xdp.h
+> @@ -172,6 +172,7 @@ struct xdp_frame {
+>  	struct xdp_mem_info mem;
+>  	struct net_device *dev_rx; /* used by cpumap */
+>  	u32 flags; /* supported values defined in xdp_buff_flags */
+> +	u32 queue_index;
+>  };
+> =20
+>  static __always_inline bool xdp_frame_has_frags(struct xdp_frame *frame)
+> @@ -301,6 +302,7 @@ struct xdp_frame *xdp_convert_buff_to_frame(struct xd=
+p_buff *xdp)
+> =20
+>  	/* rxq only valid until napi_schedule ends, convert to xdp_mem_info */
+>  	xdp_frame->mem =3D xdp->rxq->mem;
+> +	xdp_frame->queue_index =3D xdp->rxq->queue_index;
+> =20
+>  	return xdp_frame;
+>  }
+> diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
+> index f4860ac756cd..09a792d088b3 100644
+> --- a/kernel/bpf/cpumap.c
+> +++ b/kernel/bpf/cpumap.c
+> @@ -228,7 +228,7 @@ static int cpu_map_bpf_prog_run_xdp(struct bpf_cpu_ma=
+p_entry *rcpu,
+> =20
+>  		rxq.dev =3D xdpf->dev_rx;
+>  		rxq.mem =3D xdpf->mem;
+> -		/* TODO: report queue_index to xdp_rxq_info */
+> +		rxq.queue_index =3D xdpf->queue_index;
+> =20
+>  		xdp_convert_frame_to_buff(xdpf, &xdp);
+> =20
+> --=20
+> 2.37.1
+>=20
+
+--IoiytQITDcaWi1MG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCYvtnOQAKCRA6cBh0uS2t
+rLLaAQCdVeAGb/08LQDnH37VEVe/3Fh5Up+YmkCJdqs28Bn2dAD9G+I9nnCKPAhV
+1qy8W9DoRIWKeDFHujauI6mv+ZeRigs=
+=pyp8
+-----END PGP SIGNATURE-----
+
+--IoiytQITDcaWi1MG--
+
