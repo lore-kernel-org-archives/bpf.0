@@ -2,154 +2,111 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47A65C28B2B
-	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 11:21:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37016C25B0E
+	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 11:29:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234704AbiHPLVh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Aug 2022 07:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47852 "EHLO
+        id S232292AbiHPL22 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Aug 2022 07:28:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234114AbiHPLVO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Aug 2022 07:21:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B97AC3ED73
-        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 02:45:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660643136;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yvg/jdpiTYU8FTbXqqsbsmwkU/yFqn/1mx8jKK11tYw=;
-        b=TCIyAz5TQKaxtaEA5qsXSygGH7vCf8dm/TcxYwznTigxqylbpjNBJ5M/4Zax2luY01wTP4
-        RvxQfKy1x/ToYoPw6pXLMIUd88GL9Mp8m720xrFOowAxYA9ssyz49HyAwG0wzFeiqeajq/
-        LX3RfVDBRVVsutg2oEpKd6IPC0wrcdg=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-551-_T-D2GA1OvGOrkBrVUAx0A-1; Tue, 16 Aug 2022 05:45:33 -0400
-X-MC-Unique: _T-D2GA1OvGOrkBrVUAx0A-1
-Received: by mail-ed1-f69.google.com with SMTP id z6-20020a05640240c600b0043e1d52fd98so6478803edb.22
-        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 02:45:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=yvg/jdpiTYU8FTbXqqsbsmwkU/yFqn/1mx8jKK11tYw=;
-        b=CPWxlRKKFA6k0pdec6tI91aJSyv77aF7J6pLPuhUnV4SahZ+VkHvLkY5huYSHk4slu
-         PEyXiZZi/Ejr/xzKkNd2cSNXvnMk2LL2IVTxPu+gDvtqJQGSe4XlY8wYNQViVOYG7vqQ
-         Q+ZQRJjSK9XCgOt0Xfg0aNHP3+UWNVhAepyquocE7vv0U0TEGEjESPVPb8SKty/jLrMJ
-         mO2oeG8Ne+3xR1T54VT9xukY/O1tLYO6oQNRa+UAa2rn4uoatZcmbBQrxF6feiZ6dhSg
-         FEJ/1bKsHelCppFpIlS10E9CYcmLnGY/806H3SOr0tZQNqONBTyuynCoqj74I7VF2zF8
-         465w==
-X-Gm-Message-State: ACgBeo1zD5z6XMtgv/dQl2LYmYQRBIIvt5ND5Bsm3pXNTVoHBZKLPu3M
-        fVigYfsSi3yzVVafs11sHnS3Fz4jXVbNvIsuMimBnk7Nsv1LEOxI5vHrLvtZpwucWZG5ZOsIWjf
-        2hwMmOzGOTu06
-X-Received: by 2002:aa7:cf13:0:b0:43d:603a:b736 with SMTP id a19-20020aa7cf13000000b0043d603ab736mr18868709edy.20.1660643132383;
-        Tue, 16 Aug 2022 02:45:32 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR40EAKTxJPysR9n1WcUKBALU/QpdD7jytJnsqiEczKQBFn1Q2MZfmdgjrIoruj09iUjMFh0lQ==
-X-Received: by 2002:aa7:cf13:0:b0:43d:603a:b736 with SMTP id a19-20020aa7cf13000000b0043d603ab736mr18868704edy.20.1660643132211;
-        Tue, 16 Aug 2022 02:45:32 -0700 (PDT)
-Received: from localhost (net-93-71-3-16.cust.vodafonedsl.it. [93.71.3.16])
-        by smtp.gmail.com with ESMTPSA id e20-20020a50ec94000000b0043c83ac66e3sm8148081edr.92.2022.08.16.02.45.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 02:45:31 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 11:45:30 +0200
-From:   Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
-To:     Lorenzo Bianconi <lorenzo@kernel.org>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, netdev@vger.kernel.org, davem@davemloft.net,
-        kuba@kernel.org, edumazet@google.com, pabeni@redhat.com,
-        hawk@kernel.org, john.fastabend@gmail.com
-Subject: Re: [PATCH bpf-next] xdp: report rx queue index in xdp_frame
-Message-ID: <YvtnOloObaUxpR1O@lore-desk>
-References: <181f994e13c816116fa69a1e92c2f69e6330f749.1658746417.git.lorenzo@kernel.org>
+        with ESMTP id S234125AbiHPL2E (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Aug 2022 07:28:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADAA2CDF7;
+        Tue, 16 Aug 2022 03:43:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 03D99B8165D;
+        Tue, 16 Aug 2022 10:43:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86EA3C433C1;
+        Tue, 16 Aug 2022 10:43:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660646614;
+        bh=yqe/EMQmD3VLnGHghypui0+k7E1d1JAMjbBdNpJp/Ac=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=WmDtk6Cf5S1czeeVK0DAKEntmyWn/ucxbgRUOJ7EvCnJ+hlnMmXKs7d2LzLusOWjG
+         P9BZUnyFCygTSaBGyI+/ZMRsimDcw4lKZrmIl00p7YDKYDDZRS07+VkGYYjkDQNVZE
+         /NHOq/5udUF8/K0YgcGNQGgSV+Ea36YQkWf7qRPhQgneFDWP9m6nB5Vly8RrTfkWTj
+         Gx54EcrUu0WWbaHKs8uubbJDflr8MXwUMFtLvri3hNPrkYfanr9K/Ae48SXOeGfelg
+         0y7pVw8dF2stIh5VXYLv1fnS+4FQo+ZvQ2DKZC+sGfyc7TYLSt7uY6amkS3OtqU5wE
+         xT3sWq5r6idFg==
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 0ED1D55F5FC; Tue, 16 Aug 2022 12:43:32 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Florian Westphal <fw@strlen.de>
+Cc:     Daniel Xu <dxu@dxuuu.xyz>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        netfilter-devel <netfilter-devel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 2/3] bpf: Add support for writing to nf_conn:mark
+In-Reply-To: <CAADnVQLB1SQoYAYEzU_VuJ=q3azeyhBiK-NkU5OZC7rrumi0xQ@mail.gmail.com>
+References: <CAADnVQLB1SQoYAYEzU_VuJ=q3azeyhBiK-NkU5OZC7rrumi0xQ@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Tue, 16 Aug 2022 12:43:32 +0200
+Message-ID: <87v8qswjsb.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="IoiytQITDcaWi1MG"
-Content-Disposition: inline
-In-Reply-To: <181f994e13c816116fa69a1e92c2f69e6330f749.1658746417.git.lorenzo@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
 
---IoiytQITDcaWi1MG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Mon, Aug 15, 2022 at 3:40 PM Florian Westphal <fw@strlen.de> wrote:
+>>
+>> Toke H=C3=B8iland-J=C3=B8rgensen <toke@kernel.org> wrote:
+>> > > Support direct writes to nf_conn:mark from TC and XDP prog types. Th=
+is
+>> > > is useful when applications want to store per-connection metadata. T=
+his
+>> > > is also particularly useful for applications that run both bpf and
+>> > > iptables/nftables because the latter can trivially access this metad=
+ata.
+>> > >
+>> > > One example use case would be if a bpf prog is responsible for advan=
+ced
+>> > > packet classification and iptables/nftables is later used for routing
+>> > > due to pre-existing/legacy code.
+>> > >
+>> > > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+>> >
+>> > Didn't we agree the last time around that all field access should be
+>> > using helper kfuncs instead of allowing direct writes to struct nf_con=
+n?
+>>
+>> I don't see why ct->mark needs special handling.
+>>
+>> It might be possible we need to change accesses on nf/tc side to use
+>> READ/WRITE_ONCE though.
+>
+> +1
+> I don't think we need to have a hard rule.
+> If fields is safe to access directly than it's faster
+> to let bpf prog read/write it.
+> There are no backward compat concerns. If conntrack side decides
+> to make that field special we can disallow direct writes in
+> the same kernel version.
 
-> Report rx queue index in xdp_frame according to the xdp_buff xdp_rxq_info
-> pointer. xdp_frame queue_index is currently used in cpumap code to covert
-> the xdp_frame into a xdp_buff.
-> xdp_frame size is not increased adding queue_index since an alignment pad=
-ding
-> in the structure is used to insert queue_index field.
->=20
-> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> ---
->  include/net/xdp.h   | 2 ++
->  kernel/bpf/cpumap.c | 2 +-
->  2 files changed, 3 insertions(+), 1 deletion(-)
+Right, I was under the impression we wanted all fields to be wrapper by
+helpers so that the struct owner could change their semantics without
+affecting users (and solve the performance issue by figuring out a
+generic way to inline those helpers). I guess there could also be an API
+consistency argument for doing this.
 
+However, I don't have a strong opinion on this, so if y'all prefer
+keeping these as direct field writes, that's OK with me.
 
-Hi Alexei and Daniel,
+> These accesses, just like kfuncs, are unstable.
 
-this patch is marked as 'new, archived' in patchwork.
-Do I need to rebase and repost it?
+Well, it will be interesting to see how that plays out the first time
+an application relying on one of these breaks on a kernel upgrade :)
 
-Regards,
-Lorenzo
-
->=20
-> diff --git a/include/net/xdp.h b/include/net/xdp.h
-> index 04c852c7a77f..3567866b0af5 100644
-> --- a/include/net/xdp.h
-> +++ b/include/net/xdp.h
-> @@ -172,6 +172,7 @@ struct xdp_frame {
->  	struct xdp_mem_info mem;
->  	struct net_device *dev_rx; /* used by cpumap */
->  	u32 flags; /* supported values defined in xdp_buff_flags */
-> +	u32 queue_index;
->  };
-> =20
->  static __always_inline bool xdp_frame_has_frags(struct xdp_frame *frame)
-> @@ -301,6 +302,7 @@ struct xdp_frame *xdp_convert_buff_to_frame(struct xd=
-p_buff *xdp)
-> =20
->  	/* rxq only valid until napi_schedule ends, convert to xdp_mem_info */
->  	xdp_frame->mem =3D xdp->rxq->mem;
-> +	xdp_frame->queue_index =3D xdp->rxq->queue_index;
-> =20
->  	return xdp_frame;
->  }
-> diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-> index f4860ac756cd..09a792d088b3 100644
-> --- a/kernel/bpf/cpumap.c
-> +++ b/kernel/bpf/cpumap.c
-> @@ -228,7 +228,7 @@ static int cpu_map_bpf_prog_run_xdp(struct bpf_cpu_ma=
-p_entry *rcpu,
-> =20
->  		rxq.dev =3D xdpf->dev_rx;
->  		rxq.mem =3D xdpf->mem;
-> -		/* TODO: report queue_index to xdp_rxq_info */
-> +		rxq.queue_index =3D xdpf->queue_index;
-> =20
->  		xdp_convert_frame_to_buff(xdpf, &xdp);
-> =20
-> --=20
-> 2.37.1
->=20
-
---IoiytQITDcaWi1MG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCYvtnOQAKCRA6cBh0uS2t
-rLLaAQCdVeAGb/08LQDnH37VEVe/3Fh5Up+YmkCJdqs28Bn2dAD9G+I9nnCKPAhV
-1qy8W9DoRIWKeDFHujauI6mv+ZeRigs=
-=pyp8
------END PGP SIGNATURE-----
-
---IoiytQITDcaWi1MG--
-
+-Toke
