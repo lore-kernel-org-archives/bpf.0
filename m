@@ -2,49 +2,49 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08EE7C2BB41
-	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 09:39:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91F1FC32771
+	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 09:48:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233321AbiHPJjG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Aug 2022 05:39:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49796 "EHLO
+        id S234011AbiHPJs4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Aug 2022 05:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233691AbiHPJi2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:38:28 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479F4119452
-        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 01:00:27 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id l18-20020a6bd112000000b0067cb64ad9b2so5620864iob.20
-        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 01:00:27 -0700 (PDT)
+        with ESMTP id S233863AbiHPJsZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Aug 2022 05:48:25 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D2C55F21C
+        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 01:41:35 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id d6-20020a056e020be600b002dcc7977592so6616383ilu.17
+        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 01:41:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc;
-        bh=/u2jeEEoiyJZpO0ZrnI7yKagwWTGYr7cBjjav6KTDEQ=;
-        b=8QVpPBM0DMmY3Zwa8emz49lvCdo/bDQVdYPwCuflfV3Y705UgjIwuRpCROhFD/kzCJ
-         Xq8sx8DEkze+FYUDymRld+UTQLLCik5qezf6asH6dRXhpdVlcPPnyNzJqlzHNDhmGikS
-         YO9OsP4gx5oLEoS73WdisDGtxyiT0Mqa78xDK3Kcio/Q1QEjZckCdzm7+04SHNW4DXYf
-         kyc4Oaej8K2Le/dgq2AQPKUtq93dgV95I4DKWeVa3piiVLkzC/1kbVg+UxqMR68SFNc3
-         eJcWM/HMVuyFkLT+22n5S/P8gVl3OdLxiXege2rYqivCkJhMJTA1DjdOGPglWXiWJILC
-         SBGA==
-X-Gm-Message-State: ACgBeo3ux7OUax6IbYW9za/VhEKv3ryGEy00Dh9oOh3JWZevPGCQBCur
-        KF8oQJGL1qqgmUbcjQptZ9dBAEKjqzZcYW8JP1ZPsexhmTFC
-X-Google-Smtp-Source: AA6agR758k4dVTcV3GFPZiuhqFH7+ge5uru4PHLGXVTxvhhWRcfxjVGblr3p5btRyPYAJjX7pupVHyDUWWNXSwQqR1eJN/p0CFh8
+        bh=QoJU5GGMy8v8yEZNFxM99bTCjQW1eFlhk+iiG3fJdLI=;
+        b=xa6TI666q/D5FPjkY6MOU5RHJU8tLpP+JTyvK33DU0IoDGCjBc7XzEfOdhAloAYk2t
+         e/XVTCKbExzYFLJlpuitwAldJgxrKIBssbIQ8/W7U8+CN+x9v5bwrY2xIVzbCnesjC+0
+         RumjTG/PSEf7nTaWqUFUP7hTdmdta+H6EzKXjN7zVXxmg0akBPvtdYV/MLgWnLnVQV+B
+         ia1bvRHV6b/vew5BxnIngkUL4tCdi5hYrMeH06s6UiOhcoC5wg4blbNkWurvvvdDmh78
+         1cONR73RfiswWRFJr1WjQ5mHaHHYWCPawLD425u4nqu+fhdR0iDAi3OXlSl3s1XxqOKw
+         ImWw==
+X-Gm-Message-State: ACgBeo12rUcx1h+EzkyRTqcqNKUtbSsCGn37d7qcj1fWXt74LPtu3jFk
+        ybwOU7L9OB8PJhZ80k6HX7/57aUfVKf0PnkcE7FlwgMTNb1U
+X-Google-Smtp-Source: AA6agR72pfTFc5Nk70AuqknQizPu6jLKL7iJFFPqgDk7a5kQ7izKd/NlV+VSVv6WZrRf/Lm1ZySMpdIMRZk6PsLGPasFpCgAOzQH
 MIME-Version: 1.0
-X-Received: by 2002:a92:ca4e:0:b0:2df:1aae:47c4 with SMTP id
- q14-20020a92ca4e000000b002df1aae47c4mr9068356ilo.57.1660636826976; Tue, 16
- Aug 2022 01:00:26 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 01:00:26 -0700
+X-Received: by 2002:a05:6e02:2145:b0:2e4:b2f3:d6fb with SMTP id
+ d5-20020a056e02214500b002e4b2f3d6fbmr7270506ilv.163.1660639294552; Tue, 16
+ Aug 2022 01:41:34 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 01:41:34 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002c46ec05e6572415@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in sock_has_perm
-From:   syzbot <syzbot+2f2c6bea25b08dc06f86@syzkaller.appspotmail.com>
-To:     anton@enomsg.org, bpf@vger.kernel.org, ccross@android.com,
-        eparis@parisplace.org, keescook@chromium.org,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com,
-        selinux@vger.kernel.org, stephen.smalley.work@gmail.com,
-        syzkaller-bugs@googlegroups.com, tony.luck@intel.com
+Message-ID: <00000000000040801b05e657b77f@google.com>
+Subject: [syzbot] upstream boot error: BUG: unable to handle kernel paging
+ request in __rhashtable_lookup
+From:   syzbot <syzbot+6fccf62d7c237e1b4c85@syzkaller.appspotmail.com>
+To:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        fw@strlen.de, harshit.m.mogalapalli@oracle.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
@@ -54,162 +54,103 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    200e340f2196 Merge tag 'pull-work.dcache' of git://git.ker..
+HEAD commit:    4a9350597aff Merge tag 'sound-fix-6.0-rc1' of git://git.ke..
 git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16021dfd080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f2886ebe3c7b3459
-dashboard link: https://syzkaller.appspot.com/bug?extid=2f2c6bea25b08dc06f86
+console output: https://syzkaller.appspot.com/x/log.txt?x=16259e35080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5d647c9572405910
+dashboard link: https://syzkaller.appspot.com/bug?extid=6fccf62d7c237e1b4c85
 compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2f2c6bea25b08dc06f86@syzkaller.appspotmail.com
+Reported-by: syzbot+6fccf62d7c237e1b4c85@syzkaller.appspotmail.com
 
-==================================================================
-BUG: KASAN: use-after-free in sock_has_perm+0x258/0x280 security/selinux/hooks.c:4532
-Read of size 8 at addr ffff88807630e480 by task syz-executor.0/8123
-
-CPU: 1 PID: 8123 Comm: syz-executor.0 Not tainted 5.19.0-syzkaller-02972-g200e340f2196 #0
+8021q: adding VLAN 0 to HW filter on device bond0
+eql: remember to turn off Van-Jacobson compression on your slave devices
+BUG: unable to handle page fault for address: ffffdbffffffffc8
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD 11825067 P4D 11825067 PUD 0 
+Oops: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 3187 Comm: dhcpcd Not tainted 5.19.0-syzkaller-14090-g4a9350597aff #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+RIP: 0010:netlink_compare net/netlink/af_netlink.c:500 [inline]
+RIP: 0010:__rhashtable_lookup.constprop.0+0x2ae/0x5e0 include/linux/rhashtable.h:601
+Code: 01 44 89 e6 e8 83 19 e8 f9 45 84 e4 0f 85 8f 01 00 00 e8 f5 1c e8 f9 4d 8d 24 1f 49 8d bc 24 00 05 00 00 48 89 f8 48 c1 e8 03 <42> 0f b6 04 30 84 c0 74 08 3c 03 0f 8e 9c 02 00 00 45 8b ac 24 00
+RSP: 0018:ffffc9000351f818 EFLAGS: 00010a02
+RAX: 1fffdfffffffffc8 RBX: fffffffffffff940 RCX: 0000000000000000
+RDX: ffff88807cc7c140 RSI: ffffffff879318cb RDI: fffefffffffffe40
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: fffefffffffff940
+R13: ffffffff9152ccc0 R14: dffffc0000000000 R15: ffff000000000000
+FS:  00007fbe244b5740(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffdbffffffffc8 CR3: 0000000021e67000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0xeb/0x467 mm/kasan/report.c:313
- print_report mm/kasan/report.c:429 [inline]
- kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
- sock_has_perm+0x258/0x280 security/selinux/hooks.c:4532
- selinux_socket_setsockopt+0x3e/0x80 security/selinux/hooks.c:4913
- security_socket_setsockopt+0x50/0xb0 security/security.c:2249
- __sys_setsockopt+0x107/0x6a0 net/socket.c:2233
- __do_sys_setsockopt net/socket.c:2266 [inline]
- __se_sys_setsockopt net/socket.c:2263 [inline]
- __x64_sys_setsockopt+0xba/0x150 net/socket.c:2263
+ rhashtable_lookup include/linux/rhashtable.h:638 [inline]
+ rhashtable_lookup_fast include/linux/rhashtable.h:664 [inline]
+ __netlink_lookup net/netlink/af_netlink.c:518 [inline]
+ netlink_lookup+0x130/0x470 net/netlink/af_netlink.c:538
+ netlink_getsockbyportid net/netlink/af_netlink.c:1154 [inline]
+ netlink_unicast+0x244/0x7f0 net/netlink/af_netlink.c:1339
+ netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:734
+ ____sys_sendmsg+0x6eb/0x810 net/socket.c:2482
+ ___sys_sendmsg+0x110/0x1b0 net/socket.c:2536
+ __sys_sendmsg+0xf3/0x1c0 net/socket.c:2565
  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f96c7289279
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f96c842f168 EFLAGS: 00000246 ORIG_RAX: 0000000000000036
-RAX: ffffffffffffffda RBX: 00007f96c739c050 RCX: 00007f96c7289279
-RDX: 0000000000000007 RSI: 0000000000000103 RDI: 0000000000000004
-RBP: 00007f96c72e3189 R08: 0000000000000004 R09: 0000000000000000
-R10: 0000000020000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffe7030593f R14: 00007f96c842f300 R15: 0000000000022000
+RIP: 0033:0x7fbe245ad163
+Code: 64 89 02 48 c7 c0 ff ff ff ff eb b7 66 2e 0f 1f 84 00 00 00 00 00 90 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 2e 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 55 c3 0f 1f 40 00 48 83 ec 28 89 54 24 1c 48
+RSP: 002b:00007ffd4a7738f8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007fbe244b56c8 RCX: 00007fbe245ad163
+RDX: 0000000000000000 RSI: 00007ffd4a787aa8 RDI: 0000000000000005
+RBP: 0000000000000005 R08: 0000000000000000 R09: 00007ffd4a787aa8
+R10: 0000000000000000 R11: 0000000000000246 R12: ffffffffffffffff
+R13: 00007ffd4a787aa8 R14: 0000000000000030 R15: 0000000000000001
  </TASK>
-
-Allocated by task 8113:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:437 [inline]
- ____kasan_kmalloc mm/kasan/common.c:516 [inline]
- ____kasan_kmalloc mm/kasan/common.c:475 [inline]
- __kasan_kmalloc+0xa6/0xd0 mm/kasan/common.c:525
- kasan_kmalloc include/linux/kasan.h:234 [inline]
- __do_kmalloc mm/slab.c:3696 [inline]
- __kmalloc+0x209/0x4e0 mm/slab.c:3705
- kmalloc include/linux/slab.h:605 [inline]
- sk_prot_alloc+0x110/0x290 net/core/sock.c:1975
- sk_alloc+0x36/0x770 net/core/sock.c:2028
- nr_create+0xb2/0x5f0 net/netrom/af_netrom.c:433
- __sock_create+0x355/0x790 net/socket.c:1515
- sock_create net/socket.c:1566 [inline]
- __sys_socket_create net/socket.c:1603 [inline]
- __sys_socket_create net/socket.c:1588 [inline]
- __sys_socket+0x12f/0x240 net/socket.c:1636
- __do_sys_socket net/socket.c:1649 [inline]
- __se_sys_socket net/socket.c:1647 [inline]
- __x64_sys_socket+0x6f/0xb0 net/socket.c:1647
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Freed by task 15:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track+0x21/0x30 mm/kasan/common.c:45
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:367 [inline]
- ____kasan_slab_free+0x13d/0x180 mm/kasan/common.c:329
- kasan_slab_free include/linux/kasan.h:200 [inline]
- __cache_free mm/slab.c:3426 [inline]
- kfree+0x173/0x390 mm/slab.c:3796
- sk_prot_free net/core/sock.c:2011 [inline]
- __sk_destruct+0x5e5/0x710 net/core/sock.c:2097
- sk_destruct net/core/sock.c:2112 [inline]
- __sk_free+0x1a4/0x4a0 net/core/sock.c:2123
- sk_free+0x78/0xa0 net/core/sock.c:2134
- sock_put include/net/sock.h:1927 [inline]
- nr_heartbeat_expiry+0x2de/0x460 net/netrom/nr_timer.c:148
- call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1474
- expire_timers kernel/time/timer.c:1519 [inline]
- __run_timers.part.0+0x679/0xa80 kernel/time/timer.c:1790
- __run_timers kernel/time/timer.c:1768 [inline]
- run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1803
- __do_softirq+0x29b/0x9c2 kernel/softirq.c:571
-
-The buggy address belongs to the object at ffff88807630e000
- which belongs to the cache kmalloc-2k of size 2048
-The buggy address is located 1152 bytes inside of
- 2048-byte region [ffff88807630e000, ffff88807630e800)
-
-The buggy address belongs to the physical page:
-page:ffffea0001d8c380 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7630e
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffffea00004a5648 ffffea0001e43248 ffff888011840800
-raw: 0000000000000000 ffff88807630e000 0000000100000001 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x3c20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL|__GFP_THISNODE), pid 7307, tgid 7301 (syz-executor.3), ts 520580080833, free_ts 520081225704
- prep_new_page mm/page_alloc.c:2457 [inline]
- get_page_from_freelist+0x1298/0x3b80 mm/page_alloc.c:4203
- __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5431
- __alloc_pages_node include/linux/gfp.h:587 [inline]
- kmem_getpages mm/slab.c:1363 [inline]
- cache_grow_begin+0x75/0x350 mm/slab.c:2569
- cache_alloc_refill+0x27f/0x380 mm/slab.c:2942
- ____cache_alloc mm/slab.c:3024 [inline]
- ____cache_alloc mm/slab.c:3007 [inline]
- slab_alloc_node mm/slab.c:3227 [inline]
- kmem_cache_alloc_node_trace+0x51d/0x5b0 mm/slab.c:3611
- __do_kmalloc_node mm/slab.c:3633 [inline]
- __kmalloc_node_track_caller+0x38/0x60 mm/slab.c:3648
- kmalloc_reserve net/core/skbuff.c:354 [inline]
- __alloc_skb+0xde/0x340 net/core/skbuff.c:426
- alloc_skb include/linux/skbuff.h:1434 [inline]
- nlmsg_new include/net/netlink.h:953 [inline]
- audit_buffer_alloc kernel/audit.c:1782 [inline]
- audit_log_start.part.0+0x27f/0x740 kernel/audit.c:1900
- audit_log_start+0x5f/0x90 kernel/audit.c:1856
- integrity_audit_message+0xf6/0x470 security/integrity/integrity_audit.c:47
- integrity_audit_msg+0x3d/0x50 security/integrity/integrity_audit.c:32
- ima_collect_measurement+0x3b7/0x710 security/integrity/ima/ima_api.c:317
- process_measurement+0xd0d/0x1880 security/integrity/ima/ima_main.c:337
- ima_file_check+0xac/0x100 security/integrity/ima/ima_main.c:517
- do_open fs/namei.c:3501 [inline]
- path_openat+0x1611/0x28f0 fs/namei.c:3632
- do_filp_open+0x1b6/0x400 fs/namei.c:3659
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1371 [inline]
- free_pcp_prepare+0x549/0xd20 mm/page_alloc.c:1421
- free_unref_page_prepare mm/page_alloc.c:3344 [inline]
- free_unref_page+0x19/0x6a0 mm/page_alloc.c:3439
- __vunmap+0x85d/0xd30 mm/vmalloc.c:2665
- free_work+0x58/0x70 mm/vmalloc.c:97
- process_one_work+0x996/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-
-Memory state around the buggy address:
- ffff88807630e380: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88807630e400: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff88807630e480: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                   ^
- ffff88807630e500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88807630e580: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
+Modules linked in:
+CR2: ffffdbffffffffc8
+---[ end trace 0000000000000000 ]---
+RIP: 0010:netlink_compare net/netlink/af_netlink.c:500 [inline]
+RIP: 0010:__rhashtable_lookup.constprop.0+0x2ae/0x5e0 include/linux/rhashtable.h:601
+Code: 01 44 89 e6 e8 83 19 e8 f9 45 84 e4 0f 85 8f 01 00 00 e8 f5 1c e8 f9 4d 8d 24 1f 49 8d bc 24 00 05 00 00 48 89 f8 48 c1 e8 03 <42> 0f b6 04 30 84 c0 74 08 3c 03 0f 8e 9c 02 00 00 45 8b ac 24 00
+RSP: 0018:ffffc9000351f818 EFLAGS: 00010a02
+RAX: 1fffdfffffffffc8 RBX: fffffffffffff940 RCX: 0000000000000000
+RDX: ffff88807cc7c140 RSI: ffffffff879318cb RDI: fffefffffffffe40
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: fffefffffffff940
+R13: ffffffff9152ccc0 R14: dffffc0000000000 R15: ffff000000000000
+FS:  00007fbe244b5740(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffdbffffffffc8 CR3: 0000000021e67000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	01 44 89 e6          	add    %eax,-0x1a(%rcx,%rcx,4)
+   4:	e8 83 19 e8 f9       	callq  0xf9e8198c
+   9:	45 84 e4             	test   %r12b,%r12b
+   c:	0f 85 8f 01 00 00    	jne    0x1a1
+  12:	e8 f5 1c e8 f9       	callq  0xf9e81d0c
+  17:	4d 8d 24 1f          	lea    (%r15,%rbx,1),%r12
+  1b:	49 8d bc 24 00 05 00 	lea    0x500(%r12),%rdi
+  22:	00
+  23:	48 89 f8             	mov    %rdi,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	42 0f b6 04 30       	movzbl (%rax,%r14,1),%eax <-- trapping instruction
+  2f:	84 c0                	test   %al,%al
+  31:	74 08                	je     0x3b
+  33:	3c 03                	cmp    $0x3,%al
+  35:	0f 8e 9c 02 00 00    	jle    0x2d7
+  3b:	45                   	rex.RB
+  3c:	8b                   	.byte 0x8b
+  3d:	ac                   	lods   %ds:(%rsi),%al
+  3e:	24 00                	and    $0x0,%al
 
 
 ---
