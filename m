@@ -2,104 +2,122 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AA7DC2BB41
-	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 08:31:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9536AC2BB41
+	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 08:41:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiHPIbX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Aug 2022 04:31:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40306 "EHLO
+        id S233149AbiHPIla (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Aug 2022 04:41:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232546AbiHPI37 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Aug 2022 04:29:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ABC1C134BBB
-        for <bpf@vger.kernel.org>; Mon, 15 Aug 2022 22:52:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660629163;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fJw+5XXpYtdUBNAptmDWquCOSql4etovIcYYOct0Agg=;
-        b=MdjSkK3vTQFl9dQ+8/xQG1c7CjKihUTM4sx7LBm3KKYWatxwAv3WECDjCx+O8xGvE8eZ+i
-        TYIxi3x1pL3qOTOPffk03t4KPyAbpEJa/ZW9NzzHDS1b+KSl7+lmDHi2ySP70zu3h4rjEh
-        KnJmsXrZY8kgE6+nmgamYbmP1CRloIo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-436-5z1zJE7hPFmH_v6gqPr1XA-1; Tue, 16 Aug 2022 01:52:40 -0400
-X-MC-Unique: 5z1zJE7hPFmH_v6gqPr1XA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 123D0811E75;
-        Tue, 16 Aug 2022 05:52:40 +0000 (UTC)
-Received: from shodan.usersys.redhat.com (unknown [10.43.17.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E2F8340CF8EA;
-        Tue, 16 Aug 2022 05:52:39 +0000 (UTC)
-Received: by shodan.usersys.redhat.com (Postfix, from userid 1000)
-        id C30E91C029C; Tue, 16 Aug 2022 07:52:38 +0200 (CEST)
-From:   Artem Savkov <asavkov@redhat.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S233186AbiHPIk4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Aug 2022 04:40:56 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E9113697E
+        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 00:06:05 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id f22so12299631edc.7
+        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 00:06:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc;
+        bh=I+tPeKnW2Z0tD8ujR2/JpVS2JA1hQ8y18BKpgZ7zBqs=;
+        b=baN3YammN8XSMJn3rPIMsNLVwaZwN3zoiXd8AKPTNlnhQj8hEJ9Q6Eln1zn9+iL4BK
+         NGiKCA2SgCd4rI3rWwDepb2zj9t7vnc62LJc2xA0V/U9JZ4kMsxr2K/vwId1RbFgA5Jt
+         Vrss5mP79gUNmp7D79VGLmTIDMTRcvkhrkI80u92I05FOUt3ZCAJ4OmXn7mXI5lXFU6x
+         j2b+bDfptBUdKx8tI364XBVLDnhoqJc6NbhWnOihMA7ph/i63hUA+I/CQJQlEQ8bb5dl
+         htxmroV7779AYn2q4iitn5Z+1V+JnecSVwqQIQZ7STTjLXIRaVxUUB6TyxjYeIyQOEiC
+         D2lA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
+        bh=I+tPeKnW2Z0tD8ujR2/JpVS2JA1hQ8y18BKpgZ7zBqs=;
+        b=pVAwZk49w7524I62VxB1isOpz5MuiAgclzA0HdImk+V0P5YSiiBc7cNIEKZUAnsuqS
+         C9Fg1/36pQSqbUJ24Wcg0JYuoi12lEEy7ZS6OiefIaT8R53YXq0TFooO/1iFqafob90z
+         oIiWQDfC6OfvNSHZEowiBJpS9bRt1Zzk+DunjxEOrDY3zschGMT/M5V2ElSx9ztuGeaQ
+         sarMhljtMbtLzaBincvzVrasJN6JM3xC//cuLoqllINWTkIADIExsY1ezh4aoVtfLrv7
+         5TUY0A8126VHg1CjUW5wnGmCxc4PLYNpHWtSFgPGig5x3/j+l71TKkxY2r3Fmpd5BLVe
+         0oyA==
+X-Gm-Message-State: ACgBeo0cI1TWn81LKdpOtAZW76W7HS0EMTzruLyzFfgyShXAkhLeKek0
+        SIohYHJhowJu8RNwf5rYbYU=
+X-Google-Smtp-Source: AA6agR5vcZZlLrTcMzaL5DgPsMCjxaWPR23d8TYdJ/TmxKTOTO48cVRXhR817/WBq66/vFzii+UQ9g==
+X-Received: by 2002:a05:6402:428c:b0:440:8259:7a2b with SMTP id g12-20020a056402428c00b0044082597a2bmr17192079edc.329.1660633563231;
+        Tue, 16 Aug 2022 00:06:03 -0700 (PDT)
+Received: from krava ([193.85.244.190])
+        by smtp.gmail.com with ESMTPSA id l13-20020a1709066b8d00b007262b9f7120sm4907584ejr.167.2022.08.16.00.06.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 00:06:02 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Tue, 16 Aug 2022 09:06:00 +0200
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Artem Savkov <asavkov@redhat.com>
-Subject: [PATCH bpf-next v2] selftests/bpf: fix attach point for non-x86 arches in test_progs/lsm
-Date:   Tue, 16 Aug 2022 07:52:31 +0200
-Message-Id: <20220816055231.717006-1-asavkov@redhat.com>
-In-Reply-To: <376f20c5-4b1c-efec-4dde-43d91b3d4308@iogearbox.net>
-References: <376f20c5-4b1c-efec-4dde-43d91b3d4308@iogearbox.net>
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Subject: Re: [PATCHv2 bpf-next 2/6] ftrace: Keep the resolved addr in
+ kallsyms_callback
+Message-ID: <YvtB2OrqmzRGzyPr@krava>
+References: <20220811091526.172610-1-jolsa@kernel.org>
+ <20220811091526.172610-3-jolsa@kernel.org>
+ <YvocUzp5PobPKv5R@worktop.programming.kicks-ass.net>
+ <YvogVuh278uRdbq2@krava>
+ <YvpAAitklP35uCZo@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YvpAAitklP35uCZo@worktop.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use SYS_PREFIX macro from bpf_misc.h instead of hard-coded '__x64_'
-prefix for sys_setdomainname attach point in lsm test.
+On Mon, Aug 15, 2022 at 02:45:54PM +0200, Peter Zijlstra wrote:
+> On Mon, Aug 15, 2022 at 12:30:46PM +0200, Jiri Olsa wrote:
+> > On Mon, Aug 15, 2022 at 12:13:39PM +0200, Peter Zijlstra wrote:
+> > > On Thu, Aug 11, 2022 at 11:15:22AM +0200, Jiri Olsa wrote:
+> > > > Keeping the resolved 'addr' in kallsyms_callback, instead of taking
+> > > > ftrace_location value, because we depend on symbol address in the
+> > > > cookie related code.
+> > > > 
+> > > > With CONFIG_X86_KERNEL_IBT option the ftrace_location value differs
+> > > > from symbol address, which screwes the symbol address cookies matching.
+> > > > 
+> > > > There are 2 users of this function:
+> > > > - bpf_kprobe_multi_link_attach
+> > > >     for which this fix is for
+> > > 
+> > > Except you fail to explain what the problem is and how this helps
+> > > anything.
+> > 
+> > we search this array of resolved addresses later in cookie code
+> > (bpf_kprobe_multi_cookie) for address returned by fprobe, which
+> > is not 'ftrace_location' address
+> 
+> What is fprobe?
 
-Signed-off-by: Artem Savkov <asavkov@redhat.com>
----
- tools/testing/selftests/bpf/DENYLIST.s390x | 2 +-
- tools/testing/selftests/bpf/progs/lsm.c    | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+https://lore.kernel.org/bpf/164800288611.1716332.7053663723617614668.stgit@devnote2/
 
-diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x b/tools/testing/selftests/bpf/DENYLIST.s390x
-index e33cab34d22f..9d8de15e725e 100644
---- a/tools/testing/selftests/bpf/DENYLIST.s390x
-+++ b/tools/testing/selftests/bpf/DENYLIST.s390x
-@@ -43,7 +43,7 @@ test_bpffs                               # bpffs test  failed 255
- test_bprm_opts                           # failed to auto-attach program 'secure_exec': -524                           (trampoline)
- test_ima                                 # failed to auto-attach program 'ima': -524                                   (trampoline)
- test_local_storage                       # failed to auto-attach program 'unlink_hook': -524                           (trampoline)
--test_lsm                                 # failed to find kernel BTF type ID of '__x64_sys_setdomainname': -3          (?)
-+test_lsm                                 # attach unexpected error: -524                                               (trampoline)
- test_overhead                            # attach_fentry unexpected error: -524                                        (trampoline)
- test_profiler                            # unknown func bpf_probe_read_str#45                                          (overlapping)
- timer                                    # failed to auto-attach program 'test1': -524                                 (trampoline)
-diff --git a/tools/testing/selftests/bpf/progs/lsm.c b/tools/testing/selftests/bpf/progs/lsm.c
-index 33694ef8acfa..d8d8af623bc2 100644
---- a/tools/testing/selftests/bpf/progs/lsm.c
-+++ b/tools/testing/selftests/bpf/progs/lsm.c
-@@ -4,6 +4,7 @@
-  * Copyright 2020 Google LLC.
-  */
- 
-+#include "bpf_misc.h"
- #include "vmlinux.h"
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
-@@ -160,7 +161,7 @@ int BPF_PROG(test_task_free, struct task_struct *task)
- 
- int copy_test = 0;
- 
--SEC("fentry.s/__x64_sys_setdomainname")
-+SEC("fentry.s/" SYS_PREFIX "sys_setdomainname")
- int BPF_PROG(test_sys_setdomainname, struct pt_regs *regs)
- {
- 	void *ptr = (void *)PT_REGS_PARM1(regs);
--- 
-2.37.1
+> 
+> > so we want ftrace_lookup_symbols to return 'only' resolved address
+> > at this point, not 'ftrace_location' address
+> 
+> In general; I'm completely confused what any of this code is doing.
+> Mostly I don't speak BPF *at*all*. And have very little clue as to what
+> things are supposed to do, please help me along.
+> 
+> But the thing is, we're likely going to change all this (function call
+> abi) again in the very near future; it would be very nice if all this
+> code could grow some what/why comments, because I've gotten lost
+> multiple times in all this.
 
+is there any outline of the change? is this the change in your x86/fineibt
+branch that you brought up in the other thread? 
+
+jirka
