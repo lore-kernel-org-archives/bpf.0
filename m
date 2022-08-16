@@ -2,82 +2,119 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E096CC19F2C
-	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 06:21:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8360DC3F6B0
+	for <bpf@archiver.kernel.org>; Tue, 16 Aug 2022 06:38:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbiHPGVx convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 16 Aug 2022 02:21:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45912 "EHLO
+        id S229844AbiHPGh6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Aug 2022 02:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230016AbiHPGVa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Aug 2022 02:21:30 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F92DCD523
-        for <bpf@vger.kernel.org>; Mon, 15 Aug 2022 17:14:03 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27FIbxJu010563
-        for <bpf@vger.kernel.org>; Mon, 15 Aug 2022 17:14:02 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hx9pypbks-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 15 Aug 2022 17:14:02 -0700
-Received: from twshared6447.05.prn5.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 15 Aug 2022 17:14:01 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 1DF691DAC778A; Mon, 15 Aug 2022 17:13:49 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 0/4] Preparatory libbpf fixes and clean ups
-Date:   Mon, 15 Aug 2022 17:13:48 -0700
-Message-ID: <20220816001348.347435-1-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S230079AbiHPGhk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Aug 2022 02:37:40 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0747A16304F
+        for <bpf@vger.kernel.org>; Mon, 15 Aug 2022 20:27:13 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id dc19so16623710ejb.12
+        for <bpf@vger.kernel.org>; Mon, 15 Aug 2022 20:27:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=ci9V0ccH7yrdscDREP9JziE1sny4lsTm9XGKbaKxzsE=;
+        b=AWAof5gHQz0xpGuyBT2QgdnmvwmRWHIEynw3oQgIJqIsK3CNb4xJe+gU0jPpvrttOa
+         kGmfDHe6Ys8ooFwxLTe9OT5ZVuBJpWKB48FBGQ8kccCD8ZXayDGPy7Nk59wi5SeHBTy+
+         zz5Mth61HPXpu3s5u+yxCHmE2seoKtOFqxLcnVFjb92Z/hOMiV00JRin2Mpij5FqOIJs
+         SLSZ/Vm73qURJTy/AHcQck/U73yYonIYFqhry4bOJNo8kkoCyIqMn7374fC35ddP6Pyu
+         ssh0jzHk4au1xfcVgQGz7S1V870FKncspYXg9NsjEqkWqXtkhNpxgE+Ghv9inzts6Tp0
+         wiqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=ci9V0ccH7yrdscDREP9JziE1sny4lsTm9XGKbaKxzsE=;
+        b=SrV+HTYbSzLV+6bUR5fblOlBPN08IVoD/cuhBvjdBmDII2NT+kkFBH8q41R5ZF2Fs6
+         VPWCvN1ingkNGGEMssmvFothaha22hOTOpRJZhdhudD/jgBJBd5frbsgKPkWrh+lXgH+
+         cy3yJlGLrnKBVWVorvZizfKC7BfDbvOkO/4EX+7bV7Sco80o+EVsbajlrHWlZkybi4Wp
+         ukvWu/TLgQ1Bo/rMVHBm68tacgK/TrGdUn9jo1OQFyDN0I+Ime+gtiY/3Y469hff2sdt
+         jBBFxpxLow2Zs+jEvULfkUOpA11rmVv/QGjH6eEtndhPSMcy+dBthtviNvOziG3o21bL
+         E2LA==
+X-Gm-Message-State: ACgBeo2qLfmvYqIr6la8NDAenihxjYZ+8wu7oLqBCV14VnDRQ8N9oaGG
+        7a3KC/tp85nVLv+2iDZtMXIdHRAiQeE7uSDSEsE=
+X-Google-Smtp-Source: AA6agR6OF0dOaiYdXXon1R3LWzSvArgxp5jMPL0Sb1Ke/3PqGV8ka5UrihCw47wUh00gu+K8FpGxSCync2Q6IENAL+w=
+X-Received: by 2002:a17:907:3d90:b0:730:a937:fb04 with SMTP id
+ he16-20020a1709073d9000b00730a937fb04mr12437332ejc.176.1660620431604; Mon, 15
+ Aug 2022 20:27:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: ooEBwdsMLW1gRiYGAYkhbjmQ5ZsaaY8A
-X-Proofpoint-ORIG-GUID: ooEBwdsMLW1gRiYGAYkhbjmQ5ZsaaY8A
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-15_08,2022-08-15_01,2022-06-22_01
+References: <20220811091526.172610-1-jolsa@kernel.org>
+In-Reply-To: <20220811091526.172610-1-jolsa@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 15 Aug 2022 20:27:00 -0700
+Message-ID: <CAEf4BzaKWQtwki8oDcp+rh8c-kMmZcc1ok+zs=GvMCndN8UnyA@mail.gmail.com>
+Subject: Re: [PATCHv2 bpf-next 0/6] bpf: Fixes for CONFIG_X86_KERNEL_IBT
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Few fixes and clean up in preparation for finalizing libbpf 1.0.
+On Thu, Aug 11, 2022 at 2:15 AM Jiri Olsa <jolsa@kernel.org> wrote:
+>
+> hi,
+> Martynas reported bpf_get_func_ip returning +4 address when
+> CONFIG_X86_KERNEL_IBT option is enabled and I found there are
+> some failing bpf tests when this option is enabled.
+>
+> The CONFIG_X86_KERNEL_IBT option adds endbr instruction at the
+> function entry, so the idea is to 'fix' entry ip for kprobe_multi
+> and trampoline probes, because they are placed on the function
+> entry.
+>
+> v2 changes:
+>   - change kprobes get_func_ip to return zero for kprobes
+>     attached within the function body [Andrii]
+>   - detect IBT config and properly test kprobe with offset
+>     [Andrii]
+>
+> v1 changes:
+>   - read previous instruction in kprobe_multi link handler
+>     and adjust entry_ip for CONFIG_X86_KERNEL_IBT option
+>   - split first patch into 2 separate changes
+>   - update changelogs
+>
+> thanks,
+> jirka
+>
+>
+> ---
+> Jiri Olsa (6):
+>       kprobes: Add new KPROBE_FLAG_ON_FUNC_ENTRY kprobe flag
+>       ftrace: Keep the resolved addr in kallsyms_callback
+>       bpf: Use given function address for trampoline ip arg
+>       bpf: Adjust kprobe_multi entry_ip for CONFIG_X86_KERNEL_IBT
+>       bpf: Return value in kprobe get_func_ip only for entry address
+>       selftests/bpf: Fix get_func_ip offset test for CONFIG_X86_KERNEL_IBT
+>
+>  arch/x86/net/bpf_jit_comp.c                               |  9 ++++-----
+>  include/linux/kprobes.h                                   |  1 +
+>  kernel/kprobes.c                                          |  6 +++++-
+>  kernel/trace/bpf_trace.c                                  | 15 ++++++++++++++-
+>  kernel/trace/ftrace.c                                     |  3 +--
+>  tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c | 62 +++++++++++++++++++++++++++++++++++++++++++++++++++-----------
+>  tools/testing/selftests/bpf/progs/get_func_ip_test.c      | 22 ++++++++++------------
+>  tools/testing/selftests/bpf/progs/kprobe_multi.c          |  4 +---
+>  8 files changed, 87 insertions(+), 35 deletions(-)
 
-Main change is switching libbpf to initializing only relevant portions of
-union bpf_attr for any given BPF command. This has been on a wishlist for
-a while, so finally this is done. While cleaning this up, I've also cleaned up
-few other placed were we didn't use explicit memset() with kernel UAPI structs
-(perf_event_attr, bpf_map_info, bpf_prog_info, etc).
-
-Also few fixes to test_progs that came up while testing selftests in release
-mode.
-
-
-Andrii Nakryiko (4):
-  libbpf: fix potential NULL dereference when parsing ELF
-  libbpf: streamline bpf_attr and perf_event_attr initialization
-  libbpf: clean up deprecated and legacy aliases
-  selftests/bpf: few fixes for selftests/bpf built in release mode
-
- tools/lib/bpf/bpf.c                           | 178 ++++++++++--------
- tools/lib/bpf/btf.c                           |   2 -
- tools/lib/bpf/btf.h                           |   1 -
- tools/lib/bpf/libbpf.c                        |  47 +++--
- tools/lib/bpf/libbpf_legacy.h                 |   2 +
- tools/lib/bpf/netlink.c                       |   3 +-
- tools/lib/bpf/skel_internal.h                 |  10 +-
- .../selftests/bpf/prog_tests/attach_probe.c   |   6 +-
- .../selftests/bpf/prog_tests/bpf_cookie.c     |   2 +-
- .../selftests/bpf/prog_tests/task_pt_regs.c   |   2 +-
- tools/testing/selftests/bpf/xskxceiver.c      |   2 +-
- 11 files changed, 147 insertions(+), 108 deletions(-)
-
--- 
-2.30.2
-
+Overall LGTM, please address Peter's questions and request for some
+more comments and context. Few nits to simplify selftests further, but
+looks great. Thanks!
