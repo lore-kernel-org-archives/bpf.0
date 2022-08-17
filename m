@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12423C25B08
-	for <bpf@archiver.kernel.org>; Wed, 17 Aug 2022 06:53:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBDB8C25B08
+	for <bpf@archiver.kernel.org>; Wed, 17 Aug 2022 06:53:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbiHQGxF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Aug 2022 02:53:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60680 "EHLO
+        id S230272AbiHQGxJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Aug 2022 02:53:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbiHQGxE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 17 Aug 2022 02:53:04 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B1474E0D
-        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 23:53:04 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27H0J8tx007698
-        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 23:53:03 -0700
+        with ESMTP id S230473AbiHQGxH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 17 Aug 2022 02:53:07 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C82246
+        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 23:53:06 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 27H0WrHM028921
+        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 23:53:05 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=b9+a8J4nTZQThAx5/Ev65A2t+7Y1GdHEU2hKfWkpFnk=;
- b=AY9h0JGMST3I7nylTlD00dBCDpAV1LiTvQFTCo+cMW1NI0uCyTA0RqOQz2wNucEVVFve
- ZsgkC36D0F+6B/GQQaWdvwiP5L5mQEG8IbeDnspb7JYbtocZWi1VNftEMRgJKZMht7on
- Ti+L6FgxbFcYr4/sNgXDLCp9JOR0Viha67Q= 
+ bh=biZpN7ohszoJ3Mskcxzy0Zt3nSobeX/bnUTitHKAEds=;
+ b=jiCoyL43QgYQeugBHnzIJSAAAV/9qVhNnv1YlvDAA5bcQ0wko42nSP18MwTyWxYaz5+f
+ 0UVhr9f5TRAsO3Q+SpD/IO3smSFO3h8FbJvKOD5UHy6V9HABW4lDOFFnQHt/kfZRPd1s
+ JO1Sme7vt23nJxtk+OwDymBLvYqeoRtszEU= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j0np59cad-1
+        by m0001303.ppops.net (PPS) with ESMTPS id 3j0nvjha3t-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 23:53:03 -0700
-Received: from twshared14818.18.frc3.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 23:53:05 -0700
+Received: from twshared16418.24.frc3.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.31; Tue, 16 Aug 2022 23:53:02 -0700
 Received: by devbig933.frc1.facebook.com (Postfix, from userid 6611)
-        id CBE07825DDCF; Tue, 16 Aug 2022 23:18:26 -0700 (PDT)
+        id B509B825DCA4; Tue, 16 Aug 2022 23:17:44 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -44,9 +44,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>, <kernel-team@fb.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Stanislav Fomichev <sdf@google.com>
-Subject: [PATCH v4 bpf-next 12/15] bpf: Change bpf_setsockopt(SOL_IP) to reuse do_ip_setsockopt()
-Date:   Tue, 16 Aug 2022 23:18:26 -0700
-Message-ID: <20220817061826.4180990-1-kafai@fb.com>
+Subject: [PATCH v4 bpf-next 06/15] bpf: net: Change do_ipv6_setsockopt() to use the sockopt's lock_sock() and capable()
+Date:   Tue, 16 Aug 2022 23:17:44 -0700
+Message-ID: <20220817061744.4176893-1-kafai@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220817061704.4174272-1-kafai@fb.com>
 References: <20220817061704.4174272-1-kafai@fb.com>
@@ -54,8 +54,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: l0sYvHiQ4Cxu00wMG4LREiGF48Kzov_v
-X-Proofpoint-ORIG-GUID: l0sYvHiQ4Cxu00wMG4LREiGF48Kzov_v
+X-Proofpoint-GUID: XwhxsVY2Y1DgN1h-m5AXTVTeUVjxmcms
+X-Proofpoint-ORIG-GUID: XwhxsVY2Y1DgN1h-m5AXTVTeUVjxmcms
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-17_04,2022-08-16_02,2022-06-22_01
@@ -63,125 +63,82 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-After the prep work in the previous patches,
-this patch removes the dup code from bpf_setsockopt(SOL_IP)
-and reuses the implementation in do_ip_setsockopt().
-
-The existing optname white-list is refactored into a new
-function sol_ip_setsockopt().
-
-NOTE,
-the current bpf_setsockopt(IP_TOS) is quite different from the
-the do_ip_setsockopt(IP_TOS).  For example, it does not take
-the INET_ECN_MASK into the account for tcp and also does not adjust
-sk->sk_priority.  It looks like the current bpf_setsockopt(IP_TOS)
-was referencing the IPV6_TCLASS implementation instead of IP_TOS.
-This patch tries to rectify that by using the do_ip_setsockopt(IP_TOS).
-While this is a behavior change,  the do_ip_setsockopt(IP_TOS) behavior
-is arguably what the user is expecting.  At least, the INET_ECN_MASK bits
-should be masked out for tcp.
+Similar to the earlier patch that avoids sk_setsockopt() from
+taking sk lock and doing capable test when called by bpf.  This patch
+changes do_ipv6_setsockopt() to use the sockopt_{lock,release}_sock()
+and sockopt_[ns_]capable().
 
 Reviewed-by: Stanislav Fomichev <sdf@google.com>
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- include/net/ip.h       |  2 ++
- net/core/filter.c      | 40 ++++++++++++++++++++--------------------
- net/ipv4/ip_sockglue.c |  4 ++--
- 3 files changed, 24 insertions(+), 22 deletions(-)
+ net/ipv6/ipv6_sockglue.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/include/net/ip.h b/include/net/ip.h
-index 1c979fd1904c..34fa5b0f0a0e 100644
---- a/include/net/ip.h
-+++ b/include/net/ip.h
-@@ -743,6 +743,8 @@ void ip_cmsg_recv_offset(struct msghdr *msg, struct s=
-ock *sk,
- int ip_cmsg_send(struct sock *sk, struct msghdr *msg,
- 		 struct ipcm_cookie *ipc, bool allow_ipv6);
- DECLARE_STATIC_KEY_FALSE(ip4_min_ttl);
-+int do_ip_setsockopt(struct sock *sk, int level, int optname, sockptr_t =
-optval,
-+		     unsigned int optlen);
- int ip_setsockopt(struct sock *sk, int level, int optname, sockptr_t opt=
-val,
- 		  unsigned int optlen);
- int ip_getsockopt(struct sock *sk, int level, int optname, char __user *=
-optval,
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 66877605bb78..4d1b42b8f4a8 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -5114,6 +5114,25 @@ static int sol_tcp_setsockopt(struct sock *sk, int=
- optname,
- 				 KERNEL_SOCKPTR(optval), optlen);
- }
+diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
+index 222f6bf220ba..d23de48ff612 100644
+--- a/net/ipv6/ipv6_sockglue.c
++++ b/net/ipv6/ipv6_sockglue.c
+@@ -327,7 +327,7 @@ static int ipv6_set_opt_hdr(struct sock *sk, int optn=
+ame, sockptr_t optval,
+ 	int err;
 =20
-+static int sol_ip_setsockopt(struct sock *sk, int optname,
-+			     char *optval, int optlen)
-+{
-+	if (sk->sk_family !=3D AF_INET)
-+		return -EINVAL;
-+
-+	switch (optname) {
-+	case IP_TOS:
-+		if (optlen !=3D sizeof(int))
-+			return -EINVAL;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return do_ip_setsockopt(sk, SOL_IP, optname,
-+				KERNEL_SOCKPTR(optval), optlen);
-+}
-+
- static int __bpf_setsockopt(struct sock *sk, int level, int optname,
- 			    char *optval, int optlen)
- {
-@@ -5125,26 +5144,7 @@ static int __bpf_setsockopt(struct sock *sk, int l=
-evel, int optname,
- 	if (level =3D=3D SOL_SOCKET) {
- 		return sol_socket_setsockopt(sk, optname, optval, optlen);
- 	} else if (IS_ENABLED(CONFIG_INET) && level =3D=3D SOL_IP) {
--		if (optlen !=3D sizeof(int) || sk->sk_family !=3D AF_INET)
--			return -EINVAL;
--
--		val =3D *((int *)optval);
--		/* Only some options are supported */
--		switch (optname) {
--		case IP_TOS:
--			if (val < -1 || val > 0xff) {
--				ret =3D -EINVAL;
--			} else {
--				struct inet_sock *inet =3D inet_sk(sk);
--
--				if (val =3D=3D -1)
--					val =3D 0;
--				inet->tos =3D val;
--			}
--			break;
--		default:
--			ret =3D -EINVAL;
--		}
-+		return sol_ip_setsockopt(sk, optname, optval, optlen);
- 	} else if (IS_ENABLED(CONFIG_IPV6) && level =3D=3D SOL_IPV6) {
- 		if (optlen !=3D sizeof(int) || sk->sk_family !=3D AF_INET6)
- 			return -EINVAL;
-diff --git a/net/ipv4/ip_sockglue.c b/net/ipv4/ip_sockglue.c
-index a3c496580e6b..751fa69cb557 100644
---- a/net/ipv4/ip_sockglue.c
-+++ b/net/ipv4/ip_sockglue.c
-@@ -888,8 +888,8 @@ static int compat_ip_mcast_join_leave(struct sock *sk=
-, int optname,
+ 	/* hop-by-hop / destination options are privileged option */
+-	if (optname !=3D IPV6_RTHDR && !ns_capable(net->user_ns, CAP_NET_RAW))
++	if (optname !=3D IPV6_RTHDR && !sockopt_ns_capable(net->user_ns, CAP_NE=
+T_RAW))
+ 		return -EPERM;
 =20
- DEFINE_STATIC_KEY_FALSE(ip4_min_ttl);
+ 	/* remove any sticky options header with a zero option
+@@ -417,7 +417,7 @@ static int do_ipv6_setsockopt(struct sock *sk, int le=
+vel, int optname,
 =20
--static int do_ip_setsockopt(struct sock *sk, int level, int optname,
--		sockptr_t optval, unsigned int optlen)
-+int do_ip_setsockopt(struct sock *sk, int level, int optname,
-+		     sockptr_t optval, unsigned int optlen)
- {
- 	struct inet_sock *inet =3D inet_sk(sk);
- 	struct net *net =3D sock_net(sk);
+ 	if (needs_rtnl)
+ 		rtnl_lock();
+-	lock_sock(sk);
++	sockopt_lock_sock(sk);
+=20
+ 	switch (optname) {
+=20
+@@ -634,8 +634,8 @@ static int do_ipv6_setsockopt(struct sock *sk, int le=
+vel, int optname,
+ 		break;
+=20
+ 	case IPV6_TRANSPARENT:
+-		if (valbool && !ns_capable(net->user_ns, CAP_NET_RAW) &&
+-		    !ns_capable(net->user_ns, CAP_NET_ADMIN)) {
++		if (valbool && !sockopt_ns_capable(net->user_ns, CAP_NET_RAW) &&
++		    !sockopt_ns_capable(net->user_ns, CAP_NET_ADMIN)) {
+ 			retv =3D -EPERM;
+ 			break;
+ 		}
+@@ -946,7 +946,7 @@ static int do_ipv6_setsockopt(struct sock *sk, int le=
+vel, int optname,
+ 	case IPV6_IPSEC_POLICY:
+ 	case IPV6_XFRM_POLICY:
+ 		retv =3D -EPERM;
+-		if (!ns_capable(net->user_ns, CAP_NET_ADMIN))
++		if (!sockopt_ns_capable(net->user_ns, CAP_NET_ADMIN))
+ 			break;
+ 		retv =3D xfrm_user_policy(sk, optname, optval, optlen);
+ 		break;
+@@ -994,14 +994,14 @@ static int do_ipv6_setsockopt(struct sock *sk, int =
+level, int optname,
+ 		break;
+ 	}
+=20
+-	release_sock(sk);
++	sockopt_release_sock(sk);
+ 	if (needs_rtnl)
+ 		rtnl_unlock();
+=20
+ 	return retv;
+=20
+ e_inval:
+-	release_sock(sk);
++	sockopt_release_sock(sk);
+ 	if (needs_rtnl)
+ 		rtnl_unlock();
+ 	return -EINVAL;
 --=20
 2.30.2
 
