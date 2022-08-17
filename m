@@ -2,220 +2,235 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EFDDC25B08
-	for <bpf@archiver.kernel.org>; Wed, 17 Aug 2022 07:08:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28776C25B08
+	for <bpf@archiver.kernel.org>; Wed, 17 Aug 2022 07:11:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232734AbiHQHIV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Aug 2022 03:08:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46772 "EHLO
+        id S238842AbiHQHLR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Aug 2022 03:11:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238672AbiHQHIT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 17 Aug 2022 03:08:19 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5875465DB;
-        Wed, 17 Aug 2022 00:08:16 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4M6zb90tcqzKwq8;
-        Wed, 17 Aug 2022 15:06:45 +0800 (CST)
-Received: from [10.174.176.117] (unknown [10.174.176.117])
-        by APP3 (Coremail) with SMTP id _Ch0CgDHoDnXk_xiOOiuAQ--.23666S2;
-        Wed, 17 Aug 2022 15:08:11 +0800 (CST)
-Subject: Re: KASAN: slab-out-of-bounds Read in
- __htab_map_lookup_and_delete_batch
-To:     Hao Sun <sunhao.th@gmail.com>, bpf@vger.kernel.org
-References: <CACkBjsbuxaR6cv0kXJoVnBfL9ZJXjjoUcMpw_Ogc313jSrg14A@mail.gmail.com>
-From:   Hou Tao <houtao@huaweicloud.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
-        andrii@kernel.org, yhs@fb.com, song@kernel.org,
-        john.fastabend@gmail.com, sdf@google.com, jolsa@kernel.org,
-        kpsingh@kernel.org, haoluo@google.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Message-ID: <54b435bf-c710-a6b9-4855-9a29e099eab8@huaweicloud.com>
-Date:   Wed, 17 Aug 2022 15:08:07 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        with ESMTP id S238838AbiHQHLI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 17 Aug 2022 03:11:08 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0605F106
+        for <bpf@vger.kernel.org>; Wed, 17 Aug 2022 00:11:06 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 27H0X23N028988
+        for <bpf@vger.kernel.org>; Wed, 17 Aug 2022 00:11:06 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=9Wpd+EP0f4WvrEOEIxmjFxCt/Ic9sj2fpK/gO0U/XtQ=;
+ b=Hs7QiNhJqb7Jt3Ds3rIK6MBt+ll3uyRDA1yVvI3RyhtxKSHFIDLKm3ITrqL+OvK8/nLf
+ KTJ+66Lmhfukz7pSzmW4yX9CX0iGSwlX5LG3O1NeUiHb80b1xZSRMZXxiEclk6pAkVIf
+ A6FS1qhmK4YY7f4gyYr1ErhZY7FBGCUdzPQ= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net (PPS) with ESMTPS id 3j0nvjhc45-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 17 Aug 2022 00:11:06 -0700
+Received: from twshared14818.18.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 17 Aug 2022 00:11:05 -0700
+Received: by devbig933.frc1.facebook.com (Postfix, from userid 6611)
+        id D909E825DD58; Tue, 16 Aug 2022 23:18:19 -0700 (PDT)
+From:   Martin KaFai Lau <kafai@fb.com>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Miller <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, <kernel-team@fb.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Stanislav Fomichev <sdf@google.com>
+Subject: [PATCH v4 bpf-next 11/15] bpf: Change bpf_setsockopt(SOL_TCP) to reuse do_tcp_setsockopt()
+Date:   Tue, 16 Aug 2022 23:18:19 -0700
+Message-ID: <20220817061819.4180146-1-kafai@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220817061704.4174272-1-kafai@fb.com>
+References: <20220817061704.4174272-1-kafai@fb.com>
 MIME-Version: 1.0
-In-Reply-To: <CACkBjsbuxaR6cv0kXJoVnBfL9ZJXjjoUcMpw_Ogc313jSrg14A@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID: _Ch0CgDHoDnXk_xiOOiuAQ--.23666S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3Aw1UJrWfAr15Gr18Gr1fXrb_yoW3ZFW5pF
-        n5GrWxWr40qrykA3yxJr1kAryxZF43A3WUGr97WFyrZ3Wftw1jqr1vqr9Fgr1akr4FyF13
-        ArnrtrWFvw1UJaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
-        6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x07UWE__UUUUU=
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: 1CbLneUIEbNmLs_AY4SE5DcG0tjBoNtt
+X-Proofpoint-ORIG-GUID: 1CbLneUIEbNmLs_AY4SE5DcG0tjBoNtt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-17_04,2022-08-16_02,2022-06-22_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+After the prep work in the previous patches,
+this patch removes all the dup code from bpf_setsockopt(SOL_TCP)
+and reuses the do_tcp_setsockopt().
 
-On 8/16/2022 8:13 AM, Hao Sun wrote:
-> Hello,
->
-> Last email was not formatted correctly, resend it here. The following
-> crash can be triggered on:
->
-> HEAD commit: ffcf9c5700e4  x86: link vdso and boot
-> git tree: upstream
-> console output: https://pastebin.com/raw/ngeVmgpK
-> kernel config: https://pastebin.com/raw/3JYdi5mp
-> C reproducer: https://paste.ubuntu.com/p/D2sz87PQ4k/
->
-> ==================================================================
-> BUG: KASAN: slab-out-of-bounds in instrument_copy_to_user
-> include/linux/instrumented.h:118 [inline]
-> BUG: KASAN: slab-out-of-bounds in _copy_to_user lib/usercopy.c:32 [inline]
-> BUG: KASAN: slab-out-of-bounds in _copy_to_user+0x9c/0xc0 lib/usercopy.c:26
-> Read of size 54 at addr ffff8881055c0100 by task syz-executor382/8357
-Have not run the reproducer yet (due to network access restriction of our
-company), just skim through __htab_map_lookup_and_delete_batch() and found that
-the following code snippet is suspicious:
+The existing optname white-list is refactored into a new
+function sol_tcp_setsockopt().  The sol_tcp_setsockopt()
+also calls the bpf_sol_tcp_setsockopt() to handle
+the TCP_BPF_XXX specific optnames.
 
-        /* do not grab the lock unless need it (bucket_cnt > 0). */
-        if (locked) {
-                ret = htab_lock_bucket(htab, b, batch, &flags);
-                if (ret)
-                        goto next_batch;
-        }
+bpf_setsockopt(TCP_SAVE_SYN) now also allows a value 2 to
+save the eth header also and it comes for free from
+do_tcp_setsockopt().
 
-If htab_lock_bucket() fails, it should reset bucket_cnt to zero, else next_batch
-will try to read key_size * bucket_cnt bytes from keys and may lead to
-out-of-bound read. Will try to get the reproducer and to ensure or pinpoint the
-root cause.
+Reviewed-by: Stanislav Fomichev <sdf@google.com>
+Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+---
+ include/net/tcp.h |  2 +
+ net/core/filter.c | 97 +++++++++++++++--------------------------------
+ net/ipv4/tcp.c    |  4 +-
+ 3 files changed, 34 insertions(+), 69 deletions(-)
 
-> CPU: 1 PID: 8357 Comm: syz-executor382 Not tainted
-> 5.19.0-13666-gffcf9c5700e4-dirty #15
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-> 1.13.0-1ubuntu1.1 04/01/2014
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0x57/0x7d lib/dump_stack.c:106
->  print_address_description mm/kasan/report.c:317 [inline]
->  print_report.cold+0xe5/0x66d mm/kasan/report.c:433
->  kasan_report+0x8a/0x1b0 mm/kasan/report.c:495
->  check_region_inline mm/kasan/generic.c:183 [inline]
->  kasan_check_range+0x13b/0x190 mm/kasan/generic.c:189
->  instrument_copy_to_user include/linux/instrumented.h:118 [inline]
->  _copy_to_user lib/usercopy.c:32 [inline]
->  _copy_to_user+0x9c/0xc0 lib/usercopy.c:26
->  copy_to_user include/linux/uaccess.h:160 [inline]
->  __htab_map_lookup_and_delete_batch+0x1169/0x1cf0 kernel/bpf/hashtab.c:1809
->  bpf_map_do_batch+0x2d6/0x590 kernel/bpf/syscall.c:4498
->  __sys_bpf+0x1193/0x48b0 kernel/bpf/syscall.c:5014
->  __do_sys_bpf kernel/bpf/syscall.c:5058 [inline]
->  __se_sys_bpf kernel/bpf/syscall.c:5056 [inline]
->  __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5056
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f797e7e5b9d
-> Code: c3 e8 97 2a 00 00 0f 1f 80 00 00 00 00 f3 0f 1e fa 48 89 f8 48
-> 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
-> 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007f797e76ad78 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-> RAX: ffffffffffffffda RBX: 00007f797e87a2d0 RCX: 00007f797e7e5b9d
-> RDX: 0000000000000038 RSI: 0000000020000680 RDI: 0000000000000019
-> RBP: 00007f797e84700c R08: 00007f797e76b700 R09: 0000000000000000
-> R10: 00007f797e76b700 R11: 0000000000000246 R12: 00007f797e87a2d8
-> R13: 00007f797e87a2dc R14: 00000000200014c0 R15: 00007f797e846008
->  </TASK>
->
-> Allocated by task 8357:
->  kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
->  kasan_set_track mm/kasan/common.c:45 [inline]
->  set_alloc_info mm/kasan/common.c:437 [inline]
->  ____kasan_kmalloc mm/kasan/common.c:516 [inline]
->  ____kasan_kmalloc mm/kasan/common.c:475 [inline]
->  __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:525
->  kasan_kmalloc include/linux/kasan.h:234 [inline]
->  __kmalloc_node+0x1e9/0x360 mm/slub.c:4472
->  kvmalloc include/linux/slab.h:750 [inline]
->  kvmalloc_array include/linux/slab.h:768 [inline]
->  __htab_map_lookup_and_delete_batch+0x538/0x1cf0 kernel/bpf/hashtab.c:1680
->  bpf_map_do_batch+0x2d6/0x590 kernel/bpf/syscall.c:4498
->  __sys_bpf+0x1193/0x48b0 kernel/bpf/syscall.c:5014
->  __do_sys_bpf kernel/bpf/syscall.c:5058 [inline]
->  __se_sys_bpf kernel/bpf/syscall.c:5056 [inline]
->  __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5056
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
-> The buggy address belongs to the object at ffff8881055c0100
->  which belongs to the cache kmalloc-64 of size 64
-> The buggy address is located 0 bytes inside of
->  64-byte region [ffff8881055c0100, ffff8881055c0140)
->
-> The buggy address belongs to the physical page:
-> page:ffffea0004157000 refcount:1 mapcount:0 mapping:0000000000000000
-> index:0x0 pfn:0x1055c0
-> flags: 0x57ff00000000200(slab|node=1|zone=2|lastcpupid=0x7ff)
-> raw: 057ff00000000200 0000000000000000 dead000000000122 ffff888010c42640
-> raw: 0000000000000000 0000000080200020 00000001ffffffff 0000000000000000
-> page dumped because: kasan: bad access detected
-> page_owner tracks the page as allocated
-> page last allocated via order 0, migratetype Unmovable, gfp_mask
-> 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 6756, tgid 6756
-> (syz-executor382), ts 131529364832, free_ts 131498233118
->  set_page_owner include/linux/page_owner.h:31 [inline]
->  post_alloc_hook mm/page_alloc.c:2525 [inline]
->  prep_new_page+0x2c6/0x350 mm/page_alloc.c:2532
->  get_page_from_freelist+0xae9/0x3a80 mm/page_alloc.c:4283
->  __alloc_pages+0x321/0x710 mm/page_alloc.c:5515
->  alloc_slab_page mm/slub.c:1824 [inline]
->  allocate_slab mm/slub.c:1969 [inline]
->  new_slab+0x246/0x3a0 mm/slub.c:2029
->  ___slab_alloc+0xa50/0x1060 mm/slub.c:3031
->  __slab_alloc.isra.0+0x4d/0xa0 mm/slub.c:3118
->  slab_alloc_node mm/slub.c:3209 [inline]
->  __kmalloc_node+0x2ed/0x360 mm/slub.c:4468
->  kmalloc_node include/linux/slab.h:623 [inline]
->  __vmalloc_area_node mm/vmalloc.c:3012 [inline]
->  __vmalloc_node_range+0x30a/0xf70 mm/vmalloc.c:3196
->  alloc_thread_stack_node kernel/fork.c:312 [inline]
->  dup_task_struct kernel/fork.c:977 [inline]
->  copy_process+0x4069/0x6660 kernel/fork.c:2087
->  kernel_clone+0xba/0xba0 kernel/fork.c:2673
->  __do_sys_clone+0xa1/0xe0 kernel/fork.c:2807
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> page last free stack trace:
->  reset_page_owner include/linux/page_owner.h:24 [inline]
->  free_pages_prepare mm/page_alloc.c:1449 [inline]
->  free_pcp_prepare+0x5ab/0xd00 mm/page_alloc.c:1499
->  free_unref_page_prepare mm/page_alloc.c:3380 [inline]
->  free_unref_page+0x19/0x410 mm/page_alloc.c:3476
->  __tlb_remove_table arch/x86/include/asm/tlb.h:34 [inline]
->  __tlb_remove_table_free mm/mmu_gather.c:114 [inline]
->  tlb_remove_table_rcu+0x6e/0xb0 mm/mmu_gather.c:169
->  rcu_do_batch kernel/rcu/tree.c:2245 [inline]
->  rcu_core+0x785/0x1720 kernel/rcu/tree.c:2505
->  __do_softirq+0x1d0/0x908 kernel/softirq.c:571
->
-> Memory state around the buggy address:
->  ffff8881055c0000: 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc
->  ffff8881055c0080: 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc
->> ffff8881055c0100: 00 00 00 00 00 05 fc fc fc fc fc fc fc fc fc fc
->                                   ^
->  ffff8881055c0180: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->  ffff8881055c0200: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> ==================================================================
-> .
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index d10962b9f0d0..c03a50c72f40 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -405,6 +405,8 @@ __poll_t tcp_poll(struct file *file, struct socket *s=
+ock,
+ int tcp_getsockopt(struct sock *sk, int level, int optname,
+ 		   char __user *optval, int __user *optlen);
+ bool tcp_bpf_bypass_getsockopt(int level, int optname);
++int do_tcp_setsockopt(struct sock *sk, int level, int optname,
++		      sockptr_t optval, unsigned int optlen);
+ int tcp_setsockopt(struct sock *sk, int level, int optname, sockptr_t op=
+tval,
+ 		   unsigned int optlen);
+ void tcp_set_keepalive(struct sock *sk, int val);
+diff --git a/net/core/filter.c b/net/core/filter.c
+index bb135d456a53..66877605bb78 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -5086,6 +5086,34 @@ static int bpf_sol_tcp_setsockopt(struct sock *sk,=
+ int optname,
+ 	return 0;
+ }
+=20
++static int sol_tcp_setsockopt(struct sock *sk, int optname,
++			      char *optval, int optlen)
++{
++	if (sk->sk_prot->setsockopt !=3D tcp_setsockopt)
++		return -EINVAL;
++
++	switch (optname) {
++	case TCP_KEEPIDLE:
++	case TCP_KEEPINTVL:
++	case TCP_KEEPCNT:
++	case TCP_SYNCNT:
++	case TCP_WINDOW_CLAMP:
++	case TCP_USER_TIMEOUT:
++	case TCP_NOTSENT_LOWAT:
++	case TCP_SAVE_SYN:
++		if (optlen !=3D sizeof(int))
++			return -EINVAL;
++		break;
++	case TCP_CONGESTION:
++		break;
++	default:
++		return bpf_sol_tcp_setsockopt(sk, optname, optval, optlen);
++	}
++
++	return do_tcp_setsockopt(sk, SOL_TCP, optname,
++				 KERNEL_SOCKPTR(optval), optlen);
++}
++
+ static int __bpf_setsockopt(struct sock *sk, int level, int optname,
+ 			    char *optval, int optlen)
+ {
+@@ -5138,73 +5166,8 @@ static int __bpf_setsockopt(struct sock *sk, int l=
+evel, int optname,
+ 		default:
+ 			ret =3D -EINVAL;
+ 		}
+-	} else if (IS_ENABLED(CONFIG_INET) && level =3D=3D SOL_TCP &&
+-		   sk->sk_prot->setsockopt =3D=3D tcp_setsockopt) {
+-		if (optname >=3D TCP_BPF_IW)
+-			return bpf_sol_tcp_setsockopt(sk, optname,
+-						      optval, optlen);
+-
+-		if (optname =3D=3D TCP_CONGESTION) {
+-			char name[TCP_CA_NAME_MAX];
+-
+-			strncpy(name, optval, min_t(long, optlen,
+-						    TCP_CA_NAME_MAX-1));
+-			name[TCP_CA_NAME_MAX-1] =3D 0;
+-			ret =3D tcp_set_congestion_control(sk, name, false, true);
+-		} else {
+-			struct inet_connection_sock *icsk =3D inet_csk(sk);
+-			struct tcp_sock *tp =3D tcp_sk(sk);
+-
+-			if (optlen !=3D sizeof(int))
+-				return -EINVAL;
+-
+-			val =3D *((int *)optval);
+-			/* Only some options are supported */
+-			switch (optname) {
+-			case TCP_SAVE_SYN:
+-				if (val < 0 || val > 1)
+-					ret =3D -EINVAL;
+-				else
+-					tp->save_syn =3D val;
+-				break;
+-			case TCP_KEEPIDLE:
+-				ret =3D tcp_sock_set_keepidle_locked(sk, val);
+-				break;
+-			case TCP_KEEPINTVL:
+-				if (val < 1 || val > MAX_TCP_KEEPINTVL)
+-					ret =3D -EINVAL;
+-				else
+-					tp->keepalive_intvl =3D val * HZ;
+-				break;
+-			case TCP_KEEPCNT:
+-				if (val < 1 || val > MAX_TCP_KEEPCNT)
+-					ret =3D -EINVAL;
+-				else
+-					tp->keepalive_probes =3D val;
+-				break;
+-			case TCP_SYNCNT:
+-				if (val < 1 || val > MAX_TCP_SYNCNT)
+-					ret =3D -EINVAL;
+-				else
+-					icsk->icsk_syn_retries =3D val;
+-				break;
+-			case TCP_USER_TIMEOUT:
+-				if (val < 0)
+-					ret =3D -EINVAL;
+-				else
+-					icsk->icsk_user_timeout =3D val;
+-				break;
+-			case TCP_NOTSENT_LOWAT:
+-				tp->notsent_lowat =3D val;
+-				sk->sk_write_space(sk);
+-				break;
+-			case TCP_WINDOW_CLAMP:
+-				ret =3D tcp_set_window_clamp(sk, val);
+-				break;
+-			default:
+-				ret =3D -EINVAL;
+-			}
+-		}
++	} else if (IS_ENABLED(CONFIG_INET) && level =3D=3D SOL_TCP) {
++		return sol_tcp_setsockopt(sk, optname, optval, optlen);
+ 	} else {
+ 		ret =3D -EINVAL;
+ 	}
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index cfed84b1883f..a6986f201f92 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -3479,8 +3479,8 @@ int tcp_set_window_clamp(struct sock *sk, int val)
+ /*
+  *	Socket option code for TCP.
+  */
+-static int do_tcp_setsockopt(struct sock *sk, int level, int optname,
+-		sockptr_t optval, unsigned int optlen)
++int do_tcp_setsockopt(struct sock *sk, int level, int optname,
++		      sockptr_t optval, unsigned int optlen)
+ {
+ 	struct tcp_sock *tp =3D tcp_sk(sk);
+ 	struct inet_connection_sock *icsk =3D inet_csk(sk);
+--=20
+2.30.2
 
