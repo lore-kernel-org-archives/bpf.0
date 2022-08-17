@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B54B4C25B08
-	for <bpf@archiver.kernel.org>; Wed, 17 Aug 2022 06:23:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6406CC25B08
+	for <bpf@archiver.kernel.org>; Wed, 17 Aug 2022 06:29:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbiHQGXF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Aug 2022 02:23:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51102 "EHLO
+        id S229746AbiHQG3A (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Aug 2022 02:29:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbiHQGXE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 17 Aug 2022 02:23:04 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5A77B28C
-        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 23:23:03 -0700 (PDT)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 27H0Wbx8028672
-        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 23:23:02 -0700
+        with ESMTP id S229462AbiHQG27 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 17 Aug 2022 02:28:59 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A69E31DE6
+        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 23:28:58 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27H0UR1D013355
+        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 23:28:58 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=rDNYBH7Bv8pfgDHD18fUmBZ0xQFnWCFlQmHSQYNv/5s=;
- b=m/RNpt0kR0ktEko/zLHF54rl9EHwGpw2N6YiTySq27XIf4rSyxmtiV/4lNjvpVoRM6IF
- oxzIW5vinXDVx/2t89cxKmBQY2YSdpRujaAD64QMTFu2kz9fEf8e0t2waR8yv7ofj3b8
- cLBsTQc6LYt3c+Djju/Y26Yq0FBt0OqvQWs= 
+ bh=IpRE4QMT7DpbDi59QcyrlbkiR3lL4fl7L+nqzsfc95U=;
+ b=AtuRiivmOu8Rjsek7xnw9F8dR6kimVh9HhFwInnX1vanpjUQ9d8cU/TzJ1jTwfjzywgN
+ diDrXTYYgOGc1NB++hOnqGJBXC7CGHEcZhtxZw4/CocBLI8qZLcb3eMJa5kagmW37LkR
+ 3g9dJ4UzqoZy+/um/5HVyIZjrqHZUhjthD4= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3j0nvjh70q-3
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j0nuds7j0-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 23:23:02 -0700
-Received: from twshared22413.18.frc3.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 23:28:58 -0700
+Received: from twshared14818.18.frc3.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 16 Aug 2022 23:23:00 -0700
+ 15.1.2375.31; Tue, 16 Aug 2022 23:28:57 -0700
 Received: by devbig933.frc1.facebook.com (Postfix, from userid 6611)
-        id 4F975825DC41; Tue, 16 Aug 2022 23:17:30 -0700 (PDT)
+        id 0B87F825DD0D; Tue, 16 Aug 2022 23:18:04 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -44,9 +44,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>, <kernel-team@fb.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Stanislav Fomichev <sdf@google.com>
-Subject: [PATCH v4 bpf-next 04/15] bpf: net: Change do_tcp_setsockopt() to use the sockopt's lock_sock() and capable()
-Date:   Tue, 16 Aug 2022 23:17:30 -0700
-Message-ID: <20220817061730.4176021-1-kafai@fb.com>
+Subject: [PATCH v4 bpf-next 09/15] bpf: Change bpf_setsockopt(SOL_SOCKET) to reuse sk_setsockopt()
+Date:   Tue, 16 Aug 2022 23:18:04 -0700
+Message-ID: <20220817061804.4178920-1-kafai@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220817061704.4174272-1-kafai@fb.com>
 References: <20220817061704.4174272-1-kafai@fb.com>
@@ -54,8 +54,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: yFxCZygYMRxH8GrwaP6ud5Wxj6-kGWX0
-X-Proofpoint-ORIG-GUID: yFxCZygYMRxH8GrwaP6ud5Wxj6-kGWX0
+X-Proofpoint-GUID: y_bS2tEbckPdsf83LLgw91SQ4vvj7JnF
+X-Proofpoint-ORIG-GUID: y_bS2tEbckPdsf83LLgw91SQ4vvj7JnF
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-17_04,2022-08-16_02,2022-06-22_01
@@ -63,80 +63,206 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Similar to the earlier patch that avoids sk_setsockopt() from
-taking sk lock and doing capable test when called by bpf.  This patch
-changes do_tcp_setsockopt() to use the sockopt_{lock,release}_sock()
-and sockopt_[ns_]capable().
+After the prep work in the previous patches,
+this patch removes most of the dup code from bpf_setsockopt(SOL_SOCKET)
+and reuses them from sk_setsockopt().
+
+The sock ptr test is added to the SO_RCVLOWAT because
+the sk->sk_socket could be NULL in some of the bpf hooks.
+
+The existing optname white-list is refactored into a new
+function sol_socket_setsockopt().
 
 Reviewed-by: Stanislav Fomichev <sdf@google.com>
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- net/ipv4/tcp.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ include/net/sock.h |   2 +
+ net/core/filter.c  | 124 +++++++++++----------------------------------
+ net/core/sock.c    |   6 +--
+ 3 files changed, 34 insertions(+), 98 deletions(-)
 
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 970e9a2cca4a..cfed84b1883f 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -3202,7 +3202,7 @@ EXPORT_SYMBOL(tcp_disconnect);
+diff --git a/include/net/sock.h b/include/net/sock.h
+index 72b78c2b6f83..b7e159f9d7bf 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -1800,6 +1800,8 @@ void sock_pfree(struct sk_buff *skb);
+ #define sock_edemux sock_efree
+ #endif
 =20
- static inline bool tcp_can_repair_sock(const struct sock *sk)
++int sk_setsockopt(struct sock *sk, int level, int optname,
++		  sockptr_t optval, unsigned int optlen);
+ int sock_setsockopt(struct socket *sock, int level, int op,
+ 		    sockptr_t optval, unsigned int optlen);
+=20
+diff --git a/net/core/filter.c b/net/core/filter.c
+index a663d7b96bad..6f5bcc8df487 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -5013,109 +5013,43 @@ static const struct bpf_func_proto bpf_get_socke=
+t_uid_proto =3D {
+ 	.arg1_type      =3D ARG_PTR_TO_CTX,
+ };
+=20
++static int sol_socket_setsockopt(struct sock *sk, int optname,
++				 char *optval, int optlen)
++{
++	switch (optname) {
++	case SO_SNDBUF:
++	case SO_RCVBUF:
++	case SO_KEEPALIVE:
++	case SO_PRIORITY:
++	case SO_REUSEPORT:
++	case SO_RCVLOWAT:
++	case SO_MARK:
++	case SO_MAX_PACING_RATE:
++	case SO_BINDTOIFINDEX:
++	case SO_TXREHASH:
++		if (optlen !=3D sizeof(int))
++			return -EINVAL;
++		break;
++	case SO_BINDTODEVICE:
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return sk_setsockopt(sk, SOL_SOCKET, optname,
++			     KERNEL_SOCKPTR(optval), optlen);
++}
++
+ static int __bpf_setsockopt(struct sock *sk, int level, int optname,
+ 			    char *optval, int optlen)
  {
--	return ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN) &&
-+	return sockopt_ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN) &&
- 		(sk->sk_state !=3D TCP_LISTEN);
- }
+-	char devname[IFNAMSIZ];
+-	int val, valbool;
+-	struct net *net;
+-	int ifindex;
+-	int ret =3D 0;
++	int val, ret =3D 0;
 =20
-@@ -3502,11 +3502,11 @@ static int do_tcp_setsockopt(struct sock *sk, int=
- level, int optname,
- 			return -EFAULT;
- 		name[val] =3D 0;
+ 	if (!sk_fullsock(sk))
+ 		return -EINVAL;
 =20
--		lock_sock(sk);
-+		sockopt_lock_sock(sk);
- 		err =3D tcp_set_congestion_control(sk, name, true,
--						 ns_capable(sock_net(sk)->user_ns,
--							    CAP_NET_ADMIN));
--		release_sock(sk);
-+						 sockopt_ns_capable(sock_net(sk)->user_ns,
-+								    CAP_NET_ADMIN));
-+		sockopt_release_sock(sk);
- 		return err;
- 	}
- 	case TCP_ULP: {
-@@ -3522,9 +3522,9 @@ static int do_tcp_setsockopt(struct sock *sk, int l=
-evel, int optname,
- 			return -EFAULT;
- 		name[val] =3D 0;
+ 	if (level =3D=3D SOL_SOCKET) {
+-		if (optlen !=3D sizeof(int) && optname !=3D SO_BINDTODEVICE)
+-			return -EINVAL;
+-		val =3D *((int *)optval);
+-		valbool =3D val ? 1 : 0;
+-
+-		/* Only some socketops are supported */
+-		switch (optname) {
+-		case SO_RCVBUF:
+-			val =3D min_t(u32, val, sysctl_rmem_max);
+-			val =3D min_t(int, val, INT_MAX / 2);
+-			sk->sk_userlocks |=3D SOCK_RCVBUF_LOCK;
+-			WRITE_ONCE(sk->sk_rcvbuf,
+-				   max_t(int, val * 2, SOCK_MIN_RCVBUF));
+-			break;
+-		case SO_SNDBUF:
+-			val =3D min_t(u32, val, sysctl_wmem_max);
+-			val =3D min_t(int, val, INT_MAX / 2);
+-			sk->sk_userlocks |=3D SOCK_SNDBUF_LOCK;
+-			WRITE_ONCE(sk->sk_sndbuf,
+-				   max_t(int, val * 2, SOCK_MIN_SNDBUF));
+-			break;
+-		case SO_MAX_PACING_RATE: /* 32bit version */
+-			if (val !=3D ~0U)
+-				cmpxchg(&sk->sk_pacing_status,
+-					SK_PACING_NONE,
+-					SK_PACING_NEEDED);
+-			sk->sk_max_pacing_rate =3D (val =3D=3D ~0U) ?
+-						 ~0UL : (unsigned int)val;
+-			sk->sk_pacing_rate =3D min(sk->sk_pacing_rate,
+-						 sk->sk_max_pacing_rate);
+-			break;
+-		case SO_PRIORITY:
+-			sk->sk_priority =3D val;
+-			break;
+-		case SO_RCVLOWAT:
+-			if (val < 0)
+-				val =3D INT_MAX;
+-			if (sk->sk_socket && sk->sk_socket->ops->set_rcvlowat)
+-				ret =3D sk->sk_socket->ops->set_rcvlowat(sk, val);
+-			else
+-				WRITE_ONCE(sk->sk_rcvlowat, val ? : 1);
+-			break;
+-		case SO_MARK:
+-			if (sk->sk_mark !=3D val) {
+-				sk->sk_mark =3D val;
+-				sk_dst_reset(sk);
+-			}
+-			break;
+-		case SO_BINDTODEVICE:
+-			optlen =3D min_t(long, optlen, IFNAMSIZ - 1);
+-			strncpy(devname, optval, optlen);
+-			devname[optlen] =3D 0;
+-
+-			ifindex =3D 0;
+-			if (devname[0] !=3D '\0') {
+-				struct net_device *dev;
+-
+-				ret =3D -ENODEV;
+-
+-				net =3D sock_net(sk);
+-				dev =3D dev_get_by_name(net, devname);
+-				if (!dev)
+-					break;
+-				ifindex =3D dev->ifindex;
+-				dev_put(dev);
+-			}
+-			fallthrough;
+-		case SO_BINDTOIFINDEX:
+-			if (optname =3D=3D SO_BINDTOIFINDEX)
+-				ifindex =3D val;
+-			ret =3D sock_bindtoindex(sk, ifindex, false);
+-			break;
+-		case SO_KEEPALIVE:
+-			if (sk->sk_prot->keepalive)
+-				sk->sk_prot->keepalive(sk, valbool);
+-			sock_valbool_flag(sk, SOCK_KEEPOPEN, valbool);
+-			break;
+-		case SO_REUSEPORT:
+-			sk->sk_reuseport =3D valbool;
+-			break;
+-		case SO_TXREHASH:
+-			if (val < -1 || val > 1) {
+-				ret =3D -EINVAL;
+-				break;
+-			}
+-			sk->sk_txrehash =3D (u8)val;
+-			break;
+-		default:
+-			ret =3D -EINVAL;
+-		}
++		return sol_socket_setsockopt(sk, optname, optval, optlen);
+ 	} else if (IS_ENABLED(CONFIG_INET) && level =3D=3D SOL_IP) {
+ 		if (optlen !=3D sizeof(int) || sk->sk_family !=3D AF_INET)
+ 			return -EINVAL;
+diff --git a/net/core/sock.c b/net/core/sock.c
+index 7ea46e4700fd..2a6f84702eb9 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -1077,8 +1077,8 @@ EXPORT_SYMBOL(sockopt_capable);
+  *	at the socket level. Everything here is generic.
+  */
 =20
--		lock_sock(sk);
-+		sockopt_lock_sock(sk);
- 		err =3D tcp_set_ulp(sk, name);
--		release_sock(sk);
-+		sockopt_release_sock(sk);
- 		return err;
- 	}
- 	case TCP_FASTOPEN_KEY: {
-@@ -3557,7 +3557,7 @@ static int do_tcp_setsockopt(struct sock *sk, int l=
-evel, int optname,
- 	if (copy_from_sockptr(&val, optval, sizeof(val)))
- 		return -EFAULT;
-=20
--	lock_sock(sk);
-+	sockopt_lock_sock(sk);
-=20
- 	switch (optname) {
- 	case TCP_MAXSEG:
-@@ -3779,7 +3779,7 @@ static int do_tcp_setsockopt(struct sock *sk, int l=
-evel, int optname,
- 		break;
- 	}
-=20
--	release_sock(sk);
-+	sockopt_release_sock(sk);
- 	return err;
- }
-=20
+-static int sk_setsockopt(struct sock *sk, int level, int optname,
+-			 sockptr_t optval, unsigned int optlen)
++int sk_setsockopt(struct sock *sk, int level, int optname,
++		  sockptr_t optval, unsigned int optlen)
+ {
+ 	struct so_timestamping timestamping;
+ 	struct socket *sock =3D sk->sk_socket;
+@@ -1264,7 +1264,7 @@ static int sk_setsockopt(struct sock *sk, int level=
+, int optname,
+ 	case SO_RCVLOWAT:
+ 		if (val < 0)
+ 			val =3D INT_MAX;
+-		if (sock->ops->set_rcvlowat)
++		if (sock && sock->ops->set_rcvlowat)
+ 			ret =3D sock->ops->set_rcvlowat(sk, val);
+ 		else
+ 			WRITE_ONCE(sk->sk_rcvlowat, val ? : 1);
 --=20
 2.30.2
 
