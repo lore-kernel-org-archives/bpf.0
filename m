@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E4C2C25B08
-	for <bpf@archiver.kernel.org>; Wed, 17 Aug 2022 06:20:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B54B4C25B08
+	for <bpf@archiver.kernel.org>; Wed, 17 Aug 2022 06:23:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233326AbiHQGT7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Aug 2022 02:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45164 "EHLO
+        id S229981AbiHQGXF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Aug 2022 02:23:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231920AbiHQGT7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 17 Aug 2022 02:19:59 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2793967172
-        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 23:19:58 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27H0Rqmj001573
-        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 23:19:57 -0700
+        with ESMTP id S229936AbiHQGXE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 17 Aug 2022 02:23:04 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5A77B28C
+        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 23:23:03 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 27H0Wbx8028672
+        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 23:23:02 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=3p2HTvJo/KiB0bwCllk5DnuaCAIxYYmMk/pkI/2jg9o=;
- b=gUECw0zlpdc4RG19F5PyzAGpmTpDl90eBUoOnf/oDJzjUizQpmAViGfAD1gKQSAvzCO3
- m7/mTdQMWg07SRwdWIp7ODN7dgPOQ5xfPXKXSrGr9qclMgLtQmzl5NGh9Q5jtL+rRK5n
- U70yemN/YABBVnQsiDlukJH8QNdmejkVyLI= 
+ bh=rDNYBH7Bv8pfgDHD18fUmBZ0xQFnWCFlQmHSQYNv/5s=;
+ b=m/RNpt0kR0ktEko/zLHF54rl9EHwGpw2N6YiTySq27XIf4rSyxmtiV/4lNjvpVoRM6IF
+ oxzIW5vinXDVx/2t89cxKmBQY2YSdpRujaAD64QMTFu2kz9fEf8e0t2waR8yv7ofj3b8
+ cLBsTQc6LYt3c+Djju/Y26Yq0FBt0OqvQWs= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j0nt9h6y2-7
+        by m0001303.ppops.net (PPS) with ESMTPS id 3j0nvjh70q-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 23:19:57 -0700
-Received: from twshared7570.37.frc1.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 23:23:02 -0700
+Received: from twshared22413.18.frc3.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 16 Aug 2022 23:19:56 -0700
+ 15.1.2375.31; Tue, 16 Aug 2022 23:23:00 -0700
 Received: by devbig933.frc1.facebook.com (Postfix, from userid 6611)
-        id 4436E825DBF9; Tue, 16 Aug 2022 23:17:11 -0700 (PDT)
+        id 4F975825DC41; Tue, 16 Aug 2022 23:17:30 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -44,9 +44,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>, <kernel-team@fb.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Stanislav Fomichev <sdf@google.com>
-Subject: [PATCH v4 bpf-next 01/15] net: Add sk_setsockopt() to take the sk ptr instead of the sock ptr
-Date:   Tue, 16 Aug 2022 23:17:11 -0700
-Message-ID: <20220817061711.4175048-1-kafai@fb.com>
+Subject: [PATCH v4 bpf-next 04/15] bpf: net: Change do_tcp_setsockopt() to use the sockopt's lock_sock() and capable()
+Date:   Tue, 16 Aug 2022 23:17:30 -0700
+Message-ID: <20220817061730.4176021-1-kafai@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220817061704.4174272-1-kafai@fb.com>
 References: <20220817061704.4174272-1-kafai@fb.com>
@@ -54,8 +54,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: dhdPRvIWAbSfdim9_Wk-Y2FE9Pqqxthz
-X-Proofpoint-ORIG-GUID: dhdPRvIWAbSfdim9_Wk-Y2FE9Pqqxthz
+X-Proofpoint-GUID: yFxCZygYMRxH8GrwaP6ud5Wxj6-kGWX0
+X-Proofpoint-ORIG-GUID: yFxCZygYMRxH8GrwaP6ud5Wxj6-kGWX0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-17_04,2022-08-16_02,2022-06-22_01
@@ -63,75 +63,80 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-A latter patch refactors bpf_setsockopt(SOL_SOCKET) with the
-sock_setsockopt() to avoid code duplication and code
-drift between the two duplicates.
-
-The current sock_setsockopt() takes sock ptr as the argument.
-The very first thing of this function is to get back the sk ptr
-by 'sk =3D sock->sk'.
-
-bpf_setsockopt() could be called when the sk does not have
-the sock ptr created.  Meaning sk->sk_socket is NULL.  For example,
-when a passive tcp connection has just been established but has yet
-been accept()-ed.  Thus, it cannot use the sock_setsockopt(sk->sk_socket)
-or else it will pass a NULL ptr.
-
-This patch moves all sock_setsockopt implementation to the newly
-added sk_setsockopt().  The new sk_setsockopt() takes a sk ptr
-and immediately gets the sock ptr by 'sock =3D sk->sk_socket'
-
-The existing sock_setsockopt(sock) is changed to call
-sk_setsockopt(sock->sk).  All existing callers have both sock->sk
-and sk->sk_socket pointer.
-
-The latter patch will make bpf_setsockopt(SOL_SOCKET) call
-sk_setsockopt(sk) directly.  The bpf_setsockopt(SOL_SOCKET) does
-not use the optnames that require sk->sk_socket, so it will
-be safe.
+Similar to the earlier patch that avoids sk_setsockopt() from
+taking sk lock and doing capable test when called by bpf.  This patch
+changes do_tcp_setsockopt() to use the sockopt_{lock,release}_sock()
+and sockopt_[ns_]capable().
 
 Reviewed-by: Stanislav Fomichev <sdf@google.com>
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- net/core/sock.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ net/ipv4/tcp.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/net/core/sock.c b/net/core/sock.c
-index 4cb957d934a2..20269c37ab3b 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -1041,12 +1041,12 @@ static int sock_reserve_memory(struct sock *sk, i=
-nt bytes)
-  *	at the socket level. Everything here is generic.
-  */
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index 970e9a2cca4a..cfed84b1883f 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -3202,7 +3202,7 @@ EXPORT_SYMBOL(tcp_disconnect);
 =20
--int sock_setsockopt(struct socket *sock, int level, int optname,
--		    sockptr_t optval, unsigned int optlen)
-+static int sk_setsockopt(struct sock *sk, int level, int optname,
-+			 sockptr_t optval, unsigned int optlen)
+ static inline bool tcp_can_repair_sock(const struct sock *sk)
  {
- 	struct so_timestamping timestamping;
-+	struct socket *sock =3D sk->sk_socket;
- 	struct sock_txtime sk_txtime;
--	struct sock *sk =3D sock->sk;
- 	int val;
- 	int valbool;
- 	struct linger ling;
-@@ -1499,6 +1499,13 @@ int sock_setsockopt(struct socket *sock, int level=
-, int optname,
- 	release_sock(sk);
- 	return ret;
+-	return ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN) &&
++	return sockopt_ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN) &&
+ 		(sk->sk_state !=3D TCP_LISTEN);
  }
-+
-+int sock_setsockopt(struct socket *sock, int level, int optname,
-+		    sockptr_t optval, unsigned int optlen)
-+{
-+	return sk_setsockopt(sock->sk, level, optname,
-+			     optval, optlen);
-+}
- EXPORT_SYMBOL(sock_setsockopt);
 =20
- static const struct cred *sk_get_peer_cred(struct sock *sk)
+@@ -3502,11 +3502,11 @@ static int do_tcp_setsockopt(struct sock *sk, int=
+ level, int optname,
+ 			return -EFAULT;
+ 		name[val] =3D 0;
+=20
+-		lock_sock(sk);
++		sockopt_lock_sock(sk);
+ 		err =3D tcp_set_congestion_control(sk, name, true,
+-						 ns_capable(sock_net(sk)->user_ns,
+-							    CAP_NET_ADMIN));
+-		release_sock(sk);
++						 sockopt_ns_capable(sock_net(sk)->user_ns,
++								    CAP_NET_ADMIN));
++		sockopt_release_sock(sk);
+ 		return err;
+ 	}
+ 	case TCP_ULP: {
+@@ -3522,9 +3522,9 @@ static int do_tcp_setsockopt(struct sock *sk, int l=
+evel, int optname,
+ 			return -EFAULT;
+ 		name[val] =3D 0;
+=20
+-		lock_sock(sk);
++		sockopt_lock_sock(sk);
+ 		err =3D tcp_set_ulp(sk, name);
+-		release_sock(sk);
++		sockopt_release_sock(sk);
+ 		return err;
+ 	}
+ 	case TCP_FASTOPEN_KEY: {
+@@ -3557,7 +3557,7 @@ static int do_tcp_setsockopt(struct sock *sk, int l=
+evel, int optname,
+ 	if (copy_from_sockptr(&val, optval, sizeof(val)))
+ 		return -EFAULT;
+=20
+-	lock_sock(sk);
++	sockopt_lock_sock(sk);
+=20
+ 	switch (optname) {
+ 	case TCP_MAXSEG:
+@@ -3779,7 +3779,7 @@ static int do_tcp_setsockopt(struct sock *sk, int l=
+evel, int optname,
+ 		break;
+ 	}
+=20
+-	release_sock(sk);
++	sockopt_release_sock(sk);
+ 	return err;
+ }
+=20
 --=20
 2.30.2
 
