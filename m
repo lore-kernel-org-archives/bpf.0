@@ -2,101 +2,81 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 020BBC25B0E
-	for <bpf@archiver.kernel.org>; Wed, 17 Aug 2022 01:05:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF338C32771
+	for <bpf@archiver.kernel.org>; Wed, 17 Aug 2022 01:39:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238067AbiHQBFP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Aug 2022 21:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52836 "EHLO
+        id S238052AbiHQBjh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Aug 2022 21:39:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237746AbiHQBFP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Aug 2022 21:05:15 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBAB47FF81
-        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 18:05:14 -0700 (PDT)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27H0UXrq013396
-        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 18:05:14 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=eSrAtbKigXBobI01VcYS78mQIkOg9A67DdYgKlOh2+k=;
- b=JrPt8oxZgdI0BZyJMQqdKyIKhdIbbbIM6tl7+PrX5kcF4B++Bl/aT82VEODlR8rcfhQy
- Fc5DZLk8Itww4sGZKddmbM1tLnmx/f5WftXdN+/dlSWO2//xH4M+rhDjJfEupq6XWCFf
- ynOsDLXrWuMLJqDaISMOe/0g0UaKBEsLHtU= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j0nudr4a1-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 18:05:14 -0700
-Received: from twshared8442.02.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 16 Aug 2022 18:05:12 -0700
-Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
-        id EB7E5BFC4FD5; Tue, 16 Aug 2022 18:05:05 -0700 (PDT)
-From:   Dave Marchevsky <davemarchevsky@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S238042AbiHQBjg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Aug 2022 21:39:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5335995AFE;
+        Tue, 16 Aug 2022 18:39:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6CAD8B81B8D;
+        Wed, 17 Aug 2022 01:39:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81E42C433D6;
+        Wed, 17 Aug 2022 01:39:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660700372;
+        bh=WNI4T2l1xlFYKRJlgSA2O9Bc98a5ZBHH6E/B6tCD50A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EEknQiKrl/fuhzX2gYjfHuS2LhzKcvaeq3V/YtQcZVtcI78dfH+0IsdjveRIYTLHh
+         1grv26DVJhODDyf1ecCVDxMbjo1sSJ4DqiS37XphKS80Gl4NvqNQhdrIPoDTnt3Abz
+         QmkJq5ksZu/qUhsA29utPhTN2t2Qz3uH2BuTQSYGUxF52YZT8KVZcInAT4lYyTZO+Y
+         lDx+luMTE+zYuCCY/I1QGnAM3LhLa04WQaCJCog9XRcyZgpzcM340le5rc3eHddq+y
+         mP8yQCYrjv4h0HShV9WvfJ8uR2lQaw0H292s6ns2Y3uuqlSs4UD0nXtewuds+18bpf
+         VHHXp+xAm2gfQ==
+Date:   Tue, 16 Aug 2022 18:39:30 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Martin KaFai Lau <kafai@fb.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        Hawkins Jiawei <yin31149@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Kernel Team <kernel-team@fb.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [PATCH bpf-next] bpf: Sync include/uapi/linux/bpf.h with tools/include/uapi/linux/bpf.h
-Date:   Tue, 16 Aug 2022 18:05:04 -0700
-Message-ID: <20220817010504.4072757-1-davemarchevsky@fb.com>
-X-Mailer: git-send-email 2.30.2
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        bpf@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>
+Subject: Re: [PATCH] net: Fix suspicious RCU usage in
+ bpf_sk_reuseport_detach()
+Message-ID: <20220816183930.2328d46d@kernel.org>
+In-Reply-To: <20220817004319.fd7dekpqeumbvmsh@kafai-mbp>
+References: <20220816103452.479281-1-yin31149@gmail.com>
+        <166064248071.3502205.10036394558814861778.stgit@warthog.procyon.org.uk>
+        <804153.1660684606@warthog.procyon.org.uk>
+        <20220816164435.0558ef94@kernel.org>
+        <20220817004319.fd7dekpqeumbvmsh@kafai-mbp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: VBIIdiq6ghGTtaZjsFTN6j9JSpmA3oDV
-X-Proofpoint-ORIG-GUID: VBIIdiq6ghGTtaZjsFTN6j9JSpmA3oDV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-16_08,2022-08-16_02,2022-06-22_01
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Commit 94dfc73e7cf4 ("treewide: uapi: Replace zero-length arrays with
-flexible-array members") modified bpf_lpm_trie_key struct's data member
-in include/uapi/linux/bpf.h, but didn't make the same change in tools
-dir's copy. Propagate it over and fix comment indentation as well.
+On Tue, 16 Aug 2022 17:43:19 -0700 Martin KaFai Lau wrote:
+> > I like your version because it documents what the lock protecting this
+> > field is.
+> > 
+> > In fact should we also add && sock_owned_by_user(). Martin, WDYT? Would
+> > that work for reuseport? Jakub S is fixing l2tp to hold the socket lock
+> > while setting this field, yet most places take the callback lock...  
+>
+> It needs to take a closer look at where the lock_sock() has already
+> been acquired and also need to consider the lock ordering with reuseport_lock.
+> It probably should work but may need a separate patch to discuss those
+> considerations ?
 
-This is a nonfunctional change.
-
-Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
----
- include/uapi/linux/bpf.h       | 2 +-
- tools/include/uapi/linux/bpf.h | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 934a2a8beb87..0b09b5463afd 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -79,7 +79,7 @@ struct bpf_insn {
- /* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
- struct bpf_lpm_trie_key {
- 	__u32	prefixlen;	/* up to 32 for AF_INET, 128 for AF_INET6 */
--	__u8	data[];	/* Arbitrary size */
-+	__u8	data[];		/* Arbitrary size */
- };
-=20
- struct bpf_cgroup_storage_key {
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index 1d6085e15fc8..0b09b5463afd 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -79,7 +79,7 @@ struct bpf_insn {
- /* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
- struct bpf_lpm_trie_key {
- 	__u32	prefixlen;	/* up to 32 for AF_INET, 128 for AF_INET6 */
--	__u8	data[0];	/* Arbitrary size */
-+	__u8	data[];		/* Arbitrary size */
- };
-=20
- struct bpf_cgroup_storage_key {
---=20
-2.30.2
-
+Right, the users of the field with a bit allocated protect the writes
+with the callback lock, so we can hard code the check against the
+callback lock for now and revisit later if needed.
