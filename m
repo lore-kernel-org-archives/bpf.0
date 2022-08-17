@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6980C25B08
-	for <bpf@archiver.kernel.org>; Wed, 17 Aug 2022 06:29:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07A4FC25B08
+	for <bpf@archiver.kernel.org>; Wed, 17 Aug 2022 06:35:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbiHQG3K (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Aug 2022 02:29:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
+        id S238635AbiHQGfB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Aug 2022 02:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbiHQG3J (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 17 Aug 2022 02:29:09 -0400
+        with ESMTP id S229687AbiHQGfA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 17 Aug 2022 02:35:00 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911BD31DE6
-        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 23:29:07 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27H0QJWN017706
-        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 23:29:07 -0700
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116A87757F
+        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 23:35:00 -0700 (PDT)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27H0RnlP001547
+        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 23:34:59 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=T73Kh4riqgtkXF0ouQn+38NEgIX47ntvMOV6xn6a1Mc=;
- b=ILTmugEwW5rWJdaljB9PVsSQuJfnZZn650Iup6GGA2nYAGkKsZTpBiM4l8H4znBb+ULf
- p/Aw8ee28VMkMHOo9onr5fgHxjoIeM5tqrR2qs1vbegO9ghqQBxMX6W4uBieTbWA7KdF
- PBzP4FsfE9GsE/dhGyzNz5OD9yln1Bm4Rqk= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j0nsjh7m6-1
+ bh=LWvmoWcjp/8fgeoyXvqACqQ+iib8lQuxwzZSCPD/NKY=;
+ b=il8v4ifWT1VD+5w4Zp2ugx59jzL8An8yzRtyhRbhlX9ogWK6txOVgBHRx0JsCnqVmCOu
+ O75ekIQSAB65KHd1rjPM/196uXZnDkOMabz/4zG4Ov+xBRs60ucMAoTRHZNv7oTrfYWa
+ jTHP0ttbzmyVjLSWY5WP4OVD7BcfIxwShZs= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j0nt9h8g3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 23:29:07 -0700
-Received: from twshared7570.37.frc1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 16 Aug 2022 23:34:59 -0700
+Received: from twshared20276.35.frc1.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 16 Aug 2022 23:29:05 -0700
+ 15.1.2375.31; Tue, 16 Aug 2022 23:34:59 -0700
 Received: by devbig933.frc1.facebook.com (Postfix, from userid 6611)
-        id 93F03825DE1B; Tue, 16 Aug 2022 23:18:41 -0700 (PDT)
+        id 075D5825DCD6; Tue, 16 Aug 2022 23:17:52 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -44,9 +44,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>, <kernel-team@fb.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Stanislav Fomichev <sdf@google.com>
-Subject: [PATCH v4 bpf-next 14/15] bpf: Add a few optnames to bpf_setsockopt
-Date:   Tue, 16 Aug 2022 23:18:41 -0700
-Message-ID: <20220817061841.4181642-1-kafai@fb.com>
+Subject: [PATCH v4 bpf-next 07/15] bpf: Initialize the bpf_run_ctx in bpf_iter_run_prog()
+Date:   Tue, 16 Aug 2022 23:17:51 -0700
+Message-ID: <20220817061751.4177657-1-kafai@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220817061704.4174272-1-kafai@fb.com>
 References: <20220817061704.4174272-1-kafai@fb.com>
@@ -54,8 +54,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: UdRDRfZxnJt8mZ5vJni0GfgQF9_9OvqL
-X-Proofpoint-ORIG-GUID: UdRDRfZxnJt8mZ5vJni0GfgQF9_9OvqL
+X-Proofpoint-GUID: y9JEMgj9ytTq0WxTwL2JdLvAuO7RJFyB
+X-Proofpoint-ORIG-GUID: y9JEMgj9ytTq0WxTwL2JdLvAuO7RJFyB
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-17_04,2022-08-16_02,2022-06-22_01
@@ -63,69 +63,48 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds a few optnames for bpf_setsockopt:
-SO_REUSEADDR, IPV6_AUTOFLOWLABEL, TCP_MAXSEG, TCP_NODELAY,
-and TCP_THIN_LINEAR_TIMEOUTS.
+The bpf-iter-prog for tcp and unix sk can do bpf_setsockopt()
+which needs has_current_bpf_ctx() to decide if it is called by a
+bpf prog.  This patch initializes the bpf_run_ctx in
+bpf_iter_run_prog() for the has_current_bpf_ctx() to use.
 
-Thanks to the previous patches of this set, all additions can reuse
-the sk_setsockopt(), do_ipv6_setsockopt(), and do_tcp_setsockopt().
-The only change here is to allow them in bpf_setsockopt.
-
-The bpf prog has been able to read all members of a sk by
-using PTR_TO_BTF_ID of a sk.  The optname additions here can also be
-read by the same approach.  Meaning there is a way to read
-the values back.
-
-These optnames can also be added to bpf_getsockopt() later with
-another patch set that makes the bpf_getsockopt() to reuse
-the sock_getsockopt(), tcp_getsockopt(), and ip[v6]_getsockopt().
-Thus, this patch does not add more duplicated code to
-bpf_getsockopt() now.
-
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Reviewed-by: Stanislav Fomichev <sdf@google.com>
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- net/core/filter.c | 5 +++++
+ kernel/bpf/bpf_iter.c | 5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 23282b8cf61e..1acfaffeaf32 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -5017,6 +5017,7 @@ static int sol_socket_setsockopt(struct sock *sk, i=
-nt optname,
- 				 char *optval, int optlen)
+diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
+index 4b112aa8bba3..6476b2c03527 100644
+--- a/kernel/bpf/bpf_iter.c
++++ b/kernel/bpf/bpf_iter.c
+@@ -685,19 +685,24 @@ struct bpf_prog *bpf_iter_get_info(struct bpf_iter_=
+meta *meta, bool in_stop)
+=20
+ int bpf_iter_run_prog(struct bpf_prog *prog, void *ctx)
  {
- 	switch (optname) {
-+	case SO_REUSEADDR:
- 	case SO_SNDBUF:
- 	case SO_RCVBUF:
- 	case SO_KEEPALIVE:
-@@ -5093,11 +5094,14 @@ static int sol_tcp_setsockopt(struct sock *sk, in=
-t optname,
- 		return -EINVAL;
++	struct bpf_run_ctx run_ctx, *old_run_ctx;
+ 	int ret;
 =20
- 	switch (optname) {
-+	case TCP_NODELAY:
-+	case TCP_MAXSEG:
- 	case TCP_KEEPIDLE:
- 	case TCP_KEEPINTVL:
- 	case TCP_KEEPCNT:
- 	case TCP_SYNCNT:
- 	case TCP_WINDOW_CLAMP:
-+	case TCP_THIN_LINEAR_TIMEOUTS:
- 	case TCP_USER_TIMEOUT:
- 	case TCP_NOTSENT_LOWAT:
- 	case TCP_SAVE_SYN:
-@@ -5141,6 +5145,7 @@ static int sol_ipv6_setsockopt(struct sock *sk, int=
- optname,
-=20
- 	switch (optname) {
- 	case IPV6_TCLASS:
-+	case IPV6_AUTOFLOWLABEL:
- 		if (optlen !=3D sizeof(int))
- 			return -EINVAL;
- 		break;
+ 	if (prog->aux->sleepable) {
+ 		rcu_read_lock_trace();
+ 		migrate_disable();
+ 		might_fault();
++		old_run_ctx =3D bpf_set_run_ctx(&run_ctx);
+ 		ret =3D bpf_prog_run(prog, ctx);
++		bpf_reset_run_ctx(old_run_ctx);
+ 		migrate_enable();
+ 		rcu_read_unlock_trace();
+ 	} else {
+ 		rcu_read_lock();
+ 		migrate_disable();
++		old_run_ctx =3D bpf_set_run_ctx(&run_ctx);
+ 		ret =3D bpf_prog_run(prog, ctx);
++		bpf_reset_run_ctx(old_run_ctx);
+ 		migrate_enable();
+ 		rcu_read_unlock();
+ 	}
 --=20
 2.30.2
 
