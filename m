@@ -2,133 +2,167 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A340CC25B08
-	for <bpf@archiver.kernel.org>; Wed, 17 Aug 2022 09:12:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3C5EC32772
+	for <bpf@archiver.kernel.org>; Wed, 17 Aug 2022 09:29:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234694AbiHQJMa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Aug 2022 05:12:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40482 "EHLO
+        id S230216AbiHQJ3T (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Aug 2022 05:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234301AbiHQJM3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 17 Aug 2022 05:12:29 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92CD8696CC
-        for <bpf@vger.kernel.org>; Wed, 17 Aug 2022 02:12:28 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id w3so16694373edc.2
-        for <bpf@vger.kernel.org>; Wed, 17 Aug 2022 02:12:28 -0700 (PDT)
+        with ESMTP id S229620AbiHQJ3S (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 17 Aug 2022 05:29:18 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C2F27CF2;
+        Wed, 17 Aug 2022 02:29:16 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id y13so23444376ejp.13;
+        Wed, 17 Aug 2022 02:29:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc;
-        bh=hLU21of0cGMccaxHW7KCtt9n7ww1EHLploL9mLhUimI=;
-        b=h2tLDcuaAluzTCh/2uYox8F2BqwHH/cwNGXK61PGy2ukbPBH3yYM+ijTePqzl+ojyP
-         +LTrn0Qnj01jH9I+pTa2MTjMn+0ClYfLULK0D1TG5im7R+DrOG+CwRxO0s7RlA3MCCTy
-         4VbSt6ScxytQn8apJRSdHoYVdjhXaocL4Tdlc=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc;
+        bh=jljdedi6DAkIAYkCnbgj5IjVnTulkRPsvXaOGGTQHjk=;
+        b=CYrdM5leNid3d5aUornHuKlAPIq/tg/zwug8RUJg3j5tU/mlmvLw4iO09HoO9rewuy
+         ZfZoPfjf6lbjcmxsPH2HthMiXmtB9kaov+wNSxDX9sVPHwh2voBdySWIS13yeFYWGhGv
+         VuXrxQDvTZyoOcaQGoNZw0JY4xESY7jzNlcvSKiGY6jkPCSYTK44HiO/TBOpsD9kc1DH
+         gyhUiZgvUj7hgFtc2cdUzVKn03eBN7k9xnLrV/e4XrQkQ+sA7eE3CVkvaOP783Yi2kgY
+         QPS8wG9CEG8uvXxGGWJ2rt7M8t9TDxcHOlxS2CYHim6oUSSAcjr/4GN0l4mosF+nAisk
+         VI5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc;
-        bh=hLU21of0cGMccaxHW7KCtt9n7ww1EHLploL9mLhUimI=;
-        b=NZEp5MjMQrua4XE65qjcEOS6PKFdzSOizmrcMkErteUoyhUCD2XQ6PK7wGGZuU6RuP
-         y6cjlB6vSMnv1WLC73vJ7otFhGk0NvOuh3yL2AJfWaNd/V6rPEEVyjmyZ7ize0sUTI7a
-         s/0LymfqM7m7aaDfbGw7Te8CJV6mEjqsIUoDzb+MDzH1Mm4SSixQvA8ngYe+B/ea0rGL
-         r4hoPKOloKF/K8YC6oE3rKX4odLQmzEJAkRwoAMV5LD/54v5/3ABRuUW4yNJWP+PFWn/
-         FiiINtbpX3dUP5AjaQTw49aVBlHE5M4HanuCwkFLYevvdUZUQkiYonZYyEWOfuJy35tP
-         n2Ag==
-X-Gm-Message-State: ACgBeo1NULfZ9TKpVgHgZTpP2LttTqvHT3GXAEVI905p/pvf0VBoYmhX
-        GLMsKkyVAIXMZRNdEyvuLvNNaA==
-X-Google-Smtp-Source: AA6agR4cAqVXyyLznxJSp5An7Q5xuljyhx9l/fC38pTot2+Jtf6mm3PMiUncsE6nHeo4W3f+aVr8AQ==
-X-Received: by 2002:a05:6402:11cb:b0:43c:c7a3:ff86 with SMTP id j11-20020a05640211cb00b0043cc7a3ff86mr22793522edw.383.1660727547074;
-        Wed, 17 Aug 2022 02:12:27 -0700 (PDT)
-Received: from cloudflare.com (79.184.200.53.ipv4.supernova.orange.pl. [79.184.200.53])
-        by smtp.gmail.com with ESMTPSA id q23-20020a056402041700b0043cfda1368fsm10268523edv.82.2022.08.17.02.12.25
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
+        bh=jljdedi6DAkIAYkCnbgj5IjVnTulkRPsvXaOGGTQHjk=;
+        b=g9aWi0295dK1aWLTjxqlFEzpqaTCWo8amRV9Q0bzyQEmS3d3jQeKKzRZiBO0wKBB77
+         QpLjZ4sP9RKv6lK7KtTn/2yUNYO1kAkzD8PWD3qO0yNsf6f0wn9Y8g2FDTOm3+ysEmI0
+         4a2ajxNfaoC387gY2oNR2j6KdLnxo+j8ChozW+rLaEw1/b9Rc0JLIlhSNk0jay7r7Wno
+         51GpJSMp2LZbQOZdQWjkxCEejvxLbGqkU6DQ5cU3dmwI2Xodg6bhzpXpEJf2yqLfnpq5
+         RCXauokeOuiSOo+SrjjwEHMeY+hShhhkhElp2G/cm1kmRJhyYhUnjhFBT2SIXQNPZoHR
+         9Exw==
+X-Gm-Message-State: ACgBeo3Zx60mg14oyNAI4O0Lq8c/bqfrxPU/1VFxhECi/ALn7OzH5YmZ
+        PhwAgL3bxb7ZomrG3IvENeM=
+X-Google-Smtp-Source: AA6agR4MiAdMay67Au4I3uD3+4DBq5nNX1gACXdguiQjG+H8gS8v9LqNb0OxRpTdm2KNehcwOikG5A==
+X-Received: by 2002:a17:907:7d8c:b0:731:65f6:1f28 with SMTP id oz12-20020a1709077d8c00b0073165f61f28mr15361798ejc.91.1660728555133;
+        Wed, 17 Aug 2022 02:29:15 -0700 (PDT)
+Received: from krava ([83.240.61.33])
+        by smtp.gmail.com with ESMTPSA id p26-20020aa7cc9a000000b0043cc66d7accsm10210626edt.36.2022.08.17.02.29.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 02:12:26 -0700 (PDT)
-References: <20220809094915.150391-1-liujian56@huawei.com>
-User-agent: mu4e 1.6.10; emacs 27.2
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     Liu Jian <liujian56@huawei.com>, john.fastabend@gmail.com
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, daniel@iogearbox.net, andrii@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2] skmsg: Fix wrong last sg check in
- sk_msg_recvmsg()
-Date:   Wed, 17 Aug 2022 11:02:53 +0200
-In-reply-to: <20220809094915.150391-1-liujian56@huawei.com>
-Message-ID: <87ilmrw7wm.fsf@cloudflare.com>
+        Wed, 17 Aug 2022 02:29:14 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Wed, 17 Aug 2022 11:29:12 +0200
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
+Subject: Re: [RFC] ftrace: Add support to keep some functions out of ftrace
+Message-ID: <Yvy06GPn45D0rD7n@krava>
+References: <Yvo+EpO9dN30G0XE@worktop.programming.kicks-ass.net>
+ <CAADnVQJfvn2RYydqgO-nS_K+C8WJL7BdCnR44MiMF4rnAwWM5A@mail.gmail.com>
+ <YvpZJQGQdVaa2Oh4@worktop.programming.kicks-ass.net>
+ <CAADnVQKyfrFTZOM9F77i0NbaXLZZ7KbvKBvu7p6kgdnRgG+2=Q@mail.gmail.com>
+ <Yvpf67eCerqaDmlE@worktop.programming.kicks-ass.net>
+ <CAADnVQKX5xJz5N_mVyf7wg4BT8Q2cNh8ze-SxTRfk6KtcFQ0=Q@mail.gmail.com>
+ <YvpmAnFldR0iwAFC@worktop.programming.kicks-ass.net>
+ <CAADnVQJuDS22o7fi9wPZx9siAWgu1grQXXB02KfasxZ-RPdRSw@mail.gmail.com>
+ <Yvpq3JDk8fTgdMv8@worktop.programming.kicks-ass.net>
+ <Yvs/oey1NUlkI30d@krava>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yvs/oey1NUlkI30d@krava>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 05:49 PM +08, Liu Jian wrote:
-> Fix one kernel NULL pointer dereference as below:
->
-> [  224.462334] Call Trace:
-> [  224.462394]  __tcp_bpf_recvmsg+0xd3/0x380
-> [  224.462441]  ? sock_has_perm+0x78/0xa0
-> [  224.462463]  tcp_bpf_recvmsg+0x12e/0x220
-> [  224.462494]  inet_recvmsg+0x5b/0xd0
-> [  224.462534]  __sys_recvfrom+0xc8/0x130
-> [  224.462574]  ? syscall_trace_enter+0x1df/0x2e0
-> [  224.462606]  ? __do_page_fault+0x2de/0x500
-> [  224.462635]  __x64_sys_recvfrom+0x24/0x30
-> [  224.462660]  do_syscall_64+0x5d/0x1d0
-> [  224.462709]  entry_SYSCALL_64_after_hwframe+0x65/0xca
->
-> In commit 9974d37ea75f ("skmsg: Fix invalid last sg check in
-> sk_msg_recvmsg()"), we change last sg check to sg_is_last(),
-> but in sockmap redirection case (without stream_parser/stream_verdict/
-> skb_verdict), we did not mark the end of the scatterlist. Check the
-> sk_msg_alloc, sk_msg_page_add, and bpf_msg_push_data functions, they all
-> do not mark the end of sg. They are expected to use sg.end for end
-> judgment. So the judgment of '(i != msg_rx->sg.end)' is added back here.
->
-> Fixes: 9974d37ea75f ("skmsg: Fix invalid last sg check in sk_msg_recvmsg()")
-> Signed-off-by: Liu Jian <liujian56@huawei.com>
-> ---
-> v1->v2: change fix commit info in fixes tag and commit message.
->  net/core/skmsg.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-> index 81627892bdd4..385ae23580a5 100644
-> --- a/net/core/skmsg.c
-> +++ b/net/core/skmsg.c
-> @@ -462,7 +462,7 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
->  
->  			if (copied == len)
->  				break;
-> -		} while (!sg_is_last(sge));
-> +		} while ((i != msg_rx->sg.end) && !sg_is_last(sge));
->  
->  		if (unlikely(peek)) {
->  			msg_rx = sk_psock_next_msg(psock, msg_rx);
-> @@ -472,7 +472,7 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
->  		}
->  
->  		msg_rx->sg.start = i;
-> -		if (!sge->length && sg_is_last(sge)) {
-> +		if (!sge->length && (i == msg_rx->sg.end || sg_is_last(sge))) {
->  			msg_rx = sk_psock_dequeue_msg(psock);
->  			kfree_sk_msg(msg_rx);
->  		}
+On Tue, Aug 16, 2022 at 08:56:33AM +0200, Jiri Olsa wrote:
+> On Mon, Aug 15, 2022 at 05:48:44PM +0200, Peter Zijlstra wrote:
+> > On Mon, Aug 15, 2022 at 08:35:53AM -0700, Alexei Starovoitov wrote:
+> > > On Mon, Aug 15, 2022 at 8:28 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> > > >
+> > > > On Mon, Aug 15, 2022 at 08:17:42AM -0700, Alexei Starovoitov wrote:
+> > > > > It's hiding a fake function from ftrace, since it's not a function
+> > > > > and ftrace infra shouldn't show it tracing logs.
+> > > > > In other words it's a _notrace_ function with nop5.
+> > > >
+> > > > Then make it a notrace function with a nop5 in it. That isn't hard.
+> > > 
+> > > That's exactly what we're trying to do.
+> > 
+> > All the while claiming ftrace is broken while it is not.
+> > 
+> > > Jiri's patch is one way to achieve that.
+> > 
+> > Fairly horrible way.
+> > 
+> > > What is your suggestion?
+> > 
+> > Mailed it already.
+> > 
+> > > Move it from C to asm ?
+> > 
+> > Would be much better than proposed IMO.
+> 
+> nice, that would be independent of the compiler atributes
+> and config checking..  will check on this one ;-)
 
-Looks to me like I sk_msg_alloc does mark the end of a scatterlist:
+how about something like below?
 
-sk_msg_alloc
-  sg_unmark_end
-  sg_set_page
-    sg_assign_page <- sets SG_END bit
+dispatcher code is generated only for x86_64, so that will be covered
+by the assembly version (free of ftrace table) other archs stay same
 
-Why do we unmark the SG end in sk_msg_page_add and bpf_msg_push_data?
-
-John, do you recall?
+jirka
 
 
-As it might take a moment to figure it out, and we want to fix the
-regression introduced by 9974d37ea75f ("skmsg: Fix invalid last sg check
-in sk_msg_recvmsg()"):
-
-Acked-by: Jakub Sitnicki <jakub@cloudflare.com>
+----
+diff --git a/arch/x86/net/Makefile b/arch/x86/net/Makefile
+index 383c87300b0d..94964002eaae 100644
+--- a/arch/x86/net/Makefile
++++ b/arch/x86/net/Makefile
+@@ -7,4 +7,5 @@ ifeq ($(CONFIG_X86_32),y)
+         obj-$(CONFIG_BPF_JIT) += bpf_jit_comp32.o
+ else
+         obj-$(CONFIG_BPF_JIT) += bpf_jit_comp.o
++        obj-$(CONFIG_BPF_JIT) += bpf_dispatcher.o
+ endif
+diff --git a/arch/x86/net/bpf_dispatcher.S b/arch/x86/net/bpf_dispatcher.S
+new file mode 100644
+index 000000000000..65790a1286e8
+--- /dev/null
++++ b/arch/x86/net/bpf_dispatcher.S
+@@ -0,0 +1,10 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#include <linux/linkage.h>
++#include <asm/nops.h>
++#include <asm/nospec-branch.h>
++
++	.text
++SYM_FUNC_START(bpf_dispatcher_xdp_func)
++	ASM_NOP5
++	JMP_NOSPEC rdx
++SYM_FUNC_END(bpf_dispatcher_xdp_func)
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index a627a02cf8ab..03b54c820b95 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -924,7 +924,7 @@ int arch_prepare_bpf_dispatcher(void *image, s64 *funcs, int num_funcs);
+ }
+ 
+ #define DEFINE_BPF_DISPATCHER(name)					\
+-	noinline __nocfi unsigned int bpf_dispatcher_##name##_func(	\
++	noinline __nocfi unsigned int __weak bpf_dispatcher_##name##_func(\
+ 		const void *ctx,					\
+ 		const struct bpf_insn *insnsi,				\
+ 		bpf_func_t bpf_func)					\
