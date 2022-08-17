@@ -2,163 +2,491 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8995C32772
-	for <bpf@archiver.kernel.org>; Wed, 17 Aug 2022 07:11:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A692C25B08
+	for <bpf@archiver.kernel.org>; Wed, 17 Aug 2022 07:37:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238158AbiHQHLV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Aug 2022 03:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
+        id S232716AbiHQHh5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Aug 2022 03:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238773AbiHQHLR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 17 Aug 2022 03:11:17 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7874C6745D
-        for <bpf@vger.kernel.org>; Wed, 17 Aug 2022 00:11:10 -0700 (PDT)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27H0KeSC030314
-        for <bpf@vger.kernel.org>; Wed, 17 Aug 2022 00:11:09 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=PqhZWEkd7t/4jYlnXFINIA+gzLkm1J6HedioAwHDqEo=;
- b=jOe9bQXeYLBoFM5rcG29s7RZQQGj4uUGWxIX7Ej1M8i+5FlxqkN9RthCYrIq6exocbhS
- qbM00xCVKLZrssLIkhhj1g70qAmfYeOoTIQT/d0GMnYkOqjF/yHux01HaDhLGI0Q1HYL
- 9quHi1KX4ndXm7TiHn0HoPkYUpJibzBOOaQ= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j0nq01dfb-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 17 Aug 2022 00:11:09 -0700
-Received: from snc-exhub201.TheFacebook.com (2620:10d:c085:21d::7) by
- snc-exhub101.TheFacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 17 Aug 2022 00:11:07 -0700
-Received: from twshared30313.14.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 17 Aug 2022 00:11:06 -0700
-Received: by devbig933.frc1.facebook.com (Postfix, from userid 6611)
-        id F2060825DBC2; Tue, 16 Aug 2022 23:17:04 -0700 (PDT)
-From:   Martin KaFai Lau <kafai@fb.com>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        David Miller <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, <kernel-team@fb.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Stanislav Fomichev <sdf@google.com>
-Subject: [PATCH v4 bpf-next 00/15] bpf: net: Remove duplicated code from bpf_setsockopt()
-Date:   Tue, 16 Aug 2022 23:17:04 -0700
-Message-ID: <20220817061704.4174272-1-kafai@fb.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S232214AbiHQHh3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 17 Aug 2022 03:37:29 -0400
+Received: from mx07-0057a101.pphosted.com (mx07-0057a101.pphosted.com [205.220.184.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB8375CF6;
+        Wed, 17 Aug 2022 00:37:25 -0700 (PDT)
+Received: from pps.filterd (m0214197.ppops.net [127.0.0.1])
+        by mx07-0057a101.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27H5Ac33010596;
+        Wed, 17 Aug 2022 09:37:02 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=westermo.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=12052020;
+ bh=JCIXwg2KltuVDsw3bCg0ydI9BX7R71/9nGIwU3MIRGI=;
+ b=BoeTrH5vvMHaptfG3AJudM5bDydQ9RhdnJScCs/fvHWyBAGAZPTwKqTw2Nbj183MAppn
+ yE2lUxP8R4nFX8h/gn1OrR0ReeR+8OA/FThu5iMbKJAmP2BJq1jEINbHETvdryWIl/mw
+ Hrj+z+6awiV9zXK5YTPgQRTc6KG6HozNjrb5XF+Ncf+r0lJ5JsMawlsPX8rTKYPpxuQU
+ Dup/sh61pVrz1mkLOgDHBEQsJ6qvNDiFFtmYMLaee0wb5fZ5PBXeZec7CA0v0VsbKEyN
+ ncJrqCjtE39KNGNtoOcWti+7Lst+D1tOXXE4xDb9L4htqga9L1NuTJv9etQWLyLZ4kpk xA== 
+Received: from mail.beijerelectronics.com ([195.67.87.131])
+        by mx07-0057a101.pphosted.com (PPS) with ESMTPS id 3hx0abuxrs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 17 Aug 2022 09:37:01 +0200
+Received: from Orpheus.nch.westermo.com (172.29.100.2) by
+ EX01GLOBAL.beijerelectronics.com (10.101.10.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.2375.17; Wed, 17 Aug 2022 09:37:00 +0200
+From:   Matthias May <matthias.may@westermo.com>
+To:     <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <shuah@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        Matthias May <matthias.may@westermo.com>
+Subject: [PATCH net-next] selftests/net: test l2 tunnel TOS/TTL inheriting
+Date:   Wed, 17 Aug 2022 09:36:49 +0200
+Message-ID: <20220817073649.26117-1-matthias.may@westermo.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: PCoHxYaiYrIY3Hc5AfiUWxXB-soQO-BI
-X-Proofpoint-GUID: PCoHxYaiYrIY3Hc5AfiUWxXB-soQO-BI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-17_04,2022-08-16_02,2022-06-22_01
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.29.100.2]
+X-ClientProxiedBy: wsevst-s0023.westermo.com (192.168.130.120) To
+ EX01GLOBAL.beijerelectronics.com (10.101.10.25)
+X-Proofpoint-GUID: QuttER8pdkLpt5kxDXIUih3FlLxTgaAJ
+X-Proofpoint-ORIG-GUID: QuttER8pdkLpt5kxDXIUih3FlLxTgaAJ
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The code in bpf_setsockopt() is mostly a copy-and-paste from
-the sock_setsockopt(), do_tcp_setsockopt(), do_ipv6_setsockopt(),
-and do_ip_setsockopt().  As the allowed optnames in bpf_setsockopt()
-grows, so are the duplicated code.  The code between the copies
-also slowly drifted.
+There are currently 3 ip tunnels that are capable of carrying
+L2 traffic: gretap, vxlan and geneve.
+They all are capable to inherit the TOS/TTL for the outer
+IP-header from the inner frame.
 
-This set is an effort to clean this up and reuse the existing
-{sock,do_tcp,do_ipv6,do_ip}_setsockopt() as much as possible.
+Add a test that verifies that these fields are correctly inherited.
 
-After the clean up, this set also adds a few allowed optnames
-that we need to the bpf_setsockopt().
+These tests failed before the following commits:
+b09ab9c92e50 ("ip6_tunnel: allow to inherit from VLAN encapsulated IP")
+3f8a8447fd0b ("ip6_gre: use actual protocol to select xmit")
+41337f52b967 ("ip6_gre: set DSCP for non-IP")
+7ae29fd1be43 ("ip_tunnel: allow to inherit from VLAN encapsulated IP")
+7074732c8fae ("ip_tunnels: allow VXLAN/GENEVE to inherit TOS/TTL from VLAN")
+ca2bb69514a8 ("geneve: do not use RT_TOS for IPv6 flowlabel")
+b4ab94d6adaa ("geneve: fix TOS inheriting for ipv4")
 
-The initial attempt was to clean up both bpf_setsockopt() and
-bpf_getsockopt() together.  However, the patch set was getting
-too long.  It is beneficial to leave the bpf_getsockopt()
-out for another patch set.  Thus, this set is focusing
-on the bpf_setsockopt().
+Signed-off-by: Matthias May <matthias.may@westermo.com>
+---
+ tools/testing/selftests/net/Makefile          |   1 +
+ .../selftests/net/l2_tos_ttl_inherit.sh       | 390 ++++++++++++++++++
+ 2 files changed, 391 insertions(+)
+ create mode 100755 tools/testing/selftests/net/l2_tos_ttl_inherit.sh
 
-v4:
-- This set now depends on the commit f574f7f839fc ("net: bpf: Use the pro=
-tocol's set_rcvlowat behavior if there is one")
-  in the net-next tree.  The commit calls a specific protocol's
-  set_rcvlowat and it changed the bpf_setsockopt
-  which this set has also changed.
-
-  Because of this, patch 9 of this set has also adjusted
-  and a 'sock' NULL check is added to the sk_setsockopt()
-  because some of the bpf hooks have a NULL sk->sk_socket.
-  This removes more dup code from the bpf_setsockopt() side.
-- Avoid mentioning specific prog types in the comment of
-  the has_current_bpf_ctx(). (Andrii)
-- Replace signed with unsigned int bitfield in the
-  patch 15 selftest. (Daniel)
-
-v3:
-- s/in_bpf/has_current_bpf_ctx/ (Andrii)
-- Add comment to has_current_bpf_ctx() and sockopt_lock_sock()
-  (Stanislav)
-- Use vmlinux.h in selftest and add defines to bpf_tracing_net.h
-  (Stanislav)
-- Use bpf_getsockopt(SO_MARK) in selftest (Stanislav)
-- Use BPF_CORE_READ_BITFIELD in selftest (Yonghong)
-
-v2:
-- A major change is to use in_bpf() to test if a setsockopt()
-  is called by a bpf prog and use in_bpf() to skip capable
-  check.  Suggested by Stanislav.
-- Instead of passing is_locked through sockptr_t or through an extra
-  argument to sk_setsockopt, v2 uses in_bpf() to skip the lock_sock()
-  also because bpf prog has the lock acquired.
-- No change to the current sockptr_t in this revision
-- s/codes/code/
-
-Martin KaFai Lau (15):
-  net: Add sk_setsockopt() to take the sk ptr instead of the sock ptr
-  bpf: net: Avoid sk_setsockopt() taking sk lock when called from bpf
-  bpf: net: Consider has_current_bpf_ctx() when testing capable() in
-    sk_setsockopt()
-  bpf: net: Change do_tcp_setsockopt() to use the sockopt's lock_sock()
-    and capable()
-  bpf: net: Change do_ip_setsockopt() to use the sockopt's lock_sock()
-    and capable()
-  bpf: net: Change do_ipv6_setsockopt() to use the sockopt's lock_sock()
-    and capable()
-  bpf: Initialize the bpf_run_ctx in bpf_iter_run_prog()
-  bpf: Embed kernel CONFIG check into the if statement in bpf_setsockopt
-  bpf: Change bpf_setsockopt(SOL_SOCKET) to reuse sk_setsockopt()
-  bpf: Refactor bpf specific tcp optnames to a new function
-  bpf: Change bpf_setsockopt(SOL_TCP) to reuse do_tcp_setsockopt()
-  bpf: Change bpf_setsockopt(SOL_IP) to reuse do_ip_setsockopt()
-  bpf: Change bpf_setsockopt(SOL_IPV6) to reuse do_ipv6_setsockopt()
-  bpf: Add a few optnames to bpf_setsockopt
-  selftests/bpf: bpf_setsockopt tests
-
- include/linux/bpf.h                           |  13 +
- include/net/ip.h                              |   2 +
- include/net/ipv6.h                            |   2 +
- include/net/ipv6_stubs.h                      |   2 +
- include/net/sock.h                            |   7 +
- include/net/tcp.h                             |   2 +
- kernel/bpf/bpf_iter.c                         |   5 +
- net/core/filter.c                             | 371 ++++++--------
- net/core/sock.c                               |  83 +++-
- net/ipv4/ip_sockglue.c                        |  16 +-
- net/ipv4/tcp.c                                |  22 +-
- net/ipv6/af_inet6.c                           |   1 +
- net/ipv6/ipv6_sockglue.c                      |  18 +-
- .../selftests/bpf/prog_tests/setget_sockopt.c | 125 +++++
- .../selftests/bpf/progs/bpf_tracing_net.h     |  31 +-
- .../selftests/bpf/progs/setget_sockopt.c      | 451 ++++++++++++++++++
- 16 files changed, 874 insertions(+), 277 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/setget_sockopt=
-.c
- create mode 100644 tools/testing/selftests/bpf/progs/setget_sockopt.c
-
---=20
-2.30.2
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index c0ee2955fe54..11a288b67e2f 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -42,6 +42,7 @@ TEST_PROGS += arp_ndisc_evict_nocarrier.sh
+ TEST_PROGS += ndisc_unsolicited_na_test.sh
+ TEST_PROGS += arp_ndisc_untracked_subnets.sh
+ TEST_PROGS += stress_reuseport_listen.sh
++TEST_PROGS := l2_tos_ttl_inherit.sh
+ TEST_PROGS_EXTENDED := in_netns.sh setup_loopback.sh setup_veth.sh
+ TEST_PROGS_EXTENDED += toeplitz_client.sh toeplitz.sh
+ TEST_GEN_FILES =  socket nettest
+diff --git a/tools/testing/selftests/net/l2_tos_ttl_inherit.sh b/tools/testing/selftests/net/l2_tos_ttl_inherit.sh
+new file mode 100755
+index 000000000000..dca1e6f777a8
+--- /dev/null
++++ b/tools/testing/selftests/net/l2_tos_ttl_inherit.sh
+@@ -0,0 +1,390 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++
++# Author: Matthias May <matthias.may@westermo.com>
++#
++# This script evaluates ip tunnels that are capable of carrying L2 traffic
++# if they inherit or set the inheritable fields.
++# Namely these tunnels are: 'gretap', 'vxlan' and 'geneve'.
++# Checked inheritable fields are: TOS and TTL.
++# The outer tunnel protocol of 'IPv4' or 'IPv6' is verified-
++# As payload frames of type 'IPv4', 'IPv6' and 'other'(ARP) are verified.
++# In addition this script also checks if forcing a specific field in the
++# outer header is working.
++
++if [ "$(id -u)" != "0" ]; then
++	echo "Please run as root."
++	exit 0
++fi
++if ! which tcpdump > /dev/null 2>&1; then
++	echo "No tcpdump found. Required for this test."
++	exit 0
++fi
++
++expected_tos="0x00"
++expected_ttl="0"
++failed=false
++
++get_random_tos() {
++	# Get a random hex tos value between 0x00 and 0xfc, a multiple of 4
++	echo "0x$(tr -dc '0-9a-f' < /dev/urandom | head -c 1)\
++$(tr -dc '048c' < /dev/urandom | head -c 1)"
++}
++get_random_ttl() {
++	# Get a random dec value between 0 and 255
++	printf "%d" "0x$(tr -dc '0-9a-f' < /dev/urandom | head -c 2)"
++}
++get_field() {
++	# Expects to get the 'head -n 1' of a captured frame by tcpdump.
++	# Parses this first line and returns the specified field.
++	local field="$1"
++	local input="$2"
++	local found=false
++	input="$(echo "$input" | tr -d '(),')"
++	for input_field in $input; do
++		if $found; then
++			echo "$input_field"
++			return
++		fi
++		# The next field that we iterate over is the looked for value
++		if [ "$input_field" = "$field" ]; then
++			found=true
++		fi
++	done
++	echo "0"
++}
++setup() {
++	local type="$1"
++	local outer="$2"
++	local inner="$3"
++	local tos_ttl="$4"
++	local vlan="$5"
++	local test_tos="0x00"
++	local test_ttl="0"
++	local ns="ip netns exec testing"
++
++	# We don't want a test-tos of 0x00,
++	# because this is the value that we get when no tos is set.
++	expected_tos="$(get_random_tos)"
++	while [ "$expected_tos" = "0x00" ]; do
++		expected_tos="$(get_random_tos)"
++	done
++	if [ "$tos_ttl" = "random" ]; then
++		test_tos="$expected_tos"
++		tos="fixed $test_tos"
++	elif [ "$tos_ttl" = "inherit" ]; then
++		test_tos="$tos_ttl"
++		tos="inherit $expected_tos"
++	fi
++
++	# We don't want a test-ttl of 64 or 0,
++	# because 64 is when no ttl is set and 0 is not a valid ttl.
++	expected_ttl="$(get_random_ttl)"
++	while [ "$expected_ttl" = "64" ] || [ "$expected_ttl" = "0" ]; do
++		expected_ttl="$(get_random_ttl)"
++	done
++
++	if [ "$tos_ttl" = "random" ]; then
++		test_ttl="$expected_ttl"
++		ttl="fixed $test_ttl"
++	elif [ "$tos_ttl" = "inherit" ]; then
++		test_ttl="$tos_ttl"
++		ttl="inherit $expected_ttl"
++	fi
++	printf "│%7s │%6s │%6s │%13s │%13s │%6s │" \
++	"$type" "$outer" "$inner" "$tos" "$ttl" "$vlan"
++
++	# Create 'testing' netns, veth pair and connect main ns with testing ns
++	ip netns add testing
++	ip link add type veth
++	ip link set veth1 netns testing
++	ip link set veth0 up
++	$ns ip link set veth1 up
++	ip addr flush dev veth0
++	$ns ip addr flush dev veth1
++
++	local local_addr1=""
++	local local_addr2=""
++	if [ "$type" = "gre" ] || [ "$type" = "vxlan" ]; then
++		if [ "$outer" = "4" ]; then
++			local_addr1="local 198.18.0.1"
++			local_addr2="local 198.18.0.2"
++		elif [ "$outer" = "6" ]; then
++			local_addr1="local fdd1:ced0:5d88:3fce::1"
++			local_addr2="local fdd1:ced0:5d88:3fce::2"
++		fi
++	fi
++	local vxlan=""
++	if [ "$type" = "vxlan" ]; then
++		vxlan="vni 100 dstport 4789"
++	fi
++	local geneve=""
++	if [ "$type" = "geneve" ]; then
++		geneve="vni 100"
++	fi
++	# Create tunnel and assign outer IPv4/IPv6 addresses
++	if [ "$outer" = "4" ]; then
++		if [ "$type" = "gre" ]; then
++			type="gretap"
++		fi
++		ip addr add 198.18.0.1/24 dev veth0
++		$ns ip addr add 198.18.0.2/24 dev veth1
++		ip link add name tep0 type $type $local_addr1 remote \
++		198.18.0.2 tos $test_tos ttl $test_ttl $vxlan $geneve
++		$ns ip link add name tep1 type $type $local_addr2 remote \
++		198.18.0.1 tos $test_tos ttl $test_ttl $vxlan $geneve
++	elif [ "$outer" = "6" ]; then
++		if [ "$type" = "gre" ]; then
++			type="ip6gretap"
++		fi
++		ip addr add fdd1:ced0:5d88:3fce::1/64 dev veth0
++		$ns ip addr add fdd1:ced0:5d88:3fce::2/64 dev veth1
++		ip link add name tep0 type $type $local_addr1 \
++		remote fdd1:ced0:5d88:3fce::2 tos $test_tos ttl $test_ttl \
++		$vxlan $geneve
++		$ns ip link add name tep1 type $type $local_addr2 \
++		remote fdd1:ced0:5d88:3fce::1 tos $test_tos ttl $test_ttl \
++		$vxlan $geneve
++	fi
++
++	# Bring L2-tunnel link up and create VLAN on top
++	ip link set tep0 up
++	$ns ip link set tep1 up
++	ip addr flush dev tep0
++	$ns ip addr flush dev tep1
++	local parent
++	if $vlan; then
++		parent="vlan99-"
++		ip link add link tep0 name ${parent}0 type vlan id 99
++		$ns ip link add link tep1 name ${parent}1 type vlan id 99
++		ip link set ${parent}0 up
++		$ns ip link set ${parent}1 up
++		ip addr flush dev ${parent}0
++		$ns ip addr flush dev ${parent}1
++	else
++		parent="tep"
++	fi
++
++	# Assign inner IPv4/IPv6 addresses
++	if [ "$inner" = "4" ] || [ "$inner" = "other" ]; then
++		ip addr add 198.19.0.1/24 brd + dev ${parent}0
++		$ns ip addr add 198.19.0.2/24 brd + dev ${parent}1
++	elif [ "$inner" = "6" ]; then
++		ip addr add fdd4:96cf:4eae:443b::1/64 dev ${parent}0
++		$ns ip addr add fdd4:96cf:4eae:443b::2/64 dev ${parent}1
++	fi
++}
++
++verify() {
++	local outer="$1"
++	local inner="$2"
++	local tos_ttl="$3"
++	local vlan="$4"
++
++	local ping_pid out captured_tos captured_ttl result
++
++	local ping_dst
++	if [ "$inner" = "4" ]; then
++		ping_dst="198.19.0.2"
++	elif [ "$inner" = "6" ]; then
++		ping_dst="fdd4:96cf:4eae:443b::2"
++	elif [ "$inner" = "other" ]; then
++		ping_dst="198.19.0.3" # Generates ARPs which are not IPv4/IPv6
++	fi
++	if [ "$tos_ttl" = "inherit" ]; then
++		ping -i 0.1 $ping_dst -Q "$expected_tos" -t "$expected_ttl" \
++		2>/dev/null 1>&2 & ping_pid="$!"
++	else
++		ping -i 0.1 $ping_dst 2>/dev/null 1>&2 & ping_pid="$!"
++	fi
++	local tunnel_type_offset tunnel_type_proto req_proto_offset req_offset
++	if [ "$type" = "gre" ]; then
++		tunnel_type_proto="0x2f"
++	elif [ "$type" = "vxlan" ] || [ "$type" = "geneve" ]; then
++		tunnel_type_proto="0x11"
++	fi
++	if [ "$outer" = "4" ]; then
++		tunnel_type_offset="9"
++		if [ "$inner" = "4" ]; then
++			req_proto_offset="47"
++			req_offset="58"
++			if [ "$type" = "vxlan" ] || [ "$type" = "geneve" ]; then
++				req_proto_offset="$((req_proto_offset + 12))"
++				req_offset="$((req_offset + 12))"
++			fi
++			if $vlan; then
++				req_proto_offset="$((req_proto_offset + 4))"
++				req_offset="$((req_offset + 4))"
++			fi
++			out="$(tcpdump --immediate-mode -p -c 1 -v -i veth0 -n \
++			ip[$tunnel_type_offset] = $tunnel_type_proto and \
++			ip[$req_proto_offset] = 0x01 and \
++			ip[$req_offset] = 0x08 2>/dev/null | head -n 1)"
++		elif [ "$inner" = "6" ]; then
++			req_proto_offset="44"
++			req_offset="78"
++			if [ "$type" = "vxlan" ] || [ "$type" = "geneve" ]; then
++				req_proto_offset="$((req_proto_offset + 12))"
++				req_offset="$((req_offset + 12))"
++			fi
++			if $vlan; then
++				req_proto_offset="$((req_proto_offset + 4))"
++				req_offset="$((req_offset + 4))"
++			fi
++			out="$(tcpdump --immediate-mode -p -c 1 -v -i veth0 -n \
++			ip[$tunnel_type_offset] = $tunnel_type_proto and \
++			ip[$req_proto_offset] = 0x3a and \
++			ip[$req_offset] = 0x80 2>/dev/null | head -n 1)"
++		elif [ "$inner" = "other" ]; then
++			req_proto_offset="36"
++			req_offset="45"
++			if [ "$type" = "vxlan" ] || [ "$type" = "geneve" ]; then
++				req_proto_offset="$((req_proto_offset + 12))"
++				req_offset="$((req_offset + 12))"
++			fi
++			if $vlan; then
++				req_proto_offset="$((req_proto_offset + 4))"
++				req_offset="$((req_offset + 4))"
++			fi
++			if [ "$tos_ttl" = "inherit" ]; then
++				expected_tos="0x00"
++				expected_ttl="64"
++			fi
++			out="$(tcpdump --immediate-mode -p -c 1 -v -i veth0 -n \
++			ip[$tunnel_type_offset] = $tunnel_type_proto and \
++			ip[$req_proto_offset] = 0x08 and \
++			ip[$((req_proto_offset + 1))] = 0x06 and \
++			ip[$req_offset] = 0x01 2>/dev/null | head -n 1)"
++		fi
++	elif [ "$outer" = "6" ]; then
++		if [ "$type" = "gre" ]; then
++			tunnel_type_offset="40"
++		elif [ "$type" = "vxlan" ] || [ "$type" = "geneve" ]; then
++			tunnel_type_offset="6"
++		fi
++		if [ "$inner" = "4" ]; then
++			local req_proto_offset="75"
++			local req_offset="86"
++			if [ "$type" = "vxlan" ] || [ "$type" = "geneve" ]; then
++				req_proto_offset="$((req_proto_offset + 4))"
++				req_offset="$((req_offset + 4))"
++			fi
++			if $vlan; then
++				req_proto_offset="$((req_proto_offset + 4))"
++				req_offset="$((req_offset + 4))"
++			fi
++			out="$(tcpdump --immediate-mode -p -c 1 -v -i veth0 -n \
++			ip6[$tunnel_type_offset] = $tunnel_type_proto and \
++			ip6[$req_proto_offset] = 0x01 and \
++			ip6[$req_offset] = 0x08 2>/dev/null | head -n 1)"
++		elif [ "$inner" = "6" ]; then
++			local req_proto_offset="72"
++			local req_offset="106"
++			if [ "$type" = "vxlan" ] || [ "$type" = "geneve" ]; then
++				req_proto_offset="$((req_proto_offset + 4))"
++				req_offset="$((req_offset + 4))"
++			fi
++			if $vlan; then
++				req_proto_offset="$((req_proto_offset + 4))"
++				req_offset="$((req_offset + 4))"
++			fi
++			out="$(tcpdump --immediate-mode -p -c 1 -v -i veth0 -n \
++			ip6[$tunnel_type_offset] = $tunnel_type_proto and \
++			ip6[$req_proto_offset] = 0x3a and \
++			ip6[$req_offset] = 0x80 2>/dev/null | head -n 1)"
++		elif [ "$inner" = "other" ]; then
++			local req_proto_offset="64"
++			local req_offset="73"
++			if [ "$type" = "vxlan" ] || [ "$type" = "geneve" ]; then
++				req_proto_offset="$((req_proto_offset + 4))"
++				req_offset="$((req_offset + 4))"
++			fi
++			if $vlan; then
++				req_proto_offset="$((req_proto_offset + 4))"
++				req_offset="$((req_offset + 4))"
++			fi
++			if [ "$tos_ttl" = "inherit" ]; then
++				expected_tos="0x00"
++				expected_ttl="64"
++			fi
++			out="$(tcpdump --immediate-mode -p -c 1 -v -i veth0 -n \
++			ip6[$tunnel_type_offset] = $tunnel_type_proto and \
++			ip6[$req_proto_offset] = 0x08 and \
++			ip6[$((req_proto_offset + 1))] = 0x06 and \
++			ip6[$req_offset] = 0x01 2>/dev/null | head -n 1)"
++		fi
++	fi
++	kill -9 $ping_pid
++	wait $ping_pid 2>/dev/null
++	result="FAIL"
++	if [ "$outer" = "4" ]; then
++		captured_ttl="$(get_field "ttl" "$out")"
++		captured_tos="$(printf "0x%02x" "$(get_field "tos" "$out")")"
++		if [ "$captured_tos" = "$expected_tos" ] &&
++		   [ "$captured_ttl" = "$expected_ttl" ]; then
++			result="OK"
++		fi
++	elif [ "$outer" = "6" ]; then
++		captured_ttl="$(get_field "hlim" "$out")"
++		captured_tos="$(printf "0x%02x" "$(get_field "class" "$out")")"
++		if [ "$captured_tos" = "$expected_tos" ] &&
++		   [ "$captured_ttl" = "$expected_ttl" ]; then
++			result="OK"
++		fi
++	fi
++
++	printf "%7s │\n" "$result"
++	if [ "$result" = "FAIL" ]; then
++		failed=true
++		if [ "$captured_tos" != "$expected_tos" ]; then
++			printf "│%43s%27s │\n" \
++			"Expected TOS value: $expected_tos" \
++			"Captured TOS value: $captured_tos"
++		fi
++		if [ "$captured_ttl" != "$expected_ttl" ]; then
++			printf "│%43s%27s │\n" \
++			"Expected TTL value: $expected_ttl" \
++			"Captured TTL value: $captured_ttl"
++		fi
++		printf "│%71s│\n" " "
++	fi
++}
++
++cleanup() {
++	ip link del veth0 2>/dev/null
++	ip netns del testing 2>/dev/null
++	ip link del tep0 2>/dev/null
++}
++
++printf "┌────────┬───────┬───────┬──────────────┬"
++printf "──────────────┬───────┬────────┐\n"
++for type in gre vxlan geneve; do
++	if ! $(modprobe "$type" 2>/dev/null); then
++		continue
++	fi
++	for outer in 4 6; do
++		printf "├────────┼───────┼───────┼──────────────┼"
++		printf "──────────────┼───────┼────────┤\n"
++		printf "│  Type  │ outer | inner │     tos      │"
++		printf "      ttl     │  vlan │ result │\n"
++		for inner in 4 6 other; do
++			printf "├────────┼───────┼───────┼──────────────┼"
++			printf "──────────────┼───────┼────────┤\n"
++			for tos_ttl in inherit random; do
++				for vlan in false true; do
++					setup "$type" "$outer" "$inner" \
++					"$tos_ttl" "$vlan"
++					verify "$outer" "$inner" "$tos_ttl" \
++					"$vlan"
++					cleanup
++				done
++			done
++		done
++	done
++done
++printf "└────────┴───────┴───────┴──────────────┴"
++printf "──────────────┴───────┴────────┘\n"
++
++if $failed; then
++	exit 1
++fi
+-- 
+2.35.1
 
