@@ -2,194 +2,207 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BA96C00140
-	for <bpf@archiver.kernel.org>; Thu, 18 Aug 2022 12:30:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D19EEC00140
+	for <bpf@archiver.kernel.org>; Thu, 18 Aug 2022 12:38:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244685AbiHRMad (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 18 Aug 2022 08:30:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58070 "EHLO
+        id S235589AbiHRMit (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 18 Aug 2022 08:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243967AbiHRMac (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 18 Aug 2022 08:30:32 -0400
-X-Greylist: delayed 93 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 18 Aug 2022 05:30:31 PDT
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8BAA1D7C;
-        Thu, 18 Aug 2022 05:30:31 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4M7kDd51zfz9v7Gc;
-        Thu, 18 Aug 2022 20:08:17 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwA38hluLP5ipRkyAA--.42926S2;
-        Thu, 18 Aug 2022 13:11:34 +0100 (CET)
-From:   roberto.sassu@huaweicloud.com
-To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, quentin@isovalent.com
-Cc:     linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH 1/3] tools/build: Fix feature detection output due to eval expansion
-Date:   Thu, 18 Aug 2022 14:09:55 +0200
-Message-Id: <20220818120957.319995-1-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S232578AbiHRMir (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 18 Aug 2022 08:38:47 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D4E2C642
+        for <bpf@vger.kernel.org>; Thu, 18 Aug 2022 05:38:44 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id b142so953938iof.10
+        for <bpf@vger.kernel.org>; Thu, 18 Aug 2022 05:38:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Fgd8UDxkf8qmGmKuzwov66oSmEMNYS8i42IEeAx2rJI=;
+        b=KCBRlrOKvoSMG2xA9+BzdSKjnhBrRHGAjZmJzTAacklILtiCvrw0A94TsKS/24UJxS
+         Zn4gIR1yMAX7guvT/aZQsEwxHNOnr8FUUPAGPPMNix/s/P9TasWBA1eMEXnWSX1Njhqg
+         z6z1oc4gyUvkFvm1s/A2igU99GtUPtakC91T+95A0Tt85kTbIjjV2czmpujrNPTxECs4
+         79TiAiELDnQXtRTZeArf1dOf8V2P09nyr3Uit6hdtM5oZKbfxgTRmfkzAUaI+xT089oP
+         yH0a6VGseN5ZOI35ZSXK/T9BnL9/K+csnbsbmiSLEjuzb8D2+/9/XYjXlKXTh3yOajox
+         AtIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Fgd8UDxkf8qmGmKuzwov66oSmEMNYS8i42IEeAx2rJI=;
+        b=uSWC5VhUNreqAczJOMpRENHF6TCDaN1TUV8OaV1ie65ewfLD5EeTTtzdTTGDPkA23M
+         nC87qwCfXBInh/sF2bOmACIYWmikaDxb67OuoH3BCMmM3258Tu1uQSzu7v2YpMvNq9Ur
+         XYUu6STZ1oG0tZwHEucU++3pRhDzud9rqlncODSskKoXLYwL9iJZm7I4Z8OFYKKUN5qa
+         zfN7TS7y2CaG+IwAAS/FzbhqgNDrROXf6N62jgcuDD627CBTbjoge7qCHjjkggD8sDjJ
+         c8y8kE7aJiIOJ5eVsE71oAsh1OlVlM23b4YCSkn3JU355JYH9kROjzn8DW0oRtcKjmNu
+         1Ozg==
+X-Gm-Message-State: ACgBeo0TQS9g0LYLtoDB6n3yErSsZm6g0coNy45jmzKYTXGf9TTck7v9
+        nDq4wPF3bxb1zQ1ixma+j5vTBzO2GqgvtZQNyC0=
+X-Google-Smtp-Source: AA6agR4kpRMHH6yhU6LbDrgvl0ohs0TaZA8BXOpl8byKvQRHBOmZ2R2ZKcMCutLb+YbgKffV0saCQ4DI9ezskMQN1bY=
+X-Received: by 2002:a05:6638:2110:b0:346:d1b7:6a86 with SMTP id
+ n16-20020a056638211000b00346d1b76a86mr1332359jaj.116.1660826324248; Thu, 18
+ Aug 2022 05:38:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwA38hluLP5ipRkyAA--.42926S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxuFy7KryDCFWxKFW7Xr15twb_yoW7XF1kpa
-        yrCF1UAr4DGF4Fya18Ar4UuF45Gr4fJay3J3sIk34UA3WUGrnI9r4ayFWvvFZ3u3y3XF13
-        KF13KFWUAw1UCwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9ab4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1j6r18M7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
-        rVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4
-        IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwAKzVCY
-        07xG64k0F24lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x
-        0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
-        zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF
-        4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Wr1j
-        6rW3Jr1lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8Jr
-        UvcSsGvfC2KfnxnUUI43ZEXa7IU0fb1UUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
+References: <20220817210419.95560-1-alexei.starovoitov@gmail.com>
+ <20220817210419.95560-2-alexei.starovoitov@gmail.com> <CAP01T77L6e=B6OtLcM4bToM5n4+j3S6+p+ieTPtDGUgQUZ3o1Q@mail.gmail.com>
+ <20220818003957.t5lcp636n7we37hk@MacBook-Pro-3.local>
+In-Reply-To: <20220818003957.t5lcp636n7we37hk@MacBook-Pro-3.local>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Thu, 18 Aug 2022 14:38:06 +0200
+Message-ID: <CAP01T74gcYpXXoafBAEaL5a_7FaDdfAwzmoE86pOctzmeeVhmw@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 01/12] bpf: Introduce any context BPF specific
+ memory allocator.
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     davem@davemloft.net, daniel@iogearbox.net, andrii@kernel.org,
+        tj@kernel.org, delyank@fb.com, linux-mm@kvack.org,
+        bpf@vger.kernel.org, kernel-team@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On Thu, 18 Aug 2022 at 02:40, Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Thu, Aug 18, 2022 at 01:51:39AM +0200, Kumar Kartikeya Dwivedi wrote:
+> > > +
+> > > +/* notrace is necessary here and in other functions to make sure
+> > > + * bpf programs cannot attach to them and cause llist corruptions.
+> > > + */
+> > > +static void notrace *unit_alloc(struct bpf_mem_cache *c)
+> > > +{
+> > > +       bool in_nmi = bpf_in_nmi();
+> > > +       struct llist_node *llnode;
+> > > +       unsigned long flags;
+> > > +       int cnt = 0;
+> > > +
+> > > +       if (unlikely(in_nmi)) {
+> > > +               llnode = llist_del_first(&c->free_llist_nmi);
+> > > +               if (llnode)
+> > > +                       cnt = atomic_dec_return(&c->free_cnt_nmi);
+> >
+> > I am trying to understand which case this
+> > atomic_dec_return/atomic_inc_return protects against in the
+> > unit_alloc/unit_free for in_nmi branch. Is it protecting nested NMI
+> > BPF prog interrupting NMI prog?
+> >
+> > In case of perf it seems we use bpf_prog_active,
+>
+> yes, but bpf_prog_active has plenty of downsides and hopefully
+> will be replaced eventually with cleaner mechanism.
+> Separate topic.
 
-As the first eval expansion is used only to generate Makefile statements,
-messages should not be displayed at this stage, as for example conditional
-expressions are not evaluated.
+I see.
 
-It can be seen for example in the output of feature detection for bpftool,
-where the number of detected features does not change, despite turning on
-the verbose mode (VF = 1) and there are additional features to display.
+>
+> > so nested NMI prog
+> > won't be invoked while we are interrupted inside a BPF program in NMI
+> > context. Which are the other cases that might cause reentrancy in this
+> > branch such that we need atomics instead of c->free_cnt_nmi--? Or are
+> > you anticipating you might allow this in the future even if it is
+> > disallowed for now?
+> >
+> > If programs are allowed to stack like this, and we try to reason about
+> > the safety of llist_del_first operation, the code is:
+> >
+> > struct llist_node *llist_del_first(struct llist_head *head)
+> > {
+> >      struct llist_node *entry, *old_entry, *next;
+> >
+> >      entry = smp_load_acquire(&head->first);
+> >      for (;;) {
+> >          if (entry == NULL)
+> >              return NULL;
+> >          old_entry = entry;
+> >          next = READ_ONCE(entry->next);
+> > >>>>>>>> Suppose nested NMI comes at this point and BPF prog is invoked.
+>
+> llist_del_first is notrace.
+> unit_alloc() above is also notrace. See comment before it.
+> perf event overflow NMI can happen here, but for some other llist.
+> Hence we're talking about NMI issues only here. fentry progs do not apply here.
 
-Fix this issue by escaping the $ before $(info) statements, to ensure that
-messages are printed only when the function containing them is actually
-executed, and not when it is expanded.
+I was not thinking about fentry progs either. I saw perf overflow
+progs can't nest, so I was wondering whether there were any other
+cases. But you mentioned bpf_mem_refill in IRQ and perf in NMI can't
+touch the same lockless list, so the scenario is still possible.
 
-In addition, move the $(info) statement out of feature_print_status, due to
-the fact that is called both inside and outside an eval context, and place
-it to the caller so that the $ can be escaped when necessary. For symmetry,
-move the $(info) statement also out of feature_print_text, and place it to
-the caller.
+>
+> > Assume the current nmi free llist is HEAD -> A -> B -> C -> D -> ...
+> > For our cmpxchg, parameters are going to be cmpxchg(&head->first, A, B);
+> >
+> > Now, nested NMI prog does unit_alloc thrice. this does llist_del_first thrice
+>
+> Even double llist_del_first on the same llist is bad. That's a known fact.
 
-Force the TMP variable evaluation in verbose mode, to display the features
-in FEATURE_TESTS that are not in FEATURE_DISPLAY.
+Well, if you think about it (correct me if I'm wrong), at least in
+this kind of nesting scenario on the same CPU, just doing
+llist_del_first in NMI prog which interrupts llist_del_first of
+bpf_mem_refill isn't a problem. The cmpxchg will fail as head->first
+changed. The problem occurs when you combine it with llist_add between
+the READ_ONCE(entry->next) and cmpxchg of the interrupted
+llist_del_first. The main invariant of llist_del_first is that
+entry->next should not change between READ_ONCE and cmpxchg, but if we
+construct an ABA scenario like I did in my previous reply, _then_ we
+have a problem. Otherwise it will just retry loop on exit if we e.g.
+llist_del_first and kptr_xchg the ptr (which won't do llist_add).
 
-Reorder perf feature detection messages (first non-verbose, then verbose
-ones) by moving the call to feature_display_entries earlier, before the VF
-environment variable check.
+>
+> > This makes nmi free llist HEAD -> D -> ...
+> > A, B, C are allocated in prog.
+> > Now it does unit_free of all three, but in order of B, C, A.
+> > unit_free does llist_add, nmi free llist becomes HEAD -> A -> C -> B -> D -> ...
+> >
+> > Nested NMI prog exits.
+> > We continue with our cmpxchg(&head->first, A, B); It succeeds, A is
+> > returned, but C will be leaked.
+>
+> This exact scenario cannot happen for bpf_mem_cache's freelist.
+> unit_alloc is doing llist_del_first on per-cpu freelist.
+> We can have two perf_event bpf progs. Both progs would
+> share the same hash map and use the same struct bpf_mem_alloc,
+> and both call unit_alloc() on the same cpu freelist,
+> but as you noticed bpf_prog_active covers that case.
+> bpf_prog_active is too coarse as we discussed in the other thread a
+> month or so ago. It prevents valid and safe execution of bpf progs, lost
+> events, etc. We will surely come up with a better mechanism.
+>
+> Going back to your earlier question:
+>
+> > Which are the other cases that might cause reentrancy in this
+> > branch such that we need atomics instead of c->free_cnt_nmi--?
+>
+> It's the case where perf_event bpf prog happened inside bpf_mem_refill in irq_work.
+> bpf_mem_refill manipulates free_cnt_nmi and nmi bpf prog too through unit_alloc.
+> Which got me thinking that there is indeed a missing check here.
 
-Also, remove the newline from that function, as perf might display
-additional messages. Move the newline to perf Makefile, and display another
-one if displaying the detection result is not deferred as in the case of
-bpftool.
+Aaah, ok, so this is what you wanted to prevent. Makes sense, even
+though NMI nesting won't happen in progs (atleast for now), this
+irq_work refilling can be interrupted by some perf NMI prog, or raw_tp
+tracing prog in NMI context.
 
-Fixes: 0afc5cad387db ("perf build: Separate feature make support into config/Makefile.feature")
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- tools/build/Makefile.feature | 19 ++++++++-----------
- tools/perf/Makefile.config   | 15 ++++++++-------
- 2 files changed, 16 insertions(+), 18 deletions(-)
+> We need to protect free_bulk_nmi's llist_del_first from unit_alloc's llist_del_first.
+> bpf_prog_active could be used for that, but let's come up with a cleaner way.
+> Probably going to add atomic_t flag to bpf_mem_cache and cmpxchg it,
+> or lock and spin_trylock it. tbd.
 
-diff --git a/tools/build/Makefile.feature b/tools/build/Makefile.feature
-index fc6ce0b2535a..9d3afbc37e15 100644
---- a/tools/build/Makefile.feature
-+++ b/tools/build/Makefile.feature
-@@ -177,7 +177,7 @@ endif
- #
- # Print the result of the feature test:
- #
--feature_print_status = $(eval $(feature_print_status_code)) $(info $(MSG))
-+feature_print_status = $(eval $(feature_print_status_code))
- 
- define feature_print_status_code
-   ifeq ($(feature-$(1)), 1)
-@@ -187,7 +187,7 @@ define feature_print_status_code
-   endif
- endef
- 
--feature_print_text = $(eval $(feature_print_text_code)) $(info $(MSG))
-+feature_print_text = $(eval $(feature_print_text_code))
- define feature_print_text_code
-     MSG = $(shell printf '...%30s: %s' $(1) $(2))
- endef
-@@ -247,21 +247,18 @@ endif
- feature_display_entries = $(eval $(feature_display_entries_code))
- define feature_display_entries_code
-   ifeq ($(feature_display),1)
--    $(info )
--    $(info Auto-detecting system features:)
--    $(foreach feat,$(FEATURE_DISPLAY),$(call feature_print_status,$(feat),))
--    ifneq ($(feature_verbose),1)
--      $(info )
--    endif
-+    $$(info )
-+    $$(info Auto-detecting system features:)
-+    $(foreach feat,$(FEATURE_DISPLAY),$(call feature_print_status,$(feat),) $$(info $(MSG)))
-   endif
- 
-   ifeq ($(feature_verbose),1)
--    TMP := $(filter-out $(FEATURE_DISPLAY),$(FEATURE_TESTS))
--    $(foreach feat,$(TMP),$(call feature_print_status,$(feat),))
--    $(info )
-+    $(eval TMP := $(filter-out $(FEATURE_DISPLAY),$(FEATURE_TESTS)))
-+    $(foreach feat,$(TMP),$(call feature_print_status,$(feat),) $$(info $(MSG)))
-   endif
- endef
- 
- ifeq ($(FEATURE_DISPLAY_DEFERRED),)
-   $(call feature_display_entries)
-+  $(info )
- endif
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 0661a1cf9855..f4de6e16fbe2 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -1304,11 +1304,15 @@ define print_var_code
-     MSG = $(shell printf '...%30s: %s' $(1) $($(1)))
- endef
- 
-+ifeq ($(feature_display),1)
-+  $(call feature_display_entries)
-+endif
-+
- ifeq ($(VF),1)
-   # Display EXTRA features which are detected manualy
-   # from here with feature_check call and thus cannot
-   # be partof global state output.
--  $(foreach feat,$(FEATURE_TESTS_EXTRA),$(call feature_print_status,$(feat),))
-+  $(foreach feat,$(FEATURE_TESTS_EXTRA),$(call feature_print_status,$(feat),) $(info $(MSG)))
-   $(call print_var,prefix)
-   $(call print_var,bindir)
-   $(call print_var,libdir)
-@@ -1318,11 +1322,12 @@ ifeq ($(VF),1)
-   $(call print_var,JDIR)
- 
-   ifeq ($(dwarf-post-unwind),1)
--    $(call feature_print_text,"DWARF post unwind library", $(dwarf-post-unwind-text))
-+    $(call feature_print_text,"DWARF post unwind library", $(dwarf-post-unwind-text)) $(info $(MSG))
-   endif
--  $(info )
- endif
- 
-+$(info )
-+
- $(call detected_var,bindir_SQ)
- $(call detected_var,PYTHON_WORD)
- ifneq ($(OUTPUT),)
-@@ -1352,7 +1357,3 @@ endif
- # tests.
- $(shell rm -f $(FEATURE_DUMP_FILENAME))
- $(foreach feat,$(FEATURE_TESTS),$(shell echo "$(call feature_assign,$(feat))" >> $(FEATURE_DUMP_FILENAME)))
--
--ifeq ($(feature_display),1)
--  $(call feature_display_entries)
--endif
--- 
-2.25.1
+Hm, can you explain why an atomic flag or lock would be needed, and
+not just having a small busy counter like bpf_prog_active for the NMI
+free llist will work? bpf_mem_cache is already per-CPU so it can just
+be int alongside the llist. You inc it before llist_del_first, and
+then assuming inc is atomic across interrupt boundary (which I think
+this_cpu_inc_return for bpf_prog_active is already assuming), NMI prog
+will see llist as busy and will fail its llist_del_first.
+llist_add should still be fine to allow.
 
+Technically we can fail llist_add instead, since doing multiple
+llist_del_first won't be an issue, but you can't fail bpf_mem_free,
+though you can fail bpf_mem_alloc, so it makes sense to protect only
+llist_del_first using the counter.
+
+PS: Also, it would be great if you could add a few words about this
+around this code, i.e. which contexts would nest and those are what
+this atomic_inc/dec and llist_del_first protection prevents problems
+in.
