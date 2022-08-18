@@ -2,153 +2,110 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3CA1C32772
-	for <bpf@archiver.kernel.org>; Thu, 18 Aug 2022 16:40:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BDA0CC00140
+	for <bpf@archiver.kernel.org>; Thu, 18 Aug 2022 16:59:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344853AbiHRQkK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 18 Aug 2022 12:40:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57120 "EHLO
+        id S1345190AbiHRQ7W (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 18 Aug 2022 12:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344850AbiHRQkI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 18 Aug 2022 12:40:08 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA6591080
-        for <bpf@vger.kernel.org>; Thu, 18 Aug 2022 09:40:07 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id n4so2343710wrp.10
-        for <bpf@vger.kernel.org>; Thu, 18 Aug 2022 09:40:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=GexUlF4ShsbvM/5+FHZTW5WNt/VoSURza5qmXJXUOss=;
-        b=4Bt5Ng7gp6Cz4HNi5h74gAu47EzSTvO8GPxcrnNA5KcEfSGM/+mkSOLTpT1KHtQmQC
-         nyc05lkJswlBcFQrpM3M8pLq1p+AdsQuczSs55nYJUb7czQgXTxvZU64Noz6YK6XBgoE
-         0Z/9zVwOHSa4XgjHnm7r1OjEdyqYgGnu2KO81Ha8K1LrsIopy9tp+GGlRfraLtyGas0B
-         5vo935PmV/vJII+nvOKg5lnfdLa8fD0bdQA5fsLrG2XZi/MyTy663jF8ZT8guGOOsOlT
-         YOY21xNRWC1iKX+68AYjhhif8lICvVvVWqn60jXhSWK/wDxeZxUdQxqQF8dPHB8jLztN
-         xtpg==
+        with ESMTP id S1345177AbiHRQ7R (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 18 Aug 2022 12:59:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A3D3AB24
+        for <bpf@vger.kernel.org>; Thu, 18 Aug 2022 09:59:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660841954;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qPnZg5sieCcrClfL19KUprDR1I1cYNohdHMRFExuYds=;
+        b=Pu+T2TfITzWc0LHamaMpLxydExXGjV4/Y8+31wS9lBOdk4nIdAM0byA218pZfRcWyz03IC
+        trMIN9dfyAsNQv7Nc5GXCzXq2/LnGnB0pTopQaYbBIK9xCYHdC2Z63kkn2CnLslKlTAwT8
+        QEydGSE+O4N/0ss2kHA3daBONcnkaOY=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-187-A-9vFfMhNK-sc1kVxyQFYg-1; Thu, 18 Aug 2022 12:59:12 -0400
+X-MC-Unique: A-9vFfMhNK-sc1kVxyQFYg-1
+Received: by mail-ej1-f70.google.com with SMTP id sb17-20020a1709076d9100b00730fe97f897so888136ejc.16
+        for <bpf@vger.kernel.org>; Thu, 18 Aug 2022 09:59:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=GexUlF4ShsbvM/5+FHZTW5WNt/VoSURza5qmXJXUOss=;
-        b=pa5UmxNyXH5GhM0wo2RGWYWRri223wRGBxnKTfFAruc4hVuuF2dY1i6oDoqJwrxYkL
-         gpNb44PA9baLBdvuRXrPZ7QCtvVa6taWRmSmwCvbQVZJcmUxGen8eAX4rj9xBff8Lckb
-         q/yxKGMQ47Ka9ZGf51vea6Ly+hPxFDmB1pZwbLA2aipUUcm9HLcjnygksYE5sSOPI7ti
-         aSvOAwBU5DxhDPoG38Opn3edNHzh+4TS8XOEs15UiclB5/1H63hOnToo7Ng4yFJeUdGO
-         50U4GhXmZr0ibh2nMOz85ezpRarbSibYf9f56UEiBTVQlN09vDjsY7mZqb43LlgAH3Hc
-         I/zQ==
-X-Gm-Message-State: ACgBeo3wfMUtwSYZvhSrgYsO/jzF//Di7zeYFKTPHoRIQK3N8FBYGCV0
-        rE0kbkA4dVc2uGKeUuxMNMM8BQ==
-X-Google-Smtp-Source: AA6agR4OebAoKoxymPHgrWb1d98AXrHPQ3vhI+HZKG4LtXNDBBpK4goEN7GMVn6C5YBzSQl+F4e3mQ==
-X-Received: by 2002:adf:fa81:0:b0:224:f260:2523 with SMTP id h1-20020adffa81000000b00224f2602523mr2075676wrr.26.1660840805703;
-        Thu, 18 Aug 2022 09:40:05 -0700 (PDT)
-Received: from [192.168.178.32] ([51.155.200.13])
-        by smtp.gmail.com with ESMTPSA id i20-20020a1c5414000000b003a327f19bf9sm6621432wmb.14.2022.08.18.09.40.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Aug 2022 09:40:05 -0700 (PDT)
-Message-ID: <23da162e-1018-9bfa-bc5c-ec09eba9428b@isovalent.com>
-Date:   Thu, 18 Aug 2022 17:40:04 +0100
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=qPnZg5sieCcrClfL19KUprDR1I1cYNohdHMRFExuYds=;
+        b=gqPkWSr2KG+lFITMktQrRpTcnoEuw7ctLeVZSEa+z3z469V6d5XtiH5V4kZEBwJA79
+         nQETMw1TMqPorQOS+6z1Gr2A4lWLt9P71UR/sTI4CdIxy3SwGA8PtRhVawEETVjC5Ijy
+         h9jCEWzM1IR5ncHl5qQlinMlYXOcpZ1MlzLq20Hk1dWHCh/h7lkM49bm2JTG87vh0m9Y
+         SuzuozO/7Wbm1bDZ/a1koWBtcYH4x2Kkk7eYo4p7vDyLakrQDfgL7x8F7ZqGQg1m/a4C
+         5LgM0f1NK6Whv2b686KU5Qf+0Qy3Dd2nJ5kC1yrFy687zxypB5OpxmWqB4VGmYPJRMlS
+         Ex0A==
+X-Gm-Message-State: ACgBeo0J1nZymTWZU/0WFI1sUkoAvA3GSqrqXvPomHV2lnTJvbe6XQVU
+        vxFI2dYHeuxbjlL4KOThT4MU8mDgPi7u8gOaOCctmSQQAEaUHZs7i80e2UMSUPmOSYBy+hPXV0I
+        YFwNAcjOZHR1q
+X-Received: by 2002:a05:6402:3485:b0:43d:7fe0:74d1 with SMTP id v5-20020a056402348500b0043d7fe074d1mr2974820edc.413.1660841951032;
+        Thu, 18 Aug 2022 09:59:11 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6kfeZHBJ6EhZ2RgJtrW4x5BxNJKyM6xSp+khI45JVy8cxbv3UMGDoijwluWRgq89Z1KUA9NA==
+X-Received: by 2002:a05:6402:3485:b0:43d:7fe0:74d1 with SMTP id v5-20020a056402348500b0043d7fe074d1mr2974800edc.413.1660841950692;
+        Thu, 18 Aug 2022 09:59:10 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id q19-20020a17090676d300b0072af930cf97sm1045882ejn.115.2022.08.18.09.59.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 09:59:09 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 1E51055FA97; Thu, 18 Aug 2022 18:59:09 +0200 (CEST)
+From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH bpf-next 1/3] dev: Move received_rps counter next to RPS members in softnet data
+Date:   Thu, 18 Aug 2022 18:59:03 +0200
+Message-Id: <20220818165906.64450-2-toke@redhat.com>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220818165906.64450-1-toke@redhat.com>
+References: <20220818165906.64450-1-toke@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH 3/3] tools/build: Display logical OR of a feature flavors
-Content-Language: en-GB
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-References: <20220818120957.319995-1-roberto.sassu@huaweicloud.com>
- <20220818120957.319995-3-roberto.sassu@huaweicloud.com>
- <Yv46EW6KbUe9zjur@kernel.org>
- <71544d2970e246e1f0d5f5ec065ea2437df58cd9.camel@huaweicloud.com>
-From:   Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <71544d2970e246e1f0d5f5ec065ea2437df58cd9.camel@huaweicloud.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 18/08/2022 14:25, Roberto Sassu wrote:
-> On Thu, 2022-08-18 at 10:09 -0300, Arnaldo Carvalho de Melo wrote:
->> Em Thu, Aug 18, 2022 at 02:09:57PM +0200, 
->> roberto.sassu@huaweicloud.com escreveu:
->>> From: Roberto Sassu <roberto.sassu@huawei.com>
->>>
->>> Sometimes, features are simply different flavors of another
->>> feature, to
->>> properly detect the exact dependencies needed by different Linux
->>> distributions.
->>>
->>> For example, libbfd has three flavors: libbfd if the distro does
->>> not
->>> require any additional dependency; libbfd-liberty if it requires
->>> libiberty;
->>> libbfd-liberty-z if it requires libiberty and libz.
->>>
->>> It might not be clear to the user whether a feature has been
->>> successfully
->>> detected or not, given that some of its flavors will be set to OFF,
->>> others
->>> to ON.
->>>
->>> Instead, display only the feature main flavor if not in verbose
->>> mode
->>> (VF != 1), and set it to ON if at least one of its flavors has been
->>> successfully detected (logical OR), OFF otherwise. Omit the other
->>> flavors.
->>>
->>> Accomplish that by declaring a FEATURE_GROUP_MEMBERS-<feature main
->>> flavor>
->>> variable, with the list of the other flavors as variable value. For
->>> now, do
->>> it just for libbfd.
->>>
->>> In verbose mode, of if no group is defined for a feature, show the
->>> feature
->>> detection result as before.
->>
->> Looks cool, tested and added this to the commit log message here in
->> my
->> local branch, that will go public after further tests for the other
->> csets in it:
->>
->> Committer testing:
->>
->> Collecting the output from:
->>
->>   $ make -C tools/bpf/bpftool/ clean
->>   $ make -C tools/bpf/bpftool/ |& grep "Auto-detecting system
->> features" -A10
->>
->>   $ diff -u before after
->>   --- before    2022-08-18 10:06:40.422086966 -0300
->>   +++ after     2022-08-18 10:07:59.202138282 -0300
->>   @@ -1,6 +1,4 @@
->>    Auto-detecting system features:
->>    ...                                  libbfd: [ on  ]
->>   -...                          libbfd-liberty: [ on  ]
->>   -...                        libbfd-liberty-z: [ on  ]
->>    ...                                  libcap: [ on  ]
->>    ...                         clang-bpf-co-re: [ on  ]
->>   $
->>
->> Tested-by: Arnaldo Carvalho de Melo <acme@redhat.com>
->>
->> Thanks for working on this!
-> 
-> Thanks for testing and for adapting/pushing the other patches!
-> 
-> Roberto
-> 
+Move the received_rps counter value next to the other RPS-related members
+in softnet_data. This closes two four-byte holes in the structure, making
+room for another pointer in the first two cache lines without bumping the
+xmit struct to its own line.
 
-Tested locally for bpftool and I also observe "libbfd: [ on  ]" only.
-This looks much better, thank you Roberto for following up on this!
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+---
+ include/linux/netdevice.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Quentin
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 1a3cb93c3dcc..fe9aeca2fce9 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -3100,7 +3100,6 @@ struct softnet_data {
+ 	/* stats */
+ 	unsigned int		processed;
+ 	unsigned int		time_squeeze;
+-	unsigned int		received_rps;
+ #ifdef CONFIG_RPS
+ 	struct softnet_data	*rps_ipi_list;
+ #endif
+@@ -3133,6 +3132,7 @@ struct softnet_data {
+ 	unsigned int		cpu;
+ 	unsigned int		input_queue_tail;
+ #endif
++	unsigned int		received_rps;
+ 	unsigned int		dropped;
+ 	struct sk_buff_head	input_pkt_queue;
+ 	struct napi_struct	backlog;
+-- 
+2.37.2
+
