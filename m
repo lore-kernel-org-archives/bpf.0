@@ -2,158 +2,146 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FAABC32792
-	for <bpf@archiver.kernel.org>; Fri, 19 Aug 2022 22:09:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61F1DC32771
+	for <bpf@archiver.kernel.org>; Fri, 19 Aug 2022 22:22:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231530AbiHSWJt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Aug 2022 18:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55588 "EHLO
+        id S241491AbiHSWW0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Aug 2022 18:22:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231658AbiHSWJr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 19 Aug 2022 18:09:47 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5F3B9401
-        for <bpf@vger.kernel.org>; Fri, 19 Aug 2022 15:09:45 -0700 (PDT)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 27JKWJsL008472
-        for <bpf@vger.kernel.org>; Fri, 19 Aug 2022 15:09:44 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=mHOUE4szH66Eox+PIuA+3Pd9X0YXGWYpbaFgCUw145k=;
- b=eqGVFhkkyKoctJTtuWpV2zfNjISBTtUV+8wa6ryz3nByOZ+8thWqfWH3v128Sh7ZJ15n
- yTrn9OdqmUtAZkuJrlxxtgDncxoGQgE6sMyiGfmy5m6uwatn/9fYbaB4XlkR//nJVBH/
- T3hM5RGrsFKV3CbPCU6LxrtlpVnvb6X9Hyg= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3j1mw7n0q6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 19 Aug 2022 15:09:44 -0700
-Received: from twshared5413.23.frc3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 19 Aug 2022 15:09:41 -0700
-Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
-        id 327B76DDB80E; Fri, 19 Aug 2022 15:09:30 -0700 (PDT)
-From:   Kui-Feng Lee <kuifeng@fb.com>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <andrii@kernel.org>, <kernel-team@fb.com>, <yhs@fb.com>
-CC:     Kui-Feng Lee <kuifeng@fb.com>
-Subject: [PATCH bpf-next v6 2/4] bpf: Handle bpf_link_info for the parameterized task BPF iterators.
-Date:   Fri, 19 Aug 2022 15:09:25 -0700
-Message-ID: <20220819220927.3409575-3-kuifeng@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220819220927.3409575-1-kuifeng@fb.com>
-References: <20220819220927.3409575-1-kuifeng@fb.com>
+        with ESMTP id S239981AbiHSWWY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 19 Aug 2022 18:22:24 -0400
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF57E10E792
+        for <bpf@vger.kernel.org>; Fri, 19 Aug 2022 15:22:23 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id z13so2966465ilq.9
+        for <bpf@vger.kernel.org>; Fri, 19 Aug 2022 15:22:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=5SOE9sy8P4yhAnQX1DvTkOl8AAQBdpmOV8I/crXpCEU=;
+        b=kxFie1ySDa5yoZorl0KsS5IlzarYii6sLei9cixYPth7HX/iAousZy2E7iRCjeQdqu
+         /ull+PTzCLsva/D+Ar05KQEybwCI/WHhDQrUmFh9ssT5LUy0nXBXZD3NPKpYlm070Aul
+         m9spjPpqxfuHTMED5y7daZ0hHCI38/fnsXMPSBsXI2z11OG+OraSrWDeCsB+Qdi89ZvC
+         XRxtC9vhBG4He6TggmJf19APXd4qiglQ5x1CtKrnSn/Ol2X/jA/l52LDMrUIcpbH5lGO
+         erWRLI5fAGgpwaWSHuhFaap+jJNB2zPCi6s2EGBO1l0DIRtBKQ2y3oPPt53pqhs8aKSz
+         /TRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=5SOE9sy8P4yhAnQX1DvTkOl8AAQBdpmOV8I/crXpCEU=;
+        b=bRqaPd6dgsJwxwJLp8UpH6xe5eL4x+D7zKbgKm5cYNdlJI5aKDw+qTebzAod8jYuBi
+         KitYxCOxRpH6wXnZENg4hjpdgsWi9p8AGschJTgEiLgSpNbjMI0rwy57a+7ctZ//jVBO
+         uX76iiwr2V73B8bbBh5DsC++WCYNoNzI82eNiIlyHDO3ibqKnw80Pi0Dp2JIb4PpDbE6
+         i5S03b7iAZYc23ts2n6ebictIbZ+1OwUSmkEKgTgPemKIrkjYMu9nv79Pxhnnpf4ERgq
+         V5yUlbtUPUknqXtpKlCkrjcGe1R4/IAiZ+lM/2fLE8/ColSWAzAaLLJA7PX+FnW/7T0F
+         iXnA==
+X-Gm-Message-State: ACgBeo2tr9o6Al5UnYb390compLoXZI1wPwnF/mnan9iExzaMdiS0LQT
+        gK1ssi6B+FusbFS9e7CRkpftxZopH8QNPxCL/Gs=
+X-Google-Smtp-Source: AA6agR6lANax76K/CB0G6hxraxR9GmpX3eQUoFFF3VLdHLjhr7IkWMr3s0gUttvlfeTXUnVMnjW3roklWYKgo798Rws=
+X-Received: by 2002:a05:6e02:1c04:b0:2df:6b58:5fe8 with SMTP id
+ l4-20020a056e021c0400b002df6b585fe8mr4787926ilh.68.1660947742975; Fri, 19 Aug
+ 2022 15:22:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: -qk1gnOo5Ui8JIfOsfuX9U0O9R8Wkfk8
-X-Proofpoint-GUID: -qk1gnOo5Ui8JIfOsfuX9U0O9R8Wkfk8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-19_12,2022-08-18_01,2022-06-22_01
+References: <20220819214232.18784-1-alexei.starovoitov@gmail.com> <20220819214232.18784-14-alexei.starovoitov@gmail.com>
+In-Reply-To: <20220819214232.18784-14-alexei.starovoitov@gmail.com>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Sat, 20 Aug 2022 00:21:46 +0200
+Message-ID: <CAP01T75MUMKzacdE+AcKqgXy1jA5FyMwKXxiibD0ML3OFSqvsw@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf-next 13/15] bpf: Prepare bpf_mem_alloc to be used
+ by sleepable bpf programs.
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     davem@davemloft.net, daniel@iogearbox.net, andrii@kernel.org,
+        tj@kernel.org, delyank@fb.com, linux-mm@kvack.org,
+        bpf@vger.kernel.org, kernel-team@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add new fields to bpf_link_info that users can query it through
-bpf_obj_get_info_by_fd().
+On Fri, 19 Aug 2022 at 23:43, Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> From: Alexei Starovoitov <ast@kernel.org>
+>
+> Use call_rcu_tasks_trace() to wait for sleepable progs to finish.
+> Then use call_rcu() to wait for normal progs to finish
+> and finally do free_one() on each element when freeing objects
+> into global memory pool.
+>
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> ---
 
-Signed-off-by: Kui-Feng Lee <kuifeng@fb.com>
----
- include/uapi/linux/bpf.h       |  6 ++++++
- kernel/bpf/task_iter.c         | 18 ++++++++++++++++++
- tools/include/uapi/linux/bpf.h |  6 ++++++
- 3 files changed, 30 insertions(+)
+I fear this can make OOM issues very easy to run into, because one
+sleepable prog that sleeps for a long period of time can hold the
+freeing of elements from another sleepable prog which either does not
+sleep often or sleeps for a very short period of time, and has a high
+update frequency. I'm mostly worried that unrelated sleepable programs
+not even using the same map will begin to affect each other.
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 778fbf11aa00..6647e052dd00 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -6170,6 +6170,12 @@ struct bpf_link_info {
- 					__u32 map_id;
- 				} map;
- 			};
-+			union {
-+				struct {
-+					__u32 tid;
-+					__u32 pid;
-+				} task;
-+			};
- 		} iter;
- 		struct  {
- 			__u32 netns_ino;
-diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-index 2f5fc6602917..927b3a1cf354 100644
---- a/kernel/bpf/task_iter.c
-+++ b/kernel/bpf/task_iter.c
-@@ -596,6 +596,21 @@ static const struct bpf_iter_seq_info task_seq_info =
-=3D {
- 	.seq_priv_size		=3D sizeof(struct bpf_iter_seq_task_info),
- };
-=20
-+static int bpf_iter_fill_link_info(const struct bpf_iter_aux_info *aux, =
-struct bpf_link_info *info)
-+{
-+	switch (aux->task.type) {
-+	case BPF_TASK_ITER_TID:
-+		info->iter.task.tid =3D aux->task.pid;
-+		break;
-+	case BPF_TASK_ITER_TGID:
-+		info->iter.task.pid =3D aux->task.pid;
-+		break;
-+	default:
-+		break;
-+	}
-+	return 0;
-+}
-+
- static struct bpf_iter_reg task_reg_info =3D {
- 	.target			=3D "task",
- 	.attach_target		=3D bpf_iter_attach_task,
-@@ -606,6 +621,7 @@ static struct bpf_iter_reg task_reg_info =3D {
- 		  PTR_TO_BTF_ID_OR_NULL },
- 	},
- 	.seq_info		=3D &task_seq_info,
-+	.fill_link_info		=3D bpf_iter_fill_link_info,
- };
-=20
- static const struct bpf_iter_seq_info task_file_seq_info =3D {
-@@ -627,6 +643,7 @@ static struct bpf_iter_reg task_file_reg_info =3D {
- 		  PTR_TO_BTF_ID_OR_NULL },
- 	},
- 	.seq_info		=3D &task_file_seq_info,
-+	.fill_link_info		=3D bpf_iter_fill_link_info,
- };
-=20
- static const struct bpf_iter_seq_info task_vma_seq_info =3D {
-@@ -648,6 +665,7 @@ static struct bpf_iter_reg task_vma_reg_info =3D {
- 		  PTR_TO_BTF_ID_OR_NULL },
- 	},
- 	.seq_info		=3D &task_vma_seq_info,
-+	.fill_link_info		=3D bpf_iter_fill_link_info,
- };
-=20
- BPF_CALL_5(bpf_find_vma, struct task_struct *, task, u64, start,
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index 7a0268749a48..177722c5dd62 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -6170,6 +6170,12 @@ struct bpf_link_info {
- 					__u32 map_id;
- 				} map;
- 			};
-+			union {
-+				struct {
-+					__u32 tid;
-+					__u32 pid;
-+				} task;
-+			};
- 		} iter;
- 		struct  {
- 			__u32 netns_ino;
---=20
-2.30.2
+Have you considered other options? E.g. we could directly expose
+bpf_rcu_read_lock/bpf_rcu_read_unlock to the program and enforce that
+access to RCU protected map lookups only happens in such read
+sections, and unlock invalidates all RCU protected pointers? Sleepable
+helpers can then not be invoked inside the BPF RCU read section. The
+program uses RCU read section while accessing such maps, and sleeps
+after doing bpf_rcu_read_unlock. They can be kfuncs.
 
+It might also be useful in general, to access RCU protected data from
+sleepable programs (i.e. make some sections of the program RCU
+protected and non-sleepable at runtime). It will allow use of elements
+from dynamically allocated maps with bpf_mem_alloc while not having to
+wait for RCU tasks trace grace period, which can extend into minutes
+(or even longer if unlucky).
+
+One difference would be that you can pin a lookup across a sleep cycle
+with this approach, but not with preallocated maps or the explicit RCU
+section above, but I'm not sure it's worth it. It isn't possible now.
+
+>  kernel/bpf/memalloc.c | 14 +++++++++++++-
+>  1 file changed, 13 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/bpf/memalloc.c b/kernel/bpf/memalloc.c
+> index 9e5ad7dc4dc7..d34383dc12d9 100644
+> --- a/kernel/bpf/memalloc.c
+> +++ b/kernel/bpf/memalloc.c
+> @@ -224,6 +224,13 @@ static void __free_rcu(struct rcu_head *head)
+>         atomic_set(&c->call_rcu_in_progress, 0);
+>  }
+>
+> +static void __free_rcu_tasks_trace(struct rcu_head *head)
+> +{
+> +       struct bpf_mem_cache *c = container_of(head, struct bpf_mem_cache, rcu);
+> +
+> +       call_rcu(&c->rcu, __free_rcu);
+> +}
+> +
+>  static void enque_to_free(struct bpf_mem_cache *c, void *obj)
+>  {
+>         struct llist_node *llnode = obj;
+> @@ -249,7 +256,11 @@ static void do_call_rcu(struct bpf_mem_cache *c)
+>                  * from __free_rcu() and from drain_mem_cache().
+>                  */
+>                 __llist_add(llnode, &c->waiting_for_gp);
+> -       call_rcu(&c->rcu, __free_rcu);
+> +       /* Use call_rcu_tasks_trace() to wait for sleepable progs to finish.
+> +        * Then use call_rcu() to wait for normal progs to finish
+> +        * and finally do free_one() on each element.
+> +        */
+> +       call_rcu_tasks_trace(&c->rcu, __free_rcu_tasks_trace);
+>  }
+>
+>  static void free_bulk(struct bpf_mem_cache *c)
+> @@ -452,6 +463,7 @@ void bpf_mem_alloc_destroy(struct bpf_mem_alloc *ma)
+>                 /* c->waiting_for_gp list was drained, but __free_rcu might
+>                  * still execute. Wait for it now before we free 'c'.
+>                  */
+> +               rcu_barrier_tasks_trace();
+>                 rcu_barrier();
+>                 free_percpu(ma->cache);
+>                 ma->cache = NULL;
+> --
+> 2.30.2
+>
