@@ -2,146 +2,149 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D1D8C25B0E
-	for <bpf@archiver.kernel.org>; Fri, 19 Aug 2022 09:02:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A170C25B0E
+	for <bpf@archiver.kernel.org>; Fri, 19 Aug 2022 09:13:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347665AbiHSJCM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Aug 2022 05:02:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56146 "EHLO
+        id S1348000AbiHSJNN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Aug 2022 05:13:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347025AbiHSJCK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 19 Aug 2022 05:02:10 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C686F23C1
-        for <bpf@vger.kernel.org>; Fri, 19 Aug 2022 02:02:08 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id qn6so7592569ejc.11
-        for <bpf@vger.kernel.org>; Fri, 19 Aug 2022 02:02:08 -0700 (PDT)
+        with ESMTP id S242959AbiHSJNM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 19 Aug 2022 05:13:12 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917DC2181
+        for <bpf@vger.kernel.org>; Fri, 19 Aug 2022 02:13:10 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id u14so4443309wrq.9
+        for <bpf@vger.kernel.org>; Fri, 19 Aug 2022 02:13:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc;
-        bh=FnOgTS6P6pkWF5l/Qts2hE9FfSfpoGbi274HGSdbW7o=;
-        b=OC8t7wut7ZnT38rvXfRAL725WAKWB283zuSuHMRJ6w8hCkHqFuXNvfRRlNhsHfaFz6
-         53C1FTjX3PhJg0JP9Y28vTV51MIfdhSvXWmEhcYeUwX/fjFEfMF886wHk4aKWR9Z0r/p
-         ia8DqP5V2oMuTgikVhH69F68VgiaIucnvr6KA=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=ypeZ8t5+lS1GPmgig0Z7RCJC1wV2T8VE04TuEFrbnvE=;
+        b=RZUt/43HuxfC6vElzCIKYrAaxxCOdwyXhSRcDcabt37jpWZ5KAgZhAEfKywnWEfvR7
+         9n1Jh5stUI5TnnUt2FKA8ri6ZsgjRn17W8wF+/fv/yCqC+UASrZoAdckn/Fr6kxgqKK6
+         gM8jUcfso+ZH1im/WMoHOaoaHUAjz3h3WMXQclmf7l/UsF1QNy08r3D8FghmLJaOa9mf
+         e4TPXZ6kp9cLD46Wi1EzEjEL/v44Ctf92tGLo/B03WBFqxaCNTNbTEKiaKR2N30L0F9a
+         cNA/j80zuwQP+6leOT4A0jjha4W2jqmsI6PlpzAJY9PMKKmZROLWmnVvnfh+CUo6+pu5
+         s/Dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc;
-        bh=FnOgTS6P6pkWF5l/Qts2hE9FfSfpoGbi274HGSdbW7o=;
-        b=cybe8wRHaxB3lXPYa1jjV61GtwkDaLtjsK5AN0jul71EkFxaqF0R9xlHK0k+zCNIgN
-         kXS78NcijgqYiLoUbsyipd5qYcD4VkYKKMuHa4A9SkVv87TVfDsCsYe9iAgv+LX8BTNH
-         q926HUvJIfjq+viwxObEbYMIYwyMiWbdC5DOkFs0w2kgH7jIiHUNs0khpU1I4s6bRwAF
-         LjeqbboQDArD1zMh53Ho/HB5/dkQ7Ffodc9Bhx0dyMOuv/I1F6afYMbgwiXWAijf0Mxh
-         1rauaLM89sJoDh++JM8+kd0cKP2kDLOEebfOhtwphBTWTFps9JmAac/znmCjaTFQSvpK
-         yURA==
-X-Gm-Message-State: ACgBeo38vNacJO5j/X3IyElXRB/x2m6zXb2X4J3BZMSycqXL93Os/MKS
-        b88SAu+Fl5mgQDuc2oTuKXLsUQ==
-X-Google-Smtp-Source: AA6agR5RsAcNC/Oy7xOLVP3CV0POALsMhEjvmgOX8bKKzv6dyB9ehVItD0yIV2593F1df10T/1HzmQ==
-X-Received: by 2002:a17:907:1688:b0:730:b3ae:347 with SMTP id hc8-20020a170907168800b00730b3ae0347mr4230354ejc.756.1660899726913;
-        Fri, 19 Aug 2022 02:02:06 -0700 (PDT)
-Received: from cloudflare.com (79.184.200.53.ipv4.supernova.orange.pl. [79.184.200.53])
-        by smtp.gmail.com with ESMTPSA id u18-20020a1709061db200b00726c0e63b94sm2020308ejh.27.2022.08.19.02.02.06
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=ypeZ8t5+lS1GPmgig0Z7RCJC1wV2T8VE04TuEFrbnvE=;
+        b=xXU7RYYJna6BV3UIFBKxLdhBkihfk/iYAGwNcZ57zWnIn+jkOo1Nf+en6yYtQ9Odft
+         JPxSxFh4vLzZWJ49vaazRibsiInqoIX6kNEhUYh+oSF6lup2+EjF586hwXSLNVVamR/P
+         ZRRUDFyOF3eIb8ymeNb1wQeCDmTiTzL6Fa41d8Liv6MwDM9E1qDOVlNG+S6dsexu9+27
+         4Vd7RV4fT39pj8DFvA0WOOQGDJ3lGlMl0xeJ5a+MjnsLZTF7aFraq+9qRP2Ffp2YQEGE
+         IWiWStGa/UuKYNqorxi1/g2lb5sjYTJxHYdaxM8aM3McEBYwigfJSPhYAN+89Dsc+sPC
+         pf8w==
+X-Gm-Message-State: ACgBeo209UabAqf38V0hTFjxoqq2dFvYQK8JVeIzAWEVojZFc8BxIhjP
+        4SOyljtN1p9bIhrb0jpFXfM=
+X-Google-Smtp-Source: AA6agR7PcRHB2Qrmirw4N1aGlJktV3DlvEJ4Ux+CkT7nBmsF10ETsP6eLZ8KEC1NNAVGUnUFXkHJYA==
+X-Received: by 2002:a5d:654e:0:b0:225:2ee3:6c2c with SMTP id z14-20020a5d654e000000b002252ee36c2cmr3554168wrv.93.1660900388642;
+        Fri, 19 Aug 2022 02:13:08 -0700 (PDT)
+Received: from jimi.localdomain ([213.57.189.88])
+        by smtp.gmail.com with ESMTPSA id z6-20020a1cf406000000b003a2f2bb72d5sm9360175wma.45.2022.08.19.02.13.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 02:02:06 -0700 (PDT)
-References: <20220815023343.295094-1-liujian56@huawei.com>
- <20220815023343.295094-2-liujian56@huawei.com>
-User-agent: mu4e 1.6.10; emacs 27.2
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     Liu Jian <liujian56@huawei.com>, john.fastabend@gmail.com,
-        edumazet@google.com
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        kuba@kernel.org, pabeni@redhat.com, andrii@kernel.org,
-        mykolal@fb.com, ast@kernel.org, daniel@iogearbox.net,
+        Fri, 19 Aug 2022 02:13:08 -0700 (PDT)
+From:   Eyal Birger <eyal.birger@gmail.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, shuah@kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next 1/2] sk_msg: Keep reference on socket file
- while wait_memory
-Date:   Fri, 19 Aug 2022 10:39:07 +0200
-In-reply-to: <20220815023343.295094-2-liujian56@huawei.com>
-Message-ID: <871qtc1u9e.fsf@cloudflare.com>
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org
+Cc:     bpf@vger.kernel.org, Eyal Birger <eyal.birger@gmail.com>
+Subject: [PATCH bpf-next] bpf/scripts: use helper enum value instead of relying on comment order
+Date:   Fri, 19 Aug 2022 12:12:44 +0300
+Message-Id: <20220819091244.1001962-1-eyal.birger@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 10:33 AM +08, Liu Jian wrote:
-> Fix the below NULL pointer dereference:
->
-> [   14.471200] Call Trace:
-> [   14.471562]  <TASK>
-> [   14.471882]  lock_acquire+0x245/0x2e0
-> [   14.472416]  ? remove_wait_queue+0x12/0x50
-> [   14.473014]  ? _raw_spin_lock_irqsave+0x17/0x50
-> [   14.473681]  _raw_spin_lock_irqsave+0x3d/0x50
-> [   14.474318]  ? remove_wait_queue+0x12/0x50
-> [   14.474907]  remove_wait_queue+0x12/0x50
-> [   14.475480]  sk_stream_wait_memory+0x20d/0x340
-> [   14.476127]  ? do_wait_intr_irq+0x80/0x80
-> [   14.476704]  do_tcp_sendpages+0x287/0x600
-> [   14.477283]  tcp_bpf_push+0xab/0x260
-> [   14.477817]  tcp_bpf_sendmsg_redir+0x297/0x500
-> [   14.478461]  ? __local_bh_enable_ip+0x77/0xe0
-> [   14.479096]  tcp_bpf_send_verdict+0x105/0x470
-> [   14.479729]  tcp_bpf_sendmsg+0x318/0x4f0
-> [   14.480311]  sock_sendmsg+0x2d/0x40
-> [   14.480822]  ____sys_sendmsg+0x1b4/0x1c0
-> [   14.481390]  ? copy_msghdr_from_user+0x62/0x80
-> [   14.482048]  ___sys_sendmsg+0x78/0xb0
-> [   14.482580]  ? vmf_insert_pfn_prot+0x91/0x150
-> [   14.483215]  ? __do_fault+0x2a/0x1a0
-> [   14.483738]  ? do_fault+0x15e/0x5d0
-> [   14.484246]  ? __handle_mm_fault+0x56b/0x1040
-> [   14.484874]  ? lock_is_held_type+0xdf/0x130
-> [   14.485474]  ? find_held_lock+0x2d/0x90
-> [   14.486046]  ? __sys_sendmsg+0x41/0x70
-> [   14.486587]  __sys_sendmsg+0x41/0x70
-> [   14.487105]  ? intel_pmu_drain_pebs_core+0x350/0x350
-> [   14.487822]  do_syscall_64+0x34/0x80
-> [   14.488345]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
-> The test scene as following flow:
-> thread1                               thread2
-> -----------                           ---------------
->  tcp_bpf_sendmsg
->   tcp_bpf_send_verdict
->    tcp_bpf_sendmsg_redir              sock_close
->     tcp_bpf_push_locked                 __sock_release
->      tcp_bpf_push                         //inet_release
->       do_tcp_sendpages                    sock->ops->release
->        sk_stream_wait_memory          	   // tcp_close
->           sk_wait_event                      sk->sk_prot->close
->            release_sock(__sk);
->             ***
->
->                                                 lock_sock(sk);
->                                                   __tcp_close
->                                                     sock_orphan(sk)
->                                                       sk->sk_wq  = NULL
->                                                 release_sock
->             ****
->            lock_sock(__sk);
->           remove_wait_queue(sk_sleep(sk), &wait);
->              sk_sleep(sk)
->              //NULL pointer dereference
->              &rcu_dereference_raw(sk->sk_wq)->wait
->
-> While waiting for memory in thread1, the socket is released with its wait
-> queue because thread2 has closed it. This caused by tcp_bpf_send_verdict
-> didn't increase the f_count of psock->sk_redir->sk_socket->file in thread1.
+The helper value is ABI as defined by enum bpf_func_id.
+As bpf_helper_defs.h is used for the userpace part, it must be consistent
+with this enum.
 
-I'm not sure about this approach. Keeping a closed sock file alive, just
-so we can wakeup from sleep, seems like wasted effort.
+Before this change, the enumerated value was derived from the comment
+order, which assumes comments are always appended, however, there doesn't
+seem to be an enforcement anywhere for maintaining a strict order.
 
-__tcp_close sets sk->sk_shutdown = RCV_SHUTDOWN | SEND_SHUTDOWN. So we
-will return from sk_stream_wait_memory via the do_error path.
+When adding new helpers it is very puzzling when the userspace application
+breaks in weird places if the comment is inserted instead of appended -
+because the generated helper ABI is incorrect and shifted.
 
-SEND_SHUTDOWN might be set because socket got closed and orphaned - dead
-and detached from its file, like in this case.
+This commit attempts to ease this by always using bpf_func_id order as
+the helper value.
 
-So, IMHO, we should check if SOCK_DEAD flag is set on wakeup due to
-SEND_SHUTDOWN in sk_stream_wait_memory, before accessing the wait queue.
+Signed-off-by: Eyal Birger <eyal.birger@gmail.com>
+---
+ scripts/bpf_doc.py | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
-[...]
+diff --git a/scripts/bpf_doc.py b/scripts/bpf_doc.py
+index dfb260de17a8..7797aa032eca 100755
+--- a/scripts/bpf_doc.py
++++ b/scripts/bpf_doc.py
+@@ -88,7 +88,7 @@ class HeaderParser(object):
+         self.helpers = []
+         self.commands = []
+         self.desc_unique_helpers = set()
+-        self.define_unique_helpers = []
++        self.define_unique_helpers = {}
+         self.desc_syscalls = []
+         self.enum_syscalls = []
+ 
+@@ -245,24 +245,24 @@ class HeaderParser(object):
+                 break
+ 
+     def parse_define_helpers(self):
+-        # Parse the number of FN(...) in #define __BPF_FUNC_MAPPER to compare
+-        # later with the number of unique function names present in description.
++        # Parse FN(...) in #define __BPF_FUNC_MAPPER to compare later with the
++        # number of unique function names present in description and use the
++        # correct enumeration value.
+         # Note: seek_to(..) discards the first line below the target search text,
+         # resulting in FN(unspec) being skipped and not added to self.define_unique_helpers.
+         self.seek_to('#define __BPF_FUNC_MAPPER(FN)',
+                      'Could not find start of eBPF helper definition list')
+         # Searches for either one or more FN(\w+) defines or a backslash for newline
+-        p = re.compile('\s*(FN\(\w+\))+|\\\\')
+-        fn_defines_str = ''
++        p = re.compile('\s*FN\((\w+)\)+|\\\\')
++        i = 1  # 'unspec' is skipped as mentioned above
+         while True:
+             capture = p.match(self.line)
+             if capture:
+-                fn_defines_str += self.line
++                self.define_unique_helpers[capture.expand(r'bpf_\1')] = i
++                i += 1
+             else:
+                 break
+             self.line = self.reader.readline()
+-        # Find the number of occurences of FN(\w+)
+-        self.define_unique_helpers = re.findall('FN\(\w+\)', fn_defines_str)
+ 
+     def run(self):
+         self.parse_desc_syscall()
+@@ -573,6 +573,7 @@ class PrinterHelpers(Printer):
+     def __init__(self, parser):
+         self.elements = parser.helpers
+         self.elem_number_check(parser.desc_unique_helpers, parser.define_unique_helpers, 'helper', '__BPF_FUNC_MAPPER')
++        self.define_unique_helpers = parser.define_unique_helpers
+ 
+     type_fwds = [
+             'struct bpf_fib_lookup',
+@@ -761,7 +762,7 @@ class PrinterHelpers(Printer):
+             comma = ', '
+             print(one_arg, end='')
+ 
+-        print(') = (void *) %d;' % len(self.seen_helpers))
++        print(') = (void *) %d;' % self.define_unique_helpers[proto['name']])
+         print('')
+ 
+ ###############################################################################
+-- 
+2.34.1
+
