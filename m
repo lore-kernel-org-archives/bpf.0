@@ -2,117 +2,111 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45574C32792
-	for <bpf@archiver.kernel.org>; Fri, 19 Aug 2022 23:01:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 160F4C28D13
+	for <bpf@archiver.kernel.org>; Fri, 19 Aug 2022 23:23:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243380AbiHSXBX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Aug 2022 19:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51344 "EHLO
+        id S244048AbiHSXXx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Aug 2022 19:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243320AbiHSXBW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 19 Aug 2022 19:01:22 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293ECD8E0F
-        for <bpf@vger.kernel.org>; Fri, 19 Aug 2022 16:01:21 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id w19so11353988ejc.7
-        for <bpf@vger.kernel.org>; Fri, 19 Aug 2022 16:01:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=DeLotKDnm1W9Sm/K3ySjCvSBY2vLq82CSDe7WjRLcqc=;
-        b=kBdtes5N3UtjzjnhMZzG6liZ2+EvOCx/H94tnZSfqc13HQzzQskl1RPFfZyqWn156m
-         ewHw8fHvh4MHGBpZGeAYKaCyxxAbk91IZsh57EXicYR1ZL2lf8EkQQUL9UbJucXiysgZ
-         B1zPI1LuJnSeAHD0H6nvEM3xgfj0Kofe9/1rz5YSfeLVidChg/DRFT/zJ9XThjhbBfZ1
-         elMmabizvGDpsVyz7NiYxCDMFEOMSPWMigi99NFwv5UKBtf7nL3RcW9tOdkDdsYFtE4X
-         xsexwnRwSFvUsXDuKYMKrz5KD8sKdArxlPC17M02CErGPHFZXWURTjoYO3UH6lFWeP9Y
-         dNgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=DeLotKDnm1W9Sm/K3ySjCvSBY2vLq82CSDe7WjRLcqc=;
-        b=12cX3ecZmwT2h5HO1P+AzCzRHiTlIRCds+CLsREEPrCdN69F8JmLSDJsRxK3zWGy9s
-         3cjxSR/561c2LzT2QuKKj5YKhVxor5t6jE813JYOnuMyJi9NKXKEq7roPD+87QO7RYrQ
-         gbGlmeYm1o22FEn8u/rnmHdXQiJPga/dBpWt9RDAcfhUPHTZ8Z2aUg92o27Zs4X22cvU
-         VBimOZdThD6UlI7ZDzcgQtr+C5H/kC/pVb7fPCEasnfvqgkr2Dss+0pXWc8XUirgaF2u
-         lLMibtOT4i/kNj89tGeHz3kHoAraPfScJX5L5no630sy2kQJ6y4551rZIZ/xDbH5KkWe
-         8lSQ==
-X-Gm-Message-State: ACgBeo3EjH5X/1nI0F1TFsQq9n9D+oeCINeRferggWWmF72F043SgN/E
-        D9lmwv4bzOXmgmaZwM1RY6zOtdozn+Ds72fTLpQ=
-X-Google-Smtp-Source: AA6agR6OIk4Qer0KXPbkajEDbVSXNvTmhfgusw4vUtg1cRO8tKlkiWiNmRnvrh+mcyNnu3mENwyGeuPWEcBqexyp3ME=
-X-Received: by 2002:a17:907:272a:b0:731:4699:b375 with SMTP id
- d10-20020a170907272a00b007314699b375mr6198595ejl.633.1660950079717; Fri, 19
- Aug 2022 16:01:19 -0700 (PDT)
+        with ESMTP id S243553AbiHSXXw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 19 Aug 2022 19:23:52 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73ED22CE1F;
+        Fri, 19 Aug 2022 16:23:51 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id D78D332001FC;
+        Fri, 19 Aug 2022 19:23:49 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Fri, 19 Aug 2022 19:23:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1660951429; x=1661037829; bh=LS
+        KB15JNkOM6IStOUGGM5d6X8gu4EdQM8BDl4wVbxpY=; b=aNnhkpkMM66t/nF6lx
+        rxcIKVCKw1dh1rDSWLWYFGdO9EWptrDD3I/bH83Wx8ElgFAnEUYoBc1L821VqsPa
+        SOU9x0s0XvXeTVVwzppaiT+a7hZRApxjcJPEnF882GypKiUDcAreUC8QE7OHdAbO
+        Gdri5mMQPA2vS/baf2D/yjZHM55qHF+NtNmBbr5+bWv2eJLmNfAI2W+2lH1jzBV7
+        tDyVksP/KhKjjaN9DDDufebvR87fLHbx3srukx0ki5fP35f62pc0dJ2Yof3IXZED
+        uve9GK6xiNYBVrzVwaYw3lvWO+ubLMdBbzmpZUWwi6TyHQQuThGYc/GtewluSnGK
+        PhHg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1660951429; x=1661037829; bh=LSKB15JNkOM6I
+        StOUGGM5d6X8gu4EdQM8BDl4wVbxpY=; b=ctNYSGSp0ImYJGkkPZQXTQ1a0wrDG
+        4bwogzeUHbKr+DCOHuWVJs3WVf6LHzYUCE63tBMrEP3akaQVI6KWLbF+nllWPq0O
+        /uWOPPCMs3dQ0CwAMjFVZTFQ2GIh/sjwvoF07UidVzQeOtmBQCl1FsPfalBgn22V
+        nRH56LPTFL5A11MP8APngo4obBCSs2j3oQJDg4OlZk50tBSH7f/9qLcl4+5j61JG
+        v3eu/jainwIR+mYSIvYbcfGAO107KGVmlO2Xara3d7GyWSqBImwt5BGbj4jGsFDV
+        0ut3PX9VngmhHSnXdPAYpnhZHbWJtD3XoLmeJzl/NP/Wb15xyaMfKEsiQ==
+X-ME-Sender: <xms:hRsAY-XvoYkWLxQ_fulC-Yz_zpiPrP0cpxpwSCopf_u3si6xNok9kA>
+    <xme:hRsAY6n-jBy-TerGhj8wbWitd8otRgU-3BRUdUcSMBGO2St1Ra9maimyg2wL6JkPf
+    T81HWUs6JbYg5kH_A>
+X-ME-Received: <xmr:hRsAYyacAB7jdfTHC2z6AUMQBMKxB1e11OaPcjCnmza9aTo2exGlnEFFCUgziG-cb5EZurk1DRP93o8EwFtaPxl8IgeXQLWG1ouw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeivddgvdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlfeehmdenucfjughrpefhvf
+    evufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceo
+    ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepgfefgfegjefhudeike
+    dvueetffelieefuedvhfehjeeljeejkefgffeghfdttdetnecuvehluhhsthgvrhfuihii
+    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:hRsAY1UMeH4BYXQC14LD-Idykv2KbeiPuPNsq0t3FFcVCcBtq7_U9A>
+    <xmx:hRsAY4li0QQz0_U0gtS4KpO9dc1TXrdJiJp9Mm5k7HrCXhR3jVLUQQ>
+    <xmx:hRsAY6em4FDUknbxrqoJiDczosujBnjZqgdoRk9A7uhSqBgL8gckfg>
+    <xmx:hRsAYyexmazcuglZNvl-iMsslpSE1-xd9ltntUiQBC2aC94q0nxFgg>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 19 Aug 2022 19:23:48 -0400 (EDT)
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, memxor@gmail.com
+Cc:     Daniel Xu <dxu@dxuuu.xyz>, pablo@netfilter.org, fw@strlen.de,
+        toke@kernel.org, martin.lau@linux.dev,
+        netfilter-devel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v3 2/5] bpf: Add stub for btf_struct_access()
+Date:   Fri, 19 Aug 2022 17:23:31 -0600
+Message-Id: <d99c0ed59940c82eb2d249f8559fb6cb83db3fc3.1660951028.git.dxu@dxuuu.xyz>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <cover.1660951028.git.dxu@dxuuu.xyz>
+References: <cover.1660951028.git.dxu@dxuuu.xyz>
 MIME-Version: 1.0
-References: <20220819214232.18784-1-alexei.starovoitov@gmail.com>
- <20220819214232.18784-14-alexei.starovoitov@gmail.com> <CAP01T75MUMKzacdE+AcKqgXy1jA5FyMwKXxiibD0ML3OFSqvsw@mail.gmail.com>
- <20220819224317.i3mwmr5atdztudtt@MacBook-Pro-3.local.dhcp.thefacebook.com> <CAP01T77A1pqYQKeECDSCoxH1pQ1Vxcm84B8_D_r0xoZv_bbq_A@mail.gmail.com>
-In-Reply-To: <CAP01T77A1pqYQKeECDSCoxH1pQ1Vxcm84B8_D_r0xoZv_bbq_A@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 19 Aug 2022 16:01:08 -0700
-Message-ID: <CAADnVQLXKaNsP7VuGBfnrsNwEZ2BYQYcQ=s3EGS-g6HhM9E1uA@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf-next 13/15] bpf: Prepare bpf_mem_alloc to be used
- by sleepable bpf programs.
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Delyan Kratunov <delyank@fb.com>,
-        linux-mm <linux-mm@kvack.org>, bpf <bpf@vger.kernel.org>,
-        Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 3:56 PM Kumar Kartikeya Dwivedi
-<memxor@gmail.com> wrote:
->
-> On Sat, 20 Aug 2022 at 00:43, Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Sat, Aug 20, 2022 at 12:21:46AM +0200, Kumar Kartikeya Dwivedi wrote:
-> > > On Fri, 19 Aug 2022 at 23:43, Alexei Starovoitov
-> > > <alexei.starovoitov@gmail.com> wrote:
-> > > >
-> > > > From: Alexei Starovoitov <ast@kernel.org>
-> > > >
-> > > > Use call_rcu_tasks_trace() to wait for sleepable progs to finish.
-> > > > Then use call_rcu() to wait for normal progs to finish
-> > > > and finally do free_one() on each element when freeing objects
-> > > > into global memory pool.
-> > > >
-> > > > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> > > > ---
-> > >
-> > > I fear this can make OOM issues very easy to run into, because one
-> > > sleepable prog that sleeps for a long period of time can hold the
-> > > freeing of elements from another sleepable prog which either does not
-> > > sleep often or sleeps for a very short period of time, and has a high
-> > > update frequency. I'm mostly worried that unrelated sleepable programs
-> > > not even using the same map will begin to affect each other.
-> >
-> > 'sleep for long time'? sleepable bpf prog doesn't mean that they can sleep.
-> > sleepable progs can copy_from_user, but they're not allowed to waste time.
->
-> It is certainly possible to waste time, but indirectly, not through
-> the BPF program itself.
->
-> If you have userfaultfd enabled (for unpriv users), an unprivileged
-> user can trap a sleepable BPF prog (say LSM) using bpf_copy_from_user
-> for as long as it wants. A similar case can be done using FUSE, IIRC.
->
-> You can then say it's a problem about unprivileged users being able to
-> use userfaultfd or FUSE, or we could think about fixing
-> bpf_copy_from_user to return -EFAULT for this case, but it is totally
-> possible right now for malicious userspace to extend the tasks trace
-> gp like this for minutes (or even longer) on a system where sleepable
-> BPF programs are using e.g. bpf_copy_from_user.
+Add corresponding unimplemented stub for when CONFIG_BPF_SYSCALL=n
 
-Well in that sense userfaultfd can keep all sorts of things
-in the kernel from making progress.
-But nothing to do with OOM.
-There is still the max_entries limit.
-The amount of objects in waiting_for_gp is guaranteed to be less
-than full prealloc.
+Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ include/linux/bpf.h | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 39bd36359c1e..fcde14ae6e60 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2157,6 +2157,15 @@ static inline struct bpf_prog *bpf_prog_by_id(u32 id)
+ 	return ERR_PTR(-ENOTSUPP);
+ }
+ 
++static inline int btf_struct_access(struct bpf_verifier_log *log,
++				    const struct btf *btf,
++				    const struct btf_type *t, int off, int size,
++				    enum bpf_access_type atype,
++				    u32 *next_btf_id, enum bpf_type_flag *flag)
++{
++	return -EACCES;
++}
++
+ static inline const struct bpf_func_proto *
+ bpf_base_func_proto(enum bpf_func_id func_id)
+ {
+-- 
+2.37.1
+
