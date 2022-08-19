@@ -2,119 +2,179 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8A0AC32772
-	for <bpf@archiver.kernel.org>; Wed, 17 Aug 2022 19:00:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 083A4C32792
+	for <bpf@archiver.kernel.org>; Fri, 19 Aug 2022 21:10:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237941AbiHQTAw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Aug 2022 15:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54520 "EHLO
+        id S1352251AbiHSVKo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Aug 2022 17:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbiHQTAt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 17 Aug 2022 15:00:49 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F8960539;
-        Wed, 17 Aug 2022 12:00:48 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id f8so3545813wru.13;
-        Wed, 17 Aug 2022 12:00:48 -0700 (PDT)
+        with ESMTP id S1352235AbiHSVKn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 19 Aug 2022 17:10:43 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FD5E0961
+        for <bpf@vger.kernel.org>; Fri, 19 Aug 2022 14:10:41 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-11ba6e79dd1so6536315fac.12
+        for <bpf@vger.kernel.org>; Fri, 19 Aug 2022 14:10:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:to:from:references
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=XcG5s3Tfu/W3kHM07ebvHVaTnvwR81AmUKWeI5aXt/I=;
-        b=kB+XCl9vZ8QZcqlhRAxdBsHv0PxTVMb2z2fovbL5/BONHI6IdHkbBIvwP4XAmsTBkS
-         UCPey/jc+ObjQh7xCscH6ph27nKrK83ItPZ2jSmRPKy6+w94DHL5NoVARJ+UDdqfpUwq
-         /v6egD3ftjaleMwWo6aPiUc7I3SAAKnd81eHY3W02WX2NbABUTfhBiTpaqi4uRTWq+wp
-         5WIM8jaRb5btjaF+kY4uTOSh8w6K8DYut4IMCJYF1/dZHLKNXRXo7/8tnaXF0gtTAqNJ
-         PNk4LrcHXm+R6e0VaytvjqeqZnfpI6JbDo3FO580nYjw2Y8t/2dciFOh7rucyt7VHJ2U
-         WQog==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=zmFxI4fcqG+VM79kjsw3Dz4TIlHari2uDbTRTdPXcuI=;
+        b=udeHnstv36JubtLuTYAHvkRsCYyIXRbm68kCEPPrsUYo2bOebLxId89dOQzU1S4+yC
+         XpvNE7bTxDppbvh1Z5i+8BYlB8NX6HNZYEJvnfvvYXkiekcmDZWw6abvSa/FsLIZd6rV
+         KWgXxB+7ZGLahThNN7JXqvYZvRw5WhE1dSDZ08Y+fjG8BT3axeRWbJhWMDnOo5KZX4Es
+         fbFNNM4tvzaBo1fSWTt2NMrB3RsRmi3l0+dnpt7huBR1sA4uPXywbPov39c0ADkwhkZV
+         +xH634tLJSLX2zUecJGjSIeKFE9d8es5JUd39EZksIMYU+tQXh/x5L/cYTEkw71aiPB5
+         3/xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:to:from:references
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=XcG5s3Tfu/W3kHM07ebvHVaTnvwR81AmUKWeI5aXt/I=;
-        b=rJOKBjew/Uh5Iwzxe+C5QDMuz406Whv5ojzLAOKqTJWFyL5UG8M2HZIV++1RBQFbAF
-         DNrSbEDcmoz8ZNHN5QdHJRjPDqLbSPtQVi1fwwejteavH+ppne7nf448MJysXgvkavH2
-         16c+cXhh/51R+ycpD10+eD/H0BejLB19jKzLyD3rf0pbYzzTdxv5Lgdl7QYlNesazjz8
-         xxayEKTYXe7UBOFC7vHdVvwJHTF1k3lBclSuu34aOyL7+o/vOzvab/9fH7SHhBxan5xC
-         PXX+yugE3QWAiMnOjntKK8HV9kREP5vY1yE5KIuTJzv3KZu6e6f9NDvhAbvkM/pIX2XL
-         iiwQ==
-X-Gm-Message-State: ACgBeo0usGP/ea43VtDmnJWzN7VwE4NukMpaoBt77jCKoB2tDEQbgU1w
-        ajQeR+/rP7PxGdHL1IWp6l4=
-X-Google-Smtp-Source: AA6agR4eWLv0XfY/Im9zh+uIyg0eqPnNknRq2/DocmyKhIE5F4AvzB+tnF+JoJYgqsptaRFsiIG+ow==
-X-Received: by 2002:adf:f909:0:b0:225:c35:8242 with SMTP id b9-20020adff909000000b002250c358242mr7915907wrr.550.1660762846612;
-        Wed, 17 Aug 2022 12:00:46 -0700 (PDT)
-Received: from [192.168.0.209] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.googlemail.com with ESMTPSA id ay29-20020a05600c1e1d00b003a5fa79005csm3276453wmb.11.2022.08.17.12.00.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Aug 2022 12:00:46 -0700 (PDT)
-Message-ID: <ce90b1a4-777f-9cd7-48bc-7d85150d8dcc@gmail.com>
-Date:   Wed, 17 Aug 2022 20:00:44 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=zmFxI4fcqG+VM79kjsw3Dz4TIlHari2uDbTRTdPXcuI=;
+        b=eRu4unq0L018dVmiYPJbdKFpyzfFWSL83WVSnPV7imQzFzapXYAWZpupwSON6Mjn8f
+         nzBrb5yu+QMZPnZkdevfb6K0KdzaUTRQvGD958U3qXbR1Vpio5QqRnL66C/hLNXpe9r5
+         okK1+tbKjUH23Ojr9ppMbsy2d19BwSJ+VnGsY7nzXROtnhVH+eJnF6GNTJ4PpOBAtQ62
+         rdc5KnTs/svqWUuvG3M+4uIdnuIqaCrbi2cq15RkEBacolVOLWxkFwcvNsxls6SfgUdh
+         WlcEDwQOg9NPJhjYCppMsi5qbi5hHAbADzr6bS3GXJDWbXvJCW6DslkxFMp9gV9pd91P
+         tQGw==
+X-Gm-Message-State: ACgBeo1qXVJhAJ8PMI2WjAc2ysBnLziNn2raD4+O34Jyn09nrx11weBc
+        +EmVfz1/tnRgQNIWHW0o835yar9FTzSx2ajyC02J
+X-Google-Smtp-Source: AA6agR4yeIHW1ffPuIU0gnJHMWqUhUxYplMRWQFExgwSU8cLoP2mDo+70sMA6OpN/Lhm/rmY1PbO9kzIe7AIXsog2nY=
+X-Received: by 2002:a05:6870:a78d:b0:11c:437b:ec70 with SMTP id
+ x13-20020a056870a78d00b0011c437bec70mr4812540oao.136.1660943440240; Fri, 19
+ Aug 2022 14:10:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH][next] selftests/bpf: Fix spelling mistake "succesful" ->
- "successful"
-Content-Language: en-US
-References: <20220817083417.50884-1-colin.i.king@gmail.com>
- <818C5CC9-31CA-4DED-90E8-455B03AA9352@fb.com>
-From:   "Colin King (gmail)" <colin.i.king@gmail.com>
-To:     undisclosed-recipients:;
-In-Reply-To: <818C5CC9-31CA-4DED-90E8-455B03AA9352@fb.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <CAHC9VhTuxxRfJg=Ax5z87Jz6tq1oVRcppB444dHM2gP-FZrkTQ@mail.gmail.com>
+ <8735dux60p.fsf@email.froward.int.ebiederm.org> <CAHC9VhSHJNLS-KJ-Rz1R12PQbqACSksLYLbymF78d5hMkSGc-g@mail.gmail.com>
+ <871qte8wy3.fsf@email.froward.int.ebiederm.org> <CAHC9VhSU_sqMQwdoh0nAFdURqs_cVFbva8=otjcZUo8s+xyC9A@mail.gmail.com>
+ <8735du7fnp.fsf@email.froward.int.ebiederm.org> <CAHC9VhQuRNxzgVeNhDy=p5+RHz5+bTH6zFdU=UvvEhyH1e962A@mail.gmail.com>
+ <87tu6a4l83.fsf@email.froward.int.ebiederm.org> <20220818140521.GA1000@mail.hallyn.com>
+ <CAHC9VhRqBxtV04ARQFPWpMf1aFZo0HP_HiJ+8VpXAT-zXF6UXw@mail.gmail.com> <20220819144537.GA16552@mail.hallyn.com>
+In-Reply-To: <20220819144537.GA16552@mail.hallyn.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 19 Aug 2022 17:10:29 -0400
+Message-ID: <CAHC9VhSZ0aaa3k3704j8_9DJvSNRy-0jfXpy1ncs2Jmo8H0a7g@mail.gmail.com>
+Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
+To:     "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
+        casey@schaufler-ca.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        cgzones@googlemail.com, karl@bigbadwolfsecurity.com,
+        tixxdz@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 17/08/2022 19:46, Mykola Lysenko wrote:
-> Hi Colin,
-> 
-> Thanks for your patch!
-> 
-> Can you change patch title to "[PATCH bpf-next] selftests/bpf: Fix spelling mistake "succesful” (kfunc_call.c)”?
+On Fri, Aug 19, 2022 at 10:45 AM Serge E. Hallyn <serge@hallyn.com> wrote:
+> On Thu, Aug 18, 2022 at 11:11:06AM -0400, Paul Moore wrote:
+> > On Thu, Aug 18, 2022 at 10:05 AM Serge E. Hallyn <serge@hallyn.com> wrote:
 
-Personally I think the kfunc_call.c part in the title is extraneous, 
-it's clear it's patching that file from the diff and it's not the style
-I've used of the 3,900+ patches I've had accepted in the kernel.
+...
 
-Colin
+> > > I do strongly sympathize with Eric's points.  It will be very easy, once
+> > > user namespace creation has been further restricted in some distros, to
+> > > say "well see this stuff is silly" and go back to simply requiring root
+> > > to create all containers and namespaces, which is generally quite a bit
+> > > easier anywway.  And then, of course, give everyone root so they can
+> > > start containers.
+> >
+> > That's assuming a lot.  Many years have passed since namespaces were
+> > first introduced, and awareness of good security practices has
+> > improved, perhaps not as much as any of us would like, but to say that
+> > distros, system builders, and even users are the same as they were so
+> > many years ago is a bit of a stretch in my opinion.
+>
+> Maybe.  But I do get a bit worried based on some of what I've been
+> reading in mailing lists lately.  Kernel dev definitely moves like
+> fashion - remember when every api should have its own filesystem?
+> That was not a different group of people.
 
+I'm not going to argue against the idea that kernel development is
+subject to fads, I just don't agree that adding a LSM control point
+for user namespace creation is going to be the end of user namespaces.
 
-> 
-> Regards,
-> Mykola
-> 
->> On Aug 17, 2022, at 1:34 AM, Colin Ian King <colin.i.king@gmail.com> wrote:
->>
->> !-------------------------------------------------------------------|
->>   This Message Is From an External Sender
->>
->> |-------------------------------------------------------------------!
->>
->> There is a spelling mistake in an ASSERT_OK literal string. Fix it.
->>
->> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
->> ---
->> tools/testing/selftests/bpf/prog_tests/kfunc_call.c | 2 +-
->> 1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
->> index 351fafa006fb..eede7c304f86 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
->> @@ -109,7 +109,7 @@ static void test_destructive(void)
->> {
->> 	__u64 save_caps = 0;
->>
->> -	ASSERT_OK(test_destructive_open_and_load(), "succesful_load");
->> +	ASSERT_OK(test_destructive_open_and_load(), "successful_load");
->>
->> 	if (!ASSERT_OK(cap_disable_effective(1ULL << CAP_SYS_BOOT, &save_caps), "drop_caps"))
->> 		return;
->> -- 
->> 2.37.1
->>
-> 
+> > However, even ignoring that for a moment, do we really want to go to a
+> > place where we dictate how users compose and secure their systems?
+> > Linux "took over the world" because it offered a level of flexibility
+> > that wasn't really possible before, and it has flourished because it
+> > has kept that mentality.  The Linux Kernel can be shoehorned onto most
+> > hardware that you can get your hands on these days, with driver
+> > support for most anything you can think to plug into the system.  Do
+> > you want a single-user environment with no per-user separation?  We
+> > can do that.  Do you want a traditional DAC based system that leans
+> > heavy on ACLs and capabilities?  We can do that.  Do you want a
+> > container host that allows you to carve up the system with a high
+> > degree of granularity thanks to the different namespaces?  We can do
+> > that.  How about a system that leverages the LSM to enforce a least
+> > privilege ideal, even on the most privileged root user?  We can do
+> > that too.  This patchset is about giving distro, system builders, and
+> > users another choice in how they build their system.  We've seen both
+>
+> Oh, you misunderstand.  Whereas I do feel there are important concerns in
+> Eric's objections, and whereas I don't feel this set sufficiently
+> addresses the problems that I see and outlined above, I do see value in
+> this set, and was not aiming to deter it.  We need better ways to
+> mitigate a certain clas sof 0-days without completely disallowing use of
+> user namespaces, and this may help.
 
+Ah, thanks for the explanation, I missed that (obviously) in your
+previous email.  If I'm perfectly honest, I suppose the protracted
+debate with Eric has also left me a little overly sensitive to any
+perceived arguments against this patchset.
+
+> > in this patchset and in previously failed attempts that there is a
+> > definite want from a user perspective for functionality such as this,
+> > and I think it's time we deliver it in the upstream kernel so they
+> > don't have to keep patching their own systems with out-of-tree
+> > patches.
+> >
+> > > Eric and Paul, I wonder, will you - or some people you'd like to represent
+> > > you - be at plumbers in September?  Should there be a BOF session there?  (I
+> > > won't be there, but could join over video)  I think a brainstorming session
+> > > for solutions to the above problems would be good.
+> >
+> > Regardless of if Eric or I will be at LPC, it is doubtful that all of
+> > the people who have participated in this discussion will be able to
+> > attend, and I think it's important that the users who are asking for
+> > this patchset have a chance to be heard in each forum where this is
+> > discussed.  While conferences are definitely nice - I definitely
+> > missed them over the past couple of years - we can't use them as a
+> > crutch to help us reach a conclusion on this issue; we've debated much
+>
+> No I wasn't thinking we would use LPC to decide on this patchset.  As far
+> as I can see, the patchset is merged.
+
+While I maintain that Frederick's patches are a good thing, I'm not
+going to consider them "merged" until I see them in Linus' tree or
+Linus decided to voice his support on the lists.  These patches do
+have Eric's NACK, and a maintainer's NACK isn't something to take
+lightly.  I certainly don't.
+
+>  I am hoping we can come up with
+> "something better" to address people's needs, make everyone happy, and
+> bring forth world peace.  Which would stack just fine with what's here
+> for defense in depth.
+>
+> You may well not be interested in further work, and that's fine.  I need
+> to set aside a few days to think on this.
+
+I'm happy to continue the discussion as long as it's constructive; I
+think we all are.  My gut feeling is that Frederick's approach falls
+closest to the sweet spot of "workable without being overly offensive"
+(*cough*), but if you've got an additional approach in mind, or an
+alternative approach that solves the same use case problems, I think
+we'd all love to hear about it.
+
+-- 
+paul-moore.com
