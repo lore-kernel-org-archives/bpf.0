@@ -2,112 +2,113 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B44C7C32774
-	for <bpf@archiver.kernel.org>; Sat, 20 Aug 2022 11:33:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 583EEC25B08
+	for <bpf@archiver.kernel.org>; Sat, 20 Aug 2022 11:51:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345239AbiHTLdU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 20 Aug 2022 07:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47040 "EHLO
+        id S1345801AbiHTLvJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 20 Aug 2022 07:51:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345157AbiHTLdS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 20 Aug 2022 07:33:18 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694E010C0;
-        Sat, 20 Aug 2022 04:33:12 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M8xHZ1y3YzlWLb;
-        Sat, 20 Aug 2022 19:30:02 +0800 (CST)
-Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 20 Aug 2022 19:33:10 +0800
-Received: from k04.huawei.com (10.67.174.115) by
- dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 20 Aug 2022 19:33:10 +0800
-From:   Pu Lehui <pulehui@huawei.com>
-To:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S1345738AbiHTLvI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 20 Aug 2022 07:51:08 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9997D9D642
+        for <bpf@vger.kernel.org>; Sat, 20 Aug 2022 04:51:06 -0700 (PDT)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxnmulygBjkwgGAA--.14449S3;
+        Sat, 20 Aug 2022 19:51:01 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "Jean-Philippe Brucker" <jean-philippe@linaro.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        "Hao Luo" <haoluo@goddogle.com>, Jiri Olsa <jolsa@kernel.org>,
-        Pu Lehui <pulehui@huawei.com>
-Subject: [PATCH bpf-next 2/2] bpftool: Fix cgroup attach flags being assigned to effective progs
-Date:   Sat, 20 Aug 2022 20:02:34 +0800
-Message-ID: <20220820120234.2121044-3-pulehui@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220820120234.2121044-1-pulehui@huawei.com>
-References: <20220820120234.2121044-1-pulehui@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.174.115]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500019.china.huawei.com (7.185.36.180)
-X-CFilter-Loop: Reflected
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf@vger.kernel.org, loongarch@lists.linux.dev
+Subject: [PATCH bpf-next v1 1/4] LoongArch: Move {signed,unsigned}_imm_check() to inst.h
+Date:   Sat, 20 Aug 2022 19:50:57 +0800
+Message-Id: <1660996260-11337-2-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+In-Reply-To: <1660996260-11337-1-git-send-email-yangtiezhu@loongson.cn>
+References: <1660996260-11337-1-git-send-email-yangtiezhu@loongson.cn>
+X-CM-TRANSID: AQAAf8BxnmulygBjkwgGAA--.14449S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ar17Gry5KFy8tF4xZF43KFg_yoW8uF48pF
+        ZxZr4kGrWjgrn5AFyDKwn8XF98Crs7GwnIqa9xKa4xAF47XF1UXryv9rn8XFWjqa95uFW0
+        gayfJr13ua1DJaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBFb7Iv0xC_tr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
+        8067AKxVWUGwA2048vs2IY020Ec7CjxVAFwI0_JFI_Gr1l8cAvFVAK0II2c7xJM28CjxkF
+        64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcV
+        CY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv
+        6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzV
+        Aqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S
+        6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVAFwVW8KwCF04k20xvY0x
+        0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
+        7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcV
+        C0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF
+        04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7
+        CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jYdgXUUUUU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When root-cgroup attach multi progs and sub-cgroup attach a
-override prog, bpftool will display incorrectly for the attach
-flags of the sub-cgroup’s effective progs:
+{signed,unsigned}_imm_check() will also be used in the bpf jit, so move
+them from module.c to inst.h, this is preparation for later patch.
 
-$ bpftool c t /sys/fs/cgroup effective
-CgroupPath
-ID       AttachType      AttachFlags     Name
-/sys/fs/cgroup
-6        sysctl          multi           sysctl_tcp_mem
-13       sysctl          multi           sysctl_tcp_mem
-/sys/fs/cgroup/cg1
-    20       sysctl          override        sysctl_tcp_mem
-    6        sysctl          override        sysctl_tcp_mem
-    13       sysctl          override        sysctl_tcp_mem
+By the way, no need to explicitly include asm/inst.h in module.c, because
+the header file has been included indirectly.
 
-Attach flags is only valid for attached progs of this layer
-cgroup, but not for effective progs. Since prog_attach_flags
-array is already bypass the effective progs, so we can just
-use it.
+  arch/loongarch/kernel/module.c
+    include/linux/moduleloader.h
+      include/linux/module.h
+        arch/loongarch/include/asm/module.h
+          arch/loongarch/include/asm/inst.h
 
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- tools/bpf/bpftool/cgroup.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ arch/loongarch/include/asm/inst.h | 10 ++++++++++
+ arch/loongarch/kernel/module.c    | 10 ----------
+ 2 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/tools/bpf/bpftool/cgroup.c b/tools/bpf/bpftool/cgroup.c
-index cced668fb2a3..fa3eef0ff860 100644
---- a/tools/bpf/bpftool/cgroup.c
-+++ b/tools/bpf/bpftool/cgroup.c
-@@ -219,11 +219,7 @@ static int show_attached_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
- 		return 0;
+diff --git a/arch/loongarch/include/asm/inst.h b/arch/loongarch/include/asm/inst.h
+index 7b07cbb..7b37509 100644
+--- a/arch/loongarch/include/asm/inst.h
++++ b/arch/loongarch/include/asm/inst.h
+@@ -166,4 +166,14 @@ u32 larch_insn_gen_lu32id(enum loongarch_gpr rd, int imm);
+ u32 larch_insn_gen_lu52id(enum loongarch_gpr rd, enum loongarch_gpr rj, int imm);
+ u32 larch_insn_gen_jirl(enum loongarch_gpr rd, enum loongarch_gpr rj, unsigned long pc, unsigned long dest);
  
- 	for (iter = 0; iter < p.prog_cnt; iter++) {
--		__u32 attach_flags;
--
--		attach_flags = prog_attach_flags[iter] ?: p.attach_flags;
--
--		switch (attach_flags) {
-+		switch (prog_attach_flags[iter]) {
- 		case BPF_F_ALLOW_MULTI:
- 			attach_flags_str = "multi";
- 			break;
-@@ -234,7 +230,8 @@ static int show_attached_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
- 			attach_flags_str = "";
- 			break;
- 		default:
--			snprintf(buf, sizeof(buf), "unknown(%x)", attach_flags);
-+			snprintf(buf, sizeof(buf), "unknown(%x)",
-+				 prog_attach_flags[iter]);
- 			attach_flags_str = buf;
- 		}
++static inline bool signed_imm_check(long val, unsigned int bit)
++{
++	return -(1L << (bit - 1)) <= val && val < (1L << (bit - 1));
++}
++
++static inline bool unsigned_imm_check(unsigned long val, unsigned int bit)
++{
++	return val < (1UL << bit);
++}
++
+ #endif /* _ASM_INST_H */
+diff --git a/arch/loongarch/kernel/module.c b/arch/loongarch/kernel/module.c
+index 638427f..edaee67 100644
+--- a/arch/loongarch/kernel/module.c
++++ b/arch/loongarch/kernel/module.c
+@@ -18,16 +18,6 @@
+ #include <linux/string.h>
+ #include <linux/kernel.h>
  
+-static inline bool signed_imm_check(long val, unsigned int bit)
+-{
+-	return -(1L << (bit - 1)) <= val && val < (1L << (bit - 1));
+-}
+-
+-static inline bool unsigned_imm_check(unsigned long val, unsigned int bit)
+-{
+-	return val < (1UL << bit);
+-}
+-
+ static int rela_stack_push(s64 stack_value, s64 *rela_stack, size_t *rela_stack_top)
+ {
+ 	if (*rela_stack_top >= RELA_STACK_DEPTH)
 -- 
-2.25.1
+2.1.0
 
