@@ -2,81 +2,101 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77CDFC32792
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FA1EC32793
 	for <bpf@archiver.kernel.org>; Sat, 20 Aug 2022 11:51:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245327AbiHTLvL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 20 Aug 2022 07:51:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
+        id S1345738AbiHTLvK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 20 Aug 2022 07:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345775AbiHTLvJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 20 Aug 2022 07:51:09 -0400
+        with ESMTP id S1345729AbiHTLvI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 20 Aug 2022 07:51:08 -0400
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 20F009DFBD
-        for <bpf@vger.kernel.org>; Sat, 20 Aug 2022 04:51:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB4139D648
+        for <bpf@vger.kernel.org>; Sat, 20 Aug 2022 04:51:06 -0700 (PDT)
 Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxnmulygBjkwgGAA--.14449S6;
-        Sat, 20 Aug 2022 19:51:03 +0800 (CST)
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxnmulygBjkwgGAA--.14449S2;
+        Sat, 20 Aug 2022 19:51:01 +0800 (CST)
 From:   Tiezhu Yang <yangtiezhu@loongson.cn>
 To:     Huacai Chen <chenhuacai@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>
 Cc:     bpf@vger.kernel.org, loongarch@lists.linux.dev
-Subject: [PATCH bpf-next v1 4/4] LoongArch: Enable BPF_JIT and TEST_BPF in default config
-Date:   Sat, 20 Aug 2022 19:51:00 +0800
-Message-Id: <1660996260-11337-5-git-send-email-yangtiezhu@loongson.cn>
+Subject: [PATCH bpf-next v1 0/4] Add BPF JIT support for LoongArch
+Date:   Sat, 20 Aug 2022 19:50:56 +0800
+Message-Id: <1660996260-11337-1-git-send-email-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1660996260-11337-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1660996260-11337-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf8BxnmulygBjkwgGAA--.14449S6
-X-Coremail-Antispam: 1UD129KBjvdXoWrZw48tFyrGryfKFy5Ww4rZrb_yoWDWrc_JF
-        W7Gw1Duw48J39rWr12qw1ru3yDA3WUZ3WrCF17XrWI9ay7Kr13tr4DJ3W3CFn0gay5Wr45
-        ZaykAa4qkF10yjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbSkYjsxI4VW3JwAYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7
-        IE14v26r126s0DM28IrcIa0xkI8VCY1x0267AKxVW5JVCq3wA2ocxC64kIII0Yj41l84x0
-        c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2
-        IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2
-        jsIEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64
-        kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm
-        72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK67AK6r4kMxAIw28Icx
-        kI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
-        xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42
-        IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY
-        6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
-        CY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8gAw7UUUUU==
+X-CM-TRANSID: AQAAf8BxnmulygBjkwgGAA--.14449S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJrW7Zw4rur1kuw1DJrW7CFg_yoW8Zr4kpa
+        y3urn8KrWDGr1fXr1ft3yUuryrtF4fGry7Wa1ay348ArZ8ZF1jgFyxtw1DZFn5twsYgFy0
+        qr1rKw12gF4DJa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk2b7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
+        C2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r
+        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE14v_Gw4l42xK
+        82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGw
+        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48J
+        MIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMI
+        IF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUgBcEUUUUU
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-For now, BPF JIT for LoongArch is supported, update loongson3_defconfig to
-enable BPF_JIT to allow the kernel to generate native code when a program
-is loaded into the kernel, and also enable TEST_BPF to test BPF JIT.
+The basic support for LoongArch has been merged into the upstream Linux
+kernel since 5.19-rc1 on June 5, 2022, this patch series adds BPF JIT
+support for LoongArch.
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/loongarch/configs/loongson3_defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+Here is the LoongArch documention:
+https://www.kernel.org/doc/html/latest/loongarch/index.html
 
-diff --git a/arch/loongarch/configs/loongson3_defconfig b/arch/loongarch/configs/loongson3_defconfig
-index 3712552..93dc072 100644
---- a/arch/loongarch/configs/loongson3_defconfig
-+++ b/arch/loongarch/configs/loongson3_defconfig
-@@ -4,6 +4,7 @@ CONFIG_POSIX_MQUEUE=y
- CONFIG_NO_HZ=y
- CONFIG_HIGH_RES_TIMERS=y
- CONFIG_BPF_SYSCALL=y
-+CONFIG_BPF_JIT=y
- CONFIG_PREEMPT=y
- CONFIG_BSD_PROCESS_ACCT=y
- CONFIG_BSD_PROCESS_ACCT_V3=y
-@@ -801,3 +802,4 @@ CONFIG_MAGIC_SYSRQ=y
- CONFIG_SCHEDSTATS=y
- # CONFIG_DEBUG_PREEMPT is not set
- # CONFIG_FTRACE is not set
-+CONFIG_TEST_BPF=m
+With this patch series, the test cases in lib/test_bpf.ko have passed
+on LoongArch.
+
+  # echo 1 > /proc/sys/net/core/bpf_jit_enable
+  # modprobe test_bpf
+  # dmesg | grep Summary
+  test_bpf: Summary: 1026 PASSED, 0 FAILED, [1014/1014 JIT'ed]
+  test_bpf: test_tail_calls: Summary: 10 PASSED, 0 FAILED, [10/10 JIT'ed]
+  test_bpf: test_skb_segment: Summary: 2 PASSED, 0 FAILED
+
+It seems that this patch series can not be applied cleanly to bpf-next
+which is not synced to v6.0-rc1.
+
+v1:
+  -- Rebased series on v6.0-rc1
+  -- Move {signed,unsigned}_imm_check() to inst.h
+  -- Define the imm field as "unsigned int" in the instruction format
+  -- Use DEF_EMIT_*_FORMAT to define the same kind of instructions
+  -- Use "stack_adjust += sizeof(long) * 8" in build_prologue()
+
+RFC:
+  https://lore.kernel.org/bpf/1660013580-19053-1-git-send-email-yangtiezhu@loongson.cn/
+
+Tiezhu Yang (4):
+  LoongArch: Move {signed,unsigned}_imm_check() to inst.h
+  LoongArch: Add some instruction opcodes and formats
+  LoongArch: Add BPF JIT support
+  LoongArch: Enable BPF_JIT and TEST_BPF in default config
+
+ arch/loongarch/Kbuild                      |    1 +
+ arch/loongarch/Kconfig                     |    1 +
+ arch/loongarch/configs/loongson3_defconfig |    2 +
+ arch/loongarch/include/asm/inst.h          |  317 +++++++-
+ arch/loongarch/kernel/module.c             |   10 -
+ arch/loongarch/net/Makefile                |    7 +
+ arch/loongarch/net/bpf_jit.c               | 1113 ++++++++++++++++++++++++++++
+ arch/loongarch/net/bpf_jit.h               |  308 ++++++++
+ 8 files changed, 1744 insertions(+), 15 deletions(-)
+ create mode 100644 arch/loongarch/net/Makefile
+ create mode 100644 arch/loongarch/net/bpf_jit.c
+ create mode 100644 arch/loongarch/net/bpf_jit.h
+
 -- 
 2.1.0
 
