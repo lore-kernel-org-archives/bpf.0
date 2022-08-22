@@ -2,65 +2,64 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1ECBAC28D13
-	for <bpf@archiver.kernel.org>; Mon, 22 Aug 2022 18:26:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94401C32774
+	for <bpf@archiver.kernel.org>; Mon, 22 Aug 2022 18:27:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236991AbiHVS0N (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 22 Aug 2022 14:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51220 "EHLO
+        id S236208AbiHVS1Z (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 22 Aug 2022 14:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234096AbiHVS0J (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 22 Aug 2022 14:26:09 -0400
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A64481D0;
-        Mon, 22 Aug 2022 11:26:07 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.west.internal (Postfix) with ESMTP id 08E3A2B0694C;
-        Mon, 22 Aug 2022 14:26:05 -0400 (EDT)
+        with ESMTP id S236290AbiHVS0P (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 22 Aug 2022 14:26:15 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFB3481D9;
+        Mon, 22 Aug 2022 11:26:13 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id EE5D332009DF;
+        Mon, 22 Aug 2022 14:26:11 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Mon, 22 Aug 2022 14:26:07 -0400
+  by compute1.internal (MEProxy); Mon, 22 Aug 2022 14:26:13 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
         :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm3; t=1661192765; x=1661199965; bh=vfJv+oLtoyrLAFr9WpKYFQGVR
-        rJVovoWBCn/PTIos2k=; b=u0IAtOtM0kiq4G99BdozDiXx7azA98UNb9aO5isVV
-        1OaVdbQAcqHDZRsGYeXDKsxiF8z/B+wGuRCWnw9T7qApS9RmxINkXx6/5eTHF8N1
-        5qcXL0BD0LHfATtNkN5WEBy1LcpGllR53DgzalPFTGLyGd43NP9a0ae08oEY6JWS
-        Mzn2kmxuStZzEKrMsS8mVMniZg4MX3tZqp7/OBrv1XLGWO+s3nPi+uDr1amHeVpk
-        G8HKC6m0K4HsqVFPci50Z12O5+VGVKnifIXPDqaZneFQi84eYtcgMHppGzqEufAP
-        5F24q8CpRPWnbPT8qxveXIBo6TMnn0w1133BkPqA50Paw==
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1661192771; x=1661279171; bh=LS
+        KB15JNkOM6IStOUGGM5d6X8gu4EdQM8BDl4wVbxpY=; b=nqjfk//FtMa2MoirZv
+        jk5oQjexN2OO9FATNA9UsX8hVUMSUMMaWgfGdQjX6FyEWiS2Tswm9sm37V3B3YBg
+        1k9b3vTM8gIHN7cxb7TqCAL5MwtSweL6PT8IHsoQKln0gW6lKOUwbvf0a+m4LbfZ
+        99AP8UORLD9g2cspJ4qe0j9YTiB4jk0jFeFBt8Wd7uO5bVKDvW5qGr6hBRNPCCQQ
+        uG8nG32fr8LW989VuzIgAyop2zTfi3ULgnj4zUAU7SUVwuX8bpe6mfh4lj1iXnNf
+        E+HSi6/zCchFxthMOEiAosB84w/+j4WgLPSF4jENnSPrLB7WvdunHB9N9atZo8xV
+        ONHQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1661192765; x=1661199965; bh=vfJv+oLtoyrLAFr9WpKYFQGVRrJVovoWBCn
-        /PTIos2k=; b=bONUmxzMikQmLB+iJrpQTjsreENshBuVEBIS7lQsKE93OFKJ+n9
-        suARhHjp4kN27hjk46cE7COFshCqwYODJ7e7K/bnbNqSGZRVgoWJt5Colq0lYcPe
-        W6b42aCwEDMwlkZL4Ddp6LsbPnwOeP71HX254vt696fM8NuWBzwKAFbS18B3H/cd
-        h/w+/faf8FxxuYtcFFIH0TegSRW/w/gihd8Q0Pa3+pIEuBBuyq2JfGRqxUriV8er
-        s4ydbF/qR8rDMnC6/pjplywN/EtnYCQziVW2zAj8az5E3zYaYfm6nmOzLJY8Q/mW
-        NgwdSe0mb/2lAVc9Eo3lAutpuPb6WyD8iPw==
-X-ME-Sender: <xms:PMoDY2Zd3Ms3yta0HSwC7ME1iSaR42OC4VJeup5onuHhvE2VhOcqZg>
-    <xme:PMoDY5aEu57ay0VOnGP0kkLOZA9gyF6tv1cAkCRj8WHMCX5BHNpY06SiMN_TeVRp5
-    AJczE-8PUOmL23DuQ>
-X-ME-Received: <xmr:PMoDYw-QnlSTWRnpqkn3DAVLPK7qzDRbhIcjEklrgw6GpfL5_Udi2ydGE9aopOEjYHngNBMp-JUagP6hLLvz-dLyddhvVpyftrB3>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeijedguddvhecutefuodetggdotefrod
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1661192771; x=1661279171; bh=LSKB15JNkOM6I
+        StOUGGM5d6X8gu4EdQM8BDl4wVbxpY=; b=fxh6f/XgGL11QfGuHmuS/ham4YqUV
+        RwgIv0dG7c6XB7zB4RzvHLQnogbqbv7jSc592N6Z1DCY0M2Et8YSF4OgzSQG4goR
+        4LIQxJd77YM+9t/KG07lXUpYSuKExi0OUR4rU3K1gmuLZlusmNeFeTRlCkcc5gov
+        mPoIcjlWB/xcsU2HJzUIdE3YZV0ThZKSp8AkLXryBiJxbvLa1mvm3zaSwDuRrn+g
+        RHKtHL/iIH9F2yb3mTInlOKMwS3uNYdG/K1Vv/t3at5nwLtvugN0XbSxChh4Icbj
+        HjD2lbssXur6jcNz0FAAL3PYbu1EgsSzi0trqLkt1J/rn0FdfK3xi/3cQ==
+X-ME-Sender: <xms:Q8oDYyyjQafl9Go1EGdeNiMDQDnLXvSbW3U22YYOPLoBd-5MmtIz0w>
+    <xme:Q8oDY-QdEgz_AztRch6z0yezbfPBlFWlZ1kSbWlHPSMg3l_4B8e9QMZG9C4q1LgHD
+    egjq8BXhwJPFK9HZA>
+X-ME-Received: <xmr:Q8oDY0XqIajjseZeC1RSk3nOtbcYILijL3A0Ao7gZsOoVDhwe25hBzpsF_8fQUsu_v22zDSQwYsGDkn--mz3U74mZbLrGnYKbyxU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeijedguddviecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdefhedmnegovehorghsth
-    grlhdqhfeguddvqddtvdculdduhedtmdenucfjughrpefhvfevufffkffoggfgsedtkeer
-    tdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceougiguhesugiguhhuuhdrgiihii
-    eqnecuggftrfgrthhtvghrnhepteeukedtuefhfeevgffgveegfffgkeefhfekkeetffeh
-    vedtvdehudekheffledtnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhush
-    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhu
-    rdighiii
-X-ME-Proxy: <xmx:PMoDY4o8qJEfJLsP6XvUgFZKh7vre0oc39Wws0Ky2gIcA4IKSWsYwg>
-    <xmx:PMoDYxqHgeIuTNfJp6tF0et22XUl75t04RIPTWtbFNcMcfynVWi5FQ>
-    <xmx:PMoDY2R-ZmlZ7KFPB6sDSleZKLh_hiskUuDzV6-xZK6RwRzzUbUqBg>
-    <xmx:PcoDYyTy6JPTmziG9JKhBIobO5aZ0J71Uc3f-te2Ike2X4V8BJeBdqyDqlY>
+    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdefhedmnecujfgurhephf
+    fvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcu
+    oegugihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpefgfefggeejhfduie
+    ekvdeuteffleeifeeuvdfhheejleejjeekgfffgefhtddtteenucevlhhushhtvghrufhi
+    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:Q8oDY4gpaiEHkigwRgkt7nsaynFl9gsEMxecXLFMB3L3ysntClfrAg>
+    <xmx:Q8oDY0CjJxFXt5pUgRxwXrE5QCq1AKgi6Vj9N2jQO4Jw1AF21fmqew>
+    <xmx:Q8oDY5KecmqCVJFrWvXtyJcvnbuqJpNb-P5s1yRn4_vG-t4wjN3sDQ>
+    <xmx:Q8oDY9J5FcWDPjjZVIpgHNgb_nh3oqibAweL_TBMwu8ZqLCurVKwgA>
 Feedback-ID: i6a694271:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 22 Aug 2022 14:26:04 -0400 (EDT)
+ 22 Aug 2022 14:26:10 -0400 (EDT)
 From:   Daniel Xu <dxu@dxuuu.xyz>
 To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
         andrii@kernel.org, memxor@gmail.com
@@ -68,60 +67,46 @@ Cc:     Daniel Xu <dxu@dxuuu.xyz>, pablo@netfilter.org, fw@strlen.de,
         toke@kernel.org, martin.lau@linux.dev,
         netfilter-devel@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v4 0/5] Support direct writes to nf_conn:mark
-Date:   Mon, 22 Aug 2022 12:25:50 -0600
-Message-Id: <cover.1661192455.git.dxu@dxuuu.xyz>
+Subject: [PATCH bpf-next v4 2/5] bpf: Add stub for btf_struct_access()
+Date:   Mon, 22 Aug 2022 12:25:52 -0600
+Message-Id: <d99c0ed59940c82eb2d249f8559fb6cb83db3fc3.1661192455.git.dxu@dxuuu.xyz>
 X-Mailer: git-send-email 2.37.1
+In-Reply-To: <cover.1661192455.git.dxu@dxuuu.xyz>
+References: <cover.1661192455.git.dxu@dxuuu.xyz>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Support direct writes to nf_conn:mark from TC and XDP prog types. This
-is useful when applications want to store per-connection metadata. This
-is also particularly useful for applications that run both bpf and
-iptables/nftables because the latter can trivially access this metadata.
+Add corresponding unimplemented stub for when CONFIG_BPF_SYSCALL=n
 
-One example use case would be if a bpf prog is responsible for advanced
-packet classification and iptables/nftables is later used for routing
-due to pre-existing/legacy code.
+Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ include/linux/bpf.h | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-Past discussion:
-- v3: https://lore.kernel.org/bpf/cover.1660951028.git.dxu@dxuuu.xyz/
-- v2: https://lore.kernel.org/bpf/CAP01T74Sgn354dXGiFWFryu4vg+o8b9s9La1d9zEbC4LGvH4qg@mail.gmail.com/T/
-- v1: https://lore.kernel.org/bpf/cover.1660592020.git.dxu@dxuuu.xyz/
-
-Changes since v3:
-- Use a mutex to protect module load/unload critical section
-
-Changes since v2:
-- Remove use of NOT_INIT for btf_struct_access write path
-- Disallow nf_conn writing when nf_conntrack module not loaded
-- Support writing to nf_conn___init:mark
-
-Changes since v1:
-- Add unimplemented stub for when !CONFIG_BPF_SYSCALL
-
-Daniel Xu (5):
-  bpf: Remove duplicate PTR_TO_BTF_ID RO check
-  bpf: Add stub for btf_struct_access()
-  bpf: Use 0 instead of NOT_INIT for btf_struct_access() writes
-  bpf: Add support for writing to nf_conn:mark
-  selftests/bpf: Add tests for writing to nf_conn:mark
-
- include/linux/bpf.h                           |  9 ++
- include/net/netfilter/nf_conntrack_bpf.h      | 22 +++++
- kernel/bpf/verifier.c                         |  3 -
- net/core/filter.c                             | 34 +++++++
- net/ipv4/bpf_tcp_ca.c                         |  2 +-
- net/netfilter/nf_conntrack_bpf.c              | 91 ++++++++++++++++++-
- net/netfilter/nf_conntrack_core.c             |  1 +
- .../testing/selftests/bpf/prog_tests/bpf_nf.c |  2 +
- .../testing/selftests/bpf/progs/test_bpf_nf.c |  9 +-
- .../selftests/bpf/progs/test_bpf_nf_fail.c    | 14 +++
- 10 files changed, 180 insertions(+), 7 deletions(-)
-
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 39bd36359c1e..fcde14ae6e60 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2157,6 +2157,15 @@ static inline struct bpf_prog *bpf_prog_by_id(u32 id)
+ 	return ERR_PTR(-ENOTSUPP);
+ }
+ 
++static inline int btf_struct_access(struct bpf_verifier_log *log,
++				    const struct btf *btf,
++				    const struct btf_type *t, int off, int size,
++				    enum bpf_access_type atype,
++				    u32 *next_btf_id, enum bpf_type_flag *flag)
++{
++	return -EACCES;
++}
++
+ static inline const struct bpf_func_proto *
+ bpf_base_func_proto(enum bpf_func_id func_id)
+ {
 -- 
 2.37.1
 
