@@ -2,197 +2,249 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3C48C32772
-	for <bpf@archiver.kernel.org>; Tue, 23 Aug 2022 18:34:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A85FEC32772
+	for <bpf@archiver.kernel.org>; Mon, 22 Aug 2022 11:26:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230407AbiHWSd7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Aug 2022 14:33:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
+        id S231927AbiHVL0c (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 22 Aug 2022 07:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230280AbiHWSdi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Aug 2022 14:33:38 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71A783079
-        for <bpf@vger.kernel.org>; Tue, 23 Aug 2022 09:55:27 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id bq11so11162075wrb.12
-        for <bpf@vger.kernel.org>; Tue, 23 Aug 2022 09:55:27 -0700 (PDT)
+        with ESMTP id S229637AbiHVL0c (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 22 Aug 2022 07:26:32 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A9227CE7;
+        Mon, 22 Aug 2022 04:26:31 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id f17so3864199pfk.11;
+        Mon, 22 Aug 2022 04:26:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:from:references:cc:to:content-language:subject
-         :user-agent:mime-version:date:message-id:from:to:cc;
-        bh=BHHVjcMtIOwGrUJK560v1zNbcoFZ/mFC3fPSrYyoaUQ=;
-        b=bWQUvj/cHt5081k1NzWvNoxr/eF9eI+iN11/KqeOpaxDh4FkwU1FywjY1cJS7Auayt
-         Mc6msdeUORZSsweJQ8QqYyDz/BiGRRy0jv7wLMBEiqsY/VjByVxE1d9x57zdC9Iwzx6E
-         4YS6/jj8TgW57RerOF5QBVqqAJWxj+jyn8q5kjCD3aoLsjK1RjnOXfkIFPwf5msC44vX
-         MfEmgtuwoB/Uz7FZo+izbHg45s6wAAV2Hjj3jwyxWdSQgXv4nLfUQAUF4+3ZTQWHSJ9s
-         /pDjXtIXNJEvrXN/ASMhOfIu9HxcxGTl9Fz4pDRznYjCIU69mKCJS5E5CxHPEcrA0FMg
-         uRXg==
+        h=content-disposition:mime-version:message-id:cc:to:from:date:sender
+         :from:to:cc;
+        bh=xYnThmFHoGKU/sNt4SS1hXDq6GYqnmSSTt1CpRvIL48=;
+        b=nWxBmLtDylTawPLEuM/2MzvIWaoVY8d8VN5rzm3+Q0FGFiVgZNLmM+p3vaejpbL1KA
+         NPgmYtrMfKM48JaFMB6Ke3Qg2L0TexbZGmCgTtVVq8dM6QKRNqxkc7mzADsEoMxJeaJw
+         5oxebUX63OgqwuFYXqFBMZHpbhxh+Zxu9bT4gZNwd5p1Qjdh3viL6jy7OdXxRsx3DLe0
+         5h71ej+cLYiPoleAvF8TEH5G0XmZuyaHCnDHRgeDuUHTOPQXwjwMjEmF969VGN+Kk9NA
+         EZDrfl+54wVczIiVkkLCf/pCm22OFwD0kvLJWOWHJHwUtuA02L3cUMAuODmLr2rlicp3
+         PVkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:from:references:cc:to:content-language:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc;
-        bh=BHHVjcMtIOwGrUJK560v1zNbcoFZ/mFC3fPSrYyoaUQ=;
-        b=SVEHdOqOUhgcAOhYZak3QAUPOEjhxYu+xMhXXvloGjgkBtV7N8O5O+S5Xt1KhPiVwo
-         aihiPdSPCEubcmpzHmNvsewwL9U+3ugL5GVNT5C3F73EfjqLA1xpXC10Y7Gl3FzmtKHq
-         6Gvn0OlO8DROzdFjWknLh8N2+DMdkDuU2Uo8OH/HXQ3Pxya8WTfdf06G45dQq5nE3Ld9
-         jKQ/QE9Vzqc/dRJ/JZ6329vuR4cSzs3DTvceFH9S3QYALNrL3spK5KWPfmIPfQOgIotb
-         q1N0dzK6E70iHoAUVPjs1XRoXPBMqcdULO+qJueMyucN1h+AM5mOq8BLnaF3KQoX3CS+
-         Sr5w==
-X-Gm-Message-State: ACgBeo1E22D8qcWetiVoh7DjA73wmHv/HXlhE3Cg59VzJFl78uUspjGD
-        Zx8yFjXmg83XjeBoSa7oE+A=
-X-Google-Smtp-Source: AA6agR4I4d2kaNhbFiS+Ce/N2U8i58/FtyhuXHeq4DRqD6n5iWCHfE0u9vels7ROy76/VPvu+OaldQ==
-X-Received: by 2002:adf:f8c9:0:b0:225:50da:d43 with SMTP id f9-20020adff8c9000000b0022550da0d43mr7043616wrq.28.1661273726245;
-        Tue, 23 Aug 2022 09:55:26 -0700 (PDT)
-Received: from [192.168.0.160] ([170.253.36.171])
-        by smtp.gmail.com with ESMTPSA id d7-20020a5d5387000000b002235eb9d200sm15167544wrv.10.2022.08.23.09.55.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 09:55:25 -0700 (PDT)
-Message-ID: <046858e2-91b9-3703-92a3-89ddc620d445@gmail.com>
-Date:   Tue, 23 Aug 2022 18:55:24 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH bpf-next v2 1/2] scripts/bpf: Set version attribute for
- bpf-helpers(7) man page
-Content-Language: en-US
-To:     Quentin Monnet <quentin@isovalent.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        h=content-disposition:mime-version:message-id:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc;
+        bh=xYnThmFHoGKU/sNt4SS1hXDq6GYqnmSSTt1CpRvIL48=;
+        b=oQdIhnYDhp7UQqvSpj8IWYVsoqeL/M/fBPC1aUvWsqUMqVXbcDyGv9V1iDn2CweQnD
+         c0gjvSNaPOTc9kovY0yO5EKkqOeju+JO6HENmN49p1hR9nTJdcBBCLehrtRXEuOHW4rg
+         r5DvlQ+DqDALniC9yzZdjHUFpb3ox13vwoEwtQjEX/IL67bYftVEHKIgVIJjWArgpW8P
+         Gi3MMKw6H0YOYWhj3Bx+6KsQyZu8/MvNISkDrkpyGgxf+4KBbVuLwwE/mgrm4RfB4PU+
+         A9Aj+DlU/V/FlRvQiuJQtqd8Yqauw8Ts4Vu2ybvRdpVHLxxCdAOjpOGQTWxFjsGScyYb
+         Eb1g==
+X-Gm-Message-State: ACgBeo1/1oNrRCmyX56YY49QxCa7O9+udQQrqwy/AyQca5EjUc/wsHOU
+        odZBEi+Wv9+uQ3PPzB9pb7lt9C8diaE=
+X-Google-Smtp-Source: AA6agR5ntUFOMw3NycEWdfz8YmaV4pQ2lfDuTFMz2/TqP/1ze9EYk+TwWhkZGVOpWL7qE/syg/tloA==
+X-Received: by 2002:a63:eb49:0:b0:421:8c9b:4ab1 with SMTP id b9-20020a63eb49000000b004218c9b4ab1mr16740198pgk.339.1661167590122;
+        Mon, 22 Aug 2022 04:26:30 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id f8-20020a170902ce8800b00172c298ba42sm226896plg.28.2022.08.22.04.26.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Aug 2022 04:26:29 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 22 Aug 2022 01:26:28 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yafang Shao <laoar.shao@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org
-References: <20220823155327.98888-1-quentin@isovalent.com>
-From:   Alejandro Colomar <alx.manpages@gmail.com>
-In-Reply-To: <20220823155327.98888-1-quentin@isovalent.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------0RIgft0zFeZJWiG8DKV5H0fk"
+        Hao Luo <haoluo@google.com>, jolsa@kernel.org,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Cgroups <cgroups@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Mina Almasry <almasrymina@google.com>
+Message-ID: <YwNn5FvAYMHKY9jH@slm.duckdns.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------0RIgft0zFeZJWiG8DKV5H0fk
-Content-Type: multipart/mixed; boundary="------------cJwSK1tPk71iq0z1dvJb0D1X";
- protected-headers="v1"
-From: Alejandro Colomar <alx.manpages@gmail.com>
-To: Quentin Monnet <quentin@isovalent.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
- Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- bpf@vger.kernel.org
-Message-ID: <046858e2-91b9-3703-92a3-89ddc620d445@gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/2] scripts/bpf: Set version attribute for
- bpf-helpers(7) man page
-References: <20220823155327.98888-1-quentin@isovalent.com>
-In-Reply-To: <20220823155327.98888-1-quentin@isovalent.com>
+, Yosry Ahmed <yosryahmed@google.com>, Dan Schatzberg <schatzberg.dan@gmail.com>, Lennart Poettering <lennart@poettering.net>
+Bcc: htejun@gmail.com
+Subject: [RFD] cgroup: Persistent memory usage tracking
+Reply-To: 
+In-Reply-To: <CALOAHbCvUxQn5Zkp2FJ+eL1VgjeRSq1xQhzdiY87C1Cbib-nig@mail.gmail.com>
 
---------------cJwSK1tPk71iq0z1dvJb0D1X
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Hello,
 
-T24gOC8yMy8yMiAxNzo1MywgUXVlbnRpbiBNb25uZXQgd3JvdGU6DQo+IFRoZSBicGYtaGVs
-cGVycyg3KSBtYW51YWwgcGFnZSBzaGlwcGVkIGluIHRoZSBtYW4tcGFnZXMgcHJvamVjdCBp
-cw0KPiBnZW5lcmF0ZWQgZnJvbSB0aGUgZG9jdW1lbnRhdGlvbiBjb250YWluZWQgaW4gdGhl
-IEJQRiBVQVBJIGhlYWRlciwgaW4NCj4gdGhlIExpbnV4IHJlcG9zaXRvcnksIHBhcnNlZCBi
-eSBzY3JpcHQvYnBmX2RvYy5weSBhbmQgdGhlbiBmZWQgdG8NCj4gcnN0Mm1hbi4NCj4gDQo+
-IEFmdGVyIGEgcmVjZW50IHVwZGF0ZSBvZiB0aGF0IHBhZ2UgWzBdLCBBbGVqYW5kcm8gcmVw
-b3J0ZWQgdGhhdCB0aGUNCj4gbGludGVyIHVzZWQgdG8gdmFsaWRhdGUgdGhlIG1hbiBwYWdl
-cyBjb21wbGFpbnMgYWJvdXQgdGhlIGdlbmVyYXRlZA0KPiBkb2N1bWVudCBbMV0uIFRoZSBo
-ZWFkZXIgZm9yIHRoZSBwYWdlIGlzIHN1cHBvc2VkIHRvIGNvbnRhaW4gc29tZQ0KPiBhdHRy
-aWJ1dGVzIHRoYXQgd2UgZG8gbm90IHNldCBjb3JyZWN0bHkgd2l0aCB0aGUgc2NyaXB0LiBU
-aGlzIGNvbW1pdA0KPiB1cGRhdGVzIHRoZSAicHJvamVjdCBhbmQgdmVyc2lvbiIgZmllbGQu
-IFdlIGRpc2N1c3NlZCB0aGUgZm9ybWF0IG9mDQo+IHRob3NlIGZpZWxkcyBpbiBbMV0gYW5k
-IFsyXS4NCj4gDQo+IEJlZm9yZToNCj4gDQo+ICAgICAgJCAuL3NjcmlwdHMvYnBmX2RvYy5w
-eSBoZWxwZXJzIHwgcnN0Mm1hbiB8IGdyZXAgJ1wuVEgnDQo+ICAgICAgLlRIIEJQRi1IRUxQ
-RVJTIDcgIiIgIiIgIiINCj4gDQo+IEFmdGVyOg0KPiANCj4gICAgICAkIC4vc2NyaXB0cy9i
-cGZfZG9jLnB5IGhlbHBlcnMgfCByc3QybWFuIHwgZ3JlcCAnXC5USCcNCj4gICAgICAuVEgg
-QlBGLUhFTFBFUlMgNyAiIiAiTGludXggdjUuMTktMTQwMjItZzMwZDJhNGQ3NGUxMSIgIiIN
-Cj4gDQo+IFdlIGdldCB0aGUgdmVyc2lvbiBmcm9tICJnaXQgZGVzY3JpYmUiLCBidXQgaWYg
-dW5hdmFpbGFibGUsIHdlIGZhbGwgYmFjaw0KPiBvbiAibWFrZSBrZXJuZWx2ZXJzaW9uIi4g
-SWYgbm9uZSB3b3JrcywgZm9yIGV4YW1wbGUgYmVjYXVzZSBuZWl0aGVyIGdpdA0KPiBub3Jl
-IG1ha2UgYXJlIGluc3RhbGxlZCwgd2UganVzdCBzZXQgdGhlIGZpZWxkIHRvICJMaW51eCIg
-YW5kIGtlZXANCj4gZ2VuZXJhdGluZyB0aGUgcGFnZS4NCj4gDQo+IFswXSBodHRwczovL2dp
-dC5rZXJuZWwub3JnL3B1Yi9zY20vZG9jcy9tYW4tcGFnZXMvbWFuLXBhZ2VzLmdpdC9jb21t
-aXQvbWFuNy9icGYtaGVscGVycy43P2lkPTE5YzdmNzgzOTNmMmIwMzhlNzYwOTlmODczMzVk
-ZGY0M2E4N2YwMzkNCj4gWzFdIGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2FsbC8yMDIyMDgy
-MzA4NDcxOS4xMzYxMy0xLXF1ZW50aW5AaXNvdmFsZW50LmNvbS90LyNtNThhNDE4YTMxODY0
-MmM2NDI4ZTE0Y2U5YmI4NGViYTUxODNiMDZlOA0KPiBbMl0gaHR0cHM6Ly9sb3JlLmtlcm5l
-bC5vcmcvYWxsLzIwMjIwNzIxMTEwODIxLjgyNDAtMS1hbHgubWFucGFnZXNAZ21haWwuY29t
-L3QvI204ZTY4OWE4MjJlMDNmNmUyNTMwYTBkNmRlOWQxMjg0MDE5MTZjNWRlDQo+IA0KPiBD
-YzogQWxlamFuZHJvIENvbG9tYXIgPGFseC5tYW5wYWdlc0BnbWFpbC5jb20+DQo+IFJlcG9y
-dGVkLWJ5OiBBbGVqYW5kcm8gQ29sb21hciA8YWx4Lm1hbnBhZ2VzQGdtYWlsLmNvbT4NCj4g
-U2lnbmVkLW9mZi1ieTogUXVlbnRpbiBNb25uZXQgPHF1ZW50aW5AaXNvdmFsZW50LmNvbT4N
-Cg0KUmV2aWV3ZWQtYnk6IEFsZWphbmRybyBDb2xvbWFyIDxhbHgubWFucGFnZXNAZ21haWwu
-Y29tPg0KDQo+IC0tLQ0KPiAgIHNjcmlwdHMvYnBmX2RvYy5weSB8IDIxICsrKysrKysrKysr
-KysrKysrKysrLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAyMCBpbnNlcnRpb25zKCspLCAxIGRl
-bGV0aW9uKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvc2NyaXB0cy9icGZfZG9jLnB5IGIvc2Ny
-aXB0cy9icGZfZG9jLnB5DQo+IGluZGV4IGRmYjI2MGRlMTdhOC4uMDYxYWQxZGMzMjEyIDEw
-MDc1NQ0KPiAtLS0gYS9zY3JpcHRzL2JwZl9kb2MucHkNCj4gKysrIGIvc2NyaXB0cy9icGZf
-ZG9jLnB5DQo+IEBAIC0xMCw2ICsxMCw4IEBAIGZyb20gX19mdXR1cmVfXyBpbXBvcnQgcHJp
-bnRfZnVuY3Rpb24NCj4gICBpbXBvcnQgYXJncGFyc2UNCj4gICBpbXBvcnQgcmUNCj4gICBp
-bXBvcnQgc3lzLCBvcw0KPiAraW1wb3J0IHN1YnByb2Nlc3MNCj4gKw0KPiAgIA0KPiAgIGNs
-YXNzIE5vSGVscGVyRm91bmQoQmFzZUV4Y2VwdGlvbik6DQo+ICAgICAgIHBhc3MNCj4gQEAg
-LTM1Nyw2ICszNTksMjAgQEAgY2xhc3MgUHJpbnRlclJTVChQcmludGVyKToNCj4gICANCj4g
-ICAgICAgICAgIHByaW50KCcnKQ0KPiAgIA0KPiArICAgIGRlZiBnZXRfa2VybmVsX3ZlcnNp
-b24oc2VsZik6DQo+ICsgICAgICAgIHRyeToNCj4gKyAgICAgICAgICAgIHZlcnNpb24gPSBz
-dWJwcm9jZXNzLnJ1bihbJ2dpdCcsICdkZXNjcmliZSddLCBjd2Q9bGludXhSb290LA0KPiAr
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNhcHR1cmVfb3V0cHV0PVRy
-dWUsIGNoZWNrPVRydWUpDQo+ICsgICAgICAgICAgICB2ZXJzaW9uID0gdmVyc2lvbi5zdGRv
-dXQuZGVjb2RlKCkucnN0cmlwKCkNCj4gKyAgICAgICAgZXhjZXB0Og0KPiArICAgICAgICAg
-ICAgdHJ5Og0KPiArICAgICAgICAgICAgICAgIHZlcnNpb24gPSBzdWJwcm9jZXNzLnJ1bihb
-J21ha2UnLCAna2VybmVsdmVyc2lvbiddLCBjd2Q9bGludXhSb290LA0KPiArICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjYXB0dXJlX291dHB1dD1UcnVlLCBj
-aGVjaz1UcnVlKQ0KPiArICAgICAgICAgICAgICAgIHZlcnNpb24gPSB2ZXJzaW9uLnN0ZG91
-dC5kZWNvZGUoKS5yc3RyaXAoKQ0KPiArICAgICAgICAgICAgZXhjZXB0Og0KPiArICAgICAg
-ICAgICAgICAgIHJldHVybiAnTGludXgnDQo+ICsgICAgICAgIHJldHVybiAnTGludXgge3Zl
-cnNpb259Jy5mb3JtYXQodmVyc2lvbj12ZXJzaW9uKQ0KPiArDQo+ICAgY2xhc3MgUHJpbnRl
-ckhlbHBlcnNSU1QoUHJpbnRlclJTVCk6DQo+ICAgICAgICIiIg0KPiAgICAgICBBIHByaW50
-ZXIgZm9yIGR1bXBpbmcgY29sbGVjdGVkIGluZm9ybWF0aW9uIGFib3V0IGhlbHBlcnMgYXMg
-YSBSZVN0cnVjdHVyZWQNCj4gQEAgLTM3OCw2ICszOTQsNyBAQCBsaXN0IG9mIGVCUEYgaGVs
-cGVyIGZ1bmN0aW9ucw0KPiAgIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4gICANCj4g
-ICA6TWFudWFsIHNlY3Rpb246IDcNCj4gKzpWZXJzaW9uOiB7dmVyc2lvbn0NCj4gICANCj4g
-ICBERVNDUklQVElPTg0KPiAgID09PT09PT09PT09DQo+IEBAIC00MTAsOCArNDI3LDEwIEBA
-IGtlcm5lbCBhdCB0aGUgdG9wKS4NCj4gICBIRUxQRVJTDQo+ICAgPT09PT09PQ0KPiAgICcn
-Jw0KPiArICAgICAgICBrZXJuZWxWZXJzaW9uID0gc2VsZi5nZXRfa2VybmVsX3ZlcnNpb24o
-KQ0KPiArDQo+ICAgICAgICAgICBQcmludGVyUlNULnByaW50X2xpY2Vuc2Uoc2VsZikNCj4g
-LSAgICAgICAgcHJpbnQoaGVhZGVyKQ0KPiArICAgICAgICBwcmludChoZWFkZXIuZm9ybWF0
-KHZlcnNpb249a2VybmVsVmVyc2lvbikpDQo+ICAgDQo+ICAgICAgIGRlZiBwcmludF9mb290
-ZXIoc2VsZik6DQo+ICAgICAgICAgICBmb290ZXIgPSAnJycNCg0KLS0gDQpBbGVqYW5kcm8g
-Q29sb21hcg0KPGh0dHA6Ly93d3cuYWxlamFuZHJvLWNvbG9tYXIuZXMvPg0K
+This thread started on a bpf-specific memory tracking change proposal and
+went south, but a lot of people who would be interested are already cc'd, so
+I'm hijacking it to discuss what to do w/ persistent memory usage tracking.
 
---------------cJwSK1tPk71iq0z1dvJb0D1X--
+Cc'ing Mina and Yosry who were involved in the discussions on the similar
+problem re. tmpfs, Dan Schatzberg who has a lot more prod knowledge and
+experience than me, and Lennart for his thoughts from systemd side.
 
---------------0RIgft0zFeZJWiG8DKV5H0fk
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+The root problem is that there are resources (almost solely memory
+currently) that outlive a given instance of a, to use systemd-lingo,
+service. Page cache is the most common case.
 
------BEGIN PGP SIGNATURE-----
+Let's say there's system.slice/hello.service. When it runs for the first
+time, page cache backing its binary will be charged to hello.service.
+However, when it restarts after e.g. a config change, when the initial
+hello.service cgroup gets destroyed, we reparent the page cache charges to
+the parent system.slice and when the second instance starts, its binary will
+stay charged to system.slice. Over time, some may get reclaimed and
+refaulted into the new hello.service but that's not guaranteed and most hot
+pages likely won't.
 
-iQIzBAEBCgAdFiEE6jqH8KTroDDkXfJAnowa+77/2zIFAmMFBnwACgkQnowa+77/
-2zKm4g/8DPiUGSEDMo7HGX4YMN9nx4xhvNB48gtN311HIMW6CpUm5bPSptuzfO8N
-LfQQoW57SBdpPhX+414LPKuF72FPgB0V7wFJ60cA2eh8AFflD5nW6FTqaCveRh3N
-wsW3kJJPd46EQ2I8taXvy+INnfSxeuh75IyWoRv4CApu9R2ysCVWEfKw8NzdYCHC
-nV9nT0FnAeU4fmg1VkJ6X2aTC7d3vYXNXdXB4DrjfMTUIt/YazI7hmZhB+DlbRFh
-clgEdlUh9fLPWNrjxZWqvE2u4nyLErKaAEj+AEwdmjGHLN2Rk4JdlctZcBb9YvE3
-GUISmPrSqjqNIovAe1gLQgkSCbXPdEaEbR8HsO6Xwky+66Baq3cKxflHz9InEiwy
-eSV4f0nstxgFfqpFuP8yqq951XEpkWdaCiH9cksWjqsy0FxMSoArzWIXNqtU+Jfo
-ILai3jgzDbSdqGWWBIhAW/fiW07WwxLwgSTD04zIYqQu2MjVSZrFdWIpa0C3g/4J
-vsd7K7U7HlgMypFcMSWLrXQX/4+P0sKWIfe4W+duU82xzKB2pmtUApJtSCmya16D
-mgI0tOa0qwbPmYWYRqKcsmowDOnVTan/Vgthunyhk+jdPETCbL5YV+T+128o6cY2
-ODyiHtMwz7oR5esYhOwzVjmkz9542wBXd6l8SiZJGRWwSdnWOSM=
-=J1gG
------END PGP SIGNATURE-----
+The same problem exists for any memory which is not freed synchronously when
+the current instance exits. While this isn't a problem for many cases, it's
+not difficult to imagine situations where the amount of memory which ends up
+getting pushed to the parent is significant, even clear majority, with big
+page cache footprint, persistent tmpfs instances and so on, creating issues
+with accounting accuracy and thus control.
 
---------------0RIgft0zFeZJWiG8DKV5H0fk--
+I think there are two broad issues to discuss here:
+
+[1] Can this be solved by layering the instance cgroups under persistent
+    entity cgroup?
+
+So, instead of systemd.slice/hello.service, the application runs inside
+something like systemd.slice/hello.service/hello.service.instance and the
+service-level cgroup hello.service is not destroyed as long as it is
+something worth tracking on the system.
+
+The benefits are
+
+a. While requiring changing how userland organizes cgroup hiearchy, it is a
+   straight-forward extension of the current architecture and doesn't
+   require any conceptual or structural changes. All the accounting and
+   control schemes work exactly the same as before. The only difference is
+   that we now have a persistent entity representing each service as we want
+   to track their persistent resource usages.
+
+b. Per-instance tracking and control is optional. To me, it seems that the
+   persistent resource usages would be more meaningful than per-instance and
+   tracking down to the persistent usages shouldn't add noticeable runtime
+   overheads while keeping per-instance process management niceties and
+   allowing use cases to opt-in for per-instance resource tracking and
+   control as needed.
+
+The complications are:
+
+a. It requires changing cgroup hierarchy in a very visible way.
+
+b. What should be the lifetime rules for persistent cgroups? Do we keep them
+   around forever or maybe they can be created on the first use and kept
+   around until the service is removed from the system? When the persistent
+   cgroup is removed, do we need to make sure that the remaining resource
+   usages are low enough? Note that this problem exists for any approach
+   that tries to track persistent usages no matter how it's done.
+
+c. Do we need to worry about nesting overhead? Given that there's no reason
+   to enable controllers w/o persisten states for the instance level and the
+   nesting overhead is pretty low for memcg, this doesn't seem like a
+   problem to me. If this becomes a problem, we just need to fix it.
+
+A couple alternatives discussed are:
+
+a. Userspace keeps reusing the same cgroup for different instances of the
+   same service. This simplifies some aspects while making others more
+   complicated. e.g. Determining the current instance's CPU or IO usages now
+   require the monitoring software remembering what they were when this
+   instance started and calculating the deltas. Also, if some use cases want
+   to distinguish persistent vs. instance usages (more on this later), this
+   isn't gonna work. That said, this definitely is attractive in that it
+   miminizes overt user visible changes.
+
+b. Memory is disassociated rather than just reparented on cgroup destruction
+   and get re-charged to the next first user. This is attractive in that it
+   doesn't require any userspace changes; however, I'm not sure how this
+   would work for non-pageable memory usages such as bpf maps. How would we
+   detect the next first usage?
+
+
+[2] Whether and how to solve first and second+ instance charge differences.
+
+If we take the layering approach, the first instance will get charged for
+all memory that it uses while the second+ instances likely won't get charged
+for a lot of persistent usages. I don't think there is a consensus on
+whether this needs to be solved and I don't have enough context to form a
+strong opinion. memcg folks are a lot better equipped to make this decision.
+
+Assuming this needs to be solved, here's a braindump to be taken with a big
+pinch of salt:
+
+I have a bit of difficult time imagining a perfect solution given that
+whether a given page cache page is persistent or not would be really
+difficult to know (or maybe all page cache is persistent by default while
+anon is not). However, the problem still seems worthwhile to consider for
+big ticket items such as persistent tmpfs mounts and huge bpf maps as they
+can easily make the differences really big.
+
+If we want to solve this problem, here are options that I can think of:
+
+a. Let userspace put the charges where they belong using the current
+   mechanisms. ie. Create persistent entities in the persistent parent
+   cgroup while there's no current instance.
+
+   Pro: It won't require any major kernel or interface changes. There still
+   need to be some tweaking such as allowing tmpfs pages to be always
+   charged to the cgroup which created the instance (maybe as long as it's
+   an ancestor of the faulting cgroup?) but nothing too invasive.
+
+   Con: It may not be flexible enough.
+
+b. Let userspace specify which cgroup to charge for some of constructs like
+   tmpfs and bpf maps. The key problems with this approach are
+
+   1. How to grant/deny what can be charged where. We must ensure that a
+      descendant can't move charges up or across the tree without the
+      ancestors allowing it.
+
+   2. How to specify the cgroup to charge. While specifying the target
+      cgroup directly might seem like an obvious solution, it has a couple
+      rather serious problems. First, if the descendant is inside a cgroup
+      namespace, it might be able to see the target cgroup at all. Second,
+      it's an interface which is likely to cause misunderstandings on how it
+      can be used. It's too broad an interface.
+
+   One solution that I can think of is leveraging the resource domain
+   concept which is currently only used for threaded cgroups. All memory
+   usages of threaded cgroups are charged to their resource domain cgroup
+   which hosts the processes for those threads. The persistent usages have a
+   similar pattern, so maybe the service level cgroup can declare that it's
+   the encompassing resource domain and the instance cgroup can say whether
+   it's gonna charge e.g. the tmpfs instance to its own or the encompassing
+   resource domain.
+
+   This has the benefit that the user only needs to indicate its intention
+   without worrying about how cgroups are composed and what their IDs are.
+   It just indicates whether the given resource is persistent and if the
+   cgroup hierarchy is set up for that, it gets charged that way and if not
+   it can be just charged to itself.
+
+   This is a shower thought but, if we allow nesting such domains (and maybe
+   name them), we can use it for shared resources too so that co-services
+   are put inside a shared slice and shared resources are pushed to the
+   slice level.
+
+This became pretty long. I obviously have a pretty strong bias towards
+solving this within the current basic architecture but other than that most
+of these decisions are best made by memcg folks. We can hopefully build some
+consensus on the issue.
+
+Thanks.
+
+-- 
+tejun
