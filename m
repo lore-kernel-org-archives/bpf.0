@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A85FEC32772
-	for <bpf@archiver.kernel.org>; Mon, 22 Aug 2022 11:26:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16C22C32772
+	for <bpf@archiver.kernel.org>; Tue, 23 Aug 2022 18:48:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231927AbiHVL0c (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 22 Aug 2022 07:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52380 "EHLO
+        id S232848AbiHWSsR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Aug 2022 14:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiHVL0c (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 22 Aug 2022 07:26:32 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A9227CE7;
-        Mon, 22 Aug 2022 04:26:31 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id f17so3864199pfk.11;
-        Mon, 22 Aug 2022 04:26:30 -0700 (PDT)
+        with ESMTP id S233799AbiHWSr6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Aug 2022 14:47:58 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CB911987D;
+        Tue, 23 Aug 2022 10:12:08 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id w13so7742194pgq.7;
+        Tue, 23 Aug 2022 10:12:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:cc:to:from:date:sender
-         :from:to:cc;
-        bh=xYnThmFHoGKU/sNt4SS1hXDq6GYqnmSSTt1CpRvIL48=;
-        b=nWxBmLtDylTawPLEuM/2MzvIWaoVY8d8VN5rzm3+Q0FGFiVgZNLmM+p3vaejpbL1KA
-         NPgmYtrMfKM48JaFMB6Ke3Qg2L0TexbZGmCgTtVVq8dM6QKRNqxkc7mzADsEoMxJeaJw
-         5oxebUX63OgqwuFYXqFBMZHpbhxh+Zxu9bT4gZNwd5p1Qjdh3viL6jy7OdXxRsx3DLe0
-         5h71ej+cLYiPoleAvF8TEH5G0XmZuyaHCnDHRgeDuUHTOPQXwjwMjEmF969VGN+Kk9NA
-         EZDrfl+54wVczIiVkkLCf/pCm22OFwD0kvLJWOWHJHwUtuA02L3cUMAuODmLr2rlicp3
-         PVkA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=0dpf/dFnqvSQXULZAry29j8dtTwD0KWxL5BSj6ts5Eg=;
+        b=jPA0pd6oBq/PlYVNpLQ9tMeqI8Cl/RJ/N4NznoWBcbRKYwoxkVxka1Sk0FPVwrEnYI
+         /GyffhqFtgl2rq2elMxo4z7MCqh06Fg1Altta7JAOjfvoRvA7SSFCSrKDM1wGwV+g8XU
+         bgULlxeBQvY5EcitXG3qWm8yQF8lZEJ5BT9gLQyMylaZSMD4ZeBs+Xe9tix31zKKLisN
+         AqhRdPNbVN3cUBI75KK7sswjahStF79rglUYO1N6liKUCQqGNEf3oLBDGg3z+doG33+x
+         lkAtTf8jByCkCVMtUS46l3gTKafDUPsim16HzhcHYjSk74ngCm35DzpOKaGeL1MWJYWQ
+         WhyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc;
-        bh=xYnThmFHoGKU/sNt4SS1hXDq6GYqnmSSTt1CpRvIL48=;
-        b=oQdIhnYDhp7UQqvSpj8IWYVsoqeL/M/fBPC1aUvWsqUMqVXbcDyGv9V1iDn2CweQnD
-         c0gjvSNaPOTc9kovY0yO5EKkqOeju+JO6HENmN49p1hR9nTJdcBBCLehrtRXEuOHW4rg
-         r5DvlQ+DqDALniC9yzZdjHUFpb3ox13vwoEwtQjEX/IL67bYftVEHKIgVIJjWArgpW8P
-         Gi3MMKw6H0YOYWhj3Bx+6KsQyZu8/MvNISkDrkpyGgxf+4KBbVuLwwE/mgrm4RfB4PU+
-         A9Aj+DlU/V/FlRvQiuJQtqd8Yqauw8Ts4Vu2ybvRdpVHLxxCdAOjpOGQTWxFjsGScyYb
-         Eb1g==
-X-Gm-Message-State: ACgBeo1/1oNrRCmyX56YY49QxCa7O9+udQQrqwy/AyQca5EjUc/wsHOU
-        odZBEi+Wv9+uQ3PPzB9pb7lt9C8diaE=
-X-Google-Smtp-Source: AA6agR5ntUFOMw3NycEWdfz8YmaV4pQ2lfDuTFMz2/TqP/1ze9EYk+TwWhkZGVOpWL7qE/syg/tloA==
-X-Received: by 2002:a63:eb49:0:b0:421:8c9b:4ab1 with SMTP id b9-20020a63eb49000000b004218c9b4ab1mr16740198pgk.339.1661167590122;
-        Mon, 22 Aug 2022 04:26:30 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=0dpf/dFnqvSQXULZAry29j8dtTwD0KWxL5BSj6ts5Eg=;
+        b=rhttXXmNKab+GkyuK0TQ+OZz5AQeTJ65fZiMcfO60m4iclYpXgO+J8HWWYEU/wpKUN
+         XCkrNjD4+2sLmqXbVORf1unYqE+OULLpXvV2nRl0LsMCq3cn2k05nuIt68GvuxbT/fx3
+         OwJtcNt3TKmkgD7aiZytPh+xUwO/o4OhW4ad2p9VxyyZpaO3G2LdISG9FrPWjBN6LeK5
+         wf5oy/RGxtj1EZbzD+FmeIFHAJoxylUVJ0XxGl52BnVUGxTgAUXqdnfRY+TLhSKZEYax
+         +hYORI1NFrj9+aM05eTMEJ4lZLxKe2YN27l/tHJ3S4oAT0SqzgAB7M4BwCsnEmLo60Jt
+         nO5g==
+X-Gm-Message-State: ACgBeo03TPtUUqdQh1PNP4pUQNR3ENG92TmYwFbap6fuVrlo5ZFuAktn
+        Q4tBXZwli9Oz7ZDQ16vvGJQ=
+X-Google-Smtp-Source: AA6agR7wA709oFtQr9hdf8uPUHazGF3ozzzdNXJhU9DXJWsUBfdMhreZ5l/XmDnWA2ec1x+YCyrhJw==
+X-Received: by 2002:a65:6949:0:b0:41c:cb9d:3d1f with SMTP id w9-20020a656949000000b0041ccb9d3d1fmr21233337pgq.334.1661274727099;
+        Tue, 23 Aug 2022 10:12:07 -0700 (PDT)
 Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id f8-20020a170902ce8800b00172c298ba42sm226896plg.28.2022.08.22.04.26.29
+        by smtp.gmail.com with ESMTPSA id o4-20020a63e344000000b0041d6d37deb5sm9502946pgj.81.2022.08.23.10.12.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 04:26:29 -0700 (PDT)
+        Tue, 23 Aug 2022 10:12:06 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 22 Aug 2022 01:26:28 -1000
+Date:   Tue, 23 Aug 2022 07:12:05 -1000
 From:   Tejun Heo <tj@kernel.org>
 To:     Yafang Shao <laoar.shao@gmail.com>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -69,180 +69,181 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Cgroups <cgroups@vger.kernel.org>,
         netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
         Linux MM <linux-mm@kvack.org>,
-        Mina Almasry <almasrymina@google.com>
-Message-ID: <YwNn5FvAYMHKY9jH@slm.duckdns.org>
+        Yosry Ahmed <yosryahmed@google.com>,
+        Dan Schatzberg <schatzberg.dan@gmail.com>,
+        Lennart Poettering <lennart@poettering.net>
+Subject: Re: [RFD RESEND] cgroup: Persistent memory usage tracking
+Message-ID: <YwUKZWXbqzfy0w4o@slm.duckdns.org>
+References: <20220818143118.17733-1-laoar.shao@gmail.com>
+ <Yv67MRQLPreR9GU5@slm.duckdns.org>
+ <Yv6+HlEzpNy8y5kT@slm.duckdns.org>
+ <CALOAHbDcrj1ifFsNMHBEih5-SXY2rWViig4rQHi9N07JY6CjXA@mail.gmail.com>
+ <Yv/DK+AGlMeBGkF1@slm.duckdns.org>
+ <CALOAHbCvUxQn5Zkp2FJ+eL1VgjeRSq1xQhzdiY87C1Cbib-nig@mail.gmail.com>
+ <YwNold0GMOappUxc@slm.duckdns.org>
+ <CALOAHbBTR-07La=-KPehFab0WDY4V6LovXbrhLXOqKDurHD-9g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <CALOAHbBTR-07La=-KPehFab0WDY4V6LovXbrhLXOqKDurHD-9g@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-, Yosry Ahmed <yosryahmed@google.com>, Dan Schatzberg <schatzberg.dan@gmail.com>, Lennart Poettering <lennart@poettering.net>
-Bcc: htejun@gmail.com
-Subject: [RFD] cgroup: Persistent memory usage tracking
-Reply-To: 
-In-Reply-To: <CALOAHbCvUxQn5Zkp2FJ+eL1VgjeRSq1xQhzdiY87C1Cbib-nig@mail.gmail.com>
-
 Hello,
 
-This thread started on a bpf-specific memory tracking change proposal and
-went south, but a lot of people who would be interested are already cc'd, so
-I'm hijacking it to discuss what to do w/ persistent memory usage tracking.
+On Tue, Aug 23, 2022 at 07:08:17PM +0800, Yafang Shao wrote:
+> On Mon, Aug 22, 2022 at 7:29 PM Tejun Heo <tj@kernel.org> wrote:
+> > [1] Can this be solved by layering the instance cgroups under persistent
+> >     entity cgroup?
+>
+> Below is some background of kubernetes.
+> In kubernetes, a pod is organized as follows,
+> 
+>                pod
+>                |- Container
+>                |- Container
+> 
+> IOW, it is a two-layer unit, or a two-layer instance.
+> The cgroup dir of the pod is named with a UUID assigned by kubernetes-apiserver.
+> Once the old pod is destroyed (that can happen when the user wants to
+> update their service), the new pod will have a different UUID.
+> That said, different instances will have different cgroup dir.
+> 
+> If we want to introduce a  persistent entity cgroup, we have to make
+> it a three-layer unit.
+> 
+>            persistent-entity
+>            |- pod
+>                  |- Container
+>                  |- Container
+> 
+> There will be some issues,
+> 1.  The kuber-apiserver must maintain the persistent-entity on each host.
+>      It needs a great refactor and the compatibility is also a problem
+> per my discussion with kubernetes experts.
 
-Cc'ing Mina and Yosry who were involved in the discussions on the similar
-problem re. tmpfs, Dan Schatzberg who has a lot more prod knowledge and
-experience than me, and Lennart for his thoughts from systemd side.
+This is gonna be true for anybody. The basic strategy here should be
+defining a clear boundary between system agent and applications so that
+individual applications, even when they build their own subhierarchy
+internally, aren't affected by system level hierarchy configuration changes.
+systemd is already like that with clear delegation boundary. Our (fb)
+container management is like that too. So, while this requires some
+reorganization from the agent side, things like this don't create huge
+backward compatbility issues involving applications. I have no idea about
+k8s, so the situation may differ but in the long term at least, it'd be a
+good idea to build in similar conceptual separation even if it stays with
+cgroup1.
 
-The root problem is that there are resources (almost solely memory
-currently) that outlive a given instance of a, to use systemd-lingo,
-service. Page cache is the most common case.
+> 2.  How to do the monitor?
+>      If there's only one pod under this persistent-entity, we can
+> easily get the memory size of  shared resources by:
+>          Sizeof(shared-resources) = Sizeof(persistent-entity) - Sizeof(pod)
+>     But what if it has N pods and N is dynamically changed ?
 
-Let's say there's system.slice/hello.service. When it runs for the first
-time, page cache backing its binary will be charged to hello.service.
-However, when it restarts after e.g. a config change, when the initial
-hello.service cgroup gets destroyed, we reparent the page cache charges to
-the parent system.slice and when the second instance starts, its binary will
-stay charged to system.slice. Over time, some may get reclaimed and
-refaulted into the new hello.service but that's not guaranteed and most hot
-pages likely won't.
+There should only be one live pod instance inside the pod's persistent
+cgroup, so the calculation doesn't really change.
 
-The same problem exists for any memory which is not freed synchronously when
-the current instance exits. While this isn't a problem for many cases, it's
-not difficult to imagine situations where the amount of memory which ends up
-getting pushed to the parent is significant, even clear majority, with big
-page cache footprint, persistent tmpfs instances and so on, creating issues
-with accounting accuracy and thus control.
+> 3.  What if it has more than one shared resource?
+>      For example, pod-foo has two shared resources A and B, pod-bar
+> has two shared resources A and C, and another pod has two shared
+> resources B and C.
+>      How to deploy them?
+>      Pls, note that we can introduce multiple-layer persistent-entity,
+> but which one should be the parent ?
+> 
+> So from my perspective, it is almost impossible.
 
-I think there are two broad issues to discuss here:
+Yeah, this is a different problem and cgroup has never been good at tracking
+resources shared across multiple groups. There is always tension between
+overhead, complexity and accuracy and the tradeoff re. resource sharing has
+almost always been towards the former two.
 
-[1] Can this be solved by layering the instance cgroups under persistent
-    entity cgroup?
+Naming specific resources and designating them as being shared and
+accounting them commonly somehow does make sense as an approach as we get to
+avoid the biggest headaches (e.g. how to split a page cache page?) and maybe
+it can even be claimed that a lot of use cases which may want cross-group
+sharing can be sufficiently served by such approach.
 
-So, instead of systemd.slice/hello.service, the application runs inside
-something like systemd.slice/hello.service/hello.service.instance and the
-service-level cgroup hello.service is not destroyed as long as it is
-something worth tracking on the system.
+That said, it still has to be balanced against other factors. For example,
+memory pressure caused by the shared resources should affect all
+participants in the sharing group in terms of both memory and IO, which
+means that they'll have to stay within a nested subtree structure. This does
+restrict overlapping partial sharing that you described above but the goal
+is finding a reasonable tradeoff, so something has to give.
 
-The benefits are
+> > b. Memory is disassociated rather than just reparented on cgroup destruction
+> >    and get re-charged to the next first user. This is attractive in that it
+> >    doesn't require any userspace changes; however, I'm not sure how this
+> >    would work for non-pageable memory usages such as bpf maps. How would we
+> >    detect the next first usage?
+> >
+> 
+> JFYI, There is a reuse path for the bpf map, see my previous RFC[1].
+> [1] https://lore.kernel.org/bpf/20220619155032.32515-1-laoar.shao@gmail.com/
 
-a. While requiring changing how userland organizes cgroup hiearchy, it is a
-   straight-forward extension of the current architecture and doesn't
-   require any conceptual or structural changes. All the accounting and
-   control schemes work exactly the same as before. The only difference is
-   that we now have a persistent entity representing each service as we want
-   to track their persistent resource usages.
+I'm not a big fan of explicit recharging. It's too hairy to use requiring
+mixing system level hierarchy configuration knoweldge with in-application
+resource handling. There should be clear isolation between the two. This is
+also what leads to namespace and visibility issues. Ideally, these should be
+handled by structuring the resource hierarchay correctly from the get-go.
 
-b. Per-instance tracking and control is optional. To me, it seems that the
-   persistent resource usages would be more meaningful than per-instance and
-   tracking down to the persistent usages shouldn't add noticeable runtime
-   overheads while keeping per-instance process management niceties and
-   allowing use cases to opt-in for per-instance resource tracking and
-   control as needed.
+...
+> > b. Let userspace specify which cgroup to charge for some of constructs like
+> >    tmpfs and bpf maps. The key problems with this approach are
+> >
+> >    1. How to grant/deny what can be charged where. We must ensure that a
+> >       descendant can't move charges up or across the tree without the
+> >       ancestors allowing it.
+> >
+> 
+> We can add restrictions to check which memcg can be selected
+> (regarding the selectable memcg).
+> But I think it may be too early to do the restrictions, as only the
+> privileged user can set it.
+> It is the sys admin's responsbility to select a proper memcg.
+> That said, the selectable memcg is not going south.
 
-The complications are:
+I generally tend towards shaping interfaces more carefully. We can of course
+add a do-whatever-you-want interface and declare that it's for root only but
+even that becomes complicated with things like userns as we're finding out
+in different areas, but again, nothing is free and approaches like that
+often bring more longterm headaches than the problems they solve.
 
-a. It requires changing cgroup hierarchy in a very visible way.
+> >    2. How to specify the cgroup to charge. While specifying the target
+> >       cgroup directly might seem like an obvious solution, it has a couple
+> >       rather serious problems. First, if the descendant is inside a cgroup
+> >       namespace, it might be able to see the target cgroup at all.
+> 
+> It is not a problem. Just sharing our practice below.
+> $ docker run -tid --privileged    \
+>                       --mount
+> type=bind,source=/sys/fs/bpf,target=/sys/fs/bpf    \
+>                       --mount
+> type=bind,source=/sys/fs/cgroup/memory/bpf,target=/bpf-memcg    \
+>                       docker-image
+> 
+> The bind-mount can make it work.
 
-b. What should be the lifetime rules for persistent cgroups? Do we keep them
-   around forever or maybe they can be created on the first use and kept
-   around until the service is removed from the system? When the persistent
-   cgroup is removed, do we need to make sure that the remaining resource
-   usages are low enough? Note that this problem exists for any approach
-   that tries to track persistent usages no matter how it's done.
+Not mount namespace. cgroup namespace which is used to isolate the cgroup
+subtree that's visible to each container. Please take a look at
+cgroup_namespaces(7).
 
-c. Do we need to worry about nesting overhead? Given that there's no reason
-   to enable controllers w/o persisten states for the instance level and the
-   nesting overhead is pretty low for memcg, this doesn't seem like a
-   problem to me. If this becomes a problem, we just need to fix it.
+> >  Second,
+> >       it's an interface which is likely to cause misunderstandings on how it
+> >       can be used. It's too broad an interface.
+> >
+> 
+> As I said above, we just need some restrictions or guidance if that is
+> desired now.
 
-A couple alternatives discussed are:
-
-a. Userspace keeps reusing the same cgroup for different instances of the
-   same service. This simplifies some aspects while making others more
-   complicated. e.g. Determining the current instance's CPU or IO usages now
-   require the monitoring software remembering what they were when this
-   instance started and calculating the deltas. Also, if some use cases want
-   to distinguish persistent vs. instance usages (more on this later), this
-   isn't gonna work. That said, this definitely is attractive in that it
-   miminizes overt user visible changes.
-
-b. Memory is disassociated rather than just reparented on cgroup destruction
-   and get re-charged to the next first user. This is attractive in that it
-   doesn't require any userspace changes; however, I'm not sure how this
-   would work for non-pageable memory usages such as bpf maps. How would we
-   detect the next first usage?
-
-
-[2] Whether and how to solve first and second+ instance charge differences.
-
-If we take the layering approach, the first instance will get charged for
-all memory that it uses while the second+ instances likely won't get charged
-for a lot of persistent usages. I don't think there is a consensus on
-whether this needs to be solved and I don't have enough context to form a
-strong opinion. memcg folks are a lot better equipped to make this decision.
-
-Assuming this needs to be solved, here's a braindump to be taken with a big
-pinch of salt:
-
-I have a bit of difficult time imagining a perfect solution given that
-whether a given page cache page is persistent or not would be really
-difficult to know (or maybe all page cache is persistent by default while
-anon is not). However, the problem still seems worthwhile to consider for
-big ticket items such as persistent tmpfs mounts and huge bpf maps as they
-can easily make the differences really big.
-
-If we want to solve this problem, here are options that I can think of:
-
-a. Let userspace put the charges where they belong using the current
-   mechanisms. ie. Create persistent entities in the persistent parent
-   cgroup while there's no current instance.
-
-   Pro: It won't require any major kernel or interface changes. There still
-   need to be some tweaking such as allowing tmpfs pages to be always
-   charged to the cgroup which created the instance (maybe as long as it's
-   an ancestor of the faulting cgroup?) but nothing too invasive.
-
-   Con: It may not be flexible enough.
-
-b. Let userspace specify which cgroup to charge for some of constructs like
-   tmpfs and bpf maps. The key problems with this approach are
-
-   1. How to grant/deny what can be charged where. We must ensure that a
-      descendant can't move charges up or across the tree without the
-      ancestors allowing it.
-
-   2. How to specify the cgroup to charge. While specifying the target
-      cgroup directly might seem like an obvious solution, it has a couple
-      rather serious problems. First, if the descendant is inside a cgroup
-      namespace, it might be able to see the target cgroup at all. Second,
-      it's an interface which is likely to cause misunderstandings on how it
-      can be used. It's too broad an interface.
-
-   One solution that I can think of is leveraging the resource domain
-   concept which is currently only used for threaded cgroups. All memory
-   usages of threaded cgroups are charged to their resource domain cgroup
-   which hosts the processes for those threads. The persistent usages have a
-   similar pattern, so maybe the service level cgroup can declare that it's
-   the encompassing resource domain and the instance cgroup can say whether
-   it's gonna charge e.g. the tmpfs instance to its own or the encompassing
-   resource domain.
-
-   This has the benefit that the user only needs to indicate its intention
-   without worrying about how cgroups are composed and what their IDs are.
-   It just indicates whether the given resource is persistent and if the
-   cgroup hierarchy is set up for that, it gets charged that way and if not
-   it can be just charged to itself.
-
-   This is a shower thought but, if we allow nesting such domains (and maybe
-   name them), we can use it for shared resources too so that co-services
-   are put inside a shared slice and shared resources are pushed to the
-   slice level.
-
-This became pretty long. I obviously have a pretty strong bias towards
-solving this within the current basic architecture but other than that most
-of these decisions are best made by memcg folks. We can hopefully build some
-consensus on the issue.
+I'm really unlikely to go down that path because as I said before I believe
+that that's a road to long term headaches and already creates immediate
+problems in terms of how it'd interact with other resources. No matter what
+approach we may choose, it has to work with the existing resource hierarchy.
+Otherwise, we end up in a situation where we have to split accounting and
+control of other controllers too which makes little sense for non-memory
+controllers (not that it's great for memory in the first place).
 
 Thanks.
 
