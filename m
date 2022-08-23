@@ -2,164 +2,188 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70B3FC32772
-	for <bpf@archiver.kernel.org>; Tue, 23 Aug 2022 15:04:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0F05C32772
+	for <bpf@archiver.kernel.org>; Tue, 23 Aug 2022 16:48:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242178AbiHWPET (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Aug 2022 11:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59984 "EHLO
+        id S245406AbiHWQsi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Aug 2022 12:48:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242207AbiHWPEB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Aug 2022 11:04:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6B011ECD7
-        for <bpf@vger.kernel.org>; Tue, 23 Aug 2022 05:28:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661257702;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tML+QnnHXQz/iYyoD3FaZkxBdgewrRT6f7NKH6MO5KM=;
-        b=RfdGZUGs7rNpNV8R2+hRZgWE9eCSMmcVyjy4/54Qv6b5e2Nnbo/T/2KnqDckOx8K1AJGqB
-        CnveuMdPf6zeeGc7J4ixWUFuThypsAKhPVsprBfKjCCVKthKH+VHmPDVDH6P5UWqxpLUge
-        5+ByBTUq3GiJjolUHJMn9MiqQ2U3/8s=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-245-HtKl8kkEO8ibZ1eK9lBsOQ-1; Tue, 23 Aug 2022 08:28:21 -0400
-X-MC-Unique: HtKl8kkEO8ibZ1eK9lBsOQ-1
-Received: by mail-ej1-f69.google.com with SMTP id hb37-20020a170907162500b0073d7f7fbbbfso1845717ejc.17
-        for <bpf@vger.kernel.org>; Tue, 23 Aug 2022 05:28:20 -0700 (PDT)
+        with ESMTP id S245503AbiHWQrc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Aug 2022 12:47:32 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4334D9F8D3
+        for <bpf@vger.kernel.org>; Tue, 23 Aug 2022 07:23:11 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id v7-20020a1cac07000000b003a6062a4f81so9679989wme.1
+        for <bpf@vger.kernel.org>; Tue, 23 Aug 2022 07:23:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=ph0yVvHaJftkep4xaaP5tQjh94KpIWZ3IWizXSWvL8M=;
+        b=LLiIOHOYEjKXH3wQGmAbFDPscs+DAYZqPU5z+w2o243A7gB4qUpKZ5WslwtWkamp8K
+         6ACwQUyuc/71CiXbkMlWhUknVwu2FSSX/UqDbYEGFit37WP2A7yZEiI/LbBQNc/ZcQKq
+         1LoHjbbyKhU1+9OphpFMRqVapxRaBv3KHR78AydSPvD1xcqM3WQfH7jGZ44mNU3xdPMI
+         w4oKFhXx3f9r9WuTIRDY3+ferQlCLHOj8oyt8WuSQEeyKhSnk2WiSsYAU4lE9Wydlssj
+         3pQHoo9zdX2LFZsSvbcul1dNoO4pCHfZ3mga7d/Cf5BboYkg0mRLw4vS3WzOumGxSeqv
+         qW0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=tML+QnnHXQz/iYyoD3FaZkxBdgewrRT6f7NKH6MO5KM=;
-        b=psVDlSeBGbxCzIMeJCny5ds08xP4FBCQRJxpdGUflMBj3ow2GMgiuzK8kR1aLmW6ei
-         dRBUr7npDIRXXS782JZpZG5XYMUymt7G+KEkNJZDftvQfb3PMh100pzhDb1XoYFtZMZX
-         fPL1jUGdTTdYrrc8oH6BXYaMudp72H3E8UtH3a/xumgfby9IjEI1bxu3+DjInLzhbk4E
-         70qR6alavRCMlht/18CcGK5gzY6zNMxjGgd8bfmlern/UPoKi8t9IAe7gCiRuNJczPNX
-         GrLZDy9Wznzo2RwqZrrssR2ZqyM7uYS9pmBDnPZe28IqdNCiFO0/H8jkNd4842WFJOsb
-         Xtcg==
-X-Gm-Message-State: ACgBeo3PL74yERLuI7recaphJPBog5POx8wsOFatpww/bSdyYPbTSm8a
-        QGyOe6UYc9fXXRPxYNEVwSl8+522so6WSmGbmw4rm6jPfcHF/etKxcHQN0guzi9w0rrBlAGUfVq
-        CnMqjNYyb+rfg
-X-Received: by 2002:a17:907:a057:b0:730:a2d8:d5ac with SMTP id gz23-20020a170907a05700b00730a2d8d5acmr16319290ejc.764.1661257699996;
-        Tue, 23 Aug 2022 05:28:19 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4ubL1ewD3cThVJ/9ahwHJLtl3B6LgL02Z2rP69QdUogtpxwjhFQyCiHgNQYaocEstWUevLRA==
-X-Received: by 2002:a17:907:a057:b0:730:a2d8:d5ac with SMTP id gz23-20020a170907a05700b00730a2d8d5acmr16319264ejc.764.1661257699727;
-        Tue, 23 Aug 2022 05:28:19 -0700 (PDT)
-Received: from localhost (net-93-71-3-16.cust.vodafonedsl.it. [93.71.3.16])
-        by smtp.gmail.com with ESMTPSA id 18-20020a170906201200b0073a20469f31sm7386247ejo.41.2022.08.23.05.28.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 05:28:19 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 14:28:17 +0200
-From:   Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
-To:     Jesper Dangaard Brouer <jbrouer@redhat.com>
-Cc:     Lorenzo Bianconi <lorenzo@kernel.org>, bpf@vger.kernel.org,
-        brouer@redhat.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, netdev@vger.kernel.org, davem@davemloft.net,
-        kuba@kernel.org, edumazet@google.com, pabeni@redhat.com,
-        hawk@kernel.org, john.fastabend@gmail.com
-Subject: Re: [PATCH v2 bpf-next] xdp: report rx queue index in xdp_frame
-Message-ID: <YwTH4c/Mk82LIWNM@lore-desk>
-References: <3923222d836b104232ee70eef34ce2aa454ef9db.1660721856.git.lorenzo@kernel.org>
- <1a22e7e9-e6ef-028f-dffa-e954207dc24d@redhat.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=ph0yVvHaJftkep4xaaP5tQjh94KpIWZ3IWizXSWvL8M=;
+        b=4qcFqBcetu+QrPW73lHVCdp10d7yNv7y1/A3G0EHQzZUBXGPvmisEX+9B/qFFYIaek
+         ydY2lzq8q5jwK3ozJ7XKfHO2FqkL1xeTCx4HdYFda1GQn7pQbM011ybgJG5l2uSd9XA5
+         VRotwpGhkAPPnZo+ZcnWmIdNJ2UDLMMcwYsVeF51bK2Zc+2RInq/jGKg1jqpyvq9/uWh
+         KBUNretvEvNr7LAVxi3t05qdXhiHMzw3aL4BR4UwBgP9rLcIOzexNxXNvKXVYJc4IcL/
+         hfAKnYJf0Q0cro/tPoUYtAvn0dU1AmV6PmooQQiBLT0olhH74+r7gGb0Jwnq6Lw+R1zO
+         8IEA==
+X-Gm-Message-State: ACgBeo1GE9boHOOkGr6gQrKniWPQV2sxXmJrTp5c19TgIX30WeMLljcx
+        8sx7kYu90k4O6KiXDVdzSI83ZQ==
+X-Google-Smtp-Source: AA6agR7VA6vrReXbJe8qczSO/bO7bkXixvXGV0l8w6XT4IZxJdTM0+wC6HLg7VU1wdcQVi2JXG2Rrw==
+X-Received: by 2002:a05:600c:1d16:b0:3a6:1fa1:41f7 with SMTP id l22-20020a05600c1d1600b003a61fa141f7mr2312227wms.103.1661264589800;
+        Tue, 23 Aug 2022 07:23:09 -0700 (PDT)
+Received: from [192.168.178.32] ([51.155.200.13])
+        by smtp.gmail.com with ESMTPSA id b10-20020a05600c4e0a00b003a603fbad5bsm18881716wmq.45.2022.08.23.07.23.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 07:23:09 -0700 (PDT)
+Message-ID: <1c07206a-25c5-9621-afd5-d64913fece13@isovalent.com>
+Date:   Tue, 23 Aug 2022 15:23:08 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oXTbf8T5vS6lKkZ/"
-Content-Disposition: inline
-In-Reply-To: <1a22e7e9-e6ef-028f-dffa-e954207dc24d@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH bpf-next] scripts/bpf: Fix attributes for bpf-helpers(7)
+ man page
+Content-Language: en-GB
+To:     Alejandro Colomar <alx.manpages@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org
+References: <20220823084719.13613-1-quentin@isovalent.com>
+ <a9533d19-8266-8eed-63ec-82aa07ce83d0@gmail.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <a9533d19-8266-8eed-63ec-82aa07ce83d0@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+On 23/08/2022 13:26, Alejandro Colomar wrote:
+> Hi Quentin,
+> 
+> On 8/23/22 10:47, Quentin Monnet wrote:
+>> The bpf-helpers(7) manual page shipped in the man-pages project is
+>> generated from the documentation contained in the BPF UAPI header, in
+>> the Linux repository, parsed by script/bpf_doc.py and then fed to
+>> rst2man.
+>>
+>> After a recent update of that page [0], Alejandro reported that the
+>> linter used to validate the man pages complains about the generated
+>> document [1]. The header for the page is supposed to contain some
+>> attributes that we do not set correctly with the script. This commit
+>> updates some of them; please refer to the previous discussion for the
+>> meaning of those fields and the value we use (tl;dr: setting "Version"
+>> to "Linux" seems acceptable).
+>>
+>> Before:
+>>
+>>      $ ./scripts/bpf_doc.py helpers | rst2man | grep '\.TH'
+>>      .TH BPF-HELPERS 7 "" "" ""
+>>
+>> After:
+>>
+>>      $ ./scripts/bpf_doc.py helpers | rst2man | grep '\.TH'
+>>      .TH BPF-HELPERS 7 "" "Linux" "Linux Programmer's Manual"
+>>
+>> Note that this commit does not update the date field. This date should
+>> ideally be updated when generating the page to the date of the last edit
+>> of the documentation (which we can maybe approximate to the last edit of
+>> the BPF UAPI header). There is a --date option in rst2man; it does not
+>> update that field, but Alejandro raised an issue about it [2] so it
+>> might do in the future. Anyway, we just leave the date empty for now.
+>>
+>> [0]
+>> https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git/commit/man7/bpf-helpers.7?id=19c7f78393f2b038e76099f87335ddf43a87f039
+>> [1]
+>> https://lore.kernel.org/all/20220721110821.8240-1-alx.manpages@gmail.com/t/#m8e689a822e03f6e2530a0d6de9d128401916c5de
+>> [2] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1016527
+>>
+>> Cc: Alejandro Colomar <alx.manpages@gmail.com>
+>> Reported-by: Alejandro Colomar <alx.manpages@gmail.com>
+>> Signed-off-by: Quentin Monnet <quentin@isovalent.com>
+> 
+> Heh, we very recently changed the .TH line in the Linux man-pages for
+> consistency with tradition and most other manual pages out there):
+> 
+> <https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git/commit/?id=7bd6328fd40871ad75cbc3b6aa5d4a4b70f53ac7>
+> <https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git/commit/?id=45186a5da74285d72199744eb5d2888fe348f680>
 
---oXTbf8T5vS6lKkZ/
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Wow, I'm two days late!
 
->=20
-> On 17/08/2022 09.40, Lorenzo Bianconi wrote:
-> > Report rx queue index in xdp_frame according to the xdp_buff xdp_rxq_in=
-fo
-> > pointer. xdp_frame queue_index is currently used in cpumap code to conv=
-ert
-> > the xdp_frame into a xdp_buff and allow the ebpf program attached to the
-> > map entry to differentiate traffic according to the receiving hw queue.
-> > xdp_frame size is not increased adding queue_index since an alignment
-> > padding in the structure is used to insert queue_index field.
-> >=20
-> > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
->=20
-> (Sorry, I replied to v1 and not this v2.)
->=20
-> I'm still unsure about this change, because the XDP-hints will also
-> contain the rx_queue number.  And placing it in XDP-hints automatically
-> makes it avail for AF_XDP consumers.
->=20
-> I do think it is relevant for the BPF-prog to get access to the rx_queue
-> index, because it can be used for scaling the workload.
+> 
+> So, we now omit the last (5th) argument to .TH,
+> and the Version one really contains a version now.
+> I'll comment below with what I think you should do.
+> 
+> An example may show it better:
+> 
+> $ grep ^.TH <man2/membarrier.2
+> .TH MEMBARRIER 2 2021-08-27 "Linux man-pages (unreleased)"
+> 
+> Of course, that '(unreleased)' is replaced by the actual version at the
+> time of `make dist` (creating the tarball).
+> 
+> 
+>> ---
+>>   scripts/bpf_doc.py | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/scripts/bpf_doc.py b/scripts/bpf_doc.py
+>> index dfb260de17a8..e66ef4f56e95 100755
+>> --- a/scripts/bpf_doc.py
+>> +++ b/scripts/bpf_doc.py
+>> @@ -378,6 +378,8 @@ list of eBPF helper functions
+>>  
+>> -------------------------------------------------------------------------------
+>>     :Manual section: 7
+>> +:Manual group: Linux Programmer's Manual
+> 
+> Remove "Manual group" completely.  If we don't specify that, groff(1)
+> (or mandoc(1)) will produce sane defaults.  For section 7, it uses
+> "Miscellaneous Information Manual".
+> 
+> I will report a bug to rst2man(1) that it shouldn't leave the field as
+> "" if not specified, but it should just not add the field at all if not
+> specified.
+> 
+>> +:Version: Linux
+> 
+> You could append the version here.  Or maybe put a placeholder that the
+> script should fill with information from the makefile or git-describe(1)?
 
-ack, I agree. Then we can implement it with xdp hw-hints.
+So if I understand correctly, running bpf_doc.py should currently
+produce the following string:
 
-Regards,
-Lorenzo
+    .TH BPF-HELPERS 7 "" "Linux (5.19.0)" ""
 
->=20
->=20
-> > ---
-> > Changes since v1:
-> > - rebase on top of bpf-next
-> > ---
-> >   include/net/xdp.h   | 2 ++
-> >   kernel/bpf/cpumap.c | 2 +-
-> >   2 files changed, 3 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/include/net/xdp.h b/include/net/xdp.h
-> > index 04c852c7a77f..3567866b0af5 100644
-> > --- a/include/net/xdp.h
-> > +++ b/include/net/xdp.h
-> > @@ -172,6 +172,7 @@ struct xdp_frame {
-> >   	struct xdp_mem_info mem;
-> >   	struct net_device *dev_rx; /* used by cpumap */
-> >   	u32 flags; /* supported values defined in xdp_buff_flags */
-> > +	u32 queue_index;
-> >   };
-> >   static __always_inline bool xdp_frame_has_frags(struct xdp_frame *fra=
-me)
-> > @@ -301,6 +302,7 @@ struct xdp_frame *xdp_convert_buff_to_frame(struct =
-xdp_buff *xdp)
-> >   	/* rxq only valid until napi_schedule ends, convert to xdp_mem_info =
-*/
-> >   	xdp_frame->mem =3D xdp->rxq->mem;
-> > +	xdp_frame->queue_index =3D xdp->rxq->queue_index;
-> >   	return xdp_frame;
-> >   }
-> > diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-> > index b5ba34ddd4b6..48003450c98c 100644
-> > --- a/kernel/bpf/cpumap.c
-> > +++ b/kernel/bpf/cpumap.c
-> > @@ -228,7 +228,7 @@ static int cpu_map_bpf_prog_run_xdp(struct bpf_cpu_=
-map_entry *rcpu,
-> >   		rxq.dev =3D xdpf->dev_rx;
-> >   		rxq.mem =3D xdpf->mem;
-> > -		/* TODO: report queue_index to xdp_rxq_info */
-> > +		rxq.queue_index =3D xdpf->queue_index;
-> >   		xdp_convert_frame_to_buff(xdpf, &xdp);
->=20
+Is this what you expect?
 
---oXTbf8T5vS6lKkZ/
-Content-Type: application/pgp-signature; name="signature.asc"
+I can make the script call "make kernelversion" to produce the above.
+I'm not 100% convinced it should be the role of that script vs. when
+copying it (we risk having some inaccuracies, for example I generated
+the above from the bpf-next, so it doesn't really correspond to 5.19),
+but maybe it's easier that way and avoids adding another script in the
+middle of the generation so OK.
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCYwTH4QAKCRA6cBh0uS2t
-rOEXAP9q4720t4CmWUFUafKol802Af7ZiSpyq+OX6ArG4vIS1AEAtlq+Y9hu+1+l
-wwcusrNPSDuANA97lWGcFR9O8ZSPrwI=
-=VdRN
------END PGP SIGNATURE-----
-
---oXTbf8T5vS6lKkZ/--
-
+Thanks,
+Quentin
