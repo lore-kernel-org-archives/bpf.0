@@ -2,141 +2,110 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85C66C32796
-	for <bpf@archiver.kernel.org>; Tue, 23 Aug 2022 17:07:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FB62C3F6B0
+	for <bpf@archiver.kernel.org>; Tue, 23 Aug 2022 17:16:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343931AbiHWRHe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Aug 2022 13:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48378 "EHLO
+        id S245262AbiHWRQk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Aug 2022 13:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345020AbiHWRGS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:06:18 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A1212B07D
-        for <bpf@vger.kernel.org>; Tue, 23 Aug 2022 06:35:09 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MBqqZ01s7zXdkv;
-        Tue, 23 Aug 2022 21:30:49 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by canpemm500010.china.huawei.com
- (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 23 Aug
- 2022 21:35:06 +0800
-From:   Liu Jian <liujian56@huawei.com>
-To:     <john.fastabend@gmail.com>, <jakub@cloudflare.com>,
-        <edumazet@google.com>, <davem@davemloft.net>,
-        <yoshfuji@linux-ipv6.org>, <dsahern@kernel.org>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <andrii@kernel.org>, <mykolal@fb.com>,
-        <ast@kernel.org>, <daniel@iogearbox.net>, <martin.lau@linux.dev>,
-        <song@kernel.org>, <yhs@fb.com>, <kpsingh@kernel.org>,
-        <sdf@google.com>, <haoluo@google.com>, <jolsa@kernel.org>,
-        <shuah@kernel.org>, <bpf@vger.kernel.org>
-CC:     <liujian56@huawei.com>
-Subject: [PATCH bpf-next v2 1/2] net: If the sock is dead, do not access sock's sk_wq in sk_stream_wait_memory
-Date:   Tue, 23 Aug 2022 21:37:54 +0800
-Message-ID: <20220823133755.314697-2-liujian56@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220823133755.314697-1-liujian56@huawei.com>
-References: <20220823133755.314697-1-liujian56@huawei.com>
+        with ESMTP id S1344106AbiHWRPd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Aug 2022 13:15:33 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E75145BBC;
+        Tue, 23 Aug 2022 06:49:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661262598; x=1692798598;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7URe0xxC6qIsgHX2iNkaSTs6I2GXYi/eCN2P9MNn59g=;
+  b=WXj3n/J46Pbux/1Zyu41y+jG5NrJnU3Aovzu9CgAHzSx1goXwSm6BuPg
+   oafg1w4UCP3hiTQ0CbeEJSv5+NZSNZdgNyQ87zAgtklNPO3u//TA+2XNY
+   IPlnxCjPX2iZ/Cr1PDUMUt4rzAH816XyGNiVvvNFtHeICALMvyOjuSRlS
+   3Hk4m7/AIImhYJbBLz92Ug9PqnQQocI3Zjx+SK6r+3DNtmKPdVATrHBNA
+   2LUu87IXU0LKoVX4TIcI6SpL8+4mv2TFRf9rvqvcylq+1ArUUfYvznE/6
+   O6rL1A3TUGGTvoP6iIJtQ6Qven59474nnEbacE9DuvZE1FT4Sbyjk8FqG
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="292435544"
+X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
+   d="scan'208";a="292435544"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 06:49:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
+   d="scan'208";a="560172799"
+Received: from lkp-server02.sh.intel.com (HELO 9bbcefcddf9f) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 23 Aug 2022 06:49:53 -0700
+Received: from kbuild by 9bbcefcddf9f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oQUHw-0000HX-2u;
+        Tue, 23 Aug 2022 13:49:52 +0000
+Date:   Tue, 23 Aug 2022 21:49:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Xu <dxu@dxuuu.xyz>, bpf@vger.kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
+Cc:     kbuild-all@lists.01.org, Daniel Xu <dxu@dxuuu.xyz>,
+        pablo@netfilter.org, fw@strlen.de, toke@kernel.org,
+        martin.lau@linux.dev, netfilter-devel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v4 4/5] bpf: Add support for writing to
+ nf_conn:mark
+Message-ID: <202208232110.vsR1bsL0-lkp@intel.com>
+References: <073173502d762faf87bde0ca23e609c84848dd7e.1661192455.git.dxu@dxuuu.xyz>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <073173502d762faf87bde0ca23e609c84848dd7e.1661192455.git.dxu@dxuuu.xyz>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix the below NULL pointer dereference:
+Hi Daniel,
 
-[   14.471200] Call Trace:
-[   14.471562]  <TASK>
-[   14.471882]  lock_acquire+0x245/0x2e0
-[   14.472416]  ? remove_wait_queue+0x12/0x50
-[   14.473014]  ? _raw_spin_lock_irqsave+0x17/0x50
-[   14.473681]  _raw_spin_lock_irqsave+0x3d/0x50
-[   14.474318]  ? remove_wait_queue+0x12/0x50
-[   14.474907]  remove_wait_queue+0x12/0x50
-[   14.475480]  sk_stream_wait_memory+0x20d/0x340
-[   14.476127]  ? do_wait_intr_irq+0x80/0x80
-[   14.476704]  do_tcp_sendpages+0x287/0x600
-[   14.477283]  tcp_bpf_push+0xab/0x260
-[   14.477817]  tcp_bpf_sendmsg_redir+0x297/0x500
-[   14.478461]  ? __local_bh_enable_ip+0x77/0xe0
-[   14.479096]  tcp_bpf_send_verdict+0x105/0x470
-[   14.479729]  tcp_bpf_sendmsg+0x318/0x4f0
-[   14.480311]  sock_sendmsg+0x2d/0x40
-[   14.480822]  ____sys_sendmsg+0x1b4/0x1c0
-[   14.481390]  ? copy_msghdr_from_user+0x62/0x80
-[   14.482048]  ___sys_sendmsg+0x78/0xb0
-[   14.482580]  ? vmf_insert_pfn_prot+0x91/0x150
-[   14.483215]  ? __do_fault+0x2a/0x1a0
-[   14.483738]  ? do_fault+0x15e/0x5d0
-[   14.484246]  ? __handle_mm_fault+0x56b/0x1040
-[   14.484874]  ? lock_is_held_type+0xdf/0x130
-[   14.485474]  ? find_held_lock+0x2d/0x90
-[   14.486046]  ? __sys_sendmsg+0x41/0x70
-[   14.486587]  __sys_sendmsg+0x41/0x70
-[   14.487105]  ? intel_pmu_drain_pebs_core+0x350/0x350
-[   14.487822]  do_syscall_64+0x34/0x80
-[   14.488345]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Thank you for the patch! Yet something to improve:
 
-The test scene as following flow:
-thread1                               thread2
------------                           ---------------
- tcp_bpf_sendmsg
-  tcp_bpf_send_verdict
-   tcp_bpf_sendmsg_redir              sock_close
-    tcp_bpf_push_locked                 __sock_release
-     tcp_bpf_push                         //inet_release
-      do_tcp_sendpages                    sock->ops->release
-       sk_stream_wait_memory          	   // tcp_close
-          sk_wait_event                      sk->sk_prot->close
-           release_sock(__sk);
-            ***
+[auto build test ERROR on bpf-next/master]
 
-                                                lock_sock(sk);
-                                                  __tcp_close
-                                                    sock_orphan(sk)
-                                                      sk->sk_wq  = NULL
-                                                release_sock
-            ****
-           lock_sock(__sk);
-          remove_wait_queue(sk_sleep(sk), &wait);
-             sk_sleep(sk)
-             //NULL pointer dereference
-             &rcu_dereference_raw(sk->sk_wq)->wait
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Xu/bpf-Remove-duplicate-PTR_TO_BTF_ID-RO-check/20220823-032643
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220823/202208232110.vsR1bsL0-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/496ec6d75c8e8758f93c6b987eee83713c911a05
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daniel-Xu/bpf-Remove-duplicate-PTR_TO_BTF_ID-RO-check/20220823-032643
+        git checkout 496ec6d75c8e8758f93c6b987eee83713c911a05
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-While waiting for memory in thread1, the socket is released with its wait
-queue because thread2 has closed it. This caused by tcp_bpf_send_verdict
-didn't increase the f_count of psock->sk_redir->sk_socket->file in thread1.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-We should check if SOCK_DEAD flag is set on wakeup in
-sk_stream_wait_memory, before accessing the wait queue.
+All errors (new ones prefixed by >>):
 
-Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
-Signed-off-by: Liu Jian <liujian56@huawei.com>
----
-v1->v2:
-  As Jakub's suggested, check sock's DEAD flag before accessing
-  the wait queue.
- net/core/stream.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+   ld: net/core/filter.o: in function `tc_cls_act_btf_struct_access':
+   net/core/filter.c:8644: undefined reference to `nf_conntrack_btf_struct_access'
+   ld: net/core/filter.o: in function `xdp_btf_struct_access':
+>> include/net/net_namespace.h:369: undefined reference to `nf_conntrack_btf_struct_access'
+   pahole: .tmp_vmlinux.btf: Invalid argument
+   .btf.vmlinux.bin.o: file not recognized: file format not recognized
 
-diff --git a/net/core/stream.c b/net/core/stream.c
-index ccc083cdef23..1105057ce00a 100644
---- a/net/core/stream.c
-+++ b/net/core/stream.c
-@@ -159,7 +159,8 @@ int sk_stream_wait_memory(struct sock *sk, long *timeo_p)
- 		*timeo_p = current_timeo;
- 	}
- out:
--	remove_wait_queue(sk_sleep(sk), &wait);
-+	if (!sock_flag(sk, SOCK_DEAD))
-+		remove_wait_queue(sk_sleep(sk), &wait);
- 	return err;
- 
- do_error:
+
+vim +369 include/net/net_namespace.h
+
+8f424b5f32d78b Eric Dumazet      2008-11-12  365  
+0c5c9fb5510633 Eric W. Biederman 2015-03-11  366  static inline struct net *read_pnet(const possible_net_t *pnet)
+8f424b5f32d78b Eric Dumazet      2008-11-12  367  {
+0c5c9fb5510633 Eric W. Biederman 2015-03-11  368  #ifdef CONFIG_NET_NS
+0c5c9fb5510633 Eric W. Biederman 2015-03-11 @369  	return pnet->net;
+8f424b5f32d78b Eric Dumazet      2008-11-12  370  #else
+0c5c9fb5510633 Eric W. Biederman 2015-03-11  371  	return &init_net;
+8f424b5f32d78b Eric Dumazet      2008-11-12  372  #endif
+0c5c9fb5510633 Eric W. Biederman 2015-03-11  373  }
+5d1e4468a7705d Denis V. Lunev    2008-04-16  374  
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
