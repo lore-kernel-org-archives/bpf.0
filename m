@@ -2,25 +2,25 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97E4AC32772
-	for <bpf@archiver.kernel.org>; Tue, 23 Aug 2022 17:07:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86FD0C32789
+	for <bpf@archiver.kernel.org>; Tue, 23 Aug 2022 17:07:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343895AbiHWRHc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Aug 2022 13:07:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48506 "EHLO
+        id S245654AbiHWRHd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Aug 2022 13:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345018AbiHWRGS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:06:18 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759DD152C64
-        for <bpf@vger.kernel.org>; Tue, 23 Aug 2022 06:35:10 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MBqrW2mXMz1N7MB;
-        Tue, 23 Aug 2022 21:31:39 +0800 (CST)
+        with ESMTP id S1345002AbiHWRGP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Aug 2022 13:06:15 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AB2152C5F
+        for <bpf@vger.kernel.org>; Tue, 23 Aug 2022 06:35:09 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MBqrn0wwlzlWRV;
+        Tue, 23 Aug 2022 21:31:53 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by canpemm500010.china.huawei.com
  (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 23 Aug
- 2022 21:35:07 +0800
+ 2022 21:35:05 +0800
 From:   Liu Jian <liujian56@huawei.com>
 To:     <john.fastabend@gmail.com>, <jakub@cloudflare.com>,
         <edumazet@google.com>, <davem@davemloft.net>,
@@ -31,12 +31,10 @@ To:     <john.fastabend@gmail.com>, <jakub@cloudflare.com>,
         <sdf@google.com>, <haoluo@google.com>, <jolsa@kernel.org>,
         <shuah@kernel.org>, <bpf@vger.kernel.org>
 CC:     <liujian56@huawei.com>
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Add wait send memory test for sockmap redirect
-Date:   Tue, 23 Aug 2022 21:37:55 +0800
-Message-ID: <20220823133755.314697-3-liujian56@huawei.com>
+Subject: [PATCH bpf-next v2 0/2] If the sock is dead, do not access sock's sk_wq in sk_stream_wait_memory
+Date:   Tue, 23 Aug 2022 21:37:53 +0800
+Message-ID: <20220823133755.314697-1-liujian56@huawei.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220823133755.314697-1-liujian56@huawei.com>
-References: <20220823133755.314697-1-liujian56@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.175.101.6]
@@ -47,108 +45,21 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add one test for wait redirect sock's send memory test for sockmap.
+If the sock is dead, do not access sock's sk_wq in sk_stream_wait_memory
 
-Signed-off-by: Liu Jian <liujian56@huawei.com>
----
+v1->v2:
+  As Jakub's suggested, check sock's DEAD flag before accessing
+  the wait queue.
+
+Liu Jian (2):
+  net: If the sock is dead, do not access sock's sk_wq in
+    sk_stream_wait_memory
+  selftests/bpf: Add wait send memory test for sockmap redirect
+
+ net/core/stream.c                          |  3 +-
  tools/testing/selftests/bpf/test_sockmap.c | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ 2 files changed, 44 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
-index 0fbaccdc8861..95b9b45ad028 100644
---- a/tools/testing/selftests/bpf/test_sockmap.c
-+++ b/tools/testing/selftests/bpf/test_sockmap.c
-@@ -138,6 +138,7 @@ struct sockmap_options {
- 	bool data_test;
- 	bool drop_expected;
- 	bool check_recved_len;
-+	bool tx_wait_mem;
- 	int iov_count;
- 	int iov_length;
- 	int rate;
-@@ -578,6 +579,10 @@ static int msg_loop(int fd, int iov_count, int iov_length, int cnt,
- 			sent = sendmsg(fd, &msg, flags);
- 
- 			if (!drop && sent < 0) {
-+				if (opt->tx_wait_mem && errno == EACCES) {
-+					errno = 0;
-+					goto out_errno;
-+				}
- 				perror("sendmsg loop error");
- 				goto out_errno;
- 			} else if (drop && sent >= 0) {
-@@ -644,6 +649,15 @@ static int msg_loop(int fd, int iov_count, int iov_length, int cnt,
- 				goto out_errno;
- 			}
- 
-+			if (opt->tx_wait_mem) {
-+				FD_ZERO(&w);
-+				FD_SET(fd, &w);
-+				slct = select(max_fd + 1, NULL, NULL, &w, &timeout);
-+				errno = 0;
-+				close(fd);
-+				goto out_errno;
-+			}
-+
- 			errno = 0;
- 			if (peek_flag) {
- 				flags |= MSG_PEEK;
-@@ -752,6 +766,22 @@ static int sendmsg_test(struct sockmap_options *opt)
- 			return err;
- 	}
- 
-+	if (opt->tx_wait_mem) {
-+		struct timeval timeout;
-+		int rxtx_buf_len = 1024;
-+
-+		timeout.tv_sec = 3;
-+		timeout.tv_usec = 0;
-+
-+		err = setsockopt(c2, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(struct timeval));
-+		err |= setsockopt(c2, SOL_SOCKET, SO_SNDBUFFORCE, &rxtx_buf_len, sizeof(int));
-+		err |= setsockopt(p2, SOL_SOCKET, SO_RCVBUFFORCE, &rxtx_buf_len, sizeof(int));
-+		if (err) {
-+			perror("setsockopt failed()");
-+			return errno;
-+		}
-+	}
-+
- 	rxpid = fork();
- 	if (rxpid == 0) {
- 		if (txmsg_pop || txmsg_start_pop)
-@@ -788,6 +818,9 @@ static int sendmsg_test(struct sockmap_options *opt)
- 		return errno;
- 	}
- 
-+	if (opt->tx_wait_mem)
-+		close(c2);
-+
- 	txpid = fork();
- 	if (txpid == 0) {
- 		if (opt->sendpage)
-@@ -1452,6 +1485,14 @@ static void test_txmsg_redir(int cgrp, struct sockmap_options *opt)
- 	test_send(opt, cgrp);
- }
- 
-+static void test_txmsg_redir_wait_sndmem(int cgrp, struct sockmap_options *opt)
-+{
-+	txmsg_redir = 1;
-+	opt->tx_wait_mem = true;
-+	test_send_large(opt, cgrp);
-+	opt->tx_wait_mem = false;
-+}
-+
- static void test_txmsg_drop(int cgrp, struct sockmap_options *opt)
- {
- 	txmsg_drop = 1;
-@@ -1800,6 +1841,7 @@ static int populate_progs(char *bpf_file)
- struct _test test[] = {
- 	{"txmsg test passthrough", test_txmsg_pass},
- 	{"txmsg test redirect", test_txmsg_redir},
-+	{"txmsg test redirect wait send mem", test_txmsg_redir_wait_sndmem},
- 	{"txmsg test drop", test_txmsg_drop},
- 	{"txmsg test ingress redirect", test_txmsg_ingress_redir},
- 	{"txmsg test skb", test_txmsg_skb},
 -- 
 2.17.1
 
