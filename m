@@ -2,41 +2,41 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B007C00140
-	for <bpf@archiver.kernel.org>; Wed, 24 Aug 2022 13:42:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76AEEC3F6B0
+	for <bpf@archiver.kernel.org>; Wed, 24 Aug 2022 13:42:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236377AbiHXNmB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Aug 2022 09:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
+        id S238546AbiHXNmX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Aug 2022 09:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238393AbiHXNll (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 24 Aug 2022 09:41:41 -0400
+        with ESMTP id S238251AbiHXNl7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 24 Aug 2022 09:41:59 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617DA7FF82
-        for <bpf@vger.kernel.org>; Wed, 24 Aug 2022 06:41:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86E881B07
+        for <bpf@vger.kernel.org>; Wed, 24 Aug 2022 06:41:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661348486;
+        s=mimecast20190719; t=1661348492;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4pLtSMKIH0YKJu3140XCqlq7jJWTfU/sbKwsjVLAeco=;
-        b=K5K0k2IcItbZlWGlctTi82KJ6NPyy2rXyYnCTpWOPaeFWg/JkMAFZ/pwqNNbssCPSMYQ1h
-        mms39feXA3sxowMYoLOvlOfWcDmPQlLgQbLCnW4QGq0LBfdZQTxgjRxXCjPKON8+B+w7hW
-        OLbrBCVcTPWo4TscqlYcRzc1xqlyWpA=
+        bh=OfbbgckAA8b8IGBbIFhs4TFoQczUT6RAdpeMjlYjV4U=;
+        b=S3v9P/smuCv7vL9nR81sdEuLuxUEO/8L9CWkzBhm8+w/gO0MDoVkcjUi+mnJwwubIhh5nA
+        baa7odOxC5jN2dxzdcPLIEBhB6UEfeuKBVDdxGP0aPa+UqhbUi/QZyc7uQsaUTUJXMpL4d
+        t5cJxpMJOjL+S+QwQWZ4MDy6LLhLBk4=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-135-hf7p6D28MrmOFHxaNV3hnA-1; Wed, 24 Aug 2022 09:41:17 -0400
-X-MC-Unique: hf7p6D28MrmOFHxaNV3hnA-1
+ us-mta-99-1L-DFxkQNKmLF9f2NgWsDQ-1; Wed, 24 Aug 2022 09:41:28 -0400
+X-MC-Unique: 1L-DFxkQNKmLF9f2NgWsDQ-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2BAE3811E76;
-        Wed, 24 Aug 2022 13:41:16 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 72CC785A58A;
+        Wed, 24 Aug 2022 13:41:26 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.192.211])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 00E2A9459C;
-        Wed, 24 Aug 2022 13:41:12 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 464B518ECC;
+        Wed, 24 Aug 2022 13:41:23 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -55,9 +55,9 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v9 04/23] bpf/verifier: allow kfunc to return an allocated mem
-Date:   Wed, 24 Aug 2022 15:40:34 +0200
-Message-Id: <20220824134055.1328882-5-benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v9 07/23] libbpf: add map_get_fd_by_id and map_delete_elem in light skeleton
+Date:   Wed, 24 Aug 2022 15:40:37 +0200
+Message-Id: <20220824134055.1328882-8-benjamin.tissoires@redhat.com>
 In-Reply-To: <20220824134055.1328882-1-benjamin.tissoires@redhat.com>
 References: <20220824134055.1328882-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
@@ -67,363 +67,61 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-For drivers (outside of network), the incoming data is not statically
-defined in a struct. Most of the time the data buffer is kzalloc-ed
-and thus we can not rely on eBPF and BTF to explore the data.
+This allows to have a better control over maps from the kernel when
+preloading eBPF programs.
 
-This commit allows to return an arbitrary memory, previously allocated by
-the driver.
-An interesting extra point is that the kfunc can mark the exported
-memory region as read only or read/write.
-
-So, when a kfunc is not returning a pointer to a struct but to a plain
-type, we can consider it is a valid allocated memory assuming that:
-- one of the arguments is either called rdonly_buf_size or
-  rdwr_buf_size
-- and this argument is a const from the caller point of view
-
-We can then use this parameter as the size of the allocated memory.
-
-The memory is either read-only or read-write based on the name
-of the size parameter.
-
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Acked-by: Yonghong Song <yhs@fb.com>
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
 ---
 
-changes in v9:
-- updated to match upstream (replaced kfunc_flag by a field in
-  kfunc_meta)
+no changes in v9
 
 no changes in v8
 
-changes in v7:
-- ensures btf_type_is_struct_ptr() checks for a ptr first
-  (squashed from next commit)
-- remove multiple_ref_obj_id need
-- use btf_type_skip_modifiers instead of manually doing it in
-  btf_type_is_struct_ptr()
-- s/strncmp/strcmp/ in btf_is_kfunc_arg_mem_size()
-- check for tnum_is_const when retrieving the size value
-- have only one check for "Ensure only one argument is referenced
-  PTR_TO_BTF_ID"
-- add some more context to the commit message
+no changes in v7
 
-changes in v6:
-- code review from Kartikeya:
-  - remove comment change that had no reasons to be
-  - remove handling of PTR_TO_MEM with kfunc releases
-  - introduce struct bpf_kfunc_arg_meta
-  - do rdonly/rdwr_buf_size check in btf_check_kfunc_arg_match
-  - reverted most of the changes in verifier.c
-  - make sure kfunc acquire is using a struct pointer, not just a plain
-    pointer
-  - also forward ref_obj_id to PTR_TO_MEM in kfunc to not use after free
-    the allocated memory
+no changes in v6
 
-changes in v5:
-- updated PTR_TO_MEM comment in btf.c to match upstream
-- make it read-only or read-write based on the name of size
-
-new in v4
-
-change btf.h
-
-fix allow kfunc to return an allocated mem
+new in v5
 ---
- include/linux/bpf.h   |  9 +++-
- include/linux/btf.h   | 10 +++++
- kernel/bpf/btf.c      | 98 ++++++++++++++++++++++++++++++++++---------
- kernel/bpf/verifier.c | 43 +++++++++++++------
- 4 files changed, 128 insertions(+), 32 deletions(-)
+ tools/lib/bpf/skel_internal.h | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 39bd36359c1e..90dd218e0199 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1932,13 +1932,20 @@ int btf_distill_func_proto(struct bpf_verifier_log *log,
- 			   const char *func_name,
- 			   struct btf_func_model *m);
- 
-+struct bpf_kfunc_arg_meta {
-+	u64 r0_size;
-+	bool r0_rdonly;
-+	int ref_obj_id;
-+	u32 flags;
-+};
-+
- struct bpf_reg_state;
- int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
- 				struct bpf_reg_state *regs);
- int btf_check_kfunc_arg_match(struct bpf_verifier_env *env,
- 			      const struct btf *btf, u32 func_id,
- 			      struct bpf_reg_state *regs,
--			      u32 kfunc_flags);
-+			      struct bpf_kfunc_arg_meta *meta);
- int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog,
- 			  struct bpf_reg_state *reg);
- int btf_check_type_match(struct bpf_verifier_log *log, const struct bpf_prog *prog,
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index ad93c2d9cc1c..1fcc833a8690 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -441,4 +441,14 @@ static inline int register_btf_id_dtor_kfuncs(const struct btf_id_dtor_kfunc *dt
+diff --git a/tools/lib/bpf/skel_internal.h b/tools/lib/bpf/skel_internal.h
+index 00c5f94b43be..1e82ab06c3eb 100644
+--- a/tools/lib/bpf/skel_internal.h
++++ b/tools/lib/bpf/skel_internal.h
+@@ -251,6 +251,29 @@ static inline int skel_map_update_elem(int fd, const void *key,
+ 	return skel_sys_bpf(BPF_MAP_UPDATE_ELEM, &attr, attr_sz);
  }
- #endif
  
-+static inline bool btf_type_is_struct_ptr(struct btf *btf, const struct btf_type *t)
++static inline int skel_map_delete_elem(int fd, const void *key)
 +{
-+	if (!btf_type_is_ptr(t))
-+		return false;
++	const size_t attr_sz = offsetofend(union bpf_attr, flags);
++	union bpf_attr attr;
 +
-+	t = btf_type_skip_modifiers(btf, t->type, NULL);
++	memset(&attr, 0, attr_sz);
++	attr.map_fd = fd;
++	attr.key = (long)key;
 +
-+	return btf_type_is_struct(t);
++	return skel_sys_bpf(BPF_MAP_DELETE_ELEM, &attr, attr_sz);
 +}
 +
- #endif
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 386300f52b23..c0057ad1088f 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -6166,11 +6166,36 @@ static bool is_kfunc_arg_mem_size(const struct btf *btf,
- 	return true;
- }
- 
-+static bool btf_is_kfunc_arg_mem_size(const struct btf *btf,
-+				      const struct btf_param *arg,
-+				      const struct bpf_reg_state *reg,
-+				      const char *name)
++static inline int skel_map_get_fd_by_id(__u32 id)
 +{
-+	int len, target_len = strlen(name);
-+	const struct btf_type *t;
-+	const char *param_name;
++	const size_t attr_sz = offsetofend(union bpf_attr, flags);
++	union bpf_attr attr;
 +
-+	t = btf_type_skip_modifiers(btf, arg->type, NULL);
-+	if (!btf_type_is_scalar(t) || reg->type != SCALAR_VALUE)
-+		return false;
++	memset(&attr, 0, attr_sz);
++	attr.map_id = id;
 +
-+	param_name = btf_name_by_offset(btf, arg->name_off);
-+	if (str_is_empty(param_name))
-+		return false;
-+	len = strlen(param_name);
-+	if (len != target_len)
-+		return false;
-+	if (strcmp(param_name, name))
-+		return false;
-+
-+	return true;
++	return skel_sys_bpf(BPF_MAP_GET_FD_BY_ID, &attr, attr_sz);
 +}
 +
- static int btf_check_func_arg_match(struct bpf_verifier_env *env,
- 				    const struct btf *btf, u32 func_id,
- 				    struct bpf_reg_state *regs,
- 				    bool ptr_to_mem_ok,
--				    u32 kfunc_flags)
-+				    struct bpf_kfunc_arg_meta *kfunc_meta)
+ static inline int skel_raw_tracepoint_open(const char *name, int prog_fd)
  {
- 	enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
- 	bool rel = false, kptr_get = false, trusted_arg = false;
-@@ -6207,12 +6232,12 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
- 		return -EINVAL;
- 	}
- 
--	if (is_kfunc) {
-+	if (is_kfunc && kfunc_meta) {
- 		/* Only kfunc can be release func */
--		rel = kfunc_flags & KF_RELEASE;
--		kptr_get = kfunc_flags & KF_KPTR_GET;
--		trusted_arg = kfunc_flags & KF_TRUSTED_ARGS;
--		sleepable = kfunc_flags & KF_SLEEPABLE;
-+		rel = kfunc_meta->flags & KF_RELEASE;
-+		kptr_get = kfunc_meta->flags & KF_KPTR_GET;
-+		trusted_arg = kfunc_meta->flags & KF_TRUSTED_ARGS;
-+		sleepable = kfunc_meta->flags & KF_SLEEPABLE;
- 	}
- 
- 	/* check that BTF function arguments match actual types that the
-@@ -6225,6 +6250,35 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
- 
- 		t = btf_type_skip_modifiers(btf, args[i].type, NULL);
- 		if (btf_type_is_scalar(t)) {
-+			if (is_kfunc && kfunc_meta) {
-+				bool is_buf_size = false;
-+
-+				/* check for any const scalar parameter of name "rdonly_buf_size"
-+				 * or "rdwr_buf_size"
-+				 */
-+				if (btf_is_kfunc_arg_mem_size(btf, &args[i], reg,
-+							      "rdonly_buf_size")) {
-+					kfunc_meta->r0_rdonly = true;
-+					is_buf_size = true;
-+				} else if (btf_is_kfunc_arg_mem_size(btf, &args[i], reg,
-+								     "rdwr_buf_size"))
-+					is_buf_size = true;
-+
-+				if (is_buf_size) {
-+					if (kfunc_meta->r0_size) {
-+						bpf_log(log, "2 or more rdonly/rdwr_buf_size parameters for kfunc");
-+						return -EINVAL;
-+					}
-+
-+					if (!tnum_is_const(reg->var_off)) {
-+						bpf_log(log, "R%d is not a const\n", regno);
-+						return -EINVAL;
-+					}
-+
-+					kfunc_meta->r0_size = reg->var_off.value;
-+				}
-+			}
-+
- 			if (reg->type == SCALAR_VALUE)
- 				continue;
- 			bpf_log(log, "R%d is not a scalar\n", regno);
-@@ -6255,6 +6309,19 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
- 		if (ret < 0)
- 			return ret;
- 
-+		if (is_kfunc && reg->type == PTR_TO_BTF_ID) {
-+			/* Ensure only one argument is referenced PTR_TO_BTF_ID */
-+			if (reg->ref_obj_id) {
-+				if (ref_obj_id) {
-+					bpf_log(log, "verifier internal error: more than one arg with ref_obj_id R%d %u %u\n",
-+						regno, reg->ref_obj_id, ref_obj_id);
-+					return -EFAULT;
-+				}
-+				ref_regno = regno;
-+				ref_obj_id = reg->ref_obj_id;
-+			}
-+		}
-+
- 		/* kptr_get is only true for kfunc */
- 		if (i == 0 && kptr_get) {
- 			struct bpf_map_value_off_desc *off_desc;
-@@ -6327,16 +6394,6 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
- 			if (reg->type == PTR_TO_BTF_ID) {
- 				reg_btf = reg->btf;
- 				reg_ref_id = reg->btf_id;
--				/* Ensure only one argument is referenced PTR_TO_BTF_ID */
--				if (reg->ref_obj_id) {
--					if (ref_obj_id) {
--						bpf_log(log, "verifier internal error: more than one arg with ref_obj_id R%d %u %u\n",
--							regno, reg->ref_obj_id, ref_obj_id);
--						return -EFAULT;
--					}
--					ref_regno = regno;
--					ref_obj_id = reg->ref_obj_id;
--				}
- 			} else {
- 				reg_btf = btf_vmlinux;
- 				reg_ref_id = *reg2btf_ids[base_type(reg->type)];
-@@ -6427,6 +6484,9 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
- 		return -EINVAL;
- 	}
- 
-+	if (kfunc_meta && ref_obj_id)
-+		kfunc_meta->ref_obj_id = ref_obj_id;
-+
- 	/* returns argument register number > 0 in case of reference release kfunc */
- 	return rel ? ref_regno : 0;
- }
-@@ -6465,7 +6525,7 @@ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
- 	max_ctx_offset = env->prog->aux->max_ctx_offset;
- 
- 	is_global = prog->aux->func_info_aux[subprog].linkage == BTF_FUNC_GLOBAL;
--	err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global, 0);
-+	err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global, NULL);
- 
- 	env->prog->aux->max_ctx_offset = max_ctx_offset;
- 
-@@ -6481,9 +6541,9 @@ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
- int btf_check_kfunc_arg_match(struct bpf_verifier_env *env,
- 			      const struct btf *btf, u32 func_id,
- 			      struct bpf_reg_state *regs,
--			      u32 kfunc_flags)
-+			      struct bpf_kfunc_arg_meta *meta)
- {
--	return btf_check_func_arg_match(env, btf, func_id, regs, true, kfunc_flags);
-+	return btf_check_func_arg_match(env, btf, func_id, regs, true, meta);
- }
- 
- /* Convert BTF of a function into bpf_reg_state if possible
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 13190487fb12..cd50850e139d 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -7576,6 +7576,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- {
- 	const struct btf_type *t, *func, *func_proto, *ptr_type;
- 	struct bpf_reg_state *regs = cur_regs(env);
-+	struct bpf_kfunc_arg_meta meta = { 0 };
- 	const char *func_name, *ptr_type_name;
- 	u32 i, nargs, func_id, ptr_type_id;
- 	int err, insn_idx = *insn_idx_p;
-@@ -7610,8 +7611,10 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 
- 	acq = *kfunc_flags & KF_ACQUIRE;
- 
-+	meta.flags = *kfunc_flags;
-+
- 	/* Check the arguments */
--	err = btf_check_kfunc_arg_match(env, desc_btf, func_id, regs, *kfunc_flags);
-+	err = btf_check_kfunc_arg_match(env, desc_btf, func_id, regs, &meta);
- 	if (err < 0)
- 		return err;
- 	/* In case of release function, we get register number of refcounted
-@@ -7632,7 +7635,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 	/* Check return type */
- 	t = btf_type_skip_modifiers(desc_btf, func_proto->type, NULL);
- 
--	if (acq && !btf_type_is_ptr(t)) {
-+	if (acq && !btf_type_is_struct_ptr(desc_btf, t)) {
- 		verbose(env, "acquire kernel function does not return PTR_TO_BTF_ID\n");
- 		return -EINVAL;
- 	}
-@@ -7644,17 +7647,33 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		ptr_type = btf_type_skip_modifiers(desc_btf, t->type,
- 						   &ptr_type_id);
- 		if (!btf_type_is_struct(ptr_type)) {
--			ptr_type_name = btf_name_by_offset(desc_btf,
--							   ptr_type->name_off);
--			verbose(env, "kernel function %s returns pointer type %s %s is not supported\n",
--				func_name, btf_type_str(ptr_type),
--				ptr_type_name);
--			return -EINVAL;
-+			if (!meta.r0_size) {
-+				ptr_type_name = btf_name_by_offset(desc_btf,
-+								   ptr_type->name_off);
-+				verbose(env,
-+					"kernel function %s returns pointer type %s %s is not supported\n",
-+					func_name,
-+					btf_type_str(ptr_type),
-+					ptr_type_name);
-+				return -EINVAL;
-+			}
-+
-+			mark_reg_known_zero(env, regs, BPF_REG_0);
-+			regs[BPF_REG_0].type = PTR_TO_MEM;
-+			regs[BPF_REG_0].mem_size = meta.r0_size;
-+
-+			if (meta.r0_rdonly)
-+				regs[BPF_REG_0].type |= MEM_RDONLY;
-+
-+			/* Ensures we don't access the memory after a release_reference() */
-+			if (meta.ref_obj_id)
-+				regs[BPF_REG_0].ref_obj_id = meta.ref_obj_id;
-+		} else {
-+			mark_reg_known_zero(env, regs, BPF_REG_0);
-+			regs[BPF_REG_0].btf = desc_btf;
-+			regs[BPF_REG_0].type = PTR_TO_BTF_ID;
-+			regs[BPF_REG_0].btf_id = ptr_type_id;
- 		}
--		mark_reg_known_zero(env, regs, BPF_REG_0);
--		regs[BPF_REG_0].btf = desc_btf;
--		regs[BPF_REG_0].type = PTR_TO_BTF_ID;
--		regs[BPF_REG_0].btf_id = ptr_type_id;
- 		if (*kfunc_flags & KF_RET_NULL) {
- 			regs[BPF_REG_0].type |= PTR_MAYBE_NULL;
- 			/* For mark_ptr_or_null_reg, see 93c230e3f5bd6 */
+ 	const size_t attr_sz = offsetofend(union bpf_attr, raw_tracepoint.prog_fd);
 -- 
 2.36.1
 
