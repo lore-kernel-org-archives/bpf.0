@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FFD7C3F6B0
-	for <bpf@archiver.kernel.org>; Wed, 24 Aug 2022 22:30:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99958C04AA5
+	for <bpf@archiver.kernel.org>; Wed, 24 Aug 2022 22:30:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbiHXWaP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Aug 2022 18:30:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46602 "EHLO
+        id S229788AbiHXWaQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Aug 2022 18:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiHXWaM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 24 Aug 2022 18:30:12 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86BFB65E3
+        with ESMTP id S229798AbiHXWaN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 24 Aug 2022 18:30:13 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF0B7640
         for <bpf@vger.kernel.org>; Wed, 24 Aug 2022 15:30:11 -0700 (PDT)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 27OMHADD017364
-        for <bpf@vger.kernel.org>; Wed, 24 Aug 2022 15:30:10 -0700
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27OMHLEI016248
+        for <bpf@vger.kernel.org>; Wed, 24 Aug 2022 15:30:11 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=ljvMWrzzLSqnmcx7WebdAv+iiWnbhFFu5LRs9tGJuko=;
- b=ihFjfhiqtCx2zEMjl8WQc+fQphXBMziU1SpFQAj/oRjgEnb8irbal7e6guey1OUXbZze
- kWifn7G4yBw5vEQxPFsd1O8Ebm/FOLIdsL6UyvSizeSx1FEvzQdvlP6aP2e/zpdo9I5f
- KBCumdPDLCSg6dXlaLxu/5haSKBjcyikvcE= 
+ bh=OlrB5PQpPAgTu98chPbMBIvrVMRr4Sd08SLt8YT6k4U=;
+ b=MYrGaF6DH/SIVPVkkkILPsLlf/Icb+Dm/+i/Aztpg98Z8YBvRLL8kWNW03xgadrC0Gd9
+ r/YhTjsssZ4r5YSgSogvhpPanp5SAiN70IVOnB2sMDU7BfhEnrLVgoOQyLlGT99av36x
+ tSdGit2bdI165sYmIE80aIlQ9otJDONNl54= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3j4x1yvje9-5
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j5u570py5-7
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 24 Aug 2022 15:30:10 -0700
+        for <bpf@vger.kernel.org>; Wed, 24 Aug 2022 15:30:11 -0700
 Received: from twshared32421.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.31; Wed, 24 Aug 2022 15:30:09 -0700
 Received: by devbig933.frc1.facebook.com (Postfix, from userid 6611)
-        id 57A33871CA14; Wed, 24 Aug 2022 15:27:30 -0700 (PDT)
+        id 1E8DB871C99B; Wed, 24 Aug 2022 15:27:05 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -44,9 +44,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>, <kernel-team@fb.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Stanislav Fomichev <sdf@google.com>
-Subject: [PATCH bpf-next 14/17] bpf: Change bpf_getsockopt(SOL_TCP) to reuse do_tcp_getsockopt()
-Date:   Wed, 24 Aug 2022 15:27:30 -0700
-Message-ID: <20220824222730.1923992-1-kafai@fb.com>
+Subject: [PATCH bpf-next 10/17] bpf: net: Change do_ipv6_getsockopt() to take the sockptr_t argument
+Date:   Wed, 24 Aug 2022 15:27:05 -0700
+Message-ID: <20220824222705.1921702-1-kafai@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220824222601.1916776-1-kafai@fb.com>
 References: <20220824222601.1916776-1-kafai@fb.com>
@@ -54,8 +54,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: svg4Ct1Dp-CQFlJf4aRZoS_TwSejxGs2
-X-Proofpoint-ORIG-GUID: svg4Ct1Dp-CQFlJf4aRZoS_TwSejxGs2
+X-Proofpoint-GUID: Tn7VVOz7VOOcFbtg9ua1tKgzRHwbdjfT
+X-Proofpoint-ORIG-GUID: Tn7VVOz7VOOcFbtg9ua1tKgzRHwbdjfT
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-24_14,2022-08-22_02,2022-06-22_01
@@ -63,177 +63,372 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch changes bpf_getsockopt(SOL_TCP) to reuse
-do_tcp_getsockopt().  It removes the duplicated code from
-bpf_getsockopt(SOL_TCP).
+Similar to the earlier patch that changes sk_getsockopt() to
+take the sockptr_t argument .  This patch also changes
+do_ipv6_getsockopt() to take the sockptr_t argument such that
+a latter patch can make bpf_getsockopt(SOL_IPV6) to reuse
+do_ipv6_getsockopt().
 
-Before this patch, there were some optnames available to
-bpf_setsockopt(SOL_TCP) but missing in bpf_getsockopt(SOL_TCP).
-For example, TCP_NODELAY, TCP_MAXSEG, TCP_KEEPIDLE, TCP_KEEPINTVL,
-and a few more.  It surprises users from time to time.  This patch
-automatically closes this gap without duplicating more code.
-
-bpf_getsockopt(TCP_SAVED_SYN) does not free the saved_syn,
-so it stays in sol_tcp_sockopt().
-
-For string name value like TCP_CONGESTION, bpf expects it
-is always null terminated, so sol_tcp_sockopt() decrements
-optlen by one before calling do_tcp_getsockopt() and
-the 'if (optlen < saved_optlen) memset(..,0,..);'
-in __bpf_getsockopt() will always do a null termination.
+Note on the change in ip6_mc_msfget().  This function is to
+return an array of sockaddr_storage in optval.  This function
+is shared between ipv6_get_msfilter() and compat_ipv6_get_msfilter().
+However, the sockaddr_storage is stored at different offset of the
+optval because of the difference between group_filter and
+compat_group_filter.  Thus, a new 'ss_offset' argument is
+added to ip6_mc_msfget().
 
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- include/net/tcp.h |  2 ++
- net/core/filter.c | 70 ++++++++++++++++++++++++++---------------------
- net/ipv4/tcp.c    |  4 +--
- 3 files changed, 43 insertions(+), 33 deletions(-)
+ include/linux/mroute6.h  |  4 +--
+ include/net/ipv6.h       |  2 +-
+ net/ipv6/ip6mr.c         | 10 +++---
+ net/ipv6/ipv6_sockglue.c | 69 ++++++++++++++++++++++------------------
+ net/ipv6/mcast.c         |  8 ++---
+ 5 files changed, 50 insertions(+), 43 deletions(-)
 
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index c03a50c72f40..735e957f7f4b 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -402,6 +402,8 @@ void tcp_init_sock(struct sock *sk);
- void tcp_init_transfer(struct sock *sk, int bpf_op, struct sk_buff *skb)=
+diff --git a/include/linux/mroute6.h b/include/linux/mroute6.h
+index bc351a85ce9b..8f2b307fb124 100644
+--- a/include/linux/mroute6.h
++++ b/include/linux/mroute6.h
+@@ -27,7 +27,7 @@ struct sock;
+=20
+ #ifdef CONFIG_IPV6_MROUTE
+ extern int ip6_mroute_setsockopt(struct sock *, int, sockptr_t, unsigned=
+ int);
+-extern int ip6_mroute_getsockopt(struct sock *, int, char __user *, int =
+__user *);
++extern int ip6_mroute_getsockopt(struct sock *, int, sockptr_t, sockptr_=
+t);
+ extern int ip6_mr_input(struct sk_buff *skb);
+ extern int ip6mr_ioctl(struct sock *sk, int cmd, void __user *arg);
+ extern int ip6mr_compat_ioctl(struct sock *sk, unsigned int cmd, void __=
+user *arg);
+@@ -42,7 +42,7 @@ static inline int ip6_mroute_setsockopt(struct sock *so=
+ck, int optname,
+=20
+ static inline
+ int ip6_mroute_getsockopt(struct sock *sock,
+-			  int optname, char __user *optval, int __user *optlen)
++			  int optname, sockptr_t optval, sockptr_t optlen)
+ {
+ 	return -ENOPROTOOPT;
+ }
+diff --git a/include/net/ipv6.h b/include/net/ipv6.h
+index c110d9032083..a4f24573ed7a 100644
+--- a/include/net/ipv6.h
++++ b/include/net/ipv6.h
+@@ -1209,7 +1209,7 @@ int ip6_mc_source(int add, int omode, struct sock *=
+sk,
+ int ip6_mc_msfilter(struct sock *sk, struct group_filter *gsf,
+ 		  struct sockaddr_storage *list);
+ int ip6_mc_msfget(struct sock *sk, struct group_filter *gsf,
+-		  struct sockaddr_storage __user *p);
++		  sockptr_t optval, size_t ss_offset);
+=20
+ #ifdef CONFIG_PROC_FS
+ int ac6_proc_init(struct net *net);
+diff --git a/net/ipv6/ip6mr.c b/net/ipv6/ip6mr.c
+index a9ba41648e36..516e83b52f26 100644
+--- a/net/ipv6/ip6mr.c
++++ b/net/ipv6/ip6mr.c
+@@ -1827,8 +1827,8 @@ int ip6_mroute_setsockopt(struct sock *sk, int optn=
+ame, sockptr_t optval,
+  *	Getsock opt support for the multicast routing system.
+  */
+=20
+-int ip6_mroute_getsockopt(struct sock *sk, int optname, char __user *opt=
+val,
+-			  int __user *optlen)
++int ip6_mroute_getsockopt(struct sock *sk, int optname, sockptr_t optval=
+,
++			  sockptr_t optlen)
+ {
+ 	int olr;
+ 	int val;
+@@ -1859,16 +1859,16 @@ int ip6_mroute_getsockopt(struct sock *sk, int op=
+tname, char __user *optval,
+ 		return -ENOPROTOOPT;
+ 	}
+=20
+-	if (get_user(olr, optlen))
++	if (copy_from_sockptr(&olr, optlen, sizeof(int)))
+ 		return -EFAULT;
+=20
+ 	olr =3D min_t(int, olr, sizeof(int));
+ 	if (olr < 0)
+ 		return -EINVAL;
+=20
+-	if (put_user(olr, optlen))
++	if (copy_to_sockptr(optlen, &olr, sizeof(int)))
+ 		return -EFAULT;
+-	if (copy_to_user(optval, &val, olr))
++	if (copy_to_sockptr(optval, &val, olr))
+ 		return -EFAULT;
+ 	return 0;
+ }
+diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
+index 4ab284a4adf8..4d9fadef2d3e 100644
+--- a/net/ipv6/ipv6_sockglue.c
++++ b/net/ipv6/ipv6_sockglue.c
+@@ -1030,7 +1030,7 @@ int ipv6_setsockopt(struct sock *sk, int level, int=
+ optname, sockptr_t optval,
+ EXPORT_SYMBOL(ipv6_setsockopt);
+=20
+ static int ipv6_getsockopt_sticky(struct sock *sk, struct ipv6_txoptions=
+ *opt,
+-				  int optname, char __user *optval, int len)
++				  int optname, sockptr_t optval, int len)
+ {
+ 	struct ipv6_opt_hdr *hdr;
+=20
+@@ -1058,45 +1058,44 @@ static int ipv6_getsockopt_sticky(struct sock *sk=
+, struct ipv6_txoptions *opt,
+ 		return 0;
+=20
+ 	len =3D min_t(unsigned int, len, ipv6_optlen(hdr));
+-	if (copy_to_user(optval, hdr, len))
++	if (copy_to_sockptr(optval, hdr, len))
+ 		return -EFAULT;
+ 	return len;
+ }
+=20
+-static int ipv6_get_msfilter(struct sock *sk, void __user *optval,
+-		int __user *optlen, int len)
++static int ipv6_get_msfilter(struct sock *sk, sockptr_t optval,
++			     sockptr_t optlen, int len)
+ {
+ 	const int size0 =3D offsetof(struct group_filter, gf_slist_flex);
+-	struct group_filter __user *p =3D optval;
+ 	struct group_filter gsf;
+ 	int num;
+ 	int err;
+=20
+ 	if (len < size0)
+ 		return -EINVAL;
+-	if (copy_from_user(&gsf, p, size0))
++	if (copy_from_sockptr(&gsf, optval, size0))
+ 		return -EFAULT;
+ 	if (gsf.gf_group.ss_family !=3D AF_INET6)
+ 		return -EADDRNOTAVAIL;
+ 	num =3D gsf.gf_numsrc;
+ 	lock_sock(sk);
+-	err =3D ip6_mc_msfget(sk, &gsf, p->gf_slist_flex);
++	err =3D ip6_mc_msfget(sk, &gsf, optval, size0);
+ 	if (!err) {
+ 		if (num > gsf.gf_numsrc)
+ 			num =3D gsf.gf_numsrc;
+-		if (put_user(GROUP_FILTER_SIZE(num), optlen) ||
+-		    copy_to_user(p, &gsf, size0))
++		len =3D GROUP_FILTER_SIZE(num);
++		if (copy_to_sockptr(optlen, &len, sizeof(int)) ||
++		    copy_to_sockptr(optval, &gsf, size0))
+ 			err =3D -EFAULT;
+ 	}
+ 	release_sock(sk);
+ 	return err;
+ }
+=20
+-static int compat_ipv6_get_msfilter(struct sock *sk, void __user *optval=
+,
+-		int __user *optlen, int len)
++static int compat_ipv6_get_msfilter(struct sock *sk, sockptr_t optval,
++				    sockptr_t optlen, int len)
+ {
+ 	const int size0 =3D offsetof(struct compat_group_filter, gf_slist_flex)=
 ;
- __poll_t tcp_poll(struct file *file, struct socket *sock,
- 		      struct poll_table_struct *wait);
-+int do_tcp_getsockopt(struct sock *sk, int level,
-+		      int optname, sockptr_t optval, sockptr_t optlen);
- int tcp_getsockopt(struct sock *sk, int level, int optname,
- 		   char __user *optval, int __user *optlen);
- bool tcp_bpf_bypass_getsockopt(int level, int optname);
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 68b52243b306..cdbbcec46e8b 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -5096,8 +5096,9 @@ static int bpf_sol_tcp_setsockopt(struct sock *sk, =
-int optname,
+-	struct compat_group_filter __user *p =3D optval;
+ 	struct compat_group_filter gf32;
+ 	struct group_filter gf;
+ 	int err;
+@@ -1105,7 +1104,7 @@ static int compat_ipv6_get_msfilter(struct sock *sk=
+, void __user *optval,
+ 	if (len < size0)
+ 		return -EINVAL;
+=20
+-	if (copy_from_user(&gf32, p, size0))
++	if (copy_from_sockptr(&gf32, optval, size0))
+ 		return -EFAULT;
+ 	gf.gf_interface =3D gf32.gf_interface;
+ 	gf.gf_fmode =3D gf32.gf_fmode;
+@@ -1116,22 +1115,24 @@ static int compat_ipv6_get_msfilter(struct sock *=
+sk, void __user *optval,
+ 		return -EADDRNOTAVAIL;
+=20
+ 	lock_sock(sk);
+-	err =3D ip6_mc_msfget(sk, &gf, p->gf_slist_flex);
++	err =3D ip6_mc_msfget(sk, &gf, optval, size0);
+ 	release_sock(sk);
+ 	if (err)
+ 		return err;
+ 	if (num > gf.gf_numsrc)
+ 		num =3D gf.gf_numsrc;
+ 	len =3D GROUP_FILTER_SIZE(num) - (sizeof(gf)-sizeof(gf32));
+-	if (put_user(len, optlen) ||
+-	    put_user(gf.gf_fmode, &p->gf_fmode) ||
+-	    put_user(gf.gf_numsrc, &p->gf_numsrc))
++	if (copy_to_sockptr(optlen, &len, sizeof(int)) ||
++	    copy_to_sockptr_offset(optval, offsetof(struct compat_group_filter,=
+ gf_fmode),
++				   &gf.gf_fmode, sizeof(gf32.gf_fmode)) ||
++	    copy_to_sockptr_offset(optval, offsetof(struct compat_group_filter,=
+ gf_numsrc),
++				   &gf.gf_numsrc, sizeof(gf32.gf_numsrc)))
+ 		return -EFAULT;
  	return 0;
  }
 =20
--static int sol_tcp_setsockopt(struct sock *sk, int optname,
--			      char *optval, int optlen)
-+static int sol_tcp_sockopt(struct sock *sk, int optname,
-+			   char *optval, int *optlen,
-+			   bool getopt)
+ static int do_ipv6_getsockopt(struct sock *sk, int level, int optname,
+-		    char __user *optval, int __user *optlen)
++			      sockptr_t optval, sockptr_t optlen)
  {
- 	if (sk->sk_prot->setsockopt !=3D tcp_setsockopt)
- 		return -EINVAL;
-@@ -5114,17 +5115,47 @@ static int sol_tcp_setsockopt(struct sock *sk, in=
-t optname,
- 	case TCP_USER_TIMEOUT:
- 	case TCP_NOTSENT_LOWAT:
- 	case TCP_SAVE_SYN:
--		if (optlen !=3D sizeof(int))
-+		if (*optlen !=3D sizeof(int))
- 			return -EINVAL;
- 		break;
- 	case TCP_CONGESTION:
-+		if (*optlen < 2)
-+			return -EINVAL;
-+		break;
-+	case TCP_SAVED_SYN:
-+		if (*optlen < 1)
-+			return -EINVAL;
- 		break;
- 	default:
--		return bpf_sol_tcp_setsockopt(sk, optname, optval, optlen);
-+		if (getopt)
-+			return -EINVAL;
-+		return bpf_sol_tcp_setsockopt(sk, optname, optval, *optlen);
-+	}
-+
-+	if (getopt) {
-+		if (optname =3D=3D TCP_SAVED_SYN) {
-+			struct tcp_sock *tp =3D tcp_sk(sk);
-+
-+			if (!tp->saved_syn ||
-+			    *optlen > tcp_saved_syn_len(tp->saved_syn))
-+				return -EINVAL;
-+			memcpy(optval, tp->saved_syn->data, *optlen);
-+			return 0;
+ 	struct ipv6_pinfo *np =3D inet6_sk(sk);
+ 	int len;
+@@ -1140,7 +1141,7 @@ static int do_ipv6_getsockopt(struct sock *sk, int =
+level, int optname,
+ 	if (ip6_mroute_opt(optname))
+ 		return ip6_mroute_getsockopt(sk, optname, optval, optlen);
+=20
+-	if (get_user(len, optlen))
++	if (copy_from_sockptr(&len, optlen, sizeof(int)))
+ 		return -EFAULT;
+ 	switch (optname) {
+ 	case IPV6_ADDRFORM:
+@@ -1164,10 +1165,15 @@ static int do_ipv6_getsockopt(struct sock *sk, in=
+t level, int optname,
+ 		if (sk->sk_type !=3D SOCK_STREAM)
+ 			return -ENOPROTOOPT;
+=20
+-		msg.msg_control_user =3D optval;
++		if (optval.is_kernel) {
++			msg.msg_control_is_user =3D false;
++			msg.msg_control =3D optval.kernel;
++		} else {
++			msg.msg_control_is_user =3D true;
++			msg.msg_control_user =3D optval.user;
 +		}
-+
-+		if (optname =3D=3D TCP_CONGESTION) {
-+			if (!inet_csk(sk)->icsk_ca_ops)
-+				return -EINVAL;
-+			(*optlen)--;
-+		}
-+
-+		return do_tcp_getsockopt(sk, SOL_TCP, optname,
-+					 KERNEL_SOCKPTR(optval),
-+					 KERNEL_SOCKPTR(optlen));
+ 		msg.msg_controllen =3D len;
+ 		msg.msg_flags =3D 0;
+-		msg.msg_control_is_user =3D true;
+=20
+ 		lock_sock(sk);
+ 		skb =3D np->pktoptions;
+@@ -1210,7 +1216,7 @@ static int do_ipv6_getsockopt(struct sock *sk, int =
+level, int optname,
+ 			}
+ 		}
+ 		len -=3D msg.msg_controllen;
+-		return put_user(len, optlen);
++		return copy_to_sockptr(optlen, &len, sizeof(int));
+ 	}
+ 	case IPV6_MTU:
+ 	{
+@@ -1270,7 +1276,7 @@ static int do_ipv6_getsockopt(struct sock *sk, int =
+level, int optname,
+ 		/* check if ipv6_getsockopt_sticky() returns err code */
+ 		if (len < 0)
+ 			return len;
+-		return put_user(len, optlen);
++		return copy_to_sockptr(optlen, &len, sizeof(int));
  	}
 =20
- 	return do_tcp_setsockopt(sk, SOL_TCP, optname,
--				 KERNEL_SOCKPTR(optval), optlen);
-+				 KERNEL_SOCKPTR(optval), *optlen);
+ 	case IPV6_RECVHOPOPTS:
+@@ -1324,9 +1330,9 @@ static int do_ipv6_getsockopt(struct sock *sk, int =
+level, int optname,
+ 		if (!mtuinfo.ip6m_mtu)
+ 			return -ENOTCONN;
+=20
+-		if (put_user(len, optlen))
++		if (copy_to_sockptr(optlen, &len, sizeof(int)))
+ 			return -EFAULT;
+-		if (copy_to_user(optval, &mtuinfo, len))
++		if (copy_to_sockptr(optval, &mtuinfo, len))
+ 			return -EFAULT;
+=20
+ 		return 0;
+@@ -1403,7 +1409,7 @@ static int do_ipv6_getsockopt(struct sock *sk, int =
+level, int optname,
+ 		if (len < sizeof(freq))
+ 			return -EINVAL;
+=20
+-		if (copy_from_user(&freq, optval, sizeof(freq)))
++		if (copy_from_sockptr(&freq, optval, sizeof(freq)))
+ 			return -EFAULT;
+=20
+ 		if (freq.flr_action !=3D IPV6_FL_A_GET)
+@@ -1418,9 +1424,9 @@ static int do_ipv6_getsockopt(struct sock *sk, int =
+level, int optname,
+ 		if (val < 0)
+ 			return val;
+=20
+-		if (put_user(len, optlen))
++		if (copy_to_sockptr(optlen, &len, sizeof(int)))
+ 			return -EFAULT;
+-		if (copy_to_user(optval, &freq, len))
++		if (copy_to_sockptr(optval, &freq, len))
+ 			return -EFAULT;
+=20
+ 		return 0;
+@@ -1472,9 +1478,9 @@ static int do_ipv6_getsockopt(struct sock *sk, int =
+level, int optname,
+ 		return -ENOPROTOOPT;
+ 	}
+ 	len =3D min_t(unsigned int, sizeof(int), len);
+-	if (put_user(len, optlen))
++	if (copy_to_sockptr(optlen, &len, sizeof(int)))
+ 		return -EFAULT;
+-	if (copy_to_user(optval, &val, len))
++	if (copy_to_sockptr(optval, &val, len))
+ 		return -EFAULT;
+ 	return 0;
+ }
+@@ -1490,7 +1496,8 @@ int ipv6_getsockopt(struct sock *sk, int level, int=
+ optname,
+ 	if (level !=3D SOL_IPV6)
+ 		return -ENOPROTOOPT;
+=20
+-	err =3D do_ipv6_getsockopt(sk, level, optname, optval, optlen);
++	err =3D do_ipv6_getsockopt(sk, level, optname,
++				 USER_SOCKPTR(optval), USER_SOCKPTR(optlen));
+ #ifdef CONFIG_NETFILTER
+ 	/* we need to exclude all possible ENOPROTOOPTs except default case */
+ 	if (err =3D=3D -ENOPROTOOPT && optname !=3D IPV6_2292PKTOPTIONS) {
+diff --git a/net/ipv6/mcast.c b/net/ipv6/mcast.c
+index 87c699d57b36..0566ab03ddbe 100644
+--- a/net/ipv6/mcast.c
++++ b/net/ipv6/mcast.c
+@@ -580,7 +580,7 @@ int ip6_mc_msfilter(struct sock *sk, struct group_fil=
+ter *gsf,
  }
 =20
- static int sol_ip_setsockopt(struct sock *sk, int optname,
-@@ -5179,7 +5210,7 @@ static int __bpf_setsockopt(struct sock *sk, int le=
-vel, int optname,
- 	else if (IS_ENABLED(CONFIG_IPV6) && level =3D=3D SOL_IPV6)
- 		return sol_ipv6_setsockopt(sk, optname, optval, optlen);
- 	else if (IS_ENABLED(CONFIG_INET) && level =3D=3D SOL_TCP)
--		return sol_tcp_setsockopt(sk, optname, optval, optlen);
-+		return sol_tcp_sockopt(sk, optname, optval, &optlen, false);
-=20
- 	return -EINVAL;
- }
-@@ -5202,31 +5233,8 @@ static int __bpf_getsockopt(struct sock *sk, int l=
-evel, int optname,
-=20
- 	if (level =3D=3D SOL_SOCKET) {
- 		err =3D sol_socket_sockopt(sk, optname, optval, &optlen, true);
--	} else if (IS_ENABLED(CONFIG_INET) &&
--		   level =3D=3D SOL_TCP && sk->sk_prot->getsockopt =3D=3D tcp_getsocko=
-pt) {
--		struct inet_connection_sock *icsk;
--		struct tcp_sock *tp;
--
--		switch (optname) {
--		case TCP_CONGESTION:
--			icsk =3D inet_csk(sk);
--
--			if (!icsk->icsk_ca_ops || optlen <=3D 1)
--				goto err_clear;
--			strncpy(optval, icsk->icsk_ca_ops->name, optlen);
--			optval[optlen - 1] =3D 0;
--			break;
--		case TCP_SAVED_SYN:
--			tp =3D tcp_sk(sk);
--
--			if (optlen <=3D 0 || !tp->saved_syn ||
--			    optlen > tcp_saved_syn_len(tp->saved_syn))
--				goto err_clear;
--			memcpy(optval, tp->saved_syn->data, optlen);
--			break;
--		default:
--			goto err_clear;
--		}
-+	} else if (IS_ENABLED(CONFIG_INET) && level =3D=3D SOL_TCP) {
-+		err =3D sol_tcp_sockopt(sk, optname, optval, &optlen, true);
- 	} else if (IS_ENABLED(CONFIG_INET) && level =3D=3D SOL_IP) {
- 		struct inet_sock *inet =3D inet_sk(sk);
-=20
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index ab8118225797..a47cb5662be6 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -4043,8 +4043,8 @@ struct sk_buff *tcp_get_timestamping_opt_stats(cons=
-t struct sock *sk,
- 	return stats;
- }
-=20
--static int do_tcp_getsockopt(struct sock *sk, int level,
--			     int optname, sockptr_t optval, sockptr_t optlen)
-+int do_tcp_getsockopt(struct sock *sk, int level,
-+		      int optname, sockptr_t optval, sockptr_t optlen)
+ int ip6_mc_msfget(struct sock *sk, struct group_filter *gsf,
+-		  struct sockaddr_storage __user *p)
++		  sockptr_t optval, size_t ss_offset)
  {
- 	struct inet_connection_sock *icsk =3D inet_csk(sk);
- 	struct tcp_sock *tp =3D tcp_sk(sk);
+ 	struct ipv6_pinfo *inet6 =3D inet6_sk(sk);
+ 	const struct in6_addr *group;
+@@ -612,8 +612,7 @@ int ip6_mc_msfget(struct sock *sk, struct group_filte=
+r *gsf,
+=20
+ 	copycount =3D count < gsf->gf_numsrc ? count : gsf->gf_numsrc;
+ 	gsf->gf_numsrc =3D count;
+-
+-	for (i =3D 0; i < copycount; i++, p++) {
++	for (i =3D 0; i < copycount; i++) {
+ 		struct sockaddr_in6 *psin6;
+ 		struct sockaddr_storage ss;
+=20
+@@ -621,8 +620,9 @@ int ip6_mc_msfget(struct sock *sk, struct group_filte=
+r *gsf,
+ 		memset(&ss, 0, sizeof(ss));
+ 		psin6->sin6_family =3D AF_INET6;
+ 		psin6->sin6_addr =3D psl->sl_addr[i];
+-		if (copy_to_user(p, &ss, sizeof(ss)))
++		if (copy_to_sockptr_offset(optval, ss_offset, &ss, sizeof(ss)))
+ 			return -EFAULT;
++		ss_offset +=3D sizeof(ss);
+ 	}
+ 	return 0;
+ }
 --=20
 2.30.2
 
