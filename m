@@ -2,90 +2,46 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 386D3C32772
-	for <bpf@archiver.kernel.org>; Tue, 23 Aug 2022 19:31:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E63BC32772
+	for <bpf@archiver.kernel.org>; Tue, 23 Aug 2022 19:41:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbiHWTbU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Aug 2022 15:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
+        id S232503AbiHWTlr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Aug 2022 15:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233888AbiHWTa4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Aug 2022 15:30:56 -0400
-Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8F8DB7DD;
-        Tue, 23 Aug 2022 11:21:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1661278892; x=1692814892;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=n+mG2Qf5W8rDz33cIplaqij+OZcyCF2mnob3OKVLXm0=;
-  b=KxdSraNriWDttOpNWfBEdiV8aX0/gOoaQfaAhQhSQ1EnzwH/AT69GUup
-   J5T8g5nTRD6gfJde1u3/AXQ9Qc8Ku18w8SLCGgtmNORLEmWS+uDPy6ilQ
-   1jtk5g/EGKPoemzj2wETBPyxJjXwZG/LNqc2THjQMIaO1W6ZSmikyUKck
-   E=;
-X-IronPort-AV: E=Sophos;i="5.93,258,1654560000"; 
-   d="scan'208";a="122554305"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1e-90d70b14.us-east-1.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 18:13:51 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1e-90d70b14.us-east-1.amazon.com (Postfix) with ESMTPS id 9AD42C08C3;
-        Tue, 23 Aug 2022 18:13:49 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Tue, 23 Aug 2022 18:13:48 +0000
-Received: from 88665a182662.ant.amazon.com (10.43.162.140) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Tue, 23 Aug 2022 18:13:46 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-CC:     Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Kuniyuki Iwashima <kuni1840@gmail.com>, <bpf@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-Subject: [PATCH v2 bpf] bpf: Fix a data-race around bpf_jit_limit.
-Date:   Tue, 23 Aug 2022 11:12:47 -0700
-Message-ID: <20220823181247.90349-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S231830AbiHWTlU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Aug 2022 15:41:20 -0400
+Received: from server.doraya.net (unknown [146.196.52.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1646D8E454
+        for <bpf@vger.kernel.org>; Tue, 23 Aug 2022 11:39:13 -0700 (PDT)
+Received: by server.doraya.net (Postfix, from userid 10002)
+        id 3C59B21605A8; Tue, 23 Aug 2022 22:39:01 -0400 (EDT)
+To:     bpf@vger.kernel.org
+Subject: =?us-ascii?Q?FFJ_Co.,_Ltd._"Daily_News:_Mude_von_Arbeit_und_?=  =?us-ascii?Q?Schulden=3F_Raus_aus_dieser_Scheie=3F"?=
+Date:   Wed, 24 Aug 2022 02:39:01 +0000
+From:   "FFJ Co., Ltd." <ffjinfo@zenfoods-grp.com>
+Reply-To: ffjinfo@zenfoods-grp.com
+Message-ID: <85vsrirBNxL0EFkos089kR19zwKgH7XkqWThS2jtg@ffj-global.com>
+X-Mailer: PHPMailer 6.5.3 (https://github.com/PHPMailer/PHPMailer)
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.162.140]
-X-ClientProxiedBy: EX13D10UWB003.ant.amazon.com (10.43.161.106) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-While reading bpf_jit_limit, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its reader.
+お問い合わせありがとうございます。
+下記の内容で送信されました。
 
-Fixes: ede95a63b5e8 ("bpf: add bpf_jit_limit knob to restrict unpriv allocations")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
----
-v2:
-  * Drop other 3 patches (No change for this patch)
+差出人: JamesVaw <bpf@vger.kernel.org>
+件名: Daily News: Mude von Arbeit und Schulden? Raus aus dieser Scheie?
 
-v1: https://lore.kernel.org/bpf/20220818042339.82992-1-kuniyu@amazon.com/
----
- kernel/bpf/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+メッセージ本文:
+Sie mochten bequem wohnen und ab 1500 Euro pro Tag ein passives Einkommen erzielen? http://kiran-news-agency.carynconacher.com/news-bild-8156
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index c1e10d088dbb..3d9eb3ae334c 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -971,7 +971,7 @@ pure_initcall(bpf_jit_charge_init);
- 
- int bpf_jit_charge_modmem(u32 size)
- {
--	if (atomic_long_add_return(size, &bpf_jit_current) > bpf_jit_limit) {
-+	if (atomic_long_add_return(size, &bpf_jit_current) > READ_ONCE(bpf_jit_limit)) {
- 		if (!bpf_capable()) {
- 			atomic_long_sub(size, &bpf_jit_current);
- 			return -EPERM;
--- 
-2.30.2
+================================
+FFJ Co., Ltd. 
+http://ffj-global.com
+Tel: (852) 2421-2931
+Email: ffjinfo@zenfoods-grp.com
 
