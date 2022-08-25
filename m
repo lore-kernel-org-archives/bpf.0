@@ -2,161 +2,132 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A50E5ECAAA2
-	for <bpf@archiver.kernel.org>; Thu, 25 Aug 2022 21:52:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD6D8ECAAA2
+	for <bpf@archiver.kernel.org>; Thu, 25 Aug 2022 21:53:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242003AbiHYVwG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 25 Aug 2022 17:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
+        id S243507AbiHYVxM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 25 Aug 2022 17:53:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243887AbiHYVvq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 25 Aug 2022 17:51:46 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58421263D;
-        Thu, 25 Aug 2022 14:51:44 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id n23-20020a7bc5d7000000b003a62f19b453so3421560wmk.3;
-        Thu, 25 Aug 2022 14:51:44 -0700 (PDT)
+        with ESMTP id S233108AbiHYVxL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 25 Aug 2022 17:53:11 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9598921E12
+        for <bpf@vger.kernel.org>; Thu, 25 Aug 2022 14:53:10 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id pm13so12641740pjb.5
+        for <bpf@vger.kernel.org>; Thu, 25 Aug 2022 14:53:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:from:references:cc:to:content-language:subject
-         :user-agent:mime-version:date:message-id:from:to:cc;
-        bh=acSPEObLKZ1Ys2KtIxKytw09/sTFD8kD+7jBoojwB0M=;
-        b=Y7InKfiw7z+81iXZD9FAxIJ5Og3/Q/IeGrj6VuhrJW2yzfDmfp230LIKtxANlEtt5z
-         vk+TLCO8s+hd4CJDIkzgq+Yu28DZJAuBUrB7+2BjKCa+CJCjr4sP8tWDFBs2MhVoLMCb
-         NeVd7WvNk79DevsXhsJF/wu+LgVsqTF3qRoysuuzJNh3W1MGx9nOFoIWIL/QKBB+ronY
-         iualu0QpwhqcAKKn4+VPhuEsYUIW5GP2YAXy6NxTAJR//3xG0+TD2nbobxfzyIyM+NZ5
-         xXn9WhSJUWe4Pn+kio6524mGdWGaH8mBeQ6rhyzj4XFod0TwyofL+1bxFBMKsI4fssTW
-         Zj9w==
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc;
+        bh=FO+YSP08oXauM4vkT/ZjxCNWgj3LrcVAIb/CblKB8Yg=;
+        b=kEDeFr/pOfQmyeyOgKUWwegPv62A3zBPNtp8VUIN0bBEjGlNpQLwJ/VTahYOR80oTU
+         4VBMuHmF9loiHwbfH/vkYAy4vU4Dwlo2MmLcHJW2V/MvjsBgiiRGafAxJGgv03NfFkeV
+         OJ/2k0cugsh3fn6oT9x2z2uAUTpPmOzN++ApKlW4njKZyGZ51HqBOClWqK3vE4Bb2kP/
+         8OgARwkU7pfJ7vNzAwks+SZC9K6RbS1+oBwUeEriA2rn7E24iWU4pTUvHXB9ARmQHUIR
+         O/PL0vaFMbNVPDMGT0ZHKViV0naaaq+X0+Z+yJS+uC9pqsQRYfm/bxNv5rIa+MzsCNj+
+         4G+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:from:references:cc:to:content-language:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
          :cc;
-        bh=acSPEObLKZ1Ys2KtIxKytw09/sTFD8kD+7jBoojwB0M=;
-        b=f30Zq5ZCLDNKnGwKHp1zU/P9f+QjaL+bOkz6WSeODYP+WIlDBRI/fnwb7VlkqxGdDP
-         uouNL6R+PtgwSZA49Uuedh+R+Vu56JhqR1scA6omHECXCEsPLEiqklyQoGoN6xAaj6Xg
-         S20JonXk1cI1jF/8PpjUdS00dnayomRiar8he+36uf8VNi4g4xnH1N6ozoQfQlZdtrvU
-         9VSMM/rzCJupqII+5frXVeakA+kOV5l4GsiuWXuq1o6H/kUR7WLY4qwu/rd4g5nsVhH2
-         6Rj+IbSybPbrzwWN9Gv3CP404dIpCLfDtSrtX7goS4b3AFxV9wlYECV7HjITfbXkXWBI
-         SkSQ==
-X-Gm-Message-State: ACgBeo113g+eXV9tfC7qYkrrwRttG08qJ6487sm85/P1bekljWdCpaec
-        5Z9N5pEoTigoCerwUSFpTWE=
-X-Google-Smtp-Source: AA6agR5N++smfVy8Nare136pCS6PxH6SxYoCokTah00B+6Q3NheeOuBrX5db9kfLtI+91xd0mqmnWQ==
-X-Received: by 2002:a1c:7408:0:b0:3a5:c9c1:f226 with SMTP id p8-20020a1c7408000000b003a5c9c1f226mr3391433wmc.47.1661464303469;
-        Thu, 25 Aug 2022 14:51:43 -0700 (PDT)
-Received: from [192.168.0.160] ([170.253.36.171])
-        by smtp.gmail.com with ESMTPSA id v64-20020a1cac43000000b003a5fcae64d4sm444912wme.29.2022.08.25.14.51.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 14:51:42 -0700 (PDT)
-Message-ID: <403a8238-12e7-1092-a28b-a52f5d63df2c@gmail.com>
-Date:   Thu, 25 Aug 2022 23:51:26 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH] Fit line in 80 columns
-Content-Language: en-US
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Quentin Monnet <quentin@isovalent.com>, bpf <bpf@vger.kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        bh=FO+YSP08oXauM4vkT/ZjxCNWgj3LrcVAIb/CblKB8Yg=;
+        b=Gxki+ZVArgZoo3k65snZZ6CqXNmSy48akcrmpuIsXpOadxEseVP0F2scbM4baYFKpg
+         Xme3IBWWK7riCKboCQg1UJq4WOMAH1OdTJBkwwEsOSlp+8U9PJyNKYJR/KiOKFvg58k7
+         f5KO5zQN0bQqpE60m+YbJbYoiiNm4e1aunYyVbcIREy49/kXYw7LW8JBM/RXK6gOMqrB
+         /hZY7LbMSKyn4Auhkw9CCWIS4rPutxnRK0q5BRdVX04ndH0iz45LWBJZIldIBPZcGrHi
+         y1HCIWvXDDFNw1d7eG0zobUDXex9MNKpmwH/d892fKo7Jq8EUTwzlHfVKl1d2EpP3Bd3
+         2/Sw==
+X-Gm-Message-State: ACgBeo206uhZ+jUkD6QPwN5n5eUmxEXY3HfRkzmYuQDNMBFj0n7OWj2m
+        NtSye2KJIi82/a2Et4eRSFY=
+X-Google-Smtp-Source: AA6agR6GzUwRQ8hRS0hKfKk1me2YXK8o0utEelrllaB/hJ5nwyGKfmCHk36QQJytlx+7ppVUYLmgww==
+X-Received: by 2002:a17:902:f394:b0:173:316c:b50 with SMTP id f20-20020a170902f39400b00173316c0b50mr941103ple.80.1661464390064;
+        Thu, 25 Aug 2022 14:53:10 -0700 (PDT)
+Received: from localhost ([98.97.36.33])
+        by smtp.gmail.com with ESMTPSA id z16-20020aa79f90000000b0052ac99c2c1csm120757pfr.83.2022.08.25.14.53.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 14:53:09 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 14:53:08 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>, ast@kernel.org
+Cc:     andrii@kernel.org, bpf@vger.kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>
-References: <20220825175653.131125-1-alx.manpages@gmail.com>
- <CAADnVQ+yM_R4vuCLxtNJb0sp61ar=grJh9KmLWVGhXA7Lhpmvw@mail.gmail.com>
- <CAEf4BzbCgHp0MtsSm_ExPO+EGhFWzLUOiFuh1jyrhWfbsDtL3A@mail.gmail.com>
-From:   Alejandro Colomar <alx.manpages@gmail.com>
-In-Reply-To: <CAEf4BzbCgHp0MtsSm_ExPO+EGhFWzLUOiFuh1jyrhWfbsDtL3A@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------pGqPuejzvyayAlYdX5N3H0GW"
+        Hsin-Wei Hung <hsinweih@uci.edu>,
+        Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Message-ID: <6307ef446165d_aead208f7@john.notmuch>
+In-Reply-To: <984b37f9fdf7ac36831d2137415a4a915744c1b6.1661462653.git.daniel@iogearbox.net>
+References: <984b37f9fdf7ac36831d2137415a4a915744c1b6.1661462653.git.daniel@iogearbox.net>
+Subject: RE: [PATCH bpf] bpf: Don't use tnum_range on array range checking for
+ poke descriptors
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------pGqPuejzvyayAlYdX5N3H0GW
-Content-Type: multipart/mixed; boundary="------------wA8XioeQX7fQWtEh4AZDC58a";
- protected-headers="v1"
-From: Alejandro Colomar <alx.manpages@gmail.com>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Quentin Monnet <quentin@isovalent.com>, bpf <bpf@vger.kernel.org>,
- linux-man <linux-man@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
- Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <403a8238-12e7-1092-a28b-a52f5d63df2c@gmail.com>
-Subject: Re: [PATCH] Fit line in 80 columns
-References: <20220825175653.131125-1-alx.manpages@gmail.com>
- <CAADnVQ+yM_R4vuCLxtNJb0sp61ar=grJh9KmLWVGhXA7Lhpmvw@mail.gmail.com>
- <CAEf4BzbCgHp0MtsSm_ExPO+EGhFWzLUOiFuh1jyrhWfbsDtL3A@mail.gmail.com>
-In-Reply-To: <CAEf4BzbCgHp0MtsSm_ExPO+EGhFWzLUOiFuh1jyrhWfbsDtL3A@mail.gmail.com>
+Daniel Borkmann wrote:
+> Hsin-Wei reported a KASAN splat triggered by their BPF runtime fuzzer which
+> is based on a customized syzkaller:
+> 
+>   BUG: KASAN: slab-out-of-bounds in bpf_int_jit_compile+0x1257/0x13f0
+>   Read of size 8 at addr ffff888004e90b58 by task syz-executor.0/1489
+>   CPU: 1 PID: 1489 Comm: syz-executor.0 Not tainted 5.19.0 #1
+>   Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+>   1.13.0-1ubuntu1.1 04/01/2014
+>   Call Trace:
+>    <TASK>
+>    dump_stack_lvl+0x9c/0xc9
+>    print_address_description.constprop.0+0x1f/0x1f0
+>    ? bpf_int_jit_compile+0x1257/0x13f0
+>    kasan_report.cold+0xeb/0x197
+>    ? kvmalloc_node+0x170/0x200
+>    ? bpf_int_jit_compile+0x1257/0x13f0
+>    bpf_int_jit_compile+0x1257/0x13f0
+>    ? arch_prepare_bpf_dispatcher+0xd0/0xd0
+>    ? rcu_read_lock_sched_held+0x43/0x70
+>    bpf_prog_select_runtime+0x3e8/0x640
+>    ? bpf_obj_name_cpy+0x149/0x1b0
+>    bpf_prog_load+0x102f/0x2220
+>    ? __bpf_prog_put.constprop.0+0x220/0x220
+>    ? find_held_lock+0x2c/0x110
+>    ? __might_fault+0xd6/0x180
+>    ? lock_downgrade+0x6e0/0x6e0
+>    ? lock_is_held_type+0xa6/0x120
+>    ? __might_fault+0x147/0x180
+>    __sys_bpf+0x137b/0x6070
+>    ? bpf_perf_link_attach+0x530/0x530
+>    ? new_sync_read+0x600/0x600
+>    ? __fget_files+0x255/0x450
+>    ? lock_downgrade+0x6e0/0x6e0
+>    ? fput+0x30/0x1a0
+>    ? ksys_write+0x1a8/0x260
+>    __x64_sys_bpf+0x7a/0xc0
+>    ? syscall_enter_from_user_mode+0x21/0x70
+>    do_syscall_64+0x3b/0x90
+>    entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>   RIP: 0033:0x7f917c4e2c2d
+> 
+> The problem here is that a range of tnum_range(0, map->max_entries - 1) has
+> limited ability to represent the concrete tight range with the tnum as the
+> set of resulting states from value + mask can result in a superset of the
+> actual intended range, and as such a tnum_in(range, reg->var_off) check may
+> yield true when it shouldn't, for example tnum_range(0, 2) would result in
+> 00XX -> v = 0000, m = 0011 such that the intended set of {0, 1, 2} is here
+> represented by a less precise superset of {0, 1, 2, 3}. As the register is
+> known const scalar, really just use the concrete reg->var_off.value for the
+> upper index check.
+> 
+> Fixes: d2e4c1e6c294 ("bpf: Constant map key tracking for prog array pokes")
+> Reported-by: Hsin-Wei Hung <hsinweih@uci.edu>
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+> ---
+>  kernel/bpf/verifier.c | 10 ++++------
+>  1 file changed, 4 insertions(+), 6 deletions(-)
 
---------------wA8XioeQX7fQWtEh4AZDC58a
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+LGTM.
 
-SGkgQW5kcmlpIGFuZCBBbGV4ZWksDQoNCk9uIDgvMjUvMjIgMjM6MzYsIEFuZHJpaSBOYWty
-eWlrbyB3cm90ZToNCj4gT24gVGh1LCBBdWcgMjUsIDIwMjIgYXQgMTE6MDcgQU0gQWxleGVp
-IFN0YXJvdm9pdG92DQo+IDxhbGV4ZWkuc3Rhcm92b2l0b3ZAZ21haWwuY29tPiB3cm90ZToN
-Cj4+DQo+PiBPbiBUaHUsIEF1ZyAyNSwgMjAyMiBhdCAxMTowMiBBTSBBbGVqYW5kcm8gQ29s
-b21hcg0KPj4gPGFseC5tYW5wYWdlc0BnbWFpbC5jb20+IHdyb3RlOg0KPj4+DQo+Pj4gVGhh
-dCBsaW5lIGlzIHVzZWQgdG8gZ2VuZXJhdGUgdGhlIGJwZi1oZWxwZXJzKDcpIG1hbnVhbCBw
-YWdlLiAgSXQNCj4+PiBpcyBhIG5vLWZpbGwgbGluZSwgc2luY2UgaXQgcmVwcmVzZW50cyBh
-IGNvbW1hbmQsIHdoaWNoIG1lYW5zIHRoYXQNCj4+PiB0aGUgZm9ybWF0dGVyIGNhbid0IGJy
-ZWFrIHRoZSBsaW5lLCBhbmQgaW5zdGVhZCBqdXN0IHJ1bnMgYWNyb3NzDQo+Pj4gdGhlIHJp
-Z2h0IG1hcmdpbiAoaW4gbW9zdCBzZXQtdXBzIHRoaXMgbWVhbnMgdGhhdCB0aGUgcGFnZXIg
-d2lsbA0KPj4+IGJyZWFrIHRoZSBsaW5lKS4NCj4+Pg0KPj4+IFVzaW5nIDxmbXQ+IG1ha2Vz
-IGl0IGVuZCBleGFjdGx5IGF0IHRoZSA4MC1jb2wgcmlnaHQgbWFyZ2luLCBib3RoDQo+Pj4g
-aW4gdGhlIGhlYWRlciBmaWxlLCBhbmQgYWxzbyBpbiB0aGUgbWFudWFsIHBhZ2UsIGFuZCBh
-bHNvIHNlZW1zIHRvDQo+Pj4gYmUgYSBzZW5zaWJsZSBuYW1lLg0KPj4NCj4+IE5hY2suDQo+
-Pg0KPj4gV2UgZG9uJ3QgZm9sbG93IDgwIGNoYXIgbGltaXQgYW5kIGFyZSBub3QgZ29pbmcg
-dG8gYmVjYXVzZSBvZiBtYW4gcGFnZXMuDQo+IA0KPiBBbmQgaXQncyBxdWVzdGlvbmFibGUg
-aW4gZ2VuZXJhbCB0byBlbmZvcmNlIGxpbmUgbGVuZ3RoIGZvciB2ZXJiYXRpbQ0KPiAoY29k
-ZSkgYmxvY2suIEl0J3MgdmVyYmF0aW0gZm9yIGEgZ29vZCByZWFzb24sIGl0IGNhbid0IGJl
-IHdyYXBwZWQuDQoNClRoYXQncyB3aHkgaW5zdGVhZCBvZiB3cmFwcGluZywgSSByZWR1Y2Vk
-IHRoZSBsZW5ndGggb2Ygc29tZSANCiJpZGVudGlmaWVyIi4gIEl0J3Mgbm90IGVuZm9yY2Vk
-LCBidXQgaXQncyBuaWNlciBpZiBpdCBmaXRzLiAgVGhlcmUgYXJlIA0Kc2V2ZXJhbCBvdGhl
-ciBjYXNlcywgd2hlcmUgaXQgd2Fzbid0IGVhc3kgdG8gbWFrZSBpdCBzaG9ydGVyLCBhbmQg
-SSBsZWZ0IA0KaXQgZXhjZWVkaW5nIHRoZSBtYXJnaW4uDQoNCkl0J3Mgbm90IHNvIGNydWNp
-YWwgdG8gZml4IGl0LCBhbmQgaWYgeW91IHByZWZlciBpdCBsaWtlIGl0IGlzIA0KY3VycmVu
-dGx5LCBpdCdzIHJlYXNvbmFibGUuICBUaGlzIGlzIGEgc3VnZ2VzdGlvbiwgdG8gbWFrZSBp
-dCBlYXNpZXIgdG8gDQpyZWFkLg0KDQpDaGVlcnMsDQoNCkFsZXgNCg0KLS0gDQpBbGVqYW5k
-cm8gQ29sb21hcg0KPGh0dHA6Ly93d3cuYWxlamFuZHJvLWNvbG9tYXIuZXMvPg0K
-
---------------wA8XioeQX7fQWtEh4AZDC58a--
-
---------------pGqPuejzvyayAlYdX5N3H0GW
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE6jqH8KTroDDkXfJAnowa+77/2zIFAmMH7t4ACgkQnowa+77/
-2zIp5Q//Yz5Avt9fe3ivLqmWvjxrcHfXd37Pl1e2L5EJW9OAhvbX7mNaf2ndtXAv
-P1VCCq8+CX85AO+3FcCE1L/n3JqeYZAY2H7vct5D6A1UvMpBY6qy7042W31HuMPr
-ZO2duNaWJrpNVyQ9il40l2QNBMaF5b/DvmQIlu3F2XqahJLkPwBRQAwm5nnZYyR3
-8YfJUH+sYf/4YyVkv8/0eawDnYBgE22geLN+TUaDKJNwRdhDPVldi/jYGegoa1aP
-HlH8rucpgALHITwvgIVqfWYTk1MAik9Mfo4YT+mgzaq28wnz7O2XQZAbjH2YBgHQ
-E5rHRXmtLLSHM5jpe6b5PLVKzysanGQvgvQQvMqt2wVZQ+gAq65858FKxR7kczZ/
-U19Bc6ARX7yUJGnGcEDoxAdy7GsxrYC5n4/lIzcs3qMRRVlc39ONr63Myey+s2l6
-RNwcvCHhx6DAGEK15O8jEiIOlKnBO4LyAZWukrzXjsiPINIJG4/nrPyb0AbH95K0
-w8tWxwYzEJlW9rlpkkUIEWv4Vks4yILQ3hT3WR6JPTOGCaPzQzxVVCGlEHMHffYf
-VwXGVpJCMohef5tGdKXSZVvrBy1Sy9q6Wzoo9ckjIPpNQr1/a/nb7kd2YNExUjf7
-2FAgRWVSmt7gsuq6igItb49VdN8p6BDvx6I4QHVYlGC2Ir2JoI8=
-=CPn5
------END PGP SIGNATURE-----
-
---------------pGqPuejzvyayAlYdX5N3H0GW--
+Acked-by: John Fastabend <john.fastabend@gmail.com>
