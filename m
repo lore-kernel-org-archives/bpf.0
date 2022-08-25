@@ -2,96 +2,79 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B635C32774
-	for <bpf@archiver.kernel.org>; Thu, 25 Aug 2022 14:58:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72FB0C32774
+	for <bpf@archiver.kernel.org>; Thu, 25 Aug 2022 14:58:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242446AbiHYO6V (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 25 Aug 2022 10:58:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46120 "EHLO
+        id S237468AbiHYO65 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 25 Aug 2022 10:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242436AbiHYO6O (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 25 Aug 2022 10:58:14 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A61B5E66;
-        Thu, 25 Aug 2022 07:58:11 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-11d08d7ece2so18499640fac.0;
-        Thu, 25 Aug 2022 07:58:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=JocMNnEiBXUEw7bov+fVPhMWeLGE8sKeXpxcOij+6G8=;
-        b=mc1gYOpYDv8Y3QEu7Vh7YVIXdiXaTwCz7X/J1tfeSWKR91Q75vACKn9WwAH+upQBXO
-         X2fInuxuyWPxExA819uRGlvccV+crTVGIUvMOR96sOONnmSijjnDVB3rhNGcBccrpj7E
-         SZMFBZCwZPUlUr3Ptl4p//mJ1yMU6wxe8yViljiAy0RLFmXxQuHQFBnWtFxEIU1Vs+1O
-         qvlDnuAKGMPuy/8VdNeZ+BLLnukVKXMo43R/x8UjnTiS6tdHTfN6fmjrO2wHsCIAsQHg
-         iGAQeNUEg+H0nZ3g6Dm/FGD+RZe0GNWtTA7UKsm92Y7rMYVeARcv3E1N0nEklVdF79V5
-         ksTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=JocMNnEiBXUEw7bov+fVPhMWeLGE8sKeXpxcOij+6G8=;
-        b=m8eGdsSjzyKvnpDTOls2wf/X7k7N1AVPJUy1jfpsTffHe0uZUokWuRLlG6GGCur10l
-         CBTCa0Jdyxzfy2ThPPODi9tOWPie7jC/Md3Hf4cHKWlqqrF9OKwwzm88Lkfbym89OzVY
-         JH75GF8tRR/yHi/mIm4DSLCeCA9htMkhBiSKao6InQV3qEylfliAHRwDZhLhu839bJ5C
-         Z2QUU+9IBqn1z70TLrf0SzS5V0MonP9R4pm/iPrfexIkCIyAaxha/tBjtkaqP/Y/dLJX
-         01U1+0JCURBw9uVDy7Aio2Aslo9SOLIXD+J2xJLJMOCnWaIbhSQvGTXdDCgdvKBUFInt
-         Ws4A==
-X-Gm-Message-State: ACgBeo1hxfAfzNJd9DxV9SHFLAGCuelsEcVJNDhhC920DAjALFvGDkp0
-        TuL7HUiqeGjXbgESe5Y0dMo=
-X-Google-Smtp-Source: AA6agR64WsA2EuS+9gM8Rg8g5ic0ddF6AgWvFuFQDxAG5nieCueld/ADlcubeaSJ6w8tsaRJHa+h3Q==
-X-Received: by 2002:a05:6870:7092:b0:11d:83fe:9193 with SMTP id v18-20020a056870709200b0011d83fe9193mr6337617oae.41.1661439491010;
-        Thu, 25 Aug 2022 07:58:11 -0700 (PDT)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id g18-20020a544f92000000b0033a11fcb23bsm4814836oiy.27.2022.08.25.07.58.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 07:58:10 -0700 (PDT)
-Message-ID: <76bda5de-f165-d886-dbf9-9cdfd837cc61@gmail.com>
-Date:   Thu, 25 Aug 2022 11:58:26 -0300
+        with ESMTP id S238272AbiHYO64 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 25 Aug 2022 10:58:56 -0400
+Received: from 10.mo552.mail-out.ovh.net (10.mo552.mail-out.ovh.net [87.98.187.244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4F6B5A78
+        for <bpf@vger.kernel.org>; Thu, 25 Aug 2022 07:58:55 -0700 (PDT)
+Received: from mxplan6.mail.ovh.net (unknown [10.108.4.35])
+        by mo552.mail-out.ovh.net (Postfix) with ESMTPS id CC3AF2729F;
+        Thu, 25 Aug 2022 14:23:01 +0000 (UTC)
+Received: from jwilk.net (37.59.142.100) by DAG4EX1.mxp6.local (172.16.2.31)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12; Thu, 25 Aug
+ 2022 16:22:58 +0200
+Authentication-Results: garm.ovh; auth=pass (GARM-100R0039edb75d6-ed00-4167-8455-8a71bd083319,
+                    7E6AE0283D4A57E58743953EE7A8FB9473A8110D) smtp.auth=jwilk@jwilk.net
+X-OVh-ClientIp: 5.172.255.184
+Date:   Thu, 25 Aug 2022 16:22:56 +0200
+From:   Jakub Wilk <jwilk@jwilk.net>
+To:     Quentin Monnet <quentin@isovalent.com>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        <bpf@vger.kernel.org>, Alejandro Colomar <alx.manpages@gmail.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        <linux-man@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v2] bpf: Fix a few typos in BPF helpers
+ documentation
+Message-ID: <20220825142256.of3glbnwi77kgkzo@jwilk.net>
+References: <20220825110216.53698-1-quentin@isovalent.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] core: Conditionally define language encodings entries)
-Content-Language: en-US
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>
-Cc:     dwarves@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alibek Omarov <a1ba.omarov@gmail.com>,
-        Kornilios Kourtis <kornilios@isovalent.com>,
-        Kui-Feng Lee <kuifeng@fb.com>, Yonghong Song <yhs@fb.com>,
-        Luna Jernberg <droidbittin@gmail.com>, bpf@vger.kernel.org,
-        Jiri Olsa <jolsa@kernel.org>
-References: <YwQRKkmWqsf/Du6A@kernel.org>
- <YwZQ0UkLsoa+6VyY@dev-arch.thelio-3990X> <YwZcuCj49wMkr18W@kernel.org>
- <YwZl9xaRplsFkWXb@kernel.org> <Ywd2zJA63QCkd3RL@kernel.org>
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <Ywd2zJA63QCkd3RL@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220825110216.53698-1-quentin@isovalent.com>
+X-Originating-IP: [37.59.142.100]
+X-ClientProxiedBy: DAG5EX1.mxp6.local (172.16.2.41) To DAG4EX1.mxp6.local
+ (172.16.2.31)
+X-Ovh-Tracer-GUID: 43b2c289-649c-4bcf-8c4c-9677574ae55c
+X-Ovh-Tracer-Id: 9639110581004851076
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejfedgjeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujghisehttdertddttddvnecuhfhrohhmpeflrghkuhgsucghihhlkhcuoehjfihilhhksehjfihilhhkrdhnvghtqeenucggtffrrghtthgvrhhnpeeutddtteelhfffuddvhefgfedujeeltdekheduveekkeelfeduuedvgeejudffgfenucfkpheptddrtddrtddrtddpfeejrdehledrudegvddruddttdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghniedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehjfihilhhksehjfihilhhkrdhnvghtpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqmhgrnhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheehvd
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 8/25/22 10:19, Arnaldo Carvalho de Melo wrote:
-> Em Wed, Aug 24, 2022 at 02:55:03PM -0300, Arnaldo Carvalho de Melo escreveu:
->> Yeah, recent enough distros are all building ok, I'll try and add some
->> fallback for old distros.
->>
-> 
-> Ok, now it builds everywhere:
-> 
-> [...]
-> 
-> With this patch:
-> 
-> [...]
+* Quentin Monnet <quentin@isovalent.com>, 2022-08-25 12:02:
+>--- a/tools/include/uapi/linux/bpf.h
+>+++ b/tools/include/uapi/linux/bpf.h
+>@@ -79,7 +79,7 @@ struct bpf_insn {
+> /* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
+> struct bpf_lpm_trie_key {
+> 	__u32	prefixlen;	/* up to 32 for AF_INET, 128 for AF_INET6 */
+>-	__u8	data[0];	/* Arbitrary size */
+>+	__u8	data[];	/* Arbitrary size */
+> };
 
-Builds on Arch Linux on master.
+This hunk picks the change from 94dfc73e7cf4 ("treewide: uapi: Replace 
+zero-length arrays with flexible-array members").
 
-Acked-by: Martin Rodriguez Reboredo
+A bit weird to see it in a spelling-fix patch though. Wouldn't it be 
+better to put it in a separate one?
 
-- Martin Rodriguez Reboredo
+-- 
+Jakub Wilk
