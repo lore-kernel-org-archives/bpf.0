@@ -2,378 +2,168 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9578EC04AA5
-	for <bpf@archiver.kernel.org>; Thu, 25 Aug 2022 00:47:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB7CBC3F6B0
+	for <bpf@archiver.kernel.org>; Thu, 25 Aug 2022 00:48:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbiHYAr1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Aug 2022 20:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43770 "EHLO
+        id S231289AbiHYAsu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Aug 2022 20:48:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231300AbiHYAp2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 24 Aug 2022 20:45:28 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E839A7B7B2
-        for <bpf@vger.kernel.org>; Wed, 24 Aug 2022 17:45:26 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id n202so9284357iod.6
-        for <bpf@vger.kernel.org>; Wed, 24 Aug 2022 17:45:26 -0700 (PDT)
+        with ESMTP id S230498AbiHYAst (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 24 Aug 2022 20:48:49 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DFF915C7
+        for <bpf@vger.kernel.org>; Wed, 24 Aug 2022 17:48:47 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id x5so14119446qtv.9
+        for <bpf@vger.kernel.org>; Wed, 24 Aug 2022 17:48:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=uW+JxRdPFg4vtSSoSWD7y+9g+tMl3gfsWtGM6/rtxac=;
-        b=V6Zr2Z98FURVaVUjR+8E4wQKCJCWdHdZ5KatlctB/MaQrkG+QEfuCDbbOfdMTQCptD
-         pfzcZnIKYQRQNimL7Hj51hfrywEHpEnrrT0vrzZuzNpH5+o/w5QtWuTqtUFSMF3Sdpyt
-         u2kecBjFzqwpPbrc3fmIraaqsjYtY9ryNQDAKZ+9urPhx8W2f6vSiOanz5yIgJlE6t4U
-         nzCatrXNvjNeuP4/fbLx3MWXqSnJdhEVqyKUmCDff11wq6J4PVByppTZh5SyR7VH7Yxe
-         yry10yO1XkfmTzzlHdjxJiwPknyMIldnLzhIzGMX9eJFWuGTg9UR4RqF6o/vfqZ37R+1
-         mn6w==
+        bh=q79ck/AetSOthZ6hFpX5t7QfBKfX7F+uUXc0H4h3law=;
+        b=I1ZnPe5OrWyp6LVENTFATmozgLZ7ZkdmjybmuFrk1V4XML5gtlNtieEL2obZoXMgxX
+         nerAmkVQg+eYBWB2U5NJulY/1iBr5Q21ukGu4Hr8K9JSuY+Es3p3unZMzUkvu5l7rwJC
+         xJ+/8z31Gi4kJn+b/JWcy03XRR6tNpcNLoDc1O75HphHnSS01Lk2S3oGcvZVQyMYgrl0
+         sW128SgJU2S0XgP9IrMdPIG9z497lkzKQ3NHZ1nokrc0hYaq3jVlRDf1LRbsxNTKjUpS
+         DkkhpmDCsWUWwc/R3khgTuCovLvcCLxc5dqI5B50DqL740oIgIjgWjcIfsOo1A0UoRIp
+         0NTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=uW+JxRdPFg4vtSSoSWD7y+9g+tMl3gfsWtGM6/rtxac=;
-        b=MePP1i2HTsEqDdtLGmZUR2mh0Gu+QzPY7Namp0OxY8NCqP6R/7ayXt6xQdRiGCafTf
-         v6H+Bz1alvLF/uIn6NOriqnpKocPdDMYyShYfh5DGZtW/FWYZF3nJoNUsF96VNlxfdDa
-         fDSF8xNgzXgfWdwJaLNpl0pUfhzg9OVKvpvdXLEkvFPdRqqQqaMrf1tsAzBQbDqM/Ew7
-         hlaeAhQcCayKo+YkgmMoQhPZjnU4u9aXUyf8dlloWxxORJRMvBV3YTii0/vlWapZlv8Q
-         nDLl4CTbqGxkbF3gdDr/s3P+YDEv5VDJFtZT/PbluVSq7sukq0HnDU6axxeINaK4wj9b
-         NZhQ==
-X-Gm-Message-State: ACgBeo1GQz7/kt8dBN71E9WCNeqoO054+j3yxM1HKumuK1q86n03wba7
-        KFzSJehrqU56qChChvSGk7LkkACBhCrCgWYi3o7jag==
-X-Google-Smtp-Source: AA6agR7iGdiJ2a+JZhjD8fqgOVNuJragouckZOD7h+VOnM/cTl5h4DAOelLs3wpmZyz5yqtHCvJJ/CBDFB1M09X7nu4=
-X-Received: by 2002:a05:6638:2042:b0:346:e51a:da4e with SMTP id
- t2-20020a056638204200b00346e51ada4emr665969jaj.164.1661388326072; Wed, 24 Aug
- 2022 17:45:26 -0700 (PDT)
+        bh=q79ck/AetSOthZ6hFpX5t7QfBKfX7F+uUXc0H4h3law=;
+        b=30a+kxE7VakpRngWD4gwdh5d6dT9jWL9rD87dLuqi2BEFPy/k4zFTyS7wTLYYvQGco
+         AkufOf8w+4d0kz7UISim40BGLciWDqbyxBqAplLDjBNbVo3ih2WGsTBuf1LzTQEPUD+P
+         e5hw5OL7/uKMDaXhjDC3V4KVbt9huyzol9pc6wA5AE+xCiyrhsNFtr2LsxUttjnSulVs
+         TQY4sQBkYVvBksQCGQ3KWl6fHGSTiLqMTVlyL6Xsu6mzbgaSv7Ejl2ZFsyd9C7oQJ00t
+         OAAMPD/V5SsLvhA7ZyY5H9V0KTrmOhoulZDj2ruhq8kY8jyOHB3Zw21WoH0ylWql3wVD
+         YARQ==
+X-Gm-Message-State: ACgBeo19VjoMUAHrdSOgiKX8mxYHzy6e18Ip8mlhVYxoAwvNG6mXMiOM
+        JQDbPEVfbWBXzaFSZ3O3KhJFveSUD1xzMfR4XkWyNA==
+X-Google-Smtp-Source: AA6agR7N8cvbqqiOqWHk04hMyYDErfgVTBgYt4gHkcwIdZocFD/VS29vZ/4h/085kacWnmwNXvjidJc4qHeqgE3clj0=
+X-Received: by 2002:a05:622a:552:b0:342:f8c2:442 with SMTP id
+ m18-20020a05622a055200b00342f8c20442mr1729734qtx.478.1661388526277; Wed, 24
+ Aug 2022 17:48:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220606022436.331005-1-imagedong@tencent.com> <20220606022436.331005-3-imagedong@tencent.com>
-In-Reply-To: <20220606022436.331005-3-imagedong@tencent.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 24 Aug 2022 17:45:15 -0700
-Message-ID: <CANn89i+bx0ybvE55iMYf5GJM48WwV1HNpdm9Q6t-HaEstqpCSA@mail.gmail.com>
-Subject: Re: [PATCH net-next v4 2/3] net: skb: use auto-generation to convert
- skb drop reason to string
-To:     Menglong Dong <menglong8.dong@gmail.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Miller <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
+References: <20220824233117.1312810-1-haoluo@google.com> <CAADnVQLT3JE8LtOYrs30mL88PNs+NaSeXgQqAPEAup5LUC+BPQ@mail.gmail.com>
+ <CA+khW7gQi+BK7Qy4Khk=Ro72nfNQaR2kNkwZemB9ELnDo4Nk3Q@mail.gmail.com> <CAADnVQKJDoE3Krn4TEwubJ0Us-QA5cE4oyZ3G2g2MiRMDn3=Cw@mail.gmail.com>
+In-Reply-To: <CAADnVQKJDoE3Krn4TEwubJ0Us-QA5cE4oyZ3G2g2MiRMDn3=Cw@mail.gmail.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Wed, 24 Aug 2022 17:48:35 -0700
+Message-ID: <CA+khW7gzV5DyNaAdpYWApVnTe4B=5JFW_EbnmYqRAye4MmdCvw@mail.gmail.com>
+Subject: Re: [RESEND PATCH bpf-next v9 0/5] bpf: rstat: cgroup hierarchical
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
         KP Singh <kpsingh@kernel.org>,
-        Menglong Dong <imagedong@tencent.com>,
-        David Ahern <dsahern@kernel.org>,
-        Talal Ahmad <talalahmad@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>, Michal Koutny <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, Jun 5, 2022 at 7:29 PM <menglong8.dong@gmail.com> wrote:
+On Wed, Aug 24, 2022 at 5:47 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> From: Menglong Dong <imagedong@tencent.com>
+> On Wed, Aug 24, 2022 at 5:42 PM Hao Luo <haoluo@google.com> wrote:
+> >
+> > On Wed, Aug 24, 2022 at 5:29 PM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > On Wed, Aug 24, 2022 at 4:31 PM Hao Luo <haoluo@google.com> wrote:
+> > > >
+> > > > This patch series allows for using bpf to collect hierarchical cgroup
+> > > > stats efficiently by integrating with the rstat framework. The rstat
+> > > > framework provides an efficient way to collect cgroup stats percpu and
+> > > > propagate them through the cgroup hierarchy.
+> > > >
+> > > > The stats are exposed to userspace in textual form by reading files in
+> > > > bpffs, similar to cgroupfs stats by using a cgroup_iter program.
+> > > > cgroup_iter is a type of bpf_iter. It walks over cgroups in four modes:
+> > > > - walking a cgroup's descendants in pre-order.
+> > > > - walking a cgroup's descendants in post-order.
+> > > > - walking a cgroup's ancestors.
+> > > > - process only a single object.
+> > > >
+> > > > When attaching cgroup_iter, one needs to set a cgroup to the iter_link
+> > > > created from attaching. This cgroup can be passed either as a file
+> > > > descriptor or a cgroup id. That cgroup serves as the starting point of
+> > > > the walk.
+> > > >
+> > > > One can also terminate the walk early by returning 1 from the iter
+> > > > program.
+> > > >
+> > > > Note that because walking cgroup hierarchy holds cgroup_mutex, the iter
+> > > > program is called with cgroup_mutex held.
+> > > >
+> > > > ** Background on rstat for stats collection **
+> > > > (I am using a subscriber analogy that is not commonly used)
+> > > >
+> > > > The rstat framework maintains a tree of cgroups that have updates and
+> > > > which cpus have updates. A subscriber to the rstat framework maintains
+> > > > their own stats. The framework is used to tell the subscriber when
+> > > > and what to flush, for the most efficient stats propagation. The
+> > > > workflow is as follows:
+> > > >
+> > > > - When a subscriber updates a cgroup on a cpu, it informs the rstat
+> > > >   framework by calling cgroup_rstat_updated(cgrp, cpu).
+> > > >
+> > > > - When a subscriber wants to read some stats for a cgroup, it asks
+> > > >   the rstat framework to initiate a stats flush (propagation) by calling
+> > > >   cgroup_rstat_flush(cgrp).
+> > > >
+> > > > - When the rstat framework initiates a flush, it makes callbacks to
+> > > >   subscribers to aggregate stats on cpus that have updates, and
+> > > >   propagate updates to their parent.
+> > > >
+> > > > Currently, the main subscribers to the rstat framework are cgroup
+> > > > subsystems (e.g. memory, block). This patch series allow bpf programs to
+> > > > become subscribers as well.
+> > > >
+> > > > Patches in this series are organized as follows:
+> > > > * Patches 1-2 introduce cgroup_iter prog, and a selftest.
+> > > > * Patches 3-5 allow bpf programs to integrate with rstat by adding the
+> > > >   necessary hook points and kfunc. A comprehensive selftest that
+> > > >   demonstrates the entire workflow for using bpf and rstat to
+> > > >   efficiently collect and output cgroup stats is added.
+> > > >
+> > > > ---
+> > > > Changelog:
+> > > > v8 -> v9:
+> > > > - Make UNSPEC (an invalid option) as the default order for cgroup_iter.
+> > > > - Use enum for specifying cgroup_iter order, instead of u32.
+> > > > - Add BPF_ITER_RESHCED to cgroup_iter.
+> > > > - Add cgroup_hierarchical_stats to s390x denylist.
+> > >
+> > > What 'RESEND' is for?
+> > > It seems to confuse patchwork and BPF CI.
+> > >
+> > > The v9 series made it to patchwork...
+> > >
+> > > Please just bump the version to v10 next time.
+> > > Don't add things to subject, since automation cannot recognize
+> > > that yet.
+> >
+> > Sorry about that. I thought it was RESEND because no content has
+> > changed. It was just adding an entry in s390 denylist.
+> >
+> > Are we good now? Or I need to send a v10?
 >
-> It is annoying to add new skb drop reasons to 'enum skb_drop_reason'
-> and TRACE_SKB_DROP_REASON in trace/event/skb.h, and it's easy to forget
-> to add the new reasons we added to TRACE_SKB_DROP_REASON.
->
-> TRACE_SKB_DROP_REASON is used to convert drop reason of type number
-> to string. For now, the string we passed to user space is exactly the
-> same as the name in 'enum skb_drop_reason' with a 'SKB_DROP_REASON_'
-> prefix. Therefore, we can use 'auto-generation' to generate these
-> drop reasons to string at build time.
->
-> The new source 'dropreason_str.c' will be auto generated during build
-> time, which contains the string array
-> 'const char * const drop_reasons[]'.
+> No need. Assuming that 'RESEND' version will be green in CI.
 
-After this patch, I no longer have strings added after the reason: tag
-
-perf record -e skb:kfree_skb -a sleep 10
-perf script
-
-       ip_defrag 14605 [021]   221.614303:   skb:kfree_skb:
-skbaddr=0xffff9d2851242700 protocol=34525 location=0xffffffffa39346b1
-reason:
-       ip_defrag 14605 [021]   221.614304:   skb:kfree_skb:
-skbaddr=0xffff9d286e1ecb00 protocol=34525 location=0xffffffffa39346b1
-reason:
-       ip_defrag 14605 [021]   221.614305:   skb:kfree_skb:
-skbaddr=0xffff9d2851242b00 protocol=34525 location=0xffffffffa39346b1
-reason:
-       ip_defrag 14605 [021]   221.614306:   skb:kfree_skb:
-skbaddr=0xffff9d285fd23d00 protocol=34525 location=0xffffffffa39346b1
-reason:
-       ip_defrag 14605 [021]   221.614308:   skb:kfree_skb:
-skbaddr=0xffff9d2851242e00 protocol=34525 location=0xffffffffa39346b1
-reason:
-       ip_defrag 14605 [021]   221.614309:   skb:kfree_skb:
-skbaddr=0xffff9d285fd23200 protocol=34525 location=0xffffffffa39346b1
-reason:
-       ip_defrag 14605 [021]   221.614310:   skb:kfree_skb:
-skbaddr=0xffff9d286dcb0600 protocol=34525 location=0xffffffffa39346b1
-reason:
-       ip_defrag 14605 [021]   221.614311:   skb:kfree_skb:
-skbaddr=0xffff9d285fd23700 protocol=34525 location=0xffffffffa39346b1
-reason:
-       ip_defrag 14605 [021]   221.614312:   skb:kfree_skb:
-skbaddr=0xffff9d286dcb0800 protocol=34525 location=0xffffffffa39346b1
-reason:
-       ip_defrag 14605 [021]   221.614313:   skb:kfree_skb:
-skbaddr=0xffff9d284deb3b00 protocol=34525 location=0xffffffffa39346b1
-reason:
-       ip_defrag 14605 [021]   221.614314:   skb:kfree_skb:
-skbaddr=0xffff9d286dcb0100 protocol=34525 location=0xffffffffa39346b1
-reason:
-       ip_defrag 14605 [021]   221.614315:   skb:kfree_skb:
-skbaddr=0xffff9d284deb3c00 protocol=34525 location=0xffffffffa39346b1
-reason:
-       ip_defrag 14605 [021]   221.614316:   skb:kfree_skb:
-skbaddr=0xffff9d286dcb0200 protocol=34525 location=0xffffffffa39346b1
-reason:
-       ip_defrag 14605 [021]   221.614317:   skb:kfree_skb:
-skbaddr=0xffff9d284e378800 protocol=34525 location=0xffffffffa39346b1
-reason:
-       ip_defrag 14605 [021]   221.614318:   skb:kfree_skb:
-skbaddr=0xffff9d286dcb0500 protocol=34525 location=0xffffffffa39346b1
-reason:
-       ip_defrag 14605 [021]   221.614319:   skb:kfree_skb:
-skbaddr=0xffff9d284e378300 protocol=34525 location=0xffffffffa39346b1
-reason:
-
-
-
->
-> Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> ---
-> v3:
-> - add new line in the end of .gitignore
-> - fix awk warning by make '\;' to ';', as ';' is not need to be
->   escaped
-> - export 'drop_reasons' in skbuff.c
->
-> v2:
-> - generate source file instead of header file for drop reasons string
->   array (Jakub Kicinski)
-> ---
->  include/net/dropreason.h   |  2 +
->  include/trace/events/skb.h | 89 +-------------------------------------
->  net/core/.gitignore        |  1 +
->  net/core/Makefile          | 23 +++++++++-
->  net/core/drop_monitor.c    | 13 ------
->  net/core/skbuff.c          |  3 ++
->  6 files changed, 29 insertions(+), 102 deletions(-)
->  create mode 100644 net/core/.gitignore
->
-> diff --git a/include/net/dropreason.h b/include/net/dropreason.h
-> index ecd18b7b1364..013ff0f2543e 100644
-> --- a/include/net/dropreason.h
-> +++ b/include/net/dropreason.h
-> @@ -181,4 +181,6 @@ enum skb_drop_reason {
->                         SKB_DR_SET(name, reason);               \
->         } while (0)
->
-> +extern const char * const drop_reasons[];
-> +
->  #endif
-> diff --git a/include/trace/events/skb.h b/include/trace/events/skb.h
-> index a477bf907498..45264e4bb254 100644
-> --- a/include/trace/events/skb.h
-> +++ b/include/trace/events/skb.h
-> @@ -9,92 +9,6 @@
->  #include <linux/netdevice.h>
->  #include <linux/tracepoint.h>
->
-> -#define TRACE_SKB_DROP_REASON                                  \
-> -       EM(SKB_DROP_REASON_NOT_SPECIFIED, NOT_SPECIFIED)        \
-> -       EM(SKB_DROP_REASON_NO_SOCKET, NO_SOCKET)                \
-> -       EM(SKB_DROP_REASON_PKT_TOO_SMALL, PKT_TOO_SMALL)        \
-> -       EM(SKB_DROP_REASON_TCP_CSUM, TCP_CSUM)                  \
-> -       EM(SKB_DROP_REASON_SOCKET_FILTER, SOCKET_FILTER)        \
-> -       EM(SKB_DROP_REASON_UDP_CSUM, UDP_CSUM)                  \
-> -       EM(SKB_DROP_REASON_NETFILTER_DROP, NETFILTER_DROP)      \
-> -       EM(SKB_DROP_REASON_OTHERHOST, OTHERHOST)                \
-> -       EM(SKB_DROP_REASON_IP_CSUM, IP_CSUM)                    \
-> -       EM(SKB_DROP_REASON_IP_INHDR, IP_INHDR)                  \
-> -       EM(SKB_DROP_REASON_IP_RPFILTER, IP_RPFILTER)            \
-> -       EM(SKB_DROP_REASON_UNICAST_IN_L2_MULTICAST,             \
-> -          UNICAST_IN_L2_MULTICAST)                             \
-> -       EM(SKB_DROP_REASON_XFRM_POLICY, XFRM_POLICY)            \
-> -       EM(SKB_DROP_REASON_IP_NOPROTO, IP_NOPROTO)              \
-> -       EM(SKB_DROP_REASON_SOCKET_RCVBUFF, SOCKET_RCVBUFF)      \
-> -       EM(SKB_DROP_REASON_PROTO_MEM, PROTO_MEM)                \
-> -       EM(SKB_DROP_REASON_TCP_MD5NOTFOUND, TCP_MD5NOTFOUND)    \
-> -       EM(SKB_DROP_REASON_TCP_MD5UNEXPECTED,                   \
-> -          TCP_MD5UNEXPECTED)                                   \
-> -       EM(SKB_DROP_REASON_TCP_MD5FAILURE, TCP_MD5FAILURE)      \
-> -       EM(SKB_DROP_REASON_SOCKET_BACKLOG, SOCKET_BACKLOG)      \
-> -       EM(SKB_DROP_REASON_TCP_FLAGS, TCP_FLAGS)                \
-> -       EM(SKB_DROP_REASON_TCP_ZEROWINDOW, TCP_ZEROWINDOW)      \
-> -       EM(SKB_DROP_REASON_TCP_OLD_DATA, TCP_OLD_DATA)          \
-> -       EM(SKB_DROP_REASON_TCP_OVERWINDOW, TCP_OVERWINDOW)      \
-> -       EM(SKB_DROP_REASON_TCP_OFOMERGE, TCP_OFOMERGE)          \
-> -       EM(SKB_DROP_REASON_TCP_OFO_DROP, TCP_OFO_DROP)          \
-> -       EM(SKB_DROP_REASON_TCP_RFC7323_PAWS, TCP_RFC7323_PAWS)  \
-> -       EM(SKB_DROP_REASON_TCP_INVALID_SEQUENCE,                \
-> -          TCP_INVALID_SEQUENCE)                                \
-> -       EM(SKB_DROP_REASON_TCP_RESET, TCP_RESET)                \
-> -       EM(SKB_DROP_REASON_TCP_INVALID_SYN, TCP_INVALID_SYN)    \
-> -       EM(SKB_DROP_REASON_TCP_CLOSE, TCP_CLOSE)                \
-> -       EM(SKB_DROP_REASON_TCP_FASTOPEN, TCP_FASTOPEN)          \
-> -       EM(SKB_DROP_REASON_TCP_OLD_ACK, TCP_OLD_ACK)            \
-> -       EM(SKB_DROP_REASON_TCP_TOO_OLD_ACK, TCP_TOO_OLD_ACK)    \
-> -       EM(SKB_DROP_REASON_TCP_ACK_UNSENT_DATA,                 \
-> -          TCP_ACK_UNSENT_DATA)                                 \
-> -       EM(SKB_DROP_REASON_TCP_OFO_QUEUE_PRUNE,                 \
-> -         TCP_OFO_QUEUE_PRUNE)                                  \
-> -       EM(SKB_DROP_REASON_IP_OUTNOROUTES, IP_OUTNOROUTES)      \
-> -       EM(SKB_DROP_REASON_BPF_CGROUP_EGRESS,                   \
-> -          BPF_CGROUP_EGRESS)                                   \
-> -       EM(SKB_DROP_REASON_IPV6DISABLED, IPV6DISABLED)          \
-> -       EM(SKB_DROP_REASON_NEIGH_CREATEFAIL, NEIGH_CREATEFAIL)  \
-> -       EM(SKB_DROP_REASON_NEIGH_FAILED, NEIGH_FAILED)          \
-> -       EM(SKB_DROP_REASON_NEIGH_QUEUEFULL, NEIGH_QUEUEFULL)    \
-> -       EM(SKB_DROP_REASON_NEIGH_DEAD, NEIGH_DEAD)              \
-> -       EM(SKB_DROP_REASON_TC_EGRESS, TC_EGRESS)                \
-> -       EM(SKB_DROP_REASON_QDISC_DROP, QDISC_DROP)              \
-> -       EM(SKB_DROP_REASON_CPU_BACKLOG, CPU_BACKLOG)            \
-> -       EM(SKB_DROP_REASON_XDP, XDP)                            \
-> -       EM(SKB_DROP_REASON_TC_INGRESS, TC_INGRESS)              \
-> -       EM(SKB_DROP_REASON_UNHANDLED_PROTO, UNHANDLED_PROTO)    \
-> -       EM(SKB_DROP_REASON_SKB_CSUM, SKB_CSUM)                  \
-> -       EM(SKB_DROP_REASON_SKB_GSO_SEG, SKB_GSO_SEG)            \
-> -       EM(SKB_DROP_REASON_SKB_UCOPY_FAULT, SKB_UCOPY_FAULT)    \
-> -       EM(SKB_DROP_REASON_DEV_HDR, DEV_HDR)                    \
-> -       EM(SKB_DROP_REASON_DEV_READY, DEV_READY)                \
-> -       EM(SKB_DROP_REASON_FULL_RING, FULL_RING)                \
-> -       EM(SKB_DROP_REASON_NOMEM, NOMEM)                        \
-> -       EM(SKB_DROP_REASON_HDR_TRUNC, HDR_TRUNC)                \
-> -       EM(SKB_DROP_REASON_TAP_FILTER, TAP_FILTER)              \
-> -       EM(SKB_DROP_REASON_TAP_TXFILTER, TAP_TXFILTER)          \
-> -       EM(SKB_DROP_REASON_ICMP_CSUM, ICMP_CSUM)                \
-> -       EM(SKB_DROP_REASON_INVALID_PROTO, INVALID_PROTO)        \
-> -       EM(SKB_DROP_REASON_IP_INADDRERRORS, IP_INADDRERRORS)    \
-> -       EM(SKB_DROP_REASON_IP_INNOROUTES, IP_INNOROUTES)        \
-> -       EM(SKB_DROP_REASON_PKT_TOO_BIG, PKT_TOO_BIG)            \
-> -       EMe(SKB_DROP_REASON_MAX, MAX)
-> -
-> -#undef EM
-> -#undef EMe
-> -
-> -#define EM(a, b)       TRACE_DEFINE_ENUM(a);
-> -#define EMe(a, b)      TRACE_DEFINE_ENUM(a);
-> -
-> -TRACE_SKB_DROP_REASON
-> -
-> -#undef EM
-> -#undef EMe
-> -#define EM(a, b)       { a, #b },
-> -#define EMe(a, b)      { a, #b }
-> -
->  /*
->   * Tracepoint for free an sk_buff:
->   */
-> @@ -121,8 +35,7 @@ TRACE_EVENT(kfree_skb,
->
->         TP_printk("skbaddr=%p protocol=%u location=%p reason: %s",
->                   __entry->skbaddr, __entry->protocol, __entry->location,
-> -                 __print_symbolic(__entry->reason,
-> -                                  TRACE_SKB_DROP_REASON))
-> +                 drop_reasons[__entry->reason])
->  );
->
->  TRACE_EVENT(consume_skb,
-> diff --git a/net/core/.gitignore b/net/core/.gitignore
-> new file mode 100644
-> index 000000000000..df1e74372cce
-> --- /dev/null
-> +++ b/net/core/.gitignore
-> @@ -0,0 +1 @@
-> +dropreason_str.c
-> diff --git a/net/core/Makefile b/net/core/Makefile
-> index a8e4f737692b..e8ce3bd283a6 100644
-> --- a/net/core/Makefile
-> +++ b/net/core/Makefile
-> @@ -4,7 +4,8 @@
->  #
->
->  obj-y := sock.o request_sock.o skbuff.o datagram.o stream.o scm.o \
-> -        gen_stats.o gen_estimator.o net_namespace.o secure_seq.o flow_dissector.o
-> +        gen_stats.o gen_estimator.o net_namespace.o secure_seq.o \
-> +        flow_dissector.o dropreason_str.o
->
->  obj-$(CONFIG_SYSCTL) += sysctl_net_core.o
->
-> @@ -39,3 +40,23 @@ obj-$(CONFIG_NET_SOCK_MSG) += skmsg.o
->  obj-$(CONFIG_BPF_SYSCALL) += sock_map.o
->  obj-$(CONFIG_BPF_SYSCALL) += bpf_sk_storage.o
->  obj-$(CONFIG_OF)       += of_net.o
-> +
-> +clean-files := dropreason_str.c
-> +
-> +quiet_cmd_dropreason_str = GEN     $@
-> +cmd_dropreason_str = awk -F ',' 'BEGIN{ print "\#include <net/dropreason.h>\n"; \
-> +       print "const char * const drop_reasons[] = {" }\
-> +       /^enum skb_drop/ { dr=1; }\
-> +       /^\};/ { dr=0; }\
-> +       /^\tSKB_DROP_REASON_/ {\
-> +               if (dr) {\
-> +                       sub(/\tSKB_DROP_REASON_/, "", $$1);\
-> +                       printf "\t[SKB_DROP_REASON_%s] = \"%s\",\n", $$1, $$1;\
-> +               }\
-> +       }\
-> +       END{ print "};" }' $< > $@
-> +
-> +$(obj)/dropreason_str.c: $(srctree)/include/net/dropreason.h
-> +       $(call cmd,dropreason_str)
-> +
-> +$(obj)/dropreason_str.o: $(obj)/dropreason_str.c
-> diff --git a/net/core/drop_monitor.c b/net/core/drop_monitor.c
-> index 41cac0e4834e..4ad1decce724 100644
-> --- a/net/core/drop_monitor.c
-> +++ b/net/core/drop_monitor.c
-> @@ -48,19 +48,6 @@
->  static int trace_state = TRACE_OFF;
->  static bool monitor_hw;
->
-> -#undef EM
-> -#undef EMe
-> -
-> -#define EM(a, b)       [a] = #b,
-> -#define EMe(a, b)      [a] = #b
-> -
-> -/* drop_reasons is used to translate 'enum skb_drop_reason' to string,
-> - * which is reported to user space.
-> - */
-> -static const char * const drop_reasons[] = {
-> -       TRACE_SKB_DROP_REASON
-> -};
-> -
->  /* net_dm_mutex
->   *
->   * An overall lock guarding every operation coming from userspace.
-> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-> index 1d10bb4adec1..74864e6c1835 100644
-> --- a/net/core/skbuff.c
-> +++ b/net/core/skbuff.c
-> @@ -91,6 +91,9 @@ static struct kmem_cache *skbuff_ext_cache __ro_after_init;
->  int sysctl_max_skb_frags __read_mostly = MAX_SKB_FRAGS;
->  EXPORT_SYMBOL(sysctl_max_skb_frags);
->
-> +/* The array 'drop_reasons' is auto-generated in dropreason_str.c */
-> +EXPORT_SYMBOL(drop_reasons);
-> +
->  /**
->   *     skb_panic - private function for out-of-line support
->   *     @skb:   buffer
-> --
-> 2.36.1
->
+Sounds good. I will monitor the CI. :)
