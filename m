@@ -2,78 +2,105 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD68CC64990
-	for <bpf@archiver.kernel.org>; Thu, 25 Aug 2022 14:46:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11508C64991
+	for <bpf@archiver.kernel.org>; Thu, 25 Aug 2022 14:48:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232011AbiHYOqL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 25 Aug 2022 10:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55448 "EHLO
+        id S230523AbiHYOs0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 25 Aug 2022 10:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230523AbiHYOqJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 25 Aug 2022 10:46:09 -0400
-X-Greylist: delayed 242 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 25 Aug 2022 07:46:07 PDT
-Received: from esa3.mentor.iphmx.com (esa3.mentor.iphmx.com [68.232.137.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB0CB14FA
-        for <bpf@vger.kernel.org>; Thu, 25 Aug 2022 07:46:07 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.93,263,1654588800"; 
-   d="scan'208";a="81807983"
-Received: from orw-gwy-02-in.mentorg.com ([192.94.38.167])
-  by esa3.mentor.iphmx.com with ESMTP; 25 Aug 2022 06:38:49 -0800
-IronPort-SDR: x1Ixj9xEowfDaxB+rCmYv+GSCPnGqKWu+UVR1/d2bXu884TLkcyorKTAOJ3GIdG2sZcAKPnr8C
- HrDpsKuUuy/7A3YVdzDaX/MsrZX96NDhq5JOA2b7iEqcFgR8p++itQnfXWYEalx8sudUp7WR3Q
- um6mcl43b7D6ol4iQIF2NVNDO6kFKAVM4x0sDavVBXMjnIhpFoTzJo4nALK+MjLYUthu9lkmIN
- xkDupHA97VMp7y+qdLBmrdVJnKzGutKQCtTsZdyiix3T/aUpRWC6kZou1GuriOnoXxFN8q1rQH
- aYs=
-Date:   Thu, 25 Aug 2022 14:38:40 +0000
-From:   Joseph Myers <joseph@codesourcery.com>
-X-X-Sender: jsm28@digraph.polyomino.org.uk
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-CC:     Florian Weimer <fweimer@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alejandro Colomar <alx.manpages@gmail.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Alex Colomar <alx@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Zack Weinberg <zackw@panix.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        glibc <libc-alpha@sourceware.org>, GCC <gcc-patches@gcc.gnu.org>,
-        bpf <bpf@vger.kernel.org>, LTP List <ltp@lists.linux.it>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        David Laight <David.Laight@aculab.com>,
-        Cyril Hrubis <chrubis@suse.cz>,
-        David Howells <dhowells@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, Rich Felker <dalias@libc.org>,
-        Adhemerval Zanella <adhemerval.zanella@linaro.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>
-Subject: Re: [PATCH v3] Many pages: Document fixed-width types with ISO C
- naming
-In-Reply-To: <CAHk-=whsETo4kc2Ec1Nf4HQY5vKYmRi9et243kyqN4E-=PgKJw@mail.gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2208251435370.104368@digraph.polyomino.org.uk>
-References: <20210423230609.13519-1-alx.manpages@gmail.com> <20220824185505.56382-1-alx.manpages@gmail.com> <CAADnVQKiEVL9zRtN4WY2+cTD2b3b3buV8BQb83yQw13pWq4OGQ@mail.gmail.com> <c06008bc-0c13-12f1-df85-3814b74e47f9@gmail.com> <YwcPQ987poRYjfoL@kroah.com>
- <87ilmgddui.fsf@oldenburg.str.redhat.com> <CAHk-=whsETo4kc2Ec1Nf4HQY5vKYmRi9et243kyqN4E-=PgKJw@mail.gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        with ESMTP id S242101AbiHYOsZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 25 Aug 2022 10:48:25 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA5CB2860
+        for <bpf@vger.kernel.org>; Thu, 25 Aug 2022 07:48:23 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id u5so17127163wrt.11
+        for <bpf@vger.kernel.org>; Thu, 25 Aug 2022 07:48:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=U/GqjYthhXwTB8d2nbTjdjFeNP6i46d9zfH+EicQPvI=;
+        b=eF4/mm/uB3JTA2iq0IVbizRpuzK7DuzbrTrjAzs9IKBHwQymK0eHz/Is2D+RY6pjiB
+         z9rSwPibELLIQpmL6lE6bIFe1NXw0Eu0GXqJRwocCGAFz8qfPXFwQGlMjd9v9x0PGZZb
+         P5CN1ech5mMNBNgZvWiHG+wNzRMMWuidaa+oMIVCeZQypWR/chn14EJCcOHCbNEX7muG
+         WczEobh60Z12NepwCC5zizgN5hjOV/oROQ1J/mkXwXVu9UpxnJpGc1OHYf5LZdOy4PB3
+         6U0EEAtChQAStuR1/4642udiTV3tDGWYN8rTpb8kqPA2CNl/Zha4WJ6ZafRdetzJmS3X
+         PBcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=U/GqjYthhXwTB8d2nbTjdjFeNP6i46d9zfH+EicQPvI=;
+        b=e9qnyZfWNS1sQWoc4HYXYtJW3vqQ/DvdYdZhb3hO4MC/5n0Ni/SLbIwx2roNy6GY3f
+         ENLAI49Gvjb42SoBNKKvw0adM2WlT2xr1rW3ax+9NsCwPVXqzw9jbdzbzdFLzLPH7Jti
+         jCXOhCzBEYc4ItlJYnuB0XoP2zROwk5UNukUsluiYc7EYMPqP8ivLoBob9+M8DdNJ1ln
+         G1Hj1BgpTHQ2fEDy7+xLqfh1FFekHfjNXdYLToMEuKJ3w1fWCzABoIMLVqThWkBWiyM/
+         pcq2il/ll2xCPEQxTL6Y23wG91KAayjwpKKol890LmBuj4BbPQu+8i/myESYuvznyhre
+         1fdw==
+X-Gm-Message-State: ACgBeo2cg7dzyGNhutMLf1D7BL86ngWoBoD2MTGzs0iYGFZ70yW3wcJK
+        Izn4x6mY7AodSJ9QtDie9Jcz6A==
+X-Google-Smtp-Source: AA6agR5JOgx2M/L9Gb/I+71ARDJk53g6gF/fFXvk5I/ZVIq8KgWVHdZil7Ch17kYew7LJndc5fU/wA==
+X-Received: by 2002:a5d:6245:0:b0:225:3e24:e5b1 with SMTP id m5-20020a5d6245000000b002253e24e5b1mr2597594wrv.698.1661438901749;
+        Thu, 25 Aug 2022 07:48:21 -0700 (PDT)
+Received: from [192.168.178.32] ([51.155.200.13])
+        by smtp.gmail.com with ESMTPSA id p19-20020a05600c359300b003a6125562e1sm5723694wmq.46.2022.08.25.07.48.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Aug 2022 07:48:21 -0700 (PDT)
+Message-ID: <40a62a75-1548-88ff-e536-dcbf3350db01@isovalent.com>
+Date:   Thu, 25 Aug 2022 15:48:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-X-Originating-IP: [137.202.0.90]
-X-ClientProxiedBy: svr-ies-mbx-11.mgc.mentorg.com (139.181.222.11) To
- svr-ies-mbx-10.mgc.mentorg.com (139.181.222.10)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH bpf-next v2] bpf: Fix a few typos in BPF helpers
+ documentation
+Content-Language: en-GB
+To:     Jakub Wilk <jwilk@jwilk.net>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, Alejandro Colomar <alx.manpages@gmail.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        linux-man@vger.kernel.org
+References: <20220825110216.53698-1-quentin@isovalent.com>
+ <20220825142256.of3glbnwi77kgkzo@jwilk.net>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <20220825142256.of3glbnwi77kgkzo@jwilk.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 25 Aug 2022, Linus Torvalds wrote:
+On 25/08/2022 15:22, Jakub Wilk wrote:
+> * Quentin Monnet <quentin@isovalent.com>, 2022-08-25 12:02:
+>> --- a/tools/include/uapi/linux/bpf.h
+>> +++ b/tools/include/uapi/linux/bpf.h
+>> @@ -79,7 +79,7 @@ struct bpf_insn {
+>> /* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
+>> struct bpf_lpm_trie_key {
+>>     __u32    prefixlen;    /* up to 32 for AF_INET, 128 for AF_INET6 */
+>> -    __u8    data[0];    /* Arbitrary size */
+>> +    __u8    data[];    /* Arbitrary size */
+>> };
+> 
+> This hunk picks the change from 94dfc73e7cf4 ("treewide: uapi: Replace
+> zero-length arrays with flexible-array members").
+> 
+> A bit weird to see it in a spelling-fix patch though. Wouldn't it be
+> better to put it in a separate one?
+> 
 
-> That's a small detail that yes, we've tried to avoid the absolute
-> humongous mess that the C standard library has with their horrendous
-> 'PRId*' mess, but honestly, it's just a tiny detail.
+This has happened several times in the past, and the change is small
+enough I thought it wouldn't matter much. I can send another version if
+it's more convenient, though.
 
-I've not yet implemented it for glibc or for GCC format checking, but C23 
-adds 'wN' format length modifiers so you will be able to e.g. use "%w64d" 
-with printf to print an int64_t and won't need those PRI macros any more.
-
--- 
-Joseph S. Myers
-joseph@codesourcery.com
+Quentin
