@@ -2,213 +2,180 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA99FECAA24
-	for <bpf@archiver.kernel.org>; Thu, 25 Aug 2022 16:20:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B631ECAA25
+	for <bpf@archiver.kernel.org>; Thu, 25 Aug 2022 16:33:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242964AbiHYQUj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 25 Aug 2022 12:20:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
+        id S234792AbiHYQdp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 25 Aug 2022 12:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243044AbiHYQUa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 25 Aug 2022 12:20:30 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F74A0268;
-        Thu, 25 Aug 2022 09:20:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661444427; x=1692980427;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=dexjnAFY5uhDar1V0uA27KUIA1B5OYcNy4yxSywmqjs=;
-  b=SFJYUskLRA21SYfnuDUQvU10s/wlLNInvupaDs6v0hSwAnnNz6UDFtAC
-   M9BvN9VmYwkPT7sPvxKElAz093pNxhi9NJjP2JJiO8kg/JTNpJuOeL9TI
-   bNzZCuB21tWOxpjbLP5MmMvq/R4u0Z1Jjqpmy5cnArpWDtIdHd1Aa4KcA
-   PXQBxKrDvkr9MnnECoS867/jbsMRCdzh+8b9MnDyRLt7R7Fs5XKJ96G0w
-   /QmDNzmIGvZOlNbNZUrQmR08apLBMklsb8QdFcemmdnITqAnYCPlrptYO
-   n/yBUoY67pPscNN+6fmuxWGyyMbGevOgGXwCB8SMvj8tswUsT0yJ+4oJe
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="291862665"
-X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
-   d="scan'208";a="291862665"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 09:15:04 -0700
-X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
-   d="scan'208";a="671059006"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.52.129])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 09:14:52 -0700
-Message-ID: <c422c9b3-d6e2-e1d5-5273-6a720fdde6c4@intel.com>
-Date:   Thu, 25 Aug 2022 19:14:47 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v3 00/18] Mutex wrapper, locking and memory leak fixes
-Content-Language: en-US
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Weiguo Li <liwg06@foxmail.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Dario Petrillo <dario.pk1@gmail.com>,
-        Hewenliang <hewenliang4@huawei.com>,
-        yaowenbin <yaowenbin1@huawei.com>,
-        Wenyu Liu <liuwenyu7@huawei.com>,
-        Song Liu <songliubraving@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Pavithra Gurushankar <gpavithrasha@gmail.com>,
-        Alexandre Truong <alexandre.truong@arm.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        William Cohen <wcohen@redhat.com>,
-        Andres Freund <andres@anarazel.de>,
-        =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>,
-        Colin Ian King <colin.king@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Fangrui Song <maskray@google.com>,
-        Stephane Eranian <eranian@google.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Zechuan Chen <chenzechuan1@huawei.com>,
-        Jason Wang <wangborong@cdjrlc.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Remi Bernon <rbernon@codeweavers.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, llvm@lists.linux.dev
-References: <20220824153901.488576-1-irogers@google.com>
- <CA+JHD906M0truH7wPNZ=eJwdCA=qLhYDonUx_ZQBwJYpiX1hNg@mail.gmail.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <CA+JHD906M0truH7wPNZ=eJwdCA=qLhYDonUx_ZQBwJYpiX1hNg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S231437AbiHYQdo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 25 Aug 2022 12:33:44 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827F5B81F5
+        for <bpf@vger.kernel.org>; Thu, 25 Aug 2022 09:33:43 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id x15so19409177pfp.4
+        for <bpf@vger.kernel.org>; Thu, 25 Aug 2022 09:33:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc;
+        bh=KYx6gX9g7Fbj1Or+g/WAHahx+nCBrW5usgQlZDdwngs=;
+        b=bVobJguaLYbipHkHRXrUp1HQCkXRQl9+tqfsKo9o9MFOy+h3lmtX0mev9H5xgHmaR9
+         ulCZyzVnA9greH5F0Zo1/aOoS+wdnAGa9YtplwYQZdJR2Ky8vr0TouHeTE9d3AFfff3B
+         r6QmpGk+PzIBrryNX0ZGuEbXccXIwayM/ea3MoxuUAfIf32oez8p+ZUsbDfmDA1+nIEv
+         1H2CTiofs7qa9Qn2Or3lCV8Hgzii0EK2YqzPb73Mv+rkvu0VIyszrH2de02D6eC6LQAW
+         pvdDeaOe8XEF/poGoi3QMiHOYCXGbsY2qHmWmUfJhhJWbwOCvpbIyrY+OmaNefx5X947
+         ixrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc;
+        bh=KYx6gX9g7Fbj1Or+g/WAHahx+nCBrW5usgQlZDdwngs=;
+        b=Db75b6CLoBxLQlEy0d4xra/bKGhwqOmnaWOdCVAkFlF92Q/+pRt66uxOWrZxykZTxU
+         yJUvhZjkA6siJZXk1TKRI2iGYAvRlDbG/5B0CblJhgbac0+ls4//8wk2g7XGSb6qwp3p
+         fhiUEIZip5ov5m1bX5VJ14l0knpxbshFCqwOAyUkmZ5cWJLJkmuR/VTTRqGe2qwCt+mD
+         UL/0reO1+Ykzh3Wt6GroY3ob0ymtbsZDMbHcRAo7KEJhSrOHhrcaVS5OoJPsKt1j7jRn
+         xhzXk+gNTwSWiHK3WJ8mPHRLFPNr7tjj00ymnXKcG7zt2lEPA13ifNH/IWe0SfLj0pip
+         x0gw==
+X-Gm-Message-State: ACgBeo2juBzr262drXuzQ+vOCbhoopMw+SHUCvFJV6dGUixVzb6HVoBt
+        aH8ax5pnt0FJ136pVGCcNF3Lr5nilQ4=
+X-Google-Smtp-Source: AA6agR6LYA6TaCOvZfffrC8fb/IND8+RVBqaFW7tANKGtp3kYs2DejLtIgjgv6tVFAhNiZeZIt6qtA==
+X-Received: by 2002:a63:ef49:0:b0:42b:40b5:9bc4 with SMTP id c9-20020a63ef49000000b0042b40b59bc4mr3934125pgk.266.1661445222636;
+        Thu, 25 Aug 2022 09:33:42 -0700 (PDT)
+Received: from localhost ([98.97.36.33])
+        by smtp.gmail.com with ESMTPSA id w6-20020a170902e88600b0016bf803341asm11598523plg.146.2022.08.25.09.33.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 09:33:41 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 09:33:39 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Shmulik Ladkani <shmulik@metanetworks.com>, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Joanne Koong <joannelkoong@gmail.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Paul Chaignon <paul@isovalent.com>,
+        Shmulik Ladkani <shmulik.ladkani@gmail.com>
+Message-ID: <6307a4631c9a5_12460b20842@john.notmuch>
+In-Reply-To: <20220824044117.137658-5-shmulik.ladkani@gmail.com>
+References: <20220824044117.137658-1-shmulik.ladkani@gmail.com>
+ <20220824044117.137658-5-shmulik.ladkani@gmail.com>
+Subject: RE: [PATCH v5 bpf-next 4/4] selftests/bpf: Add geneve with
+ bpf_skb_set_tunnel_opt_dynptr test-case to test_progs
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 25/08/22 15:30, Arnaldo Carvalho de Melo wrote:
-> On Wed, Aug 24, 2022, 12:39 PM Ian Rogers <irogers@google.com <mailto:irogers@google.com>> wrote:
+Shmulik Ladkani wrote:
+> Add geneve test to test_tunnel. The test setup and scheme resembles the
+> existing vxlan test.
 > 
->     When fixing a locking race and memory leak in:
->     https://lore.kernel.org/linux-perf-users/20211118193714.2293728-1-irogers@google.com/ <https://lore.kernel.org/linux-perf-users/20211118193714.2293728-1-irogers@google.com/>
+> The test also checks variable length tunnel option assignment using
+> bpf_skb_set_tunnel_opt_dynptr.
 > 
->     It was requested that debug mutex code be separated out into its own
->     files. This was, in part, done by Pavithra Gurushankar in:
->     https://lore.kernel.org/lkml/20220727111954.105118-1-gpavithrasha@gmail.com/ <https://lore.kernel.org/lkml/20220727111954.105118-1-gpavithrasha@gmail.com/>
-> 
->     These patches fix issues with the previous patches, add in the
->     original dso->nsinfo fix and then build on our mutex wrapper with
->     clang's -Wthread-safety analysis. The analysis found missing unlocks
->     in builtin-sched.c which are fixed and -Wthread-safety is enabled by
->     default when building with clang.
-> 
->     v3. Adds a missing new line to the error messages and removes the
->         pshared argument to mutex_init by having two functions, mutex_init
->         and mutex_init_pshared. These changes were suggested by Adrian Hunter.
-> 
-> 
-> Adrian, can I have your Acked-by or, better, Reviewed-by?
+> Signed-off-by: Shmulik Ladkani <shmulik.ladkani@gmail.com>
+> ---
+>  .../selftests/bpf/prog_tests/test_tunnel.c    | 108 ++++++++++++++
+>  .../selftests/bpf/progs/test_tunnel_kern.c    | 136 ++++++++++++++++++
+>  2 files changed, 244 insertions(+)
 
-Sure, just let me have another look.  Should get to it
-tomorrow.
+Overall lgtm couple missing ret codes.
 
+[...]
+
+> +
+> +SEC("tc")
+> +int geneve_set_tunnel_src(struct __sk_buff *skb)
+> +{
+> +	int ret;
+> +	struct bpf_tunnel_key key;
+> +	__u32 index = 0;
+> +	__u32 *local_ip = NULL;
+> +
+> +	local_ip = bpf_map_lookup_elem(&local_ip_map, &index);
+> +	if (!local_ip) {
+> +		log_err(ret);
+
+log_err(-1)?
+
+> +		return TC_ACT_SHOT;
+> +	}
+> +
+> +	__builtin_memset(&key, 0x0, sizeof(key));
+> +	key.local_ipv4 = *local_ip;
+> +	key.remote_ipv4 = 0xac100164; /* 172.16.1.100 */
+> +	key.tunnel_id = 2;
+> +	key.tunnel_tos = 0;
+> +	key.tunnel_ttl = 64;
+> +
+> +	ret = bpf_skb_set_tunnel_key(skb, &key, sizeof(key),
+> +				     BPF_F_ZERO_CSUM_TX);
+> +	if (ret < 0) {
+> +		log_err(ret);
+> +		return TC_ACT_SHOT;
+> +	}
+> +
+> +	return TC_ACT_OK;
+> +}
+> +
+> +SEC("tc")
+> +int geneve_get_tunnel_src(struct __sk_buff *skb)
+> +{
+> +	int ret;
+> +	struct bpf_tunnel_key key;
+> +	struct tun_opts_raw opts;
+> +	int expected_opts_len;
+> +	__u32 index = 0;
+> +	__u32 *local_ip = NULL;
+> +
+> +	local_ip = bpf_map_lookup_elem(&local_ip_map, &index);
+> +	if (!local_ip) {
+> +		log_err(ret);
+
+log_err(-1)
+
+> +		return TC_ACT_SHOT;
+> +	}
+> +
+> +	ret = bpf_skb_get_tunnel_key(skb, &key, sizeof(key), 0);
+> +	if (ret < 0) {
+> +		log_err(ret);
+> +		return TC_ACT_SHOT;
+> +	}
+> +
+> +	ret = bpf_skb_get_tunnel_opt(skb, &opts, sizeof(opts));
+> +	if (ret < 0) {
+> +		log_err(ret);
+> +		return TC_ACT_SHOT;
+> +	}
+> +
+> +	expected_opts_len = (skb->len % sizeof(opts)) & ~(sizeof(__u32) - 1);
+> +	if (key.local_ipv4 != *local_ip || ret != expected_opts_len) {
+> +		bpf_printk("geneve key %d local ip 0x%x remote ip 0x%x opts_len %d\n",
+> +			   key.tunnel_id, key.local_ipv4,
+> +			   key.remote_ipv4, ret);
+
+In general I don't really like the printks. But ok.
+
+> +		bpf_printk("local_ip 0x%x\n", *local_ip);
+> +		log_err(ret);
+> +		return TC_ACT_SHOT;
+> +	}
+> +
+> +	return TC_ACT_OK;
+> +}
+> +
+>  SEC("tc")
+>  int vxlan_set_tunnel_dst(struct __sk_buff *skb)
+>  {
+> -- 
+> 2.37.2
 > 
-> Thanks, 
-> 
-> -  Arnaldo 
-> 
->     v2. Breaks apart changes that s/pthread_mutex/mutex/g and the lock
->         annotations as requested by Arnaldo and Namhyung. A boolean is
->         added to builtin-sched.c to terminate thread funcs rather than
->         leaving them blocked on delted mutexes.
-> 
->     Ian Rogers (17):
->       perf bench: Update use of pthread mutex/cond
->       perf tests: Avoid pthread.h inclusion
->       perf hist: Update use of pthread mutex
->       perf bpf: Remove unused pthread.h include
->       perf lock: Remove unused pthread.h include
->       perf record: Update use of pthread mutex
->       perf sched: Update use of pthread mutex
->       perf ui: Update use of pthread mutex
->       perf mmap: Remove unnecessary pthread.h include
->       perf dso: Update use of pthread mutex
->       perf annotate: Update use of pthread mutex
->       perf top: Update use of pthread mutex
->       perf dso: Hold lock when accessing nsinfo
->       perf mutex: Add thread safety annotations
->       perf sched: Fixes for thread safety analysis
->       perf top: Fixes for thread safety analysis
->       perf build: Enable -Wthread-safety with clang
-> 
->     Pavithra Gurushankar (1):
->       perf mutex: Wrapped usage of mutex and cond
-> 
->      tools/perf/Makefile.config                 |   5 +
->      tools/perf/bench/epoll-ctl.c               |  33 +++---
->      tools/perf/bench/epoll-wait.c              |  33 +++---
->      tools/perf/bench/futex-hash.c              |  33 +++---
->      tools/perf/bench/futex-lock-pi.c           |  33 +++---
->      tools/perf/bench/futex-requeue.c           |  33 +++---
->      tools/perf/bench/futex-wake-parallel.c     |  33 +++---
->      tools/perf/bench/futex-wake.c              |  33 +++---
->      tools/perf/bench/numa.c                    |  93 ++++++----------
->      tools/perf/builtin-inject.c                |   4 +
->      tools/perf/builtin-lock.c                  |   1 -
->      tools/perf/builtin-record.c                |  13 ++-
->      tools/perf/builtin-sched.c                 | 105 +++++++++---------
->      tools/perf/builtin-top.c                   |  45 ++++----
->      tools/perf/tests/mmap-basic.c              |   2 -
->      tools/perf/tests/openat-syscall-all-cpus.c |   2 +-
->      tools/perf/tests/perf-record.c             |   2 -
->      tools/perf/ui/browser.c                    |  20 ++--
->      tools/perf/ui/browsers/annotate.c          |  12 +--
->      tools/perf/ui/setup.c                      |   5 +-
->      tools/perf/ui/tui/helpline.c               |   5 +-
->      tools/perf/ui/tui/progress.c               |   8 +-
->      tools/perf/ui/tui/setup.c                  |   8 +-
->      tools/perf/ui/tui/util.c                   |  18 ++--
->      tools/perf/ui/ui.h                         |   4 +-
->      tools/perf/util/Build                      |   1 +
->      tools/perf/util/annotate.c                 |  15 +--
->      tools/perf/util/annotate.h                 |   4 +-
->      tools/perf/util/bpf-event.h                |   1 -
->      tools/perf/util/build-id.c                 |  12 ++-
->      tools/perf/util/dso.c                      |  19 ++--
->      tools/perf/util/dso.h                      |   4 +-
->      tools/perf/util/hist.c                     |   6 +-
->      tools/perf/util/hist.h                     |   4 +-
->      tools/perf/util/map.c                      |   3 +
->      tools/perf/util/mmap.h                     |   1 -
->      tools/perf/util/mutex.c                    | 119 +++++++++++++++++++++
->      tools/perf/util/mutex.h                    | 109 +++++++++++++++++++
->      tools/perf/util/probe-event.c              |   3 +
->      tools/perf/util/symbol.c                   |   4 +-
->      tools/perf/util/top.h                      |   5 +-
->      41 files changed, 570 insertions(+), 323 deletions(-)
->      create mode 100644 tools/perf/util/mutex.c
->      create mode 100644 tools/perf/util/mutex.h
-> 
->     -- 
->     2.37.2.609.g9ff673ca1a-goog
-> 
+
 
