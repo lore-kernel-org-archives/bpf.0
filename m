@@ -2,277 +2,157 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E367ECAA24
-	for <bpf@archiver.kernel.org>; Thu, 25 Aug 2022 16:12:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 737F4ECAA24
+	for <bpf@archiver.kernel.org>; Thu, 25 Aug 2022 16:14:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239716AbiHYQMd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 25 Aug 2022 12:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57846 "EHLO
+        id S230173AbiHYQOz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 25 Aug 2022 12:14:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238936AbiHYQMc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 25 Aug 2022 12:12:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602D19E69A;
-        Thu, 25 Aug 2022 09:12:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2AEB61B79;
-        Thu, 25 Aug 2022 16:12:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B57C2C433D6;
-        Thu, 25 Aug 2022 16:12:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661443950;
-        bh=X9Ac/hi185MXI9atczg2YUw4hk1KYe6CKc1/03EaKm8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F9FsD/fYIRRUyBuMDinB1j1GaxweIpWzuMAWQAkUN8PZNNkVt8MivHj5oELzjicQP
-         WE33klN8gPpuaEGjwSB4yHKeHsLuEudhxjeXEpG6xvFne6VDsZJDC3UikebsOINpP7
-         bndLRBki0Bk78D0ORQrg9dBbaQtmoVREux2d83hLV10e2H3UChniPsSTvcRPZXBgLO
-         bvNfGjTmf4UrsbxQg7TY4fcxHLcPKz904EIWLcPSRfuQHG4DsZG5YYUnmNJDlYptNx
-         Pmj9itD9SIOAW6S7C+2uRuUzlljYwF4PTf3ojlAH0J/x+QRGTmXRonn6DPU4YNliLm
-         5jiFJQ8Pr5QtQ==
-Date:   Thu, 25 Aug 2022 09:12:28 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     dwarves@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alibek Omarov <a1ba.omarov@gmail.com>,
-        Kornilios Kourtis <kornilios@isovalent.com>,
-        Kui-Feng Lee <kuifeng@fb.com>, Yonghong Song <yhs@fb.com>,
-        Luna Jernberg <droidbittin@gmail.com>, bpf@vger.kernel.org,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH] core: Conditionally define language encodings entries)
-Message-ID: <YwefbJSpXBhCH8Tn@dev-arch.thelio-3990X>
-References: <YwQRKkmWqsf/Du6A@kernel.org>
- <YwZQ0UkLsoa+6VyY@dev-arch.thelio-3990X>
- <YwZcuCj49wMkr18W@kernel.org>
- <YwZl9xaRplsFkWXb@kernel.org>
- <Ywd2zJA63QCkd3RL@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ywd2zJA63QCkd3RL@kernel.org>
+        with ESMTP id S233475AbiHYQOy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 25 Aug 2022 12:14:54 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D1441CFE3
+        for <bpf@vger.kernel.org>; Thu, 25 Aug 2022 09:14:53 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id x14-20020a17090a8a8e00b001fb61a71d99so5450552pjn.2
+        for <bpf@vger.kernel.org>; Thu, 25 Aug 2022 09:14:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc;
+        bh=mw212yvPRnXeLb2w2KnA5nqe8QeHOTqKwCroqPRjVJ0=;
+        b=icwnomgIUZ3BnbCIM8D0YZIJ14e5Bh9n+0UMQqlG1ZZwBYKFkK6ztD9EY5ESKV9SYq
+         2vQdVPk95lvgoHcx48gyB0P4duwa7KkueX74MLGbeBM0V6W0BAn6otfYbQXCPWgxIlsK
+         19RrgJ+jBGuGLeldLJ7IbjthtArPT93OP31IC+z5pHfXVQk1cIwbj59tqDn5lxHTwiw6
+         t8vJPnHitkAxEV+oPlwv/ZFB1ijCEusMxOTfsRBAQWtYHy/+oCWX2l3mvipJUok+IciE
+         co5Cl53A0Mc5s5PNTgqyfWikMPdoK3eKQVfu6gJnultsqztl4PUm/Ertgua+TmIKAoJ+
+         6X3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc;
+        bh=mw212yvPRnXeLb2w2KnA5nqe8QeHOTqKwCroqPRjVJ0=;
+        b=iVqwl3L5DzoykCvYtL9gdxDZxpdEBw8YmNL1FN07iVvtuS9wLr14Ctwdj7yz7rllWm
+         3XaAOcvMmW2ELAIRMr9Zjx8cxmvwJ5DLiOJl9HeVMddoSMq6PWSyU6rDD87i8WvZJN31
+         lFZLTjxlaqaVtL1ok5cyuF7O+/4T48lASUByTGEMuJ663NZThdf9XAVFycBl+XNwnVvV
+         lzOoKjOzJa4pfFY0yqvP3vjn0/yp4A0sabYi8s/wgq/4SzZfTCCvlvNB0oaHYLqXTVuL
+         ojxyyLBUq1Bbl+WENLWgPAUdWQUGmDoIcrzmV3jU/GiA16jUiorOqSe98U/zeW2m8Jec
+         RRfw==
+X-Gm-Message-State: ACgBeo0F74MI8ldGzjzGpfr7BC+VjLBNtNOEukkQjnZHiYVAdpcEbmVn
+        BsIzZh9suPY/nFdWLxlPxME=
+X-Google-Smtp-Source: AA6agR71lRl7luNOaSnSCUdGqxJol9/+5R+DKr3JQcQuMQ7HhJn8WEaEuMiRb/rCDdgRW64BW142PQ==
+X-Received: by 2002:a17:90a:3c89:b0:1fa:acc2:bafe with SMTP id g9-20020a17090a3c8900b001faacc2bafemr14738777pjc.84.1661444092781;
+        Thu, 25 Aug 2022 09:14:52 -0700 (PDT)
+Received: from localhost ([98.97.36.33])
+        by smtp.gmail.com with ESMTPSA id b6-20020a17090a6e0600b001f1f5e812e9sm3846671pjk.20.2022.08.25.09.14.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 09:14:52 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 09:14:50 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Shmulik Ladkani <shmulik@metanetworks.com>, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Joanne Koong <joannelkoong@gmail.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Paul Chaignon <paul@isovalent.com>,
+        Shmulik Ladkani <shmulik.ladkani@gmail.com>
+Message-ID: <63079ffa3f2d_12460b208d0@john.notmuch>
+In-Reply-To: <20220824044117.137658-2-shmulik.ladkani@gmail.com>
+References: <20220824044117.137658-1-shmulik.ladkani@gmail.com>
+ <20220824044117.137658-2-shmulik.ladkani@gmail.com>
+Subject: RE: [PATCH v5 bpf-next 1/4] bpf: Add 'bpf_dynptr_get_data' helper
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 10:19:08AM -0300, Arnaldo Carvalho de Melo wrote:
-> Em Wed, Aug 24, 2022 at 02:55:03PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > Yeah, recent enough distros are all building ok, I'll try and add some
-> > fallback for old distros.
-> > 
+Shmulik Ladkani wrote:
+> The task of calculating bpf_dynptr_kern's available size, and the
+> current (offset) data pointer is common for BPF functions working with
+> ARG_PTR_TO_DYNPTR parameters.
 > 
-> Ok, now it builds everywhere:
+> Introduce 'bpf_dynptr_get_data' which returns the current data
+> (with properer offset), and the number of usable bytes it has.
 > 
-> [perfbuilder@five ~]$ export BUILD_TARBALL=http://192.168.86.14/pahole/dwarves-1.25.tar.xz
-> [perfbuilder@five ~]$ export BUILD_CMD=buildcmd.sh
-> [perfbuilder@five ~]$ dm -X
->      1	     4.07 almalinux:8                   : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4) , clang version 12.0.1 (Red Hat 12.0.1-4.module_el8.5.0+1025+93159d6c)
->      2	     4.07 almalinux:9                   : Ok   gcc (GCC) 11.2.1 20220127 (Red Hat 11.2.1-9) , clang version 13.0.1 (Red Hat 13.0.1-1.el9)
->      3	     4.87 alpine:3.12                   : Ok   gcc (Alpine 9.3.0) 9.3.0 , Alpine clang version 10.0.0 (https://gitlab.alpinelinux.org/alpine/aports.git 7445adce501f8473efdb93b17b5eaf2f1445ed4c)
->      4	     5.47 alpine:3.13                   : Ok   gcc (Alpine 10.2.1_pre1) 10.2.1 20201203 , Alpine clang version 10.0.1 
->      5	     5.47 alpine:3.14                   : Ok   gcc (Alpine 10.3.1_git20210424) 10.3.1 20210424 , Alpine clang version 11.1.0
->      6	     5.27 alpine:3.15                   : Ok   gcc (Alpine 10.3.1_git20211027) 10.3.1 20211027 , Alpine clang version 12.0.1
->      7	     5.87 alpine:3.16                   : Ok   gcc (Alpine 11.2.1_git20220219) 11.2.1 20220219 , Alpine clang version 13.0.1
->      8	     5.68 alpine:edge                   : Ok   gcc (Alpine 11.2.1_git20220219) 11.2.1 20220219 , Alpine clang version 14.0.6
->      9	     3.27 alt:p8                        : Ok   x86_64-alt-linux-gcc (GCC) 5.3.1 20151207 (ALT p8 5.3.1-alt3.M80P.1) 
->     10	     3.77 alt:p9                        : Ok   x86_64-alt-linux-gcc (GCC) 8.4.1 20200305 (ALT p9 8.4.1-alt0.p9.1) , clang version 10.0.0 
->     11	     4.17 alt:p10                       : Ok   x86_64-alt-linux-gcc (GCC) 10.3.1 20210703 (ALT Sisyphus 10.3.1-alt2) , clang version 11.0.1
->     12	     4.48 alt:sisyphus                  : Ok   x86_64-alt-linux-gcc (GCC) 12.1.1 20220518 (ALT Sisyphus 12.1.1-alt1) , ALT Linux Team clang version 13.0.1
->     13	     3.77 amazonlinux:2                 : Ok   gcc (GCC) 7.3.1 20180712 (Red Hat 7.3.1-15) , clang version 11.1.0 (Amazon Linux 2 11.1.0-1.amzn2.0.2)
->     14	     4.07 amazonlinux:devel             : Ok   gcc (GCC) 11.3.1 20220421 (Red Hat 11.3.1-2) , clang version 12.0.1 (Fedora 12.0.1-1.amzn2022)
->     15	     5.38 archlinux:base                : Ok   gcc (GCC) 12.1.1 20220730 , clang version 14.0.6
->     16	     3.97 centos:8                      : Ok   gcc (GCC) 8.4.1 20200928 (Red Hat 8.4.1-1) , clang version 11.0.1 (Red Hat 11.0.1-1.module_el8.4.0+966+2995ef20)
->     17	     4.17 centos:stream                 : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-15) , clang version 14.0.0 (Red Hat 14.0.0-1.module_el8.7.0+1142+5343df54)
->     18	     4.67 clearlinux:latest             : Ok   gcc (Clear Linux OS for Intel Architecture) 12.1.1 20220811 releases/gcc-12.1.0-341-g28a7b5df3b 
->     19	     4.07 debian:9                      : Ok   gcc (Debian 6.3.0-18+deb9u1) 6.3.0 20170516 
->     20	     4.27 debian:10                     : Ok   gcc (Debian 8.3.0-6) 8.3.0 , Debian clang version 11.0.1-2~deb10u1
->     21	     4.07 debian:11                     : Ok   gcc (Debian 10.2.1-6) 10.2.1 20210110 , Debian clang version 11.0.1-2
->     22	     4.57 debian:experimental           : Ok   gcc (Debian 12.1.0-7) 12.1.0 , Debian clang version 14.0.6-2
->     23	     3.57 fedora:22                     : Ok   gcc (GCC) 5.3.1 20160406 (Red Hat 5.3.1-6) 
->     24	     4.07 fedora:24                     : Ok   gcc (GCC) 6.3.1 20161221 (Red Hat 6.3.1-1) 
->     25	     3.87 fedora:25                     : Ok   gcc (GCC) 6.4.1 20170727 (Red Hat 6.4.1-1) 
->     26	     4.07 fedora:26                     : Ok   gcc (GCC) 7.3.1 20180130 (Red Hat 7.3.1-2) 
->     27	     3.67 fedora:27                     : Ok   gcc (GCC) 7.3.1 20180712 (Red Hat 7.3.1-6) 
->     28	     3.98 fedora:28                     : Ok   gcc (GCC) 8.3.1 20190223 (Red Hat 8.3.1-2) 
->     29	     3.87 fedora:29                     : Ok   gcc (GCC) 8.3.1 20190223 (Red Hat 8.3.1-2) 
->     30	     4.77 fedora:30                     : Ok   gcc (GCC) 9.3.1 20200408 (Red Hat 9.3.1-2) 
->     31	     4.07 fedora:31                     : Ok   gcc (GCC) 9.3.1 20200408 (Red Hat 9.3.1-2) , clang version 9.0.1 (Fedora 9.0.1-4.fc31)
->     32	     4.07 fedora:32                     : Ok   gcc (GCC) 10.3.1 20210422 (Red Hat 10.3.1-1) , clang version 10.0.1 (Fedora 10.0.1-3.fc32)
->     33	     3.97 fedora:33                     : Ok   gcc (GCC) 10.3.1 20210422 (Red Hat 10.3.1-1) , clang version 11.0.0 (Fedora 11.0.0-3.fc33)
->     34	     4.37 fedora:34                     : Ok   gcc (GCC) 11.3.1 20220421 (Red Hat 11.3.1-2) , clang version 12.0.1 (Fedora 12.0.1-1.fc34)
->     35	     4.07 fedora:35                     : Ok   gcc (GCC) 11.3.1 20220421 (Red Hat 11.3.1-2) , clang version 13.0.0 (Fedora 13.0.0-3.fc35)
->     36	     4.37 fedora:36                     : Ok   gcc (GCC) 12.1.1 20220507 (Red Hat 12.1.1-1) , clang version 14.0.0 (Fedora 14.0.0-1.fc36)
->     37	     4.77 fedora:37                     : Ok   gcc (GCC) 12.1.1 20220628 (Red Hat 12.1.1-3) , clang version 14.0.5 (Fedora 14.0.5-6.fc37)
->     38	     7.77 fedora:38                     : Ok   gcc (GCC) 12.1.1 20220810 (Red Hat 12.1.1-4) , clang version 14.0.5 (Fedora 14.0.5-6.fc38)
->     39	     4.97 fedora:rawhide                : Ok   gcc (GCC) 12.1.1 20220810 (Red Hat 12.1.1-4) , clang version 14.0.5 (Fedora 14.0.5-6.fc38)
->     40	     4.37 gentoo-stage3:latest          : Ok   gcc (Gentoo 11.2.0 p1) 11.2.0 , clang version 13.0.0
->     41	     4.77 manjaro:base                  : Ok   gcc (GCC) 11.1.0 , clang version 13.0.0
->     42	     3.87 opensuse:15.0                 : Ok   gcc (SUSE Linux) 7.4.1 20190905 [gcc-7-branch revision 275407] 
->     43	     3.57 opensuse:15.1                 : Ok   gcc (SUSE Linux) 7.5.0 
->     44	     3.87 opensuse:15.2                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 9.0.1 
->     45	     5.31 opensuse:15.3                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 11.0.1
->     46	     3.77 opensuse:15.4                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 13.0.1
->     47	     4.68 opensuse:tumbleweed           : Ok   gcc (SUSE Linux) 12.1.1 20220629 [revision 7811663964aa7e31c3939b859bbfa2e16919639f] , clang version 14.0.6
->     48	     4.27 oraclelinux:8                 : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4.0.1) , clang version 12.0.1 (Red Hat 12.0.1-4.0.1.module+el8.5.0+20428+2b4ecd47)
->     49	     3.96 oraclelinux:9                 : Ok   gcc (GCC) 11.2.1 20220127 (Red Hat 11.2.1-9.4.0.2) , clang version 13.0.1 (Red Hat 13.0.1-1.0.1.el9)
->     50	     3.87 rockylinux:8                  : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-10) , clang version 13.0.1 (Red Hat 13.0.1-2.module+el8.6.0+987+d36ea6a1)
->     51	     4.07 rockylinux:9                  : Ok   gcc (GCC) 11.2.1 20220127 (Red Hat 11.2.1-9) , clang version 13.0.1 (Red Hat 13.0.1-1.el9)
->     52	     3.47 ubuntu:16.04                  : Ok   gcc (Ubuntu 5.4.0-6ubuntu1~16.04.12) 5.4.0 20160609 
->     53	     3.57 ubuntu:18.04                  : Ok   gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0 
->     54	     4.28 ubuntu:20.04                  : Ok   gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0 
->     55	     4.17 ubuntu:21.04                  : Ok   gcc (Ubuntu 10.3.0-1ubuntu1) 10.3.0 , Ubuntu clang version 12.0.0-3ubuntu1~21.04.2
->     56	     3.97 ubuntu:21.10                  : Ok   gcc (Ubuntu 11.2.0-7ubuntu2) 11.2.0 , Ubuntu clang version 13.0.0-2
->     57	     4.27 ubuntu:22.04                  : Ok   gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0 , Ubuntu clang version 14.0.0-1ubuntu1
->     58	     4.37 ubuntu:22.10                  : Ok   gcc (Ubuntu 11.3.0-5ubuntu1) 11.3.0 , Ubuntu clang version 14.0.6-2
-> [perfbuilder@five ~]$
+> This will void callers from directly calculating bpf_dynptr_kern's
+> data, offset and size.
 > 
-> With this patch:
-> 
-> From c3eac0a3591a36f6590691a21434241d67a3fa89 Mon Sep 17 00:00:00 2001
-> From: Arnaldo Carvalho de Melo <acme@redhat.com>
-> Date: Thu, 25 Aug 2022 10:01:49 -0300
-> Subject: [PATCH 1/1] core: Conditionally define language encodings
-> 
-> It it defined in an enumeration on dwarf.h, so doing it here as defines
-> doesn't clash with it and makes this file to build with older distros.
-> 
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-
-Thank you for the quick fix, it passed all of my build tests as well:
-
-https://github.com/nathanchance/env/actions/runs/2927921590
-
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-
+> Signed-off-by: Shmulik Ladkani <shmulik.ladkani@gmail.com>
 > ---
->  dwarves.c | 112 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 112 insertions(+)
+> v5:
+> - fix bpf_dynptr_get_data's incorrect usage of bpf_dynptr_kern's size
+>   spotted by Joanne Koong <joannelkoong@gmail.com>
+> ---
+>  include/linux/bpf.h  | 1 +
+>  kernel/bpf/helpers.c | 8 ++++++++
+>  2 files changed, 9 insertions(+)
 > 
-> diff --git a/dwarves.c b/dwarves.c
-> index db1dcf5904bc98fe..394a8155325484fc 100644
-> --- a/dwarves.c
-> +++ b/dwarves.c
-> @@ -2085,6 +2085,118 @@ int cus__load_file(struct cus *cus, struct conf_load *conf,
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 99fc7a64564f..d84d37bda87f 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -2577,6 +2577,7 @@ void bpf_dynptr_init(struct bpf_dynptr_kern *ptr, void *data,
+>  		     enum bpf_dynptr_type type, u32 offset, u32 size);
+>  void bpf_dynptr_set_null(struct bpf_dynptr_kern *ptr);
+>  int bpf_dynptr_check_size(u32 size);
+> +void *bpf_dynptr_get_data(struct bpf_dynptr_kern *ptr, u32 *avail_bytes);
 >  
->  #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+>  #ifdef CONFIG_BPF_LSM
+>  void bpf_cgroup_atype_get(u32 attach_btf_id, int cgroup_atype);
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index fc08035f14ed..96ff93941cae 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -1427,6 +1427,14 @@ void bpf_dynptr_init(struct bpf_dynptr_kern *ptr, void *data,
+>  	bpf_dynptr_set_type(ptr, type);
+>  }
 >  
-> +#ifndef DW_LANG_C89
-> +#define DW_LANG_C89		0x0001
-> +#endif
-> +#ifndef DW_LANG_C
-> +#define DW_LANG_C		0x0002
-> +#endif
-> +#ifndef DW_LANG_Ada83
-> +#define DW_LANG_Ada83		0x0003
-> +#endif
-> +#ifndef DW_LANG_C_plus_plus
-> +#define DW_LANG_C_plus_plus	0x0004
-> +#endif
-> +#ifndef DW_LANG_Cobol74
-> +#define DW_LANG_Cobol74		0x0005
-> +#endif
-> +#ifndef DW_LANG_Cobol85
-> +#define DW_LANG_Cobol85		0x0006
-> +#endif
-> +#ifndef DW_LANG_Fortran77
-> +#define DW_LANG_Fortran77	0x0007
-> +#endif
-> +#ifndef DW_LANG_Fortran90
-> +#define DW_LANG_Fortran90	0x0008
-> +#endif
-> +#ifndef DW_LANG_Pascal83
-> +#define DW_LANG_Pascal83	0x0009
-> +#endif
-> +#ifndef DW_LANG_Modula2
-> +#define DW_LANG_Modula2		0x000a
-> +#endif
-> +#ifndef DW_LANG_Java
-> +#define DW_LANG_Java		0x000b
-> +#endif
-> +#ifndef DW_LANG_C99
-> +#define DW_LANG_C99		0x000c
-> +#endif
-> +#ifndef DW_LANG_Ada95
-> +#define DW_LANG_Ada95		0x000d
-> +#endif
-> +#ifndef DW_LANG_Fortran95
-> +#define DW_LANG_Fortran95	0x000e
-> +#endif
-> +#ifndef DW_LANG_PLI
-> +#define DW_LANG_PLI		0x000f
-> +#endif
-> +#ifndef DW_LANG_ObjC
-> +#define DW_LANG_ObjC		0x0010
-> +#endif
-> +#ifndef DW_LANG_ObjC_plus_plus
-> +#define DW_LANG_ObjC_plus_plus	0x0011
-> +#endif
-> +#ifndef DW_LANG_UPC
-> +#define DW_LANG_UPC		0x0012
-> +#endif
-> +#ifndef DW_LANG_D
-> +#define DW_LANG_D		0x0013
-> +#endif
-> +#ifndef DW_LANG_Python
-> +#define DW_LANG_Python		0x0014
-> +#endif
-> +#ifndef DW_LANG_OpenCL
-> +#define DW_LANG_OpenCL		0x0015
-> +#endif
-> +#ifndef DW_LANG_Go
-> +#define DW_LANG_Go		0x0016
-> +#endif
-> +#ifndef DW_LANG_Modula3
-> +#define DW_LANG_Modula3		0x0017
-> +#endif
-> +#ifndef DW_LANG_Haskell
-> +#define DW_LANG_Haskell		0x0018
-> +#endif
-> +#ifndef DW_LANG_C_plus_plus_03
-> +#define DW_LANG_C_plus_plus_03	0x0019
-> +#endif
-> +#ifndef DW_LANG_C_plus_plus_11
-> +#define DW_LANG_C_plus_plus_11	0x001a
-> +#endif
-> +#ifndef DW_LANG_OCaml
-> +#define DW_LANG_OCaml		0x001b
-> +#endif
-> +#ifndef DW_LANG_Rust
-> +#define DW_LANG_Rust		0x001c
-> +#endif
-> +#ifndef DW_LANG_C11
-> +#define DW_LANG_C11		0x001d
-> +#endif
-> +#ifndef DW_LANG_Swift
-> +#define DW_LANG_Swift		0x001e
-> +#endif
-> +#ifndef DW_LANG_Julia
-> +#define DW_LANG_Julia		0x001f
-> +#endif
-> +#ifndef DW_LANG_Dylan
-> +#define DW_LANG_Dylan		0x0020
-> +#endif
-> +#ifndef DW_LANG_C_plus_plus_14
-> +#define DW_LANG_C_plus_plus_14	0x0021
-> +#endif
-> +#ifndef DW_LANG_Fortran03
-> +#define DW_LANG_Fortran03	0x0022
-> +#endif
-> +#ifndef DW_LANG_Fortran08
-> +#define DW_LANG_Fortran08	0x0023
-> +#endif
-> +#ifndef DW_LANG_RenderScript
-> +#define DW_LANG_RenderScript	0x0024
-> +#endif
-> +#ifndef DW_LANG_BLISS
-> +#define DW_LANG_BLISS		0x0025
-> +#endif
+> +void *bpf_dynptr_get_data(struct bpf_dynptr_kern *ptr, u32 *avail_bytes)
+> +{
+> +	if (!ptr->data)
+> +		return NULL;
+> +	*avail_bytes = bpf_dynptr_get_size(ptr);
+> +	return ptr->data + ptr->offset;
+> +}
 > +
->  int lang__str2int(const char *lang)
+>  void bpf_dynptr_set_null(struct bpf_dynptr_kern *ptr)
 >  {
->  	static const char *languages[] = {
+>  	memset(ptr, 0, sizeof(*ptr));
 > -- 
 > 2.37.2
 > 
+
+As a bit of an addmitedly nitpick I just wonder if having the avail_bytes
+passed through like this is much use anymore? For example,
+
++BPF_CALL_3(bpf_skb_set_tunnel_opt_dynptr, struct sk_buff *, skb,
++	   struct bpf_dynptr_kern *, ptr, u32, len)
++{
++	const u8 *from;
++	u32 avail;
++
+-       if (!ptr->data)
+-		return -EFAULT;
+-       avail = bpf_dynptr_get_size(ptr)
++	from = bpf_dynptr_get_data(ptr, &avail);
++	if (unlikely(len > avail))
++		return -EINVAL;
++	return __bpf_skb_set_tunopt(skb, from, len);
++}
++
+
+seems just about as compact to me and then drop the null check from the
+helper so we have a bpf_dynptr_get_data(*ptr) that just does the
+data+offset arithmatic. Then it could also be used in a few other
+spots where that calculation seems common.
+
+I find it easier to read at least and think the helper would get
+more use, also land it in one of the .h files. And avoids bouncing
+avail around.
+
+Bit of a gripe but what do you think?
