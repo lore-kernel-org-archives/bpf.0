@@ -2,295 +2,192 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA953ECAAD6
-	for <bpf@archiver.kernel.org>; Fri, 26 Aug 2022 17:15:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67011ECAAD7
+	for <bpf@archiver.kernel.org>; Fri, 26 Aug 2022 17:18:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344906AbiHZRPq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Aug 2022 13:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37704 "EHLO
+        id S244516AbiHZRSA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Aug 2022 13:18:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344858AbiHZRPm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 26 Aug 2022 13:15:42 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D49E6A496;
-        Fri, 26 Aug 2022 10:15:41 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id r15-20020a17090a1bcf00b001fabf42a11cso2412925pjr.3;
-        Fri, 26 Aug 2022 10:15:41 -0700 (PDT)
+        with ESMTP id S229845AbiHZRR6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 26 Aug 2022 13:17:58 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C70EDFB7F;
+        Fri, 26 Aug 2022 10:17:54 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id u5so2526510wrt.11;
+        Fri, 26 Aug 2022 10:17:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Tu7jZIwBy6/TS9+OySwXlSz0DQjny7bOfymyrHR7AeA=;
-        b=K1ywY816vNzOH+FurpUkO1yIy9EQewMiISFKqCKsUaxaE0Kt571wzuyKwEowB2S3l0
-         ilLiFXIPQ3UT3Ji4zwRxiq8FFSx4Wb/DfmuQqgZdegeYbgfNtks1w5q2bv1zCpDsZ1he
-         CSI+dyf6Vd737/GR0pKlyxajy32IYiOAm+nCprTtXiMGNAEMjjieR5azvlpv5NNBAc7z
-         tWwSel7dSyf0NJVbVHuc0MPI0VMyUM9uOhDTi97yupW7uBVxA7+nEhuaVyxyb+UlyVMg
-         dcNe3WbtnJyuVWu3T96ZmI6TEtMl119ukss1P7NgofqpoSGSZAk+Ch3wQKKKqdsVyvgq
-         K5Uw==
+        h=in-reply-to:from:content-language:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc;
+        bh=Ka9MFQxCPa3boCvexoTm1hMno6nNE4dkf87Rf/h60HU=;
+        b=XvRHMimkxLs4l2e7h72+dJUfYu6kNtimgMceLfKIPm7T6bKuNMarYSN3MWz7ZyUCck
+         oY/sD8yOQXt145+QqdSDtlfxOp5DosnVyoGWGMvW+ASB8ZHzjQwuH2sWG2zxtk4fbG3O
+         SPGu2y08jo9AuselxIC15UpN1Q2nPf0KP1THTD7RnaDNn33B8AYrVywu1KL7V9xCEo/2
+         yCjBjQbxKwDwvUM9M+5XGf02Tn9cFRwntOitXwmvxbOr13IHr5IW8AAiB5XZDWlbO7Cy
+         4An4d791DuQOr5eoiagTrBoo6SrmP5WjUWMaPQkwG5jma2bP1+6w+KP8MrhZ88pi4Op0
+         R7gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Tu7jZIwBy6/TS9+OySwXlSz0DQjny7bOfymyrHR7AeA=;
-        b=i4ym7goh2d0OOPheapPQTYM5qXyDgUpKlMMrpj6HL4l0PxwIG2D6N8UluEPgcs9wpJ
-         pV6Js8n9QX2J0LGJMiqSUEolqMZGCEWoqXpzKWKp8zV6hCXTwzEFelnRqxl9NsfO/7K0
-         6aabG3RSNsLVqtnbMKVxz3c0LG8d/wLtRqiHMMBEujaSJjg8aAR/Y/AVqQc+9nIIH6Ci
-         omHAjSioc2PwyBUef3ThwPo8Tm8SLHuGKDICElbjdzk7g4hC4clBF+p1vA67+WPe4uhP
-         zfPgfulGMZSxhJphz4BNtsmCpXOib0FKnA+gxde7iHinnulpHtxX349pqxm4V8kA3AS6
-         7jUA==
-X-Gm-Message-State: ACgBeo0L82pOZdMPbUd5Yozsge7ngwj6gz3XhygIfJwCp0xGye3OFSPP
-        hzvF0VV3DS5l1eVtuQ53t1ULZrvBY/kHMeCTwV8=
-X-Google-Smtp-Source: AA6agR5IkkCY9xhQdSMz9NzCNcAayQ+g0Ik/Vceq7ZYqgL9iiUzRaxGcmtELFqloO++Zxi/GuJBPD4nwO5VdqDJRxsg=
-X-Received: by 2002:a17:902:6b82:b0:16d:d268:3842 with SMTP id
- p2-20020a1709026b8200b0016dd2683842mr4573674plk.16.1661534140902; Fri, 26 Aug
- 2022 10:15:40 -0700 (PDT)
+        h=in-reply-to:from:content-language:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc;
+        bh=Ka9MFQxCPa3boCvexoTm1hMno6nNE4dkf87Rf/h60HU=;
+        b=wozQLNEDXZD1SRrDmHfLsdJqK09NfCyo0POsClQZEXssZuKP7Z6ilgH9UVwli9XNiH
+         oav1LUiGaT6o6FmkBCX4KFw3rDJmEpA86cT4gVcJohVSrB3VFJ4z+Ln36JAAkgvHt6ZL
+         wmF+AB+EVVox2YeEPbW31bmO083MTuhnOAvfU0Cg3BbtboXrLPuLeSB5DzKEOraRvISq
+         zjCOyfAv4azYmOgPL5YYznDLO4iaimvMuDeFGC99/8XMdYn/bTLjvitMDGsqQVfczH2g
+         VwruZFciXjq6+qq3nzBKLyPHwzWIb4UQtMfmVthKYS9o3GLiudVi4zpNM1FPThqpL1uM
+         QcVA==
+X-Gm-Message-State: ACgBeo3zxJR2jTjtS1G3PwUHJjFaS7xYAFeYpr1+C4Pq7+visDL7EVwi
+        AO4fUAE1BHyrfY1vW9bgHaA=
+X-Google-Smtp-Source: AA6agR4ijIQeZNxPRBLulms8XntO5lTf9WdjS7PGHtnPolPLLEQmQn43MWYAWTTRN8V7PHsyz7e2Jw==
+X-Received: by 2002:adf:d1e4:0:b0:221:6c37:277e with SMTP id g4-20020adfd1e4000000b002216c37277emr380673wrd.498.1661534273185;
+        Fri, 26 Aug 2022 10:17:53 -0700 (PDT)
+Received: from [192.168.0.160] ([170.253.36.171])
+        by smtp.gmail.com with ESMTPSA id i12-20020a1c540c000000b003a2f2bb72d5sm186388wmb.45.2022.08.26.10.17.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Aug 2022 10:17:52 -0700 (PDT)
+Message-ID: <67989b1b-712a-6110-b0a4-7d855179e17c@gmail.com>
+Date:   Fri, 26 Aug 2022 19:17:40 +0200
 MIME-Version: 1.0
-References: <20220825221751.258958-1-james.hilliard1@gmail.com>
- <20220826051630.glhrbdhiybtqwc4p@kafai-mbp.dhcp.thefacebook.com>
- <CADvTj4rQdnd=V0tENFGCTtpTESwSCcwK+h3i9nZ75M+TywNWzA@mail.gmail.com>
- <20220826054944.5bcx7unsyx4ts6ok@kafai-mbp.dhcp.thefacebook.com>
- <CADvTj4qNR+m2fQMMf9+=hMruhon8G_7yFC2_43-qhZ9X7ZW=8A@mail.gmail.com>
- <87k06vdtwu.fsf@oracle.com> <CADvTj4pjOu8zupK=-Vmr9Y4B3ojjBshUC6PN+_9AJQh_YXngww@mail.gmail.com>
- <87czcndkxq.fsf@oracle.com>
-In-Reply-To: <87czcndkxq.fsf@oracle.com>
-From:   James Hilliard <james.hilliard1@gmail.com>
-Date:   Fri, 26 Aug 2022 11:15:28 -0600
-Message-ID: <CADvTj4oxd2hB6JH3qYNvCvU0c2Sq5M2UfD=zNPnYsEQT56nYuw@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: Fix bind{4,6} tcp/socket header type conflict
-To:     "Jose E. Marchesi" <jose.marchesi@oracle.com>
-Cc:     Martin KaFai Lau <kafai@fb.com>, bpf@vger.kernel.org,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH bpf-next v3] bpf: Fix a few typos in BPF helpers
+ documentation
+To:     Quentin Monnet <quentin@isovalent.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, david.faust@oracle.com
-Content-Type: text/plain; charset="UTF-8"
+        bpf@vger.kernel.org, Jakub Wilk <jwilk@jwilk.net>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        linux-man@vger.kernel.org
+References: <20220825220806.107143-1-quentin@isovalent.com>
+ <ebbae976-b452-c359-fd67-5b0511c3ef10@gmail.com>
+ <c94959da-67f6-da66-1d46-ae9dfdc0e674@isovalent.com>
+Content-Language: en-US
+From:   Alejandro Colomar <alx.manpages@gmail.com>
+In-Reply-To: <c94959da-67f6-da66-1d46-ae9dfdc0e674@isovalent.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------mZNAThT0tH0c4ZVKlFpEt0u2"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 10:33 AM Jose E. Marchesi
-<jose.marchesi@oracle.com> wrote:
->
->
-> > On Fri, Aug 26, 2022 at 7:19 AM Jose E. Marchesi
-> > <jose.marchesi@oracle.com> wrote:
-> >>
-> >>
-> >> > On Thu, Aug 25, 2022 at 11:49 PM Martin KaFai Lau <kafai@fb.com> wrote:
-> >> >>
-> >> >> On Thu, Aug 25, 2022 at 11:31:15PM -0600, James Hilliard wrote:
-> >> >> > On Thu, Aug 25, 2022 at 11:16 PM Martin KaFai Lau <kafai@fb.com> wrote:
-> >> >> > >
-> >> >> > > On Thu, Aug 25, 2022 at 04:17:49PM -0600, James Hilliard wrote:
-> >> >> > > > There is a potential for us to hit a type conflict when including
-> >> >> > > > netinet/tcp.h with sys/socket.h, we can replace both of these includes
-> >> >> > > > with linux/tcp.h to avoid this conflict.
-> >> >> > > >
-> >> >> > > > Fixes errors like:
-> >> >> > > > In file included from /usr/include/netinet/tcp.h:91,
-> >> >> > > >                  from progs/bind4_prog.c:10:
-> >> >> > > > /home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:34:23: error: conflicting types for 'int8_t'; have 'char'
-> >> >> > > >    34 | typedef __INT8_TYPE__ int8_t;
-> >> >> > > >       |                       ^~~~~~
-> >> >> > > > In file included from /usr/include/x86_64-linux-gnu/sys/types.h:155,
-> >> >> > > >                  from /usr/include/x86_64-linux-gnu/bits/socket.h:29,
-> >> >> > > >                  from /usr/include/x86_64-linux-gnu/sys/socket.h:33,
-> >> >> > > >                  from progs/bind4_prog.c:9:
-> >> >> > > > /usr/include/x86_64-linux-gnu/bits/stdint-intn.h:24:18: note: previous declaration of 'int8_t' with type 'int8_t' {aka 'signed char'}
-> >> >> > > >    24 | typedef __int8_t int8_t;
-> >> >> > > >       |                  ^~~~~~
-> >> >> > > > /home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:43:24:
-> >> >> > > > error: conflicting types for 'int64_t'; have 'long int'
-> >> >> > > >    43 | typedef __INT64_TYPE__ int64_t;
-> >> >> > > >       |                        ^~~~~~~
-> >> >> > > > /usr/include/x86_64-linux-gnu/bits/stdint-intn.h:27:19: note:
-> >> >> > > > previous declaration of 'int64_t' with type 'int64_t' {aka
-> >> >> > > > 'long long int'}
-> >> >> > > >    27 | typedef __int64_t int64_t;
-> >> >> > > >       |                   ^~~~~~~
-> >> >> > > > make: *** [Makefile:537:
-> >> >> > > > /home/buildroot/bpf-next/tools/testing/selftests/bpf/bpf_gcc/bind4_prog.o]
-> >> >> > > > Error 1
-> >> >> > > >
-> >> >> > > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> >> >> > > > ---
-> >> >> > > >  tools/testing/selftests/bpf/progs/bind4_prog.c | 3 +--
-> >> >> > > >  tools/testing/selftests/bpf/progs/bind6_prog.c | 3 +--
-> >> >> > > >  2 files changed, 2 insertions(+), 4 deletions(-)
-> >> >> > > >
-> >> >> > > > diff --git a/tools/testing/selftests/bpf/progs/bind4_prog.c
-> >> >> > > > b/tools/testing/selftests/bpf/progs/bind4_prog.c
-> >> >> > > > index 474c6a62078a..6bd20042fd53 100644
-> >> >> > > > --- a/tools/testing/selftests/bpf/progs/bind4_prog.c
-> >> >> > > > +++ b/tools/testing/selftests/bpf/progs/bind4_prog.c
-> >> >> > > > @@ -6,8 +6,7 @@
-> >> >> > > >  #include <linux/bpf.h>
-> >> >> > > >  #include <linux/in.h>
-> >> >> > > >  #include <linux/in6.h>
-> >> >> > > > -#include <sys/socket.h>
-> >> >> > > > -#include <netinet/tcp.h>
-> >> >> > > These includes look normal to me.  What environment is hitting this.
-> >> >> >
-> >> >> > I was hitting this error with GCC 13(GCC master branch).
-> >> >> These two includes (<sys/socket.h> and <netinet/tcp.h>) are normal,
-> >> >> so does it mean all existing programs need to change to use gcc 13 ?
-> >> >
-> >> > Well I think it's mostly just an issue getting hit with GCC-BPF as it
-> >> > looks to me like a cross compilation host/target header conflict.
-> >>
-> >> This is an interesting issue.
-> >>
-> >> Right now the BPF GCC target is a sort of a bare-metal target.  As such,
-> >> it provides a set of header files that implement ISO C types and other
-> >> machinery (i.e. it doesn't rely on a C library to provide them):
-> >>
-> >>   iso646.h
-> >>   stdalign.h
-> >>   stdarg.h
-> >>   stdatomic.h
-> >>   stdbool.h
-> >>   stddef.h
-> >>   stdfix.h
-> >>   stdint.h
-> >>   stdnoreturn.h
-> >>   tgmath.h
-> >>   unwind.h
-> >>   varargs.h
-> >>
-> >> This is because we were expecting this to be used like:
-> >>
-> >>        <compiler-provided std C headers>
-> >>                   |        |
-> >>                   v        |
-> >>         <kernel headers>   |
-> >>                   |        |
-> >>                   v        v
-> >>                <BPF C program>
-> >>
-> >> However, if it is expected/intended for C BPF programs to include libc
-> >> headers, such as sys/socket.h, this can quickly go sour as you have
-> >> found with that conflict.
-> >>
-> >> So this leads to the question: should we turn the BPF target into a
-> >> target that assumes a libc?  This basically means we will be assuming
-> >> BPF programs are always compiled in an environment that provides a
-> >> standard stdint.h, stdbool.h and friends.
-> >
-> > Well for a normal GCC BPF setup we're basically cross compiling for the
-> > BPF bare metal target while sharing headers with the build host(for libbpf
-> > and any other libc headers that get included).
-> >
-> > On the other hand when using GCC BPF as part of a full cross toolchain
-> > we actually end up sharing headers with our real cross target architecture
-> > sysroot(which would provide a libc), essentially in that case BPF is a bare
-> > metal cross target which shares headers with the real cross target(which
-> > is not a bare metal target). For this libbpf is installed to the real
-> > cross target
-> > sysroot which is used by both GCC BPF(for bpf progs) and the real cross
-> > target GCC compiler(for userspace side). From my understanding with this
-> > setup GCC BPF will pick up the real cross target libc headers as a fallback
-> > which may sometimes have conflict/compatibility issues with the kernel
-> > headers.
-> >
-> > I think it's probably best to avoid depending on libc headers as things may
-> > otherwise get even more complex. You would essentially have 2 libc's
-> > in a normal GCC BPF setup and 3 libc's in a full cross toolchain setup(you'd
-> > have one for the build host, one for the real cross target arch and one for
-> > the BPF target arch).
-> >
-> > Cross build systems will typically allow a libc choice as
-> > well(glibc/musl/uclibc)
-> > and we don't really want the bpf programs to have to care about the specific
-> > libc being used as they are bare metal programs which shouldn't depend on
-> > a libc.
-> >
->
-> I don't understand what do you mean with "real cross target".
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------mZNAThT0tH0c4ZVKlFpEt0u2
+Content-Type: multipart/mixed; boundary="------------Td10TF0aG2n0O4U37KtzdKkQ";
+ protected-headers="v1"
+From: Alejandro Colomar <alx.manpages@gmail.com>
+To: Quentin Monnet <quentin@isovalent.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+ Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ bpf@vger.kernel.org, Jakub Wilk <jwilk@jwilk.net>,
+ Jesper Dangaard Brouer <brouer@redhat.com>, linux-man@vger.kernel.org
+Message-ID: <67989b1b-712a-6110-b0a4-7d855179e17c@gmail.com>
+Subject: Re: [PATCH bpf-next v3] bpf: Fix a few typos in BPF helpers
+ documentation
+References: <20220825220806.107143-1-quentin@isovalent.com>
+ <ebbae976-b452-c359-fd67-5b0511c3ef10@gmail.com>
+ <c94959da-67f6-da66-1d46-ae9dfdc0e674@isovalent.com>
+In-Reply-To: <c94959da-67f6-da66-1d46-ae9dfdc0e674@isovalent.com>
 
-I mean the real cross target architecture as in the real hardware target
-architecture, for example aarch64 when cross compiling from a x86_64
-build host.
+--------------Td10TF0aG2n0O4U37KtzdKkQ
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
->
-> From the toolchain perspective, the compiler is targetted to just one
-> platform: bpf-unknown-none.  As is usual for bare-metal targets, the
-> compiler provides headers to implement the C standard with things like
-> floating-point types and standard integer types, `bool', etc.
+SGkgUXVlbnRpbiwNCg0KT24gOC8yNi8yMiAxMTo0NCwgUXVlbnRpbiBNb25uZXQgd3JvdGU6
+DQo+IE9uIDI1LzA4LzIwMjIgMjM6MTIsIEFsZWphbmRybyBDb2xvbWFyIHdyb3RlOg0KPj4g
+SGkgUXVlbnRpbiwNCj4+DQo+IA0KPj4+IC0gKsKgwqDCoMKgwqDCoMKgIGN0eC4gUHJvdmlk
+aW5nIGFuICpsZW5fZGlmZiogYWRqdXN0bWVudCB0aGF0IGlzIGxhcmdlciB0aGFuDQo+Pj4g
+dGhlDQo+Pg0KPj4gSSBqdXN0IG5vdGljZWQ6wqAgZ3JvZmYoMSkgdXNlcyBkb3VibGUgc3Bh
+Y2VzIGFmdGVyIGFuIGVuZC1vZi1zZW50ZW5jZQ0KPj4gcGVyaW9kLsKgIE90aGVyd2lzZSwg
+aXQgaXMgdW5kZXJzdG9vZCBhcyBzb21ldGhpbmcgbGlrZSBpbml0aWFscywgb3IgYW4NCj4+
+IGFiYnJldmlhdHVyZSwgYW5kIGl0IGNhdXNlcyBzb21lIGlzc3Vlcy7CoCBQbGVhc2UgY2hl
+Y2sgdGhlIHdob2xlDQo+PiBkb2N1bWVudCwgYXMgSSd2ZSBzZWVuIGEgbWl4IG9mIHN0eWxl
+cy4NCj4+DQo+PiBTZWFyY2ggZm9yIHNvbWV0aGluZyBsaWtlICcuXC4gW14gXScNCj4gDQo+
+IFRoaXMgaXMgYSBzdHJhbmdlIHJlc3RyaWN0aW9uIGluIG15IG9waW5pb24sIGJ1dCBJIGNh
+biBsb29rIGludG8gdGhpcyBhcw0KPiBhIGZvbGxvdy11cC4gSSd2ZSBub3Qgbm90aWNlZCBp
+c3N1ZXMgd2l0aCB0aGUgcmVuZGVyZWQgcGFnZSBzbyBmYXIsIG91dA0KPiBvZiBjdXJpb3Np
+dHkgd2hhdCBpc3N1ZXMgYXJlIHdlIHRhbGtpbmcgYWJvdXQ/DQoNCkl0J3Mgbm90IHNvIHZp
+c2libGUsIGFuZCBJJ20gbm90IGEgZ3JvZmYoMSkgZXhwZXJ0LCBzbyBtYXliZSB0aGVyZSBh
+cmUgDQptb3JlIGlzc3VlcyB0aGFuIHRoZSBvbmVzIEkga25vdywgYnV0IEknbGwgZXhwbGFp
+biBpdCBhcyBJIHVuZGVyc3RhbmQgaXQ6DQoNCkZvciBncm9mZidzIG91dHB1dCwgdGhlcmUg
+YXJlIHR3byBraW5kcyBvZiBzcGFjZXM6IGludGVyd29yZCBhbmQgDQppbnRlcnNlbnRlbmNl
+IHNwYWNlcy4gIEludGVyd29yZCBzcGFjZSBpcyBub3JtYWxseSBhIHNpbmdsZSBjaGFyYWN0
+ZXIgaW4gDQptb25vc3BhY2VkIGZvbnRzLiAgSW50ZXJzZW50ZW5jZSBpcyBhbHNvIGEgc2lu
+Z2xlIHNwYWNlIGJ5IGRlZmF1bHQgaW4gDQptb25vc3BhY2UgZm9udHMsIGJ1dCBpdCBpcyBu
+b3Qgc3Vic3RpdHV0aW5nIGludGVyd29yZCBzcGFjZSwgYnV0IHJhdGhlciANCmFkZGluZyB0
+byBpdCwgc28gZWZmZWN0aXZlbHkgdGhlIGludGVyc2VudGVuY2Ugc2VwYXJhdGlvbiBpcyB0
+d28gc3BhY2VzIA0KaW4gYSBtb25vc3BhY2VkIGZvbnQuICBUaGF0IGNhbiBiZSBjb25maWd1
+cmVkLCBhbmQgb25lIGNhbiBmb3IgZXhhbXBsZSANCmFzayB0aGVpciBpbnRlcnNlbnRlbmNl
+IHNwYWNlIHRvIGJlIDIgY2hhcnMsIGFuZCB0aGVyZWZvcmUgaGF2ZSBhbiANCmludGVyc2Vu
+dGVuY2UgZWZmZWN0aXZlIHNlcHBhcmF0aW9uIG9mIDMgY2hhcnMuDQoNCkluIFBERiBvdXRw
+dXQsIHRoZSBkaWZmZXJlbmNlIG1heSBiZSBhbHNvIG5vdGljZWFibGUgc2xpZ2h0bHkgZGlm
+ZmVyZW50bHkuDQoNCkkgcHJlcGFyZWQgYSBzaW1wbGUgZmlsZSB0aGF0IHdpbGwgc2hvdyB5
+b3UgaG93IGl0IGNhbiBtYWtlIHNlbnRlbmNlcyANCm11Y2ggbW9yZSByZWFkYWJsZSwgZXZl
+biBpZiB0aGUgdGhlb3JldGljYWwgZGlmZmVyZW5jZSBtaWdodCBub3QgYmUgDQpub3RpY2Vh
+YmxlIGF0IGZpcnN0IGdsYW5jZSB0byB0aGUgdW50cmFpbmVkIGV5ZToNCg0KJCBjYXQgc3Au
+bWFuDQouVEggc3BhY2VzIDcgdG9kYXkgZXhwZXJpbWVudHMNCi5TSCBjb3JyZWN0IHNwYWNp
+bmcNCkhlbGxvIHdvcmxkISAgVG9kYXkgaXMgRnJpZGF5LiAgVGhpcyBhcmUgZXh0cmEgd29y
+ZHMgdG8gZmlsbC4NCkFuZCBldmVuIG1vcmUgd29yZHMuDQouU0ggaW5jb3JyZWN0IHNwYWNp
+bmcNCkhlbGxvIHdvcmxkISBUb2RheSBpcyBNb25kYXkuIFRoaXMgYXJlIGV4dHJhIHdvcmRz
+IHRvIGZpbGwuIEFuZCBldmVuIA0KbW9yZSB3b3Jkcy4NCiQgbWFuIC1QIGNhdCAuL3NwLm1h
+bg0Kc3BhY2VzKDcpICAgICAgICAgIE1pc2NlbGxhbmVvdXMgSW5mb3JtYXRpb24gTWFudWFs
+ICAgICAgICAgIHNwYWNlcyg3KQ0KDQpjb3JyZWN0IHNwYWNpbmcNCiAgICAgICAgSGVsbG8g
+IHdvcmxkISAgIFRvZGF5IGlzIEZyaWRheS4gIFRoaXMgYXJlIGV4dHJhIHdvcmRzIHRvIGZp
+bGwuDQogICAgICAgIEFuZCBldmVuIG1vcmUgd29yZHMuDQoNCmluY29ycmVjdCBzcGFjaW5n
+DQogICAgICAgIEhlbGxvIHdvcmxkISBUb2RheSBpcyBNb25kYXkuIFRoaXMgYXJlIGV4dHJh
+IHdvcmRzIHRvIGZpbGwuIEFuZA0KICAgICAgICBldmVuIG1vcmUgd29yZHMuDQoNCmV4cGVy
+aW1lbnRzICAgICAgICAgICAgICAgICAgICAgIHRvZGF5ICAgICAgICAgICAgICAgICAgICAg
+ICBzcGFjZXMoNykNCg0KDQoNCk5vdGljZSBob3cgdGhlIGZpcnN0IG9uZSBpcyBtdWNoIG1v
+cmUgbmljZWx5IHJlbmRlcmVkLiAgSSByZW5kZXJlZCBpdCBpbiANCmEgNzItY29sIHRlcm1p
+bmFsIGJlY2F1c2UgbXkgbWFpbGVyIHdvdWxkIHdyYXAgYXQgdGhhdCBib3VuZGFyeSBhbnl3
+YXkuIA0KWW91IGNhbiByZW5kZXIgdGhlIGZpbGUgYXQgODAgY29sdW1ucyBhbmQgc2VlIGEg
+ZGlmZmVyZW50IHJlbmRlcmluZywgDQp3aGVyZSBpdCBpcyBldmVuIGJpZ2dlciB0aGUgZGlm
+ZmVyZW5jZSBpbiBmYXZvciBvZiB0aGUgY29ycmVjdGx5IHdyaXR0ZW4gDQpvbmUuDQoNCg0K
+PiANCj4gQWxzbyBiZWZvcmUgdGhhdCwgaXQgd291bGQgYmUgZ29vZCB0byBzeW5jIGFuZCBz
+ZWUgd2hhdCBvdGhlciBmb3JtYXR0aW5nDQo+IGVsZW1lbnRzIG5lZWQgYmUgYWRkcmVzc2Vk
+IG9uIHRoZSBwYWdlLCBzbyB3ZSBjYW4gZml4IHRoZW0gaW4gYSBiYXRjaA0KPiByYXRoZXIg
+dGhhbiBzdWJtaXR0aW5nIHRoZW0gb25lIGFmdGVyIHRoZSBvdGhlciBsaWtlIHdlJ3JlIGRv
+aW5nLg0KDQpTdXJlISAgSXQnbGwgdGFrZSBzb21lIHRpbWUgZnJvbSBteSBzaWRlLCBidXQg
+SSdsbCB0cnkgdG8gY29tZSB1cCB3aXRoIGEgDQpsaXN0IG9mIGlzc3VlcyBpbiB0aGF0IHBh
+Z2UuDQoNCj4gDQo+IFF1ZW50aW4NCg0KDQpDaGVlcnMsDQoNCkFsZXgNCg0KLS0gDQpBbGVq
+YW5kcm8gQ29sb21hcg0KPGh0dHA6Ly93d3cuYWxlamFuZHJvLWNvbG9tYXIuZXMvPg0K
 
-Yeah, I mean gcc doesn't have proper multi-arch support like llvm does
-so a complete gcc cross toolchain(one which is sufficient to build
-kernel/userspace needed for say an aarch64 cross target along with bpf
-programs) is effectively two gcc toolchains bundled together. In some ways
-it gets used more like a separate language than a separate target.
+--------------Td10TF0aG2n0O4U37KtzdKkQ--
 
-I have a pending series for buildroot adding gcc-bpf support if you're
-curious what this currently looks like:
-https://lore.kernel.org/buildroot/20220809094109.2279598-1-james.hilliard1@gmail.com/
+--------------mZNAThT0tH0c4ZVKlFpEt0u2
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
->
-> If you then -I directories in order to "share headers with the build
-> host" or with that "real cross target", or to use any other header that
-> may implement the same types (typically a libc) then well, thats when
-> the problem arises.
+-----BEGIN PGP SIGNATURE-----
 
-Well I'm using -idirafter for including those build host/real cross target
-header directories with lowest priority, since those directories have least
-priority the conflicts would otherwise be missing header errors AFAIU if
-I didn't include them.
+iQIzBAEBCgAdFiEE6jqH8KTroDDkXfJAnowa+77/2zIFAmMJADQACgkQnowa+77/
+2zKSiw//aY8Msc7kKVb/vJsBUiTXtrJUGwWgGdD/YZFjiHimdpL412R7teJrR5ba
+1fqpAGIGzUNDxwjqBTDXdLLJ+4P2/WmtVSbyv3un0EhiQ89URoahngV6X89qALP6
+m16ebWfxDVJtmUJjQlUmEGf8k1b8AZaTv2qHzw1m5w1XkdxsFCC7UyG5vUQ9M6Qq
+sSfSUSF7a8XpLHbFF1n2n83/4zl3QBYRUpugQpM56mpBLTD7vmqKK/aDPdMweTiL
+otAbwTvLLBf1SSBSP3p/8v9jkzDVXX8pll2lU4vgqGHEeLMsGf77qbcC8hYIeUvj
+u9FBK4iGbULYSr+MQscbTYr3cScZAfmLkXFLkZkgTsjH/pm4oZ1jONzZ6EGdqwJl
+Tfb9Rtkv8BODBSHgs4jN/JRhTD5psxIae1hZHTaZvNFjnPibDl5XzXRTX3IZ//t8
+Wa1qeWbEy+IjR5grj/DsBiBPZDjWRX0z79ZebbhknXsIJ/wfAyHPUPQSvqcvg1sA
+yixZdsr9SqV7CmNy83JD1DbbtZFvz6oh/TbJtiIbdAyZT31wtT6qSrN4aeFdLA+e
+kEbgAcD964G86MS5gznFUhDV0f0Ry8Dg/a7yuJB00UnbfrTpu+zAKM8v3GGQZTLh
+89J4ZhW/aTOjs6Up8cohslkERd0/nVJRa9fPiHM3ECQiaUrOi20=
+=qQQu
+-----END PGP SIGNATURE-----
 
-From my understanding we need to include these directories as they
-provide the kernel headers required by many bpf programs.
-
->
-> I don't know how much sense does it makes to include glibc headers like
-> sys/socket.h in BPF C programs: I'm no BPF programmer.  But if it is
-> something to be supported, we will have to change the compiler to not
-> provide the standard headers.
-
-I think it's best to just avoid libc headers in BPF programs.
-
->
-> >> Thoughts?
-> >>
-> >> >> > > I don't prefer the selftest writers need to remember this rule.
-> >> >> > >
-> >> >> > > Beside, afaict, tcp.h should be removed because
-> >> >> > > I don't see this test needs it.  I tried removing it
-> >> >> > > and it works fine.  It should be removed instead of replacing it
-> >> >> > > with another unnecessary tcp.h.
-> >> >> >
-> >> >> > Oh, that does also appear to work, thought I had tried that already but I guess
-> >> >> > I hadn't, sent a v2 with them removed:
-> >> >> > https://lore.kernel.org/bpf/20220826052925.980431-1-james.hilliard1@gmail.com/T/#u
-> >> >> >
-> >> >> > >
-> >> >> > > > +#include <linux/tcp.h>
-> >> >> > > >  #include <linux/if.h>
-> >> >> > > >  #include <errno.h>
-> >> >> > > >
-> >> >> > > > diff --git a/tools/testing/selftests/bpf/progs/bind6_prog.c
-> >> >> > > > b/tools/testing/selftests/bpf/progs/bind6_prog.c
-> >> >> > > > index c19cfa869f30..f37617b35a55 100644
-> >> >> > > > --- a/tools/testing/selftests/bpf/progs/bind6_prog.c
-> >> >> > > > +++ b/tools/testing/selftests/bpf/progs/bind6_prog.c
-> >> >> > > > @@ -6,8 +6,7 @@
-> >> >> > > >  #include <linux/bpf.h>
-> >> >> > > >  #include <linux/in.h>
-> >> >> > > >  #include <linux/in6.h>
-> >> >> > > > -#include <sys/socket.h>
-> >> >> > > > -#include <netinet/tcp.h>
-> >> >> > > > +#include <linux/tcp.h>
-> >> >> > > >  #include <linux/if.h>
-> >> >> > > >  #include <errno.h>
-> >> >> > > >
-> >> >> > > > --
-> >> >> > > > 2.34.1
-> >> >> > > >
+--------------mZNAThT0tH0c4ZVKlFpEt0u2--
