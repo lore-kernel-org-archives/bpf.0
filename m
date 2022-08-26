@@ -2,150 +2,99 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D2C3ECAAD6
-	for <bpf@archiver.kernel.org>; Fri, 26 Aug 2022 16:33:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8386ECAAA3
+	for <bpf@archiver.kernel.org>; Fri, 26 Aug 2022 16:33:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbiHZQdH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Aug 2022 12:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
+        id S229447AbiHZQdk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Aug 2022 12:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiHZQdG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 26 Aug 2022 12:33:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B84D759A;
-        Fri, 26 Aug 2022 09:33:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E236B8319C;
-        Fri, 26 Aug 2022 16:33:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2A48C433C1;
-        Fri, 26 Aug 2022 16:32:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661531579;
-        bh=dddAmdfWjVtoO1zNo5UFNAU20s8CfLCokEstVAbikEI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uc453d6xrPO4sqirlR3Ea7botJQ14akx7wxI4nPJML+FKVFzSjHGdYhlpQMvjli+k
-         mvdUbRjN/hizqNn+U0Ry37bYsjrOHblkP4YlVzZSffOt1Cw/KDqbh0Kk1yq0rgmsWm
-         X5SedSOZTeS6ZL4nQf2M9BvLjwM2Se0R2gtBy3yxcVwiGVqsjpYkWrQH1treGXtfpv
-         IgSOqICc92TmABZ0wDZnsFzBtU0Snly/E8a0nVgrdPc9Uo7UAvXcEfPqFVS3HxnNtu
-         K9KU4kff5B9qMWIfir2e1QxPNKPNiTln0xnK5ciQuVad8bJ9E3urGaYhEWMQWQ904u
-         3Janfpy2A5DvQ==
-Date:   Fri, 26 Aug 2022 19:32:51 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        with ESMTP id S231868AbiHZQdi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 26 Aug 2022 12:33:38 -0400
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08875DD4CA;
+        Fri, 26 Aug 2022 09:33:38 -0700 (PDT)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-11c4d7d4683so2690565fac.8;
+        Fri, 26 Aug 2022 09:33:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=0Z6D6Sxti99F+xj/7ip2qq8AUtDFfJQ2ASh7JTCA1fk=;
+        b=0FcXjLK8i88mcU8YSLU1TRPk3bTiIVSTyWApKA8aFk8mor7T747r0+bU1nagKfUxQZ
+         iY5HOWVHzAo+K7A2VD93MzO7VQvIqSxAJbsereKT3XQz+kPJWfi0MDgSQZOA1nua6rfD
+         FetadJzGE2LvfYLvz/wLVGyFiaCYMKxS9E+nPJV9ILC6H6thwUYfOeoren67EdRXTLz2
+         lHwvctrBNh3XHE35uuNzXxkS8fewjXlXh/Qc0XCOjrA4oD/eo+SMIH7TwGVr+9s5KtFM
+         OiDQPAE6orOP8DjXpfhZvScX+6Ba3AuY2hDIMmiGuzQbN9OVCIv5l9mxvu3Z4YNHnh3u
+         abXg==
+X-Gm-Message-State: ACgBeo0MSw/+4ncB4yRpZnfZXTVUkKjmrVccGqOq11xTsc/4476Cg0eQ
+        2vsJVh2Z0CA74YL0NqfHiPlNwj1YeFhcG2CIr4w=
+X-Google-Smtp-Source: AA6agR6F/9j3KM54tAzy1q1X/e0Z9RZWqhaOlTYQgbBz89iya844tMqeldk2hWWg+XoB7bof2FNdOgetqdnGN7pQ9dc=
+X-Received: by 2002:a05:6870:a184:b0:116:bd39:7f94 with SMTP id
+ a4-20020a056870a18400b00116bd397f94mr2261698oaf.5.1661531617282; Fri, 26 Aug
+ 2022 09:33:37 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220823210354.1407473-1-namhyung@kernel.org> <CAEf4Bzbd0-jGFCSCJu3eDxxom42xnH9Tevq0n50-AajjHb5t3g@mail.gmail.com>
+ <A9E2E766-E8A2-4E2E-A661-922400D2674D@fb.com> <CAEf4BzbGf6FuM7VcnA7HKb33HJeJjrDuydC4h1_tCUB8sPCW2g@mail.gmail.com>
+ <E215461A-01E7-4677-A404-C4439D66A7AF@fb.com> <CAM9d7cgigkU8quUMpScL=Xt8+WLDVXKiF5xdKiz7BbDPibSNjg@mail.gmail.com>
+ <CAPhsuW5V1U_UTHQw9E80vCTeP4Jqg9Ta8B+7o3pybKB=8CGRFA@mail.gmail.com>
+In-Reply-To: <CAPhsuW5V1U_UTHQw9E80vCTeP4Jqg9Ta8B+7o3pybKB=8CGRFA@mail.gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 26 Aug 2022 09:33:26 -0700
+Message-ID: <CAM9d7cjTtOkRHLOosxHN8PcbVbhTK=uLDGjw8N5=1QiTHcd6rQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: Add bpf_read_raw_record() helper
+To:     Song Liu <song@kernel.org>
+Cc:     Song Liu <songliubraving@fb.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Howells <dhowells@redhat.com>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        keyrings@vger.kernel.org,
-        LSM List <linux-security-module@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel =?iso-8859-1?Q?M=FCller?= <deso@posteo.net>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Joanne Koong <joannelkoong@gmail.com>
-Subject: Re: [PATCH v12 02/10] btf: Handle dynamic pointer parameter in kfuncs
-Message-ID: <Ywj1s6d7XowV82PZ@kernel.org>
-References: <20220818152929.402605-1-roberto.sassu@huaweicloud.com>
- <20220818152929.402605-3-roberto.sassu@huaweicloud.com>
- <YwhSCE0H+JfUe4Ew@kernel.org>
- <CAADnVQJbTzfe28ife1+vg+ByLfyLBTCoEZW_eg8TEw838JGaog@mail.gmail.com>
- <YwheJqUDLOxL3iTi@kernel.org>
- <YwjcItv0q8GdzPbb@kernel.org>
- <bb4bdd90017d5772bdc31dfac93f2e86c6c61b82.camel@huaweicloud.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bb4bdd90017d5772bdc31dfac93f2e86c6c61b82.camel@huaweicloud.com>
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 05:34:57PM +0200, Roberto Sassu wrote:
-> On Fri, 2022-08-26 at 17:43 +0300, Jarkko Sakkinen wrote:
-> > On Fri, Aug 26, 2022 at 08:46:14AM +0300, Jarkko Sakkinen wrote:
-> > > On Thu, Aug 25, 2022 at 10:16:14PM -0700, Alexei Starovoitov wrote:
-> > > > On Thu, Aug 25, 2022 at 9:54 PM Jarkko Sakkinen <
-> > > > jarkko@kernel.org> wrote:
-> > > > > > -static bool is_dynptr_reg_valid_init(struct bpf_verifier_env
-> > > > > > *env, struct bpf_reg_state *reg,
-> > > > > > -                                  enum bpf_arg_type
-> > > > > > arg_type)
-> > > > > > +bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env,
-> > > > > > struct bpf_reg_state *reg,
-> > > > > > +                           enum bpf_arg_type arg_type)
-> > > > > >  {
-> > > > > >       struct bpf_func_state *state = func(env, reg);
-> > > > > >       int spi = get_spi(reg->off);
-> > > > > > --
-> > > > > > 2.25.1
-> > > > > > 
-> > > > > 
-> > > > > Might be niticking but generally I'd consider splitting
-> > > > > exports as commits of their own.
-> > > > 
-> > > > -static bool
-> > > > +bool
-> > > > 
-> > > > into a separate commit?
-> > > > 
-> > > > I guess it makes sense for people whose salary depends on
-> > > > number of commits.
-> > > > We don't play these games.
-> > > 
-> > > What kind of argument is that anyway.
-> > 
-> > "Separate each *logical change* into a separate patch." [*]
-> 
-> The logical change, as per the patch subject, is allowing the
-> possibility of including eBPF dynamic pointers in a kfunc definition.
-> It requires to call an existing function that was already defined
-> elsewhere.
-> 
-> Maybe I'm wrong, but I don't see only exporting a function definition
-> to an include file as a logical change. To me, the changes in this
-> patch are clearly connected. Or even better, they tell why the function
-> definition has been exported, that would not appear if moving the
-> function definition is a standalone patch.
-> 
-> > 
-> > To add, generally any user space visible space should be an
-> > isolated patch.
-> 
-> As far as I understood, definitions visible to user space should be in
-> include/uapi.
+On Thu, Aug 25, 2022 at 10:53 PM Song Liu <song@kernel.org> wrote:
+>
+> On Thu, Aug 25, 2022 at 10:22 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> >
+> > On Thu, Aug 25, 2022 at 7:35 PM Song Liu <songliubraving@fb.com> wrote:
+> > > Actually, since we are on this, can we make it more generic, and handle
+> > > all possible PERF_SAMPLE_* (in enum perf_event_sample_format)? Something
+> > > like:
+> > >
+> > > long bpf_perf_event_read_sample(void *ctx, void *buf, u64 size, u64 flags);
+> > >
+> > > WDYT Namhyung?
+> >
+> > Do you mean reading the whole sample data at once?
+> > Then it needs to parse the sample data format properly
+> > which is non trivial due to a number of variable length
+> > fields like callchains and branch stack, etc.
+> >
+> > Also I'm afraid I might need event configuration info
+> > other than sample data like attr.type, attr.config,
+> > attr.sample_type and so on.
+> >
+> > Hmm.. maybe we can add it to the ctx directly like ctx.attr_type?
+>
+> The user should have access to the perf_event_attr used to
+> create the event. This is also available in ctx->event->attr.
 
-It does change e.g. the output of kallsyms.
+Do you mean from BPF?  I'd like to have a generic BPF program
+that can handle various filtering according to the command line
+arguments.  I'm not sure but it might do something differently
+for each event based on the attr settings.
 
-It's not ABI but it's still user space visble.
-
-> 
-> > 
-> > Please, stop posting nonsense.
-> 
-> If I may, saying this does not encourage people to try to submit their
-> code. I feel it is a bit strong, and I kindly ask you to express your
-> opinion in a more gentle way.
-
-I agree. That's why I was wondering what is this nonsense
-about salary and games.
-
-BR, Jarkko
+Thanks,
+Namhyung
