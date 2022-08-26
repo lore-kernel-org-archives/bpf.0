@@ -2,171 +2,127 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12568ECAAA3
-	for <bpf@archiver.kernel.org>; Fri, 26 Aug 2022 17:01:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ACDB8ECAAA6
+	for <bpf@archiver.kernel.org>; Fri, 26 Aug 2022 17:15:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344912AbiHZRBi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Aug 2022 13:01:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46542 "EHLO
+        id S1344686AbiHZRPj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Aug 2022 13:15:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344885AbiHZRBa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 26 Aug 2022 13:01:30 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5685FC9252;
-        Fri, 26 Aug 2022 10:01:12 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id c93so2837992edf.5;
-        Fri, 26 Aug 2022 10:01:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc;
-        bh=wq8jdm4bP0A9xllLOljSR/UzZ9NQZ4MdSdqlcWi+tl4=;
-        b=LVYVm4XJEwP2xRcVO9d7aUhhzSCHH/awe42loIJk2T8uAG/ME+jW311T8oZiXGf52V
-         PLqCGnQV+WxQvH1VRYx1/2M4gXa7xYi9Is6UpzoabMVXjraRFj7QvvnHpgXG1GNpa4GA
-         kc+SvtAWdhysH4xHEfh+jcIQlw0tpZ/JhxraGiCD+Avo4Cho7hPhAH+YvUpG2sK/eOfw
-         meMvuIABkI2156xeSw6j3mJXSdGclkzEAjDkstoVK/McpW2hNKslF+YqWyx82v1eXgds
-         ilbCsCXEY+v9JAQDv7jKTAyzCbJ4m/7J79P/XkqqceLpnxIDnouDO1QZS+3SYTzsKFRH
-         lC5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
-        bh=wq8jdm4bP0A9xllLOljSR/UzZ9NQZ4MdSdqlcWi+tl4=;
-        b=EHgMncgo1OG2lj4n1y+7YpQMiYcCcfAX9vpr7sKUHBRv4rTcH6SFHsl1OqLrdNWhHO
-         kkDbhEXdb9yH27QVZ7aAYi5YNypuKUs2pc689U9Dz+nts9DIphKrt/IjDYNT/NhyxuGu
-         ZeXHJ6EAn1+k0a3/bgOv0ABXUC7PZQusBDjwzJkoOQi6y3/xuN1VHwx3MBi+hLqB1y81
-         5YSLDW8WilO+dMfxhVuG+oaBT5TDf671oCkLyyJOfeXV9zUxiSBCEj+jwRbGgijo7ic3
-         PxhHJb83/Ldb6LSsphTFoTKGQRT928HwySMI8aM+08vmw/cPviXdr0jHDSFyfaOHXFyB
-         9k6Q==
-X-Gm-Message-State: ACgBeo1LRdBaz1cg2C/kHbXs/Hllqco6BfjqpUX+SpvXQy3oqinXxadA
-        Fwwrstvijd7d/wYA3BSzMjI=
-X-Google-Smtp-Source: AA6agR7VDBqsCdHYhb9GwvCMme0bFNwZvjX+54Goug/DvgfOz4XBBTFlI3gPpugwHGSjqmwoNCRWNQ==
-X-Received: by 2002:a05:6402:500d:b0:440:9bc5:d0c1 with SMTP id p13-20020a056402500d00b004409bc5d0c1mr7493950eda.202.1661533270515;
-        Fri, 26 Aug 2022 10:01:10 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id l3-20020a1709065a8300b007341663d7ddsm1112644ejq.96.2022.08.26.10.01.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 10:01:10 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Fri, 26 Aug 2022 19:01:08 +0200
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>, Vitaly Chikunov <vt@altlinux.org>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
-        Martin Reboredo <yakoyoku@gmail.com>
-Subject: Re: pahole v1.24: FAILED: load BTF from vmlinux: Invalid argument
-Message-ID: <Ywj8VBH3Ud6493/z@krava>
-References: <20220825163538.vajnsv3xcpbhl47v@altlinux.org>
- <CA+JHD904e2TPpz1ybsaaqD+qMTDcueXu4nVcmotEPhxNfGN+Gw@mail.gmail.com>
- <20220825171620.cioobudss6ovyrkc@altlinux.org>
- <20220826025220.cxfwwpem2ycpvrmm@altlinux.org>
- <20220826025944.hd7htqqwljhse6ht@altlinux.org>
- <YwjQDBovX+cX/JDJ@krava>
- <800bde36-6cb2-d482-0cdb-b3d6005b41da@fb.com>
+        with ESMTP id S1344911AbiHZRPf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 26 Aug 2022 13:15:35 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475F7459A3;
+        Fri, 26 Aug 2022 10:15:32 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A3B6821BC9;
+        Fri, 26 Aug 2022 17:15:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1661534131; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ujnem+82jghAPynX8D89kMmJ0aBREjhSFJXo32+xYis=;
+        b=D+mtfhJ2z4xrDBSNcnA4TFx+/P44V+D+ZE5amHfKim/P5TlSVXi301DlnwO+/YhaB2ZXcs
+        1Y0vqyxwh/ULCExOilHOj8dTxoVzWOcxNxTqMpnHlDg3Sub36rAXeHC4bPkKDu/0U5QlFi
+        Z/vzm0/agm7LOHVNfvT7HVOPhhzrNiU=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 357E013A7E;
+        Fri, 26 Aug 2022 17:15:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id qdA1DLP/CGMaBQAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Fri, 26 Aug 2022 17:15:31 +0000
+Date:   Fri, 26 Aug 2022 19:15:29 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Hao Luo <haoluo@google.com>
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        cgroups@vger.kernel.org, netdev@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>
+Subject: Re: [PATCH bpf-next v9 1/5] bpf: Introduce cgroup iter
+Message-ID: <20220826171529.GB30475@blackbody.suse.cz>
+References: <20220824030031.1013441-1-haoluo@google.com>
+ <20220824030031.1013441-2-haoluo@google.com>
+ <20220825152455.GA29058@blackbody.suse.cz>
+ <CA+khW7hKk8yMvsQCQjnEoR3=G9=77F2TgAEDa+uSVedoOE=NsA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="uZ3hkaAS1mZxFaxD"
 Content-Disposition: inline
-In-Reply-To: <800bde36-6cb2-d482-0cdb-b3d6005b41da@fb.com>
+In-Reply-To: <CA+khW7hKk8yMvsQCQjnEoR3=G9=77F2TgAEDa+uSVedoOE=NsA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 09:51:54AM -0700, Yonghong Song wrote:
-> 
-> 
-> On 8/26/22 6:52 AM, Jiri Olsa wrote:
-> > On Fri, Aug 26, 2022 at 05:59:44AM +0300, Vitaly Chikunov wrote:
-> > > On Fri, Aug 26, 2022 at 05:52:20AM +0300, Vitaly Chikunov wrote:
-> > > > Arnaldo,
-> > > > 
-> > > > On Thu, Aug 25, 2022 at 08:16:20PM +0300, Vitaly Chikunov wrote:
-> > > > > On Thu, Aug 25, 2022 at 01:47:59PM -0300, Arnaldo Carvalho de Melo wrote:
-> > > > > > On Thu, Aug 25, 2022, 1:35 PM Vitaly Chikunov <vt@altlinux.org> wrote:
-> > > > > > > 
-> > > > > > > I also noticed that after upgrading pahole to v1.24 kernel build (tested on
-> > > > > > > v5.18.19, v5.15.63, sorry for not testing on mainline) fails with:
-> > > > > > > 
-> > > > > > >      BTFIDS  vmlinux
-> > > > > > >    + ./tools/bpf/resolve_btfids/resolve_btfids vmlinux
-> > > > > > >    FAILED: load BTF from vmlinux: Invalid argument
-> > > > > > > 
-> > > > > > > Perhaps, .tmp_vmlinux.btf is generated incorrectly? Downgrading dwarves to
-> > > > > > > v1.23 resolves the issue.
-> > > > > > > 
-> > > > > > 
-> > > > > > Can you try this, from Martin Reboredo (Archlinux):
-> > > > > > 
-> > > > > > Can you try a build of the kernel or the by passing the
-> > > > > > --skip_encoding_btf_enum64 to scripts/pahole-flags.sh?
-> > > > > > 
-> > > > > > Here's a patch for either in tree scripts/pahole-flags.sh or
-> > > > > > /usr/lib/modules/5.19.3-arch1-1/build/scripts/pahole-flags.sh
-> > > > > 
-> > > > > This patch helped and kernel builds successfully after applying it.
-> > > > > (Didn't notice this suggestion in release discussion thread.)
-> > > > 
-> > > > Even thought it now compiles with this patch, it does not boot
-> > > > afterwards (in virtme-like env), witch such console messages:
-> > > 
-> > > I'm talking here about 5.15.62. Yes, proposed patch does not apply there
-> > > (since there is no `scripts/pahole-flags.sh`), but I updated
-> > > `scripts/link-vmlinux.sh` with the similar `if` to append
-> > > `--skip_encoding_btf_enum64` which lets then compilation pass.
-> > > 
-> > > Thanks,
-> > > 
-> > > > 
-> > > >    [    0.767649] Run /init as init process
-> > > >    [    0.770858] BPF:[593] ENUM perf_event_task_context
-> > > >    [    0.771262] BPF:size=4 vlen=4
-> > > >    [    0.771511] BPF:
-> > > >    [    0.771680] BPF:Invalid btf_info kind_flag
-> > > >    [    0.772016] BPF:
-> > 
-> > I can see the same on 5.15, it looks like the libbpf change that
-> > pahole is compiled with is setting the type's kflag for values < 0:
-> > (which is the case for perf_event_task_context enum first value)
-> > 
-> >    dffbbdc2d988 libbpf: Add enum64 parsing and new enum64 public API
-> > 
-> > but IIUC kflag should stay zero for normal enum otherwise the btf meta
-> > verifier screams
-> 
-> This is deliberate so we can have sign bit set properly for 32bit enum.
-> To avoid this behavior, the correct way is to turn off enum64 support
-> in pahole with flag --skip_encoding_btf_enum64.
 
-I used that as well, it wouldn't compile without
+--uZ3hkaAS1mZxFaxD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-the error is during the boot where the standard enum has kflag set
+On Thu, Aug 25, 2022 at 10:58:26AM -0700, Hao Luo <haoluo@google.com> wrote:
+> Permission is a valid point about FD. There was discussion in an
+> earlier version of this patch series [0].
 
-jirka
+(I'm sorry, I didn't follow all the version discussions closely.)
 
-> 
-> > 
-> > if I compile pahole with the libbpf change below I can boot 5.15 kernel
-> > normally
-> > 
-> > Yonghong, any idea?
-> > 
-> > thanks,
-> > jirka
-> > 
-> > 
-> > ---
-> > diff --git a/src/btf.c b/src/btf.c
-> > index 2d14f1a52d7a..53d7516e4b89 100644
-> > --- a/src/btf.c
-> > +++ b/src/btf.c
-> > @@ -2151,10 +2151,6 @@ int btf__add_enum_value(struct btf *btf, const char *name, __s64 value)
-> >   	t = btf_last_type(btf);
-> >   	btf_type_inc_vlen(t);
-> > -	/* if negative value, set signedness to signed */
-> > -	if (value < 0)
-> > -		t->info = btf_type_info(btf_kind(t), btf_vlen(t), true);
-> > -
-> >   	btf->hdr->type_len += sz;
-> >   	btf->hdr->str_off += sz;
-> >   	return 0;
+I think the permissions are a non-issue when unprivileged BPF is
+disabled. If it's allowed, I think it'd be better solved generally
+within the BPF iterator framework. (Maybe it's already present, I didn't
+check.)
+
+(OT:
+> The good thing about ID is that it can be passed across processes=20
+
+FDs can be passed too (parent-child trivially, others via SCM_RIGHTS
+message).
+
+> and it's meaningful to appear in logs. It's more user-friendly.
+
+I'd say cgroup path wins both in meaning and user friendliness.
+(Or maybe you meant different class of users.)
+)
+
+> So we decided to support both.
+
+I accept cgroup ids are an establish{ing,ed} way to refer to cgroups
+=66rom userspace. Hence my fixups for the BPF cgroup iter (another thread)
+for better namespacing consisntency.
+
+Thanks,
+Michal
+
+--uZ3hkaAS1mZxFaxD
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYIAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCYwj/rgAKCRAkDQmsBEOq
+uRDtAP95KSUf5eIbnMtX+q0mP/oOLO5HxrPBR3LcuKDvtCX16gEA1qMMMrMNNSRI
+PnRFq9cTUofRflCF69bLsiCRXGQYSQk=
+=zlex
+-----END PGP SIGNATURE-----
+
+--uZ3hkaAS1mZxFaxD--
