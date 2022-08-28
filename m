@@ -2,157 +2,214 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB4ECC0502A
-	for <bpf@archiver.kernel.org>; Sun, 28 Aug 2022 01:42:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB2A9ECAAD1
+	for <bpf@archiver.kernel.org>; Sun, 28 Aug 2022 02:54:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230453AbiH1BmD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 27 Aug 2022 21:42:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
+        id S229532AbiH1Cyv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 27 Aug 2022 22:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbiH1BmC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 27 Aug 2022 21:42:02 -0400
-Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E0053136C;
-        Sat, 27 Aug 2022 18:42:01 -0700 (PDT)
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 7D24772C90B;
-        Sun, 28 Aug 2022 04:41:59 +0300 (MSK)
-Received: from altlinux.org (sole.flsd.net [185.75.180.6])
-        by imap.altlinux.org (Postfix) with ESMTPSA id 622E34A470D;
-        Sun, 28 Aug 2022 04:41:59 +0300 (MSK)
-Date:   Sun, 28 Aug 2022 04:41:59 +0300
-From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        dwarves@vger.kernel.org, bpf@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: pahole v1.24: FAILED: load BTF from vmlinux: Invalid argument
-Message-ID: <20220828014159.x2u4esk2ijkjlitv@altlinux.org>
-References: <20220825163538.vajnsv3xcpbhl47v@altlinux.org>
- <CA+JHD904e2TPpz1ybsaaqD+qMTDcueXu4nVcmotEPhxNfGN+Gw@mail.gmail.com>
- <20220825171620.cioobudss6ovyrkc@altlinux.org>
- <20220826025220.cxfwwpem2ycpvrmm@altlinux.org>
- <20220826025944.hd7htqqwljhse6ht@altlinux.org>
- <YwjQDBovX+cX/JDJ@krava>
- <Ywj2xCPATz1qb0lC@kernel.org>
- <20220827173310.o6sv2ugl6taul6og@altlinux.org>
- <YwpjkbMkgDIufjtO@kernel.org>
+        with ESMTP id S229493AbiH1Cyu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 27 Aug 2022 22:54:50 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C761F5F51
+        for <bpf@vger.kernel.org>; Sat, 27 Aug 2022 19:54:48 -0700 (PDT)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27RMxH84028151
+        for <bpf@vger.kernel.org>; Sat, 27 Aug 2022 19:54:48 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=8T2EXd+gP/VsAo0mC7F1T/ilUu2sGywJmyWoVYxYXmc=;
+ b=ALAjcDJTPTUWCxjBsxVxuxacACZLCH8iRCWsCZL2xgvuQUIj46ufpGERIKPIlU9z8STa
+ 6f1kRwfX3X5EdyUT8e8wwFjRFVeol9AS+T3CWrCbfY6NgTvR3zOsWEu5cJUJn82g+OFe
+ dP4L3BVw77PuJc4bvPJMHCmIDkIHYg/ziRc= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j7jk4am60-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Sat, 27 Aug 2022 19:54:48 -0700
+Received: from twshared29104.24.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 27 Aug 2022 19:54:46 -0700
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+        id A90B8EA747E0; Sat, 27 Aug 2022 19:54:43 -0700 (PDT)
+From:   Yonghong Song <yhs@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
+Subject: [PATCH bpf-next v3 1/7] bpf: Allow struct argument in trampoline based programs
+Date:   Sat, 27 Aug 2022 19:54:43 -0700
+Message-ID: <20220828025443.143456-1-yhs@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220828025438.142798-1-yhs@fb.com>
+References: <20220828025438.142798-1-yhs@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
-In-Reply-To: <YwpjkbMkgDIufjtO@kernel.org>
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: 4QbRzpNAA6nzoFANqktOOAJVGIN7MY4_
+X-Proofpoint-GUID: 4QbRzpNAA6nzoFANqktOOAJVGIN7MY4_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-27_10,2022-08-25_01,2022-06-22_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Aug 27, 2022 at 03:33:53PM -0300, Arnaldo Carvalho de Melo wrote:
-> Em Sat, Aug 27, 2022 at 08:33:10PM +0300, Vitaly Chikunov escreveu:
-> > On Fri, Aug 26, 2022 at 01:37:24PM -0300, Arnaldo Carvalho de Melo wrote:
-> > > Em Fri, Aug 26, 2022 at 03:52:12PM +0200, Jiri Olsa escreveu:
-> > > > On Fri, Aug 26, 2022 at 05:59:44AM +0300, Vitaly Chikunov wrote:
-> > > > > >   [    0.767649] Run /init as init process
-> > > > > >   [    0.770858] BPF:[593] ENUM perf_event_task_context
-> > > > > >   [    0.771262] BPF:size=4 vlen=4
-> > > > > >   [    0.771511] BPF:
-> > > > > >   [    0.771680] BPF:Invalid btf_info kind_flag
-> > > > > >   [    0.772016] BPF:
-> 
-> > > > I can see the same on 5.15, it looks like the libbpf change that
-> > > > pahole is compiled with is setting the type's kflag for values < 0:
-> > > > (which is the case for perf_event_task_context enum first value)
-> 
-> > > >   dffbbdc2d988 libbpf: Add enum64 parsing and new enum64 public API
-> 
-> > > > but IIUC kflag should stay zero for normal enum otherwise the btf meta
-> > > > verifier screams
-> 
-> > > > if I compile pahole with the libbpf change below I can boot 5.15 kernel
-> > > > normally
-> 
-> > > > Yonghong, any idea?
-> 
-> > > This made me try to build pahole with the system libbpf instead of with
-> > > the one that goes with it, here, testing with libbpf 0.7.0 it wasn't
-> > > building as BTF_KIND_ENUM64 came with libbpf 1.0 so I added the
-> > > following patch to again allow with the system libbpf, i.e. using:
-> 
-> > >   $ cmake -DCMAKE_BUILD_TYPE=Release -DLIBBPF_EMBEDDED=Off
-> 
-> > > This will return errors if trying to encode or load enum64 tags, but
-> > > disabling it, as done with kernels not supporting BTF_KIND_ENUM64 should
-> > > now work, can you please test and report results?
-> 
-> > > Vitaly I checked and alt:p9 has libbpf 0.2, which is really old, unsure
-> > > if it would build there, but alt:sisyphus has 0.8.0, so should work
-> > > there, please try.
-> 
-> > Perhaps this does not need to be tested since Jiri found the solution?
-> 
-> Right, what I suggested was just an alternative, to use the system
-> libbpf package instead of the one that ships with pahole, as the older
-> libbpf woudln't have the problem hypothesized by Jiri.
-> 
-> But it has already been determined that the problem is elsewhere, so
-> this just was useful to make me realize building with libbpf-devel was
-> broken due to BTF_KIND_ENUM64, which should be fixed with this patch.
->  
-> > BTW, alt:p9 is older ALT branch only for security updates, current
-> > branch is alt:p10, so it's relevant to replace p9 testing with p10, for
-> > new features.
-> 
-> Sure, I go on adding containers and drop them when it is not possible to
-> build with them, so far this is what I have for alt:
-> 
->    9    25.26 alt:p8       : Ok  x86_64-alt-linux-gcc (GCC) 5.3.1 20151207 (ALT p8 5.3.1-alt3.M80P.1)
->   10    81.96 alt:p9       : Ok  x86_64-alt-linux-gcc (GCC) 8.4.1 20200305 (ALT p9 8.4.1-alt0.p9.1) , clang version 10.0.0
->   11    94.60 alt:p10      : Ok  x86_64-alt-linux-gcc (GCC) 10.3.1 20210703 (ALT Sisyphus 10.3.1-alt2) , clang version 11.0.1
->   12    77.53 alt:sisyphus : Ok  x86_64-alt-linux-gcc (GCC) 12.1.1 20220518 (ALT Sisyphus 12.1.1-alt1) , ALT Linux Team clang version 13.0.1
+Allow struct argument in trampoline based programs where
+the struct size should be <=3D 16 bytes. In such cases, the argument
+will be put into up to 2 registers for bpf, x86_64 and arm64
+architectures.
 
-Btw, we also have clang14.0 in sisyphus, it's just non default yet.
+To support arch-specific trampoline manipulation,
+add arg_flags for additional struct information about arguments
+in btf_func_model. Such information will be used in arch specific
+function arch_prepare_bpf_trampoline() to prepare argument access
+properly in trampoline.
 
-> 
-> p8's clang is too old, disabled, p9 also has:
-> 
-> ENV NO_BUILD_BPF_SKEL=1
-> 
-> clang also too old to build BPF skels, but still good to build perf
-> proper.
-> 
-> > I was building dwarves with -DLIBBPF_EMBEDDED=ON, thinking it would be
-> > more stable (since they updated not independently from each other), is
-> > it recommended to turn in OFF?
-> 
-> What most distros are doing is to ship a libbpf and they expect and work
-> to make tools use it, which isn't always possible, like the patch I sent
-> shows.
-> 
-> Its a balance on having the latest and greatest libbpf that is needed
-> for some feature pahole uses and the desire to not link anything
-> statically due to security concerns (having to fix all things linking
-> statically with a faulty library).
->  
-> > ps. I think something needs to be changed somewhere (in kernel src?) or
-> > more users will report build failures when switching to the new pahole.
-> 
-> Right, I voiced concerns already about having enum64 encoded by default,
-> but its not so simple to solve.
-> 
-> People living on the bleeding edge should not have problems, as recent
-> kernels support the new BTF encodings, its just people building older
-> kernels with new pahole that will have problems, right?
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ include/linux/bpf.h |  4 ++++
+ kernel/bpf/btf.c    | 42 ++++++++++++++++++++++++++++++++++++------
+ 2 files changed, 40 insertions(+), 6 deletions(-)
 
-Yes, but even in Sisyphus (where we try to build bleeding edge stuff) we
-build latest stable and longterm kernels, that's why we happen to build
-v5.18.19 and v5.15.63 with dwarves 1.24. And 5.15.63 is released just two
-days ago so this is not that old.
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 9c1674973e03..4d32f125f4af 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -727,10 +727,14 @@ enum bpf_cgroup_storage_type {
+  */
+ #define MAX_BPF_FUNC_REG_ARGS 5
+=20
++/* The argument is a structure. */
++#define BTF_FMODEL_STRUCT_ARG		BIT(0)
++
+ struct btf_func_model {
+ 	u8 ret_size;
+ 	u8 nr_args;
+ 	u8 arg_size[MAX_BPF_FUNC_ARGS];
++	u8 arg_flags[MAX_BPF_FUNC_ARGS];
+ };
+=20
+ /* Restore arguments before returning from trampoline to let original fu=
+nction
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 903719b89238..4a081bfb4c8a 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -5328,6 +5328,31 @@ static bool is_int_ptr(struct btf *btf, const stru=
+ct btf_type *t)
+ 	return btf_type_is_int(t);
+ }
+=20
++static u32 get_ctx_arg_idx(struct btf *btf, const struct btf_type *func_=
+proto,
++			   int off)
++{
++	const struct btf_param *args;
++	const struct btf_type *t;
++	u32 offset =3D 0, nr_args;
++	int i;
++
++	nr_args =3D btf_type_vlen(func_proto);
++	args =3D (const struct btf_param *)(func_proto + 1);
++	for (i =3D 0; i < nr_args; i++) {
++		t =3D btf_type_skip_modifiers(btf, args[i].type, NULL);
++		offset +=3D btf_type_is_ptr(t) ? 8 : roundup(t->size, 8);
++		if (off < offset)
++			return i;
++	}
++
++	t =3D btf_type_skip_modifiers(btf, func_proto->type, NULL);
++	offset +=3D btf_type_is_ptr(t) ? 8 : roundup(t->size, 8);
++	if (off < offset)
++		return nr_args;
++
++	return nr_args + 1;
++}
++
+ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+ 		    const struct bpf_prog *prog,
+ 		    struct bpf_insn_access_aux *info)
+@@ -5347,7 +5372,7 @@ bool btf_ctx_access(int off, int size, enum bpf_acc=
+ess_type type,
+ 			tname, off);
+ 		return false;
+ 	}
+-	arg =3D off / 8;
++	arg =3D t =3D=3D NULL ? (off / 8) :  get_ctx_arg_idx(btf, t, off);
+ 	args =3D (const struct btf_param *)(t + 1);
+ 	/* if (t =3D=3D NULL) Fall back to default BPF prog with
+ 	 * MAX_BPF_FUNC_REG_ARGS u64 arguments.
+@@ -5417,7 +5442,7 @@ bool btf_ctx_access(int off, int size, enum bpf_acc=
+ess_type type,
+ 	/* skip modifiers */
+ 	while (btf_type_is_modifier(t))
+ 		t =3D btf_type_by_id(btf, t->type);
+-	if (btf_type_is_small_int(t) || btf_is_any_enum(t))
++	if (btf_type_is_small_int(t) || btf_is_any_enum(t) || __btf_type_is_str=
+uct(t))
+ 		/* accessing a scalar */
+ 		return true;
+ 	if (!btf_type_is_ptr(t)) {
+@@ -5881,7 +5906,7 @@ static int __get_type_size(struct btf *btf, u32 btf=
+_id,
+ 	if (btf_type_is_ptr(t))
+ 		/* kernel size of pointer. Not BPF's size of pointer*/
+ 		return sizeof(void *);
+-	if (btf_type_is_int(t) || btf_is_any_enum(t))
++	if (btf_type_is_int(t) || btf_is_any_enum(t) || __btf_type_is_struct(t)=
+)
+ 		return t->size;
+ 	return -EINVAL;
+ }
+@@ -5901,8 +5926,10 @@ int btf_distill_func_proto(struct bpf_verifier_log=
+ *log,
+ 		/* BTF function prototype doesn't match the verifier types.
+ 		 * Fall back to MAX_BPF_FUNC_REG_ARGS u64 args.
+ 		 */
+-		for (i =3D 0; i < MAX_BPF_FUNC_REG_ARGS; i++)
++		for (i =3D 0; i < MAX_BPF_FUNC_REG_ARGS; i++) {
+ 			m->arg_size[i] =3D 8;
++			m->arg_flags[i] =3D 0;
++		}
+ 		m->ret_size =3D 8;
+ 		m->nr_args =3D MAX_BPF_FUNC_REG_ARGS;
+ 		return 0;
+@@ -5916,7 +5943,7 @@ int btf_distill_func_proto(struct bpf_verifier_log =
+*log,
+ 		return -EINVAL;
+ 	}
+ 	ret =3D __get_type_size(btf, func->type, &t);
+-	if (ret < 0) {
++	if (ret < 0 || __btf_type_is_struct(t)) {
+ 		bpf_log(log,
+ 			"The function %s return type %s is unsupported.\n",
+ 			tname, btf_kind_str[BTF_INFO_KIND(t->info)]);
+@@ -5932,7 +5959,9 @@ int btf_distill_func_proto(struct bpf_verifier_log =
+*log,
+ 			return -EINVAL;
+ 		}
+ 		ret =3D __get_type_size(btf, args[i].type, &t);
+-		if (ret < 0) {
++
++		/* No support of struct argument size greater than 16 bytes */
++		if (ret < 0 || ret > 16) {
+ 			bpf_log(log,
+ 				"The function %s arg%d type %s is unsupported.\n",
+ 				tname, i, btf_kind_str[BTF_INFO_KIND(t->info)]);
+@@ -5945,6 +5974,7 @@ int btf_distill_func_proto(struct bpf_verifier_log =
+*log,
+ 			return -EINVAL;
+ 		}
+ 		m->arg_size[i] =3D ret;
++		m->arg_flags[i] =3D __btf_type_is_struct(t) ? BTF_FMODEL_STRUCT_ARG : =
+0;
+ 	}
+ 	m->nr_args =3D nargs;
+ 	return 0;
+--=20
+2.30.2
 
-> By test building against alt:p8 you see that I care about such version
-> mismatches, but its a burden, really, to try and cover all cases.
-
-I very much appreciate your work.
-Thanks!
-
-> 
-> - Arnaldo
