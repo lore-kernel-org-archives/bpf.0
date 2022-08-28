@@ -2,113 +2,157 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83654C0502A
-	for <bpf@archiver.kernel.org>; Sun, 28 Aug 2022 00:25:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB4ECC0502A
+	for <bpf@archiver.kernel.org>; Sun, 28 Aug 2022 01:42:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231579AbiH1AZM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 27 Aug 2022 20:25:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33766 "EHLO
+        id S230453AbiH1BmD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 27 Aug 2022 21:42:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiH1AZM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 27 Aug 2022 20:25:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223441A07D
-        for <bpf@vger.kernel.org>; Sat, 27 Aug 2022 17:25:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A433560EC8
-        for <bpf@vger.kernel.org>; Sun, 28 Aug 2022 00:25:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09A1DC43140
-        for <bpf@vger.kernel.org>; Sun, 28 Aug 2022 00:25:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661646310;
-        bh=sweShQ61LtekFM40yYQjlFAj+7T2XgJI4jRDJIumN1U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XftaRUJCXkcH8AIWi9Mb/X14EOa3Cfx9eQ2yDgpIwdEjV0wpnjhj5dPD2f3THJiKV
-         0TdbtjFS+ZGytUorxkC+OVSEV13jCwPtI77qdq4YBVDxI4t7F5S+f6k/VllD57Bxqb
-         Vr1bTTrD1hhr1MyyrOfg4eO/fSNjU3Cf9em+WH82GbjLyuwSGe2rOCir+7uR2t60ew
-         hSRWtuv9tBdXQzPMYwkB/GVnkUpmeJZiyEMIINHeaWjXa7AdQi4RDo0B8ShuUyg/TZ
-         LQRIIxI/nABJ0cTyT4mlETLsm5eoFHZZpgHbXcGzDfNXoNTUUOsJ7H6JFQu8rMvQvG
-         OnfYzRuXdh7+w==
-Received: by mail-qt1-f182.google.com with SMTP id cb8so3913641qtb.0
-        for <bpf@vger.kernel.org>; Sat, 27 Aug 2022 17:25:09 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3ofX/q3Qaz5TkS9eYSoMBTdjLvJArkr9DJbZ9U1upXT2Ca73BK
-        0z1nH/WjhcScFUZDS/c4qpnZ20Qteim//4IFtVjV1Q==
-X-Google-Smtp-Source: AA6agR7c0gyC8B49Pi5GMSiuNxrdau3LBkgAOtJn0snnMSkmgCxPVv66I25tl7pcvD2iO4+n/hHeobGrLjdngoZkkpA=
-X-Received: by 2002:a05:622a:4cf:b0:344:54e1:c1fe with SMTP id
- q15-20020a05622a04cf00b0034454e1c1femr5086376qtx.250.1661646308724; Sat, 27
- Aug 2022 17:25:08 -0700 (PDT)
+        with ESMTP id S230118AbiH1BmC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 27 Aug 2022 21:42:02 -0400
+Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E0053136C;
+        Sat, 27 Aug 2022 18:42:01 -0700 (PDT)
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 7D24772C90B;
+        Sun, 28 Aug 2022 04:41:59 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 622E34A470D;
+        Sun, 28 Aug 2022 04:41:59 +0300 (MSK)
+Date:   Sun, 28 Aug 2022 04:41:59 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        dwarves@vger.kernel.org, bpf@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: pahole v1.24: FAILED: load BTF from vmlinux: Invalid argument
+Message-ID: <20220828014159.x2u4esk2ijkjlitv@altlinux.org>
+References: <20220825163538.vajnsv3xcpbhl47v@altlinux.org>
+ <CA+JHD904e2TPpz1ybsaaqD+qMTDcueXu4nVcmotEPhxNfGN+Gw@mail.gmail.com>
+ <20220825171620.cioobudss6ovyrkc@altlinux.org>
+ <20220826025220.cxfwwpem2ycpvrmm@altlinux.org>
+ <20220826025944.hd7htqqwljhse6ht@altlinux.org>
+ <YwjQDBovX+cX/JDJ@krava>
+ <Ywj2xCPATz1qb0lC@kernel.org>
+ <20220827173310.o6sv2ugl6taul6og@altlinux.org>
+ <YwpjkbMkgDIufjtO@kernel.org>
 MIME-Version: 1.0
-References: <20220827100134.1621137-1-houtao@huaweicloud.com> <20220827100134.1621137-2-houtao@huaweicloud.com>
-In-Reply-To: <20220827100134.1621137-2-houtao@huaweicloud.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Sun, 28 Aug 2022 02:24:58 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ7r_i9+XaE-WJzJao2J4=1fH39Xb4u4o733ZtLwxh0WPg@mail.gmail.com>
-Message-ID: <CACYkzJ7r_i9+XaE-WJzJao2J4=1fH39Xb4u4o733ZtLwxh0WPg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/3] bpf: Propagate error from
- htab_lock_bucket() to userspace
-To:     Hou Tao <houtao@huaweicloud.com>
-Cc:     bpf@vger.kernel.org, Song Liu <songliubraving@fb.com>,
-        Hao Luo <haoluo@google.com>, Hao Sun <sunhao.th@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Yonghong Song <yhs@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Lorenz Bauer <oss@lmb.io>, houtao1@huawei.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+In-Reply-To: <YwpjkbMkgDIufjtO@kernel.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Aug 27, 2022 at 11:43 AM Hou Tao <houtao@huaweicloud.com> wrote:
->
-> From: Hou Tao <houtao1@huawei.com>
->
-> In __htab_map_lookup_and_delete_batch() if htab_lock_bucket() returns
-> -EBUSY, it will go to next bucket. Going to next bucket may not only
-> skip the elements in current bucket silently, but also incur
-> out-of-bound memory access or expose kernel memory to userspace if
-> current bucket_cnt is greater than bucket_size or zero.
->
-> Fixing it by stopping batch operation and returning -EBUSY when
-> htab_lock_bucket() fails, and the application can retry or skip the busy
-> batch as needed.
->
-> Reported-by: Hao Sun <sunhao.th@gmail.com>
-> Signed-off-by: Hou Tao <houtao1@huawei.com>
+On Sat, Aug 27, 2022 at 03:33:53PM -0300, Arnaldo Carvalho de Melo wrote:
+> Em Sat, Aug 27, 2022 at 08:33:10PM +0300, Vitaly Chikunov escreveu:
+> > On Fri, Aug 26, 2022 at 01:37:24PM -0300, Arnaldo Carvalho de Melo wrote:
+> > > Em Fri, Aug 26, 2022 at 03:52:12PM +0200, Jiri Olsa escreveu:
+> > > > On Fri, Aug 26, 2022 at 05:59:44AM +0300, Vitaly Chikunov wrote:
+> > > > > >   [    0.767649] Run /init as init process
+> > > > > >   [    0.770858] BPF:[593] ENUM perf_event_task_context
+> > > > > >   [    0.771262] BPF:size=4 vlen=4
+> > > > > >   [    0.771511] BPF:
+> > > > > >   [    0.771680] BPF:Invalid btf_info kind_flag
+> > > > > >   [    0.772016] BPF:
+> 
+> > > > I can see the same on 5.15, it looks like the libbpf change that
+> > > > pahole is compiled with is setting the type's kflag for values < 0:
+> > > > (which is the case for perf_event_task_context enum first value)
+> 
+> > > >   dffbbdc2d988 libbpf: Add enum64 parsing and new enum64 public API
+> 
+> > > > but IIUC kflag should stay zero for normal enum otherwise the btf meta
+> > > > verifier screams
+> 
+> > > > if I compile pahole with the libbpf change below I can boot 5.15 kernel
+> > > > normally
+> 
+> > > > Yonghong, any idea?
+> 
+> > > This made me try to build pahole with the system libbpf instead of with
+> > > the one that goes with it, here, testing with libbpf 0.7.0 it wasn't
+> > > building as BTF_KIND_ENUM64 came with libbpf 1.0 so I added the
+> > > following patch to again allow with the system libbpf, i.e. using:
+> 
+> > >   $ cmake -DCMAKE_BUILD_TYPE=Release -DLIBBPF_EMBEDDED=Off
+> 
+> > > This will return errors if trying to encode or load enum64 tags, but
+> > > disabling it, as done with kernels not supporting BTF_KIND_ENUM64 should
+> > > now work, can you please test and report results?
+> 
+> > > Vitaly I checked and alt:p9 has libbpf 0.2, which is really old, unsure
+> > > if it would build there, but alt:sisyphus has 0.8.0, so should work
+> > > there, please try.
+> 
+> > Perhaps this does not need to be tested since Jiri found the solution?
+> 
+> Right, what I suggested was just an alternative, to use the system
+> libbpf package instead of the one that ships with pahole, as the older
+> libbpf woudln't have the problem hypothesized by Jiri.
+> 
+> But it has already been determined that the problem is elsewhere, so
+> this just was useful to make me realize building with libbpf-devel was
+> broken due to BTF_KIND_ENUM64, which should be fixed with this patch.
+>  
+> > BTW, alt:p9 is older ALT branch only for security updates, current
+> > branch is alt:p10, so it's relevant to replace p9 testing with p10, for
+> > new features.
+> 
+> Sure, I go on adding containers and drop them when it is not possible to
+> build with them, so far this is what I have for alt:
+> 
+>    9    25.26 alt:p8       : Ok  x86_64-alt-linux-gcc (GCC) 5.3.1 20151207 (ALT p8 5.3.1-alt3.M80P.1)
+>   10    81.96 alt:p9       : Ok  x86_64-alt-linux-gcc (GCC) 8.4.1 20200305 (ALT p9 8.4.1-alt0.p9.1) , clang version 10.0.0
+>   11    94.60 alt:p10      : Ok  x86_64-alt-linux-gcc (GCC) 10.3.1 20210703 (ALT Sisyphus 10.3.1-alt2) , clang version 11.0.1
+>   12    77.53 alt:sisyphus : Ok  x86_64-alt-linux-gcc (GCC) 12.1.1 20220518 (ALT Sisyphus 12.1.1-alt1) , ALT Linux Team clang version 13.0.1
 
-Please add a Fixes tag here
+Btw, we also have clang14.0 in sisyphus, it's just non default yet.
 
-> ---
->  kernel/bpf/hashtab.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index 6fb3b7fd1622..eb1263f03e9b 100644
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
-> @@ -1704,8 +1704,11 @@ __htab_map_lookup_and_delete_batch(struct bpf_map *map,
->         /* do not grab the lock unless need it (bucket_cnt > 0). */
->         if (locked) {
->                 ret = htab_lock_bucket(htab, b, batch, &flags);
-> -               if (ret)
-> -                       goto next_batch;
-> +               if (ret) {
-> +                       rcu_read_unlock();
-> +                       bpf_enable_instrumentation();
-> +                       goto after_loop;
-> +               }
->         }
->
->         bucket_cnt = 0;
-> --
-> 2.29.2
->
+> 
+> p8's clang is too old, disabled, p9 also has:
+> 
+> ENV NO_BUILD_BPF_SKEL=1
+> 
+> clang also too old to build BPF skels, but still good to build perf
+> proper.
+> 
+> > I was building dwarves with -DLIBBPF_EMBEDDED=ON, thinking it would be
+> > more stable (since they updated not independently from each other), is
+> > it recommended to turn in OFF?
+> 
+> What most distros are doing is to ship a libbpf and they expect and work
+> to make tools use it, which isn't always possible, like the patch I sent
+> shows.
+> 
+> Its a balance on having the latest and greatest libbpf that is needed
+> for some feature pahole uses and the desire to not link anything
+> statically due to security concerns (having to fix all things linking
+> statically with a faulty library).
+>  
+> > ps. I think something needs to be changed somewhere (in kernel src?) or
+> > more users will report build failures when switching to the new pahole.
+> 
+> Right, I voiced concerns already about having enum64 encoded by default,
+> but its not so simple to solve.
+> 
+> People living on the bleeding edge should not have problems, as recent
+> kernels support the new BTF encodings, its just people building older
+> kernels with new pahole that will have problems, right?
+
+Yes, but even in Sisyphus (where we try to build bleeding edge stuff) we
+build latest stable and longterm kernels, that's why we happen to build
+v5.18.19 and v5.15.63 with dwarves 1.24. And 5.15.63 is released just two
+days ago so this is not that old.
+
+> By test building against alt:p8 you see that I care about such version
+> mismatches, but its a burden, really, to try and cover all cases.
+
+I very much appreciate your work.
+Thanks!
+
+> 
+> - Arnaldo
