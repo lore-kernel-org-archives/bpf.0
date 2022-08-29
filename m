@@ -2,42 +2,43 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DB02ECAAD2
-	for <bpf@archiver.kernel.org>; Mon, 29 Aug 2022 14:23:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E4A5ECAAD2
+	for <bpf@archiver.kernel.org>; Mon, 29 Aug 2022 14:50:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbiH2OX3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Aug 2022 10:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46856 "EHLO
+        id S229447AbiH2Ou3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Aug 2022 10:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbiH2OX2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Aug 2022 10:23:28 -0400
+        with ESMTP id S229899AbiH2Ou3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Aug 2022 10:50:29 -0400
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38A98FD73
-        for <bpf@vger.kernel.org>; Mon, 29 Aug 2022 07:23:26 -0700 (PDT)
-Received: from sslproxy01.your-server.de ([78.46.139.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C86B72ED4
+        for <bpf@vger.kernel.org>; Mon, 29 Aug 2022 07:50:25 -0700 (PDT)
+Received: from sslproxy05.your-server.de ([78.46.172.2])
         by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
         (Exim 4.92.3)
         (envelope-from <daniel@iogearbox.net>)
-        id 1oSfff-0009iv-SP; Mon, 29 Aug 2022 16:23:23 +0200
+        id 1oSg5m-00010j-HI; Mon, 29 Aug 2022 16:50:22 +0200
 Received: from [85.1.206.226] (helo=linux-4.home)
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <daniel@iogearbox.net>)
-        id 1oSfff-000C6I-L1; Mon, 29 Aug 2022 16:23:23 +0200
-Subject: Re: [PATCH bpf-next 1/2] bpf: propagate nullness information for reg
- to reg comparisons
-To:     Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
-        ast@kernel.org, andrii@kernel.org, kernel-team@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com
-References: <20220826172915.1536914-1-eddyz87@gmail.com>
- <20220826172915.1536914-2-eddyz87@gmail.com>
+        id 1oSg5m-000SFR-9c; Mon, 29 Aug 2022 16:50:22 +0200
+Subject: Re: [PATCH bpf-next 3/3] selftests/bpf: add veristat tool for
+ mass-verifying BPF object files
+To:     KP Singh <kpsingh@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, kernel-team@fb.com
+References: <20220826231531.1031943-1-andrii@kernel.org>
+ <20220826231531.1031943-4-andrii@kernel.org>
+ <CACYkzJ7dNQe58g58qUBQJ3kP86o-vvLoFw+e9_hgH-Ltb9ZAHQ@mail.gmail.com>
 From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <60a49435-85b8-f752-51d6-3946fa186b24@iogearbox.net>
-Date:   Mon, 29 Aug 2022 16:23:23 +0200
+Message-ID: <a7cae4ad-be07-893f-3923-a64d7fc20cc7@iogearbox.net>
+Date:   Mon, 29 Aug 2022 16:50:21 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20220826172915.1536914-2-eddyz87@gmail.com>
+In-Reply-To: <CACYkzJ7dNQe58g58qUBQJ3kP86o-vvLoFw+e9_hgH-Ltb9ZAHQ@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -47,101 +48,66 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 8/26/22 7:29 PM, Eduard Zingerman wrote:
-> Propagate nullness information for branches of register to register
-> equality compare instructions. The following rules are used:
-> - suppose register A maybe null
-> - suppose register B is not null
-> - for JNE A, B, ... - A is not null in the false branch
-> - for JEQ A, B, ... - A is not null in the true branch
+On 8/28/22 1:53 AM, KP Singh wrote:
+> On Sat, Aug 27, 2022 at 1:15 AM Andrii Nakryiko <andrii@kernel.org> wrote:
+>>
+>> Add a small tool, veristat, that allows mass-verification of
+>> a set of *libbpf-compatible* BPF ELF object files. For each such object
+>> file, veristat will attempt to verify each BPF program *individually*.
+>> Regardless of success or failure, it parses BPF verifier stats and
+>> outputs them in human-readable table format. In the future we can also
+>> add CSV and JSON output for more scriptable post-processing, if necessary.
+>>
+>> veristat allows to specify a set of stats that should be output and
+>> ordering between multiple objects and files (e.g., so that one can
+>> easily order by total instructions processed, instead of default file
+>> name, prog name, verdict, total instructions order).
+>>
+>> This tool should be useful for validating various BPF verifier changes
+>> or even validating different kernel versions for regressions.
 > 
+> Cool stuff!
+
++1, out of curiosity, did you try with different kernels to see the deltas?
+
+> I think this would be useful for cases beyond these (i.e. for users to get
+> stats about the verifier in general) and it's worth thinking if this should
+> be built into bpftool?
+> 
+>>
+>> Here's an example for some of the heaviest selftests/bpf BPF object
+>> files:
+>>
+>>    $ sudo ./veristat -s insns,file,prog {pyperf,loop,test_verif_scale,strobemeta,test_cls_redirect,profiler}*.linked3.o
+>>    File                                  Program                               Verdict  Duration, us  Total insns  Total states  Peak states
+>>    ------------------------------------  ------------------------------------  -------  ------------  -----------  ------------  -----------
+>>    loop3.linked3.o                       while_true                            failure        350990      1000001          9663         9663
+> 
+> [...]
+
+nit: Looks like CI on gcc is bailing:
+
+https://github.com/kernel-patches/bpf/runs/8072477251?check_suite_focus=true
+
 [...]
->   kernel/bpf/verifier.c | 41 +++++++++++++++++++++++++++++++++++++++--
->   1 file changed, 39 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 0194a36d0b36..7585288e035b 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -472,6 +472,11 @@ static bool type_may_be_null(u32 type)
->   	return type & PTR_MAYBE_NULL;
->   }
->   
-> +static bool type_is_pointer(enum bpf_reg_type type)
-> +{
-> +	return type != NOT_INIT && type != SCALAR_VALUE;
-> +}
+     INSTALL /tmp/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/skel_internal.h
+   In file included from /tmp/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf.h:20,
+     INSTALL /tmp/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf_version.h
+                    from veristat.c:17:
+   /tmp/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf_common.h:13:10: fatal error: libbpf_version.h: No such file or directory
+      13 | #include "libbpf_version.h"
+         |          ^~~~~~~~~~~~~~~~~~
+   compilation terminated.
+     INSTALL /tmp/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/usdt.bpf.h
+     HOSTCC  /tmp/work/bpf/bpf/tools/testing/selftests/bpf/tools/build/libbpf/fixdep.o
+   make: *** [Makefile:165: /tmp/work/bpf/bpf/tools/testing/selftests/bpf/veristat.o] Error 1
+   make: *** Waiting for unfinished jobs....
 
-We also have is_pointer_value(), semantics there are a bit different (and mainly to
-prevent leakage under unpriv), but I wonder if this can be refactored to accommodate
-both. My worry is that if in future we extend one but not the other bugs might slip
-in.
+I wonder, to detect regressions in pruning behavior, could we add a test_progs subtest to load
+selected obj files and compare before/after 'verified insns' numbers? The workflow probably
+makes this a bit hard to run with a kernel before this change, but maybe it could be a starting
+point where we have a checked-in file containing current numbers, and e.g. if the new change
+crosses a threshold of current +10% then the test could fail?
 
->   static bool is_acquire_function(enum bpf_func_id func_id,
->   				const struct bpf_map *map)
->   {
-> @@ -10064,6 +10069,7 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
->   	struct bpf_verifier_state *other_branch;
->   	struct bpf_reg_state *regs = this_branch->frame[this_branch->curframe]->regs;
->   	struct bpf_reg_state *dst_reg, *other_branch_regs, *src_reg = NULL;
-> +	struct bpf_reg_state *eq_branch_regs;
->   	u8 opcode = BPF_OP(insn->code);
->   	bool is_jmp32;
->   	int pred = -1;
-> @@ -10173,8 +10179,8 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
->   	/* detect if we are comparing against a constant value so we can adjust
->   	 * our min/max values for our dst register.
->   	 * this is only legit if both are scalars (or pointers to the same
-> -	 * object, I suppose, but we don't support that right now), because
-> -	 * otherwise the different base pointers mean the offsets aren't
-> +	 * object, I suppose, see the PTR_MAYBE_NULL related if block below),
-> +	 * because otherwise the different base pointers mean the offsets aren't
->   	 * comparable.
->   	 */
->   	if (BPF_SRC(insn->code) == BPF_X) {
-> @@ -10223,6 +10229,37 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
->   		find_equal_scalars(other_branch, &other_branch_regs[insn->dst_reg]);
->   	}
->   
-> +	/* if one pointer register is compared to another pointer
-> +	 * register check if PTR_MAYBE_NULL could be lifted.
-> +	 * E.g. register A - maybe null
-> +	 *      register B - not null
-> +	 * for JNE A, B, ... - A is not null in the false branch;
-> +	 * for JEQ A, B, ... - A is not null in the true branch.
-> +	 */
-> +	if (!is_jmp32 &&
-> +	    BPF_SRC(insn->code) == BPF_X &&
-> +	    type_is_pointer(src_reg->type) && type_is_pointer(dst_reg->type) &&
-> +	    type_may_be_null(src_reg->type) != type_may_be_null(dst_reg->type)) {
-> +		eq_branch_regs = NULL;
-> +		switch (opcode) {
-> +		case BPF_JEQ:
-> +			eq_branch_regs = other_branch_regs;
-> +			break;
-> +		case BPF_JNE:
-> +			eq_branch_regs = regs;
-> +			break;
-> +		default:
-> +			/* do nothing */
-> +			break;
-> +		}
-> +		if (eq_branch_regs) {
-> +			if (type_may_be_null(src_reg->type))
-> +				mark_ptr_not_null_reg(&eq_branch_regs[insn->src_reg]);
-> +			else
-> +				mark_ptr_not_null_reg(&eq_branch_regs[insn->dst_reg]);
-> +		}
-> +	}
-> +
-
-Could we consolidate the logic above with the one below which deals with R == 0 checks?
-There are some similarities, e.g. !is_jmp32, both test for jeq/jne and while one is based
-on K, the other one on X, though we could also add check X == 0 for below. Anyway, just
-a though that it may be nice to consolidate the handling.
-
->   	/* detect if R == 0 where R is returned from bpf_map_lookup_elem().
->   	 * NOTE: these optimizations below are related with pointer comparison
->   	 *       which will never be JMP32.
-> 
-
+Thanks,
+Daniel
