@@ -2,108 +2,82 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 276E8ECAAD2
-	for <bpf@archiver.kernel.org>; Mon, 29 Aug 2022 13:06:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 329DBECAAD2
+	for <bpf@archiver.kernel.org>; Mon, 29 Aug 2022 14:00:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbiH2NGj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Aug 2022 09:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50712 "EHLO
+        id S229803AbiH2OAV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Aug 2022 10:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiH2NGV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Aug 2022 09:06:21 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A4562A9B;
-        Mon, 29 Aug 2022 06:00:40 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        with ESMTP id S229968AbiH2OAV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Aug 2022 10:00:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5631B7A3;
+        Mon, 29 Aug 2022 07:00:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D2D3222DDF;
-        Mon, 29 Aug 2022 12:59:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1661777998; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sSRqVVn5SCoLVeckWTZ5Gj/nBtXDD5MTT0sRUoTFBiw=;
-        b=UqKZNoswzkT4opbT0CFX0E2k4fxB6asNd34TQMJiKraxmyY5Oy62NiBcyrPldyXJ7KDJHR
-        7Wzx8mJy2LXH7P8HqiXtIjspI2kHyviaLuibhQeNTELPHHnPMRqkdbRM750kNErG6GV8Br
-        EgX2s0bkY6Ph0Hv59W0uEeHHnYScYaw=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9836D133A6;
-        Mon, 29 Aug 2022 12:59:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 8skyJE64DGPAQwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Mon, 29 Aug 2022 12:59:58 +0000
-Date:   Mon, 29 Aug 2022 14:59:57 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Tejun Heo <tj@kernel.org>, Aditya Kali <adityakali@google.com>,
-        Serge Hallyn <serge.hallyn@canonical.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Yonghong Song <yhs@fb.com>,
-        Muneendra Kumar <muneendra.kumar@broadcom.com>,
-        Hao Luo <haoluo@google.com>
-Subject: Re: [PATCH 4/4] cgroup/bpf: Honor cgroup NS in cgroup_iter for
- ancestors
-Message-ID: <20220829125957.GB3579@blackbody.suse.cz>
-References: <20220826165238.30915-1-mkoutny@suse.com>
- <20220826165238.30915-5-mkoutny@suse.com>
- <CAJD7tkZZ6j6mPfwwFDy_ModYux5447HFP=oPwa6MFA_NYAZ9-g@mail.gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 35207B81087;
+        Mon, 29 Aug 2022 14:00:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CBBAEC433D7;
+        Mon, 29 Aug 2022 14:00:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661781616;
+        bh=f24Hdlt2fPIkAUzXmijLjWqUIfWBSBOdO9S/34q2NLg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=PpQ3uM8/lo2mmePZkinbY6Bwq1/ZdhpSD0UlGs5/jP5a/coUM0CNN9lE2CnDAU/Ok
+         XPB85BfmyYB0uJZAqzWcB1g4y54k1iz9J0ZcKLmKHLJ/rRjLJ1HcAG9fGeOk/wK3DV
+         Tscbqf7jgUuuMvx9qHt5Ppm4wNDQCiKCePpBI0DSxBRinaYh1D1er4seOPY74GQosH
+         v65oL1AuUovu/tfw0u1wEJseAqdQYNdaA6jSNfdukxM17q3dkG0plLy7gjiFgeaWRw
+         +Fm62JQgn2+ugETH28VX3dHa0hXsIph/y+DEWJckwu4dLZOedI0mO5+vbcwHO7215I
+         YWDHvxs4M0O8A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B0C51E924D6;
+        Mon, 29 Aug 2022 14:00:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="kORqDWCi7qDJ0mEj"
-Content-Disposition: inline
-In-Reply-To: <CAJD7tkZZ6j6mPfwwFDy_ModYux5447HFP=oPwa6MFA_NYAZ9-g@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2] bpf,
+ mips: No need to use min() to get MAX_TAIL_CALL_CNT
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166178161672.22044.323887276798287961.git-patchwork-notify@kernel.org>
+Date:   Mon, 29 Aug 2022 14:00:16 +0000
+References: <1661742309-2320-1-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1661742309-2320-1-git-send-email-yangtiezhu@loongson.cn>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        johan.almbladh@anyfinetworks.com, paulburton@kernel.org,
+        tsbogend@alpha.franken.de, bpf@vger.kernel.org,
+        linux-mips@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Hello:
 
---kORqDWCi7qDJ0mEj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-On Fri, Aug 26, 2022 at 10:41:37AM -0700, Yosry Ahmed <yosryahmed@google.com> wrote:
-> I understand that currently cgroup_iter is the only user of this, but
-> for future use cases, is it safe to assume that cgrp will always be
-> inside ns? Would it be safer to do something like:
+On Mon, 29 Aug 2022 11:05:09 +0800 you wrote:
+> MAX_TAIL_CALL_CNT is 33, so min(MAX_TAIL_CALL_CNT, 0xffff) is always
+> MAX_TAIL_CALL_CNT, it is better to use MAX_TAIL_CALL_CNT directly.
+> 
+> At the same time, add BUILD_BUG_ON(MAX_TAIL_CALL_CNT > 0xffff) with a
+> comment on why the assertion is there.
+> 
+> Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
+> Suggested-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> 
+> [...]
 
-I preferred the simpler root_cgrp comparison to avoid pointer
-arithmetics in cgroup_is_descendant. But I also made the assumption of
-cgrp in ns.
+Here is the summary with links:
+  - [bpf-next,v2] bpf, mips: No need to use min() to get MAX_TAIL_CALL_CNT
+    https://git.kernel.org/bpf/bpf-next/c/bbcf0f55e578
 
-Thanks, I'll likely adjust cgroup_path_ns to make it more robust for
-an external cgrp.
-
-
-I'd like to clarify, if a process A in a broad cgroup ns sets up a BPF
-cgroup iterator, exposes it via bpffs and than a process B in a narrowed
-cgroup ns (which excludes the origin cgroup) wants to traverse the
-iterator, should it fail straight ahead (regardless of iter order)?
-The alternative would be to allow self-dereference but prohibit any
-iterator moves (regardless of order).
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-Thanks,
-Michal
-
---kORqDWCi7qDJ0mEj
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYIAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCYwy4SQAKCRAkDQmsBEOq
-uZX4AQDqrzGBoULhzyvm8GveGTXVJYAupuXli8zU2n5T8KXI1wEA/d5JS9XKNwTR
-qMIafR6at0V6U72iM2jn2OX84ZgiKgk=
-=auEQ
------END PGP SIGNATURE-----
-
---kORqDWCi7qDJ0mEj--
