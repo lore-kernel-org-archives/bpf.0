@@ -2,129 +2,154 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 393F9C0502C
-	for <bpf@archiver.kernel.org>; Mon, 29 Aug 2022 15:48:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2CDFECAAD2
+	for <bpf@archiver.kernel.org>; Mon, 29 Aug 2022 15:50:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbiH2PsG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Aug 2022 11:48:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49480 "EHLO
+        id S229674AbiH2PuM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Aug 2022 11:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbiH2Pr6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Aug 2022 11:47:58 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE3997539;
-        Mon, 29 Aug 2022 08:47:42 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id q81so6880629iod.9;
-        Mon, 29 Aug 2022 08:47:42 -0700 (PDT)
+        with ESMTP id S229566AbiH2PuK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Aug 2022 11:50:10 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77CD47B8C;
+        Mon, 29 Aug 2022 08:50:08 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id h13-20020a17090a648d00b001fdb9003787so3657598pjj.4;
+        Mon, 29 Aug 2022 08:50:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=F8MIYXd/Xz7kSxyNJ7px1zHhNcsXalbvXrm8i70TLIA=;
-        b=MkC5UdWU6+Imh87+mJ22IPOYrjSDsKYj/4VTRMkEYgobRDMqGcUTHShvbFDDhzGCfI
-         hpEMw+y8vqipvOg/wJovZPsZG4SsWXV1vZ6MbVJyhmEGIvj90u6lj00dcPgD/FIEr6Cw
-         8f/Zjm2hz5bMd5oWcReckBHYB5sNYrAQaC89N2DEqP8CJPCHkVQcOTiDQifnFV5wV5d+
-         epLlyF8v3F6Ih0aOOFpW7B4sYL5E+bgt+EZKZH/abLc7eaPsnUMZlTYe2u44rHyb7BvX
-         grt6lZvl574TTY2+i/FHE03X4OEF7srQy3bLB3jQHoNkiYPSqsuvBfSgRKHN9mC/9VYG
-         ij0A==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=taWUzi4UHNfxICa8CAve34OKJtJJKSkD21g1k9CF/lA=;
+        b=bnPj20mJnripHXQ/GXvCmT3YEOJYNbHJkMkHYD8cOZCdgZEOncfbxWW7i8XLvWPDT9
+         zo7UAer/yx8HxZEp6Ek/u3o1cgFe35r8AtlRmiq+gnwHIYY3ElFXHTfkh42rzH90I0gm
+         m/EMCBdk4lYUnl+11n2bG2S26YwT9UUc7clJqCaOcBVqBNXDfjqjBXSTIWzj+HCUqNRT
+         qNi5LZLElki9RY4b5b3yiHAvuR27ALlvvOYFsLNrMBm/IaeBjZTU0cbFAdz6Op1dbc5g
+         vR5QTAQp4RnYAWwNN5+5Z+fLbZcrIJeil/1JSrt4lN/ooVCdEX4XSMfU5YjzWrZSny/h
+         xGvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=F8MIYXd/Xz7kSxyNJ7px1zHhNcsXalbvXrm8i70TLIA=;
-        b=puJ6IsDpqy/1mLrjxN69iI2mWtEomQ4cUA9GRxUUIZt5i1uxifdL903jefrOtHcC9+
-         5whIO5O68LPTZ7FMhNuDt+WlL9tdG6wXzI2CIemIE65Rh97xseIvuGAGiSepEZMKqHrq
-         0VX17t/G/cgE5+jDMmqdF/a2zT9flrUMriqLylCST5DfPwwTcn/qQPG5K3fxT/D2RDr/
-         J/9TF11qffvw5iBH3Ss+qAI2LIQutGADfsMW/Y60YsC5UaI5OHW9c8n/Fag8FAipll4j
-         rwj1HDdw/HhgjANlRlFmc0qEnRxX/Ybh84OXclZuB+Gq3ipZ2FtFmGhNdp89SEtNbS3z
-         TXAg==
-X-Gm-Message-State: ACgBeo0+dLUVM7tGp3fNlOxnfDn1bsnXeDeBatws14l9NkEMEf6w7l7S
-        6ZmMVclKfj3qqnh9nVb8+LS3tOzk4E+ZwA==
-X-Google-Smtp-Source: AA6agR7gk30EK0FrDgzRs3klB18ZOu2JkuAeAChQM6pSN6AXzyQX/5WN+1EMghi/8BQ9UMFKU0OGFg==
-X-Received: by 2002:a6b:2ac4:0:b0:688:3a14:2002 with SMTP id q187-20020a6b2ac4000000b006883a142002mr8837385ioq.62.1661788060553;
-        Mon, 29 Aug 2022 08:47:40 -0700 (PDT)
-Received: from james-x399.localdomain (71-33-138-207.hlrn.qwest.net. [71.33.138.207])
-        by smtp.gmail.com with ESMTPSA id f33-20020a05663832a100b0034294118e1bsm4452576jav.126.2022.08.29.08.47.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 08:47:39 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=taWUzi4UHNfxICa8CAve34OKJtJJKSkD21g1k9CF/lA=;
+        b=XRGc0TwrOeazTzCvZoEERvnWxfW2/8pIxXS89pXdwulgIz6hcnl5WCL2thudximj4T
+         47Wbem/M6Rxh6sIijXz4RqLhmJo002pW5rIJPf6AVaMx8vgZkrpsf8aB4TzUm/E4iZI7
+         cMXJpQqx6HP7pMi7wsv5SHqSZkEtKap1hxALbiGRPdgHuwPX/67Ab8JOFJCHZO3fpGhj
+         UabpjeagJNcq8toFLKO68TlBhJFC+pZMnoGswnGdJc6tS4JJ25CRudEUAibhnNJMVEk5
+         c4wmI2B/aLo2Cj9VC24KRV7kx1tP0vjOPA3PmhAvMgM18ZeIHhb/Sci6bZoVHjnw3Qm+
+         fTVw==
+X-Gm-Message-State: ACgBeo3pQH9t4WZCT6ruaHKDIo3CNmHGGTgyFFp/Ccts/2o7utY80YmG
+        eJ+nEI5cwG0XbtgCyRkMm6ulmR0br4C0IBSGPFA=
+X-Google-Smtp-Source: AA6agR4Z7lZcBO08T5IU5jtduvQotk3IRF4XS9ujug0Qp2Q/1F53ezAKf+Bg8HsYE1WjtYp8IpfZMYcn4CE3dbBTQe8=
+X-Received: by 2002:a17:90a:d714:b0:1fd:ea53:b924 with SMTP id
+ y20-20020a17090ad71400b001fdea53b924mr2976795pju.70.1661788208072; Mon, 29
+ Aug 2022 08:50:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220826055025.1018491-1-james.hilliard1@gmail.com> <e3d9f936-926c-8cd4-1a21-4c2894bf22b6@iogearbox.net>
+In-Reply-To: <e3d9f936-926c-8cd4-1a21-4c2894bf22b6@iogearbox.net>
 From:   James Hilliard <james.hilliard1@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     James Hilliard <james.hilliard1@gmail.com>,
+Date:   Mon, 29 Aug 2022 09:49:55 -0600
+Message-ID: <CADvTj4qBmZyzoSsHVYcg1mLvBRqCr59dWJk2t_mf7njUesa+dA@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: Fix connect4_prog tcp/socket header type conflict
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <martin.lau@linux.dev>,
         Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
         Dave Marchevsky <davemarchevsky@fb.com>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] selftests/bpf: Fix connect4_prog tcp/socket header type conflict
-Date:   Mon, 29 Aug 2022 09:47:09 -0600
-Message-Id: <20220829154710.3870139-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-There is a potential for us to hit a type conflict when including
-netinet/tcp.h and sys/socket.h, we can replace both of these includes
-with linux/tcp.h and bpf_tcp_helpers.h to avoid this conflict.
+On Mon, Aug 29, 2022 at 9:11 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> On 8/26/22 7:50 AM, James Hilliard wrote:
+> [...]
+> > diff --git a/tools/testing/selftests/bpf/progs/connect4_prog.c b/tools/testing/selftests/bpf/progs/connect4_prog.c
+> > index b241932911db..0f68b8d756b3 100644
+> > --- a/tools/testing/selftests/bpf/progs/connect4_prog.c
+> > +++ b/tools/testing/selftests/bpf/progs/connect4_prog.c
+> > @@ -7,8 +7,7 @@
+> >   #include <linux/bpf.h>
+> >   #include <linux/in.h>
+> >   #include <linux/in6.h>
+> > -#include <sys/socket.h>
+> > -#include <netinet/tcp.h>
+> > +#include <linux/tcp.h>
+> >   #include <linux/if.h>
+> >   #include <errno.h>
+>
+> Can't we just add:
+>
+> #include "bpf_tcp_helpers.h"
 
-Fixes the following error:
-In file included from /usr/include/netinet/tcp.h:91,
-                 from progs/connect4_prog.c:11:
-/home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:34:23: error: conflicting types for 'int8_t'; have 'char'
-   34 | typedef __INT8_TYPE__ int8_t;
-      |                       ^~~~~~
-In file included from /usr/include/x86_64-linux-gnu/sys/types.h:155,
-                 from /usr/include/x86_64-linux-gnu/bits/socket.h:29,
-                 from /usr/include/x86_64-linux-gnu/sys/socket.h:33,
-                 from progs/connect4_prog.c:10:
-/usr/include/x86_64-linux-gnu/bits/stdint-intn.h:24:18: note: previous declaration of 'int8_t' with type 'int8_t' {aka 'signed char'}
-   24 | typedef __int8_t int8_t;
-      |                  ^~~~~~
-/home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:43:24: error: conflicting types for 'int64_t'; have 'long int'
-   43 | typedef __INT64_TYPE__ int64_t;
-      |                        ^~~~~~~
-/usr/include/x86_64-linux-gnu/bits/stdint-intn.h:27:19: note: previous declaration of 'int64_t' with type 'int64_t' {aka 'long long int'}
-   27 | typedef __int64_t int64_t;
-      |                   ^~~~~~~
+Yeah, that seems to work, changed in v2:
+https://lore.kernel.org/bpf/20220829154710.3870139-1-james.hilliard1@gmail.com/
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v1 -> v2:
-  - use bpf_tcp_helpers.h so we can use SOL_TCP
----
- tools/testing/selftests/bpf/progs/connect4_prog.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/progs/connect4_prog.c b/tools/testing/selftests/bpf/progs/connect4_prog.c
-index b241932911db..23d85f5027d3 100644
---- a/tools/testing/selftests/bpf/progs/connect4_prog.c
-+++ b/tools/testing/selftests/bpf/progs/connect4_prog.c
-@@ -7,13 +7,13 @@
- #include <linux/bpf.h>
- #include <linux/in.h>
- #include <linux/in6.h>
--#include <sys/socket.h>
--#include <netinet/tcp.h>
-+#include <linux/tcp.h>
- #include <linux/if.h>
- #include <errno.h>
- 
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_endian.h>
-+#include "bpf_tcp_helpers.h"
- 
- #define SRC_REWRITE_IP4		0x7f000004U
- #define DST_REWRITE_IP4		0x7f000001U
--- 
-2.34.1
-
+>
+> It does define SOL_TCP already and is used also in other prog tests. I presume this
+> would avoid the need the change all the below.
+>
+> > @@ -52,7 +51,7 @@ static __inline int verify_cc(struct bpf_sock_addr *ctx,
+> >       char buf[TCP_CA_NAME_MAX];
+> >       int i;
+> >
+> > -     if (bpf_getsockopt(ctx, SOL_TCP, TCP_CONGESTION, &buf, sizeof(buf)))
+> > +     if (bpf_getsockopt(ctx, IPPROTO_TCP, TCP_CONGESTION, &buf, sizeof(buf)))
+> >               return 1;
+> >
+> >       for (i = 0; i < TCP_CA_NAME_MAX; i++) {
+> > @@ -70,12 +69,12 @@ static __inline int set_cc(struct bpf_sock_addr *ctx)
+> >       char reno[TCP_CA_NAME_MAX] = "reno";
+> >       char cubic[TCP_CA_NAME_MAX] = "cubic";
+> >
+> > -     if (bpf_setsockopt(ctx, SOL_TCP, TCP_CONGESTION, &reno, sizeof(reno)))
+> > +     if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_CONGESTION, &reno, sizeof(reno)))
+> >               return 1;
+> >       if (verify_cc(ctx, reno))
+> >               return 1;
+> >
+> > -     if (bpf_setsockopt(ctx, SOL_TCP, TCP_CONGESTION, &cubic, sizeof(cubic)))
+> > +     if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_CONGESTION, &cubic, sizeof(cubic)))
+> >               return 1;
+> >       if (verify_cc(ctx, cubic))
+> >               return 1;
+> > @@ -113,15 +112,15 @@ static __inline int set_keepalive(struct bpf_sock_addr *ctx)
+> >       if (bpf_setsockopt(ctx, SOL_SOCKET, SO_KEEPALIVE, &one, sizeof(one)))
+> >               return 1;
+> >       if (ctx->type == SOCK_STREAM) {
+> > -             if (bpf_setsockopt(ctx, SOL_TCP, TCP_KEEPIDLE, &one, sizeof(one)))
+> > +             if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_KEEPIDLE, &one, sizeof(one)))
+> >                       return 1;
+> > -             if (bpf_setsockopt(ctx, SOL_TCP, TCP_KEEPINTVL, &one, sizeof(one)))
+> > +             if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_KEEPINTVL, &one, sizeof(one)))
+> >                       return 1;
+> > -             if (bpf_setsockopt(ctx, SOL_TCP, TCP_KEEPCNT, &one, sizeof(one)))
+> > +             if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_KEEPCNT, &one, sizeof(one)))
+> >                       return 1;
+> > -             if (bpf_setsockopt(ctx, SOL_TCP, TCP_SYNCNT, &one, sizeof(one)))
+> > +             if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_SYNCNT, &one, sizeof(one)))
+> >                       return 1;
+> > -             if (bpf_setsockopt(ctx, SOL_TCP, TCP_USER_TIMEOUT, &one, sizeof(one)))
+> > +             if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_USER_TIMEOUT, &one, sizeof(one)))
+> >                       return 1;
+> >       }
+> >       if (bpf_setsockopt(ctx, SOL_SOCKET, SO_KEEPALIVE, &zero, sizeof(zero)))
+> > @@ -135,7 +134,7 @@ static __inline int set_notsent_lowat(struct bpf_sock_addr *ctx)
+> >       int lowat = 65535;
+> >
+> >       if (ctx->type == SOCK_STREAM) {
+> > -             if (bpf_setsockopt(ctx, SOL_TCP, TCP_NOTSENT_LOWAT, &lowat, sizeof(lowat)))
+> > +             if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_NOTSENT_LOWAT, &lowat, sizeof(lowat)))
+> >                       return 1;
+> >       }
+> >
+> >
+>
