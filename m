@@ -2,45 +2,45 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 532CFECAAD5
-	for <bpf@archiver.kernel.org>; Mon, 29 Aug 2022 19:21:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A38A4ECAAD5
+	for <bpf@archiver.kernel.org>; Mon, 29 Aug 2022 19:21:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbiH2TVV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Aug 2022 15:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43940 "EHLO
+        id S229768AbiH2TV3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Aug 2022 15:21:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbiH2TVT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Aug 2022 15:21:19 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB6A7DF4C
-        for <bpf@vger.kernel.org>; Mon, 29 Aug 2022 12:21:18 -0700 (PDT)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 27TJ5gFS028132
-        for <bpf@vger.kernel.org>; Mon, 29 Aug 2022 12:21:17 -0700
+        with ESMTP id S229783AbiH2TV2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Aug 2022 15:21:28 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39AD85FDC
+        for <bpf@vger.kernel.org>; Mon, 29 Aug 2022 12:21:27 -0700 (PDT)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27TJ5gGM001681
+        for <bpf@vger.kernel.org>; Mon, 29 Aug 2022 12:21:27 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=hds/l+EZne5Bx4C7SMfW/3q9vpOqEfefSjgmE92tPHU=;
- b=c9Z6YjInCQZX6vYQCAoyGbraCbtfzXtxu4cCdGG5xar6rfYTnnyKMRueI/FXxCpXB0GT
- iZ0B5Alg13FNovmm/LrcwHlKX6IrJPSwRchTFxmOEzpCuelgL9Kztj5E8mQ8N+Cd8Zxk
- ocRmVaLbjqJhWCRC2hkNGZf0Vf5k72014SU= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3j7es8m480-1
+ bh=iZsOHRvgL5PWCUAfF/SrBmDyVmWKwdWIM4SHpyqMs+I=;
+ b=fei5VJdC4U5YgFaoi/hyTqp4cZz12BkdI+LlLmi9dGeAh8FgFJMEeAbstC3C9y+GJg5N
+ qdf1ySKeNdWKs/vMu/bXQZ3yC4ukt0fUM0YBFbWZu2iJgM215wd0X8d0LFJe4zSr5led
+ HYBncIAUw9ZPXpvD5UuLXLwZ6ltzN4cFPks= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j7jk4kgn7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 29 Aug 2022 12:21:17 -0700
-Received: from twshared25017.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 29 Aug 2022 12:21:27 -0700
+Received: from twshared2273.16.frc2.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 29 Aug 2022 12:21:17 -0700
+ 15.1.2375.31; Mon, 29 Aug 2022 12:21:26 -0700
 Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
-        id 7E937749E989; Mon, 29 Aug 2022 12:21:09 -0700 (PDT)
+        id D618C749E9AE; Mon, 29 Aug 2022 12:21:15 -0700 (PDT)
 From:   Kui-Feng Lee <kuifeng@fb.com>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <andrii@kernel.org>, <kernel-team@fb.com>, <yhs@fb.com>
 CC:     Kui-Feng Lee <kuifeng@fb.com>
-Subject: [PATCH bpf-next v8 3/5] bpf, x86: Attach a cookie to fentry/fexit/fmod_ret/lsm.
-Date:   Mon, 29 Aug 2022 12:20:49 -0700
-Message-ID: <20220829192051.475894-4-kuifeng@fb.com>
+Subject: [PATCH bpf-next v8 5/5] selftest/bpf: The test cses of BPF cookie for fentry/fexit/fmod_ret/lsm.
+Date:   Mon, 29 Aug 2022 12:20:51 -0700
+Message-ID: <20220829192051.475894-6-kuifeng@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220829192051.475894-1-kuifeng@fb.com>
 References: <20220829192051.475894-1-kuifeng@fb.com>
@@ -48,8 +48,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: ICMNrMxwPt0-er25O5637_46Ne89Ak7_
-X-Proofpoint-GUID: ICMNrMxwPt0-er25O5637_46Ne89Ak7_
+X-Proofpoint-ORIG-GUID: e-dw5Y76o8saixX6VpLGY5I9Bl1H9E9U
+X-Proofpoint-GUID: e-dw5Y76o8saixX6VpLGY5I9Bl1H9E9U
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-29_09,2022-08-25_01,2022-06-22_01
@@ -57,264 +57,207 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Pass a cookie along with BPF_LINK_CREATE requests.
-
-Add a bpf_cookie field to struct bpf_tracing_link to attach a cookie.
-The cookie of a bpf_tracing_link is available by calling
-bpf_get_attach_cookie when running the BPF program of the attached
-link.
-
-The value of a cookie will be set at bpf_tramp_run_ctx by the
-trampoline of the link.
+Make sure BPF cookies are correct for fentry/fexit/fmod_ret/lsm.
 
 Signed-off-by: Kui-Feng Lee <kuifeng@fb.com>
 Acked-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- arch/x86/net/bpf_jit_comp.c    |  7 +++++--
- include/linux/bpf.h            |  1 +
- include/uapi/linux/bpf.h       |  9 +++++++++
- kernel/bpf/bpf_lsm.c           | 17 +++++++++++++++++
- kernel/bpf/syscall.c           | 12 ++++++++----
- kernel/bpf/trampoline.c        |  7 +++++--
- kernel/trace/bpf_trace.c       | 17 +++++++++++++++++
- tools/include/uapi/linux/bpf.h |  9 +++++++++
- 8 files changed, 71 insertions(+), 8 deletions(-)
+ .../selftests/bpf/prog_tests/bpf_cookie.c     | 89 +++++++++++++++++++
+ .../selftests/bpf/progs/test_bpf_cookie.c     | 52 +++++++++--
+ 2 files changed, 133 insertions(+), 8 deletions(-)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 1fbc5cf1c7a7..f94582c2875d 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -1765,13 +1765,16 @@ static int invoke_bpf_prog(const struct btf_func_=
-model *m, u8 **pprog,
- 			   struct bpf_tramp_link *l, int stack_size,
- 			   int run_ctx_off, bool save_ret)
- {
-+	u64 cookie =3D 0;
- 	u8 *prog =3D *pprog;
- 	u8 *jmp_insn;
- 	int ctx_cookie_off =3D offsetof(struct bpf_tramp_run_ctx, bpf_cookie);
- 	struct bpf_prog *p =3D l->link.prog;
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/=
+testing/selftests/bpf/prog_tests/bpf_cookie.c
+index 923a6139b2d8..83ef55e3caa4 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+@@ -4,8 +4,11 @@
+ #include <pthread.h>
+ #include <sched.h>
+ #include <sys/syscall.h>
++#include <sys/mman.h>
+ #include <unistd.h>
+ #include <test_progs.h>
++#include <network_helpers.h>
++#include <bpf/btf.h>
+ #include "test_bpf_cookie.skel.h"
+ #include "kprobe_multi.skel.h"
 =20
--	/* mov rdi, 0 */
--	emit_mov_imm64(&prog, BPF_REG_1, 0, 0);
-+	cookie =3D l->cookie;
-+
-+	/* mov rdi, cookie */
-+	emit_mov_imm64(&prog, BPF_REG_1, (long) cookie >> 32, (u32) (long) cook=
-ie);
-=20
- 	/* Prepare struct bpf_tramp_run_ctx.
- 	 *
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 256fb802e580..aba7ded56436 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1102,6 +1102,7 @@ struct bpf_link_ops {
- struct bpf_tramp_link {
- 	struct bpf_link link;
- 	struct hlist_node tramp_hlist;
-+	u64 cookie;
- };
-=20
- struct bpf_tracing_link {
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 3d032ea1b6a3..c04eff1a00b8 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1490,6 +1490,15 @@ union bpf_attr {
- 				__aligned_u64	addrs;
- 				__aligned_u64	cookies;
- 			} kprobe_multi;
-+			struct {
-+				/* this is overliad with the target_btf_id above. */
-+				__u32		target_btf_id;
-+				/* black box user-provided value passed through
-+				 * to BPF program at the execution time and
-+				 * accessible through bpf_get_attach_cookie() BPF helper
-+				 */
-+				__u64		cookie;
-+			} tracing;
- 		};
- 	} link_create;
-=20
-diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-index 064eccba641d..c1351df9f7ee 100644
---- a/kernel/bpf/bpf_lsm.c
-+++ b/kernel/bpf/bpf_lsm.c
-@@ -117,6 +117,21 @@ static const struct bpf_func_proto bpf_ima_file_hash=
-_proto =3D {
- 	.allowed	=3D bpf_ima_inode_hash_allowed,
- };
-=20
-+BPF_CALL_1(bpf_get_attach_cookie, void *, ctx)
-+{
-+	struct bpf_trace_run_ctx *run_ctx;
-+
-+	run_ctx =3D container_of(current->bpf_ctx, struct bpf_trace_run_ctx, ru=
-n_ctx);
-+	return run_ctx->bpf_cookie;
-+}
-+
-+static const struct bpf_func_proto bpf_get_attach_cookie_proto =3D {
-+	.func		=3D bpf_get_attach_cookie,
-+	.gpl_only	=3D false,
-+	.ret_type	=3D RET_INTEGER,
-+	.arg1_type	=3D ARG_PTR_TO_CTX,
-+};
-+
- static const struct bpf_func_proto *
- bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog=
-)
- {
-@@ -141,6 +156,8 @@ bpf_lsm_func_proto(enum bpf_func_id func_id, const st=
-ruct bpf_prog *prog)
- 		return prog->aux->sleepable ? &bpf_ima_inode_hash_proto : NULL;
- 	case BPF_FUNC_ima_file_hash:
- 		return prog->aux->sleepable ? &bpf_ima_file_hash_proto : NULL;
-+	case BPF_FUNC_get_attach_cookie:
-+		return bpf_prog_has_trampoline(prog) ? &bpf_get_attach_cookie_proto : =
-NULL;
- 	default:
- 		return tracing_prog_func_proto(func_id, prog);
- 	}
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index d48165fccf49..72e53489165d 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2921,7 +2921,8 @@ static const struct bpf_link_ops bpf_tracing_link_l=
-ops =3D {
-=20
- static int bpf_tracing_prog_attach(struct bpf_prog *prog,
- 				   int tgt_prog_fd,
--				   u32 btf_id)
-+				   u32 btf_id,
-+				   u64 bpf_cookie)
- {
- 	struct bpf_link_primer link_primer;
- 	struct bpf_prog *tgt_prog =3D NULL;
-@@ -2986,6 +2987,7 @@ static int bpf_tracing_prog_attach(struct bpf_prog =
-*prog,
- 	bpf_link_init(&link->link.link, BPF_LINK_TYPE_TRACING,
- 		      &bpf_tracing_link_lops, prog);
- 	link->attach_type =3D prog->expected_attach_type;
-+	link->link.cookie =3D bpf_cookie;
-=20
- 	mutex_lock(&prog->aux->dst_mutex);
-=20
-@@ -3271,7 +3273,7 @@ static int bpf_raw_tp_link_attach(struct bpf_prog *=
-prog,
- 			tp_name =3D prog->aux->attach_func_name;
- 			break;
- 		}
--		return bpf_tracing_prog_attach(prog, 0, 0);
-+		return bpf_tracing_prog_attach(prog, 0, 0, 0);
- 	case BPF_PROG_TYPE_RAW_TRACEPOINT:
- 	case BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE:
- 		if (strncpy_from_user(buf, user_tp_name, sizeof(buf) - 1) < 0)
-@@ -4524,7 +4526,8 @@ static int link_create(union bpf_attr *attr, bpfptr=
-_t uattr)
- 	case BPF_PROG_TYPE_EXT:
- 		ret =3D bpf_tracing_prog_attach(prog,
- 					      attr->link_create.target_fd,
--					      attr->link_create.target_btf_id);
-+					      attr->link_create.target_btf_id,
-+					      attr->link_create.tracing.cookie);
- 		break;
- 	case BPF_PROG_TYPE_LSM:
- 	case BPF_PROG_TYPE_TRACING:
-@@ -4539,7 +4542,8 @@ static int link_create(union bpf_attr *attr, bpfptr=
-_t uattr)
- 		else
- 			ret =3D bpf_tracing_prog_attach(prog,
- 						      attr->link_create.target_fd,
--						      attr->link_create.target_btf_id);
-+						      attr->link_create.target_btf_id,
-+						      attr->link_create.tracing.cookie);
- 		break;
- 	case BPF_PROG_TYPE_FLOW_DISSECTOR:
- 	case BPF_PROG_TYPE_SK_LOOKUP:
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index baf1b65d523e..0e9b3aefc34a 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -30,9 +30,12 @@ static DEFINE_MUTEX(trampoline_mutex);
- bool bpf_prog_has_trampoline(const struct bpf_prog *prog)
- {
- 	enum bpf_attach_type eatype =3D prog->expected_attach_type;
-+	enum bpf_prog_type ptype =3D prog->type;
-=20
--	return eatype =3D=3D BPF_TRACE_FENTRY || eatype =3D=3D BPF_TRACE_FEXIT =
-||
--	       eatype =3D=3D BPF_MODIFY_RETURN;
-+	return (ptype =3D=3D BPF_PROG_TYPE_TRACING &&
-+		(eatype =3D=3D BPF_TRACE_FENTRY || eatype =3D=3D BPF_TRACE_FEXIT ||
-+		 eatype =3D=3D BPF_MODIFY_RETURN)) ||
-+		(ptype =3D=3D BPF_PROG_TYPE_LSM && eatype =3D=3D BPF_LSM_MAC);
+@@ -410,6 +413,88 @@ static void pe_subtest(struct test_bpf_cookie *skel)
+ 	bpf_link__destroy(link);
  }
 =20
- void *bpf_jit_alloc_exec_page(void)
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index f15b826f9899..6377ed23e17f 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1091,6 +1091,21 @@ static const struct bpf_func_proto bpf_get_attach_=
-cookie_proto_pe =3D {
- 	.arg1_type	=3D ARG_PTR_TO_CTX,
- };
-=20
-+BPF_CALL_1(bpf_get_attach_cookie_tracing, void *, ctx)
++static void tracing_subtest(struct test_bpf_cookie *skel)
 +{
-+	struct bpf_trace_run_ctx *run_ctx;
++	__u64 cookie;
++	int prog_fd;
++	int fentry_fd =3D -1, fexit_fd =3D -1, fmod_ret_fd =3D -1;
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	LIBBPF_OPTS(bpf_link_create_opts, link_opts);
 +
-+	run_ctx =3D container_of(current->bpf_ctx, struct bpf_trace_run_ctx, ru=
-n_ctx);
-+	return run_ctx->bpf_cookie;
++	skel->bss->fentry_res =3D 0;
++	skel->bss->fexit_res =3D 0;
++
++	cookie =3D 0x10000000000000L;
++	prog_fd =3D bpf_program__fd(skel->progs.fentry_test1);
++	link_opts.tracing.cookie =3D cookie;
++	fentry_fd =3D bpf_link_create(prog_fd, 0, BPF_TRACE_FENTRY, &link_opts)=
+;
++	if (!ASSERT_GE(fentry_fd, 0, "fentry.link_create"))
++		goto cleanup;
++
++	cookie =3D 0x20000000000000L;
++	prog_fd =3D bpf_program__fd(skel->progs.fexit_test1);
++	link_opts.tracing.cookie =3D cookie;
++	fexit_fd =3D bpf_link_create(prog_fd, 0, BPF_TRACE_FEXIT, &link_opts);
++	if (!ASSERT_GE(fexit_fd, 0, "fexit.link_create"))
++		goto cleanup;
++
++	cookie =3D 0x30000000000000L;
++	prog_fd =3D bpf_program__fd(skel->progs.fmod_ret_test);
++	link_opts.tracing.cookie =3D cookie;
++	fmod_ret_fd =3D bpf_link_create(prog_fd, 0, BPF_MODIFY_RETURN, &link_op=
+ts);
++	if (!ASSERT_GE(fmod_ret_fd, 0, "fmod_ret.link_create"))
++		goto cleanup;
++
++	prog_fd =3D bpf_program__fd(skel->progs.fentry_test1);
++	bpf_prog_test_run_opts(prog_fd, &opts);
++
++	prog_fd =3D bpf_program__fd(skel->progs.fmod_ret_test);
++	bpf_prog_test_run_opts(prog_fd, &opts);
++
++	ASSERT_EQ(skel->bss->fentry_res, 0x10000000000000L, "fentry_res");
++	ASSERT_EQ(skel->bss->fexit_res, 0x20000000000000L, "fexit_res");
++	ASSERT_EQ(skel->bss->fmod_ret_res, 0x30000000000000L, "fmod_ret_res");
++
++cleanup:
++	if (fentry_fd >=3D 0)
++		close(fentry_fd);
++	if (fexit_fd >=3D 0)
++		close(fexit_fd);
++	if (fmod_ret_fd >=3D 0)
++		close(fmod_ret_fd);
 +}
 +
-+static const struct bpf_func_proto bpf_get_attach_cookie_proto_tracing =3D=
- {
-+	.func		=3D bpf_get_attach_cookie_tracing,
-+	.gpl_only	=3D false,
-+	.ret_type	=3D RET_INTEGER,
-+	.arg1_type	=3D ARG_PTR_TO_CTX,
-+};
++int stack_mprotect(void);
 +
- BPF_CALL_3(bpf_get_branch_snapshot, void *, buf, u32, size, u64, flags)
++static void lsm_subtest(struct test_bpf_cookie *skel)
++{
++	__u64 cookie;
++	int prog_fd;
++	int lsm_fd =3D -1;
++	LIBBPF_OPTS(bpf_link_create_opts, link_opts);
++
++	skel->bss->lsm_res =3D 0;
++
++	cookie =3D 0x90000000000090L;
++	prog_fd =3D bpf_program__fd(skel->progs.test_int_hook);
++	link_opts.tracing.cookie =3D cookie;
++	lsm_fd =3D bpf_link_create(prog_fd, 0, BPF_LSM_MAC, &link_opts);
++	if (!ASSERT_GE(lsm_fd, 0, "lsm.link_create"))
++		goto cleanup;
++
++	stack_mprotect();
++	if (!ASSERT_EQ(errno, EPERM, "stack_mprotect"))
++		goto cleanup;
++
++	usleep(1);
++
++	ASSERT_EQ(skel->bss->lsm_res, 0x90000000000090L, "fentry_res");
++
++cleanup:
++	if (lsm_fd >=3D 0)
++		close(lsm_fd);
++}
++
+ void test_bpf_cookie(void)
  {
- #ifndef CONFIG_X86
-@@ -1719,6 +1734,8 @@ tracing_prog_func_proto(enum bpf_func_id func_id, c=
-onst struct bpf_prog *prog)
- 		return bpf_prog_has_trampoline(prog) ? &bpf_get_func_ret_proto : NULL;
- 	case BPF_FUNC_get_func_arg_cnt:
- 		return bpf_prog_has_trampoline(prog) ? &bpf_get_func_arg_cnt_proto : N=
-ULL;
-+	case BPF_FUNC_get_attach_cookie:
-+		return bpf_prog_has_trampoline(prog) ? &bpf_get_attach_cookie_proto_tr=
-acing : NULL;
- 	default:
- 		fn =3D raw_tp_prog_func_proto(func_id, prog);
- 		if (!fn && prog->expected_attach_type =3D=3D BPF_TRACE_ITER)
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index 3d032ea1b6a3..c04eff1a00b8 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1490,6 +1490,15 @@ union bpf_attr {
- 				__aligned_u64	addrs;
- 				__aligned_u64	cookies;
- 			} kprobe_multi;
-+			struct {
-+				/* this is overliad with the target_btf_id above. */
-+				__u32		target_btf_id;
-+				/* black box user-provided value passed through
-+				 * to BPF program at the execution time and
-+				 * accessible through bpf_get_attach_cookie() BPF helper
-+				 */
-+				__u64		cookie;
-+			} tracing;
- 		};
- 	} link_create;
+ 	struct test_bpf_cookie *skel;
+@@ -432,6 +517,10 @@ void test_bpf_cookie(void)
+ 		tp_subtest(skel);
+ 	if (test__start_subtest("perf_event"))
+ 		pe_subtest(skel);
++	if (test__start_subtest("trampoline"))
++		tracing_subtest(skel);
++	if (test__start_subtest("lsm"))
++		lsm_subtest(skel);
 =20
+ 	test_bpf_cookie__destroy(skel);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_bpf_cookie.c b/tools/=
+testing/selftests/bpf/progs/test_bpf_cookie.c
+index 0e2222968918..22d0ac8709b4 100644
+--- a/tools/testing/selftests/bpf/progs/test_bpf_cookie.c
++++ b/tools/testing/selftests/bpf/progs/test_bpf_cookie.c
+@@ -4,18 +4,23 @@
+ #include "vmlinux.h"
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
++#include <errno.h>
+=20
+ int my_tid;
+=20
+-int kprobe_res;
+-int kprobe_multi_res;
+-int kretprobe_res;
+-int uprobe_res;
+-int uretprobe_res;
+-int tp_res;
+-int pe_res;
++__u64 kprobe_res;
++__u64 kprobe_multi_res;
++__u64 kretprobe_res;
++__u64 uprobe_res;
++__u64 uretprobe_res;
++__u64 tp_res;
++__u64 pe_res;
++__u64 fentry_res;
++__u64 fexit_res;
++__u64 fmod_ret_res;
++__u64 lsm_res;
+=20
+-static void update(void *ctx, int *res)
++static void update(void *ctx, __u64 *res)
+ {
+ 	if (my_tid !=3D (u32)bpf_get_current_pid_tgid())
+ 		return;
+@@ -82,4 +87,35 @@ int handle_pe(struct pt_regs *ctx)
+ 	return 0;
+ }
+=20
++SEC("fentry/bpf_fentry_test1")
++int BPF_PROG(fentry_test1, int a)
++{
++	update(ctx, &fentry_res);
++	return 0;
++}
++
++SEC("fexit/bpf_fentry_test1")
++int BPF_PROG(fexit_test1, int a, int ret)
++{
++	update(ctx, &fexit_res);
++	return 0;
++}
++
++SEC("fmod_ret/bpf_modify_return_test")
++int BPF_PROG(fmod_ret_test, int _a, int *_b, int _ret)
++{
++	update(ctx, &fmod_ret_res);
++	return 1234;
++}
++
++SEC("lsm/file_mprotect")
++int BPF_PROG(test_int_hook, struct vm_area_struct *vma,
++	     unsigned long reqprot, unsigned long prot, int ret)
++{
++	if (my_tid !=3D (u32)bpf_get_current_pid_tgid())
++		return ret;
++	update(ctx, &lsm_res);
++	return -EPERM;
++}
++
+ char _license[] SEC("license") =3D "GPL";
 --=20
 2.30.2
 
