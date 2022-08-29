@@ -2,82 +2,100 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 329DBECAAD2
-	for <bpf@archiver.kernel.org>; Mon, 29 Aug 2022 14:00:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E9A7ECAAD5
+	for <bpf@archiver.kernel.org>; Mon, 29 Aug 2022 14:09:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbiH2OAV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Aug 2022 10:00:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42222 "EHLO
+        id S229600AbiH2OJv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Aug 2022 10:09:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbiH2OAV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Aug 2022 10:00:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5631B7A3;
-        Mon, 29 Aug 2022 07:00:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 35207B81087;
-        Mon, 29 Aug 2022 14:00:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CBBAEC433D7;
-        Mon, 29 Aug 2022 14:00:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661781616;
-        bh=f24Hdlt2fPIkAUzXmijLjWqUIfWBSBOdO9S/34q2NLg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=PpQ3uM8/lo2mmePZkinbY6Bwq1/ZdhpSD0UlGs5/jP5a/coUM0CNN9lE2CnDAU/Ok
-         XPB85BfmyYB0uJZAqzWcB1g4y54k1iz9J0ZcKLmKHLJ/rRjLJ1HcAG9fGeOk/wK3DV
-         Tscbqf7jgUuuMvx9qHt5Ppm4wNDQCiKCePpBI0DSxBRinaYh1D1er4seOPY74GQosH
-         v65oL1AuUovu/tfw0u1wEJseAqdQYNdaA6jSNfdukxM17q3dkG0plLy7gjiFgeaWRw
-         +Fm62JQgn2+ugETH28VX3dHa0hXsIph/y+DEWJckwu4dLZOedI0mO5+vbcwHO7215I
-         YWDHvxs4M0O8A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B0C51E924D6;
-        Mon, 29 Aug 2022 14:00:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229926AbiH2OJu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Aug 2022 10:09:50 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0B2E6F
+        for <bpf@vger.kernel.org>; Mon, 29 Aug 2022 07:09:46 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MGXMn0nDHzKFjm
+        for <bpf@vger.kernel.org>; Mon, 29 Aug 2022 22:08:05 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP2 (Coremail) with SMTP id Syh0CgDXKXOmyAxjiPRgAA--.56898S4;
+        Mon, 29 Aug 2022 22:09:44 +0800 (CST)
+From:   Hou Tao <houtao@huaweicloud.com>
+To:     bpf@vger.kernel.org
+Cc:     Song Liu <songliubraving@fb.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Hao Sun <sunhao.th@gmail.com>, Hao Luo <haoluo@google.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yonghong Song <yhs@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Lorenz Bauer <oss@lmb.io>, houtao1@huawei.com
+Subject: [PATCH bpf-next 0/3] make bpf_task_storage_busy being preemption-safe
+Date:   Mon, 29 Aug 2022 22:27:49 +0800
+Message-Id: <20220829142752.330094-1-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2] bpf,
- mips: No need to use min() to get MAX_TAIL_CALL_CNT
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166178161672.22044.323887276798287961.git-patchwork-notify@kernel.org>
-Date:   Mon, 29 Aug 2022 14:00:16 +0000
-References: <1661742309-2320-1-git-send-email-yangtiezhu@loongson.cn>
-In-Reply-To: <1661742309-2320-1-git-send-email-yangtiezhu@loongson.cn>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        johan.almbladh@anyfinetworks.com, paulburton@kernel.org,
-        tsbogend@alpha.franken.de, bpf@vger.kernel.org,
-        linux-mips@vger.kernel.org
+X-CM-TRANSID: Syh0CgDXKXOmyAxjiPRgAA--.56898S4
+X-Coremail-Antispam: 1UD129KBjvJXoWrZrW7KF4fZr45Ww15Zr4fZrb_yoW8Jry8pr
+        Wxtr1Yyr1kK3Z3ZwsxJrs7ZrWrJ34kXw47KFs5tF9ayr4ktryrXr1xKr18uF9xCryFqr1f
+        Zas0gFs5Ww4UZFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
+        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+From: Hou Tao <houtao1@huawei.com>
 
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+Hi,
 
-On Mon, 29 Aug 2022 11:05:09 +0800 you wrote:
-> MAX_TAIL_CALL_CNT is 33, so min(MAX_TAIL_CALL_CNT, 0xffff) is always
-> MAX_TAIL_CALL_CNT, it is better to use MAX_TAIL_CALL_CNT directly.
-> 
-> At the same time, add BUILD_BUG_ON(MAX_TAIL_CALL_CNT > 0xffff) with a
-> comment on why the assertion is there.
-> 
-> Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
-> Suggested-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> 
-> [...]
+The patchset aims to make the update of bpf_task_storage_busy being
+preemption-safe. The problem is on same architectures (e.g. arm64),
+__this_cpu_{inc|dec|inc_return} are neither preemption-safe nor
+IRQ-safe, so the concurrent lookups or updates on the same task local
+storage and the same CPU may make bpf_task_storage_busy be imbalanced,
+and bpf_task_storage_trylock() on specific cpu will always fail.
 
-Here is the summary with links:
-  - [bpf-next,v2] bpf, mips: No need to use min() to get MAX_TAIL_CALL_CNT
-    https://git.kernel.org/bpf/bpf-next/c/bbcf0f55e578
+Patch 1 fixes the problem by using preemption/IRQ-safe per-cpu helpers.
+And patch 2 & patch 3 add a test case for the problem. Comments are
+always welcome.
 
-You are awesome, thank you!
+Regards,
+Tao
+
+Hou Tao (3):
+  bpf: Use this_cpu_{inc|dec|inc_return} for bpf_task_storage_busy
+  selftests/bpf: Move sys_pidfd_open() into test_progs.h
+  selftests/bpf: Test concurrent updates on bpf_task_storage_busy
+
+ kernel/bpf/bpf_local_storage.c                |  4 +-
+ kernel/bpf/bpf_task_storage.c                 |  8 +-
+ .../bpf/prog_tests/task_local_storage.c       | 91 +++++++++++++++++++
+ .../selftests/bpf/prog_tests/test_bprm_opts.c |  9 --
+ .../bpf/prog_tests/test_local_storage.c       |  9 --
+ tools/testing/selftests/bpf/test_progs.h      |  9 ++
+ 6 files changed, 106 insertions(+), 24 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.29.2
 
