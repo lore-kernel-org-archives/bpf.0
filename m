@@ -2,492 +2,141 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15149ECAAD5
-	for <bpf@archiver.kernel.org>; Mon, 29 Aug 2022 19:23:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12D68ECAAD2
+	for <bpf@archiver.kernel.org>; Mon, 29 Aug 2022 19:54:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229468AbiH2TXv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Aug 2022 15:23:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
+        id S229906AbiH2TyJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Aug 2022 15:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbiH2TXt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Aug 2022 15:23:49 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0CBC87094
-        for <bpf@vger.kernel.org>; Mon, 29 Aug 2022 12:23:47 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27TJ5nkG015246
-        for <bpf@vger.kernel.org>; Mon, 29 Aug 2022 12:23:46 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=UpYQr7hsZqcF2vTdIOHMeKJdTmoxyNWb0bHW0/zL4uw=;
- b=L2MTwrzBOHGyLbEtabVah+S48YLKNKyNsFzsKlky0Q6I9q+iSGpp5A98swiL4UDanyqJ
- UPXBGN8f3K07lW26uk8jVGmRQnwuFaN5b75w2gmmpHEZ57ZwwdfuEKyAd4cFadoQTDA0
- rAMFirSLa+6F+7+2Yf+GzL5Q/34IQ4zHUck= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j7h3uuq1b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 29 Aug 2022 12:23:46 -0700
-Received: from twshared30313.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 29 Aug 2022 12:23:43 -0700
-Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
-        id B84D8749ED39; Mon, 29 Aug 2022 12:23:32 -0700 (PDT)
-From:   Kui-Feng Lee <kuifeng@fb.com>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <andrii@kernel.org>, <kernel-team@fb.com>, <yhs@fb.com>
-CC:     Kui-Feng Lee <kuifeng@fb.com>
-Subject: [PATCH bpf-next v8 1/5] bpf: Parameterize task iterators.
-Date:   Mon, 29 Aug 2022 12:23:13 -0700
-Message-ID: <20220829192317.486946-2-kuifeng@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220829192317.486946-1-kuifeng@fb.com>
-References: <20220829192317.486946-1-kuifeng@fb.com>
+        with ESMTP id S229523AbiH2TyD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Aug 2022 15:54:03 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03CEA7FF81;
+        Mon, 29 Aug 2022 12:54:03 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id d68so7480173iof.11;
+        Mon, 29 Aug 2022 12:54:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=WUgMijwl3W/QqZyM5v4oVVeLOTQBRv/iBPfrAQK3cSM=;
+        b=GF2Pf2kbP1bSwmxwKabzsaine2PsPmjRpXpr0oIii0TWbFI2h2/VIQ4ER842ndSgHC
+         BB+YE71B0mKuwPEQ1JW2qu1JIB+fcQNkrw5tnFmE4ZTgrf0u5y4jM+3B06ASeBLny7qn
+         QOF1gAxuY2nLDNq3Rogeqq9yb+zoyju9oujpKoWvGmRsebu1bEe3Kuev8Wm4tNVOFdc9
+         Rah+bJsFxRN0WP2SBUjJu49Wy1vbareMzUoywImszv7gJMVCnw0ZPlrASixQYamWGv6+
+         LKZ0DvRHRXQZ5TUz18FYNLU/+WCFlOwcqZcb7hAkW8YQBLSQ7geH6Yul4KGS3bVmtnQL
+         OnPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=WUgMijwl3W/QqZyM5v4oVVeLOTQBRv/iBPfrAQK3cSM=;
+        b=r/sjUL+PtJ4WL7Q1g2QAkS2wTcBjKjuV8JeDQbzM0Ke+bk2GrPwlB5JBhevHf6O7Ya
+         2fy9BO2s7aFMoX6jxiC+vnL3ll6nYnMUd7P+/UCY631q5orNi8XUrXZ9vCCe8zJmx5ar
+         y542jkceXeSBN61YJ+khMrskAlkujyj6Cc4FhmX0J8vZnWcw4SESbZuXU0uB+WUGTVUj
+         GYkPusmWGVl2yqnj2J3AMRm2jIU7go4ilzWom4Ks9fCJmAlM9VGK5RJx7bHjo9+gBhPP
+         JiQXeKAQ2b7jFGAOXDycOiGsN25sML6zTVoFCU78sOURQlp8RvtXoWr4An6FSOl8bN+Z
+         hS9w==
+X-Gm-Message-State: ACgBeo2ES9rhEU5eoIN8zE2LzfP29zNOpB1SLQd8IdKnrKjOIM86cguR
+        Jw1bU6jPTEMCw/a6A9KkUvQGbe/Gy3V23g==
+X-Google-Smtp-Source: AA6agR7JxuA2bQaS834AqPvIcem/ZAFJkF8Qf3POvbHbAw2OGF941suyh0ZkzMo0E9PbNIqrQkq18Q==
+X-Received: by 2002:a6b:b7c2:0:b0:688:ae30:27d1 with SMTP id h185-20020a6bb7c2000000b00688ae3027d1mr9590645iof.1.1661802841930;
+        Mon, 29 Aug 2022 12:54:01 -0700 (PDT)
+Received: from james-x399.localdomain (71-33-138-207.hlrn.qwest.net. [71.33.138.207])
+        by smtp.gmail.com with ESMTPSA id 66-20020a021d45000000b0034a54523fcfsm475119jaj.28.2022.08.29.12.54.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Aug 2022 12:54:01 -0700 (PDT)
+From:   James Hilliard <james.hilliard1@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     James Hilliard <james.hilliard1@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH] libbpf: add GCC support for bpf_tail_call_static
+Date:   Mon, 29 Aug 2022 13:53:49 -0600
+Message-Id: <20220829195349.706672-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: eK67nGQEa6Zzwq-_hPFu8-6Kw777GHL6
-X-Proofpoint-GUID: eK67nGQEa6Zzwq-_hPFu8-6Kw777GHL6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-29_09,2022-08-25_01,2022-06-22_01
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Allow creating an iterator that loops through resources of one
-thread/process.
+The bpf_tail_call_static function is currently not defined unless
+using clang >= 8.
 
-People could only create iterators to loop through all resources of
-files, vma, and tasks in the system, even though they were interested
-in only the resources of a specific task or process.  Passing the
-additional parameters, people can now create an iterator to go
-through all resources or only the resources of a task.
+To support bpf_tail_call_static on GCC we can check if __clang__ is
+not defined to enable bpf_tail_call_static.
 
-Signed-off-by: Kui-Feng Lee <kuifeng@fb.com>
-Acked-by: Yonghong Song <yhs@fb.com>
+We also need to check for the GCC style __BPF__ in addition to __bpf__
+for this to work as GCC does not define __bpf__.
+
+We need to use GCC assembly syntax when the compiler does not define
+__clang__ as LLVM inline assembly is not fully compatible with GCC.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- include/linux/bpf.h            |  25 +++++
- include/uapi/linux/bpf.h       |   6 ++
- kernel/bpf/task_iter.c         | 184 +++++++++++++++++++++++++++++----
- tools/include/uapi/linux/bpf.h |   6 ++
- 4 files changed, 199 insertions(+), 22 deletions(-)
+ tools/lib/bpf/bpf_helpers.h | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 9c1674973e03..31ac2c1181f5 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1730,6 +1730,27 @@ int bpf_obj_get_user(const char __user *pathname, =
-int flags);
- 	extern int bpf_iter_ ## target(args);			\
- 	int __init bpf_iter_ ## target(args) { return 0; }
-=20
-+/*
-+ * The task type of iterators.
-+ *
-+ * For BPF task iterators, they can be parameterized with various
-+ * parameters to visit only some of tasks.
-+ *
-+ * BPF_TASK_ITER_ALL (default)
-+ *	Iterate over resources of every task.
-+ *
-+ * BPF_TASK_ITER_TID
-+ *	Iterate over resources of a task/tid.
-+ *
-+ * BPF_TASK_ITER_TGID
-+ *	Iterate over resources of every task of a process / task group.
-+ */
-+enum bpf_iter_task_type {
-+	BPF_TASK_ITER_ALL =3D 0,
-+	BPF_TASK_ITER_TID,
-+	BPF_TASK_ITER_TGID,
-+};
-+
- struct bpf_iter_aux_info {
- 	/* for map_elem iter */
- 	struct bpf_map *map;
-@@ -1739,6 +1760,10 @@ struct bpf_iter_aux_info {
- 		struct cgroup *start; /* starting cgroup */
- 		enum bpf_cgroup_iter_order order;
- 	} cgroup;
-+	struct {
-+		enum bpf_iter_task_type	type;
-+		u32 pid;
-+	} task;
- };
-=20
- typedef int (*bpf_iter_attach_target_t)(struct bpf_prog *prog,
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 962960a98835..f212a19eda06 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -110,6 +110,12 @@ union bpf_iter_link_info {
- 		__u32	cgroup_fd;
- 		__u64	cgroup_id;
- 	} cgroup;
-+	/* Parameters of task iterators. */
-+	struct {
-+		__u32	tid;
-+		__u32	pid;
-+		__u32	pid_fd;
-+	} task;
- };
-=20
- /* BPF syscall commands, see bpf(2) man-page for more details. */
-diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-index 8c921799def4..0bc7277d1ee1 100644
---- a/kernel/bpf/task_iter.c
-+++ b/kernel/bpf/task_iter.c
-@@ -12,6 +12,9 @@
-=20
- struct bpf_iter_seq_task_common {
- 	struct pid_namespace *ns;
-+	enum bpf_iter_task_type	type;
-+	u32 pid;
-+	u32 pid_visiting;
- };
-=20
- struct bpf_iter_seq_task_info {
-@@ -22,18 +25,107 @@ struct bpf_iter_seq_task_info {
- 	u32 tid;
- };
-=20
--static struct task_struct *task_seq_get_next(struct pid_namespace *ns,
-+static struct task_struct *task_group_seq_get_next(struct bpf_iter_seq_t=
-ask_common *common,
-+						   u32 *tid,
-+						   bool skip_if_dup_files)
-+{
-+	struct task_struct *task, *next_task;
-+	struct pid *pid;
-+	u32 saved_tid;
-+
-+	if (!*tid) {
-+		pid =3D find_pid_ns(common->pid, common->ns);
-+		if (pid)
-+			task =3D get_pid_task(pid, PIDTYPE_TGID);
-+
-+		*tid =3D common->pid;
-+		common->pid_visiting =3D common->pid;
-+
-+		return task;
-+	}
-+
-+	/* The callers increase *tid by 1 once they want next task.
-+	 * However, next_thread() doesn't return tasks in incremental
-+	 * order of pids. We can not find next task by just finding a
-+	 * task whose pid is greater or equal to *tid.  pid_visiting
-+	 * remembers the pid value of the task returned last time. By
-+	 * comparing pid_visiting and *tid, we known if the caller
-+	 * wants the next task.
-+	 */
-+	if (*tid =3D=3D common->pid_visiting) {
-+		pid =3D find_pid_ns(common->pid_visiting, common->ns);
-+		task =3D get_pid_task(pid, PIDTYPE_PID);
-+
-+		return task;
-+	}
-+
-+retry:
-+	pid =3D find_pid_ns(common->pid_visiting, common->ns);
-+	if (!pid)
-+		return NULL;
-+
-+	task =3D get_pid_task(pid, PIDTYPE_PID);
-+	if (!task)
-+		return NULL;
-+
-+	next_task =3D next_thread(task);
-+	put_task_struct(task);
-+	if (!next_task)
-+		return NULL;
-+
-+	saved_tid =3D *tid;
-+	*tid =3D __task_pid_nr_ns(next_task, PIDTYPE_PID, common->ns);
-+	if (*tid =3D=3D common->pid) {
-+		/* Run out of tasks of a process.  The tasks of a
-+		 * thread_group are linked as circular linked list.
-+		 */
-+		*tid =3D saved_tid;
-+		return NULL;
-+	}
-+
-+	get_task_struct(next_task);
-+	common->pid_visiting =3D *tid;
-+
-+	if (skip_if_dup_files && task->files =3D=3D task->group_leader->files)
-+		goto retry;
-+
-+	return next_task;
-+}
-+
-+static struct task_struct *task_seq_get_next(struct bpf_iter_seq_task_co=
-mmon *common,
- 					     u32 *tid,
- 					     bool skip_if_dup_files)
+diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+index 7349b16b8e2f..a0650b840cda 100644
+--- a/tools/lib/bpf/bpf_helpers.h
++++ b/tools/lib/bpf/bpf_helpers.h
+@@ -131,7 +131,7 @@
+ /*
+  * Helper function to perform a tail call with a constant/immediate map slot.
+  */
+-#if __clang_major__ >= 8 && defined(__bpf__)
++#if (!defined(__clang__) || __clang_major__ >= 8) && (defined(__bpf__) || defined(__BPF__))
+ static __always_inline void
+ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
  {
- 	struct task_struct *task =3D NULL;
- 	struct pid *pid;
-=20
-+	if (common->type =3D=3D BPF_TASK_ITER_TID) {
-+		if (*tid && *tid !=3D common->pid)
-+			return NULL;
-+		rcu_read_lock();
-+		pid =3D find_pid_ns(common->pid, common->ns);
-+		if (pid) {
-+			task =3D get_pid_task(pid, PIDTYPE_TGID);
-+			*tid =3D common->pid;
-+		}
-+		rcu_read_unlock();
-+
-+		return task;
-+	}
-+
-+	if (common->type =3D=3D BPF_TASK_ITER_TGID) {
-+		rcu_read_lock();
-+		task =3D task_group_seq_get_next(common, tid, skip_if_dup_files);
-+		rcu_read_unlock();
-+
-+		return task;
-+	}
-+
- 	rcu_read_lock();
- retry:
--	pid =3D find_ge_pid(*tid, ns);
-+	pid =3D find_ge_pid(*tid, common->ns);
- 	if (pid) {
--		*tid =3D pid_nr_ns(pid, ns);
-+		*tid =3D pid_nr_ns(pid, common->ns);
- 		task =3D get_pid_task(pid, PIDTYPE_PID);
- 		if (!task) {
- 			++*tid;
-@@ -56,7 +148,7 @@ static void *task_seq_start(struct seq_file *seq, loff=
-_t *pos)
- 	struct bpf_iter_seq_task_info *info =3D seq->private;
- 	struct task_struct *task;
-=20
--	task =3D task_seq_get_next(info->common.ns, &info->tid, false);
-+	task =3D task_seq_get_next(&info->common, &info->tid, false);
- 	if (!task)
- 		return NULL;
-=20
-@@ -73,7 +165,7 @@ static void *task_seq_next(struct seq_file *seq, void =
-*v, loff_t *pos)
- 	++*pos;
- 	++info->tid;
- 	put_task_struct((struct task_struct *)v);
--	task =3D task_seq_get_next(info->common.ns, &info->tid, false);
-+	task =3D task_seq_get_next(&info->common, &info->tid, false);
- 	if (!task)
- 		return NULL;
-=20
-@@ -117,6 +209,45 @@ static void task_seq_stop(struct seq_file *seq, void=
- *v)
- 		put_task_struct((struct task_struct *)v);
- }
-=20
-+static int bpf_iter_attach_task(struct bpf_prog *prog,
-+				union bpf_iter_link_info *linfo,
-+				struct bpf_iter_aux_info *aux)
-+{
-+	unsigned int flags;
-+	struct pid_namespace *ns;
-+	struct pid *pid;
-+	pid_t tgid;
-+
-+	if ((!!linfo->task.tid + !!linfo->task.pid + !!linfo->task.pid_fd) > 1)
-+		return -EINVAL;
-+
-+	aux->task.type =3D BPF_TASK_ITER_ALL;
-+	if (linfo->task.tid !=3D 0) {
-+		aux->task.type =3D BPF_TASK_ITER_TID;
-+		aux->task.pid =3D linfo->task.tid;
-+	}
-+	if (linfo->task.pid !=3D 0) {
-+		aux->task.type =3D BPF_TASK_ITER_TGID;
-+		aux->task.pid =3D linfo->task.pid;
-+	}
-+	if (linfo->task.pid_fd !=3D 0) {
-+		aux->task.type =3D BPF_TASK_ITER_TGID;
-+		ns =3D task_active_pid_ns(current);
-+		if (IS_ERR(ns))
-+			return PTR_ERR(ns);
-+
-+		pid =3D pidfd_get_pid(linfo->task.pid_fd, &flags);
-+		if (IS_ERR(pid))
-+			return PTR_ERR(pid);
-+
-+		tgid =3D pid_nr_ns(pid, ns);
-+		aux->task.pid =3D tgid;
-+		put_pid(pid);
-+	}
-+
-+	return 0;
-+}
-+
- static const struct seq_operations task_seq_ops =3D {
- 	.start	=3D task_seq_start,
- 	.next	=3D task_seq_next,
-@@ -137,8 +268,7 @@ struct bpf_iter_seq_task_file_info {
- static struct file *
- task_file_seq_get_next(struct bpf_iter_seq_task_file_info *info)
- {
--	struct pid_namespace *ns =3D info->common.ns;
--	u32 curr_tid =3D info->tid;
-+	u32 saved_tid =3D info->tid;
- 	struct task_struct *curr_task;
- 	unsigned int curr_fd =3D info->fd;
-=20
-@@ -151,21 +281,18 @@ task_file_seq_get_next(struct bpf_iter_seq_task_fil=
-e_info *info)
- 		curr_task =3D info->task;
- 		curr_fd =3D info->fd;
- 	} else {
--                curr_task =3D task_seq_get_next(ns, &curr_tid, true);
-+		curr_task =3D task_seq_get_next(&info->common, &info->tid, true);
-                 if (!curr_task) {
-                         info->task =3D NULL;
--                        info->tid =3D curr_tid;
-                         return NULL;
-                 }
-=20
--                /* set info->task and info->tid */
-+		/* set info->task */
- 		info->task =3D curr_task;
--		if (curr_tid =3D=3D info->tid) {
-+		if (saved_tid =3D=3D info->tid)
- 			curr_fd =3D info->fd;
--		} else {
--			info->tid =3D curr_tid;
-+		else
- 			curr_fd =3D 0;
--		}
- 	}
-=20
- 	rcu_read_lock();
-@@ -186,9 +313,15 @@ task_file_seq_get_next(struct bpf_iter_seq_task_file=
-_info *info)
- 	/* the current task is done, go to the next task */
- 	rcu_read_unlock();
- 	put_task_struct(curr_task);
-+
-+	if (info->common.type =3D=3D BPF_TASK_ITER_TID) {
-+		info->task =3D NULL;
-+		return NULL;
-+	}
-+
- 	info->task =3D NULL;
- 	info->fd =3D 0;
--	curr_tid =3D ++(info->tid);
-+	saved_tid =3D ++(info->tid);
- 	goto again;
- }
-=20
-@@ -269,6 +402,9 @@ static int init_seq_pidns(void *priv_data, struct bpf=
-_iter_aux_info *aux)
- 	struct bpf_iter_seq_task_common *common =3D priv_data;
-=20
- 	common->ns =3D get_pid_ns(task_active_pid_ns(current));
-+	common->type =3D aux->task.type;
-+	common->pid =3D aux->task.pid;
-+
- 	return 0;
- }
-=20
-@@ -307,11 +443,10 @@ enum bpf_task_vma_iter_find_op {
- static struct vm_area_struct *
- task_vma_seq_get_next(struct bpf_iter_seq_task_vma_info *info)
- {
--	struct pid_namespace *ns =3D info->common.ns;
- 	enum bpf_task_vma_iter_find_op op;
- 	struct vm_area_struct *curr_vma;
- 	struct task_struct *curr_task;
--	u32 curr_tid =3D info->tid;
-+	u32 saved_tid =3D info->tid;
-=20
- 	/* If this function returns a non-NULL vma, it holds a reference to
- 	 * the task_struct, and holds read lock on vma->mm->mmap_lock.
-@@ -371,14 +506,13 @@ task_vma_seq_get_next(struct bpf_iter_seq_task_vma_=
-info *info)
- 		}
- 	} else {
- again:
--		curr_task =3D task_seq_get_next(ns, &curr_tid, true);
-+		curr_task =3D task_seq_get_next(&info->common, &info->tid, true);
- 		if (!curr_task) {
--			info->tid =3D curr_tid + 1;
-+			info->tid++;
- 			goto finish;
- 		}
-=20
--		if (curr_tid !=3D info->tid) {
--			info->tid =3D curr_tid;
-+		if (saved_tid !=3D info->tid) {
- 			/* new task, process the first vma */
- 			op =3D task_vma_iter_first_vma;
- 		} else {
-@@ -430,9 +564,12 @@ task_vma_seq_get_next(struct bpf_iter_seq_task_vma_i=
-nfo *info)
- 	return curr_vma;
-=20
- next_task:
-+	if (info->common.type =3D=3D BPF_TASK_ITER_TID)
-+		goto finish;
-+
- 	put_task_struct(curr_task);
- 	info->task =3D NULL;
--	curr_tid++;
-+	info->tid++;
- 	goto again;
-=20
- finish:
-@@ -533,6 +670,7 @@ static const struct bpf_iter_seq_info task_seq_info =3D=
- {
-=20
- static struct bpf_iter_reg task_reg_info =3D {
- 	.target			=3D "task",
-+	.attach_target		=3D bpf_iter_attach_task,
- 	.feature		=3D BPF_ITER_RESCHED,
- 	.ctx_arg_info_size	=3D 1,
- 	.ctx_arg_info		=3D {
-@@ -551,6 +689,7 @@ static const struct bpf_iter_seq_info task_file_seq_i=
-nfo =3D {
-=20
- static struct bpf_iter_reg task_file_reg_info =3D {
- 	.target			=3D "task_file",
-+	.attach_target		=3D bpf_iter_attach_task,
- 	.feature		=3D BPF_ITER_RESCHED,
- 	.ctx_arg_info_size	=3D 2,
- 	.ctx_arg_info		=3D {
-@@ -571,6 +710,7 @@ static const struct bpf_iter_seq_info task_vma_seq_in=
-fo =3D {
-=20
- static struct bpf_iter_reg task_vma_reg_info =3D {
- 	.target			=3D "task_vma",
-+	.attach_target		=3D bpf_iter_attach_task,
- 	.feature		=3D BPF_ITER_RESCHED,
- 	.ctx_arg_info_size	=3D 2,
- 	.ctx_arg_info		=3D {
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index f4ba82a1eace..40935278eede 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -110,6 +110,12 @@ union bpf_iter_link_info {
- 		__u32	cgroup_fd;
- 		__u64	cgroup_id;
- 	} cgroup;
-+	/* Parameters of task iterators. */
-+	struct {
-+		__u32	tid;
-+		__u32	pid;
-+		__u32	pid_fd;
-+	} task;
- };
-=20
- /* BPF syscall commands, see bpf(2) man-page for more details. */
---=20
-2.30.2
+@@ -139,8 +139,8 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
+ 		__bpf_unreachable();
+ 
+ 	/*
+-	 * Provide a hard guarantee that LLVM won't optimize setting r2 (map
+-	 * pointer) and r3 (constant map index) from _different paths_ ending
++	 * Provide a hard guarantee that the compiler won't optimize setting r2
++	 * (map pointer) and r3 (constant map index) from _different paths_ ending
+ 	 * up at the _same_ call insn as otherwise we won't be able to use the
+ 	 * jmpq/nopl retpoline-free patching by the x86-64 JIT in the kernel
+ 	 * given they mismatch. See also d2e4c1e6c294 ("bpf: Constant map key
+@@ -148,12 +148,19 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
+ 	 *
+ 	 * Note on clobber list: we need to stay in-line with BPF calling
+ 	 * convention, so even if we don't end up using r0, r4, r5, we need
+-	 * to mark them as clobber so that LLVM doesn't end up using them
+-	 * before / after the call.
++	 * to mark them as clobber so that the compiler doesn't end up using
++	 * them before / after the call.
+ 	 */
+-	asm volatile("r1 = %[ctx]\n\t"
++	asm volatile(
++#ifdef __clang__
++		     "r1 = %[ctx]\n\t"
+ 		     "r2 = %[map]\n\t"
+ 		     "r3 = %[slot]\n\t"
++#else
++		     "mov %%r1,%[ctx]\n\t"
++		     "mov %%r2,%[map]\n\t"
++		     "mov %%r3,%[slot]\n\t"
++#endif
+ 		     "call 12"
+ 		     :: [ctx]"r"(ctx), [map]"r"(map), [slot]"i"(slot)
+ 		     : "r0", "r1", "r2", "r3", "r4", "r5");
+-- 
+2.34.1
 
