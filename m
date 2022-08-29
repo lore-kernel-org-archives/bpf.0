@@ -2,49 +2,45 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90A78ECAAD2
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2ABEECAAD5
 	for <bpf@archiver.kernel.org>; Mon, 29 Aug 2022 19:23:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiH2TXr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S229822AbiH2TXr (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Mon, 29 Aug 2022 15:23:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46154 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbiH2TXq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S229830AbiH2TXq (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 29 Aug 2022 15:23:46 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B2C887094
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD42B8708F
         for <bpf@vger.kernel.org>; Mon, 29 Aug 2022 12:23:45 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27TJ5sIO024760
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27TJ5goj003552
         for <bpf@vger.kernel.org>; Mon, 29 Aug 2022 12:23:45 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=fJc3oSsff1c/VN5nEOrgkk7JC2g2euKD48G+T6o5M9A=;
- b=M9w9RHZnLECAt90lBOtCZpwIBLm4av96RWZboslIHsTmF6eHtM/HDhZ1s5Xfj11XNZ39
- 8/aM+FTVPnDVZ03bCC+LYXxwBxLYPE421smf2778pTvgoOA03cNKtsD2hACnFuZSZtOo
- 281vHaOU+qHrimrQSFrNFF/yJjdzJCprRkE= 
+ bh=uNnJ3+0Cnn/OhlPlp5tmthRY6TLl8THtfaw/l2+qifc=;
+ b=TrVzQjxe0qm+8ymbuMDw/RtIC9wxjc3IVr2gOXGwsOVsVZq9D6K/Xt8XM5uTzWYeOrjl
+ 6jKZpJn5sbnJ//pPq/CZCrGtMcbqWC3DK94LPe1hhqOYBU2cmpUJzkgi0DNgIPQG8eBi
+ DCJKmPkgTGb6UACvUQruGJJSPHfLqepGxrY= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j7gypbs0u-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j7gcsuurk-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 29 Aug 2022 12:23:44 -0700
-Received: from snc-exhub201.TheFacebook.com (2620:10d:c085:21d::7) by
- snc-exhub202.TheFacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 29 Aug 2022 12:23:44 -0700
+        for <bpf@vger.kernel.org>; Mon, 29 Aug 2022 12:23:45 -0700
 Received: from twshared2273.16.frc2.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.31; Mon, 29 Aug 2022 12:23:44 -0700
 Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
-        id AA0D6749ED6D; Mon, 29 Aug 2022 12:23:36 -0700 (PDT)
+        id 1BB58749ED82; Mon, 29 Aug 2022 12:23:43 -0700 (PDT)
 From:   Kui-Feng Lee <kuifeng@fb.com>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <andrii@kernel.org>, <kernel-team@fb.com>, <yhs@fb.com>
 CC:     Kui-Feng Lee <kuifeng@fb.com>
-Subject: [PATCH bpf-next v8 3/5] bpf: Handle show_fdinfo for the parameterized task BPF iterators
-Date:   Mon, 29 Aug 2022 12:23:15 -0700
-Message-ID: <20220829192317.486946-4-kuifeng@fb.com>
+Subject: [PATCH bpf-next v8 5/5] bpftool: Show parameters of BPF task iterators.
+Date:   Mon, 29 Aug 2022 12:23:17 -0700
+Message-ID: <20220829192317.486946-6-kuifeng@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220829192317.486946-1-kuifeng@fb.com>
 References: <20220829192317.486946-1-kuifeng@fb.com>
@@ -52,8 +48,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: fv0Uhjlf_ABbBtUOsDGhe8V343xVn2vY
-X-Proofpoint-ORIG-GUID: fv0Uhjlf_ABbBtUOsDGhe8V343xVn2vY
+X-Proofpoint-GUID: ZimFiW6IYcCyYxUyzonvSwutL3sXoBbx
+X-Proofpoint-ORIG-GUID: ZimFiW6IYcCyYxUyzonvSwutL3sXoBbx
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-29_09,2022-08-25_01,2022-06-22_01
@@ -61,96 +57,73 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Show information of iterators in the respective files under
-/proc/<pid>/fdinfo/.
+Show tid or pid of iterators if giving an argument of tid or pid
 
-For example, for a task file iterator with 1723 as the value of tid
-parameter, its fdinfo would look like the following lines.
+For example, the command `bpftool link list` may list following
+lines.
 
-    pos:    0
-    flags:  02000000
-    mnt_id: 14
-    ino:    38
-    link_type:      iter
-    link_id:        51
-    prog_tag:       a590ac96db22b825
-    prog_id:        299
-    target_name:    task_file
-    task_type:      TID
-    tid: 1723
+1: iter  prog 2  target_name bpf_map
+2: iter  prog 3  target_name bpf_prog
+33: iter  prog 225  target_name task_file  tid 1644
+        pids test_progs(1644)
 
-This patch add the last three fields.  task_type is the type of the
-task parameter.  TID means the iterator visit only the thread
-specified by tid.  The value of tid in the above example is 1723.  For
-the case of PID task_type, it means the iterator visits only threads
-of a process and will show the pid value of the process instead of a
-tid.
+Link 33 is a task_file iterator with tid 1644.  For now, only targets
+of task, task_file and task_vma may be with tid or pid to filter out
+tasks other than those belonging to a process (pid) or a thread (tid).
 
 Signed-off-by: Kui-Feng Lee <kuifeng@fb.com>
 ---
- kernel/bpf/task_iter.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ tools/bpf/bpftool/link.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-index 5140117447e5..c10aeeffe1d6 100644
---- a/kernel/bpf/task_iter.c
-+++ b/kernel/bpf/task_iter.c
-@@ -10,6 +10,12 @@
- #include <linux/btf_ids.h>
- #include "mmap_unlock_work.h"
-=20
-+static const char * const iter_task_type_names[] =3D {
-+	"ALL",
-+	"TID",
-+	"PID",
-+};
-+
- struct bpf_iter_seq_task_common {
- 	struct pid_namespace *ns;
- 	enum bpf_iter_task_type	type;
-@@ -683,6 +689,15 @@ static int bpf_iter_fill_link_info(const struct bpf_=
-iter_aux_info *aux, struct b
- 	return 0;
+diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
+index 7a20931c3250..88937036fae0 100644
+--- a/tools/bpf/bpftool/link.c
++++ b/tools/bpf/bpftool/link.c
+@@ -83,6 +83,13 @@ static bool is_iter_map_target(const char *target_name=
+)
+ 	       strcmp(target_name, "bpf_sk_storage_map") =3D=3D 0;
  }
 =20
-+static void bpf_iter_task_show_fdinfo(const struct bpf_iter_aux_info *au=
-x, struct seq_file *seq)
++static bool is_iter_task_target(const char *target_name)
 +{
-+	seq_printf(seq, "task_type:\t%s\n", iter_task_type_names[aux->task.type=
-]);
-+	if (aux->task.type =3D=3D BPF_TASK_ITER_TID)
-+		seq_printf(seq, "tid:\t%d\n", aux->task.pid);
-+	else if (aux->task.type =3D=3D BPF_TASK_ITER_TGID)
-+		seq_printf(seq, "pid:\t%d\n", aux->task.pid);
++	return strcmp(target_name, "task") =3D=3D 0 ||
++		strcmp(target_name, "task_file") =3D=3D 0 ||
++		strcmp(target_name, "task_vma") =3D=3D 0;
 +}
 +
- static struct bpf_iter_reg task_reg_info =3D {
- 	.target			=3D "task",
- 	.attach_target		=3D bpf_iter_attach_task,
-@@ -694,6 +709,7 @@ static struct bpf_iter_reg task_reg_info =3D {
- 	},
- 	.seq_info		=3D &task_seq_info,
- 	.fill_link_info		=3D bpf_iter_fill_link_info,
-+	.show_fdinfo		=3D bpf_iter_task_show_fdinfo,
- };
+ static void show_iter_json(struct bpf_link_info *info, json_writer_t *wt=
+r)
+ {
+ 	const char *target_name =3D u64_to_ptr(info->iter.target_name);
+@@ -91,6 +98,12 @@ static void show_iter_json(struct bpf_link_info *info,=
+ json_writer_t *wtr)
 =20
- static const struct bpf_iter_seq_info task_file_seq_info =3D {
-@@ -716,6 +732,7 @@ static struct bpf_iter_reg task_file_reg_info =3D {
- 	},
- 	.seq_info		=3D &task_file_seq_info,
- 	.fill_link_info		=3D bpf_iter_fill_link_info,
-+	.show_fdinfo		=3D bpf_iter_task_show_fdinfo,
- };
+ 	if (is_iter_map_target(target_name))
+ 		jsonw_uint_field(wtr, "map_id", info->iter.map.map_id);
++	else if (is_iter_task_target(target_name)) {
++		if (info->iter.task.tid)
++			jsonw_uint_field(wtr, "tid", info->iter.task.tid);
++		else if (info->iter.task.pid)
++			jsonw_uint_field(wtr, "pid", info->iter.task.pid);
++	}
+ }
 =20
- static const struct bpf_iter_seq_info task_vma_seq_info =3D {
-@@ -738,6 +755,7 @@ static struct bpf_iter_reg task_vma_reg_info =3D {
- 	},
- 	.seq_info		=3D &task_vma_seq_info,
- 	.fill_link_info		=3D bpf_iter_fill_link_info,
-+	.show_fdinfo		=3D bpf_iter_task_show_fdinfo,
- };
+ static int get_prog_info(int prog_id, struct bpf_prog_info *info)
+@@ -208,6 +221,12 @@ static void show_iter_plain(struct bpf_link_info *in=
+fo)
 =20
- BPF_CALL_5(bpf_find_vma, struct task_struct *, task, u64, start,
+ 	if (is_iter_map_target(target_name))
+ 		printf("map_id %u  ", info->iter.map.map_id);
++	else if (is_iter_task_target(target_name)) {
++		if (info->iter.task.tid)
++			printf("tid %u ", info->iter.task.tid);
++		else if (info->iter.task.pid)
++			printf("pid %u ", info->iter.task.pid);
++	}
+ }
+=20
+ static int show_link_close_plain(int fd, struct bpf_link_info *info)
 --=20
 2.30.2
 
