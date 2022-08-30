@@ -2,37 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0BEFECAAD1
-	for <bpf@archiver.kernel.org>; Tue, 30 Aug 2022 17:49:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3648ECAAA1
+	for <bpf@archiver.kernel.org>; Tue, 30 Aug 2022 17:49:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232062AbiH3RtC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 30 Aug 2022 13:49:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43356 "EHLO
+        id S232172AbiH3RtF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 30 Aug 2022 13:49:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232223AbiH3Rsk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 30 Aug 2022 13:48:40 -0400
+        with ESMTP id S232246AbiH3Rsn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 30 Aug 2022 13:48:43 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFE0A6C45
-        for <bpf@vger.kernel.org>; Tue, 30 Aug 2022 10:45:36 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27UG2DWZ009515
-        for <bpf@vger.kernel.org>; Tue, 30 Aug 2022 10:28:16 -0700
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D3425E9B
+        for <bpf@vger.kernel.org>; Tue, 30 Aug 2022 10:45:42 -0700 (PDT)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27UG2F9Y025015
+        for <bpf@vger.kernel.org>; Tue, 30 Aug 2022 10:31:21 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=zrM7KTVrr+QPlaR/93gSe6NgQlu4pzIF5BpYHRQGPuQ=;
- b=VugUntD7sicmM9qnY7vJNN6HM3KhYeZ4gi20P/6irefOp70mlOQPjnDdE86HXGL6jyu6
- XF8GZ952Uh8nyCoL2bKgLAeXkQJVbeMUC/TygujVBS6bKp/X6HIiHYLT9A1NUYsCwfi6
- QyP44vzLztdvuV6t/zxvBpP1L+1I0eaqOvc= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j94gye1jk-5
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=xjs6vWKiLzieNqi5jZB2GEaVN9g15z7SKNRg+eGLHrg=;
+ b=rRmgZcD9Rg/MM+Q8CKuJRgWzzTop7+/tLpvmpKZVRrsL+2Jg9rNUJKpNvXegdVCOLJF4
+ n181tmtVxiIQ9GVXwYdyWgAxbU3bRzsi08/fJFo6V9EuLLpYpu2Jal00LPhqT9KUf4zr
+ cwLKUfWOmhkQoxWY+EBwUGHyp02jzNQ0DG0= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j9ae4c5ht-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 30 Aug 2022 10:28:16 -0700
-Received: from twshared8288.05.ash9.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 30 Aug 2022 10:31:20 -0700
+Received: from twshared0646.06.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 30 Aug 2022 10:28:15 -0700
+ 15.1.2375.31; Tue, 30 Aug 2022 10:31:19 -0700
 Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
-        id 2FF45CAD0729; Tue, 30 Aug 2022 10:28:03 -0700 (PDT)
+        id F19EDCAD079B; Tue, 30 Aug 2022 10:28:10 -0700 (PDT)
 From:   Dave Marchevsky <davemarchevsky@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -40,16 +41,18 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Kernel Team <kernel-team@fb.com>,
         Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [RFCv2 PATCH bpf-next 00/18] bpf: Introduce rbtree map
-Date:   Tue, 30 Aug 2022 10:27:41 -0700
-Message-ID: <20220830172759.4069786-1-davemarchevsky@fb.com>
+Subject: [RFCv2 PATCH bpf-next 12/18] bpf: Add OBJ_NON_OWNING_REF type flag
+Date:   Tue, 30 Aug 2022 10:27:53 -0700
+Message-ID: <20220830172759.4069786-13-davemarchevsky@fb.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220830172759.4069786-1-davemarchevsky@fb.com>
+References: <20220830172759.4069786-1-davemarchevsky@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: scoNdbSwlw4qIcJNwrTWMW35_JnCwOLp
-X-Proofpoint-GUID: scoNdbSwlw4qIcJNwrTWMW35_JnCwOLp
+X-Proofpoint-ORIG-GUID: xeFsjwL0cdoTY6sXGyAuwjam8L_KzDm0
+X-Proofpoint-GUID: xeFsjwL0cdoTY6sXGyAuwjam8L_KzDm0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-30_10,2022-08-30_01,2022-06-22_01
@@ -57,170 +60,221 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-[ RFCv2: This RFC focuses on locking improvements. Some feedback from RFC=
-v1
-feedback and other discussions is not yet applied e.g. conversion to kfun=
-cs,
-dropping open-coded iter. This isn't meant to imply that I disagree with =
-this
-feedback, but rather want to make it easier to compare locking changes to
-RFCv1. Please see changelog at end of this cover letter for a list of
-newly-added patches and major changes worth looking at ]
+Consider a pointer to a type that would normally need acquire / release
+semantics to be safely held. There may be scenarios where such a pointer
+can be safely held without the need to acquire a reference.
 
-Introduce a new map type, bpf_rbtree_map, allowing BPF programs to
-create and manipulate rbtree data structures. bpf_rbtree_map differs
-from 'classic' BPF map patterns in a few important ways:
+For example, although a PTR_TO_BTF_ID for a rbtree_map node is released
+via bpf_rbtree_add helper, the helper doesn't change the address of the
+node and must be called with the rbtree_map's spinlock held. Since the
+only way to remove a node from the rbtree - bpf_rbtree_remove helper -
+requires the same lock, the newly-added node cannot be removed by a
+concurrently-running program until the lock is released. Therefore it is
+safe to hold a reference to this node until bpf_rbtree_unlock is called.
 
-  * The map does not allocate its own elements. Instead,
-    BPF programs must call bpf_rbtree_alloc_node helper to allocate and
-    bpf_rbtree_add to add map elem - referred to as 'node' from now on -
-    to the rbtree. This means that rbtree maps can grow dynamically, do
-    not preallocate, and that 'max_entries' has no meaning for rbtree
-    maps.
-    * Separating allocation and insertion allows alloc_node call to
-      occur in contexts where it's safe to allocate.
+This patch introduces a new type flag and associated verifier logic to
+handle such "non-owning" references.
 
-  * It's possible to remove a node from a rbtree map with
-    bpf_rbtree_remove helper.
-    * Goal here is to allow a node to be removed from one rbtree and
-      added to another
-      [ NOTE: This functionality is still in progress ]
+Currently the only usecase I have is the rbtree example above, so the
+verifier logic is straightforward:
+  * Tag return types of bpf_rbtree_{add,find} with OBJ_NON_OWNING_REF
+    * These both require the rbtree lock to be held to return anything
+    non-NULL
+    * Since ret type for both is PTR_TO_BTF_ID_OR_NULL, if lock is not
+    held and NULL is returned, existing mark_ptr_or_null_reg logic
+    will clear reg type.
+    * So if mark_ptr_or_null_reg logic turns the returned reg into a
+    PTR_TO_BTF_ID | OBJ_NON_OWNING_REF, verifier knows lock is held.
 
-Helpers are added to manipulate nodes and trees:
-  * bpf_rbtree_{alloc,free}_node: Allocate / free node structs
-  * bpf_rbtree_{add,remove}: Add / remove nodes from rbtree maps
-    * A comparator function is passed to bpf_rbtree_add in order to
-      find the correct place to add the node.
-  * bpf_rbtree_find: Find a node matching some condition in the rbtree
-    * A comparator function is passed in order to determine whether a
-      node matches what's being searched for.
+  * When the lock is released the verifier invalidates any regs holding
+  non owning refs similarly to existing release_reference logic - but no
+  need to clear ref_obj_id as an 'owning' reference was never acquired.
 
-bpf_rbtree_add is very similar to the 'map_push_elem' builtin, but since
-verifier needs special logic to setup the comparator callback a new
-helper is added. Same for bpf_rbtree_find and 'map_lookup_elem' builtin.
-
-In order to safely support separate allocation / insertion and passing
-nodes between rbtrees, some invariants must hold:
-
-  * A node that is not in a rbtree map must either be free'd or added to
-    a rbtree map before the program terminates
-    * Nodes are in this state when returned from bpf_rbtree_alloc_node
-      or bpf_rbtree_remove.
-
-If a node is in a rbtree map it is 'owned' by the map, otherwise it is
-owned by the BPF program which holds a reference to it. Owner is
-responsible for the lifetime of the node.
-
-This matches existing acquire / release semantics well. node_alloc and
-remove operations 'acquire' a node while add and node_free operations
-'release' the node. The verifier enforces that acquired nodes are
-released before program terminates.
-
-Some other implementation details:
-
-  * The value type of an rbtree map is expected to be a struct which
-    contains 'struct rb_node' at offset 0.
-  * BPF programs may not modify the node struct's rb_node field.
-    * Otherwise the tree could be left in corrupted state
-  * Rbtree map is value-only. Keys have no meaning
-  * Since the value type is not known until the rbtree map is
-    instantiated, helper protos have input and return type
-    'struct rb_node *' which verifier replaces with actual
-    map value type.
-  * [ TODO: Existing logic prevents any writes to PTR_TO_BTF_ID. This
-    broadly turned off in this patch and replaced with "no writes to
-    struct rb_node is PTR_TO_BTF_ID struct has one". This is a hack and
-    needs to be replaced. ]
-
-Changelog:
-
-RFCv1 -> RFCv2: lore.kernel.org/bpf/20220722183438.3319790-1-davemarchevs=
-ky@fb.com
-Major changes:
-  * Add new patch ("bpf: Add verifier check for BPF_PTR_POISON retval and=
- arg"),
-    use BPF_PTR_POISON as placeholder btf_id for helpers which return or
-    manipulate structs which contain rbtree node. (Alexei)
-    * Migrate all rbtree helpers to use BPF_PTR_POISON
-    * Testing this patch uncovered that rbtree_find was not in
-      function_returns_rbtree_node check, add it. Rbtree_add was not
-      setting a return btf_id type, fix that as well.
-
-  * Add new patch ("libbpf: Add support for private BSS map section")
-    allowing struct bpf_spin_lock declaration in special internal map
-
-  * Add new patches improving ergonomics of associating lock with rbtree(=
-1),
-    teaching verifier to track rbtree locks(2), and teaching verifier to =
-reject
-    programs calling rbtree helpers without holding the necessary lock
-    * (1): "bpf: Support declarative association of lock with rbtree map"=
- (3)
-    * (2): "bpf: Verifier tracking of rbtree_spin_lock held"
-    * (3): "bpf: Check rbtree lock held during verification"
-    * These are the changes most worth a look. Each commit has associated=
- test
-      change patch also added at the end of the series. Test patches are =
-left
-      unsquashed to ease RFC review.
-
-Minor changes:
-  * patch "bpf: Add rbtree map"
-    * Alloc nodes w/ GFP_NOWAIT instead of GFP_KERNEL (Yonghong, Alexei)
-    * Rename access_may_touch_field -> access_can_write_field (Alexei)
-  * patch "bpf: Add CONDITIONAL_RELEASE type flag"
-    * No need to return int from mark_ptr_or_null_regs, go back to return=
-ing
-      void (Alexei)
+[ TODO: Currently the invalidation logic in
+clear_rbtree_node_non_owning_refs is not parametrized by map so
+unlocking any rbtree lock will invalidate all non-owning refs ]
 
 Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
+---
+ include/linux/bpf.h   |  1 +
+ kernel/bpf/rbtree.c   |  4 +--
+ kernel/bpf/verifier.c | 65 +++++++++++++++++++++++++++++++++++++++----
+ 3 files changed, 62 insertions(+), 8 deletions(-)
 
-Dave Marchevsky (18):
-  bpf: Add verifier support for custom callback return range
-  bpf: Add verifier check for BPF_PTR_POISON retval and arg
-  bpf: Add rb_node_off to bpf_map
-  bpf: Add rbtree map
-  libbpf: Add support for private BSS map section
-  bpf: Add bpf_spin_lock member to rbtree
-  bpf: Add bpf_rbtree_{lock,unlock} helpers
-  bpf: Enforce spinlock hold for bpf_rbtree_{add,remove,find}
-  bpf: Support declarative association of lock with rbtree map
-  bpf: Verifier tracking of rbtree_spin_lock held
-  bpf: Check rbtree lock held during verification
-  bpf: Add OBJ_NON_OWNING_REF type flag
-  bpf: Add CONDITIONAL_RELEASE type flag
-  bpf: Introduce PTR_ITER and PTR_ITER_END type flags
-  selftests/bpf: Add rbtree map tests
-  selftests/bpf: Declarative lock definition test changes
-  selftests/bpf: Lock tracking test changes
-  selftests/bpf: Rbtree static lock verification test changes
-
- include/linux/bpf.h                           |  17 +
- include/linux/bpf_types.h                     |   1 +
- include/linux/bpf_verifier.h                  |   3 +
- include/linux/btf.h                           |   1 +
- include/linux/poison.h                        |   3 +
- include/uapi/linux/bpf.h                      | 120 ++++
- kernel/bpf/Makefile                           |   2 +-
- kernel/bpf/btf.c                              |  21 +
- kernel/bpf/helpers.c                          |  48 +-
- kernel/bpf/rbtree.c                           | 442 ++++++++++++++
- kernel/bpf/syscall.c                          |  11 +-
- kernel/bpf/verifier.c                         | 546 ++++++++++++++++--
- tools/include/uapi/linux/bpf.h                | 120 ++++
- tools/lib/bpf/libbpf.c                        | 164 +++++-
- .../selftests/bpf/prog_tests/rbtree_map.c     | 134 +++++
- .../testing/selftests/bpf/progs/rbtree_map.c  | 119 ++++
- .../selftests/bpf/progs/rbtree_map_fail.c     | 243 ++++++++
- .../bpf/progs/rbtree_map_load_fail.c          |  31 +
- 18 files changed, 1951 insertions(+), 75 deletions(-)
- create mode 100644 kernel/bpf/rbtree.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/rbtree_map.c
- create mode 100644 tools/testing/selftests/bpf/progs/rbtree_map.c
- create mode 100644 tools/testing/selftests/bpf/progs/rbtree_map_fail.c
- create mode 100644 tools/testing/selftests/bpf/progs/rbtree_map_load_fai=
-l.c
-
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index b762c6b3dcfb..f164bd6e2f3a 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -415,6 +415,7 @@ enum bpf_type_flag {
+ 	/* Size is known at compile time. */
+ 	MEM_FIXED_SIZE		=3D BIT(10 + BPF_BASE_TYPE_BITS),
+=20
++	OBJ_NON_OWNING_REF	=3D BIT(11 + BPF_BASE_TYPE_BITS),
+ 	__BPF_TYPE_FLAG_MAX,
+ 	__BPF_TYPE_LAST_FLAG	=3D __BPF_TYPE_FLAG_MAX - 1,
+ };
+diff --git a/kernel/bpf/rbtree.c b/kernel/bpf/rbtree.c
+index b5d158254de6..cc89639df8a2 100644
+--- a/kernel/bpf/rbtree.c
++++ b/kernel/bpf/rbtree.c
+@@ -144,7 +144,7 @@ BPF_CALL_3(bpf_rbtree_add, struct bpf_map *, map, voi=
+d *, value, void *, cb)
+ const struct bpf_func_proto bpf_rbtree_add_proto =3D {
+ 	.func =3D bpf_rbtree_add,
+ 	.gpl_only =3D true,
+-	.ret_type =3D RET_PTR_TO_BTF_ID_OR_NULL,
++	.ret_type =3D RET_PTR_TO_BTF_ID_OR_NULL | OBJ_NON_OWNING_REF,
+ 	.ret_btf_id =3D BPF_PTR_POISON,
+ 	.arg1_type =3D ARG_CONST_MAP_PTR,
+ 	.arg2_type =3D ARG_PTR_TO_BTF_ID | OBJ_RELEASE,
+@@ -167,7 +167,7 @@ BPF_CALL_3(bpf_rbtree_find, struct bpf_map *, map, vo=
+id *, key, void *, cb)
+ const struct bpf_func_proto bpf_rbtree_find_proto =3D {
+ 	.func =3D bpf_rbtree_find,
+ 	.gpl_only =3D true,
+-	.ret_type =3D RET_PTR_TO_BTF_ID_OR_NULL,
++	.ret_type =3D RET_PTR_TO_BTF_ID_OR_NULL | OBJ_NON_OWNING_REF,
+ 	.ret_btf_id =3D BPF_PTR_POISON,
+ 	.arg1_type =3D ARG_CONST_MAP_PTR,
+ 	.arg2_type =3D ARG_ANYTHING,
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 3c9af1047d80..26aa228fa860 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -469,6 +469,11 @@ static bool type_is_rdonly_mem(u32 type)
+ 	return type & MEM_RDONLY;
+ }
+=20
++static bool type_is_non_owning_ref(u32 type)
++{
++	return type & OBJ_NON_OWNING_REF;
++}
++
+ static bool type_may_be_null(u32 type)
+ {
+ 	return type & PTR_MAYBE_NULL;
+@@ -595,7 +600,9 @@ static bool function_returns_rbtree_node(enum bpf_fun=
+c_id func_id)
+ static const char *reg_type_str(struct bpf_verifier_env *env,
+ 				enum bpf_reg_type type)
+ {
+-	char postfix[16] =3D {0}, prefix[32] =3D {0};
++	char postfix[32] =3D {0}, prefix[32] =3D {0};
++	unsigned int postfix_idx =3D 0;
++
+ 	static const char * const str[] =3D {
+ 		[NOT_INIT]		=3D "?",
+ 		[SCALAR_VALUE]		=3D "scalar",
+@@ -620,11 +627,18 @@ static const char *reg_type_str(struct bpf_verifier=
+_env *env,
+ 		[PTR_TO_SPIN_LOCK]	=3D "spin_lock",
+ 	};
+=20
+-	if (type & PTR_MAYBE_NULL) {
++	if (type_may_be_null(type)) {
+ 		if (base_type(type) =3D=3D PTR_TO_BTF_ID)
+-			strncpy(postfix, "or_null_", 16);
++			postfix_idx +=3D strlcpy(postfix + postfix_idx, "or_null_", 32 - post=
+fix_idx);
+ 		else
+-			strncpy(postfix, "_or_null", 16);
++			postfix_idx +=3D strlcpy(postfix + postfix_idx, "_or_null", 32 - post=
+fix_idx);
++	}
++
++	if (type_is_non_owning_ref(type)) {
++		if (base_type(type) =3D=3D PTR_TO_BTF_ID)
++			postfix_idx +=3D strlcpy(postfix + postfix_idx, "non_own_", 32 - post=
+fix_idx);
++		else
++			postfix_idx +=3D strlcpy(postfix + postfix_idx, "_non_own", 32 - post=
+fix_idx);
+ 	}
+=20
+ 	if (type & MEM_RDONLY)
+@@ -5758,7 +5772,14 @@ static const struct bpf_reg_types int_ptr_types =3D=
+ {
+ static const struct bpf_reg_types spin_lock_types =3D {
+ 	.types =3D {
+ 		PTR_TO_MAP_VALUE,
+-		PTR_TO_SPIN_LOCK
++		PTR_TO_SPIN_LOCK,
++	},
++};
++
++static const struct bpf_reg_types btf_ptr_types =3D {
++	.types =3D {
++		PTR_TO_BTF_ID,
++		PTR_TO_BTF_ID | OBJ_NON_OWNING_REF,
+ 	},
+ };
+=20
+@@ -5767,7 +5788,6 @@ static const struct bpf_reg_types scalar_types =3D =
+{ .types =3D { SCALAR_VALUE } };
+ static const struct bpf_reg_types context_types =3D { .types =3D { PTR_T=
+O_CTX } };
+ static const struct bpf_reg_types alloc_mem_types =3D { .types =3D { PTR=
+_TO_MEM | MEM_ALLOC } };
+ static const struct bpf_reg_types const_map_ptr_types =3D { .types =3D {=
+ CONST_PTR_TO_MAP } };
+-static const struct bpf_reg_types spin_lock_types =3D { .types =3D { PTR=
+_TO_MAP_VALUE } };
+ static const struct bpf_reg_types percpu_btf_ptr_types =3D { .types =3D =
+{ PTR_TO_BTF_ID | MEM_PERCPU } };
+ static const struct bpf_reg_types func_ptr_types =3D { .types =3D { PTR_=
+TO_FUNC } };
+ static const struct bpf_reg_types stack_ptr_types =3D { .types =3D { PTR=
+_TO_STACK } };
+@@ -6723,6 +6743,33 @@ static int release_reference(struct bpf_verifier_e=
+nv *env,
+ 	return 0;
+ }
+=20
++static void clear_non_owning_ref_regs(struct bpf_verifier_env *env,
++				      struct bpf_func_state *state)
++{
++	struct bpf_reg_state *regs =3D state->regs, *reg;
++	int i;
++
++	for (i =3D 0; i < MAX_BPF_REG; i++)
++		if (type_is_non_owning_ref(regs[i].type))
++			mark_reg_unknown(env, regs, i);
++
++	bpf_for_each_spilled_reg(i, state, reg) {
++		if (!reg)
++			continue;
++		if (type_is_non_owning_ref(reg->type))
++			__mark_reg_unknown(env, reg);
++	}
++}
++
++static void clear_rbtree_node_non_owning_refs(struct bpf_verifier_env *e=
+nv)
++{
++	struct bpf_verifier_state *vstate =3D env->cur_state;
++	int i;
++
++	for (i =3D 0; i <=3D vstate->curframe; i++)
++		clear_non_owning_ref_regs(env, vstate->frame[i]);
++}
++
+ static void clear_caller_saved_regs(struct bpf_verifier_env *env,
+ 				    struct bpf_reg_state *regs)
+ {
+@@ -7584,6 +7631,12 @@ static int check_helper_call(struct bpf_verifier_e=
+nv *env, struct bpf_insn *insn
+ 			return -EFAULT;
+ 		}
+ 		break;
++	case BPF_FUNC_rbtree_unlock:
++		/* TODO clear_rbtree_node_non_owning_refs calls should be
++		 * parametrized by base_type or ideally by owning map
++		 */
++		clear_rbtree_node_non_owning_refs(env);
++		break;
+ 	}
+=20
+ 	if (err)
 --=20
 2.30.2
 
