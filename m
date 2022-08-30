@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E8F1ECAAA1
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9A90ECAAD1
 	for <bpf@archiver.kernel.org>; Tue, 30 Aug 2022 17:53:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbiH3Rw7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S230163AbiH3Rw7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 30 Aug 2022 13:52:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55200 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231808AbiH3Rwn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S231869AbiH3Rwn (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 30 Aug 2022 13:52:43 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE02A9C38
-        for <bpf@vger.kernel.org>; Tue, 30 Aug 2022 10:49:19 -0700 (PDT)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27UFrVfi007679
-        for <bpf@vger.kernel.org>; Tue, 30 Aug 2022 10:35:15 -0700
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA57AE87A
+        for <bpf@vger.kernel.org>; Tue, 30 Aug 2022 10:49:20 -0700 (PDT)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27U7aBf9009095
+        for <bpf@vger.kernel.org>; Tue, 30 Aug 2022 10:35:14 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=TPNw2gPY2Pxjdru4n0HetYVA0UxIqST4v7qkVNdkt9E=;
- b=iJMeQo+IMZ3aLt8OE2B+VMfEKe3BSbFv/53LjLDs5PNoS8X/3pFcAsFj8yOjVW/gnROL
- FqdKBOH6zO+nxY5nDBjynME4mrE6mEGf6zAvqxufhzF+g7DUa2bo92D7OVIdqGnpTPlE
- 4oLQ/3GNl7zkJSkj+xkRc61kXuROGEmPZ1A= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j9e9yk9df-1
+ bh=wP8wWcO6Fpe5apg5LunaNHP01cFXqJAJFd3opF3Tb64=;
+ b=RGCu9tcWtrlIf0TX4vGj8DcPI5uJ3PBZY+vprjcvc2lEzlHNSf7t6LRgKNIzsg2//2+j
+ TETvtiDB+msRE/n2FVOIhayNNz9JqDqTN1Yc7ztwsh2BJo8tdKsweM0sKAErtjRPI6HS
+ I9GHEvWrHaOAgPZJjlulRtIcomAUdeq8ziA= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j9e9yuhb8-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 30 Aug 2022 10:35:15 -0700
-Received: from twshared10711.09.ash9.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 30 Aug 2022 10:35:14 -0700
+Received: from twshared14074.07.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 30 Aug 2022 10:35:14 -0700
+ 15.1.2375.31; Tue, 30 Aug 2022 10:35:13 -0700
 Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
-        id 5F1B3CAD0781; Tue, 30 Aug 2022 10:28:10 -0700 (PDT)
+        id 09A34CAD079C; Tue, 30 Aug 2022 10:28:10 -0700 (PDT)
 From:   Dave Marchevsky <davemarchevsky@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -41,9 +41,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Kernel Team <kernel-team@fb.com>,
         Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [RFCv2 PATCH bpf-next 10/18] bpf: Verifier tracking of rbtree_spin_lock held
-Date:   Tue, 30 Aug 2022 10:27:51 -0700
-Message-ID: <20220830172759.4069786-11-davemarchevsky@fb.com>
+Subject: [RFCv2 PATCH bpf-next 13/18] bpf: Add CONDITIONAL_RELEASE type flag
+Date:   Tue, 30 Aug 2022 10:27:54 -0700
+Message-ID: <20220830172759.4069786-14-davemarchevsky@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220830172759.4069786-1-davemarchevsky@fb.com>
 References: <20220830172759.4069786-1-davemarchevsky@fb.com>
@@ -51,8 +51,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: ebW7U4wkAjWabDPwk_GD9Ne9aMa0bLPq
-X-Proofpoint-GUID: ebW7U4wkAjWabDPwk_GD9Ne9aMa0bLPq
+X-Proofpoint-ORIG-GUID: iMBGzDY_BXoDmQLNTQXd87BykWnYscSv
+X-Proofpoint-GUID: iMBGzDY_BXoDmQLNTQXd87BykWnYscSv
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-30_10,2022-08-30_01,2022-06-22_01
@@ -60,402 +60,369 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch teaches the verifier that rbtree_{lock,unlock} interact with
-locks and eases use of rbtree_lock(&some_lock) where &some_lock is in a
-global internal map.
+Currently if a helper proto has an arg with OBJ_RELEASE flag, the verifie=
+r
+assumes the 'release' logic in the helper will always succeed, and
+therefore always clears the arg reg, other regs w/ same
+ref_obj_id, and releases the reference. This poses a problem for
+'release' helpers which may not always succeed.
 
-The verifier now tracks lock id for rbtree_{lock,unlock} and understands
-that lock can / must be held when calling various other rbtree helpers.
+For example, bpf_rbtree_add will fail to add the passed-in node to a
+bpf_rbtree if the rbtree's lock is not held when the helper is called.
+In this case the helper returns NULL and the calling bpf program must
+release the node in another way before terminating to avoid leaking
+memory. An example of such logic:
 
-Logic is also added to ease this pattern:
+1  struct node_data *node =3D bpf_rbtree_alloc_node(&rbtree, ...);
+2  struct node_data *ret =3D bpf_rbtree_add(&rbtree, node);
+3  if (!ret) {
+4    bpf_rbtree_free_node(node);
+5    return 0;
+6  }
+7  bpf_trace_printk("%d\n", ret->id);
 
-  /* internal map */
-  struct bpf_spin_lock lock SEC(".bss.private");
+However, current verifier logic does not allow this: after line 2,
+ref_obj_id of reg holding 'node' (BPF_REG_2) will be released via
+release_reference function, which will mark BPF_REG_2 and any other reg
+with same ref_obj_id as unknown. As a result neither ret nor node will
+point to anything useful if line 3's check passes. Additionally, since th=
+e
+reference is unconditionally released, the program would pass the
+verifier without the null check.
 
-  /* In bpf prog */
+This patch adds 'conditional release' semantics so that the verifier can
+handle the above example correctly. The CONDITIONAL_RELEASE type flag
+works in concert with the existing OBJ_RELEASE flag - the latter is used
+to tag an argument, while the new type flag is used to tag return type.
 
-  rbtree_lock(&lock);
-  /* ... use all registers for other work */
-  rbtree_unlock(&lock);
+If a helper has an OBJ_RELEASE arg type and CONDITIONAL_RELEASE return
+type, the helper is considered to use its return value to indicate
+success or failure of the release operation. NULL is returned if release
+fails, non-null otherwise.
 
-In the above example, the prog compiles down to something like:
+For my concrete usecase - bpf_rbtree_add - CONDITIONAL_RELEASE works in
+concert with OBJ_NON_OWNING_REF: successful release results in a non-owni=
+ng
+reference being returned, allowing line 7 in above example.
 
-  r1 =3D 0x12345
-  call rbtree_lock
-  /* begin other work
-  r1 =3D some_unrelated_value
-  r2 =3D r1 or similar never happens
-  */
-  r1 =3D 0x12345
-  call rbtree_unlock
+Instead of unconditionally releasing the OBJ_RELEASE reference when
+doing check_helper_call, for CONDITIONAL_RELEASE helpers the verifier
+will wait until the return value is checked for null.
+  If not null: the reference is released
 
-Each time "r1 =3D 0x12345" happens, verifier's check_ld_imm will assign a
-new id to the lock, which will result in it later complaining that
-the incorrect lock is being unlocked when checking rbtree_unlock.
+  If null: no reference is released. Since other regs w/ same ref_obj_id
+           were not marked unknown by check_helper_call, they can be
+           used to release the reference via other means (line 4 above),
 
-To help with this pattern, bpf_verifier_state now has a
-maybe_active_spin_lock_addr field. If this field is nonzero and
-bpf_verifier_state's active_spin_lock is also nonzero, then
-maybe_active_spin_lock_addr contains the address of the active spin lock
-(corresponding to active_spin_lock's id). This allows the verifier to
-avoid assigning a new lock id when it sees the second "r1 =3D 0x12345",
-since it can recognize that the address matches an existing lock id.
+It's necessary to prevent conditionally-released ref_obj_id regs from
+being used between the release helper and null check. For example:
 
-[ RFC Notes:
+1  struct node_data *node =3D bpf_rbtree_alloc_node(&rbtree, ...);
+2  struct node_data *ret =3D bpf_rbtree_add(&rbtree, node);
+3  do_something_with_a_node(node);
+4  if (!ret) {
+5    bpf_rbtree_free_node(node);
+6    return 0;
+7  }
 
-  * rbtree_process_spin_lock should be merged w/ normal
-    process_spin_lock, same with rbtree_lock and normal lock helpers.
-    Left separate for now to highlight the logic differences.
+Line 3 shouldn't be allowed since node may have been released. The
+verifier tags all regs with ref_obj_id of the conditionally-released arg
+in the period between the helper call and null check for this reason.
 
-  * The hacky maybe_active_spin_lock_addr logic can be improved by
-    adding support to a custom .lock section similar to existing use of
-    .bss.private. The new section type would function like .bss.private,
-    but the verifier would know that locks in .lock are likely to be
-    used like bpf_spin_lock(&lock), and could track the address of each
-    map value for deduping, instead of just tracking single address. For
-    multiple-lock scenario this is probably necessary.
-]
+Why no matching CONDITIONAL_ACQUIRE type flag? Existing verifier logic
+already treats acquire of an _OR_NULL type as a conditional acquire.
+Consider this code:
+
+1  struct thing *i =3D acquire_helper_that_returns_thing_or_null();
+2  if (!i)
+3    return 0;
+4  manipulate_thing(i);
+5  release_thing(i);
+
+After line 1, BPF_REG_0 will have an _OR_NULL type and a ref_obj_id set.
+When the verifier sees line 2's conditional jump, existing logic in
+mark_ptr_or_null_regs, specifically the if:
+
+  if (ref_obj_id && ref_obj_id =3D=3D id && is_null)
+          /* regs[regno] is in the " =3D=3D NULL" branch.
+           * No one could have freed the reference state before
+           * doing the NULL check.
+           */
+           WARN_ON_ONCE(release_reference_state(state, id));
+
+will release the reference in the is_null state.
+
+[ TODO: Either need to remove WARN_ON_ONCE there without adding
+CONDITIONAL_ACQUIRE flag or add the flag and don't WARN_ON_ONCE if it's
+set. Left out of first pass for simplicity's sake. ]
 
 Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
 ---
- include/linux/bpf.h          |   2 +
+ include/linux/bpf.h          |   3 +
  include/linux/bpf_verifier.h |   1 +
  kernel/bpf/rbtree.c          |   2 +-
- kernel/bpf/verifier.c        | 136 ++++++++++++++++++++++++++++++++---
- 4 files changed, 129 insertions(+), 12 deletions(-)
+ kernel/bpf/verifier.c        | 114 +++++++++++++++++++++++++++++++----
+ 4 files changed, 108 insertions(+), 12 deletions(-)
 
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index b4a44ffb0d6c..d6458aa7b79c 100644
+index f164bd6e2f3a..83b8d63545e3 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -497,6 +497,7 @@ enum bpf_return_type {
- 	RET_PTR_TO_ALLOC_MEM,		/* returns a pointer to dynamically allocated me=
-mory */
- 	RET_PTR_TO_MEM_OR_BTF_ID,	/* returns a pointer to a valid memory or a b=
-tf_id */
- 	RET_PTR_TO_BTF_ID,		/* returns a pointer to a btf_id */
-+	RET_PTR_TO_SPIN_LOCK,		/* returns a pointer to a struct bpf_spin_lock *=
-/
- 	__BPF_RET_TYPE_MAX,
+@@ -416,6 +416,9 @@ enum bpf_type_flag {
+ 	MEM_FIXED_SIZE		=3D BIT(10 + BPF_BASE_TYPE_BITS),
 =20
- 	/* Extended ret_types. */
-@@ -612,6 +613,7 @@ enum bpf_reg_type {
- 	PTR_TO_MEM,		 /* reg points to valid memory region */
- 	PTR_TO_BUF,		 /* reg points to a read/write buffer */
- 	PTR_TO_FUNC,		 /* reg points to a bpf program function */
-+	PTR_TO_SPIN_LOCK,	 /* reg points to a struct bpf_spin_lock */
- 	__BPF_REG_TYPE_MAX,
-=20
- 	/* Extended reg_types. */
+ 	OBJ_NON_OWNING_REF	=3D BIT(11 + BPF_BASE_TYPE_BITS),
++
++	CONDITIONAL_RELEASE	=3D BIT(12 + BPF_BASE_TYPE_BITS),
++
+ 	__BPF_TYPE_FLAG_MAX,
+ 	__BPF_TYPE_LAST_FLAG	=3D __BPF_TYPE_FLAG_MAX - 1,
+ };
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 9c017575c034..f81638844a4d 100644
+index f81638844a4d..e5f967d17bb9 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -313,6 +313,7 @@ struct bpf_verifier_state {
- 	u32 insn_idx;
+@@ -314,6 +314,7 @@ struct bpf_verifier_state {
  	u32 curframe;
  	u32 active_spin_lock;
-+	void *maybe_active_spin_lock_addr;
+ 	void *maybe_active_spin_lock_addr;
++	u32 active_cond_ref_obj_id;
  	bool speculative;
 =20
  	/* first and last insn idx of this verifier state */
 diff --git a/kernel/bpf/rbtree.c b/kernel/bpf/rbtree.c
-index c61662822511..0821e841a518 100644
+index cc89639df8a2..e6f51c27661c 100644
 --- a/kernel/bpf/rbtree.c
 +++ b/kernel/bpf/rbtree.c
-@@ -305,7 +305,7 @@ BPF_CALL_1(bpf_rbtree_get_lock, struct bpf_map *, map=
-)
- const struct bpf_func_proto bpf_rbtree_get_lock_proto =3D {
- 	.func =3D bpf_rbtree_get_lock,
+@@ -144,7 +144,7 @@ BPF_CALL_3(bpf_rbtree_add, struct bpf_map *, map, voi=
+d *, value, void *, cb)
+ const struct bpf_func_proto bpf_rbtree_add_proto =3D {
+ 	.func =3D bpf_rbtree_add,
  	.gpl_only =3D true,
--	.ret_type =3D RET_PTR_TO_MAP_VALUE,
-+	.ret_type =3D RET_PTR_TO_SPIN_LOCK,
+-	.ret_type =3D RET_PTR_TO_BTF_ID_OR_NULL | OBJ_NON_OWNING_REF,
++	.ret_type =3D RET_PTR_TO_BTF_ID_OR_NULL | OBJ_NON_OWNING_REF | CONDITIO=
+NAL_RELEASE,
+ 	.ret_btf_id =3D BPF_PTR_POISON,
  	.arg1_type =3D ARG_CONST_MAP_PTR,
- };
-=20
+ 	.arg2_type =3D ARG_PTR_TO_BTF_ID | OBJ_RELEASE,
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index b9e5d87fe323..f8ba381f1327 100644
+index 26aa228fa860..3da8959e5f7a 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -452,8 +452,9 @@ static bool reg_type_not_null(enum bpf_reg_type type)
-=20
- static bool reg_may_point_to_spin_lock(const struct bpf_reg_state *reg)
- {
--	return reg->type =3D=3D PTR_TO_MAP_VALUE &&
--		map_value_has_spin_lock(reg->map_ptr);
-+	return (reg->type =3D=3D PTR_TO_MAP_VALUE &&
-+		map_value_has_spin_lock(reg->map_ptr)) ||
-+		reg->type =3D=3D PTR_TO_SPIN_LOCK;
+@@ -474,6 +474,11 @@ static bool type_is_non_owning_ref(u32 type)
+ 	return type & OBJ_NON_OWNING_REF;
  }
 =20
- static bool reg_type_may_be_refcounted_or_null(enum bpf_reg_type type)
-@@ -507,6 +508,34 @@ static bool is_ptr_cast_function(enum bpf_func_id fu=
-nc_id)
- 		func_id =3D=3D BPF_FUNC_skc_to_tcp_request_sock;
- }
-=20
-+/* These functions can only be called when spinlock associated with rbtr=
-ee
-+ * is held. If they have a callback argument, that callback is not requi=
-red
-+ * to release active_spin_lock before exiting
-+ */
-+static bool is_rbtree_lock_required_function(enum bpf_func_id func_id)
++static bool type_is_cond_release(u32 type)
 +{
-+	return func_id =3D=3D BPF_FUNC_rbtree_add ||
-+		func_id =3D=3D BPF_FUNC_rbtree_remove ||
-+		func_id =3D=3D BPF_FUNC_rbtree_find ||
-+		func_id =3D=3D BPF_FUNC_rbtree_unlock;
++	return type & CONDITIONAL_RELEASE;
 +}
 +
-+/* These functions are OK to call when spinlock associated with rbtree
-+ * is held.
-+ */
-+static bool is_rbtree_lock_ok_function(enum bpf_func_id func_id)
-+{
-+	return func_id =3D=3D BPF_FUNC_rbtree_alloc_node ||
-+		func_id =3D=3D BPF_FUNC_rbtree_free_node ||
-+		is_rbtree_lock_required_function(func_id);
-+}
-+
-+static bool is_lock_allowed_function(enum bpf_func_id func_id)
-+{
-+	return func_id =3D=3D BPF_FUNC_spin_unlock ||
-+		is_rbtree_lock_ok_function(func_id);
-+}
-+
- static bool is_dynptr_ref_function(enum bpf_func_id func_id)
+ static bool type_may_be_null(u32 type)
  {
- 	return func_id =3D=3D BPF_FUNC_dynptr_data;
-@@ -579,6 +608,7 @@ static const char *reg_type_str(struct bpf_verifier_e=
-nv *env,
- 		[PTR_TO_BUF]		=3D "buf",
- 		[PTR_TO_FUNC]		=3D "func",
- 		[PTR_TO_MAP_KEY]	=3D "map_key",
-+		[PTR_TO_SPIN_LOCK]	=3D "spin_lock",
- 	};
+ 	return type & PTR_MAYBE_NULL;
+@@ -641,6 +646,15 @@ static const char *reg_type_str(struct bpf_verifier_=
+env *env,
+ 			postfix_idx +=3D strlcpy(postfix + postfix_idx, "_non_own", 32 - post=
+fix_idx);
+ 	}
 =20
- 	if (type & PTR_MAYBE_NULL) {
-@@ -1199,6 +1229,7 @@ static int copy_verifier_state(struct bpf_verifier_=
++	if (type_is_cond_release(type)) {
++		if (base_type(type) =3D=3D PTR_TO_BTF_ID)
++			postfix_idx +=3D strlcpy(postfix + postfix_idx, "cond_rel_",
++					       32 - postfix_idx);
++		else
++			postfix_idx +=3D strlcpy(postfix + postfix_idx, "_cond_rel",
++					       32 - postfix_idx);
++	}
++
+ 	if (type & MEM_RDONLY)
+ 		strncpy(prefix, "rdonly_", 32);
+ 	if (type & MEM_ALLOC)
+@@ -1253,6 +1267,7 @@ static int copy_verifier_state(struct bpf_verifier_=
 state *dst_state,
- 	dst_state->speculative =3D src->speculative;
  	dst_state->curframe =3D src->curframe;
  	dst_state->active_spin_lock =3D src->active_spin_lock;
-+	dst_state->maybe_active_spin_lock_addr =3D src->maybe_active_spin_lock_=
+ 	dst_state->maybe_active_spin_lock_addr =3D src->maybe_active_spin_lock_=
 addr;
++	dst_state->active_cond_ref_obj_id =3D src->active_cond_ref_obj_id;
  	dst_state->branches =3D src->branches;
  	dst_state->parent =3D src->parent;
  	dst_state->first_insn_idx =3D src->first_insn_idx;
-@@ -5471,6 +5502,35 @@ static int process_spin_lock(struct bpf_verifier_e=
-nv *env, int regno,
- 			return -EINVAL;
- 		}
- 		cur->active_spin_lock =3D 0;
-+		cur->maybe_active_spin_lock_addr =3D 0;
-+	}
+@@ -1460,6 +1475,7 @@ static void mark_ptr_not_null_reg(struct bpf_reg_st=
+ate *reg)
+ 		return;
+ 	}
+=20
++	reg->type &=3D ~CONDITIONAL_RELEASE;
+ 	reg->type &=3D ~PTR_MAYBE_NULL;
+ }
+=20
+@@ -6723,24 +6739,78 @@ static void release_reg_references(struct bpf_ver=
+ifier_env *env,
+ 	}
+ }
+=20
++static int __release_reference(struct bpf_verifier_env *env, struct bpf_=
+verifier_state *vstate,
++			       int ref_obj_id)
++{
++	int err;
++	int i;
++
++	err =3D release_reference_state(vstate->frame[vstate->curframe], ref_ob=
+j_id);
++	if (err)
++		return err;
++
++	for (i =3D 0; i <=3D vstate->curframe; i++)
++		release_reg_references(env, vstate->frame[i], ref_obj_id);
 +	return 0;
 +}
 +
-+static int rbtree_process_spin_lock(struct bpf_verifier_env *env, int re=
-gno,
-+				    bool is_lock)
-+{
-+	struct bpf_reg_state *regs =3D cur_regs(env), *reg =3D &regs[regno];
-+	struct bpf_verifier_state *cur =3D env->cur_state;
-+
-+	if (is_lock) {
-+		if (cur->active_spin_lock) {
-+			verbose(env,
-+				"Locking two bpf_spin_locks are not allowed\n");
-+			return -EINVAL;
-+		}
-+		cur->active_spin_lock =3D reg->id;
-+	} else {
-+		if (!cur->active_spin_lock) {
-+			verbose(env, "rbtree_spin_unlock without taking a lock\n");
-+			return -EINVAL;
-+		}
-+		if (cur->active_spin_lock !=3D reg->id) {
-+			verbose(env, "rbtree_spin_unlock of different lock\n");
-+			return -EINVAL;
-+		}
-+		cur->active_spin_lock =3D 0;
-+		cur->maybe_active_spin_lock_addr =3D 0;
- 	}
- 	return 0;
- }
-@@ -5686,12 +5746,18 @@ static const struct bpf_reg_types int_ptr_types =3D=
+ /* The pointer with the specified id has released its reference to kerne=
+l
+  * resources. Identify all copies of the same pointer and clear the refe=
+rence.
+  */
+ static int release_reference(struct bpf_verifier_env *env,
+ 			     int ref_obj_id)
  {
- 	},
- };
-=20
-+static const struct bpf_reg_types spin_lock_types =3D {
-+	.types =3D {
-+		PTR_TO_MAP_VALUE,
-+		PTR_TO_SPIN_LOCK
-+	},
-+};
-+
- static const struct bpf_reg_types fullsock_types =3D { .types =3D { PTR_=
-TO_SOCKET } };
- static const struct bpf_reg_types scalar_types =3D { .types =3D { SCALAR=
-_VALUE } };
- static const struct bpf_reg_types context_types =3D { .types =3D { PTR_T=
-O_CTX } };
- static const struct bpf_reg_types alloc_mem_types =3D { .types =3D { PTR=
-_TO_MEM | MEM_ALLOC } };
- static const struct bpf_reg_types const_map_ptr_types =3D { .types =3D {=
- CONST_PTR_TO_MAP } };
--static const struct bpf_reg_types btf_ptr_types =3D { .types =3D { PTR_T=
-O_BTF_ID } };
- static const struct bpf_reg_types spin_lock_types =3D { .types =3D { PTR=
-_TO_MAP_VALUE } };
- static const struct bpf_reg_types percpu_btf_ptr_types =3D { .types =3D =
-{ PTR_TO_BTF_ID | MEM_PERCPU } };
- static const struct bpf_reg_types func_ptr_types =3D { .types =3D { PTR_=
-TO_FUNC } };
-@@ -6057,8 +6123,12 @@ static int check_func_arg(struct bpf_verifier_env =
-*env, u32 arg,
- 		} else if (meta->func_id =3D=3D BPF_FUNC_spin_unlock) {
- 			if (process_spin_lock(env, regno, false))
- 				return -EACCES;
--		} else if (meta->func_id =3D=3D BPF_FUNC_rbtree_lock ||
--			   meta->func_id =3D=3D BPF_FUNC_rbtree_unlock) { // Do nothing for n=
-ow
-+		} else if (meta->func_id =3D=3D BPF_FUNC_rbtree_lock) {
-+			if (rbtree_process_spin_lock(env, regno, true))
-+				return -EACCES;
-+		} else if (meta->func_id =3D=3D BPF_FUNC_rbtree_unlock) {
-+			if (rbtree_process_spin_lock(env, regno, false))
-+				return -EACCES;
- 		} else {
- 			verbose(env, "verifier internal error\n");
- 			return -EFAULT;
-@@ -6993,6 +7063,29 @@ static int set_find_vma_callback_state(struct bpf_=
-verifier_env *env,
- 	return 0;
- }
-=20
-+/* Are we currently verifying the callback for a rbtree helper that must
-+ * be called with lock held? If so, no need to complain about unreleased
-+ * lock
-+ */
-+static bool in_rbtree_lock_required_cb(struct bpf_verifier_env *env)
-+{
-+	struct bpf_verifier_state *state =3D env->cur_state;
-+	struct bpf_insn *insn =3D env->prog->insnsi;
-+	struct bpf_func_state *callee;
-+	int func_id;
-+
-+	if (!state->curframe)
-+		return false;
-+
-+	callee =3D state->frame[state->curframe];
-+
-+	if (!callee->in_callback_fn)
-+		return false;
-+
-+	func_id =3D insn[callee->callsite].imm;
-+	return is_rbtree_lock_required_function(func_id);
+-	struct bpf_verifier_state *vstate =3D env->cur_state;
+-	int err;
++	return __release_reference(env, env->cur_state, ref_obj_id);
 +}
 +
- static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx=
-)
- {
- 	struct bpf_verifier_state *state =3D env->cur_state;
-@@ -7508,6 +7601,11 @@ static int check_helper_call(struct bpf_verifier_e=
++static void tag_reference_cond_release_regs(struct bpf_verifier_env *env=
+,
++					    struct bpf_func_state *state,
++					    int ref_obj_id,
++					    bool remove)
++{
++	struct bpf_reg_state *regs =3D state->regs, *reg;
+ 	int i;
+=20
+-	err =3D release_reference_state(cur_func(env), ref_obj_id);
+-	if (err)
+-		return err;
++	for (i =3D 0; i < MAX_BPF_REG; i++)
++		if (regs[i].ref_obj_id =3D=3D ref_obj_id) {
++			if (remove)
++				regs[i].type &=3D ~CONDITIONAL_RELEASE;
++			else
++				regs[i].type |=3D CONDITIONAL_RELEASE;
++		}
++
++	bpf_for_each_spilled_reg(i, state, reg) {
++		if (!reg)
++			continue;
++		if (reg->ref_obj_id =3D=3D ref_obj_id) {
++			if (remove)
++				reg->type &=3D ~CONDITIONAL_RELEASE;
++			else
++				reg->type |=3D CONDITIONAL_RELEASE;
++		}
++	}
++}
++
++static void tag_reference_cond_release(struct bpf_verifier_env *env,
++				       int ref_obj_id)
++{
++	struct bpf_verifier_state *vstate =3D env->cur_state;
++	int i;
+=20
+ 	for (i =3D 0; i <=3D vstate->curframe; i++)
+-		release_reg_references(env, vstate->frame[i], ref_obj_id);
++		tag_reference_cond_release_regs(env, vstate->frame[i],
++						ref_obj_id, false);
++}
+=20
+-	return 0;
++static void untag_reference_cond_release(struct bpf_verifier_env *env,
++					 struct bpf_verifier_state *vstate,
++					 int ref_obj_id)
++{
++	int i;
++
++	for (i =3D 0; i <=3D vstate->curframe; i++)
++		tag_reference_cond_release_regs(env, vstate->frame[i],
++						ref_obj_id, true);
+ }
+=20
+ static void clear_non_owning_ref_regs(struct bpf_verifier_env *env,
+@@ -7537,7 +7607,17 @@ static int check_helper_call(struct bpf_verifier_e=
 nv *env, struct bpf_insn *insn
- 			regs[BPF_REG_0].id =3D ++env->id_gen;
- 		}
- 		break;
-+	case RET_PTR_TO_SPIN_LOCK:
-+		mark_reg_known_zero(env, regs, BPF_REG_0);
-+		regs[BPF_REG_0].type =3D PTR_TO_SPIN_LOCK | ret_flag;
-+		regs[BPF_REG_0].id =3D ++env->id_gen;
-+		break;
- 	case RET_PTR_TO_SOCKET:
- 		mark_reg_known_zero(env, regs, BPF_REG_0);
- 		regs[BPF_REG_0].type =3D PTR_TO_SOCKET | ret_flag;
-@@ -10366,6 +10464,20 @@ static int check_cond_jmp_op(struct bpf_verifier=
-_env *env,
- 	return 0;
- }
-=20
-+static unsigned int ld_imm_lock_id_gen(struct bpf_verifier_env *env,
-+					     void *imm)
-+{
-+	struct bpf_verifier_state *cur =3D env->cur_state;
-+
-+	if (cur->active_spin_lock && cur->maybe_active_spin_lock_addr &&
-+	    cur->maybe_active_spin_lock_addr =3D=3D imm)
-+		return cur->active_spin_lock;
-+
-+	if (!cur->active_spin_lock)
-+		cur->maybe_active_spin_lock_addr =3D imm;
-+	return ++env->id_gen;
-+}
-+
- /* verify BPF_LD_IMM64 instruction */
- static int check_ld_imm(struct bpf_verifier_env *env, struct bpf_insn *i=
-nsn)
+ 		if (arg_type_is_dynptr(fn->arg_type[meta.release_regno - BPF_REG_1]))
+ 			err =3D unmark_stack_slots_dynptr(env, &regs[meta.release_regno]);
+ 		else if (meta.ref_obj_id)
+-			err =3D release_reference(env, meta.ref_obj_id);
++			if (type_is_cond_release(fn->ret_type)) {
++				if (env->cur_state->active_cond_ref_obj_id) {
++					verbose(env, "can't handle >1 cond_release\n");
++					return err;
++				}
++				env->cur_state->active_cond_ref_obj_id =3D meta.ref_obj_id;
++				tag_reference_cond_release(env, meta.ref_obj_id);
++				err =3D 0;
++			} else {
++				err =3D release_reference(env, meta.ref_obj_id);
++			}
+ 		/* meta.ref_obj_id can only be 0 if register that is meant to be
+ 		 * released is NULL, which must be > R0.
+ 		 */
+@@ -10212,7 +10292,7 @@ static void __mark_ptr_or_null_regs(struct bpf_fu=
+nc_state *state, u32 id,
+  * be folded together at some point.
+  */
+ static void mark_ptr_or_null_regs(struct bpf_verifier_state *vstate, u32=
+ regno,
+-				  bool is_null)
++				  bool is_null, struct bpf_verifier_env *env)
  {
-@@ -10373,6 +10485,7 @@ static int check_ld_imm(struct bpf_verifier_env *=
-env, struct bpf_insn *insn)
- 	struct bpf_reg_state *regs =3D cur_regs(env);
- 	struct bpf_reg_state *dst_reg;
- 	struct bpf_map *map;
-+	u64 imm;
- 	int err;
+ 	struct bpf_func_state *state =3D vstate->frame[vstate->curframe];
+ 	struct bpf_reg_state *regs =3D state->regs;
+@@ -10227,6 +10307,15 @@ static void mark_ptr_or_null_regs(struct bpf_ver=
+ifier_state *vstate, u32 regno,
+ 		 */
+ 		WARN_ON_ONCE(release_reference_state(state, id));
 =20
- 	if (BPF_SIZE(insn->code) !=3D BPF_DW) {
-@@ -10390,7 +10503,7 @@ static int check_ld_imm(struct bpf_verifier_env *=
-env, struct bpf_insn *insn)
-=20
- 	dst_reg =3D &regs[insn->dst_reg];
- 	if (insn->src_reg =3D=3D 0) {
--		u64 imm =3D ((u64)(insn + 1)->imm << 32) | (u32)insn->imm;
-+		imm =3D ((u64)(insn + 1)->imm << 32) | (u32)insn->imm;
-=20
- 		dst_reg->type =3D SCALAR_VALUE;
- 		__mark_reg_known(&regs[insn->dst_reg], imm);
-@@ -10441,13 +10554,14 @@ static int check_ld_imm(struct bpf_verifier_env=
- *env, struct bpf_insn *insn)
-=20
- 	map =3D env->used_maps[aux->map_index];
- 	dst_reg->map_ptr =3D map;
--
- 	if (insn->src_reg =3D=3D BPF_PSEUDO_MAP_VALUE ||
- 	    insn->src_reg =3D=3D BPF_PSEUDO_MAP_IDX_VALUE) {
- 		dst_reg->type =3D PTR_TO_MAP_VALUE;
- 		dst_reg->off =3D aux->map_off;
--		if (map_value_has_spin_lock(map))
--			dst_reg->id =3D ++env->id_gen;
-+		if (map_value_has_spin_lock(map)) {
-+			imm =3D ((u64)(insn + 1)->imm << 32) | (u32)insn->imm;
-+			dst_reg->id =3D ld_imm_lock_id_gen(env, (void *)imm);
++	if (type_is_cond_release(regs[regno].type)) {
++		if (!is_null) {
++			__release_reference(env, vstate, vstate->active_cond_ref_obj_id);
++			vstate->active_cond_ref_obj_id =3D 0;
++		} else {
++			untag_reference_cond_release(env, vstate, vstate->active_cond_ref_obj=
+_id);
++			vstate->active_cond_ref_obj_id =3D 0;
 +		}
- 	} else if (insn->src_reg =3D=3D BPF_PSEUDO_MAP_FD ||
- 		   insn->src_reg =3D=3D BPF_PSEUDO_MAP_IDX) {
- 		dst_reg->type =3D CONST_PTR_TO_MAP;
-@@ -12432,7 +12546,7 @@ static int do_check(struct bpf_verifier_env *env)
++	}
+ 	for (i =3D 0; i <=3D vstate->curframe; i++)
+ 		__mark_ptr_or_null_regs(vstate->frame[i], id, is_null);
+ }
+@@ -10537,9 +10626,9 @@ static int check_cond_jmp_op(struct bpf_verifier_=
+env *env,
+ 		 * safe or unknown depending R =3D=3D 0 or R !=3D 0 conditional.
+ 		 */
+ 		mark_ptr_or_null_regs(this_branch, insn->dst_reg,
+-				      opcode =3D=3D BPF_JNE);
++				      opcode =3D=3D BPF_JNE, env);
+ 		mark_ptr_or_null_regs(other_branch, insn->dst_reg,
+-				      opcode =3D=3D BPF_JEQ);
++				      opcode =3D=3D BPF_JEQ, env);
+ 	} else if (!try_match_pkt_pointers(insn, dst_reg, &regs[insn->src_reg],
+ 					   this_branch, other_branch) &&
+ 		   is_pointer_value(env, insn->dst_reg)) {
+@@ -11996,6 +12085,9 @@ static bool states_equal(struct bpf_verifier_env =
+*env,
+ 	if (old->active_spin_lock !=3D cur->active_spin_lock)
+ 		return false;
 =20
- 				if (env->cur_state->active_spin_lock &&
- 				    (insn->src_reg =3D=3D BPF_PSEUDO_CALL ||
--				     insn->imm !=3D BPF_FUNC_spin_unlock)) {
-+				     !is_lock_allowed_function(insn->imm))) {
- 					verbose(env, "function calls are not allowed while holding a lock\n=
-");
- 					return -EINVAL;
- 				}
-@@ -12467,7 +12581,7 @@ static int do_check(struct bpf_verifier_env *env)
- 					return -EINVAL;
- 				}
-=20
--				if (env->cur_state->active_spin_lock) {
-+				if (state->active_spin_lock && !in_rbtree_lock_required_cb(env)) {
- 					verbose(env, "bpf_spin_unlock is missing\n");
- 					return -EINVAL;
- 				}
++	if (old->active_cond_ref_obj_id !=3D cur->active_cond_ref_obj_id)
++		return false;
++
+ 	/* for states to be equal callsites have to be the same
+ 	 * and all frame states need to be equivalent
+ 	 */
 --=20
 2.30.2
 
