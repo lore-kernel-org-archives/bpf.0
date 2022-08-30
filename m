@@ -2,88 +2,110 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52E80ECAAA1
-	for <bpf@archiver.kernel.org>; Tue, 30 Aug 2022 13:49:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCC26C54EE9
+	for <bpf@archiver.kernel.org>; Tue, 30 Aug 2022 13:49:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229518AbiH3NtX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 30 Aug 2022 09:49:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57112 "EHLO
+        id S229653AbiH3NtY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 30 Aug 2022 09:49:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbiH3Nsb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 30 Aug 2022 09:48:31 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC4510D4E2;
-        Tue, 30 Aug 2022 06:46:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661867186; x=1693403186;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=er/Bc3XN5jHRYzy7lTmhugLOgFMGvSCPFonl4dxsKnk=;
-  b=Xdt88dJFDa5UW3TKbXvqMfqgNmjzy8zvOUPENsSYpDswHyEYYdfJxhNs
-   mOPzjC9bSbqG5bGN1OZfxD4Sgj66GfSc+VvexZwkOu28yd8DxfJvMmrGC
-   ZnkanmA+MPyx8LtCNTiRubT5WzgO1CvfLp13NpWYeDcrx3nBZflubSxfn
-   mqpmBRyoq6Laj1hPBBJMPoIAqNnWlaooOYydQ69gqi8S9ALzQ45IH6ft2
-   d7RcUV2YcD7HwOxXXSqmsgV+AkcoG3o8ZjYpx173F1Wqz44UK5LxWZ4S/
-   hSVTkUEXnvcQ58OZcY2fNg56cHmw/S7Zeqr8b97Y4wmd+jtqkoGBYqI60
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="295956716"
-X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="295956716"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 06:39:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="672868302"
-Received: from boxer.igk.intel.com ([10.102.20.173])
-  by fmsmga008.fm.intel.com with ESMTP; 30 Aug 2022 06:39:10 -0700
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org
-Cc:     netdev@vger.kernel.org, magnus.karlsson@intel.com,
-        bjorn@kernel.org, Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH bpf] selftests: xsk: add missing close() on netns fd
-Date:   Tue, 30 Aug 2022 15:39:05 +0200
-Message-Id: <20220830133905.9945-1-maciej.fijalkowski@intel.com>
-X-Mailer: git-send-email 2.35.3
+        with ESMTP id S231277AbiH3Nsm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 30 Aug 2022 09:48:42 -0400
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35612101E1;
+        Tue, 30 Aug 2022 06:46:19 -0700 (PDT)
+Received: by mail-qv1-f51.google.com with SMTP id y17so1548264qvr.5;
+        Tue, 30 Aug 2022 06:46:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=21bngEPsx9nENODhGKloV6uJhY/ub47K75lzmtVSqjY=;
+        b=ajVTQTfgysLWpj7YHSxQdryhNnfQ1uiutmZpgxOdyGGyHIbBe+t2010ZGQq1FRORMn
+         i+gB9FaiiqwZOhzLvfaDMjYUH2LlgRCp6IcLc3Owfw0aOb2JBK/AbMIq5oPN+tA4sUC4
+         Bwg/pUEPf39uQ7VraDZHvmft4erZSxhzhDafk/9W4bTu8xeDdSBEaDYIIimFSVkOhCxm
+         +HdFzblzWv7J+GK3NqKJW/w06RVvLoe0ZxBEXLAghKj3iOrwNtFsYqrmFBfZfpsJqvfB
+         1XmTU+lkX64pxC7OAKj5OBMSVrg7A9a0hK9H+yJuM4TG1VA6di5gwZz9HMkeQQ1FcyUK
+         IBYQ==
+X-Gm-Message-State: ACgBeo3yT7zIDI97m6hGamOaN4aBZCSSADt5EyqfUSXAUROdGmL+nMmK
+        IP7lnfZ5mFPG2OAkPiOTA4U=
+X-Google-Smtp-Source: AA6agR6qsN5IRB4YXJCP4WyzhBkFmtmh4gNPDHtZPGWlp0qMb55XioYmJX4BacH+uy69tJMFjYAokg==
+X-Received: by 2002:a05:6214:d6d:b0:496:e11b:69e9 with SMTP id 13-20020a0562140d6d00b00496e11b69e9mr15334444qvs.45.1661867171236;
+        Tue, 30 Aug 2022 06:46:11 -0700 (PDT)
+Received: from maniforge.dhcp.thefacebook.com ([2620:10d:c091:480::2341])
+        by smtp.gmail.com with ESMTPSA id i13-20020a05620a248d00b006baed8f3a2esm7870099qkn.103.2022.08.30.06.46.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 06:46:10 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 08:46:12 -0500
+From:   David Vernet <void@manifault.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, kernel-team@fb.com, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, joannelkoong@gmail.com, tj@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 4/4] selftests/bpf: Add selftests validating the user
+ ringbuf
+Message-ID: <Yw4UpK4uPZP9fYD+@maniforge.dhcp.thefacebook.com>
+References: <20220818221212.464487-1-void@manifault.com>
+ <20220818221212.464487-5-void@manifault.com>
+ <CAEf4Bzbj0ACUmZqQLhRR5DvEX9Zphqz5UwBWdkTdXfKqxWM0mQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4Bzbj0ACUmZqQLhRR5DvEX9Zphqz5UwBWdkTdXfKqxWM0mQ@mail.gmail.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Commit 1034b03e54ac ("selftests: xsk: Simplify cleanup of ifobjects")
-removed close on netns fd, which is not correct, so let us restore it.
+On Wed, Aug 24, 2022 at 03:03:54PM -0700, Andrii Nakryiko wrote:
 
-Fixes: 1034b03e54ac ("selftests: xsk: Simplify cleanup of ifobjects")
-Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
----
- tools/testing/selftests/bpf/xskxceiver.c | 4 ++++
- 1 file changed, 4 insertions(+)
+[...]
 
-diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-index 333cf23c01b5..d64652558d12 100644
---- a/tools/testing/selftests/bpf/xskxceiver.c
-+++ b/tools/testing/selftests/bpf/xskxceiver.c
-@@ -1698,6 +1698,8 @@ static struct ifobject *ifobject_create(void)
- 	if (!ifobj->umem)
- 		goto out_umem;
- 
-+	ifobj->ns_fd = -1;
-+
- 	return ifobj;
- 
- out_umem:
-@@ -1709,6 +1711,8 @@ static struct ifobject *ifobject_create(void)
- 
- static void ifobject_delete(struct ifobject *ifobj)
- {
-+	if (ifobj->ns_fd != -1)
-+		close(ifobj->ns_fd);
- 	free(ifobj->umem);
- 	free(ifobj->xsk_arr);
- 	free(ifobj);
--- 
-2.34.1
+> > +                       CHECK(read <= 0, "snprintf_comm",
+> > +                             "Failed to write index %d to comm\n", i);
+> 
+> please, no CHECK() use in new tests, we have ASSERT_xxx() covering all
+> common cases
 
+No problem, I'll make this change in v4. Unless I missed something,
+CHECK() isn't documented as deprecated in test_progs.h. I'll take care
+of adding that in a separate change.
+
+> > +static long
+> > +bad_access1(struct bpf_dynptr *dynptr, void *context)
+> > +{
+> > +       const struct sample *sample;
+> > +
+> > +       sample = bpf_dynptr_data(dynptr - 1, 0, sizeof(*sample));
+> > +       bpf_printk("Was able to pass bad pointer %lx\n", (__u64)dynptr - 1);
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +/* A callback that accesses a dynptr in a bpf_user_ringbuf_drain callback should
+> > + * not be able to read before the pointer.
+> > + */
+> > +SEC("?raw_tp/sys_nanosleep")
+> 
+> there is no sys_nanosleep raw tracepoint, use SEC("?raw_tp") to
+> specify type, that's enough
+
+Got it, thanks for catching that. Will fix.
+
+> > diff --git a/tools/testing/selftests/bpf/test_user_ringbuf.h b/tools/testing/selftests/bpf/test_user_ringbuf.h
+> > new file mode 100644
+> > index 000000000000..1643b4d59ba7
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/bpf/test_user_ringbuf.h
+> 
+> nit: I'd probably put it under progs/test_user_ringbuf.h so it's
+> closer to BPF source code. As it is right now, it's neither near
+> user-space part of tests nor near BPF part.
+
+Fair enough, will fix.
+
+Thanks,
+David
