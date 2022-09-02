@@ -2,147 +2,126 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B0B1C38145
-	for <bpf@archiver.kernel.org>; Fri,  2 Sep 2022 14:05:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A04D1ECAAD5
+	for <bpf@archiver.kernel.org>; Fri,  2 Sep 2022 14:07:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238812AbiIBOFY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 2 Sep 2022 10:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
+        id S238788AbiIBOHF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 2 Sep 2022 10:07:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238828AbiIBOEi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:04:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8C0148D3F
-        for <bpf@vger.kernel.org>; Fri,  2 Sep 2022 06:33:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662125589;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UmXuOjUugSdvFfhnfCLRZhRw10ucC5QWiKjJxW2knIY=;
-        b=S4kYsMRbPHFKfGf0DaUw8PZ8ftMpDM49YEORq8WAN+9HJFMT2A16YdN3OwUC5kse4jeUQh
-        LM+QZTGvaPsiPxycmiH2oPJ3iD831Yy/x8FvGyckJryRS6CV0TwdGtyRtyZwJod/SXgQlp
-        j/fzx826W/ReQB83RfVTXgguIOMmRI0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-558-C2v1YD0hOziZ3XJ_0yDWmA-1; Fri, 02 Sep 2022 09:29:56 -0400
-X-MC-Unique: C2v1YD0hOziZ3XJ_0yDWmA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7B6B63C0F37B;
-        Fri,  2 Sep 2022 13:29:55 +0000 (UTC)
-Received: from plouf.redhat.com (unknown [10.39.193.218])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1BEDC492C3B;
-        Fri,  2 Sep 2022 13:29:51 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
+        with ESMTP id S238787AbiIBOGm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 2 Sep 2022 10:06:42 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281C752080
+        for <bpf@vger.kernel.org>; Fri,  2 Sep 2022 06:34:36 -0700 (PDT)
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oU6oR-00083j-0Y; Fri, 02 Sep 2022 15:34:23 +0200
+Received: from [85.1.206.226] (helo=linux-4.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oU6oQ-000UG3-OA; Fri, 02 Sep 2022 15:34:22 +0200
+Subject: Re: [PATCH bpf-next v3 0/4] Add BPF JIT support for LoongArch
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>
-Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v10 03/23] bpf/verifier: allow all functions to read user provided context
-Date:   Fri,  2 Sep 2022 15:29:18 +0200
-Message-Id: <20220902132938.2409206-4-benjamin.tissoires@redhat.com>
-In-Reply-To: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
-References: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf@vger.kernel.org, loongarch@lists.linux.dev
+References: <1661999249-10258-1-git-send-email-yangtiezhu@loongson.cn>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <2219694c-5e4c-2b81-ee39-367467ac0733@iogearbox.net>
+Date:   Fri, 2 Sep 2022 15:34:22 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+In-Reply-To: <1661999249-10258-1-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26646/Fri Sep  2 09:55:25 2022)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When a function was trying to access data from context in a syscall eBPF
-program, the verifier was rejecting the call unless it was accessing the
-first element.
-This is because the syscall context is not known at compile time, and
-so we need to check this when actually accessing it.
+On 9/1/22 4:27 AM, Tiezhu Yang wrote:
+> The basic support for LoongArch has been merged into the upstream Linux
+> kernel since 5.19-rc1 on June 5, 2022, this patch series adds BPF JIT
+> support for LoongArch.
+> 
+> Here is the LoongArch documention:
+> https://www.kernel.org/doc/html/latest/loongarch/index.html
+> 
+> With this patch series, the test cases in lib/test_bpf.ko have passed
+> on LoongArch.
+> 
+>    # echo 1 > /proc/sys/net/core/bpf_jit_enable
+>    # modprobe test_bpf
+>    # dmesg | grep Summary
+>    test_bpf: Summary: 1026 PASSED, 0 FAILED, [1014/1014 JIT'ed]
+>    test_bpf: test_tail_calls: Summary: 10 PASSED, 0 FAILED, [10/10 JIT'ed]
+>    test_bpf: test_skb_segment: Summary: 2 PASSED, 0 FAILED
+> 
+> It seems that this patch series can not be applied cleanly to bpf-next
+> which is not synced to v6.0-rc3.
 
-Check for the valid memory access if there is no convert_ctx callback,
-and allow such situation to happen.
+For bpf-next tree this doesn't apply cleanly. Huacai, probably easier if you
+take it in. Otherwise this needs rebase (and your Ack as arch maintainer), but
+then there'll be merge conflict later anyway.
 
-There is a slight hiccup with subprogs. btf_check_subprog_arg_match()
-will check that the types are matching, which is a good thing, but to
-have an accurate result, it hides the fact that the context register may
-be null. This makes env->prog->aux->max_ctx_offset being set to the size
-of the context, which is incompatible with a NULL context.
+[...]
+Applying: LoongArch: Move {signed,unsigned}_imm_check() to inst.h
+Applying: LoongArch: Add some instruction opcodes and formats
+error: patch failed: arch/loongarch/include/asm/inst.h:18
+error: arch/loongarch/include/asm/inst.h: patch does not apply
+Patch failed at 0002 LoongArch: Add some instruction opcodes and formats
+[...]
 
-Solve that last problem by storing max_ctx_offset before the type check
-and restoring it after.
+Thanks,
+Daniel
 
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-
----
-
-changes in v10:
-- dropped the hunk in btf.c saving/restoring max_ctx_offset
-
-changes in v9:
-- rewrote the commit title and description
-- made it so all functions can make use of context even if there is
-  no convert_ctx
-- remove the is_kfunc field in bpf_call_arg_meta
-
-changes in v8:
-- fixup comment
-- return -EACCESS instead of -EINVAL for consistency
-
-changes in v7:
-- renamed access_t into atype
-- allow zero-byte read
-- check_mem_access() to the correct offset/size
-
-new in v6
----
- kernel/bpf/verifier.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d27fae3ce949..3f9e6fa92cde 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -5233,6 +5233,25 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
- 				env,
- 				regno, reg->off, access_size,
- 				zero_size_allowed, ACCESS_HELPER, meta);
-+	case PTR_TO_CTX:
-+		/* in case the function doesn't know how to access the context,
-+		 * (because we are in a program of type SYSCALL for example), we
-+		 * can not statically check its size.
-+		 * Dynamically check it now.
-+		 */
-+		if (!env->ops->convert_ctx_access) {
-+			enum bpf_access_type atype = meta && meta->raw_mode ? BPF_WRITE : BPF_READ;
-+			int offset = access_size - 1;
-+
-+			/* Allow zero-byte read from PTR_TO_CTX */
-+			if (access_size == 0)
-+				return zero_size_allowed ? 0 : -EACCES;
-+
-+			return check_mem_access(env, env->insn_idx, regno, offset, BPF_B,
-+						atype, -1, false);
-+		}
-+
-+		fallthrough;
- 	default: /* scalar_value or invalid ptr */
- 		/* Allow zero-byte read from NULL, regardless of pointer type */
- 		if (zero_size_allowed && access_size == 0 &&
--- 
-2.36.1
+> v3:
+>    -- Remove CONFIG_TEST_BPF in loongson3_defconfig
+> 
+> v2:
+>    -- Rebased series on v6.0-rc3
+>    -- Make build_epilogue() static
+>    -- Use alsl.d, bstrpick.d, [ld/st]ptr.[w/d] to save some instructions
+>    -- Replace move_imm32() and move_imm64() with move_imm() and optimize it
+>    -- Add code comments to explain the considerations of conditional jump
+>    https://lore.kernel.org/bpf/1661857809-10828-1-git-send-email-yangtiezhu@loongson.cn/
+> 
+> v1:
+>    -- Rebased series on v6.0-rc1
+>    -- Move {signed,unsigned}_imm_check() to inst.h
+>    -- Define the imm field as "unsigned int" in the instruction format
+>    -- Use DEF_EMIT_*_FORMAT to define the same kind of instructions
+>    -- Use "stack_adjust += sizeof(long) * 8" in build_prologue()
+>    https://lore.kernel.org/bpf/1660996260-11337-1-git-send-email-yangtiezhu@loongson.cn/
+> 
+> RFC:
+>    https://lore.kernel.org/bpf/1660013580-19053-1-git-send-email-yangtiezhu@loongson.cn/
+> 
+> Tiezhu Yang (4):
+>    LoongArch: Move {signed,unsigned}_imm_check() to inst.h
+>    LoongArch: Add some instruction opcodes and formats
+>    LoongArch: Add BPF JIT support
+>    LoongArch: Enable BPF_JIT in default config
+> 
+>   arch/loongarch/Kbuild                      |    1 +
+>   arch/loongarch/Kconfig                     |    1 +
+>   arch/loongarch/configs/loongson3_defconfig |    1 +
+>   arch/loongarch/include/asm/inst.h          |  383 ++++++++-
+>   arch/loongarch/kernel/module.c             |   10 -
+>   arch/loongarch/net/Makefile                |    7 +
+>   arch/loongarch/net/bpf_jit.c               | 1160 ++++++++++++++++++++++++++++
+>   arch/loongarch/net/bpf_jit.h               |  282 +++++++
+>   8 files changed, 1830 insertions(+), 15 deletions(-)
+>   create mode 100644 arch/loongarch/net/Makefile
+>   create mode 100644 arch/loongarch/net/bpf_jit.c
+>   create mode 100644 arch/loongarch/net/bpf_jit.h
+> 
 
