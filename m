@@ -2,112 +2,82 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B88D6ECAAD5
-	for <bpf@archiver.kernel.org>; Fri,  2 Sep 2022 14:26:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58EBEECAAD5
+	for <bpf@archiver.kernel.org>; Fri,  2 Sep 2022 14:40:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237325AbiIBO0o (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 2 Sep 2022 10:26:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51238 "EHLO
+        id S236736AbiIBOkt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 2 Sep 2022 10:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237379AbiIBO0Z (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:26:25 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC5F156A0B
-        for <bpf@vger.kernel.org>; Fri,  2 Sep 2022 06:53:54 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id q39-20020a056830442700b0063889adc0ddso1491883otv.1
-        for <bpf@vger.kernel.org>; Fri, 02 Sep 2022 06:53:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=TRNEPv/fVZBL+J+K0gbUvPbd/wP8B+12JIvN/V7uTcU=;
-        b=JJEiY1nRuKPAHexQSBWa1G1+D1zLBXZhFgMaAb2sUdoGvIO/vi/5FZjf3cbuXhRuS2
-         UCd9crNd+fUPxT9Fi7I5uObbhL0ex1QkxUU9j4jxgfQiBVy2PaiKUvTB8sXRu9fFVAah
-         KYM7x34v7hcl+UNTbsGMMKlRHV6XMoOvcb2TZQoY8bOAxvWLeI1qeyQgMq8zgOMAaF6b
-         PJe80p9cyT6qYpurA6bBVX9NENNzT/0xn0CRy3P8K3yed0vYzDunlyEfxOh5r2PDPQVM
-         kVGFJ5mDJrgi755A+/6bpL+HDjZYfesebLyl9SLaz24zvcnbRvbh+mKy9sapsSxqkoFV
-         IMJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=TRNEPv/fVZBL+J+K0gbUvPbd/wP8B+12JIvN/V7uTcU=;
-        b=Tb8GfxtMmQ+1OFGaHNRbc1y9FDKiQL1HlDC+68LZif+ipoe2SjeQtkuwopt6iWBkMc
-         hDYIdnJvJbBvf8868hj8RY4De6AhFRE2oBNfPRGXsVHYbLAzB1nO37hnPfYVALhTTHci
-         kr5zUOoj4ZDgQBlb8XJe9FfDvrzQk6yjLx9b05xgLdehyRyftW51igpmYGbi3hX0TdYo
-         b2rS/agoQlISOipo7PcASUgEvVGntpEKbdFQef0vG3QEGsWIOKJFK2jmJzv+1wo43+KL
-         +PN0Zr47Ml7I23zpnRtjDmtV0HF2QJ1FUAcWQeLCX3lUPsk07wFkdGWzdlIgykQ3aAIu
-         O7oA==
-X-Gm-Message-State: ACgBeo01Nz1KMRzkv0Kz7Vz/NTRQ2jCQamumLmgJfuKLrkuY3xtHVF1J
-        pL9uPVPNwcx+zhMlBkLsadpFgoTTyOEA+cvcAxvuug==
-X-Google-Smtp-Source: AA6agR6zb53YPcXo5kDN/63AZ67C60d0NARcZzDg39E8JP0pQszvgj2ovZPGPXkptzTrSV8v0tYkxi9MEbsv38BvS44=
-X-Received: by 2002:a05:6830:2a17:b0:636:f7fc:98bb with SMTP id
- y23-20020a0568302a1700b00636f7fc98bbmr14890114otu.223.1662126833447; Fri, 02
- Sep 2022 06:53:53 -0700 (PDT)
+        with ESMTP id S236881AbiIBOkG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 2 Sep 2022 10:40:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7401C12484B;
+        Fri,  2 Sep 2022 07:00:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 64F8CB82C03;
+        Fri,  2 Sep 2022 14:00:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1AE3CC433D7;
+        Fri,  2 Sep 2022 14:00:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662127216;
+        bh=6FkOE0V4Xl0gp19KmvjJh3tYe8TXuJxNaJXe5cYKWtY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=QwevnPlVKT8sKyLUXOmFC3g8jLH3mwyfHt2ULozsHipTdWaNetXQIgZLubI6v789S
+         by009iQSOMS11/xX/tVlKUyTnYoqRxIITAu7X9eTVFk/nuftkOx96+aeIsQhor1MHz
+         l6yhZ1vEnPAOGFFVfk//OweyVjp+oU8gPOszu9XLwvdUHQUzMy++UmTGTgtbxPZDlU
+         JsGMsul8wM8KStocJnEwWeya+1aAN4brXciTrlpRiktODdhG0Mv7GvJAVhmdYASBT5
+         24H1WRL/J0eieDR18h5zDUYU0li3u9TMEKadsYyzB0s7RaD4XNDx+qmlWrwbyjWVhR
+         ihxU86cWFOJmg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EFF0DC4166F;
+        Fri,  2 Sep 2022 14:00:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220902112446.29858-1-shaozhengchao@huawei.com> <20220902112446.29858-2-shaozhengchao@huawei.com>
-In-Reply-To: <20220902112446.29858-2-shaozhengchao@huawei.com>
-From:   Jamal Hadi Salim <jhs@mojatatu.com>
-Date:   Fri, 2 Sep 2022 09:53:42 -0400
-Message-ID: <CAM0EoMnxxA5y2W22aMXF+QRqckbkGm9eJoEnu-CaKhgWMM7kdA@mail.gmail.com>
-Subject: Re: [PATCH net-next 01/22] net: sched: act_api: implement generic
- walker and search for tc action
-To:     Zhengchao Shao <shaozhengchao@huawei.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, xiyou.wangcong@gmail.com,
-        jiri@resnulli.us, martin.lau@linux.dev, daniel@iogearbox.net,
-        john.fastabend@gmail.com, ast@kernel.org, andrii@kernel.org,
-        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, weiyongjun1@huawei.com,
-        yuehaibing@huawei.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v1] selftests/xsk: Avoid use-after-free on ctx
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166212721597.8214.1758586217041951809.git-patchwork-notify@kernel.org>
+Date:   Fri, 02 Sep 2022 14:00:15 +0000
+References: <20220901202645.1463552-1-irogers@google.com>
+In-Reply-To: <20220901202645.1463552-1-irogers@google.com>
+To:     Ian Rogers <irogers@google.com>
+Cc:     bjorn@kernel.org, magnus.karlsson@intel.com,
+        maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        shuah@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 7:22 AM Zhengchao Shao <shaozhengchao@huawei.com> wrote:
->
-> Being able to get tc_action_net by using net_id stored in tc_action_ops
-> and execute the generic walk/search function, add __tcf_generic_walker()
-> and __tcf_idr_search() helpers.
->
+Hello:
 
-These are nice cleanups.
-Can you please run all tdc tests for all changes you are making to
-the tc subsystem? Maybe do a kindness and add more tests.
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-Just small  opinions below. Otherwise you can add my ACK.
+On Thu,  1 Sep 2022 13:26:45 -0700 you wrote:
+> The put lowers the reference count to 0 and frees ctx, reading it
+> afterwards is invalid. Move the put after the uses and determine the
+> last use by the reference count being 1.
+> 
+> Fixes: 39e940d4abfa ("selftests/xsk: Destroy BPF resources only when ctx refcount drops to 0")
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> 
+> [...]
 
-> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
-> ---
->  include/net/act_api.h |  1 +
->  net/sched/act_api.c   | 48 +++++++++++++++++++++++++++++++++++++------
->  2 files changed, 43 insertions(+), 6 deletions(-)
->
-> diff --git a/include/net/act_api.h b/include/net/act_api.h
-> index 9cf6870b526e..a79d6e58519e 100644
-\
+Here is the summary with links:
+  - [v1] selftests/xsk: Avoid use-after-free on ctx
+    https://git.kernel.org/bpf/bpf-next/c/af515a5587b8
 
-> @@ -926,7 +945,8 @@ int tcf_register_action(struct tc_action_ops *act,
->         struct tc_action_ops *a;
->         int ret;
->
-> -       if (!act->act || !act->dump || !act->init || !act->walk || !act->lookup)
-> +       if (!act->act || !act->dump || !act->init ||
-> +           (!act->net_id && (!act->walk || !act->lookup)))
-
-I can understand net_id, but why && (!act->walk || !act->lookup) ?
-Assumedly they are now optional, no?
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-> +       if (ops->walk) {
-> +               err = ops->walk(net, skb, &dcb, RTM_DELACTION, ops, extack);
-> +       } else {
-> +               err = __tcf_generic_walker(net, skb, &dcb, RTM_DELACTION, ops, extack);
-> +       }
-
-Bikeshed mod: those braces.
-
-cheers,
-jamal
