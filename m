@@ -2,42 +2,42 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE37BECAAD3
-	for <bpf@archiver.kernel.org>; Fri,  2 Sep 2022 00:32:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFBE2C38145
+	for <bpf@archiver.kernel.org>; Fri,  2 Sep 2022 00:32:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbiIBAcF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 1 Sep 2022 20:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41108 "EHLO
+        id S234011AbiIBAcH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 1 Sep 2022 20:32:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233410AbiIBAcD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 1 Sep 2022 20:32:03 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC97A9E12E
-        for <bpf@vger.kernel.org>; Thu,  1 Sep 2022 17:32:01 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28208rLq016014
-        for <bpf@vger.kernel.org>; Thu, 1 Sep 2022 17:32:01 -0700
+        with ESMTP id S233410AbiIBAcG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 1 Sep 2022 20:32:06 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9739E12E
+        for <bpf@vger.kernel.org>; Thu,  1 Sep 2022 17:32:05 -0700 (PDT)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 28208oLn019782
+        for <bpf@vger.kernel.org>; Thu, 1 Sep 2022 17:32:04 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=bY2jMuW3r+DsOXkdRyzJUTujGu/gfhLPHZLeoYiP08A=;
- b=AMuKB1T0N7P0RfnmS/NjPjiCY16RyVMFW8uni2nBq9NPxsEvha4teqMRNOcPtFV4GPk8
- 3PqIVbTpo2iCQo6yIXhg1NVUvKWNHc6DCiaL6/Ee8bf798+D35xaXmCuDIZ5rH3xMPq7
- 5Z9C224YQK3HDIEgKWWRXSZQSZyZdIAmgCc= 
+ bh=vbW2X5/pBMDAdUcv4OUW/CWebw3qEhiQoQrYjJFeR0o=;
+ b=R34mXqjKW9/yl70aPhmrOsv6ReFd90TfOLlwtwG3VR2NWlbn33h8lBfgLBEvOKkxxvpC
+ G4NnU74AI29e5Z+RgdK2QknJrKJDVdhzkBI86JxOzTDjiEM5yW58JHcm7vv4HMypzxMy
+ 5Zf2RcpNW1d0rkZx14ZKLhYfd7so58FMg1Q= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jam56q2yh-3
+        by m0089730.ppops.net (PPS) with ESMTPS id 3jam3vf6h8-8
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 01 Sep 2022 17:32:01 -0700
+        for <bpf@vger.kernel.org>; Thu, 01 Sep 2022 17:32:04 -0700
 Received: from snc-exhub201.TheFacebook.com (2620:10d:c085:21d::7) by
- snc-exhub101.TheFacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP
+ snc-exhub204.TheFacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.31; Thu, 1 Sep 2022 17:32:00 -0700
-Received: from twshared10425.14.frc2.facebook.com (2620:10d:c085:108::4) by
+Received: from twshared29104.24.frc3.facebook.com (2620:10d:c085:108::4) by
  mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Sep 2022 17:31:59 -0700
+ 15.1.2375.31; Thu, 1 Sep 2022 17:32:00 -0700
 Received: by devbig933.frc1.facebook.com (Postfix, from userid 6611)
-        id A83998C47BEF; Thu,  1 Sep 2022 17:29:12 -0700 (PDT)
+        id B44138C47B62; Thu,  1 Sep 2022 17:28:40 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -48,9 +48,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>, <kernel-team@fb.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH v2 bpf-next 13/17] bpf: Change bpf_getsockopt(SOL_SOCKET) to reuse sk_getsockopt()
-Date:   Thu, 1 Sep 2022 17:29:12 -0700
-Message-ID: <20220902002912.2894040-1-kafai@fb.com>
+Subject: [PATCH v2 bpf-next 08/17] net: Remove unused flags argument from do_ipv6_getsockopt
+Date:   Thu, 1 Sep 2022 17:28:40 -0700
+Message-ID: <20220902002840.2891763-1-kafai@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220902002750.2887415-1-kafai@fb.com>
 References: <20220902002750.2887415-1-kafai@fb.com>
@@ -58,8 +58,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: VBQSRFxyaUqAh7-xenex8rID78bXi14U
-X-Proofpoint-GUID: VBQSRFxyaUqAh7-xenex8rID78bXi14U
+X-Proofpoint-GUID: nEoPvISsetckNF77pAWGZEmtbg_nGMB8
+X-Proofpoint-ORIG-GUID: nEoPvISsetckNF77pAWGZEmtbg_nGMB8
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-09-01_12,2022-08-31_03,2022-06-22_01
@@ -69,170 +69,47 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Martin KaFai Lau <martin.lau@kernel.org>
 
-This patch changes bpf_getsockopt(SOL_SOCKET) to reuse
-sk_getsockopt().  It removes all duplicated code from
-bpf_getsockopt(SOL_SOCKET).
-
-Before this patch, there were some optnames available to
-bpf_setsockopt(SOL_SOCKET) but missing in bpf_getsockopt(SOL_SOCKET).
-It surprises users from time to time.  For example, SO_REUSEADDR,
-SO_KEEPALIVE, SO_RCVLOWAT, and SO_MAX_PACING_RATE.  This patch
-automatically closes this gap without duplicating more code.
-The only exception is SO_BINDTODEVICE because it needs to acquire a
-blocking lock.  Thus, SO_BINDTODEVICE is not supported.
+The 'unsigned int flags' argument is always 0, so it can be removed.
 
 Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
 ---
- include/net/sock.h |  2 ++
- net/core/filter.c  | 57 +++++++++++++++++++---------------------------
- net/core/sock.c    |  4 ++--
- 3 files changed, 27 insertions(+), 36 deletions(-)
+ net/ipv6/ipv6_sockglue.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/net/sock.h b/include/net/sock.h
-index ee44b424d952..ea7965524133 100644
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -1833,6 +1833,8 @@ int sk_setsockopt(struct sock *sk, int level, int o=
-ptname,
- int sock_setsockopt(struct socket *sock, int level, int op,
- 		    sockptr_t optval, unsigned int optlen);
-=20
-+int sk_getsockopt(struct sock *sk, int level, int optname,
-+		  sockptr_t optval, sockptr_t optlen);
- int sock_getsockopt(struct socket *sock, int level, int op,
- 		    char __user *optval, int __user *optlen);
- int sock_gettstamp(struct socket *sock, void __user *userstamp,
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 347c38da1e0c..68b52243b306 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -5013,8 +5013,9 @@ static const struct bpf_func_proto bpf_get_socket_u=
-id_proto =3D {
- 	.arg1_type      =3D ARG_PTR_TO_CTX,
- };
-=20
--static int sol_socket_setsockopt(struct sock *sk, int optname,
--				 char *optval, int optlen)
-+static int sol_socket_sockopt(struct sock *sk, int optname,
-+			      char *optval, int *optlen,
-+			      bool getopt)
- {
- 	switch (optname) {
- 	case SO_REUSEADDR:
-@@ -5028,7 +5029,7 @@ static int sol_socket_setsockopt(struct sock *sk, i=
-nt optname,
- 	case SO_MAX_PACING_RATE:
- 	case SO_BINDTOIFINDEX:
- 	case SO_TXREHASH:
--		if (optlen !=3D sizeof(int))
-+		if (*optlen !=3D sizeof(int))
- 			return -EINVAL;
- 		break;
- 	case SO_BINDTODEVICE:
-@@ -5037,8 +5038,16 @@ static int sol_socket_setsockopt(struct sock *sk, =
-int optname,
- 		return -EINVAL;
- 	}
-=20
-+	if (getopt) {
-+		if (optname =3D=3D SO_BINDTODEVICE)
-+			return -EINVAL;
-+		return sk_getsockopt(sk, SOL_SOCKET, optname,
-+				     KERNEL_SOCKPTR(optval),
-+				     KERNEL_SOCKPTR(optlen));
-+	}
-+
- 	return sk_setsockopt(sk, SOL_SOCKET, optname,
--			     KERNEL_SOCKPTR(optval), optlen);
-+			     KERNEL_SOCKPTR(optval), *optlen);
+diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
+index a4535bdbd310..2894271c2c08 100644
+--- a/net/ipv6/ipv6_sockglue.c
++++ b/net/ipv6/ipv6_sockglue.c
+@@ -1133,7 +1133,7 @@ static int compat_ipv6_get_msfilter(struct sock *sk=
+, void __user *optval,
  }
 =20
- static int bpf_sol_tcp_setsockopt(struct sock *sk, int optname,
-@@ -5164,7 +5173,7 @@ static int __bpf_setsockopt(struct sock *sk, int le=
-vel, int optname,
- 		return -EINVAL;
-=20
- 	if (level =3D=3D SOL_SOCKET)
--		return sol_socket_setsockopt(sk, optname, optval, optlen);
-+		return sol_socket_sockopt(sk, optname, optval, &optlen, false);
- 	else if (IS_ENABLED(CONFIG_INET) && level =3D=3D SOL_IP)
- 		return sol_ip_setsockopt(sk, optname, optval, optlen);
- 	else if (IS_ENABLED(CONFIG_IPV6) && level =3D=3D SOL_IPV6)
-@@ -5186,38 +5195,13 @@ static int _bpf_setsockopt(struct sock *sk, int l=
-evel, int optname,
- static int __bpf_getsockopt(struct sock *sk, int level, int optname,
- 			    char *optval, int optlen)
+ static int do_ipv6_getsockopt(struct sock *sk, int level, int optname,
+-		    char __user *optval, int __user *optlen, unsigned int flags)
++		    char __user *optval, int __user *optlen)
  {
-+	int err =3D 0, saved_optlen =3D optlen;
-+
- 	if (!sk_fullsock(sk))
- 		goto err_clear;
+ 	struct ipv6_pinfo *np =3D inet6_sk(sk);
+ 	int len;
+@@ -1168,7 +1168,7 @@ static int do_ipv6_getsockopt(struct sock *sk, int =
+level, int optname,
 =20
- 	if (level =3D=3D SOL_SOCKET) {
--		if (optlen !=3D sizeof(int))
--			goto err_clear;
--
--		switch (optname) {
--		case SO_RCVBUF:
--			*((int *)optval) =3D sk->sk_rcvbuf;
--			break;
--		case SO_SNDBUF:
--			*((int *)optval) =3D sk->sk_sndbuf;
--			break;
--		case SO_MARK:
--			*((int *)optval) =3D sk->sk_mark;
--			break;
--		case SO_PRIORITY:
--			*((int *)optval) =3D sk->sk_priority;
--			break;
--		case SO_BINDTOIFINDEX:
--			*((int *)optval) =3D sk->sk_bound_dev_if;
--			break;
--		case SO_REUSEPORT:
--			*((int *)optval) =3D sk->sk_reuseport;
--			break;
--		case SO_TXREHASH:
--			*((int *)optval) =3D sk->sk_txrehash;
--			break;
--		default:
--			goto err_clear;
--		}
-+		err =3D sol_socket_sockopt(sk, optname, optval, &optlen, true);
- 	} else if (IS_ENABLED(CONFIG_INET) &&
- 		   level =3D=3D SOL_TCP && sk->sk_prot->getsockopt =3D=3D tcp_getsocko=
-pt) {
- 		struct inet_connection_sock *icsk;
-@@ -5274,7 +5258,12 @@ static int __bpf_getsockopt(struct sock *sk, int l=
-evel, int optname,
- 	} else {
- 		goto err_clear;
- 	}
--	return 0;
-+
-+	if (err)
-+		optlen =3D 0;
-+	if (optlen < saved_optlen)
-+		memset(optval + optlen, 0, saved_optlen - optlen);
-+	return err;
- err_clear:
- 	memset(optval, 0, optlen);
- 	return -EINVAL;
-diff --git a/net/core/sock.c b/net/core/sock.c
-index 7fa30fd4b37f..68e4662eb2eb 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -1583,8 +1583,8 @@ static int groups_to_user(sockptr_t dst, const stru=
-ct group_info *src)
- 	return 0;
- }
+ 		msg.msg_control_user =3D optval;
+ 		msg.msg_controllen =3D len;
+-		msg.msg_flags =3D flags;
++		msg.msg_flags =3D 0;
+ 		msg.msg_control_is_user =3D true;
 =20
--static int sk_getsockopt(struct sock *sk, int level, int optname,
--			 sockptr_t optval, sockptr_t optlen)
-+int sk_getsockopt(struct sock *sk, int level, int optname,
-+		  sockptr_t optval, sockptr_t optlen)
- {
- 	struct socket *sock =3D sk->sk_socket;
+ 		lock_sock(sk);
+@@ -1492,7 +1492,7 @@ int ipv6_getsockopt(struct sock *sk, int level, int=
+ optname,
+ 	if (level !=3D SOL_IPV6)
+ 		return -ENOPROTOOPT;
 =20
+-	err =3D do_ipv6_getsockopt(sk, level, optname, optval, optlen, 0);
++	err =3D do_ipv6_getsockopt(sk, level, optname, optval, optlen);
+ #ifdef CONFIG_NETFILTER
+ 	/* we need to exclude all possible ENOPROTOOPTs except default case */
+ 	if (err =3D=3D -ENOPROTOOPT && optname !=3D IPV6_2292PKTOPTIONS) {
 --=20
 2.30.2
 
