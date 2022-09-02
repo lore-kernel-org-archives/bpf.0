@@ -2,128 +2,83 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F74CECAAD5
-	for <bpf@archiver.kernel.org>; Fri,  2 Sep 2022 13:52:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95059ECAAD5
+	for <bpf@archiver.kernel.org>; Fri,  2 Sep 2022 13:57:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238272AbiIBNwE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 2 Sep 2022 09:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38696 "EHLO
+        id S232681AbiIBN47 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 2 Sep 2022 09:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238064AbiIBNvd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:51:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9040510B94B
-        for <bpf@vger.kernel.org>; Fri,  2 Sep 2022 06:25:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662125103;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=10S2baNmGpvfbB3rWC8TV3GU8jc51um5+NmqwLplTxA=;
-        b=VJ+isGkHdC2ls4AXEZGUTGlLaFQ/Idb+0xhFs4mZSigqlnXAiU9ldybq4I2T6mhVMxSU/n
-        5TvG1gCO4jL70p+2R3HhFk6OgK//YiQn6ROFxZPek6OY62JrZiNqwRpJ3TedA9YqsPjdB/
-        //XPWcWTdQSbBan+gcW8s8iCD6KNRcQ=
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
- [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-332-uDV7ECIfO0qvPbqzGmYUdw-1; Fri, 02 Sep 2022 09:11:50 -0400
-X-MC-Unique: uDV7ECIfO0qvPbqzGmYUdw-1
-Received: by mail-pl1-f200.google.com with SMTP id p2-20020a170902e74200b001755a859b3aso1273474plf.17
-        for <bpf@vger.kernel.org>; Fri, 02 Sep 2022 06:11:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=10S2baNmGpvfbB3rWC8TV3GU8jc51um5+NmqwLplTxA=;
-        b=x2KagDPn0IKDak4ZAnDjab5S6xlH7afuL5Qz2l+RJTDVev3aEOllCcaDukvv/c7N/R
-         Izo06uHCLY+1ykj67jR1SRs/5gFUpWEj/qllo2fqTKRI7ZNavQX9CEQ67TG732qVGXh9
-         g80xp/RQB08wciLpOGEqv81eiBoEj1yZPgS2asooUEXvqCEw+8FoxnmAbHEchxDjdUnK
-         LNiqGNSL3Y8jo3OKedag+SZlEIp96ZEpKoyaLn53XmJq475qW09jRFbnuwrzAuC9mszP
-         9EGTVtFKyODfRp57I6tEEyifDJls0FZQO4Jl94fSg2yKyzPXj/qnKommjIL4p7pKhZk+
-         YagQ==
-X-Gm-Message-State: ACgBeo13lOd5EmZgFBAanjxMo3zK4GZhHsF+cwcpnTQM+xfi9pC9x70C
-        nNix4ZBLFUQbZWWp1L3xPc9Mrewww7WG6TWbZf6LItxLlE2wWZz0tar4Hnn6j3EArIOudev6EJw
-        BnFNnM/JUp9lNmZ8E8WbBkf108szN
-X-Received: by 2002:a17:902:b58a:b0:16e:f91a:486b with SMTP id a10-20020a170902b58a00b0016ef91a486bmr36558502pls.119.1662124309717;
-        Fri, 02 Sep 2022 06:11:49 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR72EpfhkEK4ko7qYW4nPa0blgG/78lQfqmeZeVLgOOiuWSw4Fu8+YGj6zLNMt/u79Hm3xPofVjqghC/L9D7cM4=
-X-Received: by 2002:a17:902:b58a:b0:16e:f91a:486b with SMTP id
- a10-20020a170902b58a00b0016ef91a486bmr36558475pls.119.1662124309461; Fri, 02
- Sep 2022 06:11:49 -0700 (PDT)
+        with ESMTP id S237128AbiIBN4j (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 2 Sep 2022 09:56:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413985F9A3
+        for <bpf@vger.kernel.org>; Fri,  2 Sep 2022 06:30:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BFFB3620BD
+        for <bpf@vger.kernel.org>; Fri,  2 Sep 2022 13:30:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 260BFC43470;
+        Fri,  2 Sep 2022 13:30:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662125415;
+        bh=IGY+W2ex9PE5eB3W6TZ9UFvtM+euQB26qM+2a08CbO0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=eUydsMBpy6vtJ5Y1pNO/TrClsi+z8z6jQLvNbT9lea5h1l3AdSIgsKvxzvFNJzRWl
+         UPYBwLy/tu1zykSl5HfLHVqYmUsYLW7oKYh1rpHg7a6xT2oTo6DqckSeNDtXbn+t5B
+         C8KaM4mDR0vX0lyIXEGZx4Z8IdrewWBXAtRNeTFK6Uv17YhQ+CWzxy6veSCScYpJIi
+         XRJSWbQ8f1c3CP3ol9htr7D33JCcJpl5eNI7g/MR9q66jtAfisZslVTjWumReezhLI
+         9YNOG4Q8COdiNM8zPtiwf2I7eAJiVT5fFxVOvY9RCRz4dMGdZBkJ9AfV9ObpQco8lR
+         yqWZz2Ju0Ajhg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0BD40E924D6;
+        Fri,  2 Sep 2022 13:30:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220824134055.1328882-1-benjamin.tissoires@redhat.com>
- <20220824134055.1328882-2-benjamin.tissoires@redhat.com> <CAADnVQKgkFpLh_URJn6qCiAONteA1dwZHd6=4cZn15g1JCAPag@mail.gmail.com>
- <CAP01T75ec_T0M6DU=JE2tfNsWRZuPSMu_7JHA7ZoOBw5eDh1Bg@mail.gmail.com>
- <CAO-hwJLd9wXx+ppccBYPKZDymO0sk++Nt2E3-R97PY7LbfJfTg@mail.gmail.com>
- <CAADnVQK8dS+2KbWsqktvxoNKhHtdD5UPiaWVfNu=ESdn_OHpgQ@mail.gmail.com>
- <CAO-hwJK9uHTWCg3_6jrPF6UKiamkNfj=cuH5mHauoLX+0udV9w@mail.gmail.com>
- <CAADnVQLuL045Sxdvh8kfcNkmD55+Wz8fHU3RtH+oQyOgePU5Pw@mail.gmail.com>
- <CAO-hwJJJJRtoq2uTXRKCck6QSH8SFDSTpHmvTyOieczY7bdm8g@mail.gmail.com> <CAP01T77SJyiDxv0A++_mNw7JZ-Mzh4B1FAM6zLiP6n75MNY0uQ@mail.gmail.com>
-In-Reply-To: <CAP01T77SJyiDxv0A++_mNw7JZ-Mzh4B1FAM6zLiP6n75MNY0uQ@mail.gmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Fri, 2 Sep 2022 15:11:38 +0200
-Message-ID: <CAO-hwJLbbB0Abw3d4pJPnYTAzQNdtgBTpuNz4zVUTFXCbZEEbQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v9 01/23] bpf/verifier: allow all functions to
- read user provided context
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next 1/2] bpf: Support getting tunnel flags
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166212541503.23395.14569680525940531567.git-patchwork-notify@kernel.org>
+Date:   Fri, 02 Sep 2022 13:30:15 +0000
+References: <20220831144010.174110-1-shmulik.ladkani@gmail.com>
+In-Reply-To: <20220831144010.174110-1-shmulik.ladkani@gmail.com>
+To:     Shmulik Ladkani <shmulik@metanetworks.com>
+Cc:     bpf@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org,
+        andrii@kernel.org, shmulik.ladkani@gmail.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 5:50 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
->
-> On Thu, 1 Sept 2022 at 18:48, Benjamin Tissoires
-> <benjamin.tissoires@redhat.com> wrote:
-> >
-> > [...]
-> > If the above is correct, then yes, it would make sense to me to have 2
-> > distinct functions: one to check for the args types only (does the
-> > function definition in the problem matches BTF), and one to check for
-> > its use.
-> > Behind the scenes, btf_check_subprog_arg_match() calls
-> > btf_check_func_arg_match() which is the one function with entangled
-> > arguments type checking and actually assessing that the values
-> > provided are correct.
-> >
-> > I can try to split that  btf_check_func_arg_match() into 2 distinct
-> > functions, though I am not sure I'll get it right.
->
-> FYI, I've already split them into separate functions in my tree
-> because it had become super ugly at this point with all the new
-> support and I refactored it to add the linked list helpers support
-> using kfuncs (which requires some special handling for the args), so I
-> think you can just leave it with a "processing_call" check in for your
-> series for now.
->
+Hello:
 
-great, thanks a lot.
-Actually, writing the patch today with the "processing_call" was
-really easy now that I have turned the problem in my head a lot
-yesterday.
+This series was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-I am about to send v10 with the reviews addressed.
+On Wed, 31 Aug 2022 17:40:09 +0300 you wrote:
+> Existing 'bpf_skb_get_tunnel_key' extracts various tunnel parameters
+> (id, ttl, tos, local and remote) but does not expose ip_tunnel_info's
+> tun_flags to the bpf program.
+> 
+> It makes sense to expose tun_flags to the bpf program.
+> 
+> Assume for example multiple GRE tunnels maintained on a single GRE
+> interface in collect_md mode. The program expects origins to initiate
+> over GRE, however different origins use different GRE characteristics
+> (e.g. some prefer to use GRE checksum, some do not; some pass a GRE key,
+> some do not, etc..).
+> 
+> [...]
 
-Cheers,
-Benjamin
+Here is the summary with links:
+  - [bpf-next,1/2] bpf: Support getting tunnel flags
+    https://git.kernel.org/bpf/bpf-next/c/44c51472bef8
+  - [bpf-next,2/2] selftests/bpf: Amend test_tunnel to exercise BPF_F_TUNINFO_FLAGS
+    https://git.kernel.org/bpf/bpf-next/c/8cc61b7a6416
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
