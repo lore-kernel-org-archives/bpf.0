@@ -2,374 +2,94 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CA18C54EE9
-	for <bpf@archiver.kernel.org>; Fri,  2 Sep 2022 14:10:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93C05ECAAD5
+	for <bpf@archiver.kernel.org>; Fri,  2 Sep 2022 14:14:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238743AbiIBOKo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 2 Sep 2022 10:10:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38762 "EHLO
+        id S238751AbiIBOOF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 2 Sep 2022 10:14:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238726AbiIBOKL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:10:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F68C15D24A
-        for <bpf@vger.kernel.org>; Fri,  2 Sep 2022 06:37:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662125821;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1pceN/reEy6W1dhR2JsqTpMwghob87xpvrMYVrihi74=;
-        b=DtzipXnWZuNC31zZIlT5EoyNl1pxAFpbGLqKCO4UqWJXDl+ZPjY8Nk8Bu15f+mPdu+88pG
-        pyBlgvHwshyul7snhiQplRUBe4hF/2alibTpi+2PnCUPHqCtaLMIEYj1eW1HsFhwaKCG54
-        A1QV4MvP1lCXpvYqR6HwIgKeyi+jDBU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-283-rLQeVlcFPh2IQzebM1E06A-1; Fri, 02 Sep 2022 09:30:14 -0400
-X-MC-Unique: rLQeVlcFPh2IQzebM1E06A-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S238757AbiIBON0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 2 Sep 2022 10:13:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802E8F8F6B;
+        Fri,  2 Sep 2022 06:41:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 854F0101E167;
-        Fri,  2 Sep 2022 13:30:11 +0000 (UTC)
-Received: from plouf.redhat.com (unknown [10.39.193.218])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F3445492C3B;
-        Fri,  2 Sep 2022 13:30:07 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>
-Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v10 07/23] selftests/bpf: Add tests for kfunc returning a memory pointer
-Date:   Fri,  2 Sep 2022 15:29:22 +0200
-Message-Id: <20220902132938.2409206-8-benjamin.tissoires@redhat.com>
-In-Reply-To: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
-References: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7494962122;
+        Fri,  2 Sep 2022 13:40:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C964CC433D7;
+        Fri,  2 Sep 2022 13:40:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662126016;
+        bh=u/tfn1UuECw3LExgXv8MjsQQGfF+MDyPV7AB0i8NiLQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=incaRTr8WnBv1rfj1sjmPUeoHDDPIlxJY66kQHCXJXlwIPwy5NyemZuQjb/XoHNwb
+         1xegJODHkPm7noaMIucfI2GsadIMhZqKcIN+p9nEBb3vk/yx/nCA6hyrpPBTjsSTMR
+         D56ognyEUtkITA85n4mgsFNJONtle6N0D9UKPcKCt8cLSpbrMb203WxVdoQtnZ2Sy1
+         KwtP1V2Fq9CqqqnxZ4EBlaQjH+vLEtesL9xWthiVQ8uhni2RwTh219eN5eWyjs5XCA
+         XrOhAkr64Zl0zDWRICmISyf03/kMwYh4PONCY4EEEi2dy9yyXnLyQDd4zY+J2aj+kz
+         ZqbcDYBAb57gA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B5C77E924D6;
+        Fri,  2 Sep 2022 13:40:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+Subject: Re: [PATCH v6 bpf-next 0/6] selftests: xsk: real device testing support
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166212601674.28239.17720886706170091787.git-patchwork-notify@kernel.org>
+Date:   Fri, 02 Sep 2022 13:40:16 +0000
+References: <20220901114813.16275-1-maciej.fijalkowski@intel.com>
+In-Reply-To: <20220901114813.16275-1-maciej.fijalkowski@intel.com>
+To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, netdev@vger.kernel.org,
+        magnus.karlsson@intel.com, bjorn@kernel.org,
+        john.fastabend@gmail.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We add 2 new kfuncs that are following the RET_PTR_TO_MEM
-capability from the previous commit.
-Then we test them in selftests:
-the first tests are testing valid case, and are not failing,
-and the later ones are actually preventing the program to be loaded
-because they are wrong.
+Hello:
 
-To work around that, we mark the failing ones as not autoloaded
-(with SEC("?tc")), and we manually enable them one by one, ensuring
-the verifier rejects them.
+This series was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+On Thu,  1 Sep 2022 13:48:07 +0200 you wrote:
+> v5->v6:
+> * rebase properly
+> * collect acks (Magnus)
+> * extend char limit for iface/netns to 16 (Magnus)
+> 
+> v4->v5:
+> * ice patches have gone through its own way, so they are out of this
+>   revision
+> * rebase
+> * close prog fd on error path in patch 1 (John)
+> * pull out patch for closing netns fd and send it separately (John)
+> * remove a patch that made Tx completion rely on pkts_in_flight (John)
+> 
+> [...]
 
----
+Here is the summary with links:
+  - [v6,bpf-next,1/6] selftests: xsk: query for native XDP support
+    https://git.kernel.org/bpf/bpf-next/c/0d68e6fe12ad
+  - [v6,bpf-next,2/6] selftests: xsk: introduce default Rx pkt stream
+    https://git.kernel.org/bpf/bpf-next/c/1adef0643b7d
+  - [v6,bpf-next,3/6] selftests: xsk: increase chars for interface name to 16
+    https://git.kernel.org/bpf/bpf-next/c/24037ba7c47b
+  - [v6,bpf-next,4/6] selftests: xsk: add support for executing tests on physical device
+    https://git.kernel.org/bpf/bpf-next/c/a693ff3ed561
+  - [v6,bpf-next,5/6] selftests: xsk: make sure single threaded test terminates
+    https://git.kernel.org/bpf/bpf-next/c/c29fe883defc
+  - [v6,bpf-next,6/6] selftests: xsk: add support for zero copy testing
+    https://git.kernel.org/bpf/bpf-next/c/fe2ad08e1e1d
 
-changes in v10:
-- use new definition for tests
-- remove the Makefile change, it was done before
-- renamed the failed tests to be more explicit
-- add 2 more test cases for return mem: oob access and non const access
-- add one more test case for an invalid acquire function returning an
-  int pointer
-
-changes in v9:
-- updated to match upstream (net/bpf/test_run.c id sets is now using
-  flags)
-
-no changes in v8
-
-changes in v7:
-- removed stray include/linux/btf.h change
-
-new in v6
----
- net/bpf/test_run.c                            |  36 ++++++
- .../selftests/bpf/prog_tests/kfunc_call.c     |   6 +
- .../selftests/bpf/progs/kfunc_call_fail.c     | 121 ++++++++++++++++++
- .../selftests/bpf/progs/kfunc_call_test.c     |  33 +++++
- 4 files changed, 196 insertions(+)
-
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index f16baf977a21..13d578ce2a09 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -606,6 +606,38 @@ noinline void bpf_kfunc_call_memb1_release(struct prog_test_member1 *p)
- 	WARN_ON_ONCE(1);
- }
- 
-+static int *__bpf_kfunc_call_test_get_mem(struct prog_test_ref_kfunc *p, const int size)
-+{
-+	if (size > 2 * sizeof(int))
-+		return NULL;
-+
-+	return (int *)p;
-+}
-+
-+noinline int *bpf_kfunc_call_test_get_rdwr_mem(struct prog_test_ref_kfunc *p, const int rdwr_buf_size)
-+{
-+	return __bpf_kfunc_call_test_get_mem(p, rdwr_buf_size);
-+}
-+
-+noinline int *bpf_kfunc_call_test_get_rdonly_mem(struct prog_test_ref_kfunc *p, const int rdonly_buf_size)
-+{
-+	return __bpf_kfunc_call_test_get_mem(p, rdonly_buf_size);
-+}
-+
-+/* the next 2 ones can't be really used for testing expect to ensure
-+ * that the verifier rejects the call.
-+ * Acquire functions must return struct pointers, so these ones are
-+ * failing.
-+ */
-+noinline int *bpf_kfunc_call_test_acq_rdonly_mem(struct prog_test_ref_kfunc *p, const int rdonly_buf_size)
-+{
-+	return __bpf_kfunc_call_test_get_mem(p, rdonly_buf_size);
-+}
-+
-+noinline void bpf_kfunc_call_int_mem_release(int *p)
-+{
-+}
-+
- noinline struct prog_test_ref_kfunc *
- bpf_kfunc_call_test_kptr_get(struct prog_test_ref_kfunc **pp, int a, int b)
- {
-@@ -712,6 +744,10 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_memb_acquire, KF_ACQUIRE | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_release, KF_RELEASE)
- BTF_ID_FLAGS(func, bpf_kfunc_call_memb_release, KF_RELEASE)
- BTF_ID_FLAGS(func, bpf_kfunc_call_memb1_release, KF_RELEASE)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test_get_rdwr_mem, KF_RET_NULL)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test_get_rdonly_mem, KF_RET_NULL)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test_acq_rdonly_mem, KF_ACQUIRE | KF_RET_NULL)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_int_mem_release, KF_RELEASE)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_kptr_get, KF_ACQUIRE | KF_RET_NULL | KF_KPTR_GET)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_pass_ctx)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_pass1)
-diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-index 84798979f3a7..f3e5cc53a6d8 100644
---- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-@@ -35,11 +35,17 @@ static struct kfunc_test_params kfunc_tests[] = {
- 	 */
- 	{"kfunc_syscall_test_fail", -EINVAL, syscall_null_ctx_test, "processed 4 insns"},
- 	{"kfunc_syscall_test_null_fail", -EINVAL, syscall_null_ctx_test, "processed 4 insns"},
-+	{"kfunc_call_test_get_mem_fail_rdonly", 0, tc_test, "R0 cannot write into rdonly_mem"},
-+	{"kfunc_call_test_get_mem_fail_use_after_free", 0, tc_test, "invalid mem access 'scalar'"},
-+	{"kfunc_call_test_get_mem_fail_oob", 0, tc_test, "min value is outside of the allowed memory range"},
-+	{"kfunc_call_test_get_mem_fail_not_const", 0, tc_test, "is not a const"},
-+	{"kfunc_call_test_mem_acquire_fail", 0, tc_test, "acquire kernel function does not return PTR_TO_BTF_ID"},
- 
- 	/* success cases */
- 	{"kfunc_call_test1", 12, tc_test, NULL},
- 	{"kfunc_call_test2", 3, tc_test, NULL},
- 	{"kfunc_call_test_ref_btf_id", 0, tc_test, NULL},
-+	{"kfunc_call_test_get_mem", 42, tc_test, NULL},
- 	{"kfunc_syscall_test", 0, syscall_test, NULL},
- 	{"kfunc_syscall_test_null", 0, syscall_null_ctx_test, NULL},
- };
-diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_fail.c b/tools/testing/selftests/bpf/progs/kfunc_call_fail.c
-index 4168027f2ab1..b98313d391c6 100644
---- a/tools/testing/selftests/bpf/progs/kfunc_call_fail.c
-+++ b/tools/testing/selftests/bpf/progs/kfunc_call_fail.c
-@@ -3,7 +3,13 @@
- #include <vmlinux.h>
- #include <bpf/bpf_helpers.h>
- 
-+extern struct prog_test_ref_kfunc *bpf_kfunc_call_test_acquire(unsigned long *sp) __ksym;
-+extern void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p) __ksym;
- extern void bpf_kfunc_call_test_mem_len_pass1(void *mem, int len) __ksym;
-+extern int *bpf_kfunc_call_test_get_rdwr_mem(struct prog_test_ref_kfunc *p, const int rdwr_buf_size) __ksym;
-+extern int *bpf_kfunc_call_test_get_rdonly_mem(struct prog_test_ref_kfunc *p, const int rdonly_buf_size) __ksym;
-+extern int *bpf_kfunc_call_test_acq_rdonly_mem(struct prog_test_ref_kfunc *p, const int rdonly_buf_size) __ksym;
-+extern void bpf_kfunc_call_int_mem_release(int *p) __ksym;
- 
- struct syscall_test_args {
- 	__u8 data[16];
-@@ -36,4 +42,119 @@ int kfunc_syscall_test_null_fail(struct syscall_test_args *args)
- 	return 0;
- }
- 
-+SEC("?tc")
-+int kfunc_call_test_get_mem_fail_rdonly(struct __sk_buff *skb)
-+{
-+	struct prog_test_ref_kfunc *pt;
-+	unsigned long s = 0;
-+	int *p = NULL;
-+	int ret = 0;
-+
-+	pt = bpf_kfunc_call_test_acquire(&s);
-+	if (pt) {
-+		p = bpf_kfunc_call_test_get_rdonly_mem(pt, 2 * sizeof(int));
-+		if (p)
-+			p[0] = 42; /* this is a read-only buffer, so -EACCES */
-+		else
-+			ret = -1;
-+
-+		bpf_kfunc_call_test_release(pt);
-+	}
-+	return ret;
-+}
-+
-+SEC("?tc")
-+int kfunc_call_test_get_mem_fail_use_after_free(struct __sk_buff *skb)
-+{
-+	struct prog_test_ref_kfunc *pt;
-+	unsigned long s = 0;
-+	int *p = NULL;
-+	int ret = 0;
-+
-+	pt = bpf_kfunc_call_test_acquire(&s);
-+	if (pt) {
-+		p = bpf_kfunc_call_test_get_rdwr_mem(pt, 2 * sizeof(int));
-+		if (p) {
-+			p[0] = 42;
-+			ret = p[1]; /* 108 */
-+		} else {
-+			ret = -1;
-+		}
-+
-+		bpf_kfunc_call_test_release(pt);
-+	}
-+	if (p)
-+		ret = p[0]; /* p is not valid anymore */
-+
-+	return ret;
-+}
-+
-+SEC("?tc")
-+int kfunc_call_test_get_mem_fail_oob(struct __sk_buff *skb)
-+{
-+	struct prog_test_ref_kfunc *pt;
-+	unsigned long s = 0;
-+	int *p = NULL;
-+	int ret = 0;
-+
-+	pt = bpf_kfunc_call_test_acquire(&s);
-+	if (pt) {
-+		p = bpf_kfunc_call_test_get_rdonly_mem(pt, 2 * sizeof(int));
-+		if (p)
-+			ret = p[2 * sizeof(int)]; /* oob access, so -EACCES */
-+		else
-+			ret = -1;
-+
-+		bpf_kfunc_call_test_release(pt);
-+	}
-+	return ret;
-+}
-+
-+int not_const_size = 2 * sizeof(int);
-+
-+SEC("?tc")
-+int kfunc_call_test_get_mem_fail_not_const(struct __sk_buff *skb)
-+{
-+	struct prog_test_ref_kfunc *pt;
-+	unsigned long s = 0;
-+	int *p = NULL;
-+	int ret = 0;
-+
-+	pt = bpf_kfunc_call_test_acquire(&s);
-+	if (pt) {
-+		p = bpf_kfunc_call_test_get_rdonly_mem(pt, not_const_size); /* non const size, -EINVAL */
-+		if (p)
-+			ret = p[0];
-+		else
-+			ret = -1;
-+
-+		bpf_kfunc_call_test_release(pt);
-+	}
-+	return ret;
-+}
-+
-+SEC("?tc")
-+int kfunc_call_test_mem_acquire_fail(struct __sk_buff *skb)
-+{
-+	struct prog_test_ref_kfunc *pt;
-+	unsigned long s = 0;
-+	int *p = NULL;
-+	int ret = 0;
-+
-+	pt = bpf_kfunc_call_test_acquire(&s);
-+	if (pt) {
-+		/* we are failing on this one, because we are not acquiring a PTR_TO_BTF_ID (a struct ptr) */
-+		p = bpf_kfunc_call_test_acq_rdonly_mem(pt, 2 * sizeof(int));
-+		if (p)
-+			ret = p[0];
-+		else
-+			ret = -1;
-+
-+		bpf_kfunc_call_int_mem_release(p);
-+
-+		bpf_kfunc_call_test_release(pt);
-+	}
-+	return ret;
-+}
-+
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test.c b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-index 94c05267e5e7..56c96f7969f0 100644
---- a/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-+++ b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-@@ -14,6 +14,8 @@ extern void bpf_kfunc_call_test_pass1(struct prog_test_pass1 *p) __ksym;
- extern void bpf_kfunc_call_test_pass2(struct prog_test_pass2 *p) __ksym;
- extern void bpf_kfunc_call_test_mem_len_pass1(void *mem, int len) __ksym;
- extern void bpf_kfunc_call_test_mem_len_fail2(__u64 *mem, int len) __ksym;
-+extern int *bpf_kfunc_call_test_get_rdwr_mem(struct prog_test_ref_kfunc *p, const int rdwr_buf_size) __ksym;
-+extern int *bpf_kfunc_call_test_get_rdonly_mem(struct prog_test_ref_kfunc *p, const int rdonly_buf_size) __ksym;
- 
- SEC("tc")
- int kfunc_call_test2(struct __sk_buff *skb)
-@@ -130,4 +132,35 @@ int kfunc_syscall_test_null(struct syscall_test_args *args)
- 	return 0;
- }
- 
-+SEC("tc")
-+int kfunc_call_test_get_mem(struct __sk_buff *skb)
-+{
-+	struct prog_test_ref_kfunc *pt;
-+	unsigned long s = 0;
-+	int *p = NULL;
-+	int ret = 0;
-+
-+	pt = bpf_kfunc_call_test_acquire(&s);
-+	if (pt) {
-+		p = bpf_kfunc_call_test_get_rdwr_mem(pt, 2 * sizeof(int));
-+		if (p) {
-+			p[0] = 42;
-+			ret = p[1]; /* 108 */
-+		} else {
-+			ret = -1;
-+		}
-+
-+		if (ret >= 0) {
-+			p = bpf_kfunc_call_test_get_rdonly_mem(pt, 2 * sizeof(int));
-+			if (p)
-+				ret = p[0]; /* 42 */
-+			else
-+				ret = -1;
-+		}
-+
-+		bpf_kfunc_call_test_release(pt);
-+	}
-+	return ret;
-+}
-+
- char _license[] SEC("license") = "GPL";
+You are awesome, thank you!
 -- 
-2.36.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
