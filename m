@@ -2,41 +2,41 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76F2AC54EE9
-	for <bpf@archiver.kernel.org>; Fri,  2 Sep 2022 14:03:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABE25C38145
+	for <bpf@archiver.kernel.org>; Fri,  2 Sep 2022 14:03:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238914AbiIBODR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 2 Sep 2022 10:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51386 "EHLO
+        id S238882AbiIBOD3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 2 Sep 2022 10:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237278AbiIBOBc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:01:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA61158A94
-        for <bpf@vger.kernel.org>; Fri,  2 Sep 2022 06:32:04 -0700 (PDT)
+        with ESMTP id S238630AbiIBOCD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 2 Sep 2022 10:02:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04BC812DCC5
+        for <bpf@vger.kernel.org>; Fri,  2 Sep 2022 06:32:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662125493;
+        s=mimecast20190719; t=1662125440;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=pLG9m5KIl9evluPZX4jJcVXZtVYvWiEiLOA1MbUDaLA=;
-        b=AWDL00+qH3kSi/SD+a3E2amUk4b/K2CBuw768262514bJf66epqyZGDRD69xAeO0CwupYS
-        Zh0oGzHkpqbK85ytHO6QTn69L8e8mPyI98m3vvneNIDuiLbAgZLOihIXm8VA2oAhMLhlIp
-        OAAN4lEyKW5VvExj2aj2TdggI2FRNRs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=x80jDpX6lLwU9MQ1rP4cYxRvI+X7/jf1CDXV+g6djlY=;
+        b=Ts43M0dmjv03qhn/FxS4Nmkg040uxGFJFzYfbuWAfJ5h9ijnews21k/glzJ8qse1IqQMYG
+        KdEUQ9D5j/PpVNY0Ds5par3ncubo5P1cL0ks3iOghsJ3fBlZwAFzAvR67lcPqVCJdNvOaY
+        gYrqy8xnVM9kfC4sFh5oJTkJtHe3XeQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-567-cSQyk90IMzSZMVA0UAkhnA-1; Fri, 02 Sep 2022 09:31:28 -0400
-X-MC-Unique: cSQyk90IMzSZMVA0UAkhnA-1
+ us-mta-614-Hrn-KVqFPhGjrAJU2n4BVA-1; Fri, 02 Sep 2022 09:30:38 -0400
+X-MC-Unique: Hrn-KVqFPhGjrAJU2n4BVA-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9B9E32919ECE;
-        Fri,  2 Sep 2022 13:31:15 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8D078811E76;
+        Fri,  2 Sep 2022 13:30:37 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.193.218])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 21DF1492C3B;
-        Fri,  2 Sep 2022 13:31:11 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5629D492C3B;
+        Fri,  2 Sep 2022 13:30:32 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -55,9 +55,9 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v10 23/23] Documentation: add HID-BPF docs
-Date:   Fri,  2 Sep 2022 15:29:38 +0200
-Message-Id: <20220902132938.2409206-24-benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v10 13/23] selftests/bpf: add tests for the HID-bpf initial implementation
+Date:   Fri,  2 Sep 2022 15:29:28 +0200
+Message-Id: <20220902132938.2409206-14-benjamin.tissoires@redhat.com>
 In-Reply-To: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
 References: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
@@ -67,570 +67,805 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Gives a primer on HID-BPF.
+The test is pretty basic:
+- create a virtual uhid device that no userspace will like (to not mess
+  up the running system)
+- attach a BPF prog to it
+- open the matching hidraw node
+- inject one event and check:
+  * that the BPF program can do something on the event stream
+  * can modify the event stream
+- add another test where we attach/detach BPF programs to see if we get
+  errors
 
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
 ---
 
-changes in v10:
-- some fixes in the documentation from the review
+no changes in v10
 
-no changes in v9
+changes in v9:
+- kept the selftest config list alphabetically ordered
 
 no changes in v8
 
 no changes in v7
 
-changes in v6:
-- amended the example now that we can directly use the data from the
-  syscall context
+no changes in v6
 
 changes in v5:
-- amended for new API
-- reworded most of the sentences (thanks to Peter Hutterer for the review)
+- use of the HID device system id instead of fd
+- attach to HID device with the new API
+- add attach/detach test
 
 changes in v4:
-- fixed typos
+- manually retrieve the hidraw node from the sysfs (we can't get it for
+  free from BPF)
+- use the new API
 
-new in v3
+changes in v3:
+- squashed "hid: rely on uhid event to know if a test device is ready"
+  into this one
+- add selftests bpf VM config changes
+- s/hidraw_ino/hidraw_number/
+
+changes in v2:
+- split the series by bpf/libbpf/hid/selftests and samples
 ---
- Documentation/hid/hid-bpf.rst | 513 ++++++++++++++++++++++++++++++++++
- Documentation/hid/index.rst   |   1 +
- 2 files changed, 514 insertions(+)
- create mode 100644 Documentation/hid/hid-bpf.rst
+ tools/testing/selftests/bpf/config           |   3 +
+ tools/testing/selftests/bpf/prog_tests/hid.c | 669 +++++++++++++++++++
+ tools/testing/selftests/bpf/progs/hid.c      |  45 ++
+ 3 files changed, 717 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/hid.c
+ create mode 100644 tools/testing/selftests/bpf/progs/hid.c
 
-diff --git a/Documentation/hid/hid-bpf.rst b/Documentation/hid/hid-bpf.rst
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 3fc46f9cfb22..8dc41058a8f8 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -15,6 +15,8 @@ CONFIG_FPROBE=y
+ CONFIG_FTRACE_SYSCALLS=y
+ CONFIG_FUNCTION_TRACER=y
+ CONFIG_GENEVE=y
++CONFIG_HID=y
++CONFIG_HIDRAW=y
+ CONFIG_IKCONFIG=y
+ CONFIG_IKCONFIG_PROC=y
+ CONFIG_IMA=y
+@@ -61,6 +63,7 @@ CONFIG_RC_CORE=y
+ CONFIG_SECURITY=y
+ CONFIG_SECURITYFS=y
+ CONFIG_TEST_BPF=m
++CONFIG_UHID=y
+ CONFIG_USERFAULTFD=y
+ CONFIG_VXLAN=y
+ CONFIG_XDP_SOCKETS=y
+diff --git a/tools/testing/selftests/bpf/prog_tests/hid.c b/tools/testing/selftests/bpf/prog_tests/hid.c
 new file mode 100644
-index 000000000000..ba35aa2e2ba8
+index 000000000000..719d220c8d86
 --- /dev/null
-+++ b/Documentation/hid/hid-bpf.rst
-@@ -0,0 +1,513 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=======
-+HID-BPF
-+=======
-+
-+HID is a standard protocol for input devices but some devices may require
-+custom tweaks, traditionally done with a kernel driver fix. Using the eBPF
-+capabilities instead speeds up development and adds new capabilities to the
-+existing HID interfaces.
-+
-+.. contents::
-+    :local:
-+    :depth: 2
-+
-+
-+When (and why) to use HID-BPF
-+=============================
-+
-+There are several use cases when using HID-BPF is better
-+than standard kernel driver fix:
-+
-+Dead zone of a joystick
-+-----------------------
-+
-+Assuming you have a joystick that is getting older, it is common to see it
-+wobbling around its neutral point. This is usually filtered at the application
-+level by adding a *dead zone* for this specific axis.
-+
-+With HID-BPF, we can apply this filtering in the kernel directly so userspace
-+does not get woken up when nothing else is happening on the input controller.
-+
-+Of course, given that this dead zone is specific to an individual device, we
-+can not create a generic fix for all of the same joysticks. Adding a custom
-+kernel API for this (e.g. by adding a sysfs entry) does not guarantee this new
-+kernel API will be broadly adopted and maintained.
-+
-+HID-BPF allows the userspace program to load the program itself, ensuring we
-+only load the custom API when we have a user.
-+
-+Simple fixup of report descriptor
-+---------------------------------
-+
-+In the HID tree, half of the drivers only fix one key or one byte
-+in the report descriptor. These fixes all require a kernel patch and the
-+subsequent shepherding into a release, a long and painful process for users.
-+
-+We can reduce this burden by providing an eBPF program instead. Once such a
-+program  has been verified by the user, we can embed the source code into the
-+kernel tree and ship the eBPF program and load it directly instead of loading
-+a specific kernel module for it.
-+
-+Note: distribution of eBPF programs and their inclusion in the kernel is not
-+yet fully implemented
-+
-+Add a new feature that requires a new kernel API
-+------------------------------------------------
-+
-+An example for such a feature are the Universal Stylus Interface (USI) pens.
-+Basically, USI pens require a new kernel API because there are new
-+channels of communication that our HID and input stack do not support.
-+Instead of using hidraw or creating new sysfs entries or ioctls, we can rely
-+on eBPF to have the kernel API controlled by the consumer and to not
-+impact the performances by waking up userspace every time there is an
-+event.
-+
-+Morph a device into something else and control that from userspace
-+------------------------------------------------------------------
-+
-+The kernel has a relatively static mapping of HID items to evdev bits.
-+It cannot decide to dynamically transform a given device into something else
-+as it does not have the required context and any such transformation cannot be
-+undone (or even discovered) by userspace.
-+
-+However, some devices are useless with that static way of defining devices. For
-+example, the Microsoft Surface Dial is a pushbutton with haptic feedback that
-+is barely usable as of today.
-+
-+With eBPF, userspace can morph that device into a mouse, and convert the dial
-+events into wheel events. Also, the userspace program can set/unset the haptic
-+feedback depending on the context. For example, if a menu is visible on the
-+screen we likely need to have a haptic click every 15 degrees. But when
-+scrolling in a web page the user experience is better when the device emits
-+events at the highest resolution.
-+
-+Firewall
-+--------
-+
-+What if we want to prevent other users to access a specific feature of a
-+device? (think a possibly broken firmware update entry point)
-+
-+With eBPF, we can intercept any HID command emitted to the device and
-+validate it or not.
-+
-+This also allows to sync the state between the userspace and the
-+kernel/bpf program because we can intercept any incoming command.
-+
-+Tracing
-+-------
-+
-+The last usage is tracing events and all the fun we can do we BPF to summarize
-+and analyze events.
-+
-+Right now, tracing relies on hidraw. It works well except for a couple
-+of issues:
-+
-+1. if the driver doesn't export a hidraw node, we can't trace anything
-+   (eBPF will be a "god-mode" there, so this may raise some eyebrows)
-+2. hidraw doesn't catch other processes' requests to the device, which
-+   means that we have cases where we need to add printks to the kernel
-+   to understand what is happening.
-+
-+High-level view of HID-BPF
-+==========================
-+
-+The main idea behind HID-BPF is that it works at an array of bytes level.
-+Thus, all of the parsing of the HID report and the HID report descriptor
-+must be implemented in the userspace component that loads the eBPF
-+program.
-+
-+For example, in the dead zone joystick from above, knowing which fields
-+in the data stream needs to be set to ``0`` needs to be computed by userspace.
-+
-+A corollary of this is that HID-BPF doesn't know about the other subsystems
-+available in the kernel. *You can not directly emit input event through the
-+input API from eBPF*.
-+
-+When a BPF program needs to emit input events, it needs to talk with the HID
-+protocol, and rely on the HID kernel processing to translate the HID data into
-+input events.
-+
-+Available types of programs
-+===========================
-+
-+HID-BPF is built "on top" of BPF, meaning that we use tracing method to
-+declare our programs.
-+
-+HID-BPF has the following attachment types available:
-+
-+1. event processing/filtering with ``SEC("fmod_ret/hid_bpf_device_event")`` in libbpf
-+2. actions coming from userspace with ``SEC("syscall")`` in libbpf
-+3. change of the report descriptor with ``SEC("fmod_ret/hid_bpf_rdesc_fixup")`` in libbpf
-+
-+A ``hid_bpf_device_event`` is calling a BPF program when an event is received from
-+the device. Thus we are in IRQ context and can act on the data or notify userspace.
-+And given that we are in IRQ context, we can not talk back to the device.
-+
-+A ``syscall`` means that userspace called the syscall ``BPF_PROG_RUN`` facility.
-+This time, we can do any operations allowed by HID-BPF, and talking to the device is
-+allowed.
-+
-+Last, ``hid_bpf_rdesc_fixup`` is different from the others as there can be only one
-+BPF program of this type. This is called on ``probe`` from the driver and allows to
-+change the report descriptor from the BPF program. Once a ``hid_bpf_rdesc_fixup``
-+program has been loaded, it is not possible to overwrite it unless the program which
-+inserted it allows us by pinning the program and closing all of its fds pointing to it.
-+
-+Developer API:
-+==============
-+
-+User API data structures available in programs:
-+-----------------------------------------------
-+
-+.. kernel-doc:: include/uapi/linux/hid_bpf.h
-+.. kernel-doc:: include/linux/hid_bpf.h
-+
-+Available tracing functions to attach a HID-BPF program:
-+--------------------------------------------------------
-+
-+.. kernel-doc:: drivers/hid/bpf/hid_bpf_dispatch.c
-+   :functions: hid_bpf_device_event hid_bpf_rdesc_fixup
-+
-+Available API that can be used in all HID-BPF programs:
-+-------------------------------------------------------
-+
-+.. kernel-doc:: drivers/hid/bpf/hid_bpf_dispatch.c
-+   :functions: hid_bpf_get_data
-+
-+Available API that can be used in syscall HID-BPF programs:
-+-----------------------------------------------------------
-+
-+.. kernel-doc:: drivers/hid/bpf/hid_bpf_dispatch.c
-+   :functions: hid_bpf_attach_prog hid_bpf_hw_request hid_bpf_allocate_context hid_bpf_release_context
-+
-+General overview of a HID-BPF program
-+=====================================
-+
-+Accessing the data attached to the context
-+------------------------------------------
-+
-+The ``struct hid_bpf_ctx`` doesn't export the ``data`` fields directly and to access
-+it, a bpf program needs to first call :c:func:`hid_bpf_get_data`.
-+
-+``offset`` can be any integer, but ``size`` needs to be constant, known at compile
-+time.
-+
-+This allows the following:
-+
-+1. for a given device, if we know that the report length will always be of a certain value,
-+   we can request the ``data`` pointer to point at the full report length.
-+
-+   The kernel will ensure we are using a correct size and offset and eBPF will ensure
-+   the code will not attempt to read or write outside of the boundaries::
-+
-+     __u8 *data = hid_bpf_get_data(ctx, 0 /* offset */, 256 /* size */);
-+
-+     if (!data)
-+         return 0; /* ensure data is correct, now the verifier knows we
-+                    * have 256 bytes available */
-+
-+     bpf_printk("hello world: %02x %02x %02x", data[0], data[128], data[255]);
-+
-+2. if the report length is variable, but we know the value of ``X`` is always a 16-bit
-+   integer, we can then have a pointer to that value only::
-+
-+      __u16 *x = hid_bpf_get_data(ctx, offset, sizeof(*x));
-+
-+      if (!x)
-+          return 0; /* something went wrong */
-+
-+      *x += 1; /* increment X by one */
-+
-+Effect of a HID-BPF program
-+---------------------------
-+
-+For all HID-BPF attachment types except for :c:func:`hid_bpf_rdesc_fixup`, several eBPF
-+programs can be attached to the same device.
-+
-+Unless ``HID_BPF_FLAG_INSERT_HEAD`` is added to the flags while attaching the
-+program, the new program is appended at the end of the list.
-+``HID_BPF_FLAG_INSERT_HEAD`` will insert the new program at the beginning of the
-+list which is useful for e.g. tracing where we need to get the unprocessed events
-+from the device.
-+
-+Note that if there are multiple programs using the ``HID_BPF_FLAG_INSERT_HEAD`` flag,
-+only the most recently loaded one is actually the first in the list.
-+
-+``SEC("fmod_ret/hid_bpf_device_event")``
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+Whenever a matching event is raised, the eBPF programs are called one after the other
-+and are working on the same data buffer.
-+
-+If a program changes the data associated with the context, the next one will see
-+the modified data but it will have *no* idea of what the original data was.
-+
-+Once all the programs are run and return ``0`` or a positive value, the rest of the
-+HID stack will work on the modified data, with the ``size`` field of the last hid_bpf_ctx
-+being the new size of the input stream of data.
-+
-+A BPF program returning a negative error discards the event, i.e. this event will not be
-+processed by the HID stack. Clients (hidraw, input, LEDs) will **not** see this event.
-+
-+``SEC("syscall")``
-+~~~~~~~~~~~~~~~~~~
-+
-+``syscall`` are not attached to a given device. To tell which device we are working
-+with, userspace needs to refer to the device by its unique system id (the last 4 numbers
-+in the sysfs path: ``/sys/bus/hid/devices/xxxx:yyyy:zzzz:0000``).
-+
-+To retrieve a context associated with the device, the program must call
-+:c:func:`hid_bpf_allocate_context` and must release it with :c:func:`hid_bpf_release_context`
-+before returning.
-+Once the context is retrieved, one can also request a pointer to kernel memory with
-+:c:func:`hid_bpf_get_data`. This memory is big enough to support all input/output/feature
-+reports of the given device.
-+
-+``SEC("fmod_ret/hid_bpf_rdesc_fixup")``
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+The ``hid_bpf_rdesc_fixup`` program works in a similar manner to
-+``.report_fixup`` of ``struct hid_driver``.
-+
-+When the device is probed, the kernel sets the data buffer of the context with the
-+content of the report descriptor. The memory associated with that buffer is
-+``HID_MAX_DESCRIPTOR_SIZE`` (currently 4kB).
-+
-+The eBPF program can modify the data buffer at-will and the kernel uses the
-+modified content and size as the report descriptor.
-+
-+Whenever a ``SEC("fmod_ret/hid_bpf_rdesc_fixup")`` program is attached (if no
-+program was attached before), the kernel immediately disconnects the HID device
-+and does a reprobe.
-+
-+In the same way, when the ``SEC("fmod_ret/hid_bpf_rdesc_fixup")`` program is
-+detached, the kernel issues a disconnect on the device.
-+
-+There is no ``detach`` facility in HID-BPF. Detaching a program happens when
-+all the user space file descriptors pointing at a program are closed.
-+Thus, if we need to replace a report descriptor fixup, some cooperation is
-+required from the owner of the original report descriptor fixup.
-+The previous owner will likely pin the program in the bpffs, and we can then
-+replace it through normal bpf operations.
-+
-+Attaching a bpf program to a device
-+===================================
-+
-+``libbpf`` does not export any helper to attach a HID-BPF program.
-+Users need to use a dedicated ``syscall`` program which will call
-+``hid_bpf_attach_prog(hid_id, program_fd, flags)``.
-+
-+``hid_id`` is the unique system ID of the HID device (the last 4 numbers in the
-+sysfs path: ``/sys/bus/hid/devices/xxxx:yyyy:zzzz:0000``)
-+
-+``progam_fd`` is the opened file descriptor of the program to attach.
-+
-+``flags`` is of type ``enum hid_bpf_attach_flags``.
-+
-+We can not rely on hidraw to bind a BPF program to a HID device. hidraw is an
-+artefact of the processing of the HID device, and is not stable. Some drivers
-+even disable it, so that removes the tracing capabilies on those devices
-+(where it is interesting to get the non-hidraw traces).
-+
-+On the other hand, the ``hid_id`` is stable for the entire life of the HID device,
-+even if we change its report descriptor.
-+
-+Given that hidraw is not stable when the device disconnects/reconnects, we recommend
-+accessing the current report descriptor of the device through the sysfs.
-+This is available at ``/sys/bus/hid/devices/BUS:VID:PID.000N/report_descriptor`` as a
-+binary stream.
-+
-+Parsing the report descriptor is the responsibility of the BPF programmer or the userspace
-+component that loads the eBPF program.
-+
-+An (almost) complete example of a BPF enhanced HID device
-+=========================================================
-+
-+*Foreword: for most parts, this could be implemented as a kernel driver*
-+
-+Let's imagine we have a new tablet device that has some haptic capabilities
-+to simulate the surface the user is scratching on. This device would also have
-+a specific 3 positions switch to toggle between *pencil on paper*, *cray on a wall*
-+and *brush on a painting canvas*. To make things even better, we can control the
-+physical position of the switch through a feature report.
-+
-+And of course, the switch is relying on some userspace component to control the
-+haptic feature of the device itself.
-+
-+Filtering events
-+----------------
-+
-+The first step consists in filtering events from the device. Given that the switch
-+position is actually reported in the flow of the pen events, using hidraw to implement
-+that filtering would mean that we wake up userspace for every single event.
-+
-+This is OK for libinput, but having an external library that is just interested in
-+one byte in the report is less than ideal.
-+
-+For that, we can create a basic skeleton for our BPF program::
-+
-+  #include "vmlinux.h"
-+  #include <bpf/bpf_helpers.h>
-+  #include <bpf/bpf_tracing.h>
-+
-+  /* HID programs need to be GPL */
-+  char _license[] SEC("license") = "GPL";
-+
-+  /* HID-BPF kfunc API definitions */
-+  extern __u8 *hid_bpf_get_data(struct hid_bpf_ctx *ctx,
-+			      unsigned int offset,
-+			      const size_t __sz) __ksym;
-+  extern int hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, u32 flags) __ksym;
-+
-+  struct {
-+	__uint(type, BPF_MAP_TYPE_RINGBUF);
-+	__uint(max_entries, 4096 * 64);
-+  } ringbuf SEC(".maps");
-+
-+  struct attach_prog_args {
++++ b/tools/testing/selftests/bpf/prog_tests/hid.c
+@@ -0,0 +1,669 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2022 Red Hat */
++#include <test_progs.h>
++#include <testing_helpers.h>
++#include "hid.skel.h"
++
++#include <fcntl.h>
++#include <fnmatch.h>
++#include <dirent.h>
++#include <poll.h>
++#include <stdbool.h>
++#include <linux/uhid.h>
++
++static unsigned char rdesc[] = {
++	0x06, 0x00, 0xff,	/* Usage Page (Vendor Defined Page 1) */
++	0x09, 0x21,		/* Usage (Vendor Usage 0x21) */
++	0xa1, 0x01,		/* COLLECTION (Application) */
++	0x09, 0x01,			/* Usage (Vendor Usage 0x01) */
++	0xa1, 0x00,			/* COLLECTION (Physical) */
++	0x85, 0x01,				/* REPORT_ID (1) */
++	0x06, 0x00, 0xff,			/* Usage Page (Vendor Defined Page 1) */
++	0x19, 0x01,				/* USAGE_MINIMUM (1) */
++	0x29, 0x03,				/* USAGE_MAXIMUM (3) */
++	0x15, 0x00,				/* LOGICAL_MINIMUM (0) */
++	0x25, 0x01,				/* LOGICAL_MAXIMUM (1) */
++	0x95, 0x03,				/* REPORT_COUNT (3) */
++	0x75, 0x01,				/* REPORT_SIZE (1) */
++	0x81, 0x02,				/* INPUT (Data,Var,Abs) */
++	0x95, 0x01,				/* REPORT_COUNT (1) */
++	0x75, 0x05,				/* REPORT_SIZE (5) */
++	0x81, 0x01,				/* INPUT (Cnst,Var,Abs) */
++	0x05, 0x01,				/* USAGE_PAGE (Generic Desktop) */
++	0x09, 0x30,				/* USAGE (X) */
++	0x09, 0x31,				/* USAGE (Y) */
++	0x15, 0x81,				/* LOGICAL_MINIMUM (-127) */
++	0x25, 0x7f,				/* LOGICAL_MAXIMUM (127) */
++	0x75, 0x10,				/* REPORT_SIZE (16) */
++	0x95, 0x02,				/* REPORT_COUNT (2) */
++	0x81, 0x06,				/* INPUT (Data,Var,Rel) */
++
++	0x06, 0x00, 0xff,			/* Usage Page (Vendor Defined Page 1) */
++	0x19, 0x01,				/* USAGE_MINIMUM (1) */
++	0x29, 0x03,				/* USAGE_MAXIMUM (3) */
++	0x15, 0x00,				/* LOGICAL_MINIMUM (0) */
++	0x25, 0x01,				/* LOGICAL_MAXIMUM (1) */
++	0x95, 0x03,				/* REPORT_COUNT (3) */
++	0x75, 0x01,				/* REPORT_SIZE (1) */
++	0x91, 0x02,				/* Output (Data,Var,Abs) */
++	0x95, 0x01,				/* REPORT_COUNT (1) */
++	0x75, 0x05,				/* REPORT_SIZE (5) */
++	0x91, 0x01,				/* Output (Cnst,Var,Abs) */
++
++	0x06, 0x00, 0xff,			/* Usage Page (Vendor Defined Page 1) */
++	0x19, 0x06,				/* USAGE_MINIMUM (6) */
++	0x29, 0x08,				/* USAGE_MAXIMUM (8) */
++	0x15, 0x00,				/* LOGICAL_MINIMUM (0) */
++	0x25, 0x01,				/* LOGICAL_MAXIMUM (1) */
++	0x95, 0x03,				/* REPORT_COUNT (3) */
++	0x75, 0x01,				/* REPORT_SIZE (1) */
++	0xb1, 0x02,				/* Feature (Data,Var,Abs) */
++	0x95, 0x01,				/* REPORT_COUNT (1) */
++	0x75, 0x05,				/* REPORT_SIZE (5) */
++	0x91, 0x01,				/* Output (Cnst,Var,Abs) */
++
++	0xc0,				/* END_COLLECTION */
++	0xc0,			/* END_COLLECTION */
++};
++
++struct attach_prog_args {
 +	int prog_fd;
 +	unsigned int hid;
-+	unsigned int flags;
 +	int retval;
-+  };
++};
 +
-+  SEC("syscall")
-+  int attach_prog(struct attach_prog_args *ctx)
-+  {
-+	ctx->retval = hid_bpf_attach_prog(ctx->hid,
-+					  ctx->prog_fd,
-+					  ctx->flags);
-+	return 0;
-+  }
++static pthread_mutex_t uhid_started_mtx = PTHREAD_MUTEX_INITIALIZER;
++static pthread_cond_t uhid_started = PTHREAD_COND_INITIALIZER;
 +
-+  __u8 current_value = 0;
++/* no need to protect uhid_stopped, only one thread accesses it */
++static bool uhid_stopped;
 +
-+  SEC("?fmod_ret/hid_bpf_device_event")
-+  int BPF_PROG(filter_switch, struct hid_bpf_ctx *hid_ctx)
-+  {
-+	__u8 *data = hid_bpf_get_data(hid_ctx, 0 /* offset */, 192 /* size */);
-+	__u8 *buf;
++static int uhid_write(int fd, const struct uhid_event *ev)
++{
++	ssize_t ret;
 +
-+	if (!data)
-+		return 0; /* EPERM check */
++	ret = write(fd, ev, sizeof(*ev));
++	if (ret < 0) {
++		fprintf(stderr, "Cannot write to uhid: %m\n");
++		return -errno;
++	} else if (ret != sizeof(*ev)) {
++		fprintf(stderr, "Wrong size written to uhid: %zd != %zu\n",
++			ret, sizeof(ev));
++		return -EFAULT;
++	} else {
++		return 0;
++	}
++}
 +
-+	if (current_value != data[152]) {
-+		buf = bpf_ringbuf_reserve(&ringbuf, 1, 0);
-+		if (!buf)
-+			return 0;
++static int create(int fd, int rand_nb)
++{
++	struct uhid_event ev;
++	char buf[25];
 +
-+		*buf = data[152];
++	sprintf(buf, "test-uhid-device-%d", rand_nb);
 +
-+		bpf_ringbuf_commit(buf, 0);
++	memset(&ev, 0, sizeof(ev));
++	ev.type = UHID_CREATE;
++	strcpy((char *)ev.u.create.name, buf);
++	ev.u.create.rd_data = rdesc;
++	ev.u.create.rd_size = sizeof(rdesc);
++	ev.u.create.bus = BUS_USB;
++	ev.u.create.vendor = 0x0001;
++	ev.u.create.product = 0x0a37;
++	ev.u.create.version = 0;
++	ev.u.create.country = 0;
 +
-+		current_value = data[152];
++	sprintf(buf, "%d", rand_nb);
++	strcpy((char *)ev.u.create.phys, buf);
++
++	return uhid_write(fd, &ev);
++}
++
++static void destroy(int fd)
++{
++	struct uhid_event ev;
++
++	memset(&ev, 0, sizeof(ev));
++	ev.type = UHID_DESTROY;
++
++	uhid_write(fd, &ev);
++}
++
++static int uhid_event(int fd)
++{
++	struct uhid_event ev;
++	ssize_t ret;
++
++	memset(&ev, 0, sizeof(ev));
++	ret = read(fd, &ev, sizeof(ev));
++	if (ret == 0) {
++		fprintf(stderr, "Read HUP on uhid-cdev\n");
++		return -EFAULT;
++	} else if (ret < 0) {
++		fprintf(stderr, "Cannot read uhid-cdev: %m\n");
++		return -errno;
++	} else if (ret != sizeof(ev)) {
++		fprintf(stderr, "Invalid size read from uhid-dev: %zd != %zu\n",
++			ret, sizeof(ev));
++		return -EFAULT;
++	}
++
++	switch (ev.type) {
++	case UHID_START:
++		pthread_mutex_lock(&uhid_started_mtx);
++		pthread_cond_signal(&uhid_started);
++		pthread_mutex_unlock(&uhid_started_mtx);
++
++		fprintf(stderr, "UHID_START from uhid-dev\n");
++		break;
++	case UHID_STOP:
++		uhid_stopped = true;
++
++		fprintf(stderr, "UHID_STOP from uhid-dev\n");
++		break;
++	case UHID_OPEN:
++		fprintf(stderr, "UHID_OPEN from uhid-dev\n");
++		break;
++	case UHID_CLOSE:
++		fprintf(stderr, "UHID_CLOSE from uhid-dev\n");
++		break;
++	case UHID_OUTPUT:
++		fprintf(stderr, "UHID_OUTPUT from uhid-dev\n");
++		break;
++	case UHID_GET_REPORT:
++		fprintf(stderr, "UHID_GET_REPORT from uhid-dev\n");
++		break;
++	case UHID_SET_REPORT:
++		fprintf(stderr, "UHID_SET_REPORT from uhid-dev\n");
++		break;
++	default:
++		fprintf(stderr, "Invalid event from uhid-dev: %u\n", ev.type);
 +	}
 +
 +	return 0;
-+  }
++}
 +
-+To attach ``filter_switch``, userspace needs to call the ``attach_prog`` syscall
-+program first::
-+
-+  static int attach_filter(struct hid *hid_skel, int hid_id)
-+  {
-+	int err, prog_fd;
-+	int ret = -1;
-+	struct attach_prog_args args = {
-+		.hid = hid_id,
-+	};
-+	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, tattrs,
-+		.ctx_in = &args,
-+		.ctx_size_in = sizeof(args),
-+	);
-+
-+	args.prog_fd = bpf_program__fd(hid_skel->progs.filter_switch);
-+
-+	prog_fd = bpf_program__fd(hid_skel->progs.attach_prog);
-+
-+	err = bpf_prog_test_run_opts(prog_fd, &tattrs);
-+	return err;
-+  }
-+
-+Our userspace program can now listen to notifications on the ring buffer, and
-+is awaken only when the value changes.
-+
-+Controlling the device
-+----------------------
-+
-+To be able to change the haptic feedback from the tablet, the userspace program
-+needs to emit a feature report on the device itself.
-+
-+Instead of using hidraw for that, we can create a ``SEC("syscall")`` program
-+that talks to the device::
-+
-+  /* some more HID-BPF kfunc API definitions */
-+  extern struct hid_bpf_ctx *hid_bpf_allocate_context(unsigned int hid_id) __ksym;
-+  extern void hid_bpf_release_context(struct hid_bpf_ctx *ctx) __ksym;
-+  extern int hid_bpf_hw_request(struct hid_bpf_ctx *ctx,
-+			      __u8* data,
-+			      size_t len,
-+			      enum hid_report_type type,
-+			      enum hid_class_request reqtype) __ksym;
-+
-+
-+  struct hid_send_haptics_args {
-+	/* data needs to come at offset 0 so we can do a memcpy into it */
-+	__u8 data[10];
-+	unsigned int hid;
-+  };
-+
-+  SEC("syscall")
-+  int send_haptic(struct hid_send_haptics_args *args)
-+  {
-+	struct hid_bpf_ctx *ctx;
++static void *read_uhid_events_thread(void *arg)
++{
++	int fd = *(int *)arg;
++	struct pollfd pfds[1];
 +	int ret = 0;
 +
-+	ctx = hid_bpf_allocate_context(args->hid);
-+	if (!ctx)
-+		return 0; /* EPERM check */
++	pfds[0].fd = fd;
++	pfds[0].events = POLLIN;
 +
-+	ret = hid_bpf_hw_request(ctx,
-+				 args->data,
-+				 10,
-+				 HID_FEATURE_REPORT,
-+				 HID_REQ_SET_REPORT);
++	uhid_stopped = false;
 +
-+	hid_bpf_release_context(ctx);
++	while (!uhid_stopped) {
++		ret = poll(pfds, 1, 100);
++		if (ret < 0) {
++			fprintf(stderr, "Cannot poll for fds: %m\n");
++			break;
++		}
++		if (pfds[0].revents & POLLIN) {
++			ret = uhid_event(fd);
++			if (ret)
++				break;
++		}
++	}
 +
-+	return ret;
-+  }
++	return (void *)(long)ret;
++}
 +
-+And then userspace needs to call that program directly::
++static int uhid_start_listener(pthread_t *tid, int uhid_fd)
++{
++	int fd = uhid_fd;
 +
-+  static int set_haptic(struct hid *hid_skel, int hid_id, __u8 haptic_value)
-+  {
-+	int err, prog_fd;
-+	int ret = -1;
-+	struct hid_send_haptics_args args = {
-+		.hid = hid_id,
++	pthread_mutex_lock(&uhid_started_mtx);
++	if (CHECK_FAIL(pthread_create(tid, NULL, read_uhid_events_thread,
++				      (void *)&fd))) {
++		pthread_mutex_unlock(&uhid_started_mtx);
++		close(fd);
++		return -EIO;
++	}
++	pthread_cond_wait(&uhid_started, &uhid_started_mtx);
++	pthread_mutex_unlock(&uhid_started_mtx);
++
++	return 0;
++}
++
++static int send_event(int fd, u8 *buf, size_t size)
++{
++	struct uhid_event ev;
++
++	if (size > sizeof(ev.u.input.data))
++		return -E2BIG;
++
++	memset(&ev, 0, sizeof(ev));
++	ev.type = UHID_INPUT2;
++	ev.u.input2.size = size;
++
++	memcpy(ev.u.input2.data, buf, size);
++
++	return uhid_write(fd, &ev);
++}
++
++static int setup_uhid(int rand_nb)
++{
++	int fd;
++	const char *path = "/dev/uhid";
++	int ret;
++
++	fd = open(path, O_RDWR | O_CLOEXEC);
++	if (!ASSERT_GE(fd, 0, "open uhid-cdev"))
++		return -EPERM;
++
++	ret = create(fd, rand_nb);
++	if (!ASSERT_OK(ret, "create uhid device")) {
++		close(fd);
++		return -EPERM;
++	}
++
++	return fd;
++}
++
++static bool match_sysfs_device(int dev_id, const char *workdir, struct dirent *dir)
++{
++	const char *target = "0003:0001:0A37.*";
++	char phys[512];
++	char uevent[1024];
++	char temp[512];
++	int fd, nread;
++	bool found = false;
++
++	if (fnmatch(target, dir->d_name, 0))
++		return false;
++
++	/* we found the correct VID/PID, now check for phys */
++	sprintf(uevent, "%s/%s/uevent", workdir, dir->d_name);
++
++	fd = open(uevent, O_RDONLY | O_NONBLOCK);
++	if (fd < 0)
++		return false;
++
++	sprintf(phys, "PHYS=%d", dev_id);
++
++	nread = read(fd, temp, ARRAY_SIZE(temp));
++	if (nread > 0 && (strstr(temp, phys)) != NULL)
++		found = true;
++
++	close(fd);
++
++	return found;
++}
++
++static int get_hid_id(int dev_id)
++{
++	const char *workdir = "/sys/devices/virtual/misc/uhid";
++	const char *str_id;
++	DIR *d;
++	struct dirent *dir;
++	int found = -1;
++
++	/* it would be nice to be able to use nftw, but the no_alu32 target doesn't support it */
++
++	d = opendir(workdir);
++	if (d) {
++		while ((dir = readdir(d)) != NULL) {
++			if (!match_sysfs_device(dev_id, workdir, dir))
++				continue;
++
++			str_id = dir->d_name + sizeof("0003:0001:0A37.");
++			found = (int)strtol(str_id, NULL, 16);
++
++			break;
++		}
++		closedir(d);
++	}
++
++	return found;
++}
++
++static int get_hidraw(int dev_id)
++{
++	const char *workdir = "/sys/devices/virtual/misc/uhid";
++	char sysfs[1024];
++	DIR *d, *subd;
++	struct dirent *dir, *subdir;
++	int i, found = -1;
++
++	/* retry 5 times in case the system is loaded */
++	for (i = 5; i > 0; i--) {
++		usleep(10);
++		d = opendir(workdir);
++
++		if (!d)
++			continue;
++
++		while ((dir = readdir(d)) != NULL) {
++			if (!match_sysfs_device(dev_id, workdir, dir))
++				continue;
++
++			sprintf(sysfs, "%s/%s/hidraw", workdir, dir->d_name);
++
++			subd = opendir(sysfs);
++			if (!subd)
++				continue;
++
++			while ((subdir = readdir(subd)) != NULL) {
++				if (fnmatch("hidraw*", subdir->d_name, 0))
++					continue;
++
++				found = atoi(subdir->d_name + strlen("hidraw"));
++			}
++
++			closedir(subd);
++
++			if (found > 0)
++				break;
++		}
++		closedir(d);
++	}
++
++	return found;
++}
++
++static int open_hidraw(int dev_id)
++{
++	int hidraw_number;
++	char hidraw_path[64] = { 0 };
++
++	hidraw_number = get_hidraw(dev_id);
++	if (hidraw_number < 0)
++		return hidraw_number;
++
++	/* open hidraw node to check the other side of the pipe */
++	sprintf(hidraw_path, "/dev/hidraw%d", hidraw_number);
++	return open(hidraw_path, O_RDWR | O_NONBLOCK);
++}
++
++struct test_params {
++	struct hid *skel;
++	int hidraw_fd;
++};
++
++static int prep_test(int dev_id, const char *prog_name, struct test_params *test_data)
++{
++	struct hid *hid_skel = NULL;
++	struct bpf_program *prog = NULL;
++	char buf[64] = {0};
++	int hidraw_fd = -1;
++	int hid_id, attach_fd, err = -EINVAL;
++	struct attach_prog_args args = {
++		.retval = -1,
 +	};
-+	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, tattrs,
-+		.ctx_in = &args,
-+		.ctx_size_in = sizeof(args),
++	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, tattr,
++			    .ctx_in = &args,
++			    .ctx_size_in = sizeof(args),
 +	);
 +
-+	args.data[0] = 0x02; /* report ID of the feature on our device */
-+	args.data[1] = haptic_value;
++	/* locate the uevent file of the created device */
++	hid_id = get_hid_id(dev_id);
++	if (!ASSERT_GE(hid_id, 0, "locate uhid device id"))
++		goto cleanup;
 +
-+	prog_fd = bpf_program__fd(hid_skel->progs.set_haptic);
++	args.hid = hid_id;
 +
-+	err = bpf_prog_test_run_opts(prog_fd, &tattrs);
++	hid_skel = hid__open();
++	if (!ASSERT_OK_PTR(hid_skel, "hid_skel_open"))
++		goto cleanup;
++
++	prog = bpf_object__find_program_by_name(*hid_skel->skeleton->obj, prog_name);
++	if (!ASSERT_OK_PTR(prog, "find_prog_by_name"))
++		goto cleanup;
++
++	bpf_program__set_autoload(prog, true);
++
++	err = hid__load(hid_skel);
++	if (!ASSERT_OK(err, "hid_skel_load"))
++		goto cleanup;
++
++	attach_fd = bpf_program__fd(hid_skel->progs.attach_prog);
++	if (!ASSERT_GE(attach_fd, 0, "locate attach_prog")) {
++		err = attach_fd;
++		goto cleanup;
++	}
++
++	args.prog_fd = bpf_program__fd(prog);
++	err = bpf_prog_test_run_opts(attach_fd, &tattr);
++	snprintf(buf, sizeof(buf), "attach_hid(%s)", prog_name);
++	if (!ASSERT_EQ(args.retval, 0, buf))
++		goto cleanup;
++
++	hidraw_fd = open_hidraw(dev_id);
++	if (!ASSERT_GE(hidraw_fd, 0, "open_hidraw"))
++		goto cleanup;
++
++	test_data->skel = hid_skel;
++	test_data->hidraw_fd = hidraw_fd;
++
++	return 0;
++
++ cleanup:
++	if (hidraw_fd >= 0)
++		close(hidraw_fd);
++
++	hid__destroy(hid_skel);
++
++	memset(test_data, 0, sizeof(*test_data));
++
 +	return err;
-+  }
++}
 +
-+Now our userspace program is aware of the haptic state and can control it. The
-+program could make this state further available to other userspace programs
-+(e.g. via a DBus API).
++static void cleanup_test(struct test_params *test_data)
++{
++	if (!test_data)
++		return;
 +
-+The interesting bit here is that we did not created a new kernel API for this.
-+Which means that if there is a bug in our implementation, we can change the
-+interface with the kernel at-will, because the userspace application is
-+responsible for its own usage.
-diff --git a/Documentation/hid/index.rst b/Documentation/hid/index.rst
-index e50f513c579c..b2028f382f11 100644
---- a/Documentation/hid/index.rst
-+++ b/Documentation/hid/index.rst
-@@ -11,6 +11,7 @@ Human Interface Devices (HID)
-    hidraw
-    hid-sensor
-    hid-transport
-+   hid-bpf
- 
-    uhid
- 
++	if (test_data->hidraw_fd)
++		close(test_data->hidraw_fd);
++
++	hid__destroy(test_data->skel);
++
++	memset(test_data, 0, sizeof(*test_data));
++}
++
++/*
++ * Attach hid_first_event to the given uhid device,
++ * retrieve and open the matching hidraw node,
++ * inject one event in the uhid device,
++ * check that the program sees it and can change the data
++ */
++static int test_hid_raw_event(int uhid_fd, int dev_id)
++{
++	struct hid *hid_skel = NULL;
++	struct test_params params;
++	int err, hidraw_fd = -1;
++	u8 buf[10] = {0};
++	int ret = -1;
++
++	err = prep_test(dev_id, "hid_first_event", &params);
++	if (!ASSERT_EQ(err, 0, "prep_test(hid_first_event)"))
++		goto cleanup;
++
++	hid_skel = params.skel;
++	hidraw_fd = params.hidraw_fd;
++
++	/* check that the program is correctly loaded */
++	ASSERT_EQ(hid_skel->data->callback_check, 52, "callback_check1");
++	ASSERT_EQ(hid_skel->data->callback2_check, 52, "callback2_check1");
++
++	/* inject one event */
++	buf[0] = 1;
++	buf[1] = 42;
++	send_event(uhid_fd, buf, 6);
++
++	/* check that hid_first_event() was executed */
++	ASSERT_EQ(hid_skel->data->callback_check, 42, "callback_check1");
++
++	/* read the data from hidraw */
++	memset(buf, 0, sizeof(buf));
++	err = read(hidraw_fd, buf, sizeof(buf));
++	if (!ASSERT_EQ(err, 6, "read_hidraw"))
++		goto cleanup;
++
++	if (!ASSERT_EQ(buf[0], 1, "hid_first_event"))
++		goto cleanup;
++
++	if (!ASSERT_EQ(buf[2], 47, "hid_first_event"))
++		goto cleanup;
++
++	/* inject another event */
++	memset(buf, 0, sizeof(buf));
++	buf[0] = 1;
++	buf[1] = 47;
++	send_event(uhid_fd, buf, 6);
++
++	/* check that hid_first_event() was executed */
++	ASSERT_EQ(hid_skel->data->callback_check, 47, "callback_check1");
++
++	/* read the data from hidraw */
++	memset(buf, 0, sizeof(buf));
++	err = read(hidraw_fd, buf, sizeof(buf));
++	if (!ASSERT_EQ(err, 6, "read_hidraw"))
++		goto cleanup;
++
++	if (!ASSERT_EQ(buf[2], 52, "hid_first_event"))
++		goto cleanup;
++
++	ret = 0;
++
++cleanup:
++	cleanup_test(&params);
++
++	return ret;
++}
++
++/*
++ * Ensures that we can attach/detach programs
++ */
++static int test_attach_detach(int uhid_fd, int dev_id)
++{
++	struct test_params params;
++	int err, hidraw_fd = -1;
++	u8 buf[10] = {0};
++	int ret = -1;
++
++	err = prep_test(dev_id, "hid_first_event", &params);
++	if (!ASSERT_EQ(err, 0, "prep_test(hid_first_event)"))
++		goto cleanup;
++
++	/* inject one event */
++	buf[0] = 1;
++	buf[1] = 42;
++	send_event(uhid_fd, buf, 6);
++
++	/* read the data from hidraw */
++	memset(buf, 0, sizeof(buf));
++	err = read(params.hidraw_fd, buf, sizeof(buf));
++	if (!ASSERT_EQ(err, 6, "read_hidraw_with_bpf"))
++		goto cleanup;
++
++	if (!ASSERT_EQ(buf[0], 1, "hid_first_event"))
++		goto cleanup;
++
++	if (!ASSERT_EQ(buf[2], 47, "hid_first_event"))
++		goto cleanup;
++
++	/* pin the program and immediately unpin it */
++#define PIN_PATH "/sys/fs/bpf/hid_first_event"
++	bpf_program__pin(params.skel->progs.hid_first_event, PIN_PATH);
++	remove(PIN_PATH);
++#undef PIN_PATH
++	usleep(100000);
++
++	/* detach the program */
++	cleanup_test(&params);
++
++	hidraw_fd = open_hidraw(dev_id);
++	if (!ASSERT_GE(hidraw_fd, 0, "open_hidraw"))
++		goto cleanup;
++
++	/* inject another event */
++	memset(buf, 0, sizeof(buf));
++	buf[0] = 1;
++	buf[1] = 47;
++	send_event(uhid_fd, buf, 6);
++
++	/* read the data from hidraw */
++	memset(buf, 0, sizeof(buf));
++	err = read(hidraw_fd, buf, sizeof(buf));
++	if (!ASSERT_EQ(err, 6, "read_hidraw_no_bpf"))
++		goto cleanup;
++
++	if (!ASSERT_EQ(buf[0], 1, "event_no_bpf"))
++		goto cleanup;
++
++	if (!ASSERT_EQ(buf[1], 47, "event_no_bpf"))
++		goto cleanup;
++
++	if (!ASSERT_EQ(buf[2], 0, "event_no_bpf"))
++		goto cleanup;
++
++	/* re-attach our program */
++
++	err = prep_test(dev_id, "hid_first_event", &params);
++	if (!ASSERT_EQ(err, 0, "prep_test(hid_first_event)"))
++		goto cleanup;
++
++	/* inject one event */
++	memset(buf, 0, sizeof(buf));
++	buf[0] = 1;
++	buf[1] = 42;
++	send_event(uhid_fd, buf, 6);
++
++	/* read the data from hidraw */
++	memset(buf, 0, sizeof(buf));
++	err = read(params.hidraw_fd, buf, sizeof(buf));
++	if (!ASSERT_EQ(err, 6, "read_hidraw"))
++		goto cleanup;
++
++	if (!ASSERT_EQ(buf[0], 1, "hid_first_event"))
++		goto cleanup;
++
++	if (!ASSERT_EQ(buf[2], 47, "hid_first_event"))
++		goto cleanup;
++
++	ret = 0;
++
++cleanup:
++	if (hidraw_fd >= 0)
++		close(hidraw_fd);
++
++	cleanup_test(&params);
++
++	return ret;
++}
++
++void serial_test_hid_bpf(void)
++{
++	int err, uhid_fd;
++	void *uhid_err;
++	time_t t;
++	pthread_t tid;
++	int dev_id;
++
++	/* initialize random number generator */
++	srand((unsigned int)time(&t));
++
++	dev_id = rand() % 1024;
++
++	uhid_fd = setup_uhid(dev_id);
++	if (!ASSERT_GE(uhid_fd, 0, "setup uhid"))
++		return;
++
++	err = uhid_start_listener(&tid, uhid_fd);
++	ASSERT_OK(err, "uhid_start_listener");
++
++	/* start the tests! */
++	err = test_hid_raw_event(uhid_fd, dev_id);
++	ASSERT_OK(err, "hid");
++	err = test_attach_detach(uhid_fd, dev_id);
++	ASSERT_OK(err, "hid_attach_detach");
++
++	destroy(uhid_fd);
++
++	pthread_join(tid, &uhid_err);
++	err = (int)(long)uhid_err;
++	CHECK_FAIL(err);
++}
+diff --git a/tools/testing/selftests/bpf/progs/hid.c b/tools/testing/selftests/bpf/progs/hid.c
+new file mode 100644
+index 000000000000..fc0a4241643a
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/hid.c
+@@ -0,0 +1,45 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2022 Red hat */
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++char _license[] SEC("license") = "GPL";
++
++extern __u8 *hid_bpf_get_data(struct hid_bpf_ctx *ctx,
++			      unsigned int offset,
++			      const size_t __sz) __ksym;
++extern int hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, u32 flags) __ksym;
++
++struct attach_prog_args {
++	int prog_fd;
++	unsigned int hid;
++	int retval;
++};
++
++__u64 callback_check = 52;
++__u64 callback2_check = 52;
++
++SEC("?fmod_ret/hid_bpf_device_event")
++int BPF_PROG(hid_first_event, struct hid_bpf_ctx *hid_ctx)
++{
++	__u8 *rw_data = hid_bpf_get_data(hid_ctx, 0 /* offset */, 3 /* size */);
++
++	if (!rw_data)
++		return 0; /* EPERM check */
++
++	callback_check = rw_data[1];
++
++	rw_data[2] = rw_data[1] + 5;
++
++	return 0;
++}
++
++SEC("syscall")
++int attach_prog(struct attach_prog_args *ctx)
++{
++	ctx->retval = hid_bpf_attach_prog(ctx->hid,
++					  ctx->prog_fd,
++					  0);
++	return 0;
++}
 -- 
 2.36.1
 
