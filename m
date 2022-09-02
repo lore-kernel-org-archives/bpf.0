@@ -2,25 +2,25 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8170C54EE9
-	for <bpf@archiver.kernel.org>; Fri,  2 Sep 2022 11:23:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B315FECAAD5
+	for <bpf@archiver.kernel.org>; Fri,  2 Sep 2022 11:23:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233647AbiIBLXJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 2 Sep 2022 07:23:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54646 "EHLO
+        id S235994AbiIBLXN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 2 Sep 2022 07:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235287AbiIBLWu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 2 Sep 2022 07:22:50 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BCCD25C1;
-        Fri,  2 Sep 2022 04:22:45 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MJwQ039HNzWf4H;
-        Fri,  2 Sep 2022 19:18:16 +0800 (CST)
+        with ESMTP id S235843AbiIBLWv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 2 Sep 2022 07:22:51 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A5FD274B;
+        Fri,  2 Sep 2022 04:22:46 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MJwSH1BCzznTrq;
+        Fri,  2 Sep 2022 19:20:15 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
  (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 2 Sep
- 2022 19:22:41 +0800
+ 2022 19:22:43 +0800
 From:   Zhengchao Shao <shaozhengchao@huawei.com>
 To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <bpf@vger.kernel.org>, <davem@davemloft.net>,
@@ -32,9 +32,9 @@ CC:     <daniel@iogearbox.net>, <john.fastabend@gmail.com>,
         <yhs@fb.com>, <kpsingh@kernel.org>, <sdf@google.com>,
         <haoluo@google.com>, <jolsa@kernel.org>, <weiyongjun1@huawei.com>,
         <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH net-next 12/22] net: sched: act_mpls: get rid of tcf_mpls_walker and tcf_mpls_search
-Date:   Fri, 2 Sep 2022 19:24:36 +0800
-Message-ID: <20220902112446.29858-13-shaozhengchao@huawei.com>
+Subject: [PATCH net-next 14/22] net: sched: act_pedit: get rid of tcf_pedit_walker and tcf_pedit_search
+Date:   Fri, 2 Sep 2022 19:24:38 +0800
+Message-ID: <20220902112446.29858-15-shaozhengchao@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220902112446.29858-1-shaozhengchao@huawei.com>
 References: <20220902112446.29858-1-shaozhengchao@huawei.com>
@@ -49,56 +49,57 @@ List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 Use __tcf_generic_walker() and __tcf_idr_search() helpers by saving
-mpls_net_id when registering act_mpls_ops. And then remove the walk
-and lookup hook functions in act_mpls.
+pedit_net_id when registering act_pedit_ops. And then remove the walk
+and lookup hook functions in act_pedit.
 
 Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 ---
- net/sched/act_mpls.c | 20 +-------------------
+ net/sched/act_pedit.c | 20 +-------------------
  1 file changed, 1 insertion(+), 19 deletions(-)
 
-diff --git a/net/sched/act_mpls.c b/net/sched/act_mpls.c
-index adabeccb63e1..32c5b9586025 100644
---- a/net/sched/act_mpls.c
-+++ b/net/sched/act_mpls.c
-@@ -367,23 +367,6 @@ static int tcf_mpls_dump(struct sk_buff *skb, struct tc_action *a,
- 	return -EMSGSIZE;
+diff --git a/net/sched/act_pedit.c b/net/sched/act_pedit.c
+index 823ee643371c..15d1b206e73b 100644
+--- a/net/sched/act_pedit.c
++++ b/net/sched/act_pedit.c
+@@ -492,23 +492,6 @@ static int tcf_pedit_dump(struct sk_buff *skb, struct tc_action *a,
+ 	return -1;
  }
  
--static int tcf_mpls_walker(struct net *net, struct sk_buff *skb,
--			   struct netlink_callback *cb, int type,
--			   const struct tc_action_ops *ops,
--			   struct netlink_ext_ack *extack)
+-static int tcf_pedit_walker(struct net *net, struct sk_buff *skb,
+-			    struct netlink_callback *cb, int type,
+-			    const struct tc_action_ops *ops,
+-			    struct netlink_ext_ack *extack)
 -{
--	struct tc_action_net *tn = net_generic(net, mpls_net_id);
+-	struct tc_action_net *tn = net_generic(net, pedit_net_id);
 -
 -	return tcf_generic_walker(tn, skb, cb, type, ops, extack);
 -}
 -
--static int tcf_mpls_search(struct net *net, struct tc_action **a, u32 index)
+-static int tcf_pedit_search(struct net *net, struct tc_action **a, u32 index)
 -{
--	struct tc_action_net *tn = net_generic(net, mpls_net_id);
+-	struct tc_action_net *tn = net_generic(net, pedit_net_id);
 -
 -	return tcf_idr_search(tn, a, index);
 -}
 -
- static int tcf_mpls_offload_act_setup(struct tc_action *act, void *entry_data,
- 				      u32 *index_inc, bool bind,
- 				      struct netlink_ext_ack *extack)
-@@ -446,13 +429,12 @@ static int tcf_mpls_offload_act_setup(struct tc_action *act, void *entry_data,
- static struct tc_action_ops act_mpls_ops = {
- 	.kind		=	"mpls",
- 	.id		=	TCA_ID_MPLS,
-+	.net_id		=	&mpls_net_id,
+ static int tcf_pedit_offload_act_setup(struct tc_action *act, void *entry_data,
+ 				       u32 *index_inc, bool bind,
+ 				       struct netlink_ext_ack *extack)
+@@ -547,14 +530,13 @@ static int tcf_pedit_offload_act_setup(struct tc_action *act, void *entry_data,
+ static struct tc_action_ops act_pedit_ops = {
+ 	.kind		=	"pedit",
+ 	.id		=	TCA_ID_PEDIT,
++	.net_id		=	&pedit_net_id,
  	.owner		=	THIS_MODULE,
- 	.act		=	tcf_mpls_act,
- 	.dump		=	tcf_mpls_dump,
- 	.init		=	tcf_mpls_init,
- 	.cleanup	=	tcf_mpls_cleanup,
--	.walk		=	tcf_mpls_walker,
--	.lookup		=	tcf_mpls_search,
- 	.offload_act_setup =	tcf_mpls_offload_act_setup,
- 	.size		=	sizeof(struct tcf_mpls),
+ 	.act		=	tcf_pedit_act,
+ 	.stats_update	=	tcf_pedit_stats_update,
+ 	.dump		=	tcf_pedit_dump,
+ 	.cleanup	=	tcf_pedit_cleanup,
+ 	.init		=	tcf_pedit_init,
+-	.walk		=	tcf_pedit_walker,
+-	.lookup		=	tcf_pedit_search,
+ 	.offload_act_setup =	tcf_pedit_offload_act_setup,
+ 	.size		=	sizeof(struct tcf_pedit),
  };
 -- 
 2.17.1
