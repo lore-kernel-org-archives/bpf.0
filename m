@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79063ECAAD2
-	for <bpf@archiver.kernel.org>; Fri,  2 Sep 2022 00:30:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D74FBECAAD2
+	for <bpf@archiver.kernel.org>; Fri,  2 Sep 2022 00:31:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234698AbiIBAa6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 1 Sep 2022 20:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38744 "EHLO
+        id S232420AbiIBAbC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 1 Sep 2022 20:31:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234651AbiIBAax (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 1 Sep 2022 20:30:53 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594C8356F2
-        for <bpf@vger.kernel.org>; Thu,  1 Sep 2022 17:30:49 -0700 (PDT)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 28208nGh018201
-        for <bpf@vger.kernel.org>; Thu, 1 Sep 2022 17:30:48 -0700
+        with ESMTP id S234585AbiIBAa5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 1 Sep 2022 20:30:57 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31B29837B
+        for <bpf@vger.kernel.org>; Thu,  1 Sep 2022 17:30:54 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28208pvu010449
+        for <bpf@vger.kernel.org>; Thu, 1 Sep 2022 17:30:54 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=DGq5V2xq+IgMFdNCpCZVaC+vz9x6uDZXZNn2GvbQ1Z4=;
- b=I/mh7S2nJozWW4B/3/XROWNwVkPjIVzoXQKoEjcQtCYJAqZTeh7wNEiXfdVLZssqeoeu
- ZTcVDGIyMc68U5k/fRvOFodzXAAlb8CgVAsJMOheNxBSeVekiKAeBdzyL0EdHAm/iCxk
- 1n6wlPZdNL/L5gvAF1+PiPbMOBY9iux+ZCI= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3jaur6d3s7-2
+ bh=Ho+MYZhO8VTWkrW4+NoaG0n0O1n3JfSwpXGp05MjENc=;
+ b=H9+5LqZTBcgXRbZYsO+n/YJB4NkqSXIPjuzhepsxq5l7SciPRfNJlgJCv+byPjm44ncU
+ UJD95mjiFXfVVSQt+wVm79+aDtBXytV2jYNs29bBin0MuZTOibjfPT1NRLkS+YwGb4PP
+ rEXfFTcjZMt2uiBpELVnWU0Hn8mdI36xZqY= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jageh05nj-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 01 Sep 2022 17:30:48 -0700
-Received: from twshared25017.14.frc2.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 01 Sep 2022 17:30:53 -0700
+Received: from twshared5413.23.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Sep 2022 17:30:47 -0700
+ 15.1.2375.31; Thu, 1 Sep 2022 17:30:51 -0700
 Received: by devbig933.frc1.facebook.com (Postfix, from userid 6611)
-        id A1C8E8C47A4B; Thu,  1 Sep 2022 17:27:56 -0700 (PDT)
+        id 8561D8C47AB0; Thu,  1 Sep 2022 17:28:15 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -44,9 +44,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>, <kernel-team@fb.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH v2 bpf-next 01/17] net: Change sock_getsockopt() to take the sk ptr instead of the sock ptr
-Date:   Thu, 1 Sep 2022 17:27:56 -0700
-Message-ID: <20220902002756.2887884-1-kafai@fb.com>
+Subject: [PATCH v2 bpf-next 04/17] bpf: net: Change do_tcp_getsockopt() to take the sockptr_t argument
+Date:   Thu, 1 Sep 2022 17:28:15 -0700
+Message-ID: <20220902002815.2889332-1-kafai@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220902002750.2887415-1-kafai@fb.com>
 References: <20220902002750.2887415-1-kafai@fb.com>
@@ -54,8 +54,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: a9IzOUiiHZ_mgR6EAZGLojkiJqio-I4T
-X-Proofpoint-GUID: a9IzOUiiHZ_mgR6EAZGLojkiJqio-I4T
+X-Proofpoint-GUID: TgfNUA3kkNAwwzPO-ahsaTjw2ptZzKd1
+X-Proofpoint-ORIG-GUID: TgfNUA3kkNAwwzPO-ahsaTjw2ptZzKd1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-09-01_12,2022-08-31_03,2022-06-22_01
@@ -65,71 +65,265 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Martin KaFai Lau <martin.lau@kernel.org>
 
-A latter patch refactors bpf_getsockopt(SOL_SOCKET) with the
-sock_getsockopt() to avoid code duplication and code
-drift between the two duplicates.
-
-The current sock_getsockopt() takes sock ptr as the argument.
-The very first thing of this function is to get back the sk ptr
-by 'sk =3D sock->sk'.
-
-bpf_getsockopt() could be called when the sk does not have
-the sock ptr created.  Meaning sk->sk_socket is NULL.  For example,
-when a passive tcp connection has just been established but has yet
-been accept()-ed.  Thus, it cannot use the sock_getsockopt(sk->sk_socket)
-or else it will pass a NULL ptr.
-
-This patch moves all sock_getsockopt implementation to the newly
-added sk_getsockopt().  The new sk_getsockopt() takes a sk ptr
-and immediately gets the sock ptr by 'sock =3D sk->sk_socket'
-
-The existing sock_getsockopt(sock) is changed to call
-sk_getsockopt(sock->sk).  All existing callers have both sock->sk
-and sk->sk_socket pointer.
-
-The latter patch will make bpf_getsockopt(SOL_SOCKET) call
-sk_getsockopt(sk) directly.  The bpf_getsockopt(SOL_SOCKET) does
-not use the optnames that require sk->sk_socket, so it will
-be safe.
+Similar to the earlier patch that changes sk_getsockopt() to
+take the sockptr_t argument .  This patch also changes
+do_tcp_getsockopt() to take the sockptr_t argument such that
+a latter patch can make bpf_getsockopt(SOL_TCP) to reuse
+do_tcp_getsockopt().
 
 Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
 ---
- net/core/sock.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ net/ipv4/tcp.c | 72 ++++++++++++++++++++++++++------------------------
+ 1 file changed, 37 insertions(+), 35 deletions(-)
 
-diff --git a/net/core/sock.c b/net/core/sock.c
-index 2a6f84702eb9..21bc4bf6b485 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -1580,10 +1580,10 @@ static int groups_to_user(gid_t __user *dst, cons=
-t struct group_info *src)
- 	return 0;
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index f0d79ea45ac8..108c430a2a11 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -4044,14 +4044,14 @@ struct sk_buff *tcp_get_timestamping_opt_stats(co=
+nst struct sock *sk,
  }
 =20
--int sock_getsockopt(struct socket *sock, int level, int optname,
--		    char __user *optval, int __user *optlen)
-+static int sk_getsockopt(struct sock *sk, int level, int optname,
-+			 char __user *optval, int __user *optlen)
+ static int do_tcp_getsockopt(struct sock *sk, int level,
+-		int optname, char __user *optval, int __user *optlen)
++			     int optname, sockptr_t optval, sockptr_t optlen)
  {
--	struct sock *sk =3D sock->sk;
-+	struct socket *sock =3D sk->sk_socket;
+ 	struct inet_connection_sock *icsk =3D inet_csk(sk);
+ 	struct tcp_sock *tp =3D tcp_sk(sk);
+ 	struct net *net =3D sock_net(sk);
+ 	int val, len;
 =20
- 	union {
- 		int val;
-@@ -1947,6 +1947,12 @@ int sock_getsockopt(struct socket *sock, int level=
-, int optname,
+-	if (get_user(len, optlen))
++	if (copy_from_sockptr(&len, optlen, sizeof(int)))
+ 		return -EFAULT;
+=20
+ 	len =3D min_t(unsigned int, len, sizeof(int));
+@@ -4101,15 +4101,15 @@ static int do_tcp_getsockopt(struct sock *sk, int=
+ level,
+ 	case TCP_INFO: {
+ 		struct tcp_info info;
+=20
+-		if (get_user(len, optlen))
++		if (copy_from_sockptr(&len, optlen, sizeof(int)))
+ 			return -EFAULT;
+=20
+ 		tcp_get_info(sk, &info);
+=20
+ 		len =3D min_t(unsigned int, len, sizeof(info));
+-		if (put_user(len, optlen))
++		if (copy_to_sockptr(optlen, &len, sizeof(int)))
+ 			return -EFAULT;
+-		if (copy_to_user(optval, &info, len))
++		if (copy_to_sockptr(optval, &info, len))
+ 			return -EFAULT;
+ 		return 0;
+ 	}
+@@ -4119,7 +4119,7 @@ static int do_tcp_getsockopt(struct sock *sk, int l=
+evel,
+ 		size_t sz =3D 0;
+ 		int attr;
+=20
+-		if (get_user(len, optlen))
++		if (copy_from_sockptr(&len, optlen, sizeof(int)))
+ 			return -EFAULT;
+=20
+ 		ca_ops =3D icsk->icsk_ca_ops;
+@@ -4127,9 +4127,9 @@ static int do_tcp_getsockopt(struct sock *sk, int l=
+evel,
+ 			sz =3D ca_ops->get_info(sk, ~0U, &attr, &info);
+=20
+ 		len =3D min_t(unsigned int, len, sz);
+-		if (put_user(len, optlen))
++		if (copy_to_sockptr(optlen, &len, sizeof(int)))
+ 			return -EFAULT;
+-		if (copy_to_user(optval, &info, len))
++		if (copy_to_sockptr(optval, &info, len))
+ 			return -EFAULT;
+ 		return 0;
+ 	}
+@@ -4138,27 +4138,28 @@ static int do_tcp_getsockopt(struct sock *sk, int=
+ level,
+ 		break;
+=20
+ 	case TCP_CONGESTION:
+-		if (get_user(len, optlen))
++		if (copy_from_sockptr(&len, optlen, sizeof(int)))
+ 			return -EFAULT;
+ 		len =3D min_t(unsigned int, len, TCP_CA_NAME_MAX);
+-		if (put_user(len, optlen))
++		if (copy_to_sockptr(optlen, &len, sizeof(int)))
+ 			return -EFAULT;
+-		if (copy_to_user(optval, icsk->icsk_ca_ops->name, len))
++		if (copy_to_sockptr(optval, icsk->icsk_ca_ops->name, len))
+ 			return -EFAULT;
+ 		return 0;
+=20
+ 	case TCP_ULP:
+-		if (get_user(len, optlen))
++		if (copy_from_sockptr(&len, optlen, sizeof(int)))
+ 			return -EFAULT;
+ 		len =3D min_t(unsigned int, len, TCP_ULP_NAME_MAX);
+ 		if (!icsk->icsk_ulp_ops) {
+-			if (put_user(0, optlen))
++			len =3D 0;
++			if (copy_to_sockptr(optlen, &len, sizeof(int)))
+ 				return -EFAULT;
+ 			return 0;
+ 		}
+-		if (put_user(len, optlen))
++		if (copy_to_sockptr(optlen, &len, sizeof(int)))
+ 			return -EFAULT;
+-		if (copy_to_user(optval, icsk->icsk_ulp_ops->name, len))
++		if (copy_to_sockptr(optval, icsk->icsk_ulp_ops->name, len))
+ 			return -EFAULT;
+ 		return 0;
+=20
+@@ -4166,15 +4167,15 @@ static int do_tcp_getsockopt(struct sock *sk, int=
+ level,
+ 		u64 key[TCP_FASTOPEN_KEY_BUF_LENGTH / sizeof(u64)];
+ 		unsigned int key_len;
+=20
+-		if (get_user(len, optlen))
++		if (copy_from_sockptr(&len, optlen, sizeof(int)))
+ 			return -EFAULT;
+=20
+ 		key_len =3D tcp_fastopen_get_cipher(net, icsk, key) *
+ 				TCP_FASTOPEN_KEY_LENGTH;
+ 		len =3D min_t(unsigned int, len, key_len);
+-		if (put_user(len, optlen))
++		if (copy_to_sockptr(optlen, &len, sizeof(int)))
+ 			return -EFAULT;
+-		if (copy_to_user(optval, key, len))
++		if (copy_to_sockptr(optval, key, len))
+ 			return -EFAULT;
+ 		return 0;
+ 	}
+@@ -4200,7 +4201,7 @@ static int do_tcp_getsockopt(struct sock *sk, int l=
+evel,
+ 	case TCP_REPAIR_WINDOW: {
+ 		struct tcp_repair_window opt;
+=20
+-		if (get_user(len, optlen))
++		if (copy_from_sockptr(&len, optlen, sizeof(int)))
+ 			return -EFAULT;
+=20
+ 		if (len !=3D sizeof(opt))
+@@ -4215,7 +4216,7 @@ static int do_tcp_getsockopt(struct sock *sk, int l=
+evel,
+ 		opt.rcv_wnd	=3D tp->rcv_wnd;
+ 		opt.rcv_wup	=3D tp->rcv_wup;
+=20
+-		if (copy_to_user(optval, &opt, len))
++		if (copy_to_sockptr(optval, &opt, len))
+ 			return -EFAULT;
+ 		return 0;
+ 	}
+@@ -4261,14 +4262,14 @@ static int do_tcp_getsockopt(struct sock *sk, int=
+ level,
+ 		val =3D tp->save_syn;
+ 		break;
+ 	case TCP_SAVED_SYN: {
+-		if (get_user(len, optlen))
++		if (copy_from_sockptr(&len, optlen, sizeof(int)))
+ 			return -EFAULT;
+=20
+ 		lock_sock(sk);
+ 		if (tp->saved_syn) {
+ 			if (len < tcp_saved_syn_len(tp->saved_syn)) {
+-				if (put_user(tcp_saved_syn_len(tp->saved_syn),
+-					     optlen)) {
++				len =3D tcp_saved_syn_len(tp->saved_syn);
++				if (copy_to_sockptr(optlen, &len, sizeof(int))) {
+ 					release_sock(sk);
+ 					return -EFAULT;
+ 				}
+@@ -4276,11 +4277,11 @@ static int do_tcp_getsockopt(struct sock *sk, int=
+ level,
+ 				return -EINVAL;
+ 			}
+ 			len =3D tcp_saved_syn_len(tp->saved_syn);
+-			if (put_user(len, optlen)) {
++			if (copy_to_sockptr(optlen, &len, sizeof(int))) {
+ 				release_sock(sk);
+ 				return -EFAULT;
+ 			}
+-			if (copy_to_user(optval, tp->saved_syn->data, len)) {
++			if (copy_to_sockptr(optval, tp->saved_syn->data, len)) {
+ 				release_sock(sk);
+ 				return -EFAULT;
+ 			}
+@@ -4289,7 +4290,7 @@ static int do_tcp_getsockopt(struct sock *sk, int l=
+evel,
+ 		} else {
+ 			release_sock(sk);
+ 			len =3D 0;
+-			if (put_user(len, optlen))
++			if (copy_to_sockptr(optlen, &len, sizeof(int)))
+ 				return -EFAULT;
+ 		}
+ 		return 0;
+@@ -4300,21 +4301,21 @@ static int do_tcp_getsockopt(struct sock *sk, int=
+ level,
+ 		struct tcp_zerocopy_receive zc =3D {};
+ 		int err;
+=20
+-		if (get_user(len, optlen))
++		if (copy_from_sockptr(&len, optlen, sizeof(int)))
+ 			return -EFAULT;
+ 		if (len < 0 ||
+ 		    len < offsetofend(struct tcp_zerocopy_receive, length))
+ 			return -EINVAL;
+ 		if (unlikely(len > sizeof(zc))) {
+-			err =3D check_zeroed_user(optval + sizeof(zc),
+-						len - sizeof(zc));
++			err =3D check_zeroed_sockptr(optval, sizeof(zc),
++						   len - sizeof(zc));
+ 			if (err < 1)
+ 				return err =3D=3D 0 ? -EINVAL : err;
+ 			len =3D sizeof(zc);
+-			if (put_user(len, optlen))
++			if (copy_to_sockptr(optlen, &len, sizeof(int)))
+ 				return -EFAULT;
+ 		}
+-		if (copy_from_user(&zc, optval, len))
++		if (copy_from_sockptr(&zc, optval, len))
+ 			return -EFAULT;
+ 		if (zc.reserved)
+ 			return -EINVAL;
+@@ -4354,7 +4355,7 @@ static int do_tcp_getsockopt(struct sock *sk, int l=
+evel,
+ zerocopy_rcv_inq:
+ 		zc.inq =3D tcp_inq_hint(sk);
+ zerocopy_rcv_out:
+-		if (!err && copy_to_user(optval, &zc, len))
++		if (!err && copy_to_sockptr(optval, &zc, len))
+ 			err =3D -EFAULT;
+ 		return err;
+ 	}
+@@ -4363,9 +4364,9 @@ static int do_tcp_getsockopt(struct sock *sk, int l=
+evel,
+ 		return -ENOPROTOOPT;
+ 	}
+=20
+-	if (put_user(len, optlen))
++	if (copy_to_sockptr(optlen, &len, sizeof(int)))
+ 		return -EFAULT;
+-	if (copy_to_user(optval, &val, len))
++	if (copy_to_sockptr(optval, &val, len))
+ 		return -EFAULT;
  	return 0;
  }
+@@ -4390,7 +4391,8 @@ int tcp_getsockopt(struct sock *sk, int level, int =
+optname, char __user *optval,
+ 	if (level !=3D SOL_TCP)
+ 		return icsk->icsk_af_ops->getsockopt(sk, level, optname,
+ 						     optval, optlen);
+-	return do_tcp_getsockopt(sk, level, optname, optval, optlen);
++	return do_tcp_getsockopt(sk, level, optname, USER_SOCKPTR(optval),
++				 USER_SOCKPTR(optlen));
+ }
+ EXPORT_SYMBOL(tcp_getsockopt);
 =20
-+int sock_getsockopt(struct socket *sock, int level, int optname,
-+		    char __user *optval, int __user *optlen)
-+{
-+	return sk_getsockopt(sock->sk, level, optname, optval, optlen);
-+}
-+
- /*
-  * Initialize an sk_lock.
-  *
 --=20
 2.30.2
 
