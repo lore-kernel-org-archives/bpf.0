@@ -2,52 +2,52 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD7D9C6FA82
-	for <bpf@archiver.kernel.org>; Sun,  4 Sep 2022 20:42:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14DBCC6FA8B
+	for <bpf@archiver.kernel.org>; Sun,  4 Sep 2022 20:42:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231362AbiIDUmX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 4 Sep 2022 16:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50516 "EHLO
+        id S234482AbiIDUmY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 4 Sep 2022 16:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234482AbiIDUmR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S235069AbiIDUmR (ORCPT <rfc822;bpf@vger.kernel.org>);
         Sun, 4 Sep 2022 16:42:17 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBB72CDDB
-        for <bpf@vger.kernel.org>; Sun,  4 Sep 2022 13:42:11 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id q21so1379970edc.9
-        for <bpf@vger.kernel.org>; Sun, 04 Sep 2022 13:42:11 -0700 (PDT)
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC6D2CE0C
+        for <bpf@vger.kernel.org>; Sun,  4 Sep 2022 13:42:15 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id gb36so13424662ejc.10
+        for <bpf@vger.kernel.org>; Sun, 04 Sep 2022 13:42:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=oH5608x8Xk1f21fPwnG19U2alN1fCk6LlCygXLmN59Q=;
-        b=ewL8RKXF4OwMW0S1KcAGRh5Orxgq38iduo6YKKCIu/YHG6X3M2z2VqSkVl2R2kw4bk
-         WMZHEcDN2HRKYDA++Vf+YyeDrHd93tMVhjCW37l9TAQYrAek27FlK9N8KP8hGmbtDfxw
-         AxKCUddZsBR41gm6JfvahFR09a0TDcVv/ol453SKh6rpRNjt/1slAbaqxopnxAMsb31Y
-         YEI27R2CNUsjPb+sKwjzWtI7WZavncjeR/KJs1k8Dc0RLISX6c1QgmGq3Vw+pH65EUSM
-         SLWCx7KIbo9CjX4glKVs9+TPrdQo7oRiCA6vyAsTS7N5s33V+MJ/I6RzLq95Z1uPiJFJ
-         cMOQ==
+        bh=gcQMKN+S/93cn71lJllWLNd5dp5PiiA+5re+BvQFX8k=;
+        b=NsA81WnawX6QQPLTVxNI3pWRF8cffUkyvh0MWYEI5taU4M0uRyibdJLBaXJBsM9mlS
+         HCiczxHpA5kF5AMwvQ6XFt2QVwZwBMoXYT65FL9oD979642Uh6p/zQSdW2POunCuA8bG
+         qWAvxsNhKZ+e2qgRXsEdghvd9+OI+MMCSfD7DXGScGJzMCPbR1kKrRSTkITk/qu6WYW6
+         Hg42cBNDqlJ8J7T7kM+XLjZqo12Rwk3/JKzwYKnMHMThzWItWznriTYoaefvNiKQbhlU
+         VEcdxyCeEQX+SVr62Bx/3ZNicJIemz9wez1w/eljQMUXk3fm9J0XZsP9mGF1oBVzWSPz
+         /Dfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=oH5608x8Xk1f21fPwnG19U2alN1fCk6LlCygXLmN59Q=;
-        b=Zdos6ISLl2S6TNbtAOajFK7EKQZbp+GcW/L5p59xnjz+REsYOQPi4FJn5I5ujLVy/X
-         2Ij0mzemw0aC1Rm8jabg21v+ScYqzxKc9AptYd7bS5STHbLVL9myls8dLwcb9bVGVAfe
-         tOHG0pAc6fSRJPFdJ+khZkdacLGZ0aAUTTbQLTaYGv64t5RGyFWyz0BwRyGjcwJk/5wc
-         lAFGgf2LBfP4/azN6u8VzuiyUN82CdKZf1tpa2GsGOe33uSEE6hFBlqIKFV7lQNX9YvE
-         8DG4oFEU58xlE27zicae14O+2y7L8FIb6elg4HINH62q5+UqK1dOlFqToh/+0jzRxYQu
-         MDjA==
-X-Gm-Message-State: ACgBeo2fiTIWkSjuNH8FtfF2msYmIwu2g9iZLdwh8vIK1LTnvRC4akEt
-        BYHoMRDf/CCL+/JJfL7CpDTGmD3a+OIMVQ==
-X-Google-Smtp-Source: AA6agR5w6C2gmrpYQv3FCiwBjfw4BNSsllXffXq/s7ms0b+o0uRYwANHVu86prrirUmm8nuWJHXbcQ==
-X-Received: by 2002:a05:6402:1e8c:b0:448:8776:d813 with SMTP id f12-20020a0564021e8c00b004488776d813mr26929387edf.15.1662324129360;
-        Sun, 04 Sep 2022 13:42:09 -0700 (PDT)
+        bh=gcQMKN+S/93cn71lJllWLNd5dp5PiiA+5re+BvQFX8k=;
+        b=kCtU/cZrvcc44B0VLTfdjGjCAq5Nbo/MbdKHyA7nHHp8wgJK9IJd5T3qCv6V46jTRk
+         pttWxdMw9vbU7dSuNmFQW70f90jRdoUfnknnI4Bo4S1TnFLdsYZOi1qa0IsXqQ9YIAxB
+         UehE6LQcB5gpEMAAlqy/6IYl+pY1oCyO5aTko9uIRChgNPkLkVTcCJFbR5S5+fKwLHQ1
+         75rDz+v2a5wq/5UZvnLiyTRQ0lbZvGUqS5+NQ46ZHRmGRq6MhufXGPZstYsfmAVwyFVH
+         1bikShKvTmVx6B+25yTQUBQb2Vg0rtXIe3eEwkRKVbcLRNOQgud5VQJ2SAs/uiHGrizh
+         PZWg==
+X-Gm-Message-State: ACgBeo2Qafv/u9nOsHAby0qTkSTh4y5X9iZhT5HsHMWqIhFIBv1nM49u
+        J/kcaxzSsnZchE7t/r5E9PGytNq+hJArRw==
+X-Google-Smtp-Source: AA6agR50OTLILWiogZvrurMa1pHuFfIe3hhBGh72jgvlZjEBZq61CoGlF8hTybn8ukop3ZQWj9uoUw==
+X-Received: by 2002:a17:907:d08:b0:72f:b107:c07a with SMTP id gn8-20020a1709070d0800b0072fb107c07amr33953342ejc.340.1662324134398;
+        Sun, 04 Sep 2022 13:42:14 -0700 (PDT)
 Received: from localhost (212.191.202.62.dynamic.cgnat.res.cust.swisscom.ch. [62.202.191.212])
-        by smtp.gmail.com with ESMTPSA id ck7-20020a170906c44700b00722e603c39asm4184344ejb.31.2022.09.04.13.42.08
+        by smtp.gmail.com with ESMTPSA id ay2-20020a056402202200b0044841a78c70sm5215992edb.93.2022.09.04.13.42.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Sep 2022 13:42:09 -0700 (PDT)
+        Sun, 04 Sep 2022 13:42:14 -0700 (PDT)
 From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -55,336 +55,68 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Dave Marchevsky <davemarchevsky@fb.com>,
         Delyan Kratunov <delyank@fb.com>
-Subject: [PATCH RFC bpf-next v1 19/32] bpf: Support bpf_list_head in local kptrs
-Date:   Sun,  4 Sep 2022 22:41:32 +0200
-Message-Id: <20220904204145.3089-20-memxor@gmail.com>
+Subject: [PATCH RFC bpf-next v1 24/32] bpf: Permit NULL checking pointer with non-zero fixed offset
+Date:   Sun,  4 Sep 2022 22:41:37 +0200
+Message-Id: <20220904204145.3089-25-memxor@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220904204145.3089-1-memxor@gmail.com>
 References: <20220904204145.3089-1-memxor@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=11928; i=memxor@gmail.com; h=from:subject; bh=9PYf7F9T68RTcuS7mG+qN7YLBJLhbjeijt1KZkUGumo=; b=owEBbQKS/ZANAwAKAUzgyIZIvxHKAcsmYgBjFQ1xC2sV+kySd9iMfIj5kPNSP2FrUBdbC1mxY8SB MbrPBvqJAjMEAAEKAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCYxUNcQAKCRBM4MiGSL8RyhdHD/ 91LV43ZjNoh5Ga95OJ2Dp1pXmXf/zSGo/QtFvVosytWgLMDNYvxSMzclXs8vZy9/j09NMCu8ldv0rQ 7ViVGz9isaCtjaixWqN9MJvCDTrf2zBDmTMsjTnviJiHoracrLOl4Ea1VeqZhXiN4CwkP62UmXgtVG ZPGZZD7R+JgaiqgXvrcPq5+EaLgl6a38IB8X36TMyGednSiBHze6ceascBwWP5L7Cx2GFMVd6h+fpS FPCXMXwTWVIMgudqzkcbTnz4+AUOiR0i+T1ONqbmkkq3l7KKE/fvzdsoT1z3MLQKXOTOdrIg0azDlD 5w4g08lEl+Ru5LGNTJxYrf+fjo107aVCmXRn1pCbPZALfrfA0W3xZR44OeXpMwRtEb4AV9seNlW2gu QV5QGybqBaod7EYAK5QxkB3+/aCq593nmGIF6cq8fkaTaC+Aune+p4Ek9WZJizhO2IGUDTSbfg0FNo TesO9gZV4VDAlWhObg5fpingPG8xtnwZC1op45Y/qZ4B3TUMzLlDg1ERPa2nFyVx5wApVBgQU3Dwjz /4P4PHrMz7YkzWECTg1eOYn2NJ8sIw+3fAVnUBBgkuM7odZUiqhYyVBclUWyBXYVV9Q9N7eXShaTmg VJFkI5Y/aYuEj3jYE0Qn/KcPJJv6dSVR5gzauTmC6Y8usaBQVvfYJTZeX3nw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2182; i=memxor@gmail.com; h=from:subject; bh=gvumcdChAkhoW8p4ThkpZF/Q8VzLbx5/gPtjyg7rbYc=; b=owEBbQKS/ZANAwAKAUzgyIZIvxHKAcsmYgBjFQ1x7gH8+mLyp3mbyyRHo8aq/7CkE40OCZcXU98T myoXqUCJAjMEAAEKAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCYxUNcQAKCRBM4MiGSL8RyqgAEA Csh3TEEnACtDwIMfQukoRgFwfJCieUKCXDS0EOv0OfvrrLs47ISV1shGhDoJeAp0k0tAxJDF1FWLmd 6PiSBvLF9jDl/CACyOOcJqsOR3MF8iUXNjKb/HhAxPl12nnDTB2YF4pUFyHzC4di5Hk5P3+PVq2ywK +zRDUSMazTwBPeKQfJ1nNomuTNGMUJW7nGteVd0PiujRRb9HW0Soe91TKhnnR80JHlsmvdSGGXG7O2 wMCjvKk4G97MY+7VWvZeXKlssvy3Rvg/fOrne+iMq6PuytRz/2ORMzBMZ+eqJnQCn2577X5wJeEfUD 2xrc4yytpymFWgok3hM0+EyvThmX1qrVtAZ/WXyikfWo730qtAnGGM1IwvGppW7HM7Spj/ZcJLCshU WtVMmd9aTZ5u3sQBmvWgb0s6AbGM98DCg9b2xjYFiliVGvskh0qM/SSvhJqdAquQ9I6vUFPHXgFKWv wuWhNgO+6taM7OHBQGUL/pvtRC6IpB34SuSdERJyhqT4e7KHz7WINKMd5QaoIYwcHNdRHCwrLRSPG8 kVqTBVCoY1Hzm4nWXyQrXWXKkTo3o/QkPduVLSLiVsA7aJBLPDR8PC7IpV0FIDtuz/YMBXCQHhQhdW YKto7mGr0gKVhK6IklhcNmf/0S4nmxR14lra1J2UjRhN4sNoT/KZCcZt1O+Q==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To support map-in-map style use case, allow embedding a bpf_list_head
-inside a allocated kptr representing local type. Now, this is a field
-that will actually need explicit action while destructing the object,
-i.e. popping off all the nodes owned by the bpf_list_head and then
-freeing each one of them. Hence, the destruction state needs tracking
-when we are in the phase, and we also need to reject freeing when the
-embedded list_head is not destructed.
+Pointer increment on seeing PTR_MAYBE_NULL is already protected against,
+hence make an exception for local kptrs while still keeping the warning
+for other unintended cases that might creep in.
 
-For now, needs_destruction is false. Future patch will flip it to true
-once adding items to such list_head is supported.
+bpf_list_pop_{front,back} helpers return a local kptr with incremented
+offset pointing to bpf_list_node field. The user is supposed to then
+obtain the pointer to the entry using container_of after NULL checking
+it. The current restrictions trigger a warning when doing the NULL
+checking. Revisiting the reason, it is meant as an assertion which seems
+to actually work and catch the bad case! Good job verifier!
+
+Hence, under no other circumstances can reg->off be non-zero for a
+register that has the PTR_MAYBE_NULL type flag set.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/btf.h                           |  8 ++
- kernel/bpf/btf.c                              | 89 ++++++++++++++++---
- kernel/bpf/helpers.c                          |  8 ++
- kernel/bpf/verifier.c                         |  4 +
- .../testing/selftests/bpf/bpf_experimental.h  |  9 ++
- 5 files changed, 106 insertions(+), 12 deletions(-)
+ kernel/bpf/verifier.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index d99cad21e6d9..42c7f0283887 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -437,6 +437,8 @@ int btf_local_type_has_bpf_list_node(const struct btf *btf,
- 				     const struct btf_type *t, u32 *offsetp);
- int btf_local_type_has_bpf_spin_lock(const struct btf *btf,
- 				     const struct btf_type *t, u32 *offsetp);
-+int btf_local_type_has_bpf_list_head(const struct btf *btf,
-+				     const struct btf_type *t, u32 *offsetp);
- bool btf_local_type_has_special_fields(const struct btf *btf,
- 				       const struct btf_type *t);
- #else
-@@ -489,6 +491,12 @@ static inline int btf_local_type_has_bpf_spin_lock(const struct btf *btf,
- {
- 	return -ENOENT;
- }
-+static inline int btf_local_type_has_bpf_list_head(const struct btf *btf,
-+					           const struct btf_type *t,
-+					           u32 *offsetp)
-+{
-+	return -ENOENT;
-+}
- static inline bool btf_local_type_has_special_fields(const struct btf *btf,
- 						     const struct btf_type *t)
- {
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 63193c324898..c8d4513cc73e 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -3185,7 +3185,8 @@ enum btf_field_type {
- 	BTF_FIELD_SPIN_LOCK,
- 	BTF_FIELD_TIMER,
- 	BTF_FIELD_KPTR,
--	BTF_FIELD_LIST_HEAD,
-+	BTF_FIELD_LIST_HEAD_MAP,
-+	BTF_FIELD_LIST_HEAD_KPTR,
- 	BTF_FIELD_LIST_NODE,
- };
- 
-@@ -3204,6 +3205,7 @@ struct btf_field_info {
- 		struct {
- 			u32 value_type_id;
- 			const char *node_name;
-+			enum btf_field_type type;
- 		} list_head;
- 	};
- };
-@@ -3282,9 +3284,11 @@ static const char *btf_find_decl_tag_value(const struct btf *btf,
- 	return NULL;
- }
- 
--static int btf_find_list_head(const struct btf *btf, const struct btf_type *pt,
--			      int comp_idx, const struct btf_type *t,
--			      u32 off, int sz, struct btf_field_info *info)
-+static int btf_find_list_head(const struct btf *btf,
-+			      enum btf_field_type field_type,
-+			      const struct btf_type *pt, int comp_idx,
-+			      const struct btf_type *t, u32 off, int sz,
-+			      struct btf_field_info *info)
- {
- 	const char *value_type;
- 	const char *list_node;
-@@ -3316,6 +3320,7 @@ static int btf_find_list_head(const struct btf *btf, const struct btf_type *pt,
- 	info->off = off;
- 	info->list_head.value_type_id = id;
- 	info->list_head.node_name = list_node;
-+	info->list_head.type = field_type;
- 	return BTF_FIELD_FOUND;
- }
- 
-@@ -3361,8 +3366,9 @@ static int btf_find_struct_field(const struct btf *btf, const struct btf_type *t
- 			if (ret < 0)
- 				return ret;
- 			break;
--		case BTF_FIELD_LIST_HEAD:
--			ret = btf_find_list_head(btf, t, i, member_type, off, sz,
-+		case BTF_FIELD_LIST_HEAD_MAP:
-+		case BTF_FIELD_LIST_HEAD_KPTR:
-+			ret = btf_find_list_head(btf, field_type, t, i, member_type, off, sz,
- 						 idx < info_cnt ? &info[idx] : &tmp);
- 			if (ret < 0)
- 				return ret;
-@@ -3420,8 +3426,9 @@ static int btf_find_datasec_var(const struct btf *btf, const struct btf_type *t,
- 			if (ret < 0)
- 				return ret;
- 			break;
--		case BTF_FIELD_LIST_HEAD:
--			ret = btf_find_list_head(btf, var, -1, var_type, off, sz,
-+		case BTF_FIELD_LIST_HEAD_MAP:
-+		case BTF_FIELD_LIST_HEAD_KPTR:
-+			ret = btf_find_list_head(btf, field_type, var, -1, var_type, off, sz,
- 						 idx < info_cnt ? &info[idx] : &tmp);
- 			if (ret < 0)
- 				return ret;
-@@ -3462,7 +3469,8 @@ static int btf_find_field(const struct btf *btf, const struct btf_type *t,
- 		sz = sizeof(u64);
- 		align = 8;
- 		break;
--	case BTF_FIELD_LIST_HEAD:
-+	case BTF_FIELD_LIST_HEAD_MAP:
-+	case BTF_FIELD_LIST_HEAD_KPTR:
- 		name = "bpf_list_head";
- 		sz = sizeof(struct bpf_list_head);
- 		align = __alignof__(struct bpf_list_head);
-@@ -3615,13 +3623,53 @@ struct bpf_map_value_off *btf_parse_kptrs(const struct btf *btf,
- 	return ERR_PTR(ret);
- }
- 
-+static bool list_head_value_ok(const struct btf *btf, const struct btf_type *pt,
-+			       const struct btf_type *vt,
-+			       enum btf_field_type type)
-+{
-+	struct btf_field_info info;
-+	int ret;
-+
-+	/* This is the value type of either map or kptr list_head. For map
-+	 * list_head, we allow the value_type to have another bpf_list_head, but
-+	 * for kptr list_head, we cannot allow another level of list_head.
-+	 *
-+	 * Also, in the map case, we must catch the case where the value_type's
-+	 * list_head encodes the map_value as its own value_type.
-+	 *
-+	 * Essentially, we want only two levels for map, one level for kptr, and
-+	 * no cycles at all in the type graph.
-+	 */
-+	WARN_ON_ONCE(btf_is_kernel(btf) || !__btf_type_is_struct(vt));
-+	ret = btf_find_field(btf, vt, type, "kernel", &info, 1);
-+	if (ret < 0)
-+		return false;
-+	/* For map or kptr, if value doesn't have list_head, it's ok! */
-+	if (!ret)
-+		return true;
-+	if (ret) {
-+		/* For kptr, we don't allow list_head in the value type. */
-+		if (type == BTF_FIELD_LIST_HEAD_KPTR)
-+			return false;
-+		/* The map's list_head's value has another list head. We now
-+		 * need to ensure it doesn't refer to map value type itself,
-+		 * creating a cycle.
-+		 */
-+		vt = btf_type_by_id(btf, info.list_head.value_type_id);
-+		if (vt == pt)
-+			return false;
-+	}
-+	return true;
-+}
-+
- struct bpf_map_value_off *btf_parse_list_heads(struct btf *btf, const struct btf_type *t)
- {
- 	struct btf_field_info info_arr[BPF_MAP_VALUE_OFF_MAX];
- 	struct bpf_map_value_off *tab;
-+	const struct btf_type *pt = t;
- 	int ret, i, nr_off;
- 
--	ret = btf_find_field(btf, t, BTF_FIELD_LIST_HEAD, NULL, info_arr, ARRAY_SIZE(info_arr));
-+	ret = btf_find_field(btf, t, BTF_FIELD_LIST_HEAD_MAP, NULL, info_arr, ARRAY_SIZE(info_arr));
- 	if (ret < 0)
- 		return ERR_PTR(ret);
- 	if (!ret)
-@@ -3644,6 +3692,8 @@ struct bpf_map_value_off *btf_parse_list_heads(struct btf *btf, const struct btf
- 		 * verify its type.
- 		 */
- 		ret = -EINVAL;
-+		if (!list_head_value_ok(btf, pt, t, BTF_FIELD_LIST_HEAD_MAP))
-+			goto end;
- 		for_each_member(j, t, member) {
- 			if (strcmp(info_arr[i].list_head.node_name, __btf_name_by_offset(btf, member->name_off)))
- 				continue;
-@@ -5937,12 +5987,19 @@ static int btf_find_local_type_field(const struct btf *btf,
- 	int ret;
- 
- 	/* These are invariants that must hold if this is a local type */
--	WARN_ON_ONCE(btf_is_kernel(btf) || !__btf_type_is_struct(t));
-+	WARN_ON_ONCE(btf_is_kernel(btf) || !__btf_type_is_struct(t) || type == BTF_FIELD_LIST_HEAD_MAP);
- 	ret = btf_find_field(btf, t, type, "kernel", &info, 1);
- 	if (ret < 0)
- 		return ret;
- 	if (!ret)
- 		return 0;
-+	/* A validation step needs to be done for bpf_list_head in local kptrs */
-+	if (type == BTF_FIELD_LIST_HEAD_KPTR) {
-+		const struct btf_type *vt = btf_type_by_id(btf, info.list_head.value_type_id);
-+
-+		if (!list_head_value_ok(btf, t, vt, type))
-+			return -EINVAL;
-+	}
- 	if (offsetp)
- 		*offsetp = info.off;
- 	return ret;
-@@ -5960,10 +6017,17 @@ int btf_local_type_has_bpf_spin_lock(const struct btf *btf,
- 	return btf_find_local_type_field(btf, t, BTF_FIELD_SPIN_LOCK, offsetp);
- }
- 
-+int btf_local_type_has_bpf_list_head(const struct btf *btf,
-+				     const struct btf_type *t, u32 *offsetp)
-+{
-+	return btf_find_local_type_field(btf, t, BTF_FIELD_LIST_HEAD_KPTR, offsetp);
-+}
-+
- bool btf_local_type_has_special_fields(const struct btf *btf, const struct btf_type *t)
- {
- 	return btf_local_type_has_bpf_list_node(btf, t, NULL) == 1 ||
--	       btf_local_type_has_bpf_spin_lock(btf, t, NULL) == 1;
-+	       btf_local_type_has_bpf_spin_lock(btf, t, NULL) == 1 ||
-+	       btf_local_type_has_bpf_list_head(btf, t, NULL) == 1;
- }
- 
- int btf_struct_access(struct bpf_verifier_log *log, const struct btf *btf,
-@@ -5993,6 +6057,7 @@ int btf_struct_access(struct bpf_verifier_log *log, const struct btf *btf,
- 	}
- 		PREVENT_DIRECT_WRITE(bpf_list_node);
- 		PREVENT_DIRECT_WRITE(bpf_spin_lock);
-+		PREVENT_DIRECT_WRITE(bpf_list_head);
- 
- #undef PREVENT_DIRECT_WRITE
- 		err = 0;
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 94a23a544aee..8eee0793c7f1 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1724,6 +1724,13 @@ void bpf_spin_lock_init(struct bpf_spin_lock *lock__clkptr)
- 	memset(lock__clkptr, 0, sizeof(*lock__clkptr));
- }
- 
-+void bpf_list_head_init(struct bpf_list_head *head__clkptr)
-+{
-+	BUILD_BUG_ON(sizeof(struct bpf_list_head) != sizeof(struct list_head));
-+	BUILD_BUG_ON(__alignof__(struct bpf_list_head) != __alignof__(struct list_head));
-+	INIT_LIST_HEAD((struct list_head *)head__clkptr);
-+}
-+
- __diag_pop();
- 
- BTF_SET8_START(tracing_btf_ids)
-@@ -1733,6 +1740,7 @@ BTF_ID_FLAGS(func, crash_kexec, KF_DESTRUCTIVE)
- BTF_ID_FLAGS(func, bpf_kptr_alloc, KF_ACQUIRE | KF_RET_NULL | __KF_RET_DYN_BTF)
- BTF_ID_FLAGS(func, bpf_list_node_init)
- BTF_ID_FLAGS(func, bpf_spin_lock_init)
-+BTF_ID_FLAGS(func, bpf_list_head_init)
- BTF_SET8_END(tracing_btf_ids)
- 
- static const struct btf_kfunc_id_set tracing_kfunc_set = {
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 130a4f0550f5..a5aa5de4b246 100644
+index dcbeb503c25c..5e0044796671 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -7811,12 +7811,14 @@ BTF_ID_LIST(special_kfuncs)
- BTF_ID(func, bpf_kptr_alloc)
- BTF_ID(func, bpf_list_node_init)
- BTF_ID(func, bpf_spin_lock_init)
-+BTF_ID(func, bpf_list_head_init)
- BTF_ID(struct, btf) /* empty entry */
- 
- enum bpf_special_kfuncs {
- 	KF_SPECIAL_bpf_kptr_alloc,
- 	KF_SPECIAL_bpf_list_node_init,
- 	KF_SPECIAL_bpf_spin_lock_init,
-+	KF_SPECIAL_bpf_list_head_init,
- 	KF_SPECIAL_bpf_empty,
- 	KF_SPECIAL_MAX = KF_SPECIAL_bpf_empty,
- };
-@@ -7984,6 +7986,7 @@ struct local_type_field {
- 	enum {
- 		FIELD_bpf_list_node,
- 		FIELD_bpf_spin_lock,
-+		FIELD_bpf_list_head,
- 		FIELD_MAX,
- 	} type;
- 	enum bpf_special_kfuncs ctor_kfunc;
-@@ -8030,6 +8033,7 @@ static int find_local_type_fields(const struct btf *btf, u32 btf_id, struct loca
- 
- 	FILL_LOCAL_TYPE_FIELD(bpf_list_node, bpf_list_node_init, bpf_empty, false);
- 	FILL_LOCAL_TYPE_FIELD(bpf_spin_lock, bpf_spin_lock_init, bpf_empty, false);
-+	FILL_LOCAL_TYPE_FIELD(bpf_list_head, bpf_list_head_init, bpf_empty, false);
- 
- #undef FILL_LOCAL_TYPE_FIELD
- 
-diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-index 8b1cdfb2f6bc..f0b6e92c6908 100644
---- a/tools/testing/selftests/bpf/bpf_experimental.h
-+++ b/tools/testing/selftests/bpf/bpf_experimental.h
-@@ -50,4 +50,13 @@ void bpf_list_node_init(struct bpf_list_node *node) __ksym;
-  */
- void bpf_spin_lock_init(struct bpf_spin_lock *node) __ksym;
- 
-+/* Description
-+ *	Initialize bpf_list_head field in a local kptr. This kfunc has
-+ *	constructor semantics, and thus can only be called on a local kptr in
-+ *	'constructing' phase.
-+ * Returns
-+ *	Void.
-+ */
-+void bpf_list_head_init(struct bpf_list_head *node) __ksym;
-+
- #endif
+@@ -11173,15 +11173,20 @@ static void mark_ptr_or_null_reg(struct bpf_func_state *state,
+ {
+ 	if (type_may_be_null(reg->type) && reg->id == id &&
+ 	    !WARN_ON_ONCE(!reg->id)) {
+-		if (WARN_ON_ONCE(reg->smin_value || reg->smax_value ||
+-				 !tnum_equals_const(reg->var_off, 0) ||
+-				 reg->off)) {
++		if (reg->smin_value || reg->smax_value || !tnum_equals_const(reg->var_off, 0) || reg->off) {
+ 			/* Old offset (both fixed and variable parts) should
+ 			 * have been known-zero, because we don't allow pointer
+ 			 * arithmetic on pointers that might be NULL. If we
+ 			 * see this happening, don't convert the register.
++			 *
++			 * But in some cases, some helpers that return local
++			 * kptrs advance offset for the returned pointer.
++			 * In those cases, it is fine to expect to see reg->off.
+ 			 */
+-			return;
++			if (WARN_ON_ONCE(reg->type != (PTR_TO_BTF_ID | MEM_TYPE_LOCAL | PTR_MAYBE_NULL)))
++				return;
++			if (WARN_ON_ONCE(reg->smin_value || reg->smax_value || !tnum_equals_const(reg->var_off, 0)))
++				return;
+ 		}
+ 		if (is_null) {
+ 			reg->type = SCALAR_VALUE;
 -- 
 2.34.1
 
