@@ -2,52 +2,52 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FCEDC6FA86
-	for <bpf@archiver.kernel.org>; Sun,  4 Sep 2022 20:41:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E24EDC6FA82
+	for <bpf@archiver.kernel.org>; Sun,  4 Sep 2022 20:41:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbiIDUl6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 4 Sep 2022 16:41:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50136 "EHLO
+        id S234332AbiIDUl5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 4 Sep 2022 16:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234039AbiIDUlz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 4 Sep 2022 16:41:55 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6859F2CDFA
-        for <bpf@vger.kernel.org>; Sun,  4 Sep 2022 13:41:54 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id fc24so4453210ejc.3
-        for <bpf@vger.kernel.org>; Sun, 04 Sep 2022 13:41:54 -0700 (PDT)
+        with ESMTP id S231820AbiIDUlx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 4 Sep 2022 16:41:53 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4F72CDD9
+        for <bpf@vger.kernel.org>; Sun,  4 Sep 2022 13:41:52 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id b16so9039807edd.4
+        for <bpf@vger.kernel.org>; Sun, 04 Sep 2022 13:41:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=41J2Bhw1d2PoLlzpMJcqsDlE2bj/Dbn02avQOpVjma8=;
-        b=haDXrdeZvan9cpncEWCS4nOY+yt78isgG+rJKIuP6MfoUNYFv5wvoaA0g/J1MSbNpM
-         nNwDBBog7yZRnLIrHuwCWnF+NdfwFx9GoeAb44n7h+G0rczSWQdtj+qQKvjSD3WiD0pQ
-         ItzD3hdQZohkJqvqfebtKDcvxRyQ45fT6h3ICGKRECpEfsb/Rb0kH8lnLuO4gA8CG5Py
-         a2pJP2kwIgOly7tf+DPxAGwEArRDJYh8XsRAK/vm+chzv+wFvqns32XyBvK6jH69Lf7y
-         XFiRR1drISls0GMXuX4JMPqbU9UGjLFFoyc4l2eM3xthkePwtpKHDJkxGEi4XV67OkWo
-         anOA==
+        bh=7PDpdrayJx2oEcR06efOUOd3OjU+obEZHf3aU6JRhC4=;
+        b=FM3ZEBbdj83tbIXzENXO/V2YJtjdrX+cjFWotS1OvcvWs29dq3AyFV/+PkJOKreQAe
+         7FgZtqT/+XFX66NIpIUjYC5xlpTfGlJbjDSPIeHPTD9b013L17XIbdSjcYPTvxNHC1e4
+         4fbjLpDOQPk7y923u4uaHs1x6WgGLW25xqD+PhRc6MU00ASM7x8xCvzSFxOmgPF3zhD9
+         YlcYgyP/yyEscRAoWsQfH7b1BI0frtGM0k5Efc15QiTd+HVJwWLeXcaEzPnFVxjxRx3K
+         mY1fvMc/dwHHAruz5iFNny+aHnsSwXcAO1X5BX2GEeyHojBbWPVLNLZJhhwK/Ojy/4v6
+         f6wA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=41J2Bhw1d2PoLlzpMJcqsDlE2bj/Dbn02avQOpVjma8=;
-        b=fzHxyTWR+iXBRO83b7EMfA1tlMqLGL/RtaklPqZgPM0wL/lT15Dz1yIkR5pSUqgV2l
-         tC82W/gTXB7no8Q+TQOUKs29OTdnXw675xWdO4VtpUEhIz2VUwNY3Cqn4LXcRGc5EDjN
-         uHIb2dtJkyOV6SG2QFX1twHXlDyYr0qWz2W7+8/fPUzyCjBD69Gl7yy+IXNlLzv9spRH
-         NnGO5UTg0Gi7KO4O+OYC8iGgNanC6Hf5HlEwhCUq9mourq8fwROKmp1Px5ZLmJ2zaCGD
-         QozMRBkvgLEmWIQHojJHQgT9dADPxexadjYtKduIjmr5epVFIXgZm4IpsOkHR8DgUpmH
-         ChDg==
-X-Gm-Message-State: ACgBeo15FP9Vb9M3UXrVpQ7n/qbMAG/1eXWgpHedGrLzx2DrzoGteZhR
-        8/qU/CMe/ESpvt2vZGBbIkkZBFREEikmOw==
-X-Google-Smtp-Source: AA6agR5/Zzyrx0n5QWQxrqmqHBQYxvnX3WX1bZ+YACR8gvWUD7ePMoc69jIaDM0Dh9PYPFjZ8x7rWw==
-X-Received: by 2002:a17:907:7630:b0:73d:d749:975b with SMTP id jy16-20020a170907763000b0073dd749975bmr32406316ejc.632.1662324112519;
-        Sun, 04 Sep 2022 13:41:52 -0700 (PDT)
+        bh=7PDpdrayJx2oEcR06efOUOd3OjU+obEZHf3aU6JRhC4=;
+        b=x7YU1UxJ/65E2ttIcen24Qx87yKL6TS+IO2Ma7lqEif6HUBrZcItsgZvr1IBSu1mGL
+         GSQZq1fRojAC8L1CfGdES4zn6XKBq4oouOsfyEG2FB0q2Me44SVH49jm+GM0EaTfJ7v4
+         PZ5G/+VttiGq7YXKJu9mwntPdSXakoBcXPuZKgLEalxWwoqWynDHjv3hqDTAP/cLtOr4
+         IKgGtOfVCYEnsJnA15UyC6DA40toiVtau3Y+IFcVZKlTpHnFdOoh6JpD0nN+ZHrcUxoH
+         c6GSYx5GFK3QGawlL3PRuCU8lFKGwK+vrdGIHprtwCmJ9TOo3AuVjP2DcR4Z0WQq8hJ5
+         FP3A==
+X-Gm-Message-State: ACgBeo03qhKwl8wTJB1gJqJTA4/9J691luFNnyCaphxeDzE7/Nxip9ON
+        a+F26PBceTGxmD/fhE5Tjr1NMekxv8OHlA==
+X-Google-Smtp-Source: AA6agR6j7BjlYIutf7gUQrs/mZeDhtQb4iGNQel25eY3uZzK4zCu8UPXe4VGhjH3JfqcuNKdOeH7ow==
+X-Received: by 2002:a05:6402:1911:b0:448:da24:5f23 with SMTP id e17-20020a056402191100b00448da245f23mr22967451edz.61.1662324110467;
+        Sun, 04 Sep 2022 13:41:50 -0700 (PDT)
 Received: from localhost (212.191.202.62.dynamic.cgnat.res.cust.swisscom.ch. [62.202.191.212])
-        by smtp.gmail.com with ESMTPSA id 10-20020a170906300a00b00738795e7d9bsm4112207ejz.2.2022.09.04.13.41.51
+        by smtp.gmail.com with ESMTPSA id r21-20020aa7d595000000b0043cc2c9f5adsm1189654edq.40.2022.09.04.13.41.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Sep 2022 13:41:52 -0700 (PDT)
+        Sun, 04 Sep 2022 13:41:50 -0700 (PDT)
 From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -55,63 +55,119 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Dave Marchevsky <davemarchevsky@fb.com>,
         Delyan Kratunov <delyank@fb.com>
-Subject: [PATCH RFC bpf-next v1 03/32] bpf: Add zero_map_value to zero map value with special fields
-Date:   Sun,  4 Sep 2022 22:41:16 +0200
-Message-Id: <20220904204145.3089-4-memxor@gmail.com>
+Subject: [PATCH RFC bpf-next v1 01/32] bpf: Add copy_map_value_long to copy to remote percpu memory
+Date:   Sun,  4 Sep 2022 22:41:14 +0200
+Message-Id: <20220904204145.3089-2-memxor@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220904204145.3089-1-memxor@gmail.com>
 References: <20220904204145.3089-1-memxor@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1395; i=memxor@gmail.com; h=from:subject; bh=8lYhH7/GyJKxztZBQ6V4l3x0d0yaWHKbPgjXFxfuGnU=; b=owEBbQKS/ZANAwAKAUzgyIZIvxHKAcsmYgBjFQ1vfCz/ukTyxbJ8L7URi/5WRmIySkZcSGwjquvT zWapmlOJAjMEAAEKAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCYxUNbwAKCRBM4MiGSL8RyqgVD/ 9vRXcgd0OxJWz7kFg2bEvjmnYJdDMPgo4Xa1LYH7orLq3lZYhoI7CieeyOLCSvaJLNCsCsklJMgEj1 dDjVhPZ0chaepuOXHngsGQ3dZWBw+m93WyLMECV3arzj+iyC6piPLisHfPdAfAd7nckYzLagMNyAXV CI/C6Iy8W4m+9pJf6GjWLQ2wTdH0g7biYY5CQkVW+TsrlEPwUpul0ofEvTOS0smVxZsHEcpN3WV8b8 pteFlcOGbNpO0Ebz0Ly5qFyjxFK5JR+ngRtZv+K+bkGDTHUV67QK2DpaNMryQBfBMJbppjZRYu38lW kuwMG6/JIi2vD27BQ2DCZhq+qA3MeATFk52KfstP5FV/iEk2appfwXXUbdW//WdJBozivCBqedu5nS 6Vw0Jktb7Ez17/dcEcGfLpjHpsVis7OI69r57/jbzBrIjNatbOxV2fsJW0LWU59qD7JQzN2LOElA/3 AF1K6GazXwW3gRO1RG32ckNr/xmM7tEuGszQVqpwyXpzcgh/jiRroCMUU9bjDCDU3M9Zf0GCxqjTaP Gi6/1iZOuQ5Qu3kZ0YKqdRrxRDhckeUp1yr2k3eTyHFDB8rMt/dkGR7jMh1WKr8HyneRX6iJhEuggC P71yZ1GDv2Eylox+IEIA7mkL64TxLj0BMmezsZW/InGcxC/tutUP4D5/62iA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3611; i=memxor@gmail.com; h=from:subject; bh=RjvE7zUDoVrmzzdPuabNNVkyhbnnkYHyX7xfQbvclBY=; b=owEBbQKS/ZANAwAKAUzgyIZIvxHKAcsmYgBjFQ1vnTIiv0Q1ZMOdg1PVmguvOSjjBmWiVuEeU3/3 ANQkReiJAjMEAAEKAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCYxUNbwAKCRBM4MiGSL8RyhpyD/ 9pYCkWFVDI8/EZdd65pn+aTt38VjYXtxekYDqMvd/U3UGZa4urMXJQ1K05hc2CTncYTx2Pjfo+Mc2z fOokPb0p43eyGPH0XZOYFz6Xgs69vxilo3SYS57lF8GYwCUscJmidk1Mk5OclJ8h13P3yFLnVMhz3Z PoBqQAqBPTY7rv5yJhtKpncXDyaBbNWjnkcPsDkbYFaBjwpGS9QjBbiU2GPrhiB2dH3U8GWA7je4kC 3XoJDQCdX4ksM+rTuJY7KsCpeIjh38XSPYkCFo5n9qquTJGvKaFmv+3WbW12Zj7KfN8vNlr7No178j 95Dx07N+FtZBDY/eGhBfMgfJrE9mqXTD8fWwkuplGEeoKgdW/yi2b4qiR+YfZzpKgjICK/VzKAg0kf GX3wwnqLI/yozu2QnD1njlqZd/QZsSWdyS/PTJv5+Mex8+bkCIsYoJNW9hCmDXLCF2+WhbNQwoj7Eh BKELnu8R3pLQ1ta/ObnOUFUEJfV2x/tlr/nfXV+YCJUPppM+ur6jHKXbDn/1XZfw9GK40HXnSTjc0/ k+66z4bNSi37UP3GjUUESLkS2kx/7Q7phovt6T39kpqbksyd4TEOLO1MeJ8JbWg8xJTDBLXduG0EOx A0mixPzaDWj2m2lO2aCMmsELCKHIrS+fPo79uaqpsBudIabg42s5WiwoEUTQ==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We need this helper to skip over special fields (bpf_spin_lock,
-bpf_timer, kptrs) while zeroing a map value. Use the same logic as
-copy_map_value but memset instead of memcpy.
+bpf_long_memcpy is used while copying to remote percpu regions from BPF
+syscall and helpers, so that the copy is atomic at word size
+granularity.
 
-Currently, the code zeroing map value memory does not have to deal with
-special fields, hence this is a prerequisite for introducing such
-support.
+This might not be possible when you copy from map value hosting kptrs
+from or to percpu maps, as the alignment or size in disjoint regions may
+not be multiple of word size.
+
+Hence, to avoid complicating the copy loop, we only use bpf_long_memcpy
+when special fields are not present, otherwise use normal memcpy to copy
+the disjoint regions.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf.h | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ include/linux/bpf.h | 52 ++++++++++++++++++++++++++++-----------------
+ 1 file changed, 33 insertions(+), 19 deletions(-)
 
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index a6a0c0025b46..cdc0a8c1b1d1 100644
+index 9c1674973e03..a6a0c0025b46 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -329,6 +329,25 @@ static inline void copy_map_value_long(struct bpf_map *map, void *dst, void *src
- 	__copy_map_value(map, dst, src, true);
+@@ -280,14 +280,33 @@ static inline void check_and_init_map_value(struct bpf_map *map, void *dst)
+ 	}
  }
  
-+static inline void zero_map_value(struct bpf_map *map, void *dst)
+-/* copy everything but bpf_spin_lock and bpf_timer. There could be one of each. */
+-static inline void copy_map_value(struct bpf_map *map, void *dst, void *src)
++/* memcpy that is used with 8-byte aligned pointers, power-of-8 size and
++ * forced to use 'long' read/writes to try to atomically copy long counters.
++ * Best-effort only.  No barriers here, since it _will_ race with concurrent
++ * updates from BPF programs. Called from bpf syscall and mostly used with
++ * size 8 or 16 bytes, so ask compiler to inline it.
++ */
++static inline void bpf_long_memcpy(void *dst, const void *src, u32 size)
 +{
-+	u32 curr_off = 0;
-+	int i;
++	const long *lsrc = src;
++	long *ldst = dst;
 +
-+	if (likely(!map->off_arr)) {
-+		memset(dst, 0, map->value_size);
-+		return;
-+	}
++	size /= sizeof(long);
++	while (size--)
++		*ldst++ = *lsrc++;
++}
 +
-+	for (i = 0; i < map->off_arr->cnt; i++) {
-+		u32 next_off = map->off_arr->field_off[i];
++/* copy everything but bpf_spin_lock, bpf_timer, and kptrs. There could be one of each. */
++static inline void __copy_map_value(struct bpf_map *map, void *dst, void *src, bool long_memcpy)
+ {
+ 	u32 curr_off = 0;
+ 	int i;
+ 
+ 	if (likely(!map->off_arr)) {
+-		memcpy(dst, src, map->value_size);
++		if (long_memcpy)
++			bpf_long_memcpy(dst, src, round_up(map->value_size, 8));
++		else
++			memcpy(dst, src, map->value_size);
+ 		return;
+ 	}
+ 
+@@ -299,6 +318,17 @@ static inline void copy_map_value(struct bpf_map *map, void *dst, void *src)
+ 	}
+ 	memcpy(dst + curr_off, src + curr_off, map->value_size - curr_off);
+ }
 +
-+		memset(dst + curr_off, 0, next_off - curr_off);
-+		curr_off += map->off_arr->field_sz[i];
-+	}
-+	memset(dst + curr_off, 0, map->value_size - curr_off);
++static inline void copy_map_value(struct bpf_map *map, void *dst, void *src)
++{
++	__copy_map_value(map, dst, src, false);
++}
++
++static inline void copy_map_value_long(struct bpf_map *map, void *dst, void *src)
++{
++	__copy_map_value(map, dst, src, true);
 +}
 +
  void copy_map_value_locked(struct bpf_map *map, void *dst, void *src,
  			   bool lock_src);
  void bpf_timer_cancel_and_free(void *timer);
+@@ -1823,22 +1853,6 @@ int bpf_get_file_flag(int flags);
+ int bpf_check_uarg_tail_zero(bpfptr_t uaddr, size_t expected_size,
+ 			     size_t actual_size);
+ 
+-/* memcpy that is used with 8-byte aligned pointers, power-of-8 size and
+- * forced to use 'long' read/writes to try to atomically copy long counters.
+- * Best-effort only.  No barriers here, since it _will_ race with concurrent
+- * updates from BPF programs. Called from bpf syscall and mostly used with
+- * size 8 or 16 bytes, so ask compiler to inline it.
+- */
+-static inline void bpf_long_memcpy(void *dst, const void *src, u32 size)
+-{
+-	const long *lsrc = src;
+-	long *ldst = dst;
+-
+-	size /= sizeof(long);
+-	while (size--)
+-		*ldst++ = *lsrc++;
+-}
+-
+ /* verify correctness of eBPF program */
+ int bpf_check(struct bpf_prog **fp, union bpf_attr *attr, bpfptr_t uattr);
+ 
 -- 
 2.34.1
 
