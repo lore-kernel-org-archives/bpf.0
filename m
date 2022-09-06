@@ -2,25 +2,25 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3646ECAAA1
-	for <bpf@archiver.kernel.org>; Tue,  6 Sep 2022 12:13:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06C53C6FA86
+	for <bpf@archiver.kernel.org>; Tue,  6 Sep 2022 12:13:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239724AbiIFMNX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 6 Sep 2022 08:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47070 "EHLO
+        id S239759AbiIFMNZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 6 Sep 2022 08:13:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239718AbiIFMMj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 6 Sep 2022 08:12:39 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62CE979A7F;
-        Tue,  6 Sep 2022 05:11:55 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MMPM363c5znV26;
-        Tue,  6 Sep 2022 20:09:19 +0800 (CST)
+        with ESMTP id S239731AbiIFMMk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 6 Sep 2022 08:12:40 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D8A79EDA;
+        Tue,  6 Sep 2022 05:11:56 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MMPKx1CCPzmVFb;
+        Tue,  6 Sep 2022 20:08:21 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
  (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 6 Sep
- 2022 20:11:52 +0800
+ 2022 20:11:53 +0800
 From:   Zhengchao Shao <shaozhengchao@huawei.com>
 To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <bpf@vger.kernel.org>, <davem@davemloft.net>,
@@ -32,9 +32,9 @@ CC:     <daniel@iogearbox.net>, <john.fastabend@gmail.com>,
         <yhs@fb.com>, <kpsingh@kernel.org>, <sdf@google.com>,
         <haoluo@google.com>, <jolsa@kernel.org>, <weiyongjun1@huawei.com>,
         <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH net-next,v2 15/22] net: sched: act_pedit: get rid of tcf_pedit_walker and tcf_pedit_search
-Date:   Tue, 6 Sep 2022 20:13:39 +0800
-Message-ID: <20220906121346.71578-16-shaozhengchao@huawei.com>
+Subject: [PATCH net-next,v2 17/22] net: sched: act_sample: get rid of tcf_sample_walker and tcf_sample_search
+Date:   Tue, 6 Sep 2022 20:13:41 +0800
+Message-ID: <20220906121346.71578-18-shaozhengchao@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220906121346.71578-1-shaozhengchao@huawei.com>
 References: <20220906121346.71578-1-shaozhengchao@huawei.com>
@@ -48,51 +48,51 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-tcf_pedit_walker() and tcf_pedit_search() do the same thing as generic
+tcf_sample_walker() and tcf_sample_search() do the same thing as generic
 walk/search function, so remove them.
 
 Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 ---
- net/sched/act_pedit.c | 19 -------------------
+ net/sched/act_sample.c | 19 -------------------
  1 file changed, 19 deletions(-)
 
-diff --git a/net/sched/act_pedit.c b/net/sched/act_pedit.c
-index 0951cd1e277e..94ed5857ce67 100644
---- a/net/sched/act_pedit.c
-+++ b/net/sched/act_pedit.c
-@@ -491,23 +491,6 @@ static int tcf_pedit_dump(struct sk_buff *skb, struct tc_action *a,
+diff --git a/net/sched/act_sample.c b/net/sched/act_sample.c
+index c25a193f9ef4..5ba36f70e3a1 100644
+--- a/net/sched/act_sample.c
++++ b/net/sched/act_sample.c
+@@ -240,23 +240,6 @@ static int tcf_sample_dump(struct sk_buff *skb, struct tc_action *a,
  	return -1;
  }
  
--static int tcf_pedit_walker(struct net *net, struct sk_buff *skb,
--			    struct netlink_callback *cb, int type,
--			    const struct tc_action_ops *ops,
--			    struct netlink_ext_ack *extack)
+-static int tcf_sample_walker(struct net *net, struct sk_buff *skb,
+-			     struct netlink_callback *cb, int type,
+-			     const struct tc_action_ops *ops,
+-			     struct netlink_ext_ack *extack)
 -{
--	struct tc_action_net *tn = net_generic(net, act_pedit_ops.net_id);
+-	struct tc_action_net *tn = net_generic(net, act_sample_ops.net_id);
 -
 -	return tcf_generic_walker(tn, skb, cb, type, ops, extack);
 -}
 -
--static int tcf_pedit_search(struct net *net, struct tc_action **a, u32 index)
+-static int tcf_sample_search(struct net *net, struct tc_action **a, u32 index)
 -{
--	struct tc_action_net *tn = net_generic(net, act_pedit_ops.net_id);
+-	struct tc_action_net *tn = net_generic(net, act_sample_ops.net_id);
 -
 -	return tcf_idr_search(tn, a, index);
 -}
 -
- static int tcf_pedit_offload_act_setup(struct tc_action *act, void *entry_data,
- 				       u32 *index_inc, bool bind,
- 				       struct netlink_ext_ack *extack)
-@@ -552,8 +535,6 @@ static struct tc_action_ops act_pedit_ops = {
- 	.dump		=	tcf_pedit_dump,
- 	.cleanup	=	tcf_pedit_cleanup,
- 	.init		=	tcf_pedit_init,
--	.walk		=	tcf_pedit_walker,
--	.lookup		=	tcf_pedit_search,
- 	.offload_act_setup =	tcf_pedit_offload_act_setup,
- 	.size		=	sizeof(struct tcf_pedit),
- };
+ static void tcf_psample_group_put(void *priv)
+ {
+ 	struct psample_group *group = priv;
+@@ -320,8 +303,6 @@ static struct tc_action_ops act_sample_ops = {
+ 	.dump	  = tcf_sample_dump,
+ 	.init	  = tcf_sample_init,
+ 	.cleanup  = tcf_sample_cleanup,
+-	.walk	  = tcf_sample_walker,
+-	.lookup	  = tcf_sample_search,
+ 	.get_psample_group = tcf_sample_get_group,
+ 	.offload_act_setup    = tcf_sample_offload_act_setup,
+ 	.size	  = sizeof(struct tcf_sample),
 -- 
 2.17.1
 
