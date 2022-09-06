@@ -2,29 +2,29 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E34ECC38145
-	for <bpf@archiver.kernel.org>; Tue,  6 Sep 2022 20:05:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A741EC6FA89
+	for <bpf@archiver.kernel.org>; Tue,  6 Sep 2022 20:10:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231250AbiIFUFz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 6 Sep 2022 16:05:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44220 "EHLO
+        id S231262AbiIFUKi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 6 Sep 2022 16:10:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231166AbiIFUFf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 6 Sep 2022 16:05:35 -0400
+        with ESMTP id S230087AbiIFUKP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 6 Sep 2022 16:10:15 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 71F82BD296;
-        Tue,  6 Sep 2022 13:01:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35E3DBC80F;
+        Tue,  6 Sep 2022 13:05:14 -0700 (PDT)
 Received: from pwmachine.numericable.fr (85-170-34-72.rev.numericable.fr [85.170.34.72])
-        by linux.microsoft.com (Postfix) with ESMTPSA id A4272204A0FA;
-        Tue,  6 Sep 2022 12:59:13 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A4272204A0FA
+        by linux.microsoft.com (Postfix) with ESMTPSA id C7ACA20B929C;
+        Tue,  6 Sep 2022 12:58:21 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C7ACA20B929C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1662494358;
-        bh=nWaEkFlsTxoT2qCkLeEAAJWZstzNd2OmaAn1xDktTx8=;
+        s=default; t=1662494306;
+        bh=Y3tZA2UfXIUdO651eZpQHa6bop0UrWXdjXGmdZD7XUw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fXuGmpIIuRaK5ubeN/epmC7TP0PdLKlpXY6ps9ZJc116zqiws8ot0O0RNd5tCNba3
-         nTYBgwtzJqVdSySys+DMBGlf7Ye4e0bvbxvoIvh34iROJgnSn0hI8Xs6QI1KFL697Q
-         I/d/d2hdG5YcMHwma37GhE4IYAs24Y5qdcdCgrAY=
+        b=I0ImiMk2OSzmHAF9EcIea/Iv6FlA7LB/hWbPy9LpmWBxA/OWCrauZk3R6t9VWJC0j
+         3itEgHNH7uQHYpyP7WU01yZH1+GyGnywJA1qfj5ePpesxIZc6DIPD0paS1A2iERyfe
+         wJx8sQQLjg4QvCTa3T51mNdXaCtjSca+V+FF1wrE=
 From:   Francis Laniel <flaniel@linux.microsoft.com>
 To:     bpf@vger.kernel.org
 Cc:     Francis Laniel <flaniel@linux.microsoft.com>,
@@ -47,9 +47,9 @@ Cc:     Francis Laniel <flaniel@linux.microsoft.com>,
         "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH v2 4/5] libbpf: Add implementation to consume overwritable BPF ring buffer.
-Date:   Tue,  6 Sep 2022 21:56:45 +0200
-Message-Id: <20220906195656.33021-5-flaniel@linux.microsoft.com>
+Subject: [RFC PATCH v2 1/5] bpf: Make ring buffer overwritable.
+Date:   Tue,  6 Sep 2022 21:56:42 +0200
+Message-Id: <20220906195656.33021-2-flaniel@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220906195656.33021-1-flaniel@linux.microsoft.com>
 References: <20220906195656.33021-1-flaniel@linux.microsoft.com>
@@ -59,179 +59,148 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-If the BPF ring buffer is overwritable, ringbuf_process_overwritable_ring() will
-be called to handle the data consumption.
-All the available data will be consumed but some checks will be performed:
-* check we do not read data we already read, if there is no new data, nothing
-happens.
-* check we do not read more than the buffer size.
-* check we do not read invalid data by checking they fit the buffer size.
+By default, BPF ring buffer are size bounded, when producers already filled the
+buffer, they need to wait for the consumer to get those data before adding new
+ones.
+In terms of API, bpf_ringbuf_reserve() returns NULL if the buffer is full.
+
+This patch permits making BPF ring buffer overwritable.
+When producers already wrote as many data as the buffer size, they will begin to
+over write existing data, so the oldest will be replaced.
+As a result, bpf_ringbuf_reserve() never returns NULL.
+
+To avoid memory consumption, this patch writes data backward like overwritable
+perf ring buffer added in
+commit 9ecda41acb97 ("perf/core: Add ::write_backward attribute to perf event").
 
 Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
 ---
- tools/include/uapi/linux/bpf.h |   3 +
- tools/lib/bpf/ringbuf.c        | 106 +++++++++++++++++++++++++++++++++
- 2 files changed, 109 insertions(+)
+ include/uapi/linux/bpf.h |  3 +++
+ kernel/bpf/ringbuf.c     | 43 ++++++++++++++++++++++++++++++----------
+ 2 files changed, 36 insertions(+), 10 deletions(-)
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 59a217ca2dfd..cd73a89e8ead 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 59a217ca2dfd..c87a667649ab 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
 @@ -1227,6 +1227,9 @@ enum {
  
  /* Create a map that is suitable to be an inner map with dynamic max entries */
  	BPF_F_INNER_MAP		= (1U << 12),
 +
-+/* Create an over writable BPF_RINGBUF */
++/* Create an overwritable BPF_RINGBUF */
 +	BFP_F_RB_OVERWRITABLE	= (1U << 13),
  };
  
  /* Flags for BPF_PROG_QUERY. */
-diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
-index 8bc117bcc7bc..2362a6280fc5 100644
---- a/tools/lib/bpf/ringbuf.c
-+++ b/tools/lib/bpf/ringbuf.c
-@@ -23,6 +23,8 @@
+diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
+index ded4faeca192..369c61cfe8aa 100644
+--- a/kernel/bpf/ringbuf.c
++++ b/kernel/bpf/ringbuf.c
+@@ -12,7 +12,7 @@
+ #include <uapi/linux/btf.h>
+ #include <linux/btf_ids.h>
  
- struct ring {
- 	ring_buffer_sample_fn sample_cb;
+-#define RINGBUF_CREATE_FLAG_MASK (BPF_F_NUMA_NODE)
++#define RINGBUF_CREATE_FLAG_MASK (BPF_F_NUMA_NODE | BFP_F_RB_OVERWRITABLE)
+ 
+ /* non-mmap()'able part of bpf_ringbuf (everything up to consumer page) */
+ #define RINGBUF_PGOFF \
+@@ -37,6 +37,8 @@ struct bpf_ringbuf {
+ 	u64 mask;
+ 	struct page **pages;
+ 	int nr_pages;
 +	__u8 overwritable: 1,
-+	     __reserved:   7;
- 	void *ctx;
- 	void *data;
- 	unsigned long *consumer_pos;
-@@ -51,6 +53,11 @@ static void ringbuf_unmap_ring(struct ring_buffer *rb, struct ring *r)
- 	}
++	     __reserved:    7;
+ 	spinlock_t spinlock ____cacheline_aligned_in_smp;
+ 	/* Consumer and producer counters are put into separate pages to allow
+ 	 * mapping consumer page as r/w, but restrict producer page to r/o.
+@@ -127,7 +129,12 @@ static void bpf_ringbuf_notify(struct irq_work *work)
+ 	wake_up_all(&rb->waitq);
  }
  
-+static inline bool is_overwritable(struct ring *r)
+-static struct bpf_ringbuf *bpf_ringbuf_alloc(size_t data_sz, int numa_node)
++static inline bool is_overwritable(struct bpf_ringbuf *rb)
 +{
-+	return !!r->overwritable;
++	return !!rb->overwritable;
 +}
 +
- /* Add extra RINGBUF maps to this ring buffer manager */
- int ring_buffer__add(struct ring_buffer *rb, int map_fd,
- 		     ring_buffer_sample_fn sample_cb, void *ctx)
-@@ -95,6 +102,7 @@ int ring_buffer__add(struct ring_buffer *rb, int map_fd,
- 	r->sample_cb = sample_cb;
- 	r->ctx = ctx;
- 	r->mask = info.max_entries - 1;
-+	r->overwritable = !!(info.map_flags & BFP_F_RB_OVERWRITABLE);
- 
- 	/* Map writable consumer page */
- 	tmp = mmap(NULL, rb->page_size, PROT_READ | PROT_WRITE, MAP_SHARED,
-@@ -202,6 +210,101 @@ static inline int roundup_len(__u32 len)
- 	return (len + 7) / 8 * 8;
- }
- 
-+
-+static int64_t ringbuf_process_overwritable_ring(struct ring *r)
-+{
-+	/* 64-bit to avoid overflow in case of extreme application behavior */
-+	int64_t cnt = 0;
-+	unsigned long read_pos, prod_pos, previous_prod_pos;
-+
-+	prod_pos = smp_load_acquire(r->producer_pos);
-+	previous_prod_pos = smp_load_acquire(r->consumer_pos);
-+
-+	/*
-+	 * For overwritable ring buffer, we use consumer_pos as the previous
-+	 * producer_pos.
-+	 * So, if between two calls to this function, the prod_pos did not move,
-+	 * it means there is no new data, so we can return right now rather than
-+	 * dealing with data we already proceeded.
-+	 * NOTE the kernel space does not care about consumer_pos to reserve()
-+	 * in overwritable ring buffers, hence we can hijack this field.
-+	 */
-+	if (previous_prod_pos == prod_pos)
-+		return 0;
-+
-+	/*
-+	 * BPF ring buffer is over writable, we start reading from
-+	 * producer position.
-+	 */
-+	read_pos = prod_pos;
-+	while (read_pos - prod_pos < r->mask) {
-+		int *len_ptr, len;
-+
-+		len_ptr = r->data + (read_pos & r->mask);
-+		len = smp_load_acquire(len_ptr);
-+
-+		/* sample not committed yet, bail out for now */
-+		if (len & BPF_RINGBUF_BUSY_BIT)
-+			break;
-+
-+		/*
-+		 * If len is 0, it means we read all the data
-+		 * available in the buffer and jump on 0 data:
-+		 *
-+		 * prod_pos                         read_pos
-+		 *     |                                |
-+		 *     V                                V
-+		 * +---+------+----------+-------+------+
-+		 * |   |D....D|C........C|B.....B|A....A|
-+		 * +---+------+----------+-------+------+
-+		 */
-+		if (!len)
-+			break;
-+
-+		/*
-+		 * If adding the event len to the current
-+		 * consumer position makes us wrap the buffer,
-+		 * it means we already did "one loop" around the
-+		 * buffer.
-+		 * So, the pointed data would not be usable:
-+		 *
-+		 *                               prod_pos
-+		 *                   read_pos----+   |
-+		 *                               |   |
-+		 *                               V   V
-+		 * +---+------+----------+-------+---+--+
-+		 * |..E|D....D|C........C|B.....B|A..|E.|
-+		 * +---+------+----------+-------+---+--+
-+		 */
-+		if (read_pos - prod_pos + len > r->mask)
-+			break;
-+
-+		read_pos += roundup_len(len);
-+
-+		if ((len & BPF_RINGBUF_DISCARD_BIT) == 0) {
-+			void *sample;
-+			int err;
-+
-+			sample = (void *)len_ptr + BPF_RINGBUF_HDR_SZ;
-+			err = r->sample_cb(r->ctx, sample, len);
-+			if (err < 0) {
-+				/* update consumer pos and bail out */
-+				smp_store_release(r->consumer_pos,
-+						  prod_pos);
-+				return err;
-+			}
-+			cnt++;
-+		}
-+
-+		/* This prevents reading data we already processed. */
-+		if (previous_prod_pos && read_pos >= previous_prod_pos)
-+			break;
-+	}
-+
-+	smp_store_release(r->consumer_pos, prod_pos);
-+	return cnt;
-+}
-+
- static int64_t ringbuf_process_ring(struct ring* r)
++static struct bpf_ringbuf *bpf_ringbuf_alloc(size_t data_sz, int numa_node, __u32 flags)
  {
- 	int *len_ptr, len, err;
-@@ -211,6 +314,9 @@ static int64_t ringbuf_process_ring(struct ring* r)
- 	bool got_new_data;
- 	void *sample;
+ 	struct bpf_ringbuf *rb;
  
-+	if (is_overwritable(r))
-+		return ringbuf_process_overwritable_ring(r);
+@@ -142,6 +149,7 @@ static struct bpf_ringbuf *bpf_ringbuf_alloc(size_t data_sz, int numa_node)
+ 	rb->mask = data_sz - 1;
+ 	rb->consumer_pos = 0;
+ 	rb->producer_pos = 0;
++	rb->overwritable = !!(flags & BFP_F_RB_OVERWRITABLE);
+ 
+ 	return rb;
+ }
+@@ -170,7 +178,7 @@ static struct bpf_map *ringbuf_map_alloc(union bpf_attr *attr)
+ 
+ 	bpf_map_init_from_attr(&rb_map->map, attr);
+ 
+-	rb_map->rb = bpf_ringbuf_alloc(attr->max_entries, rb_map->map.numa_node);
++	rb_map->rb = bpf_ringbuf_alloc(attr->max_entries, rb_map->map.numa_node, attr->map_flags);
+ 	if (!rb_map->rb) {
+ 		kfree(rb_map);
+ 		return ERR_PTR(-ENOMEM);
+@@ -248,6 +256,7 @@ static unsigned long ringbuf_avail_data_sz(struct bpf_ringbuf *rb)
+ 
+ 	cons_pos = smp_load_acquire(&rb->consumer_pos);
+ 	prod_pos = smp_load_acquire(&rb->producer_pos);
 +
- 	cons_pos = smp_load_acquire(r->consumer_pos);
- 	do {
- 		got_new_data = false;
+ 	return prod_pos - cons_pos;
+ }
+ 
+@@ -325,14 +334,24 @@ static void *__bpf_ringbuf_reserve(struct bpf_ringbuf *rb, u64 size)
+ 	}
+ 
+ 	prod_pos = rb->producer_pos;
+-	new_prod_pos = prod_pos + len;
+ 
+-	/* check for out of ringbuf space by ensuring producer position
+-	 * doesn't advance more than (ringbuf_size - 1) ahead
+-	 */
+-	if (new_prod_pos - cons_pos > rb->mask) {
+-		spin_unlock_irqrestore(&rb->spinlock, flags);
+-		return NULL;
++	if (!is_overwritable(rb)) {
++		new_prod_pos = prod_pos + len;
++
++		/* check for out of ringbuf space by ensuring producer position
++		 * doesn't advance more than (ringbuf_size - 1) ahead
++		 */
++		if (new_prod_pos - cons_pos > rb->mask) {
++			spin_unlock_irqrestore(&rb->spinlock, flags);
++			return NULL;
++		}
++	} else {
++		/*
++		 * With overwritable ring buffer we go from the end toward the
++		 * beginning.
++		 */
++		prod_pos -= len;
++		new_prod_pos = prod_pos;
+ 	}
+ 
+ 	hdr = (void *)rb->data + (prod_pos & rb->mask);
+@@ -457,10 +476,14 @@ BPF_CALL_2(bpf_ringbuf_query, struct bpf_map *, map, u64, flags)
+ 
+ 	switch (flags) {
+ 	case BPF_RB_AVAIL_DATA:
++		if (is_overwritable(rb))
++			return -EINVAL;
+ 		return ringbuf_avail_data_sz(rb);
+ 	case BPF_RB_RING_SIZE:
+ 		return rb->mask + 1;
+ 	case BPF_RB_CONS_POS:
++		if (is_overwritable(rb))
++			return -EINVAL;
+ 		return smp_load_acquire(&rb->consumer_pos);
+ 	case BPF_RB_PROD_POS:
+ 		return smp_load_acquire(&rb->producer_pos);
 -- 
 2.25.1
 
