@@ -2,52 +2,52 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D09A4ECAAA1
-	for <bpf@archiver.kernel.org>; Tue,  6 Sep 2022 13:44:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6856CC6FA86
+	for <bpf@archiver.kernel.org>; Tue,  6 Sep 2022 13:44:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233523AbiIFNox (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S233553AbiIFNox (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 6 Sep 2022 09:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53192 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239371AbiIFNny (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:43:54 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35BB186C1
-        for <bpf@vger.kernel.org>; Tue,  6 Sep 2022 06:38:23 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id e20so15465568wri.13
-        for <bpf@vger.kernel.org>; Tue, 06 Sep 2022 06:38:23 -0700 (PDT)
+        with ESMTP id S238206AbiIFNnZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 6 Sep 2022 09:43:25 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9817E836
+        for <bpf@vger.kernel.org>; Tue,  6 Sep 2022 06:37:55 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id bj14so2232182wrb.12
+        for <bpf@vger.kernel.org>; Tue, 06 Sep 2022 06:37:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=isovalent-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=LI8DCiu6TjIj4OulZQ/ctoBXW72bGsaE1sE9uyzbXoM=;
-        b=Lj2hEeMm1oMmAa2X2cMg/JtZ1Ze8KzNCbIq+EF+wrvE9Yy2fE0c3dBEDY6Wltez/Zc
-         zUNXQaXp3tii5Zv+YHQk8ztdWiMZ08+xOp5DEGkgXZ895Db3ogzeYtnu8KuVXQd4EeCO
-         QE4nbojmSHAp6+p3PLFnQlQIYqIorvwCjt+IyWK6CkOO17GnGyXQLF5AhYFAOzPMZb9o
-         ZWaa++po6FwuFeLlVzSTle8ccofvih9KDQDrtBvOmJf95fjCTR1vHygh82WeTn6b/hgb
-         rKuqldrmvi7G89xNwxaBTux9mOnKkTuJ9EwBcEWYqeJ0+lpKo6AfgZTClyVDZ4oY2Lr4
-         5J0w==
+        bh=+OnVpQlgeliEtJDW+k76IyF+cUaA+kRBkYQqfBc1NCI=;
+        b=H/Ud2tSAMTumlwbQh8zIdUxFFBynBEGZOM1bbt3HTlOMEtnZPP+zvQ3hoTtxY0JX3m
+         sWGVkJA63mOO6sYNjxyJg599B6aT2P1FJC9H1reJeEVMQGzfqVUdSpG7p4SReBTIg0aJ
+         /uLxvARcmv9NvY3QgAz9HdTn50AlRgW1Lq1DTxFpPACyFdNzNlkfvCEwJ4k8fZ1rQGJ8
+         Q2z+Czf8avXEW1S6kLLm7tgfrDf3ZtMu7TWRHBALEyAqqJ+RN86cqVlCq1zpSbkhW8kS
+         Hk5TwFvPytmS2PbrPlSrTtCp5JX0BZxAQiuL87HQzRbSlmoS2CMUfDZHxKCEJHtwdNqs
+         k0/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=LI8DCiu6TjIj4OulZQ/ctoBXW72bGsaE1sE9uyzbXoM=;
-        b=ZzFMy9MzLOcjout9/SCHvB/v9hin2p2P4KW/7JxjrDSYG9YWsuVMfY7QVU8P73ZjDa
-         Ri16rtwWdCBcg4qe80jgNZUeU7HeuLGAMRXZO1t1/P5rH5TsP4oev3/HLGrwjbMNXE2H
-         14SIWHp28Sfb6+wpxiuIm1pc6E5oL0a/SUrVoenH5kdv7nrXyUUl1bAEgCzucbcBbFCe
-         b+eY8GxehM65Yp0iu17pp9Y/H7H5o0mbR4c2xfUxjMyaRgMtXfsyhRiSy6l3n63zo/et
-         MV+BibJj2+SuVzsYbe9Oqv4dGsfmhoMCf81IYtd690dBdcRDojICJaVtFC7TonYxxClA
-         JX7Q==
-X-Gm-Message-State: ACgBeo3H18xbugck+FzzSyOWkQ9uT1mS6/GMwGYqW4rK8Sn2Ww8Boije
-        5xF+AbpXFGsesw71Ou4jDAkmZw==
-X-Google-Smtp-Source: AA6agR5C2+9R0i8dUUe3jeYG5H35Qbvnh5cvhAfaFL5hioqA5EnfjZnjjmXgm/CPYaVTcch/2oJCfQ==
-X-Received: by 2002:a5d:550e:0:b0:228:da13:952c with SMTP id b14-20020a5d550e000000b00228da13952cmr1852407wrv.694.1662471394407;
-        Tue, 06 Sep 2022 06:36:34 -0700 (PDT)
+        bh=+OnVpQlgeliEtJDW+k76IyF+cUaA+kRBkYQqfBc1NCI=;
+        b=ktkkV9/IKWdLJSO4wg9yqet60B2Op4zO/ncwj1/LkmZCR3cceyhqoPAukqgBRNASr7
+         CLDevLNYmY7suEbdpcLAjvTEKdpbdALz6mbACtUk3YtLCKmRDk8891ZH5RwWk3xbR3fx
+         QP1aKx6lfj924XyVAr5itUv4+MOqRJabF5YUmh6OIprRXdCZC+mug21GGsC7NMuMVgjq
+         3JndYyqUuh23sfSVUUgIGR6/cibsnNzqqryWe56Tb0YQuDL2rgBzKYo0JFLbXmwkyZnL
+         U6+j+uYY0AwocJwnax4f5auNypJVJCipwoc9r8FBrS6sfOguaTA5t3l2SYsgbLQCcl1A
+         dBLA==
+X-Gm-Message-State: ACgBeo0jGSMFT6Wqz5hrBeqV08Do1tDL9gLKiDkQLT09xVGHMecnDZEY
+        hzpIoSXtYpYLPbEP+ECTd98foA==
+X-Google-Smtp-Source: AA6agR7wi+8YjFtYIRZUShCcA2ibFauosWbPq1YrXWb+/Yg98FuUJKAUmIBD3jVqRxByJe6HvU9nXQ==
+X-Received: by 2002:a5d:64c3:0:b0:226:de7e:d3eb with SMTP id f3-20020a5d64c3000000b00226de7ed3ebmr22003660wri.95.1662471392517;
+        Tue, 06 Sep 2022 06:36:32 -0700 (PDT)
 Received: from harfang.fritz.box ([51.155.200.13])
-        by smtp.gmail.com with ESMTPSA id n189-20020a1ca4c6000000b003a5c244fc13sm21775621wme.2.2022.09.06.06.36.33
+        by smtp.gmail.com with ESMTPSA id n189-20020a1ca4c6000000b003a5c244fc13sm21775621wme.2.2022.09.06.06.36.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 06:36:34 -0700 (PDT)
+        Tue, 06 Sep 2022 06:36:32 -0700 (PDT)
 From:   Quentin Monnet <quentin@isovalent.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -61,11 +61,10 @@ Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
         bpf@vger.kernel.org,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@corigine.com>,
         Simon Horman <simon.horman@corigine.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Andres Freund <andres@anarazel.de>
-Subject: [PATCH bpf-next 3/7] bpftool: Split FEATURE_TESTS/FEATURE_DISPLAY definitions in Makefile
-Date:   Tue,  6 Sep 2022 14:36:09 +0100
-Message-Id: <20220906133613.54928-4-quentin@isovalent.com>
+        Quentin Monnet <quentin@isovalent.com>
+Subject: [PATCH bpf-next 1/7] bpftool: Define _GNU_SOURCE only once
+Date:   Tue,  6 Sep 2022 14:36:07 +0100
+Message-Id: <20220906133613.54928-2-quentin@isovalent.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220906133613.54928-1-quentin@isovalent.com>
 References: <20220906133613.54928-1-quentin@isovalent.com>
@@ -75,39 +74,123 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Make FEATURE_TESTS and FEATURE_DISPLAY easier to read and less likely to
-be subject to conflicts on updates by having one feature per line.
+_GNU_SOURCE is defined in several source files for bpftool, but only one
+of them takes the precaution of checking whether the value is already
+defined. Add #ifndef for other occurrences too.
 
-Suggested-by: Andres Freund <andres@anarazel.de>
+This is in preparation for the support of disassembling JIT-ed programs
+with LLVM, with $(llvm-config --cflags) passing -D_GNU_SOURCE as a
+compilation argument.
+
 Signed-off-by: Quentin Monnet <quentin@isovalent.com>
 ---
- tools/bpf/bpftool/Makefile | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ tools/bpf/bpftool/common.c        | 2 ++
+ tools/bpf/bpftool/iter.c          | 2 ++
+ tools/bpf/bpftool/jit_disasm.c    | 2 ++
+ tools/bpf/bpftool/net.c           | 2 ++
+ tools/bpf/bpftool/perf.c          | 2 ++
+ tools/bpf/bpftool/prog.c          | 2 ++
+ tools/bpf/bpftool/xlated_dumper.c | 2 ++
+ 7 files changed, 14 insertions(+)
 
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index 04d733e98bff..8b5bfd8256c5 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -93,9 +93,16 @@ INSTALL ?= install
- RM ?= rm -f
+diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
+index 8727765add88..4c2e909a2d67 100644
+--- a/tools/bpf/bpftool/common.c
++++ b/tools/bpf/bpftool/common.c
+@@ -1,7 +1,9 @@
+ // SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ /* Copyright (C) 2017-2018 Netronome Systems, Inc. */
  
- FEATURE_USER = .bpftool
--FEATURE_TESTS = libbfd disassembler-four-args disassembler-init-styled libcap \
--	clang-bpf-co-re
--FEATURE_DISPLAY = libbfd libcap clang-bpf-co-re
-+
-+FEATURE_TESTS := clang-bpf-co-re
-+FEATURE_TESTS += libcap
-+FEATURE_TESTS += libbfd
-+FEATURE_TESTS += disassembler-four-args
-+FEATURE_TESTS += disassembler-init-styled
-+
-+FEATURE_DISPLAY := clang-bpf-co-re
-+FEATURE_DISPLAY += libcap
-+FEATURE_DISPLAY += libbfd
++#ifndef _GNU_SOURCE
+ #define _GNU_SOURCE
++#endif
+ #include <ctype.h>
+ #include <errno.h>
+ #include <fcntl.h>
+diff --git a/tools/bpf/bpftool/iter.c b/tools/bpf/bpftool/iter.c
+index f88fdc820d23..a3e6b167153d 100644
+--- a/tools/bpf/bpftool/iter.c
++++ b/tools/bpf/bpftool/iter.c
+@@ -1,7 +1,9 @@
+ // SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ // Copyright (C) 2020 Facebook
  
- check_feat := 1
- NON_CHECK_FEAT_TARGETS := clean uninstall doc doc-clean doc-install doc-uninstall
++#ifndef _GNU_SOURCE
+ #define _GNU_SOURCE
++#endif
+ #include <unistd.h>
+ #include <linux/err.h>
+ #include <bpf/libbpf.h>
+diff --git a/tools/bpf/bpftool/jit_disasm.c b/tools/bpf/bpftool/jit_disasm.c
+index aaf99a0168c9..71cb258ab0ee 100644
+--- a/tools/bpf/bpftool/jit_disasm.c
++++ b/tools/bpf/bpftool/jit_disasm.c
+@@ -11,7 +11,9 @@
+  * Licensed under the GNU General Public License, version 2.0 (GPLv2)
+  */
+ 
++#ifndef _GNU_SOURCE
+ #define _GNU_SOURCE
++#endif
+ #include <stdio.h>
+ #include <stdarg.h>
+ #include <stdint.h>
+diff --git a/tools/bpf/bpftool/net.c b/tools/bpf/bpftool/net.c
+index 526a332c48e6..c40e44c938ae 100644
+--- a/tools/bpf/bpftool/net.c
++++ b/tools/bpf/bpftool/net.c
+@@ -1,7 +1,9 @@
+ // SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ // Copyright (C) 2018 Facebook
+ 
++#ifndef _GNU_SOURCE
+ #define _GNU_SOURCE
++#endif
+ #include <errno.h>
+ #include <fcntl.h>
+ #include <stdlib.h>
+diff --git a/tools/bpf/bpftool/perf.c b/tools/bpf/bpftool/perf.c
+index 226ec2c39052..91743445e4c7 100644
+--- a/tools/bpf/bpftool/perf.c
++++ b/tools/bpf/bpftool/perf.c
+@@ -2,7 +2,9 @@
+ // Copyright (C) 2018 Facebook
+ // Author: Yonghong Song <yhs@fb.com>
+ 
++#ifndef _GNU_SOURCE
+ #define _GNU_SOURCE
++#endif
+ #include <ctype.h>
+ #include <errno.h>
+ #include <fcntl.h>
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index c81362a001ba..a31ae9f0c307 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -1,7 +1,9 @@
+ // SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ /* Copyright (C) 2017-2018 Netronome Systems, Inc. */
+ 
++#ifndef _GNU_SOURCE
+ #define _GNU_SOURCE
++#endif
+ #include <errno.h>
+ #include <fcntl.h>
+ #include <signal.h>
+diff --git a/tools/bpf/bpftool/xlated_dumper.c b/tools/bpf/bpftool/xlated_dumper.c
+index 2d9cd6a7b3c8..6fe3134ae45d 100644
+--- a/tools/bpf/bpftool/xlated_dumper.c
++++ b/tools/bpf/bpftool/xlated_dumper.c
+@@ -1,7 +1,9 @@
+ // SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ /* Copyright (C) 2018 Netronome Systems, Inc. */
+ 
++#ifndef _GNU_SOURCE
+ #define _GNU_SOURCE
++#endif
+ #include <stdarg.h>
+ #include <stdio.h>
+ #include <stdlib.h>
 -- 
 2.34.1
 
