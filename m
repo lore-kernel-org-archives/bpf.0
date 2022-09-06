@@ -2,121 +2,170 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B48FECAAD5
-	for <bpf@archiver.kernel.org>; Tue,  6 Sep 2022 13:47:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE2A6ECAAA1
+	for <bpf@archiver.kernel.org>; Tue,  6 Sep 2022 14:42:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238453AbiIFNri (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 6 Sep 2022 09:47:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53444 "EHLO
+        id S241189AbiIFOmV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 6 Sep 2022 10:42:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233896AbiIFNq3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:46:29 -0400
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA43B7F24A
-        for <bpf@vger.kernel.org>; Tue,  6 Sep 2022 06:38:56 -0700 (PDT)
-Received: by mail-wm1-f48.google.com with SMTP id c131-20020a1c3589000000b003a84b160addso8915168wma.2
-        for <bpf@vger.kernel.org>; Tue, 06 Sep 2022 06:38:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=x99CMymo2dDjTVa5z8o7iAxDkiuX6N5lOPd0KrR5QNE=;
-        b=rAiKN4dmSZMuFKF3jx9NBgsGOH2ar+dLfbdIP2UT/f59cnPWFmVO3Z/4xqq1MwUpAC
-         XeQl8t0sWMM51XutnD6lMl4lT/l0wc+Z/JmSGQMaSqwwLcdGHqYPxPCu5DY4YI043neR
-         QJM39XfR+Y+s9HfO8sLmJ8tB7h5jJweVC1ETt14obNsiJlc5nb4BcIRAb/PLDZ/nA/1L
-         GBpL1uuzstFEw7aIJQp8vokdQJQIqFn8vktySvADgFfytO7iwZ/wL60twnG8qrSt0alc
-         kSJUhyay8suNNijvs/YkP0ctyCI/Q2M7n1El6UunM6qaIjuTSyTkLxR1LCkhs5l76omP
-         w2Qg==
+        with ESMTP id S234395AbiIFOlb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 6 Sep 2022 10:41:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2349C8C3
+        for <bpf@vger.kernel.org>; Tue,  6 Sep 2022 07:02:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662472861;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fF/McEgJ2IGT8zNYV5Anr2pyXDPQdaP/ZefdLv4zi5k=;
+        b=SNakb3jdoLEiAheVKEUnoPrQsbWYeIwgKkzLpB0Q3f7qSNUsRRH0w3ZdmEZE8h8vkc3zqW
+        CAxLXDjYGhsyuf00CaM5DzK1ApQCz+VQWfiiP0ly7d1/2XyoYAhwdVAal9qbUywcoMfIrN
+        K0QznKKSKgSRaKH1hX5WEOoBFSScNSk=
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
+ [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-594-QYjqLktcOJCjaU0ZtjNkTg-1; Tue, 06 Sep 2022 09:50:13 -0400
+X-MC-Unique: QYjqLktcOJCjaU0ZtjNkTg-1
+Received: by mail-pl1-f198.google.com with SMTP id b9-20020a170902d50900b0016f0342a417so7921187plg.21
+        for <bpf@vger.kernel.org>; Tue, 06 Sep 2022 06:50:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=x99CMymo2dDjTVa5z8o7iAxDkiuX6N5lOPd0KrR5QNE=;
-        b=zvvVQTC4/OtGMWjAS8gFGwgm7JYka1unzx+mmxxvCVoTyhUQtyxIlmRbcFcLzqLdiD
-         Ev7Im2En7I4rYvFN4T9aQwmwL/2T1ns0iMpJMs6cTEOOKkD0OdJ5Gqjd1+4wQY4ZUPC8
-         oHUrz8GKR9Qrd61flK/rBpl8L3npKXBlYxrPj5WqpnV4hViqJ31vLKaMFyJPfdH6saM0
-         lvxQ/RllQO9jApovFDVX1569FT7+LDjL6NVHd+J554Z76Zx6N/LHy5dt1rL2n5+QmDuv
-         2ZVp1Qo5P/2O9fI9uQyCVQVP5M8KafWYva7E7fkGzu8CNkziXmzmAgsUg5IJtNmCZbFE
-         vS3A==
-X-Gm-Message-State: ACgBeo3HT1lpnxJEkBSkLUmVQscUXZq4iiS9Q7ivWC1BChUglZSAX++7
-        6z449Wv8gIDCkctaSaY4eR5gZg==
-X-Google-Smtp-Source: AA6agR6UD5O7+cnLv88iB9K5PfBKtg1zUn4mgN97xgDnY27eUhQQebIklrzqc32Z/yjxDijH5gQOoQ==
-X-Received: by 2002:a05:600c:4f85:b0:3a6:243d:3b7d with SMTP id n5-20020a05600c4f8500b003a6243d3b7dmr13987288wmq.84.1662471391621;
-        Tue, 06 Sep 2022 06:36:31 -0700 (PDT)
-Received: from harfang.fritz.box ([51.155.200.13])
-        by smtp.gmail.com with ESMTPSA id n189-20020a1ca4c6000000b003a5c244fc13sm21775621wme.2.2022.09.06.06.36.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 06:36:31 -0700 (PDT)
-From:   Quentin Monnet <quentin@isovalent.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@corigine.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next 0/7] bpftool: Add LLVM as default library for disassembling JIT-ed programs
-Date:   Tue,  6 Sep 2022 14:36:06 +0100
-Message-Id: <20220906133613.54928-1-quentin@isovalent.com>
-X-Mailer: git-send-email 2.25.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=fF/McEgJ2IGT8zNYV5Anr2pyXDPQdaP/ZefdLv4zi5k=;
+        b=N5lSvR/mGINPNfmL8DkBawCc5Y/r298U5jcnwTv2J1dHK4s68KPZw5hz1jdx0AKC1A
+         ZE8Rh6Nydbt5d7ruvRvY1OqOqGcFfAccMhojSpCuU9xAHf6NI2G+IYWIMdZeVf/B8wlJ
+         cM3S4VlNN+6i5GXZntSPRnVzhEycdwAbCdqd1V4cZ7i/pMCxfEkeNXg+mnPZvC/+c1Yw
+         WPLqkaIg+Aenor45D7+jztxLX1HD2nbHtquNrAwW0ogqsyb/9AodtHErqFwDgn1Uld2L
+         gEsPoMaEwAEk+JTVofP3m8cbADVSo1xDgjv3iwPE/+u8gF37NlBPTJ8B8RDuxZiEraGK
+         0HQA==
+X-Gm-Message-State: ACgBeo0U/mVNU3ltmW7hjBxmiX2n335vyLKj/FPXAdzPmBu8/Auk3tzw
+        Qc4Wx+9LnrmTPi5+7KbMygvM51n/BBYp+Hq8tSAXy1GYXDIO/iT77CRIzlrCYJRUZjoV6ZkkO61
+        Iw/E12kKIINohs6YKg7BSeaqqar6p
+X-Received: by 2002:a63:125b:0:b0:434:6fb1:660e with SMTP id 27-20020a63125b000000b004346fb1660emr6591738pgs.489.1662472212073;
+        Tue, 06 Sep 2022 06:50:12 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6fpX4ksRwNdiWB8H8btCxoSm5yD30eQEDR5VMy+1tR5Dy84nsIw3fRbEfb3k43eyQqvvFdzBBzDMPFKfIuvA8=
+X-Received: by 2002:a63:125b:0:b0:434:6fb1:660e with SMTP id
+ 27-20020a63125b000000b004346fb1660emr6591709pgs.489.1662472211764; Tue, 06
+ Sep 2022 06:50:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
+ <20220902132938.2409206-2-benjamin.tissoires@redhat.com> <CAP01T75KTjawtsvQmhZhj0=tEJVwc7UewRqdT1ui+uKONg07Zw@mail.gmail.com>
+ <CAP01T74zEuSfTYhkKieU1B5YwzdXhKWxPX55AabV84j-=virwA@mail.gmail.com>
+In-Reply-To: <CAP01T74zEuSfTYhkKieU1B5YwzdXhKWxPX55AabV84j-=virwA@mail.gmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Tue, 6 Sep 2022 15:50:00 +0200
+Message-ID: <CAO-hwJLBtjfU7NWVTRK8HKmATuSb3ZSY__+OOMZhqY85DeQbWQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v10 01/23] selftests/bpf: regroup and declare
+ similar kfuncs selftests in an array
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To disassemble instructions for JIT-ed programs, bpftool has relied on the
-libbfd library. This has been problematic in the past: libbfd's interface
-is not meant to be stable and has changed several times, hence the
-detection of the two related features from the Makefile
-(disassembler-four-args and disassembler-init-styled). When it comes to
-shipping bpftool, this has also caused issues with several distribution
-maintainers unwilling to support the feature (for example, Debian's page
-for binutils-dev, libbfd's package, says: "Note that building Debian
-packages which depend on the shared libbfd is Not Allowed.").
+On Tue, Sep 6, 2022 at 5:27 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+>
+> On Tue, 6 Sept 2022 at 05:25, Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+> >
+> > On Fri, 2 Sept 2022 at 15:29, Benjamin Tissoires
+> > <benjamin.tissoires@redhat.com> wrote:
+> > >
+> > > Similar to tools/testing/selftests/bpf/prog_tests/dynptr.c:
+> > > we declare an array of tests that we run one by one in a for loop.
+> > >
+> > > Followup patches will add more similar-ish tests, so avoid a lot of copy
+> > > paste by grouping the declaration in an array.
+> > >
+> > > To be able to call bpf_object__find_program_by_name(), we need to use
+> > > plain libbpf calls, and not light skeletons. So also change the Makefile
+> > > to not generate light skeletons.
+> > >
+> > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> > >
+> > > ---
+> >
+> > I see your point, but this is also a test so that we keep verifying
+> > kfunc call in light skeleton.
+> > Code for relocating both is different in libbpf (we generate BPF ASM
+> > for light skeleton so it is done inside a loader BPF program instead
+> > of userspace).
+>
+> Err, hit send too early.
+> We can probably use a macro to hide how program is called, then do
+> X(prog1)
+> X(prog2)
+> in a series, won't look too bad and avoids duplication at the same time.
+>
+> > You might then be able to make it work for both light and normal skeleton.
+> >
+> WDYT?
+>
 
-This patchset adds support for LLVM as the primary library for
-disassembling instructions for JIT-ed programs.
+On this patch alone, I concede the benefit is minimum. But if you look
+at 6/23, I must confess I definitely prefer having just an array of
+tests at the beginning instead of crippling the tests functions with
+calls or macros.
 
-We keep libbfd as a fallback. One reason for this is that currently it
-works well, we have all we need in terms of features detection in the
-Makefile, so it provides a fallback for disassembling JIT-ed programs if
-libbfd is installed but LLVM is not. The other reason is that libbfd
-supports nfp instruction for Netronome's SmartNICs and can be used to
-disassemble offloaded programs, something that LLVM cannot do (Niklas
-confirmed that the feature is still in use). However, if libbfd's interface
-breaks again in the future, we might reconsider keeping support for it.
+The actual reason for me to ditch light skeletons was because I was
+using bpf_object__find_program_by_name().
 
-Quentin Monnet (7):
-  bpftool: Define _GNU_SOURCE only once
-  bpftool: Remove asserts from JIT disassembler
-  bpftool: Split FEATURE_TESTS/FEATURE_DISPLAY definitions in Makefile
-  bpftool: Group libbfd defs in Makefile, only pass them if we use
-    libbfd
-  bpftool: Refactor disassembler for JIT-ed programs
-  bpftool: Add LLVM as default library for disassembling JIT-ed programs
-  bpftool: Add llvm feature to "bpftool version"
+But I can work around that by relying on the offsetof() macro, and
+make the whole thing working for *both* light skeleton and libbpf:
++struct kfunc_test_params {
++       const char *prog_name;
++       unsigned long int lskel_prog_desc_offset;
++       int retval;
++};
++
++#define TC_TEST(name,__retval) \
++       { \
++         .prog_name = #name, \
++         .lskel_prog_desc_offset = offsetof(struct
+kfunc_call_test_lskel, progs.name), \
++         .retval = __retval, \
++       }
++
++static struct kfunc_test_params kfunc_tests[] = {
++       TC_TEST(kfunc_call_test1, 12),
++       TC_TEST(kfunc_call_test2, 3),
++       TC_TEST(kfunc_call_test_ref_btf_id, 0),
++};
++
++static void verify_success(struct kfunc_test_params *param)
+ {
+[...]
++       struct bpf_prog_desc *lskel_prog = (struct bpf_prog_desc
+*)((char *)lskel + param->lskel_prog_desc_offset);
 
- .../bpftool/Documentation/common_options.rst  |   8 +-
- tools/bpf/bpftool/Makefile                    |  65 +++--
- tools/bpf/bpftool/common.c                    |   2 +
- tools/bpf/bpftool/iter.c                      |   2 +
- tools/bpf/bpftool/jit_disasm.c                | 244 ++++++++++++++----
- tools/bpf/bpftool/main.c                      |  10 +
- tools/bpf/bpftool/main.h                      |  29 ++-
- tools/bpf/bpftool/map.c                       |   1 -
- tools/bpf/bpftool/net.c                       |   2 +
- tools/bpf/bpftool/perf.c                      |   2 +
- tools/bpf/bpftool/prog.c                      |  17 +-
- tools/bpf/bpftool/xlated_dumper.c             |   2 +
- 12 files changed, 291 insertions(+), 93 deletions(-)
+However, for failing tests, I can not really rely on light skeletons
+because we can not dynamically set the autoload property.
+So either I split every failed test in its own file, or I only test
+the ones that are supposed to load, which don't add a lot IMO.
 
--- 
-2.34.1
+I'll repost the bpf-core changes only so you can have a better idea of
+what I am saying.
+
+Cheers,
+Benjamin
 
