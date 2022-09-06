@@ -2,29 +2,29 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 109FBC54EE9
-	for <bpf@archiver.kernel.org>; Tue,  6 Sep 2022 20:05:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 886D3ECAAA1
+	for <bpf@archiver.kernel.org>; Tue,  6 Sep 2022 20:05:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231159AbiIFUFV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 6 Sep 2022 16:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
+        id S230002AbiIFUFz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 6 Sep 2022 16:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231166AbiIFUE4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 6 Sep 2022 16:04:56 -0400
+        with ESMTP id S229956AbiIFUFe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 6 Sep 2022 16:05:34 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B18CCB5E79;
-        Tue,  6 Sep 2022 13:00:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DAB97B602B;
+        Tue,  6 Sep 2022 13:01:10 -0700 (PDT)
 Received: from pwmachine.numericable.fr (85-170-34-72.rev.numericable.fr [85.170.34.72])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 36F4E204A062;
-        Tue,  6 Sep 2022 12:58:55 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 36F4E204A062
+        by linux.microsoft.com (Postfix) with ESMTPSA id EAFD4204A580;
+        Tue,  6 Sep 2022 12:59:36 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EAFD4204A580
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1662494339;
-        bh=uFGRrOq/51NXIcdfjbdqGyuEN8JjUWMtBLgpVH9tTbM=;
+        s=default; t=1662494381;
+        bh=N4qKGNRCArorGaqJPvl3arifkj3tGRGaxyc5hkP2FRA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s0ip9PP/e7tNFhTzW5Qi5hmgISsGF5ZqFozbagJLd9QyP2nb8fQwXdiRQ3lp6yhyo
-         SYD9DSLv8MQk1PstZ+J+YXCj5NpaCpaBeetft2N5Pr3g5S/kp4+m2LBnYNKboOS+bO
-         C7/FC7B8CQ4ZEjDDb3eC26nfWjqax71Es0yYlFR8=
+        b=YHDuOBp3oEAQ+LnOL1ippAIf7DJGdmUY1DDeO2SFn6XY2urLU+ZehCkolr/XgcX+t
+         v1k3Pkj1O9uk1MP4cRwir7XBkmbkke1JOvRWMhZrHi5sdj3dHN1aM/lcT4XeHqRtrA
+         0tiIgnXQqhhkb/ZRVWw839cEBZZVp3aeC5DThNEM=
 From:   Francis Laniel <flaniel@linux.microsoft.com>
 To:     bpf@vger.kernel.org
 Cc:     Francis Laniel <flaniel@linux.microsoft.com>,
@@ -45,11 +45,11 @@ Cc:     Francis Laniel <flaniel@linux.microsoft.com>,
         Maxim Mikityanskiy <maximmi@nvidia.com>,
         Geliang Tang <geliang.tang@suse.com>,
         "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH v2 3/5] docs/bpf: Add documentation for overwritable ring buffer.
-Date:   Tue,  6 Sep 2022 21:56:44 +0200
-Message-Id: <20220906195656.33021-4-flaniel@linux.microsoft.com>
+Subject: [RFC PATCH v2 5/5] for test purpose only: Add toy to play with BPF ring.
+Date:   Tue,  6 Sep 2022 21:56:46 +0200
+Message-Id: <20220906195656.33021-6-flaniel@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220906195656.33021-1-flaniel@linux.microsoft.com>
 References: <20220906195656.33021-1-flaniel@linux.microsoft.com>
@@ -59,47 +59,167 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add documentation to precise behavior of overwritable BPF ring buffer compared
-to conventionnal ones.
+This patch should be applied on iovisor/bcc.
 
 Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
 ---
- Documentation/bpf/ringbuf.rst | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ ...-only-Add-toy-to-play-with-BPF-ring-.patch | 147 ++++++++++++++++++
+ 1 file changed, 147 insertions(+)
+ create mode 100644 0001-for-test-purpose-only-Add-toy-to-play-with-BPF-ring-.patch
 
-diff --git a/Documentation/bpf/ringbuf.rst b/Documentation/bpf/ringbuf.rst
-index 6a615cd62bda..e062381ff604 100644
---- a/Documentation/bpf/ringbuf.rst
-+++ b/Documentation/bpf/ringbuf.rst
-@@ -124,7 +124,7 @@ buffer.  Currently 4 are supported:
- 
- - ``BPF_RB_AVAIL_DATA`` returns amount of unconsumed data in ring buffer;
- - ``BPF_RB_RING_SIZE`` returns the size of ring buffer;
--- ``BPF_RB_CONS_POS``/``BPF_RB_PROD_POS`` returns current logical possition
-+- ``BPF_RB_CONS_POS``/``BPF_RB_PROD_POS`` returns current logical position
-   of consumer/producer, respectively.
- 
- Returned values are momentarily snapshots of ring buffer state and could be
-@@ -204,3 +204,19 @@ buffer. For extreme cases, when BPF program wants more manual control of
- notifications, commit/discard/output helpers accept ``BPF_RB_NO_WAKEUP`` and
- ``BPF_RB_FORCE_WAKEUP`` flags, which give full control over notifications of
- data availability, but require extra caution and diligence in using this API.
+diff --git a/0001-for-test-purpose-only-Add-toy-to-play-with-BPF-ring-.patch b/0001-for-test-purpose-only-Add-toy-to-play-with-BPF-ring-.patch
+new file mode 100644
+index 000000000000..37d08cc08a88
+--- /dev/null
++++ b/0001-for-test-purpose-only-Add-toy-to-play-with-BPF-ring-.patch
+@@ -0,0 +1,147 @@
++From e4b95b1f9625f62d0978173973070dce38bd7210 Mon Sep 17 00:00:00 2001
++From: Francis Laniel <flaniel@linux.microsoft.com>
++Date: Tue, 9 Aug 2022 18:18:53 +0200
++Subject: [PATCH] for test purpose only: Add toy to play with BPF ring buffer.
 +
-+Specific case of overwritable ring buffer
-+-----------------------------------------
++Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
++---
++ libbpf-tools/Makefile  |  1 +
++ libbpf-tools/toy.bpf.c | 29 +++++++++++++++++++
++ libbpf-tools/toy.c     | 65 ++++++++++++++++++++++++++++++++++++++++++
++ libbpf-tools/toy.h     |  4 +++
++ 4 files changed, 99 insertions(+)
++ create mode 100644 libbpf-tools/toy.bpf.c
++ create mode 100644 libbpf-tools/toy.c
++ create mode 100644 libbpf-tools/toy.h
 +
-+Using ``BFP_F_RB_OVERWRITABLE`` when creating the ring buffer will make it
-+overwritable.
-+As a consequence, the producers will never be stopped from writing data, *i.e.*
-+in this mode ``bpf_ringbuf_reserve()`` never blocks and returns NULL, but oldest
-+events will be replaced by newest ones.
++diff --git a/libbpf-tools/Makefile b/libbpf-tools/Makefile
++index 3e40f6e5..0d81d3b7 100644
++--- a/libbpf-tools/Makefile
+++++ b/libbpf-tools/Makefile
++@@ -68,6 +68,7 @@ APPS = \
++ 	tcplife \
++ 	tcprtt \
++ 	tcpsynbl \
+++	toy \
++ 	vfsstat \
++ 	#
++ 
++diff --git a/libbpf-tools/toy.bpf.c b/libbpf-tools/toy.bpf.c
++new file mode 100644
++index 00000000..3c28a20b
++--- /dev/null
+++++ b/libbpf-tools/toy.bpf.c
++@@ -0,0 +1,29 @@
+++#include <linux/types.h>
+++#include <bpf/bpf_helpers.h>
+++#include <linux/bpf.h>
+++#include "toy.h"
+++
+++
+++struct {
+++	__uint(type, BPF_MAP_TYPE_RINGBUF);
+++	__uint(max_entries, 4096);
+++	__uint(map_flags, 1U << 13);
+++} buffer SEC(".maps");
+++
+++static __u32 count = 0;
+++
+++SEC("tracepoint/syscalls/sys_enter_execve")
+++int sys_enter_execve(void) {
+++	count++;
+++	struct event *event = bpf_ringbuf_reserve(&buffer, sizeof(struct event), 0);
+++	if (!event) {
+++		return 1;
+++	}
+++
+++	event->count = count;
+++	bpf_ringbuf_submit(event, 0);
+++
+++	return 0;
+++}
+++
+++char _license[] SEC("license") = "GPL";
++diff --git a/libbpf-tools/toy.c b/libbpf-tools/toy.c
++new file mode 100644
++index 00000000..4cd8b588
++--- /dev/null
+++++ b/libbpf-tools/toy.c
++@@ -0,0 +1,65 @@
+++#include <bpf/libbpf.h>
+++#include <stdio.h>
+++#include <unistd.h>
+++#include "toy.h"
+++#include "toy.skel.h"
+++#include "btf_helpers.h"
+++
+++
+++static int buf_process_sample(void *ctx, void *data, size_t len) {
+++	struct event *evt = (struct event *)data;
+++
+++	printf("%d\n", evt->count);
+++
+++	return 0;
+++}
+++
+++int main(void) {
+++	LIBBPF_OPTS(bpf_object_open_opts, open_opts);
+++	int buffer_map_fd = -1;
+++	struct toy_bpf *obj;
+++	int err;
+++
+++	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
+++
+++	err = ensure_core_btf(&open_opts);
+++	if (err) {
+++		fprintf(stderr, "failed to fetch necessary BTF for CO-RE: %s\n", strerror(-err));
+++		return 1;
+++	}
+++
+++	obj = toy_bpf__open_opts(&open_opts);
+++	if (!obj) {
+++		fprintf(stderr, "failed to open BPF object\n");
+++		return 1;
+++	}
+++
+++	err = toy_bpf__load(obj);
+++	if (err) {
+++		fprintf(stderr, "failed to load BPF object: %d\n", err);
+++		return 1;
+++	}
+++
+++	struct ring_buffer *ring_buffer;
+++
+++	buffer_map_fd = bpf_object__find_map_fd_by_name(obj->obj, "buffer");
+++	ring_buffer = ring_buffer__new(buffer_map_fd, buf_process_sample, NULL, NULL);
+++
+++	if(!ring_buffer) {
+++		fprintf(stderr, "failed to create ring buffer\n");
+++		return 1;
+++	}
+++
+++	err = toy_bpf__attach(obj);
+++	if (err) {
+++		fprintf(stderr, "failed to attach BPF programs\n");
+++		return 1;
+++	}
+++
+++	for (;;) {
+++		ring_buffer__consume(ring_buffer);
+++		sleep(1);
+++	}
+++
+++	return 0;
+++}
++diff --git a/libbpf-tools/toy.h b/libbpf-tools/toy.h
++new file mode 100644
++index 00000000..ebfedf06
++--- /dev/null
+++++ b/libbpf-tools/toy.h
++@@ -0,0 +1,4 @@
+++struct event {
+++	__u32 count;
+++	char filler[4096 / 8 - sizeof(__u32) - 8];
+++};
++-- 
++2.25.1
 +
-+In terms of implementation, this feature uses the same logic than overwritable
-+perf ring buffer.
-+The ring buffer is written backward, while it should be read forward from the
-+producer position.
-+As a consequence, in this mode, the consumer position has no meaning and can be
-+used freely by userspace implementation.
 -- 
 2.25.1
 
