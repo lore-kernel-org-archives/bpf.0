@@ -2,133 +2,93 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BDBFC38145
-	for <bpf@archiver.kernel.org>; Tue,  6 Sep 2022 10:08:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3203EC6FA83
+	for <bpf@archiver.kernel.org>; Tue,  6 Sep 2022 10:37:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233801AbiIFKIG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 6 Sep 2022 06:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37502 "EHLO
+        id S239148AbiIFKhb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 6 Sep 2022 06:37:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233948AbiIFKIF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 6 Sep 2022 06:08:05 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0542125C5B
-        for <bpf@vger.kernel.org>; Tue,  6 Sep 2022 03:08:04 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id e17so6839102edc.5
-        for <bpf@vger.kernel.org>; Tue, 06 Sep 2022 03:08:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date;
-        bh=zmJzNViE34p6/jA1hPcZaxIhLbmiyBCQ1vHBKsBEiKI=;
-        b=XmNGGEU/lM/VX9Pbm6CZ9V1PonF5qn2K8ULq9JF+GAkqBh0NpyvsD3Uyyfzc38pykf
-         wlwWbAWDLSOUPS0bxa1Ajw5Brt/L3tSieN0JCdVaEs3HZjVgwKsH6vu6RI9QAIQoo2WI
-         IwriVGn0zunFZ2yeeIiQMZEadlURC8oVBw93Gil8JydmxMHZr1XRqj6u3mz/m4lqwqmr
-         vP3dBXdlar9+j6BOJlXTN7XwnyhsjbaSn9eDdSS7m0kLvKZyWXmFs+CX5jugvxM2XvsC
-         cP8vmA69Qu1m4kniJukQYvdU7meEohUvUqHkvXzL+nGqF2YBFZL3rKlTP5h+V45aF1Fv
-         rmSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=zmJzNViE34p6/jA1hPcZaxIhLbmiyBCQ1vHBKsBEiKI=;
-        b=S5VP8EoHpvIYzb8jwK341NcLLb9UXa821HYtyoy+9aLcoPKU+yMDdOYcd2FiUxjQk6
-         yryruTQcFohfQv99Txd2/Pzm8xCUC7/Mdhc8b2AXCYL0DcjpP9VZ1O20wCvzxdHjKoYH
-         T41ynZEb0joOZYmgWNA8LQQdPXbLH52HOKZm6QLmbllMBXsnxhyHEMwJ1sgjKwhGwOk9
-         uBqhfRK/uMJIQTKYdtUCQNswBT4wrUum8FBKkblJ5L78PMmk+35klVqslGHoZLAMmALD
-         ok9XQhD15JxcwnFwFckH5LduTLLktCcKufkpkr/Bh0VM3Ernioj46U3I67rMljWJkcy4
-         1l6w==
-X-Gm-Message-State: ACgBeo00V9xVcy4zIGR6v7tfvCVKNn/hna7/QgFe6hREkdN4AuGyE6aE
-        Sx7qsbbTIdIiZu7xNZnUOV0=
-X-Google-Smtp-Source: AA6agR4WyoB1Jpi1zEexzPm6CmzknSux2PLdA0EMVF+ONytiWyVraACVhq872zW75ebvPq4w9BvqcQ==
-X-Received: by 2002:a05:6402:2937:b0:44e:b578:6fdd with SMTP id ee55-20020a056402293700b0044eb5786fddmr4330530edb.159.1662458882429;
-        Tue, 06 Sep 2022 03:08:02 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id qt14-20020a170906ecee00b00728f6d4d0d7sm6388124ejb.67.2022.09.06.03.08.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 03:08:01 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Tue, 6 Sep 2022 12:07:59 +0200
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, bpf@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
-Subject: Re: [PATCHv3 bpf-next 2/2] bpf: Move bpf_dispatcher function out of
- ftrace locations
-Message-ID: <Yxcb/9W3XsoA+QM/@krava>
-References: <20220903131154.420467-1-jolsa@kernel.org>
- <20220903131154.420467-3-jolsa@kernel.org>
- <20220905112345.3daf34a1@gandalf.local.home>
+        with ESMTP id S233801AbiIFKha (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 6 Sep 2022 06:37:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03FD50054;
+        Tue,  6 Sep 2022 03:37:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 86124B8169E;
+        Tue,  6 Sep 2022 10:37:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7504C433C1;
+        Tue,  6 Sep 2022 10:37:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662460647;
+        bh=BuxP8jb9h9jN0GwTnwe4RVFoi8sw11ZHMZvZH1y85ug=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dOXUAO02eBSo6akp7bs6auFNRuH/3OjhChGKIBZl00SaSPNBFAsHHE7IVnRan+Rpt
+         5Y091I+Igj9nKbB78xXfw4sNs2tsYmaobrsA5fUERV60piERPeJNh+ZH6v1beZnHbq
+         ymY9BsSkfPSYaE7n2Gg+5mwvE+QVn7G51oZfWRh4ZNeTM1mL7HY0QGDGrMGlXW5jXL
+         oT+VpStV3zdKqGazFJWgby5CVvWGnFy5leod+8a/K1ed1qn78Artd3pypLY9JzkItB
+         fKPOGYnjQmbhOLjI7OZq+vbjvXJ9zUncgvaby+BVS0hS/HP0ZyE0u1t38nITrci0O6
+         8MbKtlWIA17PQ==
+Date:   Tue, 6 Sep 2022 13:37:23 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        dhowells@redhat.com, rostedt@goodmis.org, mingo@redhat.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        shuah@kernel.org, bpf@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, memxor@gmail.com,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: Re: [PATCH v16 05/12] KEYS: Move KEY_LOOKUP_ to include/linux/key.h
+ and define KEY_LOOKUP_ALL
+Message-ID: <Yxci4yrV5OcMnTNi@kernel.org>
+References: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com>
+ <20220905143318.1592015-6-roberto.sassu@huaweicloud.com>
+ <YxZsbLIAcR4/bScc@kernel.org>
+ <394ed3b5f96afd3cf39e99675be1a32c89c8080d.camel@huaweicloud.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220905112345.3daf34a1@gandalf.local.home>
+In-Reply-To: <394ed3b5f96afd3cf39e99675be1a32c89c8080d.camel@huaweicloud.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 11:23:45AM -0400, Steven Rostedt wrote:
-> On Sat,  3 Sep 2022 15:11:54 +0200
-> Jiri Olsa <jolsa@kernel.org> wrote:
+On Tue, Sep 06, 2022 at 09:08:23AM +0200, Roberto Sassu wrote:
+> On Tue, 2022-09-06 at 00:38 +0300, Jarkko Sakkinen wrote:
+> > On Mon, Sep 05, 2022 at 04:33:11PM +0200, Roberto Sassu wrote:
+> > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > 
+> > > In preparation for the patch that introduces the
+> > > bpf_lookup_user_key() eBPF
+> > > kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be
+> > > able to
+> > > validate the kfunc parameters. Add them to enum key_lookup_flag, so
+> > > that
+> > > all the current ones and the ones defined in the future are
+> > > automatically
+> > > exported through BTF and available to eBPF programs.
+> > > 
+> > > Also, add KEY_LOOKUP_ALL to the enum, to facilitate checking
+> > > whether a
+> > > variable contains only defined flags.
+> > > 
+> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > Reviewed-by: KP Singh <kpsingh@kernel.org>
+> > > Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > 
+> > You should remove ack if there is any substantial change.
 > 
-> > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> > index f9920f1341c8..089c20cefd2b 100644
-> > --- a/arch/x86/Kconfig
-> > +++ b/arch/x86/Kconfig
-> > @@ -284,6 +284,7 @@ config X86
-> >  	select PROC_PID_ARCH_STATUS		if PROC_FS
-> >  	select HAVE_ARCH_NODE_DEV_GROUP		if X86_SGX
-> >  	imply IMA_SECURE_AND_OR_TRUSTED_BOOT    if EFI
-> > +	select HAVE_DYNAMIC_FTRACE_NO_PATCHABLE
-> >  
-> >  config INSTRUCTION_DECODER
-> >  	def_bool y
-> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> > index 9c1674973e03..e267625557cb 100644
-> > --- a/include/linux/bpf.h
-> > +++ b/include/linux/bpf.h
-> > @@ -924,7 +924,14 @@ int arch_prepare_bpf_dispatcher(void *image, s64 *funcs, int num_funcs);
-> >  	},							\
-> >  }
-> >  
-> > +#ifdef CONFIG_X86_64
+> Yes, sorry. I thought you were fine with the change due to:
 > 
-> I think Peter may have already mentioned this, but shouldn't he above be:
-> 
->   #ifdef HAVE_DYNAMIC_FTRACE_NO_PATCHABLE
+> https://lore.kernel.org/bpf/YxF4H9MTDj+PnJ+V@kernel.org/
 
-different archs need different patchable_function_entry(X) attribute
-so I think we should use arch configs in here
+It was the documentation part, not really the enum change.
 
-also having HAVE_DYNAMIC_FTRACE_NO_PATCHABLE option enabled does not
-imply there's support for dispatcher image generation, so we might
-endup with extra nop bytes
-
-jirka
-
-> 
-> ??
-> 
-> -- Steve
-> 
-> > +#define BPF_DISPATCHER_ATTRIBUTES __attribute__((patchable_function_entry(5)))
-> > +#else
-> > +#define BPF_DISPATCHER_ATTRIBUTES
-> > +#endif
-> > +
-> >  #define DEFINE_BPF_DISPATCHER(name)					\
-> > +	notrace BPF_DISPATCHER_ATTRIBUTES				\
-> >  	noinline __nocfi unsigned int bpf_dispatcher_##name##_func(	\
-> >  		const void *ctx,					\
-> >  		const struct bpf_insn *insnsi,				\
-> > -- 
+BR, Jarkko
