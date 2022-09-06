@@ -2,65 +2,65 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83DD5C54EE9
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 662A2ECAAA1
 	for <bpf@archiver.kernel.org>; Tue,  6 Sep 2022 10:53:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233593AbiIFKwy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 6 Sep 2022 06:52:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48410 "EHLO
+        id S233335AbiIFKwx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 6 Sep 2022 06:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239629AbiIFKwZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 6 Sep 2022 06:52:25 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5347B29D;
-        Tue,  6 Sep 2022 03:50:57 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id bp20so14338866wrb.9;
-        Tue, 06 Sep 2022 03:50:57 -0700 (PDT)
+        with ESMTP id S239681AbiIFKw0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 6 Sep 2022 06:52:26 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E547C52A;
+        Tue,  6 Sep 2022 03:50:58 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id z14-20020a7bc7ce000000b003a5db0388a8so7896579wmk.1;
+        Tue, 06 Sep 2022 03:50:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:user-agent:references:message-id:date:in-reply-to
          :subject:cc:to:from:from:to:cc:subject:date;
-        bh=DeZeaGmLe3sAs17o9u4aA+9IGunBSiFEik8IifS7SLk=;
-        b=N7RZ/0QQzjm+knbE/RlztSF707It1haNgKph+ZBYlZgjSTSpbFx7ALekjKZ1JSbqVj
-         4OmM51mK2yEhaqZi7CZy8qDmn2dwQoBCZ9jAznomYjkO/Oh6zZ289ArQ5LwEUIWyQ+vT
-         UE8x1rJWGMUpRjzB70jAJlhoZdg9GIUWAUAu+no9EePC6i09sIRqrOArGJJFt8HkdESg
-         4DMzrswVY1LW0/yfMNHTB1AnnSHDNy+cQfBz0M0J0AGmPb4tN/ORMr/BNxVlOrOX7Wxv
-         TGKuo/oK3zSNftUeSV9vol3cSbUfQip/uqJBRvbsk1bmWRmyClHFbl0XBgiqFgRI7h1U
-         OiQQ==
+        bh=b1zh3Myo6jU2fqhvORGPXUCfBSeS9QtYiYf8N35O2G8=;
+        b=BCOPqG0yChofOoj0r9oHxKJbYuhNfnuLxdUdm4eBHhojDQ2/p2F6Oe+P1CerRJwt4/
+         O1xjMkpEGjCZz6ig+13Jawcyekt2YZ0+PBNDeMisA1Lz40Q6l2dR1skFMlpplAGBKZPk
+         V9TIM0nranK9ozI5eVZr8Y2E2xVGDiMpois9P+AZue3xDJhyandWfW0fEeD1pyoxH8z4
+         1KQ2cTdqDFBLg+T+C2xDnuVbsbzuib6Ne2tt9Wp2yNYrYhq/AxSw1eDaTEpkJWJ62ztx
+         x5qJ5+a0PqG6OS/Lj4bKc1qI1ZoV/58xjjWWB0YTgb5fDqPqGMsAvIyG7+wpH3efHOjP
+         ATJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=mime-version:user-agent:references:message-id:date:in-reply-to
          :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=DeZeaGmLe3sAs17o9u4aA+9IGunBSiFEik8IifS7SLk=;
-        b=bMm/SkxzfErBfXzEAx6Ba0GsGBiNhJmvNxP4Fxu+skgo/xOblDWQ1XhyJJJd+6oEVZ
-         k5LC24qpdGm5hG6Ztuz5LqdxjC//I9LRznv3xQ0lfmBaQo8kn9LAbkqVJ2BjMY+9lMyP
-         xDiQ95616fJOjty1Gu3fBIFjAnjjbaAflHXdmHK8xZhbajk1+lYJcVMS6OhjzLFDGv9C
-         YdgTAVXNmM3fqdAotRClZDpDRE/hGN0Pyz69fYBykm4ihI53vvlYLNkv/rvtzMkvWQs1
-         Y3TfSperx/G1s9xZcGROYjg1hBzlveUPaWwBTMRcQtLB7/cWhRBA9UsO32XqVdOQ0btJ
-         7Gvg==
-X-Gm-Message-State: ACgBeo0YYd8Xm13pPqfcCXn+VRW8X4AjbIszopijlyIVRm1FYlKYkzsf
-        gNXqEKyXBMw/XWYjEO3azT0=
-X-Google-Smtp-Source: AA6agR79p5K6VeBZ3o0ywObGZXXOxpg7PafY0OT9DSE6RWchw34Oq7Z7KDr/pgwu9Xvm9agFIeSsmA==
-X-Received: by 2002:a5d:47c7:0:b0:225:8905:296 with SMTP id o7-20020a5d47c7000000b0022589050296mr27986402wrc.515.1662461455554;
-        Tue, 06 Sep 2022 03:50:55 -0700 (PDT)
+        bh=b1zh3Myo6jU2fqhvORGPXUCfBSeS9QtYiYf8N35O2G8=;
+        b=sxHcSffQkcp+6GJH6MSXGIos9IPF6nGLMqlO7i8eyTFDzou0BEOy9EgRoNQbhYyJPl
+         y0ClFcIBXm2SPRatKV+roVSuHjxfDRqjc5n3J4j/RyVorVAwq7Fu5RpMGhKCwLbtJyOk
+         YlPCcvvP8sWsskGCo/sYhziDg8/8eAKD/VGP7l7Uox8MG3lRJj1HNIDq072hFW1OLiBT
+         lDxrEi3nXTPEv/lmCuGzw+ojyXtiD8ZSHM7tSSLi8TwYba1X+WDGVaIr2OKepmMGkUGW
+         CCvdK0dsnVQ+JuJWp0hUMS/yDdIiTIfuukjuJ2cu19bwuEToH5k9pyPMxF5TFV/j/KLc
+         e/Dg==
+X-Gm-Message-State: ACgBeo3d6NU1cPAz5zvek5bAcVJwby/6zW0I5HMR0OPme1s6/FTIZSZ5
+        JBX5VbydrlvFRjvURXRiths=
+X-Google-Smtp-Source: AA6agR7H+Ae4hheQrM5Be9dOg7JU2kpa1pWsVb2R/E4T4iMLEPoqt6gYIa7fUtYa7zp/8lwVctmsXA==
+X-Received: by 2002:a05:600c:4e8b:b0:3a5:f5bf:9c5a with SMTP id f11-20020a05600c4e8b00b003a5f5bf9c5amr13639171wmq.85.1662461457391;
+        Tue, 06 Sep 2022 03:50:57 -0700 (PDT)
 Received: from imac ([88.97.103.74])
-        by smtp.gmail.com with ESMTPSA id z14-20020a5d4c8e000000b0021e4829d359sm12179006wrs.39.2022.09.06.03.50.53
+        by smtp.gmail.com with ESMTPSA id h23-20020a05600c2cb700b003a2f2bb72d5sm25353742wmc.45.2022.09.06.03.50.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 03:50:54 -0700 (PDT)
+        Tue, 06 Sep 2022 03:50:56 -0700 (PDT)
 From:   Donald Hunter <donald.hunter@gmail.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>
+To:     Jani Nikula <jani.nikula@linux.intel.com>
 Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
         Jonathan Corbet <corbet@lwn.net>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/2] Add subdir support to Documentation
- makefile
-In-Reply-To: <3d08894c-b3d1-37e8-664e-48e66dc664ac@iogearbox.net> (Daniel
-        Borkmann's message of "Fri, 2 Sep 2022 17:08:09 +0200")
-Date:   Tue, 06 Sep 2022 11:21:59 +0100
-Message-ID: <m2h71k6bw8.fsf@gmail.com>
+Subject: Re: [PATCH bpf-next v3 2/2] Add table of BPF program types to
+ libbpf docs
+In-Reply-To: <875yi5dbpw.fsf@intel.com> (Jani Nikula's message of "Fri, 02 Sep
+        2022 18:42:35 +0300")
+Date:   Tue, 06 Sep 2022 11:49:25 +0100
+Message-ID: <m2czc86ami.fsf@gmail.com>
 References: <20220829091500.24115-1-donald.hunter@gmail.com>
-        <20220829091500.24115-2-donald.hunter@gmail.com>
-        <3d08894c-b3d1-37e8-664e-48e66dc664ac@iogearbox.net>
+        <20220829091500.24115-3-donald.hunter@gmail.com>
+        <875yi5dbpw.fsf@intel.com>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (darwin)
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -68,22 +68,22 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Daniel Borkmann <daniel@iogearbox.net> writes:
+Jani Nikula <jani.nikula@linux.intel.com> writes:
 
-> On 8/29/22 11:14 AM, Donald Hunter wrote:
->> Run make in list of subdirs to build generated sources and migrate
->> userspace-api/media to use this instead of being a special case.
->> Signed-off-by: Donald Hunter <donald.hunter@gmail.com>
+> On Mon, 29 Aug 2022, Donald Hunter <donald.hunter@gmail.com> wrote:
+>> Extend the libbpf documentation with a table of program types,
+>> attach points and ELF section names. This table uses data from
+>> program_types.csv which is generated from tools/lib/bpf/libbpf.c
+>> during the documentation build.
 >
-> Jonathan, given this touches Documentation/Makefile, could you ACK if
-> it looks good to you? Noticed both patches don't have doc: $subj prefix,
-> but that's something we could fix up.
+> Oh, would be nice to turn all of these into proper but simple Sphinx
+> extensions that take the deps into account in the Sphinx build
+> process. And, of course, would be pure python instead of a combo of
+> Make, shell, and awk.
 >
-> Maybe one small request, would be nice to build Documentation/bpf/libbpf/
-> also with every BPF CI run to avoid breakage of program_types.csv. Donald
-> could you check if feasible? Follow-up might be ok too, but up to Andrii.
+> That's one of the reasons we chose Sphinx originally, to be able to
+> write Sphinx extensions and avoid complicated pipelines.
 
-Sure, I can look at what is needed for the BPF CI run.
-
-> Thanks,
-> Daniel
+I could look at this as a followup patch since I would need to learn how
+to write Sphinx extensions first. It seems that it will require a new
+reST directive, is that right?
