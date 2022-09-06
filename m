@@ -2,322 +2,121 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8E80C38145
-	for <bpf@archiver.kernel.org>; Tue,  6 Sep 2022 20:10:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8D94ECAAA1
+	for <bpf@archiver.kernel.org>; Tue,  6 Sep 2022 20:31:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbiIFUKi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 6 Sep 2022 16:10:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57268 "EHLO
+        id S229718AbiIFUbn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 6 Sep 2022 16:31:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbiIFUKO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 6 Sep 2022 16:10:14 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 010781083;
-        Tue,  6 Sep 2022 13:05:13 -0700 (PDT)
-Received: from pwmachine.numericable.fr (85-170-34-72.rev.numericable.fr [85.170.34.72])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 9EE5D2049BAF;
-        Tue,  6 Sep 2022 12:58:36 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9EE5D2049BAF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1662494321;
-        bh=5lDK7It259RN4ymtCiet+4wq5JdclQetrfA0fw0WV64=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n4pfBsr8YWPyT8jTqgIQ0DuqftZrl5YeBbvTauX+bmGr6Oi5Og9mJq+BFVDiKjYRZ
-         +28qWwbzGIlpkEiLF16UdzsP9MLefcnk+gN0iBPjiPS68hMTZENletySVI9taNLRSI
-         zMDXto3nHyBx3sfB03NjnyOBkFLegNVD8mPIMfA8=
-From:   Francis Laniel <flaniel@linux.microsoft.com>
-To:     bpf@vger.kernel.org
-Cc:     Francis Laniel <flaniel@linux.microsoft.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Maxim Mikityanskiy <maximmi@nvidia.com>,
-        Geliang Tang <geliang.tang@suse.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH v2 2/5] selftests: Add BPF overwritable ring buffer self tests.
-Date:   Tue,  6 Sep 2022 21:56:43 +0200
-Message-Id: <20220906195656.33021-3-flaniel@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220906195656.33021-1-flaniel@linux.microsoft.com>
-References: <20220906195656.33021-1-flaniel@linux.microsoft.com>
+        with ESMTP id S229748AbiIFUbm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 6 Sep 2022 16:31:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B0090C48;
+        Tue,  6 Sep 2022 13:31:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF6836157D;
+        Tue,  6 Sep 2022 20:31:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59216C433D6;
+        Tue,  6 Sep 2022 20:31:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662496300;
+        bh=r6C8I6H9slvWl19aG25ndT1qrQs1nCb5lub5kG6oMVM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=IBxJB0kY8IdmdiwIctGlt20BRhMPgy/q7I6Ft2NI2cnP5lk97gNaFqVFwkfvmFYwp
+         z8K7gbDiLCKZkB9WBFvnysDzlY4vnkqQbhmMClOEXhiJZ1YXe3QogxbGGr3D8FL6n0
+         V9pi7j4lewk7w1lcu0NDT8o5a4HiUlGpt2pnKcHQGae7PIAb+cswhzsHp6lH+cIUM+
+         9h85gOnc15YhRY7rB5ZyNO+Z16sbSdSHLK/OuKFIrko406Sp3DagqOsSttzKDc5cSr
+         vX0S/ZvwybNeEIg/TDK2AMM/A77ld9H3Mq68rzs4xXy4GKhKbLMCYe5xMI9oovwR8F
+         sWGeu6GvX2qqQ==
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1278624b7c4so12847074fac.5;
+        Tue, 06 Sep 2022 13:31:40 -0700 (PDT)
+X-Gm-Message-State: ACgBeo38/WPfIq/+csrtKdeNytkYK4dE9BgA3DlrMqRMybVcIHLnUZvW
+        SpeOQ60tysCDB+AeUlvuCZYfM6gg5yTc3bdz8gc=
+X-Google-Smtp-Source: AA6agR5bslcLEkAX68DDQ1hm4d4hlb0UQqBdySwDdLluNxVqQfl/fEkrRXLkeHf66mthaEsUmz5zqVwPriCVRhTLJmk=
+X-Received: by 2002:a05:6808:195:b0:342:ed58:52b5 with SMTP id
+ w21-20020a056808019500b00342ed5852b5mr86646oic.22.1662496299511; Tue, 06 Sep
+ 2022 13:31:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <6d349d1047f44001b926f80ad5416245@huawei.com>
+In-Reply-To: <6d349d1047f44001b926f80ad5416245@huawei.com>
+From:   Song Liu <song@kernel.org>
+Date:   Tue, 6 Sep 2022 13:31:28 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7Em6q5hqiKWEZpJOaU5DTrZE+BPPHq+Chyz0-+-yQ_ZA@mail.gmail.com>
+Message-ID: <CAPhsuW7Em6q5hqiKWEZpJOaU5DTrZE+BPPHq+Chyz0-+-yQ_ZA@mail.gmail.com>
+Subject: Re: [PATCH] libbpf: Clean up legacy bpf maps declaration in bpf_helpers
+To:     "Liuxin(EulerOS)" <liuxin350@huawei.com>
+Cc:     "andrii@kernel.org" <andrii@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "martin.lau@linux.dev" <martin.lau@linux.dev>,
+        "yhs@fb.com" <yhs@fb.com>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "sdf@google.com" <sdf@google.com>,
+        "haoluo@google.com" <haoluo@google.com>,
+        "jolsa@kernel.org" <jolsa@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "854182924@qq.com" <854182924@qq.com>,
+        "Yanan (Euler)" <yanan@huawei.com>,
+        "Wuchangye (EulerOS)" <wuchangye@huawei.com>,
+        Xiesongyang <xiesongyang@huawei.com>,
+        "zhudi (E)" <zhudi2@huawei.com>,
+        "kongweibin (A)" <kongweibin2@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add tests to confirm behavior of overwritable BPF ring buffer, particularly the
-oldest data being overwritten by newest ones.
+On Mon, Sep 5, 2022 at 1:38 AM Liuxin(EulerOS) <liuxin350@huawei.com> wrote:
+>
+> Legacy bpf maps declaration were no longer supported in Libbpf 1.0,
+> so it was time to remove the definition of bpf_map_def in
+> bpf_helpers.h.
+>
+> LINK:[1] https://github.com/libbpf/libbpf/wiki/Libbpf:-the-road-to-v1.0
+>
+> Signed-off-by: Liu Xin<liuxin350@huawei.com>
 
-Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
----
- tools/testing/selftests/bpf/Makefile          |   5 +-
- .../bpf/prog_tests/ringbuf_overwritable.c     | 158 ++++++++++++++++++
- .../bpf/progs/test_ringbuf_overwritable.c     |  61 +++++++
- 3 files changed, 222 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/ringbuf_overwritable.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_ringbuf_overwritable.c
+This looks a little weird.
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 8d59ec7f4c2d..96e95dcfc982 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -351,8 +351,9 @@ LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h		\
- 		test_usdt.skel.h
- 
- LSKELS := kfunc_call_test.c fentry_test.c fexit_test.c fexit_sleep.c \
--	test_ringbuf.c atomics.c trace_printk.c trace_vprintk.c \
--	map_ptr_kern.c core_kern.c core_kern_overflow.c
-+	test_ringbuf.c test_ringbuf_overwritable.c atomics.c \
-+	trace_printk.c trace_vprintk.c map_ptr_kern.c \
-+	core_kern.c core_kern_overflow.c
- # Generate both light skeleton and libbpf skeleton for these
- LSKELS_EXTRA := test_ksyms_module.c test_ksyms_weak.c kfunc_call_test_subprog.c
- SKEL_BLACKLIST += $$(LSKELS)
-diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf_overwritable.c b/tools/testing/selftests/bpf/prog_tests/ringbuf_overwritable.c
-new file mode 100644
-index 000000000000..b5ec1e62f761
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/ringbuf_overwritable.c
-@@ -0,0 +1,158 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#include <linux/compiler.h>
-+#include <asm/barrier.h>
-+#include <test_progs.h>
-+#include <sys/mman.h>
-+#include <sys/epoll.h>
-+#include <time.h>
-+#include <sched.h>
-+#include <signal.h>
-+#include <pthread.h>
-+#include <sys/sysinfo.h>
-+#include <linux/perf_event.h>
-+#include <linux/ring_buffer.h>
-+#include "test_ringbuf_overwritable.lskel.h"
-+
-+struct sample {
-+	int count;
-+	/*
-+	 * filler size will be computed to have 8 samples in a 4096 bytes long
-+	 * buffer.
-+	 */
-+	char filler[4096 / 8 - sizeof(int) - 8];
-+};
-+
-+struct ring {
-+	ring_buffer_sample_fn sample_cb;
-+	__u8 overwritable: 1,
-+	     __reserved:   7;
-+	void *ctx;
-+	void *data;
-+	unsigned long *consumer_pos;
-+	unsigned long *producer_pos;
-+	unsigned long mask;
-+	int map_fd;
-+};
-+
-+struct ring_buffer {
-+	struct epoll_event *events;
-+	struct ring *rings;
-+	size_t page_size;
-+	int epoll_fd;
-+	int ring_cnt;
-+};
-+
-+static int duration;
-+static struct test_ringbuf_overwritable_lskel *skel;
-+
-+void test_ringbuf_overwritable(void)
-+{
-+	const size_t rec_sz = BPF_RINGBUF_HDR_SZ + sizeof(struct sample);
-+	int page_size = getpagesize();
-+	int sample_cnt = 0, sample_read = 0;
-+	unsigned long mask = page_size - 1;
-+	struct ring_buffer *ringbuf;
-+	int err, *len_ptr, len;
-+	struct sample *sample;
-+	long read_pos;
-+	void *data_ptr;
-+
-+	skel = test_ringbuf_overwritable_lskel__open();
-+	if (CHECK(!skel, "skel_open", "skeleton open failed\n"))
-+		return;
-+
-+	skel->maps.ringbuf.max_entries = page_size;
-+
-+	err = test_ringbuf_overwritable_lskel__load(skel);
-+	if (CHECK(err != 0, "skel_load", "skeleton load failed\n"))
-+		goto cleanup;
-+
-+	/* only trigger BPF program for current process */
-+	skel->bss->pid = getpid();
-+
-+	ringbuf = ring_buffer__new(skel->maps.ringbuf.map_fd, NULL, NULL, NULL);
-+	if (CHECK(!ringbuf, "ringbuf_create", "failed to create ringbuf\n"))
-+		goto cleanup;
-+
-+	/* There is only one ring in this ringbuf. */
-+	data_ptr = ringbuf->rings[0].data;
-+
-+	err = test_ringbuf_overwritable_lskel__attach(skel);
-+	if (CHECK(err, "skel_attach", "skeleton attachment failed: %d\n", err))
-+		goto cleanup;
-+
-+	/* Trigger one sample. */
-+	syscall(__NR_getpgid);
-+	sample_cnt++;
-+
-+	CHECK(skel->bss->avail_data != -EINVAL,
-+	      "err_avail_size", "exp %d, got %ld\n",
-+	      -EINVAL, skel->bss->avail_data);
-+	CHECK(skel->bss->ring_size != page_size,
-+	      "err_ring_size", "exp %ld, got %ld\n",
-+	      (long)page_size, skel->bss->ring_size);
-+	CHECK(skel->bss->cons_pos != -EINVAL,
-+	      "err_cons_pos", "exp %d, got %ld\n",
-+	      -EINVAL, skel->bss->cons_pos);
-+	CHECK(skel->bss->prod_pos != sample_cnt * -rec_sz,
-+	      "err_prod_pos", "exp %ld, got %ld\n",
-+	      sample_cnt * -rec_sz, skel->bss->prod_pos);
-+
-+	len_ptr = data_ptr + (skel->bss->prod_pos & mask);
-+	len = smp_load_acquire(len_ptr);
-+
-+	CHECK(len != sizeof(struct sample),
-+	      "err_sample_len", "exp %ld, got %d\n",
-+	      sizeof(struct sample), len);
-+
-+	sample = (void *)len_ptr + BPF_RINGBUF_HDR_SZ;
-+
-+	CHECK(sample->count != sample_cnt,
-+	      "err_sample_cnt", "exp %d, got %d",
-+	      sample_cnt, sample->count);
-+
-+	/* Trigger many samples, so we overwrite data */
-+	for (int i = 0; i < 16; i++) {
-+		syscall(__NR_getpgid);
-+		sample_cnt++;
-+	}
-+
-+	CHECK(skel->bss->avail_data != -EINVAL,
-+	      "err_avail_size", "exp %d, got %ld\n",
-+	      -EINVAL, skel->bss->avail_data);
-+	CHECK(skel->bss->ring_size != page_size,
-+	      "err_ring_size", "exp %ld, got %ld\n",
-+	      (long)page_size, skel->bss->ring_size);
-+	CHECK(skel->bss->cons_pos != -EINVAL,
-+	      "err_cons_pos", "exp %d, got %ld\n",
-+	      -EINVAL, skel->bss->cons_pos);
-+	CHECK(skel->bss->prod_pos != sample_cnt * -rec_sz,
-+	      "err_prod_pos", "exp %ld, got %ld\n",
-+	      sample_cnt * -rec_sz, skel->bss->prod_pos);
-+
-+	read_pos = skel->bss->prod_pos;
-+	sample_read = 0;
-+	while (read_pos - skel->bss->prod_pos < mask) {
-+		len_ptr = data_ptr + (read_pos & mask);
-+		len = smp_load_acquire(len_ptr);
-+
-+		sample = (void *)len_ptr + BPF_RINGBUF_HDR_SZ;
-+
-+		CHECK(sample->count != sample_cnt - sample_read,
-+		      "err_sample_cnt", "exp %d, got %d",
-+		      sample_cnt - sample_read, sample->count);
-+
-+		sample_read++;
-+		read_pos += round_up(len + BPF_RINGBUF_HDR_SZ, 8);
-+	}
-+
-+	CHECK(sample_read != page_size / rec_sz,
-+	      "err_sample_read", "exp %ld, got %d",
-+	      page_size / rec_sz, sample_read);
-+
-+	test_ringbuf_overwritable_lskel__detach(skel);
-+cleanup:
-+	ring_buffer__free(ringbuf);
-+	test_ringbuf_overwritable_lskel__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_ringbuf_overwritable.c b/tools/testing/selftests/bpf/progs/test_ringbuf_overwritable.c
-new file mode 100644
-index 000000000000..e28be35059b7
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_ringbuf_overwritable.c
-@@ -0,0 +1,61 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2020 Facebook
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct sample {
-+	int count;
-+	/*
-+	 * filler size will be computed to have 8 samples in a 4096 bytes long
-+	 * buffer.
-+	 */
-+	char filler[4096 / 8 - sizeof(int) - BPF_RINGBUF_HDR_SZ];
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_RINGBUF);
-+	__uint(map_flags, BFP_F_RB_OVERWRITABLE);
-+} ringbuf SEC(".maps");
-+
-+/* inputs */
-+int pid = 0;
-+
-+/* outputs */
-+long avail_data = 0;
-+long ring_size = 0;
-+long cons_pos = 0;
-+long prod_pos = 0;
-+
-+static int count;
-+
-+SEC("fentry/" SYS_PREFIX "sys_getpgid")
-+int test_ringbuf_overwritable(void *ctx)
-+{
-+	int cur_pid = bpf_get_current_pid_tgid() >> 32;
-+	struct sample *sample;
-+
-+	if (cur_pid != pid)
-+		return 0;
-+
-+	sample = bpf_ringbuf_reserve(&ringbuf, sizeof(*sample), 0);
-+	if (!sample)
-+		return 0;
-+
-+	__sync_fetch_and_add(&count, 1);
-+	sample->count = count;
-+
-+	bpf_printk("count: %d\n", count);
-+
-+	bpf_ringbuf_submit(sample, 0);
-+
-+	avail_data = bpf_ringbuf_query(&ringbuf, BPF_RB_AVAIL_DATA);
-+	ring_size = bpf_ringbuf_query(&ringbuf, BPF_RB_RING_SIZE);
-+	cons_pos = bpf_ringbuf_query(&ringbuf, BPF_RB_CONS_POS);
-+	prod_pos = bpf_ringbuf_query(&ringbuf, BPF_RB_PROD_POS);
-+
-+	return 0;
-+}
--- 
-2.25.1
+From: "Liuxin(EulerOS)" <liuxin350@huawei.com>
 
+Please fix your name in git config:
+
+Otherwise,
+
+Acked-by: Song Liu <song@kernel.org>
+
+> ---
+> tools/lib/bpf/bpf_helpers.h | 12 ------------
+> 1 file changed, 12 deletions(-)
+>
+> diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+> index 867b73483..9cad13e7f 100644
+> --- a/tools/lib/bpf/bpf_helpers.h
+> +++ b/tools/lib/bpf/bpf_helpers.h
+> @@ -167,18 +167,6 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
+> }
+> #endif
+>
+> -/*
+> - * Helper structure used by eBPF C program
+> - * to describe BPF map attributes to libbpf loader
+> - */
+> -struct bpf_map_def {
+> -       unsigned int type;
+> -       unsigned int key_size;
+> -       unsigned int value_size;
+> -       unsigned int max_entries;
+> -       unsigned int map_flags;
+> -} __attribute__((deprecated("use BTF-defined maps in .maps section")));
+> -
+> enum libbpf_pin_type {
+>         LIBBPF_PIN_NONE,
+>         /* PIN_BY_NAME: pin maps by name (in /sys/fs/bpf by default) */
+> --
+> 2.33.0
