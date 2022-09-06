@@ -2,25 +2,25 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DF11ECAAA1
-	for <bpf@archiver.kernel.org>; Tue,  6 Sep 2022 12:13:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AEB8C54EE9
+	for <bpf@archiver.kernel.org>; Tue,  6 Sep 2022 12:13:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239795AbiIFMNf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 6 Sep 2022 08:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48076 "EHLO
+        id S239684AbiIFMNv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 6 Sep 2022 08:13:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238965AbiIFMM4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 6 Sep 2022 08:12:56 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD59796B2;
-        Tue,  6 Sep 2022 05:11:59 -0700 (PDT)
+        with ESMTP id S239810AbiIFMM5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 6 Sep 2022 08:12:57 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CCE7A529;
+        Tue,  6 Sep 2022 05:12:00 -0700 (PDT)
 Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MMPMt6X8YzrS92;
-        Tue,  6 Sep 2022 20:10:02 +0800 (CST)
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MMPL06ZvMzmVD6;
+        Tue,  6 Sep 2022 20:08:24 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
  (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 6 Sep
- 2022 20:11:55 +0800
+ 2022 20:11:57 +0800
 From:   Zhengchao Shao <shaozhengchao@huawei.com>
 To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <bpf@vger.kernel.org>, <davem@davemloft.net>,
@@ -32,9 +32,9 @@ CC:     <daniel@iogearbox.net>, <john.fastabend@gmail.com>,
         <yhs@fb.com>, <kpsingh@kernel.org>, <sdf@google.com>,
         <haoluo@google.com>, <jolsa@kernel.org>, <weiyongjun1@huawei.com>,
         <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH net-next,v2 19/22] net: sched: act_skbedit: get rid of tcf_skbedit_walker and tcf_skbedit_search
-Date:   Tue, 6 Sep 2022 20:13:43 +0800
-Message-ID: <20220906121346.71578-20-shaozhengchao@huawei.com>
+Subject: [PATCH net-next,v2 21/22] net: sched: act_tunnel_key: get rid of tunnel_key_walker and tunnel_key_search
+Date:   Tue, 6 Sep 2022 20:13:45 +0800
+Message-ID: <20220906121346.71578-22-shaozhengchao@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220906121346.71578-1-shaozhengchao@huawei.com>
 References: <20220906121346.71578-1-shaozhengchao@huawei.com>
@@ -48,51 +48,50 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-tcf_skbedit_walker() and tcf_skbedit_search() do the same thing as generic
+tunnel_key_walker() and tunnel_key_search() do the same thing as generic
 walk/search function, so remove them.
 
 Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 ---
- net/sched/act_skbedit.c | 19 -------------------
+ net/sched/act_tunnel_key.c | 19 -------------------
  1 file changed, 19 deletions(-)
 
-diff --git a/net/sched/act_skbedit.c b/net/sched/act_skbedit.c
-index 72729ed7219a..7f598784fd30 100644
---- a/net/sched/act_skbedit.c
-+++ b/net/sched/act_skbedit.c
-@@ -346,23 +346,6 @@ static void tcf_skbedit_cleanup(struct tc_action *a)
- 		kfree_rcu(params, rcu);
+diff --git a/net/sched/act_tunnel_key.c b/net/sched/act_tunnel_key.c
+index 2db0c929fa09..2691a3d8e451 100644
+--- a/net/sched/act_tunnel_key.c
++++ b/net/sched/act_tunnel_key.c
+@@ -769,23 +769,6 @@ static int tunnel_key_dump(struct sk_buff *skb, struct tc_action *a,
+ 	return -1;
  }
  
--static int tcf_skbedit_walker(struct net *net, struct sk_buff *skb,
--			      struct netlink_callback *cb, int type,
--			      const struct tc_action_ops *ops,
--			      struct netlink_ext_ack *extack)
+-static int tunnel_key_walker(struct net *net, struct sk_buff *skb,
+-			     struct netlink_callback *cb, int type,
+-			     const struct tc_action_ops *ops,
+-			     struct netlink_ext_ack *extack)
 -{
--	struct tc_action_net *tn = net_generic(net, act_skbedit_ops.net_id);
+-	struct tc_action_net *tn = net_generic(net, act_tunnel_key_ops.net_id);
 -
 -	return tcf_generic_walker(tn, skb, cb, type, ops, extack);
 -}
 -
--static int tcf_skbedit_search(struct net *net, struct tc_action **a, u32 index)
+-static int tunnel_key_search(struct net *net, struct tc_action **a, u32 index)
 -{
--	struct tc_action_net *tn = net_generic(net, act_skbedit_ops.net_id);
+-	struct tc_action_net *tn = net_generic(net, act_tunnel_key_ops.net_id);
 -
 -	return tcf_idr_search(tn, a, index);
 -}
 -
- static size_t tcf_skbedit_get_fill_size(const struct tc_action *act)
+ static void tcf_tunnel_encap_put_tunnel(void *priv)
  {
- 	return nla_total_size(sizeof(struct tc_skbedit))
-@@ -427,9 +410,7 @@ static struct tc_action_ops act_skbedit_ops = {
- 	.dump		=	tcf_skbedit_dump,
- 	.init		=	tcf_skbedit_init,
- 	.cleanup	=	tcf_skbedit_cleanup,
--	.walk		=	tcf_skbedit_walker,
- 	.get_fill_size	=	tcf_skbedit_get_fill_size,
--	.lookup		=	tcf_skbedit_search,
- 	.offload_act_setup =	tcf_skbedit_offload_act_setup,
- 	.size		=	sizeof(struct tcf_skbedit),
+ 	struct ip_tunnel_info *tunnel = priv;
+@@ -849,8 +832,6 @@ static struct tc_action_ops act_tunnel_key_ops = {
+ 	.dump		=	tunnel_key_dump,
+ 	.init		=	tunnel_key_init,
+ 	.cleanup	=	tunnel_key_release,
+-	.walk		=	tunnel_key_walker,
+-	.lookup		=	tunnel_key_search,
+ 	.offload_act_setup =	tcf_tunnel_key_offload_act_setup,
+ 	.size		=	sizeof(struct tcf_tunnel_key),
  };
 -- 
 2.17.1
