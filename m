@@ -2,120 +2,85 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1D73ECAAA1
-	for <bpf@archiver.kernel.org>; Tue,  6 Sep 2022 17:05:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3596ECAAD5
+	for <bpf@archiver.kernel.org>; Tue,  6 Sep 2022 17:19:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239292AbiIFRFZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 6 Sep 2022 13:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
+        id S237344AbiIFRTZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 6 Sep 2022 13:19:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239352AbiIFRE5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 6 Sep 2022 13:04:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 687371012
-        for <bpf@vger.kernel.org>; Tue,  6 Sep 2022 09:51:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 735A3615A8
-        for <bpf@vger.kernel.org>; Tue,  6 Sep 2022 16:51:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC607C433D7
-        for <bpf@vger.kernel.org>; Tue,  6 Sep 2022 16:51:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662483102;
-        bh=eVzpS8UbW3F7NnvzwrjmHwwSUdB2CW3lOO+QslUAmMo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Cfh+rX1bbJpQZhf2thYL+rRVmsQT5fzFiqJxuS3h4Av6FjxfQkab1TBbd2X7qo2aE
-         lHomKAqra3t2d7KxyOVIY0qLVlbpUpcdaXhttQRQ12y2eTfqtyAghmmorC7aCLVAHn
-         kvFiv/8zbxI+DE3bFOG9a2Wjb3Crm/eS06TkK0FYEWizWbu7fMXvoqLPvGmpySGoDb
-         k2TYPqQvoax2ENnnbZ5fNhp14UKAyNbk283brLZWmoEm3sRdkaNiG8AbkyCwatLFLg
-         /e31tTc4uluMAotDrFEr2/x3+kg85dCsYYYEG8+X0KkqTO1DMY12qwr7/t3epJ8WkW
-         88B4phwOOSJUw==
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-127a3a39131so8817693fac.13
-        for <bpf@vger.kernel.org>; Tue, 06 Sep 2022 09:51:42 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3VK6ltn9uck+L2NATLDwWv8XXUodk8L/+J1VxHI6PI2sTssLTg
-        ySm9tUtCDB0ABNbQM4bE4XRAIRA4ylUgcrwmZa8=
-X-Google-Smtp-Source: AA6agR59TCxORs6AceoiEdZNr/mAmlVPxMXuIFwRm5jFfAtyKclw0Q9AlD5fCR70mTRxQKrSgTnEclX8gL6kpYOhjf8=
-X-Received: by 2002:a05:6808:195:b0:342:ed58:52b5 with SMTP id
- w21-20020a056808019500b00342ed5852b5mr10812855oic.22.1662483101976; Tue, 06
- Sep 2022 09:51:41 -0700 (PDT)
+        with ESMTP id S239871AbiIFRSy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 6 Sep 2022 13:18:54 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0E417E38;
+        Tue,  6 Sep 2022 10:07:42 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id az27so16431306wrb.6;
+        Tue, 06 Sep 2022 10:07:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:from:to:cc:subject:date;
+        bh=d7AkixOMV32e6vIKIt1+7sUJ8KZkxzm56toQ2L27L/E=;
+        b=D7jUbaMMyC2gYcwc8IognHgPh/EZCIu/DW4jpPg16JRyxc+jy8gb71guWFb14Gpoit
+         0OGsZe/lPtyVcFm1xoAuCfFpGis7SmTa6gU6iGT4/q1v8XolO9oL9miMpGyiRWrdyb4J
+         I6DKLDC5aGh5G0dIL46dANxQqcRDwMW6+fqRJsKA3OJCsm9YQarBNFg/CguS6q8xXWLS
+         Fd/pZFHq8K8LWojqJr4gpEFS74zuM0JkzQ5t0FidJH8QAQxIq5N/hNBCT6SY7XUYpwy0
+         Uxn4R+ZxrE+sYFSq3Hn1Idmq2Qsznsam1ckjJPsCn4qi5jsPHc6az1qVCNqGR93dOqBg
+         nYvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=d7AkixOMV32e6vIKIt1+7sUJ8KZkxzm56toQ2L27L/E=;
+        b=jkN5vb9wURKR6a6U2J2B+4kLD9v/eubWxhVuH7tA45lDsCD4JB5e4LsOEhveB00vZY
+         eUZlG7a7YNaV09leZnKdIEXYNip2Nln7KFtX3yVJGb8T7XGFSs6vtKzqPZ0XM/hS9dgf
+         swJvV9sjVNXrK7VvC5ZxNgxFhwhVqPRuFZrLuQtXhn26DpzLk3tqOz1icIFbP6vLuZ0e
+         UWImF3NtQs2UaQIXC2tp2P+XEZ6B5YntgMmoo/tnHyaXODDQfR0P0l/niKrohoE5ODEh
+         Qw41XWgH+4ANIYDxQFuHSiu8N7ajRTOP19upWnFaxGgw3Lp2Pjzv6ADFHNJZi/m0zx7E
+         KQEQ==
+X-Gm-Message-State: ACgBeo1kZmKEBiIh2onC7VHrNQkrvyQWDAcdRGECJW+1ZXtlbnrda4VH
+        WiDkmiu7leKDUTG9jiCDPrvvbcFbm0etfQ==
+X-Google-Smtp-Source: AA6agR6V8Xqe1ALsd54De/WO0V1JbQN4IOWkD22QSXiegjL0f+7f/84PJ2yIKhcEJK/STy7sYVvxDg==
+X-Received: by 2002:a5d:4690:0:b0:228:9858:8520 with SMTP id u16-20020a5d4690000000b0022898588520mr5896626wrq.558.1662484060984;
+        Tue, 06 Sep 2022 10:07:40 -0700 (PDT)
+Received: from imac ([88.97.103.74])
+        by smtp.gmail.com with ESMTPSA id c8-20020a7bc008000000b003a31ca9dfb6sm18227921wmb.32.2022.09.06.10.07.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 10:07:39 -0700 (PDT)
+From:   Donald Hunter <donald.hunter@gmail.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Subject: Re: [PATCH bpf-next v3 2/2] Add table of BPF program types to
+ libbpf docs
+References: <20220829091500.24115-1-donald.hunter@gmail.com>
+        <20220829091500.24115-3-donald.hunter@gmail.com>
+        <87h71kadjh.fsf@intel.com>
+Date:   Tue, 06 Sep 2022 18:07:38 +0100
+In-Reply-To: <87h71kadjh.fsf@intel.com> (Jani Nikula's message of "Tue, 06 Sep
+        2022 15:32:50 +0300")
+Message-ID: <m2zgfc4ejp.fsf@gmail.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (darwin)
 MIME-Version: 1.0
-References: <20220905072219.56361-1-ykaliuta@redhat.com>
-In-Reply-To: <20220905072219.56361-1-ykaliuta@redhat.com>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 6 Sep 2022 09:51:31 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4fKb17XXW5LhosJb5PPPFM+G0bqde1d6MC62TtrM=SVQ@mail.gmail.com>
-Message-ID: <CAPhsuW4fKb17XXW5LhosJb5PPPFM+G0bqde1d6MC62TtrM=SVQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests: bpf: test_kmod.sh: pass parameter to
- the module
-To:     Yauheni Kaliuta <ykaliuta@redhat.com>
-Cc:     bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 12:25 AM Yauheni Kaliuta <ykaliuta@redhat.com> wrote:
->
-> It's possible to specify particular tests for test_bpf.ko with
-> module parameters. Make it possible to pass a module parameter as
-> the first test_kmod.sh argument, example:
->
-> test_kmod.sh test_range=1,3
->
-> Since magnitude tests take long time it can be reasonable to skip
-> them.
->
-> Signed-off-by: Yauheni Kaliuta <ykaliuta@redhat.com>
-> ---
->  tools/testing/selftests/bpf/test_kmod.sh | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/test_kmod.sh b/tools/testing/selftests/bpf/test_kmod.sh
-> index 4f6444bcd53f..3cb52ba20db8 100755
-> --- a/tools/testing/selftests/bpf/test_kmod.sh
-> +++ b/tools/testing/selftests/bpf/test_kmod.sh
-> @@ -4,6 +4,8 @@
->  # Kselftest framework requirement - SKIP code is 4.
->  ksft_skip=4
->
-> +MOD_PARAM="$1"
+Jani Nikula <jani.nikula@linux.intel.com> writes:
 
-Shall we use $@ to pass all remaining arguments to insmod/modprobe?
-Otherwise, users may get confused when some parameters don't get
-passed.
+>> +
+>> +.. csv-table:: Program Types and Their ELF Section Names
+>> +   :file: ../../output/program_types.csv
+>
+> Oh. You should probably test this with out-of-tree builds.
 
-We should also add a help/usage message or at least a comment in the
-script.
+By out of tree, do you mean make htmldocs O=... or something else?
+
+I have tested with O=... whih works for the kernel docs, but I think I
+will need to rework the location to support the libbpf doc build which
+has different directory layout.
 
 Thanks,
-Song
-
-> +
->  msg="skip all tests:"
->  if [ "$(id -u)" != "0" ]; then
->         echo $msg please run this as root >&2
-> @@ -26,15 +28,15 @@ test_run()
->         echo "[ JIT enabled:$1 hardened:$2 ]"
->         dmesg -C
->         if [ -f ${OUTPUT}/lib/test_bpf.ko ]; then
-> -               insmod ${OUTPUT}/lib/test_bpf.ko 2> /dev/null
-> +               insmod ${OUTPUT}/lib/test_bpf.ko $MOD_PARAM 2> /dev/null
->                 if [ $? -ne 0 ]; then
->                         rc=1
->                 fi
->         else
->                 # Use modprobe dry run to check for missing test_bpf module
-> -               if ! /sbin/modprobe -q -n test_bpf; then
-> +               if ! /sbin/modprobe -q -n test_bpf $MOD_PARAM; then
->                         echo "test_bpf: [SKIP]"
-> -               elif /sbin/modprobe -q test_bpf; then
-> +               elif /sbin/modprobe -q test_bpf $MOD_PARAM; then
->                         echo "test_bpf: ok"
->                 else
->                         echo "test_bpf: [FAIL]"
-> --
-> 2.34.1
->
+Donald.
