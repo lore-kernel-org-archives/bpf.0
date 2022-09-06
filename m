@@ -2,40 +2,41 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A574C6FA86
-	for <bpf@archiver.kernel.org>; Tue,  6 Sep 2022 15:55:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 934D6C6FA83
+	for <bpf@archiver.kernel.org>; Tue,  6 Sep 2022 15:55:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235879AbiIFPzi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 6 Sep 2022 11:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55788 "EHLO
+        id S233854AbiIFPzl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 6 Sep 2022 11:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238373AbiIFPzP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 6 Sep 2022 11:55:15 -0400
+        with ESMTP id S233924AbiIFPzW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 6 Sep 2022 11:55:22 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E4B8D3CC
-        for <bpf@vger.kernel.org>; Tue,  6 Sep 2022 08:13:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8958E8E0D2
+        for <bpf@vger.kernel.org>; Tue,  6 Sep 2022 08:13:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662477199;
+        s=mimecast20190719; t=1662477204;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=rSMhvfIyusO2m5Ftz3A0TdMajIqOhGV3ENODeHiCzw4=;
-        b=NG0XGk9ddSrgC16P7/K5eZ77vkHv8/8mWMidgFkk21liVbgtt5exFbnLsquI6Ed57sfd8s
-        wehB09AKgaFt1AGAIBqRL5G8MJBiPmkNl9w6FSdHBh5ExzKwWT1ntPE9DsyhdHGBEqx6wi
-        Wckry0cb99G7X8VF4e0osbj0kbAxwEQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EN0gZ7KX3l2ofZoDtpWQPp8Bi3n6Z9ichaklbTKAD6Q=;
+        b=h4ug5WhQ7ohHbvVm32L1AA8cQjRqqX1E9deRHsKZTwWNgUQkqF35P+ReqMHjy2fse+D4KA
+        OtABIOGaxu0GeYrBUCM+cobYWDJYfoqzCyGjvIh0tzWxzSVtQcJyxYfwYqPeLDiqFIUPLl
+        wrNojcF4YsHGk2Gjczxa8SzPxP78h1Y=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-58-BrTXZ5JsO-uTWW_xymhi_w-1; Tue, 06 Sep 2022 11:13:13 -0400
-X-MC-Unique: BrTXZ5JsO-uTWW_xymhi_w-1
+ us-mta-628-Efo7MM1UNLaxIWQUg9MRVA-1; Tue, 06 Sep 2022 11:13:21 -0400
+X-MC-Unique: Efo7MM1UNLaxIWQUg9MRVA-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 34AF42999B20;
-        Tue,  6 Sep 2022 15:13:13 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 92252805B9A;
+        Tue,  6 Sep 2022 15:13:20 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.192.236])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E2DBD40D296C;
-        Tue,  6 Sep 2022 15:13:10 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5801A40D296C;
+        Tue,  6 Sep 2022 15:13:18 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -48,9 +49,11 @@ To:     Alexei Starovoitov <ast@kernel.org>,
 Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v11 0/7] bpf-core changes for preparation of
-Date:   Tue,  6 Sep 2022 17:12:56 +0200
-Message-Id: <20220906151303.2780789-1-benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v11 3/7] bpf/verifier: allow all functions to read user provided context
+Date:   Tue,  6 Sep 2022 17:12:59 +0200
+Message-Id: <20220906151303.2780789-4-benjamin.tissoires@redhat.com>
+In-Reply-To: <20220906151303.2780789-1-benjamin.tissoires@redhat.com>
+References: <20220906151303.2780789-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
@@ -58,48 +61,84 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+When a function was trying to access data from context in a syscall eBPF
+program, the verifier was rejecting the call unless it was accessing the
+first element.
+This is because the syscall context is not known at compile time, and
+so we need to check this when actually accessing it.
 
-well, given that the HID changes haven't moved a lot in the past
-revisions and that I am cc-ing a bunch of people, I have dropped them
-while we focus on the last 2 requirements in bpf-core changes.
+Check for the valid memory access if there is no convert_ctx callback,
+and allow such situation to happen.
 
-I'll submit a HID targeted series when we get these in tree, which
-would make things a lore more independent.
+There is a slight hiccup with subprogs. btf_check_subprog_arg_match()
+will check that the types are matching, which is a good thing, but to
+have an accurate result, it hides the fact that the context register may
+be null. This makes env->prog->aux->max_ctx_offset being set to the size
+of the context, which is incompatible with a NULL context.
 
-For reference, the whole reasons for these 2 main changes are at
-https://lore.kernel.org/bpf/20220902132938.2409206-1-benjamin.tissoires@redhat.com/
+Solve that last problem by storing max_ctx_offset before the type check
+and restoring it after.
 
-Compared to v10 (in addition of dropping the HID changes), I have
-changed the selftests so we can test both light skeletons and libbbpf
-calls.
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
-Cheers,
-Benjamin
+---
 
-Benjamin Tissoires (7):
-  selftests/bpf: regroup and declare similar kfuncs selftests in an
-    array
-  bpf: split btf_check_subprog_arg_match in two
-  bpf/verifier: allow all functions to read user provided context
-  selftests/bpf: add test for accessing ctx from syscall program type
-  bpf/btf: bump BTF_KFUNC_SET_MAX_CNT
-  bpf/verifier: allow kfunc to return an allocated mem
-  selftests/bpf: Add tests for kfunc returning a memory pointer
+no changes in v11
 
- include/linux/bpf.h                           |  11 +-
- include/linux/bpf_verifier.h                  |   2 +
- include/linux/btf.h                           |  10 +
- kernel/bpf/btf.c                              | 149 ++++++++++--
- kernel/bpf/verifier.c                         |  66 +++--
- net/bpf/test_run.c                            |  37 +++
- tools/testing/selftests/bpf/Makefile          |   5 +-
- .../selftests/bpf/prog_tests/kfunc_call.c     | 227 ++++++++++++++++--
- .../selftests/bpf/progs/kfunc_call_fail.c     | 160 ++++++++++++
- .../selftests/bpf/progs/kfunc_call_test.c     |  71 ++++++
- 10 files changed, 678 insertions(+), 60 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/kfunc_call_fail.c
+changes in v10:
+- dropped the hunk in btf.c saving/restoring max_ctx_offset
 
+changes in v9:
+- rewrote the commit title and description
+- made it so all functions can make use of context even if there is
+  no convert_ctx
+- remove the is_kfunc field in bpf_call_arg_meta
+
+changes in v8:
+- fixup comment
+- return -EACCESS instead of -EINVAL for consistency
+
+changes in v7:
+- renamed access_t into atype
+- allow zero-byte read
+- check_mem_access() to the correct offset/size
+
+new in v6
+---
+ kernel/bpf/verifier.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index d27fae3ce949..3f9e6fa92cde 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5233,6 +5233,25 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
+ 				env,
+ 				regno, reg->off, access_size,
+ 				zero_size_allowed, ACCESS_HELPER, meta);
++	case PTR_TO_CTX:
++		/* in case the function doesn't know how to access the context,
++		 * (because we are in a program of type SYSCALL for example), we
++		 * can not statically check its size.
++		 * Dynamically check it now.
++		 */
++		if (!env->ops->convert_ctx_access) {
++			enum bpf_access_type atype = meta && meta->raw_mode ? BPF_WRITE : BPF_READ;
++			int offset = access_size - 1;
++
++			/* Allow zero-byte read from PTR_TO_CTX */
++			if (access_size == 0)
++				return zero_size_allowed ? 0 : -EACCES;
++
++			return check_mem_access(env, env->insn_idx, regno, offset, BPF_B,
++						atype, -1, false);
++		}
++
++		fallthrough;
+ 	default: /* scalar_value or invalid ptr */
+ 		/* Allow zero-byte read from NULL, regardless of pointer type */
+ 		if (zero_size_allowed && access_size == 0 &&
 -- 
 2.36.1
 
