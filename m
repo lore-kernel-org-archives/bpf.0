@@ -2,52 +2,52 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C99ECECAAA1
-	for <bpf@archiver.kernel.org>; Tue,  6 Sep 2022 13:44:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC297C6FA89
+	for <bpf@archiver.kernel.org>; Tue,  6 Sep 2022 13:44:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232891AbiIFNor (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 6 Sep 2022 09:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52654 "EHLO
+        id S233162AbiIFNot (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 6 Sep 2022 09:44:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239221AbiIFNnu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:43:50 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0095BD11B
-        for <bpf@vger.kernel.org>; Tue,  6 Sep 2022 06:38:13 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id b17so2158008wrq.3
-        for <bpf@vger.kernel.org>; Tue, 06 Sep 2022 06:38:13 -0700 (PDT)
+        with ESMTP id S238739AbiIFNnb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 6 Sep 2022 09:43:31 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E797E83D
+        for <bpf@vger.kernel.org>; Tue,  6 Sep 2022 06:37:56 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id c131-20020a1c3589000000b003a84b160addso8915295wma.2
+        for <bpf@vger.kernel.org>; Tue, 06 Sep 2022 06:37:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=isovalent-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=6qwqarUq+IF4oE3LW/CY/4dfi8ZMWfExmdWZvKwSC6g=;
-        b=8FCgFTK32v1WTPP/ZjhSaI0yMo3HrRxWsvK/b+Y4cFer25utbtQ0iezgkBwgswazOw
-         uCDXYAAT/6I2iNhs1kUKuvANdElmazW+Mt+slWHzYQx4/tW35C0u1gT3YfvWXRJH7S4W
-         wqj3ijJLjId9zfekc8L6+4xQW8oDY3A+ZwPyR3b0n3+3o2ly4WQof5zBe5aaiGNdiI95
-         fiA9DLk3Md1JZgeKd5ccC18GnohGJYRi78iQYU57zJguCU3o9DfwVo4ZG6Vl2pQ4/nfq
-         i8yoUVqqwQAf90RniO2J+TeratKjAE7QarBOwljE7Tjp6B37vyQi8VvLkwc1dIwtMNbA
-         bIwQ==
+        bh=6H8KdwUCDA9IoCWknsDTaVHGW/ZpCyIDX2q/KTx4PM8=;
+        b=dfbrmGyWjgv64/Jj81UEmI7B+xKkx45326Q+ydfsIwRQ7Ps34tW3RZbw3auwy2rkGZ
+         mp2a+NOLSjmpNzjmSMKw2F9Zvhi1ES8TyPZ/qubtMEvdTyig2+DdWWPWZYOvV+k1tPkR
+         TNIwNtBEcFI03zmqezoiWJzuyn14YWgNpmS9vvgOhAvgbL6Ij+FrB5cjfMipdyBZl0pU
+         QqDRjr9pedxO7fyMPwEIEfDxoQ+s71i8GhLYlmPXxI/3Pz6f874jX3xCYT/aRIGh/5bR
+         YHddQU1Kp8aKlC/VsBO6ynoLxMbJEWqsDeW3Uikyn8CIWb7JgP/F/f0YReKt66ZgQMO7
+         IVFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=6qwqarUq+IF4oE3LW/CY/4dfi8ZMWfExmdWZvKwSC6g=;
-        b=3Nr9Am2Kkk1tkG/T/pxpcgcHCmDJ26kmf9Y1YkTVwfpPZjpIAaH+9XJlGw41W/OFBH
-         VXeX5Bbz3nYola2BFVG1WmhLJlrVGoxFpJDY6d3x7PcmIWul12F3b9hfUO+xY2Xb6nXD
-         k8uxCd+Ocuj1917WVu/zZBUgRogHPc+hwdarrrbfCuGWpHsrrExMJ8f+kWL4vI24VzY+
-         GQ+u3IowEhbMjRmOrMvzgoI8w9szItOysxZhOk5E/kgVOlmescB+mAtJDu6weElEVr00
-         EHAxuEJwnqRbjAUJe8mVaADfjXpt2pZzhxhjRqMnQVowMpW2ub1ocQhgrSHZ9b/MhcEr
-         ahEA==
-X-Gm-Message-State: ACgBeo1HA630okjsKMlV0xCIoxEn6KomNR4ZP1OW7mApGDK3sOXByH8I
-        2KSl6gQdK+DJdU3X4TuimSjv/g==
-X-Google-Smtp-Source: AA6agR5TSgJCP7AT7fzKD67C6ybaySqBqSKDWPMbmLPY+1FKJdxiZJ5KPphf0ZJscHOXChb1NuVRww==
-X-Received: by 2002:adf:fe06:0:b0:228:db6f:41ae with SMTP id n6-20020adffe06000000b00228db6f41aemr1560775wrr.577.1662471393507;
-        Tue, 06 Sep 2022 06:36:33 -0700 (PDT)
+        bh=6H8KdwUCDA9IoCWknsDTaVHGW/ZpCyIDX2q/KTx4PM8=;
+        b=ma9pPmsVqT61LaR548syLbuRbdE19CjVPRJJTV4OpIysVnrarGnWEQxQ29fl74gA5G
+         V251nqyS9TGEqhc/tOk4L/5TiPF9fy4Wdl21TJdC4tJJCNqetFbI+GxIwAnTKCHptr6s
+         KpdFPqFfC8qUuHrGnjldpwn01Qs925BZzuO3VEh3lzYStwFuBZXr4GoZAfkBQHfoO6ll
+         wxbQq6pRYHGp/vEAu3jt3D9ECriCkTd6J1h9xb5e4vHnyfoQMZK5y0HYIB0RgrNdSsh4
+         hs/GW1WwqaVVDkL5smXYI3V2TZMTQBvpxazrYDTHLRCumdtj/jJbLEDgwJCO7Ip/RfQQ
+         IR4A==
+X-Gm-Message-State: ACgBeo1byhN7I37gKLF0bnf792QkwM7nXSqAm0AiwpDwG/F6i1JFUimz
+        LFQIQ/maz19jEv11gMd4FVgCNw==
+X-Google-Smtp-Source: AA6agR6cA52XGbaA9LirYLUWCKC8xLDTGQT/v6urlvjVlkvn3+jqKkGvbOkDeGRfkQ5oPhXDUsdXig==
+X-Received: by 2002:a05:600c:1554:b0:3a6:23d7:1669 with SMTP id f20-20020a05600c155400b003a623d71669mr14033021wmg.70.1662471395332;
+        Tue, 06 Sep 2022 06:36:35 -0700 (PDT)
 Received: from harfang.fritz.box ([51.155.200.13])
-        by smtp.gmail.com with ESMTPSA id n189-20020a1ca4c6000000b003a5c244fc13sm21775621wme.2.2022.09.06.06.36.32
+        by smtp.gmail.com with ESMTPSA id n189-20020a1ca4c6000000b003a5c244fc13sm21775621wme.2.2022.09.06.06.36.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 06:36:33 -0700 (PDT)
+        Tue, 06 Sep 2022 06:36:34 -0700 (PDT)
 From:   Quentin Monnet <quentin@isovalent.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -62,9 +62,9 @@ Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@corigine.com>,
         Simon Horman <simon.horman@corigine.com>,
         Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next 2/7] bpftool: Remove asserts from JIT disassembler
-Date:   Tue,  6 Sep 2022 14:36:08 +0100
-Message-Id: <20220906133613.54928-3-quentin@isovalent.com>
+Subject: [PATCH bpf-next 4/7] bpftool: Group libbfd defs in Makefile, only pass them if we use libbfd
+Date:   Tue,  6 Sep 2022 14:36:10 +0100
+Message-Id: <20220906133613.54928-5-quentin@isovalent.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220906133613.54928-1-quentin@isovalent.com>
 References: <20220906133613.54928-1-quentin@isovalent.com>
@@ -74,227 +74,77 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The JIT disassembler in bpftool is the only components (with the JSON
-writer) using asserts to check the return values of functions. But it
-does not do so in a consistent way, and diasm_print_insn() returns no
-value, although sometimes the operation failed.
+Bpftool uses libbfd for disassembling JIT-ed programs. But the feature
+is optional, and the tool can be compiled without libbfd support. The
+Makefile sets the relevant variables accordingly. It also sets variables
+related to libbfd's interface, given that it has changed over time.
 
-Remove the asserts, and instead check the return values, print messages
-on errors, and propagate the error to the caller from prog.c.
+Group all those libbfd-related definitions so that it's easier to
+understand what we are testing for, and only use variables related to
+libbfd's interface if we need libbfd in the first place.
 
-Remove the inclusion of assert.h from jit_disasm.c, and also from map.c
-where it is unused.
+In addition to make the Makefile clearer, grouping the definitions
+related to disassembling JIT-ed programs will help support alternatives
+to libbfd.
 
 Signed-off-by: Quentin Monnet <quentin@isovalent.com>
 ---
- tools/bpf/bpftool/jit_disasm.c | 51 +++++++++++++++++++++++-----------
- tools/bpf/bpftool/main.h       | 25 +++++++++--------
- tools/bpf/bpftool/map.c        |  1 -
- tools/bpf/bpftool/prog.c       | 15 ++++++----
- 4 files changed, 57 insertions(+), 35 deletions(-)
+ tools/bpf/bpftool/Makefile | 27 +++++++++++++++------------
+ 1 file changed, 15 insertions(+), 12 deletions(-)
 
-diff --git a/tools/bpf/bpftool/jit_disasm.c b/tools/bpf/bpftool/jit_disasm.c
-index 71cb258ab0ee..723a9b799a0c 100644
---- a/tools/bpf/bpftool/jit_disasm.c
-+++ b/tools/bpf/bpftool/jit_disasm.c
-@@ -18,7 +18,6 @@
- #include <stdarg.h>
- #include <stdint.h>
- #include <stdlib.h>
--#include <assert.h>
- #include <unistd.h>
- #include <string.h>
- #include <bfd.h>
-@@ -31,14 +30,18 @@
- #include "json_writer.h"
- #include "main.h"
+diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+index 8b5bfd8256c5..8060c7013d4f 100644
+--- a/tools/bpf/bpftool/Makefile
++++ b/tools/bpf/bpftool/Makefile
+@@ -120,13 +120,6 @@ include $(FEATURES_DUMP)
+ endif
+ endif
  
--static void get_exec_path(char *tpath, size_t size)
-+static int get_exec_path(char *tpath, size_t size)
- {
- 	const char *path = "/proc/self/exe";
- 	ssize_t len;
+-ifeq ($(feature-disassembler-four-args), 1)
+-CFLAGS += -DDISASM_FOUR_ARGS_SIGNATURE
+-endif
+-ifeq ($(feature-disassembler-init-styled), 1)
+-    CFLAGS += -DDISASM_INIT_STYLED
+-endif
+-
+ LIBS = $(LIBBPF) -lelf -lz
+ LIBS_BOOTSTRAP = $(LIBBPF_BOOTSTRAP) -lelf -lz
+ ifeq ($(feature-libcap), 1)
+@@ -138,9 +131,7 @@ include $(wildcard $(OUTPUT)*.d)
  
- 	len = readlink(path, tpath, size - 1);
--	assert(len > 0);
-+	if (len <= 0)
-+		return -1;
+ all: $(OUTPUT)bpftool
+ 
+-BFD_SRCS = jit_disasm.c
+-
+-SRCS = $(filter-out $(BFD_SRCS),$(wildcard *.c))
++SRCS := $(wildcard *.c)
+ 
+ ifeq ($(feature-libbfd),1)
+   LIBS += -lbfd -ldl -lopcodes
+@@ -150,9 +141,21 @@ else ifeq ($(feature-libbfd-liberty-z),1)
+   LIBS += -lbfd -ldl -lopcodes -liberty -lz
+ endif
+ 
++# If one of the above feature combinations is set, we support libbfd
+ ifneq ($(filter -lbfd,$(LIBS)),)
+-CFLAGS += -DHAVE_LIBBFD_SUPPORT
+-SRCS += $(BFD_SRCS)
++  CFLAGS += -DHAVE_LIBBFD_SUPPORT
 +
- 	tpath[len] = 0;
-+
-+	return 0;
- }
++  # Libbfd interface changed over time, figure out what we need
++  ifeq ($(feature-disassembler-four-args), 1)
++    CFLAGS += -DDISASM_FOUR_ARGS_SIGNATURE
++  endif
++  ifeq ($(feature-disassembler-init-styled), 1)
++    CFLAGS += -DDISASM_INIT_STYLED
++  endif
++endif
++ifeq ($(filter -DHAVE_LIBBFD_SUPPORT,$(CFLAGS)),)
++  # No support for JIT disassembly
++  SRCS := $(filter-out jit_disasm.c,$(SRCS))
+ endif
  
- static int oper_count;
-@@ -99,30 +102,39 @@ static int fprintf_json_styled(void *out,
- 	return r;
- }
- 
--void disasm_print_insn(unsigned char *image, ssize_t len, int opcodes,
--		       const char *arch, const char *disassembler_options,
--		       const struct btf *btf,
--		       const struct bpf_prog_linfo *prog_linfo,
--		       __u64 func_ksym, unsigned int func_idx,
--		       bool linum)
-+int disasm_print_insn(unsigned char *image, ssize_t len, int opcodes,
-+		      const char *arch, const char *disassembler_options,
-+		      const struct btf *btf,
-+		      const struct bpf_prog_linfo *prog_linfo,
-+		      __u64 func_ksym, unsigned int func_idx,
-+		      bool linum)
- {
- 	const struct bpf_line_info *linfo = NULL;
- 	disassembler_ftype disassemble;
-+	int count, i, pc = 0, err = -1;
- 	struct disassemble_info info;
- 	unsigned int nr_skip = 0;
--	int count, i, pc = 0;
- 	char tpath[PATH_MAX];
- 	bfd *bfdf;
- 
- 	if (!len)
--		return;
-+		return -1;
- 
- 	memset(tpath, 0, sizeof(tpath));
--	get_exec_path(tpath, sizeof(tpath));
-+	if (get_exec_path(tpath, sizeof(tpath))) {
-+		p_err("failed to create disasembler (get_exec_path)");
-+		return -1;
-+	}
- 
- 	bfdf = bfd_openr(tpath, NULL);
--	assert(bfdf);
--	assert(bfd_check_format(bfdf, bfd_object));
-+	if (!bfdf) {
-+		p_err("failed to create disassembler (bfd_openr)");
-+		return -1;
-+	}
-+	if (!bfd_check_format(bfdf, bfd_object)) {
-+		p_err("failed to create disassembler (bfd_check_format)");
-+		goto exit_close;
-+	}
- 
- 	if (json_output)
- 		init_disassemble_info_compat(&info, stdout,
-@@ -141,7 +153,7 @@ void disasm_print_insn(unsigned char *image, ssize_t len, int opcodes,
- 			bfdf->arch_info = inf;
- 		} else {
- 			p_err("No libbfd support for %s", arch);
--			return;
-+			goto exit_close;
- 		}
- 	}
- 
-@@ -162,7 +174,10 @@ void disasm_print_insn(unsigned char *image, ssize_t len, int opcodes,
- #else
- 	disassemble = disassembler(bfdf);
- #endif
--	assert(disassemble);
-+	if (!disassemble) {
-+		p_err("failed to create disassembler");
-+		goto exit_close;
-+	}
- 
- 	if (json_output)
- 		jsonw_start_array(json_wtr);
-@@ -226,7 +241,11 @@ void disasm_print_insn(unsigned char *image, ssize_t len, int opcodes,
- 	if (json_output)
- 		jsonw_end_array(json_wtr);
- 
-+	err = 0;
-+
-+exit_close:
- 	bfd_close(bfdf);
-+	return err;
- }
- 
- int disasm_init(void)
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index 5e5060c2ac04..c9e171082cf6 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -173,22 +173,23 @@ int map_parse_fd_and_info(int *argc, char ***argv, void *info, __u32 *info_len);
- 
- struct bpf_prog_linfo;
- #ifdef HAVE_LIBBFD_SUPPORT
--void disasm_print_insn(unsigned char *image, ssize_t len, int opcodes,
--		       const char *arch, const char *disassembler_options,
--		       const struct btf *btf,
--		       const struct bpf_prog_linfo *prog_linfo,
--		       __u64 func_ksym, unsigned int func_idx,
--		       bool linum);
-+int disasm_print_insn(unsigned char *image, ssize_t len, int opcodes,
-+		      const char *arch, const char *disassembler_options,
-+		      const struct btf *btf,
-+		      const struct bpf_prog_linfo *prog_linfo,
-+		      __u64 func_ksym, unsigned int func_idx,
-+		      bool linum);
- int disasm_init(void);
- #else
- static inline
--void disasm_print_insn(unsigned char *image, ssize_t len, int opcodes,
--		       const char *arch, const char *disassembler_options,
--		       const struct btf *btf,
--		       const struct bpf_prog_linfo *prog_linfo,
--		       __u64 func_ksym, unsigned int func_idx,
--		       bool linum)
-+int disasm_print_insn(unsigned char *image, ssize_t len, int opcodes,
-+		      const char *arch, const char *disassembler_options,
-+		      const struct btf *btf,
-+		      const struct bpf_prog_linfo *prog_linfo,
-+		      __u64 func_ksym, unsigned int func_idx,
-+		      bool linum)
- {
-+	return 0;
- }
- static inline int disasm_init(void)
- {
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index 38b6bc9c26c3..a0e573589811 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -1,7 +1,6 @@
- // SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- /* Copyright (C) 2017-2018 Netronome Systems, Inc. */
- 
--#include <assert.h>
- #include <errno.h>
- #include <fcntl.h>
- #include <linux/err.h>
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index a31ae9f0c307..345dca656a34 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -822,10 +822,11 @@ prog_dump(struct bpf_prog_info *info, enum dump_mode mode,
- 					printf("%s:\n", sym_name);
- 				}
- 
--				disasm_print_insn(img, lens[i], opcodes,
--						  name, disasm_opt, btf,
--						  prog_linfo, ksyms[i], i,
--						  linum);
-+				if (disasm_print_insn(img, lens[i], opcodes,
-+						      name, disasm_opt, btf,
-+						      prog_linfo, ksyms[i], i,
-+						      linum))
-+					goto exit_free;
- 
- 				img += lens[i];
- 
-@@ -838,8 +839,10 @@ prog_dump(struct bpf_prog_info *info, enum dump_mode mode,
- 			if (json_output)
- 				jsonw_end_array(json_wtr);
- 		} else {
--			disasm_print_insn(buf, member_len, opcodes, name,
--					  disasm_opt, btf, NULL, 0, 0, false);
-+			if (disasm_print_insn(buf, member_len, opcodes, name,
-+					      disasm_opt, btf, NULL, 0, 0,
-+					      false))
-+				goto exit_free;
- 		}
- 	} else if (visual) {
- 		if (json_output)
+ HOST_CFLAGS = $(subst -I$(LIBBPF_INCLUDE),-I$(LIBBPF_BOOTSTRAP_INCLUDE),\
 -- 
 2.34.1
 
