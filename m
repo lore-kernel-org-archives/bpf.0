@@ -2,52 +2,52 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF137C6FA86
-	for <bpf@archiver.kernel.org>; Tue,  6 Sep 2022 13:44:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C99ECECAAA1
+	for <bpf@archiver.kernel.org>; Tue,  6 Sep 2022 13:44:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232570AbiIFNop (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 6 Sep 2022 09:44:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53192 "EHLO
+        id S232891AbiIFNor (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 6 Sep 2022 09:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233553AbiIFNna (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:43:30 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63382B40
-        for <bpf@vger.kernel.org>; Tue,  6 Sep 2022 06:37:57 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id e13so15519450wrm.1
-        for <bpf@vger.kernel.org>; Tue, 06 Sep 2022 06:37:56 -0700 (PDT)
+        with ESMTP id S239221AbiIFNnu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 6 Sep 2022 09:43:50 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0095BD11B
+        for <bpf@vger.kernel.org>; Tue,  6 Sep 2022 06:38:13 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id b17so2158008wrq.3
+        for <bpf@vger.kernel.org>; Tue, 06 Sep 2022 06:38:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=isovalent-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=S7PgMe2exWuYmtTchtff0lomr9j48WSXfhH+F490Iio=;
-        b=tSV2UH/+rQ7m08rslXJIJHUPKJYT0CtHCYVqWeoJUS2DNtflwZlKaHA+NurDWSY2Hi
-         F1nkpFbCHOUnrxp4AFiPm46DspOAgtk0dhwob8M5rInhYedJCWPMxSkW8THbEydFFclB
-         cHLC1Fefic1O8dsAKdriTt+YEz4ugBZVWEMOJVDkzZH8QcLp7ktZklSTSQNs5xHHFuLL
-         wcASXi2BOb9xFGrESvwnCRXMB1DaCAj+cSk6JHrPpYcdznLHPoPXouM+d4zzxrL5TENQ
-         y599MPE4EAs/cB69V1TSJSk499TsAbDUHDuQPkNCQU2CV1KJJu4ExT3zGuaq/gnW/cbj
-         t26g==
+        bh=6qwqarUq+IF4oE3LW/CY/4dfi8ZMWfExmdWZvKwSC6g=;
+        b=8FCgFTK32v1WTPP/ZjhSaI0yMo3HrRxWsvK/b+Y4cFer25utbtQ0iezgkBwgswazOw
+         uCDXYAAT/6I2iNhs1kUKuvANdElmazW+Mt+slWHzYQx4/tW35C0u1gT3YfvWXRJH7S4W
+         wqj3ijJLjId9zfekc8L6+4xQW8oDY3A+ZwPyR3b0n3+3o2ly4WQof5zBe5aaiGNdiI95
+         fiA9DLk3Md1JZgeKd5ccC18GnohGJYRi78iQYU57zJguCU3o9DfwVo4ZG6Vl2pQ4/nfq
+         i8yoUVqqwQAf90RniO2J+TeratKjAE7QarBOwljE7Tjp6B37vyQi8VvLkwc1dIwtMNbA
+         bIwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=S7PgMe2exWuYmtTchtff0lomr9j48WSXfhH+F490Iio=;
-        b=6YTvWvsH8zd0Fbimtut0XBtN7hD6yP9yb2i8dDC1oraVTzi+ZQSeOIzudkMQ+1Y3sj
-         7bgG4rbrG+zmNwHPhuKYgVB6Dxz2KG9jnHK5RlID18vnFHHKDgcJiRRaxanGx/JnRvqF
-         i+nvCa/CzAMFxt95AnMnQ+KkMfsu+vPYEsXIRMjOvID+3hUF2Qgna2FaGLBw4awlHS3H
-         XI+Jh+6K8nASTl8cHgl3cCT+kFVZPJua5suTyo/LZslbuF2N2ApBtI/uG/mOfSiFmngt
-         L2DXzw9bFxY6bmjQ72sJUInWHWQIWRNbsbbF36JCCow9qGRO91iSGBtfwhPNqQmMTaOc
-         uQSQ==
-X-Gm-Message-State: ACgBeo1piNLsfE2xyItKXQzKQ9LoE6CsuOFS4hnDZGX5nvqI2FoidrH/
-        lAnADBXR2mNDz3hJPi9omZAgfw==
-X-Google-Smtp-Source: AA6agR4y/v2f+5tzPQn4BL0zEIFPBo2KQfp3YqfpUFQm6amlJobspDMPcUOukLuqpMHhfgIEJEs+5A==
-X-Received: by 2002:a5d:6d89:0:b0:228:da8b:2537 with SMTP id l9-20020a5d6d89000000b00228da8b2537mr1616678wrs.585.1662471398043;
-        Tue, 06 Sep 2022 06:36:38 -0700 (PDT)
+        bh=6qwqarUq+IF4oE3LW/CY/4dfi8ZMWfExmdWZvKwSC6g=;
+        b=3Nr9Am2Kkk1tkG/T/pxpcgcHCmDJ26kmf9Y1YkTVwfpPZjpIAaH+9XJlGw41W/OFBH
+         VXeX5Bbz3nYola2BFVG1WmhLJlrVGoxFpJDY6d3x7PcmIWul12F3b9hfUO+xY2Xb6nXD
+         k8uxCd+Ocuj1917WVu/zZBUgRogHPc+hwdarrrbfCuGWpHsrrExMJ8f+kWL4vI24VzY+
+         GQ+u3IowEhbMjRmOrMvzgoI8w9szItOysxZhOk5E/kgVOlmescB+mAtJDu6weElEVr00
+         EHAxuEJwnqRbjAUJe8mVaADfjXpt2pZzhxhjRqMnQVowMpW2ub1ocQhgrSHZ9b/MhcEr
+         ahEA==
+X-Gm-Message-State: ACgBeo1HA630okjsKMlV0xCIoxEn6KomNR4ZP1OW7mApGDK3sOXByH8I
+        2KSl6gQdK+DJdU3X4TuimSjv/g==
+X-Google-Smtp-Source: AA6agR5TSgJCP7AT7fzKD67C6ybaySqBqSKDWPMbmLPY+1FKJdxiZJ5KPphf0ZJscHOXChb1NuVRww==
+X-Received: by 2002:adf:fe06:0:b0:228:db6f:41ae with SMTP id n6-20020adffe06000000b00228db6f41aemr1560775wrr.577.1662471393507;
+        Tue, 06 Sep 2022 06:36:33 -0700 (PDT)
 Received: from harfang.fritz.box ([51.155.200.13])
-        by smtp.gmail.com with ESMTPSA id n189-20020a1ca4c6000000b003a5c244fc13sm21775621wme.2.2022.09.06.06.36.37
+        by smtp.gmail.com with ESMTPSA id n189-20020a1ca4c6000000b003a5c244fc13sm21775621wme.2.2022.09.06.06.36.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 06:36:37 -0700 (PDT)
+        Tue, 06 Sep 2022 06:36:33 -0700 (PDT)
 From:   Quentin Monnet <quentin@isovalent.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -62,9 +62,9 @@ Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@corigine.com>,
         Simon Horman <simon.horman@corigine.com>,
         Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next 7/7] bpftool: Add llvm feature to "bpftool version"
-Date:   Tue,  6 Sep 2022 14:36:13 +0100
-Message-Id: <20220906133613.54928-8-quentin@isovalent.com>
+Subject: [PATCH bpf-next 2/7] bpftool: Remove asserts from JIT disassembler
+Date:   Tue,  6 Sep 2022 14:36:08 +0100
+Message-Id: <20220906133613.54928-3-quentin@isovalent.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220906133613.54928-1-quentin@isovalent.com>
 References: <20220906133613.54928-1-quentin@isovalent.com>
@@ -74,70 +74,227 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Similarly to "libbfd", add a "llvm" feature to the output of command
-"bpftool version" to indicate that LLVM is used for disassembling JIT-ed
-programs. This feature is mutually exclusive with "libbfd".
+The JIT disassembler in bpftool is the only components (with the JSON
+writer) using asserts to check the return values of functions. But it
+does not do so in a consistent way, and diasm_print_insn() returns no
+value, although sometimes the operation failed.
+
+Remove the asserts, and instead check the return values, print messages
+on errors, and propagate the error to the caller from prog.c.
+
+Remove the inclusion of assert.h from jit_disasm.c, and also from map.c
+where it is unused.
 
 Signed-off-by: Quentin Monnet <quentin@isovalent.com>
 ---
- tools/bpf/bpftool/Documentation/common_options.rst |  8 ++++----
- tools/bpf/bpftool/main.c                           | 10 ++++++++++
- 2 files changed, 14 insertions(+), 4 deletions(-)
+ tools/bpf/bpftool/jit_disasm.c | 51 +++++++++++++++++++++++-----------
+ tools/bpf/bpftool/main.h       | 25 +++++++++--------
+ tools/bpf/bpftool/map.c        |  1 -
+ tools/bpf/bpftool/prog.c       | 15 ++++++----
+ 4 files changed, 57 insertions(+), 35 deletions(-)
 
-diff --git a/tools/bpf/bpftool/Documentation/common_options.rst b/tools/bpf/bpftool/Documentation/common_options.rst
-index 4107a586b68b..05350a1aadf9 100644
---- a/tools/bpf/bpftool/Documentation/common_options.rst
-+++ b/tools/bpf/bpftool/Documentation/common_options.rst
-@@ -7,10 +7,10 @@
- 	  Print bpftool's version number (similar to **bpftool version**), the
- 	  number of the libbpf version in use, and optional features that were
- 	  included when bpftool was compiled. Optional features include linking
--	  against libbfd to provide the disassembler for JIT-ted programs
--	  (**bpftool prog dump jited**) and usage of BPF skeletons (some
--	  features like **bpftool prog profile** or showing pids associated to
--	  BPF objects may rely on it).
-+	  against LLVM or libbfd to provide the disassembler for JIT-ted
-+	  programs (**bpftool prog dump jited**) and usage of BPF skeletons
-+	  (some features like **bpftool prog profile** or showing pids
-+	  associated to BPF objects may rely on it).
+diff --git a/tools/bpf/bpftool/jit_disasm.c b/tools/bpf/bpftool/jit_disasm.c
+index 71cb258ab0ee..723a9b799a0c 100644
+--- a/tools/bpf/bpftool/jit_disasm.c
++++ b/tools/bpf/bpftool/jit_disasm.c
+@@ -18,7 +18,6 @@
+ #include <stdarg.h>
+ #include <stdint.h>
+ #include <stdlib.h>
+-#include <assert.h>
+ #include <unistd.h>
+ #include <string.h>
+ #include <bfd.h>
+@@ -31,14 +30,18 @@
+ #include "json_writer.h"
+ #include "main.h"
  
- -j, --json
- 	  Generate JSON output. For commands that cannot produce JSON, this
-diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-index ccd7457f92bf..7e06ca2c5d42 100644
---- a/tools/bpf/bpftool/main.c
-+++ b/tools/bpf/bpftool/main.c
-@@ -89,6 +89,11 @@ static int do_version(int argc, char **argv)
- #else
- 	const bool has_libbfd = false;
- #endif
-+#ifdef HAVE_LLVM_SUPPORT
-+	const bool has_llvm = true;
-+#else
-+	const bool has_llvm = false;
-+#endif
- #ifdef BPFTOOL_WITHOUT_SKELETONS
- 	const bool has_skeletons = false;
- #else
-@@ -112,6 +117,7 @@ static int do_version(int argc, char **argv)
- 		jsonw_name(json_wtr, "features");
- 		jsonw_start_object(json_wtr);	/* features */
- 		jsonw_bool_field(json_wtr, "libbfd", has_libbfd);
-+		jsonw_bool_field(json_wtr, "llvm", has_llvm);
- 		jsonw_bool_field(json_wtr, "libbpf_strict", !legacy_libbpf);
- 		jsonw_bool_field(json_wtr, "skeletons", has_skeletons);
- 		jsonw_end_object(json_wtr);	/* features */
-@@ -132,6 +138,10 @@ static int do_version(int argc, char **argv)
- 			printf(" libbfd");
- 			nb_features++;
+-static void get_exec_path(char *tpath, size_t size)
++static int get_exec_path(char *tpath, size_t size)
+ {
+ 	const char *path = "/proc/self/exe";
+ 	ssize_t len;
+ 
+ 	len = readlink(path, tpath, size - 1);
+-	assert(len > 0);
++	if (len <= 0)
++		return -1;
++
+ 	tpath[len] = 0;
++
++	return 0;
+ }
+ 
+ static int oper_count;
+@@ -99,30 +102,39 @@ static int fprintf_json_styled(void *out,
+ 	return r;
+ }
+ 
+-void disasm_print_insn(unsigned char *image, ssize_t len, int opcodes,
+-		       const char *arch, const char *disassembler_options,
+-		       const struct btf *btf,
+-		       const struct bpf_prog_linfo *prog_linfo,
+-		       __u64 func_ksym, unsigned int func_idx,
+-		       bool linum)
++int disasm_print_insn(unsigned char *image, ssize_t len, int opcodes,
++		      const char *arch, const char *disassembler_options,
++		      const struct btf *btf,
++		      const struct bpf_prog_linfo *prog_linfo,
++		      __u64 func_ksym, unsigned int func_idx,
++		      bool linum)
+ {
+ 	const struct bpf_line_info *linfo = NULL;
+ 	disassembler_ftype disassemble;
++	int count, i, pc = 0, err = -1;
+ 	struct disassemble_info info;
+ 	unsigned int nr_skip = 0;
+-	int count, i, pc = 0;
+ 	char tpath[PATH_MAX];
+ 	bfd *bfdf;
+ 
+ 	if (!len)
+-		return;
++		return -1;
+ 
+ 	memset(tpath, 0, sizeof(tpath));
+-	get_exec_path(tpath, sizeof(tpath));
++	if (get_exec_path(tpath, sizeof(tpath))) {
++		p_err("failed to create disasembler (get_exec_path)");
++		return -1;
++	}
+ 
+ 	bfdf = bfd_openr(tpath, NULL);
+-	assert(bfdf);
+-	assert(bfd_check_format(bfdf, bfd_object));
++	if (!bfdf) {
++		p_err("failed to create disassembler (bfd_openr)");
++		return -1;
++	}
++	if (!bfd_check_format(bfdf, bfd_object)) {
++		p_err("failed to create disassembler (bfd_check_format)");
++		goto exit_close;
++	}
+ 
+ 	if (json_output)
+ 		init_disassemble_info_compat(&info, stdout,
+@@ -141,7 +153,7 @@ void disasm_print_insn(unsigned char *image, ssize_t len, int opcodes,
+ 			bfdf->arch_info = inf;
+ 		} else {
+ 			p_err("No libbfd support for %s", arch);
+-			return;
++			goto exit_close;
  		}
-+		if (has_llvm) {
-+			printf(" llvm");
-+			nb_features++;
-+		}
- 		if (!legacy_libbpf) {
- 			printf("%s libbpf_strict", nb_features++ ? "," : "");
- 			nb_features++;
+ 	}
+ 
+@@ -162,7 +174,10 @@ void disasm_print_insn(unsigned char *image, ssize_t len, int opcodes,
+ #else
+ 	disassemble = disassembler(bfdf);
+ #endif
+-	assert(disassemble);
++	if (!disassemble) {
++		p_err("failed to create disassembler");
++		goto exit_close;
++	}
+ 
+ 	if (json_output)
+ 		jsonw_start_array(json_wtr);
+@@ -226,7 +241,11 @@ void disasm_print_insn(unsigned char *image, ssize_t len, int opcodes,
+ 	if (json_output)
+ 		jsonw_end_array(json_wtr);
+ 
++	err = 0;
++
++exit_close:
+ 	bfd_close(bfdf);
++	return err;
+ }
+ 
+ int disasm_init(void)
+diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
+index 5e5060c2ac04..c9e171082cf6 100644
+--- a/tools/bpf/bpftool/main.h
++++ b/tools/bpf/bpftool/main.h
+@@ -173,22 +173,23 @@ int map_parse_fd_and_info(int *argc, char ***argv, void *info, __u32 *info_len);
+ 
+ struct bpf_prog_linfo;
+ #ifdef HAVE_LIBBFD_SUPPORT
+-void disasm_print_insn(unsigned char *image, ssize_t len, int opcodes,
+-		       const char *arch, const char *disassembler_options,
+-		       const struct btf *btf,
+-		       const struct bpf_prog_linfo *prog_linfo,
+-		       __u64 func_ksym, unsigned int func_idx,
+-		       bool linum);
++int disasm_print_insn(unsigned char *image, ssize_t len, int opcodes,
++		      const char *arch, const char *disassembler_options,
++		      const struct btf *btf,
++		      const struct bpf_prog_linfo *prog_linfo,
++		      __u64 func_ksym, unsigned int func_idx,
++		      bool linum);
+ int disasm_init(void);
+ #else
+ static inline
+-void disasm_print_insn(unsigned char *image, ssize_t len, int opcodes,
+-		       const char *arch, const char *disassembler_options,
+-		       const struct btf *btf,
+-		       const struct bpf_prog_linfo *prog_linfo,
+-		       __u64 func_ksym, unsigned int func_idx,
+-		       bool linum)
++int disasm_print_insn(unsigned char *image, ssize_t len, int opcodes,
++		      const char *arch, const char *disassembler_options,
++		      const struct btf *btf,
++		      const struct bpf_prog_linfo *prog_linfo,
++		      __u64 func_ksym, unsigned int func_idx,
++		      bool linum)
+ {
++	return 0;
+ }
+ static inline int disasm_init(void)
+ {
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index 38b6bc9c26c3..a0e573589811 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -1,7 +1,6 @@
+ // SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ /* Copyright (C) 2017-2018 Netronome Systems, Inc. */
+ 
+-#include <assert.h>
+ #include <errno.h>
+ #include <fcntl.h>
+ #include <linux/err.h>
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index a31ae9f0c307..345dca656a34 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -822,10 +822,11 @@ prog_dump(struct bpf_prog_info *info, enum dump_mode mode,
+ 					printf("%s:\n", sym_name);
+ 				}
+ 
+-				disasm_print_insn(img, lens[i], opcodes,
+-						  name, disasm_opt, btf,
+-						  prog_linfo, ksyms[i], i,
+-						  linum);
++				if (disasm_print_insn(img, lens[i], opcodes,
++						      name, disasm_opt, btf,
++						      prog_linfo, ksyms[i], i,
++						      linum))
++					goto exit_free;
+ 
+ 				img += lens[i];
+ 
+@@ -838,8 +839,10 @@ prog_dump(struct bpf_prog_info *info, enum dump_mode mode,
+ 			if (json_output)
+ 				jsonw_end_array(json_wtr);
+ 		} else {
+-			disasm_print_insn(buf, member_len, opcodes, name,
+-					  disasm_opt, btf, NULL, 0, 0, false);
++			if (disasm_print_insn(buf, member_len, opcodes, name,
++					      disasm_opt, btf, NULL, 0, 0,
++					      false))
++				goto exit_free;
+ 		}
+ 	} else if (visual) {
+ 		if (json_output)
 -- 
 2.34.1
 
