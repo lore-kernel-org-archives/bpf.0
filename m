@@ -2,102 +2,82 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD24BC54EE9
-	for <bpf@archiver.kernel.org>; Wed,  7 Sep 2022 18:16:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 952DBC54EE9
+	for <bpf@archiver.kernel.org>; Wed,  7 Sep 2022 18:20:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbiIGSQD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 7 Sep 2022 14:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53350 "EHLO
+        id S229498AbiIGSUX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 7 Sep 2022 14:20:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiIGSQC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 7 Sep 2022 14:16:02 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEF09C23C
-        for <bpf@vger.kernel.org>; Wed,  7 Sep 2022 11:16:01 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id lz22so11395727ejb.3
-        for <bpf@vger.kernel.org>; Wed, 07 Sep 2022 11:16:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=0AhUs+ZF6YL0YnaxavPuj29v6rZ71SuC1+lY5vlY+IE=;
-        b=kTg51TWyjPKaD8ZlDy5nRgSbnELJGnns4YPJd6fHqoRTbtstF938IpvywpGskwMwEo
-         4E6MO4QQve/otI1pG81uqE0xqeYnPkWOfzh9aOSnGjHnxSltb3WwkxtlGNVdKZybAX1e
-         e1iBlI1NtRC8irvn2/vO/N32z6aqNcYN2d/yXK5TVK6sT0hGWaz7s6+DDi/vC6h87gQO
-         wR/378JNOMSW0JVgHnDRP42LHD0SdGQGm307ZYp13gueWF02/on3umc1yQRC3iMb+Kya
-         EgjWiiOEGVXzMZTI7Qr0Bqjk32XpH0UM4fWGH53by5rxuEitlveMhN8tIlzNIZuPtH5+
-         K7FQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=0AhUs+ZF6YL0YnaxavPuj29v6rZ71SuC1+lY5vlY+IE=;
-        b=y3Bl/TQEobPguSIvOKI/6c9ZBzdpijp4tjziXGURTXsyteOTHetAY08AVnZ8elhmop
-         YyHREvaXRU1YqcI0T22TMiry3KL3c/0iPPkraPKI3KDtZ1DMYlE4CL/4G/T+7ZSJ/xKM
-         18VyPRkIl0Npi6UgKjWdaUz3Bss15UD1bvUfGCyedqQx9MvBXHTv8TYvy1vRleoTV2iD
-         SaS17N7XOOKHpMbBpSjMhcfjbOh5h6ns90YDkYJjbX7e5CVa94l3STJhWaFM1kbiR3sC
-         N28L2aTvnzdVJsxlM6+KOprH1OMS+ebk227YGSmWr9tWpBu1jBirrNQMJMTjiCjV2jeL
-         LhBg==
-X-Gm-Message-State: ACgBeo1A/93F66bmteKN6heiLvHCpaIkWv4gJoi+D5seSZJOYYq1ZN08
-        7sYjaErKvSCO/JI2C8EOLV7CS0Ki3STqXveGyyM=
-X-Google-Smtp-Source: AA6agR4rRQQ71afEyF1tGyYsS5zd1ZJ5Nh9XiV5f7PNT/uE5PN3/Gd28aspOxrAkGHthznXPel+u6r2yM1TaDI6Fzao=
-X-Received: by 2002:a17:906:dc93:b0:742:133b:42c3 with SMTP id
- cs19-20020a170906dc9300b00742133b42c3mr3323770ejc.502.1662574560244; Wed, 07
- Sep 2022 11:16:00 -0700 (PDT)
+        with ESMTP id S229572AbiIGSUU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 7 Sep 2022 14:20:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F7B96FFB
+        for <bpf@vger.kernel.org>; Wed,  7 Sep 2022 11:20:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 21DFD619E3
+        for <bpf@vger.kernel.org>; Wed,  7 Sep 2022 18:20:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7476FC43470;
+        Wed,  7 Sep 2022 18:20:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662574815;
+        bh=MCO92E5KtvW+qhvyjQslHkf3DYIj93hVGCxx2jXiepU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=gePf+K0TpnRz9c9Qc+vtHUGgFWi3I42aAEdrnjI3WOpgiLb2ItWTDWU/4yxZfTHfo
+         grP6eSIIyGn7/rfoJ3bI2MEZuotznunDVa0Dj3bL0h8sjz0RNkgpV0ycRIPR59ZY6L
+         6IP+Gu8LO/x/AecrV7pkE9CF5UbmhyK9ZBbJTeKLd4GV4MJK626NrMd/ivdi2tFc2a
+         GsoeudX94nUH/U9XRy2Wtp4aJfuo/l2gt8915IfDsPgv3yY5D0G31X5IWEmxU3aVwE
+         B+8/qfJrhL7z4e4eaUodo5sNn4HfbYmiM98Ux8gTWb8Me9Q1A4kAPBNESY6gwXSf+8
+         86GYp+RvQp/cw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 56E79E1CABE;
+        Wed,  7 Sep 2022 18:20:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <Yxi3pJaK6UDjVJSy@playground> <CAP01T77wGxv5aTf=Wwwn79jHMrTuv+Wr9Y8b8x1244tQUBxCyQ@mail.gmail.com>
-In-Reply-To: <CAP01T77wGxv5aTf=Wwwn79jHMrTuv+Wr9Y8b8x1244tQUBxCyQ@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 7 Sep 2022 11:15:48 -0700
-Message-ID: <CAADnVQJE+D2jGEa0PSWVbtn50TvkyvdHECkHwxfuyNJk_KcN0Q@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Subject: Re: [PATCH bpf-next v2] bpf: Fix resetting logic for unreferenced kptrs
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     Jules Irenge <jbi.octave@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf <bpf@vger.kernel.org>, Elana.Copperman@mobileye.com
-Content-Type: text/plain; charset="UTF-8"
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166257481535.10994.10943927407806912362.git-patchwork-notify@kernel.org>
+Date:   Wed, 07 Sep 2022 18:20:15 +0000
+References: <Yxi3pJaK6UDjVJSy@playground>
+In-Reply-To: <Yxi3pJaK6UDjVJSy@playground>
+To:     Jules Irenge <jbi.octave@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, bpf@vger.kernel.org, memxor@gmail.com,
+        Elana.Copperman@mobileye.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 8:58 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
->
-> On Wed, 7 Sept 2022 at 17:24, Jules Irenge <jbi.octave@gmail.com> wrote:
-> >
-> > Sparse reported a warning at bpf_map_free_kptrs()
-> >
-> > "warning: Using plain integer as NULL pointer"
-> >
-> > During the process of fixing this warning,
-> > it was discovered that the current code
-> > erroneously writes to the pointer variable
-> > instead of deferencing and writing to the actual kptr.
-> > Hence, Sparse tool accidentally helped to uncover this problem.
-> >
-> > Fix this by doing WRITE_ONCE(*p, 0) instead of WRITE_ONCE(p, 0).
-> >
-> > Note that the effect of this bug is that
-> > unreferenced kptrs will not be cleared during check_and_free_fields.
-> > It is not a problem if the clearing is not done during map_free stage,
-> > as there is nothing to free for them.
-> >
->
-> You're still missing the fixes tag right before your Signed-off-By.
->
-> Instead of
->
-> Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
->
-> It must be
->
-> Fixes: 14a324f6a67e ("bpf: Wire up freeing of referenced kptr")
-> Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
+Hello:
 
-Added while applying.
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Wed, 7 Sep 2022 16:24:20 +0100 you wrote:
+> Sparse reported a warning at bpf_map_free_kptrs()
+> 
+> "warning: Using plain integer as NULL pointer"
+> 
+> During the process of fixing this warning,
+> it was discovered that the current code
+> erroneously writes to the pointer variable
+> instead of deferencing and writing to the actual kptr.
+> Hence, Sparse tool accidentally helped to uncover this problem.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v2] bpf: Fix resetting logic for unreferenced kptrs
+    https://git.kernel.org/bpf/bpf-next/c/9fad7fe5b298
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
