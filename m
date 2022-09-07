@@ -2,214 +2,149 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6379CC54EE9
-	for <bpf@archiver.kernel.org>; Wed,  7 Sep 2022 16:05:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 934DFC54EE9
+	for <bpf@archiver.kernel.org>; Wed,  7 Sep 2022 16:08:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbiIGQFh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 7 Sep 2022 12:05:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51998 "EHLO
+        id S229582AbiIGQIs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 7 Sep 2022 12:08:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbiIGQEZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 7 Sep 2022 12:04:25 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD349BC82C;
-        Wed,  7 Sep 2022 09:02:46 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id e18so20421821edj.3;
-        Wed, 07 Sep 2022 09:02:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=W50vIl8H8okzCAHaiXlJ50UVDkF7Y2icaSoN501LXVk=;
-        b=cSXmBeIU8YEd8KpkA8OIVFcCNyIWOpvxJZ3Z76jqeM1Nfr4CcOUHyr8tnCbWvR/Dd3
-         a+xIS7mQheRBmXzC3OdoGzFj55wYZgGBbG2U68jKwSZMMHE2S3ucY6qgN9hIVp9V3FXA
-         +LjPEjt3YYVTeX7BBNsiwSK2MVLv8QPtTad7Vmwb8R5pwGTDGhzzeWMZFZz76uXc516m
-         My1hyOyYiocDp1zCbWRWNhuqssIcspna7958G/dDtEbmGMHOZOleNsGnpq73KIblz4jP
-         jcsv52FTlrUZ+Kby6kQkkl7xZ0nqxFZs6XI0Mp20FDB37grdSGlo/nJFAMTSzjlf8LuF
-         Zxgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=W50vIl8H8okzCAHaiXlJ50UVDkF7Y2icaSoN501LXVk=;
-        b=6hYd0tKmEwqNAKHwIbYLX7oYD/cyDkii4ihDWduNCbRibpHTiEJYGwWZwTGz6CcrUK
-         0/bL0nheOb8jd226ZNneFs16KiYuhRiayBEBEaqgx2bf60fhqDWWe3FByAFiGtJia+0E
-         fk8mS1tbSd2FcmN/ZXdwDRJvCut5VppPjw9bFUIKqnG93ignRDA+dIB2Wur9ONdtszXr
-         nXZO/fddyBXbVt0Oe3t6IrmI41tJT/KFWBljMB44pyDRC080hyHfgBEPddR71MM0gHax
-         8AMWt5qtADxmEYU7+uaSk9IMzYC/uPZXHLOsPif8HJu+5Cli4lytr4KZ+vl58jdvg63R
-         aKjg==
-X-Gm-Message-State: ACgBeo1tcMckz4d/UDLD9DuxSX7iS1tyRDDiBo1i920tSM4UlZ2K1nb1
-        zZ3JuT79hiE2Zm+n2a8wDnBU2RMvMgmnriw6efY=
-X-Google-Smtp-Source: AA6agR627hvEYVrK8cONsjNB6SibCo3kdbrD3+RR1gZlPRM5T5pob6+UKUFsFL+3lVkDMtaz8cWkWFUer8OM7q5tXH4=
-X-Received: by 2002:a05:6402:28cb:b0:43b:c6d7:ef92 with SMTP id
- ef11-20020a05640228cb00b0043bc6d7ef92mr3720169edb.333.1662566558177; Wed, 07
- Sep 2022 09:02:38 -0700 (PDT)
+        with ESMTP id S229652AbiIGQIZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 7 Sep 2022 12:08:25 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1583AE7F;
+        Wed,  7 Sep 2022 09:08:21 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 50B395C0150;
+        Wed,  7 Sep 2022 12:08:18 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Wed, 07 Sep 2022 12:08:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1662566898; x=1662653298; bh=09XcLY+Oh89nxAbOdZB+wq/xVi9I
+        kY5d9sAv3nm7+vU=; b=S+2VagZcRJa0df0SXZoltSC5mTxQ2CJMLQbGS+ADdHeb
+        6GkHCYghhu6pQnr7fny4YGaX/Yce6RLfhEqLSiBT+AUaNN50TaUtBwQRJ7MC1SmQ
+        Q7aaJFrZ/+GwZ+SNNjwG1X9GlAOT/zkiVm7GD6fw7kC6WwE6pI7aeK2TF2AtTyud
+        e9BG7W3tQG0aUUlNMTl+tA+skmheYcf6Ir/dKwhZ8btyFXYAGik/A+YgJ+lpQ2pR
+        PTZI3soXAa4BAnKghj63bdVjjMTs3hq1Qh7DzwkwjE/D3EACsAgNJch4ydfcZSF4
+        K/8QkNh+XUceApvbG9kiyEVU6nTj3LHrnE6xdtncRA==
+X-ME-Sender: <xms:8cEYY8Mo99YOk85-NRX0cy2LFdqOmW0Pd4eG1z8avUKe3n8A50wPJA>
+    <xme:8cEYYy-plYsm4M_CZK7B0HtP5dSsZJcoYjKqESg61_kD7603opVArBAkOIHSOseCY
+    LAwHrpInoM1RXU>
+X-ME-Received: <xmr:8cEYYzSbbZVxXSY0KkJXrtsu6mCQGRvpApk4HqVW5RMl7PwDnbg2n8OkrIntx805cJKR3UpgFsYFroQaRH-meOk1KcdKIw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddgleejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcu
+    ufgthhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrth
+    htvghrnhepfeehffeggeffueffheeitdfhkedtfeelffffjeegtedtffegieejjeeuteej
+    teevnecuffhomhgrihhnpehofhhflhhorggurdhphienucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiughoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:8cEYY0s574npuVmYzJvedy1Yu5t-t5SZaQ7qQV4isikwv2QTzw8LBQ>
+    <xmx:8cEYY0eLvL8_qBZs6c1d6L16JBKoF2QVityTgEhKcPWxJdtTX8W3lQ>
+    <xmx:8cEYY42zw4BLGYFAtgoF4QyrpVtVonW2PQsx9Xg4Xd_ZxJ4hOtM70A>
+    <xmx:8sEYYz-XXd8EynQ6tmnN6sEV7OTbM-5p3JEML7n-JKmnG5OyzfWK0A>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 7 Sep 2022 12:08:17 -0400 (EDT)
+Date:   Wed, 7 Sep 2022 19:08:13 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     "Zhou, Jie2X" <jie2x.zhou@intel.com>, kuba@kernel.org
+Cc:     "andrii@kernel.org" <andrii@kernel.org>,
+        "mykolal@fb.com" <mykolal@fb.com>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "martin.lau@linux.dev" <martin.lau@linux.dev>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "hawk@kernel.org" <hawk@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Li, Philip" <philip.li@intel.com>,
+        "petrm@nvidia.com" <petrm@nvidia.com>
+Subject: Re: test ./tools/testing/selftests/bpf/test_offload.py failed
+Message-ID: <YxjB7RZvVrKxJ4ec@shredder>
+References: <20220907051657.55597-1-jie2x.zhou@intel.com>
+ <Yxg9r37w1Wg3mvxy@shredder>
+ <CY4PR11MB1320E553043DC1D67B5E7D56C5419@CY4PR11MB1320.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-References: <20220906170301.256206-1-roberto.sassu@huaweicloud.com>
- <20220906170301.256206-2-roberto.sassu@huaweicloud.com> <CAADnVQ+o8zyi_Z+XqCQynmvj04AtEtF9AoOTSeyUx9dvKTXOqg@mail.gmail.com>
- <02309cfbc1ce47f7de6be8addc2caa315b1fee1b.camel@huaweicloud.com>
-In-Reply-To: <02309cfbc1ce47f7de6be8addc2caa315b1fee1b.camel@huaweicloud.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 7 Sep 2022 09:02:26 -0700
-Message-ID: <CAADnVQ+cEM5Sb7d9yPA72Mp2zimx7VZ5Si3SPVdAZgsdFGpP1Q@mail.gmail.com>
-Subject: Re: [PATCH 1/7] bpf: Add missing fd modes check for map iterators
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Hou Tao <houtao1@huawei.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable <stable@vger.kernel.org>, Chenbo Feng <fengc@google.com>,
-        LSM List <linux-security-module@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CY4PR11MB1320E553043DC1D67B5E7D56C5419@CY4PR11MB1320.namprd11.prod.outlook.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 1:03 AM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> On Tue, 2022-09-06 at 11:21 -0700, Alexei Starovoitov wrote:
-> > On Tue, Sep 6, 2022 at 10:04 AM Roberto Sassu
-> > <roberto.sassu@huaweicloud.com> wrote:
-> > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > >
-> > > Commit 6e71b04a82248 ("bpf: Add file mode configuration into bpf
-> > > maps")
-> > > added the BPF_F_RDONLY and BPF_F_WRONLY flags, to let user space
-> > > specify
-> > > whether it will just read or modify a map.
-> > >
-> > > Map access control is done in two steps. First, when user space
-> > > wants to
-> > > obtain a map fd, it provides to the kernel the eBPF-defined flags,
-> > > which
-> > > are converted into open flags and passed to the security_bpf_map()
-> > > security
-> > > hook for evaluation by LSMs.
-> > >
-> > > Second, if user space successfully obtained an fd, it passes that
-> > > fd to the
-> > > kernel when it requests a map operation (e.g. lookup or update).
-> > > The kernel
-> > > first checks if the fd has the modes required to perform the
-> > > requested
-> > > operation and, if yes, continues the execution and returns the
-> > > result to
-> > > user space.
-> > >
-> > > While the fd modes check was added for map_*_elem() functions, it
-> > > is
-> > > currently missing for map iterators, added more recently with
-> > > commit
-> > > a5cbe05a6673 ("bpf: Implement bpf iterator for map elements"). A
-> > > map
-> > > iterator executes a chosen eBPF program for each key/value pair of
-> > > a map
-> > > and allows that program to read and/or modify them.
-> > >
-> > > Whether a map iterator allows only read or also write depends on
-> > > whether
-> > > the MEM_RDONLY flag in the ctx_arg_info member of the bpf_iter_reg
-> > > structure is set. Also, write needs to be supported at verifier
-> > > level (for
-> > > example, it is currently not supported for sock maps).
-> > >
-> > > Since map iterators obtain a map from a user space fd with
-> > > bpf_map_get_with_uref(), add the new req_modes parameter to that
-> > > function,
-> > > so that map iterators can provide the required fd modes to access a
-> > > map. If
-> > > the user space fd doesn't include the required modes,
-> > > bpf_map_get_with_uref() returns with an error, and the map iterator
-> > > will
-> > > not be created.
-> > >
-> > > If a map iterator marks both the key and value as read-only, it
-> > > calls
-> > > bpf_map_get_with_uref() with FMODE_CAN_READ as value for req_modes.
-> > > If it
-> > > also allows write access to either the key or the value, it calls
-> > > that
-> > > function with FMODE_CAN_READ | FMODE_CAN_WRITE as value for
-> > > req_modes,
-> > > regardless of whether or not the write is supported by the verifier
-> > > (the
-> > > write is intentionally allowed).
-> > >
-> > > bpf_fd_probe_obj() does not require any fd mode, as the fd is only
-> > > used for
-> > > the purpose of finding the eBPF object type, for pinning the object
-> > > to the
-> > > bpffs filesystem.
-> > >
-> > > Finally, it is worth to mention that the fd modes check was not
-> > > added for
-> > > the cgroup iterator, although it registers an attach_target method
-> > > like the
-> > > other iterators. The reason is that the fd is not the only way for
-> > > user
-> > > space to reference a cgroup object (also by ID and by path). For
-> > > the
-> > > protection to be effective, all reference methods need to be
-> > > evaluated
-> > > consistently. This work is deferred to a separate patch.
-> >
-> > I think the current behavior is fine.
-> > File permissions don't apply at iterator level or prog level.
->
-> + Chenbo, linux-security-module
->
-> Well, if you write a security module to prevent writes on a map, and
-> user space is able to do it anyway with an iterator, what is the
-> purpose of the security module then?
+On Wed, Sep 07, 2022 at 08:51:56AM +0000, Zhou, Jie2X wrote:
+> What is the output of test_offload.py?
 
-sounds like a broken "security module" and nothing else.
+This output [1], but requires this [2] additional fix on top of the one
+I already posted for netdevsim. Hopefully someone more familiar with
+this test can comment if this is the right fix or not.
 
-> > fmode_can_read/write are for syscall commands only.
-> > To be fair we've added them to lookup/delete commands
-> > and it was more of a pain to maintain and no confirmed good use.
->
-> I think a good use would be requesting the right permission for the
-> type of operation that needs to be performed, e.g. read-only permission
-> when you have a read-like operation like a lookup or dump.
->
-> By always requesting read-write permission, for all operations,
-> security modules won't be able to distinguish which operation has to be
-> denied to satisfy the policy.
->
-> One example of that is that, when there is a security module preventing
-> writes on maps (will be that uncommon?),
+Without it, bpftool refuses to load the program [3].
 
-lsm that prevents writes into bpf maps? That's a convoluted design.
-You can try to implement such an lsm, but expect lots of challenges.
+[1]
+# ./test_offload.py
+Test destruction of generic XDP...
+Test TC non-offloaded...
+Test TC non-offloaded isn't getting bound...
+Test TC offloads are off by default...
+[...]
+test_offload.py: OK
+# echo $?
+0
 
-> bpftool is not able to show
-> the full list of maps because it asks for read-write permission for
-> getting the map info.
+[2]
+diff --git a/tools/testing/selftests/bpf/progs/sample_map_ret0.c b/tools/testing/selftests/bpf/progs/sample_map_ret0.c
+index 495990d355ef..91417aae6194 100644
+--- a/tools/testing/selftests/bpf/progs/sample_map_ret0.c
++++ b/tools/testing/selftests/bpf/progs/sample_map_ret0.c
+@@ -17,7 +17,8 @@ struct {
+ } array SEC(".maps");
+ 
+ /* Sample program which should always load for testing control paths. */
+-SEC(".text") int func()
++SEC("xdp")
++int func()
+ {
+ 	__u64 key64 = 0;
+ 	__u32 key = 0;
+diff --git a/tools/testing/selftests/bpf/progs/sample_ret0.c b/tools/testing/selftests/bpf/progs/sample_ret0.c
+index fec99750d6ea..f51c63dd6f20 100644
+--- a/tools/testing/selftests/bpf/progs/sample_ret0.c
++++ b/tools/testing/selftests/bpf/progs/sample_ret0.c
+@@ -1,6 +1,9 @@
+ /* SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause) */
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
+ 
+ /* Sample program which should always load for testing control paths. */
++SEC("xdp")
+ int func()
+ {
+ 	return 0;
+diff --git a/tools/testing/selftests/bpf/test_offload.py b/tools/testing/selftests/bpf/test_offload.py
+index 6cd6ef9fc20b..0381f48f45a6 100755
+--- a/tools/testing/selftests/bpf/test_offload.py
++++ b/tools/testing/selftests/bpf/test_offload.py
+@@ -235,7 +235,7 @@ def tc(args, JSON=True, ns="", fail=True, include_stderr=False):
+ def ethtool(dev, opt, args, fail=True):
+     return cmd("ethtool %s %s %s" % (opt, dev["ifname"], args), fail=fail)
+ 
+-def bpf_obj(name, sec=".text", path=bpf_test_dir,):
++def bpf_obj(name, sec="xdp", path=bpf_test_dir,):
+     return "obj %s sec %s" % (os.path.join(path, name), sec)
+ 
+ def bpf_pinned(name):
 
-completely orthogonal issue.
-
-> Freezing the map is not a solution, if you want to allow certain
-> subjects to continuously update the protected map at run-time.
->
-> Roberto
->
+[3]
+# bpftool prog load /home/idosch/code/linux/tools/testing/selftests/bpf/sample_ret0.o /sys/fs/bpf/nooffload type xdp                                                 
+Error: object file doesn't contain any bpf program                                    
+Warning: bpftool is now running in libbpf strict mode and has more stringent requirements about BPF programs.                                                                
+If it used to work for this object file but now doesn't, see --legacy option for more details.
