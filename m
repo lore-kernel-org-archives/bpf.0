@@ -2,92 +2,91 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97DD8C54EE9
-	for <bpf@archiver.kernel.org>; Wed,  7 Sep 2022 15:58:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9B32C6FA89
+	for <bpf@archiver.kernel.org>; Wed,  7 Sep 2022 16:05:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbiIGP6p (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 7 Sep 2022 11:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47722 "EHLO
+        id S230374AbiIGQFY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 7 Sep 2022 12:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbiIGP6n (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 7 Sep 2022 11:58:43 -0400
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B466BB02E
-        for <bpf@vger.kernel.org>; Wed,  7 Sep 2022 08:58:35 -0700 (PDT)
-Received: by mail-il1-x144.google.com with SMTP id s11so7783979ilt.7
-        for <bpf@vger.kernel.org>; Wed, 07 Sep 2022 08:58:35 -0700 (PDT)
+        with ESMTP id S229604AbiIGQFE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 7 Sep 2022 12:05:04 -0400
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5DDDBCCF6;
+        Wed,  7 Sep 2022 09:03:28 -0700 (PDT)
+Received: by mail-il1-x141.google.com with SMTP id l6so7793906ilk.13;
+        Wed, 07 Sep 2022 09:03:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=k4KTklcG0JXYWiy3L/LW81UYNL/fw/f9zXp372npIYE=;
-        b=LkmRxLTczIfp+ofNR3dd5CS5DnrJqSSj9dCBNKo6DZxsfjmie+Ybb1SQWMJpf673r/
-         ZofWg3Q9c1Dr4ix6eF5DkugsGCGGHbQHcn/YNUxo4BbJiTpxoK/XGbQzAuZALLtZXFQV
-         TfduGxGX6er+sOGsz0ttzWlaC8hoXrtW2Q26THPRI600QQwUhaiaCDXlvHjCL0Dyg1Tr
-         q9UYhih9ijJT7t0LO+QF6lmismjmGk2SGqrV1zhYK76Y7AoheQMWIYfAobXgWGjTMSMi
-         iDxeJoQShaDXxaCEWE+rgflEFZv/ClFAxgLDmb5j49Xed6LYuH6ITHmerwPWBxbkl7oI
-         cEgw==
+        bh=lt1bpJM6pHMY/em4ZNsqZVuYS7ky1YDSS0Zv0T/sQCI=;
+        b=jFrMQnAJyokhbea+zJXMZUcpgYdRpW6ftt5X8yDsUmyx2A4f77acUmlMItitO1FogO
+         p0bEzPpuqSiuwlKsN8tybJJDylxM59F++Xmxy4P5f+e6/5m4LATaktIUyoghbJvS/faC
+         CDzGmAW/QicbE8j6KYbsmSE/J19AMses1La/f2fg44SktusCjr2xneuPqsjpMAfBYCHn
+         UPS3zWSx7vbgypW+5wJGwA5biGU+ZHb3LlbUMkkmWNyZuckczS+nu1IFmU/tfN0xIuBc
+         7vbypb3c16FPIyTdjo2byYrd5Ce7ap9CY+J4YhWRm52GoiEDxedVnkj+Cfx53cDUSmrj
+         CPoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=k4KTklcG0JXYWiy3L/LW81UYNL/fw/f9zXp372npIYE=;
-        b=wnWjZQpC39fJIH5z+voB2b/c5jf2f/ITV6L+Hhk+aIeJQYhxbcMXvZyRPNswAFdvZW
-         3aueDNZy24x5jM4YuW+ptV5xvnjqX0M2hSSJdHmFVXQZqN3iG/8HKUUtKkKK92FRTBGC
-         X9J7+GCmdHtQaS1zOpZUYrG8q6ezgY8NF7M4n9w9gAS1wZtl0IRfsyPDvdv3Uk+X0sMo
-         l3JkiF6kqRDes4i+8kbXpSmgEdjsOKpep3zCQNtxd6/+OTQZd6gSE8LICw5PFdppRE8g
-         IYy9LlQKrz3XzHnqO5XCt7UbvCVXkkCuQRCI2WQbIlufmimyLzI1FK+rJPzG2qlja95d
-         HbJg==
-X-Gm-Message-State: ACgBeo37Qsr5aYcoavtMlKJhq8aP3+9KcIHZHrtITGrEMnZJGIi7MJbl
-        T0m28fFxUHszYTf6F2LNOd10X4X2obGq8nre+NY=
-X-Google-Smtp-Source: AA6agR6jTxGei1pUDj89UGDfib7xMAo+9WfPvKHbBBmCJBXDqj3TpUL2lUCs4XPZyewyYLOsRiZLXHh+DkqtvzLY4vM=
-X-Received: by 2002:a05:6e02:170f:b0:2f1:6cdf:6f32 with SMTP id
- u15-20020a056e02170f00b002f16cdf6f32mr2240650ill.216.1662566314475; Wed, 07
- Sep 2022 08:58:34 -0700 (PDT)
+        bh=lt1bpJM6pHMY/em4ZNsqZVuYS7ky1YDSS0Zv0T/sQCI=;
+        b=ze3Uc7zSJMaPjpVWvF1ztWN3mPjlJO61CQcR8BRJFtNNlhnAQtmIwo0phdrZCDxVtn
+         LiS4aTiGt9tyM7YL8gVaKhD8QP8IdK1EYdh5WtkWaZh3v3EcS1tnMNCWCZmUN8gJXu5C
+         Wn25edvZdPa6QkErAB3ctgO8KskxcYsWH8tamQl7BOUF32xXuYKzpiGCVbh9w8lz16fy
+         B1aQfQITjb4S9VKOXhlvTmumfsLao4vk+rfFm+7jnT+qvE4wNb5z8jCU3LfMeBFoXIza
+         jBxeJ2VH/00qa7nkCy2YbKwayzB+4F7vdzIQKj69R8d2o76BS5r2YjsQRwf7AdNfZXnZ
+         b2Dg==
+X-Gm-Message-State: ACgBeo1Z2lQomAOkdqp/Uqxp8PGSCWRDaMtjOLtJVj6OZ1xJk815Ycd0
+        OLWteix1QeUpVx3OdqUJ73FGvlqouVHQNc42U0Q=
+X-Google-Smtp-Source: AA6agR5D0yaJMaMJfVkyP7yo0j3n7J4Q2NxUTHD4GglycqC1kGl3Kap+m8RkpO7wuD2gzZZFsAnPWsgP2IfD+vK5xbs=
+X-Received: by 2002:a05:6e02:1489:b0:2f1:a985:853 with SMTP id
+ n9-20020a056e02148900b002f1a9850853mr2320169ilk.68.1662566607972; Wed, 07 Sep
+ 2022 09:03:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <Yxi3pJaK6UDjVJSy@playground>
-In-Reply-To: <Yxi3pJaK6UDjVJSy@playground>
+References: <CAP01T74L7C+F7oiBx3fL9SahdvU-9rHpQ=GaLTj0XAfeOKaXrA@mail.gmail.com>
+ <20220907145939.489784-1-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20220907145939.489784-1-roberto.sassu@huaweicloud.com>
 From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date:   Wed, 7 Sep 2022 17:57:58 +0200
-Message-ID: <CAP01T77wGxv5aTf=Wwwn79jHMrTuv+Wr9Y8b8x1244tQUBxCyQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] bpf: Fix resetting logic for unreferenced kptrs
-To:     Jules Irenge <jbi.octave@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, bpf@vger.kernel.org, Elana.Copperman@mobileye.com
+Date:   Wed, 7 Sep 2022 18:02:51 +0200
+Message-ID: <CAP01T77rgLz-ApBoXfegLCmensukK59-9=jh2CmuWsC0VVMzWw@mail.gmail.com>
+Subject: Re: [PATCH v17 12/12] selftests/bpf: Add tests for dynamic pointers
+ parameters in kfuncs
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, deso@posteo.net, dhowells@redhat.com,
+        haoluo@google.com, jarkko@kernel.org, jmorris@namei.org,
+        john.fastabend@gmail.com, jolsa@kernel.org,
+        keyrings@vger.kernel.org, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, martin.lau@linux.dev,
+        mingo@redhat.com, mykolal@fb.com, paul@paul-moore.com,
+        roberto.sassu@huawei.com, rostedt@goodmis.org, sdf@google.com,
+        serge@hallyn.com, shuah@kernel.org, song@kernel.org, yhs@fb.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 7 Sept 2022 at 17:24, Jules Irenge <jbi.octave@gmail.com> wrote:
+On Wed, 7 Sept 2022 at 17:00, Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
 >
-> Sparse reported a warning at bpf_map_free_kptrs()
+> From: Roberto Sassu <roberto.sassu@huawei.com>
 >
-> "warning: Using plain integer as NULL pointer"
+> Add tests to ensure that only supported dynamic pointer types are accepted,
+> that the passed argument is actually a dynamic pointer, that the passed
+> argument is a pointer to the stack, and that bpf_verify_pkcs7_signature()
+> correctly handles dynamic pointers with data set to NULL.
 >
-> During the process of fixing this warning,
-> it was discovered that the current code
-> erroneously writes to the pointer variable
-> instead of deferencing and writing to the actual kptr.
-> Hence, Sparse tool accidentally helped to uncover this problem.
+> The tests are currently in the deny list for s390x (JIT does not support
+> calling kernel function).
 >
-> Fix this by doing WRITE_ONCE(*p, 0) instead of WRITE_ONCE(p, 0).
->
-> Note that the effect of this bug is that
-> unreferenced kptrs will not be cleared during check_and_free_fields.
-> It is not a problem if the clearing is not done during map_free stage,
-> as there is nothing to free for them.
->
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
 
-You're still missing the fixes tag right before your Signed-off-By.
+Just a minor nit: you could probably use invalid flags value other
+than 1, since most likely the next valid flag value will be 1, which
+will require changing this again. LGTM otherwise.
 
-Instead of
-
-Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
-
-It must be
-
-Fixes: 14a324f6a67e ("bpf: Wire up freeing of referenced kptr")
-Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
