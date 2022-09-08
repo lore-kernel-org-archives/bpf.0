@@ -2,79 +2,233 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26377C38145
-	for <bpf@archiver.kernel.org>; Thu,  8 Sep 2022 00:07:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0156C38145
+	for <bpf@archiver.kernel.org>; Thu,  8 Sep 2022 00:07:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbiIHAHf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 7 Sep 2022 20:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37098 "EHLO
+        id S229541AbiIHAHn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 7 Sep 2022 20:07:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiIHAHf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 7 Sep 2022 20:07:35 -0400
+        with ESMTP id S230052AbiIHAHn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 7 Sep 2022 20:07:43 -0400
 Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40ECAB5A48
-        for <bpf@vger.kernel.org>; Wed,  7 Sep 2022 17:07:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE11B2CE2
+        for <bpf@vger.kernel.org>; Wed,  7 Sep 2022 17:07:41 -0700 (PDT)
 Received: by devbig010.atn6.facebook.com (Postfix, from userid 115148)
-        id 764961170375C; Wed,  7 Sep 2022 17:07:22 -0700 (PDT)
+        id BA509117037C7; Wed,  7 Sep 2022 17:07:27 -0700 (PDT)
 From:   Joanne Koong <joannelkoong@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     daniel@iogearbox.net, martin.lau@kernel.org, andrii@kernel.org,
         ast@kernel.org, Kernel-team@fb.com,
         Joanne Koong <joannelkoong@gmail.com>
-Subject: [PATCH bpf-next v1 0/8] Dynptr convenience helpers
-Date:   Wed,  7 Sep 2022 17:02:46 -0700
-Message-Id: <20220908000254.3079129-1-joannelkoong@gmail.com>
+Subject: [PATCH bpf-next v1 4/8] bpf: Add bpf_dynptr_get_size and bpf_dynptr_get_offset
+Date:   Wed,  7 Sep 2022 17:02:50 -0700
+Message-Id: <20220908000254.3079129-5-joannelkoong@gmail.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220908000254.3079129-1-joannelkoong@gmail.com>
+References: <20220908000254.3079129-1-joannelkoong@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patchset is the 3rd in the dynptr series. The 1st can be found here =
-[0]
-and the 2nd can be found here [1].
+Add two new helper functions: bpf_dynptr_get_size and
+bpf_dynptr_get_offset.
 
-In this patchset, the following convenience helpers are added for interac=
-ting
-with bpf dynamic pointers:
+bpf_dynptr_get_size returns the number of usable bytes in a dynptr and
+bpf_dynptr_get_offset returns the current offset into the dynptr.
 
-    * bpf_dynptr_data_rdonly
-    * bpf_dynptr_trim
-    * bpf_dynptr_advance
-    * bpf_dynptr_is_null
-    * bpf_dynptr_is_rdonly
-    * bpf_dynptr_get_size
-    * bpf_dynptr_get_offset
-    * bpf_dynptr_clone
-    * bpf_dynptr_iterator
+Signed-off-by: Joanne Koong <joannelkoong@gmail.com>
+---
+ include/uapi/linux/bpf.h       | 25 ++++++++++++++++++++
+ kernel/bpf/helpers.c           | 42 ++++++++++++++++++++++++++++++----
+ tools/include/uapi/linux/bpf.h | 25 ++++++++++++++++++++
+ 3 files changed, 88 insertions(+), 4 deletions(-)
 
-[0] https://lore.kernel.org/bpf/20220523210712.3641569-1-joannelkoong@gma=
-il.com/
-[1] https://lore.kernel.org/bpf/20220907183129.745846-1-joannelkoong@gmai=
-l.com/
-
-Joanne Koong (8):
-  bpf: Add bpf_dynptr_data_rdonly
-  bpf: Add bpf_dynptr_trim and bpf_dynptr_advance
-  bpf: Add bpf_dynptr_is_null and bpf_dynptr_is_rdonly
-  bpf: Add bpf_dynptr_get_size and bpf_dynptr_get_offset
-  bpf: Add bpf_dynptr_clone
-  bpf: Add verifier support for custom callback return range
-  bpf: Add bpf_dynptr_iterator
-  selftests/bpf: Tests for dynptr convenience helpers
-
- include/linux/bpf_verifier.h                  |   1 +
- include/uapi/linux/bpf.h                      | 120 ++++
- kernel/bpf/helpers.c                          | 231 +++++++-
- kernel/bpf/verifier.c                         | 155 +++--
- scripts/bpf_doc.py                            |   3 +
- tools/include/uapi/linux/bpf.h                | 120 ++++
- .../testing/selftests/bpf/prog_tests/dynptr.c |  30 +
- .../testing/selftests/bpf/progs/dynptr_fail.c | 462 +++++++++++++++
- .../selftests/bpf/progs/dynptr_success.c      | 551 +++++++++++++++++-
- 9 files changed, 1617 insertions(+), 56 deletions(-)
-
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 90b6d0744df2..4ca07cf500d2 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -5485,6 +5485,29 @@ union bpf_attr {
+  *	Return
+  *		True if the dynptr is read-only and a valid dynptr,
+  *		else false.
++ *
++ * long bpf_dynptr_get_size(struct bpf_dynptr *ptr)
++ *	Description
++ *		Get the size of *ptr*.
++ *
++ *		Size refers to the number of usable bytes. For example,
++ *		if *ptr* was initialized with 100 bytes and its
++ *		offset was advanced by 40 bytes, then the size will be
++ *		60 bytes.
++ *
++ *		*ptr* must be an initialized dynptr.
++ *	Return
++ *		The size of the dynptr on success, -EINVAL if the dynptr is
++ *		invalid.
++ *
++ * long bpf_dynptr_get_offset(struct bpf_dynptr *ptr)
++ *	Description
++ *		Get the offset of the dynptr.
++ *
++ *		*ptr* must be an initialized dynptr.
++ *	Return
++ *		The offset of the dynptr on success, -EINVAL if the dynptr is
++ *		invalid.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -5703,6 +5726,8 @@ union bpf_attr {
+ 	FN(dynptr_trim),		\
+ 	FN(dynptr_is_null),		\
+ 	FN(dynptr_is_rdonly),		\
++	FN(dynptr_get_size),		\
++	FN(dynptr_get_offset),		\
+ 	/* */
+=20
+ /* integer value in 'imm' field of BPF_CALL instruction selects which he=
+lper
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 8729383d0966..62ed27444b73 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1418,7 +1418,7 @@ static enum bpf_dynptr_type bpf_dynptr_get_type(con=
+st struct bpf_dynptr_kern *pt
+ 	return (ptr->size & ~(DYNPTR_RDONLY_BIT)) >> DYNPTR_TYPE_SHIFT;
+ }
+=20
+-static u32 bpf_dynptr_get_size(struct bpf_dynptr_kern *ptr)
++static u32 __bpf_dynptr_get_size(struct bpf_dynptr_kern *ptr)
+ {
+ 	return ptr->size & DYNPTR_SIZE_MASK;
+ }
+@@ -1451,7 +1451,7 @@ void bpf_dynptr_set_null(struct bpf_dynptr_kern *pt=
+r)
+=20
+ static int bpf_dynptr_check_off_len(struct bpf_dynptr_kern *ptr, u32 off=
+set, u32 len)
+ {
+-	u32 size =3D bpf_dynptr_get_size(ptr);
++	u32 size =3D __bpf_dynptr_get_size(ptr);
+=20
+ 	if (len > size || offset > size - len)
+ 		return -E2BIG;
+@@ -1660,7 +1660,7 @@ BPF_CALL_2(bpf_dynptr_advance, struct bpf_dynptr_ke=
+rn *, ptr, u32, len)
+ 	if (!ptr->data)
+ 		return -EINVAL;
+=20
+-	size =3D bpf_dynptr_get_size(ptr);
++	size =3D __bpf_dynptr_get_size(ptr);
+=20
+ 	if (len > size)
+ 		return -ERANGE;
+@@ -1687,7 +1687,7 @@ BPF_CALL_2(bpf_dynptr_trim, struct bpf_dynptr_kern =
+*, ptr, u32, len)
+ 	if (!ptr->data)
+ 		return -EINVAL;
+=20
+-	size =3D bpf_dynptr_get_size(ptr);
++	size =3D __bpf_dynptr_get_size(ptr);
+=20
+ 	if (len > size)
+ 		return -ERANGE;
+@@ -1732,6 +1732,36 @@ static const struct bpf_func_proto bpf_dynptr_is_r=
+donly_proto =3D {
+ 	.arg1_type	=3D ARG_PTR_TO_DYNPTR,
+ };
+=20
++BPF_CALL_1(bpf_dynptr_get_size, struct bpf_dynptr_kern *, ptr)
++{
++	if (!ptr->data)
++		return -EINVAL;
++
++	return __bpf_dynptr_get_size(ptr);
++}
++
++static const struct bpf_func_proto bpf_dynptr_get_size_proto =3D {
++	.func		=3D bpf_dynptr_get_size,
++	.gpl_only	=3D false,
++	.ret_type	=3D RET_INTEGER,
++	.arg1_type	=3D ARG_PTR_TO_DYNPTR,
++};
++
++BPF_CALL_1(bpf_dynptr_get_offset, struct bpf_dynptr_kern *, ptr)
++{
++	if (!ptr->data)
++		return -EINVAL;
++
++	return ptr->offset;
++}
++
++static const struct bpf_func_proto bpf_dynptr_get_offset_proto =3D {
++	.func		=3D bpf_dynptr_get_offset,
++	.gpl_only	=3D false,
++	.ret_type	=3D RET_INTEGER,
++	.arg1_type	=3D ARG_PTR_TO_DYNPTR,
++};
++
+ const struct bpf_func_proto bpf_get_current_task_proto __weak;
+ const struct bpf_func_proto bpf_get_current_task_btf_proto __weak;
+ const struct bpf_func_proto bpf_probe_read_user_proto __weak;
+@@ -1812,6 +1842,10 @@ bpf_base_func_proto(enum bpf_func_id func_id)
+ 		return &bpf_dynptr_is_null_proto;
+ 	case BPF_FUNC_dynptr_is_rdonly:
+ 		return &bpf_dynptr_is_rdonly_proto;
++	case BPF_FUNC_dynptr_get_size:
++		return &bpf_dynptr_get_size_proto;
++	case BPF_FUNC_dynptr_get_offset:
++		return &bpf_dynptr_get_offset_proto;
+ 	default:
+ 		break;
+ 	}
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+index 90b6d0744df2..4ca07cf500d2 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -5485,6 +5485,29 @@ union bpf_attr {
+  *	Return
+  *		True if the dynptr is read-only and a valid dynptr,
+  *		else false.
++ *
++ * long bpf_dynptr_get_size(struct bpf_dynptr *ptr)
++ *	Description
++ *		Get the size of *ptr*.
++ *
++ *		Size refers to the number of usable bytes. For example,
++ *		if *ptr* was initialized with 100 bytes and its
++ *		offset was advanced by 40 bytes, then the size will be
++ *		60 bytes.
++ *
++ *		*ptr* must be an initialized dynptr.
++ *	Return
++ *		The size of the dynptr on success, -EINVAL if the dynptr is
++ *		invalid.
++ *
++ * long bpf_dynptr_get_offset(struct bpf_dynptr *ptr)
++ *	Description
++ *		Get the offset of the dynptr.
++ *
++ *		*ptr* must be an initialized dynptr.
++ *	Return
++ *		The offset of the dynptr on success, -EINVAL if the dynptr is
++ *		invalid.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -5703,6 +5726,8 @@ union bpf_attr {
+ 	FN(dynptr_trim),		\
+ 	FN(dynptr_is_null),		\
+ 	FN(dynptr_is_rdonly),		\
++	FN(dynptr_get_size),		\
++	FN(dynptr_get_offset),		\
+ 	/* */
+=20
+ /* integer value in 'imm' field of BPF_CALL instruction selects which he=
+lper
 --=20
 2.30.2
 
