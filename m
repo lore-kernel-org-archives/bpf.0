@@ -2,155 +2,104 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A38FDC6FA8A
-	for <bpf@archiver.kernel.org>; Thu,  8 Sep 2022 06:38:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DAAFECAAD5
+	for <bpf@archiver.kernel.org>; Thu,  8 Sep 2022 06:51:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230397AbiIHGiI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 8 Sep 2022 02:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33772 "EHLO
+        id S229535AbiIHGve (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 8 Sep 2022 02:51:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiIHGiF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 8 Sep 2022 02:38:05 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530FAC58EB;
-        Wed,  7 Sep 2022 23:38:05 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id c198so7069066pfc.13;
-        Wed, 07 Sep 2022 23:38:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date;
-        bh=XrKerZgfr8OsAjyFj/pfcukHC6xfGt6r5ZUbVw1UMjA=;
-        b=oOdlYalln0v3/1vyUGIKPtIcrNI+M5Q3tPPtiaFjUtIQwIdFPvQHolv1ZZff2MKD0K
-         5Z7+1eocGHNmvFLqu1gK9bD5qKRVVfxwD6MDAmngWQQtWzArLLCTMbOWSGVyDmlqkmau
-         Neaifc+kN8U2q2v7EPjbq34WPdHXtumPbLkDNcjdllxbyUUeLdKBcZxg+3c3PEZBqJqV
-         cbDoGoLHAeKbgN60n3JMHsN7dySDoP8UPsQqO8smJni3T6uTtNStCeJAlRQd3bBKhhcm
-         8NyRla0UmgTwdq9+zrHRXk2sgxJ8cu7KyqKCOQ9m1+D7S9/yLh8J0oE8NyP3Tomp/XC1
-         ZRyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date;
-        bh=XrKerZgfr8OsAjyFj/pfcukHC6xfGt6r5ZUbVw1UMjA=;
-        b=BMvFBeZqksgIaBHAYGZBX7jnyDNfA/4KU0izfm+kNeysT8Z4y77v0y9LRtfrIoE8+d
-         D/xpMhW8xDe6mk9S7BPEznWIo9om7AyocAyHH6YI7LpYcnvpfkcyAVFcethObFNwHCdj
-         JB/QW1mxGYGHi2WPrylxCiCrUSTaVxId1shmadt3SOYPEwZl6Msdk30akGdXYeMBevoO
-         tAxvwsBMyrnUbUFT+tLQAvtBJYxgUtDY9J5INSHCm1fyFf3M6Tq/I4L6LfDudgw8LpOr
-         TZLsuJoSSrnotrHe8meZlKuOgGow45YQGR6AmD8s2ycMw9RKXS1BJkdHPEasRTzIVPQB
-         WV6A==
-X-Gm-Message-State: ACgBeo3mq0JsTpp6+vEiRdZfuspoIkCLcw9yO3YE85QQS9+/+jXqaTMQ
-        g2EvYpGsySVVjlpmEU4/640=
-X-Google-Smtp-Source: AA6agR6Wl3fV/Z9sVDie6QCrAqMZ49pcxWl4rCafzAzHBFQFVXu+/mGB+oPJ0jddzwvRiMsZ1KnAXQ==
-X-Received: by 2002:a63:e317:0:b0:432:38c0:bde3 with SMTP id f23-20020a63e317000000b0043238c0bde3mr6352573pgh.567.1662619084779;
-        Wed, 07 Sep 2022 23:38:04 -0700 (PDT)
-Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:1040:7f21:d032:3f14:a4e6])
-        by smtp.gmail.com with ESMTPSA id o33-20020a17090a0a2400b001fb0fc33d72sm890716pjo.47.2022.09.07.23.38.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 23:38:04 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
-        bpf@vger.kernel.org
-Subject: [PATCH 4/4] perf lock contention: Skip stack trace from BPF
-Date:   Wed,  7 Sep 2022 23:37:54 -0700
-Message-Id: <20220908063754.1369709-5-namhyung@kernel.org>
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-In-Reply-To: <20220908063754.1369709-1-namhyung@kernel.org>
-References: <20220908063754.1369709-1-namhyung@kernel.org>
+        with ESMTP id S230504AbiIHGv3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 8 Sep 2022 02:51:29 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA771CB35;
+        Wed,  7 Sep 2022 23:51:27 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MNV9G2sgJzKJJM;
+        Thu,  8 Sep 2022 14:49:38 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.67.175.61])
+        by APP2 (Coremail) with SMTP id Syh0CgBXqHHskBljwcslAg--.10754S3;
+        Thu, 08 Sep 2022 14:51:26 +0800 (CST)
+From:   Pu Lehui <pulehui@huaweicloud.com>
+To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Pu Lehui <pulehui@huawei.com>
+Subject: [PATCH bpf-next v2 1/2] bpf, cgroup: Fix attach flags being assigned to effective progs
+Date:   Thu,  8 Sep 2022 14:53:03 +0000
+Message-Id: <20220908145304.3436139-2-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220908145304.3436139-1-pulehui@huaweicloud.com>
+References: <20220908145304.3436139-1-pulehui@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgBXqHHskBljwcslAg--.10754S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7tFWftw17WFyxAFWxGFW7Arb_yoW8JFy5pF
+        W8ZFy7W3WY9F9Fva97t3yFq3yrZw4ktr1jkr98Ary5AFy7Ww1v9ryFk34ayF1SyryUAw1r
+        ZFyYyr9Fka4UZFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M2
+        8IrcIa0xkI8VA2jI8067AKxVWUGwA2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK
+        0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4
+        x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2
+        z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4
+        xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v2
+        6r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x0262
+        8vn2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
+        F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GF
+        ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
+        1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jg
+        a9fUUUUU=
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently it collects stack traces to max size then skip entries.
-Because we don't have control how to skip perf callchains.  But BPF can
-do it with bpf_get_stackid() with a flag.
+From: Pu Lehui <pulehui@huawei.com>
 
-Say we have max-stack=4 and stack-skip=2, we get these stack traces.
+When root-cgroup attach multi progs and sub-cgroup attach a override
+prog, query sub-cgroup with effective flags will incorrectly fill
+the prog_attach_flags array. Attach flags is only valid for attached
+progs of this layer cgroup, but not for effective progs. We know that
+the attached progs is at the beginning of the effective progs array,
+so we can just populate the elements in front of the prog_attach_flags
+array.
 
-Before:                    After:
-
-      ---> +---+ <--             ---> +---+ <--
-     /     |   |    \           /     |   |    \
-     |     +---+  usable        |     +---+    |
-    max    |   |    /          max    |   |    |
-   stack   +---+ <--          stack   +---+  usable
-     |     | X |                |     |   |    |
-     |     +---+   skip         |     +---+    |
-     \     | X |                \     |   |    /
-      ---> +---+                 ---> +---+ <--    <=== collection
-                                      | X |
-                                      +---+   skip
-                                      | X |
-                                      +---+
-
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
 ---
- tools/perf/util/bpf_lock_contention.c          | 7 ++++---
- tools/perf/util/bpf_skel/lock_contention.bpf.c | 3 ++-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ kernel/bpf/cgroup.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/util/bpf_lock_contention.c b/tools/perf/util/bpf_lock_contention.c
-index ef5323c78ffc..efe5b9968e77 100644
---- a/tools/perf/util/bpf_lock_contention.c
-+++ b/tools/perf/util/bpf_lock_contention.c
-@@ -93,6 +93,8 @@ int lock_contention_prepare(struct lock_contention *con)
- 		bpf_map_update_elem(fd, &pid, &val, BPF_ANY);
- 	}
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 00c7f864900e..9c439d163a0b 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -1093,11 +1093,14 @@ static int __cgroup_bpf_query(struct cgroup *cgrp, const union bpf_attr *attr,
+ 		}
  
-+	skel->bss->stack_skip = con->stack_skip;
+ 		if (prog_attach_flags) {
++			int progs_cnt = min_t(int, prog_list_length(&cgrp->bpf.progs[atype]), total_cnt);
+ 			flags = cgrp->bpf.flags[atype];
+ 
+-			for (i = 0; i < cnt; i++)
++			/* attach flags only valid for attached progs, but not effective progs */
++			for (i = 0; i < progs_cnt; i++)
+ 				if (copy_to_user(prog_attach_flags + i, &flags, sizeof(flags)))
+ 					return -EFAULT;
 +
- 	lock_contention_bpf__attach(skel);
- 	return 0;
- }
-@@ -127,7 +129,7 @@ int lock_contention_read(struct lock_contention *con)
- 	while (!bpf_map_get_next_key(fd, &prev_key, &key)) {
- 		struct map *kmap;
- 		struct symbol *sym;
--		int idx;
-+		int idx = 0;
+ 			prog_attach_flags += cnt;
+ 		}
  
- 		bpf_map_lookup_elem(fd, &key, &data);
- 		st = zalloc(sizeof(*st));
-@@ -146,8 +148,7 @@ int lock_contention_read(struct lock_contention *con)
- 
- 		bpf_map_lookup_elem(stack, &key, stack_trace);
- 
--		/* skip BPF + lock internal functions */
--		idx = con->stack_skip;
-+		/* skip lock internal functions */
- 		while (is_lock_function(machine, stack_trace[idx]) &&
- 		       idx < con->max_stack - 1)
- 			idx++;
-diff --git a/tools/perf/util/bpf_skel/lock_contention.bpf.c b/tools/perf/util/bpf_skel/lock_contention.bpf.c
-index 9e8b94eb6320..e107d71f0f1a 100644
---- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
-+++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
-@@ -72,6 +72,7 @@ struct {
- int enabled;
- int has_cpu;
- int has_task;
-+int stack_skip;
- 
- /* error stat */
- unsigned long lost;
-@@ -117,7 +118,7 @@ int contention_begin(u64 *ctx)
- 	pelem->timestamp = bpf_ktime_get_ns();
- 	pelem->lock = (__u64)ctx[0];
- 	pelem->flags = (__u32)ctx[1];
--	pelem->stack_id = bpf_get_stackid(ctx, &stacks, BPF_F_FAST_STACK_CMP);
-+	pelem->stack_id = bpf_get_stackid(ctx, &stacks, BPF_F_FAST_STACK_CMP | stack_skip);
- 
- 	if (pelem->stack_id < 0)
- 		lost++;
 -- 
-2.37.2.789.g6183377224-goog
+2.25.1
 
