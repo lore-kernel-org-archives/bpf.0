@@ -2,25 +2,25 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 576B8C38145
-	for <bpf@archiver.kernel.org>; Thu,  8 Sep 2022 04:13:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84EF9C6FA83
+	for <bpf@archiver.kernel.org>; Thu,  8 Sep 2022 04:13:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbiIHENJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 8 Sep 2022 00:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42506 "EHLO
+        id S229598AbiIHENO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 8 Sep 2022 00:13:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbiIHENI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 8 Sep 2022 00:13:08 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96FCE87681;
-        Wed,  7 Sep 2022 21:13:07 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MNQcD0nHNz14QMw;
-        Thu,  8 Sep 2022 12:09:16 +0800 (CST)
+        with ESMTP id S229742AbiIHENK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 8 Sep 2022 00:13:10 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75967F08E;
+        Wed,  7 Sep 2022 21:13:09 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MNQfS040HzHnZv;
+        Thu,  8 Sep 2022 12:11:12 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
  (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 8 Sep
- 2022 12:13:04 +0800
+ 2022 12:13:06 +0800
 From:   Zhengchao Shao <shaozhengchao@huawei.com>
 To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <bpf@vger.kernel.org>, <davem@davemloft.net>,
@@ -32,10 +32,12 @@ CC:     <daniel@iogearbox.net>, <john.fastabend@gmail.com>,
         <yhs@fb.com>, <kpsingh@kernel.org>, <sdf@google.com>,
         <haoluo@google.com>, <jolsa@kernel.org>, <weiyongjun1@huawei.com>,
         <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH net-next,v3 00/22] refactor the walk and lookup hook functions in tc_action_ops
-Date:   Thu, 8 Sep 2022 12:14:32 +0800
-Message-ID: <20220908041454.365070-1-shaozhengchao@huawei.com>
+Subject: [PATCH net-next,v3 02/22] net: sched: act_api: implement generic walker and search for tc action
+Date:   Thu, 8 Sep 2022 12:14:34 +0800
+Message-ID: <20220908041454.365070-3-shaozhengchao@huawei.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220908041454.365070-1-shaozhengchao@huawei.com>
+References: <20220908041454.365070-1-shaozhengchao@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.175.101.6]
@@ -46,85 +48,88 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The implementation logic of the walk/lookup hook function in each action
-module is the same. Therefore, the two functions can be reconstructed.
-When registering tc_action_ops of each action module, the corresponding
-net_id is saved to tc_action_ops. In this way, the net_id of the
-corresponding module can be directly obtained in act_api without executing
-the specific walk and lookup hook functions. Then, generic functions can
-be added to replace the walk and lookup hook functions of each action
-module. Last, modify each action module in alphabetical order.
+Being able to get tc_action_net by using net_id stored in tc_action_ops
+and execute the generic walk/search function, add __tcf_generic_walker()
+and __tcf_idr_search() helpers.
 
-Reserve the walk and lookup interfaces and delete them when they are no
-longer used.
-
-This patchset has been tested by using TDC, and I will add selftest in
-other patchset.
-
-Last, thanks to Jamal Hadi Salim and Cong Wang for their advice.
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
 ---
-v3: remove hole from the structure tc_action_ops
-v2: save the net_id of each TC action module to the tc_action_ops structure
----
+ net/sched/act_api.c | 33 +++++++++++++++++++++++++++++----
+ 1 file changed, 29 insertions(+), 4 deletions(-)
 
-Zhengchao Shao (22):
-  net: sched: act: move global static variable net_id to tc_action_ops
-  net: sched: act_api: implement generic walker and search for tc action
-  net: sched: act_bpf: get rid of tcf_bpf_walker and tcf_bpf_search
-  net: sched: act_connmark: get rid of tcf_connmark_walker and
-    tcf_connmark_search
-  net: sched: act_csum: get rid of tcf_csum_walker and tcf_csum_search
-  net: sched: act_ct: get rid of tcf_ct_walker and tcf_ct_search
-  net: sched: act_ctinfo: get rid of tcf_ctinfo_walker and
-    tcf_ctinfo_search
-  net: sched: act_gact: get rid of tcf_gact_walker and tcf_gact_search
-  net: sched: act_gate: get rid of tcf_gate_walker and tcf_gate_search
-  net: sched: act_ife: get rid of tcf_ife_walker and tcf_ife_search
-  net: sched: act_ipt: get rid of tcf_ipt_walker/tcf_xt_walker and
-    tcf_ipt_search/tcf_xt_search
-  net: sched: act_mirred: get rid of tcf_mirred_walker and
-    tcf_mirred_search
-  net: sched: act_mpls: get rid of tcf_mpls_walker and tcf_mpls_search
-  net: sched: act_nat: get rid of tcf_nat_walker and tcf_nat_search
-  net: sched: act_pedit: get rid of tcf_pedit_walker and
-    tcf_pedit_search
-  net: sched: act_police: get rid of tcf_police_walker and
-    tcf_police_search
-  net: sched: act_sample: get rid of tcf_sample_walker and
-    tcf_sample_search
-  net: sched: act_simple: get rid of tcf_simp_walker and tcf_simp_search
-  net: sched: act_skbedit: get rid of tcf_skbedit_walker and
-    tcf_skbedit_search
-  net: sched: act_skbmod: get rid of tcf_skbmod_walker and
-    tcf_skbmod_search
-  net: sched: act_tunnel_key: get rid of tunnel_key_walker and
-    tunnel_key_search
-  net: sched: act_vlan: get rid of tcf_vlan_walker and tcf_vlan_search
-
- include/net/act_api.h      |  1 +
- net/sched/act_api.c        | 33 ++++++++++++++++++---
- net/sched/act_bpf.c        | 28 +++--------------
- net/sched/act_connmark.c   | 28 +++--------------
- net/sched/act_csum.c       | 28 +++--------------
- net/sched/act_ct.c         | 32 ++++----------------
- net/sched/act_ctinfo.c     | 28 +++--------------
- net/sched/act_gact.c       | 28 +++--------------
- net/sched/act_gate.c       | 28 +++--------------
- net/sched/act_ife.c        | 28 +++--------------
- net/sched/act_ipt.c        | 61 +++++++-------------------------------
- net/sched/act_mirred.c     | 28 +++--------------
- net/sched/act_mpls.c       | 28 +++--------------
- net/sched/act_nat.c        | 28 +++--------------
- net/sched/act_pedit.c      | 28 +++--------------
- net/sched/act_police.c     | 28 +++--------------
- net/sched/act_sample.c     | 28 +++--------------
- net/sched/act_simple.c     | 28 +++--------------
- net/sched/act_skbedit.c    | 28 +++--------------
- net/sched/act_skbmod.c     | 28 +++--------------
- net/sched/act_tunnel_key.c | 28 +++--------------
- net/sched/act_vlan.c       | 28 +++--------------
- 22 files changed, 118 insertions(+), 513 deletions(-)
-
+diff --git a/net/sched/act_api.c b/net/sched/act_api.c
+index 817065aa2833..9b31a10cc639 100644
+--- a/net/sched/act_api.c
++++ b/net/sched/act_api.c
+@@ -676,6 +676,31 @@ int tcf_idr_search(struct tc_action_net *tn, struct tc_action **a, u32 index)
+ }
+ EXPORT_SYMBOL(tcf_idr_search);
+ 
++static int __tcf_generic_walker(struct net *net, struct sk_buff *skb,
++				struct netlink_callback *cb, int type,
++				const struct tc_action_ops *ops,
++				struct netlink_ext_ack *extack)
++{
++	struct tc_action_net *tn = net_generic(net, ops->net_id);
++
++	if (unlikely(ops->walk))
++		return ops->walk(net, skb, cb, type, ops, extack);
++
++	return tcf_generic_walker(tn, skb, cb, type, ops, extack);
++}
++
++static int __tcf_idr_search(struct net *net,
++			    const struct tc_action_ops *ops,
++			    struct tc_action **a, u32 index)
++{
++	struct tc_action_net *tn = net_generic(net, ops->net_id);
++
++	if (unlikely(ops->lookup))
++		return ops->lookup(net, a, index);
++
++	return tcf_idr_search(tn, a, index);
++}
++
+ static int tcf_idr_delete_index(struct tcf_idrinfo *idrinfo, u32 index)
+ {
+ 	struct tc_action *p;
+@@ -926,7 +951,7 @@ int tcf_register_action(struct tc_action_ops *act,
+ 	struct tc_action_ops *a;
+ 	int ret;
+ 
+-	if (!act->act || !act->dump || !act->init || !act->walk || !act->lookup)
++	if (!act->act || !act->dump || !act->init)
+ 		return -EINVAL;
+ 
+ 	/* We have to register pernet ops before making the action ops visible,
+@@ -1638,7 +1663,7 @@ static struct tc_action *tcf_action_get_1(struct net *net, struct nlattr *nla,
+ 		goto err_out;
+ 	}
+ 	err = -ENOENT;
+-	if (ops->lookup(net, &a, index) == 0) {
++	if (__tcf_idr_search(net, ops, &a, index) == 0) {
+ 		NL_SET_ERR_MSG(extack, "TC action with specified index not found");
+ 		goto err_mod;
+ 	}
+@@ -1703,7 +1728,7 @@ static int tca_action_flush(struct net *net, struct nlattr *nla,
+ 		goto out_module_put;
+ 	}
+ 
+-	err = ops->walk(net, skb, &dcb, RTM_DELACTION, ops, extack);
++	err = __tcf_generic_walker(net, skb, &dcb, RTM_DELACTION, ops, extack);
+ 	if (err <= 0) {
+ 		nla_nest_cancel(skb, nest);
+ 		goto out_module_put;
+@@ -2121,7 +2146,7 @@ static int tc_dump_action(struct sk_buff *skb, struct netlink_callback *cb)
+ 	if (nest == NULL)
+ 		goto out_module_put;
+ 
+-	ret = a_o->walk(net, skb, cb, RTM_GETACTION, a_o, NULL);
++	ret = __tcf_generic_walker(net, skb, cb, RTM_GETACTION, a_o, NULL);
+ 	if (ret < 0)
+ 		goto out_module_put;
+ 
 -- 
 2.17.1
 
