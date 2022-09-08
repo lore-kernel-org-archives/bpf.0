@@ -2,128 +2,125 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FC34C6FA83
-	for <bpf@archiver.kernel.org>; Thu,  8 Sep 2022 06:51:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0590FC38145
+	for <bpf@archiver.kernel.org>; Thu,  8 Sep 2022 07:35:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbiIHGvg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 8 Sep 2022 02:51:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55704 "EHLO
+        id S230391AbiIHHff (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 8 Sep 2022 03:35:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230506AbiIHGv3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 8 Sep 2022 02:51:29 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF49918385;
-        Wed,  7 Sep 2022 23:51:27 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MNV9H2LBYz6S32d;
-        Thu,  8 Sep 2022 14:49:39 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.67.175.61])
-        by APP2 (Coremail) with SMTP id Syh0CgBXqHHskBljwcslAg--.10754S4;
-        Thu, 08 Sep 2022 14:51:26 +0800 (CST)
-From:   Pu Lehui <pulehui@huaweicloud.com>
-To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S229924AbiIHHfe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 8 Sep 2022 03:35:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B642B442D;
+        Thu,  8 Sep 2022 00:35:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E363661B53;
+        Thu,  8 Sep 2022 07:35:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85081C433D6;
+        Thu,  8 Sep 2022 07:35:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662622532;
+        bh=myFJHXYjylDbYqIz67EITWqaRTZwH+KbFTWFLPlfzHo=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=rWSxQRj9NIxwyjwIuwvIl8vk6rh0HO0v9Un8qVwQb2Mjb9i3M1dBBlrDEGJdKzLju
+         fUECPIfqKlf79D3qC3DfzNDh23UNWQLrM4EMxgZD16KLrq2SV7LkyUG0r6R+VXWSHT
+         WdQF9Bcyr2+liLSTs3pLe19n4Z0olvO4Pk29pCWvBeyNf4mMKSNxiQT4QJ1vNwKPIT
+         CAZRDpcJb2a1MPBo4QPIHnwcSzbmLu3clK7K3rFBDKOgI+dNlB+6OE+5ZnKbYRCIDA
+         vDb8gNfd0Rr2lDPX83BJw9Pq7v/m0CgB9OgJrZY+idMEpA3Tjy3yHDHX6hc88zpSyF
+         6NZp5BLTI4DrA==
+Date:   Thu, 8 Sep 2022 08:35:26 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>,
         Martin KaFai Lau <martin.lau@linux.dev>,
         Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Pu Lehui <pulehui@huawei.com>
-Subject: [PATCH bpf-next v2 2/2] bpftool: Fix cgroup attach flags being assigned to effective progs
-Date:   Thu,  8 Sep 2022 14:53:04 +0000
-Message-Id: <20220908145304.3436139-3-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220908145304.3436139-1-pulehui@huaweicloud.com>
-References: <20220908145304.3436139-1-pulehui@huaweicloud.com>
+        Hao Luo <haoluo@google.com>, bpf@vger.kernel.org,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH v3 1/1] bpf: Drop unprotected find_vpid() in favour of
+ find_get_pid()
+Message-ID: <YxmbPqKZMEXHL6sI@google.com>
+References: <20220809134752.1488608-1-lee@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgBXqHHskBljwcslAg--.10754S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7WFWkWF1xKw1DGFy3JFW5Wrg_yoW8Zr48pr
-        ykZa4UG3Wrur98XFWfK34YqFWrGw4xAryjyas8Jw45uF17GryvvrW2ka4kCr15WFW7Cw4x
-        ZF1Y9FyUWa1UtaUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M2
-        8IrcIa0xkI8VA2jI8067AKxVWUXwA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK
-        0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4
-        x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2
-        z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4
-        xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v2
-        6r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x0262
-        8vn2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
-        F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GF
-        ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
-        1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07js
-        vtZUUUUU=
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
+In-Reply-To: <20220809134752.1488608-1-lee@kernel.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Pu Lehui <pulehui@huawei.com>
+On Tue, 09 Aug 2022, Lee Jones wrote:
 
-When root-cgroup attach multi progs and sub-cgroup attach a
-override prog, bpftool will display incorrectly for the attach
-flags of the sub-cgroup’s effective progs:
+> The documentation for find_vpid() clearly states:
+> 
+>   "Must be called with the tasklist_lock or rcu_read_lock() held."
+> 
+> Presently we do neither.
+> 
+> Let's use find_get_pid() which searches for the vpid, then takes a
+> reference to it preventing early free, all within the safety of
+> rcu_read_lock().  Once we have our reference we can safely make use of
+> it up until the point it is put.
+> 
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: John Fastabend <john.fastabend@gmail.com>
+> Cc: Andrii Nakryiko <andrii@kernel.org>
+> Cc: Martin KaFai Lau <martin.lau@linux.dev>
+> Cc: Song Liu <song@kernel.org>
+> Cc: Yonghong Song <yhs@fb.com>
+> Cc: KP Singh <kpsingh@kernel.org>
+> Cc: Stanislav Fomichev <sdf@google.com>
+> Cc: Hao Luo <haoluo@google.com>
+> Cc: bpf@vger.kernel.org
+> Fixes: 41bdc4b40ed6f ("bpf: introduce bpf subcommand BPF_TASK_FD_QUERY")
+> Acked-by: Jiri Olsa <jolsa@kernel.org>
+> Signed-off-by: Lee Jones <lee@kernel.org>
+> ---
+> 
+> v1 => v2:
+>   * Commit log update - description - no code differences
+> 
+> v2 => v3:
+>   * Commit log update - spelling of find_vpid() - no code differences
 
-$ bpftool cgroup tree /sys/fs/cgroup effective
-CgroupPath
-ID       AttachType      AttachFlags     Name
-/sys/fs/cgroup
-6        cgroup_sysctl   multi           sysctl_tcp_mem
-13       cgroup_sysctl   multi           sysctl_tcp_mem
-/sys/fs/cgroup/cg1
-20       cgroup_sysctl   override        sysctl_tcp_mem
-6        cgroup_sysctl   override        sysctl_tcp_mem <- wrong
-13       cgroup_sysctl   override        sysctl_tcp_mem <- wrong
-/sys/fs/cgroup/cg1/cg2
-20       cgroup_sysctl                   sysctl_tcp_mem
-6        cgroup_sysctl                   sysctl_tcp_mem
-13       cgroup_sysctl                   sysctl_tcp_mem
+Did anyone get a chance to look at this please?
 
-Attach flags is only valid for attached progs of this layer
-cgroup, but not for effective progs. Since prog_attach_flags
-array is already bypass the effective progs, so we can just
-use it.
+Would you like a [RESEND]?
 
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
- tools/bpf/bpftool/cgroup.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+>  kernel/bpf/syscall.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 83c7136c5788d..c20cff30581c4 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -4385,6 +4385,7 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
+>  	const struct perf_event *event;
+>  	struct task_struct *task;
+>  	struct file *file;
+> +	struct pid *ppid;
+>  	int err;
+>  
+>  	if (CHECK_ATTR(BPF_TASK_FD_QUERY))
+> @@ -4396,7 +4397,9 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
+>  	if (attr->task_fd_query.flags != 0)
+>  		return -EINVAL;
+>  
+> -	task = get_pid_task(find_vpid(pid), PIDTYPE_PID);
+> +	ppid = find_get_pid(pid);
+> +	task = get_pid_task(ppid, PIDTYPE_PID);
+> +	put_pid(ppid);
+>  	if (!task)
+>  		return -ENOENT;
+>  
 
-diff --git a/tools/bpf/bpftool/cgroup.c b/tools/bpf/bpftool/cgroup.c
-index cced668fb2a3..fa3eef0ff860 100644
---- a/tools/bpf/bpftool/cgroup.c
-+++ b/tools/bpf/bpftool/cgroup.c
-@@ -219,11 +219,7 @@ static int show_attached_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
- 		return 0;
- 
- 	for (iter = 0; iter < p.prog_cnt; iter++) {
--		__u32 attach_flags;
--
--		attach_flags = prog_attach_flags[iter] ?: p.attach_flags;
--
--		switch (attach_flags) {
-+		switch (prog_attach_flags[iter]) {
- 		case BPF_F_ALLOW_MULTI:
- 			attach_flags_str = "multi";
- 			break;
-@@ -234,7 +230,8 @@ static int show_attached_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
- 			attach_flags_str = "";
- 			break;
- 		default:
--			snprintf(buf, sizeof(buf), "unknown(%x)", attach_flags);
-+			snprintf(buf, sizeof(buf), "unknown(%x)",
-+				 prog_attach_flags[iter]);
- 			attach_flags_str = buf;
- 		}
- 
 -- 
-2.25.1
-
+Lee Jones [李琼斯]
