@@ -2,98 +2,93 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EDB3CC38145
-	for <bpf@archiver.kernel.org>; Thu,  8 Sep 2022 04:16:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C397C38145
+	for <bpf@archiver.kernel.org>; Thu,  8 Sep 2022 05:09:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbiIHEQY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 8 Sep 2022 00:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48856 "EHLO
+        id S229704AbiIHFJH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 8 Sep 2022 01:09:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbiIHEPK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 8 Sep 2022 00:15:10 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB42CD50B;
-        Wed,  7 Sep 2022 21:13:29 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MNQct6BnzzmVGY;
-        Thu,  8 Sep 2022 12:09:50 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
- (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 8 Sep
- 2022 12:13:26 +0800
-From:   Zhengchao Shao <shaozhengchao@huawei.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <martin.lau@linux.dev>
-CC:     <daniel@iogearbox.net>, <john.fastabend@gmail.com>,
-        <ast@kernel.org>, <andrii@kernel.org>, <song@kernel.org>,
-        <yhs@fb.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>, <weiyongjun1@huawei.com>,
-        <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH net-next,v3 21/22] net: sched: act_tunnel_key: get rid of tunnel_key_walker and tunnel_key_search
-Date:   Thu, 8 Sep 2022 12:14:53 +0800
-Message-ID: <20220908041454.365070-22-shaozhengchao@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220908041454.365070-1-shaozhengchao@huawei.com>
-References: <20220908041454.365070-1-shaozhengchao@huawei.com>
+        with ESMTP id S229668AbiIHFJB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 8 Sep 2022 01:09:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF98C92F55;
+        Wed,  7 Sep 2022 22:09:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 93595B81F74;
+        Thu,  8 Sep 2022 05:08:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00C59C433D7;
+        Thu,  8 Sep 2022 05:08:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662613738;
+        bh=dg8wftGIvmW8f8CxANQmVU9WzgpbVESeuK33TzXQNuE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HpROFulEeTkGHTFH1WQZcXr5tmSa3vWhKhn99/2aXSWhe7QrS/o92XogewYtQT75M
+         yXKmuFb9SBJ5x/+C+/h+NtIrwvrwU4Lmi7b93zmj9yPltoOSHkdNkXKrzxSFfL04wD
+         ie5mjahJpvZyqGTWpRYxS343ak7RJJEuS34xcFGU4sN/T18prCGq4AUEIegR6o3o+3
+         kI4c8F8nbSIxHhku1MkNhYnpIZ8RhwHKdPGk/eK+TEOg/CS1HU0aBKmHFAsDwM2uD0
+         BpmwwmQ0Xj1Qzlrjor1fu74rWCJ1C6H18rqdNu0t/jrCmMfFZEpGaqRp15XE80mHg2
+         7L1sMat+zGXBg==
+Date:   Wed, 7 Sep 2022 22:08:55 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Suleiman Souhlal <suleiman@google.com>,
+        bpf <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
+        Borislav Petkov <bp@suse.de>, x86@kernel.org
+Subject: Re: [PATCH v2 1/2] x86/kprobes: Fix kprobes instruction boudary
+ check with CONFIG_RETHUNK
+Message-ID: <20220908050855.w77mimzznrlp6pwe@treble>
+References: <166260087224.759381.4170102827490658262.stgit@devnote2>
+ <166260088298.759381.11727280480035568118.stgit@devnote2>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <166260088298.759381.11727280480035568118.stgit@devnote2>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-tunnel_key_walker() and tunnel_key_search() do the same thing as generic
-walk/search function, so remove them.
+On Thu, Sep 08, 2022 at 10:34:43AM +0900, Masami Hiramatsu (Google) wrote:
+> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> Since the CONFIG_RETHUNK and CONFIG_SLS will use INT3 for stopping
+> speculative execution after RET instruction, kprobes always failes to
+> check the probed instruction boundary by decoding the function body if
+> the probed address is after such sequence. (Note that some conditional
+> code blocks will be placed after function return, if compiler decides
+> it is not on the hot path.)
+> 
+> This is because kprobes expects someone (e.g. kgdb) puts the INT3 as
+> a software breakpoint and it will replace the original instruction.
+> But these INT3 are not such purpose, it doesn't need to recover the
+> original instruction.
+> 
+> To avoid this issue, memorize the branch target address during decoding
+> and if there is INT3, restart decoding from unchecked target address.
 
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
-Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
----
- net/sched/act_tunnel_key.c | 19 -------------------
- 1 file changed, 19 deletions(-)
+Hm, is kprobes conflicting with kgdb actually a realistic concern?
+Seems like a dangerous combination
 
-diff --git a/net/sched/act_tunnel_key.c b/net/sched/act_tunnel_key.c
-index 2db0c929fa09..2691a3d8e451 100644
---- a/net/sched/act_tunnel_key.c
-+++ b/net/sched/act_tunnel_key.c
-@@ -769,23 +769,6 @@ static int tunnel_key_dump(struct sk_buff *skb, struct tc_action *a,
- 	return -1;
- }
- 
--static int tunnel_key_walker(struct net *net, struct sk_buff *skb,
--			     struct netlink_callback *cb, int type,
--			     const struct tc_action_ops *ops,
--			     struct netlink_ext_ack *extack)
--{
--	struct tc_action_net *tn = net_generic(net, act_tunnel_key_ops.net_id);
--
--	return tcf_generic_walker(tn, skb, cb, type, ops, extack);
--}
--
--static int tunnel_key_search(struct net *net, struct tc_action **a, u32 index)
--{
--	struct tc_action_net *tn = net_generic(net, act_tunnel_key_ops.net_id);
--
--	return tcf_idr_search(tn, a, index);
--}
--
- static void tcf_tunnel_encap_put_tunnel(void *priv)
- {
- 	struct ip_tunnel_info *tunnel = priv;
-@@ -849,8 +832,6 @@ static struct tc_action_ops act_tunnel_key_ops = {
- 	.dump		=	tunnel_key_dump,
- 	.init		=	tunnel_key_init,
- 	.cleanup	=	tunnel_key_release,
--	.walk		=	tunnel_key_walker,
--	.lookup		=	tunnel_key_search,
- 	.offload_act_setup =	tcf_tunnel_key_offload_act_setup,
- 	.size		=	sizeof(struct tcf_tunnel_key),
- };
+Either way, this feels overengineered.  Sort of like implementing
+objtool in the kernel.
+
+And it's incomplete: for a switch statement jump table (or C goto jump
+table like in BPF), you can't detect the potential targets of the
+indirect branch.
+
+Wouldn't it be much simpler to just encode the knowledge that
+
+  	if (CONFIG_RETHUNK && !X86_FEATURE_RETHUNK)
+		// all rets are followed by four INT3s
+	else if (CONFIG_SLS)
+		// all rets are followed by one INT3
+
+?
+	
 -- 
-2.17.1
-
+Josh
