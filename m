@@ -2,240 +2,235 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2877C54EE9
-	for <bpf@archiver.kernel.org>; Thu,  8 Sep 2022 00:10:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 681FBC6FA82
+	for <bpf@archiver.kernel.org>; Thu,  8 Sep 2022 00:27:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbiIHAKM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 7 Sep 2022 20:10:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41046 "EHLO
+        id S229674AbiIHA1s (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 7 Sep 2022 20:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiIHAKJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 7 Sep 2022 20:10:09 -0400
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9865699B5C
-        for <bpf@vger.kernel.org>; Wed,  7 Sep 2022 17:10:08 -0700 (PDT)
-Received: by devbig010.atn6.facebook.com (Postfix, from userid 115148)
-        id 5E5AA1170376F; Wed,  7 Sep 2022 17:07:25 -0700 (PDT)
-From:   Joanne Koong <joannelkoong@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     daniel@iogearbox.net, martin.lau@kernel.org, andrii@kernel.org,
-        ast@kernel.org, Kernel-team@fb.com,
-        Joanne Koong <joannelkoong@gmail.com>
-Subject: [PATCH bpf-next v1 1/8] bpf: Add bpf_dynptr_data_rdonly
-Date:   Wed,  7 Sep 2022 17:02:47 -0700
-Message-Id: <20220908000254.3079129-2-joannelkoong@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220908000254.3079129-1-joannelkoong@gmail.com>
-References: <20220908000254.3079129-1-joannelkoong@gmail.com>
+        with ESMTP id S229766AbiIHA1r (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 7 Sep 2022 20:27:47 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511C6D0222
+        for <bpf@vger.kernel.org>; Wed,  7 Sep 2022 17:27:46 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id g4so1139110pgc.0
+        for <bpf@vger.kernel.org>; Wed, 07 Sep 2022 17:27:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=H/4av3KMvxgmpVRBh/8Ku/Jrn/UUQfz1tBd0dHVpSG8=;
+        b=XSIN+VC1nwvBWXY89fTDGZYrE0iGepEPDQsCHv/LC0uq7OCmSkcO4i7mDI0Nm/Ph/A
+         SJ+FYf9hyCyOffefXVuKytyKe2X4xJCjF5cJaWB1pWqnyzu6XUDheCSlUOUXhFB9a1HH
+         JWexGyDxh5RmrY5gkDs5/pPN+NYBXNSlK8bcEnYNoazzkUM7TZnaIA6Fw3MYJO8islk2
+         nnBTavtybPxG/A4+jsxJlb5WDBkfXhije6xbm1Ljvk+6tCHsajaLu991zdAk4+JzmS3N
+         wM/apyhJofBvB23sYGagJQLIBwynPMbbkzyWJPxKlQYGeZ/mZ7FnZf0WOn1LyN8xvFDJ
+         afEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=H/4av3KMvxgmpVRBh/8Ku/Jrn/UUQfz1tBd0dHVpSG8=;
+        b=EMtUHxUiZ9o5cZBv8+ymZLwqnJJSyzHhYtLCUJQ3+pnTtEH+kV6rts0G1gppo11Ya0
+         gQYqYhgYwyNtT5GDUcxirMeMBjv+nttxs0v3t0lD7VtIe6cLnmukpPd22O4+Z5CfiVhc
+         PbfPOLPyyrfdq3ScJPDT32AkHgQ018M1xhm+VA8IP8RaM7ZgrQW0CgImivV/2uPPfyJ7
+         iL7GrloWf9CO0QmPvhoE1/OUJQShf7St2iHQ19/hMzNs9kqSI9US23kayIOScIBzDLmW
+         5kwhRx37T7pVLb1+jLTJbhf+fKlr4BIoeiL3VEWpEbKbz2nzIVlVHy70vA5hvHl23mNY
+         bzlA==
+X-Gm-Message-State: ACgBeo287HuPP4CdPHIshll46doS5FOwrjloXiGn619i9Jh1zTGY4uag
+        5f625r7ocMHEwucWXWYhLWU=
+X-Google-Smtp-Source: AA6agR6feTEUbO53yB0EhNsqdboi4A/lC78j2+eebwWExjvtwqjs4EfvK/xCRVjVxEK8uC5YmwFyDQ==
+X-Received: by 2002:a05:6a00:26d1:b0:53e:1d86:bead with SMTP id p17-20020a056a0026d100b0053e1d86beadmr6515980pfw.26.1662596865634;
+        Wed, 07 Sep 2022 17:27:45 -0700 (PDT)
+Received: from macbook-pro-4.dhcp.thefacebook.com ([2620:10d:c090:400::5:66c4])
+        by smtp.gmail.com with ESMTPSA id w13-20020a17090a780d00b002003464d81fsm298718pjk.0.2022.09.07.17.27.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 17:27:45 -0700 (PDT)
+Date:   Wed, 7 Sep 2022 17:27:42 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Delyan Kratunov <delyank@fb.com>
+Subject: Re: [PATCH RFC bpf-next v1 21/32] bpf: Allow locking bpf_spin_lock
+ global variables
+Message-ID: <20220908002742.cqwwahxa5ktaik3r@macbook-pro-4.dhcp.thefacebook.com>
+References: <20220904204145.3089-1-memxor@gmail.com>
+ <20220904204145.3089-22-memxor@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220904204145.3089-22-memxor@gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a new helper bpf_dynptr_data_rdonly
+On Sun, Sep 04, 2022 at 10:41:34PM +0200, Kumar Kartikeya Dwivedi wrote:
+> Global variables reside in maps accessible using direct_value_addr
+> callbacks, so giving each load instruction's rewrite a unique reg->id
+> disallows us from holding locks which are global.
+> 
+> This is not great, so refactor the active_spin_lock into two separate
+> fields, active_spin_lock_ptr and active_spin_lock_id, which is generic
+> enough to allow it for global variables, map lookups, and local kptr
+> registers at the same time.
+> 
+> Held vs non-held is indicated by active_spin_lock_ptr, which stores the
+> reg->map_ptr or reg->btf pointer of the register used for locking spin
+> lock. But the active_spin_lock_id also needs to be compared to ensure
+> whether bpf_spin_unlock is for the same register.
+> 
+> Next, pseudo load instructions are not given a unique reg->id, as they
+> are doing lookup for the same map value (max_entries is never greater
+> than 1).
+> 
+> Essentially, we consider that the tuple of (active_spin_lock_ptr,
+> active_spin_lock_id) will always be unique for any kind of argument to
+> bpf_spin_{lock,unlock}.
+> 
+> Note that this can be extended in the future to also remember offset
+> used for locking, so that we can introduce multiple bpf_spin_lock fields
+> in the same allocation.
+> 
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
+>  include/linux/bpf_verifier.h |  3 ++-
+>  kernel/bpf/verifier.c        | 39 +++++++++++++++++++++++++-----------
+>  2 files changed, 29 insertions(+), 13 deletions(-)
+> 
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index 2a9dcefca3b6..00c21ad6f61c 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -348,7 +348,8 @@ struct bpf_verifier_state {
+>  	u32 branches;
+>  	u32 insn_idx;
+>  	u32 curframe;
+> -	u32 active_spin_lock;
+> +	void *active_spin_lock_ptr;
+> +	u32 active_spin_lock_id;
 
-void *bpf_dynptr_data_rdonly(struct bpf_dynptr *ptr, u32 offset, u32 len)=
-;
+{map, id=0} is indeed enough to distinguish different global locks and
+{map, id} for locks in map values,
+but what 'btf' is for?
+When is the case when reg->map_ptr is not set?
+locks in allocated objects?
+Feels too early to add that in this patch.
 
-which gets a read-only pointer to the underlying dynptr data.
+Also this patch is heavily influenced by Dave's patch with
+a realization that max_entries==1 simplifies the logic.
+I think you gotta give him more credit.
+Maybe as much as his SOB and authorship.
 
-This is equivalent to bpf_dynptr_data(), except the pointer returned is
-read-only, which allows this to support both read-write and read-only
-dynptrs.
-
-One example where this will be useful is for skb dynptrs where the
-program type only allows read-only access to packet data. This API will
-provide a way to obtain a data slice that can be used for direct reads.
-
-Signed-off-by: Joanne Koong <joannelkoong@gmail.com>
----
- include/uapi/linux/bpf.h       | 15 +++++++++++++++
- kernel/bpf/helpers.c           | 32 ++++++++++++++++++++++++++------
- kernel/bpf/verifier.c          |  7 +++++--
- tools/include/uapi/linux/bpf.h | 15 +++++++++++++++
- 4 files changed, 61 insertions(+), 8 deletions(-)
-
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index c55c23f25c0f..cce3356765fc 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -5439,6 +5439,20 @@ union bpf_attr {
-  *		*flags* is currently unused, it must be 0 for now.
-  *	Return
-  *		0 on success, -EINVAL if flags is not 0.
-+ *
-+ * void *bpf_dynptr_data_rdonly(struct bpf_dynptr *ptr, u32 offset, u32 =
-len)
-+ *	Description
-+ *		Get a read-only pointer to the underlying dynptr data.
-+ *
-+ *		This is equivalent to **bpf_dynptr_data**\ () except the
-+ *		pointer returned is read-only, which allows this to support
-+ *		both read-write and read-only dynptrs. For more details on using
-+ *		the API, please refer to **bpf_dynptr_data**\ ().
-+ *	Return
-+ *		Read-only pointer to the underlying dynptr data, NULL if the
-+ *		dynptr is invalid or if the offset and length is out of bounds
-+ *		or in a paged buffer for skb-type dynptrs or across fragments
-+ *		for xdp-type dynptrs.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5652,6 +5666,7 @@ union bpf_attr {
- 	FN(ktime_get_tai_ns),		\
- 	FN(dynptr_from_skb),		\
- 	FN(dynptr_from_xdp),		\
-+	FN(dynptr_data_rdonly),		\
- 	/* */
-=20
- /* integer value in 'imm' field of BPF_CALL instruction selects which he=
-lper
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index befafae34a63..30a59c9e5df3 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1572,7 +1572,7 @@ static const struct bpf_func_proto bpf_dynptr_write=
-_proto =3D {
- 	.arg5_type	=3D ARG_ANYTHING,
- };
-=20
--BPF_CALL_3(bpf_dynptr_data, struct bpf_dynptr_kern *, ptr, u32, offset, =
-u32, len)
-+void *__bpf_dynptr_data(struct bpf_dynptr_kern *ptr, u32 offset, u32 len=
-, bool writable)
- {
- 	enum bpf_dynptr_type type;
- 	void *data;
-@@ -1585,7 +1585,7 @@ BPF_CALL_3(bpf_dynptr_data, struct bpf_dynptr_kern =
-*, ptr, u32, offset, u32, len
- 	if (err)
- 		return 0;
-=20
--	if (bpf_dynptr_is_rdonly(ptr))
-+	if (writable && bpf_dynptr_is_rdonly(ptr))
- 		return 0;
-=20
- 	type =3D bpf_dynptr_get_type(ptr);
-@@ -1610,13 +1610,31 @@ BPF_CALL_3(bpf_dynptr_data, struct bpf_dynptr_ker=
-n *, ptr, u32, offset, u32, len
- 		/* if the requested data in across fragments, then it cannot
- 		 * be accessed directly - bpf_xdp_pointer will return NULL
- 		 */
--		return (unsigned long)bpf_xdp_pointer(ptr->data,
--						      ptr->offset + offset, len);
-+		return bpf_xdp_pointer(ptr->data, ptr->offset + offset, len);
- 	default:
--		WARN_ONCE(true, "bpf_dynptr_data: unknown dynptr type %d\n", type);
-+		WARN_ONCE(true, "__bpf_dynptr_data: unknown dynptr type %d\n", type);
- 		return 0;
- 	}
--	return (unsigned long)(data + ptr->offset + offset);
-+	return data + ptr->offset + offset;
-+}
-+
-+BPF_CALL_3(bpf_dynptr_data_rdonly, struct bpf_dynptr_kern *, ptr, u32, o=
-ffset, u32, len)
-+{
-+	return (unsigned long)__bpf_dynptr_data(ptr, offset, len, false);
-+}
-+
-+static const struct bpf_func_proto bpf_dynptr_data_rdonly_proto =3D {
-+	.func		=3D bpf_dynptr_data_rdonly,
-+	.gpl_only	=3D false,
-+	.ret_type	=3D RET_PTR_TO_DYNPTR_MEM_OR_NULL | MEM_RDONLY,
-+	.arg1_type	=3D ARG_PTR_TO_DYNPTR,
-+	.arg2_type	=3D ARG_ANYTHING,
-+	.arg3_type	=3D ARG_CONST_ALLOC_SIZE_OR_ZERO,
-+};
-+
-+BPF_CALL_3(bpf_dynptr_data, struct bpf_dynptr_kern *, ptr, u32, offset, =
-u32, len)
-+{
-+	return (unsigned long)__bpf_dynptr_data(ptr, offset, len, true);
- }
-=20
- static const struct bpf_func_proto bpf_dynptr_data_proto =3D {
-@@ -1698,6 +1716,8 @@ bpf_base_func_proto(enum bpf_func_id func_id)
- 		return &bpf_dynptr_write_proto;
- 	case BPF_FUNC_dynptr_data:
- 		return &bpf_dynptr_data_proto;
-+	case BPF_FUNC_dynptr_data_rdonly:
-+		return &bpf_dynptr_data_rdonly_proto;
- 	default:
- 		break;
- 	}
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index b1f66a1cc690..c312d931359d 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -506,7 +506,8 @@ static bool is_ptr_cast_function(enum bpf_func_id fun=
-c_id)
-=20
- static bool is_dynptr_ref_function(enum bpf_func_id func_id)
- {
--	return func_id =3D=3D BPF_FUNC_dynptr_data;
-+	return func_id =3D=3D BPF_FUNC_dynptr_data ||
-+		func_id =3D=3D BPF_FUNC_dynptr_data_rdonly;
- }
-=20
- static bool helper_multiple_ref_obj_use(enum bpf_func_id func_id,
-@@ -7398,6 +7399,7 @@ static int check_helper_call(struct bpf_verifier_en=
-v *env, struct bpf_insn *insn
- 		}
- 		break;
- 	case BPF_FUNC_dynptr_data:
-+	case BPF_FUNC_dynptr_data_rdonly:
- 	{
- 		struct bpf_reg_state *reg;
-=20
-@@ -7495,7 +7497,8 @@ static int check_helper_call(struct bpf_verifier_en=
-v *env, struct bpf_insn *insn
- 		mark_reg_known_zero(env, regs, BPF_REG_0);
- 		regs[BPF_REG_0].type =3D PTR_TO_MEM | ret_flag;
- 		regs[BPF_REG_0].mem_size =3D meta.mem_size;
--		if (func_id =3D=3D BPF_FUNC_dynptr_data) {
-+		if (func_id =3D=3D BPF_FUNC_dynptr_data ||
-+		    func_id =3D=3D BPF_FUNC_dynptr_data_rdonly) {
- 			if (dynptr_type =3D=3D BPF_DYNPTR_TYPE_SKB)
- 				regs[BPF_REG_0].type |=3D DYNPTR_TYPE_SKB;
- 			else if (dynptr_type =3D=3D BPF_DYNPTR_TYPE_XDP)
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index c55c23f25c0f..cce3356765fc 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -5439,6 +5439,20 @@ union bpf_attr {
-  *		*flags* is currently unused, it must be 0 for now.
-  *	Return
-  *		0 on success, -EINVAL if flags is not 0.
-+ *
-+ * void *bpf_dynptr_data_rdonly(struct bpf_dynptr *ptr, u32 offset, u32 =
-len)
-+ *	Description
-+ *		Get a read-only pointer to the underlying dynptr data.
-+ *
-+ *		This is equivalent to **bpf_dynptr_data**\ () except the
-+ *		pointer returned is read-only, which allows this to support
-+ *		both read-write and read-only dynptrs. For more details on using
-+ *		the API, please refer to **bpf_dynptr_data**\ ().
-+ *	Return
-+ *		Read-only pointer to the underlying dynptr data, NULL if the
-+ *		dynptr is invalid or if the offset and length is out of bounds
-+ *		or in a paged buffer for skb-type dynptrs or across fragments
-+ *		for xdp-type dynptrs.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5652,6 +5666,7 @@ union bpf_attr {
- 	FN(ktime_get_tai_ns),		\
- 	FN(dynptr_from_skb),		\
- 	FN(dynptr_from_xdp),		\
-+	FN(dynptr_data_rdonly),		\
- 	/* */
-=20
- /* integer value in 'imm' field of BPF_CALL instruction selects which he=
-lper
---=20
-2.30.2
-
+>  	bool speculative;
+>  
+>  	/* first and last insn idx of this verifier state */
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index b1754fd69f7d..ed19e4036b0a 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -1202,7 +1202,8 @@ static int copy_verifier_state(struct bpf_verifier_state *dst_state,
+>  	}
+>  	dst_state->speculative = src->speculative;
+>  	dst_state->curframe = src->curframe;
+> -	dst_state->active_spin_lock = src->active_spin_lock;
+> +	dst_state->active_spin_lock_ptr = src->active_spin_lock_ptr;
+> +	dst_state->active_spin_lock_id = src->active_spin_lock_id;
+>  	dst_state->branches = src->branches;
+>  	dst_state->parent = src->parent;
+>  	dst_state->first_insn_idx = src->first_insn_idx;
+> @@ -5504,22 +5505,35 @@ static int process_spin_lock(struct bpf_verifier_env *env, int regno,
+>  		return -EINVAL;
+>  	}
+>  	if (is_lock) {
+> -		if (cur->active_spin_lock) {
+> +		if (cur->active_spin_lock_ptr) {
+>  			verbose(env,
+>  				"Locking two bpf_spin_locks are not allowed\n");
+>  			return -EINVAL;
+>  		}
+> -		cur->active_spin_lock = reg->id;
+> +		if (map)
+> +			cur->active_spin_lock_ptr = map;
+> +		else
+> +			cur->active_spin_lock_ptr = btf;
+> +		cur->active_spin_lock_id = reg->id;
+>  	} else {
+> -		if (!cur->active_spin_lock) {
+> +		void *ptr;
+> +
+> +		if (map)
+> +			ptr = map;
+> +		else
+> +			ptr = btf;
+> +
+> +		if (!cur->active_spin_lock_ptr) {
+>  			verbose(env, "bpf_spin_unlock without taking a lock\n");
+>  			return -EINVAL;
+>  		}
+> -		if (cur->active_spin_lock != reg->id) {
+> +		if (cur->active_spin_lock_ptr != ptr ||
+> +		    cur->active_spin_lock_id != reg->id) {
+>  			verbose(env, "bpf_spin_unlock of different lock\n");
+>  			return -EINVAL;
+>  		}
+> -		cur->active_spin_lock = 0;
+> +		cur->active_spin_lock_ptr = NULL;
+> +		cur->active_spin_lock_id = 0;
+>  	}
+>  	return 0;
+>  }
+> @@ -11207,8 +11221,8 @@ static int check_ld_imm(struct bpf_verifier_env *env, struct bpf_insn *insn)
+>  	    insn->src_reg == BPF_PSEUDO_MAP_IDX_VALUE) {
+>  		dst_reg->type = PTR_TO_MAP_VALUE;
+>  		dst_reg->off = aux->map_off;
+> -		if (map_value_has_spin_lock(map))
+> -			dst_reg->id = ++env->id_gen;
+> +		WARN_ON_ONCE(map->max_entries != 1);
+> +		/* We want reg->id to be same (0) as map_value is not distinct */
+>  	} else if (insn->src_reg == BPF_PSEUDO_MAP_FD ||
+>  		   insn->src_reg == BPF_PSEUDO_MAP_IDX) {
+>  		dst_reg->type = CONST_PTR_TO_MAP;
+> @@ -11286,7 +11300,7 @@ static int check_ld_abs(struct bpf_verifier_env *env, struct bpf_insn *insn)
+>  		return err;
+>  	}
+>  
+> -	if (env->cur_state->active_spin_lock) {
+> +	if (env->cur_state->active_spin_lock_ptr) {
+>  		verbose(env, "BPF_LD_[ABS|IND] cannot be used inside bpf_spin_lock-ed region\n");
+>  		return -EINVAL;
+>  	}
+> @@ -12566,7 +12580,8 @@ static bool states_equal(struct bpf_verifier_env *env,
+>  	if (old->speculative && !cur->speculative)
+>  		return false;
+>  
+> -	if (old->active_spin_lock != cur->active_spin_lock)
+> +	if (old->active_spin_lock_ptr != cur->active_spin_lock_ptr ||
+> +	    old->active_spin_lock_id != cur->active_spin_lock_id)
+>  		return false;
+>  
+>  	/* for states to be equal callsites have to be the same
+> @@ -13213,7 +13228,7 @@ static int do_check(struct bpf_verifier_env *env)
+>  					return -EINVAL;
+>  				}
+>  
+> -				if (env->cur_state->active_spin_lock &&
+> +				if (env->cur_state->active_spin_lock_ptr &&
+>  				    (insn->src_reg == BPF_PSEUDO_CALL ||
+>  				     insn->imm != BPF_FUNC_spin_unlock)) {
+>  					verbose(env, "function calls are not allowed while holding a lock\n");
+> @@ -13250,7 +13265,7 @@ static int do_check(struct bpf_verifier_env *env)
+>  					return -EINVAL;
+>  				}
+>  
+> -				if (env->cur_state->active_spin_lock) {
+> +				if (env->cur_state->active_spin_lock_ptr) {
+>  					verbose(env, "bpf_spin_unlock is missing\n");
+>  					return -EINVAL;
+>  				}
+> -- 
+> 2.34.1
+> 
