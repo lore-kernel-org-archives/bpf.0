@@ -2,56 +2,57 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25984C54EE9
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 894A9C6FA8B
 	for <bpf@archiver.kernel.org>; Fri,  9 Sep 2022 00:50:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbiIIAuI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 8 Sep 2022 20:50:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51204 "EHLO
+        id S229720AbiIIAuN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 8 Sep 2022 20:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiIIAuG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 8 Sep 2022 20:50:06 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4286565834
-        for <bpf@vger.kernel.org>; Thu,  8 Sep 2022 17:50:05 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id b25-20020aa78119000000b00536a929d8e4so117730pfi.1
-        for <bpf@vger.kernel.org>; Thu, 08 Sep 2022 17:50:05 -0700 (PDT)
+        with ESMTP id S229751AbiIIAuL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 8 Sep 2022 20:50:11 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2150F6B67F
+        for <bpf@vger.kernel.org>; Thu,  8 Sep 2022 17:50:08 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id l2-20020a170902f68200b00177ee7e673eso266809plg.2
+        for <bpf@vger.kernel.org>; Thu, 08 Sep 2022 17:50:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date;
-        bh=UzC//+Yk70hj2hJqUtleEEzIXj0/R3c00YBdzJHLjn8=;
-        b=oLKZibQ7Xpojcs/uncAmpTMBxDPKAqywkflZvuGSE3Qz4DrVMgJJnwybZ7wbTny1HE
-         3rVRxOSXgHGMXdTjwFBSS2sueK7XeAQYphFQxr53Sxx0ZnOybWQvESCxY8QGHsSaB9xr
-         HUmvWw7xS/+vSgXdqXazIQ5Xa4GhLm6r88m4qyUfBI9cXULvULoqenuoF/lo5Xenk1x9
-         A/+3lxIrDyInfFHzWzi5B0rCULUcAHIVIQWKTyTx7PkZTGsaRFQrYzB1mHPjVHNzF+b/
-         zCk87rfwOY6E/xwj92CfBqmDE/wvmizDPXT2kpy02T/yKzui7wNKKIon2KILEQFT9pME
-         sG2A==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date;
+        bh=WXnjmdIZb8SItePycRIoqj321JtXN7AVWGBtHTjKeOI=;
+        b=ZTWsDugxXupQNqVPqZX2VvEH8/PJricBwpC4zOpB6ggMcfiNzPSaxgzhmgfMBcOCMU
+         vEvouRs4IZhkgVXmCC8EBdwvpPUxtITvcjdhM2ziKB4qBIDRWLKmyZy5XkFVpX9yG58p
+         MmIr4ljTmxch+UFKLYvSYf7r36mvtQ3bYKj8ik2CgPHT3lOZSc/NdkBzIk0Cn6/56rie
+         ZC2ps3E6XbQnMOrPX1APJ8CnGcM/3Vr5+8vLW5UxOKUuiVPs9KF859ylT5E8vU6mfWiD
+         /2LBghfdL46moOcE6nQDHvfGqZwbbqWcnPA/gmnqIoF/NhJAxDpSfSkg8eriG6k4QoJi
+         aLog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=UzC//+Yk70hj2hJqUtleEEzIXj0/R3c00YBdzJHLjn8=;
-        b=cHIJF5FdyRMqaMe0QAAL0GcoV03guVvQz8kaFjYH+bBr2fp4B3ltfSC8hpvOPG7eFB
-         f+IE2VUO4V2KG9SfWMRw3RcOtnq/P0FQPVh6ix5RoRILcZWDgeUM7cG66qH1Gn2aLW3M
-         quYTlWwVwG7B066/DR3/rImLshL+hjbfmqhovwYU/oeeFTdxpcTif6sB5dLwTpF+nyFM
-         ejVIrTwncK6nj50DMTBImE0LI6pTYQbLPSDfdIROCXKs5NI0ne0I3zXU91z9HHiZZJ44
-         8dMl98gp6T3nukw35UHsDLlJMWHJUAG39OoKIIC3P8jCcTBpbnR1/Cdf8n5ISE5vlCYb
-         GapQ==
-X-Gm-Message-State: ACgBeo2u1YFfm/u91RmTBlk1sMVjTR4EBHVdG+DLozXZZcB2/mUIMdU/
-        EHBr7x2EDc9WyMscRcpRfFwumTyBLab0gViH4c3J/SQzjTZtml5adLXhEJP+C8XAx+4tmf5x6F9
-        htnjgAAR/VO5LURcz2bIXUVnhFdBW8OExX6RBiWNjeGu0teqGoBcR7HEbo+MWNsc=
-X-Google-Smtp-Source: AA6agR59tJ1faHQghtsH7mhwtNJ+H7GjQXWBqcckySx7FEgQSBctBT2bgOBT1E6hEj1eT/zPqFPOmVOEWbxkxA==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=WXnjmdIZb8SItePycRIoqj321JtXN7AVWGBtHTjKeOI=;
+        b=PUd8A1qnU9XHQR0iLNSPDEsQMpR5+o8p5EqVtcki5Np+C1zHM4ZlZLpfejPJJfj8ii
+         7dIrvuiqKN8Yrlr6amzq2v+dz76JnVV3RU4mvYWoolvrd8d/r3Vf4ZYzIhYMez9318FJ
+         3yC5dYn0zh8EzXStAnwCJnK7oi7/RZ3/HxeJy9ZMVBAKE75XWPvicU2/w1h+FgPKS4h7
+         4MeZxKBMZ2EEIP0JOplcLb12rHfW54F9/YmTDUgD5N6r4z9D0HQIHGqVB+4Gh5k1HGhC
+         P/pSn7WGi/ZcrSlaYh1VbiPVkCGj+lmSb3XOh7f4eDEYLeOWx4I5e/PT1sNPGUYBEIfd
+         XsZA==
+X-Gm-Message-State: ACgBeo3y/grQFX7iar0KEloAmB0POKmjZsj+CZ6NsBMKPcbXvC2+snEO
+        uKstlLu9+0gdTwycewZaWk4DUWQXmBxnFFgX077+B2T1klEB3en359cIm1OQ/flbIhNrRnIN/QA
+        A+NK9gmILz06XH3m2hkcZTuXtb4yvDQhQgzaKOcWJbJ5ajdVGcP//oiFuvLAzwk4=
+X-Google-Smtp-Source: AA6agR466doHsdPrRV/SqfmFIwhkzDkbIKAZk5Sl1I029gWyNrTQirMY1QkHbOxm1UFXqiqzc2VFeUlVPU4ZhA==
 X-Received: from zhuyifei-kvm.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2edc])
- (user=zhuyifei job=sendgmr) by 2002:a05:6a00:a90:b0:530:2f3c:da43 with SMTP
- id b16-20020a056a000a9000b005302f3cda43mr11595911pfl.50.1662684604707; Thu,
- 08 Sep 2022 17:50:04 -0700 (PDT)
-Date:   Fri,  9 Sep 2022 00:49:38 +0000
+ (user=zhuyifei job=sendgmr) by 2002:a17:902:d589:b0:174:63e0:5a5c with SMTP
+ id k9-20020a170902d58900b0017463e05a5cmr11365998plh.5.1662684608338; Thu, 08
+ Sep 2022 17:50:08 -0700 (PDT)
+Date:   Fri,  9 Sep 2022 00:49:40 +0000
+In-Reply-To: <cover.1662682323.git.zhuyifei@google.com>
 Mime-Version: 1.0
+References: <cover.1662682323.git.zhuyifei@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <cover.1662682323.git.zhuyifei@google.com>
-Subject: [PATCH v4 bpf-next 0/3] cgroup/connect{4,6} programs for unprivileged
- ICMP ping
+Message-ID: <9b4fc9a27bd52f771b657b4c4090fc8d61f3a6b5.1662682323.git.zhuyifei@google.com>
+Subject: [PATCH v4 bpf-next 2/3] selftests/bpf: Deduplicate write_sysctl() to test_progs.c
 From:   YiFei Zhu <zhuyifei@google.com>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
@@ -71,50 +72,124 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Usually when a TCP/UDP connection is initiated, we can bind the socket
-to a specific IP attached to an interface in a cgroup/connect hook.
-But for pings, this is impossible, as the hook is not being called.
+This helper is needed in multiple tests. Instead of copying it over
+and over, better to deduplicate this helper to test_progs.c.
 
-This series adds the invocation for cgroup/connect{4,6} programs to
-unprivileged ICMP ping (i.e. ping sockets created with SOCK_DGRAM
-IPPROTO_ICMP(V6) as opposed to SOCK_RAW). This also adds a test to
-verify that the hooks are being called and invoking bpf_bind() from
-within the hook actually binds the socket.
+test_progs.c is chosen over testing_helpers.c because of this helper's
+use of CHECK / ASSERT_*, and the CHECK was modified to use ASSERT_*
+so it does not rely on a duration variable.
 
-Patch 1 adds the invocation of the hook.
-Patch 2 deduplicates write_sysctl in BPF test_progs.
-Patch 3 adds the tests for this hook.
+Suggested-by: Martin KaFai Lau <kafai@fb.com>
+Signed-off-by: YiFei Zhu <zhuyifei@google.com>
+---
+ .../bpf/prog_tests/btf_skc_cls_ingress.c      | 20 -------------------
+ .../bpf/prog_tests/tcp_hdr_options.c          | 20 -------------------
+ tools/testing/selftests/bpf/test_progs.c      | 17 ++++++++++++++++
+ tools/testing/selftests/bpf/test_progs.h      |  1 +
+ 4 files changed, 18 insertions(+), 40 deletions(-)
 
-v1 -> v2:
-* Added static to bindaddr_v6 in prog_tests/connect_ping.c
-* Deduplicated much of the test logic in prog_tests/connect_ping.c
-* Deduplicated write_sysctl() to test_progs.c
-
-v2 -> v3:
-* Renamed variable "obj" to "skel" for the BPF skeleton object in
-  prog_tests/connect_ping.c
-
-v3 -> v4:
-* Fixed error path to destroy skel in prog_tests/connect_ping.c
-
-YiFei Zhu (3):
-  bpf: Invoke cgroup/connect{4,6} programs for unprivileged ICMP ping
-  selftests/bpf: Deduplicate write_sysctl() to test_progs.c
-  selftests/bpf: Ensure cgroup/connect{4,6} programs can bind unpriv
-    ICMP ping
-
- net/ipv4/ping.c                               |  15 ++
- net/ipv6/ping.c                               |  16 ++
- .../bpf/prog_tests/btf_skc_cls_ingress.c      |  20 --
- .../selftests/bpf/prog_tests/connect_ping.c   | 178 ++++++++++++++++++
- .../bpf/prog_tests/tcp_hdr_options.c          |  20 --
- .../selftests/bpf/progs/connect_ping.c        |  53 ++++++
- tools/testing/selftests/bpf/test_progs.c      |  17 ++
- tools/testing/selftests/bpf/test_progs.h      |   1 +
- 8 files changed, 280 insertions(+), 40 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/connect_ping.c
- create mode 100644 tools/testing/selftests/bpf/progs/connect_ping.c
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c b/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
+index 664ffc0364f4f..7a277035c275b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
+@@ -22,26 +22,6 @@ static __u32 duration;
+ 
+ #define PROG_PIN_FILE "/sys/fs/bpf/btf_skc_cls_ingress"
+ 
+-static int write_sysctl(const char *sysctl, const char *value)
+-{
+-	int fd, err, len;
+-
+-	fd = open(sysctl, O_WRONLY);
+-	if (CHECK(fd == -1, "open sysctl", "open(%s): %s (%d)\n",
+-		  sysctl, strerror(errno), errno))
+-		return -1;
+-
+-	len = strlen(value);
+-	err = write(fd, value, len);
+-	close(fd);
+-	if (CHECK(err != len, "write sysctl",
+-		  "write(%s, %s, %d): err:%d %s (%d)\n",
+-		  sysctl, value, len, err, strerror(errno), errno))
+-		return -1;
+-
+-	return 0;
+-}
+-
+ static int prepare_netns(void)
+ {
+ 	if (CHECK(unshare(CLONE_NEWNET), "create netns",
+diff --git a/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c b/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
+index 1fa7720799674..f24436d33cd6f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
++++ b/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
+@@ -54,26 +54,6 @@ static int create_netns(void)
+ 	return 0;
+ }
+ 
+-static int write_sysctl(const char *sysctl, const char *value)
+-{
+-	int fd, err, len;
+-
+-	fd = open(sysctl, O_WRONLY);
+-	if (CHECK(fd == -1, "open sysctl", "open(%s): %s (%d)\n",
+-		  sysctl, strerror(errno), errno))
+-		return -1;
+-
+-	len = strlen(value);
+-	err = write(fd, value, len);
+-	close(fd);
+-	if (CHECK(err != len, "write sysctl",
+-		  "write(%s, %s): err:%d %s (%d)\n",
+-		  sysctl, value, err, strerror(errno), errno))
+-		return -1;
+-
+-	return 0;
+-}
+-
+ static void print_hdr_stg(const struct hdr_stg *hdr_stg, const char *prefix)
+ {
+ 	fprintf(stderr, "%s{active:%u, resend_syn:%u, syncookie:%u, fastopen:%u}\n",
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index 3561c97701f24..0e9a47f978908 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -943,6 +943,23 @@ int trigger_module_test_write(int write_sz)
+ 	return 0;
+ }
+ 
++int write_sysctl(const char *sysctl, const char *value)
++{
++	int fd, err, len;
++
++	fd = open(sysctl, O_WRONLY);
++	if (!ASSERT_NEQ(fd, -1, "open sysctl"))
++		return -1;
++
++	len = strlen(value);
++	err = write(fd, value, len);
++	close(fd);
++	if (!ASSERT_EQ(err, len, "write sysctl"))
++		return -1;
++
++	return 0;
++}
++
+ #define MAX_BACKTRACE_SZ 128
+ void crash_handler(int signum)
+ {
+diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
+index 5fe1365c2bb1e..b090996daee5c 100644
+--- a/tools/testing/selftests/bpf/test_progs.h
++++ b/tools/testing/selftests/bpf/test_progs.h
+@@ -384,6 +384,7 @@ int extract_build_id(char *build_id, size_t size);
+ int kern_sync_rcu(void);
+ int trigger_module_test_read(int read_sz);
+ int trigger_module_test_write(int write_sz);
++int write_sysctl(const char *sysctl, const char *value);
+ 
+ #ifdef __x86_64__
+ #define SYS_NANOSLEEP_KPROBE_NAME "__x64_sys_nanosleep"
 -- 
 2.37.2.789.g6183377224-goog
 
