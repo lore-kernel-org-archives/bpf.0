@@ -2,266 +2,129 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55DDCECAAD5
-	for <bpf@archiver.kernel.org>; Fri,  9 Sep 2022 02:39:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F135FECAAD3
+	for <bpf@archiver.kernel.org>; Fri,  9 Sep 2022 04:19:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbiIICj1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 8 Sep 2022 22:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54922 "EHLO
+        id S229572AbiIIETd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 9 Sep 2022 00:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiIICjZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 8 Sep 2022 22:39:25 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE525F4D
-        for <bpf@vger.kernel.org>; Thu,  8 Sep 2022 19:39:23 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id z8-20020a17090a014800b001fac4204c7eso141344pje.8
-        for <bpf@vger.kernel.org>; Thu, 08 Sep 2022 19:39:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date;
-        bh=inPxHq+KrnKfQqIZCe/BUAIsJdUyw8tOtqkD6eaZDTg=;
-        b=MnvK9srsnjCsTUZhls5Ng24hc4C5ybks0WFlpFbbt2A85bZ5Cq1TtGZGwbIWGP1//C
-         oaFvPZZk+InyUaQIxz47xRzzEOc7wHsMFbVp8SliJ4sbDXvfEdanUGTzIQgxEeq3CreA
-         zgw/BA9RBQGe2akiF9oAzBxfH0sGgYyoYQ/HLdcNXdkxHGJTBNwFpwpHAmN9PozK/Oze
-         QG+kiw5clPoV3oEyLY24UkOSRXiOXphoMgbuwStIRLfZxkPhQrXxhfN7noZbS/ujmh19
-         XK2QxszT+L+jSkjVsHXNN/O8ZgTujkj+jGYTcIPelXNvYnjFVBIEtxLryaZ1zXhHLVCb
-         nZoQ==
+        with ESMTP id S229456AbiIIETc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 9 Sep 2022 00:19:32 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00F62621
+        for <bpf@vger.kernel.org>; Thu,  8 Sep 2022 21:19:25 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id u23-20020a6be917000000b0069f4854e11eso335913iof.2
+        for <bpf@vger.kernel.org>; Thu, 08 Sep 2022 21:19:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=inPxHq+KrnKfQqIZCe/BUAIsJdUyw8tOtqkD6eaZDTg=;
-        b=TITHloEiladYTGFhDSNH1pathKoOHAWOaUEiT0R3j9ElWslduM7MLV0jyDczzad+ew
-         nVc4FL+fmN5YMzr9M+nIErxMJsg+Yj8LOg/Spr9QlYzA08HDvNtRWb4JePMtQBE1D2oD
-         qvEsdzd1ClZg2RYAeVOYI4j7o/wlHsN2SKTgljynXzN+owMDr0iLb8s+xaAX7ThgZ4mq
-         2/G2tSGoYP0sSSXXcllAtV4zsQCFWZi3uIXrY9Ks47IKS4L0ZAYfFdqr4WFDD+g+Q2Mj
-         d9tVhSdFqw699paYiu6pEOCqaIRPzGSi720rd9zXEJdLIbc+w6C7Geu2d7ZZS+T+fZWP
-         4Rtg==
-X-Gm-Message-State: ACgBeo0u56yDFZnG9ZgxD1/1N0IeXECtO+R7S7ZZt5U9+0n8DrlelX9r
-        gzlrc6xJ7NVVv2Ne0JOlQu69WQc=
-X-Google-Smtp-Source: AA6agR71u6EqQz9KXLG5t48VaXYxo/6jo5yDgHmaGGylZT6qedzcEy3jo8V0Muekv2UndSzqeQCeRwc=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a17:90b:1d81:b0:200:52da:7b5c with SMTP id
- pf1-20020a17090b1d8100b0020052da7b5cmr7306080pjb.228.1662691163370; Thu, 08
- Sep 2022 19:39:23 -0700 (PDT)
-Date:   Thu, 8 Sep 2022 19:39:22 -0700
-In-Reply-To: <CAK0nC2VpY-ag_OJr+mF=WGGAxUEwE6bDeB5mMmMJoSVp4i4iAQ@mail.gmail.com>
-Mime-Version: 1.0
-References: <20220908183952.3438815-1-mj@hunetr.com> <YxpmmepVMXXcaNfh@google.com>
- <CAK0nC2VpY-ag_OJr+mF=WGGAxUEwE6bDeB5mMmMJoSVp4i4iAQ@mail.gmail.com>
-Message-ID: <YxqnWuH8LRBDlFRV@google.com>
-Subject: Re: [PATCH] bpftool: output map/prog indices on `gen skeleton`
-From:   sdf@google.com
-To:     Marcelo Juchem <juchem@gmail.com>
-Cc:     bpf@vger.kernel.org, Marcelo Juchem <mj@hunetr.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=JbsBL1c3AkZtVs4/cSEGc5hTtYMUj0g0hX9Fbt9+yjg=;
+        b=lQvd6SyCnSxL5nQFHfR1cX48ZBXzIz8QYkuf/aA2Tq0n2OP6yoOjQ/mAe97nfeVejj
+         KNUDzeQTQD9+1SCNN5gp2WQ8HIY7pq589l0fhF2fTY54H7dKjBOQbMG8TWE9N/5slq8q
+         xGpQIOJ4KA4qS9oig8osyLgKkiNEzjQfYoGNWGOEDtKA808i0/0tf+hApm4Z7qKm4sl/
+         AHmTob0Oxv01Rr8hg6PmxsYLdUNE19aTZzHUY0taGMIc2uCbJUZLYhTjozCAmKhO+j7D
+         FGRn/KMr71kwsHdmocERtSr4m/hFZ0JGWzOsi+siF4px3kiP5Ef3609MjqvGArTw5b7y
+         WXHw==
+X-Gm-Message-State: ACgBeo17iVapIz6Aw1l6bocDXCxqdfS/ecEwByo9tjQh/EYLh1Wr7Wfp
+        JvEsTIYCBVpzl5IHwI4ZmE8RsDyJdBESgYfaqXTgew8IvbEb
+X-Google-Smtp-Source: AA6agR479dFZN40nHgHFqZhh2nj8Ibx3ZY9wf4YJrUbXeDaPLOwtxaKkASsbh6S5hVwVKtnImhn9pRjFGROqLGLqB+iHVcVMZOUr
+MIME-Version: 1.0
+X-Received: by 2002:a02:b001:0:b0:358:2f68:8a07 with SMTP id
+ p1-20020a02b001000000b003582f688a07mr5056754jah.280.1662697165094; Thu, 08
+ Sep 2022 21:19:25 -0700 (PDT)
+Date:   Thu, 08 Sep 2022 21:19:25 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e506e905e836d9e7@google.com>
+Subject: [syzbot] WARNING in bpf_verifier_vlog
+From:   syzbot <syzbot+8b2a08dfbd25fd933d75@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, haoluo@google.com,
+        hawk@kernel.org, john.fastabend@gmail.com, jolsa@kernel.org,
+        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, martin.lau@linux.dev, nathan@kernel.org,
+        ndesaulniers@google.com, netdev@vger.kernel.org, sdf@google.com,
+        song@kernel.org, syzkaller-bugs@googlegroups.com, trix@redhat.com,
+        yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 09/08, Marcelo Juchem wrote:
-> I'm not sure I can run all definite tests to know whether the program
-> is loadable or not. I wouldn't even know what the tests should be in
-> all cases.
-> On the other hand, it's very practical for me to attempt attaching
-> certain functions in order, until one of them works.
-> Besides, that's not necessarily the only library functionality that
-> could be built on top of this extra introspective power.
+Hello,
 
-> This is just one usage example, of course, but I'll try to illustrate
-> what one possible application would look like:
+syzbot found the following issue on:
 
-> ```
-> size_t attach_with_fallback(bpf_object_skeleton *skeleton,
-> std::initializer_list<size_t> probes) {
->    for (size_t i: probes) {
->      bpf_link *link = bpf_program__attach(*skeleton->progs[i].prog);
->      if (!libbpf_get_error(link)) {
->        return i;
->      }
->    }
->    return skeleton->prog_cnt;
-> }
+HEAD commit:    7e18e42e4b28 Linux 6.0-rc4
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1551da55080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f4d613baa509128c
+dashboard link: https://syzkaller.appspot.com/bug?extid=8b2a08dfbd25fd933d75
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1798cab7080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16ccbdc5080000
 
-> // ...
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/da260c675b46/disk-7e18e42e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/58f7bbbaa6ff/vmlinux-7e18e42e.xz
 
-> CHECK_ATTACHED(
->    attach_with_fallback(
->      obj->skeleton,
->      {
->        my_ebpf::prog_index::on_prepare_task_switch,
->        my_ebpf::prog_index::on_prepare_task_switch_isra_0,
->        my_ebpf::prog_index::on_finish_task_switch,
->        my_ebpf::prog_index::on_finish_task_switch_isra_0
->      }
->    )
-> );
-> CHECK_ATTACHED(
->    attach_with_fallback(
->      obj->skeleton,
->      {
->        my_ebpf::prog_index::on_tcp_recvmsg,
->        my_ebpf::prog_index::on_tcp_recvmsg_pre_5_19
->      }
->    )
-> );
-> ```
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8b2a08dfbd25fd933d75@syzkaller.appspotmail.com
 
-
-Thanks for the explanation, but I think I'm still confused :-)
-You mention 'attach' and that the kernel will not let you attach,
-but isn't 'attach' too late? Kernel should not let you load the program if  
-the
-function signature doesn't match, so you need to have a load_with_fallback?
-
-But regardless, you should be able to achieve it without any new code it
-seems:
-
-bool attach_with_fallback(std::initializer_list<struct bpf_program *>  
-progs) {
-   for (auto p i: progs) {
-     bpf_link *link = bpf_program__attach(p);
-     if (!libbpf_get_error(link)) {
-       return false;
-     }
-   }
-   return true;
-}
-
-CHECK_ATTACHED(
-   attach_with_fallback(
-     obj->skeleton,
-     {
-        
-bpf_object__find_program_by_name(obj->skeleton->obj, "on_tcp_recvmsg"),
-        
-bpf_object__find_program_by_name(obj->skeleton->obj, "on_tcp_recvmsg_5_19"),
-     }
-   )
-
-Would something like this work for you?
+------------[ cut here ]------------
+verifier log line truncated - local buffer too short
+WARNING: CPU: 1 PID: 3604 at kernel/bpf/verifier.c:300 bpf_verifier_vlog+0x267/0x3c0 kernel/bpf/verifier.c:300
+Modules linked in:
+CPU: 1 PID: 3604 Comm: syz-executor146 Not tainted 6.0.0-rc4-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+RIP: 0010:bpf_verifier_vlog+0x267/0x3c0 kernel/bpf/verifier.c:300
+Code: f5 95 3d 0c 31 ff 89 ee e8 06 07 f0 ff 40 84 ed 75 1a e8 7c 0a f0 ff 48 c7 c7 c0 e7 f3 89 c6 05 d4 95 3d 0c 01 e8 fb 4c ae 07 <0f> 0b e8 62 0a f0 ff 48 89 da 48 b8 00 00 00 00 00 fc ff df 48 c1
+RSP: 0018:ffffc900039bf8a0 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: ffff888017a19210 RCX: 0000000000000000
+RDX: ffff888021fb1d80 RSI: ffffffff8161f408 RDI: fffff52000737f06
+RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000000 R12: ffffffff89f5aba0
+R13: 00000000000003ff R14: ffff888017a19214 R15: ffff888012705800
+FS:  0000555555cba300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020100000 CR3: 000000001bf9e000 CR4: 0000000000350ee0
+Call Trace:
+ <TASK>
+ __btf_verifier_log+0xbb/0xf0 kernel/bpf/btf.c:1375
+ __btf_verifier_log_type+0x451/0x8f0 kernel/bpf/btf.c:1413
+ btf_func_proto_check_meta+0x117/0x160 kernel/bpf/btf.c:3905
+ btf_check_meta kernel/bpf/btf.c:4588 [inline]
+ btf_check_all_metas+0x3c1/0xa70 kernel/bpf/btf.c:4612
+ btf_parse_type_sec kernel/bpf/btf.c:4748 [inline]
+ btf_parse kernel/bpf/btf.c:5031 [inline]
+ btf_new_fd+0x939/0x1e70 kernel/bpf/btf.c:6710
+ bpf_btf_load kernel/bpf/syscall.c:4314 [inline]
+ __sys_bpf+0x13bd/0x6130 kernel/bpf/syscall.c:4998
+ __do_sys_bpf kernel/bpf/syscall.c:5057 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5055 [inline]
+ __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5055
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fb092221c29
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff5b0a6878 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fb092221c29
+RDX: 0000000000000020 RSI: 0000000020000240 RDI: 0000000000000012
+RBP: 00007fb0921e5dd0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fb0921e5e60
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-> -mj
-
-> On Thu, Sep 8, 2022 at 5:03 PM <sdf@google.com> wrote:
-> >
-> > On 09/08, Marcelo Juchem wrote:
-> > > The skeleton generated by `bpftool` makes it easy to attach and load  
-> bpf
-> > > objects as a whole. Some BPF programs are not directly portable across
-> > > kernel
-> > > versions, though, and require some cherry-picking on which programs to
-> > > load/attach. The skeleton makes this cherry-picking possible, but not
-> > > entirely
-> > > friendly in some cases.
-> >
-> > > For example, an useful feature is `attach_with_fallback` so that one
-> > > program can be attempted, and fallback programs tried subsequently  
-> until
-> > > one works (think `tcp_recvmsg` interface changing on kernel 5.19).
-> >
-> > > Being able to represent a set of probes programatically in a way that  
-> is
-> > > both
-> > > descriptive, compile-time validated, runtime efficient and custom  
-> library
-> > > friendly is quite desirable for application developers. A very simple  
-> way
-> > > to
-> > > represent a set of probes is with an array of indices.
-> >
-> > > This patch creates a couple of enums under the `__cplusplus` section  
-> to
-> > > represent the program and map indices inside the skeleton object, that
-> > > can be
-> > > used to refer to the proper program/map object.
-> >
-> > > This is the code generated for the `__cplusplus` section of
-> > > `profiler.skel.h`:
-> > > ```
-> > >    enum map_idxs: size_t {
-> > >      events = 0,
-> > >      fentry_readings = 1,
-> > >      accum_readings = 2,
-> > >      counts = 3,
-> > >      rodata = 4
-> > >    };
-> > >    enum prog_idxs: size_t {
-> > >      fentry_XXX = 0,
-> > >      fexit_XXX = 1
-> > >    };
-> > >    static inline struct profiler_bpf *open(const struct
-> > > bpf_object_open_opts *opts = nullptr);
-> > >    static inline struct profiler_bpf *open_and_load();
-> > >    static inline int load(struct profiler_bpf *skel);
-> > >    static inline int attach(struct profiler_bpf *skel);
-> > >    static inline void detach(struct profiler_bpf *skel);
-> > >    static inline void destroy(struct profiler_bpf *skel);
-> > >    static inline const void *elf_bytes(size_t *sz);
-> > > ```
-> > > ---
-> > >   src/gen.c | 32 ++++++++++++++++++++++++++++++++
-> > >   1 file changed, 32 insertions(+)
-> >
-> > > diff --git a/src/gen.c b/src/gen.c
-> > > index 7070dcf..7e28dc7 100644
-> > > --- a/src/gen.c
-> > > +++ b/src/gen.c
-> > > @@ -1086,6 +1086,38 @@ static int do_skeleton(int argc, char **argv)
-> > >               \n\
-> >  
-> >                                                                            
-> \n\
-> > >               #ifdef  
-> __cplusplus                                          \n\
-> > > +             "
-> > > +     );
-> > > +
-> >
-> > [..]
-> >
-> > > +     {
-> > > +             size_t i = 0;
-> > > +             printf("\tenum map_index: size_t {");
-> > > +             bpf_object__for_each_map(map, obj) {
-> > > +                     if (!get_map_ident(map, ident, sizeof(ident)))
-> > > +                             continue;
-> > > +                     if (i) {
-> > > +                             printf(",");
-> > > +                     }
-> > > +                     printf("\n\t\t%s = %lu", ident, i);
-> > > +                     ++i;
-> > > +             }
-> > > +             printf("\n\t};\n");
-> > > +     }
-> > > +     {
-> > > +             size_t i = 0;
-> > > +             printf("\tenum prog_index: size_t {");
-> > > +             bpf_object__for_each_program(prog, obj) {
-> > > +                     if (i) {
-> > > +                             printf(",");
-> > > +                     }
-> > > +                     printf("\n\t\t%s = %lu",  
-> bpf_program__name(prog), i);
-> > > +                     ++i;
-> > > +             }
-> > > +             printf("\n\t};\n");
-> > > +     }
-> >
-> > I might be missing something, but what prevents you from calling these
-> > on the skeleton's bpf_object?
-> >
-> >    skel = xxx__open();
-> >
-> >    bpf_object__for_each_map(map, skel->obj) {
-> >      // do whatever you want here to test whether it's loadable or not
-> >    }
-> >
-> >    // same for bpf_object__for_each_program
-> >
-> >    xxx__load(skel);
-> >
-> > How do these new enums help?
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
