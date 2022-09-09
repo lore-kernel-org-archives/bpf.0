@@ -2,192 +2,105 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F815C6FA82
-	for <bpf@archiver.kernel.org>; Fri,  9 Sep 2022 09:47:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97F17ECAAA1
+	for <bpf@archiver.kernel.org>; Fri,  9 Sep 2022 10:12:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbiIIJrL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 9 Sep 2022 05:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60176 "EHLO
+        id S229712AbiIIKMz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 9 Sep 2022 06:12:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbiIIJrK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 9 Sep 2022 05:47:10 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 90D3CF3BF4
-        for <bpf@vger.kernel.org>; Fri,  9 Sep 2022 02:47:09 -0700 (PDT)
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxkOCXCxtjqlIVAA--.20658S3;
-        Fri, 09 Sep 2022 17:47:04 +0800 (CST)
-Subject: Re: [PATCH bpf-next v3 3/4] LoongArch: Add BPF JIT support
-To:     WANG Xuerui <kernel@xen0n.name>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <git@xen0n.name>, Xi Ruoyao <xry111@xry111.site>
-References: <1661999249-10258-1-git-send-email-yangtiezhu@loongson.cn>
- <1661999249-10258-4-git-send-email-yangtiezhu@loongson.cn>
- <CAAhV-H4yU2tp=DBGCkdSzp-9bAXXDM4+0iqDgOac+fbgQnsx2A@mail.gmail.com>
- <1a740b5c-041c-85c6-f1d6-bb0b931c0c3e@loongson.cn>
- <CAAhV-H5vfw+Mv=LbQfa4sPHW91Z+ij3R8+LsHZOAiR+u7pJONw@mail.gmail.com>
- <cfc4c2e5-34af-b968-9c44-28e71731bb75@xen0n.name>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S229716AbiIIKMy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 9 Sep 2022 06:12:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E0DD5725
+        for <bpf@vger.kernel.org>; Fri,  9 Sep 2022 03:12:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 774B2B8247B
+        for <bpf@vger.kernel.org>; Fri,  9 Sep 2022 10:12:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3F10C433D7;
+        Fri,  9 Sep 2022 10:12:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662718371;
+        bh=yDZIXIy21L6RAjRLN8cOV8rIEumjhDVTwYRylcXQRcc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=vHfDGc1jYCDK9ZYxkHnI/QhWOTa37Xt/t0QI1McGjgxX1wjZm5LKeD+/qMCyvgeij
+         VHX6oj7ny0sLAuAuGiF444+/Bux0NZAWhcH/YoPKE1QckGcf8P0ctMkvejhJL86koI
+         B3NXpbE8PyMN8vMuQziLCjvazvNjMH54iMpJoH+an7gt20jfo8OyGy1yOfjZmMwgGv
+         JvK68Zh/1awj9OfebJ6VuUqm7Gww9hpjByVLw+N4e0WGAu1zmNDbjuBr99Vx8qUxoj
+         eBS+bd2VtnX04WgNNj1m5mp9yfAvIDdv4VmoA83vJtzZOZjVwQ5SC9W+uS3VwCJxK6
+         ZJ2VGQrBI5jww==
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        loongarch@lists.linux.dev, Li Xuefeng <lixuefeng@loongson.cn>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <16f24d7c-39c5-8dfa-a45f-61cd7f0e8b5f@loongson.cn>
-Date:   Fri, 9 Sep 2022 17:47:03 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Martynas Pumputis <m@lambda.lt>
+Subject: [PATCHv3 bpf-next 0/6] bpf: Fixes for CONFIG_X86_KERNEL_IBT 
+Date:   Fri,  9 Sep 2022 12:12:39 +0200
+Message-Id: <20220909101245.347173-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-In-Reply-To: <cfc4c2e5-34af-b968-9c44-28e71731bb75@xen0n.name>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8CxkOCXCxtjqlIVAA--.20658S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxZr4UKF1DAr4kZry8Jw13urg_yoW7JrWUpF
-        W3KFZ8KFs3JFy3AF9Fqw45Xa4ay39xKr13XF15Kry8A3s0qr1FgFWrGr1Y9a4DC34xZr1q
-        9F48try3Z3W5AFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9qb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
-        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVW8JVWxJw
-        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l
-        c7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE14v_GFWl42xK82IYc2Ij64vIr41l4I8I3I
-        0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
-        GVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
-        0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0
-        rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r
-        4UJbIYCTnIWIevJa73UjIFyTuYvjxUgN6JUUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+hi,
+Martynas reported bpf_get_func_ip returning +4 address when
+CONFIG_X86_KERNEL_IBT option is enabled and I found there are
+some failing bpf tests when this option is enabled.
+
+The CONFIG_X86_KERNEL_IBT option adds endbr instruction at the
+function entry, so the idea is to 'fix' entry ip for kprobe_multi
+and trampoline probes, because they are placed on the function
+entry.
+
+v3 changes:
+  - using 'unused' bpf function to get IBT config option
+    into selftest skeleton
+  - rebased to current bpf-next/master
+  - added ack/review from Masami
+
+v2 changes:
+  - change kprobes get_func_ip to return zero for kprobes
+    attached within the function body [Andrii]
+  - detect IBT config and properly test kprobe with offset 
+    [Andrii]
+
+v1 changes:
+  - read previous instruction in kprobe_multi link handler
+    and adjust entry_ip for CONFIG_X86_KERNEL_IBT option
+  - split first patch into 2 separate changes
+  - update changelogs
+
+thanks,
+jirka
 
 
-On 09/09/2022 12:51 AM, WANG Xuerui wrote:
-> Hi,
->
-> On 9/4/22 17:04, Huacai Chen wrote:
->> On Sat, Sep 3, 2022 at 6:11 PM Tiezhu Yang <yangtiezhu@loongson.cn>
->> wrote:
->>>
->>>
->>> On 09/03/2022 04:32 PM, Huacai Chen wrote:
->>>> On Thu, Sep 1, 2022 at 10:27 AM Tiezhu Yang <yangtiezhu@loongson.cn>
->>>> wrote:
->>>>> BPF programs are normally handled by a BPF interpreter, add BPF JIT
->>>>> support for LoongArch to allow the kernel to generate native code
->>>>> when a program is loaded into the kernel, this will significantly
->>>>> speed-up processing of BPF programs.
->>> [...]
->>>
->>>>> +
->>>>> +static inline int emit_cond_jmp(struct jit_ctx *ctx, u8 cond, enum
->>>>> loongarch_gpr rj,
->>>>> +                               enum loongarch_gpr rd, int jmp_offset)
->>>>> +{
->>>>> +       /*
->>>>> +        * A large PC-relative jump offset may overflow the
->>>>> immediate field of
->>>>> +        * the native conditional branch instruction, triggering a
->>>>> conversion
->>>>> +        * to use an absolute jump instead, this jump sequence is
->>>>> particularly
->>>>> +        * nasty. For now, use cond_jmp_offs26() directly to keep
->>>>> it simple.
->>>>> +        * In the future, maybe we can add support for far
->>>>> branching, the branch
->>>>> +        * relaxation requires more than two passes to converge,
->>>>> the code seems
->>>>> +        * too complex to understand, not quite sure whether it is
->>>>> necessary and
->>>>> +        * worth the extra pain. Anyway, just leave it as it is to
->>>>> enhance code
->>>>> +        * readability now.
->>>> Oh, no. I don't think this is a very difficult problem, because the
->>>> old version has already solved [1]. Please improve your code and send
->>>> V4.
->>>> BTW, I have committed V3 with some small modifications in
->>>> https://github.com/loongson/linux/commits/loongarch-next, please make
->>>> V4 based on that.
->>>>
->>>> [1]
->>>> https://github.com/loongson/linux/commit/e20b2353f40cd13720996524e1df6d0ca086eeb8#diff-6d2f4f5a862a5dce12f8eb0feeca095825c4ed1c2e7151b0905fb8d03c98922e
->>>>
->>>>
->>>> --------code in the old version--------
->>>> static inline void emit_cond_jump(struct jit_ctx *ctx, u8 cond, enum
->>>> loongarch_gpr rj,
->>>>                                    enum loongarch_gpr rd, int
->>>> jmp_offset)
->>>> {
->>>>          if (is_signed_imm16(jmp_offset))
->>>>                  cond_jump_offs16(ctx, cond, rj, rd, jmp_offset);
->>>>          else if (is_signed_imm26(jmp_offset))
->>>>                  cond_jump_offs26(ctx, cond, rj, rd, jmp_offset);
->>>>          else
->>>>                  cond_jump_offs32(ctx, cond, rj, rd, jmp_offset);
->>>> }
->>>>
->>>> static inline void emit_uncond_jump(struct jit_ctx *ctx, int
->>>> jmp_offset, bool is_exit)
->>>> {
->>>>          if (is_signed_imm26(jmp_offset))
->>>>                  uncond_jump_offs26(ctx, jmp_offset);
->>>>          else
->>>>                  uncond_jump_offs32(ctx, jmp_offset, is_exit);
->>>> }
->>>> --------end of code--------
->>>>
->>>> Huacai
->>>>
->>> Hi Huacai,
->>>
->>> This change is to pass the special test cases:
->>> "a new type of jump test where the program jumps forwards
->>> and backwards with increasing offset. It mainly tests JITs where a
->>> relative jump may generate different JITed code depending on the offset
->>> size."
->>>
->>> They are introduced in commit a7d2e752e520 ("bpf/tests: Add staggered
->>> JMP and JMP32 tests") after the old internal version you mentioned.
->>>
->>> Here, we use the native instructions to enlarge the jump range to 26 bit
->>> directly rather than 16 bit first, and also take no account of more than
->>> 26 bit case because there is no native instruction and it needs to
->>> emulate.
->>>
->>> As the code comment said, this is to enhance code readability now.
->> I'm not familiar with bpf, Daniel, Ruoyao and Xuerui, what do you
->> think about it?
->
-> I'm not familiar with eBPF JITs either, but from a cursory look it seems
-> the readability isn't that bad even for the original version? It is
-> clear that the appropriate instructions are selected according to size
-> of the immediate. And the current way of doing things doesn't really fix
-> the problem, it relies on the fact that *normally* the negative branch
-> offset is expressible in 16 bits (actually 18 bits).
->
-> So, at the very least, you should keep the fallback logic towards
-> cond_jump_offs32. At which point adding back enough code so you're back
-> to the original version doesn't sound like it's too much anyway...
->
+---
+Jiri Olsa (6):
+      kprobes: Add new KPROBE_FLAG_ON_FUNC_ENTRY kprobe flag
+      ftrace: Keep the resolved addr in kallsyms_callback
+      bpf: Use given function address for trampoline ip arg
+      bpf: Adjust kprobe_multi entry_ip for CONFIG_X86_KERNEL_IBT
+      bpf: Return value in kprobe get_func_ip only for entry address
+      selftests/bpf: Fix get_func_ip offset test for CONFIG_X86_KERNEL_IBT
 
-Hi Huacai and Xuerui,
-
-cond_jump_offs26() has the ability to handle the offs16 range, this
-is intended to pass a new type of jump test where the program jumps
-forwards and backwards with increasing offset.
-
-The case with larger jump offset is rare, it can fall back to the
-interpreter if jit failed.
-
-As we discussed offline, the current implementation is OK,
-the committed v3 with some small modifications by Huacai in
-https://github.com/loongson/linux/commits/loongarch-next
-looks good and works well, no need to do more modifications,
-thank you all for your reviews.
-
-Thanks,
-Tiezhu
-
+ arch/x86/net/bpf_jit_comp.c                               |  9 ++++-----
+ include/linux/kprobes.h                                   |  1 +
+ kernel/kprobes.c                                          |  6 +++++-
+ kernel/trace/bpf_trace.c                                  | 15 ++++++++++++++-
+ kernel/trace/ftrace.c                                     |  3 +--
+ tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c | 59 ++++++++++++++++++++++++++++++++++++++++++++++++-----------
+ tools/testing/selftests/bpf/progs/get_func_ip_test.c      | 25 +++++++++++++------------
+ tools/testing/selftests/bpf/progs/kprobe_multi.c          |  4 +---
+ 8 files changed, 87 insertions(+), 35 deletions(-)
