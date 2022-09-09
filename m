@@ -2,214 +2,112 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC42FECAAD3
-	for <bpf@archiver.kernel.org>; Fri,  9 Sep 2022 10:14:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1785ECAAD3
+	for <bpf@archiver.kernel.org>; Fri,  9 Sep 2022 10:14:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbiIIKOO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 9 Sep 2022 06:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36776 "EHLO
+        id S230115AbiIIKOh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 9 Sep 2022 06:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbiIIKOJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 9 Sep 2022 06:14:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0212116B40
-        for <bpf@vger.kernel.org>; Fri,  9 Sep 2022 03:13:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DFE1361F66
-        for <bpf@vger.kernel.org>; Fri,  9 Sep 2022 10:13:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5C03C433D6;
-        Fri,  9 Sep 2022 10:13:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662718438;
-        bh=e8bbtFYLVSbybF8R+o1g1uIyD4WWd53GoZ4LOoXZOgg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tGn95YzKLhrlY5DYcb3BzOMhxJvgFg5OqONINN8bGlsUCuBLDgPEY0FCk/bw0NHTM
-         FDX9Y2zFbQvGaXt1wRCha9mh+iJuLj34EyIrrSuEz94dXz9BSHDwOqwin91NKElQ6G
-         u/hlAP4GkQ9/zS5uu0Ww2xkxm1UGAkGaHqEINiGkFL3BD+xU2D5Gkm8vlkAxlhlk4E
-         YgMri3EabN37izQmA+xZHYbIvo7da5jEg7iMAzOUDQIh9eEIQQFo70Yg682IXYT8cb
-         mASgha7RQFXDEWON1EUd2cpxJVRpGhmlv+eW3AXGicXELjZCeVWXCBGjEvQW5HdDge
-         NkpQyX3Vmnjug==
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Martynas Pumputis <m@lambda.lt>
-Subject: [PATCHv3 bpf-next 6/6] selftests/bpf: Fix get_func_ip offset test for CONFIG_X86_KERNEL_IBT
-Date:   Fri,  9 Sep 2022 12:12:45 +0200
-Message-Id: <20220909101245.347173-7-jolsa@kernel.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220909101245.347173-1-jolsa@kernel.org>
-References: <20220909101245.347173-1-jolsa@kernel.org>
+        with ESMTP id S230159AbiIIKOb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 9 Sep 2022 06:14:31 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA431167;
+        Fri,  9 Sep 2022 03:14:26 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id b5so1925533wrr.5;
+        Fri, 09 Sep 2022 03:14:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:references:message-id:date:in-reply-to
+         :subject:cc:to:from:from:to:cc:subject:date;
+        bh=02N4B3uo/LK8nlmi+RnMMB9q8gQKWvRe4GM8PGErHWs=;
+        b=qjcvcPhwfQa4ir/ripxGmcWvbeaxDckFoNQ2IiWrKi+XzkWAVTWXugWvxn0dcq8ovQ
+         HPSWNESlSJ0PCjGe+ndkFdWN8r1yO9rT/unLn5usp8vFSlrD2x/8l/Y8CSeq2UroFRrI
+         QeMsh6uraVua+z0Q1shVCvcsSkn4RHjYwrTjkr7KPTa53fX8VEqGCuOxdrdTiV8C3DZp
+         wsWUYKyDOpK0BXHjFkS1A1JrqJ5F2TX9LL2fYXy/rWsGJNKFeMmLnB1q0wU9AnE00SNo
+         He6skvIenhYuwnR5a75QVBYpD7kHxbzHDu1B2m8pEfmhLEeurhplOU8HnqVvdtyDnrp1
+         qHeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:references:message-id:date:in-reply-to
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=02N4B3uo/LK8nlmi+RnMMB9q8gQKWvRe4GM8PGErHWs=;
+        b=aqEpI5sQNoCIcy43Wb8WrGAR4glTNSeR/FWe/+SPaWJeTwff+gFSxYMdJVX+uFysiZ
+         Jjo2vZ+MSkDY7281s1nn5gorjvXm86WTo/S6Hfd6Uir0I5il4Itd6LyVSuFEZ/Rm9XuF
+         a4QM4IQBNDQ3PUgmzTxmcIqmMu7fRmUaXGyLfqtx3GS4jf5YsN+9dyRRRrX7jFus3YYF
+         n6LMcVK0Qv/ayHffjdZhrguT87Gy2cJXipYHqJb0gSYGKQS7sPdqgLwsjsrekGXI7WN1
+         tL3uFylWejjP4Y3XU+ebyO6sABNKJEsJ9fz15AKtwQwf2NFn5jrTz8edJNHvSX+xj8w7
+         tbdg==
+X-Gm-Message-State: ACgBeo1q8s2QbPEdCb7HzO921tslyo3ThqgKOuTUpmwNa7Qz1Ny4npAv
+        xXdnOkGwe5gvXWG4HxVUSZY5ddC/pO4=
+X-Google-Smtp-Source: AA6agR7lNCXLIBMUU1cUNouP2uyCSi4R0CP+r06yQih+mYJHjNuPXI5zn0if7JNb6JmQpuOYEwEjwg==
+X-Received: by 2002:adf:f80b:0:b0:228:dbb9:5bdf with SMTP id s11-20020adff80b000000b00228dbb95bdfmr7489884wrp.327.1662718464885;
+        Fri, 09 Sep 2022 03:14:24 -0700 (PDT)
+Received: from imac ([88.97.103.74])
+        by smtp.gmail.com with ESMTPSA id d41-20020a05600c4c2900b003a5c999cd1asm206389wmp.14.2022.09.09.03.14.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Sep 2022 03:14:24 -0700 (PDT)
+From:   Donald Hunter <donald.hunter@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Daniel =?utf-8?Q?M=C3=BCller?= <deso@posteo.net>,
+        Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
+        linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [PATCH bpf-next v3 1/2] Add subdir support to Documentation
+ makefile
+In-Reply-To: <CAEf4BzZ_2wCVTjhAe0XzJ5qfbVhV0pfZeJ=z9Jg_fj_fzD1JFw@mail.gmail.com>
+        (Andrii Nakryiko's message of "Thu, 8 Sep 2022 16:29:55 -0700")
+Date:   Fri, 09 Sep 2022 11:12:22 +0100
+Message-ID: <m2bkro3lh5.fsf@gmail.com>
+References: <20220829091500.24115-1-donald.hunter@gmail.com>
+        <20220829091500.24115-2-donald.hunter@gmail.com>
+        <3d08894c-b3d1-37e8-664e-48e66dc664ac@iogearbox.net>
+        <m2h71k6bw8.fsf@gmail.com>
+        <CAEf4BzZ_2wCVTjhAe0XzJ5qfbVhV0pfZeJ=z9Jg_fj_fzD1JFw@mail.gmail.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (darwin)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-With CONFIG_X86_KERNEL_IBT enabled the test for kprobe with offset
-won't work because of the extra endbr instruction.
+Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
 
-As suggested by Andrii adding CONFIG_X86_KERNEL_IBT detection
-and using appropriate offset value based on that.
+> On Tue, Sep 6, 2022 at 3:50 AM Donald Hunter <donald.hunter@gmail.com> wrote:
+>>
+>> Daniel Borkmann <daniel@iogearbox.net> writes:
+>>
+>> > On 8/29/22 11:14 AM, Donald Hunter wrote:
+>> >> Run make in list of subdirs to build generated sources and migrate
+>> >> userspace-api/media to use this instead of being a special case.
+>> >> Signed-off-by: Donald Hunter <donald.hunter@gmail.com>
+>> >
+>> > Jonathan, given this touches Documentation/Makefile, could you ACK if
+>> > it looks good to you? Noticed both patches don't have doc: $subj prefix,
+>> > but that's something we could fix up.
+>> >
+>> > Maybe one small request, would be nice to build Documentation/bpf/libbpf/
+>> > also with every BPF CI run to avoid breakage of program_types.csv. Donald
+>> > could you check if feasible? Follow-up might be ok too, but up to Andrii.
+>>
+>> Sure, I can look at what is needed for the BPF CI run.
+>>
+>
+> Daniel (Mueller, not Borkmann), is this something that can be added to BPF CI?
 
-Also removing test7 program, because it does the same as test6.
+It looks to me like it can be added to BPF CI if we change docs/conf.py
+to call a new make target in docs/sphinx/Makefile. Hopefully Daniel can
+confirm whether this is the case.
 
-Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- .../bpf/prog_tests/get_func_ip_test.c         | 59 +++++++++++++++----
- .../selftests/bpf/progs/get_func_ip_test.c    | 23 ++++----
- 2 files changed, 60 insertions(+), 22 deletions(-)
+Given that the tree layouts of the kernel and libbpf are very different
+I think we need to do one of:
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c b/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c
-index 938dbd4d7c2f..fede8ef58b5b 100644
---- a/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c
-@@ -2,7 +2,7 @@
- #include <test_progs.h>
- #include "get_func_ip_test.skel.h"
- 
--void test_get_func_ip_test(void)
-+static void test_function_entry(void)
- {
- 	struct get_func_ip_test *skel = NULL;
- 	int err, prog_fd;
-@@ -12,14 +12,6 @@ void test_get_func_ip_test(void)
- 	if (!ASSERT_OK_PTR(skel, "get_func_ip_test__open"))
- 		return;
- 
--	/* test6 is x86_64 specifc because of the instruction
--	 * offset, disabling it for all other archs
--	 */
--#ifndef __x86_64__
--	bpf_program__set_autoload(skel->progs.test6, false);
--	bpf_program__set_autoload(skel->progs.test7, false);
--#endif
--
- 	err = get_func_ip_test__load(skel);
- 	if (!ASSERT_OK(err, "get_func_ip_test__load"))
- 		goto cleanup;
-@@ -43,11 +35,56 @@ void test_get_func_ip_test(void)
- 	ASSERT_EQ(skel->bss->test3_result, 1, "test3_result");
- 	ASSERT_EQ(skel->bss->test4_result, 1, "test4_result");
- 	ASSERT_EQ(skel->bss->test5_result, 1, "test5_result");
-+
-+cleanup:
-+	get_func_ip_test__destroy(skel);
-+}
-+
-+/* test6 is x86_64 specific because of the instruction
-+ * offset, disabling it for all other archs
-+ */
- #ifdef __x86_64__
-+static void test_function_body(void)
-+{
-+	struct get_func_ip_test *skel = NULL;
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	LIBBPF_OPTS(bpf_kprobe_opts, kopts);
-+	struct bpf_link *link6 = NULL;
-+	int err, prog_fd;
-+
-+	skel = get_func_ip_test__open();
-+	if (!ASSERT_OK_PTR(skel, "get_func_ip_test__open"))
-+		return;
-+
-+	bpf_program__set_autoload(skel->progs.test6, true);
-+
-+	err = get_func_ip_test__load(skel);
-+	if (!ASSERT_OK(err, "get_func_ip_test__load"))
-+		goto cleanup;
-+
-+	kopts.offset = skel->kconfig->CONFIG_X86_KERNEL_IBT ? 9 : 5;
-+
-+	link6 = bpf_program__attach_kprobe_opts(skel->progs.test6, "bpf_fentry_test6", &kopts);
-+	if (!ASSERT_OK_PTR(link6, "link6"))
-+		goto cleanup;
-+
-+	prog_fd = bpf_program__fd(skel->progs.test1);
-+	err = bpf_prog_test_run_opts(prog_fd, &topts);
-+	ASSERT_OK(err, "test_run");
-+	ASSERT_EQ(topts.retval, 0, "test_run");
-+
- 	ASSERT_EQ(skel->bss->test6_result, 1, "test6_result");
--	ASSERT_EQ(skel->bss->test7_result, 1, "test7_result");
--#endif
- 
- cleanup:
-+	bpf_link__destroy(link6);
- 	get_func_ip_test__destroy(skel);
- }
-+#else
-+#define test_function_body()
-+#endif
-+
-+void test_get_func_ip_test(void)
-+{
-+	test_function_entry();
-+	test_function_body();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/get_func_ip_test.c b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-index 6db70757bc8b..8559e698b40d 100644
---- a/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-+++ b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-@@ -2,6 +2,7 @@
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
-+#include <stdbool.h>
- 
- char _license[] SEC("license") = "GPL";
- 
-@@ -13,6 +14,16 @@ extern const void bpf_modify_return_test __ksym;
- extern const void bpf_fentry_test6 __ksym;
- extern const void bpf_fentry_test7 __ksym;
- 
-+extern bool CONFIG_X86_KERNEL_IBT __kconfig __weak;
-+
-+/* This function is here to have CONFIG_X86_KERNEL_IBT
-+ * used and added to object BTF.
-+ */
-+int unused(void)
-+{
-+	return CONFIG_X86_KERNEL_IBT ? 0 : 1;
-+}
-+
- __u64 test1_result = 0;
- SEC("fentry/bpf_fentry_test1")
- int BPF_PROG(test1, int a)
-@@ -64,7 +75,7 @@ int BPF_PROG(test5, int a, int *b, int ret)
- }
- 
- __u64 test6_result = 0;
--SEC("kprobe/bpf_fentry_test6+0x5")
-+SEC("?kprobe")
- int test6(struct pt_regs *ctx)
- {
- 	__u64 addr = bpf_get_func_ip(ctx);
-@@ -72,13 +83,3 @@ int test6(struct pt_regs *ctx)
- 	test6_result = (const void *) addr == 0;
- 	return 0;
- }
--
--__u64 test7_result = 0;
--SEC("kprobe/bpf_fentry_test7+5")
--int test7(struct pt_regs *ctx)
--{
--	__u64 addr = bpf_get_func_ip(ctx);
--
--	test7_result = (const void *) addr == 0;
--	return 0;
--}
--- 
-2.37.3
+1. Use a separate a .csv generator script with dedicated makefiles per
+project.
 
+2. Move this entirely to libbpf and include a readthedocs URL in
+index.rst in the same way as currently done for the API docs.
+
+I think my preference would be for 2.
+
+Thanks
+Donald.
