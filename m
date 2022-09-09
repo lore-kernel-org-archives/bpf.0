@@ -2,117 +2,83 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A74CECAAA1
-	for <bpf@archiver.kernel.org>; Fri,  9 Sep 2022 10:22:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1B3AECAAD3
+	for <bpf@archiver.kernel.org>; Fri,  9 Sep 2022 10:48:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiIIKWI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 9 Sep 2022 06:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53706 "EHLO
+        id S230380AbiIIKsy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 9 Sep 2022 06:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230212AbiIIKWI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 9 Sep 2022 06:22:08 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D40EBF36E
-        for <bpf@vger.kernel.org>; Fri,  9 Sep 2022 03:22:06 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id v16so2875185ejr.10
-        for <bpf@vger.kernel.org>; Fri, 09 Sep 2022 03:22:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date;
-        bh=4m33vCG+fVpmCVZX7nTieYKGZQy3TEaWwZ17if8+4TE=;
-        b=BfzR/SdqqzFQy8ATO7FfwJOqJazFBEz/kE+/l0ykuN0bMnopAXrWmnbCDm7WbNCFTM
-         eMJNgcXj3fmM4UIbdBE/3XqO3y4uspXgIwBzwzbyuTvwLNYsgqeR5FkGR7PtossfWlYP
-         +Cr2UlvD5bw+IQPy4BFG1cxSinfCTqD5P5QnwKsBYI3x2GeqyFXvS+QWo9YYsGTjbx3M
-         6/Xa4sdovs3/QGZQy8Uco5KcZrpenM4UxTCx4GHYukcDKkmsywukP+UhmryhU5AY9Ojq
-         EySwQ/1SLUc6L80XmeJqRN3e9zDVEtPv4ZZAEeJPKFbpX/nFAwg1WgOVlUs5RZfBuFaQ
-         JAQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=4m33vCG+fVpmCVZX7nTieYKGZQy3TEaWwZ17if8+4TE=;
-        b=nYRMQrTGux/or8ac4v7oT3w10V2cZA9l+Y3/gKn/3PaBZwu+UptViH61QCDrGhYbzM
-         PJXwUZMW71seGWLMALqoGwtWKxKidJ8dtTwYCoiUsafEZEcsF6Ldwky6om3Gt9RZLNWy
-         rZa2QKj5bR11hCFs9r9sC9ziwrs961+DmtZe7Uaen3HDUBk0K9eYDZ3zBDQg7c6V7U+E
-         XdY/ZagAdz2B0tXnVGM3G7CsG/Mqlwyo13zWxZojXEFkrnm5K/eIvX2V6xW8VPVIhsmq
-         MLlCRn1coa1YilmS6bJp7uDz6C6YAKZIpTpnZjnU3nii8lu3qWpdBXipSejgMGvSygha
-         CMVw==
-X-Gm-Message-State: ACgBeo0m1b/+5GQE9XjAk6OMVpZhijkDi6IGW8wwilDF+cBupyn5ARUX
-        6TnaRzgbb3GE3SUnsUK/e0E=
-X-Google-Smtp-Source: AA6agR7hkeTohoGaJjhgtA8CfXg2W0fd0h/bAuB5KrY++D4WwyR1IKFSrp7c1x1jElWjopLCyzN+1g==
-X-Received: by 2002:a17:907:2e01:b0:730:9ecc:cd28 with SMTP id ig1-20020a1709072e0100b007309ecccd28mr9199115ejc.360.1662718924383;
-        Fri, 09 Sep 2022 03:22:04 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id h19-20020a1709063b5300b0074134543f82sm83874ejf.90.2022.09.09.03.22.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 03:22:04 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Fri, 9 Sep 2022 12:22:02 +0200
-To:     kernel test robot <lkp@intel.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, kbuild-all@lists.01.org,
-        syzbot+2251879aa068ad9c960d@syzkaller.appspotmail.com,
-        bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>
-Subject: Re: [PATCH bpf-next] bpf: Prevent bpf program recursion for raw
- tracepoint probes
-Message-ID: <YxsTyh5DX07eryh9@krava>
-References: <20220908114659.102775-1-jolsa@kernel.org>
- <202209091544.TU8KWEUM-lkp@intel.com>
+        with ESMTP id S229494AbiIIKsf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 9 Sep 2022 06:48:35 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F2613D7B3;
+        Fri,  9 Sep 2022 03:47:05 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MPCHM1hfgzZcDc;
+        Fri,  9 Sep 2022 18:42:23 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.70) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 9 Sep 2022 18:46:54 +0800
+From:   Wang Yufen <wangyufen@huawei.com>
+To:     <ast@kernel.org>, <daniel@iogearbox.net>,
+        <john.fastabend@gmail.com>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <kpsingh@kernel.org>, <sdf@google.com>, <haoluo@google.com>,
+        <jolsa@kernel.org>
+CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [bpf-next] bpf: use kvmemdup_bpfptr helper
+Date:   Fri, 9 Sep 2022 18:58:17 +0800
+Message-ID: <1662721097-23793-1-git-send-email-wangyufen@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202209091544.TU8KWEUM-lkp@intel.com>
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.70]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 03:27:57PM +0800, kernel test robot wrote:
-> Hi Jiri,
-> 
-> I love your patch! Yet something to improve:
-> 
-> [auto build test ERROR on bpf-next/master]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Jiri-Olsa/bpf-Prevent-bpf-program-recursion-for-raw-tracepoint-probes/20220908-194832
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-> config: x86_64-randconfig-c022 (https://download.01.org/0day-ci/archive/20220909/202209091544.TU8KWEUM-lkp@intel.com/config)
-> compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-> reproduce (this is a W=1 build):
->         # https://github.com/intel-lab-lkp/linux/commit/f68b567cfb6572c20e431242a440cc5f01452485
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Jiri-Olsa/bpf-Prevent-bpf-program-recursion-for-raw-tracepoint-probes/20220908-194832
->         git checkout f68b567cfb6572c20e431242a440cc5f01452485
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->    ld: kernel/trace/bpf_trace.o: in function `__bpf_trace_run':
->    kernel/trace/bpf_trace.c:2046: undefined reference to `bpf_prog_inc_misses_counter'
-> >> ld: kernel/trace/bpf_trace.c:2046: undefined reference to `bpf_prog_inc_misses_counter'
-> >> ld: kernel/trace/bpf_trace.c:2046: undefined reference to `bpf_prog_inc_misses_counter'
-> >> ld: kernel/trace/bpf_trace.c:2046: undefined reference to `bpf_prog_inc_misses_counter'
-> >> ld: kernel/trace/bpf_trace.c:2046: undefined reference to `bpf_prog_inc_misses_counter'
->    ld: kernel/trace/bpf_trace.o:kernel/trace/bpf_trace.c:2046: more undefined references to `bpf_prog_inc_misses_counter' follow
+Use kvmemdup_bpfptr helper instead of open-coding to
+simplify the code.
 
-ah right, trampoline.o is for JIT config only, will move
-bpf_prog_inc_misses_counter to some common place
+Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+---
+ kernel/bpf/syscall.c | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
-jirka
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 4e9d4622aef7..13ce28081982 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -1413,20 +1413,14 @@ static int map_update_elem(union bpf_attr *attr, bpfptr_t uattr)
+ 	}
+ 
+ 	value_size = bpf_map_value_size(map);
+-
+-	err = -ENOMEM;
+-	value = kvmalloc(value_size, GFP_USER | __GFP_NOWARN);
+-	if (!value)
++	value = kvmemdup_bpfptr(uvalue, value_size);
++	if (IS_ERR(value)) {
++		err = PTR_ERR(value);
+ 		goto free_key;
+-
+-	err = -EFAULT;
+-	if (copy_from_bpfptr(value, uvalue, value_size) != 0)
+-		goto free_value;
++	}
+ 
+ 	err = bpf_map_update_value(map, f, key, value, attr->flags);
+ 
+-free_value:
+-	kvfree(value);
+ free_key:
+ 	kvfree(key);
+ err_put:
+-- 
+2.25.1
 
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
