@@ -2,25 +2,25 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C9B7C6FA82
-	for <bpf@archiver.kernel.org>; Fri,  9 Sep 2022 01:27:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7C8EECAAD5
+	for <bpf@archiver.kernel.org>; Fri,  9 Sep 2022 01:27:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229437AbiIIB1p (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 8 Sep 2022 21:27:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51438 "EHLO
+        id S229988AbiIIB1s (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 8 Sep 2022 21:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbiIIB1k (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 8 Sep 2022 21:27:40 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCA61177A7;
-        Thu,  8 Sep 2022 18:27:38 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MNyx05NxQzHnlS;
-        Fri,  9 Sep 2022 09:25:40 +0800 (CST)
+        with ESMTP id S229449AbiIIB1l (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 8 Sep 2022 21:27:41 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9EC1177A2;
+        Thu,  8 Sep 2022 18:27:40 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MNyt35VKRzZclr;
+        Fri,  9 Sep 2022 09:23:07 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
  (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 9 Sep
- 2022 09:27:36 +0800
+ 2022 09:27:38 +0800
 From:   Zhengchao Shao <shaozhengchao@huawei.com>
 To:     <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
@@ -28,9 +28,9 @@ To:     <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <shuah@kernel.org>
 CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
         <shaozhengchao@huawei.com>
-Subject: [PATCH net-next 4/8] selftests/tc-testings: add connmark action deleting test case
-Date:   Fri, 9 Sep 2022 09:29:32 +0800
-Message-ID: <20220909012936.268433-5-shaozhengchao@huawei.com>
+Subject: [PATCH net-next 7/8] selftests/tc-testings: add sample action deleting test case
+Date:   Fri, 9 Sep 2022 09:29:35 +0800
+Message-ID: <20220909012936.268433-8-shaozhengchao@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220909012936.268433-1-shaozhengchao@huawei.com>
 References: <20220909012936.268433-1-shaozhengchao@huawei.com>
@@ -44,71 +44,71 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Test 6571: Delete connmark action with valid index
-Test 3426: Delete connmark action with invalid index
+Test 3872: Delete sample action with valid index
+Test a394: Delete sample action with invalid index
 
 Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 ---
- .../tc-testing/tc-tests/actions/connmark.json | 50 +++++++++++++++++++
+ .../tc-testing/tc-tests/actions/sample.json   | 50 +++++++++++++++++++
  1 file changed, 50 insertions(+)
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/actions/connmark.json b/tools/testing/selftests/tc-testing/tc-tests/actions/connmark.json
-index cadde8f41fcd..0de2f79ea329 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/actions/connmark.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/actions/connmark.json
-@@ -312,5 +312,55 @@
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/actions/sample.json b/tools/testing/selftests/tc-testing/tc-tests/actions/sample.json
+index ddabb160a11b..148d8bcb8606 100644
+--- a/tools/testing/selftests/tc-testing/tc-tests/actions/sample.json
++++ b/tools/testing/selftests/tc-testing/tc-tests/actions/sample.json
+@@ -633,5 +633,55 @@
          "teardown": [
-             "$TC actions flush action connmark"
+             "$TC actions flush action sample"
          ]
 +    },
 +    {
-+        "id": "6571",
-+        "name": "Delete connmark action with valid index",
++        "id": "3872",
++        "name": "Delete sample action with valid index",
 +        "category": [
 +            "actions",
-+            "connmark"
++            "sample"
 +        ],
 +        "setup": [
 +            [
-+                "$TC actions flush action connmark",
++                "$TC actions flush action sample",
 +                0,
 +                1,
 +                255
 +            ],
-+	    "$TC actions add action connmark pass index 20"
++	    "$TC actions add action sample rate 10 group 1 index 20"
 +        ],
-+        "cmdUnderTest": "$TC actions del action connmark index 20",
++        "cmdUnderTest": "$TC actions del action sample index 20",
 +        "expExitCode": "0",
-+        "verifyCmd": "$TC actions get action connmark index 20",
-+        "matchPattern": "action order [0-9]+: connmark zone 0 pass.*index 20 ref",
++        "verifyCmd": "$TC actions get action sample index 20",
++        "matchPattern": "action order [0-9]+: sample rate 1/10 group 1.*index 20 ref",
 +        "matchCount": "0",
 +        "teardown": [
-+            "$TC actions flush action connmark"
++            "$TC actions flush action sample"
 +        ]
 +    },
 +    {
-+        "id": "3426",
-+        "name": "Delete connmark action with invalid index",
++        "id": "a394",
++        "name": "Delete sample action with invalid index",
 +        "category": [
 +            "actions",
-+            "connmark"
++            "sample"
 +        ],
 +        "setup": [
 +            [
-+                "$TC actions flush action connmark",
++                "$TC actions flush action sample",
 +                0,
 +                1,
 +                255
 +            ],
-+            "$TC actions add action connmark pass index 20"
++            "$TC actions add action sample rate 10 group 1 index 20"
 +        ],
-+        "cmdUnderTest": "$TC actions del action connmark index 1",
++        "cmdUnderTest": "$TC actions del action sample index 10",
 +        "expExitCode": "255",
-+        "verifyCmd": "$TC actions get action connmark index 20",
-+        "matchPattern": "action order [0-9]+: connmark zone 0 pass.*index 20 ref",
++        "verifyCmd": "$TC actions get action sample index 20",
++        "matchPattern": "action order [0-9]+: sample rate 1/10 group 1.*index 20 ref",
 +        "matchCount": "1",
 +        "teardown": [
-+            "$TC actions flush action connmark"
++            "$TC actions flush action sample"
 +        ]
      }
  ]
