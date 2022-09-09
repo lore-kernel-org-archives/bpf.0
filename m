@@ -2,25 +2,25 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B67DEC6FA90
-	for <bpf@archiver.kernel.org>; Fri,  9 Sep 2022 01:27:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80809C6FA91
+	for <bpf@archiver.kernel.org>; Fri,  9 Sep 2022 01:27:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbiIIB1t (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 8 Sep 2022 21:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51472 "EHLO
+        id S229567AbiIIB1u (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 8 Sep 2022 21:27:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbiIIB1l (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 8 Sep 2022 21:27:41 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5B51177A7;
-        Thu,  8 Sep 2022 18:27:41 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MNyt42XNHzZcm3;
-        Fri,  9 Sep 2022 09:23:08 +0800 (CST)
+        with ESMTP id S229670AbiIIB1k (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 8 Sep 2022 21:27:40 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54621177AB;
+        Thu,  8 Sep 2022 18:27:39 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MNyx16cZ1zHnlY;
+        Fri,  9 Sep 2022 09:25:41 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
  (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 9 Sep
- 2022 09:27:39 +0800
+ 2022 09:27:37 +0800
 From:   Zhengchao Shao <shaozhengchao@huawei.com>
 To:     <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
@@ -28,9 +28,9 @@ To:     <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <shuah@kernel.org>
 CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
         <shaozhengchao@huawei.com>
-Subject: [PATCH net-next 8/8] selftests/tc-testings: add tunnel_key action deleting test case
-Date:   Fri, 9 Sep 2022 09:29:36 +0800
-Message-ID: <20220909012936.268433-9-shaozhengchao@huawei.com>
+Subject: [PATCH net-next 6/8] selftests/tc-testings: add nat action deleting test case
+Date:   Fri, 9 Sep 2022 09:29:34 +0800
+Message-ID: <20220909012936.268433-7-shaozhengchao@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220909012936.268433-1-shaozhengchao@huawei.com>
 References: <20220909012936.268433-1-shaozhengchao@huawei.com>
@@ -44,71 +44,71 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Test 3671: Delete tunnel_key set action with valid index
-Test 8597: Delete tunnel_key set action with invalid index
+Test b811: Delete nat action with valid index
+Test a521: Delete nat action with invalid index
 
 Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 ---
- .../tc-tests/actions/tunnel_key.json          | 50 +++++++++++++++++++
+ .../tc-testing/tc-tests/actions/nat.json      | 50 +++++++++++++++++++
  1 file changed, 50 insertions(+)
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/actions/tunnel_key.json b/tools/testing/selftests/tc-testing/tc-tests/actions/tunnel_key.json
-index d06346968bcb..b40ee602918a 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/actions/tunnel_key.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/actions/tunnel_key.json
-@@ -933,5 +933,55 @@
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/actions/nat.json b/tools/testing/selftests/tc-testing/tc-tests/actions/nat.json
+index bc12c1ccad30..0a3c491edbc5 100644
+--- a/tools/testing/selftests/tc-testing/tc-tests/actions/nat.json
++++ b/tools/testing/selftests/tc-testing/tc-tests/actions/nat.json
+@@ -614,5 +614,55 @@
          "teardown": [
-             "$TC actions flush action tunnel_key"
+             "$TC actions flush action nat"
          ]
 +    },
 +    {
-+        "id": "3671",
-+        "name": "Delete tunnel_key set action with valid index",
-+	"category": [
++        "id": "b811",
++        "name": "Delete nat action with valid index",
++        "category": [
 +            "actions",
-+            "tunnel_key"
++            "nat"
 +        ],
 +        "setup": [
 +            [
-+                "$TC actions flush action tunnel_key",
++                "$TC actions flush action nat",
 +                0,
 +                1,
 +                255
 +            ],
-+	    "$TC actions add action tunnel_key set src_ip 1.1.1.1 dst_ip 2.2.2.2 index 1"
++            "$TC actions add action nat ingress 1.1.1.1 2.2.2.2 drop index 20"
 +        ],
-+        "cmdUnderTest": "$TC actions del action tunnel_key index 1",
++        "cmdUnderTest": "$TC actions del action nat index 20",
 +        "expExitCode": "0",
-+        "verifyCmd": "$TC actions list action tunnel_key",
-+        "matchPattern": "action order [0-9]+: tunnel_key.*set.*src_ip 1.1.1.1.*dst_ip 2.2.2.2.*index 1",
++        "verifyCmd": "$TC actions ls action nat index 20",
++        "matchPattern": "action order [0-9]+:  nat ingress 1.1.1.1/32 2.2.2.2 drop.*index 20 ref",
 +        "matchCount": "0",
 +        "teardown": [
-+            "$TC actions flush action tunnel_key"
++            "$TC actions flush action nat"
 +        ]
 +    },
 +    {
-+        "id": "8597",
-+        "name": "Delete tunnel_key set action with invalid index",
++        "id": "a521",
++        "name": "Delete nat action with invalid index",
 +        "category": [
 +            "actions",
-+            "tunnel_key"
++            "nat"
 +        ],
 +        "setup": [
 +            [
-+                "$TC actions flush action tunnel_key",
++                "$TC actions flush action nat",
 +                0,
 +                1,
 +                255
 +            ],
-+            "$TC actions add action tunnel_key set src_ip 1.1.1.1 dst_ip 2.2.2.2 index 1"
++            "$TC actions add action nat ingress 1.1.1.1 2.2.2.2 drop index 20"
 +        ],
-+        "cmdUnderTest": "$TC actions del action tunnel_key index 10",
++        "cmdUnderTest": "$TC actions del action nat index 10",
 +        "expExitCode": "255",
-+        "verifyCmd": "$TC actions list action tunnel_key",
-+        "matchPattern": "action order [0-9]+: tunnel_key.*set.*src_ip 1.1.1.1.*dst_ip 2.2.2.2.*index 1",
++        "verifyCmd": "$TC actions ls action nat index 20",
++        "matchPattern": "action order [0-9]+:  nat ingress 1.1.1.1/32 2.2.2.2 drop.*index 20 ref",
 +        "matchCount": "1",
 +        "teardown": [
-+            "$TC actions flush action tunnel_key"
++            "$TC actions flush action nat"
 +        ]
      }
  ]
