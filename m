@@ -2,150 +2,145 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72949ECAAA1
-	for <bpf@archiver.kernel.org>; Mon, 12 Sep 2022 09:24:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B1F5C6FA83
+	for <bpf@archiver.kernel.org>; Mon, 12 Sep 2022 09:43:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbiILJYj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 12 Sep 2022 05:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42968 "EHLO
+        id S229640AbiILJnS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 12 Sep 2022 05:43:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiILJYh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 12 Sep 2022 05:24:37 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001406159;
-        Mon, 12 Sep 2022 02:24:35 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id d64-20020a17090a6f4600b00202ce056566so2296310pjk.4;
-        Mon, 12 Sep 2022 02:24:35 -0700 (PDT)
+        with ESMTP id S229546AbiILJnR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 12 Sep 2022 05:43:17 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2CC527CC6;
+        Mon, 12 Sep 2022 02:43:15 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id m17-20020a7bce11000000b003a5bedec07bso10601853wmc.0;
+        Mon, 12 Sep 2022 02:43:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=A+Syqg4y1JE8bIO5x/LU8yXwkMx7DMhEF6V8BixASDk=;
-        b=i3jYkx3jASZnk7nQzWlUfg3hG5o5zcavYIAbbpiOGm0filEkseTQmzjV5rub+XCMwk
-         W355ocRljQy4Que7e2ixQmf01KSfbnPJdOIr6Mw3GYhKVpAmIH6oNc20n6wOq8reN1x7
-         V3Rf/QtIlh8ajmgSwZIdm4mFL3dS5VyIyx9SBYqGU38UEKDu1dci1bA/TtWOFhkFic4m
-         7trBiqNfFh+KrcRh5gBKf3xU+J4RZQrMbbGmiaavLQHMpfAvHu6HeXwSjcYC6R7plXCT
-         /tqUaQFjpVn98LeNwv7q0MV4JwmGCLNq+V9+bhCxK7+qA/2kFCDxX1nhHxB9mJ3/M97b
-         t4vA==
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :message-id:date:in-reply-to:subject:cc:to:from:from:to:cc:subject
+         :date;
+        bh=v9fqEBVLV5iKy/G2Bt6vR6zJk2p8sIIWJSHXdeCUN1s=;
+        b=kIeYUPvDeV3L0Ro9OdON4Zmv0MbYRKR9sTDCa3GD3DboeJaj4C37LnP+h4KRJkdjFw
+         231QRbFJZFg9Pcvpv8L22ik4gIQlwKD2AUNZAtNGtBlP63fa0631zj+DdlzpfMP4fvhm
+         4mSLhuhzcdJm7oZn666Z1lfAoul29ZqmvALzImJp/XS/8ND0+QnEryo5aKzUW7Irmgo+
+         DywnByjG8XSCKzTqwfrphDqevo5H1iBULB444PwwNDOmRsUtHtpyJkZIwOybiGWdXaN3
+         gRlfrNV30KGiNrQFMwfwIYU28bKw+BzlQsdM2o5G44lNY5CuGFW854gIBnm0mKGI2vJj
+         U6TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=A+Syqg4y1JE8bIO5x/LU8yXwkMx7DMhEF6V8BixASDk=;
-        b=zGBhOMRdxidGWA39sJvdR5U3UoXf8leiO5WMEhHlL+T+O65eGI2SY9JRtPWOLHpj3Y
-         neDpUQJz/d4SQMozhYIyq5C/avVKWQpKbu726vW4XKWr+VkBfb5vdhoiy82MghYq3AeL
-         3EoZNc61K69Xspo5AEQVkH5bKkNsK9ASjumAOESkRkn7FtVmnd395cf2vnoOpYJ86FUI
-         hiG7xHcMkvJYzVOHZXXgq4syGmURHDN7RkOIOp2UuZLj8X6LwZMCtSGDuDaPfA+O1tq3
-         SWoRMQzi9Dscr888mTECsG79M+3IeXBcmUTrNovJ2WVMQAjv13BcIY9+4XJzMc4u4iV1
-         331Q==
-X-Gm-Message-State: ACgBeo2cCJchcQ+1rSLFZ5BAlXLiX3VMsClavcunc6DL+MSVkng/M4kW
-        QtfpbCF88GUM/c1c1A9Dh04=
-X-Google-Smtp-Source: AA6agR4oaU+WBpYICmUHkFCM/PO1PEe4j28gFaz3bM+cs+H79Ws+xUcg+YIvrolIkiP+agnqJx6YKw==
-X-Received: by 2002:a17:90a:6d62:b0:200:579f:e4ea with SMTP id z89-20020a17090a6d6200b00200579fe4eamr23220150pjj.244.1662974675500;
-        Mon, 12 Sep 2022 02:24:35 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id i5-20020a17090a4b8500b0020080e8c8besm4645681pjh.40.2022.09.12.02.24.31
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :message-id:date:in-reply-to:subject:cc:to:from:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=v9fqEBVLV5iKy/G2Bt6vR6zJk2p8sIIWJSHXdeCUN1s=;
+        b=eH7EGwb8GFgJu82U6hbfIeq7sLW6d0YvwCiyFuCtYkoCJv6950eAmde1jIlsa84+Ny
+         fQOKeVQXykWgxkW7MdRfEUOx2rvMuVDX283yuW+iuu8PfWByc4iWdS42Le2Vtt9ae9e0
+         RAXYXMsJZEP+aF8oVGJCm/xtEiLPuDPXpXo6bT+bpArp10+z8W1gjrZYGZr+wWVFcJmR
+         ijyoF+uPkD5zr6+2YKy4snBIk+M07xqMg07ZvP86YEwRAs9SGyOnwCh9pI9iZI+Wbcj8
+         IH0CQnmJ9yO70vGz9yOEjx4wtzrTykPl0+sRTGqp0VfHNW4O74HJAh+C1aSlA50ZVy/J
+         PEOg==
+X-Gm-Message-State: ACgBeo2nYv4OCoe5E4BMrJ4fnESXCuW1y6cxF/Qk+8Beo+2+2W34UJ8R
+        0nAsd49Ie2Su/OwEXAHEHeQ=
+X-Google-Smtp-Source: AA6agR5XgB7miHJ7dy/o6yB5sM8VyivrnHoVunGowNiZkzJ7q6rHS5zoqsCVBqyxxyv9ye1jJg40EQ==
+X-Received: by 2002:a05:600c:34c2:b0:3b4:76f2:9c3b with SMTP id d2-20020a05600c34c200b003b476f29c3bmr4628234wmq.179.1662975794282;
+        Mon, 12 Sep 2022 02:43:14 -0700 (PDT)
+Received: from imac ([2a02:8010:60a0:0:a19a:6418:7e1e:227a])
+        by smtp.gmail.com with ESMTPSA id k9-20020adfb349000000b002252884cc91sm6963635wrd.43.2022.09.12.02.43.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 02:24:34 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: xu.panda@zte.com.cn
-To:     paul@paul-moore.com
-Cc:     stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        keescook@chromium.org, anton@enomsg.org, ccross@android.com,
-        tony.luck@intel.com, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Xu Panda <xu.panda@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] selinux/hooks: remove the unneeded result variable
-Date:   Mon, 12 Sep 2022 09:17:19 +0000
-Message-Id: <20220912091718.18053-1-xu.panda@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 12 Sep 2022 02:43:13 -0700 (PDT)
+From:   Donald Hunter <donald.hunter@gmail.com>
+To:     Daniel =?utf-8?Q?M=C3=BCller?= <deso@posteo.net>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
+        linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [PATCH bpf-next v3 1/2] Add subdir support to Documentation
+ makefile
+In-Reply-To: <20220909214914.hdn4rxsj6b2cy3xj@muellerd-fedora-PC2BDTX9>
+        ("Daniel =?utf-8?Q?M=C3=BCller=22's?= message of "Fri, 9 Sep 2022 21:49:14
+ +0000")
+Date:   Mon, 12 Sep 2022 09:31:55 +0100
+Message-ID: <m235cx2dtw.fsf@gmail.com>
+References: <20220829091500.24115-1-donald.hunter@gmail.com>
+        <20220829091500.24115-2-donald.hunter@gmail.com>
+        <3d08894c-b3d1-37e8-664e-48e66dc664ac@iogearbox.net>
+        <m2h71k6bw8.fsf@gmail.com>
+        <CAEf4BzZ_2wCVTjhAe0XzJ5qfbVhV0pfZeJ=z9Jg_fj_fzD1JFw@mail.gmail.com>
+        <m2bkro3lh5.fsf@gmail.com>
+        <20220909214914.hdn4rxsj6b2cy3xj@muellerd-fedora-PC2BDTX9>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (darwin)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Xu Panda <xu.panda@zte.com.cn>
+Daniel M=C3=BCller <deso@posteo.net> writes:
 
-Return the value avc_has_perm() directly instead of storing it in
-another redundant variable.
+> On Fri, Sep 09, 2022 at 11:12:22AM +0100, Donald Hunter wrote:
+>> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+>>=20
+>> > On Tue, Sep 6, 2022 at 3:50 AM Donald Hunter <donald.hunter@gmail.com>=
+ wrote:
+>> >>
+>> >> Daniel Borkmann <daniel@iogearbox.net> writes:
+>> >>
+>> >> > On 8/29/22 11:14 AM, Donald Hunter wrote:
+>> >> >> Run make in list of subdirs to build generated sources and migrate
+>> >> >> userspace-api/media to use this instead of being a special case.
+>> >> >> Signed-off-by: Donald Hunter <donald.hunter@gmail.com>
+>> >> >
+>> >> > Jonathan, given this touches Documentation/Makefile, could you ACK =
+if
+>> >> > it looks good to you? Noticed both patches don't have doc: $subj pr=
+efix,
+>> >> > but that's something we could fix up.
+>> >> >
+>> >> > Maybe one small request, would be nice to build Documentation/bpf/l=
+ibbpf/
+>> >> > also with every BPF CI run to avoid breakage of program_types.csv. =
+Donald
+>> >> > could you check if feasible? Follow-up might be ok too, but up to A=
+ndrii.
+>> >>
+>> >> Sure, I can look at what is needed for the BPF CI run.
+>> >>
+>> >
+>> > Daniel (Mueller, not Borkmann), is this something that can be added to=
+ BPF CI?
+>
+> I think as long as all required packages are available in the CI distribu=
+tion
+> (which I believe is currently a Ubuntu image, but may in the future becom=
+e Arch
+> Linux) it should not be a problem to perform checking in CI. It seems as =
+if
+> generating the documentation may take a while, so we should likely try to=
+ have
+> it run in a separate job. I can't tell what hidden dependencies there may=
+ be,
+> though.
+>
+>> It looks to me like it can be added to BPF CI if we change docs/conf.py
+>> to call a new make target in docs/sphinx/Makefile. Hopefully Daniel can
+>> confirm whether this is the case.
+>
+> I am not familiar with the documentation generation, but my quick search =
+seems
+> to suggest that this is done by a 3rd party service and is decoupled from=
+ BPF
+> CI. Specifically, what you suggest may be reflected in the generated docs=
+ at
+> https://libbpf.readthedocs.io/, but I believe they are created from the l=
+ibbpf
+> GitHub repository, which is only infrequently synced from bpf tree source=
+s. I
+> didn't find any indication that CI triggers documentation creation, but i=
+t's
+> possible I missed something.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
----
- security/selinux/hooks.c | 24 +++++++++---------------
- 1 file changed, 9 insertions(+), 15 deletions(-)
-
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 2a1168b33218..f553c370397e 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -5995,7 +5995,6 @@ static int selinux_msg_queue_alloc_security(struct kern_ipc_perm *msq)
- 	struct ipc_security_struct *isec;
- 	struct common_audit_data ad;
- 	u32 sid = current_sid();
--	int rc;
- 
- 	isec = selinux_ipc(msq);
- 	ipc_init_security(isec, SECCLASS_MSGQ);
-@@ -6003,10 +6002,9 @@ static int selinux_msg_queue_alloc_security(struct kern_ipc_perm *msq)
- 	ad.type = LSM_AUDIT_DATA_IPC;
- 	ad.u.ipc_id = msq->key;
- 
--	rc = avc_has_perm(&selinux_state,
--			  sid, isec->sid, SECCLASS_MSGQ,
--			  MSGQ__CREATE, &ad);
--	return rc;
-+	return avc_has_perm(&selinux_state,
-+			    sid, isec->sid, SECCLASS_MSGQ,
-+			    MSGQ__CREATE, &ad);
- }
- 
- static int selinux_msg_queue_associate(struct kern_ipc_perm *msq, int msqflg)
-@@ -6134,7 +6132,6 @@ static int selinux_shm_alloc_security(struct kern_ipc_perm *shp)
- 	struct ipc_security_struct *isec;
- 	struct common_audit_data ad;
- 	u32 sid = current_sid();
--	int rc;
- 
- 	isec = selinux_ipc(shp);
- 	ipc_init_security(isec, SECCLASS_SHM);
-@@ -6142,10 +6139,9 @@ static int selinux_shm_alloc_security(struct kern_ipc_perm *shp)
- 	ad.type = LSM_AUDIT_DATA_IPC;
- 	ad.u.ipc_id = shp->key;
- 
--	rc = avc_has_perm(&selinux_state,
--			  sid, isec->sid, SECCLASS_SHM,
--			  SHM__CREATE, &ad);
--	return rc;
-+	return avc_has_perm(&selinux_state,
-+			    sid, isec->sid, SECCLASS_SHM,
-+			    SHM__CREATE, &ad);
- }
- 
- static int selinux_shm_associate(struct kern_ipc_perm *shp, int shmflg)
-@@ -6219,7 +6215,6 @@ static int selinux_sem_alloc_security(struct kern_ipc_perm *sma)
- 	struct ipc_security_struct *isec;
- 	struct common_audit_data ad;
- 	u32 sid = current_sid();
--	int rc;
- 
- 	isec = selinux_ipc(sma);
- 	ipc_init_security(isec, SECCLASS_SEM);
-@@ -6227,10 +6222,9 @@ static int selinux_sem_alloc_security(struct kern_ipc_perm *sma)
- 	ad.type = LSM_AUDIT_DATA_IPC;
- 	ad.u.ipc_id = sma->key;
- 
--	rc = avc_has_perm(&selinux_state,
--			  sid, isec->sid, SECCLASS_SEM,
--			  SEM__CREATE, &ad);
--	return rc;
-+	return avc_has_perm(&selinux_state,
-+			    sid, isec->sid, SECCLASS_SEM,
-+			    SEM__CREATE, &ad);
- }
- 
- static int selinux_sem_associate(struct kern_ipc_perm *sma, int semflg)
--- 
-2.15.2
-
+Apologies, I was referring to the libbpf GitHub repository. Anything
+committed to the kernel Documentation/bpf/libbpf risks breaking the
+documentation generation in the libbpf GitHub repository which, as you
+say, uses readthedocs.
