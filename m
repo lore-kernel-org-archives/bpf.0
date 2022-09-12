@@ -2,571 +2,150 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94788ECAAA1
-	for <bpf@archiver.kernel.org>; Mon, 12 Sep 2022 08:21:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72949ECAAA1
+	for <bpf@archiver.kernel.org>; Mon, 12 Sep 2022 09:24:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbiILIVo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 12 Sep 2022 04:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56372 "EHLO
+        id S229743AbiILJYj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 12 Sep 2022 05:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiILIVf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 12 Sep 2022 04:21:35 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D69A2B180
-        for <bpf@vger.kernel.org>; Mon, 12 Sep 2022 01:21:25 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id h8so7090966wrf.3
-        for <bpf@vger.kernel.org>; Mon, 12 Sep 2022 01:21:25 -0700 (PDT)
+        with ESMTP id S229688AbiILJYh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 12 Sep 2022 05:24:37 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001406159;
+        Mon, 12 Sep 2022 02:24:35 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id d64-20020a17090a6f4600b00202ce056566so2296310pjk.4;
+        Mon, 12 Sep 2022 02:24:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=siGq6ZcP/6apnbpG4AfjudZGp3LuCX14nLBlKRh0iMU=;
-        b=5ohu+93yr8JnzNQY/aU7zyw8YPZ1LX4b7YeIX1jys1tr29FGi1UgaTrHkWUq44RD7W
-         6sjwtuuRbb5KJ9FYjaX8HMqwecIjny0fp1bPp979sPPVXbCdOaLhmyMiP6LFm+B+Do5r
-         UNLuP4y9wZ4H3xTUyww5NeyVTqFRIVEh5/j13q308THdZO4A27Rk9kBljkbeZfSkCVFh
-         Zj/5ZDtCX23qtTZbNfh64goYiqdnaS4Z2B+CchBJDWo7pvh1Czt5JtnvycwPKH+PrlE/
-         0AHUB1hlh1mVDAj1scJzDUVLmNiwjAYfySfLP7HSbP1GIPxEfbTGLakZxw14Qlea5eVo
-         ihdg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=A+Syqg4y1JE8bIO5x/LU8yXwkMx7DMhEF6V8BixASDk=;
+        b=i3jYkx3jASZnk7nQzWlUfg3hG5o5zcavYIAbbpiOGm0filEkseTQmzjV5rub+XCMwk
+         W355ocRljQy4Que7e2ixQmf01KSfbnPJdOIr6Mw3GYhKVpAmIH6oNc20n6wOq8reN1x7
+         V3Rf/QtIlh8ajmgSwZIdm4mFL3dS5VyIyx9SBYqGU38UEKDu1dci1bA/TtWOFhkFic4m
+         7trBiqNfFh+KrcRh5gBKf3xU+J4RZQrMbbGmiaavLQHMpfAvHu6HeXwSjcYC6R7plXCT
+         /tqUaQFjpVn98LeNwv7q0MV4JwmGCLNq+V9+bhCxK7+qA/2kFCDxX1nhHxB9mJ3/M97b
+         t4vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=siGq6ZcP/6apnbpG4AfjudZGp3LuCX14nLBlKRh0iMU=;
-        b=GiO1vpmKAPY+4kGVm9ZpBe1NhgoYNkYkL1wsFMBCO9s93VS5YRYyrVcMTLC4fgSTcq
-         VGjDTp2FYYtPafO2qWvQlrANQj9+3U/7xkEZ8F4UJeBeiEHJB56OrzIJCZjmsALGHesJ
-         0+lKh6C0VqUgn2eDkefFLe9RF2r3/Rz1oHyTD6CQlrcS5o4tEbeOEPQKowCP3ilpOFS5
-         bn5Tdw1YjB9oD8EZmWkrpJ6iRKdbsCo3PBFgrOzeqiD3WXDhzKr8pSRKleqvJeGZj4rS
-         kUqCNFKQtmBN1q9wG0jwmwt9wAiAp4bIi4inwweJrBS1HDYD/Lnf1Di/Yv0evYeqkwod
-         Gvjg==
-X-Gm-Message-State: ACgBeo34W9Bv0qin0+lZ7Acyo2zgQwCX9p1hpIM1iGwr7cpfEpDZm7u6
-        eNXEzGCAPmDACy1lOAzE2HtfRw==
-X-Google-Smtp-Source: AA6agR7gVKsI3MRjbTM1i8fMO6et8D4l6pTctq9KUw9IjsE0tkINVViAy93t9SWShMIQ1inmoUI/Ig==
-X-Received: by 2002:a05:6000:16ce:b0:228:62e0:37a6 with SMTP id h14-20020a05600016ce00b0022862e037a6mr14130043wrf.563.1662970883547;
-        Mon, 12 Sep 2022 01:21:23 -0700 (PDT)
-Received: from lavr ([2a02:168:f656:0:5a7e:ec5b:fff2:22ef])
-        by smtp.gmail.com with ESMTPSA id z13-20020adfec8d000000b0022a297950cesm6765559wrn.23.2022.09.12.01.21.22
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=A+Syqg4y1JE8bIO5x/LU8yXwkMx7DMhEF6V8BixASDk=;
+        b=zGBhOMRdxidGWA39sJvdR5U3UoXf8leiO5WMEhHlL+T+O65eGI2SY9JRtPWOLHpj3Y
+         neDpUQJz/d4SQMozhYIyq5C/avVKWQpKbu726vW4XKWr+VkBfb5vdhoiy82MghYq3AeL
+         3EoZNc61K69Xspo5AEQVkH5bKkNsK9ASjumAOESkRkn7FtVmnd395cf2vnoOpYJ86FUI
+         hiG7xHcMkvJYzVOHZXXgq4syGmURHDN7RkOIOp2UuZLj8X6LwZMCtSGDuDaPfA+O1tq3
+         SWoRMQzi9Dscr888mTECsG79M+3IeXBcmUTrNovJ2WVMQAjv13BcIY9+4XJzMc4u4iV1
+         331Q==
+X-Gm-Message-State: ACgBeo2cCJchcQ+1rSLFZ5BAlXLiX3VMsClavcunc6DL+MSVkng/M4kW
+        QtfpbCF88GUM/c1c1A9Dh04=
+X-Google-Smtp-Source: AA6agR4oaU+WBpYICmUHkFCM/PO1PEe4j28gFaz3bM+cs+H79Ws+xUcg+YIvrolIkiP+agnqJx6YKw==
+X-Received: by 2002:a17:90a:6d62:b0:200:579f:e4ea with SMTP id z89-20020a17090a6d6200b00200579fe4eamr23220150pjj.244.1662974675500;
+        Mon, 12 Sep 2022 02:24:35 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id i5-20020a17090a4b8500b0020080e8c8besm4645681pjh.40.2022.09.12.02.24.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 01:21:22 -0700 (PDT)
-Date:   Mon, 12 Sep 2022 10:21:20 +0200
-From:   Anton Protopopov <aspsk@isovalent.com>
-To:     sdf@google.com
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Martynas Pumputis <m@lambda.lt>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Eric Torng <torng@msu.edu>
-Subject: Re: [RFC PATCH] bpf: introduce new bpf map type BPF_MAP_TYPE_WILDCARD
-Message-ID: <Yx7sABy1bvNqoDIC@lavr>
-References: <20220907080140.290413-1-aspsk@isovalent.com>
- <YxkknQJC1vWmU/o9@google.com>
- <YxmsVB3CSPvGGEhP@lavr>
- <Yxpun3tl9ZhozYe9@google.com>
- <YxsJVYuBc0Cg52Xo@lavr>
- <YxuMBtF1cVVQPGEC@google.com>
+        Mon, 12 Sep 2022 02:24:34 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: xu.panda@zte.com.cn
+To:     paul@paul-moore.com
+Cc:     stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        keescook@chromium.org, anton@enomsg.org, ccross@android.com,
+        tony.luck@intel.com, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Xu Panda <xu.panda@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] selinux/hooks: remove the unneeded result variable
+Date:   Mon, 12 Sep 2022 09:17:19 +0000
+Message-Id: <20220912091718.18053-1-xu.panda@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YxuMBtF1cVVQPGEC@google.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 22/09/09 11:55, sdf@google.com wrote:
-> On 09/09, Anton Protopopov wrote:
-> > On 22/09/08 03:37, sdf@google.com wrote:
-> > > On 09/08, Anton Protopopov wrote:
-> > > > On 22/09/07 04:09, sdf@google.com wrote:
-> > > > > [sorry for the noise, got a bounce from the list, resend with the
-> > > > > message trimmed]
-> > > > >
-> > > > > On 09/07, Anton Protopopov wrote:
-> > > > > > Add a new map, BPF_MAP_TYPE_WILDCARD, which provides means to
-> > > > implement
-> > > > > > generic
-> > > > > > online packet classification. Here "online" stands for "fast
-> > lookups
-> > > > and
-> > > > > > fast
-> > > > > > updates", and "generic" means that a user can create maps with
-> > custom
-> > > > > > lookup
-> > > > > > schemes—different numbers of fields and different interpretation
-> > of
-> > > > > > individual
-> > > > > > fields (prefix bitmasks, ranges, and direct matches).
-> > > > >
-> > > > > > In particular, in Cilium we have several use cases for such a map:
-> > > > >
-> > > > > >    * XDP Prefilter is a simple XDP-based DDoS mitigation system
-> > > > provided by
-> > > > > >      Cilium. At the moment it only supports filtering by source
-> > CIDRs.
-> > > > > > It would
-> > > > > >      benefit from using this new map, as it allows to utilize
-> > wildcard
-> > > > > > rules
-> > > > > >      without big penalty comparing to one hash or LPM lookup
-> > > > utilized now.
-> > > > >
-> > > > > >    * XDP Packet Recorder (see
-> > > > > > https://lpc.events/event/11/contributions/953/)
-> > > > >
-> > > > > >    * K8S and Cilium Network Policies: as of k8s 1.25 port ranges
-> > are
-> > > > > > considered
-> > > > > >      to be a stable feature, and this map allows to implement this
-> > > > > > easily (and
-> > > > > >      also to provide more sophisticated filtering for Cilium
-> > Network
-> > > > > > Policies)
-> > > > >
-> > > > > > Keys for wildcard maps are defined using the struct wildcard_key
-> > > > > > structure.
-> > > > > > Besides the type field, it contains the data field of an arbitrary
-> > > > size.
-> > > > > > To
-> > > > > > educate map about what's contained inside the data field, two
-> > > > additional
-> > > > > > structures are used. The first one, struct wildcard_desc, also of
-> > > > > > arbitrary
-> > > > > > size, tells how many fields are contained inside data, and the
-> > struct
-> > > > > > wildcard_rule_desc structure defines how individual fields look
-> > like.
-> > > > >
-> > > > > > Fields (rules) can be of three types:
-> > > > > > BPF_WILDCARD_RULE_{PREFIX,RANGE,MATCH}.
-> > > > >
-> > > > > [..]
-> > > > >
-> > > > > > The PREFIX rule means that inside data we have a binary value
-> > and a
-> > > > binary
-> > > > > > (prefix) mask:
-> > > > >
-> > > > > >                 size             u32
-> > > > > >          <----------------> <----------->
-> > > > > >     ... |    rule value    |   prefix   | ...
-> > > > >
-> > > > > > Here rule value is a binary value, e.g., 123.324.128.0, and prefix
-> > > > is a
-> > > > > > u32 bit
-> > > > > > variable; we only use lower 8 bits of it. We allow 8, 16, 32,
-> > 64, and
-> > > > > > 128 bit
-> > > > > > values for PREFIX rules.
-> > > > >
-> > > > > I haven't looked at the code, so pardon stupid questions. This
-> > sounds
-> > > > > like optimized LPM-trie?
-> > > > >
-> > > > > If not, what's the difference?
-> > >
-> > > > First, this map provides more generic API than LPM. Namely, we allow
-> > not
-> > > > one,
-> > > > but multiple prefixes (say, to specify both source and destination
-> > > > prefix), and
-> > > > also not only prefixes, but ranges. See the example I've just posted
-> > in
-> > > > reply
-> > > > to Daniel, but in short, we can specify rules like
-> > >
-> > > >    (192.68.0.0/16, 10.0.0.0/24, *, 22)
-> > >
-> > > > We are also not limited by 4-tuples, we can create any combination of
-> > > > rules.
-> > >
-> > > Ah, ok, that seems useful. But fundamentally looks like a
-> > > map-in-a-map-in-a-map-in-a-map? So, in theory, at least the ip prefix
-> > > lookups
-> > > already can be implemented with LPM (albeit slower)?
-> 
-> > Well, this is just a single map :)
-> 
-> > We have a use case for one prefix lookups in Cilium. The XDP prefilter
-> > uses
-> > either a hash or an LPM (hash is used if only precise match rules
-> > specified,
-> > and LPM - if there are CIDR rules):
-> 
-> >    https://github.com/cilium/cilium/blob/master/bpf/bpf_xdp.c#L60-L68
-> 
-> > Here the new map works faster than LPM (e.g., for 5000K rules this is
-> > about
-> > 120ns vs. 80ns for an [IPv6] map lookup on AMD Ryzen 9). With the new
-> > map we
-> > also will be able to specify more sophisticated rules for the XDP
-> > prefilter,
-> > not only source CIDRs.
-> 
-> Ack, I'm just trying to understand whether decomposing this into smaller
-> units might be beneficial. I don't think I have an answer, only asking
-> questions :-)
+From: Xu Panda <xu.panda@zte.com.cn>
 
-Sure, thanks for the questions! For the smaller pieces, this is possible to
-just configure a "one-range" map or "one-prefix" map. E.g., in Cilium we have
-a usecase where we need a "(u32 ID, u16 range)" map (for security id + port
-range).
+Return the value avc_has_perm() directly instead of storing it in
+another redundant variable.
 
-> > > > Second, the [tuple merge implementation of this] map uses hash
-> > tables to
-> > > > do
-> > > > lookups, not tries.
-> > >
-> > > > I also should have mentioned that I have a talk on Plumbers next
-> > Tuesday
-> > > > about
-> > > > this map, I will talk about API and algorithms there, and provide some
-> > > > numbers.
-> > > > See https://lpc.events/event/16/contributions/1356/
-> > >
-> > > Awesome, hopefully I'll be there as well, will come say hi :-)
-> 
-> > Unluckily, I will be remote this time
-> 
-> Still looking forward to the talk! Hopefully you'll get some useful
-> feedback out of it.
-> 
-> > > From that link, regarding the following:
-> > >   Thus, both of algorithms are [nearly?] impossible to implement in
-> > "pure"
-> > >   BPF due to lack of functionality and also due to verifier complexity
-> > > limits.
-> > >
-> > > There is a natural question here: what's missing? Can we extend the
-> > > bpf machinery to lift some of these restrictions? Verifier complexity
-> > > limits are pretty different now compared to even 2 years ago..
-> 
-> > The complexity, in fact, is a big concern for us in Cilium - we already
-> > have
-> > rather large programs. Adding, at least, a few hundreds lines vs. just
-> > doing a
-> > single map lookup is a big deal. (We also have to support older kernels.)
-> 
-> > The Tuple Merge implementation uses a [custom] hash table underneath. The
-> > difference with the normal hash table is that we actually have multiple
-> > hash
-> > tables inside one - we split rules in several "tables" and do a hash
-> > lookup for
-> > each table (and to resolve collisions hash table elements know to which
-> > table
-> > they do belong).
-> 
-> Agreed, the tradeoff is basically:
-> 
-> - solve your "narrow" usecase
-> - solve a bigger problem that will allow you to solve your usecase as
->   well (say, write all those algorithms in bpf; that won't work for the
->   older kernels, but it will lessen the maintenance burden on the
->   kernel)
-> 
-> I'm not sure where that balance is in this particular case. Maybe let's
-> get back to discussion after the LPC, hopefully I'll get more context.
-> 
-> > > > > If yes, can this be special cased/optimized in the existing LPM-trie
-> > > > > optimization? I think we've tried in the past, mostly gave up and
-> > > > > "fixed" by caching the state in the socket local storage.
-> > > > >
-> > > > > Also, fixed 8/16/32/64 prefixes seems like a big limitation? At
-> > least if
-> > > > > I were to store ipv4 from the classless (cidr) world..
-> > >
-> > > > This is not for prefixes, but for the field lengths. The basic use
-> > case
-> > > > for
-> > > > this map is to filter packets, so we can create 4- or 5-tuple IPv4
-> > or IPv6
-> > > > maps. In the first case our field lengths will be (32, 32, 16, 16),
-> > in the
-> > > > second - (128, 128, 16, 16). Prefixes can be of any length from 0 up
-> > to
-> > > > the
-> > > > field size.
-> > >
-> > > Understood, thx.
-> > >
-> > > > > > The RANGE rule is determined by two binary values: minimum and
-> > > > maximum,
-> > > > > > treated
-> > > > > > as unsigned integers of appropriate size:
-> > > > >
-> > > > > >                 size               size
-> > > > > >          <----------------> <---------------->
-> > > > > >     ... |  min rule value  |  max rule value  | ...
-> > > > >
-> > > > > > We only allow the 8, 16, 32, and 64-bit for RANGE rules.
-> > > > >
-> > > > > That seems useful. I was thinking about similar 'rangemap' where
-> > > > > we can effectively store and lookup [a,b] ranges. Might be useful
-> > > > > in firewalls for storing lists of ports efficiently. So why not
-> > > > > a separate map instead? Are you able to share a lot of code with
-> > > > > the general matching map?
-> > >
-> > > > Yes, all is included inside one map. For firewalls users can create
-> > > > individual
-> > > > maps with different specifications. Say, one can filter 4-tuples, or
-> > > > 5-tuples,
-> > > > or (src, dst, dst port), or (flow-label, dest port), etc.
-> > >
-> > > > > > The MATCH rule is determined by one binary value, and is
-> > basically the
-> > > > > > same as
-> > > > > > (X,sizeof(X)*8) PREFIX rule, but can be processed a bit faster:
-> > > > >
-> > > > > >                 size
-> > > > > >          <---------------->
-> > > > > >     ... |    rule value    | ...
-> > > > >
-> > > > > > To speed up processing all the rules, including the prefix field,
-> > > > should
-> > > > > > be
-> > > > > > stored in host byte order, and all elements in network byte order.
-> > > > 16-byte
-> > > > > > fields are stored as {lo,hi}—lower eight bytes, then higher eight
-> > > > bytes.
-> > > > >
-> > > > > > For elements only values are stored.
-> > > > >
-> > > > > Can these optimization be auto-magically derived whenever PREFIX map
-> > > > > with the right values is created? Why put this decision on the
-> > users?
-> > >
-> > > > Thanks for pointing this out. I am not really proud of this particular
-> > > > interface...
-> > >
-> > > > For packet filtering values tend to appear in network byte order, so
-> > we
-> > > > can
-> > > > just assume this. We definitely can optimize values to the right
-> > order for
-> > > > rules internally when bpf_map_update_elem is called.
-> > >
-> > > > We also can add a map flag to process values in host byte order. This
-> > > > can be
-> > > > helpful for a non-networking usage, when values appear in host byte
-> > order
-> > > > naturally.
-> > >
-> > > Yeah, it seems like the less uapi we export - the better. Maybe some of
-> > > that endiannes can be deduced via BTF (be32 vs u32) so we can
-> > > transparently apply these optimizations?
-> 
-> > I am not sure how to do this automatically. Say, users can define an IPv4
-> > address as __u32, or __u8[4], or __be32. And they can also legally mix the
-> > definitions, as bpf(2) only says "gimme a void *key".
-> 
-> You don't have to solve it for everything:
-> __u32 and __u8[4] won't get those optimizations, but __be32/__be8[4] will.
-> (assuming endianness signal can be taken from the key's BTF if it preserves
-> __be32 vs __u32 distinction).
-> 
-> And then, somewhere in the documentation, you can say: the preferred way
-> to store ip addresses is __be32; this might (or may not) deliver better
-> performance in some cases.
-> 
-> This way, we are free to add more heuristics without having a written
-> contract with the users about this extra mode. At some point,
-> we might figure out how to make this work more efficiently for regular __u32
-> as well.
-> 
-> (pardon me if I'm spilling some nonsense, maybe we should really get
-> back to this after LPC)
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+---
+ security/selinux/hooks.c | 24 +++++++++---------------
+ 1 file changed, 9 insertions(+), 15 deletions(-)
 
-Yes, in the best case I will get some feedback about use cases other people have.
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index 2a1168b33218..f553c370397e 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -5995,7 +5995,6 @@ static int selinux_msg_queue_alloc_security(struct kern_ipc_perm *msq)
+ 	struct ipc_security_struct *isec;
+ 	struct common_audit_data ad;
+ 	u32 sid = current_sid();
+-	int rc;
+ 
+ 	isec = selinux_ipc(msq);
+ 	ipc_init_security(isec, SECCLASS_MSGQ);
+@@ -6003,10 +6002,9 @@ static int selinux_msg_queue_alloc_security(struct kern_ipc_perm *msq)
+ 	ad.type = LSM_AUDIT_DATA_IPC;
+ 	ad.u.ipc_id = msq->key;
+ 
+-	rc = avc_has_perm(&selinux_state,
+-			  sid, isec->sid, SECCLASS_MSGQ,
+-			  MSGQ__CREATE, &ad);
+-	return rc;
++	return avc_has_perm(&selinux_state,
++			    sid, isec->sid, SECCLASS_MSGQ,
++			    MSGQ__CREATE, &ad);
+ }
+ 
+ static int selinux_msg_queue_associate(struct kern_ipc_perm *msq, int msqflg)
+@@ -6134,7 +6132,6 @@ static int selinux_shm_alloc_security(struct kern_ipc_perm *shp)
+ 	struct ipc_security_struct *isec;
+ 	struct common_audit_data ad;
+ 	u32 sid = current_sid();
+-	int rc;
+ 
+ 	isec = selinux_ipc(shp);
+ 	ipc_init_security(isec, SECCLASS_SHM);
+@@ -6142,10 +6139,9 @@ static int selinux_shm_alloc_security(struct kern_ipc_perm *shp)
+ 	ad.type = LSM_AUDIT_DATA_IPC;
+ 	ad.u.ipc_id = shp->key;
+ 
+-	rc = avc_has_perm(&selinux_state,
+-			  sid, isec->sid, SECCLASS_SHM,
+-			  SHM__CREATE, &ad);
+-	return rc;
++	return avc_has_perm(&selinux_state,
++			    sid, isec->sid, SECCLASS_SHM,
++			    SHM__CREATE, &ad);
+ }
+ 
+ static int selinux_shm_associate(struct kern_ipc_perm *shp, int shmflg)
+@@ -6219,7 +6215,6 @@ static int selinux_sem_alloc_security(struct kern_ipc_perm *sma)
+ 	struct ipc_security_struct *isec;
+ 	struct common_audit_data ad;
+ 	u32 sid = current_sid();
+-	int rc;
+ 
+ 	isec = selinux_ipc(sma);
+ 	ipc_init_security(isec, SECCLASS_SEM);
+@@ -6227,10 +6222,9 @@ static int selinux_sem_alloc_security(struct kern_ipc_perm *sma)
+ 	ad.type = LSM_AUDIT_DATA_IPC;
+ 	ad.u.ipc_id = sma->key;
+ 
+-	rc = avc_has_perm(&selinux_state,
+-			  sid, isec->sid, SECCLASS_SEM,
+-			  SEM__CREATE, &ad);
+-	return rc;
++	return avc_has_perm(&selinux_state,
++			    sid, isec->sid, SECCLASS_SEM,
++			    SEM__CREATE, &ad);
+ }
+ 
+ static int selinux_sem_associate(struct kern_ipc_perm *sma, int semflg)
+-- 
+2.15.2
 
-> > Users don't have problems with specifying, say, LPM keys or socket
-> > options in
-> > network byte order, so can we just say: use network byte order for your
-> > values?
-> 
-> > > > > > To simplify definition of key structures, the
-> > > > > > BPF_WILDCARD_DESC_{1,2,3,4,5}
-> > > > > > macros should be used. For example, one can define an IPv4 4-tuple
-> > > > keys as
-> > > > > > follows:
-> > > > >
-> > > > > >     BPF_WILDCARD_DESC_4(
-> > > > > >          capture4_wcard,
-> > > > > >          BPF_WILDCARD_RULE_PREFIX, __u32, saddr,
-> > > > > >          BPF_WILDCARD_RULE_PREFIX, __u32, daddr,
-> > > > > >          BPF_WILDCARD_RULE_RANGE, __u16, sport,
-> > > > > >          BPF_WILDCARD_RULE_RANGE, __u16, dport
-> > > > > >     );
-> > > > >
-> > > > > > This macro will define the following structure:
-> > > > >
-> > > > > >     struct capture4_wcard_key {
-> > > > > >          __u32 type;
-> > > > > >          __u32 priority;
-> > > > > >          union {
-> > > > > >              struct {
-> > > > > >                      __u32 saddr;
-> > > > > >                      __u32 saddr_prefix;
-> > > > > >                      __u32 daddr;
-> > > > > >                      __u32 daddr_prefix;
-> > > > > >                      __u16 sport_min;
-> > > > > >                      __u16 sport_max;
-> > > > > >                      __u16 dport_min;
-> > > > > >                      __u16 dport_max;
-> > > > > >              } __packed rule;
-> > > > > >              struct {
-> > > > > >                      __u32 saddr;
-> > > > > >                      __u32 daddr;
-> > > > > >                      __u16 sport;
-> > > > > >                      __u16 dport;
-> > > > > >              } __packed;
-> > > > > >          };
-> > > > > >     } __packed;
-> > > > >
-> > > > > > Here type field should contain either BPF_WILDCARD_KEY_RULE or
-> > > > > > BPF_WILDCARD_KEY_ELEM so that kernel can differentiate between
-> > rules
-> > > > and
-> > > > > > elements. The rule structure is used to define (and lookup)
-> > rules, the
-> > > > > > unnamed
-> > > > > > structure can be used to specify elements when matching them with
-> > > > rules.
-> > > > >
-> > > > > > In order to simplify definition of a corresponding struct
-> > > > wildcard_desc,
-> > > > > > the
-> > > > > > BPF_WILDCARD_DESC_* macros will create yet another structure:
-> > > > >
-> > > > > >     struct capture4_wcard_desc {
-> > > > > >          __uint(n_rules, 4);
-> > > > > >          struct {
-> > > > > >                  __uint(type, BPF_WILDCARD_RULE_PREFIX);
-> > > > > >                  __uint(size, sizeof(__u32));
-> > > > > >          } saddr;
-> > > > > >          struct {
-> > > > > >                  __uint(type, BPF_WILDCARD_RULE_PREFIX);
-> > > > > >                  __uint(size, sizeof(__u32));
-> > > > > >          } daddr;
-> > > > > >          struct {
-> > > > > >                  __uint(type, BPF_WILDCARD_RULE_RANGE);
-> > > > > >                  __uint(size, sizeof(__u16));
-> > > > > >          } sport;
-> > > > > >          struct {
-> > > > > >                  __uint(type, BPF_WILDCARD_RULE_RANGE);
-> > > > > >                  __uint(size, sizeof(__u16));
-> > > > > >          } dport;
-> > > > > >     };
-> > > > >
-> > > > > > This structure can be used in a (BTF) map definition as follows:
-> > > > >
-> > > > > >      __type(wildcard_desc, struct capture4_wcard_desc);
-> > > > >
-> > > > > > Then libbpf will create a corresponding struct wildcard_desc and
-> > > > pass it
-> > > > > > to
-> > > > > > kernel in bpf_attr using new map_extra_data/map_extra_data_size
-> > > > fields.
-> > > > >
-> > > > > [..]
-> > > > >
-> > > > > > The map implementation allows users to specify which algorithm to
-> > > > use to
-> > > > > > store
-> > > > > > rules and lookup packets. Currently, three algorithms are
-> > supported:
-> > > > >
-> > > > > >    * Brute Force (suitable for map sizes of about 32 or below
-> > > > elements)
-> > > > >
-> > > > > >    * Tuple Merge (a variant of the Tuple Merge algorithm described
-> > > > in the
-> > > > > >      "TupleMerge: Fast Software Packet Processing for Online
-> > Packet
-> > > > > >      Classification" white paper, see
-> > > > > > https://nonsns.github.io/paper/rossi19ton.pdf.
-> > > > > >      The Tuple Merge algorithm is not protected by any patents.)
-> > > > >
-> > > > > >    * Static Tuple Merge (a variant of Tuple Merge where a set of
-> > > > lookup
-> > > > > > tables
-> > > > > >      is directly provided by a user)
-> > > > >
-> > > > > As a user that has no clue how this map works, how do I decide which
-> > > > > algorithm to use? What I like with the current maps is that they
-> > don't
-> > > > > leak too much of their inner state. These controls seems a bit low
-> > > > > level?
-> > >
-> > > > The idea to let users to select an algorithm appeared because the
-> > map is
-> > > > pretty
-> > > > generic, and some algorithms may work better for some cases. You're
-> > > > right that
-> > > > there shouldn't be need to specify algorithm. (In fact, users can
-> > omit the
-> > > > algorithm flag now, and the default algorithm will be used. I also
-> > > > marked to
-> > > > myself to setup the right default algorithm, as now this seems to be
-> > the
-> > > > brute
-> > > > force...).
-> > >
-> > > The reason I ask is: it seems it's just a matter of time until there
-> > will be
-> > > an algorithm called BPF_WILDCARD_F_ALGORITHM_BPF where you can pass a
-> > BPF
-> > > program that implements a custom one :-)
-> 
-> > ... which fits the current implementation :)
-> 
-> > If we don't let users to specify an algorithm, then do we let them to pass
-> > options for a particular algorithm? For example, if for a particular
-> > setup an
-> > option can change a lookup time, say, twice, comparing to the default,
-> > then is
-> > this worth to provide such a toggle? If we let users to provide options,
-> > then
-> > once we change the default algorithm, those options won't, most
-> > probably, have
-> > meaning for the new one.
-> 
-> > We actually can do both things here. For a "default" algorithm we won't
-> > let
-> > users to specify any non-generic, algorithm-specific, options. But if a
-> > user
-> > specifies a particular algorithm, then setting algorithm-specific
-> > options will
-> > be allowed.
-> 
-> Right, but again, it might be useful to do more research on what's
-> missing from the generic bpf machinery to support your fast wildcard lookups
-> by letting you implement some of these algorithms in bpf itself.
-> 
-> Because the result might be one of:
-> 
-> 1. There is x, y, z technical problems which will take years to solve;
-> let's do this wildcard map for now; as bpf gains more and more features
-> it will become obsolete or gain that BPF_WILDCARD_F_ALGORITHM_BPF for
-> custom algos.
-> 
-> Or
-> 
-> 2. Looks like we can add this and that to the verifier in some
-> reasonable amount of time and then we won't need a new map.
-> 
-> I'm also somewhat leaning on (1), but I'm still questioning your
-> statement about 'these algorithms are [nearly?] impossible to implement
-> in "pure" bpf'. Given enough effort this 'impossible' will at some point
-> become possible. Bpf landscape is very different today compared to
-> yesterday.
-
-The current implementation provides a good generic solution (Tuple Merge
-algorithm works pretty well, even without any additional configuration).  It
-also provides a way to experiment with implementing a similar or better
-algorithm in BPF (aka BPF_WILDCARD_F_ALGORITHM_BPF).
-
-When I wrote "nearly impossible" phrase, I've meant, in the first place,
-embedding the classifier inside existing programs.
