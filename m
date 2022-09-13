@@ -2,302 +2,106 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BDCC6C54EE9
-	for <bpf@archiver.kernel.org>; Tue, 13 Sep 2022 04:23:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8206DC6FA82
+	for <bpf@archiver.kernel.org>; Tue, 13 Sep 2022 04:28:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230199AbiIMEXy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 13 Sep 2022 00:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37738 "EHLO
+        id S229732AbiIME2x (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 13 Sep 2022 00:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbiIMEWh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 13 Sep 2022 00:22:37 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A106440;
-        Mon, 12 Sep 2022 21:20:42 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MRVYx0b0lzHnhk;
-        Tue, 13 Sep 2022 12:17:57 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
- (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 13 Sep
- 2022 12:19:57 +0800
-From:   Zhengchao Shao <shaozhengchao@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <jhs@mojatatu.com>, <jiri@resnulli.us>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <shuah@kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>, <weiyongjun1@huawei.com>,
-        <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH net-next 8/9] selftests/tc-testings: add selftests for tcindex filter
-Date:   Tue, 13 Sep 2022 12:21:34 +0800
-Message-ID: <20220913042135.58342-9-shaozhengchao@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220913042135.58342-1-shaozhengchao@huawei.com>
-References: <20220913042135.58342-1-shaozhengchao@huawei.com>
+        with ESMTP id S229926AbiIME1g (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 13 Sep 2022 00:27:36 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CD254CBA;
+        Mon, 12 Sep 2022 21:24:22 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MRVbp6CV2zNmBj;
+        Tue, 13 Sep 2022 12:19:34 +0800 (CST)
+Received: from [10.174.179.191] (10.174.179.191) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 13 Sep 2022 12:24:08 +0800
+Message-ID: <46b807bc-56ef-f0dd-3df4-bece4f8d4af4@huawei.com>
+Date:   Tue, 13 Sep 2022 12:24:08 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500026.china.huawei.com (7.185.36.106)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [bpf-next] bpf: use kvmemdup_bpfptr helper
+To:     <sdf@google.com>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>,
+        <john.fastabend@gmail.com>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <kpsingh@kernel.org>, <haoluo@google.com>, <jolsa@kernel.org>,
+        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1662721097-23793-1-git-send-email-wangyufen@huawei.com>
+ <Yxt3fnUdzDTJzUTt@google.com>
+From:   wangyufen <wangyufen@huawei.com>
+In-Reply-To: <Yxt3fnUdzDTJzUTt@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.191]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500010.china.huawei.com (7.192.105.118)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Test 8293: Add tcindex filter with default action
-Test 7281: Add tcindex filter with hash size and pass action
-Test b294: Add tcindex filter with mask shift and reclassify action
-Test 0532: Add tcindex filter with pass_on and continue actions
-Test d473: Add tcindex filter with pipe action
-Test 2940: Add tcindex filter with miltiple actions
-Test 1893: List tcindex filters
-Test 2041: Change tcindex filters with pass action
-Test 9203: Replace tcindex filters with pass action
-Test 7957: Delete tcindex filters with drop action
 
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
----
- .../tc-testing/tc-tests/filters/tcindex.json  | 227 ++++++++++++++++++
- 1 file changed, 227 insertions(+)
- create mode 100644 tools/testing/selftests/tc-testing/tc-tests/filters/tcindex.json
+在 2022/9/10 1:27, sdf@google.com 写道:
+> On 09/09, Wang Yufen wrote:
+>> Use kvmemdup_bpfptr helper instead of open-coding to
+>> simplify the code.
+>
+>> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+>> ---
+>>   kernel/bpf/syscall.c | 14 ++++----------
+>>   1 file changed, 4 insertions(+), 10 deletions(-)
+>
+>> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+>> index 4e9d4622aef7..13ce28081982 100644
+>> --- a/kernel/bpf/syscall.c
+>> +++ b/kernel/bpf/syscall.c
+>> @@ -1413,20 +1413,14 @@ static int map_update_elem(union bpf_attr 
+>> *attr, bpfptr_t uattr)
+>>       }
+>
+>>       value_size = bpf_map_value_size(map);
+>> -
+>> -    err = -ENOMEM;
+>> -    value = kvmalloc(value_size, GFP_USER | __GFP_NOWARN);
+>> -    if (!value)
+>> +    value = kvmemdup_bpfptr(uvalue, value_size);
+>> +    if (IS_ERR(value)) {
+>> +        err = PTR_ERR(value);
+>>           goto free_key;
+>> -
+>> -    err = -EFAULT;
+>> -    if (copy_from_bpfptr(value, uvalue, value_size) != 0)
+>> -        goto free_value;
+>> +    }
+>
+>>       err = bpf_map_update_value(map, f, key, value, attr->flags);
+>
+>
+> [..]
+>
+>> -free_value:
+>> -    kvfree(value);
+>
+> And here you leak the value. We need to free it after update regardless
+> of error/success. That's why it is coded like that.
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/tcindex.json b/tools/testing/selftests/tc-testing/tc-tests/filters/tcindex.json
-new file mode 100644
-index 000000000000..03e0435071a4
---- /dev/null
-+++ b/tools/testing/selftests/tc-testing/tc-tests/filters/tcindex.json
-@@ -0,0 +1,227 @@
-+[
-+    {
-+        "id": "8293",
-+        "name": "Add tcindex filter with default action",
-+        "category": [
-+            "filter",
-+            "tcindex"
-+        ],
-+	"plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress"
-+        ],
-+        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 1 tcindex classid 1:1",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 prio 1 protocol ip tcindex",
-+        "matchPattern": "^filter parent ffff: protocol ip pref 1 tcindex chain 0 handle 0x0001 classid 1:1",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    },
-+    {
-+        "id": "7281",
-+        "name": "Add tcindex filter with hash size and pass action",
-+        "category": [
-+            "filter",
-+            "tcindex"
-+        ],
-+	"plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress"
-+        ],
-+        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 1 tcindex hash 32 fall_through classid 1:1 action pass",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 prio 1 protocol ip tcindex",
-+        "matchPattern": "^filter parent ffff: protocol ip pref.*tcindex chain [0-9]+ handle 0x0001 classid 1:1.*action order [0-9]+: gact action pass",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    },
-+    {
-+        "id": "b294",
-+        "name": "Add tcindex filter with mask shift and reclassify action",
-+        "category": [
-+            "filter",
-+            "tcindex"
-+        ],
-+	"plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress"
-+        ],
-+        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 1 tcindex hash 32 mask 1 shift 2 fall_through classid 1:1 action reclassify",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 prio 1 protocol ip tcindex",
-+        "matchPattern": "^filter parent ffff: protocol ip pref.*tcindex chain [0-9]+ handle 0x0001 classid 1:1.*action order [0-9]+: gact action reclassify",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    },
-+    {
-+        "id": "0532",
-+        "name": "Add tcindex filter with pass_on and continue actions",
-+        "category": [
-+            "filter",
-+            "tcindex"
-+        ],
-+	"plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress"
-+        ],
-+        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 1 tcindex hash 32 mask 1 shift 2 pass_on classid 1:1 action continue",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 prio 1 protocol ip tcindex",
-+        "matchPattern": "^filter parent ffff: protocol ip pref.*tcindex chain [0-9]+ handle 0x0001 classid 1:1.*action order [0-9]+: gact action continue",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    },
-+    {
-+        "id": "d473",
-+        "name": "Add tcindex filter with pipe action",
-+        "category": [
-+            "filter",
-+            "tcindex"
-+        ],
-+	"plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress"
-+        ],
-+        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 1 tcindex hash 32 mask 1 shift 2 fall_through classid 1:1 action pipe",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 prio 1 protocol ip tcindex",
-+        "matchPattern": "^filter parent ffff: protocol ip pref.*tcindex chain [0-9]+ handle 0x0001 classid 1:1.*action order [0-9]+: gact action pipe",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    },
-+    {
-+        "id": "2940",
-+        "name": "Add tcindex filter with miltiple actions",
-+        "category": [
-+            "filter",
-+            "tcindex"
-+        ],
-+	"plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress"
-+        ],
-+        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 7 tcindex hash 32 mask 1 shift 2 fall_through classid 1:1 action skbedit mark 7 pipe action gact drop",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 prio 7 protocol ip tcindex",
-+        "matchPattern": "^filter parent ffff: protocol ip pref 7 tcindex.*handle 0x0001.*action.*skbedit.*mark 7 pipe.*action.*gact action drop",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    },
-+    {
-+        "id": "1893",
-+        "name": "List tcindex filters",
-+        "category": [
-+            "filter",
-+            "tcindex"
-+        ],
-+	"plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress",
-+            "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 1 tcindex classid 1:1",
-+	    "$TC filter add dev $DEV1 parent ffff: handle 2 protocol ip prio 1 tcindex classid 1:1"
-+        ],
-+        "cmdUnderTest": "$TC filter show dev $DEV1 parent ffff:",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC filter show dev $DEV1 parent ffff:",
-+        "matchPattern": "handle 0x000[0-9]+ classid 1:1",
-+        "matchCount": "2",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    },
-+    {
-+        "id": "2041",
-+        "name": "Change tcindex filters with pass action",
-+        "category": [
-+            "filter",
-+            "tcindex"
-+        ],
-+	"plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress",
-+            "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 1 tcindex classid 1:1 action drop"
-+        ],
-+        "cmdUnderTest": "$TC filter change dev $DEV1 parent ffff: handle 1 protocol ip prio 1 tcindex classid 1:1 action pass",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 prio 1 protocol ip tcindex",
-+        "matchPattern": "handle 0x0001 classid 1:1.*action order [0-9]+: gact action pass",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    },
-+    {
-+        "id": "9203",
-+        "name": "Replace tcindex filters with pass action",
-+        "category": [
-+            "filter",
-+            "tcindex"
-+        ],
-+	"plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress",
-+            "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 1 tcindex classid 1:1 action drop"
-+        ],
-+        "cmdUnderTest": "$TC filter replace dev $DEV1 parent ffff: handle 1 protocol ip prio 1 tcindex classid 1:1 action pass",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 prio 1 protocol ip tcindex",
-+        "matchPattern": "handle 0x0001 classid 1:1.*action order [0-9]+: gact action pass",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    },
-+    {
-+        "id": "7957",
-+        "name": "Delete tcindex filters with drop action",
-+        "category": [
-+            "filter",
-+            "tcindex"
-+        ],
-+	"plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress",
-+            "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 1 tcindex classid 1:1 action drop"
-+        ],
-+        "cmdUnderTest": "$TC filter del dev $DEV1 parent ffff: handle 1 protocol ip prio 1 tcindex classid 1:1 action drop",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 prio 1 protocol ip tcindex",
-+        "matchPattern": "handle 0x0001 classid 1:1.*action order [0-9]+: gact action drop",
-+        "matchCount": "0",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    }
-+]
--- 
-2.17.1
+Thanks for your comments.
 
+It's my mistake.
+
+Can I keep kvfree(value);    and send v2?
+
+>
+>>   free_key:
+>>       kvfree(key);
+>>   err_put:
+>> -- 
+>> 2.25.1
+>
