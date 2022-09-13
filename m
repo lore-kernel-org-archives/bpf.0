@@ -2,25 +2,25 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7549AC6FA8D
-	for <bpf@archiver.kernel.org>; Tue, 13 Sep 2022 04:22:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFE3FC6FA82
+	for <bpf@archiver.kernel.org>; Tue, 13 Sep 2022 04:22:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbiIMEWK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 13 Sep 2022 00:22:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38520 "EHLO
+        id S230327AbiIMEWk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 13 Sep 2022 00:22:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbiIMEVZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 13 Sep 2022 00:21:25 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2362DFF;
-        Mon, 12 Sep 2022 21:20:21 -0700 (PDT)
+        with ESMTP id S230264AbiIMEVx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 13 Sep 2022 00:21:53 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D85F564D7;
+        Mon, 12 Sep 2022 21:20:32 -0700 (PDT)
 Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MRVYq1PHTzHnjW;
-        Tue, 13 Sep 2022 12:17:51 +0800 (CST)
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MRVVw22GmzNmD1;
+        Tue, 13 Sep 2022 12:15:20 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
  (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 13 Sep
- 2022 12:19:51 +0800
+ 2022 12:19:54 +0800
 From:   Zhengchao Shao <shaozhengchao@huawei.com>
 To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
@@ -32,9 +32,9 @@ CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
         <haoluo@google.com>, <jolsa@kernel.org>, <weiyongjun1@huawei.com>,
         <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH net-next 2/9] net/sched: use tc_cls_stats_update() in filter
-Date:   Tue, 13 Sep 2022 12:21:28 +0800
-Message-ID: <20220913042135.58342-3-shaozhengchao@huawei.com>
+Subject: [PATCH net-next 5/9] selftests/tc-testings: add selftests for flow filter
+Date:   Tue, 13 Sep 2022 12:21:31 +0800
+Message-ID: <20220913042135.58342-6-shaozhengchao@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220913042135.58342-1-shaozhengchao@huawei.com>
 References: <20220913042135.58342-1-shaozhengchao@huawei.com>
@@ -48,216 +48,670 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-use tc_cls_stats_update() in filter.
+Test 5294: Add flow filter with map key and ops
+Test 3514: Add flow filter with map key or ops
+Test 7534: Add flow filter with map key xor ops
+Test 4524: Add flow filter with map key rshift ops
+Test 0230: Add flow filter with map key addend ops
+Test 2344: Add flow filter with src map key
+Test 9304: Add flow filter with proto map key
+Test 9038: Add flow filter with proto-src map key
+Test 2a03: Add flow filter with proto-dst map key
+Test a073: Add flow filter with iif map key
+Test 3b20: Add flow filter with priority map key
+Test 8945: Add flow filter with mark map key
+Test c034: Add flow filter with nfct map key
+Test 0205: Add flow filter with nfct-src map key
+Test 5315: Add flow filter with nfct-src map key
+Test 7849: Add flow filter with nfct-proto-src map key
+Test 9902: Add flow filter with nfct-proto-dst map key
+Test 6742: Add flow filter with rt-classid map key
+Test 5432: Add flow filter with sk-uid map key
+Test 4134: Add flow filter with sk-gid map key
+Test 4522: Add flow filter with vlan-tag map key
+Test 4253: Add flow filter with rxhash map key
+Test 4452: Add flow filter with hash key list
+Test 4341: Add flow filter with muliple ops
+Test 4392: List flow filters
+Test 4322: Change flow filter with map key num
+Test 2320: Replace flow filter with map key num
+Test 3213: Delete flow filter with map key num
 
 Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 ---
- net/sched/cls_basic.c   |  9 +--------
- net/sched/cls_bpf.c     |  8 +-------
- net/sched/cls_flow.c    |  8 +-------
- net/sched/cls_fw.c      |  9 +--------
- net/sched/cls_route.c   |  9 +--------
- net/sched/cls_rsvp.h    |  9 +--------
- net/sched/cls_tcindex.c | 18 ++++--------------
- net/sched/cls_u32.c     | 20 +++++---------------
- 8 files changed, 15 insertions(+), 75 deletions(-)
+ .../tc-testing/tc-tests/filters/flow.json     | 623 ++++++++++++++++++
+ 1 file changed, 623 insertions(+)
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/filters/flow.json
 
-diff --git a/net/sched/cls_basic.c b/net/sched/cls_basic.c
-index 8158fc9ee1ab..dd8b2a54ff9e 100644
---- a/net/sched/cls_basic.c
-+++ b/net/sched/cls_basic.c
-@@ -251,15 +251,8 @@ static void basic_walk(struct tcf_proto *tp, struct tcf_walker *arg,
- 	struct basic_filter *f;
- 
- 	list_for_each_entry(f, &head->flist, link) {
--		if (arg->count < arg->skip)
--			goto skip;
--
--		if (arg->fn(tp, f, arg) < 0) {
--			arg->stop = 1;
-+		if (!tc_cls_stats_update(tp, arg, f))
- 			break;
--		}
--skip:
--		arg->count++;
- 	}
- }
- 
-diff --git a/net/sched/cls_bpf.c b/net/sched/cls_bpf.c
-index c85b85a192bf..e096b6deaedb 100644
---- a/net/sched/cls_bpf.c
-+++ b/net/sched/cls_bpf.c
-@@ -650,14 +650,8 @@ static void cls_bpf_walk(struct tcf_proto *tp, struct tcf_walker *arg,
- 	struct cls_bpf_prog *prog;
- 
- 	list_for_each_entry(prog, &head->plist, link) {
--		if (arg->count < arg->skip)
--			goto skip;
--		if (arg->fn(tp, prog, arg) < 0) {
--			arg->stop = 1;
-+		if (!tc_cls_stats_update(tp, arg, prog))
- 			break;
--		}
--skip:
--		arg->count++;
- 	}
- }
- 
-diff --git a/net/sched/cls_flow.c b/net/sched/cls_flow.c
-index 972303aa8edd..5114cf00b27e 100644
---- a/net/sched/cls_flow.c
-+++ b/net/sched/cls_flow.c
-@@ -683,14 +683,8 @@ static void flow_walk(struct tcf_proto *tp, struct tcf_walker *arg,
- 	struct flow_filter *f;
- 
- 	list_for_each_entry(f, &head->filters, list) {
--		if (arg->count < arg->skip)
--			goto skip;
--		if (arg->fn(tp, f, arg) < 0) {
--			arg->stop = 1;
-+		if (!tc_cls_stats_update(tp, arg, f))
- 			break;
--		}
--skip:
--		arg->count++;
- 	}
- }
- 
-diff --git a/net/sched/cls_fw.c b/net/sched/cls_fw.c
-index 8654b0ce997c..b2c1d4c21172 100644
---- a/net/sched/cls_fw.c
-+++ b/net/sched/cls_fw.c
-@@ -358,15 +358,8 @@ static void fw_walk(struct tcf_proto *tp, struct tcf_walker *arg,
- 
- 		for (f = rtnl_dereference(head->ht[h]); f;
- 		     f = rtnl_dereference(f->next)) {
--			if (arg->count < arg->skip) {
--				arg->count++;
--				continue;
--			}
--			if (arg->fn(tp, f, arg) < 0) {
--				arg->stop = 1;
-+			if (!tc_cls_stats_update(tp, arg, f))
- 				return;
--			}
--			arg->count++;
- 		}
- 	}
- }
-diff --git a/net/sched/cls_route.c b/net/sched/cls_route.c
-index 29adac7812fe..dcf484f992e8 100644
---- a/net/sched/cls_route.c
-+++ b/net/sched/cls_route.c
-@@ -587,15 +587,8 @@ static void route4_walk(struct tcf_proto *tp, struct tcf_walker *arg,
- 				for (f = rtnl_dereference(b->ht[h1]);
- 				     f;
- 				     f = rtnl_dereference(f->next)) {
--					if (arg->count < arg->skip) {
--						arg->count++;
--						continue;
--					}
--					if (arg->fn(tp, f, arg) < 0) {
--						arg->stop = 1;
-+					if (!tc_cls_stats_update(tp, arg, f))
- 						return;
--					}
--					arg->count++;
- 				}
- 			}
- 		}
-diff --git a/net/sched/cls_rsvp.h b/net/sched/cls_rsvp.h
-index 5cd9d6b143c4..c1eb1eec2f4a 100644
---- a/net/sched/cls_rsvp.h
-+++ b/net/sched/cls_rsvp.h
-@@ -671,15 +671,8 @@ static void rsvp_walk(struct tcf_proto *tp, struct tcf_walker *arg,
- 
- 				for (f = rtnl_dereference(s->ht[h1]); f;
- 				     f = rtnl_dereference(f->next)) {
--					if (arg->count < arg->skip) {
--						arg->count++;
--						continue;
--					}
--					if (arg->fn(tp, f, arg) < 0) {
--						arg->stop = 1;
-+					if (!tc_cls_stats_update(tp, arg, f))
- 						return;
--					}
--					arg->count++;
- 				}
- 			}
- 		}
-diff --git a/net/sched/cls_tcindex.c b/net/sched/cls_tcindex.c
-index 742c7d49a958..28d60436a1dc 100644
---- a/net/sched/cls_tcindex.c
-+++ b/net/sched/cls_tcindex.c
-@@ -566,13 +566,8 @@ static void tcindex_walk(struct tcf_proto *tp, struct tcf_walker *walker,
- 		for (i = 0; i < p->hash; i++) {
- 			if (!p->perfect[i].res.class)
- 				continue;
--			if (walker->count >= walker->skip) {
--				if (walker->fn(tp, p->perfect + i, walker) < 0) {
--					walker->stop = 1;
--					return;
--				}
--			}
--			walker->count++;
-+			if (!tc_cls_stats_update(tp, walker, p->perfect + i))
-+				return;
- 		}
- 	}
- 	if (!p->h)
-@@ -580,13 +575,8 @@ static void tcindex_walk(struct tcf_proto *tp, struct tcf_walker *walker,
- 	for (i = 0; i < p->hash; i++) {
- 		for (f = rtnl_dereference(p->h[i]); f; f = next) {
- 			next = rtnl_dereference(f->next);
--			if (walker->count >= walker->skip) {
--				if (walker->fn(tp, &f->result, walker) < 0) {
--					walker->stop = 1;
--					return;
--				}
--			}
--			walker->count++;
-+			if (!tc_cls_stats_update(tp, walker, &f->result))
-+				return;
- 		}
- 	}
- }
-diff --git a/net/sched/cls_u32.c b/net/sched/cls_u32.c
-index 4d27300c287c..a3e3df2c28d4 100644
---- a/net/sched/cls_u32.c
-+++ b/net/sched/cls_u32.c
-@@ -1125,26 +1125,16 @@ static void u32_walk(struct tcf_proto *tp, struct tcf_walker *arg,
- 	     ht = rtnl_dereference(ht->next)) {
- 		if (ht->prio != tp->prio)
- 			continue;
--		if (arg->count >= arg->skip) {
--			if (arg->fn(tp, ht, arg) < 0) {
--				arg->stop = 1;
--				return;
--			}
--		}
--		arg->count++;
-+
-+		if (!tc_cls_stats_update(tp, arg, ht))
-+			return;
-+
- 		for (h = 0; h <= ht->divisor; h++) {
- 			for (n = rtnl_dereference(ht->ht[h]);
- 			     n;
- 			     n = rtnl_dereference(n->next)) {
--				if (arg->count < arg->skip) {
--					arg->count++;
--					continue;
--				}
--				if (arg->fn(tp, n, arg) < 0) {
--					arg->stop = 1;
-+				if (!tc_cls_stats_update(tp, arg, n))
- 					return;
--				}
--				arg->count++;
- 			}
- 		}
- 	}
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/flow.json b/tools/testing/selftests/tc-testing/tc-tests/filters/flow.json
+new file mode 100644
+index 000000000000..d2e2087220ff
+--- /dev/null
++++ b/tools/testing/selftests/tc-testing/tc-tests/filters/flow.json
+@@ -0,0 +1,623 @@
++[
++    {
++        "id": "5294",
++        "name": "Add flow filter with map key and ops",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key dst and 0xff",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 1 flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys dst and 0x000000ff baseclass",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "3514",
++        "name": "Add flow filter with map key or ops",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key dst or 0xff",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 1 flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys dst.*or 0x000000ff baseclass",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "7534",
++        "name": "Add flow filter with map key xor ops",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key dst xor 0xff",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 1 flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys dst xor 0x000000ff baseclass",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "4524",
++        "name": "Add flow filter with map key rshift ops",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key dst rshift 0xff",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 1 flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys dst rshift 255 baseclass",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "0230",
++        "name": "Add flow filter with map key addend ops",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key dst addend 0xff",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 1 flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys dst addend 0xff baseclass",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "2344",
++        "name": "Add flow filter with src map key",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key src addend 0xff",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 1 flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys src addend 0xff baseclass",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "9304",
++        "name": "Add flow filter with proto map key",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key proto addend 0xff",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 1 flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys proto addend 0xff baseclass",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "9038",
++        "name": "Add flow filter with proto-src map key",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key proto-src addend 0xff",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 1 flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys proto-src addend 0xff baseclass",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "2a03",
++        "name": "Add flow filter with proto-dst map key",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key proto-dst addend 0xff",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 1 flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys proto-dst addend 0xff baseclass",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "a073",
++        "name": "Add flow filter with iif map key",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key iif addend 0xff",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 1 flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys iif addend 0xff baseclass",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "3b20",
++        "name": "Add flow filter with priority map key",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key priority addend 0xff",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 1 flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys priority addend 0xff baseclass",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "8945",
++        "name": "Add flow filter with mark map key",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key mark addend 0xff",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 1 flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys mark addend 0xff baseclass",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "c034",
++        "name": "Add flow filter with nfct map key",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key nfct addend 0xff",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 1 flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys nfct addend 0xff baseclass",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "0205",
++        "name": "Add flow filter with nfct-src map key",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key nfct-dst addend 0xff",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 1 flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys nfct-dst addend 0xff baseclass",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "5315",
++        "name": "Add flow filter with nfct-src map key",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key nfct-src addend 0xff",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 1 flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys nfct-src addend 0xff baseclass",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "7849",
++        "name": "Add flow filter with nfct-proto-src map key",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key nfct-proto-src addend 0xff",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 1 flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys nfct-proto-src addend 0xff baseclass",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "9902",
++        "name": "Add flow filter with nfct-proto-dst map key",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key nfct-proto-dst addend 0xff",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 1 flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys nfct-proto-dst addend 0xff baseclass",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "6742",
++        "name": "Add flow filter with rt-classid map key",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key rt-classid addend 0xff",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 1 flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys rt-classid addend 0xff baseclass",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "5432",
++        "name": "Add flow filter with sk-uid map key",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key sk-uid addend 0xff",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 1 flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys sk-uid addend 0xff baseclass",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "4134",
++        "name": "Add flow filter with sk-gid map key",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key sk-gid addend 0xff",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 1 flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys sk-gid addend 0xff baseclass",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "4522",
++        "name": "Add flow filter with vlan-tag map key",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key vlan-tag addend 0xff",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 1 flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys vlan-tag addend 0xff baseclass",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "4253",
++        "name": "Add flow filter with rxhash map key",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key rxhash addend 0xff",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 1 flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys rxhash addend 0xff baseclass",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "4452",
++        "name": "Add flow filter with hash key list",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow hash keys src",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 1 flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 hash keys src baseclass",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "4341",
++        "name": "Add flow filter with muliple ops",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow hash keys src divisor 1024 baseclass 1:1 match 'cmp(u8 at 0 layer link mask 0xff gt 10)' action drop",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 1 flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 hash keys src divisor 1024 baseclass 1:1.*cmp\\(u8 at 0 layer 0 mask 0xff gt 10\\)",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "4392",
++        "name": "List flow filters",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress",
++	    "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key rxhash addend 0xff",
++	    "$TC filter add dev $DEV1 parent ffff: handle 2 prio 1 protocol ip flow map key rxhash or 0xff"
++        ],
++        "cmdUnderTest": "$TC filter show dev $DEV1 parent ffff:",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter show dev $DEV1 parent ffff:",
++        "matchPattern": "filter protocol ip pref 1 flow chain 0 handle 0x[0-9]+ map keys rxhash",
++        "matchCount": "2",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "4322",
++        "name": "Change flow filter with map key num",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress",
++            "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key rxhash addend 0xff"
++        ],
++        "cmdUnderTest": "$TC filter change dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key rxhash addend 0x22",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys rxhash addend 0x22 baseclass",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "2320",
++        "name": "Replace flow filter with map key num",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress",
++            "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key rxhash addend 0xff"
++        ],
++        "cmdUnderTest": "$TC filter replace dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key rxhash addend 0x88",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys rxhash addend 0x88 baseclass",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "3213",
++        "name": "Delete flow filter with map key num",
++        "category": [
++            "filter",
++            "flow"
++        ],
++	"plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress",
++            "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key rxhash addend 0xff"
++        ],
++        "cmdUnderTest": "$TC filter delete dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key rxhash addend 0xff",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys rxhash addend 0x88 baseclass",
++        "matchCount": "0",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    }
++]
 -- 
 2.17.1
 
