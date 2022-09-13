@@ -2,200 +2,112 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75B97C54EE9
-	for <bpf@archiver.kernel.org>; Tue, 13 Sep 2022 06:16:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E345C6FA82
+	for <bpf@archiver.kernel.org>; Tue, 13 Sep 2022 06:24:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbiIMGQB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 13 Sep 2022 02:16:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58514 "EHLO
+        id S229950AbiIMGYN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 13 Sep 2022 02:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbiIMGQA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 13 Sep 2022 02:16:00 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C845459B0;
-        Mon, 12 Sep 2022 23:15:59 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id u18so18417728lfo.8;
-        Mon, 12 Sep 2022 23:15:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=iL+PSuTvBsgGgVuYBzw23P7DA3wgNTk8Y2M7Kc+r7u8=;
-        b=UXg7Y3VmdYKh0yVQeWq3KV0amIKGmR9oIbm2MDgvqcrlBMbu3Gz0DwJ2d7oTuamu/6
-         MNqFRm+GD3j1yKbm3LDTkdJ4gee9fnjmeQVk7onS2afn0pU1gUPmFp0Ort3ThmUpqA0P
-         BCRjT363Klq15cX5XXoZwn7aC1EW4FZso6vCdIvC6WRpB6PZNTsmNFVUdoVwmhGOrCoN
-         Fd5buTIBvFqWtyxkxWCx+SQ9CXELd4rl/uPSaEFApnVvkLyVB3sAcMwPC0sOajU+oldm
-         D3lKi3nkb3r+0KVHyovGr1Q1S7rQkiFWuDJHhpqPSVfxddUM2JVIAt+djtL61R2yldi+
-         ypcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=iL+PSuTvBsgGgVuYBzw23P7DA3wgNTk8Y2M7Kc+r7u8=;
-        b=AAq6AeZB1lqZclOI911iPHhqBYzLVT8XcnUPohUEvEFvlwrB0Yhk4ia8OcyDsKNfVN
-         V6tK2J+vaSouw06nbZ+tUuEqjMo7+SSXVN872jIoWmjy1Bll5QbKImZx/flsGz80Qcxu
-         uzD6o+SAUyVwu71LpicVntmPFLJmLp0FpY1iEmkDpVuh7ae/bhpWSzP2Mh1/ImEEgPE/
-         Gi4rc74/28sLfjeC9YQW48bQ3swS97x8u1YobOfNjc+RxDTiCQZqgXTpEQ18CgELpG/c
-         KmVJPQZR0R7T1/60fGaubUAY+IyJEboeIQMf5icSrft0KWBiEOvxKRpbQPMh0R4VLgGD
-         m9wQ==
-X-Gm-Message-State: ACgBeo0fbkVYXW8/6D1bloCJqgkt8gMkjLzCYGtCUqobQ4rR6sqKh7KW
-        ieH99kZfIgt9YhzUAkLZrvro2yo+/4+rVFXvPs0W0ltl9Zg=
-X-Google-Smtp-Source: AA6agR5VmWxfy56PXWZAcwLrkMGS5wp/Ejn6/hngmWDh5knnHYWEpK2RjT7MF2S80VGErukdVML8SxZeKNR+2oc2bAU=
-X-Received: by 2002:a05:6512:308d:b0:499:bd1a:d1bc with SMTP id
- z13-20020a056512308d00b00499bd1ad1bcmr4830380lfd.274.1663049757320; Mon, 12
- Sep 2022 23:15:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220902023003.47124-1-laoar.shao@gmail.com> <Yxi8I4fXXSCi6z9T@slm.duckdns.org>
- <YxkVq4S1Eoa4edjZ@P9FQF9L96D.corp.robot.car> <CALOAHbAp=g20rL0taUpQmTwymanArhO-u69Xw42s5ap39Esn=A@mail.gmail.com>
- <YxoUkz05yA0ccGWe@P9FQF9L96D.corp.robot.car>
-In-Reply-To: <YxoUkz05yA0ccGWe@P9FQF9L96D.corp.robot.car>
-From:   Yafang Shao <laoar.shao@gmail.com>
-Date:   Tue, 13 Sep 2022 14:15:20 +0800
-Message-ID: <CALOAHbAzi0s3N_5BOkLsnGfwWCDpUksvvhPejjj5jo4G2v3mGg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 00/13] bpf: Introduce selectable memcg for bpf map
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Tejun Heo <tj@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S229892AbiIMGYM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 13 Sep 2022 02:24:12 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FF7E90;
+        Mon, 12 Sep 2022 23:24:11 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MRYKN5FcyzKJcR;
+        Tue, 13 Sep 2022 14:22:16 +0800 (CST)
+Received: from k01.huawei.com (unknown [10.67.174.197])
+        by APP4 (Coremail) with SMTP id gCh0CgCHSYkDIiBjT3sKAw--.4735S3;
+        Tue, 13 Sep 2022 14:24:08 +0800 (CST)
+From:   Xu Kuohai <xukuohai@huaweicloud.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Florent Revest <revest@chromium.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Cgroups <cgroups@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [PATCH bpf-next 1/4] ftrace: Allow users to disable ftrace direct call
+Date:   Tue, 13 Sep 2022 02:31:43 -0400
+Message-Id: <20220913063146.74750-2-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220913063146.74750-1-xukuohai@huaweicloud.com>
+References: <20220913063146.74750-1-xukuohai@huaweicloud.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgCHSYkDIiBjT3sKAw--.4735S3
+X-Coremail-Antispam: 1UD129KBjvJXoWruFyfCrWfXr4rWr1fXFy7Jrb_yoW8Jr45pF
+        ZxGan7Gw48uFn0kr4S93W8WF98Zws2vryay3WDJ3yF9r98J3yDWrsFq39Fg348tF97G3yU
+        ZF409Fyjk3W7Z37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
+        A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+        6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+        Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+        Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64
+        vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+        jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2I
+        x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAI
+        w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
+        0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1cdbUUUUUU==
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Sep 9, 2022 at 12:13 AM Roman Gushchin <roman.gushchin@linux.dev> wrote:
->
-> On Thu, Sep 08, 2022 at 10:37:02AM +0800, Yafang Shao wrote:
-> > On Thu, Sep 8, 2022 at 6:29 AM Roman Gushchin <roman.gushchin@linux.dev> wrote:
-> > >
-> > > On Wed, Sep 07, 2022 at 05:43:31AM -1000, Tejun Heo wrote:
-> > > > Hello,
-> > > >
-> > > > On Fri, Sep 02, 2022 at 02:29:50AM +0000, Yafang Shao wrote:
-> > > > ...
-> > > > > This patchset tries to resolve the above two issues by introducing a
-> > > > > selectable memcg to limit the bpf memory. Currently we only allow to
-> > > > > select its ancestor to avoid breaking the memcg hierarchy further.
-> > > > > Possible use cases of the selectable memcg as follows,
-> > > >
-> > > > As discussed in the following thread, there are clear downsides to an
-> > > > interface which requires the users to specify the cgroups directly.
-> > > >
-> > > >  https://lkml.kernel.org/r/YwNold0GMOappUxc@slm.duckdns.org
-> > > >
-> > > > So, I don't really think this is an interface we wanna go for. I was hoping
-> > > > to hear more from memcg folks in the above thread. Maybe ping them in that
-> > > > thread and continue there?
-> > >
-> >
-> > Hi Roman,
-> >
-> > > As I said previously, I don't like it, because it's an attempt to solve a non
-> > > bpf-specific problem in a bpf-specific way.
-> > >
-> >
-> > Why do you still insist that bpf_map->memcg is not a bpf-specific
-> > issue after so many discussions?
-> > Do you charge the bpf-map's memory the same way as you charge the page
-> > caches or slabs ?
-> > No, you don't. You charge it in a bpf-specific way.
->
+From: Xu Kuohai <xukuohai@huawei.com>
 
-Hi Roman,
+To support ftrace direct call on arm64, multiple NOP instructions need
+to be added to the ftrace fentry, which will make the kernel image
+larger. For users who don't need direct calls, they should not pay this
+unnecessary price, so they should be allowed to disable this option.
 
-Sorry for the late response.
-I've been on vacation in the past few days.
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+---
+ kernel/trace/Kconfig | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-> The only difference is that we charge the cgroup of the processes who
-> created a map, not a process who is doing a specific allocation.
-
-This means the bpf-map can be indepent of process, IOW, the memcg of
-bpf-map can be indepent of the memcg of the processes.
-This is the fundamental difference between bpf-map and page caches, then...
-
-> Your patchset doesn't change this.
-
-We can make this behavior reasonable by introducing an independent
-memcg, as what I did in the previous version.
-
-> There are pros and cons with this approach, we've discussed it back
-> to the times when bpf memcg accounting was developed. If you want
-> to revisit this, it's maybe possible (given there is a really strong and likely
-> new motivation appears), but I haven't seen any complaints yet except from you.
->
-
-memcg-base bpf accounting is a new feature, which may not be used widely.
-
-> >
-> > > Yes, memory cgroups are not great for accounting of shared resources, it's well
-> > > known. This patchset looks like an attempt to "fix" it specifically for bpf maps
-> > > in a particular cgroup setup. Honestly, I don't think it's worth the added
-> > > complexity. Especially because a similar behaviour can be achieved simple
-> > > by placing the task which creates the map into the desired cgroup.
-> >
-> > Are you serious ?
-> > Have you ever read the cgroup doc? Which clearly describe the "No
-> > Internal Process Constraint".[1]
-> > Obviously you can't place the task in the desired cgroup, i.e. the parent memcg.
->
-> But you can place it into another leaf cgroup. You can delete this leaf cgroup
-> and your memcg will get reparented. You can attach this process and create
-> a bpf map to the parent cgroup before it gets child cgroups.
-
-If the process doesn't exit after it created bpf-map, we have to
-migrate it around memcgs....
-The complexity in deployment can introduce unexpected issues easily.
-
-> You can revisit the idea of shared bpf maps and outlive specific cgroups.
-> Lof of options.
->
-> >
-> > [1] https://www.kernel.org/doc/Documentation/cgroup-v2.txt
-> >
-> > > Beatiful? Not. Neither is the proposed solution.
-> > >
-> >
-> > Is it really hard to admit a fault?
->
-> Yafang, you posted several versions and so far I haven't seen much of support
-> or excitement from anyone (please, fix me if I'm wrong). It's not like I'm
-> nacking a patchset with many acks, reviews and supporters.
->
-> Still think you're solving an important problem in a reasonable way?
-> It seems like not many are convinced yet. I'd recommend to focus on this instead
-> of blaming me.
->
-
-The best way so far is to introduce specific memcg for specific resources.
-Because not only the process owns its memcg, but also specific
-resources own their memcgs, for example bpf-map, or socket.
-
-struct bpf_map {                                 <<<< memcg owner
-    struct memcg_cgroup *memcg;
-};
-
-struct sock {                                       <<<< memcg owner
-    struct mem_cgroup *sk_memcg;
-};
-
-These resources already have their own memcgs, so we should make this
-behavior formal.
-
-The selectable memcg is just a variant of 'echo ${proc} > cgroup.procs'.
-
+diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+index 1052126bdca2..fc8a22f1a6a0 100644
+--- a/kernel/trace/Kconfig
++++ b/kernel/trace/Kconfig
+@@ -240,9 +240,14 @@ config DYNAMIC_FTRACE_WITH_REGS
+ 	depends on HAVE_DYNAMIC_FTRACE_WITH_REGS
+ 
+ config DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+-	def_bool y
++	bool "Support for calling custom trampoline from fentry directly"
++	default y
+ 	depends on DYNAMIC_FTRACE_WITH_REGS
+ 	depends on HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
++	help
++	  This option enables calling custom trampoline from ftrace fentry
++	  directly, instead of using ftrace regs caller. This may reserve more
++	  space in the fentry, making the kernel image larger.
+ 
+ config DYNAMIC_FTRACE_WITH_ARGS
+ 	def_bool y
 -- 
-Regards
-Yafang
+2.30.2
+
