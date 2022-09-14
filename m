@@ -2,79 +2,81 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92B8AECAAD3
-	for <bpf@archiver.kernel.org>; Wed, 14 Sep 2022 11:52:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D009ECAAD8
+	for <bpf@archiver.kernel.org>; Wed, 14 Sep 2022 12:35:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbiINLwk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 14 Sep 2022 07:52:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41058 "EHLO
+        id S229603AbiINMfu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 14 Sep 2022 08:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiINLwj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 14 Sep 2022 07:52:39 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1477AC0C
-        for <bpf@vger.kernel.org>; Wed, 14 Sep 2022 04:52:37 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-127ba06d03fso40255568fac.3
-        for <bpf@vger.kernel.org>; Wed, 14 Sep 2022 04:52:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=ndUOLxOaGlFRGIa+IUCqchYoYX0ob/eqM4B2Su7aOP0=;
-        b=EYX698uwfmKMSXh/ILCEGi20kLHVC2QuF0Wcs243ekp242ONMvwY1QBX2Wui6PGcDI
-         CStw08eCxFr2759UFNnBa8qHHa4Win2S11Vurdt3ZiGKFm99xL6z796AH36DFexOXHDP
-         zceFKtA8ZYKgFgi2lYpPZ4YFgTfHW75lvh0G4BuwOq1lyzddQzX9zqz0gVeu016zV1zD
-         p7pXrSD4aLmWaQ02ILxqsWj/iVqXRyGwtUm79+trpdTViGk3qIKqq7Db2TJdO+s7ryjY
-         6ehpS2yC1VWqMsZ7CzGOU4R+6lla4NmIAE5RKYGCXbWJFKfbJy5VfKDaamgKn3aZsgRm
-         A9Hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ndUOLxOaGlFRGIa+IUCqchYoYX0ob/eqM4B2Su7aOP0=;
-        b=ZZ2CzdUjfo7NNACK4Pu71iE/ognTOnAeDVfeoEK8LIguVGSao/gHtIp9oD1sqeqH5w
-         ETZ0w1bs7wf/u89216yPTroFYoLSNooLj0lC3GJZbzMIp7mGY1ve1lzfrTGlR8v40ARW
-         NVYXVPDEYKRWiW7AZtqP1nt7DJeNGDafP961QGpb0MPZo2XVZxrMwtI94ocW7eWrdEMI
-         hD9Y8hjeiDJ/an3LqvWmiV2sSLjC/sCrJNbxoLjfNYRiLJVrJj9SCf9MEHdEHdlH2kgx
-         A2Zq3RFXYRljNyif9dzSJqLHVVayMFqWy+wvzfGuvp1pk+KwJqHzXUPVIBHsdYCP7P18
-         /NNA==
-X-Gm-Message-State: ACgBeo1Rp1bg6RED3lULw7F9RVb+5gyE11C/SdAZ2in6MJvM8PtdT+aT
-        x5WzIqtGgqNHxkKYAuekB70P+ii69WCP3NTvC9fe
-X-Google-Smtp-Source: AA6agR6NuCDcdGmTw2CRi4kDEce0q6x+ZkxaJ0aByIguJ13AxbD6awMbL0ptxfjdNAPNp3SxBD/Oa58zKL17FN8ONQ4=
-X-Received: by 2002:a05:6808:1a18:b0:34f:ff74:8303 with SMTP id
- bk24-20020a0568081a1800b0034fff748303mr1737508oib.41.1663156357118; Wed, 14
- Sep 2022 04:52:37 -0700 (PDT)
+        with ESMTP id S229597AbiINMfh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 14 Sep 2022 08:35:37 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83BC965669;
+        Wed, 14 Sep 2022 05:35:34 -0700 (PDT)
+Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MSKT32Zxjz14QRj;
+        Wed, 14 Sep 2022 20:31:35 +0800 (CST)
+Received: from dggpeml500010.china.huawei.com (7.185.36.155) by
+ dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 14 Sep 2022 20:35:33 +0800
+Received: from huawei.com (10.175.101.6) by dggpeml500010.china.huawei.com
+ (7.185.36.155) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 14 Sep
+ 2022 20:35:32 +0800
+From:   Xin Liu <liuxin350@huawei.com>
+To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <haoluo@google.com>, <jolsa@kernel.org>
+CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yanan@huawei.com>, <wuchangye@huawei.com>,
+        <xiesongyang@huawei.com>, <zhudi2@huawei.com>,
+        <kongweibin2@huawei.com>, <liuxin350@huawei.com>
+Subject: [PATCH] libbpf: adjust OPTS_VALID logic, so that it can be used correctly
+Date:   Wed, 14 Sep 2022 20:34:23 +0800
+Message-ID: <20220914123423.24368-1-liuxin350@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-References: <20220912091718.18053-1-xu.panda@zte.com.cn>
-In-Reply-To: <20220912091718.18053-1-xu.panda@zte.com.cn>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 14 Sep 2022 07:52:26 -0400
-Message-ID: <CAHC9VhSnzZ-75EVyOx6SO1_61y7HT-oGHisCwNSeM+VpjzhaDQ@mail.gmail.com>
-Subject: Re: [PATCH linux-next] selinux/hooks: remove the unneeded result variable
-To:     cgel.zte@gmail.com
-Cc:     stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        keescook@chromium.org, anton@enomsg.org, ccross@android.com,
-        tony.luck@intel.com, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Xu Panda <xu.panda@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500010.china.huawei.com (7.185.36.155)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 5:24 AM <cgel.zte@gmail.com> wrote:
-> From: Xu Panda <xu.panda@zte.com.cn>
->
-> Return the value avc_has_perm() directly instead of storing it in
-> another redundant variable.
->
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-> ---
->  security/selinux/hooks.c | 24 +++++++++---------------
->  1 file changed, 9 insertions(+), 15 deletions(-)
+We found that function btf_dump__dump_type_data can be called by the user
+as an api, but in this function, the `opts` parameter may be used as a
+null pointer, because OPTS_VALID can't properly prevent opts used as null
+pointers during verification. Therefore, we fix this problem through this
+modification.
 
-Merged into selinux/next, thanks.
+This modification has no impact on other places where OPTS_VALID has been
+used.
 
+Fixes: 2ce8450ef5a3 ("libbpf: add bpf_object__open_{file, mem} w/ extensible opts")
+Signed-off-by: Xin Liu <liuxin350@huawei.com>
+---
+ tools/lib/bpf/libbpf_internal.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index 377642ff51fc..29d3267ba56a 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -294,7 +294,7 @@ static inline bool libbpf_validate_opts(const char *opts,
+ }
+ 
+ #define OPTS_VALID(opts, type)						      \
+-	(!(opts) || libbpf_validate_opts((const char *)opts,		      \
++	((opts) && libbpf_validate_opts((const char *)opts,		      \
+ 					 offsetofend(struct type,	      \
+ 						     type##__last_field),     \
+ 					 (opts)->sz, #type))
 -- 
-paul-moore.com
+2.33.0
+
