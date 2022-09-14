@@ -2,118 +2,91 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BAF0DECAAD3
-	for <bpf@archiver.kernel.org>; Wed, 14 Sep 2022 10:01:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73269ECAAD8
+	for <bpf@archiver.kernel.org>; Wed, 14 Sep 2022 11:20:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbiINKBV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 14 Sep 2022 06:01:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46592 "EHLO
+        id S229764AbiINLUM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 14 Sep 2022 07:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231439AbiINKBD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 14 Sep 2022 06:01:03 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3798E6AA17;
-        Wed, 14 Sep 2022 03:00:50 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MSG1m14HJzNmG6;
-        Wed, 14 Sep 2022 17:56:12 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
- (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 14 Sep
- 2022 18:00:46 +0800
-From:   Zhengchao Shao <shaozhengchao@huawei.com>
-To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <jhs@mojatatu.com>,
-        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <shuah@kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>, <weiyongjun1@huawei.com>,
-        <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH net-next,v2 9/9] selftests/tc-testings: add list case for basic filter
-Date:   Wed, 14 Sep 2022 18:02:21 +0800
-Message-ID: <20220914100221.386855-10-shaozhengchao@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220914100221.386855-1-shaozhengchao@huawei.com>
-References: <20220914100221.386855-1-shaozhengchao@huawei.com>
+        with ESMTP id S229766AbiINLUI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 14 Sep 2022 07:20:08 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D104A2FFF3;
+        Wed, 14 Sep 2022 04:20:06 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id D4C875C016D;
+        Wed, 14 Sep 2022 07:20:05 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Wed, 14 Sep 2022 07:20:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lmb.io; h=cc:cc
+        :content-transfer-encoding:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1663154405; x=1663240805; bh=g5
+        nrhku7XzOq1sKHPJflx7TIWuD1FqVOgdP2P6w9enc=; b=WsybmA4GEiX2AoM+AQ
+        SMLx9NbIM2YpucB2Gyf6h+yyPAoaT+NquJaqqm60VxCsYNFd5numGa98kIIYkN9R
+        j4BCw8hBqTUsOT7b7sBZCKU94oSc96qcekYNaGQpDG6UOuxKUS5xB8XNZMjbhgzB
+        +jrHH3oDZnJM+WPw22x6Kgvc/r3+tk3qXJCBKITAzskEsNArLR7W+i2SujyRuNdn
+        X7MWbINNyL/ECmg0pUGJ3zL4xpwsXT4C2JBMV5U1sj660AxkMVH58qgHwYxRcFqY
+        ongOnEZFCMEh/5jSKyId6oSx7e9EwDAo+ff/YQhP+UcMUcZhh/1GvaWUGwUPrV2G
+        9XNw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1663154405; x=1663240805; bh=g5nrhku7XzOq1
+        sKHPJflx7TIWuD1FqVOgdP2P6w9enc=; b=boZ1l8ntoCcSTeNPdTmksFTkU15Nq
+        meXMrwqbtUlWftVSVsrdsvUKw3OMvGJY6bkD9+9Fni/VFqh0YIZ0/cKw7+JUI61y
+        WHK9li6/mp6tbV3F7PKrulAKhxhWx1ENgzEFpFozUpZVc8lXKROIxhPvhzCOGmU6
+        rx7myiUIbp18YCR/2yjRzIh82U+CihyJCZqYwTPAXrFNeZl4q0xZzn/0fc5///6F
+        KjcUQ0zQDatAKhg68iWrcnEa4iMveqmk2gp2dpBF4nNxKIvhYjFlo3Hes+5W5EUV
+        k78N7GTo98aN9aPd3EDmZY2kBU+m9meFgDUAMqDm/cOSI38r5C3MipFwA==
+X-ME-Sender: <xms:5bghY8DACsSbbx70DWxK1UC8tlBGzBMkUeqy7iba569P3XadnhXqPg>
+    <xme:5bghY-ittppfDZYHnnvW6MwMQ_aoZe1DCqaNl7vE4Tg4zdzB_LzhGC5dL1EZwapad
+    dUm7NOrr60QbuDTpg>
+X-ME-Received: <xmr:5bghY_nTRnnObcxBRCKViDnrmWft9GOBV9qeevzHLZj4WzGT5elzjHyvjJK__MaUuoLrAj29>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeduiedggedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
+    ertdertddtnecuhfhrohhmpefnohhrvghniicuuegruhgvrhcuoehoshhssehlmhgsrdhi
+    oheqnecuggftrfgrthhtvghrnhepfeegledtgeehgeekgfffteeihfevieejhedvudeuie
+    euhefgvdevudevteefvdetnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhu
+    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehoshhssehlmhgsrd
+    hioh
+X-ME-Proxy: <xmx:5bghYyxjCeL_4v9xPOjUS7y0sne7BoixouJJkXX4dE6IPkrIfX9PRQ>
+    <xmx:5bghYxSG7H3TPQFOd4_kFJsB_t90kx6eSwesf66cQWA728iIcjybkg>
+    <xmx:5bghY9aqgZGQitDD_qROBSv-W3G2AQt1-RqXUgKEpFTCTGJ9Gw0s6w>
+    <xmx:5bghYwHWqd5fFEF-DhdZ53hBWC_TMJzIi4jO-wMOsCJdq-Jc_ul8Rw>
+Feedback-ID: icd3146c6:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 14 Sep 2022 07:20:03 -0400 (EDT)
+From:   Lorenz Bauer <oss@lmb.io>
+To:     shaozhengchao@huawei.com, ast@kernel.org, daniel@iogearbox.net
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org, sdf@google.com,
+        yuehaibing@huawei.com, Lorenz Bauer <oss@lmb.io>
+Subject: Re: [PATCH v4,bpf-next] bpf: Don't redirect packets with invalid pkt_len
+Date:   Wed, 14 Sep 2022 11:19:36 +0000
+Message-Id: <20220914111936.19881-1-oss@lmb.io>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220715115559.139691-1-shaozhengchao@huawei.com>
+References: <20220715115559.139691-1-shaozhengchao@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Test 0811: Add multiple basic filter with cmp ematch u8/link layer and
-default action and dump them
-Test 5129: List basic filters
+Hi,
 
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
----
- .../tc-testing/tc-tests/filters/basic.json    | 47 +++++++++++++++++++
- 1 file changed, 47 insertions(+)
+I think this patch is causing user-space breakage, see [0].
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/basic.json b/tools/testing/selftests/tc-testing/tc-tests/filters/basic.json
-index e788c114a484..d1278de8ebc3 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/filters/basic.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/filters/basic.json
-@@ -1274,5 +1274,52 @@
-         "teardown": [
-             "$TC qdisc del dev $DEV1 ingress"
-         ]
-+    },
-+    {
-+        "id": "0811",
-+        "name": "Add multiple basic filter with cmp ematch u8/link layer and default action and dump them",
-+        "category": [
-+            "filter",
-+            "basic"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress",
-+            "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 1 basic match 'cmp(u8 at 0 layer link mask 0xff gt 10)' classid 1:1"
-+        ],
-+        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 2 protocol ip prio 1 basic match 'cmp(u8 at 0 layer link mask 0xff gt 10)' classid 1:1",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC filter show dev $DEV1 parent ffff:",
-+        "matchPattern": "^filter protocol ip pref 1 basic",
-+        "matchCount": "3",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    },
-+    {
-+        "id": "5129",
-+        "name": "List basic filters",
-+        "category": [
-+            "filter",
-+            "basic"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress",
-+            "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 1 basic match 'cmp(u8 at 0 layer link mask 0xff gt 10)' classid 1:1",
-+            "$TC filter add dev $DEV1 parent ffff: handle 2 protocol ip prio 1 basic match 'cmp(u8 at 0 layer link mask 0xff gt 10)' classid 1:1"
-+        ],
-+        "cmdUnderTest": "$TC filter show dev $DEV1 parent ffff:",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC filter show dev $DEV1 parent ffff:",
-+        "matchPattern": "cmp\\(u8 at 0 layer 0 mask 0xff gt 10\\)",
-+        "matchCount": "2",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-     }
- ]
--- 
-2.17.1
+The gist is that we do BPF_PROG_RUN of a socket filter with 14 byte input to determine whether
+BPF_PROG_RUN is available or not. I'll fix this in cilium/ebpf, but I think this patch
+needs more work since users may be doing the same thing in their code.
 
+
+Thanks,
+Lorenz
+
+0: https://github.com/cilium/ebpf/pull/788
