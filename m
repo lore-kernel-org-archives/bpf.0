@@ -2,125 +2,276 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88404ECAAA1
-	for <bpf@archiver.kernel.org>; Thu, 15 Sep 2022 12:41:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26F7AC6FA8E
+	for <bpf@archiver.kernel.org>; Thu, 15 Sep 2022 16:00:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbiIOMlq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 15 Sep 2022 08:41:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36430 "EHLO
+        id S229724AbiIOQAe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 15 Sep 2022 12:00:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiIOMlq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 15 Sep 2022 08:41:46 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43816BE8;
-        Thu, 15 Sep 2022 05:41:45 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id bj12so41771271ejb.13;
-        Thu, 15 Sep 2022 05:41:45 -0700 (PDT)
+        with ESMTP id S230084AbiIOQA3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 15 Sep 2022 12:00:29 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633464B0FC
+        for <bpf@vger.kernel.org>; Thu, 15 Sep 2022 09:00:27 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id v130so2764716oie.2
+        for <bpf@vger.kernel.org>; Thu, 15 Sep 2022 09:00:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=tzmtfB02Kll9bwoDnqvoio0j7mPs1ux70CIafG7WcfU=;
-        b=atzRGS0IEVvnd6WXWC1rlccaFpBQ2yFXqBqZ0xtSuNwYZbyh6YLVXuYzo5VlCf3iMP
-         BXWfOqj/F/1zmWoyB2Ve1b4rG8wV4V0nXNPRF2ttYQZHs5S+vgVt5aY8tk9kzZEKkCGp
-         99SPE2OCnrsp7ChpLRX6eFj/7iiUngJWcWymqH8Vf3Qh5/8epbpknxNhTWsZD+pPH0kl
-         8q57dvY2+qmbkMehptiFXjeo8CWidirKYdwZ1kovxRZGLbsHsxjaOqqcaSrGOvJCGK+R
-         RYD31Gyww66Ch62fGeb1WerCHHiTxFWaTjfIwREbvvYEBrsMvYShWfKyvxogNPSQVbAY
-         U1LQ==
+        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=X9/FP3VBJRq8TtJfMVb96DGTxGgvouChIEWCiVKx+Cc=;
+        b=tlXobdp5w6HhdgCBq9e6RQhoInFe2vYAKDl/BflsgKdeRee7L2Y2k+WEhl0HkJ5xm3
+         MJ6fI39/Z7+8HOC05PzhXTqIfymXVGznaUbmOH9+deDyiEIMkWtblNZe55wPKW4xq128
+         SQkiPcfY/8ulO79oHxmJzug1kW8j4BZc1+vV5co23ccyULVNTRxhWh1P99SCpPMJZnFR
+         2SEVO1CZMl36PTebDbHbkpX3OmJcucKfbF2NnrWCZ2EcJwtjT7Ouzn0Pf25m75YDoGje
+         HbH0ujTUtaqhi+TWRq1fR1q90IXbMCxBabh5VvIDBDaAqPkgeR+SrTrbNcxCJC69KaIE
+         IPaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=tzmtfB02Kll9bwoDnqvoio0j7mPs1ux70CIafG7WcfU=;
-        b=EpH8uQyQN5mFFxV3qACj/16IvD18Q/SDl0XbLhwwDUm/qcxszHX985oAGWqtLCGava
-         VXOLU8lXvxqFg70DLabKcpG8YHZ2XgTvMsvwATJDZKsXK1AUm+uNO3D/PjKJwYNtCJgH
-         3To0GreZT5yI+xEQe7BJpiNerhMSapEiqrLJFD/1weuiloPs12k1B8m5dCuaYBrAkacL
-         Ci3SaWA2uZ2Tvsk0TSPu7LAqWdVGfr2T6eoirayqVGRIBZO2JJeZGneGE9oN91nMhX8w
-         s03iixLhiXqPhyBBwZj7KmJBYQZl1ZAKtFJ2HMpnQv9PFI7mqZEz1+V5DYmSgE0C61IM
-         Ijag==
-X-Gm-Message-State: ACgBeo3txzsJrCfP+aP6f1zM7QWvphCjRbFAVBz1exKMJKTTMnAJgWbt
-        3sBWTfhy3rCB2m/zGXg88GI=
-X-Google-Smtp-Source: AA6agR6OETBFpaXizZkBzwGuLb/nSX3ng6zwpvWStvpMjub1lzTuDLEeGZHPr04IhJAIRKoFkOF22g==
-X-Received: by 2002:a17:906:8c7:b0:730:c1a9:e187 with SMTP id o7-20020a17090608c700b00730c1a9e187mr29400332eje.55.1663245703722;
-        Thu, 15 Sep 2022 05:41:43 -0700 (PDT)
-Received: from localhost.localdomain (host-95-251-45-225.retail.telecomitalia.it. [95.251.45.225])
-        by smtp.gmail.com with ESMTPSA id b18-20020a1709063cb200b007778c9b7629sm9056305ejh.34.2022.09.15.05.41.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 05:41:42 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        Gurucharan <gurucharanx.g@intel.com>
-Subject: [RESEND PATCH] ixgbe: Don't call kmap() on page allocated with GFP_ATOMIC
-Date:   Thu, 15 Sep 2022 14:40:12 +0200
-Message-Id: <20220915124012.28811-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=X9/FP3VBJRq8TtJfMVb96DGTxGgvouChIEWCiVKx+Cc=;
+        b=ZJCsV73x/jzH5PM88l/x9myAki+e8B0TC+C3cOyhjglEnFex7jC7gMYOnyfzU6Oc+N
+         4jD09hWXHBQDpMrKMZlnObPPs52E6wxRl2yRVziNZpZmU943hn03nLJNC6tvZg0pOLkE
+         qINMLIBGy/1U0wDw/zRhAIht7w8vy7z0uSEFk6VxQ2QUKQd9YhlQ6BHIIb3KeDhxR+ar
+         MMSx0t7LUBTE1+QLQ+SCuibo3rfFmolQZ5tqDOnE2zhgWhN20hf6vq10/v869Cs6HDq0
+         46xsznjjGqAAwlQSxHJ3bq9UtMaUU/nejfjKHdFDxXWnyLvfeT5oFIpvBrD3kUlP6Gv0
+         zVbw==
+X-Gm-Message-State: ACgBeo0XnH2IprPqCacShGgDrZGxM1iPQpvtnrqB9hJM5B0i8Nqj/gqV
+        NMsX4z9upHVATLWKi2GnTjtLHA==
+X-Google-Smtp-Source: AA6agR7sKStDeo0t1HhVbBFSs83Bz4lSOFh/W6UH7W5fz3eOj2mZh8/wIZC7dv5OyBJUALbMypC1lQ==
+X-Received: by 2002:a05:6808:2387:b0:350:28c5:335 with SMTP id bp7-20020a056808238700b0035028c50335mr2890860oib.18.1663257627009;
+        Thu, 15 Sep 2022 09:00:27 -0700 (PDT)
+Received: from ?IPV6:2804:1b3:7000:d095:41f2:210c:b643:8576? ([2804:1b3:7000:d095:41f2:210c:b643:8576])
+        by smtp.gmail.com with ESMTPSA id p22-20020a4a8156000000b00448985f1f17sm7956443oog.9.2022.09.15.09.00.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Sep 2022 09:00:26 -0700 (PDT)
+Message-ID: <7c5d6f5f-9fc9-a184-1412-182106bb7a77@mojatatu.com>
+Date:   Thu, 15 Sep 2022 13:00:20 -0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH net-next,v3 3/9] selftests/tc-testings: add selftests for
+ bpf filter
+Content-Language: en-US
+To:     Zhengchao Shao <shaozhengchao@huawei.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, shuah@kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, weiyongjun1@huawei.com,
+        yuehaibing@huawei.com
+References: <20220915063038.20010-1-shaozhengchao@huawei.com>
+ <20220915063038.20010-4-shaozhengchao@huawei.com>
+From:   Victor Nogueira <victor@mojatatu.com>
+In-Reply-To: <20220915063038.20010-4-shaozhengchao@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Pages allocated with GFP_ATOMIC cannot come from Highmem. This is why
-there is no need to call kmap() on them.
+On 15/09/2022 03:30, Zhengchao Shao wrote:
+> Test 23c3: Add cBPF filter with valid bytecode
+> Test 1563: Add cBPF filter with invalid bytecode
+> Test 2334: Add eBPF filter with valid object-file
+> Test 2373: Add eBPF filter with invalid object-file
+> Test 4423: Replace cBPF bytecode
+> Test 5122: Delete cBPF filter
+> Test e0a9: List cBPF filters
+> 
+> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+> Reviewed-by: Jamal Hadi Salim <jhs@mojatatu.com>
+> ---
+>   .../tc-testing/tc-tests/filters/bpf.json      | 171 ++++++++++++++++++
+>   1 file changed, 171 insertions(+)
+>   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/filters/bpf.json
+> 
+> diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/bpf.json b/tools/testing/selftests/tc-testing/tc-tests/filters/bpf.json
+> new file mode 100644
+> index 000000000000..4c8e1fd8faab
+> --- /dev/null
+> +++ b/tools/testing/selftests/tc-testing/tc-tests/filters/bpf.json
+> @@ -0,0 +1,171 @@
+> +[
+> +    {
+> +        "id": "23c3",
+> +        "name": "Add cBPF filter with valid bytecode",
+> +        "category": [
+> +            "filter",
+> +            "bpf-filter"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$TC qdisc add dev $DEV1 ingress"
+> +        ],
+> +        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf bytecode '4,40 0 0 12,21 0 1 2048,6 0 0 262144,6 0 0 0'",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf",
+> +        "matchPattern": "filter parent ffff: protocol ip pref 100 bpf chain [0-9]+ handle 0x1.*bytecode '4,40 0 0 12,21 0 1 2048,6 0 0 262144,6 0 0 0'",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DEV1 ingress"
+> +        ]
+> +    },
+> +    {
+> +        "id": "1563",
+> +        "name": "Add cBPF filter with invalid bytecode",
+> +        "category": [
+> +            "filter",
+> +            "bpf-filter"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$TC qdisc add dev $DEV1 ingress"
+> +	],
 
-Therefore, don't call kmap() on rx_buffer->page() and instead use a
-plain page_address() to get the kernel address.
+Sorry for the nit-picking, you are still using tabs in some places.
+Like in the line above.
 
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Suggested-by: Alexander Duyck <alexander.duyck@gmail.com>
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-Reviewed-by: Alexander Duyck <alexander.duyck@gmail.com>
-Tested-by: Gurucharan <gurucharanx.g@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
-
-I send again this patch because it was submitted more than two months ago,
-Monday 4th July 2022, but for one or more (good?) reasons it has not yet
-reached Linus' tree. In the meantime I am also forwarding two "Reviewed-by"
-and one "Tested-by" tags (thanks a lot to Ira, Alexander, Gurucharan).
-Obviously I have not made any changes to the code.
-
- drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
-index 04f453eabef6..cb5c707538a5 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
-@@ -1964,15 +1964,13 @@ static bool ixgbe_check_lbtest_frame(struct ixgbe_rx_buffer *rx_buffer,
- 
- 	frame_size >>= 1;
- 
--	data = kmap(rx_buffer->page) + rx_buffer->page_offset;
-+	data = page_address(rx_buffer->page) + rx_buffer->page_offset;
- 
- 	if (data[3] != 0xFF ||
- 	    data[frame_size + 10] != 0xBE ||
- 	    data[frame_size + 12] != 0xAF)
- 		match = false;
- 
--	kunmap(rx_buffer->page);
--
- 	return match;
- }
- 
--- 
-2.37.2
+> +        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf bytecode '4,40 0 0 12,31 0 1 2048,6 0 0 262144,6 0 0 0'",
+> +        "expExitCode": "2",
+> +        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf",
+> +        "matchPattern": "filter parent ffff: protocol ip pref 100 bpf chain [0-9]+ handle 0x1.*bytecode '4,40 0 0 12,21 0 1 2048,6 0 0 262144,6 0 0 0'",
+> +        "matchCount": "0",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DEV1 ingress"
+> +        ]
+> +    },
+> +    {
+> +        "id": "2334",
+> +        "name": "Add eBPF filter with valid object-file",
+> +        "category": [
+> +            "filter",
+> +            "bpf-filter"
+> +        ],
+> +        "plugins": {
+> +            "requires": "buildebpfPlugin"
+> +        },
+> +        "setup": [
+> +            "$TC qdisc add dev $DEV1 ingress"
+> +	],
+> +        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf object-file $EBPFDIR/action.o section action-ok",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf",
+> +        "matchPattern": "filter parent ffff: protocol ip pref 100 bpf chain [0-9]+ handle 0x1 action.o:\\[action-ok\\].*tag [0-9a-f]{16}( jited)?",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DEV1 ingress"
+> +        ]
+> +    },
+> +    {
+> +        "id": "2373",
+> +        "name": "Add eBPF filter with invalid object-file",
+> +        "category": [
+> +            "filter",
+> +            "bpf-filter"
+> +        ],
+> +        "plugins": {
+> +            "requires": "buildebpfPlugin"
+> +        },
+> +        "setup": [
+> +            "$TC qdisc add dev $DEV1 ingress"
+> +	],
+> +        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf object-file $EBPFDIR/action.o section action-ko",
+> +        "expExitCode": "1",
+> +        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf",
+> +        "matchPattern": "filter parent ffff: protocol ip pref 100 bpf chain [0-9]+ handle 0x1 action.o:\\[action-ko\\].*tag [0-9a-f]{16}( jited)?",
+> +        "matchCount": "0",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DEV1 ingress"
+> +	]
+> +    },
+> +    {
+> +        "id": "4423",
+> +        "name": "Replace cBPF bytecode",
+> +        "category": [
+> +            "filter",
+> +            "bpf-filter"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$TC qdisc add dev $DEV1 ingress",
+> +            [
+> +                "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf bytecode '4,40 0 0 12,21 0 1 2048,6 0 0 262144,6 0 0 0'",
+> +                0,
+> +                1,
+> +                255
+> +            ]
+> +        ],
+> +        "cmdUnderTest": "$TC filter replace dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf bytecode '4,40 0 0 12,21 0 1 2054,6 0 0 262144,6 0 0 0'",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf",
+> +        "matchPattern": "filter parent ffff: protocol ip pref 100 bpf chain [0-9]+ handle 0x1.*bytecode '4,40 0 0 12,21 0 1 2054,6 0 0 262144,6 0 0 0'",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DEV1 ingress"
+> +	]
+> +    },
+> +    {
+> +        "id": "5122",
+> +        "name": "Delete cBPF filter",
+> +        "category": [
+> +            "filter",
+> +            "bpf-filter"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$TC qdisc add dev $DEV1 ingress",
+> +	    [
+> +                "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf bytecode '4,40 0 0 12,21 0 1 2048,6 0 0 262144,6 0 0 0'",
+> +                0,
+> +                1,
+> +                255
+> +            ]
+> +        ],
+> +        "cmdUnderTest": "$TC filter del dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf",
+> +        "matchPattern": "filter parent ffff: protocol ip pref 100 bpf chain [0-9]+ handle 0x1.*bytecode '4,40 0 0 12,21 0 1 2048,6 0 0 262144,6 0 0 0'",
+> +        "matchCount": "0",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DEV1 ingress"
+> +	]
+> +    },
+> +    {
+> +        "id": "e0a9",
+> +        "name": "List cBPF filters",
+> +        "category": [
+> +            "filter",
+> +            "bpf-filter"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$TC qdisc add dev $DEV1 ingress",
+> +	    "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf bytecode '4,40 0 0 12,21 0 1 2048,6 0 0 262144,6 0 0 0'",
+> +            "$TC filter add dev $DEV1 parent ffff: handle 2 protocol ip prio 100 bpf bytecode '4,40 0 0 12,21 0 1 2054,6 0 0 262144,6 0 0 0'",
+> +            "$TC filter add dev $DEV1 parent ffff: handle 100 protocol ip prio 100 bpf bytecode '4,40 0 0 12,21 0 1 33024,6 0 0 262144,6 0 0 0'"
+> +        ],
+> +        "cmdUnderTest": "$TC filter show dev $DEV1 parent ffff:",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC filter show dev $DEV1 parent ffff:",
+> +	"matchPattern": "filter protocol ip pref 100 bpf chain [0-9]+ handle",
+> +        "matchCount": "3",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DEV1 ingress"
+> +        ]
+> +    }
+> +]
 
