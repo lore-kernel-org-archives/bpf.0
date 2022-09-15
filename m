@@ -2,141 +2,125 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFBA3ECAAD3
-	for <bpf@archiver.kernel.org>; Thu, 15 Sep 2022 10:31:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88404ECAAA1
+	for <bpf@archiver.kernel.org>; Thu, 15 Sep 2022 12:41:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiIOKbX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 15 Sep 2022 06:31:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34900 "EHLO
+        id S229635AbiIOMlq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 15 Sep 2022 08:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiIOKbW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 15 Sep 2022 06:31:22 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF7C895C1
-        for <bpf@vger.kernel.org>; Thu, 15 Sep 2022 03:31:20 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id A327E5C006D;
-        Thu, 15 Sep 2022 06:31:17 -0400 (EDT)
-Received: from imap49 ([10.202.2.99])
-  by compute5.internal (MEProxy); Thu, 15 Sep 2022 06:31:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lmb.io; h=cc:cc
-        :content-type:date:date:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1663237877; x=1663324277; bh=NFNg93cumQ6GotlPF6eXabO9jiXMH/FvtO9
-        yjxTzR74=; b=b+ahCT0ea+H5fONX5h0ZkDFFL4jXMrGbZW5A+4e05fnPvxr6gis
-        41vtkZYFLedu1GSYqFA1ANrBZ8mSPjpT65olKcHc8Z0woyM615PB2SfL6l4ewzcc
-        9x2SoKm14WCxjCNKs9VnmiyVuOvSEbT//HrKDGNCqS6qd3t9chUYDmx753AnEAPv
-        UwImZ7bmXod5ZDGe2G7w+5w46tdaqyrxJKuLFe9dmeeFJFKQf0VSWWCvoVEr7oJZ
-        US0GIg+7nZrJT8Qre7o3YGLft0BlYOAh8OaSoTZeRqkV/E47V/rHfYg/BTSsPZUD
-        breyCm40Vwk4zoDdqEep2HewPVAXes3ULlw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:message-id:mime-version
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1663237877; x=
-        1663324277; bh=NFNg93cumQ6GotlPF6eXabO9jiXMH/FvtO9yjxTzR74=; b=A
-        rZVT6BYVL0ZalOwS2EeTAoJaRW1K1UDgmwDeMdcI+GiGA8kJXtLfEFpAtWpncShR
-        VGCZPrlgKxb6FTHt0CUB9oyQevjlocwouY7dpfcJUYXLTPD+jy3XSgmeaa0+4x5W
-        KO1XTX8ZZxhQSIK441vhzDOKtxPVLS6/5aGJMrAS0GQjtDW3a0B9teACciazpAYR
-        +tD8VxCh2XDUuVWEfF4I7GjOpFzTJ+A8sBK4bvtTf/lPD/jWX/O3vLrzHOTGxp2k
-        SVKE+/N5CDjPmeLxL2DEFbaU3QDam7oVIpydG/Zk1dKnK5Al633ksNRf51qSEaYE
-        IeDlt+pTIBJ7YgI73CZOQ==
-X-ME-Sender: <xms:9P4iY3J1DdUVMnq2GlVHOgkAPEDJFzwP8ClS6g0bOEZnrXGFtDV--Q>
-    <xme:9P4iY7KJTTf2l8Dr1UUt9kcLpycWtWRGDeo1Twbpta80bF2M6ysGatrHt4qRmADc0
-    -At4PPpZFtS0V5kOw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedukedgfedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkfffhvfevufgtsehttdertderredtnecuhfhrohhmpedfnfhorhgv
-    nhiiuceurghuvghrfdcuoehoshhssehlmhgsrdhioheqnecuggftrfgrthhtvghrnhepke
-    ehuefgfffgueduueeuhffhvdeuvdffueelheegtdegtddtvdekueetgeehheetnecuffho
-    mhgrihhnpehlphgtrdgvvhgvnhhtshdpsghoohhtlhhinhdrtghomhdpkhgvrhhnvghlrd
-    horhhgpdhgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgr
-    mhepmhgrihhlfhhrohhmpehoshhssehlmhgsrdhioh
-X-ME-Proxy: <xmx:9P4iY_vkMXmZf56Ie3eNItbBkRUCt9mCTyWMphJ-g1wZorDrzqybDg>
-    <xmx:9P4iYwZtP3T9cPZsudRuKwsb4YuKifsyPg6HrYF2XHjo6haiziGdUg>
-    <xmx:9P4iY-aTwGx_OTbp8RIXEPMenSkfwS5CCXpiAtZA4e2rvnNWyOnb2w>
-    <xmx:9f4iY1Uzg5Md3kOh2Lka7PVS7bHfPjfvGux9RQcngumHMkqi8KzFuA>
-Feedback-ID: icd3146c6:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id D524F15A0087; Thu, 15 Sep 2022 06:31:16 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
-Mime-Version: 1.0
-Message-Id: <a6c0bb85-6eeb-407e-a515-06f67e70db57@www.fastmail.com>
-Date:   Thu, 15 Sep 2022 11:30:12 +0100
-From:   "Lorenz Bauer" <oss@lmb.io>
-To:     "Alexei Starovoitov" <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        "Andrii Nakryiko" <andrii@kernel.org>,
-        "Martin KaFai Lau" <martin.lau@linux.dev>,
-        "KP Singh" <kpsingh@kernel.org>,
-        "Stanislav Fomichev" <sdf@google.com>
-Cc:     bpf@vger.kernel.org
-Subject: Closing the BPF map permission loophole
-Content-Type: text/plain
+        with ESMTP id S229780AbiIOMlq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 15 Sep 2022 08:41:46 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43816BE8;
+        Thu, 15 Sep 2022 05:41:45 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id bj12so41771271ejb.13;
+        Thu, 15 Sep 2022 05:41:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=tzmtfB02Kll9bwoDnqvoio0j7mPs1ux70CIafG7WcfU=;
+        b=atzRGS0IEVvnd6WXWC1rlccaFpBQ2yFXqBqZ0xtSuNwYZbyh6YLVXuYzo5VlCf3iMP
+         BXWfOqj/F/1zmWoyB2Ve1b4rG8wV4V0nXNPRF2ttYQZHs5S+vgVt5aY8tk9kzZEKkCGp
+         99SPE2OCnrsp7ChpLRX6eFj/7iiUngJWcWymqH8Vf3Qh5/8epbpknxNhTWsZD+pPH0kl
+         8q57dvY2+qmbkMehptiFXjeo8CWidirKYdwZ1kovxRZGLbsHsxjaOqqcaSrGOvJCGK+R
+         RYD31Gyww66Ch62fGeb1WerCHHiTxFWaTjfIwREbvvYEBrsMvYShWfKyvxogNPSQVbAY
+         U1LQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=tzmtfB02Kll9bwoDnqvoio0j7mPs1ux70CIafG7WcfU=;
+        b=EpH8uQyQN5mFFxV3qACj/16IvD18Q/SDl0XbLhwwDUm/qcxszHX985oAGWqtLCGava
+         VXOLU8lXvxqFg70DLabKcpG8YHZ2XgTvMsvwATJDZKsXK1AUm+uNO3D/PjKJwYNtCJgH
+         3To0GreZT5yI+xEQe7BJpiNerhMSapEiqrLJFD/1weuiloPs12k1B8m5dCuaYBrAkacL
+         Ci3SaWA2uZ2Tvsk0TSPu7LAqWdVGfr2T6eoirayqVGRIBZO2JJeZGneGE9oN91nMhX8w
+         s03iixLhiXqPhyBBwZj7KmJBYQZl1ZAKtFJ2HMpnQv9PFI7mqZEz1+V5DYmSgE0C61IM
+         Ijag==
+X-Gm-Message-State: ACgBeo3txzsJrCfP+aP6f1zM7QWvphCjRbFAVBz1exKMJKTTMnAJgWbt
+        3sBWTfhy3rCB2m/zGXg88GI=
+X-Google-Smtp-Source: AA6agR6OETBFpaXizZkBzwGuLb/nSX3ng6zwpvWStvpMjub1lzTuDLEeGZHPr04IhJAIRKoFkOF22g==
+X-Received: by 2002:a17:906:8c7:b0:730:c1a9:e187 with SMTP id o7-20020a17090608c700b00730c1a9e187mr29400332eje.55.1663245703722;
+        Thu, 15 Sep 2022 05:41:43 -0700 (PDT)
+Received: from localhost.localdomain (host-95-251-45-225.retail.telecomitalia.it. [95.251.45.225])
+        by smtp.gmail.com with ESMTPSA id b18-20020a1709063cb200b007778c9b7629sm9056305ejh.34.2022.09.15.05.41.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Sep 2022 05:41:42 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        Gurucharan <gurucharanx.g@intel.com>
+Subject: [RESEND PATCH] ixgbe: Don't call kmap() on page allocated with GFP_ATOMIC
+Date:   Thu, 15 Sep 2022 14:40:12 +0200
+Message-Id: <20220915124012.28811-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.37.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi list,
+Pages allocated with GFP_ATOMIC cannot come from Highmem. This is why
+there is no need to call kmap() on them.
 
-Here is a summary of the talk I gave at LPC '22 titled "Closing the BPF map permission loophole", with slides at [0].
+Therefore, don't call kmap() on rx_buffer->page() and instead use a
+plain page_address() to get the kernel address.
 
-Problem #1: Read-only fds can be modified via a BPF program
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Suggested-by: Alexander Duyck <alexander.duyck@gmail.com>
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+Reviewed-by: Alexander Duyck <alexander.duyck@gmail.com>
+Tested-by: Gurucharan <gurucharanx.g@intel.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
 
-1. Craft a BPF program that executes bpf_map_update_elem(read-only fd, ...)
-2. Load the program & execute it
+I send again this patch because it was submitted more than two months ago,
+Monday 4th July 2022, but for one or more (good?) reasons it has not yet
+reached Linus' tree. In the meantime I am also forwarding two "Reviewed-by"
+and one "Tested-by" tags (thanks a lot to Ira, Alexander, Gurucharan).
+Obviously I have not made any changes to the code.
 
-The reason is that the verifier only checks bpf_map->map_flags in resolve_pseudo_ldimm64, but ignores fd->f_mode.
+ drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Fixing this problem is complicated by the fact that a user may use several distinct fds with differing permissions to refer to the same map, but that the verifier internally only tracks unique struct bpf_map. See [1].
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
+index 04f453eabef6..cb5c707538a5 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
+@@ -1964,15 +1964,13 @@ static bool ixgbe_check_lbtest_frame(struct ixgbe_rx_buffer *rx_buffer,
+ 
+ 	frame_size >>= 1;
+ 
+-	data = kmap(rx_buffer->page) + rx_buffer->page_offset;
++	data = page_address(rx_buffer->page) + rx_buffer->page_offset;
+ 
+ 	if (data[3] != 0xFF ||
+ 	    data[frame_size + 10] != 0xBE ||
+ 	    data[frame_size + 12] != 0xAF)
+ 		match = false;
+ 
+-	kunmap(rx_buffer->page);
+-
+ 	return match;
+ }
+ 
+-- 
+2.37.2
 
-Problem #2: Read-only fds can be "transmuted" into read-write fds via map in map
-
-1. BPF_MAP_UPDATE_ELEM(map in map fd, read-only fd)
-2. BPF_MAP_LOOKUP_ELEM(map in map fd) = read-write fd
-
-This was pointed out by Stanislav Fomichev during the LPC session. I've not yet tried this myself.
-
-Problem #3: Read-only fds can be transmuted into read-write fds via object pinning
-
-1. BPF_OBJ_PIN(read-only fd, /sys/fs/bpf/foo)
-2. BPF_OBJ_GET(/sys/fs/bpf/foo) = read-write fd
-
-The problem is with BPF_OBJ_PIN semantics: regardless of fd->f_mode, pinning creates an inode that is owned by the current user, with mode o=rw. Even if we made the inode o=r, a user / attacker can still use chmod(2) to change it back to o=rw.
-
-On older kernels, this requires either unprivileged BPF or CAP_BPF, but recently BPF_OBJ_PIN has been made available without CAP_BPF.
-
-This problem also applies to other BPF objects: links, programs, maybe iterators? Since we don't have BPF_F_RDONLY semantics for those the issue is maybe less urgent, but see [2] for some more fun.
-
-A number of ideas were explored during the session:
-
-* In OBJ_PIN, create the inode owned by the user that executed MAP_CREATE, not the user that
-  invoked OBJ_PIN. This would allow unprivileged users to create files as another user, which
-  seems like a bad idea.
-* In OBJ_GET, refuse a read-write fd if the fd passed to OBJ_PIN wasn't read-write. This is not
-  possible since we store struct bpf_map * in the inode, so we don't have access to fd->f_mode
-  anymore.
-* In OBJ_PIN, adjust the mode of the created inode to match fd->f_mode, and later refuse attempts
-  to chmod(2). After a cursory glance at the source code it seems like there are no hooks for
-  filesystems to influence chmod.
-
-My gut feeling is that the root of the problem is that OBJ_PIN is too permissive. Once an inode exists that is owned by the current user the cat is out of the box.
-
-BPF_F_RDONLY and BPF_F_WRONLY were introduced in 4.15 [3]. If we want to fix this properly, aka relying on BPF_R_RDONLY doesn't introduce a gaping hole, we'll have to do quite a bit of backporting.
-
-I plan on submitting a sledgehammer approach fix for #1 and #2 as discussed with Daniel after my presentation.
-
-#3 is in sore need of further discussion and creativity. One avenue I want to explore is whether we can refuse OBJ_PIN if:
-- the current user is not the map creator
-- and the fd is not r/w
-- and the current user has no CAP_DAC_OVERRIDE (or similar)
-
-Thanks
-Lorenz
-
-0: https://lpc.events/event/16/contributions/1372/attachments/977/2059/Plumbers%2022%20Closing%20the%20BPF%20map%20permission%20loophole.pdf
-1: https://elixir.bootlin.com/linux/v6.0-rc5/source/kernel/bpf/verifier.c#L12839
-2: https://lore.kernel.org/bpf/20210618105526.265003-1-zenczykowski@gmail.com/
-3: https://github.com/torvalds/linux/commit/6e71b04a8224
