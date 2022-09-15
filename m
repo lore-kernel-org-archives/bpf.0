@@ -2,301 +2,180 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9002CC6FA95
-	for <bpf@archiver.kernel.org>; Thu, 15 Sep 2022 16:00:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4680C6FA89
+	for <bpf@archiver.kernel.org>; Thu, 15 Sep 2022 16:12:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbiIOQAg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 15 Sep 2022 12:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47060 "EHLO
+        id S229744AbiIOQMF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 15 Sep 2022 12:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbiIOQAT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 15 Sep 2022 12:00:19 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B3840553
-        for <bpf@vger.kernel.org>; Thu, 15 Sep 2022 09:00:17 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id m81so1085475oia.1
-        for <bpf@vger.kernel.org>; Thu, 15 Sep 2022 09:00:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=DxzMiPMhforlytOmRSkizFz8ynx+/7o6P0N+FvxElZY=;
-        b=dmEiSXZLw/EIFybxxz+JRwArOhvSt4dHisLcfWTnkJQyYtJd7z4avZY6KaancznrVT
-         j4IRPNNDfp71eue9dXFPLyk8zQYt73ZwAeXEyFEudCEFAwFAfZ67WHYzB4K/SNPwh0QS
-         qzs1OmVHmICBwCK/WiktSjosSB4aeUkov4Pfz0xpDfkkgN3LEP2KpFIWvQOJCbiP+qBL
-         CiqVe1Jzn56m55SRSQLudDxj7zGiaFSamkEcKSGgn33Unr1enTEmV2vZCK9mtQ3GtNOt
-         OnjArCEfxyiM4V7pfLDMx7qvertfqTUdvv4vfVmFnSJqS9b0yx4urfwfu9IDPk6Cfp29
-         UrVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=DxzMiPMhforlytOmRSkizFz8ynx+/7o6P0N+FvxElZY=;
-        b=H6BnJk9/34efVfGS5tH1dUBaHt8GIejtacOejyXGFSgg76dJZ7CK3bA0vh59H9MiBJ
-         VLBEBeZiJUXoogzZ7r4I4R8NXgb+nPW4OxWnwivJDwFuRmiKUKpi5c3rOa2TySRU4OSk
-         R9Hlu1um/FD13fqh38agjRxCq63qsl6cIryerfiq+CjB1aDHKgkaP//8YL43CiPsA8xv
-         8yqoljxixzb6FqOeo3B01/gAMRm1fRjul0rgOLqTD6EzVM1UylYauep22JWhfgYwJklC
-         iD63uYH0rcuYqs2Q4bK6ApYKt6b6lpBVdqOeZrLyrl/D0DnZF67cARjsBRnZ31Z2AnV2
-         BuXQ==
-X-Gm-Message-State: ACrzQf21qOqyXlmAsgKAD89HXg5RYP00MWwHu9Dw+nIyGz1EiYIrfH5n
-        oP1ME1vcFpDMqHUZ+aKViyp9Ew==
-X-Google-Smtp-Source: AMsMyM4wlmqL995bfrjHej3EjaF/2atZOozLmGccNjzj36RlEExbBlaQfQM1zOgTdvIDLdCzm5S9zg==
-X-Received: by 2002:a05:6808:3b1:b0:350:3412:d3ab with SMTP id n17-20020a05680803b100b003503412d3abmr276233oie.134.1663257616504;
-        Thu, 15 Sep 2022 09:00:16 -0700 (PDT)
-Received: from ?IPV6:2804:1b3:7000:d095:41f2:210c:b643:8576? ([2804:1b3:7000:d095:41f2:210c:b643:8576])
-        by smtp.gmail.com with ESMTPSA id s10-20020acadb0a000000b0034d14c6ce3dsm7949188oig.16.2022.09.15.09.00.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Sep 2022 09:00:15 -0700 (PDT)
-Message-ID: <1ca0fbfe-bdc6-2a98-9f31-48ab7d9d886d@mojatatu.com>
-Date:   Thu, 15 Sep 2022 13:00:09 -0300
+        with ESMTP id S229769AbiIOQME (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 15 Sep 2022 12:12:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21679AFBA
+        for <bpf@vger.kernel.org>; Thu, 15 Sep 2022 09:12:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B9506252E
+        for <bpf@vger.kernel.org>; Thu, 15 Sep 2022 16:12:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88754C433B5
+        for <bpf@vger.kernel.org>; Thu, 15 Sep 2022 16:12:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663258322;
+        bh=biii+7n43gDq9XV3lLWEwCgiBUcjGdS9pCCJ+UVSt80=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=KY92zLXe4muQeT1lP6R9O5WWgH7s5lQ+vChsWGQh8DGyYNJ6977AySX8t8+qdp7v3
+         aLfeeEhEodnbotQKGT6sCZ6Drv8TMMhccqgAIWerpQs6aV6eQDUCEKuUL3Qi2k+wIT
+         htRuqYdkNUN5O+PyusMCvjYSdy5m30dnl0szn8dppzVlJo5e9sPcKsJJQl2uPJfG/F
+         u4qKF2QS8Tqzks05KCbYy7TNpHRciwFKTO7fqmillcE6nWWrJgq7woUJo09OJEasvV
+         FUXY1Xlm6GUwumTZNgYKLh3w+i7EFTEqNW9bU7iV3G2XP/cq8BVnHW5h4lDXTwRQD4
+         FGPpWinZS+7uw==
+Received: by mail-ej1-f47.google.com with SMTP id y17so38228396ejo.6
+        for <bpf@vger.kernel.org>; Thu, 15 Sep 2022 09:12:02 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2ylywHaolOXT/4vUFLmOvig8OF+RN2Iz2BtXxYrCo5+lgwwQJM
+        FLys2qYeiFUIcwPjJP3uivn+HpgFK3PSpRo820P4zg==
+X-Google-Smtp-Source: AMsMyM6A+1amQaBgdn6PNz6+7XLx4sQcOmwWWgNA8pV7010ZefQzIPoOFXBCHMTh3iKNuMgzYaiNCa6qWPB+3IVAEF8=
+X-Received: by 2002:a17:906:9bd3:b0:778:c8e0:fcee with SMTP id
+ de19-20020a1709069bd300b00778c8e0fceemr471268ejc.275.1663258310370; Thu, 15
+ Sep 2022 09:11:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH net-next,v3 0/9] refactor duplicate codes in the tc cls
- walk function
-Content-Language: en-US
-To:     Zhengchao Shao <shaozhengchao@huawei.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, shuah@kernel.org
+References: <20220909120736.1027040-1-roberto.sassu@huaweicloud.com> <20220909120736.1027040-12-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20220909120736.1027040-12-roberto.sassu@huaweicloud.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Thu, 15 Sep 2022 17:11:39 +0100
+X-Gmail-Original-Message-ID: <CACYkzJ7uraUdmGV9gMmTZs1OMb_3Q2DttoaxU-irmrXFudOweQ@mail.gmail.com>
+Message-ID: <CACYkzJ7uraUdmGV9gMmTZs1OMb_3Q2DttoaxU-irmrXFudOweQ@mail.gmail.com>
+Subject: Re: [PATCH v17 11/12] selftests/bpf: Add test for bpf_verify_pkcs7_signature()
+ kfunc
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, weiyongjun1@huawei.com,
-        yuehaibing@huawei.com
-References: <20220915063038.20010-1-shaozhengchao@huawei.com>
-From:   Victor Nogueira <victor@mojatatu.com>
-In-Reply-To: <20220915063038.20010-1-shaozhengchao@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        john.fastabend@gmail.com, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, mykolal@fb.com, dhowells@redhat.com,
+        jarkko@kernel.org, rostedt@goodmis.org, mingo@redhat.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        shuah@kernel.org, bpf@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, memxor@gmail.com,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Joanne Koong <joannelkoong@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 15/09/2022 03:30, Zhengchao Shao wrote:
-> The walk implementation of most tc cls modules is basically the same.
-> That is, the values of count and skip are checked first. If count is
-> greater than or equal to skip, the registered fn function is executed.
-> Otherwise, increase the value of count. So the code can be refactored.
-> Then use helper function to replace the code of each cls module in
-> alphabetical order.
-> 
-> The walk function is invoked during dump. Therefore, test cases related
->   to the tdc filter need to be added.
-> 
-> Last, thanks to Jamal and Victor for their review.
-> 
-> Add test cases locally and perform the test. The test results are listed
-> below:
-> 
-> ./tdc.py -e 0811
-> ok 1 0811 - Add multiple basic filter with cmp ematch u8/link layer and
-> default action and dump them
-> 
-> ./tdc.py -e 5129
-> ok 1 5129 - List basic filters
-> 
-> ./tdc.py -c bpf-filter
-> ok 1 23c3 - Add cBPF filter with valid bytecode
-> ok 2 1563 - Add cBPF filter with invalid bytecode
-> ok 3 2334 - Add eBPF filter with valid object-file
-> ok 4 2373 - Add eBPF filter with invalid object-file
-> ok 5 4423 - Replace cBPF bytecode
-> ok 6 5122 - Delete cBPF filter
-> ok 7 e0a9 - List cBPF filters
-> 
-> ./tdc.py -c cgroup
-> ok 1 6273 - Add cgroup filter with cmp ematch u8/link layer and drop
-> action
-> ok 2 4721 - Add cgroup filter with cmp ematch u8/link layer with trans
-> flag and pass action
-> ok 3 d392 - Add cgroup filter with cmp ematch u16/link layer and pipe
-> action
-> ok 4 0234 - Add cgroup filter with cmp ematch u32/link layer and miltiple
-> actions
-> ok 5 8499 - Add cgroup filter with cmp ematch u8/network layer and pass
-> action
-> ok 6 b273 - Add cgroup filter with cmp ematch u8/network layer with trans
-> flag and drop action
-> ok 7 1934 - Add cgroup filter with cmp ematch u16/network layer and pipe
-> action
-> ok 8 2733 - Add cgroup filter with cmp ematch u32/network layer and
-> miltiple actions
-> ok 9 3271 - Add cgroup filter with NOT cmp ematch rule and pass action
-> ok 10 2362 - Add cgroup filter with two ANDed cmp ematch rules and single
-> action
-> ok 11 9993 - Add cgroup filter with two ORed cmp ematch rules and single
-> action
-> ok 12 2331 - Add cgroup filter with two ANDed cmp ematch rules and one
-> ORed ematch rule and single action
-> ok 13 3645 - Add cgroup filter with two ANDed cmp ematch rules and one
-> NOT ORed ematch rule and single action
-> ok 14 b124 - Add cgroup filter with u32 ematch u8/zero offset and drop
-> action
-> ok 15 7381 - Add cgroup filter with u32 ematch u8/zero offset and invalid
-> value >0xFF
-> ok 16 2231 - Add cgroup filter with u32 ematch u8/positive offset and
-> drop action
-> ok 17 1882 - Add cgroup filter with u32 ematch u8/invalid mask >0xFF
-> ok 18 1237 - Add cgroup filter with u32 ematch u8/missing offset
-> ok 19 3812 - Add cgroup filter with u32 ematch u8/missing AT keyword
-> ok 20 1112 - Add cgroup filter with u32 ematch u8/missing value
-> ok 21 3241 - Add cgroup filter with u32 ematch u8/non-numeric value
-> ok 22 e231 - Add cgroup filter with u32 ematch u8/non-numeric mask
-> ok 23 4652 - Add cgroup filter with u32 ematch u8/negative offset and
-> pass action
-> ok 24 1331 - Add cgroup filter with u32 ematch u16/zero offset and pipe
-> action
-> ok 25 e354 - Add cgroup filter with u32 ematch u16/zero offset and
-> invalid value >0xFFFF
-> ok 26 3538 - Add cgroup filter with u32 ematch u16/positive offset and
-> drop action
-> ok 27 4576 - Add cgroup filter with u32 ematch u16/invalid mask >0xFFFF
-> ok 28 b842 - Add cgroup filter with u32 ematch u16/missing offset
-> ok 29 c924 - Add cgroup filter with u32 ematch u16/missing AT keyword
-> ok 30 cc93 - Add cgroup filter with u32 ematch u16/missing value
-> ok 31 123c - Add cgroup filter with u32 ematch u16/non-numeric value
-> ok 32 3675 - Add cgroup filter with u32 ematch u16/non-numeric mask
-> ok 33 1123 - Add cgroup filter with u32 ematch u16/negative offset and
-> drop action
-> ok 34 4234 - Add cgroup filter with u32 ematch u16/nexthdr+ offset and
-> pass action
-> ok 35 e912 - Add cgroup filter with u32 ematch u32/zero offset and pipe
-> action
-> ok 36 1435 - Add cgroup filter with u32 ematch u32/positive offset and
-> drop action
-> ok 37 1282 - Add cgroup filter with u32 ematch u32/missing offset
-> ok 38 6456 - Add cgroup filter with u32 ematch u32/missing AT keyword
-> ok 39 4231 - Add cgroup filter with u32 ematch u32/missing value
-> ok 40 2131 - Add cgroup filter with u32 ematch u32/non-numeric value
-> ok 41 f125 - Add cgroup filter with u32 ematch u32/non-numeric mask
-> ok 42 4316 - Add cgroup filter with u32 ematch u32/negative offset and
-> drop action
-> ok 43 23ae - Add cgroup filter with u32 ematch u32/nexthdr+ offset and
-> pipe action
-> ok 44 23a1 - Add cgroup filter with canid ematch and single SFF
-> ok 45 324f - Add cgroup filter with canid ematch and single SFF with mask
-> ok 46 2576 - Add cgroup filter with canid ematch and multiple SFF
-> ok 47 4839 - Add cgroup filter with canid ematch and multiple SFF with
-> masks
-> ok 48 6713 - Add cgroup filter with canid ematch and single EFF
-> ok 49 4572 - Add cgroup filter with canid ematch and single EFF with mask
-> ok 50 8031 - Add cgroup filter with canid ematch and multiple EFF
-> ok 51 ab9d - Add cgroup filter with canid ematch and multiple EFF with
-> masks
-> ok 52 5349 - Add cgroup filter with canid ematch and a combination of
-> SFF/EFF
-> ok 53 c934 - Add cgroup filter with canid ematch and a combination of
-> SFF/EFF with masks
-> ok 54 4319 - Replace cgroup filter with diffferent match
-> ok 55 4636 - Detele cgroup filter
-> 
-> ./tdc.py -c flow
-> ok 1 5294 - Add flow filter with map key and ops
-> ok 2 3514 - Add flow filter with map key or ops
-> ok 3 7534 - Add flow filter with map key xor ops
-> ok 4 4524 - Add flow filter with map key rshift ops
-> ok 5 0230 - Add flow filter with map key addend ops
-> ok 6 2344 - Add flow filter with src map key
-> ok 7 9304 - Add flow filter with proto map key
-> ok 8 9038 - Add flow filter with proto-src map key
-> ok 9 2a03 - Add flow filter with proto-dst map key
-> ok 10 a073 - Add flow filter with iif map key
-> ok 11 3b20 - Add flow filter with priority map key
-> ok 12 8945 - Add flow filter with mark map key
-> ok 13 c034 - Add flow filter with nfct map key
-> ok 14 0205 - Add flow filter with nfct-src map key
-> ok 15 5315 - Add flow filter with nfct-src map key
-> ok 16 7849 - Add flow filter with nfct-proto-src map key
-> ok 17 9902 - Add flow filter with nfct-proto-dst map key
-> ok 18 6742 - Add flow filter with rt-classid map key
-> ok 19 5432 - Add flow filter with sk-uid map key
-> ok 20 4234 - Add flow filter with sk-gid map key
-> ok 21 4522 - Add flow filter with vlan-tag map key
-> ok 22 4253 - Add flow filter with rxhash map key
-> ok 23 4452 - Add flow filter with hash key list
-> ok 24 4341 - Add flow filter with muliple ops
-> ok 25 4392 - List flow filters
-> ok 26 4322 - Change flow filter with map key num
-> ok 27 2320 - Replace flow filter with map key num
-> ok 28 3213 - Delete flow filter with map key num
-> 
-> ./tdc.py -c route
-> ok 1 e122 - Add route filter with from and to tag
-> ok 2 6573 - Add route filter with fromif and to tag
-> ok 3 1362 - Add route filter with to flag and reclassify action
-> ok 4 4720 - Add route filter with from flag and continue actions
-> ok 5 2812 - Add route filter with form tag and pipe action
-> ok 6 7994 - Add route filter with miltiple actions
-> ok 7 4312 - List route filters
-> ok 8 2634 - Delete route filter with pipe action
-> 
-> ./tdc.py -c rsvp
-> ok 1 2141 - Add rsvp filter with tcp proto and specific IP address
-> ok 2 5267 - Add rsvp filter with udp proto and specific IP address
-> ok 3 2819 - Add rsvp filter with src ip and src port
-> ok 4 c967 - Add rsvp filter with tunnelid and continue action
-> ok 5 5463 - Add rsvp filter with tunnel and pipe action
-> ok 6 2332 - Add rsvp filter with miltiple actions
-> ok 7 8879 - Add rsvp filter with tunnel and skp flag
-> ok 8 8261 - List rsvp filters
-> ok 9 8989 - Delete rsvp filter
-> 
-> ./tdc.py -c tcindex
-> ok 1 8293 - Add tcindex filter with default action
-> ok 2 7281 - Add tcindex filter with hash size and pass action
-> ok 3 b294 - Add tcindex filter with mask shift and reclassify action
-> ok 4 0532 - Add tcindex filter with pass_on and continue actions
-> ok 5 d473 - Add tcindex filter with pipe action
-> ok 6 2940 - Add tcindex filter with miltiple actions
-> ok 7 1893 - List tcindex filters
-> ok 8 2041 - Change tcindex filter with pass action
-> ok 9 9203 - Replace tcindex filter with pass action
-> ok 10 7957 - Delete tcindex filter with drop action
-> 
-> ---
-> v3: Modify the test case format alignment
-> v2: rectify spelling error; The category name bpf in filters file
->      is renamed to bpf-filter
-> ---
-> 
-> Zhengchao Shao (9):
->    net/sched: cls_api: add helper for tc cls walker stats updating
->    net/sched: use tc_cls_stats_update() in filter
->    selftests/tc-testings: add selftests for bpf filter
->    selftests/tc-testings: add selftests for cgroup filter
->    selftests/tc-testings: add selftests for flow filter
->    selftests/tc-testings: add selftests for route filter
->    selftests/tc-testings: add selftests for rsvp filter
->    selftests/tc-testings: add selftests for tcindex filter
->    selftests/tc-testings: add list case for basic filter
-> 
->   include/net/pkt_cls.h                         |   13 +
->   net/sched/cls_basic.c                         |    9 +-
->   net/sched/cls_bpf.c                           |    8 +-
->   net/sched/cls_flow.c                          |    8 +-
->   net/sched/cls_fw.c                            |    9 +-
->   net/sched/cls_route.c                         |    9 +-
->   net/sched/cls_rsvp.h                          |    9 +-
->   net/sched/cls_tcindex.c                       |   18 +-
->   net/sched/cls_u32.c                           |   20 +-
->   .../tc-testing/tc-tests/filters/basic.json    |   47 +
->   .../tc-testing/tc-tests/filters/bpf.json      |  171 +++
->   .../tc-testing/tc-tests/filters/cgroup.json   | 1236 +++++++++++++++++
->   .../tc-testing/tc-tests/filters/flow.json     |  623 +++++++++
->   .../tc-testing/tc-tests/filters/route.json    |  181 +++
->   .../tc-testing/tc-tests/filters/rsvp.json     |  203 +++
->   .../tc-testing/tc-tests/filters/tcindex.json  |  227 +++
->   16 files changed, 2716 insertions(+), 75 deletions(-)
->   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/filters/bpf.json
->   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/filters/cgroup.json
->   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/filters/flow.json
->   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/filters/route.json
->   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/filters/rsvp.json
->   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/filters/tcindex.json
+On Fri, Sep 9, 2022 at 1:10 PM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
 
-Sorry for the nit-picking, but you're still using tabs in some places.
-More precisely, in the bpf, cgroup, flow and route tests.
+[...]
+
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c b/tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c
+> new file mode 100644
+> index 000000000000..4ceab545d99a
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c
+> @@ -0,0 +1,100 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +/*
+> + * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
+> + *
+> + * Author: Roberto Sassu <roberto.sassu@huawei.com>
+> + */
+> +
+> +#include "vmlinux.h"
+> +#include <errno.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +
+> +#define MAX_DATA_SIZE (1024 * 1024)
+> +#define MAX_SIG_SIZE 1024
+> +
+> +typedef __u8 u8;
+> +typedef __u16 u16;
+> +typedef __u32 u32;
+> +typedef __u64 u64;
+
+I think you can avoid this and just use u32 and u64 directly.
+
+> +
+> +struct bpf_dynptr {
+> +       __u64 :64;
+> +       __u64 :64;
+> +} __attribute__((aligned(8)));
+> +
+
+I think you are doing this because including the uapi headers causes
+type conflicts.
+This does happen quite often. What do other folks think about doing
+something like
+
+#define DYNPTR(x) ((void *)x)
+
+It seems like this will be an issue anytime we use the helpers with
+vmlinux.h and users
+will always have to define this type in their tests.
+
+- KP
+
+> +extern struct bpf_key *bpf_lookup_user_key(__u32 serial, __u64 flags) __ksym;
+> +extern struct bpf_key *bpf_lookup_system_key(__u64 id) __ksym;
+> +extern void bpf_key_put(struct bpf_key *key) __ksym;
+> +extern int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_ptr,
+> +                                     struct bpf_dynptr *sig_ptr,
+> +                                     struct bpf_key *trusted_keyring) __ksym;
+> +
+> +u32 monitored_pid;
+> +u32 user_keyring_serial;
+> +u64 system_keyring_id;
+> +
+> +struct data {
+> +       u8 data[MAX_DATA_SIZE];
+> +       u32 data_len;
+> +       u8 sig[MAX_SIG_SIZE];
+> +       u32 sig_len;
+> +};
+> +
+> +struct {
+> +       __uint(type, BPF_MAP_TYPE_ARRAY);
+> +       __uint(max_entries, 1);
+> +       __type(key, __u32);
+> +       __type(value, struct data);
+> +} data_input SEC(".maps");
+> +
+> +char _license[] SEC("license") = "GPL";
+> +
+> +SEC("lsm.s/bpf")
+> +int BPF_PROG(bpf, int cmd, union bpf_attr *attr, unsigned int size)
+> +{
+> +       struct bpf_dynptr data_ptr, sig_ptr;
+> +       struct data *data_val;
+> +       struct bpf_key *trusted_keyring;
+> +       u32 pid;
+> +       u64 value;
+> +       int ret, zero = 0;
+> +
+> +       pid = bpf_get_current_pid_tgid() >> 32;
+> +       if (pid != monitored_pid)
+> +               return 0;
+> +
+> +       data_val = bpf_map_lookup_elem(&data_input, &zero);
+> +       if (!data_val)
+> +               return 0;
+> +
+> +       bpf_probe_read(&value, sizeof(value), &attr->value);
+> +
+> +       bpf_copy_from_user(data_val, sizeof(struct data),
+>
+
+[...]
+
+> --
+> 2.25.1
+>
