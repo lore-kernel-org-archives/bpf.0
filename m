@@ -2,195 +2,100 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46717ECAAA1
-	for <bpf@archiver.kernel.org>; Thu, 15 Sep 2022 16:58:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFCBDC32771
+	for <bpf@archiver.kernel.org>; Thu, 15 Sep 2022 23:23:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbiIOQ6y (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 15 Sep 2022 12:58:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
+        id S229629AbiIOXXQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 15 Sep 2022 19:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbiIOQ6v (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 15 Sep 2022 12:58:51 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A8498D02;
-        Thu, 15 Sep 2022 09:58:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663261128; x=1694797128;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=x9Mn+HpvE0jeSXXjYZwll4DXcBg002OF814G9gDrW5o=;
-  b=Uw4K5o5G0nBfUQy2kg9wEHokughc8VbQjRLDeHoClkjj85sTYM/XJ6Fo
-   yuZlOhj+sUrF96RJJMcLi6oGgxRQHJiQzWJjxoydgUCLUusC0RakVNwKu
-   KCMRtgL+iXvzQXyjJAm4jthbzSRaT0elgXs+HJlGUW2K7+g/XHkPXRHDf
-   JWw52XXmJFX0Awthh9p3H94b+gSkcPTRT7dQpOrqHTw2MPReZyxnqcr0J
-   V3b6DJTazn8Vf6Ie4n+v3UckNMaBeO7SnRFseDkOH28qubdpe4amjdYIC
-   T3IXj/zndsOm5DMAuvA2iRGm6gKMSLwfel7NRR1YpuogzQOmS0JdNmYf/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="385063725"
-X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
-   d="scan'208";a="385063725"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 09:58:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
-   d="scan'208";a="792778449"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga005.jf.intel.com with ESMTP; 15 Sep 2022 09:58:41 -0700
-Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 15 Sep 2022 09:58:41 -0700
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 15 Sep 2022 09:58:40 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Thu, 15 Sep 2022 09:58:40 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.175)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Thu, 15 Sep 2022 09:58:40 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OVB0jNRzdjuUZnbocbNvEFSHtYfMawKmokhEOn4MEPiD0jtlr4jusfoM0X4lEQ5ObBbdCJF0QrBvnYQkr5UgxPBH6a638sJFWhLP5USABiVDhzQ818OxjGZcGEY+16VLrOo5/bYbWrH98g7HjtJMo5ke3Fm4pyb5buguvixVlxmY2UpIT085Ed+/5nPELf1deYwpa02YUYt2a7+2jD8Uj9B27Gonv6OYYEZStcxfSPG6+XPwRfP7BsuAkxmORgBJjo0Xl97820NizXGd63MpRlTtK1junc9eRO31Xh3tH8ky+WBViQnmsTn77JrKAuYck8Lh/p2AWydI2+eA20lLPQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wMoLjvzSrz5iPMXfdoWqzHHV6c2eiW0C+2oRsmTrV9I=;
- b=GXkLCJCEQopFgb04EHfv74c/rHjzi3FRrwSXhTRUAUgnXJdHWb0oyCy2C+3X44taPf05PUoffl+nJLlYMJdGrOxMRulrMsSP533QIccoWjsErhlXVtuOK8tmnBWcHZH67FEJhw6UTCCILNU34FZGFwlNIAOejD0q6gyKzlcKOzALndrEuVWVDatJS3E+bDJuH5nT+yFX8IX3XSXwY6bGcusdb36GYOFsPJb9f1azi1VreOtJ85A+Dweqz94REYXfMr1VQQrIg55iWYLm8CgZkNzIVKLk5yb2pxkv3oZlM9XCuTFZLojH1mGHTqRwcRdv0667sEcCw09x3JhZOxuSUQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
- by PH0PR11MB5660.namprd11.prod.outlook.com (2603:10b6:510:d5::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.15; Thu, 15 Sep
- 2022 16:58:39 +0000
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::1967:b7cd:c851:cb91]) by SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::1967:b7cd:c851:cb91%3]) with mapi id 15.20.5612.022; Thu, 15 Sep 2022
- 16:58:39 +0000
-Date:   Thu, 15 Sep 2022 09:58:33 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Tony Nguyen <anthony.l.nguyen@intel.com>
-CC:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        "John Fastabend" <john.fastabend@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        <intel-wired-lan@lists.osuosl.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-hwmon@vger.kernel.org>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        Gurucharan <gurucharanx.g@intel.com>
-Subject: Re: [RESEND PATCH] ixgbe: Don't call kmap() on page allocated with
- GFP_ATOMIC
-Message-ID: <YyNZuTlShCviTKXi@iweiny-desk3>
-References: <20220915124012.28811-1-fmdefrancesco@gmail.com>
- <96855b74-5b77-4426-891b-d638ead17cd6@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <96855b74-5b77-4426-891b-d638ead17cd6@intel.com>
-X-ClientProxiedBy: BY3PR10CA0012.namprd10.prod.outlook.com
- (2603:10b6:a03:255::17) To SA1PR11MB6733.namprd11.prod.outlook.com
- (2603:10b6:806:25c::17)
+        with ESMTP id S229473AbiIOXXO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 15 Sep 2022 19:23:14 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB4D7CA8F;
+        Thu, 15 Sep 2022 16:23:13 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id i15so15421548qvp.5;
+        Thu, 15 Sep 2022 16:23:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=1QrCyzzwTfUJwLj3S6cxRWluHW2svGs+HhM9SBpAePE=;
+        b=KqmVkpIAbDwHrCcz/+17YNfdK8pPZ2kpbOanusQsqLSovcj0Sj0cx1YpV52/VoL+Th
+         aUqd4zDweolb8nIucDWd37S2o4VfPYkC+1bmzUlxNphQ2a3nV9Ak26blluBbRIkNgANR
+         bANHNgt1/rg0CMKPve7qmIZE+PhrMa2jBri+JYHpA0QOd1eF4HQDrsz2OEpDFpjbBcPU
+         LcTrjy2BU7VqVIbrXuSh/GdRD85LFpOMe8GfzjkEWAToZt6fg3sqWZixsgha7DI/7tUK
+         2A68HaTkKT5+tbGzFXc5B+E1yBmCcsjNMGN3etvqVYFLHiu7H95oG5VkPgT2PzOwfhzZ
+         yFBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=1QrCyzzwTfUJwLj3S6cxRWluHW2svGs+HhM9SBpAePE=;
+        b=c8h0KGrYCjSTcYkV+C9N+5QPwNj9WMEZrK+I7QUrvE5fuFcLphg41C4JXTrhrhexfZ
+         BGJEtWN53TfeGFADBMGzcTepsySTCMdo8+OCAhUqBwiZX+ogJgYuMxUGz87eE2ggffqv
+         wsLK/Jj7TvzAbAQt5lOyD8x+Tme9jZKkE+YxDYOs5kG7etelruO9d9vsEHYjGUTfE7tC
+         7R9gMPNxORNKX0bMmk2MnKLCi46SEf5/WELqYRUw9NSvteWXq2LhrPcZpVhTOHvuUQsr
+         u5N3j8OsVK+vbljbbnuHdfhVOjhnmz0e6BQaSTYaX9ArTWIMbWUVna+7t2MNWOlPaPJN
+         o+5w==
+X-Gm-Message-State: ACrzQf26lteT9OKUO9iYfTFmuZgbx2EnPUJFOT2CUN6pe2KBKingglc8
+        6nBP9Q+Y3+CWZ7vkjMJagbo=
+X-Google-Smtp-Source: AMsMyM6+1hmP35AruDorcXQm3QRKD7aRMMfVX2bqHBh0nOLbYPetC8uLp3aGwW71JA2eK/k/OnOrWg==
+X-Received: by 2002:ad4:5ba7:0:b0:4a9:33e4:2801 with SMTP id 7-20020ad45ba7000000b004a933e42801mr1824874qvq.87.1663284193003;
+        Thu, 15 Sep 2022 16:23:13 -0700 (PDT)
+Received: from localhost ([2600:1700:65a0:ab60:3158:855c:7b19:dc49])
+        by smtp.gmail.com with ESMTPSA id u12-20020a05620a454c00b006cc190f627bsm5175794qkp.63.2022.09.15.16.23.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Sep 2022 16:23:12 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 16:23:10 -0700
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+To:     Zhengchao Shao <shaozhengchao@huawei.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, jhs@mojatatu.com,
+        jiri@resnulli.us, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, weiyongjun1@huawei.com,
+        yuehaibing@huawei.com
+Subject: Re: [PATCH net-next,v3 1/9] net/sched: cls_api: add helper for tc
+ cls walker stats updating
+Message-ID: <YyOz3qLWTS3raNpe@pop-os.localdomain>
+References: <20220915063038.20010-1-shaozhengchao@huawei.com>
+ <20220915063038.20010-2-shaozhengchao@huawei.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|PH0PR11MB5660:EE_
-X-MS-Office365-Filtering-Correlation-Id: d1b3ba09-1594-41b1-d42b-08da973b896d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: U3DnVmFyW2Yq1UXVfkF4lTdN7DAQJeYDpXW1x7P+SceF0jTo8bPrxf4bxZcGdUrDZZyeR9gX7irmubXT9i03R93a/sO1I5tTSNBrK12HPhG+wYqz3nGgQ7bDULtkUwEqiMKf6n0otSi14V90geUFPHrTfXo7JzlTvccFnQLZlbHNcCqLv4REY+cWKTQVADNOduEmaZd76f1H2O23lcKQpYdtsQtH4g6Q1J6FLJe8ze2dtyn1cDxNxzxWbI9Yf5bQIy674GAwICGN1aRJejhVpZ4gSHB3TGy6ukV5jH0hoeJUWqEeJqx/oPx4UrL1lRcANvb/7l55wQxoL0JrhEkbcBnPk2tlaGmdC6mnsetDQMp3ASfHlcCunyZj9omQACEJDW08mg3RXoqM55KcOL4tfFCLrbQl042SBHnXtDX2Rjfw2vacRndxCiOik0OQwQ648vi/lTkwDJMcir1LbFNPgsNiO8ceXXP3ER0pRRItkhUNR3i9kn6xA6Nxr6IobKA9jPABDHuny/WZKFERqZ2l7fGCsc6k4evpKUnWgcw+UstKKvoL2H9R0VFZ8Wm7Ae1+HOHZr+V+6RnA2T0sZrUSLQ2a2wGqOYcWwXPk7Gws6ssa/D7/Jhfu3KO+4kofswKND3pw+fpoWFPB/iLGbnveEm0KnuqPUsQOChnlmP4ldJamznBtIPHgQCmbSMkZhhFedyQ5gDfx9vcRKCuOeP9kHwmoQ0DJctaeso5T22lmi1k=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(366004)(396003)(136003)(346002)(376002)(39860400002)(451199015)(8676002)(316002)(38100700002)(82960400001)(54906003)(5660300002)(44832011)(86362001)(4326008)(7416002)(66946007)(66556008)(66476007)(8936002)(6862004)(2906002)(41300700001)(33716001)(186003)(966005)(9686003)(478600001)(6506007)(53546011)(26005)(6512007)(107886003)(6486002)(6666004)(6636002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1TGIQPOBLBQ5EO3gwJ1j9NcRI6T6yBUTwtZG53MU20QDOFLxENwF2uRZk0TI?=
- =?us-ascii?Q?AB2P3AlHHoUEBeAz8yZumSGwi8YzQqVCbyPrzoFtbiKEMEPBchS/m1xaJY+A?=
- =?us-ascii?Q?oi4jX3p1kNDDaOcMPcW5oRL9G6p6FnkmQV/B1Zp6zpiycg69+XqI4n9eYJI+?=
- =?us-ascii?Q?QcWuqo/+vjXDkU9Lb5gNGfamzbfLXBTvN+zmVzJQrSiU2h0TDmOkv6DRiAOO?=
- =?us-ascii?Q?ta3adXgadZzaTQUhFx8Ifp3GXtSZhaYizD5RYcOtQjiu5PJ4l8+1WMHSDvK9?=
- =?us-ascii?Q?6nxi/RFMflsDvPus5UQ8erYtQZaETN1m8Ye2v2iI/z2+Bg6BLuE9YaBddMQD?=
- =?us-ascii?Q?8yYS/EaX74OBIrEZQmkjSraB4oH7KKA9I129vyFcQ6GD6NvO+etdjiFKdFir?=
- =?us-ascii?Q?j7B3MqqJ+FMT1gbMYtSd+D6740gNgbpL/8vLEKGD+5hhXF7HxeXR+8hmmz6V?=
- =?us-ascii?Q?mSePJ1/6JZ8iAaRkHIAtyHF7kFN4tNrvgnlh9YXmhOeRu00vFvtSJMtyxjkP?=
- =?us-ascii?Q?QBA5Aar7k1DkQVAIhIZ5xzWnB7/bFSzhBrH7QXiD3Un0ZmFol1loXCcZDI4V?=
- =?us-ascii?Q?oHXVt9YxeFy9LT4k67GzWVnH9IhpsCVZsUNOWajSWZAnQcnQ1yOH4qDiI4+n?=
- =?us-ascii?Q?B5OkROV7f7gokEVqBgeQUfwTAva5rPsLBhvG8MNEFQFu2Tww+woellxQvde/?=
- =?us-ascii?Q?4oFf1D7J2bzR9dlAGf6zndaCIYcTgSUD+MQciUBzFZ4qcGN5ZuI0BHWvaHim?=
- =?us-ascii?Q?MGReMrZ2f5DPQNQ0TSkJ9YqZZ6kgK4f88h/W/76FAvUEo1wi/aVuwzWvbd8J?=
- =?us-ascii?Q?hcL6OcE4Da3+ornvzWm19R5G2ZhOngIhEBjkMDe7lmENc0K8QCQKWylOTZHk?=
- =?us-ascii?Q?geOH6EaKiQ8S04ouAE3EXWOhxOgeKUmIhsPS8sq7DEYq34+yg7ovrYxd1Y6G?=
- =?us-ascii?Q?+JSMwMtugMY6t7W8vBARNl24UCDzfyAhXgTnrcIK0Nrn6TaIVzfCqJUYlZHw?=
- =?us-ascii?Q?K69mdxnqoKugVAr41op34VA1BIMYgefVrFh3lZh5zOweWOU9qqFdv+yx1mN6?=
- =?us-ascii?Q?2HXY2xZECyX7EPBLuFtJojAgnYrgsIFZaZp8S6ERsuIYiCNM0jiBsm0AxbNU?=
- =?us-ascii?Q?7F3Cj8DXLfKAGb1U1uwEwKELBihZmWEfy8QagR5RSfRff++xBh95Zq/HQ/R8?=
- =?us-ascii?Q?WwqcOA7bYnuzheT/iIz2Bp9me4D99XEPkZ3t12iBJZpXILrn9VDR4usHhE4Z?=
- =?us-ascii?Q?stB/qAzRdk+lneikg8RZKKV03S1SCgm7ulrps+DzXlZ+f1mU1edX2wOZ8H0i?=
- =?us-ascii?Q?f8ahvT8ayrmvzrhL5XO/3Nd4TR544pQA4+GIz4tF99kNxvCZs/J773D8Xcwp?=
- =?us-ascii?Q?mGayLLlv0+S5+XGRBZfOU2LT9BBEruvIeZVCo2v9W4/pXfVC4v8Co9j9NRed?=
- =?us-ascii?Q?dBxXSnGgb08lnRk7TzQ2WaxWiijnfLQHr2Xe1a9kH1I/lICQKQDJty9YFpV+?=
- =?us-ascii?Q?kCv7N0tXK+vkIxCaVeMXe5h7yYE6KPeVybYr2hov5RkVii2GCTNnHqtCBTlw?=
- =?us-ascii?Q?HNaH5m567hQtiDWeZPLUS0ySrosW9ur71hMsztbu?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: d1b3ba09-1594-41b1-d42b-08da973b896d
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2022 16:58:39.2449
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nNZc3Bi8Z3WkZdIqmXtYM3P3h4QmMDAStXKdUvFNzELmvSz1cYZesTK5OD9ltwOPMPKG1lS+aNfn36oXCZcreQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5660
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220915063038.20010-2-shaozhengchao@huawei.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 09:30:50AM -0700, Tony Nguyen wrote:
+On Thu, Sep 15, 2022 at 02:30:30PM +0800, Zhengchao Shao wrote:
+> The walk implementation of most tc cls modules is basically the same.
+> That is, the values of count and skip are checked first. If count is
+> greater than or equal to skip, the registered fn function is executed.
+> Otherwise, increase the value of count. So we can reconstruct them.
 > 
+> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+> Reviewed-by: Jamal Hadi Salim <jhs@mojatatu.com>
+> ---
+>  include/net/pkt_cls.h | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
 > 
-> On 9/15/2022 5:40 AM, Fabio M. De Francesco wrote:
-> > Pages allocated with GFP_ATOMIC cannot come from Highmem. This is why
-> > there is no need to call kmap() on them.
-> > 
-> > Therefore, don't call kmap() on rx_buffer->page() and instead use a
-> > plain page_address() to get the kernel address.
-> > 
-> > Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> > Suggested-by: Alexander Duyck <alexander.duyck@gmail.com>
-> > Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-> > Reviewed-by: Alexander Duyck <alexander.duyck@gmail.com>
-> > Tested-by: Gurucharan <gurucharanx.g@intel.com>
-> > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> > ---
-> > 
-> > I send again this patch because it was submitted more than two months ago,
-> > Monday 4th July 2022, but for one or more (good?) reasons it has not yet
-> > reached Linus' tree. In the meantime I am also forwarding two "Reviewed-by"
-> > and one "Tested-by" tags (thanks a lot to Ira, Alexander, Gurucharan).
-> > Obviously I have not made any changes to the code.
-> 
-> Hi Fabio,
-> 
-> This is accepted into net-next already[1] and will land in the next kernel.
+> diff --git a/include/net/pkt_cls.h b/include/net/pkt_cls.h
+> index d9d90e6925e1..d3cbbabf7592 100644
+> --- a/include/net/pkt_cls.h
+> +++ b/include/net/pkt_cls.h
+> @@ -81,6 +81,19 @@ int tcf_classify(struct sk_buff *skb,
+>  		 const struct tcf_proto *tp, struct tcf_result *res,
+>  		 bool compat_mode);
+>  
+> +static inline bool tc_cls_stats_update(struct tcf_proto *tp,
 
-Thanks, sorry just saw this after sending my last.  :-/  :-D
+This function name is confusing, I don't think it updates anything,
+probably we only dump stats when calling ->walk(). Please use a better
+name here, like tc_cls_stats_dump().
 
-Ira
-
-> 
-> Thanks,
-> Tony
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/?id=03f51719df032637250af828f9a1ffcc5695982d
+Thanks.
