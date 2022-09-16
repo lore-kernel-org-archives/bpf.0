@@ -2,303 +2,132 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F260AC6FA92
-	for <bpf@archiver.kernel.org>; Fri, 16 Sep 2022 02:01:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E36FAC6FA86
+	for <bpf@archiver.kernel.org>; Fri, 16 Sep 2022 03:04:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbiIPCBf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 15 Sep 2022 22:01:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55758 "EHLO
+        id S229998AbiIPDEj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 15 Sep 2022 23:04:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbiIPCB0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 15 Sep 2022 22:01:26 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032FC80373;
-        Thu, 15 Sep 2022 19:01:16 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MTHJB718FzlVj6;
-        Fri, 16 Sep 2022 09:57:14 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
- (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 16 Sep
- 2022 10:01:14 +0800
-From:   Zhengchao Shao <shaozhengchao@huawei.com>
-To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <jhs@mojatatu.com>,
-        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <shuah@kernel.org>, <victor@mojatatu.com>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>, <weiyongjun1@huawei.com>,
-        <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH net-next,v4 8/9] selftests/tc-testings: add selftests for tcindex filter
-Date:   Fri, 16 Sep 2022 10:02:50 +0800
-Message-ID: <20220916020251.190097-9-shaozhengchao@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220916020251.190097-1-shaozhengchao@huawei.com>
-References: <20220916020251.190097-1-shaozhengchao@huawei.com>
+        with ESMTP id S229833AbiIPDER (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 15 Sep 2022 23:04:17 -0400
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C58A98D21
+        for <bpf@vger.kernel.org>; Thu, 15 Sep 2022 20:04:09 -0700 (PDT)
+Received: by mail-il1-x141.google.com with SMTP id v15so10710932iln.6
+        for <bpf@vger.kernel.org>; Thu, 15 Sep 2022 20:04:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=9e3bR4VUntRfLU7LBMqE2BGvJJCtXZnkVdPNUSg9f/8=;
+        b=oTNAPmSsihwRulZEQJT1gYxb6/oF3iYZK8sPnQGMhGeflp3Mihfyh2z/HpQLFy/JXE
+         BP5/KMGFFq4soR3QO1DEmv3mmr1Wh2fOd41/mJserT+quaiaBVyZtHtXoozq1wFHkdln
+         iFXgCbtpxzbMZo3wS3DzOK+mHL/TQsYO/yWviRUcDKtgmLdaacSrV8eZ61xT6PLFKctj
+         joc9mETJhNz5mgiBvEKi4hxGLUzcDjUn6OXEe6MULwePsPEXfpaXAYMhHWoKsBXx3eR0
+         hbuyYmjlx6asBY+bJJELzOYJraPFPFiN/XETNeLbsiUoM+1JcIq6edlVAI9vv0nEnWHr
+         TY+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=9e3bR4VUntRfLU7LBMqE2BGvJJCtXZnkVdPNUSg9f/8=;
+        b=OL0/NFgfaf91aDKCOZudutP88IUsP4n6QzlAsppaPoKKNOUwgKbdW/AlGdO369jyCm
+         Ac2+ukk+LA/CtQYuHYDfsuQkDgi4+OLT0jQtMHj3RdFaSW7hZ3zQUk/H+ZcbO+T6VNYj
+         LMLkA6iJ5PwY1aUihhKxONfzL3TR0kPCwKoa0UID5M2kjZodI5walpCOBcLnxxAuG3ei
+         Af7sbNTU2QGE+qNIXBd8iQHSlvnGuJ9qCzaeFp8HD5jKnE/fXvSxQDcrBvI+0PyL1UTj
+         9zX9hnzJsezHjzhT3mpRIseJFt+AjMmqexf3i2rRJC1YVKkLzMhFxynB9VYuHbxorJ/0
+         5XRQ==
+X-Gm-Message-State: ACrzQf2wd83nEbOK9p+U8G8/sYV/1zRcqD07M4nRiQOk7PNA9F5HjQhR
+        Y3XSbfXvK8+ZAN29AAIuqPZtl6euUTt/XuC2VQ0=
+X-Google-Smtp-Source: AMsMyM4PZSQnpojFBaoGcs2jrUA8nibgND9SjzrWruaCKYljyzhi+93u7roGaKwZ57rAruKOXoNjTA65lk2N1tTDztc=
+X-Received: by 2002:a92:d5cd:0:b0:2f4:9660:1ba9 with SMTP id
+ d13-20020a92d5cd000000b002f496601ba9mr1378617ilq.91.1663297448091; Thu, 15
+ Sep 2022 20:04:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
+References: <a6c0bb85-6eeb-407e-a515-06f67e70db57@www.fastmail.com>
+In-Reply-To: <a6c0bb85-6eeb-407e-a515-06f67e70db57@www.fastmail.com>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Fri, 16 Sep 2022 05:03:32 +0200
+Message-ID: <CAP01T76fv-qpBsEp8CJbg6FzcbKAWPRq+cDoNCWhcaTJvuNyxg@mail.gmail.com>
+Subject: Re: Closing the BPF map permission loophole
+To:     Lorenz Bauer <oss@lmb.io>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>, bpf@vger.kernel.org,
+        luto@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Test 8293: Add tcindex filter with default action
-Test 7281: Add tcindex filter with hash size and pass action
-Test b294: Add tcindex filter with mask shift and reclassify action
-Test 0532: Add tcindex filter with pass_on and continue actions
-Test d473: Add tcindex filter with pipe action
-Test 2940: Add tcindex filter with miltiple actions
-Test 1893: List tcindex filters
-Test 2041: Change tcindex filter with pass action
-Test 9203: Replace tcindex filter with pass action
-Test 7957: Delete tcindex filter with drop action
+On Thu, 15 Sept 2022 at 12:41, Lorenz Bauer <oss@lmb.io> wrote:
+>
+> Hi list,
+>
+> Here is a summary of the talk I gave at LPC '22 titled "Closing the BPF map permission loophole", with slides at [0].
+>
+> Problem #1: Read-only fds can be modified via a BPF program
+>
+> 1. Craft a BPF program that executes bpf_map_update_elem(read-only fd, ...)
+> 2. Load the program & execute it
+>
+> The reason is that the verifier only checks bpf_map->map_flags in resolve_pseudo_ldimm64, but ignores fd->f_mode.
+>
+> Fixing this problem is complicated by the fact that a user may use several distinct fds with differing permissions to refer to the same map, but that the verifier internally only tracks unique struct bpf_map. See [1].
+>
+> Problem #2: Read-only fds can be "transmuted" into read-write fds via map in map
+>
+> 1. BPF_MAP_UPDATE_ELEM(map in map fd, read-only fd)
+> 2. BPF_MAP_LOOKUP_ELEM(map in map fd) = read-write fd
+>
+> This was pointed out by Stanislav Fomichev during the LPC session. I've not yet tried this myself.
+>
+> Problem #3: Read-only fds can be transmuted into read-write fds via object pinning
+>
+> 1. BPF_OBJ_PIN(read-only fd, /sys/fs/bpf/foo)
+> 2. BPF_OBJ_GET(/sys/fs/bpf/foo) = read-write fd
+>
 
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
-Reviewed-by: Jamal Hadi Salim <jhs@mojatatu.com>
----
- .../tc-testing/tc-tests/filters/tcindex.json  | 227 ++++++++++++++++++
- 1 file changed, 227 insertions(+)
- create mode 100644 tools/testing/selftests/tc-testing/tc-tests/filters/tcindex.json
+Just for completeness, this was also pointed out by Andy back in 2019:
+https://lore.kernel.org/bpf/CALCETrVtPs8gY-H4gmzSqPboid3CB++n50SvYd6RU9YVde_-Ow@mail.gmail.com
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/tcindex.json b/tools/testing/selftests/tc-testing/tc-tests/filters/tcindex.json
-new file mode 100644
-index 000000000000..44901db70376
---- /dev/null
-+++ b/tools/testing/selftests/tc-testing/tc-tests/filters/tcindex.json
-@@ -0,0 +1,227 @@
-+[
-+    {
-+        "id": "8293",
-+        "name": "Add tcindex filter with default action",
-+        "category": [
-+            "filter",
-+            "tcindex"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress"
-+        ],
-+        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 1 tcindex classid 1:1",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 prio 1 protocol ip tcindex",
-+        "matchPattern": "^filter parent ffff: protocol ip pref 1 tcindex chain 0 handle 0x0001 classid 1:1",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    },
-+    {
-+        "id": "7281",
-+        "name": "Add tcindex filter with hash size and pass action",
-+        "category": [
-+            "filter",
-+            "tcindex"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress"
-+        ],
-+        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 1 tcindex hash 32 fall_through classid 1:1 action pass",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 prio 1 protocol ip tcindex",
-+        "matchPattern": "^filter parent ffff: protocol ip pref.*tcindex chain [0-9]+ handle 0x0001 classid 1:1.*action order [0-9]+: gact action pass",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    },
-+    {
-+        "id": "b294",
-+        "name": "Add tcindex filter with mask shift and reclassify action",
-+        "category": [
-+            "filter",
-+            "tcindex"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress"
-+        ],
-+        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 1 tcindex hash 32 mask 1 shift 2 fall_through classid 1:1 action reclassify",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 prio 1 protocol ip tcindex",
-+        "matchPattern": "^filter parent ffff: protocol ip pref.*tcindex chain [0-9]+ handle 0x0001 classid 1:1.*action order [0-9]+: gact action reclassify",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    },
-+    {
-+        "id": "0532",
-+        "name": "Add tcindex filter with pass_on and continue actions",
-+        "category": [
-+            "filter",
-+            "tcindex"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress"
-+        ],
-+        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 1 tcindex hash 32 mask 1 shift 2 pass_on classid 1:1 action continue",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 prio 1 protocol ip tcindex",
-+        "matchPattern": "^filter parent ffff: protocol ip pref.*tcindex chain [0-9]+ handle 0x0001 classid 1:1.*action order [0-9]+: gact action continue",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    },
-+    {
-+        "id": "d473",
-+        "name": "Add tcindex filter with pipe action",
-+        "category": [
-+            "filter",
-+            "tcindex"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress"
-+        ],
-+        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 1 tcindex hash 32 mask 1 shift 2 fall_through classid 1:1 action pipe",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 prio 1 protocol ip tcindex",
-+        "matchPattern": "^filter parent ffff: protocol ip pref.*tcindex chain [0-9]+ handle 0x0001 classid 1:1.*action order [0-9]+: gact action pipe",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    },
-+    {
-+        "id": "2940",
-+        "name": "Add tcindex filter with miltiple actions",
-+        "category": [
-+            "filter",
-+            "tcindex"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress"
-+        ],
-+        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 7 tcindex hash 32 mask 1 shift 2 fall_through classid 1:1 action skbedit mark 7 pipe action gact drop",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 prio 7 protocol ip tcindex",
-+        "matchPattern": "^filter parent ffff: protocol ip pref 7 tcindex.*handle 0x0001.*action.*skbedit.*mark 7 pipe.*action.*gact action drop",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    },
-+    {
-+        "id": "1893",
-+        "name": "List tcindex filters",
-+        "category": [
-+            "filter",
-+            "tcindex"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress",
-+            "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 1 tcindex classid 1:1",
-+            "$TC filter add dev $DEV1 parent ffff: handle 2 protocol ip prio 1 tcindex classid 1:1"
-+        ],
-+        "cmdUnderTest": "$TC filter show dev $DEV1 parent ffff:",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC filter show dev $DEV1 parent ffff:",
-+        "matchPattern": "handle 0x000[0-9]+ classid 1:1",
-+        "matchCount": "2",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    },
-+    {
-+        "id": "2041",
-+        "name": "Change tcindex filter with pass action",
-+        "category": [
-+            "filter",
-+            "tcindex"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress",
-+            "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 1 tcindex classid 1:1 action drop"
-+        ],
-+        "cmdUnderTest": "$TC filter change dev $DEV1 parent ffff: handle 1 protocol ip prio 1 tcindex classid 1:1 action pass",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 prio 1 protocol ip tcindex",
-+        "matchPattern": "handle 0x0001 classid 1:1.*action order [0-9]+: gact action pass",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    },
-+    {
-+        "id": "9203",
-+        "name": "Replace tcindex filter with pass action",
-+        "category": [
-+            "filter",
-+            "tcindex"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress",
-+            "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 1 tcindex classid 1:1 action drop"
-+        ],
-+        "cmdUnderTest": "$TC filter replace dev $DEV1 parent ffff: handle 1 protocol ip prio 1 tcindex classid 1:1 action pass",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 prio 1 protocol ip tcindex",
-+        "matchPattern": "handle 0x0001 classid 1:1.*action order [0-9]+: gact action pass",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    },
-+    {
-+        "id": "7957",
-+        "name": "Delete tcindex filter with drop action",
-+        "category": [
-+            "filter",
-+            "tcindex"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress",
-+            "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 1 tcindex classid 1:1 action drop"
-+        ],
-+        "cmdUnderTest": "$TC filter del dev $DEV1 parent ffff: handle 1 protocol ip prio 1 tcindex classid 1:1 action drop",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 prio 1 protocol ip tcindex",
-+        "matchPattern": "handle 0x0001 classid 1:1.*action order [0-9]+: gact action drop",
-+        "matchCount": "0",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    }
-+]
--- 
-2.17.1
-
+> The problem is with BPF_OBJ_PIN semantics: regardless of fd->f_mode, pinning creates an inode that is owned by the current user, with mode o=rw. Even if we made the inode o=r, a user / attacker can still use chmod(2) to change it back to o=rw.
+>
+> On older kernels, this requires either unprivileged BPF or CAP_BPF, but recently BPF_OBJ_PIN has been made available without CAP_BPF.
+>
+> This problem also applies to other BPF objects: links, programs, maybe iterators? Since we don't have BPF_F_RDONLY semantics for those the issue is maybe less urgent, but see [2] for some more fun.
+>
+> A number of ideas were explored during the session:
+>
+> * In OBJ_PIN, create the inode owned by the user that executed MAP_CREATE, not the user that
+>   invoked OBJ_PIN. This would allow unprivileged users to create files as another user, which
+>   seems like a bad idea.
+> * In OBJ_GET, refuse a read-write fd if the fd passed to OBJ_PIN wasn't read-write. This is not
+>   possible since we store struct bpf_map * in the inode, so we don't have access to fd->f_mode
+>   anymore.
+> * In OBJ_PIN, adjust the mode of the created inode to match fd->f_mode, and later refuse attempts
+>   to chmod(2). After a cursory glance at the source code it seems like there are no hooks for
+>   filesystems to influence chmod.
+>
+> My gut feeling is that the root of the problem is that OBJ_PIN is too permissive. Once an inode exists that is owned by the current user the cat is out of the box.
+>
+> BPF_F_RDONLY and BPF_F_WRONLY were introduced in 4.15 [3]. If we want to fix this properly, aka relying on BPF_R_RDONLY doesn't introduce a gaping hole, we'll have to do quite a bit of backporting.
+>
+> I plan on submitting a sledgehammer approach fix for #1 and #2 as discussed with Daniel after my presentation.
+>
+> #3 is in sore need of further discussion and creativity. One avenue I want to explore is whether we can refuse OBJ_PIN if:
+> - the current user is not the map creator
+> - and the fd is not r/w
+> - and the current user has no CAP_DAC_OVERRIDE (or similar)
+>
+> Thanks
+> Lorenz
+>
+> 0: https://lpc.events/event/16/contributions/1372/attachments/977/2059/Plumbers%2022%20Closing%20the%20BPF%20map%20permission%20loophole.pdf
+> 1: https://elixir.bootlin.com/linux/v6.0-rc5/source/kernel/bpf/verifier.c#L12839
+> 2: https://lore.kernel.org/bpf/20210618105526.265003-1-zenczykowski@gmail.com/
+> 3: https://github.com/torvalds/linux/commit/6e71b04a8224
