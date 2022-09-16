@@ -2,25 +2,25 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EAFC1C32771
-	for <bpf@archiver.kernel.org>; Fri, 16 Sep 2022 02:01:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DEF0C6FA92
+	for <bpf@archiver.kernel.org>; Fri, 16 Sep 2022 02:01:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbiIPCB2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 15 Sep 2022 22:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55562 "EHLO
+        id S229953AbiIPCBa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 15 Sep 2022 22:01:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiIPCBV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 15 Sep 2022 22:01:21 -0400
+        with ESMTP id S229863AbiIPCBX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 15 Sep 2022 22:01:23 -0400
 Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326D33134B;
-        Thu, 15 Sep 2022 19:01:12 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MTHLK6GX9zBsPf;
-        Fri, 16 Sep 2022 09:59:05 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF36326C2;
+        Thu, 15 Sep 2022 19:01:14 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MTHLP0m6DzBsPd;
+        Fri, 16 Sep 2022 09:59:09 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
  (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 16 Sep
- 2022 10:01:08 +0800
+ 2022 10:01:12 +0800
 From:   Zhengchao Shao <shaozhengchao@huawei.com>
 To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
         <linux-kselftest@vger.kernel.org>, <jhs@mojatatu.com>,
@@ -32,9 +32,9 @@ CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
         <haoluo@google.com>, <jolsa@kernel.org>, <weiyongjun1@huawei.com>,
         <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH net-next,v4 3/9] selftests/tc-testings: add selftests for bpf filter
-Date:   Fri, 16 Sep 2022 10:02:45 +0800
-Message-ID: <20220916020251.190097-4-shaozhengchao@huawei.com>
+Subject: [PATCH net-next,v4 6/9] selftests/tc-testings: add selftests for route filter
+Date:   Fri, 16 Sep 2022 10:02:48 +0800
+Message-ID: <20220916020251.190097-7-shaozhengchao@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220916020251.190097-1-shaozhengchao@huawei.com>
 References: <20220916020251.190097-1-shaozhengchao@huawei.com>
@@ -48,34 +48,35 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Test 23c3: Add cBPF filter with valid bytecode
-Test 1563: Add cBPF filter with invalid bytecode
-Test 2334: Add eBPF filter with valid object-file
-Test 2373: Add eBPF filter with invalid object-file
-Test 4423: Replace cBPF bytecode
-Test 5122: Delete cBPF filter
-Test e0a9: List cBPF filters
+Test e122: Add route filter with from and to tag
+Test 6573: Add route filter with fromif and to tag
+Test 1362: Add route filter with to flag and reclassify action
+Test 4720: Add route filter with from flag and continue actions
+Test 2812: Add route filter with form tag and pipe action
+Test 7994: Add route filter with miltiple actions
+Test 4312: List route filters
+Test 2634: Delete route filter with pipe action
 
 Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 Reviewed-by: Jamal Hadi Salim <jhs@mojatatu.com>
 ---
- .../tc-testing/tc-tests/filters/bpf.json      | 171 ++++++++++++++++++
- 1 file changed, 171 insertions(+)
- create mode 100644 tools/testing/selftests/tc-testing/tc-tests/filters/bpf.json
+ .../tc-testing/tc-tests/filters/route.json    | 181 ++++++++++++++++++
+ 1 file changed, 181 insertions(+)
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/filters/route.json
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/bpf.json b/tools/testing/selftests/tc-testing/tc-tests/filters/bpf.json
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/route.json b/tools/testing/selftests/tc-testing/tc-tests/filters/route.json
 new file mode 100644
-index 000000000000..1f0cae474db2
+index 000000000000..1f6f19f02997
 --- /dev/null
-+++ b/tools/testing/selftests/tc-testing/tc-tests/filters/bpf.json
-@@ -0,0 +1,171 @@
++++ b/tools/testing/selftests/tc-testing/tc-tests/filters/route.json
+@@ -0,0 +1,181 @@
 +[
 +    {
-+        "id": "23c3",
-+        "name": "Add cBPF filter with valid bytecode",
++        "id": "e122",
++        "name": "Add route filter with from and to tag",
 +        "category": [
 +            "filter",
-+            "bpf-filter"
++            "route"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -83,21 +84,21 @@ index 000000000000..1f0cae474db2
 +        "setup": [
 +            "$TC qdisc add dev $DEV1 ingress"
 +        ],
-+        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf bytecode '4,40 0 0 12,21 0 1 2048,6 0 0 262144,6 0 0 0'",
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: protocol ip prio 100 route from 1 to 10 classid 1:10",
 +        "expExitCode": "0",
-+        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf",
-+        "matchPattern": "filter parent ffff: protocol ip pref 100 bpf chain [0-9]+ handle 0x1.*bytecode '4,40 0 0 12,21 0 1 2048,6 0 0 262144,6 0 0 0'",
++        "verifyCmd": "$TC filter ls dev $DEV1 parent ffff:",
++        "matchPattern": "flowid 1:10 to 10 from 1",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DEV1 ingress"
 +        ]
 +    },
 +    {
-+        "id": "1563",
-+        "name": "Add cBPF filter with invalid bytecode",
++        "id": "6573",
++        "name": "Add route filter with fromif and to tag",
 +        "category": [
 +            "filter",
-+            "bpf-filter"
++            "route"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -105,136 +106,146 @@ index 000000000000..1f0cae474db2
 +        "setup": [
 +            "$TC qdisc add dev $DEV1 ingress"
 +        ],
-+        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf bytecode '4,40 0 0 12,31 0 1 2048,6 0 0 262144,6 0 0 0'",
-+        "expExitCode": "2",
-+        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf",
-+        "matchPattern": "filter parent ffff: protocol ip pref 100 bpf chain [0-9]+ handle 0x1.*bytecode '4,40 0 0 12,21 0 1 2048,6 0 0 262144,6 0 0 0'",
-+        "matchCount": "0",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    },
-+    {
-+        "id": "2334",
-+        "name": "Add eBPF filter with valid object-file",
-+        "category": [
-+            "filter",
-+            "bpf-filter"
-+        ],
-+        "plugins": {
-+            "requires": "buildebpfPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress"
-+        ],
-+        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf object-file $EBPFDIR/action.o section action-ok",
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: protocol ip prio 100 route fromif $DEV1 to 10 classid 1:10",
 +        "expExitCode": "0",
-+        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf",
-+        "matchPattern": "filter parent ffff: protocol ip pref 100 bpf chain [0-9]+ handle 0x1 action.o:\\[action-ok\\].*tag [0-9a-f]{16}( jited)?",
++        "verifyCmd": "$TC filter ls dev $DEV1 parent ffff:",
++        "matchPattern": "flowid 1:10 to 10 fromif",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DEV1 ingress"
 +        ]
 +    },
 +    {
-+        "id": "2373",
-+        "name": "Add eBPF filter with invalid object-file",
++        "id": "1362",
++        "name": "Add route filter with to flag and reclassify action",
 +        "category": [
 +            "filter",
-+            "bpf-filter"
-+        ],
-+        "plugins": {
-+            "requires": "buildebpfPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress"
-+        ],
-+        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf object-file $EBPFDIR/action.o section action-ko",
-+        "expExitCode": "1",
-+        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf",
-+        "matchPattern": "filter parent ffff: protocol ip pref 100 bpf chain [0-9]+ handle 0x1 action.o:\\[action-ko\\].*tag [0-9a-f]{16}( jited)?",
-+        "matchCount": "0",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    },
-+    {
-+        "id": "4423",
-+        "name": "Replace cBPF bytecode",
-+        "category": [
-+            "filter",
-+            "bpf-filter"
++            "route"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
 +        },
 +        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress",
-+            [
-+                "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf bytecode '4,40 0 0 12,21 0 1 2048,6 0 0 262144,6 0 0 0'",
-+                0,
-+                1,
-+                255
-+            ]
++            "$TC qdisc add dev $DEV1 ingress"
 +        ],
-+        "cmdUnderTest": "$TC filter replace dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf bytecode '4,40 0 0 12,21 0 1 2054,6 0 0 262144,6 0 0 0'",
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: protocol ip prio 2 route to 10 classid 1:20 action reclassify",
 +        "expExitCode": "0",
-+        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf",
-+        "matchPattern": "filter parent ffff: protocol ip pref 100 bpf chain [0-9]+ handle 0x1.*bytecode '4,40 0 0 12,21 0 1 2054,6 0 0 262144,6 0 0 0'",
++        "verifyCmd": "$TC filter ls dev $DEV1 parent ffff:",
++        "matchPattern": "filter protocol ip pref.*route chain [0-9]+.*flowid 1:20 to 10.*action order [0-9]+: gact action reclassify",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DEV1 ingress"
 +        ]
 +    },
 +    {
-+        "id": "5122",
-+        "name": "Delete cBPF filter",
++        "id": "4720",
++        "name": "Add route filter with from flag and continue actions",
 +        "category": [
 +            "filter",
-+            "bpf-filter"
++            "route"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
 +        },
 +        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress",
-+            [
-+                "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf bytecode '4,40 0 0 12,21 0 1 2048,6 0 0 262144,6 0 0 0'",
-+                0,
-+                1,
-+                255
-+            ]
++            "$TC qdisc add dev $DEV1 ingress"
 +        ],
-+        "cmdUnderTest": "$TC filter del dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf",
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: protocol ip prio 2 route from 10 classid 1:100 action continue",
 +        "expExitCode": "0",
-+        "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf",
-+        "matchPattern": "filter parent ffff: protocol ip pref 100 bpf chain [0-9]+ handle 0x1.*bytecode '4,40 0 0 12,21 0 1 2048,6 0 0 262144,6 0 0 0'",
-+        "matchCount": "0",
++        "verifyCmd": "$TC filter ls dev $DEV1 parent ffff:",
++        "matchPattern": "filter protocol ip pref.*route chain [0-9]+.*flowid 1:100 from 10.*action continue",
++        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DEV1 ingress"
 +        ]
 +    },
 +    {
-+        "id": "e0a9",
-+        "name": "List cBPF filters",
++        "id": "2812",
++        "name": "Add route filter with form tag and pipe action",
 +        "category": [
 +            "filter",
-+            "bpf-filter"
++            "route"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: protocol ip prio 2 route from 10 to 2 classid 1:1 action pipe",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter ls dev $DEV1 parent ffff:",
++        "matchPattern": "filter protocol ip pref.*route chain [0-9]+.*flowid 1:1 to 2 from 10.*action pipe",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "7994",
++        "name": "Add route filter with miltiple actions",
++        "category": [
++            "filter",
++            "route"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: protocol ip prio 2 route from 10 to 2 classid 1:1 action skbedit mark 7 pipe action gact drop",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter ls dev $DEV1 parent ffff:",
++        "matchPattern": "filter protocol ip pref.*route chain [0-9]+.*flowid 1:1 to 2 from 10.*action order [0-9]+: skbedit  mark 7 pipe.*action order [0-9]+: gact action drop",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "4312",
++        "name": "List route filters",
++        "category": [
++            "filter",
++            "route"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
 +        },
 +        "setup": [
 +            "$TC qdisc add dev $DEV1 ingress",
-+            "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 100 bpf bytecode '4,40 0 0 12,21 0 1 2048,6 0 0 262144,6 0 0 0'",
-+            "$TC filter add dev $DEV1 parent ffff: handle 2 protocol ip prio 100 bpf bytecode '4,40 0 0 12,21 0 1 2054,6 0 0 262144,6 0 0 0'",
-+            "$TC filter add dev $DEV1 parent ffff: handle 100 protocol ip prio 100 bpf bytecode '4,40 0 0 12,21 0 1 33024,6 0 0 262144,6 0 0 0'"
++            "$TC filter add dev $DEV1 parent ffff: protocol ip prio 2 route from 10 to 2 classid 1:1 action pipe",
++            "$TC filter add dev $DEV1 parent ffff: protocol ip prio 2 route from 20 to 1 classid 1:20 action pipe"
 +        ],
 +        "cmdUnderTest": "$TC filter show dev $DEV1 parent ffff:",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC filter show dev $DEV1 parent ffff:",
-+        "matchPattern": "filter protocol ip pref 100 bpf chain [0-9]+ handle",
-+        "matchCount": "3",
++        "matchPattern": "action order [0-9]+: gact action pipe",
++        "matchCount": "2",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "2634",
++        "name": "Delete route filter with pipe action",
++        "category": [
++            "filter",
++            "route"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress",
++            "$TC filter add dev $DEV1 parent ffff: protocol ip prio 2 route from 10 to 2 classid 1:1 action pipe"
++        ],
++        "cmdUnderTest": "$TC filter del dev $DEV1 parent ffff: protocol ip prio 2 route from 10 to 2 classid 1:1 action pipe",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter show dev $DEV1 parent ffff:",
++        "matchPattern": "filter protocol ip pref.*route chain [0-9]+.*flowid 1:1 to 2 from 10.*action pipe",
++        "matchCount": "0",
 +        "teardown": [
 +            "$TC qdisc del dev $DEV1 ingress"
 +        ]
