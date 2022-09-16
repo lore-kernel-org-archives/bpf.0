@@ -2,76 +2,197 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98C25C32771
-	for <bpf@archiver.kernel.org>; Fri, 16 Sep 2022 03:24:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE140ECAAD8
+	for <bpf@archiver.kernel.org>; Fri, 16 Sep 2022 07:16:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229452AbiIPDYB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 15 Sep 2022 23:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
+        id S229601AbiIPHQg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 16 Sep 2022 03:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiIPDX7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 15 Sep 2022 23:23:59 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40DD8844CB;
-        Thu, 15 Sep 2022 20:23:58 -0700 (PDT)
-Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MTK9r3LjHzBsNY;
-        Fri, 16 Sep 2022 11:21:52 +0800 (CST)
-Received: from dggpeml500010.china.huawei.com (7.185.36.155) by
- dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
+        with ESMTP id S229808AbiIPHQa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 16 Sep 2022 03:16:30 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89397A4065;
+        Fri, 16 Sep 2022 00:16:27 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MTQHs2JYnz14QVj;
+        Fri, 16 Sep 2022 15:12:25 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.70) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 16 Sep 2022 11:23:56 +0800
-Received: from huawei.com (10.175.101.6) by dggpeml500010.china.huawei.com
- (7.185.36.155) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 16 Sep
- 2022 11:23:55 +0800
-From:   Xin Liu <liuxin350@huawei.com>
-To:     <haoluo@google.com>
-CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-        <daniel@iogearbox.net>, <john.fastabend@gmail.com>,
-        <jolsa@kernel.org>, <kongweibin2@huawei.com>, <kpsingh@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <liuxin350@huawei.com>,
-        <martin.lau@linux.dev>, <sdf@google.com>, <song@kernel.org>,
-        <wuchangye@huawei.com>, <xiesongyang@huawei.com>,
-        <yanan@huawei.com>, <yhs@fb.com>, <zhudi2@huawei.com>
-Subject: Re: [PATCH] libbpf: adjust OPTS_VALID logic, so that it can be used correctly
-Date:   Fri, 16 Sep 2022 11:22:47 +0800
-Message-ID: <20220916032247.27207-1-liuxin350@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <CA+khW7hS=c4PSo4coBmw+6VReWNhj+4Bnsr+r+mGsG4tCZ8KnQ@mail.gmail.com>
-References: <CA+khW7hS=c4PSo4coBmw+6VReWNhj+4Bnsr+r+mGsG4tCZ8KnQ@mail.gmail.com>
+ 15.1.2375.31; Fri, 16 Sep 2022 15:16:24 +0800
+From:   Wang Yufen <wangyufen@huawei.com>
+To:     <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <haoluo@google.com>, <jolsa@kernel.org>,
+        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <hawk@kernel.org>, <nathan@kernel.org>, <ndesaulniers@google.com>,
+        <trix@redhat.com>
+CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <llvm@lists.linux.dev>
+Subject: [bpf-next v2 1/2] libbpf: Add pathname_concat() helper
+Date:   Fri, 16 Sep 2022 15:36:59 +0800
+Message-ID: <1663313820-29918-1-git-send-email-wangyufen@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500010.china.huawei.com (7.185.36.155)
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.70]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500010.china.huawei.com (7.192.105.118)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 14 Sep 2022 at 6:15:39 PM Hao Luo <haoluo@google.com> wrote:
-> Hi Xin,
->
-> On Wed, Sep 14, 2022 at 5:35 AM Xin Liu <liuxin350@huawei.com> wrote:
-> >
-> > We found that function btf_dump__dump_type_data can be called by the user
-> > as an api, but in this function, the `opts` parameter may be used as a
-> > null pointer, because OPTS_VALID can't properly prevent opts used as null
-> > pointers during verification. Therefore, we fix this problem through this
-> > modification.
-> >
-> > This modification has no impact on other places where OPTS_VALID has been
-> > used.
->
-> I think this is a bug of btf_dump__dump_type_data(), not OPTS_VALID.
-> It seems allowing OPTS_VALID to accept NULL is the intended behavior.
->
-> >
-> [...]
-> >
+Move snprintf and len check to common helper pathname_concat() to make the
+code simpler.
 
-Thank you for your review.
-You are right, OPTS_GET should be used to get data from opts and determine if
-opts is NULL. Here I'll use OPTS_GET to fix the bug in the v2 version.
+Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+---
+ tools/lib/bpf/libbpf.c | 76 +++++++++++++++++++-------------------------------
+ 1 file changed, 29 insertions(+), 47 deletions(-)
+
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 3ad1392..7ab977c 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -2096,19 +2096,30 @@ static bool get_map_field_int(const char *map_name, const struct btf *btf,
+ 	return true;
+ }
+ 
++static int pathname_concat(const char *path, const char *name, char *buf)
++{
++	int len;
++
++	len = snprintf(buf, PATH_MAX, "%s/%s", path, name);
++	if (len < 0)
++		return -EINVAL;
++	if (len >= PATH_MAX)
++		return -ENAMETOOLONG;
++
++	return 0;
++}
++
+ static int build_map_pin_path(struct bpf_map *map, const char *path)
+ {
+ 	char buf[PATH_MAX];
+-	int len;
++	int err;
+ 
+ 	if (!path)
+ 		path = "/sys/fs/bpf";
+ 
+-	len = snprintf(buf, PATH_MAX, "%s/%s", path, bpf_map__name(map));
+-	if (len < 0)
+-		return -EINVAL;
+-	else if (len >= PATH_MAX)
+-		return -ENAMETOOLONG;
++	err = pathname_concat(path, bpf_map__name(map), buf);
++	if (err)
++		return err;
+ 
+ 	return bpf_map__set_pin_path(map, buf);
+ }
+@@ -7961,17 +7972,9 @@ int bpf_object__pin_maps(struct bpf_object *obj, const char *path)
+ 			continue;
+ 
+ 		if (path) {
+-			int len;
+-
+-			len = snprintf(buf, PATH_MAX, "%s/%s", path,
+-				       bpf_map__name(map));
+-			if (len < 0) {
+-				err = -EINVAL;
+-				goto err_unpin_maps;
+-			} else if (len >= PATH_MAX) {
+-				err = -ENAMETOOLONG;
++			err = pathname_concat(path, bpf_map__name(map), buf);
++			if (err)
+ 				goto err_unpin_maps;
+-			}
+ 			sanitize_pin_path(buf);
+ 			pin_path = buf;
+ 		} else if (!map->pin_path) {
+@@ -8009,14 +8012,9 @@ int bpf_object__unpin_maps(struct bpf_object *obj, const char *path)
+ 		char buf[PATH_MAX];
+ 
+ 		if (path) {
+-			int len;
+-
+-			len = snprintf(buf, PATH_MAX, "%s/%s", path,
+-				       bpf_map__name(map));
+-			if (len < 0)
+-				return libbpf_err(-EINVAL);
+-			else if (len >= PATH_MAX)
+-				return libbpf_err(-ENAMETOOLONG);
++			err = pathname_concat(path, bpf_map__name(map), buf);
++			if (err)
++				return err;
+ 			sanitize_pin_path(buf);
+ 			pin_path = buf;
+ 		} else if (!map->pin_path) {
+@@ -8034,6 +8032,7 @@ int bpf_object__unpin_maps(struct bpf_object *obj, const char *path)
+ int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
+ {
+ 	struct bpf_program *prog;
++	char buf[PATH_MAX];
+ 	int err;
+ 
+ 	if (!obj)
+@@ -8045,17 +8044,9 @@ int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
+ 	}
+ 
+ 	bpf_object__for_each_program(prog, obj) {
+-		char buf[PATH_MAX];
+-		int len;
+-
+-		len = snprintf(buf, PATH_MAX, "%s/%s", path, prog->name);
+-		if (len < 0) {
+-			err = -EINVAL;
+-			goto err_unpin_programs;
+-		} else if (len >= PATH_MAX) {
+-			err = -ENAMETOOLONG;
++		err = pathname_concat(path, prog->name, buf);
++		if (err)
+ 			goto err_unpin_programs;
+-		}
+ 
+ 		err = bpf_program__pin(prog, buf);
+ 		if (err)
+@@ -8066,13 +8057,7 @@ int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
+ 
+ err_unpin_programs:
+ 	while ((prog = bpf_object__prev_program(obj, prog))) {
+-		char buf[PATH_MAX];
+-		int len;
+-
+-		len = snprintf(buf, PATH_MAX, "%s/%s", path, prog->name);
+-		if (len < 0)
+-			continue;
+-		else if (len >= PATH_MAX)
++		if (pathname_concat(path, prog->name, buf))
+ 			continue;
+ 
+ 		bpf_program__unpin(prog, buf);
+@@ -8091,13 +8076,10 @@ int bpf_object__unpin_programs(struct bpf_object *obj, const char *path)
+ 
+ 	bpf_object__for_each_program(prog, obj) {
+ 		char buf[PATH_MAX];
+-		int len;
+ 
+-		len = snprintf(buf, PATH_MAX, "%s/%s", path, prog->name);
+-		if (len < 0)
+-			return libbpf_err(-EINVAL);
+-		else if (len >= PATH_MAX)
+-			return libbpf_err(-ENAMETOOLONG);
++		err = pathname_concat(path, prog->name, buf);
++		if (err)
++			return libbpf_err(err);
+ 
+ 		err = bpf_program__unpin(prog, buf);
+ 		if (err)
+-- 
+1.8.3.1
+
