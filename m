@@ -2,184 +2,220 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C4F8C54EE9
-	for <bpf@archiver.kernel.org>; Fri, 16 Sep 2022 07:16:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A5E8C54EE9
+	for <bpf@archiver.kernel.org>; Fri, 16 Sep 2022 07:19:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbiIPHQh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 16 Sep 2022 03:16:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40774 "EHLO
+        id S229628AbiIPHTX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 16 Sep 2022 03:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiIPHQa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 16 Sep 2022 03:16:30 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BA6A50C2;
-        Fri, 16 Sep 2022 00:16:28 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MTQL61vzSzBsPF;
-        Fri, 16 Sep 2022 15:14:22 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.70) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 16 Sep 2022 15:16:25 +0800
-From:   Wang Yufen <wangyufen@huawei.com>
-To:     <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>,
-        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <davem@davemloft.net>, <kuba@kernel.org>,
-        <hawk@kernel.org>, <nathan@kernel.org>, <ndesaulniers@google.com>,
-        <trix@redhat.com>
-CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <llvm@lists.linux.dev>
-Subject: [bpf-next v2 2/2] selftests/bpf: Add testcases for pinning to errpath
-Date:   Fri, 16 Sep 2022 15:37:00 +0800
-Message-ID: <1663313820-29918-2-git-send-email-wangyufen@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1663313820-29918-1-git-send-email-wangyufen@huawei.com>
-References: <1663313820-29918-1-git-send-email-wangyufen@huawei.com>
+        with ESMTP id S229483AbiIPHTW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 16 Sep 2022 03:19:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FAE5A405A
+        for <bpf@vger.kernel.org>; Fri, 16 Sep 2022 00:19:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 282D46289A
+        for <bpf@vger.kernel.org>; Fri, 16 Sep 2022 07:19:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 644DCC433C1;
+        Fri, 16 Sep 2022 07:19:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663312760;
+        bh=VVgQ/yDYDXtN2TOOKqoH6VFVNuOC04R0IJTuou13n5M=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pEHRWgvNDuCnPuBexy0IGFJ0HhjJUxrJnwMWwpwitl6M4q+4SRU3dBqiPC7pUddaM
+         xwe+pHn64o8nNCL1cMLoRMY2eOsMLdWR1im5bG7Gk2uyiM1WDCQlYYI1Y0G3JYHxXH
+         d8xk1aeihe/WBxdcouPfQ1Ygs7lVEnN26A/u7n3Chiv0ZM76svLM8Dw1hWWMj7SAUJ
+         A28hAvFzL2s2tSQn2alVGDSi+F83b2tgs4Tmd0EzD25GkSyjxRUzqctqku3a3u9raa
+         P2pdEcE37buAzz73uu4hEPrMViYcc5G61Y0ioysY/1cdmztDDtQnffGSY84We5hHBc
+         ng0oOGOFzspZw==
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Stanislav Fomichev <sdf@google.com>,
+        syzbot+2251879aa068ad9c960d@syzkaller.appspotmail.com,
+        bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, Hao Luo <haoluo@google.com>
+Subject: [PATCHv2 bpf-next] bpf: Prevent bpf program recursion for raw tracepoint probes
+Date:   Fri, 16 Sep 2022 09:19:14 +0200
+Message-Id: <20220916071914.7156-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add testcases for map and prog pin to errpath.
+We got report from sysbot [1] about warnings that were caused by
+bpf program attached to contention_begin raw tracepoint triggering
+the same tracepoint by using bpf_trace_printk helper that takes
+trace_printk_lock lock.
 
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+ Call Trace:
+  <TASK>
+  ? trace_event_raw_event_bpf_trace_printk+0x5f/0x90
+  bpf_trace_printk+0x2b/0xe0
+  bpf_prog_a9aec6167c091eef_prog+0x1f/0x24
+  bpf_trace_run2+0x26/0x90
+  native_queued_spin_lock_slowpath+0x1c6/0x2b0
+  _raw_spin_lock_irqsave+0x44/0x50
+  bpf_trace_printk+0x3f/0xe0
+  bpf_prog_a9aec6167c091eef_prog+0x1f/0x24
+  bpf_trace_run2+0x26/0x90
+  native_queued_spin_lock_slowpath+0x1c6/0x2b0
+  _raw_spin_lock_irqsave+0x44/0x50
+  bpf_trace_printk+0x3f/0xe0
+  bpf_prog_a9aec6167c091eef_prog+0x1f/0x24
+  bpf_trace_run2+0x26/0x90
+  native_queued_spin_lock_slowpath+0x1c6/0x2b0
+  _raw_spin_lock_irqsave+0x44/0x50
+  bpf_trace_printk+0x3f/0xe0
+  bpf_prog_a9aec6167c091eef_prog+0x1f/0x24
+  bpf_trace_run2+0x26/0x90
+  native_queued_spin_lock_slowpath+0x1c6/0x2b0
+  _raw_spin_lock_irqsave+0x44/0x50
+  __unfreeze_partials+0x5b/0x160
+  ...
+
+The can be reproduced by attaching bpf program as raw tracepoint on
+contention_begin tracepoint. The bpf prog calls bpf_trace_printk
+helper. Then by running perf bench the spin lock code is forced to
+take slow path and call contention_begin tracepoint.
+
+Fixing this by skipping execution of the bpf program if it's
+already running, Using bpf prog 'active' field, which is being
+currently used by trampoline programs for the same reason.
+
+Moving bpf_prog_inc_misses_counter to syscall.c because
+trampoline.c is compiled in just for CONFIG_BPF_JIT option.
+
+Reviewed-by: Stanislav Fomichev <sdf@google.com>
+Reported-by: syzbot+2251879aa068ad9c960d@syzkaller.appspotmail.com
+[1] https://lore.kernel.org/bpf/YxhFe3EwqchC%2FfYf@krava/T/#t
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- tools/testing/selftests/bpf/prog_tests/pinning.c   | 67 ++++++++++++++++++++++
- .../selftests/bpf/progs/test_pinning_path.c        | 19 ++++++
- 2 files changed, 86 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/test_pinning_path.c
+v2 changes:
+  - moved inc_misses_counter from trampoline to syscall object
+    to fix compilation fails found by kernel test robot
+  - added Stanislav's ack
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/pinning.c b/tools/testing/selftests/bpf/prog_tests/pinning.c
-index d95cee5..ab7780f 100644
---- a/tools/testing/selftests/bpf/prog_tests/pinning.c
-+++ b/tools/testing/selftests/bpf/prog_tests/pinning.c
-@@ -24,6 +24,61 @@ __u32 get_map_id(struct bpf_object *obj, const char *name)
- 	return map_info.id;
+ include/linux/bpf.h      |  6 ++++++
+ kernel/bpf/syscall.c     | 11 +++++++++++
+ kernel/bpf/trampoline.c  | 15 ++-------------
+ kernel/trace/bpf_trace.c |  6 ++++++
+ 4 files changed, 25 insertions(+), 13 deletions(-)
+
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 54178b9e9c3a..bf17f7883da7 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2029,6 +2029,8 @@ static inline bool has_current_bpf_ctx(void)
+ {
+ 	return !!current->bpf_ctx;
  }
- 
-+static void test_pin_path(void)
++
++void notrace bpf_prog_inc_misses_counter(struct bpf_prog *prog);
+ #else /* !CONFIG_BPF_SYSCALL */
+ static inline struct bpf_prog *bpf_prog_get(u32 ufd)
+ {
+@@ -2251,6 +2253,10 @@ static inline bool has_current_bpf_ctx(void)
+ {
+ 	return false;
+ }
++
++static inline void bpf_prog_inc_misses_counter(struct bpf_prog *prog)
 +{
-+	const char *progfile = "./test_pinning_path.bpf.o";
-+	const char *progpinpath = "/sys/fs/bpf/test_pinpath";
-+	char errpath[PATH_MAX + 1];
-+	char command[64];
-+	int prog_fd, err;
-+	struct bpf_object *obj;
-+	__u32 duration = 0;
++}
+ #endif /* CONFIG_BPF_SYSCALL */
+ 
+ void __bpf_free_used_btfs(struct bpf_prog_aux *aux,
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 69be1c612daa..be7761414308 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2098,6 +2098,17 @@ struct bpf_prog_kstats {
+ 	u64 misses;
+ };
+ 
++void notrace bpf_prog_inc_misses_counter(struct bpf_prog *prog)
++{
++	struct bpf_prog_stats *stats;
++	unsigned int flags;
 +
-+	/* Use libbpf 1.0 API mode */
-+	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
-+
-+	err = bpf_prog_test_load(progfile, BPF_PROG_TYPE_SOCK_OPS, &obj,
-+				 &prog_fd);
-+	CHECK(err, "bpf_prog_test_load", "err %d errno %d\n", err, errno);
-+
-+	memset(&errpath, 't', PATH_MAX);
-+	err = bpf_object__pin_maps(obj, errpath);
-+	if (CHECK(err != -ENAMETOOLONG, "pin maps errpath", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	err = bpf_object__pin_maps(obj, progpinpath);
-+	if (CHECK(err, "pin maps", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	err = bpf_object__pin_programs(obj, errpath);
-+	if (CHECK(err != -ENAMETOOLONG, "pin progs errpath", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	err = bpf_object__pin_programs(obj, progpinpath);
-+	if (CHECK(err, "pin prog", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	err = bpf_object__unpin_programs(obj, errpath);
-+	if (CHECK(err != -ENAMETOOLONG, "pin progs errpath", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	err = bpf_object__unpin_programs(obj, progpinpath);
-+	if (CHECK(err, "pin prog", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	err = bpf_object__unpin_maps(obj, errpath);
-+	if (CHECK(err != -ENAMETOOLONG, "pin maps errpath", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	err = bpf_object__unpin_maps(obj, progpinpath);
-+	if (CHECK(err, "pin maps", "err %d errno %d\n", err, errno))
-+		goto out;
-+out:
-+	bpf_object__close(obj);
-+	sprintf(command, "rm -r %s", progpinpath);
-+	system(command);
++	stats = this_cpu_ptr(prog->stats);
++	flags = u64_stats_update_begin_irqsave(&stats->syncp);
++	u64_stats_inc(&stats->misses);
++	u64_stats_update_end_irqrestore(&stats->syncp, flags);
 +}
 +
- void test_pinning(void)
+ static void bpf_prog_get_stats(const struct bpf_prog *prog,
+ 			       struct bpf_prog_kstats *stats)
  {
- 	const char *file_invalid = "./test_pinning_invalid.bpf.o";
-@@ -32,6 +87,7 @@ void test_pinning(void)
- 	const char *nopinpath2 = "/sys/fs/bpf/nopinmap2";
- 	const char *custpath = "/sys/fs/bpf/custom";
- 	const char *pinpath = "/sys/fs/bpf/pinmap";
-+	char errpath[PATH_MAX + 1];
- 	const char *file = "./test_pinning.bpf.o";
- 	__u32 map_id, map_id2, duration = 0;
- 	struct stat statbuf = {};
-@@ -206,7 +262,17 @@ void test_pinning(void)
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index ad76940b02cc..41b67eb83ab3 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -863,17 +863,6 @@ static __always_inline u64 notrace bpf_prog_start_time(void)
+ 	return start;
+ }
  
- 	bpf_object__close(obj);
+-static void notrace inc_misses_counter(struct bpf_prog *prog)
+-{
+-	struct bpf_prog_stats *stats;
+-	unsigned int flags;
+-
+-	stats = this_cpu_ptr(prog->stats);
+-	flags = u64_stats_update_begin_irqsave(&stats->syncp);
+-	u64_stats_inc(&stats->misses);
+-	u64_stats_update_end_irqrestore(&stats->syncp, flags);
+-}
+-
+ /* The logic is similar to bpf_prog_run(), but with an explicit
+  * rcu_read_lock() and migrate_disable() which are required
+  * for the trampoline. The macro is split into
+@@ -896,7 +885,7 @@ u64 notrace __bpf_prog_enter(struct bpf_prog *prog, struct bpf_tramp_run_ctx *ru
+ 	run_ctx->saved_run_ctx = bpf_set_run_ctx(&run_ctx->run_ctx);
  
-+	/* test auto-pinning at err path with open opt */
-+	memset(&errpath, 't', PATH_MAX);
-+	opts.pin_root_path = errpath;
-+	obj = bpf_object__open_file(file, &opts);
-+	if (CHECK_FAIL(libbpf_get_error(obj) != -ENAMETOOLONG)) {
-+		obj = NULL;
+ 	if (unlikely(this_cpu_inc_return(*(prog->active)) != 1)) {
+-		inc_misses_counter(prog);
++		bpf_prog_inc_misses_counter(prog);
+ 		return 0;
+ 	}
+ 	return bpf_prog_start_time();
+@@ -967,7 +956,7 @@ u64 notrace __bpf_prog_enter_sleepable(struct bpf_prog *prog, struct bpf_tramp_r
+ 	might_fault();
+ 
+ 	if (unlikely(this_cpu_inc_return(*(prog->active)) != 1)) {
+-		inc_misses_counter(prog);
++		bpf_prog_inc_misses_counter(prog);
+ 		return 0;
+ 	}
+ 
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 68e5cdd24cef..c8cd1aa7b112 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -2042,9 +2042,15 @@ static __always_inline
+ void __bpf_trace_run(struct bpf_prog *prog, u64 *args)
+ {
+ 	cant_sleep();
++	if (unlikely(this_cpu_inc_return(*(prog->active)) != 1)) {
++		bpf_prog_inc_misses_counter(prog);
 +		goto out;
 +	}
-+
- 	/* test auto-pinning at custom path with open opt */
-+	opts.pin_root_path = custpath;
- 	obj = bpf_object__open_file(file, &opts);
- 	if (CHECK_FAIL(libbpf_get_error(obj))) {
- 		obj = NULL;
-@@ -277,4 +343,5 @@ void test_pinning(void)
- 	rmdir(custpath);
- 	if (obj)
- 		bpf_object__close(obj);
-+	test_pin_path();
+ 	rcu_read_lock();
+ 	(void) bpf_prog_run(prog, args);
+ 	rcu_read_unlock();
++out:
++	this_cpu_dec(*(prog->active));
  }
-diff --git a/tools/testing/selftests/bpf/progs/test_pinning_path.c b/tools/testing/selftests/bpf/progs/test_pinning_path.c
-new file mode 100644
-index 0000000..b4e2099
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_pinning_path.c
-@@ -0,0 +1,19 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKHASH);
-+	__uint(max_entries, 64);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} sock_ops_map SEC(".maps");
-+
-+SEC("sockops")
-+int bpf_sockmap(struct bpf_sock_ops *skops)
-+{
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+ 
+ #define UNPACK(...)			__VA_ARGS__
 -- 
-1.8.3.1
+2.37.3
 
