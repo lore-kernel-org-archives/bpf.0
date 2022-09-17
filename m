@@ -2,24 +2,24 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CE37ECAAD3
-	for <bpf@archiver.kernel.org>; Sat, 17 Sep 2022 15:13:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FA4AC54EE9
+	for <bpf@archiver.kernel.org>; Sat, 17 Sep 2022 15:13:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbiIQPN2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 17 Sep 2022 11:13:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42072 "EHLO
+        id S229515AbiIQPN3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 17 Sep 2022 11:13:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiIQPN1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 17 Sep 2022 11:13:27 -0400
+        with ESMTP id S229510AbiIQPN2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 17 Sep 2022 11:13:28 -0400
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB4F2F667
-        for <bpf@vger.kernel.org>; Sat, 17 Sep 2022 08:13:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D503201A7
+        for <bpf@vger.kernel.org>; Sat, 17 Sep 2022 08:13:26 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MVDt659ZwzKMwY
-        for <bpf@vger.kernel.org>; Sat, 17 Sep 2022 23:11:26 +0800 (CST)
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MVDt853KfzKNFq
+        for <bpf@vger.kernel.org>; Sat, 17 Sep 2022 23:11:28 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP2 (Coremail) with SMTP id Syh0CgAnenMO5CVjskryAw--.61987S5;
-        Sat, 17 Sep 2022 23:13:22 +0800 (CST)
+        by APP2 (Coremail) with SMTP id Syh0CgAnenMO5CVjskryAw--.61987S8;
+        Sat, 17 Sep 2022 23:13:24 +0800 (CST)
 From:   Hou Tao <houtao@huaweicloud.com>
 To:     bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>
 Cc:     Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
@@ -35,31 +35,31 @@ Cc:     Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
         John Fastabend <john.fastabend@gmail.com>,
         Lorenz Bauer <oss@lmb.io>,
         "Paul E . McKenney" <paulmck@kernel.org>, houtao1@huawei.com
-Subject: [PATCH bpf-next 01/10] bpf: Export bpf_dynptr_{get|set}_size
-Date:   Sat, 17 Sep 2022 23:31:16 +0800
-Message-Id: <20220917153125.2001645-2-houtao@huaweicloud.com>
+Subject: [PATCH bpf-next 04/10] bpf: Support bpf_dynptr-typed map key for bpf program
+Date:   Sat, 17 Sep 2022 23:31:19 +0800
+Message-Id: <20220917153125.2001645-5-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20220917153125.2001645-1-houtao@huaweicloud.com>
 References: <20220917153125.2001645-1-houtao@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgAnenMO5CVjskryAw--.61987S5
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFWDXrWUuw4xtF15tw4UXFb_yoW8CryUpF
-        ykC347Xr48tFW7Jr4UJFs7Zw4Ygw4DWr17GryjkryrKrZFq3sxur1jgryxWr98t34DGrW3
-        Arn7KrWFvw18Xr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
-        A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-        GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx
-        0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWU
-        JVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwI
-        xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
-        Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7
-        IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
-        6cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jn9N3UUUUU=
+X-CM-TRANSID: Syh0CgAnenMO5CVjskryAw--.61987S8
+X-Coremail-Antispam: 1UD129KBjvJXoW7KF17ZryrtF1rGr4fZFWUArb_yoW8Gr17pF
+        1kGrW2gr48KFsI9w13ZFZ7Zry5G34Sq3y3Cw4Sy3ySvF17ArW5u3y8GF17WFy5trZ7K34F
+        yw4qvFWYv34UCFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
+        14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
+        xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
+        z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2
+        Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+        6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0x
+        vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY
+        6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
+        CY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU13l1DUUUUU==
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 X-CFilter-Loop: Reflected
 Precedence: bulk
@@ -68,53 +68,43 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Hou Tao <houtao1@huawei.com>
 
-For map with bpf_dynptr-typed key, lookup and update procedures will use
-bpf_dynptr_get_size() to get the length of key, and iteration procedure
-will use bpf_dynptr_set_size() to set the length of returned key.
+When bpf program manipulates a BPF_F_DYNPTR_KEY-enabled map, only allow
+it to use a bpf_dynptr as map key.
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- include/linux/bpf.h  | 2 ++
- kernel/bpf/helpers.c | 9 ++++++++-
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ kernel/bpf/verifier.c | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index e0dbe0c0a17e..8da4a8190413 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2647,6 +2647,8 @@ void bpf_dynptr_init(struct bpf_dynptr_kern *ptr, void *data,
- 		     enum bpf_dynptr_type type, u32 offset, u32 size);
- void bpf_dynptr_set_null(struct bpf_dynptr_kern *ptr);
- int bpf_dynptr_check_size(u32 size);
-+u32 bpf_dynptr_get_size(const struct bpf_dynptr_kern *ptr);
-+void bpf_dynptr_set_size(struct bpf_dynptr_kern *ptr, u32 new_size);
- 
- #ifdef CONFIG_BPF_LSM
- void bpf_cgroup_atype_get(u32 attach_btf_id, int cgroup_atype);
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 41aeaf3862ec..7dbda4acb2c2 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1408,11 +1408,18 @@ static void bpf_dynptr_set_type(struct bpf_dynptr_kern *ptr, enum bpf_dynptr_typ
- 	ptr->size |= type << DYNPTR_TYPE_SHIFT;
- }
- 
--static u32 bpf_dynptr_get_size(struct bpf_dynptr_kern *ptr)
-+u32 bpf_dynptr_get_size(const struct bpf_dynptr_kern *ptr)
- {
- 	return ptr->size & DYNPTR_SIZE_MASK;
- }
- 
-+void bpf_dynptr_set_size(struct bpf_dynptr_kern *ptr, u32 new_size)
-+{
-+	u32 metadata = ptr->size & ~DYNPTR_SIZE_MASK;
-+
-+	ptr->size = new_size | metadata;
-+}
-+
- int bpf_dynptr_check_size(u32 size)
- {
- 	return size > DYNPTR_MAX_SIZE ? -E2BIG : 0;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 8c6fbcd0afaf..169c0b3e8002 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6000,9 +6000,21 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 			verbose(env, "invalid map_ptr to access map->key\n");
+ 			return -EACCES;
+ 		}
+-		err = check_helper_mem_access(env, regno,
+-					      meta->map_ptr->key_size, false,
+-					      NULL);
++		/* For BPF_F_DYNPTR_KEY-enabled map, only allow bpf_dynptr
++		 * to be used as map key
++		 */
++		if (meta->map_ptr->map_flags & BPF_F_DYNPTR_KEY) {
++			if (base_type(reg->type) != PTR_TO_STACK ||
++			    !is_dynptr_reg_valid_init(env, reg, ARG_PTR_TO_DYNPTR)) {
++				verbose(env, "expect R%d to be dynptr instead of %s\n",
++					regno, reg_type_str(env, reg->type));
++				return -EACCES;
++			}
++		} else {
++			err = check_helper_mem_access(env, regno,
++						      meta->map_ptr->key_size, false,
++						      NULL);
++		}
+ 		break;
+ 	case ARG_PTR_TO_MAP_VALUE:
+ 		if (type_may_be_null(arg_type) && register_is_null(reg))
 -- 
 2.29.2
 
