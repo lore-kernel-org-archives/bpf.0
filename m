@@ -2,154 +2,118 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4192DC54EE9
-	for <bpf@archiver.kernel.org>; Sun, 18 Sep 2022 12:17:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DB0FECAAD8
+	for <bpf@archiver.kernel.org>; Sun, 18 Sep 2022 22:14:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiIRMRs (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 18 Sep 2022 08:17:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46446 "EHLO
+        id S229553AbiIRWOs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 18 Sep 2022 18:14:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbiIRMRr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 18 Sep 2022 08:17:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84761D0E2
-        for <bpf@vger.kernel.org>; Sun, 18 Sep 2022 05:17:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663503466;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YIbilycgQyjenY282EZwIsPOR3PFZL895xpYAyq5afo=;
-        b=cceqa2GsaVj0FTELW5Nuhk+n9LlJ4hvPyqls+8rs+nQhbDo/jiRicfZyUz2Z06BPfk7bEj
-        zAM/f/LWLxtFRtnQdSy8ZT3zb0EtcADY70hivN0KBrBN+tM9sy8egjZEPncSf71JKPTRe5
-        u08Mz88ledCsgARMoRVwzlxIhUJNkuA=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-132-kW5mmBTPMiWC7wULLh17ow-1; Sun, 18 Sep 2022 08:17:42 -0400
-X-MC-Unique: kW5mmBTPMiWC7wULLh17ow-1
-Received: by mail-wr1-f69.google.com with SMTP id e18-20020adfa452000000b00228a420c389so5936798wra.16
-        for <bpf@vger.kernel.org>; Sun, 18 Sep 2022 05:17:42 -0700 (PDT)
+        with ESMTP id S229447AbiIRWOr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 18 Sep 2022 18:14:47 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE59636C;
+        Sun, 18 Sep 2022 15:14:44 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id go34so60596879ejc.2;
+        Sun, 18 Sep 2022 15:14:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date;
+        bh=kbFSMhiL8A86s0CsON/rdR0Gz4dPoVS/1Hb74JYxBe0=;
+        b=qN7F4qLWDb/treWv4SofmpVJ1tf6axhjm68wXDbUP4ws6tWJSqFmTGSfjgQXR4N/ij
+         +3oNkf1i4fxSuDQvW7lcrMxVX5QIp8/sLz9daRG4ZX+3rFeOuPgGubfx13jWI4kkS7ES
+         MSuSeJtFAjDQ8ZFKQLMuuMG/dCvTaSeBzx+u6Ak/HQB2F8zBuZtGH4JE9eKRqgqwpg5l
+         6tcKm3FjCIpOTXMJxodj3RYcU33o8P3VVcjpVTFPkvVHihKekq07mp4xmOC8/SFL/QSc
+         QNmfeCDNth0vz7i7HZHqpQL29LThSbhitU6yTRnUlGRMeV3j5RwQxi+4l15kB6+2jeJy
+         gXsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=YIbilycgQyjenY282EZwIsPOR3PFZL895xpYAyq5afo=;
-        b=OMHSgjXeIvUAjRzHo9m0AufJz9KMMdXTkIfvfRXIsDemXfGceM69vb6+R1BM1NNCYn
-         SAF7J8BfJFuqGoadg2ePIvqEtYyKVxCJw2IT6Iwe/UnCRhEcfvI7MG967auWAGmo4RU6
-         Ka+MLZFSTGGUmX8kr76KbvI/yF8ks2ZpSxdR6Vc0wbyt/p3bBDzewNmqT5OXw8rVN20H
-         PjKG3I8zZFddPYX0TsCHC9wREyT0nIUnjiFV7c/sAb1LBo4rxQz2Oc91k8cBOVI0/eAt
-         W9Jhxswj04WSpZiyEwATCShlBYYe0jLLMeWgMLe9bVKuVuS1GtrqizjJnm5rKHGtod4f
-         m0pA==
-X-Gm-Message-State: ACrzQf2dy6M9mj8llNqcpw7ic+HZy0SxIWzSITu0rHhG4ACEzF3e3NGF
-        k8d6G4wvIPkkmNodgq62/9jPKYKKk2LMCMp1OG3d6zawvHIj6Z0rx7G95dynuUJ5R+2l+5KdVPb
-        3zbA2DQ/pXe6p
-X-Received: by 2002:a5d:4742:0:b0:22a:3a88:d9e6 with SMTP id o2-20020a5d4742000000b0022a3a88d9e6mr8183464wrs.438.1663503461618;
-        Sun, 18 Sep 2022 05:17:41 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6OgKAiHsRIMsNcvcQlSELq9pAaD49wvj8xve/5Xz8Q2YgoqvtA0Jk9oZfbBvYoMf3nUdnFOQ==
-X-Received: by 2002:a5d:4742:0:b0:22a:3a88:d9e6 with SMTP id o2-20020a5d4742000000b0022a3a88d9e6mr8183456wrs.438.1663503461375;
-        Sun, 18 Sep 2022 05:17:41 -0700 (PDT)
-Received: from redhat.com ([2.52.4.6])
-        by smtp.gmail.com with ESMTPSA id i7-20020a05600c354700b003b4cba4ef71sm4421682wmq.41.2022.09.18.05.17.38
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=kbFSMhiL8A86s0CsON/rdR0Gz4dPoVS/1Hb74JYxBe0=;
+        b=Dk/cOEAQu24ZZMW8TGdDi3+tbU1IoY2NxLZEhhIGEjUAJTUE8DWQeCFYalxN6wPnWG
+         x8taicjk/oPdgOpdNyFmxEgvN9/+VPaasrS1GlQAduVey5QJatkrbZXs5NlozQMPKbiC
+         sKck/KthqEMxg+XGP8ZJ2/9usn0mdMNSuS+TX0IUHjORZCGnZhva2WRyJmIHzgvzdXht
+         fLUTOxRTUx9NFDNq1cO1kYZYr29CKIdvdFXqetEjU9iQbfJsKb7uIuzzKxjFSDr3xRtq
+         cFIQUJKN9uWtnq9UGyen1zI2PzlgzQtwWsomPpNvcbL9q04JL24SCXBe7MKB3WtvpgWB
+         byfQ==
+X-Gm-Message-State: ACrzQf03syRldnWWIvOPgBbsPinY8PdtDZAADMooEYS2KFsse0W6zQCC
+        fG19zyfQQIuMtrorqnD/jUo=
+X-Google-Smtp-Source: AMsMyM73ksJk5qUmITb9v+gtvMEIARvdQ89ffmHDN/PQxwjdGuOeYkz0xweZ0fR1OZQhjaznuy/Jkw==
+X-Received: by 2002:a17:906:cc14:b0:779:8ae0:eece with SMTP id ml20-20020a170906cc1400b007798ae0eecemr10580874ejb.418.1663539282790;
+        Sun, 18 Sep 2022 15:14:42 -0700 (PDT)
+Received: from krava ([83.240.61.0])
+        by smtp.gmail.com with ESMTPSA id pw17-20020a17090720b100b00780348931e7sm7757760ejb.75.2022.09.18.15.14.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Sep 2022 05:17:40 -0700 (PDT)
-Date:   Sun, 18 Sep 2022 08:17:36 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Junbo <junbo4242@gmail.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        Sun, 18 Sep 2022 15:14:42 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Mon, 19 Sep 2022 00:14:40 +0200
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Jiri Olsa <olsajiri@gmail.com>, stable@vger.kernel.org,
+        bpf@vger.kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH] Do not name control queue for virtio-net
-Message-ID: <20220918081713-mutt-send-email-mst@kernel.org>
-References: <20220917092857.3752357-1-junbo4242@gmail.com>
- <20220918025033-mutt-send-email-mst@kernel.org>
- <CACvn-oGUj0mDxBO2yV1mwvz4PzhN3rDnVpUh12NA5jLKTqRT3A@mail.gmail.com>
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: [PATCH stable 5.15 0/2] kbuild: Fix compilation for latest
+ pahole release
+Message-ID: <YyeYUEHyR/nHM8NT@krava>
+References: <20220904131901.13025-1-jolsa@kernel.org>
+ <YxSxwZWkYMmtcsmA@kroah.com>
+ <YxWfaoImsdcvkbce@krava>
+ <Yxc3Er1sv17xrei1@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACvn-oGUj0mDxBO2yV1mwvz4PzhN3rDnVpUh12NA5jLKTqRT3A@mail.gmail.com>
+In-Reply-To: <Yxc3Er1sv17xrei1@kroah.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, Sep 18, 2022 at 05:00:20PM +0800, Junbo wrote:
-> hi Michael
+On Tue, Sep 06, 2022 at 02:03:30PM +0200, Greg KH wrote:
+> On Mon, Sep 05, 2022 at 09:04:10AM +0200, Jiri Olsa wrote:
+> > On Sun, Sep 04, 2022 at 04:10:09PM +0200, Greg KH wrote:
+> > > On Sun, Sep 04, 2022 at 03:18:59PM +0200, Jiri Olsa wrote:
+> > > > hi,
+> > > > new version of pahole (1.24) is causing compilation fail for 5.15
+> > > > stable kernel, discussed in here [1][2]. Sending fix for that plus
+> > > > one dependency patch.
+> > > > 
+> > > > Note for patch 1:
+> > > > there was one extra line change in scripts/pahole-flags.sh file in
+> > > > its linux tree merge commit:
+> > > > 
+> > > >   fc02cb2b37fe Merge tag 'net-next-for-5.16' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next
+> > > > 
+> > > > not sure how/if to track that, I squashed the change in.
+> > > 
+> > > Squashing is fine, thanks.
+> > > 
+> > > And do we also need this for kernels older than 5.15?  Like 5.10 and 5.4?
+> > 
+> > yes, 5.10 needs similar patchset, but this for 5.15 won't apply there,
+> > so I'll send it separately
+> > 
+> > 5.4 passes compilation, but I don't think it will boot properly, still
+> > need to check on that
+> > 
+> > in any case, more patches are coming ;-)
 > 
-> in virtio-net.c
->     /* Parameters for control virtqueue, if any */
->     if (vi->has_cvq) {
->         callbacks[total_vqs - 1] = NULL;
->         names[total_vqs - 1] = "control";
->     }
-> 
-> I think the Author who write the code
+> Ok, these two are now queued up, feel free to send the rest when you
+> have them ready.
 
-wait, that was not you?
+hi,
+as for 5.10 changes, I have them ready, pushed in here:
+  git://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git pahole_fix_5_10
 
-> maybe want to name the control queue to
-> 'virtioX-control', but it never worked, we can see the name still be
-> 'virtioX-config' in /proc/interrupts, for example 
->  43:          0          0          0          0          0          0        
->  0          0   PCI-MSI-edge      virtio0-config
->  44:         64          0          0          0          0          0      
-> 1845          0   PCI-MSI-edge      virtio0-input.0
->  45:          1          0          0          0          0          0        
->  0          0   PCI-MSI-edge      virtio0-output.0
-> 
-> Because in function vp_request_msix_vectors, it just allocate 'xxxx-config' to
-> every virtio devices, even the virtio device do not need it. in /proc/
-> interrupts, we can see that each virtio device's first interrupt always named
-> 'virtioX-config'.
-> 
-> So I think it's better to not explicitly give the "control" here, it's
-> useless...  
-> 
-> 
-> Michael S. Tsirkin <mst@redhat.com> 于2022年9月18日周日 14:56写道：
-> 
->     On Sat, Sep 17, 2022 at 09:28:57AM +0000, junbo4242@gmail.com wrote:
->     > From: Junbo <junbo4242@gmail.com>
->     >
->     > In virtio drivers, the control queue always named <virtioX>-config.
->     >
->     > Signed-off-by: Junbo <junbo4242@gmail.com>
-> 
->     I don't think that's right. config is the config interrupt.
-> 
-> 
-> 
->     > ---
->     >  drivers/net/virtio_net.c | 3 ++-
->     >  1 file changed, 2 insertions(+), 1 deletion(-)
->     >
->     > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
->     > index 9cce7dec7366..0b3e74cfe201 100644
->     > --- a/drivers/net/virtio_net.c
->     > +++ b/drivers/net/virtio_net.c
->     > @@ -3469,7 +3469,8 @@ static int virtnet_find_vqs(struct virtnet_info
->     *vi)
->     >       /* Parameters for control virtqueue, if any */
->     >       if (vi->has_cvq) {
->     >               callbacks[total_vqs - 1] = NULL;
->     > -             names[total_vqs - 1] = "control";
->     > +             /* control virtqueue always named <virtioX>-config */
->     > +             names[total_vqs - 1] = "";
->     >       }
->     > 
->     >       /* Allocate/initialize parameters for send/receive virtqueues */
->     > --
->     > 2.31.1
-> 
-> 
+but it looks like CONFIG_DEBUG_INFO_BTF is not being used in 5.10,
+because I had to backport other similar option, that would break
+the build even earlier (--skip_encoding_btf_vars), or people use
+just old pahole ;-)
 
+I suggest we wait with this change until somebody actually wants
+this fixed, AFAICS there's no report of broken 5.10 build yet
+
+thanks,
+jirka
