@@ -2,117 +2,115 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C24AC6FA91
-	for <bpf@archiver.kernel.org>; Mon, 19 Sep 2022 14:28:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52019C54EE9
+	for <bpf@archiver.kernel.org>; Mon, 19 Sep 2022 14:30:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiISO2v (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 19 Sep 2022 10:28:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53430 "EHLO
+        id S229896AbiISOa2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 19 Sep 2022 10:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbiISO2s (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 19 Sep 2022 10:28:48 -0400
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 572B326555;
-        Mon, 19 Sep 2022 07:28:43 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MWRj93TCkz9v7gQ;
-        Mon, 19 Sep 2022 22:22:53 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwD3cl1vfChjLSJdAA--.62071S2;
-        Mon, 19 Sep 2022 15:28:13 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     roberto.sassu@huaweicloud.com
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, deso@posteo.net, dhowells@redhat.com,
-        haoluo@google.com, jarkko@kernel.org, jmorris@namei.org,
-        joannelkoong@gmail.com, john.fastabend@gmail.com, jolsa@kernel.org,
-        keyrings@vger.kernel.org, kpsingh@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, martin.lau@linux.dev,
-        memxor@gmail.com, mingo@redhat.com, mykolal@fb.com,
-        paul@paul-moore.com, roberto.sassu@huawei.com, rostedt@goodmis.org,
-        sdf@google.com, serge@hallyn.com, shuah@kernel.org,
-        song@kernel.org, yhs@fb.com
-Subject: [PATCH v18 02/13] btf: Export bpf_dynptr definition
-Date:   Mon, 19 Sep 2022 16:27:54 +0200
-Message-Id: <20220919142754.626564-1-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <64e8ef59363bcd0f314d4e1eb7483f4dd2b7dbcf.camel@huaweicloud.com>
-References: <64e8ef59363bcd0f314d4e1eb7483f4dd2b7dbcf.camel@huaweicloud.com>
+        with ESMTP id S229885AbiISOaX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 19 Sep 2022 10:30:23 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE942C109
+        for <bpf@vger.kernel.org>; Mon, 19 Sep 2022 07:30:09 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MWRqb20VszlJJJ
+        for <bpf@vger.kernel.org>; Mon, 19 Sep 2022 22:28:27 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP2 (Coremail) with SMTP id Syh0CgAnenPtfChj541UBA--.48026S4;
+        Mon, 19 Sep 2022 22:30:07 +0800 (CST)
+From:   Hou Tao <houtao@huaweicloud.com>
+To:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>
+Cc:     Martin KaFai Lau <kafai@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
+        Yonghong Song <yhs@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Lorenz Bauer <oss@lmb.io>, houtao1@huawei.com
+Subject: [PATCH bpf-next] bpf: Check whether or not node is NULL before free it in free_bulk
+Date:   Mon, 19 Sep 2022 22:48:11 +0800
+Message-Id: <20220919144811.3570825-1-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwD3cl1vfChjLSJdAA--.62071S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tw47JF4UCFy5JFyxurWUCFg_yoW8Zr1rpa
-        1rG39Fyr4vqFyI9w1UAr4093ySyw4kX347CFyvv3yYvrsIqFyqvF4jkr43Wr95trWDWFWY
-        kF4agr4Yva4UZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9a14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJV
-        WxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x
-        0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
-        zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF
-        4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_
-        WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJr
-        UvcSsGvfC2KfnxnUUI43ZEXa7VUUbAw7UUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAABF1jj4M4lgADsa
+X-CM-TRANSID: Syh0CgAnenPtfChj541UBA--.48026S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7uF18Gr1kXw4xKrWDGrWfZrb_yoW8AF4UpF
+        WrJr18Gr4kZF1Iva1jvw1xCFWDZayrKa13GayxZ34SyF1rJr9Ig34DtFyYqFya9rs5trWx
+        AFsFkF4FqayUZ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
+        IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+From: Hou Tao <houtao1@huawei.com>
 
-eBPF dynamic pointers is a new feature recently added to upstream. It binds
-together a pointer to a memory area and its size. The internal kernel
-structure bpf_dynptr_kern is not accessible by eBPF programs in user space.
-They instead see bpf_dynptr, which is then translated to the internal
-kernel structure by the eBPF verifier.
+llnode could be NULL if there are new allocations after the checking of
+c-free_cnt > c->high_watermark in bpf_mem_refill() and before the
+calling of __llist_del_first() in free_bulk (e.g. a PREEMPT_RT kernel
+or allocation in NMI context). And it will incur oops as shown below:
 
-The problem is that it is not possible to include at the same time the uapi
-include linux/bpf.h and the vmlinux BTF vmlinux.h, as they both contain the
-definition of some structures/enums. The compiler complains saying that the
-structures/enums are redefined.
+ BUG: kernel NULL pointer dereference, address: 0000000000000000
+ #PF: supervisor write access in kernel mode
+ #PF: error_code(0x0002) - not-present page
+ PGD 0 P4D 0
+ Oops: 0002 [#1] PREEMPT_RT SMP
+ CPU: 39 PID: 373 Comm: irq_work/39 Tainted: G        W          6.0.0-rc6-rt9+ #1
+ Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
+ RIP: 0010:bpf_mem_refill+0x66/0x130
+ ......
+ Call Trace:
+  <TASK>
+  irq_work_single+0x24/0x60
+  irq_work_run_list+0x24/0x30
+  run_irq_workd+0x18/0x20
+  smpboot_thread_fn+0x13f/0x2c0
+  kthread+0x121/0x140
+  ? kthread_complete_and_exit+0x20/0x20
+  ret_from_fork+0x1f/0x30
+  </TASK>
 
-As bpf_dynptr is defined in the uapi include linux/bpf.h, this makes it
-impossible to include vmlinux.h. However, in some cases, e.g. when using
-kfuncs, vmlinux.h has to be included. The only option until now was to
-include vmlinux.h and add the definition of bpf_dynptr directly in the eBPF
-program source code from linux/bpf.h.
+Simply fixing it by checking whether or not llnode is NULL in free_bulk().
 
-Solve the problem by using the same approach as for bpf_timer (which also
-follows the same scheme with the _kern suffix for the internal kernel
-structure).
-
-Add the following line in one of the dynamic pointer helpers,
-bpf_dynptr_from_mem():
-
-BTF_TYPE_EMIT(struct bpf_dynptr);
-
-Cc: stable@vger.kernel.org
-Cc: Joanne Koong <joannelkoong@gmail.com>
-Fixes: 97e03f521050c ("bpf: Add verifier support for dynptrs")
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Fixes: 1376b7c57624 ("bpf: Introduce any context BPF specific memory allocator.")
+Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- kernel/bpf/helpers.c | 2 ++
- 1 file changed, 2 insertions(+)
+ kernel/bpf/memalloc.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 41aeaf3862ec..7ce1f583b929 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1446,6 +1446,8 @@ BPF_CALL_4(bpf_dynptr_from_mem, void *, data, u32, size, u64, flags, struct bpf_
- {
- 	int err;
+diff --git a/kernel/bpf/memalloc.c b/kernel/bpf/memalloc.c
+index 20621f5407d8..5f83be1d2018 100644
+--- a/kernel/bpf/memalloc.c
++++ b/kernel/bpf/memalloc.c
+@@ -277,7 +277,8 @@ static void free_bulk(struct bpf_mem_cache *c)
+ 		local_dec(&c->active);
+ 		if (IS_ENABLED(CONFIG_PREEMPT_RT))
+ 			local_irq_restore(flags);
+-		enque_to_free(c, llnode);
++		if (llnode)
++			enque_to_free(c, llnode);
+ 	} while (cnt > (c->high_watermark + c->low_watermark) / 2);
  
-+	BTF_TYPE_EMIT(struct bpf_dynptr);
-+
- 	err = bpf_dynptr_check_size(size);
- 	if (err)
- 		goto error;
+ 	/* and drain free_llist_extra */
 -- 
-2.25.1
+2.29.2
 
