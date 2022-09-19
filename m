@@ -2,97 +2,197 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DE4FECAAD8
-	for <bpf@archiver.kernel.org>; Mon, 19 Sep 2022 01:05:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60C19ECAAD8
+	for <bpf@archiver.kernel.org>; Mon, 19 Sep 2022 02:28:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbiISBFn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 18 Sep 2022 21:05:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42956 "EHLO
+        id S229621AbiISC2M (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 18 Sep 2022 22:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiISBFm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 18 Sep 2022 21:05:42 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C6913E0B
-        for <bpf@vger.kernel.org>; Sun, 18 Sep 2022 18:05:41 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id r22-20020a9d7516000000b00659ef017e34so3294574otk.13
-        for <bpf@vger.kernel.org>; Sun, 18 Sep 2022 18:05:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=7Nln9o8+KgWXh20eCVhrCs8ZRIFITlFWDCJFyQHKKl4=;
-        b=HZ5JQstOdyCuVV963ZooQpoyIaPxFimUQrEC+R/gZH/lIHi1rSMy4XixtpzdjH8IVN
-         IVkMMP2OO0H5Buf8+jWiOlDZuJ9yy/8qCB66kindOVf71hZ6Yo8R9QQYGY1iQm+ZGU81
-         FqHdC+XWokAbMRaxDHY2l1b6vmGUV+dDxIeFYHKTRqj75hJKEeomm66Vy7FW3eM/p9Ff
-         wtJFjVqIbQLRnJrBdqirW73gj7lV4wzfrScnVjxYnhiLqduhq0zYWVH2pTJ12lkpcweD
-         qK/IWwvrYrL9gfVbcXH/IhdeQEtoIqODDuMh0QVqBjzHT7gpyDBoB4P/HvOalDqRlLC7
-         1n6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=7Nln9o8+KgWXh20eCVhrCs8ZRIFITlFWDCJFyQHKKl4=;
-        b=6OjSGCHzJ1A+hANrMPiLcA+1K/KBuUJlE2spLmmKPP22GkaL9QkktUCg+qmVn0bx+Y
-         A9gYg+/Y9juTwxGxj45q/4Al1UhSBeaBefl6b1JzqLYCxwNXg4asAlxzBIKhkAW5xjNY
-         vSCrtNWdwdsJxEtv1/7RZsc+UQj0ZSSx/gammgU5re5h7TU00cHk8clkLz31d02ghqVv
-         40YMmdxRAGno80ZC8+loWicVSgVsq6kN8w35sUnpyGxWbHEsvBRGcFcBcuS4WsPByK5p
-         RrJgMdnKtJgqD3RHKnUZkouajTyENtBxMApIjjoywckV0wfJ8xhguQS9KfwkkcBynGVC
-         OgrQ==
-X-Gm-Message-State: ACrzQf1rhiQ3TCiaVdXWMaz70sdjsJm4fOY49o2uf/avMtm/Z/FCR3UC
-        JtqyMCEktHxxS6X4EG2IfWENz95pvipwJluB77Exow==
-X-Google-Smtp-Source: AMsMyM6OazjHldIhOvSyzPAGt9W76ixoFWTADxVnkP4jasV5XE9fsHajWSzioFh5T2jypjokFzRcCm/zA1Bu6QNAlv8=
-X-Received: by 2002:a9d:1b70:0:b0:658:cfeb:d221 with SMTP id
- l103-20020a9d1b70000000b00658cfebd221mr6955321otl.34.1663549540604; Sun, 18
- Sep 2022 18:05:40 -0700 (PDT)
+        with ESMTP id S229483AbiISC2M (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 18 Sep 2022 22:28:12 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667B914D32;
+        Sun, 18 Sep 2022 19:28:08 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MW7nz05FqzHntN;
+        Mon, 19 Sep 2022 10:25:59 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.70) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 19 Sep 2022 10:28:05 +0800
+From:   Wang Yufen <wangyufen@huawei.com>
+To:     <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <haoluo@google.com>, <jolsa@kernel.org>,
+        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <hawk@kernel.org>, <nathan@kernel.org>, <ndesaulniers@google.com>,
+        <trix@redhat.com>
+CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <llvm@lists.linux.dev>
+Subject: [bpf-next v3 1/2] libbpf: Add pathname_concat() helper
+Date:   Mon, 19 Sep 2022 10:48:44 +0800
+Message-ID: <1663555725-17016-1-git-send-email-wangyufen@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-References: <20220916020251.190097-1-shaozhengchao@huawei.com> <f0fa2b91-cebf-0997-1074-d1ba35bf77a9@mojatatu.com>
-In-Reply-To: <f0fa2b91-cebf-0997-1074-d1ba35bf77a9@mojatatu.com>
-From:   Jamal Hadi Salim <jhs@mojatatu.com>
-Date:   Sun, 18 Sep 2022 21:05:29 -0400
-Message-ID: <CAM0EoMmcjfjg+7RsMtW_4YWb+4ewACGW=YVtzOU0Xqh=Kk_K-g@mail.gmail.com>
-Subject: Re: [PATCH net-next,v4 0/9] refactor duplicate codes in the tc cls
- walk function
-To:     Victor Nogueira <victor@mojatatu.com>
-Cc:     Zhengchao Shao <shaozhengchao@huawei.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        weiyongjun1@huawei.com, yuehaibing@huawei.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.70]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 12:56 PM Victor Nogueira <victor@mojatatu.com> wrote:
->
->
-> On 15/09/2022 23:02, Zhengchao Shao wrote:
-> > The walk implementation of most tc cls modules is basically the same.
-> > That is, the values of count and skip are checked first. If count is
-> > greater than or equal to skip, the registered fn function is executed.
-> > Otherwise, increase the value of count. So the code can be refactored.
-> > Then use helper function to replace the code of each cls module in
-> > alphabetical order.
-> >
-> > The walk function is invoked during dump. Therefore, test cases related
-> >   to the tdc filter need to be added.
-> >
-> > Last, thanks to Jamal, Victor and Wang for their review.
-> >
-> > Add test cases locally and perform the test. The test results are listed
-> > below:
-> >
+Move snprintf and len check to common helper pathname_concat() to make the
+code simpler.
 
->
-> Reviewed-by: Victor Nogueira <victor@mojatatu.com>
-> Tested-by: Victor Nogueira <victor@mojatatu.com>
+Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+---
+ tools/lib/bpf/libbpf.c | 76 +++++++++++++++++++-------------------------------
+ 1 file changed, 29 insertions(+), 47 deletions(-)
 
-For the series:
-Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 3ad1392..43a530d 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -2096,19 +2096,30 @@ static bool get_map_field_int(const char *map_name, const struct btf *btf,
+ 	return true;
+ }
+ 
++static int pathname_concat(const char *path, const char *name, char *buf, size_t buflen)
++{
++	int len;
++
++	len = snprintf(buf, buflen, "%s/%s", path, name);
++	if (len < 0)
++		return -EINVAL;
++	if (len >= buflen)
++		return -ENAMETOOLONG;
++
++	return 0;
++}
++
+ static int build_map_pin_path(struct bpf_map *map, const char *path)
+ {
+ 	char buf[PATH_MAX];
+-	int len;
++	int err;
+ 
+ 	if (!path)
+ 		path = "/sys/fs/bpf";
+ 
+-	len = snprintf(buf, PATH_MAX, "%s/%s", path, bpf_map__name(map));
+-	if (len < 0)
+-		return -EINVAL;
+-	else if (len >= PATH_MAX)
+-		return -ENAMETOOLONG;
++	err = pathname_concat(path, bpf_map__name(map), buf, PATH_MAX);
++	if (err)
++		return err;
+ 
+ 	return bpf_map__set_pin_path(map, buf);
+ }
+@@ -7961,17 +7972,9 @@ int bpf_object__pin_maps(struct bpf_object *obj, const char *path)
+ 			continue;
+ 
+ 		if (path) {
+-			int len;
+-
+-			len = snprintf(buf, PATH_MAX, "%s/%s", path,
+-				       bpf_map__name(map));
+-			if (len < 0) {
+-				err = -EINVAL;
+-				goto err_unpin_maps;
+-			} else if (len >= PATH_MAX) {
+-				err = -ENAMETOOLONG;
++			err = pathname_concat(path, bpf_map__name(map), buf, PATH_MAX);
++			if (err)
+ 				goto err_unpin_maps;
+-			}
+ 			sanitize_pin_path(buf);
+ 			pin_path = buf;
+ 		} else if (!map->pin_path) {
+@@ -8009,14 +8012,9 @@ int bpf_object__unpin_maps(struct bpf_object *obj, const char *path)
+ 		char buf[PATH_MAX];
+ 
+ 		if (path) {
+-			int len;
+-
+-			len = snprintf(buf, PATH_MAX, "%s/%s", path,
+-				       bpf_map__name(map));
+-			if (len < 0)
+-				return libbpf_err(-EINVAL);
+-			else if (len >= PATH_MAX)
+-				return libbpf_err(-ENAMETOOLONG);
++			err = pathname_concat(path, bpf_map__name(map), buf, PATH_MAX);
++			if (err)
++				return err;
+ 			sanitize_pin_path(buf);
+ 			pin_path = buf;
+ 		} else if (!map->pin_path) {
+@@ -8034,6 +8032,7 @@ int bpf_object__unpin_maps(struct bpf_object *obj, const char *path)
+ int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
+ {
+ 	struct bpf_program *prog;
++	char buf[PATH_MAX];
+ 	int err;
+ 
+ 	if (!obj)
+@@ -8045,17 +8044,9 @@ int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
+ 	}
+ 
+ 	bpf_object__for_each_program(prog, obj) {
+-		char buf[PATH_MAX];
+-		int len;
+-
+-		len = snprintf(buf, PATH_MAX, "%s/%s", path, prog->name);
+-		if (len < 0) {
+-			err = -EINVAL;
+-			goto err_unpin_programs;
+-		} else if (len >= PATH_MAX) {
+-			err = -ENAMETOOLONG;
++		err = pathname_concat(path, prog->name, buf, PATH_MAX);
++		if (err)
+ 			goto err_unpin_programs;
+-		}
+ 
+ 		err = bpf_program__pin(prog, buf);
+ 		if (err)
+@@ -8066,13 +8057,7 @@ int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
+ 
+ err_unpin_programs:
+ 	while ((prog = bpf_object__prev_program(obj, prog))) {
+-		char buf[PATH_MAX];
+-		int len;
+-
+-		len = snprintf(buf, PATH_MAX, "%s/%s", path, prog->name);
+-		if (len < 0)
+-			continue;
+-		else if (len >= PATH_MAX)
++		if (pathname_concat(path, prog->name, buf, PATH_MAX))
+ 			continue;
+ 
+ 		bpf_program__unpin(prog, buf);
+@@ -8091,13 +8076,10 @@ int bpf_object__unpin_programs(struct bpf_object *obj, const char *path)
+ 
+ 	bpf_object__for_each_program(prog, obj) {
+ 		char buf[PATH_MAX];
+-		int len;
+ 
+-		len = snprintf(buf, PATH_MAX, "%s/%s", path, prog->name);
+-		if (len < 0)
+-			return libbpf_err(-EINVAL);
+-		else if (len >= PATH_MAX)
+-			return libbpf_err(-ENAMETOOLONG);
++		err = pathname_concat(path, prog->name, buf, PATH_MAX);
++		if (err)
++			return libbpf_err(err);
+ 
+ 		err = bpf_program__unpin(prog, buf);
+ 		if (err)
+-- 
+1.8.3.1
 
-cheers,
-jamal
