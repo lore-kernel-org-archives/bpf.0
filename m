@@ -2,159 +2,234 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 140DCC54EE9
-	for <bpf@archiver.kernel.org>; Tue, 20 Sep 2022 06:27:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 961A8C54EE9
+	for <bpf@archiver.kernel.org>; Tue, 20 Sep 2022 07:43:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbiITG1t (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 20 Sep 2022 02:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33304 "EHLO
+        id S231229AbiITHnA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 20 Sep 2022 03:43:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiITG1r (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 20 Sep 2022 02:27:47 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B4C14036;
-        Mon, 19 Sep 2022 23:27:46 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id r23so1574695pgr.6;
-        Mon, 19 Sep 2022 23:27:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=hVjUCDSaCdPdJ7NXLFSifGsFadRadfOQWil7zKYvxLI=;
-        b=c125V8QjD5o5L+Aqok+dbsA1xQu0n25dsto6FuFHTGqhuM7a30ssy9Bs6qo8NNXIJy
-         lYGrqv/UeUKStJwtecVoceKViRqnHW+DfaHZIo7g5ALU1AL2IPxzDLJPoXW9xjoHVrsM
-         8x0ZHzaag8QtoAdsJvAD4JTkiMOmgBXcy9UwwJz/TCGwZG7H4UIFiaR18ePdxTgt23GT
-         H76eLZ8X1YFQBgMPJ5W/gkScCjmgjeS+PoXSc5PNQZoyFOy4de5ghPSQcAnHWs/tyWHd
-         PXqQLUyWa8B0HTxw2CAzWCXoWPIcZtdg734JqkletsmF3w0oX1D54xT/U25BGdZEOYf7
-         JRbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=hVjUCDSaCdPdJ7NXLFSifGsFadRadfOQWil7zKYvxLI=;
-        b=AWAJuouVQ0/sjkzYjOeGykglNt73gSA3J7dQu9ZBFdre5SgdgWBwfk3fQc9o+fXrW0
-         yx5gtFaEVOzfsRWfMydq14QvW3Y9n39aN/GzNv360xug23hCrtRjNomUz0ClSsxMoKTF
-         +wkA3+ABTHuVJKFWY9tDq5vdAw2BP/cH0qPOQoMeNIg7CF8PqNg9cbLc3AMQc1V6QPAP
-         D1CaByETEiR5czEn/jlYh4dZXTj3jDO+j31hH1eIW88S0+Byka4Ww+kA1+UCtqvx5B3C
-         bOCy6DGhxte3hNVrfh7ISrK1MpQX1xDjr/9xtPAFl43+YRrvjpUkcUBcwkFsgp2UfDCU
-         tOQw==
-X-Gm-Message-State: ACrzQf1bujblJ85mwElZ7r6N2IMk8stk1AFF2C7wFIEPhp3c1HADqAzE
-        9WpEwb7XF6rDEDiPn7FojjDDYyNWzqFarPs2csY=
-X-Google-Smtp-Source: AMsMyM5s4t8RXN2/xwtdUU0gK/TFlYQcykuRGozpzIEPl1arwy8c3Q8rsEQyaBnVdQYh7nqPZL3CP6d7nL3hQ92w7NE=
-X-Received: by 2002:a63:3409:0:b0:438:c9c9:5582 with SMTP id
- b9-20020a633409000000b00438c9c95582mr18570186pga.69.1663655265597; Mon, 19
- Sep 2022 23:27:45 -0700 (PDT)
+        with ESMTP id S230416AbiITHmm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 20 Sep 2022 03:42:42 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6BC399E1;
+        Tue, 20 Sep 2022 00:41:11 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MWthg1vt9zlK5Z;
+        Tue, 20 Sep 2022 15:38:59 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.67.175.61])
+        by APP2 (Coremail) with SMTP id Syh0CgBH4mt1biljrIh4BA--.36206S4;
+        Tue, 20 Sep 2022 15:40:39 +0800 (CST)
+From:   Pu Lehui <pulehui@huaweicloud.com>
+To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Pu Lehui <pulehui@huawei.com>,
+        Pu Lehui <pulehui@huaweicloud.com>
+Subject: [PATCH bpf v4 2/2] bpftool: Fix wrong cgroup attach flags being assigned to effective progs
+Date:   Tue, 20 Sep 2022 15:42:33 +0000
+Message-Id: <20220920154233.1494352-3-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220920154233.1494352-1-pulehui@huaweicloud.com>
+References: <20220920154233.1494352-1-pulehui@huaweicloud.com>
 MIME-Version: 1.0
-References: <YyjCBjJch24OT+Ia@ipe420-102>
-In-Reply-To: <YyjCBjJch24OT+Ia@ipe420-102>
-From:   Magnus Karlsson <magnus.karlsson@gmail.com>
-Date:   Tue, 20 Sep 2022 08:27:34 +0200
-Message-ID: <CAJ8uoz3G05BsmafrkP93sO--3S2MBgA96Dh_40iM8svuPU5qxA@mail.gmail.com>
-Subject: Re: [PATCH bpf] xsk: inherit need_wakeup flag for shared sockets
-To:     Jalal Mostafa <jalal.a.mostapha@gmail.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, bjorn@kernel.org,
-        magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
-        jonathan.lemon@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        linux-kernel@vger.kernel.org, jalal.mostafa@kit.edu
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgBH4mt1biljrIh4BA--.36206S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxuw4fAr4rGrykAF18CF1rZwb_yoW7CF4xpr
+        4kZ34jy3WY9r9xXFsav3s0gFWrGr4xW342ya9xXr4ruF1xWryvyr1IkFy0vr13WFZ2yw4x
+        Z3W5ZFZrGw4jva7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUm214x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2048vs2IY02
+        0E87I2jVAFwI0_Jryl82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2
+        F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjx
+        v20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2
+        z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0V
+        AKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1l
+        Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErc
+        IFxwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkE
+        bVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67
+        AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI
+        42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMI
+        IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVF
+        xhVjvjDU0xZFpf9x0pR9NVDUUUUU=
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 9:27 PM Jalal Mostafa
-<jalal.a.mostapha@gmail.com> wrote:
->
-> The flag for need_wakeup is not set for xsks with `XDP_SHARED_UMEM`
-> flag and of different queue ids and/or devices. They should inherit
-> the flag from the first socket buffer pool since no flags can be
-> specified once `XDP_SHARED_UMEM` is specified. The issue is fixed
-> by creating a new function `xp_create_and_assign_umem_shared` to
-> create xsk_buff_pool for xsks with the shared umem flag set.
+From: Pu Lehui <pulehui@huawei.com>
 
-Thanks for spotting this Jalal. Though I think we should aim for a
-simpler fix. The uses_need_wakeup flag is set by xp_assign_dev(). The
-problem here is the function xp_assign_dev_shared() that prepares the
-flag parameter for xp_assign_dev().
+When root-cgroup attach multi progs and sub-cgroup attach a override prog,
+bpftool will display incorrectly for the attach flags of the sub-cgroup’s
+effective progs:
 
-if (pool->uses_need_wakeup)
-                flags |= XDP_USE_NEED_WAKEUP;
+$ bpftool cgroup tree /sys/fs/cgroup effective
+CgroupPath
+ID       AttachType      AttachFlags     Name
+/sys/fs/cgroup
+6        cgroup_sysctl   multi           sysctl_tcp_mem
+13       cgroup_sysctl   multi           sysctl_tcp_mem
+/sys/fs/cgroup/cg1
+20       cgroup_sysctl   override        sysctl_tcp_mem
+6        cgroup_sysctl   override        sysctl_tcp_mem <- wrong
+13       cgroup_sysctl   override        sysctl_tcp_mem <- wrong
+/sys/fs/cgroup/cg1/cg2
+20       cgroup_sysctl                   sysctl_tcp_mem
+6        cgroup_sysctl                   sysctl_tcp_mem
+13       cgroup_sysctl                   sysctl_tcp_mem
 
-Should really be:
+Attach flags is only valid for attached progs of this layer cgroup,
+but not for effective progs. For querying with EFFECTIVE flags,
+exporting attach flags does not make sense. So let's remove the
+AttachFlags field and the associated logic. After this patch, the
+above effective cgroup tree will show as bellow:
 
-if (umem_xs->pool->uses_need_wakeup)
-                flags |= XDP_USE_NEED_WAKEUP;
+$ bpftool cgroup tree /sys/fs/cgroup effective
+CgroupPath
+ID       AttachType      Name
+/sys/fs/cgroup
+6        cgroup_sysctl   sysctl_tcp_mem
+13       cgroup_sysctl   sysctl_tcp_mem
+/sys/fs/cgroup/cg1
+20       cgroup_sysctl   sysctl_tcp_mem
+6        cgroup_sysctl   sysctl_tcp_mem
+13       cgroup_sysctl   sysctl_tcp_mem
+/sys/fs/cgroup/cg1/cg2
+20       cgroup_sysctl   sysctl_tcp_mem
+6        cgroup_sysctl   sysctl_tcp_mem
+13       cgroup_sysctl   sysctl_tcp_mem
 
-So change the function parameter *umem to *umem_xs, use that in the
-function call and do:
+Fixes: b79c9fc9551b ("bpf: implement BPF_PROG_QUERY for BPF_LSM_CGROUP")
+Fixes: a98bf57391a2 ("tools: bpftool: add support for reporting the effective cgroup progs")
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+---
+ tools/bpf/bpftool/cgroup.c | 54 ++++++++++++++++++++++++++++++++++----
+ 1 file changed, 49 insertions(+), 5 deletions(-)
 
-flags = umem_xs->umem->zc ? XDP_ZEROCOPY : XDP_COPY;
-if (umem_xs->pool->uses_need_wakeup)
-          flags |= XDP_USE_NEED_WAKEUP;
+diff --git a/tools/bpf/bpftool/cgroup.c b/tools/bpf/bpftool/cgroup.c
+index cced668fb2a3..b46a998d8f8d 100644
+--- a/tools/bpf/bpftool/cgroup.c
++++ b/tools/bpf/bpftool/cgroup.c
+@@ -136,8 +136,8 @@ static int show_bpf_prog(int id, enum bpf_attach_type attach_type,
+ 			jsonw_string_field(json_wtr, "attach_type", attach_type_str);
+ 		else
+ 			jsonw_uint_field(json_wtr, "attach_type", attach_type);
+-		jsonw_string_field(json_wtr, "attach_flags",
+-				   attach_flags_str);
++		if (!(query_flags & BPF_F_QUERY_EFFECTIVE))
++			jsonw_string_field(json_wtr, "attach_flags", attach_flags_str);
+ 		jsonw_string_field(json_wtr, "name", prog_name);
+ 		if (attach_btf_name)
+ 			jsonw_string_field(json_wtr, "attach_btf_name", attach_btf_name);
+@@ -150,7 +150,10 @@ static int show_bpf_prog(int id, enum bpf_attach_type attach_type,
+ 			printf("%-15s", attach_type_str);
+ 		else
+ 			printf("type %-10u", attach_type);
+-		printf(" %-15s %-15s", attach_flags_str, prog_name);
++		if (query_flags & BPF_F_QUERY_EFFECTIVE)
++			printf(" %-15s", prog_name);
++		else
++			printf(" %-15s %-15s", attach_flags_str, prog_name);
+ 		if (attach_btf_name)
+ 			printf(" %-15s", attach_btf_name);
+ 		else if (info.attach_btf_id)
+@@ -195,6 +198,32 @@ static int cgroup_has_attached_progs(int cgroup_fd)
+ 
+ 	return no_prog ? 0 : 1;
+ }
++
++static int show_effective_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
++				    int level)
++{
++	LIBBPF_OPTS(bpf_prog_query_opts, p);
++	__u32 prog_ids[1024] = {0};
++	__u32 iter;
++	int ret;
++
++	p.query_flags = query_flags;
++	p.prog_cnt = ARRAY_SIZE(prog_ids);
++	p.prog_ids = prog_ids;
++
++	ret = bpf_prog_query_opts(cgroup_fd, type, &p);
++	if (ret)
++		return ret;
++
++	if (p.prog_cnt == 0)
++		return 0;
++
++	for (iter = 0; iter < p.prog_cnt; iter++)
++		show_bpf_prog(prog_ids[iter], type, NULL, level);
++
++	return 0;
++}
++
+ static int show_attached_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
+ 				   int level)
+ {
+@@ -245,6 +274,14 @@ static int show_attached_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
+ 	return 0;
+ }
+ 
++static int show_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
++			  int level)
++{
++	return query_flags & BPF_F_QUERY_EFFECTIVE ?
++	       show_effective_bpf_progs(cgroup_fd, type, level) :
++	       show_attached_bpf_progs(cgroup_fd, type, level);
++}
++
+ static int do_show(int argc, char **argv)
+ {
+ 	enum bpf_attach_type type;
+@@ -292,6 +329,8 @@ static int do_show(int argc, char **argv)
+ 
+ 	if (json_output)
+ 		jsonw_start_array(json_wtr);
++	else if (query_flags & BPF_F_QUERY_EFFECTIVE)
++		printf("%-8s %-15s %-15s\n", "ID", "AttachType", "Name");
+ 	else
+ 		printf("%-8s %-15s %-15s %-15s\n", "ID", "AttachType",
+ 		       "AttachFlags", "Name");
+@@ -304,7 +343,7 @@ static int do_show(int argc, char **argv)
+ 		 * If we were able to get the show for at least one
+ 		 * attach type, let's return 0.
+ 		 */
+-		if (show_attached_bpf_progs(cgroup_fd, type, 0) == 0)
++		if (show_bpf_progs(cgroup_fd, type, 0) == 0)
+ 			ret = 0;
+ 	}
+ 
+@@ -362,7 +401,7 @@ static int do_show_tree_fn(const char *fpath, const struct stat *sb,
+ 
+ 	btf_vmlinux = libbpf_find_kernel_btf();
+ 	for (type = 0; type < __MAX_BPF_ATTACH_TYPE; type++)
+-		show_attached_bpf_progs(cgroup_fd, type, ftw->level);
++		show_bpf_progs(cgroup_fd, type, ftw->level);
+ 
+ 	if (errno == EINVAL)
+ 		/* Last attach type does not support query.
+@@ -436,6 +475,11 @@ static int do_show_tree(int argc, char **argv)
+ 
+ 	if (json_output)
+ 		jsonw_start_array(json_wtr);
++	else if (query_flags & BPF_F_QUERY_EFFECTIVE)
++		printf("%s\n"
++		       "%-8s %-15s %-15s\n",
++		       "CgroupPath",
++		       "ID", "AttachType", "Name");
+ 	else
+ 		printf("%s\n"
+ 		       "%-8s %-15s %-15s %-15s\n",
+-- 
+2.25.1
 
-What do you think?
-
-> Signed-off-by: Jalal Mostafa <jalal.a.mostapha@gmail.com>
-> ---
->  include/net/xsk_buff_pool.h |  2 ++
->  net/xdp/xsk.c               |  3 +--
->  net/xdp/xsk_buff_pool.c     | 15 +++++++++++++++
->  3 files changed, 18 insertions(+), 2 deletions(-)
->
-> diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
-> index 647722e847b4..917cfef9d355 100644
-> --- a/include/net/xsk_buff_pool.h
-> +++ b/include/net/xsk_buff_pool.h
-> @@ -93,6 +93,8 @@ struct xsk_buff_pool {
->  /* AF_XDP core. */
->  struct xsk_buff_pool *xp_create_and_assign_umem(struct xdp_sock *xs,
->                                                 struct xdp_umem *umem);
-> +struct xsk_buff_pool *xp_create_and_assign_umem_shared(struct xdp_sock *xs,
-> +                                                      struct xdp_sock *umem_xs);
->  int xp_assign_dev(struct xsk_buff_pool *pool, struct net_device *dev,
->                   u16 queue_id, u16 flags);
->  int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_umem *umem,
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 5b4ce6ba1bc7..a415db88e8e5 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-> @@ -946,8 +946,7 @@ static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
->                         /* Share the umem with another socket on another qid
->                          * and/or device.
->                          */
-> -                       xs->pool = xp_create_and_assign_umem(xs,
-> -                                                            umem_xs->umem);
-> +                       xs->pool = xp_create_and_assign_umem_shared(xs, umem_xs);
->                         if (!xs->pool) {
->                                 err = -ENOMEM;
->                                 sockfd_put(sock);
-> diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-> index a71a8c6edf55..7d5b0bd8d953 100644
-> --- a/net/xdp/xsk_buff_pool.c
-> +++ b/net/xdp/xsk_buff_pool.c
-> @@ -112,6 +112,21 @@ struct xsk_buff_pool *xp_create_and_assign_umem(struct xdp_sock *xs,
->         return NULL;
->  }
->
-> +struct xsk_buff_pool *xp_create_and_assign_umem_shared(struct xdp_sock *xs,
-> +                                                      struct xdp_sock *umem_xs)
-> +{
-> +       struct xdp_umem *umem = umem_xs->umem;
-> +       struct xsk_buff_pool *pool = xp_create_and_assign_umem(xs, umem);
-> +
-> +       if (!pool)
-> +               goto out;
-> +
-> +       pool->uses_need_wakeup = umem_xs->pool->uses_need_wakeup;
-> +
-> +out:
-> +       return pool;
-> +}
-> +
->  void xp_set_rxq_info(struct xsk_buff_pool *pool, struct xdp_rxq_info *rxq)
->  {
->         u32 i;
-> --
-> 2.34.1
->
