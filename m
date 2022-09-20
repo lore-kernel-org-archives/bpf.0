@@ -2,104 +2,112 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64959C54EE9
-	for <bpf@archiver.kernel.org>; Tue, 20 Sep 2022 05:21:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B970C54EE9
+	for <bpf@archiver.kernel.org>; Tue, 20 Sep 2022 05:24:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbiITFVS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 20 Sep 2022 01:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38184 "EHLO
+        id S229549AbiITFYS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 20 Sep 2022 01:24:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbiITFVE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 20 Sep 2022 01:21:04 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5AC7558C8
-        for <bpf@vger.kernel.org>; Mon, 19 Sep 2022 22:21:00 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id l8so1053728wmi.2
-        for <bpf@vger.kernel.org>; Mon, 19 Sep 2022 22:21:00 -0700 (PDT)
+        with ESMTP id S230249AbiITFYC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 20 Sep 2022 01:24:02 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7A85A88F
+        for <bpf@vger.kernel.org>; Mon, 19 Sep 2022 22:23:00 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id cc5so2397169wrb.6
+        for <bpf@vger.kernel.org>; Mon, 19 Sep 2022 22:23:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=a8YXF4FkoK4BVn3ip9rlUtWQPJoXHaS5Sh7vR1MqvPE=;
-        b=WQmhzGMxqT4k0MzVa39wjOjN6R1nS4Ob/3kNG8TNGLSXt9PSeb2c6blJWFgxQBWMEE
-         C23t1U2Ydi8xpeQd79xyj1NUKN159B4wlJ0uql9e2c1y40fAoftHrIB4P9nJiAzIVpEc
-         7KIA6DDvj+g/2roQOyKEVsyV7TlelJzIbRSk6VdPWqmoqXMfhWm+sQJbsIOAlZ52A6TK
-         jXJGpUp6Cj/yQuc7aLBdKwq/c1nHMFHqnRUyvjANVydqd1waFKYVClY2XDHkhnRFCUpI
-         4mewNeL/RCaxFggAbnK/UfVspoTujKPYBB0HUdCmdO9TLqeLGv9Op2btNtAN5yn6WX1/
-         o9Yw==
+        d=metanetworks.com; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=98qbQv6w1d+q5r2VEqKFWdAB7F5cqKlEm1iqy8qrkhs=;
+        b=QAbXeC52ehq2tMtbscVU2DmgGCB0nHm579m6AvT1/tDEHLSs3IEBrNreDSVtiARaSl
+         Bvj3Vi+Jp6vG1qbV+412k5d5eLM0G75JlKGS5GhbmP88afjN2vkwfllgseqsd4w1FeqV
+         S/X9hPadfip+2c+murYKwAr19YYGO7PMl/VgA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=a8YXF4FkoK4BVn3ip9rlUtWQPJoXHaS5Sh7vR1MqvPE=;
-        b=bdK0DZCYgh4/oq/pnt9MRB0eGUZaZ32Ualx1tDDTyzJ26hWfaVkKIa6+gHw3zNEiKv
-         kI2M9i4TPkrhrlRASqdWJ8sQM1oCubBl3d5poSGZaayOfswjAHoz3QzecCO5dM6iSQL1
-         HzUx9JhwIvgR9TJi2sL+cc/HwtWpBW5uCtAO2G6bE4brTbMmuzwo0rweH3F/kile4n1o
-         DoLdIOHToa1/4a2DalnmzBdby/uQr2f18Kb4TDL0Gfm+vW/L0BdZeRuhk50U4qIgI3M0
-         ddALYC53hk6fQKULZ2yV8SPnA7MRNyc86fv/7KAVq7ZmMNvoiELb0wSv80CsCo6omuAZ
-         WRHQ==
-X-Gm-Message-State: ACrzQf29d1sqkROwp9PM6WZ13oVATfBCd4y09Tuk58kkBey0JGissIGN
-        rzT8X2/wyqWQaMNowK0BG0291nFvypY=
-X-Google-Smtp-Source: AMsMyM4tMNmk9qzQ0VFB9tQwZPblgL5ica1PQNeJhq5B5Pi13OBZ1UM1aYqDsZQrO91xFDkbaF/Hmw==
-X-Received: by 2002:a05:600c:42d4:b0:3b3:3de1:7564 with SMTP id j20-20020a05600c42d400b003b33de17564mr969875wme.152.1663651260066;
-        Mon, 19 Sep 2022 22:21:00 -0700 (PDT)
-Received: from localhost.localdomain ([2a0d:6fc2:4af0:cc00:f99d:5d19:6e17:dc3a])
-        by smtp.gmail.com with ESMTPSA id n33-20020a05600c3ba100b003b3401f1e24sm827063wms.28.2022.09.19.22.20.58
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=98qbQv6w1d+q5r2VEqKFWdAB7F5cqKlEm1iqy8qrkhs=;
+        b=uv8yoPLn5H8orMMZueb1ad17DPqX743DICuAmwLGjdXVw64RgSZstJkgIKFGq85UXa
+         ORVujY3RSulzU69JJ3lEA6CIXz4yYeenfJ+Wc92yhNSmotTmWwsxXNM1MpSn6+ylwk+I
+         NW6spUI+9BZifDG2k8GURsJlHKqKlaiA8j7EarRKooYEd+t73T082MwMNapWFje2aNUa
+         EnzsQ2bTZ6RpQI8ZmCCh8eXCNjjXB+qJ7B7CNE7lOt8Q15eyFqUGfBCN7HZsqXrgOLew
+         yF5XQ0GCCJtBV4jLZ8KuzTW159xUko9vTnLDO+qFr+g5X7Pfvk2d8SF6JnGGgk7Kb2iU
+         uG8w==
+X-Gm-Message-State: ACrzQf1iIXTMxBB4haK4mYtzAYc3xnSrKVa+UCqo23P5tvskRNYLgEKi
+        SCxEX9mVs7xB1+98q4GxHc0sxuu0BpyVRA==
+X-Google-Smtp-Source: AMsMyM7Bjso/KWxgg4jZg8Y9PppoV5QfVV2p2qxCy6gtDQti2IJNt7o0UmvuLs3tPrCrz2pfx8bbzw==
+X-Received: by 2002:adf:de0b:0:b0:22a:c7f7:8eb4 with SMTP id b11-20020adfde0b000000b0022ac7f78eb4mr12640386wrm.195.1663651378871;
+        Mon, 19 Sep 2022 22:22:58 -0700 (PDT)
+Received: from blondie ([77.137.65.34])
+        by smtp.gmail.com with ESMTPSA id q6-20020adff946000000b00226dedf1ab7sm462395wrr.76.2022.09.19.22.22.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 22:20:59 -0700 (PDT)
-From:   Jon Doron <arilou@gmail.com>
-To:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org
-Cc:     Jon Doron <jond@wiz.io>
-Subject: [PATCH bpf v1] Fix the case of running rootless with capabilities
-Date:   Tue, 20 Sep 2022 08:20:45 +0300
-Message-Id: <20220920052045.3248976-1-arilou@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        Mon, 19 Sep 2022 22:22:58 -0700 (PDT)
+Date:   Tue, 20 Sep 2022 08:22:54 +0300
+From:   Shmulik Ladkani <shmulik@metanetworks.com>
+To:     Yonghong Song <yhs@fb.com>
+Cc:     bpf@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Paul Chaignon <paul@isovalent.com>,
+        Shmulik Ladkani <shmulik.ladkani@gmail.com>
+Subject: Re: [PATCH v7 bpf-next 4/4] selftests/bpf: Add geneve with
+ bpf_skb_set_tunnel_opt_dynptr test-case to test_progs
+Message-ID: <20220920082254.4672d5e4@blondie>
+In-Reply-To: <65c2f50f-d7ad-a979-a7ea-2b79b4886d15@fb.com>
+References: <20220911122328.306188-1-shmulik.ladkani@gmail.com>
+        <20220911122328.306188-5-shmulik.ladkani@gmail.com>
+        <65c2f50f-d7ad-a979-a7ea-2b79b4886d15@fb.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jon Doron <jond@wiz.io>
+On Mon, 19 Sep 2022 19:58:20 -0700 Yonghong Song <yhs@fb.com> wrote:
 
-When running rootless with special capabilities like:
-FOWNER / DAC_OVERRIDE / DAC_READ_SEARCH
+> > +	/* set empty geneve options (of runtime length) using a dynptr */
+> > +	__builtin_memset(opts, 0x0, sizeof(*opts));
+> > +	if (*local_ip % 2)
+> > +		bpf_dynptr_from_mem(opts, GENEVE_OPTS_LEN1, 0, &dptr);
+> > +	else
+> > +		bpf_dynptr_from_mem(opts, GENEVE_OPTS_LEN0, 0, &dptr);
+> > +	ret = bpf_skb_set_tunnel_opt_dynptr(skb, &dptr);  
+> 
+> I think the above example is not good. since it can write as
+> 	if (*local_ip % 2)
+> 		ret = bpf_skb_set_tunnel_opt(skb, opts, GENEVE_OPTS_LEN1);
+> 	else
+> 		ret = bpf_skb_set_tunnel_opt(skb, opts,	GENEVE_OPTS_LEN0);
+> 
+> In the commit message of Patch 2, we have
+> 
+> ===
+> For example, we have an ebpf program that gets geneve options on
+> incoming packets, stores them into a map (using a key representing
+> the incoming flow), and later needs to assign *same* options to
+> reply packets (belonging to same flow).
+> ===
+> 
+> It would be great if you can create a test case for the above
+> use case.
 
-The access API will not make the proper check if there is really
-access to a file or not.
+Yes, but please note dynptr trim/advance API is still WIP:
 
-Signed-off-by: Jon Doron <jond@wiz.io>
----
- tools/lib/bpf/libbpf.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+https://lore.kernel.org/bpf/CAJnrk1a53F=LLaU+gdmXGcZBBeUR-anALT3iO6pyHKiZpD0cNw@mail.gmail.com/
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 50d41815f431..df804fd65493 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -875,8 +875,9 @@ __u32 get_kernel_version(void)
- 	const char *ubuntu_kver_file = "/proc/version_signature";
- 	__u32 major, minor, patch;
- 	struct utsname info;
-+	struct stat sb;
- 
--	if (access(ubuntu_kver_file, R_OK) == 0) {
-+	if (stat(ubuntu_kver_file, &sb) == 0) {
- 		FILE *f;
- 
- 		f = fopen(ubuntu_kver_file, "r");
-@@ -9877,9 +9878,10 @@ static int append_to_file(const char *file, const char *fmt, ...)
- static bool use_debugfs(void)
- {
- 	static int has_debugfs = -1;
-+	struct stat sb;
- 
- 	if (has_debugfs < 0)
--		has_debugfs = access(DEBUGFS, F_OK) == 0;
-+		has_debugfs = stat(DEBUGFS, &sb) == 0;
- 
- 	return has_debugfs == 1;
- }
--- 
-2.37.3
+However, once we settled on the API for setting variable length tunnel
+options from a *dynptr* (and not from raw buffer+len), we can just
+exercise 'bpf_skb_set_tunnel_opt_dynptr' regardless the original
+usecase (i.e. we can assume dynptrs can be properly mangled).
 
+In any case, I can later amend the test once all dynptr convenience
+helpers are accepted.
+
+Best,
+Shmulik
