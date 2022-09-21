@@ -2,121 +2,123 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B2B7C6FA82
-	for <bpf@archiver.kernel.org>; Wed, 21 Sep 2022 02:44:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F847C6FA82
+	for <bpf@archiver.kernel.org>; Wed, 21 Sep 2022 02:55:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbiIUCoQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 20 Sep 2022 22:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38340 "EHLO
+        id S229638AbiIUCzk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 20 Sep 2022 22:55:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbiIUCoM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 20 Sep 2022 22:44:12 -0400
+        with ESMTP id S229518AbiIUCzj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 20 Sep 2022 22:55:39 -0400
 Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C717D784;
-        Tue, 20 Sep 2022 19:44:10 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MXN3l2yJpz6T8t2;
-        Wed, 21 Sep 2022 10:42:11 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.67.175.61])
-        by APP1 (Coremail) with SMTP id cCh0CgD3xCh3eipjRFhmBA--.50399S5;
-        Wed, 21 Sep 2022 10:44:09 +0800 (CST)
-From:   Pu Lehui <pulehui@huaweicloud.com>
-To:     Martin KaFai Lau <martin.lau@linux.dev>,
-        Stanislav Fomichev <sdf@google.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB732792E9
+        for <bpf@vger.kernel.org>; Tue, 20 Sep 2022 19:55:37 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MXNJy1KThz6TCP5
+        for <bpf@vger.kernel.org>; Wed, 21 Sep 2022 10:53:38 +0800 (CST)
+Received: from [10.174.176.117] (unknown [10.174.176.117])
+        by APP2 (Coremail) with SMTP id Syh0CgB3FG4kfSpjibqfBA--.22693S2;
+        Wed, 21 Sep 2022 10:55:36 +0800 (CST)
+Subject: Re: [PATCH bpf-next] bpf: Check whether or not node is NULL before
+ free it in free_bulk
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
+        Yonghong Song <yhs@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Jiri Olsa <jolsa@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Pu Lehui <pulehui@huawei.com>,
-        Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH bpf v5 3/3] selftests/bpf: Adapt cgroup effective query uapi change
-Date:   Wed, 21 Sep 2022 10:46:04 +0000
-Message-Id: <20220921104604.2340580-4-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220921104604.2340580-1-pulehui@huaweicloud.com>
-References: <20220921104604.2340580-1-pulehui@huaweicloud.com>
+        Lorenz Bauer <oss@lmb.io>, Hou Tao <houtao1@huawei.com>
+References: <20220919144811.3570825-1-houtao@huaweicloud.com>
+ <CAADnVQJTQG3=2vMyJ6roXqOoD5dZPs7ddTwxXEcMsym1K-FeUQ@mail.gmail.com>
+From:   Hou Tao <houtao@huaweicloud.com>
+Message-ID: <578432bd-2c3d-f15c-d82d-e2d3795094aa@huaweicloud.com>
+Date:   Wed, 21 Sep 2022 10:55:32 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
+In-Reply-To: <CAADnVQJTQG3=2vMyJ6roXqOoD5dZPs7ddTwxXEcMsym1K-FeUQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgD3xCh3eipjRFhmBA--.50399S5
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFyUXw1xJr43ZF47XF48Crg_yoW8uw1kpF
-        ykZ34Ut3WrWr1agF1kA3s2vrWI9FsxW3WIyF4UJrW3ZFy2vr10vr1xKws0vF1rJrWvyw4F
-        va4Yy398XF4UZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUmI14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2048vs2IY02
-        0E87I2jVAFwI0_JrWl82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2
-        F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjx
-        v20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2
-        z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0V
-        AKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1l
-        Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErc
-        IFxwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkE
-        bVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67
-        AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI
-        42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCw
-        CI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnI
-        WIevJa73UjIFyTuYvjTRNzVbUUUUU
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+Content-Language: en-US
+X-CM-TRANSID: Syh0CgB3FG4kfSpjibqfBA--.22693S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kr4UXw13CryfCFW5Cw45ZFb_yoW8ZrWxpr
+        WFyF18KF4kArn2v3Z2v3W7GF17ua17KF17WF9avrWfu3WFvrnF9r9rta4Uuayfur4kJ34j
+        ya12ya1fK3s8Z3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvab4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
+        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv
+        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
+        uYvjxUFDGOUUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Pu Lehui <pulehui@huawei.com>
+Hi,
 
-The attach flags is meaningless for effective query and
-its value will always be set as 0 during effective query.
-Root cg's effective progs is always its attached progs,
-so we use non-effective query to get its progs count and
-attach flags. And we don't need the remain attach flags
-check.
-
-Fixes: b79c9fc9551b ("bpf: implement BPF_PROG_QUERY for BPF_LSM_CGROUP")
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
- tools/testing/selftests/bpf/prog_tests/cgroup_link.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_link.c b/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
-index 9e6e6aad347c..15093a69510e 100644
---- a/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
-@@ -71,10 +71,9 @@ void serial_test_cgroup_link(void)
- 
- 	ping_and_check(cg_nr, 0);
- 
--	/* query the number of effective progs and attach flags in root cg */
-+	/* query the number of attached progs and attach flags in root cg */
- 	err = bpf_prog_query(cgs[0].fd, BPF_CGROUP_INET_EGRESS,
--			     BPF_F_QUERY_EFFECTIVE, &attach_flags, NULL,
--			     &prog_cnt);
-+			     0, &attach_flags, NULL, &prog_cnt);
- 	CHECK_FAIL(err);
- 	CHECK_FAIL(attach_flags != BPF_F_ALLOW_MULTI);
- 	if (CHECK(prog_cnt != 1, "effect_cnt", "exp %d, got %d\n", 1, prog_cnt))
-@@ -85,17 +84,15 @@ void serial_test_cgroup_link(void)
- 			     BPF_F_QUERY_EFFECTIVE, NULL, NULL,
- 			     &prog_cnt);
- 	CHECK_FAIL(err);
--	CHECK_FAIL(attach_flags != BPF_F_ALLOW_MULTI);
- 	if (CHECK(prog_cnt != cg_nr, "effect_cnt", "exp %d, got %d\n",
- 		  cg_nr, prog_cnt))
- 		goto cleanup;
- 
- 	/* query the effective prog IDs in last cg */
- 	err = bpf_prog_query(cgs[last_cg].fd, BPF_CGROUP_INET_EGRESS,
--			     BPF_F_QUERY_EFFECTIVE, &attach_flags,
--			     prog_ids, &prog_cnt);
-+			     BPF_F_QUERY_EFFECTIVE, NULL, prog_ids,
-+			     &prog_cnt);
- 	CHECK_FAIL(err);
--	CHECK_FAIL(attach_flags != BPF_F_ALLOW_MULTI);
- 	if (CHECK(prog_cnt != cg_nr, "effect_cnt", "exp %d, got %d\n",
- 		  cg_nr, prog_cnt))
- 		goto cleanup;
--- 
-2.25.1
+On 9/20/2022 11:09 PM, Alexei Starovoitov wrote:
+> On Mon, Sep 19, 2022 at 7:30 AM Hou Tao <houtao@huaweicloud.com> wrote:
+>> From: Hou Tao <houtao1@huawei.com>
+>>
+>> llnode could be NULL if there are new allocations after the checking of
+>> c-free_cnt > c->high_watermark in bpf_mem_refill() and before the
+>> calling of __llist_del_first() in free_bulk (e.g. a PREEMPT_RT kernel
+>> or allocation in NMI context). And it will incur oops as shown below:
+>>
+>>  BUG: kernel NULL pointer dereference, address: 0000000000000000
+>>  #PF: supervisor write access in kernel mode
+>>  #PF: error_code(0x0002) - not-present page
+>>  PGD 0 P4D 0
+>>  Oops: 0002 [#1] PREEMPT_RT SMP
+>>  CPU: 39 PID: 373 Comm: irq_work/39 Tainted: G        W          6.0.0-rc6-rt9+ #1
+>>  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
+>>  RIP: 0010:bpf_mem_refill+0x66/0x130
+>>  ......
+>>  Call Trace:
+>>   <TASK>
+>>   irq_work_single+0x24/0x60
+>>   irq_work_run_list+0x24/0x30
+>>   run_irq_workd+0x18/0x20
+>>   smpboot_thread_fn+0x13f/0x2c0
+>>   kthread+0x121/0x140
+>>   ? kthread_complete_and_exit+0x20/0x20
+>>   ret_from_fork+0x1f/0x30
+>>   </TASK>
+>>
+>> Simply fixing it by checking whether or not llnode is NULL in free_bulk().
+>>
+>> Fixes: 1376b7c57624 ("bpf: Introduce any context BPF specific memory allocator.")
+> There is no such sha.
+> Also that commit isn't buggy as-is.
+> The proper fixes tag:
+> Fixes: 8d5a8011b35d ("bpf: Batch call_rcu callbacks instead of
+> SLAB_TYPESAFE_BY_RCU.")
+The incorrect git sha-sum is due to rebase on my local branch.
+You are right. In 7c8199e24fa0 ("bpf: Introduce any context BPF specific memory
+allocator."), free_bulk() calls kfree() and kmem_cache_free() directly, so there
+is no such problem.  And in commit 8d5a8011b35d ("bpf: Batch call_rcu callbacks
+instead of SLAB_TYPESAFE_BY_RCU."), free_one is replaced by enque_to_free() and
+incurs the problem.
+>
+> Used that while applying.
+Thanks for the update.
+> Thanks for the fix !
+> .
 
