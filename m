@@ -2,41 +2,41 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74A90ECAAD8
-	for <bpf@archiver.kernel.org>; Wed, 21 Sep 2022 16:49:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EC9DC6FA8B
+	for <bpf@archiver.kernel.org>; Wed, 21 Sep 2022 16:50:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231533AbiIUQt4 convert rfc822-to-8bit (ORCPT
+        id S231535AbiIUQt4 convert rfc822-to-8bit (ORCPT
         <rfc822;bpf@archiver.kernel.org>); Wed, 21 Sep 2022 12:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50878 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231553AbiIUQtd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S231556AbiIUQtd (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 21 Sep 2022 12:49:33 -0400
 Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8AE9AF9D
-        for <bpf@vger.kernel.org>; Wed, 21 Sep 2022 09:43:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E37F9AF87
+        for <bpf@vger.kernel.org>; Wed, 21 Sep 2022 09:43:42 -0700 (PDT)
 Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28LFUjZJ015200
-        for <bpf@vger.kernel.org>; Wed, 21 Sep 2022 09:43:42 -0700
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28LFUjZH015200
+        for <bpf@vger.kernel.org>; Wed, 21 Sep 2022 09:43:41 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jqbbub3q6-10
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jqbbub3q6-8
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 21 Sep 2022 09:43:42 -0700
+        for <bpf@vger.kernel.org>; Wed, 21 Sep 2022 09:43:41 -0700
 Received: from snc-exhub201.TheFacebook.com (2620:10d:c085:21d::7) by
  snc-exhub103.TheFacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 21 Sep 2022 09:43:37 -0700
-Received: from twshared15978.04.prn5.facebook.com (2620:10d:c085:108::4) by
+ 15.1.2375.31; Wed, 21 Sep 2022 09:43:36 -0700
+Received: from twshared15978.04.prn5.facebook.com (2620:10d:c085:208::11) by
  mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.31; Wed, 21 Sep 2022 09:43:07 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 3464E1F2B4FA7; Wed, 21 Sep 2022 09:43:03 -0700 (PDT)
+        id 138791F2B4F9A; Wed, 21 Sep 2022 09:42:59 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v2 bpf-next 4/4] selftests/bpf: add ability to filter programs in veristat
-Date:   Wed, 21 Sep 2022 09:42:54 -0700
-Message-ID: <20220921164254.3630690-5-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 2/4] selftests/bpf: add CSV output mode for veristat
+Date:   Wed, 21 Sep 2022 09:42:52 -0700
+Message-ID: <20220921164254.3630690-3-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220921164254.3630690-1-andrii@kernel.org>
 References: <20220921164254.3630690-1-andrii@kernel.org>
@@ -44,8 +44,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: SzJN1qZQOHn1y-lMuutnw4OfKQlJRe6S
-X-Proofpoint-GUID: SzJN1qZQOHn1y-lMuutnw4OfKQlJRe6S
+X-Proofpoint-ORIG-GUID: q6in8Ouq-kDPvkFsgW9_YCm5PlhC5zfx
+X-Proofpoint-GUID: q6in8Ouq-kDPvkFsgW9_YCm5PlhC5zfx
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
  definitions=2022-09-21_09,2022-09-20_02,2022-06-22_01
@@ -53,375 +53,235 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add -f (--filter) argument which accepts glob-based filters for
-narrowing down what BPF object files and programs within them should be
-processed by veristat. This filtering applies both to comparison and
-main (verification) mode.
+Teach veristat to output results as CSV table for easier programmatic
+processing. Change what was --output/-o argument to now be --emit/-e.
+And then use --output-format/-o <fmt> to specify output format.
+Currently "table" and "csv" is supported, table being default.
 
-Filter can be of two forms:
-  - file (object) filter: 'strobemeta*'; in this case all the programs
-    within matching files are implicitly allowed (or denied, depending
-    if it's positive or negative rule, see below);
-  - file and prog filter: 'strobemeta*/*unroll*' will further filter
-    programs within matching files to only allow those program names that
-    match '*unroll*' glob.
+For CSV output mode veristat is using spec identifiers as column names.
+E.g., instead of "Total states" veristat uses "total_states" as a CSV
+header name.
 
-As mentioned, filters can be positive (allowlisting) and negative
-(denylisting). Negative filters should start with '!': '!strobemeta*'
-will deny any filename which basename starts with "strobemeta".
-
-Further, one extra special syntax is supported to allow more convenient
-use in practice. Instead of specifying rule on the command line,
-veristat allows to specify file that contains rules, both positive and
-negative, one line per one filter. This is achieved with -f @<filepath>
-use, where <filepath> points to a text file containing rules (negative
-and positive rules can be mixed). For convenience empty lines and lines
-starting with '#' are ignored. This feature is useful to have some
-pre-canned list of object files and program names that are tested
-repeatedly, allowing to check in a list of rules and quickly specify
-them on the command line.
-
-As a demonstration (and a short cut for nearest future), create a small
-list of "interesting" BPF object files from selftests/bpf and commit it
-as veristat.cfg. It currently includes 73 programs, most of which are
-the most complex and largest BPF programs in selftests, as judged by
-total verified instruction count and verifier states total.
-
-If there is overlap between positive or negative filters, negative
-filter takes precedence (denylisting is stronger than allowlisting). If
-no allow filter is specified, veristat implicitly assumes '*/*' rule. If
-no deny rule is specified, veristat (logically) assumes no negative
-filters.
-
-Also note that -f (just like -e and -s) can be specified multiple times
-and their effect is cumulative.
+Internally veristat recognizes three formats, one of them
+(RESFMT_TABLE_CALCLEN) is a special format instructing veristat to
+calculate column widths for table output. This felt a bit cleaner and
+more uniform than either creating separate functions just for this.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/testing/selftests/bpf/veristat.c   | 212 ++++++++++++++++++++++-
- tools/testing/selftests/bpf/veristat.cfg |  17 ++
- 2 files changed, 227 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/veristat.cfg
+ tools/testing/selftests/bpf/veristat.c | 111 +++++++++++++++++--------
+ 1 file changed, 75 insertions(+), 36 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
-index c6837bac357f..51030234b60a 100644
+index c0c8a65cda52..0472bfae3c9d 100644
 --- a/tools/testing/selftests/bpf/veristat.c
 +++ b/tools/testing/selftests/bpf/veristat.c
-@@ -52,6 +52,11 @@ enum resfmt {
- 	RESFMT_CSV,
+@@ -46,10 +46,17 @@ struct stat_specs {
+ 	int lens[ALL_STATS_CNT];
  };
  
-+struct filter {
-+	char *file_glob;
-+	char *prog_glob;
++enum resfmt {
++	RESFMT_TABLE,
++	RESFMT_TABLE_CALCLEN, /* fake format to pre-calculate table's column widths */
++	RESFMT_CSV,
 +};
 +
  static struct env {
  	char **filenames;
  	int filename_cnt;
-@@ -68,6 +73,11 @@ static struct env {
+ 	bool verbose;
++	enum resfmt out_fmt;
  
- 	struct stat_specs output_spec;
- 	struct stat_specs sort_spec;
-+
-+	struct filter *allow_filters;
-+	struct filter *deny_filters;
-+	int allow_filter_cnt;
-+	int deny_filter_cnt;
- } env;
- 
- static int libbpf_print_fn(enum libbpf_print_level level, const char *format, va_list args)
-@@ -94,10 +104,13 @@ static const struct argp_option opts[] = {
+ 	struct verif_stats *prog_stats;
+ 	int prog_stat_cnt;
+@@ -78,8 +85,9 @@ const char argp_program_doc[] =
+ static const struct argp_option opts[] = {
+ 	{ NULL, 'h', NULL, OPTION_HIDDEN, "Show the full help" },
+ 	{ "verbose", 'v', NULL, 0, "Verbose mode" },
+-	{ "output", 'o', "SPEC", 0, "Specify output stats" },
++	{ "emit", 'e', "SPEC", 0, "Specify stats to be emitted" },
  	{ "sort", 's', "SPEC", 0, "Specify sort order" },
- 	{ "output-format", 'o', "FMT", 0, "Result output format (table, csv), default is table." },
- 	{ "compare", 'C', NULL, 0, "Comparison mode" },
-+	{ "filter", 'f', "FILTER", 0, "Filter expressions (or @filename for file with expressions)." },
++	{ "output-format", 'o', "FMT", 0, "Result output format (table, csv), default is table." },
  	{},
  };
  
- static int parse_stats(const char *stats_str, struct stat_specs *specs);
-+static int append_filter(struct filter **filters, int *cnt, const char *str);
-+static int append_filter_file(const char *path);
- 
- static error_t parse_arg(int key, char *arg, struct argp_state *state)
- {
-@@ -134,6 +147,18 @@ static error_t parse_arg(int key, char *arg, struct argp_state *state)
- 	case 'C':
- 		env.comparison_mode = true;
+@@ -97,7 +105,7 @@ static error_t parse_arg(int key, char *arg, struct argp_state *state)
+ 	case 'v':
+ 		env.verbose = true;
  		break;
-+	case 'f':
-+		if (arg[0] == '@')
-+			err = append_filter_file(arg + 1);
-+		else if (arg[0] == '!')
-+			err = append_filter(&env.deny_filters, &env.deny_filter_cnt, arg + 1);
-+		else
-+			err = append_filter(&env.allow_filters, &env.allow_filter_cnt, arg);
-+		if (err) {
-+			fprintf(stderr, "Failed to collect program filter expressions: %d\n", err);
-+			return err;
+-	case 'o':
++	case 'e':
+ 		err = parse_stats(arg, &env.output_spec);
+ 		if (err)
+ 			return err;
+@@ -107,6 +115,16 @@ static error_t parse_arg(int key, char *arg, struct argp_state *state)
+ 		if (err)
+ 			return err;
+ 		break;
++	case 'o':
++		if (strcmp(arg, "table") == 0) {
++			env.out_fmt = RESFMT_TABLE;
++		} else if (strcmp(arg, "csv") == 0) {
++			env.out_fmt = RESFMT_CSV;
++		} else {
++			fprintf(stderr, "Unrecognized output format '%s'\n", arg);
++			return -EINVAL;
 +		}
 +		break;
  	case ARGP_KEY_ARG:
  		tmp = realloc(env.filenames, (env.filename_cnt + 1) * sizeof(*env.filenames));
  		if (!tmp)
-@@ -156,6 +181,150 @@ static const struct argp argp = {
- 	.doc = argp_program_doc,
- };
+@@ -147,7 +165,7 @@ static struct stat_def {
+ 	[FILE_NAME] = { "File", {"file_name", "filename", "file"}, true /* asc */ },
+ 	[PROG_NAME] = { "Program", {"prog_name", "progname", "prog"}, true /* asc */ },
+ 	[VERDICT] = { "Verdict", {"verdict"}, true /* asc: failure, success */ },
+-	[DURATION] = { "Duration, us", {"duration", "dur"}, },
++	[DURATION] = { "Duration (us)", {"duration", "dur"}, },
+ 	[TOTAL_INSNS] = { "Total insns", {"total_insns", "insns"}, },
+ 	[TOTAL_STATES] = { "Total states", {"total_states", "states"}, },
+ 	[PEAK_STATES] = { "Peak states", {"peak_states"}, },
+@@ -385,7 +403,21 @@ static int cmp_prog_stats(const void *v1, const void *v2)
+ #define HEADER_CHAR '-'
+ #define COLUMN_SEP "  "
  
-+
-+/* Adapted from perf/util/string.c */
-+static bool glob_matches(const char *str, const char *pat)
+-static void output_headers(bool calc_len)
++static void output_header_underlines(void)
 +{
-+	while (*str && *pat && *pat != '*') {
-+		if (*str != *pat)
-+			return false;
-+		str++;
-+		pat++;
++	int i, j, len;
++
++	for (i = 0; i < env.output_spec.spec_cnt; i++) {
++		len = env.output_spec.lens[i];
++
++		printf("%s", i == 0 ? "" : COLUMN_SEP);
++		for (j = 0; j < len; j++)
++			printf("%c", HEADER_CHAR);
 +	}
-+	/* Check wild card */
-+	if (*pat == '*') {
-+		while (*pat == '*')
-+			pat++;
-+		if (!*pat) /* Tail wild card matches all */
-+			return true;
-+		while (*str)
-+			if (glob_matches(str++, pat))
-+				return true;
-+	}
-+	return !*str && !*pat;
++	printf("\n");
 +}
 +
-+static bool should_process_file(const char *filename)
-+{
-+	int i;
-+
-+	if (env.deny_filter_cnt > 0) {
-+		for (i = 0; i < env.deny_filter_cnt; i++) {
-+			if (glob_matches(filename, env.deny_filters[i].file_glob))
-+				return false;
-+		}
-+	}
-+
-+	if (env.allow_filter_cnt == 0)
-+		return true;
-+
-+	for (i = 0; i < env.allow_filter_cnt; i++) {
-+		if (glob_matches(filename, env.allow_filters[i].file_glob))
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
-+static bool should_process_prog(const char *filename, const char *prog_name)
-+{
-+	int i;
-+
-+	if (env.deny_filter_cnt > 0) {
-+		for (i = 0; i < env.deny_filter_cnt; i++) {
-+			if (glob_matches(filename, env.deny_filters[i].file_glob))
-+				return false;
-+			if (!env.deny_filters[i].prog_glob)
-+				continue;
-+			if (glob_matches(prog_name, env.deny_filters[i].prog_glob))
-+				return false;
-+		}
-+	}
-+
-+	if (env.allow_filter_cnt == 0)
-+		return true;
-+
-+	for (i = 0; i < env.allow_filter_cnt; i++) {
-+		if (!glob_matches(filename, env.allow_filters[i].file_glob))
-+			continue;
-+		/* if filter specifies only filename glob part, it implicitly
-+		 * allows all progs within that file
-+		 */
-+		if (!env.allow_filters[i].prog_glob)
-+			return true;
-+		if (glob_matches(prog_name, env.allow_filters[i].prog_glob))
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
-+static int append_filter(struct filter **filters, int *cnt, const char *str)
-+{
-+	struct filter *f;
-+	void *tmp;
-+	const char *p;
-+
-+	tmp = realloc(*filters, (*cnt + 1) * sizeof(**filters));
-+	if (!tmp)
-+		return -ENOMEM;
-+	*filters = tmp;
-+
-+	f = &(*filters)[*cnt];
-+	f->file_glob = f->prog_glob = NULL;
-+
-+	/* filter can be specified either as "<obj-glob>" or "<obj-glob>/<prog-glob>" */
-+	p = strchr(str, '/');
-+	if (!p) {
-+		f->file_glob = strdup(str);
-+		if (!f->file_glob)
-+			return -ENOMEM;
-+	} else {
-+		f->file_glob = strndup(str, p - str);
-+		f->prog_glob = strdup(p + 1);
-+		if (!f->file_glob || !f->prog_glob) {
-+			free(f->file_glob);
-+			free(f->prog_glob);
-+			f->file_glob = f->prog_glob = NULL;
-+			return -ENOMEM;
-+		}
-+	}
-+
-+	*cnt = *cnt + 1;
-+	return 0;
-+}
-+
-+static int append_filter_file(const char *path)
-+{
-+	char buf[1024];
-+	FILE *f;
-+	int err = 0;
-+
-+	f = fopen(path, "r");
-+	if (!f) {
-+		err = -errno;
-+		fprintf(stderr, "Failed to open '%s': %d\n", path, err);
-+		return err;
-+	}
-+
-+	while (fscanf(f, " %1023[^\n]\n", buf) == 1) {
-+		/* lines starting with # are comments, skip them */
-+		if (buf[0] == '\0' || buf[0] == '#')
-+			continue;
-+		/* lines starting with ! are negative match filters */
-+		if (buf[0] == '!')
-+			err = append_filter(&env.deny_filters, &env.deny_filter_cnt, buf + 1);
-+		else
-+			err = append_filter(&env.allow_filters, &env.allow_filter_cnt, buf);
-+		if (err)
-+			goto cleanup;
-+	}
-+
-+cleanup:
-+	fclose(f);
-+	return err;
-+}
-+
- static const struct stat_specs default_output_spec = {
- 	.spec_cnt = 7,
- 	.ids = {
-@@ -283,6 +452,9 @@ static int process_prog(const char *filename, struct bpf_object *obj, struct bpf
- 	int err = 0;
- 	void *tmp;
++static void output_headers(enum resfmt fmt)
+ {
+ 	int i, len;
  
-+	if (!should_process_prog(basename(filename), bpf_program__name(prog)))
-+		return 0;
-+
- 	tmp = realloc(env.prog_stats, (env.prog_stat_cnt + 1) * sizeof(*env.prog_stats));
- 	if (!tmp)
- 		return -ENOMEM;
-@@ -330,6 +502,9 @@ static int process_obj(const char *filename)
- 	LIBBPF_OPTS(bpf_object_open_opts, opts);
- 	int err = 0, prog_cnt = 0;
+@@ -393,34 +425,30 @@ static void output_headers(bool calc_len)
+ 		int id = env.output_spec.ids[i];
+ 		int *max_len = &env.output_spec.lens[i];
  
-+	if (!should_process_file(basename(filename)))
-+		return 0;
-+
- 	old_libbpf_print_fn = libbpf_set_print(libbpf_print_fn);
- 
- 	obj = bpf_object__open_file(filename, &opts);
-@@ -666,7 +841,10 @@ static int parse_stats_csv(const char *filename, struct stat_specs *specs,
- 				goto cleanup;
- 			}
- 			*statsp = tmp;
-+
- 			st = &(*statsp)[*stat_cntp];
-+			memset(st, 0, sizeof(*st));
-+
- 			*stat_cntp += 1;
+-		if (calc_len) {
++		switch (fmt) {
++		case RESFMT_TABLE_CALCLEN:
+ 			len = snprintf(NULL, 0, "%s", stat_defs[id].header);
+ 			if (len > *max_len)
+ 				*max_len = len;
+-		} else {
++			break;
++		case RESFMT_TABLE:
+ 			printf("%s%-*s", i == 0 ? "" : COLUMN_SEP,  *max_len, stat_defs[id].header);
++			if (i == env.output_spec.spec_cnt - 1)
++				printf("\n");
++			break;
++		case RESFMT_CSV:
++			printf("%s%s", i == 0 ? "" : ",", stat_defs[id].names[0]);
++			if (i == env.output_spec.spec_cnt - 1)
++				printf("\n");
++			break;
  		}
- 
-@@ -692,14 +870,34 @@ static int parse_stats_csv(const char *filename, struct stat_specs *specs,
- 			col++;
- 		}
- 
--		if (!header && col < specs->spec_cnt) {
-+		if (header) {
-+			header = false;
-+			continue;
-+		}
-+
-+		if (col < specs->spec_cnt) {
- 			fprintf(stderr, "Not enough columns in row #%d in '%s'\n",
- 				*stat_cntp, filename);
- 			err = -EINVAL;
- 			goto cleanup;
- 		}
- 
--		header = false;
-+		if (!st->file_name || !st->prog_name) {
-+			fprintf(stderr, "Row #%d in '%s' is missing file and/or program name\n",
-+				*stat_cntp, filename);
-+			err = -EINVAL;
-+			goto cleanup;
-+		}
-+
-+		/* in comparison mode we can only check filters after we
-+		 * parsed entire line; if row should be ignored we pretend we
-+		 * never parsed it
-+		 */
-+		if (!should_process_prog(st->file_name, st->prog_name)) {
-+			free(st->file_name);
-+			free(st->prog_name);
-+			*stat_cntp -= 1;
-+		}
  	}
  
- 	if (!feof(f)) {
-@@ -1012,5 +1210,15 @@ int main(int argc, char **argv)
- 	for (i = 0; i < env.filename_cnt; i++)
- 		free(env.filenames[i]);
- 	free(env.filenames);
-+	for (i = 0; i < env.allow_filter_cnt; i++) {
-+		free(env.allow_filters[i].file_glob);
-+		free(env.allow_filters[i].prog_glob);
-+	}
-+	free(env.allow_filters);
-+	for (i = 0; i < env.deny_filter_cnt; i++) {
-+		free(env.deny_filters[i].file_glob);
-+		free(env.deny_filters[i].prog_glob);
-+	}
-+	free(env.deny_filters);
- 	return -err;
+-	if (!calc_len)
+-		printf("\n");
++	if (fmt == RESFMT_TABLE)
++		output_header_underlines();
  }
-diff --git a/tools/testing/selftests/bpf/veristat.cfg b/tools/testing/selftests/bpf/veristat.cfg
-new file mode 100644
-index 000000000000..1a385061618d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/veristat.cfg
-@@ -0,0 +1,17 @@
-+# pre-canned list of rather complex selftests/bpf BPF object files to monitor
-+# BPF verifier's performance on
-+bpf_flow*
-+bpf_loop_bench*
-+loop*
-+netif_receive_skb*
-+profiler*
-+pyperf*
-+strobemeta*
-+test_cls_redirect*
-+test_l4lb
-+test_sysctl*
-+test_tcp_hdr_*
-+test_usdt*
-+test_verif_scale*
-+test_xdp_noinline*
-+xdp_synproxy*
+ 
+-static void output_header_underlines(void)
+-{
+-	int i, j, len;
+-
+-	for (i = 0; i < env.output_spec.spec_cnt; i++) {
+-		len = env.output_spec.lens[i];
+-
+-		printf("%s", i == 0 ? "" : COLUMN_SEP);
+-		for (j = 0; j < len; j++)
+-			printf("%c", HEADER_CHAR);
+-	}
+-	printf("\n");
+-}
+-
+-static void output_stats(const struct verif_stats *s, bool calc_len)
++static void output_stats(const struct verif_stats *s, enum resfmt fmt, bool last)
+ {
+ 	int i;
+ 
+@@ -453,23 +481,36 @@ static void output_stats(const struct verif_stats *s, bool calc_len)
+ 			exit(1);
+ 		}
+ 
+-		if (calc_len) {
++		switch (fmt) {
++		case RESFMT_TABLE_CALCLEN:
+ 			if (str)
+ 				len = snprintf(NULL, 0, "%s", str);
+ 			else
+ 				len = snprintf(NULL, 0, "%ld", val);
+ 			if (len > *max_len)
+ 				*max_len = len;
+-		} else {
++			break;
++		case RESFMT_TABLE:
+ 			if (str)
+ 				printf("%s%-*s", i == 0 ? "" : COLUMN_SEP, *max_len, str);
+ 			else
+ 				printf("%s%*ld", i == 0 ? "" : COLUMN_SEP,  *max_len, val);
++			if (i == env.output_spec.spec_cnt - 1)
++				printf("\n");
++			break;
++		case RESFMT_CSV:
++			if (str)
++				printf("%s%s", i == 0 ? "" : ",", str);
++			else
++				printf("%s%ld", i == 0 ? "" : ",", val);
++			if (i == env.output_spec.spec_cnt - 1)
++				printf("\n");
++			break;
+ 		}
+ 	}
+ 
+-	if (!calc_len)
+-		printf("\n");
++	if (last && fmt == RESFMT_TABLE)
++		output_header_underlines();
+ }
+ 
+ int main(int argc, char **argv)
+@@ -505,20 +546,18 @@ int main(int argc, char **argv)
+ 
+ 	qsort(env.prog_stats, env.prog_stat_cnt, sizeof(*env.prog_stats), cmp_prog_stats);
+ 
+-	/* calculate column widths */
+-	output_headers(true);
+-	for (i = 0; i < env.prog_stat_cnt; i++) {
+-		output_stats(&env.prog_stats[i], true);
++	if (env.out_fmt == RESFMT_TABLE) {
++		/* calculate column widths */
++		output_headers(RESFMT_TABLE_CALCLEN);
++		for (i = 0; i < env.prog_stat_cnt; i++)
++			output_stats(&env.prog_stats[i], RESFMT_TABLE_CALCLEN, false);
+ 	}
+ 
+ 	/* actually output the table */
+-	output_headers(false);
+-	output_header_underlines();
++	output_headers(env.out_fmt);
+ 	for (i = 0; i < env.prog_stat_cnt; i++) {
+-		output_stats(&env.prog_stats[i], false);
++		output_stats(&env.prog_stats[i], env.out_fmt, i == env.prog_stat_cnt - 1);
+ 	}
+-	output_header_underlines();
+-	printf("\n");
+ 
+ 	printf("Done. Processed %d object files, %d programs.\n",
+ 	       env.filename_cnt, env.prog_stat_cnt);
 -- 
 2.30.2
 
