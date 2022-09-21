@@ -2,204 +2,210 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A358C32771
-	for <bpf@archiver.kernel.org>; Wed, 21 Sep 2022 07:20:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A49D7ECAAD8
+	for <bpf@archiver.kernel.org>; Wed, 21 Sep 2022 07:40:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbiIUHU0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 21 Sep 2022 03:20:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37994 "EHLO
+        id S230328AbiIUHkF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 21 Sep 2022 03:40:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiIUHUZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 21 Sep 2022 03:20:25 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E9C7CB79
-        for <bpf@vger.kernel.org>; Wed, 21 Sep 2022 00:20:23 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MXVBm0JbRzlJJJ
-        for <bpf@vger.kernel.org>; Wed, 21 Sep 2022 15:18:40 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP2 (Coremail) with SMTP id Syh0CgDXKXM0uypjR6SoBA--.9748S4;
-        Wed, 21 Sep 2022 15:20:21 +0800 (CST)
-From:   Hou Tao <houtao@huaweicloud.com>
-To:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
-        Yonghong Song <yhs@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>, houtao1@huawei.com
-Subject: [PATCH bpf-next RESEND] bpf: Always use raw spinlock for hash bucket lock
-Date:   Wed, 21 Sep 2022 15:38:26 +0800
-Message-Id: <20220921073826.2365800-1-houtao@huaweicloud.com>
-X-Mailer: git-send-email 2.29.2
+        with ESMTP id S230315AbiIUHkE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 21 Sep 2022 03:40:04 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0644F275CE;
+        Wed, 21 Sep 2022 00:40:00 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MXVcs0hlGzHpmT;
+        Wed, 21 Sep 2022 15:37:49 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.70) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 21 Sep 2022 15:39:57 +0800
+From:   Wang Yufen <wangyufen@huawei.com>
+To:     <quentin@isovalent.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <andrii@kernel.org>, <martin.lau@linux.dev>, <song@kernel.org>,
+        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+        <sdf@google.com>, <haoluo@google.com>, <jolsa@kernel.org>,
+        <davem@davemloft.net>, <kuba@kernel.org>, <hawk@kernel.org>,
+        <nathan@kernel.org>, <ndesaulniers@google.com>, <trix@redhat.com>
+CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <llvm@lists.linux.dev>
+Subject: [bpf-next v5 1/3] bpftool: Add auto_attach for bpf prog load|loadall
+Date:   Wed, 21 Sep 2022 16:00:38 +0800
+Message-ID: <1663747240-31210-1-git-send-email-wangyufen@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgDXKXM0uypjR6SoBA--.9748S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxXw13GFW8CF13Aw45Wr1xKrg_yoWrKryfpF
-        WfKasayr18ZF1S93yDXw10gr15Gw4Ig3yUA3ykW348Aa45Zrnagrn2qryIvFy0vryxAFn0
-        vF42gF1YkryUZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
-        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI
-        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
-        IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUo0eHDUUUU
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.70]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500010.china.huawei.com (7.192.105.118)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Hou Tao <houtao1@huawei.com>
+Add auto_attach optional to support one-step load-attach-pin_link.
 
-For a non-preallocated hash map on RT kernel, regular spinlock instead
-of raw spinlock is used for bucket lock. The reason is that on RT kernel
-memory allocation is forbidden under atomic context and regular spinlock
-is sleepable under RT.
+For example,
+   $ bpftool prog loadall test.o /sys/fs/bpf/test auto_attach
 
-Now hash map has been fully converted to use bpf_map_alloc, and there
-will be no synchronous memory allocation for non-preallocated hash map,
-so it is safe to always use raw spinlock for bucket lock on RT. So
-removing the usage of htab_use_raw_lock() and updating the comments
-accordingly.
+   $ bpftool link
+   26: tracing  name test1  tag f0da7d0058c00236  gpl
+   	loaded_at 2022-09-09T21:39:49+0800  uid 0
+   	xlated 88B  jited 55B  memlock 4096B  map_ids 3
+   	btf_id 55
+   28: kprobe  name test3  tag 002ef1bef0723833  gpl
+   	loaded_at 2022-09-09T21:39:49+0800  uid 0
+   	xlated 88B  jited 56B  memlock 4096B  map_ids 3
+   	btf_id 55
+   57: tracepoint  name oncpu  tag 7aa55dfbdcb78941  gpl
+   	loaded_at 2022-09-09T21:41:32+0800  uid 0
+   	xlated 456B  jited 265B  memlock 4096B  map_ids 17,13,14,15
+   	btf_id 82
 
-Signed-off-by: Hou Tao <houtao1@huawei.com>
+   $ bpftool link
+   1: tracing  prog 26
+   	prog_type tracing  attach_type trace_fentry
+   3: perf_event  prog 28
+   10: perf_event  prog 57
+
+The auto_attach optional can support tracepoints, k(ret)probes,
+u(ret)probes.
+
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+Reviewed-by: Quentin Monnet <quentin@isovalent.com>
 ---
- * Forget to add bpf-next for the previous send, so send it again
+v4 -> v5: some formatting nits of doc
+v3 -> v4: rename functions, update doc, bash and do_help()
+v2 -> v3: switch to extend prog load command instead of extend perf
+v2: https://patchwork.kernel.org/project/netdevbpf/patch/20220824033837.458197-1-weiyongjun1@huawei.com/
+v1: https://patchwork.kernel.org/project/netdevbpf/patch/20220816151725.153343-1-weiyongjun1@huawei.com/
+ tools/bpf/bpftool/prog.c | 77 ++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 75 insertions(+), 2 deletions(-)
 
- kernel/bpf/hashtab.c | 66 ++++++++++----------------------------------
- 1 file changed, 14 insertions(+), 52 deletions(-)
-
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 86aec20c22d0..ed3f8a53603b 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -68,24 +68,16 @@
-  * In theory the BPF locks could be converted to regular spinlocks as well,
-  * but the bucket locks and percpu_freelist locks can be taken from
-  * arbitrary contexts (perf, kprobes, tracepoints) which are required to be
-- * atomic contexts even on RT. These mechanisms require preallocated maps,
-- * so there is no need to invoke memory allocations within the lock held
-- * sections.
-- *
-- * BPF maps which need dynamic allocation are only used from (forced)
-- * thread context on RT and can therefore use regular spinlocks which in
-- * turn allows to invoke memory allocations from the lock held section.
-- *
-- * On a non RT kernel this distinction is neither possible nor required.
-- * spinlock maps to raw_spinlock and the extra code is optimized out by the
-- * compiler.
-+ * atomic contexts even on RT. Before the introduction of bpf_mem_alloc,
-+ * it is only safe to use raw spinlock for preallocated hash map on a RT kernel,
-+ * because there is no memory allocation within the lock held sections. However
-+ * after hash map was fully converted to use bpf_mem_alloc, there will be
-+ * non-synchronous memory allocation for non-preallocated hash map, so it is
-+ * safe to always use raw spinlock for bucket lock.
-  */
- struct bucket {
- 	struct hlist_nulls_head head;
--	union {
--		raw_spinlock_t raw_lock;
--		spinlock_t     lock;
--	};
-+	raw_spinlock_t raw_lock;
- };
- 
- #define HASHTAB_MAP_LOCK_COUNT 8
-@@ -141,26 +133,15 @@ static inline bool htab_is_prealloc(const struct bpf_htab *htab)
- 	return !(htab->map.map_flags & BPF_F_NO_PREALLOC);
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index c81362a..aea0b57 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -1453,6 +1453,68 @@ static int do_run(int argc, char **argv)
+ 	return ret;
  }
  
--static inline bool htab_use_raw_lock(const struct bpf_htab *htab)
--{
--	return (!IS_ENABLED(CONFIG_PREEMPT_RT) || htab_is_prealloc(htab));
--}
--
- static void htab_init_buckets(struct bpf_htab *htab)
++static int
++auto_attach_program(struct bpf_program *prog, const char *path)
++{
++	struct bpf_link *link;
++	int err;
++
++	link = bpf_program__attach(prog);
++	err = libbpf_get_error(link);
++	if (err)
++		return err;
++
++	err = bpf_link__pin(link, path);
++	if (err) {
++		bpf_link__destroy(link);
++		return err;
++	}
++	return 0;
++}
++
++static int pathname_concat(const char *path, const char *name, char *buf)
++{
++	int len;
++
++	len = snprintf(buf, PATH_MAX, "%s/%s", path, name);
++	if (len < 0)
++		return -EINVAL;
++	if (len >= PATH_MAX)
++		return -ENAMETOOLONG;
++
++	return 0;
++}
++
++static int
++auto_attach_programs(struct bpf_object *obj, const char *path)
++{
++	struct bpf_program *prog;
++	char buf[PATH_MAX];
++	int err;
++
++	bpf_object__for_each_program(prog, obj) {
++		err = pathname_concat(path, bpf_program__name(prog), buf);
++		if (err)
++			goto err_unpin_programs;
++
++		err = auto_attach_program(prog, buf);
++		if (err)
++			goto err_unpin_programs;
++	}
++
++	return 0;
++
++err_unpin_programs:
++	while ((prog = bpf_object__prev_program(obj, prog))) {
++		if (pathname_concat(path, bpf_program__name(prog), buf))
++			continue;
++
++		bpf_program__unpin(prog, buf);
++	}
++
++	return err;
++}
++
+ static int load_with_options(int argc, char **argv, bool first_prog_only)
  {
- 	unsigned int i;
+ 	enum bpf_prog_type common_prog_type = BPF_PROG_TYPE_UNSPEC;
+@@ -1464,6 +1526,7 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+ 	struct bpf_program *prog = NULL, *pos;
+ 	unsigned int old_map_fds = 0;
+ 	const char *pinmaps = NULL;
++	bool auto_attach = false;
+ 	struct bpf_object *obj;
+ 	struct bpf_map *map;
+ 	const char *pinfile;
+@@ -1583,6 +1646,9 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+ 				goto err_free_reuse_maps;
  
- 	for (i = 0; i < htab->n_buckets; i++) {
- 		INIT_HLIST_NULLS_HEAD(&htab->buckets[i].head, i);
--		if (htab_use_raw_lock(htab)) {
--			raw_spin_lock_init(&htab->buckets[i].raw_lock);
--			lockdep_set_class(&htab->buckets[i].raw_lock,
-+		raw_spin_lock_init(&htab->buckets[i].raw_lock);
-+		lockdep_set_class(&htab->buckets[i].raw_lock,
- 					  &htab->lockdep_key);
--		} else {
--			spin_lock_init(&htab->buckets[i].lock);
--			lockdep_set_class(&htab->buckets[i].lock,
--					  &htab->lockdep_key);
--		}
- 		cond_resched();
- 	}
- }
-@@ -170,28 +151,17 @@ static inline int htab_lock_bucket(const struct bpf_htab *htab,
- 				   unsigned long *pflags)
- {
- 	unsigned long flags;
--	bool use_raw_lock;
+ 			pinmaps = GET_ARG();
++		} else if (is_prefix(*argv, "auto_attach")) {
++			auto_attach = true;
++			NEXT_ARG();
+ 		} else {
+ 			p_err("expected no more arguments, 'type', 'map' or 'dev', got: '%s'?",
+ 			      *argv);
+@@ -1692,14 +1758,20 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+ 			goto err_close_obj;
+ 		}
  
- 	hash = hash & HASHTAB_MAP_LOCK_MASK;
- 
--	use_raw_lock = htab_use_raw_lock(htab);
--	if (use_raw_lock)
--		preempt_disable();
--	else
--		migrate_disable();
-+	preempt_disable();
- 	if (unlikely(__this_cpu_inc_return(*(htab->map_locked[hash])) != 1)) {
- 		__this_cpu_dec(*(htab->map_locked[hash]));
--		if (use_raw_lock)
--			preempt_enable();
--		else
--			migrate_enable();
-+		preempt_enable();
- 		return -EBUSY;
- 	}
- 
--	if (use_raw_lock)
--		raw_spin_lock_irqsave(&b->raw_lock, flags);
--	else
--		spin_lock_irqsave(&b->lock, flags);
-+	raw_spin_lock_irqsave(&b->raw_lock, flags);
- 	*pflags = flags;
- 
- 	return 0;
-@@ -201,18 +171,10 @@ static inline void htab_unlock_bucket(const struct bpf_htab *htab,
- 				      struct bucket *b, u32 hash,
- 				      unsigned long flags)
- {
--	bool use_raw_lock = htab_use_raw_lock(htab);
--
- 	hash = hash & HASHTAB_MAP_LOCK_MASK;
--	if (use_raw_lock)
--		raw_spin_unlock_irqrestore(&b->raw_lock, flags);
--	else
--		spin_unlock_irqrestore(&b->lock, flags);
-+	raw_spin_unlock_irqrestore(&b->raw_lock, flags);
- 	__this_cpu_dec(*(htab->map_locked[hash]));
--	if (use_raw_lock)
--		preempt_enable();
--	else
--		migrate_enable();
-+	preempt_enable();
- }
- 
- static bool htab_lru_map_delete_node(void *arg, struct bpf_lru_node *node);
+-		err = bpf_obj_pin(bpf_program__fd(prog), pinfile);
++		if (auto_attach)
++			err = auto_attach_program(prog, pinfile);
++		else
++			err = bpf_obj_pin(bpf_program__fd(prog), pinfile);
+ 		if (err) {
+ 			p_err("failed to pin program %s",
+ 			      bpf_program__section_name(prog));
+ 			goto err_close_obj;
+ 		}
+ 	} else {
+-		err = bpf_object__pin_programs(obj, pinfile);
++		if (auto_attach)
++			err = auto_attach_programs(obj, pinfile);
++		else
++			err = bpf_object__pin_programs(obj, pinfile);
+ 		if (err) {
+ 			p_err("failed to pin all programs");
+ 			goto err_close_obj;
+@@ -2338,6 +2410,7 @@ static int do_help(int argc, char **argv)
+ 		"                         [type TYPE] [dev NAME] \\\n"
+ 		"                         [map { idx IDX | name NAME } MAP]\\\n"
+ 		"                         [pinmaps MAP_DIR]\n"
++		"                         [auto_attach]\n"
+ 		"       %1$s %2$s attach PROG ATTACH_TYPE [MAP]\n"
+ 		"       %1$s %2$s detach PROG ATTACH_TYPE [MAP]\n"
+ 		"       %1$s %2$s run PROG \\\n"
 -- 
-2.29.2
+1.8.3.1
 
