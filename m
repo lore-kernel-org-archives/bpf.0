@@ -2,166 +2,93 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E769C54EE9
-	for <bpf@archiver.kernel.org>; Wed, 21 Sep 2022 02:22:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4B3EC54EE9
+	for <bpf@archiver.kernel.org>; Wed, 21 Sep 2022 02:41:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbiIUCWC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 20 Sep 2022 22:22:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44928 "EHLO
+        id S229518AbiIUClE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 20 Sep 2022 22:41:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiIUCWB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 20 Sep 2022 22:22:01 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F7149B79
-        for <bpf@vger.kernel.org>; Tue, 20 Sep 2022 19:21:59 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28KL3DoF014451
-        for <bpf@vger.kernel.org>; Tue, 20 Sep 2022 19:21:59 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=e49NcZpgCFpb0dqDSixxDl7cRq97Y2YV7rCYjKMHYJc=;
- b=S5PGS8BK7zrKHRnF2Zjo/hoGD7aCJWyQBySmWW6TSL0KSvdUN0EA4+dlywkrusfAu/GU
- C2VYVHyd2yhMak09yIFM+v8XQ46QpisAkzGkB9VeagfxV3u9f65Dcwg1OVjNkp1itTyU
- no7ZTvqDslNTCnF6j7KFGCgI2kXQRgTDVg0= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jpyt7t6cb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 20 Sep 2022 19:21:58 -0700
-Received: from twshared22593.02.prn5.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 20 Sep 2022 19:21:57 -0700
-Received: by devbig150.prn5.facebook.com (Postfix, from userid 187975)
-        id D4DDD10577438; Tue, 20 Sep 2022 19:21:53 -0700 (PDT)
-From:   Jie Meng <jmeng@fb.com>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <andrii@kernel.org>,
-        <daniel@iogearbox.net>
-CC:     Jie Meng <jmeng@fb.com>
-Subject: [PATCH bpf-next] bpf,x64: use shrx/sarx/shlx when available
-Date:   Tue, 20 Sep 2022 19:21:43 -0700
-Message-ID: <20220921022143.1405126-1-jmeng@fb.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S230155AbiIUCk5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 20 Sep 2022 22:40:57 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754705F7EA
+        for <bpf@vger.kernel.org>; Tue, 20 Sep 2022 19:40:54 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MXMzx2pjSzKQKP
+        for <bpf@vger.kernel.org>; Wed, 21 Sep 2022 10:38:53 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP2 (Coremail) with SMTP id Syh0CgBH53CxeSpj9UifBA--.10379S5;
+        Wed, 21 Sep 2022 10:40:51 +0800 (CST)
+From:   Hou Tao <houtao@huaweicloud.com>
+To:     bpf@vger.kernel.org
+Cc:     Martin KaFai Lau <kafai@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
+        Yonghong Song <yhs@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Lorenz Bauer <oss@lmb.io>, houtao1@huawei.com
+Subject: [PATCH bpf-next 1/2] selftests/bpf: Destroy the skeleton when CONFIG_PREEMPT is off
+Date:   Wed, 21 Sep 2022 10:58:54 +0800
+Message-Id: <20220921025855.115463-2-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20220921025855.115463-1-houtao@huaweicloud.com>
+References: <20220921025855.115463-1-houtao@huaweicloud.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 6nNw3DtIs7FBo-0DgAH2hqrC1uEj3pQU
-X-Proofpoint-GUID: 6nNw3DtIs7FBo-0DgAH2hqrC1uEj3pQU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-20_12,2022-09-20_02,2022-06-22_01
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgBH53CxeSpj9UifBA--.10379S5
+X-Coremail-Antispam: 1UD129KBjvdXoWruw4fWF1ftrW3CF43tF4Dtwb_yoWDWFgEyF
+        4Utr97GFZ0yrZrJr1ay3Z7WrWDta1Ygrn7G347ur9rKr4jvF48JF4kAr15Za4Fqr9xCaya
+        qa98ZFWxtw1jvjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbfxYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7IE14v26r18M2
+        8IrcIa0xkI8VCY1x0267AKxVW8JVW5JwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK
+        021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r
+        4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+        GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx
+        0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWU
+        JVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwI
+        xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
+        Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7
+        IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
+        6cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jn9N3UUUUU=
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Instead of shr/sar/shl that implicitly use %cl, emit their more flexible
-alternatives provided in BMI2
+From: Hou Tao <houtao1@huawei.com>
 
-Signed-off-by: Jie Meng <jmeng@fb.com>
+Destroy the created skeleton when CONFIG_PREEMPT is off, else will be
+resource leak.
+
+Fixes: 73b97bc78b32 ("selftests/bpf: Test concurrent updates on bpf_task_storage_busy")
+Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- arch/x86/net/bpf_jit_comp.c                | 53 ++++++++++++++++++++++
- tools/testing/selftests/bpf/verifier/jit.c |  7 +--
- 2 files changed, 57 insertions(+), 3 deletions(-)
+ tools/testing/selftests/bpf/map_tests/task_storage_map.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index ae89f4143eb4..81a3b34327ae 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -889,6 +889,35 @@ static void emit_nops(u8 **pprog, int len)
- 	*pprog =3D prog;
- }
-=20
-+static void emit_3vex(u8 **pprog, bool r, bool x, bool b, u8 m,
-+		      bool w, u8 src_reg2, bool l, u8 p)
-+{
-+	u8 *prog =3D *pprog;
-+	u8 b0 =3D 0xc4, b1, b2;
-+	u8 src2 =3D reg2hex[src_reg2];
-+
-+	if (is_ereg(src_reg2))
-+		src2 |=3D 1 << 3;
-+
-+	/*
-+	 *    7                           0
-+	 *  +---+---+---+---+---+---+---+---+
-+	 *  |~R |~X |~B |         m         |
-+	 *  +---+---+---+---+---+---+---+---+
-+	 */
-+	b1 =3D (!r << 7) | (!x << 6) | (!b << 5) | (m & 0x1f);
-+	/*
-+	 *    7                           0
-+	 *  +---+---+---+---+---+---+---+---+
-+	 *  | W |     ~vvvv     | L |   pp  |
-+	 *  +---+---+---+---+---+---+---+---+
-+	 */
-+	b2 =3D (w << 7) | ((~src2 & 0xf) << 3) | (l << 2) | (p & 3);
-+
-+	EMIT3(b0, b1, b2);
-+	*pprog =3D prog;
-+}
-+
- #define INSN_SZ_DIFF (((addrs[i] - addrs[i - 1]) - (prog - temp)))
-=20
- static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image, u8 *=
-rw_image,
-@@ -1135,7 +1164,31 @@ static int do_jit(struct bpf_prog *bpf_prog, int *=
-addrs, u8 *image, u8 *rw_image
- 		case BPF_ALU64 | BPF_LSH | BPF_X:
- 		case BPF_ALU64 | BPF_RSH | BPF_X:
- 		case BPF_ALU64 | BPF_ARSH | BPF_X:
-+			if (boot_cpu_has(X86_FEATURE_BMI2)) {
-+				/* shrx/sarx/shlx dst_reg, dst_reg, src_reg */
-+				bool r =3D is_ereg(dst_reg);
-+				u8 m =3D 2; /* escape code 0f38 */
-+				bool w =3D (BPF_CLASS(insn->code) =3D=3D BPF_ALU64);
-+				u8 p;
-+
-+				switch (BPF_OP(insn->code)) {
-+				case BPF_LSH:
-+					p =3D 1; /* prefix 0x66 */
-+					break;
-+				case BPF_RSH:
-+					p =3D 3; /* prefix 0xf2 */
-+					break;
-+				case BPF_ARSH:
-+					p =3D 2; /* prefix 0xf3 */
-+					break;
-+				}
-+
-+				emit_3vex(&prog, r, false, r, m,
-+					  w, src_reg, false, p);
-+				EMIT2(0xf7, add_2reg(0xC0, dst_reg, dst_reg));
-=20
-+				break;
-+			}
- 			/* Check for bad case when dst_reg =3D=3D rcx */
- 			if (dst_reg =3D=3D BPF_REG_4) {
- 				/* mov r11, dst_reg */
-diff --git a/tools/testing/selftests/bpf/verifier/jit.c b/tools/testing/s=
-elftests/bpf/verifier/jit.c
-index 79021c30e51e..3323b93f0972 100644
---- a/tools/testing/selftests/bpf/verifier/jit.c
-+++ b/tools/testing/selftests/bpf/verifier/jit.c
-@@ -4,15 +4,16 @@
- 	BPF_MOV64_IMM(BPF_REG_0, 1),
- 	BPF_MOV64_IMM(BPF_REG_1, 0xff),
- 	BPF_ALU64_IMM(BPF_LSH, BPF_REG_1, 1),
--	BPF_ALU32_IMM(BPF_LSH, BPF_REG_1, 1),
-+	BPF_ALU32_REG(BPF_LSH, BPF_REG_1, BPF_REG_0),
- 	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 0x3fc, 1),
- 	BPF_EXIT_INSN(),
--	BPF_ALU64_IMM(BPF_RSH, BPF_REG_1, 1),
-+	BPF_ALU64_REG(BPF_RSH, BPF_REG_1, BPF_REG_0),
- 	BPF_ALU32_IMM(BPF_RSH, BPF_REG_1, 1),
- 	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 0xff, 1),
- 	BPF_EXIT_INSN(),
- 	BPF_ALU64_IMM(BPF_ARSH, BPF_REG_1, 1),
--	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 0x7f, 1),
-+	BPF_ALU32_REG(BPF_ARSH, BPF_REG_1, BPF_REG_0),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 0x3f, 1),
- 	BPF_EXIT_INSN(),
- 	BPF_MOV64_IMM(BPF_REG_0, 2),
- 	BPF_EXIT_INSN(),
---=20
-2.30.2
+diff --git a/tools/testing/selftests/bpf/map_tests/task_storage_map.c b/tools/testing/selftests/bpf/map_tests/task_storage_map.c
+index aac08c85240b..7d050364efca 100644
+--- a/tools/testing/selftests/bpf/map_tests/task_storage_map.c
++++ b/tools/testing/selftests/bpf/map_tests/task_storage_map.c
+@@ -79,6 +79,7 @@ void test_task_storage_map_stress_lookup(void)
+ 	/* Only for a fully preemptible kernel */
+ 	if (!skel->kconfig->CONFIG_PREEMPT) {
+ 		printf("%s SKIP (no CONFIG_PREEMPT)\n", __func__);
++		read_bpf_task_storage_busy__destroy(skel);
+ 		skips++;
+ 		return;
+ 	}
+-- 
+2.29.2
 
