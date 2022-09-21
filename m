@@ -2,123 +2,209 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F847C6FA82
-	for <bpf@archiver.kernel.org>; Wed, 21 Sep 2022 02:55:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D7DAC6FA82
+	for <bpf@archiver.kernel.org>; Wed, 21 Sep 2022 04:42:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbiIUCzk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 20 Sep 2022 22:55:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55718 "EHLO
+        id S230012AbiIUEmJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 21 Sep 2022 00:42:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiIUCzj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 20 Sep 2022 22:55:39 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB732792E9
-        for <bpf@vger.kernel.org>; Tue, 20 Sep 2022 19:55:37 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MXNJy1KThz6TCP5
-        for <bpf@vger.kernel.org>; Wed, 21 Sep 2022 10:53:38 +0800 (CST)
-Received: from [10.174.176.117] (unknown [10.174.176.117])
-        by APP2 (Coremail) with SMTP id Syh0CgB3FG4kfSpjibqfBA--.22693S2;
-        Wed, 21 Sep 2022 10:55:36 +0800 (CST)
-Subject: Re: [PATCH bpf-next] bpf: Check whether or not node is NULL before
- free it in free_bulk
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
-        Yonghong Song <yhs@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Lorenz Bauer <oss@lmb.io>, Hou Tao <houtao1@huawei.com>
-References: <20220919144811.3570825-1-houtao@huaweicloud.com>
- <CAADnVQJTQG3=2vMyJ6roXqOoD5dZPs7ddTwxXEcMsym1K-FeUQ@mail.gmail.com>
-From:   Hou Tao <houtao@huaweicloud.com>
-Message-ID: <578432bd-2c3d-f15c-d82d-e2d3795094aa@huaweicloud.com>
-Date:   Wed, 21 Sep 2022 10:55:32 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-MIME-Version: 1.0
-In-Reply-To: <CAADnVQJTQG3=2vMyJ6roXqOoD5dZPs7ddTwxXEcMsym1K-FeUQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S229990AbiIUEmH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 21 Sep 2022 00:42:07 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F93C7E814;
+        Tue, 20 Sep 2022 21:42:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663735326; x=1695271326;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=tbKQxnukv2PBwA7Mdw9B+nz9lf3PaxZ8GxkATrUMz9c=;
+  b=eoi4L9HHq70PGmMzC8EusPaKNDKg5FcFIuhSuiwvED17eoY/Gl28bcLt
+   AvXH+tOgbDodXCqtcOy4d5GYRK/DLyLIM9+fEaNBDHoulUjAiNZFeD3Nd
+   ToTrewlm8XjtC3ZMkHKg2SmUuIut8tztwcQO/gsZPNS8pLxm00g85zy9r
+   achlolfKqKCuwNQwBeQW4nEWOVM0AexQpnQXJixMIE+99SIkAXyPk6n/+
+   hJG76/v2bOyzpKWr19l8YI5JiVg/bP4Bl2fzE2MjWD6/Oqc0tJ9oluz1f
+   qSUkpRHZb32nCEF4esisqSabnfKGKbji5NtrgtGCX3BzTtEGv0yGlbZiW
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="386182585"
+X-IronPort-AV: E=Sophos;i="5.93,332,1654585200"; 
+   d="scan'208";a="386182585"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 21:42:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,332,1654585200"; 
+   d="scan'208";a="708284209"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by FMSMGA003.fm.intel.com with ESMTP; 20 Sep 2022 21:42:05 -0700
+Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 20 Sep 2022 21:42:05 -0700
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 20 Sep 2022 21:42:04 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Tue, 20 Sep 2022 21:42:04 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.170)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Tue, 20 Sep 2022 21:42:04 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lZYNjNqrIokgoDaFKyJc3OEhw/fA05aLgi+oDzkiNCHHE4yYyBFlXiPhAO17NG9es6aO+Vsz1CgzFU17snV7MHhb6IPGRDCqwxrvKtrxhBzSOrZ4M152e6tYUe3GXGOeUCXD/f5Iw5R3sLTJyBdvKgZesYxNNhIc6N2jxYOONQNtv1aDwn1lQA2+Noc+54SENJYYXYem+H03qhuhD90OvpNxEqnb1FdayR3YAW02eMXqjsXjlf5jDTHNPRfZw+7Xq0kNBFHyXC/0iqdCTzqX+8OBd2biC6pB+Jfolbj4JrJrQJK1SP+QFsKssM9wl3yVLp+6Z8tdF1mRS3/6S1DOHA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fDRe20bQ07CA3TlU8CZaB2/0yFeIlzqmlsCZSowolN8=;
+ b=hex6UYar2hbWzYSwiA7rwz58J9ujimBM7cucpdtn6A+7lN/H81/65jhZl0XtjL20jq4f12TwnqG/+EM63Yr/0ofv3j+fGLxAnKlAUlkRyEq3/m9Eyo/qUSCAajlRLyUHPHXUX2Mre/Fw96+tweSUkKn8HtrjgNdNRVluV6cU3bkZqRxcV8+UO8vCMx3I0lh02MlHCR/MxY/WX+abD0XkgZRp6x5Sp8DmMwd9CzrMuizy5Iz/b3iIU+sC2j1bgETkrsx7y7hfiM8h3mtzog/lDMFTPiIsXFomXz+CakbV7RFktz6t0PtPjuLz0N90ZxnnoGE8CS8fAC6A1IszoMdkaQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from PH0PR11MB5144.namprd11.prod.outlook.com (2603:10b6:510:3e::20)
+ by MN2PR11MB4584.namprd11.prod.outlook.com (2603:10b6:208:264::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.14; Wed, 21 Sep
+ 2022 04:42:03 +0000
+Received: from PH0PR11MB5144.namprd11.prod.outlook.com
+ ([fe80::d1ff:f036:e0a7:9af6]) by PH0PR11MB5144.namprd11.prod.outlook.com
+ ([fe80::d1ff:f036:e0a7:9af6%3]) with mapi id 15.20.5654.017; Wed, 21 Sep 2022
+ 04:42:02 +0000
+From:   "Kuruvinakunnel, George" <george.kuruvinakunnel@intel.com>
+To:     "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>
+CC:     "alasdair.mcwilliam@outlook.com" <alasdair.mcwilliam@outlook.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>
+Subject: RE: [Intel-wired-lan] [PATCH v3 intel-net 1/2] ice: xsk: change
+ batched Tx descriptor cleaning
+Thread-Topic: [Intel-wired-lan] [PATCH v3 intel-net 1/2] ice: xsk: change
+ batched Tx descriptor cleaning
+Thread-Index: AQHYve9gnSeJ4Jo9uUyaKzrUHhLtMa3pa9Jw
+Date:   Wed, 21 Sep 2022 04:42:02 +0000
+Message-ID: <PH0PR11MB5144EA7C4111E52713BABD1BE24F9@PH0PR11MB5144.namprd11.prod.outlook.com>
+References: <20220901104040.15723-1-maciej.fijalkowski@intel.com>
+ <20220901104040.15723-2-maciej.fijalkowski@intel.com>
+In-Reply-To: <20220901104040.15723-2-maciej.fijalkowski@intel.com>
+Accept-Language: en-US
 Content-Language: en-US
-X-CM-TRANSID: Syh0CgB3FG4kfSpjibqfBA--.22693S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kr4UXw13CryfCFW5Cw45ZFb_yoW8ZrWxpr
-        WFyF18KF4kArn2v3Z2v3W7GF17ua17KF17WF9avrWfu3WFvrnF9r9rta4Uuayfur4kJ34j
-        ya12ya1fK3s8Z3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvab4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
-        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv
-        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
-        uYvjxUFDGOUUUUU
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR11MB5144:EE_|MN2PR11MB4584:EE_
+x-ms-office365-filtering-correlation-id: 7054045d-1078-46db-775c-08da9b8ba0eb
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: VvNiCPdpzUAr04IUQ+1z7Rg231l1V1BtTeIypiezmhvVeRzY8YWNKOZBwWymo0WjnC2seQGG/Http4+fXdNBOQlDxhJ0ON8QkYI/nwH76ZQ0tjM0jg21by3NpHbDUi35Iz7gWnZy6HPfb+9amtZIdCGT8s1NlZKhoPcN865ihYCgJ0wpfHZXkDyqiJcmNFTTLj3f1pSJluyoODTFjk43jMmYt1PQpt7l6S5LAw6tk+C5DiT6tlpBco+r1u+GFwdoag3x00JDniGH2haTz0NK4PO7EeghFzHp62nf12TM12O6CM0uEXebPX3UsP4OXT5BZ44HlYNTs2xGJ1GGuNFQyBNmNNn9M04xCSC5MgvYLUSpt062t3Y69Lh8m/N9/fb4mCeMhYVtqiSMUZoLm+wqMp1tO4kKSi/MLg6SQrP8W4APUKLoNzODCKt+8DY+A11W8AfRDveBRBHuerd16tx7n/vWK9PXEWNzDiRYoAhzvrPbSQM6CmYwmpX3Ly9hngaUS4SldxcmsHNX43GGRYOpW9LWePxd256GRxarkFp33mf92QCvwSayIbPWg9vo/hTbyORmhTrH1VL5bKJqL4EWs2V2PbI/BxfaoQCcjE3VF4h59y9cy3cEIMWvlZbyOhwDa+tTSoDopjN9LlgByHEGiB6I/aRRscXwK1MCM2acP95Hi2vTj6J7K7BdHe+ed+ACem5Zhc36UAR5ZIwe3OU3e3Ism36OQLCUG2/5ajmwe0cuZc7G0ajRxnNFwlPTnRi/fFSIfHVJhAry2RYPiExWhUgjuwjGaF9q/2nMF0HF9J0=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5144.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(376002)(366004)(39860400002)(346002)(136003)(451199015)(83380400001)(2906002)(8676002)(54906003)(110136005)(316002)(52536014)(66446008)(76116006)(5660300002)(33656002)(66476007)(66556008)(64756008)(66946007)(4326008)(86362001)(966005)(45080400002)(107886003)(41300700001)(478600001)(71200400001)(8936002)(6506007)(7696005)(53546011)(9686003)(186003)(26005)(38070700005)(38100700002)(82960400001)(55016003)(122000001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?xktHTo14kcHTqokOXhNJMc3z+neF3iAtHWQEANIR9MRW/gJWXzmnveIWQ5v+?=
+ =?us-ascii?Q?nnEri5meaRwLmikwwUZEDjVkUi+VgY+Q59WWjpMF+jM4OGeMX6AehPoagKrq?=
+ =?us-ascii?Q?Ui30CdRqU/KNQtUnWlQnnmF9pXK7ome9QObT2p30KWrCXtwQ66d3iVtOFVKh?=
+ =?us-ascii?Q?77AIlYguvPxpdiKaxYwaV0i5OjaN5Vn6nl3uKpJz9NGv3lPHLWu1UCIT5iUH?=
+ =?us-ascii?Q?uoJ6sqSrNJ58p+86QOi728s+tatTp5zxldNf08IYL94/H6ssgHZXuYlDEdPN?=
+ =?us-ascii?Q?sL9Qu3akCtpXwcHlOzIWtfmX5prsSVyNytWfUSdJbCJJ7vJIDq1iM5d5hQ8G?=
+ =?us-ascii?Q?VjiReIVDJGIT6ByLf+mw1bJclg56NBCH0wIG16Ty8s4GWwYd1akb/n7MAHYa?=
+ =?us-ascii?Q?HVsG9UdHq5BMDBH2SU6PDvQjxrYl58XCvqPs2lkMppgP3kNX21dvOlku4P4F?=
+ =?us-ascii?Q?eEeWPK0gHXIslyGvLqApgZALkWSBJZndWB3quMSg+5iMyjhupbjoePNIW/rI?=
+ =?us-ascii?Q?BLhoG7q2FN09+GBvwkpNAAk1RnUNUnDGd01Kv/cNsWeNv7PflOac5TvxpDP6?=
+ =?us-ascii?Q?tH1jJR7KaaV5Uty5lDg/emUy6iee649jrM33QQ8EjJuzTNaZmkb5LCFAqTSo?=
+ =?us-ascii?Q?BUOXqnDIeLwvDuOfzy+2UlyDDJvonx3N/x/m1pIcL1BI2orJzi4qbvz86uX5?=
+ =?us-ascii?Q?EcXWwJ8exMQVGPCCDbCetpjzHSKIG4y/YuKglMwP9RH/v3YiQtMJGC/jhFxl?=
+ =?us-ascii?Q?M2qWDwKOFLVNhoOVNRk4KKw1wTjG6T0fSXJcGpIy3BrahAElTYEK4SMphhwQ?=
+ =?us-ascii?Q?EDVs3iXZ4bbqdgaYOkhacUbNHSbraYrSYOClMzhahkxqTEOUvsYJ0cWIKmSf?=
+ =?us-ascii?Q?HsACeQfRtE6pj9aDqteHKH0FxT91Sb8w4PWqhM6cRDn44dsMH6ayR++1Kbnx?=
+ =?us-ascii?Q?ZdAFMea2RnFATl+UBRU3tY9j22AWeEmcLG/gocpJ3fb7RC9vi85rJdtVE5ky?=
+ =?us-ascii?Q?IoQPqqwgn2aUsaGyQuw0ETsz5KEnMbUfgI+85GYvCogkSFQymp2GpkO4HPX+?=
+ =?us-ascii?Q?khQ/u5uHV1C9ExSnj/JRba2Mcc89nnzn6yDelSqm46W1UkHt0WNA5S710+hs?=
+ =?us-ascii?Q?YKuhXWL99dZatU9mECPNF4yoNonMmY6D420sSS0oG/mGn2x7PI8ZKDZ0kGTG?=
+ =?us-ascii?Q?V2mmH7DbWv2tNMGsiKwYH1BhS7ac4dmvuifN2t71LRh+UHTw0OvygS1J1w8s?=
+ =?us-ascii?Q?wyyvsa1I9qtapS81A+rQ9xJJ8WtY55+RozMqfyL+GrWetlFy04qaUmOxedml?=
+ =?us-ascii?Q?TAvSSigOmyEaxxWFTRraq3fonOhXKn3NrtsdYqlgDLabFBMfdYF9luSadO2G?=
+ =?us-ascii?Q?HqWbzLlynpWFQgiJKiXjNS5smETTmny9LVlEOObbgeaaWfwRpFC7J22FAXuR?=
+ =?us-ascii?Q?ScDZTgn4wvXAbDvv8bkWNIazgz7dqaJ5B7bjleoxVDixdZjNENUWwPiyPrnl?=
+ =?us-ascii?Q?/3D8fuYgn2m9IArscOzuuRVrszDouedObKPEtO5vkPeh5gyESaFg0wpv6Xd4?=
+ =?us-ascii?Q?mA/xXdrEDpR0WG+rRh2LsOFSrRhYJNvelW5UnrIhruTHzOHOsyNqQBkj4b3Z?=
+ =?us-ascii?Q?4Q=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5144.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7054045d-1078-46db-775c-08da9b8ba0eb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Sep 2022 04:42:02.8267
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: hZkF5dDuqwd1EN1R+LBzE7JjUl4wwWc0qfLOW6LD61LBxusnxtLwlg5npmqQhc1Z5xt6S4heN1TjbmHF2yWJHZhmZ3xrr3MIifozO0drLf0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4584
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+> From: Intel-wired-lan <intel-wired-lan-bounces@osuosl.org> On Behalf Of M=
+aciej
+> Fijalkowski
+> Sent: Thursday, September 1, 2022 4:11 PM
+> To: intel-wired-lan@lists.osuosl.org
+> Cc: alasdair.mcwilliam@outlook.com; netdev@vger.kernel.org;
+> bpf@vger.kernel.org; Karlsson, Magnus <magnus.karlsson@intel.com>
+> Subject: [Intel-wired-lan] [PATCH v3 intel-net 1/2] ice: xsk: change batc=
+hed Tx
+> descriptor cleaning
+>=20
+> AF_XDP Tx descriptor cleaning in ice driver currently works in a "lazy"
+> way - descriptors are not cleaned immediately after send. We rather hold =
+on with
+> cleaning until we see that free space in ring drops below particular thre=
+shold. This
+> was supposed to reduce the amount of unnecessary work related to cleaning=
+ and
+> instead of keeping the ring empty, ring was rather saturated.
+>=20
+> In AF_XDP realm cleaning Tx descriptors implies producing them to CQ.
+> This is a way of letting know user space that particular descriptor has b=
+een sent,
+> as John points out in [0].
+>=20
+> We tried to implement serial descriptor cleaning which would be used in
+> conjunction with batched cleaning but it made code base more convoluted a=
+nd
+> probably harder to maintain in future. Therefore we step away from batche=
+d
+> cleaning in a current form in favor of an approach where we set RS bit on=
+ every
+> last descriptor from a batch and clean always at the beginning of ice_xmi=
+t_zc().
+>=20
+> This means that we give up a bit of Tx performance, but this doesn't hurt=
+ l2fwd
+> scenario which is way more meaningful than txonly as this can be treaten =
+as
+> AF_XDP based packet generator. l2fwd is not hurt due to the fact that Tx =
+side is
+> much faster than Rx and Rx is the one that has to catch Tx up.
+>=20
+> FWIW Tx descriptors are still produced in a batched way.
+>=20
+> [0]: https://lore.kernel.org/bpf/62b0a20232920_3573208ab@john.notmuch/
+>=20
+> Fixes: 126cdfe1007a ("ice: xsk: Improve AF_XDP ZC Tx and use batching API=
+")
+> Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+> ---
+>  drivers/net/ethernet/intel/ice/ice_txrx.c |   2 +-
+>  drivers/net/ethernet/intel/ice/ice_xsk.c  | 143 +++++++++-------------
+>  drivers/net/ethernet/intel/ice/ice_xsk.h  |   7 +-
+>  3 files changed, 64 insertions(+), 88 deletions(-)
+>=20
 
-On 9/20/2022 11:09 PM, Alexei Starovoitov wrote:
-> On Mon, Sep 19, 2022 at 7:30 AM Hou Tao <houtao@huaweicloud.com> wrote:
->> From: Hou Tao <houtao1@huawei.com>
->>
->> llnode could be NULL if there are new allocations after the checking of
->> c-free_cnt > c->high_watermark in bpf_mem_refill() and before the
->> calling of __llist_del_first() in free_bulk (e.g. a PREEMPT_RT kernel
->> or allocation in NMI context). And it will incur oops as shown below:
->>
->>  BUG: kernel NULL pointer dereference, address: 0000000000000000
->>  #PF: supervisor write access in kernel mode
->>  #PF: error_code(0x0002) - not-present page
->>  PGD 0 P4D 0
->>  Oops: 0002 [#1] PREEMPT_RT SMP
->>  CPU: 39 PID: 373 Comm: irq_work/39 Tainted: G        W          6.0.0-rc6-rt9+ #1
->>  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
->>  RIP: 0010:bpf_mem_refill+0x66/0x130
->>  ......
->>  Call Trace:
->>   <TASK>
->>   irq_work_single+0x24/0x60
->>   irq_work_run_list+0x24/0x30
->>   run_irq_workd+0x18/0x20
->>   smpboot_thread_fn+0x13f/0x2c0
->>   kthread+0x121/0x140
->>   ? kthread_complete_and_exit+0x20/0x20
->>   ret_from_fork+0x1f/0x30
->>   </TASK>
->>
->> Simply fixing it by checking whether or not llnode is NULL in free_bulk().
->>
->> Fixes: 1376b7c57624 ("bpf: Introduce any context BPF specific memory allocator.")
-> There is no such sha.
-> Also that commit isn't buggy as-is.
-> The proper fixes tag:
-> Fixes: 8d5a8011b35d ("bpf: Batch call_rcu callbacks instead of
-> SLAB_TYPESAFE_BY_RCU.")
-The incorrect git sha-sum is due to rebase on my local branch.
-You are right. In 7c8199e24fa0 ("bpf: Introduce any context BPF specific memory
-allocator."), free_bulk() calls kfree() and kmem_cache_free() directly, so there
-is no such problem.  And in commit 8d5a8011b35d ("bpf: Batch call_rcu callbacks
-instead of SLAB_TYPESAFE_BY_RCU."), free_one is replaced by enque_to_free() and
-incurs the problem.
->
-> Used that while applying.
-Thanks for the update.
-> Thanks for the fix !
-> .
-
+Tested-by: George Kuruvinakunnel <george.kuruvinakunnel@intel.com>
