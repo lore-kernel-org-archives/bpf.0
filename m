@@ -2,96 +2,103 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F027DC32771
-	for <bpf@archiver.kernel.org>; Wed, 21 Sep 2022 07:40:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0053CC6FA8B
+	for <bpf@archiver.kernel.org>; Wed, 21 Sep 2022 07:46:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbiIUHkH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 21 Sep 2022 03:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33198 "EHLO
+        id S230055AbiIUHqu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 21 Sep 2022 03:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230317AbiIUHkE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 21 Sep 2022 03:40:04 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944592A25A;
-        Wed, 21 Sep 2022 00:40:02 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MXVZc6T6sz14QNg;
-        Wed, 21 Sep 2022 15:35:52 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.70) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 21 Sep 2022 15:39:58 +0800
-From:   Wang Yufen <wangyufen@huawei.com>
-To:     <quentin@isovalent.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <andrii@kernel.org>, <martin.lau@linux.dev>, <song@kernel.org>,
-        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-        <sdf@google.com>, <haoluo@google.com>, <jolsa@kernel.org>,
-        <davem@davemloft.net>, <kuba@kernel.org>, <hawk@kernel.org>,
-        <nathan@kernel.org>, <ndesaulniers@google.com>, <trix@redhat.com>
-CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <llvm@lists.linux.dev>
-Subject: [bpf-next v5 2/3] bpftool: Update doc (add auto_attach to prog load)
-Date:   Wed, 21 Sep 2022 16:00:39 +0800
-Message-ID: <1663747240-31210-2-git-send-email-wangyufen@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1663747240-31210-1-git-send-email-wangyufen@huawei.com>
-References: <1663747240-31210-1-git-send-email-wangyufen@huawei.com>
+        with ESMTP id S230368AbiIUHqr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 21 Sep 2022 03:46:47 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1AF75CE0;
+        Wed, 21 Sep 2022 00:46:45 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id bj12so11587104ejb.13;
+        Wed, 21 Sep 2022 00:46:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=Jvswl6qPZOcAXOYK+YaACZfbIZSk41zN4O+biBvkXG0=;
+        b=YaRXBHJPol1fGJedZAViFdap5ub5A1LUkNMA7njQyXZrRZjoHQt2NhuGJNAwLA3/N6
+         eMX8JQjcigJ+P+X0ZNVkZv3IMd2OeoJzZv5kZ0TSe6A9IuEm5WSNwPTPVZCdHgnpu2BA
+         ZEQLJsbH9GptoGHCKH65NQyaqavJHZKYNNnIdMDUsOhMDCaAl3hKybZlme+f61t55MWR
+         MZl7AjazZAdbHkD0NimC/TxK+g2kW0WNEBpzDs3jXf4akHF048JoJlWm+DithTsi16XB
+         IZs8I0wYBzRZTBKK3hERcY/SZ6ST9irLlcGGVSuy/4mYm07ryjg2PT3uXChek+QG4JBe
+         vIkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=Jvswl6qPZOcAXOYK+YaACZfbIZSk41zN4O+biBvkXG0=;
+        b=UrtsuI6kFHAUs0wQBVtJbrbR1gbDuGTCwwqLVeYcYxEZ/KAmxa5p3/PJWFLkWPI1IC
+         nZIOw/mbw+P2q6lYnWCZCCMhCdJu/M6nLDJtS+7YXYT7hJ9Qf2aHLMQOZtOw1QcjuWpZ
+         LBD1Z2jXnr9BmCcJb48+HzW8/utGsM7ofuUr0Hj5O1D+Fi1IG98PQ4dul0uIhJVSuPyQ
+         9Q2xWLWlD0jGf3Aa286EBjTmFqLUqtOv98fGNRM0wb/AUe898OBB94SEjd5SS9CuO1jN
+         dSi19xb3zzR53YZdSo6A3tuYcOpnOx1Md4eh5Rb+EwVQvI4VaXpLz+vxOQF6pcqyl21G
+         m6UQ==
+X-Gm-Message-State: ACrzQf3SLLkqMxpKFkw9GPbKvR6xxT7kp70x4VkVcGb88Y0O8BOZWkqa
+        yKNhASeUGF7sYLtzSMwJwLW/RczptHs=
+X-Google-Smtp-Source: AMsMyM6i4J03MIvteEA1fiiRTP1mwoK51vO3ZiRjvim80xL0CQ2Wl+8A3wdnT2O/PqGP9v1ZjUZCrw==
+X-Received: by 2002:a17:906:9b92:b0:780:1f91:30fc with SMTP id dd18-20020a1709069b9200b007801f9130fcmr20501508ejc.142.1663746403733;
+        Wed, 21 Sep 2022 00:46:43 -0700 (PDT)
+Received: from gmail.com (1F2EF035.nat.pool.telekom.hu. [31.46.240.53])
+        by smtp.gmail.com with ESMTPSA id r2-20020a170906a20200b0078020ae040csm869564ejy.219.2022.09.21.00.46.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 00:46:43 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Wed, 21 Sep 2022 09:46:40 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Li Zhong <floridsleeves@gmail.com>
+Cc:     linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
+        namhyung@kernel.org, jolsa@kernel.org,
+        alexander.shishkin@linux.intel.com, mark.rutland@arm.com,
+        acme@kernel.org, mingo@redhat.com, peterz@infradead.org
+Subject: Re: [PATCH v2] kernel/events/core: check return value of
+ task_function_call()
+Message-ID: <YyrBYE4iMvei/nNC@gmail.com>
+References: <20220919191611.1589661-1-floridsleeves@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220919191611.1589661-1-floridsleeves@gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add auto_attach optional to prog load|loadall for supporting
-one-step load-attach-pin_link.
 
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
----
- tools/bpf/bpftool/Documentation/bpftool-prog.rst | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+* Li Zhong <floridsleeves@gmail.com> wrote:
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-index eb1b2a2..5bc5a23 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-@@ -31,7 +31,7 @@ PROG COMMANDS
- |	**bpftool** **prog dump xlated** *PROG* [{**file** *FILE* | **opcodes** | **visual** | **linum**}]
- |	**bpftool** **prog dump jited**  *PROG* [{**file** *FILE* | **opcodes** | **linum**}]
- |	**bpftool** **prog pin** *PROG* *FILE*
--|	**bpftool** **prog** { **load** | **loadall** } *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*]
-+|	**bpftool** **prog** { **load** | **loadall** } *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*] [**auto_attach**]
- |	**bpftool** **prog attach** *PROG* *ATTACH_TYPE* [*MAP*]
- |	**bpftool** **prog detach** *PROG* *ATTACH_TYPE* [*MAP*]
- |	**bpftool** **prog tracelog**
-@@ -131,7 +131,7 @@ DESCRIPTION
- 		  contain a dot character ('.'), which is reserved for future
- 		  extensions of *bpffs*.
- 
--	**bpftool prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*]
-+	**bpftool prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*] [**auto_attach**]
- 		  Load bpf program(s) from binary *OBJ* and pin as *PATH*.
- 		  **bpftool prog load** pins only the first program from the
- 		  *OBJ* as *PATH*. **bpftool prog loadall** pins all programs
-@@ -150,6 +150,15 @@ DESCRIPTION
- 		  Optional **pinmaps** argument can be provided to pin all
- 		  maps under *MAP_DIR* directory.
- 
-+		  If **auto_attach** is specified program will be attached
-+		  before pin. In that case, only the link (representing the
-+		  program attached to its hook) is pinned, not the program as
-+		  such, so the path won't show in "**bpftool prog show -f**",
-+		  only show in "**bpftool link show -f**". Also, this only works
-+		  when bpftool (libbpf) is able to infer all necessary information
-+		  from the objectfile, in particular, it's not supported for all
-+		  program types.
-+
- 		  Note: *PATH* must be located in *bpffs* mount. It must not
- 		  contain a dot character ('.'), which is reserved for future
- 		  extensions of *bpffs*.
--- 
-1.8.3.1
+> From: lily <floridsleeves@gmail.com>
+> 
+> Check the return value of task_function_call(), which could be error
+> code when the execution fails. We log this on info level.
+> 
+> Signed-off-by: Li Zhong <floridsleeves@gmail.com>
+> ---
+>  kernel/events/core.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/events/core.c b/kernel/events/core.c
+> index 2621fd24ad26..3848631b009c 100644
+> --- a/kernel/events/core.c
+> +++ b/kernel/events/core.c
+> @@ -13520,7 +13520,10 @@ static void perf_cgroup_attach(struct cgroup_taskset *tset)
+>  	struct cgroup_subsys_state *css;
+>  
+>  	cgroup_taskset_for_each(task, css, tset)
+> -		task_function_call(task, __perf_cgroup_move, task);
+> +		if (!task_function_call(task, __perf_cgroup_move, task)) {
+> +			printk(KERN_INFO "perf: this process isn't running!\n");
+> +			continue;
 
+If this is a 'should never happen' condition, then this should really be 
+WARN_ON_ONCE().
+
+(If it can happen, then polluting the syslog is wrong.)
+
+Thanks,
+
+	Ingo
