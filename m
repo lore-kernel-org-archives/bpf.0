@@ -2,199 +2,109 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33D55C6FA86
-	for <bpf@archiver.kernel.org>; Thu, 22 Sep 2022 22:57:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC2ECC54EE9
+	for <bpf@archiver.kernel.org>; Thu, 22 Sep 2022 23:07:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbiIVW5L (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 22 Sep 2022 18:57:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56390 "EHLO
+        id S230272AbiIVXHw convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 22 Sep 2022 19:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231159AbiIVW46 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 22 Sep 2022 18:56:58 -0400
+        with ESMTP id S230420AbiIVXHv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 22 Sep 2022 19:07:51 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B9F1138F3
-        for <bpf@vger.kernel.org>; Thu, 22 Sep 2022 15:56:55 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28MKiI4J032557
-        for <bpf@vger.kernel.org>; Thu, 22 Sep 2022 15:56:55 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=I6mE5Nuvw1CCKlFjYO5v8nXq6zIBUNfcRxIn1vznMQA=;
- b=djeLTeuLwo9JehQCGslUUR2VHyTAw6QT2iYbqwdxWwPJxYO+Kwjz+B5jfxs/UP7+DOJk
- Ya5hE8ISgUxN3JsVng8EHkjbHmwvoopYSvzIFxjDrqrO67mYtoUfe8WEa/swH0WpHcgC
- GCJ16i8Xtp7XM2o9fIfFSoYJ+GmJYZ4bsrs= 
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D462E1138F3
+        for <bpf@vger.kernel.org>; Thu, 22 Sep 2022 16:07:47 -0700 (PDT)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28MKiSvV001292
+        for <bpf@vger.kernel.org>; Thu, 22 Sep 2022 16:07:47 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jrm42610t-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jrhjgpu2b-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 22 Sep 2022 15:56:55 -0700
-Received: from twshared20273.14.frc2.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 22 Sep 2022 16:07:47 -0700
+Received: from twshared10425.14.frc2.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 15:56:54 -0700
-Received: by devbig933.frc1.facebook.com (Postfix, from userid 6611)
-        id C35B5999DE97; Thu, 22 Sep 2022 15:56:42 -0700 (PDT)
-From:   Martin KaFai Lau <kafai@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        <netdev@vger.kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next 4/5] bpf: Stop bpf_setsockopt(TCP_CONGESTION) in init ops to recur itself
-Date:   Thu, 22 Sep 2022 15:56:42 -0700
-Message-ID: <20220922225642.3058176-1-kafai@fb.com>
+ 15.1.2375.31; Thu, 22 Sep 2022 16:07:46 -0700
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id 219941F384474; Thu, 22 Sep 2022 16:07:45 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH bpf-next 2/5] selftests/bpf: make veristat's verifier log parsing faster and more robust
+Date:   Thu, 22 Sep 2022 16:07:36 -0700
+Message-ID: <20220922230739.1288536-3-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220922225616.3054840-1-kafai@fb.com>
-References: <20220922225616.3054840-1-kafai@fb.com>
+In-Reply-To: <20220922230739.1288536-1-andrii@kernel.org>
+References: <20220922230739.1288536-1-andrii@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: LnoX4SW8Lp0LP4uEM576iS8ePopGzWYK
-X-Proofpoint-ORIG-GUID: LnoX4SW8Lp0LP4uEM576iS8ePopGzWYK
+X-Proofpoint-GUID: YJd5tiBbqJy1ScCK2n4sxSuG042ZN0Yi
+X-Proofpoint-ORIG-GUID: YJd5tiBbqJy1ScCK2n4sxSuG042ZN0Yi
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-22_14,2022-09-22_02,2022-06-22_01
+ definitions=2022-09-22_15,2022-09-22_02,2022-06-22_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Martin KaFai Lau <martin.lau@kernel.org>
+Make sure veristat doesn't spend ridiculous amount of time parsing
+verifier stats from verifier log, especially for very large logs or
+truncated logs (e.g., when verifier returns -ENOSPC due to too small
+buffer). For this, parse lines from the end of the log and make sure we
+parse only up to 100 last lines, where stats should be, if at all.
 
-When a bad bpf prog '.init' calls
-bpf_setsockopt(TCP_CONGESTION, "itself"), it will trigger this loop:
-
-.init =3D> bpf_setsockopt(tcp_cc) =3D> .init =3D> bpf_setsockopt(tcp_cc) =
-...
-... =3D> .init =3D> bpf_setsockopt(tcp_cc).
-
-It was prevented by the prog->active counter before but the prog->active
-detection cannot be used in struct_ops as explained in the earlier
-patch of the set.
-
-In this patch, the second bpf_setsockopt(tcp_cc) is not allowed
-in order to break the loop.  This is done by checking the
-previous bpf_run_ctx has saved the same sk pointer in the
-bpf_cookie.
-
-Note that this essentially limits only the first '.init' can
-call bpf_setsockopt(TCP_CONGESTION) to pick a fallback cc (eg. peer
-does not support ECN) and the second '.init' cannot fallback to
-another cc.  This applies even the second
-bpf_setsockopt(TCP_CONGESTION) will not cause a loop.
-
-Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
+Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- include/linux/filter.h |  3 +++
- net/core/filter.c      |  4 ++--
- net/ipv4/bpf_tcp_ca.c  | 54 ++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 59 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/veristat.c | 29 ++++++++++++++++++--------
+ 1 file changed, 20 insertions(+), 9 deletions(-)
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 98e28126c24b..9942ecc68a45 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -911,6 +911,9 @@ int sk_get_filter(struct sock *sk, sockptr_t optval, =
-unsigned int len);
- bool sk_filter_charge(struct sock *sk, struct sk_filter *fp);
- void sk_filter_uncharge(struct sock *sk, struct sk_filter *fp);
-=20
-+int _bpf_setsockopt(struct sock *sk, int level, int optname,
-+		    char *optval, int optlen);
+diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
+index 51030234b60a..77bdfd6fe302 100644
+--- a/tools/testing/selftests/bpf/veristat.c
++++ b/tools/testing/selftests/bpf/veristat.c
+@@ -419,19 +419,30 @@ static void free_verif_stats(struct verif_stats *stats, size_t stat_cnt)
+ 
+ static char verif_log_buf[64 * 1024];
+ 
+-static int parse_verif_log(const char *buf, size_t buf_sz, struct verif_stats *s)
++#define MAX_PARSED_LOG_LINES 100
 +
- u64 __bpf_call_base(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
- #define __bpf_call_base_args \
- 	((u64 (*)(u64, u64, u64, u64, u64, const struct bpf_insn *)) \
-diff --git a/net/core/filter.c b/net/core/filter.c
-index f4cea3ff994a..e56a1ebcf1bc 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -5244,8 +5244,8 @@ static int __bpf_setsockopt(struct sock *sk, int le=
-vel, int optname,
- 	return -EINVAL;
- }
-=20
--static int _bpf_setsockopt(struct sock *sk, int level, int optname,
--			   char *optval, int optlen)
-+int _bpf_setsockopt(struct sock *sk, int level, int optname,
-+		    char *optval, int optlen)
++static int parse_verif_log(char * const buf, size_t buf_sz, struct verif_stats *s)
  {
- 	if (sk_fullsock(sk))
- 		sock_owned_by_me(sk);
-diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
-index 6da16ae6a962..a9f2cab5ffbc 100644
---- a/net/ipv4/bpf_tcp_ca.c
-+++ b/net/ipv4/bpf_tcp_ca.c
-@@ -144,6 +144,57 @@ static const struct bpf_func_proto bpf_tcp_send_ack_=
-proto =3D {
- 	.arg2_type	=3D ARG_ANYTHING,
- };
-=20
-+BPF_CALL_5(bpf_init_ops_setsockopt, struct sock *, sk, int, level,
-+	   int, optname, char *, optval, int, optlen)
-+{
-+	struct bpf_tramp_run_ctx *run_ctx, *saved_run_ctx;
-+	int ret;
+-	const char *next;
+-	int pos;
++	const char *cur;
++	int pos, lines;
 +
-+	if (optname !=3D TCP_CONGESTION)
-+		return _bpf_setsockopt(sk, level, optname, optval, optlen);
-+
-+	run_ctx =3D (struct bpf_tramp_run_ctx *)current->bpf_ctx;
-+	if (unlikely(run_ctx->saved_run_ctx &&
-+		     run_ctx->saved_run_ctx->type =3D=3D BPF_RUN_CTX_TYPE_STRUCT_OPS))=
- {
-+		saved_run_ctx =3D (struct bpf_tramp_run_ctx *)run_ctx->saved_run_ctx;
-+		/* It stops this looping
-+		 *
-+		 * .init =3D> bpf_setsockopt(tcp_cc) =3D> .init =3D>
-+		 * bpf_setsockopt(tcp_cc)" =3D> .init =3D> ....
-+		 *
-+		 * The second bpf_setsockopt(tcp_cc) is not allowed
-+		 * in order to break the loop when both .init
-+		 * are the same bpf prog.
-+		 *
-+		 * This applies even the second bpf_setsockopt(tcp_cc)
-+		 * does not cause a loop.  This limits only the first
-+		 * '.init' can call bpf_setsockopt(TCP_CONGESTION) to
-+		 * pick a fallback cc (eg. peer does not support ECN)
-+		 * and the second '.init' cannot fallback to
-+		 * another cc.
++	buf[buf_sz - 1] = '\0';
+ 
+-	for (pos = 0; buf[0]; buf = next) {
+-		if (buf[0] == '\n')
+-			buf++;
+-		next = strchrnul(&buf[pos], '\n');
++	for (pos = strlen(buf) - 1, lines = 0; pos >= 0 && lines < MAX_PARSED_LOG_LINES; lines++) {
++		/* find previous endline or otherwise take the start of log buf */
++		for (cur = &buf[pos]; cur > buf && cur[0] != '\n'; cur--, pos--) {
++		}
++		/* next time start from end of previous line (or pos goes to <0) */
++		pos--;
++		/* if we found endline, point right after endline symbol;
++		 * otherwise, stay at the beginning of log buf
 +		 */
-+		if (saved_run_ctx->bpf_cookie =3D=3D (uintptr_t)sk)
-+			return -EBUSY;
-+	}
-+
-+	run_ctx->bpf_cookie =3D (uintptr_t)sk;
-+	ret =3D _bpf_setsockopt(sk, level, optname, optval, optlen);
-+	run_ctx->bpf_cookie =3D 0;
-+
-+	return ret;
-+}
-+
-+static const struct bpf_func_proto bpf_init_ops_setsockopt_proto =3D {
-+	.func		=3D bpf_init_ops_setsockopt,
-+	.gpl_only	=3D false,
-+	.ret_type	=3D RET_INTEGER,
-+	.arg1_type	=3D ARG_PTR_TO_BTF_ID_SOCK_COMMON,
-+	.arg2_type	=3D ARG_ANYTHING,
-+	.arg3_type	=3D ARG_ANYTHING,
-+	.arg4_type	=3D ARG_PTR_TO_MEM | MEM_RDONLY,
-+	.arg5_type	=3D ARG_CONST_SIZE,
-+};
-+
- static u32 prog_ops_moff(const struct bpf_prog *prog)
- {
- 	const struct btf_member *m;
-@@ -169,6 +220,9 @@ bpf_tcp_ca_get_func_proto(enum bpf_func_id func_id,
- 	case BPF_FUNC_sk_storage_delete:
- 		return &bpf_sk_storage_delete_proto;
- 	case BPF_FUNC_setsockopt:
-+		if (prog_ops_moff(prog) =3D=3D
-+		    offsetof(struct tcp_congestion_ops, init))
-+			return &bpf_init_ops_setsockopt_proto;
- 		/* Does not allow release() to call setsockopt.
- 		 * release() is called when the current bpf-tcp-cc
- 		 * is retiring.  It is not allowed to call
---=20
++		if (cur[0] == '\n')
++			cur++;
+ 
+-		if (1 == sscanf(buf, "verification time %ld usec\n", &s->stats[DURATION]))
++		if (1 == sscanf(cur, "verification time %ld usec\n", &s->stats[DURATION]))
+ 			continue;
+-		if (6 == sscanf(buf, "processed %ld insns (limit %*d) max_states_per_insn %ld total_states %ld peak_states %ld mark_read %ld",
++		if (6 == sscanf(cur, "processed %ld insns (limit %*d) max_states_per_insn %ld total_states %ld peak_states %ld mark_read %ld",
+ 				&s->stats[TOTAL_INSNS],
+ 				&s->stats[MAX_STATES_PER_INSN],
+ 				&s->stats[TOTAL_STATES],
+-- 
 2.30.2
 
