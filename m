@@ -2,140 +2,118 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09502C6FA82
-	for <bpf@archiver.kernel.org>; Thu, 22 Sep 2022 15:40:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 876BDC6FA82
+	for <bpf@archiver.kernel.org>; Thu, 22 Sep 2022 16:21:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbiIVPj6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 22 Sep 2022 11:39:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48448 "EHLO
+        id S231882AbiIVQVp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 22 Sep 2022 12:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbiIVPj5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 22 Sep 2022 11:39:57 -0400
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2854B4AA
-        for <bpf@vger.kernel.org>; Thu, 22 Sep 2022 08:39:54 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MYK7v6wkwz9xHds
-        for <bpf@vger.kernel.org>; Thu, 22 Sep 2022 23:34:03 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwDXBF+1gSxjBhdqAA--.34800S2;
-        Thu, 22 Sep 2022 16:39:39 +0100 (CET)
-Message-ID: <65546f56be138ab326544b7b2e59bb3175ec884a.camel@huaweicloud.com>
-Subject: Re: Closing the BPF map permission loophole
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Lorenz Bauer <oss@lmb.io>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>
-Cc:     bpf@vger.kernel.org
-Date:   Thu, 22 Sep 2022 17:39:31 +0200
-In-Reply-To: <7f7c3337-74f1-424e-a14d-578c4c7ee2fe@www.fastmail.com>
-References: <a6c0bb85-6eeb-407e-a515-06f67e70db57@www.fastmail.com>
-         <8e243ad132ecf2885fc65c33c7793f0703937890.camel@huaweicloud.com>
-         <7f7c3337-74f1-424e-a14d-578c4c7ee2fe@www.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        with ESMTP id S231625AbiIVQVo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 22 Sep 2022 12:21:44 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD630E21D0
+        for <bpf@vger.kernel.org>; Thu, 22 Sep 2022 09:21:42 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id z13so3013649ejp.6
+        for <bpf@vger.kernel.org>; Thu, 22 Sep 2022 09:21:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=svyigr/4pQFgIA5xvhCZ4KlvmSb8/kEuQzuv4/Xh8g0=;
+        b=Lk12qa9Q02RI/QER7YXZGzGUUzsXWGg+5CBYkZ4XASADk0loV5OvpxDw21TTt6CScV
+         KCFkALPT2xRnbqzIcGiy3s1H3R/cIgAHoCdjoLqUw1XAcOTpLpfeOV7dW95AWY6rxkJk
+         KLG0cGP6LY5oXsuS64SVHFollQNKOAx2RNDhSN8fH3zZF/wP3yUOq/DcQB5ZXudyEhE4
+         n86CCVbVEwJzlkKsCFcHVQ/L6aO6ETzdEvC4LDfR/2Xt2PeNl4DmmCMo2Ra/HJCxYSjc
+         7/NBDlX6W9LXtIN9CcyKSOydK9snUyG2Q5S6czmAPvUuUrz/J4jnXZm1yray9adyZCWS
+         gD7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=svyigr/4pQFgIA5xvhCZ4KlvmSb8/kEuQzuv4/Xh8g0=;
+        b=m52FcVOFLDYu2znhU9a5d0L9/sLfPpcSBxdkjh5mFeykaYt3GVrF0jXr/nkb3joyIM
+         satvIOiSVbKwcnsE/i/+QVkDWhLUTuiADmPjbnOWItARGGcMKdKxYTJEwhpOEvpgAopi
+         4U9GCSQGPLU/QN0f0IghqjNSS/jVvzB8vHAfFqaFelnb4aXB5IGmUq89/CvrQP97u4Wp
+         VyptKAG+WoR79WL05etuQFKw3C/8mgdMDaysSUZBhzzQJkNgghZtQDxpPbCJ8zvWc902
+         +UzyiwuBnKyBiJRuH8K+dABsWM+ZYUPHXHe5ur8960DYTgruEwSzGEcyrI2CDeEr9Ehq
+         GNwA==
+X-Gm-Message-State: ACrzQf0gje6NqQBtCGmeMyZuI44tXge+LgqCSESAiiWm8rOWFuKkLPwF
+        YdgZHehsPBbHjbyLA6SnXIwjESzXIUox/9GZ12A=
+X-Google-Smtp-Source: AMsMyM6Sn8y305CxzLifCpHl/RbzPRv3i4OGDVsI+GcXZ84saMBSuh4L/eKK4V7euzpr2JvlPzdhh5VMbv77IXXoBGw=
+X-Received: by 2002:a17:906:8454:b0:772:7b02:70b5 with SMTP id
+ e20-20020a170906845400b007727b0270b5mr3549488ejy.114.1663863701309; Thu, 22
+ Sep 2022 09:21:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwDXBF+1gSxjBhdqAA--.34800S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxuF13tryDuF15Jw4xtFy3twb_yoW5ZFy7pa
-        yrKF9rCFn7tFWxCFn7Za13ua1UtwsxXrW7GrZ8trWUZws8Wry5JryFqFWYvFy7uFs7A34Y
-        vw43ZrWrAFyDAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-        Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
-        AY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
-        cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMI
-        IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2
-        KfnxnUUI43ZEXa7IU1zuWJUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQADBF1jj4NclwAAs-
-X-CFilter-Loop: Reflected
+References: <20220921164254.3630690-1-andrii@kernel.org> <CAADnVQ+ZDFe6brZJ4dPWnEWwxUtZnL=MuXOzoyNNfY7oxXZZ-w@mail.gmail.com>
+In-Reply-To: <CAADnVQ+ZDFe6brZJ4dPWnEWwxUtZnL=MuXOzoyNNfY7oxXZZ-w@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 22 Sep 2022 09:21:30 -0700
+Message-ID: <CAEf4BzZXy6BG1OE6L1tGzeqFMNqe2p=B4x8c0yH-Jo9-XUrGaA@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 0/4] veristat: CSV output, comparison mode, filtering
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        =?UTF-8?Q?Daniel_M=C3=BCller?= <deso@posteo.net>
+Cc:     Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 2022-09-22 at 15:47 +0100, Lorenz Bauer wrote:
-> On Wed, 21 Sep 2022, at 17:32, Roberto Sassu wrote:
-> > I saw your fix #2, even if I didn't fully understand it. What do
-> > you
-> > think instead about converting the fd modes to map flags (e.g.
-> > BPF_F_RDONLY -> BPF_RDONLY_PROG), and we rely on the existing
-> > verifier
-> > behavior for the _PROG counterparts? In this way, it will be the
-> > verifier enforcing the decision made by security_bpf_map().
-> 
-> Thanks for that idea, I think something like it was floated during
-> the discussion after my talk as well but I forgot about it. I gave it
-> a shot, and it turns out okay actually. The biggest draw back is that
-> this approach requires commit 591fe9888d78 ("bpf: add program side
-> {rd, wr}only support for maps") which appeared after BPF_F_RDONLY.
+On Wed, Sep 21, 2022 at 7:52 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Wed, Sep 21, 2022 at 9:43 AM Andrii Nakryiko <andrii@kernel.org> wrote:
+> >
+> > Add three more critical features to veristat tool, which make it sufficient
+> > for a practical work on BPF verifier:
+>
+> Nice tool!
 
-Yes, true. Not sure if it makes sense to backport it to stable versions
-(probably not). Or alternatively, for older versions we could ensure
-that the fd is for read/write, even if as you said, there is a risk of
-breakage of existing applications. It seems unlikely that this could
-happen, as libbpf still does not support requesting a read-only fd,
-although one could create an ad-hoc function to set the appropriate
-parameters for the bpf() system call.
+Thanks!
 
-Actually, if it may help, I could send my version of the fix I
-developed to validate the idea. I also wrote the tests.
+> Few requests:
+>
+> 1.
+> Please fix -v mode, since
+> veristat -v loop1.bpf.linked3.o
+> hangs forever. Maybe not forever, but I didn't have that much
+> time to find out whether it will finish eventually.
+>
 
-> Problem #3: Read-only fds can be transmuted into read-write fds
-> > > via
-> > > object pinning
-> > 
-> > Maybe I'm missing something, but I consider pinning more like
-> > adding a
-> > new reference to an eBPF object (like the ID).
-> > 
-> > You are still subject to access control decision by
-> > security_bpf_map(),
-> > as for BPF_MAP_GET_FD_BY_ID().
-> 
-> I had a look, security_bpf_map() is only called from
-> bpf_map_new_fd(), which in turn is invoked from GET_FD_BY_ID,
-> MAP_CREATE and OBJ_GET. Checking at this point is too late, since
-> OBJ_PIN + chmod allow escalating privileges. Can you explain your
-> idea some more?
+[vmuser@archvm bpf]$ sudo ./veristat -v loop1.bpf.linked3.o
+libbpf: prog 'nested_loops': BPF program load failed: No space left on device
+libbpf: prog 'nested_loops': failed to load: -28
+libbpf: failed to load object 'loop1.bpf.linked3.o'
+...<hangs>...
 
-The ability to access the path of a pinned map does not give you the
-ability to access the map itself. You still need to pass
-security_bpf_map(). With SELinux, you would need a rule like:
+Yep, some bug if the program fails to validate due to -ENOSPC. I'll fix it.
 
-allow <ctx of subject accessing the pinned map> <ctx of the map
-creator>: bpf { map_read map_write };
+BTW, I also want to extend this verbose capability to allow specifying
+log_level = 2 for BPF verifier, because for successfully validated BPF
+programs log_level = 1 is empty (except for stats).
 
-The inode is not passed to security_bpf_map(), so likely it is not
-taken into account for the security decision.
+> 2.
+> Please add some sort of progress indicator to
+> veristat *.linked3.o
+> otherwise it's not clear when it will be done and
+> -v cannot be used to find out because of bug 1.
 
-What you say, I think it applies to map iterators. The ability to
-access the path of an iterator gives you the ability to make changes to
-the map without further checks.
+just dumping every entry to console would be too verbose, so I was
+thinking to overwrite single line with updated progress, if output is
+a console. I'll look up how to do it.
 
-My further question, we could discuss it separately, is: by updating
-the verifier to check fd modes, and by checking the fd modes for map
-iterators, are we able to intercept any possible attempt from user
-space to modify a map?
+>
+> 3.
+> could you make it ignore non bpf elf files?
+> So it can be used just with veristat *.o ?
 
-> Now, the security model is limited to two permissions (read,
-> > write). If
-> > we want to add a new one to decide whether or not a new reference
-> > can
-> > be added, we could revisit this.
-> 
-> Maybe, but that would preclude back porting any fixes. I'll write up
-> another summary in a bit that shows that this problem goes back all
-> the way to the introduction of BPF_F_RDONLY, etc.
+Yep, I can, will add that as a convenience.
 
-Definitely, if possible, the fix should be backportable.
-
-Roberto
-
+Note that for now you probably want to do '*.bpf.linked3.o'. Daniel
+added .bpf.o suffix which helped greatly, but I think we might want to
+tweak this a bit more to make sure that what we have as .bpf.linked3.o
+is just .bpf.o, and initial .bpf.o (which might require further static
+linking to be complete) will be called something else.
