@@ -2,167 +2,108 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70C3EECAAD8
-	for <bpf@archiver.kernel.org>; Thu, 22 Sep 2022 00:43:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F21A7C6FA90
+	for <bpf@archiver.kernel.org>; Thu, 22 Sep 2022 01:10:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbiIVAnH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 21 Sep 2022 20:43:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55058 "EHLO
+        id S229637AbiIVBKX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 21 Sep 2022 21:10:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbiIVAnG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 21 Sep 2022 20:43:06 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA00BA99DD;
-        Wed, 21 Sep 2022 17:43:05 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id z97so11268697ede.8;
-        Wed, 21 Sep 2022 17:43:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=wYSOQNWC5It+o8/Gi1iJCg31bqOBA5TdTGj9SmNibk4=;
-        b=J+da/wSD/B7rlCGbUx98XPTM2HCpGyWOHbEa0NrjgBx5frpgi/kvKYenSf4puOfOAf
-         X/ki/9drk1cdFhtXBFq0Hav6/R1Bd6YbO7RfsFCOHzfvgL0WpWDcPXUhPQhBh1uqpMld
-         tp7NrZFsLUHNYOGdZVoH6s21g2X68GSNGg9SaGfNvsH9oopBVghs8a+DROo7V1ASLXvQ
-         jcJopt/O52j7mtEAAQC4Ma0jzZxFTdClBzrLvRjeD20TByNlpmAYk/w+E7z73T4SFdLx
-         8Fx5GnWNXguX/GL7j+7PtzaHodTa46QqkkBdisSTHVNkjleZZSh4YB3QRmPALDRUQomX
-         +HMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=wYSOQNWC5It+o8/Gi1iJCg31bqOBA5TdTGj9SmNibk4=;
-        b=YwWRJdTjkQS9slT9T56AqKYqX3dksLNpcwyCoTsSvzBgiuYneKrssslaVhILIEogq/
-         uoSIUvNLrIQiN5J3q6LS3J07dCVTHUzVJIVlGwi77F6ZbWcaKNRG3jHkqdlEdpouMIoU
-         L9HBW890+bo2sVlaKxHuXPUS8WO01fDGuAj9oIxFOC65Hhs6RpXFuVn8slLc5lBEHf30
-         TCAltNmM+6qCQwxyHShb1y69XQowEXCBWgVacEuR75vVyeQK0dda7OxTJZJmhJd6dfNE
-         JTqyTndw613+Jyu6QdZ/7Q/pE32eTz19g4lsg3l7OZrz3k4aZBTg2ifAh0kLXM0vvq7U
-         PG+A==
-X-Gm-Message-State: ACrzQf1I/MCexS67xbT3tsA/B+1AoP0/bBJ+qxy9Au5IqoFw+1YIDfMH
-        SnCSmDQFE8bgS+zIGAxZr2UTLaHxu1f1U7KOYMI=
-X-Google-Smtp-Source: AMsMyM59vgKc16+SXV2dQ4kgCA5xjzucBZiPrf0bFDSAQRC+J5Lv2Mq/uM4O+cnE/TwO1jgVgHajxhaw5e64drpOsf8=
-X-Received: by 2002:aa7:de9a:0:b0:44d:8191:44c5 with SMTP id
- j26-20020aa7de9a000000b0044d819144c5mr707493edv.232.1663807384275; Wed, 21
- Sep 2022 17:43:04 -0700 (PDT)
+        with ESMTP id S229523AbiIVBKW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 21 Sep 2022 21:10:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0D8DFD0;
+        Wed, 21 Sep 2022 18:10:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE15B63343;
+        Thu, 22 Sep 2022 01:10:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 11191C433D7;
+        Thu, 22 Sep 2022 01:10:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663809020;
+        bh=JQYpUNVHmmWqqXAXWDbpfQz1G7DdV3xIEvXth+vs+eE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=c0PJHJkL4zQlong+cLZwqtdSIVI1lzbtkLA2s3IdFJOKBUq2IL6fozJFi4bAp9yQI
+         2qBAluRvsHqdjKJOPdnM14aGcMdp+0EifvqIQ4bG4w/gHxuxmmmRiC8wR4TXn8qv12
+         BiXIYJ4+/47tqw0RsBTBktnTbDqtJdBS7A8ew/GDFOJwEhYkv2lmsgVVaPmqWrxUlE
+         KJoe/CFeVri62F4CZHA6ei5JhDZf35duMIEQgqi15k0ZATIf6VZZt+9x3q3+YpDcLE
+         MJzIo+cqgNfmTWz7+NAbjU1UlpnbLSIK1t0DD96PXhQf9IvYeAuwscpkkCHbFJe9JZ
+         nSSdkyw676YnA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E3658E21ECF;
+        Thu, 22 Sep 2022 01:10:19 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <1662702346-29665-1-git-send-email-wangyufen@huawei.com>
- <1662702346-29665-2-git-send-email-wangyufen@huawei.com> <Yxt07BE7TOX6dGh2@google.com>
-In-Reply-To: <Yxt07BE7TOX6dGh2@google.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 21 Sep 2022 17:42:53 -0700
-Message-ID: <CAEf4Bza_449Ku65rLFG391aS6_ec-rt-sWbspveZ_nhBKn2j8w@mail.gmail.com>
-Subject: Re: [bpf-next 2/2] libbpf: Add pathname_concat() helper
-To:     sdf@google.com
-Cc:     Wang Yufen <wangyufen@huawei.com>, andrii@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, haoluo@google.com, jolsa@kernel.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, davem@davemloft.net, kuba@kernel.org,
-        hawk@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-        trix@redhat.com, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v18 00/13] bpf: Add kfuncs for PKCS#7 signature verification
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166380901992.22214.9738927038585872619.git-patchwork-notify@kernel.org>
+Date:   Thu, 22 Sep 2022 01:10:19 +0000
+References: <20220920075951.929132-1-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20220920075951.929132-1-roberto.sassu@huaweicloud.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, shuah@kernel.org, bpf@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, memxor@gmail.com, roberto.sassu@huawei.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Sep 9, 2022 at 10:16 AM <sdf@google.com> wrote:
->
-> On 09/09, Wang Yufen wrote:
-> > Move snprintf and len check to common helper pathname_concat() to make the
-> > code simpler.
->
-> > Signed-off-by: Wang Yufen <wangyufen@huawei.com>
-> > ---
-> >   tools/lib/bpf/libbpf.c | 74
-> > ++++++++++++++++++--------------------------------
-> >   1 file changed, 27 insertions(+), 47 deletions(-)
->
-> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> > index 5854b92..238a03e 100644
-> > --- a/tools/lib/bpf/libbpf.c
-> > +++ b/tools/lib/bpf/libbpf.c
-> > @@ -2096,20 +2096,31 @@ static bool get_map_field_int(const char
-> > *map_name, const struct btf *btf,
-> >       return true;
-> >   }
->
-> > -static int build_map_pin_path(struct bpf_map *map, const char *path)
-> > +static int pathname_concat(const char *path, const char *name, char *buf)
-> >   {
-> > -     char buf[PATH_MAX];
-> >       int len;
->
-> > -     if (!path)
-> > -             path = "/sys/fs/bpf";
-> > -
-> > -     len = snprintf(buf, PATH_MAX, "%s/%s", path, bpf_map__name(map));
-> > +     len = snprintf(buf, PATH_MAX, "%s/%s", path, name);
-> >       if (len < 0)
-> >               return -EINVAL;
-> >       else if (len >= PATH_MAX)
-> >               return -ENAMETOOLONG;
->
-> > +     return 0;
-> > +}
-> > +
-> > +static int build_map_pin_path(struct bpf_map *map, const char *path)
-> > +{
-> > +     char buf[PATH_MAX];
-> > +     int err;
-> > +
-> > +     if (!path)
-> > +             path = "/sys/fs/bpf";
-> > +
-> > +     err = pathname_concat(path, bpf_map__name(map), buf);
-> > +     if (err)
-> > +             return err;
-> > +
-> >       return bpf_map__set_pin_path(map, buf);
-> >   }
->
-> > @@ -7959,17 +7970,8 @@ int bpf_object__pin_maps(struct bpf_object *obj,
-> > const char *path)
-> >                       continue;
->
-> >               if (path) {
-> > -                     int len;
-> > -
-> > -                     len = snprintf(buf, PATH_MAX, "%s/%s", path,
-> > -                                    bpf_map__name(map));
-> > -                     if (len < 0) {
-> > -                             err = -EINVAL;
-> > -                             goto err_unpin_maps;
-> > -                     } else if (len >= PATH_MAX) {
-> > -                             err = -ENAMETOOLONG;
->
-> [..]
->
-> > +                     if (pathname_concat(path, bpf_map__name(map), buf))
-> >                               goto err_unpin_maps;
-> > -                     }
->
-> You're breaking error reporting here and in a bunch of other places.
-> Should be:
->
-> err = pathname_concat();
-> if (err)
->         goto err_unpin_maps;
->
-> I have the same attitude towards this patch as the first one in the
-> series: not worth it. Nothing is currently broken, the code as is relatively
-> readable, this version is not much simpler, it just looks slightly different
-> taste-wise..
->
+Hello:
 
-It's a minor improvement, IMO, so I don't mind it (5 repetitions of
-annoying error case handling seems worth streamlining). But selftests
-just for this seems like an overkill.
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-> How about this: if you really want to push this kind of cleanup, send
-> selftests that exercise all these error cases? :-)
->
->
+On Tue, 20 Sep 2022 09:59:38 +0200 you wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> One of the desirable features in security is the ability to restrict import
+> of data to a given system based on data authenticity. If data import can be
+> restricted, it would be possible to enforce a system-wide policy based on
+> the signing keys the system owner trusts.
+> 
+> [...]
 
-[...]
+Here is the summary with links:
+  - [v18,01/13] bpf: Allow kfuncs to be used in LSM programs
+    https://git.kernel.org/bpf/bpf-next/c/d15bf1501c75
+  - [v18,02/13] btf: Export bpf_dynptr definition
+    https://git.kernel.org/bpf/bpf-next/c/00f146413ccb
+  - [v18,03/13] bpf: Move dynptr type check to is_dynptr_type_expected()
+    https://git.kernel.org/bpf/bpf-next/c/e9e315b4a5de
+  - [v18,04/13] btf: Allow dynamic pointer parameters in kfuncs
+    https://git.kernel.org/bpf/bpf-next/c/b8d31762a0ae
+  - [v18,05/13] bpf: Export bpf_dynptr_get_size()
+    https://git.kernel.org/bpf/bpf-next/c/51df48657185
+  - [v18,06/13] KEYS: Move KEY_LOOKUP_ to include/linux/key.h and define KEY_LOOKUP_ALL
+    https://git.kernel.org/bpf/bpf-next/c/90fd8f26edd4
+  - [v18,07/13] bpf: Add bpf_lookup_*_key() and bpf_key_put() kfuncs
+    https://git.kernel.org/bpf/bpf-next/c/f3cf4134c5c6
+  - [v18,08/13] bpf: Add bpf_verify_pkcs7_signature() kfunc
+    https://git.kernel.org/bpf/bpf-next/c/865b0566d8f1
+  - [v18,09/13] selftests/bpf: Compile kernel with everything as built-in
+    https://git.kernel.org/bpf/bpf-next/c/94fd7420faa0
+  - [v18,10/13] selftests/bpf: Add verifier tests for bpf_lookup_*_key() and bpf_key_put()
+    https://git.kernel.org/bpf/bpf-next/c/7c036ed9e006
+  - [v18,11/13] selftests/bpf: Add additional tests for bpf_lookup_*_key()
+    https://git.kernel.org/bpf/bpf-next/c/ecce368d6e6d
+  - [v18,12/13] selftests/bpf: Add test for bpf_verify_pkcs7_signature() kfunc
+    https://git.kernel.org/bpf/bpf-next/c/fc97590668ae
+  - [v18,13/13] selftests/bpf: Add tests for dynamic pointers parameters in kfuncs
+    https://git.kernel.org/bpf/bpf-next/c/b94fa9f9dcf9
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
