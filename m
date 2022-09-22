@@ -2,76 +2,72 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBF2BC6FA82
-	for <bpf@archiver.kernel.org>; Thu, 22 Sep 2022 16:21:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADDC1C6FA82
+	for <bpf@archiver.kernel.org>; Thu, 22 Sep 2022 16:29:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231903AbiIVQV4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 22 Sep 2022 12:21:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53650 "EHLO
+        id S231946AbiIVQ33 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 22 Sep 2022 12:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231936AbiIVQVy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 22 Sep 2022 12:21:54 -0400
+        with ESMTP id S231965AbiIVQ30 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 22 Sep 2022 12:29:26 -0400
 Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0692E21D0
-        for <bpf@vger.kernel.org>; Thu, 22 Sep 2022 09:21:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C885EE99AC
+        for <bpf@vger.kernel.org>; Thu, 22 Sep 2022 09:29:23 -0700 (PDT)
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 956013200657;
-        Thu, 22 Sep 2022 12:21:46 -0400 (EDT)
+        by mailout.west.internal (Postfix) with ESMTP id 6C1433200914;
+        Thu, 22 Sep 2022 12:29:22 -0400 (EDT)
 Received: from imap49 ([10.202.2.99])
-  by compute5.internal (MEProxy); Thu, 22 Sep 2022 12:21:47 -0400
+  by compute5.internal (MEProxy); Thu, 22 Sep 2022 12:29:23 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lmb.io; h=cc:cc
         :content-type:date:date:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1663863706; x=1663950106; bh=ojV5qtpUSm
-        xW/5klERVRy6tSkdY9WvxB4GKRxa9oxE0=; b=kyd4eQ15Iu49HIl5hx7j1twtku
-        pSPTJ1cfmHLKSeppjjKE9/KYQ8aV9fuLUXTwQE/y3vYjeUxPTzGxfRxVh7Qfcg6i
-        OPzBvivxHVL4uUzVzMPV0g0AEiE0TkkJq3EHsH6vq7tUTnG9tAgLGBsHMld4B6zi
-        5KaanXoa/rKaHKuVC5XFlb7mYWRi3pg26YKGbW3oNsElxNXx9UjzhMFSCuSY3AJe
-        AZMar0N7VihPUSBzjXEWbCqXMgIDKddysrJUaif2Yzp5k+Sysqwf3EHZ0FLFSbRK
-        2OgVCseHBTRsI6XJAljO0zGPlelIAmECOPgg6O6wPOShHiGQYHz2hAKDdu5A==
+        :subject:to:to; s=fm1; t=1663864161; x=1663950561; bh=Ls4S0Tz98v
+        3lAbaZgRInk3TZOEGIbEC9AZNUZNgnaHk=; b=m6fpdaKyQ/j3rQ8aeSgEwovBuB
+        mKQbXtimIUL6Fgm4PFKryF1prQnhnp4P1g7P49Bc2oS6G6oLBH2//8Nva1abW/1V
+        wVairHJxF5rfTENFWBjUnTspIulqXM2MXYWH5/I85BHj4/6JLWf+LqZF4ivRT8ql
+        CuEy8HmjoyjvGllGmkrVgfGL1oGRFRHkuXb/flPglvkp6zsezUZFsN7FcdVil6qx
+        msKCEjP6ryFsy1nFnGleBiKpcVBnImuzBv/0euT8Umse0ukBispkBOacbDM9CGC7
+        BOHStDnzaBnDhgtNwSTfmFP6UeCgA0eFU8iVmqIX2ic5DLIJeunmlJ+u/efQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
         :feedback-id:from:from:in-reply-to:in-reply-to:message-id
         :mime-version:references:reply-to:sender:subject:subject:to:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1663863706; x=1663950106; bh=ojV5qtpUSmxW/5klERVRy6tSkdY9
-        WvxB4GKRxa9oxE0=; b=UCXu8YhTe9Lu14ccq806REv9DfvuXWnW3n6Z7Hfwedhf
-        HjdM7LavTJ9Ul2/mFprJXZ2J/s2h/5bKJLDs1+pvqKTUp9WhlsORboxHmy4mntr0
-        U8RyCWu3Uza+L/NK90HbvN06ulDTJNoepp3sVCQH5I91wDTFG5lXbIyNFN1pq88M
-        j56L8WSB0hvEscGY/y7Dvh+/Us9eY/vcxjgwETWhmNBRegg7OANVk1KFjMDP5q5y
-        D0rCOsxky7j2iL+gPNSG25QTBkEWuNNJjrhdX4Caqyh6kqauCDVozBORvgmndpCD
-        VPOPPAMNEK4SccV/S+Ne5OcvPrGFdJ5t21VDYXz3WA==
-X-ME-Sender: <xms:mYssYwxbLoPIcmGinVVDQmbaUFb2YZMNFwv5uGE4cEnz9wAv5Q-_Sw>
-    <xme:mYssY0Sojx-THc7lUZbWfNOYew6jC1yiSBGplq9YhGpeKqq1ygJHhVQwgD5JyugOq
-    DdWt26PVQxRTSzZDw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeefgedgfeelucetufdoteggodetrfdotf
+        fm2; t=1663864161; x=1663950561; bh=Ls4S0Tz98v3lAbaZgRInk3TZOEGI
+        bEC9AZNUZNgnaHk=; b=k0z0huR3YdLYFic2Nu1u1WDmoGLSQMHe6dYZTjQmZ+dk
+        9rxIul42uNnkO+W7Z7AcbJxezUTCo8avzkhXQMWNxf0md5LuaiPKSVsv3nbNN0Zf
+        RoOGqRce/SzCiDAg6t9HDoKg6jQUpL8fUDGciIjlzJX9UpVpGQqDFQfLYpyMDkoV
+        qcjnyeNNi72nLpvFgSbE5McIFmb9Ib8M8fqdjELcfqxpKaisQsBQEngFXKqb4PuY
+        vFpet7CfivYXTfrOc1QZxf5VN3xObhJnOXIcgkQHSRbK3rCesQyDT4sd0D6dmA3b
+        6xH9sZ6FENhjWfOjb+QAM/MrsmrWbwHh2e/FH4DdxQ==
+X-ME-Sender: <xms:YY0sYz51oNQc2gQGYQVZOxMK7YEDQcKHNrZnmUZGsMxv-ksTKvauBQ>
+    <xme:YY0sY467xdITZyVReBII0LPxuLBiz_VXJ34BBmSMCPU5AuxJubCEShHlLMOv16mu5
+    07Hr7_UmQbImBitEQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeefgedggedvucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfnfho
     rhgvnhiiuceurghuvghrfdcuoehoshhssehlmhgsrdhioheqnecuggftrfgrthhtvghrnh
-    epffejueekkeetheeiieehieffhfevheetuddvfeehgeekgeelleffkeelueefleevnecu
-    ffhomhgrihhnpegthhgvtghkshdrhhhofienucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpehoshhssehlmhgsrdhioh
-X-ME-Proxy: <xmx:mYssYyUVaI98Rmxl5WgQw-0Z7BxlkC9wcUbOvrtf-R4Ziy6yL9RfwA>
-    <xmx:mYssY-iqT2t9VweKztrTmXzjAVw9AU_HaUAuZnR4TKnhF7BmWuiIXg>
-    <xmx:mYssYyD5mz5YqVBmWOFXUj0EaFqGx-t5avoJBRlLlibuw2wGVRsswQ>
-    <xmx:mossY56nc2FoPOMX4ZuTFNZu40KA-wVDd_mEeP0IifTElngYiEjMNA>
+    epjeekveeutdejtdefueffgfetgeehvdeileffgeevtddvuddtteejvdduhfdtvdefnecu
+    ffhomhgrihhnpehgihhthhhusgdrtghomhdpkhgvrhhnvghlrdhorhhgnecuvehluhhsth
+    gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepohhssheslhhmsgdrihho
+X-ME-Proxy: <xmx:YY0sY6fH-mZeY6kU_t4D4PhEJMYHdAmzZ3JWcj6mYW63JgEVf-fIoA>
+    <xmx:YY0sY0J4_kwKBfMnOqxHxS4Wq53h7HrsnHMLbFb66H9_UHQEnbDTHQ>
+    <xmx:YY0sY3JEgL2K49p6WbVtYYg6itIqQZNC2OJKDZWrWJGBoq5wp2J0Jg>
+    <xmx:YY0sY0FWwoSCrnsxOwHRl9xZ86dtaf2F20QzycfPa6hrqV6SOc8r9Q>
 Feedback-ID: icd3146c6:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id A676815A008B; Thu, 22 Sep 2022 12:21:45 -0400 (EDT)
+        id 8E76A15A0087; Thu, 22 Sep 2022 12:29:21 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
 Mime-Version: 1.0
-Message-Id: <b0c00f80-c11e-4f5d-ba63-2e9fb7cad561@www.fastmail.com>
-In-Reply-To: <65546f56be138ab326544b7b2e59bb3175ec884a.camel@huaweicloud.com>
+Message-Id: <4e66ca38-e99d-4fe5-b224-e36fb946878f@www.fastmail.com>
+In-Reply-To: <a6c0bb85-6eeb-407e-a515-06f67e70db57@www.fastmail.com>
 References: <a6c0bb85-6eeb-407e-a515-06f67e70db57@www.fastmail.com>
- <8e243ad132ecf2885fc65c33c7793f0703937890.camel@huaweicloud.com>
- <7f7c3337-74f1-424e-a14d-578c4c7ee2fe@www.fastmail.com>
- <65546f56be138ab326544b7b2e59bb3175ec884a.camel@huaweicloud.com>
-Date:   Thu, 22 Sep 2022 17:21:12 +0100
+Date:   Thu, 22 Sep 2022 17:29:01 +0100
 From:   "Lorenz Bauer" <oss@lmb.io>
-To:     "Roberto Sassu" <roberto.sassu@huaweicloud.com>,
-        "Alexei Starovoitov" <ast@kernel.org>,
+To:     "Alexei Starovoitov" <ast@kernel.org>,
         "Daniel Borkmann" <daniel@iogearbox.net>,
         "Andrii Nakryiko" <andrii@kernel.org>,
         "Martin KaFai Lau" <martin.lau@linux.dev>,
@@ -84,43 +80,56 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 22 Sep 2022, at 16:39, Roberto Sassu wrote:
+On Thu, 15 Sep 2022, at 11:30, Lorenz Bauer wrote:
+> Hi list,
 >
-> Yes, true. Not sure if it makes sense to backport it to stable versions
-> (probably not). Or alternatively, for older versions we could ensure
-> that the fd is for read/write, even if as you said, there is a risk of
-> breakage of existing applications. It seems unlikely that this could
-> happen, as libbpf still does not support requesting a read-only fd,
-> although one could create an ad-hoc function to set the appropriate
-> parameters for the bpf() system call.
+> Here is a summary of the talk I gave at LPC '22 titled "Closing the BPF 
+> map permission loophole", with slides at [0].
 
-You can create a r-o fd via bpf_map_create if you pass map_flags=BPF_F_RDONLY unfortunately. Were you thinking of OBJ_GET when you refer to libbpf?
+A timeline of the most important commits in this sorry affair. TL;DR: >= 4.15 is really broken.
 
-> Actually, if it may help, I could send my version of the fix I
-> developed to validate the idea. I also wrote the tests.
+v4.4 commit b2197755b263 ("bpf: add support for persistent maps/progs") 
+https://github.com/torvalds/linux/commit/b2197755b263
 
-Yes please, I have also have a WIP patch that seems to work, but I'm curious what you came up with. Tests would also be great, mine are kinda janky.
+Introduces BPF_OBJ_PIN and OBJ_GET. Map fds are always read-write and all is fine.
 
-> The ability to access the path of a pinned map does not give you the
-> ability to access the map itself.
+v4.12 commit 56f668dfe00d ("bpf: Add array of maps support")
+https://github.com/torvalds/linux/commit/56f668dfe00d
 
-I think there is a subtlety here I don't get. BPF_OBJ_GET(/sys/fs/bpf/foo) gives me an fd I can modify via syscall, no? Are you making a distinction between the inode and the bpf_map itself?
+Map fds are always read-write. Inner map map_flags are compared to the outer map via bpf_map_meta_equal, which prevents stripping BPF_F_RDONLY_PROG, etc. later on.
 
-> You still need to pass
-> security_bpf_map(). With SELinux, you would need a rule like:
+v4.15 commit 6e71b04a8224 ("bpf: Add file mode configuration into bpf maps")
+https://github.com/torvalds/linux/commit/6e71b04a8224
+
+Introduces BPF_F_RDONLY / WRONLY. Doesn't take into account that BPF programs can modify maps (unprivileged BPF is enabled since v4.3). Also doesn't take into account that BPF_OBJ_PIN can be used to turn r/o into r/w maps. This is the start of our problems, and IMO it's completely broken.
+
+v5.2 commit 591fe9888d78 ("bpf: add program side {rd, wr}only support for maps")
+https://github.com/torvalds/linux/commit/591fe9888d78
+
+Introduces BPF_F_RDONLY_PROG, etc. Using sourcegraph.com I found a BPF ELF that creates a map with BPF_F_RDONLY | BPF_F_RDONLY_PROG flags [0]. This would be broken by refusing non-RW fds in the verifier, which is my preferred brute fix. Those flags came about because of a misunderstanding of what BPF_F_RDONLY does, which makes me worry might be other cases out there.
+
+Based on my research, we can do the following:
+
+> Problem #1: Read-only fds can be modified via a BPF program
+
+Up until 591fe9888d78 BPF_F_RDONLY_PROG we'd probably be OK with just refusing !rw fds. The only kernel.org version that this applies to is 4.19. 5.4, 5.10, 5.15 need the fix Roberto suggested.
+
+> Problem #2: Read-only fds can be "transmuted" into read-write fds via map in map
+
+This is not as big a problem as I initially thought. First, lookup in a nested map from userspace returns an ID, not a fd. Going from ID to fd requires CAP_SYS_ADMIN. On the program side, it's possible to retrieve the inner map and modify it.
+
+I think it's possible to fix this by refusing to insert !rw inner maps, by patching bpf_map_fd_get_ptr(). That function hasn't changed in a long time either. 4.19, 5.4, 5.10, 5.15.
+
+> Problem #3: Read-only fds can be transmuted into read-write fds via 
+> object pinning
 >
-> allow <ctx of subject accessing the pinned map> <ctx of the map
-> creator>: bpf { map_read map_write };
->
-> The inode is not passed to security_bpf_map(), so likely it is not
-> taken into account for the security decision.
+> 1. BPF_OBJ_PIN(read-only fd, /sys/fs/bpf/foo)
+> 2. BPF_OBJ_GET(/sys/fs/bpf/foo) = read-write fd
 
-Ok, you're saying that a user can prevent the escalation via SELinux?
+bpf_map doesn't have a concept of an owning user, so the only solution I can come up with is to refuse OBJ_PIN if !rw and !capable(CAP_DAC_OVERRIDE). Replace CAP_DAC_OVERRIDE with another capability of your choice, the idea being that this allows programs that run as root (probably a lot?) to continue functioning.
 
-> What you say, I think it applies to map iterators. The ability to
-> access the path of an iterator gives you the ability to make changes to
-> the map without further checks.
+Again 4.19, 5.4, 5.10, 5.15.
 
-How? An example would really help me, I don't know much about iterators besides that I can pin them and that open() triggers the program.
+Daniel, Alexei, Andrii: any thoughts? This is a pretty deep rabbit hole, and I don't want to waste my time on the wrong approach.
 
-Lorenz
+0: https://github.com/willfindlay/bpfcontain-rs/blob/eb2cd826b609e165d63d784c0f562b7a278171d2/src/bpf/include/allocator.h#L16
