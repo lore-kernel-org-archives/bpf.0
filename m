@@ -2,86 +2,118 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BC6EC6FA86
-	for <bpf@archiver.kernel.org>; Thu, 22 Sep 2022 10:09:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90208C54EE9
+	for <bpf@archiver.kernel.org>; Thu, 22 Sep 2022 11:53:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231352AbiIVKJ2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 22 Sep 2022 06:09:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
+        id S231298AbiIVLxO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 22 Sep 2022 07:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231405AbiIVKJK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 22 Sep 2022 06:09:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26309D58A6;
-        Thu, 22 Sep 2022 03:08:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B72AD62ADB;
-        Thu, 22 Sep 2022 10:08:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 957EDC433C1;
-        Thu, 22 Sep 2022 10:08:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663841321;
-        bh=DQD5bY7rmYscssK562jPhzpbowUB46DFrAfdGq6qZ3w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i2TNQKgtrEU+Yf7g9o2GRe9ffvaoTrWTjnm2fRwGEVnIxgUvoSRkXmb4Kb5NflwAX
-         FPLN2A7ja6KyLFWVYAT0WXvjtqBincyJRxVOlvlhklcnX7zgzi0Mi13LwxHr65w07u
-         XBd9lX+BeASwwRT9eGEbdNV+2tRDvvNtOHxe6Avk=
-Date:   Thu, 22 Sep 2022 12:08:38 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     cgel.zte@gmail.com
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xu Panda <xu.panda@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH linu-next] samples/bpf: use absolute path for dd
-Message-ID: <Yyw0JskGMbGE1lHK@kroah.com>
-References: <20220922090231.236152-1-xu.panda@zte.com.cn>
+        with ESMTP id S229448AbiIVLxN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 22 Sep 2022 07:53:13 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999B2979F4;
+        Thu, 22 Sep 2022 04:53:12 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id t7so15070785wrm.10;
+        Thu, 22 Sep 2022 04:53:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=+EO80SPRWg5tCr6JwsANQXApnPAi2pPn2xvc+2uILU0=;
+        b=jtl0JHE111TNmC2pKToSLZuFxKaqh6m3rfTwt7rv1EFXUdBkXyBHSiG8jf9zGzDyBB
+         uF2xLoaQDmOL+cmuGkx3sFUoP8R9SmnsGMYov9hPQ004A1glWPzeZ31jy/Xn1tOvI6td
+         SaN3GtnFRIe9ks1U78CDG7WkV/wlhM0UDflh7y4Ec7DXKewSH1qFbOaA1EZWtOh5qrAi
+         sCl4j3GsGjNOQ8A2j85JDBLfzeVylmAyC084yU8FYXaUrbOlfXjRs1xPZdqeWCX8hlBy
+         CzLCgDG5GHpNYJXuUyWozay6ygPIjhniZ3jGIrbAIDhdM+eV2Ej0q4vnzu1vZV2RMwfx
+         QEIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=+EO80SPRWg5tCr6JwsANQXApnPAi2pPn2xvc+2uILU0=;
+        b=o5Yt2WKCH2i9PEO2z0gBQP8iEtGuYjgGX67SxExsFqwjwI3WVPfqOVMt1lGADaMCST
+         5Ew8e/W9Dl0Ra2YX42ohoxwsS6SGmj/lJxj7VLz+Wcj4/gu33Tt1kuGG3Ust21YV5Krn
+         8rCemM9ZUpeRU0tIRVxrG0MDpD1b39zqLhq7xqypkh2JqmJw76jCVoTjAYB6GpH7Oq+P
+         8ITvCDwUm6znOgmqNiUgSPFS387oWPK69AEhX/3jP1nzyUTT+A21xriQmKdheCysoF4Z
+         72oBL6NuNmm1XZeBbtYxXfjDbIL2jMyfeFJSQyoa76zFS5/zSPEpunlGjhTWUjxM3wgV
+         3yrg==
+X-Gm-Message-State: ACrzQf33106x7BXCWr1hbKMy3tNEtS3MefKvwBCLEP9s8QbSd7aa4o6k
+        YwK+La1mY9HHiCXRoU/BUkFaF1sXhmeo+g==
+X-Google-Smtp-Source: AMsMyM6NjU5s5wT23z6SSIrz5YltzqINCNfIZt11xrEepsibOPozuGPZ3Qg8jQozL9mFRQFmT5hU8Q==
+X-Received: by 2002:a05:6000:1189:b0:228:62c7:7e6c with SMTP id g9-20020a056000118900b0022862c77e6cmr1884752wrx.716.1663847590382;
+        Thu, 22 Sep 2022 04:53:10 -0700 (PDT)
+Received: from imac.redhat.com ([88.97.103.74])
+        by smtp.gmail.com with ESMTPSA id bg17-20020a05600c3c9100b003a5f4fccd4asm5865074wmb.35.2022.09.22.04.53.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Sep 2022 04:53:09 -0700 (PDT)
+From:   Donald Hunter <donald.hunter@gmail.com>
+To:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Donald Hunter <donald.hunter@gmail.com>
+Subject: [PATCH bpf-next v4 0/2] Add table of BPF program types to docs
+Date:   Thu, 22 Sep 2022 12:52:55 +0100
+Message-Id: <20220922115257.99815-1-donald.hunter@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220922090231.236152-1-xu.panda@zte.com.cn>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 09:02:31AM +0000, cgel.zte@gmail.com wrote:
-> From: Xu Panda <xu.panda@zte.com.cn>
-> 
-> Not using absolute path when invoking dd can lead to serious security
-> issues.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-> ---
->  samples/bpf/trace_event_user.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/samples/bpf/trace_event_user.c b/samples/bpf/trace_event_user.c
-> index 9664749bf618..d841918accc9 100644
-> --- a/samples/bpf/trace_event_user.c
-> +++ b/samples/bpf/trace_event_user.c
-> @@ -126,7 +126,7 @@ static void print_stacks(void)
-> 
->  static inline int generate_load(void)
->  {
-> -       if (system("dd if=/dev/zero of=/dev/null count=5000k status=none") < 0) {
-> +       if (system("/usr/bin/dd if=/dev/zero of=/dev/null count=5000k status=none") < 0) {
->                 printf("failed to generate some load with dd: %s\n", strerror(errno));
->                 return -1;
->         }
-> -- 
-> 2.15.2
+Extend the libbpf documentation with a table of program types, attach
+points and ELF section names. The table uses data from program_types.csv
+which is generated from tools/lib/bpf/libbpf.c during the documentation
+build.
 
-Again, please stop submitting patches for Linux kernel development at
-this point in time until your company has fixed their development
-process.
+Patch 1 adds subdir support to Documentation/Makefile and changes
+userspace-api/media to use this instead of being a special case.
 
-You have been warned many times about this, and we have heard nothing
-back from you at all.  I'll go ask for your email address to now be
-banned from our lists, sorry.
+Patch 2 adds the program_types documentation with a new makefile in
+the libbpf doc directory to generate program_types.csv, using
+scripts/gen-bpf-progtypes.sh
 
-greg k-h
+The generator is now in scripts/gen-bpf-progtypes.sh so that it can be
+exported to the libbpf git repository along with the libbpf docs. The
+libbpf repository will need to be updated to sync and use
+scripts/gen-btf-progtypes.sh after this patch lands.
+
+I plan to look at adding info about the format of section "extras" for
+each program type as a follow-on.
+
+v3 -> v4:
+Fix typo reported by Jesper Brouer
+Move the generator from the Makefile to a separate script
+
+v2 -> v3:
+Put program_types after API docs in TOC as suggested by Andrii Nakryiko
+Fix formatting as reported by Andrii Nakryiko
+Include USDT extras example as suggested by Andrii Nakryiko
+Include sample of program_types.csv as suggested by Andrii Nakryiko
+
+v1 -> v2:
+Automate the generation of program_types.csv as suggested by
+Andrii Nakryiko.
+
+Donald Hunter (2):
+  Add subdir support to Documentation makefile
+  Add table of BPF program types to libbpf docs
+
+ Documentation/Makefile                     | 16 ++++++++--
+ Documentation/bpf/libbpf/.gitignore        |  1 +
+ Documentation/bpf/libbpf/Makefile          | 29 ++++++++++++++++++
+ Documentation/bpf/libbpf/index.rst         |  3 ++
+ Documentation/bpf/libbpf/program_types.rst | 32 ++++++++++++++++++++
+ Documentation/bpf/programs.rst             |  3 ++
+ Documentation/userspace-api/media/Makefile |  2 ++
+ scripts/gen-bpf-progtypes.sh               | 34 ++++++++++++++++++++++
+ 8 files changed, 118 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/bpf/libbpf/.gitignore
+ create mode 100644 Documentation/bpf/libbpf/Makefile
+ create mode 100644 Documentation/bpf/libbpf/program_types.rst
+ create mode 100755 scripts/gen-bpf-progtypes.sh
+
+-- 
+2.35.1
+
