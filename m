@@ -2,59 +2,55 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3F26C6FA91
-	for <bpf@archiver.kernel.org>; Thu, 22 Sep 2022 01:10:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41FEBECAAD8
+	for <bpf@archiver.kernel.org>; Thu, 22 Sep 2022 01:20:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiIVBKZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 21 Sep 2022 21:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53332 "EHLO
+        id S230043AbiIVBUS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 21 Sep 2022 21:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbiIVBKY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 21 Sep 2022 21:10:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8535DFD0;
-        Wed, 21 Sep 2022 18:10:22 -0700 (PDT)
+        with ESMTP id S229578AbiIVBUQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 21 Sep 2022 21:20:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0E89750B
+        for <bpf@vger.kernel.org>; Wed, 21 Sep 2022 18:20:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83493B83392;
-        Thu, 22 Sep 2022 01:10:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 20EC3C433D6;
-        Thu, 22 Sep 2022 01:10:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9D4963216
+        for <bpf@vger.kernel.org>; Thu, 22 Sep 2022 01:20:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 04CF7C433B5;
+        Thu, 22 Sep 2022 01:20:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663809020;
-        bh=nqwrahPpEmqU9hoaAGBy+tCno5ccXCf26SD5Ui4kgPM=;
+        s=k20201202; t=1663809615;
+        bh=vxrl5MskWISLh6saaXZ9q4beRMdTt9DKf8duog7VInw=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=jePXvIRYDT0m7r4OsYVfB2YAEaLMQrqxgMi/n8LO3QgVR1KvV+lb2vAy4Otn62VUp
-         qUtTjZGbCS7by8bmqNxSKFxAWwJZ8Pmgj0zbGNin/4raaK/7Yx+AE3l4gaZ/QRqM5s
-         Aet8Wn9fnlmW4+BSrrUki7NAlq0zwenepZIbtTNVWcM0a0i6Di/jEfB/+pWN3GPGuQ
-         JWA7IN0w0DZ8v/WXTNLoxabMFskk4o9QEdSwEPO1hbX4ahxKXjoJyUOeGfxx+J5F6B
-         oRFJZxTkui2E86fATwbXo4LpGqQsNrTXwTL/xcyNycESxvYVH7Fiptz68Uj8Obb242
-         iqGFZSOONILhA==
+        b=uiEtft14lrt2ahJ464W+kYUEpaUYEkVxN3t5p5DOTk6VT0PeOhPlySvsKTtKMBmT9
+         MqnMZbtE30G/5Ano57zPqAMZ+YzbhKNJR+EfwdGhY/XOjQIxTaw6eqcMx+gCee91XE
+         Cm232XAMht9nqpso9HFa87YVLypWkrn7LF3aBW/X9OBlyfLcTuwQuFE89H4rr1u/0Y
+         RzMami0TN9y2uFo9hGuRzcnvXbdDQByGG4QvHMHlmDxL0aQnqfeghkhxdjyhFOk58k
+         d23kviuowmJjsrtsc7zD+Rx9yE5JxcaIrX+gQhIEVctS9+YoHBaOUaD3TnAzvolJ/w
+         spi+SHm8FSUUw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F0B21E4D03F;
-        Thu, 22 Sep 2022 01:10:19 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D7F84E4D03C;
+        Thu, 22 Sep 2022 01:20:14 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v18 02/13] btf: Export bpf_dynptr definition
+Subject: Re: [PATCH bpf-next RESEND] bpf: Always use raw spinlock for hash bucket
+ lock
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166380901998.22214.18015919305656352830.git-patchwork-notify@kernel.org>
-Date:   Thu, 22 Sep 2022 01:10:19 +0000
-References: <20220919142754.626564-1-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20220919142754.626564-1-roberto.sassu@huaweicloud.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, deso@posteo.net, dhowells@redhat.com,
-        haoluo@google.com, jarkko@kernel.org, jmorris@namei.org,
-        joannelkoong@gmail.com, john.fastabend@gmail.com, jolsa@kernel.org,
-        keyrings@vger.kernel.org, kpsingh@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, martin.lau@linux.dev,
-        memxor@gmail.com, mingo@redhat.com, mykolal@fb.com,
-        paul@paul-moore.com, roberto.sassu@huawei.com, rostedt@goodmis.org,
-        sdf@google.com, serge@hallyn.com, shuah@kernel.org,
-        song@kernel.org, yhs@fb.com
+Message-Id: <166380961488.28833.2007899206692761423.git-patchwork-notify@kernel.org>
+Date:   Thu, 22 Sep 2022 01:20:14 +0000
+References: <20220921073826.2365800-1-houtao@huaweicloud.com>
+In-Reply-To: <20220921073826.2365800-1-houtao@huaweicloud.com>
+To:     Hou Tao <houtao@huaweicloud.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, kafai@fb.com,
+        andrii@kernel.org, songliubraving@fb.com, haoluo@google.com,
+        yhs@fb.com, daniel@iogearbox.net, kpsingh@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, sdf@google.com,
+        jolsa@kernel.org, john.fastabend@gmail.com, tglx@linutronix.de,
+        houtao1@huawei.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
@@ -64,20 +60,19 @@ Hello:
 This patch was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Mon, 19 Sep 2022 16:27:54 +0200 you wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
+On Wed, 21 Sep 2022 15:38:26 +0800 you wrote:
+> From: Hou Tao <houtao1@huawei.com>
 > 
-> eBPF dynamic pointers is a new feature recently added to upstream. It binds
-> together a pointer to a memory area and its size. The internal kernel
-> structure bpf_dynptr_kern is not accessible by eBPF programs in user space.
-> They instead see bpf_dynptr, which is then translated to the internal
-> kernel structure by the eBPF verifier.
+> For a non-preallocated hash map on RT kernel, regular spinlock instead
+> of raw spinlock is used for bucket lock. The reason is that on RT kernel
+> memory allocation is forbidden under atomic context and regular spinlock
+> is sleepable under RT.
 > 
 > [...]
 
 Here is the summary with links:
-  - [v18,02/13] btf: Export bpf_dynptr definition
-    https://git.kernel.org/bpf/bpf-next/c/00f146413ccb
+  - [bpf-next,RESEND] bpf: Always use raw spinlock for hash bucket lock
+    https://git.kernel.org/bpf/bpf-next/c/1d8b82c61329
 
 You are awesome, thank you!
 -- 
