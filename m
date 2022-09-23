@@ -2,43 +2,43 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18E6EC6FA92
-	for <bpf@archiver.kernel.org>; Fri, 23 Sep 2022 15:47:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C086ECAAD8
+	for <bpf@archiver.kernel.org>; Fri, 23 Sep 2022 15:47:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232677AbiIWPrM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 23 Sep 2022 11:47:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48298 "EHLO
+        id S232822AbiIWPrY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 23 Sep 2022 11:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232743AbiIWPqn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 23 Sep 2022 11:46:43 -0400
+        with ESMTP id S229517AbiIWPqv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 23 Sep 2022 11:46:51 -0400
 Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-eopbgr140041.outbound.protection.outlook.com [40.107.14.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0ECE13A971;
-        Fri, 23 Sep 2022 08:46:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F35E6B9B;
+        Fri, 23 Sep 2022 08:46:49 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bH08max3tAP/Havzx+7Prjdxm5U83ZrNUCTY+fM2lQfsNnpJ8wKKiMOn97kiKCoplGourePcOy5D+zwVc0VQuWeE+a9NJbE/hG5g6y8u7ixwzdCKDnk93I1qlFsclnqwwu3yseQv0+c4tBR4b34rqXVfXlsDH/nEukGZniJQP3ZU8gYOmcf8DdXPrzUZ2gbTFhgSU9DSHooNPqujgOTJ81RvFoXXvAFBfBNJd0Md4xhB8IldMspUY7hiu3UlQhy5JqC0mxHZbVMHLWmdrsQbcpAoM0tI8OcLDFqK0hmfj52H3K1T+tzATlFM5SLcDEyxhUcRO48BhkemGP8AHb7K0w==
+ b=C7wZJllCccbgvhcC47xC/o/Rhiflx9ifWbT9JYh5zTe3p0817zsEwIIY7KuqXQqT2AMkUr3DOeAPKbyD69PnKIsuccffsNt6xZHjXubU1siGJcf0jYxkIExu/xQbBm3iK05TP6RaoGZa8uqVwWmp6lwMBdBY+aC2n55sx+qjY9adugqZIvfPhmOL/xy2RUKQyGnlZC2Y8C3jR2WWLWP5VMsd+8IkTgoLsKfEWT6ikLzF7SnRiCIaNY1iHxs3ja1F95eblMBZT4HDu+7DbNDln66j0jiz+gW+l+Nncj7DinPOs7xpBR1rz/XsfrU5PVqoE/7LTObwOiYKeWxtec3UWg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=C7ap+Zz8ampTLUeZCVAP/J9UHcUJqdIvO5pZ0yVTHhI=;
- b=Y4CZYwV2uJQVhru4aks8kpq6wPCn/IzZb4xY3i9t1oGoGSEUdjBpAzDqLZwZ+zD+W082eYq9luyE2OqE+tQfWXAr2uIZGAUyPIuMvHl+KxaScISd3ndCphvOonHe1cDjfKJVLog9dBoKrjC1EGtKEavviH7bH2DPXdLrk1nCPHVosGMTFm8jhAYiyq/co2cuaCUPHS8VXg5zJ8y2U7Ku5jZXbHKT/sK8o2iWQBuJlblgbdeRN8/X0h8Oqrz90I2dKMcWvK3lekbc9KDp2/2eAJBNK2IjBzM7/1RE2J6eprGWIuAr42CxhkCi1Gwk3hEvl/OIoMLqmwmmnWkCFBYFrg==
+ bh=pQlg0GNxhAlw2+YJphOGYJj4HZ9HHgrPznZnlXhCY7M=;
+ b=WUTrWo32A/OxxrM+S2FDuDcCET1JrtG53KxrRJoqfSxYvF3PG/SdOAR93sVQUsFZDgZJ7tLesm0Y8xja2OGs1zbUpOeLPwndB8ru5TuLiG/GMfyLjb2txFlnAaaHaUYBYddlBh5PC8IVTe/11qzO5epERBQ1otJjwC12i7E6yIIS7l6b+M2jQu8nXblLpKmigoHg1hoNzJ5iRaz4fYX2sZFkhmZgxCK1Veol5AWiHNiN4/JVTn2NrISFXG19QX4DQ/RkpwDqroWE/8rUJQ990C4gDPccK3gT5ytURN/97Amak82uo8iAtxYIqWM8oKsnUhnQfZN2bVZ486PscFtMdQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C7ap+Zz8ampTLUeZCVAP/J9UHcUJqdIvO5pZ0yVTHhI=;
- b=C4viNrQdYCTJVBPaIABPMcx5vXBsVSIjD9xwT2amhcwRTY+ov7zoI/qfLYi6CQm2cPD86bqkHkb+FHrgaL7Us2m1h2E1DhT3xgpjvzLGiZxGYEuVerhp4hY43v4UPcDr+fzFVVpIeg6ngTXo7ErlSGzynn5eLacHMc47wqwbfjE=
+ bh=pQlg0GNxhAlw2+YJphOGYJj4HZ9HHgrPznZnlXhCY7M=;
+ b=UaY7mAOCGWLRC6f9dzPT4Y6X5EG3hfMo7G1vAsZ70jbTebF/YqE/y9KCs7b6LSg/wkJPA8w37vMkrI75Qv6S8ybW3aT9gHDhsTiBiztYX/tMQdoc3HBrWT5GnEDuBUIAS2zzxAecBFpRGeG2g29WGXE1m5ZKTlAVcO+iwCivE3U=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from GV1PR04MB9055.eurprd04.prod.outlook.com (2603:10a6:150:1e::22)
  by AS8PR04MB8996.eurprd04.prod.outlook.com (2603:10a6:20b:42f::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.20; Fri, 23 Sep
- 2022 15:46:38 +0000
+ 2022 15:46:43 +0000
 Received: from GV1PR04MB9055.eurprd04.prod.outlook.com
  ([fe80::dd0b:d481:bc5a:9f15]) by GV1PR04MB9055.eurprd04.prod.outlook.com
  ([fe80::dd0b:d481:bc5a:9f15%4]) with mapi id 15.20.5654.018; Fri, 23 Sep 2022
- 15:46:38 +0000
+ 15:46:43 +0000
 From:   Ioana Ciornei <ioana.ciornei@nxp.com>
 To:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
@@ -47,11 +47,14 @@ To:     "David S. Miller" <davem@davemloft.net>,
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org
-Subject: [PATCH net-next v2 00/12] net: dpaa2-eth: AF_XDP zero-copy support
-Date:   Fri, 23 Sep 2022 18:45:44 +0300
-Message-Id: <20220923154556.721511-1-ioana.ciornei@nxp.com>
+        John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org,
+        Ioana Ciornei <ioana.ciornei@nxp.com>
+Subject: [PATCH net-next v2 04/12] net: dpaa2-eth: export the CH#<index> in the 'ch_stats' debug file
+Date:   Fri, 23 Sep 2022 18:45:48 +0300
+Message-Id: <20220923154556.721511-5-ioana.ciornei@nxp.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220923154556.721511-1-ioana.ciornei@nxp.com>
+References: <20220923154556.721511-1-ioana.ciornei@nxp.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: AM3PR05CA0152.eurprd05.prod.outlook.com
@@ -60,127 +63,90 @@ X-ClientProxiedBy: AM3PR05CA0152.eurprd05.prod.outlook.com
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: GV1PR04MB9055:EE_|AS8PR04MB8996:EE_
-X-MS-Office365-Filtering-Correlation-Id: c2bf5c6a-6dca-4c10-24b6-08da9d7acd42
+X-MS-Office365-Filtering-Correlation-Id: c62ca720-0f5a-4555-d255-08da9d7ad07b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: x16PLuoNZSAXM5yrngfbcWmFNXuvR40nMD5ipYaPuMe/xh/YNVMOLkKl+oNQyEEIKG+exWz8MYy75gxqm9cZz4tJl2bpts30COngdlbELKZj1Wqjp3g1i4x7tDjpVWFFhoyA6uebsCCrn4Rbp9boUGuedthrNj+t+Wffmcpymcdn2OXLPtvzcQh/LYcL8Aw7hPvejKMN32ZqPsn+fMJJwbbsArWWFnJjlmJO0xsTzwJcnnd6zBf2m9Sk8dI9yK1fodHnvb0kwFAuYCtHEIEeP7lE7+muKJXYyq/dDPl4M1uz13GE+7DMZrcZvM/m6uajQt8RmiGDmpj8m+aozsTprsF/qHb9K2D9BaFSqUP9T8ses0wyuphDhdHZcXo1q8qg6kRplMRLnYrsYiNgPOlQGMgy67sZwCmC+aFkgSXmy602BnEm/YcDs7SdB6CfXFLWL/knDFRiV5RwjalLjzULBfC2Y5/ebbGwf2gDGABOSqkJmunozWqaCnixbXMeZkYnrgT4+K/XsZYJraO2XN8YgPpm7O1uwuxSm+86LvEuGyU+nS5MBmLnJO3zlsecim6gO9+IfkdBn6yVYLCgfu18pGPVplrohM9KoWE6GSnZabO2RIfSLCNhqKKWkXw1YloSo8Tl4sTXrlGsfcAr8GoVn1JuUWCdRJDklw/aPJcN/A+DHhC7d0zXXXMWkEOxw7M7zsRu/ih+rTQa5xrEHwW4gyqjb4Cmy6nU8DXxHcK6H7N6J/JXgVzctsZnSQ4RdolB4chIngzfrn6PacPMXT2T5w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV1PR04MB9055.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(346002)(376002)(366004)(39860400002)(451199015)(6486002)(36756003)(316002)(54906003)(2616005)(4326008)(38350700002)(1076003)(38100700002)(6512007)(26005)(86362001)(52116002)(66476007)(110136005)(186003)(6506007)(83380400001)(6666004)(66946007)(2906002)(66556008)(478600001)(8676002)(41300700001)(5660300002)(44832011)(8936002)(7416002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: dgsnjLXENgwmmqEULjdKgTNC02G811SkpI9ap0BE6Fs9wi4i5PqUaeYxBypVf/c2wRdqkZif29fmHYZk62gIlFKCbXlmuAXd59o8gHFYNragJrA9cXNtenXdfVEKCisEOzM0syE3IUCd25Ac8bj9D196GSl78SY0hCqF3GcKDMw/AgwjrWU22Ymm3KD6QRquodMP85N9XDuScobRC7kodf4I/+RMMLUewdZND9RaYU2a+NqrTexpjigYev+1oN1b+GF2xWJawEPVP12gUMHvgyr5YA3AMf6ug/BGk2U65bmMoEriw/zJpTxyDdei/drBS4/j72NHmNKFq68LsFwIsSv+1lX/2YvU3oCsCGcsPO4qBuodyYTT6/c0aDTjArfLIs6MLq/Qdm6tyro2BMprR57WZNKZ3yhZd7qeo7CslHQishnuU+jsJzB32rRzaZitG0duQACm1Ur6hi3WoH5C3Du/MsfNma2ULUH4h2z6P1PxS9xyQyxsjgm++SGgu0TstGXltronkO94mbrmxIuS7po2ocPZVT2Dp6aUxDKWlR2ttCbU5t7Wm3ZhXuasI6LtIFZ6kG5YkzTgl21cw5nyRtmdDEbnRAecQebP5qRUU7gw1tLjjtrbDtkmqZqY4Do27xUxhTsSsvu9D09eRAsoBEtp3QRfWuxt3T37TcR1sthJL5A3j6JJqxeGaQaKfary2JSblkv6OoiiH+Pc8ZZTHT0g9rAr/3NozowixcKEPjY8fuHF2jF2Od73SMh1l4gWBIBZMmNXesOTPeshU70RhA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV1PR04MB9055.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(346002)(376002)(366004)(39860400002)(451199015)(6486002)(36756003)(316002)(54906003)(2616005)(4326008)(38350700002)(1076003)(38100700002)(6512007)(26005)(86362001)(52116002)(66476007)(110136005)(186003)(6506007)(83380400001)(66946007)(2906002)(66556008)(478600001)(8676002)(41300700001)(5660300002)(44832011)(8936002)(7416002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Vea8LibtXUZUmyVDO4zSjIpMiiv7ApTsklTXlVQRWghtTtyshmydqsSRg5T3?=
- =?us-ascii?Q?uK0c6aIjCiuuEtoXYT/9LLeT6q1P80LlvX/xULMF9fM862g6OdTr0hOfZJdU?=
- =?us-ascii?Q?DIN/dt1NIEEkL7YqLBZopIwyLitmB9c0irm554nbkqdj9O73sUj9xZA1Aoco?=
- =?us-ascii?Q?EEMzdtwrzV/rNvsB43TrcpiJ5vNR4A39tgv7oFGeVq4Ui/5csEbxxUTL+6yx?=
- =?us-ascii?Q?BWIB4VrrBekZSr6BLBZFYYkaalhoF5uqFWzXyjpL8fMbG2GXu9+2YTONpAFo?=
- =?us-ascii?Q?VLtATHYL83TBpglqK91HYTRz3/Db0N/A2O4ai+6WRY5SbCK2UNagMEFuzesY?=
- =?us-ascii?Q?pJbPHWAmgkio6YDpD/ntyrcSOQ/NjzK8F596GBJhulMFFEk8VdEz9CmpoqO3?=
- =?us-ascii?Q?qUVeEPzNbMF/hcvrOIktXcCLoN1qw34umpRSPEQDPEU8HEaBUCYI/GuPQAeK?=
- =?us-ascii?Q?owiCIsN/XyzfaHsHgb0dqe0lwSx6vgS0Krrlt6SePgINvzfe9NYAKz1OIlm6?=
- =?us-ascii?Q?Houozx3ZIyluoQZXIdWoJBWfMQ9WDstyee8jaZT9guIS4dRQMWcQuN1w8RMo?=
- =?us-ascii?Q?DBGWCeK+obtjcbPvoRfyDcrlhiJV+6G4tD1HAYmgbfJ9SNxCm4qJe1LUmZ4K?=
- =?us-ascii?Q?7f5MmqraQ/LtCe2U+YFEXWnaU/RDJkShVRzclKaXHRRy+akTVGdcMAM5FPCn?=
- =?us-ascii?Q?ixS5iNVM0l+d1iJQOLTx5UFyXGc6nhHlrn6V+mXkURutksGWsgn5ZHYm9TP7?=
- =?us-ascii?Q?g8PbmEcfKoFWX2EX5AwJ0Xmh8dE/8p6egDMeQxuhR2aATvfFdguuBsHYw7TZ?=
- =?us-ascii?Q?KGVYfIqBGds73emJQW+BR5FoTRzQFx7gGoTMIJPGclOkQyKp4MW1v2mX22Ib?=
- =?us-ascii?Q?bMDnh6C6NaOAp6Y518IrHcEdQbcnIRPJEKnVb0NjbOt6D4bvm7BThLzWIoSD?=
- =?us-ascii?Q?GIttwG5xaW9f+TM/W97Q0xbstcQ1MZBbHbg8TE8RfRM16PE/8yELFOJGKtqR?=
- =?us-ascii?Q?L7p6qHkhYSZ6IIr3guiKAq5O96XEwqpvnvEqt7v6Z1v957dFN/elaoSEukm+?=
- =?us-ascii?Q?3Kz6f2tRr3c0XcPKy9sgKq9mnWYN/Kp60eN84zO0DRFORWnbBrkq03Kf03j9?=
- =?us-ascii?Q?JkuHmw4feOAogFSbdqwlcL1SygEhYmzsnT2G56seWfMba02YIUDIgvsFAsDQ?=
- =?us-ascii?Q?NQw6f0CkZGYKt6dWg2qZMZ5m2QZtSfUlDdg+ods7I+ogv1X60Az3+Cww9N+c?=
- =?us-ascii?Q?8BDUhRnKrMcq32rycJIHyLk7GtTm7sk4Z1QMWyqtbEMUI68pO0KKkQbkcfKi?=
- =?us-ascii?Q?JLTADZc1eSI76DCiS1QncA06aqFsHlHfzlIBoBZEd/qqrg2NRh6s1q5deXFR?=
- =?us-ascii?Q?pVIIQymt/EIVgI0TKb1k1+gfkua9IQ+iQQKYTaEpaSMkruyWEdk8sIuoQ9uF?=
- =?us-ascii?Q?oJLV4PbTGeXC545VQvEzHO8YjQjd81t9ZaYjdnV3qMnD3w6UO4rnGdLMG4so?=
- =?us-ascii?Q?l3Lj+Vzo9FpKmLgBwOUAyXpmtbQN5onNF/onZ/GhMJoGQoldZcCrnHXnjKAb?=
- =?us-ascii?Q?sdISeg7uzF8haRgs9xrS/CONLyRPhsxdZxN2uLLDyvEd8YQtFUU6JAjM9yUo?=
- =?us-ascii?Q?YA=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IyuVvSJkd5oNneAENvTiJQRtzdB4DIkT/gY0LuYSuMPo90IBk+tREOW6GNYh?=
+ =?us-ascii?Q?r1jC/5jDq9COeaVPuwik0PatKpUYcEitOZx6nWJbrTK+shgYrmzV7j5TfHya?=
+ =?us-ascii?Q?AZhyHSvThQbrh/W4LPOwe0jPkPDuGOuTWJMhzlv8rOMCLbFO+YplvOtmk+15?=
+ =?us-ascii?Q?DOfgHw86pmKqvXmJSMG4ovGHEIwt/jXrrxcM+vZFV2aijJrNqq4obualR4RO?=
+ =?us-ascii?Q?fo5igohoFntuaEvZAorlPPbLjGAcxE8vDM0/j1c4HEAoBg0QzKGDYggmmu1Q?=
+ =?us-ascii?Q?nxVHJNUnun3UasZXEl+loofJubsJzHMelICKe62gBsGwufeIYJAgfKO79/dg?=
+ =?us-ascii?Q?bMFe+r0eOiPbF/XNRsFQMC/AyteuWR88KDvZnei9QDkOIyu3TurAfVDRYwnj?=
+ =?us-ascii?Q?0qHS0z/dXAPtEnjIpwbuVITv7Yz11w7xZp+44Q9k2D5jEPCkKoU/ZcKGJxFU?=
+ =?us-ascii?Q?H/vggr5oBJkzxpYiZ6symndLeg+RwRFwcG27uPEXB9ROJV8GqxW3K9w+dhAw?=
+ =?us-ascii?Q?Ee4AmW9IzmXQKKKCfYuilDEHWxUmKQDLqNuPruTVfRdC8TQtCKcU4aaqakkX?=
+ =?us-ascii?Q?mLbraFvyDOzAQ6MTIeN1YGbgDXltfBaJN9uoSFty2SZzPMCzwDUIlTtEgQMX?=
+ =?us-ascii?Q?1L9tUsV6gMaCXWa0h91PceMpsV7VCqFmIWOj2+9BQHbGX1piI9IN75pBQJOJ?=
+ =?us-ascii?Q?geQcu1hP0n1DrhAhGHz1A+QudoL2haO8MLsO+4ndwOkGgxJmD0R6ztEhdd17?=
+ =?us-ascii?Q?Hdnhsr/lwWk6GHemOI4vBx0+IVa0qmGOFxkLHZhdv0DfRwyp/VxIUz6lXHio?=
+ =?us-ascii?Q?Y4JxgU8z2anAbI8Gm1LH2Pc/m21cwEqp5RJieptUQe9O8BW4oCdpRC4RSzo3?=
+ =?us-ascii?Q?ytqmpV5XIvhSEsiCwFUB6XlK2O4xqhSRRg1qgZBvfqbi/mOMv/4e4mocXFeu?=
+ =?us-ascii?Q?tjv+dhkBqa+tYPjDYuBe4V5GVs7DrnbgU1EZwL5zmG+wbcbfmSI1B8o+PEk/?=
+ =?us-ascii?Q?FVhGjNax/QVxV5t4cJuf5mun0FWfgTtRO+SM/6Uv52zR4JvEXnobMofyHAE0?=
+ =?us-ascii?Q?V/ObBaSJNDsUmk9wseIDAZ57X3Cx+u9UOFlw5auoRPLwWCRqJ34j0G/FdM+y?=
+ =?us-ascii?Q?3il6L7UX9x3BOYpX2sMDBTmI3PAK52SPsGqYbELacVXfve2m+pdsHhmG/cMI?=
+ =?us-ascii?Q?DeFU0pVdbzJnWf1o/KdJn1KrEsBROk6mYSN2Pnj8PkGuqSIzIbXRyb0ZRiwg?=
+ =?us-ascii?Q?7BoC/WG5SjrwwfzKUGM9LCiIGzTAE9cGWA0+Pe3q4URl2bekbx4Um5APWioE?=
+ =?us-ascii?Q?J3HBmEbt4BOLJKXQxSPl1taB0fDcyBw0x6mnl/x4Wch6iE59jEUPslW6GtAg?=
+ =?us-ascii?Q?wNemx7RhEIZoEjD4fwlhAERHsa+H07i9Ln4Vtr0Kamss2f0XmErBRM99BJjB?=
+ =?us-ascii?Q?jL2hFqkeZnAZRsodwP5FpI2Zyp4ORCeZhgXCANTmbQBrxPteAZDAyDN9sCBM?=
+ =?us-ascii?Q?pIqb6akMVBx8U/d65JBR89bphJ54R9wXAI2BgFLw0dyeWQ1dJBJSh4BIIv7q?=
+ =?us-ascii?Q?p6/G/1pSRvOJ4DHXHOZobl/w2PR/eqic7zl/zvWO?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c2bf5c6a-6dca-4c10-24b6-08da9d7acd42
+X-MS-Exchange-CrossTenant-Network-Message-Id: c62ca720-0f5a-4555-d255-08da9d7ad07b
 X-MS-Exchange-CrossTenant-AuthSource: GV1PR04MB9055.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2022 15:46:38.3769
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2022 15:46:43.7268
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bcP/xk/bLYstDi9UXuxjjUhJQ/Po6SZ6mZmgBcmaaJypmVBMEEuBQsO48vVArc4dPeacWOY325nBvlReXMdw4Q==
+X-MS-Exchange-CrossTenant-UserPrincipalName: PDo3WE/jV/nC30lJ3SmzNz13Wm57hHvnXZzi3xMttUyq0nlVhmDkPKvYYjGsn0t78TsFqt60Iy4lsp6OT3A+Vw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8996
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch set adds support for AF_XDP zero-copy in the dpaa2-eth
-driver. The support is available on the LX2160A SoC and its variants and
-only on interfaces (DPNIs) with a maximum of 8 queues (HW limitations
-are the root cause).
+Just give out an index for each channel that we export into the debug
+file in the form of CH#<index>. This is purely to help corelate each
+channel information from one debugfs file to another one.
 
-We are first implementing the .get_channels() callback since this a
-dependency for further work.
-
-Patches 2-3 are working on making the necessary changes for multiple
-buffer pools on a single interface. By default, without an AF_XDP socket
-attached, only a single buffer pool will be used and shared between all
-the queues. The changes in the functions are made in this patch, but the
-actual allocation and setup of a new BP is done in patch#10.
-
-Patches 4-5 are improving the information exposed in debugfs. We are
-exposing a new file to show which buffer pool is used by what channels
-and how many buffers it currently has.
-
-The 6th patch updates the dpni_set_pools() firmware API so that we are
-capable of setting up a different buffer per queue in later patches.
-
-In the 7th patch the generic dev_open/close APIs are used instead of the
-dpaa2-eth internal ones.
-
-Patches 8-9 are rearranging the existing code in dpaa2-eth.c in order to
-create new functions which will be used in the XSK implementation in
-dpaa2-xsk.c
-
-Finally, the last 3 patches are adding the actual support for both the
-Rx and Tx path of AF_XDP zero-copy and some associated tracepoints.
-Details on the implementation can be found in the actual patch.
-
+Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
+---
 Changes in v2:
- - 3/12:  Export dpaa2_eth_allocate_dpbp/dpaa2_eth_free_dpbp in this
-   patch to avoid a build warning. The functions will be used in next
-   patches.
- - 6/12:  Use __le16 instead of u16 for the dpbp_id field.
- - 12/12: Use xdp_buff->data_hard_start when tracing the BP seeding.
+ - none
 
-Ioana Ciornei (4):
-  net: dpaa2-eth: rearrange variable in dpaa2_eth_get_ethtool_stats
-  net: dpaa2-eth: export the CH#<index> in the 'ch_stats' debug file
-  net: dpaa2-eth: export buffer pool info into a new debugfs file
-  net: dpaa2-eth: use dev_close/open instead of the internal functions
+ drivers/net/ethernet/freescale/dpaa2/dpaa2-eth-debugfs.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Robert-Ionut Alexa (8):
-  net: dpaa2-eth: add support to query the number of queues through
-    ethtool
-  net: dpaa2-eth: add support for multiple buffer pools per DPNI
-  net: dpaa2-eth: update the dpni_set_pools() API to support per QDBIN
-    pools
-  net: dpaa2-eth: create and export the dpaa2_eth_alloc_skb function
-  net: dpaa2-eth: create and export the dpaa2_eth_receive_skb() function
-  net: dpaa2-eth: AF_XDP RX zero copy support
-  net: dpaa2-eth: AF_XDP TX zero copy support
-  net: dpaa2-eth: add trace points on XSK events
-
- MAINTAINERS                                   |   1 +
- drivers/net/ethernet/freescale/dpaa2/Makefile |   2 +-
- .../freescale/dpaa2/dpaa2-eth-debugfs.c       |  57 +-
- .../freescale/dpaa2/dpaa2-eth-trace.h         | 142 +++--
- .../net/ethernet/freescale/dpaa2/dpaa2-eth.c  | 486 ++++++++++++------
- .../net/ethernet/freescale/dpaa2/dpaa2-eth.h  | 101 +++-
- .../ethernet/freescale/dpaa2/dpaa2-ethtool.c  |  58 ++-
- .../net/ethernet/freescale/dpaa2/dpaa2-xsk.c  | 454 ++++++++++++++++
- .../net/ethernet/freescale/dpaa2/dpni-cmd.h   |  19 +-
- drivers/net/ethernet/freescale/dpaa2/dpni.c   |   6 +-
- drivers/net/ethernet/freescale/dpaa2/dpni.h   |   9 +
- 11 files changed, 1093 insertions(+), 242 deletions(-)
- create mode 100644 drivers/net/ethernet/freescale/dpaa2/dpaa2-xsk.c
-
+diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth-debugfs.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth-debugfs.c
+index 8356af4631fd..54e7fcf95c89 100644
+--- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth-debugfs.c
++++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth-debugfs.c
+@@ -98,14 +98,14 @@ static int dpaa2_dbg_ch_show(struct seq_file *file, void *offset)
+ 	int i;
+ 
+ 	seq_printf(file, "Channel stats for %s:\n", priv->net_dev->name);
+-	seq_printf(file, "%s%16s%16s%16s%16s%16s%16s\n",
+-		   "CHID", "CPU", "Deq busy", "Frames", "CDANs",
++	seq_printf(file, "%s  %5s%16s%16s%16s%16s%16s%16s\n",
++		   "IDX", "CHID", "CPU", "Deq busy", "Frames", "CDANs",
+ 		   "Avg Frm/CDAN", "Buf count");
+ 
+ 	for (i = 0; i < priv->num_channels; i++) {
+ 		ch = priv->channel[i];
+-		seq_printf(file, "%4d%16d%16llu%16llu%16llu%16llu%16d\n",
+-			   ch->ch_id,
++		seq_printf(file, "%3s%d%6d%16d%16llu%16llu%16llu%16llu%16d\n",
++			   "CH#", i, ch->ch_id,
+ 			   ch->nctx.desired_cpu,
+ 			   ch->stats.dequeue_portal_busy,
+ 			   ch->stats.frames,
 -- 
 2.25.1
 
