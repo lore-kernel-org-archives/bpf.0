@@ -2,37 +2,37 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18FE2C04A95
-	for <bpf@archiver.kernel.org>; Fri, 23 Sep 2022 17:59:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11CF5C6FA82
+	for <bpf@archiver.kernel.org>; Fri, 23 Sep 2022 17:59:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbiIWR7f convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 23 Sep 2022 13:59:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59038 "EHLO
+        id S232588AbiIWR7h convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 23 Sep 2022 13:59:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232572AbiIWR7e (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S232606AbiIWR7e (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 23 Sep 2022 13:59:34 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430B72F8
-        for <bpf@vger.kernel.org>; Fri, 23 Sep 2022 10:59:29 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28NGcAo9013137
-        for <bpf@vger.kernel.org>; Fri, 23 Sep 2022 10:59:28 -0700
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603FD25D8
+        for <bpf@vger.kernel.org>; Fri, 23 Sep 2022 10:59:31 -0700 (PDT)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28NAPiwt020720
+        for <bpf@vger.kernel.org>; Fri, 23 Sep 2022 10:59:31 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3js7mxc3m5-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jsb1pu2jf-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 23 Sep 2022 10:59:28 -0700
-Received: from twshared17341.24.frc3.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 23 Sep 2022 10:59:31 -0700
+Received: from twshared22593.02.prn5.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 23 Sep 2022 10:59:27 -0700
+ 15.1.2375.31; Fri, 23 Sep 2022 10:59:29 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 7F1521F41C91E; Fri, 23 Sep 2022 10:59:18 -0700 (PDT)
+        id 9DE5D1F41C92E; Fri, 23 Sep 2022 10:59:22 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v2 bpf-next 2/5] selftests/bpf: make veristat's verifier log parsing faster and more robust
-Date:   Fri, 23 Sep 2022 10:59:10 -0700
-Message-ID: <20220923175913.3272430-3-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 4/5] selftests/bpf: emit processing progress and add quiet mode to veristat
+Date:   Fri, 23 Sep 2022 10:59:12 -0700
+Message-ID: <20220923175913.3272430-5-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220923175913.3272430-1-andrii@kernel.org>
 References: <20220923175913.3272430-1-andrii@kernel.org>
@@ -40,8 +40,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: GgCZ72qNAhKr4iaz896ZzsiO5CPDUYNF
-X-Proofpoint-GUID: GgCZ72qNAhKr4iaz896ZzsiO5CPDUYNF
+X-Proofpoint-GUID: bgJLMlgyBSMzigiWsKH2QLkTDRQqWg6w
+X-Proofpoint-ORIG-GUID: bgJLMlgyBSMzigiWsKH2QLkTDRQqWg6w
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
  definitions=2022-09-23_06,2022-09-22_02,2022-06-22_01
@@ -49,62 +49,72 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Make sure veristat doesn't spend ridiculous amount of time parsing
-verifier stats from verifier log, especially for very large logs or
-truncated logs (e.g., when verifier returns -ENOSPC due to too small
-buffer). For this, parse lines from the end of the log and make sure we
-parse only up to 100 last lines, where stats should be, if at all.
+Emit "Processing <filepath>..." for each BPF object file to be
+processed, to show progress. But also add -q (--quiet) flag to silence
+such messages. Doing something more clever (like overwriting same output
+line) is to cumbersome and easily breakable if there is any other
+console output (e.g., errors from libbpf).
 
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/testing/selftests/bpf/veristat.c | 29 ++++++++++++++++++--------
- 1 file changed, 20 insertions(+), 9 deletions(-)
+ tools/testing/selftests/bpf/veristat.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
-index 51030234b60a..77bdfd6fe302 100644
+index f09dd143a8df..85a77f1dd863 100644
 --- a/tools/testing/selftests/bpf/veristat.c
 +++ b/tools/testing/selftests/bpf/veristat.c
-@@ -419,19 +419,30 @@ static void free_verif_stats(struct verif_stats *stats, size_t stat_cnt)
+@@ -63,6 +63,7 @@ static struct env {
+ 	char **filenames;
+ 	int filename_cnt;
+ 	bool verbose;
++	bool quiet;
+ 	enum resfmt out_fmt;
+ 	bool comparison_mode;
  
- static char verif_log_buf[64 * 1024];
+@@ -107,6 +108,7 @@ const char argp_program_doc[] =
+ static const struct argp_option opts[] = {
+ 	{ NULL, 'h', NULL, OPTION_HIDDEN, "Show the full help" },
+ 	{ "verbose", 'v', NULL, 0, "Verbose mode" },
++	{ "quiet", 'q', NULL, 0, "Quiet mode" },
+ 	{ "emit", 'e', "SPEC", 0, "Specify stats to be emitted" },
+ 	{ "sort", 's', "SPEC", 0, "Specify sort order" },
+ 	{ "output-format", 'o', "FMT", 0, "Result output format (table, csv), default is table." },
+@@ -131,6 +133,9 @@ static error_t parse_arg(int key, char *arg, struct argp_state *state)
+ 	case 'v':
+ 		env.verbose = true;
+ 		break;
++	case 'q':
++		env.quiet = true;
++		break;
+ 	case 'e':
+ 		err = parse_stats(arg, &env.output_spec);
+ 		if (err)
+@@ -569,8 +574,10 @@ static int process_obj(const char *filename)
+ 		return 0;
+ 	}
  
--static int parse_verif_log(const char *buf, size_t buf_sz, struct verif_stats *s)
-+#define MAX_PARSED_LOG_LINES 100
+-	old_libbpf_print_fn = libbpf_set_print(libbpf_print_fn);
++	if (!env.quiet && env.out_fmt == RESFMT_TABLE)
++		printf("Processing '%s'...\n", basename(filename));
+ 
++	old_libbpf_print_fn = libbpf_set_print(libbpf_print_fn);
+ 	obj = bpf_object__open_file(filename, &opts);
+ 	if (!obj) {
+ 		/* if libbpf can't open BPF object file, it could be because
+@@ -1268,6 +1275,12 @@ int main(int argc, char **argv)
+ 	if (argp_parse(&argp, argc, argv, 0, NULL, NULL))
+ 		return 1;
+ 
++	if (env.verbose && env.quiet) {
++		fprintf(stderr, "Verbose and quiet modes are incompatible, please specify just one or neither!\n");
++		argp_help(&argp, stderr, ARGP_HELP_USAGE, "veristat");
++		return 1;
++	}
 +
-+static int parse_verif_log(char * const buf, size_t buf_sz, struct verif_stats *s)
- {
--	const char *next;
--	int pos;
-+	const char *cur;
-+	int pos, lines;
-+
-+	buf[buf_sz - 1] = '\0';
- 
--	for (pos = 0; buf[0]; buf = next) {
--		if (buf[0] == '\n')
--			buf++;
--		next = strchrnul(&buf[pos], '\n');
-+	for (pos = strlen(buf) - 1, lines = 0; pos >= 0 && lines < MAX_PARSED_LOG_LINES; lines++) {
-+		/* find previous endline or otherwise take the start of log buf */
-+		for (cur = &buf[pos]; cur > buf && cur[0] != '\n'; cur--, pos--) {
-+		}
-+		/* next time start from end of previous line (or pos goes to <0) */
-+		pos--;
-+		/* if we found endline, point right after endline symbol;
-+		 * otherwise, stay at the beginning of log buf
-+		 */
-+		if (cur[0] == '\n')
-+			cur++;
- 
--		if (1 == sscanf(buf, "verification time %ld usec\n", &s->stats[DURATION]))
-+		if (1 == sscanf(cur, "verification time %ld usec\n", &s->stats[DURATION]))
- 			continue;
--		if (6 == sscanf(buf, "processed %ld insns (limit %*d) max_states_per_insn %ld total_states %ld peak_states %ld mark_read %ld",
-+		if (6 == sscanf(cur, "processed %ld insns (limit %*d) max_states_per_insn %ld total_states %ld peak_states %ld mark_read %ld",
- 				&s->stats[TOTAL_INSNS],
- 				&s->stats[MAX_STATES_PER_INSN],
- 				&s->stats[TOTAL_STATES],
+ 	if (env.output_spec.spec_cnt == 0)
+ 		env.output_spec = default_output_spec;
+ 	if (env.sort_spec.spec_cnt == 0)
 -- 
 2.30.2
 
