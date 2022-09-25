@@ -2,57 +2,46 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE9A9C04A95
-	for <bpf@archiver.kernel.org>; Sun, 25 Sep 2022 07:04:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CC4FC04A95
+	for <bpf@archiver.kernel.org>; Sun, 25 Sep 2022 13:26:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbiIYHEt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 25 Sep 2022 03:04:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57772 "EHLO
+        id S229850AbiIYN00 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 25 Sep 2022 09:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiIYHEr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 25 Sep 2022 03:04:47 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DAFB13F5E
-        for <bpf@vger.kernel.org>; Sun, 25 Sep 2022 00:04:46 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id z6so5864765wrq.1
-        for <bpf@vger.kernel.org>; Sun, 25 Sep 2022 00:04:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=7qy4eyTtycg4Lj6NX8cEGFTWtc//JOsv8rqbt6B4C1E=;
-        b=JOU8UoemVO/+IRVTJ5UsANwTu3ujY6JSWB4UWZ5CmUqiS9iVHz8liwHBFVp9/nf7WI
-         H/jguB6qM+pNTK7zBQ+Mf7ZTf0nF+0xgoqfcz736NalLIdf+yz5X1jbn8waoPVTn1/TW
-         PSW4RdF3HoD5q7qcvpg2lyPZQqu8PLOBMyPod9X38zUAJ7kGYg3ZS9VBopvrgtA6wq5C
-         eSQy6TGsjxtLV7xZZGtiC0+vK1UB67sTsMsghjbzZIVVZ2VL/b4+jWHzsxw+zzjBricJ
-         0yZUdQrJUFkIJSN/MX/+nHvzVrzpd2Z/sxtvxNK5ZAe3e6f9GmV9BbsH/sz62s/u0csK
-         rCgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=7qy4eyTtycg4Lj6NX8cEGFTWtc//JOsv8rqbt6B4C1E=;
-        b=x30SnYSLH5h+O90iCSJjyeGppEAvOgs/QBn8BF/U7o4AatNVsIFUUKOe/VpJgz6iCt
-         5cB6fusflgLDvu2OgLaMeDT7KUBnhguD+DXISgpg8zZRo9Z78t6ppZmup03WB9VfQT99
-         1jEm4yH/xpT9eDNH2gn5FkHtuzrZAbF6IGxsfm2gbYU/Ain0iBW8dVYmfEq+wlZPgWHA
-         V6NXpRH6r94CcfplMi789RIp1J9DPEz00GGg3fMBRQJ1RB+/7GfpvB5W9lU7AGh5baj6
-         xWGJpNUsiFZFP7DLqnhShCm1zaLqejyeAUU5PagjW+rE7udDcGqdftdnX79RJBkFmjL4
-         icGQ==
-X-Gm-Message-State: ACrzQf1k9cFnZgkkJBTW18qafmZKEiRcGxRmUfobVIGW9/xfMMP8MzDb
-        fDhC4Y7CFu/qTaAaqu5NOvG4uBkaSWk=
-X-Google-Smtp-Source: AMsMyM7uIuiin6rZcK1BzK6ssPzxBj7gWCKCXjpsKV8jvG0JuqDB4u15g5WCDngaGPWUljdfysNjWQ==
-X-Received: by 2002:a05:6000:1882:b0:22a:f402:c975 with SMTP id a2-20020a056000188200b0022af402c975mr9910270wri.532.1664089484045;
-        Sun, 25 Sep 2022 00:04:44 -0700 (PDT)
-Received: from localhost.localdomain ([2a0d:6fc2:4af0:cc00:f99d:5d19:6e17:dc3a])
-        by smtp.gmail.com with ESMTPSA id e10-20020a5d6d0a000000b0022aeba020casm13115495wrq.83.2022.09.25.00.04.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Sep 2022 00:04:43 -0700 (PDT)
-From:   Jon Doron <arilou@gmail.com>
-To:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org
-Cc:     Jon Doron <jond@wiz.io>
-Subject: [PATCH bpf-next v3] libbpf: Fix the case of running as non-root with capabilities
-Date:   Sun, 25 Sep 2022 10:04:31 +0300
-Message-Id: <20220925070431.1313680-1-arilou@gmail.com>
+        with ESMTP id S229589AbiIYN00 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 25 Sep 2022 09:26:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68D92F03F;
+        Sun, 25 Sep 2022 06:26:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61A0DB8010F;
+        Sun, 25 Sep 2022 13:26:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C2ECC433D6;
+        Sun, 25 Sep 2022 13:26:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664112382;
+        bh=RqRzawPrzxIpU09rt8ECwEplXzcYl+Pry0JvNgCCkTE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qICDQpZDED7S3nlvd7HpvJfsWSZur+NrEMsRrgG/VjuMRSpmdDyful+lb1Xg45USl
+         ueEI6Qv4zp5ouw3k4w255a64m4bJFuB4eCHCTPiJwlvyIsfV/1fZtUDyYsa1WQ6TkZ
+         9vno9P+l3wq4a5sp8Q7CgYF5RtH2JBQ+d3n46hm03sWNkPHtnMvrSl0va+S5XwVT1d
+         WEajkP085pRit+ZGjT/yuS8eYRYtkbZZNLvXmDHrIuN4uwZoiQxSUZ+J/q24Th9oiP
+         P7N5ezrd3ilvgZHk38hAtEcMdjdTMkLBi9W1/My56pNiLTOLGzleI/X5m3aDAU3F5w
+         /4dlaT3GAOc2Q==
+From:   Lorenzo Bianconi <lorenzo@kernel.org>
+To:     bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        edumazet@google.com, pabeni@redhat.com, pablo@netfilter.org,
+        fw@strlen.de, netfilter-devel@vger.kernel.org,
+        lorenzo.bianconi@redhat.com, brouer@redhat.com, toke@redhat.com,
+        memxor@gmail.com, nathan@kernel.org
+Subject: [PATCH bpf-next] net: netfilter: move bpf_ct_set_nat_info kfunc in nf_nat_bpf.c
+Date:   Sun, 25 Sep 2022 15:26:12 +0200
+Message-Id: <ddd17d808fe25917893eb035b20146479810124c.1664111646.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -60,94 +49,260 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jon Doron <jond@wiz.io>
+Remove circular dependency between nf_nat module and nf_conntrack one
+moving bpf_ct_set_nat_info kfunc in nf_nat_bpf.c
 
-When running rootless with special capabilities like:
-FOWNER / DAC_OVERRIDE / DAC_READ_SEARCH
-
-The "access" API will not make the proper check if there is really
-access to a file or not.
-
-From the access man page:
-"
-The check is done using the calling process's real UID and GID, rather
-than the effective IDs as is done when actually attempting an operation
-(e.g., open(2)) on the file.  Similarly, for the root user, the check
-uses the set of permitted capabilities  rather than the set of effective
-capabilities; ***and for non-root users, the check uses an empty set of
-capabilities.***
-"
-
-What that means is that for non-root user the access API will not do the
-proper validation if the process really has permission to a file or not.
-
-To resolve this this patch replaces all the access API calls with
-faccessat with AT_EACCESS flag.
-
-Signed-off-by: Jon Doron <jond@wiz.io>
+Fixes: 0fabd2aa199f ("net: netfilter: add bpf_ct_set_nat_info kfunc helper")
+Suggested-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- tools/lib/bpf/btf.c    | 2 +-
- tools/lib/bpf/libbpf.c | 6 +++---
- tools/lib/bpf/usdt.c   | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ include/net/netfilter/nf_conntrack_bpf.h |  5 ++
+ include/net/netfilter/nf_nat.h           | 14 +++++
+ net/netfilter/Makefile                   |  6 ++
+ net/netfilter/nf_conntrack_bpf.c         | 49 ---------------
+ net/netfilter/nf_nat_bpf.c               | 79 ++++++++++++++++++++++++
+ net/netfilter/nf_nat_core.c              |  2 +-
+ 6 files changed, 105 insertions(+), 50 deletions(-)
+ create mode 100644 net/netfilter/nf_nat_bpf.c
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index b4d9a96c3c1b..d88647da2c7f 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -4664,7 +4664,7 @@ struct btf *btf__load_vmlinux_btf(void)
- 	for (i = 0; i < ARRAY_SIZE(locations); i++) {
- 		snprintf(path, PATH_MAX, locations[i], buf.release);
+diff --git a/include/net/netfilter/nf_conntrack_bpf.h b/include/net/netfilter/nf_conntrack_bpf.h
+index c8b80add1142..1ce46e406062 100644
+--- a/include/net/netfilter/nf_conntrack_bpf.h
++++ b/include/net/netfilter/nf_conntrack_bpf.h
+@@ -4,6 +4,11 @@
+ #define _NF_CONNTRACK_BPF_H
  
--		if (access(path, R_OK))
-+		if (faccessat(AT_FDCWD, path, R_OK, AT_EACCESS))
- 			continue;
+ #include <linux/kconfig.h>
++#include <net/netfilter/nf_conntrack.h>
++
++struct nf_conn___init {
++	struct nf_conn ct;
++};
  
- 		btf = btf__parse(path, NULL);
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index e691f08a297f..184ce1684dcd 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -884,7 +884,7 @@ __u32 get_kernel_version(void)
- 	__u32 major, minor, patch;
- 	struct utsname info;
- 
--	if (access(ubuntu_kver_file, R_OK) == 0) {
-+	if (faccessat(AT_FDCWD, ubuntu_kver_file, R_OK, AT_EACCESS) == 0) {
- 		FILE *f;
- 
- 		f = fopen(ubuntu_kver_file, "r");
-@@ -9904,7 +9904,7 @@ static bool use_debugfs(void)
- 	static int has_debugfs = -1;
- 
- 	if (has_debugfs < 0)
--		has_debugfs = access(DEBUGFS, F_OK) == 0;
-+		has_debugfs = faccessat(AT_FDCWD, DEBUGFS, F_OK, AT_EACCESS) == 0;
- 
- 	return has_debugfs == 1;
+ #if (IS_BUILTIN(CONFIG_NF_CONNTRACK) && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) || \
+     (IS_MODULE(CONFIG_NF_CONNTRACK) && IS_ENABLED(CONFIG_DEBUG_INFO_BTF_MODULES))
+diff --git a/include/net/netfilter/nf_nat.h b/include/net/netfilter/nf_nat.h
+index e9eb01e99d2f..cd084059a953 100644
+--- a/include/net/netfilter/nf_nat.h
++++ b/include/net/netfilter/nf_nat.h
+@@ -68,6 +68,20 @@ static inline bool nf_nat_oif_changed(unsigned int hooknum,
+ #endif
  }
-@@ -10721,7 +10721,7 @@ static int resolve_full_path(const char *file, char *result, size_t result_sz)
- 				continue;
- 			snprintf(result, result_sz, "%.*s/%s", seg_len, s, file);
- 			/* ensure it has required permissions */
--			if (access(result, perm) < 0)
-+			if (faccessat(AT_FDCWD, result, perm, AT_EACCESS) < 0)
- 				continue;
- 			pr_debug("resolved '%s' to '%s'\n", file, result);
- 			return 0;
-diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
-index d18e37982344..e83b497c2245 100644
---- a/tools/lib/bpf/usdt.c
-+++ b/tools/lib/bpf/usdt.c
-@@ -282,7 +282,7 @@ struct usdt_manager *usdt_manager_new(struct bpf_object *obj)
- 	 * If this is not supported, USDTs with semaphores will not be supported.
- 	 * Added in: a6ca88b241d5 ("trace_uprobe: support reference counter in fd-based uprobe")
- 	 */
--	man->has_sema_refcnt = access(ref_ctr_sysfs_path, F_OK) == 0;
-+	man->has_sema_refcnt = faccessat(AT_FDCWD, ref_ctr_sysfs_path, F_OK, AT_EACCESS) == 0;
  
- 	return man;
++#if (IS_BUILTIN(CONFIG_NF_NAT) && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) || \
++    (IS_MODULE(CONFIG_NF_NAT) && IS_ENABLED(CONFIG_DEBUG_INFO_BTF_MODULES))
++
++extern int register_nf_nat_bpf(void);
++
++#else
++
++static inline int register_nf_nat_bpf(void)
++{
++	return 0;
++}
++
++#endif
++
+ int nf_nat_register_fn(struct net *net, u8 pf, const struct nf_hook_ops *ops,
+ 		       const struct nf_hook_ops *nat_ops, unsigned int ops_count);
+ void nf_nat_unregister_fn(struct net *net, u8 pf, const struct nf_hook_ops *ops,
+diff --git a/net/netfilter/Makefile b/net/netfilter/Makefile
+index 06df49ea6329..0f060d100880 100644
+--- a/net/netfilter/Makefile
++++ b/net/netfilter/Makefile
+@@ -60,6 +60,12 @@ obj-$(CONFIG_NF_NAT) += nf_nat.o
+ nf_nat-$(CONFIG_NF_NAT_REDIRECT) += nf_nat_redirect.o
+ nf_nat-$(CONFIG_NF_NAT_MASQUERADE) += nf_nat_masquerade.o
+ 
++ifeq ($(CONFIG_NF_NAT),m)
++nf_nat-$(CONFIG_DEBUG_INFO_BTF_MODULES) += nf_nat_bpf.o
++else ifeq ($(CONFIG_NF_NAT),y)
++nf_nat-$(CONFIG_DEBUG_INFO_BTF) += nf_nat_bpf.o
++endif
++
+ # NAT helpers
+ obj-$(CONFIG_NF_NAT_AMANDA) += nf_nat_amanda.o
+ obj-$(CONFIG_NF_NAT_FTP) += nf_nat_ftp.o
+diff --git a/net/netfilter/nf_conntrack_bpf.c b/net/netfilter/nf_conntrack_bpf.c
+index 756ea818574e..f4ba4ff3a63b 100644
+--- a/net/netfilter/nf_conntrack_bpf.c
++++ b/net/netfilter/nf_conntrack_bpf.c
+@@ -14,7 +14,6 @@
+ #include <linux/types.h>
+ #include <linux/btf_ids.h>
+ #include <linux/net_namespace.h>
+-#include <net/netfilter/nf_conntrack.h>
+ #include <net/netfilter/nf_conntrack_bpf.h>
+ #include <net/netfilter/nf_conntrack_core.h>
+ #include <net/netfilter/nf_nat.h>
+@@ -239,10 +238,6 @@ __diag_push();
+ __diag_ignore_all("-Wmissing-prototypes",
+ 		  "Global functions as their definitions will be in nf_conntrack BTF");
+ 
+-struct nf_conn___init {
+-	struct nf_conn ct;
+-};
+-
+ /* bpf_xdp_ct_alloc - Allocate a new CT entry
+  *
+  * Parameters:
+@@ -476,49 +471,6 @@ int bpf_ct_change_status(struct nf_conn *nfct, u32 status)
+ 	return nf_ct_change_status_common(nfct, status);
  }
+ 
+-/* bpf_ct_set_nat_info - Set source or destination nat address
+- *
+- * Set source or destination nat address of the newly allocated
+- * nf_conn before insertion. This must be invoked for referenced
+- * PTR_TO_BTF_ID to nf_conn___init.
+- *
+- * Parameters:
+- * @nfct	- Pointer to referenced nf_conn object, obtained using
+- *		  bpf_xdp_ct_alloc or bpf_skb_ct_alloc.
+- * @addr	- Nat source/destination address
+- * @port	- Nat source/destination port. Non-positive values are
+- *		  interpreted as select a random port.
+- * @manip	- NF_NAT_MANIP_SRC or NF_NAT_MANIP_DST
+- */
+-int bpf_ct_set_nat_info(struct nf_conn___init *nfct,
+-			union nf_inet_addr *addr, int port,
+-			enum nf_nat_manip_type manip)
+-{
+-#if ((IS_MODULE(CONFIG_NF_NAT) && IS_MODULE(CONFIG_NF_CONNTRACK)) || \
+-     IS_BUILTIN(CONFIG_NF_NAT))
+-	struct nf_conn *ct = (struct nf_conn *)nfct;
+-	u16 proto = nf_ct_l3num(ct);
+-	struct nf_nat_range2 range;
+-
+-	if (proto != NFPROTO_IPV4 && proto != NFPROTO_IPV6)
+-		return -EINVAL;
+-
+-	memset(&range, 0, sizeof(struct nf_nat_range2));
+-	range.flags = NF_NAT_RANGE_MAP_IPS;
+-	range.min_addr = *addr;
+-	range.max_addr = range.min_addr;
+-	if (port > 0) {
+-		range.flags |= NF_NAT_RANGE_PROTO_SPECIFIED;
+-		range.min_proto.all = cpu_to_be16(port);
+-		range.max_proto.all = range.min_proto.all;
+-	}
+-
+-	return nf_nat_setup_info(ct, &range, manip) == NF_DROP ? -ENOMEM : 0;
+-#else
+-	return -EOPNOTSUPP;
+-#endif
+-}
+-
+ __diag_pop()
+ 
+ BTF_SET8_START(nf_ct_kfunc_set)
+@@ -532,7 +484,6 @@ BTF_ID_FLAGS(func, bpf_ct_set_timeout, KF_TRUSTED_ARGS)
+ BTF_ID_FLAGS(func, bpf_ct_change_timeout, KF_TRUSTED_ARGS)
+ BTF_ID_FLAGS(func, bpf_ct_set_status, KF_TRUSTED_ARGS)
+ BTF_ID_FLAGS(func, bpf_ct_change_status, KF_TRUSTED_ARGS)
+-BTF_ID_FLAGS(func, bpf_ct_set_nat_info, KF_TRUSTED_ARGS)
+ BTF_SET8_END(nf_ct_kfunc_set)
+ 
+ static const struct btf_kfunc_id_set nf_conntrack_kfunc_set = {
+diff --git a/net/netfilter/nf_nat_bpf.c b/net/netfilter/nf_nat_bpf.c
+new file mode 100644
+index 000000000000..0fa5a0bbb0ff
+--- /dev/null
++++ b/net/netfilter/nf_nat_bpf.c
+@@ -0,0 +1,79 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Unstable NAT Helpers for XDP and TC-BPF hook
++ *
++ * These are called from the XDP and SCHED_CLS BPF programs. Note that it is
++ * allowed to break compatibility for these functions since the interface they
++ * are exposed through to BPF programs is explicitly unstable.
++ */
++
++#include <linux/bpf.h>
++#include <linux/btf_ids.h>
++#include <net/netfilter/nf_conntrack_bpf.h>
++#include <net/netfilter/nf_conntrack_core.h>
++#include <net/netfilter/nf_nat.h>
++
++__diag_push();
++__diag_ignore_all("-Wmissing-prototypes",
++		  "Global functions as their definitions will be in nf_nat BTF");
++
++/* bpf_ct_set_nat_info - Set source or destination nat address
++ *
++ * Set source or destination nat address of the newly allocated
++ * nf_conn before insertion. This must be invoked for referenced
++ * PTR_TO_BTF_ID to nf_conn___init.
++ *
++ * Parameters:
++ * @nfct	- Pointer to referenced nf_conn object, obtained using
++ *		  bpf_xdp_ct_alloc or bpf_skb_ct_alloc.
++ * @addr	- Nat source/destination address
++ * @port	- Nat source/destination port. Non-positive values are
++ *		  interpreted as select a random port.
++ * @manip	- NF_NAT_MANIP_SRC or NF_NAT_MANIP_DST
++ */
++int bpf_ct_set_nat_info(struct nf_conn___init *nfct,
++			union nf_inet_addr *addr, int port,
++			enum nf_nat_manip_type manip)
++{
++	struct nf_conn *ct = (struct nf_conn *)nfct;
++	u16 proto = nf_ct_l3num(ct);
++	struct nf_nat_range2 range;
++
++	if (proto != NFPROTO_IPV4 && proto != NFPROTO_IPV6)
++		return -EINVAL;
++
++	memset(&range, 0, sizeof(struct nf_nat_range2));
++	range.flags = NF_NAT_RANGE_MAP_IPS;
++	range.min_addr = *addr;
++	range.max_addr = range.min_addr;
++	if (port > 0) {
++		range.flags |= NF_NAT_RANGE_PROTO_SPECIFIED;
++		range.min_proto.all = cpu_to_be16(port);
++		range.max_proto.all = range.min_proto.all;
++	}
++
++	return nf_nat_setup_info(ct, &range, manip) == NF_DROP ? -ENOMEM : 0;
++}
++
++__diag_pop()
++
++BTF_SET8_START(nf_nat_kfunc_set)
++BTF_ID_FLAGS(func, bpf_ct_set_nat_info, KF_TRUSTED_ARGS)
++BTF_SET8_END(nf_nat_kfunc_set)
++
++static const struct btf_kfunc_id_set nf_bpf_nat_kfunc_set = {
++	.owner = THIS_MODULE,
++	.set   = &nf_nat_kfunc_set,
++};
++
++int register_nf_nat_bpf(void)
++{
++	int ret;
++
++	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP,
++					&nf_bpf_nat_kfunc_set);
++	if (ret)
++		return ret;
++
++	return register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS,
++					 &nf_bpf_nat_kfunc_set);
++}
+diff --git a/net/netfilter/nf_nat_core.c b/net/netfilter/nf_nat_core.c
+index 7981be526f26..1ed09c9af5e5 100644
+--- a/net/netfilter/nf_nat_core.c
++++ b/net/netfilter/nf_nat_core.c
+@@ -1152,7 +1152,7 @@ static int __init nf_nat_init(void)
+ 	WARN_ON(nf_nat_hook != NULL);
+ 	RCU_INIT_POINTER(nf_nat_hook, &nat_hook);
+ 
+-	return 0;
++	return register_nf_nat_bpf();
+ }
+ 
+ static void __exit nf_nat_cleanup(void)
 -- 
 2.37.3
 
