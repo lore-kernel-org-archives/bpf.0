@@ -2,124 +2,88 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E940C32771
-	for <bpf@archiver.kernel.org>; Mon, 26 Sep 2022 16:58:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9215C07E9D
+	for <bpf@archiver.kernel.org>; Mon, 26 Sep 2022 17:00:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbiIZQ6L (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 26 Sep 2022 12:58:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41548 "EHLO
+        id S230169AbiIZRAj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 26 Sep 2022 13:00:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbiIZQ5y (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 26 Sep 2022 12:57:54 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED94C559D;
-        Mon, 26 Sep 2022 08:54:29 -0700 (PDT)
-Received: from sslproxy04.your-server.de ([78.46.152.42])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1ocqR2-000DrH-9Y; Mon, 26 Sep 2022 17:54:20 +0200
-Received: from [85.1.206.226] (helo=linux-4.home)
-        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1ocqR1-000UV1-VR; Mon, 26 Sep 2022 17:54:19 +0200
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: fix incorrect fcntl call
- (test_sockmap.c)
-To:     John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Qiao Ma <mqaio@linux.alibaba.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-References: <38269a1610deebf8d51127f15b1c55d00caa4283.1661392989.git.mqaio@linux.alibaba.com>
- <CAADnVQKm-TGJxjwByaMBcvFA_7g+wC2hB+cqkZKhSc83a2H0Pg@mail.gmail.com>
- <6308f39ddfecc_75c920884@john.notmuch>
- <CAEf4BzbqdDUY-1mpGUBk-CpMLAC7jvgRV7rNbgvxr=5nMOsj2Q@mail.gmail.com>
- <632cad99e05c2_3c2b22088@john.notmuch>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <b25aae5e-2fdb-3b29-80e9-404002d316b9@iogearbox.net>
-Date:   Mon, 26 Sep 2022 17:54:19 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        with ESMTP id S230141AbiIZQ7p (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 26 Sep 2022 12:59:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E204E52084
+        for <bpf@vger.kernel.org>; Mon, 26 Sep 2022 09:00:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F0DC60F76
+        for <bpf@vger.kernel.org>; Mon, 26 Sep 2022 16:00:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DC7C0C433D6;
+        Mon, 26 Sep 2022 16:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664208015;
+        bh=TP5QaX58+t2f8qdTAr1xg5gT7RwUFgUsBtn3Vv67H64=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=P7YsLIRFDwIwUfe/ZSBFdujWCJkMhybypcosthpTO/C4WuPvG2NiLYh87GcP1EzpD
+         r9NMAwn5oZeQFVcB1Nvjn8NrbsDsXa5FayKwBq6PmwKshL6s+7ERR9Qgsqye9fQ6pI
+         CUYc1SDq+cxwlmp9ql4105/JahY+HfPmZehrluXKyshPkO70mUu5WTtDTNniFRM4nU
+         ETRaD1h3DZpvNssT6CkGSMtF4gj47s8Ir2XEfMjtnzHhHxs1MY+IiVSVK4QloSTwAC
+         zpR5kxkJwnWvzbOztvcDaNrBoQKHkT7xVjqOOtDkvHXw6OFB8u+kjYMuEaZGzXVT+8
+         O0cKiepwaN7UA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C32DDC070C8;
+        Mon, 26 Sep 2022 16:00:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <632cad99e05c2_3c2b22088@john.notmuch>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26670/Mon Sep 26 10:00:52 2022)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2 0/2] If the sock is dead,
+ do not access sock's sk_wq in sk_stream_wait_memory
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166420801579.16435.17356318802759700685.git-patchwork-notify@kernel.org>
+Date:   Mon, 26 Sep 2022 16:00:15 +0000
+References: <20220823133755.314697-1-liujian56@huawei.com>
+In-Reply-To: <20220823133755.314697-1-liujian56@huawei.com>
+To:     Liu Jian <liujian56@huawei.com>
+Cc:     john.fastabend@gmail.com, jakub@cloudflare.com,
+        edumazet@google.com, davem@davemloft.net, yoshfuji@linux-ipv6.org,
+        dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+        andrii@kernel.org, mykolal@fb.com, ast@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, shuah@kernel.org, bpf@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 9/22/22 8:46 PM, John Fastabend wrote:
-> Andrii Nakryiko wrote:
->> On Fri, Aug 26, 2022 at 9:24 AM John Fastabend <john.fastabend@gmail.com> wrote:
->>> Alexei Starovoitov wrote:
->>>> On Wed, Aug 24, 2022 at 7:11 PM Qiao Ma <mqaio@linux.alibaba.com> wrote:
->>>>>
->>>>> In test_sockmap.c, the testcase sets socket nonblock first, and then
->>>>> calls select() and recvmsg() to receive data.
->>>>> If some error occur, nonblock setting will make recvmsg() return
->>>>> immediately, rather than blocking forever.
->>>>>
->>>>> However, the way to call fcntl() to set nonblock is wrong.
->>>>> To set socket noblock, we need to use
->>>>>> fcntl(fd, F_SETFL, O_NONBLOCK);
->>>>> rather than:
->>>>>> fcntl(fd, O_NONBLOCK);
->>>>>
->>>>> Signed-off-by: Qiao Ma <mqaio@linux.alibaba.com>
->>>>> ---
->>>>>   tools/testing/selftests/bpf/test_sockmap.c | 7 ++++++-
->>>>>   1 file changed, 6 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
->>>>> index 0fbaccdc8861..abb4102f33b0 100644
->>>>> --- a/tools/testing/selftests/bpf/test_sockmap.c
->>>>> +++ b/tools/testing/selftests/bpf/test_sockmap.c
->>>>> @@ -598,7 +598,12 @@ static int msg_loop(int fd, int iov_count, int iov_length, int cnt,
->>>>>                  struct timeval timeout;
->>>>>                  fd_set w;
->>>>>
->>>>> -               fcntl(fd, fd_flags);
->>>>> +               err = fcntl(fd, F_SETFL, fd_flags);
->>>>> +               if (err < 0) {
->>>>> +                       perror("fcntl failed");
->>>>> +                       goto out_errno;
->>>>> +               }
->>>>> +
->>>>
->>>> John, Jakub,
->>>>
->>>> Please review this.
->>>> Unfortunately test_sockmap (and sockmap kernel) is broken
->>>> before and after this patch,
->>>> so I'm hesitant to apply it not to make thing harder to debug.
->>>> Here is what I see:
->>>> # ./test_sockmap
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
+
+On Tue, 23 Aug 2022 21:37:53 +0800 you wrote:
+> If the sock is dead, do not access sock's sk_wq in sk_stream_wait_memory
+> 
+> v1->v2:
+>   As Jakub's suggested, check sock's DEAD flag before accessing
+>   the wait queue.
+> 
+> Liu Jian (2):
+>   net: If the sock is dead, do not access sock's sk_wq in
+>     sk_stream_wait_memory
+>   selftests/bpf: Add wait send memory test for sockmap redirect
 > 
 > [...]
-> 
->>>> and test_sockmap 'hangs' (or doing something for long time) after
->>>> #31/ 6 sockhash:ktls:txmsg test drop:OK
->>>
->>> Thanks for spotting I'll take a look.
->>
->> Friendly ping. John, did you get a chance to look at this? This patch
->> is still marked as "Needs ACK" in Patchworks.
-> 
-> Yep thanks. We are tracking a couple fixes internally around this so should
-> have something pop out soon. I think we want the fix and test to go in at
-> the same time.
 
-Ok, I'll mark it as 'awaiting upstream' assuming that you carry this fix forward
-together with your series then.
+Here is the summary with links:
+  - [bpf-next,v2,1/2] net: If the sock is dead, do not access sock's sk_wq in sk_stream_wait_memory
+    https://git.kernel.org/bpf/bpf-next/c/3f8ef65af927
+  - [bpf-next,v2,2/2] selftests/bpf: Add wait send memory test for sockmap redirect
+    https://git.kernel.org/bpf/bpf-next/c/043a7356dbd0
 
-Thanks,
-Daniel
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
