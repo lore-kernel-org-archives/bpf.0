@@ -2,96 +2,68 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC781C07E9D
-	for <bpf@archiver.kernel.org>; Mon, 26 Sep 2022 09:25:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41CFDC6FA83
+	for <bpf@archiver.kernel.org>; Mon, 26 Sep 2022 10:35:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234552AbiIZJZc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 26 Sep 2022 05:25:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37510 "EHLO
+        id S235743AbiIZKfE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 26 Sep 2022 06:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235114AbiIZJYX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 26 Sep 2022 05:24:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62AA43E53
-        for <bpf@vger.kernel.org>; Mon, 26 Sep 2022 02:23:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664184210;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=s2lHTvZs+V7Gx9PPCaD6yMDf7ghWzItrMiu0Sn+royw=;
-        b=LoYE2jvQkccjU7rrAbgudpwysv5esnMtnKmDBypN9JFsik+q0caQCUn4ENMkJie1STMQTB
-        09VB81krksIDh9rhyRfDuTO61Q8NTcv1rcWuhz+p1mf0CX1jCbIgaVfyWDX21EzmUetmSf
-        rXxuZ/xHDMoutVV7pa4zTJMrUpCZ0cU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-58-fIDBChgdNhahNk1stzT04Q-1; Mon, 26 Sep 2022 05:23:23 -0400
-X-MC-Unique: fIDBChgdNhahNk1stzT04Q-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4C9A085A59D;
-        Mon, 26 Sep 2022 09:23:23 +0000 (UTC)
-Received: from astarta.redhat.com (unknown [10.39.193.47])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4EA94492CA4;
-        Mon, 26 Sep 2022 09:23:22 +0000 (UTC)
-From:   Yauheni Kaliuta <ykaliuta@redhat.com>
-To:     bpf@vger.kernel.org
-Cc:     andrii@kernel.org, liuhangbin@gmail.com,
-        Yauheni Kaliuta <ykaliuta@redhat.com>
-Subject: [PATCH bpf-next] selftests: bpf: test_kmod.sh: fix passing arguments via function
-Date:   Mon, 26 Sep 2022 12:23:20 +0300
-Message-Id: <20220926092320.564631-1-ykaliuta@redhat.com>
+        with ESMTP id S235977AbiIZKdp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 26 Sep 2022 06:33:45 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6741250181;
+        Mon, 26 Sep 2022 03:20:51 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MbdvY2sgWzlXW0;
+        Mon, 26 Sep 2022 18:16:25 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
+ (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 26 Sep
+ 2022 18:20:38 +0800
+From:   Zhengchao Shao <shaozhengchao@huawei.com>
+To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <martin.lau@linux.dev>, <daniel@iogearbox.net>
+CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
+        <shaozhengchao@huawei.com>
+Subject: [PATCH net-next] net: sched: act_bpf: simplify code logic in tcf_bpf_init()
+Date:   Mon, 26 Sep 2022 18:21:58 +0800
+Message-ID: <20220926102158.78658-1-shaozhengchao@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Content-Type: text/plain
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Since the tests are run in a function $@ there actually contains
-function arguments, not the script ones.
+Both is_bpf and is_ebpf are boolean types, so
+(!is_bpf && !is_ebpf) || (is_bpf && is_ebpf) can be reduced to
+is_bpf == is_ebpf in tcf_bpf_init().
 
-Pass "$@" to the function as well.
-
-Fixes: 272d1f4cfa3c ("selftests: bpf: test_kmod.sh: Pass parameters to the module")
-Signed-off-by: Yauheni Kaliuta <ykaliuta@redhat.com>
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 ---
+ net/sched/act_bpf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I have to admit that I messed up with testing of the last test_kmod.sh
-patch and it paid immediatly. Feeling really ashamed.
-
----
- tools/testing/selftests/bpf/test_kmod.sh | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/test_kmod.sh b/tools/testing/selftests/bpf/test_kmod.sh
-index d4a4279c0181..50dca53ac536 100755
---- a/tools/testing/selftests/bpf/test_kmod.sh
-+++ b/tools/testing/selftests/bpf/test_kmod.sh
-@@ -29,6 +29,7 @@ test_run()
- 	sysctl -w net.core.bpf_jit_harden=$2 2>&1 > /dev/null
+diff --git a/net/sched/act_bpf.c b/net/sched/act_bpf.c
+index c5dbb68e6b78..b79eee44e24e 100644
+--- a/net/sched/act_bpf.c
++++ b/net/sched/act_bpf.c
+@@ -333,7 +333,7 @@ static int tcf_bpf_init(struct net *net, struct nlattr *nla,
+ 	is_bpf = tb[TCA_ACT_BPF_OPS_LEN] && tb[TCA_ACT_BPF_OPS];
+ 	is_ebpf = tb[TCA_ACT_BPF_FD];
  
- 	echo "[ JIT enabled:$1 hardened:$2 ]"
-+	shift 2
- 	dmesg -C
- 	if [ -f ${OUTPUT}/lib/test_bpf.ko ]; then
- 		insmod ${OUTPUT}/lib/test_bpf.ko "$@" 2> /dev/null
-@@ -64,9 +65,9 @@ test_restore()
- 
- rc=0
- test_save
--test_run 0 0
--test_run 1 0
--test_run 1 1
--test_run 1 2
-+test_run 0 0 "$@"
-+test_run 1 0 "$@"
-+test_run 1 1 "$@"
-+test_run 1 2 "$@"
- test_restore
- exit $rc
+-	if ((!is_bpf && !is_ebpf) || (is_bpf && is_ebpf)) {
++	if (is_bpf == is_ebpf) {
+ 		ret = -EINVAL;
+ 		goto put_chain;
+ 	}
 -- 
-2.37.3
+2.17.1
 
