@@ -2,49 +2,54 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B3D2C07E9D
-	for <bpf@archiver.kernel.org>; Mon, 26 Sep 2022 18:48:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 989C1C07E9D
+	for <bpf@archiver.kernel.org>; Mon, 26 Sep 2022 18:50:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbiIZSsI convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 26 Sep 2022 14:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49866 "EHLO
+        id S230473AbiIZSuS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 26 Sep 2022 14:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbiIZSsI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 26 Sep 2022 14:48:08 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7E980BE0
-        for <bpf@vger.kernel.org>; Mon, 26 Sep 2022 11:48:06 -0700 (PDT)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28QI9K3l020616
-        for <bpf@vger.kernel.org>; Mon, 26 Sep 2022 11:48:06 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jt174n3kc-3
+        with ESMTP id S230449AbiIZSuR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 26 Sep 2022 14:50:17 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F023A4BE
+        for <bpf@vger.kernel.org>; Mon, 26 Sep 2022 11:50:14 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 28QIBJph008018
+        for <bpf@vger.kernel.org>; Mon, 26 Sep 2022 11:50:13 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=EOLQsl1iM2n+hqWB6yKxw77IOaj0Fa7bLCF1z4Ee++Q=;
+ b=SxrBam+BC8DP1yLO2k270laa4a0LRLSqnz5RGOFh+czGw9a8pY9CSPDiMxlrSt5LXBN1
+ lWrYcJZEZb7Rg17XWzBb9NyD5Vk1myC4Ogq/WZHkIjquPod/e0yowIPbM7OwAuRySfYx
+ V3IgvGpISQfO226GXPkwXVKqvJxcNEjEJWY= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net (PPS) with ESMTPS id 3jswjunhqd-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 26 Sep 2022 11:48:06 -0700
-Received: from twshared3307.37.frc1.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 26 Sep 2022 11:50:13 -0700
+Received: from twshared10425.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 26 Sep 2022 11:47:58 -0700
-Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
-        id 55A6BD6AB47C; Mon, 26 Sep 2022 11:47:45 -0700 (PDT)
-From:   Song Liu <song@kernel.org>
-To:     <bpf@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>,
-        <john.fastabend@gmail.com>, <kpsingh@chromium.org>,
-        <kernel-team@fb.com>, <haoluo@google.com>, <jlayton@kernel.org>,
-        <bjorn@kernel.org>, Song Liu <song@kernel.org>
-Subject: [PATCH v2 bpf-next 1/2] bpf: use bpf_prog_pack for bpf_dispatcher
-Date:   Mon, 26 Sep 2022 11:47:38 -0700
-Message-ID: <20220926184739.3512547-2-song@kernel.org>
+ 15.1.2375.31; Mon, 26 Sep 2022 11:50:12 -0700
+Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
+        id 6E368895101A; Mon, 26 Sep 2022 11:50:00 -0700 (PDT)
+From:   Kui-Feng Lee <kuifeng@fb.com>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <andrii@kernel.org>, <kernel-team@fb.com>, <yhs@fb.com>
+CC:     Kui-Feng Lee <kuifeng@fb.com>
+Subject: [PATCH bpf-next v11 3/5] bpf: Handle show_fdinfo for the parameterized task BPF iterators
+Date:   Mon, 26 Sep 2022 11:49:55 -0700
+Message-ID: <20220926184957.208194-4-kuifeng@fb.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220926184739.3512547-1-song@kernel.org>
-References: <20220926184739.3512547-1-song@kernel.org>
+In-Reply-To: <20220926184957.208194-1-kuifeng@fb.com>
+References: <20220926184957.208194-1-kuifeng@fb.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: HrctmjVIACfAmsXw9dEbjY8rdNEUuQ4l
-X-Proofpoint-ORIG-GUID: HrctmjVIACfAmsXw9dEbjY8rdNEUuQ4l
+X-Proofpoint-GUID: v15a-GMSH7yOg7AsyXeQnK7luv_5mspK
+X-Proofpoint-ORIG-GUID: v15a-GMSH7yOg7AsyXeQnK7luv_5mspK
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
  definitions=2022-09-26_09,2022-09-22_02,2022-06-22_01
@@ -52,235 +57,97 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Allocate bpf_dispatcher with bpf_prog_pack_alloc so that bpf_dispatcher
-can share pages with bpf programs.
+Show information of iterators in the respective files under
+/proc/<pid>/fdinfo/.
 
-arch_prepare_bpf_dispatcher() is updated to provide a RW buffer as working
-area for arch code to write to.
+For example, for a task file iterator with 1723 as the value of tid
+parameter, its fdinfo would look like the following lines.
 
-This also fixes CPA W^X warnning like:
+    pos:    0
+    flags:  02000000
+    mnt_id: 14
+    ino:    38
+    link_type:      iter
+    link_id:        51
+    prog_tag:       a590ac96db22b825
+    prog_id:        299
+    target_name:    task_file
+    task_type:      TID
+    tid: 1723
 
-CPA refuse W^X violation: 8000000000000163 -> 0000000000000163 range: ...
+This patch add the last three fields.  task_type is the type of the
+task parameter.  TID means the iterator visit only the thread
+specified by tid.  The value of tid in the above example is 1723.  For
+the case of PID task_type, it means the iterator visits only threads
+of a process and will show the pid value of the process instead of a
+tid.
 
-Signed-off-by: Song Liu <song@kernel.org>
+Signed-off-by: Kui-Feng Lee <kuifeng@fb.com>
+Acked-by: Yonghong Song <yhs@fb.com>
 ---
- arch/x86/net/bpf_jit_comp.c | 16 ++++++++--------
- include/linux/bpf.h         |  3 ++-
- include/linux/filter.h      |  5 +++++
- kernel/bpf/core.c           |  9 +++++++--
- kernel/bpf/dispatcher.c     | 27 +++++++++++++++++++++------
- 5 files changed, 43 insertions(+), 17 deletions(-)
+ kernel/bpf/task_iter.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index ae89f4143eb4..f62c05385fa7 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -2243,7 +2243,7 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
- 	return ret;
- }
- 
--static int emit_bpf_dispatcher(u8 **pprog, int a, int b, s64 *progs)
-+static int emit_bpf_dispatcher(u8 **pprog, int a, int b, s64 *progs, u8 *image, u8 *buf)
- {
- 	u8 *jg_reloc, *prog = *pprog;
- 	int pivot, err, jg_bytes = 1;
-@@ -2259,12 +2259,12 @@ static int emit_bpf_dispatcher(u8 **pprog, int a, int b, s64 *progs)
- 		EMIT2_off32(0x81, add_1reg(0xF8, BPF_REG_3),
- 			    progs[a]);
- 		err = emit_cond_near_jump(&prog,	/* je func */
--					  (void *)progs[a], prog,
-+					  (void *)progs[a], image + (prog - buf),
- 					  X86_JE);
- 		if (err)
- 			return err;
- 
--		emit_indirect_jump(&prog, 2 /* rdx */, prog);
-+		emit_indirect_jump(&prog, 2 /* rdx */, image + (prog - buf));
- 
- 		*pprog = prog;
- 		return 0;
-@@ -2289,7 +2289,7 @@ static int emit_bpf_dispatcher(u8 **pprog, int a, int b, s64 *progs)
- 	jg_reloc = prog;
- 
- 	err = emit_bpf_dispatcher(&prog, a, a + pivot,	/* emit lower_part */
--				  progs);
-+				  progs, image, buf);
- 	if (err)
- 		return err;
- 
-@@ -2303,7 +2303,7 @@ static int emit_bpf_dispatcher(u8 **pprog, int a, int b, s64 *progs)
- 	emit_code(jg_reloc - jg_bytes, jg_offset, jg_bytes);
- 
- 	err = emit_bpf_dispatcher(&prog, a + pivot + 1,	/* emit upper_part */
--				  b, progs);
-+				  b, progs, image, buf);
- 	if (err)
- 		return err;
- 
-@@ -2323,12 +2323,12 @@ static int cmp_ips(const void *a, const void *b)
+diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
+index 655a0040a4c8..5371d82a0d7f 100644
+--- a/kernel/bpf/task_iter.c
++++ b/kernel/bpf/task_iter.c
+@@ -10,6 +10,12 @@
+ #include <linux/btf_ids.h>
+ #include "mmap_unlock_work.h"
+=20
++static const char * const iter_task_type_names[] =3D {
++	"ALL",
++	"TID",
++	"PID",
++};
++
+ struct bpf_iter_seq_task_common {
+ 	struct pid_namespace *ns;
+ 	enum bpf_iter_task_type	type;
+@@ -691,6 +697,15 @@ static int bpf_iter_fill_link_info(const struct bpf_=
+iter_aux_info *aux, struct b
  	return 0;
  }
- 
--int arch_prepare_bpf_dispatcher(void *image, s64 *funcs, int num_funcs)
-+int arch_prepare_bpf_dispatcher(void *image, void *buf, s64 *funcs, int num_funcs)
- {
--	u8 *prog = image;
-+	u8 *prog = buf;
- 
- 	sort(funcs, num_funcs, sizeof(funcs[0]), cmp_ips, NULL);
--	return emit_bpf_dispatcher(&prog, 0, num_funcs - 1, funcs);
-+	return emit_bpf_dispatcher(&prog, 0, num_funcs - 1, funcs, image, buf);
- }
- 
- struct x64_jit_data {
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index edd43edb27d6..9ae155c75014 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -946,6 +946,7 @@ struct bpf_dispatcher {
- 	struct bpf_dispatcher_prog progs[BPF_DISPATCHER_MAX];
- 	int num_progs;
- 	void *image;
-+	void *rw_image;
- 	u32 image_off;
- 	struct bpf_ksym ksym;
- };
-@@ -964,7 +965,7 @@ int bpf_trampoline_unlink_prog(struct bpf_tramp_link *link, struct bpf_trampolin
- struct bpf_trampoline *bpf_trampoline_get(u64 key,
- 					  struct bpf_attach_target_info *tgt_info);
- void bpf_trampoline_put(struct bpf_trampoline *tr);
--int arch_prepare_bpf_dispatcher(void *image, s64 *funcs, int num_funcs);
-+int arch_prepare_bpf_dispatcher(void *image, void *buf, s64 *funcs, int num_funcs);
- #define BPF_DISPATCHER_INIT(_name) {				\
- 	.mutex = __MUTEX_INITIALIZER(_name.mutex),		\
- 	.func = &_name##_func,					\
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 98e28126c24b..efc42a6e3aed 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -1023,6 +1023,8 @@ extern long bpf_jit_limit_max;
- 
- typedef void (*bpf_jit_fill_hole_t)(void *area, unsigned int size);
- 
-+void bpf_jit_fill_hole_with_zero(void *area, unsigned int size);
-+
- struct bpf_binary_header *
- bpf_jit_binary_alloc(unsigned int proglen, u8 **image_ptr,
- 		     unsigned int alignment,
-@@ -1035,6 +1037,9 @@ void bpf_jit_free(struct bpf_prog *fp);
- struct bpf_binary_header *
- bpf_jit_binary_pack_hdr(const struct bpf_prog *fp);
- 
-+void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_insns);
-+void bpf_prog_pack_free(struct bpf_binary_header *hdr);
-+
- static inline bool bpf_prog_kallsyms_verify_off(const struct bpf_prog *fp)
- {
- 	return list_empty(&fp->aux->ksym.lnode) ||
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index d1be78c28619..711fd293b6de 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -825,6 +825,11 @@ struct bpf_prog_pack {
- 	unsigned long bitmap[];
- };
- 
-+void bpf_jit_fill_hole_with_zero(void *area, unsigned int size)
+=20
++static void bpf_iter_task_show_fdinfo(const struct bpf_iter_aux_info *au=
+x, struct seq_file *seq)
 +{
-+	memset(area, 0, size);
++	seq_printf(seq, "task_type:\t%s\n", iter_task_type_names[aux->task.type=
+]);
++	if (aux->task.type =3D=3D BPF_TASK_ITER_TID)
++		seq_printf(seq, "tid:\t%u\n", aux->task.pid);
++	else if (aux->task.type =3D=3D BPF_TASK_ITER_TGID)
++		seq_printf(seq, "pid:\t%u\n", aux->task.pid);
 +}
 +
- #define BPF_PROG_SIZE_TO_NBITS(size)	(round_up(size, BPF_PROG_CHUNK_SIZE) / BPF_PROG_CHUNK_SIZE)
- 
- static DEFINE_MUTEX(pack_mutex);
-@@ -864,7 +869,7 @@ static struct bpf_prog_pack *alloc_new_pack(bpf_jit_fill_hole_t bpf_fill_ill_ins
- 	return pack;
- }
- 
--static void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_insns)
-+void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_insns)
- {
- 	unsigned int nbits = BPF_PROG_SIZE_TO_NBITS(size);
- 	struct bpf_prog_pack *pack;
-@@ -905,7 +910,7 @@ static void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_insn
- 	return ptr;
- }
- 
--static void bpf_prog_pack_free(struct bpf_binary_header *hdr)
-+void bpf_prog_pack_free(struct bpf_binary_header *hdr)
- {
- 	struct bpf_prog_pack *pack = NULL, *tmp;
- 	unsigned int nbits;
-diff --git a/kernel/bpf/dispatcher.c b/kernel/bpf/dispatcher.c
-index 2444bd15cc2d..fa64b80b8bca 100644
---- a/kernel/bpf/dispatcher.c
-+++ b/kernel/bpf/dispatcher.c
-@@ -85,12 +85,12 @@ static bool bpf_dispatcher_remove_prog(struct bpf_dispatcher *d,
- 	return false;
- }
- 
--int __weak arch_prepare_bpf_dispatcher(void *image, s64 *funcs, int num_funcs)
-+int __weak arch_prepare_bpf_dispatcher(void *image, void *buf, s64 *funcs, int num_funcs)
- {
- 	return -ENOTSUPP;
- }
- 
--static int bpf_dispatcher_prepare(struct bpf_dispatcher *d, void *image)
-+static int bpf_dispatcher_prepare(struct bpf_dispatcher *d, void *image, void *buf)
- {
- 	s64 ips[BPF_DISPATCHER_MAX] = {}, *ipsp = &ips[0];
- 	int i;
-@@ -99,12 +99,12 @@ static int bpf_dispatcher_prepare(struct bpf_dispatcher *d, void *image)
- 		if (d->progs[i].prog)
- 			*ipsp++ = (s64)(uintptr_t)d->progs[i].prog->bpf_func;
- 	}
--	return arch_prepare_bpf_dispatcher(image, &ips[0], d->num_progs);
-+	return arch_prepare_bpf_dispatcher(image, buf, &ips[0], d->num_progs);
- }
- 
- static void bpf_dispatcher_update(struct bpf_dispatcher *d, int prev_num_progs)
- {
--	void *old, *new;
-+	void *old, *new, *tmp;
- 	u32 noff;
- 	int err;
- 
-@@ -117,8 +117,14 @@ static void bpf_dispatcher_update(struct bpf_dispatcher *d, int prev_num_progs)
- 	}
- 
- 	new = d->num_progs ? d->image + noff : NULL;
-+	tmp = d->num_progs ? d->rw_image + noff : NULL;
- 	if (new) {
--		if (bpf_dispatcher_prepare(d, new))
-+		/* Prepare the dispatcher in d->rw_image. Then use
-+		 * bpf_arch_text_copy to update d->image, which is RO+X.
-+		 */
-+		if (bpf_dispatcher_prepare(d, new, tmp))
-+			return;
-+		if (IS_ERR(bpf_arch_text_copy(new, tmp, PAGE_SIZE / 2)))
- 			return;
- 	}
- 
-@@ -140,9 +146,18 @@ void bpf_dispatcher_change_prog(struct bpf_dispatcher *d, struct bpf_prog *from,
- 
- 	mutex_lock(&d->mutex);
- 	if (!d->image) {
--		d->image = bpf_jit_alloc_exec_page();
-+		d->image = bpf_prog_pack_alloc(PAGE_SIZE, bpf_jit_fill_hole_with_zero);
- 		if (!d->image)
- 			goto out;
-+		d->rw_image = bpf_jit_alloc_exec(PAGE_SIZE);
-+		if (!d->rw_image) {
-+			u32 size = PAGE_SIZE;
-+
-+			bpf_arch_text_copy(d->image, &size, sizeof(size));
-+			bpf_prog_pack_free((struct bpf_binary_header *)d->image);
-+			d->image = NULL;
-+			goto out;
-+		}
- 		bpf_image_ksym_add(d->image, &d->ksym);
- 	}
- 
--- 
+ static struct bpf_iter_reg task_reg_info =3D {
+ 	.target			=3D "task",
+ 	.attach_target		=3D bpf_iter_attach_task,
+@@ -702,6 +717,7 @@ static struct bpf_iter_reg task_reg_info =3D {
+ 	},
+ 	.seq_info		=3D &task_seq_info,
+ 	.fill_link_info		=3D bpf_iter_fill_link_info,
++	.show_fdinfo		=3D bpf_iter_task_show_fdinfo,
+ };
+=20
+ static const struct bpf_iter_seq_info task_file_seq_info =3D {
+@@ -724,6 +740,7 @@ static struct bpf_iter_reg task_file_reg_info =3D {
+ 	},
+ 	.seq_info		=3D &task_file_seq_info,
+ 	.fill_link_info		=3D bpf_iter_fill_link_info,
++	.show_fdinfo		=3D bpf_iter_task_show_fdinfo,
+ };
+=20
+ static const struct bpf_iter_seq_info task_vma_seq_info =3D {
+@@ -746,6 +763,7 @@ static struct bpf_iter_reg task_vma_reg_info =3D {
+ 	},
+ 	.seq_info		=3D &task_vma_seq_info,
+ 	.fill_link_info		=3D bpf_iter_fill_link_info,
++	.show_fdinfo		=3D bpf_iter_task_show_fdinfo,
+ };
+=20
+ BPF_CALL_5(bpf_find_vma, struct task_struct *, task, u64, start,
+--=20
 2.30.2
 
