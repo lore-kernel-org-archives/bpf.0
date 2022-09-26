@@ -2,25 +2,25 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B1FEC32771
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1864C6FA90
 	for <bpf@archiver.kernel.org>; Mon, 26 Sep 2022 04:51:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233137AbiIZEvr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 26 Sep 2022 00:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43834 "EHLO
+        id S233001AbiIZEvs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 26 Sep 2022 00:51:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233001AbiIZEvq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 26 Sep 2022 00:51:46 -0400
+        with ESMTP id S233141AbiIZEvr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 26 Sep 2022 00:51:47 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4194F26544
-        for <bpf@vger.kernel.org>; Sun, 25 Sep 2022 21:51:45 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MbVdY4h4tzpVW2;
-        Mon, 26 Sep 2022 12:48:49 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3327B2655A
+        for <bpf@vger.kernel.org>; Sun, 25 Sep 2022 21:51:47 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MbVc406TnzlWZy;
+        Mon, 26 Sep 2022 12:47:32 +0800 (CST)
 Received: from localhost.localdomain (10.175.112.70) by
  canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 26 Sep 2022 12:51:42 +0800
+ 15.1.2375.31; Mon, 26 Sep 2022 12:51:44 +0800
 From:   Wang Yufen <wangyufen@huawei.com>
 To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
@@ -30,9 +30,9 @@ To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <jakub@cloudflare.com>, <kuba@kernel.org>, <kuifeng@fb.com>,
         <deso@posteo.net>, <zhuyifei@google.com>, <hengqi.chen@gmail.com>
 CC:     <bpf@vger.kernel.org>
-Subject: [bpf-next 03/11] bpf/selftests: convert sockopt test to ASSERT_* macros
-Date:   Mon, 26 Sep 2022 13:12:03 +0800
-Message-ID: <1664169131-32405-4-git-send-email-wangyufen@huawei.com>
+Subject: [bpf-next 05/11] bpf/selftests: convert sockopt_multi test to ASSERT_* macros
+Date:   Mon, 26 Sep 2022 13:12:05 +0800
+Message-ID: <1664169131-32405-6-git-send-email-wangyufen@huawei.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1664169131-32405-1-git-send-email-wangyufen@huawei.com>
 References: <1664169131-32405-1-git-send-email-wangyufen@huawei.com>
@@ -51,28 +51,42 @@ deprecated CHECK().
 
 Signed-off-by: Wang Yufen <wangyufen@huawei.com>
 ---
- tools/testing/selftests/bpf/prog_tests/sockopt.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/sockopt_multi.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt.c b/tools/testing/selftests/bpf/prog_tests/sockopt.c
-index cd09f4c..aa4debf6 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockopt.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockopt.c
-@@ -972,12 +972,12 @@ void test_sockopt(void)
- 	int cgroup_fd, i;
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_multi.c b/tools/testing/selftests/bpf/prog_tests/sockopt_multi.c
+index 28d592dc..7f56593 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockopt_multi.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockopt_multi.c
+@@ -303,11 +303,11 @@ void test_sockopt_multi(void)
+ 	int err = -1;
  
- 	cgroup_fd = test__join_cgroup("/sockopt");
--	if (CHECK_FAIL(cgroup_fd < 0))
-+	if (!ASSERT_GE(cgroup_fd, 0, "join_cgroup"))
- 		return;
+ 	cg_parent = test__join_cgroup("/parent");
+-	if (CHECK_FAIL(cg_parent < 0))
++	if (!ASSERT_GE(cg_parent, 0, "join_cgroup /parent"))
+ 		goto out;
  
- 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
- 		test__start_subtest(tests[i].descr);
--		CHECK_FAIL(run_test(cgroup_fd, &tests[i]));
-+		ASSERT_OK(run_test(cgroup_fd, &tests[i]), tests[i].descr);
- 	}
+ 	cg_child = test__join_cgroup("/parent/child");
+-	if (CHECK_FAIL(cg_child < 0))
++	if (!ASSERT_GE(cg_child, 0, "join_cgroup /parent/child"))
+ 		goto out;
  
- 	close(cgroup_fd);
+ 	obj = bpf_object__open_file("sockopt_multi.bpf.o", NULL);
+@@ -319,11 +319,11 @@ void test_sockopt_multi(void)
+ 		goto out;
+ 
+ 	sock_fd = socket(AF_INET, SOCK_STREAM, 0);
+-	if (CHECK_FAIL(sock_fd < 0))
++	if (!ASSERT_GE(sock_fd, 0, "socket"))
+ 		goto out;
+ 
+-	CHECK_FAIL(run_getsockopt_test(obj, cg_parent, cg_child, sock_fd));
+-	CHECK_FAIL(run_setsockopt_test(obj, cg_parent, cg_child, sock_fd));
++	ASSERT_OK(run_getsockopt_test(obj, cg_parent, cg_child, sock_fd), "getsockopt_test");
++	ASSERT_OK(run_setsockopt_test(obj, cg_parent, cg_child, sock_fd), "setsockopt_test");
+ 
+ out:
+ 	close(sock_fd);
 -- 
 1.8.3.1
 
