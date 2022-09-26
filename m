@@ -2,107 +2,195 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66964C6FA92
-	for <bpf@archiver.kernel.org>; Mon, 26 Sep 2022 11:24:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92E18C6FA90
+	for <bpf@archiver.kernel.org>; Mon, 26 Sep 2022 11:49:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234616AbiIZLYY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 26 Sep 2022 07:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52116 "EHLO
+        id S238421AbiIZLt0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 26 Sep 2022 07:49:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237869AbiIZLXb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:23:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7011BEA0;
-        Mon, 26 Sep 2022 03:39:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A36BF60C05;
-        Mon, 26 Sep 2022 10:39:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65286C433C1;
-        Mon, 26 Sep 2022 10:39:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188741;
-        bh=ZdPKxg5UW1HEw759TXM5ScOiD9P0Pfppjo6F7MnLu3Q=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ldzMh9ZYLoMxTCXnlxbxvQgSQkZDkrVbn6MOvMNy/X/l0Y2SPpvvExZueiffC0AIr
-         oFoG/nmdcpOrMiBC58qfbc4oOl5RzeooAis+2Fbu3v4bxGOKja7McE4/hB3xaIT7n3
-         abFSyS58GGqrpETS8Jwl0nRghGugb7kbAklhjBo8=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>, bpf@vger.kernel.org,
-        Ian Rogers <irogers@google.com>,
-        Ingo Molnar <mingo@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Song Liu <songliubraving@fb.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 106/148] perf stat: Fix BPF program section name
-Date:   Mon, 26 Sep 2022 12:12:20 +0200
-Message-Id: <20220926100800.089875531@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
-User-Agent: quilt/0.67
+        with ESMTP id S238513AbiIZLrs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 26 Sep 2022 07:47:48 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D781074DD0
+        for <bpf@vger.kernel.org>; Mon, 26 Sep 2022 03:47:56 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id c11so9513105wrp.11
+        for <bpf@vger.kernel.org>; Mon, 26 Sep 2022 03:47:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=TkeJ6Fx1YX+DJ9RAwA8Kk9or3Gugtl5q1hK17knU0BA=;
+        b=B9y43+TNPHZ/59uqH8nEbojremxQKTaJQoSInS8tVxC5USe5fb7hsS6Fmf7GLEGT9/
+         NyXf6VhkDRrA2UJtKiQhl8Ohykck1m3tVA1GPk/7225r4haIcXNCsqRsPo4aagC270aZ
+         dbxRA+/qHW9FQo6YhvNoVVYTjDwHIyKc3S5+p3tA5q1T57CpRhEmUiPEbUFnloMvqsVl
+         iB8o0kiYLyA006xg3KXZK1hg73bLmKKZXqbG/w7vFrFAn9Fjwvxz2K3EowWuxfISeh0x
+         LMYNZLRN11tRP0zy2n3Xt69VIHZCigxfqusfn+MUmdzreBZM5ZT81rNRcZY6w9typ4Rx
+         v2OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=TkeJ6Fx1YX+DJ9RAwA8Kk9or3Gugtl5q1hK17knU0BA=;
+        b=02n2NZrnRuSKHiAbTbgQH+f/a5XZcXGQIvbsKXJWAjhk+HFhv3cEg62JXZ4ZsgatWV
+         0SNhxlFN4W2rIAYs8pPsTkvpJG0EHiUOZeJKtgbu4JkP+LOA+bQz/evgU6S5u4DOgFIV
+         XeujG8aDJtIheTVexj9qqFjfUUmoQuSUXmXkPPdJtog5kXii/4/WjT9M+46Qju+ikejD
+         oFS9eLaF5/dhxUsPOpagNm0tHhcIebOvsP6CVsxAOhi9SoXKm8Yw5obkixGZbGfLHlyh
+         k5cPQ0HYiLmlMvlJYZ1bCfRE3OtOdZfiXEMeN0lYQdpbP1arp/YBseCyk2dcFbLG1XeY
+         L+Vw==
+X-Gm-Message-State: ACrzQf2z8zidnxnlHfeAtXPlqbftpUx5nrDx26TRL22ot8XblQhTIBWr
+        90SBrumVVHFgty56VMEpAalJ8A==
+X-Google-Smtp-Source: AMsMyM4rI/LVbjbcwOi+ZBasDlj+u6afWRFcKSFN0LE8DC93MLu9289n4JIYLawB9nsOT0+CPltxSA==
+X-Received: by 2002:a05:6000:1887:b0:22a:3c3d:75ea with SMTP id a7-20020a056000188700b0022a3c3d75eamr12324657wri.669.1664189191814;
+        Mon, 26 Sep 2022 03:46:31 -0700 (PDT)
+Received: from [192.168.178.32] ([51.155.200.13])
+        by smtp.gmail.com with ESMTPSA id x8-20020adfdcc8000000b0022a2dbc80fdsm13971613wrm.10.2022.09.26.03.46.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Sep 2022 03:46:31 -0700 (PDT)
+Message-ID: <2f670f3f-4d91-9b74-4fbe-8ea1351444cb@isovalent.com>
+Date:   Mon, 26 Sep 2022 11:46:29 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [bpf-next v6 1/3] bpftool: Add auto_attach for bpf prog
+ load|loadall
+Content-Language: en-GB
+To:     Wang Yufen <wangyufen@huawei.com>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        hawk@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+        trix@redhat.com
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, llvm@lists.linux.dev
+References: <1664014430-5286-1-git-send-email-wangyufen@huawei.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <1664014430-5286-1-git-send-email-wangyufen@huawei.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Namhyung Kim <namhyung@kernel.org>
+Sat Sep 24 2022 11:13:48 GMT+0100 (British Summer Time) ~ Wang Yufen
+<wangyufen@huawei.com>
+> Add auto_attach optional to support one-step load-attach-pin_link.
+> 
+> For example,
+>    $ bpftool prog loadall test.o /sys/fs/bpf/test autoattach
+> 
+>    $ bpftool link
+>    26: tracing  name test1  tag f0da7d0058c00236  gpl
+>    	loaded_at 2022-09-09T21:39:49+0800  uid 0
+>    	xlated 88B  jited 55B  memlock 4096B  map_ids 3
+>    	btf_id 55
+>    28: kprobe  name test3  tag 002ef1bef0723833  gpl
+>    	loaded_at 2022-09-09T21:39:49+0800  uid 0
+>    	xlated 88B  jited 56B  memlock 4096B  map_ids 3
+>    	btf_id 55
+>    57: tracepoint  name oncpu  tag 7aa55dfbdcb78941  gpl
+>    	loaded_at 2022-09-09T21:41:32+0800  uid 0
+>    	xlated 456B  jited 265B  memlock 4096B  map_ids 17,13,14,15
+>    	btf_id 82
+> 
+>    $ bpftool link
+>    1: tracing  prog 26
+>    	prog_type tracing  attach_type trace_fentry
+>    3: perf_event  prog 28
+>    10: perf_event  prog 57
+> 
+> The autoattach optional can support tracepoints, k(ret)probes,
+> u(ret)probes.
+> 
+> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+> ---
+> v5 -> v6: skip the programs not supporting auto-attach,
+> 	  and change optional name from "auto_attach" to "autoattach"
+> v4 -> v5: some formatting nits of doc
+> v3 -> v4: rename functions, update doc, bash and do_help()
+> v2 -> v3: switch to extend prog load command instead of extend perf
+> v2: https://patchwork.kernel.org/project/netdevbpf/patch/20220824033837.458197-1-weiyongjun1@huawei.com/
+> v1: https://patchwork.kernel.org/project/netdevbpf/patch/20220816151725.153343-1-weiyongjun1@huawei.com/
+>  tools/bpf/bpftool/prog.c | 76 ++++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 74 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+> index c81362a001ba..b1cbd06dee19 100644
+> --- a/tools/bpf/bpftool/prog.c
+> +++ b/tools/bpf/bpftool/prog.c
+> @@ -1453,6 +1453,67 @@ get_prog_type_by_name(const char *name, enum bpf_prog_type *prog_type,
+>  	return ret;
+>  }
+>  
+> +static int
+> +auto_attach_program(struct bpf_program *prog, const char *path)
+> +{
+> +	struct bpf_link *link;
+> +	int err;
+> +
+> +	link = bpf_program__attach(prog);
+> +	if (!link)
+> +		return -1;
+> +
+> +	err = bpf_link__pin(link, path);
+> +	if (err) {
+> +		bpf_link__destroy(link);
+> +		return err;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static int pathname_concat(const char *path, const char *name, char *buf)
+> +{
+> +	int len;
+> +
+> +	len = snprintf(buf, PATH_MAX, "%s/%s", path, name);
+> +	if (len < 0)
+> +		return -EINVAL;
+> +	if (len >= PATH_MAX)
+> +		return -ENAMETOOLONG;
+> +
+> +	return 0;
+> +}
+> +
+> +static int
+> +auto_attach_programs(struct bpf_object *obj, const char *path)
+> +{
+> +	struct bpf_program *prog;
+> +	char buf[PATH_MAX];
+> +	int err;
+> +
+> +	bpf_object__for_each_program(prog, obj) {
+> +		err = pathname_concat(path, bpf_program__name(prog), buf);
+> +		if (err)
+> +			goto err_unpin_programs;
+> +
+> +		err = auto_attach_program(prog, buf);
+> +		if (err && errno != EOPNOTSUPP)
+> +			goto err_unpin_programs;
 
-[ Upstream commit 0d77326c3369e255715ed2440a78894ccc98dd69 ]
+If I read the above correctly, we skip entirely programs that couldn't
+be auto-attached. I'm not sure what Andrii had in mind exactly, but it
+would make sense to me to fallback to regular program pinning if the
+program couldn't be attached/linked, so we still keep it loaded in the
+kernel after bpftool exits. Probably with a p_info() message to let
+users know?
 
-It seems the recent libbpf got more strict about the section name.
-I'm seeing a failure like this:
-
-  $ sudo ./perf stat -a --bpf-counters --for-each-cgroup ^. sleep 1
-  libbpf: prog 'on_cgrp_switch': missing BPF prog type, check ELF section name 'perf_events'
-  libbpf: prog 'on_cgrp_switch': failed to load: -22
-  libbpf: failed to load object 'bperf_cgroup_bpf'
-  libbpf: failed to load BPF skeleton 'bperf_cgroup_bpf': -22
-  Failed to load cgroup skeleton
-
-The section name should be 'perf_event' (without the trailing 's').
-Although it's related to the libbpf change, it'd be better fix the
-section name in the first place.
-
-Fixes: 944138f048f7d759 ("perf stat: Enable BPF counter with --for-each-cgroup")
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: bpf@vger.kernel.org
-Cc: Ian Rogers <irogers@google.com>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Song Liu <songliubraving@fb.com>
-Link: https://lore.kernel.org/r/20220916184132.1161506-2-namhyung@kernel.org
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/perf/util/bpf_skel/bperf_cgroup.bpf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-index 292c430768b5..c72f8ad96f75 100644
---- a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-+++ b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-@@ -176,7 +176,7 @@ static int bperf_cgroup_count(void)
- }
- 
- // This will be attached to cgroup-switches event for each cpu
--SEC("perf_events")
-+SEC("perf_event")
- int BPF_PROG(on_cgrp_switch)
- {
- 	return bperf_cgroup_count();
--- 
-2.35.1
-
-
-
+> +	}
+> +
+> +	return 0;
+> +
+> +err_unpin_programs:
+> +	while ((prog = bpf_object__prev_program(obj, prog))) {
+> +		if (pathname_concat(path, bpf_program__name(prog), buf))
+> +			continue;
+> +
+> +		bpf_program__unpin(prog, buf);
+> +	}
+> +
+> +	return err;
+> +}
