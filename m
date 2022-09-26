@@ -2,32 +2,32 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD3B3C6FA92
-	for <bpf@archiver.kernel.org>; Mon, 26 Sep 2022 11:56:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C59EC32771
+	for <bpf@archiver.kernel.org>; Mon, 26 Sep 2022 12:06:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236598AbiIZL4D (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 26 Sep 2022 07:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
+        id S239095AbiIZMGe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 26 Sep 2022 08:06:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239129AbiIZLyj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:54:39 -0400
+        with ESMTP id S239904AbiIZMFr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 26 Sep 2022 08:05:47 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5CD4D835;
-        Mon, 26 Sep 2022 03:50:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9188B5A161;
+        Mon, 26 Sep 2022 03:55:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 451D9B802C7;
-        Mon, 26 Sep 2022 10:48:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77956C433D6;
-        Mon, 26 Sep 2022 10:48:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7D9EEB80936;
+        Mon, 26 Sep 2022 10:48:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3E71C433D6;
+        Mon, 26 Sep 2022 10:48:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189315;
-        bh=iaB1KodNW2681CtVUDHZXZv/QS5f3KAqBTUzxLWxXwM=;
+        s=korg; t=1664189312;
+        bh=ZdPKxg5UW1HEw759TXM5ScOiD9P0Pfppjo6F7MnLu3Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j/aKFhIurr/fX+Wx7+hNjUI9E/YHDx9qyCXkO2KdSdVYJgCQrrybWkOidPNZzZpbU
-         eiwuHYgJTnsSp4xgQXmcxNLVNBik+mk6/2xudsV+oe9YOqE5AJKCxOqECuki7aHovl
-         cAqqhOmhLJ+5aUbjD+n88NxiX7f+GTzI6UdD9UHA=
+        b=zIMyGLnBQKq28E89vOpFVZJwFpvRYtoMxEfIuonu3A45KPpO/P2Jm3OKk1VHTwyRV
+         M/ZkfU+DlMCDHTuSAlCqsk90gZwdUmjy+IoUowmBD6C9ug7mgnoheuJePsZUs79o5y
+         HlEOnnGpLiE4gERTZtY9uFDJrqrKTf+tJw4XC2x0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -39,9 +39,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Song Liu <songliubraving@fb.com>,
         Arnaldo Carvalho de Melo <acme@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 146/207] perf stat: Fix cpu map index in bperf cgroup code
-Date:   Mon, 26 Sep 2022 12:12:15 +0200
-Message-Id: <20220926100813.049490680@linuxfoundation.org>
+Subject: [PATCH 5.19 145/207] perf stat: Fix BPF program section name
+Date:   Mon, 26 Sep 2022 12:12:14 +0200
+Message-Id: <20220926100813.001464711@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
 References: <20220926100806.522017616@linuxfoundation.org>
@@ -55,57 +55,52 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Namhyung Kim <namhyung@kernel.org>
 
-[ Upstream commit 3da35231d9e4949c4ae40e3ce653e7c468455d55 ]
+[ Upstream commit 0d77326c3369e255715ed2440a78894ccc98dd69 ]
 
-The previous cpu map introduced a bug in the bperf cgroup counter.  This
-results in a failure when user gives a partial cpu map starting from
-non-zero.
+It seems the recent libbpf got more strict about the section name.
+I'm seeing a failure like this:
 
-  $ sudo ./perf stat -C 1-2 --bpf-counters --for-each-cgroup ^. sleep 1
-  libbpf: prog 'on_cgrp_switch': failed to create BPF link for perf_event FD 0:
-                                 -9 (Bad file descriptor)
-  Failed to attach cgroup program
+  $ sudo ./perf stat -a --bpf-counters --for-each-cgroup ^. sleep 1
+  libbpf: prog 'on_cgrp_switch': missing BPF prog type, check ELF section name 'perf_events'
+  libbpf: prog 'on_cgrp_switch': failed to load: -22
+  libbpf: failed to load object 'bperf_cgroup_bpf'
+  libbpf: failed to load BPF skeleton 'bperf_cgroup_bpf': -22
+  Failed to load cgroup skeleton
 
-To get the FD of an evsel, it should use a map index not the CPU number.
+The section name should be 'perf_event' (without the trailing 's').
+Although it's related to the libbpf change, it'd be better fix the
+section name in the first place.
 
-Fixes: 0255571a16059c8e ("perf cpumap: Switch to using perf_cpu_map API")
+Fixes: 944138f048f7d759 ("perf stat: Enable BPF counter with --for-each-cgroup")
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 Cc: Adrian Hunter <adrian.hunter@intel.com>
 Cc: bpf@vger.kernel.org
 Cc: Ian Rogers <irogers@google.com>
 Cc: Ingo Molnar <mingo@kernel.org>
 Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
 Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: Song Liu <songliubraving@fb.com>
-Link: https://lore.kernel.org/r/20220916184132.1161506-3-namhyung@kernel.org
+Link: https://lore.kernel.org/r/20220916184132.1161506-2-namhyung@kernel.org
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/perf/util/bpf_counter_cgroup.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/perf/util/bpf_skel/bperf_cgroup.bpf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/perf/util/bpf_counter_cgroup.c b/tools/perf/util/bpf_counter_cgroup.c
-index 63b9db657442..97c69a249c6e 100644
---- a/tools/perf/util/bpf_counter_cgroup.c
-+++ b/tools/perf/util/bpf_counter_cgroup.c
-@@ -95,7 +95,7 @@ static int bperf_load_program(struct evlist *evlist)
+diff --git a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
+index 292c430768b5..c72f8ad96f75 100644
+--- a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
++++ b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
+@@ -176,7 +176,7 @@ static int bperf_cgroup_count(void)
+ }
  
- 	perf_cpu_map__for_each_cpu(cpu, i, evlist->core.all_cpus) {
- 		link = bpf_program__attach_perf_event(skel->progs.on_cgrp_switch,
--						      FD(cgrp_switch, cpu.cpu));
-+						      FD(cgrp_switch, i));
- 		if (IS_ERR(link)) {
- 			pr_err("Failed to attach cgroup program\n");
- 			err = PTR_ERR(link);
-@@ -123,7 +123,7 @@ static int bperf_load_program(struct evlist *evlist)
- 
- 			map_fd = bpf_map__fd(skel->maps.events);
- 			perf_cpu_map__for_each_cpu(cpu, j, evlist->core.all_cpus) {
--				int fd = FD(evsel, cpu.cpu);
-+				int fd = FD(evsel, j);
- 				__u32 idx = evsel->core.idx * total_cpus + cpu.cpu;
- 
- 				err = bpf_map_update_elem(map_fd, &idx, &fd,
+ // This will be attached to cgroup-switches event for each cpu
+-SEC("perf_events")
++SEC("perf_event")
+ int BPF_PROG(on_cgrp_switch)
+ {
+ 	return bperf_cgroup_count();
 -- 
 2.35.1
 
