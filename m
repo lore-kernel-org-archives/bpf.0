@@ -2,56 +2,56 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A69BC07E9D
-	for <bpf@archiver.kernel.org>; Mon, 26 Sep 2022 23:19:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38A1BC32771
+	for <bpf@archiver.kernel.org>; Mon, 26 Sep 2022 23:19:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbiIZXTc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 26 Sep 2022 19:19:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36858 "EHLO
+        id S231303AbiIZXTw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 26 Sep 2022 19:19:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231172AbiIZXSv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 26 Sep 2022 19:18:51 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BFFB56C2
-        for <bpf@vger.kernel.org>; Mon, 26 Sep 2022 16:18:48 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id r62-20020a252b41000000b006af00577c42so7137166ybr.10
-        for <bpf@vger.kernel.org>; Mon, 26 Sep 2022 16:18:48 -0700 (PDT)
+        with ESMTP id S231175AbiIZXTB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 26 Sep 2022 19:19:01 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E909BCF48E
+        for <bpf@vger.kernel.org>; Mon, 26 Sep 2022 16:18:53 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-350b9af86e8so46017727b3.5
+        for <bpf@vger.kernel.org>; Mon, 26 Sep 2022 16:18:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=H7CaqqH/S1PI07TF9lAvEP/hY/HwjM9ZNiVQ+Vulqi4=;
-        b=XCWtDGqDzgXGKd9AdPQ5jXAQDnBCZRTgmAxMkr7sTgl+UMJdQcZm7kGdW4dh+hAl8w
-         GmxTnbQfDjEZLRP4rN261o8MpBunr+j/gL7L7T1nxPhgewL7K/9mLXN9atVqLJmKnvz4
-         2xrxSqjHcs0MhQne8cMIj+4f7BQi4deL+x91r3ToIIuNRPQKJcakNuCE4b00u50q0cPz
-         tEIAOnv30mlzV7ChfLz8cJ6bIYW9ndauuOn/x7q3+f2XmxPY1tBm/9uXe/cv1GwaQvIM
-         gfCChnkoIyWiZHlnI//IfJhNkI0FPtuys8nJYJXbz0kAgIxH/UucdBIXc9V+ScyW49eD
-         fajA==
+        bh=yTzbWKA3zPzjeiF937oMd+mrfs7eDa6MeIt8WxC7alo=;
+        b=XxZSKP++rmDEAheWrfuIcNVJDlRhi31eGx0fW/AOn5FDJiyfDd+KgpYtrxZGtTn1pS
+         ZiQc3KZZ/mFoH0nvvq42krCSaNA5K0wB6LWVwQYjuohdPjz3SAKJx8OWbQiHlTLDR4op
+         fTUgoDz3gtxmVWXUwjq5WRsr8D/1BdtErlFd6nhr9WE9yUhKxTpaZ0S0wWMW2NRFw/a8
+         yG1+UPwahz0d+H2fEBJSi1+mITB6N/sKxcDqKrJJOxT9sqiCbt9Wb4XvDmF/ibvKB3Iv
+         l3++DdWpVDYnp7K+b5pilBcFlSteae6kc5L5UjGtRiHa3hXh/a9tRX/EZs6635gDwc8M
+         j4Mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=H7CaqqH/S1PI07TF9lAvEP/hY/HwjM9ZNiVQ+Vulqi4=;
-        b=it9s+Fk7uAy5+XjerpqxJ+DJtPGEh6H+oPKpGDeBZ8xqHzV8xS1fmY1155dDFD805F
-         5Zpf318aVCg8H0RomsUQxm/AGKROP8C2Nx6a+egg7JF7kWtajr90V1Og3p4/WQMH/5SW
-         DFPOvdHWMzIYbpgIRJR7zpNYwRbbSSKNnCkEXjWNJJwI3Ediw4Y0NVICkRpQjX/VWAMi
-         3lK+McudTB2p9S8Rbeqq3hmBj0Pl2BUvqvArIIDBcKiexxdhLOwCb1uUFN2DtGw9sUgs
-         jxAyvG9qMl2F+y6p9gsWerrLJHKXDwNV3pFyoqlUhRIOdnDqD93abSub6q+7SQUcbhJ+
-         +ZUA==
-X-Gm-Message-State: ACrzQf1rKBOXvPGy2nf8JULO6WeRBwk28xYj+8eOrCMTbbyLRR4JLnMV
-        c++1ZZX34/XCcPkRTR5xiVKLnVu1Aso=
-X-Google-Smtp-Source: AMsMyM6hk2fP0HQJwRc2Nsdf5gf57JQBJqdOywQqU/Agxcr0/47FcTPLY7DJ7MA2MXTdgYcm1rHbSXJbcZ8=
+        bh=yTzbWKA3zPzjeiF937oMd+mrfs7eDa6MeIt8WxC7alo=;
+        b=2JxKBV2SICaLpaAqpkRPymTy+MtQORjB407V7df5isdoBEFKZvlO38l6ACWf78QW/S
+         b+mCcUxNdYH5awvVMgw8jXFcFCwhA70wQFfmPgtnxhtkTnLk+cjcK3J77v8ZYqrYF1Yp
+         yqZd/iWdgmza3ImVjWquh0Egf+uhDN5QG4X3KdM3FjPK3hIMxOL6iXlOIbhyL6kzs5lZ
+         VIPFsNvjzwExQZsMID2vHxzxgKJjrgFn41T9QqBXDt81FUYlcEWZNy2xZ2ykJ4HTQq4/
+         pbRLj3UXiHVGAC6q/CtJhjMFUXlCyUIbn1g7+tBKDmEO2EJCCSabEpW2YKTjQ7Hrr1RS
+         4IvQ==
+X-Gm-Message-State: ACrzQf2E1l+dSFZmmDh3K8f7D8j3Ivg7Q0/uw7683ZiUMZIuEqKvZaqJ
+        07UC6O6l8M6wn3Zk7YQEEV4GxyZ1iF8=
+X-Google-Smtp-Source: AMsMyM4moFi5+iumYozT+7qlS1BDI8DN0/blS/CYnmUA6IS+xnhRO4FLKdQ/ipgElvsFL6t89fVCoWxZ3Ew=
 X-Received: from drosen.mtv.corp.google.com ([2620:15c:211:200:4643:a68e:2b7:f873])
- (user=drosen job=sendgmr) by 2002:a05:6902:709:b0:6af:270a:c1c6 with SMTP id
- k9-20020a056902070900b006af270ac1c6mr23204160ybt.447.1664234327864; Mon, 26
- Sep 2022 16:18:47 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 16:18:03 -0700
+ (user=drosen job=sendgmr) by 2002:a25:af13:0:b0:6ae:3166:1aee with SMTP id
+ a19-20020a25af13000000b006ae31661aeemr23247290ybh.288.1664234333269; Mon, 26
+ Sep 2022 16:18:53 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 16:18:05 -0700
 In-Reply-To: <20220926231822.994383-1-drosen@google.com>
 Mime-Version: 1.0
 References: <20220926231822.994383-1-drosen@google.com>
 X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
-Message-ID: <20220926231822.994383-8-drosen@google.com>
-Subject: [PATCH 07/26] fuse-bpf: Prepare for fuse-bpf patch
+Message-ID: <20220926231822.994383-10-drosen@google.com>
+Subject: [PATCH 09/26] fuse-bpf: Don't support export_operations
 From:   Daniel Rosenberg <drosen@google.com>
 To:     Miklos Szeredi <miklos@szeredi.hu>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -75,194 +75,40 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This moves some functions and structs around to make the following patch
-easier to read.
+In the future, we may choose to support these, but it poses some
+challenges. In order to create a disconnected dentry/inode, we'll need
+to encode the mountpoint and bpf into the file_handle, which means we'd
+need a stable representation of them. This also won't hold up to cases
+where the bpf is not stateless. One possibility is registering bpf
+programs and mounts in a specific order, so they can be assigned
+consistent ids we can use in the file_handle. We can defer to the lower
+filesystem for the lower inode's representation in the file_handle.
 
 Signed-off-by: Daniel Rosenberg <drosen@google.com>
 Signed-off-by: Paul Lawrence <paullawrence@google.com>
 ---
- fs/fuse/dir.c    | 30 ------------------------------
- fs/fuse/fuse_i.h | 35 +++++++++++++++++++++++++++++++++++
- fs/fuse/inode.c  | 46 +++++++++++++++++++++++-----------------------
- 3 files changed, 58 insertions(+), 53 deletions(-)
+ fs/fuse/inode.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/fs/fuse/dir.c b/fs/fuse/dir.c
-index b585b04e815e..74e13af039f1 100644
---- a/fs/fuse/dir.c
-+++ b/fs/fuse/dir.c
-@@ -46,10 +46,6 @@ static inline u64 fuse_dentry_time(const struct dentry *entry)
- }
- 
- #else
--union fuse_dentry {
--	u64 time;
--	struct rcu_head rcu;
--};
- 
- static inline void __fuse_dentry_settime(struct dentry *dentry, u64 time)
- {
-@@ -83,27 +79,6 @@ static void fuse_dentry_settime(struct dentry *dentry, u64 time)
- 	__fuse_dentry_settime(dentry, time);
- }
- 
--/*
-- * FUSE caches dentries and attributes with separate timeout.  The
-- * time in jiffies until the dentry/attributes are valid is stored in
-- * dentry->d_fsdata and fuse_inode->i_time respectively.
-- */
--
--/*
-- * Calculate the time in jiffies until a dentry/attributes are valid
-- */
--static u64 time_to_jiffies(u64 sec, u32 nsec)
--{
--	if (sec || nsec) {
--		struct timespec64 ts = {
--			sec,
--			min_t(u32, nsec, NSEC_PER_SEC - 1)
--		};
--
--		return get_jiffies_64() + timespec64_to_jiffies(&ts);
--	} else
--		return 0;
--}
- 
- /*
-  * Set dentry and possibly attribute timeouts from the lookup/mk*
-@@ -115,11 +90,6 @@ void fuse_change_entry_timeout(struct dentry *entry, struct fuse_entry_out *o)
- 		time_to_jiffies(o->entry_valid, o->entry_valid_nsec));
- }
- 
--static u64 attr_timeout(struct fuse_attr_out *o)
--{
--	return time_to_jiffies(o->attr_valid, o->attr_valid_nsec);
--}
--
- u64 entry_attr_timeout(struct fuse_entry_out *o)
- {
- 	return time_to_jiffies(o->attr_valid, o->attr_valid_nsec);
-diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
-index 488b460e046f..054b96c3e061 100644
---- a/fs/fuse/fuse_i.h
-+++ b/fs/fuse/fuse_i.h
-@@ -63,6 +63,14 @@ struct fuse_forget_link {
- 	struct fuse_forget_link *next;
- };
- 
-+/** FUSE specific dentry data */
-+#if BITS_PER_LONG < 64
-+union fuse_dentry {
-+	u64 time;
-+	struct rcu_head rcu;
-+};
-+#endif
-+
- /** FUSE inode */
- struct fuse_inode {
- 	/** Inode data */
-@@ -1316,4 +1324,31 @@ struct fuse_file *fuse_file_open(struct fuse_mount *fm, u64 nodeid,
- void fuse_file_release(struct inode *inode, struct fuse_file *ff,
- 		       unsigned int open_flags, fl_owner_t id, bool isdir);
- 
-+/*
-+ * FUSE caches dentries and attributes with separate timeout.  The
-+ * time in jiffies until the dentry/attributes are valid is stored in
-+ * dentry->d_fsdata and fuse_inode->i_time respectively.
-+ */
-+
-+/*
-+ * Calculate the time in jiffies until a dentry/attributes are valid
-+ */
-+static inline u64 time_to_jiffies(u64 sec, u32 nsec)
-+{
-+	if (sec || nsec) {
-+		struct timespec64 ts = {
-+			sec,
-+			min_t(u32, nsec, NSEC_PER_SEC - 1)
-+		};
-+
-+		return get_jiffies_64() + timespec64_to_jiffies(&ts);
-+	} else
-+		return 0;
-+}
-+
-+static inline u64 attr_timeout(struct fuse_attr_out *o)
-+{
-+	return time_to_jiffies(o->attr_valid, o->attr_valid_nsec);
-+}
-+
- #endif /* _FS_FUSE_I_H */
 diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
-index 6b3beda16c1b..036a14e917e1 100644
+index ca65199b38cb..290eae750282 100644
 --- a/fs/fuse/inode.c
 +++ b/fs/fuse/inode.c
-@@ -162,6 +162,28 @@ static ino_t fuse_squash_ino(u64 ino64)
- 	return ino;
- }
+@@ -1122,6 +1122,14 @@ static int fuse_encode_fh(struct inode *inode, u32 *fh, int *max_len,
+ 	nodeid = get_fuse_inode(inode)->nodeid;
+ 	generation = inode->i_generation;
  
-+static void fuse_fill_attr_from_inode(struct fuse_attr *attr,
-+				      const struct inode *inode)
-+{
-+	*attr = (struct fuse_attr){
-+		.ino		= inode->i_ino,
-+		.size		= inode->i_size,
-+		.blocks		= inode->i_blocks,
-+		.atime		= inode->i_atime.tv_sec,
-+		.mtime		= inode->i_mtime.tv_sec,
-+		.ctime		= inode->i_ctime.tv_sec,
-+		.atimensec	= inode->i_atime.tv_nsec,
-+		.mtimensec	= inode->i_mtime.tv_nsec,
-+		.ctimensec	= inode->i_ctime.tv_nsec,
-+		.mode		= inode->i_mode,
-+		.nlink		= inode->i_nlink,
-+		.uid		= inode->i_uid.val,
-+		.gid		= inode->i_gid.val,
-+		.rdev		= inode->i_rdev,
-+		.blksize	= 1u << inode->i_blkbits,
-+	};
-+}
++#ifdef CONFIG_FUSE_BPF
++	/* TODO: Does it make sense to support this in some cases? */
++	if (!nodeid && get_fuse_inode(inode)->backing_inode) {
++		*max_len = 0;
++		return FILEID_INVALID;
++	}
++#endif
 +
- void fuse_change_attributes_common(struct inode *inode, struct fuse_attr *attr,
- 				   u64 attr_valid, u32 cache_mask)
- {
-@@ -1386,28 +1408,6 @@ void fuse_dev_free(struct fuse_dev *fud)
- }
- EXPORT_SYMBOL_GPL(fuse_dev_free);
- 
--static void fuse_fill_attr_from_inode(struct fuse_attr *attr,
--				      const struct fuse_inode *fi)
--{
--	*attr = (struct fuse_attr){
--		.ino		= fi->inode.i_ino,
--		.size		= fi->inode.i_size,
--		.blocks		= fi->inode.i_blocks,
--		.atime		= fi->inode.i_atime.tv_sec,
--		.mtime		= fi->inode.i_mtime.tv_sec,
--		.ctime		= fi->inode.i_ctime.tv_sec,
--		.atimensec	= fi->inode.i_atime.tv_nsec,
--		.mtimensec	= fi->inode.i_mtime.tv_nsec,
--		.ctimensec	= fi->inode.i_ctime.tv_nsec,
--		.mode		= fi->inode.i_mode,
--		.nlink		= fi->inode.i_nlink,
--		.uid		= fi->inode.i_uid.val,
--		.gid		= fi->inode.i_gid.val,
--		.rdev		= fi->inode.i_rdev,
--		.blksize	= 1u << fi->inode.i_blkbits,
--	};
--}
--
- static void fuse_sb_defaults(struct super_block *sb)
- {
- 	sb->s_magic = FUSE_SUPER_MAGIC;
-@@ -1451,7 +1451,7 @@ static int fuse_fill_super_submount(struct super_block *sb,
- 	if (parent_sb->s_subtype && !sb->s_subtype)
- 		return -ENOMEM;
- 
--	fuse_fill_attr_from_inode(&root_attr, parent_fi);
-+	fuse_fill_attr_from_inode(&root_attr, &parent_fi->inode);
- 	root = fuse_iget(sb, parent_fi->nodeid, 0, &root_attr, 0, 0);
- 	/*
- 	 * This inode is just a duplicate, so it is not looked up and
+ 	fh[0] = (u32)(nodeid >> 32);
+ 	fh[1] = (u32)(nodeid & 0xffffffff);
+ 	fh[2] = generation;
 -- 
 2.37.3.998.g577e59143f-goog
 
