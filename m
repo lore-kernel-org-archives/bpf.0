@@ -2,81 +2,76 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CACEBC07E9D
-	for <bpf@archiver.kernel.org>; Tue, 27 Sep 2022 03:50:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05ADFC54EE9
+	for <bpf@archiver.kernel.org>; Tue, 27 Sep 2022 04:30:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbiI0DuU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 26 Sep 2022 23:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38728 "EHLO
+        id S229453AbiI0E35 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 27 Sep 2022 00:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiI0DuT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 26 Sep 2022 23:50:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844588709E
-        for <bpf@vger.kernel.org>; Mon, 26 Sep 2022 20:50:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2BFF7B81988
-        for <bpf@vger.kernel.org>; Tue, 27 Sep 2022 03:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B4910C433B5;
-        Tue, 27 Sep 2022 03:50:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664250615;
-        bh=FeL/ArkKCta/N7GTni9GyuBUmKBAKzrexF/2u3ULfJA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=UGO/pLDa1K/JDUKs6HnCSwpqXtP580NeRwxjULPRhmc+56qqngshfGTiaeu6jzAGX
-         L10eMrf802CBwczbmixzViUhdiPGZWwwF2MuKOPZpJn7bikry9ib4wt33f29w8PNDC
-         Xjnf2eIWg52ZMXGYV0PPh85YL6V/e+X7PR+gaR6xogUkgIafKagTAT80h6oCqC9ku7
-         JBcd6BFOO17lCEyoeWBDNp3M6UGA0YgGIbj5IAY9W4pONc3kk2qw5/KoD2InlZHmTo
-         2BYABEBaSWkeyqC4FfpW+g//2rTYECFtbgZRW3Mw7NKjA3MEoxyJ+3IzSjitU+iNTE
-         N8Iywo6p2mRNA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 99524E21EC2;
-        Tue, 27 Sep 2022 03:50:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229470AbiI0E34 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 27 Sep 2022 00:29:56 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F92422F0
+        for <bpf@vger.kernel.org>; Mon, 26 Sep 2022 21:29:54 -0700 (PDT)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28QKCdG3030976
+        for <bpf@vger.kernel.org>; Mon, 26 Sep 2022 21:29:54 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jt174r7a6-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 26 Sep 2022 21:29:54 -0700
+Received: from twshared20183.05.prn5.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 26 Sep 2022 21:29:52 -0700
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id 89B1B1F65CC87; Mon, 26 Sep 2022 21:29:44 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: enforce C++11 mode for test_cpp test
+Date:   Mon, 26 Sep 2022 21:29:40 -0700
+Message-ID: <20220927042940.147185-2-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220927042940.147185-1-andrii@kernel.org>
+References: <20220927042940.147185-1-andrii@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 bpf-next 0/2] enforce W^X for trampoline and dispatcher
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166425061562.22022.15767427387347504337.git-patchwork-notify@kernel.org>
-Date:   Tue, 27 Sep 2022 03:50:15 +0000
-References: <20220926184739.3512547-1-song@kernel.org>
-In-Reply-To: <20220926184739.3512547-1-song@kernel.org>
-To:     Song Liu <song@kernel.org>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        john.fastabend@gmail.com, kpsingh@chromium.org, kernel-team@fb.com,
-        haoluo@google.com, jlayton@kernel.org, bjorn@kernel.org
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: atGmzGrkiey3SEuFSxZeVo9BFrq69Vu-
+X-Proofpoint-ORIG-GUID: atGmzGrkiey3SEuFSxZeVo9BFrq69Vu-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-26_11,2022-09-22_02,2022-06-22_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+Setting -std=c++11 seems to catch more potential C++-only problems. Also
+BPF skeleton isn't rely compilable with any older standard due to the
+use of nullptr.
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/testing/selftests/bpf/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Mon, 26 Sep 2022 11:47:37 -0700 you wrote:
-> Changes v1 => v2:
-> 1. Update arch_prepare_bpf_dispatcher to use a RO image and a RW buffer.
->    (Alexei) Note: I haven't found an existing test to cover this part, so
->    this part was tested manually (comparing the generated dispatcher is
->    the same).
-> 
-> Jeff Layton reported CPA W^X warning linux-next [1]. It turns out to be
-> W^X issue with bpf trampoline and bpf dispatcher. Fix these by:
-> 
-> [...]
-
-Here is the summary with links:
-  - [v2,bpf-next,1/2] bpf: use bpf_prog_pack for bpf_dispatcher
-    https://git.kernel.org/bpf/bpf-next/c/19c02415da23
-  - [v2,bpf-next,2/2] bpf: Enforce W^X for bpf trampoline
-    https://git.kernel.org/bpf/bpf-next/c/5b0d1c7bd572
-
-You are awesome, thank you!
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index e6cf21fad69f..d52069c70e49 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -570,7 +570,7 @@ $(OUTPUT)/test_verifier: test_verifier.c verifier/tests.h $(BPFOBJ) | $(OUTPUT)
+ # Make sure we are able to include and link libbpf against c++.
+ $(OUTPUT)/test_cpp: test_cpp.cpp $(OUTPUT)/test_core_extern.skel.h $(BPFOBJ)
+ 	$(call msg,CXX,,$@)
+-	$(Q)$(CXX) $(CFLAGS) $(filter %.a %.o %.cpp,$^) $(LDLIBS) -o $@
++	$(Q)$(CXX) $(CFLAGS) -std=c++11 $(filter %.a %.o %.cpp,$^) $(LDLIBS) -o $@
+ 
+ # Benchmark runner
+ $(OUTPUT)/bench_%.o: benchs/bench_%.c bench.h $(BPFOBJ)
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.30.2
 
