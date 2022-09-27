@@ -2,58 +2,58 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1898C07E9D
-	for <bpf@archiver.kernel.org>; Tue, 27 Sep 2022 19:00:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64EE3C6FA83
+	for <bpf@archiver.kernel.org>; Tue, 27 Sep 2022 19:00:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231784AbiI0TAy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 27 Sep 2022 15:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53622 "EHLO
+        id S231831AbiI0TAz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 27 Sep 2022 15:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231563AbiI0TAo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 27 Sep 2022 15:00:44 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A68161CC1
-        for <bpf@vger.kernel.org>; Tue, 27 Sep 2022 12:00:30 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id i15-20020a17090a4b8f00b0020073b4ac27so10887170pjh.3
-        for <bpf@vger.kernel.org>; Tue, 27 Sep 2022 12:00:30 -0700 (PDT)
+        with ESMTP id S231659AbiI0TAq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 27 Sep 2022 15:00:46 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA581BF0D6
+        for <bpf@vger.kernel.org>; Tue, 27 Sep 2022 12:00:32 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id bh13so10227003pgb.4
+        for <bpf@vger.kernel.org>; Tue, 27 Sep 2022 12:00:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=1IK9f71Lu9DwK4AC/QfvBLYh1EUy09UxmzY/Y/A+poE=;
-        b=hPZ8uChI5QK5l0A+yP+dFDX4k+8nkDCkWY6v1TzPw6f/DKz2o9+gv8Iku4f0vvLs16
-         HG+VhTt68vDbg2rMarOv0IJ83G6+Pu9WSWr/8feecDc06FNB65yPJL0J3mz/L4Yg84ES
-         ZNQzkXF2UpBDpzOxjnfxbMcqSv+pFZD53JQuL0ytn2O8Hyg/Da9RbN9TFUigLkB2+t3o
-         4u8NS7yT72oexkyLdIwRhq15N9lx8tUj0W+/rYdwMFtnK7LVSoufDaJQrzu0K33lDP77
-         /fjb6DfYZqre5WnKt/WC8Dvp2PUZRIWb6SY/0CbLbG6pONxJ3cKIgXNAxkS1zuZGXioO
-         Dfaw==
+        bh=gajT+qZhqxOHyN30cJ1Tk/WUWyKoP1GuuIXodlFuV/s=;
+        b=LTHZomXONDXGYFZIQzJorvySYU4L1C/V/OSqnvRWuOS8URws2bgDo7VEaVr72zFlvb
+         YUnKf+3Kuatn01uSeoqU2243U6lV3o/adLwNT9Lds7Nd6/hhW5WuSyQ+HGniTUKX+UGI
+         MxwML1W0OqTnWUcXJswPOlUbIeYDMKpJTZf5yj4y+LLuJuAp2nRfdHOq9MQNncxRSJ2X
+         nJVQ1L3tca5nYSxwTTRa5ACs5bUFPgn9V3UDjSA6jFZ4dzJC+NWBojkXQVZ3rHb5/6Aq
+         LPMUbjsegQnzN7mesya4qs1DKuVpyKG4i2/jNFYnoDtgXvqXwmSNOG7cA+21ua1gPnkO
+         ZdFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=1IK9f71Lu9DwK4AC/QfvBLYh1EUy09UxmzY/Y/A+poE=;
-        b=vgnKPiOhIKzHhoyeEjisHg47wLfI3IB8HuQoR1iFXQSKjvD3o+T5wrOguga7fbChSG
-         q8iGIn6jGjPl1gUMEqwhdYrJOBBJEMbRxj9g8u+q0k8JWPTiSaxBG4uw+C2zlilVofOD
-         TuPI+QMwei6kSxPapOxQ7z0VkWPJWBqugNFFaRcEERhLZkzZANJTTzNYqrMgf3Cc8kh5
-         IeDmPJJGHd+UwnAGSAHHF74dsrP6rTtYFl68YAeT6fl7DGKjGXDib6MxAuQaP8+HOqex
-         3eRuBblH47kiryBzakE/AjZrW/znrBXWOKu0wUvcWvIKId6obp9f7Z3ic6R47l8tRWIs
-         tKeA==
-X-Gm-Message-State: ACrzQf3CA32dNKqHeancBwIjESzXgKUqo68nmNzaGeiutAAORvQGhQ2K
-        U/UUMa7bxvxoLr1pUW3xzCcNSGN4N64=
-X-Google-Smtp-Source: AMsMyM4yfPAKnDypkFN7w+FAhRAhhZY9T5gme1lLgR+o9ia7DtK4kxebob0rinByd1CQzLJ0Aztoow==
-X-Received: by 2002:a17:902:7ed6:b0:178:378a:ebbf with SMTP id p22-20020a1709027ed600b00178378aebbfmr28827436plb.117.1664305228957;
-        Tue, 27 Sep 2022 12:00:28 -0700 (PDT)
+        bh=gajT+qZhqxOHyN30cJ1Tk/WUWyKoP1GuuIXodlFuV/s=;
+        b=eW/3Yk2Ada9SluHmPXGjRfJucMHMDfaxAiKQduJTc1l3Ztje3bDigF4eUon7ShUz/y
+         Gzb5xCjlkJogrb8QWAz9cgv7a50yE1R+zucY9vl+FQqPZPjwNlpYelyTRwMqjjOxQFaq
+         S0tHzw2s5vFZgFS2arF2e64JIev4T1tb4f1zpjrLOLwNdcntVbyVvwclagWX1brEXy+G
+         HcrPzoiOnclfV8TfYYRTLtGPBwoOSOUyAel1tJ9D8HRUhYfkf2Xi3Q/K2Sf97ga61VEo
+         HkRcWbPZjDGCp5jKwq5CqLmunzxXbxL9XHzp4F2gvleH/7MqVjlqB0I7spkWhuOzL1W9
+         tsSQ==
+X-Gm-Message-State: ACrzQf33A8z/GUr3GPEq3zMh+IiMwbF1Vw4za5dMyllJ6kTgprMdii5S
+        frMX4GQwcr81MMw/el3jSuC8lqnjiY4=
+X-Google-Smtp-Source: AMsMyM7ZpqLd8FDEZMczpfwsrP9CLTRyyE9/CbnfhrVaTS561LJmN4ax4743q+FyOd9751bhYLn1Nw==
+X-Received: by 2002:a65:6e89:0:b0:43c:e3d8:49f1 with SMTP id bm9-20020a656e89000000b0043ce3d849f1mr6036597pgb.315.1664305232101;
+        Tue, 27 Sep 2022 12:00:32 -0700 (PDT)
 Received: from mariner-vm.. ([131.107.1.181])
-        by smtp.gmail.com with ESMTPSA id mi9-20020a17090b4b4900b001f8aee0d826sm8737557pjb.53.2022.09.27.12.00.27
+        by smtp.gmail.com with ESMTPSA id mi9-20020a17090b4b4900b001f8aee0d826sm8737557pjb.53.2022.09.27.12.00.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 12:00:28 -0700 (PDT)
+        Tue, 27 Sep 2022 12:00:31 -0700 (PDT)
 From:   dthaler1968@googlemail.com
 To:     bpf@vger.kernel.org
 Cc:     Dave Thaler <dthaler@microsoft.com>
-Subject: [PATCH 12/15] ebpf-docs: Add Linux note about register calling convention
-Date:   Tue, 27 Sep 2022 18:59:55 +0000
-Message-Id: <20220927185958.14995-12-dthaler1968@googlemail.com>
+Subject: [PATCH 15/15] ebpf-docs: Add note about invalid instruction
+Date:   Tue, 27 Sep 2022 18:59:58 +0000
+Message-Id: <20220927185958.14995-15-dthaler1968@googlemail.com>
 X-Mailer: git-send-email 2.33.4
 In-Reply-To: <20220927185958.14995-1-dthaler1968@googlemail.com>
 References: <20220927185958.14995-1-dthaler1968@googlemail.com>
@@ -67,26 +67,40 @@ From: Dave Thaler <dthaler@microsoft.com>
 
 Signed-off-by: Dave Thaler <dthaler@microsoft.com>
 ---
- Documentation/bpf/linux-notes.rst | 6 ++++++
- 1 file changed, 6 insertions(+)
+ Documentation/bpf/clang-notes.rst     | 5 +++++
+ Documentation/bpf/instruction-set.rst | 3 +++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/Documentation/bpf/linux-notes.rst b/Documentation/bpf/linux-notes.rst
-index 522ebe27d..0581ba326 100644
---- a/Documentation/bpf/linux-notes.rst
-+++ b/Documentation/bpf/linux-notes.rst
-@@ -7,6 +7,12 @@ Linux implementation notes
+diff --git a/Documentation/bpf/clang-notes.rst b/Documentation/bpf/clang-notes.rst
+index 528feddf2..3c934421b 100644
+--- a/Documentation/bpf/clang-notes.rst
++++ b/Documentation/bpf/clang-notes.rst
+@@ -20,6 +20,11 @@ Arithmetic instructions
+ For CPU versions prior to 3, Clang v7.0 and later can enable ``BPF_ALU`` support with
+ ``-Xclang -target-feature -Xclang +alu32``.  In CPU version 3, support is automatically included.
  
- This document provides more details specific to the Linux kernel implementation of the eBPF instruction set.
- 
-+Registers and calling convention
-+================================
++Invalid instructions
++====================
 +
-+All program types only use R1 which contains the "context", which is typically a structure containing all
-+the inputs needed, and the exit value for eBPF programs is passed as a 32 bit value.
++Clang will generate the invalid ``BPF_CALL | BPF_X | BPF_JMP`` (0x8d) instruction if ``-O0`` is used.
 +
- Arithmetic instructions
- =======================
+ Atomic operations
+ =================
  
+diff --git a/Documentation/bpf/instruction-set.rst b/Documentation/bpf/instruction-set.rst
+index 2ac8f0dae..af9dc0cc6 100644
+--- a/Documentation/bpf/instruction-set.rst
++++ b/Documentation/bpf/instruction-set.rst
+@@ -303,6 +303,9 @@ with the remaining registers being ignored.  The definition of a helper function
+ is responsible for specifying the type (e.g., integer, pointer, etc.) of the value returned,
+ the number of arguments, and the type of each argument.
+ 
++Note that ``BPF_CALL | BPF_X | BPF_JMP`` (0x8d), where the helper function integer
++would be read from a specified register, is not currently permitted.
++
+ Runtime functions
+ ~~~~~~~~~~~~~~~~~
+ Runtime functions are like helper functions except that they are not specific
 -- 
 2.33.4
 
