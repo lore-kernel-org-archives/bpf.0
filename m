@@ -2,58 +2,58 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DEB31C6FA82
-	for <bpf@archiver.kernel.org>; Tue, 27 Sep 2022 19:00:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1C2EC07E9D
+	for <bpf@archiver.kernel.org>; Tue, 27 Sep 2022 19:01:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231669AbiI0TA5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 27 Sep 2022 15:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54546 "EHLO
+        id S231880AbiI0TA7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 27 Sep 2022 15:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbiI0TAo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 27 Sep 2022 15:00:44 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA961BEA79
-        for <bpf@vger.kernel.org>; Tue, 27 Sep 2022 12:00:31 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d11so9895790pll.8
-        for <bpf@vger.kernel.org>; Tue, 27 Sep 2022 12:00:31 -0700 (PDT)
+        with ESMTP id S231666AbiI0TAr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 27 Sep 2022 15:00:47 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBA91BB20F
+        for <bpf@vger.kernel.org>; Tue, 27 Sep 2022 12:00:29 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d11so9895710pll.8
+        for <bpf@vger.kernel.org>; Tue, 27 Sep 2022 12:00:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=g7dKqq8ieDPDu8THRlVWwhDbW+P/kY6bJ0OccIy1imM=;
-        b=INMP68CyAxO0YCFoT54yNnMi+M5KW+TWkDOvvYdN/nieXgT2g2+z3BKBCYbw78UK82
-         /Gn/rxHLSAT22QqC0h9Oor7Z0e2TQfbOhL34eoHL+Ynk0dcCKa+ZJfbss9OX2o5xmxGk
-         O/HlUg8yxCdKHS8MSYqz/xxC66NXrEkvG9iHKDlRonZ2Y6V9lqwdE/e1yH3z/xqFb9Wf
-         OGTzxNYIbpZ1XVjeV1BjXzzJBUKsOlCIvshOcprwfcy8Jg/ykJRAkG2WMhdP8GBui/JA
-         z6wK+EyfA+PrRkRmdJR+tAFYJnj2pFTHzUmaJje6uaL0TJuTQv4rz+EjoSjf1Dc6B0a9
-         qlzQ==
+        bh=D9LaGrytoWd6kVpBouFet7qELPwaLytRzvtxPO5gDAM=;
+        b=nYcMmuElMVbadBLaeXmyQ12CdEphsQSgAVdWwFw/LSyFN1ARewL9xFMuu3cDGBj8bn
+         9pMhOZ1IkSKtrQCw1098VHd3EbSESOxHPtY/Lxu8r4uapzliMV+NyQQUZ2fNyXZZ4ese
+         HE7bh/NOS79Kg6RpnS29HwHatZy0NPfwe+UIi+pbAw0bjI6ipCnuf0/x6IArk27fJWkk
+         oyyCql97RhgyV/dvZRNw44c9rvkGpXh+MA+5HXoFeSXvN57FiSgD7Vw4P3F7db1axYSB
+         G3wl4qMMFwJkLYbhcP0i3dqJ12JklcSZlCaF6NiKsCXFgsNSCAl8h/02AfEdtDP1RWqv
+         kqcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=g7dKqq8ieDPDu8THRlVWwhDbW+P/kY6bJ0OccIy1imM=;
-        b=Qsy1MsYNay6xwzcrSO1GhIaWsLpgLBGCrVUplTUYvDqmSWTNsKJ438+zDC7n5wEvUz
-         knnGeCzps2NLzTjAVx9KKVP9V0bYWVjpis+iibj1R36uGedNKNlrdzgYaBh2c0ZQy1rP
-         MUWuljbyedyPHDJfElEYQiUi0SMbN34hb7q9mYgIhf+0KZQ7UVymaEqIQKC+7HPcGiW8
-         ABYIw6Vdwgyut0ZwSXBv5Io32fI15n2VDUs1VbLS+8IiL+H6tt8CM+X75VLLWyf6urES
-         3kIkHNAvooFIcUWVJQU7UkK+m7+LGertawf8nU6qdTpoGNvNS80KZyWi0vICKgN8XqcX
-         EBXQ==
-X-Gm-Message-State: ACrzQf1IqIfg+gNEJoNZpLjuHe09I0IB4pNQG5Czg30xPe9gyAGtublo
-        lOkfEtsm2A/tbigyM+Y+rCIrrcN7Eto=
-X-Google-Smtp-Source: AMsMyM4n0NaT8JpJuFY/QPaHvxMKgavwypnkaMmOoPR32qTMqAWd6N9UPUt0cJInTDjvdEjWGJ0aZQ==
-X-Received: by 2002:a17:902:e883:b0:177:f38f:6498 with SMTP id w3-20020a170902e88300b00177f38f6498mr27831948plg.32.1664305230251;
-        Tue, 27 Sep 2022 12:00:30 -0700 (PDT)
+        bh=D9LaGrytoWd6kVpBouFet7qELPwaLytRzvtxPO5gDAM=;
+        b=bRgn5h2m+OemwMAcIBiR1/6C+j+7qHkAxwey6BK1+m5ZVH3vJxEwQp/1VJmF/m4LcN
+         QtUZqBYr0d7isjgOoLofqvu1N4n+6+WecEfKAeIqtl83QOvHMVyZejxZ9WqY9p/4JhvX
+         8PK2UKFtzVpCfk6TIb7ezsYKOfmqwW0xMOha2itwcE/E6XdIqFTzRhI6dRHhwDuATKV3
+         uEmtQPFS9JIytbPE05QGompGF89pGkvexDUZYRKAeZTdtoYcWr6wBOE9frMFUZ/xWPjI
+         Ih+aeJgQTRKc8e46lsVtWP4iqenOEGKfH1FDNR4DOxp7sEG79azTYJnpdw10YyUIrCgr
+         Ndag==
+X-Gm-Message-State: ACrzQf2IsyuzAAiYvPgjaSKQH3wjzNrpAKQ3DvEHeB+fXBtORwXMrlsh
+        qJUlfWfTDEN1kwWUuL0NzCNsRIkGxSo=
+X-Google-Smtp-Source: AMsMyM5FK8sovL9Yn9kiJN85XR1G/uwE/UhzXU/JZzezs66MooiMC/aprfq5N34z6wVrg+2kX3ZUNQ==
+X-Received: by 2002:a17:902:d4cb:b0:178:6e81:35b7 with SMTP id o11-20020a170902d4cb00b001786e8135b7mr28927611plg.108.1664305227788;
+        Tue, 27 Sep 2022 12:00:27 -0700 (PDT)
 Received: from mariner-vm.. ([131.107.1.181])
-        by smtp.gmail.com with ESMTPSA id mi9-20020a17090b4b4900b001f8aee0d826sm8737557pjb.53.2022.09.27.12.00.29
+        by smtp.gmail.com with ESMTPSA id mi9-20020a17090b4b4900b001f8aee0d826sm8737557pjb.53.2022.09.27.12.00.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 12:00:29 -0700 (PDT)
+        Tue, 27 Sep 2022 12:00:27 -0700 (PDT)
 From:   dthaler1968@googlemail.com
 To:     bpf@vger.kernel.org
 Cc:     Dave Thaler <dthaler@microsoft.com>
-Subject: [PATCH 13/15] ebpf-docs: Add extended 64-bit immediate instructions
-Date:   Tue, 27 Sep 2022 18:59:56 +0000
-Message-Id: <20220927185958.14995-13-dthaler1968@googlemail.com>
+Subject: [PATCH 11/15] ebpf-docs: Improve English readability
+Date:   Tue, 27 Sep 2022 18:59:54 +0000
+Message-Id: <20220927185958.14995-11-dthaler1968@googlemail.com>
 X-Mailer: git-send-email 2.33.4
 In-Reply-To: <20220927185958.14995-1-dthaler1968@googlemail.com>
 References: <20220927185958.14995-1-dthaler1968@googlemail.com>
@@ -67,107 +67,281 @@ From: Dave Thaler <dthaler@microsoft.com>
 
 Signed-off-by: Dave Thaler <dthaler@microsoft.com>
 ---
- Documentation/bpf/instruction-set.rst | 54 +++++++++++++++++++++++++--
- Documentation/bpf/linux-notes.rst     | 10 +++++
- 2 files changed, 60 insertions(+), 4 deletions(-)
+ Documentation/bpf/instruction-set.rst | 137 ++++++++++++++++----------
+ 1 file changed, 87 insertions(+), 50 deletions(-)
 
 diff --git a/Documentation/bpf/instruction-set.rst b/Documentation/bpf/instruction-set.rst
-index 328207ff6..667d97715 100644
+index b6f098104..328207ff6 100644
 --- a/Documentation/bpf/instruction-set.rst
 +++ b/Documentation/bpf/instruction-set.rst
-@@ -430,14 +430,54 @@ and loaded back to ``R0``.
- -----------------------------
+@@ -7,6 +7,9 @@ eBPF Instruction Set Specification, v1.0
  
- Instructions with the ``BPF_IMM`` 'mode' modifier use the wide instruction
--encoding for an extra imm64 value.
-+encoding defined in `Instruction encoding`_, and use the 'src' field of the
-+basic instruction to hold an opcode subtype.
-+
-+The following instructions are defined, and use additional concepts defined below:
-+
-+=========================  ======  ===  =====================================  ===========  ==============
-+opcode construction        opcode  src  pseudocode                             imm type     dst type
-+=========================  ======  ===  =====================================  ===========  ==============
-+BPF_IMM | BPF_DW | BPF_LD  0x18    0x0  dst = imm64                            integer      integer
-+BPF_IMM | BPF_DW | BPF_LD  0x18    0x1  dst = map_by_fd(imm)                   map fd       map
-+BPF_IMM | BPF_DW | BPF_LD  0x18    0x2  dst = mva(map_by_fd(imm)) + next_imm   map fd       data pointer
-+BPF_IMM | BPF_DW | BPF_LD  0x18    0x3  dst = variable_addr(imm)               variable id  data pointer
-+BPF_IMM | BPF_DW | BPF_LD  0x18    0x4  dst = code_addr(imm)                   integer      code pointer
-+BPF_IMM | BPF_DW | BPF_LD  0x18    0x5  dst = map_by_idx(imm)                  map index    map
-+BPF_IMM | BPF_DW | BPF_LD  0x18    0x6  dst = mva(map_by_idx(imm)) + next_imm  map index    data pointer
-+=========================  ======  ===  =====================================  ===========  ==============
+ This document specifies version 1.0 of the eBPF instruction set.
  
--There is currently only one such instruction.
++The eBPF instruction set consists of eleven 64 bit registers, a program counter,
++and 512 bytes of stack space.
++
+ Documentation conventions
+ =========================
+ 
+@@ -25,12 +28,24 @@ The eBPF calling convention is defined as:
+ * R6 - R9: callee saved registers that function calls will preserve
+ * R10: read-only frame pointer to access stack
+ 
+-R0 - R5 are scratch registers and eBPF programs needs to spill/fill them if
+-necessary across calls.
++Registers R0 - R5 are scratch registers, meaning the BPF program needs to either
++spill them to the BPF stack or move them to callee saved registers if these
++arguments are to be reused across multiple function calls. Spilling means
++that the value in the register is moved to the BPF stack. The reverse operation
++of moving the variable from the BPF stack to the register is called filling.
++The reason for spilling/filling is due to the limited number of registers.
++
++Upon entering execution of an eBPF program, registers R1 - R5 initially can contain
++the input arguments for the program (similar to the argc/argv pair for a typical C program).
++The actual number of registers used, and their meaning, is defined by the program type;
++for example, a networking program might have an argument that includes network packet data
++and/or metadata.
+ 
+ Instruction encoding
+ ====================
+ 
++An eBPF program is a sequence of instructions.
++
+ eBPF has two instruction encodings:
+ 
+ * the basic instruction encoding, which uses 64 bits to encode an instruction
+@@ -63,7 +78,7 @@ opcode
+   operation to perform
+ 
+ Note that most instructions do not use all of the fields.
+-Unused fields shall be cleared to zero.
++Unused fields must be set to zero.
+ 
+ As discussed below in `64-bit immediate instructions`_, some
+ instructions use a 64-bit immediate value that is constructed as follows.
+@@ -90,7 +105,9 @@ and destination registers, respectively, rather than the register number.
+ Instruction classes
+ -------------------
+ 
+-The three LSB bits of the 'opcode' field store the instruction class:
++The encoding of the 'opcode' field varies and can be determined from
++the three least significant bits (LSB) of the 'opcode' field which holds
++the "instruction class", as follows:
+ 
+ =========  =====  ===============================  ===================================
+ class      value  description                      reference
+@@ -136,9 +153,11 @@ instruction class
+ Arithmetic instructions
+ -----------------------
+ 
+-``BPF_ALU`` uses 32-bit wide operands while ``BPF_ALU64`` uses 64-bit wide operands for
++Instruction class ``BPF_ALU`` uses 32-bit wide operands (zeroing the upper 32 bits
++of the destination register) while ``BPF_ALU64`` uses 64-bit wide operands for
+ otherwise identical operations.
+-The 'code' field encodes the operation as below:
++
++The 4-bit 'code' field encodes the operation as follows:
+ 
+ ========  =====  ==========================================================
+ code      value  description
+@@ -168,21 +187,23 @@ the destination register is instead set to zero.
+ If execution would result in modulo by zero,
+ the destination register is instead left unchanged.
+ 
+-``BPF_ADD | BPF_X | BPF_ALU`` means::
++Examples:
++
++``BPF_ADD | BPF_X | BPF_ALU`` (0x0c) means::
+ 
+   dst = (uint32_t) (dst + src)
+ 
+ where '(uint32_t)' indicates truncation to 32 bits.
+ 
+-``BPF_ADD | BPF_X | BPF_ALU64`` means::
++``BPF_ADD | BPF_X | BPF_ALU64`` (0x0f) means::
+ 
+   dst = dst + src
+ 
+-``BPF_XOR | BPF_K | BPF_ALU`` means::
++``BPF_XOR | BPF_K | BPF_ALU`` (0xa4) means::
+ 
+   src = (uint32_t) src ^ (uint32_t) imm
+ 
+-``BPF_XOR | BPF_K | BPF_ALU64`` means::
++``BPF_XOR | BPF_K | BPF_ALU64`` (0xa7) means::
+ 
+   src = src ^ imm
+ 
+@@ -204,8 +225,9 @@ The byte swap instructions use an instruction class of ``BPF_ALU`` and a 4-bit
+ The byte swap instructions operate on the destination register
+ only and do not use a separate source register or immediate value.
+ 
+-The 1-bit source operand field in the opcode is used to to select what byte
+-order the operation convert from or to:
++Byte swap instructions use non-default semantics of the 1-bit 'source' field in
++the 'opcode' field.  Instead of indicating the source operator, it is instead
++used to select what byte order the operation converts from or to:
+ 
+ =========  =====  =================================================
+ source     value  description
+@@ -215,24 +237,33 @@ BPF_TO_BE  0x08   convert between host byte order and big endian
+ =========  =====  =================================================
+ 
+ The 'imm' field encodes the width of the swap operations.  The following widths
+-are supported: 16, 32 and 64.
+-
+-Examples:
+-
+-``BPF_ALU | BPF_TO_LE | BPF_END`` with imm = 16 means::
+-
+-  dst = htole16(dst)
+-
+-``BPF_ALU | BPF_TO_BE | BPF_END`` with imm = 64 means::
+-
+-  dst = htobe64(dst)
++are supported: 16, 32 and 64. The following table summarizes the resulting
++possibilities:
++
++=============================  =========  ===  ========  ==================
++opcode construction            opcode     imm  mnemonic  pseudocode
++=============================  =========  ===  ========  ==================
++BPF_END | BPF_TO_LE | BPF_ALU  0xd4       16   le16 dst  dst = htole16(dst)
++BPF_END | BPF_TO_LE | BPF_ALU  0xd4       32   le32 dst  dst = htole32(dst)
++BPF_END | BPF_TO_LE | BPF_ALU  0xd4       64   le64 dst  dst = htole64(dst)
++BPF_END | BPF_TO_BE | BPF_ALU  0xdc       16   be16 dst  dst = htobe16(dst)
++BPF_END | BPF_TO_BE | BPF_ALU  0xdc       32   be32 dst  dst = htobe32(dst)
++BPF_END | BPF_TO_BE | BPF_ALU  0xdc       64   be64 dst  dst = htobe64(dst)
++=============================  =========  ===  ========  ==================
++
 +where
 +
-+* map_by_fd(fd) means to convert a 32-bit POSIX file descriptor into an address of a map object (see `Map objects`_)
-+* map_by_index(index) means to convert a 32-bit index into an address of a map object
-+* mva(map) gets the address of the first value in a given map object
-+* variable_addr(id) gets the address of a variable (see `Variables`_) with a given id
-+* code_addr(offset) gets the address of the instruction at a specified relative offset in units of 64-bit blocks
-+* the 'imm type' can be used by disassemblers for display
-+* the 'dst type' can be used for verification and JIT compilation purposes
++* mnenomic indicates a short form that might be displayed by some tools such as disassemblers
++* 'htoleNN()' indicates converting a NN-bit value from host byte order to little-endian byte order
++* 'htobeNN()' indicates converting a NN-bit value from host byte order to big-endian byte order
+ 
+ Jump instructions
+ -----------------
+ 
+-``BPF_JMP32`` uses 32-bit wide operands while ``BPF_JMP`` uses 64-bit wide operands for
++Instruction class ``BPF_JMP32`` uses 32-bit wide operands while ``BPF_JMP`` uses 64-bit wide operands for
+ otherwise identical operations.
+-The 'code' field encodes the operation as below:
 +
-+Map objects
-+~~~~~~~~~~~
++The 4-bit 'code' field encodes the operation as below, where PC is the program counter:
+ 
+ ========  =====  =========================  ============
+ code      value  description                notes
+@@ -253,9 +284,6 @@ BPF_JSLT  0xc0   PC += off if dst < src     signed
+ BPF_JSLE  0xd0   PC += off if dst <= src    signed
+ ========  =====  =========================  ============
+ 
+-The eBPF program needs to store the return value into register R0 before doing a
+-BPF_EXIT.
+-
+ Helper functions
+ ~~~~~~~~~~~~~~~~
+ Helper functions are a concept whereby BPF programs can call into a
+@@ -285,7 +313,8 @@ For load and store instructions (``BPF_LD``, ``BPF_LDX``, ``BPF_ST``, and ``BPF_
+ mode          size    instruction class
+ ============  ======  =================
+ 
+-The mode modifier is one of:
++mode
++  one of:
+ 
+   =============  =====  ====================================  =============
+   mode modifier  value  description                           reference
+@@ -297,7 +326,8 @@ The mode modifier is one of:
+   BPF_ATOMIC     0xc0   atomic operations                     `Atomic operations`_
+   =============  =====  ====================================  =============
+ 
+-The size modifier is one of:
++size
++  one of:
+ 
+   =============  =====  =====================
+   size modifier  value  description
+@@ -308,25 +338,31 @@ The size modifier is one of:
+   BPF_DW         0x18   double word (8 bytes)
+   =============  =====  =====================
+ 
++instruction class
++  the instruction class (see `Instruction classes`_)
 +
-+Maps are shared memory regions accessible by eBPF programs on some platforms, where we use the term "map object"
-+to refer to an object containing the data and metadata (e.g., size) about the memory region.
-+A map can have various semantics as defined in a separate document, and may or may not have a single
-+contiguous memory region, but the 'mva(map)' is currently only defined for maps that do have a single
-+contiguous memory region.  Support for maps is optional.
+ Regular load and store operations
+ ---------------------------------
  
--``BPF_LD | BPF_DW | BPF_IMM`` means::
-+Each map object can have a POSIX file descriptor (fd) if supported by the platform,
-+where 'map_by_fd(fd)' means to get the map with the specified file descriptor.
-+Each eBPF program can also be defined to use a set of maps associated with the program
-+at load time, and 'map_by_index(index)' means to get the map with the given index in the set
-+associated with the eBPF program containing the instruction.
+ The ``BPF_MEM`` mode modifier is used to encode regular load and store
+ instructions that transfer data between a register and memory.
  
--  dst = imm64
-+Variables
-+~~~~~~~~~
+-``BPF_MEM | <size> | BPF_STX`` means::
+-
+-  *(size *) (dst + offset) = src_reg
+-
+-``BPF_MEM | <size> | BPF_ST`` means::
+-
+-  *(size *) (dst + offset) = imm32
+-
+-``BPF_MEM | <size> | BPF_LDX`` means::
+-
+-  dst = *(size *) (src + offset)
+-
+-Where size is one of: ``BPF_B``, ``BPF_H``, ``BPF_W``, or ``BPF_DW``.
++=============================  =========  ====================================
++opcode construction            opcode     pseudocode
++=============================  =========  ====================================
++BPF_MEM | BPF_B | BPF_LDX      0x71       dst = \*(uint8_t \*) (src + offset)
++BPF_MEM | BPF_H | BPF_LDX      0x69       dst = \*(uint16_t \*) (src + offset)
++BPF_MEM | BPF_W | BPF_LDX      0x61       dst = \*(uint32_t \*) (src + offset)
++BPF_MEM | BPF_DW | BPF_LDX     0x79       dst = \*(uint64_t \*) (src + offset)
++BPF_MEM | BPF_B | BPF_ST       0x72       \*(uint8_t \*) (dst + offset) = imm
++BPF_MEM | BPF_H | BPF_ST       0x6a       \*(uint16_t \*) (dst + offset) = imm
++BPF_MEM | BPF_W | BPF_ST       0x62       \*(uint32_t \*) (dst + offset) = imm
++BPF_MEM | BPF_DW | BPF_ST      0x7a       \*(uint64_t \*) (dst + offset) = imm
++BPF_MEM | BPF_B | BPF_STX      0x73       \*(uint8_t \*) (dst + offset) = src
++BPF_MEM | BPF_H | BPF_STX      0x6b       \*(uint16_t \*) (dst + offset) = src
++BPF_MEM | BPF_W | BPF_STX      0x63       \*(uint32_t \*) (dst + offset) = src
++BPF_MEM | BPF_DW | BPF_STX     0x7b       \*(uint64_t \*) (dst + offset) = src
++=============================  =========  ====================================
  
-+Variables are memory regions, identified by integer ids, accessible by eBPF programs on
-+some platforms.  The 'variable_addr(id)' operation means to get the address of the memory region
-+identified by the given id.  Support for such variables is optional.
+ Atomic operations
+ -----------------
+@@ -338,9 +374,11 @@ by other eBPF programs or means outside of this specification.
+ All atomic operations supported by eBPF are encoded as store operations
+ that use the ``BPF_ATOMIC`` mode modifier as follows:
  
- Legacy BPF Packet access instructions
- -------------------------------------
-@@ -465,6 +505,12 @@ opcode  src  imm   description                                          referenc
- 0x16    0x0  any   if (uint32_t)dst == imm goto +offset                 `Jump instructions`_
- 0x17    0x0  any   dst -= imm                                           `Arithmetic instructions`_
- 0x18    0x0  any   dst = imm64                                          `64-bit immediate instructions`_
-+0x18    0x1  any   dst = map_by_fd(imm)                                 `64-bit immediate instructions`_
-+0x18    0x2  any   dst = mva(map_by_fd(imm)) + next_imm                 `64-bit immediate instructions`_
-+0x18    0x3  any   dst = variable_addr(imm)                             `64-bit immediate instructions`_
-+0x18    0x4  any   dst = code_addr(imm)                                 `64-bit immediate instructions`_
-+0x18    0x5  any   dst = map_by_idx(imm)                                `64-bit immediate instructions`_
-+0x18    0x6  any   dst = mva(map_by_idx(imm)) + next_imm                `64-bit immediate instructions`_
- 0x1c    any  0x00  dst = (uint32_t)(dst - src)                          `Arithmetic instructions`_
- 0x1d    any  0x00  if dst == src goto +offset                           `Jump instructions`_
- 0x1e    any  0x00  if (uint32_t)dst == (uint32_t)src goto +offset       `Jump instructions`_
-diff --git a/Documentation/bpf/linux-notes.rst b/Documentation/bpf/linux-notes.rst
-index 0581ba326..e7f79242c 100644
---- a/Documentation/bpf/linux-notes.rst
-+++ b/Documentation/bpf/linux-notes.rst
-@@ -24,6 +24,16 @@ Byte swap instructions
- 
- ``BPF_FROM_LE`` and ``BPF_FROM_BE`` exist as aliases for ``BPF_TO_LE`` and ``BPF_TO_BE`` respectively.
- 
-+Map objects
-+===========
+-* ``BPF_ATOMIC | BPF_W | BPF_STX`` for 32-bit operations
+-* ``BPF_ATOMIC | BPF_DW | BPF_STX`` for 64-bit operations
+-* 8-bit and 16-bit wide atomic operations are not supported.
++* ``BPF_ATOMIC | BPF_W | BPF_STX`` (0xc3) for 32-bit operations
++* ``BPF_ATOMIC | BPF_DW | BPF_STX`` (0xdb) for 64-bit operations
 +
-+Linux only supports the 'mva(map)' operation on array maps with a single element.
-+
-+Variables
-+=========
-+
-+Linux uses BTF ids to identify variables.
-+
- Legacy BPF Packet access instructions
- =====================================
++Note that 8-bit (``BPF_B``) and 16-bit (``BPF_H``) wide atomic operations are not supported,
++nor is ``BPF_ATOMIC | <size> | BPF_ST``.
  
+ The 'imm' field is used to encode the actual atomic operation.
+ Simple atomic operation use a subset of the values defined to encode
+@@ -355,16 +393,15 @@ BPF_AND   0x50   atomic and
+ BPF_XOR   0xa0   atomic xor
+ ========  =====  ===========
+ 
+-
+-``BPF_ATOMIC | BPF_W  | BPF_STX`` with 'imm' = BPF_ADD means::
++``BPF_ATOMIC | BPF_W  | BPF_STX`` (0xc3) with 'imm' = BPF_ADD means::
+ 
+   *(uint32_t *)(dst + offset) += src
+ 
+-``BPF_ATOMIC | BPF_DW | BPF_STX`` with 'imm' = BPF ADD means::
++``BPF_ATOMIC | BPF_DW | BPF_STX`` (0xdb) with 'imm' = BPF ADD means::
+ 
+   *(uint64_t *)(dst + offset) += src
+ 
+-In addition to the simple atomic operations, there also is a modifier and
++In addition to the simple atomic operations above, there also is a modifier and
+ two complex atomic operations:
+ 
+ ===========  ================  ===========================
 -- 
 2.33.4
 
