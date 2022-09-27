@@ -2,121 +2,100 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C81CC54EE9
-	for <bpf@archiver.kernel.org>; Tue, 27 Sep 2022 10:21:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A61E3C54EE9
+	for <bpf@archiver.kernel.org>; Tue, 27 Sep 2022 11:01:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230461AbiI0KV1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 27 Sep 2022 06:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40944 "EHLO
+        id S231772AbiI0LA7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 27 Sep 2022 07:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230180AbiI0KVZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 27 Sep 2022 06:21:25 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576B2D4A96
-        for <bpf@vger.kernel.org>; Tue, 27 Sep 2022 03:21:24 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id o20-20020a05600c4fd400b003b4a516c479so5167437wmq.1
-        for <bpf@vger.kernel.org>; Tue, 27 Sep 2022 03:21:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=vgh002MbzGIvX+WNWBnASqpqcHfioqqk7UDCUr0BcD0=;
-        b=c8x5vdCdVwrSPGUJ1zvOAX9uZUIiOuP+7WTSPGV0j+E5BC2CTlKzoCNqDCQK0dcCRJ
-         RUvuyPK/+wwRCIZb1QH3UTRCnfH3yV8f8O64CKllJKBV8wUzPtHXJZeeHaJ0ARHobGmV
-         pyK64xm5laaM1/dinPPzsezrdg22/KQc8PfkluC6Z1bg06nMaKYjsgKQBHJcQA6jBk+k
-         1gUWEj5rPDlnsM6dKUFiOq+IzDP73Xo41tfX3G3BBlRZkaROLNOS0/wPk/ZaNsy6QfLn
-         UmoyajtfWyLolR2Q4ZKet6eJQfNScXlzkaZ7rcj6Mj3ZioSuSC9cP7bnwo4XjnPmpztJ
-         QTXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=vgh002MbzGIvX+WNWBnASqpqcHfioqqk7UDCUr0BcD0=;
-        b=NX7PsDqu4MsFd8M2nuVUfq4JI//aQ6JozKCOi97bgE3SfUzzWIl0kbT1Lb5Xt5SF3t
-         Q9AVVX+OqWlkj7IB7YNZlqbMIONjelpfgfGN7ZfbksfdVmkx1pzFn5OPKBQJHTd9sfe9
-         dD10QPugaiLekIGvW4DGtOkC+Blgm3xZko9tmA/vnZ8332gCVYyHBKkdxlnR+srOPQfT
-         r8JxSDaFFNGxh60uzO5sAwskINyMPp3VQ++2EfqyG+b/uoTOnjkLlz1VyPAWissipqj+
-         MQBkY84KcHzj/txZYelIQe68QSGXnGako8dZwo9bUFJ2NcsN20QGX8rwrqLPRvQv4Biu
-         DZwQ==
-X-Gm-Message-State: ACrzQf1MfQPRbSV0cYDvPt+DC0iyAp7xUqdN5Ho2dNungr1V4amZQXXs
-        68sdxFmApKwWrZ/dknsvDZIYug==
-X-Google-Smtp-Source: AMsMyM5KigCTNRehqfnJPf5L8G60+lZ4zECOx1Of9PDTtLY1fplC++hd5EXvPKgw9T2j3xArGysK3A==
-X-Received: by 2002:a05:600c:524b:b0:3b4:8c0c:f3b6 with SMTP id fc11-20020a05600c524b00b003b48c0cf3b6mr2137807wmb.50.1664274082579;
-        Tue, 27 Sep 2022 03:21:22 -0700 (PDT)
-Received: from [192.168.178.32] ([51.155.200.13])
-        by smtp.gmail.com with ESMTPSA id l9-20020a5d4809000000b00228b3ff1f5dsm1503944wrq.117.2022.09.27.03.21.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 03:21:21 -0700 (PDT)
-Message-ID: <c5c5cedb-4b32-2569-1d55-fc95cad1b260@isovalent.com>
-Date:   Tue, 27 Sep 2022 11:21:20 +0100
+        with ESMTP id S231720AbiI0LAr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 27 Sep 2022 07:00:47 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B732B29C84;
+        Tue, 27 Sep 2022 04:00:44 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4McGlT5DTZzWgqX;
+        Tue, 27 Sep 2022 18:56:37 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.70) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 27 Sep 2022 19:00:41 +0800
+From:   Wang Yufen <wangyufen@huawei.com>
+To:     <quentin@isovalent.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <andrii@kernel.org>, <martin.lau@linux.dev>, <song@kernel.org>,
+        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+        <sdf@google.com>, <haoluo@google.com>, <jolsa@kernel.org>,
+        <davem@davemloft.net>, <kuba@kernel.org>, <hawk@kernel.org>,
+        <nathan@kernel.org>, <ndesaulniers@google.com>, <trix@redhat.com>
+CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <llvm@lists.linux.dev>
+Subject: [bpf-next v7 2/3] bpftool: Update doc (add autoattach to prog load)
+Date:   Tue, 27 Sep 2022 19:21:15 +0800
+Message-ID: <1664277676-2228-2-git-send-email-wangyufen@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1664277676-2228-1-git-send-email-wangyufen@huawei.com>
+References: <1664277676-2228-1-git-send-email-wangyufen@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 1/2] libbpf: add fPIC option for static library
-Content-Language: en-GB
-To:     Xin Liu <liuxin350@huawei.com>, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yanan@huawei.com, wuchangye@huawei.com, xiesongyang@huawei.com,
-        zhudi2@huawei.com, kongweibin2@huawei.com
-References: <20220924101209.50653-1-liuxin350@huawei.com>
- <20220924101209.50653-2-liuxin350@huawei.com>
-From:   Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <20220924101209.50653-2-liuxin350@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.70]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Sat Sep 24 2022 11:12:08 GMT+0100 ~ Xin Liu <liuxin350@huawei.com>
-> Some programs depned on libbpf.a(eg:bpftool). If libbpf.a miss -fPIC,
+Add autoattach optional to prog load|loadall for supporting
+one-step load-attach-pin_link.
 
-Typo "depned"
+Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+---
+ tools/bpf/bpftool/Documentation/bpftool-prog.rst | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-> this will cause a similar error at compile time:
-> 
-> /usr/bin/ld: .../libbpf.a(libbpf-in.o): relocation
-> R_AARCH64_ADR_PREL_PG_HI21 against symbol `stderr@@GLIBC_2.17' which
-> may bind externally can not be used when making a sharedobject;
-> recompile with -fPIC
-> 
-> Use -fPIC for static library compilation to solve this problem.
-> 
-> Signed-off-by: Xin Liu <liuxin350@huawei.com>
-> ---
->  tools/lib/bpf/Makefile | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-> index 4c904ef0b47e..427e971f4fcd 100644
-> --- a/tools/lib/bpf/Makefile
-> +++ b/tools/lib/bpf/Makefile
-> @@ -91,9 +91,10 @@ override CFLAGS += $(INCLUDES)
->  override CFLAGS += -fvisibility=hidden
->  override CFLAGS += -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
->  override CFLAGS += $(CLANG_CROSS_FLAGS)
-> +override CFLAGS += -fPIC
->  
->  # flags specific for shared library
-> -SHLIB_FLAGS := -DSHARED -fPIC
-> +SHLIB_FLAGS := -DSHARED
->  
->  ifeq ($(VERBOSE),1)
->    Q =
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+index eb1b2a2..b81d3d9 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+@@ -31,7 +31,7 @@ PROG COMMANDS
+ |	**bpftool** **prog dump xlated** *PROG* [{**file** *FILE* | **opcodes** | **visual** | **linum**}]
+ |	**bpftool** **prog dump jited**  *PROG* [{**file** *FILE* | **opcodes** | **linum**}]
+ |	**bpftool** **prog pin** *PROG* *FILE*
+-|	**bpftool** **prog** { **load** | **loadall** } *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*]
++|	**bpftool** **prog** { **load** | **loadall** } *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*] [**autoattach**]
+ |	**bpftool** **prog attach** *PROG* *ATTACH_TYPE* [*MAP*]
+ |	**bpftool** **prog detach** *PROG* *ATTACH_TYPE* [*MAP*]
+ |	**bpftool** **prog tracelog**
+@@ -131,7 +131,7 @@ DESCRIPTION
+ 		  contain a dot character ('.'), which is reserved for future
+ 		  extensions of *bpffs*.
+ 
+-	**bpftool prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*]
++	**bpftool prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*] [**autoattach**]
+ 		  Load bpf program(s) from binary *OBJ* and pin as *PATH*.
+ 		  **bpftool prog load** pins only the first program from the
+ 		  *OBJ* as *PATH*. **bpftool prog loadall** pins all programs
+@@ -150,6 +150,19 @@ DESCRIPTION
+ 		  Optional **pinmaps** argument can be provided to pin all
+ 		  maps under *MAP_DIR* directory.
+ 
++		  If **autoattach** is specified program will be attached
++		  before pin. In that case, only the link (representing the
++		  program attached to its hook) is pinned, not the program as
++		  such, so the path won't show in "**bpftool prog show -f**",
++		  only show in "**bpftool link show -f**". Also, this only works
++		  when bpftool (libbpf) is able to infer all necessary information
++		  from the objectfile, in particular, it's not supported for all
++		  program types. If the *OBJ* contains multiple programs and
++		  *loadall* is used, if the program A in these programs does not
++		  support auto-attachi, will skip program A(do no operation on
++		  program A), print a info message such as "Program A does not
++		  support autoattach", and continue to autoattach the next program.
++
+ 		  Note: *PATH* must be located in *bpffs* mount. It must not
+ 		  contain a dot character ('.'), which is reserved for future
+ 		  extensions of *bpffs*.
+-- 
+1.8.3.1
 
-Hi, the two patches look OK to me, but it would be nice to have a bit
-more context on what the flags do other than “fixing this particular
-issue” and how they improve bpftool security. It would also be
-interesting to have a note on what it does on various architectures, my
-understanding is that only some archs are supported (I read AArch64,
-m68k, PowerPC and SPARC), I guess the flags are silently ignored on x86
-for example?
-
-Thanks,
-Quentin
