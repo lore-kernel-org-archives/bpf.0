@@ -2,200 +2,138 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09400C54EE9
-	for <bpf@archiver.kernel.org>; Tue, 27 Sep 2022 11:16:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95639C07E9D
+	for <bpf@archiver.kernel.org>; Tue, 27 Sep 2022 11:27:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231833AbiI0LQw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 27 Sep 2022 07:16:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35310 "EHLO
+        id S230099AbiI0L1E (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 27 Sep 2022 07:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231871AbiI0LQc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:16:32 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C336D553
-        for <bpf@vger.kernel.org>; Tue, 27 Sep 2022 04:15:58 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id c81so11488937oif.3
-        for <bpf@vger.kernel.org>; Tue, 27 Sep 2022 04:15:58 -0700 (PDT)
+        with ESMTP id S231938AbiI0L0l (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 27 Sep 2022 07:26:41 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44110151010
+        for <bpf@vger.kernel.org>; Tue, 27 Sep 2022 04:24:24 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id h7so2105936wru.10
+        for <bpf@vger.kernel.org>; Tue, 27 Sep 2022 04:24:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=R6DEIK2Zq+FTX+wZyA6Mcr+7aOgLXcB6/3yVSe028aA=;
-        b=RysijwsUAJ4+AIMPMC72NnJNhU1LRFV/xN+4XEjPHCtNvNhAooO3QNXxGIrHD3zvZj
-         qFWMnbTbREVx92DLjafJmkzXtbVClWEB9KvKD62HrSIEEDCdZItaQRTrp31bxXLGlVJ4
-         K/EOtnC0RNgEQGyBZqMf/UXWUj+WYsrm8Iv2KJ0Pg+cwVMwfoFk7uBsGWfpwX3XcmHLh
-         V+lLHddpoD9SXn4OAUPgVPBo33FrI/SsGfCuE/XHojDfvoc5ganpSwavjgzxv5laz3No
-         quq2QtFZv+S1jnGgwpvsMoWYaCzb3wF5uQt/CLtqYXP5zEnrU3vRkSrjJgmZo9Tn8kZC
-         RQlg==
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=M5jzKo1Y6yI8r6q8Sre+cxDLdD/2A2kaYMD25zdlE5Y=;
+        b=wY0y/gjDHN0kyfvnbXiYP1LJWlasB9eHWujUMSjiBEt1tVtKsFWxqZCosRJ2FEyitc
+         rcwP5o7zIXVkpPWjB5+JKDgDYsKJPvxySRdElxlJ3UicgGCRaXMMMO40KDgBNXMNAhwk
+         uR6DbnYzzqeBNhFcl/BGOA2okT8591/ST+yaDc9naDI1rh56kyT442rbsCWfmdmA/qYN
+         2zqOjW8tpoBe5N97UhplymbT15S39fMe99SuUVc/kY18KDGbWYVOtw04KdWVoSWPQE1l
+         Cvq9FPIv880ZYltFD/m5PPlfRNdclm/luwQxe9HQN8IW1L9Sa2qchR7ctoLQ8KdRA+Pa
+         ompA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=R6DEIK2Zq+FTX+wZyA6Mcr+7aOgLXcB6/3yVSe028aA=;
-        b=sTMj6UA2NW8OE21xGLxMEUtE0g9UNg4NFca14jpt5LI+3hY0RnAwofADKDFKj6ceiT
-         lXh2uCaWLFYuFd9IhMqgPXtrPMvZvx8goXPD9A9QZBegq/xjAUdRTdJTD0BjXmNpajKt
-         W9cwxLY199dqDEfjTjxZVGr5zYAHvGN0hT5D3rEF9zzUQktaswpNldQTeyyXlkFVIefJ
-         Hov5YT3wG/C4i3gW5aUfeJ71b+U9ivrhE+GRgCrPyxKbLp6jltJvE6NavQd6k32V0j6U
-         uYd9PhWD5QKF04Tay+IvuDpQxRzBi4QxcS+EAjeZPZbVBvChGuVnrjCCHth/jKQUbLrT
-         9zqw==
-X-Gm-Message-State: ACrzQf265KgsB7FLoS3C7mfLKkv6UVeatDzl6bCiJ3NcWX9NgX4KL1lJ
-        QrkZ25oL65h5dsdiNva925gS62z7ubjFK+uHI/8oEQ==
-X-Google-Smtp-Source: AMsMyM6ZFNdptDkcaJzdd4BuwwP5UqO4ID3fTeODCcJ8PdTnxhwQseJ8nJrPrng+q6GITOhMhHDgXb0m3aGt0rQYaxI=
-X-Received: by 2002:a05:6808:148d:b0:350:7858:63ce with SMTP id
- e13-20020a056808148d00b00350785863cemr1518431oiw.106.1664277357708; Tue, 27
- Sep 2022 04:15:57 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=M5jzKo1Y6yI8r6q8Sre+cxDLdD/2A2kaYMD25zdlE5Y=;
+        b=z/g72sowfbPDMprqchvKOTiSSQRzOIe5gha2tIW84vex3j6SnCOVUa2CCvTDn1kyYZ
+         123FAOtBu1wWaBzbT+n+2T+5voto8gQ2Z9T9HA59lEfOnDtuxbI+94V8XsCnnDmqVf7C
+         25n5nfbbTPNWxyi0YZy4M+oXu2vuMqKyWkzI49qJDwq9G84L8Pe4FYBdFU1BBRETKEZb
+         iDB6jpCSDJeR0cYx0NyZe+ulEFaqZeySSLd1DWE1+T7KYJXWjX9NHDQNrh+RD2wfwUYg
+         EEeChy9zxtp3o28aCdVMkemBijqLCGwNbFnCA7+M0vggRh3jCtdRkwdkFWTNoLOszU2y
+         e9eg==
+X-Gm-Message-State: ACrzQf27u6EqH6kSRp5aoggSM+GGIItptWXP1d2bAE3/+rRGh78Y05mP
+        H8o54qnIQVQB6U5KlPsyYAjtaw==
+X-Google-Smtp-Source: AMsMyM7hdNgWKg7o40V9KPh9IqnsmYOoGY4isSQArZdor/24G3ERCBhxkIfKfwq8gTq4l5ezW5oW8A==
+X-Received: by 2002:a5d:54cd:0:b0:22c:8df8:62c6 with SMTP id x13-20020a5d54cd000000b0022c8df862c6mr11862797wrv.276.1664277859672;
+        Tue, 27 Sep 2022 04:24:19 -0700 (PDT)
+Received: from [192.168.178.32] ([51.155.200.13])
+        by smtp.gmail.com with ESMTPSA id p9-20020adfe609000000b0022add5a6fb1sm1614648wrm.30.2022.09.27.04.24.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 04:24:19 -0700 (PDT)
+Message-ID: <896ae326-125b-5d23-2870-aeaa95341c64@isovalent.com>
+Date:   Tue, 27 Sep 2022 12:24:18 +0100
 MIME-Version: 1.0
-References: <88410cddd31197ea26840d7dd71612bece8c6acf.1663871981.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <88410cddd31197ea26840d7dd71612bece8c6acf.1663871981.git.christophe.jaillet@wanadoo.fr>
-From:   Jamal Hadi Salim <jhs@mojatatu.com>
-Date:   Tue, 27 Sep 2022 07:15:46 -0400
-Message-ID: <CAM0EoM=EsyAYfQreLvUhyr1csuR2SQx1hLFzVX86OhHhLdU5WA@mail.gmail.com>
-Subject: Re: [PATCH v2] headers: Remove some left-over license text
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     yhs@fb.com, Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH bpf-next v2 08/13] bpftool: Add support for qp-trie map
+Content-Language: en-GB
+To:     Hou Tao <houtao@huaweicloud.com>, bpf@vger.kernel.org
+Cc:     Martin KaFai Lau <kafai@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
+        Yonghong Song <yhs@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>, houtao1@huawei.com
+References: <20220924133620.4147153-1-houtao@huaweicloud.com>
+ <20220924133620.4147153-9-houtao@huaweicloud.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <20220924133620.4147153-9-houtao@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Sat Sep 24 2022 14:36:15 GMT+0100 (British Summer Time) ~ Hou Tao
+<houtao@huaweicloud.com>
+> From: Hou Tao <houtao1@huawei.com>
+> 
+> Support lookup/update/delete/iterate/dump operations for qp-trie in
+> bpftool. Mainly add two functions: one function to parse dynptr key and
+> another one to dump dynptr key. The input format of dynptr key is:
+> "key [hex] size BYTES" and the output format of dynptr key is:
+> "size BYTES".
+> 
+> The following is the output when using bpftool to manipulate
+> qp-trie:
+> 
+>   $ bpftool map pin id 724953 /sys/fs/bpf/qp
+>   $ bpftool map show pinned /sys/fs/bpf/qp
+>   724953: qp_trie  name qp_trie  flags 0x1
+>           key 16B  value 4B  max_entries 2  memlock 65536B  map_extra 8
+>           btf_id 779
+>           pids test_qp_trie.bi(109167)
+>   $ bpftool map dump pinned /sys/fs/bpf/qp
+>   [{
+>           "key": {
+>               "size": 4,
+>               "data": ["0x0","0x0","0x0","0x0"
+>               ]
+>           },
+>           "value": 0
+>       },{
+>           "key": {
+>               "size": 4,
+>               "data": ["0x0","0x0","0x0","0x1"
+>               ]
+>           },
+>           "value": 2
+>       }
+>   ]
+>   $ bpftool map lookup pinned /sys/fs/bpf/qp key 4 0 0 0 1
+>   {
+>       "key": {
+>           "size": 4,
+>           "data": ["0x0","0x0","0x0","0x1"
+>           ]
+>       },
+>       "value": 2
+>   }
 
-cheers,
-jamal
+The bpftool patch looks good, thanks! I have one comment on the syntax
+for the keys, I don't find it intuitive to have the size as the first
+BYTE. It makes it awkward to understand what the command does if we read
+it in the wild without knowing the map type. I can see two alternatives,
+either adding a keyword (e.g., "key_size 4 key 0 0 0 1"), or changing
+parse_bytes() to make it able to parse as much as it can then count the
+bytes, when we don't know in advance how many we get.
 
-On Thu, Sep 22, 2022 at 2:41 PM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
->
-> Remove some left-over from commit e2be04c7f995 ("License cleanup: add SPDX
-> license identifier to uapi header files with a license")
->
-> When the SPDX-License-Identifier tag has been added, the corresponding
-> license text has not been removed.
->
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> Changes since v1:
->   - add tools/include/uapi/linux/tc_act/tc_bpf.h   [Yonghong Song <yhs@fb.com>]
->
-> v1: https://lore.kernel.org/all/2a15aba72497e78ff08c8b8a8bfe3cf5a3e6ee18.1662897019.git.christophe.jaillet@wanadoo.fr/
-> ---
->  include/uapi/linux/tc_act/tc_bpf.h        |  5 -----
->  include/uapi/linux/tc_act/tc_skbedit.h    | 13 -------------
->  include/uapi/linux/tc_act/tc_skbmod.h     |  7 +------
->  include/uapi/linux/tc_act/tc_tunnel_key.h |  5 -----
->  include/uapi/linux/tc_act/tc_vlan.h       |  5 -----
->  tools/include/uapi/linux/tc_act/tc_bpf.h  |  5 -----
->  6 files changed, 1 insertion(+), 39 deletions(-)
->
-> diff --git a/include/uapi/linux/tc_act/tc_bpf.h b/include/uapi/linux/tc_act/tc_bpf.h
-> index 653c4f94f76e..fe6c8f8f3e8c 100644
-> --- a/include/uapi/linux/tc_act/tc_bpf.h
-> +++ b/include/uapi/linux/tc_act/tc_bpf.h
-> @@ -1,11 +1,6 @@
->  /* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
->  /*
->   * Copyright (c) 2015 Jiri Pirko <jiri@resnulli.us>
-> - *
-> - * This program is free software; you can redistribute it and/or modify
-> - * it under the terms of the GNU General Public License as published by
-> - * the Free Software Foundation; either version 2 of the License, or
-> - * (at your option) any later version.
->   */
->
->  #ifndef __LINUX_TC_BPF_H
-> diff --git a/include/uapi/linux/tc_act/tc_skbedit.h b/include/uapi/linux/tc_act/tc_skbedit.h
-> index 6cb6101208d0..64032513cc4c 100644
-> --- a/include/uapi/linux/tc_act/tc_skbedit.h
-> +++ b/include/uapi/linux/tc_act/tc_skbedit.h
-> @@ -2,19 +2,6 @@
->  /*
->   * Copyright (c) 2008, Intel Corporation.
->   *
-> - * This program is free software; you can redistribute it and/or modify it
-> - * under the terms and conditions of the GNU General Public License,
-> - * version 2, as published by the Free Software Foundation.
-> - *
-> - * This program is distributed in the hope it will be useful, but WITHOUT
-> - * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-> - * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-> - * more details.
-> - *
-> - * You should have received a copy of the GNU General Public License along with
-> - * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-> - * Place - Suite 330, Boston, MA 02111-1307 USA.
-> - *
->   * Author: Alexander Duyck <alexander.h.duyck@intel.com>
->   */
->
-> diff --git a/include/uapi/linux/tc_act/tc_skbmod.h b/include/uapi/linux/tc_act/tc_skbmod.h
-> index af6ef2cfbf3d..ac62c9a993ea 100644
-> --- a/include/uapi/linux/tc_act/tc_skbmod.h
-> +++ b/include/uapi/linux/tc_act/tc_skbmod.h
-> @@ -1,12 +1,7 @@
->  /* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
->  /*
->   * Copyright (c) 2016, Jamal Hadi Salim
-> - *
-> - * This program is free software; you can redistribute it and/or modify
-> - * it under the terms of the GNU General Public License as published by
-> - * the Free Software Foundation; either version 2 of the License, or
-> - * (at your option) any later version.
-> -*/
-> + */
->
->  #ifndef __LINUX_TC_SKBMOD_H
->  #define __LINUX_TC_SKBMOD_H
-> diff --git a/include/uapi/linux/tc_act/tc_tunnel_key.h b/include/uapi/linux/tc_act/tc_tunnel_key.h
-> index 3f10dc4e7a4b..49ad4033951b 100644
-> --- a/include/uapi/linux/tc_act/tc_tunnel_key.h
-> +++ b/include/uapi/linux/tc_act/tc_tunnel_key.h
-> @@ -2,11 +2,6 @@
->  /*
->   * Copyright (c) 2016, Amir Vadai <amir@vadai.me>
->   * Copyright (c) 2016, Mellanox Technologies. All rights reserved.
-> - *
-> - * This program is free software; you can redistribute it and/or modify
-> - * it under the terms of the GNU General Public License as published by
-> - * the Free Software Foundation; either version 2 of the License, or
-> - * (at your option) any later version.
->   */
->
->  #ifndef __LINUX_TC_TUNNEL_KEY_H
-> diff --git a/include/uapi/linux/tc_act/tc_vlan.h b/include/uapi/linux/tc_act/tc_vlan.h
-> index 5b306fe815cc..3e1f8e57cdd2 100644
-> --- a/include/uapi/linux/tc_act/tc_vlan.h
-> +++ b/include/uapi/linux/tc_act/tc_vlan.h
-> @@ -1,11 +1,6 @@
->  /* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
->  /*
->   * Copyright (c) 2014 Jiri Pirko <jiri@resnulli.us>
-> - *
-> - * This program is free software; you can redistribute it and/or modify
-> - * it under the terms of the GNU General Public License as published by
-> - * the Free Software Foundation; either version 2 of the License, or
-> - * (at your option) any later version.
->   */
->
->  #ifndef __LINUX_TC_VLAN_H
-> diff --git a/tools/include/uapi/linux/tc_act/tc_bpf.h b/tools/include/uapi/linux/tc_act/tc_bpf.h
-> index 653c4f94f76e..fe6c8f8f3e8c 100644
-> --- a/tools/include/uapi/linux/tc_act/tc_bpf.h
-> +++ b/tools/include/uapi/linux/tc_act/tc_bpf.h
-> @@ -1,11 +1,6 @@
->  /* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
->  /*
->   * Copyright (c) 2015 Jiri Pirko <jiri@resnulli.us>
-> - *
-> - * This program is free software; you can redistribute it and/or modify
-> - * it under the terms of the GNU General Public License as published by
-> - * the Free Software Foundation; either version 2 of the License, or
-> - * (at your option) any later version.
->   */
->
->  #ifndef __LINUX_TC_BPF_H
-> --
-> 2.34.1
->
+Thanks,
+Quentin
+
