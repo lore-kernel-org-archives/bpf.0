@@ -2,58 +2,58 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C563BC6FA82
-	for <bpf@archiver.kernel.org>; Tue, 27 Sep 2022 19:00:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1898C07E9D
+	for <bpf@archiver.kernel.org>; Tue, 27 Sep 2022 19:00:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231312AbiI0TAt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 27 Sep 2022 15:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53602 "EHLO
+        id S231784AbiI0TAy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 27 Sep 2022 15:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231329AbiI0TAc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 27 Sep 2022 15:00:32 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E46D18A4A3
-        for <bpf@vger.kernel.org>; Tue, 27 Sep 2022 12:00:28 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id f23so9901509plr.6
-        for <bpf@vger.kernel.org>; Tue, 27 Sep 2022 12:00:28 -0700 (PDT)
+        with ESMTP id S231563AbiI0TAo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 27 Sep 2022 15:00:44 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A68161CC1
+        for <bpf@vger.kernel.org>; Tue, 27 Sep 2022 12:00:30 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id i15-20020a17090a4b8f00b0020073b4ac27so10887170pjh.3
+        for <bpf@vger.kernel.org>; Tue, 27 Sep 2022 12:00:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=XxkoEN7lZP3Dtq56SUjv5/hG8wKNzCHhcEcj/U1ulzU=;
-        b=DDCdeVJ7ww8Lrc/EalswqOY30PfAlCZ8IoZiAdrx9UPZpt+DSiu32A+7V3sM7/19A7
-         8Kmz/L73b/04hJfPbxVCezyd0Jo4RHvbkUDL0J5rpxSIoHRTH2w6mIsXbQWBJzJmQjIF
-         SU8dOw41pwU/RMzvuClNSSsyZf3mgLFlAte9HS9IrBaPMKaoXGw1Krpz85GzKv+oGjAI
-         2vTdWW9hVDNzmQy1QH/Owjvz4w64sWZ1y+r0cBImNKftTZO55Y9g1oRrprfYB9GvhJGQ
-         CQNpX8hc+2NwX6JiKqWykfHTVD+SG9at179a8/TeyI9IXrRi3sgz3oOMO+bJQ+Q5ENGR
-         YkNA==
+        bh=1IK9f71Lu9DwK4AC/QfvBLYh1EUy09UxmzY/Y/A+poE=;
+        b=hPZ8uChI5QK5l0A+yP+dFDX4k+8nkDCkWY6v1TzPw6f/DKz2o9+gv8Iku4f0vvLs16
+         HG+VhTt68vDbg2rMarOv0IJ83G6+Pu9WSWr/8feecDc06FNB65yPJL0J3mz/L4Yg84ES
+         ZNQzkXF2UpBDpzOxjnfxbMcqSv+pFZD53JQuL0ytn2O8Hyg/Da9RbN9TFUigLkB2+t3o
+         4u8NS7yT72oexkyLdIwRhq15N9lx8tUj0W+/rYdwMFtnK7LVSoufDaJQrzu0K33lDP77
+         /fjb6DfYZqre5WnKt/WC8Dvp2PUZRIWb6SY/0CbLbG6pONxJ3cKIgXNAxkS1zuZGXioO
+         Dfaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=XxkoEN7lZP3Dtq56SUjv5/hG8wKNzCHhcEcj/U1ulzU=;
-        b=SMSbDC3hw/KmMsSlqFh/QsR0ltYrFebz7VdqS8tL4nUXYQKWXClAHZui9nifhQAr3V
-         QSDGIBZMKxTvXhSIx6YgvwhpeMUhWFZjX7r2PB0XbcjO9ig2l/rgvS66u7D/5VYSjkll
-         W7bLTtyojjHd/E5ZYcmhpLc1c7aKDz0eeSZb21NIe+JWDqIzIrC7a13riKR8TsSi6ZOm
-         dxEiGG6Rpi7CEiEpgY7kaSLBch72T0bkwoiZ8QcF5BQrtIjG23f5+dX5765sabQY576W
-         IDnceN7oWFKKl9/cLy/6MErv0Nx/scl8EOSnzO1TIKNdeGf8QsieB3FcgxOhmkFVeDYM
-         9BPA==
-X-Gm-Message-State: ACrzQf0Rrb4PgDaPVHfozhoVx6vbYeYNLJ0ZAmPh6sTrAHXELw8RrMFa
-        S4+Bjx2+UboqnlZr2br3L0ZiFE2r4j0=
-X-Google-Smtp-Source: AMsMyM6oQPkHYKJuIt9OoZrZ64Z9+5WAVxfCU6MRKYmkekti6AjyNN4HcvLvQdzDai8kBYH2BMHHOQ==
-X-Received: by 2002:a17:90a:ba8f:b0:202:f6b1:eebc with SMTP id t15-20020a17090aba8f00b00202f6b1eebcmr6137485pjr.241.1664305222644;
-        Tue, 27 Sep 2022 12:00:22 -0700 (PDT)
+        bh=1IK9f71Lu9DwK4AC/QfvBLYh1EUy09UxmzY/Y/A+poE=;
+        b=vgnKPiOhIKzHhoyeEjisHg47wLfI3IB8HuQoR1iFXQSKjvD3o+T5wrOguga7fbChSG
+         q8iGIn6jGjPl1gUMEqwhdYrJOBBJEMbRxj9g8u+q0k8JWPTiSaxBG4uw+C2zlilVofOD
+         TuPI+QMwei6kSxPapOxQ7z0VkWPJWBqugNFFaRcEERhLZkzZANJTTzNYqrMgf3Cc8kh5
+         IeDmPJJGHd+UwnAGSAHHF74dsrP6rTtYFl68YAeT6fl7DGKjGXDib6MxAuQaP8+HOqex
+         3eRuBblH47kiryBzakE/AjZrW/znrBXWOKu0wUvcWvIKId6obp9f7Z3ic6R47l8tRWIs
+         tKeA==
+X-Gm-Message-State: ACrzQf3CA32dNKqHeancBwIjESzXgKUqo68nmNzaGeiutAAORvQGhQ2K
+        U/UUMa7bxvxoLr1pUW3xzCcNSGN4N64=
+X-Google-Smtp-Source: AMsMyM4yfPAKnDypkFN7w+FAhRAhhZY9T5gme1lLgR+o9ia7DtK4kxebob0rinByd1CQzLJ0Aztoow==
+X-Received: by 2002:a17:902:7ed6:b0:178:378a:ebbf with SMTP id p22-20020a1709027ed600b00178378aebbfmr28827436plb.117.1664305228957;
+        Tue, 27 Sep 2022 12:00:28 -0700 (PDT)
 Received: from mariner-vm.. ([131.107.1.181])
-        by smtp.gmail.com with ESMTPSA id mi9-20020a17090b4b4900b001f8aee0d826sm8737557pjb.53.2022.09.27.12.00.21
+        by smtp.gmail.com with ESMTPSA id mi9-20020a17090b4b4900b001f8aee0d826sm8737557pjb.53.2022.09.27.12.00.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 12:00:22 -0700 (PDT)
+        Tue, 27 Sep 2022 12:00:28 -0700 (PDT)
 From:   dthaler1968@googlemail.com
 To:     bpf@vger.kernel.org
 Cc:     Dave Thaler <dthaler@microsoft.com>
-Subject: [PATCH 07/15] ebpf-docs: Fix modulo zero, division by zero, overflow, and underflow
-Date:   Tue, 27 Sep 2022 18:59:50 +0000
-Message-Id: <20220927185958.14995-7-dthaler1968@googlemail.com>
+Subject: [PATCH 12/15] ebpf-docs: Add Linux note about register calling convention
+Date:   Tue, 27 Sep 2022 18:59:55 +0000
+Message-Id: <20220927185958.14995-12-dthaler1968@googlemail.com>
 X-Mailer: git-send-email 2.33.4
 In-Reply-To: <20220927185958.14995-1-dthaler1968@googlemail.com>
 References: <20220927185958.14995-1-dthaler1968@googlemail.com>
@@ -67,56 +67,25 @@ From: Dave Thaler <dthaler@microsoft.com>
 
 Signed-off-by: Dave Thaler <dthaler@microsoft.com>
 ---
- Documentation/bpf/instruction-set.rst | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
+ Documentation/bpf/linux-notes.rst | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/bpf/instruction-set.rst b/Documentation/bpf/instruction-set.rst
-index a24bc5d53..3c5a63612 100644
---- a/Documentation/bpf/instruction-set.rst
-+++ b/Documentation/bpf/instruction-set.rst
-@@ -103,19 +103,26 @@ code      value  description
- BPF_ADD   0x00   dst += src
- BPF_SUB   0x10   dst -= src
- BPF_MUL   0x20   dst \*= src
--BPF_DIV   0x30   dst /= src
-+BPF_DIV   0x30   dst = (src != 0) ? (dst / src) : 0
- BPF_OR    0x40   dst \|= src
- BPF_AND   0x50   dst &= src
- BPF_LSH   0x60   dst <<= src
- BPF_RSH   0x70   dst >>= src
- BPF_NEG   0x80   dst = ~src
--BPF_MOD   0x90   dst %= src
-+BPF_MOD   0x90   dst = (src != 0) ? (dst % src) : dst
- BPF_XOR   0xa0   dst ^= src
- BPF_MOV   0xb0   dst = src
- BPF_ARSH  0xc0   sign extending shift right
- BPF_END   0xd0   byte swap operations (see `Byte swap instructions`_ below)
- ========  =====  ==========================================================
+diff --git a/Documentation/bpf/linux-notes.rst b/Documentation/bpf/linux-notes.rst
+index 522ebe27d..0581ba326 100644
+--- a/Documentation/bpf/linux-notes.rst
++++ b/Documentation/bpf/linux-notes.rst
+@@ -7,6 +7,12 @@ Linux implementation notes
  
-+Underflow and overflow are allowed during arithmetic operations,
-+meaning the 64-bit or 32-bit value will wrap.  If
-+eBPF program execution would result in division by zero,
-+the destination register is instead set to zero.
-+If execution would result in modulo by zero,
-+the destination register is instead left unchanged.
+ This document provides more details specific to the Linux kernel implementation of the eBPF instruction set.
+ 
++Registers and calling convention
++================================
 +
- ``BPF_ADD | BPF_X | BPF_ALU`` means::
- 
-   dst_reg = (uint32_t) dst_reg + (uint32_t) src_reg;
-@@ -135,6 +142,14 @@ where '(uint32_t)' indicates truncation to 32 bits.
-   src_reg = src_reg ^ imm32
- 
- 
-+Also note that the modulo operation often varies by language
-+when the dividend or divisor are negative, where Python, Ruby, etc.
-+differ from C, Go, Java, etc. This specification requires that
-+modulo use truncated division (where -13 % 3 == -1) as implemented
-+in C, Go, etc.:
++All program types only use R1 which contains the "context", which is typically a structure containing all
++the inputs needed, and the exit value for eBPF programs is passed as a 32 bit value.
 +
-+   a % n = a - n * trunc(a / n)
-+
- Byte swap instructions
- ~~~~~~~~~~~~~~~~~~~~~~
+ Arithmetic instructions
+ =======================
  
 -- 
 2.33.4
