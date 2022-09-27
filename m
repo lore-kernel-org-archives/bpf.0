@@ -2,109 +2,81 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 623D1C54EE9
-	for <bpf@archiver.kernel.org>; Tue, 27 Sep 2022 12:26:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57B2FC54EE9
+	for <bpf@archiver.kernel.org>; Tue, 27 Sep 2022 12:41:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231865AbiI0M0t (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 27 Sep 2022 08:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34002 "EHLO
+        id S231312AbiI0MlD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 27 Sep 2022 08:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231896AbiI0MZ5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 27 Sep 2022 08:25:57 -0400
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E6E5D0E1;
-        Tue, 27 Sep 2022 05:25:40 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4McJbN3hPnz9xHdt;
-        Tue, 27 Sep 2022 20:19:44 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwCnnpKo6zJjXcR8AA--.32036S2;
-        Tue, 27 Sep 2022 13:25:20 +0100 (CET)
-Message-ID: <55ad7ac680a8300a7f1f6e28f16d98f34223468a.camel@huaweicloud.com>
-Subject: Re: [PATCH 3/3] tools/build: Display logical OR of a feature flavors
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     peterz@infradead.org, mingo@redhat.com,
-        Jiri Olsa <olsajiri@gmail.com>, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, namhyung@kernel.org,
-        quentin@isovalent.com, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Tue, 27 Sep 2022 14:25:09 +0200
-In-Reply-To: <YzLq5uar4dZlT1s6@kernel.org>
-References: <20220818120957.319995-1-roberto.sassu@huaweicloud.com>
-         <20220818120957.319995-3-roberto.sassu@huaweicloud.com>
-         <YwNhabqHEq3PfNM8@krava>
-         <64352c51c5dcbab389201a16733f3157a1ea591e.camel@huaweicloud.com>
-         <75986095d7ada2b24784ef356abc6ce17307575d.camel@huaweicloud.com>
-         <YzLq5uar4dZlT1s6@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        with ESMTP id S232406AbiI0Mkx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 27 Sep 2022 08:40:53 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4C7AE9EB;
+        Tue, 27 Sep 2022 05:40:45 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4McK0z3sQWzHqJM;
+        Tue, 27 Sep 2022 20:38:27 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
+ (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 27 Sep
+ 2022 20:40:42 +0800
+From:   Zhengchao Shao <shaozhengchao@huawei.com>
+To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <haoluo@google.com>, <jolsa@kernel.org>, <weiyongjun1@huawei.com>,
+        <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
+Subject: [PATCH net-next 2/3] net: sched: cls_api: introduce tc_cls_bind_class() helper
+Date:   Tue, 27 Sep 2022 20:48:54 +0800
+Message-ID: <20220927124855.252023-3-shaozhengchao@huawei.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220927124855.252023-1-shaozhengchao@huawei.com>
+References: <20220927124855.252023-1-shaozhengchao@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwCnnpKo6zJjXcR8AA--.32036S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJr4xGFy5WFy3Kw15WryxuFg_yoW8GF47p3
-        yrJayftr4DXr1rAa1qyw15Zrs0krZrta1DX3yrW347Z3ZF9rnakF1Ikay8uF9rG34rur12
-        vrW8Xa47ZryUC3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAIBF1jj4OAUAACst
+Content-Type: text/plain
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 2022-09-27 at 13:21 +0100, Arnaldo Carvalho de Melo wrote:
-> Em Tue, Sep 27, 2022 at 09:14:34AM +0200, Roberto Sassu escreveu:
-> > On Mon, 2022-08-22 at 13:24 +0200, Roberto Sassu wrote:
-> > > On Mon, 2022-08-22 at 12:58 +0200, Jiri Olsa wrote:
-> > > > On Thu, Aug 18, 2022 at 02:09:57PM +0200, 
-> > > 
-> > > [...]
-> > > 
-> > > > > In verbose mode, of if no group is defined for a feature,
-> > > > > show
-> > > > > the
-> > > > > feature
-> > > > > detection result as before.
-> > > 
-> > > Thanks Jiri.
-> > > 
-> > > 'or' instead of 'of', if the patch can be edited.
-> > 
-> > Hi Arnaldo
-> > 
-> > will you take these patches?
-> 
-> The tools/build one I have in my perf/core branch, for v6.1.
-> 
-> ⬢[acme@toolbox perf]$ git log --oneline --author 
-> roberto.sassu@huawei.com tools/{build,perf,lib}
-> 924b0da1154fa814 tools build: Display logical OR of a feature flavors
-> 1903f4ac2f3a6d33 tools build: Increment room for feature name in
-> feature detection output
-> 48ab65e0fec644b4 tools build: Fix feature detection output due to
-> eval expansion
-> 5b245985a6de5ac1 tools build: Switch to new openssl API for test-
-> libcrypto
-> dd6775f986144a9e perf build: Remove FEATURE_CHECK_LDFLAGS-
-> disassembler-{four-args,init-styled} setting
-> 629b98e2b1c6efcf tools, build: Retry detection of bfd-related
-> features
-> ⬢[acme@toolbox perf]$
+All the bind_class callback duplicate the same logic, this patch
+introduces tc_cls_bind_class() helper for common usage.
 
-Oh, thanks. I had a quick look today at the web interface. I didn't see
-them.
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+---
+ include/net/pkt_cls.h | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Roberto
+diff --git a/include/net/pkt_cls.h b/include/net/pkt_cls.h
+index d376c995d906..4cabb32a2ad9 100644
+--- a/include/net/pkt_cls.h
++++ b/include/net/pkt_cls.h
+@@ -210,6 +210,18 @@ tcf_unbind_filter(struct tcf_proto *tp, struct tcf_result *r)
+ 	__tcf_unbind_filter(q, r);
+ }
+ 
++static inline void tc_cls_bind_class(u32 classid, unsigned long cl,
++				     void *q, struct tcf_result *res,
++				     unsigned long base)
++{
++	if (res->classid == classid) {
++		if (cl)
++			__tcf_bind_filter(q, res, base);
++		else
++			__tcf_unbind_filter(q, res);
++	}
++}
++
+ struct tcf_exts {
+ #ifdef CONFIG_NET_CLS_ACT
+ 	__u32	type; /* for backward compat(TCA_OLD_COMPAT) */
+-- 
+2.17.1
 
