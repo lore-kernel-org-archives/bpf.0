@@ -2,227 +2,83 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42EC9C6FA82
-	for <bpf@archiver.kernel.org>; Tue, 27 Sep 2022 12:41:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02439C07E9D
+	for <bpf@archiver.kernel.org>; Tue, 27 Sep 2022 12:43:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232297AbiI0MlI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 27 Sep 2022 08:41:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41250 "EHLO
+        id S231519AbiI0Mnl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 27 Sep 2022 08:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232364AbiI0Mk5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 27 Sep 2022 08:40:57 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09B7B089E;
-        Tue, 27 Sep 2022 05:40:46 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4McJy54kSZzHtdQ;
-        Tue, 27 Sep 2022 20:35:57 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
- (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 27 Sep
- 2022 20:40:43 +0800
-From:   Zhengchao Shao <shaozhengchao@huawei.com>
-To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>, <weiyongjun1@huawei.com>,
-        <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH net-next 3/3] net: sched: use tc_cls_bind_class() in filter
-Date:   Tue, 27 Sep 2022 20:48:55 +0800
-Message-ID: <20220927124855.252023-4-shaozhengchao@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220927124855.252023-1-shaozhengchao@huawei.com>
-References: <20220927124855.252023-1-shaozhengchao@huawei.com>
+        with ESMTP id S231197AbiI0Mnj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 27 Sep 2022 08:43:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E15615E4D9
+        for <bpf@vger.kernel.org>; Tue, 27 Sep 2022 05:43:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C135DB81B97
+        for <bpf@vger.kernel.org>; Tue, 27 Sep 2022 12:43:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B7FEC433C1;
+        Tue, 27 Sep 2022 12:43:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664282615;
+        bh=vIDbrl3yjZKn/Jc6mYdhqBJ5ndukoL7NPn7wIE7k/Mo=;
+        h=From:To:Subject:In-Reply-To:References:Date:From;
+        b=O0cE6A1v7m80gNKlSKCGFRnoaEnb2eHAFvwVN+3ZKG+vFTQRRN6wGglZM+KT+n9Kx
+         nFK+drgzgSg05o8O9tGhreZ1LJKta0skoZJJKtAOcovK8iaPG26T4l5Kam5o7IURqj
+         NUKFfNu2o6jY2XRuK80ZPnhua+d1CnN+X8NTeV5sguaYuRZWsZm/dDToAOgnyofwVy
+         Gil1kLGtjAASHgAwuzAU6PkcHZPGYUrXkR+i9JAif7nN8lIuEqh89/ABX7JKGqYGJx
+         wZnAEsGMs5M+/qc2geM5P0PVamelTt5a+iiNWWAc0hmmMFNXcQExxNjYK1ukKwHTcY
+         priypUHq//OVA==
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id C9E9161CFFD; Tue, 27 Sep 2022 14:43:32 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>
+To:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        bpf <bpf@vger.kernel.org>
+Subject: Re: The future of bpf_dispatcher
+In-Reply-To: <CAJ+HfNgnvWaQcZKC37ayZgrWdLa1Ni9Zvena8NxyEYPTeAoMsw@mail.gmail.com>
+References: <CAJ+HfNgnvWaQcZKC37ayZgrWdLa1Ni9Zvena8NxyEYPTeAoMsw@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Tue, 27 Sep 2022 14:43:32 +0200
+Message-ID: <87tu4trnrf.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use tc_cls_bind_class() in filter.
+Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com> writes:
 
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
----
- net/sched/cls_basic.c    | 7 +------
- net/sched/cls_bpf.c      | 7 +------
- net/sched/cls_flower.c   | 7 +------
- net/sched/cls_fw.c       | 7 +------
- net/sched/cls_matchall.c | 7 +------
- net/sched/cls_route.c    | 7 +------
- net/sched/cls_rsvp.h     | 7 +------
- net/sched/cls_tcindex.c  | 7 +------
- net/sched/cls_u32.c      | 7 +------
- 9 files changed, 9 insertions(+), 54 deletions(-)
+> In the recent weeks there have been various issues [1] [2] (warnings, ftr=
+ace
+> breakage) related to the bpf_dispatcher. The dispatcher was introduced
+> to reduce the cost of indirect calls for the XDP realm, and during the
+> whole retpoline timeline it was doing its job pretty good.
+>
+> However, it's a somewhat odd animal in the kernel, and very x86
+> specific.
+>
+> Is the bpf_dispatcher still relevant? If yes, can it be replaced by a
+> more generic functionality (e.g. static_calls)?
 
-diff --git a/net/sched/cls_basic.c b/net/sched/cls_basic.c
-index d9fbaa0fbe8b..d229ce99e554 100644
---- a/net/sched/cls_basic.c
-+++ b/net/sched/cls_basic.c
-@@ -261,12 +261,7 @@ static void basic_bind_class(void *fh, u32 classid, unsigned long cl, void *q,
- {
- 	struct basic_filter *f = fh;
- 
--	if (f && f->res.classid == classid) {
--		if (cl)
--			__tcf_bind_filter(q, &f->res, base);
--		else
--			__tcf_unbind_filter(q, &f->res);
--	}
-+	tc_cls_bind_class(classid, cl, q, &f->res, base);
- }
- 
- static int basic_dump(struct net *net, struct tcf_proto *tp, void *fh,
-diff --git a/net/sched/cls_bpf.c b/net/sched/cls_bpf.c
-index 938be14cfa3f..bc317b3eac12 100644
---- a/net/sched/cls_bpf.c
-+++ b/net/sched/cls_bpf.c
-@@ -635,12 +635,7 @@ static void cls_bpf_bind_class(void *fh, u32 classid, unsigned long cl,
- {
- 	struct cls_bpf_prog *prog = fh;
- 
--	if (prog && prog->res.classid == classid) {
--		if (cl)
--			__tcf_bind_filter(q, &prog->res, base);
--		else
--			__tcf_unbind_filter(q, &prog->res);
--	}
-+	tc_cls_bind_class(classid, cl, q, &prog->res, base);
- }
- 
- static void cls_bpf_walk(struct tcf_proto *tp, struct tcf_walker *arg,
-diff --git a/net/sched/cls_flower.c b/net/sched/cls_flower.c
-index 22d32b82bc09..25bc57ee6ea1 100644
---- a/net/sched/cls_flower.c
-+++ b/net/sched/cls_flower.c
-@@ -3405,12 +3405,7 @@ static void fl_bind_class(void *fh, u32 classid, unsigned long cl, void *q,
- {
- 	struct cls_fl_filter *f = fh;
- 
--	if (f && f->res.classid == classid) {
--		if (cl)
--			__tcf_bind_filter(q, &f->res, base);
--		else
--			__tcf_unbind_filter(q, &f->res);
--	}
-+	tc_cls_bind_class(classid, cl, q, &f->res, base);
- }
- 
- static bool fl_delete_empty(struct tcf_proto *tp)
-diff --git a/net/sched/cls_fw.c b/net/sched/cls_fw.c
-index fa66191574a4..a32351da968c 100644
---- a/net/sched/cls_fw.c
-+++ b/net/sched/cls_fw.c
-@@ -416,12 +416,7 @@ static void fw_bind_class(void *fh, u32 classid, unsigned long cl, void *q,
- {
- 	struct fw_filter *f = fh;
- 
--	if (f && f->res.classid == classid) {
--		if (cl)
--			__tcf_bind_filter(q, &f->res, base);
--		else
--			__tcf_unbind_filter(q, &f->res);
--	}
-+	tc_cls_bind_class(classid, cl, q, &f->res, base);
- }
- 
- static struct tcf_proto_ops cls_fw_ops __read_mostly = {
-diff --git a/net/sched/cls_matchall.c b/net/sched/cls_matchall.c
-index 63b99ffb7dbc..39a5d9c170de 100644
---- a/net/sched/cls_matchall.c
-+++ b/net/sched/cls_matchall.c
-@@ -394,12 +394,7 @@ static void mall_bind_class(void *fh, u32 classid, unsigned long cl, void *q,
- {
- 	struct cls_mall_head *head = fh;
- 
--	if (head && head->res.classid == classid) {
--		if (cl)
--			__tcf_bind_filter(q, &head->res, base);
--		else
--			__tcf_unbind_filter(q, &head->res);
--	}
-+	tc_cls_bind_class(classid, cl, q, &head->res, base);
- }
- 
- static struct tcf_proto_ops cls_mall_ops __read_mostly = {
-diff --git a/net/sched/cls_route.c b/net/sched/cls_route.c
-index 17bb04af2fa8..9e43b929d4ca 100644
---- a/net/sched/cls_route.c
-+++ b/net/sched/cls_route.c
-@@ -649,12 +649,7 @@ static void route4_bind_class(void *fh, u32 classid, unsigned long cl, void *q,
- {
- 	struct route4_filter *f = fh;
- 
--	if (f && f->res.classid == classid) {
--		if (cl)
--			__tcf_bind_filter(q, &f->res, base);
--		else
--			__tcf_unbind_filter(q, &f->res);
--	}
-+	tc_cls_bind_class(classid, cl, q, &f->res, base);
- }
- 
- static struct tcf_proto_ops cls_route4_ops __read_mostly = {
-diff --git a/net/sched/cls_rsvp.h b/net/sched/cls_rsvp.h
-index fb60f2c2c325..b00a7dbd0587 100644
---- a/net/sched/cls_rsvp.h
-+++ b/net/sched/cls_rsvp.h
-@@ -733,12 +733,7 @@ static void rsvp_bind_class(void *fh, u32 classid, unsigned long cl, void *q,
- {
- 	struct rsvp_filter *f = fh;
- 
--	if (f && f->res.classid == classid) {
--		if (cl)
--			__tcf_bind_filter(q, &f->res, base);
--		else
--			__tcf_unbind_filter(q, &f->res);
--	}
-+	tc_cls_bind_class(classid, cl, q, &f->res, base);
- }
- 
- static struct tcf_proto_ops RSVP_OPS __read_mostly = {
-diff --git a/net/sched/cls_tcindex.c b/net/sched/cls_tcindex.c
-index a33076033462..1c9eeb98d826 100644
---- a/net/sched/cls_tcindex.c
-+++ b/net/sched/cls_tcindex.c
-@@ -691,12 +691,7 @@ static void tcindex_bind_class(void *fh, u32 classid, unsigned long cl,
- {
- 	struct tcindex_filter_result *r = fh;
- 
--	if (r && r->res.classid == classid) {
--		if (cl)
--			__tcf_bind_filter(q, &r->res, base);
--		else
--			__tcf_unbind_filter(q, &r->res);
--	}
-+	tc_cls_bind_class(classid, cl, q, &r->res, base);
- }
- 
- static struct tcf_proto_ops cls_tcindex_ops __read_mostly = {
-diff --git a/net/sched/cls_u32.c b/net/sched/cls_u32.c
-index 58c7680faabd..fa7302503bf5 100644
---- a/net/sched/cls_u32.c
-+++ b/net/sched/cls_u32.c
-@@ -1246,12 +1246,7 @@ static void u32_bind_class(void *fh, u32 classid, unsigned long cl, void *q,
- {
- 	struct tc_u_knode *n = fh;
- 
--	if (n && n->res.classid == classid) {
--		if (cl)
--			__tcf_bind_filter(q, &n->res, base);
--		else
--			__tcf_unbind_filter(q, &n->res);
--	}
-+	tc_cls_bind_class(classid, cl, q, &n->res, base);
- }
- 
- static int u32_dump(struct net *net, struct tcf_proto *tp, void *fh,
--- 
-2.17.1
+During Daniel's talk at LPC (about TC attachment) he mentioned that he
+was planning to support multiple programs by iterating through an array
+and doing an indirect call into each. I asked if we could avoid the
+indirect calls by generating a bpf_dispatcher-style trampoline instead
+(and further down the line extend this to XDP as well, like what libxdp
+is doing).
 
+No one seemed to complain loudly about this idea in the session; so I'm
+hoping that the future of bpf_dispatcher is that we can generalise it so
+it can be used for both TC and XDP, and also support chaining of
+multiple programs on a single hook.
+
+I don't have any opinion on how the low-level plumbing for this should
+work, though; if changing it to re-use other kernel functionality like
+static_calls makes sense, that's fine with me...
+
+WDYT, sounds feasible? :)
+
+-Toke
