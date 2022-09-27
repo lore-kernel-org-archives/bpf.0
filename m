@@ -2,88 +2,131 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1052C6FA83
-	for <bpf@archiver.kernel.org>; Tue, 27 Sep 2022 16:42:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F8ACC54EE9
+	for <bpf@archiver.kernel.org>; Tue, 27 Sep 2022 16:42:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233062AbiI0QmD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 27 Sep 2022 12:42:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60922 "EHLO
+        id S233175AbiI0QmL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 27 Sep 2022 12:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233056AbiI0Qle (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 27 Sep 2022 12:41:34 -0400
+        with ESMTP id S233070AbiI0Qlf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 27 Sep 2022 12:41:35 -0400
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5D41E05D4;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E162E189385;
         Tue, 27 Sep 2022 09:41:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1664296886; x=1695832886;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Z1+s4VzUdLF8e19QQz1bRbISxthQ3ZMqFG2bviCOyhY=;
-  b=SIaXH44u5t6HSH9D9wsgCIP/ENX8zc9MVCp4xed7PfC0tqt/PwJzfQJ2
-   /jNkENBd/nd3Efo0g/0BiegqjUZ3vpANjab0/8dqfwlUO0G8GSR0Fp6te
-   xgAAPJxWWF6LSCDF6mmVEIgTtabLbF7RLJG/JK8hN90JcD3HInpVdsoAP
-   i0SVTy4DhNrSXoN+sjvaqhMnzmPYLOQOqEK24y98irz66jXA8t4/vwttj
-   XxYugtvykh/VySxzOYQqReMMhevQNWkKa4mzbapzUv9i6I73Vde5mXBsh
-   3qGMmgDI2rhf4F5hWD0SQAokxo4KEFmRVjWdIobiXMGXDH33jG6TxqHYk
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=zImS/+kQEFFKtoylnkK9hx7b+ZnRst+iBc45qyPH9e0=;
+  b=TpSX0jWnmYfqFbuQr3dx1i9t2OPOAigmJFPdJKZ8vbH5ri+0xylrj8KI
+   wZ9Ea82UgOnuKy3n2/Qwf/LhqrmkkWcJNz6nDIxtF9BUOMxvDpY1LAOZF
+   Dr1YPLOhvoCZvDko0ZG0Law+GwJBKDDt/gCwsM9+K3JAbCkB5Ufhnz/B2
+   Aj8SlWxgrBXeJNpGXsQhG0WBKy7JMEfrj/hBHRl4Sv9vT3UoK2l7ansmA
+   tN7ErgiCyQRb4sgyatR5owIjzaJC1iW3FIlXGCQIn3gTDDZCNwW3cYH3q
+   TteHlYm5irzvbkHI4jRxPUGX7/Z+hYQRBIA9ykxP8+A78fSDpqVCZ8eiU
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="281085136"
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="281085144"
 X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="281085136"
+   d="scan'208";a="281085144"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 09:41:18 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 09:41:21 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="616893057"
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="616893064"
 X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="616893057"
+   d="scan'208";a="616893064"
 Received: from anguy11-desk2.jf.intel.com ([10.166.244.147])
   by orsmga007.jf.intel.com with ESMTP; 27 Sep 2022 09:41:17 -0700
 From:   Tony Nguyen <anthony.l.nguyen@intel.com>
 To:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
         edumazet@google.com
-Cc:     Tony Nguyen <anthony.l.nguyen@intel.com>, netdev@vger.kernel.org,
-        maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
-        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-        john.fastabend@gmail.com, bpf@vger.kernel.org
-Subject: [PATCH net 0/2][pull request] ice: xsk: ZC changes
-Date:   Tue, 27 Sep 2022 09:41:10 -0700
-Message-Id: <20220927164112.4011983-1-anthony.l.nguyen@intel.com>
+Cc:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        netdev@vger.kernel.org, anthony.l.nguyen@intel.com,
+        magnus.karlsson@intel.com, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com, bpf@vger.kernel.org,
+        Alasdair McWilliam <alasdair.mcwilliam@outlook.com>,
+        George Kuruvinakunnel <george.kuruvinakunnel@intel.com>
+Subject: [PATCH net 2/2] ice: xsk: drop power of 2 ring size restriction for AF_XDP
+Date:   Tue, 27 Sep 2022 09:41:12 -0700
+Message-Id: <20220927164112.4011983-3-anthony.l.nguyen@intel.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220927164112.4011983-1-anthony.l.nguyen@intel.com>
+References: <20220927164112.4011983-1-anthony.l.nguyen@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Maciej Fijalkowski says:
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-This set consists of two fixes to issues that were either pointed out on
-indirectly (John was reviewing AF_XDP selftests that were testing ice's
-ZC support) mailing list or were directly reported by customers.
+We had multiple customers in the past months that reported commit
+296f13ff3854 ("ice: xsk: Force rings to be sized to power of 2")
+makes them unable to use ring size of 8160 in conjunction with AF_XDP.
+Remove this restriction.
 
-First patch allows user space to see done descriptor in CQ even after a
-single frame being transmitted and second patch removes the need for
-having HW rings sized to power of 2 number of descriptors when used
-against AF_XDP.
+Fixes: 296f13ff3854 ("ice: xsk: Force rings to be sized to power of 2")
+CC: Alasdair McWilliam <alasdair.mcwilliam@outlook.com>
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Tested-by: George Kuruvinakunnel <george.kuruvinakunnel@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+---
+ drivers/net/ethernet/intel/ice/ice_xsk.c | 20 +++++++-------------
+ 1 file changed, 7 insertions(+), 13 deletions(-)
 
-I also forgot to mention that due to the current Tx cleaning algorithm,
-4k HW ring was broken and these two patches bring it back to life, so we
-kill two birds with one stone.
-
-The following are changes since commit 797666cd5af041ffb66642fff62f7389f08566a2:
-  net: usb: qmi_wwan: Add new usb-id for Dell branded EM7455
-and are available in the git repository at:
-  git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue 100GbE
-
-Maciej Fijalkowski (2):
-  ice: xsk: change batched Tx descriptor cleaning
-  ice: xsk: drop power of 2 ring size restriction for AF_XDP
-
- drivers/net/ethernet/intel/ice/ice_txrx.c |   2 +-
- drivers/net/ethernet/intel/ice/ice_xsk.c  | 163 +++++++++-------------
- drivers/net/ethernet/intel/ice/ice_xsk.h  |   7 +-
- 3 files changed, 71 insertions(+), 101 deletions(-)
-
+diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
+index 8833b66b4e54..056c904b83cc 100644
+--- a/drivers/net/ethernet/intel/ice/ice_xsk.c
++++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
+@@ -392,13 +392,6 @@ int ice_xsk_pool_setup(struct ice_vsi *vsi, struct xsk_buff_pool *pool, u16 qid)
+ 		goto failure;
+ 	}
+ 
+-	if (!is_power_of_2(vsi->rx_rings[qid]->count) ||
+-	    !is_power_of_2(vsi->tx_rings[qid]->count)) {
+-		netdev_err(vsi->netdev, "Please align ring sizes to power of 2\n");
+-		pool_failure = -EINVAL;
+-		goto failure;
+-	}
+-
+ 	if_running = netif_running(vsi->netdev) && ice_is_xdp_ena_vsi(vsi);
+ 
+ 	if (if_running) {
+@@ -534,11 +527,10 @@ static bool __ice_alloc_rx_bufs_zc(struct ice_rx_ring *rx_ring, u16 count)
+ bool ice_alloc_rx_bufs_zc(struct ice_rx_ring *rx_ring, u16 count)
+ {
+ 	u16 rx_thresh = ICE_RING_QUARTER(rx_ring);
+-	u16 batched, leftover, i, tail_bumps;
++	u16 leftover, i, tail_bumps;
+ 
+-	batched = ALIGN_DOWN(count, rx_thresh);
+-	tail_bumps = batched / rx_thresh;
+-	leftover = count & (rx_thresh - 1);
++	tail_bumps = count / rx_thresh;
++	leftover = count - (tail_bumps * rx_thresh);
+ 
+ 	for (i = 0; i < tail_bumps; i++)
+ 		if (!__ice_alloc_rx_bufs_zc(rx_ring, rx_thresh))
+@@ -1037,14 +1029,16 @@ bool ice_xsk_any_rx_ring_ena(struct ice_vsi *vsi)
+  */
+ void ice_xsk_clean_rx_ring(struct ice_rx_ring *rx_ring)
+ {
+-	u16 count_mask = rx_ring->count - 1;
+ 	u16 ntc = rx_ring->next_to_clean;
+ 	u16 ntu = rx_ring->next_to_use;
+ 
+-	for ( ; ntc != ntu; ntc = (ntc + 1) & count_mask) {
++	while (ntc != ntu) {
+ 		struct xdp_buff *xdp = *ice_xdp_buf(rx_ring, ntc);
+ 
+ 		xsk_buff_free(xdp);
++		ntc++;
++		if (ntc >= rx_ring->count)
++			ntc = 0;
+ 	}
+ }
+ 
 -- 
 2.35.1
 
