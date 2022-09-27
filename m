@@ -2,78 +2,70 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3381EC433F5
-	for <bpf@archiver.kernel.org>; Fri, 30 Sep 2022 00:53:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 155BFC433FE
+	for <bpf@archiver.kernel.org>; Fri, 30 Sep 2022 01:01:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbiI3Axa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 29 Sep 2022 20:53:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57194 "EHLO
+        id S229743AbiI3BBw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 29 Sep 2022 21:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiI3AxL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 29 Sep 2022 20:53:11 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F7D20589D;
-        Thu, 29 Sep 2022 17:52:28 -0700 (PDT)
-Message-ID: <9d828483-21d0-18da-0870-babcb50d5c03@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1664499146;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NHJr4Xpyg9WKtImexYWG0vQTFzDQgaCHa5Ss8yShYZc=;
-        b=BKi0gDIvZ4KSxHZQ+chheYRT/I4Rf1DJsoX2trucN8c/yhu1oEhhUIBOE2kf4StEQQ0U48
-        C7GjnGH5mXrkFkVxBgVQ9kC8adzkJhA5gZEi356riHWljcE1hI05rfYVK7pOfMiVAvYTMR
-        fhLmlThZ7ULDgsRLHn4FHV11y9ggWaQ=
-Date:   Thu, 29 Sep 2022 17:52:22 -0700
+        with ESMTP id S229651AbiI3BBu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 29 Sep 2022 21:01:50 -0400
+Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823BC1F8C0D;
+        Thu, 29 Sep 2022 18:01:48 -0700 (PDT)
+Received: from ([60.208.111.195])
+        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id YAF00140;
+        Fri, 30 Sep 2022 09:01:40 +0800
+Received: from localhost.localdomain (10.200.104.82) by
+ jtjnmail201605.home.langchao.com (10.100.2.5) with Microsoft SMTP Server id
+ 15.1.2507.12; Fri, 30 Sep 2022 09:01:43 +0800
+From:   Deming Wang <wangdeming@inspur.com>
+To:     <ast@kernel.org>, <daniel@iogearbox.net>, <davem@davemloft.net>,
+        <kuba@kernel.org>, <hawk@kernel.org>, <john.fastabend@gmail.com>,
+        <andrii@kernel.org>
+CC:     <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <kpsingh@kernel.org>, <sdf@google.com>, <haoluo@google.com>,
+        <jolsa@kernel.org>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Deming Wang <wangdeming@inspur.com>
+Subject: [PATCH] samples, bpf: fix the typo of sample
+Date:   Tue, 27 Sep 2022 15:25:27 -0400
+Message-ID: <20220927192527.8722-1-wangdeming@inspur.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next] selftests/xsk: fix double free
-Content-Language: en-US
-To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>
-Cc:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, netdev@vger.kernel.org,
-        jonathan.lemon@gmail.com, bpf@vger.kernel.org
-References: <20220929090133.7869-1-magnus.karlsson@gmail.com>
- <YzV28OlK+pwlm/B/@boxer>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <YzV28OlK+pwlm/B/@boxer>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.200.104.82]
+tUid:   20229300901401c89c41559e6149114e126f6d18044e9
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 9/29/22 3:44 AM, Maciej Fijalkowski wrote:
-> On Thu, Sep 29, 2022 at 11:01:33AM +0200, Magnus Karlsson wrote:
->> From: Magnus Karlsson <magnus.karlsson@intel.com>
->>
->> Fix a double free at exit of the test suite.
->>
->> Fixes: a693ff3ed561 ("selftests/xsk: Add support for executing tests on physical device")
->> Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
->> ---
->>   tools/testing/selftests/bpf/xskxceiver.c | 3 ---
->>   1 file changed, 3 deletions(-)
->>
->> diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
->> index ef33309bbe49..d1a5f3218c34 100644
->> --- a/tools/testing/selftests/bpf/xskxceiver.c
->> +++ b/tools/testing/selftests/bpf/xskxceiver.c
->> @@ -1953,9 +1953,6 @@ int main(int argc, char **argv)
->>   
->>   	pkt_stream_delete(tx_pkt_stream_default);
->>   	pkt_stream_delete(rx_pkt_stream_default);
->> -	free(ifobj_rx->umem);
->> -	if (!ifobj_tx->shared_umem)
-shared_umem means ifobj_rx->umem and ifobj_tx->umem are the same?  No special 
-handling is needed and ifobject_delete() will handle it?
+fix the typo of the enty.
 
->> -		free(ifobj_tx->umem);
->>   	ifobject_delete(ifobj_tx);
->>   	ifobject_delete(ifobj_rx);
-> 
-> So basically we free this inside ifobject_delete().
+Signed-off-by: Deming Wang <wangdeming@inspur.com>
+---
+ samples/bpf/xdp_router_ipv4_user.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/samples/bpf/xdp_router_ipv4_user.c b/samples/bpf/xdp_router_ipv4_user.c
+index 294fc15ad1cb..683913bbf279 100644
+--- a/samples/bpf/xdp_router_ipv4_user.c
++++ b/samples/bpf/xdp_router_ipv4_user.c
+@@ -209,7 +209,7 @@ static void read_route(struct nlmsghdr *nh, int nll)
+ 					/* Rereading the route table to check if
+ 					 * there is an entry with the same
+ 					 * prefix but a different metric as the
+-					 * deleted enty.
++					 * deleted entry.
+ 					 */
+ 					get_route_table(AF_INET);
+ 				} else if (prefix_key->data[0] ==
+-- 
+2.27.0
 
