@@ -2,29 +2,29 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 258B7C04A95
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B22FC6FA82
 	for <bpf@archiver.kernel.org>; Thu, 29 Sep 2022 07:05:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235070AbiI2HFI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 29 Sep 2022 03:05:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36106 "EHLO
+        id S235121AbiI2HFJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 29 Sep 2022 03:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235072AbiI2HEm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 29 Sep 2022 03:04:42 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C128613070A;
-        Thu, 29 Sep 2022 00:04:29 -0700 (PDT)
+        with ESMTP id S235075AbiI2HEn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 29 Sep 2022 03:04:43 -0400
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABABF5F8C;
+        Thu, 29 Sep 2022 00:04:35 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1664435068;
+        t=1664435074;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Uh+ejWrx6vnFNK0wy56yr0aj1vBg58V3Md/AW4RsBQQ=;
-        b=TQWjUUP7upW2dOzPQicUtj7yvX9ICrPTkCgil0Emkcmlz3DAr0nIZy3Ws7WBvzGO2TczBk
-        u0LlCR/+4msrBpT+u+QVCO6mVgQV9VmrhObPHHl+ezqbaysQIBekfJ+bz73Ud3w1jOXkr4
-        vgVerwWaYCdfCvqzh54R5bKa2MTCys4=
+        bh=mrtWExq0wBIpyOPOl96p4X+vkDCpxYHVu/CvZF0R/5Y=;
+        b=uEamq2QYjtyqsfp4pDJigvVn1gC3erCNRlj4CjW3pNjI9vZb5z1o3tUeygE6FcMTKRoYhL
+        nWMjh3PONjzLnHBBJrZ7jGBKC6BLEnG45CNuiFpiJDvSNj87bbo6pTkTGrcCoEsUrizPyb
+        2hCX2RZanCnFocQTtgQaSdojjhpzvTk=
 From:   Martin KaFai Lau <martin.lau@linux.dev>
 To:     ' ' <bpf@vger.kernel.org>, ' ' <netdev@vger.kernel.org>
 Cc:     'Alexei Starovoitov ' <ast@kernel.org>,
@@ -34,9 +34,9 @@ Cc:     'Alexei Starovoitov ' <ast@kernel.org>,
         'Jakub Kicinski ' <kuba@kernel.org>,
         'Eric Dumazet ' <edumazet@google.com>,
         'Paolo Abeni ' <pabeni@redhat.com>, ' ' <kernel-team@fb.com>
-Subject: [PATCH v3 bpf-next 2/5] bpf: Move the "cdg" tcp-cc check to the common sol_tcp_sockopt()
-Date:   Thu, 29 Sep 2022 00:04:04 -0700
-Message-Id: <20220929070407.965581-3-martin.lau@linux.dev>
+Subject: [PATCH v3 bpf-next 4/5] bpf: tcp: Stop bpf_setsockopt(TCP_CONGESTION) in init ops to recur itself
+Date:   Thu, 29 Sep 2022 00:04:06 -0700
+Message-Id: <20220929070407.965581-5-martin.lau@linux.dev>
 In-Reply-To: <20220929070407.965581-1-martin.lau@linux.dev>
 References: <20220929070407.965581-1-martin.lau@linux.dev>
 MIME-Version: 1.0
@@ -48,55 +48,110 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Martin KaFai Lau <martin.lau@kernel.org>
 
-The check on the tcp-cc, "cdg", is done in the bpf_sk_setsockopt which is
-used by the bpf_tcp_ca, bpf_lsm, cg_sockopt, and tcp_iter hooks.
-However, it is not done for cg sock_ddr, cg sockops, and some of
-the bpf_lsm_cgroup hooks.
+When a bad bpf prog '.init' calls
+bpf_setsockopt(TCP_CONGESTION, "itself"), it will trigger this loop:
 
-The tcp-cc "cdg" should have very limited usage.  This patch is to
-move the "cdg" check to the common sol_tcp_sockopt() so that all
-hooks have a consistent behavior.   The motivation to make
-this check consistent now is because the latter patch will
-refactor the bpf_setsockopt(TCP_CONGESTION) into another function,
-so it is better to take this chance to refactor this piece
-also.
+.init => bpf_setsockopt(tcp_cc) => .init => bpf_setsockopt(tcp_cc) ...
+... => .init => bpf_setsockopt(tcp_cc).
+
+It was prevented by the prog->active counter before but the prog->active
+detection cannot be used in struct_ops as explained in the earlier
+patch of the set.
+
+In this patch, the second bpf_setsockopt(tcp_cc) is not allowed
+in order to break the loop.  This is done by using a bit of
+an existing 1 byte hole in tcp_sock to check if there is
+on-going bpf_setsockopt(TCP_CONGESTION) in this tcp_sock.
+
+Note that this essentially limits only the first '.init' can
+call bpf_setsockopt(TCP_CONGESTION) to pick a fallback cc (eg. peer
+does not support ECN) and the second '.init' cannot fallback to
+another cc.  This applies even the second
+bpf_setsockopt(TCP_CONGESTION) will not cause a loop.
 
 Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
 ---
- net/core/filter.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ include/linux/tcp.h      |  6 ++++++
+ net/core/filter.c        | 28 +++++++++++++++++++++++++++-
+ net/ipv4/tcp_minisocks.c |  1 +
+ 3 files changed, 34 insertions(+), 1 deletion(-)
 
+diff --git a/include/linux/tcp.h b/include/linux/tcp.h
+index a9fbe22732c3..3bdf687e2fb3 100644
+--- a/include/linux/tcp.h
++++ b/include/linux/tcp.h
+@@ -388,6 +388,12 @@ struct tcp_sock {
+ 	u8	bpf_sock_ops_cb_flags;  /* Control calling BPF programs
+ 					 * values defined in uapi/linux/tcp.h
+ 					 */
++	u8	bpf_chg_cc_inprogress:1; /* In the middle of
++					  * bpf_setsockopt(TCP_CONGESTION),
++					  * it is to avoid the bpf_tcp_cc->init()
++					  * to recur itself by calling
++					  * bpf_setsockopt(TCP_CONGESTION, "itself").
++					  */
+ #define BPF_SOCK_OPS_TEST_FLAG(TP, ARG) (TP->bpf_sock_ops_cb_flags & ARG)
+ #else
+ #define BPF_SOCK_OPS_TEST_FLAG(TP, ARG) 0
 diff --git a/net/core/filter.c b/net/core/filter.c
-index 2fd9449026aa..f4cea3ff994a 100644
+index 96f2f7a65e65..ac4c45c02da5 100644
 --- a/net/core/filter.c
 +++ b/net/core/filter.c
-@@ -5127,6 +5127,13 @@ static int sol_tcp_sockopt(struct sock *sk, int optname,
- 	case TCP_CONGESTION:
- 		if (*optlen < 2)
- 			return -EINVAL;
-+		/* "cdg" is the only cc that alloc a ptr
-+		 * in inet_csk_ca area.  The bpf-tcp-cc may
-+		 * overwrite this ptr after switching to cdg.
-+		 */
-+		if (!getopt && *optlen >= sizeof("cdg") - 1 &&
-+		    !strncmp("cdg", optval, *optlen))
-+			return -ENOTSUPP;
- 		break;
- 	case TCP_SAVED_SYN:
- 		if (*optlen < 1)
-@@ -5285,12 +5292,6 @@ static int _bpf_getsockopt(struct sock *sk, int level, int optname,
- BPF_CALL_5(bpf_sk_setsockopt, struct sock *, sk, int, level,
- 	   int, optname, char *, optval, int, optlen)
+@@ -5105,6 +5105,9 @@ static int bpf_sol_tcp_setsockopt(struct sock *sk, int optname,
+ static int sol_tcp_sockopt_congestion(struct sock *sk, char *optval,
+ 				      int *optlen, bool getopt)
  {
--	if (level == SOL_TCP && optname == TCP_CONGESTION) {
--		if (optlen >= sizeof("cdg") - 1 &&
--		    !strncmp("cdg", optval, optlen))
--			return -ENOTSUPP;
--	}
--
- 	return _bpf_setsockopt(sk, level, optname, optval, optlen);
++	struct tcp_sock *tp;
++	int ret;
++
+ 	if (*optlen < 2)
+ 		return -EINVAL;
+ 
+@@ -5125,8 +5128,31 @@ static int sol_tcp_sockopt_congestion(struct sock *sk, char *optval,
+ 	if (*optlen >= sizeof("cdg") - 1 && !strncmp("cdg", optval, *optlen))
+ 		return -ENOTSUPP;
+ 
+-	return do_tcp_setsockopt(sk, SOL_TCP, TCP_CONGESTION,
++	/* It stops this looping
++	 *
++	 * .init => bpf_setsockopt(tcp_cc) => .init =>
++	 * bpf_setsockopt(tcp_cc)" => .init => ....
++	 *
++	 * The second bpf_setsockopt(tcp_cc) is not allowed
++	 * in order to break the loop when both .init
++	 * are the same bpf prog.
++	 *
++	 * This applies even the second bpf_setsockopt(tcp_cc)
++	 * does not cause a loop.  This limits only the first
++	 * '.init' can call bpf_setsockopt(TCP_CONGESTION) to
++	 * pick a fallback cc (eg. peer does not support ECN)
++	 * and the second '.init' cannot fallback to
++	 * another.
++	 */
++	tp = tcp_sk(sk);
++	if (tp->bpf_chg_cc_inprogress)
++		return -EBUSY;
++
++	tp->bpf_chg_cc_inprogress = 1;
++	ret = do_tcp_setsockopt(sk, SOL_TCP, TCP_CONGESTION,
+ 				KERNEL_SOCKPTR(optval), *optlen);
++	tp->bpf_chg_cc_inprogress = 0;
++	return ret;
  }
  
+ static int sol_tcp_sockopt(struct sock *sk, int optname,
+diff --git a/net/ipv4/tcp_minisocks.c b/net/ipv4/tcp_minisocks.c
+index cb95d88497ae..ddcdc2bc4c04 100644
+--- a/net/ipv4/tcp_minisocks.c
++++ b/net/ipv4/tcp_minisocks.c
+@@ -541,6 +541,7 @@ struct sock *tcp_create_openreq_child(const struct sock *sk,
+ 	newtp->fastopen_req = NULL;
+ 	RCU_INIT_POINTER(newtp->fastopen_rsk, NULL);
+ 
++	newtp->bpf_chg_cc_inprogress = 0;
+ 	tcp_bpf_clone(sk, newsk);
+ 
+ 	__TCP_INC_STATS(sock_net(sk), TCP_MIB_PASSIVEOPENS);
 -- 
 2.30.2
 
