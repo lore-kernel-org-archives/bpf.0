@@ -2,49 +2,52 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 074CDC433F5
-	for <bpf@archiver.kernel.org>; Fri, 30 Sep 2022 22:50:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50271C433FE
+	for <bpf@archiver.kernel.org>; Fri, 30 Sep 2022 22:50:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232773AbiI3WuT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 30 Sep 2022 18:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58398 "EHLO
+        id S232528AbiI3WuU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 30 Sep 2022 18:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232528AbiI3WuS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S232421AbiI3WuS (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 30 Sep 2022 18:50:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6498CE007A
-        for <bpf@vger.kernel.org>; Fri, 30 Sep 2022 15:50:17 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43818E0073;
+        Fri, 30 Sep 2022 15:50:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9445C62566
-        for <bpf@vger.kernel.org>; Fri, 30 Sep 2022 22:50:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E10AAC433C1;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CBC0623C1;
+        Fri, 30 Sep 2022 22:50:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D4EE4C433D7;
         Fri, 30 Sep 2022 22:50:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1664578215;
-        bh=mloHjKjhBS69pHPRycOpWhjUCN8lK6EK2CFnauyFWdY=;
+        bh=S1Nfm1SuWz0ZMY9Q/MbRTaTgbwFvqK1pQY8qW4oPp1I=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=HXAalcYeoZVaEIup4/tu4m1O4Qf4U9M9o7IXddifLxrUlU2yQfLj4xbAimG4tY+RN
-         bwBJSSo4rrBJ21T+Aa0zODnMaduNUx5cOUNt6XU1m7lPrZsLHcqnWMnHs5ISr8SLjo
-         L60xn/tEuwxvgbFMQxPJuPnxU7hqztoIUN6aYPs5yUudHY7HcDO54snGwGWZwPqyga
-         lEWv7NbuFonbJTsH9thVonbQAnqjPXsDTfGOFbjZDDdusDpXHtsr68y3uUDXZP6d9R
-         a3Khsw806HNCf5Cj63/wmwTWWZLcq8DHUZXEsQr/MqJp5psKNmDIk4ekFG/HS/jJxr
-         MiuXS4+f/3CJQ==
+        b=LJwKkmtceu4SNZr4V2rdO0VLHIB/S7sPkfYHcul+XL5zFUFL2esMhJK0WtohkuI9f
+         /OriHgVf7N2jK3GZA/8NpTfnKCEv/HsEN+uW6JbdPgHJIf/bntp68pwbnmsFXbT6ck
+         v+XeLUsq2D0FDukHAQRDKV4uFzMkFt4N6aIg0nLxPd22Ok8mImNH/xRdvppWrKoiw1
+         6gmgbPoKsicabgcfmdnaN1MVZEN9x17B4yoTOkNiLIHxGfsGfHfhjcJVQ3UzpXHCFB
+         5iFwIwAmTMzjVlL2IAnQ+LjiDLZass1XGxX2Lxzv+kXQh34S2GF4MNTB9RomXo4thB
+         D024DkvRiMfSw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C65DAE50D64;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BB224E49FA5;
         Fri, 30 Sep 2022 22:50:15 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] bpftool: Fix error message of strerror
+Subject: Re: [PATCH bpf-next] selftests/xsk: fix double free
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166457821580.20099.13099293716781387232.git-patchwork-notify@kernel.org>
+Message-Id: <166457821574.20099.16151789150062540312.git-patchwork-notify@kernel.org>
 Date:   Fri, 30 Sep 2022 22:50:15 +0000
-References: <SY4P282MB1084AD9CD84A920F08DF83E29D549@SY4P282MB1084.AUSP282.PROD.OUTLOOK.COM>
-In-Reply-To: <SY4P282MB1084AD9CD84A920F08DF83E29D549@SY4P282MB1084.AUSP282.PROD.OUTLOOK.COM>
-To:     Tianyi Liu <i.pear@outlook.com>
-Cc:     quentin@isovalent.com, bpf@vger.kernel.org
+References: <20220929090133.7869-1-magnus.karlsson@gmail.com>
+In-Reply-To: <20220929090133.7869-1-magnus.karlsson@gmail.com>
+To:     Magnus Karlsson <magnus.karlsson@gmail.com>
+Cc:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, netdev@vger.kernel.org,
+        maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com,
+        bpf@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
@@ -54,22 +57,19 @@ Hello:
 This patch was applied to bpf/bpf-next.git (master)
 by Andrii Nakryiko <andrii@kernel.org>:
 
-On Wed, 28 Sep 2022 16:09:32 +0800 you wrote:
-> strerror() expects a positive errno, however variable err will never be
-> positive when an error occurs. This causes bpftool to output too many
-> "unknown error", even a simple "file not exist" error can not get an
-> accurate message.
+On Thu, 29 Sep 2022 11:01:33 +0200 you wrote:
+> From: Magnus Karlsson <magnus.karlsson@intel.com>
 > 
-> This patch fixed all "strerror(err)" patterns in bpftool.
-> Specially in btf.c#L823, hashmap__append() is an internal function of
-> libbpf and will not change errno, so there's a little difference.
-> Some libbpf_get_error() calls are kept for return values.
+> Fix a double free at exit of the test suite.
+> 
+> Fixes: a693ff3ed561 ("selftests/xsk: Add support for executing tests on physical device")
+> Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
 > 
 > [...]
 
 Here is the summary with links:
-  - [v2] bpftool: Fix error message of strerror
-    https://git.kernel.org/bpf/bpf-next/c/3ca2fb497440
+  - [bpf-next] selftests/xsk: fix double free
+    https://git.kernel.org/bpf/bpf-next/c/5f388bba7acb
 
 You are awesome, thank you!
 -- 
