@@ -2,94 +2,82 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67B42C433F5
-	for <bpf@archiver.kernel.org>; Mon,  3 Oct 2022 06:56:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BD0CC433FE
+	for <bpf@archiver.kernel.org>; Mon,  3 Oct 2022 12:30:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbiJCG4h (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 3 Oct 2022 02:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40216 "EHLO
+        id S229702AbiJCMaS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 3 Oct 2022 08:30:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbiJCG4e (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 3 Oct 2022 02:56:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DD85F75
-        for <bpf@vger.kernel.org>; Sun,  2 Oct 2022 23:56:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664780190;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8ZBicwUKsvtaRkaZY3oUqaPDULjldiOgTy47Jjj1bT4=;
-        b=RObIm19SY/cYBNgrS28as/iZO1tEfvVdTte7u7Y0Pn7MxVOllcxkbEAfoQqGmGEgL70gF9
-        RcaYbtXWkn6zWQgp3OOzSku46hmgSneWvgoUP3BkdVoUU08DAznHhf2b5K9nIdLvMvukOT
-        LNlvs0DiNjpFvCmz8LhMhuBLRlksKME=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-554-7Gjv7yeBOTuEh7uYyEfOEg-1; Mon, 03 Oct 2022 02:56:27 -0400
-X-MC-Unique: 7Gjv7yeBOTuEh7uYyEfOEg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S229641AbiJCMaR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 3 Oct 2022 08:30:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8A227CCB;
+        Mon,  3 Oct 2022 05:30:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2404F3C025C3;
-        Mon,  3 Oct 2022 06:56:27 +0000 (UTC)
-Received: from samus.usersys.redhat.com (unknown [10.43.17.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id DBB452166B26;
-        Mon,  3 Oct 2022 06:56:25 +0000 (UTC)
-Date:   Mon, 3 Oct 2022 08:56:24 +0200
-From:   Artem Savkov <asavkov@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jbenc@redhat.com
-Subject: Re: [PATCH bpf-next] selftests/bpf: make libbpf_probe_prog_types
- testcase aware of kernel configuration
-Message-ID: <YzqHmHRjxAc4Nndc@samus.usersys.redhat.com>
-Mail-Followup-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jbenc@redhat.com
-References: <20220930110900.75492-1-asavkov@redhat.com>
- <CAEf4BzZpkgXi9Y6x-_-6mDDW12GvTj0Y_e7cpQMqF3dtiBBhpA@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2663C61038;
+        Mon,  3 Oct 2022 12:30:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7D15DC433B5;
+        Mon,  3 Oct 2022 12:30:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664800215;
+        bh=ra5p4TDbHH/MyogX7WQr6WkJNPkFdYxm41lh3797BPg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Cz2oNJSfn4osQO/eBtSLTJQdCNfQH1YJocaZGJLqLySd3Aq+81zMIxP7Ejinl8gMv
+         59CTj5IRh0yL2x/Is5fvpFQse7ba1h84Lsms/jZIJzUByrhrkmwm9wefb2sPPgdlwh
+         6SqtcxBN67zJb97ZopK9uPmSaXv9xV7mt36eNc6yo3sx3QGSBS78epeSFC7ApwfCFN
+         sz9DGmGZSJwGfiEVBboTuoQXrAwPE9H+z3r4Zyw0cxfOui2OxLREArTLEpGP6XLJyU
+         dxj8SD75n0eRkqLj4DdJSSW4reT4V3RWUQRSNHkUbFPJkWvQUrXbWSN+upemClDKAu
+         ClzmW2s8gDVUA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 594F3E524CD;
+        Mon,  3 Oct 2022 12:30:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzZpkgXi9Y6x-_-6mDDW12GvTj0Y_e7cpQMqF3dtiBBhpA@mail.gmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net/ieee802154: reject zero-sized raw_sendmsg()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166480021535.14393.17575492399292423045.git-patchwork-notify@kernel.org>
+Date:   Mon, 03 Oct 2022 12:30:15 +0000
+References: <5e89b653-3fc6-25c5-324b-1b15909c0183@I-love.SAKURA.ne.jp>
+In-Reply-To: <5e89b653-3fc6-25c5-324b-1b15909c0183@I-love.SAKURA.ne.jp>
+To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Cc:     alex.aring@gmail.com, stefan@datenfreihafen.org,
+        shaozhengchao@huawei.com, ast@kernel.org, sdf@google.com,
+        linux-wpan@vger.kernel.org,
+        syzbot+5ea725c25d06fb9114c4@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com, bpf@vger.kernel.org,
+        netdev@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 04:06:41PM -0700, Andrii Nakryiko wrote:
-> On Fri, Sep 30, 2022 at 4:09 AM Artem Savkov <asavkov@redhat.com> wrote:
-> >
-> > At the moment libbpf_probe_prog_types test iterates over all available
-> > BPF_PROG_TYPE regardless of kernel configuration which can exclude some
-> > of those. Unfortunately there is no direct way to tell which types are
-> > available, but we can look at struct bpf_ctx_onvert to tell which ones
-> > are available.
-> >
-> > Signed-off-by: Artem Savkov <asavkov@redhat.com>
-> > ---
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Sun, 2 Oct 2022 01:43:44 +0900 you wrote:
+> syzbot is hitting skb_assert_len() warning at raw_sendmsg() for ieee802154
+> socket. What commit dc633700f00f726e ("net/af_packet: check len when
+> min_header_len equals to 0") does also applies to ieee802154 socket.
 > 
-> Many selftests assume correct kernel configuration which is encoded in
-> config and config.<arch> files. So it seems fair to assume that all
-> defined program types are available on kernel-under-test.
+> Link: https://syzkaller.appspot.com/bug?extid=5ea725c25d06fb9114c4
+> Reported-by: syzbot <syzbot+5ea725c25d06fb9114c4@syzkaller.appspotmail.com>
+> Fixes: fd1894224407c484 ("bpf: Don't redirect packets with invalid pkt_len")
+> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> 
+> [...]
 
-Ok. Wasn't sure if this is the assumption being made.
+Here is the summary with links:
+  - net/ieee802154: reject zero-sized raw_sendmsg()
+    https://git.kernel.org/netdev/net/c/3a4d061c699b
 
-> If someone is running selftests under custom more minimal kernel they
-> can use denylist to ignore specific prog type subtests?
-
-Thanks for the suggestion. Denylist is a bit too broad in this case as
-it means we'll be disabling the whole libbpf_probe_prog_types test while
-only a single type is a problem. Looks like we'll have to live with a
-downstream-only patch in this case.
-
+You are awesome, thank you!
 -- 
- Artem
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
