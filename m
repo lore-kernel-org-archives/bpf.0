@@ -2,23 +2,23 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5A98C43219
-	for <bpf@archiver.kernel.org>; Tue,  4 Oct 2022 23:12:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EEF0C4321E
+	for <bpf@archiver.kernel.org>; Tue,  4 Oct 2022 23:12:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbiJDXMX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 4 Oct 2022 19:12:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40900 "EHLO
+        id S230084AbiJDXMZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 4 Oct 2022 19:12:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiJDXMO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 4 Oct 2022 19:12:14 -0400
+        with ESMTP id S230028AbiJDXMP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 4 Oct 2022 19:12:15 -0400
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD30854C89;
-        Tue,  4 Oct 2022 16:12:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A3656014;
+        Tue,  4 Oct 2022 16:12:13 -0700 (PDT)
 Received: from 226.206.1.85.dynamic.wline.res.cust.swisscom.ch ([85.1.206.226] helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
         (Exim 4.92.3)
         (envelope-from <daniel@iogearbox.net>)
-        id 1ofr54-000AIt-UA; Wed, 05 Oct 2022 01:12:07 +0200
+        id 1ofr59-000AKL-Pv; Wed, 05 Oct 2022 01:12:11 +0200
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     bpf@vger.kernel.org
 Cc:     razor@blackwall.org, ast@kernel.org, andrii@kernel.org,
@@ -26,9 +26,9 @@ Cc:     razor@blackwall.org, ast@kernel.org, andrii@kernel.org,
         joannelkoong@gmail.com, memxor@gmail.com, toke@redhat.com,
         joe@cilium.io, netdev@vger.kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next 01/10] bpf: Add initial fd-based API to attach tc BPF programs
-Date:   Wed,  5 Oct 2022 01:11:34 +0200
-Message-Id: <20221004231143.19190-2-daniel@iogearbox.net>
+Subject: [PATCH bpf-next 10/10] bpf, selftests: Add various BPF tc link selftests
+Date:   Wed,  5 Oct 2022 01:11:43 +0200
+Message-Id: <20221004231143.19190-11-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20221004231143.19190-1-daniel@iogearbox.net>
 References: <20221004231143.19190-1-daniel@iogearbox.net>
@@ -40,1445 +40,842 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This work refactors and adds a lightweight extension to the tc BPF ingress
-and egress data path side for allowing BPF programs via an fd-based attach /
-detach API. The main goal behind this work which we also presented at LPC [0]
-this year is to eventually add support for BPF links for tc BPF programs in
-a second step, thus this prep work is required for the latter which allows
-for a model of safe ownership and program detachment. Given the vast rise
-in tc BPF users in cloud native / Kubernetes environments, this becomes
-necessary to avoid hard to debug incidents either through stale leftover
-programs or 3rd party applications stepping on each others toes. Further
-details for BPF link rationale in next patch.
+Add a big batch of selftest to extend test_progs with various tc link,
+attach ops and old-style tc BPF attachments via libbpf APIs. Also test
+multi-program attachments including mixing the various attach options:
 
-For the current tc framework, there is no change in behavior with this change
-and neither does this change touch on tc core kernel APIs. The gist of this
-patch is that the ingress and egress hook gets a lightweight, qdisc-less
-extension for BPF to attach its tc BPF programs, in other words, a minimal
-tc-layer entry point for BPF. As part of the feedback from LPC, there was
-a suggestion to provide a name for this infrastructure to more easily differ
-between the classic cls_bpf attachment and the fd-based API. As for most,
-the XDP vs tc layer is already the default mental model for the pkt processing
-pipeline. We refactored this with an xtc internal prefix aka 'express traffic
-control' in order to avoid to deviate too far (and 'express' given its more
-lightweight/faster entry point).
+  # ./test_progs -t tc_link
+  #179     tc_link_base:OK
+  #180     tc_link_detach:OK
+  #181     tc_link_mix:OK
+  #182     tc_link_opts:OK
+  #183     tc_link_run_base:OK
+  #184     tc_link_run_chain:OK
+  Summary: 6/0 PASSED, 0 SKIPPED, 0 FAILED
 
-For the ingress and egress xtc points, the device holds a cache-friendly array
-with programs. Same as with classic tc, programs are attached with a prio that
-can be specified or auto-allocated through an idr, and the program return code
-determines whether to continue in the pipeline or to terminate processing.
-With TC_ACT_UNSPEC code, the processing continues (as the case today). The goal
-was to have maximum compatibility to existing tc BPF programs, so they don't
-need to be adapted. Compatibility to call into classic tcf_classify() is also
-provided in order to allow successive migration or both to cleanly co-exist
-where needed given its one logical layer. The fd-based API is behind a static
-key, so that when unused the code is also not entered. The struct xtc_entry's
-program array is currently static, but could be made dynamic if necessary at
-a point in future. Desire has also been expressed for future work to adapt
-similar framework for XDP to allow multi-attach from in-kernel side, too.
-
-Tested with tc-testing selftest suite which all passes, as well as the tc BPF
-tests from the BPF CI.
-
-  [0] https://lpc.events/event/16/contributions/1353/
+All new and existing test cases pass.
 
 Co-developed-by: Nikolay Aleksandrov <razor@blackwall.org>
 Signed-off-by: Nikolay Aleksandrov <razor@blackwall.org>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- MAINTAINERS                    |   4 +-
- include/linux/bpf.h            |   1 +
- include/linux/netdevice.h      |  14 +-
- include/linux/skbuff.h         |   4 +-
- include/net/sch_generic.h      |   2 +-
- include/net/xtc.h              | 181 ++++++++++++++++++++++
- include/uapi/linux/bpf.h       |  35 ++++-
- kernel/bpf/Kconfig             |   1 +
- kernel/bpf/Makefile            |   1 +
- kernel/bpf/net.c               | 274 +++++++++++++++++++++++++++++++++
- kernel/bpf/syscall.c           |  24 ++-
- net/Kconfig                    |   5 +
- net/core/dev.c                 | 262 +++++++++++++++++++------------
- net/core/filter.c              |   4 +-
- net/sched/Kconfig              |   4 +-
- net/sched/sch_ingress.c        |  48 +++++-
- tools/include/uapi/linux/bpf.h |  35 ++++-
- 17 files changed, 769 insertions(+), 130 deletions(-)
- create mode 100644 include/net/xtc.h
- create mode 100644 kernel/bpf/net.c
+ .../selftests/bpf/prog_tests/tc_link.c        | 756 ++++++++++++++++++
+ .../selftests/bpf/progs/test_tc_link.c        |  43 +
+ 2 files changed, 799 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/tc_link.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_tc_link.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e55a4d47324c..bb63d8d000ea 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3850,13 +3850,15 @@ S:	Maintained
- F:	kernel/trace/bpf_trace.c
- F:	kernel/bpf/stackmap.c
- 
--BPF [NETWORKING] (tc BPF, sock_addr)
-+BPF [NETWORKING] (xtc & tc BPF, sock_addr)
- M:	Martin KaFai Lau <martin.lau@linux.dev>
- M:	Daniel Borkmann <daniel@iogearbox.net>
- R:	John Fastabend <john.fastabend@gmail.com>
- L:	bpf@vger.kernel.org
- L:	netdev@vger.kernel.org
- S:	Maintained
-+F:	include/net/xtc.h
-+F:	kernel/bpf/net.c
- F:	net/core/filter.c
- F:	net/sched/act_bpf.c
- F:	net/sched/cls_bpf.c
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 9e7d46d16032..71e5f43db378 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1473,6 +1473,7 @@ struct bpf_prog_array_item {
- 	union {
- 		struct bpf_cgroup_storage *cgroup_storage[MAX_BPF_CGROUP_STORAGE_TYPE];
- 		u64 bpf_cookie;
-+		u32 bpf_priority;
- 	};
- };
- 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index eddf8ee270e7..43bbb2303e57 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -1880,8 +1880,7 @@ enum netdev_ml_priv_type {
-  *
-  *	@rx_handler:		handler for received packets
-  *	@rx_handler_data: 	XXX: need comments on this one
-- *	@miniq_ingress:		ingress/clsact qdisc specific data for
-- *				ingress processing
-+ *	@xtc_ingress:		BPF/clsact qdisc specific data for ingress processing
-  *	@ingress_queue:		XXX: need comments on this one
-  *	@nf_hooks_ingress:	netfilter hooks executed for ingress packets
-  *	@broadcast:		hw bcast address
-@@ -1902,8 +1901,7 @@ enum netdev_ml_priv_type {
-  *	@xps_maps:		all CPUs/RXQs maps for XPS device
-  *
-  *	@xps_maps:	XXX: need comments on this one
-- *	@miniq_egress:		clsact qdisc specific data for
-- *				egress processing
-+ *	@xtc_egress:		BPF/clsact qdisc specific data for egress processing
-  *	@nf_hooks_egress:	netfilter hooks executed for egress packets
-  *	@qdisc_hash:		qdisc hash table
-  *	@watchdog_timeo:	Represents the timeout that is used by
-@@ -2191,8 +2189,8 @@ struct net_device {
- 	rx_handler_func_t __rcu	*rx_handler;
- 	void __rcu		*rx_handler_data;
- 
--#ifdef CONFIG_NET_CLS_ACT
--	struct mini_Qdisc __rcu	*miniq_ingress;
-+#ifdef CONFIG_NET_XGRESS
-+	struct xtc_entry __rcu	*xtc_ingress;
- #endif
- 	struct netdev_queue __rcu *ingress_queue;
- #ifdef CONFIG_NETFILTER_INGRESS
-@@ -2220,8 +2218,8 @@ struct net_device {
- #ifdef CONFIG_XPS
- 	struct xps_dev_maps __rcu *xps_maps[XPS_MAPS_MAX];
- #endif
--#ifdef CONFIG_NET_CLS_ACT
--	struct mini_Qdisc __rcu	*miniq_egress;
-+#ifdef CONFIG_NET_XGRESS
-+	struct xtc_entry __rcu *xtc_egress;
- #endif
- #ifdef CONFIG_NETFILTER_EGRESS
- 	struct nf_hook_entries __rcu *nf_hooks_egress;
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 9fcf534f2d92..a9ff7a1996e9 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -955,7 +955,7 @@ struct sk_buff {
- 	__u8			csum_level:2;
- 	__u8			dst_pending_confirm:1;
- 	__u8			mono_delivery_time:1;	/* See SKB_MONO_DELIVERY_TIME_MASK */
--#ifdef CONFIG_NET_CLS_ACT
-+#ifdef CONFIG_NET_XGRESS
- 	__u8			tc_skip_classify:1;
- 	__u8			tc_at_ingress:1;	/* See TC_AT_INGRESS_MASK */
- #endif
-@@ -983,7 +983,7 @@ struct sk_buff {
- 	__u8			slow_gro:1;
- 	__u8			csum_not_inet:1;
- 
--#ifdef CONFIG_NET_SCHED
-+#if defined(CONFIG_NET_SCHED) || defined(CONFIG_NET_XGRESS)
- 	__u16			tc_index;	/* traffic control index */
- #endif
- 
-diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
-index d5517719af4e..bc5c1da2d30f 100644
---- a/include/net/sch_generic.h
-+++ b/include/net/sch_generic.h
-@@ -693,7 +693,7 @@ int skb_do_redirect(struct sk_buff *);
- 
- static inline bool skb_at_tc_ingress(const struct sk_buff *skb)
- {
--#ifdef CONFIG_NET_CLS_ACT
-+#ifdef CONFIG_NET_XGRESS
- 	return skb->tc_at_ingress;
- #else
- 	return false;
-diff --git a/include/net/xtc.h b/include/net/xtc.h
+diff --git a/tools/testing/selftests/bpf/prog_tests/tc_link.c b/tools/testing/selftests/bpf/prog_tests/tc_link.c
 new file mode 100644
-index 000000000000..627dc18aa433
+index 000000000000..2dfd2874bbdd
 --- /dev/null
-+++ b/include/net/xtc.h
-@@ -0,0 +1,181 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (c) 2022 Isovalent */
-+#ifndef __NET_XTC_H
-+#define __NET_XTC_H
-+
-+#include <linux/idr.h>
-+#include <linux/bpf.h>
-+
-+#include <net/sch_generic.h>
-+
-+#define XTC_MAX_ENTRIES 30
-+/* Adds 1 NULL entry. */
-+#define XTC_MAX	(XTC_MAX_ENTRIES + 1)
-+
-+struct xtc_entry {
-+	struct bpf_prog_array_item items[XTC_MAX] ____cacheline_aligned;
-+	struct xtc_entry_pair *parent;
-+};
-+
-+struct mini_Qdisc;
-+
-+struct xtc_entry_pair {
-+	struct rcu_head		rcu;
-+	struct idr		idr;
-+	struct mini_Qdisc	*miniq;
-+	struct xtc_entry	a;
-+	struct xtc_entry	b;
-+};
-+
-+static inline void xtc_set_ingress(struct sk_buff *skb, bool ingress)
-+{
-+#ifdef CONFIG_NET_XGRESS
-+	skb->tc_at_ingress = ingress;
-+#endif
-+}
-+
-+#ifdef CONFIG_NET_XGRESS
-+void xtc_inc(void);
-+void xtc_dec(void);
-+
-+static inline void
-+dev_xtc_entry_update(struct net_device *dev, struct xtc_entry *entry,
-+		     bool ingress)
-+{
-+	ASSERT_RTNL();
-+	if (ingress)
-+		rcu_assign_pointer(dev->xtc_ingress, entry);
-+	else
-+		rcu_assign_pointer(dev->xtc_egress, entry);
-+	synchronize_rcu();
-+}
-+
-+static inline struct xtc_entry *dev_xtc_entry_peer(const struct xtc_entry *entry)
-+{
-+	if (entry == &entry->parent->a)
-+		return &entry->parent->b;
-+	else
-+		return &entry->parent->a;
-+}
-+
-+static inline struct xtc_entry *dev_xtc_entry_create(void)
-+{
-+	struct xtc_entry_pair *pair = kzalloc(sizeof(*pair), GFP_KERNEL);
-+
-+	if (pair) {
-+		pair->a.parent = pair;
-+		pair->b.parent = pair;
-+		idr_init(&pair->idr);
-+		return &pair->a;
-+	}
-+	return NULL;
-+}
-+
-+static inline struct xtc_entry *dev_xtc_entry_fetch(struct net_device *dev,
-+						    bool ingress, bool *created)
-+{
-+	struct xtc_entry *entry = ingress ?
-+		rcu_dereference_rtnl(dev->xtc_ingress) :
-+		rcu_dereference_rtnl(dev->xtc_egress);
-+
-+	*created = false;
-+	if (!entry) {
-+		entry = dev_xtc_entry_create();
-+		if (!entry)
-+			return NULL;
-+		*created = true;
-+	}
-+	return entry;
-+}
-+
-+static inline void dev_xtc_entry_clear(struct xtc_entry *entry)
-+{
-+	memset(entry->items, 0, sizeof(entry->items));
-+}
-+
-+static inline int dev_xtc_entry_prio_new(struct xtc_entry *entry, u32 prio,
-+					 struct bpf_prog *prog)
-+{
-+	int ret;
-+
-+	if (prio == 0)
-+		prio = 1;
-+	ret = idr_alloc_u32(&entry->parent->idr, prog, &prio, U32_MAX,
-+			    GFP_KERNEL);
-+	return ret < 0 ? ret : prio;
-+}
-+
-+static inline void dev_xtc_entry_prio_set(struct xtc_entry *entry, u32 prio,
-+					  struct bpf_prog *prog)
-+{
-+	idr_replace(&entry->parent->idr, prog, prio);
-+}
-+
-+static inline void dev_xtc_entry_prio_del(struct xtc_entry *entry, u32 prio)
-+{
-+	idr_remove(&entry->parent->idr, prio);
-+}
-+
-+static inline void dev_xtc_entry_free(struct xtc_entry *entry)
-+{
-+	idr_destroy(&entry->parent->idr);
-+	kfree_rcu(entry->parent, rcu);
-+}
-+
-+static inline u32 dev_xtc_entry_total(struct xtc_entry *entry)
-+{
-+	const struct bpf_prog_array_item *item;
-+	const struct bpf_prog *prog;
-+	u32 num = 0;
-+
-+	item = &entry->items[0];
-+	while ((prog = READ_ONCE(item->prog))) {
-+		num++;
-+		item++;
-+	}
-+	return num;
-+}
-+
-+static inline enum tc_action_base xtc_action_code(struct sk_buff *skb, int code)
-+{
-+	switch (code) {
-+	case TC_PASS:
-+		skb->tc_index = qdisc_skb_cb(skb)->tc_classid;
-+		fallthrough;
-+	case TC_DROP:
-+	case TC_REDIRECT:
-+		return code;
-+	case TC_NEXT:
-+	default:
-+		return TC_NEXT;
-+	}
-+}
-+
-+int xtc_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog);
-+int xtc_prog_detach(const union bpf_attr *attr);
-+int xtc_prog_query(const union bpf_attr *attr,
-+		   union bpf_attr __user *uattr);
-+void dev_xtc_uninstall(struct net_device *dev);
-+#else
-+static inline int xtc_prog_attach(const union bpf_attr *attr,
-+				  struct bpf_prog *prog)
-+{
-+	return -EINVAL;
-+}
-+
-+static inline int xtc_prog_detach(const union bpf_attr *attr)
-+{
-+	return -EINVAL;
-+}
-+
-+static inline int xtc_prog_query(const union bpf_attr *attr,
-+				 union bpf_attr __user *uattr)
-+{
-+	return -EINVAL;
-+}
-+
-+static inline void dev_xtc_uninstall(struct net_device *dev)
-+{
-+}
-+#endif /* CONFIG_NET_XGRESS */
-+#endif /* __NET_XTC_H */
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 51b9aa640ad2..de1f5546bcfe 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1025,6 +1025,8 @@ enum bpf_attach_type {
- 	BPF_PERF_EVENT,
- 	BPF_TRACE_KPROBE_MULTI,
- 	BPF_LSM_CGROUP,
-+	BPF_NET_INGRESS,
-+	BPF_NET_EGRESS,
- 	__MAX_BPF_ATTACH_TYPE
- };
- 
-@@ -1399,14 +1401,20 @@ union bpf_attr {
- 	};
- 
- 	struct { /* anonymous struct used by BPF_PROG_ATTACH/DETACH commands */
--		__u32		target_fd;	/* container object to attach to */
-+		union {
-+			__u32	target_fd;	/* container object to attach to */
-+			__u32	target_ifindex; /* target ifindex */
-+		};
- 		__u32		attach_bpf_fd;	/* eBPF program to attach */
- 		__u32		attach_type;
- 		__u32		attach_flags;
--		__u32		replace_bpf_fd;	/* previously attached eBPF
-+		union {
-+			__u32	attach_priority;
-+			__u32	replace_bpf_fd;	/* previously attached eBPF
- 						 * program to replace if
- 						 * BPF_F_REPLACE is used
- 						 */
-+		};
- 	};
- 
- 	struct { /* anonymous struct used by BPF_PROG_TEST_RUN command */
-@@ -1452,7 +1460,10 @@ union bpf_attr {
- 	} info;
- 
- 	struct { /* anonymous struct used by BPF_PROG_QUERY command */
--		__u32		target_fd;	/* container object to query */
-+		union {
-+			__u32	target_fd;	/* container object to query */
-+			__u32	target_ifindex; /* target ifindex */
-+		};
- 		__u32		attach_type;
- 		__u32		query_flags;
- 		__u32		attach_flags;
-@@ -6038,6 +6049,19 @@ struct bpf_sock_tuple {
- 	};
- };
- 
-+/* (Simplified) user return codes for tc prog type.
-+ * A valid tc program must return one of these defined values. All other
-+ * return codes are reserved for future use. Must remain compatible with
-+ * their TC_ACT_* counter-parts. For compatibility in behavior, unknown
-+ * return codes are mapped to TC_NEXT.
-+ */
-+enum tc_action_base {
-+	TC_NEXT		= -1,
-+	TC_PASS		= 0,
-+	TC_DROP		= 2,
-+	TC_REDIRECT	= 7,
-+};
-+
- struct bpf_xdp_sock {
- 	__u32 queue_id;
- };
-@@ -6804,6 +6828,11 @@ struct bpf_flow_keys {
- 	__be32	flow_label;
- };
- 
-+struct bpf_query_info {
-+	__u32 prog_id;
-+	__u32 prio;
-+};
-+
- struct bpf_func_info {
- 	__u32	insn_off;
- 	__u32	type_id;
-diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
-index 2dfe1079f772..6a906ff93006 100644
---- a/kernel/bpf/Kconfig
-+++ b/kernel/bpf/Kconfig
-@@ -31,6 +31,7 @@ config BPF_SYSCALL
- 	select TASKS_TRACE_RCU
- 	select BINARY_PRINTF
- 	select NET_SOCK_MSG if NET
-+	select NET_XGRESS if NET
- 	select PAGE_POOL if NET
- 	default n
- 	help
-diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-index 341c94f208f4..76c3f9d4e2f3 100644
---- a/kernel/bpf/Makefile
-+++ b/kernel/bpf/Makefile
-@@ -20,6 +20,7 @@ obj-$(CONFIG_BPF_SYSCALL) += devmap.o
- obj-$(CONFIG_BPF_SYSCALL) += cpumap.o
- obj-$(CONFIG_BPF_SYSCALL) += offload.o
- obj-$(CONFIG_BPF_SYSCALL) += net_namespace.o
-+obj-$(CONFIG_BPF_SYSCALL) += net.o
- endif
- ifeq ($(CONFIG_PERF_EVENTS),y)
- obj-$(CONFIG_BPF_SYSCALL) += stackmap.o
-diff --git a/kernel/bpf/net.c b/kernel/bpf/net.c
-new file mode 100644
-index 000000000000..ab9a9dee615b
---- /dev/null
-+++ b/kernel/bpf/net.c
-@@ -0,0 +1,274 @@
-+// SPDX-License-Identifier: GPL-2.0-only
++++ b/tools/testing/selftests/bpf/prog_tests/tc_link.c
+@@ -0,0 +1,756 @@
++// SPDX-License-Identifier: GPL-2.0
 +/* Copyright (c) 2022 Isovalent */
 +
-+#include <linux/bpf.h>
-+#include <linux/filter.h>
-+#include <linux/netdevice.h>
++#include <uapi/linux/if_link.h>
++#include <test_progs.h>
 +
-+#include <net/xtc.h>
++#include "test_tc_link.skel.h"
 +
-+static int __xtc_prog_attach(struct net_device *dev, bool ingress, u32 limit,
-+			     struct bpf_prog *nprog, u32 prio, u32 flags)
++#define loopback	1
++#define ping_cmd	"ping -q -c1 -w1 127.0.0.1 > /dev/null"
++
++void serial_test_tc_link_base(void)
 +{
-+	struct bpf_prog_array_item *item, *tmp;
-+	struct xtc_entry *entry, *peer;
-+	struct bpf_prog *oprog;
-+	bool created;
-+	int i, j;
++	struct test_tc_link *skel1 = NULL, *skel2 = NULL;
++	__u32 prog_fd1, prog_fd2, prog_fd3, prog_fd4;
++	__u32 id0 = 0, id1, id2, id3, id4, id5, id6, id7;
++	struct bpf_prog_info prog_info;
++	struct bpf_link_info link_info;
++	__u32 link_info_len = sizeof(link_info);
++	__u32 prog_info_len = sizeof(prog_info);
++	__u32 prog_cnt, attach_flags = 0;
++	struct bpf_query_info progs[4];
++	struct bpf_link *link;
++	int err;
 +
-+	ASSERT_RTNL();
++	skel1 = test_tc_link__open_and_load();
++	if (!ASSERT_OK_PTR(skel1, "skel_load"))
++		goto cleanup;
++	prog_fd1 = bpf_program__fd(skel1->progs.tc_handler_in);
++	prog_fd2 = bpf_program__fd(skel1->progs.tc_handler_eg);
 +
-+	entry = dev_xtc_entry_fetch(dev, ingress, &created);
-+	if (!entry)
-+		return -ENOMEM;
-+	for (i = 0; i < limit; i++) {
-+		item = &entry->items[i];
-+		oprog = item->prog;
-+		if (!oprog)
-+			break;
-+		if (item->bpf_priority == prio) {
-+			if (flags & BPF_F_REPLACE) {
-+				/* Pairs with READ_ONCE() in xtc_run_progs(). */
-+				WRITE_ONCE(item->prog, nprog);
-+				bpf_prog_put(oprog);
-+				dev_xtc_entry_prio_set(entry, prio, nprog);
-+				return prio;
-+			}
-+			return -EBUSY;
-+		}
-+	}
-+	if (dev_xtc_entry_total(entry) >= limit)
-+		return -ENOSPC;
-+	prio = dev_xtc_entry_prio_new(entry, prio, nprog);
-+	if (prio < 0) {
-+		if (created)
-+			dev_xtc_entry_free(entry);
-+		return -ENOMEM;
-+	}
-+	peer = dev_xtc_entry_peer(entry);
-+	dev_xtc_entry_clear(peer);
-+	for (i = 0, j = 0; i < limit; i++, j++) {
-+		item = &entry->items[i];
-+		tmp = &peer->items[j];
-+		oprog = item->prog;
-+		if (!oprog) {
-+			if (i == j) {
-+				tmp->prog = nprog;
-+				tmp->bpf_priority = prio;
-+			}
-+			break;
-+		} else if (item->bpf_priority < prio) {
-+			tmp->prog = oprog;
-+			tmp->bpf_priority = item->bpf_priority;
-+		} else if (item->bpf_priority > prio) {
-+			if (i == j) {
-+				tmp->prog = nprog;
-+				tmp->bpf_priority = prio;
-+				tmp = &peer->items[++j];
-+			}
-+			tmp->prog = oprog;
-+			tmp->bpf_priority = item->bpf_priority;
-+		}
-+	}
-+	dev_xtc_entry_update(dev, peer, ingress);
-+	if (ingress)
-+		net_inc_ingress_queue();
-+	else
-+		net_inc_egress_queue();
-+	xtc_inc();
-+	return prio;
-+}
++	skel2 = test_tc_link__open_and_load();
++	if (!ASSERT_OK_PTR(skel2, "skel_load"))
++		goto cleanup;
++	prog_fd3 = bpf_program__fd(skel2->progs.tc_handler_in);
++	prog_fd4 = bpf_program__fd(skel2->progs.tc_handler_eg);
 +
-+int xtc_prog_attach(const union bpf_attr *attr, struct bpf_prog *nprog)
-+{
-+	struct net *net = current->nsproxy->net_ns;
-+	bool ingress = attr->attach_type == BPF_NET_INGRESS;
-+	struct net_device *dev;
-+	int ret;
++	memset(&prog_info, 0, sizeof(prog_info));
++	err = bpf_obj_get_info_by_fd(prog_fd1, &prog_info, &prog_info_len);
++	if (!ASSERT_OK(err, "fd_info1"))
++		goto cleanup;
++	id1 = prog_info.id;
 +
-+	if (attr->attach_flags & ~BPF_F_REPLACE)
-+		return -EINVAL;
-+	rtnl_lock();
-+	dev = __dev_get_by_index(net, attr->target_ifindex);
-+	if (!dev) {
-+		rtnl_unlock();
-+		return -EINVAL;
-+	}
-+	ret = __xtc_prog_attach(dev, ingress, XTC_MAX_ENTRIES, nprog,
-+				attr->attach_priority, attr->attach_flags);
-+	rtnl_unlock();
-+	return ret;
-+}
++	memset(&prog_info, 0, sizeof(prog_info));
++	err = bpf_obj_get_info_by_fd(prog_fd2, &prog_info, &prog_info_len);
++	if (!ASSERT_OK(err, "fd_info2"))
++		goto cleanup;
++	id2 = prog_info.id;
 +
-+static int __xtc_prog_detach(struct net_device *dev, bool ingress, u32 limit,
-+			     u32 prio)
-+{
-+	struct bpf_prog_array_item *item, *tmp;
-+	struct bpf_prog *oprog, *fprog = NULL;
-+	struct xtc_entry *entry, *peer;
-+	int i, j;
++	memset(&prog_info, 0, sizeof(prog_info));
++	err = bpf_obj_get_info_by_fd(prog_fd3, &prog_info, &prog_info_len);
++	if (!ASSERT_OK(err, "fd_info3"))
++		goto cleanup;
++	id3 = prog_info.id;
 +
-+	ASSERT_RTNL();
++	memset(&prog_info, 0, sizeof(prog_info));
++	err = bpf_obj_get_info_by_fd(prog_fd4, &prog_info, &prog_info_len);
++	if (!ASSERT_OK(err, "fd_info4"))
++		goto cleanup;
++	id4 = prog_info.id;
 +
-+	entry = ingress ?
-+		rcu_dereference_rtnl(dev->xtc_ingress) :
-+		rcu_dereference_rtnl(dev->xtc_egress);
-+	if (!entry)
-+		return -ENOENT;
-+	peer = dev_xtc_entry_peer(entry);
-+	dev_xtc_entry_clear(peer);
-+	for (i = 0, j = 0; i < limit; i++) {
-+		item = &entry->items[i];
-+		tmp = &peer->items[j];
-+		oprog = item->prog;
-+		if (!oprog)
-+			break;
-+		if (item->bpf_priority != prio) {
-+			tmp->prog = oprog;
-+			tmp->bpf_priority = item->bpf_priority;
-+			j++;
-+		} else {
-+			fprog = oprog;
-+		}
-+	}
-+	if (fprog) {
-+		dev_xtc_entry_prio_del(peer, prio);
-+		if (dev_xtc_entry_total(peer) == 0 && !entry->parent->miniq)
-+			peer = NULL;
-+		dev_xtc_entry_update(dev, peer, ingress);
-+		bpf_prog_put(fprog);
-+		if (!peer)
-+			dev_xtc_entry_free(entry);
-+		if (ingress)
-+			net_dec_ingress_queue();
-+		else
-+			net_dec_egress_queue();
-+		xtc_dec();
-+		return 0;
-+	}
-+	return -ENOENT;
-+}
++	/* Sanity check that we have distinct programs. */
++	ASSERT_NEQ(id1, id3, "prog_ids_1_3");
++	ASSERT_NEQ(id2, id4, "prog_ids_2_4");
++	ASSERT_NEQ(id1, id4, "prog_ids_1_4");
 +
-+int xtc_prog_detach(const union bpf_attr *attr)
-+{
-+	struct net *net = current->nsproxy->net_ns;
-+	bool ingress = attr->attach_type == BPF_NET_INGRESS;
-+	struct net_device *dev;
-+	int ret;
++	link = bpf_program__attach_tc(skel1->progs.tc_handler_in, loopback, 1);
++	if (!ASSERT_OK_PTR(link, "link_attach"))
++		goto cleanup;
++	skel1->links.tc_handler_in = link;
 +
-+	if (attr->attach_flags || !attr->attach_priority)
-+		return -EINVAL;
-+	rtnl_lock();
-+	dev = __dev_get_by_index(net, attr->target_ifindex);
-+	if (!dev) {
-+		rtnl_unlock();
-+		return -EINVAL;
-+	}
-+	ret = __xtc_prog_detach(dev, ingress, XTC_MAX_ENTRIES,
-+				attr->attach_priority);
-+	rtnl_unlock();
-+	return ret;
-+}
++	memset(&link_info, 0, sizeof(link_info));
++	err = bpf_obj_get_info_by_fd(bpf_link__fd(link), &link_info, &link_info_len);
++	if (!ASSERT_OK(err, "link_info"))
++		goto cleanup;
 +
-+static void __xtc_prog_detach_all(struct net_device *dev, bool ingress, u32 limit)
-+{
-+	struct bpf_prog_array_item *item;
-+	struct xtc_entry *entry;
-+	struct bpf_prog *prog;
-+	int i;
++	/* Sanity check that attached ingress BPF link looks as expected. */
++	ASSERT_EQ(link_info.type, BPF_LINK_TYPE_TC, "link_type");
++	ASSERT_EQ(link_info.prog_id, id1, "link_prog_id");
++	ASSERT_EQ(link_info.tc.ifindex, loopback, "link_ifindex");
++	ASSERT_EQ(link_info.tc.attach_type, BPF_NET_INGRESS, "link_attach_type");
++	ASSERT_EQ(link_info.tc.priority, 1, "link_priority");
++	ASSERT_NEQ(link_info.id, id0, "link_id");
++	id5 = link_info.id;
 +
-+	ASSERT_RTNL();
++	/* Updating program under active ingress BPF link works as expected. */
++	err = bpf_link__update_program(link, skel2->progs.tc_handler_in);
++	if (!ASSERT_OK(err, "link_upd_invalid"))
++		goto cleanup;
 +
-+	entry = ingress ?
-+		rcu_dereference_rtnl(dev->xtc_ingress) :
-+		rcu_dereference_rtnl(dev->xtc_egress);
-+	if (!entry)
-+		return;
-+	dev_xtc_entry_update(dev, NULL, ingress);
-+	for (i = 0; i < limit; i++) {
-+		item = &entry->items[i];
-+		prog = item->prog;
-+		if (!prog)
-+			break;
-+		dev_xtc_entry_prio_del(entry, item->bpf_priority);
-+		bpf_prog_put(prog);
-+		if (ingress)
-+			net_dec_ingress_queue();
-+		else
-+			net_dec_egress_queue();
-+		xtc_dec();
-+	}
-+	dev_xtc_entry_free(entry);
-+}
++	memset(&link_info, 0, sizeof(link_info));
++	err = bpf_obj_get_info_by_fd(bpf_link__fd(link), &link_info, &link_info_len);
++	if (!ASSERT_OK(err, "link_info"))
++		goto cleanup;
 +
-+void dev_xtc_uninstall(struct net_device *dev)
-+{
-+	__xtc_prog_detach_all(dev, true,  XTC_MAX_ENTRIES + 1);
-+	__xtc_prog_detach_all(dev, false, XTC_MAX_ENTRIES + 1);
-+}
++	ASSERT_EQ(link_info.id, id5, "link_id");
++	ASSERT_EQ(link_info.prog_id, id3, "link_prog_id");
 +
-+static int
-+__xtc_prog_query(const union bpf_attr *attr, union bpf_attr __user *uattr,
-+		 struct net_device *dev, bool ingress, u32 limit)
-+{
-+	struct bpf_query_info info, __user *uinfo;
-+	struct bpf_prog_array_item *item;
-+	struct xtc_entry *entry;
-+	struct bpf_prog *prog;
-+	u32 i, flags = 0, cnt;
-+	int ret = 0;
++	link = bpf_program__attach_tc(skel1->progs.tc_handler_eg, loopback, 1);
++	if (!ASSERT_OK_PTR(link, "link_attach"))
++		goto cleanup;
++	skel1->links.tc_handler_eg = link;
 +
-+	ASSERT_RTNL();
++	memset(&link_info, 0, sizeof(link_info));
++	err = bpf_obj_get_info_by_fd(bpf_link__fd(link), &link_info, &link_info_len);
++	if (!ASSERT_OK(err, "link_info"))
++		goto cleanup;
 +
-+	entry = ingress ?
-+		rcu_dereference_rtnl(dev->xtc_ingress) :
-+		rcu_dereference_rtnl(dev->xtc_egress);
-+	if (!entry)
-+		return -ENOENT;
-+	cnt = dev_xtc_entry_total(entry);
-+	if (copy_to_user(&uattr->query.attach_flags, &flags, sizeof(flags)))
-+		return -EFAULT;
-+	if (copy_to_user(&uattr->query.prog_cnt, &cnt, sizeof(cnt)))
-+		return -EFAULT;
-+	uinfo = u64_to_user_ptr(attr->query.prog_ids);
-+	if (attr->query.prog_cnt == 0 || !uinfo || !cnt)
-+		/* return early if user requested only program count + flags */
-+		return 0;
-+	if (attr->query.prog_cnt < cnt) {
-+		cnt = attr->query.prog_cnt;
-+		ret = -ENOSPC;
-+	}
-+	for (i = 0; i < limit; i++) {
-+		item = &entry->items[i];
-+		prog = item->prog;
-+		if (!prog)
-+			break;
-+		info.prog_id = prog->aux->id;
-+		info.prio = item->bpf_priority;
-+		if (copy_to_user(uinfo + i, &info, sizeof(info)))
-+			return -EFAULT;
-+		if (i + 1 == cnt)
-+			break;
-+	}
-+	return ret;
-+}
++	/* Sanity check that attached egress BPF link looks as expected. */
++	ASSERT_EQ(link_info.type, BPF_LINK_TYPE_TC, "link_type");
++	ASSERT_EQ(link_info.prog_id, id2, "link_prog_id");
++	ASSERT_EQ(link_info.tc.ifindex, loopback, "link_ifindex");
++	ASSERT_EQ(link_info.tc.attach_type, BPF_NET_EGRESS, "link_attach_type");
++	ASSERT_EQ(link_info.tc.priority, 1, "link_priority");
++	ASSERT_NEQ(link_info.id, id0, "link_id");
++	ASSERT_NEQ(link_info.id, id5, "link_id");
++	id6 = link_info.id;
 +
-+int xtc_prog_query(const union bpf_attr *attr, union bpf_attr __user *uattr)
-+{
-+	struct net *net = current->nsproxy->net_ns;
-+	bool ingress = attr->query.attach_type == BPF_NET_INGRESS;
-+	struct net_device *dev;
-+	int ret;
++	/* Updating program under active egress BPF link works as expected. */
++	err = bpf_link__update_program(link, skel2->progs.tc_handler_eg);
++	if (!ASSERT_OK(err, "link_upd_invalid"))
++		goto cleanup;
 +
-+	if (attr->query.query_flags || attr->query.attach_flags)
-+		return -EINVAL;
-+	rtnl_lock();
-+	dev = __dev_get_by_index(net, attr->query.target_ifindex);
-+	if (!dev) {
-+		rtnl_unlock();
-+		return -EINVAL;
-+	}
-+	ret = __xtc_prog_query(attr, uattr, dev, ingress, XTC_MAX_ENTRIES);
-+	rtnl_unlock();
-+	return ret;
-+}
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 7b373a5e861f..a0a670b964bb 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -36,6 +36,8 @@
- #include <linux/memcontrol.h>
- #include <linux/trace_events.h>
- 
-+#include <net/xtc.h>
++	memset(&link_info, 0, sizeof(link_info));
++	err = bpf_obj_get_info_by_fd(bpf_link__fd(link), &link_info, &link_info_len);
++	if (!ASSERT_OK(err, "link_info"))
++		goto cleanup;
 +
- #define IS_FD_ARRAY(map) ((map)->map_type == BPF_MAP_TYPE_PERF_EVENT_ARRAY || \
- 			  (map)->map_type == BPF_MAP_TYPE_CGROUP_ARRAY || \
- 			  (map)->map_type == BPF_MAP_TYPE_ARRAY_OF_MAPS)
-@@ -3448,6 +3450,9 @@ attach_type_to_prog_type(enum bpf_attach_type attach_type)
- 		return BPF_PROG_TYPE_XDP;
- 	case BPF_LSM_CGROUP:
- 		return BPF_PROG_TYPE_LSM;
-+	case BPF_NET_INGRESS:
-+	case BPF_NET_EGRESS:
-+		return BPF_PROG_TYPE_SCHED_CLS;
- 	default:
- 		return BPF_PROG_TYPE_UNSPEC;
- 	}
-@@ -3466,18 +3471,15 @@ static int bpf_prog_attach(const union bpf_attr *attr)
- 
- 	if (CHECK_ATTR(BPF_PROG_ATTACH))
- 		return -EINVAL;
--
- 	if (attr->attach_flags & ~BPF_F_ATTACH_MASK)
- 		return -EINVAL;
- 
- 	ptype = attach_type_to_prog_type(attr->attach_type);
- 	if (ptype == BPF_PROG_TYPE_UNSPEC)
- 		return -EINVAL;
--
- 	prog = bpf_prog_get_type(attr->attach_bpf_fd, ptype);
- 	if (IS_ERR(prog))
- 		return PTR_ERR(prog);
--
- 	if (bpf_prog_attach_check_attach_type(prog, attr->attach_type)) {
- 		bpf_prog_put(prog);
- 		return -EINVAL;
-@@ -3508,16 +3510,18 @@ static int bpf_prog_attach(const union bpf_attr *attr)
- 
- 		ret = cgroup_bpf_prog_attach(attr, ptype, prog);
- 		break;
-+	case BPF_PROG_TYPE_SCHED_CLS:
-+		ret = xtc_prog_attach(attr, prog);
-+		break;
- 	default:
- 		ret = -EINVAL;
- 	}
--
--	if (ret)
-+	if (ret < 0)
- 		bpf_prog_put(prog);
- 	return ret;
- }
- 
--#define BPF_PROG_DETACH_LAST_FIELD attach_type
-+#define BPF_PROG_DETACH_LAST_FIELD replace_bpf_fd
- 
- static int bpf_prog_detach(const union bpf_attr *attr)
- {
-@@ -3527,6 +3531,9 @@ static int bpf_prog_detach(const union bpf_attr *attr)
- 		return -EINVAL;
- 
- 	ptype = attach_type_to_prog_type(attr->attach_type);
-+	if (ptype != BPF_PROG_TYPE_SCHED_CLS &&
-+	    (attr->attach_flags || attr->replace_bpf_fd))
-+		return -EINVAL;
- 
- 	switch (ptype) {
- 	case BPF_PROG_TYPE_SK_MSG:
-@@ -3545,6 +3552,8 @@ static int bpf_prog_detach(const union bpf_attr *attr)
- 	case BPF_PROG_TYPE_SOCK_OPS:
- 	case BPF_PROG_TYPE_LSM:
- 		return cgroup_bpf_prog_detach(attr, ptype);
-+	case BPF_PROG_TYPE_SCHED_CLS:
-+		return xtc_prog_detach(attr);
- 	default:
- 		return -EINVAL;
- 	}
-@@ -3598,6 +3607,9 @@ static int bpf_prog_query(const union bpf_attr *attr,
- 	case BPF_SK_MSG_VERDICT:
- 	case BPF_SK_SKB_VERDICT:
- 		return sock_map_bpf_prog_query(attr, uattr);
-+	case BPF_NET_INGRESS:
-+	case BPF_NET_EGRESS:
-+		return xtc_prog_query(attr, uattr);
- 	default:
- 		return -EINVAL;
- 	}
-diff --git a/net/Kconfig b/net/Kconfig
-index 48c33c222199..b7a9cd174464 100644
---- a/net/Kconfig
-+++ b/net/Kconfig
-@@ -52,6 +52,11 @@ config NET_INGRESS
- config NET_EGRESS
- 	bool
- 
-+config NET_XGRESS
-+	select NET_INGRESS
-+	select NET_EGRESS
-+	bool
++	ASSERT_EQ(link_info.id, id6, "link_id");
++	ASSERT_EQ(link_info.prog_id, id4, "link_prog_id");
 +
- config NET_REDIRECT
- 	bool
- 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index fa53830d0683..552b805c27dd 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -107,6 +107,7 @@
- #include <net/pkt_cls.h>
- #include <net/checksum.h>
- #include <net/xfrm.h>
-+#include <net/xtc.h>
- #include <linux/highmem.h>
- #include <linux/init.h>
- #include <linux/module.h>
-@@ -154,7 +155,6 @@
- #include "dev.h"
- #include "net-sysfs.h"
- 
--
- static DEFINE_SPINLOCK(ptype_lock);
- struct list_head ptype_base[PTYPE_HASH_SIZE] __read_mostly;
- struct list_head ptype_all __read_mostly;	/* Taps */
-@@ -3935,69 +3935,199 @@ int dev_loopback_xmit(struct net *net, struct sock *sk, struct sk_buff *skb)
- EXPORT_SYMBOL(dev_loopback_xmit);
- 
- #ifdef CONFIG_NET_EGRESS
--static struct sk_buff *
--sch_handle_egress(struct sk_buff *skb, int *ret, struct net_device *dev)
-+static struct netdev_queue *
-+netdev_tx_queue_mapping(struct net_device *dev, struct sk_buff *skb)
-+{
-+	int qm = skb_get_queue_mapping(skb);
-+
-+	return netdev_get_tx_queue(dev, netdev_cap_txqueue(dev, qm));
-+}
-+
-+static bool netdev_xmit_txqueue_skipped(void)
-+{
-+	return __this_cpu_read(softnet_data.xmit.skip_txqueue);
-+}
-+
-+void netdev_xmit_skip_txqueue(bool skip)
-+{
-+	__this_cpu_write(softnet_data.xmit.skip_txqueue, skip);
-+}
-+EXPORT_SYMBOL_GPL(netdev_xmit_skip_txqueue);
-+#endif /* CONFIG_NET_EGRESS */
-+
-+#ifdef CONFIG_NET_XGRESS
-+static int tc_run(struct xtc_entry *entry, struct sk_buff *skb)
- {
-+	int ret = TC_ACT_UNSPEC;
- #ifdef CONFIG_NET_CLS_ACT
--	struct mini_Qdisc *miniq = rcu_dereference_bh(dev->miniq_egress);
--	struct tcf_result cl_res;
-+	struct mini_Qdisc *miniq = rcu_dereference_bh(entry->parent->miniq);
-+	struct tcf_result res;
- 
- 	if (!miniq)
--		return skb;
-+		return ret;
- 
--	/* qdisc_skb_cb(skb)->pkt_len was already set by the caller. */
- 	tc_skb_cb(skb)->mru = 0;
- 	tc_skb_cb(skb)->post_ct = false;
--	mini_qdisc_bstats_cpu_update(miniq, skb);
- 
--	switch (tcf_classify(skb, miniq->block, miniq->filter_list, &cl_res, false)) {
-+	mini_qdisc_bstats_cpu_update(miniq, skb);
-+	ret = tcf_classify(skb, miniq->block, miniq->filter_list, &res, false);
-+	/* Only tcf related quirks below. */
-+	switch (ret) {
-+	case TC_ACT_SHOT:
-+		mini_qdisc_qstats_cpu_drop(miniq);
-+		break;
- 	case TC_ACT_OK:
- 	case TC_ACT_RECLASSIFY:
--		skb->tc_index = TC_H_MIN(cl_res.classid);
-+		skb->tc_index = TC_H_MIN(res.classid);
- 		break;
-+	}
-+#endif /* CONFIG_NET_CLS_ACT */
-+	return ret;
-+}
-+
-+static DEFINE_STATIC_KEY_FALSE(xtc_needed_key);
-+
-+void xtc_inc(void)
-+{
-+	static_branch_inc(&xtc_needed_key);
-+}
-+EXPORT_SYMBOL_GPL(xtc_inc);
-+
-+void xtc_dec(void)
-+{
-+	static_branch_dec(&xtc_needed_key);
-+}
-+EXPORT_SYMBOL_GPL(xtc_dec);
-+
-+static __always_inline enum tc_action_base
-+xtc_run(const struct xtc_entry *entry, struct sk_buff *skb,
-+	const bool needs_mac)
-+{
-+	const struct bpf_prog_array_item *item;
-+	const struct bpf_prog *prog;
-+	int ret = TC_NEXT;
-+
-+	if (needs_mac)
-+		__skb_push(skb, skb->mac_len);
-+	item = &entry->items[0];
-+	while ((prog = READ_ONCE(item->prog))) {
-+		bpf_compute_data_pointers(skb);
-+		ret = bpf_prog_run(prog, skb);
-+		if (ret != TC_NEXT)
-+			break;
-+		item++;
-+	}
-+	if (needs_mac)
-+		__skb_pull(skb, skb->mac_len);
-+	return xtc_action_code(skb, ret);
-+}
-+
-+static __always_inline struct sk_buff *
-+sch_handle_ingress(struct sk_buff *skb, struct packet_type **pt_prev, int *ret,
-+		   struct net_device *orig_dev, bool *another)
-+{
-+	struct xtc_entry *entry = rcu_dereference_bh(skb->dev->xtc_ingress);
-+	int sch_ret;
-+
-+	if (!entry)
-+		return skb;
-+	if (*pt_prev) {
-+		*ret = deliver_skb(skb, *pt_prev, orig_dev);
-+		*pt_prev = NULL;
++	/* BPF link is not allowed to replace another BPF link. */
++	link = bpf_program__attach_tc(skel2->progs.tc_handler_eg, loopback, 1);
++	if (!ASSERT_ERR_PTR(link, "link_attach_should_fail")) {
++		bpf_link__destroy(link);
++		goto cleanup;
 +	}
 +
-+	qdisc_skb_cb(skb)->pkt_len = skb->len;
-+	xtc_set_ingress(skb, true);
++	/* BPF link can be attached with different prio to available slot however. */
++	link = bpf_program__attach_tc(skel2->progs.tc_handler_eg, loopback, 2);
++	if (!ASSERT_OK_PTR(link, "link_attach"))
++		goto cleanup;
 +
-+	if (static_branch_unlikely(&xtc_needed_key)) {
-+		sch_ret = xtc_run(entry, skb, true);
-+		if (sch_ret != TC_ACT_UNSPEC)
-+			goto ingress_verdict;
-+	}
-+	sch_ret = tc_run(entry, skb);
-+ingress_verdict:
-+	switch (sch_ret) {
-+	case TC_ACT_REDIRECT:
-+		/* skb_mac_header check was done by BPF, so we can safely
-+		 * push the L2 header back before redirecting to another
-+		 * netdev.
-+		 */
-+		__skb_push(skb, skb->mac_len);
-+		if (skb_do_redirect(skb) == -EAGAIN) {
-+			__skb_pull(skb, skb->mac_len);
-+			*another = true;
-+			break;
-+		}
-+		return NULL;
- 	case TC_ACT_SHOT:
--		mini_qdisc_qstats_cpu_drop(miniq);
--		*ret = NET_XMIT_DROP;
--		kfree_skb_reason(skb, SKB_DROP_REASON_TC_EGRESS);
-+		kfree_skb_reason(skb, SKB_DROP_REASON_TC_INGRESS);
- 		return NULL;
-+	/* used by tc_run */
- 	case TC_ACT_STOLEN:
- 	case TC_ACT_QUEUED:
- 	case TC_ACT_TRAP:
--		*ret = NET_XMIT_SUCCESS;
- 		consume_skb(skb);
-+		fallthrough;
-+	case TC_ACT_CONSUMED:
- 		return NULL;
++	memset(&link_info, 0, sizeof(link_info));
++	err = bpf_obj_get_info_by_fd(bpf_link__fd(link), &link_info, &link_info_len);
++	if (!ASSERT_OK(err, "link_info")) {
++		bpf_link__destroy(link);
++		goto cleanup;
 +	}
 +
-+	return skb;
++	/* Sanity check that 2nd attached egress BPF link looks as expected. */
++	ASSERT_EQ(link_info.type, BPF_LINK_TYPE_TC, "link_type");
++	ASSERT_EQ(link_info.prog_id, id4, "link_prog_id");
++	ASSERT_EQ(link_info.tc.ifindex, loopback, "link_ifindex");
++	ASSERT_EQ(link_info.tc.attach_type, BPF_NET_EGRESS, "link_attach_type");
++	ASSERT_EQ(link_info.tc.priority, 2, "link_priority");
++	ASSERT_NEQ(link_info.id, id6, "link_id");
++
++	/* We destroy link, and reattach with auto-allocated prio. */
++	bpf_link__destroy(link);
++
++	link = bpf_program__attach_tc(skel2->progs.tc_handler_eg, loopback, 0);
++	if (!ASSERT_OK_PTR(link, "link_attach"))
++		goto cleanup;
++
++	memset(&link_info, 0, sizeof(link_info));
++	err = bpf_obj_get_info_by_fd(bpf_link__fd(link), &link_info, &link_info_len);
++	if (!ASSERT_OK(err, "link_info"))
++		goto cleanup_link;
++
++	/* Sanity check that egress BPF link looks as expected and got prio 2. */
++	ASSERT_EQ(link_info.type, BPF_LINK_TYPE_TC, "link_type");
++	ASSERT_EQ(link_info.prog_id, id4, "link_prog_id");
++	ASSERT_EQ(link_info.tc.ifindex, loopback, "link_ifindex");
++	ASSERT_EQ(link_info.tc.attach_type, BPF_NET_EGRESS, "link_attach_type");
++	ASSERT_EQ(link_info.tc.priority, 2, "link_priority");
++	ASSERT_NEQ(link_info.id, id6, "link_id");
++	id7 = link_info.id;
++
++	/* Sanity check query API on what progs we have attached. */
++	prog_cnt = 0;
++	err = bpf_prog_query(loopback, BPF_NET_EGRESS, 0, &attach_flags,
++			     NULL, &prog_cnt);
++	if (!ASSERT_OK(err, "prog_query"))
++		goto cleanup_link;
++
++	ASSERT_EQ(prog_cnt, 2, "prog_cnt");
++
++	memset(progs, 0, sizeof(progs));
++	prog_cnt = ARRAY_SIZE(progs);
++	err = bpf_prog_query(loopback, BPF_NET_EGRESS, 0, &attach_flags,
++			     progs, &prog_cnt);
++	if (!ASSERT_OK(err, "prog_query"))
++		goto cleanup_link;
++
++	ASSERT_EQ(prog_cnt, 2, "prog_cnt");
++	ASSERT_EQ(progs[0].prog_id, id4, "prog[0]_id");
++	ASSERT_EQ(progs[0].link_id, id6, "prog[0]_link");
++	ASSERT_EQ(progs[0].prio, 1, "prog[0]_prio");
++	ASSERT_EQ(progs[1].prog_id, id4, "prog[1]_id");
++	ASSERT_EQ(progs[1].link_id, id7, "prog[1]_link");
++	ASSERT_EQ(progs[1].prio, 2, "prog[1]_prio");
++	ASSERT_EQ(progs[2].prog_id, 0, "prog[2]_id");
++	ASSERT_EQ(progs[2].link_id, 0, "prog[2]_link");
++	ASSERT_EQ(progs[2].prio, 0, "prog[2]_prio");
++
++	memset(progs, 0, sizeof(progs));
++	prog_cnt = ARRAY_SIZE(progs);
++	err = bpf_prog_query(loopback, BPF_NET_INGRESS, 0, &attach_flags,
++			     progs, &prog_cnt);
++	if (!ASSERT_OK(err, "prog_query"))
++		goto cleanup_link;
++
++	ASSERT_EQ(prog_cnt, 1, "prog_cnt");
++	ASSERT_EQ(progs[0].prog_id, id3, "prog[0]_id");
++	ASSERT_EQ(progs[0].link_id, id5, "prog[0]_link");
++	ASSERT_EQ(progs[0].prio, 1, "prog[0]_prio");
++	ASSERT_EQ(progs[1].prog_id, 0, "prog[1]_id");
++	ASSERT_EQ(progs[1].link_id, 0, "prog[1]_link");
++	ASSERT_EQ(progs[1].prio, 0, "prog[1]_prio");
++
++cleanup_link:
++	bpf_link__destroy(link);
++cleanup:
++	test_tc_link__destroy(skel1);
++	test_tc_link__destroy(skel2);
 +}
 +
-+static __always_inline struct sk_buff *
-+sch_handle_egress(struct sk_buff *skb, int *ret, struct net_device *dev)
++void serial_test_tc_link_detach(void)
 +{
-+	struct xtc_entry *entry = rcu_dereference_bh(dev->xtc_egress);
-+	int sch_ret;
++	struct bpf_prog_info prog_info;
++	struct bpf_link_info link_info;
++	struct test_tc_link *skel;
++	__u32 prog_info_len = sizeof(prog_info);
++	__u32 link_info_len = sizeof(link_info);
++	__u32 prog_cnt, attach_flags = 0;
++	__u32 prog_fd, id, id2;
++	struct bpf_link *link;
++	int err;
 +
-+	if (!entry)
-+		return skb;
++	skel = test_tc_link__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_load"))
++		goto cleanup;
++	prog_fd = bpf_program__fd(skel->progs.tc_handler_in);
 +
-+	/* qdisc_skb_cb(skb)->pkt_len & xtc_set_ingress() was
-+	 * already set by the caller.
++	memset(&prog_info, 0, sizeof(prog_info));
++	err = bpf_obj_get_info_by_fd(prog_fd, &prog_info, &prog_info_len);
++	if (!ASSERT_OK(err, "fd_info"))
++		goto cleanup;
++	id = prog_info.id;
++
++	link = bpf_program__attach_tc(skel->progs.tc_handler_in, loopback, 0);
++	if (!ASSERT_OK_PTR(link, "link_attach"))
++		goto cleanup;
++	skel->links.tc_handler_in = link;
++
++	memset(&link_info, 0, sizeof(link_info));
++	err = bpf_obj_get_info_by_fd(bpf_link__fd(link), &link_info, &link_info_len);
++	if (!ASSERT_OK(err, "link_info"))
++		goto cleanup;
++
++	/* Sanity check that attached ingress BPF link looks as expected. */
++	ASSERT_EQ(link_info.type, BPF_LINK_TYPE_TC, "link_type");
++	ASSERT_EQ(link_info.prog_id, id, "link_prog_id");
++	ASSERT_EQ(link_info.tc.ifindex, loopback, "link_ifindex");
++	ASSERT_EQ(link_info.tc.attach_type, BPF_NET_INGRESS, "link_attach_type");
++	ASSERT_EQ(link_info.tc.priority, 1, "link_priority");
++	id2 = link_info.id;
++
++	/* Sanity check query API that one prog is attached. */
++	prog_cnt = 0;
++	err = bpf_prog_query(loopback, BPF_NET_INGRESS, 0, &attach_flags,
++			     NULL, &prog_cnt);
++	if (!ASSERT_OK(err, "prog_query"))
++		goto cleanup;
++
++	ASSERT_EQ(prog_cnt, 1, "prog_cnt");
++
++	err = bpf_link__detach(link);
++	if (!ASSERT_OK(err, "link_detach"))
++		goto cleanup;
++
++	memset(&link_info, 0, sizeof(link_info));
++	err = bpf_obj_get_info_by_fd(bpf_link__fd(link), &link_info, &link_info_len);
++	if (!ASSERT_OK(err, "link_info"))
++		goto cleanup;
++
++	/* Sanity check that defunct detached link looks as expected. */
++	ASSERT_EQ(link_info.type, BPF_LINK_TYPE_TC, "link_type");
++	ASSERT_EQ(link_info.prog_id, id, "link_prog_id");
++	ASSERT_EQ(link_info.tc.ifindex, 0, "link_ifindex");
++	ASSERT_EQ(link_info.tc.attach_type, BPF_NET_INGRESS, "link_attach_type");
++	ASSERT_EQ(link_info.tc.priority, 1, "link_priority");
++	ASSERT_EQ(link_info.id, id2, "link_id");
++
++	/* Sanity check query API that no prog is attached. */
++	prog_cnt = 0;
++	err = bpf_prog_query(loopback, BPF_NET_INGRESS, 0, &attach_flags,
++			     NULL, &prog_cnt);
++	ASSERT_EQ(err, -ENOENT, "prog_cnt");
++cleanup:
++	test_tc_link__destroy(skel);
++}
++
++void serial_test_tc_link_opts(void)
++{
++	DECLARE_LIBBPF_OPTS(bpf_prog_attach_opts, opta);
++	DECLARE_LIBBPF_OPTS(bpf_prog_detach_opts, optd);
++	__u32 prog_fd1, prog_fd2, id1, id2;
++	struct bpf_prog_info prog_info;
++	struct test_tc_link *skel;
++	__u32 prog_info_len = sizeof(prog_info);
++	__u32 prog_cnt, attach_flags = 0;
++	struct bpf_query_info progs[4];
++	int err, prio;
++
++	skel = test_tc_link__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_load"))
++		goto cleanup;
++	prog_fd1 = bpf_program__fd(skel->progs.tc_handler_in);
++	prog_fd2 = bpf_program__fd(skel->progs.tc_handler_eg);
++
++	memset(&prog_info, 0, sizeof(prog_info));
++	err = bpf_obj_get_info_by_fd(prog_fd1, &prog_info, &prog_info_len);
++	if (!ASSERT_OK(err, "fd_info1"))
++		goto cleanup;
++	id1 = prog_info.id;
++
++	memset(&prog_info, 0, sizeof(prog_info));
++	err = bpf_obj_get_info_by_fd(prog_fd2, &prog_info, &prog_info_len);
++	if (!ASSERT_OK(err, "fd_info2"))
++		goto cleanup;
++	id2 = prog_info.id;
++
++	ASSERT_NEQ(id1, id2, "prog_ids_1_2");
++
++	/* Sanity check query API that nothing is attached. */
++	prog_cnt = 0;
++	err = bpf_prog_query(loopback, BPF_NET_INGRESS, 0, &attach_flags,
++			     NULL, &prog_cnt);
++	ASSERT_EQ(prog_cnt, 0, "prog_cnt");
++	ASSERT_EQ(err, -ENOENT, "prog_query");
++
++	prog_cnt = 0;
++	err = bpf_prog_query(loopback, BPF_NET_EGRESS, 0, &attach_flags,
++			     NULL, &prog_cnt);
++	ASSERT_EQ(prog_cnt, 0, "prog_cnt");
++	ASSERT_EQ(err, -ENOENT, "prog_query");
++
++	/* Sanity check that attaching with given prio works. */
++	opta.flags = 0;
++	opta.attach_priority = prio = 1;
++	err = bpf_prog_attach_opts(prog_fd1, loopback, BPF_NET_INGRESS, &opta);
++	if (!ASSERT_EQ(err, opta.attach_priority, "prog_attach"))
++		goto cleanup;
++
++	prog_cnt = 0;
++	err = bpf_prog_query(loopback, BPF_NET_INGRESS, 0, &attach_flags,
++			     NULL, &prog_cnt);
++	if (!ASSERT_OK(err, "prog_query"))
++		goto cleanup_detach;
++
++	ASSERT_EQ(prog_cnt, 1, "prog_cnt");
++
++	memset(progs, 0, sizeof(progs));
++	prog_cnt = ARRAY_SIZE(progs);
++	err = bpf_prog_query(loopback, BPF_NET_INGRESS, 0, &attach_flags,
++			     progs, &prog_cnt);
++	if (!ASSERT_OK(err, "prog_query"))
++		goto cleanup_detach;
++
++	ASSERT_EQ(prog_cnt, 1, "prog_cnt");
++	ASSERT_EQ(progs[0].prog_id, id1, "prog[0]_id");
++	ASSERT_EQ(progs[0].link_id, 0, "prog[0]_link");
++	ASSERT_EQ(progs[0].prio, 1, "prog[0]_prio");
++	ASSERT_EQ(progs[1].prog_id, 0, "prog[1]_id");
++	ASSERT_EQ(progs[1].link_id, 0, "prog[1]_link");
++	ASSERT_EQ(progs[1].prio, 0, "prog[1]_prio");
++
++	/* We cannot override unless we add replace flag. */
++	opta.flags = 0;
++	opta.attach_priority = 1;
++	err = bpf_prog_attach_opts(prog_fd2, loopback, BPF_NET_INGRESS, &opta);
++	if (!ASSERT_ERR(err, "prog_attach_fail"))
++		goto cleanup_detach;
++
++	opta.flags = BPF_F_REPLACE;
++	opta.attach_priority = 1;
++	err = bpf_prog_attach_opts(prog_fd2, loopback, BPF_NET_INGRESS, &opta);
++	if (!ASSERT_EQ(err, opta.attach_priority, "prog_replace"))
++		goto cleanup_detach;
++
++	memset(progs, 0, sizeof(progs));
++	prog_cnt = ARRAY_SIZE(progs);
++	err = bpf_prog_query(loopback, BPF_NET_INGRESS, 0, &attach_flags,
++			     progs, &prog_cnt);
++	if (!ASSERT_OK(err, "prog_query"))
++		goto cleanup_detach;
++
++	ASSERT_EQ(prog_cnt, 1, "prog_cnt");
++	ASSERT_EQ(progs[0].prog_id, id2, "prog[0]_id");
++	ASSERT_EQ(progs[0].link_id, 0, "prog[0]_link");
++	ASSERT_EQ(progs[0].prio, 1, "prog[0]_prio");
++	ASSERT_EQ(progs[1].prog_id, 0, "prog[1]_id");
++	ASSERT_EQ(progs[1].link_id, 0, "prog[1]_link");
++	ASSERT_EQ(progs[1].prio, 0, "prog[1]_prio");
++
++	/* Check auto-assignment for priority. */
++	opta.flags = 0;
++	opta.attach_priority = 0;
++	err = bpf_prog_attach_opts(prog_fd1, loopback, BPF_NET_INGRESS, &opta);
++	if (!ASSERT_EQ(err, 2, "prog_replace"))
++		goto cleanup_detach;
++
++	memset(progs, 0, sizeof(progs));
++	prog_cnt = ARRAY_SIZE(progs);
++	err = bpf_prog_query(loopback, BPF_NET_INGRESS, 0, &attach_flags,
++			     progs, &prog_cnt);
++	if (!ASSERT_OK(err, "prog_query"))
++		goto cleanup_detach2;
++
++	ASSERT_EQ(prog_cnt, 2, "prog_cnt");
++	ASSERT_EQ(progs[0].prog_id, id2, "prog[0]_id");
++	ASSERT_EQ(progs[0].link_id, 0, "prog[0]_link");
++	ASSERT_EQ(progs[0].prio, 1, "prog[0]_prio");
++	ASSERT_EQ(progs[1].prog_id, id1, "prog[1]_id");
++	ASSERT_EQ(progs[1].link_id, 0, "prog[1]_link");
++	ASSERT_EQ(progs[1].prio, 2, "prog[1]_prio");
++	ASSERT_EQ(progs[2].prog_id, 0, "prog[2]_id");
++	ASSERT_EQ(progs[2].link_id, 0, "prog[2]_link");
++	ASSERT_EQ(progs[2].prio, 0, "prog[2]_prio");
++
++	/* Remove the 1st program, so the 2nd becomes 1st in line. */
++	prio = 2;
++	optd.attach_priority = 1;
++	err = bpf_prog_detach_opts(0, loopback, BPF_NET_INGRESS, &optd);
++	if (!ASSERT_OK(err, "prog_detach"))
++		goto cleanup_detach;
++
++	memset(progs, 0, sizeof(progs));
++	prog_cnt = ARRAY_SIZE(progs);
++	err = bpf_prog_query(loopback, BPF_NET_INGRESS, 0, &attach_flags,
++			     progs, &prog_cnt);
++	if (!ASSERT_OK(err, "prog_query"))
++		goto cleanup_detach;
++
++	ASSERT_EQ(prog_cnt, 1, "prog_cnt");
++	ASSERT_EQ(progs[0].prog_id, id1, "prog[0]_id");
++	ASSERT_EQ(progs[0].link_id, 0, "prog[0]_link");
++	ASSERT_EQ(progs[0].prio, 2, "prog[0]_prio");
++	ASSERT_EQ(progs[1].prog_id, 0, "prog[1]_id");
++	ASSERT_EQ(progs[1].link_id, 0, "prog[1]_link");
++	ASSERT_EQ(progs[1].prio, 0, "prog[1]_prio");
++
++	/* Add back higher prio program, so 1st becomes 2nd in line.
++	 * Replace also works if nothing was attached at the given prio.
 +	 */
-+	if (static_branch_unlikely(&xtc_needed_key)) {
-+		sch_ret = xtc_run(entry, skb, false);
-+		if (sch_ret != TC_ACT_UNSPEC)
-+			goto egress_verdict;
++	opta.flags = BPF_F_REPLACE;
++	opta.attach_priority = 1;
++	err = bpf_prog_attach_opts(prog_fd2, loopback, BPF_NET_INGRESS, &opta);
++	if (!ASSERT_EQ(err, opta.attach_priority, "prog_replace"))
++		goto cleanup_detach;
++
++	prio = 1;
++	memset(progs, 0, sizeof(progs));
++	prog_cnt = ARRAY_SIZE(progs);
++	err = bpf_prog_query(loopback, BPF_NET_INGRESS, 0, &attach_flags,
++			     progs, &prog_cnt);
++	if (!ASSERT_OK(err, "prog_query"))
++		goto cleanup_detach2;
++
++	ASSERT_EQ(prog_cnt, 2, "prog_cnt");
++	ASSERT_EQ(progs[0].prog_id, id2, "prog[0]_id");
++	ASSERT_EQ(progs[0].link_id, 0, "prog[0]_link");
++	ASSERT_EQ(progs[0].prio, 1, "prog[0]_prio");
++	ASSERT_EQ(progs[1].prog_id, id1, "prog[1]_id");
++	ASSERT_EQ(progs[1].link_id, 0, "prog[1]_link");
++	ASSERT_EQ(progs[1].prio, 2, "prog[1]_prio");
++	ASSERT_EQ(progs[2].prog_id, 0, "prog[2]_id");
++	ASSERT_EQ(progs[2].link_id, 0, "prog[2]_link");
++	ASSERT_EQ(progs[2].prio, 0, "prog[2]_prio");
++
++	optd.attach_priority = 2;
++	err = bpf_prog_detach_opts(0, loopback, BPF_NET_INGRESS, &optd);
++	ASSERT_OK(err, "prog_detach");
++
++	optd.attach_priority = 1;
++	err = bpf_prog_detach_opts(0, loopback, BPF_NET_INGRESS, &optd);
++	ASSERT_OK(err, "prog_detach");
++
++	/* Expected to be empty again. */
++	prog_cnt = 0;
++	err = bpf_prog_query(loopback, BPF_NET_INGRESS, 0, &attach_flags,
++			     NULL, &prog_cnt);
++	ASSERT_EQ(prog_cnt, 0, "prog_cnt");
++	ASSERT_EQ(err, -ENOENT, "prog_query");
++	goto cleanup;
++
++cleanup_detach:
++	optd.attach_priority = prio;
++	err = bpf_prog_detach_opts(0, loopback, BPF_NET_INGRESS, &optd);
++	if (!ASSERT_OK(err, "prog_detach"))
++		goto cleanup;
++cleanup:
++	test_tc_link__destroy(skel);
++	return;
++cleanup_detach2:
++	optd.attach_priority = 2;
++	err = bpf_prog_detach_opts(0, loopback, BPF_NET_INGRESS, &optd);
++	ASSERT_OK(err, "prog_detach");
++	goto cleanup_detach;
++}
++
++void serial_test_tc_link_mix(void)
++{
++	DECLARE_LIBBPF_OPTS(bpf_prog_attach_opts, opta);
++	DECLARE_LIBBPF_OPTS(bpf_prog_detach_opts, optd);
++	__u32 prog_fd1, prog_fd2, id1, id2, id3;
++	struct test_tc_link *skel;
++	struct bpf_link *link;
++	struct bpf_prog_info prog_info;
++	struct bpf_link_info link_info;
++	__u32 link_info_len = sizeof(link_info);
++	__u32 prog_info_len = sizeof(prog_info);
++	__u32 prog_cnt, attach_flags = 0;
++	struct bpf_query_info progs[4];
++	int err;
++
++	skel = test_tc_link__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_load"))
++		goto cleanup;
++	prog_fd1 = bpf_program__fd(skel->progs.tc_handler_in);
++	prog_fd2 = bpf_program__fd(skel->progs.tc_handler_eg);
++
++	memset(&prog_info, 0, sizeof(prog_info));
++	err = bpf_obj_get_info_by_fd(prog_fd1, &prog_info, &prog_info_len);
++	if (!ASSERT_OK(err, "fd_info1"))
++		goto cleanup;
++	id1 = prog_info.id;
++
++	memset(&prog_info, 0, sizeof(prog_info));
++	err = bpf_obj_get_info_by_fd(prog_fd2, &prog_info, &prog_info_len);
++	if (!ASSERT_OK(err, "fd_info2"))
++		goto cleanup;
++	id2 = prog_info.id;
++
++	ASSERT_NEQ(id1, id2, "prog_ids_1_2");
++
++	/* Sanity check that attaching with given prio works. */
++	opta.flags = 0;
++	opta.attach_priority = 42;
++	err = bpf_prog_attach_opts(prog_fd1, loopback, BPF_NET_EGRESS, &opta);
++	if (!ASSERT_EQ(err, opta.attach_priority, "prog_attach"))
++		goto cleanup;
++
++	prog_cnt = 0;
++	err = bpf_prog_query(loopback, BPF_NET_EGRESS, 0, &attach_flags,
++			     NULL, &prog_cnt);
++	if (!ASSERT_OK(err, "prog_query"))
++		goto cleanup_detach;
++
++	ASSERT_EQ(prog_cnt, 1, "prog_cnt");
++
++	memset(progs, 0, sizeof(progs));
++	prog_cnt = ARRAY_SIZE(progs);
++	err = bpf_prog_query(loopback, BPF_NET_EGRESS, 0, &attach_flags,
++			     progs, &prog_cnt);
++	if (!ASSERT_OK(err, "prog_query"))
++		goto cleanup_detach;
++
++	ASSERT_EQ(prog_cnt, 1, "prog_cnt");
++	ASSERT_EQ(progs[0].prog_id, id1, "prog[0]_id");
++	ASSERT_EQ(progs[0].link_id, 0, "prog[0]_link");
++	ASSERT_EQ(progs[0].prio, 42, "prog[0]_prio");
++	ASSERT_EQ(progs[1].prog_id, 0, "prog[1]_id");
++	ASSERT_EQ(progs[1].link_id, 0, "prog[1]_link");
++	ASSERT_EQ(progs[1].prio, 0, "prog[1]_prio");
++
++	/* Sanity check that attaching link with same prio will fail. */
++	link = bpf_program__attach_tc(skel->progs.tc_handler_eg, loopback, 42);
++	if (!ASSERT_ERR_PTR(link, "link_attach_should_fail")) {
++		bpf_link__destroy(link);
++		goto cleanup;
 +	}
-+	sch_ret = tc_run(entry, skb);
-+egress_verdict:
-+	switch (sch_ret) {
- 	case TC_ACT_REDIRECT:
-+		*ret = NET_XMIT_SUCCESS;
- 		/* No need to push/pop skb's mac_header here on egress! */
- 		skb_do_redirect(skb);
-+		return NULL;
-+	case TC_ACT_SHOT:
-+		*ret = NET_XMIT_DROP;
-+		kfree_skb_reason(skb, SKB_DROP_REASON_TC_EGRESS);
-+		return NULL;
-+	/* used by tc_run */
-+	case TC_ACT_STOLEN:
-+	case TC_ACT_QUEUED:
-+	case TC_ACT_TRAP:
- 		*ret = NET_XMIT_SUCCESS;
- 		return NULL;
--	default:
--		break;
- 	}
--#endif /* CONFIG_NET_CLS_ACT */
- 
- 	return skb;
- }
--
--static struct netdev_queue *
--netdev_tx_queue_mapping(struct net_device *dev, struct sk_buff *skb)
--{
--	int qm = skb_get_queue_mapping(skb);
--
--	return netdev_get_tx_queue(dev, netdev_cap_txqueue(dev, qm));
--}
--
--static bool netdev_xmit_txqueue_skipped(void)
++
++	/* Different prio on unused slot works of course. */
++	link = bpf_program__attach_tc(skel->progs.tc_handler_eg, loopback, 0);
++	if (!ASSERT_OK_PTR(link, "link_attach"))
++		goto cleanup;
++	skel->links.tc_handler_eg = link;
++
++	memset(&link_info, 0, sizeof(link_info));
++	err = bpf_obj_get_info_by_fd(bpf_link__fd(link), &link_info, &link_info_len);
++	if (!ASSERT_OK(err, "link_info"))
++		goto cleanup;
++
++	ASSERT_EQ(link_info.prog_id, id2, "link_prog_id");
++	id3 = link_info.id;
++
++	memset(progs, 0, sizeof(progs));
++	prog_cnt = ARRAY_SIZE(progs);
++	err = bpf_prog_query(loopback, BPF_NET_EGRESS, 0, &attach_flags,
++			     progs, &prog_cnt);
++	if (!ASSERT_OK(err, "prog_query"))
++		goto cleanup_detach;
++
++	ASSERT_EQ(prog_cnt, 2, "prog_cnt");
++	ASSERT_EQ(progs[0].prog_id, id2, "prog[0]_id");
++	ASSERT_EQ(progs[0].link_id, id3, "prog[0]_link");
++	ASSERT_EQ(progs[0].prio, 1, "prog[0]_prio");
++	ASSERT_EQ(progs[1].prog_id, id1, "prog[1]_id");
++	ASSERT_EQ(progs[1].link_id, 0, "prog[1]_link");
++	ASSERT_EQ(progs[1].prio, 42, "prog[1]_prio");
++	ASSERT_EQ(progs[2].prog_id, 0, "prog[2]_id");
++	ASSERT_EQ(progs[2].link_id, 0, "prog[2]_link");
++	ASSERT_EQ(progs[2].prio, 0, "prog[2]_prio");
++
++	/* Sanity check that attaching non-link with same prio as link will fail. */
++	opta.flags = BPF_F_REPLACE;
++	opta.attach_priority = 1;
++	err = bpf_prog_attach_opts(prog_fd1, loopback, BPF_NET_EGRESS, &opta);
++	if (!ASSERT_ERR(err, "prog_attach_should_fail"))
++		goto cleanup_detach;
++
++	opta.flags = 0;
++	opta.attach_priority = 1;
++	err = bpf_prog_attach_opts(prog_fd1, loopback, BPF_NET_EGRESS, &opta);
++	if (!ASSERT_ERR(err, "prog_attach_should_fail"))
++		goto cleanup_detach;
++
++cleanup_detach:
++	optd.attach_priority = 42;
++	err = bpf_prog_detach_opts(0, loopback, BPF_NET_EGRESS, &optd);
++	if (!ASSERT_OK(err, "prog_detach"))
++		goto cleanup;
++cleanup:
++	test_tc_link__destroy(skel);
++}
++
++void serial_test_tc_link_run_base(void)
++{
++	struct test_tc_link *skel;
++	struct bpf_link *link;
++
++	skel = test_tc_link__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_load"))
++		goto cleanup;
++
++	link = bpf_program__attach_tc(skel->progs.tc_handler_eg, loopback, 0);
++	if (!ASSERT_OK_PTR(link, "link_attach"))
++		goto cleanup;
++	skel->links.tc_handler_eg = link;
++
++	link = bpf_program__attach_tc(skel->progs.tc_handler_in, loopback, 0);
++	if (!ASSERT_OK_PTR(link, "link_attach"))
++		goto cleanup;
++
++	CHECK_FAIL(system(ping_cmd));
++	ASSERT_EQ(skel->bss->run, 3, "run32_value");
++
++	bpf_link__destroy(link);
++	skel->bss->run = 0;
++
++	CHECK_FAIL(system(ping_cmd));
++	ASSERT_EQ(skel->bss->run, 2, "run32_value");
++cleanup:
++	test_tc_link__destroy(skel);
++}
++
++void tc_link_run_chain(int location, bool chain_tc_old)
++{
++	DECLARE_LIBBPF_OPTS(bpf_tc_opts, tc_opts, .handle = 1, .priority = 1);
++	DECLARE_LIBBPF_OPTS(bpf_tc_hook, tc_hook, .ifindex = loopback);
++	DECLARE_LIBBPF_OPTS(bpf_prog_attach_opts, opta);
++	DECLARE_LIBBPF_OPTS(bpf_prog_detach_opts, optd);
++	bool hook_created = false, tc_attached = false;
++	__u32 prog_fd1, prog_fd2, prog_fd3;
++	struct test_tc_link *skel;
++	int err;
++
++	skel = test_tc_link__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_load"))
++		goto cleanup;
++
++	prog_fd1 = bpf_program__fd(skel->progs.tc_handler_in);
++	prog_fd2 = bpf_program__fd(skel->progs.tc_handler_eg);
++	prog_fd3 = bpf_program__fd(skel->progs.tc_handler_old);
++
++	if (chain_tc_old) {
++		tc_hook.attach_point = location == BPF_NET_INGRESS ?
++				       BPF_TC_INGRESS : BPF_TC_EGRESS;
++		err = bpf_tc_hook_create(&tc_hook);
++		if (err == 0)
++			hook_created = true;
++		err = err == -EEXIST ? 0 : err;
++		if (!ASSERT_OK(err, "bpf_tc_hook_create"))
++			goto cleanup;
++
++		tc_opts.prog_fd = prog_fd3;
++		err = bpf_tc_attach(&tc_hook, &tc_opts);
++		if (!ASSERT_OK(err, "bpf_tc_attach"))
++			goto cleanup;
++		tc_attached = true;
++	}
++
++	opta.flags = 0;
++	opta.attach_priority = 1;
++	err = bpf_prog_attach_opts(prog_fd1, loopback, location, &opta);
++	if (!ASSERT_EQ(err, opta.attach_priority, "prog_attach"))
++		goto cleanup;
++
++	opta.flags = 0;
++	opta.attach_priority = 2;
++	err = bpf_prog_attach_opts(prog_fd2, loopback, location, &opta);
++	if (!ASSERT_EQ(err, opta.attach_priority, "prog_attach"))
++		goto cleanup_detach;
++
++	CHECK_FAIL(system(ping_cmd));
++	ASSERT_EQ(skel->bss->run, chain_tc_old ? 7 : 3, "run32_value");
++
++	skel->bss->run = 0;
++
++	optd.attach_priority = 2;
++	err = bpf_prog_detach_opts(0, loopback, location, &optd);
++	if (!ASSERT_OK(err, "prog_detach"))
++		goto cleanup_detach;
++
++	CHECK_FAIL(system(ping_cmd));
++	ASSERT_EQ(skel->bss->run, chain_tc_old ? 5 : 1, "run32_value");
++
++cleanup_detach:
++	optd.attach_priority = 1;
++	err = bpf_prog_detach_opts(0, loopback, location, &optd);
++	if (!ASSERT_OK(err, "prog_detach"))
++		goto cleanup;
++cleanup:
++	if (tc_attached) {
++		tc_opts.flags = tc_opts.prog_fd = tc_opts.prog_id = 0;
++		err = bpf_tc_detach(&tc_hook, &tc_opts);
++		ASSERT_OK(err, "bpf_tc_detach");
++	}
++	if (hook_created) {
++		tc_hook.attach_point = BPF_TC_INGRESS | BPF_TC_EGRESS;
++		bpf_tc_hook_destroy(&tc_hook);
++	}
++	test_tc_link__destroy(skel);
++}
++
++void serial_test_tc_link_run_chain(void)
++{
++	tc_link_run_chain(BPF_NET_INGRESS, false);
++	tc_link_run_chain(BPF_NET_EGRESS, false);
++
++	tc_link_run_chain(BPF_NET_INGRESS, true);
++	tc_link_run_chain(BPF_NET_EGRESS, true);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_tc_link.c b/tools/testing/selftests/bpf/progs/test_tc_link.c
+new file mode 100644
+index 000000000000..648e504954eb
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_tc_link.c
+@@ -0,0 +1,43 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2022 Isovalent */
++#include <linux/bpf.h>
++#include <linux/pkt_cls.h>
++
++#include <bpf/bpf_helpers.h>
++
++char LICENSE[] SEC("license") = "GPL";
++
++__u32 run;
++
++SEC("tc/ingress")
++int tc_handler_in(struct __sk_buff *skb)
++{
++#ifdef ENABLE_ATOMICS_TESTS
++	__sync_fetch_and_or(&run, 1);
 +#else
-+static __always_inline struct sk_buff *
-+sch_handle_ingress(struct sk_buff *skb, struct packet_type **pt_prev, int *ret,
-+		   struct net_device *orig_dev, bool *another)
- {
--	return __this_cpu_read(softnet_data.xmit.skip_txqueue);
-+	return skb;
- }
- 
--void netdev_xmit_skip_txqueue(bool skip)
-+static __always_inline struct sk_buff *
-+sch_handle_egress(struct sk_buff *skb, int *ret, struct net_device *dev)
- {
--	__this_cpu_write(softnet_data.xmit.skip_txqueue, skip);
-+	return skb;
- }
--EXPORT_SYMBOL_GPL(netdev_xmit_skip_txqueue);
--#endif /* CONFIG_NET_EGRESS */
-+#endif /* CONFIG_NET_XGRESS */
- 
- #ifdef CONFIG_XPS
- static int __get_xps_queue_idx(struct net_device *dev, struct sk_buff *skb,
-@@ -4181,9 +4311,7 @@ int __dev_queue_xmit(struct sk_buff *skb, struct net_device *sb_dev)
- 	skb_update_prio(skb);
- 
- 	qdisc_pkt_len_init(skb);
--#ifdef CONFIG_NET_CLS_ACT
--	skb->tc_at_ingress = 0;
--#endif
-+	xtc_set_ingress(skb, false);
- #ifdef CONFIG_NET_EGRESS
- 	if (static_branch_unlikely(&egress_needed_key)) {
- 		if (nf_hook_egress_active()) {
-@@ -5101,68 +5229,6 @@ int (*br_fdb_test_addr_hook)(struct net_device *dev,
- EXPORT_SYMBOL_GPL(br_fdb_test_addr_hook);
- #endif
- 
--static inline struct sk_buff *
--sch_handle_ingress(struct sk_buff *skb, struct packet_type **pt_prev, int *ret,
--		   struct net_device *orig_dev, bool *another)
--{
--#ifdef CONFIG_NET_CLS_ACT
--	struct mini_Qdisc *miniq = rcu_dereference_bh(skb->dev->miniq_ingress);
--	struct tcf_result cl_res;
--
--	/* If there's at least one ingress present somewhere (so
--	 * we get here via enabled static key), remaining devices
--	 * that are not configured with an ingress qdisc will bail
--	 * out here.
--	 */
--	if (!miniq)
--		return skb;
--
--	if (*pt_prev) {
--		*ret = deliver_skb(skb, *pt_prev, orig_dev);
--		*pt_prev = NULL;
--	}
--
--	qdisc_skb_cb(skb)->pkt_len = skb->len;
--	tc_skb_cb(skb)->mru = 0;
--	tc_skb_cb(skb)->post_ct = false;
--	skb->tc_at_ingress = 1;
--	mini_qdisc_bstats_cpu_update(miniq, skb);
--
--	switch (tcf_classify(skb, miniq->block, miniq->filter_list, &cl_res, false)) {
--	case TC_ACT_OK:
--	case TC_ACT_RECLASSIFY:
--		skb->tc_index = TC_H_MIN(cl_res.classid);
--		break;
--	case TC_ACT_SHOT:
--		mini_qdisc_qstats_cpu_drop(miniq);
--		kfree_skb_reason(skb, SKB_DROP_REASON_TC_INGRESS);
--		return NULL;
--	case TC_ACT_STOLEN:
--	case TC_ACT_QUEUED:
--	case TC_ACT_TRAP:
--		consume_skb(skb);
--		return NULL;
--	case TC_ACT_REDIRECT:
--		/* skb_mac_header check was done by cls/act_bpf, so
--		 * we can safely push the L2 header back before
--		 * redirecting to another netdev
--		 */
--		__skb_push(skb, skb->mac_len);
--		if (skb_do_redirect(skb) == -EAGAIN) {
--			__skb_pull(skb, skb->mac_len);
--			*another = true;
--			break;
--		}
--		return NULL;
--	case TC_ACT_CONSUMED:
--		return NULL;
--	default:
--		break;
--	}
--#endif /* CONFIG_NET_CLS_ACT */
--	return skb;
--}
--
- /**
-  *	netdev_is_rx_handler_busy - check if receive handler is registered
-  *	@dev: device to check
-@@ -10832,7 +10898,7 @@ void unregister_netdevice_many(struct list_head *head)
- 
- 		/* Shutdown queueing discipline. */
- 		dev_shutdown(dev);
--
-+		dev_xtc_uninstall(dev);
- 		dev_xdp_uninstall(dev);
- 
- 		netdev_offload_xstats_disable_all(dev);
-diff --git a/net/core/filter.c b/net/core/filter.c
-index bb0136e7a8e4..ac4bb016c5ee 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -9132,7 +9132,7 @@ static struct bpf_insn *bpf_convert_tstamp_read(const struct bpf_prog *prog,
- 	__u8 value_reg = si->dst_reg;
- 	__u8 skb_reg = si->src_reg;
- 
--#ifdef CONFIG_NET_CLS_ACT
-+#ifdef CONFIG_NET_XGRESS
- 	/* If the tstamp_type is read,
- 	 * the bpf prog is aware the tstamp could have delivery time.
- 	 * Thus, read skb->tstamp as is if tstamp_type_access is true.
-@@ -9166,7 +9166,7 @@ static struct bpf_insn *bpf_convert_tstamp_write(const struct bpf_prog *prog,
- 	__u8 value_reg = si->src_reg;
- 	__u8 skb_reg = si->dst_reg;
- 
--#ifdef CONFIG_NET_CLS_ACT
-+#ifdef CONFIG_NET_XGRESS
- 	/* If the tstamp_type is read,
- 	 * the bpf prog is aware the tstamp could have delivery time.
- 	 * Thus, write skb->tstamp as is if tstamp_type_access is true.
-diff --git a/net/sched/Kconfig b/net/sched/Kconfig
-index 1e8ab4749c6c..c1b8f2e7d966 100644
---- a/net/sched/Kconfig
-+++ b/net/sched/Kconfig
-@@ -382,8 +382,7 @@ config NET_SCH_FQ_PIE
- config NET_SCH_INGRESS
- 	tristate "Ingress/classifier-action Qdisc"
- 	depends on NET_CLS_ACT
--	select NET_INGRESS
--	select NET_EGRESS
-+	select NET_XGRESS
- 	help
- 	  Say Y here if you want to use classifiers for incoming and/or outgoing
- 	  packets. This qdisc doesn't do anything else besides running classifiers,
-@@ -753,6 +752,7 @@ config NET_EMATCH_IPT
- config NET_CLS_ACT
- 	bool "Actions"
- 	select NET_CLS
-+	select NET_XGRESS
- 	help
- 	  Say Y here if you want to use traffic control actions. Actions
- 	  get attached to classifiers and are invoked after a successful
-diff --git a/net/sched/sch_ingress.c b/net/sched/sch_ingress.c
-index 84838128b9c5..3bd37ee898ce 100644
---- a/net/sched/sch_ingress.c
-+++ b/net/sched/sch_ingress.c
-@@ -13,6 +13,7 @@
- #include <net/netlink.h>
- #include <net/pkt_sched.h>
- #include <net/pkt_cls.h>
-+#include <net/xtc.h>
- 
- struct ingress_sched_data {
- 	struct tcf_block *block;
-@@ -78,11 +79,19 @@ static int ingress_init(struct Qdisc *sch, struct nlattr *opt,
- {
- 	struct ingress_sched_data *q = qdisc_priv(sch);
- 	struct net_device *dev = qdisc_dev(sch);
-+	struct xtc_entry *entry;
-+	bool created;
- 	int err;
- 
- 	net_inc_ingress_queue();
- 
--	mini_qdisc_pair_init(&q->miniqp, sch, &dev->miniq_ingress);
-+	entry = dev_xtc_entry_fetch(dev, true, &created);
-+	if (!entry)
-+		return -ENOMEM;
++	run |= 1;
++#endif
++	return TC_NEXT;
++}
 +
-+	mini_qdisc_pair_init(&q->miniqp, sch, &entry->parent->miniq);
-+	if (created)
-+		dev_xtc_entry_update(dev, entry, true);
- 
- 	q->block_info.binder_type = FLOW_BLOCK_BINDER_TYPE_CLSACT_INGRESS;
- 	q->block_info.chain_head_change = clsact_chain_head_change;
-@@ -93,15 +102,20 @@ static int ingress_init(struct Qdisc *sch, struct nlattr *opt,
- 		return err;
- 
- 	mini_qdisc_pair_block_init(&q->miniqp, q->block);
--
- 	return 0;
- }
- 
- static void ingress_destroy(struct Qdisc *sch)
- {
- 	struct ingress_sched_data *q = qdisc_priv(sch);
-+	struct net_device *dev = qdisc_dev(sch);
-+	struct xtc_entry *entry = rtnl_dereference(dev->xtc_ingress);
- 
- 	tcf_block_put_ext(q->block, sch, &q->block_info);
-+	if (entry && dev_xtc_entry_total(entry) == 0) {
-+		dev_xtc_entry_update(dev, NULL, true);
-+		dev_xtc_entry_free(entry);
-+	}
- 	net_dec_ingress_queue();
- }
- 
-@@ -217,12 +231,20 @@ static int clsact_init(struct Qdisc *sch, struct nlattr *opt,
- {
- 	struct clsact_sched_data *q = qdisc_priv(sch);
- 	struct net_device *dev = qdisc_dev(sch);
-+	struct xtc_entry *entry;
-+	bool created;
- 	int err;
- 
- 	net_inc_ingress_queue();
- 	net_inc_egress_queue();
- 
--	mini_qdisc_pair_init(&q->miniqp_ingress, sch, &dev->miniq_ingress);
-+	entry = dev_xtc_entry_fetch(dev, true, &created);
-+	if (!entry)
-+		return -ENOMEM;
++SEC("tc/egress")
++int tc_handler_eg(struct __sk_buff *skb)
++{
++#ifdef ENABLE_ATOMICS_TESTS
++	__sync_fetch_and_or(&run, 2);
++#else
++	run |= 2;
++#endif
++	return TC_NEXT;
++}
 +
-+	mini_qdisc_pair_init(&q->miniqp_ingress, sch, &entry->parent->miniq);
-+	if (created)
-+		dev_xtc_entry_update(dev, entry, true);
- 
- 	q->ingress_block_info.binder_type = FLOW_BLOCK_BINDER_TYPE_CLSACT_INGRESS;
- 	q->ingress_block_info.chain_head_change = clsact_chain_head_change;
-@@ -235,7 +257,13 @@ static int clsact_init(struct Qdisc *sch, struct nlattr *opt,
- 
- 	mini_qdisc_pair_block_init(&q->miniqp_ingress, q->ingress_block);
- 
--	mini_qdisc_pair_init(&q->miniqp_egress, sch, &dev->miniq_egress);
-+	entry = dev_xtc_entry_fetch(dev, false, &created);
-+	if (!entry)
-+		return -ENOMEM;
-+
-+	mini_qdisc_pair_init(&q->miniqp_egress, sch, &entry->parent->miniq);
-+	if (created)
-+		dev_xtc_entry_update(dev, entry, false);
- 
- 	q->egress_block_info.binder_type = FLOW_BLOCK_BINDER_TYPE_CLSACT_EGRESS;
- 	q->egress_block_info.chain_head_change = clsact_chain_head_change;
-@@ -247,9 +275,21 @@ static int clsact_init(struct Qdisc *sch, struct nlattr *opt,
- static void clsact_destroy(struct Qdisc *sch)
- {
- 	struct clsact_sched_data *q = qdisc_priv(sch);
-+	struct net_device *dev = qdisc_dev(sch);
-+	struct xtc_entry *ingress_entry = rtnl_dereference(dev->xtc_ingress);
-+	struct xtc_entry *egress_entry = rtnl_dereference(dev->xtc_egress);
- 
- 	tcf_block_put_ext(q->egress_block, sch, &q->egress_block_info);
-+	if (egress_entry && dev_xtc_entry_total(egress_entry) == 0) {
-+		dev_xtc_entry_update(dev, NULL, false);
-+		dev_xtc_entry_free(egress_entry);
-+	}
-+
- 	tcf_block_put_ext(q->ingress_block, sch, &q->ingress_block_info);
-+	if (ingress_entry && dev_xtc_entry_total(ingress_entry) == 0) {
-+		dev_xtc_entry_update(dev, NULL, true);
-+		dev_xtc_entry_free(ingress_entry);
-+	}
- 
- 	net_dec_ingress_queue();
- 	net_dec_egress_queue();
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 51b9aa640ad2..de1f5546bcfe 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1025,6 +1025,8 @@ enum bpf_attach_type {
- 	BPF_PERF_EVENT,
- 	BPF_TRACE_KPROBE_MULTI,
- 	BPF_LSM_CGROUP,
-+	BPF_NET_INGRESS,
-+	BPF_NET_EGRESS,
- 	__MAX_BPF_ATTACH_TYPE
- };
- 
-@@ -1399,14 +1401,20 @@ union bpf_attr {
- 	};
- 
- 	struct { /* anonymous struct used by BPF_PROG_ATTACH/DETACH commands */
--		__u32		target_fd;	/* container object to attach to */
-+		union {
-+			__u32	target_fd;	/* container object to attach to */
-+			__u32	target_ifindex; /* target ifindex */
-+		};
- 		__u32		attach_bpf_fd;	/* eBPF program to attach */
- 		__u32		attach_type;
- 		__u32		attach_flags;
--		__u32		replace_bpf_fd;	/* previously attached eBPF
-+		union {
-+			__u32	attach_priority;
-+			__u32	replace_bpf_fd;	/* previously attached eBPF
- 						 * program to replace if
- 						 * BPF_F_REPLACE is used
- 						 */
-+		};
- 	};
- 
- 	struct { /* anonymous struct used by BPF_PROG_TEST_RUN command */
-@@ -1452,7 +1460,10 @@ union bpf_attr {
- 	} info;
- 
- 	struct { /* anonymous struct used by BPF_PROG_QUERY command */
--		__u32		target_fd;	/* container object to query */
-+		union {
-+			__u32	target_fd;	/* container object to query */
-+			__u32	target_ifindex; /* target ifindex */
-+		};
- 		__u32		attach_type;
- 		__u32		query_flags;
- 		__u32		attach_flags;
-@@ -6038,6 +6049,19 @@ struct bpf_sock_tuple {
- 	};
- };
- 
-+/* (Simplified) user return codes for tc prog type.
-+ * A valid tc program must return one of these defined values. All other
-+ * return codes are reserved for future use. Must remain compatible with
-+ * their TC_ACT_* counter-parts. For compatibility in behavior, unknown
-+ * return codes are mapped to TC_NEXT.
-+ */
-+enum tc_action_base {
-+	TC_NEXT		= -1,
-+	TC_PASS		= 0,
-+	TC_DROP		= 2,
-+	TC_REDIRECT	= 7,
-+};
-+
- struct bpf_xdp_sock {
- 	__u32 queue_id;
- };
-@@ -6804,6 +6828,11 @@ struct bpf_flow_keys {
- 	__be32	flow_label;
- };
- 
-+struct bpf_query_info {
-+	__u32 prog_id;
-+	__u32 prio;
-+};
-+
- struct bpf_func_info {
- 	__u32	insn_off;
- 	__u32	type_id;
++SEC("tc/egress")
++int tc_handler_old(struct __sk_buff *skb)
++{
++#ifdef ENABLE_ATOMICS_TESTS
++	__sync_fetch_and_or(&run, 4);
++#else
++	run |= 4;
++#endif
++	return TC_NEXT;
++}
 -- 
 2.34.1
 
