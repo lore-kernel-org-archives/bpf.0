@@ -2,23 +2,23 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34695C433F5
-	for <bpf@archiver.kernel.org>; Tue,  4 Oct 2022 23:12:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EEFFC433FE
+	for <bpf@archiver.kernel.org>; Tue,  4 Oct 2022 23:12:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbiJDXMN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 4 Oct 2022 19:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40862 "EHLO
+        id S230009AbiJDXMO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 4 Oct 2022 19:12:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbiJDXML (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 4 Oct 2022 19:12:11 -0400
+        with ESMTP id S229774AbiJDXMM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 4 Oct 2022 19:12:12 -0400
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6A456014;
-        Tue,  4 Oct 2022 16:12:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881C9564E4;
+        Tue,  4 Oct 2022 16:12:10 -0700 (PDT)
 Received: from 226.206.1.85.dynamic.wline.res.cust.swisscom.ch ([85.1.206.226] helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
         (Exim 4.92.3)
         (envelope-from <daniel@iogearbox.net>)
-        id 1ofr54-000AIp-Cr; Wed, 05 Oct 2022 01:12:06 +0200
+        id 1ofr57-000AJT-31; Wed, 05 Oct 2022 01:12:09 +0200
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     bpf@vger.kernel.org
 Cc:     razor@blackwall.org, ast@kernel.org, andrii@kernel.org,
@@ -26,10 +26,12 @@ Cc:     razor@blackwall.org, ast@kernel.org, andrii@kernel.org,
         joannelkoong@gmail.com, memxor@gmail.com, toke@redhat.com,
         joe@cilium.io, netdev@vger.kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next 00/10] BPF link support for tc BPF programs
-Date:   Wed,  5 Oct 2022 01:11:33 +0200
-Message-Id: <20221004231143.19190-1-daniel@iogearbox.net>
+Subject: [PATCH bpf-next 05/10] bpf: Implement link detach for tc BPF link programs
+Date:   Wed,  5 Oct 2022 01:11:38 +0200
+Message-Id: <20221004231143.19190-6-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20221004231143.19190-1-daniel@iogearbox.net>
+References: <20221004231143.19190-1-daniel@iogearbox.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: daniel@iogearbox.net
@@ -38,61 +40,48 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series adds BPF link support for tc BPF programs. We initially
-presented the motivation, related work and design at this year's LPC
-conference in the networking & BPF track [0], and have incorporated
-feedback we received. The main changes are in first two patches and
-the last one has an extensive batch of test cases we developed along
-with it, please see individual patches for details. We tested this
-series with the tc-testing selftest suite as well as the existing
-and newly developed tc BPF tests from BPF selftests which all pass.
-Thanks!
+Add support for forced detach operation of tc BPF link. This detaches the link
+but without destroying it. It has the same semantics as auto-detaching of BPF
+link due to e.g. net device being destroyed for tc or XDP BPF link. Meaning,
+in this case the BPF link is still a valid kernel object, but is defunct given
+it is not attached anywhere anymore. It still holds a reference to the BPF
+program, though. This functionality allows users with enough access rights to
+manually force-detach attached tc BPF link without killing respective owner
+process and to then introspect/debug the BPF assets. Similar LINK_DETACH exists
+also for other BPF link types.
 
-  [0] https://lpc.events/event/16/contributions/1353/
+Co-developed-by: Nikolay Aleksandrov <razor@blackwall.org>
+Signed-off-by: Nikolay Aleksandrov <razor@blackwall.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+---
+ kernel/bpf/net.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Daniel Borkmann (10):
-  bpf: Add initial fd-based API to attach tc BPF programs
-  bpf: Implement BPF link handling for tc BPF programs
-  bpf: Implement link update for tc BPF link programs
-  bpf: Implement link introspection for tc BPF link programs
-  bpf: Implement link detach for tc BPF link programs
-  libbpf: Change signature of bpf_prog_query
-  libbpf: Add extended attach/detach opts
-  libbpf: Add support for BPF tc link
-  bpftool: Add support for tc fd-based attach types
-  bpf, selftests: Add various BPF tc link selftests
-
- MAINTAINERS                                   |   4 +-
- include/linux/bpf.h                           |   4 +
- include/linux/netdevice.h                     |  14 +-
- include/linux/skbuff.h                        |   4 +-
- include/net/sch_generic.h                     |   2 +-
- include/net/xtc.h                             | 195 +++++
- include/uapi/linux/bpf.h                      |  45 +-
- kernel/bpf/Kconfig                            |   1 +
- kernel/bpf/Makefile                           |   1 +
- kernel/bpf/net.c                              | 451 +++++++++++
- kernel/bpf/syscall.c                          |  27 +-
- net/Kconfig                                   |   5 +
- net/core/dev.c                                | 262 +++---
- net/core/filter.c                             |   4 +-
- net/sched/Kconfig                             |   4 +-
- net/sched/sch_ingress.c                       |  48 +-
- tools/bpf/bpftool/net.c                       |  76 +-
- tools/include/uapi/linux/bpf.h                |  45 +-
- tools/lib/bpf/bpf.c                           |  27 +-
- tools/lib/bpf/bpf.h                           |  22 +-
- tools/lib/bpf/libbpf.c                        |  31 +-
- tools/lib/bpf/libbpf.h                        |   2 +
- tools/lib/bpf/libbpf.map                      |   2 +
- .../selftests/bpf/prog_tests/tc_link.c        | 756 ++++++++++++++++++
- .../selftests/bpf/progs/test_tc_link.c        |  43 +
- 25 files changed, 1932 insertions(+), 143 deletions(-)
- create mode 100644 include/net/xtc.h
- create mode 100644 kernel/bpf/net.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/tc_link.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_tc_link.c
-
+diff --git a/kernel/bpf/net.c b/kernel/bpf/net.c
+index a74b86bb60a9..5650f62c1315 100644
+--- a/kernel/bpf/net.c
++++ b/kernel/bpf/net.c
+@@ -350,6 +350,12 @@ static void xtc_link_release(struct bpf_link *l)
+ 	rtnl_unlock();
+ }
+ 
++static int xtc_link_detach(struct bpf_link *l)
++{
++	xtc_link_release(l);
++	return 0;
++}
++
+ static void xtc_link_dealloc(struct bpf_link *l)
+ {
+ 	struct bpf_tc_link *link = container_of(l, struct bpf_tc_link, link);
+@@ -393,6 +399,7 @@ static int xtc_link_fill_info(const struct bpf_link *l,
+ 
+ static const struct bpf_link_ops bpf_tc_link_lops = {
+ 	.release	= xtc_link_release,
++	.detach		= xtc_link_detach,
+ 	.dealloc	= xtc_link_dealloc,
+ 	.update_prog	= xtc_link_update,
+ 	.show_fdinfo	= xtc_link_fdinfo,
 -- 
 2.34.1
 
