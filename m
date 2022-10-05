@@ -2,70 +2,92 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 841D8C433F5
-	for <bpf@archiver.kernel.org>; Wed,  5 Oct 2022 15:44:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 630BEC433F5
+	for <bpf@archiver.kernel.org>; Wed,  5 Oct 2022 16:15:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbiJEPov (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 5 Oct 2022 11:44:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34450 "EHLO
+        id S230281AbiJEQPA convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 5 Oct 2022 12:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230159AbiJEPoq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 5 Oct 2022 11:44:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9015411802;
-        Wed,  5 Oct 2022 08:44:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8699C61728;
-        Wed,  5 Oct 2022 15:44:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA089C433C1;
-        Wed,  5 Oct 2022 15:44:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664984684;
-        bh=o0JGcCrOPBtEAT5SvB2ymNerKwfOl8r6AZuOjzfOb4E=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=rZNZ7v9qF2Demi+FSDLXIi3JcbcA5ut1QfdPtf0lvoCm19LutTgmf7wtD7bqONtmG
-         K9X5fbrFd7mkaBB8Z0ihqzzIssix1DPDDk/VLJwFDZczpQf4lJb1D/nYI9n5e8AYzc
-         tZfCl+ROV1O6N+puKEwhpBS0BQgCUr0q0ttJM5HD9LJ/C6kCE/wcKqZQWrlX6Wgzfn
-         eXL6qRahi03j8Don4yv4mzM/wLOA1WxXmc0ntVtRHRyeaY6ednExGYTvnf4ySQhdVB
-         q4PI8WTbL+r4zTUBX5eCJoUsfl/iLD5tfTaOxRsZM4syP8JLrrJn0/Z6vPW0I4+9KV
-         kui6f1Ok0CYVg==
-Date:   Wed, 5 Oct 2022 08:44:42 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Daniel Xu <dxu@dxuuu.xyz>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        bpf@vger.kernel.org,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: WARN: multiple IDs found for 'nf_conn': 92168, 117897 - using
- 92168
-Message-ID: <20221005084442.48cb27f1@kernel.org>
-In-Reply-To: <Yz1SSlzZQhVtl1oS@krava>
-References: <20221003190545.6b7c7aba@kernel.org>
-        <20221003214941.6f6ea10d@kernel.org>
-        <YzvV0CFSi9KvXVlG@krava>
-        <20221004072522.319cd826@kernel.org>
-        <Yz1SSlzZQhVtl1oS@krava>
+        with ESMTP id S229771AbiJEQO7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 5 Oct 2022 12:14:59 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C381A1B9F7
+        for <bpf@vger.kernel.org>; Wed,  5 Oct 2022 09:14:58 -0700 (PDT)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 295Drr1g011262
+        for <bpf@vger.kernel.org>; Wed, 5 Oct 2022 09:14:58 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3k0xhpvpfv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 05 Oct 2022 09:14:58 -0700
+Received: from twshared29845.14.frc2.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 5 Oct 2022 09:14:57 -0700
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id B61C51FBED499; Wed,  5 Oct 2022 09:14:53 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH bpf-next 2/3] selftests/bpf: avoid reporting +100% difference in veristat for actual 0%
+Date:   Wed, 5 Oct 2022 09:14:49 -0700
+Message-ID: <20221005161450.1064469-2-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221005161450.1064469-1-andrii@kernel.org>
+References: <20221005161450.1064469-1-andrii@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: WuWuOyGMDtoOIOnWxFNO8huFzR5Ie-U-
+X-Proofpoint-ORIG-GUID: WuWuOyGMDtoOIOnWxFNO8huFzR5Ie-U-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-05_03,2022-10-05_01,2022-06-22_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 5 Oct 2022 11:45:46 +0200 Jiri Olsa wrote:
-> On Tue, Oct 04, 2022 at 07:25:22AM -0700, Jakub Kicinski wrote:
-> > On Tue, 4 Oct 2022 08:42:24 +0200 Jiri Olsa wrote:  
-> > > I did not see that before, could you please share your config?  
-> > 
-> > allmodconfig  
-> 
-> I compiled linux-next with that and can't see that,
-> any other hint (apart the old gcc) about your setup?
+In special case when both base and comparison values are 0, veristat
+currently reports "+0 (+100%)" difference, which is quite confusing. Fix
+it up to be "+0 (+0%)".
 
-Hm, I was compiling Linus's tree not linux-next.
-Let me try linux-next right now.
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/testing/selftests/bpf/veristat.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-Did you use the 8.5 gcc (which I believe is what comes with 
-CentOS Stream)?  I only see it there.
+diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
+index b0d83a28e348..38f678122a7d 100644
+--- a/tools/testing/selftests/bpf/veristat.c
++++ b/tools/testing/selftests/bpf/veristat.c
+@@ -1104,17 +1104,21 @@ static void output_comp_stats(const struct verif_stats *base, const struct verif
+ 			else
+ 				snprintf(diff_buf, sizeof(diff_buf), "%s", "MISMATCH");
+ 		} else {
++			double p = 0.0;
++
+ 			snprintf(base_buf, sizeof(base_buf), "%ld", base_val);
+ 			snprintf(comp_buf, sizeof(comp_buf), "%ld", comp_val);
+ 
+ 			diff_val = comp_val - base_val;
+ 			if (base == &fallback_stats || comp == &fallback_stats || base_val == 0) {
+-				snprintf(diff_buf, sizeof(diff_buf), "%+ld (%+.2lf%%)",
+-					 diff_val, comp_val < base_val ? -100.0 : 100.0);
++				if (comp_val == base_val)
++					p = 0.0; /* avoid +0 (+100%) case */
++				else
++					p = comp_val < base_val ? -100.0 : 100.0;
+ 			} else {
+-				snprintf(diff_buf, sizeof(diff_buf), "%+ld (%+.2lf%%)",
+-					 diff_val, diff_val * 100.0 / base_val);
++				 p = diff_val * 100.0 / base_val;
+ 			}
++			snprintf(diff_buf, sizeof(diff_buf), "%+ld (%+.2lf%%)", diff_val, p);
+ 		}
+ 
+ 		switch (fmt) {
+-- 
+2.30.2
+
