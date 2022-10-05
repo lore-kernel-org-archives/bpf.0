@@ -2,120 +2,66 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3852BC433FE
-	for <bpf@archiver.kernel.org>; Wed,  5 Oct 2022 16:15:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0560C433FE
+	for <bpf@archiver.kernel.org>; Wed,  5 Oct 2022 16:18:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiJEQPI convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 5 Oct 2022 12:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54204 "EHLO
+        id S229736AbiJEQSO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 5 Oct 2022 12:18:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbiJEQPH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 5 Oct 2022 12:15:07 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C064A29370
-        for <bpf@vger.kernel.org>; Wed,  5 Oct 2022 09:15:06 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 295EjkGn013468
-        for <bpf@vger.kernel.org>; Wed, 5 Oct 2022 09:15:06 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3k0ehwud1g-7
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 05 Oct 2022 09:15:05 -0700
-Received: from snc-exhub201.TheFacebook.com (2620:10d:c085:21d::7) by
- snc-exhub202.TheFacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 5 Oct 2022 09:15:05 -0700
-Received: from twshared10425.14.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 5 Oct 2022 09:15:04 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id A5F211FBED494; Wed,  5 Oct 2022 09:14:51 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 1/3] selftests/bpf: allow requesting log level 2 in test_verifier
-Date:   Wed, 5 Oct 2022 09:14:48 -0700
-Message-ID: <20221005161450.1064469-1-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S229926AbiJEQSK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 5 Oct 2022 12:18:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10B043E70;
+        Wed,  5 Oct 2022 09:18:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C4ADE61756;
+        Wed,  5 Oct 2022 16:18:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9AF3C433C1;
+        Wed,  5 Oct 2022 16:18:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664986683;
+        bh=jTFSY/LXZitt+tjuL1epWeJ5HqwW2iI22Nd4jOlij0w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=N9b5dxaxaXLu75NUUrJyaLYNYJiPDXNztIT+lfhNH0q5ScL9Ogw//ZeXbtE6/zUlZ
+         vFN4n/JT4i8phmzEimBYkzU58rHNBfYLIizjtoxGFA0KDI/mPCKTh4L1ShJwbcRd7J
+         RxTZiYFxzmsl0uXyhKAkrtmycf7UivyMLG+M9rN2S8UbgdxLExwnHAfNkjf4v3lcZ+
+         ObVWimCrrrf1Ar3EbrPWAKIZqUAZub1eEwsW/G9XFkOVGNahKiThDwmWHZa57hSK0k
+         v7FsNfzsxlVoFz1H6BMqX0fuSiUBFM8UWhPzAyH4zA8JOHGBD/h5Dk5QAgkwTq6Ztl
+         oxLmrbr/rmhsA==
+Date:   Wed, 5 Oct 2022 09:18:01 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Daniel Xu <dxu@dxuuu.xyz>,
+        Martin KaFai Lau <martin.lau@kernel.org>,
+        bpf@vger.kernel.org,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: WARN: multiple IDs found for 'nf_conn': 92168, 117897 - using
+ 92168
+Message-ID: <20221005091801.38cc8732@kernel.org>
+In-Reply-To: <20221005084442.48cb27f1@kernel.org>
+References: <20221003190545.6b7c7aba@kernel.org>
+        <20221003214941.6f6ea10d@kernel.org>
+        <YzvV0CFSi9KvXVlG@krava>
+        <20221004072522.319cd826@kernel.org>
+        <Yz1SSlzZQhVtl1oS@krava>
+        <20221005084442.48cb27f1@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: mHoQzRR9_Tk9Q_CArK78UFBpsatkTu9J
-X-Proofpoint-GUID: mHoQzRR9_Tk9Q_CArK78UFBpsatkTu9J
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-05_03,2022-10-05_01,2022-06-22_01
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Log level 1 on successfully verified programs are basically equivalent
-to log level 4 (stats-only), so it's useful to be able to request more
-verbose logs at log level 2. Teach test_verifier to recognize -vv as
-"very verbose" mode switch and use log level 2 in such mode.
+On Wed, 5 Oct 2022 08:44:42 -0700 Jakub Kicinski wrote:
+> Hm, I was compiling Linus's tree not linux-next.
+> Let me try linux-next right now.
+> 
+> Did you use the 8.5 gcc (which I believe is what comes with 
+> CentOS Stream)?  I only see it there.
 
-Also force verifier stats regradless of -v or -vv, they are very minimal
-and useful to be always emitted in verbose mode.
+Yeah, it's there on linux-next, too.
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/testing/selftests/bpf/test_verifier.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index 2dbcbf363c18..9c7091100b7f 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -68,7 +68,6 @@
- #define SKIP_INSNS()	BPF_RAW_INSN(0xde, 0xa, 0xd, 0xbeef, 0xdeadbeef)
- 
- #define DEFAULT_LIBBPF_LOG_LEVEL	4
--#define VERBOSE_LIBBPF_LOG_LEVEL	1
- 
- #define F_NEEDS_EFFICIENT_UNALIGNED_ACCESS	(1 << 0)
- #define F_LOAD_WITH_STRICT_ALIGNMENT		(1 << 1)
-@@ -81,6 +80,7 @@
- static bool unpriv_disabled = false;
- static int skips;
- static bool verbose = false;
-+static int verif_log_level = 0;
- 
- struct kfunc_btf_id_pair {
- 	const char *kfunc;
-@@ -759,7 +759,7 @@ static int load_btf_spec(__u32 *types, int types_len,
- 		    .log_buf = bpf_vlog,
- 		    .log_size = sizeof(bpf_vlog),
- 		    .log_level = (verbose
--				  ? VERBOSE_LIBBPF_LOG_LEVEL
-+				  ? verif_log_level
- 				  : DEFAULT_LIBBPF_LOG_LEVEL),
- 	);
- 
-@@ -1491,7 +1491,7 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
- 
- 	opts.expected_attach_type = test->expected_attach_type;
- 	if (verbose)
--		opts.log_level = VERBOSE_LIBBPF_LOG_LEVEL;
-+		opts.log_level = verif_log_level | 4; /* force stats */
- 	else if (expected_ret == VERBOSE_ACCEPT)
- 		opts.log_level = 2;
- 	else
-@@ -1746,6 +1746,13 @@ int main(int argc, char **argv)
- 	if (argc > 1 && strcmp(argv[1], "-v") == 0) {
- 		arg++;
- 		verbose = true;
-+		verif_log_level = 1;
-+		argc--;
-+	}
-+	if (argc > 1 && strcmp(argv[1], "-vv") == 0) {
-+		arg++;
-+		verbose = true;
-+		verif_log_level = 2;
- 		argc--;
- 	}
- 
--- 
-2.30.2
-
+Let me grab a fresh VM and try there. Maybe it's my system. Somehow.
