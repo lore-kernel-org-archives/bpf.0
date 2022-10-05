@@ -2,27 +2,27 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64D33C433FE
-	for <bpf@archiver.kernel.org>; Wed,  5 Oct 2022 14:13:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BC7FC4332F
+	for <bpf@archiver.kernel.org>; Wed,  5 Oct 2022 14:13:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiJEONj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 5 Oct 2022 10:13:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41444 "EHLO
+        id S229691AbiJEONw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 5 Oct 2022 10:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbiJEONj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 5 Oct 2022 10:13:39 -0400
+        with ESMTP id S230221AbiJEONr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 5 Oct 2022 10:13:47 -0400
 Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4567AC20
-        for <bpf@vger.kernel.org>; Wed,  5 Oct 2022 07:13:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7557C33D
+        for <bpf@vger.kernel.org>; Wed,  5 Oct 2022 07:13:46 -0700 (PDT)
 Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
         (envelope-from <fw@breakpoint.cc>)
-        id 1og59U-0001ex-Km; Wed, 05 Oct 2022 16:13:36 +0200
+        id 1og59c-0001fE-VS; Wed, 05 Oct 2022 16:13:45 +0200
 From:   Florian Westphal <fw@strlen.de>
 To:     bpf@vger.kernel.org
 Cc:     Florian Westphal <fw@strlen.de>
-Subject: [RFC v2 3/9] netfilter: remove hook index from nf_hook_slow arguments
-Date:   Wed,  5 Oct 2022 16:13:03 +0200
-Message-Id: <20221005141309.31758-4-fw@strlen.de>
+Subject: [RFC v2 5/9] netfilter: reduce allowed hook count to 32
+Date:   Wed,  5 Oct 2022 16:13:05 +0200
+Message-Id: <20221005141309.31758-6-fw@strlen.de>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221005141309.31758-1-fw@strlen.de>
 References: <20221005141309.31758-1-fw@strlen.de>
@@ -32,108 +32,32 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Previous patch added hook_entry member to nf_hook_state struct, so
-use that for passing the index.
+1k is huge and will mean we'd need to support tailcalls in the
+nf_hook bpf converter.
+
+We need about 5 insns per hook at this time, ignoring prologue/epilogue.
+
+32 should be fine, typically even extreme cases need about 8 hooks per
+hook location.
 
 Signed-off-by: Florian Westphal <fw@strlen.de>
 ---
- include/linux/netfilter.h        | 5 +++--
- include/linux/netfilter_netdev.h | 4 ++--
- net/bridge/br_netfilter_hooks.c  | 3 ++-
- net/netfilter/core.c             | 6 +++---
- 4 files changed, 10 insertions(+), 8 deletions(-)
+ net/netfilter/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/netfilter.h b/include/linux/netfilter.h
-index 7a1a2c4787f0..ec416d79352e 100644
---- a/include/linux/netfilter.h
-+++ b/include/linux/netfilter.h
-@@ -154,6 +154,7 @@ static inline void nf_hook_state_init(struct nf_hook_state *p,
- {
- 	p->hook = hook;
- 	p->pf = pf;
-+	p->hook_index = 0;
- 	p->in = indev;
- 	p->out = outdev;
- 	p->sk = sk;
-@@ -198,7 +199,7 @@ extern struct static_key nf_hooks_needed[NFPROTO_NUMPROTO][NF_MAX_HOOKS];
- #endif
- 
- int nf_hook_slow(struct sk_buff *skb, struct nf_hook_state *state,
--		 const struct nf_hook_entries *e, unsigned int i);
-+		 const struct nf_hook_entries *e);
- 
- void nf_hook_slow_list(struct list_head *head, struct nf_hook_state *state,
- 		       const struct nf_hook_entries *e);
-@@ -255,7 +256,7 @@ static inline int nf_hook(u_int8_t pf, unsigned int hook, struct net *net,
- 		nf_hook_state_init(&state, hook, pf, indev, outdev,
- 				   sk, net, okfn);
- 
--		ret = nf_hook_slow(skb, &state, hook_head, 0);
-+		ret = nf_hook_slow(skb, &state, hook_head);
- 	}
- 	rcu_read_unlock();
- 
-diff --git a/include/linux/netfilter_netdev.h b/include/linux/netfilter_netdev.h
-index 8676316547cc..92996b1ac90f 100644
---- a/include/linux/netfilter_netdev.h
-+++ b/include/linux/netfilter_netdev.h
-@@ -31,7 +31,7 @@ static inline int nf_hook_ingress(struct sk_buff *skb)
- 	nf_hook_state_init(&state, NF_NETDEV_INGRESS,
- 			   NFPROTO_NETDEV, skb->dev, NULL, NULL,
- 			   dev_net(skb->dev), NULL);
--	ret = nf_hook_slow(skb, &state, e, 0);
-+	ret = nf_hook_slow(skb, &state, e);
- 	if (ret == 0)
- 		return -1;
- 
-@@ -104,7 +104,7 @@ static inline struct sk_buff *nf_hook_egress(struct sk_buff *skb, int *rc,
- 
- 	/* nf assumes rcu_read_lock, not just read_lock_bh */
- 	rcu_read_lock();
--	ret = nf_hook_slow(skb, &state, e, 0);
-+	ret = nf_hook_slow(skb, &state, e);
- 	rcu_read_unlock();
- 
- 	if (ret == 1) {
-diff --git a/net/bridge/br_netfilter_hooks.c b/net/bridge/br_netfilter_hooks.c
-index f20f4373ff40..cc4b5a19ca31 100644
---- a/net/bridge/br_netfilter_hooks.c
-+++ b/net/bridge/br_netfilter_hooks.c
-@@ -1036,7 +1036,8 @@ int br_nf_hook_thresh(unsigned int hook, struct net *net,
- 	nf_hook_state_init(&state, hook, NFPROTO_BRIDGE, indev, outdev,
- 			   sk, net, okfn);
- 
--	ret = nf_hook_slow(skb, &state, e, i);
-+	state.hook_index = i;
-+	ret = nf_hook_slow(skb, &state, e);
- 	if (ret == 1)
- 		ret = okfn(net, sk, skb);
- 
 diff --git a/net/netfilter/core.c b/net/netfilter/core.c
-index c094742e3ec3..a8176351f120 100644
+index 593fec9434d7..17165f9cf4a1 100644
 --- a/net/netfilter/core.c
 +++ b/net/netfilter/core.c
-@@ -605,9 +605,9 @@ EXPORT_SYMBOL(nf_unregister_net_hooks);
- /* Returns 1 if okfn() needs to be executed by the caller,
-  * -EPERM for NF_DROP, 0 otherwise.  Caller must hold rcu_read_lock. */
- int nf_hook_slow(struct sk_buff *skb, struct nf_hook_state *state,
--		 const struct nf_hook_entries *e, unsigned int s)
-+		 const struct nf_hook_entries *e)
- {
--	unsigned int verdict;
-+	unsigned int verdict, s = state->hook_index;
- 	int ret;
+@@ -42,7 +42,7 @@ EXPORT_SYMBOL(nf_hooks_needed);
+ static DEFINE_MUTEX(nf_hook_mutex);
  
- 	for (; s < e->num_hook_entries; s++) {
-@@ -651,7 +651,7 @@ void nf_hook_slow_list(struct list_head *head, struct nf_hook_state *state,
+ /* max hooks per family/hooknum */
+-#define MAX_HOOK_COUNT		1024
++#define MAX_HOOK_COUNT		32
  
- 	list_for_each_entry_safe(skb, next, head, list) {
- 		skb_list_del_init(skb);
--		ret = nf_hook_slow(skb, state, e, 0);
-+		ret = nf_hook_slow(skb, state, e);
- 		if (ret == 1)
- 			list_add_tail(&skb->list, &sublist);
- 	}
+ #define nf_entry_dereference(e) \
+ 	rcu_dereference_protected(e, lockdep_is_held(&nf_hook_mutex))
 -- 
 2.35.1
 
