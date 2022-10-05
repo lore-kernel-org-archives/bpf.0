@@ -2,62 +2,64 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CD67C4332F
-	for <bpf@archiver.kernel.org>; Wed,  5 Oct 2022 17:18:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C75EC433FE
+	for <bpf@archiver.kernel.org>; Wed,  5 Oct 2022 17:18:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiJERSI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 5 Oct 2022 13:18:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58264 "EHLO
+        id S230042AbiJERSO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 5 Oct 2022 13:18:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbiJERSH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 5 Oct 2022 13:18:07 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A66813CC0;
-        Wed,  5 Oct 2022 10:18:06 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id fb18so876500qtb.12;
-        Wed, 05 Oct 2022 10:18:06 -0700 (PDT)
+        with ESMTP id S229681AbiJERSN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 5 Oct 2022 13:18:13 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E165726111;
+        Wed,  5 Oct 2022 10:18:10 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id mx8so4474643qvb.8;
+        Wed, 05 Oct 2022 10:18:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=wXTLSqmAIjjRRTkuHZFDqIFGC9IDRgbpl+sVPHe3DS0=;
-        b=WhvLbcPsIqU1h5/d5N20ViAN12Swdl+pyLjSzM+2KTUva/v/gBu4W8AsJu4FGsMYpq
-         Q3EG6HwOLUyn8R6rdwS813iR7USJ33MgJ3QiH3uR3oEyLhf4UwZMtHoUMaDVIxLF7ZU4
-         QL7+SeGXkfFdwW58WNnOV7gr6X1TkdPAVnsmDMCY3WBm3EPCbGWBEF+aPW/xB3LBq7J6
-         nOjTZFQFqgte2+e9FSrs7WlNSnE5CB1wcdLdtojdjwLJ9qz/JZt8AB77zDhi7xoCvWPY
-         nnp5CAK38QP1r7rATa7UAQO0Hq+6iy8lLJjK9On3F453r2HJbn2UAg+SRq70u2KPB9nj
-         CGiQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=ZhAUYVqrdKYklNGIsEXG4znDGVspQ80aq1aJ4554Cc0=;
+        b=XVTKmDU0btvmwiJm2tarmHaZXjec2OSoNYPt63uGtSpVIlbgGxxTyuah0+G6y1HLtX
+         F6klWNxyzedwZVUyRj7krLaQ0z3XH/eNh6t40mdbgi2JqaLqp08TDjZgwgKAOuZ8ZjTy
+         WdVkG4C6pdiufVYjfrv6cpVa9Srhw7wXLPU1t60Udf9RcYKsdthZmwqRdllwo02XTdFh
+         gQOHI3iHD4CWkAD94mzYBD5JKRzRMZ5Im1TtdJTLZe1n5l+BJCd2kX0BWb7BlQ/vAbXB
+         +DhBou99kHHwyokw32MDyYQDxqlC+sXs06p/uFEf9SK9ws1mrI0EsuO/RzdMZ1eqzLzr
+         f+0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=wXTLSqmAIjjRRTkuHZFDqIFGC9IDRgbpl+sVPHe3DS0=;
-        b=JIWvmqwwYnaCfwLswPSpRU2JbhCsEE5lqrsy31OCp3M1DUWlvAjVID6ECATX6kLajg
-         UqBHxkby0QgQJi7XAHvtLpPlmI1MYnKpwYhuCx5laFjfOjGjva6VZKrblXcij80sBE3y
-         UOGMYo1LLGWLFk80WANqaNZ5U1+7Uw9AZ8HMJ6iLaBXgZiOH5qV0JjFKnuZi52C3L2IT
-         2Q74P0A1gy72j2cDl34p8g7HGF+n+Z3n8P/5fuZmj5XVzN+sxtStwt8MGrBPa0yhOQdY
-         wC3ejvMut4pJo0BWyyRXmRVvsyoTIfiJ/UQE5YV/rdBRZXYtvzJh/7bl+SYq0Pc6dic4
-         bIzQ==
-X-Gm-Message-State: ACrzQf0gXZmCoRP1/fJuZDC4cPAvQQdluaaPgjAjN9COjrsJ34ygVswK
-        TSPCVfxCq7XEX+rykrH4SyKGVKP17cA=
-X-Google-Smtp-Source: AMsMyM4CDdD1oCfVt7coGu+CoBvgr3tHqa635tTiksLJlI15+JFQwln6JEkUbDKXP1QQDx5pOveiYg==
-X-Received: by 2002:a05:622a:412:b0:35d:5770:a5ef with SMTP id n18-20020a05622a041200b0035d5770a5efmr495651qtx.25.1664990259596;
-        Wed, 05 Oct 2022 10:17:39 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=ZhAUYVqrdKYklNGIsEXG4znDGVspQ80aq1aJ4554Cc0=;
+        b=GUh1NOpC+kRZs96b6VZQyLzlnmxKH8rru88vtKdR09PVpNwMDGAaKLqXzwYgwGT7Ft
+         /hVz5qS0IYqE/fuotrM6EVOIqblN3KG8kkIn1yFRgKggqs6/NdKQZClRTSo8y9tP9h6X
+         zP/FlC40dTwaa/uLfkZjIFeMqwg8U1PfrfxZ9jjrkksGFC4yGZBaWpNk3ZfFcuCL2c1z
+         lXtscKKRvFIrxpUs9OL/rYj3XbGP/bvD2ZNbwI/eubtGKoCiiwRtykAKbMTToIkDUo8q
+         pb66INSct8elNZeFACBty/jdJBGFsLkcOoUVYI67bVCHi0G9dz64XBg3yIURmyrjBL25
+         Uysw==
+X-Gm-Message-State: ACrzQf2JP0b7JrnMEzrHbnEgpvt/tFalXFWRMyU4cKoMWcArWKf+VVBm
+        g9JD11aBGqSRnxyEN3HLPhs6BpFg7WY=
+X-Google-Smtp-Source: AMsMyM5IYwCwEN1mk5GDaZ6ZOVUMnadpOXpI0I2WBqgbWV4iXT2KsktcL7kQ9PlOgCTMzQKL3g9upA==
+X-Received: by 2002:a05:6214:5018:b0:4b1:c2d9:f0a with SMTP id jo24-20020a056214501800b004b1c2d90f0amr615128qvb.45.1664990267095;
+        Wed, 05 Oct 2022 10:17:47 -0700 (PDT)
 Received: from pop-os.attlocal.net ([2600:1700:65a0:ab60:2bd1:c1af:4b3b:4384])
-        by smtp.gmail.com with ESMTPSA id m13-20020ac85b0d000000b003913996dce3sm1764552qtw.6.2022.10.05.10.17.37
+        by smtp.gmail.com with ESMTPSA id m13-20020ac85b0d000000b003913996dce3sm1764552qtw.6.2022.10.05.10.17.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 10:17:38 -0700 (PDT)
+        Wed, 05 Oct 2022 10:17:46 -0700 (PDT)
 From:   Cong Wang <xiyou.wangcong@gmail.com>
 To:     netdev@vger.kernel.org
 Cc:     yangpeihao@sjtu.edu.cn, toke@redhat.com, jhs@mojatatu.com,
         jiri@resnulli.us, bpf@vger.kernel.org, sdf@google.com,
         Cong Wang <cong.wang@bytedance.com>
-Subject: [RFC Patch v6 0/5] net_sched: introduce eBPF based Qdisc
-Date:   Wed,  5 Oct 2022 10:17:04 -0700
-Message-Id: <20221005171709.150520-1-xiyou.wangcong@gmail.com>
+Subject: [RFC Patch v6 4/5] net_sched: Add kfuncs for storing skb
+Date:   Wed,  5 Oct 2022 10:17:08 -0700
+Message-Id: <20221005171709.150520-5-xiyou.wangcong@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221005171709.150520-1-xiyou.wangcong@gmail.com>
+References: <20221005171709.150520-1-xiyou.wangcong@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
@@ -65,126 +67,112 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Cong Wang <cong.wang@bytedance.com>
 
-This *incomplete* patchset introduces a programmable Qdisc with eBPF.
-
-There are a few use cases:
-
-1. Allow customizing Qdisc's in an easier way. So that people don't
-   have to write a complete Qdisc kernel module just to experiment
-   some new queuing theory.
-
-2. Solve EDT's problem. EDT calcuates the "tokens" in clsact which
-   is before enqueue, it is impossible to adjust those "tokens" after
-   packets get dropped in enqueue. With eBPF Qdisc, it is easy to
-   be solved with a shared map between clsact and sch_bpf.
-
-3. Replace qevents, as now the user gains much more control over the
-   skb and queues.
-
-4. Provide a new way to reuse TC filters. Currently TC relies on filter
-   chain and block to reuse the TC filters, but they are too complicated
-   to understand. With eBPF helper bpf_skb_tc_classify(), we can invoke
-   TC filters on _any_ Qdisc (even on a different netdev) to do the
-   classification.
-
-5. Potentially pave a way for ingress to queue packets, although
-   current implementation is still only for egress.
-
-6. Possibly pave a way for handling TCP protocol in TC, as rbtree itself
-   is already used by TCP to handle TCP retransmission.
-
-7. Potentially pave a way for implementing eBPF based CPU scheduler,
-   because we already have task kptr and CFS is clearly based on rbtree
-   too.
-
-The goal here is to make this Qdisc as programmable as possible,
-that is, to replace as many existing Qdisc's as we can, no matter
-in tree or out of tree. This is why I give up on PIFO which has
-serious limitations on the programmablity. More importantly, with
-rbtree, it is easy to implement PIFO logic too.
-
-Here is a summary of design decisions I made:
-
-1. Avoid eBPF struct_ops, as it would be really hard to program
-   a Qdisc with this approach, literally all the struct Qdisc_ops
-   and struct Qdisc_class_ops are needed to implement. This is almost
-   as hard as programming a Qdisc kernel module.
-
-2. Introduce a generic rbtree map, which supports kptr, so that skb's
-   can be stored inside.
-
-   a) As eBPF maps are not directly visible to the kernel, we have to
-   dump the stats via eBPF map API's instead of netlink.
-
-   b) The user-space is not allowed to read the entire packets, only __sk_buff
-   itself is readable, because we don't have such a use case yet and it would
-   require a different API to read the data, as map values have fixed length.
-
-   c) Multi-queue support is implemented via map-in-map, in a similar
-   push/pop fasion based on rbtree too.
-
-   d) Use the netdevice notifier to reset the packets inside skb map upon
-   NETDEV_DOWN event. (TODO: need to recognize kptr type)
-
-3. Integrate with existing TC infra. For example, if the user doesn't want
-   to implement her own filters (e.g. a flow dissector), she should be able
-   to re-use the existing TC filters. Another helper bpf_skb_tc_classify() is
-   introduced for this purpose.
-
-Any high-level feedback is welcome. Please kindly ignore any coding details
-until RFC tag is removed.
-
-TODO:
-1. actually test it
-2. write a document for this Qdisc
-3. add test cases and sample code
-
-Cc: Toke Høiland-Jørgensen <toke@redhat.com>
-Cc: Jamal Hadi Salim <jhs@mojatatu.com>
-Cc: Jiri Pirko <jiri@resnulli.us>
 Signed-off-by: Cong Wang <cong.wang@bytedance.com>
 ---
-v6: switch to kptr based approach
+ net/sched/sch_bpf.c | 81 ++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 80 insertions(+), 1 deletion(-)
 
-v5: mv kernel/bpf/skb_map.c net/core/skb_map.c
-    implement flow map as map-in-map
-    rename bpf_skb_tc_classify() and move it to net/sched/cls_api.c
-    clean up eBPF qdisc program context
-
-v4: get rid of PIFO, use rbtree directly
-
-v3: move priority queue from sch_bpf to skb map
-    introduce skb map and its helpers
-    introduce bpf_skb_classify()
-    use netdevice notifier to reset skb's
-    Rebase on latest bpf-next
-
-v2: Rebase on latest net-next
-    Make the code more complete (but still incomplete)
-
-Cong Wang (5):
-  bpf: Introduce rbtree map
-  bpf: Add map in map support to rbtree
-  net_sched: introduce eBPF based Qdisc
-  net_sched: Add kfuncs for storing skb
-  net_sched: Introduce helper bpf_skb_tc_classify()
-
- include/linux/bpf.h            |   4 +
- include/linux/bpf_types.h      |   4 +
- include/uapi/linux/bpf.h       |  19 ++
- include/uapi/linux/pkt_sched.h |  17 +
- kernel/bpf/Makefile            |   2 +-
- kernel/bpf/rbtree.c            | 603 +++++++++++++++++++++++++++++++++
- kernel/bpf/syscall.c           |   7 +
- net/core/filter.c              |  27 ++
- net/sched/Kconfig              |  15 +
- net/sched/Makefile             |   1 +
- net/sched/cls_api.c            |  69 ++++
- net/sched/sch_bpf.c            | 564 ++++++++++++++++++++++++++++++
- 12 files changed, 1331 insertions(+), 1 deletion(-)
- create mode 100644 kernel/bpf/rbtree.c
- create mode 100644 net/sched/sch_bpf.c
-
+diff --git a/net/sched/sch_bpf.c b/net/sched/sch_bpf.c
+index 2998d576708d..6850eb8bb574 100644
+--- a/net/sched/sch_bpf.c
++++ b/net/sched/sch_bpf.c
+@@ -15,6 +15,7 @@
+ #include <linux/slab.h>
+ #include <linux/filter.h>
+ #include <linux/bpf.h>
++#include <linux/btf_ids.h>
+ #include <net/netlink.h>
+ #include <net/pkt_sched.h>
+ #include <net/pkt_cls.h>
+@@ -468,9 +469,87 @@ static struct Qdisc_ops sch_bpf_qdisc_ops __read_mostly = {
+ 	.owner		=	THIS_MODULE,
+ };
+ 
++__diag_push();
++__diag_ignore_all("-Wmissing-prototypes",
++		  "Global functions as their definitions will be in vmlinux BTF");
++
++/**
++ * bpf_skb_acquire - Acquire a reference to an skb. An skb acquired by this
++ * kfunc which is not stored in a map as a kptr, must be released by calling
++ * bpf_skb_release().
++ * @p: The skb on which a reference is being acquired.
++ */
++__used noinline
++struct sk_buff *bpf_skb_acquire(struct sk_buff *p)
++{
++	return skb_get(p);
++}
++
++/**
++ * bpf_skb_kptr_get - Acquire a reference on a struct sk_buff kptr. An skb
++ * kptr acquired by this kfunc which is not subsequently stored in a map, must
++ * be released by calling bpf_skb_release().
++ * @pp: A pointer to an skb kptr on which a reference is being acquired.
++ */
++__used noinline
++struct sk_buff *bpf_skb_kptr_get(struct sk_buff **pp)
++{
++	struct sk_buff *p;
++
++	rcu_read_lock();
++	p = READ_ONCE(*pp);
++	if (p && !refcount_inc_not_zero(&p->users))
++		p = NULL;
++	rcu_read_unlock();
++
++	return p;
++}
++
++/**
++ * bpf_skb_release - Release the reference acquired on a struct sk_buff *.
++ * @p: The skb on which a reference is being released.
++ */
++__used noinline void bpf_skb_release(struct sk_buff *p)
++{
++	consume_skb(p);
++}
++
++__diag_pop();
++
++BTF_SET8_START(skb_kfunc_btf_ids)
++BTF_ID_FLAGS(func, bpf_skb_acquire, KF_ACQUIRE)
++BTF_ID_FLAGS(func, bpf_skb_kptr_get, KF_ACQUIRE | KF_KPTR_GET | KF_RET_NULL)
++BTF_ID_FLAGS(func, bpf_skb_release, KF_RELEASE | KF_TRUSTED_ARGS)
++BTF_SET8_END(skb_kfunc_btf_ids)
++
++static const struct btf_kfunc_id_set skb_kfunc_set = {
++	.owner = THIS_MODULE,
++	.set   = &skb_kfunc_btf_ids,
++};
++
++BTF_ID_LIST(skb_kfunc_dtor_ids)
++BTF_ID(struct, sk_buff)
++BTF_ID(func, bpf_skb_release)
++
+ static int __init sch_bpf_mod_init(void)
+ {
+-	return register_qdisc(&sch_bpf_qdisc_ops);
++	int ret;
++	const struct btf_id_dtor_kfunc skb_kfunc_dtors[] = {
++		{
++			.btf_id       = skb_kfunc_dtor_ids[0],
++			.kfunc_btf_id = skb_kfunc_dtor_ids[1]
++		},
++	};
++
++	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_QDISC, &skb_kfunc_set);
++	if (ret)
++		return ret;
++	ret = register_btf_id_dtor_kfuncs(skb_kfunc_dtors,
++					  ARRAY_SIZE(skb_kfunc_dtors),
++					  THIS_MODULE);
++	if (ret == 0)
++		return register_qdisc(&sch_bpf_qdisc_ops);
++	return ret;
+ }
+ 
+ static void __exit sch_bpf_mod_exit(void)
 -- 
 2.34.1
 
