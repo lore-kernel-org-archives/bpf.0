@@ -2,177 +2,130 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A961C433FE
-	for <bpf@archiver.kernel.org>; Thu,  6 Oct 2022 03:21:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22F7CC433FE
+	for <bpf@archiver.kernel.org>; Thu,  6 Oct 2022 03:38:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbiJFDVV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 5 Oct 2022 23:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43604 "EHLO
+        id S230024AbiJFDh6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 5 Oct 2022 23:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiJFDUX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 5 Oct 2022 23:20:23 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C13F17A92;
-        Wed,  5 Oct 2022 20:19:56 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id o21so1637690ejm.11;
-        Wed, 05 Oct 2022 20:19:56 -0700 (PDT)
+        with ESMTP id S229908AbiJFDh4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 5 Oct 2022 23:37:56 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E9F7EFEA
+        for <bpf@vger.kernel.org>; Wed,  5 Oct 2022 20:37:55 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id a13so1095421edj.0
+        for <bpf@vger.kernel.org>; Wed, 05 Oct 2022 20:37:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JMWpW+ooNTC/6z/R9cnX05e8m1vIwam4kn8UgJBux/E=;
-        b=Z8CKBHmDHwtW1qRx7dXraDv87fqz1+6lxtmOeWDM9/cYnfDd9/6xaCyhSihOi5QkBV
-         PVZrDXfyWFSY0vRXbtbjWnJ+d35W7AK5gVXFrnSNIkrpA4NQl3YjHqeMDt/SnL++GWwm
-         LWcLAVR2Ghe7l19DfA3JzIAEtdI19OvZn/cbVKpW1r3WCWdqlRbAwmVwvwHVGgTbGqEE
-         r98aWzm5TR5PYGRM8X5sZcZJ4aVXY2Inj9sPXQE56Q+qKDs3YsIXdhVeclHw+g2GZuir
-         dkx+61NTBUY8e7RnpwbE+4k4uDSaMygtTfkqxdvsYgPKMiT3D23KVJOEY3KjMku+uuD/
-         5zBg==
+        bh=AECG9CTDeWJnEBPcHnDwufHM9I5Hzvj+jlt2ueysdDI=;
+        b=HObtpq5SW3DD6zmYXdHaoJLJb8VVWW85a89S3od8h6YijoK32Lv80/YDoBqPIulubp
+         L0YyXkHsINdbswA9nkDZ2zC74OMHYbtyY+PwFPSnCVnabUhjGoPgUM4eZ4T+XSNIFuE2
+         xfwCKfh17UrX5Jp9ctQzM62mviSDWtqQypoeswFZ7nSpqsJZOJNkaH2NQ9CoBc4SXej9
+         bynfKKDP9uvE/L9NUmzPj6YbDhSf4bvD3FoTNdW8LtjbzGreduISodWh70v/etlqA04p
+         LLZ3aTtKBt4OHdNu6Gp0PPzB54qS+LdjqKqqgGXDFpd+CQ/En728Dn9V0tPy+4xTi3xq
+         7wzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=JMWpW+ooNTC/6z/R9cnX05e8m1vIwam4kn8UgJBux/E=;
-        b=p5bNMl6vxyd5mgj5/E1A0fJ7qn6dcJkmAdAYUE6e9XlvqjgD+UAZJ5hTWHFUeDCnCK
-         4+U5fxl0hKDQNtyJvuDC29OZzFQUnKecpE8ZCbfr9YHHTr1sQ/Uwl69y7Vz2rm05j1Y4
-         pWOW0YE7sruEfGYRcggz6uaM+Vs59b4HhpnYEpG+sABtXlZu5O6aSE5kDfTFGx0+7VDa
-         chSmsiaT0UW6GaT5wOAlhRHcOzdmNh/MhXghh4+4UmjWcg0NTzl6/38VU1K7Hxsxpjwi
-         wsfeNqkNMW894FlcTpqgxshjK2dKzYiEkhXw891M+9vmQJLd3ejXZN7HcgymKxpdEIer
-         zBzg==
-X-Gm-Message-State: ACrzQf1cZG39lolPIqSSLPnPwLXxF8YA+rD1iD0BwuEh9QF/82ZkSizN
-        kXwMm47oaO6RXGrnmSfs/P6GeuJQsf0tEgOe63I=
-X-Google-Smtp-Source: AMsMyM5CnMAZs1QbPpYYSC4SGUopv5WDsLTwM9r5aX8yrItZIQzPU9X5Qq2op/SiG/t5g25zz8yZTd+McmWHAVIi7yc=
-X-Received: by 2002:a17:906:99c5:b0:73d:70c5:1a4f with SMTP id
- s5-20020a17090699c500b0073d70c51a4fmr2127330ejn.302.1665026394561; Wed, 05
- Oct 2022 20:19:54 -0700 (PDT)
+        bh=AECG9CTDeWJnEBPcHnDwufHM9I5Hzvj+jlt2ueysdDI=;
+        b=OueycgQNHLTa9KiMkiBHOjMW5jEJvSKfsy4Prw+ESn/Wa/Wi/jyDptHSmU3IlRYvT5
+         0nD9CRU6hneU/2Mg0Bn1YPRqliwRCJ/GiC/tkGNk70vdho40+25ISdDlQhqoC4S3M7Sk
+         Qz2IaVTqVt1rPj0wUO9Z4uD36AO9XC2qvEV72UYaJ8L5YbvmrxKvZbBl8izsKtfaxvaj
+         K6Vao3P8gd4NtPjq0Lp8RgTKllbwhVU9jvckBtzjpprfokfMzh8LUhoPMA95Sy3IAtK6
+         3vO3hxxFuSwhj4doXtc+8ON1pPoUQtxe+19Mdp2X6iUs2KkjggUsqV5IIFARw4FOpsCx
+         frmQ==
+X-Gm-Message-State: ACrzQf2JB0JNu0WDOjbxmnCTo8xf7O5Tks1Pg/DoogEhYzp0BlND+iUC
+        ACEzk/Z/jJblqWt19VX32azI/c9frv0NamUYYP4=
+X-Google-Smtp-Source: AMsMyM4YGlFXvsDbWLCeym0CopYwuEfB3TDdJCXgXOLCzq5SwqXVlt/EAErf+ZchU0Pad3PRB1oM3o7BcmoOpPJQUdI=
+X-Received: by 2002:aa7:de9a:0:b0:44d:8191:44c5 with SMTP id
+ j26-20020aa7de9a000000b0044d819144c5mr2628871edv.232.1665027474136; Wed, 05
+ Oct 2022 20:37:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221004231143.19190-1-daniel@iogearbox.net> <20221004231143.19190-8-daniel@iogearbox.net>
-In-Reply-To: <20221004231143.19190-8-daniel@iogearbox.net>
+References: <20221005180932.2278505-1-andrii@kernel.org> <20221006003654.dgjotl7vxpvpm53i@macbook-pro-4.dhcp.thefacebook.com>
+In-Reply-To: <20221006003654.dgjotl7vxpvpm53i@macbook-pro-4.dhcp.thefacebook.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 5 Oct 2022 20:19:40 -0700
-Message-ID: <CAEf4BzadsJWcCm4e=Bc40EaLj_8dMRy-MrfF7uwF5ysdZgGnkA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 07/10] libbpf: Add extended attach/detach opts
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     bpf@vger.kernel.org, razor@blackwall.org, ast@kernel.org,
-        andrii@kernel.org, martin.lau@linux.dev, john.fastabend@gmail.com,
-        joannelkoong@gmail.com, memxor@gmail.com, toke@redhat.com,
-        joe@cilium.io, netdev@vger.kernel.org
+Date:   Wed, 5 Oct 2022 20:37:42 -0700
+Message-ID: <CAEf4BzbRvAiQhg4af0zZfWqTO+vxEgEj3DJT3buVjcqKyGg_Eg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: explicitly define BPF_FUNC_xxx integer values
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        timo@isovalent.com
+Cc:     Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, kernel-team@fb.com,
+        Quentin Monnet <quentin@isovalent.com>,
+        Andrea Terzolo <andrea.terzolo@polito.it>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Oct 4, 2022 at 4:12 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+On Wed, Oct 5, 2022 at 5:37 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> Extend libbpf attach opts and add a new detach opts API so this can be used
-> to add/remove fd-based tc BPF programs. For concrete usage examples, see the
-> extensive selftests that have been developed as part of this series.
+> On Wed, Oct 05, 2022 at 11:09:32AM -0700, Andrii Nakryiko wrote:
+> > Historically enum bpf_func_id's BPF_FUNC_xxx enumerators relied on
+> > implicit sequential values being assigned by compiler. This is
+> > convenient, as new BPF helpers are always added at the very end, but it
+> > also has its downsides, some of them being:
+> >
+> >   - with over 200 helpers now it's very hard to know what's each helper's ID,
+> >     which is often important to know when working with BPF assembly (e.g.,
+> >     by dumping raw bpf assembly instructions with llvm-objdump -d
+> >     command). it's possible to work around this by looking into vmlinux.h,
+> >     dumping /sys/btf/kernel/vmlinux, looking at libbpf-provided
+> >     bpf_helper_defs.h, etc. But it always feels like an unnecessary step
+> >     and one should be able to quickly figure this out from UAPI header.
+> >
+> >   - when backporting and cherry-picking only some BPF helpers onto older
+> >     kernels it's important to be able to skip some enum values for helpers
+> >     that weren't backported, but preserve absolute integer IDs to keep BPF
+> >     helper IDs stable so that BPF programs stay portable across upstream
+> >     and backported kernels.
 >
-> Co-developed-by: Nikolay Aleksandrov <razor@blackwall.org>
-> Signed-off-by: Nikolay Aleksandrov <razor@blackwall.org>
-> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-> ---
->  tools/lib/bpf/bpf.c      | 21 +++++++++++++++++++++
->  tools/lib/bpf/bpf.h      | 17 +++++++++++++++--
->  tools/lib/bpf/libbpf.map |  1 +
->  3 files changed, 37 insertions(+), 2 deletions(-)
+> I like the macro hack, but it doesn't really address the above goal.
+
+Ok, cool, thanks for spotting these problems. I think we can fix them
+pretty easily. I'll send v2 with bpf_doc.py updates.
+
+> I tried:
+> -       FN(map_delete_elem, 3, ##ctx)
 >
-> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-> index 18b1e91cc469..d1e338ac9a62 100644
-> --- a/tools/lib/bpf/bpf.c
-> +++ b/tools/lib/bpf/bpf.c
-> @@ -670,6 +670,27 @@ int bpf_prog_detach2(int prog_fd, int target_fd, enum bpf_attach_type type)
->         return libbpf_err_errno(ret);
->  }
+> and got libbpf build error:
+> Exception: Helper bpf_map_delete_elem is missing from enum bpf_func_id
 >
-> +int bpf_prog_detach_opts(int prog_fd, int target_fd,
-> +                        enum bpf_attach_type type,
-> +                        const struct bpf_prog_detach_opts *opts)
-> +{
-> +       const size_t attr_sz = offsetofend(union bpf_attr, replace_bpf_fd);
-> +       union bpf_attr attr;
-> +       int ret;
-> +
-> +       if (!OPTS_VALID(opts, bpf_prog_detach_opts))
-> +               return libbpf_err(-EINVAL);
-> +
-> +       memset(&attr, 0, attr_sz);
-> +       attr.target_fd     = target_fd;
-> +       attr.attach_bpf_fd = prog_fd;
-> +       attr.attach_type   = type;
-> +       attr.attach_priority = OPTS_GET(opts, attach_priority, 0);
-> +
-> +       ret = sys_bpf(BPF_PROG_DETACH, &attr, attr_sz);
-> +       return libbpf_err_errno(ret);
-> +}
-> +
->  int bpf_link_create(int prog_fd, int target_fd,
->                     enum bpf_attach_type attach_type,
->                     const struct bpf_link_create_opts *opts)
-> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-> index bef7a5282188..96de58fecdbc 100644
-> --- a/tools/lib/bpf/bpf.h
-> +++ b/tools/lib/bpf/bpf.h
-> @@ -286,8 +286,11 @@ LIBBPF_API int bpf_obj_get_opts(const char *pathname,
+> Then I tried to delete the comment describing map_delete_elem and got:
+> Exception: Helper bpf_probe_read comment order (#3) must be aligned with its position (#4) in enum bpf_func_id
 >
->  struct bpf_prog_attach_opts {
->         size_t sz; /* size of this struct for forward/backward compatibility */
-> -       unsigned int flags;
-> -       int replace_prog_fd;
-> +       __u32 flags;
-> +       union {
-> +               int replace_prog_fd;
-> +               __u32 attach_priority;
-> +       };
+> So backporting process is a bit easier, but such uapi/bpf.h
+> is unasable to build libbpf against.
+> It's not a problem for github/libbpf, since it keeps bpf_helper_defs.h in the git,
+> but still.
+> Probably bpf_doc.py needs to get smarter.
 
-just add a new field, unions are very confusing in API structures.
-It's ok if some unused fields stay zero.
+Correct. And I'd still advocate to use Github version of libbpf for
+building applications. But we do need to fix libbpf build in
+backported kernel anyways because libbpf is used during kernel build
+process itself.
 
->  };
->  #define bpf_prog_attach_opts__last_field replace_prog_fd
 >
-> @@ -296,9 +299,19 @@ LIBBPF_API int bpf_prog_attach(int prog_fd, int attachable_fd,
->  LIBBPF_API int bpf_prog_attach_opts(int prog_fd, int attachable_fd,
->                                      enum bpf_attach_type type,
->                                      const struct bpf_prog_attach_opts *opts);
-> +
-> +struct bpf_prog_detach_opts {
-> +       size_t sz; /* size of this struct for forward/backward compatibility */
-> +       __u32 attach_priority;
+> Maybe 2nd check in bpf_doc.py can be dropped?
+> Meaning that the comments can now be made out-of-order?
+> A good thing?
+> I think we should probably still enforce the order in upstream kernel through code-review.
 
-please add size_t: 0; at the end to ensure better zero-initialization
-by compiler
+Yep, we should relax this check, I think. I'd still enforce that
+helpers should be documented in correct order, it's just that enum
+value != position in comment stream. I'll see how to adjust script to
+accommodate that. This will handle both latest upstream and backport
+case nicely.
 
-> +};
-> +#define bpf_prog_detach_opts__last_field attach_priority
-> +
->  LIBBPF_API int bpf_prog_detach(int attachable_fd, enum bpf_attach_type type);
->  LIBBPF_API int bpf_prog_detach2(int prog_fd, int attachable_fd,
->                                 enum bpf_attach_type type);
-> +LIBBPF_API int bpf_prog_detach_opts(int prog_fd, int target_fd,
-> +                                   enum bpf_attach_type type,
-
-given we add detach_opts API, is type something that always makes
-sense? If not, let's move it into opts.
-
-> +                                   const struct bpf_prog_detach_opts *opts);
 >
->  union bpf_iter_link_info; /* defined in up-to-date linux/bpf.h */
->  struct bpf_link_create_opts {
-> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> index c1d6aa7c82b6..0c94b4862ebb 100644
-> --- a/tools/lib/bpf/libbpf.map
-> +++ b/tools/lib/bpf/libbpf.map
-> @@ -377,4 +377,5 @@ LIBBPF_1.1.0 {
->                 user_ring_buffer__reserve;
->                 user_ring_buffer__reserve_blocking;
->                 user_ring_buffer__submit;
-> +               bpf_prog_detach_opts;
+> Also see cilium/ebpf/asm/func.go
+> The change to FN() will break that hacky script, but it's an ok trade-off.
 
-let's keep this sorted
-
->  } LIBBPF_1.0.0;
-
-> --
-> 2.34.1
->
+Yep, I think so too. And it should be very easy to fix up that script.
+I've cc'ed Timo for heads up.
