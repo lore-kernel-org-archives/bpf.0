@@ -2,56 +2,56 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 343FFC433F5
-	for <bpf@archiver.kernel.org>; Thu,  6 Oct 2022 03:21:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A961C433FE
+	for <bpf@archiver.kernel.org>; Thu,  6 Oct 2022 03:21:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbiJFDVP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 5 Oct 2022 23:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43480 "EHLO
+        id S230219AbiJFDVV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 5 Oct 2022 23:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbiJFDUV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 5 Oct 2022 23:20:21 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C0137184;
-        Wed,  5 Oct 2022 20:20:03 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id qn17so1820761ejb.0;
-        Wed, 05 Oct 2022 20:20:03 -0700 (PDT)
+        with ESMTP id S230160AbiJFDUX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 5 Oct 2022 23:20:23 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C13F17A92;
+        Wed,  5 Oct 2022 20:19:56 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id o21so1637690ejm.11;
+        Wed, 05 Oct 2022 20:19:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kl6vLfdqF2ET91PW5YnTTZdZIlk/zQZbqzIMjm66yoQ=;
-        b=LCGVxeH+I4troi2RSQVpOlQ4NXWo4rUpqYlePzuFwhfd3YM1bvNwKSeMEjZI0q24SP
-         +qtaaZ3R0ASA1zYCA5habCPd53q7y2OOhMZdeuXeVSlceNjJcu+r60+BZ7xbkCZZG02W
-         fzRxSPk9odnHvPGk0Hh3dKWNBrgvEshZgIRsoerQv7DQ9KqX8hvGIMAx7KoiFezmg2BV
-         PvK8gPWyoQW5VD+dxvSetip9GHk5SVZ+Be+WYKHRz6XAtKZraACH0ApGUcON4zKHdOQ8
-         cv43eQvR0hPXZXQJ7ReYg9KnyHC+yjEWxN1z1QL/I6YWcF00RZQs6heW7xJz0/iqukLc
-         TdgQ==
+        bh=JMWpW+ooNTC/6z/R9cnX05e8m1vIwam4kn8UgJBux/E=;
+        b=Z8CKBHmDHwtW1qRx7dXraDv87fqz1+6lxtmOeWDM9/cYnfDd9/6xaCyhSihOi5QkBV
+         PVZrDXfyWFSY0vRXbtbjWnJ+d35W7AK5gVXFrnSNIkrpA4NQl3YjHqeMDt/SnL++GWwm
+         LWcLAVR2Ghe7l19DfA3JzIAEtdI19OvZn/cbVKpW1r3WCWdqlRbAwmVwvwHVGgTbGqEE
+         r98aWzm5TR5PYGRM8X5sZcZJ4aVXY2Inj9sPXQE56Q+qKDs3YsIXdhVeclHw+g2GZuir
+         dkx+61NTBUY8e7RnpwbE+4k4uDSaMygtTfkqxdvsYgPKMiT3D23KVJOEY3KjMku+uuD/
+         5zBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kl6vLfdqF2ET91PW5YnTTZdZIlk/zQZbqzIMjm66yoQ=;
-        b=hO44sABYmL35LI6TlXR3SAtTyZ8PVEB2SkEYh+SDhMssvY1gihBds1ZSm7EhPwuY0X
-         5mzW++ClvG2BrAwVXslSrchePd5dZScZq08c7WOsPzEQVMnBjUdLBQb2Fe0yFGx+/Yyf
-         PDzv5Dti0RyLEjNCf1rE77mtFc402bY2wtDr0GeTOzPN7DRJHVQXx9zUP9EcnrkhuYY7
-         QLR9IdslXJByET5T7BXsqpjqTbgLikkP+MQ9vichQiQ4tQxV55gM8GZlE4T50n2IqKEy
-         N1Enu7KibtdATzCvmN5yxzxUuLK7V0LYJbT/9urgMj/FUTnMx35I+ezuo67CChZbCdjL
-         k9CA==
-X-Gm-Message-State: ACrzQf3iyDwbjVw3k+SOvyKJUWs+yqiIBAVGKYKA7MfER+RuBNlPXAhM
-        XeAsbJUUlo3txRoW9nQbwgN2eoHv4SyTZ6kYbWE=
-X-Google-Smtp-Source: AMsMyM52AMLw4wsHPohN75FiHI1iNrPiQ09Y5txe8ACilx95hcRB8aI46GleO2bO3O6vJHWyCBcozYbTfkATrZ3ogi4=
-X-Received: by 2002:a17:907:72c1:b0:783:34ce:87b9 with SMTP id
- du1-20020a17090772c100b0078334ce87b9mr2186260ejc.115.1665026401784; Wed, 05
- Oct 2022 20:20:01 -0700 (PDT)
+        bh=JMWpW+ooNTC/6z/R9cnX05e8m1vIwam4kn8UgJBux/E=;
+        b=p5bNMl6vxyd5mgj5/E1A0fJ7qn6dcJkmAdAYUE6e9XlvqjgD+UAZJ5hTWHFUeDCnCK
+         4+U5fxl0hKDQNtyJvuDC29OZzFQUnKecpE8ZCbfr9YHHTr1sQ/Uwl69y7Vz2rm05j1Y4
+         pWOW0YE7sruEfGYRcggz6uaM+Vs59b4HhpnYEpG+sABtXlZu5O6aSE5kDfTFGx0+7VDa
+         chSmsiaT0UW6GaT5wOAlhRHcOzdmNh/MhXghh4+4UmjWcg0NTzl6/38VU1K7Hxsxpjwi
+         wsfeNqkNMW894FlcTpqgxshjK2dKzYiEkhXw891M+9vmQJLd3ejXZN7HcgymKxpdEIer
+         zBzg==
+X-Gm-Message-State: ACrzQf1cZG39lolPIqSSLPnPwLXxF8YA+rD1iD0BwuEh9QF/82ZkSizN
+        kXwMm47oaO6RXGrnmSfs/P6GeuJQsf0tEgOe63I=
+X-Google-Smtp-Source: AMsMyM5CnMAZs1QbPpYYSC4SGUopv5WDsLTwM9r5aX8yrItZIQzPU9X5Qq2op/SiG/t5g25zz8yZTd+McmWHAVIi7yc=
+X-Received: by 2002:a17:906:99c5:b0:73d:70c5:1a4f with SMTP id
+ s5-20020a17090699c500b0073d70c51a4fmr2127330ejn.302.1665026394561; Wed, 05
+ Oct 2022 20:19:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221004231143.19190-1-daniel@iogearbox.net> <20221004231143.19190-11-daniel@iogearbox.net>
-In-Reply-To: <20221004231143.19190-11-daniel@iogearbox.net>
+References: <20221004231143.19190-1-daniel@iogearbox.net> <20221004231143.19190-8-daniel@iogearbox.net>
+In-Reply-To: <20221004231143.19190-8-daniel@iogearbox.net>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 5 Oct 2022 20:19:49 -0700
-Message-ID: <CAEf4Bzapj27OtLZPo9Gd8F0LWj+VKiXfRwPhN0uWip+WxhyyVA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 10/10] bpf, selftests: Add various BPF tc link selftests
+Date:   Wed, 5 Oct 2022 20:19:40 -0700
+Message-ID: <CAEf4BzadsJWcCm4e=Bc40EaLj_8dMRy-MrfF7uwF5ysdZgGnkA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 07/10] libbpf: Add extended attach/detach opts
 To:     Daniel Borkmann <daniel@iogearbox.net>
 Cc:     bpf@vger.kernel.org, razor@blackwall.org, ast@kernel.org,
         andrii@kernel.org, martin.lau@linux.dev, john.fastabend@gmail.com,
@@ -64,42 +64,115 @@ X-Mailing-List: bpf@vger.kernel.org
 
 On Tue, Oct 4, 2022 at 4:12 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
 >
-> Add a big batch of selftest to extend test_progs with various tc link,
-> attach ops and old-style tc BPF attachments via libbpf APIs. Also test
-> multi-program attachments including mixing the various attach options:
->
->   # ./test_progs -t tc_link
->   #179     tc_link_base:OK
->   #180     tc_link_detach:OK
->   #181     tc_link_mix:OK
->   #182     tc_link_opts:OK
->   #183     tc_link_run_base:OK
->   #184     tc_link_run_chain:OK
->   Summary: 6/0 PASSED, 0 SKIPPED, 0 FAILED
->
-> All new and existing test cases pass.
+> Extend libbpf attach opts and add a new detach opts API so this can be used
+> to add/remove fd-based tc BPF programs. For concrete usage examples, see the
+> extensive selftests that have been developed as part of this series.
 >
 > Co-developed-by: Nikolay Aleksandrov <razor@blackwall.org>
 > Signed-off-by: Nikolay Aleksandrov <razor@blackwall.org>
 > Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 > ---
-
-Few small things.
-
-First, please make sure to not use CHECK and CHECK_FAIL.
-
-Second, it's kind of sad that we need to still check
-ENABLE_ATOMICS_TESTS guards. I'd either not do that at all, or I
-wonder if it's cleaner to do it in one header and just re-#define
-__sync_fetch_and_xxx to be no-ops. This will make compilation not
-break. And then tests will just be failing at runtime, which is fine,
-because they can be denylisted. WDYT?
-
->  .../selftests/bpf/prog_tests/tc_link.c        | 756 ++++++++++++++++++
->  .../selftests/bpf/progs/test_tc_link.c        |  43 +
->  2 files changed, 799 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/tc_link.c
->  create mode 100644 tools/testing/selftests/bpf/progs/test_tc_link.c
+>  tools/lib/bpf/bpf.c      | 21 +++++++++++++++++++++
+>  tools/lib/bpf/bpf.h      | 17 +++++++++++++++--
+>  tools/lib/bpf/libbpf.map |  1 +
+>  3 files changed, 37 insertions(+), 2 deletions(-)
 >
+> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+> index 18b1e91cc469..d1e338ac9a62 100644
+> --- a/tools/lib/bpf/bpf.c
+> +++ b/tools/lib/bpf/bpf.c
+> @@ -670,6 +670,27 @@ int bpf_prog_detach2(int prog_fd, int target_fd, enum bpf_attach_type type)
+>         return libbpf_err_errno(ret);
+>  }
+>
+> +int bpf_prog_detach_opts(int prog_fd, int target_fd,
+> +                        enum bpf_attach_type type,
+> +                        const struct bpf_prog_detach_opts *opts)
+> +{
+> +       const size_t attr_sz = offsetofend(union bpf_attr, replace_bpf_fd);
+> +       union bpf_attr attr;
+> +       int ret;
+> +
+> +       if (!OPTS_VALID(opts, bpf_prog_detach_opts))
+> +               return libbpf_err(-EINVAL);
+> +
+> +       memset(&attr, 0, attr_sz);
+> +       attr.target_fd     = target_fd;
+> +       attr.attach_bpf_fd = prog_fd;
+> +       attr.attach_type   = type;
+> +       attr.attach_priority = OPTS_GET(opts, attach_priority, 0);
+> +
+> +       ret = sys_bpf(BPF_PROG_DETACH, &attr, attr_sz);
+> +       return libbpf_err_errno(ret);
+> +}
+> +
+>  int bpf_link_create(int prog_fd, int target_fd,
+>                     enum bpf_attach_type attach_type,
+>                     const struct bpf_link_create_opts *opts)
+> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+> index bef7a5282188..96de58fecdbc 100644
+> --- a/tools/lib/bpf/bpf.h
+> +++ b/tools/lib/bpf/bpf.h
+> @@ -286,8 +286,11 @@ LIBBPF_API int bpf_obj_get_opts(const char *pathname,
+>
+>  struct bpf_prog_attach_opts {
+>         size_t sz; /* size of this struct for forward/backward compatibility */
+> -       unsigned int flags;
+> -       int replace_prog_fd;
+> +       __u32 flags;
+> +       union {
+> +               int replace_prog_fd;
+> +               __u32 attach_priority;
+> +       };
 
-[...]
+just add a new field, unions are very confusing in API structures.
+It's ok if some unused fields stay zero.
+
+>  };
+>  #define bpf_prog_attach_opts__last_field replace_prog_fd
+>
+> @@ -296,9 +299,19 @@ LIBBPF_API int bpf_prog_attach(int prog_fd, int attachable_fd,
+>  LIBBPF_API int bpf_prog_attach_opts(int prog_fd, int attachable_fd,
+>                                      enum bpf_attach_type type,
+>                                      const struct bpf_prog_attach_opts *opts);
+> +
+> +struct bpf_prog_detach_opts {
+> +       size_t sz; /* size of this struct for forward/backward compatibility */
+> +       __u32 attach_priority;
+
+please add size_t: 0; at the end to ensure better zero-initialization
+by compiler
+
+> +};
+> +#define bpf_prog_detach_opts__last_field attach_priority
+> +
+>  LIBBPF_API int bpf_prog_detach(int attachable_fd, enum bpf_attach_type type);
+>  LIBBPF_API int bpf_prog_detach2(int prog_fd, int attachable_fd,
+>                                 enum bpf_attach_type type);
+> +LIBBPF_API int bpf_prog_detach_opts(int prog_fd, int target_fd,
+> +                                   enum bpf_attach_type type,
+
+given we add detach_opts API, is type something that always makes
+sense? If not, let's move it into opts.
+
+> +                                   const struct bpf_prog_detach_opts *opts);
+>
+>  union bpf_iter_link_info; /* defined in up-to-date linux/bpf.h */
+>  struct bpf_link_create_opts {
+> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> index c1d6aa7c82b6..0c94b4862ebb 100644
+> --- a/tools/lib/bpf/libbpf.map
+> +++ b/tools/lib/bpf/libbpf.map
+> @@ -377,4 +377,5 @@ LIBBPF_1.1.0 {
+>                 user_ring_buffer__reserve;
+>                 user_ring_buffer__reserve_blocking;
+>                 user_ring_buffer__submit;
+> +               bpf_prog_detach_opts;
+
+let's keep this sorted
+
+>  } LIBBPF_1.0.0;
+
+> --
+> 2.34.1
+>
