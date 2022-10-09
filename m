@@ -2,47 +2,47 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6361DC4332F
-	for <bpf@archiver.kernel.org>; Sun,  9 Oct 2022 23:36:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5680C4332F
+	for <bpf@archiver.kernel.org>; Sun,  9 Oct 2022 23:42:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbiJIXgd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 9 Oct 2022 19:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45158 "EHLO
+        id S232052AbiJIXmN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 9 Oct 2022 19:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231214AbiJIXgM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 9 Oct 2022 19:36:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E189A4F3A9;
-        Sun,  9 Oct 2022 16:07:56 -0700 (PDT)
+        with ESMTP id S230185AbiJIXlc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 9 Oct 2022 19:41:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1B519C;
+        Sun,  9 Oct 2022 16:14:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 90FCAB80DE9;
-        Sun,  9 Oct 2022 22:24:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C27CC43150;
-        Sun,  9 Oct 2022 22:24:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7863AB80DE5;
+        Sun,  9 Oct 2022 22:25:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59ED5C433B5;
+        Sun,  9 Oct 2022 22:25:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665354261;
-        bh=oSEwHrF3uLuQvDbP2ocyulp2gLrZ/bx2nS2MuGBDTI4=;
+        s=k20201202; t=1665354347;
+        bh=9KH/eTz89VG3tE92+jiCS0qATg1NKn3RD022sSdk/m0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q50tgDpeV/OyP6+FWMmVkpRVH0LQrLs8aYfKnybRfbpf8evsLJGUs4gfGiebthBQj
-         v5H/ga3laHcqafl8loyYXr7ydHMpJvQj55a71ENBsflGNNI5vit8Ntca/Kr0QuWxNZ
-         GCZm9lBZZtVubL+Y/jYedBcCo1w2QKTX7p7aLqWdLfvFcL/FUwV2v2K7QXi4o/7eiS
-         3nG1vGimVvD6ZDNrf/MelQgSQqztUIMIesvA3wxMxFba7EReMJgguh6reMByfiFSwz
-         JkwIwD18jC1I/jdadb45GgRCw8HH0jhaRgWDBGQVLEVqyzCmRicJ4Zl0+JKbSs1XQz
-         u/msN/pRM9cAw==
+        b=aumih1BIpOvpejycfaU+lK3f0foEkkK0yAI8SVwkx0oVAPGG8uajU35iQ+pC5dKRn
+         lYTSpreWZSujPEMhdkK7PCREKZJvwbyu2O1oNDWXcwa2gpIr2SGmrNzvmpBykWSqRk
+         TLqSTomj1ZrCb80Zm+V+sFFv3VOJ1QUQvfM91VFasOim3L/hjSW+/liA9QJ3/gfoPI
+         WSoLKfkPh1Nmf3xUy/7ehAnk33k1RtCG27ll3zTCBEh7orCWX30MbLw+i6ja76y1tu
+         M9fve+5IfaWOaAIbAO4J7m6G8XjoCP1YzGH6jQRicZk2lk7Fg8aI7BhEr03ecoNud4
+         WH11qx9/OsH2A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Xin Liu <liuxin350@huawei.com>,
         Andrii Nakryiko <andrii@kernel.org>,
         Sasha Levin <sashal@kernel.org>, ast@kernel.org,
         daniel@iogearbox.net, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 28/29] libbpf: Fix overrun in netlink attribute iteration
-Date:   Sun,  9 Oct 2022 18:23:03 -0400
-Message-Id: <20221009222304.1218873-28-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 24/25] libbpf: Fix overrun in netlink attribute iteration
+Date:   Sun,  9 Oct 2022 18:24:29 -0400
+Message-Id: <20221009222436.1219411-24-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221009222304.1218873-1-sashal@kernel.org>
-References: <20221009222304.1218873-1-sashal@kernel.org>
+In-Reply-To: <20221009222436.1219411-1-sashal@kernel.org>
+References: <20221009222436.1219411-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -69,10 +69,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/lib/bpf/nlattr.c b/tools/lib/bpf/nlattr.c
-index 1e69c0c8d413..faa6256d857a 100644
+index 4719434278b2..869b2fe14726 100644
 --- a/tools/lib/bpf/nlattr.c
 +++ b/tools/lib/bpf/nlattr.c
-@@ -31,7 +31,7 @@ static struct nlattr *nla_next(const struct nlattr *nla, int *remaining)
+@@ -41,7 +41,7 @@ static struct nlattr *nla_next(const struct nlattr *nla, int *remaining)
  
  static int nla_ok(const struct nlattr *nla, int remaining)
  {
