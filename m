@@ -2,77 +2,123 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7890C433F5
-	for <bpf@archiver.kernel.org>; Sun,  9 Oct 2022 13:13:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 586B1C433F5
+	for <bpf@archiver.kernel.org>; Sun,  9 Oct 2022 18:43:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbiJINNj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 9 Oct 2022 09:13:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48082 "EHLO
+        id S230319AbiJISnS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 9 Oct 2022 14:43:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiJINNi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 9 Oct 2022 09:13:38 -0400
-X-Greylist: delayed 564 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 09 Oct 2022 06:13:36 PDT
-Received: from mail-200163.simplelogin.co (mail-200163.simplelogin.co [176.119.200.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD6226109
-        for <bpf@vger.kernel.org>; Sun,  9 Oct 2022 06:13:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lirui.org; s=dkim;
-        t=1665320650;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=l5bv8JJTWrUbMLpWEm/kLrumWiCr7L4/4GhcnsQX1hw=;
-        b=hdbPh73bwnYtjv7Rz1SJZWiHAfhw2zsANgr5874Za3l7K5Jka4nzDdh9Q1fZyr9GjN2Uj4
-        ZeKedi9eFgp9x6s80s9j4xP/AcmtValhYg0M3eDk/CCfkzqtBIi+ZUoryui1i+IELwJ7R3
-        NLV/0CjpNs/Shq/kZnSBOojn/wrx1eg=
-Subject: [PATCH] bpf: Replace strlcpy with strscpy in preload module
-Date:   Sun,  9 Oct 2022 21:03:27 +0800
+        with ESMTP id S230201AbiJISnR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 9 Oct 2022 14:43:17 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3A124BCA
+        for <bpf@vger.kernel.org>; Sun,  9 Oct 2022 11:43:16 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id r8-20020a1c4408000000b003c47d5fd475so2114238wma.3
+        for <bpf@vger.kernel.org>; Sun, 09 Oct 2022 11:43:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YTptt1W09idFMS+rLbJl5PLPMmSHCElX2/TSniLH/8g=;
+        b=thbsNcRGKjqPIwsobQXfLXoUIDBQSBB504od90dhebRdyWSHFpcFj+aMQSge9MFSHL
+         vRmwyCD767NUh/Cd79Vs7TMv2zv+t2iXDAeoWLky5d9iJnKHBks9hRSmKvZZ1dt14pB3
+         LNFmZxfP6P2uEi7Sl2C/HJqmMFrpgnVNSNU441vR9S0tTWYI74lGG+A+oPuQgud3lJtM
+         38UlxH9zOoT7dt12l4g3gGZPLEGaGtoX1ME3Oj1xz4uYatuKai3DJvaZyD5kHV8zW99U
+         ngdvLikMpsXc3XaPI4q57DyoAGdySRLbE8UwP2Yeq9dgJNxr28yuBj7ozrZM+m0P/JIn
+         yYbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YTptt1W09idFMS+rLbJl5PLPMmSHCElX2/TSniLH/8g=;
+        b=IBmq5/H8kROZp7pIePik1AjxLD+ZN6U4OHH+v1uhk+6RPVInVjDKCNrbtoslbubQxe
+         n+3GQWqKaMgzcYRc3ZYJFlL4pxzHXZvbPn0ZG+pctyrYr2LMNPVUJInfdS1PyYc90WCR
+         czfVRqi0R9pmR91alzFq8seUHRPaKiq2xv8EH2v74MxlvCqgMYQ6d4++VkYbDiUG6l6g
+         cqxgw/N3P9IkGbqWO4XVpkpwWTWn5LXh60Txkh9HOYwAe+vkNZHOob2WP87bqDAfnExC
+         qMmuy1VlpavHxn3RHXWucHZ++9nAi1FI+eEQdtRrSYd4n/wOiAfetZZYhI2uNEHNsH3H
+         t/Ew==
+X-Gm-Message-State: ACrzQf3tfkv/Dz4eRgb53Giq6vvMtKsnZZzeU5DbRkXo3r1UJUw0kFog
+        orX0ZqPcyUZMxv8lkrpMzpUUL38DaqZWrTbRkuk3sQ==
+X-Google-Smtp-Source: AMsMyM7yuyOUnHNHbwjRAR2T4wV32eCL4nIRnjXcCI2J78gBD2N+klea2pOETLZBRdsTrgffHLQPgjzpfcd1+2H5v/I=
+X-Received: by 2002:a7b:cb92:0:b0:3c4:cf60:7a7 with SMTP id
+ m18-20020a7bcb92000000b003c4cf6007a7mr5213828wmi.24.1665340995066; Sun, 09
+ Oct 2022 11:43:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-From:   Rui Li <me@lirui.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+References: <000000000000385cbf05ea3f1862@google.com> <00000000000028a44005ea40352b@google.com>
+ <Y0CbtVwW6+QIYJdQ@slm.duckdns.org> <Y0HBlJ4AoZba93Uf@cae.in-ulm.de>
+ <20221009084039.cw6meqbvy4362lsa@wittgenstein> <Y0LITEA/22Z7YVSa@cae.in-ulm.de>
+In-Reply-To: <Y0LITEA/22Z7YVSa@cae.in-ulm.de>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Sun, 9 Oct 2022 11:42:38 -0700
+Message-ID: <CAJD7tkaQSMSmrb3Nt17-NPAPkvEoUp5tJBg8e4UYn0eU6x-Gqw@mail.gmail.com>
+Subject: Re: [PATCH] cgroup: Fix crash with CLONE_INTO_CGROUP and v1 cgroups
+To:     "Christian A. Ehrhardt" <lk@c--e.de>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-ID: <166532064978.9.18239510123131509626.67790627@lirui.org>
-X-SimpleLogin-Type: Reply
-X-SimpleLogin-EmailLog-ID: 67790636
-X-SimpleLogin-Want-Signing: yes
+        Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>, bpf <bpf@vger.kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>, Tejun Heo <tj@kernel.org>,
+        syzbot <syzbot+534ee3d24c37c411f37f@syzkaller.appspotmail.com>,
+        gregkh@linuxfoundation.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use strscpy instead of strlcpy as the former one checks the size
-of source. Especially for this case, source strings are less than
-dst size.
+On Sun, Oct 9, 2022 at 6:10 AM Christian A. Ehrhardt <lk@c--e.de> wrote:
+>
+>
+> Since commit f3a2aebdd6, Version 1 cgroups no longer cause an
+> error when used with CLONE_INTO_CGROUP. However, the permission
+> checks performed during clone assume a Version 2 cgroup.
+>
+> Restore the error check for V1 cgroups in the clone() path.
+>
+> Reported-by: syzbot+534ee3d24c37c411f37f@syzkaller.appspotmail.com
+> Link: https://lore.kernel.org/lkml/000000000000385cbf05ea3f1862@google.com/
+> Fixes: f3a2aebdd6 ("cgroup: enable cgroup_get_from_file() on cgroup1")
 
-Signed-off-by: Rui Li <me@lirui.org>
----
- kernel/bpf/preload/bpf_preload_kern.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Thanks for fixing this, and sorry if this caused a mess.
 
-diff --git a/kernel/bpf/preload/bpf_preload_kern.c b/kernel/bpf/preload/bpf_preload_kern.c
-index 5106b5372f0c..af8dd3a7c928 100644
---- a/kernel/bpf/preload/bpf_preload_kern.c
-+++ b/kernel/bpf/preload/bpf_preload_kern.c
-@@ -19,9 +19,9 @@ static void free_links_and_skel(void)
- 
- static int preload(struct bpf_preload_info *obj)
- {
--	strlcpy(obj[0].link_name, "maps.debug", sizeof(obj[0].link_name));
-+	strscpy(obj[0].link_name, "maps.debug", sizeof(obj[0].link_name));
- 	obj[0].link = maps_link;
--	strlcpy(obj[1].link_name, "progs.debug", sizeof(obj[1].link_name));
-+	strscpy(obj[1].link_name, "progs.debug", sizeof(obj[1].link_name));
- 	obj[1].link = progs_link;
- 	return 0;
- }
--- 
-2.30.2
+cgroup_get_from_file() independently seemed like it can support
+cgroup1, I didn't realize that some of the callers depend on the fact
+that it only supports cgroup2.
 
++Andrii Nakryiko +Alexei Starovoitov +Martin KaFai Lau +bpf
+I wonder if BPF users have this dependency. Does cgroup_bpf_attach()
+also depend on cgroup_get_from_fd() (which calls
+cgroup_get_from_file()) eliminating v1 cgroups?
 
+It seems like cgroup storages (and some other places) use cgroup ids.
+Collisions can happen in cgroup1 ids so I am assuming we want to add a
+check there as well. Perhaps in cgroup_bpf_attach() ?
+
+I can send a patch for this if that's the case.
+
+> Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
+> ---
+>  kernel/cgroup/cgroup.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+> index b6e3110b3ea7..f7fc3afa88c1 100644
+> --- a/kernel/cgroup/cgroup.c
+> +++ b/kernel/cgroup/cgroup.c
+> @@ -6244,6 +6244,11 @@ static int cgroup_css_set_fork(struct kernel_clone_args *kargs)
+>                 goto err;
+>         }
+>
+> +       if (!cgroup_on_dfl(dst_cgrp)) {
+> +               ret = -EBADF;
+> +               goto err;
+> +       }
+> +
+>         if (cgroup_is_dead(dst_cgrp)) {
+>                 ret = -ENODEV;
+>                 goto err;
+> --
+> 2.34.1
+>
