@@ -2,45 +2,52 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A686C4332F
-	for <bpf@archiver.kernel.org>; Sun,  9 Oct 2022 22:19:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D669EC4321E
+	for <bpf@archiver.kernel.org>; Sun,  9 Oct 2022 22:19:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbiJIWTs (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 9 Oct 2022 18:19:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36328 "EHLO
+        id S231164AbiJIWTt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 9 Oct 2022 18:19:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231705AbiJIWS6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 9 Oct 2022 18:18:58 -0400
+        with ESMTP id S231499AbiJIWSG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 9 Oct 2022 18:18:06 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094B83BC63;
-        Sun,  9 Oct 2022 15:16:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB483A15D;
+        Sun,  9 Oct 2022 15:15:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53E5F60CA0;
-        Sun,  9 Oct 2022 22:14:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD596C433D6;
-        Sun,  9 Oct 2022 22:14:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A07F960CBA;
+        Sun,  9 Oct 2022 22:13:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 867BDC433C1;
+        Sun,  9 Oct 2022 22:13:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665353696;
-        bh=csB+pO8pL0qHwlqK0R5dM8S9SaeLsh5olOWztVLv/ec=;
-        h=From:To:Cc:Subject:Date:From;
-        b=R13aVpDr2fNJGqX+1ykGseyzdihQVkUQUgj7Ge4FGCDmOSjmTXlzEJU7kisZXnW61
-         8SBxGtUh/oZHOTNBC8Znkjoyz8qZkvsomqD3MeWRmBsrqS1lYTwcDgD8XuIaBD15Tt
-         qScZgP0GBZXglmVtj3RF5zopX/7RUZgndDhRYaH0HBy4OiVG7Nyq4cEzu59SBOYv2E
-         H3IEtPChYaFD17S9KUkbtAFffTSxlZzSR1OqDjozgaPGONMBnzxd/+oN2Yfdvm7kfm
-         +NNBFudULzaUN9jc2cd7q+kHxYZgeBJKb/pAE+obrB65z3EJIXR+h0aNHDU6mm50o5
-         zCyQv7KJqox1A==
+        s=k20201202; t=1665353636;
+        bh=In2aSrHdCfyGPlB+8GUQrvSWW/PSrZOKUxsOPPibnjA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=uSV+esbZSBSit/KOg+r4a87t688QZpPJY9pi2YfCGk4FkVwcBABBnxhzvr1OiFfsW
+         cAWHPWlw5aXVhN+kmTsoJgcGWQjn9fZKlR+k2lWC6328Rrp2i/y7Z/GQ6IyQg3tnZE
+         AydUJG1PVdeU+MlD9Gma5wiPiW6Z1gAOEx460Od580AFjtQVhelt0v9d2Q8k7GAD9r
+         l7RG6tvMs21Ez7uPCJ/Uvv6VGAoNhIHFnCeeuvRHBjWebBJDrhiuoXISdMfDiw7ZsT
+         hqatxJx6NUoQ6rCAwQQ1ayk/nqwUimodQBGLCVu9ce0jM0LLlIBJk3VqJGFQeNLKUm
+         DmhIZzBsqULXg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hengqi Chen <hengqi.chen@gmail.com>, Goro Fuji <goro@fastly.com>,
+Cc:     Jiri Olsa <jolsa@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Martynas Pumputis <m@lambda.lt>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, ast@kernel.org,
-        daniel@iogearbox.net, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.19 01/73] libbpf: Do not require executable permission for shared libraries
-Date:   Sun,  9 Oct 2022 18:13:39 -0400
-Message-Id: <20221009221453.1216158-1-sashal@kernel.org>
+        Alexei Starovoitov <ast@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, daniel@iogearbox.net,
+        song@kernel.org, rostedt@goodmis.org, mingo@redhat.com,
+        shuah@kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.0 69/77] bpf: Adjust kprobe_multi entry_ip for CONFIG_X86_KERNEL_IBT
+Date:   Sun,  9 Oct 2022 18:07:46 -0400
+Message-Id: <20221009220754.1214186-69-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221009220754.1214186-1-sashal@kernel.org>
+References: <20221009220754.1214186-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -49,59 +56,106 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Hengqi Chen <hengqi.chen@gmail.com>
+From: Jiri Olsa <jolsa@kernel.org>
 
-[ Upstream commit 9e32084ef1c33a87a736d6ce3fcb95b60dac9aa1 ]
+[ Upstream commit c09eb2e578eb1668bbc84dc07e8d8bd6f04b9a02 ]
 
-Currently, resolve_full_path() requires executable permission for both
-programs and shared libraries. This causes failures on distos like Debian
-since the shared libraries are not installed executable and Linux is not
-requiring shared libraries to have executable permissions. Let's remove
-executable permission check for shared libraries.
+Martynas reported bpf_get_func_ip returning +4 address when
+CONFIG_X86_KERNEL_IBT option is enabled.
 
-Reported-by: Goro Fuji <goro@fastly.com>
-Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20220806102021.3867130-1-hengqi.chen@gmail.com
+When CONFIG_X86_KERNEL_IBT is enabled we'll have endbr instruction
+at the function entry, which screws return value of bpf_get_func_ip()
+helper that should return the function address.
+
+There's short term workaround for kprobe_multi bpf program made by
+Alexei [1], but we need this fixup also for bpf_get_attach_cookie,
+that returns cookie based on the entry_ip value.
+
+Moving the fixup in the fprobe handler, so both bpf_get_func_ip
+and bpf_get_attach_cookie get expected function address when
+CONFIG_X86_KERNEL_IBT option is enabled.
+
+Also renaming kprobe_multi_link_handler entry_ip argument to fentry_ip
+so it's clearer this is an ftrace __fentry__ ip.
+
+[1] commit 7f0059b58f02 ("selftests/bpf: Fix kprobe_multi test.")
+
+Cc: Peter Zijlstra <peterz@infradead.org>
+Reported-by: Martynas Pumputis <m@lambda.lt>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+Link: https://lore.kernel.org/r/20220926153340.1621984-5-jolsa@kernel.org
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/bpf/libbpf.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ kernel/trace/bpf_trace.c                      | 20 +++++++++++++++++--
+ .../selftests/bpf/progs/kprobe_multi.c        |  4 +---
+ 2 files changed, 19 insertions(+), 5 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 266357b1dca1..91bfe42e5cf4 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -11206,15 +11206,17 @@ static const char *arch_specific_lib_paths(void)
- static int resolve_full_path(const char *file, char *result, size_t result_sz)
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 68e5cdd24cef..b1daf7c9b895 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1026,6 +1026,22 @@ static const struct bpf_func_proto bpf_get_func_ip_proto_tracing = {
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ };
+ 
++#ifdef CONFIG_X86_KERNEL_IBT
++static unsigned long get_entry_ip(unsigned long fentry_ip)
++{
++	u32 instr;
++
++	/* Being extra safe in here in case entry ip is on the page-edge. */
++	if (get_kernel_nofault(instr, (u32 *) fentry_ip - 1))
++		return fentry_ip;
++	if (is_endbr(instr))
++		fentry_ip -= ENDBR_INSN_SIZE;
++	return fentry_ip;
++}
++#else
++#define get_entry_ip(fentry_ip) fentry_ip
++#endif
++
+ BPF_CALL_1(bpf_get_func_ip_kprobe, struct pt_regs *, regs)
  {
- 	const char *search_paths[3] = {};
--	int i;
-+	int i, perm;
+ 	struct kprobe *kp = kprobe_running();
+@@ -2414,13 +2430,13 @@ kprobe_multi_link_prog_run(struct bpf_kprobe_multi_link *link,
+ }
  
- 	if (str_has_sfx(file, ".so") || strstr(file, ".so.")) {
- 		search_paths[0] = getenv("LD_LIBRARY_PATH");
- 		search_paths[1] = "/usr/lib64:/usr/lib";
- 		search_paths[2] = arch_specific_lib_paths();
-+		perm = R_OK;
- 	} else {
- 		search_paths[0] = getenv("PATH");
- 		search_paths[1] = "/usr/bin:/usr/sbin";
-+		perm = R_OK | X_OK;
- 	}
+ static void
+-kprobe_multi_link_handler(struct fprobe *fp, unsigned long entry_ip,
++kprobe_multi_link_handler(struct fprobe *fp, unsigned long fentry_ip,
+ 			  struct pt_regs *regs)
+ {
+ 	struct bpf_kprobe_multi_link *link;
  
- 	for (i = 0; i < ARRAY_SIZE(search_paths); i++) {
-@@ -11233,8 +11235,8 @@ static int resolve_full_path(const char *file, char *result, size_t result_sz)
- 			if (!seg_len)
- 				continue;
- 			snprintf(result, result_sz, "%.*s/%s", seg_len, s, file);
--			/* ensure it is an executable file/link */
--			if (access(result, R_OK | X_OK) < 0)
-+			/* ensure it has required permissions */
-+			if (access(result, perm) < 0)
- 				continue;
- 			pr_debug("resolved '%s' to '%s'\n", file, result);
- 			return 0;
+ 	link = container_of(fp, struct bpf_kprobe_multi_link, fp);
+-	kprobe_multi_link_prog_run(link, entry_ip, regs);
++	kprobe_multi_link_prog_run(link, get_entry_ip(fentry_ip), regs);
+ }
+ 
+ static int symbols_cmp_r(const void *a, const void *b, const void *priv)
+diff --git a/tools/testing/selftests/bpf/progs/kprobe_multi.c b/tools/testing/selftests/bpf/progs/kprobe_multi.c
+index 08f95a8155d1..98c3399e15c0 100644
+--- a/tools/testing/selftests/bpf/progs/kprobe_multi.c
++++ b/tools/testing/selftests/bpf/progs/kprobe_multi.c
+@@ -36,15 +36,13 @@ __u64 kretprobe_test6_result = 0;
+ __u64 kretprobe_test7_result = 0;
+ __u64 kretprobe_test8_result = 0;
+ 
+-extern bool CONFIG_X86_KERNEL_IBT __kconfig __weak;
+-
+ static void kprobe_multi_check(void *ctx, bool is_return)
+ {
+ 	if (bpf_get_current_pid_tgid() >> 32 != pid)
+ 		return;
+ 
+ 	__u64 cookie = test_cookie ? bpf_get_attach_cookie(ctx) : 0;
+-	__u64 addr = bpf_get_func_ip(ctx) - (CONFIG_X86_KERNEL_IBT ? 4 : 0);
++	__u64 addr = bpf_get_func_ip(ctx);
+ 
+ #define SET(__var, __addr, __cookie) ({			\
+ 	if (((const void *) addr == __addr) &&		\
 -- 
 2.35.1
 
