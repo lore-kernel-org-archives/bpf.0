@@ -2,44 +2,44 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 405C1C433F5
-	for <bpf@archiver.kernel.org>; Sun,  9 Oct 2022 22:08:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3BBCC433F5
+	for <bpf@archiver.kernel.org>; Sun,  9 Oct 2022 22:19:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230486AbiJIWIy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 9 Oct 2022 18:08:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40684 "EHLO
+        id S230285AbiJIWTs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 9 Oct 2022 18:19:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230301AbiJIWI0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 9 Oct 2022 18:08:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF396286F5;
-        Sun,  9 Oct 2022 15:08:16 -0700 (PDT)
+        with ESMTP id S231561AbiJIWSi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 9 Oct 2022 18:18:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2CA3AE6F;
+        Sun,  9 Oct 2022 15:15:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3E675B80DCD;
-        Sun,  9 Oct 2022 22:08:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08B51C4347C;
-        Sun,  9 Oct 2022 22:08:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5388060DB4;
+        Sun,  9 Oct 2022 22:14:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2B80C433D6;
+        Sun,  9 Oct 2022 22:14:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665353292;
-        bh=x0O9W2XoIIMXYnl74aXnnkx0BzJcyvrdEjk6w1tkkfU=;
+        s=k20201202; t=1665353646;
+        bh=iOp5sUohYYKlU8xKhB8swSLrL8/OASDUJXxbMxBidxc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PvDxvORL3SEUcTpC+b9eQro8ENXw36/obFpCfRJrkUVdMmpi1hp5dQkyIPdgxZOBf
-         0DVYg3plWE2sJXJLnX4WZXoSVCvXQswBO3T2q9/jszJ2Bm6JL6JUxK8dQCBA1sbf7b
-         kfYZb3Sx8u4MHblWIqsK3QxFGGRUi+Tp8/g9cdfThJjhxqcSGfMvrX3/NKoZ3ExqCu
-         /y35aVY6fbjbU0TxgYgMJpWrG6EKeRVjujx0dSxOyWAImVAlziVxxIqap0LMQTYODC
-         0u0gd/yCKkZhiJupywF1Gqq+y4KnYkBwcLgXViBSQE05onus2aXdR9R6DWsSmhC7x4
-         8rB97dMxP49PA==
+        b=U7F/S4MCaZDPvxH2qpZJCCm4J9MWEwp2DtTvdItvblhjMnipRNGikPmteYvDZaC/a
+         etQgo4GbwB2J9EeFiU5Idm02Mge0pY/u7DJiNQ8yYEfJtzqR0kqhg6ZxyqDTwRS37x
+         B9Snz58PbG7rY1Evfc3v/qFRKfM0hmxwq1ot1RjezQFT0nejNbBjiG7fKD4y6j2DD0
+         sAQWPg0AbTbkXWhJIX4jQgqhVhUyxSbwrYL72YHnB1vCU8F9n8De/OVp9DL3L+yvUh
+         swalwvzoTlP9/zEkNHR6j65tp37cR91QAm7kZiWemsYCaZZu2ocXmMLSp2y5v4HGl0
+         Yxkj/hA5qVT7g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Quentin Monnet <quentin@isovalent.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+Cc:     Xin Liu <liuxin350@huawei.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Sasha Levin <sashal@kernel.org>, ast@kernel.org,
-        andrii@kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.0 06/77] bpftool: Clear errno after libcap's checks
-Date:   Sun,  9 Oct 2022 18:06:43 -0400
-Message-Id: <20221009220754.1214186-6-sashal@kernel.org>
+        daniel@iogearbox.net, bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.0 73/77] libbpf: Fix overrun in netlink attribute iteration
+Date:   Sun,  9 Oct 2022 18:07:50 -0400
+Message-Id: <20221009220754.1214186-73-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221009220754.1214186-1-sashal@kernel.org>
 References: <20221009220754.1214186-1-sashal@kernel.org>
@@ -51,68 +51,36 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Quentin Monnet <quentin@isovalent.com>
+From: Xin Liu <liuxin350@huawei.com>
 
-[ Upstream commit cea558855c39b7f1f02ff50dcf701ca6596bc964 ]
+[ Upstream commit 51e05a8cf8eb34da7473823b7f236a77adfef0b4 ]
 
-When bpftool is linked against libcap, the library runs a "constructor"
-function to compute the number of capabilities of the running kernel
-[0], at the beginning of the execution of the program. As part of this,
-it performs multiple calls to prctl(). Some of these may fail, and set
-errno to a non-zero value:
+I accidentally found that a change in commit 1045b03e07d8 ("netlink: fix
+overrun in attribute iteration") was not synchronized to the function
+`nla_ok` in tools/lib/bpf/nlattr.c, I think it is necessary to modify,
+this patch will do it.
 
-    # strace -e prctl ./bpftool version
-    prctl(PR_CAPBSET_READ, CAP_MAC_OVERRIDE) = 1
-    prctl(PR_CAPBSET_READ, 0x30 /* CAP_??? */) = -1 EINVAL (Invalid argument)
-    prctl(PR_CAPBSET_READ, CAP_CHECKPOINT_RESTORE) = 1
-    prctl(PR_CAPBSET_READ, 0x2c /* CAP_??? */) = -1 EINVAL (Invalid argument)
-    prctl(PR_CAPBSET_READ, 0x2a /* CAP_??? */) = -1 EINVAL (Invalid argument)
-    prctl(PR_CAPBSET_READ, 0x29 /* CAP_??? */) = -1 EINVAL (Invalid argument)
-    ** fprintf added at the top of main(): we have errno == 1
-    ./bpftool v7.0.0
-    using libbpf v1.0
-    features: libbfd, libbpf_strict, skeletons
-    +++ exited with 0 +++
-
-This has been addressed in libcap 2.63 [1], but until this version is
-available everywhere, we can fix it on bpftool side.
-
-Let's clean errno at the beginning of the main() function, to make sure
-that these checks do not interfere with the batch mode, where we error
-out if errno is set after a bpftool command.
-
-  [0] https://git.kernel.org/pub/scm/libs/libcap/libcap.git/tree/libcap/cap_alloc.c?h=libcap-2.65#n20
-  [1] https://git.kernel.org/pub/scm/libs/libcap/libcap.git/commit/?id=f25a1b7e69f7b33e6afb58b3e38f3450b7d2d9a0
-
-Signed-off-by: Quentin Monnet <quentin@isovalent.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20220815162205.45043-1-quentin@isovalent.com
+Signed-off-by: Xin Liu <liuxin350@huawei.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20220930090708.62394-1-liuxin350@huawei.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/bpf/bpftool/main.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ tools/lib/bpf/nlattr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-index 451cefc2d0da..ccd7457f92bf 100644
---- a/tools/bpf/bpftool/main.c
-+++ b/tools/bpf/bpftool/main.c
-@@ -435,6 +435,16 @@ int main(int argc, char **argv)
+diff --git a/tools/lib/bpf/nlattr.c b/tools/lib/bpf/nlattr.c
+index f57e77a6e40f..3900d052ed19 100644
+--- a/tools/lib/bpf/nlattr.c
++++ b/tools/lib/bpf/nlattr.c
+@@ -32,7 +32,7 @@ static struct nlattr *nla_next(const struct nlattr *nla, int *remaining)
  
- 	setlinebuf(stdout);
- 
-+#ifdef USE_LIBCAP
-+	/* Libcap < 2.63 hooks before main() to compute the number of
-+	 * capabilities of the running kernel, and doing so it calls prctl()
-+	 * which may fail and set errno to non-zero.
-+	 * Let's reset errno to make sure this does not interfere with the
-+	 * batch mode.
-+	 */
-+	errno = 0;
-+#endif
-+
- 	last_do_help = do_help;
- 	pretty_output = false;
- 	json_output = false;
+ static int nla_ok(const struct nlattr *nla, int remaining)
+ {
+-	return remaining >= sizeof(*nla) &&
++	return remaining >= (int)sizeof(*nla) &&
+ 	       nla->nla_len >= sizeof(*nla) &&
+ 	       nla->nla_len <= remaining;
+ }
 -- 
 2.35.1
 
