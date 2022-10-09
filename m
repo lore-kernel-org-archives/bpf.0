@@ -2,35 +2,35 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFD74C433FE
-	for <bpf@archiver.kernel.org>; Sun,  9 Oct 2022 22:56:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9157DC433FE
+	for <bpf@archiver.kernel.org>; Sun,  9 Oct 2022 23:23:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233946AbiJIW4O (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 9 Oct 2022 18:56:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45718 "EHLO
+        id S231132AbiJIXXP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 9 Oct 2022 19:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234166AbiJIWzH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 9 Oct 2022 18:55:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6841F10066;
-        Sun,  9 Oct 2022 15:29:48 -0700 (PDT)
+        with ESMTP id S233299AbiJIXWs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 9 Oct 2022 19:22:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C21711475;
+        Sun,  9 Oct 2022 15:49:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55EEBB80DDE;
-        Sun,  9 Oct 2022 22:25:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8047C433C1;
-        Sun,  9 Oct 2022 22:25:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C50DC60C27;
+        Sun,  9 Oct 2022 22:24:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA18CC433C1;
+        Sun,  9 Oct 2022 22:24:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665354344;
-        bh=/uUdM+oKqHOU5RS8nYx4xunaSoAOYepM1eEAdpERTus=;
+        s=k20201202; t=1665354258;
+        bh=9F/WwTjHJoxdBWqRa6iOQ5UCJYl2sd5H82WhROoztuA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nwe7SA5hhhu7fCpaYOiyVRz6J3qZdc+NLkyE2iBich7+Ubol8qHTkIPh0h2OO/VLB
-         TQVjbagOVc58geqpUpD3qDlac8eK9fXxXOjmaDJfRttegPXoudQXdCeE1A8LOBnRpc
-         Q+Xx2+hi3o97niqW4HxmTmK2fl3waLskdCcUooA3pvTbYODZFdb5euPgk+Fd4Uzn5W
-         Mh9FfYzn/TJxu/+wX1+Pj3q/cdRmVZzKZVwvcbHesLA5dzioPIbeAM8fmEioM8OV6a
-         LOwcfFGSCAqJ5+r+/1e0krnJ49m1Mxe2N3/gYqThnTt5HfjdYBh0EG6qzFwmPsF+9U
-         jG3gzgORR7P2g==
+        b=Ipw5pjN4ZMGojwFzS0GL1JrTYekoUttlPS7AW3TowuZv5fGAWlDsm1bHptsjWfW6K
+         W6/TUZ+k3TnGrJdJc75aguOUqhPq9du1XVYserKsKw3X+TZg4awEXhZxlYWObcin7c
+         Vkw3OB5B7U7YEsw596AvCltNAX13V4HaS0fjlrR94NRfvGviAQig3h4P/GE2t04308
+         20NsKuPKySFXMX0aU9iIgvnv5z0ZqVsNRmwa74p6ccHNogHVDDpr9ctcczxU6cLjgI
+         mgNdY28PLUaIJjVZh9pYKrj2DMQMgzToyJCE9fkrmo+lRVuO7zt3I6RjoV2LKIjEbe
+         iJH/t41ij3RVw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Liu Jian <liujian56@huawei.com>,
@@ -41,12 +41,12 @@ Cc:     Liu Jian <liujian56@huawei.com>,
         Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
         kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 22/25] net: If sock is dead don't access sock's sk_wq in sk_stream_wait_memory
-Date:   Sun,  9 Oct 2022 18:24:27 -0400
-Message-Id: <20221009222436.1219411-22-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 26/29] net: If sock is dead don't access sock's sk_wq in sk_stream_wait_memory
+Date:   Sun,  9 Oct 2022 18:23:01 -0400
+Message-Id: <20221009222304.1218873-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221009222436.1219411-1-sashal@kernel.org>
-References: <20221009222436.1219411-1-sashal@kernel.org>
+In-Reply-To: <20221009222304.1218873-1-sashal@kernel.org>
+References: <20221009222304.1218873-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -140,7 +140,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/net/core/stream.c b/net/core/stream.c
-index 3d98774cf128..7b411a91a81c 100644
+index a166a32b411f..a61130504827 100644
 --- a/net/core/stream.c
 +++ b/net/core/stream.c
 @@ -159,7 +159,8 @@ int sk_stream_wait_memory(struct sock *sk, long *timeo_p)
