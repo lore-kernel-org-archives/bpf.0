@@ -2,128 +2,91 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 498BBC433FE
-	for <bpf@archiver.kernel.org>; Sun,  9 Oct 2022 12:53:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9843C433F5
+	for <bpf@archiver.kernel.org>; Sun,  9 Oct 2022 13:00:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbiJIMxu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 9 Oct 2022 08:53:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46964 "EHLO
+        id S230037AbiJINAt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 9 Oct 2022 09:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiJIMxu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 9 Oct 2022 08:53:50 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28308B492;
-        Sun,  9 Oct 2022 05:53:49 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id d26so12841610eje.10;
-        Sun, 09 Oct 2022 05:53:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZESD6ey7LAoCvYqteYGKHRcvT5xH2VgJgOZK6wnuVJU=;
-        b=e47bf7q8ORFWnHRIliB9uWOqvqtG3S3kBFknWpss4c43ofG8tCdrrlYtL58iSXRY18
-         b/4QSouKbAmdBGaiq8ALf0RB+yY2d5XiF5FGxh8dsVyKKYYV0yLQb1igTeEaUyUZqH8S
-         Pw+hm4PpC/lR2adpL1AX76ToB/ax5xPrRId8ivI76kOFbCsCPYo8q1P/Rhz7YuvOMzdF
-         MGz7XKDjUQYgfCws6hM9vylH4b4+BgxmZa0ia+oCgeVoyhYacBnB+Kmw7T1uVBwDWJOv
-         +/TzLofMv1+OaQk/nDbc4mCVBPhlr+E0eSjff3qAxHrD+mMGTw35sx0UruuxEBDajk4X
-         3hQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZESD6ey7LAoCvYqteYGKHRcvT5xH2VgJgOZK6wnuVJU=;
-        b=Hh9R7zxDJZEhNneemrFkSAbyE9+CL3LdV3YK03ireSDpcdYairwHaW0PSTAjMtsE51
-         Pog+tqQZdBpQcfB4nrVUZrgT2gSCCAeeAN7v5rMYcWaKPE50Pkeyjh3olR0d4GZHygGt
-         dxlF20LdvNOf5mNjz8hRlvSgBOtSvHUDaEAY2+0Jj9TOwKhMBdnRkORpY6QzN1i//2WR
-         xG+WGNtg5uW4WKcYTDdFgmF2E7Et999EkyPv+yQjIfv4PENnyvBY+dB3mKMeuQawWmoc
-         TB2oomL5qd1BwVlsNqE2co89Qhf9Uc1rH060agIOdQrlvr/asxJ6qAVu7XW7LmGXg+RI
-         AJNQ==
-X-Gm-Message-State: ACrzQf3gStD97q0/C0f8hbRUq04c7m8ZEI3lt3WB5AHEkMIlfd968N2P
-        DtASi9yUEYQUIpeY6zWlP3k=
-X-Google-Smtp-Source: AMsMyM5QFoJMnh9+uhemwsIEXhMTcAfJqGRhBbH2BAqIf/LU/boRfqSxotDU3R/rhI3Cng/USX8iFw==
-X-Received: by 2002:a17:906:1e08:b0:73d:c724:4876 with SMTP id g8-20020a1709061e0800b0073dc7244876mr10975002ejj.62.1665320027534;
-        Sun, 09 Oct 2022 05:53:47 -0700 (PDT)
-Received: from krava ([83.240.62.156])
-        by smtp.gmail.com with ESMTPSA id i24-20020a50d758000000b00458a03203b1sm5146741edj.31.2022.10.09.05.53.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Oct 2022 05:53:46 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Sun, 9 Oct 2022 14:53:42 +0200
-To:     Li kunyu <kunyu@nfschina.com>
-Cc:     lkp@intel.com, andrii@kernel.org, ast@kernel.org,
-        bpf@vger.kernel.org, daniel@iogearbox.net, haoluo@google.com,
-        john.fastabend@gmail.com, kbuild-all@lists.01.org,
-        kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-        martin.lau@linux.dev, sdf@google.com, song@kernel.org, yhs@fb.com
-Subject: Re: [PATCH] lib: bpf: Optimized variable usage in the btf_parse_elf
- function
-Message-ID: <Y0LEVuvk/O93xBAn@krava>
-References: <202210082050.nPzAbV1v-lkp@intel.com>
- <20221009070827.525694-2-kunyu@nfschina.com>
+        with ESMTP id S229663AbiJINAs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 9 Oct 2022 09:00:48 -0400
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9155224BFF;
+        Sun,  9 Oct 2022 06:00:45 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MlhtZ2ZDLz6Pm4S;
+        Sun,  9 Oct 2022 20:58:30 +0800 (CST)
+Received: from k01.huawei.com (unknown [10.67.174.197])
+        by APP2 (Coremail) with SMTP id Syh0CgDHX9T6xUJjwRQEAA--.16593S2;
+        Sun, 09 Oct 2022 21:00:43 +0800 (CST)
+From:   Xu Kuohai <xukuohai@huaweicloud.com>
+To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Hou Tao <houtao1@huawei.com>,
+        Dmitrii Dolgov <9erthalion6@gmail.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Kui-Feng Lee <kuifeng@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: [PATCH bpf-next 0/5] Fix bugs found by ASAN when running selftests
+Date:   Sun,  9 Oct 2022 09:18:25 -0400
+Message-Id: <20221009131830.395569-1-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221009070827.525694-2-kunyu@nfschina.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgDHX9T6xUJjwRQEAA--.16593S2
+X-Coremail-Antispam: 1UD129KBjvdXoWruFyftFWDArW7AF4rZr47Jwb_yoW3ArXEyF
+        4IqrykZFZrCa9IyFW5C3Z3WrWxC3yYqryIvFsrtr97J34j9r1UAF4kKFWSy3y8W3y3Jrya
+        vFykX3y09r1aqjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb2xYFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
+        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, Oct 09, 2022 at 03:08:28PM +0800, Li kunyu wrote:
-> The following changes were made in the btf_parse_elf function:
-> 1. The initialization assignments of err, fd, scn and elf variables are
-> removed, and they do not affect function security after analysis.
-> 2. Remove unnecessary assignments to err variable (-error).
-> 
-> Signed-off-by: Li kunyu <kunyu@nfschina.com>
-> ---
->  tools/lib/bpf/btf.c | 11 ++++-------
->  1 file changed, 4 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> index 2d14f1a52d7a..fa9d5fa03da4 100644
-> --- a/tools/lib/bpf/btf.c
-> +++ b/tools/lib/bpf/btf.c
-> @@ -910,10 +910,10 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
->  				 struct btf_ext **btf_ext)
->  {
->  	Elf_Data *btf_data = NULL, *btf_ext_data = NULL;
-> -	int err = 0, fd = -1, idx = 0;
-> +	int err, fd, idx = 0;
->  	struct btf *btf = NULL;
-> -	Elf_Scn *scn = NULL;
-> -	Elf *elf = NULL;
-> +	Elf_Scn *scn;
-> +	Elf *elf;
->  	GElf_Ehdr ehdr;
->  	size_t shstrndx;
->  
-> @@ -924,9 +924,8 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
->  
->  	fd = open(path, O_RDONLY | O_CLOEXEC);
->  	if (fd < 0) {
-> -		err = -errno;
->  		pr_warn("failed to open %s: %s\n", path, strerror(errno));
-> -		return ERR_PTR(err);
-> +		return ERR_PTR(-errno);
+From: Xu Kuohai <xukuohai@huawei.com>
 
-hum, pr_warn could potentionally change errno
+Xu Kuohai (5):
+  libbpf: Fix use-after-free in btf_dump_name_dups
+  libbpf: Fix memory leak in parse_usdt_arg()
+  selftests/bpf: Fix memory leak caused by not destroying skeleton
+  selftest/bpf: Fix memory leak in kprobe_multi_test
+  selftest/bpf: Fix error usage of ASSERT_OK in xdp_adjust_tail.c
 
-jirka
+ tools/lib/bpf/btf_dump.c                      | 47 +++++++++++----
+ tools/lib/bpf/usdt.c                          | 59 +++++++++++--------
+ .../selftests/bpf/prog_tests/bpf_iter.c       |  4 +-
+ .../bpf/prog_tests/kprobe_multi_test.c        | 17 +++---
+ .../selftests/bpf/prog_tests/map_kptr.c       |  3 +-
+ .../selftests/bpf/prog_tests/tracing_struct.c |  3 +-
+ .../bpf/prog_tests/xdp_adjust_tail.c          |  6 +-
+ 7 files changed, 88 insertions(+), 51 deletions(-)
 
->  	}
->  
->  	err = -LIBBPF_ERRNO__FORMAT;
-> @@ -987,8 +986,6 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
->  		}
->  	}
->  
-> -	err = 0;
-> -
->  	if (!btf_data) {
->  		err = -ENOENT;
->  		goto done;
-> -- 
-> 2.18.2
-> 
+-- 
+2.25.1
+
