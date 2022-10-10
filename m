@@ -2,25 +2,25 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3772C43217
-	for <bpf@archiver.kernel.org>; Mon, 10 Oct 2022 10:40:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BD2BC43219
+	for <bpf@archiver.kernel.org>; Mon, 10 Oct 2022 10:40:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231981AbiJJKkd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 10 Oct 2022 06:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56486 "EHLO
+        id S231975AbiJJKke (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 10 Oct 2022 06:40:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231517AbiJJKkb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 10 Oct 2022 06:40:31 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A9A646E;
-        Mon, 10 Oct 2022 03:40:27 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MmFgY3Xlqz1P7Nn;
-        Mon, 10 Oct 2022 18:35:53 +0800 (CST)
+        with ESMTP id S231814AbiJJKk3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 10 Oct 2022 06:40:29 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C1865A9;
+        Mon, 10 Oct 2022 03:40:26 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MmFg13mttzHv8Z;
+        Mon, 10 Oct 2022 18:35:25 +0800 (CST)
 Received: from localhost.localdomain (10.175.112.70) by
  canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 10 Oct 2022 18:40:24 +0800
+ 15.1.2375.31; Mon, 10 Oct 2022 18:40:22 +0800
 From:   Wang Yufen <wangyufen@huawei.com>
 To:     <quentin@isovalent.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <andrii@kernel.org>, <martin.lau@linux.dev>, <song@kernel.org>,
@@ -30,12 +30,10 @@ To:     <quentin@isovalent.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <nathan@kernel.org>, <ndesaulniers@google.com>, <trix@redhat.com>
 CC:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
         <llvm@lists.linux.dev>
-Subject: [bpf-next v8 2/3] bpftool: Update doc (add autoattach to prog load)
-Date:   Mon, 10 Oct 2022 19:00:00 +0800
-Message-ID: <1665399601-29668-3-git-send-email-wangyufen@huawei.com>
+Subject: [bpf-next v8 0/3] bpftool: Add autoattach for bpf prog load|loadall
+Date:   Mon, 10 Oct 2022 18:59:58 +0800
+Message-ID: <1665399601-29668-1-git-send-email-wangyufen@huawei.com>
 X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1665399601-29668-1-git-send-email-wangyufen@huawei.com>
-References: <1665399601-29668-1-git-send-email-wangyufen@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.175.112.70]
@@ -46,54 +44,30 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add autoattach optional to prog load|loadall for supporting
+This patchset add "autoattach" optional for "bpftool prog load(_all)" to support
 one-step load-attach-pin_link.
 
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
----
- tools/bpf/bpftool/Documentation/bpftool-prog.rst | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+v7 -> v8: for the programs not supporting autoattach, fall back to reguler pinning
+	  instead of skipping
+v6 -> v7: add info msg print and update doc for the skip program
+v5 -> v6: skip the programs not supporting auto-attach,
+	  and change optional name from "auto_attach" to "autoattach"
+v4 -> v5: some formatting nits of doc
+v3 -> v4: rename functions, update doc, bash and do_help()
+v2 -> v3: switch to extend prog load command instead of extend perf
+v2: https://patchwork.kernel.org/project/netdevbpf/patch/20220824033837.458197-1-weiyongjun1@huawei.com/
+v1: https://patchwork.kernel.org/project/netdevbpf/patch/20220816151725.153343-1-weiyongjun1@huawei.com/
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-index eb1b2a2..14de725 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-@@ -31,7 +31,7 @@ PROG COMMANDS
- |	**bpftool** **prog dump xlated** *PROG* [{**file** *FILE* | **opcodes** | **visual** | **linum**}]
- |	**bpftool** **prog dump jited**  *PROG* [{**file** *FILE* | **opcodes** | **linum**}]
- |	**bpftool** **prog pin** *PROG* *FILE*
--|	**bpftool** **prog** { **load** | **loadall** } *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*]
-+|	**bpftool** **prog** { **load** | **loadall** } *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*] [**autoattach**]
- |	**bpftool** **prog attach** *PROG* *ATTACH_TYPE* [*MAP*]
- |	**bpftool** **prog detach** *PROG* *ATTACH_TYPE* [*MAP*]
- |	**bpftool** **prog tracelog**
-@@ -131,7 +131,7 @@ DESCRIPTION
- 		  contain a dot character ('.'), which is reserved for future
- 		  extensions of *bpffs*.
- 
--	**bpftool prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*]
-+	**bpftool prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*] [**autoattach**]
- 		  Load bpf program(s) from binary *OBJ* and pin as *PATH*.
- 		  **bpftool prog load** pins only the first program from the
- 		  *OBJ* as *PATH*. **bpftool prog loadall** pins all programs
-@@ -150,6 +150,17 @@ DESCRIPTION
- 		  Optional **pinmaps** argument can be provided to pin all
- 		  maps under *MAP_DIR* directory.
- 
-+		  If **autoattach** is specified program will be attached
-+		  before pin. In that case, only the link (representing the
-+		  program attached to its hook) is pinned, not the program as
-+		  such, so the path won't show in **bpftool prog show -f**,
-+		  only show in **bpftool link show -f**. Also, this only works
-+		  when bpftool (libbpf) is able to infer all necessary
-+		  information from the object file, in particular, it's not
-+		  supported for all program types. If a program does not
-+		  support autoattach, bpftool falls back to regular pinning
-+		  for that program instead.
-+
- 		  Note: *PATH* must be located in *bpffs* mount. It must not
- 		  contain a dot character ('.'), which is reserved for future
- 		  extensions of *bpffs*.
+Wang Yufen (3):
+  bpftool: Add autoattach for bpf prog load|loadall
+  bpftool: Update doc (add autoattach to prog load)
+  bpftool: Update the bash completion(add autoattach to prog load)
+
+ tools/bpf/bpftool/Documentation/bpftool-prog.rst | 15 ++++-
+ tools/bpf/bpftool/bash-completion/bpftool        |  1 +
+ tools/bpf/bpftool/prog.c                         | 78 +++++++++++++++++++++++-
+ 3 files changed, 90 insertions(+), 4 deletions(-)
+
 -- 
 1.8.3.1
 
