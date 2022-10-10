@@ -2,123 +2,264 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E21C5C433FE
-	for <bpf@archiver.kernel.org>; Mon, 10 Oct 2022 06:47:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6A20C4332F
+	for <bpf@archiver.kernel.org>; Mon, 10 Oct 2022 08:40:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231528AbiJJGrN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 10 Oct 2022 02:47:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38870 "EHLO
+        id S231428AbiJJIkJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 10 Oct 2022 04:40:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231329AbiJJGrH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 10 Oct 2022 02:47:07 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9435247B;
-        Sun,  9 Oct 2022 23:47:06 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Mm8Xz2cq9z6R7vH;
-        Mon, 10 Oct 2022 14:44:51 +0800 (CST)
-Received: from k01.huawei.com (unknown [10.67.174.197])
-        by APP2 (Coremail) with SMTP id Syh0CgDnf9Tiv0NjoL4qAA--.49036S6;
-        Mon, 10 Oct 2022 14:47:05 +0800 (CST)
-From:   Xu Kuohai <xukuohai@huaweicloud.com>
-To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Hou Tao <houtao1@huawei.com>,
-        Dmitrii Dolgov <9erthalion6@gmail.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>
-Subject: [PATCH bpf v2 4/5] selftest/bpf: Fix memory leak in kprobe_multi_test
-Date:   Mon, 10 Oct 2022 03:04:53 -0400
-Message-Id: <20221010070454.577433-5-xukuohai@huaweicloud.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221010070454.577433-1-xukuohai@huaweicloud.com>
-References: <20221010070454.577433-1-xukuohai@huaweicloud.com>
+        with ESMTP id S231245AbiJJIkI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 10 Oct 2022 04:40:08 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC24B4A818
+        for <bpf@vger.kernel.org>; Mon, 10 Oct 2022 01:40:05 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id bv10so12360185wrb.4
+        for <bpf@vger.kernel.org>; Mon, 10 Oct 2022 01:40:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Kf8mKHxxKpxb09MVW+3gksJi6I82CwXsffNzmGA2To0=;
+        b=A01s1JhV6/4fcxpQ9ufTqvJFbroaoutXKSl+BV3JJUli/Ql9f81K2AUsaxwZtHcHRz
+         YoOp6HLYLFSU7CeOTvJwJRYtyUFY3eSZPe/9Oris8ozfp9Kc56zkRAvGlwsbbx5HbS0u
+         +DXBHEDWtoStzy4fvkrY0dY5WUfHY9jxgV6VRf92aqpp/nsTXp7xS8CA4wCS7bSFXOVN
+         Yr1t+T9XIn40u/daJZg0Wl9nQMat5mH1W+AcDTWhglZITe2+xaNyR1bJXFAysCh+o2kd
+         DO4CDXKzCHWWdDov+PT451+AwgHPVd4DiT9OOLVH1Sek11aHofREalCM6DT+gRhv/qd9
+         E8Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Kf8mKHxxKpxb09MVW+3gksJi6I82CwXsffNzmGA2To0=;
+        b=ILcM3Dy35PfyBmm39faxN/IlNzPLyr+P9KxEdRZEntRXTd3m1+bAY2Q4hvpia1wZ19
+         /sKiY3eEsqs57d8EbVheJoGi4QYVo7DcCCvpkkfC5Jx7OTkB6TaInFbYKN+jOkISicIZ
+         m7uEdt+8kDLshI1PySPjGl/xJETz3sCP9IqLi9txpEiafp2BMPNwjuS/ziiXU52281BB
+         GuYoURKG7XZ+YdebzPI4Ab7ehLXeu7df9gceF09rtRpyhK++eYfe+uM3ntQ5cSBVgKh7
+         eWobAi1AJHhlykdXR12xi6NdH9pHY1fE/QaZEF4i6agjaEEANfZMHzggAVdIX8ebF5A8
+         Uufg==
+X-Gm-Message-State: ACrzQf2ip2Z9GZpZYyoy2R3Kn+Klsi5t7haC1jQsbNBW4xO2aMcwPxl9
+        kQnED4zdP3xcJpQFfGfjMVWYug==
+X-Google-Smtp-Source: AMsMyM77eLXWR+MyIpID2jk2qpGHzFUOVdJv9NH/oiJxE8GwC7nojNYrdl1CBwt9VTjuHvlort5mmQ==
+X-Received: by 2002:adf:f5c2:0:b0:22f:992b:7d9f with SMTP id k2-20020adff5c2000000b0022f992b7d9fmr5406500wrp.601.1665391204176;
+        Mon, 10 Oct 2022 01:40:04 -0700 (PDT)
+Received: from [192.168.178.32] ([51.155.200.13])
+        by smtp.gmail.com with ESMTPSA id iv19-20020a05600c549300b003b47b913901sm36776137wmb.1.2022.10.10.01.40.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Oct 2022 01:40:03 -0700 (PDT)
+Message-ID: <5f26a827-0220-da23-f2fb-08f35ee7412e@isovalent.com>
+Date:   Mon, 10 Oct 2022 09:40:02 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [bpf-next v7 1/3] bpftool: Add auto_attach for bpf prog
+ load|loadall
+Content-Language: en-GB
+To:     wangyufen <wangyufen@huawei.com>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        hawk@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+        trix@redhat.com
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, llvm@lists.linux.dev
+References: <1664277676-2228-1-git-send-email-wangyufen@huawei.com>
+ <83307f48-bef0-bff8-e3b5-f8df7a592678@isovalent.com>
+ <0242ccfe-53e5-5b9d-9fd9-73fa8bd0d7a4@huawei.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <0242ccfe-53e5-5b9d-9fd9-73fa8bd0d7a4@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgDnf9Tiv0NjoL4qAA--.49036S6
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFyfZw1fZF47Wr4xGrW3Jrb_yoW8Ar4Upa
-        yFyw4Yka4xAF13X3W3GF48WFyruFsrZ34UuFWYvw15Cwn8Xw1kGF4xKay3KF95GrZ5Zw43
-        u3W5trn5Ga1UXaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBSb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
-        14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-        xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-        z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2
-        Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-        6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0x
-        vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAI
-        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
-        IEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUFgAwUUUUU
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Xu Kuohai <xukuohai@huawei.com>
+Sat Oct 08 2022 06:16:42 GMT+0100 ~ wangyufen <wangyufen@huawei.com>
+> 
+> 在 2022/10/1 0:26, Quentin Monnet 写道:
+>> Tue Sep 27 2022 12:21:14 GMT+0100 ~ Wang Yufen <wangyufen@huawei.com>
+>>> Add auto_attach optional to support one-step load-attach-pin_link.
+>> Nit: Now "autoattach" instead of "auto_attach". Same in commit title.
+> will change in v8, thanks.
+>>
+>>> For example,
+>>>     $ bpftool prog loadall test.o /sys/fs/bpf/test autoattach
+>>>
+>>>     $ bpftool link
+>>>     26: tracing  name test1  tag f0da7d0058c00236  gpl
+>>>         loaded_at 2022-09-09T21:39:49+0800  uid 0
+>>>         xlated 88B  jited 55B  memlock 4096B  map_ids 3
+>>>         btf_id 55
+>>>     28: kprobe  name test3  tag 002ef1bef0723833  gpl
+>>>         loaded_at 2022-09-09T21:39:49+0800  uid 0
+>>>         xlated 88B  jited 56B  memlock 4096B  map_ids 3
+>>>         btf_id 55
+>>>     57: tracepoint  name oncpu  tag 7aa55dfbdcb78941  gpl
+>>>         loaded_at 2022-09-09T21:41:32+0800  uid 0
+>>>         xlated 456B  jited 265B  memlock 4096B  map_ids 17,13,14,15
+>>>         btf_id 82
+>>>
+>>>     $ bpftool link
+>>>     1: tracing  prog 26
+>>>         prog_type tracing  attach_type trace_fentry
+>>>     3: perf_event  prog 28
+>>>     10: perf_event  prog 57
+>>>
+>>> The autoattach optional can support tracepoints, k(ret)probes,
+>>> u(ret)probes.
+>>>
+>>> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+>>> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+>>> ---
+>>> v6 -> v7: add info msg print and update doc for the skip program
+>>> v5 -> v6: skip the programs not supporting auto-attach,
+>>>       and change optional name from "auto_attach" to "autoattach"
+>>> v4 -> v5: some formatting nits of doc
+>>> v3 -> v4: rename functions, update doc, bash and do_help()
+>>> v2 -> v3: switch to extend prog load command instead of extend perf
+>>> v2:
+>>> https://patchwork.kernel.org/project/netdevbpf/patch/20220824033837.458197-1-weiyongjun1@huawei.com/
+>>> v1:
+>>> https://patchwork.kernel.org/project/netdevbpf/patch/20220816151725.153343-1-weiyongjun1@huawei.com/
+>>>   tools/bpf/bpftool/prog.c | 81
+>>> ++++++++++++++++++++++++++++++++++++++++++++++--
+>>>   1 file changed, 79 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+>>> index c81362a..84eced8 100644
+>>> --- a/tools/bpf/bpftool/prog.c
+>>> +++ b/tools/bpf/bpftool/prog.c
+>>> @@ -1453,6 +1453,72 @@ static int do_run(int argc, char **argv)
+>>>       return ret;
+>>>   }
+>>>   +static int
+>>> +auto_attach_program(struct bpf_program *prog, const char *path)
+>>> +{
+>>> +    struct bpf_link *link;
+>>> +    int err;
+>>> +
+>>> +    link = bpf_program__attach(prog);
+>>> +    if (!link)
+>>> +        return -1;
+>>> +
+>>> +    err = bpf_link__pin(link, path);
+>>> +    if (err) {
+>>> +        bpf_link__destroy(link);
+>>> +        return err;
+>>> +    }
+>>> +    return 0;
+>>> +}
+>>> +
+>>> +static int pathname_concat(const char *path, const char *name, char
+>>> *buf)
+>>> +{
+>>> +    int len;
+>>> +
+>>> +    len = snprintf(buf, PATH_MAX, "%s/%s", path, name);
+>>> +    if (len < 0)
+>>> +        return -EINVAL;
+>>> +    if (len >= PATH_MAX)
+>>> +        return -ENAMETOOLONG;
+>>> +
+>>> +    return 0;
+>>> +}
+>>> +
+>>> +static int
+>>> +auto_attach_programs(struct bpf_object *obj, const char *path)
+>>> +{
+>>> +    struct bpf_program *prog;
+>>> +    char buf[PATH_MAX];
+>>> +    int err;
+>>> +
+>>> +    bpf_object__for_each_program(prog, obj) {
+>>> +        err = pathname_concat(path, bpf_program__name(prog), buf);
+>>> +        if (err)
+>>> +            goto err_unpin_programs;
+>>> +
+>>> +        err = auto_attach_program(prog, buf);
+>>> +        if (!err)
+>>> +            continue;
+>>> +        if (errno == EOPNOTSUPP)
+>>> +            p_info("Program %s does not support autoattach",
+>>> +                   bpf_program__name(prog));
+>>> +        else
+>>> +            goto err_unpin_programs
+>> With this code, if auto-attach fails, then we skip this program and move
+>> on to the next. That's an improvement, but in that case the program
+>> won't remain loaded in the kernel after bpftool exits. My suggestion in
+>> my previous message (sorry if it was not clear) was to fall back to
+>> regular pinning in that case (bpf_obj_pin()), along with the p_info()
+>> message, so we can have the program pinned but not attached and let the
+>> user know. If regular pinning fails as well, then we should unpin all
+>> and error out, for consistency with bpf_object__pin_programs().
+>>
+>> And in that case, the (errno == EOPNOTSUPP) with fallback to regular
+>> pinning could maybe be moved into auto_attach_program(), so that
+>> auto-attaching single programs can use the fallback too?
+>>
+>> Thanks,
+>> Quentin
+> 
+> If I understand correctly, can we just check link?  as following:
 
-The get_syms() function in kprobe_multi_test.c does not free the string
-memory allocated by sscanf correctly. Fix it.
+Yes, this is exactly what I meant
 
-Fixes: 5b6c7e5c4434 ("selftests/bpf: Add attach bench test")
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
----
- .../bpf/prog_tests/kprobe_multi_test.c          | 17 ++++++++---------
- 1 file changed, 8 insertions(+), 9 deletions(-)
+> 
+> --- a/tools/bpf/bpftool/prog.c
+> +++ b/tools/bpf/bpftool/prog.c
+> @@ -1460,9 +1460,10 @@ static int do_run(int argc, char **argv)
+>         int err;
+>  
+>         link = bpf_program__attach(prog);
+> -       if (!link)
+> -               return -1;
+> -
+> +       if (!link) {
+> +               p_info("Program %s attach failed",
+> bpf_program__name(prog));
+> +               return bpf_obj_pin(bpf_program__fd(prog), path);
+> +       }
+>         err = bpf_link__pin(link, path);
+>         if (err) {
+>                 bpf_link__destroy(link);
+> @@ -1499,9 +1500,6 @@ static int pathname_concat(const char *path, const
+> char *name, char *buf)
+>                 err = auto_attach_program(prog, buf);
+>                 if (!err)
+>                         continue;
+> -               if (errno == EOPNOTSUPP)
+> -                       p_info("Program %s does not support autoattach",
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-index d457a55ff408..07dd2c5b7f98 100644
---- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-@@ -360,15 +360,14 @@ static int get_syms(char ***symsp, size_t *cntp)
- 		 * to them. Filter out the current culprits - arch_cpu_idle
- 		 * and rcu_* functions.
- 		 */
--		if (!strcmp(name, "arch_cpu_idle"))
--			continue;
--		if (!strncmp(name, "rcu_", 4))
--			continue;
--		if (!strcmp(name, "bpf_dispatcher_xdp_func"))
--			continue;
--		if (!strncmp(name, "__ftrace_invalid_address__",
--			     sizeof("__ftrace_invalid_address__") - 1))
-+		if (!strcmp(name, "arch_cpu_idle") ||
-+			!strncmp(name, "rcu_", 4) ||
-+			!strcmp(name, "bpf_dispatcher_xdp_func") ||
-+			!strncmp(name, "__ftrace_invalid_address__",
-+				 sizeof("__ftrace_invalid_address__") - 1)) {
-+			free(name);
- 			continue;
-+		}
- 		err = hashmap__add(map, name, NULL);
- 		if (err) {
- 			free(name);
-@@ -394,7 +393,7 @@ static int get_syms(char ***symsp, size_t *cntp)
- 	hashmap__free(map);
- 	if (err) {
- 		for (i = 0; i < cnt; i++)
--			free(syms[cnt]);
-+			free(syms[i]);
- 		free(syms);
- 	}
- 	return err;
--- 
-2.30.2
+p_info("Program %s does not support autoattach, falling back to pinning"
 
+> -                              bpf_program__name(prog));
+>                 else
+>                         goto err_unpin_programs;
+>         }
+> 
+> 
+> and the doc is modified as follows:
+> 
+> If the program does not support autoattach, will do regular pin along
+> with an
+> info message such as "Program %s attach failed". If the *OBJ* contains
+> multiple
+> programs and **loadall** is used, if the program A in these programs
+> does not
+> support autoattach, the program A will do regular pin along with an info
+> message,
+> and continue to autoattach the next program.
+
+Not sure the "program A" designation helps too much, I'd simply write this:
+
+"If a program does not support autoattach, bpftool falls back to regular
+pinning for that program instead."
+
+Which should be enough for both the "load" and "loadall" behaviours? I
+wouldn't mention the help message in the docs (the p_info() won't show
+up in the JSON output for example).
+
+Looks good otherwise, thanks!
