@@ -2,134 +2,80 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3E50C433FE
-	for <bpf@archiver.kernel.org>; Tue, 11 Oct 2022 06:47:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02736C433FE
+	for <bpf@archiver.kernel.org>; Tue, 11 Oct 2022 06:56:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbiJKGrC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 11 Oct 2022 02:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49776 "EHLO
+        id S229925AbiJKG44 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 11 Oct 2022 02:56:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiJKGrB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 11 Oct 2022 02:47:01 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2056F1C43F
-        for <bpf@vger.kernel.org>; Mon, 10 Oct 2022 23:47:00 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MmmVl07V7zl5kr
-        for <bpf@vger.kernel.org>; Tue, 11 Oct 2022 14:45:03 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP4 (Coremail) with SMTP id gCh0CgAnJ8lhEUVjGGlfAA--.22272S4;
-        Tue, 11 Oct 2022 14:46:58 +0800 (CST)
-From:   Hou Tao <houtao@huaweicloud.com>
-To:     bpf@vger.kernel.org
-Cc:     Martin KaFai Lau <kafai@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
-        Yonghong Song <yhs@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>, houtao1@huawei.com
-Subject: [PATCH bpf-next] selftests/bpf: Use sys_pidfd_open() helper when possible
-Date:   Tue, 11 Oct 2022 15:12:49 +0800
-Message-Id: <20221011071249.3471760-1-houtao@huaweicloud.com>
-X-Mailer: git-send-email 2.29.2
+        with ESMTP id S229901AbiJKG4x (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 11 Oct 2022 02:56:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB57814D3
+        for <bpf@vger.kernel.org>; Mon, 10 Oct 2022 23:56:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D284AB811F6
+        for <bpf@vger.kernel.org>; Tue, 11 Oct 2022 06:56:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CE72C433C1
+        for <bpf@vger.kernel.org>; Tue, 11 Oct 2022 06:56:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665471405;
+        bh=l03l7G9r+ApNPs+hFq19dM7C4MYy+Pzo2M7sXTT8AnI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=dKPMaAKKTqzl3+jI0xwQaVoCSzQz7rgWBrBWoHi6AVXLhKnPjEmSjmefRAUv6kpVP
+         YcKqU2h96aLkDTTS1GZCZA2mE6t6CkxnMega7eViXXxG1Dr3//Ec0OKu7+DofZSSFf
+         VDj9TfTlqCjBaXxMEt0YYGAOHUMenCwB7Guel6z4p6ZgkTlsRKu1jTylYuHFD+w8yz
+         sNym2QRrqVTIz3IM0Efp/FUOkdiWhQViYZIsD41hXYVlxgvHguGqMuXv1noB5YtvAL
+         +79cz/YlW5PWhP7GvHEzp/wmErjDEk7TIswZjOmKfYS4QX+mfRnvcLNUeSf/bJXJ5U
+         yRopZ95zTVyuw==
+Received: by mail-ej1-f47.google.com with SMTP id r17so29284213eja.7
+        for <bpf@vger.kernel.org>; Mon, 10 Oct 2022 23:56:45 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0PH4QAxxVRVoGEzbOYVx3PlvIF8VgfRWr0GZ9MvmVaMfWhJUR8
+        uu6L8TPWernFTIe532QdcNy5b5EjZyz+gRTG2Rw=
+X-Google-Smtp-Source: AMsMyM6vqxgKmvKyAHRO8RVhPtXq1FBJ8wqM0BoMooMNw1L1lLdjYfLOztJKrLF8Lo5mhx/gayluHU0PRbKj2Y6R3Ss=
+X-Received: by 2002:a17:907:970b:b0:78d:8d70:e4e8 with SMTP id
+ jg11-20020a170907970b00b0078d8d70e4e8mr13657042ejc.614.1665471403779; Mon, 10
+ Oct 2022 23:56:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAnJ8lhEUVjGGlfAA--.22272S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zry5KrWkJr4xCry7KrWUCFg_yoW5JF1kpa
-        ykAF4qkFyfJa9xJ3ZrCF42g3Waqw1kX345Crn0qr98Zr43Xr93Wr4xKFyrZF1rG3yFvr1f
-        Z3ySkr1fCrWUZFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
-        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
-        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIx
-        AIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
-        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUo0eHDUUUU
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
+References: <20221009215926.970164-1-jolsa@kernel.org> <20221009215926.970164-2-jolsa@kernel.org>
+In-Reply-To: <20221009215926.970164-2-jolsa@kernel.org>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 10 Oct 2022 23:56:31 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4VrGxKXb-4AHKk72emOf8kRupEYYLaY0iWgkQv3HxCiQ@mail.gmail.com>
+Message-ID: <CAPhsuW4VrGxKXb-4AHKk72emOf8kRupEYYLaY0iWgkQv3HxCiQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/8] kallsyms: Make module_kallsyms_on_each_symbol
+ generally available
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Christoph Hellwig <hch@lst.de>, bpf@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Martynas Pumputis <m@lambda.lt>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Hou Tao <houtao1@huawei.com>
+On Sun, Oct 9, 2022 at 2:59 PM Jiri Olsa <jolsa@kernel.org> wrote:
+>
+> Making module_kallsyms_on_each_symbol generally available, so it
+> can be used outside CONFIG_LIVEPATCH option in following changes.
+>
+> Rather than adding another ifdef option let's make the function
+> generally available (when CONFIG_KALLSYMS and CONFIG_MODULES
+> options are defined).
+>
+> Cc: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 
-SYS_pidfd_open may be undefined for old glibc, so using sys_pidfd_open()
-helper defined in task_local_storage_helpers.h instead to fix potential
-build failure.
-
-And according to commit 7615d9e1780e ("arch: wire-up pidfd_open()"), the
-syscall number of pidfd_open is always 434 except for alpha architure,
-so update the definition of __NR_pidfd_open accordingly.
-
-Signed-off-by: Hou Tao <houtao1@huawei.com>
----
- tools/testing/selftests/bpf/prog_tests/bpf_iter.c      | 10 +++-------
- .../testing/selftests/bpf/task_local_storage_helpers.h |  4 ++++
- 2 files changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-index ecde236047fe..c39d40f4b268 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-@@ -3,6 +3,7 @@
- #include <test_progs.h>
- #include <unistd.h>
- #include <sys/syscall.h>
-+#include <task_local_storage_helpers.h>
- #include "bpf_iter_ipv6_route.skel.h"
- #include "bpf_iter_netlink.skel.h"
- #include "bpf_iter_bpf_map.skel.h"
-@@ -175,11 +176,6 @@ static void test_bpf_map(void)
- 	bpf_iter_bpf_map__destroy(skel);
- }
- 
--static int pidfd_open(pid_t pid, unsigned int flags)
--{
--	return syscall(SYS_pidfd_open, pid, flags);
--}
--
- static void check_bpf_link_info(const struct bpf_program *prog)
- {
- 	LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-@@ -295,8 +291,8 @@ static void test_task_pidfd(void)
- 	union bpf_iter_link_info linfo;
- 	int pidfd;
- 
--	pidfd = pidfd_open(getpid(), 0);
--	if (!ASSERT_GT(pidfd, 0, "pidfd_open"))
-+	pidfd = sys_pidfd_open(getpid(), 0);
-+	if (!ASSERT_GT(pidfd, 0, "sys_pidfd_open"))
- 		return;
- 
- 	memset(&linfo, 0, sizeof(linfo));
-diff --git a/tools/testing/selftests/bpf/task_local_storage_helpers.h b/tools/testing/selftests/bpf/task_local_storage_helpers.h
-index 711d5abb7d51..281f86132766 100644
---- a/tools/testing/selftests/bpf/task_local_storage_helpers.h
-+++ b/tools/testing/selftests/bpf/task_local_storage_helpers.h
-@@ -7,8 +7,12 @@
- #include <sys/types.h>
- 
- #ifndef __NR_pidfd_open
-+#ifdef __alpha__
-+#define __NR_pidfd_open 544
-+#else
- #define __NR_pidfd_open 434
- #endif
-+#endif
- 
- static inline int sys_pidfd_open(pid_t pid, unsigned int flags)
- {
--- 
-2.29.2
-
+Acked-by: Song Liu <song@kernel.org>
