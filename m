@@ -2,24 +2,24 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DE06C4332F
-	for <bpf@archiver.kernel.org>; Tue, 11 Oct 2022 11:43:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AEA84C433FE
+	for <bpf@archiver.kernel.org>; Tue, 11 Oct 2022 11:43:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbiJKLnn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 11 Oct 2022 07:43:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60888 "EHLO
+        id S229902AbiJKLno (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 11 Oct 2022 07:43:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbiJKLne (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 11 Oct 2022 07:43:34 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8482895C1;
-        Tue, 11 Oct 2022 04:43:32 -0700 (PDT)
+        with ESMTP id S229974AbiJKLnh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 11 Oct 2022 07:43:37 -0400
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE2F8F25D;
+        Tue, 11 Oct 2022 04:43:34 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Mmv4W0nM8zKG9D;
-        Tue, 11 Oct 2022 19:41:15 +0800 (CST)
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Mmv4Z3YR4z6R4ld;
+        Tue, 11 Oct 2022 19:41:18 +0800 (CST)
 Received: from k01.huawei.com (unknown [10.67.174.197])
-        by APP2 (Coremail) with SMTP id Syh0CgBX8NTXVkVj5HNpAA--.32480S5;
-        Tue, 11 Oct 2022 19:43:31 +0800 (CST)
+        by APP2 (Coremail) with SMTP id Syh0CgBX8NTXVkVj5HNpAA--.32480S7;
+        Tue, 11 Oct 2022 19:43:33 +0800 (CST)
 From:   Xu Kuohai <xukuohai@huaweicloud.com>
 To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
@@ -40,31 +40,31 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Alan Maguire <alan.maguire@oracle.com>,
         Delyan Kratunov <delyank@fb.com>,
         Lorenzo Bianconi <lorenzo@kernel.org>
-Subject: [PATCH bpf-next v4 3/6] selftests/bpf: Fix memory leak caused by not destroying skeleton
-Date:   Tue, 11 Oct 2022 08:01:05 -0400
-Message-Id: <20221011120108.782373-4-xukuohai@huaweicloud.com>
+Subject: [PATCH bpf-next v4 5/6] selftests/bpf: Fix error failure of case test_xdp_adjust_tail_grow
+Date:   Tue, 11 Oct 2022 08:01:07 -0400
+Message-Id: <20221011120108.782373-6-xukuohai@huaweicloud.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221011120108.782373-1-xukuohai@huaweicloud.com>
 References: <20221011120108.782373-1-xukuohai@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgBX8NTXVkVj5HNpAA--.32480S5
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFy3Cr4xWF4UAFWDJFy5Jwb_yoW8uw4fpa
-        48u34akF1SyF1jqFy8Ca17uFWrKFs7Zr1Ykr48tw1Fvrn8XFyxXF1xKay5J3Z3GrZ5Zw13
-        Aa4ftrs5CayUJFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
-        A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-        Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-        Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64
-        vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
-        jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2I
-        x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAI
-        w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x
-        0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
+X-CM-TRANSID: Syh0CgBX8NTXVkVj5HNpAA--.32480S7
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFy3ZFW5JFWkWr1fWr1fCrg_yoW8GFy7pa
+        4xJ3W7tFySqF12qF1DWFW29FW8Ga1kuF13Ca92qrW3Ar43JFn7tF4xKay5Was3KFWfXw1r
+        Z34rKrn5Cws5JwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBSb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
+        14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
+        xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
+        z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2
+        Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+        6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0x
+        vE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAI
+        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2js
+        IEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUFgAwUUUUU
 X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 X-CFilter-Loop: Reflected
 Precedence: bulk
@@ -73,59 +73,33 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Xu Kuohai <xukuohai@huawei.com>
 
-Some test cases does not destroy skeleton object correctly, causing ASAN
-to report memory leak warning. Fix it.
+test_xdp_adjust_tail_grow failed with ipv6:
+  test_xdp_adjust_tail_grow:FAIL:ipv6 unexpected error: -28 (errno 28)
 
-Fixes: 0ef6740e9777 ("selftests/bpf: Add tests for kptr_ref refcounting")
-Fixes: 1642a3945e22 ("selftests/bpf: Add struct argument tests with fentry/fexit programs.")
+The reason is that this test case tests ipv4 before ipv6, and when ipv4
+test finished, topts.data_size_out was set to 54, which is smaller than the
+ipv6 output data size 114, so ipv6 test fails with NOSPC error.
+
+Fix it by reset topts.data_size_out to sizeof(buf) before testing ipv6.
+
+Fixes: 04fcb5f9a104 ("selftests/bpf: Migrate from bpf_prog_test_run")
 Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 ---
- tools/testing/selftests/bpf/prog_tests/map_kptr.c       | 3 ++-
- tools/testing/selftests/bpf/prog_tests/tracing_struct.c | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/map_kptr.c b/tools/testing/selftests/bpf/prog_tests/map_kptr.c
-index fdcea7a61491..0d66b1524208 100644
---- a/tools/testing/selftests/bpf/prog_tests/map_kptr.c
-+++ b/tools/testing/selftests/bpf/prog_tests/map_kptr.c
-@@ -105,7 +105,7 @@ static void test_map_kptr_success(bool test_run)
- 	ASSERT_OK(opts.retval, "test_map_kptr_ref2 retval");
- 
- 	if (test_run)
--		return;
-+		goto exit;
- 
- 	ret = bpf_map__update_elem(skel->maps.array_map,
- 				   &key, sizeof(key), buf, sizeof(buf), 0);
-@@ -132,6 +132,7 @@ static void test_map_kptr_success(bool test_run)
- 	ret = bpf_map__delete_elem(skel->maps.lru_hash_map, &key, sizeof(key), 0);
- 	ASSERT_OK(ret, "lru_hash_map delete");
- 
-+exit:
- 	map_kptr__destroy(skel);
- }
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-index d5022b91d1e4..48dc9472e160 100644
---- a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-@@ -15,7 +15,7 @@ static void test_fentry(void)
- 
- 	err = tracing_struct__attach(skel);
- 	if (!ASSERT_OK(err, "tracing_struct__attach"))
--		return;
-+		goto destroy_skel;
- 
- 	ASSERT_OK(trigger_module_test_read(256), "trigger_read");
- 
-@@ -54,6 +54,7 @@ static void test_fentry(void)
- 	ASSERT_EQ(skel->bss->t5_ret, 1, "t5 ret");
- 
- 	tracing_struct__detach(skel);
-+destroy_skel:
- 	tracing_struct__destroy(skel);
- }
- 
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
+index 9b9cf8458adf..009ee37607df 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
+@@ -63,6 +63,7 @@ static void test_xdp_adjust_tail_grow(void)
+ 	expect_sz = sizeof(pkt_v6) + 40; /* Test grow with 40 bytes */
+ 	topts.data_in = &pkt_v6;
+ 	topts.data_size_in = sizeof(pkt_v6);
++	topts.data_size_out = sizeof(buf);
+ 	err = bpf_prog_test_run_opts(prog_fd, &topts);
+ 	ASSERT_OK(err, "ipv6");
+ 	ASSERT_EQ(topts.retval, XDP_TX, "ipv6 retval");
 -- 
 2.30.2
 
