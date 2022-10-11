@@ -2,251 +2,401 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92610C433F5
-	for <bpf@archiver.kernel.org>; Tue, 11 Oct 2022 11:57:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D5C3C433F5
+	for <bpf@archiver.kernel.org>; Tue, 11 Oct 2022 14:40:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbiJKL5q (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 11 Oct 2022 07:57:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33722 "EHLO
+        id S229820AbiJKOkP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 11 Oct 2022 10:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiJKL5p (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 11 Oct 2022 07:57:45 -0400
+        with ESMTP id S229830AbiJKOkM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 11 Oct 2022 10:40:12 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D268C80E95
-        for <bpf@vger.kernel.org>; Tue, 11 Oct 2022 04:57:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA99165A0
+        for <bpf@vger.kernel.org>; Tue, 11 Oct 2022 07:40:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665489462;
+        s=mimecast20190719; t=1665499206;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hx8VYBfOo97s7JqgJ8RxYkCcwtrkc30xw9K5nM/Rsyc=;
-        b=Ynj8xJbG/RvLNNTC5fhnwQtEPwNQSe48JJkrGgwb+SpDtMC5wxe+hofpXW9Dh7lCWf+DOW
-        LN0y7TksUNKWMXUJrWs9sOSEmudvIuU6RFHrXHBUWk3RpevbiidrHgd3LYLOiMd/VRwL9k
-        0dji0xp35HqD7zkk5bhuRUxQQkCBVio=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=uZ3v4pjnJDIojWEqppu2PN3XNMeuVy2PS0+WLzDvoJY=;
+        b=BxCv5HNkNIW+PcXBhWj2hH1Y9Lvt3vqw2F345EmPX8TCnmMumuGu4K+2olNFX/N8kLA8dI
+        lpVb5eC3TGQOZdVOheRYoKJD/imvalvqS2kldEVWnfFKCX4zYwxcGx+e6xvRq4QQQbA2e6
+        d06iVHU7pMxBzioZotwYhZZAoEgOw9A=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-177-tJHIS_aPNCqEdx7Xm6k9CA-1; Tue, 11 Oct 2022 07:57:41 -0400
-X-MC-Unique: tJHIS_aPNCqEdx7Xm6k9CA-1
-Received: by mail-ej1-f71.google.com with SMTP id hq13-20020a1709073f0d00b0078dce6a32fcso1525981ejc.13
-        for <bpf@vger.kernel.org>; Tue, 11 Oct 2022 04:57:41 -0700 (PDT)
+ us-mta-607-UARhf-VhObSgwIHCE6Hp6Q-1; Tue, 11 Oct 2022 10:40:05 -0400
+X-MC-Unique: UARhf-VhObSgwIHCE6Hp6Q-1
+Received: by mail-ed1-f70.google.com with SMTP id t19-20020a056402525300b00459546fd250so11525992edd.23
+        for <bpf@vger.kernel.org>; Tue, 11 Oct 2022 07:40:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hx8VYBfOo97s7JqgJ8RxYkCcwtrkc30xw9K5nM/Rsyc=;
-        b=MlVFOQIGi/XXdVrEsORZj14D2Ey7F9HH7AQ8hpDW7oZob2pOj1OZBW8zdolq+0p2HZ
-         9CnexZhyTwnioMlaxhpcr0tBoANOvTPR/Gwk6Nzt2bBii2EjmwY9E/zvuyyFSsxNKRTa
-         0xpTLfWDQRcuYj+Pkvsn/pXY+WEPV2LsHQ24M+oRz1mJPMALklniV0BQpvv6WJpTt3kY
-         /N0M82QR8MZm5zqFPqhtgkHPuDmX8AhsTJ5bOtSjIOOeP0QuOhZItL6oCeFICYDSHW2z
-         y2UX2ZOSJ9BAFKRLmozBP8MuUuQzP+oVcChyns65Et7rQAtTmRdJdvo8EvAkCEJLTK7P
-         ELYA==
-X-Gm-Message-State: ACrzQf3lH6Wu73aC3hkh5ZVA5Y0zuJof8hzjTsEKqnairztqvLKCNDiU
-        AAd5Sz0bph+rSCQ8RR2PrTNjzI2eLko9C3UG/zHX3lvyQcujwjyTykctCK+Ac1lppQ+nD6Q/nyo
-        rHJAvMlrORWKX
-X-Received: by 2002:a17:906:730d:b0:782:a4e0:bb54 with SMTP id di13-20020a170906730d00b00782a4e0bb54mr18879421ejc.659.1665489460165;
-        Tue, 11 Oct 2022 04:57:40 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6r6+NLk1bapBg7twZGRxaCDC8DC7D8M2O1fue98kxpCQ1GcL42pTAJDG9lqZbtBsS6jplWbg==
-X-Received: by 2002:a17:906:730d:b0:782:a4e0:bb54 with SMTP id di13-20020a170906730d00b00782a4e0bb54mr18879403ejc.659.1665489459918;
-        Tue, 11 Oct 2022 04:57:39 -0700 (PDT)
-Received: from [192.168.41.81] (83-90-141-187-cable.dk.customer.tdc.net. [83.90.141.187])
-        by smtp.gmail.com with ESMTPSA id s19-20020aa7d793000000b00459d0df08f0sm9115628edq.75.2022.10.11.04.57.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 04:57:39 -0700 (PDT)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <ad360933-953a-7a99-5057-4d452a9a6005@redhat.com>
-Date:   Tue, 11 Oct 2022 13:57:36 +0200
+        bh=uZ3v4pjnJDIojWEqppu2PN3XNMeuVy2PS0+WLzDvoJY=;
+        b=iwlnsZ2W/oIwkH5z1hrtIAnO6yk91z9i/QaOsRe/fpmooZpb4z3ZL2yxe16/XQaiQ4
+         Fc05gb7PTSsq88bcYh49zkCtpKAASs9g6mWsm0NKPeL0Tozp2syvAwY2hm9HIBZvEI1U
+         pLZMF1/Ne839Sg7hZg8qeymuMDrHI7dT/KUvnwk15vXHKwTpvEQqWQi3YxLU0Xn5CNeb
+         AEPK54gxp17az7L1YTMJh8Nt7e+Sx0RtmM4NC6DHoF3j+NOn0DralF79cIxxzC42qjk0
+         VNE5aDUglaWSmSV+bj4tl6oLuo4tyZTNtOHvfsacMqBMluEIrA7L3ThQFckpZ5WD8ySv
+         GwVQ==
+X-Gm-Message-State: ACrzQf2IptRW3vbm4cdPMqx//5P/vM56wZu6pSC8rD2VwA+qPkdUUhX2
+        iG4n/OBwrU+Zdwj2ffqgZWnjfZaATRefRdGiLR2rs0aW2iL9r2xEf3GFnQ2zWKDbR8eKHY3/MpY
+        wqGYa3T9xp5NR
+X-Received: by 2002:a17:906:5d0f:b0:78d:1bed:890f with SMTP id g15-20020a1709065d0f00b0078d1bed890fmr19408340ejt.594.1665499203391;
+        Tue, 11 Oct 2022 07:40:03 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7F2pHhFMErZLqiL3W/dHKt2lypGiwTU6kTF0fZvUbidfvcUAgdSzaTi516qR3wQRBC7ixilA==
+X-Received: by 2002:a17:906:5d0f:b0:78d:1bed:890f with SMTP id g15-20020a1709065d0f00b0078d1bed890fmr19408271ejt.594.1665499202266;
+        Tue, 11 Oct 2022 07:40:02 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id dn22-20020a05640222f600b00451319a43dasm9451073edb.2.2022.10.11.07.40.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 07:40:01 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 7808A682D16; Tue, 11 Oct 2022 16:40:00 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     mtahhan@redhat.com, bpf@vger.kernel.org, linux-doc@vger.kernel.org
+Cc:     Maryam Tahhan <mtahhan@redhat.com>
+Subject: Re: [PATCH v1 1/1] doc: BPF_MAP_TYPE_DEVMAP, BPF_MAP_TYPE_DEVMAP_HASH
+In-Reply-To: <20221011090846.752622-2-mtahhan@redhat.com>
+References: <20221011090846.752622-1-mtahhan@redhat.com>
+ <20221011090846.752622-2-mtahhan@redhat.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Tue, 11 Oct 2022 16:40:00 +0200
+Message-ID: <878rlmqv9b.fsf@toke.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Cc:     brouer@redhat.com, Stanislav Fomichev <sdf@google.com>,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        xdp-hints@xdp-project.net, larysa.zaremba@intel.com,
-        memxor@gmail.com, Lorenzo Bianconi <lorenzo@kernel.org>,
-        mtahhan@redhat.com,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Daniel Borkmann <borkmann@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        dave@dtucker.co.uk, Magnus Karlsson <magnus.karlsson@intel.com>,
-        bjorn@kernel.org, Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [PATCH RFCv2 bpf-next 00/18] XDP-hints: XDP gaining access to HW
- offload hints via BTF
-Content-Language: en-US
-To:     Martin KaFai Lau <martin.lau@linux.dev>,
-        Jesper Dangaard Brouer <jbrouer@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>
-References: <166256538687.1434226.15760041133601409770.stgit@firesoul>
- <Yzt2YhbCBe8fYHWQ@google.com>
- <35fcfb25-583a-e923-6eee-e8bbcc19db17@redhat.com>
- <CAKH8qBuYVk7QwVOSYrhMNnaKFKGd7M9bopDyNp6-SnN6hSeTDQ@mail.gmail.com>
- <5ccff6fa-0d50-c436-b891-ab797fe7e3c4@linux.dev>
- <20221004175952.6e4aade7@kernel.org>
- <CAKH8qBtdAeHqbWa33yO-MMgC2+h2qehFn8Y_C6ZC1=YsjQS-Bw@mail.gmail.com>
- <20221004182451.6804b8ca@kernel.org>
- <CAKH8qBtTPNULZDLd2n1r2o7XZwvs_q5OkNqhdq0A+b5zkHRNMw@mail.gmail.com>
- <e29082a8-bbd5-6ee3-34bf-c16d0f6ed45a@linux.dev>
- <CAJ8uoz2ng=wv=dWQqxomQX4h11QsYq=scU++MSJ3Q0PMQWuzWQ@mail.gmail.com>
- <cc7e4a27-93ab-e9de-55e0-10029948d738@redhat.com>
- <c8a712d8-dc97-8df5-6421-a5ccb1357b67@linux.dev>
-In-Reply-To: <c8a712d8-dc97-8df5-6421-a5ccb1357b67@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+mtahhan@redhat.com writes:
 
-
-On 11/10/2022 08.29, Martin KaFai Lau wrote:
-> On 10/6/22 8:29 AM, Jesper Dangaard Brouer wrote:
->>
->> On 06/10/2022 11.14, Magnus Karlsson wrote:
->>> On Wed, Oct 5, 2022 at 9:27 PM Martin KaFai Lau 
->>> <martin.lau@linux.dev> wrote:
->>>>
->>>> On 10/4/22 7:15 PM, Stanislav Fomichev wrote:
->>>>> On Tue, Oct 4, 2022 at 6:24 PM Jakub Kicinski <kuba@kernel.org> wrote:
->>>>>>
->>>>>> On Tue, 4 Oct 2022 18:02:56 -0700 Stanislav Fomichev wrote:
->>>>>>> +1, sounds like a good alternative (got your reply while typing)
->>>>>>> I'm not too versed in the rx_desc/rx_queue area, but seems like worst
->>>>>>> case that bpf_xdp_get_hwtstamp can probably receive a xdp_md ctx and
->>>>>>> parse it out from the pre-populated metadata?
->>>>>>
->>>>>> I'd think so, worst case the driver can put xdp_md into a struct
->>>>>> and container_of() to get to its own stack with whatever fields
->>>>>> it needs.
->>>>>
->>>>> Ack, seems like something worth exploring then.
->>>>>
->>>>> The only issue I see with that is that we'd probably have to extend
->>>>> the loading api to pass target xdp device so we can pre-generate
->>>>> per-device bytecode for those kfuncs?
->>>>
->>>> There is an existing attr->prog_ifindex for dev offload purpose.  
->>>> May be we can
->>>> re-purpose/re-use some of the offload API.  How this kfunc can be 
->>>> presented also
->>>> needs some thoughts, could be a new ndo_xxx.... not sure.
->>>>> And this potentially will block attaching the same program
->>>>   > to different drivers/devices?
->>>>> Or, Martin, did you maybe have something better in mind?
->>>>
->>>> If the kfunc/helper is inline, then it will have to be per device.  
->>>> Unless the
->>>> bpf prog chooses not to inline which could be an option but I am 
->>>> also not sure
->>>> how often the user wants to 'attach' a loaded xdp prog to a 
->>>> different device.
->>>> To some extend, the CO-RE hints-loading-code will have to be per 
->>>> device also, no?
->>>>
->>>> Why I asked the kfunc/helper approach is because, from the set, it 
->>>> seems the
->>>> hints has already been available at the driver.  The specific 
->>>> knowledge that the
->>>> xdp prog missing is how to get the hints from the rx_desc/rx_queue.  
->>>> The
->>>> straight forward way to me is to make them (rx_desc/rx_queue) 
->>>> available to xdp
->>>> prog and have kfunc/helper to extract the hints from them only if 
->>>> the xdp prog
->>>> needs it.  The xdp prog can selectively get what hints it needs and 
->>>> then
->>>> optionally store them into the meta area in any layout.
->>>
->>> This sounds like a really good idea to me, well worth exploring. To
->>> only have to pay, performance wise, for the metadata you actually use
->>> is very important. I did some experiments [1] on the previous patch
->>> set of Jesper's and there is substantial overhead added for each
->>> metadata enabled (and fetched from the NIC). This is especially
->>> important for AF_XDP in zero-copy mode where most packets are directed
->>> to user-space (if not, you should be using the regular driver that is
->>> optimized for passing packets to the stack or redirecting to other
->>> devices). In this case, the user knows exactly what metadata it wants
->>> and where in the metadata area it should be located in order to offer
->>> the best performance for the application in question. But as you say,
->>> your suggestion could potentially offer a good performance upside to
->>> the regular XDP path too.
-> 
-> Yeah, since we are on this flexible hint layout, after reading the 
-> replies in other threads, now I am also not sure why we need a 
-> xdp_hints_common and probably I am missing something also.  It seems to 
-> be most useful in __xdp_build_skb_from_frame. However, the xdp prog can 
-> also fill in the xdp_hints_common by itself only when needed instead of 
-> having the driver always filling it in.
-> 
-
-I *want* the XDP-hints to be populated even when no XDP-prog is running.
-The xdp_frame *is* the mini-SKB concept. These XDP-hints are about
-adding HW offload hints to this mini-SKB, to allow it grow into a
-full-SKB with these offloads.
-
-I could add this purely as a netstack feature, via extending xdp_frame
-area with a common struct. For XDP-prog access I could extend xdp_md
-with fields that gets UAPI rewrite mapped to access these fields. For
-the AF_XDP users this data becomes harder to access, but an XDP-prog
-could (spend cycles) moving these offloads into the metadata area, but
-why not place them there is the first place.
-
-I think the main point is that I don't see the XDP-prog as the primary
-consumer of these hints.
-One reason/use-case for letting XDP-prog access these hints prior to
-creating a full-SKB is to help fixing up (or providing) offload hints.
-The mvneta driver patch highlight this as HW have limited hints, which
-an XDP-prog can provide prior to calling netstack.
-
-In this patchset I'm trying to balance the different users. And via BTF
-I'm trying hard not to create more UAPI (e.g. more fixed fields avail in
-xdp_md that we cannot get rid of). And trying to add driver flexibility
-on-top of the common struct.  This flexibility seems to be stalling the
-patchset as we haven't found the perfect way to express this (yet) given
-BTF layout is per driver.
-
-
->>
->> Okay, lets revisit this again.  And let me explain why I believe this
->> isn't going to fly.
->>
->> I was also my initial though, lets just give XDP BPF-prog direct access
->> to the NIC rx_descriptor, or another BPF-prog populate XDP-hints prior
->> to calling XDP-prog.  Going down this path (previously) I learned three
->> things:
->>
->> (1) Understanding/decoding rx_descriptor requires access to the
->> programmers datasheet, because it is very compacted and the mean of the
->> bits depend on other bits and plus current configuration status of the 
->> HW.
->>
->> (2) HW have bugs and for certain chip revisions driver will skip some
->> offload hints.  Thus, chip revisions need to be exported to BPF-progs
->> and handled appropriately.
->>
->> (3) Sometimes the info is actually not available in the rx_descriptor.
->> Often for HW timestamps, the timestamp need to be read from a HW
->> register.  How do we expose this to the BPF-prog?
-> 
-> hmm.... may be I am missing those hw specific details here.  How would 
-> the driver handle the above cases and fill in the xdp_hints in the 
-> meta?  Can the same code be called by the xdp prog?
+> From: Maryam Tahhan <mtahhan@redhat.com>
 >
+> Add documentation for BPF_MAP_TYPE_DEVMAP and
+> BPF_MAP_TYPE_DEVMAP_HASH including kernel version
+> introduced, usage and examples.
 
-As I mentioned above, I want the XDP-hints to be populated even when no 
-XDP-prog is running. I don't want the dependency on loading an XDP-prog 
-to get the hints populated, as e.g. netstack is one of the users.
+Thanks for doing this! Some comments below.
+
+>
+> Signed-off-by: Maryam Tahhan <mtahhan@redhat.com>
+> ---
+>  Documentation/bpf/map_devmap.rst | 231 +++++++++++++++++++++++++++++++
+>  1 file changed, 231 insertions(+)
+>  create mode 100644 Documentation/bpf/map_devmap.rst
+>
+> diff --git a/Documentation/bpf/map_devmap.rst b/Documentation/bpf/map_devmap.rst
+> new file mode 100644
+> index 000000000000..ecd2b7b951cc
+> --- /dev/null
+> +++ b/Documentation/bpf/map_devmap.rst
+> @@ -0,0 +1,231 @@
+> +.. SPDX-License-Identifier: GPL-2.0-only
+> +.. Copyright (C) 2022 Red Hat, Inc.
+> +
+> +=================================================
+> +BPF_MAP_TYPE_DEVMAP and BPF_MAP_TYPE_DEVMAP_HASH
+> +=================================================
+> +
+> +.. note::
+> +   - ``BPF_MAP_TYPE_DEVMAP`` was introduced in kernel version 4.14
+> +   - ``BPF_MAP_TYPE_DEVMAP_HASH`` was introduced in kernel version 5.4
+> +
+> +``BPF_MAP_TYPE_DEVMAP`` is a BPF map, primarily used as a backend map for the XDP
+> +BPF helper call ``bpf_redirect_map()``. It's backed by an array that uses the key as
+> +the index to lookup a reference to a net device. The user provides <``key``/ ``ifindex``>
+> +pairs to update the map with new net devices.
+
+The TYPE_DEVMAP also takes the bpf_devmap_val struct as its value, not
+just key/ifindex (as is indeed also noted below). Maybe it's better to
+just collapse the description of the two into one paragraph noting that
+they only differ in the "sparseness" of keys?
+
+> +``BPF_MAP_TYPE_DEVMAP_HASH`` is also a backend map for ``bpf_redirect_map()``.
+> +It's backed by a hash table that uses the ``ifindex`` as the key to lookup a reference
+> +to a net device. As it's a hash map, it allows for densely packing the net devices
+> +(compared with the sparsely packed ``BPF_MAP_TYPE_DEVMAP``).
+
+Should we note that the packing comes at the cost of a hash of the key
+when looking up?
+
+> The user provides
+> +<``key``/ ``struct bpf_devmap_val``> pairs to update the map with new net devices.
+> +
+> +The setup and packet enqueue/send code is shared between the two types of
+> +devmap; only the lookup and insertion is different.
+> +
+> +XDP_REDIRECT
+> +============
+> +
+> +XDP_REDIRECT works by a three-step process, implemented as follows:
+> +
+> +1. The ``bpf_redirect()`` and ``bpf_redirect_map()`` helpers will lookup the
+> +   target of the redirect and store it (along with some other metadata) in a
+> +   per-CPU ``struct bpf_redirect_info``. This is where the maps above come into
+> +   play.
+> +
+> +2. When the program returns the ``XDP_REDIRECT`` return code, the driver will
+> +   call ``xdp_do_redirect()`` which will use the information in ``struct
+> +   bpf_redirect_info`` to actually enqueue the frame into a map type-specific
+> +   bulk queue structure.
+> +
+> +3. Before exiting its NAPI poll loop, the driver will call ``xdp_do_flush()``,
+> +   which will flush all the different bulk queues, thus completing the
+> +   redirect.
+
+This is supposed to be user-facing documentation right (i.e., to be read
+by BPF program authors not kernel programmers)? If so, maybe this is a
+tad bit too much detail. I feel it's fine to explain the three-step
+process and bulk queueing, but the function and data structure names are
+maybe superfluous details?
+
+> +Pointers to the map entries will be kept around for this whole sequence of
+> +steps, protected by RCU. However, there is no top-level ``rcu_read_lock()`` in
+> +the core code; instead, the RCU protection relies on everything happening
+> +inside a single NAPI poll sequence, which means it's between a pair of calls
+> +to ``local_bh_disable()`` / ``local_bh_enable()``.
+> +
+> +The map entries are marked as ``__rcu`` and the map code makes sure to dereference
+> +those pointers with ``rcu_dereference_check()`` in a way that works for both
+> +sections that to hold an ``rcu_read_lock()`` and sections that are called from
+> +NAPI without a separate ``rcu_read_lock()``. The code below does not use RCU
+> +annotations, but relies on those in the map code.
+
+This is *definitely* too much detail for user-facing documentation.
+
+> +.. note::
+> +    ``XDP_REDIRECT`` is not fully supported yet for xdp frags since not all XDP
+> +    capable drivers can map a non-linear ``xdp_frame`` in ``ndo_xdp_xmit``.
+
+It's not really "fully supported" for non-frags either (i.e., it still
+depends on driver support). So maybe expand this to say something like
+"not all drivers support transmitting frames after a redirect, and for
+those that do, not all of them support non-linear frames"? Do we explain
+anywhere what a non-linear frame is, BTW?
 
 
->>
->> Notice that this patchset doesn't block this idea, as it is orthogonal.
->> After we have established a way to express xdp_hints layouts via BTF,
->> then we can still add a pre-XDP BPF-prog that populates the XDP-hints,
->> and squeeze out more performance by skipping some of the offloads that
->> your-specific-XDP-prog are not interested in.
->>
->> --Jesper
->>
-> 
+> +Usage
+> +=====
+> +
+> +.. c:function::
+> +   long bpf_map_update_elem(struct bpf_map *map, const void *key, const void *value, u64 flags)
+
+Feels a bit weird to include these (generic) helpers into a document on
+the specific map type? Shouldn't they be documented separately (and the
+map type just document the value type)?
+
+> + Net device entries can be added or updated using the ``bpf_map_update_elem()``
+> + helper. This helper replaces existing elements atomically. The ``flags``
+> + parameter can be used to control the update behaviour:
+
+Should probably specify that updates can only be done from userspace
+(not from a BPF program)?
+
+> +
+> + - ``BPF_ANY`` will create a new element or update an existing element
+> + - ``BPF_NOEXIST`` will create a new element only if one did not already
+> +   exist
+> + - ``BPF_EXIST`` will update an existing element
+> +
+> + ``bpf_map_update_elem()`` returns 0 on success, or negative error in
+> + case of failure.
+> +
+> + The value parameter is of type ``struct bpf_devmap_val``:
+
+It's either a bpf_devmap_val struct or just an ifindex (for backwards
+compatibility reasons).
+
+> +
+> + .. code-block:: c
+> +
+> +    struct bpf_devmap_val {
+> +        __u32 ifindex;   /* device index */
+> +        union {
+> +            int   fd;  /* prog fd on map write */
+> +            __u32 id;  /* prog id on map read */
+> +        } bpf_prog;
+> +    };
+> +
+> + DEVMAPs can associate a program with a device entry by adding a ``bpf_prog.fd``
+> + to ``struct bpf_devmap_val``. Programs are run after ``XDP_REDIRECT`` and have
+> + access to both Rx device and Tx device. The  program associated with the ``fd``
+> + must have type XDP with expected attach type ``xdp_devmap``.
+> + When a program is associated with a device index, the program is run on an
+> + ``XDP_REDIRECT`` and before the buffer is added to the per-cpu queue. Examples
+> + of how to attach/use xdp_devmap progs can be found in the kernel selftests:
+> +
+> + - test_xdp_with_devmap_helpers_
+> + - xdp_devmap_attach_
+> +
+> +.. _xdp_devmap_attach: https://github.com/torvalds/linux/blob/master/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
+> +.. _test_xdp_with_devmap_helpers: https://github.com/torvalds/linux/blob/master/tools/testing/selftests/bpf/progs/test_xdp_with_devmap_helpers.c
+> +
+> +.. c:function::
+> +   void *bpf_map_lookup_elem(struct bpf_map *map, const void *key)
+> +
+> + net device entries can be retrieved using the ``bpf_map_lookup_elem()``
+> + helper. This helper returns a pointer to the value associated with ``key``, or
+> + ``NULL`` if no entry was found.
+> +
+> +.. c:function::
+> +   long bpf_map_delete_elem(struct bpf_map *map, const void *key)
+> +
+> + net device entries can be deleted using the ``bpf_map_delete_elem()``
+> + helper. This helper will return 0 on success, or negative error in case of
+> + failure.
+> +
+> +.. c:function::
+> +     long bpf_redirect_map(struct bpf_map *map, u32 key, u64 flags)
+
+This helper makes a bit more sense to have documented here, but I also
+feels like it would make more sense to document thew hole redirect
+facility in one place, along with all the different map types (i.e.,
+also XSK and CPUMAP)?
+
+> + Redirect the packet to the endpoint referenced by map at index
+> ``key``.
+
+s/map/``map``/ ?
+
+> + For ``BPF_MAP_TYPE_DEVMAP`` and ``BPF_MAP_TYPE_DEVMAP_HASH`` this map contains
+> + references to net devices (for forwarding packets through other ports).
+> +
+> + The lower two bits of *flags* are used as the return code if the map lookup
+> + fails. This is so that the return value can be one of the XDP program return
+> + codes up to ``XDP_TX``, as chosen by the caller. The higher bits of ``flags``
+> + can be set to ``BPF_F_BROADCAST`` or ``BPF_F_EXCLUDE_INGRESS`` as defined
+> + below.
+> +
+> + With ``BPF_F_BROADCAST`` the packet will be broadcast to all the interfaces
+> + in the map, with ``BPF_F_EXCLUDE_INGRESS`` the ingress interface will be excluded
+> + from the broadcast.
+> +
+> + This helper will return ``XDP_REDIRECT`` on success, or the value of the two
+> + lower bits of the *flags* argument if the map lookup fails.
+>
+> +Examples
+> +========
+> +
+> +Kernel BPF
+> +----------
+> +
+> +The following code snippet shows how to declare a ``BPF_MAP_TYPE_DEVMAP``
+> +called tx_port.
+> +
+> +.. code-block:: c
+> +
+> +    struct {
+> +        __uint(type, BPF_MAP_TYPE_DEVMAP);
+> +        __uint(key_size, sizeof(int));
+> +        __uint(value_size, sizeof(int));
+
+I think we generally use '__u32' not 'int' as the key and value types;
+also, should this use the '__type(key, __u32)' syntax instead of __uint(key_size..)?
+
+> +        __uint(max_entries, 256);
+> +    } tx_port SEC(".maps");
+> +
+> +The following code snippet shows how to declare a ``BPF_MAP_TYPE_DEVMAP_HASH``
+> +called forward_map.
+> +
+> +.. code-block:: c
+> +
+> +    struct {
+> +        __uint(type, BPF_MAP_TYPE_DEVMAP_HASH);
+> +        __uint(key_size, sizeof(int));
+> +        __uint(value_size, sizeof(struct bpf_devmap_val));
+> +        __uint(max_entries, 32);
+> +    } forward_map SEC(".maps");
+
+As above, and maybe point out that this one is deliberately using the
+struct value while the other isn't?
+
+> +The following code snippet shows a simple xdp_redirect_map program.
+> +
+> +.. code-block:: c
+> +
+> +    SEC("xdp")
+> +    int xdp_redirect_map_func(struct xdp_md *ctx)
+> +    {
+> +        void *data_end = (void *)(long)ctx->data_end;
+> +        void *data = (void *)(long)ctx->data;
+
+Why define the data pointers if they're not used?
+
+> +        int action = XDP_PASS;
+
+Why is this defined as a variable, and why is it initialised (it will
+always be overridden below)?
+
+> +        int index = ctx->ingress_ifindex;
+
+Should probably explain that this works in concert with the userspace
+code to index the devmap on ingress ifindex, yielding a fixed
+destination port for each ingress ifindex?
+
+> +
+> +        action = bpf_redirect_map(&tx_port, index, BPF_F_BROADCAST | BPF_F_EXCLUDE_INGRESS);
+> +
+> +    out:
+
+Unused label?
+
+> +        return action;
+> +    }
+> +
+> +
+> +User space
+> +----------
+> +
+> +The following code snippet shows how to update a devmap called ``tx_port``.
+> +
+> +.. code-block:: c
+> +
+> +    int update_devmap(int ifindex, int redirect_ifindex)
+> +    {
+> +        int ret = -1;
+> +
+> +        ret = bpf_map_update_elem(bpf_map__fd(tx_port), &ifindex, &redirect_ifindex, 0);
+> +        if (ret < 0) {
+> +            fprintf(stderr, "Failed to update devmap_ value: %s\n",
+> +                strerror(errno));
+> +        }
+> +
+> +        return ret;
+> +    }
+> +
+> +The following code snippet shows how to update a hash_devmap called ``forward_map``.
+> +
+> +.. code-block:: c
+> +
+> +    int update_devmap(int ifindex, int redirect_ifindex)
+> +    {
+> +        struct bpf_devmap_val devmap_val;
+
+This should be zero-initialised; maybe just initialise as { .ifindex =
+redirect_ifindex }; ?
+
+> +        int ret = -1;
+> +
+> +        devmap_val.ifindex = redirect_ifindex;
+> +        ret = bpf_map_update_elem(bpf_map__fd(forward_map), &ifindex, &devmap_val, 0);
+> +        if (ret < 0) {
+> +            fprintf(stderr, "Failed to update devmap_ value: %s\n",
+> +                strerror(errno));
+> +        }
+> +        return ret;
+> +    }
+> +
+> +References
+> +===========
+> +
+> +- https://lwn.net/Articles/728146/
+> +- https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=6f9d451ab1a33728adb72d7ff66a7b374d665176
+> +- https://elixir.bootlin.com/linux/latest/source/net/core/filter.c#L4106
+> -- 
+> 2.35.3
 
