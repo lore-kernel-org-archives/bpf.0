@@ -2,323 +2,174 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D699FC4332F
-	for <bpf@archiver.kernel.org>; Tue, 11 Oct 2022 08:13:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59058C433F5
+	for <bpf@archiver.kernel.org>; Tue, 11 Oct 2022 08:44:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbiJKIN0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 11 Oct 2022 04:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37734 "EHLO
+        id S229943AbiJKIoq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 11 Oct 2022 04:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbiJKINQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 11 Oct 2022 04:13:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545918A1C6
-        for <bpf@vger.kernel.org>; Tue, 11 Oct 2022 01:13:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665475992;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fEg7RdYXtmRiuEncVrnSP1mNHXGZ3TfxjtkeK/MBbwM=;
-        b=Ac72C2z5v5WfAKNa/ETLcnAU7SAGU4fjtdP1Icuo/u95eFDqinfUjPWC45Gws9Z40boxLX
-        gEDO2YTmSF7b62wN/vpAhMAbqkb06cq11mWbseisU4mBXvS3Hy21i5RgyhJZBFYwg6N5tT
-        D7H6edTRRlwKPPI6LQeV5LVajbfz3/A=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-641-EQowxkpEML2R1_yDESZSXw-1; Tue, 11 Oct 2022 04:13:11 -0400
-X-MC-Unique: EQowxkpEML2R1_yDESZSXw-1
-Received: by mail-qv1-f70.google.com with SMTP id y2-20020a0ce802000000b004b1ce1c4a70so7477810qvn.9
-        for <bpf@vger.kernel.org>; Tue, 11 Oct 2022 01:13:10 -0700 (PDT)
+        with ESMTP id S229890AbiJKIoo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 11 Oct 2022 04:44:44 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1F5E6A
+        for <bpf@vger.kernel.org>; Tue, 11 Oct 2022 01:44:37 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id n14-20020a056e02100e00b002f9e283e850so10486356ilj.9
+        for <bpf@vger.kernel.org>; Tue, 11 Oct 2022 01:44:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fEg7RdYXtmRiuEncVrnSP1mNHXGZ3TfxjtkeK/MBbwM=;
-        b=n1aIVmJJvxpeUQZ+ezYAbAoBeeaQ1UO38MX8Yn0vpPEGOTVxmTTRRmsvFhkGZErQ+R
-         8ZyXBpALR/bOFazDqqwcdE0ooCwkLGMH/8uN3OoV5gPTfD78LqCNr/0ZDCRfTUIKLANO
-         nr/Byg0+LXtM+QDj/hKtOU9U0eX+5K13ub8DqCrvleALsYPVHjQE0Gs7mzG9mPYUQ0Ha
-         sjn1PsO+2iYJyZ5l8HVUpXnbOwCEd2S7xwRid7xVpPhpgqQrHL0HIVcKLXwInPAv5jci
-         QAfhApba+vWE1pKG5bTO8eZbL8hOeuvJ0tjc5uapV7bO+bftEAV5msUseWAMpZ3xw6pC
-         zEGw==
-X-Gm-Message-State: ACrzQf1u9P/5zkR+CrtpaJvzlGM0q+YJ+tZhrsq88n7cALa9aMp/Cmmj
-        pHFmL34FKsgemaAQaSW8jHUIIvpgVJ5x5j0NsUDsmUW9C+iTjG9iPCN4T7SE8vWlx9MZSVrUKkc
-        U6Xn4f19n82JWMQXH+lPaRGpggNNQfmmIBHYyyCZe6RqEb2DOtmYvGV1+QDzhYHY=
-X-Received: by 2002:a37:b906:0:b0:6ce:4076:9859 with SMTP id j6-20020a37b906000000b006ce40769859mr15726787qkf.580.1665475990298;
-        Tue, 11 Oct 2022 01:13:10 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6Po/4tvHy/Kl+S5HR98VqMzCkZcNBAx7+wScCszP+UtkZOakCGmlMmJGAliOYjviOBvxUSJg==
-X-Received: by 2002:a37:b906:0:b0:6ce:4076:9859 with SMTP id j6-20020a37b906000000b006ce40769859mr15726775qkf.580.1665475989924;
-        Tue, 11 Oct 2022 01:13:09 -0700 (PDT)
-Received: from nfvsdn-06.testing.baremetal.edge-sites.net (nat-pool-232-132.redhat.com. [66.187.232.132])
-        by smtp.gmail.com with ESMTPSA id q6-20020a05620a0d8600b006bb82221013sm12383261qkl.0.2022.10.11.01.13.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 01:13:09 -0700 (PDT)
-From:   mtahhan@redhat.com
-To:     bpf@vger.kernel.org, linux-doc@vger.kernel.org
-Cc:     Maryam Tahhan <mtahhan@redhat.com>
-Subject: [PATCH v1 1/1] doc: BPF_MAP_TYPE_DEVMAP, BPF_MAP_TYPE_DEVMAP_HASH
-Date:   Tue, 11 Oct 2022 05:08:46 -0400
-Message-Id: <20221011090846.752622-2-mtahhan@redhat.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20221011090846.752622-1-mtahhan@redhat.com>
-References: <20221011090846.752622-1-mtahhan@redhat.com>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8rAyLwcqhyqbw6qTRq87Ygr7lL5zRM4lvjhTuwKCYi8=;
+        b=NmA5193TlOfSrHZJrk2tf3h//Qj2sv1ANT+ecv872t2V26siMH6zyPYuugjjKah2LD
+         y0GlvySbhfzA+DnNmFaMl1l2K0inTUpKuoAvDx5Xp1RMlH/LQzpfRj6fLM/g1HouNuwb
+         HLPMWodUBDkTSsDHf1P83gzBj+gPuhAT9lcVtvTOhEBfPVqRVl0lVWWi5FIG4p/Vm8kq
+         hyHIYpZeC4P5/lfbCr/jY2hCMaLsNnt+UdyFlFyBcVL4EN2sxzKFxX79w5j/i1DH0OxQ
+         VuWzTcy+FdSWVEE6blWOKAe+9SroLk3O1Eq0F3kEtMFZDZ7VACGqhmQTX2RFtaGI38Fh
+         o9Eg==
+X-Gm-Message-State: ACrzQf3A/pWC8xyHY13KJ1pqr4KQEZtQWokIZbkvx8x1PMx0jaOGijbO
+        EvcB06cBeE/72Qkgf50CkyPvwVPbI3PGyqFg+WGnnIpO4pL+
+X-Google-Smtp-Source: AMsMyM54O9dsqiI/JJaOBF3ZjqzA/TDDc3/FQ8DTweNouW7yamqmvv7hjigIiq88S996gzHIs8mqxVi9JO1GqP8Ipb7r9iBDqLlL
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6e02:1baa:b0:2f9:9fcd:1f63 with SMTP id
+ n10-20020a056e021baa00b002f99fcd1f63mr10926621ili.295.1665477877146; Tue, 11
+ Oct 2022 01:44:37 -0700 (PDT)
+Date:   Tue, 11 Oct 2022 01:44:37 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003fac9905eabe4964@google.com>
+Subject: [syzbot] upstream boot error: WARNING in cpumask_next_wrap
+From:   syzbot <syzbot+51a652e2d24d53e75734@syzkaller.appspotmail.com>
+To:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, edumazet@google.com, hawk@kernel.org,
+        jasowang@redhat.com, john.fastabend@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, mst@redhat.com,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com,
+        virtualization@lists.linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Maryam Tahhan <mtahhan@redhat.com>
+Hello,
 
-Add documentation for BPF_MAP_TYPE_DEVMAP and
-BPF_MAP_TYPE_DEVMAP_HASH including kernel version
-introduced, usage and examples.
+syzbot found the following issue on:
 
-Signed-off-by: Maryam Tahhan <mtahhan@redhat.com>
+HEAD commit:    e2302539dd4f Merge tag 'xtensa-20221010' of https://github..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=105b851a880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1370a7ded58197a2
+dashboard link: https://syzkaller.appspot.com/bug?extid=51a652e2d24d53e75734
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/f6eb85afda26/disk-e2302539.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/6091bfed3009/vmlinux-e2302539.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+51a652e2d24d53e75734@syzkaller.appspotmail.com
+
+ACPI: button: Sleep Button [SLPF]
+ACPI: \_SB_.LNKC: Enabled at IRQ 11
+virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
+ACPI: \_SB_.LNKD: Enabled at IRQ 10
+virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
+ACPI: \_SB_.LNKB: Enabled at IRQ 10
+virtio-pci 0000:00:06.0: virtio_pci: leaving for legacy driver
+virtio-pci 0000:00:07.0: virtio_pci: leaving for legacy driver
+N_HDLC line discipline registered with maxframe=4096
+Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
+00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
+00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
+Non-volatile memory driver v1.3
+Linux agpgart interface v0.103
+ACPI: bus type drm_connector registered
+[drm] Initialized vgem 1.0.0 20120112 for vgem on minor 0
+[drm] Initialized vkms 1.0.0 20180514 for vkms on minor 1
+Console: switching to colour frame buffer device 128x48
+platform vkms: [drm] fb0: vkmsdrmfb frame buffer device
+usbcore: registered new interface driver udl
+brd: module loaded
+loop: module loaded
+zram: Added device: zram0
+null_blk: disk nullb0 created
+null_blk: module loaded
+Guest personality initialized and is inactive
+VMCI host device registered (name=vmci, major=10, minor=120)
+Initialized host personality
+usbcore: registered new interface driver rtsx_usb
+usbcore: registered new interface driver viperboard
+usbcore: registered new interface driver dln2
+usbcore: registered new interface driver pn533_usb
+nfcsim 0.2 initialized
+usbcore: registered new interface driver port100
+usbcore: registered new interface driver nfcmrvl
+Loading iSCSI transport class v2.0-870.
+scsi host0: Virtio SCSI HBA
+st: Version 20160209, fixed bufsize 32768, s/g segs 256
+Rounding down aligned max_sectors from 4294967295 to 4294967288
+db_root: cannot open: /etc/target
+slram: not enough parameters.
+ftl_cs: FTL header not found.
+wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
+wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+eql: Equalizer2002: Simon Janes (simon@ncm.com) and David S. Miller (davem@redhat.com)
+MACsec IEEE 802.1AE
+tun: Universal TUN/TAP device driver, 1.6
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpumask_check include/linux/cpumask.h:117 [inline]
+WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpumask_next include/linux/cpumask.h:178 [inline]
+WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpumask_next_wrap+0x11c/0x1c0 lib/cpumask.c:27
+Modules linked in:
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.0.0-syzkaller-10145-ge2302539dd4f #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+RIP: 0010:cpu_max_bits_warn include/linux/cpumask.h:110 [inline]
+RIP: 0010:cpumask_check include/linux/cpumask.h:117 [inline]
+RIP: 0010:cpumask_next include/linux/cpumask.h:178 [inline]
+RIP: 0010:cpumask_next_wrap+0x11c/0x1c0 lib/cpumask.c:27
+Code: a6 00 00 00 e8 b5 34 62 f7 48 8b 04 24 41 bd ff ff ff ff 45 31 e4 48 b9 00 00 00 00 00 fc ff df e9 39 ff ff ff e8 94 34 62 f7 <0f> 0b e9 59 ff ff ff 48 c7 c1 b8 f2 0c 8e 80 e1 07 80 c1 03 38 c1
+RSP: 0000:ffffc90000067218 EFLAGS: 00010293
+RAX: ffffffff8a255bdc RBX: 0000000000000002 RCX: ffff888012278000
+RDX: 0000000000000000 RSI: 0000000000000002 RDI: 0000000000000002
+RBP: 0000000000000002 R08: ffffffff8a255b2f R09: fffff5200000ce5d
+R10: fffff5200000ce5d R11: 1ffff9200000ce5c R12: 0000000000000001
+R13: 0000000000000001 R14: 1ffffffff1c19e57 R15: 0000000000000002
+FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88823ffff000 CR3: 000000000c88e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ virtnet_set_affinity+0x2be/0x6f0 drivers/net/virtio_net.c:2303
+ init_vqs+0x107c/0x11d0 drivers/net/virtio_net.c:3581
+ virtnet_probe+0x198d/0x3120 drivers/net/virtio_net.c:3884
+ virtio_dev_probe+0x8ca/0xb60 drivers/virtio/virtio.c:305
+ call_driver_probe+0x96/0x250
+ really_probe+0x24c/0x9f0 drivers/base/dd.c:639
+ __driver_probe_device+0x1f4/0x3f0 drivers/base/dd.c:778
+ driver_probe_device+0x50/0x240 drivers/base/dd.c:808
+ __driver_attach+0x364/0x5b0 drivers/base/dd.c:1190
+ bus_for_each_dev+0x168/0x1d0 drivers/base/bus.c:301
+ bus_add_driver+0x32f/0x600 drivers/base/bus.c:618
+ driver_register+0x2e9/0x3e0 drivers/base/driver.c:246
+ virtio_net_driver_init+0x8e/0xcb drivers/net/virtio_net.c:4090
+ do_one_initcall+0x1c9/0x400 init/main.c:1295
+ do_initcall_level+0x168/0x218 init/main.c:1368
+ do_initcalls+0x4b/0x8c init/main.c:1384
+ kernel_init_freeable+0x3f1/0x57b init/main.c:1622
+ kernel_init+0x19/0x2b0 init/main.c:1511
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+
+
 ---
- Documentation/bpf/map_devmap.rst | 231 +++++++++++++++++++++++++++++++
- 1 file changed, 231 insertions(+)
- create mode 100644 Documentation/bpf/map_devmap.rst
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/Documentation/bpf/map_devmap.rst b/Documentation/bpf/map_devmap.rst
-new file mode 100644
-index 000000000000..ecd2b7b951cc
---- /dev/null
-+++ b/Documentation/bpf/map_devmap.rst
-@@ -0,0 +1,231 @@
-+.. SPDX-License-Identifier: GPL-2.0-only
-+.. Copyright (C) 2022 Red Hat, Inc.
-+
-+=================================================
-+BPF_MAP_TYPE_DEVMAP and BPF_MAP_TYPE_DEVMAP_HASH
-+=================================================
-+
-+.. note::
-+   - ``BPF_MAP_TYPE_DEVMAP`` was introduced in kernel version 4.14
-+   - ``BPF_MAP_TYPE_DEVMAP_HASH`` was introduced in kernel version 5.4
-+
-+``BPF_MAP_TYPE_DEVMAP`` is a BPF map, primarily used as a backend map for the XDP
-+BPF helper call ``bpf_redirect_map()``. It's backed by an array that uses the key as
-+the index to lookup a reference to a net device. The user provides <``key``/ ``ifindex``>
-+pairs to update the map with new net devices.
-+
-+``BPF_MAP_TYPE_DEVMAP_HASH`` is also a backend map for ``bpf_redirect_map()``.
-+It's backed by a hash table that uses the ``ifindex`` as the key to lookup a reference
-+to a net device. As it's a hash map, it allows for densely packing the net devices
-+(compared with the sparsely packed ``BPF_MAP_TYPE_DEVMAP``). The user provides
-+<``key``/ ``struct bpf_devmap_val``> pairs to update the map with new net devices.
-+
-+The setup and packet enqueue/send code is shared between the two types of
-+devmap; only the lookup and insertion is different.
-+
-+XDP_REDIRECT
-+============
-+
-+XDP_REDIRECT works by a three-step process, implemented as follows:
-+
-+1. The ``bpf_redirect()`` and ``bpf_redirect_map()`` helpers will lookup the
-+   target of the redirect and store it (along with some other metadata) in a
-+   per-CPU ``struct bpf_redirect_info``. This is where the maps above come into
-+   play.
-+
-+2. When the program returns the ``XDP_REDIRECT`` return code, the driver will
-+   call ``xdp_do_redirect()`` which will use the information in ``struct
-+   bpf_redirect_info`` to actually enqueue the frame into a map type-specific
-+   bulk queue structure.
-+
-+3. Before exiting its NAPI poll loop, the driver will call ``xdp_do_flush()``,
-+   which will flush all the different bulk queues, thus completing the
-+   redirect.
-+
-+Pointers to the map entries will be kept around for this whole sequence of
-+steps, protected by RCU. However, there is no top-level ``rcu_read_lock()`` in
-+the core code; instead, the RCU protection relies on everything happening
-+inside a single NAPI poll sequence, which means it's between a pair of calls
-+to ``local_bh_disable()`` / ``local_bh_enable()``.
-+
-+The map entries are marked as ``__rcu`` and the map code makes sure to dereference
-+those pointers with ``rcu_dereference_check()`` in a way that works for both
-+sections that to hold an ``rcu_read_lock()`` and sections that are called from
-+NAPI without a separate ``rcu_read_lock()``. The code below does not use RCU
-+annotations, but relies on those in the map code.
-+
-+.. note::
-+    ``XDP_REDIRECT`` is not fully supported yet for xdp frags since not all XDP
-+    capable drivers can map a non-linear ``xdp_frame`` in ``ndo_xdp_xmit``.
-+
-+Usage
-+=====
-+
-+.. c:function::
-+   long bpf_map_update_elem(struct bpf_map *map, const void *key, const void *value, u64 flags)
-+
-+ Net device entries can be added or updated using the ``bpf_map_update_elem()``
-+ helper. This helper replaces existing elements atomically. The ``flags``
-+ parameter can be used to control the update behaviour:
-+
-+ - ``BPF_ANY`` will create a new element or update an existing element
-+ - ``BPF_NOEXIST`` will create a new element only if one did not already
-+   exist
-+ - ``BPF_EXIST`` will update an existing element
-+
-+ ``bpf_map_update_elem()`` returns 0 on success, or negative error in
-+ case of failure.
-+
-+ The value parameter is of type ``struct bpf_devmap_val``:
-+
-+ .. code-block:: c
-+
-+    struct bpf_devmap_val {
-+        __u32 ifindex;   /* device index */
-+        union {
-+            int   fd;  /* prog fd on map write */
-+            __u32 id;  /* prog id on map read */
-+        } bpf_prog;
-+    };
-+
-+ DEVMAPs can associate a program with a device entry by adding a ``bpf_prog.fd``
-+ to ``struct bpf_devmap_val``. Programs are run after ``XDP_REDIRECT`` and have
-+ access to both Rx device and Tx device. The  program associated with the ``fd``
-+ must have type XDP with expected attach type ``xdp_devmap``.
-+ When a program is associated with a device index, the program is run on an
-+ ``XDP_REDIRECT`` and before the buffer is added to the per-cpu queue. Examples
-+ of how to attach/use xdp_devmap progs can be found in the kernel selftests:
-+
-+ - test_xdp_with_devmap_helpers_
-+ - xdp_devmap_attach_
-+
-+.. _xdp_devmap_attach: https://github.com/torvalds/linux/blob/master/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
-+.. _test_xdp_with_devmap_helpers: https://github.com/torvalds/linux/blob/master/tools/testing/selftests/bpf/progs/test_xdp_with_devmap_helpers.c
-+
-+.. c:function::
-+   void *bpf_map_lookup_elem(struct bpf_map *map, const void *key)
-+
-+ net device entries can be retrieved using the ``bpf_map_lookup_elem()``
-+ helper. This helper returns a pointer to the value associated with ``key``, or
-+ ``NULL`` if no entry was found.
-+
-+.. c:function::
-+   long bpf_map_delete_elem(struct bpf_map *map, const void *key)
-+
-+ net device entries can be deleted using the ``bpf_map_delete_elem()``
-+ helper. This helper will return 0 on success, or negative error in case of
-+ failure.
-+
-+.. c:function::
-+     long bpf_redirect_map(struct bpf_map *map, u32 key, u64 flags)
-+
-+ Redirect the packet to the endpoint referenced by map at index ``key``.
-+ For ``BPF_MAP_TYPE_DEVMAP`` and ``BPF_MAP_TYPE_DEVMAP_HASH`` this map contains
-+ references to net devices (for forwarding packets through other ports).
-+
-+ The lower two bits of *flags* are used as the return code if the map lookup
-+ fails. This is so that the return value can be one of the XDP program return
-+ codes up to ``XDP_TX``, as chosen by the caller. The higher bits of ``flags``
-+ can be set to ``BPF_F_BROADCAST`` or ``BPF_F_EXCLUDE_INGRESS`` as defined
-+ below.
-+
-+ With ``BPF_F_BROADCAST`` the packet will be broadcast to all the interfaces
-+ in the map, with ``BPF_F_EXCLUDE_INGRESS`` the ingress interface will be excluded
-+ from the broadcast.
-+
-+ This helper will return ``XDP_REDIRECT`` on success, or the value of the two
-+ lower bits of the *flags* argument if the map lookup fails.
-+
-+Examples
-+========
-+
-+Kernel BPF
-+----------
-+
-+The following code snippet shows how to declare a ``BPF_MAP_TYPE_DEVMAP``
-+called tx_port.
-+
-+.. code-block:: c
-+
-+    struct {
-+        __uint(type, BPF_MAP_TYPE_DEVMAP);
-+        __uint(key_size, sizeof(int));
-+        __uint(value_size, sizeof(int));
-+        __uint(max_entries, 256);
-+    } tx_port SEC(".maps");
-+
-+The following code snippet shows how to declare a ``BPF_MAP_TYPE_DEVMAP_HASH``
-+called forward_map.
-+
-+.. code-block:: c
-+
-+    struct {
-+        __uint(type, BPF_MAP_TYPE_DEVMAP_HASH);
-+        __uint(key_size, sizeof(int));
-+        __uint(value_size, sizeof(struct bpf_devmap_val));
-+        __uint(max_entries, 32);
-+    } forward_map SEC(".maps");
-+
-+The following code snippet shows a simple xdp_redirect_map program.
-+
-+.. code-block:: c
-+
-+    SEC("xdp")
-+    int xdp_redirect_map_func(struct xdp_md *ctx)
-+    {
-+        void *data_end = (void *)(long)ctx->data_end;
-+        void *data = (void *)(long)ctx->data;
-+        int action = XDP_PASS;
-+        int index = ctx->ingress_ifindex;
-+
-+        action = bpf_redirect_map(&tx_port, index, BPF_F_BROADCAST | BPF_F_EXCLUDE_INGRESS);
-+
-+    out:
-+        return action;
-+    }
-+
-+
-+User space
-+----------
-+
-+The following code snippet shows how to update a devmap called ``tx_port``.
-+
-+.. code-block:: c
-+
-+    int update_devmap(int ifindex, int redirect_ifindex)
-+    {
-+        int ret = -1;
-+
-+        ret = bpf_map_update_elem(bpf_map__fd(tx_port), &ifindex, &redirect_ifindex, 0);
-+        if (ret < 0) {
-+            fprintf(stderr, "Failed to update devmap_ value: %s\n",
-+                strerror(errno));
-+        }
-+
-+        return ret;
-+    }
-+
-+The following code snippet shows how to update a hash_devmap called ``forward_map``.
-+
-+.. code-block:: c
-+
-+    int update_devmap(int ifindex, int redirect_ifindex)
-+    {
-+        struct bpf_devmap_val devmap_val;
-+        int ret = -1;
-+
-+        devmap_val.ifindex = redirect_ifindex;
-+        ret = bpf_map_update_elem(bpf_map__fd(forward_map), &ifindex, &devmap_val, 0);
-+        if (ret < 0) {
-+            fprintf(stderr, "Failed to update devmap_ value: %s\n",
-+                strerror(errno));
-+        }
-+        return ret;
-+    }
-+
-+References
-+===========
-+
-+- https://lwn.net/Articles/728146/
-+- https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=6f9d451ab1a33728adb72d7ff66a7b374d665176
-+- https://elixir.bootlin.com/linux/latest/source/net/core/filter.c#L4106
--- 
-2.35.3
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
