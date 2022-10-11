@@ -2,116 +2,121 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB501C433FE
-	for <bpf@archiver.kernel.org>; Tue, 11 Oct 2022 06:41:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EFBDC43219
+	for <bpf@archiver.kernel.org>; Tue, 11 Oct 2022 06:45:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbiJKGl1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 11 Oct 2022 02:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41554 "EHLO
+        id S229865AbiJKGpu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 11 Oct 2022 02:45:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiJKGl0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 11 Oct 2022 02:41:26 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406DD371B4;
-        Mon, 10 Oct 2022 23:41:26 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id B9656320046F;
-        Tue, 11 Oct 2022 02:41:22 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Tue, 11 Oct 2022 02:41:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1665470482; x=1665556882; bh=Te6x0oEH5PW3g1OGnqB5gG0tb3T4
-        mkg/JlI/9qYhhsM=; b=RJV5L9FHPxtuSOVO3wATpSX3NnlmZAWGIFpEUKtorLE2
-        RiXnlKkBefZiMrQyuNuGGd324ambOfLYWxxaHoZ71rumJGiJ54l89Wjg5/NpBuNl
-        u5fD476K0xVLzybGe2vi1iNslKl+LA/pvuYClrq8/JnqxJgtYfdYDaGf+QlqlM77
-        GWmbIxEajaxLBR9yc0cKrly/dlMqp4gGnusO7gU/aTAWy2wHRyW352XNHTStbTpq
-        ztaI6DEEl8xoKW+xiW9c15uMS/wnQRmKXRDwGL/aovK4rWoVbwKkcVkQ/4eNX3nv
-        +3nLKXDBg0jsNQj75MrMJSBKBv3cLTSPhAeP6NopTA==
-X-ME-Sender: <xms:EBBFYwxQjdpcis1oRb47ud7dayfZqCPX6m93IFoSPzVxj2mM9ttt5g>
-    <xme:EBBFY0T5G3_O9JDIz-Wepqf70i8MMlT3AMigTZa0AMTn_d1fXqpW6S4usWVcgu4ce
-    p0B2bca37bRsfY>
-X-ME-Received: <xmr:EBBFYyWS7Ppc3HlbKJpOfwr-SNkaibVo_lPqv2KDSaLSYl5YN4pGUYvw9F04jTA0WeEtQjhZ_qIy31T6Lrz9UXG3etU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejhedguddtlecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkugho
-    ucfutghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrg
-    htthgvrhhnpedvudefveekheeugeeftddvveefgfduieefudeifefgleekheegleegjeej
-    geeghfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hiughoshgthhesihguohhstghhrdhorhhg
-X-ME-Proxy: <xmx:EBBFY-jjBnevYXktaCxs5NylxKdGeqg2opyXr2YxjAJ8_YtB_wxbGQ>
-    <xmx:EBBFYyA-1WRXyJ2KAPrUJR-hg4sbmf27HNs3LHnwCr6GFIUSKrhybQ>
-    <xmx:EBBFY_LPAgsQ6OmwAH69Mk3k_KDtau11NydA9D89rqoD_iLwKpQUqw>
-    <xmx:EhBFY-6LmPL4M3P9WZd2XdRGylYVyg9U1EEI8RmXB8u1HiYtCZLXEw>
-Feedback-ID: i494840e7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 11 Oct 2022 02:41:20 -0400 (EDT)
-Date:   Tue, 11 Oct 2022 09:41:15 +0300
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Eyal Birger <eyal.birger@gmail.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, steffen.klassert@secunet.com,
-        herbert@gondor.apana.org.au, dsahern@kernel.org,
-        contact@proelbtn.com, pablo@netfilter.org,
-        nicolas.dichtel@6wind.com, razor@blackwall.org,
-        daniel@iogearbox.net, netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH ipsec-next,v4 3/3] xfrm: lwtunnel: add lwtunnel support
- for xfrm interfaces in collect_md mode
-Message-ID: <Y0UQC0oycrGs4Zad@shredder>
-References: <20220826114700.2272645-1-eyal.birger@gmail.com>
- <20220826114700.2272645-4-eyal.birger@gmail.com>
+        with ESMTP id S229698AbiJKGpt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 11 Oct 2022 02:45:49 -0400
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4634077542;
+        Mon, 10 Oct 2022 23:45:41 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MmmSs14nqz6PmRS;
+        Tue, 11 Oct 2022 14:43:25 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP4 (Coremail) with SMTP id gCh0CgD39sgQEUVj3FxfAA--.20636S6;
+        Tue, 11 Oct 2022 14:45:39 +0800 (CST)
+From:   Hou Tao <houtao@huaweicloud.com>
+To:     bpf@vger.kernel.org
+Cc:     Martin KaFai Lau <kafai@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
+        Yonghong Song <yhs@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Delyan Kratunov <delyank@fb.com>, rcu@vger.kernel.org,
+        houtao1@huawei.com
+Subject: [PATCH bpf-next 2/3] bpf: Free local storage memory after one RCU-tasks-trace grace period
+Date:   Tue, 11 Oct 2022 15:11:27 +0800
+Message-Id: <20221011071128.3470622-3-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20221011071128.3470622-1-houtao@huaweicloud.com>
+References: <20221011071128.3470622-1-houtao@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220826114700.2272645-4-eyal.birger@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgD39sgQEUVj3FxfAA--.20636S6
+X-Coremail-Antispam: 1UD129KBjvJXoW7uryrtFy8tr15Cw13WrWfXwb_yoW8AF4kpF
+        yUXrn8Jr4Fya1ruanxGF4fAryDXw47Wr1UKFZ5A3yftrZxArWDWFnIkF1Uua43Gw4rWr4I
+        vF90gF1UGw1UZFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+        A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+        6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+        Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+        Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64
+        vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+        jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2I
+        x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAI
+        w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
+        0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1sa9DUUUUU==
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 02:47:00PM +0300, Eyal Birger wrote:
-> diff --git a/net/core/lwtunnel.c b/net/core/lwtunnel.c
-> index 9ccd64e8a666..6fac2f0ef074 100644
-> --- a/net/core/lwtunnel.c
-> +++ b/net/core/lwtunnel.c
-> @@ -50,6 +50,7 @@ static const char *lwtunnel_encap_str(enum lwtunnel_encap_types encap_type)
->  		return "IOAM6";
->  	case LWTUNNEL_ENCAP_IP6:
->  	case LWTUNNEL_ENCAP_IP:
-> +	case LWTUNNEL_ENCAP_XFRM:
->  	case LWTUNNEL_ENCAP_NONE:
->  	case __LWTUNNEL_ENCAP_MAX:
->  		/* should not have got here */
+From: Hou Tao <houtao1@huawei.com>
 
-Eyal,
+Local storage map is accessible for both sleepable and normal bpf
+program, so its memory is freed by using both call_rcu_tasks_trace() and
+kfree_rcu() to wait for both RCU-tasks-trace grace period and RCU grace
+period to expire.
 
-The warning at the bottom can be triggered [1] from user space when the
-kernel is compiled with CONFIG_MODULES=y and CONFIG_XFRM=n:
+However According to the current implementation of RCU-tasks-trace, one
+RCU-tasks-trace grace period waits for one RCU grace period, so there is
+no need to call kfree_rcu(), it is safe to call kfree() directly.
 
- # ip route add 198.51.100.0/24 dev dummy1 encap xfrm if_id 1
- Error: lwt encapsulation type not supported.
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ kernel/bpf/bpf_local_storage.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-Original report is from a private syzkaller instance which I have
-reduced to the command above.
+diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
+index 802fc15b0d73..18a2dd611635 100644
+--- a/kernel/bpf/bpf_local_storage.c
++++ b/kernel/bpf/bpf_local_storage.c
+@@ -84,20 +84,26 @@ bpf_selem_alloc(struct bpf_local_storage_map *smap, void *owner,
+ 	return NULL;
+ }
+ 
++/* Now RCU Tasks grace period implies RCU grace period, so no need to call
++ * kfree_rcu(), just call kfree() directly.
++ */
+ void bpf_local_storage_free_rcu(struct rcu_head *rcu)
+ {
+ 	struct bpf_local_storage *local_storage;
+ 
+ 	local_storage = container_of(rcu, struct bpf_local_storage, rcu);
+-	kfree_rcu(local_storage, rcu);
++	kfree(local_storage);
+ }
+ 
++/* Now RCU Tasks grace period implies RCU grace period, so no need to call
++ * kfree_rcu(), just call kfree() directly.
++ */
+ static void bpf_selem_free_rcu(struct rcu_head *rcu)
+ {
+ 	struct bpf_local_storage_elem *selem;
+ 
+ 	selem = container_of(rcu, struct bpf_local_storage_elem, rcu);
+-	kfree_rcu(selem, rcu);
++	kfree(selem);
+ }
+ 
+ /* local_storage->lock must be held and selem->local_storage == local_storage.
+-- 
+2.29.2
 
-Thanks
-
-[1]
- WARNING: CPU: 3 PID: 2746262 at net/core/lwtunnel.c:57 lwtunnel_valid_encap_type+0x4f/0x120
-[...]
- Call Trace:
-  <TASK>
-  rtm_to_fib_config+0x211/0x350
-  inet_rtm_newroute+0x3a/0xa0 
-  rtnetlink_rcv_msg+0x154/0x3c0
-  netlink_rcv_skb+0x49/0xf0
-  netlink_unicast+0x22f/0x350 
-  netlink_sendmsg+0x208/0x440 
-  ____sys_sendmsg+0x21f/0x250
-  ___sys_sendmsg+0x83/0xd0
-  __sys_sendmsg+0x54/0xa0
-  do_syscall_64+0x35/0x80
-  entry_SYSCALL_64_after_hwframe+0x63/0xcd
