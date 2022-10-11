@@ -2,24 +2,24 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E2D5C43217
-	for <bpf@archiver.kernel.org>; Tue, 11 Oct 2022 06:45:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3E50C433FE
+	for <bpf@archiver.kernel.org>; Tue, 11 Oct 2022 06:47:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbiJKGpw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 11 Oct 2022 02:45:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48790 "EHLO
+        id S229867AbiJKGrC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 11 Oct 2022 02:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbiJKGpu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 11 Oct 2022 02:45:50 -0400
+        with ESMTP id S229605AbiJKGrB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 11 Oct 2022 02:47:01 -0400
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460357697B;
-        Mon, 10 Oct 2022 23:45:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2056F1C43F
+        for <bpf@vger.kernel.org>; Mon, 10 Oct 2022 23:47:00 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MmmTC3JHWzl4wS;
-        Tue, 11 Oct 2022 14:43:43 +0800 (CST)
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MmmVl07V7zl5kr
+        for <bpf@vger.kernel.org>; Tue, 11 Oct 2022 14:45:03 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP4 (Coremail) with SMTP id gCh0CgD39sgQEUVj3FxfAA--.20636S5;
-        Tue, 11 Oct 2022 14:45:38 +0800 (CST)
+        by APP4 (Coremail) with SMTP id gCh0CgAnJ8lhEUVjGGlfAA--.22272S4;
+        Tue, 11 Oct 2022 14:46:58 +0800 (CST)
 From:   Hou Tao <houtao@huaweicloud.com>
 To:     bpf@vger.kernel.org
 Cc:     Martin KaFai Lau <kafai@fb.com>,
@@ -33,35 +33,29 @@ Cc:     Martin KaFai Lau <kafai@fb.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
         Jiri Olsa <jolsa@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Delyan Kratunov <delyank@fb.com>, rcu@vger.kernel.org,
-        houtao1@huawei.com
-Subject: [PATCH bpf-next 1/3] bpf: Free elements after one RCU-tasks-trace grace period
-Date:   Tue, 11 Oct 2022 15:11:26 +0800
-Message-Id: <20221011071128.3470622-2-houtao@huaweicloud.com>
+        John Fastabend <john.fastabend@gmail.com>, houtao1@huawei.com
+Subject: [PATCH bpf-next] selftests/bpf: Use sys_pidfd_open() helper when possible
+Date:   Tue, 11 Oct 2022 15:12:49 +0800
+Message-Id: <20221011071249.3471760-1-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20221011071128.3470622-1-houtao@huaweicloud.com>
-References: <20221011071128.3470622-1-houtao@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgD39sgQEUVj3FxfAA--.20636S5
-X-Coremail-Antispam: 1UD129KBjvJXoW7Cw17XrWfGw1xtw1kZF43Wrg_yoW8try5pF
-        yfJFyDGrs5AF4a9a93Xr1xC398A39ag3srtay0y3sa9ry5C34DuF4UCa45XFyF9rWrAa1a
-        vr4vkr13Ga18ZrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUB0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
-        A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-        Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-        Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64
-        vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
-        jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2I
-        x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK
-        8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
-        0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2mL9UUUUU
+X-CM-TRANSID: gCh0CgAnJ8lhEUVjGGlfAA--.22272S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zry5KrWkJr4xCry7KrWUCFg_yoW5JF1kpa
+        ykAF4qkFyfJa9xJ3ZrCF42g3Waqw1kX345Crn0qr98Zr43Xr93Wr4xKFyrZF1rG3yFvr1f
+        Z3ySkr1fCrWUZFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIx
+        AIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUo0eHDUUUU
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 X-CFilter-Loop: Reflected
 Precedence: bulk
@@ -70,63 +64,72 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Hou Tao <houtao1@huawei.com>
 
-According to the implementation of RCU Tasks Trace, it inovkes
-->postscan_func() to wait for one RCU-tasks-trace grace period and
-rcu_tasks_trace_postscan() inovkes synchronize_rcu() to wait for one
-normal RCU grace period in turn, so one RCU-tasks-trace grace period
-will imply one RCU grace period.
+SYS_pidfd_open may be undefined for old glibc, so using sys_pidfd_open()
+helper defined in task_local_storage_helpers.h instead to fix potential
+build failure.
 
-So there is no need to do call_rcu() again in the callback of
-call_rcu_tasks_trace() and it can just free these elements directly.
+And according to commit 7615d9e1780e ("arch: wire-up pidfd_open()"), the
+syscall number of pidfd_open is always 434 except for alpha architure,
+so update the definition of __NR_pidfd_open accordingly.
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- kernel/bpf/memalloc.c | 17 ++++++-----------
- 1 file changed, 6 insertions(+), 11 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/bpf_iter.c      | 10 +++-------
+ .../testing/selftests/bpf/task_local_storage_helpers.h |  4 ++++
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/kernel/bpf/memalloc.c b/kernel/bpf/memalloc.c
-index 5f83be1d2018..6f32dddc804f 100644
---- a/kernel/bpf/memalloc.c
-+++ b/kernel/bpf/memalloc.c
-@@ -209,6 +209,9 @@ static void free_one(struct bpf_mem_cache *c, void *obj)
- 	kfree(obj);
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+index ecde236047fe..c39d40f4b268 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+@@ -3,6 +3,7 @@
+ #include <test_progs.h>
+ #include <unistd.h>
+ #include <sys/syscall.h>
++#include <task_local_storage_helpers.h>
+ #include "bpf_iter_ipv6_route.skel.h"
+ #include "bpf_iter_netlink.skel.h"
+ #include "bpf_iter_bpf_map.skel.h"
+@@ -175,11 +176,6 @@ static void test_bpf_map(void)
+ 	bpf_iter_bpf_map__destroy(skel);
  }
  
-+/* Now RCU Tasks grace period implies RCU grace period, so no need to do
-+ * an extra call_rcu().
-+ */
- static void __free_rcu(struct rcu_head *head)
- {
- 	struct bpf_mem_cache *c = container_of(head, struct bpf_mem_cache, rcu);
-@@ -220,13 +223,6 @@ static void __free_rcu(struct rcu_head *head)
- 	atomic_set(&c->call_rcu_in_progress, 0);
- }
- 
--static void __free_rcu_tasks_trace(struct rcu_head *head)
+-static int pidfd_open(pid_t pid, unsigned int flags)
 -{
--	struct bpf_mem_cache *c = container_of(head, struct bpf_mem_cache, rcu);
--
--	call_rcu(&c->rcu, __free_rcu);
+-	return syscall(SYS_pidfd_open, pid, flags);
 -}
 -
- static void enque_to_free(struct bpf_mem_cache *c, void *obj)
+ static void check_bpf_link_info(const struct bpf_program *prog)
  {
- 	struct llist_node *llnode = obj;
-@@ -252,11 +248,10 @@ static void do_call_rcu(struct bpf_mem_cache *c)
- 		 * from __free_rcu() and from drain_mem_cache().
- 		 */
- 		__llist_add(llnode, &c->waiting_for_gp);
--	/* Use call_rcu_tasks_trace() to wait for sleepable progs to finish.
--	 * Then use call_rcu() to wait for normal progs to finish
--	 * and finally do free_one() on each element.
-+	/* Use call_rcu_tasks_trace() to wait for both sleepable and normal
-+	 * progs to finish and finally do free_one() on each element.
- 	 */
--	call_rcu_tasks_trace(&c->rcu, __free_rcu_tasks_trace);
-+	call_rcu_tasks_trace(&c->rcu, __free_rcu);
- }
+ 	LIBBPF_OPTS(bpf_iter_attach_opts, opts);
+@@ -295,8 +291,8 @@ static void test_task_pidfd(void)
+ 	union bpf_iter_link_info linfo;
+ 	int pidfd;
  
- static void free_bulk(struct bpf_mem_cache *c)
+-	pidfd = pidfd_open(getpid(), 0);
+-	if (!ASSERT_GT(pidfd, 0, "pidfd_open"))
++	pidfd = sys_pidfd_open(getpid(), 0);
++	if (!ASSERT_GT(pidfd, 0, "sys_pidfd_open"))
+ 		return;
+ 
+ 	memset(&linfo, 0, sizeof(linfo));
+diff --git a/tools/testing/selftests/bpf/task_local_storage_helpers.h b/tools/testing/selftests/bpf/task_local_storage_helpers.h
+index 711d5abb7d51..281f86132766 100644
+--- a/tools/testing/selftests/bpf/task_local_storage_helpers.h
++++ b/tools/testing/selftests/bpf/task_local_storage_helpers.h
+@@ -7,8 +7,12 @@
+ #include <sys/types.h>
+ 
+ #ifndef __NR_pidfd_open
++#ifdef __alpha__
++#define __NR_pidfd_open 544
++#else
+ #define __NR_pidfd_open 434
+ #endif
++#endif
+ 
+ static inline int sys_pidfd_open(pid_t pid, unsigned int flags)
+ {
 -- 
 2.29.2
 
