@@ -2,103 +2,83 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72957C433F5
-	for <bpf@archiver.kernel.org>; Tue, 11 Oct 2022 08:03:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1301C433F5
+	for <bpf@archiver.kernel.org>; Tue, 11 Oct 2022 08:13:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbiJKIDY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 11 Oct 2022 04:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46192 "EHLO
+        id S229955AbiJKINY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 11 Oct 2022 04:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiJKIDY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 11 Oct 2022 04:03:24 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50BBA7C1F6;
-        Tue, 11 Oct 2022 01:03:23 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id g9so8478361qvo.12;
-        Tue, 11 Oct 2022 01:03:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Har4yFeCgOSIR75xmzHnKi7+0/DdgcGnqVSyzGu67iQ=;
-        b=hFWvHe2rL9DfymigRuvA6mSzLM5EJsqf/AmSbJ3BlPX01OzM7F00Tdx3rX2cJ0I1Zc
-         EP1i1JRBGeTSscfXsfHMQY4Cl8eni5mGjr+86QjD4+RedSJx1u9ZISolpI3VWQ12aAGj
-         LEjeeZolJQe/JFQHqUMd37yHkOxczAUHY0tdYV9NQZ9DnYB+oRcfREzC8OlI6PXSu/7k
-         HJWVaSC/tLoCW4Er/KhnPU3M5AO6oCsfmEkQIxg+SoIJ9shBgwmH8vDz4bpWw88MkHg+
-         ffeZf5h3DJCvl+YSdO4UNZZHrvkMCZT7iZVL8hXAdPjBWiYDURKTrePz8VRXjBlWfv1M
-         EVTQ==
+        with ESMTP id S229925AbiJKINO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 11 Oct 2022 04:13:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A5089CDC
+        for <bpf@vger.kernel.org>; Tue, 11 Oct 2022 01:13:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665475991;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Wd2uHcBEj1+0Ib8C2XV8f8kpv5GXpAIa7u+xFyKcdgM=;
+        b=d2U6L/lECTzgk7u4Dh9sg8sy8jOgGq3xR26I53fYdisQCS9BnHhSKDbKTOoeX/U5XddP9p
+        F8uOKLx0kOvbL7S6qmBjOb2YJZLfrBXXcOr6oDFtakU48rShLGWzjHWW4xWIwGn0/odJLM
+        7tLmsQxUTVLLWyfcg4w1rUd8wTrIw9I=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-220-K0Oc9en3P1S856EpjOkOvQ-1; Tue, 11 Oct 2022 04:13:09 -0400
+X-MC-Unique: K0Oc9en3P1S856EpjOkOvQ-1
+Received: by mail-qv1-f71.google.com with SMTP id q17-20020a056214019100b004b1d3c9f3acso7500985qvr.0
+        for <bpf@vger.kernel.org>; Tue, 11 Oct 2022 01:13:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Har4yFeCgOSIR75xmzHnKi7+0/DdgcGnqVSyzGu67iQ=;
-        b=2z1fV/cjYX8SMWgtk6oxucnwOeBePPsAJtJKMFfuoYkFSzILwneR84jwsUKvzNhC9t
-         hsoRJT7oDNHe6w5sG0CxlFCBP7lpywRC9zGZr1SrM5KBPiYrdyTLlz1nK/z9mYu44CYz
-         tYhyTpIDNwN6qXrLj2U2WkCtWwGx/0HZRVIWhPCWuzE8jgal8oufEd4p5fK7WQB5m/Hk
-         F8grNQc289vVvRGGrtNA++hkaPY+FrYh8eWBZG5Wxbi9l26LkWxKS3w8EY/znrhkMnmV
-         Fe0/xiifXZu+dzaoLGiJug5hFnRz1pdZca4u9CobC5NSKUJs5iO++DJkcu5Ft06bYjbe
-         QgMA==
-X-Gm-Message-State: ACrzQf1y3ZH4emxzgGv94ldcLIDPYfjwvM0/B+hOuVrmloIIeKqAqIqN
-        +G2G7BJqChJXgaOHflVDoOIFaJP8qwTOU0FQyWI=
-X-Google-Smtp-Source: AMsMyM6xuX36W2rDkfJiTmjD1m6OTf85cPSViXo9CUCEFAaBcpegkti3X9ZLI/wHgQL6hRbRsTg3mHMuupU8+4qOYyo=
-X-Received: by 2002:a05:6214:f65:b0:4b3:f4f2:fcaa with SMTP id
- iy5-20020a0562140f6500b004b3f4f2fcaamr8320798qvb.48.1665475401976; Tue, 11
- Oct 2022 01:03:21 -0700 (PDT)
+        bh=Wd2uHcBEj1+0Ib8C2XV8f8kpv5GXpAIa7u+xFyKcdgM=;
+        b=5HfIoA2WB8dZFbI0u6q6wQaSQYPLhDkPPH7Zi1lFqCVQ3tkP6IkUNFOQOIRQAGDhL3
+         u1+Q0Ijaf0CbrzPqtFwHAm7KuhQ+Pw/LZSmPZBROKVzzi30qd9Bobl+Z7sBEVrlVpMVV
+         w34GEbPmH3YYGf2KHA3owB5+egyyp22iy7LPgO79h4nYb5Mljx6e3MUV8ZkSsBlGffjN
+         QbWK4ObMimhifWz23tevKZQHymXHv/f6PwSwWb327NcKq+KRCUnm3ofbw/tr6DDneMkX
+         GxB1dp84ny8zhQbA/faJt9IchN6HdNWsvKHpZgxNzVA/taVLH6vikHKrFfTYo9itFuab
+         z1fg==
+X-Gm-Message-State: ACrzQf3V+UBkIv3mJ6G4G2zAancIprIeTpcQuuOjaT1Z0l8IHCIgkAHz
+        RzKnQPoDkFO/iA9lb+ZItSvANpKcf6ChenfQcq5eLohygkV9lvNjniS4Ve7pZjooC/b+aEDHEKu
+        RSiXeFjFJEK5nFAqzRVNUDVYieiUIF+QGXG7hbJPhrnHmVJstJjwOamigvT+rLS8=
+X-Received: by 2002:ad4:5be7:0:b0:4b3:fe6c:904b with SMTP id k7-20020ad45be7000000b004b3fe6c904bmr7864987qvc.42.1665475989055;
+        Tue, 11 Oct 2022 01:13:09 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6Z50e2zMuPNcTPzKxsIS/IJz6E3Nr+YvNDrK/sslRe4t7ajiwFhtGqot/3OLS2Z/iHAsBzzw==
+X-Received: by 2002:ad4:5be7:0:b0:4b3:fe6c:904b with SMTP id k7-20020ad45be7000000b004b3fe6c904bmr7864978qvc.42.1665475988879;
+        Tue, 11 Oct 2022 01:13:08 -0700 (PDT)
+Received: from nfvsdn-06.testing.baremetal.edge-sites.net (nat-pool-232-132.redhat.com. [66.187.232.132])
+        by smtp.gmail.com with ESMTPSA id q6-20020a05620a0d8600b006bb82221013sm12383261qkl.0.2022.10.11.01.13.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 01:13:08 -0700 (PDT)
+From:   mtahhan@redhat.com
+To:     bpf@vger.kernel.org, linux-doc@vger.kernel.org
+Cc:     Maryam Tahhan <mtahhan@redhat.com>
+Subject: [PATCH v1 0/1] doc: BPF_MAP_TYPE_DEVMAP, BPF_MAP_TYPE_DEVMAP_HASH
+Date:   Tue, 11 Oct 2022 05:08:45 -0400
+Message-Id: <20221011090846.752622-1-mtahhan@redhat.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-References: <20220826114700.2272645-1-eyal.birger@gmail.com>
- <20220826114700.2272645-4-eyal.birger@gmail.com> <Y0UQC0oycrGs4Zad@shredder>
-In-Reply-To: <Y0UQC0oycrGs4Zad@shredder>
-From:   Eyal Birger <eyal.birger@gmail.com>
-Date:   Tue, 11 Oct 2022 11:03:10 +0300
-Message-ID: <CAHsH6GthqZe6-Q0GQpLVRUwy=7XmqdZFoxUSe+o_PWS+wHNZoQ@mail.gmail.com>
-Subject: Re: [PATCH ipsec-next,v4 3/3] xfrm: lwtunnel: add lwtunnel support
- for xfrm interfaces in collect_md mode
-To:     Ido Schimmel <idosch@idosch.org>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, steffen.klassert@secunet.com,
-        herbert@gondor.apana.org.au, dsahern@kernel.org,
-        contact@proelbtn.com, pablo@netfilter.org,
-        nicolas.dichtel@6wind.com, razor@blackwall.org,
-        daniel@iogearbox.net, netdev@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Ido,
+From: Maryam Tahhan <mtahhan@redhat.com>
 
-On Tue, Oct 11, 2022 at 9:41 AM Ido Schimmel <idosch@idosch.org> wrote:
->
-> On Fri, Aug 26, 2022 at 02:47:00PM +0300, Eyal Birger wrote:
-> > diff --git a/net/core/lwtunnel.c b/net/core/lwtunnel.c
-> > index 9ccd64e8a666..6fac2f0ef074 100644
-> > --- a/net/core/lwtunnel.c
-> > +++ b/net/core/lwtunnel.c
-> > @@ -50,6 +50,7 @@ static const char *lwtunnel_encap_str(enum lwtunnel_encap_types encap_type)
-> >               return "IOAM6";
-> >       case LWTUNNEL_ENCAP_IP6:
-> >       case LWTUNNEL_ENCAP_IP:
-> > +     case LWTUNNEL_ENCAP_XFRM:
-> >       case LWTUNNEL_ENCAP_NONE:
-> >       case __LWTUNNEL_ENCAP_MAX:
-> >               /* should not have got here */
->
-> Eyal,
->
-> The warning at the bottom can be triggered [1] from user space when the
-> kernel is compiled with CONFIG_MODULES=y and CONFIG_XFRM=n:
->
->  # ip route add 198.51.100.0/24 dev dummy1 encap xfrm if_id 1
->  Error: lwt encapsulation type not supported.
->
-> Original report is from a private syzkaller instance which I have
-> reduced to the command above.
->
-> Thanks
+Add documentation for BPF_MAP_TYPE_DEVMAP and BPF_MAP_TYPE_DEVMAP_HASH
+including kernel version introduced, usage and examples.
 
-Thanks for the report!
+Maryam Tahhan (1):
+  doc: BPF_MAP_TYPE_DEVMAP, BPF_MAP_TYPE_DEVMAP_HASH
 
-Submitted a fix muting the warning for this case.
+ Documentation/bpf/map_devmap.rst | 231 +++++++++++++++++++++++++++++++
+ 1 file changed, 231 insertions(+)
+ create mode 100644 Documentation/bpf/map_devmap.rst
 
-Eyal.
+-- 
+2.35.3
+
