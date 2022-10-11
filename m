@@ -2,24 +2,24 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F97DC433F5
-	for <bpf@archiver.kernel.org>; Tue, 11 Oct 2022 11:43:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AD29C43219
+	for <bpf@archiver.kernel.org>; Tue, 11 Oct 2022 11:43:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbiJKLn3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 11 Oct 2022 07:43:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
+        id S229921AbiJKLnc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 11 Oct 2022 07:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbiJKLn2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 11 Oct 2022 07:43:28 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1722A7C32E;
-        Tue, 11 Oct 2022 04:43:26 -0700 (PDT)
+        with ESMTP id S229908AbiJKLna (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 11 Oct 2022 07:43:30 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AABF7C748;
+        Tue, 11 Oct 2022 04:43:29 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Mmv4N2Hgyz6Pq8D;
-        Tue, 11 Oct 2022 19:41:08 +0800 (CST)
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Mmv4S0YPtzKG3R;
+        Tue, 11 Oct 2022 19:41:12 +0800 (CST)
 Received: from k01.huawei.com (unknown [10.67.174.197])
-        by APP2 (Coremail) with SMTP id Syh0CgBX8NTXVkVj5HNpAA--.32480S2;
-        Tue, 11 Oct 2022 19:43:20 +0800 (CST)
+        by APP2 (Coremail) with SMTP id Syh0CgBX8NTXVkVj5HNpAA--.32480S4;
+        Tue, 11 Oct 2022 19:43:28 +0800 (CST)
 From:   Xu Kuohai <xukuohai@huaweicloud.com>
 To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
@@ -40,28 +40,31 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Alan Maguire <alan.maguire@oracle.com>,
         Delyan Kratunov <delyank@fb.com>,
         Lorenzo Bianconi <lorenzo@kernel.org>
-Subject: [PATCH bpf-next v4 0/6] Fix bugs found by ASAN when running selftests
-Date:   Tue, 11 Oct 2022 08:01:02 -0400
-Message-Id: <20221011120108.782373-1-xukuohai@huaweicloud.com>
+Subject: [PATCH bpf-next v4 2/6] libbpf: Fix memory leak in parse_usdt_arg()
+Date:   Tue, 11 Oct 2022 08:01:04 -0400
+Message-Id: <20221011120108.782373-3-xukuohai@huaweicloud.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221011120108.782373-1-xukuohai@huaweicloud.com>
+References: <20221011120108.782373-1-xukuohai@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgBX8NTXVkVj5HNpAA--.32480S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFyfJr4DKF4ktFy5ZFW3Awb_yoW8JFWkpF
-        1xCws0gryS9r1avF4fXFy293yrta1kXw15Za1Iyw13CrsrJay8uF4Igw4fu3Z0grWkWw15
-        Zw17KF95C34UZ37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
-        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
-        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF
-        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-TRANSID: Syh0CgBX8NTXVkVj5HNpAA--.32480S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFyxtrW8ury5KFW3WFW8Xrb_yoW8tr1rpr
+        WS9w1qvrn7J3yfGFyDXanYq343CrsrJr9Yyr1Fya45ZF4fWrW8J3s3Kr4fKwn8JFW7AFWa
+        9F4rKrWfGFy5XF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+        A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+        6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+        Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+        Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64
+        vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+        jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2I
+        x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAI
+        w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
+        0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1sa9DUUUUU==
 X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 X-CFilter-Loop: Reflected
 Precedence: bulk
@@ -70,35 +73,62 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Xu Kuohai <xukuohai@huawei.com>
 
-This series fixes bugs found by ASAN when running bpf selftests on arm64.
+In the arm64 version of parse_usdt_arg(), when sscanf returns 2, reg_name
+is allocated but not freed. Fix it.
 
-v4:
-- Address Andrii's suggestions
+Fixes: 0f8619929c57 ("libbpf: Usdt aarch64 arg parsing support")
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+---
+ tools/lib/bpf/usdt.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-v3: https://lore.kernel.org/bpf/5311e154-c2d4-91a5-ccb8-f5adede579ed@huawei.com
-- Fix error failure of case test_xdp_adjust_tail_grow exposed by this series
-
-v2: https://lore.kernel.org/bpf/20221010070454.577433-1-xukuohai@huaweicloud.com
-- Rebase and fix conflict
-
-v1: https://lore.kernel.org/bpf/20221009131830.395569-1-xukuohai@huaweicloud.com
-
-Xu Kuohai (6):
-  libbpf: Fix use-after-free in btf_dump_name_dups
-  libbpf: Fix memory leak in parse_usdt_arg()
-  selftests/bpf: Fix memory leak caused by not destroying skeleton
-  selftest/bpf: Fix memory leak in kprobe_multi_test
-  selftests/bpf: Fix error failure of case test_xdp_adjust_tail_grow
-  selftest/bpf: Fix error usage of ASSERT_OK in xdp_adjust_tail.c
-
- tools/lib/bpf/btf_dump.c                      | 30 +++++++++++++++++--
- tools/lib/bpf/usdt.c                          | 11 +++----
- .../bpf/prog_tests/kprobe_multi_test.c        | 26 ++++++++--------
- .../selftests/bpf/prog_tests/map_kptr.c       |  3 +-
- .../selftests/bpf/prog_tests/tracing_struct.c |  3 +-
- .../bpf/prog_tests/xdp_adjust_tail.c          |  7 +++--
- 6 files changed, 53 insertions(+), 27 deletions(-)
-
+diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+index e83b497c2245..49f3c3b7f609 100644
+--- a/tools/lib/bpf/usdt.c
++++ b/tools/lib/bpf/usdt.c
+@@ -1348,25 +1348,23 @@ static int calc_pt_regs_off(const char *reg_name)
+ 
+ static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec *arg)
+ {
+-	char *reg_name = NULL;
++	char reg_name[16];
+ 	int arg_sz, len, reg_off;
+ 	long off;
+ 
+-	if (sscanf(arg_str, " %d @ \[ %m[a-z0-9], %ld ] %n", &arg_sz, &reg_name, &off, &len) == 3) {
++	if (sscanf(arg_str, " %d @ \[ %15[a-z0-9], %ld ] %n", &arg_sz, reg_name, &off, &len) == 3) {
+ 		/* Memory dereference case, e.g., -4@[sp, 96] */
+ 		arg->arg_type = USDT_ARG_REG_DEREF;
+ 		arg->val_off = off;
+ 		reg_off = calc_pt_regs_off(reg_name);
+-		free(reg_name);
+ 		if (reg_off < 0)
+ 			return reg_off;
+ 		arg->reg_off = reg_off;
+-	} else if (sscanf(arg_str, " %d @ \[ %m[a-z0-9] ] %n", &arg_sz, &reg_name, &len) == 2) {
++	} else if (sscanf(arg_str, " %d @ \[ %15[a-z0-9] ] %n", &arg_sz, reg_name, &len) == 2) {
+ 		/* Memory dereference case, e.g., -4@[sp] */
+ 		arg->arg_type = USDT_ARG_REG_DEREF;
+ 		arg->val_off = 0;
+ 		reg_off = calc_pt_regs_off(reg_name);
+-		free(reg_name);
+ 		if (reg_off < 0)
+ 			return reg_off;
+ 		arg->reg_off = reg_off;
+@@ -1375,12 +1373,11 @@ static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec
+ 		arg->arg_type = USDT_ARG_CONST;
+ 		arg->val_off = off;
+ 		arg->reg_off = 0;
+-	} else if (sscanf(arg_str, " %d @ %m[a-z0-9] %n", &arg_sz, &reg_name, &len) == 2) {
++	} else if (sscanf(arg_str, " %d @ %15[a-z0-9] %n", &arg_sz, reg_name, &len) == 2) {
+ 		/* Register read case, e.g., -8@x4 */
+ 		arg->arg_type = USDT_ARG_REG;
+ 		arg->val_off = 0;
+ 		reg_off = calc_pt_regs_off(reg_name);
+-		free(reg_name);
+ 		if (reg_off < 0)
+ 			return reg_off;
+ 		arg->reg_off = reg_off;
 -- 
 2.30.2
 
