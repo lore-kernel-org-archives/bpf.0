@@ -2,84 +2,122 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D088BC433FE
-	for <bpf@archiver.kernel.org>; Thu, 13 Oct 2022 21:01:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AEB05C433FE
+	for <bpf@archiver.kernel.org>; Thu, 13 Oct 2022 21:07:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbiJMVBe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Oct 2022 17:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53122 "EHLO
+        id S229735AbiJMVHQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Oct 2022 17:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbiJMVBc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 13 Oct 2022 17:01:32 -0400
-X-Greylist: delayed 3104 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 13 Oct 2022 14:01:30 PDT
-Received: from mx05lb.world4you.com (mx05lb.world4you.com [81.19.149.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C8E1793A2;
-        Thu, 13 Oct 2022 14:01:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ev9JakADx7qAtKKTcOpWroMdgabdypUWFXx+WaEhjLY=; b=jemgowjT34NhSYPsto4A7+PiOa
-        hiCpmJgylUDr9Wwphni+var0FQS38aF0EBSmBBQpPk2EQItk+65Jl+UwOL2+56Ur4rv9Zc/qLzB/9
-        Oe7vmIyirA9A0SVmdTTZhmB9iUfUA8u0tmhDTJ7VLHRslNC/717dGsOAHEAqPxA2XtXs=;
-Received: from [88.117.56.108] (helo=hornet.engleder.at)
-        by mx05lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <gerhard@engleder-embedded.com>)
-        id 1oj4WH-0003m5-LE; Thu, 13 Oct 2022 22:09:29 +0200
-From:   Gerhard Engleder <gerhard@engleder-embedded.com>
-To:     ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Gerhard Engleder <gerhard@engleder-embedded.com>
-Subject: [PATCH net-next] samples/bpf: Fix map interation in xdp1_user
-Date:   Thu, 13 Oct 2022 22:09:22 +0200
-Message-Id: <20221013200922.17167-1-gerhard@engleder-embedded.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S229550AbiJMVHQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 Oct 2022 17:07:16 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F33183DB8;
+        Thu, 13 Oct 2022 14:07:15 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id fy4so6565008ejc.5;
+        Thu, 13 Oct 2022 14:07:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IZ5njUsMjpaWj9YOz1Vm++un7O5+eC1XTxzvAZerpow=;
+        b=faWAR8yx9y/ximCfiagbNCy/0PAKrBsY8wEvnxUxd7VFrwze8WrW/LXuOEsD1B1MgC
+         bmzapz1zdHF1jE76T+mA54DNMXKki/cswG3sXkx6RAEOiC9LYHXvBWUkBqkVC/OutC6w
+         TBoPedYKZEP4+ld5ZJzts0nQv+3AjeM1WBzF9oIZsaGYMjz2koC525mlMh4cImsSStp6
+         XSWzJkXeoFofq4dZ0tkjtoHD4Jl4nliDAg9B+Vd6RKf38AjPS//hn7h+QcZjjgk0xM+g
+         X3Q+S3ElOX8GsPkSJbBAoFNFKK+vjKbNMwCVHL9RQlOConV4BRjaHXXF9yIEoDbdhF1L
+         19Fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IZ5njUsMjpaWj9YOz1Vm++un7O5+eC1XTxzvAZerpow=;
+        b=JrAgMraWu9PHel5PSEmuAjHc+NRsWwuD5UjI2njwqbWzvA1+e+qRablmULnEt+5Ehp
+         HVGYkMUYyOW1hDjuHGuAQjSQJkPbF1QiLhlrogPEL8xKnrQExHCQiDRtO1DN+OBi2BXt
+         qDsbCCFE5ZNBxqFZq54bz9kna9uqR42Z2fmurVJXB620vharTvZtAS2FVXUGPHIuhcfm
+         93hDFB+BoMfZ6G8MwfkRUbHSm6zc1hpn2gKKiorhmkqWzbtepSYpQ1vBzMYgM821anga
+         empHjWbIPb67nKnpc6DatZaZybQsGlwQQpQ8vgBhA+9JXm+rsnFdGFSpoSY+TZf9pCIk
+         ZXqw==
+X-Gm-Message-State: ACrzQf0sAnlrVlRbJntAcXjAF0s/AnFkWJQzhhqYZVhgJuFDmXtQnrL6
+        INeu+/dGUimt90HmsPEbeoA=
+X-Google-Smtp-Source: AMsMyM4cU3vLsTSiWCSsbEcY7UV+UJBrC5a07f1dY57EL9s1EUxZ5n3i98uvEdXbgJXpbA6zfUHWAw==
+X-Received: by 2002:a17:907:980e:b0:78d:b6d5:661e with SMTP id ji14-20020a170907980e00b0078db6d5661emr1253849ejc.46.1665695233566;
+        Thu, 13 Oct 2022 14:07:13 -0700 (PDT)
+Received: from localhost.localdomain (host-95-250-231-122.retail.telecomitalia.it. [95.250.231.122])
+        by smtp.gmail.com with ESMTPSA id v25-20020a17090651d900b0078da24ea9c7sm443973ejk.17.2022.10.13.14.07.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 14:07:12 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Christian Brauner <brauner@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Kees Cook <keescook@chromium.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-hwmon@vger.kernel.org, linux-hardening@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: [PATCH] drm/radeon: Replace kmap() with kmap_local_page()
+Date:   Thu, 13 Oct 2022 23:07:14 +0200
+Message-Id: <20221013210714.16320-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-AV-Do-Run: Yes
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-BPF map iteration in xdp1_user results in endless loop without any
-output, because the return value of bpf_map_get_next_key() is checked
-against the wrong value.
+The use of kmap() is being deprecated in favor of kmap_local_page().
 
-Other call locations of bpf_map_get_next_key() check for equal 0 for
-continuing the iteration. xdp1_user checks against unequal -1. This is
-wrong for a function which can return arbitrary negative errno values,
-because a return value of e.g. -2 results in an endless loop.
+There are two main problems with kmap(): (1) It comes with an overhead as
+the mapping space is restricted and protected by a global lock for
+synchronization and (2) it also requires global TLB invalidation when the
+kmap’s pool wraps and it might block when the mapping space is fully
+utilized until a slot becomes available.
 
-With this fix xdp1_user is printing statistics again:
-proto 0:          1 pkt/s
-proto 0:          1 pkt/s
-proto 17:     107383 pkt/s
-proto 17:     881655 pkt/s
-proto 17:     882083 pkt/s
-proto 17:     881758 pkt/s
+With kmap_local_page() the mappings are per thread, CPU local, can take
+page faults, and can be called from any context (including interrupts).
+It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+the tasks can be preempted and, when they are scheduled to run again, the
+kernel virtual addresses are restored and still valid.
 
-Signed-off-by: Gerhard Engleder <gerhard@engleder-embedded.com>
+Therefore, replace kmap() with kmap_local_page() in radeon_ttm_gtt_read().
+
+Cc: "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 ---
- samples/bpf/xdp1_user.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/radeon/radeon_ttm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/samples/bpf/xdp1_user.c b/samples/bpf/xdp1_user.c
-index ac370e638fa3..281dc964de8d 100644
---- a/samples/bpf/xdp1_user.c
-+++ b/samples/bpf/xdp1_user.c
-@@ -51,7 +51,7 @@ static void poll_stats(int map_fd, int interval)
+diff --git a/drivers/gpu/drm/radeon/radeon_ttm.c b/drivers/gpu/drm/radeon/radeon_ttm.c
+index d33fec488713..bdb4c0e0736b 100644
+--- a/drivers/gpu/drm/radeon/radeon_ttm.c
++++ b/drivers/gpu/drm/radeon/radeon_ttm.c
+@@ -869,11 +869,11 @@ static ssize_t radeon_ttm_gtt_read(struct file *f, char __user *buf,
  
- 		sleep(interval);
+ 		page = rdev->gart.pages[p];
+ 		if (page) {
+-			ptr = kmap(page);
++			ptr = kmap_local_page(page);
+ 			ptr += off;
  
--		while (bpf_map_get_next_key(map_fd, &key, &key) != -1) {
-+		while (bpf_map_get_next_key(map_fd, &key, &key) == 0) {
- 			__u64 sum = 0;
+ 			r = copy_to_user(buf, ptr, cur_size);
+-			kunmap(rdev->gart.pages[p]);
++			kunmap_local(ptr);
+ 		} else
+ 			r = clear_user(buf, cur_size);
  
- 			assert(bpf_map_lookup_elem(map_fd, &key, values) == 0);
 -- 
-2.30.2
+2.37.3
 
