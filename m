@@ -2,96 +2,93 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4A6AC433FE
-	for <bpf@archiver.kernel.org>; Thu, 13 Oct 2022 09:37:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37561C43217
+	for <bpf@archiver.kernel.org>; Thu, 13 Oct 2022 10:16:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229594AbiJMJhN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Oct 2022 05:37:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37390 "EHLO
+        id S229582AbiJMKQE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Oct 2022 06:16:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiJMJhM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 13 Oct 2022 05:37:12 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348841217F9;
-        Thu, 13 Oct 2022 02:37:11 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 0685F320070D;
-        Thu, 13 Oct 2022 05:37:09 -0400 (EDT)
-Received: from imap49 ([10.202.2.99])
-  by compute5.internal (MEProxy); Thu, 13 Oct 2022 05:37:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lmb.io; h=cc:cc
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1665653829; x=1665740229; bh=94gmUViEmx
-        ZNAoGT1K6i8LMnLlUOVqZvX3qw2bZpGzY=; b=496j8BpNYVYjDufuizPiYKuK3u
-        AFk7ktnw6wQnoDLEKjDkcNGmuWlWcDxewSLhGSSZLDFk8NErcPItc5YCF7qB0FyE
-        tTRKyUDJcBK7Pg9aCrAH46wsvFSKpTXa8Qjv3C6B7m2IwaXSHkCEWSyN0ind1kn6
-        JB+LmF04WTczVcPEv+RpANhPLC48EMp10n9isEkyTJDukuDLSV02MSFQiUOS1j3Q
-        zn/hUIb87RCiLyZA0pzZmjKqO9wA2QWMiM+ChflG0DXBcTE4DuLzByHoZTjJrBgq
-        t9lwjeV5+urXcw4o6tDCIQHxYGgWcmwUov29VuddB8AsJ/M7DqesqiyqmD8A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1665653829; x=1665740229; bh=94gmUViEmxZNAoGT1K6i8LMnLlUO
-        VqZvX3qw2bZpGzY=; b=dbMuSmN402f2sHIAl0/VYJcMHc5fvNrMERwwxLxZdVpt
-        wKPpp8t3x3pLpgae4oGgfs6XPtOcnw7KZAZFCeDAAL/65tzbTQDZLiiOPDZTSvKr
-        Av+icqEeRXzzNfAmQpZtu9WzCeggc3BQvRGWcRtIcPBWTPgHWJd5nH7ehdoaWs06
-        XhKZumqXSQaSeabp7JWpCCkuxnW8tzwk8Lo+WjWGa+kmD7cXU4+yyE8bmh1J2gQW
-        M0GbdXXnlRqPcRHb2Q3EZ7D8YhNtClTn+KPx4KCnYDCv+L8r/qFtA0TfPLyV5UxG
-        QT54CpUEmR7BYRqMxTGh5z6Z9WbTb9fQxBoTS41+Pg==
-X-ME-Sender: <xms:RdxHY18eLI9tsLljB4YXHWHV2-KVmfVFJfk2irG2m35y9xbh6jdxNw>
-    <xme:RdxHY5tknEKBXzDZkmkCO2GArUg0MpeDvL4jf8eUQkESjjHlVe-BGmVq3ALGOOb4A
-    PTCinl_pvN8KvBs6w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeektddgudelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfnfho
-    rhgvnhiiuceurghuvghrfdcuoehoshhssehlmhgsrdhioheqnecuggftrfgrthhtvghrnh
-    epffetgeffgfffffeuudeihfffueffgfelheegtdelleeggfffgfevfeekfedtffelnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepohhssheslh
-    hmsgdrihho
-X-ME-Proxy: <xmx:RdxHYzBwPv8ro9NwVIwnOwJaDY0-v1jvaNn2arbixoo8d5PB-EjfoA>
-    <xmx:RdxHY5dQhBcvsnXhi9QqvDqGwmrXVcOJtk-hYps_4UoXiqgBeseQ9Q>
-    <xmx:RdxHY6O-NV3cmEmc-WF3O1lc1BCjFiBP-_EZJdlQLPCfqj1XSV-p9w>
-    <xmx:RdxHY3ronHjIDFTt22ku2L4JA5rwtoF-miW8kadUIGpeQVcAAy-lTg>
-Feedback-ID: icd3146c6:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 4EA7E15A0087; Thu, 13 Oct 2022 05:37:09 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
-Mime-Version: 1.0
-Message-Id: <bc69e8a3-d474-451f-853e-1c936f776ef9@app.fastmail.com>
-In-Reply-To: <c416473b-af8b-3bf6-7ede-e1198b3496f5@huawei.com>
-References: <20220715115559.139691-1-shaozhengchao@huawei.com>
- <20220914111936.19881-1-oss@lmb.io>
- <CAKH8qBujKnFh8_g+npxHpo7RGFshus3N0iysmVBohTtG1X2yow@mail.gmail.com>
- <5a3c5ea9-d557-6070-d778-1092f3c51257@huawei.com>
- <aec8ef40-260c-4ded-b806-d381a3075ff0@www.fastmail.com>
- <c416473b-af8b-3bf6-7ede-e1198b3496f5@huawei.com>
-Date:   Thu, 13 Oct 2022 10:36:49 +0100
-From:   "Lorenz Bauer" <oss@lmb.io>
-To:     shaozhengchao <shaozhengchao@huawei.com>,
-        "Stanislav Fomichev" <sdf@google.com>
-Cc:     "Alexei Starovoitov" <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yuehaibing@huawei.com
-Subject: Re: [PATCH v4,bpf-next] bpf: Don't redirect packets with invalid pkt_len
-Content-Type: text/plain
+        with ESMTP id S229469AbiJMKQD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 Oct 2022 06:16:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F18EA6AE
+        for <bpf@vger.kernel.org>; Thu, 13 Oct 2022 03:16:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665656161;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=h1cObQ2s1xR5ZeaqLWVHbxy0BrP3z3LZ2+yRklnqRvk=;
+        b=ch6j2+Hsm4XPbFKdhPjJZ7fhPD/XfxGGgOO3wMFegStVlw2Y83QdF1E1YVEZfJ1KtkB8RT
+        HOAef4yqaWpXRl7ojsJL5bcvMgQLV1B3zixxfVlTzIxWMOniqqiW/BUcz5/OiYHwQR+WbK
+        WIlBCGu544tn63HsC3qtXI/eTrMYWQI=
+Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com
+ [209.85.160.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-584-zVmJuU41Onyxi4Su50ZPkg-1; Thu, 13 Oct 2022 06:16:00 -0400
+X-MC-Unique: zVmJuU41Onyxi4Su50ZPkg-1
+Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-13234741239so885237fac.7
+        for <bpf@vger.kernel.org>; Thu, 13 Oct 2022 03:16:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h1cObQ2s1xR5ZeaqLWVHbxy0BrP3z3LZ2+yRklnqRvk=;
+        b=C4BI9MolYxMo2CjdkxBl6W/zyZC5VQVdQ2SfrTkzQLBKjdGYY3q5RoensEyeGhIDMx
+         NRbwK7DTwVkFSXIG2rWLzRyUDwvSVdcUZ2gwQYywb1dpA+UpWeNR4+Cz4EWC5H2k4Jox
+         R7J+DcW0FxDhq3Rp2a9OFiedEvoe4LUNXEn8vJyuDqvUsP6cMWbCpjjkip+y+YBPDTnc
+         z7m3gKxdTKiygBXtBsFooYLjUwxw0pIWPcMJ9O4q9d4lu7eSDRaUHKJO6QXrQX6y1rhC
+         XCRWRhZcbz+xoXeMTOH/G0Wso9xXuqO0XKQgXwuv78/ODUarhOcrdtiO1WKwNc07SKVg
+         GRlA==
+X-Gm-Message-State: ACrzQf0BKlmIcF8hulPhr7qvq0JgiL3UmbPaX49+GxS6MJ7KmAxtURaJ
+        4N7ZcHNqY54IWAuK78PhQ6dCkzPrA7xjAYRGf6OYX2BJrTsFBunPSidtu3G4rBzuKyWCS4qtdvO
+        KsBu9MGi19fkeHla8jcSQE3p57jw02yTNv6wBJRVUZHyl0ImCT5E3WEm7NeEGylM=
+X-Received: by 2002:a05:6808:1513:b0:354:f6d6:2015 with SMTP id u19-20020a056808151300b00354f6d62015mr2173384oiw.18.1665656159378;
+        Thu, 13 Oct 2022 03:15:59 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5Wlx3426Um6Yto4xX93+FqYjwG4/Vl5PILgVndKDc7GhdaqOhvp5FTBE7avNS0UTRrE2wFGw==
+X-Received: by 2002:a05:6808:1513:b0:354:f6d6:2015 with SMTP id u19-20020a056808151300b00354f6d62015mr2173373oiw.18.1665656158992;
+        Thu, 13 Oct 2022 03:15:58 -0700 (PDT)
+Received: from nfvsdn-06.testing.baremetal.edge-sites.net (nat-pool-232-132.redhat.com. [66.187.232.132])
+        by smtp.gmail.com with ESMTPSA id f187-20020aca38c4000000b00354732338desm5034605oia.17.2022.10.13.03.15.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 03:15:58 -0700 (PDT)
+From:   mtahhan@redhat.com
+To:     bpf@vger.kernel.org, linux-doc@vger.kernel.org
+Cc:     Maryam Tahhan <mtahhan@redhat.com>
+Subject: [PATCH bpf-next v2 0/1] doc: DEVMAPs and XDP_REDIRECT
+Date:   Thu, 13 Oct 2022 07:11:28 -0400
+Message-Id: <20221013111129.401325-1-mtahhan@redhat.com>
+X-Mailer: git-send-email 2.35.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 21 Sep 2022, at 09:48, shaozhengchao wrote:
-> Hi Lorenz
-> 	Sorry. But how does the rejection of the 0 length affect the
-> test case? Is the return value abnormal, send packet failure or some
-> others?
+From: Maryam Tahhan <mtahhan@redhat.com>
 
-Hi Zhengchao,
+Add documentation for BPF_MAP_TYPE_DEVMAP and
+BPF_MAP_TYPE_DEVMAP_HASH including kernel version
+introduced, usage and examples.
 
-Did you get around to submitting another fix for this?
+Add documentation that describes XDP_REDIRECT. 
 
-Best
-Lorenz
+v1->v2:
+- Separate xdp_redirect documentation to its own file.
+- Clean up and simplify examples and usage function descriptions.
+
+Maryam Tahhan (1):
+  doc: DEVMAPs and XDP_REDIRECT
+
+ Documentation/bpf/index.rst      |   1 +
+ Documentation/bpf/map_devmap.rst | 192 +++++++++++++++++++++++++++++++
+ Documentation/bpf/redirect.rst   |  46 ++++++++
+ 3 files changed, 239 insertions(+)
+ create mode 100644 Documentation/bpf/map_devmap.rst
+ create mode 100644 Documentation/bpf/redirect.rst
+
+-- 
+2.35.3
+
