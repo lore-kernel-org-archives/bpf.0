@@ -2,236 +2,128 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38376C433FE
-	for <bpf@archiver.kernel.org>; Thu, 13 Oct 2022 19:47:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 153C9C4332F
+	for <bpf@archiver.kernel.org>; Thu, 13 Oct 2022 20:52:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiJMTrz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Oct 2022 15:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54790 "EHLO
+        id S229679AbiJMUwR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Oct 2022 16:52:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiJMTrx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 13 Oct 2022 15:47:53 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA8B18B4B1;
-        Thu, 13 Oct 2022 12:47:52 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id w18so6124120ejq.11;
-        Thu, 13 Oct 2022 12:47:52 -0700 (PDT)
+        with ESMTP id S229620AbiJMUwJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 Oct 2022 16:52:09 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926AD30569
+        for <bpf@vger.kernel.org>; Thu, 13 Oct 2022 13:52:07 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id d26so6450148eje.10
+        for <bpf@vger.kernel.org>; Thu, 13 Oct 2022 13:52:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6pqoki37Jq/v/v0yGu6lDbXT2HjCHjHDBLAGhTwQPUY=;
-        b=gJH+tXWlpCxu2t9WDfup3OOXnDY31epVMOS13GBHkaNbTzClzXNS8H/tClvMYQvHBS
-         7Zmi1O264AAl7ahr8JzTwtAcO2ZKuYpJcBDNEqJisnLY++9muXRsuI2lGazWPGms/DIa
-         dUBoUkPlxn+ZjeUhXCIh0NLP2cIqK6k9QD3u5Fx8otlIsu8AQN46wivsKZhcehBG9PE8
-         jBwqi+4RYrEUSb3cj/sPEEkeJB5NsEF2pNd+T8JC198RmrtK9TjbuSLcZtDwwzLPK2vx
-         vZ0QV2bu4vI0Yo9jrCGnS8IJBdwQf25AsaINIfdWF9DAHnaqAiUmyvvC5qJl5ZiXoBp9
-         s/ng==
+        d=cloudflare.com; s=google;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ua2pyR2RXrZSoFLziseD0y4VLxWwGSmbAF9fIZqn7t0=;
+        b=t40RR9oDpBYTG23J6NgBk2i4Egsa19IbkYa3W0cox3NokLbJ0Ih4dirumyjunRD7zS
+         ZYuXFKve9SJYdwkrx+K+86ffsk0ngbeohzGKhElq7nWfUL1aouUgRbLWFI/65qbGupI/
+         zKOQeBmVDYQuPvuh9qsheu7BbXYrg6WxxRbjM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6pqoki37Jq/v/v0yGu6lDbXT2HjCHjHDBLAGhTwQPUY=;
-        b=Pxx46o+pSgbJFQvJn2Kuo9g4icDzbS2VXfu7XXcKDGkV6HPspI9AfrWWU8k8mpXTuG
-         RDBAzS8R8yej1illhnx6I48V/6urMDOTUWD/a3yBUuxHcMaHwUxL1pfa3p4j7fUGCOwx
-         Kn+LjdAkPjxslO2TqxopE6HWqYXVD/mniHiSVGAvBUuppkZBgEhYAJdrj3VrFB31x2Q8
-         LsUvfTlWJ0RJk0sB36FCcXml3AkGwtpg8QTekHKoIOJ2du8QK/kAUezNH/udvGJCG1rP
-         hrNndom/zG8fiu+bTXUvHRX+dXve3shPcJ+sY1NIoylJlyYpMdVteQ42Oq8fGV/I+/BQ
-         9UKg==
-X-Gm-Message-State: ACrzQf3YYCmos+xHSQS/u6QP3kZQrwK37VwGqFM/M/61Oab2NRWhsj2v
-        YAQBd7aTQwS8j11g/rzm5L3DVGs+zrpU4acrXIc=
-X-Google-Smtp-Source: AMsMyM49ZL/IRLYiBP2cjHrCi0tZ598HwWHVQz/TSdv8f/2rdxDUnk0B/6QXkvxx4ubZmhXDJwetbVXA4rt1No9xp2A=
-X-Received: by 2002:a17:906:99c5:b0:73d:70c5:1a4f with SMTP id
- s5-20020a17090699c500b0073d70c51a4fmr994662ejn.302.1665690470849; Thu, 13 Oct
- 2022 12:47:50 -0700 (PDT)
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ua2pyR2RXrZSoFLziseD0y4VLxWwGSmbAF9fIZqn7t0=;
+        b=dS839cQM2zPq0hIDIzzipDQGUeiBmpxIwb+PeKYRJE0dJi5KeZpmxoBzof8nv8KuFH
+         7LB6FZoKaI5kFDrn/gjL5wtaqOIeTMEn5qoOk692KTIm6G0fSLIRIqomXvGhQJrbLVCr
+         em9ZJqNp56TPBGHAJl8zWXXE9Z90hsmjufwLoIUm7R4zkCsCD12B6+JWg0IHJlvoMQKx
+         Sz62nvuwc0Zyvmo/wDGS8RYwwfWTg8W01Su22K4PiHe+zs28+/7PZMWVUVcD0BU+TFUr
+         zx0qDZsCZwwhPn7heQSge/TM2JVxmsTiR2ncSQrAfAjG5fIaoMHOuh3A+6QQQXOFAwuI
+         kckg==
+X-Gm-Message-State: ACrzQf2nKxJEEqQhNBGkIyNRO6q37Y+/Dygu4PHAezJrHWqb57BiBrbA
+        7/8l5WAF2EmI/vVQUbgi2Q+IVA==
+X-Google-Smtp-Source: AMsMyM60S5hCOmlxJOf1765NN6g7CVJ/ljJ87Ia5lGawADbbKflnYFXWX2wfm65nwacHKCspJ0qyFQ==
+X-Received: by 2002:a17:907:94c7:b0:78e:1c4f:51f9 with SMTP id dn7-20020a17090794c700b0078e1c4f51f9mr1244290ejc.200.1665694326062;
+        Thu, 13 Oct 2022 13:52:06 -0700 (PDT)
+Received: from cloudflare.com (79.191.60.152.ipv4.supernova.orange.pl. [79.191.60.152])
+        by smtp.gmail.com with ESMTPSA id p6-20020a05640243c600b0045b4b67156fsm456398edc.45.2022.10.13.13.52.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 13:52:05 -0700 (PDT)
+References: <Y0csu2SwegJ8Tab+@google.com>
+User-agent: mu4e 1.6.10; emacs 27.2
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     sdf@google.com
+Cc:     john.fastabend@gmail.com, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>
+Subject: Re: Lockdep warning after c0feea594e058223973db94c1c32a830c9807c86
+Date:   Thu, 13 Oct 2022 22:39:08 +0200
+In-reply-to: <Y0csu2SwegJ8Tab+@google.com>
+Message-ID: <87bkqfigzv.fsf@cloudflare.com>
 MIME-Version: 1.0
-References: <1665399601-29668-1-git-send-email-wangyufen@huawei.com> <1665399601-29668-2-git-send-email-wangyufen@huawei.com>
-In-Reply-To: <1665399601-29668-2-git-send-email-wangyufen@huawei.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 13 Oct 2022 12:47:38 -0700
-Message-ID: <CAEf4BzYzUKUg=V6Bir7s1AKuZF-=HFsjuWBTjTqO8fganjWVDg@mail.gmail.com>
-Subject: Re: [bpf-next v8 1/3] bpftool: Add autoattach for bpf prog load|loadall
-To:     Wang Yufen <wangyufen@huawei.com>
-Cc:     quentin@isovalent.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
-        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-        bpf@vger.kernel.org, netdev@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 3:40 AM Wang Yufen <wangyufen@huawei.com> wrote:
->
-> Add autoattach optional to support one-step load-attach-pin_link.
->
-> For example,
->    $ bpftool prog loadall test.o /sys/fs/bpf/test autoattach
->
->    $ bpftool link
->    26: tracing  name test1  tag f0da7d0058c00236  gpl
->         loaded_at 2022-09-09T21:39:49+0800  uid 0
->         xlated 88B  jited 55B  memlock 4096B  map_ids 3
->         btf_id 55
->    28: kprobe  name test3  tag 002ef1bef0723833  gpl
->         loaded_at 2022-09-09T21:39:49+0800  uid 0
->         xlated 88B  jited 56B  memlock 4096B  map_ids 3
->         btf_id 55
->    57: tracepoint  name oncpu  tag 7aa55dfbdcb78941  gpl
->         loaded_at 2022-09-09T21:41:32+0800  uid 0
->         xlated 456B  jited 265B  memlock 4096B  map_ids 17,13,14,15
->         btf_id 82
->
->    $ bpftool link
->    1: tracing  prog 26
->         prog_type tracing  attach_type trace_fentry
->    3: perf_event  prog 28
->    10: perf_event  prog 57
->
-> The autoattach optional can support tracepoints, k(ret)probes,
-> u(ret)probes.
->
-> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
-> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
-> ---
->  tools/bpf/bpftool/prog.c | 78 ++++++++++++++++++++++++++++++++++++++++++++++--
->  1 file changed, 76 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-> index c81362a..8f3afce 100644
-> --- a/tools/bpf/bpftool/prog.c
-> +++ b/tools/bpf/bpftool/prog.c
-> @@ -1453,6 +1453,69 @@ static int do_run(int argc, char **argv)
->         return ret;
->  }
->
-> +static int
-> +auto_attach_program(struct bpf_program *prog, const char *path)
-> +{
-> +       struct bpf_link *link;
-> +       int err;
-> +
-> +       link = bpf_program__attach(prog);
-> +       if (!link) {
-> +               p_info("Program %s does not support autoattach, falling back to pinning",
-> +                      bpf_program__name(prog));
-> +               return bpf_obj_pin(bpf_program__fd(prog), path);
-> +       }
-> +       err = bpf_link__pin(link, path);
-> +       if (err) {
-> +               bpf_link__destroy(link);
-> +               return err;
-> +       }
+Hi Stan,
 
-leaking link here, destroy it unconditionally. If pinning succeeded,
-you don't need to hold link's FD open anymore.
-
-> +       return 0;
-> +}
-> +
-> +static int pathname_concat(const char *path, const char *name, char *buf)
-
-why you didn't do the same as in libbpf? Pass buffer size explicitly
-instead of assuming PATH_MAX
-
-> +{
-> +       int len;
-> +
-> +       len = snprintf(buf, PATH_MAX, "%s/%s", path, name);
-> +       if (len < 0)
-> +               return -EINVAL;
-> +       if (len >= PATH_MAX)
-> +               return -ENAMETOOLONG;
-> +
-> +       return 0;
-> +}
-> +
-> +static int
-> +auto_attach_programs(struct bpf_object *obj, const char *path)
-> +{
-> +       struct bpf_program *prog;
-> +       char buf[PATH_MAX];
-> +       int err;
-> +
-> +       bpf_object__for_each_program(prog, obj) {
-> +               err = pathname_concat(path, bpf_program__name(prog), buf);
-> +               if (err)
-> +                       goto err_unpin_programs;
-> +
-> +               err = auto_attach_program(prog, buf);
-> +               if (err)
-> +                       goto err_unpin_programs;
-> +       }
-> +
-> +       return 0;
-> +
-> +err_unpin_programs:
-> +       while ((prog = bpf_object__prev_program(obj, prog))) {
-> +               if (pathname_concat(path, bpf_program__name(prog), buf))
-> +                       continue;
-> +
-> +               bpf_program__unpin(prog, buf);
-> +       }
-> +
-> +       return err;
-> +}
-> +
->  static int load_with_options(int argc, char **argv, bool first_prog_only)
->  {
->         enum bpf_prog_type common_prog_type = BPF_PROG_TYPE_UNSPEC;
-> @@ -1464,6 +1527,7 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
->         struct bpf_program *prog = NULL, *pos;
->         unsigned int old_map_fds = 0;
->         const char *pinmaps = NULL;
-> +       bool auto_attach = false;
->         struct bpf_object *obj;
->         struct bpf_map *map;
->         const char *pinfile;
-> @@ -1583,6 +1647,9 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
->                                 goto err_free_reuse_maps;
+On Wed, Oct 12, 2022 at 02:08 PM -07, sdf@google.com wrote:
+> Hi John & Jakub,
 >
->                         pinmaps = GET_ARG();
-> +               } else if (is_prefix(*argv, "autoattach")) {
-> +                       auto_attach = true;
-> +                       NEXT_ARG();
->                 } else {
->                         p_err("expected no more arguments, 'type', 'map' or 'dev', got: '%s'?",
->                               *argv);
-> @@ -1692,14 +1759,20 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
->                         goto err_close_obj;
->                 }
+> Upstream commit c0feea594e05 ("workqueue: don't skip lockdep work
+> dependency in cancel_work_sync()") seems to trigger the following
+> lockdep warning during test_prog's sockmap_listen:
 >
-> -               err = bpf_obj_pin(bpf_program__fd(prog), pinfile);
-> +               if (auto_attach)
-> +                       err = auto_attach_program(prog, pinfile);
-> +               else
-> +                       err = bpf_obj_pin(bpf_program__fd(prog), pinfile);
->                 if (err) {
->                         p_err("failed to pin program %s",
->                               bpf_program__section_name(prog));
->                         goto err_close_obj;
->                 }
->         } else {
-> -               err = bpf_object__pin_programs(obj, pinfile);
-> +               if (auto_attach)
-> +                       err = auto_attach_programs(obj, pinfile);
-> +               else
-> +                       err = bpf_object__pin_programs(obj, pinfile);
->                 if (err) {
->                         p_err("failed to pin all programs");
->                         goto err_close_obj;
-> @@ -2338,6 +2411,7 @@ static int do_help(int argc, char **argv)
->                 "                         [type TYPE] [dev NAME] \\\n"
->                 "                         [map { idx IDX | name NAME } MAP]\\\n"
->                 "                         [pinmaps MAP_DIR]\n"
-> +               "                         [autoattach]\n"
->                 "       %1$s %2$s attach PROG ATTACH_TYPE [MAP]\n"
->                 "       %1$s %2$s detach PROG ATTACH_TYPE [MAP]\n"
->                 "       %1$s %2$s run PROG \\\n"
-> --
-> 1.8.3.1
->
+> [  +0.003631] WARNING: possible circular locking dependency detected
+
+[...]
+
+> Are you ware? Any idea what's wrong?
+> Is there some stable fix I'm missing in bpf-next?
+
+Thanks for bringing it up. I didn't know.
+
+The mentioned commit doesn't look that fresh
+
+commit c0feea594e058223973db94c1c32a830c9807c86
+Author: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Date:   Fri Jul 29 13:30:23 2022 +0900
+
+    workqueue: don't skip lockdep work dependency in cancel_work_sync()
+
+... but then it just landed not so long ago, which explains things:
+
+$ git describe --contains c0feea594e058223973db94c1c32a830c9807c86 --match 'v*'
+v6.0-rc7~10^2
+
+I've untangled the call chains leading to the potential dead-lock a
+bit. There does seem to be a window of opportunity there.
+
+psock->work.func = sk_psock_backlog()
+  ACQUIRE psock->work_mutex
+    sk_psock_handle_skb()
+      skb_send_sock()
+        __skb_send_sock()
+          sendpage_unlocked()
+            kernel_sendpage()
+              sock->ops->sendpage = inet_sendpage()
+                sk->sk_prot->sendpage = tcp_sendpage()
+                  ACQUIRE sk->sk_lock
+                    tcp_sendpage_locked()
+                  RELEASE sk->sk_lock
+  RELEASE psock->work_mutex
+
+sock_map_close()
+  ACQUIRE sk->sk_lock
+  sk_psock_stop()
+    sk_psock_clear_state(psock, SK_PSOCK_TX_ENABLED)
+    cancel_work_sync()
+      __cancel_work_timer()
+        __flush_work()
+          // wait for psock->work to finish
+  RELEASE sk->sk_lock
+
+There is no fix I know of. Need to think. Ideas welcome.
+
+CC Cong, just FYI, because we did rearrange the locking scheme in [1].
+
+However it looks to me like the dead-lock was already there before that.
+
+[1] https://lore.kernel.org/bpf/20210331023237.41094-5-xiyou.wangcong@gmail.com/
