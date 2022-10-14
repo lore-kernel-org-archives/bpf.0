@@ -2,41 +2,41 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15D20C4332F
-	for <bpf@archiver.kernel.org>; Fri, 14 Oct 2022 20:15:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D6A9C43217
+	for <bpf@archiver.kernel.org>; Fri, 14 Oct 2022 20:15:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbiJNUP2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 14 Oct 2022 16:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33684 "EHLO
+        id S231236AbiJNUPa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 14 Oct 2022 16:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231403AbiJNUPH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 14 Oct 2022 16:15:07 -0400
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07472F39E;
-        Fri, 14 Oct 2022 13:15:00 -0700 (PDT)
-Received: by mail-qv1-f43.google.com with SMTP id z18so3941619qvn.6;
-        Fri, 14 Oct 2022 13:15:00 -0700 (PDT)
+        with ESMTP id S231295AbiJNUPK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 14 Oct 2022 16:15:10 -0400
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC00B3FA22;
+        Fri, 14 Oct 2022 13:15:03 -0700 (PDT)
+Received: by mail-qt1-f175.google.com with SMTP id a24so4388741qto.10;
+        Fri, 14 Oct 2022 13:15:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jPMxAoolUKUZpMFf0g5q1NnQIG6EvSAKe+JJbcK/7Z8=;
-        b=e1XaPGiGlGRUnV5FY547aw7fQNsjiSbqdw7HivThWcaX03L+wA0hEw+2LK/+8xtxnX
-         uQNu3980ji+s4CZpy6tijaspdMH0pSJ/bG/txAA7hnFTwlBtimkNKFZ0g0UDoqEZ+p1C
-         iJmMb2xvTqQ0b4z1Q4zmk8p/PvmqrBjo80kYyD/t8g4w+rE1x3f04PLSlMs7x8a6guvz
-         t09HGLobiQ5bL2hmtD+WirJnWh87zw+UvtcA6HMmIu+rXSy7wKKR+uxNUHSkBzND+hUt
-         7EU4rbbbwHgy4WTcfxd+NzKRalIegBptUhdqoo1j7FjsjRga/ghILtPr7TubmoV7D5mY
-         lhHg==
-X-Gm-Message-State: ACrzQf3KsathmnsaV0pp/L6J3Wsj5bA0sPPSv/PtJHqlh6LiV6e/EFos
-        RTX9FMapkvwVN4Km8dF/nKlFitWlX8fC7w==
-X-Google-Smtp-Source: AMsMyM6Wm/pUbZhtwR4a9PtrwKInPgqki5i7r7d8Qu4wc14QwIm7Q/2Z136MC7GRkkhhJYRV9TuB3w==
-X-Received: by 2002:a05:6214:3017:b0:4b1:bfdc:d4c1 with SMTP id ke23-20020a056214301700b004b1bfdcd4c1mr5429379qvb.42.1665778499589;
-        Fri, 14 Oct 2022 13:14:59 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Un9v/0s/QDKsNCY1plqqMOPWTqMpkXY8lPQPooSTmh0=;
+        b=1uibWyC9kfmcCuuQ0HW9NBRE8Q+rKl6if7jWWBDZThegQ28X11hx7yJnOh4zvFQBCd
+         92+TEgi6c+xyE2ev34cao8uuuyxnYO/xryBMtcwphE8KKapNoIL91z8i50HUvdDcU7Dd
+         luOaGhk5yytxciyJ8pPgLCHlMKKrW9bvr0q0fM2vf/ziSdOqJUiJl/c+oDTPSvkiB+dH
+         fMQwmdFNNrKyL4kpW6qiYU9UwXZY+wBwBNK5J1qEgTSEIOujfc1+XdqC47Bf365D77kg
+         NUnbLplufVjp40PDEXkeq8DMcPW1YnmK4J7NRNegdiEvPn1/2VjNRlciXMbn+qpLi9M/
+         eb8A==
+X-Gm-Message-State: ACrzQf2kMVJxdvYLmpkNltkH60oLC87305ITUlgmqBP2dDssNRZhZE/r
+        ghvDX6OozuMvhlwppAAbgM102VNboY69zg==
+X-Google-Smtp-Source: AMsMyM5fsJtNB/B2nmqRNx8AjrY7npNH4EXX8gOYzPNepSRKhr8AIZWlqvgHNDWHhVVEpOs82uWqag==
+X-Received: by 2002:ac8:5745:0:b0:35c:9f9b:9d56 with SMTP id 5-20020ac85745000000b0035c9f9b9d56mr5747074qtx.103.1665778502191;
+        Fri, 14 Oct 2022 13:15:02 -0700 (PDT)
 Received: from localhost ([2620:10d:c091:480::6918])
-        by smtp.gmail.com with ESMTPSA id y21-20020a05620a44d500b006b61b2cb1d2sm3297124qkp.46.2022.10.14.13.14.58
+        by smtp.gmail.com with ESMTPSA id t4-20020a05622a01c400b00397e97baa96sm2929859qtw.0.2022.10.14.13.15.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 13:14:59 -0700 (PDT)
+        Fri, 14 Oct 2022 13:15:01 -0700 (PDT)
 From:   David Vernet <void@manifault.com>
 To:     bpf@vger.kernel.org
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
@@ -44,71 +44,146 @@ Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
         haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
         kernel-team@fb.com, tj@kernel.org, memxor@gmail.com
-Subject: [PATCH v3 0/3] Support storing struct task_struct objects as kptrs
-Date:   Fri, 14 Oct 2022 15:14:24 -0500
-Message-Id: <20221014201427.2435461-1-void@manifault.com>
+Subject: [PATCH v3 2/3] bpf: Add kfuncs for storing struct task_struct * as a kptr
+Date:   Fri, 14 Oct 2022 15:14:26 -0500
+Message-Id: <20221014201427.2435461-3-void@manifault.com>
 X-Mailer: git-send-email 2.38.0
+In-Reply-To: <20221014201427.2435461-1-void@manifault.com>
+References: <20221014201427.2435461-1-void@manifault.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Now that BPF supports adding new kernel functions with kfuncs, and storing
-kernel objects in maps with kptrs, we can add a set of kfuncs which allow
-struct task_struct objects to be stored in maps as referenced kptrs.
+Now that BPF supports adding new kernel functions with kfuncs, and
+storing kernel objects in maps with kptrs, we can add a set of kfuncs
+which allow struct task_struct objects to be stored in maps as
+referenced kptrs. The possible use cases for doing this are plentiful.
+During tracing, for example, it would be useful to be able to collect
+some tasks that performed a certain operation, and then periodically
+summarize who they are, which cgroup they're in, how much CPU time
+they've utilized, etc.
 
-The possible use cases for doing this are plentiful.  During tracing,
-for example, it would be useful to be able to collect some tasks that
-performed a certain operation, and then periodically summarize who they
-are, which cgroup they're in, how much CPU time they've utilized, etc.
-Doing this now would require storing the task's pids along with some
-relevant data to be exported to user space, and later associating the
-pids to tasks in other event handlers where the data is recorded.
-Another useful by-product of this is that it allows a program to pin a
-task in a BPF program, and by proxy therefore also e.g. pin its task
-local storage.
+In order to enable this, this patch adds three new kfuncs:
 
-In order to support this, we'll need to expand KF_TRUSTED_ARGS to
-support receiving trusted, non-refcounted pointers. It currently only
-supports either PTR_TO_CTX pointers, or refcounted pointers . What this
-means in terms of implementation is that btf_check_func_arg_match()
-would have to add another condition to its logic for checking if
-a ptr needs a refcount to also require that the pointer has at least one
-type modifier, such as PTR_UNTRUSTED. PTR_UNTRUSTED does not cover all
-of the possible pointers we need to watch out for, though. For example,
-a pointer obtained from walking a struct is considered "trusted" (or at
-least, not PTR_UNTRUSTED). To account for this and enable us to expand
-KF_TRUSTED_ARGS, this patch set also introduces a new PTR_NESTED type
-flag modifier which records if a pointer was obtained from walking a
-struct.
+struct task_struct *bpf_task_acquire(struct task_struct *p);
+struct task_struct *bpf_task_kptr_get(struct task_struct **pp);
+void bpf_task_release(struct task_struct *p);
 
-This patch set adds this new PTR_NESTED type flag, expands
-KF_TRUSTED_ARGS accordingly, adds the new set of kfuncs mentioned above,
-and then finally adds a new selftest suite to validate all of this new
-behavior.
+A follow-on patch will add selftests validating these kfuncs.
 
-David Vernet (3):
-  bpf: Allow trusted pointers to be passed to KF_TRUSTED_ARGS kfuncs
-  bpf: Add kfuncs for storing struct task_struct * as a kptr
-  bpf/selftests: Add selftests for new task kfuncs
+Signed-off-by: David Vernet <void@manifault.com>
+---
+ kernel/bpf/helpers.c | 86 +++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 81 insertions(+), 5 deletions(-)
 
- include/linux/bpf.h                           |   6 +
- kernel/bpf/btf.c                              |  11 +-
- kernel/bpf/helpers.c                          |  86 ++++-
- kernel/bpf/verifier.c                         |  15 +-
- tools/testing/selftests/bpf/DENYLIST.s390x    |   1 +
- .../selftests/bpf/prog_tests/task_kfunc.c     | 160 +++++++++
- .../selftests/bpf/progs/task_kfunc_common.h   |  83 +++++
- .../selftests/bpf/progs/task_kfunc_failure.c  | 315 ++++++++++++++++++
- .../selftests/bpf/progs/task_kfunc_success.c  | 132 ++++++++
- tools/testing/selftests/bpf/verifier/calls.c  |   4 +-
- 10 files changed, 804 insertions(+), 9 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/task_kfunc.c
- create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_common.h
- create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_failure.c
- create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_success.c
-
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index a6b04faed282..9d0307969977 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1700,20 +1700,96 @@ bpf_base_func_proto(enum bpf_func_id func_id)
+ 	}
+ }
+ 
+-BTF_SET8_START(tracing_btf_ids)
++__diag_push();
++__diag_ignore_all("-Wmissing-prototypes",
++		  "Global functions as their definitions will be in vmlinux BTF");
++
++/**
++ * bpf_task_acquire - Acquire a reference to a task. A task acquired by this
++ * kfunc which is not stored in a map as a kptr, must be released by calling
++ * bpf_task_release().
++ * @p: The task on which a reference is being acquired.
++ */
++__used noinline
++struct task_struct *bpf_task_acquire(struct task_struct *p)
++{
++	if (!p)
++		return NULL;
++
++	refcount_inc(&p->rcu_users);
++	return p;
++}
++
++/**
++ * bpf_task_kptr_get - Acquire a reference on a struct task_struct kptr. A task
++ * kptr acquired by this kfunc which is not subsequently stored in a map, must
++ * be released by calling bpf_task_release().
++ * @pp: A pointer to a task kptr on which a reference is being acquired.
++ */
++__used noinline
++struct task_struct *bpf_task_kptr_get(struct task_struct **pp)
++{
++	struct task_struct *p;
++
++	rcu_read_lock();
++	p = READ_ONCE(*pp);
++	if (p && !refcount_inc_not_zero(&p->rcu_users))
++		p = NULL;
++	rcu_read_unlock();
++
++	return p;
++}
++
++/**
++ * bpf_task_release - Release the reference acquired on a struct task_struct *.
++ * If this kfunc is invoked in an RCU read region, the task_struct is
++ * guaranteed to not be freed until the current grace period has ended, even if
++ * its refcount drops to 0.
++ * @p: The task on which a reference is being released.
++ */
++__used noinline void bpf_task_release(struct task_struct *p)
++{
++	if (!p)
++		return;
++
++	put_task_struct_rcu_user(p);
++}
++
++__diag_pop();
++
++BTF_SET8_START(generic_kfunc_btf_ids)
+ #ifdef CONFIG_KEXEC_CORE
+ BTF_ID_FLAGS(func, crash_kexec, KF_DESTRUCTIVE)
+ #endif
+-BTF_SET8_END(tracing_btf_ids)
++BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_RET_NULL | KF_TRUSTED_ARGS)
++BTF_ID_FLAGS(func, bpf_task_kptr_get, KF_ACQUIRE | KF_KPTR_GET | KF_RET_NULL)
++BTF_ID_FLAGS(func, bpf_task_release, KF_RELEASE | KF_TRUSTED_ARGS)
++BTF_SET8_END(generic_kfunc_btf_ids)
+ 
+-static const struct btf_kfunc_id_set tracing_kfunc_set = {
++static const struct btf_kfunc_id_set generic_kfunc_set = {
+ 	.owner = THIS_MODULE,
+-	.set   = &tracing_btf_ids,
++	.set   = &generic_kfunc_btf_ids,
+ };
+ 
++BTF_ID_LIST(generic_kfunc_dtor_ids)
++BTF_ID(struct, task_struct)
++BTF_ID(func, bpf_task_release)
++
+ static int __init kfunc_init(void)
+ {
+-	return register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &tracing_kfunc_set);
++	int ret;
++	const struct btf_id_dtor_kfunc generic_kfunc_dtors[] = {
++		{
++			.btf_id       = generic_kfunc_dtor_ids[0],
++			.kfunc_btf_id = generic_kfunc_dtor_ids[1]
++		},
++	};
++
++	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &generic_kfunc_set);
++	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &generic_kfunc_set);
++	return ret ?: register_btf_id_dtor_kfuncs(generic_kfunc_dtors,
++						  ARRAY_SIZE(generic_kfunc_dtors),
++						  THIS_MODULE);
+ }
+ 
+ late_initcall(kfunc_init);
 -- 
 2.38.0
 
