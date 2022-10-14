@@ -2,41 +2,41 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DB26C43219
-	for <bpf@archiver.kernel.org>; Fri, 14 Oct 2022 20:15:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7979FC433FE
+	for <bpf@archiver.kernel.org>; Fri, 14 Oct 2022 20:15:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231259AbiJNUPb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 14 Oct 2022 16:15:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33726 "EHLO
+        id S231268AbiJNUPc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 14 Oct 2022 16:15:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231298AbiJNUPK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 14 Oct 2022 16:15:10 -0400
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83DEB38A3F;
-        Fri, 14 Oct 2022 13:15:02 -0700 (PDT)
-Received: by mail-qk1-f179.google.com with SMTP id j21so3208926qkk.9;
-        Fri, 14 Oct 2022 13:15:02 -0700 (PDT)
+        with ESMTP id S231372AbiJNUPM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 14 Oct 2022 16:15:12 -0400
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A08437C6;
+        Fri, 14 Oct 2022 13:15:04 -0700 (PDT)
+Received: by mail-qk1-f178.google.com with SMTP id f8so3225986qkg.3;
+        Fri, 14 Oct 2022 13:15:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9B5WCJk+STzLKu34JLdJ6VKkq949MWYzKFWY8poF1r0=;
-        b=2My0ygw6iyZ5trHVHQR65yvzDG1upIaY5RgMBNQDmSIhg+6odYURJBaYUxQhK/o/8F
-         xT4ImJB4QhPyN0+21Hy4I5eS0wKd+42NkQU7mhfrnHUol/8Adwsgcz74AcAy1tsI1D7H
-         we9vSKsRl0mP0IUu2OOmR5O/QGfMwdyPM2tnG2xX8gm3K7oFl1Va6Tii2UOX6wK/Rlww
-         heAQvFEou3loN/sSe6uATY6C9/fMgQcfxU7yOaRkzL2tq1X1Lm5UrICfc2fSLt2rtFC0
-         8oUI6Oi/v8Dd1d7DzQnKwLk9y11WrLED/masPIbdgtIaxZk9ezNamV5pa9K2SEbRSA2q
-         rJbA==
-X-Gm-Message-State: ACrzQf0REk+Gex5RCmyuxFfJudccXUBIs0sp9YZudhHBhkWbmj5i3aei
-        xpmE3xbCjsH1zNvd+nb769bDjqb1ol38gg==
-X-Google-Smtp-Source: AMsMyM5BFC3eT9RO2tF6GwqLWqA+cU9cHCaWZPObI7F0teiesgOJ9+1uGJ+OZQwdkVyqawD2K4m07A==
-X-Received: by 2002:a05:620a:448c:b0:6ce:a013:7fa3 with SMTP id x12-20020a05620a448c00b006cea0137fa3mr5070457qkp.532.1665778500897;
-        Fri, 14 Oct 2022 13:15:00 -0700 (PDT)
+        bh=y3kA6sfh9ixG31h28lqpzkA8keoz0b9VTmFg5pP/IKA=;
+        b=71SdWxefO0NFUegUERN/K2pR6DyS7lj2vMTo97gPnWSL9MUbyoM90AJlm/GgLBsox6
+         uHl2Ipj7lZPxno7m+uFw8rLbpJhMnfX5UckPz2rgU8c13BMUmhDbc7U7oqjjHKa274yu
+         MczzUJ/Bht7v3uyiZwkN3TKm1f+3/L1hcPYcImyC0u4vWXzhP7SEXwCFB0X/8uqt1fSI
+         uGCi/cYSM/xBxlx4BGz+m4gq/o+fWeFlBiTI0dHkqycCT3ctvlTitq+uISqHUOX/1o8n
+         hLD+gFVo98voA5LGb2766D+19RXPQMpAsJhUVrkyTXC8E7+tvDmJr0sJVYYeaTKpMy95
+         PZXg==
+X-Gm-Message-State: ACrzQf3FUz/wN9kKdgrNbN2qVzzKdBn4mW1Lmq/1VSOWxYaLUY8N7ImU
+        ch5QRCFimv7Hed3ARV3IwSlsbG/nwhRKRQ==
+X-Google-Smtp-Source: AMsMyM63FASCxpiv51nJipKMgJ+75aBHX5TphhyBCgOXxZuI3voSfGEXzT76gAjsU+aNZF/KA6n0BA==
+X-Received: by 2002:a37:6044:0:b0:6cf:ce19:a73 with SMTP id u65-20020a376044000000b006cfce190a73mr5034924qkb.21.1665778503474;
+        Fri, 14 Oct 2022 13:15:03 -0700 (PDT)
 Received: from localhost ([2620:10d:c091:480::6918])
-        by smtp.gmail.com with ESMTPSA id bp39-20020a05620a45a700b006ce3f1af120sm3183062qkb.44.2022.10.14.13.15.00
+        by smtp.gmail.com with ESMTPSA id x10-20020a05620a448a00b006eecc4a0de9sm2843942qkp.62.2022.10.14.13.15.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 13:15:00 -0700 (PDT)
+        Fri, 14 Oct 2022 13:15:03 -0700 (PDT)
 From:   David Vernet <void@manifault.com>
 To:     bpf@vger.kernel.org
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
@@ -44,9 +44,9 @@ Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
         haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
         kernel-team@fb.com, tj@kernel.org, memxor@gmail.com
-Subject: [PATCH v3 1/3] bpf: Allow trusted pointers to be passed to KF_TRUSTED_ARGS kfuncs
-Date:   Fri, 14 Oct 2022 15:14:25 -0500
-Message-Id: <20221014201427.2435461-2-void@manifault.com>
+Subject: [PATCH v3 3/3] bpf/selftests: Add selftests for new task kfuncs
+Date:   Fri, 14 Oct 2022 15:14:27 -0500
+Message-Id: <20221014201427.2435461-4-void@manifault.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221014201427.2435461-1-void@manifault.com>
 References: <20221014201427.2435461-1-void@manifault.com>
@@ -56,185 +56,749 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Kfuncs currently support specifying the KF_TRUSTED_ARGS flag to signal
-to the verifier that it should enforce that a BPF program passes it a
-"safe", trusted pointer. Currently, "safe" means that the pointer is
-either PTR_TO_CTX, or is refcounted. There may be cases, however, where
-the kernel passes a BPF program a safe / trusted pointer to an object
-that the BPF program wishes to use as a kptr, but because the object
-does not yet have a ref_obj_id from the perspective of the verifier, the
-program would be unable to pass it to a KF_ACQUIRE | KF_TRUSTED_ARGS
-kfunc.
-
-The solution is to expand the set of pointers that are considered
-trusted according to KF_TRUSTED_ARGS, so that programs can invoke kfuncs
-with these pointers without getting rejected by the verifier.
-
-There is already a PTR_UNTRUSTED flag that is set in some scenarios,
-such as when a BPF program reads a kptr directly from a map
-without performing a bpf_kptr_xchg() call. These pointers of course can
-and should be rejected by the verifier. Unfortunately, however,
-PTR_UNTRUSTED does not cover all the cases for safety that need to
-be addressed to adequately protect kfuncs. Specifically, pointers
-obtained by a BPF program "walking" a struct are _not_ considered
-PTR_UNTRUSTED according to BPF. For example, say that we were to add a
-kfunc called bpf_task_acquire(), with KF_ACQUIRE | KF_TRUSTED_ARGS, to
-acquire a struct task_struct *. If we only used PTR_UNTRUSTED to signal
-that a task was unsafe to pass to a kfunc, the verifier would mistakenly
-allow the following unsafe BPF program to be loaded:
-
-SEC("tp_btf/task_newtask")
-int BPF_PROG(unsafe_acquire_task,
-	     struct task_struct *task,
-	     u64 clone_flags)
-{
-	struct task_struct *acquired, *nested;
-
-	nested = task->last_wakee;
-
-	/* Would not be rejected by the verifier. */
-	acquired = bpf_task_acquire(nested);
-	if (!acquired)
-		return 0;
-
-	bpf_task_release(acquired);
-	return 0;
-}
-
-To address this, this patch defines a new type flag called PTR_NESTED
-which tracks whether a PTR_TO_BTF_ID pointer was retrieved from walking
-a struct. A pointer passed directly from the kernel begins with
-(PTR_NESTED & type) == 0, meaning of course that it is not nested. Any
-pointer received from walking that object, however, would inherit that
-flag and become a nested pointer.
-
-With that flag, this patch also updates btf_check_func_arg_match() to
-only flag a PTR_TO_BTF_ID object as requiring a refcount if it has any
-type modifiers (which of course includes both PTR_UNTRUSTED and
-PTR_NESTED). Otherwise, the pointer passes this check and continues
-onto the others in btf_check_func_arg_match().
-
-A subsequent patch will add kfuncs for storing a task kfunc as a kptr,
-and then another patch will validate this feature by ensuring that the
-verifier rejects a kfunc invocation with a nested pointer.
+A previous change added a series of kfuncs for storing struct
+task_struct objects as referenced kptrs. This patch adds a new
+task_kfunc test suite for validating their expected behavior.
 
 Signed-off-by: David Vernet <void@manifault.com>
 ---
- include/linux/bpf.h                          |  6 ++++++
- kernel/bpf/btf.c                             | 11 ++++++++++-
- kernel/bpf/verifier.c                        | 15 ++++++++++++++-
- tools/testing/selftests/bpf/verifier/calls.c |  4 ++--
- 4 files changed, 32 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/DENYLIST.s390x    |   1 +
+ .../selftests/bpf/prog_tests/task_kfunc.c     | 160 +++++++++
+ .../selftests/bpf/progs/task_kfunc_common.h   |  83 +++++
+ .../selftests/bpf/progs/task_kfunc_failure.c  | 315 ++++++++++++++++++
+ .../selftests/bpf/progs/task_kfunc_success.c  | 132 ++++++++
+ 5 files changed, 691 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/task_kfunc.c
+ create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_common.h
+ create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_failure.c
+ create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_success.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 9e7d46d16032..b624024edb4e 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -457,6 +457,12 @@ enum bpf_type_flag {
- 	/* Size is known at compile time. */
- 	MEM_FIXED_SIZE		= BIT(10 + BPF_BASE_TYPE_BITS),
- 
-+	/* PTR was obtained from walking a struct. This is used with
-+	 * PTR_TO_BTF_ID to determine whether the pointer is safe to pass to a
-+	 * kfunc with KF_TRUSTED_ARGS.
-+	 */
-+	PTR_NESTED		= BIT(11 + BPF_BASE_TYPE_BITS),
+diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x b/tools/testing/selftests/bpf/DENYLIST.s390x
+index 520f12229b98..323a0e312b3d 100644
+--- a/tools/testing/selftests/bpf/DENYLIST.s390x
++++ b/tools/testing/selftests/bpf/DENYLIST.s390x
+@@ -52,6 +52,7 @@ skc_to_unix_sock                         # could not attach BPF object unexpecte
+ socket_cookie                            # prog_attach unexpected error: -524                                          (trampoline)
+ stacktrace_build_id                      # compare_map_keys stackid_hmap vs. stackmap err -2 errno 2                   (?)
+ tailcalls                                # tail_calls are not allowed in non-JITed programs with bpf-to-bpf calls      (?)
++task_kfunc                               # JIT does not support calling kernel function
+ task_local_storage                       # failed to auto-attach program 'trace_exit_creds': -524                      (trampoline)
+ test_bpffs                               # bpffs test  failed 255                                                      (iterator)
+ test_bprm_opts                           # failed to auto-attach program 'secure_exec': -524                           (trampoline)
+diff --git a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c b/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
+new file mode 100644
+index 000000000000..18492d010c45
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
+@@ -0,0 +1,160 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
 +
- 	__BPF_TYPE_FLAG_MAX,
- 	__BPF_TYPE_LAST_FLAG	= __BPF_TYPE_FLAG_MAX - 1,
- };
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index eba603cec2c5..3d7bad11b10b 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -6333,8 +6333,17 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
- 		/* Check if argument must be a referenced pointer, args + i has
- 		 * been verified to be a pointer (after skipping modifiers).
- 		 * PTR_TO_CTX is ok without having non-zero ref_obj_id.
-+		 *
-+		 * All object pointers must be refcounted, other than:
-+		 * - PTR_TO_CTX
-+		 * - Trusted pointers (i.e. pointers with no type modifiers)
- 		 */
--		if (is_kfunc && trusted_args && (obj_ptr && reg->type != PTR_TO_CTX) && !reg->ref_obj_id) {
-+		if (is_kfunc &&
-+		    trusted_args &&
-+		    obj_ptr &&
-+		    base_type(reg->type) != PTR_TO_CTX &&
-+		    type_flag(reg->type) &&
-+		    !reg->ref_obj_id) {
- 			bpf_log(log, "R%d must be referenced\n", regno);
- 			return -EINVAL;
- 		}
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 6f6d2d511c06..a625aaddeb34 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -581,6 +581,8 @@ static const char *reg_type_str(struct bpf_verifier_env *env,
- 		strncpy(prefix, "user_", 32);
- 	if (type & MEM_PERCPU)
- 		strncpy(prefix, "percpu_", 32);
-+	if (type & PTR_NESTED)
-+		strncpy(prefix, "nested_", 32);
- 	if (type & PTR_UNTRUSTED)
- 		strncpy(prefix, "untrusted_", 32);
- 
-@@ -4558,6 +4560,9 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
- 	if (type_flag(reg->type) & PTR_UNTRUSTED)
- 		flag |= PTR_UNTRUSTED;
- 
-+	/* A pointer can only be unwalked when it wasn't accessed by walking a struct. */
-+	flag |= PTR_NESTED;
++#define _GNU_SOURCE
++#include <sys/wait.h>
++#include <test_progs.h>
++#include <unistd.h>
 +
- 	if (atype == BPF_READ && value_regno >= 0)
- 		mark_btf_ld_reg(env, regs, value_regno, ret, reg->btf, btf_id, flag);
- 
-@@ -5694,7 +5699,12 @@ static const struct bpf_reg_types scalar_types = { .types = { SCALAR_VALUE } };
- static const struct bpf_reg_types context_types = { .types = { PTR_TO_CTX } };
- static const struct bpf_reg_types alloc_mem_types = { .types = { PTR_TO_MEM | MEM_ALLOC } };
- static const struct bpf_reg_types const_map_ptr_types = { .types = { CONST_PTR_TO_MAP } };
--static const struct bpf_reg_types btf_ptr_types = { .types = { PTR_TO_BTF_ID } };
-+static const struct bpf_reg_types btf_ptr_types = {
-+	.types = {
-+		PTR_TO_BTF_ID,
-+		PTR_TO_BTF_ID | PTR_NESTED
-+	},
++#include "task_kfunc_failure.skel.h"
++#include "task_kfunc_success.skel.h"
++
++static size_t log_buf_sz = 1 << 20; /* 1 MB */
++static char obj_log_buf[1048576];
++
++static struct task_kfunc_success *open_load_task_kfunc_skel(void)
++{
++	struct task_kfunc_success *skel;
++	int err;
++
++	skel = task_kfunc_success__open();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		return NULL;
++
++	skel->bss->pid = getpid();
++
++	err = task_kfunc_success__load(skel);
++	if (!ASSERT_OK(err, "skel_load"))
++		goto cleanup;
++
++	return skel;
++
++cleanup:
++	task_kfunc_success__destroy(skel);
++	return NULL;
++}
++
++static void run_success_test(const char *prog_name)
++{
++	struct task_kfunc_success *skel;
++	int status;
++	pid_t child_pid;
++	struct bpf_program *prog;
++	struct bpf_link *link = NULL;
++
++	skel = open_load_task_kfunc_skel();
++	if (!ASSERT_OK_PTR(skel, "open_load_skel"))
++		return;
++
++	if (!ASSERT_OK(skel->bss->err, "pre_spawn_err"))
++		goto cleanup;
++
++	prog = bpf_object__find_program_by_name(skel->obj, prog_name);
++	if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
++		goto cleanup;
++
++	link = bpf_program__attach(prog);
++	if (!ASSERT_OK_PTR(link, "attached_link"))
++		goto cleanup;
++
++	child_pid = fork();
++	if (!ASSERT_GT(child_pid, -1, "child_pid"))
++		goto cleanup;
++	if (child_pid == 0)
++		_exit(0);
++	waitpid(child_pid, &status, 0);
++
++	ASSERT_OK(skel->bss->err, "post_wait_err");
++
++cleanup:
++	bpf_link__destroy(link);
++	task_kfunc_success__destroy(skel);
++}
++
++static const char * const success_tests[] = {
++	"test_task_acquire_release_argument",
++	"test_task_acquire_release_current",
++	"test_task_acquire_leave_in_map",
++	"test_task_xchg_release",
++	"test_task_get_release",
 +};
- static const struct bpf_reg_types spin_lock_types = { .types = { PTR_TO_MAP_VALUE } };
- static const struct bpf_reg_types percpu_btf_ptr_types = { .types = { PTR_TO_BTF_ID | MEM_PERCPU } };
- static const struct bpf_reg_types func_ptr_types = { .types = { PTR_TO_FUNC } };
-@@ -5768,6 +5778,9 @@ static int check_reg_type(struct bpf_verifier_env *env, u32 regno,
- 	if (arg_type & PTR_MAYBE_NULL)
- 		type &= ~PTR_MAYBE_NULL;
- 
-+	if (!(arg_type & ARG_PTR_TO_BTF_ID))
-+		type &= ~PTR_NESTED;
 +
- 	for (i = 0; i < ARRAY_SIZE(compatible->types); i++) {
- 		expected = compatible->types[i];
- 		if (expected == NOT_INIT)
-diff --git a/tools/testing/selftests/bpf/verifier/calls.c b/tools/testing/selftests/bpf/verifier/calls.c
-index e1a937277b54..496c29b1a298 100644
---- a/tools/testing/selftests/bpf/verifier/calls.c
-+++ b/tools/testing/selftests/bpf/verifier/calls.c
-@@ -181,7 +181,7 @@
- 	},
- 	.result_unpriv = REJECT,
- 	.result = REJECT,
--	.errstr = "negative offset ptr_ ptr R1 off=-4 disallowed",
-+	.errstr = "negative offset nested_ptr_ ptr R1 off=-4 disallowed",
- },
- {
- 	"calls: invalid kfunc call: PTR_TO_BTF_ID with variable offset",
-@@ -243,7 +243,7 @@
- 	},
- 	.result_unpriv = REJECT,
- 	.result = REJECT,
--	.errstr = "R1 must be referenced",
-+	.errstr = "arg#0 pointer type STRUCT prog_test_ref_kfunc must point to scalar",
- },
- {
- 	"calls: valid kfunc call: referenced arg needs refcounted PTR_TO_BTF_ID",
++static struct {
++	const char *prog_name;
++	const char *expected_err_msg;
++} failure_tests[] = {
++	{"task_kfunc_acquire_untrusted", "arg#0 pointer type STRUCT task_struct must point"},
++	{"task_kfunc_acquire_fp", "arg#0 pointer type STRUCT task_struct must point"},
++	{"task_kfunc_acquire_no_null_check", "arg#0 pointer type STRUCT task_struct must point"},
++	{"task_kfunc_acquire_trusted_nested", "arg#0 pointer type STRUCT task_struct must point"},
++	{"task_kfunc_acquire_null", "arg#0 pointer type STRUCT task_struct must point"},
++	{"task_kfunc_acquire_unreleased", "Unreleased reference"},
++	{"task_kfunc_get_non_kptr_param", "arg#0 expected pointer to map value"},
++	{"task_kfunc_get_non_kptr_acquired", "arg#0 expected pointer to map value"},
++	{"task_kfunc_get_null", "arg#0 expected pointer to map value"},
++	{"task_kfunc_xchg_unreleased", "Unreleased reference"},
++	{"task_kfunc_get_unreleased", "Unreleased reference"},
++	{"task_kfunc_release_untrusted", "arg#0 pointer type STRUCT task_struct must point"},
++	{"task_kfunc_release_fp", "arg#0 pointer type STRUCT task_struct must point"},
++	{"task_kfunc_release_null", "arg#0 pointer type STRUCT task_struct must point"},
++	{"task_kfunc_release_unacquired", "release kernel function bpf_task_release expects refcounted PTR_TO_BTF_ID"},
++};
++
++static void verify_fail(const char *prog_name, const char *expected_err_msg)
++{
++	LIBBPF_OPTS(bpf_object_open_opts, opts);
++	struct task_kfunc_failure *skel;
++	int err, i;
++
++	opts.kernel_log_buf = obj_log_buf;
++	opts.kernel_log_size = log_buf_sz;
++	opts.kernel_log_level = 1;
++
++	skel = task_kfunc_failure__open_opts(&opts);
++	if (!ASSERT_OK_PTR(skel, "task_kfunc_failure__open_opts"))
++		goto cleanup;
++
++	skel->bss->pid = getpid();
++
++	for (i = 0; i < ARRAY_SIZE(failure_tests); i++) {
++		struct bpf_program *prog;
++		const char *curr_name = failure_tests[i].prog_name;
++
++		prog = bpf_object__find_program_by_name(skel->obj, curr_name);
++		if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
++			goto cleanup;
++
++		bpf_program__set_autoload(prog, !strcmp(curr_name, prog_name));
++	}
++
++	err = task_kfunc_failure__load(skel);
++	if (!ASSERT_ERR(err, "unexpected load success"))
++		goto cleanup;
++
++	if (!ASSERT_OK_PTR(strstr(obj_log_buf, expected_err_msg), "expected_err_msg")) {
++		fprintf(stderr, "Expected err_msg: %s\n", expected_err_msg);
++		fprintf(stderr, "Verifier output: %s\n", obj_log_buf);
++	}
++
++cleanup:
++	task_kfunc_failure__destroy(skel);
++}
++
++void test_task_kfunc(void)
++{
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(success_tests); i++) {
++		if (!test__start_subtest(success_tests[i]))
++			continue;
++
++		run_success_test(success_tests[i]);
++	}
++
++	for (i = 0; i < ARRAY_SIZE(failure_tests); i++) {
++		if (!test__start_subtest(failure_tests[i].prog_name))
++			continue;
++
++		verify_fail(failure_tests[i].prog_name, failure_tests[i].expected_err_msg);
++	}
++}
+diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_common.h b/tools/testing/selftests/bpf/progs/task_kfunc_common.h
+new file mode 100644
+index 000000000000..f51257bdd695
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/task_kfunc_common.h
+@@ -0,0 +1,83 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
++
++#ifndef _TASK_KFUNC_COMMON_H
++#define _TASK_KFUNC_COMMON_H
++
++#include <errno.h>
++#include <vmlinux.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_helpers.h>
++
++struct __tasks_kfunc_map_value {
++	struct task_struct __kptr_ref * task;
++};
++
++struct hash_map {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__type(key, int);
++	__type(value, struct __tasks_kfunc_map_value);
++	__uint(max_entries, 1);
++} __tasks_kfunc_map SEC(".maps");
++
++struct task_struct *bpf_task_acquire(struct task_struct *p) __ksym;
++struct task_struct *bpf_task_kptr_get(struct task_struct **pp) __ksym;
++void bpf_task_release(struct task_struct *p) __ksym;
++
++#define TEST_NAME_SZ 128
++
++/* The pid of the test process used to determine if a newly created task is the test task. */
++int pid;
++
++static inline struct __tasks_kfunc_map_value *tasks_kfunc_map_value_lookup(struct task_struct *p)
++{
++	s32 pid;
++	long status;
++
++	status = bpf_probe_read_kernel(&pid, sizeof(pid), &p->pid);
++	if (status)
++		return NULL;
++
++	return bpf_map_lookup_elem(&__tasks_kfunc_map, &pid);
++}
++
++static inline int tasks_kfunc_map_insert(struct task_struct *p)
++{
++	struct __tasks_kfunc_map_value local, *v;
++	long status;
++	struct task_struct *acquired, *old;
++	s32 pid;
++
++	status = bpf_probe_read_kernel(&pid, sizeof(pid), &p->pid);
++	if (status)
++		return status;
++
++	local.task = NULL;
++	status = bpf_map_update_elem(&__tasks_kfunc_map, &pid, &local, BPF_NOEXIST);
++	if (status)
++		return status;
++
++	v = bpf_map_lookup_elem(&__tasks_kfunc_map, &pid);
++	if (!v) {
++		bpf_map_delete_elem(&__tasks_kfunc_map, &pid);
++		return status;
++	}
++
++	acquired = bpf_task_acquire(p);
++	old = bpf_kptr_xchg(&v->task, acquired);
++	if (old) {
++		bpf_task_release(old);
++		return -EEXIST;
++	}
++
++	return 0;
++}
++
++static inline bool is_test_kfunc_task(void)
++{
++	int cur_pid = bpf_get_current_pid_tgid() >> 32;
++
++	return pid == cur_pid;
++}
++
++#endif /* _TASK_KFUNC_COMMON_H */
+diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_failure.c b/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
+new file mode 100644
+index 000000000000..74d2f176a2de
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
+@@ -0,0 +1,315 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
++
++#include <vmlinux.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_helpers.h>
++
++#include "task_kfunc_common.h"
++
++char _license[] SEC("license") = "GPL";
++
++/* Prototype for all of the program trace events below:
++ *
++ * TRACE_EVENT(task_newtask,
++ *         TP_PROTO(struct task_struct *p, u64 clone_flags)
++ */
++
++static struct __tasks_kfunc_map_value *insert_lookup_task(struct task_struct *task)
++{
++	int status;
++
++	status = tasks_kfunc_map_insert(task);
++	if (status)
++		return NULL;
++
++	return tasks_kfunc_map_value_lookup(task);
++}
++
++SEC("tp_btf/task_newtask")
++int BPF_PROG(task_kfunc_acquire_untrusted, struct task_struct *task, u64 clone_flags)
++{
++	struct task_struct *acquired;
++	struct __tasks_kfunc_map_value *v;
++
++	if (!is_test_kfunc_task())
++		return 0;
++
++	v = insert_lookup_task(task);
++	if (!v)
++		return 0;
++
++	/* Can't invoke bpf_task_acquire() on an untrusted pointer. */
++	acquired = bpf_task_acquire(v->task);
++	if (!acquired)
++		return 0;
++
++	bpf_task_release(acquired);
++
++	return 0;
++}
++
++SEC("tp_btf/task_newtask")
++int BPF_PROG(task_kfunc_acquire_fp, struct task_struct *task, u64 clone_flags)
++{
++	struct task_struct *acquired, *stack_task = (struct task_struct *)&clone_flags;
++
++	if (!is_test_kfunc_task())
++		return 0;
++
++	/* Can't invoke bpf_task_acquire() on a random frame pointer. */
++	acquired = bpf_task_acquire((struct task_struct *)&stack_task);
++	if (!acquired)
++		return 0;
++	bpf_task_release(acquired);
++
++	return 0;
++}
++
++SEC("tp_btf/task_newtask")
++int BPF_PROG(task_kfunc_acquire_no_null_check, struct task_struct *task, u64 clone_flags)
++{
++	struct task_struct *acquired;
++
++	if (!is_test_kfunc_task())
++		return 0;
++
++	acquired = bpf_task_acquire(task);
++	/* Can't release a bpf_task_acquire()'d task without a NULL check. */
++	bpf_task_release(acquired);
++
++	return 0;
++}
++
++SEC("tp_btf/task_newtask")
++int BPF_PROG(task_kfunc_acquire_trusted_nested, struct task_struct *task, u64 clone_flags)
++{
++	struct task_struct *acquired;
++
++	if (!is_test_kfunc_task())
++		return 0;
++
++	/* Can't invoke bpf_task_acquire() on a trusted pointer at a nonzero offset. */
++	acquired = bpf_task_acquire(task->last_wakee);
++	if (!acquired)
++		return 0;
++	bpf_task_release(acquired);
++
++	return 0;
++}
++
++
++SEC("tp_btf/task_newtask")
++int BPF_PROG(task_kfunc_acquire_null, struct task_struct *task, u64 clone_flags)
++{
++	struct task_struct *acquired;
++
++	if (!is_test_kfunc_task())
++		return 0;
++
++	/* Can't invoke bpf_task_acquire() on a NULL pointer. */
++	acquired = bpf_task_acquire(NULL);
++	if (!acquired)
++		return 0;
++	bpf_task_release(acquired);
++
++	return 0;
++}
++
++SEC("tp_btf/task_newtask")
++int BPF_PROG(task_kfunc_acquire_unreleased, struct task_struct *task, u64 clone_flags)
++{
++	struct task_struct *acquired;
++
++	if (!is_test_kfunc_task())
++		return 0;
++
++	acquired = bpf_task_acquire(task);
++
++	/* Acquired task is never released. */
++
++	return 0;
++}
++
++SEC("tp_btf/task_newtask")
++int BPF_PROG(task_kfunc_get_non_kptr_param, struct task_struct *task, u64 clone_flags)
++{
++	struct task_struct *kptr;
++
++	if (!is_test_kfunc_task())
++		return 0;
++
++	/* Cannot use bpf_task_kptr_get() on a non-kptr, even on a valid task. */
++	kptr = bpf_task_kptr_get(&task);
++	if (!kptr)
++		return 0;
++
++	bpf_task_release(kptr);
++
++	return 0;
++}
++
++SEC("tp_btf/task_newtask")
++int BPF_PROG(task_kfunc_get_non_kptr_acquired, struct task_struct *task, u64 clone_flags)
++{
++	struct task_struct *kptr, *acquired;
++
++	if (!is_test_kfunc_task())
++		return 0;
++
++	acquired = bpf_task_acquire(task);
++	if (!acquired)
++		return 0;
++
++	/* Cannot use bpf_task_kptr_get() on a non-kptr, even if it was acquired. */
++	kptr = bpf_task_kptr_get(&acquired);
++	bpf_task_release(acquired);
++	if (!kptr)
++		return 0;
++
++	bpf_task_release(kptr);
++
++	return 0;
++}
++
++SEC("tp_btf/task_newtask")
++int BPF_PROG(task_kfunc_get_null, struct task_struct *task, u64 clone_flags)
++{
++	struct task_struct *kptr;
++
++	if (!is_test_kfunc_task())
++		return 0;
++
++	/* Cannot use bpf_task_kptr_get() on a NULL pointer. */
++	kptr = bpf_task_kptr_get(NULL);
++	if (!kptr)
++		return 0;
++
++	bpf_task_release(kptr);
++
++	return 0;
++}
++
++SEC("tp_btf/task_newtask")
++int BPF_PROG(task_kfunc_xchg_unreleased, struct task_struct *task, u64 clone_flags)
++{
++	struct task_struct *kptr;
++	struct __tasks_kfunc_map_value *v;
++
++	if (!is_test_kfunc_task())
++		return 0;
++
++	v = insert_lookup_task(task);
++	if (!v)
++		return 0;
++
++	kptr = bpf_kptr_xchg(&v->task, NULL);
++	if (!kptr)
++		return 0;
++
++	/* Kptr retrieved from map is never released. */
++
++	return 0;
++}
++
++SEC("tp_btf/task_newtask")
++int BPF_PROG(task_kfunc_get_unreleased, struct task_struct *task, u64 clone_flags)
++{
++	struct task_struct *kptr;
++	struct __tasks_kfunc_map_value *v;
++
++	if (!is_test_kfunc_task())
++		return 0;
++
++	v = insert_lookup_task(task);
++	if (!v)
++		return 0;
++
++	kptr = bpf_task_kptr_get(&v->task);
++	if (!kptr)
++		return 0;
++
++	/* Kptr acquired above is never released. */
++
++	return 0;
++}
++
++SEC("tp_btf/task_newtask")
++int BPF_PROG(task_kfunc_release_untrusted, struct task_struct *task, u64 clone_flags)
++{
++	struct __tasks_kfunc_map_value *v;
++
++	if (!is_test_kfunc_task())
++		return 0;
++
++	v = insert_lookup_task(task);
++	if (!v)
++		return 0;
++
++	/* Can't invoke bpf_task_release() on an untrusted pointer. */
++	bpf_task_release(v->task);
++
++	return 0;
++}
++
++SEC("tp_btf/task_newtask")
++int BPF_PROG(task_kfunc_release_fp, struct task_struct *task, u64 clone_flags)
++{
++	struct task_struct *acquired = (struct task_struct *)&clone_flags;
++
++	if (!is_test_kfunc_task())
++		return 0;
++
++	/* Cannot release random frame pointer. */
++	bpf_task_release(acquired);
++
++	return 0;
++}
++
++SEC("tp_btf/task_newtask")
++int BPF_PROG(task_kfunc_release_null, struct task_struct *task, u64 clone_flags)
++{
++	struct __tasks_kfunc_map_value local, *v;
++	long status;
++	struct task_struct *acquired, *old;
++	s32 pid;
++
++	if (!is_test_kfunc_task())
++		return 0;
++
++	status = bpf_probe_read_kernel(&pid, sizeof(pid), &task->pid);
++	if (status)
++		return 0;
++
++	local.task = NULL;
++	status = bpf_map_update_elem(&__tasks_kfunc_map, &pid, &local, BPF_NOEXIST);
++	if (status)
++		return status;
++
++	v = bpf_map_lookup_elem(&__tasks_kfunc_map, &pid);
++	if (!v)
++		return status;
++
++	acquired = bpf_task_acquire(task);
++	if (!acquired)
++		return 0;
++
++	old = bpf_kptr_xchg(&v->task, acquired);
++
++	/* old cannot be passed to bpf_task_release() without a NULL check. */
++	bpf_task_release(old);
++
++	return 0;
++}
++
++SEC("tp_btf/task_newtask")
++int BPF_PROG(task_kfunc_release_unacquired, struct task_struct *task, u64 clone_flags)
++{
++	if (!is_test_kfunc_task())
++		return 0;
++
++	/* Cannot release trusted task pointer which was not acquired. */
++	bpf_task_release(task);
++
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_success.c b/tools/testing/selftests/bpf/progs/task_kfunc_success.c
+new file mode 100644
+index 000000000000..8d5c05b41d53
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/task_kfunc_success.c
+@@ -0,0 +1,132 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
++
++#include <vmlinux.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_helpers.h>
++
++#include "task_kfunc_common.h"
++
++char _license[] SEC("license") = "GPL";
++
++int err;
++
++/* Prototype for all of the program trace events below:
++ *
++ * TRACE_EVENT(task_newtask,
++ *         TP_PROTO(struct task_struct *p, u64 clone_flags)
++ */
++
++static int test_acquire_release(struct task_struct *task)
++{
++	struct task_struct *acquired;
++
++	acquired = bpf_task_acquire(task);
++	if (!acquired) {
++		err = 1;
++		return 0;
++	}
++
++	bpf_task_release(acquired);
++
++	return 0;
++}
++
++SEC("tp_btf/task_newtask")
++int BPF_PROG(test_task_acquire_release_argument, struct task_struct *task, u64 clone_flags)
++{
++	if (!is_test_kfunc_task())
++		return 0;
++
++	return test_acquire_release(task);
++}
++
++SEC("tp_btf/task_newtask")
++int BPF_PROG(test_task_acquire_release_current, struct task_struct *task, u64 clone_flags)
++{
++	if (!is_test_kfunc_task())
++		return 0;
++
++	return test_acquire_release(bpf_get_current_task_btf());
++}
++
++SEC("tp_btf/task_newtask")
++int BPF_PROG(test_task_acquire_leave_in_map, struct task_struct *task, u64 clone_flags)
++{
++	long status;
++
++	if (!is_test_kfunc_task())
++		return 0;
++
++	status = tasks_kfunc_map_insert(task);
++	if (status)
++		err = 1;
++
++	return 0;
++}
++
++SEC("tp_btf/task_newtask")
++int BPF_PROG(test_task_xchg_release, struct task_struct *task, u64 clone_flags)
++{
++	struct task_struct *kptr;
++	struct __tasks_kfunc_map_value *v;
++	long status;
++
++	if (!is_test_kfunc_task())
++		return 0;
++
++	status = tasks_kfunc_map_insert(task);
++	if (status) {
++		err = 1;
++		return 0;
++	}
++
++	v = tasks_kfunc_map_value_lookup(task);
++	if (!v) {
++		err = 2;
++		return 0;
++	}
++
++	kptr = bpf_kptr_xchg(&v->task, NULL);
++	if (!kptr) {
++		err = 3;
++		return 0;
++	}
++
++	bpf_task_release(kptr);
++
++	return 0;
++}
++
++SEC("tp_btf/task_newtask")
++int BPF_PROG(test_task_get_release, struct task_struct *task, u64 clone_flags)
++{
++	struct task_struct *kptr;
++	struct __tasks_kfunc_map_value *v;
++	long status;
++
++	if (!is_test_kfunc_task())
++		return 0;
++
++	status = tasks_kfunc_map_insert(task);
++	if (status) {
++		err = 1;
++		return 0;
++	}
++
++	v = tasks_kfunc_map_value_lookup(task);
++	if (!v) {
++		err = 2;
++		return 0;
++	}
++
++	kptr = bpf_task_kptr_get(&v->task);
++	if (!kptr) {
++		err = 3;
++		return 0;
++	}
++
++	bpf_task_release(kptr);
++
++	return 0;
++}
 -- 
 2.38.0
 
