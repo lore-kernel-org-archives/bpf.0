@@ -2,95 +2,111 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DDE9C43217
-	for <bpf@archiver.kernel.org>; Fri, 14 Oct 2022 13:31:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 686A7C4332F
+	for <bpf@archiver.kernel.org>; Fri, 14 Oct 2022 14:57:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbiJNNa7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 14 Oct 2022 09:30:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56310 "EHLO
+        id S229460AbiJNO5R (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 14 Oct 2022 10:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiJNNa6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 14 Oct 2022 09:30:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02D429CA9;
-        Fri, 14 Oct 2022 06:30:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77F2FB822E8;
-        Fri, 14 Oct 2022 13:30:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F84BC433C1;
-        Fri, 14 Oct 2022 13:30:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665754255;
-        bh=mINcMLnVsgheBTTRF+mKEseQpUsGdZeG1g0fkhbY1s8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F5k0CxXma58+OUFwamCyShctCfhZ4boPFlcTKXUDVo4dAsKnwDpkQJDIftCIIEgOw
-         SUYYg38JNhtp85t0DPyanIjStUgYbL9bPCykHcwPItgz04Uj68xFIHpd8omJTGvd6R
-         8dIBeSS9Du1WD4R8RpxsSs7pbRhh4Qw42iZsqRIFGq8CJkhpPpsmeA61h60IGsb4wZ
-         HS6W++YWokOJ6lty9mMD5VbBuaX+IYVtn/VjkLfaQvpYsmNqIcDCgIREgAwiGM68l6
-         YPiwN/0brn4bBo7l2WtuYSNF3tdtoGSv4oJe4yZU3bZCdOgLwRe/qAaMA86wiiaLo/
-         z+VMAbtM9OfQQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id A423C4062C; Fri, 14 Oct 2022 10:30:52 -0300 (-03)
-Date:   Fri, 14 Oct 2022 10:30:52 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        Jiri Olsa <jolsa@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
-        bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>
-Subject: Re: [PATCH v2] perf stat: Support old kernels for bperf cgroup
- counting
-Message-ID: <Y0lkjJLfZNXQNYxR@kernel.org>
-References: <Y0Sx2KWX4gPlLytq@slm.duckdns.org>
- <20221011052808.282394-1-namhyung@kernel.org>
- <Y0Wfl88objrECjSo@slm.duckdns.org>
- <Y0ljzN920sWalEHR@kernel.org>
+        with ESMTP id S229702AbiJNO5Q (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 14 Oct 2022 10:57:16 -0400
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3811946C5
+        for <bpf@vger.kernel.org>; Fri, 14 Oct 2022 07:57:14 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4Mpq9F60tQz9xGYt
+        for <bpf@vger.kernel.org>; Fri, 14 Oct 2022 22:52:01 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwAH_5K+eEljD2LCAA--.17435S2;
+        Fri, 14 Oct 2022 15:57:05 +0100 (CET)
+Message-ID: <fb72bce5610434dd4c8742e3f1f6838d4795c64d.camel@huaweicloud.com>
+Subject: -EBUSY in __bpf_arch_text_poke() for fmod_ret program
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     bpf@vger.kernel.org
+Date:   Fri, 14 Oct 2022 16:56:59 +0200
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0ljzN920sWalEHR@kernel.org>
-X-Url:  http://acmel.wordpress.com
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwAH_5K+eEljD2LCAA--.17435S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZrW3ZrWxKw1rtryxGF18uFg_yoW8Jw48pF
+        yIq348Z398GFs7WF4UGw42v39a9rs3Xw13Gay8t34rC3s2grnrZ3W8Kr4Ykr90k348WrWI
+        yFn8t343Xan3JFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+        Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
+        AY17CE14v26r1j6r15MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
+        cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMI
+        IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2
+        KfnxnUUI43ZEXa7IU1CPfJUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAFBF1jj4Q-yAABsD
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Em Fri, Oct 14, 2022 at 10:27:40AM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Tue, Oct 11, 2022 at 06:53:43AM -1000, Tejun Heo escreveu:
-> > On Mon, Oct 10, 2022 at 10:28:08PM -0700, Namhyung Kim wrote:
-> > > The recent change in the cgroup will break the backward compatiblity in
-> > > the BPF program.  It should support both old and new kernels using BPF
-> > > CO-RE technique.
-> 
-> > > Like the task_struct->__state handling in the offcpu analysis, we can
-> > > check the field name in the cgroup struct.
->  
-> > > Acked-by: Jiri Olsa <jolsa@kernel.org>
-> > > Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> > > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
->  
-> > Applied to cgroup/for-6.1-fixes.
-> 
-> Hey, I noticed that the perf build is broken for the
-> tools/perf/util/bpf_skel/bperf_cgroup.bpf.c skell, so I tried using b4
-> on this Namhyung patch, it ended up getting a newer version, by Tejun,
-> that mixes up kernel code and tooling, which, when I tried to apply
-> upstream didn't work.
-> 
-> Please try not to mix up kernel and tools/ changes in the same patch to
-> avoid these issues.
-> 
-> Also when changing tools/perf, please CC me.
-> 
-> I'm now back trying to apply v2 of this patch to see if it fixes my
-> build.
+Hi everyone
 
-Yeah, applying just Namhyung's v2 patch gets perf back building, I'll
-keep it there while processing the other patches so that I can test them
-all together.
+I want to introduce a kfunc() whose implementation is done in an eBPF
+program, which injects the result.
 
-- Arnaldo
+This is what I did:
+
+int noinline
+_bpf_verify_pgp_signature(struct bpf_dynptr_kern *data_ptr,
+                          struct bpf_dynptr_kern *sig_ptr,
+                          struct bpf_key *trusted_keyring)
+{
+        return -EBADMSG;
+}
+ALLOW_ERROR_INJECTION(_bpf_verify_pgp_signature, ERRNO);
+
+int bpf_verify_pgp_signature(struct bpf_dynptr_kern *data_ptr,
+                             struct bpf_dynptr_kern *sig_ptr,
+                             struct bpf_key *trusted_keyring)
+{
+[...]
+
+        return _bpf_verify_pgp_signature(data_ptr, sig_ptr,
+                                         trusted_keyring);
+}
+
+This is the sample of eBPF program doing the work:
+
+SEC("fmod_ret/_bpf_verify_pgp_signature")
+int BPF_PROG(pgp_sig_parse, struct bpf_dynptr *data_ptr,
+             struct bpf_dynptr *sig_ptr,
+             struct bpf_key *trusted_keyring, int ret)
+{
+        return 0;
+}
+
+However, the program fails to auto attach:
+
+libbpf: prog 'pgp_sig_parse': failed to attach: Device or resource busy
+libbpf: prog 'pgp_sig_parse': failed to auto-attach: -16
+
+Not sure what is the cause, but the failure is here:
+
+static int __bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
+				void *old_addr, void *new_addr)
+{
+
+[...]
+
+	ret = -EBUSY;
+	mutex_lock(&text_mutex);
+	if (memcmp(ip, old_insn, X86_PATCH_SIZE))
+
+Any ideas?
+
+Thanks
+
+Roberto
+
