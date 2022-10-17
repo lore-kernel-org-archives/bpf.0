@@ -2,113 +2,127 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17263C4332F
-	for <bpf@archiver.kernel.org>; Mon, 17 Oct 2022 10:26:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA119C433FE
+	for <bpf@archiver.kernel.org>; Mon, 17 Oct 2022 13:39:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbiJQK0t (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 Oct 2022 06:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56362 "EHLO
+        id S229829AbiJQNjp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 17 Oct 2022 09:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230140AbiJQK0r (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 17 Oct 2022 06:26:47 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8291AD99
-        for <bpf@vger.kernel.org>; Mon, 17 Oct 2022 03:26:42 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id bk15so17701953wrb.13
-        for <bpf@vger.kernel.org>; Mon, 17 Oct 2022 03:26:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zqFH7fkSzlUJ/2W1iruZbB5EzbPt5ER8Dh62DWRIYdY=;
-        b=JRDTY2RTwyOQQmuytKiWjx2boNd+SABeKuq+ABi66sXY5PFS0H8xS/uPnSN39DlzS6
-         IVn7rfA1hpEc4dAuz77AU5vd9t6v7ooM352hZpE5aq5RFkuQ7WSBK+yb4FUl+PJ1ArRD
-         WL0trHkopfAvptuzYw96Dclnw2TvgorwrG1AmMnPQkAe7UnVQmLPZnHTOh7UyyHIT9iw
-         BG3qMNsIgpzKdUC6b1f4oyFdWJQvQj6Jo4xdUA2iM+2yTH8iICd3HMHnVawPNlrcEVYz
-         h0Uu4NfepETfRQXB+o6jafKNCecPeYswSTWKIcJVniGRZSgscR6XrcdMtquhaQN5Wif1
-         7TYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zqFH7fkSzlUJ/2W1iruZbB5EzbPt5ER8Dh62DWRIYdY=;
-        b=L11NB+WEt3O+VdKahfmxHcD4osR1JhP8ht48CF1HDkZJRt88JgjGFQaphDnOM3N1mT
-         g+8VVVhRtPFikI98M/cdozlpH8CIBYBr0p0X3MU8oao8sdOWrFF3xH8qB1oqClK0vrcH
-         U0Mx6odWItol60tZspsG8DJ/VMuPosK2Yeljc6R9OT/qAXyUZqnnXfTE3+I7cNFDSRvy
-         RTpzARm5z9hUtBrFRdCadrfh2QaO/sL7W24vWem4zA1hvqCQZ/MoR4p8ss1cu66Wq5Zd
-         BPJ+uFIW9woYYQq2njIOHFe6Z9n6LDE0vktuaO4FNUyKL5aHjRuSHg3hMS0YdUDAowz0
-         nr4Q==
-X-Gm-Message-State: ACrzQf3ZHZRHzuJECdyMQz2FFEK7FkmcAXWEeWUMIvkOHrKxhB4DVH9Y
-        3eFAG+m7tAVnMzAxfBQU4MGQ8Q==
-X-Google-Smtp-Source: AMsMyM4ctyyhYc8QFz0sg15O9CiZwSBb25ZxTDHt8Hj490+lur42i8LA6AMPZx+cmpAWwRMFpmTfng==
-X-Received: by 2002:adf:fc88:0:b0:22e:764a:9762 with SMTP id g8-20020adffc88000000b0022e764a9762mr5745184wrr.318.1666002400659;
-        Mon, 17 Oct 2022 03:26:40 -0700 (PDT)
-Received: from [192.168.178.32] ([51.155.200.13])
-        by smtp.gmail.com with ESMTPSA id c1-20020a5d4141000000b002238ea5750csm10004798wrq.72.2022.10.17.03.26.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 03:26:40 -0700 (PDT)
-Message-ID: <01966876-c242-9533-9305-ef3cbf2e7a94@isovalent.com>
-Date:   Mon, 17 Oct 2022 11:26:39 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH bpf-next 4/5] bpftool: Support new cgroup local storage
-Content-Language: en-GB
-To:     Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S229774AbiJQNjo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 17 Oct 2022 09:39:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CFA3193DC;
+        Mon, 17 Oct 2022 06:39:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90CBB61149;
+        Mon, 17 Oct 2022 13:39:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3EA5C433D6;
+        Mon, 17 Oct 2022 13:39:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666013981;
+        bh=VWdsyJklIFqTKFzaZdG160rEOXJvSY1pTS3ruH0xx9Y=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=iocHajVGnjaoi7KlkLktTXZ+e4bx9AD+KSesMhZ/aglmZAf+I90ZU0kCz3ES7F7t6
+         fDFtGjqpaWOp7RllrRWBd/MHY24YaUikbFvCe+eVUaN5LMHSg7AZNx1K4dmoQEbESK
+         omq6lelD8idiWvdBvZXuc9S1DnI2Ll3Aanju6yf7k2pCmGa+4s7nN5wt84Jwyq5ZQ7
+         m5ohv3dsQjeB8o+1IGB6CyKtPUK0Q+iMjSv8gpdsGW+3T69h+tlNSb4mGGlLbTkpqY
+         HBQlkeJp2FiT02pSXlOaUcUcVI2j9tZNjOg6ZZ4ok34t14t67vIbutIs93svt6nXvD
+         0OsGGkknSou3Q==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 7CB565C0622; Mon, 17 Oct 2022 06:39:41 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 06:39:41 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Hou Tao <houtao@huaweicloud.com>
+Cc:     bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
+        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
+        Yonghong Song <yhs@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         KP Singh <kpsingh@kernel.org>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Tejun Heo <tj@kernel.org>
-References: <20221014045619.3309899-1-yhs@fb.com>
- <20221014045640.3313008-1-yhs@fb.com>
-From:   Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <20221014045640.3313008-1-yhs@fb.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>, houtao1@huawei.com,
+        Delyan Kratunov <delyank@fb.com>, rcu@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 0/4] Remove unnecessary RCU grace period
+ chaining
+Message-ID: <20221017133941.GF5600@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221014113946.965131-1-houtao@huaweicloud.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221014113946.965131-1-houtao@huaweicloud.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-2022-10-13 21:56 UTC-0700 ~ Yonghong Song <yhs@fb.com>
-> Add support for new cgroup local storage
+On Fri, Oct 14, 2022 at 07:39:42PM +0800, Hou Tao wrote:
+> From: Hou Tao <houtao1@huawei.com>
 > 
-> Signed-off-by: Yonghong Song <yhs@fb.com>
-> ---
->  tools/bpf/bpftool/Documentation/bpftool-map.rst | 2 +-
->  tools/bpf/bpftool/map.c                         | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> Hi,
 > 
-> diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-> index 7f3b67a8b48f..4c591b10961e 100644
-> --- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
-> +++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-> @@ -55,7 +55,7 @@ MAP COMMANDS
->  |		| **devmap** | **devmap_hash** | **sockmap** | **cpumap** | **xskmap** | **sockhash**
->  |		| **cgroup_storage** | **reuseport_sockarray** | **percpu_cgroup_storage**
->  |		| **queue** | **stack** | **sk_storage** | **struct_ops** | **ringbuf** | **inode_storage**
-> -|		| **task_storage** | **bloom_filter** | **user_ringbuf** }
-> +|		| **task_storage** | **bloom_filter** | **user_ringbuf** | **cgroup_local_storage** }
->  
->  DESCRIPTION
->  ===========
-> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-> index 9a6ca9f31133..ab681dc65316 100644
-> --- a/tools/bpf/bpftool/map.c
-> +++ b/tools/bpf/bpftool/map.c
-> @@ -1459,7 +1459,7 @@ static int do_help(int argc, char **argv)
->  		"                 devmap | devmap_hash | sockmap | cpumap | xskmap | sockhash |\n"
->  		"                 cgroup_storage | reuseport_sockarray | percpu_cgroup_storage |\n"
->  		"                 queue | stack | sk_storage | struct_ops | ringbuf | inode_storage |\n"
-> -		"                 task_storage | bloom_filter | user_ringbuf }\n"
-> +		"                 task_storage | bloom_filter | user_ringbuf | cgroup_local_storage }\n"
->  		"       " HELP_SPEC_OPTIONS " |\n"
->  		"                    {-f|--bpffs} | {-n|--nomount} }\n"
->  		"",
+> Now bpf uses RCU grace period chaining to wait for the completion of
+> access from both sleepable and non-sleepable bpf program: calling
+> call_rcu_tasks_trace() firstly to wait for a RCU-tasks-trace grace
+> period, then in its callback calls call_rcu() or kfree_rcu() to wait for
+> a normal RCU grace period.
+> 
+> According to the implementation of RCU Tasks Trace, it inovkes
+> ->postscan_func() to wait for one RCU-tasks-trace grace period and
+> rcu_tasks_trace_postscan() inovkes synchronize_rcu() to wait for one
+> normal RCU grace period in turn, so one RCU-tasks-trace grace period
+> will imply one normal RCU grace period. To codify the implication,
+> introduces rcu_trace_implies_rcu_gp() in patch #1. And using it in patch
+> #2~#4 to remove unnecessary call_rcu() or kfree_rcu() in bpf subsystem.
+> Other two uses of call_rcu_tasks_trace() are unchanged: for
+> __bpf_prog_put_rcu() there is no gp chain and for
+> __bpf_tramp_image_put_rcu_tasks() it chains RCU tasks trace GP and RCU
+> tasks GP.
+> 
+> An alternative way to remove these unnecessary RCU grace period
+> chainings is using the RCU polling API to check whether or not a normal
+> RCU grace period has passed (e.g. get_state_synchronize_rcu()). But it
+> needs an unsigned long space for each free element or each call, and
+> it is not affordable for local storage element, so as for now always
+> rcu_trace_implies_rcu_gp().
+> 
+> Comments are always welcome.
 
-Thanks for the bpftool update!
+For #2-#4:
 
-Acked-by: Quentin Monnet <quentin@isovalent.com>
+Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
+
+(#1 already has my Signed-off-by, in case anyone was wondering.)
+
+> Change Log:
+> 
+> v2:
+>  * codify the implication of RCU Tasks Trace grace period instead of
+>    assuming for it
+> 
+> v1: https://lore.kernel.org/bpf/20221011071128.3470622-1-houtao@huaweicloud.com
+> 
+> Hou Tao (3):
+>   bpf: Use rcu_trace_implies_rcu_gp() in bpf memory allocator
+>   bpf: Use rcu_trace_implies_rcu_gp() in local storage map
+>   bpf: Use rcu_trace_implies_rcu_gp() for program array freeing
+> 
+> Paul E. McKenney (1):
+>   rcu-tasks: Provide rcu_trace_implies_rcu_gp()
+> 
+>  include/linux/rcupdate.h       | 12 ++++++++++++
+>  kernel/bpf/bpf_local_storage.c | 13 +++++++++++--
+>  kernel/bpf/core.c              |  8 +++++++-
+>  kernel/bpf/memalloc.c          | 15 ++++++++++-----
+>  kernel/rcu/tasks.h             |  2 ++
+>  5 files changed, 42 insertions(+), 8 deletions(-)
+> 
+> -- 
+> 2.29.2
+> 
