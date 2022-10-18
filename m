@@ -2,75 +2,143 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EA45C4332F
-	for <bpf@archiver.kernel.org>; Tue, 18 Oct 2022 14:26:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4151DC433FE
+	for <bpf@archiver.kernel.org>; Tue, 18 Oct 2022 14:38:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbiJRO0h (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 18 Oct 2022 10:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38234 "EHLO
+        id S231154AbiJROiI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Oct 2022 10:38:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231307AbiJRO0e (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 18 Oct 2022 10:26:34 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A4BC0981
-        for <bpf@vger.kernel.org>; Tue, 18 Oct 2022 07:26:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=lRhdHgCWUjXjv0masOFjK8upoM6QJK70D7oNOPh9QAI=; b=TvLOM0OA6hngiwG1n2tO/7kvkS
-        9fok2BOQXpzBCgenV5aH6IjXJWQEMV5dCFtqGHrIKve5rjIvDByHH+sKFDpY6K6Eo9UwSxsFyfS1E
-        WYgKZrdDVoiZfnQf7OOH4HhW87UiFfjrLBtF/2GbEDjCcusYtBE2vmRlZFNyO9GN4dKUqMNKDTgno
-        p3NH/zk2ePy2EG9vLC7IcDQtnU9ge5eK6gcubz/GV+VW5/hWvdIVJQeYzc8zy0z9Nc6HHfaeF3HD0
-        Qc+0rl6MT0XCeoedM2GkjIZUmA7OblJ0v/bxkaDARrAUu8XstJAQhhTAqQpH+L+PNi6Xtr4bch1wP
-        9k7yYuRA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oknXq-004VNx-Cs; Tue, 18 Oct 2022 14:26:14 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E70D1300202;
-        Tue, 18 Oct 2022 16:26:12 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D051C2129C235; Tue, 18 Oct 2022 16:26:12 +0200 (CEST)
-Date:   Tue, 18 Oct 2022 16:26:12 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Jiri Olsa <jolsa@kernel.org>
+        with ESMTP id S229966AbiJROiE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 18 Oct 2022 10:38:04 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF36C97CC;
+        Tue, 18 Oct 2022 07:38:01 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MsGcT5n69zKG7J;
+        Tue, 18 Oct 2022 22:35:37 +0800 (CST)
+Received: from k01.huawei.com (unknown [10.67.174.197])
+        by APP3 (Coremail) with SMTP id _Ch0CgBne11Guk5jh5e9AQ--.19076S2;
+        Tue, 18 Oct 2022 22:37:59 +0800 (CST)
+From:   Xu Kuohai <xukuohai@huaweicloud.com>
+To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>
-Subject: Re: [PATCH bpf] bpf: Fix dispatcher patchable function entry to 5
- bytes nop
-Message-ID: <Y063hLFH1JXtdg7Y@hirez.programming.kicks-ass.net>
-References: <20221018075934.574415-1-jolsa@kernel.org>
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
+Subject: [PATCH] libbpf: Avoid allocating reg_name with sscanf in parse_usdt_arg()
+Date:   Tue, 18 Oct 2022 10:55:38 -0400
+Message-Id: <20221018145538.2046842-1-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221018075934.574415-1-jolsa@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgBne11Guk5jh5e9AQ--.19076S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWFW8Xw4fuF1rKF17Kw1rJFb_yoW5Ar43pw
+        4Sgw1qvrn7J3ySga4DXanYq34UCrZrJrZYyr18ta45ZF4fWr95t34fKF4Fywn5GFW7AF4a
+        9F4rCryrGFy5Xr7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
+        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUOyCJDUUUU
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 09:59:34AM +0200, Jiri Olsa wrote:
-> The patchable_function_entry(5) might output 5 single nop
-> instructions (depends on toolchain), which will clash with
-> bpf_arch_text_poke check for 5 bytes nop instruction.
-> 
-> Adding early init call for dispatcher that checks and change
-> the patchable entry into expected 5 nop instruction if needed.
-> 
-> There's no need to take text_mutex, because we are using it
-> in early init call which is called at pre-smp time.
-> 
-> Fixes: ceea991a019c ("bpf: Move bpf_dispatcher function out of ftrace locations")
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+From: Xu Kuohai <xukuohai@huawei.com>
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+The reg_name in parse_usdt_arg() is used to hold register name, which
+is short enough to be held in a 16-byte array, so we could define
+reg_name as char reg_name[16] to avoid dynamically allocating reg_name
+with sscanf.
+
+Suggested-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+---
+ tools/lib/bpf/usdt.c | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
+
+diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+index 49f3c3b7f609..28fa1b2283de 100644
+--- a/tools/lib/bpf/usdt.c
++++ b/tools/lib/bpf/usdt.c
+@@ -1225,26 +1225,24 @@ static int calc_pt_regs_off(const char *reg_name)
+ 
+ static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec *arg)
+ {
+-	char *reg_name = NULL;
++	char reg_name[16];
+ 	int arg_sz, len, reg_off;
+ 	long off;
+ 
+-	if (sscanf(arg_str, " %d @ %ld ( %%%m[^)] ) %n", &arg_sz, &off, &reg_name, &len) == 3) {
++	if (sscanf(arg_str, " %d @ %ld ( %%%15[^)] ) %n", &arg_sz, &off, reg_name, &len) == 3) {
+ 		/* Memory dereference case, e.g., -4@-20(%rbp) */
+ 		arg->arg_type = USDT_ARG_REG_DEREF;
+ 		arg->val_off = off;
+ 		reg_off = calc_pt_regs_off(reg_name);
+-		free(reg_name);
+ 		if (reg_off < 0)
+ 			return reg_off;
+ 		arg->reg_off = reg_off;
+-	} else if (sscanf(arg_str, " %d @ %%%ms %n", &arg_sz, &reg_name, &len) == 2) {
++	} else if (sscanf(arg_str, " %d @ %%%15s %n", &arg_sz, reg_name, &len) == 2) {
+ 		/* Register read case, e.g., -4@%eax */
+ 		arg->arg_type = USDT_ARG_REG;
+ 		arg->val_off = 0;
+ 
+ 		reg_off = calc_pt_regs_off(reg_name);
+-		free(reg_name);
+ 		if (reg_off < 0)
+ 			return reg_off;
+ 		arg->reg_off = reg_off;
+@@ -1456,16 +1454,15 @@ static int calc_pt_regs_off(const char *reg_name)
+ 
+ static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec *arg)
+ {
+-	char *reg_name = NULL;
++	char reg_name[16];
+ 	int arg_sz, len, reg_off;
+ 	long off;
+ 
+-	if (sscanf(arg_str, " %d @ %ld ( %m[a-z0-9] ) %n", &arg_sz, &off, &reg_name, &len) == 3) {
++	if (sscanf(arg_str, " %d @ %ld ( %15[a-z0-9] ) %n", &arg_sz, &off, reg_name, &len) == 3) {
+ 		/* Memory dereference case, e.g., -8@-88(s0) */
+ 		arg->arg_type = USDT_ARG_REG_DEREF;
+ 		arg->val_off = off;
+ 		reg_off = calc_pt_regs_off(reg_name);
+-		free(reg_name);
+ 		if (reg_off < 0)
+ 			return reg_off;
+ 		arg->reg_off = reg_off;
+@@ -1474,12 +1471,11 @@ static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec
+ 		arg->arg_type = USDT_ARG_CONST;
+ 		arg->val_off = off;
+ 		arg->reg_off = 0;
+-	} else if (sscanf(arg_str, " %d @ %m[a-z0-9] %n", &arg_sz, &reg_name, &len) == 2) {
++	} else if (sscanf(arg_str, " %d @ %15[a-z0-9] %n", &arg_sz, reg_name, &len) == 2) {
+ 		/* Register read case, e.g., -8@a1 */
+ 		arg->arg_type = USDT_ARG_REG;
+ 		arg->val_off = 0;
+ 		reg_off = calc_pt_regs_off(reg_name);
+-		free(reg_name);
+ 		if (reg_off < 0)
+ 			return reg_off;
+ 		arg->reg_off = reg_off;
+-- 
+2.30.2
+
