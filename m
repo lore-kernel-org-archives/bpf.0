@@ -2,43 +2,43 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9FDDC433FE
-	for <bpf@archiver.kernel.org>; Tue, 18 Oct 2022 14:20:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16076C4332F
+	for <bpf@archiver.kernel.org>; Tue, 18 Oct 2022 14:20:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231475AbiJROUi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 18 Oct 2022 10:20:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46250 "EHLO
+        id S231325AbiJROUj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Oct 2022 10:20:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231325AbiJROUE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S231357AbiJROUE (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 18 Oct 2022 10:20:04 -0400
-Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00079.outbound.protection.outlook.com [40.107.0.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8804D17D;
-        Tue, 18 Oct 2022 07:19:52 -0700 (PDT)
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on20605.outbound.protection.outlook.com [IPv6:2a01:111:f400:7d00::605])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555C865570;
+        Tue, 18 Oct 2022 07:19:56 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=K4xziIUBuBaGktzomrzJda0hucjb86b5mP5kqlSeVPklEZcoJPcEh1QS6pMwqBIKlVwPxG/wpQpEVYma9m40Aw9/n3f3OIaLLwdBmo0CUz8mJgvR37hxDOGDbfNJtKgShrTu9B2NJI2OjiL1RqECd4Oo5k4IfnfIKogIUau8t1wPMQ0pH/g2kkC6lUIh3++0dM9D5MyD/tPF0lNiHRXds9tUnpasJ7Bm7lqcagbZ1UsO6lJn+W3c86VS8WMYMkwAooI1DQG7VGmq1NHThwZjRYb2K4TkdJSMCTtND0QbTRIH7w++ozsBM14furT7gW994mhk1jdhOeALG4zDLqhvHg==
+ b=PWZvrkwcvcyt7ZAl7M3ZQm5uPJPohLIGaYBLxH2YAgUJZec1eIWMrqK9z+/Kuwxy0YjnvhT4e4ir36DpIZv/1IIGDUKCDG99Xyww9cY5XtZKRcGql9qiuYJYsfZm+1eNb/ikniajCWj87pe1KrB0rdyOcwQL+a/IlM3OwYhjKB4CCFZ8RMWjvy68MZSylyrEaUqx0dg4j9RQF4UCq3csc7LrV7tM37IUvxBpBiTpd7ecg579qCqz028WcqENV2hdWqocH8jiVohoVmPUWvid3yqhJsvuw2IhcOtuaG/dJHa2KDJcAwrR4zAapV+LtkrRtgAsCfeQ+j40xWQDdBBNQQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xC0C739Qi88v+Z19lx7Ru9rwWXQ3k8zsB0B3ffB/ZnM=;
- b=ed5x07MVGYB4oUcbKfoFrhh4IecSFBoDfRb5oDVJeeWH9T2zBnLTa7QHxc+gvXPnaI6MoemLSZyXrI66x71Qd5K9mTmWUDRlJVL35s95abMe+VARV7bduiS2/j7ZVd/iAOctYXQNgCvglkKI8KTZwQgp1ezfJ9nNd6grUaa5s3goPaUazatDDTfucqLooyI2uYtKgXD9Xanoo4RY0ikJ27bsLzjzcwmQ3GEL6uATE0J7xFRh/AwJE8ZdbHCz0cqaCHwNE+MZAdW09NEMLsAURz3Gk9yrAMammJgLydKO32s9mq8/HIlJDFsYcu6jS+G6cKwOKHGqZNa64WyG1cX+8A==
+ bh=x1TmZeJseMcIuqfWQg3HnNJDVghovbT0imT0Y/vQZjw=;
+ b=IiOUSLx6tbeMmZ22f2t7iyFmscpqFqhpGjhBTCbgyBvzVj4TAsjidGDGfGlH1lAtPBvfTLL12EUfklngodhs1TSQYPGc7+Rz9KbghA08/NrWng8DZFK7XtrfFECZ6OM4w9ztYcPlzgAaa8sDk1kYY4BQkQnmIJu7G9SENfXC9HDAwSWhdzc0HWy1pDjKAbLGRW4I0wz11HMm5ZoRZOxt9wJ8WkAQy4N8A64bo3T8M4taMtWDYK3tnMSQlICrawOHXI66JYosIwiI2u7f+mrti+CUM1YXJES8s2aO1DwGALiq7OKuwQ6KCDNLeah5zniaAJbtxUvmBL5Z5pY45WQ1OQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xC0C739Qi88v+Z19lx7Ru9rwWXQ3k8zsB0B3ffB/ZnM=;
- b=UC/VsJOoCEQ6BLBeGCZU6o4QQhXEsPxSkXM2ZHPp5f7ZL38OUrB6Z7GaJRHGIqyJ8LoR5sCYejiNzkXEKWP0qs8C4oie2s6HIzQN//9hk8Dt0nefzuI9JS16q+3tf/MCdwAfzSg3/kQI/yK9FTC54u+a11gM/bFU4oyZUJhzezM=
+ bh=x1TmZeJseMcIuqfWQg3HnNJDVghovbT0imT0Y/vQZjw=;
+ b=Cdm0ONt7OZkcdY5EaHNVtzjwzHjegzEa7hL5yuHWubOuzXpNm3fa88cYy5kKOoPm2q09TLigWutt0ovoxzOfjGzmXOki5LGFU4vJjgq8Sv1RZyaFoxrKHDhcoHFFboR5W8mqN3ES7lMSYxQV0BsMWdHbPXftwjzBhl9GQt5Jp6Y=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from GV1PR04MB9055.eurprd04.prod.outlook.com (2603:10a6:150:1e::22)
- by DU2PR04MB9145.eurprd04.prod.outlook.com (2603:10a6:10:2f4::16) with
+ by AS8PR04MB8706.eurprd04.prod.outlook.com (2603:10a6:20b:429::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Tue, 18 Oct
- 2022 14:19:37 +0000
+ 2022 14:19:40 +0000
 Received: from GV1PR04MB9055.eurprd04.prod.outlook.com
  ([fe80::84a:2f01:9d76:3ff7]) by GV1PR04MB9055.eurprd04.prod.outlook.com
  ([fe80::84a:2f01:9d76:3ff7%7]) with mapi id 15.20.5723.033; Tue, 18 Oct 2022
- 14:19:37 +0000
+ 14:19:40 +0000
 From:   Ioana Ciornei <ioana.ciornei@nxp.com>
 To:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
@@ -48,9 +48,9 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org
-Subject: [PATCH net-next v3 06/12] net: dpaa2-eth: update the dpni_set_pools() API to support per QDBIN pools
-Date:   Tue, 18 Oct 2022 17:18:55 +0300
-Message-Id: <20221018141901.147965-7-ioana.ciornei@nxp.com>
+Subject: [PATCH net-next v3 08/12] net: dpaa2-eth: create and export the dpaa2_eth_alloc_skb function
+Date:   Tue, 18 Oct 2022 17:18:57 +0300
+Message-Id: <20221018141901.147965-9-ioana.ciornei@nxp.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221018141901.147965-1-ioana.ciornei@nxp.com>
 References: <20221018141901.147965-1-ioana.ciornei@nxp.com>
@@ -61,178 +61,141 @@ X-ClientProxiedBy: AS4PR10CA0002.EURPRD10.PROD.OUTLOOK.COM
  (2603:10a6:150:1e::22)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: GV1PR04MB9055:EE_|DU2PR04MB9145:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9f3dc672-e785-4ce5-802c-08dab113c94c
+X-MS-TrafficTypeDiagnostic: GV1PR04MB9055:EE_|AS8PR04MB8706:EE_
+X-MS-Office365-Filtering-Correlation-Id: 99aa3672-6715-4415-4852-08dab113cb3a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WWYCf35kG8Bm1V2qsqgU3kjm8Biya1wADyXnyY9GE0D6SgR/g51oCGK3SMQ6abcGTZUrvZnwMciNZ+o/3g+7HIKZCykZDFLYp73AvRZDx+oErnNp5gfVCFGeaExEGPd3op6xQWvJ6Hf85Wcir/CqN0mSsKttOyDLMuiPyePOjGEOryO0IehCY719S/P4LSse9HND7CS01IkzSWGSJwQLBWelwCvQH6A3A6N2R+rK1d7m8HXPBQaJXOHLcoyHwtvWITcszzPJxddoUk+R2XJmrG7k+pdDEJSi9bpCzThxlUZ3gsIsUhGz7pYGVQQXOjkZXM51PmhgIhSIvYp4qEWSuHl/8wLGc9Y0u8WWutjtpqzfzWaINbBPSQXTB9W2vCnstf5cD9dZsXel2jcFSXIsoTkuHCowV8HGfG45aOwhQMFt1UBQjOWTWl1VPNJs5W6HxOhucCXiAv5DhSWQ90Diyq/U9XZAAC3bcNVQaOHdhS49X8Ha+YvdAzznlapuDjnQUezTaihBV9Ns34LSHsJZOb6e7rwwZS3V+OPNero7M4zl2UVBqOmudUThJaLCXYJ88cvQzmx7jOfNSKHxiGwS6N1t86wtN7BAQYiDjnCsKYwyExioSm8OzrAKz2bBiq/EP5Myd5QNyXUGcSCSFsPGF2cvnR/mKHrRZxoa3WkhvUYTDqCzXRf7Aa8ycpB3eOarF00AJFNlvGTK22jiHkCcwUQ8wcHl3tV2HaWJKfWhs80fzbE4PX+XTgJu+e5sgey8r3GIXqqp57/lA3tLg8hh+A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV1PR04MB9055.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(136003)(376002)(346002)(39860400002)(451199015)(83380400001)(110136005)(6486002)(54906003)(6506007)(478600001)(26005)(36756003)(2906002)(44832011)(6512007)(38350700002)(38100700002)(316002)(4326008)(6666004)(8676002)(186003)(66556008)(15650500001)(52116002)(7416002)(41300700001)(8936002)(5660300002)(2616005)(66476007)(86362001)(66946007)(1076003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: NIQrAM2ozczI0/0wQ263j9Est05xR2osBxl7mStPvG0iON0OwNtK3R//5SD4doUyfv8IwA+HT2eJs/Cz6hu2AsU5qDG2movhJzExsEN5SDLRbHe+ik7GI7UMd+E8KhC7BBsNl8H+7p0zmcnrjPak9HZPWBprU7rE3KSpk5t8BHDQeLVL84t1tXYbir3HZWKpPezp9t5pq5icF720CQQtQVFp2ENC8Uf+eMAM304rDIqat9gMpMCcZ6zBX9naV94IvWWpuQ93MJtSS9CS9aZ0qXZf7niSNRnlnAyFLChbR8gXhz0/4FDCbgAmH4LFjmrG29P/Y8PKgEGxGCBHj8ubwLnGz0VjetF1gpDZnO+wdRm56q+g8y51wR/gd+Vlob7oyYiqWdhdcqZvgLShu4oaLk+v6GwHqFeOmDehbkOC3YI1UZ4ROf/iYKV/aJGQNaFcsOTdxRilLeeKIvTCitt44pMjaxWu92ir1Pb/gswQ3rc/VS/nHdf3LZARoOGmtHTVfmSADz1iS+xTH2jrLFE5dTWc4dCBeQ/LpESkCiogpfkWTeXCNm0L2NEpKhTqFlAfWVOAn1xVwtJbixQjlRtSJVH1DFjNpy6rV/6yAf1CtGoATAqat3GykotSyeidWBrbotIY3//otxHvfepfDJtju7JN7QiLVjmcUJ9Q6fvJEXFwC2vxZba1L1fwhxRx83k1ta/uymWVuk5HhX+jpKn2vkYIpZe6to82I/FeBGE+/LTHlThY06SSBwySCY9xOGVabsOrAvKR4BKCNrcmQGHUVw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV1PR04MB9055.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(396003)(376002)(346002)(366004)(451199015)(36756003)(86362001)(7416002)(5660300002)(44832011)(38100700002)(2906002)(38350700002)(186003)(2616005)(1076003)(83380400001)(26005)(6506007)(316002)(478600001)(6486002)(110136005)(54906003)(6512007)(41300700001)(66476007)(66556008)(66946007)(52116002)(4326008)(8936002)(6666004)(8676002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Lvgnn5wUcAm4/HVBQz6KOwePv6lpJ/6XaS5CCwUFO/YWVgTczyQdcHd4Py7L?=
- =?us-ascii?Q?YzPZb7QFumBLgk4bEFGpo79EIViOzGEhl00FReYc7jUi1Nv7S7kUictuf1JS?=
- =?us-ascii?Q?G+yKs7RK2MxIjIvUwLUWxi1HRGQbkKW6eP3zXmw9OPOppsTp38oguOsFa3TO?=
- =?us-ascii?Q?RxwojpaA3ggLtlifeYfzfauLP6YmGhDoguBLSIwiJRVe76AYyIQXUQlvLxez?=
- =?us-ascii?Q?ZvJ3fpBhfjJRO2LaZWAR6MxiQYeW0qCoZh07v/1icylwoo0mb//RDgFAthOo?=
- =?us-ascii?Q?O+4WSjw8jMjZ42UAMZlW6TeLf/aw6csuWCSbusPH0fShVzKC6Rd8L6IDoU0L?=
- =?us-ascii?Q?45NkvIv2Jfssow7kFXrnc9qZTt6wvItvdhtnGM/Mj2ISdbS7b7VyXBwAPENp?=
- =?us-ascii?Q?PeIBYengXmoCZe/QUDZWCgkY+ZIm2HeHNcB1eGSQ7t3N/jmK3vR2zMxAfsLS?=
- =?us-ascii?Q?IyqQM5NlxVWWaGmeHULsm3ctt0qL1dDlntZQpcsgxuusaSAlMgH39hkwpQeC?=
- =?us-ascii?Q?ZyLnteiThOsCQawA56bG3r8RlKx/C7ZAePI5Jh30H33eTFSz49lS0heOHfUl?=
- =?us-ascii?Q?Fcs+ozc24nyQ/1hsX9j/qXnwbN36DHjIAxyQceCpdDu+1zXM/eVZGAJ96C6j?=
- =?us-ascii?Q?30Irq6qDw0oUfqDTJWBAr7tVRQTspF2AkMGg8OCUmObNidFN7bQwLW+7doBY?=
- =?us-ascii?Q?rZbAXLmRORtbPy95mLT/mQRRrNr3YP+57//8IACucFpTpAwg5CMywnaeA+Li?=
- =?us-ascii?Q?6e5qfZKcl93QwHnyXPxbYRZFy6EOBnvVMEloseoZ+8RYFfy7MIjx6v+tVFm7?=
- =?us-ascii?Q?FO0VwrqgfvGug1QZhsmJ3HQzzKgmILTSMDJ2LTjRHeUSCIX43sK8yTZjiNmO?=
- =?us-ascii?Q?TuMPLzAlThB0C8ELwZWB6FBAzRuhGTMq/gTxpHxYxgJLEblbupIfIy7KrqWe?=
- =?us-ascii?Q?KxqRqA2iCA/jpR/u7/MtaPyCnftfDauXPUMHSEMy+pAPK2uI1ldPzq05lmUd?=
- =?us-ascii?Q?FCjA1eC6FQ8s1aBWXsnUV9W95y4PA6ubzKNWufHS5YvExOyN/D/AOUx8cWnU?=
- =?us-ascii?Q?mpSO511JnonBwNCzpkzweFeMyz2dz1uK/bFG7UyDXr9GXt+qXXauXV59H9aS?=
- =?us-ascii?Q?IzHhzyiOSHXP8AhT6OIU6ane6D1nD4mmnP3u5mQevgGQRKXVPTYm8c/GbVnc?=
- =?us-ascii?Q?ZWVq2gnGz+YIl3p72Qtx5oVJNScLxqCfbrhuz8Qsy1MpqgCZzwTYz7ZPA3Ya?=
- =?us-ascii?Q?wUIBCBPRsW7FlEcpPhx1CTKlBiXSEBgEbp4FN9bsQGDVxD515eFzl81z9Kvn?=
- =?us-ascii?Q?y7oEJvwRWd83zGREG1EKz/kAf/CalBoBn2K8STgUFXZm3mieMkOAUlgY+eN4?=
- =?us-ascii?Q?/XwC8iQmLVobtDdcCcXB75WfBN4qN3jny7ff6xl9GFBNi8mh/Ji7SVmhBS/0?=
- =?us-ascii?Q?CpPr3n9jRzpbHGN/hLw3zMWHNropdj5+0wSg0JDKryhhh4KqFkJcBuuRygOB?=
- =?us-ascii?Q?a6Jt3vJ/MLg8l85lOiacNQW1pmArwFaDcT3eykHZad1OzkjSIrVIw0pGc0Ju?=
- =?us-ascii?Q?cPweruqYz74v50BGKwh45wkonXWn4CIHFD4D7ZK6?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LjjgHm7IBTjf4py8JJHzJzQPn73uFkl26x/vrJTVHZwI0ASC+eiwSxPYq//f?=
+ =?us-ascii?Q?0+3niN+RbTz/s5b8ZcyYgr9r7R/8V+RiTVmoVMrDqs+EFiaJ69LEv1qHkEhh?=
+ =?us-ascii?Q?ILQ/hhEsi7/H+eBpppgmpbYO0IU+k2bDt1iYenu9ve1wy6roJaF+OuekGfDC?=
+ =?us-ascii?Q?JmLxtMDAy+NOwjgpytBF3UbAokNMudvuf5xFKa6h2kZGR7jtrkbwAkfLzWXQ?=
+ =?us-ascii?Q?NaRRBzupAq5eU2ugg4BbWHXl5t5aDkp/zPR7WF4c1IexRqCaq8yEqJ2EtEK2?=
+ =?us-ascii?Q?/hiyxJSWl1JQOugK720aRpsYiiCSkzhEL0/N6yxMQHilCeqSxw2vr5SYQqa9?=
+ =?us-ascii?Q?IlevLcJuww8d0JAf0DiBjYBhYeM6TVz32bV3cwzrcVyWjc9fI4RJMFRdBnRA?=
+ =?us-ascii?Q?kQ65uWYIAxnmbnmm5xURIycubQIUHoZ+4YID2jpjeFs0Q2vm90WBL/DnL8Mm?=
+ =?us-ascii?Q?9AB3Jr0PQG2Ar8ztKB3RQ3rdyKlffd+KxyY89CSZZrHQ0yor4W8ZLvniMUre?=
+ =?us-ascii?Q?1Bh31wVePsfFavBRQPkw7b3RjLaqUNMp+Cckmak7hckgm09hyrl8z/PIFTDZ?=
+ =?us-ascii?Q?so6hhaajgJexo/d5BtXgZ6dX83JXn97cRx+svFxuEE0k1Jp+33wrxOKC1pN3?=
+ =?us-ascii?Q?8IPlFjyXdBsCoNtZpoIOFDd4i4Go1dLRT2IOij96z/1APQpwB4dRf5OTQ6Rw?=
+ =?us-ascii?Q?auC3vwW1tPu8DsalgFKpcytipLTrQZOsN5/tIWd68bNbPdc773RHq8E8TCzd?=
+ =?us-ascii?Q?9sdzr030jdTaaTvQg54I0lh16ico+XHlBggNuQr7D3qTJbRKPOnG0Kk73IRn?=
+ =?us-ascii?Q?Y06ODgpvbJjDQgh0fIIWbK+zF83zrK1qWBeFlcKpXUoqVfGsetcatOWCuzPn?=
+ =?us-ascii?Q?FTkhTv6Nt+b82c35VJda+W0EbYwMnQudpgy0e7CuArio0LDMd6bp6GNGV38t?=
+ =?us-ascii?Q?kV3PsqWYq1cWwGQ6F1tyjBDvTIlOGlmFk8ZtFfDWn5WwmwjNohIkcOyh818Y?=
+ =?us-ascii?Q?E//bTNiQ5j17wmaBN+Hd2NOo/b+7VxjTNbbiYMApXI4A8o1faw/elSZyPLua?=
+ =?us-ascii?Q?Qu9aa0TNiAnmULw8yGSPc/Gmcj65BH4RAaOiA1cWG1XPD0dN58jIBGjIAMo1?=
+ =?us-ascii?Q?sloeE12fhtrDCKExWuYWXl92l5EX3xBmAXNxqhEV6RQRUP6I4bJ6bz3xxcoo?=
+ =?us-ascii?Q?I5ENMQv4O1jWebt9HoHmoetGB7XwPEj56bpCFOKxxxxTfZYlaMpl0QG+Vfy1?=
+ =?us-ascii?Q?aNIugPs0yzqVuBT36sRVclzECp2S2ph1xquJkmzS1n3dpEQV+dT0DY1+tfyi?=
+ =?us-ascii?Q?PxHKhES4NCdlCRTjaLVRERdG2ZbVM+GX//XLnDLu/BbEDwROF/M6tvZ3RZ9/?=
+ =?us-ascii?Q?AMxKYlRKmTwL/Z79dXewigWgxiAZtyyPtNQ7M6W6WSO1VZ5KYsMcOBN1negW?=
+ =?us-ascii?Q?y+jU944M3tzlKNq6qFAjUPBAfR7gHYM/IiPWZozVD+alO2YIi/FvsHxf+wtl?=
+ =?us-ascii?Q?AtfVZCtSu9wHy10OotZfc9w5ZJCOe2pWNACKgjrXqtb5c1ZybqWoAVaANkyb?=
+ =?us-ascii?Q?bmud59yUUX5lWb6uNKN9/1H5OPlJv20s9omPgG2+CEdOKQ6y2CqgyXhWIFAY?=
+ =?us-ascii?Q?Tw=3D=3D?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9f3dc672-e785-4ce5-802c-08dab113c94c
+X-MS-Exchange-CrossTenant-Network-Message-Id: 99aa3672-6715-4415-4852-08dab113cb3a
 X-MS-Exchange-CrossTenant-AuthSource: GV1PR04MB9055.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Oct 2022 14:19:36.7637
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Oct 2022 14:19:40.0466
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MZIbBl6/wGmOKr6ktl8xPJYWgtAM7LA6AoaKZMjnH1uGPdnoIiO07CUk5jWiVXSUa0niQPR54uv4yVWD5rdsmw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB9145
+X-MS-Exchange-CrossTenant-UserPrincipalName: YQhXZoQiCbx0xQPSvDd9NxpFG0/EeyK3LjmTirSicnCazhsggasliBjDMofLYuJCiV0fVa7vpcf3I/zyFOJlog==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8706
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 From: Robert-Ionut Alexa <robert-ionut.alexa@nxp.com>
 
-Update the dpni_set_pool() firmware API so that in the next patches we
-can configure per Rx queue (per QDBIN) buffer pools.
-This is a hard requirement of the AF_XDP, thus we need the newer API
-version.
+The dpaa2_eth_alloc_skb() function is added by moving code from the
+dpaa2_eth_copybreak() previously defined function. What the new API does
+is to allocate a new skb, copy the frame data from the passed FD to the
+new skb and then return the skb.
+Export this new function since we'll need the this functionality also
+from the XSK code path.
 
 Signed-off-by: Robert-Ionut Alexa <robert-ionut.alexa@nxp.com>
 Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
 ---
 Changes in v2:
- - use __le16 instead of u16 for the dpbp_id field
+ - none
 Changes in v3:
  - none
 
- .../net/ethernet/freescale/dpaa2/dpni-cmd.h   | 19 +++++++++++++------
- drivers/net/ethernet/freescale/dpaa2/dpni.c   |  6 +++++-
- drivers/net/ethernet/freescale/dpaa2/dpni.h   |  9 +++++++++
- 3 files changed, 27 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/net/ethernet/freescale/dpaa2/dpni-cmd.h b/drivers/net/ethernet/freescale/dpaa2/dpni-cmd.h
-index 828f538097af..be9492b8d5dc 100644
---- a/drivers/net/ethernet/freescale/dpaa2/dpni-cmd.h
-+++ b/drivers/net/ethernet/freescale/dpaa2/dpni-cmd.h
-@@ -13,10 +13,12 @@
- #define DPNI_VER_MINOR				0
- #define DPNI_CMD_BASE_VERSION			1
- #define DPNI_CMD_2ND_VERSION			2
-+#define DPNI_CMD_3RD_VERSION			3
- #define DPNI_CMD_ID_OFFSET			4
+ .../net/ethernet/freescale/dpaa2/dpaa2-eth.c  | 25 +++++++++++++------
+ .../net/ethernet/freescale/dpaa2/dpaa2-eth.h  |  5 ++++
+ 2 files changed, 22 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
+index b95e9a7123e0..9909fdf084e3 100644
+--- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
++++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
+@@ -485,19 +485,15 @@ static u32 dpaa2_eth_run_xdp(struct dpaa2_eth_priv *priv,
+ 	return xdp_act;
+ }
  
- #define DPNI_CMD(id)	(((id) << DPNI_CMD_ID_OFFSET) | DPNI_CMD_BASE_VERSION)
- #define DPNI_CMD_V2(id)	(((id) << DPNI_CMD_ID_OFFSET) | DPNI_CMD_2ND_VERSION)
-+#define DPNI_CMD_V3(id)	(((id) << DPNI_CMD_ID_OFFSET) | DPNI_CMD_3RD_VERSION)
+-static struct sk_buff *dpaa2_eth_copybreak(struct dpaa2_eth_channel *ch,
+-					   const struct dpaa2_fd *fd,
+-					   void *fd_vaddr)
++struct sk_buff *dpaa2_eth_alloc_skb(struct dpaa2_eth_priv *priv,
++				    struct dpaa2_eth_channel *ch,
++				    const struct dpaa2_fd *fd, u32 fd_length,
++				    void *fd_vaddr)
+ {
+ 	u16 fd_offset = dpaa2_fd_get_offset(fd);
+-	struct dpaa2_eth_priv *priv = ch->priv;
+-	u32 fd_length = dpaa2_fd_get_len(fd);
+ 	struct sk_buff *skb = NULL;
+ 	unsigned int skb_len;
  
- #define DPNI_CMDID_OPEN					DPNI_CMD(0x801)
- #define DPNI_CMDID_CLOSE				DPNI_CMD(0x800)
-@@ -39,7 +41,7 @@
- #define DPNI_CMDID_GET_IRQ_STATUS			DPNI_CMD(0x016)
- #define DPNI_CMDID_CLEAR_IRQ_STATUS			DPNI_CMD(0x017)
+-	if (fd_length > priv->rx_copybreak)
+-		return NULL;
+-
+ 	skb_len = fd_length + dpaa2_eth_needed_headroom(NULL);
  
--#define DPNI_CMDID_SET_POOLS				DPNI_CMD(0x200)
-+#define DPNI_CMDID_SET_POOLS				DPNI_CMD_V3(0x200)
- #define DPNI_CMDID_SET_ERRORS_BEHAVIOR			DPNI_CMD(0x20B)
+ 	skb = napi_alloc_skb(&ch->napi, skb_len);
+@@ -514,6 +510,19 @@ static struct sk_buff *dpaa2_eth_copybreak(struct dpaa2_eth_channel *ch,
+ 	return skb;
+ }
  
- #define DPNI_CMDID_GET_QDID				DPNI_CMD(0x210)
-@@ -115,14 +117,19 @@ struct dpni_cmd_open {
- };
- 
- #define DPNI_BACKUP_POOL(val, order)	(((val) & 0x1) << (order))
++static struct sk_buff *dpaa2_eth_copybreak(struct dpaa2_eth_channel *ch,
++					   const struct dpaa2_fd *fd,
++					   void *fd_vaddr)
++{
++	struct dpaa2_eth_priv *priv = ch->priv;
++	u32 fd_length = dpaa2_fd_get_len(fd);
 +
-+struct dpni_cmd_pool {
-+	__le16 dpbp_id;
-+	u8 priority_mask;
-+	u8 pad;
-+};
++	if (fd_length > priv->rx_copybreak)
++		return NULL;
 +
- struct dpni_cmd_set_pools {
--	/* cmd word 0 */
- 	u8 num_dpbp;
- 	u8 backup_pool_mask;
--	__le16 pad;
--	/* cmd word 0..4 */
--	__le32 dpbp_id[DPNI_MAX_DPBP];
--	/* cmd word 4..6 */
-+	u8 pad;
-+	u8 pool_options;
-+	struct dpni_cmd_pool pool[DPNI_MAX_DPBP];
- 	__le16 buffer_size[DPNI_MAX_DPBP];
- };
- 
-diff --git a/drivers/net/ethernet/freescale/dpaa2/dpni.c b/drivers/net/ethernet/freescale/dpaa2/dpni.c
-index 6c3b36f20fb8..02601a283b59 100644
---- a/drivers/net/ethernet/freescale/dpaa2/dpni.c
-+++ b/drivers/net/ethernet/freescale/dpaa2/dpni.c
-@@ -173,8 +173,12 @@ int dpni_set_pools(struct fsl_mc_io *mc_io,
- 					  token);
- 	cmd_params = (struct dpni_cmd_set_pools *)cmd.params;
- 	cmd_params->num_dpbp = cfg->num_dpbp;
-+	cmd_params->pool_options = cfg->pool_options;
- 	for (i = 0; i < DPNI_MAX_DPBP; i++) {
--		cmd_params->dpbp_id[i] = cpu_to_le32(cfg->pools[i].dpbp_id);
-+		cmd_params->pool[i].dpbp_id =
-+			cpu_to_le16(cfg->pools[i].dpbp_id);
-+		cmd_params->pool[i].priority_mask =
-+			cfg->pools[i].priority_mask;
- 		cmd_params->buffer_size[i] =
- 			cpu_to_le16(cfg->pools[i].buffer_size);
- 		cmd_params->backup_pool_mask |=
-diff --git a/drivers/net/ethernet/freescale/dpaa2/dpni.h b/drivers/net/ethernet/freescale/dpaa2/dpni.h
-index 6fffd519aa00..5c0a1d5ac934 100644
---- a/drivers/net/ethernet/freescale/dpaa2/dpni.h
-+++ b/drivers/net/ethernet/freescale/dpaa2/dpni.h
-@@ -92,19 +92,28 @@ int dpni_close(struct fsl_mc_io	*mc_io,
- 	       u32		cmd_flags,
- 	       u16		token);
- 
-+#define DPNI_POOL_ASSOC_QPRI	0
-+#define DPNI_POOL_ASSOC_QDBIN	1
++	return dpaa2_eth_alloc_skb(priv, ch, fd, fd_length, fd_vaddr);
++}
 +
- /**
-  * struct dpni_pools_cfg - Structure representing buffer pools configuration
-  * @num_dpbp: Number of DPBPs
-+ * @pool_options: Buffer assignment options.
-+ *	This field is a combination of DPNI_POOL_ASSOC_flags
-  * @pools: Array of buffer pools parameters; The number of valid entries
-  *	must match 'num_dpbp' value
-  * @pools.dpbp_id: DPBP object ID
-+ * @pools.priority: Priority mask that indicates TC's used with this buffer.
-+ *	If set to 0x00 MC will assume value 0xff.
-  * @pools.buffer_size: Buffer size
-  * @pools.backup_pool: Backup pool
-  */
- struct dpni_pools_cfg {
- 	u8		num_dpbp;
-+	u8		pool_options;
- 	struct {
- 		int	dpbp_id;
-+		u8	priority_mask;
- 		u16	buffer_size;
- 		int	backup_pool;
- 	} pools[DPNI_MAX_DPBP];
+ /* Main Rx frame processing routine */
+ static void dpaa2_eth_rx(struct dpaa2_eth_priv *priv,
+ 			 struct dpaa2_eth_channel *ch,
+diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.h b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.h
+index bb0881e7033b..7c46ec37b29a 100644
+--- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.h
++++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.h
+@@ -791,4 +791,9 @@ struct dpaa2_eth_trap_item *dpaa2_eth_dl_get_trap(struct dpaa2_eth_priv *priv,
+ 
+ struct dpaa2_eth_bp *dpaa2_eth_allocate_dpbp(struct dpaa2_eth_priv *priv);
+ void dpaa2_eth_free_dpbp(struct dpaa2_eth_priv *priv, struct dpaa2_eth_bp *bp);
++
++struct sk_buff *dpaa2_eth_alloc_skb(struct dpaa2_eth_priv *priv,
++				    struct dpaa2_eth_channel *ch,
++				    const struct dpaa2_fd *fd, u32 fd_length,
++				    void *fd_vaddr);
+ #endif	/* __DPAA2_H */
 -- 
 2.25.1
 
