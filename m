@@ -2,137 +2,140 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25CC2C433FE
-	for <bpf@archiver.kernel.org>; Tue, 18 Oct 2022 18:24:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 692AFC43217
+	for <bpf@archiver.kernel.org>; Tue, 18 Oct 2022 18:26:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbiJRSYP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 18 Oct 2022 14:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42946 "EHLO
+        id S229756AbiJRS0n (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Oct 2022 14:26:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbiJRSXr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 18 Oct 2022 14:23:47 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFBA588DD4
-        for <bpf@vger.kernel.org>; Tue, 18 Oct 2022 11:23:23 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 126-20020a630284000000b0043942ef3ac7so8479654pgc.11
-        for <bpf@vger.kernel.org>; Tue, 18 Oct 2022 11:23:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tQmq9UzNO8/vpVEaRPhIfDjBEjrQBce6+yHluipsWs8=;
-        b=iOz4xb6iC2gHx1KFSZp9OpL8tO7q9fl+7BL5RAeSEv2WTiyOwwLwp1/uEFZs2SkMC/
-         Fcg1V2Pkyv7hVH+Z6FKwXEd6Ms34hV+yS7Pe8pkdNJdu661oAIpV2PikS8T+xxJtB7HR
-         LEcIfGzZqhzZULKDwi7Ll8tY8A8rw9dHXClwiDQ0Q/6rTCwbG+XH9AQ7+SA8pwsGUi8t
-         Z5JA5mz+7Dw1sX3zwdC+bYDsFWZfJ2pUQJExBYC33hxDxX8Ik+fEfuDIDRrYmcQRZ6DY
-         XYDU/XWd+4/u9XBFScmVwOFJYkMidPsriTo+mvG+FaKV5ifKTOcZNc6otEMcKVJc7hjt
-         iu5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tQmq9UzNO8/vpVEaRPhIfDjBEjrQBce6+yHluipsWs8=;
-        b=cKdMrweEyKonlE6kvjQHbHu0ZhEbZDWt0TFo8PeYz73P0MeldOKO37qzmkB4s4sLQ9
-         v5lKv3LHxDlalrW8eb7SqMZaUy2lAnjIXKeT6PnVTrRpSIvVhjj+QBuf44jDuyLvckvi
-         CqDdC2r2WQCSFjuWrgoHDp9QP9wSHqOKtQqvBxdFYeaoPe/+RKXuEDleZjRldJ19b1jW
-         87fZ7c8KwE5FnGhGi88d0AgbiC29OQB8kr7M/5XdWVSUAgBjyG6+4e+XfCV9fKS90Oyi
-         Mq4/iGkTj3op66O1SlRwBtrLza9jbbOWUyyXCVkVYJoVDv9XblqIdxizKD5hVg2BRuKQ
-         s0EQ==
-X-Gm-Message-State: ACrzQf361ammc0Ybs9c1DiXXRPzfyDDRAHyZ7b+9vRN8RnB18FQajEtl
-        uFcnAjf2WWnYl1Z8Q3Xv3Wbj/lU=
-X-Google-Smtp-Source: AMsMyM7/nYZh0LdADEN+Racs+MemJDU1EWmwxhvm2vIczehsYmVIbpMTrReEUwhaO1TWM4T0PlXqEZA=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a05:6a00:2305:b0:565:60b0:40d9 with SMTP id
- h5-20020a056a00230500b0056560b040d9mr4480046pfh.77.1666117403213; Tue, 18 Oct
- 2022 11:23:23 -0700 (PDT)
-Date:   Tue, 18 Oct 2022 11:23:21 -0700
-In-Reply-To: <20221018122708.823792-1-jolsa@kernel.org>
-Mime-Version: 1.0
-References: <20221018122708.823792-1-jolsa@kernel.org>
-Message-ID: <Y07vGVPIf913gND8@google.com>
-Subject: Re: [PATCH] x86: Include asm/ptrace.h in syscall_wrapper header
-From:   sdf@google.com
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Akihiro HARAI <jharai0815@gmail.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, Hao Luo <haoluo@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+        with ESMTP id S229490AbiJRS0m (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 18 Oct 2022 14:26:42 -0400
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F84CB7EB;
+        Tue, 18 Oct 2022 11:26:40 -0700 (PDT)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@strlen.de>)
+        id 1okrIT-0002Yh-EO; Tue, 18 Oct 2022 20:26:37 +0200
+Date:   Tue, 18 Oct 2022 20:26:37 +0200
+From:   Florian Westphal <fw@strlen.de>
+To:     bpf@vger.kernel.org
+Cc:     netfilter-devel <netfilter-devel@vger.kernel.org>
+Subject: netfilter+bpf road ahead
+Message-ID: <20221018182637.GA4631@breakpoint.cc>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 10/18, Jiri Olsa wrote:
-> From: Jiri Olsa <olsajiri@gmail.com>
+Hello,
 
-> With just the forward declaration of the 'struct pt_regs' in
-> syscall_wrapper.h, the syscall stub functions:
+This is a summary of what Alexei Starovoitov and myself talked about
+in our meeting in Zurich.  Most of this was written by Alexei, with
+minor edits and additions from me.
 
->    __[x64|ia32]_sys_*(struct pt_regs *regs)
+- Alexei and Florian met in Zurich to discuss netfilter and bpf.
+  netfilter (core, ipables, ebtables, nftables ...) all take heavy
+  performance hits on retpoline enabled kernels due to
+  indiscriminate use of indirect calls.
+  Over the years nftables grew a large number of workarounds to keep
+acceptable performance for common case.
+  In few places indirect calls were replaced with large if (tgt ==
+&fn1) fn1(); else if (tgt == &fn2) fn2(); else ...
+  [link1](https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git/tree/net/netfilter/nf_tables_core.c#n256)
+  [link2](https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git/tree/net/netfilter/nf_tables_core.c#n198)
+  In other place a set of giant switch statements were used.
+  [link](https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git/tree/net/netfilter/nft_meta.c#n309)
+  The 3rd bottleneck couldn't be done with either if-s or switch and
+Florian proposed to accelerate it with [generated bpf
+code](https://lore.kernel.org/bpf/20221005141309.31758-1-fw@strlen.de/).
+  The NFT VM wasn't flexible enough either. Despite large engineering
+investment it still lacks some abilities that are needed for feature
+parity with iptables.
+RHEL and Fedora changed the iptables default to iptables-nft, but
+iptables-nft implements feature parity with ipables by calling into the
+x_tables modules.  This needs two indirect calls for each match
+(call to nft_compat expression, then call to the xtables target or
+ match function).
+iptables-nft can be changed gradually to replace matches with nft-native
+expressions to avoid this.
+But in some cases the modules/targets have a feature that
+cannot be emulated with the existing nft vm.
 
-> will have different definition of 'regs' argument in BTF data
-> based on which object file they are defined in.
+One example is ability to only store parts of skb->mark.
+The nft grammar would allow to do:
 
-> If the syscall's object includes 'struct pt_regs' definition,
-> the BTF argument data will point to 'struct pt_regs' record,
-> like:
+ct mark set (ct mark & 0xffffff00) | (meta mark & 0xff)
 
->    [226] STRUCT 'pt_regs' size=168 vlen=21
->           'r15' type_id=1 bits_offset=0
->           'r14' type_id=1 bits_offset=64
->           'r13' type_id=1 bits_offset=128
->    ...
+... which would stash the lower 8bit of skb->mark while keeping
+the upper 24 bits of the connmark intact.
 
-> If not, it will point to fwd declaration record:
+But neither frontend or backend (kernel) can handle it, because it needs
+support for:
 
->    [15439] FWD 'pt_regs' fwd_kind=struct
+  regA = regB | regC
 
-> and make bpf tracing program hooking on those functions unable
-> to access fields from 'struct pt_regs'.
+nf_tables only allows
+  regA = regB BINOP VALUE.
 
-Is the core issue here is that we can't / don't resolve FWD declarations
-at load time (or dedup time)? I'm assuming 'struct pt_regs' is still
-exposed somewhere in BTF via some other obj file, it's just those
-syscall definitions that have FWD decl?
+In the example given above, the problem is the right hand side
+of the OR -- its not a constant value.
 
-Applying this patch seems fine for now, but also seems fragile. Should
-we instead/also teach verifier/dedup/whatever to resolve those FWD
-declarations?
+ct mark set (ct mark & 0xffffff00) | 1
 
-> Including asm/ptrace.h directly in syscall_wrapper.h to make
-> sure all syscalls see 'struct pt_regs' definition and resulted
-> BTF for '__*_sys_*(struct pt_regs *regs)' functions point to
-> actual struct, not just forward declaration.
+... would work.
 
-> Reported-by: Akihiro HARAI <jharai0815@gmail.com>
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->   arch/x86/include/asm/syscall_wrapper.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+Patches that allow two source registers are floating around on mailing
+list but have not been applied so far.
 
-> diff --git a/arch/x86/include/asm/syscall_wrapper.h  
-> b/arch/x86/include/asm/syscall_wrapper.h
-> index 59358d1bf880..fd2669b1cb2d 100644
-> --- a/arch/x86/include/asm/syscall_wrapper.h
-> +++ b/arch/x86/include/asm/syscall_wrapper.h
-> @@ -6,7 +6,7 @@
->   #ifndef _ASM_X86_SYSCALL_WRAPPER_H
->   #define _ASM_X86_SYSCALL_WRAPPER_H
+Some customers use xt_bpf with either classic_bf or ebpf, so Florian proposed
+nft->ebpf, but Daniel Borkmann and Alexei argued against.
+The key promise of NFT was flexible packet parsing. Turns out that there
+are users that would benefit from programmable parsing, e.g. to extract
+sni from certificates or hostnames from DNS replies.
 
-> -struct pt_regs;
-> +#include <asm/ptrace.h>
+After many hours of brainstorming we came up with the plan:
+ - cleanup and land bpf generator to accelerate one of nf bottlenecks.
+ - introduce new stable BPF_PROG_TYPE_NETFILTER. Alexeis preference
+was to avoid new prog types and use unstable hooks,
+but iptables are scoped by network namespaces. We could use
+xdp_dispatcher-like generator to demux bpf prog per netns,
+but netns removal automatically flushes iptable rules, so netns
+would need to know about this bpf dispatcher and unload
+bpf-netfilter prog. At that point the amount of user facing
+"implementation details" becomes so large that calling
+such hooks "unstable" isn't realistic.
+- return values from this prog type will be existing netfilter codes
+except NF_STOLEN.
+- allow BPF_PROG_TYPE_NETFILTER to attach to all netfilter/iptables
+hooks where program context will be uapi 'struct bpf_netfilter'
+At that point the stable part of the interface ends. From input
+context the program will be able to access skb, socket, nents, netdev
+pointers and read them with the help of CO-RE and BTF.
+- attach uapi will be done either with bpf_link and FD or with
+netlink using a tuple (netns, nf_family, nf_hook, bpf_prog)
+- introduce a set of kfuncs to access conntrack, nat, nft sets and maps,
+nf_queue and so on.
+- in addition to existing two iptables rules converters in user
+space (iptables->nft text-to-text and iptables->nft text-to-netlink)
+the latter will be augmented to generate BPF_PROG_TYPE_NETFILTER
+prog as well.  bpf-aware nft frontend would pass both the nft instructions
+(for netfilter monitor and netlink query purposes) and a bpf_prog, but will execute
+bpf program in run-time.
+The bpf prog doesn't have to have 100% feature parity. It can fall
+back to NFT core for not-yet-implemented expressions.
+- nft_set_pipapo.c is an efficient classification map for arbitrary ranges
+represented as 'nft set' from uapi pov.
+bpf side might interface to it directly via kfuncs.
+- lots of details to be figured out, but if netfilter core folks
+agree to this plan it will be one of the most exciting
+projects in the linux networking. iptables will see significant
+performance boost and major feature addition.
+Blending bpf and netfilter worlds would be fantastic.
 
->   extern long __x64_sys_ni_syscall(const struct pt_regs *regs);
->   extern long __ia32_sys_ni_syscall(const struct pt_regs *regs);
-> --
-> 2.37.3
-
+Florian will rework the last RFC patchset and will re-run
+benchmarks with both RETPOLINE=n|y, results should be available
+mid-november-ish.
