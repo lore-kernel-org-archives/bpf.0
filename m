@@ -2,38 +2,39 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC2CEC433FE
-	for <bpf@archiver.kernel.org>; Wed, 19 Oct 2022 00:32:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14D0FC4332F
+	for <bpf@archiver.kernel.org>; Wed, 19 Oct 2022 00:32:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbiJSAcU convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 18 Oct 2022 20:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40130 "EHLO
+        id S229535AbiJSAc0 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 18 Oct 2022 20:32:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiJSAcT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 18 Oct 2022 20:32:19 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E00DBE78
-        for <bpf@vger.kernel.org>; Tue, 18 Oct 2022 17:32:17 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29J049aA012668
-        for <bpf@vger.kernel.org>; Tue, 18 Oct 2022 17:32:17 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3k9j40mcv6-3
+        with ESMTP id S229670AbiJSAcZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 18 Oct 2022 20:32:25 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66417DCACC
+        for <bpf@vger.kernel.org>; Tue, 18 Oct 2022 17:32:24 -0700 (PDT)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 29J03xBK024389
+        for <bpf@vger.kernel.org>; Tue, 18 Oct 2022 17:32:23 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3k92jvwvd1-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 18 Oct 2022 17:32:16 -0700
-Received: from twshared26494.14.frc2.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 18 Oct 2022 17:32:23 -0700
+Received: from twshared58694.02.prn6.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 18 Oct 2022 17:32:14 -0700
+ 15.1.2375.31; Tue, 18 Oct 2022 17:32:22 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 229B52051287A; Tue, 18 Oct 2022 17:32:06 -0700 (PDT)
+        id 3D59420512885; Tue, 18 Oct 2022 17:32:10 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
-        Stanislav Fomichev <sdf@google.com>
-Subject: [PATCH v2 bpf-next 1/3] libbpf: clean up and refactor BTF fixup step
-Date:   Tue, 18 Oct 2022 17:28:14 -0700
-Message-ID: <20221019002816.359650-2-andrii@kernel.org>
+        Stanislav Fomichev <sdf@google.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>
+Subject: [PATCH v2 bpf-next 3/3] libbpf: add non-mmapable data section selftest
+Date:   Tue, 18 Oct 2022 17:28:16 -0700
+Message-ID: <20221019002816.359650-4-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221019002816.359650-1-andrii@kernel.org>
 References: <20221019002816.359650-1-andrii@kernel.org>
@@ -41,8 +42,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: CGNcE1GT5DTke0qjBuo2PvehyHBXZfxH
-X-Proofpoint-GUID: CGNcE1GT5DTke0qjBuo2PvehyHBXZfxH
+X-Proofpoint-ORIG-GUID: rvwnSHZ9ASiBYT7eq7DBX6eLi-NMiDHI
+X-Proofpoint-GUID: rvwnSHZ9ASiBYT7eq7DBX6eLi-NMiDHI
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-10-18_09,2022-10-18_01,2022-06-22_01
@@ -50,214 +51,151 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Refactor libbpf's BTF fixup step during BPF object open phase. The only
-functional change is that we now ignore BTF_VAR_GLOBAL_EXTERN variables
-during fix up, not just BTF_VAR_STATIC ones, which shouldn't cause any
-change in behavior as there shouldn't be any extern variable in data
-sections for valid BPF object anyways.
+Add non-mmapable data section to test_skeleton selftest and make sure it
+really isn't mmapable by trying to mmap() it anyways.
 
-Otherwise it's just collapsing two functions that have no reason to be
-separate, and switching find_elf_var_offset() helper to return entire
-symbol pointer, not just its offset. This will be used by next patch to
-get ELF symbol visibility.
+Also make sure that libbpf doesn't report BPF_F_MMAPABLE flag to users.
 
-While refactoring, also "normalize" debug messages inside
-btf_fixup_datasec() to follow general libbpf style and print out data
-section name consistently, where it's available.
+Additional, some more manual testing was performed that this feature
+works as intended.
+
+Looking at created map through bpftool shows that flags passed to kernel are
+indeed zero:
+
+  $ bpftool map show
+  ...
+  1782: array  name .data.non_mmapa  flags 0x0
+          key 4B  value 16B  max_entries 1  memlock 4096B
+          btf_id 1169
+          pids test_progs(8311)
+  ...
+
+Checking BTF uploaded to kernel for this map shows that zero_key and
+zero_value are indeed marked as static, even though zero_key is actually
+original global (but STV_HIDDEN) variable:
+
+  $ bpftool btf dump id 1169
+  ...
+  [51] VAR 'zero_key' type_id=2, linkage=static
+  [52] VAR 'zero_value' type_id=7, linkage=static
+  ...
+  [62] DATASEC '.data.non_mmapable' size=16 vlen=2
+          type_id=51 offset=0 size=4 (VAR 'zero_key')
+          type_id=52 offset=4 size=12 (VAR 'zero_value')
+  ...
+
+And original BTF does have zero_key marked as linkage=global:
+
+  $ bpftool btf dump file test_skeleton.bpf.linked3.o
+  ...
+  [51] VAR 'zero_key' type_id=2, linkage=global
+  [52] VAR 'zero_value' type_id=7, linkage=static
+  ...
+  [62] DATASEC '.data.non_mmapable' size=16 vlen=2
+          type_id=51 offset=0 size=4 (VAR 'zero_key')
+          type_id=52 offset=4 size=12 (VAR 'zero_value')
+
+Bpftool didn't require any changes at all because it checks whether internal
+map is mmapable already, but just to double-check generated skeleton, we
+see that .data.non_mmapable neither sets mmaped pointer nor has
+a corresponding field in the skeleton:
+
+  $ grep non_mmapable test_skeleton.skel.h
+                  struct bpf_map *data_non_mmapable;
+          s->maps[7].name = ".data.non_mmapable";
+          s->maps[7].map = &obj->maps.data_non_mmapable;
+
+But .data.read_mostly has all of those things:
+
+  $ grep read_mostly test_skeleton.skel.h
+                  struct bpf_map *data_read_mostly;
+          struct test_skeleton__data_read_mostly {
+                  int read_mostly_var;
+          } *data_read_mostly;
+          s->maps[6].name = ".data.read_mostly";
+          s->maps[6].map = &obj->maps.data_read_mostly;
+          s->maps[6].mmaped = (void **)&obj->data_read_mostly;
+          _Static_assert(sizeof(s->data_read_mostly->read_mostly_var) == 4, "unexpected size of 'read_mostly_var'");
 
 Acked-by: Stanislav Fomichev <sdf@google.com>
+Acked-by: Dave Marchevsky <davemarchevsky@fb.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/libbpf.c | 96 ++++++++++++++++++------------------------
- 1 file changed, 42 insertions(+), 54 deletions(-)
+ .../testing/selftests/bpf/prog_tests/skeleton.c | 11 ++++++++++-
+ .../testing/selftests/bpf/progs/test_skeleton.c | 17 +++++++++++++++++
+ 2 files changed, 27 insertions(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 8c3f236c86e4..8802e06c5569 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -1461,15 +1461,12 @@ static int find_elf_sec_sz(const struct bpf_object *obj, const char *name, __u32
- 	return -ENOENT;
- }
+diff --git a/tools/testing/selftests/bpf/prog_tests/skeleton.c b/tools/testing/selftests/bpf/prog_tests/skeleton.c
+index 99dac5292b41..bc6817aee9aa 100644
+--- a/tools/testing/selftests/bpf/prog_tests/skeleton.c
++++ b/tools/testing/selftests/bpf/prog_tests/skeleton.c
+@@ -2,6 +2,7 @@
+ /* Copyright (c) 2019 Facebook */
  
--static int find_elf_var_offset(const struct bpf_object *obj, const char *name, __u32 *off)
-+static Elf64_Sym *find_elf_var_sym(const struct bpf_object *obj, const char *name)
- {
- 	Elf_Data *symbols = obj->efile.symbols;
- 	const char *sname;
- 	size_t si;
+ #include <test_progs.h>
++#include <sys/mman.h>
  
--	if (!name || !off)
--		return -EINVAL;
--
- 	for (si = 0; si < symbols->d_size / sizeof(Elf64_Sym); si++) {
- 		Elf64_Sym *sym = elf_sym_by_idx(obj, si);
+ struct s {
+ 	int a;
+@@ -22,7 +23,8 @@ void test_skeleton(void)
+ 	struct test_skeleton__kconfig *kcfg;
+ 	const void *elf_bytes;
+ 	size_t elf_bytes_sz = 0;
+-	int i;
++	void *m;
++	int i, fd;
  
-@@ -1483,15 +1480,13 @@ static int find_elf_var_offset(const struct bpf_object *obj, const char *name, _
- 		sname = elf_sym_str(obj, sym->st_name);
- 		if (!sname) {
- 			pr_warn("failed to get sym name string for var %s\n", name);
--			return -EIO;
--		}
--		if (strcmp(name, sname) == 0) {
--			*off = sym->st_value;
--			return 0;
-+			return ERR_PTR(-EIO);
- 		}
-+		if (strcmp(name, sname) == 0)
-+			return sym;
- 	}
+ 	skel = test_skeleton__open();
+ 	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
+@@ -124,6 +126,13 @@ void test_skeleton(void)
  
--	return -ENOENT;
-+	return ERR_PTR(-ENOENT);
- }
+ 	ASSERT_EQ(bss->huge_arr[ARRAY_SIZE(bss->huge_arr) - 1], 123, "huge_arr");
  
- static struct bpf_map *bpf_object__add_map(struct bpf_object *obj)
-@@ -2850,57 +2845,63 @@ static int compare_vsi_off(const void *_a, const void *_b)
- static int btf_fixup_datasec(struct bpf_object *obj, struct btf *btf,
- 			     struct btf_type *t)
- {
--	__u32 size = 0, off = 0, i, vars = btf_vlen(t);
--	const char *name = btf__name_by_offset(btf, t->name_off);
--	const struct btf_type *t_var;
-+	__u32 size = 0, i, vars = btf_vlen(t);
-+	const char *sec_name = btf__name_by_offset(btf, t->name_off);
- 	struct btf_var_secinfo *vsi;
--	const struct btf_var *var;
--	int ret;
-+	int err;
- 
--	if (!name) {
-+	if (!sec_name) {
- 		pr_debug("No name found in string section for DATASEC kind.\n");
- 		return -ENOENT;
- 	}
- 
--	/* .extern datasec size and var offsets were set correctly during
--	 * extern collection step, so just skip straight to sorting variables
-+	/* extern-backing datasecs (.ksyms, .kconfig) have their size and
-+	 * variable offsets set at the previous step, so we skip any fixups
-+	 * for such sections
- 	 */
- 	if (t->size)
- 		goto sort_vars;
- 
--	ret = find_elf_sec_sz(obj, name, &size);
--	if (ret || !size) {
--		pr_debug("Invalid size for section %s: %u bytes\n", name, size);
-+	err = find_elf_sec_sz(obj, sec_name, &size);
-+	if (err || !size) {
-+		pr_debug("sec '%s': failed to determine size from ELF: size %u, err %d\n",
-+			 sec_name, size, err);
- 		return -ENOENT;
- 	}
- 
- 	t->size = size;
- 
- 	for (i = 0, vsi = btf_var_secinfos(t); i < vars; i++, vsi++) {
-+		const struct btf_type *t_var;
-+		struct btf_var *var;
-+		const char *var_name;
-+		Elf64_Sym *sym;
++	fd = bpf_map__fd(skel->maps.data_non_mmapable);
++	m = mmap(NULL, getpagesize(), PROT_READ, MAP_SHARED, fd, 0);
++	if (!ASSERT_EQ(m, MAP_FAILED, "unexpected_mmap_success"))
++		munmap(m, getpagesize());
 +
- 		t_var = btf__type_by_id(btf, vsi->type);
- 		if (!t_var || !btf_is_var(t_var)) {
--			pr_debug("Non-VAR type seen in section %s\n", name);
-+			pr_debug("sec '%s': unexpected non-VAR type found\n", sec_name);
- 			return -EINVAL;
- 		}
++	ASSERT_EQ(bpf_map__map_flags(skel->maps.data_non_mmapable), 0, "non_mmap_flags");
++
+ 	elf_bytes = test_skeleton__elf_bytes(&elf_bytes_sz);
+ 	ASSERT_OK_PTR(elf_bytes, "elf_bytes");
+ 	ASSERT_GE(elf_bytes_sz, 0, "elf_bytes_sz");
+diff --git a/tools/testing/selftests/bpf/progs/test_skeleton.c b/tools/testing/selftests/bpf/progs/test_skeleton.c
+index 1a4e93f6d9df..adece9f91f58 100644
+--- a/tools/testing/selftests/bpf/progs/test_skeleton.c
++++ b/tools/testing/selftests/bpf/progs/test_skeleton.c
+@@ -53,6 +53,20 @@ int out_mostly_var;
  
- 		var = btf_var(t_var);
--		if (var->linkage == BTF_VAR_STATIC)
-+		if (var->linkage == BTF_VAR_STATIC || var->linkage == BTF_VAR_GLOBAL_EXTERN)
- 			continue;
+ char huge_arr[16 * 1024 * 1024];
  
--		name = btf__name_by_offset(btf, t_var->name_off);
--		if (!name) {
--			pr_debug("No name found in string section for VAR kind\n");
-+		var_name = btf__name_by_offset(btf, t_var->name_off);
-+		if (!var_name) {
-+			pr_debug("sec '%s': failed to find name of DATASEC's member #%d\n",
-+				 sec_name, i);
- 			return -ENOENT;
- 		}
++/* non-mmapable custom .data section */
++
++struct my_value { int x, y, z; };
++
++__hidden int zero_key SEC(".data.non_mmapable");
++static struct my_value zero_value SEC(".data.non_mmapable");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__type(key, int);
++	__type(value, struct my_value);
++	__uint(max_entries, 1);
++} my_map SEC(".maps");
++
+ SEC("raw_tp/sys_enter")
+ int handler(const void *ctx)
+ {
+@@ -75,6 +89,9 @@ int handler(const void *ctx)
  
--		ret = find_elf_var_offset(obj, name, &off);
--		if (ret) {
--			pr_debug("No offset found in symbol table for VAR %s\n",
--				 name);
-+		sym = find_elf_var_sym(obj, var_name);
-+		if (IS_ERR(sym)) {
-+			pr_debug("sec '%s': failed to find ELF symbol for VAR '%s'\n",
-+				 sec_name, var_name);
- 			return -ENOENT;
- 		}
+ 	huge_arr[sizeof(huge_arr) - 1] = 123;
  
--		vsi->offset = off;
-+		vsi->offset = sym->st_value;
- 	}
- 
- sort_vars:
-@@ -2908,13 +2909,16 @@ static int btf_fixup_datasec(struct bpf_object *obj, struct btf *btf,
++	/* make sure zero_key and zero_value are not optimized out */
++	bpf_map_update_elem(&my_map, &zero_key, &zero_value, BPF_ANY);
++
  	return 0;
  }
  
--static int btf_finalize_data(struct bpf_object *obj, struct btf *btf)
-+static int bpf_object_fixup_btf(struct bpf_object *obj)
- {
--	int err = 0;
--	__u32 i, n = btf__type_cnt(btf);
-+	int i, n, err = 0;
- 
-+	if (!obj->btf)
-+		return 0;
-+
-+	n = btf__type_cnt(obj->btf);
- 	for (i = 1; i < n; i++) {
--		struct btf_type *t = btf_type_by_id(btf, i);
-+		struct btf_type *t = btf_type_by_id(obj->btf, i);
- 
- 		/* Loader needs to fix up some of the things compiler
- 		 * couldn't get its hands on while emitting BTF. This
-@@ -2922,28 +2926,12 @@ static int btf_finalize_data(struct bpf_object *obj, struct btf *btf)
- 		 * the info from the ELF itself for this purpose.
- 		 */
- 		if (btf_is_datasec(t)) {
--			err = btf_fixup_datasec(obj, btf, t);
-+			err = btf_fixup_datasec(obj, obj->btf, t);
- 			if (err)
--				break;
-+				return err;
- 		}
- 	}
- 
--	return libbpf_err(err);
--}
--
--static int bpf_object__finalize_btf(struct bpf_object *obj)
--{
--	int err;
--
--	if (!obj->btf)
--		return 0;
--
--	err = btf_finalize_data(obj, obj->btf);
--	if (err) {
--		pr_warn("Error finalizing %s: %d.\n", BTF_ELF_SEC, err);
--		return err;
--	}
--
- 	return 0;
- }
- 
-@@ -7233,7 +7221,7 @@ static struct bpf_object *bpf_object_open(const char *path, const void *obj_buf,
- 	err = err ? : bpf_object__check_endianness(obj);
- 	err = err ? : bpf_object__elf_collect(obj);
- 	err = err ? : bpf_object__collect_externs(obj);
--	err = err ? : bpf_object__finalize_btf(obj);
-+	err = err ? : bpf_object_fixup_btf(obj);
- 	err = err ? : bpf_object__init_maps(obj, opts);
- 	err = err ? : bpf_object_init_progs(obj, opts);
- 	err = err ? : bpf_object__collect_relos(obj);
 -- 
 2.30.2
 
