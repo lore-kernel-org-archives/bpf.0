@@ -2,148 +2,166 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CD0DC43217
-	for <bpf@archiver.kernel.org>; Wed, 19 Oct 2022 16:06:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04563C433FE
+	for <bpf@archiver.kernel.org>; Wed, 19 Oct 2022 16:31:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbiJSQGt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Oct 2022 12:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37110 "EHLO
+        id S229597AbiJSQbi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Oct 2022 12:31:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231788AbiJSQGZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 19 Oct 2022 12:06:25 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534F3BB057
-        for <bpf@vger.kernel.org>; Wed, 19 Oct 2022 09:05:07 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29JEWuw5010290;
-        Wed, 19 Oct 2022 09:04:53 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=HofSKEqBC/Qv/Guo6pk4rYGGmoPMQxJxXyozIvsZ9VU=;
- b=giUFCpEmvBwaLME5StHY0mw2C43cr9iA/qgVsWA59yIffRhFx9GYYvZgnF+4b+PC4Bj+
- /Q4Waw1XQfAdQAcjgA2uuE9LelgOLeY/TCv+8+cLygbz7jrsW0o0WiLOVjFaI0jdTWTF
- v5y52DllaJMGTD+Yi7CBey0Dt0/cRkr9/bg+Ylk1HqA+1l8M4JJvmoxHfwAQqAR309Uo
- t8BIBXr7gj0+PEnBD45K6ogZX/mbRHMG07kF40/8f7FccFQq/2Be18gMyUHpZ47Axx20
- 4z6md2SKm5CWOdXl0ARWo9AqqiRZKpbLLlYI+xYJxin7friyAN/Y/PYlLXFBMU2NN1tH 9w== 
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2176.outbound.protection.outlook.com [104.47.59.176])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3k9eynn55e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Oct 2022 09:04:53 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WzVOoFg2BpWO8YabKXErRDFHvAcpsXR4m0WIBGvIt2GkjPFwD02IuLSvJ8ncc90IIEnDY3kiNbDNBBSlIVQx/YGWycTTr/DRHdJNKsY03ZwOefSy9YHW19413wZQT/+TSRMC8hBj3YC/9z0SVepCI6BBD8j3sBUO/nuExyNx8mFz9EZQYHp6/F27t80yel6LsBT77l4rn+GizC1M9HlcUA9NFdGKdWnwM1Ps14KGxQZLXd1kRlf/rkxdvs61PEWCfEhogPMljByOA6C2YvbTsWulEJVvn3Z6QUQq9hYB0uhFJGFedh/ShqDYpczZN7kOq1TGimDXRXRH2nLDLJqzrA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HofSKEqBC/Qv/Guo6pk4rYGGmoPMQxJxXyozIvsZ9VU=;
- b=mQcc11zAQonvXKktESq6bGZTaxP7CCZcaFDOi+KWEYA4EoT0ebxfT/Sx9vPN3659+ar9sPW1DLVdwdXaTDb/zsh3Uye4FZbaKxwUQFPK6okRkHaZ5iH4yIsq3a5x6QwlhV/BI1NsPv8SenXnD5NEdrGshtsW49E+vgfExatBlDnZKepknycupwSD4MRVPF5jOstUEml/fRCXcnBwI6zkEAz1+GcWUX1udm652C9tWp8A69WCUf7ogoq+ixc2XKepSQhHuugP+nrtGWPNxfY9oNdpIVvQEjJX8gr8o5AAKNMSfBL6LeYUX6H0aiehQRdj06nTwBqwllBj27I1oO52MA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from DM6PR15MB4039.namprd15.prod.outlook.com (2603:10b6:5:2b2::20)
- by BLAPR15MB3923.namprd15.prod.outlook.com (2603:10b6:208:276::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.20; Wed, 19 Oct
- 2022 16:04:51 +0000
-Received: from DM6PR15MB4039.namprd15.prod.outlook.com
- ([fe80::ba24:a61c:1552:445a]) by DM6PR15MB4039.namprd15.prod.outlook.com
- ([fe80::ba24:a61c:1552:445a%7]) with mapi id 15.20.5723.034; Wed, 19 Oct 2022
- 16:04:51 +0000
-Message-ID: <5f7db320-60f9-256e-8ac4-eb9a5617c35a@meta.com>
-Date:   Wed, 19 Oct 2022 12:04:49 -0400
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.3
-Subject: Re: [PATCH bpf-next v2 05/25] bpf: Drop
- reg_type_may_be_refcounted_or_null
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S229491AbiJSQbh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 19 Oct 2022 12:31:37 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB54615F335
+        for <bpf@vger.kernel.org>; Wed, 19 Oct 2022 09:31:34 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id k2so41296796ejr.2
+        for <bpf@vger.kernel.org>; Wed, 19 Oct 2022 09:31:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QzwrkDuFpARPQBLHkeuxXMN2tnLqTO3Q+KR9a8q5n9M=;
+        b=Guy676hx6L0iOTXjPp76xayeQSblWF2F1oB+2mmKXUpOr7+ZAklasQiSMTomEMAVMv
+         g2ECUvPX54m09Vapg3puiq/zfvuhoz7hq8AO7YMFfR8o2aWpdqe+b1U9/lDQz5ycXq2v
+         JirWdj+YNnwdRDSmwTN+ti+nKsl6Rq98il+kY29VwEzDvkgizbhtrjrp0ROI4bIqAL9i
+         sU0rutfU4v97DYUWgEQAL6c7eU4OFTuv7EfpY2Us0DH2Kcg4vditfehIb65XDiHF6XrH
+         +LZIrY3FgqbMB+doO2GkR0wNCHxwiimnzj4KcISa6+OwHKnBKV3cqWqKrBEDEPccUEAI
+         PZig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QzwrkDuFpARPQBLHkeuxXMN2tnLqTO3Q+KR9a8q5n9M=;
+        b=U4Qzn0be/Lh9A6AOoIOidBCfidweOIRvXXV4QLplkSqx54EBl8MtU7nMnBA8X2AxEe
+         vcrO/owpK+rbH07WWVzraeroeJWVKUPiWpQi1gocm0gOqfV/AX6OYkqI0AayFbRZayNu
+         bcFvwJ1MX2JY7O+2FvZeDmXllLYCmrDTql+fNeNXhfk6qW7LUNPRmUSIJaqIMs+Jjn7t
+         Fb09FzrCqGvpcQHOlJETLANNVvrXe6VwKEuOpUzgZ/Frufg3OjZxVUjTz596Xgdb5WJs
+         HCaO1CVqyYqzO1OQxek+eZt0Zbs7pvJ4Gn1/eMqKzppzH6xfWIza+RsKrFsw+G7eKHFt
+         pH2g==
+X-Gm-Message-State: ACrzQf37HtC5qgbzQ/l39pG5HtEfzy0RBwGtFX1jElOM7AoXgvQGm3QD
+        Cbrgmg0m6LISSMAe9Jb9Jegk5FrW2UJDc+rSrNk=
+X-Google-Smtp-Source: AMsMyM5FKLwmg4NoJUGusC0cd1g/FLHyfzeRzqP3Zt8ElWDkP8nkvk8el7Ny3miEAUT6cB4cnnC4xW42bSlAUNPGyz4=
+X-Received: by 2002:a17:907:2cd8:b0:78d:9c3c:d788 with SMTP id
+ hg24-20020a1709072cd800b0078d9c3cd788mr7654698ejc.327.1666197093236; Wed, 19
+ Oct 2022 09:31:33 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221013062303.896469-1-memxor@gmail.com> <20221013062303.896469-20-memxor@gmail.com>
+ <20221019023124.47zzi3gs2zcdvxca@macbook-pro-4.dhcp.thefacebook.com> <20221019055834.ux5dfoot7hyuf4jk@apollo>
+In-Reply-To: <20221019055834.ux5dfoot7hyuf4jk@apollo>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 19 Oct 2022 09:31:21 -0700
+Message-ID: <CAADnVQ+Q9LO1dkz-Q7jHRjgf5cFFk1go=gwYDfVrTtanjMCoHw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 19/25] bpf: Introduce bpf_kptr_new
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        Dave Marchevsky <davemarchevsky@meta.com>,
         Delyan Kratunov <delyank@meta.com>
-References: <20221013062303.896469-1-memxor@gmail.com>
- <20221013062303.896469-6-memxor@gmail.com>
-Content-Language: en-US
-From:   Dave Marchevsky <davemarchevsky@meta.com>
-In-Reply-To: <20221013062303.896469-6-memxor@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL1PR13CA0226.namprd13.prod.outlook.com
- (2603:10b6:208:2bf::21) To DM6PR15MB4039.namprd15.prod.outlook.com
- (2603:10b6:5:2b2::20)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR15MB4039:EE_|BLAPR15MB3923:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3a2ef299-841c-45b4-559e-08dab1eba770
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PqUkk4VJ3IEr0iTYCoKrqXY6ybmpgW/SHVohlYv8ZW6zZc25ugTvFXXtv8cvVUIl3fAp/j35amAi3xFbm/emOujeMQ5NYksutsHIE7hA9w8GBBmIrc2Z/TrvKOf25Z9tVxN0YDIgoGcE9duzZWENAbatXjfASiKLw5vzYJeJ3SGVpPKrUSX3u8jjPD7KdKv/QDXVORL04EMsPJtVv+lXkMdqCAXSMLbE5PukddVXEG5dQNNWa0trxJafC2W5hp32+F2sa6/mBR8nho9r/OIILbao7bkvqyoQ91M2dhjFEWOOuaoWiSwEbUTrgrEoHHmUeAPofLfT07OZJlLyW5agvtuu7lt6kLdP0mAMiWAhBdi5MH31GYfiIw7lb0T8BirHN1U7fUA0h68QHfxuJh5DUjzDZVOc95osjQL4aqIMayPEE7mkc1rfaN1x2ttXST7pI5IX9S36VMH/XpdGcQegzBObYS62xie+dOEBTvZNFl+CTvG89QzOmohsCyepK7kwN7krmfi3TXoc6bociakdThFEjPusiVOjOMpOGu4DBMwJ9o1oRmWYeM3/5NqZMMGHBNXxL0raAOzNjDJmz7LAiyntBhG9/DAI6hpB/NK4YejQtrKwpDXlnjrrwwso+zC1+UINZZNa4kxxyDC9fnSesbTb8txY1XbRYlWbrJBowOkV0gOwRNQ0hkFRDCzYe3AK1rBJPubTpPraxHnF94kPfoxvwjFoMR3quJvUsZmqArVUWEas/0uCAF0bps6FD9uQdZVbJwAxtYo0Z49h5qeOaq4uWJQ9RORR3Digen/MjFk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR15MB4039.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(366004)(136003)(376002)(39860400002)(451199015)(31686004)(4326008)(66946007)(2906002)(2616005)(38100700002)(5660300002)(4744005)(186003)(31696002)(86362001)(66476007)(53546011)(107886003)(6506007)(6486002)(6512007)(54906003)(66556008)(316002)(8676002)(8936002)(36756003)(41300700001)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NThzRjBYMnJqR0pqWWRiZ3k0ZXN4c3FnSjJCd1J2TGNacExBb213S2RONzRj?=
- =?utf-8?B?WEc5aVJPWlRuTEJWR0toZGtsRjhBNUx1a2k5cE1NNWxMcWdNenhidWpMWmNK?=
- =?utf-8?B?TllBcmhoRW5sRUR6dzdxTENydjQwd2hVL3lab005dHF6UnZ1emZiN0ttd1Vq?=
- =?utf-8?B?UDFDUTZqRC8yemhTZkExakhQVE1nc0g1VU9ySTJBL2IvT0o0OVkzYWpqUnJy?=
- =?utf-8?B?N08wc09aRjN4bWV3ZnFHeTVFa2FhQ1M4Rmcvb3Y5K3lWZzZydlFJQWVEa3VK?=
- =?utf-8?B?ejliMThMeVcvcDdESmJhSDRUYkNsWVZRK0hrNGE1WjUzUHljN2IwbHFNMTlI?=
- =?utf-8?B?cFJ0c1B0dkhPZlludUNTZjFxVXJYK1BDaHNpa2JsY1ByaXd0N2M1cldZY1dJ?=
- =?utf-8?B?eDFWa1E0aTlWY0wwT0dpQkg4RXEvNmxCdGR4QXBSZzU2MHZrYmNhM1B2NmE3?=
- =?utf-8?B?ZlMrZUdsNEl6c0tNUEVTcE81WW5peVBWRm93L0d1QjVvdk9IekUzNFUxTSsx?=
- =?utf-8?B?RmdvRHo3Y1FOdEFFNkRBd3NWUmlkd25OY3RKTFdnNE95ajlDM1kxRHdLeWx5?=
- =?utf-8?B?SWJ0QXVJWEdqRWRVSVhMMCtncE1OVHNONEVSaEI2UC92T3lIR2F1U0NOTDdx?=
- =?utf-8?B?RU1tQlF6SzZoTEN2UjFrdkRsS0ExWDQweElvTnpLdHRHL3NzSjBPSGFTYU50?=
- =?utf-8?B?TUpsSDZHWVRhc3Q5eG83em5mY0Znc3hxYWlQOFNsZWNxMWJjckF1NlcySmxo?=
- =?utf-8?B?UEQzNGdCdkFNVVdkeThlU3hyYXluSVpPbE55YjdUZkF6VW41b1c3L0FvNWNi?=
- =?utf-8?B?YnQvbjRhUmNBU29kdWRub2lsU2JWeVpZbC9YMG8vMUh4RmZheU5Da0FIT21h?=
- =?utf-8?B?NFBOMlBGa0xkcHZpelgrRmFGM3RZSFdOTEZ4MW9Ta1dMZUtaRTgyMEpwNUox?=
- =?utf-8?B?YnR3SmZ6V1o2V1BMY3NWblhIdVFRRk44clk5MmtlN05mN1FBcVluNGREN3hI?=
- =?utf-8?B?NHZpUHU0b1B4ajdvM3I3VGNqM2xlaW1aeEJZYTk0bmpiZWZSQmJHUmxCblk5?=
- =?utf-8?B?ZWVXMXpXQTNTdTdFL3M5ajQ2cHRwYllXU0FucTZHTFlLdFFzdk1BUnRaSGM2?=
- =?utf-8?B?N0JyNlFOMCt4Zncyb0RvNkRLR00vUDliRVU1eGs4VThjd0REa0pNSitjOGgw?=
- =?utf-8?B?S2dhMXNxMDN6RUtZK1NoeWY5SUovbjladlB5V3pBZ291eCtVQjZBcWtTVTNh?=
- =?utf-8?B?R0pkV0tyUDFaRkNmeGVFdnJlS3YvQzZRaXh6dzZPR0kyRjFoMm5YUGxsN2x0?=
- =?utf-8?B?cnhHTWFxNXpjdlRZVXloMmsxRlFpQ2dUZmJ6ZmVvL29VQXQ4QmNsSnJhSE02?=
- =?utf-8?B?Qy85ejZ3SEh3WWV0VUxGQzZLWkJwdHp5QUZETkhBNjB2UXdRcjVqbVFSN1ph?=
- =?utf-8?B?aTlhOUxab0RaTE4wcjRqQndTQ2RsNzBTZXFOU3JDVDg0UjlXL0x2eUZzNFF3?=
- =?utf-8?B?TmtxSjNadjVKcHBGZVpYZzFyaDRYdmlMNTlhVzEzNnNFMVFtSjZTcFR1dHVL?=
- =?utf-8?B?eFpzY3NuNXZSNWNXUWYxWFlJT01wbjF4VHE3NTNvMUk5L3FITU9yL1lvMWc5?=
- =?utf-8?B?UVh3NnZQUndYeHBTWlp6S3NNQnRyRExtcmppUzlFbWg2OFBiL05VL01ReWZF?=
- =?utf-8?B?ZXpoL3R1aHM0elVOMFZFaCtyWGFncUxWaFZrUEoyK05QcUN4OGRveHdsNHRq?=
- =?utf-8?B?ZWNFb3QrVUxBU0dNeEpsRWE1MTErMDIvRTBDdE9TQzFPSUQ1WG9IMFdzTnJi?=
- =?utf-8?B?VUE1ZkhYMDUrM0JjelF5WVo3SFQvbEQ2MXN2ejNuUVZjS0tLUjRvVUlhN1d0?=
- =?utf-8?B?NmZEcFZxQkFhZU5BZElvdGY2dE9DRmxwb0tJL1pIN1o2aVJsb3F6azVIeHBB?=
- =?utf-8?B?ZkJZWmIzYkdBVmJMdm5Tb0ZpeGFMWU5adjZlOXA2SzBGbkZhTXlPSkZrd1Rm?=
- =?utf-8?B?ZlRQWmROWFNyTlN0QWhhaDVsTWRjVU5xVXhES3JFUWxleWRBblY4V05lM3BO?=
- =?utf-8?B?a0VuSnA3Ky9yM1VRb1Z0SS8yZDhQaWpwWW5rdmN2WXBKQ2ZaVTJ4NmZtZC8y?=
- =?utf-8?B?WGxIWkNjZXF1TTF0MXY4UEsrZWZsY0t5aGpZRnRQWlREY1dtMWFrVVJMVmZO?=
- =?utf-8?Q?1jEbLqRndhofq2sUIQPXWto=3D?=
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a2ef299-841c-45b4-559e-08dab1eba770
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR15MB4039.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2022 16:04:51.2825
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: flqWzrDcILbHcNMDfnBaju6HtPUJPG2f3gzyOBHR4fZgwwTjiICuGjZQvhTU43m02Hfb9SShQVHKoXxr2mGC7w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR15MB3923
-X-Proofpoint-GUID: t3kCz9OOeT-69Et5y143Y3wgSm6IKp6C
-X-Proofpoint-ORIG-GUID: t3kCz9OOeT-69Et5y143Y3wgSm6IKp6C
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-19_09,2022-10-19_04,2022-06-22_01
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 10/13/22 2:22 AM, Kumar Kartikeya Dwivedi wrote:
-> It is not scalable to maintain a list of types that can have non-zero
-> ref_obj_id. It is never set for scalars anyway, so just remove the
-> conditional on register types and print it whenever it is non-zero.
-> 
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> ---
+On Tue, Oct 18, 2022 at 10:58 PM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
+>
+> On Wed, Oct 19, 2022 at 08:01:24AM IST, Alexei Starovoitov wrote:
+> > On Thu, Oct 13, 2022 at 11:52:57AM +0530, Kumar Kartikeya Dwivedi wrote:
+> > > +void *bpf_kptr_new_impl(u64 local_type_id__k, u64 flags, void *meta__ign)
+> > > +{
+> > > +   struct btf_struct_meta *meta = meta__ign;
+> > > +   u64 size = local_type_id__k;
+> > > +   void *p;
+> > > +
+> > > +   if (unlikely(flags || !bpf_global_ma_set))
+> > > +           return NULL;
+> >
+> > Unused 'flags' looks weird in unstable api. Just drop it?
+> > And keep it as:
+> > void *bpf_kptr_new(u64 local_type_id__k, struct btf_struct_meta *meta__ign);
+> >
+> > and in bpf_experimental.h:
+> >
+> > extern void *bpf_kptr_new(__u64 local_type_id) __ksym;
+> >
+> > since __ign args are ignored during kfunc type match
+> > the bpf progs can use it without #define.
+> >
+>
+> It's ignored during check_kfunc_call, but libbpf doesn't ignore that. The
+> prototypes will not be the same. I guess I'll have to teach it do that during
+> type match, but IDK how you feel about that.
 
-Acked-by: Dave Marchevsky <davemarchevsky@fb.com>
+libbpf does the full type match, really?
+Could you point me to the code?
+
+> Otherwise unless you want people to manually pass something to the ignored
+> argument, we have to hide it behind a macro.
+>
+> I actually like the macro on top, then I don't even pass the type ID but the
+> type. But that's a personal preference, and I don't feel strongly about it.
+>
+> So in C one does malloc(sizeof(*p)), here we'll just write
+> bpf_kptr_new(typeof(*p)). YMMV.
+
+bpf_kptr_new(typeof(*p)) is cleaner.
+
+> > > +   p = bpf_mem_alloc(&bpf_global_ma, size);
+> > > +   if (!p)
+> > > +           return NULL;
+> > > +   if (meta)
+> > > +           bpf_obj_init(meta->off_arr, p);
+> >
+> > I'm starting to dislike all that _arr and _tab suffixes in the verifier code base.
+> > It reminds me of programming style where people tried to add types into
+> > variable names. imo dropping _arr wouldn't be just fine.
+>
+> Ack, I'll do it in v3.
+>
+> Also, I'd like to invite people to please bikeshed a bit over the naming of the
+> APIs, e.g. whether it should be bpf_kptr_drop vs bpf_kptr_delete.
+
+bpf_kptr_drop is more precise.
+delete assumes instant free which is not the case here.
+
+How about
+extern void *__bpf_obj_new(__u64 local_type_id) __ksym;
+extern void bpf_obj_drop(void *obj) __ksym;
+#define bpf_obj_new(t) \
+ (t *)__bpf_obj_new(bpf_core_type_id_local(t));
+
+kptr means 'kernel pointer'.
+Here we have program supplied object.
+It feels 'obj' is better than 'kptr' in this context.
+
+> In the BPF list API, it's named bpf_list_del but it's actually distinct from how
+> list_del in the kernel works. So it does make sense to give them a different
+> name (like pop_front/pop_back and push_front/push_back)?
+>
+> Because even bpf_list_add takes bpf_list_head, in the kernel there's no
+> distinction between node and head, so you can do list_add on a node as well, but
+> it won't be possible with the kfunc (unless we overload the head argument to
+> also work with nodes).
+>
+> Later we'll probably have to add bpf_list_node_add etc. that add before or after
+> a node to make that work.
+>
+> The main question is whether it should closely resembly the linked list API in
+> the kernel, or can it steer away considerably from that?
+
+If we do doubly linked list we should allow delete in
+the middle with
+bpf_list_del_any(head, node)
+
+and
+bpf_list_pop_front/pop_back(head)
+
+bpf_list_add(node, head) would match kernel style,
+but I think it's cleaner to have head as 1st arg.
+In that sense new pop/push/_front/_back are cleaner.
+And similar for rbtree.
+
+If we keep (node, head) and (rb_node, rb_root) order
+we should keep kernel names.
