@@ -2,120 +2,162 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33109C4332F
-	for <bpf@archiver.kernel.org>; Wed, 19 Oct 2022 09:05:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5CC3C433FE
+	for <bpf@archiver.kernel.org>; Wed, 19 Oct 2022 09:56:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232142AbiJSJFO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Oct 2022 05:05:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56204 "EHLO
+        id S231270AbiJSJ46 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Oct 2022 05:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232517AbiJSJE2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 19 Oct 2022 05:04:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CCDAF1BC;
-        Wed, 19 Oct 2022 01:57:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E9646182C;
-        Wed, 19 Oct 2022 08:56:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD034C43470;
-        Wed, 19 Oct 2022 08:56:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666169793;
-        bh=scqpA+ha7SzlbjXpyjkq6PnxKVFNnwZoNtO5fqgmj+I=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UEo3G+RClphBrxr72vNpX2vPrejo35VbzycOkLHYEL23oO57LelB9Vr+wXn3tkL9A
-         /gWvmcTiGhe6XYhUwdUow55Q/WxMT5g0zTdGDLz5WWiD4UbYbcyXpBn/T4hQquEeqr
-         LGmTeBBmEqGS1pMve40cbjxbM0wY5//DSaGKjnNi9pAScR0lHCJj+7yUM3NjL7Ao/L
-         6o35DE7EONjiPhE1XFn17bP8LR64JcQy8UhdL5+v3CzPp9YNXjBxPCMJI8DbNxRcTC
-         FzjOJB/Ls1CEqCaiDaaaYWYGrgvK6QJQuRLZ3025WJruBMBGToVj74xSh9Hywis7be
-         TvI2SCTrbGiMA==
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     stable@vger.kernel.org
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        bpf@vger.kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>,
+        with ESMTP id S234394AbiJSJ43 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 19 Oct 2022 05:56:29 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8805810A7FE;
+        Wed, 19 Oct 2022 02:32:33 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id n12so27936920wrp.10;
+        Wed, 19 Oct 2022 02:32:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uRkokOnUGTB7YuuZ3HxvCL2EU7JYl74de/Mbu83cbuA=;
+        b=RDX8T5T0XtX3o+g5YTuJgc/k6wZqjY06wjnbWG8cfKToMu2DIl3ujkjBGAufkRIMRH
+         Hfsoocd9Ll60B8Lozu3PEVlzVVKSsIJ8WmLi228cYopOrpF9rfCJH9O/LuWrGuars7d9
+         m4moV7UzxQ7GNjJZfvn7Et6EBW4MKtB2aQ+PaNos7BQR53D5MswBZj6iSK9AZc5FRBHK
+         HKn+7JAlAfJG3mjgCV8Avjhrf0hTOhoU6WUkCQSBE1YfCYMm707DetMhBYvl1XRkPQ+B
+         PXQRdYMRWb387QTMTHYtPFhFtvWobbE8wJqE7ZPkDMPZTFR7dWAF2CQZIgwf7YZvYtWx
+         6a+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uRkokOnUGTB7YuuZ3HxvCL2EU7JYl74de/Mbu83cbuA=;
+        b=45832iBD20GI5ionXDhlbjniSDA8NQplSI6BFnj+Tr1FW6yaINnub+IpILTgSXtOuL
+         SX3r0mCmOSa/I6YsWH24HW6xAb6q/UiJXzuMMudEthzUEhv9BmF5Oda3BPkIsMZCvGxK
+         XXaW5FBj0VXf42VY3DVkPMRZngtkk+2ts/o5P+zGUe63Mhv3R2ZGPqPiFzYVxeBfTrmA
+         5bx3PRGKGzXjbUL6aBC+pSRU0zgPLj1r/11bN4iAxYKhjHYEBdTBFfJd0+fBGw06Tfbm
+         dNOPpnCHkd659xos+B2WVQ9mANcza6CqCZu3veujexeLvxrDfeZZ7n7V78KCqUHU0qmL
+         BjpQ==
+X-Gm-Message-State: ACrzQf2gWYsdTUATVeLE2JD8OdgRGoYJpY2CRPtfdsQjWgApBvwe1s4x
+        6zKOYOfUtcD2xHe96T9OD54=
+X-Google-Smtp-Source: AMsMyM6hY/mR6nXmoP38MIbO0/nm/YOio2x+b9h9je3MNNv/Dhv0OhDQqND0rZdCpyg+KQBiimsSdg==
+X-Received: by 2002:a5d:54ce:0:b0:22e:2ecf:7c2a with SMTP id x14-20020a5d54ce000000b0022e2ecf7c2amr4371465wrv.181.1666171814580;
+        Wed, 19 Oct 2022 02:30:14 -0700 (PDT)
+Received: from krava ([83.240.63.167])
+        by smtp.gmail.com with ESMTPSA id u7-20020a7bc047000000b003b5054c6f87sm15647813wmc.21.2022.10.19.02.30.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 02:30:13 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Wed, 19 Oct 2022 11:30:11 +0200
+To:     sdf@google.com
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        =?UTF-8?q?Philip=20M=C3=BCller?= <philm@manjaro.org>
-Subject: [PATCH stable 5.10 2/5] kbuild: Quote OBJCOPY var to avoid a pahole call break the build
-Date:   Wed, 19 Oct 2022 10:56:01 +0200
-Message-Id: <20221019085604.1017583-3-jolsa@kernel.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221019085604.1017583-1-jolsa@kernel.org>
-References: <20221019085604.1017583-1-jolsa@kernel.org>
+        Andrii Nakryiko <andrii@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Akihiro HARAI <jharai0815@gmail.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, Hao Luo <haoluo@google.com>
+Subject: Re: [PATCH] x86: Include asm/ptrace.h in syscall_wrapper header
+Message-ID: <Y0/Do4l0bALGrD0p@krava>
+References: <20221018122708.823792-1-jolsa@kernel.org>
+ <Y07vGVPIf913gND8@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y07vGVPIf913gND8@google.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Javier Martinez Canillas <javierm@redhat.com>
+On Tue, Oct 18, 2022 at 11:23:21AM -0700, sdf@google.com wrote:
+> On 10/18, Jiri Olsa wrote:
+> > From: Jiri Olsa <olsajiri@gmail.com>
+> 
+> > With just the forward declaration of the 'struct pt_regs' in
+> > syscall_wrapper.h, the syscall stub functions:
+> 
+> >    __[x64|ia32]_sys_*(struct pt_regs *regs)
+> 
+> > will have different definition of 'regs' argument in BTF data
+> > based on which object file they are defined in.
+> 
+> > If the syscall's object includes 'struct pt_regs' definition,
+> > the BTF argument data will point to 'struct pt_regs' record,
+> > like:
+> 
+> >    [226] STRUCT 'pt_regs' size=168 vlen=21
+> >           'r15' type_id=1 bits_offset=0
+> >           'r14' type_id=1 bits_offset=64
+> >           'r13' type_id=1 bits_offset=128
+> >    ...
+> 
+> > If not, it will point to fwd declaration record:
+> 
+> >    [15439] FWD 'pt_regs' fwd_kind=struct
+> 
+> > and make bpf tracing program hooking on those functions unable
+> > to access fields from 'struct pt_regs'.
+> 
+> Is the core issue here is that we can't / don't resolve FWD declarations
+> at load time (or dedup time)? I'm assuming 'struct pt_regs' is still
+> exposed somewhere in BTF via some other obj file, it's just those
+> syscall definitions that have FWD decl?
 
-commit ff2e6efda0d5c51b33e2bcc0b0b981ac0a0ef214 upstream.
+yes, BTF is generated from dwarf debug info, so it's object based,
+and in some objects the regs argument will point to full struct
+definition and in some just to forward declaration
 
-[backported for dependency, skipped Makefile.modfinal change,
-because module BTF is not supported in 5.10]
+> 
+> Applying this patch seems fine for now, but also seems fragile. Should
+> we instead/also teach verifier/dedup/whatever to resolve those FWD
+> declarations?
 
-The ccache tool can be used to speed up cross-compilation, by calling the
-compiler and binutils through ccache. For example, following should work:
+I'm not sure how hard it'd be to connect forward declarations
+to definitions.. it'd need to be probably in dedup or verifier
+as you suggest
 
-    $ export ARCH=arm64 CROSS_COMPILE="ccache aarch64-linux-gnu-"
+and I think it'd need to be done just based on struct name search,
+so I expect all sort of unexpected problems ;-) other than to be
+sure you connect to proper struct
 
-    $ make M=drivers/gpu/drm/rockchip/
+Andrii will have probably better idea if and where this is possible
 
-but pahole fails to extract the BTF info from DWARF, breaking the build:
+jirka
 
-      CC [M]  drivers/gpu/drm/rockchip//rockchipdrm.mod.o
-      LD [M]  drivers/gpu/drm/rockchip//rockchipdrm.ko
-      BTF [M] drivers/gpu/drm/rockchip//rockchipdrm.ko
-    aarch64-linux-gnu-objcopy: invalid option -- 'J'
-    Usage: aarch64-linux-gnu-objcopy [option(s)] in-file [out-file]
-     Copies a binary file, possibly transforming it in the process
-    ...
-    make[1]: *** [scripts/Makefile.modpost:156: __modpost] Error 2
-    make: *** [Makefile:1866: modules] Error 2
-
-this fails because OBJCOPY is set to "ccache aarch64-linux-gnu-copy" and
-later pahole is executed with the following command line:
-
-    LLVM_OBJCOPY=$(OBJCOPY) $(PAHOLE) -J --btf_base vmlinux $@
-
-which gets expanded to:
-
-    LLVM_OBJCOPY=ccache aarch64-linux-gnu-objcopy pahole -J ...
-
-instead of:
-
-    LLVM_OBJCOPY="ccache aarch64-linux-gnu-objcopy" pahole -J ...
-
-Fixes: 5f9ae91f7c0d ("kbuild: Build kernel module BTFs if BTF is enabled and pahole supports it")
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Acked-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Link: https://lore.kernel.org/bpf/20210526215228.3729875-1-javierm@redhat.com
----
- scripts/link-vmlinux.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index cdfccbfed452..72bf14df6903 100755
---- a/scripts/link-vmlinux.sh
-+++ b/scripts/link-vmlinux.sh
-@@ -162,7 +162,7 @@ gen_btf()
- 	vmlinux_link ${1}
- 
- 	info "BTF" ${2}
--	LLVM_OBJCOPY=${OBJCOPY} ${PAHOLE} -J ${extra_paholeopt} ${1}
-+	LLVM_OBJCOPY="${OBJCOPY}" ${PAHOLE} -J ${extra_paholeopt} ${1}
- 
- 	# Create ${2} which contains just .BTF section but no symbols. Add
- 	# SHF_ALLOC because .BTF will be part of the vmlinux image. --strip-all
--- 
-2.37.3
-
+> 
+> > Including asm/ptrace.h directly in syscall_wrapper.h to make
+> > sure all syscalls see 'struct pt_regs' definition and resulted
+> > BTF for '__*_sys_*(struct pt_regs *regs)' functions point to
+> > actual struct, not just forward declaration.
+> 
+> > Reported-by: Akihiro HARAI <jharai0815@gmail.com>
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >   arch/x86/include/asm/syscall_wrapper.h | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> > diff --git a/arch/x86/include/asm/syscall_wrapper.h
+> > b/arch/x86/include/asm/syscall_wrapper.h
+> > index 59358d1bf880..fd2669b1cb2d 100644
+> > --- a/arch/x86/include/asm/syscall_wrapper.h
+> > +++ b/arch/x86/include/asm/syscall_wrapper.h
+> > @@ -6,7 +6,7 @@
+> >   #ifndef _ASM_X86_SYSCALL_WRAPPER_H
+> >   #define _ASM_X86_SYSCALL_WRAPPER_H
+> 
+> > -struct pt_regs;
+> > +#include <asm/ptrace.h>
+> 
+> >   extern long __x64_sys_ni_syscall(const struct pt_regs *regs);
+> >   extern long __ia32_sys_ni_syscall(const struct pt_regs *regs);
+> > --
+> > 2.37.3
+> 
