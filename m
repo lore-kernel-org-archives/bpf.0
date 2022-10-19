@@ -2,280 +2,122 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76078C433FE
-	for <bpf@archiver.kernel.org>; Wed, 19 Oct 2022 15:00:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91294C433FE
+	for <bpf@archiver.kernel.org>; Wed, 19 Oct 2022 15:02:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231598AbiJSPA3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Oct 2022 11:00:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51402 "EHLO
+        id S230183AbiJSPCl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Oct 2022 11:02:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231584AbiJSPAG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:00:06 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5E4108DD1;
-        Wed, 19 Oct 2022 07:54:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1666191241; x=1697727241;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dmqJD4fcpIKbqeF6IrZ6qAmHqj1QWhXt8/3LbmilXiA=;
-  b=m+SshWKgOaE3n3ictFRzULnMPtSZRLvQhoCin74FRoweY7blLJO07PuV
-   bqiPhXM4NkxPxKFJPuR69kgyGF+NVQhYgF3Pjq7M4SxYbWQKzonjh33v9
-   wysGc6M4g7GxgRQD1I2yr/4ywfLvGgu2odiVZBn1qQPckp/FIeoAFmbCf
-   25skj1iiLkbub5Vy7EL3VS8Xgj42ctiI79F39frk8Q5Dek0C3xwE9DwX9
-   0jOuvYbs5cgtoyUQyws11+MaspOiOCwyWp0UUTePpVfJIiX87GeOPAORY
-   TX83XMHXfIMy0X1qvhwm0o5Dex+yLzPmTPvtduB8p30xgwmz9SrQ/2/2S
-   w==;
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="185521599"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Oct 2022 06:46:50 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 19 Oct 2022 06:46:50 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 19 Oct 2022 06:46:47 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <hawk@kernel.org>, <john.fastabend@gmail.com>,
-        <linux@armlinux.org.uk>, <UNGLinuxDriver@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next 5/5] net: lan96x: Use page_pool API
-Date:   Wed, 19 Oct 2022 15:50:08 +0200
-Message-ID: <20221019135008.3281743-6-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221019135008.3281743-1-horatiu.vultur@microchip.com>
-References: <20221019135008.3281743-1-horatiu.vultur@microchip.com>
+        with ESMTP id S229872AbiJSPCX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 19 Oct 2022 11:02:23 -0400
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF473BC7C;
+        Wed, 19 Oct 2022 07:56:56 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id DC54158037C;
+        Wed, 19 Oct 2022 10:55:49 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Wed, 19 Oct 2022 10:55:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1666191349; x=1666198549; bh=vLMDs+R0Qm
+        IdgQZ4Vz8PN8O4cAAR90i7fWXyp/iiOtc=; b=eyPQSFmtsV8ZrW+KoU8ZZZuZ3r
+        ODVWj7YuCHZwM3N4oWayR3z/2AN1JLQFIHNaMoBx8toiX0A0FiTUJ3fKvDg887Oo
+        IvZMp21KAJ84vUjsHadH3NwbxwbDUo7fnqrGmFEU92SyOJj33DcKI87e42Hllb1z
+        rHyqGmJAEO+LqDbb15dQmL3ad5+yKGHNOkweoQd8+ExBXHzTmLutlC/zHQqafm/z
+        Cb9G8SiIMuFqGgfZ+lt6MUrj3n18zERq7u7ESZ6s12bXWH0c+CZPFq6FzgX4eGdM
+        jqf295mnXW9LI3zTK3I4Bj/ROpx886y/YHUOaKepc+X+ZnVfoLLpBTSvdosw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1666191349; x=1666198549; bh=vLMDs+R0QmIdgQZ4Vz8PN8O4cAAR
+        90i7fWXyp/iiOtc=; b=PkCKZoZcXQRzr50Ourdgvcz5hJGG2JhYJrLiTGCV06Ql
+        ReinxzTYVo0wO7G3VQTsIUt2djGct10NNn2tKXlImjCe6Iu2ZrBBmOMS/j4Pa0x8
+        zzC1JpNSG4oHQzEQUghJ9X1FA82EVYDGVb2eyNuFevea5yFOJLO3fBKFTdiKWGln
+        Jb6FDg3AHFkAHJODQIDEjjpEWkjN+pZgNy28t/MNtkDynBOSC/TxTcw9LaI0aHmF
+        Bf4Xs73MTikPQwdfzK0gKS4LoVQpbOpcPp+c45MmFl16dbb9Hwq24DNuXNWM1+1Z
+        nM952PQeHD70YfPkqyGjBfZKpytZ4tn//ZYT9/WbXQ==
+X-ME-Sender: <xms:9Q9QY_87-oWhliLkEklgr0elc74zNdq_y5dbEug9VPpbZ6J0HLNivA>
+    <xme:9Q9QY7vBfJb39zKh6-i42buww6wgIrtemr7SlGG5ny9VjtwQ7MPU-VvD80rZAzGSF
+    Y1l4dA7PUII8Q>
+X-ME-Received: <xmr:9Q9QY9DW8OLXIUeOOI2PYxu3YxE02dh3JeHXx6Ngsp-_kx9MYYyOB1ulDcRnf2yaVnErC_Ok6PFLYXZRuWHNVGUs2qMSbhRX>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeelgedgkeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepgeehue
+    ehgfdtledutdelkeefgeejteegieekheefudeiffdvudeffeelvedttddvnecuffhomhgr
+    ihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:9Q9QY7fCLa7BEWX1y5Lz0na0bRJ2av_Nxn13_BRHIsXyBZFYo0zF-g>
+    <xmx:9Q9QY0MWZLXDoPWRcpR1RTLsE-nP-D9Tr0TbDXplqBZS2SdkobusDw>
+    <xmx:9Q9QY9lISEjJksidcPuIAHm-TKUaYvXXqszRRktbHPu5TRkuwVdS-g>
+    <xmx:9Q9QYwsoIEQhS4X_HZaocxA6hX0RO1Xetz4aCt2z3Z8sIA39iH-Hrg>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 19 Oct 2022 10:55:48 -0400 (EDT)
+Date:   Wed, 19 Oct 2022 16:55:46 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     stable@vger.kernel.org, bpf@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Philip =?iso-8859-1?Q?M=FCller?= <philm@manjaro.org>
+Subject: Re: [PATCH stable 5.10 0/5] kbuild: Fix compilation for latest
+ pahole release
+Message-ID: <Y1AP8h6YGiDZAgyp@kroah.com>
+References: <20221019085604.1017583-1-jolsa@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221019085604.1017583-1-jolsa@kernel.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use the page_pool API for allocation, freeing and DMA handling instead
-of dev_alloc_pages, __free_pages and dma_map_page.
+On Wed, Oct 19, 2022 at 10:55:59AM +0200, Jiri Olsa wrote:
+> hi,
+> new version of pahole (1.24) is causing compilation fail for 5.10
+> stable kernel, discussed in here [1][2]. Sending fix for that plus
+> dependency patches.
+> 
+> thanks,
+> jirka
+> 
+> 
+> [1] https://lore.kernel.org/bpf/20220825163538.vajnsv3xcpbhl47v@altlinux.org/
+> [2] https://lore.kernel.org/bpf/YwQRKkmWqsf%2FDu6A@kernel.org/
+> ---
+> Andrii Nakryiko (1):
+>       kbuild: skip per-CPU BTF generation for pahole v1.18-v1.21
+> 
+> Ilya Leoshkevich (1):
+>       bpf: Generate BTF_KIND_FLOAT when linking vmlinux
+> 
+> Javier Martinez Canillas (1):
+>       kbuild: Quote OBJCOPY var to avoid a pahole call break the build
+> 
+> Jiri Olsa (1):
+>       kbuild: Unify options for BTF generation for vmlinux and modules
+> 
+> Martin Rodriguez Reboredo (1):
+>       kbuild: Add skip_encoding_btf_enum64 option to pahole
+> 
+>  Makefile                |  3 +++
+>  scripts/link-vmlinux.sh |  2 +-
+>  scripts/pahole-flags.sh | 21 +++++++++++++++++++++
+>  3 files changed, 25 insertions(+), 1 deletion(-)
+>  create mode 100755 scripts/pahole-flags.sh
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- .../net/ethernet/microchip/lan966x/Kconfig    |  1 +
- .../ethernet/microchip/lan966x/lan966x_fdma.c | 74 +++++++++++--------
- .../ethernet/microchip/lan966x/lan966x_main.h |  3 +
- 3 files changed, 46 insertions(+), 32 deletions(-)
+Ah, all showed up now.  I'll look at these tomorrow, thanks!
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/Kconfig b/drivers/net/ethernet/microchip/lan966x/Kconfig
-index 49e1464a43139..b7ae5ce7d3f7a 100644
---- a/drivers/net/ethernet/microchip/lan966x/Kconfig
-+++ b/drivers/net/ethernet/microchip/lan966x/Kconfig
-@@ -7,5 +7,6 @@ config LAN966X_SWITCH
- 	depends on BRIDGE || BRIDGE=n
- 	select PHYLINK
- 	select PACKING
-+	select PAGE_POOL
- 	help
- 	  This driver supports the Lan966x network switch device.
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-index 4e8f7e47c5536..ba34a7b7ccd13 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-@@ -10,47 +10,25 @@ static int lan966x_fdma_channel_active(struct lan966x *lan966x)
- static struct page *lan966x_fdma_rx_alloc_page(struct lan966x_rx *rx,
- 					       struct lan966x_db *db)
- {
--	struct lan966x *lan966x = rx->lan966x;
--	dma_addr_t dma_addr;
- 	struct page *page;
- 
--	page = dev_alloc_pages(rx->page_order);
-+	page = page_pool_dev_alloc_pages(rx->page_pool);
- 	if (unlikely(!page))
- 		return NULL;
- 
--	dma_addr = dma_map_page(lan966x->dev, page, 0,
--				PAGE_SIZE << rx->page_order,
--				DMA_FROM_DEVICE);
--	if (unlikely(dma_mapping_error(lan966x->dev, dma_addr)))
--		goto free_page;
--
--	db->dataptr = dma_addr;
-+	db->dataptr = page_pool_get_dma_addr(page);
- 
- 	return page;
--
--free_page:
--	__free_pages(page, rx->page_order);
--	return NULL;
- }
- 
- static void lan966x_fdma_rx_free_pages(struct lan966x_rx *rx)
- {
--	struct lan966x *lan966x = rx->lan966x;
--	struct lan966x_rx_dcb *dcb;
--	struct lan966x_db *db;
- 	int i, j;
- 
- 	for (i = 0; i < FDMA_DCB_MAX; ++i) {
--		dcb = &rx->dcbs[i];
--
--		for (j = 0; j < FDMA_RX_DCB_MAX_DBS; ++j) {
--			db = &dcb->db[j];
--			dma_unmap_single(lan966x->dev,
--					 (dma_addr_t)db->dataptr,
--					 PAGE_SIZE << rx->page_order,
--					 DMA_FROM_DEVICE);
--			__free_pages(rx->page[i][j], rx->page_order);
--		}
-+		for (j = 0; j < FDMA_RX_DCB_MAX_DBS; ++j)
-+			page_pool_put_full_page(rx->page_pool,
-+						rx->page[i][j], false);
- 	}
- }
- 
-@@ -62,7 +40,7 @@ static void lan966x_fdma_rx_free_page(struct lan966x_rx *rx)
- 	if (unlikely(!page))
- 		return;
- 
--	__free_pages(page, rx->page_order);
-+	page_pool_recycle_direct(rx->page_pool, page);
- }
- 
- static void lan966x_fdma_rx_add_dcb(struct lan966x_rx *rx,
-@@ -84,6 +62,27 @@ static void lan966x_fdma_rx_add_dcb(struct lan966x_rx *rx,
- 	rx->last_entry = dcb;
- }
- 
-+static int lan966x_fdma_rx_alloc_page_pool(struct lan966x_rx *rx)
-+{
-+	struct lan966x *lan966x = rx->lan966x;
-+	struct page_pool_params pp_params = {
-+		.order = rx->page_order,
-+		.flags = PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV,
-+		.pool_size = FDMA_DCB_MAX,
-+		.nid = NUMA_NO_NODE,
-+		.dev = lan966x->dev,
-+		.dma_dir = DMA_FROM_DEVICE,
-+		.offset = 0,
-+		.max_len = PAGE_SIZE << rx->page_order,
-+	};
-+
-+	rx->page_pool = page_pool_create(&pp_params);
-+	if (IS_ERR(rx->page_pool))
-+		return PTR_ERR(rx->page_pool);
-+
-+	return 0;
-+}
-+
- static int lan966x_fdma_rx_alloc(struct lan966x_rx *rx)
- {
- 	struct lan966x *lan966x = rx->lan966x;
-@@ -93,6 +92,9 @@ static int lan966x_fdma_rx_alloc(struct lan966x_rx *rx)
- 	int i, j;
- 	int size;
- 
-+	if (lan966x_fdma_rx_alloc_page_pool(rx))
-+		return PTR_ERR(rx->page_pool);
-+
- 	/* calculate how many pages are needed to allocate the dcbs */
- 	size = sizeof(struct lan966x_rx_dcb) * FDMA_DCB_MAX;
- 	size = ALIGN(size, PAGE_SIZE);
-@@ -431,9 +433,9 @@ static int lan966x_fdma_rx_check_frame(struct lan966x_rx *rx, u64 *src_port)
- 	if (unlikely(!page))
- 		return FDMA_RX_ERROR;
- 
--	dma_unmap_single(lan966x->dev, (dma_addr_t)db->dataptr,
--			 FDMA_DCB_STATUS_BLOCKL(db->status),
--			 DMA_FROM_DEVICE);
-+	dma_sync_single_for_cpu(lan966x->dev, (dma_addr_t)db->dataptr,
-+				FDMA_DCB_STATUS_BLOCKL(db->status),
-+				DMA_FROM_DEVICE);
- 
- 	lan966x_ifh_get_src_port(page_address(page), src_port);
- 
-@@ -464,6 +466,8 @@ static struct sk_buff *lan966x_fdma_rx_get_frame(struct lan966x_rx *rx,
- 	if (unlikely(!skb))
- 		goto free_page;
- 
-+	skb_mark_for_recycle(skb);
-+
- 	skb_put(skb, FDMA_DCB_STATUS_BLOCKL(db->status));
- 
- 	lan966x_ifh_get_timestamp(skb->data, &timestamp);
-@@ -491,7 +495,7 @@ static struct sk_buff *lan966x_fdma_rx_get_frame(struct lan966x_rx *rx,
- 	return skb;
- 
- free_page:
--	__free_pages(page, rx->page_order);
-+	page_pool_recycle_direct(rx->page_pool, page);
- 
- 	return NULL;
- }
-@@ -718,6 +722,7 @@ static int lan966x_qsys_sw_status(struct lan966x *lan966x)
- static int lan966x_fdma_reload(struct lan966x *lan966x, int new_mtu)
- {
- 	void *rx_dcbs, *tx_dcbs, *tx_dcbs_buf;
-+	struct page_pool *page_pool;
- 	dma_addr_t rx_dma, tx_dma;
- 	u32 size;
- 	int err;
-@@ -728,6 +733,7 @@ static int lan966x_fdma_reload(struct lan966x *lan966x, int new_mtu)
- 	rx_dcbs = lan966x->rx.dcbs;
- 	tx_dcbs = lan966x->tx.dcbs;
- 	tx_dcbs_buf = lan966x->tx.dcbs_buf;
-+	page_pool = lan966x->rx.page_pool;
- 
- 	napi_synchronize(&lan966x->napi);
- 	napi_disable(&lan966x->napi);
-@@ -745,6 +751,8 @@ static int lan966x_fdma_reload(struct lan966x *lan966x, int new_mtu)
- 	size = ALIGN(size, PAGE_SIZE);
- 	dma_free_coherent(lan966x->dev, size, rx_dcbs, rx_dma);
- 
-+	page_pool_destroy(page_pool);
-+
- 	lan966x_fdma_tx_disable(&lan966x->tx);
- 	err = lan966x_fdma_tx_alloc(&lan966x->tx);
- 	if (err)
-@@ -761,6 +769,7 @@ static int lan966x_fdma_reload(struct lan966x *lan966x, int new_mtu)
- 
- 	return err;
- restore:
-+	lan966x->rx.page_pool = page_pool;
- 	lan966x->rx.dma = rx_dma;
- 	lan966x->rx.dcbs = rx_dcbs;
- 	lan966x_fdma_rx_start(&lan966x->rx);
-@@ -872,5 +881,6 @@ void lan966x_fdma_deinit(struct lan966x *lan966x)
- 
- 	lan966x_fdma_rx_free_pages(&lan966x->rx);
- 	lan966x_fdma_rx_free(&lan966x->rx);
-+	page_pool_destroy(lan966x->rx.page_pool);
- 	lan966x_fdma_tx_free(&lan966x->tx);
- }
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-index e635e529df0d4..9abdc3fb3f7e5 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-@@ -9,6 +9,7 @@
- #include <linux/phy.h>
- #include <linux/phylink.h>
- #include <linux/ptp_clock_kernel.h>
-+#include <net/page_pool.h>
- #include <net/pkt_cls.h>
- #include <net/pkt_sched.h>
- #include <net/switchdev.h>
-@@ -160,6 +161,8 @@ struct lan966x_rx {
- 	u8 page_order;
- 
- 	u8 channel_id;
-+
-+	struct page_pool *page_pool;
- };
- 
- struct lan966x_tx_dcb_buf {
--- 
-2.38.0
-
+greg k-h
