@@ -2,85 +2,95 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B219BC4332F
-	for <bpf@archiver.kernel.org>; Wed, 19 Oct 2022 13:03:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9675C433FE
+	for <bpf@archiver.kernel.org>; Wed, 19 Oct 2022 13:49:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbiJSNDK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Oct 2022 09:03:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33952 "EHLO
+        id S231450AbiJSNti (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Oct 2022 09:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbiJSNCt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 19 Oct 2022 09:02:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 435D427DC8
-        for <bpf@vger.kernel.org>; Wed, 19 Oct 2022 05:46:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666183501;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q8LPpnYpysqGSiJUPWry3p0iYpcsy7FD/788/f3PsSg=;
-        b=Qf8MOAN0dm4EBewezJ84Y9Q2bN8zUdMLOPTjIghsb2gtUjaC6ycbVO53DMP5THNibY0W9z
-        WHfPh2gJbjaTITne25g0fsi1sCgTl25KBRGeOk/k2pnEDyNI9KCF1yHXg8bMiKXEz8xx7Z
-        sg0UJLf7ZyXb3K9RnWruo1+7jjXv8xc=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-148-5EO_4TfcOPmwIFGowP_BHQ-1; Wed, 19 Oct 2022 08:41:31 -0400
-X-MC-Unique: 5EO_4TfcOPmwIFGowP_BHQ-1
-Received: by mail-ed1-f71.google.com with SMTP id b13-20020a056402350d00b0045d0fe2004eso12163548edd.18
-        for <bpf@vger.kernel.org>; Wed, 19 Oct 2022 05:41:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q8LPpnYpysqGSiJUPWry3p0iYpcsy7FD/788/f3PsSg=;
-        b=2RCCDqSaxHfAwJ7gKK/Hc2d6v1OweCDsn9U8gKKjR1d0sgLltu17w0N93rLCS9RX4V
-         mLVxSwOGQzgx/HRdGy5U9kfQ0Bs8BCxONFAQlIKo1H1GCaAu/nmYnXRLAbCjR9i2DlOy
-         aWXKFEwlURfU+OwRXyGjM7ebR9M9MxJ3q5eeMxtV39hi7fzIVqoyNOA1/116K2sdarPc
-         xeB6grig8qrHYdA2qyE4ZxhwD7Z8Giji3A78XsTX0DIViWPW4haYaVXxXiaNr39oEXWu
-         acyktxIh1h7ifyYMUhoBWNVXcFuQnlzX+s/aDgvnyVghHcMUvMK5+zuejfa59d2lWqoQ
-         oc/A==
-X-Gm-Message-State: ACrzQf3x28YidwSmBUBWv2VjzKCpt/UW5UAKloKgvs9bNbXIP6TYnNmZ
-        Ax69KKoHHahi/0YAglqe6fTDcp2Pf4TweiKKYrxalZBtTS7qeUE637/omPUgKSfca1So3GuESsJ
-        Vw8guwQnqo1nj
-X-Received: by 2002:a17:906:5a4b:b0:78d:8790:d4a1 with SMTP id my11-20020a1709065a4b00b0078d8790d4a1mr6561278ejc.329.1666183287303;
-        Wed, 19 Oct 2022 05:41:27 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6sWe0zylQfRJULRKTF9A5wU7VQf2KsdTVq4NOZsdUmfUsJ4OCFQfVUDSsqaTfCq+dVr7yOIg==
-X-Received: by 2002:a17:906:5a4b:b0:78d:8790:d4a1 with SMTP id my11-20020a1709065a4b00b0078d8790d4a1mr6561225ejc.329.1666183286337;
-        Wed, 19 Oct 2022 05:41:26 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id k15-20020a17090632cf00b0078d38cda2b1sm8818709ejk.202.2022.10.19.05.41.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 05:41:25 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 9D7306C25B2; Wed, 19 Oct 2022 14:41:24 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Florian Westphal <fw@strlen.de>, bpf@vger.kernel.org
-Cc:     netfilter-devel <netfilter-devel@vger.kernel.org>
-Subject: Re: netfilter+bpf road ahead
-In-Reply-To: <20221018182637.GA4631@breakpoint.cc>
-References: <20221018182637.GA4631@breakpoint.cc>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Wed, 19 Oct 2022 14:41:24 +0200
-Message-ID: <87a65shtor.fsf@toke.dk>
+        with ESMTP id S233590AbiJSNsJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 19 Oct 2022 09:48:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A50A169CE7;
+        Wed, 19 Oct 2022 06:32:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C9F9CB82403;
+        Wed, 19 Oct 2022 08:57:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E977AC433D7;
+        Wed, 19 Oct 2022 08:57:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666169826;
+        bh=TWvekpxCQLsPdCpQ6E83BRmLzXBNTJyP0GcQMrJFkck=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=nw1qmLALAU7LVw6td58WiRkh86vmdlP6ufQAoVQITVnehA7Sfe/PLIpdRtc4Hv3jH
+         WQBsBZwN812c6G8u28lqeqPkmwUBFmuD7PzQ+jIPHom5+Rg91olAxcSAJ8WRcpaSkN
+         Q+jRVAdfCoh2VldfdHVlWDZOXX8VtXvakDtXM2RbOkfqOwaRizs+AvVbf6czVH1NFK
+         LBE6hSqdXBid15L3KzS30vwPqbnWRQz0ssZsyOiaPvhzVaM93KYbnRJkrzlSOgGr/q
+         zmlmvTfRjP2zDqWatv5jIsGvc6ejkwj9DZEvrcEiOGj0sugg78apiRB37XBTVObN52
+         LT1JWQc9JbYbQ==
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     stable@vger.kernel.org
+Cc:     bpf@vger.kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        =?UTF-8?q?Philip=20M=C3=BCller?= <philm@manjaro.org>
+Subject: [PATCH stable 5.10 5/5] kbuild: Add skip_encoding_btf_enum64 option to pahole
+Date:   Wed, 19 Oct 2022 10:56:04 +0200
+Message-Id: <20221019085604.1017583-6-jolsa@kernel.org>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20221019085604.1017583-1-jolsa@kernel.org>
+References: <20221019085604.1017583-1-jolsa@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Florian Westphal <fw@strlen.de> writes:
+From: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
 
-> - lots of details to be figured out, but if netfilter core folks
-> agree to this plan it will be one of the most exciting
-> projects in the linux networking. iptables will see significant
-> performance boost and major feature addition.
-> Blending bpf and netfilter worlds would be fantastic.
+New pahole (version 1.24) generates by default new BTF_KIND_ENUM64 BTF tag,
+which is not supported by stable kernel.
 
-+1 on this; sounds like great news, and I look forward to seeing this
-effort come to fruition. Thank you both for taking time to hash this
-out! :)
+As a result the kernel with CONFIG_DEBUG_INFO_BTF option will fail to
+compile with following error:
 
--Toke
+  BTFIDS  vmlinux
+FAILED: load BTF from vmlinux: Invalid argument
+
+New pahole provides --skip_encoding_btf_enum64 option to skip BTF_KIND_ENUM64
+generation and produce BTF supported by stable kernel.
+
+Adding this option to scripts/pahole-flags.sh.
+
+This change does not have equivalent commit in linus tree, because linus tree
+has support for BTF_KIND_ENUM64 tag, so it does not need to be disabled.
+
+Signed-off-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+ scripts/pahole-flags.sh | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/scripts/pahole-flags.sh b/scripts/pahole-flags.sh
+index 27445cb72974..8c82173e42e5 100755
+--- a/scripts/pahole-flags.sh
++++ b/scripts/pahole-flags.sh
+@@ -14,4 +14,8 @@ if [ "${pahole_ver}" -ge "118" ] && [ "${pahole_ver}" -le "121" ]; then
+ 	extra_paholeopt="${extra_paholeopt} --skip_encoding_btf_vars"
+ fi
+ 
++if [ "${pahole_ver}" -ge "124" ]; then
++	extra_paholeopt="${extra_paholeopt} --skip_encoding_btf_enum64"
++fi
++
+ echo ${extra_paholeopt}
+-- 
+2.37.3
 
