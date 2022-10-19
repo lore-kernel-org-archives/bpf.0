@@ -2,59 +2,59 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E3FBC4332F
-	for <bpf@archiver.kernel.org>; Wed, 19 Oct 2022 18:38:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2AEFC4332F
+	for <bpf@archiver.kernel.org>; Wed, 19 Oct 2022 18:38:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbiJSSix (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Oct 2022 14:38:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60908 "EHLO
+        id S229885AbiJSSi4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Oct 2022 14:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbiJSSiw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 19 Oct 2022 14:38:52 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1674217D87F
-        for <bpf@vger.kernel.org>; Wed, 19 Oct 2022 11:38:52 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id fw14so17662474pjb.3
-        for <bpf@vger.kernel.org>; Wed, 19 Oct 2022 11:38:52 -0700 (PDT)
+        with ESMTP id S229803AbiJSSiz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 19 Oct 2022 14:38:55 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C77189C30
+        for <bpf@vger.kernel.org>; Wed, 19 Oct 2022 11:38:54 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id e129so17023157pgc.9
+        for <bpf@vger.kernel.org>; Wed, 19 Oct 2022 11:38:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rCDmQ9xrAmjZGrgEFa9vY4JR2yCT6Jw9ahBiSCvLJ/g=;
-        b=c8+eQ40FIkjNEj8ttqyXmUcelsZu7ov0f0IGlxfmrIxlo3FG0SE+a6jX1kP3dd2U7u
-         8U95OVG+txXYb2ZtBvewi/ukEiyNYbo4yID+wkvSuuGX2nxwu59wCaI/Y2C9sHtQaKS5
-         TwYO8hkGsxVPEX7UlkCPw6TDu+bwl1/ufC6uDq8Zz9HA1fmi2Eo/oQMdzPyI9fp17Gez
-         YtnunUOof5uMvIPgx+IH06G5nlb0E8d9bD2vwZkr5VM4vyJsQyORe0yOmTxD7HvrpBJT
-         r/7xz+WxxXZ4xHVWqWsotOHSQQlMxfuM4HmcwVaq6rz/74bmq3ToLn1oFcCq7iAOwRqJ
-         tcYw==
+        bh=M0k3UitIuZs8QbREBS2h3Pc+EVFq/RHeV38kSddPEQQ=;
+        b=cJIdnYGrlFLTQ/pmsfdG6vB3y/ot1C7WuTo0EQv85ateL6+L/hYQRtD3QLoXxIkxBf
+         fhWG6SYs0aMulhAFsj7xr2OGF5Suk387VXzIVH5PPRqPTuogyp5PS9E5XkjaPzdMtYRR
+         vVd0HVJH3l/vk/MhCco3mS48Lk7AzVPursUfIcvFCH8zkFEcV4PFqzZu8Hcs71axxyK0
+         9stR6kfTPKJRD1v2io1cZL4HClTEY+OLIdLpPxKxrTfLzXJrVzTIFn/6orfaRZKdOPIf
+         GqQxKZS7OnrTWqpAb6ADFzdjmZBYwZU5VNVsM3lOCgBCofH6Gzm5F1hBEKo1iNpZsGYo
+         3nTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rCDmQ9xrAmjZGrgEFa9vY4JR2yCT6Jw9ahBiSCvLJ/g=;
-        b=cfxDAWE+83iltfRS3yE2zyev4fnhKXG/eJoCSl2Q9pQ/kSuiZgvTPWdvTWunl+GKQ6
-         gGqQokR9m63iSHWdJYwHsjkt/sKsOeuWz72hWsyXz3U7jrivWvywQy5Fx5mYnCdGWSCh
-         9vxY5BGJaQSVdwlk3jdHacvMLAYxkUqFG0QoZ89YY3Urtgr+rPVac3lUBFlw1+Gpqi3M
-         NsWVL2oL6PiuRKAZOxq5QPdluL3Be+XLBMehqQ5JdwbWNyGy1SuAJeR91vxh26hLGCP7
-         G0YIdMQ9tN5ySwaHzm4Y4XCrV5rtfMF1Y5utl/0kPE8DtQSgQTJuEExU1XQL5HDCNW9F
-         BuRg==
-X-Gm-Message-State: ACrzQf07oRrGEioVtc5HgO+3ROL0gdvB0WxFcqoggPG7GB9f0zViLT0M
-        h6tWac8mQITe5KblO3Zr2udPGTBHKaIuOQ==
-X-Google-Smtp-Source: AMsMyM6+yFOsW5lsUTCDsJKLSuYkQLB0C4SGONr/bjWBT8Bk7mMw/r794zH3+i0bQtzxbM4OyDSwDQ==
-X-Received: by 2002:a17:902:8c81:b0:178:1701:cd with SMTP id t1-20020a1709028c8100b00178170100cdmr10018742plo.138.1666204731188;
-        Wed, 19 Oct 2022 11:38:51 -0700 (PDT)
+        bh=M0k3UitIuZs8QbREBS2h3Pc+EVFq/RHeV38kSddPEQQ=;
+        b=xd78yLEABrmh4GCNNLW30Krq3EhU38OH0zyWN7NnGIXW2NPoeY1mCK6vtfOyuvF7cw
+         MJdGwh9aq46E8UL9JXAEzTRzcUwAe9/OUF6PqUaB2uu7SBDnCqJ+As/zcK2cI3grSEB+
+         xBe7G+9KXFzUkgmnWYgZjaN/AZ7t/+/dbInESEE4vbPbJqOTUmkcCs9jW0CrQPcy7YNB
+         xoRlyca9pJhE3OOT/407Fy+3hLGfcQ+CP1ldj3ioQVfuukqNXqKY4Zth20RLeI8Jtxcs
+         T1enJJVage31kKhdOY4swv0PgI7JnBUzBHedJp7nwnBdsZSP52zBp3JrXv+TpE0z5UKy
+         K8TQ==
+X-Gm-Message-State: ACrzQf1BIX51e3vCQjcHWVbRyEb2S4ALZcWp7Sc4u3kbPhZ8fG/yJMA2
+        +ll93i3IbPJ4nYXMBocevgEka7JXB4Edqw==
+X-Google-Smtp-Source: AMsMyM647pe54sjfn91KpZTfSIEArldRGfeq3X3oQcbXBYMNs8zSTUJE/WoXxq2JvPGn2qpwNpq2/A==
+X-Received: by 2002:a63:5519:0:b0:457:dced:8ba1 with SMTP id j25-20020a635519000000b00457dced8ba1mr8161929pgb.163.1666204733726;
+        Wed, 19 Oct 2022 11:38:53 -0700 (PDT)
 Received: from mariner-vm.. (c-67-185-99-176.hsd1.wa.comcast.net. [67.185.99.176])
-        by smtp.gmail.com with ESMTPSA id x2-20020a170902a38200b00177ff4019d9sm11104510pla.274.2022.10.19.11.38.50
+        by smtp.gmail.com with ESMTPSA id x2-20020a170902a38200b00177ff4019d9sm11104510pla.274.2022.10.19.11.38.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 11:38:50 -0700 (PDT)
+        Wed, 19 Oct 2022 11:38:53 -0700 (PDT)
 From:   dthaler1968@googlemail.com
 To:     bpf@vger.kernel.org
 Cc:     Dave Thaler <dthaler@microsoft.com>
-Subject: [PATCH 2/4] bpf, docs: Fix modulo zero, division by zero, overflow, and underflow
-Date:   Wed, 19 Oct 2022 18:38:43 +0000
-Message-Id: <20221019183845.905-2-dthaler1968@googlemail.com>
+Subject: [PATCH 4/4] bpf, docs: Explain helper functions
+Date:   Wed, 19 Oct 2022 18:38:45 +0000
+Message-Id: <20221019183845.905-4-dthaler1968@googlemail.com>
 X-Mailer: git-send-email 2.33.4
 In-Reply-To: <20221019183845.905-1-dthaler1968@googlemail.com>
 References: <20221019183845.905-1-dthaler1968@googlemail.com>
@@ -66,58 +66,52 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Dave Thaler <dthaler@microsoft.com>
 
-Fix modulo zero, division by zero, overflow, and underflow.
-Also clarify how a negative immediate value is ued in unsigned division
+Explain helper functions.
+
+Kernel functions and bpf to bpf calls are covered in
+a later commit in this set ("Add extended call instructions").
 
 Signed-off-by: Dave Thaler <dthaler@microsoft.com>
 ---
- Documentation/bpf/instruction-set.rst | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ Documentation/bpf/instruction-set.rst | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
 diff --git a/Documentation/bpf/instruction-set.rst b/Documentation/bpf/instruction-set.rst
-index 6847a4cbf..3a64d4b49 100644
+index 29b599c70..f9e56d9d5 100644
 --- a/Documentation/bpf/instruction-set.rst
 +++ b/Documentation/bpf/instruction-set.rst
-@@ -104,19 +104,26 @@ code      value  description
- BPF_ADD   0x00   dst += src
- BPF_SUB   0x10   dst -= src
- BPF_MUL   0x20   dst \*= src
--BPF_DIV   0x30   dst /= src
-+BPF_DIV   0x30   dst = (src != 0) ? (dst / src) : 0
- BPF_OR    0x40   dst \|= src
- BPF_AND   0x50   dst &= src
- BPF_LSH   0x60   dst <<= src
- BPF_RSH   0x70   dst >>= src
- BPF_NEG   0x80   dst = ~src
--BPF_MOD   0x90   dst %= src
-+BPF_MOD   0x90   dst = (src != 0) ? (dst % src) : dst
- BPF_XOR   0xa0   dst ^= src
- BPF_MOV   0xb0   dst = src
- BPF_ARSH  0xc0   sign extending shift right
- BPF_END   0xd0   byte swap operations (see `Byte swap instructions`_ below)
- ========  =====  ==========================================================
+@@ -242,7 +242,7 @@ BPF_JSET  0x40   PC += off if dst & src
+ BPF_JNE   0x50   PC += off if dst != src
+ BPF_JSGT  0x60   PC += off if dst > src     signed
+ BPF_JSGE  0x70   PC += off if dst >= src    signed
+-BPF_CALL  0x80   function call
++BPF_CALL  0x80   function call              see `Helper functions`_
+ BPF_EXIT  0x90   function / program return  BPF_JMP only
+ BPF_JLT   0xa0   PC += off if dst < src     unsigned
+ BPF_JLE   0xb0   PC += off if dst <= src    unsigned
+@@ -253,6 +253,22 @@ BPF_JSLE  0xd0   PC += off if dst <= src    signed
+ The eBPF program needs to store the return value into register R0 before doing a
+ BPF_EXIT.
  
-+Underflow and overflow are allowed during arithmetic operations,
-+meaning the 64-bit or 32-bit value will wrap.  If
-+eBPF program execution would result in division by zero,
-+the destination register is instead set to zero.
-+If execution would result in modulo by zero,
-+the destination register is instead left unchanged.
++Helper functions
++~~~~~~~~~~~~~~~~
++Helper functions are a concept whereby BPF programs can call into a
++set of function calls exposed by the eBPF runtime.  Each helper
++function is identified by an integer used in a ``BPF_CALL`` instruction.
++The available helper functions may differ for each eBPF program type.
 +
- ``BPF_ADD | BPF_X | BPF_ALU`` means::
++Conceptually, each helper function is implemented with a commonly shared function
++signature defined as:
++
++  u64 function(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5)
++
++In actuality, each helper function is defined as taking between 0 and 5 arguments,
++with the remaining registers being ignored.  The definition of a helper function
++is responsible for specifying the type (e.g., integer, pointer, etc.) of the value returned,
++the number of arguments, and the type of each argument.
  
-   dst_reg = (u32) dst_reg + (u32) src_reg;
-@@ -135,6 +142,10 @@ where '(u32)' indicates truncation to 32 bits.
- 
-   src_reg = src_reg ^ imm32
- 
-+Also note that the division and modulo operations are unsigned,
-+where 'imm' is first sign extended to 64 bits and then converted
-+to an unsigned 64-bit value.  There are no instructions for
-+signed division or modulo.
- 
- Byte swap instructions
- ~~~~~~~~~~~~~~~~~~~~~~
+ Load and store instructions
+ ===========================
 -- 
 2.33.4
 
