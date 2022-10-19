@@ -2,35 +2,35 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FDDDC4332F
-	for <bpf@archiver.kernel.org>; Wed, 19 Oct 2022 14:17:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90DA3C4332F
+	for <bpf@archiver.kernel.org>; Wed, 19 Oct 2022 14:20:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233325AbiJSOR5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Oct 2022 10:17:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
+        id S230185AbiJSOUf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Oct 2022 10:20:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbiJSORi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 19 Oct 2022 10:17:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E7C1D8183
-        for <bpf@vger.kernel.org>; Wed, 19 Oct 2022 07:00:16 -0700 (PDT)
+        with ESMTP id S233449AbiJSOUL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 19 Oct 2022 10:20:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 333B65A2FC
+        for <bpf@vger.kernel.org>; Wed, 19 Oct 2022 07:03:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1A50B81EDB
-        for <bpf@vger.kernel.org>; Wed, 19 Oct 2022 13:57:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2309C433D6;
-        Wed, 19 Oct 2022 13:57:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3D463B8229C
+        for <bpf@vger.kernel.org>; Wed, 19 Oct 2022 13:57:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47F23C433D6;
+        Wed, 19 Oct 2022 13:56:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666187868;
-        bh=5ntUDp/6Up6cYJCfHl9XG8Bio8zzPLtnVfgJMeHZuYA=;
+        s=k20201202; t=1666187823;
+        bh=BLrWSK2y6Ic1QFL/lOXOKAwcJZalvL2PzPAMR6ELH6o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hu60o14F0BnQjnEtL+JC6Oln2jOTspsg57AwJ6DjFX6GORfOmVfAHuEt27aKmhEY5
-         36ypPqxPrkJPQTr1JEcOMYyztFZqJDULgGGCcLSmS+iEa/hwCqqpx6r3SvV2KagbPy
-         GhjYvGb4SyU+7GmNFNhYPm26424ADspa37cv6ufHky290rOXXwzx+/UAYWapLycu5f
-         8CZ3igWtl0GMfJvoP4h5aLq4TGyO9ojYp9tGAZ1CCpg9j9Fsca+R0+RR4oIIxA9RzW
-         bpWCSCZG0bnPX7MEG7FEtV0I3SJE3CilqPXsUzjShaFByFb0Mi4SjC6uO+tg48tuNg
-         8i5PQXAZhw65Q==
+        b=dE30VzyS41r3RkQpxgFFZyCYCO7TZqWodkhM709GX2G8+/qN7q76POeYcIG3/vXgb
+         FodhhlUndbX0xIf6R525RdqoBILRfXZyUT9jK1QRdZA4q1sVvzdbSjW2ozw7Yb1I8v
+         /ja/ITQosIUPXJuvGikfKW6xhJVqAFmwuceU8LW9R7y8/ity8N2+pjuZcXuug5exZr
+         CKfiq62jJPPdr8/92oHxzRvDwsVj8T50sBr8H8h0uZ5DCMUPGeM5rYJu9iTRpY+nmW
+         rn07zSjC/SrjNzv9Bzgbd1ivlx8oiRP/xIOWw1DrP9XorizpjnnTshzeG8+/amQKA0
+         WhE4DLIqx1qiw==
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -44,9 +44,9 @@ Cc:     Song Liu <song@kernel.org>, bpf@vger.kernel.org,
         Hao Luo <haoluo@google.com>, Christoph Hellwig <hch@lst.de>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Martynas Pumputis <m@lambda.lt>
-Subject: [PATCHv2 bpf-next 7/8] selftests/bpf: Add kprobe_multi check to module attach test
-Date:   Wed, 19 Oct 2022 15:56:20 +0200
-Message-Id: <20221019135621.1480923-8-jolsa@kernel.org>
+Subject: [PATCHv2 bpf-next 3/8] bpf: Rename __bpf_kprobe_multi_cookie_cmp to bpf_kprobe_multi_addrs_cmp
+Date:   Wed, 19 Oct 2022 15:56:16 +0200
+Message-Id: <20221019135621.1480923-4-jolsa@kernel.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221019135621.1480923-1-jolsa@kernel.org>
 References: <20221019135621.1480923-1-jolsa@kernel.org>
@@ -56,49 +56,46 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding test that makes sure the kernel module won't be removed
-if there's kprobe multi link defined on top of it.
+Renaming __bpf_kprobe_multi_cookie_cmp to bpf_kprobe_multi_addrs_cmp,
+because it's more suitable to current and upcoming code.
 
 Acked-by: Song Liu <song@kernel.org>
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- tools/testing/selftests/bpf/prog_tests/module_attach.c | 7 +++++++
- tools/testing/selftests/bpf/progs/test_module_attach.c | 6 ++++++
- 2 files changed, 13 insertions(+)
+ kernel/trace/bpf_trace.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/module_attach.c b/tools/testing/selftests/bpf/prog_tests/module_attach.c
-index 6d0e50dcf47c..7fc01ff490db 100644
---- a/tools/testing/selftests/bpf/prog_tests/module_attach.c
-+++ b/tools/testing/selftests/bpf/prog_tests/module_attach.c
-@@ -103,6 +103,13 @@ void test_module_attach(void)
- 	ASSERT_ERR(delete_module("bpf_testmod", 0), "delete_module");
- 	bpf_link__destroy(link);
- 
-+	link = bpf_program__attach(skel->progs.kprobe_multi);
-+	if (!ASSERT_OK_PTR(link, "attach_kprobe_multi"))
-+		goto cleanup;
-+
-+	ASSERT_ERR(delete_module("bpf_testmod", 0), "delete_module");
-+	bpf_link__destroy(link);
-+
- cleanup:
- 	test_module_attach__destroy(skel);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_module_attach.c b/tools/testing/selftests/bpf/progs/test_module_attach.c
-index 08628afedb77..8a1b50f3a002 100644
---- a/tools/testing/selftests/bpf/progs/test_module_attach.c
-+++ b/tools/testing/selftests/bpf/progs/test_module_attach.c
-@@ -110,4 +110,10 @@ int BPF_PROG(handle_fmod_ret,
- 	return 0; /* don't override the exit code */
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 1ed08967fb97..17ae9e8336db 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -2550,7 +2550,7 @@ static void bpf_kprobe_multi_cookie_swap(void *a, void *b, int size, const void
+ 	swap(*cookie_a, *cookie_b);
  }
  
-+SEC("kprobe.multi/bpf_testmod_test_read")
-+int BPF_PROG(kprobe_multi)
-+{
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
+-static int __bpf_kprobe_multi_cookie_cmp(const void *a, const void *b)
++static int bpf_kprobe_multi_addrs_cmp(const void *a, const void *b)
+ {
+ 	const unsigned long *addr_a = a, *addr_b = b;
+ 
+@@ -2561,7 +2561,7 @@ static int __bpf_kprobe_multi_cookie_cmp(const void *a, const void *b)
+ 
+ static int bpf_kprobe_multi_cookie_cmp(const void *a, const void *b, const void *priv)
+ {
+-	return __bpf_kprobe_multi_cookie_cmp(a, b);
++	return bpf_kprobe_multi_addrs_cmp(a, b);
+ }
+ 
+ static u64 bpf_kprobe_multi_cookie(struct bpf_run_ctx *ctx)
+@@ -2579,7 +2579,7 @@ static u64 bpf_kprobe_multi_cookie(struct bpf_run_ctx *ctx)
+ 		return 0;
+ 	entry_ip = run_ctx->entry_ip;
+ 	addr = bsearch(&entry_ip, link->addrs, link->cnt, sizeof(entry_ip),
+-		       __bpf_kprobe_multi_cookie_cmp);
++		       bpf_kprobe_multi_addrs_cmp);
+ 	if (!addr)
+ 		return 0;
+ 	cookie = link->cookies + (addr - link->addrs);
 -- 
 2.37.3
 
