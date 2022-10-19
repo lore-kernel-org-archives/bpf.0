@@ -2,35 +2,35 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9675C433FE
-	for <bpf@archiver.kernel.org>; Wed, 19 Oct 2022 13:49:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE1C4C4332F
+	for <bpf@archiver.kernel.org>; Wed, 19 Oct 2022 13:56:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231450AbiJSNti (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Oct 2022 09:49:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44130 "EHLO
+        id S230401AbiJSN4E (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Oct 2022 09:56:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233590AbiJSNsJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 19 Oct 2022 09:48:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A50A169CE7;
-        Wed, 19 Oct 2022 06:32:44 -0700 (PDT)
+        with ESMTP id S233844AbiJSNyJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 19 Oct 2022 09:54:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF6D1C25C0;
+        Wed, 19 Oct 2022 06:36:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C9F9CB82403;
-        Wed, 19 Oct 2022 08:57:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E977AC433D7;
-        Wed, 19 Oct 2022 08:57:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42E9CB823DE;
+        Wed, 19 Oct 2022 08:56:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2C69C433B5;
+        Wed, 19 Oct 2022 08:56:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666169826;
-        bh=TWvekpxCQLsPdCpQ6E83BRmLzXBNTJyP0GcQMrJFkck=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nw1qmLALAU7LVw6td58WiRkh86vmdlP6ufQAoVQITVnehA7Sfe/PLIpdRtc4Hv3jH
-         WQBsBZwN812c6G8u28lqeqPkmwUBFmuD7PzQ+jIPHom5+Rg91olAxcSAJ8WRcpaSkN
-         Q+jRVAdfCoh2VldfdHVlWDZOXX8VtXvakDtXM2RbOkfqOwaRizs+AvVbf6czVH1NFK
-         LBE6hSqdXBid15L3KzS30vwPqbnWRQz0ssZsyOiaPvhzVaM93KYbnRJkrzlSOgGr/q
-         zmlmvTfRjP2zDqWatv5jIsGvc6ejkwj9DZEvrcEiOGj0sugg78apiRB37XBTVObN52
-         LT1JWQc9JbYbQ==
+        s=k20201202; t=1666169771;
+        bh=ng76K4N2fuUGk4I1JMwOArtnth+j1G2paRsYl7PIp8Y=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cSSCa0JrVjez2ZxUnZ1hi2RPgW+o44fYVvnvWPsP8t1bdEzKTlujLkO5dB5m+3FE1
+         oSTHpODME4seO7J7E9sP0lsRM5Df53M3EF6oEaN4eUvBAT+/KOon8LGwa95ektRYfV
+         1yyhNoRmWD04Pe54Kewpb/u3tiNjxMPXwDpT+wgaIF/I55M6iVoLbstsM66VyEmQD2
+         6EIaYed9QkWA6cNGe8whxWId5+0hc1ulAukmhyLib92ta90m3DTHes57qY1iZ7Oawj
+         ZL3cSCkSHpcbN81URyxheDLe/nNELLyqiBTiwE0jUkfLJiFA1wSas0I6OfHWZpAE6d
+         xDK88CyHekuIA==
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     stable@vger.kernel.org
 Cc:     bpf@vger.kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -41,56 +41,45 @@ Cc:     bpf@vger.kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>,
         Ilya Leoshkevich <iii@linux.ibm.com>,
         Nathan Chancellor <nathan@kernel.org>,
         =?UTF-8?q?Philip=20M=C3=BCller?= <philm@manjaro.org>
-Subject: [PATCH stable 5.10 5/5] kbuild: Add skip_encoding_btf_enum64 option to pahole
-Date:   Wed, 19 Oct 2022 10:56:04 +0200
-Message-Id: <20221019085604.1017583-6-jolsa@kernel.org>
+Subject: [PATCH stable 5.10 0/5] kbuild: Fix compilation for latest pahole release
+Date:   Wed, 19 Oct 2022 10:55:59 +0200
+Message-Id: <20221019085604.1017583-1-jolsa@kernel.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221019085604.1017583-1-jolsa@kernel.org>
-References: <20221019085604.1017583-1-jolsa@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+hi,
+new version of pahole (1.24) is causing compilation fail for 5.10
+stable kernel, discussed in here [1][2]. Sending fix for that plus
+dependency patches.
 
-New pahole (version 1.24) generates by default new BTF_KIND_ENUM64 BTF tag,
-which is not supported by stable kernel.
+thanks,
+jirka
 
-As a result the kernel with CONFIG_DEBUG_INFO_BTF option will fail to
-compile with following error:
 
-  BTFIDS  vmlinux
-FAILED: load BTF from vmlinux: Invalid argument
-
-New pahole provides --skip_encoding_btf_enum64 option to skip BTF_KIND_ENUM64
-generation and produce BTF supported by stable kernel.
-
-Adding this option to scripts/pahole-flags.sh.
-
-This change does not have equivalent commit in linus tree, because linus tree
-has support for BTF_KIND_ENUM64 tag, so it does not need to be disabled.
-
-Signed-off-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+[1] https://lore.kernel.org/bpf/20220825163538.vajnsv3xcpbhl47v@altlinux.org/
+[2] https://lore.kernel.org/bpf/YwQRKkmWqsf%2FDu6A@kernel.org/
 ---
- scripts/pahole-flags.sh | 4 ++++
- 1 file changed, 4 insertions(+)
+Andrii Nakryiko (1):
+      kbuild: skip per-CPU BTF generation for pahole v1.18-v1.21
 
-diff --git a/scripts/pahole-flags.sh b/scripts/pahole-flags.sh
-index 27445cb72974..8c82173e42e5 100755
---- a/scripts/pahole-flags.sh
-+++ b/scripts/pahole-flags.sh
-@@ -14,4 +14,8 @@ if [ "${pahole_ver}" -ge "118" ] && [ "${pahole_ver}" -le "121" ]; then
- 	extra_paholeopt="${extra_paholeopt} --skip_encoding_btf_vars"
- fi
- 
-+if [ "${pahole_ver}" -ge "124" ]; then
-+	extra_paholeopt="${extra_paholeopt} --skip_encoding_btf_enum64"
-+fi
-+
- echo ${extra_paholeopt}
--- 
-2.37.3
+Ilya Leoshkevich (1):
+      bpf: Generate BTF_KIND_FLOAT when linking vmlinux
 
+Javier Martinez Canillas (1):
+      kbuild: Quote OBJCOPY var to avoid a pahole call break the build
+
+Jiri Olsa (1):
+      kbuild: Unify options for BTF generation for vmlinux and modules
+
+Martin Rodriguez Reboredo (1):
+      kbuild: Add skip_encoding_btf_enum64 option to pahole
+
+ Makefile                |  3 +++
+ scripts/link-vmlinux.sh |  2 +-
+ scripts/pahole-flags.sh | 21 +++++++++++++++++++++
+ 3 files changed, 25 insertions(+), 1 deletion(-)
+ create mode 100755 scripts/pahole-flags.sh
