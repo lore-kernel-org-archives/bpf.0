@@ -2,42 +2,42 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27C4EC4332F
-	for <bpf@archiver.kernel.org>; Wed, 19 Oct 2022 14:07:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD7B4C433FE
+	for <bpf@archiver.kernel.org>; Wed, 19 Oct 2022 14:08:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232278AbiJSOHr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Oct 2022 10:07:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
+        id S232718AbiJSOIJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Oct 2022 10:08:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232332AbiJSOHM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 19 Oct 2022 10:07:12 -0400
+        with ESMTP id S231579AbiJSOHW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 19 Oct 2022 10:07:22 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A6021249;
-        Wed, 19 Oct 2022 06:49:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55786888F;
+        Wed, 19 Oct 2022 06:49:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1666187373; x=1697723373;
+  t=1666187384; x=1697723384;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=pI0JGV3h82O40WyzoIcLbpM9n6xc5MOAH3SkvA5G0Y0=;
-  b=fjqbYTeSmofiEvKqB5pI4y2OeYqROCK2riLege90jmORmlqwZi1FX/YJ
-   gPWq5e8751d6qrhzdKHg8VZksg7pqDJbJ8iGAJLX4qx5v6Fy+0MQmtqVT
-   7oEVcRRqoey6Ny8jSbPjKUTRHVQ2/GV6bIjrqmcrDOEvG04sxMAiWMdQf
-   GcLlIfC8luFXfUFyDqBYtS88cldmD3zDBBo7N3Y+zYHHnILBGCN+OaKVA
-   EC3uHXXl90C/XHijKxt88KSQm1FoC3B+7RbinpqckKktab/79Bd1RzCVu
-   ea0oaHF90LXMJo2PVQOhqSc0PVhIVirMRAHuhq3XzrFRB5SRX4Vw0g+6y
-   g==;
+  bh=jCuqHZfOvxY7kIZx6uTkH9sGBO4CT3qm5M3fduho0PI=;
+  b=uMbvJyqD344930NQFHDgvkcaXx5Mx2qvE0hK7vZhTxrsqtOuGOY6yw3t
+   NxL879CbC57/42dkXSUvgtPY2l2VRJfNeFrWUhh5T+EYrs6TQooYTqAcl
+   9LU9cRISQEZ76jJFDrBaITeRcGwFwv/Ol6SJ+PcN+k4S/xZKe3oqb3XfE
+   XAVvBF1FZRkHvREkLOEVfKTHBSEpKDJmkuldlRugMbdxwE+8AO6RxykeY
+   wJiXL9FIKTkEa8zrRiLII12yscMxiT310OI0/nYHEi09nW5EwKtVxYgqM
+   iIT/XrOSyse8amFFnNnX/bqPlryYvqZHCJc+kJiWezYb35tfRpYnFmI9m
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="196129559"
+   d="scan'208";a="196129575"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Oct 2022 06:46:38 -0700
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Oct 2022 06:46:44 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 19 Oct 2022 06:46:38 -0700
+ 15.1.2507.12; Wed, 19 Oct 2022 06:46:44 -0700
 Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 19 Oct 2022 06:46:35 -0700
+ 15.1.2507.12 via Frontend Transport; Wed, 19 Oct 2022 06:46:41 -0700
 From:   Horatiu Vultur <horatiu.vultur@microchip.com>
 To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>
@@ -46,9 +46,9 @@ CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
         <hawk@kernel.org>, <john.fastabend@gmail.com>,
         <linux@armlinux.org.uk>, <UNGLinuxDriver@microchip.com>,
         Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next 1/5] net: lan966x: Add define IFH_LEN_BYTES
-Date:   Wed, 19 Oct 2022 15:50:04 +0200
-Message-ID: <20221019135008.3281743-2-horatiu.vultur@microchip.com>
+Subject: [PATCH net-next 3/5] net: lan966x: Split function lan966x_fdma_rx_get_frame
+Date:   Wed, 19 Oct 2022 15:50:06 +0200
+Message-ID: <20221019135008.3281743-4-horatiu.vultur@microchip.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221019135008.3281743-1-horatiu.vultur@microchip.com>
 References: <20221019135008.3281743-1-horatiu.vultur@microchip.com>
@@ -59,85 +59,198 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The total length of IFH(inter frame header) in bytes is calculated as
-IFH_LEN * sizeof(u32). Because IFH_LEN describes the length in words
-and not in bytes. As the length of IFH in bytes is used quite often
-add a define for this, just to simplify the things.
+The function lan966x_fdma_rx_get_frame was unmapping the frame from
+device and check also if the frame was received on a valid port. And
+only after that it tried to generate the skb.
+Move this check in a different function, in preparation for xdp
+support. Such that xdp to be added here and the
+lan966x_fdma_rx_get_frame to be used only when giving the skb to upper
+layers.
 
 Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 ---
- drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c | 10 +++++-----
- drivers/net/ethernet/microchip/lan966x/lan966x_ifh.h  |  1 +
- drivers/net/ethernet/microchip/lan966x/lan966x_main.c |  2 +-
- 3 files changed, 7 insertions(+), 6 deletions(-)
+ .../ethernet/microchip/lan966x/lan966x_fdma.c | 86 ++++++++++++++-----
+ .../ethernet/microchip/lan966x/lan966x_main.h |  9 ++
+ 2 files changed, 72 insertions(+), 23 deletions(-)
 
 diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-index 7e4061c854f0e..1dc4e6ace8b56 100644
+index e0b9cd289994f..6b6baf6a3d1ee 100644
 --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
 +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-@@ -429,7 +429,7 @@ static struct sk_buff *lan966x_fdma_rx_get_frame(struct lan966x_rx *rx)
- 		goto free_skb;
+@@ -54,6 +54,17 @@ static void lan966x_fdma_rx_free_pages(struct lan966x_rx *rx)
+ 	}
+ }
  
++static void lan966x_fdma_rx_free_page(struct lan966x_rx *rx)
++{
++	struct page *page;
++
++	page = rx->page[rx->dcb_index][rx->db_index];
++	if (unlikely(!page))
++		return;
++
++	__free_pages(page, rx->page_order);
++}
++
+ static void lan966x_fdma_rx_add_dcb(struct lan966x_rx *rx,
+ 				    struct lan966x_rx_dcb *dcb,
+ 				    u64 nextptr)
+@@ -116,6 +127,12 @@ static int lan966x_fdma_rx_alloc(struct lan966x_rx *rx)
+ 	return 0;
+ }
+ 
++static void lan966x_fdma_rx_advance_dcb(struct lan966x_rx *rx)
++{
++	rx->dcb_index++;
++	rx->dcb_index &= FDMA_DCB_MAX - 1;
++}
++
+ static void lan966x_fdma_rx_free(struct lan966x_rx *rx)
+ {
+ 	struct lan966x *lan966x = rx->lan966x;
+@@ -402,32 +419,50 @@ static bool lan966x_fdma_rx_more_frames(struct lan966x_rx *rx)
+ 	return true;
+ }
+ 
+-static struct sk_buff *lan966x_fdma_rx_get_frame(struct lan966x_rx *rx)
++static int lan966x_fdma_rx_check_frame(struct lan966x_rx *rx, u64 *src_port)
+ {
+ 	struct lan966x *lan966x = rx->lan966x;
+-	u64 src_port, timestamp;
+ 	struct lan966x_db *db;
+-	struct sk_buff *skb;
+ 	struct page *page;
+ 
+-	/* Get the received frame and unmap it */
+ 	db = &rx->dcbs[rx->dcb_index].db[rx->db_index];
+ 	page = rx->page[rx->dcb_index][rx->db_index];
+-	skb = build_skb(page_address(page), PAGE_SIZE << rx->page_order);
+-	if (unlikely(!skb))
+-		goto unmap_page;
++	if (unlikely(!page))
++		return FDMA_RX_ERROR;
+ 
+ 	dma_unmap_single(lan966x->dev, (dma_addr_t)db->dataptr,
+ 			 FDMA_DCB_STATUS_BLOCKL(db->status),
+ 			 DMA_FROM_DEVICE);
++
++	lan966x_ifh_get_src_port(page_address(page), src_port);
++
++	if (WARN_ON(*src_port >= lan966x->num_phys_ports))
++		return FDMA_RX_ERROR;
++
++	return FDMA_RX_OK;
++}
++
++static struct sk_buff *lan966x_fdma_rx_get_frame(struct lan966x_rx *rx,
++						 u64 src_port)
++{
++	struct lan966x *lan966x = rx->lan966x;
++	struct lan966x_db *db;
++	struct sk_buff *skb;
++	struct page *page;
++	u64 timestamp;
++
++	/* Get the received frame */
++	db = &rx->dcbs[rx->dcb_index].db[rx->db_index];
++	page = rx->page[rx->dcb_index][rx->db_index];
++
++	skb = build_skb(page_address(page), PAGE_SIZE << rx->page_order);
++	if (unlikely(!skb))
++		goto free_page;
++
+ 	skb_put(skb, FDMA_DCB_STATUS_BLOCKL(db->status));
+ 
+-	lan966x_ifh_get_src_port(skb->data, &src_port);
+ 	lan966x_ifh_get_timestamp(skb->data, &timestamp);
+ 
+-	if (WARN_ON(src_port >= lan966x->num_phys_ports))
+-		goto free_skb;
+-
  	skb->dev = lan966x->ports[src_port]->dev;
--	skb_pull(skb, IFH_LEN * sizeof(u32));
-+	skb_pull(skb, IFH_LEN_BYTES);
+ 	skb_pull(skb, IFH_LEN_BYTES);
  
- 	if (likely(!(skb->dev->features & NETIF_F_RXFCS)))
- 		skb_trim(skb, skb->len - ETH_FCS_LEN);
-@@ -585,7 +585,7 @@ int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev)
+@@ -450,12 +485,7 @@ static struct sk_buff *lan966x_fdma_rx_get_frame(struct lan966x_rx *rx)
+ 
+ 	return skb;
+ 
+-free_skb:
+-	kfree_skb(skb);
+-unmap_page:
+-	dma_unmap_page(lan966x->dev, (dma_addr_t)db->dataptr,
+-		       FDMA_DCB_STATUS_BLOCKL(db->status),
+-		       DMA_FROM_DEVICE);
++free_page:
+ 	__free_pages(page, rx->page_order);
+ 
+ 	return NULL;
+@@ -467,10 +497,12 @@ static int lan966x_fdma_napi_poll(struct napi_struct *napi, int weight)
+ 	struct lan966x_rx *rx = &lan966x->rx;
+ 	int dcb_reload = rx->dcb_index;
+ 	struct lan966x_rx_dcb *old_dcb;
++	enum lan966x_fdma_rx_error err;
+ 	struct lan966x_db *db;
+ 	struct sk_buff *skb;
+ 	struct page *page;
+ 	int counter = 0;
++	u64 src_port;
+ 	u64 nextptr;
+ 
+ 	lan966x_fdma_tx_clear_buf(lan966x, weight);
+@@ -480,19 +512,27 @@ static int lan966x_fdma_napi_poll(struct napi_struct *napi, int weight)
+ 		if (!lan966x_fdma_rx_more_frames(rx))
+ 			break;
+ 
+-		skb = lan966x_fdma_rx_get_frame(rx);
++		counter++;
+ 
+-		rx->page[rx->dcb_index][rx->db_index] = NULL;
+-		rx->dcb_index++;
+-		rx->dcb_index &= FDMA_DCB_MAX - 1;
++		err = lan966x_fdma_rx_check_frame(rx, &src_port);
++		switch (err) {
++		case FDMA_RX_OK:
++			break;
++		case FDMA_RX_ERROR:
++			lan966x_fdma_rx_free_page(rx);
++			lan966x_fdma_rx_advance_dcb(rx);
++			goto allocate_new;
++		}
+ 
++		skb = lan966x_fdma_rx_get_frame(rx, src_port);
++		lan966x_fdma_rx_advance_dcb(rx);
+ 		if (!skb)
+-			break;
++			goto allocate_new;
+ 
+ 		napi_gro_receive(&lan966x->napi, skb);
+-		counter++;
  	}
  
- 	/* skb processing */
--	needed_headroom = max_t(int, IFH_LEN * sizeof(u32) - skb_headroom(skb), 0);
-+	needed_headroom = max_t(int, IFH_LEN_BYTES - skb_headroom(skb), 0);
- 	needed_tailroom = max_t(int, ETH_FCS_LEN - skb_tailroom(skb), 0);
- 	if (needed_headroom || needed_tailroom || skb_header_cloned(skb)) {
- 		err = pskb_expand_head(skb, needed_headroom, needed_tailroom,
-@@ -598,8 +598,8 @@ int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev)
- 	}
++allocate_new:
+ 	/* Allocate new pages and map them */
+ 	while (dcb_reload != rx->dcb_index) {
+ 		db = &rx->dcbs[dcb_reload].db[rx->db_index];
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+index e05036841f825..608e2cb81b095 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+@@ -98,6 +98,15 @@ enum macaccess_entry_type {
+ 	ENTRYTYPE_MACV6,
+ };
  
- 	skb_tx_timestamp(skb);
--	skb_push(skb, IFH_LEN * sizeof(u32));
--	memcpy(skb->data, ifh, IFH_LEN * sizeof(u32));
-+	skb_push(skb, IFH_LEN_BYTES);
-+	memcpy(skb->data, ifh, IFH_LEN_BYTES);
- 	skb_put(skb, 4);
++/* FDMA rx error codes for checking if the frame is valid
++ * FDMA_RX_OK, frame is valid and can be used
++ * FDMA_RX_ERROR, something went wrong, stop getting more frames
++ */
++enum lan966x_fdma_rx_error {
++	FDMA_RX_OK = 0,
++	FDMA_RX_ERROR,
++};
++
+ struct lan966x_port;
  
- 	dma_addr = dma_map_single(lan966x->dev, skb->data, skb->len,
-@@ -750,7 +750,7 @@ int lan966x_fdma_change_mtu(struct lan966x *lan966x)
- 	u32 val;
- 
- 	max_mtu = lan966x_fdma_get_max_mtu(lan966x);
--	max_mtu += IFH_LEN * sizeof(u32);
-+	max_mtu += IFH_LEN_BYTES;
- 
- 	if (round_up(max_mtu, PAGE_SIZE) / PAGE_SIZE - 1 ==
- 	    lan966x->rx.page_order)
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_ifh.h b/drivers/net/ethernet/microchip/lan966x/lan966x_ifh.h
-index ca3314789d18d..f3b1e0d318261 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_ifh.h
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_ifh.h
-@@ -8,6 +8,7 @@
-  */
- 
- #define IFH_LEN                      7
-+#define IFH_LEN_BYTES                (IFH_LEN * sizeof(u32))
- 
- /* Timestamp for frame */
- #define IFH_POS_TIMESTAMP            192
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-index be2fd030cccbe..6fd857880d3fe 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-@@ -760,7 +760,7 @@ static int lan966x_probe_port(struct lan966x *lan966x, u32 p,
- 			 NETIF_F_HW_VLAN_STAG_TX |
- 			 NETIF_F_HW_TC;
- 	dev->hw_features |= NETIF_F_HW_TC;
--	dev->needed_headroom = IFH_LEN * sizeof(u32);
-+	dev->needed_headroom = IFH_LEN_BYTES;
- 
- 	eth_hw_addr_gen(dev, lan966x->base_mac, p + 1);
- 
+ struct lan966x_db {
 -- 
 2.38.0
 
