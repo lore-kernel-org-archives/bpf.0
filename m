@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2715AC433FE
-	for <bpf@archiver.kernel.org>; Thu, 20 Oct 2022 22:13:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48737C433FE
+	for <bpf@archiver.kernel.org>; Thu, 20 Oct 2022 22:13:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiJTWNe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Oct 2022 18:13:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38400 "EHLO
+        id S229678AbiJTWNi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Oct 2022 18:13:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiJTWNd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 20 Oct 2022 18:13:33 -0400
+        with ESMTP id S229629AbiJTWNi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 20 Oct 2022 18:13:38 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BDE215538
-        for <bpf@vger.kernel.org>; Thu, 20 Oct 2022 15:13:30 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29KHaCAl023184
-        for <bpf@vger.kernel.org>; Thu, 20 Oct 2022 15:13:29 -0700
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2102112B9
+        for <bpf@vger.kernel.org>; Thu, 20 Oct 2022 15:13:37 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29KHaCSp009412
+        for <bpf@vger.kernel.org>; Thu, 20 Oct 2022 15:13:36 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=LZgsahRgS2+ozMpcEZ97QsCPayPMplqJkGhaAaubtkc=;
- b=Y3DLeJE54qXIm40t/MaD/e2F3Pd74ADFUKwgHdxS+qxm8PdVQNKv/cRBlQthmTSfO/Zk
- Hh/0qUiYOgKPqlJ7uL6vol2VrzHSstIer1PJrfDg9nesE2gjT84F1qdYJoSA/7qrSoEj
- 3bTTr5c+8mGAtUWqERocG1lRKF2Pa378rVY= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3kawj0as1w-9
+ bh=vTr6RbKSp5SXWBQZQ7WTsQB9FAwJtccH55Rr7CWZNCw=;
+ b=GxUpzrKyYzB4OQvNdz2tLnuB+YrvfzqvhPozdjMbCtA0dW43t9cO+zqmMz+lALJOfiFX
+ C1uYUvrMEszUVSfq4EmM73+BUVNLEtfC02d86LokCD9arqW1ir9UFbqlwUJo4x71LxLJ
+ EGoYaW/oXE2FOQcLP7JB/C55zGbVvDUp0JI= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3kb799db4n-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 20 Oct 2022 15:13:29 -0700
-Received: from twshared19720.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 20 Oct 2022 15:13:36 -0700
+Received: from twshared17038.18.frc3.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 20 Oct 2022 15:13:23 -0700
+ 15.1.2375.31; Thu, 20 Oct 2022 15:13:35 -0700
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id EA44410F4EC60; Thu, 20 Oct 2022 15:13:16 -0700 (PDT)
+        id B6D2C10F4ECA8; Thu, 20 Oct 2022 15:13:27 -0700 (PDT)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -41,11 +41,10 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         KP Singh <kpsingh@kernel.org>,
         Martin KaFai Lau <martin.lau@kernel.org>,
-        Tejun Heo <tj@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next v2 4/6] bpftool: Support new cgroup local storage
-Date:   Thu, 20 Oct 2022 15:13:16 -0700
-Message-ID: <20221020221316.3554872-1-yhs@fb.com>
+        Tejun Heo <tj@kernel.org>
+Subject: [PATCH bpf-next v2 6/6] docs/bpf: Add documentation for map type BPF_MAP_TYPE_CGRP_STROAGE
+Date:   Thu, 20 Oct 2022 15:13:27 -0700
+Message-ID: <20221020221327.3557258-1-yhs@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221020221255.3553649-1-yhs@fb.com>
 References: <20221020221255.3553649-1-yhs@fb.com>
@@ -53,8 +52,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: 4M_Y3TbeIZM1j38vySbFGbQBuAml1ksu
-X-Proofpoint-ORIG-GUID: 4M_Y3TbeIZM1j38vySbFGbQBuAml1ksu
+X-Proofpoint-GUID: o-RuAa5u4arVZMvWqw6DYvsqpvVAdc5Q
+X-Proofpoint-ORIG-GUID: o-RuAa5u4arVZMvWqw6DYvsqpvVAdc5Q
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-10-20_11,2022-10-20_01,2022-06-22_01
@@ -62,50 +61,150 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add support for new cgroup local storage
+Add some descriptions and examples for BPF_MAP_TYPE_CGRP_STROAGE.
+Also illustate the major difference between BPF_MAP_TYPE_CGRP_STROAGE
+and BPF_MAP_TYPE_CGROUP_STORAGE and recommend to use
+BPF_MAP_TYPE_CGRP_STROAGE instead of BPF_MAP_TYPE_CGROUP_STORAGE
+in the end.
 
-Acked-by: Quentin Monnet <quentin@isovalent.com>
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- tools/bpf/bpftool/Documentation/bpftool-map.rst | 2 +-
- tools/bpf/bpftool/map.c                         | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Documentation/bpf/map_cgrp_storage.rst | 104 +++++++++++++++++++++++++
+ 1 file changed, 104 insertions(+)
+ create mode 100644 Documentation/bpf/map_cgrp_storage.rst
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/=
-bpftool/Documentation/bpftool-map.rst
-index 7f3b67a8b48f..11250c4734fe 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-@@ -55,7 +55,7 @@ MAP COMMANDS
- |		| **devmap** | **devmap_hash** | **sockmap** | **cpumap** | **xskmap*=
-* | **sockhash**
- |		| **cgroup_storage** | **reuseport_sockarray** | **percpu_cgroup_stor=
-age**
- |		| **queue** | **stack** | **sk_storage** | **struct_ops** | **ringbuf=
-** | **inode_storage**
--|		| **task_storage** | **bloom_filter** | **user_ringbuf** }
-+|		| **task_storage** | **bloom_filter** | **user_ringbuf** | **cgrp_sto=
-rage** }
-=20
- DESCRIPTION
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index 9a6ca9f31133..3a2a89912637 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -1459,7 +1459,7 @@ static int do_help(int argc, char **argv)
- 		"                 devmap | devmap_hash | sockmap | cpumap | xskmap | s=
-ockhash |\n"
- 		"                 cgroup_storage | reuseport_sockarray | percpu_cgroup=
-_storage |\n"
- 		"                 queue | stack | sk_storage | struct_ops | ringbuf | =
-inode_storage |\n"
--		"                 task_storage | bloom_filter | user_ringbuf }\n"
-+		"                 task_storage | bloom_filter | user_ringbuf | cgrp_st=
-orage }\n"
- 		"       " HELP_SPEC_OPTIONS " |\n"
- 		"                    {-f|--bpffs} | {-n|--nomount} }\n"
- 		"",
+diff --git a/Documentation/bpf/map_cgrp_storage.rst b/Documentation/bpf/m=
+ap_cgrp_storage.rst
+new file mode 100644
+index 000000000000..15691aab7fc7
+--- /dev/null
++++ b/Documentation/bpf/map_cgrp_storage.rst
+@@ -0,0 +1,104 @@
++.. SPDX-License-Identifier: GPL-2.0-only
++.. Copyright (C) 2022 Meta Platforms, Inc. and affiliates.
++
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
++BPF_MAP_TYPE_CGRP_STORAGE
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
++
++The ``BPF_MAP_TYPE_CGRP_STORAGE`` map type represents a local fix-sized
++storage for cgroups. It is only available with ``CONFIG_CGROUP_BPF``.
++The programs are made available by the same Kconfig. The
++data for a particular cgroup can be retrieved by looking up the map
++with that cgroup.
++
++This document describes the usage and semantics of the
++``BPF_MAP_TYPE_CGRP_STORAGE`` map type.
++
++Usage
++=3D=3D=3D=3D=3D
++
++The map key must be ``sizeof(int)`` representing a cgroup fd.
++To access the storage in a program, use ``bpf_cgrp_storage_get``::
++
++    void *bpf_cgrp_storage_get(struct bpf_map *map, struct cgroup *cgrou=
+p, void *value, u64 flags)
++
++``flags`` could be 0 or ``BPF_LOCAL_STORAGE_GET_F_CREATE`` which indicat=
+es that
++a new local storage will be created if one does not exist.
++
++The local storage can be removed with ``bpf_cgrp_storage_delete``::
++
++    long bpf_cgrp_storage_delete(struct bpf_map *map, struct cgruop *cgr=
+oup)
++
++The map is available to all program types.
++
++Examples
++=3D=3D=3D=3D=3D=3D=3D=3D
++
++An bpf-program example with BPF_MAP_TYPE_CGRP_STORAGE::
++
++    #include <vmlinux.h>
++    #include <bpf/bpf_helpers.h>
++    #include <bpf/bpf_tracing.h>
++
++    struct {
++            __uint(type, BPF_MAP_TYPE_CGRP_STORAGE);
++            __uint(map_flags, BPF_F_NO_PREALLOC);
++            __type(key, int);
++            __type(value, long);
++    } cgrp_storage SEC(".maps");
++
++    SEC("tp_btf/sys_enter")
++    int BPF_PROG(on_enter, struct pt_regs *regs, long id)
++    {
++            struct task_struct *task =3D bpf_get_current_task_btf();
++            long *ptr;
++
++            ptr =3D bpf_cgrp_storage_get(&cgrp_storage, task->cgroups->d=
+fl_cgrp, 0,
++                                       BPF_LOCAL_STORAGE_GET_F_CREATE);
++            if (ptr)
++                __sync_fetch_and_add(ptr, 1);
++
++            return 0;
++    }
++
++Userspace accessing map declared above::
++
++    #include <linux/bpf.h>
++    #include <linux/libbpf.h>
++
++    __u32 map_lookup(struct bpf_map *map, int cgrp_fd)
++    {
++            __u32 *value;
++            value =3D bpf_map_lookup_elem(bpf_map__fd(map), &cgrp_fd);
++            if (value)
++                return *value;
++            return 0;
++    }
++
++Difference Between BPF_MAP_TYPE_CGRP_STORAGE and BPF_MAP_TYPE_CGROUP_STO=
+RAGE
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
++
++The main difference between ``BPF_MAP_TYPE_CGRP_STORAGE`` and ``BPF_MAP_=
+TYPE_CGROUP_STORAGE``
++is that ``BPF_MAP_TYPE_CGRP_STORAGE`` can be used by all program types w=
+hile
++``BPF_MAP_TYPE_CGROUP_STORAGE`` is available only to cgroup program type=
+s.
++
++There are some other differences as well.
++
++(1). ``BPF_MAP_TYPE_CGRP_STORAGE`` supports local storage for more than =
+one
++     cgroups while ``BPF_MAP_TYPE_CGROUP_STORAGE`` only support one, the=
+ one attached
++     by the bpf program.
++
++(2). ``BPF_MAP_TYPE_CGROUP_STORAGE`` allocates local storage at attach t=
+ime so
++     ``bpf_get_local_storage()`` always returns non-null local storage.
++     ``BPF_MAP_TYPE_CGRP_STORAGE`` allocates local storage at runtime so
++     it is possible that ``bpf_cgrp_storage_get()`` may return null loca=
+l storage.
++     To avoid such null local storage issue, user space can do
++     ``bpf_map_update_elem()`` to pre-allocate local storage.
++
++(3). ``BPF_MAP_TYPE_CGRP_STORAGE`` supports de-allocating local storage =
+by bpf program
++     while ``BPF_MAP_TYPE_CGROUP_STORAGE`` only de-allocates storage dur=
+ing
++     prog detach time.
++
++So overall, ``BPF_MAP_TYPE_CGRP_STORAGE`` supports all ``BPF_MAP_TYPE_CG=
+ROUP_STORAGE``
++functionality and beyond. It is recommended to use ``BPF_MAP_TYPE_CGRP_S=
+TORAGE``
++instead of ``BPF_MAP_TYPE_CGROUP_STORAGE``.
 --=20
 2.30.2
 
