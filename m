@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79239C43219
-	for <bpf@archiver.kernel.org>; Thu, 20 Oct 2022 16:07:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C4FDC43217
+	for <bpf@archiver.kernel.org>; Thu, 20 Oct 2022 16:07:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbiJTQHi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Oct 2022 12:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47100 "EHLO
+        id S230141AbiJTQHj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Oct 2022 12:07:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230141AbiJTQHh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 20 Oct 2022 12:07:37 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD1652805
-        for <bpf@vger.kernel.org>; Thu, 20 Oct 2022 09:07:36 -0700 (PDT)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 29K94FYT027213
-        for <bpf@vger.kernel.org>; Thu, 20 Oct 2022 09:07:35 -0700
+        with ESMTP id S230239AbiJTQHi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 20 Oct 2022 12:07:38 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211265B12F
+        for <bpf@vger.kernel.org>; Thu, 20 Oct 2022 09:07:37 -0700 (PDT)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29KFchYU021094
+        for <bpf@vger.kernel.org>; Thu, 20 Oct 2022 09:07:37 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=1+bpa4WnGEBpq7c/NdxZohc7+q6jghBxXdoc0Pp+EkI=;
- b=C/uxuVnFiBbbH7CAJpDGCfIlRBej1Kbl+olqtElamse+a6yijuYqmCQcGWfIf+VR3P2A
- YoB4jsSWZ+NOpuopXHDp8tQfcm3sVD9HWJE77y+cKS2pPFAFvpXhF4dsnF67Q9AqwMCg
- VFkW7CzpPDZFcrUo86XD5MJsdx3gdL9Y5QE= 
+ bh=CDIOdYwxE335uZcm1fUP27HXFZyAVkI08gGx/E7ExRA=;
+ b=oPv6lrUhCAFT9l5BCeG0jC1ksXtA/nV33KY/QTAby/x9wOSRkZbUCy5OPnvxPA0EhBKD
+ 8s7OwJTNDpS6NBXPYundlRpU8kYbddVkCXKoxp1WlShnnNA9vws0dNy/XzDijgxI129q
+ O1YrCtYO8Qd+JEMcJp2t2/nNMR9P58mus0o= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3kb3cd42nr-5
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3kawj0722j-16
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 20 Oct 2022 09:07:35 -0700
+        for <bpf@vger.kernel.org>; Thu, 20 Oct 2022 09:07:36 -0700
 Received: from twshared9269.07.ash9.facebook.com (2620:10d:c085:208::f) by
  mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 20 Oct 2022 09:07:33 -0700
+ 15.1.2375.31; Thu, 20 Oct 2022 09:07:35 -0700
 Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
-        id 88BDBF43AEDB; Thu, 20 Oct 2022 09:07:23 -0700 (PDT)
+        id 86B4EF43AEE1; Thu, 20 Oct 2022 09:07:25 -0700 (PDT)
 From:   Dave Marchevsky <davemarchevsky@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -42,9 +42,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Kernel Team <kernel-team@fb.com>, Yonghong Song <yhs@fb.com>,
         Kumar Kartikeya Dwivedi <memxor@gmail.com>,
         Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [PATCH v5 bpf-next 2/4] bpf: Consider all mem_types compatible for map_{key,value} args
-Date:   Thu, 20 Oct 2022 09:07:19 -0700
-Message-ID: <20221020160721.4030492-2-davemarchevsky@fb.com>
+Subject: [PATCH v5 bpf-next 4/4] selftests/bpf: Add write to hashmap to array_map iter test
+Date:   Thu, 20 Oct 2022 09:07:21 -0700
+Message-ID: <20221020160721.4030492-4-davemarchevsky@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221020160721.4030492-1-davemarchevsky@fb.com>
 References: <20221020160721.4030492-1-davemarchevsky@fb.com>
@@ -52,8 +52,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: MVM2WGc_qXlWlHuDY1viF3hXDnbotzso
-X-Proofpoint-GUID: MVM2WGc_qXlWlHuDY1viF3hXDnbotzso
+X-Proofpoint-GUID: pheydeR6HRshaGHuswgkyX47QPLuzwoh
+X-Proofpoint-ORIG-GUID: pheydeR6HRshaGHuswgkyX47QPLuzwoh
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-10-20_07,2022-10-20_01,2022-06-22_01
@@ -61,90 +61,125 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-After the previous patch, which added PTR_TO_MEM | MEM_ALLOC type
-map_key_value_types, the only difference between map_key_value_types and
-mem_types sets is PTR_TO_BUF and PTR_TO_MEM, which are in the latter set
-but not the former.
+Modify iter prog in existing bpf_iter_bpf_array_map.c, which currently
+dumps arraymap key/val, to also do a write of (val, key) into a
+newly-added hashmap. Confirm that the write succeeds as expected by
+modifying the userspace runner program.
 
-Helpers which expect ARG_PTR_TO_MAP_KEY or ARG_PTR_TO_MAP_VALUE
-already effectively expect a valid blob of arbitrary memory that isn't
-necessarily explicitly associated with a map. When validating a
-PTR_TO_MAP_{KEY,VALUE} arg, the verifier expects meta->map_ptr to have
-already been set, either by an earlier ARG_CONST_MAP_PTR arg, or custom
-logic like that in process_timer_func or process_kptr_func.
+Before a change added in an earlier commit - considering PTR_TO_BUF reg
+a valid input to helpers which expect MAP_{KEY,VAL} - the verifier
+would've rejected this prog change due to type mismatch. Since using
+current iter's key/val to access a separate map is a reasonable usecase,
+let's add support for it.
 
-So let's get rid of map_key_value_types and just use mem_types for those
-args.
+Note that the test prog cannot directly write (val, key) into hashmap
+via bpf_map_update_elem when both come from iter context because key is
+marked MEM_RDONLY. This is due to bpf_map_update_elem - and other basic
+map helpers - taking ARG_PTR_TO_MAP_{KEY,VALUE} w/o MEM_RDONLY type
+flag. bpf_map_{lookup,update,delete}_elem don't modify their
+input key/val so it should be possible to tag their args READONLY, but
+due to the ubiquitous use of these helpers and verifier checks for
+type =3D=3D MAP_VALUE, such a change is nontrivial and seems better to
+address in a followup series.
 
-This has the effect of adding PTR_TO_BUF and PTR_TO_MEM to the set of
-compatible types for ARG_PTR_TO_MAP_KEY and ARG_PTR_TO_MAP_VALUE.
-
-PTR_TO_BUF is used by various bpf_iter implementations to represent a
-chunk of valid r/w memory in ctx args for iter prog.
-
-PTR_TO_MEM is used by networking, tracing, and ringbuf helpers to
-represent a chunk of valid memory. The PTR_TO_MEM | MEM_ALLOC
-type added in previous commmit is specific to ringbuf helpers.
-Presence or absence of MEM_ALLOC doesn't change the validity of using
-PTR_TO_MEM as a map_{key,val} input.
+Also fixup some 'goto's in test runner's map checking loop.
 
 Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
 ---
-v1 -> v5: lore.kernel.org/bpf/20220912101106.2765921-2-davemarchevsky@fb.=
-com
+ .../selftests/bpf/prog_tests/bpf_iter.c       | 20 ++++++++++++------
+ .../bpf/progs/bpf_iter_bpf_array_map.c        | 21 ++++++++++++++++++-
+ 2 files changed, 34 insertions(+), 7 deletions(-)
 
-  * This patch was dropped in v2 as I had no concrete usecase for
-    PTR_TO_BUF and PTR_TO_MEM w/o MEM_ALLOC. Andrii encouraged me to
-    re-add the patch as we both share desire to eventually cleanup all
-    these separate "valid chunk of memory" types. Starting to treat them
-    similarly is a good step in that direction.
-    * A usecase for PTR_TO_BUF is now demonstrated in patch 4 of this
-      series.
-    * PTR_TO_MEM w/o MEM_ALLOC is returned by bpf_{this,per}_cpu_ptr
-      helpers via RET_PTR_TO_MEM_OR_BTF_ID, but in both cases the return
-      type is also tagged MEM_RDONLY, which map helpers don't currently
-      accept (see patch 4 summary). So no selftest for this specific
-      case is added in the series, but by logic in this patch summary
-      there's no reason to treat it differently.
-
- kernel/bpf/verifier.c | 15 ++-------------
- 1 file changed, 2 insertions(+), 13 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 97351ae3e7a7..ddc1452cf023 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -5634,17 +5634,6 @@ struct bpf_reg_types {
- 	u32 *btf_id;
- };
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/te=
+sting/selftests/bpf/prog_tests/bpf_iter.c
+index c39d40f4b268..6f8ed61fc4b4 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+@@ -941,10 +941,10 @@ static void test_bpf_array_map(void)
+ {
+ 	__u64 val, expected_val =3D 0, res_first_val, first_val =3D 0;
+ 	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
+-	__u32 expected_key =3D 0, res_first_key;
++	__u32 key, expected_key =3D 0, res_first_key;
++	int err, i, map_fd, hash_fd, iter_fd;
+ 	struct bpf_iter_bpf_array_map *skel;
+ 	union bpf_iter_link_info linfo;
+-	int err, i, map_fd, iter_fd;
+ 	struct bpf_link *link;
+ 	char buf[64] =3D {};
+ 	int len, start;
+@@ -1001,12 +1001,20 @@ static void test_bpf_array_map(void)
+ 	if (!ASSERT_EQ(skel->bss->val_sum, expected_val, "val_sum"))
+ 		goto close_iter;
 =20
--static const struct bpf_reg_types map_key_value_types =3D {
--	.types =3D {
--		PTR_TO_STACK,
--		PTR_TO_PACKET,
--		PTR_TO_PACKET_META,
--		PTR_TO_MAP_KEY,
--		PTR_TO_MAP_VALUE,
--		PTR_TO_MEM | MEM_ALLOC,
--	},
--};
--
- static const struct bpf_reg_types sock_types =3D {
- 	.types =3D {
- 		PTR_TO_SOCK_COMMON,
-@@ -5711,8 +5700,8 @@ static const struct bpf_reg_types dynptr_types =3D =
-{
- };
++	hash_fd =3D bpf_map__fd(skel->maps.hashmap1);
+ 	for (i =3D 0; i < bpf_map__max_entries(skel->maps.arraymap1); i++) {
+ 		err =3D bpf_map_lookup_elem(map_fd, &i, &val);
+-		if (!ASSERT_OK(err, "map_lookup"))
+-			goto out;
+-		if (!ASSERT_EQ(i, val, "invalid_val"))
+-			goto out;
++		if (!ASSERT_OK(err, "map_lookup arraymap1"))
++			goto close_iter;
++		if (!ASSERT_EQ(i, val, "invalid_val arraymap1"))
++			goto close_iter;
++
++		val =3D i + 4;
++		err =3D bpf_map_lookup_elem(hash_fd, &val, &key);
++		if (!ASSERT_OK(err, "map_lookup hashmap1"))
++			goto close_iter;
++		if (!ASSERT_EQ(key, val - 4, "invalid_val hashmap1"))
++			goto close_iter;
+ 	}
 =20
- static const struct bpf_reg_types *compatible_reg_types[__BPF_ARG_TYPE_M=
-AX] =3D {
--	[ARG_PTR_TO_MAP_KEY]		=3D &map_key_value_types,
--	[ARG_PTR_TO_MAP_VALUE]		=3D &map_key_value_types,
-+	[ARG_PTR_TO_MAP_KEY]		=3D &mem_types,
-+	[ARG_PTR_TO_MAP_VALUE]		=3D &mem_types,
- 	[ARG_CONST_SIZE]		=3D &scalar_types,
- 	[ARG_CONST_SIZE_OR_ZERO]	=3D &scalar_types,
- 	[ARG_CONST_ALLOC_SIZE_OR_ZERO]	=3D &scalar_types,
+ close_iter:
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_array_map.c b=
+/tools/testing/selftests/bpf/progs/bpf_iter_bpf_array_map.c
+index 6286023fd62b..c5969ca6f26b 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_array_map.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_array_map.c
+@@ -19,13 +19,20 @@ struct {
+ 	__type(value, __u64);
+ } arraymap1 SEC(".maps");
+=20
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(max_entries, 10);
++	__type(key, __u64);
++	__type(value, __u32);
++} hashmap1 SEC(".maps");
++
+ __u32 key_sum =3D 0;
+ __u64 val_sum =3D 0;
+=20
+ SEC("iter/bpf_map_elem")
+ int dump_bpf_array_map(struct bpf_iter__bpf_map_elem *ctx)
+ {
+-	__u32 *key =3D ctx->key;
++	__u32 *hmap_val, *key =3D ctx->key;
+ 	__u64 *val =3D ctx->value;
+=20
+ 	if (key =3D=3D (void *)0 || val =3D=3D (void *)0)
+@@ -35,6 +42,18 @@ int dump_bpf_array_map(struct bpf_iter__bpf_map_elem *=
+ctx)
+ 	bpf_seq_write(ctx->meta->seq, val, sizeof(__u64));
+ 	key_sum +=3D *key;
+ 	val_sum +=3D *val;
++
++	/* workaround - It's necessary to do this convoluted (val, key)
++	 * write into hashmap1, instead of simply doing
++	 *   bpf_map_update_elem(&hashmap1, val, key, BPF_ANY);
++	 * because key has MEM_RDONLY flag and bpf_map_update elem expects
++	 * types without this flag
++	 */
++	bpf_map_update_elem(&hashmap1, val, val, BPF_ANY);
++	hmap_val =3D bpf_map_lookup_elem(&hashmap1, val);
++	if (hmap_val)
++		*hmap_val =3D *key;
++
+ 	*val =3D *key;
+ 	return 0;
+ }
 --=20
 2.30.2
 
