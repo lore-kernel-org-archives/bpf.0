@@ -2,217 +2,355 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D320C4332F
-	for <bpf@archiver.kernel.org>; Thu, 20 Oct 2022 02:41:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5D57C4332F
+	for <bpf@archiver.kernel.org>; Thu, 20 Oct 2022 02:44:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbiJTClA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Oct 2022 22:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
+        id S229525AbiJTCow (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Oct 2022 22:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231449AbiJTCk5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 19 Oct 2022 22:40:57 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCD416D88F
-        for <bpf@vger.kernel.org>; Wed, 19 Oct 2022 19:40:54 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id h185so17971465pgc.10
-        for <bpf@vger.kernel.org>; Wed, 19 Oct 2022 19:40:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Aob3cvLXgjG/VfP+QiWpBFkKraAhGNXNoj/fKiXouQk=;
-        b=PkS+dID0NctJtf/cc6JXGsyZRcs7tyPyByVHL9roFOgPVXfvtOee2nSkEIF1Vot5mH
-         FaKAmIYkGXfi68ylvuXGkSu6dXvYjn4nF2vALtHx773SpsOU8q4qmLJaLiuLEvibZVUK
-         VRXLHfFo6+qv8GZEm5MdQOc3oaEeT7jMxRrd0bMZg/bQKeZ7iWqaDo5mxsAuqwGumVXG
-         GQj3VEgVZaN/syLlfOl+46zycDquMUm4AfdeZv92UY3/pgRYy82bFIx0nakJBFJ6H24x
-         zJC2XBCip3ue57YhGSKIiFnl3MryiHkmxBq+aN+I7i+wHgPfuRrxzRufAL1Lb++RwRm9
-         B6hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Aob3cvLXgjG/VfP+QiWpBFkKraAhGNXNoj/fKiXouQk=;
-        b=rJUNmpgYl7GzlaNvlfxuiYx5KP0ABqM8uCATEU+UgQyvrLFrQoY3fWZRU84/JAOz+7
-         WKsAZuL7XMJyHtGLazByVaTHgkL8aLXKFOONYOnoTuSnAxSdc05seH2G0FZvUDan1kNb
-         2MW8UDipZoS6kQSwCJw5FK9FoVS+HQkV88/3HO2ZfsjAZLTiZwy4kYthId/wiPwKDK2J
-         nPv7wwZXHjsF/qh0nOZcrrw6vuFvi3KMBpgaRp2t88k37LCYvH3QGavFQxWpFOMiTjTI
-         V4RtwoDJl58Yf2hsdCC27plgnb2pymQSHbf8afzNajrZP/7x6UzAw5bbmcKQeHv3eIq5
-         0CcQ==
-X-Gm-Message-State: ACrzQf2DM6oIEd0YHYVc0m9F66BueRNYOWD+1W+XqImIAzobyvfvwfAX
-        CSW89d6T9KJbCldSKSXBjk6oUTjdn1u4lg==
-X-Google-Smtp-Source: AMsMyM7UFyPz/McgnjkClzHdlLwr8nP3oyhy2j/8kegcUXiSNsyCWCIuECZkhU/OdDCAFUrQhUIZ8Q==
-X-Received: by 2002:a05:6a00:10cf:b0:563:34ce:412f with SMTP id d15-20020a056a0010cf00b0056334ce412fmr11905704pfu.67.1666233654302;
-        Wed, 19 Oct 2022 19:40:54 -0700 (PDT)
-Received: from localhost ([14.96.13.220])
-        by smtp.gmail.com with ESMTPSA id u15-20020a1709026e0f00b00176683cde9bsm11408278plk.294.2022.10.19.19.40.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 19:40:53 -0700 (PDT)
-Date:   Thu, 20 Oct 2022 08:10:42 +0530
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        David Vernet <void@manifault.com>
-Subject: Re: [PATCH bpf-next v1 06/13] bpf: Fix missing var_off check for
- ARG_PTR_TO_DYNPTR
-Message-ID: <20221020024042.z5y47jfv3faupecx@apollo>
-References: <20221018135920.726360-1-memxor@gmail.com>
- <20221018135920.726360-7-memxor@gmail.com>
- <CAADnVQL_CWV7auFJFnkTy6wzo28JSN2e8-H7J6AnG79ov9Zjyw@mail.gmail.com>
- <20221020010417.eqerzqjimnzwwhhd@apollo>
- <CAADnVQK+wRP1EwTcokN00_eJ+piTmJsTCj9L1uZCY9bC+Ftf=g@mail.gmail.com>
+        with ESMTP id S229569AbiJTCov (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 19 Oct 2022 22:44:51 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C45A7697B
+        for <bpf@vger.kernel.org>; Wed, 19 Oct 2022 19:44:49 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MtBhH564BzJn6D;
+        Thu, 20 Oct 2022 10:42:07 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.70) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 20 Oct 2022 10:44:47 +0800
+From:   Wang Yufen <wangyufen@huawei.com>
+To:     <bpf@vger.kernel.org>
+CC:     <andrii@kernel.org>, <mykolal@fb.com>, <martin.lau@linux.dev>,
+        <ast@kernel.org>, <deso@posteo.net>
+Subject: [bpf-next] selftests/bpf: fix missing BPF object files
+Date:   Thu, 20 Oct 2022 11:05:34 +0800
+Message-ID: <1666235134-562-1-git-send-email-wangyufen@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAADnVQK+wRP1EwTcokN00_eJ+piTmJsTCj9L1uZCY9bC+Ftf=g@mail.gmail.com>
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.70]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 07:43:16AM IST, Alexei Starovoitov wrote:
-> On Wed, Oct 19, 2022 at 6:04 PM Kumar Kartikeya Dwivedi
-> <memxor@gmail.com> wrote:
-> >
-> > On Thu, Oct 20, 2022 at 12:22:56AM IST, Alexei Starovoitov wrote:
-> > > On Tue, Oct 18, 2022 at 6:59 AM Kumar Kartikeya Dwivedi
-> > > <memxor@gmail.com> wrote:
-> > > >
-> > > > Currently, the dynptr function is not checking the variable offset part
-> > > > of PTR_TO_STACK that it needs to check. The fixed offset is considered
-> > > > when computing the stack pointer index, but if the variable offset was
-> > > > not a constant (such that it could not be accumulated in reg->off), we
-> > > > will end up a discrepency where runtime pointer does not point to the
-> > > > actual stack slot we mark as STACK_DYNPTR.
-> > > >
-> > > > It is impossible to precisely track dynptr state when variable offset is
-> > > > not constant, hence, just like bpf_timer, kptr, bpf_spin_lock, etc.
-> > > > simply reject the case where reg->var_off is not constant. Then,
-> > > > consider both reg->off and reg->var_off.value when computing the stack
-> > > > pointer index.
-> > > >
-> > > > A new helper dynptr_get_spi is introduced to hide over these details
-> > > > since the dynptr needs to be located in multiple places outside the
-> > > > process_dynptr_func checks, hence once we know it's a PTR_TO_STACK, we
-> > > > need to enforce these checks in all places.
-> > > >
-> > > > Note that it is disallowed for unprivileged users to have a non-constant
-> > > > var_off, so this problem should only be possible to trigger from
-> > > > programs having CAP_PERFMON. However, its effects can vary.
-> > > >
-> > > > Without the fix, it is possible to replace the contents of the dynptr
-> > > > arbitrarily by making verifier mark different stack slots than actual
-> > > > location and then doing writes to the actual stack address of dynptr at
-> > > > runtime.
-> > > >
-> > > > Fixes: 97e03f521050 ("bpf: Add verifier support for dynptrs")
-> > > > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> > > > ---
-> > > >  kernel/bpf/verifier.c                         | 80 +++++++++++++++----
-> > > >  .../testing/selftests/bpf/prog_tests/dynptr.c |  6 +-
-> > > >  .../bpf/prog_tests/kfunc_dynptr_param.c       |  2 +-
-> > > >  3 files changed, 67 insertions(+), 21 deletions(-)
-> > > >
-> > > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > > > index 8f667180f70f..0fd73f96c5e2 100644
-> > > > --- a/kernel/bpf/verifier.c
-> > > > +++ b/kernel/bpf/verifier.c
-> > > > @@ -610,11 +610,34 @@ static void print_liveness(struct bpf_verifier_env *env,
-> > > >                 verbose(env, "D");
-> > > >  }
-> > > >
-> > > > -static int get_spi(s32 off)
-> > > > +static int __get_spi(s32 off)
-> > > >  {
-> > > >         return (-off - 1) / BPF_REG_SIZE;
-> > > >  }
-> > > >
-> > > > +static int dynptr_get_spi(struct bpf_verifier_env *env, struct bpf_reg_state *reg)
-> > > > +{
-> > > > +       int spi;
-> > > > +
-> > > > +       if (reg->off % BPF_REG_SIZE) {
-> > > > +               verbose(env, "cannot pass in dynptr at an offset=%d\n", reg->off);
-> > > > +               return -EINVAL;
-> > > > +       }
-> > >
-> > > I think this cannot happen.
-> > >
-> >
-> > There are existing selftests that trigger this.
->
-> Really. Which one is that?
-> Those that you've modified in this patch are hitting
-> "cannot pass in dynptr..." message from the check below, no?
->
+After commit afef88e65554 ("selftests/bpf: Store BPF object files with
+.bpf.o extension"), we should use *.bpf.o instead of *.o.
 
-Just taking one example, invalid_read2 which does:
+In addition, use the BPF_FILE variable to save the BPF object file name,
+which can be better identified and modified.
 
-bpf_dynptr_read(read_data, sizeof(read_data), (void *)&ptr + 1, 0, 0);
+Fixes: afef88e65554 ("selftests/bpf: Store BPF object files with .bpf.o extension")
+Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+---
+ tools/testing/selftests/bpf/test_bpftool_metadata.sh |  7 +++++--
+ tools/testing/selftests/bpf/test_flow_dissector.sh   |  6 ++++--
+ tools/testing/selftests/bpf/test_lwt_ip_encap.sh     | 17 +++++++++--------
+ tools/testing/selftests/bpf/test_lwt_seg6local.sh    |  9 +++++----
+ tools/testing/selftests/bpf/test_tc_edt.sh           |  3 ++-
+ tools/testing/selftests/bpf/test_tc_tunnel.sh        |  5 +++--
+ tools/testing/selftests/bpf/test_tunnel.sh           |  5 +++--
+ tools/testing/selftests/bpf/test_xdp_meta.sh         |  9 +++++----
+ tools/testing/selftests/bpf/test_xdp_vlan.sh         |  8 ++++----
+ 9 files changed, 40 insertions(+), 29 deletions(-)
 
-does hit this one, it passes fp-15, no var_off.
+diff --git a/tools/testing/selftests/bpf/test_bpftool_metadata.sh b/tools/testing/selftests/bpf/test_bpftool_metadata.sh
+index 1bf81b4..b552069 100755
+--- a/tools/testing/selftests/bpf/test_bpftool_metadata.sh
++++ b/tools/testing/selftests/bpf/test_bpftool_metadata.sh
+@@ -4,6 +4,9 @@
+ # Kselftest framework requirement - SKIP code is 4.
+ ksft_skip=4
+ 
++BPF_FILE_USED="metadata_used.bpf.o"
++BPF_FILE_UNUSED="metadata_unused.bpf.o"
++
+ TESTNAME=bpftool_metadata
+ BPF_FS=$(awk '$3 == "bpf" {print $2; exit}' /proc/mounts)
+ BPF_DIR=$BPF_FS/test_$TESTNAME
+@@ -55,7 +58,7 @@ mkdir $BPF_DIR
+ 
+ trap cleanup EXIT
+ 
+-bpftool prog load metadata_unused.o $BPF_DIR/unused
++bpftool prog load $BPF_FILE_UNUSED $BPF_DIR/unused
+ 
+ METADATA_PLAIN="$(bpftool prog)"
+ echo "$METADATA_PLAIN" | grep 'a = "foo"' > /dev/null
+@@ -67,7 +70,7 @@ bpftool map | grep 'metadata.rodata' > /dev/null
+ 
+ rm $BPF_DIR/unused
+ 
+-bpftool prog load metadata_used.o $BPF_DIR/used
++bpftool prog load $BPF_FILE_USED $BPF_DIR/used
+ 
+ METADATA_PLAIN="$(bpftool prog)"
+ echo "$METADATA_PLAIN" | grep 'a = "bar"' > /dev/null
+diff --git a/tools/testing/selftests/bpf/test_flow_dissector.sh b/tools/testing/selftests/bpf/test_flow_dissector.sh
+index 5303ce0..4b298863 100755
+--- a/tools/testing/selftests/bpf/test_flow_dissector.sh
++++ b/tools/testing/selftests/bpf/test_flow_dissector.sh
+@@ -2,6 +2,8 @@
+ # SPDX-License-Identifier: GPL-2.0
+ #
+ # Load BPF flow dissector and verify it correctly dissects traffic
++
++BPF_FILE="bpf_flow.bpf.o"
+ export TESTNAME=test_flow_dissector
+ unmount=0
+ 
+@@ -22,7 +24,7 @@ if [[ -z $(ip netns identify $$) ]]; then
+ 	if bpftool="$(which bpftool)"; then
+ 		echo "Testing global flow dissector..."
+ 
+-		$bpftool prog loadall ./bpf_flow.o /sys/fs/bpf/flow \
++		$bpftool prog loadall $BPF_FILE /sys/fs/bpf/flow \
+ 			type flow_dissector
+ 
+ 		if ! unshare --net $bpftool prog attach pinned \
+@@ -95,7 +97,7 @@ else
+ fi
+ 
+ # Attach BPF program
+-./flow_dissector_load -p bpf_flow.o -s _dissect
++./flow_dissector_load -p $BPF_FILE -s _dissect
+ 
+ # Setup
+ tc qdisc add dev lo ingress
+diff --git a/tools/testing/selftests/bpf/test_lwt_ip_encap.sh b/tools/testing/selftests/bpf/test_lwt_ip_encap.sh
+index 6c69c42..1e565f4 100755
+--- a/tools/testing/selftests/bpf/test_lwt_ip_encap.sh
++++ b/tools/testing/selftests/bpf/test_lwt_ip_encap.sh
+@@ -38,6 +38,7 @@
+ #       ping: SRC->[encap at veth2:ingress]->GRE:decap->DST
+ #       ping replies go DST->SRC directly
+ 
++BPF_FILE="test_lwt_ip_encap.bpf.o"
+ if [[ $EUID -ne 0 ]]; then
+ 	echo "This script must be run as root"
+ 	echo "FAIL"
+@@ -373,14 +374,14 @@ test_egress()
+ 	# install replacement routes (LWT/eBPF), pings succeed
+ 	if [ "${ENCAP}" == "IPv4" ] ; then
+ 		ip -netns ${NS1} route add ${IPv4_DST} encap bpf xmit obj \
+-			test_lwt_ip_encap.o sec encap_gre dev veth1 ${VRF}
++			${BPF_FILE} sec encap_gre dev veth1 ${VRF}
+ 		ip -netns ${NS1} -6 route add ${IPv6_DST} encap bpf xmit obj \
+-			test_lwt_ip_encap.o sec encap_gre dev veth1 ${VRF}
++			${BPF_FILE} sec encap_gre dev veth1 ${VRF}
+ 	elif [ "${ENCAP}" == "IPv6" ] ; then
+ 		ip -netns ${NS1} route add ${IPv4_DST} encap bpf xmit obj \
+-			test_lwt_ip_encap.o sec encap_gre6 dev veth1 ${VRF}
++			${BPF_FILE} sec encap_gre6 dev veth1 ${VRF}
+ 		ip -netns ${NS1} -6 route add ${IPv6_DST} encap bpf xmit obj \
+-			test_lwt_ip_encap.o sec encap_gre6 dev veth1 ${VRF}
++			${BPF_FILE} sec encap_gre6 dev veth1 ${VRF}
+ 	else
+ 		echo "    unknown encap ${ENCAP}"
+ 		TEST_STATUS=1
+@@ -431,14 +432,14 @@ test_ingress()
+ 	# install replacement routes (LWT/eBPF), pings succeed
+ 	if [ "${ENCAP}" == "IPv4" ] ; then
+ 		ip -netns ${NS2} route add ${IPv4_DST} encap bpf in obj \
+-			test_lwt_ip_encap.o sec encap_gre dev veth2 ${VRF}
++			${BPF_FILE} sec encap_gre dev veth2 ${VRF}
+ 		ip -netns ${NS2} -6 route add ${IPv6_DST} encap bpf in obj \
+-			test_lwt_ip_encap.o sec encap_gre dev veth2 ${VRF}
++			${BPF_FILE} sec encap_gre dev veth2 ${VRF}
+ 	elif [ "${ENCAP}" == "IPv6" ] ; then
+ 		ip -netns ${NS2} route add ${IPv4_DST} encap bpf in obj \
+-			test_lwt_ip_encap.o sec encap_gre6 dev veth2 ${VRF}
++			${BPF_FILE} sec encap_gre6 dev veth2 ${VRF}
+ 		ip -netns ${NS2} -6 route add ${IPv6_DST} encap bpf in obj \
+-			test_lwt_ip_encap.o sec encap_gre6 dev veth2 ${VRF}
++			${BPF_FILE} sec encap_gre6 dev veth2 ${VRF}
+ 	else
+ 		echo "FAIL: unknown encap ${ENCAP}"
+ 		TEST_STATUS=1
+diff --git a/tools/testing/selftests/bpf/test_lwt_seg6local.sh b/tools/testing/selftests/bpf/test_lwt_seg6local.sh
+index 826f4423..0efea22 100755
+--- a/tools/testing/selftests/bpf/test_lwt_seg6local.sh
++++ b/tools/testing/selftests/bpf/test_lwt_seg6local.sh
+@@ -23,6 +23,7 @@
+ 
+ # Kselftest framework requirement - SKIP code is 4.
+ ksft_skip=4
++BPF_FILE="test_lwt_seg6local.bpf.o"
+ readonly NS1="ns1-$(mktemp -u XXXXXX)"
+ readonly NS2="ns2-$(mktemp -u XXXXXX)"
+ readonly NS3="ns3-$(mktemp -u XXXXXX)"
+@@ -117,18 +118,18 @@ ip netns exec ${NS6} ip -6 addr add fb00::109/16 dev veth10 scope link
+ ip netns exec ${NS1} ip -6 addr add fb00::1/16 dev lo
+ ip netns exec ${NS1} ip -6 route add fb00::6 dev veth1 via fb00::21
+ 
+-ip netns exec ${NS2} ip -6 route add fb00::6 encap bpf in obj test_lwt_seg6local.o sec encap_srh dev veth2
++ip netns exec ${NS2} ip -6 route add fb00::6 encap bpf in obj ${BPF_FILE} sec encap_srh dev veth2
+ ip netns exec ${NS2} ip -6 route add fd00::1 dev veth3 via fb00::43 scope link
+ 
+ ip netns exec ${NS3} ip -6 route add fc42::1 dev veth5 via fb00::65
+-ip netns exec ${NS3} ip -6 route add fd00::1 encap seg6local action End.BPF endpoint obj test_lwt_seg6local.o sec add_egr_x dev veth4
++ip netns exec ${NS3} ip -6 route add fd00::1 encap seg6local action End.BPF endpoint obj ${BPF_FILE} sec add_egr_x dev veth4
+ 
+-ip netns exec ${NS4} ip -6 route add fd00::2 encap seg6local action End.BPF endpoint obj test_lwt_seg6local.o sec pop_egr dev veth6
++ip netns exec ${NS4} ip -6 route add fd00::2 encap seg6local action End.BPF endpoint obj ${BPF_FILE} sec pop_egr dev veth6
+ ip netns exec ${NS4} ip -6 addr add fc42::1 dev lo
+ ip netns exec ${NS4} ip -6 route add fd00::3 dev veth7 via fb00::87
+ 
+ ip netns exec ${NS5} ip -6 route add fd00::4 table 117 dev veth9 via fb00::109
+-ip netns exec ${NS5} ip -6 route add fd00::3 encap seg6local action End.BPF endpoint obj test_lwt_seg6local.o sec inspect_t dev veth8
++ip netns exec ${NS5} ip -6 route add fd00::3 encap seg6local action End.BPF endpoint obj ${BPF_FILE} sec inspect_t dev veth8
+ 
+ ip netns exec ${NS6} ip -6 addr add fb00::6/16 dev lo
+ ip netns exec ${NS6} ip -6 addr add fd00::4/16 dev lo
+diff --git a/tools/testing/selftests/bpf/test_tc_edt.sh b/tools/testing/selftests/bpf/test_tc_edt.sh
+index daa7d1b..76f0bd1 100755
+--- a/tools/testing/selftests/bpf/test_tc_edt.sh
++++ b/tools/testing/selftests/bpf/test_tc_edt.sh
+@@ -5,6 +5,7 @@
+ # with dst port = 9000 down to 5MBps. Then it measures actual
+ # throughput of the flow.
+ 
++BPF_FILE="test_tc_edt.bpf.o"
+ if [[ $EUID -ne 0 ]]; then
+ 	echo "This script must be run as root"
+ 	echo "FAIL"
+@@ -54,7 +55,7 @@ ip -netns ${NS_DST} route add ${IP_SRC}/32  dev veth_dst
+ ip netns exec ${NS_SRC} tc qdisc add dev veth_src root fq
+ ip netns exec ${NS_SRC} tc qdisc add dev veth_src clsact
+ ip netns exec ${NS_SRC} tc filter add dev veth_src egress \
+-	bpf da obj test_tc_edt.o sec cls_test
++	bpf da obj ${BPF_FILE} sec cls_test
+ 
+ 
+ # start the listener
+diff --git a/tools/testing/selftests/bpf/test_tc_tunnel.sh b/tools/testing/selftests/bpf/test_tc_tunnel.sh
+index 088fcad..334bdfe 100755
+--- a/tools/testing/selftests/bpf/test_tc_tunnel.sh
++++ b/tools/testing/selftests/bpf/test_tc_tunnel.sh
+@@ -3,6 +3,7 @@
+ #
+ # In-place tunneling
+ 
++BPF_FILE="test_tc_tunnel.bpf.o"
+ # must match the port that the bpf program filters on
+ readonly port=8000
+ 
+@@ -196,7 +197,7 @@ verify_data
+ # client can no longer connect
+ ip netns exec "${ns1}" tc qdisc add dev veth1 clsact
+ ip netns exec "${ns1}" tc filter add dev veth1 egress \
+-	bpf direct-action object-file ./test_tc_tunnel.o \
++	bpf direct-action object-file ${BPF_FILE} \
+ 	section "encap_${tuntype}_${mac}"
+ echo "test bpf encap without decap (expect failure)"
+ server_listen
+@@ -296,7 +297,7 @@ fi
+ ip netns exec "${ns2}" ip link del dev testtun0
+ ip netns exec "${ns2}" tc qdisc add dev veth2 clsact
+ ip netns exec "${ns2}" tc filter add dev veth2 ingress \
+-	bpf direct-action object-file ./test_tc_tunnel.o section decap
++	bpf direct-action object-file ${BPF_FILE} section decap
+ echo "test bpf encap with bpf decap"
+ client_connect
+ verify_data
+diff --git a/tools/testing/selftests/bpf/test_tunnel.sh b/tools/testing/selftests/bpf/test_tunnel.sh
+index e9ebc67..2eaedc1 100755
+--- a/tools/testing/selftests/bpf/test_tunnel.sh
++++ b/tools/testing/selftests/bpf/test_tunnel.sh
+@@ -45,6 +45,7 @@
+ # 5) Tunnel protocol handler, ex: vxlan_rcv, decap the packet
+ # 6) Forward the packet to the overlay tnl dev
+ 
++BPF_FILE="test_tunnel_kern.bpf.o"
+ BPF_PIN_TUNNEL_DIR="/sys/fs/bpf/tc/tunnel"
+ PING_ARG="-c 3 -w 10 -q"
+ ret=0
+@@ -545,7 +546,7 @@ test_xfrm_tunnel()
+ 	> /sys/kernel/debug/tracing/trace
+ 	setup_xfrm_tunnel
+ 	mkdir -p ${BPF_PIN_TUNNEL_DIR}
+-	bpftool prog loadall ./test_tunnel_kern.o ${BPF_PIN_TUNNEL_DIR}
++	bpftool prog loadall ${BPF_FILE} ${BPF_PIN_TUNNEL_DIR}
+ 	tc qdisc add dev veth1 clsact
+ 	tc filter add dev veth1 proto ip ingress bpf da object-pinned \
+ 		${BPF_PIN_TUNNEL_DIR}/xfrm_get_state
+@@ -572,7 +573,7 @@ attach_bpf()
+ 	SET=$2
+ 	GET=$3
+ 	mkdir -p ${BPF_PIN_TUNNEL_DIR}
+-	bpftool prog loadall ./test_tunnel_kern.o ${BPF_PIN_TUNNEL_DIR}/
++	bpftool prog loadall ${BPF_FILE} ${BPF_PIN_TUNNEL_DIR}/
+ 	tc qdisc add dev $DEV clsact
+ 	tc filter add dev $DEV egress bpf da object-pinned ${BPF_PIN_TUNNEL_DIR}/$SET
+ 	tc filter add dev $DEV ingress bpf da object-pinned ${BPF_PIN_TUNNEL_DIR}/$GET
+diff --git a/tools/testing/selftests/bpf/test_xdp_meta.sh b/tools/testing/selftests/bpf/test_xdp_meta.sh
+index ea69370..2740322 100755
+--- a/tools/testing/selftests/bpf/test_xdp_meta.sh
++++ b/tools/testing/selftests/bpf/test_xdp_meta.sh
+@@ -1,5 +1,6 @@
+ #!/bin/sh
+ 
++BPF_FILE="test_xdp_meta.bpf.o"
+ # Kselftest framework requirement - SKIP code is 4.
+ readonly KSFT_SKIP=4
+ readonly NS1="ns1-$(mktemp -u XXXXXX)"
+@@ -42,11 +43,11 @@ ip netns exec ${NS2} ip addr add 10.1.1.22/24 dev veth2
+ ip netns exec ${NS1} tc qdisc add dev veth1 clsact
+ ip netns exec ${NS2} tc qdisc add dev veth2 clsact
+ 
+-ip netns exec ${NS1} tc filter add dev veth1 ingress bpf da obj test_xdp_meta.o sec t
+-ip netns exec ${NS2} tc filter add dev veth2 ingress bpf da obj test_xdp_meta.o sec t
++ip netns exec ${NS1} tc filter add dev veth1 ingress bpf da obj ${BPF_FILE} sec t
++ip netns exec ${NS2} tc filter add dev veth2 ingress bpf da obj ${BPF_FILE} sec t
+ 
+-ip netns exec ${NS1} ip link set dev veth1 xdp obj test_xdp_meta.o sec x
+-ip netns exec ${NS2} ip link set dev veth2 xdp obj test_xdp_meta.o sec x
++ip netns exec ${NS1} ip link set dev veth1 xdp obj ${BPF_FILE} sec x
++ip netns exec ${NS2} ip link set dev veth2 xdp obj ${BPF_FILE} sec x
+ 
+ ip netns exec ${NS1} ip link set dev veth1 up
+ ip netns exec ${NS2} ip link set dev veth2 up
+diff --git a/tools/testing/selftests/bpf/test_xdp_vlan.sh b/tools/testing/selftests/bpf/test_xdp_vlan.sh
+index 810c407..fbcaa9f 100755
+--- a/tools/testing/selftests/bpf/test_xdp_vlan.sh
++++ b/tools/testing/selftests/bpf/test_xdp_vlan.sh
+@@ -200,11 +200,11 @@ ip netns exec ${NS2} sh -c 'ping -W 1 -c 1 100.64.41.1 || echo "Success: First p
+ # ----------------------------------------------------------------------
+ # In ns1: ingress use XDP to remove VLAN tags
+ export DEVNS1=veth1
+-export FILE=test_xdp_vlan.o
++export BPF_FILE=test_xdp_vlan.bpf.o
+ 
+ # First test: Remove VLAN by setting VLAN ID 0, using "xdp_vlan_change"
+ export XDP_PROG=xdp_vlan_change
+-ip netns exec ${NS1} ip link set $DEVNS1 $XDP_MODE object $FILE section $XDP_PROG
++ip netns exec ${NS1} ip link set $DEVNS1 $XDP_MODE object $BPF_FILE section $XDP_PROG
+ 
+ # In ns1: egress use TC to add back VLAN tag 4011
+ #  (del cmd)
+@@ -212,7 +212,7 @@ ip netns exec ${NS1} ip link set $DEVNS1 $XDP_MODE object $FILE section $XDP_PRO
+ #
+ ip netns exec ${NS1} tc qdisc add dev $DEVNS1 clsact
+ ip netns exec ${NS1} tc filter add dev $DEVNS1 egress \
+-  prio 1 handle 1 bpf da obj $FILE sec tc_vlan_push
++  prio 1 handle 1 bpf da obj $BPF_FILE sec tc_vlan_push
+ 
+ # Now the namespaces can reach each-other, test with ping:
+ ip netns exec ${NS2} ping -i 0.2 -W 2 -c 2 $IPADDR1
+@@ -226,7 +226,7 @@ ip netns exec ${NS1} ping -i 0.2 -W 2 -c 2 $IPADDR2
+ #
+ export XDP_PROG=xdp_vlan_remove_outer2
+ ip netns exec ${NS1} ip link set $DEVNS1 $XDP_MODE off
+-ip netns exec ${NS1} ip link set $DEVNS1 $XDP_MODE object $FILE section $XDP_PROG
++ip netns exec ${NS1} ip link set $DEVNS1 $XDP_MODE object $BPF_FILE section $XDP_PROG
+ 
+ # Now the namespaces should still be able reach each-other, test with ping:
+ ip netns exec ${NS2} ping -i 0.2 -W 2 -c 2 $IPADDR1
+-- 
+1.8.3.1
 
-Same with invalid_helper2 that was updated.
-Same with invalid_offset that was updated.
-invalid_write3 gained coverage from this patch, earlier it was probably just
-being rejected because of arg_type_is_release checking spilled_ptr.id.
-not_valid_dynptr is also hitting this one, not the one below.
-
-The others now started hitting this error as the order of checks was changed in
-the verifier. Since arg_type_is_release checking happens before
-process_dynptr_func, it uses dynptr_get_spi to check ref_obj_id of spilled_ptr.
-At that point no checks have been made of the dynptr argument, so dynptr_get_spi
-is required to ensure spi is in bounds.
-
-The reg->off % BPF_REG_SIZE was earlier in check_func_arg_reg_off but that alone
-is not sufficient. This is why I wrapped everything into dynptr_get_spi.
-
-> > Or do you mean it cannot happen anymore? If so, why?
->
-> Why would it? There is an alignment check earlier.
->
-
-I removed the one in check_func_arg_reg_off. So this is the only place now where
-this alignment check happens.
-
-> > > > +       if (!tnum_is_const(reg->var_off)) {
-> > > > +               verbose(env, "dynptr has to be at the constant offset\n");
-> > > > +               return -EINVAL;
-> > > > +       }
-> > >
-> > > This part can.
-> > >
-> > > > +       spi = __get_spi(reg->off + reg->var_off.value);
-> > > > +       if (spi < 1) {
-> > > > +               verbose(env, "cannot pass in dynptr at an offset=%d\n",
-> > > > +                       (int)(reg->off + reg->var_off.value));
-> > > > +               return -EINVAL;
-> > > > +       }
-> > > > +       return spi;
-> > > > +}
-> > >
-> > > This one is a more conservative (read: redundant) check.
-> > > The is_spi_bounds_valid() is doing it better.
-> >
-> > The problem is, is_spi_bounds_valid returning an error is not always a problem.
-> > See how in is_dynptr_reg_valid_uninit we just return true on invalid bounds,
-> > then later simulate two 8-byte accesses for uninit_dynptr_regno and rely on it
-> > to grow the stack depth and do MAX_BPF_STACK check.
->
-> It's a weird one. I'm not sure it's actually correct to do it this way.
->
-
-Yeah, when looking at this I was actually surprised by that return true,
-thinking that was by accident and the stack depth was not being updated, but it
-later happens using check_mem_access in that if block.
-
-I'm open to other ideas, like separating out code in
-check_stack_write_fixed_off, but the only issue is code divergence and we miss
-checks we need to in both places due to duplication. Let me know what you think.
-
-But however you do it, it has to be done after check_func_arg. The stack depth
-should not be updated until all other arguments have been checked. If you
-consider meta.access_size handling, that happens in a similar way.
