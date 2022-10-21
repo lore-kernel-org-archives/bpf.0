@@ -2,85 +2,99 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60092C4332F
-	for <bpf@archiver.kernel.org>; Fri, 21 Oct 2022 11:01:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63470C433FE
+	for <bpf@archiver.kernel.org>; Fri, 21 Oct 2022 11:20:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbiJULBS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 21 Oct 2022 07:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53770 "EHLO
+        id S229660AbiJULUx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 21 Oct 2022 07:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiJULBR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 21 Oct 2022 07:01:17 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8723F25CD9D
-        for <bpf@vger.kernel.org>; Fri, 21 Oct 2022 04:01:14 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Mv1fv5GHQzKHTq
-        for <bpf@vger.kernel.org>; Fri, 21 Oct 2022 18:58:47 +0800 (CST)
-Received: from [10.174.176.117] (unknown [10.174.176.117])
-        by APP1 (Coremail) with SMTP id cCh0CgA3X3j0e1JjDGdbAg--.6134S2;
-        Fri, 21 Oct 2022 19:01:12 +0800 (CST)
-Subject: Re: [PATCH bpf] bpf: Support for setting numa node in bpf memory
- allocator
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Hao Luo <haoluo@google.com>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Hou Tao <houtao1@huawei.com>
-References: <20221020142247.1682009-1-houtao@huaweicloud.com>
- <CA+khW7jE_inL9-66Cb_WAPey6YkY+yf1H+q2uASTQujNXbRF=Q@mail.gmail.com>
- <212fbd46-7371-c3f9-e900-3a49d9fafab8@huaweicloud.com>
- <20221021014807.pvjppg433lucybui@macbook-pro-4.dhcp.thefacebook.com>
- <b20aa49f-61ee-6275-3f8b-aa2b5e950874@huaweicloud.com>
- <CAADnVQJXdFsPXSQBhD9WD_66bWaGyq1x_=SY5UiFGzUqm=34Dg@mail.gmail.com>
- <de1173bb-3adf-a04c-7999-44e7e7103ff9@huaweicloud.com>
- <CAADnVQ+_xJzdLpJMucRA7wXRBUr7msDktEjYfcinfzrRGLfVTg@mail.gmail.com>
-From:   Hou Tao <houtao@huaweicloud.com>
-Message-ID: <9cc8b08a-9bce-744a-a956-0df0db3f302b@huaweicloud.com>
-Date:   Fri, 21 Oct 2022 19:01:08 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        with ESMTP id S229635AbiJULUw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 21 Oct 2022 07:20:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB15E3DF38
+        for <bpf@vger.kernel.org>; Fri, 21 Oct 2022 04:20:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666351250;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ReqbEj8BqOln93pvlV1AGFFDODx76Z1OSm0u26Ew1ZQ=;
+        b=Fs+M1IfkX8ArVNFZIBXynk6MfoNvLpj8g48Xd8vtgYXsDl1ddE1Y52KBz1SJKd64WZ327V
+        uh/krXpoMv99I7VFXGeB1jcVorOF6DHeaHVwjfMPPOUemBbfNasxYd0kkTG1Uvk4nE2m8X
+        mbnKLaB2NJA5E5PFe5XLIP3qArNVd/E=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-338-McTtlbZfNb20owuSD_wyBQ-1; Fri, 21 Oct 2022 07:20:49 -0400
+X-MC-Unique: McTtlbZfNb20owuSD_wyBQ-1
+Received: by mail-qk1-f198.google.com with SMTP id i11-20020a05620a404b00b006eeb0791c1aso3281049qko.10
+        for <bpf@vger.kernel.org>; Fri, 21 Oct 2022 04:20:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ReqbEj8BqOln93pvlV1AGFFDODx76Z1OSm0u26Ew1ZQ=;
+        b=sp0ZAsF3NVnZyaJIpehWHWpAqjwwY2eduDi3pHVmhkvxwGJzAPtjcSLbZcrwE7a0vX
+         hwzq5dWaoh44mDVlO9rCUzRjNfhmKix9L6/AIvwYpHssu4W2S965mbqBrcg3wkbHTDGj
+         FAnlxXnZdAVmcKvuw5LDQIorGboYI1IXXhVrbMpsoK4r8CLJ1ZlNgJaANamtZtBUCA3g
+         1LUeWiYkuzpYwbfObdUQLvp3K7n79Zg+ThiXvJ5DlPSAe1m1++xHt3gDuaixjPZleEya
+         F3b1tfS6BKJG0iEMn3KHztYTApcn17UxypyjuWpxTpH0iGypmDCEBTjrxvwfxFruLxmJ
+         1BOA==
+X-Gm-Message-State: ACrzQf34E9jZl4CGS9PWcEB2KrWWzzWiKNKxmI+EgbfYLNhbrQEUAppk
+        d0WT9ekYLOTOpo2Gel619YbDIGD8mibVeFv3OBsdSPT2bWXhOep87ATuvd5CvxulhHAdqp/xOwr
+        z5kSA2c7LxPb+BtMyJBgbzLoV8S+P8BLybnJG8cZrol/kyzY21Ar4jBEW2rMYZG4=
+X-Received: by 2002:a05:620a:16d5:b0:6ec:52ab:e8bd with SMTP id a21-20020a05620a16d500b006ec52abe8bdmr12849031qkn.424.1666351248779;
+        Fri, 21 Oct 2022 04:20:48 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6P8dlyWGTrZobZd3w5ieHLYuNRCnqoDjXom734aeT3HyS1kvD7hNbry43KHSZ1JgSdyY/NOw==
+X-Received: by 2002:a05:620a:16d5:b0:6ec:52ab:e8bd with SMTP id a21-20020a05620a16d500b006ec52abe8bdmr12849007qkn.424.1666351248493;
+        Fri, 21 Oct 2022 04:20:48 -0700 (PDT)
+Received: from nfvsdn-06.testing.baremetal.edge-sites.net (nat-pool-232-132.redhat.com. [66.187.232.132])
+        by smtp.gmail.com with ESMTPSA id c25-20020ac81119000000b003996aa171b9sm7766604qtj.97.2022.10.21.04.20.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Oct 2022 04:20:47 -0700 (PDT)
+From:   mtahhan@redhat.com
+To:     bpf@vger.kernel.org, linux-doc@vger.kernel.org
+Cc:     Maryam Tahhan <mtahhan@redhat.com>
+Subject: [PATCH bpf-next v3 0/1] doc: DEVMAPs and XDP_REDIRECT 
+Date:   Fri, 21 Oct 2022 08:15:56 -0400
+Message-Id: <20221021121557.3486894-1-mtahhan@redhat.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-In-Reply-To: <CAADnVQ+_xJzdLpJMucRA7wXRBUr7msDktEjYfcinfzrRGLfVTg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-CM-TRANSID: cCh0CgA3X3j0e1JjDGdbAg--.6134S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYI7kC6x804xWl14x267AKxVW8JVW5JwAF
-        c2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII
-        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xv
-        wVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4
-        x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
-        64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r
-        1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
-        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
-        nIWIevJa73UjIFyTuYvjxUrR6zUUUUU
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+From: Maryam Tahhan <mtahhan@redhat.com>
 
-On 10/21/2022 12:22 PM, Alexei Starovoitov wrote:
-> On Thu, Oct 20, 2022 at 7:26 PM Hou Tao <houtao@huaweicloud.com> wrote:
->> How about reject the NUMA node setting for non-preallocated hash table in
->> hashtab.c ?
-> It's easy to ask the question, but please answer it yourself.
-> Analyze the code and describe what you think is happening now
-> and what should or should not be the behavior.
-Will do.
+Add documentation for BPF_MAP_TYPE_DEVMAP and
+BPF_MAP_TYPE_DEVMAP_HASH including kernel version
+introduced, usage and examples.
+
+Add documentation that describes XDP_REDIRECT. 
+
+v2->v3:
+- Update examples in DEVMAPs documentation for broadcast scenario.
+- Update key reference for BPF_MAP_TYPE_DEVMAP_HASH (doesn't have to be
+  ifindex).
+- Remove information re xdp_redirect internals.
+
+v1->v2:
+- Separate xdp_redirect documentation to its own file.
+- Clean up and simplify examples and usage function descriptions.
+
+Maryam Tahhan (1):
+  doc: DEVMAPs and XDP_REDIRECT
+
+ Documentation/bpf/index.rst      |   1 +
+ Documentation/bpf/map_devmap.rst | 208 +++++++++++++++++++++++++++++++
+ Documentation/bpf/redirect.rst   |  41 ++++++
+ 3 files changed, 250 insertions(+)
+ create mode 100644 Documentation/bpf/map_devmap.rst
+ create mode 100644 Documentation/bpf/redirect.rst
+
+-- 
+2.35.3
 
