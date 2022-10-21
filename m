@@ -2,141 +2,100 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86D4EC43217
-	for <bpf@archiver.kernel.org>; Fri, 21 Oct 2022 15:02:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBC26FA373E
+	for <bpf@archiver.kernel.org>; Fri, 21 Oct 2022 16:04:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbiJUPCZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 21 Oct 2022 11:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
+        id S230187AbiJUQER (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 21 Oct 2022 12:04:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbiJUPCZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 21 Oct 2022 11:02:25 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592772250D;
-        Fri, 21 Oct 2022 08:02:22 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29LD4qJ6016588;
-        Fri, 21 Oct 2022 15:02:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id; s=corp-2022-7-12;
- bh=cbzQlmdyn+pS1z6URGMPjcCqsBu3TL5vN/BBm8MMhEU=;
- b=1wRsrGjUYCj356II2xMnhBsIeBDn/IFcf5R+OCkxIvkvjrf0XQEz/ZGV4E5/7V56SbDy
- vDl8xbHCdnza6Qw04LVk53L3PIUwgztmaPwu0OoAtuhhS7nmB96mypADLZJAV84DY5pZ
- KSrc8tsljFV3BcjgSRjptzPLpeJhv+Sii6ZW2Uc4WhZscxijf7ynezxhCMjgl3ytl8i0
- 0ZjY3ucUhy2OTnzHQd9BelPU0hhE2ftS/iYvTRFD1yM7yKmm9X/9K0ruUk7zZirC1Pal
- GoaCE5TsJ8zdGdzyym99saLQVHO7p18sSKuAkztjKNbNCgMRXWz22rKVdnS7z38uSSib +A== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3k99ntmv98-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 21 Oct 2022 15:02:18 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29LCrDVx014834;
-        Fri, 21 Oct 2022 15:02:07 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3k8hu9tup0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 21 Oct 2022 15:02:07 +0000
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29LF26EI032219;
-        Fri, 21 Oct 2022 15:02:06 GMT
-Received: from myrouter.uk.oracle.com (dhcp-10-175-208-221.vpn.oracle.com [10.175.208.221])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3k8hu9tukx-1;
-        Fri, 21 Oct 2022 15:02:06 +0000
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     acme@kernel.org, dwarves@vger.kernel.org
-Cc:     jolsa@kernel.org, andrii@kernel.org, bpf@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH dwarves] dwarves: zero-initialize struct cu in cu__new() to prevent incorrect BTF types
-Date:   Fri, 21 Oct 2022 16:02:03 +0100
-Message-Id: <1666364523-9648-1-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-21_04,2022-10-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999
- malwarescore=0 spamscore=0 suspectscore=0 phishscore=0 adultscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210210090
-X-Proofpoint-ORIG-GUID: LyK3FFLvQ3YYda-ixajuYUacGDeTv4yb
-X-Proofpoint-GUID: LyK3FFLvQ3YYda-ixajuYUacGDeTv4yb
+        with ESMTP id S229835AbiJUQEQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 21 Oct 2022 12:04:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30202263B4F
+        for <bpf@vger.kernel.org>; Fri, 21 Oct 2022 09:04:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666368252;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=17geT16pG35VTrdYqV5tA3g6Cj90L+YxvyM0AjY26TQ=;
+        b=R4exmJ8vSWV+I13alWHeub+uozLegSrAg3cx10Uq/tbjYDjLWVjtXeRmhcbyGrdc1V/a4o
+        1DTYpXDUFZ7OwPq7+KGhWnaxOxAF7vTj0D3l/OZFhSj5Ln8T8WGJb4WYgvQw3AsMk3p/nm
+        TRUanLxsgSk+oJNqhUzjflFiN1cnJc0=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-640-rUIjDTB7OUeUuBEgcvJyKw-1; Fri, 21 Oct 2022 12:04:10 -0400
+X-MC-Unique: rUIjDTB7OUeUuBEgcvJyKw-1
+Received: by mail-qk1-f200.google.com with SMTP id h9-20020a05620a244900b006ee944ec451so3844072qkn.13
+        for <bpf@vger.kernel.org>; Fri, 21 Oct 2022 09:04:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=17geT16pG35VTrdYqV5tA3g6Cj90L+YxvyM0AjY26TQ=;
+        b=3E9OpuwWlf7VRJP+HKmSr935yA0UX6CeICTb5oCWpu0ZVgBE1DSOzMGOHWnpX04SUb
+         8xy4ha4FMzuSXFM10sPeSf36M4Y/W/Rho2Gh9e7TU4L0bfXDpEUD+xLmSqybGjSzHULD
+         H9X3je0jD1W4PxG+L4HdIZ8skVptgYMVoHftaJqeBQJZPRwaPvNuUaWgRB6cueYq+PQJ
+         ntd7+3pDL4Y+HaJqk6gdf9yp5TMfZ8J11H+FCeOTMsMT5RNSr6kzhvSk5yoNG8QfrCBb
+         3lWG1g6jc+OMyftPfioOh2pEW+TmBJ90bFm9hocAS30vIbPkaQQfBAi+9Y+ngJf3FBr8
+         Yy+Q==
+X-Gm-Message-State: ACrzQf2Ftpk9THBDzgz/HmGSBuStyTYNE3PRqbYqJbZGbGWFFgsH0Ik2
+        aS+mZiteydAS8NLzrcQJ1WH+F3jUYucXx/coVcx26iFw9l2iROK2AEM6nTeiIkMcUJGokmGJliB
+        QG6YGEzxAh67/7xFG/4jMFjXDbEM75zh7unGp2TKVIZghXzHOSYlJaWVlA7ZrawA=
+X-Received: by 2002:a05:620a:2414:b0:6ee:d0c5:b3ad with SMTP id d20-20020a05620a241400b006eed0c5b3admr14003976qkn.613.1666368250093;
+        Fri, 21 Oct 2022 09:04:10 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6pELEP9EfuC3UNQ/G1TIANQewXbb7hKJRjTjdUXiNxvYiQXnDmDhOls8IIpnlQmwzpvCa9nQ==
+X-Received: by 2002:a05:620a:2414:b0:6ee:d0c5:b3ad with SMTP id d20-20020a05620a241400b006eed0c5b3admr14003940qkn.613.1666368249809;
+        Fri, 21 Oct 2022 09:04:09 -0700 (PDT)
+Received: from nfvsdn-06.testing.baremetal.edge-sites.net (nat-pool-232-132.redhat.com. [66.187.232.132])
+        by smtp.gmail.com with ESMTPSA id br22-20020a05622a1e1600b0039cb5c9dbacsm8088849qtb.22.2022.10.21.09.04.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Oct 2022 09:04:09 -0700 (PDT)
+From:   mtahhan@redhat.com
+To:     bpf@vger.kernel.org, linux-doc@vger.kernel.org
+Cc:     Maryam Tahhan <mtahhan@redhat.com>
+Subject: [PATCH bpf-next v4 0/1] doc: DEVMAPs and XDP_REDIRECT
+Date:   Fri, 21 Oct 2022 12:59:18 -0400
+Message-Id: <20221021165919.509652-1-mtahhan@redhat.com>
+X-Mailer: git-send-email 2.35.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-BTF deduplication was throwing some strange results, where core kernel
-data types were failing to deduplicate due to the return values
-of function type members being void (0) instead of the actual type
-(unsigned int).  An example of this can be seen below, where
-"struct dst_ops" was failing to deduplicate between kernel and
-module:
+From: Maryam Tahhan <mtahhan@redhat.com>
 
-struct dst_ops {
-        short unsigned int family;
-        unsigned int gc_thresh;
-        int (*gc)(struct dst_ops *);
-        struct dst_entry * (*check)(struct dst_entry *, __u32);
-        unsigned int (*default_advmss)(const struct dst_entry *);
-        unsigned int (*mtu)(const struct dst_entry *);
-...
+Add documentation for BPF_MAP_TYPE_DEVMAP and
+BPF_MAP_TYPE_DEVMAP_HASH including kernel version
+introduced, usage and examples.
 
-struct dst_ops___2 {
-        short unsigned int family;
-        unsigned int gc_thresh;
-        int (*gc)(struct dst_ops___2 *);
-        struct dst_entry___2 * (*check)(struct dst_entry___2 *, __u32);
-        void (*default_advmss)(const struct dst_entry___2 *);
-        void (*mtu)(const struct dst_entry___2 *);
-...
+Add documentation that describes XDP_REDIRECT.
 
-This was seen with
+v3->v4:
+- Prepend supported map section for XDP_REDIRECT documentation.
 
-bcc648a10cbc ("btf_encoder: Encode DW_TAG_unspecified_type returning routines as void")
+v2->v3:
+- Fixed indentations in usage section to exclude non note text.
+- Replace links to selftest with actual paths.
 
-...which rewrites the return value as 0 (void) when it is marked
-as matching DW_TAG_unspecified_type:
+v1->v2:
+- Separate xdp_redirect documentation to its own file.
+- Clean up and simplify examples and usage function descriptions.
 
-static int32_t btf_encoder__tag_type(struct btf_encoder *encoder, uint32_t type_id_off, uint32_t tag_type)
-{
-       if (tag_type == 0)
-               return 0;
+Maryam Tahhan (1):
+  doc: DEVMAPs and XDP_REDIRECT
 
-       if (encoder->cu->unspecified_type.tag && tag_type == encoder->cu->unspecified_type.type) {
-               // No provision for encoding this, turn it into void.
-               return 0;
-       }
+ Documentation/bpf/index.rst      |   1 +
+ Documentation/bpf/map_devmap.rst | 205 +++++++++++++++++++++++++++++++
+ Documentation/bpf/redirect.rst   |  46 +++++++
+ 3 files changed, 252 insertions(+)
+ create mode 100644 Documentation/bpf/map_devmap.rst
+ create mode 100644 Documentation/bpf/redirect.rst
 
-       return type_id_off + tag_type;
-}
-
-However the odd thing was that on further examination, the unspecified type
-was not being set, so why was this logic being tripped?  Futher debugging
-showed that the encoder->cu->unspecified_type.tag value was garbage, and
-the type id happened to collide with "unsigned int"; as a result we
-were replacing unsigned ints with void return values, and since this
-was being done to function type members in structs, it triggered a
-type mismatch which failed deduplication between kernel and module.
-
-The fix is simply to calloc() the cu in cu__new() instead.
-
-Fixes: bcc648a10cbc ("btf_encoder: Encode DW_TAG_unspecified_type returning routines as void")
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- dwarves.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/dwarves.c b/dwarves.c
-index fbebc1d..424381d 100644
---- a/dwarves.c
-+++ b/dwarves.c
-@@ -626,7 +626,7 @@ struct cu *cu__new(const char *name, uint8_t addr_size,
- 		   const unsigned char *build_id, int build_id_len,
- 		   const char *filename, bool use_obstack)
- {
--	struct cu *cu = malloc(sizeof(*cu) + build_id_len);
-+	struct cu *cu = calloc(1, sizeof(*cu) + build_id_len);
- 
- 	if (cu != NULL) {
- 		uint32_t void_id;
 -- 
-2.31.1
+2.35.3
 
