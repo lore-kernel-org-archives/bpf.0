@@ -2,125 +2,151 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58665C4332F
-	for <bpf@archiver.kernel.org>; Fri, 21 Oct 2022 01:36:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBBC3C4332F
+	for <bpf@archiver.kernel.org>; Fri, 21 Oct 2022 01:38:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbiJUBgb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Oct 2022 21:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33824 "EHLO
+        id S229726AbiJUBiW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Oct 2022 21:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJUBga (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 20 Oct 2022 21:36:30 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DD210DE7E;
-        Thu, 20 Oct 2022 18:36:29 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id ot12so3761594ejb.1;
-        Thu, 20 Oct 2022 18:36:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=riV2LKDCFyGjMOKFMcuq4CjIaZfhS9K0Zw+bRcaY9Ps=;
-        b=Z/b1h0Ea2IOWf8ygXQlMOLriBrTuYzmtSPrEuu6v+TL+mM9RxVlN44VRR1wiRY3PXT
-         Bt9WCuzw44D56rPl7WwjzQtG3JthD69N1HfVQgJndDhDK9LWPdxdhH6qhdD6oNuF0ZKf
-         v7lpBBhqsSbaQIG2t8Ed2Ldgmb1KjyfOv1qo6+Az9Pqo4tYBB6GUy56zRt9Vdff6lbHi
-         O7hgksyhy7pRlPOAXBco9KRMG56RXO4EUluwNAbNuQGKbinuvJGRxB8aWa+y6QOTK6PX
-         mRGk1nhnjMWZuP98i8prLVwmLuAmnE315L2xgSwUYaYAneLqFfQxI7sQVG4AQFC3YBB6
-         YC+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=riV2LKDCFyGjMOKFMcuq4CjIaZfhS9K0Zw+bRcaY9Ps=;
-        b=UP1iBLhUekRpu8d1p/J2raPCmtYi34lCFpY63O2qRFdamXYwaXePnj25Ub/GLHU18t
-         V8TPdbLdcG7A3I3f+eCe4aY3XUKtb0j9D92+nhVenlbH+BQGPTZc0InYUzkFv2ufDZmn
-         jmq5HZFykaGDesVuM5FBlidvg+td8aDtU/3Hi8oBi3qBzsuJ9Na8FFWbxt7pic4FEay2
-         lq3yEsVu5RK7mR4pJVsxJTRcfQLa29arvYQZuGuUa7KmYq4O2cPbULL+59216foz3+TT
-         z4hslp2qb+IfdvnZz8ygaxf4t3Jevm9cN47zByyuKow5THa1zvUVEODEK0oEciQmhReI
-         lIGw==
-X-Gm-Message-State: ACrzQf1vo+UYj9bteerMB/ihGgeTcd5iRsM7K6ZuVDVrA7wqrAc4CgQ0
-        6hMv4loFr/PwtvwzfKDKkNo/6M0nhyqstacLZ3aUALVF
-X-Google-Smtp-Source: AMsMyM5ljJniXUYLRN9ji7bgw5RywfZYlVJvXYot0viEKNYOvBV5IcbY/KdfypX2Fe0N4EnnN6USoZp5ku2SCRZqSM4=
-X-Received: by 2002:a17:907:6e93:b0:78d:dff1:71e3 with SMTP id
- sh19-20020a1709076e9300b0078ddff171e3mr12669803ejc.94.1666316187888; Thu, 20
- Oct 2022 18:36:27 -0700 (PDT)
+        with ESMTP id S229606AbiJUBiW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 20 Oct 2022 21:38:22 -0400
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74FAB23082B
+        for <bpf@vger.kernel.org>; Thu, 20 Oct 2022 18:38:20 -0700 (PDT)
+Received: by devbig010.atn6.facebook.com (Postfix, from userid 115148)
+        id 5A91A12EA670E; Thu, 20 Oct 2022 18:15:24 -0700 (PDT)
+From:   Joanne Koong <joannelkoong@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     daniel@iogearbox.net, martin.lau@kernel.org, andrii@kernel.org,
+        ast@kernel.org, netdev@vger.kernel.org, Kernel-team@fb.com,
+        Joanne Koong <joannelkoong@gmail.com>
+Subject: [PATCH bpf-next v7 0/3] Add skb + xdp dynptrs
+Date:   Thu, 20 Oct 2022 18:15:07 -0700
+Message-Id: <20221021011510.1890852-1-joannelkoong@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <Yz8lbkx3HYQpnvIB@krava> <20221007081327.1047552-1-sumanthk@linux.ibm.com>
- <Yz/1QNGfO39Y7dOJ@krava> <Y0BDWK7cl83Fkwqz@hirez.programming.kicks-ass.net> <CAADnVQJ0ur6Pox9aTjoSkXs43strqN__e1h4JWya46WOER9V4w@mail.gmail.com>
-In-Reply-To: <CAADnVQJ0ur6Pox9aTjoSkXs43strqN__e1h4JWya46WOER9V4w@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 20 Oct 2022 18:36:16 -0700
-Message-ID: <CAADnVQ+gquOKjo68ryUhpw4nQYoQzpUYJhdA2e6Wfqs=_oHV8g@mail.gmail.com>
-Subject: Re: [PATCH] bpf: fix sample_flags for bpf_perf_event_output
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        bpf <bpf@vger.kernel.org>, Vasily Gorbik <gor@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        X86 ML <x86@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Peter,
+This patchset is the 2nd in the dynptr series. The 1st can be found here =
+[0].
 
-Another 2 days have passed and bpf side is still broken
-due to the change that went during the merge window without
-corresponding fix from the bpf side.
-Looks like the patch is sitting in tip:perf/urgent.
-Please send it to Linus asap.
+This patchset adds skb and xdp type dynptrs, which have two main benefits=
+ for
+packet parsing:
+    * allowing operations on sizes that are not statically known at
+      compile-time (eg variable-sized accesses).
+    * more ergonomic and less brittle iteration through data (eg does not=
+ need
+      manual if checking for being within bounds of data_end)
 
-We're not sending bpf fixes to avoid breaking bpf tree too.
-We've worked around the issue in bpf CI for bpf-next tree only.
-Developers still see failures when they run tests locally.
+When comparing the differences in runtime for packet parsing without dynp=
+trs
+vs. with dynptrs for the more simple cases, there is no noticeable differ=
+ence.
+For the more complex cases where lengths are non-statically known at comp=
+ile
+time, there can be a significant speed-up when using dynptrs (eg a 2x spe=
+ed up
+for cls redirection). Patch 3 contains more details as well as examples o=
+f how
+to use skb and xdp dynptrs.
 
-On Tue, Oct 18, 2022 at 9:57 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Fri, Oct 7, 2022 at 8:31 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Fri, Oct 07, 2022 at 11:45:36AM +0200, Jiri Olsa wrote:
-> > > On Fri, Oct 07, 2022 at 10:13:27AM +0200, Sumanth Korikkar wrote:
-> > > > * Raw data is also filled by bpf_perf_event_output.
-> > > > * Add sample_flags to indicate raw data.
-> > > > * This eliminates the segfaults as shown below:
-> > > >   Run ./samples/bpf/trace_output
-> > > >   BUG pid 9 cookie 1001000000004 sized 4
-> > > >   BUG pid 9 cookie 1001000000004 sized 4
-> > > >   BUG pid 9 cookie 1001000000004 sized 4
-> > > >   Segmentation fault (core dumped)
-> > > >
-> > > > Fixes: 838d9bb62d13 ("perf: Use sample_flags for raw_data")
-> > > > Acked-by: Namhyung Kim <namhyung@kernel.org>
-> > > > Signed-off-by: Sumanth Korikkar <sumanthk@linux.ibm.com>
-> > >
-> > > Acked-by: Jiri Olsa <jolsa@kernel.org>
-> > >
-> > > Peter,
-> > > I think this should go through your tree again?
-> > > bpf-next/master does not have sample_flags merged yet
-> >
-> > Yep can do. I'll line it up in perf/urgent (Ingo just send out
-> > perf/core).
->
-> Peter,
->
-> Could you please hurry up. 11 days have passed.
->
-> This issue affects everyone the hard way now after merging
-> all the trees: tip -> linus -> net-next -> bpf-next.
-> The BPF CI is red right now with 5 tests failing because
-> this fix is still missing.
-> It's causing a headache to maintainers and developers.
+[0] https://lore.kernel.org/bpf/20220523210712.3641569-1-joannelkoong@gma=
+il.com/
+
+--
+Changelog:
+
+v6 =3D https://lore.kernel.org/bpf/20220907183129.745846-1-joannelkoong@g=
+mail.com/
+v6 -> v7
+    * Change bpf_dynptr_data() to return read-only data slices if the skb=
+ prog
+      is read-only (Martin)
+    * Add test "skb_invalid_write" to test that writes to rd-only data sl=
+ices
+      are rejected
+
+v5 =3D https://lore.kernel.org/bpf/20220831183224.3754305-1-joannelkoong@=
+gmail.com/
+v5 -> v6
+    * Address kernel test robot errors by static inlining
+
+v4 =3D https://lore.kernel.org/bpf/20220822235649.2218031-1-joannelkoong@=
+gmail.com/
+v4 -> v5
+    * Address kernel test robot errors for configs w/out CONFIG_NET set
+    * For data slices, return PTR_TO_MEM instead of PTR_TO_PACKET (Kumar)
+    * Split selftests into subtests (Andrii)
+    * Remove insn patching. Use rdonly and rdwr protos for dynptr skb
+      construction (Andrii)
+    * bpf_dynptr_data() returns NULL for rd-only dynptrs. There will be a
+      separate bpf_dynptr_data_rdonly() added later (Andrii and Kumar)
+
+v3 =3D https://lore.kernel.org/bpf/20220822193442.657638-1-joannelkoong@g=
+mail.com/
+v3 -> v4
+    * Forgot to commit --amend the kernel test robot error fixups
+
+v2 =3D https://lore.kernel.org/bpf/20220811230501.2632393-1-joannelkoong@=
+gmail.com/
+v2 -> v3
+    * Fix kernel test robot build test errors
+
+v1 =3D https://lore.kernel.org/bpf/20220726184706.954822-1-joannelkoong@g=
+mail.com/
+v1 -> v2
+  * Return data slices to rd-only skb dynptrs (Martin)
+  * bpf_dynptr_write allows writes to frags for skb dynptrs, but always
+    invalidates associated data slices (Martin)
+  * Use switch casing instead of ifs (Andrii)
+  * Use 0xFD for experimental kind number in the selftest (Zvi)
+  * Put selftest conversions w/ dynptrs into new files (Alexei)
+  * Add new selftest "test_cls_redirect_dynptr.c"=20
+
+
+Joanne Koong (3):
+  bpf: Add skb dynptrs
+  bpf: Add xdp dynptrs
+  selftests/bpf: tests for using dynptrs to parse skb and xdp buffers
+
+ include/linux/bpf.h                           |  88 +-
+ include/linux/filter.h                        |  38 +
+ include/uapi/linux/bpf.h                      |  67 +-
+ kernel/bpf/helpers.c                          |  91 +-
+ kernel/bpf/verifier.c                         | 116 ++-
+ net/core/filter.c                             | 119 ++-
+ tools/include/uapi/linux/bpf.h                |  67 +-
+ .../selftests/bpf/prog_tests/cls_redirect.c   |  25 +
+ .../testing/selftests/bpf/prog_tests/dynptr.c |  74 +-
+ .../selftests/bpf/prog_tests/l4lb_all.c       |   2 +
+ .../bpf/prog_tests/parse_tcp_hdr_opt.c        |  93 ++
+ .../selftests/bpf/prog_tests/xdp_attach.c     |  11 +-
+ .../testing/selftests/bpf/progs/dynptr_fail.c | 111 ++
+ .../selftests/bpf/progs/dynptr_success.c      |  23 +
+ .../bpf/progs/test_cls_redirect_dynptr.c      | 968 ++++++++++++++++++
+ .../bpf/progs/test_l4lb_noinline_dynptr.c     | 469 +++++++++
+ .../bpf/progs/test_parse_tcp_hdr_opt.c        | 119 +++
+ .../bpf/progs/test_parse_tcp_hdr_opt_dynptr.c | 110 ++
+ .../selftests/bpf/progs/test_xdp_dynptr.c     | 235 +++++
+ .../selftests/bpf/test_tcp_hdr_options.h      |   1 +
+ 20 files changed, 2731 insertions(+), 96 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/parse_tcp_hdr_=
+opt.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_cls_redirect_d=
+ynptr.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_l4lb_noinline_=
+dynptr.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_parse_tcp_hdr_=
+opt.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_parse_tcp_hdr_=
+opt_dynptr.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_dynptr.c
+
+--=20
+2.30.2
+
