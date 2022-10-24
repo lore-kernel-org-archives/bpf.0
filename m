@@ -2,160 +2,146 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51989C67871
-	for <bpf@archiver.kernel.org>; Mon, 24 Oct 2022 21:15:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03261C67871
+	for <bpf@archiver.kernel.org>; Mon, 24 Oct 2022 21:27:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233512AbiJXVPa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Oct 2022 17:15:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42734 "EHLO
+        id S233502AbiJXV1U (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Oct 2022 17:27:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233589AbiJXVPC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Oct 2022 17:15:02 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3011AE286
-        for <bpf@vger.kernel.org>; Mon, 24 Oct 2022 12:20:34 -0700 (PDT)
-Message-ID: <dba4c448-ae08-f665-8723-c83c4d2fb98f@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1666639151;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/yJV29KX24qrAO/LArfIVxhCLoYYUOUuWbD5557Fipc=;
-        b=Wf2s3j3boPTDISjs/WDdTOMrAXWT4SKEAFKOMiCiKvEyevpcoJQ00zkzC7rVtx4IfI7qPV
-        BalP4SFVVg5vuWpWqbNGAE6XyBM/tC0KVoHCYAYiloHpyC0bObSya11iMkvNxPz9xvnsEb
-        7zIe80wiz9AopfaB1Isw3Rhoebm2A2A=
-Date:   Mon, 24 Oct 2022 12:19:04 -0700
-MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v4 3/7] bpf: Implement cgroup storage available
- to non-cgroup-attached bpf progs
-Content-Language: en-US
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
-        KP Singh <kpsingh@kernel.org>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org
-References: <20221023180514.2857498-1-yhs@fb.com>
- <20221023180530.2860453-1-yhs@fb.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20221023180530.2860453-1-yhs@fb.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+        with ESMTP id S234018AbiJXV1E (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Oct 2022 17:27:04 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7373FD5C
+        for <bpf@vger.kernel.org>; Mon, 24 Oct 2022 12:33:52 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29OD4Hrr005853;
+        Mon, 24 Oct 2022 14:38:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2022-7-12;
+ bh=9cpMH1m71ldzuy2BaEQjqqU6L77oI7b+JOdZo24w2Dc=;
+ b=IYWi67phW+cF/qyHCo1DSj+RazrFJvoJuthR899STDv1WDRK1U+QJ01vmJzOgUDQ3THW
+ Q3RuaY+qw1sD699X7wkHdcmImC+7khVc2WbSJ+UZnhCIIeuXWr9qRsspSlYPa/h8Z4fr
+ fDJt+zlBznaGMIvwR78i22bUlBEGY7zJJIVxOsm5V2mo6ocWDOS+ZscAGW65xS0qjqLU
+ IXs7z8M/JMe+idfh66Q/QN+yh3euTTsYpgZggwJDoAqzBAMxSfh8U0fNgOL8DbQKDvRR
+ qlHRAoYc6qYyNCXvbavrWhVFHX2NUGndlXIPUUEoXu4fLaOSCJlkp9fI6jkTP3HwnkRY oQ== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kc6xdurt0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 24 Oct 2022 14:38:35 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29OE6EBn017396;
+        Mon, 24 Oct 2022 14:38:34 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3kc6y3wp9k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 24 Oct 2022 14:38:34 +0000
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29OEcXb1025436;
+        Mon, 24 Oct 2022 14:38:33 GMT
+Received: from myrouter.uk.oracle.com (dhcp-10-175-174-236.vpn.oracle.com [10.175.174.236])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3kc6y3wp8n-1;
+        Mon, 24 Oct 2022 14:38:33 +0000
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     andrii@kernel.org, ast@kernel.org, jolsa@kernel.org
+Cc:     acme@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH bpf] libbpf: btf dedup identical struct test needs check for nested structs/arrays
+Date:   Mon, 24 Oct 2022 15:38:29 +0100
+Message-Id: <1666622309-22289-1-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-24_04,2022-10-21_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 phishscore=0
+ mlxlogscore=999 adultscore=0 malwarescore=0 spamscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2210240089
+X-Proofpoint-GUID: 8KfYJZiY3NtOnvpv54_tQUXP16-jspRO
+X-Proofpoint-ORIG-GUID: 8KfYJZiY3NtOnvpv54_tQUXP16-jspRO
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 10/23/22 11:05 AM, Yonghong Song wrote:
-> +void bpf_cgrp_storage_free(struct cgroup *cgroup)
-> +{
-> +	struct bpf_local_storage *local_storage;
-> +	struct bpf_local_storage_elem *selem;
-> +	bool free_cgroup_storage = false;
-> +	struct hlist_node *n;
-> +	unsigned long flags;
-> +
-> +	rcu_read_lock();
-> +	local_storage = rcu_dereference(cgroup->bpf_cgrp_storage);
-> +	if (!local_storage) {
-> +		rcu_read_unlock();
-> +		return;
-> +	}
-> +
-> +	/* Neither the bpf_prog nor the bpf_map's syscall
-> +	 * could be modifying the local_storage->list now.
-> +	 * Thus, no elem can be added to or deleted from the
-> +	 * local_storage->list by the bpf_prog or by the bpf_map's syscall.
-> +	 *
-> +	 * It is racing with __bpf_local_storage_map_free() alone
-> +	 * when unlinking elem from the local_storage->list and
-> +	 * the map's bucket->list.
-> +	 */
-> +	bpf_cgrp_storage_lock();
-> +	raw_spin_lock_irqsave(&local_storage->lock, flags);
-> +	hlist_for_each_entry_safe(selem, n, &local_storage->list, snode) {
-> +		bpf_selem_unlink_map(selem);
-> +		/* If local_storage list has only one element, the
-> +		 * bpf_selem_unlink_storage_nolock() will return true.
-> +		 * Otherwise, it will return false. The current loop iteration
-> +		 * intends to remove all local storage. So the last iteration
-> +		 * of the loop will set the free_cgroup_storage to true.
-> +		 */
-> +		free_cgroup_storage =
-> +			bpf_selem_unlink_storage_nolock(local_storage, selem, false, false);
-> +	}
-> +	raw_spin_unlock_irqrestore(&local_storage->lock, flags);
-> +	bpf_cgrp_storage_unlock();
-> +	rcu_read_unlock();
-> +
-> +	if (free_cgroup_storage)
-> +		kfree_rcu(local_storage, rcu);
-> +}
+When examining module BTF, it is common to see core kernel structures
+such as sk_buff, net_device duplicated in the module.  After adding
+debug messaging to BTF it turned out that much of the problem
+was down to the identical struct test failing during deduplication;
+sometimes the compiler adds identical structs.  However
+it turns out sometimes that type ids of identical struct members
+can also differ, even when the containing structs are still identical.
 
-[ ... ]
+To take an example, for struct sk_buff, debug messaging revealed
+that the identical struct matching was failing for the anon
+struct "headers"; specifically for the first field:
 
-> +/* *gfp_flags* is a hidden argument provided by the verifier */
-> +BPF_CALL_5(bpf_cgrp_storage_get, struct bpf_map *, map, struct cgroup *, cgroup,
-> +	   void *, value, u64, flags, gfp_t, gfp_flags)
-> +{
-> +	struct bpf_local_storage_data *sdata;
-> +
-> +	WARN_ON_ONCE(!bpf_rcu_lock_held());
-> +	if (flags & ~(BPF_LOCAL_STORAGE_GET_F_CREATE))
-> +		return (unsigned long)NULL;
-> +
-> +	if (!cgroup)
-> +		return (unsigned long)NULL;
-> +
-> +	if (!bpf_cgrp_storage_trylock())
-> +		return (unsigned long)NULL;
-> +
-> +	sdata = cgroup_storage_lookup(cgroup, map, true);
-> +	if (sdata)
-> +		goto unlock;
-> +
-> +	/* only allocate new storage, when the cgroup is refcounted */
-> +	if (!percpu_ref_is_dying(&cgroup->self.refcnt) &&
-> +	    (flags & BPF_LOCAL_STORAGE_GET_F_CREATE))
-> +		sdata = bpf_local_storage_update(cgroup, (struct bpf_local_storage_map *)map,
-> +						 value, BPF_NOEXIST, gfp_flags);
-> +
-> +unlock:
-> +	bpf_cgrp_storage_unlock();
-> +	return IS_ERR_OR_NULL(sdata) ? (unsigned long)NULL : (unsigned long)sdata->data;
-> +}
+__u8       __pkt_type_offset[0]; /*   128     0 */
 
-[ ... ]
+Looking at the code in BTF deduplication, we have code that guards
+against the possibility of identical struct definitions, down to
+type ids, and identical array definitions.  However in this case
+we have a struct which is being defined twice but does not have
+identical type ids since each duplicate struct has separate type
+ids for the above array member.   A similar problem (though not
+observed) could occur for struct-in-struct.
 
-> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-> index 764bdd5fd8d1..32145d066a09 100644
-> --- a/kernel/cgroup/cgroup.c
-> +++ b/kernel/cgroup/cgroup.c
-> @@ -5227,6 +5227,10 @@ static void css_free_rwork_fn(struct work_struct *work)
->   	struct cgroup_subsys *ss = css->ss;
->   	struct cgroup *cgrp = css->cgroup;
->   
-> +#ifdef CONFIG_BPF_SYSCALL
-> +	bpf_cgrp_storage_free(cgrp);
-> +#endif
+The solution is to make the "identical struct" test check members
+not just for matching ids, but to also check if they in turn are
+identical structs or arrays.
 
+The results of doing this are quite dramatic (for some modules
+at least); I see the number of type ids drop from around 10000
+to just over 1000 in one module for example.
 
-After revisiting comment 4bfc0bb2c60e, some of the commit message came to my mind:
+For testing use latest pahole or apply [1], otherwise dedups
+can fail for the reasons described there.
 
-" ...... it blocks a possibility to implement
-   the memcg-based memory accounting for bpf objects, because a circular
-   reference dependency will occur. Charged memory pages are pinning the
-   corresponding memory cgroup, and if the memory cgroup is pinning
-   the attached bpf program, nothing will be ever released."
+Also fix return type of btf_dedup_identical_arrays() as
+suggested by Andrii to match boolean return type used
+elsewhere.
 
-Considering the bpf_map_kzalloc() is used in bpf_local_storage_map.c and it can 
-charge the memcg, I wonder if the cgrp_local_storage will have similar refcnt 
-loop issue here.
+Fixes: efdd3eb8015e ("libbpf: Accommodate DWARF/compiler bug with duplicated structs")
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 
-If here is the right place to free the cgrp_local_storage() and enough to break 
-this refcnt loop, it will be useful to add some explanation and its 
-consideration in the commit message.
+[1] https://lore.kernel.org/bpf/1666364523-9648-1-git-send-email-alan.maguire
+---
+ tools/lib/bpf/btf.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index d88647d..675a0df 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -3887,14 +3887,14 @@ static inline __u16 btf_fwd_kind(struct btf_type *t)
+ }
+ 
+ /* Check if given two types are identical ARRAY definitions */
+-static int btf_dedup_identical_arrays(struct btf_dedup *d, __u32 id1, __u32 id2)
++static bool btf_dedup_identical_arrays(struct btf_dedup *d, __u32 id1, __u32 id2)
+ {
+ 	struct btf_type *t1, *t2;
+ 
+ 	t1 = btf_type_by_id(d->btf, id1);
+ 	t2 = btf_type_by_id(d->btf, id2);
+ 	if (!btf_is_array(t1) || !btf_is_array(t2))
+-		return 0;
++		return false;
+ 
+ 	return btf_equal_array(t1, t2);
+ }
+@@ -3918,7 +3918,9 @@ static bool btf_dedup_identical_structs(struct btf_dedup *d, __u32 id1, __u32 id
+ 	m1 = btf_members(t1);
+ 	m2 = btf_members(t2);
+ 	for (i = 0, n = btf_vlen(t1); i < n; i++, m1++, m2++) {
+-		if (m1->type != m2->type)
++		if (m1->type != m2->type &&
++		    !btf_dedup_identical_arrays(d, m1->type, m2->type) &&
++		    !btf_dedup_identical_structs(d, m1->type, m2->type))
+ 			return false;
+ 	}
+ 	return true;
+-- 
+1.8.3.1
 
