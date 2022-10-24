@@ -2,102 +2,235 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 279F0FA3741
-	for <bpf@archiver.kernel.org>; Mon, 24 Oct 2022 16:51:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F42AECAAA1
+	for <bpf@archiver.kernel.org>; Mon, 24 Oct 2022 18:33:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235135AbiJXQvT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Oct 2022 12:51:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
+        id S232005AbiJXSd3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Oct 2022 14:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233181AbiJXQuY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:50:24 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F9917054;
-        Mon, 24 Oct 2022 08:33:53 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id E9F103200312;
-        Mon, 24 Oct 2022 11:28:13 -0400 (EDT)
-Received: from imap49 ([10.202.2.99])
-  by compute5.internal (MEProxy); Mon, 24 Oct 2022 11:28:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lmb.io; h=cc:cc
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1666625293; x=1666711693; bh=q4fzVob94O
-        +Bj0fcl99z5CvnsJigYyvI50uZH9qLdLQ=; b=gE9VoD+k5nuto7UW3tGPkjrh4Z
-        LBPp1sOCTOR+PMEVTN+amj0Su9uWbyFg0HFn9tIAW3xLKYs8AEudtbc2AYpGqt0/
-        s8s9HscR0DrTrK+WxzsBanU6MytNxDou9BHdX0I6T5XmCVO0COy87EiJ3S7vsRmb
-        Pz9g+IB1TmftSsh+UmIXDaV407JKYzlBW9AMbsrpzvBjotlNkzknPbBSF427ZXCT
-        NvAe537LeJ3Wo3AZ+xKqKeYLtoED4anUUs09Dq81AWsAylnHVpZAz+74ngmd3x8S
-        ChGRohwpIMi/Xg1PLFvPQgFOyT+7FQfRjy6f/iQl8mEYQjff90eMb2enM7zw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1666625293; x=1666711693; bh=q4fzVob94O+Bj0fcl99z5CvnsJig
-        YyvI50uZH9qLdLQ=; b=VKNjPbUVy84sNof68wyF5lA3rZWmQB8RTY+iy4R4T/ct
-        gui83QOxvC/onSgZiaOds17v5HqyMqarCGkeSmbobWeaK+QH76r5ZUol9LxjKCKR
-        Btdw7m7Tv1DeZ7EXWSpr2+/ngXDwf2KHLHn97VbYhjt3hACLuXEsj56IDzOfRpmD
-        YvzDfC66h1TobFQB7xxauJE6YwKTNhW23hu7cr0TsosqfovH+SIocaZfqT0bWjrM
-        NDdRx2h9nwrcDcZt1WZGsPX05tOQO4QfXOz7Ru5ybqXy21zAEunW7066nJ3kGSft
-        yuS7eXi1mvRdZQTrr0IMNjhZOHhxrlaSu8b25bUtgA==
-X-ME-Sender: <xms:Da9WY8Si5Qwn8-KAfWStUJcj3BWClEyNbJoW2gxfaHS1FNDuaPXuXQ>
-    <xme:Da9WY5yBqBrPC2AfbkY3z_hl4HWlK1WIumMtLywhvIOjKlxEBjBht18Y3005_Qr0s
-    RQYsTC3DPjpiayKcw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedtgedgkeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfnfho
-    rhgvnhiiuceurghuvghrfdcuoehoshhssehlmhgsrdhioheqnecuggftrfgrthhtvghrnh
-    epffdugfeggfeiheefieehffetgeektddvtdffheekffeiueeiuddvffeljedvheevnecu
-    ffhomhgrihhnpegsohhothhlihhnrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepohhssheslhhmsgdrihho
-X-ME-Proxy: <xmx:Da9WY52vYXkrFSWZU2lNPQ_VMP_x9hDLpRthaK5jAj7sjx3DY7Ci0Q>
-    <xmx:Da9WYwBA_sHQeq3E_5Tmc2su5ThPUUAFBH4x-eDJJdCbTVWQL93i7A>
-    <xmx:Da9WY1gEBUOYH4Qdqdd7jENf2P__CFKz-R7EeVHrY6XmpTA7R0XYTA>
-    <xmx:Da9WY8Xx6e36INu7jeMRtUSlftqxweUm9CLA09A1axjU745wVQgAFA>
-Feedback-ID: icd3146c6:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 09BEC15A0087; Mon, 24 Oct 2022 11:28:12 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
-Mime-Version: 1.0
-Message-Id: <6c859203-68a4-4dd9-bd7c-e93c65c686f2@app.fastmail.com>
-In-Reply-To: <20221018122708.823792-1-jolsa@kernel.org>
-References: <20221018122708.823792-1-jolsa@kernel.org>
-Date:   Mon, 24 Oct 2022 16:26:21 +0100
-From:   "Lorenz Bauer" <oss@lmb.io>
-To:     "Jiri Olsa" <jolsa@kernel.org>,
-        "Alexei Starovoitov" <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        "Andrii Nakryiko" <andrii@kernel.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Andy Lutomirski" <luto@kernel.org>
-Cc:     "Akihiro HARAI" <jharai0815@gmail.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, "Martin KaFai Lau" <kafai@fb.com>,
-        "Song Liu" <songliubraving@fb.com>, "Yonghong Song" <yhs@fb.com>,
-        "John Fastabend" <john.fastabend@gmail.com>,
-        "KP Singh" <kpsingh@chromium.org>,
-        "Stanislav Fomichev" <sdf@google.com>,
-        "Hao Luo" <haoluo@google.com>
-Subject: Re: [PATCH] x86: Include asm/ptrace.h in syscall_wrapper header
-Content-Type: text/plain
+        with ESMTP id S231567AbiJXSdO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Oct 2022 14:33:14 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541B710D687
+        for <bpf@vger.kernel.org>; Mon, 24 Oct 2022 10:14:39 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id d142so8252057iof.7
+        for <bpf@vger.kernel.org>; Mon, 24 Oct 2022 10:14:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W2Q1uYN8Rm6FcSy3035Mz7Vh+RosplwMYx7sBjd+ess=;
+        b=NFv2jWkhdB9WHBOGYKX/JSJYIwoNNJGvxlFNij0Zvmuf4W4mBUB05VWXNrjWsF47nJ
+         y0Kzq+TBhthE7lFCKiJcvrd+T2U5lqYOhf+Dz6RC8nGwiwcrr1uoeDyMuKp62KMrYMag
+         vxN2HmZAbFAICbNvh4D9NRlkk6SBx1nKLfwWy/1d1m2vmeZW9uk65M+Aa209epBVBsw9
+         34ajffHIyLlwF/+cP4vmy2qGc5Ir3+Lu4nOk1VKBv9RmJtVnzbOD8sULIfN/6nKYHHet
+         nBdMliDNG1hLYhci8tvuaay4ZgMyRW65hHmu+G4Z+v+F9A1AarfnforTJN6A1Y8fcbp3
+         OaJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=W2Q1uYN8Rm6FcSy3035Mz7Vh+RosplwMYx7sBjd+ess=;
+        b=CB/psl1YsHhnj6DnKYED+l0ju7sOLl6Thd1sGTzRefsPi4Va7fQuFEdTWebMPmQrxC
+         ifw5HymofsrKuChZD5Mfvd+0pBYPXKFY9dhPHvtD7SlGKLJaJ9ziztdz6USc4LhJJr0e
+         3tFHepx/BOhJyvxhx8JyUJPCuNmWaNCl02JG2lMbzfs435EA2NPfszdKM6p2sKk518UK
+         QajxRpKLtPOcTTSEJFffGdw5oMOCwGA9eJ5n25RQFn/0OJ/BAwTotN5QOebo/RFpkDnE
+         Cu5BVKe6PMqtiAOUcU/075ypLualHYU+i3smqaH9ZKxed/qZbPjNpe2GPFqEcb0B7NC5
+         QTog==
+X-Gm-Message-State: ACrzQf2y/Pk8XhMx/P2SfbOzbuV0+qPlwn3dZACZViPafb9V194UoqID
+        2/kNxlIGmj/98PQwPl0ElAHAOrSA0iEeibjXWd9CnA==
+X-Google-Smtp-Source: AMsMyM6C4qQwoOnS4EyFff0ghQtd8QN5RyFBxdENAh838VoZrn/MM/Wx9/MGBG6Mm+Sxt6ioCgbR+lewPuxl24Gcv6M=
+X-Received: by 2002:a05:6602:2a48:b0:6bc:e1c7:797b with SMTP id
+ k8-20020a0566022a4800b006bce1c7797bmr21180555iov.131.1666631597614; Mon, 24
+ Oct 2022 10:13:17 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221015092448.117563-1-shaozhengchao@huawei.com>
+ <CAKH8qBugSdWHP7mtNxrnLLR+56u_0OCx3xQOkJSV-+RUvDAeNg@mail.gmail.com>
+ <d830980c-4a38-5537-b594-bc5fb86b0acd@huawei.com> <CAKH8qBtyfS0Otpugn7_ZiG5APA_WTKOVAe1wsFfyaxF-03X=5w@mail.gmail.com>
+ <87f67a8c-2fb2-9478-adbb-f55c7a7c94f9@huawei.com> <CAKH8qBsOMxVaemF0Oy=vE1V0vKO8ORUcVGB5YANS3HdKOhVjjw@mail.gmail.com>
+ <7ddbf8f4-2b03-223f-4601-add0f7208855@huawei.com>
+In-Reply-To: <7ddbf8f4-2b03-223f-4601-add0f7208855@huawei.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Mon, 24 Oct 2022 10:13:06 -0700
+Message-ID: <CAKH8qBuKVuRKd+fFiXKTiSpoB8ue4YPw1gM+pkGFKAdgNOcpTg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: fix issue that packet only contains l2 is dropped
+To:     shaozhengchao <shaozhengchao@huawei.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, haoluo@google.com,
+        jolsa@kernel.org, oss@lmb.io, weiyongjun1@huawei.com,
+        yuehaibing@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 18 Oct 2022, at 13:27, Jiri Olsa wrote:
-> From: Jiri Olsa <olsajiri@gmail.com>
+On Sat, Oct 22, 2022 at 4:36 AM shaozhengchao <shaozhengchao@huawei.com> wr=
+ote:
 >
-> With just the forward declaration of the 'struct pt_regs' in
-> syscall_wrapper.h, the syscall stub functions:
 >
->   __[x64|ia32]_sys_*(struct pt_regs *regs)
+>
+> On 2022/10/22 2:16, Stanislav Fomichev wrote:
+> > On Fri, Oct 21, 2022 at 12:25 AM shaozhengchao <shaozhengchao@huawei.co=
+m> wrote:
+> >>
+> >>
+> >>
+> >> On 2022/10/21 1:45, Stanislav Fomichev wrote:
+> >>> On Wed, Oct 19, 2022 at 6:47 PM shaozhengchao <shaozhengchao@huawei.c=
+om> wrote:
+> >>>>
+> >>>>
+> >>>>
+> >>>> On 2022/10/18 0:36, Stanislav Fomichev wrote:
+> >>>>> On Sat, Oct 15, 2022 at 2:16 AM Zhengchao Shao <shaozhengchao@huawe=
+i.com> wrote:
+> >>>>>>
+> >>>>>> As [0] see, bpf_prog_test_run_skb() should allow user space to for=
+ward
+> >>>>>> 14-bytes packet via BPF_PROG_RUN instead of dropping packet direct=
+ly.
+> >>>>>> So fix it.
+> >>>>>>
+> >>>>>> 0: https://github.com/cilium/ebpf/commit/a38fb6b5a46ab3b5639ea4d42=
+1232a10013596c0
+> >>>>>>
+> >>>>>> Fixes: fd1894224407 ("bpf: Don't redirect packets with invalid pkt=
+_len")
+> >>>>>> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+> >>>>>> ---
+> >>>>>>     net/bpf/test_run.c | 6 +++---
+> >>>>>>     1 file changed, 3 insertions(+), 3 deletions(-)
+> >>>>>>
+> >>>>>> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> >>>>>> index 13d578ce2a09..aa1b49f19ca3 100644
+> >>>>>> --- a/net/bpf/test_run.c
+> >>>>>> +++ b/net/bpf/test_run.c
+> >>>>>> @@ -979,9 +979,6 @@ static int convert___skb_to_skb(struct sk_buff=
+ *skb, struct __sk_buff *__skb)
+> >>>>>>     {
+> >>>>>>            struct qdisc_skb_cb *cb =3D (struct qdisc_skb_cb *)skb-=
+>cb;
+> >>>>>>
+> >>>>>> -       if (!skb->len)
+> >>>>>> -               return -EINVAL;
+> >>>>>> -
+> >>>>>>            if (!__skb)
+> >>>>>>                    return 0;
+> >>>>>>
+> >>>>>> @@ -1102,6 +1099,9 @@ int bpf_prog_test_run_skb(struct bpf_prog *p=
+rog, const union bpf_attr *kattr,
+> >>>>>>            if (IS_ERR(data))
+> >>>>>>                    return PTR_ERR(data);
+> >>>>>>
+> >>>>>> +       if (size =3D=3D ETH_HLEN)
+> >>>>>> +               is_l2 =3D true;
+> >>>>>> +
+> >>>>>
+> >>>>> Don't think this will work? That is_l2 is there to expose proper l2=
+/l3
+> >>>>> skb for specific hooks; we can't suddenly start exposing l2 headers=
+ to
+> >>>>> the hooks that don't expect it.
+> >>>>> Does it make sense to start with a small reproducer that triggers t=
+he
+> >>>>> issue first? We can have a couple of cases for
+> >>>>> len=3D0/ETH_HLEN-1/ETH_HLEN+1 and trigger them from the bpf program=
+ that
+> >>>>> redirects to different devices (to trigger dev_is_mac_header_xmit).
+> >>>>>
+> >>>>>
+> >>>> Hi Stanislav:
+> >>>>           Thank you for your review. Is_l2 is the flag of a specific
+> >>>> hook. Therefore, do you mean that if skb->len is equal to 0, just
+> >>>> add the length back?
+> >>>
+> >>> Not sure I understand your question. All I'm saying is - you can't
+> >>> flip that flag arbitrarily. This flag depends on the attach point tha=
+t
+> >>> you're running the prog against. Some attach points expect packets
+> >>> with l2, some expect packets without l2.
+> >>>
+> >>> What about starting with a small reproducer? Does it make sense to
+> >>> create a small selftest that adds net namespace + fq_codel +
+> >>> bpf_prog_test run and do redirect ingress/egress with len
+> >>> 0/1...tcphdr? Because I'm not sure I 100% understand whether it's onl=
+y
+> >>> len=3D0 that's problematic or some other combination as well?
+> >>>
+> >> yes, only skb->len =3D 0 will cause null-ptr-deref issue.
+> >> The following is the process of triggering the problem:
+> >> enqueue a skb:
+> >> fq_codel_enqueue()
+> >>          ...
+> >>          idx =3D fq_codel_classify()        --->if idx !=3D 0
+> >>          flow =3D &q->flows[idx];
+> >>          flow_queue_add(flow, skb);       --->add skb to flow[idex]
+> >>          q->backlogs[idx] +=3D qdisc_pkt_len(skb); --->backlogs =3D 0
+> >>          ...
+> >>          fq_codel_drop()                  --->set sch->limit =3D 0, al=
+ways
+> >> drop packets
+> >>                  ...
+> >>                  idx =3D i                  --->becuase backlogs in ev=
+ery
+> >> flows is 0, so idx =3D 0
+> >>                  ...
+> >>                  flow =3D &q->flows[idx];   --->get idx=3D0 flow
+> >>                  ...
+> >>                  dequeue_head()
+> >>                          skb =3D flow->head; --->flow->head =3D NULL
+> >>                          flow->head =3D skb->next; --->cause null-ptr-=
+deref
+> >> So, if skb->len !=3D0=EF=BC=8Cfq_codel_drop() could get the correct id=
+x, and
+> >> then skb!=3DNULL, it will be OK.
+> >> Maybe, I will fix it in fq_codel.
+> >
+> > I think the consensus here is that the stack, in general, doesn't
+> > expect the packets like this. So there are probably more broken things
+> > besides fq_codel. Thus, it's better if we remove the ability to
+> > generate them from the bpf side instead of fixing the individual users
+> > like fq_codel.
+> >
+> >> But, as I know, skb->len =3D 0 is just invalid packet. I prefer to add=
+ the
+> >> length back, like bellow:
+> >>          if (is_l2 || !skb->len)
+> >>                  __skb_push(skb, hh_len);
+> >> is it OK?
+> >
+> > Probably not?
+> >
+> > Looking at the original syzkaller report, prog_type is
+> > BPF_PROG_TYPE_LWT_XMIT which does expect a packet without l2 header.
+> > Can we do something like:
+> >
+> > if (!is_l2 && !skb->len) {
+> >    // append some dummy byte to the skb ?
+> > }
+> >
+> >
+> I pad one byte, and test OK.
+> if (!is_l2 && !skb->len)
+>      __skb_push(skb, 1);
+>
+> Does it look OK to you?
 
-I think arm64 has a similar problem: https://elixir.bootlin.com/linux/v6.1-rc2/source/arch/arm64/include/asm/syscall_wrapper.h#L11
+Nope, this will eat a byte out of the l2 header. We need to skb_put
+and make sure we allocate enough to make that skb_put succeed.
 
-Best
-Lorenz
+But stepping back a bit: it feels like it's all unnecessary? The only
+valid use-case of this is probing for the BPF_PROG_TEST_RUN as cilium
+does. This is mostly about testing, so fixing it in the users seems
+fair? No real production code is expected to generate these zero-len
+packets. Or are we concerned that this will leak into stable kernels?
+
+I feel like we are trying to add more complexity here for no apparent reaso=
+n.
