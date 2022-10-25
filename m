@@ -2,44 +2,44 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F5E1FA3744
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00B33FA3748
 	for <bpf@archiver.kernel.org>; Tue, 25 Oct 2022 18:12:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232658AbiJYSMg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 25 Oct 2022 14:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56164 "EHLO
+        id S232665AbiJYSMh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 25 Oct 2022 14:12:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232380AbiJYSMd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 25 Oct 2022 14:12:33 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2045.outbound.protection.outlook.com [40.107.237.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5F0B1DE3;
-        Tue, 25 Oct 2022 11:12:30 -0700 (PDT)
+        with ESMTP id S232634AbiJYSMf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 25 Oct 2022 14:12:35 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2047.outbound.protection.outlook.com [40.107.220.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911D3B1DFC;
+        Tue, 25 Oct 2022 11:12:32 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=La5QNStPWqxXF8M1GdQev90mfoCj2qIFT3QcYcvoz/YV1a0wL5BgavE1VEO1IYGNwU0UXIj/20dMUkGlN+nSL7LembxLAiZ/klxmDAOAGy09ef9T8kd6rMhs5zpotq6IoetRZuXnBuvii2MevHapsMkTCe4G9WpDJvQT68I5+gBk6O7FnUrTNchVrzSSSWtb1J5UFrdkTOSL7ioaiyxSxahJYbLxhX4UaoI2Acptj9Gy2Zz6sR3Kpgz3ch/jn3wrhqD0kwOGcFOOIFyRJPx217zJHAh+FcNxqkxDeFT5h+uijTSpiPzt35dyBvbkm4T17TF6cqHz4I4beTBHeCvxjA==
+ b=cvFuiVBAqMixckHyuS5azgL//Na3Ett+QzVGWsjZK2aWvbfoCgsJ3RhOdCipovI7z2rMf+5rz62X94qith5a9Pv3NGxRFb8VkK4TJ/BdMLTRLzZRNVzFBisrodWC21zZYwCqI97q8pjyCzIHUnqs18dpWJuHizQ36VDw9NXG6QJNpFKdysQ+/v6M1UtSkAwWNpQ/MwGyhX6NGb4nvmlDXtKJUuOZ2is+PV9MFM2/3jm4vP/EfnWTg4AK/1VJmv5o1qj6pf7f+J4r3a4fU3RTLeAl5XhIPMoveilaYNzDMFqfgy6N1goujUjSaA3riyD7YRPrJJ6vx62FDdnw2M+bhA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WWLRqUfk5qLeu1ABpeOCULlhr6vyxlC2X7SSBj2Lon0=;
- b=gFD2DO995KZB2wbBNb+8WIDjk9FynecXmGCYNyrTiQm9m2EeKYI4ITK7asrzATqyqd3Hm8EjsjfZlkFk9Dyj5gYXbendOr320i37y0vhMnPVICAcW6q8OXQMCCzT9y+rdvzOiK29kOW+IOkBob4sa4aogjHViJ4KRl5sC7Xkv0ujMjgi/6hjqIAH5SEew0sfFDu1vI1nCTdxawkzRfBhTnBNSRSTVmDGpxm3x05zlMQSY3C07yeq3rU+fP4Mq7W0JxHMLbbxea25H/ijgBHton7s7W5eDVx36UWaOScC6LuN2+JIaxJsLS6mdJZrcc3Mkr/OfOpIrwUN3UXB25QHrA==
+ bh=+aNorrgrLiE1iwOdAxehUWSj/XSLvXIKgSRFtwlKwdE=;
+ b=OWmbtVOVyA4uUEYAl1GGmX1Tfv56qzc2nAZVucaa/Er+LLe+N9a+3rFZps2v2kP17TCoWw/Nv859ap5DIY1P30IoLYLK/+Qkhh/eN8Lab3uQphIcEiNH6Xmu1WtPIIbK0ZPuLyFEgokhgeF7C8QmrnRTfG1Cxc87oZt3JGV+pJF/oIiScMPnyjsZYCmph6ZrR6/ASmHCagMRlloU5EUWOLq4orGqV2qhgVc8GcOqYhO3yiLtylcjcL2+9JQM2rMsXGXcG9kI84v0Gsw5A80/EcF6UUWUUXWZTUoHpOCWOymRmTcGenhlOQLi3Rz/zNb8bLCech31Y51B0XyZVyynkQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WWLRqUfk5qLeu1ABpeOCULlhr6vyxlC2X7SSBj2Lon0=;
- b=dokB4WvgnUVjBS9LKB992YLeaDXV74bI/+w6Tmf8Ad0HIdQYwoAkBtkcsqhiNQjN3kOBpnXqUg13NF1r9Sf4jFCChsKXibIhubsu8/j0tyByBFu8SUcZ2vKLllAY5pw8Sxm+PcQFbTUv2JI3jx8HnNMZ1eMB6pH/O0RXgQRUZRZy0geSSVc6sTAJ/HXJ8EpgfYRsJLR48BLYwjNmK7GV98Q9DWedVb/2YOqLaV4FLjB4UbVI4LTDeET7fgDuKQLfMiJVCT4K0NyQlVjCi3ebGyOBNA/m6EQiYieUa+TVVjpiku+GJmudvNBbq/yv6qtcKg0OolF6BazOVP66m1fyUg==
+ bh=+aNorrgrLiE1iwOdAxehUWSj/XSLvXIKgSRFtwlKwdE=;
+ b=JRNl+JbVcZpMXjP93ETFCQaO2/QG2vJcyJx1egI1a0XXB27qlyN8INe8Rv9kz0cu59MyVSkTLFvUxGmq4OeflXp2Z/BR/TIrg31iJHQor4SbS+DWOn8sTuWKmciaqoglP73jK+WDwEJ5zyqESlewnPKXP4ll3tIBhu1YzK7AbglOFdzvsWhERT3bXl6hSJiyigbdAUKKVkZb0iawSIxTYkv5HeV19h58y6W4m10FPeCmAAndc4KZKcbaHepoXvx2NhicexoT90sTvUl8H3mwi2ea3uJmN6xKLQDxjwtdRL+LFXGWrwoaSboU4npRU1HCNw3qEGFfx1yZxbRtS8NSDw==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by BL3PR12MB6475.namprd12.prod.outlook.com (2603:10b6:208:3bb::22) with
+ by BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30; Tue, 25 Oct
- 2022 18:12:28 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.23; Tue, 25 Oct
+ 2022 18:12:31 +0000
 Received: from LV2PR12MB5869.namprd12.prod.outlook.com
  ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
  ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5746.021; Tue, 25 Oct 2022
- 18:12:28 +0000
+ 18:12:31 +0000
 From:   Jason Gunthorpe <jgg@nvidia.com>
 To:     Lu Baolu <baolu.lu@linux.intel.com>, bpf@vger.kernel.org,
         Jonathan Corbet <corbet@lwn.net>,
@@ -71,326 +71,127 @@ Cc:     Alex Williamson <alex.williamson@redhat.com>,
         Shameerali Kolothum Thodi 
         <shameerali.kolothum.thodi@huawei.com>,
         Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
-Subject: [PATCH v3 03/15] interval-tree: Add a utility to iterate over spans in an interval tree
-Date:   Tue, 25 Oct 2022 15:12:12 -0300
-Message-Id: <3-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
+Subject: [PATCH v3 01/15] iommu: Add IOMMU_CAP_ENFORCE_CACHE_COHERENCY
+Date:   Tue, 25 Oct 2022 15:12:10 -0300
+Message-Id: <1-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
 In-Reply-To: <0-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
 References: 
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: MN2PR05CA0035.namprd05.prod.outlook.com
- (2603:10b6:208:c0::48) To LV2PR12MB5869.namprd12.prod.outlook.com
+X-ClientProxiedBy: MN2PR08CA0007.namprd08.prod.outlook.com
+ (2603:10b6:208:239::12) To LV2PR12MB5869.namprd12.prod.outlook.com
  (2603:10b6:408:176::16)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL3PR12MB6475:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9fbab31b-8f96-45ec-522f-08dab6b4784b
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL0PR12MB5506:EE_
+X-MS-Office365-Filtering-Correlation-Id: 72ca51c3-1d1e-4198-de07-08dab6b47902
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qfZU+lnf/25J+4x8q6ov7+D8vqqwdnqhBp5jPCzP+Jeatx6pxK4cUwasr26dOHuRW4ShctNZrliZabUMSIu3l36j4uIEZJrimJOQsKLUTzKnPLGunCxOqmiNiYvnCKrPb4W8sC4MYfHuyVYmJsDMosUGzuWhm0JkQAeKOPO+CjhfYdJVtSwz95mBemE6zNyTRPjsCrdhTZOevrkxqERUPkoVERSedjFiHHATnNx+1O78RAAXmDQV5cuMe9oSKhMANs599V7O9WeftxHxOzVvfebzxYB1/rKOvPRsENq2KCeKSlY1N1dLBmnZEr561dO5Bj/vczBjqqG78wl+lsj1BJ+R4dEP7kIXkSgg9FAxdXTwZbBEWuqtjXmIPSmgzUMkgY83NqGWP3W3uobg9H/FJvSAAdEp84r75sWJsn6XdciGFG2nGLXibGIXb/3kYFVUcLhLU0T9uAxbRPlVjUPQxYQmy8ijhp3z1hSfyhk/7XoY+mTR8C6/NDZ9EZu4zjkEz7aLUgls+D7G3/njTCdNU7Qq/beC1eoc7dM6njRCQKfKapr5dGIk6G26N9iPmoaWHAJelf4u/NXtUe3qeRoEW/AcbYvsA9SC5vfSb5X8CppvgA3DXqlhDXZJ2q7qZ/2Fs/d788kHNcdvohynqWPBbmlvpUX2oj5Opzp/+5s6jSZbJ9Ob4EJtQdYyRLLbR6xmMHan+FPnfvClLv+IOJitzDFZ/GiXrDpfvZMPnyklOOOGA8/6/46VQf7YH9XtsOEws+GQRIzoerUcV7DlpM2AlA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(376002)(396003)(366004)(346002)(451199015)(6666004)(316002)(41300700001)(110136005)(36756003)(2616005)(6506007)(54906003)(7406005)(7416002)(8936002)(66476007)(83380400001)(5660300002)(26005)(2906002)(4326008)(186003)(66946007)(8676002)(66556008)(6512007)(921005)(6486002)(38100700002)(86362001)(478600001)(4216001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 4pbUp6c2B7fnE+qu3KmyVrY/NByFvCte0lc4w5gDxHFKM2oGb3fLEQIfJYKwNTJD/d1neph4HKLPAr4EF3amEF0Q8EejYIatn3rwm59PgYkMpRZP1+yYNHjbn7nwnoTyCp4r1gW1A8cZsHr+sF3e+jE5MJuTnhgdT/Kt16RvT2Ot+Afk/ebSrEkmEBRHPGSrjqsCHdVqzPCE/g9grMQIgrpJOy+P+49JHorOA/N553sATz6voElucu3JO5oCEFVRv/pKIWPSQkz3nCKq1jNAyM4huP1MsmK7z8Yh4UhFF7ZjgDl+q6nw7cHKyhX4WwCfk/qEE6Dr1Ga2zcNQ4q7UCelg0HOmu9Zy82lT0g/7U31FiA5r+3gQbOP+wwpTVY8rDySTFgOG+yY/rqUUT/R1KDUJhFabTKnncuDyIU07isAICh0/oaG1RkYzy5bzGWz/1oYP/Uakc/Q2IA0hAYwDtx3MYUNEH9S4rIdaeB34p9HmNWNpNaL34K5C75jQcI+A7tH+btbMapTyzDuMkK57pKAcEIyaD89GLExf8N9hM3h8OSvsi0xKf5G05Qp3Y/L77ssMrTfwJP7+pOkC1Aajkk0h10zAxzbL4r52ctfnuHcQYAwQGtLGSoNbcVg1sQM0Z+CgzbAuqy3/+6Em9KdlE/WkEWHML+M1CCmVRnTja3mtnfgYBZWjU2gGdfeZlMvQQSt/SAKetua6BpVPNg3TkR8VYEHAEMK96AMyjSq5KMfbA5qHWhnbhD8NdMEj5+oKawsT8rGgP2gmN5gmb5JxRg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(39860400002)(396003)(376002)(366004)(451199015)(7406005)(7416002)(41300700001)(5660300002)(8936002)(66476007)(6506007)(110136005)(66946007)(36756003)(4326008)(8676002)(6512007)(66556008)(6666004)(316002)(26005)(2616005)(921005)(38100700002)(186003)(2906002)(54906003)(86362001)(6486002)(478600001)(4216001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4rkW6byTJuCcLgeh5i9XLlodTNnimKoNvQre3LaMsXnABTXUGWRZDX0uph0r?=
- =?us-ascii?Q?Kc/MJ+v3JUlEtCwQabL9islP66fI7X3+TtPZ+nyJb9ADtBWspRTRKhh2vW3R?=
- =?us-ascii?Q?GryUJZn0CGFtqiHqb/6tbyj7YmxIP4QVDtVjP8ABRZb3XNI4819iWHle9HvC?=
- =?us-ascii?Q?1QdpNJaw3l1z69sebs02pqwaf06IY1xOdScmne4XG1EiK0iLxEiI68BXFWfx?=
- =?us-ascii?Q?zW6DD8S0QH7tF78raVuCyuy4Cud8oqGPXQb+guBSRB8k+13TNanIxBE00wgx?=
- =?us-ascii?Q?UHjtr5UADWRBQY4ymTnE18SGpzh7ArmlU8dL0DzscEnmmWmGqnSfgd7wQvVY?=
- =?us-ascii?Q?vu1hm7CN8WuApPSoCkVGyVGcMdZASIEIApo+u4sV66PwO1asH8LYBSk9dlIR?=
- =?us-ascii?Q?5iq9bpl6wv3dVbMPru1YekuZFKlO9QrJTqDcjLU2EGttHYd6jM+s3EhVJUf5?=
- =?us-ascii?Q?kd61o2MyhGRsJdC6YDvTfWW17dmD5PUgsdVXP/30Q38FRjA8c8EDnbAHWgiF?=
- =?us-ascii?Q?I46J4d9ZSaqB8k0MAHUIKPI8QaukB52jg7V/AhcLEnIQRDvfDaxAS5iwB3Rk?=
- =?us-ascii?Q?D6M1N1cafL7TAbHRqnrhlUuWPRukU9tGP4SEkW6IVyGIo5GvFBNXV5R3X4JA?=
- =?us-ascii?Q?TdFlUWEAS9pg/waf2rAezKswsIHddgPrL/ls81hwhAegLRT66rhA9gBBUgZt?=
- =?us-ascii?Q?Ye/dIKTaw0gu/isOIZ+P10+IfrSCvyo1MNDC+oTOsU98KjGv/UVldef4h6xf?=
- =?us-ascii?Q?WqDbmLKfF1UZeEXwHsZuanBxwr8IR0CT97iB215+dprZOpod+4q6z3KRuAQF?=
- =?us-ascii?Q?xfkpWqqE9ww+w1/ozG8+3y94zYuV895RcykcH9qqJBJxSJLN9xdiS+OQvTr7?=
- =?us-ascii?Q?cww0Xo4MbYlyKMgwsCEVt5HI/bDPfiXHAHv102L449JrAt7m5KG75shOtXyI?=
- =?us-ascii?Q?0/R3JqNVFy2sN2Mz5yWfF1TCMC92sjcMucSOVAZ6dVQ+0KfoPs8uuqV37Y9x?=
- =?us-ascii?Q?C7Fwpd/noMVwtcr4bBkJWT+K54sfG0hkADB2ba4Uy472YoYlhi6rk6o4gSlJ?=
- =?us-ascii?Q?BubuZSIDAXjPQpzyKxTkS3oweoek4wzmvWHJtRHTsPorTKHYWGb2oXR+nLOq?=
- =?us-ascii?Q?RyMYacY0N1DdzzBtSmEvnlN1vFjdALQwhblfoZa/ZLaJakdCWkzN8gvsnnTv?=
- =?us-ascii?Q?uba3ulfeRHv1z1NQRr+fOzj5t3gwOBVbvbK7Ns1n2+M9C9SBjSN+bP6APuN0?=
- =?us-ascii?Q?UOMeR2IB9DhKL+aquoOp9rDyMFyUtf0jiqZcgdwporYztKX9ubI1UoIKs6lR?=
- =?us-ascii?Q?012xlNBX+BMP/hNEZ9OAy2mggA0+ScgA3i/IxWYeCFglaDnMV5dEKk8fhH7f?=
- =?us-ascii?Q?ToMzxRXVSPozI6vQW6WEd0emknI82nRqvDTQ6TjcPq1uf8dnxUrl1q1jJLrw?=
- =?us-ascii?Q?zMZOjFG8tJLUtZKEsJ5aRZ4ihqpO9N9zuDEuJiZe+SFSO22HguDLYiaxa06L?=
- =?us-ascii?Q?xwpU+BPfHdzmr1oCvGgxes32NaVArXQcke5ByKuCy6WpCsoUrABHgqmh6pz4?=
- =?us-ascii?Q?eVs13wBPaimQSbB3Gcw=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HfVHhgbRWCAkLsHxNpjHJy2lIXeYWeIyknVuM+FXMT/ZrpNfsz8nKvwnGTfY?=
+ =?us-ascii?Q?59P0K/ogRHoPGNHMSioUE0sexzG4WNd0P3gMsCrQDP5MSPC37XjqYiv74N6D?=
+ =?us-ascii?Q?CqaDKaUPzdq/Oyoe8xzQ5BgTzFuxGSjgEPMwXob99HgjnZY71WqP7kipl8s3?=
+ =?us-ascii?Q?CEL+uS3UVepmuhkjEU4SYx3FWT2+medCfe6G1NoViU6aufM1AnINvtBZsDAh?=
+ =?us-ascii?Q?Hu+4mK7A7eDvDLFsl3WMj1/L4AIJZshuDgXRVK9shppakktytY8aSJkrTv9f?=
+ =?us-ascii?Q?7iU1B0OhcVuo6PoDadcBs/RXkSW6W1/5AF/qhrYnTSAu0QjZZF7t39WB9Kae?=
+ =?us-ascii?Q?b5S69cQSGHoHm6NLuZ82kPTZJrYJUAPoyoTkFBHDwpnHD7SmyrNJLqS3wZxS?=
+ =?us-ascii?Q?ODfO1QlUTUdMgSr0asNdGApvO7NAHgRPnNkjvD28lBCyyGG2GKD/Y+F+iHme?=
+ =?us-ascii?Q?+qSbqOJ5FZMPQUt10QnIm/pp4q5+3I7WTZyo1+bqdeON0YbAXyBMtAwj1Ccw?=
+ =?us-ascii?Q?SNkuoUWBg/eU4wBLVjA9E1ATlN42gwREoNZK825PVUDGkA3hs7ulG/5WYNOX?=
+ =?us-ascii?Q?wRjWJd2EOqQ0+E5oqtynnrfjqLTeuFeUnrUC2xjPzAWaPMoKWhAJD5qrTfns?=
+ =?us-ascii?Q?JsUo4uZRFHSg7YoAEyTdawaPXJx3bUwoyHgPC1lKczQxI+LeCdnbLc3ATN55?=
+ =?us-ascii?Q?ulv20beISSVsHnIF9YbJFQwfkzH14CbGHe4fS94POqgS4watWGL7wt0ujoJ9?=
+ =?us-ascii?Q?Mh+ZanAOBB2uRVK8Jy1OxXZ0Q2QyfYtT2XZy2qVbpnK5AFEqqoxRy13IcKsR?=
+ =?us-ascii?Q?9DIe7QXIki1+AI5KqVnfkxJHIruyaKto01wR23LwPMqBX5f5kIdk6uwE68hA?=
+ =?us-ascii?Q?7hPNVkRvd4NFRxiKHibDr6JOFELXQFz9I1TgNvDnILjc9SZJDg+utW17J0hQ?=
+ =?us-ascii?Q?ipUECqGfqbEVtxfBxEHTMJNUvqANms1IkCTXKOZ1v6YW0erKqYkOBxvDyH6p?=
+ =?us-ascii?Q?G7EcPPVj8X9kNZkgWobVLArBig3+yAmaEyWeJcQyA9MIlekU+SJUQb6InHWh?=
+ =?us-ascii?Q?hC42jZeFAyieXdnfNuJgqYB0jNzhR2TD4QV6PlZc5IFoCeDr01WqojZl85Gu?=
+ =?us-ascii?Q?h+cOSv/GHSTuCsVFjdN+JP0s91huBt44TZVMM/criAdH9kW6LOvQGKceLR7h?=
+ =?us-ascii?Q?dMhmypUyEkMSwfIIu1qsz3FEUnTIvEnVv7VX4bCVi6T8KZFJZeL5tk7h/ptl?=
+ =?us-ascii?Q?LmaGk85X07i5sl9ULbkFT+9buUWbQOUdE4q8XuN6NlMcNN73pWvKNFAcRwM8?=
+ =?us-ascii?Q?8DXLD5J1SExb5lKsAf+L5wnk99IiGXOevFUqH1WNDG76+u4d9yDZMwgWGasz?=
+ =?us-ascii?Q?6L4VEq99CjCrVuIXdlTV2aKc7j0Q6PQs9r4RwqYpOQSM/Dn/8xnatreWSmtE?=
+ =?us-ascii?Q?KKiiX8/27D+VufyHvA7EIuLt9p506dW3A68jv84HHOv1iptDcqDcBOMz3Q4q?=
+ =?us-ascii?Q?mKqL7tgKpt9Hmj3MBVLA8PrMZj6yQDf2juIWBzma2FfGJOCjzojp1rywqU8z?=
+ =?us-ascii?Q?lblVgzvgLZudyCT8rII=3D?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9fbab31b-8f96-45ec-522f-08dab6b4784b
+X-MS-Exchange-CrossTenant-Network-Message-Id: 72ca51c3-1d1e-4198-de07-08dab6b47902
 X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2022 18:12:25.6791
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2022 18:12:26.7727
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: r8Jm6wzBV1gJUmbo824KsN2susJX1+QPwXzsRHbn2wYQqlxzN33DIDUPmpG46MHd
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6475
+X-MS-Exchange-CrossTenant-UserPrincipalName: XvlH+ae1//R+qJQLwSkSE+lxvxPEV5qEgMdIuGtQQQ9JqUSZG91q1FVYlo2RDU2x
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB5506
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The span iterator travels over the indexes of the interval_tree, not the
-nodes, and classifies spans of indexes as either 'used' or 'hole'.
+This queries if a domain linked to a device should expect to support
+enforce_cache_coherency() so iommufd can negotiate the rules for when a
+domain should be shared or not.
 
-'used' spans are fully covered by nodes in the tree and 'hole' spans have
-no node intersecting the span.
-
-This is done greedily such that spans are maximally sized and every
-iteration step switches between used/hole.
-
-As an example a trivial allocator can be written as:
-
-	for (interval_tree_span_iter_first(&span, itree, 0, ULONG_MAX);
-	     !interval_tree_span_iter_done(&span);
-	     interval_tree_span_iter_next(&span))
-		if (span.is_hole &&
-		    span.last_hole - span.start_hole >= allocation_size - 1)
-			return span.start_hole;
-
-With all the tricky boundary conditions handled by the library code.
-
-The following iommufd patches have several algorithms for its overlapping
-node interval trees that are significantly simplified with this kind of
-iteration primitive. As it seems generally useful, put it into lib/.
+For iommufd a device that declares IOMMU_CAP_ENFORCE_CACHE_COHERENCY will
+not be attached to a domain that does not support it.
 
 Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 ---
- .clang-format                 |   1 +
- include/linux/interval_tree.h |  50 +++++++++++++
- lib/Kconfig                   |   4 ++
- lib/interval_tree.c           | 132 ++++++++++++++++++++++++++++++++++
- 4 files changed, 187 insertions(+)
+ drivers/iommu/amd/iommu.c   | 2 ++
+ drivers/iommu/intel/iommu.c | 4 ++++
+ include/linux/iommu.h       | 5 +++++
+ 3 files changed, 11 insertions(+)
 
-diff --git a/.clang-format b/.clang-format
-index 1247d54f9e49fa..96d07786dcfb46 100644
---- a/.clang-format
-+++ b/.clang-format
-@@ -440,6 +440,7 @@ ForEachMacros:
-   - 'inet_lhash2_for_each_icsk'
-   - 'inet_lhash2_for_each_icsk_continue'
-   - 'inet_lhash2_for_each_icsk_rcu'
-+  - 'interval_tree_for_each_span'
-   - 'intlist__for_each_entry'
-   - 'intlist__for_each_entry_safe'
-   - 'kcore_copy__for_each_phdr'
-diff --git a/include/linux/interval_tree.h b/include/linux/interval_tree.h
-index 288c26f50732d7..3c803379b83cd8 100644
---- a/include/linux/interval_tree.h
-+++ b/include/linux/interval_tree.h
-@@ -27,4 +27,54 @@ extern struct interval_tree_node *
- interval_tree_iter_next(struct interval_tree_node *node,
- 			unsigned long start, unsigned long last);
+diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
+index d3b39d0416fa32..d0802cab2a2f0c 100644
+--- a/drivers/iommu/amd/iommu.c
++++ b/drivers/iommu/amd/iommu.c
+@@ -2286,6 +2286,8 @@ static bool amd_iommu_capable(struct device *dev, enum iommu_cap cap)
+ 		return false;
+ 	case IOMMU_CAP_PRE_BOOT_PROTECTION:
+ 		return amdr_ivrs_remap_support;
++	case IOMMU_CAP_ENFORCE_CACHE_COHERENCY:
++		return true;
+ 	default:
+ 		break;
+ 	}
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index 48cdcd0a5cf346..438ba997fa230e 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -4458,7 +4458,11 @@ static bool intel_iommu_capable(struct device *dev, enum iommu_cap cap)
+ 		return irq_remapping_enabled == 1;
+ 	if (cap == IOMMU_CAP_PRE_BOOT_PROTECTION)
+ 		return dmar_platform_optin();
++	if (cap == IOMMU_CAP_ENFORCE_CACHE_COHERENCY) {
++		struct device_domain_info *info = dev_iommu_priv_get(dev);
  
-+/*
-+ * This iterator travels over spans in an interval tree. It does not return
-+ * nodes but classifies each span as either a hole, where no nodes intersect, or
-+ * a used, which is fully covered by nodes. Each iteration step toggles between
-+ * hole and used until the entire range is covered. The returned spans always
-+ * fully cover the requested range.
-+ *
-+ * The iterator is greedy, it always returns the largest hole or used possible,
-+ * consolidating all consecutive nodes.
-+ *
-+ * Only is_hole, start_hole/used and last_hole/used are part of the external
-+ * interface.
-+ */
-+struct interval_tree_span_iter {
-+	struct interval_tree_node *nodes[2];
-+	unsigned long first_index;
-+	unsigned long last_index;
-+	union {
-+		unsigned long start_hole;
-+		unsigned long start_used;
-+	};
-+	union {
-+		unsigned long last_hole;
-+		unsigned long last_used;
-+	};
-+	/* 0 == used, 1 == is_hole, -1 == done iteration */
-+	int is_hole;
-+};
-+
-+void interval_tree_span_iter_first(struct interval_tree_span_iter *state,
-+				   struct rb_root_cached *itree,
-+				   unsigned long first_index,
-+				   unsigned long last_index);
-+void interval_tree_span_iter_advance(struct interval_tree_span_iter *iter,
-+				     struct rb_root_cached *itree,
-+				     unsigned long new_index);
-+void interval_tree_span_iter_next(struct interval_tree_span_iter *state);
-+
-+static inline bool
-+interval_tree_span_iter_done(struct interval_tree_span_iter *state)
-+{
-+	return state->is_hole == -1;
-+}
-+
-+#define interval_tree_for_each_span(span, itree, first_index, last_index)      \
-+	for (interval_tree_span_iter_first(span, itree,                        \
-+					   first_index, last_index);           \
-+	     !interval_tree_span_iter_done(span);                              \
-+	     interval_tree_span_iter_next(span))
-+
- #endif	/* _LINUX_INTERVAL_TREE_H */
-diff --git a/lib/Kconfig b/lib/Kconfig
-index 9bbf8a4b2108e6..c6c323fd251721 100644
---- a/lib/Kconfig
-+++ b/lib/Kconfig
-@@ -479,6 +479,10 @@ config INTERVAL_TREE
++		return ecap_sc_support(info->iommu->ecap);
++	}
+ 	return false;
+ }
  
- 	  for more information.
- 
-+config INTERVAL_TREE_SPAN_ITER
-+	bool
-+	depends on INTERVAL_TREE
-+
- config XARRAY_MULTI
- 	bool
- 	help
-diff --git a/lib/interval_tree.c b/lib/interval_tree.c
-index 593ce56ece5050..6edfb83894af8e 100644
---- a/lib/interval_tree.c
-+++ b/lib/interval_tree.c
-@@ -15,3 +15,135 @@ EXPORT_SYMBOL_GPL(interval_tree_insert);
- EXPORT_SYMBOL_GPL(interval_tree_remove);
- EXPORT_SYMBOL_GPL(interval_tree_iter_first);
- EXPORT_SYMBOL_GPL(interval_tree_iter_next);
-+
-+#ifdef CONFIG_INTERVAL_TREE_SPAN_ITER
-+static void
-+interval_tree_span_iter_next_gap(struct interval_tree_span_iter *state)
-+{
-+	struct interval_tree_node *cur = state->nodes[1];
-+
+diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+index 3c9da1f8979e3a..40cf2d8393465f 100644
+--- a/include/linux/iommu.h
++++ b/include/linux/iommu.h
+@@ -108,6 +108,11 @@ enum iommu_cap {
+ 	IOMMU_CAP_NOEXEC,		/* IOMMU_NOEXEC flag */
+ 	IOMMU_CAP_PRE_BOOT_PROTECTION,	/* Firmware says it used the IOMMU for
+ 					   DMA protection and we should too */
 +	/*
-+	 * Roll nodes[1] into nodes[0] by advancing nodes[1] to the end of a
-+	 * contiguous span of nodes. This makes nodes[0]->last the end of that
-+	 * contiguous span of valid indexes that started at the original
-+	 * nodes[1]->start. nodes[1] is now the next node and a hole is between
-+	 * nodes[0] and [1].
++	 * Per-device flag indicating if enforce_cache_coherency() will work on
++	 * this device.
 +	 */
-+	state->nodes[0] = cur;
-+	do {
-+		if (cur->last > state->nodes[0]->last)
-+			state->nodes[0] = cur;
-+		cur = interval_tree_iter_next(cur, state->first_index,
-+					      state->last_index);
-+	} while (cur && (state->nodes[0]->last >= cur->start ||
-+			 state->nodes[0]->last + 1 == cur->start));
-+	state->nodes[1] = cur;
-+}
-+
-+void interval_tree_span_iter_first(struct interval_tree_span_iter *iter,
-+				   struct rb_root_cached *itree,
-+				   unsigned long first_index,
-+				   unsigned long last_index)
-+{
-+	iter->first_index = first_index;
-+	iter->last_index = last_index;
-+	iter->nodes[0] = NULL;
-+	iter->nodes[1] =
-+		interval_tree_iter_first(itree, first_index, last_index);
-+	if (!iter->nodes[1]) {
-+		/* No nodes intersect the span, whole span is hole */
-+		iter->start_hole = first_index;
-+		iter->last_hole = last_index;
-+		iter->is_hole = 1;
-+		return;
-+	}
-+	if (iter->nodes[1]->start > first_index) {
-+		/* Leading hole on first iteration */
-+		iter->start_hole = first_index;
-+		iter->last_hole = iter->nodes[1]->start - 1;
-+		iter->is_hole = 1;
-+		interval_tree_span_iter_next_gap(iter);
-+		return;
-+	}
-+
-+	/* Starting inside a used */
-+	iter->start_used = first_index;
-+	iter->is_hole = 0;
-+	interval_tree_span_iter_next_gap(iter);
-+	iter->last_used = iter->nodes[0]->last;
-+	if (iter->last_used >= last_index) {
-+		iter->last_used = last_index;
-+		iter->nodes[0] = NULL;
-+		iter->nodes[1] = NULL;
-+	}
-+}
-+EXPORT_SYMBOL_GPL(interval_tree_span_iter_first);
-+
-+void interval_tree_span_iter_next(struct interval_tree_span_iter *iter)
-+{
-+	if (!iter->nodes[0] && !iter->nodes[1]) {
-+		iter->is_hole = -1;
-+		return;
-+	}
-+
-+	if (iter->is_hole) {
-+		iter->start_used = iter->last_hole + 1;
-+		iter->last_used = iter->nodes[0]->last;
-+		if (iter->last_used >= iter->last_index) {
-+			iter->last_used = iter->last_index;
-+			iter->nodes[0] = NULL;
-+			iter->nodes[1] = NULL;
-+		}
-+		iter->is_hole = 0;
-+		return;
-+	}
-+
-+	if (!iter->nodes[1]) {
-+		/* Trailing hole */
-+		iter->start_hole = iter->nodes[0]->last + 1;
-+		iter->last_hole = iter->last_index;
-+		iter->nodes[0] = NULL;
-+		iter->is_hole = 1;
-+		return;
-+	}
-+
-+	/* must have both nodes[0] and [1], interior hole */
-+	iter->start_hole = iter->nodes[0]->last + 1;
-+	iter->last_hole = iter->nodes[1]->start - 1;
-+	iter->is_hole = 1;
-+	interval_tree_span_iter_next_gap(iter);
-+}
-+EXPORT_SYMBOL_GPL(interval_tree_span_iter_next);
-+
-+/*
-+ * Advance the iterator index to a specific position. The returned used/hole is
-+ * updated to start at new_index. This is faster than calling
-+ * interval_tree_span_iter_first() as it can avoid full searches in several
-+ * cases where the iterator is already set.
-+ */
-+void interval_tree_span_iter_advance(struct interval_tree_span_iter *iter,
-+				     struct rb_root_cached *itree,
-+				     unsigned long new_index)
-+{
-+	if (iter->is_hole == -1)
-+		return;
-+
-+	iter->first_index = new_index;
-+	if (new_index == iter->last_index) {
-+		iter->is_hole = -1;
-+		return;
-+	}
-+
-+	/* Rely on the union aliasing hole/used */
-+	if (iter->start_hole <= new_index && new_index <= iter->last_hole) {
-+		iter->start_hole = new_index;
-+		return;
-+	}
-+	if (new_index == iter->last_hole + 1)
-+		interval_tree_span_iter_next(iter);
-+	else
-+		interval_tree_span_iter_first(iter, itree, new_index,
-+					      iter->last_index);
-+}
-+EXPORT_SYMBOL_GPL(interval_tree_span_iter_advance);
-+#endif
++	IOMMU_CAP_ENFORCE_CACHE_COHERENCY,
+ };
+ 
+ /* These are the possible reserved region types */
 -- 
 2.38.0
 
