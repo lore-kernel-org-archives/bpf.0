@@ -2,87 +2,135 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 999E5FA3740
-	for <bpf@archiver.kernel.org>; Tue, 25 Oct 2022 17:50:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFEFDFA373E
+	for <bpf@archiver.kernel.org>; Tue, 25 Oct 2022 18:11:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbiJYRuM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 25 Oct 2022 13:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46214 "EHLO
+        id S229875AbiJYSLU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 25 Oct 2022 14:11:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230025AbiJYRuK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 25 Oct 2022 13:50:10 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDAE2BB0C;
-        Tue, 25 Oct 2022 10:50:09 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id bp11so21847637wrb.9;
-        Tue, 25 Oct 2022 10:50:09 -0700 (PDT)
+        with ESMTP id S229714AbiJYSLT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 25 Oct 2022 14:11:19 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91E315708
+        for <bpf@vger.kernel.org>; Tue, 25 Oct 2022 11:11:18 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id g129so10622293pgc.7
+        for <bpf@vger.kernel.org>; Tue, 25 Oct 2022 11:11:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:user-agent:references:message-id:date:in-reply-to
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vLgvf8+jcLueS2m85FZOCCTl0+pu+RRqs5gE7k132Ew=;
-        b=JesPhdpAnA8vBsbE+8g8h4vUgBwbQOeUCvia+Anqhk8ccJsGcGpS4l8LcCehXZNW7Y
-         aDA7rrvzvssliRjx1JrzbaDryWrmfGV6+sP3WP7GpGRRyrUMy675wYumSseYTzlOInru
-         aWukOOgBaQiUMH6I03DQMcqRRP/gTqxyI4NIWKsBYOIC0cNT1NbbGnbg2/B4GN4kWXGI
-         y9S3BP+zvYRx1kXafgHjqKmqt9II6Mp+IK5varHgymFOBs2xgUD9CuALx/hMXOecbb8a
-         lv3KrRdMyHWAZArvzsUZ+BUjjMXEHhtGoX3gcaXe9ewrn2CJb2rYnRxudriMrFtyF5o6
-         /RCQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yZRwIzyW0nV1lobwwIYbOw8yQGu/+QFtPhfGRaUZ1CI=;
+        b=BiTTN/nnJXvMRdymNDPw4mC7yZUxkjkLedb0w7fFILbwUKJtVOJk5pfdYxJ9TNS0ep
+         loIO9jgvcVtwb/l1bjETtZuXEdP6cxa5hj1DEihdBeB2jWNQor3b0aDK3YK3oPOzePMe
+         PM9to/0THjZpsaRa+TZjoaQ93s5pI5J3A4HhypjdiTQTA/cQpOvlm3ZqT19pULVqVYrV
+         rEWe8NY4mkOdVfD1bI7zQc8hRAJAdPPgGVwX2Q8rzndMC23aK453HFSfxfA0CqpO9+21
+         9BzGmMVzQhtvM8o7qqKpwjj2cDk0trWB3flbeIkYSbkc3EaD7vn+LPGKVqqpKpcqBvCb
+         J8iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:references:message-id:date:in-reply-to
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vLgvf8+jcLueS2m85FZOCCTl0+pu+RRqs5gE7k132Ew=;
-        b=KlK5kHMxPWdgfbMc2gVuTqDutEuhqZmKLpYoEBCHtFxhQHaRHcqWa+VI9BZJmByLiL
-         Xid4e41L5JuytNeqiXlxk2QsVNsiGlqlKRuAJcQeMQ5asLmR+0MJp/gpeNhCBfpZYhza
-         +I22NpeZuIRqhFf4DCLoZTeRhTy4m5vQodM1Vx8solf47/DfNeRvrz/o4zs6tRNoa9rf
-         +I7ph/mDBCK7FWPqXON+py0uB3Rnn8AsPmlsuzI3pU6ft7Okzka56J7WN3eT0d+P306f
-         GsdfbD2Jas3EvWkHprrkZ0TZ6aUBSqlKN35fAS3Q95y9gz4Zygys4CA4mw9wE9eLkc6I
-         HZ3A==
-X-Gm-Message-State: ACrzQf2LBuWqQljBrHm24o2F/FNRfTdq0AhT4JwC3My4YdVxJcH45hrZ
-        fDWcWs+vo6qVrQP54zq0+iw=
-X-Google-Smtp-Source: AMsMyM650VMDeHz/oyedkIfA0SO9XAmtCZaDAdiHusW2JIVCdHayXiaELMUEBZHqYZtWKNaK5I3/LQ==
-X-Received: by 2002:a05:6000:1d93:b0:22e:5d8a:c8f8 with SMTP id bk19-20020a0560001d9300b0022e5d8ac8f8mr26190005wrb.324.1666720207977;
-        Tue, 25 Oct 2022 10:50:07 -0700 (PDT)
-Received: from imac ([2a02:8010:60a0:0:d0eb:e336:b451:acd2])
-        by smtp.gmail.com with ESMTPSA id c1-20020adfe741000000b00236883f2f5csm801740wrn.94.2022.10.25.10.50.06
+        bh=yZRwIzyW0nV1lobwwIYbOw8yQGu/+QFtPhfGRaUZ1CI=;
+        b=yg6wZDQqgCxhc/bxbY+Kmwo+8IqnYTULQbEHkBhW7T1EVjgX7NTxnmrjWLjUwTRkvx
+         yCYotMLNQDfjr3cPQrX87/2BKv2yyZ/63VUW5e12QEU9keHwlOe0v9WBvBaBzhLmxUTb
+         GAN7PZ+zn/wsTW3b7xpPWxXalAejVpjsHzOH3v53mdm9GbjeCywv/X2YIVd1RoNANzHa
+         z4moSxHlgV+YpD6xXeFmMFPJ8YQbgokfmQws47hvAansHoo4GEJrFOsUzxRcvAOWlf6E
+         tXYcO1WLhap05wmS+NeHK71Gpwt/XXHrgUKq28ysTedqnij8TKLcVPLJ5Ut0IJNbpxx0
+         zc/A==
+X-Gm-Message-State: ACrzQf0XKd7EnEJUvLKT9x0y6Blv/bHF9LJYWdGQEWWhU1JzyklGWGrl
+        /ns7hKwZHi+pegiTjAtCPVjXeTCR2n++9Q==
+X-Google-Smtp-Source: AMsMyM5wGhAj7YqdWI3TfXB7DVk6aoBxSOHwS0DcGG7kzefMH/24gDKDsNCoD1UrNO8JnqtTdAizDA==
+X-Received: by 2002:a05:6a00:224c:b0:56c:40ff:7709 with SMTP id i12-20020a056a00224c00b0056c40ff7709mr1362565pfu.59.1666721478195;
+        Tue, 25 Oct 2022 11:11:18 -0700 (PDT)
+Received: from localhost ([103.4.221.252])
+        by smtp.gmail.com with ESMTPSA id h18-20020a056a00001200b0056b8e55f956sm1666280pfk.76.2022.10.25.11.11.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 10:50:07 -0700 (PDT)
-From:   Donald Hunter <donald.hunter@gmail.com>
-To:     "Jesper D. Brouer" <netdev@brouer.com>
-Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org, brouer@redhat.com,
-        dave@dtucker.co.uk, Toke Hoiland Jorgensen <toke@redhat.com>
-Subject: Re: [PATCH bpf-next v8 1/1] bpf, docs: document BPF_MAP_TYPE_ARRAY
-In-Reply-To: <5cd2d8ee-a0aa-070f-17c8-dacd816f0927@brouer.com> (Jesper
-        D. Brouer's message of "Tue, 25 Oct 2022 15:57:47 +0200")
-Date:   Tue, 25 Oct 2022 17:47:47 +0100
-Message-ID: <m2pmefyhn0.fsf@gmail.com>
-References: <20221021142259.18093-1-donald.hunter@gmail.com>
-        <20221021142259.18093-2-donald.hunter@gmail.com>
-        <5cd2d8ee-a0aa-070f-17c8-dacd816f0927@brouer.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (darwin)
+        Tue, 25 Oct 2022 11:11:17 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 23:41:16 +0530
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     Dave Marchevsky <davemarchevsky@meta.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Delyan Kratunov <delyank@meta.com>
+Subject: Re: [PATCH bpf-next v2 10/25] bpf: Introduce local kptrs
+Message-ID: <20221025181116.tiqxzo6qevtpiibr@apollo>
+References: <20221013062303.896469-1-memxor@gmail.com>
+ <20221013062303.896469-11-memxor@gmail.com>
+ <582912fa-3d32-7c5a-cf24-fc79899a2e31@meta.com>
+ <20221020004837.qclzg6pgrqamcn7e@apollo>
+ <d147dca1-4b8b-338e-103c-9ecdb476f06d@meta.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d147dca1-4b8b-338e-103c-9ecdb476f06d@meta.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-"Jesper D. Brouer" <netdev@brouer.com> writes:
-
-> On 21/10/2022 16.22, Donald Hunter wrote:
->> +
->> +Usage
->> +=====
+On Tue, Oct 25, 2022 at 09:57:58PM IST, Dave Marchevsky wrote:
+> On 10/19/22 8:48 PM, Kumar Kartikeya Dwivedi wrote:
+> > On Wed, Oct 19, 2022 at 10:45:22PM IST, Dave Marchevsky wrote:
+> >> On 10/13/22 2:22 AM, Kumar Kartikeya Dwivedi wrote:
+> >>> Introduce the idea of local kptrs, i.e. PTR_TO_BTF_ID that point to a
+> >>> type in program BTF. This is indicated by the presence of MEM_TYPE_LOCAL
+> >>> type tag in reg->type to avoid having to check btf_is_kernel when trying
+> >>> to match argument types in helpers.
+> >>>
+> >>> For now, these local kptrs will always be referenced in verifier
+> >>> context, hence ref_obj_id == 0 for them is a bug. It is allowed to write
+> >>> to such objects, as long fields that are special are not touched
+> >>> (support for which will be added in subsequent patches).
+> >>>
+> >>> No PROBE_MEM handling is hence done since they can never be in an
+> >>> undefined state, and their lifetime will always be valid.
+> >>>
+> >>> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> >>> ---
 >
-> Can we make it more clear, that below refers to usage from BPF programs.
-> E.g. changing title "Usage" to something else, or create a sub-section.
-> Below we have subsections "Kernel BPF" and "Userspace", do set aside
-> kernel-side and userspace API users.
+> [...]
 >
-> Sorry for bringing this up so late (v8), but I think it is important
-> that the documentation makes it easy for the reader to quickly grasp
-> which section is BPF-prog code and which is userspace libbpf APIs.
-> IMHO this should then be consistent across out docs.
+> >>
+> >>
+> >> more re: passing entire reg state to btf_struct access:
+> >>
+> >> In the next patch in the series ("bpf: Recognize bpf_{spin_lock,list_head,list_node} in local kptrs")
+> >> you do btf_find_struct_meta(btf, reg->btf_id). I see why you couldn't use 't'
+> >> that's passed in here / elsewhere since you need the btf_id for meta lookup.
+> >> Perhaps 'btf_type *t' param can be changed to btf_id, eliminating the need
+> >> to pass 'reg'.
+> >>
+> >> Alternatively, since we're already passing reg->btf and result of
+> >> btf_type_by_id(reg->btf, reg->btf_id), seems like btf_struct_access
+> >> maybe is tied closely enough to reg state that passing reg state
+> >> directly and getting rid of extraneous args is cleaner.
+> >>
+> >
+> > So Alexei actually suggested dropping both btf and type arguments and simply
+> > pass in the register and get it from there.
+> >
+> > But one call site threw a wrench in the plan:
+> >
+> > check_ptr_to_map_access -> btf_struct_access
+> >
+> > Here, it passes it's own btf and type to simulate access to a map. Maybe I
+> > should be creating a dummy register on stack and make it work like that for this
+> > particular case? Otherwise all other callers pass in what they have from reg.
+>
+> Ah, sorry for missing that. Personally I'm not a fan of dummy register on the
+> stack. Then if btf_struct_access starts using some reg state that wasn't
+> populated in the dummy reg it will be confusing.
 
-Agreed. I will add "Kernel BPF" and "Userspace" subsections consistently
-for both Usage and Examples.
+Well, it can be initialized the same way it's done for normal regs. memset to 0
+and then mark_reg_known_zero, memset zeroes state untouched by
+mark_reg_known_zero (reg->parent, reg->live, etc.). which won't matter here.
+
+In general, your point is valid as well, but I think for this particular case we
+can get away with it, moreso because this is the only case needing such
+adjustment.
+
+Or maybe it can be split into two, with the inner call taking btf and btf_id,
+while the outer one passes them in. Then btf_struct_access uses reg to pass them
+in, while __btf_struct_access takes them directly.
