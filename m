@@ -2,55 +2,57 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95574ECAAA1
-	for <bpf@archiver.kernel.org>; Thu, 27 Oct 2022 20:00:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C142FA3740
+	for <bpf@archiver.kernel.org>; Thu, 27 Oct 2022 20:00:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236864AbiJ0UAy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 27 Oct 2022 16:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40280 "EHLO
+        id S236870AbiJ0UAz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 27 Oct 2022 16:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236886AbiJ0UAc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S236891AbiJ0UAc (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 27 Oct 2022 16:00:32 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD67A10570
-        for <bpf@vger.kernel.org>; Thu, 27 Oct 2022 13:00:23 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-36f8318e4d0so23407327b3.20
-        for <bpf@vger.kernel.org>; Thu, 27 Oct 2022 13:00:23 -0700 (PDT)
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B19446DA8
+        for <bpf@vger.kernel.org>; Thu, 27 Oct 2022 13:00:26 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id x16-20020a63b210000000b0045f5c1e18d0so1317761pge.0
+        for <bpf@vger.kernel.org>; Thu, 27 Oct 2022 13:00:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=IJRg5lgl7kzO11/gALyLFHMHPMyjmqqtY1BF5RnPR14=;
-        b=pIzQsnpSaVOO8sqt3SlIBbbbp5f8vt+5f4S6vG1zTlEcojcd7pFtgx9OtrR6wqKYtV
-         u1JVcAjJhAibGxcLrpDTMDfv01VAJOia439UJ2cheASuIRUoU9ylX8KdY7WJ+8qtgK4F
-         P6hbry+vEmgMIr+S+Xnf0kTyly656ScneE299J74XPrm2fnUJz/IjMv6rYfutp03nBRO
-         jjwQ8mL7smDVBDwnkj2WuFIlZhZmWsdDC35QfGv7btqEWHRvnftWZgUO5PqRWP3xcKPA
-         dVjd7Fdx6E8rFaXuM7VZlrE6FOs73jcVJ0xH8hc1+DwWlBt9Z5dL0WkPhjWnlsYROdQ7
-         IOoA==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=x1Wy4MtVrL47Mg6ubq0m6la2HOdUZD2ps1PI5efyQcs=;
+        b=SyIs+Emv1OBwjcyUosDYnXifGanJYSjH84/nXaLyaA5afcxeH3mO8R0OkOrVKyLtud
+         colO6y3DBMP++hfxqwQiWOEw8/pwZvEj1kYeJFT2Xw3X9ZltE5YGffc67Ko8KpATeT2K
+         a+WBWCh9VZZTbOLPAqeamWIpZDzp5a1i4xXDZIewe0q9rMxAULjB1A8SBhCDQ8wx1V/l
+         8Qa5HthLZz94xj48WkINPKiY4QnYILSE+SEtwsN5CzXuBS+F8stvHwCmbd7bgAzV1yWU
+         qjPXtDvukNrC+qqR1vfQLEdObH869HnuF6Qpen3iytklLrT7RmDZRKxScbVwvWXoy5Z7
+         iK2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IJRg5lgl7kzO11/gALyLFHMHPMyjmqqtY1BF5RnPR14=;
-        b=ql57WJJpgpMWmBT5TvSxI/woBGYAPyob/MQUlsLFmU+NDQezoz/h8YrnzKXaMocNVr
-         gDac86H9WeDIIHrwLsUUxki2pItGLTINs8mQt6xtmWt76xd00l/8RoiLbWyrLZZXIxVX
-         1I2sQKj6z/5grV1nHF+rPr0UJfbYVE+YfIHZSzea8FOfDkGsvIZTVLb4nHTIsPBrYOtu
-         a1qLbplr/F+o53EVm8zHNEDHosBNWn4CRyta4ZDLHKkUQkiWQ2SAT3EJP0vUFnwyfhI0
-         mzu5f12ckvcRqRU2S3/xBss/Pt8Tur2iVvMLB2FAtUgcFiR2jW7x04pSxrGGtWIixuhQ
-         egWA==
-X-Gm-Message-State: ACrzQf07FnYiKVj24TGGt7DvfWVZwTki/yjSgCrLw96/H+nnWJZetydf
-        Ge9DWSjyFrKZI/8ACU1rc5XERLx08/BPunlwOu6m3dAA3YLHFBUF4z8n7kHmDbARSMKIITSW03A
-        cWGccNe4B5UKkZbab35vmRFu7ibALcthJ0MQ9Zwu/i7p4w5bvIw==
-X-Google-Smtp-Source: AMsMyM6zYTuXcO6vunm67vhV12nr//6lfCXy+lo+BgbWwTf9fJWfDDLT6f4KPEgSZ+iSKGUJ2C/F2tQ=
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=x1Wy4MtVrL47Mg6ubq0m6la2HOdUZD2ps1PI5efyQcs=;
+        b=tCCQ9wat73671SJHZEGGO1Y96I1KayYPXFSm0uGrCEy5NBbf7s4YGJ6dxGhV8iDfo6
+         EkrdoNuan9CyBtAd8fa7IUOG31HXp6V77UI1XKRDpsG973Y9cA9o+ncQUEQcCF1NQc/E
+         GyZGU9/Kz3yEMSpasT991iBjVtm2xx0Q8HdvQEJ7jVYhvSk3MDN0mYAISRNnZGbdAkTo
+         kZbI4bBgsQHXTJKS6wE8q3qSTOznx4Pp4doXvjmeRRgpzQ2SEWyd58e/QjEx37FkJ/3/
+         wLN/lokQUShsrVzTpJTu2gM8XkPh/9G8d6KG9IoPaiPPHDtNCPXYqS7P2ssWO+dFtOgK
+         I13g==
+X-Gm-Message-State: ACrzQf2BlFsB2++p71CJ7ld0Drp7UpuxBcH8ouqnIw7pW8lPx7JbXCkr
+        fhEvG5InhSI95jNDecDmF5D/alFcCbR9SCP7So0hY/3h630c8uYHRJCkF9Oz1u4pQHnaML0FjgB
+        P2OV9VAbpTuviqTbADGEoXDIp3t28vK2PXw/smHXyRrPdDL4z/A==
+X-Google-Smtp-Source: AMsMyM74Nmf3sqNhRUcydUqTY8hM2m32VR/qgcCbmIBnAg2SN9JSYoBjNFvsPVPTnWinR5B/f4Wg1/4=
 X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a5b:390:0:b0:6b0:22:89fe with SMTP id
- k16-20020a5b0390000000b006b0002289femr0ybp.200.1666900821424; Thu, 27 Oct
- 2022 13:00:21 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 13:00:14 -0700
+ (user=sdf job=sendgmr) by 2002:a17:903:2447:b0:186:e200:6109 with SMTP id
+ l7-20020a170903244700b00186e2006109mr8840520pls.104.1666900825517; Thu, 27
+ Oct 2022 13:00:25 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 13:00:16 -0700
+In-Reply-To: <20221027200019.4106375-1-sdf@google.com>
 Mime-Version: 1.0
+References: <20221027200019.4106375-1-sdf@google.com>
 X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
-Message-ID: <20221027200019.4106375-1-sdf@google.com>
-Subject: [RFC bpf-next 0/5] xdp: hints via kfuncs
+Message-ID: <20221027200019.4106375-3-sdf@google.com>
+Subject: [RFC bpf-next 2/5] veth: Support rx timestamp metadata for xdp
 From:   Stanislav Fomichev <sdf@google.com>
 To:     bpf@vger.kernel.org
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
@@ -70,43 +72,16 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This is an RFC for the alternative approach suggested by Martin and
-Jakub. I've tried to CC most of the people from the original discussion,
-feel free to add more if you think I've missed somebody.
+xskxceiver conveniently setups up veth pairs so it seems logical
+to use veth as an example for some of the metadata handling.
 
-Summary:
-- add new BPF_F_XDP_HAS_METADATA program flag and abuse
-  attr->prog_ifindex to pass target device ifindex at load time
-- at load time, find appropriate ndo_unroll_kfunc and call
-  it to unroll/inline kfuncs; kfuncs have the default "safe"
-  implementation if unrolling is not supported by a particular
-  device
-- rewrite xskxceiver test to use C bpf program and extend
-  it to export rx_timestamp (plus add rx timestamp to veth driver)
+We timestamp skb right when we "receive" it, store its
+pointer in xdp_buff->priv and generate BPF bytecode to
+reach it from the BPF program.
 
-I've intentionally kept it small and hacky to see whether the approach is
-workable or not.
-
-Pros:
-- we avoid BTF complexity; the BPF programs themselves are now responsible
-  for agreeing on the metadata layout with the AF_XDP consumer
-- the metadata is free if not used
-- the metadata should, in theory, be cheap if used; kfuncs should be
-  unrolled to the same code as if the metadata was pre-populated and
-  passed with a BTF id
-- it's not all or nothing; users can use small subset of metadata which
-  is more efficient than the BTF id approach where all metadata has to be
-  exposed for every frame (and selectively consumed by the users)
-
-Cons:
-- forwarding has to be handled explicitly; the BPF programs have to
-  agree on the metadata layout (IOW, the forwarding program
-  has to be aware of the final AF_XDP consumer metadata layout)
-- TX picture is not clear; but it's not clear with BTF ids as well;
-  I think we've agreed that just reusing whatever we have at RX
-  won't fly at TX; seems like TX XDP program might be the answer
-  here? (with a set of another tx kfuncs to "expose" bpf/af_xdp metatata
-  back into the kernel)
+This largely follows the idea of "store some queue context in
+the xdp_buff/xdp_frame so the metadata can be reached out
+from the BPF program".
 
 Cc: Martin KaFai Lau <martin.lau@linux.dev>
 Cc: Jakub Kicinski <kuba@kernel.org>
@@ -118,35 +93,81 @@ Cc: Magnus Karlsson <magnus.karlsson@gmail.com>
 Cc: Maryam Tahhan <mtahhan@redhat.com>
 Cc: xdp-hints@xdp-project.net
 Cc: netdev@vger.kernel.org
+Signed-off-by: Stanislav Fomichev <sdf@google.com>
+---
+ drivers/net/veth.c | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-Stanislav Fomichev (5):
-  bpf: Support inlined/unrolled kfuncs for xdp metadata
-  veth: Support rx timestamp metadata for xdp
-  libbpf: Pass prog_ifindex via bpf_object_open_opts
-  selftests/bpf: Convert xskxceiver to use custom program
-  selftests/bpf: Test rx_timestamp metadata in xskxceiver
-
- drivers/net/veth.c                            |  31 +++++
- include/linux/bpf.h                           |   1 +
- include/linux/btf.h                           |   1 +
- include/linux/btf_ids.h                       |   4 +
- include/linux/netdevice.h                     |   3 +
- include/net/xdp.h                             |  22 ++++
- include/uapi/linux/bpf.h                      |   5 +
- kernel/bpf/syscall.c                          |  28 ++++-
- kernel/bpf/verifier.c                         |  60 +++++++++
- net/core/dev.c                                |   7 ++
- net/core/xdp.c                                |  28 +++++
- tools/include/uapi/linux/bpf.h                |   5 +
- tools/lib/bpf/libbpf.c                        |   1 +
- tools/lib/bpf/libbpf.h                        |   6 +-
- tools/testing/selftests/bpf/Makefile          |   1 +
- .../testing/selftests/bpf/progs/xskxceiver.c  |  43 +++++++
- tools/testing/selftests/bpf/xskxceiver.c      | 119 +++++++++++++++---
- tools/testing/selftests/bpf/xskxceiver.h      |   5 +-
- 18 files changed, 348 insertions(+), 22 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/xskxceiver.c
-
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index 09682ea3354e..35396dd73de0 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -597,6 +597,7 @@ static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
+ 
+ 		xdp_convert_frame_to_buff(frame, &xdp);
+ 		xdp.rxq = &rq->xdp_rxq;
++		xdp.priv = NULL;
+ 
+ 		act = bpf_prog_run_xdp(xdp_prog, &xdp);
+ 
+@@ -820,6 +821,7 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+ 
+ 	orig_data = xdp.data;
+ 	orig_data_end = xdp.data_end;
++	xdp.priv = skb;
+ 
+ 	act = bpf_prog_run_xdp(xdp_prog, &xdp);
+ 
+@@ -936,6 +938,7 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+ 			struct sk_buff *skb = ptr;
+ 
+ 			stats->xdp_bytes += skb->len;
++			__net_timestamp(skb);
+ 			skb = veth_xdp_rcv_skb(rq, skb, bq, stats);
+ 			if (skb) {
+ 				if (skb_shared(skb) || skb_unclone(skb, GFP_ATOMIC))
+@@ -1595,6 +1598,33 @@ static int veth_xdp(struct net_device *dev, struct netdev_bpf *xdp)
+ 	}
+ }
+ 
++static int veth_unroll_kfunc(struct bpf_prog *prog, struct bpf_insn *insn)
++{
++	u32 func_id = insn->imm;
++
++	if (func_id == xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_HAVE_RX_TIMESTAMP)) {
++		/* return true; */
++		insn[0] = BPF_MOV64_IMM(BPF_REG_0, 1);
++		return 1;
++	} else if (func_id == xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_TIMESTAMP)) {
++		/* r1 = ((struct xdp_buff *)r1)->priv; [skb] */
++		insn[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1,
++				      offsetof(struct xdp_buff, priv));
++		/* if (r1 == NULL) { */
++		insn[1] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 0, 1);
++		/*	return 0; */
++		insn[2] = BPF_MOV64_IMM(BPF_REG_0, 0);
++		/* } else { */
++		/*	return ((struct sk_buff *)r1)->tstamp; */
++		insn[3] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
++				      offsetof(struct sk_buff, tstamp));
++		/* } */
++		return 4;
++	}
++
++	return 0;
++}
++
+ static const struct net_device_ops veth_netdev_ops = {
+ 	.ndo_init            = veth_dev_init,
+ 	.ndo_open            = veth_open,
+@@ -1614,6 +1644,7 @@ static const struct net_device_ops veth_netdev_ops = {
+ 	.ndo_bpf		= veth_xdp,
+ 	.ndo_xdp_xmit		= veth_ndo_xdp_xmit,
+ 	.ndo_get_peer_dev	= veth_peer_dev,
++	.ndo_unroll_kfunc       = veth_unroll_kfunc,
+ };
+ 
+ #define VETH_FEATURES (NETIF_F_SG | NETIF_F_FRAGLIST | NETIF_F_HW_CSUM | \
 -- 
 2.38.1.273.g43a17bfeac-goog
 
