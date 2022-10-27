@@ -2,150 +2,179 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 334D4FA3742
-	for <bpf@archiver.kernel.org>; Thu, 27 Oct 2022 11:24:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBBDBFA3744
+	for <bpf@archiver.kernel.org>; Thu, 27 Oct 2022 11:37:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235071AbiJ0LYN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 27 Oct 2022 07:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
+        id S235361AbiJ0Lhx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 27 Oct 2022 07:37:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233403AbiJ0LYN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 27 Oct 2022 07:24:13 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FAE836E7;
-        Thu, 27 Oct 2022 04:24:12 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id jb18so732618wmb.4;
-        Thu, 27 Oct 2022 04:24:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hjZhiiyHr6e7gEr5aYAyXoXMrTUnFkMEXcIg3TOETvs=;
-        b=UmrKbRdbOVixvxTz4Cdf6Hlo+Y/TO+OnYi3Cy7dVmeAt2wXTcSHDcOrkO+a3GUAqGz
-         5AmUJXdpOsnwlI/d8njnXdArLn6V0cHk9GhB0SyGc62yKmWrvKayFzsj/7DM19AqhvZG
-         OVI8PlUnbNYApaN8hO84RkPKrOTL4zTr5OZR5l2qzDg+KSeLeD6s23CD0+ExJwCR36Aj
-         Qx+cHjTvBGt2hQfLgsztyQRNZyLIiW6Ryl+ELH3/DCUsFMpWJ7QIL3af7qb/7XeogDLY
-         6u+km5qbYSgAyzmmtERuWjFDpcNDZO2DPB4zson/NcXdAeUISYxfye9TQ+ucRvSCeJ5j
-         KmtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hjZhiiyHr6e7gEr5aYAyXoXMrTUnFkMEXcIg3TOETvs=;
-        b=oqGTtEWfNLTIMJvtyfqNcHYcpnRUT0m1nIo8/8P74BnDQS3FhcJ4nZCIGse81uNcWO
-         QQbpMLl+A1w2H/OufsMnJ91XtboJ9D7/d2byjET+XTKxhzdYkDwQsJUVQBesAgTvNRNL
-         lFbVDQhplmqDubh2CFFaRZpjZIVHkOSzkHK7CCwDzJ5PWRW1mPeVKwxu3f/bm+4byvpU
-         ZlWXAWmTLD7lJDr2wSmw8RDhgE1YGJp0tkUqly/x2I9a7vOPHGvFweWxVq6h2PW70SQs
-         HU+iQJTfwr7SFXloqp9uKrtXVlGWEQMyr3xod7Dn/feBl2NoU4Np63PZX5jT5ZnWuvEA
-         Wxjg==
-X-Gm-Message-State: ACrzQf3HQKVRHbCLUSYF0v5Rrh8WWtqJhjbWEkIniiqK+SohX1uAgmVa
-        ihv6bTK30v60TpqfEI4nR1Y=
-X-Google-Smtp-Source: AMsMyM50TgO9W02U87sguwHzv7Ais2cNd+MxlSFxMM7s2w6ywfRK1tmKZVefAWo34IBBm+FOugdPYA==
-X-Received: by 2002:a7b:c3c4:0:b0:3c4:785a:36d7 with SMTP id t4-20020a7bc3c4000000b003c4785a36d7mr5603776wmj.138.1666869850590;
-        Thu, 27 Oct 2022 04:24:10 -0700 (PDT)
-Received: from krava (2001-1ae9-1c2-4c00-8b88-53b7-c55c-8535.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:8b88:53b7:c55c:8535])
-        by smtp.gmail.com with ESMTPSA id j21-20020a05600c42d500b003b492753826sm1173625wme.43.2022.10.27.04.24.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 04:24:10 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Thu, 27 Oct 2022 13:24:08 +0200
-To:     Hao Sun <sunhao.th@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        andrii@kernel.org, ast@kernel.org, bpf <bpf@vger.kernel.org>,
-        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, martin.lau@linux.dev, sdf@google.com,
-        song@kernel.org, yhs@fb.com
-Subject: Re: WARNING in bpf_bprintf_prepare
-Message-ID: <Y1pqWPRmP0M+hcXf@krava>
-References: <CACkBjsakT_yWxnSWr4r-0TpPvbKm9-OBmVUhJb7hV3hY8fdCkw@mail.gmail.com>
-MIME-Version: 1.0
+        with ESMTP id S235271AbiJ0Lhs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 27 Oct 2022 07:37:48 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2060.outbound.protection.outlook.com [40.107.223.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0385E8A92;
+        Thu, 27 Oct 2022 04:37:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jlGsgfkNiyDXSIkTrdIu93qBC5gK4NVGrcgL3f4lTrrQ3aAeYoiZPS0JfA5WYOo5veEXXOYiOZ7nQC7cuACHBRMZYFlve/MTA6vNW+Oznl+Hfg0LFoozZKzpEvWPDv1vn+D/Z250Aa4TlgsLlHpBX/0GiDbrZE/Qs30Ms2ecTp14DwWgTHcX6VLjzAyGRGyZEBn95Zi/t/06xSNCtWqVaorWt6etMkzzfzKZo7RPdHwKYAC1G6h09xX9xBZUEeGCDUg7WUd8uoS4iSc4cUGArQjYBhEgmeSSwRiEYgVsZsYdHqwutn1TOdrXN6YxJ5y0W+KKRTKrDk7nmMsifZH4zA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wgJKFB5pGB+X/sHCfppLsTIrbT+ZsWsd8O+nLreUCzk=;
+ b=UqWgoLAftWidu1w8ywerWR4TZWnOrfqiabdiOImvJ+2XNfSZju+ROGeSewiznDZC8mwmhg0+ntqQEQXjuKhTSTms4htTDe+bYSsUWNB+ti/ilisTstruFbGuJkbSLRRDtW6AE+YMfdgLN6JjW0wpmtqIDCerk4AuU5fxWoyCMi1oSyS1f2AZqsXR/LJakhSgQwWuWgBkIcYMTexAJTgLEpmwFyIYNx5qXEVEgkWfSJIRnElEuC70n7cbLTA7je6L6O/wXdRc0rZ1u5gNA5LVe6WcslWn4s9BOilFjPzZwud8EbQndk2Ws43J0FnrzdsnV+jJ9v/tYoLs/6XmZ0FyOQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wgJKFB5pGB+X/sHCfppLsTIrbT+ZsWsd8O+nLreUCzk=;
+ b=PJrN5pOeJ3IkS0b1kjyePlA717Ibg+riK1I60XZBZF7XI7OLgQJaMp+DbBPEoMDa7YWg3Nr7TjKzMar5adpzIyPqJrIiZaI9UeyHnRkycah9yA8vs/Tjzvfn8mbs/TBLfeLOglOXM7/P7r6MX1jC/LUa8ixzoKLRQvYae/PZ6kPC/X7I6eFhNGoGL+7YMc9e+xQXbEKg+p5fjH4fJzdulL9S4xiGh6h4U+OKbhW78gmY0SRX08xUHfyvP9sJkq4v9Yi+HeEBT759uuETezRIKRs68OhP5+Vb/rRPX25X+Qa6HjoM1ayhU2lU4bLy9e9P5mfi61SUVgyQYZs4lAdnkQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by MW4PR12MB6827.namprd12.prod.outlook.com (2603:10b6:303:20b::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Thu, 27 Oct
+ 2022 11:37:45 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5746.021; Thu, 27 Oct 2022
+ 11:37:45 +0000
+Date:   Thu, 27 Oct 2022 08:37:44 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>, bpf@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>,
+        Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        David Gibson <david@gibson.dropbear.id.au>,
+        Eric Auger <eric.auger@redhat.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Shameerali Kolothum Thodi 
+        <shameerali.kolothum.thodi@huawei.com>,
+        Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
+Subject: Re: [PATCH v3 9/15] iommufd: Data structure to provide IOVA to PFN
+ mapping
+Message-ID: <Y1ptiMxTfslWZBW2@nvidia.com>
+References: <0-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
+ <9-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACkBjsakT_yWxnSWr4r-0TpPvbKm9-OBmVUhJb7hV3hY8fdCkw@mail.gmail.com>
+In-Reply-To: <9-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
+X-ClientProxiedBy: MN2PR20CA0058.namprd20.prod.outlook.com
+ (2603:10b6:208:235::27) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MW4PR12MB6827:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9019e03e-f3ad-487e-7bc6-08dab80faaab
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: LgBe0JPlksVhx2irXRgynvfiK42qVp4YJUyaiq+tSnR056M1P1ADmtQRWtG+tFdLguwJLmBszluLdECHnDe7sF8ja4JEkt80eGD9NWF7sblaTkRzy29LxxMfyvXjzYfX0Mni1nMAAbFDGIDIL5lcouC256qqbALWIW1DytBA69++R79EDz1vkAMRrKPuErblAJC7Z4Tjg4tYgtjJ5NsiP0AHg4D6wNJ6AlHOswe4PNaF5KWFln8j5DCtody29hTPSWPM92BIfSnW13yM73bw6e8wfoYIzI1QP7RgkaWoAO2NHdGhsXVwuAmwGfVI59HC2fvklWvOJVLRxaoe4Pa2vlnerDciOVnE0Xg4pIAgpLj+5VZQisoTw34oQY9xkjyu7OJDoqQ2qt/kY5pgceScIn4WplCIwvlHcihP6ChnS6WmrecMKaICC87zJ16ZjbmnT3BUwP9/cBiTSmMln0AFqIeTIfKkAOP3uOux1J56T499yMb65xHsrxWQ98KxD2EUFffXzkV+j8enaIS9LGxmuJrBvkRFDjS2kpvkoGB1AXMIIdHxB+l1hLyFF7uBrOfyewvU1q9UOg1tgBsLY5jyMCXQI0th4JsQ4NzNoWY37+6nVV8va0xPmMkrA8eqaGdCyzwx6Rg5NkfgSqfYHRl31+8H625gdjGvO9cFZfakQ4ewuQR7dlyLD2IX22QlO/LRXVS3fYEWNfCUl9jugHhxaVRSxypzGB8Vkwb0VDgaYptqnyhpoiOKavZyS1BCfDHk
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(376002)(39860400002)(366004)(396003)(451199015)(66899015)(54906003)(478600001)(8936002)(5660300002)(83380400001)(921005)(8676002)(4326008)(38100700002)(2906002)(110136005)(7416002)(66556008)(36756003)(7406005)(6486002)(66476007)(66946007)(41300700001)(6512007)(2616005)(316002)(186003)(86362001)(6506007)(26005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZRnTxBspg9yByjHNbhCNSCcIBpe7GREWanwM1zidoRbLHojqxspTKHZM0LcQ?=
+ =?us-ascii?Q?Ar1J9+M2QnksNmLxNsTS7f4OEg7T0RbPcz4cQr8xXouEczwvmfv5fyZ/9OYT?=
+ =?us-ascii?Q?+gB2N2hlomIQgv/oUbszQpivVxmr9N+vo4MAA41kUWBpRQ/AWzK8OLZbFz//?=
+ =?us-ascii?Q?73U+gFCFLD8xnn+QVyBKhsGnvT7uYdRwLToR4oy6prY6i5Nne9sIi6XamEEn?=
+ =?us-ascii?Q?dAoOp+RaiY6+//IH7nscwgBatH5Ed2djtuq5GqDj5Uv4v3CkYCifArO367Kc?=
+ =?us-ascii?Q?PMtbU1TkheZK9kVF7UtdG/CUowEmYUBigz+WPOGNImcwG5Kf6aVta1AA+84L?=
+ =?us-ascii?Q?bhPL8QqjdYsqudoqqRYqUbJMGnOY0mFIP5ZIkIxqS3W7ALsKnVKMXrm+xoOt?=
+ =?us-ascii?Q?7UgdI+yYC034YVCQ8ddf0Qn8/S9EkdC7FN3TFce9CDhXVRMumehdY5FHzlJ5?=
+ =?us-ascii?Q?Zh+LvLnZmm9EQdbeQFabr/d5bF2nwpQGiGr6blgZJljT/zZufM2dfV/GVXcQ?=
+ =?us-ascii?Q?D8c4i5mLeajA6Ai4AQVwSkKRM+A+szpeHfG1uZYOCPNAccbNkHt0iHwVNzM/?=
+ =?us-ascii?Q?qC+WcYSlwIvg58Uml0djWAIojdP97JKh2DKs7/nfAIniWUom5uGMxQxls9G5?=
+ =?us-ascii?Q?+lvcFeM+XcAsBQIzMHVMYE/RsflfU0eyUAF22C3/Gi8BVD3kBbEKdb8n6fLx?=
+ =?us-ascii?Q?3PqYF9cuenOCvDnR9ue3z4Zm1ZU2ni4pI1bOAaV/wj231Mq9skqH0iRtA8GK?=
+ =?us-ascii?Q?wcyaGjWbHl6XBqRdwT3hGKVntx1j1lL+GzyT6g6IzbYqT439f76Z/LVlw/z8?=
+ =?us-ascii?Q?kxq8I2GbftvQxZAeCPe+sCOxkj+QYVgY39l4ZB7Cem37B1f986fbICTrJcsG?=
+ =?us-ascii?Q?05RamT57r+oSljX0cF20dsN2OE3qlJhZv4tR4F+XbxWk238gbfWy7QNPifAz?=
+ =?us-ascii?Q?GyQV8Uw1atXHtf44GgOvVW/jmD3ZZO1c/3YnfkrejIcnkXg7+TOemPXE7Lr2?=
+ =?us-ascii?Q?VJI8GCtMKeadWpupp0R3RKxT4ISqCmrECdqejp/jkHI5GCTCvAmDZg5bgKxN?=
+ =?us-ascii?Q?WarncN3HfuWHSr/2N73RKMdF38QXTmkRvseC0eDJna4maBwjJ6OkEj2ZOjng?=
+ =?us-ascii?Q?iDy57r/o69U+yivED5/DAGoiIMANrdQuvn7hRjEl2EBPi33Pdy7xjmd2Dopl?=
+ =?us-ascii?Q?a8m9EV3iSm8vRkuvf0c07lTuC8r+gc36dnlocPkXVxPbE0Pp4Fn+DyjYEdh0?=
+ =?us-ascii?Q?6hkls0Ki2hyTW5oyLq8XdQKrLny1XiND2n7oZDJCTQiilv9+8G8aKd9HSNH7?=
+ =?us-ascii?Q?ig8RQJ4GZ8QXxbV45l1ayLs3pRb/HEQrHe9nV5nmuXfUBx6lxMU8cOIYJrJ6?=
+ =?us-ascii?Q?sUwv2DT9lJ+0899lFBidpa9+vguTCjKMASN1EsZId7RBNtP/pAw4PAKlJQ5L?=
+ =?us-ascii?Q?vOuiMbcgGYUS+NdFP5ll9i7578nA+GU7zlu73ufhjIROmvSyQudcy7x/O8Bh?=
+ =?us-ascii?Q?Zvu7v/fxXZVS85yFsHU7hUzkVv8SDW/dW4Q/F3V8KGMj0NJ2CbFSvRjo860p?=
+ =?us-ascii?Q?A9Ef33jPjJBfG1Wo7yU=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9019e03e-f3ad-487e-7bc6-08dab80faaab
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2022 11:37:45.5137
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uF07YGSkNedPk0j27Hj5NhkXJxuS7Q2Na7Sd8isu4s5Gav2tV9gt9/rHypNKAxGV
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6827
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 10:27:28AM +0800, Hao Sun wrote:
-> Hi,
-> 
-> The following warning can be triggered with the C reproducer in the link.
-> Syzbot also reported this several days ago, Jiri posted a patch that
-> uses bpf prog `active` field to fix this by 05b24ff9b2cfab (bpf:
-> Prevent bpf program recursion...) according to syzbot dashboard
-> (https://syzkaller.appspot.com/bug?id=179313fb375161d50a98311a28b8e2fc5f7350f9).
-> But this warning can still be triggered on 247f34f7b803
-> (Linux-v6.1-rc2) that already merged the patch, so it seems that this
-> still is an issue.
-> 
-> HEAD commit: 247f34f7b803 Linux 6.1-rc2
-> git tree: upstream
-> console output: https://pastebin.com/raw/kNw8JCu5
-> kernel config: https://pastebin.com/raw/sE5QK5HL
-> C reproducer: https://pastebin.com/raw/X96ASi27
+On Tue, Oct 25, 2022 at 03:12:18PM -0300, Jason Gunthorpe wrote:
 
-hi,
-right, that fix addressed that issue for single bpf program,
-and it won't prevent if there are multiple programs hook on
-contention_begin tracepoint and calling bpf_trace_printk,
+> +static int iopt_check_iova(struct io_pagetable *iopt, unsigned long iova,
+> +			   unsigned long length)
+> +{
+> +	unsigned long last;
+> +
+> +	lockdep_assert_held(&iopt->iova_rwsem);
+> +
+> +	if ((iova & (iopt->iova_alignment - 1)) ||
+> +	    (length & (iopt->iova_alignment - 1)) || !length)
+> +		return -EINVAL;
 
-I'm not sure we can do something there.. will check
+syzkaller noticed this length check is too late, if userpsace
+supplies an invalid length and asks for automatic IOVA allocation 
+it will trigger a WARN_ON.
 
-do you run just the reproducer, or you load the server somehow?
-I cannot hit the issue so far
+@@ -177,8 +177,7 @@ static int iopt_check_iova(struct io_pagetable *iopt, unsigned long iova,
+ 
+        lockdep_assert_held(&iopt->iova_rwsem);
+ 
+-       if ((iova & (iopt->iova_alignment - 1)) ||
+-           (length & (iopt->iova_alignment - 1)) || !length)
++       if ((iova & (iopt->iova_alignment - 1)))
+                return -EINVAL;
+ 
+        if (check_add_overflow(iova, length - 1, &last))
+@@ -248,6 +247,11 @@ static int iopt_alloc_area_pages(struct io_pagetable *iopt,
+        }
+ 
+        down_write(&iopt->iova_rwsem);
++       if ((length & (iopt->iova_alignment - 1)) || !length) {
++               rc = -EINVAL;
++               goto out_unlock;
++       }
++
+        if (flags & IOPT_ALLOC_IOVA) {
+                /* Use the first entry to guess the ideal IOVA alignment */
+                elm = list_first_entry(pages_list, struct iopt_pages_list,
 
-thanks,
-jirka
+And a test to cover it
 
-> 
-> ------------[ cut here ]------------
-> WARNING: CPU: 6 PID: 6850 at kernel/bpf/helpers.c:770
-> try_get_fmt_tmp_buf kernel/bpf/helpers.c:770 [inline]
-> WARNING: CPU: 6 PID: 6850 at kernel/bpf/helpers.c:770
-> bpf_bprintf_prepare+0xf6a/0x1170 kernel/bpf/helpers.c:818
-> Modules linked in:
-> CPU: 6 PID: 6850 Comm: a.out Not tainted 6.1.0-rc2-dirty #23
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-> 1.13.0-1ubuntu1.1 04/01/2014
-> RIP: 0010:try_get_fmt_tmp_buf kernel/bpf/helpers.c:770 [inline]
-> RIP: 0010:bpf_bprintf_prepare+0xf6a/0x1170 kernel/bpf/helpers.c:818
-> Code: c6 e8 ba 51 00 07 83 c0 01 48 98 48 01 c5 48 89 6c 24 08 e8 b8
-> 0a eb ff 8d 6b 02 83 44 24 10 01 e9 2d f5 ff ff e8 a6 0a eb ff <0f> 0b
-> 65 ff 0d 85 bf 7c 7e bf 01 00 00 00 41 bc f0 ff ff ff e8 2d
-> RSP: 0018:ffffc90015a96c20 EFLAGS: 00010046
-> RAX: 0000000000000000 RBX: 0000000000000002 RCX: ffff88814f8057c0
-> RDX: 0000000000000000 RSI: ffff88814f8057c0 RDI: 0000000000000002
-> RBP: ffffc90015a96d50 R08: ffffffff818681ba R09: 0000000000000003
-> R10: 0000000000000005 R11: fffffbfff1a25ab2 R12: 0000000000000003
-> R13: 0000000000000004 R14: ffffc90015a96e08 R15: 0000000000000003
-> FS:  00007f012f4d2440(0000) GS:ffff8880b9d80000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f012f19ac28 CR3: 0000000148da3000 CR4: 0000000000350ee0
-> Call Trace:
->  <TASK>
->  ____bpf_trace_printk kernel/trace/bpf_trace.c:385 [inline]
->  bpf_trace_printk+0xab/0x420 kernel/trace/bpf_trace.c:376
->  bpf_prog_0605f9f479290f07+0x2f/0x33
->  bpf_dispatcher_nop_func include/linux/bpf.h:963 [inline]
->  __bpf_prog_run include/linux/filter.h:600 [inline]
->  bpf_prog_run include/linux/filter.h:607 [inline]
->  __bpf_trace_run kernel/trace/bpf_trace.c:2254 [inline]
->  bpf_trace_run2+0x14d/0x3d0 kernel/trace/bpf_trace.c:2293
->  __bpf_trace_contention_begin+0xb5/0xf0 include/trace/events/lock.h:95
->  __traceiter_contention_begin+0x56/0x90 include/trace/events/lock.h:95
->  trace_contention_begin include/trace/events/lock.h:95 [inline]
->  __pv_queued_spin_lock_slowpath+0x542/0xff0 kernel/locking/qspinlock.c:405
->  pv_queued_spin_lock_slowpath arch/x86/include/asm/paravirt.h:591 [inline]
->  queued_spin_lock_slowpath arch/x86/include/asm/qspinlock.h:51 [inline]
->  queued_spin_lock include/asm-generic/qspinlock.h:114 [inline]
->  do_raw_spin_lock+0x204/0x2d0 kernel/locking/spinlock_debug.c:115
->  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:111 [inline]
->  _raw_spin_lock_irqsave+0x41/0x50 kernel/locking/spinlock.c:162
->  ____bpf_trace_printk kernel/trace/bpf_trace.c:390 [inline]
->  bpf_trace_printk+0xcf/0x420 kernel/trace/bpf_trace.c:376
->  </TASK>
-> 
-> Regards
-> Hao Sun
+Jason
