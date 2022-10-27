@@ -2,157 +2,178 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF0F5C67871
-	for <bpf@archiver.kernel.org>; Thu, 27 Oct 2022 10:03:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 757BBC38A2D
+	for <bpf@archiver.kernel.org>; Thu, 27 Oct 2022 10:39:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234436AbiJ0KDc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 27 Oct 2022 06:03:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56910 "EHLO
+        id S235285AbiJ0Kjo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 27 Oct 2022 06:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234997AbiJ0KDO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 27 Oct 2022 06:03:14 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD51D48CAC;
-        Thu, 27 Oct 2022 03:02:59 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Myh3j1T3qzpVxx;
-        Thu, 27 Oct 2022 17:59:29 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.70) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 27 Oct 2022 18:02:55 +0800
-From:   Wang Yufen <wangyufen@huawei.com>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>,
-        <john.fastabend@gmail.com>, <andrii@kernel.org>,
-        <martin.lau@linux.dev>, <yhs@fb.com>, <joe@wand.net.nz>
-Subject: [PATCH net] bpf: Fix memory leaks in __check_func_call
-Date:   Thu, 27 Oct 2022 18:23:33 +0800
-Message-ID: <1666866213-4394-1-git-send-email-wangyufen@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
+        with ESMTP id S235181AbiJ0Kjl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 27 Oct 2022 06:39:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D6964E0
+        for <bpf@vger.kernel.org>; Thu, 27 Oct 2022 03:39:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39FF4B82569
+        for <bpf@vger.kernel.org>; Thu, 27 Oct 2022 10:39:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E012CC4347C
+        for <bpf@vger.kernel.org>; Thu, 27 Oct 2022 10:39:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666867171;
+        bh=Wfmr4jp4HWW9KkLYlH5RdoT/CI548D6X9rUf/WCpVQg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=MrYrTW7Dq3P9FJ9B//5GvZ6CqIvdUD0cgQN6gaHJSrF/dTn9JfUyyIqjS8JZ6jKnG
+         XDn7TIbMan+M6a2jxIJsjbFt+v/f/jHp4ij7cf29DRNV+os0choJDGr9p4t3thtKbR
+         GJB1JEwiFOVpPd3ELWaBxVfScpiJvZ7mVMVXtke9x8L2z0Lul1KbF1FT42RxG1Z9Td
+         clhNM/4x1okSwMvQW4XZekx5aYcZ6xrDSyLHk0ixIv7RbXMXj/xim+lEFviSLTPwRc
+         Wnozi5tQfi211Fp6XBxtkPQcEMEoBnayIHxsdhB6n2e0y5MIdJI2sayWPqL/Wx7W7U
+         2cF90vJRCf3ew==
+Received: by mail-lj1-f182.google.com with SMTP id k19so1397313lji.2
+        for <bpf@vger.kernel.org>; Thu, 27 Oct 2022 03:39:31 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0+zssoghVRMnvRDP71kNjiXIrOmWjZZFTd0F33g7c4Jy3qcm6J
+        jyfuBTSjpG8gqKvUB3h1lYHst4rQ6oPmpQ2UIrKHEw==
+X-Google-Smtp-Source: AMsMyM5lSj/2LnLqo7T20znVrmI7UobT8m/3WPr8d4g5QIvgeQkhIyhha+FrrV0RKJldTOKLM0u9mHBI8oYzZVC6HQ8=
+X-Received: by 2002:a2e:9107:0:b0:277:2e85:79d4 with SMTP id
+ m7-20020a2e9107000000b002772e8579d4mr455368ljg.425.1666867169899; Thu, 27 Oct
+ 2022 03:39:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
+References: <20221021164626.3729012-1-roberto.sassu@huaweicloud.com>
+ <CAADnVQJHDboosqTy5LTHJtJaWJCWn9rv09jmd_sMgeV_OVQjGg@mail.gmail.com>
+ <d7a17e482b7bbf945c92443b45de73f56afea08a.camel@huaweicloud.com>
+ <bb7a5986f3d25706269d0fec9906ea73c174b808.camel@huaweicloud.com>
+ <CAADnVQL1a2pPAJqzj6oUwupxxfaW38KQswzppAZeZPzmTFhjMg@mail.gmail.com>
+ <98353f6c82d3dabdb0d434d7ecf0bfc5295015ad.camel@huaweicloud.com>
+ <ffbdcfbe-0c63-2ced-62e3-a7248b7a24f0@schaufler-ca.com> <CAADnVQLAXsZRNytPHG0KhYKar3K+=7bq2KPQG77VFOKbnTPHmg@mail.gmail.com>
+ <34357c96-fe58-ffe5-e464-4bded8f119d5@huaweicloud.com> <CAADnVQKD5e9vKsSo1TPeBm5hr6j4GzQeHqRURoBJyB++VOwHCw@mail.gmail.com>
+In-Reply-To: <CAADnVQKD5e9vKsSo1TPeBm5hr6j4GzQeHqRURoBJyB++VOwHCw@mail.gmail.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Thu, 27 Oct 2022 12:39:19 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ4ak4=qPNQxVckvn3c8CZpXkXSLSyYa_HCU-RJNyuLoZg@mail.gmail.com>
+Message-ID: <CACYkzJ4ak4=qPNQxVckvn3c8CZpXkXSLSyYa_HCU-RJNyuLoZg@mail.gmail.com>
+Subject: Re: [RFC][PATCH] bpf: Check xattr name/value pair from bpf_lsm_inode_init_security()
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>, bpf <bpf@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        nicolas.bouchinet@clip-os.org, Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-kmemleak reports this issue:
+On Wed, Oct 26, 2022 at 7:14 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Wed, Oct 26, 2022 at 1:42 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> >
+> > On 10/26/2022 8:37 AM, Alexei Starovoitov wrote:
+> > > On Tue, Oct 25, 2022 at 7:58 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
+> > >>
+> > >> On 10/25/2022 12:43 AM, Roberto Sassu wrote:
+> > >>> On Mon, 2022-10-24 at 19:13 -0700, Alexei Starovoitov wrote:
+> > >>>> I'm looking at security_inode_init_security() and it is indeed messy.
+> > >>>> Per file system initxattrs callback that processes kmalloc-ed
+> > >>>> strings.
+> > >>>> Yikes.
+> > >>>>
+> > >>>> In the short term we should denylist inode_init_security hook to
+> > >>>> disallow attaching bpf-lsm there. set/getxattr should be done
+> > >>>> through kfuncs instead of such kmalloc-a-string hack.
+> > >>> Inode_init_security is an example. It could be that the other hooks are
+> > >>> affected too. What happens if they get arbitrary positive values too?
+> > >>
+> > >> TL;DR - Things will go cattywampus.
+> > >>
+> > >> The LSM infrastructure is an interface that has "grown organically",
+> > >> and isn't necessarily consistent in what it requires of the security
+> > >> module implementations. There are cases where it assumes that the
+> > >> security module hooks are well behaved, as you've discovered. I have
+> > >> no small amount of fear that someone is going to provide an eBPF
+> > >> program for security_secid_to_secctx(). There has been an assumption,
+> > >> oft stated, that all security modules are going to be reviewed as
+> > >> part of the upstream process. The review process ought to catch hooks
+> > >> that return unacceptable values. Alas, we've lost that with BPF.
+> > >>
+> > >> It would take a(nother) major overhaul of the LSM infrastructure to
+> > >> make it safe against hooks that are not well behaved. From what I have
+> > >> seen so far it wouldn't be easy/convenient/performant to do it in the
+> > >> BPF security module either. I personally think that BPF needs to
+> > >> ensure that the eBPF implementations don't return inappropriate values,
+> > >> but I understand why that is problematic.
+> > >
+> > > That's an accurate statement. Thank you.
+> > >
+> > > Going back to the original question...
+> > > We fix bugs when we discover them.
+> > > Regardless of the subsystem they belong to.
+> > > No finger pointing.
+> >
+> > I'm concerned about the following situation:
+> >
+> > struct <something> *function()
+> > {
+> >
+> >         ret = security_*();
+> >         if (ret)
+> >                 return ERR_PTR(ret);
+> >
+> > }
+> >
+> > int caller()
+> > {
+> >         ptr = function()
+> >         if (IS_ERR(ptr)
+> >                 goto out;
+> >
+> >         <use of invalid pointer>
+> > }
+> >
+> > I quickly found an occurrence of this:
+> >
+> > static int lookup_one_common()
+> > {
+> >
+> > [...]
+> >
+> >         return inode_permission();
+> > }
+> >
+> > struct dentry *try_lookup_one_len()
+> > {
+> >
+> > [...]
+> >
+> >          err = lookup_one_common(&init_user_ns, name, base, len, &this);
+> >          if (err)
+> >                  return ERR_PTR(err);
+> >
+> >
+> > Unfortunately, attaching to inode_permission causes the kernel
+> > to crash immediately (it does not happen with negative return
+> > values).
+> >
+> > So, I think the fix should be broader, and not limited to the
+> > inode_init_security hook. Will try to see how it can be fixed.
+>
+> I see. Let's restrict bpf-lsm return values to IS_ERR_VALUE.
+> Trivial verifier change.
 
-unreferenced object 0xffff88817139d000 (size 2048):
-  comm "test_progs", pid 33246, jiffies 4307381979 (age 45851.820s)
-  hex dump (first 32 bytes):
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<0000000045f075f0>] kmalloc_trace+0x27/0xa0
-    [<0000000098b7c90a>] __check_func_call+0x316/0x1230
-    [<00000000b4c3c403>] check_helper_call+0x172e/0x4700
-    [<00000000aa3875b7>] do_check+0x21d8/0x45e0
-    [<000000001147357b>] do_check_common+0x767/0xaf0
-    [<00000000b5a595b4>] bpf_check+0x43e3/0x5bc0
-    [<0000000011e391b1>] bpf_prog_load+0xf26/0x1940
-    [<0000000007f765c0>] __sys_bpf+0xd2c/0x3650
-    [<00000000839815d6>] __x64_sys_bpf+0x75/0xc0
-    [<00000000946ee250>] do_syscall_64+0x3b/0x90
-    [<0000000000506b7f>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Thanks, yes this indeed is an issue. We need to do a few things:
 
-The root case here is: In function prepare_func_exit(), the callee is
-not released in the abnormal scenario after "state->curframe--;".
-
-In addition, function __check_func_call() has a similar problem. In
-the abnormal scenario before "state->curframe++;", the callee is alse
-not released.
-
-Fixes: 69c087ba6225 ("bpf: Add bpf_for_each_map_elem() helper")
-Fixes: fd978bf7fd31 ("bpf: Add reference tracking to verifier")
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
----
- kernel/bpf/verifier.c | 25 ++++++++++++++++---------
- 1 file changed, 16 insertions(+), 9 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 014ee09..bff8477 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -6736,11 +6736,11 @@ static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 	/* Transfer references to the callee */
- 	err = copy_reference_state(callee, caller);
- 	if (err)
--		return err;
-+		goto err;
- 
- 	err = set_callee_state_cb(env, caller, callee, *insn_idx);
- 	if (err)
--		return err;
-+		goto err;
- 
- 	clear_caller_saved_regs(env, caller->regs);
- 
-@@ -6757,6 +6757,10 @@ static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 		print_verifier_state(env, callee, true);
- 	}
- 	return 0;
-+
-+err:
-+	kfree(callee);
-+	return err;
- }
- 
- int map_set_for_each_callback_args(struct bpf_verifier_env *env,
-@@ -6954,7 +6958,7 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
- 	struct bpf_verifier_state *state = env->cur_state;
- 	struct bpf_func_state *caller, *callee;
- 	struct bpf_reg_state *r0;
--	int err;
-+	int ret;
- 
- 	callee = state->frame[state->curframe];
- 	r0 = &callee->regs[BPF_REG_0];
-@@ -6977,11 +6981,13 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
- 
- 		if (r0->type != SCALAR_VALUE) {
- 			verbose(env, "R0 not a scalar value\n");
--			return -EACCES;
-+			ret = -EACCES;
-+			goto out;
- 		}
- 		if (!tnum_in(range, r0->var_off)) {
- 			verbose_invalid_scalar(env, r0, &range, "callback return", "R0");
--			return -EINVAL;
-+			ret = -EINVAL;
-+			goto out;
- 		}
- 	} else {
- 		/* return to the caller whatever r0 had in the callee */
-@@ -6995,9 +7001,9 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
- 	 */
- 	if (!callee->in_callback_fn) {
- 		/* Transfer references to the caller */
--		err = copy_reference_state(caller, callee);
--		if (err)
--			return err;
-+		ret = copy_reference_state(caller, callee);
-+		if (ret)
-+			goto out;
- 	}
- 
- 	*insn_idx = callee->callsite + 1;
-@@ -7008,9 +7014,10 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
- 		print_verifier_state(env, caller, true);
- 	}
- 	/* clear everything in the callee */
-+out:
- 	free_func_state(callee);
- 	state->frame[state->curframe + 1] = NULL;
--	return 0;
-+	return ret;
- }
- 
- static void do_refine_retval_range(struct bpf_reg_state *regs, int ret_type,
--- 
-1.8.3.1
-
+1. Restrict some hooks that we know the BPF LSM will never need.
+2. A verifier function that checks return values of LSM
+hooks.
+For most LSK hooks IS_ERR_VALUE is fine, however, there are some hooks
+like *xattr hooks that use a return value of 1 to indicate a
+capability check is required which might need special handling.
