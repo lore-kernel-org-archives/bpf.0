@@ -2,115 +2,143 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15226FA3741
-	for <bpf@archiver.kernel.org>; Fri, 28 Oct 2022 23:24:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52E19C38A02
+	for <bpf@archiver.kernel.org>; Fri, 28 Oct 2022 23:24:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbiJ1XYB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 28 Oct 2022 19:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37758 "EHLO
+        id S229717AbiJ1XYg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 28 Oct 2022 19:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiJ1XYA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 28 Oct 2022 19:24:00 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4612C248C85;
-        Fri, 28 Oct 2022 16:23:58 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MzdnR71c3zpW8L;
-        Sat, 29 Oct 2022 07:20:27 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.70) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 29 Oct 2022 07:23:56 +0800
-From:   Wang Yufen <wangyufen@huawei.com>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <john.fastabend@gmail.com>, <jakub@cloudflare.com>
-Subject: [PATCH net v2] bpf, sockmap: fix the sk->sk_forward_alloc warning of sk_stream_kill_queues()
-Date:   Sat, 29 Oct 2022 07:44:34 +0800
-Message-ID: <1667000674-13237-1-git-send-email-wangyufen@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
+        with ESMTP id S229528AbiJ1XYe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 28 Oct 2022 19:24:34 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92EC1A39E
+        for <bpf@vger.kernel.org>; Fri, 28 Oct 2022 16:24:31 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id f5-20020a17090a4a8500b002131bb59d61so8677525pjh.1
+        for <bpf@vger.kernel.org>; Fri, 28 Oct 2022 16:24:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TvJTRiJEqHAzLBn1Q67HdapERY1Efp+/IyfhvO5bHXg=;
+        b=ODiVpjXBtJXZxzV5zIFoTZuCnj2RUcmdlAX/J2bS6L4tswJmuY2p+bXIVtAe+4XsBh
+         hOFH3GeWvcOIFzvILUClO3QdjQa6Ix5/1Wqvvsuggaf4LO5RwTaJjSzYAh8MJ7nlAqdy
+         ZKXqYLvR1TClX5FQQRSB/d3sOfi4bqK1QLNgniV46BtpcJIgzyRaHiZP/l6Kouarj3AS
+         uX0Ir8qWvLiM5iToxwc8LA9CGwEw4esY6QpAq1ZFV9/14+ZYEVXmVSI5k/w4Kfcg93kv
+         eylef/A1nAWHkQqpZv9ms4dejzjGva27YoKMqa/jKbCSqNiJhCh5QhfEeUUj3PDTu0vH
+         BxzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TvJTRiJEqHAzLBn1Q67HdapERY1Efp+/IyfhvO5bHXg=;
+        b=Uz/X8P/yfEvDxkmjKe5JLtOCp1Y4SHubyPSBCIcOYSUfEm088mMqV/IjczkmAvmiUO
+         BezwlqkzVHCzd3oWZMGE/DLFh56pFuJ0jbx3fnfmpF8GXEo855u2TSKguDplV2LRr7n4
+         e6cd+PyU3tQnx2jOA0bYbhE3mWbskQjNGNXMzsYKKb7ob9+ldTzni61E88BQ2mvCYrrx
+         uml3YiTVTxwrJABj4WltKJpV11uOCSICDqDh7+U2cgGF7nJNPPoBW4lCp8MBnjb3QCwE
+         ZzWNRFWycVoQM/I25E0ZsuShUsyyO3aErCPYlS/In3XTW2nPztdDXi87S92pAZHdhf7Q
+         zMsg==
+X-Gm-Message-State: ACrzQf2KMf5GBq09xQYhT80n6CqNj0EK4km/F+wSFqMtchzQaK/3UhMO
+        mZA2U2WD8RQt4IER9eo5uUc=
+X-Google-Smtp-Source: AMsMyM53jKsHOvLK2C7o5kweGmFC23Qxqyyrar9IG/3yiDxX3zxwa/WPw4L2QQlzVJij2aIukJ3ECg==
+X-Received: by 2002:a17:90b:11d4:b0:212:ee83:481 with SMTP id gv20-20020a17090b11d400b00212ee830481mr1777538pjb.36.1666999471326;
+        Fri, 28 Oct 2022 16:24:31 -0700 (PDT)
+Received: from localhost ([98.97.41.13])
+        by smtp.gmail.com with ESMTPSA id q4-20020aa79824000000b0056bb7d90f0fsm3345430pfl.182.2022.10.28.16.24.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 16:24:30 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 16:24:27 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
+        bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, kafai@fb.com, kernel-team@fb.com
+Message-ID: <635c64abe004c_b1ba20850@john.notmuch>
+In-Reply-To: <20221028175530.1413351-1-cerasuolodomenico@gmail.com>
+References: <20221028175530.1413351-1-cerasuolodomenico@gmail.com>
+Subject: RE: [PATCH bpf-next] selftests: fix test group SKIPPED result
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When running `test_sockmap` selftests, got the following warning:
+Domenico Cerasuolo wrote:
+> From: Domenico Cerasuolo <dceras@meta.com>
+> 
+> When showing the result of a test group, if one
+> of the subtests was skipped, while still having
+> passing subtets, the group result was marked as
+> SKIPPED.
+> 
+> #223/1   usdt/basic:SKIP
+> #223/2   usdt/multispec:OK
+> #223     usdt:SKIP
+> 
+> With this change only if all of the subtests
+> were skipped the group test is marked as SKIPPED.
+> 
+> #223/1   usdt/basic:SKIP
+> #223/2   usdt/multispec:OK
+> #223     usdt:OK
 
-WARNING: CPU: 2 PID: 197 at net/core/stream.c:205 sk_stream_kill_queues+0xd3/0xf0
-Call Trace:
-  <TASK>
-  inet_csk_destroy_sock+0x55/0x110
-  tcp_rcv_state_process+0xd28/0x1380
-  ? tcp_v4_do_rcv+0x77/0x2c0
-  tcp_v4_do_rcv+0x77/0x2c0
-  __release_sock+0x106/0x130
-  __tcp_close+0x1a7/0x4e0
-  tcp_close+0x20/0x70
-  inet_release+0x3c/0x80
-  __sock_release+0x3a/0xb0
-  sock_close+0x14/0x20
-  __fput+0xa3/0x260
-  task_work_run+0x59/0xb0
-  exit_to_user_mode_prepare+0x1b3/0x1c0
-  syscall_exit_to_user_mode+0x19/0x50
-  do_syscall_64+0x48/0x90
-  entry_SYSCALL_64_after_hwframe+0x44/0xae
+I'm not sure don't you want to know that some of the tests
+were skipped? With this change its not knowable from output
+if everything passed or one passed.
 
-The root case is: In commit 84472b436e76 ("bpf, sockmap: Fix more
-uncharged while msg has more_data") , I used msg->sg.size replace
-tosend rudely, which break the
-   if (msg->apply_bytes && msg->apply_bytes < send)
-scene.
+I would prefer the behavior: If anything fails return
+FAIL, else if anything is skipped SKIP and if _everything_
+passes mark it OK.
 
-Fixes: 84472b436e76 ("bpf, sockmap: Fix more uncharged while msg has more_data")
-Reported-by: Jakub Sitnicki <jakub@cloudflare.com>
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
----
-v1 -> v2: typo fixup
- net/ipv4/tcp_bpf.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+My preference is to drop this change.
 
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index a1626af..774d481 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -278,7 +278,7 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
- {
- 	bool cork = false, enospc = sk_msg_full(msg);
- 	struct sock *sk_redir;
--	u32 tosend, delta = 0;
-+	u32 tosend, orgsize, sent, delta = 0;
- 	u32 eval = __SK_NONE;
- 	int ret;
- 
-@@ -333,10 +333,12 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
- 			cork = true;
- 			psock->cork = NULL;
- 		}
--		sk_msg_return(sk, msg, msg->sg.size);
-+		sk_msg_return(sk, msg, tosend);
- 		release_sock(sk);
- 
-+		orgsize = msg->sg.size;
- 		ret = tcp_bpf_sendmsg_redir(sk_redir, msg, tosend, flags);
-+		sent = orgsize - msg->sg.size;
- 
- 		if (eval == __SK_REDIRECT)
- 			sock_put(sk_redir);
-@@ -375,7 +377,7 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
- 		    msg->sg.data[msg->sg.start].page_link &&
- 		    msg->sg.data[msg->sg.start].length) {
- 			if (eval == __SK_REDIRECT)
--				sk_mem_charge(sk, msg->sg.size);
-+				sk_mem_charge(sk, tosend - sent);
- 			goto more_data;
- 		}
- 	}
--- 
-1.8.3.1
+> 
+> Signed-off-by: Domenico Cerasuolo <dceras@meta.com>
+> ---
+>  tools/testing/selftests/bpf/test_progs.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+> index 0e9a47f97890..14b70393018b 100644
+> --- a/tools/testing/selftests/bpf/test_progs.c
+> +++ b/tools/testing/selftests/bpf/test_progs.c
+> @@ -222,6 +222,11 @@ static char *test_result(bool failed, bool skipped)
+>  	return failed ? "FAIL" : (skipped ? "SKIP" : "OK");
+>  }
+>  
+> +static char *test_group_result(int tests_count, bool failed, int skipped)
+> +{
+> +	return failed ? "FAIL" : (skipped == tests_count ? "SKIP" : "OK");
+> +}
+> +
+>  static void print_test_log(char *log_buf, size_t log_cnt)
+>  {
+>  	log_buf[log_cnt] = '\0';
+> @@ -308,7 +313,8 @@ static void dump_test_log(const struct prog_test_def *test,
+>  	}
+>  
+>  	print_test_name(test->test_num, test->test_name,
+> -			test_result(test_failed, test_state->skip_cnt));
+> +			test_group_result(test_state->subtest_num,
+> +				test_failed, test_state->skip_cnt));
+>  }
+>  
+>  static void stdio_restore(void);
+> @@ -1071,7 +1077,8 @@ static void run_one_test(int test_num)
+>  
+>  	if (verbose() && env.worker_id == -1)
+>  		print_test_name(test_num + 1, test->test_name,
+> -				test_result(state->error_cnt, state->skip_cnt));
+> +				test_group_result(state->subtest_num,
+> +					state->error_cnt, state->skip_cnt));
+>  
+>  	reset_affinity();
+>  	restore_netns();
+> -- 
+> 2.30.2
+> 
+
 
