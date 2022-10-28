@@ -2,242 +2,127 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74FB5ECAAA1
-	for <bpf@archiver.kernel.org>; Fri, 28 Oct 2022 02:56:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A46FECAAA1
+	for <bpf@archiver.kernel.org>; Fri, 28 Oct 2022 05:01:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234693AbiJ1C4v (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 27 Oct 2022 22:56:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40542 "EHLO
+        id S229379AbiJ1FBb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 28 Oct 2022 01:01:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235771AbiJ1C4n (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 27 Oct 2022 22:56:43 -0400
+        with ESMTP id S229494AbiJ1FBa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 28 Oct 2022 01:01:30 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8B997EE3
-        for <bpf@vger.kernel.org>; Thu, 27 Oct 2022 19:56:41 -0700 (PDT)
-Received: from canpemm100009.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mz6d46grWzHtnk;
-        Fri, 28 Oct 2022 10:56:24 +0800 (CST)
-Received: from canpemm500010.china.huawei.com (7.192.105.118) by
- canpemm100009.china.huawei.com (7.192.105.213) with Microsoft SMTP Server
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657071911FA;
+        Thu, 27 Oct 2022 22:01:24 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mz9P00SPhzHvNH;
+        Fri, 28 Oct 2022 13:01:08 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.70) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 28 Oct 2022 10:56:39 +0800
-Received: from canpemm500010.china.huawei.com ([7.192.105.118]) by
- canpemm500010.china.huawei.com ([7.192.105.118]) with mapi id 15.01.2375.031;
- Fri, 28 Oct 2022 10:56:39 +0800
-From:   "liujian (CE)" <liujian56@huawei.com>
-To:     Jakub Sitnicki <jakub@cloudflare.com>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>
-CC:     "edumazet@google.com" <edumazet@google.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "yoshfuji@linux-ipv6.org" <yoshfuji@linux-ipv6.org>,
-        "dsahern@kernel.org" <dsahern@kernel.org>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "mykolal@fb.com" <mykolal@fb.com>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "martin.lau@linux.dev" <martin.lau@linux.dev>,
-        "song@kernel.org" <song@kernel.org>, "yhs@fb.com" <yhs@fb.com>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "sdf@google.com" <sdf@google.com>,
-        "haoluo@google.com" <haoluo@google.com>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: =?gb2312?B?tPC4tDogW1BBVENIIGJwZi1uZXh0IHYyIDAvMl0gSWYgdGhlIHNvY2sgaXMg?=
- =?gb2312?B?ZGVhZCwgZG8gbm90IGFjY2VzcyBzb2NrJ3Mgc2tfd3EgaW4gc2tfc3RyZWFt?=
- =?gb2312?B?X3dhaXRfbWVtb3J5?=
-Thread-Topic: [PATCH bpf-next v2 0/2] If the sock is dead, do not access
- sock's sk_wq in sk_stream_wait_memory
-Thread-Index: AQHYtvUoQm09t7RV/kaoW9E06ge0Va4h6/uAgABSLoCAAGLOgIAA4d5g
-Date:   Fri, 28 Oct 2022 02:56:38 +0000
-Message-ID: <fdde6704226149f6855b7a6fdc180f75@huawei.com>
-References: <20220823133755.314697-1-liujian56@huawei.com>
- <874jvpim37.fsf@cloudflare.com> <87zgdhgu0p.fsf@cloudflare.com>
- <87r0ytgdoq.fsf@cloudflare.com>
-In-Reply-To: <87r0ytgdoq.fsf@cloudflare.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.84.19.254]
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+ 15.1.2375.31; Fri, 28 Oct 2022 13:01:22 +0800
+From:   Wang Yufen <wangyufen@huawei.com>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>,
+        <john.fastabend@gmail.com>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <yhs@fb.com>, <joe@wand.net.nz>
+Subject: [PATCH net v2] bpf: Fix memory leaks in __check_func_call
+Date:   Fri, 28 Oct 2022 13:22:00 +0800
+Message-ID: <1666934520-22509-1-git-send-email-wangyufen@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.70]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500010.china.huawei.com (7.192.105.118)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-DQoNCj4gLS0tLS3Tyrz+1K28/i0tLS0tDQo+ILeivP7IyzogSmFrdWIgU2l0bmlja2kgPGpha3Vi
-QGNsb3VkZmxhcmUuY29tPg0KPiC3osvNyrG85DogMjAyMsTqMTDUwjI4yNUgNToyNA0KPiDK1bz+
-yMs6IGxpdWppYW4gKENFKSA8bGl1amlhbjU2QGh1YXdlaS5jb20+OyBqb2huLmZhc3RhYmVuZEBn
-bWFpbC5jb20NCj4gs63LzTogZWR1bWF6ZXRAZ29vZ2xlLmNvbTsgZGF2ZW1AZGF2ZW1sb2Z0Lm5l
-dDsNCj4geW9zaGZ1amlAbGludXgtaXB2Ni5vcmc7IGRzYWhlcm5Aa2VybmVsLm9yZzsga3ViYUBr
-ZXJuZWwub3JnOw0KPiBwYWJlbmlAcmVkaGF0LmNvbTsgYW5kcmlpQGtlcm5lbC5vcmc7IG15a29s
-YWxAZmIuY29tOyBhc3RAa2VybmVsLm9yZzsNCj4gZGFuaWVsQGlvZ2VhcmJveC5uZXQ7IG1hcnRp
-bi5sYXVAbGludXguZGV2OyBzb25nQGtlcm5lbC5vcmc7IHloc0BmYi5jb207DQo+IGtwc2luZ2hA
-a2VybmVsLm9yZzsgc2RmQGdvb2dsZS5jb207IGhhb2x1b0Bnb29nbGUuY29tOyBqb2xzYUBrZXJu
-ZWwub3JnOw0KPiBzaHVhaEBrZXJuZWwub3JnOyBicGZAdmdlci5rZXJuZWwub3JnDQo+INb3zOI6
-IFJlOiBbUEFUQ0ggYnBmLW5leHQgdjIgMC8yXSBJZiB0aGUgc29jayBpcyBkZWFkLCBkbyBub3Qg
-YWNjZXNzIHNvY2sncw0KPiBza193cSBpbiBza19zdHJlYW1fd2FpdF9tZW1vcnkNCj4gDQo+IE9u
-IFRodSwgT2N0IDI3LCAyMDIyIGF0IDA1OjMwIFBNICswMiwgSmFrdWIgU2l0bmlja2kgd3JvdGU6
-DQo+ID4gT24gVGh1LCBPY3QgMjcsIDIwMjIgYXQgMTI6MzYgUE0gKzAyLCBKYWt1YiBTaXRuaWNr
-aSB3cm90ZToNCj4gPg0KPiA+IFsuLi5dDQo+ID4NCj4gPj4gV2hpbGUgdGVzdGluZyBDb25nJ3Mg
-Zml4IGZvciB0aGUgZGVhZCBsb2NrIGluIHNrX3Bzb2NrX2JhY2tsb2cgWzFdLA0KPiA+PiBJJ3Zl
-IG5vdGljZWQgdGhhdCB0aGlzIGNoYW5nZSBpbnRyb2R1Y2VzIGEgbWVtb3J5IGFjY291bnRpbmcg
-aXNzdWUuDQo+ID4+IFNlZSB3YXJuaW5ncyBiZWxvdy4NCj4gPj4NCj4gPj4gU28gd2hhdCBJJ3Zl
-IHByb3Bvc2VkIGlzIG5vdCBjb21wbGV0ZWx5IHNvdW5kLiBXZSB3aWxsIG5lZWQgdG8NCj4gPj4g
-cmV2aXNpdCBpdC4NCj4gPj4NCj4gPj4gWzFdDQo+ID4+DQo+IGh0dHBzOi8vbG9yZS5rZXJuZWwu
-b3JnL2JwZi9ZMHhKVWMlMkZMUnU4SyUyRkFmOEBwb3Atb3MubG9jYWxkb21haW4vDQo+ID4+DQo+
-ID4+IC0tODwtLQ0KPiA+PiBiYXNoLTUuMSMgdW5hbWUgLXINCj4gPj4gNi4wLjAtcmMzLTAwODky
-LWczZjhlZjY1YWY5MjcNCj4gPj4gYmFzaC01LjEjIC4vdGVzdF9zb2NrbWFwDQo+ID4+ICMgMS8g
-NiAgc29ja21hcDo6dHhtc2cgdGVzdCBwYXNzdGhyb3VnaDpPSyAjIDIvIDYgIHNvY2ttYXA6OnR4
-bXNnDQo+ID4+IHRlc3QgcmVkaXJlY3Q6T0sgIyAzLyAxICBzb2NrbWFwOjp0eG1zZyB0ZXN0IHJl
-ZGlyZWN0IHdhaXQgc2VuZA0KPiA+PiBtZW06T0sgIyA0LyA2ICBzb2NrbWFwOjp0eG1zZyB0ZXN0
-IGRyb3A6T0sgIyA1LyA2ICBzb2NrbWFwOjp0eG1zZw0KPiA+PiB0ZXN0IGluZ3Jlc3MgcmVkaXJl
-Y3Q6T0sgIyA2LyA3ICBzb2NrbWFwOjp0eG1zZyB0ZXN0IHNrYjpPSyAjIDcvIDgNCj4gPj4gc29j
-a21hcDo6dHhtc2cgdGVzdCBhcHBseTpPSyAjIDgvMTIgIHNvY2ttYXA6OnR4bXNnIHRlc3QgY29y
-azpPSw0KPiA+PiBbICAgNDYuMzI0MDIzXSAtLS0tLS0tLS0tLS1bIGN1dCBoZXJlIF0tLS0tLS0t
-LS0tLS0NCj4gPj4gWyA0Ni4zMjUxMTRdIFdBUk5JTkc6IENQVTogMyBQSUQ6IDE5OSBhdCBuZXQv
-Y29yZS9zdHJlYW0uYzoyMDYNCj4gPj4gc2tfc3RyZWFtX2tpbGxfcXVldWVzKzB4ZDYvMHhmMA0K
-PiA+PiBbICAgNDYuMzI2NTczXSBNb2R1bGVzIGxpbmtlZCBpbjoNCj4gPj4gWyA0Ni4zMjcxMDVd
-IENQVTogMyBQSUQ6IDE5OSBDb21tOiB0ZXN0X3NvY2ttYXAgTm90IHRhaW50ZWQNCj4gPj4gNi4w
-LjAtcmMzLTAwODkyLWczZjhlZjY1YWY5MjcgIzM2DQo+ID4+IFsgNDYuMzI4NDA2XSBIYXJkd2Fy
-ZSBuYW1lOiBRRU1VIFN0YW5kYXJkIFBDIChpNDQwRlggKyBQSUlYLCAxOTk2KSwNCj4gPj4gQklP
-Uw0KPiA+PiAxLjE1LjAtMS5mYzM1IDA0LzAxLzIwMTQNCj4gPj4gWyAgIDQ2LjMzMDAwMF0gUklQ
-OiAwMDEwOnNrX3N0cmVhbV9raWxsX3F1ZXVlcysweGQ2LzB4ZjANCj4gPj4gWyA0Ni4zMzA4MTZd
-IENvZGU6IDI5IDViIDVkIDMxIGMwIDg5IGMyIDg5IGM2IDg5IGM3IGMzIDQ4IDg5IGRmIGU4IDEw
-DQo+ID4+IDE0IGZmIGZmIDhiIDgzIDcwIDAyIDAwIDAwIDhiIGIzIDI4IDAyIDAwIDAwIDg1IGMw
-IDc0IGQ5IDBmIDBiIDg1IGY2DQo+ID4+IDc0IGQ3IDwwZj4gMGIgNWIgNWQNCj4gPj4gMzEgYzAg
-ODkgYzIgODkgYzYgODkgYzcgYzMgMGYgMGIgZWIgOTIgNjYgMGYgMWYgODQgMDANCj4gPj4gWyAg
-IDQ2LjMzMTg4OV0gUlNQOiAwMDE4OmZmZmZjOTAwMDBiYzdkNDggRUZMQUdTOiAwMDAxMDIwNg0K
-PiA+PiBbICAgNDYuMzMyMTg2XSBSQVg6IDAwMDAwMDAwMDAwMDAwMDAgUkJYOiBmZmZmODg4MTA1
-NjdkYzAwIFJDWDoNCj4gMDAwMDAwMDAwMDAwMDAwMA0KPiA+PiBbICAgNDYuMzMyNTgzXSBSRFg6
-IDAwMDAwMDAwMDAwMDAwMDAgUlNJOiAwMDAwMDAwMDAwMDAwZmMwIFJESToNCj4gZmZmZjg4ODEw
-NTY3ZGRiOA0KPiA+PiBbICAgNDYuMzMyOTkxXSBSQlA6IGZmZmY4ODgxMDU2N2RkYjggUjA4OiAw
-MDAwMDAwMDAwMDAwMDAwIFIwOToNCj4gMDAwMDAwMDAwMDAwMDAwMA0KPiA+PiBbICAgNDYuMzMz
-MzIxXSBSMTA6IDAwMDAwMDAwMDAwMDAwMDAgUjExOiAwMDAwMDAwMDAwMDAwMDAwIFIxMjoNCj4g
-ZmZmZjg4ODEwNTY3ZGMwMA0KPiA+PiBbICAgNDYuMzMzNjYxXSBSMTM6IGZmZmY4ODgxMDM4OTQ1
-MDAgUjE0OiBmZmZmODg4MTAxZmRmOGUwIFIxNToNCj4gZmZmZjg4ODEwNTY3ZGQzMA0KPiA+PiBb
-ICAgNDYuMzM0MDc0XSBGUzogIDAwMDA3ZjQyMGE0ZDhiODAoMDAwMCkNCj4gR1M6ZmZmZjg4ODEz
-YmQ4MDAwMCgwMDAwKSBrbmxHUzowMDAwMDAwMDAwMDAwMDAwDQo+ID4+IFsgICA0Ni4zMzQ1MzJd
-IENTOiAgMDAxMCBEUzogMDAwMCBFUzogMDAwMCBDUjA6IDAwMDAwMDAwODAwNTAwMzMNCj4gPj4g
-WyAgIDQ2LjMzNDg4MV0gQ1IyOiAwMDAwN2Y0MjBhNGQ4YWY4IENSMzogMDAwMDAwMDEwMmUxNzAw
-MSBDUjQ6DQo+IDAwMDAwMDAwMDAzNzBlZTANCj4gPj4gWyAgIDQ2LjMzNTMwMF0gQ2FsbCBUcmFj
-ZToNCj4gPj4gWyAgIDQ2LjMzNTQ0NF0gIDxUQVNLPg0KPiA+PiBbICAgNDYuMzM1NTczXSAgaW5l
-dF9jc2tfZGVzdHJveV9zb2NrKzB4NGYvMHgxMTANCj4gPj4gWyAgIDQ2LjMzNTgzMl0gIHRjcF9y
-Y3Zfc3RhdGVfcHJvY2VzcysweGRjZi8weDExNDANCj4gPj4gWyAgIDQ2LjMzNjA3Nl0gID8gdGNw
-X3Y0X2RvX3JjdisweDc3LzB4MmEwDQo+ID4+IFsgICA0Ni4zMzYyOTldICB0Y3BfdjRfZG9fcmN2
-KzB4NzcvMHgyYTANCj4gPj4gWyAgIDQ2LjMzNjUxMl0gIF9fcmVsZWFzZV9zb2NrKzB4NTgvMHhi
-MA0KPiA+PiBbICAgNDYuMzM2NzIxXSAgX190Y3BfY2xvc2UrMHgxODYvMHg0NTANCj4gPj4gWyAg
-IDQ2LjMzNjg4M10gIHRjcF9jbG9zZSsweDIwLzB4NzANCj4gPj4gWyAgIDQ2LjMzNzAyNl0gIGlu
-ZXRfcmVsZWFzZSsweDM5LzB4ODANCj4gPj4gWyAgIDQ2LjMzNzE3N10gIF9fc29ja19yZWxlYXNl
-KzB4MzcvMHhhMA0KPiA+PiBbICAgNDYuMzM3MzQxXSAgc29ja19jbG9zZSsweDE0LzB4MjANCj4g
-Pj4gWyAgIDQ2LjMzNzQ4Nl0gIF9fZnB1dCsweGEyLzB4MjYwDQo+ID4+IFsgICA0Ni4zMzc2MjJd
-ICB0YXNrX3dvcmtfcnVuKzB4NTkvMHhhMA0KPiA+PiBbICAgNDYuMzM3Nzg1XSAgZXhpdF90b191
-c2VyX21vZGVfcHJlcGFyZSsweDE4NS8weDE5MA0KPiA+PiBbICAgNDYuMzM3OTkyXSAgc3lzY2Fs
-bF9leGl0X3RvX3VzZXJfbW9kZSsweDE5LzB4NDANCj4gPj4gWyAgIDQ2LjMzODE4OV0gIGRvX3N5
-c2NhbGxfNjQrMHg0Mi8weDkwDQo+ID4+IFsgICA0Ni4zMzgzNTBdICBlbnRyeV9TWVNDQUxMXzY0
-X2FmdGVyX2h3ZnJhbWUrMHg0Ni8weGIwDQo+ID4+IFsgICA0Ni4zMzg1NjVdIFJJUDogMDAzMzow
-eDdmNDIwYTYxOGViNw0KPiA+PiBbIDQ2LjMzODc0MV0gQ29kZTogZmYgZTggN2QgZTIgMDEgMDAg
-NjYgMmUgMGYgMWYgODQgMDAgMDAgMDAgMDAgMDAgMGYNCj4gPj4gMWYgMDAgZjMgMGYgMWUgZmEg
-NjQgOGIgMDQgMjUgMTggMDAgMDAgMDAgODUgYzAgNzUgMTAgYjggMDMgMDAgMDAgMDANCj4gPj4g
-MGYgMDUgPDQ4PiAzZCAwMCBmMCBmZiBmZiA3NyA0MSBjMyA0OCA4MyBlYyAxOCA4OSA3YyAyNCAw
-YyBlOCA0MyBjZCBmNSBmZg0KPiA+PiBbICAgNDYuMzM5NTk2XSBSU1A6IDAwMmI6MDAwMDdmZmQ1
-NDc0OGRmOCBFRkxBR1M6IDAwMDAwMjQ2DQo+IE9SSUdfUkFYOiAwMDAwMDAwMDAwMDAwMDAzDQo+
-ID4+IFsgICA0Ni4zMzk5NDRdIFJBWDogMDAwMDAwMDAwMDAwMDAwMCBSQlg6IDAwMDAwMDAwMDAw
-MDAwMDAgUkNYOg0KPiAwMDAwN2Y0MjBhNjE4ZWI3DQo+ID4+IFsgICA0Ni4zNDAzNDldIFJEWDog
-MDAwMDAwMDAwMDAwMDAxOCBSU0k6IDAwMDA3ZmZkNTQ3NDhkNTAgUkRJOg0KPiAwMDAwMDAwMDAw
-MDAwMDE5DQo+ID4+IFsgICA0Ni4zNDA3NTNdIFJCUDogMDAwMDdmZmQ1NDc0OGU0MCBSMDg6IDAw
-MDA3ZmZkNTQ3NDhkNTAgUjA5Og0KPiAwMDAwN2ZmZDU0NzQ4ZDUwDQo+ID4+IFsgICA0Ni4zNDEx
-NjJdIFIxMDogMDAwMDdmZmQ1NDc0OGQ1MCBSMTE6IDAwMDAwMDAwMDAwMDAyNDYgUjEyOg0KPiAw
-MDAwN2ZmZDU0NzQ5MTE4DQo+ID4+IFsgICA0Ni4zNDE1NzRdIFIxMzogMDAwMDAwMDAwMDQwZDBh
-ZCBSMTQ6IDAwMDAwMDAwMDA0NzRkZjggUjE1Og0KPiAwMDAwN2Y0MjBhNzY5MDAwDQo+ID4+IFsg
-ICA0Ni4zNDE5MjddICA8L1RBU0s+DQo+ID4+IFsgICA0Ni4zNDIwMjVdIGlycSBldmVudCBzdGFt
-cDogMjA2Mzg1DQo+ID4+IFsgNDYuMzQyMTc1XSBoYXJkaXJxcyBsYXN0IGVuYWJsZWQgYXQgKDIw
-NjM5Myk6IFs8ZmZmZmZmZmY4MTBmMWY4Mj5dDQo+ID4+IF9fdXBfY29uc29sZV9zZW0rMHg1Mi8w
-eDYwDQo+ID4+IFsgNDYuMzQyNTQ2XSBoYXJkaXJxcyBsYXN0IGRpc2FibGVkIGF0ICgyMDY0MDAp
-OiBbPGZmZmZmZmZmODEwZjFmNjc+XQ0KPiA+PiBfX3VwX2NvbnNvbGVfc2VtKzB4MzcvMHg2MA0K
-PiA+PiBbIDQ2LjM0Mjk2NV0gc29mdGlycXMgbGFzdCBlbmFibGVkIGF0ICgyMDY0MTQpOiBbPGZm
-ZmZmZmZmODEwN2JjYzU+XQ0KPiA+PiBfX2lycV9leGl0X3JjdSsweGM1LzB4MTIwDQo+ID4+IFsg
-NDYuMzQzNDU0XSBzb2Z0aXJxcyBsYXN0IGRpc2FibGVkIGF0ICgyMDY0MDkpOiBbPGZmZmZmZmZm
-ODEwN2JjYzU+XQ0KPiA+PiBfX2lycV9leGl0X3JjdSsweGM1LzB4MTIwDQo+ID4+IFsgICA0Ni4z
-NDM5NTFdIC0tLVsgZW5kIHRyYWNlIDAwMDAwMDAwMDAwMDAwMDAgXS0tLQ0KPiA+PiBbICAgNDYu
-MzQ0MTk5XSAtLS0tLS0tLS0tLS1bIGN1dCBoZXJlIF0tLS0tLS0tLS0tLS0NCj4gPj4gWyA0Ni4z
-NDQ0MjFdIFdBUk5JTkc6IENQVTogMyBQSUQ6IDE5OSBhdCBuZXQvaXB2NC9hZl9pbmV0LmM6MTU0
-DQo+ID4+IGluZXRfc29ja19kZXN0cnVjdCsweDFhMC8weDFkMA0KPiA+PiBbICAgNDYuMzQ0ODk3
-XSBNb2R1bGVzIGxpbmtlZCBpbjoNCj4gPj4gWyA0Ni4zNDUwNzRdIENQVTogMyBQSUQ6IDE5OSBD
-b21tOiB0ZXN0X3NvY2ttYXAgVGFpbnRlZDogRyBXDQo+ID4+IDYuMC4wLXJjMy0wMDg5Mi1nM2Y4
-ZWY2NWFmOTI3ICMzNg0KPiA+PiBbIDQ2LjM0NTU0OV0gSGFyZHdhcmUgbmFtZTogUUVNVSBTdGFu
-ZGFyZCBQQyAoaTQ0MEZYICsgUElJWCwgMTk5NiksDQo+ID4+IEJJT1MNCj4gPj4gMS4xNS4wLTEu
-ZmMzNSAwNC8wMS8yMDE0DQo+ID4+IFsgICA0Ni4zNDYwMjhdIFJJUDogMDAxMDppbmV0X3NvY2tf
-ZGVzdHJ1Y3QrMHgxYTAvMHgxZDANCj4gPj4gWyA0Ni4zNDYzMTNdIENvZGU6IGZmIDQ5IDhiIGJj
-IDI0IDYwIDAyIDAwIDAwIGU4IGNjIDFlIGU5IGZmIDQ5IDhiIGJjDQo+ID4+IDI0IDg4IDAwDQo+
-ID4+IDAwIDAwIDViIDQxIDVjIGU5IGJjIDFlIGU5IGZmIDQxIDhiIDg0IDI0IDI4IDAyIDAwIDAw
-IDg1IGMwIDc0IGNhDQo+ID4+IDwwZj4gMGIgZWIgYzYgNGMgODkgZTcgZTggYTQgMmQgZTYgZmYg
-ZTkgNTAgZmYgZmYgZmYgMGYgMGIgNDEgOGIgODQNCj4gPj4gWyAgIDQ2LjM0NzM3MF0gUlNQOiAw
-MDE4OmZmZmZjOTAwMDBiYzdlNDAgRUZMQUdTOiAwMDAxMDIwNg0KPiA+PiBbICAgNDYuMzQ3Njcw
-XSBSQVg6IDAwMDAwMDAwMDAwMDBmYzAgUkJYOiBmZmZmODg4MTA1NjdkZDYwIFJDWDoNCj4gMDAw
-MDAwMDAwMDAwMDAwMA0KPiA+PiBbICAgNDYuMzQ4MDkwXSBSRFg6IDAwMDAwMDAwMDAwMDAzMDMg
-UlNJOiAwMDAwMDAwMDAwMDAwZmMwIFJESToNCj4gZmZmZjg4ODEwNTY3ZGQ2MA0KPiA+PiBbICAg
-NDYuMzQ4NDk1XSBSQlA6IGZmZmY4ODgxMDU2N2RjMDAgUjA4OiAwMDAwMDAwMDAwMDAwMDAwIFIw
-OToNCj4gMDAwMDAwMDAwMDAwMDAwMA0KPiA+PiBbICAgNDYuMzQ4OTIxXSBSMTA6IDAwMDAwMDAw
-MDAwMDAwMDAgUjExOiAwMDAwMDAwMDAwMDAwMDAwIFIxMjoNCj4gZmZmZjg4ODEwNTY3ZGMwMA0K
-PiA+PiBbICAgNDYuMzQ5MzA2XSBSMTM6IGZmZmY4ODgxMDAxZDQ4ZTAgUjE0OiBmZmZmODg4MTAy
-NTdhM2E4IFIxNToNCj4gMDAwMDAwMDAwMDAwMDAwMA0KPiA+PiBbICAgNDYuMzQ5NzE3XSBGUzog
-IDAwMDA3ZjQyMGE0ZDhiODAoMDAwMCkNCj4gR1M6ZmZmZjg4ODEzYmQ4MDAwMCgwMDAwKSBrbmxH
-UzowMDAwMDAwMDAwMDAwMDAwDQo+ID4+IFsgICA0Ni4zNTAxOTFdIENTOiAgMDAxMCBEUzogMDAw
-MCBFUzogMDAwMCBDUjA6IDAwMDAwMDAwODAwNTAwMzMNCj4gPj4gWyAgIDQ2LjM1MDUzMV0gQ1Iy
-OiAwMDAwN2Y0MjBhNGQ4YWY4IENSMzogMDAwMDAwMDEwMmUxNzAwMSBDUjQ6DQo+IDAwMDAwMDAw
-MDAzNzBlZTANCj4gPj4gWyAgIDQ2LjM1MDk0N10gQ2FsbCBUcmFjZToNCj4gPj4gWyAgIDQ2LjM1
-MTA5OF0gIDxUQVNLPg0KPiA+PiBbICAgNDYuMzUxMjQ2XSAgX19za19kZXN0cnVjdCsweDIzLzB4
-MjUwDQo+ID4+IFsgICA0Ni4zNTE1OTldICBpbmV0X3JlbGVhc2UrMHgzOS8weDgwDQo+ID4+IFsg
-ICA0Ni4zNTE4MzVdICBfX3NvY2tfcmVsZWFzZSsweDM3LzB4YTANCj4gPj4gWyAgIDQ2LjM1MjA1
-OV0gIHNvY2tfY2xvc2UrMHgxNC8weDIwDQo+ID4+IFsgICA0Ni4zNTIyMDZdICBfX2ZwdXQrMHhh
-Mi8weDI2MA0KPiA+PiBbICAgNDYuMzUyMzQ3XSAgdGFza193b3JrX3J1bisweDU5LzB4YTANCj4g
-Pj4gWyAgIDQ2LjM1MjUxNV0gIGV4aXRfdG9fdXNlcl9tb2RlX3ByZXBhcmUrMHgxODUvMHgxOTAN
-Cj4gPj4gWyAgIDQ2LjM1MjcyOF0gIHN5c2NhbGxfZXhpdF90b191c2VyX21vZGUrMHgxOS8weDQw
-DQo+ID4+IFsgICA0Ni4zNTI5NTRdICBkb19zeXNjYWxsXzY0KzB4NDIvMHg5MA0KPiA+PiBbICAg
-NDYuMzUzMTE5XSAgZW50cnlfU1lTQ0FMTF82NF9hZnRlcl9od2ZyYW1lKzB4NDYvMHhiMA0KPiA+
-PiBbICAgNDYuMzUzMzQyXSBSSVA6IDAwMzM6MHg3ZjQyMGE2MThlYjcNCj4gPj4gWyA0Ni4zNTM0
-OThdIENvZGU6IGZmIGU4IDdkIGUyIDAxIDAwIDY2IDJlIDBmIDFmIDg0IDAwIDAwIDAwIDAwIDAw
-IDBmDQo+ID4+IDFmIDAwIGYzIDBmIDFlIGZhIDY0IDhiIDA0IDI1IDE4IDAwIDAwIDAwIDg1IGMw
-IDc1IDEwIGI4IDAzIDAwIDAwIDAwDQo+ID4+IDBmIDA1IDw0OD4gM2QgMDAgZjAgZmYgZmYgNzcg
-NDEgYzMgNDggODMgZWMgMTggODkgN2MgMjQgMGMgZTggNDMgY2QgZjUgZmYNCj4gPj4gWyAgIDQ2
-LjM1NDI4NF0gUlNQOiAwMDJiOjAwMDA3ZmZkNTQ3NDhkZjggRUZMQUdTOiAwMDAwMDI0Ng0KPiBP
-UklHX1JBWDogMDAwMDAwMDAwMDAwMDAwMw0KPiA+PiBbICAgNDYuMzU0NjAxXSBSQVg6IDAwMDAw
-MDAwMDAwMDAwMDAgUkJYOiAwMDAwMDAwMDAwMDAwMDAwIFJDWDoNCj4gMDAwMDdmNDIwYTYxOGVi
-Nw0KPiA+PiBbICAgNDYuMzU0OTA4XSBSRFg6IDAwMDAwMDAwMDAwMDAwMTggUlNJOiAwMDAwN2Zm
-ZDU0NzQ4ZDUwIFJESToNCj4gMDAwMDAwMDAwMDAwMDAxOQ0KPiA+PiBbICAgNDYuMzU1MzA4XSBS
-QlA6IDAwMDA3ZmZkNTQ3NDhlNDAgUjA4OiAwMDAwN2ZmZDU0NzQ4ZDUwIFIwOToNCj4gMDAwMDdm
-ZmQ1NDc0OGQ1MA0KPiA+PiBbICAgNDYuMzU1NzEwXSBSMTA6IDAwMDA3ZmZkNTQ3NDhkNTAgUjEx
-OiAwMDAwMDAwMDAwMDAwMjQ2IFIxMjoNCj4gMDAwMDdmZmQ1NDc0OTExOA0KPiA+PiBbICAgNDYu
-MzU2MTE3XSBSMTM6IDAwMDAwMDAwMDA0MGQwYWQgUjE0OiAwMDAwMDAwMDAwNDc0ZGY4IFIxNToN
-Cj4gMDAwMDdmNDIwYTc2OTAwMA0KPiA+PiBbICAgNDYuMzU2NTMyXSAgPC9UQVNLPg0KPiA+PiBb
-ICAgNDYuMzU2NjY0XSBpcnEgZXZlbnQgc3RhbXA6IDIwNjgzNw0KPiA+PiBbIDQ2LjM1Njg3M10g
-aGFyZGlycXMgbGFzdCBlbmFibGVkIGF0ICgyMDY4NDcpOiBbPGZmZmZmZmZmODEwZjFmODI+XQ0K
-PiA+PiBfX3VwX2NvbnNvbGVfc2VtKzB4NTIvMHg2MA0KPiA+PiBbIDQ2LjM1NzM2OV0gaGFyZGly
-cXMgbGFzdCBkaXNhYmxlZCBhdCAoMjA2ODU0KTogWzxmZmZmZmZmZjgxMGYxZjY3Pl0NCj4gPj4g
-X191cF9jb25zb2xlX3NlbSsweDM3LzB4NjANCj4gPj4gWyA0Ni4zNTc4NjRdIHNvZnRpcnFzIGxh
-c3QgZW5hYmxlZCBhdCAoMjA2NjA0KTogWzxmZmZmZmZmZjgxMDdiY2M1Pl0NCj4gPj4gX19pcnFf
-ZXhpdF9yY3UrMHhjNS8weDEyMA0KPiA+PiBbIDQ2LjM1ODM1OF0gc29mdGlycXMgbGFzdCBkaXNh
-YmxlZCBhdCAoMjA2NTkxKTogWzxmZmZmZmZmZjgxMDdiY2M1Pl0NCj4gPj4gX19pcnFfZXhpdF9y
-Y3UrMHhjNS8weDEyMA0KPiA+PiBbICAgNDYuMzU4ODY1XSAtLS1bIGVuZCB0cmFjZSAwMDAwMDAw
-MDAwMDAwMDAwIF0tLS0NCj4gPj4gIyA5LyAzICBzb2NrbWFwOjp0eG1zZyB0ZXN0IGhhbmdpbmcg
-Y29ya3M6T0sNCj4gPg0KPiA+IFsuLi5dDQo+ID4NCj4gPiBBY3R1YWxseSwgd2UgaGFkIGEgZml4
-IGZvciB0aGVzZSB3YXJuaW5ncyBpbiA5YzM0ZTM4YzRhODcgKCJicGYsDQo+ID4gc29ja21hcDog
-Rml4IG1lbWxlYWsgaW4gdGNwX2JwZl9zZW5kbXNnIHdoaWxlIHNrIG1zZyBpcyBmdWxsIikgWzFd
-Lg0KPiA+DQo+ID4gQnV0IHRoZXkgcmVhcHBlYXIgZm9yIG1lIGluIHY1LjE4LXJjMS4gVHJ5aW5n
-IHRvIGJpc2VjdCB3aGF0IHdlbnQNCj4gPiB3cm9uZy4uLg0KPiA+DQo+ID4gWzFdDQo+ID4NCj4g
-aHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYnBmLzIwMjIwMzA0MDgxMTQ1LjIwMzcxODItMy13YW5n
-eXVmZW5AaHVhd2UNCj4gaS4NCj4gPiBjb20NCj4gDQo+IFRyYWNlZCBpdCBkb3duIHRvIDg0NDcy
-YjQzNmU3NiAoImJwZiwgc29ja21hcDogRml4IG1vcmUgdW5jaGFyZ2VkIHdoaWxlDQo+IG1zZyBo
-YXMgbW9yZV9kYXRhIiksIHdoaWNoIHdhcyB0aGUgbmV4dCBjb21taXQgYWZ0ZXIgdGhlIG9uZSBJ
-IHRob3VnaHQNCj4gY29udGFpbmVkIHRoZSBmaXgsIHRoYXQgaXMgOWMzNGUzOGM0YTg3Lg0KPiAN
-Cj4gSSBzdGFydGVkIGEgZGlzY3Vzc2lvbiBpbiB0aGUgdGhyZWFkIGZvciB0aGUgcGF0Y2ggc2V0
-IFsxXSwgYXMgdGhlIHdhcm5pbmdzIGxvb2sNCj4gY29tcGxldGVseSB1bnJlbGF0ZWQgdG8gdGhp
-cyBjaGFuZ2UuDQo+IA0KT2theSwgdGhhbmsgeW91IGZvciB0aGUgY2xhcmlmaWNhdGlvbi4NCj4g
-WzFdIGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL25ldGRldi84N3Y4bzVnZHcyLmZzZkBjbG91ZGZs
-YXJlLmNvbS8NCg==
+kmemleak reports this issue:
+
+unreferenced object 0xffff88817139d000 (size 2048):
+  comm "test_progs", pid 33246, jiffies 4307381979 (age 45851.820s)
+  hex dump (first 32 bytes):
+    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<0000000045f075f0>] kmalloc_trace+0x27/0xa0
+    [<0000000098b7c90a>] __check_func_call+0x316/0x1230
+    [<00000000b4c3c403>] check_helper_call+0x172e/0x4700
+    [<00000000aa3875b7>] do_check+0x21d8/0x45e0
+    [<000000001147357b>] do_check_common+0x767/0xaf0
+    [<00000000b5a595b4>] bpf_check+0x43e3/0x5bc0
+    [<0000000011e391b1>] bpf_prog_load+0xf26/0x1940
+    [<0000000007f765c0>] __sys_bpf+0xd2c/0x3650
+    [<00000000839815d6>] __x64_sys_bpf+0x75/0xc0
+    [<00000000946ee250>] do_syscall_64+0x3b/0x90
+    [<0000000000506b7f>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+The root case here is: In function prepare_func_exit(), the callee is
+not released in the abnormal scenario after "state->curframe--;". To
+fix, move "state->curframe--;" to the very bottom of the function,
+right when we free callee and reset frame[] pointer to NULL, as Andrii
+suggested.
+
+In addition, function __check_func_call() has a similar problem. In
+the abnormal scenario before "state->curframe++;", the callee is alse
+not released.
+
+Fixes: 69c087ba6225 ("bpf: Add bpf_for_each_map_elem() helper")
+Fixes: fd978bf7fd31 ("bpf: Add reference tracking to verifier")
+Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+---
+ kernel/bpf/verifier.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 014ee09..d28d460 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6736,11 +6736,11 @@ static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 	/* Transfer references to the callee */
+ 	err = copy_reference_state(callee, caller);
+ 	if (err)
+-		return err;
++		goto err_out;
+ 
+ 	err = set_callee_state_cb(env, caller, callee, *insn_idx);
+ 	if (err)
+-		return err;
++		goto err_out;
+ 
+ 	clear_caller_saved_regs(env, caller->regs);
+ 
+@@ -6757,6 +6757,11 @@ static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 		print_verifier_state(env, callee, true);
+ 	}
+ 	return 0;
++
++err_out:
++	kfree(callee);
++	state->frame[state->curframe + 1] = NULL;
++	return err;
+ }
+ 
+ int map_set_for_each_callback_args(struct bpf_verifier_env *env,
+@@ -6969,7 +6974,6 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
+ 		return -EINVAL;
+ 	}
+ 
+-	state->curframe--;
+ 	caller = state->frame[state->curframe];
+ 	if (callee->in_callback_fn) {
+ 		/* enforce R0 return value range [0, 1]. */
+@@ -7000,6 +7004,7 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
+ 			return err;
+ 	}
+ 
++	state->curframe--;
+ 	*insn_idx = callee->callsite + 1;
+ 	if (env->log.level & BPF_LOG_LEVEL) {
+ 		verbose(env, "returning from callee:\n");
+-- 
+1.8.3.1
+
