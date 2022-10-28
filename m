@@ -2,85 +2,115 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A95DAC38A02
-	for <bpf@archiver.kernel.org>; Fri, 28 Oct 2022 23:21:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15226FA3741
+	for <bpf@archiver.kernel.org>; Fri, 28 Oct 2022 23:24:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229500AbiJ1XU6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 28 Oct 2022 19:20:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35328 "EHLO
+        id S229515AbiJ1XYB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 28 Oct 2022 19:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiJ1XU5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 28 Oct 2022 19:20:57 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8FB1B1562
-        for <bpf@vger.kernel.org>; Fri, 28 Oct 2022 16:20:55 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id g62so5994061pfb.10
-        for <bpf@vger.kernel.org>; Fri, 28 Oct 2022 16:20:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2Uzk3Lk212hyHZBLwlj2n7xSyIpu4M+s529OGHEaZT0=;
-        b=B8aWKoOO0GoF8AiUGXJozKzeXmiazZMi08nQIIgI1vQ+juvz74hqj4aAg8aEcxN0AQ
-         Ugbz1xQtwy0oz4bObXoA6is/lIM9SMw9XhNEn5ovDTngCf47wJ1SJzt+8SVQ6ZfoQKfr
-         UhujcdG4hNCAL0zY8YwK6j9xPElcapgf1AoGrM82509Kn7I0jPZLZT0s0Sn4HFe3BtOM
-         gJ+iOMI3hcjf+4sTvO2DhsfpT4rdyqZleA5cVRh05PxtVTQunobl2N3MwJUXHFSqw01s
-         xhnOXEauJqFqE8pm1KuyieWEffxdBGD6wtyU8VZnay2GG/CK7uykJ8/ml+o0YtQg/wJY
-         CAeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=2Uzk3Lk212hyHZBLwlj2n7xSyIpu4M+s529OGHEaZT0=;
-        b=pNbhIxCEvkNIMtOm+9s5ZywfVHeGuez2I7LbIDKZ5DNR0u+Pz/jj+UFDSNt8jhdtwi
-         Pe3co4Wzwizef6YOO4xYmDGsMm3eAR38KYeaphVNzb6iL5yqjj1msyfHJ6FXjFQHnERN
-         3cldbczCYovXDXIq4G1FwwzgMlvJSfATWhQ8J1e8UOWLVd+IBuSa0bCzP4DtNXR0lkNa
-         82s8yPsDXQo+2Py1AwBzT4b+risO0pAh+pm+KouFqqlfn7X75Ep8eDP42hKSt+0AIE/l
-         t5po3FN+eQZs1nMNevlGMQGoF6O3hqheWVWvKuEi/QoOghXN7ZKE79fqzea8fa7RPqiQ
-         BMTw==
-X-Gm-Message-State: ACrzQf255/46Q8cuisUQhUCo/Nldx0ihB0WmtzaBUNYUTCUL2VjoC6gp
-        W5IOlM/ze2MS1/F84oqeaGLDggNyiX5bxQ==
-X-Google-Smtp-Source: AMsMyM7J/tsteH1ahjJmE1q/+uXd5BRjzt8zY+i9ncugk2gkEyO6xt3FrVzRawEoWTV6BW4JCE/1JA==
-X-Received: by 2002:a65:6951:0:b0:42b:b13:b253 with SMTP id w17-20020a656951000000b0042b0b13b253mr1693104pgq.555.1666999254731;
-        Fri, 28 Oct 2022 16:20:54 -0700 (PDT)
-Received: from localhost ([98.97.41.13])
-        by smtp.gmail.com with ESMTPSA id w35-20020a634763000000b0046ef0114367sm3210347pgk.71.2022.10.28.16.20.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 16:20:54 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 16:20:52 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Florian Lehner <dev@der-flo.net>, bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, Florian Lehner <dev@der-flo.net>
-Message-ID: <635c63d4d8ad2_b1ba20896@john.notmuch>
-In-Reply-To: <20221028183405.59554-1-dev@der-flo.net>
-References: <20221028183405.59554-1-dev@der-flo.net>
-Subject: RE: [PATCH bpf-next v2] bpf: check max_entries before allocating
- memory
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+        with ESMTP id S229473AbiJ1XYA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 28 Oct 2022 19:24:00 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4612C248C85;
+        Fri, 28 Oct 2022 16:23:58 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MzdnR71c3zpW8L;
+        Sat, 29 Oct 2022 07:20:27 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.70) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 29 Oct 2022 07:23:56 +0800
+From:   Wang Yufen <wangyufen@huawei.com>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <john.fastabend@gmail.com>, <jakub@cloudflare.com>
+Subject: [PATCH net v2] bpf, sockmap: fix the sk->sk_forward_alloc warning of sk_stream_kill_queues()
+Date:   Sat, 29 Oct 2022 07:44:34 +0800
+Message-ID: <1667000674-13237-1-git-send-email-wangyufen@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.70]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Florian Lehner wrote:
-> For maps of type BPF_MAP_TYPE_CPUMAP memory is allocated first before
-> checking the max_entries argument. If then max_entries is greater than
-> NR_CPUS additional work needs to be done to free allocated memory before
-> an error is returned.
-> This changes moves the check on max_entries before the allocation
-> happens.
-> 
-> Signed-off-by: Florian Lehner <dev@der-flo.net>
-> ---
+When running `test_sockmap` selftests, got the following warning:
 
-LGTM.
- 
+WARNING: CPU: 2 PID: 197 at net/core/stream.c:205 sk_stream_kill_queues+0xd3/0xf0
+Call Trace:
+  <TASK>
+  inet_csk_destroy_sock+0x55/0x110
+  tcp_rcv_state_process+0xd28/0x1380
+  ? tcp_v4_do_rcv+0x77/0x2c0
+  tcp_v4_do_rcv+0x77/0x2c0
+  __release_sock+0x106/0x130
+  __tcp_close+0x1a7/0x4e0
+  tcp_close+0x20/0x70
+  inet_release+0x3c/0x80
+  __sock_release+0x3a/0xb0
+  sock_close+0x14/0x20
+  __fput+0xa3/0x260
+  task_work_run+0x59/0xb0
+  exit_to_user_mode_prepare+0x1b3/0x1c0
+  syscall_exit_to_user_mode+0x19/0x50
+  do_syscall_64+0x48/0x90
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+The root case is: In commit 84472b436e76 ("bpf, sockmap: Fix more
+uncharged while msg has more_data") , I used msg->sg.size replace
+tosend rudely, which break the
+   if (msg->apply_bytes && msg->apply_bytes < send)
+scene.
+
+Fixes: 84472b436e76 ("bpf, sockmap: Fix more uncharged while msg has more_data")
+Reported-by: Jakub Sitnicki <jakub@cloudflare.com>
+Signed-off-by: Wang Yufen <wangyufen@huawei.com>
 Acked-by: John Fastabend <john.fastabend@gmail.com>
+---
+v1 -> v2: typo fixup
+ net/ipv4/tcp_bpf.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index a1626af..774d481 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -278,7 +278,7 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
+ {
+ 	bool cork = false, enospc = sk_msg_full(msg);
+ 	struct sock *sk_redir;
+-	u32 tosend, delta = 0;
++	u32 tosend, orgsize, sent, delta = 0;
+ 	u32 eval = __SK_NONE;
+ 	int ret;
+ 
+@@ -333,10 +333,12 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
+ 			cork = true;
+ 			psock->cork = NULL;
+ 		}
+-		sk_msg_return(sk, msg, msg->sg.size);
++		sk_msg_return(sk, msg, tosend);
+ 		release_sock(sk);
+ 
++		orgsize = msg->sg.size;
+ 		ret = tcp_bpf_sendmsg_redir(sk_redir, msg, tosend, flags);
++		sent = orgsize - msg->sg.size;
+ 
+ 		if (eval == __SK_REDIRECT)
+ 			sock_put(sk_redir);
+@@ -375,7 +377,7 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
+ 		    msg->sg.data[msg->sg.start].page_link &&
+ 		    msg->sg.data[msg->sg.start].length) {
+ 			if (eval == __SK_REDIRECT)
+-				sk_mem_charge(sk, msg->sg.size);
++				sk_mem_charge(sk, tosend - sent);
+ 			goto more_data;
+ 		}
+ 	}
+-- 
+1.8.3.1
+
