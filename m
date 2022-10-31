@@ -2,57 +2,57 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CDBDFA3743
-	for <bpf@archiver.kernel.org>; Mon, 31 Oct 2022 20:16:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 234B4ECAAA1
+	for <bpf@archiver.kernel.org>; Mon, 31 Oct 2022 21:53:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbiJaUQa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 31 Oct 2022 16:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50268 "EHLO
+        id S229515AbiJaVxu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 31 Oct 2022 17:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbiJaUQ3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 31 Oct 2022 16:16:29 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD2DF024
-        for <bpf@vger.kernel.org>; Mon, 31 Oct 2022 13:16:27 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id a67so19037502edf.12
-        for <bpf@vger.kernel.org>; Mon, 31 Oct 2022 13:16:27 -0700 (PDT)
+        with ESMTP id S229730AbiJaVxt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 31 Oct 2022 17:53:49 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F509140B2
+        for <bpf@vger.kernel.org>; Mon, 31 Oct 2022 14:53:47 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id m15so4744984ilq.2
+        for <bpf@vger.kernel.org>; Mon, 31 Oct 2022 14:53:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ci3+QoHQ25KB/iJMgmn6M3elbqhltdUkE8SPO6WZlmo=;
-        b=CTq5gfsrME/R6gLnFUaqNt0aOVbT6FsZdc4Y79sVuG3Ei3LiCj1u1WpbqERv/iHI1M
-         iqxNDtg5J9u3HoJ03UQzyZJf+xLFzk90PkvZjo55ZgpkQGiCsyoP/7HnGkk3E2ZI38vZ
-         LcWSvxybIs+Xp/rXEFb3lkFepFH32VuGs28NjvTry1Adw289juuZZK0ZEJIgJQxtYuLl
-         2aUYIUoFvjytKpnwCI1LD1X6Pr/8HFKhD3ZEk5R/W3TSRSoHxuhEB45kWJ/nrUByxN4Y
-         FvRtgj2eEwIemS6gW+ubspkopG/c+k/qRMVBunNq8y7spIeIpRiKOtHpdjwppZ2EAdnl
-         33Mg==
+        bh=UoC+o1dA/kh0+MOmEfvSCDk84t2FIDGBnI6Rcg5ImMo=;
+        b=aK3PQn25+nFHVNHYNimanppB4aRKlWTUzSc9eZq7EiKK0b0Kwl6TzB2G+Q0iMhSkNu
+         8OfDbSlNe9ZWz/oNqNrBnjKKdaTCeNOiGs2sKTxR/73/3CIQDyGibUoGVcIRy4aN+bIy
+         Mc25TWFuu4qLCGQSrk6EvXccTUKSbwYXW4CNZe+rAZgwERLO1C4Mua5krpXBA5xAEdY5
+         KPn/qR9p3gqKF7lDTBZvzRYC9sEJ1+P+LcOL/KO4ddojR6Ci9gTDYxhi2rNcelubL0d6
+         AZ/5v40agOxfcfYMQ9CUG3vjtk0KjMeXkRcFbUqRp37y133fzarooQbb9MhwTNUamFPc
+         dn5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ci3+QoHQ25KB/iJMgmn6M3elbqhltdUkE8SPO6WZlmo=;
-        b=v4YMQtqR72v7vOqpFmmag4uw4qfR0eUWZ9uTTtybs3NsSkH8E1wtkSt9/VQzs/kR7k
-         ByJW6pMcJnvVBV1UM2A1NBgQoRO2dTb8vx+eZ9/Wc55eOU1J7UiRGO1XRUc/lvrYddx6
-         Qjg9TrH42F3Vx3JeJHAxp3O2n9g21Gq2j+Us/vuENuQuMsT8nxE8ql1wIyn0FIcyIyTR
-         YXAj60LcZW3sDapQKItyJF5NuA7RQP1aJra6dlAkQp2OPaxUDHBz8g+LDC15qvxgkIFY
-         f1V8sb0YGW+15LO6wgyQXeDiGPJeTs14scn/0Eq+grU6SerCgzjM3yh9ltjwe7G1DUHY
-         8S5Q==
-X-Gm-Message-State: ACrzQf3oUM0rwb+eIBjn5PhKOzZeC9/Ce3EUIA5yddotajj8YsZRD+IV
-        2EcwVxQsqdxdKz2Gm4c3GY0htN39YscCfGWDd2yA
-X-Google-Smtp-Source: AMsMyM7FRCcRFTFbl0DrxIU1Df1+CfE/Y1YzIBEFicyXXX8ZtMZF3eDdxV5jWU80lH6VSNcXEsdIz+04ZtO0WlJW7EY=
-X-Received: by 2002:a05:6402:22a5:b0:462:b393:f281 with SMTP id
- cx5-20020a05640222a500b00462b393f281mr15555602edb.379.1667247386069; Mon, 31
- Oct 2022 13:16:26 -0700 (PDT)
+        bh=UoC+o1dA/kh0+MOmEfvSCDk84t2FIDGBnI6Rcg5ImMo=;
+        b=tL2Jd+Im3O7iSOf6sX+fLOAeAHmuVwLIlsDe+lfGC1wjy4IU6TCvkQu/MIJ9/mxYOi
+         alUHIvYLdJKYU62LPcrriMmrhTmZ7aTlBCNXIFlPP85++/XWs/YAcHZxrYWos/34cj4o
+         Zub7Hsec3EE6Djz0HbhLTB10cDizMkMhUbviS8f/3qA6+bit4sGDQukL/29OHhSOdQ/C
+         O18tsi8zkak3aW3WJ7K1Yc206fzMSjr5+kXmWwJM2MYpVs0x3dTbZyepzbp/csw8ljRU
+         r6VseyKVIEVCBknH62CR9BYIU2rpGYM1TDi5eqVULA99E3Ji/KN2soYPdw46UB/xRnCC
+         ugoA==
+X-Gm-Message-State: ACrzQf1wgLgDdfBbXNsCbpb7owtU7CyRH09bQSgR2PwNcAw0UILpOAqg
+        y5ORqV5DVG5ExSgiT5thDGPrA+TG469s8N+eM/dTCQ==
+X-Google-Smtp-Source: AMsMyM63vFkqFQ/XTot4Z2F499OIgZ3P+z0mQdszUmqz74FFU4KzGigXy7wS+JLjVY3TUKDRO55RjJ/s5tBQ8hx5r6o=
+X-Received: by 2002:a05:6e02:1a41:b0:2fa:969d:fcd0 with SMTP id
+ u1-20020a056e021a4100b002fa969dfcd0mr8403581ilv.6.1667253226708; Mon, 31 Oct
+ 2022 14:53:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221029024444.gonna.633-kees@kernel.org> <20221029025433.2533810-1-keescook@chromium.org>
-In-Reply-To: <20221029025433.2533810-1-keescook@chromium.org>
-From:   Bill Wendling <morbo@google.com>
-Date:   Mon, 31 Oct 2022 13:16:09 -0700
-Message-ID: <CAGG=3QXYVwQ5pwARdGTenm-mDQn4Tcz6U-=EZ8BDcwBkM5bFfg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/3] bpf/verifier: Fix potential memory leak
- in array reallocation
+References: <20221029024444.gonna.633-kees@kernel.org> <20221029025433.2533810-3-keescook@chromium.org>
+In-Reply-To: <20221029025433.2533810-3-keescook@chromium.org>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Mon, 31 Oct 2022 14:53:35 -0700
+Message-ID: <CAKH8qBtS9UHTVZ8PgFd2fOS1k6MLxot_SDBg2+H5BhoqQTOcGg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 3/3] bpf/verifier: Take advantage of full
+ allocation sizes
 To:     Kees Cook <keescook@chromium.org>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -60,23 +60,19 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <martin.lau@linux.dev>,
         Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 7:55 PM Kees Cook <keescook@chromium.org> wrote:
+On Fri, Oct 28, 2022 at 7:54 PM Kees Cook <keescook@chromium.org> wrote:
 >
-> If an error (NULL) is returned by krealloc(), callers of realloc_array()
-> were setting their allocation pointers to NULL, but on error krealloc()
-> does not touch the original allocation. This would result in a memory
-> resource leak. Instead, free the old allocation on the error handling
-> path.
+> Since the full kmalloc bucket size is being explicitly allocated, pass
+> back the resulting details to take advantage of the full size so that
+> reallocation checking will be needed less frequently.
 >
 > Cc: Alexei Starovoitov <ast@kernel.org>
 > Cc: Daniel Borkmann <daniel@iogearbox.net>
@@ -91,37 +87,102 @@ On Fri, Oct 28, 2022 at 7:55 PM Kees Cook <keescook@chromium.org> wrote:
 > Cc: Jiri Olsa <jolsa@kernel.org>
 > Cc: bpf@vger.kernel.org
 > Signed-off-by: Kees Cook <keescook@chromium.org>
-
-Reviewed-by: Bill Wendling <morbo@google.com>
-
 > ---
->  kernel/bpf/verifier.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
+>  kernel/bpf/verifier.c | 27 ++++++++++++++++-----------
+>  1 file changed, 16 insertions(+), 11 deletions(-)
 >
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 014ee0953dbd..eb8c34db74c7 100644
+> index 1c040d27b8f6..e58b554e862b 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
-> @@ -1027,12 +1027,17 @@ static void *copy_array(void *dst, const void *src, size_t n, size_t size, gfp_t
+> @@ -1020,20 +1020,23 @@ static void *copy_array(void *dst, const void *src, size_t n, size_t size, gfp_t
+>         return dst ? dst : ZERO_SIZE_PTR;
+>  }
+>
+> -/* resize an array from old_n items to new_n items. the array is reallocated if it's too
+> - * small to hold new_n items. new items are zeroed out if the array grows.
+> +/* Resize an array from old_n items to *new_n items. The array is
+> + * reallocated if it's too small to hold *new_n items. New items are
+> + * zeroed out if the array grows. Allocation is rounded up to next kmalloc
+> + * bucket size to reduce frequency of resizing. *new_n contains the new
+> + * total number of items that will fit.
+>   *
+> - * Contrary to krealloc_array, does not free arr if new_n is zero.
+> + * Contrary to krealloc, does not free arr if new_n is zero.
 >   */
->  static void *realloc_array(void *arr, size_t old_n, size_t new_n, size_t size)
+> -static void *realloc_array(void *arr, size_t old_n, size_t new_n, size_t size)
+> +static void *realloc_array(void *arr, size_t old_n, size_t *new_n, size_t size)
 >  {
-> +       void *new_arr;
-> +
->         if (!new_n || old_n == new_n)
+>         size_t alloc_size;
+>         void *new_arr;
+>
+> -       if (!new_n || old_n == new_n)
+> +       if (!new_n || !*new_n || old_n == *new_n)
 >                 goto out;
 >
-> -       arr = krealloc_array(arr, new_n, size, GFP_KERNEL);
-> -       if (!arr)
-> +       new_arr = krealloc_array(arr, new_n, size, GFP_KERNEL);
-> +       if (!new_arr) {
-> +               kfree(arr);
->                 return NULL;
-> +       }
-> +       arr = new_arr;
+> -       alloc_size = kmalloc_size_roundup(size_mul(new_n, size));
+> +       alloc_size = kmalloc_size_roundup(size_mul(*new_n, size));
+>         new_arr = krealloc(arr, alloc_size, GFP_KERNEL);
+>         if (!new_arr) {
+>                 kfree(arr);
+> @@ -1041,8 +1044,9 @@ static void *realloc_array(void *arr, size_t old_n, size_t new_n, size_t size)
+>         }
+>         arr = new_arr;
 >
->         if (new_n > old_n)
->                 memset(arr + old_n * size, 0, (new_n - old_n) * size);
+> -       if (new_n > old_n)
+> -               memset(arr + old_n * size, 0, (new_n - old_n) * size);
+> +       *new_n = alloc_size / size;
+> +       if (*new_n > old_n)
+> +               memset(arr + old_n * size, 0, (*new_n - old_n) * size);
+>
+>  out:
+>         return arr ? arr : ZERO_SIZE_PTR;
+
+[..]
+
+> @@ -1074,7 +1078,7 @@ static int copy_stack_state(struct bpf_func_state *dst, const struct bpf_func_st
+>
+>  static int resize_reference_state(struct bpf_func_state *state, size_t n)
+>  {
+> -       state->refs = realloc_array(state->refs, state->acquired_refs, n,
+> +       state->refs = realloc_array(state->refs, state->acquired_refs, &n,
+>                                     sizeof(struct bpf_reference_state));
+>         if (!state->refs)
+>                 return -ENOMEM;
+
+Patches 1 & 2 look good, but not sure about this part. We later do the
+following in the same routine:
+
+state->acquired_refs = n;
+
+And acquire_reference_state() does "new_ofs = state->acquired_refs;" to append..
+
+Which changes semantics a bit? It used to mean array size, now it
+means array capacity.
+Should we keep this part as is but add a shortcut to realloc_array
+when ksize(ptr) == kmalloc_size_roundup(new size) -> reuse existing
+array?
+Or am I missing something? (haven't looked too deep)
+
+
+
+
+
+> @@ -1090,11 +1094,12 @@ static int grow_stack_state(struct bpf_func_state *state, int size)
+>         if (old_n >= n)
+>                 return 0;
+>
+> -       state->stack = realloc_array(state->stack, old_n, n, sizeof(struct bpf_stack_state));
+> +       state->stack = realloc_array(state->stack, old_n, &n,
+> +                                    sizeof(struct bpf_stack_state));
+>         if (!state->stack)
+>                 return -ENOMEM;
+>
+> -       state->allocated_stack = size;
+> +       state->allocated_stack = n * BPF_REG_SIZE;
+>         return 0;
+>  }
+>
 > --
 > 2.34.1
 >
