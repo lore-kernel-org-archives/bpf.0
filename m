@@ -2,63 +2,94 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62877C433FE
-	for <bpf@archiver.kernel.org>; Tue,  1 Nov 2022 16:27:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CA78C4332F
+	for <bpf@archiver.kernel.org>; Tue,  1 Nov 2022 16:27:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbiKAQ1j (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 1 Nov 2022 12:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59860 "EHLO
+        id S229457AbiKAQ14 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 1 Nov 2022 12:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiKAQ1i (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 1 Nov 2022 12:27:38 -0400
+        with ESMTP id S230030AbiKAQ1z (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 1 Nov 2022 12:27:55 -0400
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F541A213;
-        Tue,  1 Nov 2022 09:27:35 -0700 (PDT)
-Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF511CFC9;
+        Tue,  1 Nov 2022 09:27:52 -0700 (PDT)
+Received: from sslproxy05.your-server.de ([78.46.172.2])
         by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
         (Exim 4.92.3)
         (envelope-from <daniel@iogearbox.net>)
-        id 1optic-000Ate-8J; Tue, 01 Nov 2022 17:02:26 +0100
+        id 1optT4-0009B8-27; Tue, 01 Nov 2022 16:46:22 +0100
 Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <daniel@iogearbox.net>)
-        id 1optib-0007FE-U4; Tue, 01 Nov 2022 17:02:25 +0100
-Subject: Re: [PATCH] bpftool: Support use full prog name in prog subcommand
-To:     Tao Chen <chentao.kernel@linux.alibaba.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <c26d1dde6d1665a9195b054e5fd209a32c94e490.1667313454.git.chentao.kernel@linux.alibaba.com>
- <c26d1dde6d1665a9195b054e5fd209a32c94e490.1667313454.git.chentao.kernel@linux.alibaba.com>
+        id 1optT3-000TRb-I0; Tue, 01 Nov 2022 16:46:21 +0100
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix strncpy() fortify warning
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     andrii.nakryiko@gmail.com, andrii@kernel.org, ast@kernel.org,
+        bpf@vger.kernel.org, david.laight@aculab.com, haoluo@google.com,
+        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        martin.lau@linux.dev, mykolal@fb.com, rongtao@cestc.cn,
+        sdf@google.com, shuah@kernel.org, song@kernel.org, yhs@fb.com
+References: <fc8634e8-6efd-9911-cab4-07ad6ba4ad33@iogearbox.net>
+ <tencent_630BF3724BC5EA157B341EB1C7604EE83705@qq.com>
 From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <7e775aff-a4d3-f1b0-ea55-06a30097348c@iogearbox.net>
-Date:   Tue, 1 Nov 2022 17:02:25 +0100
+Message-ID: <fe0e300f-a857-dc42-f9f8-c524be6b212f@iogearbox.net>
+Date:   Tue, 1 Nov 2022 16:46:20 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <c26d1dde6d1665a9195b054e5fd209a32c94e490.1667313454.git.chentao.kernel@linux.alibaba.com>
+In-Reply-To: <tencent_630BF3724BC5EA157B341EB1C7604EE83705@qq.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: daniel@iogearbox.net
 X-Virus-Scanned: Clear (ClamAV 0.103.6/26706/Tue Nov  1 08:52:34 2022)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 11/1/22 3:38 PM, Tao Chen wrote:
-> Now that the commit: <b662000aff84> ("bpftool: Adding support for BTF
-> program names") supported show the full prog name, we can also use
-> the full prog name more than 16 (BPF_OBJ_NAME_LEN) chars in prog
-> subcommand, such as "bpftool prog show name PROG_NAME".
+On 11/1/22 3:23 PM, Rong Tao wrote:
+> From: Rong Tao <rongtao@cestc.cn>
 > 
-> Signed-off-by: Tao Chen <chentao.kernel@linux.alibaba.com>
+> move libbpf_strlcpy() to bpf_util.h, and replace strncpy() with
+> libbpf_strlcpy(), fix compile warning.
+> 
+> Compile samples/bpf, warning:
+> $ cd samples/bpf
+> $ make
+> ...
+> cgroup_helpers.c: In function ‘__enable_controllers’:
+> cgroup_helpers.c:80:17: warning: ‘strncpy’ specified bound 4097 equals destination size [-Wstringop-truncation]
+>     80 |                 strncpy(enable, controllers, sizeof(enable));
+>        |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Signed-off-by: Rong Tao <rongtao@cestc.cn>
 
-Please rebase against bpf-next, this does not apply cleanly.
+Nope, BPF CI fails once again with:
+
+https://github.com/kernel-patches/bpf/actions/runs/3370230622/jobs/5590876906
+
+   [...]
+     TEST-OBJ [test_progs-no_alu32] connect_ping.test.o
+     TEST-OBJ [test_progs-no_alu32] map_kptr.test.o
+   In file included from /tmp/work/bpf/bpf/tools/testing/selftests/bpf/prog_tests/perf_branches.c:7:
+   /tmp/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf_internal.h:200:20: error: redefinition of 'libbpf_strlcpy'
+   static inline void libbpf_strlcpy(char *dst, const char *src, size_t sz)
+                      ^
+   /tmp/work/bpf/bpf/tools/testing/selftests/bpf/bpf_util.h:29:20: note: previous definition is here
+   static inline void libbpf_strlcpy(char *dst, const char *src, size_t sz)
+                      ^
+   1 error generated.
+     TEST-OBJ [test_progs-no_alu32] hash_large_key.test.o
+   make: *** [Makefile:539: /tmp/work/bpf/bpf/tools/testing/selftests/bpf/no_alu32/perf_branches.test.o] Error 1
+   make: *** Waiting for unfinished jobs....
+   make: Leaving directory '/tmp/work/bpf/bpf/tools/testing/selftests/bpf'
+   Error: Process completed with exit code 2.
+
+Please do not send broken stuff that was not even compile tested.
+
+Here's a small howto for running BPF selftests:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/tree/tools/testing/selftests/bpf/README.rst#n48
