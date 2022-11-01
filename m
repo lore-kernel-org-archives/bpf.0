@@ -2,22 +2,22 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1952C4332F
-	for <bpf@archiver.kernel.org>; Tue,  1 Nov 2022 14:39:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00F36C433FE
+	for <bpf@archiver.kernel.org>; Tue,  1 Nov 2022 14:39:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229457AbiKAOjB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 1 Nov 2022 10:39:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52490 "EHLO
+        id S230259AbiKAOjF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 1 Nov 2022 10:39:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiKAOjA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 1 Nov 2022 10:39:00 -0400
+        with ESMTP id S229717AbiKAOjE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 1 Nov 2022 10:39:04 -0400
 Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762B03895;
-        Tue,  1 Nov 2022 07:38:56 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=chentao.kernel@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VTjllWc_1667313514;
-Received: from VM20210331-5.tbsite.net(mailfrom:chentao.kernel@linux.alibaba.com fp:SMTPD_---0VTjllWc_1667313514)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA57120B8;
+        Tue,  1 Nov 2022 07:39:03 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=chentao.kernel@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VTjllex_1667313533;
+Received: from VM20210331-5.tbsite.net(mailfrom:chentao.kernel@linux.alibaba.com fp:SMTPD_---0VTjllex_1667313533)
           by smtp.aliyun-inc.com;
-          Tue, 01 Nov 2022 22:38:52 +0800
+          Tue, 01 Nov 2022 22:39:00 +0800
 From:   Tao Chen <chentao.kernel@linux.alibaba.com>
 To:     Quentin Monnet <quentin@isovalent.com>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -31,12 +31,15 @@ To:     Quentin Monnet <quentin@isovalent.com>,
 Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         Tao Chen <chentao.kernel@linux.alibaba.com>
 Subject: [PATCH] bpftool: Support use full prog name in prog subcommand
-Date:   Tue,  1 Nov 2022 22:38:32 +0800
-Message-Id: <c26d1dde6d1665a9195b054e5fd209a32c94e490.1667313454.git.chentao.kernel@linux.alibaba.com>
+Date:   Tue,  1 Nov 2022 22:38:33 +0800
+Message-ID: <c26d1dde6d1665a9195b054e5fd209a32c94e490.1667313454.git.chentao.kernel@linux.alibaba.com>
 X-Mailer: git-send-email 2.2.1
+In-Reply-To: <c26d1dde6d1665a9195b054e5fd209a32c94e490.1667313454.git.chentao.kernel@linux.alibaba.com>
+References: <c26d1dde6d1665a9195b054e5fd209a32c94e490.1667313454.git.chentao.kernel@linux.alibaba.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
+Message-ID: <20221101143833.GDTvwl11sbMMbld8Fovly3gwVCLYf4eYpkY8EIvjKrk@z>
 
 Now that the commit: <b662000aff84> ("bpftool: Adding support for BTF
 program names") supported show the full prog name, we can also use
