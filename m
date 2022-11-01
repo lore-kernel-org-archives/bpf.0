@@ -2,242 +2,104 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89ACAC433FE
-	for <bpf@archiver.kernel.org>; Tue,  1 Nov 2022 11:01:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C402AC433FE
+	for <bpf@archiver.kernel.org>; Tue,  1 Nov 2022 11:03:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230057AbiKALBT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 1 Nov 2022 07:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42062 "EHLO
+        id S229964AbiKALDu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 1 Nov 2022 07:03:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbiKALBS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 1 Nov 2022 07:01:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F2D193C3
-        for <bpf@vger.kernel.org>; Tue,  1 Nov 2022 04:00:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667300419;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tUgPMvy3VGkHcduOGHC0NN08qyPSt72BZ+gPr23LqZk=;
-        b=IBXqK7w33+EW4+pEkVfOyegsO5Xt/6faTMFHzyMwJBfr5GfY6gHCIdVrutbbGUBuzWOkjM
-        Ykbc9mRnDGtpZ2FEOVj0hHi3iASprIYhnTQF6qHIUPPeOM0ytZt6c38VMWeH8IyO/AFWEN
-        LaDwzclDbVLE4YrmxLiqV4NqiD1+xlM=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-142-KRAMrAGXMR2TKPJOneP9PQ-1; Tue, 01 Nov 2022 07:00:18 -0400
-X-MC-Unique: KRAMrAGXMR2TKPJOneP9PQ-1
-Received: by mail-qt1-f199.google.com with SMTP id fb5-20020a05622a480500b003a525d52abcso3678443qtb.10
-        for <bpf@vger.kernel.org>; Tue, 01 Nov 2022 04:00:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tUgPMvy3VGkHcduOGHC0NN08qyPSt72BZ+gPr23LqZk=;
-        b=aTItkIgBu0h0jeykWmLkYs/w7zfBwQc5Kp6UlMT6gSfBeD3ueuXeQlnWwgMnA7ivLV
-         5pimiHfrxLiyWWLmitzeQLWUe2WciKjqjPdZA1NkY58hZPCuiQWTelZFtPcMB2TyZQQk
-         gywZEBUKNaetJFokuQTr44Rx7yArZP3oNGoiApM74Ubio3a4kD1yOjUqw9oXcyQcgpH/
-         Kxt2Nj4soyTEDxNiGPPdu9CKAN5b/9DxWzFdW/WV/UkuZ85D5QDg0B5tMXKbZZ5wjI2h
-         xuf/neIC2YHMV5QrvCcTuvnAUJ19GJYyN4ZapSWUUGBWU9ZgrAU44QURUBb5TDVq/ACg
-         mfmg==
-X-Gm-Message-State: ACrzQf2rPgaTvxns4ENvbUsCugZ5aEPijFFFMkjeBRI5gT2dpG6iAKIM
-        eQ3x4qzn6DUx5SXkIkIkXEG/6K4qL09iIEkmozGezGGF5hfrMqN3BabE/AK/8Gs4Tyl/h7Kfeft
-        N2G/2eq60KpZ/
-X-Received: by 2002:a05:622a:4c8e:b0:3a5:26a5:51d4 with SMTP id ez14-20020a05622a4c8e00b003a526a551d4mr7391702qtb.92.1667300417464;
-        Tue, 01 Nov 2022 04:00:17 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7lu7pC7PKXWeJgg25nKoOsyXZDObeXT8CM27oEjHGETpWGLJhnxME3nRTHJByFL0pfnvkH5g==
-X-Received: by 2002:a05:622a:4c8e:b0:3a5:26a5:51d4 with SMTP id ez14-20020a05622a4c8e00b003a526a551d4mr7391691qtb.92.1667300417166;
-        Tue, 01 Nov 2022 04:00:17 -0700 (PDT)
-Received: from [192.168.0.4] ([78.17.46.82])
-        by smtp.gmail.com with ESMTPSA id b13-20020ac812cd000000b0039492d503cdsm4090253qtj.51.2022.11.01.04.00.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Nov 2022 04:00:16 -0700 (PDT)
-Message-ID: <22732cba-8ecc-1c79-a777-3df40c6923bb@redhat.com>
-Date:   Tue, 1 Nov 2022 11:00:15 +0000
+        with ESMTP id S230080AbiKALDr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 1 Nov 2022 07:03:47 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC711A053;
+        Tue,  1 Nov 2022 04:03:34 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N1nDy5qmvzHvXt;
+        Tue,  1 Nov 2022 19:03:14 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 1 Nov 2022 19:03:06 +0800
+Received: from [10.67.108.67] (10.67.108.67) by dggpemm500013.china.huawei.com
+ (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 1 Nov
+ 2022 19:03:06 +0800
+Message-ID: <be794dca-f3ad-8fe4-98f2-2b17ea8ad72b@huawei.com>
+Date:   Tue, 1 Nov 2022 19:03:06 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.0
-Subject: Re: [PATCH bpf-next v1] bpf, docs: document
- BPF_MAP_TYPE_ARRAY_OF_MAPS and *_HASH_OF_MAPS
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0
+Subject: Re: [PATCH] netfilter: nf_nat: Fix possible memory leak in
+ nf_nat_init()
 Content-Language: en-US
-To:     Donald Hunter <donald.hunter@gmail.com>, bpf@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20221010112154.39494-1-donald.hunter@gmail.com>
-From:   Maryam Tahhan <mtahhan@redhat.com>
-In-Reply-To: <20221010112154.39494-1-donald.hunter@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     <linux-kernel@vger.kernel.org>, <netfilter-devel@vger.kernel.org>,
+        <coreteam@netfilter.org>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>
+CC:     <pablo@netfilter.org>, <kadlec@netfilter.org>, <fw@strlen.de>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <john.fastabend@gmail.com>,
+        <lorenzo@kernel.org>, <ast@kernel.org>
+References: <20221101093430.126571-1-chenzhongjin@huawei.com>
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+In-Reply-To: <20221101093430.126571-1-chenzhongjin@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.108.67]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 10/10/2022 12:21, Donald Hunter wrote:
-> Add documentation for the ARRAY_OF_MAPS and HASH_OF_MAPS map types,
-> including usage and examples.
-> 
-> Signed-off-by: Donald Hunter <donald.hunter@gmail.com>
+On 2022/11/1 17:34, Chen Zhongjin wrote:
+> In nf_nat_init(), register_nf_nat_bpf() can fail and return directly
+> without any error handling.
+> Then nf_nat_bysource will leak and registering of &nat_net_ops won't
+> be reverted. This leaves wild ops in subsystem linkedlist and when
+> another module tries to call register_pernet_operations() it triggers
+> page fault:
+>
+>   BUG: unable to handle page fault for address: fffffbfff81b964c
+>   RIP: 0010:register_pernet_operations+0x1b9/0x5f0
+>   Call Trace:
+>   <TASK>
+>    register_pernet_subsys+0x29/0x40
+>    ebtables_init+0x58/0x1000 [ebtables]
+>    ...
+>
+> Fixes: 820dc0523e05 ("net: netfilter: move bpf_ct_set_nat_info kfunc in nf_nat_bpf.c")
+> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 > ---
->   Documentation/bpf/map_of_maps.rst | 145 ++++++++++++++++++++++++++++++
->   1 file changed, 145 insertions(+)
->   create mode 100644 Documentation/bpf/map_of_maps.rst
-> 
-> diff --git a/Documentation/bpf/map_of_maps.rst b/Documentation/bpf/map_of_maps.rst
-> new file mode 100644
-> index 000000000000..16fcda8720de
-> --- /dev/null
-> +++ b/Documentation/bpf/map_of_maps.rst
-> @@ -0,0 +1,145 @@
-> +.. SPDX-License-Identifier: GPL-2.0-only
-> +.. Copyright (C) 2022 Red Hat, Inc.
-> +
-> +========================================================
-> +BPF_MAP_TYPE_ARRAY_OF_MAPS and BPF_MAP_TYPE_HASH_OF_MAPS
-> +========================================================
-> +
-> +.. note::
-> +   - ``BPF_MAP_TYPE_ARRAY_OF_MAPS`` and ``BPF_MAP_TYPE_HASH_OF_MAPS`` were
-> +     introduced in kernel version 4.12.
-> +
-> +``BPF_MAP_TYPE_ARRAY_OF_MAPS`` and ``BPF_MAP_TYPE_HASH_OF_MAPS`` provide general
-> +purpose support for map in map storage. One level of nesting is supported, where
-> +an outer map contains instances of a single type of inner map, for example
-> +``array_of_maps->sock_map``.
-> +
-> +When creating an outer map, an inner map instance is used to initialize the
-> +metadata that the outer map holds about its inner maps. This inner map has a
-> +separate lifetime from the outer map and can be deleted after the outer map has
-> +been created.
-> +
-> +The outer map supports element update and delete from user space using the
-> +syscall API. A BPF program is only allowed to do element lookup in the outer
-> +map.
-> +
-> +.. note::
-> +   - Multi-level nesting is not supported.
-> +   - Any BPF map type can be used as an inner map, except for
-> +     ``BPF_MAP_TYPE_PROG_ARRAY``.
-> +   - A BPF program cannot update or delete outer map entries.
-> +
-> +Array of Maps
-> +-------------
-> +
-> +For ``BPF_MAP_TYPE_ARRAY_OF_MAPS`` the key is an unsigned 32-bit integer index
-> +into the array. The array is a fixed size with `max_entries` elements that are
-> +zero initialized when created.
-> +
-> +Hash of Maps
-> +------------
-> +
-> +For ``BPF_MAP_TYPE_HASH_OF_MAPS`` the key type can be chosen when defining the
-> +map.
-> +
-> +The kernel is responsible for allocating and freeing key/value pairs, up
-> +to the max_entries limit that you specify. Hash maps use pre-allocation
-> +of hash table elements by default. The ``BPF_F_NO_PREALLOC`` flag can be
-> +used to disable pre-allocation when it is too memory expensive.
-> +
-> +Usage
-> +=====
-> +
-> +.. c:function::
-> +   void *bpf_map_lookup_elem(struct bpf_map *map, const void *key)
-> +
-> +Inner maps can be retrieved using the ``bpf_map_lookup_elem()`` helper. This
-> +helper returns a pointer to the inner map, or ``NULL`` if no entry was found.
-> +
-> +Examples
-> +========
-> +
-> +Kernel BPF
-> +----------
-> +
-> +This snippet shows how to create an array of devmaps in a BPF program. Note that
-> +the outer array can only be modified from user space using the syscall API.
-> +
-> +.. code-block:: c
-> +
-> +    struct redirect_map {
-> +            __uint(type, BPF_MAP_TYPE_DEVMAP);
-> +            __uint(max_entries, 32);
-> +            __type(key, enum skb_drop_reason);
-> +            __type(value, __u64);
-> +    } redirect_map SEC(".maps");
-> +
-> +    struct {
-> +            __uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
-> +            __uint(max_entries, 2);
-> +            __uint(key_size, sizeof(int));
-> +            __uint(value_size, sizeof(int));
-> +            __array(values, struct redirect_map);
-> +    } outer_map SEC(".maps");
-> +
-Maybe worth sticking to the same __type declarations in both map structs 
-for the key and value params?
+>   net/netfilter/nf_nat_core.c | 7 ++++++-
+>   1 file changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/net/netfilter/nf_nat_core.c b/net/netfilter/nf_nat_core.c
+> index 18319a6e6806..b24b4dfc1ca4 100644
+> --- a/net/netfilter/nf_nat_core.c
+> +++ b/net/netfilter/nf_nat_core.c
+> @@ -1152,7 +1152,12 @@ static int __init nf_nat_init(void)
+>   	WARN_ON(nf_nat_hook != NULL);
+>   	RCU_INIT_POINTER(nf_nat_hook, &nat_hook);
+>   
+> -	return register_nf_nat_bpf();
+> +	ret = register_nf_nat_bpf();
+> +	if (ret < 0) {
+> +		kvfree(nf_nat_bysource);
+> +		unregister_pernet_subsys(&nat_net_ops);
+> +	}
+> +	return ret;
+>   }
 
-Other than that LGTM.
+I noticed that follow_master_nat should also be unregistered.
 
-> +This snippet shows how to lookup an outer map to retrieve an inner map.
-> +
-> +.. code-block:: c
-> +
-> +    SEC("xdp")
-> +    int redirect_by_priority(struct xdp_md *ctx) {
-> +            struct bpf_map *devmap;
-> +            int action = XDP_PASS;
-> +            int index = 0;
-> +
-> +            devmap = bpf_map_lookup_elem(&outer_arr, &index);
-> +            if (!devmap)
-> +                    return XDP_PASS;
-> +
-> +            /* use inner devmap here */
-> +
-> +            return action;
-> +    }
-> +
-> +User Space
-> +----------
-> +
-> +This snippet shows how to create an array based outer map:
-> +
-> +.. code-block:: c
-> +
-> +    int create_outer_array(int inner_fd) {
-> +            int fd;
-> +            LIBBPF_OPTS(bpf_map_create_opts, opts);
-> +            opts.inner_map_fd = inner_fd;
-> +            fd = bpf_map_create(BPF_MAP_TYPE_ARRAY_OF_MAPS,
-> +                                "example_array",       /* name */
-> +                                sizeof(__u32),         /* key size */
-> +                                sizeof(__u32),         /* value size */
-> +                                256,                   /* max entries */
-> +                                &opts);                /* create opts */
-> +            return fd;
-> +    }
-> +
-> +
-> +This snippet shows how to add an inner map to an outer map:
-> +
-> +.. code-block:: c
-> +
-> +    int add_devmap(int outer_fd, int index, const char *name) {
-> +            int fd, ret;
-> +
-> +            fd = bpf_map_create(BPF_MAP_TYPE_DEVMAP, name,
-> +                                sizeof(__u32), sizeof(__u32), 256, NULL);
-> +            if (fd < 0)
-> +                    return fd;
-> +
-> +            ret = bpf_map_update_elem(outer_fd, &index, &fd, BPF_NOEXIST);
-> +            return ret;
-> +    }
-> +
-> +References
-> +==========
-> +
-> +- https://lore.kernel.org/netdev/20170322170035.923581-3-kafai@fb.com/
-> +- https://lore.kernel.org/netdev/20170322170035.923581-4-kafai@fb.com/
+Going to send v2, discard this one.
 
+
+Best,
+
+Chen
+
+>   
+>   static void __exit nf_nat_cleanup(void)
