@@ -2,237 +2,344 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECFC6C433FE
-	for <bpf@archiver.kernel.org>; Tue,  1 Nov 2022 15:37:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6598EC4332F
+	for <bpf@archiver.kernel.org>; Tue,  1 Nov 2022 16:02:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231298AbiKAPhI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 1 Nov 2022 11:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
+        id S229767AbiKAQCZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 1 Nov 2022 12:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbiKAPhH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 1 Nov 2022 11:37:07 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1239818B35
-        for <bpf@vger.kernel.org>; Tue,  1 Nov 2022 08:37:07 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A1D9iBc030983
-        for <bpf@vger.kernel.org>; Tue, 1 Nov 2022 08:37:06 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : mime-version; s=s2048-2021-q4;
- bh=LLuYyT3nM1YT/yf+lyhZODNi4WSfazCLcCAdjh3xuWA=;
- b=GE7f3tVSoJHdDqS01RQZkP4OoJPYNclJVXwZ1onsRwGbe8Ei/8HizCc3W1jLROqAxc2s
- 1yxdO7x5WR8xtHGpt1p3fV9QGWUuig4sBGT774sm66zHOI0KGraNFXXm5PIddR9Okyhk
- FzVeMdwME30k0kxtYWPP6u6A1wm1Roxy2rpes6jbZvQo0YEWOb45kyyB6+PyFRorDdM6
- 7+HUUMWiwPORu0pC2GS6+AzT4QKabibnj81ozl6ByBMYvq/psb2CO3QyybGfZlva5jXO
- sbMrovAg4Epo7s8zQKoY4lxbOwFZh7bFdy0RHrTS62hpJTR+rZHhpcL2hUaCol2DhJtX 3g== 
-Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam04lp2173.outbound.protection.outlook.com [104.47.73.173])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3kjn3fg83j-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 01 Nov 2022 08:37:06 -0700
+        with ESMTP id S229553AbiKAQCY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 1 Nov 2022 12:02:24 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A33CE07
+        for <bpf@vger.kernel.org>; Tue,  1 Nov 2022 09:02:23 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A1F4EHG009892;
+        Tue, 1 Nov 2022 16:02:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=1w3C7Q8mdzm0ZrkSUQaLRAbnH04EVS1ws5H6kK8iU7M=;
+ b=FW8WGyyw86fTFYk89lhHNZuTRVUU9RjqxvCXAxu0ADKfTn1w/W8VvEC7Pq+ah9A4rByG
+ 6wfs78vEqqX9vjDgsXywpmfEraDvMCL/Lv0w068cDlcisjTfPj9p1W/zQNxzqilV9guM
+ ZCXGA+xzcM7OIXLXEezs/VsboMj06AFF7kkQRlEbFgX4E1IALl6ZKSmiXkD+FX2scs0H
+ klPlTy0xQkv4QYNr/d374KNbFJwIcRmfDXnTkktnpCxmO711NS4racu/HG1NeW14ywm5
+ V19hYYt3aDUOkrAuYUwVGbwI0irKqYTWlUK8Jju8bssiB6/kMtKP+liEg/cYjnTWvT09 ug== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kgvqtf49h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 01 Nov 2022 16:02:00 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2A1Fbp0T014174;
+        Tue, 1 Nov 2022 16:01:59 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3kgtmamvhg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 01 Nov 2022 16:01:59 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LVc/j2ufGUzzPV/tQ19xMVY+gGQ1/b5QV/Zajp4MciPEE7+AvKoEuJ1LIrWvENVidGX/oNLY+UjiK88kRpw/CrdZGsex0z/cz4JUrL7gop5ulNOTZxHxLFqv+V5HL8ff3ss8quWRGWD56ym8ZIvcf9TDUNXHU+W2xEmpXuhdrHodmcSdKRwkNcvLJXshIAGGoPG5y0bWOnnAH6sAlJZQZx20P+hSpSxTzObyezqKplhCThe00nL9RSIUxoWI7R9KOyT1q7rKjBcDC1lTY5UrND52H7lQ2eYybxXRPJQB9NDsg6AyNL5vtZ7SWEOg8SbI9aOIAHvcoGBusJxp3oz4dw==
+ b=UqfCQC2zbzR4JBF+acVaE/qmTEUXYjTu8KpvMQ6IsnB61VU+fHqW/Wvl0ZvpnaKIxra8T0hq5PwehC0eq5mOe+vpID0zf/Q5w3WiC1BMYl7mGsu2SFdtSaF48nqncc0npSRS2KcYSy648C02jeFfwz2zpk58ou1IT2+7WRpPGmtYKhfvXJm6ekMF2Cg0Dl5YjAwIULXYwwkzV9t4tRLnuiF4auirPIepeRQalNOQ/WCGs+eKJGAz32UvOz1RzzGmDjiiBeE99iU4CpwfcjpuvqGIDmzPJ/IRzDsSupqmPVOmhTLNSvwzenSRNvKJIRdMXR+H+0Pa+WSt/YqHQYTofg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LLuYyT3nM1YT/yf+lyhZODNi4WSfazCLcCAdjh3xuWA=;
- b=jwj+Ezymn2rcxEMbFs7v3csqPgeUUzEheh5SRJQoAK90tfE4NvjNhj2kFeRHzJfqIjHFpgJgpL1vNEyIRiv4C6YCB5koyLhcSgpBIGqgYgV6DVr80uLxcmvdRhKyRnZPFB/25vXTVgagO0DQpQvZZ4W2TPmbjxQnDv0FTZmwHNvOddX26aTs6kiPj6mcIJhOOAO+dtKCYCrbjBA25QgNL6PJ71CmLTRJTa47CG/VkfvL9V+1hIG7YQFsw/WLUKMZr/3aHrUu3cQAIvCtKYPvXVt3qBAN1ap/u0Tj7VxuBMltintDcprJb5tBNsORePBzcUBS48qgxpZZSNTcDavnaA==
+ bh=1w3C7Q8mdzm0ZrkSUQaLRAbnH04EVS1ws5H6kK8iU7M=;
+ b=aXuN3aIan+Z3saYBqLZ+rbGr7vpPiGRxFdwOhoMQL2RgjLUA+8NnduAjQQ0qTVEmBOzhLgmQ2E5B7NDc/QxwPutPmBlIE0M6ZHi+2PMV0+FTCroukOp/hG9Y2oMQ1Wm7b0eVVkHQDxr2jjbPk04M8fqyB/TX+LEjoIx2nBGtWQu3YEEzfB+whRnaUymFqrPHMNrR6kakqSTtn+KuUENCa632qogmSMwNnDdDX7rRkdT3xcwDGSeHVqjd2ZJTlGDbkCsNEUaWg+XwV/b+o4jFU/XWN2h5tv6DtvX9FtPaUYcYtP5xEBSzYJ0vLb0BMykR3Q9bvdW7Sww87ES24XUKLg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from MN2PR15MB3213.namprd15.prod.outlook.com (2603:10b6:208:3d::12)
- by BN6PR15MB1908.namprd15.prod.outlook.com (2603:10b6:405:4f::16) with
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1w3C7Q8mdzm0ZrkSUQaLRAbnH04EVS1ws5H6kK8iU7M=;
+ b=W596TVULcpUJghn+2bVUrYMMnXEZV56Zw0TIHo58f51JhW/7dzI9LYRvREx4ftXkQkC8nk1jugBmEB8ditZjLMjxcI6VdLRORUinC0IcNnaLIJckbRTJ/st2xFuOmshBbl0hdkMYgK5NZHCZLlZWRfgFLONGAmsg7W4inNJdXgM=
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
+ by PH0PR10MB4631.namprd10.prod.outlook.com (2603:10b6:510:41::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.19; Tue, 1 Nov
- 2022 15:37:00 +0000
-Received: from MN2PR15MB3213.namprd15.prod.outlook.com
- ([fe80::939f:e752:d037:b8fe]) by MN2PR15MB3213.namprd15.prod.outlook.com
- ([fe80::939f:e752:d037:b8fe%7]) with mapi id 15.20.5769.021; Tue, 1 Nov 2022
- 15:37:00 +0000
-From:   Mykola Lysenko <mykolal@meta.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-CC:     Mykola Lysenko <mykolal@meta.com>,
-        Mykola Lysenko <mykolal@meta.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        Martin Lau <kafai@meta.com>, Kernel Team <Kernel-team@fb.com>
-Subject: Re: [PATCH bpf-next] selftests: fix test group SKIPPED result
-Thread-Topic: [PATCH bpf-next] selftests: fix test group SKIPPED result
-Thread-Index: AQHY6vaGM1jKXWJApUmeK34cLDMAa64kcuqAgAS8pICAAPVzgIAAFKIA
-Date:   Tue, 1 Nov 2022 15:37:00 +0000
-Message-ID: <4523359B-B8E2-4DC3-9209-CD789E772906@fb.com>
-References: <20221028175530.1413351-1-cerasuolodomenico@gmail.com>
- <635c64abe004c_b1ba20850@john.notmuch>
- <DC4AB44C-734B-46BC-A9E2-9A24C56F7F9A@fb.com>
- <7cedf721-0438-ba98-1e9a-7a07985d88b1@iogearbox.net>
-In-Reply-To: <7cedf721-0438-ba98-1e9a-7a07985d88b1@iogearbox.net>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.21; Tue, 1 Nov
+ 2022 16:01:57 +0000
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::8e3c:584c:3f1a:7825]) by BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::8e3c:584c:3f1a:7825%6]) with mapi id 15.20.5769.021; Tue, 1 Nov 2022
+ 16:01:57 +0000
+Subject: Re: [RFC bpf-next 00/12] Use uapi kernel headers with vmlinux.h
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Yonghong Song <yhs@meta.com>
+Cc:     Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
+        ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+        kernel-team@fb.com, yhs@fb.com, arnaldo.melo@gmail.com
+References: <20221025222802.2295103-1-eddyz87@gmail.com>
+ <CAEf4BzbScntAd4Yh5AWw+7bZhooYYaomwLYiuM0+iBtx_7LKoQ@mail.gmail.com>
+ <f62834eb-fd3f-ba55-2cec-c256c328926e@meta.com>
+ <CAEf4BzYT4pwmw64DaCTxR3_QjO5RRVadqVLO0h-hNa-+xOyLZw@mail.gmail.com>
+ <af1facf9-7bc8-8a3d-0db4-7b3f333589a2@meta.com>
+ <CAEf4BzZE7boex4KBjMmhJ4Nib6BA71-pf5jiAg74FjEdr_2e6A@mail.gmail.com>
+From:   Alan Maguire <alan.maguire@oracle.com>
+Message-ID: <ea841d91-a43f-a6e0-e8ce-90f9b2d3f77c@oracle.com>
+Date:   Tue, 1 Nov 2022 16:01:51 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.3
+In-Reply-To: <CAEf4BzZE7boex4KBjMmhJ4Nib6BA71-pf5jiAg74FjEdr_2e6A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN2PR15MB3213:EE_|BN6PR15MB1908:EE_
-x-ms-office365-filtering-correlation-id: acedd5a5-7bd1-447b-b8da-08dabc1eeb2f
-x-fb-source: Internal
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: xve8MJcOVAlUHZ5r/AbUrlgLI+u2mMpDmfaPDbXhE3HmyT3fsDdRBpa+j/fMFZA8q1orZSvqiElR6VYmyUvo6s4VAZ/wtdqINhUPucJuhYq6I1pef2R6wGtw2fXyf9UrIga+zWLkMW/5AOlF+HQ3tD1GWMMzp7stI+goY0AMmG6sKD+t9Q9GksxtekWf2uMsh/eY20L0JP/GkHjTblM7kpnJreSTksmHgV/ou+p8qBu1QpHTqKRVtIRucU9SkoJbMLjlfEGLgd2dgq1yPEYJ0VUV8sCwZw9F74UBFgMTmbXdFEaqVtkJ1349QDkdiBp2Xsh0kpgTG1JwnnsBNAs6djrLghxWfDOF5ecvPxiUQ828YfOvuAqkufJmOUqX678Z5eBvHogWwEjtoHLtl1e1wU+TmV9DMhLZP1l5/WpTvzF22sSxAk/mLKA3Tk0aRNy3EhqcxSsQqMm4060/SVY9bfodqJCKaFdf+b/E/Hpz387BASRZbPyg7gQ2I9vvLVxjEjxkxqbnjZBC1qpnB3LZs99CHyH1UHMQwh+ng0LRRdQJreXUKgTl9lqvDZzniBYxMEStRFOt25ORJn9pLlJP5MjyrL+6aJNmQq0EFYc2DzkIuI+CbNx/nWsTgEWDUbrXGd0W4QhCsnAFA/x6Ohi63+UqYh0YQPAhHrPXHwOIaQuPju3AykCbMHcZ20X3BmpT4HCEQStIiWiDLDopwyJLBKzdeMjkcfDHymm79O/UEFZGeFtpGgw4iat5O0PQLOkOaK+d7L3pSSUicLPzOtArGrLkyvVn/z4uimQ5KZllHeI=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR15MB3213.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(346002)(376002)(136003)(366004)(451199015)(36756003)(478600001)(8936002)(33656002)(5660300002)(316002)(71200400001)(38070700005)(83380400001)(76116006)(66946007)(66446008)(64756008)(66476007)(8676002)(91956017)(4326008)(66556008)(54906003)(41300700001)(6916009)(6486002)(2906002)(9686003)(6512007)(186003)(122000001)(86362001)(6506007)(38100700002)(53546011);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?QzW5t3ytn4D5tIIAvsY9JDgSJJQ3HpWK8M2nN5lwWWSPzdZP/riQ9WfBxz2Q?=
- =?us-ascii?Q?rfIW1s2ii2C58YXQ4RfFj7D4ixKfttHHhv3q9ZPvj9b3jaGtByl33vEUSc1n?=
- =?us-ascii?Q?FNgAMWmQzFBjWfEaC1VNLOgM04tx3T3SRQea9aGi1KyIeE/AYgM+NioBs3Cu?=
- =?us-ascii?Q?Puz+9jS2Ry6x8Pa/mUXxjpzgiY7AH0UK/ancJzw3xjmcex7iQAC2eraeiJIa?=
- =?us-ascii?Q?jZZ0Za/r6t5UczUlkpuUtLwWj9JFOnYv8wcMJNK9JcBtibNd4Jube3s0J9w2?=
- =?us-ascii?Q?42Yo6JZOvC9LYeyeeXWgi58TcbDNrsrx/S31BCekBv6WKHHnjpY14mm9+qXN?=
- =?us-ascii?Q?QFa3eQyyvbDtawWCVy3vN79Z04mct4v3ECBH0lSjOSQynVo8GuU4jqQGvShW?=
- =?us-ascii?Q?RRAFVzceLiFv8FfwFT9bXGneXNcd9h5Vodbwvzt9QDuRd/aa6YFg06Akdx/S?=
- =?us-ascii?Q?bnKykqPWx4GK2KgkI4Fv2VVCezhuwi9HBWLEFgbk4FLla1hTBrVGQadsRCk0?=
- =?us-ascii?Q?E40laHaPiasetqaeNqUlgwLnMvqeCFcHEIbRZ3lVrt602a7DaVuejy3vvkve?=
- =?us-ascii?Q?tNp/aypUN1c46bVuha8IiknXgOgrx1SgLmBXJBQmtPM1W/7v18QV1IJAydJq?=
- =?us-ascii?Q?yIsRyCEbOauqaJPsk1LItRjUfq3r3JPpkNB9HZmITUcb+1MpZCf1YUZNHmMv?=
- =?us-ascii?Q?zsctU2UzG1QjPZ6LY93NePSb7MNGA1VKE8cxeLafZ1YwWzPz7CBdJvST1PaK?=
- =?us-ascii?Q?Hjew4VU9uPHKBAB2CC2i1a5DYVwimaRtIdBNxPBorVmSu7Rk1ZPB4s3lv3Uc?=
- =?us-ascii?Q?4kXA43ga0FbaNcAkoSuP2LoRoWT4A0V/NDC4fBVWODmx0b/tk9pzUNO3e13X?=
- =?us-ascii?Q?mJ3cebSsVutBPDS3+nI1+rVhXBDesCoGQdeMmY7nQKPu6ClClvtNbaulXEAi?=
- =?us-ascii?Q?jviDXYEwzannJwLxMy1mKkJL+X83kb3nbdcr7Pqeh6tkKpKUfJjNCulVEMWI?=
- =?us-ascii?Q?CKSB9+V/ZkRderqJWHA/AWij+RrMy0o1w7PV1UNFzyc+vMT1/4wkFeMJyMtH?=
- =?us-ascii?Q?BzrL88vMKVxo1zAAopRO3BybaX8gamY50AD0gU1L7m0g6lxx5J3kVaY67xLY?=
- =?us-ascii?Q?vJuIK+R6crrgthzVtLokWjUeU0U3N48V5yCRZa0uKLPuvflqTd/sCGndoEs4?=
- =?us-ascii?Q?UCEmTzLajy8NwDmfq0+Ty8gDnwaZd2zDxBAtZBSSU2O6MiC7I6OERa3Cmegy?=
- =?us-ascii?Q?OX5uh1+wDpchg7WYNbkQAwS2JLH3D0HCHmuexU2zdk2AS0D06DN4Y/zHEJfH?=
- =?us-ascii?Q?RTWiRpBTtICKSu++xZAg81zP76fq8CmwhIkQQRtqDyxU+6Y2foe8451XqiWo?=
- =?us-ascii?Q?cJ+UeOoR6BZdhL6j9bC6H5I5ZkDSF6A6JJB4TQg/BvCFIR4YuxwxeeO5Dz9t?=
- =?us-ascii?Q?sI3bk5Nq0ikCrm4e4GHZPpBITL9wyVEQtwdHmP2ov8jqPgUW30XidfjvlNMW?=
- =?us-ascii?Q?w5+OPpYm2quXi8vwQzxq+Mdost/0vutJ8BPsSsYpEG2mo/a9GMSr6pE1g/UX?=
- =?us-ascii?Q?KQEU/8edk5hvlDriL/mfpd4uWRPXnEAxemJ3qrXFH3EFXkI6WyxY4smhYQGJ?=
- =?us-ascii?Q?2ak65E72X84VvAfP0NhCx4lkcZnhZzyv9Oy9woTqj/DG?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <4AB2FAB1C4449943B84AD69CC08C3150@namprd15.prod.outlook.com>
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR15MB3213.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: acedd5a5-7bd1-447b-b8da-08dabc1eeb2f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Nov 2022 15:37:00.6848
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wonakR9JzW4NO5AZiDUY+MEvt7ksyNDEPClbbxhEflFc9upyrShQLbaTthIyLwqLXaI2UKBKWT7GM/QjigQfsQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR15MB1908
-X-Proofpoint-ORIG-GUID: r_IIqC77acx61vKNeoqOwD9x-hiCFHWr
-X-Proofpoint-GUID: r_IIqC77acx61vKNeoqOwD9x-hiCFHWr
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO2P265CA0238.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:b::34) To BLAPR10MB5267.namprd10.prod.outlook.com
+ (2603:10b6:208:30e::22)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BLAPR10MB5267:EE_|PH0PR10MB4631:EE_
+X-MS-Office365-Filtering-Correlation-Id: 81884d96-fe89-439c-ed0f-08dabc2266ef
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PKcPvzfnOActdj+AUukD3Im4MOyO1CygPmvWXvXXK7EhK8sxFKR1YiCjCOkG+rpwLzTMJRvTL4kCe3G0oQQcC1mcwJShjVZpCdMW/3Tzn/mt1vXMnBqBQZrw9nMilH0rK8ZLWYbuM4ehDzt4EcY90w6iMfRiIfDncPMla7nG0Fiopkqd8OdGii8FdyE+EPfe7Jz+Q5oyglNFoYzho17CiaFsm47nPFRltjR1uLm7ynm9f+kpiTFijBNrlThchiasVo9BCCw8Rc0pzi9gghVkfskT2r/6IrkzB+tbzk/WUuLLEFpoKMKTXXIVcGmFXT9zaM0+UmXsRcTq36jPFwaZKXptTEJ4mU2fuG2ehw2C95njJcRHcBuYlK/K+Boy0cBmrc3TxjNKFNyNkIWWUwvw+U98A7t2oNbNjkzumaLaMRM8r+4oJnaXm636ECDjNx85dwhpV4PZx7ehgWiXwu+BGqykANisbgi5nkaMT4jGSp4QmyxACSAij53SRizWQepX4AgIKSAFSkA3EmjAblbApzfyh9bhNL9v9tU/vYGNaoDPH1rAzgRzBm4aPAdMDnC5xB72LxKkGFAynMm5WeI/UWbGx0FMtV6zVRyOgEWHAiVZ8ar8NqAkR2kHlJ6mCLYbyJzIi6AYnUC7RcVAI5GuSVL+BB8OzpC7EUXFqUOWPk0c3N8dqDGMsTST4jYwY81hkfPf2Q5U3BaF2ROk+z6yztNN+BS+SMHAjL0VuJOag7sZZimHjndJMEd3BV2RemeaD4FRDV9BrJ7FgoIhYTtYvp+9w8Fw9LNBFYXrTv2/f7+ov+kEOuTSP3eWKm6v9Hu7
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(136003)(366004)(39860400002)(376002)(346002)(451199015)(6506007)(31686004)(8936002)(44832011)(53546011)(2906002)(6666004)(7416002)(5660300002)(41300700001)(6486002)(2616005)(36756003)(6512007)(966005)(86362001)(478600001)(31696002)(66556008)(38100700002)(66946007)(66476007)(66574015)(4326008)(8676002)(186003)(110136005)(83380400001)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Ym1tVUVyNE5aWHZwN204bW1RNEJwNmdnTlAwOEE4WEV6NXZPa0xSUXNSSlRR?=
+ =?utf-8?B?ZGVKTnA2Y0IwMmU0ZTlrQTNUN0QveXRzWmR0MVdxNDZhSGdvUnQvS1FMS2hE?=
+ =?utf-8?B?UHZzbGxSV3QxZVVVdDcrOHZVOWtQNG9YRzBNNkwwSGNrM0huUyt4NzFxUmtR?=
+ =?utf-8?B?ekhxSGF3RmRsMTVMbkhmcHlBbGtTUDhQVmZhOWR4bE9Db3FMZk1JblpDa3BY?=
+ =?utf-8?B?S0JPWFV5bkpGZG5HcmI3OWRWVDBSR2NGV2JiajczN0tLeGVENTRNbk83Y29R?=
+ =?utf-8?B?UUNZR0pPbUVaSzV1Ry92dzdhU0FOVU9USmlkL0ZLL2wvMWdNU1pEbGFhV1lu?=
+ =?utf-8?B?QkduNDVtL29uQlQrcS9LMGVYTWR0TjNNWGVCaHRzbVoxcUhwaUR6WWgzN0pw?=
+ =?utf-8?B?c3J5YlIvcEovblI5bFlPTzZNZS9GcnRZeDVHajZvd1BWVzBRMXZsL3JlSWR1?=
+ =?utf-8?B?bFhOVTNwWEowc2pkTkhkT1JBeXE1QjhUWG02UGpyU0tLbVlFQWhlYmJMWXNB?=
+ =?utf-8?B?MVhCUFBpcWY3YWVpOXAwTFIxN0o4U0dtQ0tJaFFMVEg0bll5R1pudFdyQjZi?=
+ =?utf-8?B?SFc4UWpLdnljRzU5VHdlK2dwQ05CSFk0ZWdKMGVmWkhKM0V4bHpLOVFBcmJh?=
+ =?utf-8?B?MkljMTlndUovWXZkM1lZUSt4NkdKdkZFRnRPTEc3RkxKYXNjSTZQVVdXUXRB?=
+ =?utf-8?B?RjR6OUVrZTZFY2k1WlpJYjF1KzZsVG1NdmJhTVRqakthZytiWmkzWGhzaFdB?=
+ =?utf-8?B?Qmo0dmtlUkxYREQ2aFAvU3ZTQllLbmNhRzZVSlBGNlhXam9ROXBodTJud2Q1?=
+ =?utf-8?B?QjRMQ2laTUJyQ1N3WUtXeHBDUVE0V3F6RmtXMjhFeFRmRXVFTWV6M2JyTC9Z?=
+ =?utf-8?B?dlVmeDhvN3l4TGROL0RGTnBkUmlweEF1aWlQU2RwMWRydVBWT01TRnBHRS9G?=
+ =?utf-8?B?WkEyV3dxVldaVG90djJhL1crWXNpYmY2ck1lbk9QQjdzMXoyem1SbjY3MjFk?=
+ =?utf-8?B?MndMVXdzTTN2L1ducXpqTlNXeUZTb2hSSEY0dTQ3dEFkb2lyQjZrOTUra01x?=
+ =?utf-8?B?SU1SblZwb2FFMXNyWjdIVWJOb28yb0MyUE1sUEt0czZJS3IxV0RCSFNyTEZN?=
+ =?utf-8?B?ODB5OGNEaURGSDdlWGhSc1NHNEZTcEFHY1V6RFk0emhtS2x6WjNvNjcwcjgz?=
+ =?utf-8?B?cnQ2aVF1eUcyaVBGNFpNdXZwRnppL3dJQ1ZlcjkzNkdSZlZVbGU1STV4V2pF?=
+ =?utf-8?B?c3J0bHVEeTZ0WTB6eFpuV0VoV0szQ3dFQTdWMkF5R1pHSHRGMW1hSGFTT2R2?=
+ =?utf-8?B?enRlWkR2N2NtWjlZMEdPVlZ6WTg2VWI1Q1RhNnZmT2lxVmpwUG55TUkwMnZm?=
+ =?utf-8?B?clRDMDM2Nzd1bUNLOEFKakVFWWl3bXNVMVphZWJJL3ovUEhKVDBneFM0cnlo?=
+ =?utf-8?B?ejdsZWh0VWZtREhKUExhWUJYUm1PZFh0RzV3L3NEeUtnaStPK1o2YXZHY1ZM?=
+ =?utf-8?B?Z29WSlhOd3F4dTRHdmNVVzZMQStjcTduOXpCZWtHT2NmRXpXQXdBZXVzekdj?=
+ =?utf-8?B?S0lpbGc2NE5JaVo5bThGbEs4cE9ZczJFaml4eGlVSlNhUTdxUDhEdk8xSGwy?=
+ =?utf-8?B?MU81UjNFVHdqODk3c3ZDK1lhM0gzaWtlMWphbU53VnVYVklCVGNvVUppVW03?=
+ =?utf-8?B?d2F2QjN6b1lBSU9UaTRrNGZZREcrU0lCRUQ3YkFzKzNtcUllZ3RJQ2VnZWJE?=
+ =?utf-8?B?NmRORkJoQkVxSFVGSW9Ud0tLZ0VQVytoZFZiUUhiU2RMTFdtclgwdXhpRExE?=
+ =?utf-8?B?RGRwRnN1bEFEeWd0N0k1dzZWUjYyS05qbXB1TWk0dnVvRGkxRzJNQUNNS1lR?=
+ =?utf-8?B?am5VSkVWaVgyQVovVDR0eGZDRHNyd2VlMmdrSlM2S3kydEFDTXBNYzUvdE41?=
+ =?utf-8?B?UVg3eS9XRElWZnlDcmhIZEU0MXpjQXV6U1M1WlBEN2lXdmcyM0c1c05pUnJS?=
+ =?utf-8?B?ME9JNHRKcyszNVF2NzVTUE0rcGlGeDIxc2lMd3djbmlmTjZPaGVyd1N5NjFw?=
+ =?utf-8?B?TGxiMTk2YlhaU1VJZlljY1NQQ1FTbUIvSXJtbWM2M0ZYdnNFU0pqdENYR0p1?=
+ =?utf-8?B?OUxGbFM3TC9pN1A2b0YrVzJtTDFBUlVHMTZKTlA1NWtiR1I0ck05SnNCa0Jp?=
+ =?utf-8?Q?AmnBX8IkEmkhNHx0U3dIC2Q=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 81884d96-fe89-439c-ed0f-08dabc2266ef
+X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Nov 2022 16:01:57.1081
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /dbPeYnm2wdj//HBQZvVW4ek5Ocv4+ijOZRPCTCTdnHShN/PKmTDZMP2j+gZhv2qfL/IBQj313aVkK5Js7Jbdg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB4631
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-01_07,2022-11-01_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0
+ suspectscore=0 malwarescore=0 spamscore=0 adultscore=0 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211010120
+X-Proofpoint-GUID: VdzsUK9XS8mTpaEhwXuhLzq1geQNuU61
+X-Proofpoint-ORIG-GUID: VdzsUK9XS8mTpaEhwXuhLzq1geQNuU61
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+On 28/10/2022 22:35, Andrii Nakryiko wrote:
+> On Fri, Oct 28, 2022 at 11:57 AM Yonghong Song <yhs@meta.com> wrote:
+>>
+>>
+>>
+>> On 10/28/22 10:13 AM, Andrii Nakryiko wrote:
+>>> On Thu, Oct 27, 2022 at 6:33 PM Yonghong Song <yhs@meta.com> wrote:
+>>>>
+>>>>
+>>>>
+>>>> On 10/27/22 4:14 PM, Andrii Nakryiko wrote:
+>>>>> On Tue, Oct 25, 2022 at 3:28 PM Eduard Zingerman <eddyz87@gmail.com> wrote:
+>>>>>>
+>>>>>> Hi BPF community,
+>>>>>>
+>>>>>> AFAIK there is a long standing feature request to use kernel headers
+>>>>>> alongside `vmlinux.h` generated by `bpftool`. For example significant
+>>>>>> effort was put to add an attribute `bpf_dominating_decl` (see [1]) to
+>>>>>> clang, unfortunately this effort was stuck due to concerns regarding C
+>>>>>> language semantics.
+>>>>>>
+>>>>>
+>>>>> Maybe we should make another attempt to implement bpf_dominating_decl?
+>>>>> That seems like a more elegant solution than any other implemented or
+>>>>> discussed alternative. Yonghong, WDYT?
+>>>>
+>>>> I would say it would be very difficult for upstream to agree with
+>>>> bpf_dominating_decl. We already have lots of discussions and we
+>>>> likely won't be able to satisfy Aaron who wants us to emit
+>>>> adequate diagnostics which will involve lots of other work
+>>>> and he also thinks this is too far away from C standard and he
+>>>> wants us to implement in a llvm/clang tool which is not what
+>>>> we want.
+>>>
+>>> Ok, could we change the problem to detecting if some type is defined.
+>>> Would it be possible to have something like
+>>>
+>>> #if !__is_type_defined(struct abc)
+>>> struct abc {
+>>> };
+>>> #endif
+>>>
+>>> I think we talked about this and there were problems with this
+>>> approach, but I don't remember details and how insurmountable the
+>>> problem is. Having a way to check whether some type is defined would
+>>> be very useful even outside of -target bpf parlance, though, so maybe
+>>> it's the problem worth attacking?
+>>
+>> Yes, we discussed this before. This will need to add additional work
+>> in preprocessor. I just made a discussion topic in llvm discourse
+>>
+>> https://discourse.llvm.org/t/add-a-type-checking-macro-is-type-defined-type/66268
+>>
+>> Let us see whether we can get some upstream agreement or not.
+>>
+> 
+> Thanks for starting the conversation! I'll be following along.
+>
 
 
-> On Nov 1, 2022, at 7:23 AM, Daniel Borkmann <daniel@iogearbox.net> wrote:
-> 
-> Hi Mykola, hi Domenico,
+I think this sort of approach assumes that vmlinux.h is included after
+any uapi headers, and would guard type definitions with 
 
-Thanks for the feedback Daniel! It makes sense and we will look at addressing it.
+#if type_is_defined(foo)
+struct foo {
 
-> 
-> On 11/1/22 12:44 AM, Mykola Lysenko wrote:
->> Hi John,
->> Test FAILs when there is an unexpected condition during test/subtest execution, developer does not control it. Hence we propagate FAIL subtest result to be the test result, test_progs result and consequently CI result.
->> On the other hand, SKIP state is fully controlled by us. E.g. we decide when particular subtest/test should be skipped. We do not propagate SKIP state to the test_progs result. test_progs result can either be OK or FAIL. Also, SKIPPED subtest is not an indication of a problem in a test. Hence, I do not think one SKIPPED subtest should mark the whole test as SKIPPED.
->> For example, core_reloc_btfgen has 77 subtests (https://github.com/kernel-patches/bpf/actions/runs/3349035937/jobs/5548924891#step:6:4895). Some of them are skipped right now. However, most of them are passing. It is a normal state. For me, marking core_reloc_btfgen as SKIP would mean that something is not right with the whole test. Also, I do not think we are reviewing SKIP tests / subtests right now. Maybe we should. But this would be orthogonal discussion to this patch.
-> 
-> I think parts of the above should probably be incorporated into the below
-> commit description to better explain the rationale for the change.
-> 
->>> On Oct 28, 2022, at 4:24 PM, John Fastabend <john.fastabend@gmail.com> wrote:
->>> 
->>> Domenico Cerasuolo wrote:
->>>> From: Domenico Cerasuolo <dceras@meta.com>
->>>> 
->>>> When showing the result of a test group, if one
->>>> of the subtests was skipped, while still having
->>>> passing subtets, the group result was marked as
-> 
-> nit: subtets
-> 
->>>> SKIPPED.
->>>> 
->>>> #223/1   usdt/basic:SKIP
->>>> #223/2   usdt/multispec:OK
->>>> #223     usdt:SKIP
->>>> 
->>>> With this change only if all of the subtests
->>>> were skipped the group test is marked as SKIPPED.
->>>> 
->>>> #223/1   usdt/basic:SKIP
->>>> #223/2   usdt/multispec:OK
->>>> #223     usdt:OK
->>> 
->>> I'm not sure don't you want to know that some of the tests
->>> were skipped? With this change its not knowable from output
->>> if everything passed or one passed.
->>> 
->>> I would prefer the behavior: If anything fails return
->>> FAIL, else if anything is skipped SKIP and if _everything_
->>> passes mark it OK.
->>> 
->>> My preference is to drop this change.
-> 
-> I guess for manual testing you could just grep for usdt and see all subtest
-> results. I think changing from SKIP to OK is fine, but could we indicate e.g.
-> "usdt:OK (SKIP:1/2)" to differ from "usdt:OK" where nothing had to be skipped?
-> Presumably this would address John's concern, too.
-> 
->>>> Signed-off-by: Domenico Cerasuolo <dceras@meta.com>
->>>> ---
->>>> tools/testing/selftests/bpf/test_progs.c | 11 +++++++++--
->>>> 1 file changed, 9 insertions(+), 2 deletions(-)
->>>> 
->>>> diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
->>>> index 0e9a47f97890..14b70393018b 100644
->>>> --- a/tools/testing/selftests/bpf/test_progs.c
->>>> +++ b/tools/testing/selftests/bpf/test_progs.c
->>>> @@ -222,6 +222,11 @@ static char *test_result(bool failed, bool skipped)
->>>> 	return failed ? "FAIL" : (skipped ? "SKIP" : "OK");
->>>> }
->>>> 
->>>> +static char *test_group_result(int tests_count, bool failed, int skipped)
->>>> +{
->>>> +	return failed ? "FAIL" : (skipped == tests_count ? "SKIP" : "OK");
->>>> +}
->>>> +
->>>> static void print_test_log(char *log_buf, size_t log_cnt)
->>>> {
->>>> 	log_buf[log_cnt] = '\0';
->>>> @@ -308,7 +313,8 @@ static void dump_test_log(const struct prog_test_def *test,
->>>> 	}
->>>> 
->>>> 	print_test_name(test->test_num, test->test_name,
->>>> -			test_result(test_failed, test_state->skip_cnt));
->>>> +			test_group_result(test_state->subtest_num,
->>>> +				test_failed, test_state->skip_cnt));
->>>> }
->>>> 
->>>> static void stdio_restore(void);
->>>> @@ -1071,7 +1077,8 @@ static void run_one_test(int test_num)
->>>> 
->>>> 	if (verbose() && env.worker_id == -1)
->>>> 		print_test_name(test_num + 1, test->test_name,
->>>> -				test_result(state->error_cnt, state->skip_cnt));
->>>> +				test_group_result(state->subtest_num,
->>>> +					state->error_cnt, state->skip_cnt));
->>>> 
->>>> 	reset_affinity();
->>>> 	restore_netns();
->>>> -- 
->>>> 2.30.2
+};
+#endif
 
+...is that right? My concern is that the vmlinux.h definitions have
+the CO-RE attributes. From a BPF perspective, would we like the vmlinux.h
+definitions to dominate over UAPI definitions do you think, or does it
+matter?
+
+I was wondering if there might be yet another way to crack this;
+if we did want the vmlinux.h type definitions to be authoritative
+because they have the preserve access index attribute, and because
+bpftool knows all vmlinux types, it could use that info to selectively
+redefine those type names such that we avoid name clashes when later
+including UAPI headers. Something like
+
+#ifdef __VMLINUX_H__
+//usual vmlinux.h type definitions
+#endif /* __VMLINUX_H__ */
+
+#ifdef __VMLINUX_ALIAS__
+if !defined(timespec64)
+#define timespec64 __VMLINUX_ALIAS__timespec64
+#endif
+// rest of the types define aliases here
+#undef __VMLINUX_ALIAS__
+#else /* unalias */
+#if defined(timespec64)
+#undef timespec64
+#endif
+// rest of types undef aliases here
+#endif /* __VMLINUX_ALIAS__ */
+
+
+Then the consumer does this:
+
+#define __VMLINUX_ALIAS__
+#include "vmlinux.h"
+// include uapi headers
+#include "vmlinux.h"
+
+(the latter include of vmlinux.h is needed to undef all the type aliases)
+
+I tried hacking up bpftool to support this aliasing scheme and while 
+it is kind of hacky it does seem to work, aside from some issues with 
+IPPROTO_* definitions - for the enumerated IPPROTO_ values linux/in.h does
+this:
+
+enum {
+  IPPROTO_IP = 0,               /* Dummy protocol for TCP               */
+#define IPPROTO_IP              IPPROTO_IP
+  IPPROTO_ICMP = 1,             /* Internet Control Message Protocol    */
+#define IPPROTO_ICMP            IPPROTO_ICMP
+
+
+...so our enum value definitions for IPPROTO_ values clash with the above 
+definitions. These could be individually ifdef-guarded if needed though I think.
+
+I can send the proof-of-concept patch if it would help, I just wanted to 
+check in case that might be a workable path too, since it just requires 
+changes to bpftool (and changes to in.h).
+
+Thanks!
+
+Alan
+
+ 
+>>>
+>>>>
+>>>>>
+>>>>> BTW, I suggest splitting libbpf btf_dedup and btf_dump changes into a
+>>>>> separate series and sending them as non-RFC sooner. Those improvements
+>>>>> are independent of all the header guards stuff, let's get them landed
+>>>>> sooner.
+>>>>>
+>>>>>> After some discussion with Alexei and Yonghong I'd like to request
+>>>>>> your comments regarding a somewhat brittle and partial solution to
+>>>>>> this issue that relies on adding `#ifndef FOO_H ... #endif` guards in
+>>>>>> the generated `vmlinux.h`.
+>>>>>>
+>>>>>
+>>>>> [...]
+>>>>>
+>>>>>> Eduard Zingerman (12):
+>>>>>>     libbpf: Deduplicate unambigous standalone forward declarations
+>>>>>>     selftests/bpf: Tests for standalone forward BTF declarations
+>>>>>>       deduplication
+>>>>>>     libbpf: Support for BTF_DECL_TAG dump in C format
+>>>>>>     selftests/bpf: Tests for BTF_DECL_TAG dump in C format
+>>>>>>     libbpf: Header guards for selected data structures in vmlinux.h
+>>>>>>     selftests/bpf: Tests for header guards printing in BTF dump
+>>>>>>     bpftool: Enable header guards generation
+>>>>>>     kbuild: Script to infer header guard values for uapi headers
+>>>>>>     kbuild: Header guards for types from include/uapi/*.h in kernel BTF
+>>>>>>     selftests/bpf: Script to verify uapi headers usage with vmlinux.h
+>>>>>>     selftests/bpf: Known good uapi headers for test_uapi_headers.py
+>>>>>>     selftests/bpf: script for infer_header_guards.pl testing
+>>>>>>
+>>>>>>    scripts/infer_header_guards.pl                | 191 +++++
+>>>>>>    scripts/link-vmlinux.sh                       |  13 +-
+>>>>>>    tools/bpf/bpftool/btf.c                       |   4 +-
+>>>>>>    tools/lib/bpf/btf.c                           | 178 ++++-
+>>>>>>    tools/lib/bpf/btf.h                           |   7 +-
+>>>>>>    tools/lib/bpf/btf_dump.c                      | 232 +++++-
+>>>>>>    .../selftests/bpf/good_uapi_headers.txt       | 677 ++++++++++++++++++
+>>>>>>    tools/testing/selftests/bpf/prog_tests/btf.c  | 152 ++++
+>>>>>>    .../selftests/bpf/prog_tests/btf_dump.c       |  11 +-
+>>>>>>    .../bpf/progs/btf_dump_test_case_decl_tag.c   |  39 +
+>>>>>>    .../progs/btf_dump_test_case_header_guards.c  |  94 +++
+>>>>>>    .../bpf/test_uapi_header_guards_infer.sh      |  33 +
+>>>>>>    .../selftests/bpf/test_uapi_headers.py        | 197 +++++
+>>>>>>    13 files changed, 1816 insertions(+), 12 deletions(-)
+>>>>>>    create mode 100755 scripts/infer_header_guards.pl
+>>>>>>    create mode 100644 tools/testing/selftests/bpf/good_uapi_headers.txt
+>>>>>>    create mode 100644 tools/testing/selftests/bpf/progs/btf_dump_test_case_decl_tag.c
+>>>>>>    create mode 100644 tools/testing/selftests/bpf/progs/btf_dump_test_case_header_guards.c
+>>>>>>    create mode 100755 tools/testing/selftests/bpf/test_uapi_header_guards_infer.sh
+>>>>>>    create mode 100755 tools/testing/selftests/bpf/test_uapi_headers.py
+>>>>>>
+>>>>>> --
+>>>>>> 2.34.1
+>>>>>>
