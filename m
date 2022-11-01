@@ -2,268 +2,301 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0FE2FA3743
-	for <bpf@archiver.kernel.org>; Tue,  1 Nov 2022 11:50:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92871FA3743
+	for <bpf@archiver.kernel.org>; Tue,  1 Nov 2022 11:54:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231455AbiKALuQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 1 Nov 2022 07:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40868 "EHLO
+        id S229475AbiKALyz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 1 Nov 2022 07:54:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231334AbiKALtj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 1 Nov 2022 07:49:39 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23061A238;
-        Tue,  1 Nov 2022 04:45:50 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id h9so19804896wrt.0;
-        Tue, 01 Nov 2022 04:45:50 -0700 (PDT)
+        with ESMTP id S229457AbiKALyy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 1 Nov 2022 07:54:54 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3BF51B6
+        for <bpf@vger.kernel.org>; Tue,  1 Nov 2022 04:54:52 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id h12so13789130ljg.9
+        for <bpf@vger.kernel.org>; Tue, 01 Nov 2022 04:54:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xgVvXV1TqlbopSpUav8X32PWApDTlkADJpb+ZwiYlZs=;
-        b=o/AwFUfLh1ZseZxhtt/4cXKhcOoE0pxANbWi6XHJLFCkYz0gRTZ5Ca2PlCO4PbsIqR
-         0k4LVmkTF8xMMSJgH3qESTE7TTfiZw/WbMh+O8uqXjmVTf3LRFWIdTv9e5wR8W5/LHkT
-         GWoOHChf0BUwxtfPxxChj3Vb2gen3rGhpRGbndbbZcIRS79hcTPZhIxsPY0QM+eYbJuX
-         Z3pqD4/eE/szE0vRxx4ZRDYUUCidO+w5GjZvyr5uL0bYN2FzJ4ynG31ES2rnyOtT+E57
-         olvjY3QJ9CCo1ZI33iyI+UsdaPHjrhaQG6ICAmeDheUGQoehNjdp1YyKXbs5phgU/tEx
-         kEOA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=T+NHB+45QH9Lm1JwMIt8qyGsRjfvqvv2Oj9l6Fz9484=;
+        b=XqNPJfNlXBKV6CdupK1WlEroJKGEk12PXwL/nLfmDbRphmIB57U9XKaMyXb/TpWmTS
+         2a8S3HYbIzBTirdWLAFnceZBKHKl5V43odVbc3hz0sTRUiEqL8WTzRlS8GYq4qAxjnCw
+         A+kSrDIVZpkqsdwa1LP6PD8LtkZoVF6DSTVIXDuFJvMRRanKl/PBilSjS1X7vwofUXjw
+         WU+iyNHg555cd8Ddiwm3htSfDS/KJta7n2GiAr1yGRYTeqyJP5ZgSZqSvTdj+i9Q/dm0
+         +59mG3Owr8E4D33ZCn9YHc6fKkpC2A/pF2nvHIJqTMxwf3Apgto0KXJgh4L/U8A4qHrH
+         asTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xgVvXV1TqlbopSpUav8X32PWApDTlkADJpb+ZwiYlZs=;
-        b=hxvND7S1OM3gKLIROVfDL/E46jRv9y3AQZZR0RkTcSDB7lPRL32LQIe/1XJpv373GP
-         M/5z4cNrT7hIF9KOl7M5XAXW5y7eMg36/dQaNWtefWY5zh/S9bDtitJcwsNwS8ew4J/E
-         YgfxKsQDqzX4gZMpAKzTYR7eBj5uoSkEG2I7Xrr0AzsKMWwaRIQUFh4M3FIWDLPa6P+J
-         YIUdXmDp2o9MMPfbMdj96LhK8h+Z7H48SijTaoe18rU/Z9G9DRJwygy6d6SWFqPKlbgO
-         QPkOxkh/V0avx2w6uZCt1Jv1ihH8LzMiKuXfGS0imhXzRoJsfo7sS9feTsORBMK8DO2k
-         QJ0A==
-X-Gm-Message-State: ACrzQf27prUXI6ILzHR9ETBKzudF17H9BRKKtQ1yHdV4akdvvz7M6LOv
-        vlFE9eWkoksdr4Kqi5srL1yJAE9DIO/4nQ==
-X-Google-Smtp-Source: AMsMyM6TFAcFRaHoCGSQO3O+0lnQzz3aZQ4jdeUJ4jZ53hAAlm0tjAy/NX8n+BNjeVllviQqdIG5Rw==
-X-Received: by 2002:a5d:5b18:0:b0:236:c174:e99c with SMTP id bx24-20020a5d5b18000000b00236c174e99cmr8085214wrb.10.1667303148905;
-        Tue, 01 Nov 2022 04:45:48 -0700 (PDT)
-Received: from imac.fritz.box ([2a02:8010:60a0:0:1575:dcd7:a83c:38b])
-        by smtp.gmail.com with ESMTPSA id f18-20020a1cc912000000b003cf5ec79bf9sm10279291wmb.40.2022.11.01.04.45.47
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T+NHB+45QH9Lm1JwMIt8qyGsRjfvqvv2Oj9l6Fz9484=;
+        b=CiHG/ijKBCU+dFhvDmbiHIxGkQtNwdrQO2Gc6X71N3IGykAfeTsQsQW3F+qx4pdEBq
+         SYVGckm2ziYRH7nxIE/jP19QrnyVJBD7wC/z+ss2t6ZhT7uDaK+PKZTJCdOXKJrszyPJ
+         eUFFOFhLQwgHSIXks+sTkK1C8Tt/xoU+LoQSeq8WiT9IDc6Ksj+yKMFJdSGoCRRI7RTR
+         S8dtmpziCq9703okOguMerCaJl+en9iLClD7zIff+xsSFw+bNPq13S/F+uK3Em0YwnBQ
+         URz7X384V6micIJpW+K4pgWjPZukqxo7UCsKRDCoYLvnpAcTZtSUeC4wMSuyGC36iH+J
+         TpwQ==
+X-Gm-Message-State: ACrzQf0aJC+A6dG1mMoNhk+cH0lUpPj6b376UVmjfURShwzXdDOXPv8G
+        s0rQh40DJPLs28miKQNYU4o=
+X-Google-Smtp-Source: AMsMyM54VKGz/3N1shyObhBDBs6i4meDvY8fQ6hjvP+FwGXjUu3zMzT3ayiXLB37wcDZYW1BnOdINQ==
+X-Received: by 2002:a2e:9848:0:b0:277:72a:41a5 with SMTP id e8-20020a2e9848000000b00277072a41a5mr801251ljj.352.1667303690742;
+        Tue, 01 Nov 2022 04:54:50 -0700 (PDT)
+Received: from pc636 (host-90-235-23-76.mobileonline.telia.com. [90.235.23.76])
+        by smtp.gmail.com with ESMTPSA id k14-20020a2ea26e000000b0026c2baa72d4sm1764033ljm.27.2022.11.01.04.54.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 04:45:48 -0700 (PDT)
-From:   Donald Hunter <donald.hunter@gmail.com>
-To:     bpf@vger.kernel.org, linux-doc@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Donald Hunter <donald.hunter@gmail.com>
-Subject: [PATCH bpf-next v2 1/1] Document BPF_MAP_TYPE_LPM_TRIE
-Date:   Tue,  1 Nov 2022 11:45:42 +0000
-Message-Id: <20221101114542.24481-2-donald.hunter@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221101114542.24481-1-donald.hunter@gmail.com>
-References: <20221101114542.24481-1-donald.hunter@gmail.com>
+        Tue, 01 Nov 2022 04:54:50 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Tue, 1 Nov 2022 12:54:47 +0100
+To:     Song Liu <song@kernel.org>
+Cc:     bpf@vger.kernel.org, linux-mm@kvack.org, akpm@linux-foundation.org,
+        x86@kernel.org, peterz@infradead.org, hch@lst.de,
+        rick.p.edgecombe@intel.com, dave.hansen@intel.com,
+        urezki@gmail.com, mcgrof@kernel.org, kernel-team@fb.com
+Subject: Re: [PATCH bpf-next v1 1/5] vmalloc: introduce vmalloc_exec,
+ vfree_exec, and vcopy_exec
+Message-ID: <Y2EJB34M3NPKBY3v@pc636>
+References: <20221031215834.1615596-1-song@kernel.org>
+ <20221031215834.1615596-2-song@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221031215834.1615596-2-song@kernel.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add documentation for BPF_MAP_TYPE_LPM_TRIE including kernel
-BPF helper usage, userspace usage and examples.
+On Mon, Oct 31, 2022 at 02:58:30PM -0700, Song Liu wrote:
+> vmalloc_exec is used to allocate memory to host dynamic kernel text
+> (modules, BPF programs, etc.) with huge pages. This is similar to the
+> proposal by Peter in [1].
+> 
+> A new tree of vmap_area, free_text_area_* tree, is introduced in addition
+> to free_vmap_area_* and vmap_area_*. vmalloc_exec allocates pages from
+> free_text_area_*. When there isn't enough space left in free_text_area_*,
+> new PMD_SIZE page(s) is allocated from free_vmap_area_* and added to
+> free_text_area_*. To be more accurate, the vmap_area is first added to
+> vmap_area_* tree and then moved to free_text_area_*. This extra move
+> simplifies the logic of vmalloc_exec.
+> 
+> vmap_area in free_text_area_* tree are backed with memory, but we need
+> subtree_max_size for tree operations. Therefore, vm_struct for these
+> vmap_area are stored in a separate list, all_text_vm.
+> 
+> The new tree allows separate handling of < PAGE_SIZE allocations, as
+> current vmalloc code mostly assumes PAGE_SIZE aligned allocations. This
+> version of vmalloc_exec can handle bpf programs, which uses 64 byte
+> aligned allocations), and modules, which uses PAGE_SIZE aligned
+> allocations.
+> 
+> Memory allocated by vmalloc_exec() is set to RO+X before returning to the
+> caller. Therefore, the caller cannot write directly write to the memory.
+> Instead, the caller is required to use vcopy_exec() to update the memory.
+> For the safety and security of X memory, vcopy_exec() checks the data
+> being updated always in the memory allocated by one vmalloc_exec() call.
+> vcopy_exec() uses text_poke like mechanism and requires arch support.
+> Specifically, the arch need to implement arch_vcopy_exec().
+> 
+> In vfree_exec(), the memory is first erased with arch_invalidate_exec().
+> Then, the memory is added to free_text_area_*. If this free creates big
+> enough continuous free space (> PMD_SIZE), vfree_exec() will try to free
+> the backing vm_struct.
+> 
+> [1] https://lore.kernel.org/bpf/Ys6cWUMHO8XwyYgr@hirez.programming.kicks-ass.net/
+> 
+> Signed-off-by: Song Liu <song@kernel.org>
+> ---
+>  include/linux/vmalloc.h |   5 +
+>  mm/nommu.c              |  12 ++
+>  mm/vmalloc.c            | 318 ++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 335 insertions(+)
+> 
+> diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
+> index 096d48aa3437..9b2042313c12 100644
+> --- a/include/linux/vmalloc.h
+> +++ b/include/linux/vmalloc.h
+> @@ -154,6 +154,11 @@ extern void *__vmalloc_node_range(unsigned long size, unsigned long align,
+>  void *__vmalloc_node(unsigned long size, unsigned long align, gfp_t gfp_mask,
+>  		int node, const void *caller) __alloc_size(1);
+>  void *vmalloc_huge(unsigned long size, gfp_t gfp_mask) __alloc_size(1);
+> +void *vmalloc_exec(unsigned long size, unsigned long align) __alloc_size(1);
+> +void *vcopy_exec(void *dst, void *src, size_t len);
+> +void vfree_exec(void *addr);
+> +void *arch_vcopy_exec(void *dst, void *src, size_t len);
+> +int arch_invalidate_exec(void *ptr, size_t len);
+>  
+>  extern void *__vmalloc_array(size_t n, size_t size, gfp_t flags) __alloc_size(1, 2);
+>  extern void *vmalloc_array(size_t n, size_t size) __alloc_size(1, 2);
+> diff --git a/mm/nommu.c b/mm/nommu.c
+> index 214c70e1d059..8a1317247ef0 100644
+> --- a/mm/nommu.c
+> +++ b/mm/nommu.c
+> @@ -371,6 +371,18 @@ int vm_map_pages_zero(struct vm_area_struct *vma, struct page **pages,
+>  }
+>  EXPORT_SYMBOL(vm_map_pages_zero);
+>  
+> +void *vmalloc_exec(unsigned long size, unsigned long align)
+> +{
+> +	return NULL;
+> +}
+> +
+> +void *vcopy_exec(void *dst, void *src, size_t len)
+> +{
+> +	return ERR_PTR(-EOPNOTSUPP);
+> +}
+> +
+> +void vfree_exec(const void *addr) { }
+> +
+>  /*
+>   *  sys_brk() for the most part doesn't need the global kernel
+>   *  lock, except when an application is doing something nasty
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index ccaa461998f3..6f4c73e67191 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -72,6 +72,9 @@ early_param("nohugevmalloc", set_nohugevmalloc);
+>  static const bool vmap_allow_huge = false;
+>  #endif	/* CONFIG_HAVE_ARCH_HUGE_VMALLOC */
+>  
+> +#define PMD_ALIGN(addr) ALIGN(addr, PMD_SIZE)
+> +#define PMD_ALIGN_DOWN(addr) ALIGN_DOWN(addr, PMD_SIZE)
+> +
+>  bool is_vmalloc_addr(const void *x)
+>  {
+>  	unsigned long addr = (unsigned long)kasan_reset_tag(x);
+> @@ -769,6 +772,38 @@ static LIST_HEAD(free_vmap_area_list);
+>   */
+>  static struct rb_root free_vmap_area_root = RB_ROOT;
+>  
+> +/*
+> + * free_text_area for vmalloc_exec()
+> + */
+> +static DEFINE_SPINLOCK(free_text_area_lock);
+> +/*
+> + * This linked list is used in pair with free_text_area_root.
+> + * It gives O(1) access to prev/next to perform fast coalescing.
+> + */
+> +static LIST_HEAD(free_text_area_list);
+> +
+> +/*
+> + * This augment red-black tree represents the free text space.
+> + * All vmap_area objects in this tree are sorted by va->va_start
+> + * address. It is used for allocation and merging when a vmap
+> + * object is released.
+> + *
+> + * Each vmap_area node contains a maximum available free block
+> + * of its sub-tree, right or left. Therefore it is possible to
+> + * find a lowest match of free area.
+> + *
+> + * vmap_area in this tree are backed by RO+X memory, but they do
+> + * not have valid vm pointer (because we need subtree_max_size).
+> + * The vm for these vmap_area are stored in all_text_vm.
+> + */
+> +static struct rb_root free_text_area_root = RB_ROOT;
+> +
+> +/*
+> + * List of vm_struct for free_text_area_root. This list is rarely
+> + * accessed, so the O(N) complexity is not likely a real issue.
+> + */
+> +struct vm_struct *all_text_vm;
+> +
+>  /*
+>   * Preload a CPU with one object for "no edge" split case. The
+>   * aim is to get rid of allocations from the atomic context, thus
+> @@ -3313,6 +3348,289 @@ void *vmalloc(unsigned long size)
+>  }
+>  EXPORT_SYMBOL(vmalloc);
+>  
+> +#if defined(CONFIG_MODULES) && defined(MODULES_VADDR)
+> +#define VMALLOC_EXEC_START MODULES_VADDR
+> +#define VMALLOC_EXEC_END MODULES_END
+> +#else
+> +#define VMALLOC_EXEC_START VMALLOC_START
+> +#define VMALLOC_EXEC_END VMALLOC_END
+> +#endif
+> +
+> +static void move_vmap_to_free_text_tree(void *addr)
+> +{
+> +	struct vmap_area *va;
+> +
+> +	/* remove from vmap_area_root */
+> +	spin_lock(&vmap_area_lock);
+> +	va = __find_vmap_area((unsigned long)addr, &vmap_area_root);
+> +	if (WARN_ON_ONCE(!va)) {
+> +		spin_unlock(&vmap_area_lock);
+> +		return;
+> +	}
+> +	unlink_va(va, &vmap_area_root);
+> +	spin_unlock(&vmap_area_lock);
+> +
+> +	/* make the memory RO+X */
+> +	memset(addr, 0, va->va_end - va->va_start);
+> +	set_memory_ro(va->va_start, (va->va_end - va->va_start) >> PAGE_SHIFT);
+> +	set_memory_x(va->va_start, (va->va_end - va->va_start) >> PAGE_SHIFT);
+> +
+> +	/* add to all_text_vm */
+> +	va->vm->next = all_text_vm;
+> +	all_text_vm = va->vm;
+> +
+> +	/* add to free_text_area_root */
+> +	spin_lock(&free_text_area_lock);
+> +	merge_or_add_vmap_area_augment(va, &free_text_area_root, &free_text_area_list);
+> +	spin_unlock(&free_text_area_lock);
+> +}
+> +
+> +/**
+> + * vmalloc_exec - allocate virtually contiguous RO+X memory
+> + * @size:    allocation size
+> + *
+> + * This is used to allocate dynamic kernel text, such as module text, BPF
+> + * programs, etc. User need to use text_poke to update the memory allocated
+> + * by vmalloc_exec.
+> + *
+> + * Return: pointer to the allocated memory or %NULL on error
+> + */
+> +void *vmalloc_exec(unsigned long size, unsigned long align)
+> +{
+> +	struct vmap_area *va, *tmp;
+> +	unsigned long addr;
+> +	enum fit_type type;
+> +	int ret;
+> +
+> +	va = kmem_cache_alloc_node(vmap_area_cachep, GFP_KERNEL, NUMA_NO_NODE);
+> +	if (unlikely(!va))
+> +		return NULL;
+> +
+> +again:
+> +	preload_this_cpu_lock(&free_text_area_lock, GFP_KERNEL, NUMA_NO_NODE);
+> +	tmp = find_vmap_lowest_match(&free_text_area_root, size, align, 1, false);
+> +
+> +	if (!tmp) {
+> +		unsigned long alloc_size;
+> +		void *ptr;
+> +
+> +		spin_unlock(&free_text_area_lock);
+> +
+> +		/*
+> +		 * Not enough continuous space in free_text_area_root, try
+> +		 * allocate more memory. The memory is first added to
+> +		 * vmap_area_root, and then moved to free_text_area_root.
+> +		 */
+> +		alloc_size = roundup(size, PMD_SIZE * num_online_nodes());
+> +		ptr = __vmalloc_node_range(alloc_size, PMD_SIZE, VMALLOC_EXEC_START,
+> +					   VMALLOC_EXEC_END, GFP_KERNEL, PAGE_KERNEL,
+> +					   VM_ALLOW_HUGE_VMAP | VM_NO_GUARD,
+> +					   NUMA_NO_NODE, __builtin_return_address(0));
+> +		if (unlikely(!ptr))
+> +			goto err_out;
+> +
+> +		move_vmap_to_free_text_tree(ptr);
+> +		goto again;
+>
+It is yet another allocator built on top of vmalloc. So there are 4 then.
+Could you please avoid of doing it? I do not find it as something that is
+reasonable.
 
-Signed-off-by: Donald Hunter <donald.hunter@gmail.com>
----
- Documentation/bpf/map_lpm_trie.rst | 181 +++++++++++++++++++++++++++++
- 1 file changed, 181 insertions(+)
- create mode 100644 Documentation/bpf/map_lpm_trie.rst
-
-diff --git a/Documentation/bpf/map_lpm_trie.rst b/Documentation/bpf/map_lpm_trie.rst
-new file mode 100644
-index 000000000000..31be1aa7ba2c
---- /dev/null
-+++ b/Documentation/bpf/map_lpm_trie.rst
-@@ -0,0 +1,181 @@
-+.. SPDX-License-Identifier: GPL-2.0-only
-+.. Copyright (C) 2022 Red Hat, Inc.
-+
-+=====================
-+BPF_MAP_TYPE_LPM_TRIE
-+=====================
-+
-+.. note::
-+   - ``BPF_MAP_TYPE_LPM_TRIE`` was introduced in kernel version 4.11
-+
-+``BPF_MAP_TYPE_LPM_TRIE`` provides a longest prefix match algorithm that
-+can be used to match IP addresses to a stored set of prefixes.
-+Internally, data is stored in an unbalanced trie of nodes that uses
-+``prefixlen,data`` pairs as its keys. The ``data`` is interpreted in
-+network byte order, i.e. big endian, so ``data[0]`` stores the most
-+significant byte.
-+
-+LPM tries may be created with a maximum prefix length that is a multiple
-+of 8, in the range from 8 to 2048. The key used for lookup and update
-+operations is a ``struct bpf_lpm_trie_key``, extended by
-+``max_prefixlen/8`` bytes.
-+
-+- For IPv4 addresses the data length is 4 bytes
-+- For IPv6 addresses the data length is 16 bytes
-+
-+The value type stored in the LPM trie can be any user defined type.
-+
-+.. note::
-+   When creating a map of type ``BPF_MAP_TYPE_LPM_TRIE`` you must set the
-+   ``BPF_F_NO_PREALLOC`` flag.
-+
-+Usage
-+=====
-+
-+Kernel BPF
-+----------
-+
-+.. c:function::
-+   void *bpf_map_lookup_elem(struct bpf_map *map, const void *key)
-+
-+The longest prefix entry for a given data value can be found using the
-+``bpf_map_lookup_elem()`` helper. This helper returns a pointer to the
-+value associated with the longest matching ``key``, or ``NULL`` if no
-+entry was found.
-+
-+The ``key`` should have ``prefixlen`` set to ``max_prefixlen`` when
-+performing longest prefix lookups. For example, when searching for the
-+longest prefix match for an IPv4 address, ``prefixlen`` should be set to
-+``32``.
-+
-+.. c:function::
-+   long bpf_map_update_elem(struct bpf_map *map, const void *key, const void *value, u64 flags)
-+
-+Prefix entries can be added or updated using the ``bpf_map_update_elem()``
-+helper. This helper replaces existing elements atomically.
-+
-+``bpf_map_update_elem()`` returns ``0`` on success, or negative error in
-+case of failure.
-+
-+ .. note::
-+    The flags parameter must be one of BPF_ANY, BPF_NOEXIST or BPF_EXIST,
-+    but the value is ignored, giving BPF_ANY semantics.
-+
-+.. c:function::
-+   long bpf_map_delete_elem(struct bpf_map *map, const void *key)
-+
-+Prefix entries can be deleted using the ``bpf_map_delete_elem()``
-+helper. This helper will return 0 on success, or negative error in case
-+of failure.
-+
-+Userspace
-+---------
-+
-+Access from userspace uses libbpf APIs with the same names as above, with
-+the map identified by ``fd``.
-+
-+.. c:function::
-+   int bpf_map_get_next_key (int fd, const void *cur_key, void *next_key)
-+
-+A userspace program can iterate through the entries in an LPM trie using
-+libbpf's ``bpf_map_get_next_key()`` function. The first key can be
-+fetched by calling ``bpf_map_get_next_key()`` with ``cur_key`` set to
-+``NULL``. Subsequent calls will fetch the next key that follows the
-+current key. ``bpf_map_get_next_key()`` returns ``0`` on success,
-+``-ENOENT`` if ``cur_key`` is the last key in the trie, or negative
-+error in case of failure.
-+
-+``bpf_map_get_next_key()`` will iterate through the LPM trie elements
-+from leftmost leaf first. This means that iteration will return more
-+specific keys before less specific ones.
-+
-+Examples
-+========
-+
-+Please see ``tools/testing/selftests/bpf/test_lpm_map.c`` for examples
-+of LPM trie usage from userspace. The code snippets below demonstrate
-+API usage.
-+
-+Kernel BPF
-+----------
-+
-+The following BPF code snippet shows how to declare a new LPM trie for IPv4
-+address prefixes:
-+
-+.. code-block:: c
-+
-+    #include <linux/bpf.h>
-+    #include <bpf/bpf_helpers.h>
-+
-+    struct ipv4_lpm_key {
-+            __u32 prefixlen;
-+            __u32 data;
-+    };
-+
-+    struct {
-+            __uint(type, BPF_MAP_TYPE_LPM_TRIE);
-+            __type(key, struct ipv4_lpm_key);
-+            __type(value, __u32);
-+            __uint(map_flags, BPF_F_NO_PREALLOC);
-+            __uint(max_entries, 255);
-+    } ipv4_lpm_map SEC(".maps");
-+
-+The following BPF code snippet shows how to lookup by IPv4 address:
-+
-+.. code-block:: c
-+
-+    void *lookup(__u32 ipaddr)
-+    {
-+            struct ipv4_lpm_key key = {
-+                    .prefixlen = 32,
-+                    .data = ipaddr
-+            };
-+
-+            return bpf_map_lookup_elem(&ipv4_lpm_map, &key);
-+    }
-+
-+Userspace
-+---------
-+
-+The following snippet shows how to insert an IPv4 prefix entry into an
-+LPM trie:
-+
-+.. code-block:: c
-+
-+    int add_prefix_entry(int lpm_fd, __u32 addr, __u32 prefixlen, struct value *value)
-+    {
-+            struct ipv4_lpm_key ipv4_key = {
-+                    .prefixlen = prefixlen,
-+                    .data = addr
-+            };
-+            return bpf_map_update_elem(lpm_fd, &ipv4_key, value, BPF_ANY);
-+    }
-+
-+The following snippet shows a userspace program walking through the entries
-+of an LPM trie:
-+
-+
-+.. code-block:: c
-+
-+    #include <bpf/libbpf.h>
-+    #include <bpf/bpf.h>
-+
-+    void iterate_lpm_trie(int map_fd)
-+    {
-+            struct ipv4_lpm_key *cur_key = NULL;
-+            struct ipv4_lpm_key next_key;
-+            struct value value;
-+            int err;
-+
-+            for (;;) {
-+                    err = bpf_map_get_next_key(map_fd, cur_key, &next_key);
-+                    if (err)
-+                            break;
-+
-+                    bpf_map_lookup_elem(map_fd, &next_key, &value);
-+
-+                    /* Use key and value here */
-+
-+                    cur_key = &next_key;
-+            }
-+    }
--- 
-2.35.1
-
+--
+Uladzislau Rezki
