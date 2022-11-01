@@ -2,137 +2,145 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80E47C4332F
-	for <bpf@archiver.kernel.org>; Tue,  1 Nov 2022 17:02:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29527C4332F
+	for <bpf@archiver.kernel.org>; Tue,  1 Nov 2022 17:05:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbiKARCE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 1 Nov 2022 13:02:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60320 "EHLO
+        id S229562AbiKARFa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 1 Nov 2022 13:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbiKARCC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 1 Nov 2022 13:02:02 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5289A260D
-        for <bpf@vger.kernel.org>; Tue,  1 Nov 2022 10:02:01 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id 192so14018777pfx.5
-        for <bpf@vger.kernel.org>; Tue, 01 Nov 2022 10:02:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jE7AvJG+Pz67X1gNkDD5t0oKXb/RV/Yt8yibr4qw2hM=;
-        b=X/gV7zp6dIxPh1lTFK7XJ1Lzpq/BU9+/KVrCvofn1ZEe/klpVutZ0tyFNEqWnHK+tY
-         djh1iYMcH01+Smh7fhNrKsh315ifrlU7gHoZ6kjKTsMX9a0o5hYJW5pF4EDXqmJ4VfVP
-         v94BSqS5Z6rlDc3T715VlRhA7zcP2usCNyuUo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jE7AvJG+Pz67X1gNkDD5t0oKXb/RV/Yt8yibr4qw2hM=;
-        b=Vg1eX2x7cMvA8kMvAAiwn+9RKgpRgEseClcGIDoItucPXja+4Y1BodymegTAEBo3te
-         hE0EGhvfbwtG7SpE2jEDquKlDmc9P0VFIUGAdStY/2yBky6bv+fKKuqM9fHfvGZGEG2X
-         8SxyBsdqvSB4TiHOr30p8lUEBnUiC68JWLmNCavF0MPlJpg2HfvVXHshZ9TBmsOuiB1c
-         UXIcudsl58XTvttt8lnuopPwnH9U6Vc0u/+gkh1epIrFzs7DXWOPSszwxHWb1kSPXvyh
-         j2PGwXRi8+5Ziw6uzHWw7bu1T/F9i+FwDE5Rxb7LH1auh96j3GBss4LWoeWF132jF+SI
-         RoFQ==
-X-Gm-Message-State: ACrzQf3K9dFCqjrMdaDQmQmb9wGdYM4o7q/IuJHaGZw00bobZj9+7icU
-        OG5ulK2gRUEFudzzKFBOV/Tk9A==
-X-Google-Smtp-Source: AMsMyM5i16ttcVnnTVedidHBJ9bNsg59Epj19woNCj4kXnyFV8ovuhhEUMMKJaZDZxaCdd+pCO2HVw==
-X-Received: by 2002:a63:551b:0:b0:44b:7dcf:92ee with SMTP id j27-20020a63551b000000b0044b7dcf92eemr18373150pgb.610.1667322120754;
-        Tue, 01 Nov 2022 10:02:00 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id a10-20020a1709027e4a00b0016eef326febsm1597080pln.1.2022.11.01.10.02.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 10:02:00 -0700 (PDT)
-Date:   Tue, 1 Nov 2022 10:01:59 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 2/3] bpf/verifier: Use kmalloc_size_roundup()
- to match ksize() usage
-Message-ID: <202211010937.4631CB1B0E@keescook>
-References: <20221029024444.gonna.633-kees@kernel.org>
- <20221029025433.2533810-2-keescook@chromium.org>
- <da0959e7-a91c-ab4c-56be-3c3cd280e592@iogearbox.net>
+        with ESMTP id S229534AbiKARF2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 1 Nov 2022 13:05:28 -0400
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C321C13E30;
+        Tue,  1 Nov 2022 10:05:24 -0700 (PDT)
+Message-ID: <0c00ba33-f37b-dfe6-7980-45920ffa273b@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1667322323;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cQa/6U5NTiSVzwW86YvgQYxS/QKgw9kmzN/gFIFxOg0=;
+        b=CWGacSkuXsCz33NqB//Bn4xp4PaNCICNI5QVUY+gKslwuIp3OZ2cK7n5KI5fcjRRLWQ7vr
+        cGPK/Ic8GU5EnsnFQRk3EXef5GbzN0kT9/U665D1jDF7ef/oOW0qjEg3ow9nAf5EWNWDOM
+        JDmTr/DbOjTl7HgT1X3qDODET44CR3c=
+Date:   Tue, 1 Nov 2022 10:05:13 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <da0959e7-a91c-ab4c-56be-3c3cd280e592@iogearbox.net>
+Subject: Re: [xdp-hints] Re: [RFC bpf-next 0/5] xdp: hints via kfuncs
+Content-Language: en-US
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     "Bezdeka, Florian" <florian.bezdeka@siemens.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "alexandr.lobakin@intel.com" <alexandr.lobakin@intel.com>,
+        "anatoly.burakov@intel.com" <anatoly.burakov@intel.com>,
+        "song@kernel.org" <song@kernel.org>,
+        "Deric, Nemanja" <nemanja.deric@siemens.com>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "Kiszka, Jan" <jan.kiszka@siemens.com>,
+        "magnus.karlsson@gmail.com" <magnus.karlsson@gmail.com>,
+        "willemb@google.com" <willemb@google.com>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "brouer@redhat.com" <brouer@redhat.com>, "yhs@fb.com" <yhs@fb.com>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "mtahhan@redhat.com" <mtahhan@redhat.com>,
+        "xdp-hints@xdp-project.net" <xdp-hints@xdp-project.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "jolsa@kernel.org" <jolsa@kernel.org>,
+        "haoluo@google.com" <haoluo@google.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>
+References: <20221027200019.4106375-1-sdf@google.com>
+ <635bfc1a7c351_256e2082f@john.notmuch> <20221028110457.0ba53d8b@kernel.org>
+ <CAKH8qBshi5dkhqySXA-Rg66sfX0-eTtVYz1ymHfBxSE=Mt2duA@mail.gmail.com>
+ <635c62c12652d_b1ba208d0@john.notmuch> <20221028181431.05173968@kernel.org>
+ <5aeda7f6bb26b20cb74ef21ae9c28ac91d57fae6.camel@siemens.com>
+ <875yg057x1.fsf@toke.dk>
+ <CAKH8qBvQbgE=oSZoH4xiLJmqMSXApH-ufd-qEKGKD8=POfhrWQ@mail.gmail.com>
+ <77b115a0-bbba-48eb-89bd-3078b5fb7eeb@linux.dev>
+ <CAKH8qBsGB1G60cu91Au816gsB2zF8T0P-yDwxbTEOxX0TN3WgA@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <CAKH8qBsGB1G60cu91Au816gsB2zF8T0P-yDwxbTEOxX0TN3WgA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 02:52:16PM +0100, Daniel Borkmann wrote:
-> On 10/29/22 4:54 AM, Kees Cook wrote:
-> > Round up allocations with kmalloc_size_roundup() so that the verifier's
-> > use of ksize() is always accurate and no special handling of the memory
-> > is needed by KASAN, UBSAN_BOUNDS, nor FORTIFY_SOURCE. Pass the new size
-> > information back up to callers so they can use the space immediately,
-> > so array resizing to happen less frequently as well.
-> > 
-> [...]
+On 10/31/22 6:59 PM, Stanislav Fomichev wrote:
+> On Mon, Oct 31, 2022 at 3:57 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
+>>
+>> On 10/31/22 10:00 AM, Stanislav Fomichev wrote:
+>>>> 2. AF_XDP programs won't be able to access the metadata without using a
+>>>> custom XDP program that calls the kfuncs and puts the data into the
+>>>> metadata area. We could solve this with some code in libxdp, though; if
+>>>> this code can be made generic enough (so it just dumps the available
+>>>> metadata functions from the running kernel at load time), it may be
+>>>> possible to make it generic enough that it will be forward-compatible
+>>>> with new versions of the kernel that add new fields, which should
+>>>> alleviate Florian's concern about keeping things in sync.
+>>>
+>>> Good point. I had to convert to a custom program to use the kfuncs :-(
+>>> But your suggestion sounds good; maybe libxdp can accept some extra
+>>> info about at which offset the user would like to place the metadata
+>>> and the library can generate the required bytecode?
+>>>
+>>>> 3. It will make it harder to consume the metadata when building SKBs. I
+>>>> think the CPUMAP and veth use cases are also quite important, and that
+>>>> we want metadata to be available for building SKBs in this path. Maybe
+>>>> this can be resolved by having a convenient kfunc for this that can be
+>>>> used for programs doing such redirects. E.g., you could just call
+>>>> xdp_copy_metadata_for_skb() before doing the bpf_redirect, and that
+>>>> would recursively expand into all the kfunc calls needed to extract the
+>>>> metadata supported by the SKB path?
+>>>
+>>> So this xdp_copy_metadata_for_skb will create a metadata layout that
+>>
+>> Can the xdp_copy_metadata_for_skb be written as a bpf prog itself?
+>> Not sure where is the best point to specify this prog though.  Somehow during
+>> bpf_xdp_redirect_map?
+>> or this prog belongs to the target cpumap and the xdp prog redirecting to this
+>> cpumap has to write the meta layout in a way that the cpumap is expecting?
 > 
-> The commit message is a bit cryptic here without further context. Is this
-> a bug fix or improvement? I read the latter, but it would be good to have
+> We're probably interested in triggering it from the places where xdp
+> frames can eventually be converted into skbs?
+> So for plain 'return XDP_PASS' and things like bpf_redirect/etc? (IOW,
+> anything that's not XDP_DROP / AF_XDP redirect).
+> We can probably make it magically work, and can generate
+> kernel-digestible metadata whenever data == data_meta, but the
+> question - should we?
+> (need to make sure we won't regress any existing cases that are not
+> relying on the metadata)
 
-It's an improvement -- e.g. it depends on the recently added
-kmalloc_size_roundup() helper.
+Instead of having some kernel-digestible meta data, how about calling another 
+bpf prog to initialize the skb fields from the meta area after 
+__xdp_build_skb_from_frame() in the cpumap, so 
+run_xdp_set_skb_fileds_from_metadata() may be a better name.
 
-> more context here for reviewers (maybe Link tag pointing to some discussion
-> or the like). Also, why is the kmalloc_size_roundup() not hidden for kmalloc
-> callers, isn't this a tree-wide issue?
+The xdp_prog@rx sets the meta data and then redirect.  If the xdp_prog@rx can 
+also specify a xdp prog to initialize the skb fields from the meta area, then 
+there is no need to have a kfunc to enforce a kernel-digestible layout.  Not 
+sure what is a good way to specify this xdp_prog though...
 
-The main issue is that _most_ allocation callers want an explicitly sized
-allocation (and not "more"), and that dynamic runtime analysis tools
-(e.g. KASAN, UBSAN_BOUNDS, FORTIFY_SOURCE, etc) are looking for precise
-bounds checking (i.e. not something that is rounded up). A tiny handful
-of allocations were doing an implicit alloc/realloc loop that actually
-depended on ksize(), and didn't actually always call realloc. This has
-created a long series of bugs and problems over many years related to the
-runtime bounds checking, so these callers are finally being adjusted to
-_not_ depend on the ksize() side-effect, by doing one of several things:
+>>> the kernel will be able to understand when converting back to skb?
+>>> IIUC, the xdp program will look something like the following:
+>>>
+>>> if (xdp packet is to be consumed by af_xdp) {
+>>>     // do a bunch of bpf_xdp_metadata_<metadata> calls and assemble your
+>>> own metadata layout
+>>>     return bpf_redirect_map(xsk, ...);
+>>> } else {
+>>>     // if the packet is to be consumed by the kernel
+>>>     xdp_copy_metadata_for_skb(ctx);
+>>>     return bpf_redirect(...);
+>>> }
+>>>
+>>> Sounds like a great suggestion! xdp_copy_metadata_for_skb can maybe
+>>> put some magic number in the first byte(s) of the metadata so the
+>>> kernel can check whether xdp_copy_metadata_for_skb has been called
+>>> previously (or maybe xdp_frame can carry this extra signal, idk).
 
-- tracking the allocation size precisely and just never calling ksize()
-  at all[1].
-
-- always calling realloc and not using ksize() at all. (This solution
-  ends up actually be a subset of the next solution.)
-
-- using kmalloc_size_roundup() to explicitly round up the desired
-  allocation size immediately[2].
-
-The bpf/verifier case is this another of this latter case.
-
-Because some of the dynamic bounds checking depends on the size being an
-_argument_ to an allocator function (i.e. see the __alloc_size attribute),
-the ksize() users are rare, and it could waste local variables, it
-was been deemed better to explicitly separate the rounding up from the
-allocation itself[3].
-
-Hopefully that helps clarify! :)
-
--Kees
-
-[1] e.g.:
-    https://git.kernel.org/linus/712f210a457d
-    https://git.kernel.org/linus/72c08d9f4c72
-
-[2] e.g.:
-    https://git.kernel.org/netdev/net-next/c/12d6c1d3a2ad
-    https://git.kernel.org/netdev/net-next/c/ab3f7828c979
-    https://git.kernel.org/netdev/net-next/c/d6dd508080a3
-
-[3] https://lore.kernel.org/lkml/0ea1fc165a6c6117f982f4f135093e69cb884930.camel@redhat.com/
-
--- 
-Kees Cook
