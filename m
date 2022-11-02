@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 567D3C43219
-	for <bpf@archiver.kernel.org>; Wed,  2 Nov 2022 20:28:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6F55C433FE
+	for <bpf@archiver.kernel.org>; Wed,  2 Nov 2022 20:28:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231165AbiKBU2Q (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Nov 2022 16:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
+        id S231211AbiKBU2P (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Nov 2022 16:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbiKBU2L (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 2 Nov 2022 16:28:11 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37235FAB
-        for <bpf@vger.kernel.org>; Wed,  2 Nov 2022 13:28:10 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id b29so17400189pfp.13
-        for <bpf@vger.kernel.org>; Wed, 02 Nov 2022 13:28:10 -0700 (PDT)
+        with ESMTP id S231165AbiKBU2C (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Nov 2022 16:28:02 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8A7645C
+        for <bpf@vger.kernel.org>; Wed,  2 Nov 2022 13:27:58 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id h193so8521729pgc.10
+        for <bpf@vger.kernel.org>; Wed, 02 Nov 2022 13:27:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EFVKm9N7yN4j6gzFmzgZ18cbIlNE4XJ+caMDLKjzKGw=;
-        b=ncuKPT88UHKlqrRz8A7Mdf5fB9uxwpTXZtN1s7ZKMVy33Juu9vTXu4BRp83oyiegxn
-         5McF3+3bV2/naJmc9u75G9ah64Qu1vxFXLGW66NAJtt0p6q1nVmMV7952AFCoAkodDAD
-         HZ8R22qLR6FF2XMtxfx0+Q4Nw2BKxSctcBtNwWSL4k0OO0qx9aUffe/bkvoAb3F8LsUG
-         o+68ViWoV22n5AwxOCfNjdVVLNU2vmz8+mn/3uaaqO+I4+MMduekIV1FRvMCwGcbXP3l
-         /57r3UyJ2/gW3IwrtvjhZkYcKbDlv6hsDhmj1tNX7JfJrAu3v+CB00mklKx7CrruB7RP
-         aPUg==
+        bh=Y9uBRVO7JEHM4nW49xozdCg81j4pB8AgHBF/irn9W9M=;
+        b=SkgpIhZ7cYMGQ1wL1R/gim/TNpEn4ArumnWZQ2c+1qZBQZ1F8FPiqUIT8wpi1nK+pA
+         kP13ldq7u9OHuJ5WulDlQACFUkyVie0swd6gnlB+ldyMtbuYLpdPqtWvjCJOMZTFe9oK
+         gBhopR4jis3oC9FyU/OKIHc7m3UxyCV+6Ch5g07ZqZwk8tJrtQDXC7v/7ckrJQbOzp23
+         WQhhb52lM43bCcTcJj2IURP7q0S1YAr4WJ8UOVb4pAG64MIsfYkvRBZ1rae8nm/KudB8
+         1NCui+ErjAAn5Kh2Qx3dW7kjLcnzG/HAx37MiL6XuZwWjYWJPR6SvzKLTpe6n22M3EyC
+         vpWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EFVKm9N7yN4j6gzFmzgZ18cbIlNE4XJ+caMDLKjzKGw=;
-        b=ZuSTbBUUauUIgUbE4aORaZIgMrT5dBGDkNeip1e9eLQUwxe5b4jAZghOgEVJiXIWX2
-         8XB5kqUTpMJdCY803ZrXKB5a+gzzgRK/HMn+tZtmjvJJqYQAmD1zorI/Pwk347nYCUg8
-         KnNy06P5ijxqdmvUTZTKVq0g78r0beHLtMjkWxo6krityyx+8dZzekNyxlMDESHx9AEb
-         9D+COa1PeRBK/AswxgqjnGM0Ug7Mm7WYThESvrYmSSCwB8eC8IFo52UPfrR8rfR+FKE2
-         YlrRg8VVkhJIXdoH2U2hq24v+54OFvX7jf5eSjGNiP+CCnl/Um+kBnifXkRggqE1DchA
-         k8bg==
-X-Gm-Message-State: ACrzQf37vIvExeynBiZVPC4cjdFB/PxdE4tzojDG6mklzlGruyjGjVg0
-        u5pytf/Fk+/iVXazwAvV27485EckvDG3SA==
-X-Google-Smtp-Source: AMsMyM5wS9HgCgvOOb275MoK7Wl5c/KpQxKwI8FG1OEP+bNnGeSmXZPZWQp26zhi9LIMW2d6guOn1g==
-X-Received: by 2002:a63:5a61:0:b0:41b:b021:f916 with SMTP id k33-20020a635a61000000b0041bb021f916mr22500791pgm.387.1667420889571;
-        Wed, 02 Nov 2022 13:28:09 -0700 (PDT)
+        bh=Y9uBRVO7JEHM4nW49xozdCg81j4pB8AgHBF/irn9W9M=;
+        b=6jicGokCMWVYDKct18eDc6BTk5tkX0OV7sWHQb4ob2vtTntZgsoDH30dVPNwiVspxJ
+         UT+D16wm01ueJJrWj7ftPY1HG8fe3M71eYfwTIMYXEh7IaDzWmpyqmIrl8lG5F3E7ozl
+         xjktRatHZE2UJ0MgVDPqEkmPTjcmGSTmoO8ctpkydc0O7Cwh7sb0LELdRJhdLZbFtqMi
+         3cVwIHbAwF4p/fIbdRAVGhORtvfeFcraeGoAitDBL0cKATU2y9RV6emcSpCHT9hROqo1
+         Ip4gOdfM8B0ahKQWqZB5V/8eImH2qbY5mXLikRX9+aEdTCJ1DUg38oc7qiFpi0XP27vx
+         uBXg==
+X-Gm-Message-State: ACrzQf0yb9lp9PPSmeYAty+gwn6PqJOblKCqj7b7Mmm5yfMtqLHHOgYz
+        avRwWiJ1IcyR6u1VU1wKOWEnrF7ozGq7Kw==
+X-Google-Smtp-Source: AMsMyM4+HpANogEU4gtxRcUWReNFPjsd8/dOSPIk64YAt3lh9Ndq9rr5o0RDV6Wv184sFMUuxaCOsA==
+X-Received: by 2002:a05:6a00:238c:b0:56c:b442:6d28 with SMTP id f12-20020a056a00238c00b0056cb4426d28mr27777052pfc.62.1667420877699;
+        Wed, 02 Nov 2022 13:27:57 -0700 (PDT)
 Received: from localhost ([59.152.80.69])
-        by smtp.gmail.com with ESMTPSA id i9-20020a17090332c900b00183c67844aesm8798009plr.22.2022.11.02.13.28.08
+        by smtp.gmail.com with ESMTPSA id e16-20020aa798d0000000b0056ba02feda1sm9158503pfm.94.2022.11.02.13.27.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 13:28:09 -0700 (PDT)
+        Wed, 02 Nov 2022 13:27:57 -0700 (PDT)
 From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -57,451 +57,815 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Martin KaFai Lau <martin.lau@kernel.org>,
         Dave Marchevsky <davemarchevsky@meta.com>,
         Delyan Kratunov <delyank@meta.com>
-Subject: [PATCH bpf-next v3 19/24] bpf: Introduce bpf_obj_new
-Date:   Thu,  3 Nov 2022 01:56:53 +0530
-Message-Id: <20221102202658.963008-20-memxor@gmail.com>
+Subject: [PATCH bpf-next v3 15/24] bpf: Rewrite kfunc argument handling
+Date:   Thu,  3 Nov 2022 01:56:49 +0530
+Message-Id: <20221102202658.963008-16-memxor@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221102202658.963008-1-memxor@gmail.com>
 References: <20221102202658.963008-1-memxor@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=14712; i=memxor@gmail.com; h=from:subject; bh=fpez4BywDzjC9dwTgpFLpw2p4RcUhZ157Y41sx8f5Cc=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBjYtIE2VYeQbgAwifMQHw74+1jRyua/EgvCc5nN8h1 7GlOCY+JAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCY2LSBAAKCRBM4MiGSL8RyqzED/ 49Fo8w2fJ4f9QmiedDmKay4HWqvmt0823VgSPROpb3aLwNmTOZualBn7u9Dx3zlfceLmqvTAWwX4DC X6YyjlGOmvGjG+gJNtE+QYhHgUleeGik9E3C/vk5rKGCzTjAP2hPCqJCYN+dqJZFuG5QCuATDjKASJ 048VKC47AzW6Vh+vgFtU5IevtbYlQQrr1cwobofrKl32dgk6NYcxR6ZV3ED9djVa8xQV/ZRugDbOz9 cw/CTHFobg+TdbOxyzqBH03fe5ZVcfTRVTmVkdA69de4wrxAZRXigGGxSzRqBybEvQwGOo9TT/+qK5 8Z1OkbPV2rXqfEXHzpkJG+cTOWty7/I5MUdejS813CjQr5pSGpE5GfpqQBVSq2fcQMIfzihUbWU1te EdykUyT0SzSnhVu3DyW5wQfGPxdRxXG3FTVqBVuPwr+jgz3DLW0t9iJslsgE1hLZhg+32lQ04vZlSH MAhd+JRd2FRm1hDEm8UBEouIAZiiIiK04WDlMmaHsco5kNLiPBd4LRovNRy2/DRwIdE0SyHn1QvtAe wBxMZI2xBWKZi52iuarh0C5yYJcPzT6S0aP90lwuTJSyJkiaRaBK7XPvJLkD39Wq9nIeN6vLY3ji41 OYwzbzSOxU1fI8ivNZL+isW5+M9aPix33YKHtN7+1+pf3/JfxuQDKQWkK9EQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=27392; i=memxor@gmail.com; h=from:subject; bh=t24T7ZoR5q3SFler3EnMzKBH6exayjC+6sqd4SSbXgU=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBjYtID91FT1oIQmN+V4R1l+tdtlpNKvMsUZ8KkiPxl /+9TRqKJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCY2LSAwAKCRBM4MiGSL8RyvHgEA Ce9vQIiiG5jkh8wFrr5n5paGVsBKIRF00VwiyvY2emCEufsny1rW2HhR/130qqCV5Qz3EuJhE8JvWT tiYyMezlmq0gcmQawVelPiC05y+YnsoDZnw9kErbeE7K+49pmq9Du877hzDv0JYaqBhkdO74r5nbK0 Exvmf/jtJSDyyZTbh9LkKZ8j9UfVZk7FIa7cc51ylWyttNd72PoQEiauPTkDQ7RVG/a02lCCKZ/l45 0r/ihhC58dK4FM08Thy1EJkf97opSXdXCW+ClaMv0xRW0tIDPHiiwHqhQS84Qyi7AoXFToUKjyBbJQ hLxaz9FCYOAfgHcw4CMqrEqDxc5PdA0DRR0XrjLAYfQvQ9MNUc0B3P0ryphuiB67kqFkOZ/gg6hqWI AL69qjb2uyo4uxfytP8PDP1ZL20jMTIVWfp1KboyeCKht3WD+2hlDicmwAxu9UKUYEUErrMC6bhoK9 LllJQUoXYzeEzPf05qY3Mp25WaMrHc3naPwG+/llwUgYwakMOpNPtd4B3qJhVSgj00AJcOjezpDpC8 ttP/hGtRhk4Pi8Q2OOn1Wo+yvT3ruICgknJYOocjykkcmvypJqDGCyT5NHYzeQCOF29eO6koDoAnGn am/jSvu8lsm3xaq96mraGuYNIhuoH2Ne3C9EDP/CfwiShLX5T0Oowqt6WeZA==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce type safe memory allocator bpf_obj_new for BPF programs. The
-kernel side kfunc is named bpf_obj_new_impl, as passing hidden arguments
-to kfuncs still requires having them in prototype, unlike BPF helpers
-which always take 5 arguments and have them checked using bpf_func_proto
-in verifier, ignoring unset argument types.
+As we continue to add more features, argument types, kfunc flags, and
+different extensions to kfuncs, the code to verify the correctness of
+the kfunc prototype wrt the passed in registers has become ad-hoc and
+ugly to read.
 
-Introduce __ign suffix to ignore a specific kfunc argument during type
-checks, then use this to introduce support for passing type metadata to
-the bpf_obj_new_impl kfunc.
+To make life easier, and make a very clear split between different
+stages of argument processing, move all the code into verifier.c and
+refactor into easier to read helpers and functions.
 
-The user passes BTF ID of the type it wants to allocates in program BTF,
-the verifier then rewrites the first argument as the size of this type,
-after performing some sanity checks (to ensure it exists and it is a
-struct type).
-
-The second argument is also fixed up and passed by the verifier. This is
-the btf_struct_meta for the type being allocated. It would be needed
-mostly for the offset array which is required for zero initializing
-special fields while leaving the rest of storage in unitialized state.
-
-It would also be needed in the next patch to perform proper destruction
-of the object's special fields.
-
-A convenience macro is included in the bpf_experimental.h header to hide
-over the ugly details of the implementation, leading to user code
-looking similar to a language level extension which allocates and
-constructs fields of a user type.
-
-struct bar {
-	struct bpf_list_node node;
-};
-
-struct foo {
-	struct bpf_spin_lock lock;
-	struct bpf_list_head head __contains(bar, node);
-};
-
-void prog(void) {
-	struct foo *f;
-
-	f = bpf_obj_new(typeof(*f));
-	if (!f)
-		return;
-	...
-}
-
-A key piece of this story is still missing, i.e. the free function,
-which will come in the next patch.
+This also makes sharing code within the verifier easier with kfunc
+argument processing. This will be more and more useful in later patches
+as we are now moving to implement very core BPF helpers as kfuncs, to
+keep them experimental before baking into UAPI.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf.h                           |  21 ++--
- include/linux/bpf_verifier.h                  |   2 +
- kernel/bpf/core.c                             |  14 +++
- kernel/bpf/helpers.c                          |  41 +++++--
- kernel/bpf/verifier.c                         | 107 ++++++++++++++++--
- .../testing/selftests/bpf/bpf_experimental.h  |  20 ++++
- 6 files changed, 182 insertions(+), 23 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/bpf_experimental.h
+ include/linux/btf.h                           |  31 +-
+ kernel/bpf/btf.c                              |  16 +-
+ kernel/bpf/verifier.c                         | 545 +++++++++++++++++-
+ .../bpf/prog_tests/kfunc_dynptr_param.c       |   2 +-
+ tools/testing/selftests/bpf/verifier/calls.c  |   4 +-
+ .../selftests/bpf/verifier/ref_tracking.c     |   4 +-
+ 6 files changed, 568 insertions(+), 34 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index f3a109a8d4fb..13dc7a638f07 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -53,6 +53,8 @@ struct cgroup;
- extern struct idr btf_idr;
- extern spinlock_t btf_idr_lock;
- extern struct kobject *btf_kobj;
-+extern struct bpf_mem_alloc bpf_global_ma;
-+extern bool bpf_global_ma_set;
- 
- typedef u64 (*bpf_callback_t)(u64, u64, u64, u64, u64);
- typedef int (*bpf_iter_init_seq_priv_t)(void *private_data,
-@@ -333,16 +335,19 @@ static inline bool btf_record_has_field(const struct btf_record *rec, enum btf_f
- 	return rec->field_mask & type;
+diff --git a/include/linux/btf.h b/include/linux/btf.h
+index 42d8f3730a8d..d5b26380a60f 100644
+--- a/include/linux/btf.h
++++ b/include/linux/btf.h
+@@ -338,6 +338,16 @@ static inline bool btf_type_is_struct(const struct btf_type *t)
+ 	return kind == BTF_KIND_STRUCT || kind == BTF_KIND_UNION;
  }
  
--static inline void check_and_init_map_value(struct bpf_map *map, void *dst)
-+static inline void bpf_obj_init(const struct btf_field_offs *foffs, void *obj)
++static inline bool __btf_type_is_struct(const struct btf_type *t)
++{
++	return BTF_INFO_KIND(t->info) == BTF_KIND_STRUCT;
++}
++
++static inline bool btf_type_is_array(const struct btf_type *t)
++{
++	return BTF_INFO_KIND(t->info) == BTF_KIND_ARRAY;
++}
++
+ static inline u16 btf_type_vlen(const struct btf_type *t)
  {
--	if (!IS_ERR_OR_NULL(map->record)) {
--		struct btf_field *fields = map->record->fields;
--		u32 cnt = map->record->cnt;
--		int i;
-+	int i;
- 
--		for (i = 0; i < cnt; i++)
--			memset(dst + fields[i].offset, 0, btf_field_type_size(fields[i].type));
--	}
-+	if (!foffs)
-+		return;
-+	for (i = 0; i < foffs->cnt; i++)
-+		memset(obj + foffs->field_off[i], 0, foffs->field_sz[i]);
-+}
-+
-+static inline void check_and_init_map_value(struct bpf_map *map, void *dst)
-+{
-+	bpf_obj_init(map->field_offs, dst);
+ 	return BTF_INFO_VLEN(t->info);
+@@ -439,9 +449,10 @@ static inline void *btf_id_set8_contains(const struct btf_id_set8 *set, u32 id)
+ 	return bsearch(&id, set->pairs, set->cnt, sizeof(set->pairs[0]), btf_id_cmp_func);
  }
  
- /* memcpy that is used with 8-byte aligned pointers, power-of-8 size and
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 2614892ca063..1e9c782e0974 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -426,6 +426,8 @@ struct bpf_insn_aux_data {
- 		 */
- 		struct bpf_loop_inline_state loop_inline_state;
- 	};
-+	u64 obj_new_size; /* remember the size of type passed to bpf_obj_new to rewrite R1 */
-+	struct btf_struct_meta *kptr_struct_meta;
- 	u64 map_key_state; /* constant (32 bit) key tracking for maps */
- 	int ctx_field_size; /* the ctx field size for load insn, maybe 0 */
- 	u32 seen; /* this insn was processed by the verifier at env->pass_cnt */
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index a0e762a2bf97..5f44998c07f6 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -34,6 +34,7 @@
- #include <linux/log2.h>
- #include <linux/bpf_verifier.h>
- #include <linux/nodemask.h>
-+#include <linux/bpf_mem_alloc.h>
+-#ifdef CONFIG_BPF_SYSCALL
+ struct bpf_prog;
++struct bpf_verifier_log;
  
- #include <asm/barrier.h>
- #include <asm/unaligned.h>
-@@ -60,6 +61,9 @@
- #define CTX	regs[BPF_REG_CTX]
- #define IMM	insn->imm
- 
-+struct bpf_mem_alloc bpf_global_ma;
-+bool bpf_global_ma_set;
-+
- /* No hurry in this branch
-  *
-  * Exported for the bpf jit load helper.
-@@ -2746,6 +2750,16 @@ int __weak bpf_arch_text_invalidate(void *dst, size_t len)
- 	return -ENOTSUPP;
++#ifdef CONFIG_BPF_SYSCALL
+ const struct btf_type *btf_type_by_id(const struct btf *btf, u32 type_id);
+ const char *btf_name_by_offset(const struct btf *btf, u32 offset);
+ struct btf *btf_parse_vmlinux(void);
+@@ -455,6 +466,12 @@ s32 btf_find_dtor_kfunc(struct btf *btf, u32 btf_id);
+ int register_btf_id_dtor_kfuncs(const struct btf_id_dtor_kfunc *dtors, u32 add_cnt,
+ 				struct module *owner);
+ struct btf_struct_meta *btf_find_struct_meta(const struct btf *btf, u32 btf_id);
++const struct btf_member *
++btf_get_prog_ctx_type(struct bpf_verifier_log *log, const struct btf *btf,
++		      const struct btf_type *t, enum bpf_prog_type prog_type,
++		      int arg);
++bool btf_types_are_same(const struct btf *btf1, u32 id1,
++			const struct btf *btf2, u32 id2);
+ #else
+ static inline const struct btf_type *btf_type_by_id(const struct btf *btf,
+ 						    u32 type_id)
+@@ -490,6 +507,18 @@ static inline struct btf_struct_meta *btf_find_struct_meta(const struct btf *btf
+ {
+ 	return NULL;
  }
- 
-+static int __init bpf_global_ma_init(void)
++static inline const struct btf_member *
++btf_get_prog_ctx_type(struct bpf_verifier_log *log, const struct btf *btf,
++		      const struct btf_type *t, enum bpf_prog_type prog_type,
++		      int arg)
 +{
-+	int ret;
-+
-+	ret = bpf_mem_alloc_init(&bpf_global_ma, 0, false);
-+	bpf_global_ma_set = !ret;
-+	return ret;
++	return NULL;
 +}
-+late_initcall(bpf_global_ma_init);
-+
- DEFINE_STATIC_KEY_FALSE(bpf_stats_enabled_key);
- EXPORT_SYMBOL(bpf_stats_enabled_key);
- 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index e2441b70d3ed..b78eaf8ae554 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -19,6 +19,7 @@
- #include <linux/proc_ns.h>
- #include <linux/security.h>
- #include <linux/btf_ids.h>
-+#include <linux/bpf_mem_alloc.h>
- 
- #include "../../lib/kstrtox.h"
- 
-@@ -1731,8 +1732,11 @@ void bpf_list_head_free(const struct btf_field *field, void *list_head,
- 
- 		obj -= field->list_head.node_offset;
- 		head = head->next;
--		/* TODO: Rework later */
--		kfree(obj);
-+		/* The contained type can also have resources, including a
-+		 * bpf_list_head which needs to be freed.
-+		 */
-+		bpf_obj_free_fields(field->list_head.value_rec, obj);
-+		bpf_mem_free(&bpf_global_ma, obj);
- 	}
- unlock:
- 	INIT_LIST_HEAD(head);
-@@ -1740,20 +1744,43 @@ void bpf_list_head_free(const struct btf_field *field, void *list_head,
- 	local_irq_restore(flags);
- }
- 
--BTF_SET8_START(tracing_btf_ids)
-+__diag_push();
-+__diag_ignore_all("-Wmissing-prototypes",
-+		  "Global functions as their definitions will be in vmlinux BTF");
-+
-+void *bpf_obj_new_impl(u64 local_type_id__k, void *meta__ign)
++static inline bool btf_types_are_same(const struct btf *btf1, u32 id1,
++				      const struct btf *btf2, u32 id2)
 +{
-+	struct btf_struct_meta *meta = meta__ign;
-+	u64 size = local_type_id__k;
-+	void *p;
-+
-+	if (unlikely(!bpf_global_ma_set))
-+		return NULL;
-+	p = bpf_mem_alloc(&bpf_global_ma, size);
-+	if (!p)
-+		return NULL;
-+	if (meta)
-+		bpf_obj_init(meta->field_offs, p);
-+	return p;
++	return false;
 +}
-+
-+__diag_pop();
-+
-+BTF_SET8_START(generic_btf_ids)
- #ifdef CONFIG_KEXEC_CORE
- BTF_ID_FLAGS(func, crash_kexec, KF_DESTRUCTIVE)
  #endif
--BTF_SET8_END(tracing_btf_ids)
-+BTF_ID_FLAGS(func, bpf_obj_new_impl, KF_ACQUIRE | KF_RET_NULL)
-+BTF_SET8_END(generic_btf_ids)
  
--static const struct btf_kfunc_id_set tracing_kfunc_set = {
-+static const struct btf_kfunc_id_set generic_kfunc_set = {
- 	.owner = THIS_MODULE,
--	.set   = &tracing_btf_ids,
-+	.set   = &generic_btf_ids,
- };
- 
- static int __init kfunc_init(void)
- {
--	return register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &tracing_kfunc_set);
-+	return register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &generic_kfunc_set);
+ static inline bool btf_type_is_struct_ptr(struct btf *btf, const struct btf_type *t)
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index f0d2caf7f2f1..b63e0bb968f2 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -478,16 +478,6 @@ static bool btf_type_nosize_or_null(const struct btf_type *t)
+ 	return !t || btf_type_nosize(t);
  }
  
- late_initcall(kfunc_init);
+-static bool __btf_type_is_struct(const struct btf_type *t)
+-{
+-	return BTF_INFO_KIND(t->info) == BTF_KIND_STRUCT;
+-}
+-
+-static bool btf_type_is_array(const struct btf_type *t)
+-{
+-	return BTF_INFO_KIND(t->info) == BTF_KIND_ARRAY;
+-}
+-
+ static bool btf_type_is_datasec(const struct btf_type *t)
+ {
+ 	return BTF_INFO_KIND(t->info) == BTF_KIND_DATASEC;
+@@ -5529,7 +5519,7 @@ static u8 bpf_ctx_convert_map[] = {
+ #undef BPF_MAP_TYPE
+ #undef BPF_LINK_TYPE
+ 
+-static const struct btf_member *
++const struct btf_member *
+ btf_get_prog_ctx_type(struct bpf_verifier_log *log, const struct btf *btf,
+ 		      const struct btf_type *t, enum bpf_prog_type prog_type,
+ 		      int arg)
+@@ -6315,8 +6305,8 @@ int btf_struct_access(struct bpf_verifier_log *log,
+  * end up with two different module BTFs, but IDs point to the common type in
+  * vmlinux BTF.
+  */
+-static bool btf_types_are_same(const struct btf *btf1, u32 id1,
+-			       const struct btf *btf2, u32 id2)
++bool btf_types_are_same(const struct btf *btf1, u32 id1,
++			const struct btf *btf2, u32 id2)
+ {
+ 	if (id1 != id2)
+ 		return false;
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 074070e7a105..a04a98b23524 100644
+index b91b5a790d3e..52e69befb522 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -7776,6 +7776,11 @@ static bool is_kfunc_arg_sfx_constant(const struct btf *btf, const struct btf_pa
- 	return __kfunc_param_match_suffix(btf, arg, "__k");
+@@ -7674,19 +7674,521 @@ static void mark_btf_func_reg_size(struct bpf_verifier_env *env, u32 regno,
+ 	}
  }
  
-+static bool is_kfunc_arg_sfx_ignore(const struct btf *btf, const struct btf_param *arg)
-+{
-+	return __kfunc_param_match_suffix(btf, arg, "__ign");
-+}
-+
- static bool is_kfunc_arg_ret_buf_size(const struct btf *btf,
- 				      const struct btf_param *arg,
- 				      const struct bpf_reg_state *reg,
-@@ -8044,6 +8049,10 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 		int kf_arg_type;
- 
- 		t = btf_type_skip_modifiers(btf, args[i].type, NULL);
-+
-+		if (is_kfunc_arg_sfx_ignore(btf, &args[i]))
-+			continue;
-+
- 		if (btf_type_is_scalar(t)) {
- 			if (reg->type != SCALAR_VALUE) {
- 				verbose(env, "R%d is not a scalar\n", regno);
-@@ -8221,6 +8230,17 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 	return 0;
- }
- 
-+enum special_kfunc_type {
-+	KF_bpf_obj_new_impl,
++struct bpf_kfunc_call_arg_meta {
++	/* In parameters */
++	struct btf *btf;
++	u32 func_id;
++	u32 kfunc_flags;
++	const struct btf_type *func_proto;
++	const char *func_name;
++	/* Out parameters */
++	u32 ref_obj_id;
++	u8 release_regno;
++	bool r0_rdonly;
++	u64 r0_size;
 +};
 +
-+BTF_SET_START(special_kfunc_set)
-+BTF_ID(func, bpf_obj_new_impl)
-+BTF_SET_END(special_kfunc_set)
++static bool is_kfunc_acquire(struct bpf_kfunc_call_arg_meta *meta)
++{
++	return meta->kfunc_flags & KF_ACQUIRE;
++}
 +
-+BTF_ID_LIST(special_kfunc_list)
-+BTF_ID(func, bpf_obj_new_impl)
++static bool is_kfunc_ret_null(struct bpf_kfunc_call_arg_meta *meta)
++{
++	return meta->kfunc_flags & KF_RET_NULL;
++}
++
++static bool is_kfunc_release(struct bpf_kfunc_call_arg_meta *meta)
++{
++	return meta->kfunc_flags & KF_RELEASE;
++}
++
++static bool is_kfunc_trusted_args(struct bpf_kfunc_call_arg_meta *meta)
++{
++	return meta->kfunc_flags & KF_TRUSTED_ARGS;
++}
++
++static bool is_kfunc_sleepable(struct bpf_kfunc_call_arg_meta *meta)
++{
++	return meta->kfunc_flags & KF_SLEEPABLE;
++}
++
++static bool is_kfunc_destructive(struct bpf_kfunc_call_arg_meta *meta)
++{
++	return meta->kfunc_flags & KF_DESTRUCTIVE;
++}
++
++static bool is_kfunc_arg_kptr_get(struct bpf_kfunc_call_arg_meta *meta, int arg)
++{
++	return arg == 0 && (meta->kfunc_flags & KF_KPTR_GET);
++}
++
++static bool is_kfunc_arg_mem_size(const struct btf *btf,
++				  const struct btf_param *arg,
++				  const struct bpf_reg_state *reg)
++{
++	int len, sfx_len = sizeof("__sz") - 1;
++	const struct btf_type *t;
++	const char *param_name;
++
++	t = btf_type_skip_modifiers(btf, arg->type, NULL);
++	if (!btf_type_is_scalar(t) || reg->type != SCALAR_VALUE)
++		return false;
++
++	/* In the future, this can be ported to use BTF tagging */
++	param_name = btf_name_by_offset(btf, arg->name_off);
++	if (str_is_empty(param_name))
++		return false;
++	len = strlen(param_name);
++	if (len < sfx_len)
++		return false;
++	param_name += len - sfx_len;
++	if (strncmp(param_name, "__sz", sfx_len))
++		return false;
++
++	return true;
++}
++
++static bool is_kfunc_arg_ret_buf_size(const struct btf *btf,
++				      const struct btf_param *arg,
++				      const struct bpf_reg_state *reg,
++				      const char *name)
++{
++	int len, target_len = strlen(name);
++	const struct btf_type *t;
++	const char *param_name;
++
++	t = btf_type_skip_modifiers(btf, arg->type, NULL);
++	if (!btf_type_is_scalar(t) || reg->type != SCALAR_VALUE)
++		return false;
++
++	param_name = btf_name_by_offset(btf, arg->name_off);
++	if (str_is_empty(param_name))
++		return false;
++	len = strlen(param_name);
++	if (len != target_len)
++		return false;
++	if (strcmp(param_name, name))
++		return false;
++
++	return true;
++}
++
++enum {
++	KF_ARG_DYNPTR_ID,
++};
++
++BTF_ID_LIST(kf_arg_btf_ids)
++BTF_ID(struct, bpf_dynptr_kern)
++
++static bool is_kfunc_arg_dynptr(const struct btf *btf,
++				const struct btf_param *arg)
++{
++	const struct btf_type *t;
++	u32 res_id;
++
++	t = btf_type_skip_modifiers(btf, arg->type, NULL);
++	if (!t)
++		return false;
++	if (!btf_type_is_ptr(t))
++		return false;
++	t = btf_type_skip_modifiers(btf, t->type, &res_id);
++	if (!t)
++		return false;
++	return btf_types_are_same(btf, res_id, btf_vmlinux, kf_arg_btf_ids[KF_ARG_DYNPTR_ID]);
++}
++
++/* Returns true if struct is composed of scalars, 4 levels of nesting allowed */
++static bool __btf_type_is_scalar_struct(struct bpf_verifier_env *env,
++					const struct btf *btf,
++					const struct btf_type *t, int rec)
++{
++	const struct btf_type *member_type;
++	const struct btf_member *member;
++	u32 i;
++
++	if (!btf_type_is_struct(t))
++		return false;
++
++	for_each_member(i, t, member) {
++		const struct btf_array *array;
++
++		member_type = btf_type_skip_modifiers(btf, member->type, NULL);
++		if (btf_type_is_struct(member_type)) {
++			if (rec >= 3) {
++				verbose(env, "max struct nesting depth exceeded\n");
++				return false;
++			}
++			if (!__btf_type_is_scalar_struct(env, btf, member_type, rec + 1))
++				return false;
++			continue;
++		}
++		if (btf_type_is_array(member_type)) {
++			array = btf_array(member_type);
++			if (!array->nelems)
++				return false;
++			member_type = btf_type_skip_modifiers(btf, array->type, NULL);
++			if (!btf_type_is_scalar(member_type))
++				return false;
++			continue;
++		}
++		if (!btf_type_is_scalar(member_type))
++			return false;
++	}
++	return true;
++}
++
++
++static u32 *reg2btf_ids[__BPF_REG_TYPE_MAX] = {
++#ifdef CONFIG_NET
++	[PTR_TO_SOCKET] = &btf_sock_ids[BTF_SOCK_TYPE_SOCK],
++	[PTR_TO_SOCK_COMMON] = &btf_sock_ids[BTF_SOCK_TYPE_SOCK_COMMON],
++	[PTR_TO_TCP_SOCK] = &btf_sock_ids[BTF_SOCK_TYPE_TCP],
++#endif
++};
++
++enum kfunc_ptr_arg_type {
++	KF_ARG_PTR_TO_CTX,
++	KF_ARG_PTR_TO_BTF_ID,	     /* Also covers reg2btf_ids conversions */
++	KF_ARG_PTR_TO_KPTR_STRONG,   /* PTR_TO_KPTR but type specific */
++	KF_ARG_PTR_TO_DYNPTR,
++	KF_ARG_PTR_TO_MEM,
++	KF_ARG_PTR_TO_MEM_SIZE,	     /* Size derived from next argument, skip it */
++};
++
++static enum kfunc_ptr_arg_type
++get_kfunc_ptr_arg_type(struct bpf_verifier_env *env,
++		       struct bpf_kfunc_call_arg_meta *meta,
++		       const struct btf_type *t, const struct btf_type *ref_t,
++		       const char *ref_tname, const struct btf_param *args,
++		       int argno, int nargs)
++{
++	u32 regno = argno + 1;
++	struct bpf_reg_state *regs = cur_regs(env);
++	struct bpf_reg_state *reg = &regs[regno];
++	bool arg_mem_size = false;
++
++	/* In this function, we verify the kfunc's BTF as per the argument type,
++	 * leaving the rest of the verification with respect to the register
++	 * type to our caller. When a set of conditions hold in the BTF type of
++	 * arguments, we resolve it to a known kfunc_ptr_arg_type.
++	 */
++	if (btf_get_prog_ctx_type(&env->log, meta->btf, t, resolve_prog_type(env->prog), argno))
++		return KF_ARG_PTR_TO_CTX;
++
++	if ((base_type(reg->type) == PTR_TO_BTF_ID || reg2btf_ids[base_type(reg->type)])) {
++		if (!btf_type_is_struct(ref_t)) {
++			verbose(env, "kernel function %s args#%d pointer type %s %s is not supported\n",
++				meta->func_name, argno, btf_type_str(ref_t), ref_tname);
++			return -EINVAL;
++		}
++		return KF_ARG_PTR_TO_BTF_ID;
++	}
++
++	if (is_kfunc_arg_kptr_get(meta, argno)) {
++		if (!btf_type_is_ptr(ref_t)) {
++			verbose(env, "arg#0 BTF type must be a double pointer for kptr_get kfunc\n");
++			return -EINVAL;
++		}
++		ref_t = btf_type_by_id(meta->btf, ref_t->type);
++		ref_tname = btf_name_by_offset(meta->btf, ref_t->name_off);
++		if (!btf_type_is_struct(ref_t)) {
++			verbose(env, "kernel function %s args#0 pointer type %s %s is not supported\n",
++				meta->func_name, btf_type_str(ref_t), ref_tname);
++			return -EINVAL;
++		}
++		return KF_ARG_PTR_TO_KPTR_STRONG;
++	}
++
++	if (is_kfunc_arg_dynptr(meta->btf, &args[argno]))
++		return KF_ARG_PTR_TO_DYNPTR;
++
++	if (argno + 1 < nargs && is_kfunc_arg_mem_size(meta->btf, &args[argno + 1], &regs[regno + 1]))
++		arg_mem_size = true;
++
++	/* This is the catch all argument type of register types supported by
++	 * check_helper_mem_access. However, we only allow when argument type is
++	 * pointer to scalar, or struct composed (recursively) of scalars. When
++	 * arg_mem_size is true, the pointer can be void *.
++	 */
++	if (!btf_type_is_scalar(ref_t) && !__btf_type_is_scalar_struct(env, meta->btf, ref_t, 0) &&
++	    (arg_mem_size ? !btf_type_is_void(ref_t) : 1)) {
++		verbose(env, "arg#%d pointer type %s %s must point to %sscalar, or struct with scalar\n",
++			argno, btf_type_str(ref_t), ref_tname, arg_mem_size ? "void, " : "");
++		return -EINVAL;
++	}
++	return arg_mem_size ? KF_ARG_PTR_TO_MEM_SIZE : KF_ARG_PTR_TO_MEM;
++}
++
++static int process_kf_arg_ptr_to_btf_id(struct bpf_verifier_env *env,
++					struct bpf_reg_state *reg,
++					const struct btf_type *ref_t,
++					const char *ref_tname, u32 ref_id,
++					struct bpf_kfunc_call_arg_meta *meta,
++					int argno)
++{
++	const struct btf_type *reg_ref_t;
++	bool strict_type_match = false;
++	const struct btf *reg_btf;
++	const char *reg_ref_tname;
++	u32 reg_ref_id;
++
++	if (reg->type == PTR_TO_BTF_ID) {
++		reg_btf = reg->btf;
++		reg_ref_id = reg->btf_id;
++	} else {
++		reg_btf = btf_vmlinux;
++		reg_ref_id = *reg2btf_ids[base_type(reg->type)];
++	}
++
++	if (is_kfunc_trusted_args(meta) || (is_kfunc_release(meta) && reg->ref_obj_id))
++		strict_type_match = true;
++
++	reg_ref_t = btf_type_skip_modifiers(reg_btf, reg_ref_id, &reg_ref_id);
++	reg_ref_tname = btf_name_by_offset(reg_btf, reg_ref_t->name_off);
++	if (!btf_struct_ids_match(&env->log, reg_btf, reg_ref_id, reg->off, meta->btf, ref_id, strict_type_match)) {
++		verbose(env, "kernel function %s args#%d expected pointer to %s %s but R%d has a pointer to %s %s\n",
++			meta->func_name, argno, btf_type_str(ref_t), ref_tname, argno + 1,
++			btf_type_str(reg_ref_t), reg_ref_tname);
++		return -EINVAL;
++	}
++	return 0;
++}
++
++static int process_kf_arg_ptr_to_kptr_strong(struct bpf_verifier_env *env,
++					     struct bpf_reg_state *reg,
++					     const struct btf_type *ref_t,
++					     const char *ref_tname,
++					     struct bpf_kfunc_call_arg_meta *meta,
++					     int argno)
++{
++	struct btf_field *kptr_field;
++
++	/* check_func_arg_reg_off allows var_off for
++	 * PTR_TO_MAP_VALUE, but we need fixed offset to find
++	 * off_desc.
++	 */
++	if (!tnum_is_const(reg->var_off)) {
++		verbose(env, "arg#0 must have constant offset\n");
++		return -EINVAL;
++	}
++
++	kptr_field = btf_record_find(reg->map_ptr->record, reg->off + reg->var_off.value, BPF_KPTR);
++	if (!kptr_field || kptr_field->type != BPF_KPTR_REF) {
++		verbose(env, "arg#0 no referenced kptr at map value offset=%llu\n",
++			reg->off + reg->var_off.value);
++		return -EINVAL;
++	}
++
++	if (!btf_struct_ids_match(&env->log, meta->btf, ref_t->type, 0, kptr_field->kptr.btf,
++				  kptr_field->kptr.btf_id, true)) {
++		verbose(env, "kernel function %s args#%d expected pointer to %s %s\n",
++			meta->func_name, argno, btf_type_str(ref_t), ref_tname);
++		return -EINVAL;
++	}
++	return 0;
++}
++
++static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_arg_meta *meta)
++{
++	const char *func_name = meta->func_name, *ref_tname;
++	const struct btf *btf = meta->btf;
++	const struct btf_param *args;
++	u32 i, nargs;
++	int ret;
++
++	args = (const struct btf_param *)(meta->func_proto + 1);
++	nargs = btf_type_vlen(meta->func_proto);
++	if (nargs > MAX_BPF_FUNC_REG_ARGS) {
++		verbose(env, "Function %s has %d > %d args\n", func_name, nargs,
++			MAX_BPF_FUNC_REG_ARGS);
++		return -EINVAL;
++	}
++
++	/* Check that BTF function arguments match actual types that the
++	 * verifier sees.
++	 */
++	for (i = 0; i < nargs; i++) {
++		struct bpf_reg_state *regs = cur_regs(env), *reg = &regs[i + 1];
++		const struct btf_type *t, *ref_t, *resolve_ret;
++		enum bpf_arg_type arg_type = ARG_DONTCARE;
++		u32 regno = i + 1, ref_id, type_size;
++		bool is_ret_buf_sz = false;
++		int kf_arg_type;
++
++		t = btf_type_skip_modifiers(btf, args[i].type, NULL);
++		if (btf_type_is_scalar(t)) {
++			if (reg->type != SCALAR_VALUE) {
++				verbose(env, "R%d is not a scalar\n", regno);
++				return -EINVAL;
++			}
++			if (is_kfunc_arg_ret_buf_size(btf, &args[i], reg, "rdonly_buf_size")) {
++					meta->r0_rdonly = true;
++					is_ret_buf_sz = true;
++			} else if (is_kfunc_arg_ret_buf_size(btf, &args[i], reg, "rdwr_buf_size")) {
++					is_ret_buf_sz = true;
++			}
++
++			if (is_ret_buf_sz) {
++				if (meta->r0_size) {
++					verbose(env, "2 or more rdonly/rdwr_buf_size parameters for kfunc");
++					return -EINVAL;
++				}
++
++				if (!tnum_is_const(reg->var_off)) {
++					verbose(env, "R%d is not a const\n", regno);
++					return -EINVAL;
++				}
++
++				meta->r0_size = reg->var_off.value;
++				ret = mark_chain_precision(env, regno);
++				if (ret)
++					return ret;
++			}
++			continue;
++		}
++
++		if (!btf_type_is_ptr(t)) {
++			verbose(env, "Unrecognized arg#%d type %s\n", i, btf_type_str(t));
++			return -EINVAL;
++		}
++
++		if (reg->ref_obj_id) {
++			if (is_kfunc_release(meta) && meta->ref_obj_id) {
++				verbose(env, "verifier internal error: more than one arg with ref_obj_id R%d %u %u\n",
++					regno, reg->ref_obj_id,
++					meta->ref_obj_id);
++				return -EFAULT;
++			}
++			meta->ref_obj_id = reg->ref_obj_id;
++			if (is_kfunc_release(meta))
++				meta->release_regno = regno;
++		}
++
++		ref_t = btf_type_skip_modifiers(btf, t->type, &ref_id);
++		ref_tname = btf_name_by_offset(btf, ref_t->name_off);
++
++		kf_arg_type = get_kfunc_ptr_arg_type(env, meta, t, ref_t, ref_tname, args, i, nargs);
++		if (kf_arg_type < 0)
++			return kf_arg_type;
++
++		switch (kf_arg_type) {
++		case KF_ARG_PTR_TO_BTF_ID:
++			if (is_kfunc_trusted_args(meta) && !reg->ref_obj_id) {
++				verbose(env, "R%d must be referenced\n", regno);
++				return -EINVAL;
++			}
++			fallthrough;
++		case KF_ARG_PTR_TO_CTX:
++			/* Trusted arguments have the same offset checks as release arguments */
++			arg_type |= OBJ_RELEASE;
++			break;
++		case KF_ARG_PTR_TO_KPTR_STRONG:
++		case KF_ARG_PTR_TO_DYNPTR:
++		case KF_ARG_PTR_TO_MEM:
++		case KF_ARG_PTR_TO_MEM_SIZE:
++			/* Trusted by default */
++			break;
++		default:
++			WARN_ON_ONCE(1);
++			return -EFAULT;
++		}
++
++		if (is_kfunc_release(meta) && reg->ref_obj_id)
++			arg_type |= OBJ_RELEASE;
++		ret = check_func_arg_reg_off(env, reg, regno, arg_type);
++		if (ret < 0)
++			return ret;
++
++		switch (kf_arg_type) {
++		case KF_ARG_PTR_TO_CTX:
++			if (reg->type != PTR_TO_CTX) {
++				verbose(env, "arg#%d expected pointer to ctx, but got %s\n", i, btf_type_str(t));
++				return -EINVAL;
++			}
++			break;
++		case KF_ARG_PTR_TO_BTF_ID:
++			/* Only base_type is checked, further checks are done here */
++			if (reg->type != PTR_TO_BTF_ID &&
++			    (!reg2btf_ids[base_type(reg->type)] || type_flag(reg->type))) {
++				verbose(env, "arg#%d expected pointer to btf or socket\n", i);
++				return -EINVAL;
++			}
++			ret = process_kf_arg_ptr_to_btf_id(env, reg, ref_t, ref_tname, ref_id, meta, i);
++			if (ret < 0)
++				return ret;
++			break;
++		case KF_ARG_PTR_TO_KPTR_STRONG:
++			if (reg->type != PTR_TO_MAP_VALUE) {
++				verbose(env, "arg#0 expected pointer to map value\n");
++				return -EINVAL;
++			}
++			ret = process_kf_arg_ptr_to_kptr_strong(env, reg, ref_t, ref_tname, meta, i);
++			if (ret < 0)
++				return ret;
++			break;
++		case KF_ARG_PTR_TO_DYNPTR:
++			if (reg->type != PTR_TO_STACK) {
++				verbose(env, "arg#%d expected pointer to stack\n", i);
++				return -EINVAL;
++			}
++
++			if (!is_dynptr_reg_valid_init(env, reg)) {
++				verbose(env, "arg#%d pointer type %s %s must be valid and initialized\n",
++					i, btf_type_str(ref_t), ref_tname);
++				return -EINVAL;
++			}
++
++			if (!is_dynptr_type_expected(env, reg, ARG_PTR_TO_DYNPTR | DYNPTR_TYPE_LOCAL)) {
++				verbose(env, "arg#%d pointer type %s %s points to unsupported dynamic pointer type\n",
++					i, btf_type_str(ref_t), ref_tname);
++				return -EINVAL;
++			}
++			break;
++		case KF_ARG_PTR_TO_MEM:
++			resolve_ret = btf_resolve_size(btf, ref_t, &type_size);
++			if (IS_ERR(resolve_ret)) {
++				verbose(env, "arg#%d reference type('%s %s') size cannot be determined: %ld\n",
++					i, btf_type_str(ref_t), ref_tname, PTR_ERR(resolve_ret));
++				return -EINVAL;
++			}
++			ret = check_mem_reg(env, reg, regno, type_size);
++			if (ret < 0)
++				return ret;
++			break;
++		case KF_ARG_PTR_TO_MEM_SIZE:
++			ret = check_kfunc_mem_size_reg(env, &regs[regno + 1], regno + 1);
++			if (ret < 0) {
++				verbose(env, "arg#%d arg#%d memory, len pair leads to invalid memory access\n", i, i + 1);
++				return ret;
++			}
++			/* Skip next '__sz' argument */
++			i++;
++			break;
++		}
++	}
++
++	if (is_kfunc_release(meta) && !meta->release_regno) {
++		verbose(env, "release kernel function %s expects refcounted PTR_TO_BTF_ID\n",
++			func_name);
++		return -EINVAL;
++	}
++
++	return 0;
++}
 +
  static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
  			    int *insn_idx_p)
  {
-@@ -8295,17 +8315,64 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 	t = btf_type_skip_modifiers(desc_btf, func_proto->type, NULL);
+ 	const struct btf_type *t, *func, *func_proto, *ptr_type;
+ 	struct bpf_reg_state *regs = cur_regs(env);
+-	struct bpf_kfunc_arg_meta meta = { 0 };
+ 	const char *func_name, *ptr_type_name;
++	struct bpf_kfunc_call_arg_meta meta;
+ 	u32 i, nargs, func_id, ptr_type_id;
+ 	int err, insn_idx = *insn_idx_p;
+ 	const struct btf_param *args;
+ 	struct btf *desc_btf;
+ 	u32 *kfunc_flags;
+-	bool acq;
  
- 	if (is_kfunc_acquire(&meta) && !btf_type_is_struct_ptr(meta.btf, t)) {
--		verbose(env, "acquire kernel function does not return PTR_TO_BTF_ID\n");
--		return -EINVAL;
-+		/* Only exception is bpf_obj_new_impl */
-+		if (meta.btf != btf_vmlinux || meta.func_id != special_kfunc_list[KF_bpf_obj_new_impl]) {
-+			verbose(env, "acquire kernel function does not return PTR_TO_BTF_ID\n");
-+			return -EINVAL;
-+		}
+ 	/* skip for now, but return error when we find this in fixup_kfunc_call */
+ 	if (!insn->imm)
+@@ -7707,24 +8209,34 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 			func_name);
+ 		return -EACCES;
+ 	}
+-	if (*kfunc_flags & KF_DESTRUCTIVE && !capable(CAP_SYS_BOOT)) {
+-		verbose(env, "destructive kfunc calls require CAP_SYS_BOOT capabilities\n");
++
++	/* Prepare kfunc call metadata */
++	memset(&meta, 0, sizeof(meta));
++	meta.btf = desc_btf;
++	meta.func_id = func_id;
++	meta.kfunc_flags = *kfunc_flags;
++	meta.func_proto = func_proto;
++	meta.func_name = func_name;
++
++	if (is_kfunc_destructive(&meta) && !capable(CAP_SYS_BOOT)) {
++		verbose(env, "destructive kfunc calls require CAP_SYS_BOOT capability\n");
+ 		return -EACCES;
  	}
  
- 	if (btf_type_is_scalar(t)) {
- 		mark_reg_unknown(env, regs, BPF_REG_0);
- 		mark_btf_func_reg_size(env, BPF_REG_0, t->size);
- 	} else if (btf_type_is_ptr(t)) {
--		ptr_type = btf_type_skip_modifiers(desc_btf, t->type,
--						   &ptr_type_id);
--		if (!btf_type_is_struct(ptr_type)) {
-+		ptr_type = btf_type_skip_modifiers(desc_btf, t->type, &ptr_type_id);
-+
-+		if (meta.btf == btf_vmlinux && btf_id_set_contains(&special_kfunc_set, meta.func_id)) {
-+			if (!btf_type_is_void(ptr_type)) {
-+				verbose(env, "kernel function %s must have void * return type\n",
-+					meta.func_name);
-+				return -EINVAL;
-+			}
-+			if (meta.func_id == special_kfunc_list[KF_bpf_obj_new_impl]) {
-+				const struct btf_type *ret_t;
-+				struct btf *ret_btf;
-+				u32 ret_btf_id;
-+
-+				if (((u64)(u32)meta.arg_constant.value) != meta.arg_constant.value) {
-+					verbose(env, "local type ID argument must be in range [0, U32_MAX]\n");
-+					return -EINVAL;
-+				}
-+
-+				ret_btf = env->prog->aux->btf;
-+				ret_btf_id = meta.arg_constant.value;
-+
-+				/* This may be NULL due to user not supplying a BTF */
-+				if (!ret_btf) {
-+					verbose(env, "bpf_obj_new requires prog BTF\n");
-+					return -EINVAL;
-+				}
-+
-+				mark_reg_known_zero(env, regs, BPF_REG_0);
-+				regs[BPF_REG_0].type = PTR_TO_BTF_ID | MEM_TYPE_LOCAL;
-+				regs[BPF_REG_0].btf = ret_btf;
-+				regs[BPF_REG_0].btf_id = ret_btf_id;
-+
-+				ret_t = btf_type_by_id(ret_btf, ret_btf_id);
-+				if (!ret_t || !__btf_type_is_struct(ret_t)) {
-+					verbose(env, "bpf_obj_new type ID argument must be of a struct\n");
-+					return -EINVAL;
-+				}
-+
-+				env->insn_aux_data[insn_idx].obj_new_size = ret_t->size;
-+				env->insn_aux_data[insn_idx].kptr_struct_meta =
-+					btf_find_struct_meta(ret_btf, ret_btf_id);
-+			} else {
-+				verbose(env, "kernel function %s unhandled dynamic return type\n",
-+					meta.func_name);
-+				return -EFAULT;
-+			}
-+		} else if (!__btf_type_is_struct(ptr_type)) {
- 			if (!meta.r0_size) {
- 				ptr_type_name = btf_name_by_offset(desc_btf,
- 								   ptr_type->name_off);
-@@ -8333,6 +8400,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+-	acq = *kfunc_flags & KF_ACQUIRE;
+-
+-	meta.flags = *kfunc_flags;
++	if (is_kfunc_sleepable(&meta) && !env->prog->aux->sleepable) {
++		verbose(env, "program must be sleepable to call sleepable kfunc %s\n", func_name);
++		return -EACCES;
++	}
+ 
+ 	/* Check the arguments */
+-	err = btf_check_kfunc_arg_match(env, desc_btf, func_id, regs, &meta);
++	err = check_kfunc_args(env, &meta);
+ 	if (err < 0)
+ 		return err;
+ 	/* In case of release function, we get register number of refcounted
+-	 * PTR_TO_BTF_ID back from btf_check_kfunc_arg_match, do the release now
++	 * PTR_TO_BTF_ID in bpf_kfunc_arg_meta, do the release now.
+ 	 */
+-	if (err) {
+-		err = release_reference(env, regs[err].ref_obj_id);
++	if (meta.release_regno) {
++		err = release_reference(env, regs[meta.release_regno].ref_obj_id);
+ 		if (err) {
+ 			verbose(env, "kfunc %s#%d reference has not been acquired before\n",
+ 				func_name, func_id);
+@@ -7738,7 +8250,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	/* Check return type */
+ 	t = btf_type_skip_modifiers(desc_btf, func_proto->type, NULL);
+ 
+-	if (acq && !btf_type_is_struct_ptr(desc_btf, t)) {
++	if (is_kfunc_acquire(&meta) && !btf_type_is_struct_ptr(meta.btf, t)) {
+ 		verbose(env, "acquire kernel function does not return PTR_TO_BTF_ID\n");
+ 		return -EINVAL;
+ 	}
+@@ -7777,20 +8289,23 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
  			regs[BPF_REG_0].type = PTR_TO_BTF_ID;
  			regs[BPF_REG_0].btf_id = ptr_type_id;
  		}
-+
- 		if (is_kfunc_ret_null(&meta)) {
+-		if (*kfunc_flags & KF_RET_NULL) {
++		if (is_kfunc_ret_null(&meta)) {
  			regs[BPF_REG_0].type |= PTR_MAYBE_NULL;
  			/* For mark_ptr_or_null_reg, see 93c230e3f5bd6 */
-@@ -14471,8 +14539,8 @@ static int fixup_call_args(struct bpf_verifier_env *env)
- 	return err;
- }
- 
--static int fixup_kfunc_call(struct bpf_verifier_env *env,
--			    struct bpf_insn *insn)
-+static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
-+			    struct bpf_insn *insn_buf, int insn_idx, int *cnt)
- {
- 	const struct bpf_kfunc_desc *desc;
- 
-@@ -14491,8 +14559,21 @@ static int fixup_kfunc_call(struct bpf_verifier_env *env,
- 		return -EFAULT;
- 	}
- 
-+	*cnt = 0;
- 	insn->imm = desc->imm;
-+	if (insn->off)
-+		return 0;
-+	if (desc->func_id == special_kfunc_list[KF_bpf_obj_new_impl]) {
-+		struct btf_struct_meta *kptr_struct_meta = env->insn_aux_data[insn_idx].kptr_struct_meta;
-+		struct bpf_insn addr[2] = { BPF_LD_IMM64(BPF_REG_2, (long)kptr_struct_meta) };
-+		u64 obj_new_size = env->insn_aux_data[insn_idx].obj_new_size;
- 
-+		insn_buf[0] = BPF_MOV64_IMM(BPF_REG_1, obj_new_size);
-+		insn_buf[1] = addr[0];
-+		insn_buf[2] = addr[1];
-+		insn_buf[3] = *insn;
-+		*cnt = 4;
-+	}
- 	return 0;
- }
- 
-@@ -14634,9 +14715,19 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 		if (insn->src_reg == BPF_PSEUDO_CALL)
- 			continue;
- 		if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
--			ret = fixup_kfunc_call(env, insn);
-+			ret = fixup_kfunc_call(env, insn, insn_buf, i + delta, &cnt);
- 			if (ret)
- 				return ret;
-+			if (cnt == 0)
-+				continue;
-+
-+			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
-+			if (!new_prog)
-+				return -ENOMEM;
-+
-+			delta	 += cnt - 1;
-+			env->prog = prog = new_prog;
-+			insn	  = new_prog->insnsi + i + delta;
- 			continue;
+ 			regs[BPF_REG_0].id = ++env->id_gen;
  		}
+ 		mark_btf_func_reg_size(env, BPF_REG_0, sizeof(void *));
+-		if (acq) {
++		if (is_kfunc_acquire(&meta)) {
+ 			int id = acquire_reference_state(env, insn_idx);
  
-diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-new file mode 100644
-index 000000000000..1d3451084a68
---- /dev/null
-+++ b/tools/testing/selftests/bpf/bpf_experimental.h
-@@ -0,0 +1,20 @@
-+#include <vmlinux.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_core_read.h>
-+
-+/* Description
-+ *	Allocates a local kptr of type represented by 'local_type_id' in program
-+ *	BTF. User may use the bpf_core_type_id_local macro to pass the type ID
-+ *	of a struct in program BTF.
-+ *
-+ *	The 'local_type_id' parameter must be a known constant.
-+ *	The 'meta' parameter is a hidden argument that is ignored.
-+ * Returns
-+ *	A local kptr corresponding to passed in 'local_type_id', or NULL on
-+ *	failure.
-+ */
-+extern void *bpf_obj_new_impl(__u64 local_type_id, void *meta) __ksym;
-+
-+/* Convenience macro to wrap over bpf_obj_new_impl */
-+#define bpf_obj_new(type) bpf_obj_new_impl(bpf_core_type_id_local(type), NULL)
+ 			if (id < 0)
+ 				return id;
+-			regs[BPF_REG_0].id = id;
++			if (is_kfunc_ret_null(&meta))
++				regs[BPF_REG_0].id = id;
+ 			regs[BPF_REG_0].ref_obj_id = id;
+ 		}
++		if (reg_may_point_to_spin_lock(&regs[BPF_REG_0]) && !regs[BPF_REG_0].id)
++			regs[BPF_REG_0].id = ++env->id_gen;
+ 	} /* else { add_kfunc_call() ensures it is btf_type_is_void(t) } */
+ 
+ 	nargs = btf_type_vlen(func_proto);
+diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c b/tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
+index c210657d4d0a..55d641c1f126 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
++++ b/tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
+@@ -22,7 +22,7 @@ static struct {
+ 	 "arg#0 pointer type STRUCT bpf_dynptr_kern points to unsupported dynamic pointer type", 0},
+ 	{"not_valid_dynptr",
+ 	 "arg#0 pointer type STRUCT bpf_dynptr_kern must be valid and initialized", 0},
+-	{"not_ptr_to_stack", "arg#0 pointer type STRUCT bpf_dynptr_kern not to stack", 0},
++	{"not_ptr_to_stack", "arg#0 expected pointer to stack", 0},
+ 	{"dynptr_data_null", NULL, -EBADMSG},
+ };
+ 
+diff --git a/tools/testing/selftests/bpf/verifier/calls.c b/tools/testing/selftests/bpf/verifier/calls.c
+index e1a937277b54..e349d85f7717 100644
+--- a/tools/testing/selftests/bpf/verifier/calls.c
++++ b/tools/testing/selftests/bpf/verifier/calls.c
+@@ -109,7 +109,7 @@
+ 	},
+ 	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
+ 	.result = REJECT,
+-	.errstr = "arg#0 pointer type STRUCT prog_test_ref_kfunc must point",
++	.errstr = "arg#0 expected pointer to btf or socket",
+ 	.fixup_kfunc_btf_id = {
+ 		{ "bpf_kfunc_call_test_acquire", 3 },
+ 		{ "bpf_kfunc_call_test_release", 5 },
+@@ -181,7 +181,7 @@
+ 	},
+ 	.result_unpriv = REJECT,
+ 	.result = REJECT,
+-	.errstr = "negative offset ptr_ ptr R1 off=-4 disallowed",
++	.errstr = "R1 must have zero offset when passed to release func",
+ },
+ {
+ 	"calls: invalid kfunc call: PTR_TO_BTF_ID with variable offset",
+diff --git a/tools/testing/selftests/bpf/verifier/ref_tracking.c b/tools/testing/selftests/bpf/verifier/ref_tracking.c
+index f18ce867271f..4784471b0b7f 100644
+--- a/tools/testing/selftests/bpf/verifier/ref_tracking.c
++++ b/tools/testing/selftests/bpf/verifier/ref_tracking.c
+@@ -142,7 +142,7 @@
+ 	.kfunc = "bpf",
+ 	.expected_attach_type = BPF_LSM_MAC,
+ 	.flags = BPF_F_SLEEPABLE,
+-	.errstr = "arg#0 pointer type STRUCT bpf_key must point to scalar, or struct with scalar",
++	.errstr = "arg#0 expected pointer to btf or socket",
+ 	.fixup_kfunc_btf_id = {
+ 		{ "bpf_lookup_user_key", 2 },
+ 		{ "bpf_key_put", 4 },
+@@ -163,7 +163,7 @@
+ 	.kfunc = "bpf",
+ 	.expected_attach_type = BPF_LSM_MAC,
+ 	.flags = BPF_F_SLEEPABLE,
+-	.errstr = "arg#0 pointer type STRUCT bpf_key must point to scalar, or struct with scalar",
++	.errstr = "arg#0 expected pointer to btf or socket",
+ 	.fixup_kfunc_btf_id = {
+ 		{ "bpf_lookup_system_key", 1 },
+ 		{ "bpf_key_put", 3 },
 -- 
 2.38.1
 
