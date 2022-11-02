@@ -2,167 +2,172 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5513CC433FE
-	for <bpf@archiver.kernel.org>; Wed,  2 Nov 2022 06:25:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B1D2C4332F
+	for <bpf@archiver.kernel.org>; Wed,  2 Nov 2022 07:20:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbiKBGZi convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 2 Nov 2022 02:25:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41656 "EHLO
+        id S230320AbiKBHT7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Nov 2022 03:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbiKBGZY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 2 Nov 2022 02:25:24 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ADFD26AFB
-        for <bpf@vger.kernel.org>; Tue,  1 Nov 2022 23:25:08 -0700 (PDT)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A25BPB7011606
-        for <bpf@vger.kernel.org>; Tue, 1 Nov 2022 23:25:07 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3kkhkvgkxj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 01 Nov 2022 23:25:07 -0700
-Received: from twshared18509.43.prn1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+        with ESMTP id S230300AbiKBHT6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Nov 2022 03:19:58 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E296F23164;
+        Wed,  2 Nov 2022 00:19:55 -0700 (PDT)
+Received: from canpemm500005.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N2J740d2TzRnx1;
+        Wed,  2 Nov 2022 15:14:56 +0800 (CST)
+Received: from [10.174.178.197] (10.174.178.197) by
+ canpemm500005.china.huawei.com (7.192.104.229) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 1 Nov 2022 23:25:06 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id C580320F58A63; Tue,  1 Nov 2022 23:22:33 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 5/6] bpf: aggressively forget precise markings during state checkpointing
-Date:   Tue, 1 Nov 2022 23:22:20 -0700
-Message-ID: <20221102062221.2019833-6-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221102062221.2019833-1-andrii@kernel.org>
-References: <20221102062221.2019833-1-andrii@kernel.org>
+ 15.1.2375.31; Wed, 2 Nov 2022 15:19:52 +0800
+Message-ID: <666b976a-8873-25e2-66dd-1398682c6cb7@huawei.com>
+Date:   Wed, 2 Nov 2022 15:19:52 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: x7HZp-bBbZhUgWbmE8KagQ_Z1K5pD_li
-X-Proofpoint-ORIG-GUID: x7HZp-bBbZhUgWbmE8KagQ_Z1K5pD_li
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-02_02,2022-11-01_02,2022-06-22_01
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH -next] bpf, test_run: fix alignment problem in
+ bpf_prog_test_run_skb()
+To:     Eric Dumazet <edumazet@google.com>,
+        Kees Cook <keescook@chromium.org>
+CC:     Jakub Kicinski <kuba@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <davem@davemloft.net>,
+        <pabeni@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@kernel.org>,
+        <song@kernel.org>, <yhs@fb.com>, <haoluo@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Linux MM <linux-mm@kvack.org>, <kasan-dev@googlegroups.com>
+References: <20221101040440.3637007-1-zhongbaisong@huawei.com>
+ <eca17bfb-c75f-5db1-f194-5b00c2a0c6f2@iogearbox.net>
+ <ca6253bd-dcf4-2625-bc41-4b9a7774d895@huawei.com>
+ <20221101210542.724e3442@kernel.org> <202211012121.47D68D0@keescook>
+ <CANn89i+FVN95uvftTJteZgGQ_sSb6452XXZn0veNjHHKZ2yEFQ@mail.gmail.com>
+From:   zhongbaisong <zhongbaisong@huawei.com>
+Organization: huawei
+In-Reply-To: <CANn89i+FVN95uvftTJteZgGQ_sSb6452XXZn0veNjHHKZ2yEFQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.197]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500005.china.huawei.com (7.192.104.229)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Exploit the property of about-to-be-checkpointed state to be able to
-forget all precise markings up to that point even more aggressively. We
-now clear all potentially inherited precise markings right before
-checkpointing and branching off into child state. If any of children
-states require precise knowledge of any SCALAR register, those will be
-propagated backwards later on before this state is finalized, preserving
-correctness.
 
-There is a single selftests BPF program change, but tremendous one: 25x
-reduction in number of verified instructions and states in
-trace_virtqueue_add_sgs.
 
-Cilium results are more modest, but happen across wider range of programs.
+On 2022/11/2 12:37, Eric Dumazet wrote:
+> On Tue, Nov 1, 2022 at 9:27 PM Kees Cook <keescook@chromium.org> wrote:
+>>
+>> On Tue, Nov 01, 2022 at 09:05:42PM -0700, Jakub Kicinski wrote:
+>>> On Wed, 2 Nov 2022 10:59:44 +0800 zhongbaisong wrote:
+>>>> On 2022/11/2 0:45, Daniel Borkmann wrote:
+>>>>> [ +kfence folks ]
+>>>>
+>>>> + cc: Alexander Potapenko, Marco Elver, Dmitry Vyukov
+>>>>
+>>>> Do you have any suggestions about this problem?
+>>>
+>>> + Kees who has been sending similar patches for drivers
+>>>
+>>>>> On 11/1/22 5:04 AM, Baisong Zhong wrote:
+>>>>>> Recently, we got a syzkaller problem because of aarch64
+>>>>>> alignment fault if KFENCE enabled.
+>>>>>>
+>>>>>> When the size from user bpf program is an odd number, like
+>>>>>> 399, 407, etc, it will cause skb shard info's alignment access,
+>>>>>> as seen below:
+>>>>>>
+>>>>>> BUG: KFENCE: use-after-free read in __skb_clone+0x23c/0x2a0
+>>>>>> net/core/skbuff.c:1032
+>>>>>>
+>>>>>> Use-after-free read at 0xffff6254fffac077 (in kfence-#213):
+>>>>>>    __lse_atomic_add arch/arm64/include/asm/atomic_lse.h:26 [inline]
+>>>>>>    arch_atomic_add arch/arm64/include/asm/atomic.h:28 [inline]
+>>>>>>    arch_atomic_inc include/linux/atomic-arch-fallback.h:270 [inline]
+>>>>>>    atomic_inc include/asm-generic/atomic-instrumented.h:241 [inline]
+>>>>>>    __skb_clone+0x23c/0x2a0 net/core/skbuff.c:1032
+>>>>>>    skb_clone+0xf4/0x214 net/core/skbuff.c:1481
+>>>>>>    ____bpf_clone_redirect net/core/filter.c:2433 [inline]
+>>>>>>    bpf_clone_redirect+0x78/0x1c0 net/core/filter.c:2420
+>>>>>>    bpf_prog_d3839dd9068ceb51+0x80/0x330
+>>>>>>    bpf_dispatcher_nop_func include/linux/bpf.h:728 [inline]
+>>>>>>    bpf_test_run+0x3c0/0x6c0 net/bpf/test_run.c:53
+>>>>>>    bpf_prog_test_run_skb+0x638/0xa7c net/bpf/test_run.c:594
+>>>>>>    bpf_prog_test_run kernel/bpf/syscall.c:3148 [inline]
+>>>>>>    __do_sys_bpf kernel/bpf/syscall.c:4441 [inline]
+>>>>>>    __se_sys_bpf+0xad0/0x1634 kernel/bpf/syscall.c:4381
+>>>>>>
+>>>>>> kfence-#213: 0xffff6254fffac000-0xffff6254fffac196, size=407,
+>>>>>> cache=kmalloc-512
+>>>>>>
+>>>>>> allocated by task 15074 on cpu 0 at 1342.585390s:
+>>>>>>    kmalloc include/linux/slab.h:568 [inline]
+>>>>>>    kzalloc include/linux/slab.h:675 [inline]
+>>>>>>    bpf_test_init.isra.0+0xac/0x290 net/bpf/test_run.c:191
+>>>>>>    bpf_prog_test_run_skb+0x11c/0xa7c net/bpf/test_run.c:512
+>>>>>>    bpf_prog_test_run kernel/bpf/syscall.c:3148 [inline]
+>>>>>>    __do_sys_bpf kernel/bpf/syscall.c:4441 [inline]
+>>>>>>    __se_sys_bpf+0xad0/0x1634 kernel/bpf/syscall.c:4381
+>>>>>>    __arm64_sys_bpf+0x50/0x60 kernel/bpf/syscall.c:4381
+>>>>>>
+>>>>>> To fix the problem, we round up allocations with kmalloc_size_roundup()
+>>>>>> so that build_skb()'s use of kize() is always alignment and no special
+>>>>>> handling of the memory is needed by KFENCE.
+>>>>>>
+>>>>>> Fixes: 1cf1cae963c2 ("bpf: introduce BPF_PROG_TEST_RUN command")
+>>>>>> Signed-off-by: Baisong Zhong <zhongbaisong@huawei.com>
+>>>>>> ---
+>>>>>>    net/bpf/test_run.c | 1 +
+>>>>>>    1 file changed, 1 insertion(+)
+>>>>>>
+>>>>>> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+>>>>>> index 13d578ce2a09..058b67108873 100644
+>>>>>> --- a/net/bpf/test_run.c
+>>>>>> +++ b/net/bpf/test_run.c
+>>>>>> @@ -774,6 +774,7 @@ static void *bpf_test_init(const union bpf_attr
+>>>>>> *kattr, u32 user_size,
+>>>>>>        if (user_size > size)
+>>>>>>            return ERR_PTR(-EMSGSIZE);
+>>>>>> +    size = kmalloc_size_roundup(size);
+>>>>>>        data = kzalloc(size + headroom + tailroom, GFP_USER);
+>>>>>
+>>>>> The fact that you need to do this roundup on call sites feels broken, no?
+>>>>> Was there some discussion / consensus that now all k*alloc() call sites
+>>>>> would need to be fixed up? Couldn't this be done transparently in k*alloc()
+>>>>> when KFENCE is enabled? I presume there may be lots of other such occasions
+>>>>> in the kernel where similar issue triggers, fixing up all call-sites feels
+>>>>> like ton of churn compared to api-internal, generic fix.
+>>
+>> I hope I answer this in more detail here:
+>> https://lore.kernel.org/lkml/202211010937.4631CB1B0E@keescook/
+>>
+>> The problem is that ksize() should never have existed in the first
+>> place. :P Every runtime bounds checker has tripped over it, and with
+>> the addition of the __alloc_size attribute, I had to start ripping
+>> ksize() out: it can't be used to pretend an allocation grew in size.
+>> Things need to either preallocate more or go through *realloc() like
+>> everything else. Luckily, ksize() is rare.
+>>
+>> FWIW, the above fix doesn't look correct to me -- I would expect this to
+>> be:
+>>
+>>          size_t alloc_size;
+>>          ...
+>>          alloc_size = kmalloc_size_roundup(size + headroom + tailroom);
+>>          data = kzalloc(alloc_size, GFP_USER);
+> 
+> Making sure the struct skb_shared_info is aligned to a cache line does
+> not need kmalloc_size_roundup().
+> 
+> What is needed is to adjust @size so that (@size + @headroom) is a
+> multiple of SMP_CACHE_BYTES
 
-SELFTESTS RESULTS
-=================
+ok, I'll fix it and send v2.
 
-$ ./veristat -C -e file,prog,insns,states ~/imprecise-early-results.csv ~/imprecise-aggressive-results.csv | grep -v '+0'
-File                 Program                  Total insns (A)  Total insns (B)  Total insns (DIFF)  Total states (A)  Total states (B)  Total states (DIFF)
--------------------  -----------------------  ---------------  ---------------  ------------------  ----------------  ----------------  -------------------
-loop6.bpf.linked1.o  trace_virtqueue_add_sgs           398057            15114   -382943 (-96.20%)              8717               336      -8381 (-96.15%)
--------------------  -----------------------  ---------------  ---------------  ------------------  ----------------  ----------------  -------------------
+Thanks
 
-CILIUM RESULTS
-==============
-
-$ ./veristat -C -e file,prog,insns,states ~/imprecise-early-results-cilium.csv ~/imprecise-aggressive-results-cilium.csv | grep -v '+0'
-File           Program                           Total insns (A)  Total insns (B)  Total insns (DIFF)  Total states (A)  Total states (B)  Total states (DIFF)
--------------  --------------------------------  ---------------  ---------------  ------------------  ----------------  ----------------  -------------------
-bpf_host.o     tail_handle_nat_fwd_ipv4                    23426            23221       -205 (-0.88%)              1537              1515         -22 (-1.43%)
-bpf_host.o     tail_handle_nat_fwd_ipv6                    13009            12904       -105 (-0.81%)               719               708         -11 (-1.53%)
-bpf_host.o     tail_nodeport_nat_ingress_ipv6               5261             5196        -65 (-1.24%)               247               243          -4 (-1.62%)
-bpf_host.o     tail_nodeport_nat_ipv6_egress                3446             3406        -40 (-1.16%)               203               198          -5 (-2.46%)
-bpf_lxc.o      tail_handle_nat_fwd_ipv4                    23426            23221       -205 (-0.88%)              1537              1515         -22 (-1.43%)
-bpf_lxc.o      tail_handle_nat_fwd_ipv6                    13009            12904       -105 (-0.81%)               719               708         -11 (-1.53%)
-bpf_lxc.o      tail_ipv4_ct_egress                          5074             4897       -177 (-3.49%)               255               248          -7 (-2.75%)
-bpf_lxc.o      tail_ipv4_ct_ingress                         5100             4923       -177 (-3.47%)               255               248          -7 (-2.75%)
-bpf_lxc.o      tail_ipv4_ct_ingress_policy_only             5100             4923       -177 (-3.47%)               255               248          -7 (-2.75%)
-bpf_lxc.o      tail_ipv6_ct_egress                          4558             4536        -22 (-0.48%)               188               187          -1 (-0.53%)
-bpf_lxc.o      tail_ipv6_ct_ingress                         4578             4556        -22 (-0.48%)               188               187          -1 (-0.53%)
-bpf_lxc.o      tail_ipv6_ct_ingress_policy_only             4578             4556        -22 (-0.48%)               188               187          -1 (-0.53%)
-bpf_lxc.o      tail_nodeport_nat_ingress_ipv6               5261             5196        -65 (-1.24%)               247               243          -4 (-1.62%)
-bpf_overlay.o  tail_nodeport_nat_ingress_ipv6               5261             5196        -65 (-1.24%)               247               243          -4 (-1.62%)
-bpf_overlay.o  tail_nodeport_nat_ipv6_egress                3482             3442        -40 (-1.15%)               204               201          -3 (-1.47%)
-bpf_xdp.o      tail_nodeport_nat_egress_ipv4               17200            15619      -1581 (-9.19%)              1111              1010        -101 (-9.09%)
--------------  --------------------------------  ---------------  ---------------  ------------------  ----------------  ----------------  -------------------
-
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- kernel/bpf/verifier.c | 37 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 2ec9d1452d4f..8841a873bcd5 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2781,6 +2781,31 @@ static void mark_all_scalars_precise(struct bpf_verifier_env *env,
- 	}
- }
- 
-+static void mark_all_scalars_imprecise(struct bpf_verifier_env *env, struct bpf_verifier_state *st)
-+{
-+	struct bpf_func_state *func;
-+	struct bpf_reg_state *reg;
-+	int i, j;
-+
-+	for (i = 0; i <= st->curframe; i++) {
-+		func = st->frame[i];
-+		for (j = 0; j < BPF_REG_FP; j++) {
-+			reg = &func->regs[j];
-+			if (reg->type != SCALAR_VALUE)
-+				continue;
-+			reg->precise = false;
-+		}
-+		for (j = 0; j < func->allocated_stack / BPF_REG_SIZE; j++) {
-+			if (!is_spilled_reg(&func->stack[j]))
-+				continue;
-+			reg = &func->stack[j].spilled_ptr;
-+			if (reg->type != SCALAR_VALUE)
-+				continue;
-+			reg->precise = false;
-+		}
-+	}
-+}
-+
- /*
-  * __mark_chain_precision() backtracks BPF program instruction sequence and
-  * chain of verifier states making sure that register *regno* (if regno >= 0)
-@@ -2859,6 +2884,14 @@ static void mark_all_scalars_precise(struct bpf_verifier_env *env,
-  * be imprecise. If any child state does require this register to be precise,
-  * we'll mark it precise later retroactively during precise markings
-  * propagation from child state to parent states.
-+ *
-+ * Skipping precise marking setting in current state is a mild version of
-+ * relying on the above observation. But we can utilize this property even
-+ * more aggressively by proactively forgetting any precise marking in the
-+ * current state (which we inherited from the parent state), right before we
-+ * checkpoint it and branch off into new child state. This is done by
-+ * mark_all_scalars_imprecise() to hopefully get more permissive and generic
-+ * finalized states which help in short circuiting more future states.
-  */
- static int __mark_chain_precision(struct bpf_verifier_env *env, int frame, int regno,
- 				  int spi)
-@@ -12203,6 +12236,10 @@ static int is_state_visited(struct bpf_verifier_env *env, int insn_idx)
- 	env->prev_jmps_processed = env->jmps_processed;
- 	env->prev_insn_processed = env->insn_processed;
- 
-+	/* forget precise markings we inherited, see __mark_chain_precision */
-+	if (env->bpf_capable)
-+		mark_all_scalars_imprecise(env, cur);
-+
- 	/* add new state to the head of linked list */
- 	new = &new_sl->state;
- 	err = copy_verifier_state(new, cur);
--- 
-2.30.2
-
+.
