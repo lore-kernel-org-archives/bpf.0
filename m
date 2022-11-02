@@ -2,93 +2,148 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF758C433FE
-	for <bpf@archiver.kernel.org>; Wed,  2 Nov 2022 11:50:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBA84C433FE
+	for <bpf@archiver.kernel.org>; Wed,  2 Nov 2022 11:56:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbiKBLul (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Nov 2022 07:50:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47904 "EHLO
+        id S229531AbiKBL4T (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Nov 2022 07:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiKBLuk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 2 Nov 2022 07:50:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AF928714
-        for <bpf@vger.kernel.org>; Wed,  2 Nov 2022 04:49:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667389779;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=06VWUZSI6Qm+q2bw86oGTZUBRk/gldRyN2LaxznNUAc=;
-        b=QJSj1eZNJTTzuF3FQ16UcnzUX1ZsJh3RWx3hstp9KUWOyTB8zgm4KDQh8ypr4Unahd+NaF
-        +c1i53c8QYQ4Ko8FCDjvk4UV/kgWu44dXXFwZ0Afzru1H3pjhxTx9T60toFueB7HoO3Jp6
-        4OtcYNnvWUenvRv4gpp64pVia/Ps3OQ=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-283-UJDp-NTcP1eMOZz03WUiKw-1; Wed, 02 Nov 2022 07:49:38 -0400
-X-MC-Unique: UJDp-NTcP1eMOZz03WUiKw-1
-Received: by mail-qv1-f69.google.com with SMTP id d8-20020a0cfe88000000b004bb65193fdcso9709198qvs.12
-        for <bpf@vger.kernel.org>; Wed, 02 Nov 2022 04:49:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=06VWUZSI6Qm+q2bw86oGTZUBRk/gldRyN2LaxznNUAc=;
-        b=ccJPrq2+DxtFb/ieA7uRMen5WpKCvTZ7OR5lsy4OXNxevS6G7DT6bt/Qmg59pmpPDg
-         Bdx8X9/GvpAM1W5RioKcYMIbx7X6za3nki7cN8DnTENFoAxnzHrNJBFj2qKyE9RBwAoM
-         PiTAi7/K1B809huS++M8H3URBGWrCr6HiUrWIxGkwDVyNOelrXYHLvZXhBprKzhc6fsq
-         A6l2XZutYULOYbeb17jnzNcr1GSR3gUfT1pAMwNNGQLlek7UKEoYfFwQrMoyHfstNvqQ
-         2t9D2OjWtCu1+aU/8TXWQ40G3e+cr4osJ16wH5lRl9VDtE7PaPuKa5OmOxqItUxfi/Sm
-         xASw==
-X-Gm-Message-State: ACrzQf24XhJg9Z3ZU6bFgqjqFjGy61ICGwYAp1167XPEYsZ+hexGJXWM
-        nWzB9aeHjRzgmR8c+GENNZmX+4kb71r0r5OhoY4PbioqsMVH/65fUVh6Zw18qSH8U0AY8PXX1Xs
-        hoHy9ntLRsReQ5HjSx6SH69foFjwQbpu9RgdeD0aQJn+OjaMSdj5jxGoKiTN1nvg=
-X-Received: by 2002:a05:622a:1e05:b0:3a5:460f:9655 with SMTP id br5-20020a05622a1e0500b003a5460f9655mr1498353qtb.471.1667389777838;
-        Wed, 02 Nov 2022 04:49:37 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4DJxHdfEPTbBpgqYZxtb6t994NR8WH5p2zFWigdLBnpc2oW+fMr6IzeXsMdnA/biKQcgrwPA==
-X-Received: by 2002:a05:622a:1e05:b0:3a5:460f:9655 with SMTP id br5-20020a05622a1e0500b003a5460f9655mr1498334qtb.471.1667389777564;
-        Wed, 02 Nov 2022 04:49:37 -0700 (PDT)
-Received: from nfvsdn-06.testing.baremetal.edge-sites.net (nat-pool-232-132.redhat.com. [66.187.232.132])
-        by smtp.gmail.com with ESMTPSA id h6-20020a05620a400600b006ee8874f5fasm7784855qko.53.2022.11.02.04.49.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 04:49:37 -0700 (PDT)
-From:   mtahhan@redhat.com
-To:     bpf@vger.kernel.org, linux-doc@vger.kernel.org
-Cc:     jbrouer@redhat.com, thoiland@redhat.com,
-        Maryam Tahhan <mtahhan@redhat.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>
-Subject: [PATCH bpf-next v2 0/1] docs: BPF_MAP_TYPE_CPUMAP
-Date:   Wed,  2 Nov 2022 08:44:15 -0400
-Message-Id: <20221102124416.2820268-1-mtahhan@redhat.com>
-X-Mailer: git-send-email 2.35.3
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S230047AbiKBL4O (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Nov 2022 07:56:14 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD55209BB;
+        Wed,  2 Nov 2022 04:56:13 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A2BiuSP008864;
+        Wed, 2 Nov 2022 11:56:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=6wA4ORMLiohH2s/IWcjz13uh/wcATUDu4AptGbMKXBY=;
+ b=FQvoU6ykUP1sKxu0R2cLQUgriPABt04zgaF31W3XmISKQrZgn0I6+uZotpfQCuVRkHOL
+ Uw1xWU+T8Zt3MH0sRY0qYFEOk8db8qDrFk5TKi90DtKlKyGbKcPMVh9ldCs/GLtRPOoy
+ RRyuqoicSfniYyxzmUZi+4BBWk64vbuanupVyfL5J0Qk47kNMaK1DDnVweYIyh4CLFcf
+ X1+v08dtCoeBWhKP8n4TGr2v81AV/elx6bvhZZpTaW/JbJL8Cx681W7IEFsIGZ2jlvGt
+ TidytV7sxrngW6S+a2Y7s8FIGNAym6Iew9lBztOTDzm3VX10g3ZaQFl4MpSdIfW7zxcj 1A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kkqxwg8gg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 11:56:03 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A2BjwtR011979;
+        Wed, 2 Nov 2022 11:56:02 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kkqxwg8g7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 11:56:02 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A2Bol6M016860;
+        Wed, 2 Nov 2022 11:56:02 GMT
+Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
+        by ppma04dal.us.ibm.com with ESMTP id 3kguta8yxb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 11:56:01 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com ([9.208.128.112])
+        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A2Bu0Uw23003986
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Nov 2022 11:56:01 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 614115805A;
+        Wed,  2 Nov 2022 11:56:00 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6643858054;
+        Wed,  2 Nov 2022 11:55:59 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.11.177])
+        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  2 Nov 2022 11:55:59 +0000 (GMT)
+Message-ID: <135f442b44af0ac2bcd239c1f11c18c740f6e641.camel@linux.ibm.com>
+Subject: Re: Possible bug or unintended behaviour using bpf_ima_file_hash
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Isaac Matthews <isaac.jmatt@gmail.com>,
+        linux-integrity@vger.kernel.org, bpf@vger.kernel.org
+Cc:     isaac.matthews@hpe.com
+Date:   Wed, 02 Nov 2022 07:55:58 -0400
+In-Reply-To: <e45a4736e9fa77acbe48e947f40c023d3cd71922.camel@huaweicloud.com>
+References: <CAFrssUQKyfZXXXQQA2vPMLR957RZtt7MN9rEG_VbLW_D0wBZ0w@mail.gmail.com>
+         <e45a4736e9fa77acbe48e947f40c023d3cd71922.camel@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: adbfpaV3dyrHxpnOXEiUn8tR5vkDKDdW
+X-Proofpoint-GUID: x_JvrlWtPIjZPoU5djURo9_ceJkS5lEo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-02_08,2022-11-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ impostorscore=0 mlxscore=0 priorityscore=1501 suspectscore=0 phishscore=0
+ adultscore=0 lowpriorityscore=0 clxscore=1011 bulkscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211020070
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Maryam Tahhan <mtahhan@redhat.com>
+On Wed, 2022-11-02 at 09:08 +0100, Roberto Sassu wrote:
+> On Mon, 2022-10-31 at 16:25 +0000, Isaac Matthews wrote:
+> > Using bpf_ima_file_hash() from kernel 6.0.
+> > 
+> > When using bpf_ima_file_hash() with the lsm.s/file_open hook, a hash
+> > of the file is only sometimes returned.  This is because the
+> > FMODE_CAN_READ flag is set after security_file_open() is already
+> > called, and ima_calc_file_hash() only checks for FMODE_READ not
+> > FMODE_CAN_READ in order to decide if a new instance needs to be
+> > opened. Because of this, if a file passes the FMODE_READ check  it
+> > will fail to be hashed as FMODE_CAN_READ has not yet been set.
+> > 
+> > To demonstrate: if the file is opened for write for example, when
+> > ima_calc_file_hash() is called and the file->f_mode is checked
+> > against
+> > FMODE_READ, a new file instance is opened with the correct flags and
+> > a
+> > hash is returned. If the file is opened for read, a new file instance
+> > is not returned in ima_calc_file_hash() as (!(file->f_mode &
+> > FMODE_READ)) is now false. When __kernel_read() is called as part of
+> > ima_calc_file_hash_tfm() it will fail on if (!(file->f_mode &
+> > FMODE_CAN_READ)) and so no hash will be returned by
+> > bpf_ima_file_hash().
+> > 
+> > If possible could someone please advise me as to whether this is
+> > intended behaviour, and is it possible to either modify the flags
+> > with
+> > eBPF or to open a new instance with the correct flags set as IMA does
+> > currently?
+> 
+> Hi Isaac
+> 
+> I think this is the intended behavior, as IMA is supposed to be called
+> when the file descriptor is ready to use.
+> 
+> If we need to call ima_file_hash() from lsm.s/file_open, I think it
+> should not be a problem to create a new fd just for eBPF, in
+> __ima_inode_hash().
+> 
+> Mimi, what do you think?
 
-Add documentation for BPF_MAP_TYPE_CPUMAP including
-kernel version introduced, usage and examples.
+Who/what is checking that this is a regular file and we have permission
+to open the file?  Are we relying on eBPF to do this?  Will opening a
+file circumvent all of the LSM checks?
 
-Signed-off-by: Maryam Tahhan <mtahhan@redhat.com>
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-Co-developed-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> 
+> > Alternatively, would a better solution be adding a check for
+> > FMODE_CAN_READ to ima_calc_file_hash()? I noticed in the comment
+> > above
+> > the conditional in ima_calc_file_hash() that the conditional should
+> > be
+> > checking whether the file can be read, but only checks the FMODE_READ
+> > flag which is not the only requirement for __kernel_read() to be able
+> > to read a file.
+> > 
+> > Thanks for your help.
+> > Isaac
+> 
 
-v2:
-- Removed TMI.
-- Updated example to use a round robin scheme.
-
-Maryam Tahhan (1):
-  docs: BPF_MAP_TYPE_CPUMAP
-
- Documentation/bpf/map_cpumap.rst | 140 +++++++++++++++++++++++++++++++
- 1 file changed, 140 insertions(+)
- create mode 100644 Documentation/bpf/map_cpumap.rst
-
--- 
-2.35.3
 
