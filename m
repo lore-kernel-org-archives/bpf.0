@@ -2,81 +2,293 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFCCEC4167B
-	for <bpf@archiver.kernel.org>; Wed,  2 Nov 2022 11:13:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98022C433FE
+	for <bpf@archiver.kernel.org>; Wed,  2 Nov 2022 11:13:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230330AbiKBLNJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Nov 2022 07:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50608 "EHLO
+        id S230364AbiKBLNL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Nov 2022 07:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbiKBLNH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S230290AbiKBLNH (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 2 Nov 2022 07:13:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1730527B09;
-        Wed,  2 Nov 2022 04:12:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2B9A2B81AF4;
-        Wed,  2 Nov 2022 11:10:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BCC37C433D7;
-        Wed,  2 Nov 2022 11:10:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667387415;
-        bh=otPC0Z8ehZO+mCX6BTVk8Fpd1N5cWu1SFQSouS/RYAg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Qi2Us5WI90cVYAvlCzud3HL0Pp7yjUkx4UsrI2CPJx/ajM6zHLuwlrUEtxWuiGh1L
-         tjpEn2uyznkppiuo/DIOYZhc+nKgMP3HpwYd1NTWieJvXKfuMMfRqEbAgxhUuiPQ2y
-         Tnxsf6rJBiH1LwFRWyyeCFz6Cc+2w7TmyAUrAqLkTteAeNcrN/RKVyD3c+0m5GXf6R
-         tGDmr/1zZ1RD1sD9fqaqHtGzqIZGFXpa5BbU3Zsq0cB/I4kUvr1JQWID6wFXCVyBdZ
-         cd/Np262pH7KgKQxxwDsmajqQGKTmqRxjXNMb0YgzlErrg6r/bxAp/0I9PrkG/ziIz
-         8QeZC4+tw4Nww==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A1D14E270D5;
-        Wed,  2 Nov 2022 11:10:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176AC29368
+        for <bpf@vger.kernel.org>; Wed,  2 Nov 2022 04:12:53 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id z24so24659728ljn.4
+        for <bpf@vger.kernel.org>; Wed, 02 Nov 2022 04:12:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NadiVRqe3cNn00Jqu8Kz2tqjT7Si0LInxnk93EKnj7s=;
+        b=ZCd1UTDC18JimIbQyQjgwe6PnplSo1mIfnLSISrIknmYHe7vVF+jLSASvKcS1oS1aL
+         tIDNdMdpJGMamLGy7xgVjXg5BUReuEPEvdcagkgeYmddvGehCXN9Cnj23b90SLdpXkoZ
+         F/lW6j+CPlSoCNyq7lqeVDHgPd8S2ddrNUCr7XewXLL7myOQ+eBeWAOame2R8hJmKNYE
+         DcmrYTQ8J5IBH0pPIZwupzz5m7U9dafb7MUcv6fQ9voE1mxkMgWj99psa5vC13WvfJLq
+         rS0IOJ66uYq10Jwcm0YDNkGqemJBXTIa6pYR085tjRDmbdS3ORO5kcIvwF1l5Fbk0kX6
+         1WHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NadiVRqe3cNn00Jqu8Kz2tqjT7Si0LInxnk93EKnj7s=;
+        b=VCZwawtKg7atolSJHnWLyN8uksowqs7+FqQOIw0WOXbB7F3zL939gV/rOTEKozUoW6
+         PUVVx88LjTHmxkVBEMpwCADzTa7AaY18dnpKucliLfOwwxmJmK0neba9DTGc3oR+btPm
+         JmKR6rSh1CmLBZAzaQPhBAOmZymhTgZ2olag/WXOSmLzCd6OHLaX50aEcCSYyvxIjaLs
+         Ve3WPPQLTc4LxZI01d2xvBmT/kqbAdNwarFy3u+TNV/31biaVJZWDOFSLmO0+QmvaLpt
+         bfK8jRy+DkhdAxVw875OjtOXClKy6u8/pHz/Kf2+YGobnahtHAYNi5qH9cmLJrIStGIC
+         WIYg==
+X-Gm-Message-State: ACrzQf0M0c77uEBPcJ0ivRLsF9SlWUVHVVhVpfz7WoXsmF220Uz5goFk
+        yVPCzU+6w8X4KmYQmCGWXw3V6MU3+1zPyU7C
+X-Google-Smtp-Source: AMsMyM5fVZqMJTNslTRVHcWgnxWkHpt/7CcEQi8iewAbY3FfmEK/iNffgkrBDKaS9z6zfcbP4WfJmA==
+X-Received: by 2002:a2e:9801:0:b0:25e:45ed:edc5 with SMTP id a1-20020a2e9801000000b0025e45ededc5mr8518889ljj.467.1667387394003;
+        Wed, 02 Nov 2022 04:09:54 -0700 (PDT)
+Received: from pluto.. (boundsly.muster.volia.net. [93.72.16.93])
+        by smtp.gmail.com with ESMTPSA id a6-20020a05651c010600b0026dcac60624sm2039781ljb.108.2022.11.02.04.09.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 04:09:53 -0700 (PDT)
+From:   Eduard Zingerman <eddyz87@gmail.com>
+To:     bpf@vger.kernel.org, ast@kernel.org
+Cc:     andrii@kernel.org, daniel@iogearbox.net, kernel-team@fb.com,
+        yhs@fb.com, alan.maguire@oracle.com,
+        Eduard Zingerman <eddyz87@gmail.com>
+Subject: [PATCH bpf-next 3/4] libbpf: Resolve unambigous forward declarations
+Date:   Wed,  2 Nov 2022 13:09:04 +0200
+Message-Id: <20221102110905.2433622-4-eddyz87@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221102110905.2433622-1-eddyz87@gmail.com>
+References: <20221102110905.2433622-1-eddyz87@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf] bpftool: Fix NULL pointer dereference when pin {PROG,
- MAP, LINK} without FILE
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166738741565.14695.12146940150736935990.git-patchwork-notify@kernel.org>
-Date:   Wed, 02 Nov 2022 11:10:15 +0000
-References: <20221102084034.3342995-1-pulehui@huaweicloud.com>
-In-Reply-To: <20221102084034.3342995-1-pulehui@huaweicloud.com>
-To:     Pu Lehui <pulehui@huaweicloud.com>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quentin@isovalent.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        pulehui@huawei.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+Resolve forward declarations that don't take part in type graphs
+comparisons if declaration name is unambiguous. Example:
 
-This patch was applied to bpf/bpf.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+CU #1:
 
-On Wed,  2 Nov 2022 16:40:34 +0800 you wrote:
-> From: Pu Lehui <pulehui@huawei.com>
-> 
-> When using bpftool to pin {PROG, MAP, LINK} without FILE,
-> segmentation fault will occur. The reson is that the lack
-> of FILE will cause strlen to trigger NULL pointer dereference.
-> The corresponding stacktrace is shown below:
-> 
-> [...]
+struct foo;              // standalone forward declaration
+struct foo *some_global;
 
-Here is the summary with links:
-  - [bpf] bpftool: Fix NULL pointer dereference when pin {PROG, MAP, LINK} without FILE
-    https://git.kernel.org/bpf/bpf/c/34de8e6e0e1f
+CU #2:
 
-You are awesome, thank you!
+struct foo { int x; };
+struct foo *another_global;
+
+The `struct foo` from CU #1 is not a part of any definition that is
+compared against another definition while `btf_dedup_struct_types`
+processes structural types. The the BTF after `btf_dedup_struct_types`
+the BTF looks as follows:
+
+[1] STRUCT 'foo' size=4 vlen=1 ...
+[2] INT 'int' size=4 ...
+[3] PTR '(anon)' type_id=1
+[4] FWD 'foo' fwd_kind=struct
+[5] PTR '(anon)' type_id=4
+
+This commit adds a new pass `btf_dedup_resolve_fwds`, that maps such
+forward declarations to structs or unions with identical name in case
+if the name is not ambiguous.
+
+The pass is positioned before `btf_dedup_ref_types` so that types
+[3] and [5] could be merged as a same type after [1] and [4] are merged.
+The final result for the example above looks as follows:
+
+[1] STRUCT 'foo' size=4 vlen=1
+	'x' type_id=2 bits_offset=0
+[2] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
+[3] PTR '(anon)' type_id=1
+
+For defconfig kernel with BTF enabled this removes 63 forward
+declarations. Examples of removed declarations: `pt_regs`, `in6_addr`.
+The running time of `btf__dedup` function is increased by about 3%.
+
+Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+---
+ tools/lib/bpf/btf.c | 140 ++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 136 insertions(+), 4 deletions(-)
+
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index 04db202aac3d..d2f994d30af7 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -2881,6 +2881,7 @@ static int btf_dedup_strings(struct btf_dedup *d);
+ static int btf_dedup_prim_types(struct btf_dedup *d);
+ static int btf_dedup_struct_types(struct btf_dedup *d);
+ static int btf_dedup_ref_types(struct btf_dedup *d);
++static int btf_dedup_resolve_fwds(struct btf_dedup *d);
+ static int btf_dedup_compact_types(struct btf_dedup *d);
+ static int btf_dedup_remap_types(struct btf_dedup *d);
+ 
+@@ -2988,15 +2989,16 @@ static int btf_dedup_remap_types(struct btf_dedup *d);
+  * Algorithm summary
+  * =================
+  *
+- * Algorithm completes its work in 6 separate passes:
++ * Algorithm completes its work in 7 separate passes:
+  *
+  * 1. Strings deduplication.
+  * 2. Primitive types deduplication (int, enum, fwd).
+  * 3. Struct/union types deduplication.
+- * 4. Reference types deduplication (pointers, typedefs, arrays, funcs, func
++ * 4. Resolve unambiguous forward declarations.
++ * 5. Reference types deduplication (pointers, typedefs, arrays, funcs, func
+  *    protos, and const/volatile/restrict modifiers).
+- * 5. Types compaction.
+- * 6. Types remapping.
++ * 6. Types compaction.
++ * 7. Types remapping.
+  *
+  * Algorithm determines canonical type descriptor, which is a single
+  * representative type for each truly unique type. This canonical type is the
+@@ -3060,6 +3062,11 @@ int btf__dedup(struct btf *btf, const struct btf_dedup_opts *opts)
+ 		pr_debug("btf_dedup_struct_types failed:%d\n", err);
+ 		goto done;
+ 	}
++	err = btf_dedup_resolve_fwds(d);
++	if (err < 0) {
++		pr_debug("btf_dedup_resolve_fwds failed:%d\n", err);
++		goto done;
++	}
+ 	err = btf_dedup_ref_types(d);
+ 	if (err < 0) {
+ 		pr_debug("btf_dedup_ref_types failed:%d\n", err);
+@@ -4526,6 +4533,131 @@ static int btf_dedup_ref_types(struct btf_dedup *d)
+ 	return 0;
+ }
+ 
++/*
++ * Collect a map from type names to type ids for all canonical structs
++ * and unions. If the same name is shared by several canonical types
++ * use a special value 0 to indicate this fact.
++ */
++static int btf_dedup_fill_unique_names_map(struct btf_dedup *d, struct hashmap *names_map)
++{
++	__u32 nr_types = btf__type_cnt(d->btf);
++	struct btf_type *t;
++	__u32 type_id;
++	__u16 kind;
++	int err;
++
++	/*
++	 * Iterate over base and split module ids in order to get all
++	 * available structs in the map.
++	 */
++	for (type_id = 1; type_id < nr_types; ++type_id) {
++		t = btf_type_by_id(d->btf, type_id);
++		kind = btf_kind(t);
++
++		if (kind != BTF_KIND_STRUCT && kind != BTF_KIND_UNION)
++			continue;
++
++		/* Skip non-canonical types */
++		if (type_id != d->map[type_id])
++			continue;
++
++		err = hashmap__add(names_map, t->name_off, type_id);
++		if (err == -EEXIST)
++			err = hashmap__set(names_map, t->name_off, 0, NULL, NULL);
++
++		if (err)
++			return err;
++	}
++
++	return 0;
++}
++
++static int btf_dedup_resolve_fwd(struct btf_dedup *d, struct hashmap *names_map, __u32 type_id)
++{
++	struct btf_type *t = btf_type_by_id(d->btf, type_id);
++	enum btf_fwd_kind fwd_kind = btf_kflag(t);
++	__u16 cand_kind, kind = btf_kind(t);
++	struct btf_type *cand_t;
++	uintptr_t cand_id = 0;
++
++	if (kind != BTF_KIND_FWD)
++		return 0;
++
++	/* Skip if this FWD already has a mapping */
++	if (type_id != d->map[type_id])
++		return 0;
++
++	hashmap__find(names_map, t->name_off, &cand_id);
++	if (!cand_id)
++		return 0;
++
++	cand_t = btf_type_by_id(d->btf, cand_id);
++	cand_kind = btf_kind(cand_t);
++	if (!(cand_kind == BTF_KIND_STRUCT && fwd_kind == BTF_FWD_STRUCT) &&
++	    !(cand_kind == BTF_KIND_UNION && fwd_kind == BTF_FWD_UNION))
++		return 0;
++
++	d->map[type_id] = cand_id;
++
++	return 0;
++}
++
++/*
++ * Resolve unambiguous forward declarations.
++ *
++ * The lion's share of all FWD declarations is resolved during
++ * `btf_dedup_struct_types` phase when different type graphs are
++ * compared against each other. However, if in some compilation unit a
++ * FWD declaration is not a part of a type graph compared against
++ * another type graph that declaration's canonical type would not be
++ * changed. Example:
++ *
++ * CU #1:
++ *
++ * struct foo;
++ * struct foo *some_global;
++ *
++ * CU #2:
++ *
++ * struct foo { int u; };
++ * struct foo *another_global;
++ *
++ * After `btf_dedup_struct_types` the BTF looks as follows:
++ *
++ * [1] STRUCT 'foo' size=4 vlen=1 ...
++ * [2] INT 'int' size=4 ...
++ * [3] PTR '(anon)' type_id=1
++ * [4] FWD 'foo' fwd_kind=struct
++ * [5] PTR '(anon)' type_id=4
++ *
++ * This pass assumes that such FWD declarations should be mapped to
++ * structs or unions with identical name in case if the name is not
++ * ambiguous.
++ */
++static int btf_dedup_resolve_fwds(struct btf_dedup *d)
++{
++	int i, err;
++	struct hashmap *names_map =
++		hashmap__new(btf_dedup_identity_hash_fn, btf_dedup_equal_fn, NULL);
++
++	if (!names_map)
++		return -ENOMEM;
++
++	err = btf_dedup_fill_unique_names_map(d, names_map);
++	if (err < 0)
++		goto exit;
++
++	for (i = 0; i < d->btf->nr_types; i++) {
++		err = btf_dedup_resolve_fwd(d, names_map, d->btf->start_id + i);
++		if (err < 0)
++			goto exit;
++	}
++
++exit:
++	hashmap__free(names_map);
++	return err;
++}
++
+ /*
+  * Compact types.
+  *
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.34.1
 
