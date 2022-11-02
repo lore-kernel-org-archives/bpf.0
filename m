@@ -2,147 +2,81 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C6EEC43219
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFCCEC4167B
 	for <bpf@archiver.kernel.org>; Wed,  2 Nov 2022 11:13:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbiKBLNK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Nov 2022 07:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50614 "EHLO
+        id S230330AbiKBLNJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Nov 2022 07:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230364AbiKBLNH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S230308AbiKBLNH (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 2 Nov 2022 07:13:07 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174CE27DE3
-        for <bpf@vger.kernel.org>; Wed,  2 Nov 2022 04:12:53 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id d25so27214832lfb.7
-        for <bpf@vger.kernel.org>; Wed, 02 Nov 2022 04:12:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4nOAzoMxDAS9rcXqet8/6HQvCaOnZU+cYFlpsdxzLl0=;
-        b=XIRMFo3gnVhy4ufnXupGIiY1YIrbYGMiq5+g+ILZAMWgvDOIDfbwfKi/HQOZs9EjaX
-         RfW9n0IE2oynpKttcd/rU9J341szq0UvDLyFRxhygRUxIqO3Po95jf48mxIaiPdkwxku
-         YV9jaOuCOp6OL6NqD6ujS65FKJ7BnAGpquuF4KfZSxDxGLrA3FOefFSg2F1h7vu0Zw98
-         KRei9cMFO4f8SxruratKxSReuTMFA1vlVLI5P37rv9oV8evsjoicDrt2ggZOeuxsQNb9
-         XRWqidWssfxtqn3tJnMj3g+erLR8ypWDu03FQcSkp50X4Z4h6FCu2lUNSRvgRh4u7pBN
-         ioXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4nOAzoMxDAS9rcXqet8/6HQvCaOnZU+cYFlpsdxzLl0=;
-        b=tg2nAjPoVV1NoxGLuoDjx4w4wm2jDkx5aVSm/1G0qX9VblKuH5j/zPp1pqd/OP6dXn
-         YatwGbICgIN+oErIxGqiWbiN8ZNkaHQaEnJJaBETTIQaRT0lVYyl7Xb6b8ZfTiYWqEom
-         1/5NKUYq7DOG1xpnwKRa9SXbg/STi63qOvqBmGh1rxChqDoQYa6/3ntlHpB5wQ3oV4XA
-         AsiWqjNhHtjdhD6pat9YMNWiHDNWpcQZx0SE3mtTHVFuCdI+IfiNcGaGXclQ8aSC795g
-         0B6gzyKBRjh/nPrNVEkoAzsq2En86ta3DkohgB5+yY6wh/Edsqx2A50LzZKTC446SUTs
-         PQCQ==
-X-Gm-Message-State: ACrzQf1IR/3a+WzRDQvKv9oB0VQA1qzNMetJXeOkpa71ClMKpEUkDbIt
-        WidD1imlgkFyyx/k8/HJnVSowENFl6nkxUgC
-X-Google-Smtp-Source: AMsMyM5NWpmZb0oBLJcXRSzG2Mf9MSGFevL1HBvUJ8HWocdoLG7vbAzvIDigyQM3Z2sznim95F2CqQ==
-X-Received: by 2002:a05:6512:3b81:b0:4a2:8aa3:cf42 with SMTP id g1-20020a0565123b8100b004a28aa3cf42mr8755805lfv.301.1667387390096;
-        Wed, 02 Nov 2022 04:09:50 -0700 (PDT)
-Received: from pluto.. (boundsly.muster.volia.net. [93.72.16.93])
-        by smtp.gmail.com with ESMTPSA id a6-20020a05651c010600b0026dcac60624sm2039781ljb.108.2022.11.02.04.09.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 04:09:49 -0700 (PDT)
-From:   Eduard Zingerman <eddyz87@gmail.com>
-To:     bpf@vger.kernel.org, ast@kernel.org
-Cc:     andrii@kernel.org, daniel@iogearbox.net, kernel-team@fb.com,
-        yhs@fb.com, alan.maguire@oracle.com,
-        Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next 0/4] libbpf: Resolve unambigous forward declarations
-Date:   Wed,  2 Nov 2022 13:09:01 +0200
-Message-Id: <20221102110905.2433622-1-eddyz87@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1730527B09;
+        Wed,  2 Nov 2022 04:12:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B9A2B81AF4;
+        Wed,  2 Nov 2022 11:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BCC37C433D7;
+        Wed,  2 Nov 2022 11:10:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667387415;
+        bh=otPC0Z8ehZO+mCX6BTVk8Fpd1N5cWu1SFQSouS/RYAg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Qi2Us5WI90cVYAvlCzud3HL0Pp7yjUkx4UsrI2CPJx/ajM6zHLuwlrUEtxWuiGh1L
+         tjpEn2uyznkppiuo/DIOYZhc+nKgMP3HpwYd1NTWieJvXKfuMMfRqEbAgxhUuiPQ2y
+         Tnxsf6rJBiH1LwFRWyyeCFz6Cc+2w7TmyAUrAqLkTteAeNcrN/RKVyD3c+0m5GXf6R
+         tGDmr/1zZ1RD1sD9fqaqHtGzqIZGFXpa5BbU3Zsq0cB/I4kUvr1JQWID6wFXCVyBdZ
+         cd/Np262pH7KgKQxxwDsmajqQGKTmqRxjXNMb0YgzlErrg6r/bxAp/0I9PrkG/ziIz
+         8QeZC4+tw4Nww==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A1D14E270D5;
+        Wed,  2 Nov 2022 11:10:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf] bpftool: Fix NULL pointer dereference when pin {PROG,
+ MAP, LINK} without FILE
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166738741565.14695.12146940150736935990.git-patchwork-notify@kernel.org>
+Date:   Wed, 02 Nov 2022 11:10:15 +0000
+References: <20221102084034.3342995-1-pulehui@huaweicloud.com>
+In-Reply-To: <20221102084034.3342995-1-pulehui@huaweicloud.com>
+To:     Pu Lehui <pulehui@huaweicloud.com>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quentin@isovalent.com, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        pulehui@huawei.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Resolve forward declarations that don't take part in type graphs
-comparisons if declaration name is unambiguous.
-Example:
+Hello:
 
-CU #1:
+This patch was applied to bpf/bpf.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-struct foo;              // standalone forward declaration
-struct foo *some_global;
+On Wed,  2 Nov 2022 16:40:34 +0800 you wrote:
+> From: Pu Lehui <pulehui@huawei.com>
+> 
+> When using bpftool to pin {PROG, MAP, LINK} without FILE,
+> segmentation fault will occur. The reson is that the lack
+> of FILE will cause strlen to trigger NULL pointer dereference.
+> The corresponding stacktrace is shown below:
+> 
+> [...]
 
-CU #2:
+Here is the summary with links:
+  - [bpf] bpftool: Fix NULL pointer dereference when pin {PROG, MAP, LINK} without FILE
+    https://git.kernel.org/bpf/bpf/c/34de8e6e0e1f
 
-struct foo { int x; };
-struct foo *another_global;
-
-Currently the de-duplicated BTF for this example looks as follows:
-
-[1] STRUCT 'foo' size=4 vlen=1 ...
-[2] INT 'int' size=4 ...
-[3] PTR '(anon)' type_id=1
-[4] FWD 'foo' fwd_kind=struct
-[5] PTR '(anon)' type_id=4
-
-The goal of this patch-set is to simplify it as follows:
-
-[1] STRUCT 'foo' size=4 vlen=1
-	'x' type_id=2 bits_offset=0
-[2] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
-[3] PTR '(anon)' type_id=1
-
-The patch-set is consists of the following parts:
-- A refactoring of the libbpf's hashmap interface to use `uintptr_t`
-  instead of `void*` for keys and values. The reasoning behind the
-  refactoring is that integer keys / values are used in libbpf more
-  often then pointer keys / values. Thus the refactoring reduces the
-  number of awkward looking casts like "(void *)(long)off".
-  `uintptr_t` is used to avoid necessity for temporary variables when
-  pointer keys / values are used on platforms with 32-bit pointers.
-- A change to `lib/bpf/btf.c:btf__dedup` that adds a new pass named
-  "Resolve unambiguous forward declaration". This pass builds a
-  hashmap `name_off -> uniquely named struct or union` and uses it to
-  replace FWD types by structs or unions. This is necessary for corner
-  cases when FWD is not used as a part of some struct or union
-  definition de-duplicated by `btf_dedup_struct_types`.
-
-For defconfig kernel with BTF enabled this removes 63 forward
-declarations.
-
-For allmodconfig kernel with BTF enabled this removes ~5K out of ~21K
-forward declarations in ko objects. This unlocks some additional
-de-duplication in ko objects, but impact is tiny: ~13K less BTF ids
-out of ~2M.
-
-Eduard Zingerman (4):
-  libbpf: hashmap interface update to uintptr_t -> uintptr_t
-  selftests/bpf: hashmap test cases updated for uintptr_t -> uintptr_t
-    interface
-  libbpf: Resolve unambigous forward declarations
-  selftests/bpf: Tests for btf_dedup_resolve_fwds
-
- tools/bpf/bpftool/btf.c                       |  23 +--
- tools/bpf/bpftool/common.c                    |  10 +-
- tools/bpf/bpftool/gen.c                       |  19 +-
- tools/bpf/bpftool/link.c                      |   8 +-
- tools/bpf/bpftool/main.h                      |   4 +-
- tools/bpf/bpftool/map.c                       |   8 +-
- tools/bpf/bpftool/pids.c                      |  16 +-
- tools/bpf/bpftool/prog.c                      |   8 +-
- tools/lib/bpf/btf.c                           | 183 +++++++++++++++---
- tools/lib/bpf/btf_dump.c                      |  16 +-
- tools/lib/bpf/hashmap.c                       |  16 +-
- tools/lib/bpf/hashmap.h                       |  35 ++--
- tools/lib/bpf/libbpf.c                        |  18 +-
- tools/lib/bpf/strset.c                        |  24 +--
- tools/lib/bpf/usdt.c                          |  31 ++-
- tools/testing/selftests/bpf/prog_tests/btf.c  | 152 +++++++++++++++
- .../bpf/prog_tests/btf_dedup_split.c          |  45 +++--
- .../selftests/bpf/prog_tests/hashmap.c        |  68 +++----
- .../bpf/prog_tests/kprobe_multi_test.c        |   6 +-
- 19 files changed, 482 insertions(+), 208 deletions(-)
-
+You are awesome, thank you!
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
