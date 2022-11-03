@@ -2,226 +2,95 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52ED1C4321E
-	for <bpf@archiver.kernel.org>; Thu,  3 Nov 2022 08:36:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A08BC4332F
+	for <bpf@archiver.kernel.org>; Thu,  3 Nov 2022 08:59:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231283AbiKCIgU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Nov 2022 04:36:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42164 "EHLO
+        id S229459AbiKCI7I (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Nov 2022 04:59:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231204AbiKCIgQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 3 Nov 2022 04:36:16 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132BF26DF;
-        Thu,  3 Nov 2022 01:36:15 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N2xpH25LqzpW7r;
-        Thu,  3 Nov 2022 16:32:39 +0800 (CST)
+        with ESMTP id S229699AbiKCI7H (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Nov 2022 04:59:07 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE1B5583;
+        Thu,  3 Nov 2022 01:59:05 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N2yNg19LXz15MLT;
+        Thu,  3 Nov 2022 16:58:59 +0800 (CST)
 Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
  dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 16:36:13 +0800
-Received: from ubuntu1804.huawei.com (10.67.174.61) by
+ 15.1.2375.31; Thu, 3 Nov 2022 16:59:03 +0800
+Received: from [10.67.111.205] (10.67.111.205) by
  kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 16:36:12 +0800
+ 15.1.2375.31; Thu, 3 Nov 2022 16:59:02 +0800
+Subject: Re: [PATCH] uapi: Add missing linux/stddef.h header file to in.h
+To:     Paolo Abeni <pabeni@redhat.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <keescook@chromium.org>,
+        <gustavoars@kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <acme@kernel.org>
+References: <20221031095517.100297-1-yangjihong1@huawei.com>
+ <477a37b80b01d5eaa895effa20df29bcf02f65b6.camel@redhat.com>
 From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>,
-        <illusionist.neo@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <mykolal@fb.com>, <shuah@kernel.org>,
-        <benjamin.tissoires@redhat.com>, <memxor@gmail.com>,
-        <delyank@fb.com>, <asavkov@redhat.com>, <colin.i.king@gmail.com>,
-        <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-CC:     <yangjihong1@huawei.com>
-Subject: [PATCH 3/4] bpf: Add kernel function call support in 32-bit ARM
-Date:   Thu, 3 Nov 2022 16:32:53 +0800
-Message-ID: <20221103083254.237646-4-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
-In-Reply-To: <20221103083254.237646-1-yangjihong1@huawei.com>
-References: <20221103083254.237646-1-yangjihong1@huawei.com>
+Message-ID: <300b547d-8ea5-d7d1-f39e-d55df73847cd@huawei.com>
+Date:   Thu, 3 Nov 2022 16:59:02 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.61]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+In-Reply-To: <477a37b80b01d5eaa895effa20df29bcf02f65b6.camel@redhat.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
  kwepemm600003.china.huawei.com (7.193.23.202)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds kernel function call support to the 32-bit ARM bpf jit.
+Hello Paolo,
 
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
----
- arch/arm/net/bpf_jit_32.c | 130 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 130 insertions(+)
+On 2022/11/3 16:25, Paolo Abeni wrote:
+> On Mon, 2022-10-31 at 17:55 +0800, Yang Jihong wrote:
+>> commit 5854a09b4957 ("net/ipv4: Use __DECLARE_FLEX_ARRAY() helper") does not
+>> include "linux/stddef.h" header file, and tools headers update linux/in.h copy,
+>> BPF prog fails to be compiled:
+>>
+>>      CLNG-BPF [test_maps] bpf_flow.bpf.o
+>>      CLNG-BPF [test_maps] cgroup_skb_sk_lookup_kern.bpf.o
+>>    In file included from progs/cgroup_skb_sk_lookup_kern.c:9:
+>>    /root/linux/tools/include/uapi/linux/in.h:199:3: error: type name requires a specifier or qualifier
+>>                    __DECLARE_FLEX_ARRAY(__be32, imsf_slist_flex);
+>>                    ^
+>>    /root/linux/tools/include/uapi/linux/in.h:199:32: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
+>>                    __DECLARE_FLEX_ARRAY(__be32, imsf_slist_flex);
+>>                                                 ^
+>>    2 errors generated.
+>>
+>> To maintain consistency, add missing header file to kernel.
+>> Fixes: 5854a09b4957 ("net/ipv4: Use __DECLARE_FLEX_ARRAY() helper")
+>>
+>> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+> 
+> The 'Fixes' tag must be separated by the commit message by a blank
+> line, and you need to remove the empty line between 'Fixes' and SoB.
+> 
+> Additionally, on repost, please specify the target tree in the patch
+> subj, and wrap the commit message text to 75 chars per line (that does
+> not apply to the build output).
+> 
+OK, will fix these issues in the next version, thanks for your advice.
 
-diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
-index 6a1c9fca5260..51428c82bec6 100644
---- a/arch/arm/net/bpf_jit_32.c
-+++ b/arch/arm/net/bpf_jit_32.c
-@@ -1337,6 +1337,118 @@ static void build_epilogue(struct jit_ctx *ctx)
- #endif
- }
- 
-+/*
-+ * Input parameters of function in 32-bit ARM architecture:
-+ * The first four word-sized parameters passed to a function will be
-+ * transferred in registers R0-R3. Sub-word sized arguments, for example,
-+ * char, will still use a whole register.
-+ * Arguments larger than a word will be passed in multiple registers.
-+ * If more arguments are passed, the fifth and subsequent words will be passed
-+ * on the stack.
-+ *
-+ * The first for args of a function will be considered for
-+ * putting into the 32bit register R1, R2, R3 and R4.
-+ *
-+ * Two 32bit registers are used to pass a 64bit arg.
-+ *
-+ * For example,
-+ * void foo(u32 a, u32 b, u32 c, u32 d, u32 e):
-+ *      u32 a: R0
-+ *      u32 b: R1
-+ *      u32 c: R2
-+ *      u32 d: R3
-+ *      u32 e: stack
-+ *
-+ * void foo(u64 a, u32 b, u32 c, u32 d):
-+ *      u64 a: R0 (lo32) R1 (hi32)
-+ *      u32 b: R2
-+ *      u32 c: R3
-+ *      u32 d: stack
-+ *
-+ * void foo(u32 a, u64 b, u32 c, u32 d):
-+ *       u32 a: R0
-+ *       u64 b: R2 (lo32) R3 (hi32)
-+ *       u32 c: stack
-+ *       u32 d: stack
-+ *
-+ * void foo(u32 a, u32 b, u64 c, u32 d):
-+ *       u32 a: R0
-+ *       u32 b: R1
-+ *       u64 c: R2 (lo32) R3 (hi32)
-+ *       u32 d: stack
-+ *
-+ * The return value will be stored in the R0 (and R1 for 64bit value).
-+ *
-+ * For example,
-+ * u32 foo(u32 a, u32 b, u32 c):
-+ *      return value: R0
-+ *
-+ * u64 foo(u32 a, u32 b, u32 c):
-+ *      return value: R0 (lo32) R1 (hi32)
-+ */
-+static int emit_kfunc_call(const struct bpf_insn *insn, struct jit_ctx *ctx, const u32 func)
-+{
-+	int i;
-+	const struct btf_func_model *fm;
-+	const s8 *tmp = bpf2a32[TMP_REG_1];
-+	const u8 arg_regs[] = { ARM_R0, ARM_R1, ARM_R2, ARM_R3 };
-+	int nr_arg_regs = ARRAY_SIZE(arg_regs);
-+	int arg_regs_idx = 0, stack_off = 0;
-+
-+	fm = bpf_jit_find_kfunc_model(ctx->prog, insn);
-+	if (!fm)
-+		return -EINVAL;
-+
-+	for (i = 0; i < fm->nr_args; i++) {
-+		if (fm->arg_size[i] > sizeof(u32)) {
-+			if (arg_regs_idx + 1 < nr_arg_regs) {
-+				/*
-+				 * AAPCS states:
-+				 * A double-word sized type is passed in two
-+				 * consecutive registers (e.g., r0 and r1, or
-+				 * r2 and r3). The content of the registers is
-+				 * as if the value had been loaded from memory
-+				 * representation with a single LDM instruction.
-+				 */
-+				if (arg_regs_idx & 1)
-+					arg_regs_idx++;
-+
-+				emit(ARM_LDRD_I(arg_regs[arg_regs_idx], ARM_FP,
-+						EBPF_SCRATCH_TO_ARM_FP(
-+							bpf2a32[BPF_REG_1 + i][1])), ctx);
-+
-+				arg_regs_idx += 2;
-+			} else {
-+				stack_off = ALIGN(stack_off, STACK_ALIGNMENT);
-+
-+				emit(ARM_LDRD_I(tmp[1], ARM_FP,
-+						EBPF_SCRATCH_TO_ARM_FP(
-+							bpf2a32[BPF_REG_1 + i][1])), ctx);
-+				emit(ARM_STRD_I(tmp[1], ARM_SP, stack_off), ctx);
-+
-+				stack_off += 8;
-+			}
-+		} else {
-+			if (arg_regs_idx + 1 < nr_arg_regs) {
-+				emit_a32_mov_r(arg_regs[arg_regs_idx++],
-+					       bpf2a32[BPF_REG_1 + i][1], ctx);
-+			} else {
-+				emit(ARM_LDR_I(tmp[1], ARM_FP,
-+						EBPF_SCRATCH_TO_ARM_FP(
-+						       bpf2a32[BPF_REG_1 + i][1])), ctx);
-+				emit(ARM_STR_I(tmp[1], ARM_SP, stack_off), ctx);
-+
-+				stack_off += 4;
-+			}
-+		}
-+	}
-+
-+	emit_a32_mov_i(tmp[1], func, ctx);
-+	emit_blx_r(tmp[1], ctx);
-+
-+	return 0;
-+}
-+
- /*
-  * Convert an eBPF instruction to native instruction, i.e
-  * JITs an eBPF instruction.
-@@ -1603,6 +1715,10 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 	case BPF_LDX | BPF_MEM | BPF_H:
- 	case BPF_LDX | BPF_MEM | BPF_B:
- 	case BPF_LDX | BPF_MEM | BPF_DW:
-+	case BPF_LDX | BPF_PROBE_MEM | BPF_W:
-+	case BPF_LDX | BPF_PROBE_MEM | BPF_H:
-+	case BPF_LDX | BPF_PROBE_MEM | BPF_B:
-+	case BPF_LDX | BPF_PROBE_MEM | BPF_DW:
- 		rn = arm_bpf_get_reg32(src_lo, tmp2[1], ctx);
- 		emit_ldx_r(dst, rn, off, ctx, BPF_SIZE(code));
- 		break;
-@@ -1785,6 +1901,16 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 		const s8 *r5 = bpf2a32[BPF_REG_5];
- 		const u32 func = (u32)__bpf_call_base + (u32)imm;
- 
-+		if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
-+			int err;
-+
-+			err = emit_kfunc_call(insn, ctx, func);
-+
-+			if (err)
-+				return err;
-+			break;
-+		}
-+
- 		emit_a32_mov_r64(true, r0, r1, ctx);
- 		emit_a32_mov_r64(true, r1, r2, ctx);
- 		emit_push_r64(r5, ctx);
-@@ -2022,3 +2148,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 	return prog;
- }
- 
-+bool bpf_jit_supports_kfunc_call(void)
-+{
-+	return true;
-+}
--- 
-2.30.GIT
 
+Thanks,
+Yang
+> Thanks,
+> 
+> Paolo
+> 
+> 
+> .
+> 
