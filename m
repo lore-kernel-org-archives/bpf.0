@@ -2,537 +2,322 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 291C4C433FE
-	for <bpf@archiver.kernel.org>; Thu,  3 Nov 2022 16:02:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0218BC4321E
+	for <bpf@archiver.kernel.org>; Thu,  3 Nov 2022 16:17:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231887AbiKCQCi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Nov 2022 12:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60762 "EHLO
+        id S230513AbiKCQRw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Nov 2022 12:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231255AbiKCQCM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 3 Nov 2022 12:02:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0051B9C4
-        for <bpf@vger.kernel.org>; Thu,  3 Nov 2022 08:58:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667491130;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=35vI4iNIZI7SVC8N/h2i/xxhLm+SVmqisQHlXI8u33A=;
-        b=X7ETyfyCoezzYumvoJMfT8VlgJ04EW75e658fa/zT4VBiG8FJjGlgw4FdQaO455Y7mJNvA
-        YvzClZHXvGe0qksqJyK9P+MjxruYmrQo+RkkAn6x9+wEKPPUHjHkktViXIizKBWMPOW7te
-        4itA3ODlh9+yNwYnZCQFRQwN8qBuewk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-377-APgFDwdSM_u_ytZbRaf-ZA-1; Thu, 03 Nov 2022 11:58:46 -0400
-X-MC-Unique: APgFDwdSM_u_ytZbRaf-ZA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CA3652823803;
-        Thu,  3 Nov 2022 15:58:45 +0000 (UTC)
-Received: from plouf.redhat.com (unknown [10.39.192.98])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E493A4A9254;
-        Thu,  3 Nov 2022 15:58:43 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
-Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH hid v12 14/15] samples/hid: add Surface Dial example
-Date:   Thu,  3 Nov 2022 16:57:55 +0100
-Message-Id: <20221103155756.687789-15-benjamin.tissoires@redhat.com>
-In-Reply-To: <20221103155756.687789-1-benjamin.tissoires@redhat.com>
-References: <20221103155756.687789-1-benjamin.tissoires@redhat.com>
+        with ESMTP id S231703AbiKCQRu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Nov 2022 12:17:50 -0400
+X-Greylist: delayed 484 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 03 Nov 2022 09:17:47 PDT
+Received: from smtp-8fac.mail.infomaniak.ch (smtp-8fac.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fac])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1451838E
+        for <bpf@vger.kernel.org>; Thu,  3 Nov 2022 09:17:47 -0700 (PDT)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4N37xc16zjzMpnTN;
+        Thu,  3 Nov 2022 17:09:40 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4N37xb0B4pzMpphG;
+        Thu,  3 Nov 2022 17:09:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1667491780;
+        bh=nAGLkQKdFqX2PHeLP/p0EHiQdszCz61dANsujoabcoE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=N7JAAHTsCzpwdAZCamgd480C38UUIhZj3IfHifZ6XxGhVbPNmHSl2t+xd5RM0pd4N
+         nysRkw+4JwMCVFCimEIVztaYcX+x8aVW6VVR32kJzfgONL7ANm79koMM6v/xpbXARF
+         YUybVOVwr/vVCprWG+Psou276VsbNqzCQODLb/cs=
+Message-ID: <1fe5c84d-6f85-9ee8-76d4-d184a47ebff2@digikod.net>
+Date:   Thu, 3 Nov 2022 17:09:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: 
+Subject: Re: [PATCH v2] LSM: Better reporting of actual LSMs at boot
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>, Paul Moore <paul@paul-moore.com>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+References: <20221102000525.gonna.409-kees@kernel.org>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <20221102000525.gonna.409-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a more complete HID-BPF example.
 
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+On 02/11/2022 01:05, Kees Cook wrote:
+> Enhance the details reported by "lsm.debug" in several ways:
+> 
+> - report contents of "security="
+> - report contents of "CONFIG_LSM"
+> - report contents of "lsm="
+> - report any early LSM details
+> - whitespace-align the output of similar phases for easier visual parsing
+> - change "disabled" to more accurate "skipped"
+> - explain what "skipped" and "ignored" mean in a parenthetical
+> 
+> Upgrade the "security= is ignored" warning from pr_info to pr_warn,
+> and include full arguments list to make the cause even more clear.
+> 
+> Replace static "Security Framework initializing" pr_info with specific
+> list of the resulting order of enabled LSMs.
+> 
+> For example, if the kernel is built with:
+> 
+> CONFIG_SECURITY_SELINUX=y
+> CONFIG_SECURITY_APPARMOR=y
+> CONFIG_SECURITY_LOADPIN=y
+> CONFIG_SECURITY_YAMA=y
+> CONFIG_SECURITY_SAFESETID=y
+> CONFIG_SECURITY_LOCKDOWN_LSM=y
+> CONFIG_SECURITY_LANDLOCK=y
+> CONFIG_INTEGRITY=y
+> CONFIG_BPF_LSM=y
+> CONFIG_DEFAULT_SECURITY_APPARMOR=y
+> CONFIG_LSM="landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf"
+> 
+> Booting without options will show:
+> 
+> LSM: initializing lsm=lockdown,capability,landlock,yama,loadpin,safesetid,integrity,selinux,bpf
+> landlock: Up and running.
+> Yama: becoming mindful.
+> LoadPin: ready to pin (currently not enforcing)
+> SELinux:  Initializing.
+> LSM support for eBPF active
+> 
+> Boot with "lsm.debug" will show:
+> 
+> LSM: legacy security= *unspecified*
+> LSM: CONFIG_LSM=landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf
+> LSM: boot arg lsm= *unspecified*
+> LSM:   early started: lockdown (enabled)
+> LSM:   first ordered: capability (enabled)
+> LSM: builtin ordered: landlock (enabled)
+> LSM: builtin ignored: lockdown (not built into kernel)
+> LSM: builtin ordered: yama (enabled)
+> LSM: builtin ordered: loadpin (enabled)
+> LSM: builtin ordered: safesetid (enabled)
+> LSM: builtin ordered: integrity (enabled)
+> LSM: builtin ordered: selinux (enabled)
+> LSM: builtin ignored: smack (not built into kernel)
+> LSM: builtin ignored: tomoyo (not built into kernel)
+> LSM: builtin ordered: apparmor (enabled)
+> LSM: builtin ordered: bpf (enabled)
+> LSM: exclusive chosen:   selinux
+> LSM: exclusive disabled: apparmor
+> LSM: initializing lsm=lockdown,capability,landlock,yama,loadpin,safesetid,integrity,selinux,bpf
+> LSM: cred blob size       = 32
+> LSM: file blob size       = 16
+> LSM: inode blob size      = 72
+> LSM: ipc blob size        = 8
+> LSM: msg_msg blob size    = 4
+> LSM: superblock blob size = 80
+> LSM: task blob size       = 8
+> LSM: initializing capability
+> LSM: initializing landlock
+> landlock: Up and running.
+> LSM: initializing yama
+> Yama: becoming mindful.
+> LSM: initializing loadpin
+> LoadPin: ready to pin (currently not enforcing)
+> LSM: initializing safesetid
+> LSM: initializing integrity
+> LSM: initializing selinux
+> SELinux:  Initializing.
+> LSM: initializing bpf
+> LSM support for eBPF active
+> 
+> And some examples of how the lsm.debug ordering report changes...
+> 
+> With "lsm.debug security=selinux":
+> 
+> LSM: legacy security=selinux
+> LSM: CONFIG_LSM=landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf
+> LSM: boot arg lsm= *unspecified*
+> LSM:   early started: lockdown (enabled)
+> LSM:   first ordered: capability (enabled)
+> LSM: security=selinux disabled: apparmor (only one legacy major LSM)
+> LSM: builtin ordered: landlock (enabled)
+> LSM: builtin ignored: lockdown (not built into kernel)
+> LSM: builtin ordered: yama (enabled)
+> LSM: builtin ordered: loadpin (enabled)
+> LSM: builtin ordered: safesetid (enabled)
+> LSM: builtin ordered: integrity (enabled)
+> LSM: builtin ordered: selinux (enabled)
+> LSM: builtin ignored: smack (not built into kernel)
+> LSM: builtin ignored: tomoyo (not built into kernel)
+> LSM: builtin ordered: apparmor (disabled)
+> LSM: builtin ordered: bpf (enabled)
+> LSM: exclusive chosen:   selinux
+> LSM: initializing lsm=lockdown,capability,landlock,yama,loadpin,safesetid,integrity,selinux,bpf
+> 
+> With "lsm.debug lsm=integrity,selinux,loadpin,crabability,bpf,loadpin,loadpin":
+> 
+> LSM: legacy security= *unspecified*
+> LSM: CONFIG_LSM=landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf
+> LSM: boot arg lsm=integrity,selinux,loadpin,capability,bpf,loadpin,loadpin
+> LSM:   early started: lockdown (enabled)
+> LSM:   first ordered: capability (enabled)
+> LSM: cmdline ordered: integrity (enabled)
+> LSM: cmdline ordered: selinux (enabled)
+> LSM: cmdline ordered: loadpin (enabled)
+> LSM: cmdline ignored: crabability (not built into kernel)
+> LSM: cmdline ordered: bpf (enabled)
+> LSM: cmdline skipped: apparmor (not in requested order)
+> LSM: cmdline skipped: yama (not in requested order)
+> LSM: cmdline skipped: safesetid (not in requested order)
+> LSM: cmdline skipped: landlock (not in requested order)
+> LSM: exclusive chosen:   selinux
+> LSM: initializing lsm=lockdown,capability,integrity,selinux,loadpin,bpf
+> 
+> Cc: Paul Moore <paul@paul-moore.com>
+> Cc: James Morris <jmorris@namei.org>
+> Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> Cc: linux-security-module@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
----
+I think this change would be useful to help users debug their LSM 
+configuration. I'm not sure about the whitespace-aligned output though, 
+I guess it could break some scripts, but it is not part of the ABI and 
+only relevant for debug purpose.
 
-changes in v12:
-- use the shared hid_bpf_attach.bpf.c program
+Acked-by: Mickaël Salaün <mic@digikod.net>
 
-changes in v11:
-- use samples/hid instead of samples/bpf
 
-no changes in v10
-
-changes in v9:
-- extend the usage section
-- add sleep while waiting
-- changed the title of the commit
-
-no changes in v8
-
-changes in v7:
-- remove unnecessary __must_check definition
-
-new in v6
-
-fix sample hid_surface_dial
----
- samples/hid/.gitignore             |   1 +
- samples/hid/Makefile               |   6 +-
- samples/hid/hid_bpf_helpers.h      |   2 +
- samples/hid/hid_surface_dial.bpf.c | 134 +++++++++++++++++
- samples/hid/hid_surface_dial.c     | 226 +++++++++++++++++++++++++++++
- 5 files changed, 368 insertions(+), 1 deletion(-)
- create mode 100644 samples/hid/hid_surface_dial.bpf.c
- create mode 100644 samples/hid/hid_surface_dial.c
-
-diff --git a/samples/hid/.gitignore b/samples/hid/.gitignore
-index 8cb45592e29a..3ea0fed3bbad 100644
---- a/samples/hid/.gitignore
-+++ b/samples/hid/.gitignore
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-only
- hid_mouse
-+hid_surface_dial
- *.out
- *.skel.h
- /vmlinux.h
-diff --git a/samples/hid/Makefile b/samples/hid/Makefile
-index 8fe6ccfc5f29..026288280a03 100644
---- a/samples/hid/Makefile
-+++ b/samples/hid/Makefile
-@@ -7,6 +7,7 @@ pound := \#
- 
- # List of programs to build
- tprogs-y += hid_mouse
-+tprogs-y += hid_surface_dial
- 
- # Libbpf dependencies
- LIBBPF_SRC = $(TOOLS_PATH)/lib/bpf
-@@ -19,6 +20,7 @@ EXTRA_HEADERS := hid_bpf_attach.h
- EXTRA_BPF_HEADERS := hid_bpf_helpers.h
- 
- hid_mouse-objs := hid_mouse.o
-+hid_surface_dial-objs := hid_surface_dial.o
- 
- # Tell kbuild to always build the programs
- always-y := $(tprogs-y)
-@@ -156,6 +158,7 @@ libbpf_hdrs: $(LIBBPF)
- .PHONY: libbpf_hdrs
- 
- $(obj)/hid_mouse.o: $(obj)/hid_mouse.skel.h
-+$(obj)/hid_surface_dial.o: $(obj)/hid_surface_dial.skel.h
- 
- -include $(HID_SAMPLES_PATH)/Makefile.target
- 
-@@ -201,10 +204,11 @@ $(obj)/%.bpf.o: $(src)/%.bpf.c $(EXTRA_BPF_HEADERS_SRC) $(obj)/vmlinux.h
- 		-I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
- 		-c $(filter %.bpf.c,$^) -o $@
- 
--LINKED_SKELS := hid_mouse.skel.h
-+LINKED_SKELS := hid_mouse.skel.h hid_surface_dial.skel.h
- clean-files += $(LINKED_SKELS)
- 
- hid_mouse.skel.h-deps := hid_mouse.bpf.o hid_bpf_attach.bpf.o
-+hid_surface_dial.skel.h-deps := hid_surface_dial.bpf.o hid_bpf_attach.bpf.o
- 
- LINKED_BPF_SRCS := $(patsubst %.bpf.o,%.bpf.c,$(foreach skel,$(LINKED_SKELS),$($(skel)-deps)))
- 
-diff --git a/samples/hid/hid_bpf_helpers.h b/samples/hid/hid_bpf_helpers.h
-index c555aeef5e37..4fff31dbe0e7 100644
---- a/samples/hid/hid_bpf_helpers.h
-+++ b/samples/hid/hid_bpf_helpers.h
-@@ -10,6 +10,8 @@ extern __u8 *hid_bpf_get_data(struct hid_bpf_ctx *ctx,
- 			      unsigned int offset,
- 			      const size_t __sz) __ksym;
- extern int hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, u32 flags) __ksym;
-+extern struct hid_bpf_ctx *hid_bpf_allocate_context(unsigned int hid_id) __ksym;
-+extern void hid_bpf_release_context(struct hid_bpf_ctx *ctx) __ksym;
- extern int hid_bpf_hw_request(struct hid_bpf_ctx *ctx,
- 			      __u8 *data,
- 			      size_t buf__sz,
-diff --git a/samples/hid/hid_surface_dial.bpf.c b/samples/hid/hid_surface_dial.bpf.c
-new file mode 100644
-index 000000000000..1f80478c0918
---- /dev/null
-+++ b/samples/hid/hid_surface_dial.bpf.c
-@@ -0,0 +1,134 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2022 Benjamin Tissoires
-+ */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "hid_bpf_helpers.h"
-+
-+#define HID_UP_BUTTON		0x0009
-+#define HID_GD_WHEEL		0x0038
-+
-+SEC("fmod_ret/hid_bpf_device_event")
-+int BPF_PROG(hid_event, struct hid_bpf_ctx *hctx)
-+{
-+	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 9 /* size */);
-+
-+	if (!data)
-+		return 0; /* EPERM check */
-+
-+	/* Touch */
-+	data[1] &= 0xfd;
-+
-+	/* X */
-+	data[4] = 0;
-+	data[5] = 0;
-+
-+	/* Y */
-+	data[6] = 0;
-+	data[7] = 0;
-+
-+	return 0;
-+}
-+
-+/* 72 == 360 / 5 -> 1 report every 5 degrees */
-+int resolution = 72;
-+int physical = 5;
-+
-+struct haptic_syscall_args {
-+	unsigned int hid;
-+	int retval;
-+};
-+
-+static __u8 haptic_data[8];
-+
-+SEC("syscall")
-+int set_haptic(struct haptic_syscall_args *args)
-+{
-+	struct hid_bpf_ctx *ctx;
-+	const size_t size = sizeof(haptic_data);
-+	u16 *res;
-+	int ret;
-+
-+	if (size > sizeof(haptic_data))
-+		return -7; /* -E2BIG */
-+
-+	ctx = hid_bpf_allocate_context(args->hid);
-+	if (!ctx)
-+		return -1; /* EPERM check */
-+
-+	haptic_data[0] = 1;  /* report ID */
-+
-+	ret = hid_bpf_hw_request(ctx, haptic_data, size, HID_FEATURE_REPORT, HID_REQ_GET_REPORT);
-+
-+	bpf_printk("probed/remove event ret value: %d", ret);
-+	bpf_printk("buf: %02x %02x %02x",
-+		   haptic_data[0],
-+		   haptic_data[1],
-+		   haptic_data[2]);
-+	bpf_printk("     %02x %02x %02x",
-+		   haptic_data[3],
-+		   haptic_data[4],
-+		   haptic_data[5]);
-+	bpf_printk("     %02x %02x",
-+		   haptic_data[6],
-+		   haptic_data[7]);
-+
-+	/* whenever resolution multiplier is not 3600, we have the fixed report descriptor */
-+	res = (u16 *)&haptic_data[1];
-+	if (*res != 3600) {
-+//		haptic_data[1] = 72; /* resolution multiplier */
-+//		haptic_data[2] = 0;  /* resolution multiplier */
-+//		haptic_data[3] = 0;  /* Repeat Count */
-+		haptic_data[4] = 3;  /* haptic Auto Trigger */
-+//		haptic_data[5] = 5;  /* Waveform Cutoff Time */
-+//		haptic_data[6] = 80; /* Retrigger Period */
-+//		haptic_data[7] = 0;  /* Retrigger Period */
-+	} else {
-+		haptic_data[4] = 0;
-+	}
-+
-+	ret = hid_bpf_hw_request(ctx, haptic_data, size, HID_FEATURE_REPORT, HID_REQ_SET_REPORT);
-+
-+	bpf_printk("set haptic ret value: %d -> %d", ret, haptic_data[4]);
-+
-+	args->retval = ret;
-+
-+	hid_bpf_release_context(ctx);
-+
-+	return 0;
-+}
-+
-+/* Convert REL_DIAL into REL_WHEEL */
-+SEC("fmod_ret/hid_bpf_rdesc_fixup")
-+int BPF_PROG(hid_rdesc_fixup, struct hid_bpf_ctx *hctx)
-+{
-+	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 4096 /* size */);
-+	__u16 *res, *phys;
-+
-+	if (!data)
-+		return 0; /* EPERM check */
-+
-+	/* Convert TOUCH into a button */
-+	data[31] = HID_UP_BUTTON;
-+	data[33] = 2;
-+
-+	/* Convert REL_DIAL into REL_WHEEL */
-+	data[45] = HID_GD_WHEEL;
-+
-+	/* Change Resolution Multiplier */
-+	phys = (__u16 *)&data[61];
-+	*phys = physical;
-+	res = (__u16 *)&data[66];
-+	*res = resolution;
-+
-+	/* Convert X,Y from Abs to Rel */
-+	data[88] = 0x06;
-+	data[98] = 0x06;
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
-+u32 _version SEC("version") = 1;
-diff --git a/samples/hid/hid_surface_dial.c b/samples/hid/hid_surface_dial.c
-new file mode 100644
-index 000000000000..bceea53d39b0
---- /dev/null
-+++ b/samples/hid/hid_surface_dial.c
-@@ -0,0 +1,226 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2022 Benjamin Tissoires
-+ *
-+ * This program will morph the Microsoft Surface Dial into a mouse,
-+ * and depending on the chosen resolution enable or not the haptic feedback:
-+ * - a resolution (-r) of 3600 will report 3600 "ticks" in one full rotation
-+ *   wihout haptic feedback
-+ * - any other resolution will report N "ticks" in a full rotation with haptic
-+ *   feedback
-+ *
-+ * A good default for low resolution haptic scrolling is 72 (1 "tick" every 5
-+ * degrees), and set to 3600 for smooth scrolling.
-+ */
-+
-+#include <assert.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <libgen.h>
-+#include <signal.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/resource.h>
-+#include <unistd.h>
-+
-+#include <linux/bpf.h>
-+#include <linux/errno.h>
-+
-+#include <bpf/bpf.h>
-+#include <bpf/libbpf.h>
-+
-+#include "hid_surface_dial.skel.h"
-+#include "hid_bpf_attach.h"
-+
-+static bool running = true;
-+
-+struct haptic_syscall_args {
-+	unsigned int hid;
-+	int retval;
-+};
-+
-+static void int_exit(int sig)
-+{
-+	running = false;
-+	exit(0);
-+}
-+
-+static void usage(const char *prog)
-+{
-+	fprintf(stderr,
-+		"%s: %s [OPTIONS] /sys/bus/hid/devices/0BUS:0VID:0PID:00ID\n\n"
-+		"  OPTIONS:\n"
-+		"    -r N\t set the given resolution to the device (number of ticks per 360°)\n\n",
-+		__func__, prog);
-+	fprintf(stderr,
-+		"This program will morph the Microsoft Surface Dial into a mouse,\n"
-+		"and depending on the chosen resolution enable or not the haptic feedback:\n"
-+		"- a resolution (-r) of 3600 will report 3600 'ticks' in one full rotation\n"
-+		"  wihout haptic feedback\n"
-+		"- any other resolution will report N 'ticks' in a full rotation with haptic\n"
-+		"  feedback\n"
-+		"\n"
-+		"A good default for low resolution haptic scrolling is 72 (1 'tick' every 5\n"
-+		"degrees), and set to 3600 for smooth scrolling.\n");
-+}
-+
-+static int get_hid_id(const char *path)
-+{
-+	const char *str_id, *dir;
-+	char uevent[1024];
-+	int fd;
-+
-+	memset(uevent, 0, sizeof(uevent));
-+	snprintf(uevent, sizeof(uevent) - 1, "%s/uevent", path);
-+
-+	fd = open(uevent, O_RDONLY | O_NONBLOCK);
-+	if (fd < 0)
-+		return -ENOENT;
-+
-+	close(fd);
-+
-+	dir = basename((char *)path);
-+
-+	str_id = dir + sizeof("0003:0001:0A37.");
-+	return (int)strtol(str_id, NULL, 16);
-+}
-+
-+static int attach_prog(struct hid_surface_dial *skel, struct bpf_program *prog, int hid_id)
-+{
-+	struct attach_prog_args args = {
-+		.hid = hid_id,
-+		.retval = -1,
-+	};
-+	int attach_fd, err;
-+	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, tattr,
-+			    .ctx_in = &args,
-+			    .ctx_size_in = sizeof(args),
-+	);
-+
-+	attach_fd = bpf_program__fd(skel->progs.attach_prog);
-+	if (attach_fd < 0) {
-+		fprintf(stderr, "can't locate attach prog: %m\n");
-+		return 1;
-+	}
-+
-+	args.prog_fd = bpf_program__fd(prog);
-+	err = bpf_prog_test_run_opts(attach_fd, &tattr);
-+	if (err) {
-+		fprintf(stderr, "can't attach prog to hid device %d: %m (err: %d)\n",
-+			hid_id, err);
-+		return 1;
-+	}
-+	return 0;
-+}
-+
-+static int set_haptic(struct hid_surface_dial *skel, int hid_id)
-+{
-+	struct haptic_syscall_args args = {
-+		.hid = hid_id,
-+		.retval = -1,
-+	};
-+	int haptic_fd, err;
-+	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, tattr,
-+			    .ctx_in = &args,
-+			    .ctx_size_in = sizeof(args),
-+	);
-+
-+	haptic_fd = bpf_program__fd(skel->progs.set_haptic);
-+	if (haptic_fd < 0) {
-+		fprintf(stderr, "can't locate haptic prog: %m\n");
-+		return 1;
-+	}
-+
-+	err = bpf_prog_test_run_opts(haptic_fd, &tattr);
-+	if (err) {
-+		fprintf(stderr, "can't set haptic configuration to hid device %d: %m (err: %d)\n",
-+			hid_id, err);
-+		return 1;
-+	}
-+	return 0;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	struct hid_surface_dial *skel;
-+	struct bpf_program *prog;
-+	const char *optstr = "r:";
-+	const char *sysfs_path;
-+	int opt, hid_id, resolution = 72;
-+
-+	while ((opt = getopt(argc, argv, optstr)) != -1) {
-+		switch (opt) {
-+		case 'r':
-+			{
-+				char *endp = NULL;
-+				long l = -1;
-+
-+				if (optarg) {
-+					l = strtol(optarg, &endp, 10);
-+					if (endp && *endp)
-+						l = -1;
-+				}
-+
-+				if (l < 0) {
-+					fprintf(stderr,
-+						"invalid r option %s - expecting a number\n",
-+						optarg ? optarg : "");
-+					exit(EXIT_FAILURE);
-+				};
-+
-+				resolution = (int) l;
-+				break;
-+			}
-+		default:
-+			usage(basename(argv[0]));
-+			return 1;
-+		}
-+	}
-+
-+	if (optind == argc) {
-+		usage(basename(argv[0]));
-+		return 1;
-+	}
-+
-+	sysfs_path = argv[optind];
-+	if (!sysfs_path) {
-+		perror("sysfs");
-+		return 1;
-+	}
-+
-+	skel = hid_surface_dial__open_and_load();
-+	if (!skel) {
-+		fprintf(stderr, "%s  %s:%d", __func__, __FILE__, __LINE__);
-+		return -1;
-+	}
-+
-+	hid_id = get_hid_id(sysfs_path);
-+	if (hid_id < 0) {
-+		fprintf(stderr, "can not open HID device: %m\n");
-+		return 1;
-+	}
-+
-+	skel->data->resolution = resolution;
-+	skel->data->physical = (int)(resolution / 72);
-+
-+	bpf_object__for_each_program(prog, *skel->skeleton->obj) {
-+		/* ignore syscalls */
-+		if (bpf_program__get_type(prog) != BPF_PROG_TYPE_TRACING)
-+			continue;
-+
-+		attach_prog(skel, prog, hid_id);
-+	}
-+
-+	signal(SIGINT, int_exit);
-+	signal(SIGTERM, int_exit);
-+
-+	set_haptic(skel, hid_id);
-+
-+	while (running)
-+		sleep(1);
-+
-+	hid_surface_dial__destroy(skel);
-+
-+	return 0;
-+}
--- 
-2.36.1
-
+> ---
+> v2: en/dis-enabled expanded, example output in commit log, use pr_cont.
+> v1: https://lore.kernel.org/lkml/20221018064825.never.323-kees@kernel.org/
+> ---
+>   security/security.c | 45 ++++++++++++++++++++++++++++++++++++---------
+>   1 file changed, 36 insertions(+), 9 deletions(-)
+> 
+> diff --git a/security/security.c b/security/security.c
+> index 79d82cb6e469..abceabda103d 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -161,8 +161,8 @@ static void __init append_ordered_lsm(struct lsm_info *lsm, const char *from)
+>   		lsm->enabled = &lsm_enabled_true;
+>   	ordered_lsms[last_lsm++] = lsm;
+>   
+> -	init_debug("%s ordering: %s (%sabled)\n", from, lsm->name,
+> -		   is_enabled(lsm) ? "en" : "dis");
+> +	init_debug("%s ordered: %s (%s)\n", from, lsm->name,
+> +		   is_enabled(lsm) ? "enabled" : "disabled");
+>   }
+>   
+>   /* Is an LSM allowed to be initialized? */
+> @@ -224,7 +224,7 @@ static void __init prepare_lsm(struct lsm_info *lsm)
+>   	if (enabled) {
+>   		if ((lsm->flags & LSM_FLAG_EXCLUSIVE) && !exclusive) {
+>   			exclusive = lsm;
+> -			init_debug("exclusive chosen: %s\n", lsm->name);
+> +			init_debug("exclusive chosen:   %s\n", lsm->name);
+>   		}
+>   
+>   		lsm_set_blob_sizes(lsm->blobs);
+> @@ -252,7 +252,7 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+>   	/* LSM_ORDER_FIRST is always first. */
+>   	for (lsm = __start_lsm_info; lsm < __end_lsm_info; lsm++) {
+>   		if (lsm->order == LSM_ORDER_FIRST)
+> -			append_ordered_lsm(lsm, "first");
+> +			append_ordered_lsm(lsm, "  first");
+>   	}
+>   
+>   	/* Process "security=", if given. */
+> @@ -270,7 +270,7 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+>   			if ((major->flags & LSM_FLAG_LEGACY_MAJOR) &&
+>   			    strcmp(major->name, chosen_major_lsm) != 0) {
+>   				set_enabled(major, false);
+> -				init_debug("security=%s disabled: %s\n",
+> +				init_debug("security=%s disabled: %s (only one legacy major LSM)\n",
+>   					   chosen_major_lsm, major->name);
+>   			}
+>   		}
+> @@ -291,7 +291,8 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+>   		}
+>   
+>   		if (!found)
+> -			init_debug("%s ignored: %s\n", origin, name);
+> +			init_debug("%s ignored: %s (not built into kernel)\n",
+> +				   origin, name);
+>   	}
+>   
+>   	/* Process "security=", if given. */
+> @@ -309,7 +310,8 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+>   		if (exists_ordered_lsm(lsm))
+>   			continue;
+>   		set_enabled(lsm, false);
+> -		init_debug("%s disabled: %s\n", origin, lsm->name);
+> +		init_debug("%s skipped: %s (not in requested order)\n",
+> +			   origin, lsm->name);
+>   	}
+>   
+>   	kfree(sep);
+> @@ -320,6 +322,24 @@ static void __init lsm_early_task(struct task_struct *task);
+>   
+>   static int lsm_append(const char *new, char **result);
+>   
+> +static void __init report_lsm_order(void)
+> +{
+> +	struct lsm_info **lsm, *early;
+> +	int first = 0;
+> +
+> +	pr_info("initializing lsm=");
+> +
+> +	/* Report each enabled LSM name, comma separated. */
+> +	for (early = __start_early_lsm_info; early < __end_early_lsm_info; early++)
+> +		if (is_enabled(early))
+> +			pr_cont("%s%s", first++ == 0 ? "" : ",", early->name);
+> +	for (lsm = ordered_lsms; *lsm; lsm++)
+> +		if (is_enabled(*lsm))
+> +			pr_cont("%s%s", first++ == 0 ? "" : ",", (*lsm)->name);
+> +
+> +	pr_cont("\n");
+> +}
+> +
+>   static void __init ordered_lsm_init(void)
+>   {
+>   	struct lsm_info **lsm;
+> @@ -329,7 +349,8 @@ static void __init ordered_lsm_init(void)
+>   
+>   	if (chosen_lsm_order) {
+>   		if (chosen_major_lsm) {
+> -			pr_info("security= is ignored because it is superseded by lsm=\n");
+> +			pr_warn("security=%s is ignored because it is superseded by lsm=%s\n",
+> +				chosen_major_lsm, chosen_lsm_order);
+>   			chosen_major_lsm = NULL;
+>   		}
+>   		ordered_lsm_parse(chosen_lsm_order, "cmdline");
+> @@ -339,6 +360,8 @@ static void __init ordered_lsm_init(void)
+>   	for (lsm = ordered_lsms; *lsm; lsm++)
+>   		prepare_lsm(*lsm);
+>   
+> +	report_lsm_order();
+> +
+>   	init_debug("cred blob size       = %d\n", blob_sizes.lbs_cred);
+>   	init_debug("file blob size       = %d\n", blob_sizes.lbs_file);
+>   	init_debug("inode blob size      = %d\n", blob_sizes.lbs_inode);
+> @@ -395,13 +418,17 @@ int __init security_init(void)
+>   {
+>   	struct lsm_info *lsm;
+>   
+> -	pr_info("Security Framework initializing\n");
+> +	init_debug("legacy security=%s\n", chosen_major_lsm ?: " *unspecified*");
+> +	init_debug("  CONFIG_LSM=%s\n", builtin_lsm_order);
+> +	init_debug("boot arg lsm=%s\n", chosen_lsm_order ?: " *unspecified*");
+>   
+>   	/*
+>   	 * Append the names of the early LSM modules now that kmalloc() is
+>   	 * available
+>   	 */
+>   	for (lsm = __start_early_lsm_info; lsm < __end_early_lsm_info; lsm++) {
+> +		init_debug("  early started: %s (%s)\n", lsm->name,
+> +			   is_enabled(lsm) ? "enabled" : "disabled");
+>   		if (lsm->enabled)
+>   			lsm_append(lsm->name, &lsm_names);
+>   	}
