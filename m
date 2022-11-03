@@ -2,29 +2,29 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7911C4332F
-	for <bpf@archiver.kernel.org>; Thu,  3 Nov 2022 09:25:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A628C4167E
+	for <bpf@archiver.kernel.org>; Thu,  3 Nov 2022 09:25:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229379AbiKCJZs (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Nov 2022 05:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42446 "EHLO
+        id S231526AbiKCJZt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Nov 2022 05:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230497AbiKCJYz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S231375AbiKCJYz (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 3 Nov 2022 05:24:55 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F186EFAC8;
-        Thu,  3 Nov 2022 02:24:37 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N2yy70MypzmVPt;
-        Thu,  3 Nov 2022 17:24:31 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BC9F02A;
+        Thu,  3 Nov 2022 02:24:39 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N2yy85xD6zmVCW;
+        Thu,  3 Nov 2022 17:24:32 +0800 (CST)
 Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 17:24:36 +0800
+ 15.1.2375.31; Thu, 3 Nov 2022 17:24:37 +0800
 Received: from ubuntu1804.huawei.com (10.67.174.61) by
  kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 17:24:35 +0800
+ 15.1.2375.31; Thu, 3 Nov 2022 17:24:36 +0800
 From:   Yang Jihong <yangjihong1@huawei.com>
 To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
@@ -39,9 +39,9 @@ To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
         <linux-kselftest@vger.kernel.org>
 CC:     <yangjihong1@huawei.com>
-Subject: [PATCH bpf RESEND 2/4] bpf: Remove size check for sk in bpf_skb_is_valid_access for 32-bit architecture
-Date:   Thu, 3 Nov 2022 17:21:16 +0800
-Message-ID: <20221103092118.248600-3-yangjihong1@huawei.com>
+Subject: [PATCH bpf RESEND 4/4] bpf:selftests: Add kfunc_call test for mixing 32-bit and 64-bit parameters
+Date:   Thu, 3 Nov 2022 17:21:18 +0800
+Message-ID: <20221103092118.248600-5-yangjihong1@huawei.com>
 X-Mailer: git-send-email 2.30.GIT
 In-Reply-To: <20221103092118.248600-1-yangjihong1@huawei.com>
 References: <20221103092118.248600-1-yangjihong1@huawei.com>
@@ -56,35 +56,98 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The error code -EACCES is returned when bpf prog is tested in 32-bit environment,
-This is because bpf_object__relocate modifies the instruction to change memory
-size to 4 bytes, as shown in the following messages:
-
-libbpf: prog 'kfunc_call_test1': relo #2: matching candidate #0 <byte_off> [18342] struct __sk_buff.sk (0:30:0 @ offset 168)
-libbpf: prog 'kfunc_call_test1': relo #2: patched insn #1 (LDX/ST/STX) off 168 -> 168
-libbpf: prog 'kfunc_call_test1': relo #2: patched insn #1 (LDX/ST/STX) mem_sz 8 -> 4
-
-As a result, the bpf_skb_is_valid_access check fails. For 32-bit architecture,
-unnecessary checks need to be deleted.
+for function foo(u32 a, u64 b, u32 c) in 32-bit ARM: a is in r0, b is in
+r2-r3, c is stored on the stack.
+Because the AAPCS states:
+"A double-word sized type is passed in two consecutive registers (e.g., r0
+and r1, or r2 and r3). The content of the registers is as if the value had
+been loaded from memory representation with a single LDM instruction."
+Supplement the test cases in this case.
 
 Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
 ---
- net/core/filter.c | 2 --
- 1 file changed, 2 deletions(-)
+ net/bpf/test_run.c                            |  6 +++++
+ .../selftests/bpf/prog_tests/kfunc_call.c     |  1 +
+ .../selftests/bpf/progs/kfunc_call_test.c     | 23 +++++++++++++++++++
+ 3 files changed, 30 insertions(+)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index bb0136e7a8e4..eab7ce89740c 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -8269,8 +8269,6 @@ static bool bpf_skb_is_valid_access(int off, int size, enum bpf_access_type type
- 			return false;
- 		break;
- 	case offsetof(struct __sk_buff, sk):
--		if (type == BPF_WRITE || size != sizeof(__u64))
--			return false;
- 		info->reg_type = PTR_TO_SOCK_COMMON_OR_NULL;
- 		break;
- 	case offsetof(struct __sk_buff, tstamp_type):
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 13d578ce2a09..bdfb3081e1ce 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -551,6 +551,11 @@ struct sock * noinline bpf_kfunc_call_test3(struct sock *sk)
+ 	return sk;
+ }
+ 
++u64 noinline bpf_kfunc_call_test4(struct sock *sk, u64 a, u64 b, u32 c, u32 d)
++{
++	return a + b + c + d;
++}
++
+ struct prog_test_member1 {
+ 	int a;
+ };
+@@ -739,6 +744,7 @@ BTF_SET8_START(test_sk_check_kfunc_ids)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test1)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test2)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test3)
++BTF_ID_FLAGS(func, bpf_kfunc_call_test4)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_acquire, KF_ACQUIRE | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_memb_acquire, KF_ACQUIRE | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_release, KF_RELEASE)
+diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+index 5af1ee8f0e6e..13a105bb05ed 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
++++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+@@ -72,6 +72,7 @@ static struct kfunc_test_params kfunc_tests[] = {
+ 	/* success cases */
+ 	TC_TEST(kfunc_call_test1, 12),
+ 	TC_TEST(kfunc_call_test2, 3),
++	TC_TEST(kfunc_call_test4, 16),
+ 	TC_TEST(kfunc_call_test_ref_btf_id, 0),
+ 	TC_TEST(kfunc_call_test_get_mem, 42),
+ 	SYSCALL_TEST(kfunc_syscall_test, 0),
+diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test.c b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
+index f636e50be259..7cccb014d26e 100644
+--- a/tools/testing/selftests/bpf/progs/kfunc_call_test.c
++++ b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
+@@ -6,6 +6,8 @@
+ extern int bpf_kfunc_call_test2(struct sock *sk, __u32 a, __u32 b) __ksym;
+ extern __u64 bpf_kfunc_call_test1(struct sock *sk, __u32 a, __u64 b,
+ 				  __u32 c, __u64 d) __ksym;
++extern __u64 bpf_kfunc_call_test4(struct sock *sk, __u64 a, __u64 b,
++				  __u32 c, __u32 d) __ksym;
+ 
+ extern struct prog_test_ref_kfunc *bpf_kfunc_call_test_acquire(unsigned long *sp) __ksym;
+ extern void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p) __ksym;
+@@ -17,6 +19,27 @@ extern void bpf_kfunc_call_test_mem_len_fail2(__u64 *mem, int len) __ksym;
+ extern int *bpf_kfunc_call_test_get_rdwr_mem(struct prog_test_ref_kfunc *p, const int rdwr_buf_size) __ksym;
+ extern int *bpf_kfunc_call_test_get_rdonly_mem(struct prog_test_ref_kfunc *p, const int rdonly_buf_size) __ksym;
+ 
++SEC("tc")
++int kfunc_call_test4(struct __sk_buff *skb)
++{
++	struct bpf_sock *sk = skb->sk;
++	__u64 a = 1ULL << 32;
++	__u32 ret;
++
++	if (!sk)
++		return -1;
++
++	sk = bpf_sk_fullsock(sk);
++	if (!sk)
++		return -1;
++
++	a = bpf_kfunc_call_test4((struct sock *)sk, a | 2, a | 3, 4, 5);
++	ret = a >> 32;   /* ret should be 2 */
++	ret += (__u32)a; /* ret should be 16 */
++
++	return ret;
++}
++
+ SEC("tc")
+ int kfunc_call_test2(struct __sk_buff *skb)
+ {
 -- 
 2.30.GIT
 
