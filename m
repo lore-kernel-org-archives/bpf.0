@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73FD4C433FE
-	for <bpf@archiver.kernel.org>; Thu,  3 Nov 2022 05:53:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E4ADC43217
+	for <bpf@archiver.kernel.org>; Thu,  3 Nov 2022 05:53:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbiKCFxg convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 3 Nov 2022 01:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36626 "EHLO
+        id S230094AbiKCFxh convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 3 Nov 2022 01:53:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbiKCFxe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S230222AbiKCFxe (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 3 Nov 2022 01:53:34 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85102ADF
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C860365B2
         for <bpf@vger.kernel.org>; Wed,  2 Nov 2022 22:53:28 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A2NVtvN010027
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 2A2NVquk020776
         for <bpf@vger.kernel.org>; Wed, 2 Nov 2022 22:53:27 -0700
-Received: from maileast.thefacebook.com ([163.114.130.8])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3kkvcwdu67-6
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3kkhd9jypv-7
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Wed, 02 Nov 2022 22:53:27 -0700
 Received: from twshared17038.18.frc3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.31; Wed, 2 Nov 2022 22:53:25 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 045452102ECEF; Wed,  2 Nov 2022 22:53:15 -0700 (PDT)
+        id 4FEC42102ED26; Wed,  2 Nov 2022 22:53:20 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <netdev@vger.kernel.org>, <kuba@kernel.org>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 05/10] selftests/bpf: allow to define asc/desc ordering for sort specs in veristat
-Date:   Wed, 2 Nov 2022 22:52:59 -0700
-Message-ID: <20221103055304.2904589-6-andrii@kernel.org>
+Subject: [PATCH bpf-next 07/10] selftests/bpf: make veristat emit all stats in CSV mode by default
+Date:   Wed, 2 Nov 2022 22:53:01 -0700
+Message-ID: <20221103055304.2904589-8-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221103055304.2904589-1-andrii@kernel.org>
 References: <20221103055304.2904589-1-andrii@kernel.org>
@@ -41,8 +41,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: pdHs5H9iE1KDz3s-FG1jmFfP041_NiBv
-X-Proofpoint-ORIG-GUID: pdHs5H9iE1KDz3s-FG1jmFfP041_NiBv
+X-Proofpoint-GUID: KxXpelZ_6NHrxzzpeljXw6ttdfnSXde4
+X-Proofpoint-ORIG-GUID: KxXpelZ_6NHrxzzpeljXw6ttdfnSXde4
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-02_15,2022-11-02_01,2022-06-22_01
@@ -50,107 +50,52 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Allow to specify '^' at the end of stat name to designate that it should
-be sorted in ascending order. Similarly, allow any of 'v', 'V', '.',
-'!', or '_' suffix "symbols" to designate descending order. It's such
-a zoo for descending order because there is no single intuitive symbol
-that could be used (using 'v' looks pretty weird in practice), so few
-symbols that are "downwards leaning or pointing" were chosen. Either
-way, it shouldn't cause any troubles in practice.
-
-This new feature allows to customize sortering order to match user's
-needs.
+Make veristat distinguish between table and CSV output formats and use
+different default set of stats (columns) that are emitted. While for
+human-readable table output it doesn't make sense to output all known
+stats, it is very useful for CSV mode to record all possible data, so
+that it can later be queried and filtered in replay or comparison mode.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/testing/selftests/bpf/veristat.c | 63 ++++++++++++++++++++------
- 1 file changed, 48 insertions(+), 15 deletions(-)
+ tools/testing/selftests/bpf/veristat.c | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
-index 0da3ecf6ed52..56ba55156abb 100644
+index 37e512d233a7..ec1a8ba7791c 100644
 --- a/tools/testing/selftests/bpf/veristat.c
 +++ b/tools/testing/selftests/bpf/veristat.c
-@@ -419,32 +419,65 @@ static struct stat_def {
- 	[MARK_READ_MAX_LEN] = { "Max mark read length", {"max_mark_read_len", "mark_read"}, },
+@@ -501,6 +501,15 @@ static const struct stat_specs default_output_spec = {
+ 	},
  };
  
-+static bool parse_stat_id(const char *name, size_t len, int *id)
-+{
-+	int i, j;
++static const struct stat_specs default_csv_output_spec = {
++	.spec_cnt = 9,
++	.ids = {
++		FILE_NAME, PROG_NAME, VERDICT, DURATION,
++		TOTAL_INSNS, TOTAL_STATES, PEAK_STATES,
++		MAX_STATES_PER_INSN, MARK_READ_MAX_LEN,
++	},
++};
 +
-+	for (i = 0; i < ARRAY_SIZE(stat_defs); i++) {
-+		struct stat_def *def = &stat_defs[i];
-+
-+		for (j = 0; j < ARRAY_SIZE(stat_defs[i].names); j++) {
-+
-+			if (!def->names[j] ||
-+			    strlen(def->names[j]) != len ||
-+			    strncmp(def->names[j], name, len) != 0)
-+				continue;
-+
-+			*id = i;
-+			return true;
-+		}
+ static const struct stat_specs default_sort_spec = {
+ 	.spec_cnt = 2,
+ 	.ids = {
+@@ -1561,8 +1570,12 @@ int main(int argc, char **argv)
+ 	if (env.verbose && env.log_level == 0)
+ 		env.log_level = 1;
+ 
+-	if (env.output_spec.spec_cnt == 0)
+-		env.output_spec = default_output_spec;
++	if (env.output_spec.spec_cnt == 0) {
++		if (env.out_fmt == RESFMT_CSV)
++			env.output_spec = default_csv_output_spec;
++		else
++			env.output_spec = default_output_spec;
 +	}
-+
-+	return false;
-+}
-+
-+static bool is_asc_sym(char c)
-+{
-+	return c == '^';
-+}
-+
-+static bool is_desc_sym(char c)
-+{
-+	return c == 'v' || c == 'V' || c == '.' || c == '!' || c == '_';
-+}
-+
- static int parse_stat(const char *stat_name, struct stat_specs *specs)
- {
--	int id, i;
-+	int id;
-+	bool has_order = false, is_asc = false;
-+	size_t len = strlen(stat_name);
+ 	if (env.sort_spec.spec_cnt == 0)
+ 		env.sort_spec = default_sort_spec;
  
- 	if (specs->spec_cnt >= ARRAY_SIZE(specs->ids)) {
- 		fprintf(stderr, "Can't specify more than %zd stats\n", ARRAY_SIZE(specs->ids));
- 		return -E2BIG;
- 	}
- 
--	for (id = 0; id < ARRAY_SIZE(stat_defs); id++) {
--		struct stat_def *def = &stat_defs[id];
--
--		for (i = 0; i < ARRAY_SIZE(stat_defs[id].names); i++) {
--			if (!def->names[i] || strcmp(def->names[i], stat_name) != 0)
--				continue;
--
--			specs->ids[specs->spec_cnt] = id;
--			specs->asc[specs->spec_cnt] = def->asc_by_default;
--			specs->spec_cnt++;
-+	if (len > 1 && (is_asc_sym(stat_name[len - 1]) || is_desc_sym(stat_name[len - 1]))) {
-+		has_order = true;
-+		is_asc = is_asc_sym(stat_name[len - 1]);
-+		len -= 1;
-+	}
- 
--			return 0;
--		}
-+	if (!parse_stat_id(stat_name, len, &id)) {
-+		fprintf(stderr, "Unrecognized stat name '%s'\n", stat_name);
-+		return -ESRCH;
- 	}
- 
--	fprintf(stderr, "Unrecognized stat name '%s'\n", stat_name);
--	return -ESRCH;
-+	specs->ids[specs->spec_cnt] = id;
-+	specs->asc[specs->spec_cnt] = has_order ? is_asc : stat_defs[id].asc_by_default;
-+	specs->spec_cnt++;
-+
-+	return 0;
- }
- 
- static int parse_stats(const char *stats_str, struct stat_specs *specs)
 -- 
 2.30.2
 
