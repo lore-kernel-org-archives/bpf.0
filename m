@@ -2,129 +2,103 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1B3EC4332F
-	for <bpf@archiver.kernel.org>; Thu,  3 Nov 2022 09:22:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3403C4332F
+	for <bpf@archiver.kernel.org>; Thu,  3 Nov 2022 09:25:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231511AbiKCJW2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Nov 2022 05:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39654 "EHLO
+        id S231502AbiKCJZq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Nov 2022 05:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231514AbiKCJVk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 3 Nov 2022 05:21:40 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FCC8E0E3;
-        Thu,  3 Nov 2022 02:21:33 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N2ytb4fhvz15M4L;
-        Thu,  3 Nov 2022 17:21:27 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.70) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+        with ESMTP id S231359AbiKCJYx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Nov 2022 05:24:53 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B75F00F;
+        Thu,  3 Nov 2022 02:24:36 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N2yxp6gWxzHtch;
+        Thu,  3 Nov 2022 17:24:14 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 17:21:31 +0800
-From:   Wang Yufen <wangyufen@huawei.com>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>,
-        <john.fastabend@gmail.com>, <andrii@kernel.org>,
-        <martin.lau@linux.dev>, <yhs@fb.com>, <joe@wand.net.nz>
-Subject: [PATCH bpf v3] bpf: Fix memory leaks in __check_func_call
-Date:   Thu, 3 Nov 2022 17:42:04 +0800
-Message-ID: <1667468524-4926-1-git-send-email-wangyufen@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
+ 15.1.2375.31; Thu, 3 Nov 2022 17:24:34 +0800
+Received: from ubuntu1804.huawei.com (10.67.174.61) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 3 Nov 2022 17:24:33 +0800
+From:   Yang Jihong <yangjihong1@huawei.com>
+To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <haoluo@google.com>, <jolsa@kernel.org>,
+        <illusionist.neo@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <mykolal@fb.com>, <shuah@kernel.org>,
+        <benjamin.tissoires@redhat.com>, <memxor@gmail.com>,
+        <delyank@fb.com>, <asavkov@redhat.com>, <bpf@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+CC:     <yangjihong1@huawei.com>
+Subject: [PATCH bpf RESEND 0/4] bpf: Support kernel function call in 32-bit ARM
+Date:   Thu, 3 Nov 2022 17:21:14 +0800
+Message-ID: <20221103092118.248600-1-yangjihong1@huawei.com>
+X-Mailer: git-send-email 2.30.GIT
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500010.china.huawei.com (7.192.105.118)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.61]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-kmemleak reports this issue:
+1. Patch 1 and Patch 2 are dependent patches to resolve the BPF check
+   error in 32-bit ARM.
+2. Patch 3 supports bpf fkunc in 32-bit ARM.
+3. Patch 4 is used to add test cases to cover some parameter scenarios
+   states by AAPCS.
 
-unreferenced object 0xffff88817139d000 (size 2048):
-  comm "test_progs", pid 33246, jiffies 4307381979 (age 45851.820s)
-  hex dump (first 32 bytes):
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<0000000045f075f0>] kmalloc_trace+0x27/0xa0
-    [<0000000098b7c90a>] __check_func_call+0x316/0x1230
-    [<00000000b4c3c403>] check_helper_call+0x172e/0x4700
-    [<00000000aa3875b7>] do_check+0x21d8/0x45e0
-    [<000000001147357b>] do_check_common+0x767/0xaf0
-    [<00000000b5a595b4>] bpf_check+0x43e3/0x5bc0
-    [<0000000011e391b1>] bpf_prog_load+0xf26/0x1940
-    [<0000000007f765c0>] __sys_bpf+0xd2c/0x3650
-    [<00000000839815d6>] __x64_sys_bpf+0x75/0xc0
-    [<00000000946ee250>] do_syscall_64+0x3b/0x90
-    [<0000000000506b7f>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+The following is the test_progs result in the 32-bit ARM environment:
 
-The root case here is: In function prepare_func_exit(), the callee is
-not released in the abnormal scenario after "state->curframe--;". To
-fix, move "state->curframe--;" to the very bottom of the function,
-right when we free callee and reset frame[] pointer to NULL, as Andrii
-suggested.
+  # uname -a
+  Linux qemuarm32 6.1.0-rc3+ #2 SMP Thu Nov  3 15:31:29 CST 2022 armv7l armv7l armv7l GNU/Linux
+  # echo 1 > /proc/sys/net/core/bpf_jit_enable
+  # ./test_progs -t kfunc_call
+  #1/1     kfunc_call/kfunc_syscall_test_fail:OK
+  #1/2     kfunc_call/kfunc_syscall_test_null_fail:OK
+  #1/3     kfunc_call/kfunc_call_test_get_mem_fail_rdonly:OK
+  #1/4     kfunc_call/kfunc_call_test_get_mem_fail_use_after_free:OK
+  #1/5     kfunc_call/kfunc_call_test_get_mem_fail_oob:OK
+  #1/6     kfunc_call/kfunc_call_test_get_mem_fail_not_const:OK
+  #1/7     kfunc_call/kfunc_call_test_mem_acquire_fail:OK
+  #1/8     kfunc_call/kfunc_call_test1:OK
+  #1/9     kfunc_call/kfunc_call_test2:OK
+  #1/10    kfunc_call/kfunc_call_test4:OK
+  #1/11    kfunc_call/kfunc_call_test_ref_btf_id:OK
+  #1/12    kfunc_call/kfunc_call_test_get_mem:OK
+  #1/13    kfunc_call/kfunc_syscall_test:OK
+  #1/14    kfunc_call/kfunc_syscall_test_null:OK
+  #1/17    kfunc_call/destructive:OK
 
-In addition, function __check_func_call() has a similar problem. In
-the abnormal scenario before "state->curframe++;", the callee is alse
-not released.
+Yang Jihong (4):
+  bpf: Adapt 32-bit return value kfunc for 32-bit ARM when zext
+    extension
+  bpf: Remove size check for sk in bpf_skb_is_valid_access for 32-bit
+    architecture
+  bpf: Add kernel function call support in 32-bit ARM
+  bpf:selftests: Add kfunc_call test for mixing 32-bit and 64-bit
+    parameters
 
-Fixes: 69c087ba6225 ("bpf: Add bpf_for_each_map_elem() helper")
-Fixes: fd978bf7fd31 ("bpf: Add reference tracking to verifier")
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
----
- kernel/bpf/verifier.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ arch/arm/net/bpf_jit_32.c                     | 130 ++++++++++++++++++
+ kernel/bpf/verifier.c                         |   3 +
+ net/bpf/test_run.c                            |   6 +
+ net/core/filter.c                             |   2 -
+ .../selftests/bpf/prog_tests/kfunc_call.c     |   1 +
+ .../selftests/bpf/progs/kfunc_call_test.c     |  23 ++++
+ 6 files changed, 163 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 7f0a9f6..eff7a5a 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -6736,11 +6736,11 @@ static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 	/* Transfer references to the callee */
- 	err = copy_reference_state(callee, caller);
- 	if (err)
--		return err;
-+		goto err_out;
- 
- 	err = set_callee_state_cb(env, caller, callee, *insn_idx);
- 	if (err)
--		return err;
-+		goto err_out;
- 
- 	clear_caller_saved_regs(env, caller->regs);
- 
-@@ -6757,6 +6757,11 @@ static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 		print_verifier_state(env, callee, true);
- 	}
- 	return 0;
-+
-+err_out:
-+	kfree(callee);
-+	state->frame[state->curframe + 1] = NULL;
-+	return err;
- }
- 
- int map_set_for_each_callback_args(struct bpf_verifier_env *env,
-@@ -6970,8 +6975,7 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
- 		return -EINVAL;
- 	}
- 
--	state->curframe--;
--	caller = state->frame[state->curframe];
-+	caller = state->frame[state->curframe - 1];
- 	if (callee->in_callback_fn) {
- 		/* enforce R0 return value range [0, 1]. */
- 		struct tnum range = callee->callback_ret_range;
-@@ -7001,6 +7005,7 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
- 			return err;
- 	}
- 
-+	state->curframe--;
- 	*insn_idx = callee->callsite + 1;
- 	if (env->log.level & BPF_LOG_LEVEL) {
- 		verbose(env, "returning from callee:\n");
 -- 
-1.8.3.1
+2.30.GIT
 
