@@ -2,180 +2,81 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C540C433FE
-	for <bpf@archiver.kernel.org>; Thu,  3 Nov 2022 12:09:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4BC3C4332F
+	for <bpf@archiver.kernel.org>; Thu,  3 Nov 2022 12:12:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231544AbiKCMJi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Nov 2022 08:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38568 "EHLO
+        id S231531AbiKCMMz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Nov 2022 08:12:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231543AbiKCMJd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 3 Nov 2022 08:09:33 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9653110DE;
-        Thu,  3 Nov 2022 05:09:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
-        Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To;
-        bh=D+IbIcIImMPdQpJwzXPlYzbuRJccnY/ode4zkKbsw8o=; b=djh2MvwagoWZ2wxNVF79AMiAZ3
-        cjSbuepOvsmsIVV3NzIPip4mJqeBySJZAlQgNs+So6jNLViKVTkIQalaosQNw//ZhVUZ1woL+FKfm
-        sokEw4B7RcevgVDj0rLBX/Al2Xou+0iGvWvFFZsAcytESkIgoe0Yv9NgSyvwGx1R+vgsJtJ3QBY8o
-        y03y4OwSLufc3l8LHzX/NmP4aUq0Xs1rErlQnMV3ws1oAXEHtRRT2wJ8WrJD4g0EtG2F8MjNhexlJ
-        ptt5dLq1Zr3tZj5zjlKvFehj3UvM8rn8ct/aP4uzdVGL4tIgs/zqZPhzub4/01cMKq66YChAsmqn6
-        D2Sj1+yw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oqZ1d-008fpA-8v; Thu, 03 Nov 2022 12:08:51 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 311BE300411;
-        Thu,  3 Nov 2022 13:08:44 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 855C720AB9A14; Thu,  3 Nov 2022 13:08:44 +0100 (CET)
-Message-ID: <20221103120647.728830733@infradead.org>
-User-Agent: quilt/0.66
-Date:   Thu, 03 Nov 2022 13:00:13 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     olsajiri@gmail.com, ast@kernel.org, daniel@iogearbox.net
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, peterz@infradead.org, bjorn@kernel.org,
-        toke@redhat.com, David.Laight@aculab.com, rostedt@goodmis.org
-Subject: [PATCH 1/2] bpf: Revert ("Fix dispatcher patchable function entry to 5 bytes nop")
-References: <20221103120012.717020618@infradead.org>
+        with ESMTP id S231527AbiKCMMy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Nov 2022 08:12:54 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EAFF10F7
+        for <bpf@vger.kernel.org>; Thu,  3 Nov 2022 05:12:50 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id a11-20020a05600c2d4b00b003cf6f5fd9f1so1060162wmg.2
+        for <bpf@vger.kernel.org>; Thu, 03 Nov 2022 05:12:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:message-id:date:subject:to:from:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HdCS2Cyug92ZaoildN1oakf4WSLajPHqZNlQJx4j49g=;
+        b=ZSItUGIQ52KsQeKgoLXU/ZQlM2zX9PL4HqByO4wXQIiPn1qufFLs47d0pbJbRnA6e9
+         9dli3sxQy0y7S4QZHOe8dhfXOLNGz5nEv3Ds1poNQ0s69Bf0+mK/r5EL2jhCf6P1MjyI
+         0r2rRXMnkv9Sp//kwkdOggN7yx+Bwn2UFSe3I4nd5hx1bVGUWZSCRVtNQoz9xjXLnl99
+         ZA6hnjvZOazt+wLZIrt18pPb89wZMWAwXEO8jzTuTBQc2fMWyKhgdH2vuQAk2H6s8VKj
+         iqNPnjDv5Eg6DNyUDwbx5/2OjDcxCgr+3UB/4jM2MTZAD50YK7t8yZKEMNr+eMy7raqX
+         XzSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:message-id:date:subject:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HdCS2Cyug92ZaoildN1oakf4WSLajPHqZNlQJx4j49g=;
+        b=MBQuAl0PR2rAcn/7ETQirO273YbOJQdwW4SBJ+RAlAQ8f3lcp65LfnbulSQoVOVWKA
+         kEXeD495ACwi7HFKX/nVORZE1ytU9WXy9TF6Ae/udG44VkF+GbAYQqHtxTEbdM+0xmyX
+         2Nism4Ca5yySuMn5exxKTxFG/cCxBDVzDhcPgkJ5fs1iUyNcLRFlDzulxa5wopkNP65n
+         HC4G81czWcwtn6+CiTGnqSu4UIcLSROgMG2sKItcnoMBUYQ1mR30Oz0HKtbpaV3Vea0d
+         KtEotMY6cVSm4vD8ZikakNA7jb3zwNFoa2j6X73ZBa8RFQDiI2tFjOTCJIqD2+lPqz5W
+         aLdg==
+X-Gm-Message-State: ACrzQf1Pwj958NKjTgp9MrXVMqJYK5AOFMzsr0sYjV8Ikba15BWl1BQZ
+        q3hPcuBn1MD1yd45LTJIHQJf9GkwwtY=
+X-Google-Smtp-Source: AMsMyM7OL1lY7jzHEpaWGoi/znZyThxx7G/LLQOdvv+cp4vSXw9/s8kOTdP5nBWp7HkvpxEwb3WkRA==
+X-Received: by 2002:a7b:cc13:0:b0:3cf:8297:d61 with SMTP id f19-20020a7bcc13000000b003cf82970d61mr7983165wmh.160.1667477569025;
+        Thu, 03 Nov 2022 05:12:49 -0700 (PDT)
+Received: from imac ([2a02:8010:60a0:0:b0e4:331f:74b1:5cc8])
+        by smtp.gmail.com with ESMTPSA id bt12-20020a056000080c00b00236576c8eddsm747769wrb.12.2022.11.03.05.12.48
+        for <bpf@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 05:12:48 -0700 (PDT)
+From:   Donald Hunter <donald.hunter@gmail.com>
+To:     bpf@vger.kernel.org
+Subject: Question: __u32 or u32 in BPF code
+Date:   Thu, 03 Nov 2022 12:12:31 +0000
+Message-ID: <m24jvgtexc.fsf@gmail.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (darwin)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Because __attribute__((patchable_function_entry)) is only available
-since GCC-8 this solution fails to build on the minimum required GCC
-version.
+Hi,
 
-Undo these changes so we might try again -- without cluttering up the
-patches with too many changes.
+Should BPF code be using UAPI types such as __u32 or is it considered
+acceptable to use kernel types such as u32? I ask because the helper
+definitions that come from libbpf use the UAPI __u32 style types, but
+the bpf-helpers(7) man page refers to the kernel u32 style types.
 
-This is an almost complete revert of:
+As I understand it, u32 et al are kernel internal type definitions that
+should not leak into userspace which I believe extends to BPF
+code. In order to use a kernel internal type, the BPF programmer would
+need to define it themselves, or use a BTF generated vmlinux.h? Please
+correct me if I am wrong, or oversimplifying things.
 
-  dbe69b299884 ("bpf: Fix dispatcher patchable function entry to 5 bytes nop")
-  ceea991a019c ("bpf: Move bpf_dispatcher function out of ftrace locations")
+I think it would be useful to include a statement about UAPI types and
+usage in BPF code somewhere in the documentation. Once I have an answer
+to the question above, I am happy to work on a contribution to the
+documentation.
 
-(notably the arch/x86/Kconfig hunk is kept).
-
-Reported-by: David Laight <David.Laight@aculab.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/439d8dc735bb4858875377df67f1b29a@AcuMS.aculab.com
----
- arch/x86/net/bpf_jit_comp.c |   13 -------------
- include/linux/bpf.h         |   21 +--------------------
- kernel/bpf/dispatcher.c     |    6 ------
- 3 files changed, 1 insertion(+), 39 deletions(-)
-
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -11,7 +11,6 @@
- #include <linux/bpf.h>
- #include <linux/memory.h>
- #include <linux/sort.h>
--#include <linux/init.h>
- #include <asm/extable.h>
- #include <asm/set_memory.h>
- #include <asm/nospec-branch.h>
-@@ -389,18 +388,6 @@ static int __bpf_arch_text_poke(void *ip
- 	return ret;
- }
- 
--int __init bpf_arch_init_dispatcher_early(void *ip)
--{
--	const u8 *nop_insn = x86_nops[5];
--
--	if (is_endbr(*(u32 *)ip))
--		ip += ENDBR_INSN_SIZE;
--
--	if (memcmp(ip, nop_insn, X86_PATCH_SIZE))
--		text_poke_early(ip, nop_insn, X86_PATCH_SIZE);
--	return 0;
--}
--
- int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
- 		       void *old_addr, void *new_addr)
- {
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -27,7 +27,6 @@
- #include <linux/bpfptr.h>
- #include <linux/btf.h>
- #include <linux/rcupdate_trace.h>
--#include <linux/init.h>
- 
- struct bpf_verifier_env;
- struct bpf_verifier_log;
-@@ -971,8 +970,6 @@ struct bpf_trampoline *bpf_trampoline_ge
- 					  struct bpf_attach_target_info *tgt_info);
- void bpf_trampoline_put(struct bpf_trampoline *tr);
- int arch_prepare_bpf_dispatcher(void *image, void *buf, s64 *funcs, int num_funcs);
--int __init bpf_arch_init_dispatcher_early(void *ip);
--
- #define BPF_DISPATCHER_INIT(_name) {				\
- 	.mutex = __MUTEX_INITIALIZER(_name.mutex),		\
- 	.func = &_name##_func,					\
-@@ -986,21 +983,7 @@ int __init bpf_arch_init_dispatcher_earl
- 	},							\
- }
- 
--#define BPF_DISPATCHER_INIT_CALL(_name)					\
--	static int __init _name##_init(void)				\
--	{								\
--		return bpf_arch_init_dispatcher_early(_name##_func);	\
--	}								\
--	early_initcall(_name##_init)
--
--#ifdef CONFIG_X86_64
--#define BPF_DISPATCHER_ATTRIBUTES __attribute__((patchable_function_entry(5)))
--#else
--#define BPF_DISPATCHER_ATTRIBUTES
--#endif
--
- #define DEFINE_BPF_DISPATCHER(name)					\
--	notrace BPF_DISPATCHER_ATTRIBUTES				\
- 	noinline __nocfi unsigned int bpf_dispatcher_##name##_func(	\
- 		const void *ctx,					\
- 		const struct bpf_insn *insnsi,				\
-@@ -1010,9 +993,7 @@ int __init bpf_arch_init_dispatcher_earl
- 	}								\
- 	EXPORT_SYMBOL(bpf_dispatcher_##name##_func);			\
- 	struct bpf_dispatcher bpf_dispatcher_##name =			\
--		BPF_DISPATCHER_INIT(bpf_dispatcher_##name);		\
--	BPF_DISPATCHER_INIT_CALL(bpf_dispatcher_##name);
--
-+		BPF_DISPATCHER_INIT(bpf_dispatcher_##name);
- #define DECLARE_BPF_DISPATCHER(name)					\
- 	unsigned int bpf_dispatcher_##name##_func(			\
- 		const void *ctx,					\
---- a/kernel/bpf/dispatcher.c
-+++ b/kernel/bpf/dispatcher.c
-@@ -4,7 +4,6 @@
- #include <linux/hash.h>
- #include <linux/bpf.h>
- #include <linux/filter.h>
--#include <linux/init.h>
- 
- /* The BPF dispatcher is a multiway branch code generator. The
-  * dispatcher is a mechanism to avoid the performance penalty of an
-@@ -90,11 +89,6 @@ int __weak arch_prepare_bpf_dispatcher(v
- {
- 	return -ENOTSUPP;
- }
--
--int __weak __init bpf_arch_init_dispatcher_early(void *ip)
--{
--	return -ENOTSUPP;
--}
- 
- static int bpf_dispatcher_prepare(struct bpf_dispatcher *d, void *image, void *buf)
- {
-
-
+A follow-on question is how to make things consistent across the UAPI
+header files and the bpf-helpers(7) documentation. 
