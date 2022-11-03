@@ -2,149 +2,262 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C157C433FE
-	for <bpf@archiver.kernel.org>; Thu,  3 Nov 2022 09:41:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 065CEC433FE
+	for <bpf@archiver.kernel.org>; Thu,  3 Nov 2022 10:25:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229379AbiKCJlX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Nov 2022 05:41:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53516 "EHLO
+        id S229379AbiKCKZH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Nov 2022 06:25:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiKCJlV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 3 Nov 2022 05:41:21 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2B064E0;
-        Thu,  3 Nov 2022 02:41:19 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N2zFM6dN3zpW5X;
-        Thu,  3 Nov 2022 17:37:43 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 17:41:12 +0800
-Received: from ubuntu1804.huawei.com (10.67.174.61) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 17:41:12 +0800
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <acme@redhat.com>, <pabeni@redhat.com>, <adrian.hunter@intel.com>,
-        <wojciech.drewek@intel.com>, <davem@davemloft.net>,
-        <gustavoars@kernel.org>, <tadeusz.struk@linaro.org>,
-        <keescook@chromium.org>, <linux-kernel@vger.kernel.org>,
-        <bpf@vger.kernel.org>
-CC:     <yangjihong1@huawei.com>
-Subject: [PATCH bpf RESEND v2] tools headers UAPI: Sync linux/stddef.h with the kernel sources
-Date:   Thu, 3 Nov 2022 17:37:57 +0800
-Message-ID: <20221103093757.252390-1-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
+        with ESMTP id S231192AbiKCKZG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Nov 2022 06:25:06 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187AEDE87;
+        Thu,  3 Nov 2022 03:25:05 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id bs21so2063520wrb.4;
+        Thu, 03 Nov 2022 03:25:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:references:message-id:date:in-reply-to
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wcw3vDILN+VEHTzCfmu4v27x19X3i1q7FXp645flK6U=;
+        b=UL7CofUqPSXbNsY8WOzUTJyCfMZCfHpLZ2ItSBRonkS21jz3vK8nnIgMU/daI0+ydr
+         AQ12sIHRu1lgI3We49QIvGiLBkdtB+QevOLm/yaPAoXFrqta1r1GyW9LVYqbv5jZLuER
+         hHAaEL6e0PWdpiQWOLDmoHCLK9KWvh42pvqHnUzZrjC+08kHySZ6rq0lvAIWBoScDfla
+         VoaR7inIvA4F0HQV0+hMAbc1+Hsw4NY7w9FF5sKVBLn0wv2CHPbAGjncXw/AQLZu1rLt
+         Poe6JAfeZ7cwRTGeSOCMUBPaUfWLhqnU4KRG6Mxq8XhzLeaHV3Ng/OcpLjxM6d+UcWwZ
+         IpoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:references:message-id:date:in-reply-to
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wcw3vDILN+VEHTzCfmu4v27x19X3i1q7FXp645flK6U=;
+        b=nUwGjrO0pXdtE6YYjwrpndbpRm0Yt2XqHK06h7UpU38kHkau1Wy4UrY8n3EfDD4kIM
+         juPWS6kDewoAOjnojpRMDnLfRKUbXWt1cUGNhSKah7e1DlRwsaYIxPpR8V94eKiZ51WS
+         /p8MfMBEaJxEmsVLcB3xUvgD57Rr3eEFCtOD3jL9YlG+S1/9726XbV74H/jilehFaQVe
+         7uedgqmfUmDU7nDY8epulgZKZKppJ5YQGldkrmRceun1CY3Nd/0i3W6+UxJzcl0TZLHa
+         /Zry85nNRz9RFpSkhf2ZSplSvSpsw1P6AXjnEa9SLgQbyivBaqW1SRrp9dv5fwsWW+Qr
+         cz5A==
+X-Gm-Message-State: ACrzQf3cxjZ0JZroLSPNQbi7X2wT+EgHR/fND7ziV5TV+a3ofPDGYdNq
+        8piw9zmkVqTPwjApAZ8IkVc=
+X-Google-Smtp-Source: AMsMyM7xwdlAqiDVEIAz8d1gSI7tOaoJiw80uyoGhG74NvLVcPUes2rguRn3h1zztYX2AHC6tMfMkg==
+X-Received: by 2002:a5d:4846:0:b0:236:64b1:50fe with SMTP id n6-20020a5d4846000000b0023664b150femr18498398wrs.672.1667471103322;
+        Thu, 03 Nov 2022 03:25:03 -0700 (PDT)
+Received: from imac ([2a02:8010:60a0:0:b0e4:331f:74b1:5cc8])
+        by smtp.gmail.com with ESMTPSA id l2-20020a05600c1d0200b003cf878c4468sm5829695wms.5.2022.11.03.03.25.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 03:25:02 -0700 (PDT)
+From:   Donald Hunter <donald.hunter@gmail.com>
+To:     mtahhan@redhat.com
+Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org, jbrouer@redhat.com,
+        thoiland@redhat.com, Lorenzo Bianconi <lorenzo@kernel.org>
+Subject: Re: [PATCH bpf-next v2 1/1] docs: BPF_MAP_TYPE_CPUMAP
+In-Reply-To: <20221102124416.2820268-2-mtahhan@redhat.com>
+        (mtahhan@redhat.com's message of "Wed, 2 Nov 2022 08:44:16 -0400")
+Date:   Thu, 03 Nov 2022 10:24:49 +0000
+Message-ID: <m2mt98tjwu.fsf@gmail.com>
+References: <20221102124416.2820268-1-mtahhan@redhat.com>
+        <20221102124416.2820268-2-mtahhan@redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (darwin)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.61]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-commit 036b8f5b8970 ("tools headers uapi: Update linux/in.h copy") modify
-tools/include/uapi/linux/in.h, and __DECLARE_FLEX_ARRAY is introduced.
-Macro is not defined in tools/include, compilation fails:
+mtahhan@redhat.com writes:
 
-    CLNG-BPF [test_maps] bind4_prog.bpf.o
-  In file included from progs/bind4_prog.c:7:
-  /root/linux-mainline-new/linux/tools/include/uapi/linux/in.h:199:3: error: type name requires a specifier or qualifier
-                  __DECLARE_FLEX_ARRAY(__be32, imsf_slist_flex);
-                  ^
-  /root/linux-mainline-new/linux/tools/include/uapi/linux/in.h:199:32: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-                  __DECLARE_FLEX_ARRAY(__be32, imsf_slist_flex);
-                                               ^
-  2 errors generated.
+> From: Maryam Tahhan <mtahhan@redhat.com>
+>
+> Add documentation for BPF_MAP_TYPE_CPUMAP including
+> kernel version introduced, usage and examples.
+>
+> Signed-off-by: Maryam Tahhan <mtahhan@redhat.com>
+> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> Co-developed-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> ---
+>  Documentation/bpf/map_cpumap.rst | 140 +++++++++++++++++++++++++++++++
+>  1 file changed, 140 insertions(+)
+>  create mode 100644 Documentation/bpf/map_cpumap.rst
+>
+> diff --git a/Documentation/bpf/map_cpumap.rst b/Documentation/bpf/map_cpumap.rst
+> new file mode 100644
+> index 000000000000..23320fb61bf7
+> --- /dev/null
+> +++ b/Documentation/bpf/map_cpumap.rst
+> @@ -0,0 +1,140 @@
+> +.. SPDX-License-Identifier: GPL-2.0-only
+> +.. Copyright (C) 2022 Red Hat, Inc.
+> +
+> +===================
+> +BPF_MAP_TYPE_CPUMAP
+> +===================
+> +
+> +.. note::
+> +   - ``BPF_MAP_TYPE_CPUMAP`` was introduced in kernel version 4.15
+> +
+> +``BPF_MAP_TYPE_CPUMAP`` is primarily used as a backend map for the XDP BPF
+> +helpers ``bpf_redirect_map()`` and ``XDP_REDIRECT`` action. This map type redirects raw
+> +XDP frames to another CPU.
+> +
+> +A CPUMAP is a scalability and isolation mechanism that allows the steering of packets
+> +to dedicated CPUs for processing. An example use-case for this map type is software
+> +based Receive Side Scaling (RSS).
+> +
+> +The CPUMAP represents the CPUs in the system indexed as the map-key, and the
+> +map-value is the config setting (per CPUMAP entry). Each CPUMAP entry has a dedicated
+> +kernel thread bound to the given CPU to represent the remote CPU execution unit.
+> +
+> +Starting from Linux kernel version 5.9 the CPUMAP can run a second XDP program
+> +on the remote CPU. This allows an XDP program to split its processing across
+> +multiple CPUs. For example, a scenario where the initial CPU (that sees/receives
+> +the packets) needs to do minimal packet processing and the remote CPU (to which
+> +the packet is directed) can afford to spend more cycles processing the frame. The
+> +initial CPU is where the XDP redirect program is executed. The remote CPU
+> +receives raw``xdp_frame`` objects.
 
-Synchronize include/uapi/linux/stddef.h to tools headers directory,
-and delete the line "#include <linux/compiler_types.h>":
+Nit - missing space between raw and ``xdp_frame`` is breaking formatting.
 
-  # cp ./include/uapi/linux/stddef.h tools/include/uapi/linux/stddef.h
-  # sed -i '/#include <linux\/compiler_types.h>/,+1d' tools/include/uapi/linux/stddef.h
+> +
+> +Usage
+> +=====
 
-And add missed <linux/stddef.h> header in tools/include/uapi/linux/in.h.
+Can you add subheadings for "Kernel BPF" and "Userspace" and move
+update, lookup, delete under "Userspace".
 
-Fixes: 036b8f5b8970 ("tools headers uapi: Update linux/in.h copy")
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
----
+> +.. c:function::
+> +   long bpf_map_update_elem(struct bpf_map *map, const void *key, const void *value, u64 flags)
 
-Changes since v1:
- - Specify the target tree to "bpf" in title.
- - Add more reviewers.
+This function signature is for the BPF helper. If it can only be used
+from userspace then this should be the libbpf function signature.
 
- tools/include/uapi/linux/in.h     |  1 +
- tools/include/uapi/linux/stddef.h | 45 +++++++++++++++++++++++++++++++
- 2 files changed, 46 insertions(+)
- create mode 100644 tools/include/uapi/linux/stddef.h
+> +
+> + CPU entries can be added or updated using the ``bpf_map_update_elem()``
+> + helper. This helper replaces existing elements atomically. The ``value`` parameter
+> + can be ``struct bpf_cpumap_val``.
 
-diff --git a/tools/include/uapi/linux/in.h b/tools/include/uapi/linux/in.h
-index f243ce665f74..79015665daf1 100644
---- a/tools/include/uapi/linux/in.h
-+++ b/tools/include/uapi/linux/in.h
-@@ -22,6 +22,7 @@
- #include <linux/types.h>
- #include <linux/libc-compat.h>
- #include <linux/socket.h>
-+#include <linux/stddef.h>
- 
- #if __UAPI_DEF_IN_IPPROTO
- /* Standard well-defined IP protocols.  */
-diff --git a/tools/include/uapi/linux/stddef.h b/tools/include/uapi/linux/stddef.h
-new file mode 100644
-index 000000000000..72bcdf96999f
---- /dev/null
-+++ b/tools/include/uapi/linux/stddef.h
-@@ -0,0 +1,45 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+#ifndef _UAPI_LINUX_STDDEF_H
-+#define _UAPI_LINUX_STDDEF_H
-+
-+#ifndef __always_inline
-+#define __always_inline inline
-+#endif
-+
-+/**
-+ * __struct_group() - Create a mirrored named and anonyomous struct
-+ *
-+ * @TAG: The tag name for the named sub-struct (usually empty)
-+ * @NAME: The identifier name of the mirrored sub-struct
-+ * @ATTRS: Any struct attributes (usually empty)
-+ * @MEMBERS: The member declarations for the mirrored structs
-+ *
-+ * Used to create an anonymous union of two structs with identical layout
-+ * and size: one anonymous and one named. The former's members can be used
-+ * normally without sub-struct naming, and the latter can be used to
-+ * reason about the start, end, and size of the group of struct members.
-+ * The named struct can also be explicitly tagged for layer reuse, as well
-+ * as both having struct attributes appended.
-+ */
-+#define __struct_group(TAG, NAME, ATTRS, MEMBERS...) \
-+	union { \
-+		struct { MEMBERS } ATTRS; \
-+		struct TAG { MEMBERS } ATTRS NAME; \
-+	}
-+
-+/**
-+ * __DECLARE_FLEX_ARRAY() - Declare a flexible array usable in a union
-+ *
-+ * @TYPE: The type of each flexible array element
-+ * @NAME: The name of the flexible array member
-+ *
-+ * In order to have a flexible array member in a union or alone in a
-+ * struct, it needs to be wrapped in an anonymous struct with at least 1
-+ * named member, but that member can be empty.
-+ */
-+#define __DECLARE_FLEX_ARRAY(TYPE, NAME)	\
-+	struct { \
-+		struct { } __empty_ ## NAME; \
-+		TYPE NAME[]; \
-+	}
-+#endif
--- 
-2.30.GIT
+I think this needs to be a stronger statement that says the value must
+either be a __u32 or a struct bpf_cpumap_val.
 
+> + .. note::
+> +    The maps can only be updated from user space and not from a BPF program.
+
+Suggest moving this note to the start of the usage section.
+
+> + .. code-block:: c
+> +
+> +    struct bpf_cpumap_val {
+> +        __u32 qsize;  /* queue size to remote target CPU */
+> +        union {
+> +            int   fd; /* prog fd on map write */
+> +            __u32 id; /* prog id on map read */
+> +        } bpf_prog;
+> +    };
+
+Should also state the valid use of flags, which I think is BPF_ANY or
+BPF_EXIST due to the array semantics.
+
+> +.. c:function::
+> +   void *bpf_map_lookup_elem(struct bpf_map *map, const void *key)
+
+This needs to be the libbpf function signature.
+
+> + CPU entries can be retrieved using the ``bpf_map_lookup_elem()``
+> + helper.
+> +
+> +.. c:function::
+> +   long bpf_map_delete_elem(struct bpf_map *map, const void *key)
+
+This needs to be the libbpf function signature.
+
+> + CPU entries can be deleted using the ``bpf_map_delete_elem()``
+> + helper. This helper will return 0 on success, or negative error in case of
+> + failure.
+> +
+> +.. c:function::
+> +     long bpf_redirect_map(struct bpf_map *map, u32 key, u64 flags)
+
+Can you put this under a "Kernel BPF" subheading.
+
+> + Redirect the packet to the endpoint referenced by ``map`` at index ``key``.
+> + For ``BPF_MAP_TYPE_CPUMAP`` this map contains references to CPUs.
+> +
+> + The lower two bits of *flags* are used as the return code if the map lookup
+
+Nit - should that be ``flags``
+
+> + fails. This is so that the return value can be one of the XDP program return
+> + codes up to ``XDP_TX``, as chosen by the caller.
+> +
+> +Examples
+> +========
+> +Kernel
+> +------
+> +
+> +The following code snippet shows how to declare a BPF_MAP_TYPE_CPUMAP called
+> +cpu_map and how to redirect packets to a remote CPU using a round robin scheme.
+
+Nit - ``BPF_MAP_TYPE_CPUMAP`` called ``cpu_map``
+
+> +.. code-block:: c
+> +
+> +   struct {
+> +        __uint(type, BPF_MAP_TYPE_CPUMAP);
+> +        __type(key, u32);
+> +        __type(value, struct bpf_cpumap_val);
+> +        __uint(max_entries, 12);
+> +    } cpu_map SEC(".maps");
+> +
+> +    struct {
+> +        __uint(type, BPF_MAP_TYPE_ARRAY);
+> +        __type(key, u32);
+> +        __type(value, u32);
+> +        __uint(max_entries, 12);
+> +    } cpus_available SEC(".maps");
+> +
+> +    struct {
+> +        __uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
+> +        __type(key, u32);
+> +        __type(value, u32);
+> +        __uint(max_entries, 1);
+> +       } cpus_iterator SEC(".maps");
+
+Nit - closing brace indentation.
+
+> +    SEC("xdp")
+> +    int  xdp_redir_cpu_round_robin(struct xdp_md *ctx)
+> +    {
+> +        u32 key = 0;
+> +        u32 cpu_dest = 0;
+> +        u32 *cpu_selected, *cpu_iterator;
+> +        u32 cpu_idx;
+> +
+> +        cpu_iterator = bpf_map_lookup_elem(&cpus_iterator, &key);
+> +        if (!cpu_iterator)
+> +            return XDP_ABORTED;
+> +        cpu_idx = *cpu_iterator;
+> +
+> +        *cpu_iterator += 1;
+> +        if (*cpu_iterator == bpf_num_possible_cpus())
+> +            *cpu_iterator = 0;
+> +
+> +        cpu_selected = bpf_map_lookup_elem(&cpus_available, &cpu_idx);
+> +        if (!cpu_selected)
+> +            return XDP_ABORTED;
+> +        cpu_dest = *cpu_selected;
+> +
+> +        if (cpu_dest >= bpf_num_possible_cpus())
+> +            return XDP_ABORTED;
+> +
+> +        return bpf_redirect_map(&cpu_map, cpu_dest, 0);
+> +    }
+
+I think the above example should use __u32 instead of u32 because it
+should use UAPI definitions, but we should verify this.
+
+> +References
+> +===========
+> +
+> +- https://elixir.bootlin.com/linux/v6.0.1/source/kernel/bpf/cpumap.c
+> +- https://developers.redhat.com/blog/2021/05/13/receive-side-scaling-rss-with-ebpf-and-cpumap#redirecting_into_a_cpumap
