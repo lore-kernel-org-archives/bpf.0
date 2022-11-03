@@ -2,29 +2,29 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 940CAC4321E
-	for <bpf@archiver.kernel.org>; Thu,  3 Nov 2022 08:36:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45662C43219
+	for <bpf@archiver.kernel.org>; Thu,  3 Nov 2022 08:36:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231197AbiKCIgP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Nov 2022 04:36:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42152 "EHLO
+        id S231222AbiKCIgS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Nov 2022 04:36:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiKCIgN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 3 Nov 2022 04:36:13 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B8926DF;
-        Thu,  3 Nov 2022 01:36:12 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N2xpD3fL5zpW5r;
-        Thu,  3 Nov 2022 16:32:36 +0800 (CST)
+        with ESMTP id S231205AbiKCIgQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Nov 2022 04:36:16 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4839126FA;
+        Thu,  3 Nov 2022 01:36:15 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N2xtJ6Zdjz15MLW;
+        Thu,  3 Nov 2022 16:36:08 +0800 (CST)
 Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 16:36:10 +0800
+ 15.1.2375.31; Thu, 3 Nov 2022 16:36:12 +0800
 Received: from ubuntu1804.huawei.com (10.67.174.61) by
  kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 16:36:09 +0800
+ 15.1.2375.31; Thu, 3 Nov 2022 16:36:11 +0800
 From:   Yang Jihong <yangjihong1@huawei.com>
 To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
@@ -39,10 +39,12 @@ To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
         <linux-kselftest@vger.kernel.org>
 CC:     <yangjihong1@huawei.com>
-Subject: [PATCH 0/4] bpf: Support kernel function call in 32-bit ARM
-Date:   Thu, 3 Nov 2022 16:32:50 +0800
-Message-ID: <20221103083254.237646-1-yangjihong1@huawei.com>
+Subject: [PATCH 2/4] bpf: Remove size check for sk in bpf_skb_is_valid_access for 32-bit architecture
+Date:   Thu, 3 Nov 2022 16:32:52 +0800
+Message-ID: <20221103083254.237646-3-yangjihong1@huawei.com>
 X-Mailer: git-send-email 2.30.GIT
+In-Reply-To: <20221103083254.237646-1-yangjihong1@huawei.com>
+References: <20221103083254.237646-1-yangjihong1@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -54,51 +56,35 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-1. Patch 1 and Patch 2 are dependent patches to resolve the BPF check error in
-   32-bit ARM.
-2. Patch 3 supports bpf fkunc in 32-bit ARM.
-3. Patch 4 is used to add test cases to cover some parameter scenarios states
-   by AAPCS.
+The error code -EACCES is returned when bpf prog is tested in 32-bit environment,
+This is because bpf_object__relocate modifies the instruction to change memory
+size to 4 bytes, as shown in the following messages:
 
-The following is the test_progs result in the 32-bit ARM environment:
+libbpf: prog 'kfunc_call_test1': relo #2: matching candidate #0 <byte_off> [18342] struct __sk_buff.sk (0:30:0 @ offset 168)
+libbpf: prog 'kfunc_call_test1': relo #2: patched insn #1 (LDX/ST/STX) off 168 -> 168
+libbpf: prog 'kfunc_call_test1': relo #2: patched insn #1 (LDX/ST/STX) mem_sz 8 -> 4
 
-  # uname -a
-  Linux qemuarm32 6.1.0-rc3+ #2 SMP Thu Nov  3 15:31:29 CST 2022 armv7l armv7l armv7l GNU/Linux
-  # echo 1 > /proc/sys/net/core/bpf_jit_enable
-  # ./test_progs -t kfunc_call
-  #1/1     kfunc_call/kfunc_syscall_test_fail:OK
-  #1/2     kfunc_call/kfunc_syscall_test_null_fail:OK
-  #1/3     kfunc_call/kfunc_call_test_get_mem_fail_rdonly:OK
-  #1/4     kfunc_call/kfunc_call_test_get_mem_fail_use_after_free:OK
-  #1/5     kfunc_call/kfunc_call_test_get_mem_fail_oob:OK
-  #1/6     kfunc_call/kfunc_call_test_get_mem_fail_not_const:OK
-  #1/7     kfunc_call/kfunc_call_test_mem_acquire_fail:OK
-  #1/8     kfunc_call/kfunc_call_test1:OK
-  #1/9     kfunc_call/kfunc_call_test2:OK
-  #1/10    kfunc_call/kfunc_call_test4:OK
-  #1/11    kfunc_call/kfunc_call_test_ref_btf_id:OK
-  #1/12    kfunc_call/kfunc_call_test_get_mem:OK
-  #1/13    kfunc_call/kfunc_syscall_test:OK
-  #1/14    kfunc_call/kfunc_syscall_test_null:OK
-  #1/17    kfunc_call/destructive:OK
+As a result, the bpf_skb_is_valid_access check fails. For 32-bit architecture,
+unnecessary checks need to be deleted.
 
-Yang Jihong (4):
-  bpf: Adapt 32-bit return value kfunc for 32-bit ARM when zext
-    extension
-  bpf: Remove size check for sk in bpf_skb_is_valid_access for 32-bit
-    architecture
-  bpf: Add kernel function call support in 32-bit ARM
-  bpf:selftests: Add kfunc_call test for mixing 32-bit and 64-bit
-    parameters
+Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+---
+ net/core/filter.c | 2 --
+ 1 file changed, 2 deletions(-)
 
- arch/arm/net/bpf_jit_32.c                     | 130 ++++++++++++++++++
- kernel/bpf/verifier.c                         |   3 +
- net/bpf/test_run.c                            |   6 +
- net/core/filter.c                             |   2 -
- .../selftests/bpf/prog_tests/kfunc_call.c     |   1 +
- .../selftests/bpf/progs/kfunc_call_test.c     |  23 ++++
- 6 files changed, 163 insertions(+), 2 deletions(-)
-
+diff --git a/net/core/filter.c b/net/core/filter.c
+index bb0136e7a8e4..eab7ce89740c 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -8269,8 +8269,6 @@ static bool bpf_skb_is_valid_access(int off, int size, enum bpf_access_type type
+ 			return false;
+ 		break;
+ 	case offsetof(struct __sk_buff, sk):
+-		if (type == BPF_WRITE || size != sizeof(__u64))
+-			return false;
+ 		info->reg_type = PTR_TO_SOCK_COMMON_OR_NULL;
+ 		break;
+ 	case offsetof(struct __sk_buff, tstamp_type):
 -- 
 2.30.GIT
 
