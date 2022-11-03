@@ -2,226 +2,108 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79DAFC4167D
-	for <bpf@archiver.kernel.org>; Thu,  3 Nov 2022 09:25:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1D7FC4332F
+	for <bpf@archiver.kernel.org>; Thu,  3 Nov 2022 09:34:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbiKCJZw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Nov 2022 05:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42474 "EHLO
+        id S229553AbiKCJey (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Nov 2022 05:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230507AbiKCJY5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 3 Nov 2022 05:24:57 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877B0F5BA;
-        Thu,  3 Nov 2022 02:24:43 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N2yyF3ZFJz15MLj;
-        Thu,  3 Nov 2022 17:24:37 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 17:24:37 +0800
-Received: from ubuntu1804.huawei.com (10.67.174.61) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 17:24:36 +0800
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>,
-        <illusionist.neo@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <mykolal@fb.com>, <shuah@kernel.org>,
-        <benjamin.tissoires@redhat.com>, <memxor@gmail.com>,
-        <delyank@fb.com>, <asavkov@redhat.com>, <bpf@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-CC:     <yangjihong1@huawei.com>
-Subject: [PATCH bpf RESEND 3/4] bpf: Add kernel function call support in 32-bit ARM
-Date:   Thu, 3 Nov 2022 17:21:17 +0800
-Message-ID: <20221103092118.248600-4-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
-In-Reply-To: <20221103092118.248600-1-yangjihong1@huawei.com>
-References: <20221103092118.248600-1-yangjihong1@huawei.com>
+        with ESMTP id S229501AbiKCJev (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Nov 2022 05:34:51 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4602AD3
+        for <bpf@vger.kernel.org>; Thu,  3 Nov 2022 02:34:50 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id f63so1192897pgc.2
+        for <bpf@vger.kernel.org>; Thu, 03 Nov 2022 02:34:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PqAFBiOS42xsITjoRr3FHC0NWlSrAxOw+pt6izNPrvk=;
+        b=krPKlqMc8L/GDXZP15AMH6goEoFjKKk+CuGC+VtJTxr6XkJe7Ltzv4WHKAhwafy48s
+         hUVVaquT4Szpyom2kSjASfxKu9Z9ZGHHNNfpXUdLboVZrUSpDdYVJ6WAHhn1nnb0r5hJ
+         ukSN7FVS6UKnOOu+h8mz9WIGHreeTTRYoC/7gsz/hwJ88bzup7O/STGASCkSVJ2ncIXt
+         QXAuAMfmJX0tx4j7e5ML044b2+fmBrKIdi1rMfQlran3L6XrlcFgXkbfhD+0nIuq7iS/
+         lZee7vu/5oCd0417d56cQJlwlMQVlYn979U5/clO+eihjFi9geFzZgLryL5siQzOX4CM
+         1CwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PqAFBiOS42xsITjoRr3FHC0NWlSrAxOw+pt6izNPrvk=;
+        b=YRt+t4qvd/bHgjXuyVab1FKzf7L0fXDWD2fvihxWu02TdCzgxPXZMzAVeilqqYXN0d
+         YPQuwaQp1GJEW/PD6/LegM/kkgb1c574Zlzp2eJPuY8wkgAd55eBuzCyQYgfiSyuRuxa
+         wP57YVImIHXe/OX9Co1i1OiKnwB+bhce2i2vUgjVJB5FiTJ5z1GkMHZGpLdm2IiuKEQa
+         yp0K2IQ7WuBUZkqj8qYZZyslTP4dbyfWvBJVfeV4L+vGxlC2E3qTDb3MrsJK0Dl1PenN
+         7SRnH+wZ/SRUwt929a44UAXb1DpsKTgQUeiXmzl6xq/XL4YowXP0jTP/hhr6GPpnZt3p
+         uSXA==
+X-Gm-Message-State: ACrzQf176Me4Vk7VFYf8+bldNVJ2CbOo5dKFeRxmh/9BlHb1HAA4HYWn
+        UcNtMCdS0GHZ+00UbEuFzlEitulEXk2j9IQY
+X-Google-Smtp-Source: AMsMyM7ZxFc2+FfbH4t4ReLCFOnnVjyTx4/vZhkhF/QbxKeQwd5OUE105OazyVO7eoJlYP76bO7sMg==
+X-Received: by 2002:aa7:9298:0:b0:56b:b6dc:988a with SMTP id j24-20020aa79298000000b0056bb6dc988amr29617876pfa.5.1667468089907;
+        Thu, 03 Nov 2022 02:34:49 -0700 (PDT)
+Received: from k1r0aKuee.localdomain ([20.255.2.235])
+        by smtp.gmail.com with ESMTPSA id b4-20020a170902d50400b0018668bee7cdsm177786plg.77.2022.11.03.02.34.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 02:34:49 -0700 (PDT)
+From:   Youlin Li <liulin063@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     daniel@iogearbox.net, Youlin Li <liulin063@gmail.com>
+Subject: [PATCH bpf 1/2 v2] bpf: Fix wrong reg type conversion in release_reference()
+Date:   Thu,  3 Nov 2022 17:34:39 +0800
+Message-Id: <20221103093440.3161-1-liulin063@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.61]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds kernel function call support to the 32-bit ARM bpf jit.
+Some helper functions will allocate memory. To avoid memory leaks, the
+verifier requires the eBPF program to release these memories by calling
+the corresponding helper functions.
 
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+When a resource is released, all pointer registers corresponding to the
+resource should be invalidated. The verifier use release_references() to
+do this job, by apply  __mark_reg_unknown() to each relevant register.
+
+It will give these registers the type of SCALAR_VALUE. A register that
+will contain a pointer value at runtime, but of type SCALAR_VALUE, which
+may allow the unprivileged user to get a kernel pointer by storing this
+register into a map.
+
+Using __mark_reg_not_init() while NOT allow_ptr_leaks can mitigate this
+problem.
+
+Fixes: fd978bf7fd31 ("bpf: Add reference tracking to verifier")
+Signed-off-by: Youlin Li <liulin063@gmail.com>
 ---
- arch/arm/net/bpf_jit_32.c | 130 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 130 insertions(+)
+v1->v2: Use __mark_reg_not_init() only when !allow_ptr_leaks.
 
-diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
-index 6a1c9fca5260..51428c82bec6 100644
---- a/arch/arm/net/bpf_jit_32.c
-+++ b/arch/arm/net/bpf_jit_32.c
-@@ -1337,6 +1337,118 @@ static void build_epilogue(struct jit_ctx *ctx)
- #endif
- }
+ kernel/bpf/verifier.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 9ab7188d8f68..1bb797bf9bbc 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6618,8 +6618,12 @@ static int release_reference(struct bpf_verifier_env *env,
+ 		return err;
  
-+/*
-+ * Input parameters of function in 32-bit ARM architecture:
-+ * The first four word-sized parameters passed to a function will be
-+ * transferred in registers R0-R3. Sub-word sized arguments, for example,
-+ * char, will still use a whole register.
-+ * Arguments larger than a word will be passed in multiple registers.
-+ * If more arguments are passed, the fifth and subsequent words will be passed
-+ * on the stack.
-+ *
-+ * The first for args of a function will be considered for
-+ * putting into the 32bit register R1, R2, R3 and R4.
-+ *
-+ * Two 32bit registers are used to pass a 64bit arg.
-+ *
-+ * For example,
-+ * void foo(u32 a, u32 b, u32 c, u32 d, u32 e):
-+ *      u32 a: R0
-+ *      u32 b: R1
-+ *      u32 c: R2
-+ *      u32 d: R3
-+ *      u32 e: stack
-+ *
-+ * void foo(u64 a, u32 b, u32 c, u32 d):
-+ *      u64 a: R0 (lo32) R1 (hi32)
-+ *      u32 b: R2
-+ *      u32 c: R3
-+ *      u32 d: stack
-+ *
-+ * void foo(u32 a, u64 b, u32 c, u32 d):
-+ *       u32 a: R0
-+ *       u64 b: R2 (lo32) R3 (hi32)
-+ *       u32 c: stack
-+ *       u32 d: stack
-+ *
-+ * void foo(u32 a, u32 b, u64 c, u32 d):
-+ *       u32 a: R0
-+ *       u32 b: R1
-+ *       u64 c: R2 (lo32) R3 (hi32)
-+ *       u32 d: stack
-+ *
-+ * The return value will be stored in the R0 (and R1 for 64bit value).
-+ *
-+ * For example,
-+ * u32 foo(u32 a, u32 b, u32 c):
-+ *      return value: R0
-+ *
-+ * u64 foo(u32 a, u32 b, u32 c):
-+ *      return value: R0 (lo32) R1 (hi32)
-+ */
-+static int emit_kfunc_call(const struct bpf_insn *insn, struct jit_ctx *ctx, const u32 func)
-+{
-+	int i;
-+	const struct btf_func_model *fm;
-+	const s8 *tmp = bpf2a32[TMP_REG_1];
-+	const u8 arg_regs[] = { ARM_R0, ARM_R1, ARM_R2, ARM_R3 };
-+	int nr_arg_regs = ARRAY_SIZE(arg_regs);
-+	int arg_regs_idx = 0, stack_off = 0;
-+
-+	fm = bpf_jit_find_kfunc_model(ctx->prog, insn);
-+	if (!fm)
-+		return -EINVAL;
-+
-+	for (i = 0; i < fm->nr_args; i++) {
-+		if (fm->arg_size[i] > sizeof(u32)) {
-+			if (arg_regs_idx + 1 < nr_arg_regs) {
-+				/*
-+				 * AAPCS states:
-+				 * A double-word sized type is passed in two
-+				 * consecutive registers (e.g., r0 and r1, or
-+				 * r2 and r3). The content of the registers is
-+				 * as if the value had been loaded from memory
-+				 * representation with a single LDM instruction.
-+				 */
-+				if (arg_regs_idx & 1)
-+					arg_regs_idx++;
-+
-+				emit(ARM_LDRD_I(arg_regs[arg_regs_idx], ARM_FP,
-+						EBPF_SCRATCH_TO_ARM_FP(
-+							bpf2a32[BPF_REG_1 + i][1])), ctx);
-+
-+				arg_regs_idx += 2;
-+			} else {
-+				stack_off = ALIGN(stack_off, STACK_ALIGNMENT);
-+
-+				emit(ARM_LDRD_I(tmp[1], ARM_FP,
-+						EBPF_SCRATCH_TO_ARM_FP(
-+							bpf2a32[BPF_REG_1 + i][1])), ctx);
-+				emit(ARM_STRD_I(tmp[1], ARM_SP, stack_off), ctx);
-+
-+				stack_off += 8;
-+			}
-+		} else {
-+			if (arg_regs_idx + 1 < nr_arg_regs) {
-+				emit_a32_mov_r(arg_regs[arg_regs_idx++],
-+					       bpf2a32[BPF_REG_1 + i][1], ctx);
-+			} else {
-+				emit(ARM_LDR_I(tmp[1], ARM_FP,
-+						EBPF_SCRATCH_TO_ARM_FP(
-+						       bpf2a32[BPF_REG_1 + i][1])), ctx);
-+				emit(ARM_STR_I(tmp[1], ARM_SP, stack_off), ctx);
-+
-+				stack_off += 4;
-+			}
+ 	bpf_for_each_reg_in_vstate(env->cur_state, state, reg, ({
+-		if (reg->ref_obj_id == ref_obj_id)
+-			__mark_reg_unknown(env, reg);
++		if (reg->ref_obj_id == ref_obj_id) {
++			if (!env->allow_ptr_leaks)
++				__mark_reg_not_init(env, reg);
++			else
++				__mark_reg_unknown(env, reg);
 +		}
-+	}
-+
-+	emit_a32_mov_i(tmp[1], func, ctx);
-+	emit_blx_r(tmp[1], ctx);
-+
-+	return 0;
-+}
-+
- /*
-  * Convert an eBPF instruction to native instruction, i.e
-  * JITs an eBPF instruction.
-@@ -1603,6 +1715,10 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 	case BPF_LDX | BPF_MEM | BPF_H:
- 	case BPF_LDX | BPF_MEM | BPF_B:
- 	case BPF_LDX | BPF_MEM | BPF_DW:
-+	case BPF_LDX | BPF_PROBE_MEM | BPF_W:
-+	case BPF_LDX | BPF_PROBE_MEM | BPF_H:
-+	case BPF_LDX | BPF_PROBE_MEM | BPF_B:
-+	case BPF_LDX | BPF_PROBE_MEM | BPF_DW:
- 		rn = arm_bpf_get_reg32(src_lo, tmp2[1], ctx);
- 		emit_ldx_r(dst, rn, off, ctx, BPF_SIZE(code));
- 		break;
-@@ -1785,6 +1901,16 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 		const s8 *r5 = bpf2a32[BPF_REG_5];
- 		const u32 func = (u32)__bpf_call_base + (u32)imm;
+ 	}));
  
-+		if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
-+			int err;
-+
-+			err = emit_kfunc_call(insn, ctx, func);
-+
-+			if (err)
-+				return err;
-+			break;
-+		}
-+
- 		emit_a32_mov_r64(true, r0, r1, ctx);
- 		emit_a32_mov_r64(true, r1, r2, ctx);
- 		emit_push_r64(r5, ctx);
-@@ -2022,3 +2148,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 	return prog;
- }
- 
-+bool bpf_jit_supports_kfunc_call(void)
-+{
-+	return true;
-+}
+ 	return 0;
 -- 
-2.30.GIT
+2.25.1
 
