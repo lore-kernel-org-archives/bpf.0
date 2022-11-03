@@ -2,158 +2,300 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31532C4332F
-	for <bpf@archiver.kernel.org>; Thu,  3 Nov 2022 11:35:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B34C5C4332F
+	for <bpf@archiver.kernel.org>; Thu,  3 Nov 2022 12:02:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbiKCLfv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Nov 2022 07:35:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
+        id S231433AbiKCMCH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Nov 2022 08:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231336AbiKCLfs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 3 Nov 2022 07:35:48 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB7B11C27;
-        Thu,  3 Nov 2022 04:35:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=cODXvOWILXssuf2hSihjNWxlG+Nis9Z446oDoCKvjaY=; b=maw3pryN8lZOU0IdsOp6Unnp2B
-        0u3eYTW7E8E9A4i53UAc5exT8CsEdtLNR+ICUDriV9QDKFQsNDfjf7fXw++vuCHx+AM+11t3lyioP
-        mR2mLNzr/ejmwGvN8UpTmIIXWB6MZVD7ZYPoAsO/qQPcjNZN4CrTguPNoQfHuOt+lcD+Va3D+VTgq
-        Kfns1g6ZI/cskQSnNt+nGVRMaofodc2kBUEI60MtgQHs1fpaGoOay6jTDmG0PkBWFg6qZVOUMQjsM
-        qISp20JQ0uLG1jRlf3Tv9zXo7gcFxMvepwxZ6mIK2XGWHapcN9cSq9yElgaO+JGod+sN+NVZPHMWr
-        FlA/+eEw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35092)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oqYVH-0006F9-QI; Thu, 03 Nov 2022 11:35:23 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oqYVF-0008K2-Uw; Thu, 03 Nov 2022 11:35:21 +0000
-Date:   Thu, 3 Nov 2022 11:35:21 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Yang Jihong <yangjihong1@huawei.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, illusionist.neo@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, mykolal@fb.com, shuah@kernel.org,
-        benjamin.tissoires@redhat.com, memxor@gmail.com, delyank@fb.com,
-        asavkov@redhat.com, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf RESEND 3/4] bpf: Add kernel function call support in
- 32-bit ARM
-Message-ID: <Y2OnedQdQaIQEPDQ@shell.armlinux.org.uk>
-References: <20221103092118.248600-1-yangjihong1@huawei.com>
- <20221103092118.248600-4-yangjihong1@huawei.com>
+        with ESMTP id S231424AbiKCMCF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Nov 2022 08:02:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20831261B
+        for <bpf@vger.kernel.org>; Thu,  3 Nov 2022 05:01:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667476870;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MRla5Jx7B3b6K5eK+3vGls3v50zlZMblv0IPrff+ht8=;
+        b=JDuY5ezN//+I02whrqSS9zc1tBlSon9Ie3o7E5IF7WcrRFZKtv7fDr/mF2vlmCn3yHY9Bl
+        1IuUXZExedEs0BaMcWVJRPElYRMxqIhwXqL8GLCtLSLngqCVfwkFoLewPj2sxApk9UcBnr
+        TmQIkUp4AGRfVarlH3BFpHLURvlPFfI=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-70-rvwUmEMpO-eDZhPDBDiIaA-1; Thu, 03 Nov 2022 08:01:08 -0400
+X-MC-Unique: rvwUmEMpO-eDZhPDBDiIaA-1
+Received: by mail-ed1-f72.google.com with SMTP id t4-20020a056402524400b004620845ba7bso1206800edd.4
+        for <bpf@vger.kernel.org>; Thu, 03 Nov 2022 05:01:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:to
+         :content-language:subject:cc:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MRla5Jx7B3b6K5eK+3vGls3v50zlZMblv0IPrff+ht8=;
+        b=PQI4nvbWGnSmFo5bmqLulh4NmLJ1epS3ajizz21rzD3w8W9Fx380ccYbQM5lGZCRnp
+         I29ty9VsiGOZuc+d4tDTK0vnCxusudtI3/luTOqCYbKIKR5EzLlr21m0s5a3+XWdzdN7
+         1DW+qxTTBCli3G8pwszG9IvfKx5ZxBfhlgXA05ZFxXjO1cm/fFsbnDco1Bm378VaPpAS
+         Cl/dnQZgHjNaFrn87OqPqpA3xPCfIi0rW5yMkVyPpDf4NOVSN76hjYD/bPf5hd6AMgbV
+         30XBIpbpA3El4dy3udKnrPSgnbo+bY+Jng9B9zjxmlB5OJy/5XJaXHp5XhkQmfmYN8gj
+         1x7w==
+X-Gm-Message-State: ACrzQf3YinaQ9ZEtBw4OVAGxOoFqKk7YJH3Wmp5U2vnW5PTHWHUqu0uY
+        7yv83SPuSqOGr8bxdGjDRXnPYW+M54bWo3aFcaf1uyiiQ1LRYrd5slXBH3vwpPElEZWedlzL0Ed
+        0+KtUl7SMbsO1
+X-Received: by 2002:a05:6402:5107:b0:462:3014:3d73 with SMTP id m7-20020a056402510700b0046230143d73mr29858704edd.177.1667476867316;
+        Thu, 03 Nov 2022 05:01:07 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7Cz/CvU8MVfpquOd46TGi6PWkPT77h30qL4B6emE8rASk7LRjOgORcCcMtIYBJhwrJ1DS22w==
+X-Received: by 2002:a05:6402:5107:b0:462:3014:3d73 with SMTP id m7-20020a056402510700b0046230143d73mr29858676edd.177.1667476866969;
+        Thu, 03 Nov 2022 05:01:06 -0700 (PDT)
+Received: from [192.168.41.200] (83-90-141-187-cable.dk.customer.tdc.net. [83.90.141.187])
+        by smtp.gmail.com with ESMTPSA id o1-20020a170906860100b007ad96726c42sm415866ejx.91.2022.11.03.05.01.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 05:01:06 -0700 (PDT)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <df32c60e-84de-16a3-f751-d393f37e5347@redhat.com>
+Date:   Thu, 3 Nov 2022 13:01:03 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221103092118.248600-4-yangjihong1@huawei.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Cc:     brouer@redhat.com, Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        "Bezdeka, Florian" <florian.bezdeka@siemens.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "alexandr.lobakin@intel.com" <alexandr.lobakin@intel.com>,
+        "anatoly.burakov@intel.com" <anatoly.burakov@intel.com>,
+        "song@kernel.org" <song@kernel.org>,
+        "Deric, Nemanja" <nemanja.deric@siemens.com>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "Kiszka, Jan" <jan.kiszka@siemens.com>,
+        "magnus.karlsson@gmail.com" <magnus.karlsson@gmail.com>,
+        "willemb@google.com" <willemb@google.com>,
+        "ast@kernel.org" <ast@kernel.org>, "yhs@fb.com" <yhs@fb.com>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "mtahhan@redhat.com" <mtahhan@redhat.com>,
+        "xdp-hints@xdp-project.net" <xdp-hints@xdp-project.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "jolsa@kernel.org" <jolsa@kernel.org>,
+        "haoluo@google.com" <haoluo@google.com>
+Subject: Re: [xdp-hints] Re: [RFC bpf-next 0/5] xdp: hints via kfuncs
+Content-Language: en-US
+To:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        Stanislav Fomichev <sdf@google.com>
+References: <20221027200019.4106375-1-sdf@google.com>
+ <635bfc1a7c351_256e2082f@john.notmuch> <20221028110457.0ba53d8b@kernel.org>
+ <CAKH8qBshi5dkhqySXA-Rg66sfX0-eTtVYz1ymHfBxSE=Mt2duA@mail.gmail.com>
+ <635c62c12652d_b1ba208d0@john.notmuch> <20221028181431.05173968@kernel.org>
+ <5aeda7f6bb26b20cb74ef21ae9c28ac91d57fae6.camel@siemens.com>
+ <875yg057x1.fsf@toke.dk>
+ <CAKH8qBvQbgE=oSZoH4xiLJmqMSXApH-ufd-qEKGKD8=POfhrWQ@mail.gmail.com>
+ <77b115a0-bbba-48eb-89bd-3078b5fb7eeb@linux.dev>
+ <CAKH8qBsGB1G60cu91Au816gsB2zF8T0P-yDwxbTEOxX0TN3WgA@mail.gmail.com>
+ <0c00ba33-f37b-dfe6-7980-45920ffa273b@linux.dev>
+ <48ba6e77-1695-50b3-b27f-e82750ee70bb@redhat.com> <87iljx2ey4.fsf@toke.dk>
+ <CAKH8qBt31WBpDWb+SkNpuzE1PuwC1O_v7seF9TMJfc6SvhN7MQ@mail.gmail.com>
+ <87cza43nlu.fsf@toke.dk>
+In-Reply-To: <87cza43nlu.fsf@toke.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 05:21:17PM +0800, Yang Jihong wrote:
-> This patch adds kernel function call support to the 32-bit ARM bpf jit.
+
+On 03/11/2022 01.09, Toke Høiland-Jørgensen wrote:
+> Stanislav Fomichev <sdf@google.com> writes:
 > 
-> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
-> ---
->  arch/arm/net/bpf_jit_32.c | 130 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 130 insertions(+)
+>> On Wed, Nov 2, 2022 at 3:02 PM Toke Høiland-Jørgensen <toke@redhat.com> wrote:
+>>>
+>>> Jesper Dangaard Brouer <jbrouer@redhat.com> writes:
+>>>
+>>>> On 01/11/2022 18.05, Martin KaFai Lau wrote:
+>>>>> On 10/31/22 6:59 PM, Stanislav Fomichev wrote:
+>>>>>> On Mon, Oct 31, 2022 at 3:57 PM Martin KaFai Lau
+>>>>>> <martin.lau@linux.dev> wrote:
+>>>>>>>
+>>>>>>> On 10/31/22 10:00 AM, Stanislav Fomichev wrote:
+>>>>>>>>> 2. AF_XDP programs won't be able to access the metadata without
+>>>>>>>>> using a
+>>>>>>>>> custom XDP program that calls the kfuncs and puts the data into the
+>>>>>>>>> metadata area. We could solve this with some code in libxdp,
+>>>>>>>>> though; if
+>>>>>>>>> this code can be made generic enough (so it just dumps the available
+>>>>>>>>> metadata functions from the running kernel at load time), it may be
+>>>>>>>>> possible to make it generic enough that it will be forward-compatible
+>>>>>>>>> with new versions of the kernel that add new fields, which should
+>>>>>>>>> alleviate Florian's concern about keeping things in sync.
+>>>>>>>>
+>>>>>>>> Good point. I had to convert to a custom program to use the kfuncs :-(
+>>>>>>>> But your suggestion sounds good; maybe libxdp can accept some extra
+>>>>>>>> info about at which offset the user would like to place the metadata
+>>>>>>>> and the library can generate the required bytecode?
+>>>>>>>>
+>>>>>>>>> 3. It will make it harder to consume the metadata when building
+>>>>>>>>> SKBs. I
+>>>>>>>>> think the CPUMAP and veth use cases are also quite important, and that
+>>>>>>>>> we want metadata to be available for building SKBs in this path. Maybe
+>>>>>>>>> this can be resolved by having a convenient kfunc for this that can be
+>>>>>>>>> used for programs doing such redirects. E.g., you could just call
+>>>>>>>>> xdp_copy_metadata_for_skb() before doing the bpf_redirect, and that
+>>>>>>>>> would recursively expand into all the kfunc calls needed to extract
+>>>>>>>>> the
+>>>>>>>>> metadata supported by the SKB path?
+>>>>>>>>
+>>>>>>>> So this xdp_copy_metadata_for_skb will create a metadata layout that
+>>>>>>>
+>>>>>>> Can the xdp_copy_metadata_for_skb be written as a bpf prog itself?
+>>>>>>> Not sure where is the best point to specify this prog though.
+>>>>>>> Somehow during
+>>>>>>> bpf_xdp_redirect_map?
+>>>>>>> or this prog belongs to the target cpumap and the xdp prog
+>>>>>>> redirecting to this
+>>>>>>> cpumap has to write the meta layout in a way that the cpumap is
+>>>>>>> expecting?
+>>>>>>
+>>>>>> We're probably interested in triggering it from the places where xdp
+>>>>>> frames can eventually be converted into skbs?
+>>>>>> So for plain 'return XDP_PASS' and things like bpf_redirect/etc? (IOW,
+>>>>>> anything that's not XDP_DROP / AF_XDP redirect).
+>>>>>> We can probably make it magically work, and can generate
+>>>>>> kernel-digestible metadata whenever data == data_meta, but the
+>>>>>> question - should we?
+>>>>>> (need to make sure we won't regress any existing cases that are not
+>>>>>> relying on the metadata)
+>>>>>
+>>>>> Instead of having some kernel-digestible meta data, how about calling
+>>>>> another bpf prog to initialize the skb fields from the meta area after
+>>>>> __xdp_build_skb_from_frame() in the cpumap, so
+>>>>> run_xdp_set_skb_fileds_from_metadata() may be a better name.
+>>>>>
+>>>>
+>>>> I very much like this idea of calling another bpf prog to initialize the
+>>>> SKB fields from the meta area. (As a reminder, data need to come from
+>>>> meta area, because at this point the hardware RX-desc is out-of-scope).
+>>>> I'm onboard with xdp_copy_metadata_for_skb() populating the meta area.
+>>>>
+>>>> We could invoke this BPF-prog inside __xdp_build_skb_from_frame().
+>>>>
+>>>> We might need a new BPF_PROG_TYPE_XDP2SKB as this new BPF-prog
+>>>> run_xdp_set_skb_fields_from_metadata() would need both xdp_buff + SKB as
+>>>> context inputs. Right?  (Not sure, if this is acceptable with the BPF
+>>>> maintainers new rules)
+>>>>
+>>>>> The xdp_prog@rx sets the meta data and then redirect.  If the
+>>>>> xdp_prog@rx can also specify a xdp prog to initialize the skb fields
+>>>>> from the meta area, then there is no need to have a kfunc to enforce a
+>>>>> kernel-digestible layout.  Not sure what is a good way to specify this
+>>>>> xdp_prog though...
+>>>>
+>>>> The challenge of running this (BPF_PROG_TYPE_XDP2SKB) BPF-prog inside
+>>>> __xdp_build_skb_from_frame() is that it need to know howto decode the
+>>>> meta area for every device driver or XDP-prog populating this (as veth
+>>>> and cpumap can get redirected packets from multiple device drivers).
+>>>
+>>> If we have the helper to copy the data "out of" the drivers, why do we
+>>> need a second BPF program to copy data to the SKB?
+>>>
+
+IMHO the second BPF program to populate the SKB is needed to add
+flexibility and extensibility.
+
+My end-goal here is to speedup packet parsing.
+This BPF-prog should (in time) be able to update skb->transport_header
+and skb->network_header.  As I mentioned before, HW RX-hash already tell
+us the L3 and L4 protocols and in-most-cases header-len.  Even without
+HW-hints, the XDP-prog likely have parsed the packet once. This parse
+information is lost today, and redone by netstack. What about storing
+this header parse info in meta data and re-use in this new XDP2SKB hook?
+
+The reason for suggesting this BPF-prog to be a callback, associated
+with the net_device, were that HW is going to differ on what HW hints
+that HW support.  Thus, we can avoid a generic C-function that need to
+check for all the possible hints, and instead have a BPF-prog that only
+contains the code that is relevant for this net_device.
+
+
+>>> I.e., the XDP program calls xdp_copy_metadata_for_skb(); this invokes
+>>> each of the kfuncs needed for the metadata used by SKBs, all of which
+>>> get unrolled. The helper takes the output of these metadata-extracting
+>>> kfuncs and stores it "somewhere". This "somewhere" could well be the
+>>> metadata area; but in any case, since it's hidden away inside a helper
+>>> (or kfunc) from the calling XDP program's PoV, the helper can just stash
+>>> all the data in a fixed format, which __xdp_build_skb_from_frame() can
+>>> then just read statically. We could even make this format match the
+>>> field layout of struct sk_buff, so all we have to do is memcpy a
+>>> contiguous chunk of memory when building the SKB.
+>>
+>> +1
+
+Sorry, I think this "hiding" layout trick is going in a wrong direction.
+
+Imagine the use-case of cpumap redirect.  The physical device XDP-prog
+calls xdp_copy_metadata_for_skb() to extract info from RX-desc, then it
+calls redirect into cpumap.  On remote CPU, the xdp_frame is picked up,
+and then I want to run another XDP-prog that want to look at these
+HW-hints, and then likely call XDP_PASS which creates the SKB, also
+using these HW-hints.  I take it, it would not be possible when using
+the xdp_copy_metadata_for_skb() helper?
+
+>>
+>> I'm currently doing exactly what you're suggesting (minus matching skb layout):
+>>
+>> struct xdp_to_skb_metadata {
+>>    u32 magic; // randomized at boot
+>>    ... skb-consumable-metadata in fixed format
+>> } __randomize_layout;
+>>
+>> bpf_xdp_copy_metadata_for_skb() does bpf_xdp_adjust_meta(ctx,
+>> -sizeof(struct xdp_to_skb_metadata)) and then calls a bunch of kfuncs
+>> to fill in the actual data.
+>>
+>> Then, at __xdp_build_skb_from_frame time, I'm having a regular kernel
+>> C code that parses that 'struct xdp_to_skb_metadata'.
+>> (To be precise, I'm trying to parse the metadata from
+>> skb_metadata_set; it's called from __xdp_build_skb_from_frame, but not
+>> 100% sure that's the right place).
+>> (I also randomize the layout and magic to make sure userspace doesn't
+>> depend on it because nothing stops this packet to be routed into xsk
+>> socket..)
 > 
-> diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
-> index 6a1c9fca5260..51428c82bec6 100644
-> --- a/arch/arm/net/bpf_jit_32.c
-> +++ b/arch/arm/net/bpf_jit_32.c
-> @@ -1337,6 +1337,118 @@ static void build_epilogue(struct jit_ctx *ctx)
->  #endif
->  }
->  
-> +/*
-> + * Input parameters of function in 32-bit ARM architecture:
-> + * The first four word-sized parameters passed to a function will be
-> + * transferred in registers R0-R3. Sub-word sized arguments, for example,
-> + * char, will still use a whole register.
-> + * Arguments larger than a word will be passed in multiple registers.
-> + * If more arguments are passed, the fifth and subsequent words will be passed
-> + * on the stack.
-> + *
-> + * The first for args of a function will be considered for
-> + * putting into the 32bit register R1, R2, R3 and R4.
-> + *
-> + * Two 32bit registers are used to pass a 64bit arg.
-> + *
-> + * For example,
-> + * void foo(u32 a, u32 b, u32 c, u32 d, u32 e):
-> + *      u32 a: R0
-> + *      u32 b: R1
-> + *      u32 c: R2
-> + *      u32 d: R3
-> + *      u32 e: stack
-> + *
-> + * void foo(u64 a, u32 b, u32 c, u32 d):
-> + *      u64 a: R0 (lo32) R1 (hi32)
-> + *      u32 b: R2
-> + *      u32 c: R3
-> + *      u32 d: stack
-> + *
-> + * void foo(u32 a, u64 b, u32 c, u32 d):
-> + *       u32 a: R0
-> + *       u64 b: R2 (lo32) R3 (hi32)
-> + *       u32 c: stack
-> + *       u32 d: stack
+> Ah, nice trick with __randomize_layout - I agree we need to do something
+> to prevent userspace from inadvertently starting to rely on this, and
+> this seems like a great solution!
 
-This code supports both EABI and OABI, but the above is EABI-only.
-Either we need to decide not to support OABI, or we need to add code
-for both. That can probably be done by making:
+Sorry, I disagree where this is going.  Why do all of a sudden want to
+prevent userspace (e.g. AF_XDP) from using this data?!?
 
-> +	for (i = 0; i < fm->nr_args; i++) {
-> +		if (fm->arg_size[i] > sizeof(u32)) {
-> +			if (arg_regs_idx + 1 < nr_arg_regs) {
-> +				/*
-> +				 * AAPCS states:
-> +				 * A double-word sized type is passed in two
-> +				 * consecutive registers (e.g., r0 and r1, or
-> +				 * r2 and r3). The content of the registers is
-> +				 * as if the value had been loaded from memory
-> +				 * representation with a single LDM instruction.
-> +				 */
-> +				if (arg_regs_idx & 1)
-> +					arg_regs_idx++;
+The hole exercise started with wanting to provide AF_XDP with these
+HW-hints. The hints a standard AF_XDP user wants is likely very similar
+to what the SKB user wants.  Why do the AF_XDP user need to open code this?
 
-... this conditional on IS_ENABLED(CONFIG_AEABI).
+The BTF-ID scheme precisely allows us to expose this layout to
+userspace, and at the same time have freedom to change this in kernel
+space, as userspace must decode the BTF-layout before reading this.
+I was hoping xdp_copy_metadata_for_skb() could simply use the BTF-ID
+scheme, with the BTF-ID of struct xdp_hints_rx_common, is to too much to
+ask for?  You can just consider the BTF-ID as the magic number, as it
+will be more-or-less random per kernel build (and module load order).
 
-> +				emit(ARM_LDRD_I(arg_regs[arg_regs_idx], ARM_FP,
-> +						EBPF_SCRATCH_TO_ARM_FP(
-> +							bpf2a32[BPF_REG_1 + i][1])), ctx);
+> Look forward to seeing what the whole thing looks like in a more
+> complete form :)
 
-You probably want to re-use the internals of arm_bpf_get_reg64() to load
-the register.
+I'm sort of on-board with the kfuncs and unroll-tricks, if I can see
+some driver code that handles the issues of getting HW setup state
+exposed needed to decode the RX-desc format.
 
-> +
-> +				arg_regs_idx += 2;
-> +			} else {
-> +				stack_off = ALIGN(stack_off, STACK_ALIGNMENT);
-> +
-> +				emit(ARM_LDRD_I(tmp[1], ARM_FP,
-> +						EBPF_SCRATCH_TO_ARM_FP(
-> +							bpf2a32[BPF_REG_1 + i][1])), ctx);
+I sense that I myself, haven't been good enough to explain/convey the
+BTF-ID scheme.  Next week, I will code some examples that demo how
+BTF-IDs can be used from BPF-progs, even as a communication channel
+between different BPF-progs (e.g. drv XDP-prog -> cpumap XDP-prog ->
+TC-BPF).
 
-Same here.
+--Jesper
 
-> +				emit(ARM_STRD_I(tmp[1], ARM_SP, stack_off), ctx);
-
-and the internals of arm_bpf_put_reg64() here. Not all Arm CPUs that
-this code runs on supports ldrd and strd.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
