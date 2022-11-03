@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8AB4C433FE
-	for <bpf@archiver.kernel.org>; Thu,  3 Nov 2022 05:53:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5B55C433FE
+	for <bpf@archiver.kernel.org>; Thu,  3 Nov 2022 05:53:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbiKCFxb convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 3 Nov 2022 01:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36498 "EHLO
+        id S229694AbiKCFxf convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 3 Nov 2022 01:53:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiKCFx3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 3 Nov 2022 01:53:29 -0400
+        with ESMTP id S230159AbiKCFxb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Nov 2022 01:53:31 -0400
 Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13092616
-        for <bpf@vger.kernel.org>; Wed,  2 Nov 2022 22:53:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379686174
+        for <bpf@vger.kernel.org>; Wed,  2 Nov 2022 22:53:24 -0700 (PDT)
 Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A2NVxOW010298
-        for <bpf@vger.kernel.org>; Wed, 2 Nov 2022 22:53:21 -0700
-Received: from maileast.thefacebook.com ([163.114.130.3])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3kkvcwdu68-1
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A2NVtvL010027
+        for <bpf@vger.kernel.org>; Wed, 2 Nov 2022 22:53:24 -0700
+Received: from maileast.thefacebook.com ([163.114.130.8])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3kkvcwdu67-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 02 Nov 2022 22:53:20 -0700
-Received: from twshared29133.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 02 Nov 2022 22:53:23 -0700
+Received: from twshared13315.14.prn3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 2 Nov 2022 22:53:20 -0700
+ 15.1.2375.31; Wed, 2 Nov 2022 22:53:22 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id BCDA02102ECC1; Wed,  2 Nov 2022 22:53:07 -0700 (PDT)
+        id 2E9BD2102ECF8; Wed,  2 Nov 2022 22:53:18 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <netdev@vger.kernel.org>, <kuba@kernel.org>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 01/10] selftests/bpf: add veristat replay mode
-Date:   Wed, 2 Nov 2022 22:52:55 -0700
-Message-ID: <20221103055304.2904589-2-andrii@kernel.org>
+Subject: [PATCH bpf-next 06/10] selftests/bpf: support simple filtering of stats in veristat
+Date:   Wed, 2 Nov 2022 22:53:00 -0700
+Message-ID: <20221103055304.2904589-7-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221103055304.2904589-1-andrii@kernel.org>
 References: <20221103055304.2904589-1-andrii@kernel.org>
@@ -41,8 +41,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: HstuPl_T9DQu-tWl5KDTD7f_EN_mntA9
-X-Proofpoint-ORIG-GUID: HstuPl_T9DQu-tWl5KDTD7f_EN_mntA9
+X-Proofpoint-GUID: YbnPap9uYvIGXo09VHNAFfCJ7cu7XaPA
+X-Proofpoint-ORIG-GUID: YbnPap9uYvIGXo09VHNAFfCJ7cu7XaPA
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-02_15,2022-11-02_01,2022-06-22_01
@@ -50,209 +50,266 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Replay mode allow to parse previously stored CSV file with verification
-results and present it in desired output (presumable human-readable
-table, but CSV to CSV convertion is supported as well). While doing
-that, it's possible to use veristat's sorting rules, specify subset of
-columns, and filter by file and program name.
+Define simple expressions to filter not just by file and program name,
+but also by resulting values of collected stats. Support usual
+equality and inequality operators. Verdict, which is a boolean-like
+field can be also filtered either as 0/1, failure/success (with f/s,
+fail/succ, and failure/success aliases) symbols, or as false/true (f/t).
+Aliases are case insensitive.
 
-In subsequent patches veristat's filtering capabilities will just grow
-making replay mode even more useful in practice for post-processing
-results.
+Currently this filtering is honored only in verification and replay
+modes. Comparison mode support will be added in next patch.
+
+Here's an example of verifying a bunch of BPF object files and emitting
+only results for successfully validated programs that have more than 100
+total instructions processed by BPF verifier, sorted by number of
+instructions in ascending order:
+
+  $ sudo ./veristat *.bpf.o -s insns^ -f 'insns>100'
+
+There can be many filters (both allow and deny flavors), all of them are
+combined.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/testing/selftests/bpf/veristat.c | 126 +++++++++++++++++--------
- 1 file changed, 88 insertions(+), 38 deletions(-)
+ tools/testing/selftests/bpf/veristat.c | 158 ++++++++++++++++++++++++-
+ 1 file changed, 157 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
-index 973cbf6af323..7e1432c06e0c 100644
+index 56ba55156abb..37e512d233a7 100644
 --- a/tools/testing/selftests/bpf/veristat.c
 +++ b/tools/testing/selftests/bpf/veristat.c
-@@ -67,6 +67,7 @@ static struct env {
- 	int log_level;
- 	enum resfmt out_fmt;
- 	bool comparison_mode;
-+	bool replay_mode;
- 
- 	struct verif_stats *prog_stats;
- 	int prog_stat_cnt;
-@@ -115,6 +116,7 @@ static const struct argp_option opts[] = {
- 	{ "sort", 's', "SPEC", 0, "Specify sort order" },
- 	{ "output-format", 'o', "FMT", 0, "Result output format (table, csv), default is table." },
- 	{ "compare", 'C', NULL, 0, "Comparison mode" },
-+	{ "replay", 'R', NULL, 0, "Replay mode" },
- 	{ "filter", 'f', "FILTER", 0, "Filter expressions (or @filename for file with expressions)." },
- 	{},
+@@ -54,10 +54,30 @@ enum resfmt {
+ 	RESFMT_CSV,
  };
-@@ -169,6 +171,9 @@ static error_t parse_arg(int key, char *arg, struct argp_state *state)
- 	case 'C':
- 		env.comparison_mode = true;
- 		break;
-+	case 'R':
-+		env.replay_mode = true;
-+		break;
- 	case 'f':
- 		if (arg[0] == '@')
- 			err = append_filter_file(arg + 1);
-@@ -841,42 +846,6 @@ static void output_stats(const struct verif_stats *s, enum resfmt fmt, bool last
- 	}
+ 
++enum filter_kind {
++	FILTER_NAME,
++	FILTER_STAT,
++};
++
++enum operator_kind {
++	OP_EQ,		/* == or = */
++	OP_NEQ,		/* != or <> */
++	OP_LT,		/* < */
++	OP_LE,		/* <= */
++	OP_GT,		/* > */
++	OP_GE,		/* >= */
++};
++
+ struct filter {
++	enum filter_kind kind;
++	/* FILTER_NAME */
+ 	char *any_glob;
+ 	char *file_glob;
+ 	char *prog_glob;
++	/* FILTER_STAT */
++	enum operator_kind op;
++	int stat_id;
++	long value;
+ };
+ 
+ static struct env {
+@@ -271,6 +291,8 @@ static bool should_process_file_prog(const char *filename, const char *prog_name
+ 
+ 	for (i = 0; i < env.deny_filter_cnt; i++) {
+ 		f = &env.deny_filters[i];
++		if (f->kind != FILTER_NAME)
++			continue;
+ 
+ 		if (f->any_glob && glob_matches(filename, f->any_glob))
+ 			return false;
+@@ -284,8 +306,10 @@ static bool should_process_file_prog(const char *filename, const char *prog_name
+ 
+ 	for (i = 0; i < env.allow_filter_cnt; i++) {
+ 		f = &env.allow_filters[i];
+-		allow_cnt++;
++		if (f->kind != FILTER_NAME)
++			continue;
+ 
++		allow_cnt++;
+ 		if (f->any_glob) {
+ 			if (glob_matches(filename, f->any_glob))
+ 				return true;
+@@ -306,11 +330,32 @@ static bool should_process_file_prog(const char *filename, const char *prog_name
+ 	return allow_cnt == 0;
  }
  
--static int handle_verif_mode(void)
--{
--	int i, err;
--
--	if (env.filename_cnt == 0) {
--		fprintf(stderr, "Please provide path to BPF object file!\n");
--		argp_help(&argp, stderr, ARGP_HELP_USAGE, "veristat");
--		return -EINVAL;
--	}
--
--	for (i = 0; i < env.filename_cnt; i++) {
--		err = process_obj(env.filenames[i]);
--		if (err) {
--			fprintf(stderr, "Failed to process '%s': %d\n", env.filenames[i], err);
--			return err;
--		}
--	}
--
--	qsort(env.prog_stats, env.prog_stat_cnt, sizeof(*env.prog_stats), cmp_prog_stats);
--
--	if (env.out_fmt == RESFMT_TABLE) {
--		/* calculate column widths */
--		output_headers(RESFMT_TABLE_CALCLEN);
--		for (i = 0; i < env.prog_stat_cnt; i++)
--			output_stats(&env.prog_stats[i], RESFMT_TABLE_CALCLEN, false);
--	}
--
--	/* actually output the table */
--	output_headers(env.out_fmt);
--	for (i = 0; i < env.prog_stat_cnt; i++) {
--		output_stats(&env.prog_stats[i], env.out_fmt, i == env.prog_stat_cnt - 1);
--	}
--
--	return 0;
--}
--
- static int parse_stat_value(const char *str, enum stat_id id, struct verif_stats *st)
++static struct {
++	enum operator_kind op_kind;
++	const char *op_str;
++} operators[] = {
++	/* Order of these definitions matter to avoid situations like '<'
++	 * matching part of what is actually a '<>' operator. That is,
++	 * substrings should go last.
++	 */
++	{ OP_EQ, "==" },
++	{ OP_NEQ, "!=" },
++	{ OP_NEQ, "<>" },
++	{ OP_LE, "<=" },
++	{ OP_LT, "<" },
++	{ OP_GE, ">=" },
++	{ OP_GT, ">" },
++	{ OP_EQ, "=" },
++};
++
++static bool parse_stat_id(const char *name, size_t len, int *id);
++
+ static int append_filter(struct filter **filters, int *cnt, const char *str)
  {
- 	switch (id) {
-@@ -1206,7 +1175,7 @@ static int handle_comparison_mode(void)
- 	int err, i, j;
+ 	struct filter *f;
+ 	void *tmp;
+ 	const char *p;
++	int i;
  
- 	if (env.filename_cnt != 2) {
--		fprintf(stderr, "Comparison mode expects exactly two input CSV files!\n");
-+		fprintf(stderr, "Comparison mode expects exactly two input CSV files!\n\n");
- 		argp_help(&argp, stderr, ARGP_HELP_USAGE, "veristat");
- 		return -EINVAL;
- 	}
-@@ -1307,6 +1276,79 @@ static int handle_comparison_mode(void)
+ 	tmp = realloc(*filters, (*cnt + 1) * sizeof(**filters));
+ 	if (!tmp)
+@@ -320,6 +365,67 @@ static int append_filter(struct filter **filters, int *cnt, const char *str)
+ 	f = &(*filters)[*cnt];
+ 	memset(f, 0, sizeof(*f));
+ 
++	/* First, let's check if it's a stats filter of the following form:
++	 * <stat><op><value, where:
++	 *   - <stat> is one of supported numerical stats (verdict is also
++	 *     considered numerical, failure == 0, success == 1);
++	 *   - <op> is comparison operator (see `operators` definitions);
++	 *   - <value> is an integer (or failure/success, or false/true as
++	 *     special aliases for 0 and 1, respectively).
++	 * If the form doesn't match what user provided, we assume file/prog
++	 * glob filter.
++	 */
++	for (i = 0; i < ARRAY_SIZE(operators); i++) {
++		int id;
++		long val;
++		const char *end = str;
++		const char *op_str;
++
++		op_str = operators[i].op_str;
++		p = strstr(str, op_str);
++		if (!p)
++			continue;
++
++		if (!parse_stat_id(str, p - str, &id)) {
++			fprintf(stderr, "Unrecognized stat name in '%s'!\n", str);
++			return -EINVAL;
++		}
++		if (id >= FILE_NAME) {
++			fprintf(stderr, "Non-integer stat is specified in '%s'!\n", str);
++			return -EINVAL;
++		}
++
++		p += strlen(op_str);
++
++		if (strcasecmp(p, "true") == 0 ||
++		    strcasecmp(p, "t") == 0 ||
++		    strcasecmp(p, "success") == 0 ||
++		    strcasecmp(p, "succ") == 0 ||
++		    strcasecmp(p, "s") == 0) {
++			val = 1;
++		} else if (strcasecmp(p, "false") == 0 ||
++			   strcasecmp(p, "f") == 0 ||
++			   strcasecmp(p, "failure") == 0 ||
++			   strcasecmp(p, "fail") == 0) {
++			val = 0;
++		} else {
++			errno = 0;
++			val = strtol(p, (char **)&end, 10);
++			if (errno || end == p || *end != '\0' ) {
++				fprintf(stderr, "Invalid integer value in '%s'!\n", str);
++				return -EINVAL;
++			}
++		}
++
++		f->kind = FILTER_STAT;
++		f->stat_id = id;
++		f->op = operators[i].op_kind;
++		f->value = val;
++
++		*cnt += 1;
++		return 0;
++	}
++
+ 	/* File/prog filter can be specified either as '<glob>' or
+ 	 * '<file-glob>/<prog-glob>'. In the former case <glob> is applied to
+ 	 * both file and program names. This seems to be way more useful in
+@@ -328,6 +434,7 @@ static int append_filter(struct filter **filters, int *cnt, const char *str)
+ 	 * name. But usually common <glob> seems to be the most useful and
+ 	 * ergonomic way.
+ 	 */
++	f->kind = FILTER_NAME;
+ 	p = strchr(str, '/');
+ 	if (!p) {
+ 		f->any_glob = strdup(str);
+@@ -1317,6 +1424,51 @@ static int handle_comparison_mode(void)
  	return 0;
  }
  
-+static void output_prog_stats(void)
++static bool is_stat_filter_matched(struct filter *f, const struct verif_stats *stats)
 +{
-+	const struct verif_stats *stats;
-+	int i, last_stat_idx = 0;
++	long value = stats->stats[f->stat_id];
 +
-+	if (env.out_fmt == RESFMT_TABLE) {
-+		/* calculate column widths */
-+		output_headers(RESFMT_TABLE_CALCLEN);
-+		for (i = 0; i < env.prog_stat_cnt; i++) {
-+			stats = &env.prog_stats[i];
-+			output_stats(stats, RESFMT_TABLE_CALCLEN, false);
-+			last_stat_idx = i;
-+		}
++	switch (f->op) {
++	case OP_EQ: return value == f->value;
++	case OP_NEQ: return value != f->value;
++	case OP_LT: return value < f->value;
++	case OP_LE: return value <= f->value;
++	case OP_GT: return value > f->value;
++	case OP_GE: return value >= f->value;
 +	}
 +
-+	/* actually output the table */
-+	output_headers(env.out_fmt);
-+	for (i = 0; i < env.prog_stat_cnt; i++) {
-+		stats = &env.prog_stats[i];
-+		output_stats(stats, env.out_fmt, i == last_stat_idx);
-+	}
++	fprintf(stderr, "BUG: unknown filter op %d!\n", f->op);
++	return false;
 +}
 +
-+static int handle_verif_mode(void)
++static bool should_output_stats(const struct verif_stats *stats)
 +{
-+	int i, err;
++	struct filter *f;
++	int i, allow_cnt = 0;
 +
-+	if (env.filename_cnt == 0) {
-+		fprintf(stderr, "Please provide path to BPF object file!\n\n");
-+		argp_help(&argp, stderr, ARGP_HELP_USAGE, "veristat");
-+		return -EINVAL;
++	for (i = 0; i < env.deny_filter_cnt; i++) {
++		f = &env.deny_filters[i];
++		if (f->kind != FILTER_STAT)
++			continue;
++
++		if (is_stat_filter_matched(f, stats))
++			return false;
 +	}
 +
-+	for (i = 0; i < env.filename_cnt; i++) {
-+		err = process_obj(env.filenames[i]);
-+		if (err) {
-+			fprintf(stderr, "Failed to process '%s': %d\n", env.filenames[i], err);
-+			return err;
-+		}
++	for (i = 0; i < env.allow_filter_cnt; i++) {
++		f = &env.allow_filters[i];
++		if (f->kind != FILTER_STAT)
++			continue;
++		allow_cnt++;
++
++		if (is_stat_filter_matched(f, stats))
++			return true;
 +	}
 +
-+	qsort(env.prog_stats, env.prog_stat_cnt, sizeof(*env.prog_stats), cmp_prog_stats);
-+
-+	output_prog_stats();
-+
-+	return 0;
++	/* if there are no stat allowed filters, pass everything through */
++	return allow_cnt == 0;
 +}
 +
-+static int handle_replay_mode(void)
-+{
-+	struct stat_specs specs = {};
-+	int err;
-+
-+	if (env.filename_cnt != 1) {
-+		fprintf(stderr, "Replay mode expects exactly one input CSV file!\n\n");
-+		argp_help(&argp, stderr, ARGP_HELP_USAGE, "veristat");
-+		return -EINVAL;
-+	}
-+
-+	err = parse_stats_csv(env.filenames[0], &specs,
-+			      &env.prog_stats, &env.prog_stat_cnt);
-+	if (err) {
-+		fprintf(stderr, "Failed to parse stats from '%s': %d\n", env.filenames[0], err);
-+		return err;
-+	}
-+
-+	qsort(env.prog_stats, env.prog_stat_cnt, sizeof(*env.prog_stats), cmp_prog_stats);
-+
-+	output_prog_stats();
-+
-+	return 0;
-+}
-+
- int main(int argc, char **argv)
+ static void output_prog_stats(void)
  {
- 	int err = 0, i;
-@@ -1315,7 +1357,7 @@ int main(int argc, char **argv)
- 		return 1;
- 
- 	if (env.verbose && env.quiet) {
--		fprintf(stderr, "Verbose and quiet modes are incompatible, please specify just one or neither!\n");
-+		fprintf(stderr, "Verbose and quiet modes are incompatible, please specify just one or neither!\n\n");
- 		argp_help(&argp, stderr, ARGP_HELP_USAGE, "veristat");
- 		return 1;
+ 	const struct verif_stats *stats;
+@@ -1327,6 +1479,8 @@ static void output_prog_stats(void)
+ 		output_headers(RESFMT_TABLE_CALCLEN);
+ 		for (i = 0; i < env.prog_stat_cnt; i++) {
+ 			stats = &env.prog_stats[i];
++			if (!should_output_stats(stats))
++				continue;
+ 			output_stats(stats, RESFMT_TABLE_CALCLEN, false);
+ 			last_stat_idx = i;
+ 		}
+@@ -1336,6 +1490,8 @@ static void output_prog_stats(void)
+ 	output_headers(env.out_fmt);
+ 	for (i = 0; i < env.prog_stat_cnt; i++) {
+ 		stats = &env.prog_stats[i];
++		if (!should_output_stats(stats))
++			continue;
+ 		output_stats(stats, env.out_fmt, i == last_stat_idx);
  	}
-@@ -1327,8 +1369,16 @@ int main(int argc, char **argv)
- 	if (env.sort_spec.spec_cnt == 0)
- 		env.sort_spec = default_sort_spec;
- 
-+	if (env.comparison_mode && env.replay_mode) {
-+		fprintf(stderr, "Can't specify replay and comparison mode at the same time!\n\n");
-+		argp_help(&argp, stderr, ARGP_HELP_USAGE, "veristat");
-+		return 1;
-+	}
-+
- 	if (env.comparison_mode)
- 		err = handle_comparison_mode();
-+	else if (env.replay_mode)
-+		err = handle_replay_mode();
- 	else
- 		err = handle_verif_mode();
- 
+ }
 -- 
 2.30.2
 
