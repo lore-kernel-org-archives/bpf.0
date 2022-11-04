@@ -2,55 +2,57 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED174C4332F
-	for <bpf@archiver.kernel.org>; Fri,  4 Nov 2022 03:27:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E93BCC4167D
+	for <bpf@archiver.kernel.org>; Fri,  4 Nov 2022 03:27:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbiKDD1U (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Nov 2022 23:27:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59176 "EHLO
+        id S230291AbiKDD1X (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Nov 2022 23:27:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230368AbiKDDZy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 3 Nov 2022 23:25:54 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013116436
-        for <bpf@vger.kernel.org>; Thu,  3 Nov 2022 20:25:34 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-349423f04dbso35985417b3.13
-        for <bpf@vger.kernel.org>; Thu, 03 Nov 2022 20:25:34 -0700 (PDT)
+        with ESMTP id S231404AbiKDD0I (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Nov 2022 23:26:08 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB044134
+        for <bpf@vger.kernel.org>; Thu,  3 Nov 2022 20:25:39 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id i17-20020a170902cf1100b00183e2a963f5so2606490plg.5
+        for <bpf@vger.kernel.org>; Thu, 03 Nov 2022 20:25:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=PUk/KzpzScQpgR6M7qGYfZX/G9X9dItCofF/HHylYj4=;
-        b=gMWIfG1emRxrVj3GyaVOH00tmqqnQXYIzwJzyGg+LotRtT7/13UdKQCitTcq1lddFF
-         w7YoyreI/+mDOVzPc/bFF8SQE/T7Z/8qGxTc0Fdq0c5HmeYGP5WVmosxwEcW3VDg9VL/
-         gupQdFaR26PAjkrXLt0FYzyKaPNfJfTWqIUCDrbSiKJEHFao/OQfEgCYP29Uy6t5KaQN
-         r0Rf+/FM0Lam4KlajBiPQwgeh1/5vK89s8U0CD6H5sYA2vz88FHawMAG7x8fpY6Q3W/i
-         jhsbcRGsaS++U/GsdSLSbCoIdn+MzR15ZsorjSJNxkVZaC41STe9fVSsml7G7t7hU2oO
-         SRUQ==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3uxyzgBF4YLw1FGPryWNIz4KO9fXpQNdVePNc1oTLIE=;
+        b=bDCJk6STvPJfESg83z4MQdHgvU/DIjnVye3uYwBXTWNWKkXJvwRk1iWNIG3IhNT8tB
+         LBPbboRkqxAOdeee59ZwR0q/c0GAXyaRjSpUehFY5kNSN9hmzhfqpQ1iaipxj/Rr/UhS
+         Kp8fSqVb+Nv5H0FLeUMCyph+lRa87HetxPDgCmTY2SCgJyCifGqCy2pevHDHeepiWmzS
+         uw9gDlq0hQBuvaBeC4kk2gAf9XQpSh3yYReSQmokuQxhxvOTmu/h29jnpFZFaw7Kym1+
+         BvJyUGRD9bPBMX0eEhF5vuge7dAmiFOZNGFi9jTdygN9cq4NDiwc3Aq6j1d0VE29M6Cx
+         a3vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PUk/KzpzScQpgR6M7qGYfZX/G9X9dItCofF/HHylYj4=;
-        b=JBwhWrabxMKdE6OfPlByIPH0YqYq4EnACJLwAHePIps3plywWdCqU6p0z4uijeAl63
-         zICxkxB95iHk3YeFA7/y5BAw0sap9E85HAXIdtr4LK8iSLPIb6WLTi8B9M5eHDYk0Wso
-         58riMTGCyNJDa7ud54hP49YVkythwl+Y52EsofkaCeYCwSKtjCxhMEwT751onKNGy9jT
-         sKSrVrjDOBtKncYnZkUnQ9rroMyiv0IMX6ohV44LXEsfvCEkQEnsXxHD1FrIYW/aUdMt
-         mMDvBzSZZWoBO5MDpmwOabHcSKCT/vnYgHvN9eXQSV/5RG+6VsemuFS+Vlvh/btyu5FB
-         m/IQ==
-X-Gm-Message-State: ACrzQf2SZN2Dh1luSPq+DDxrWdU1cksnMGK7ZZ9qr3ikDLPMM+j517mO
-        FVq9e5WEVbEktz7kMjTniYduXOCsgqkhhIf35c+xOWUZVA0J44jFjXCWaHc4CjHOj1Ht/LJ00RI
-        6R3gKYxiy0FlnutcZbyK3vnY1ADiYyT4jUxYvYaPK5vNg/M9oBw==
-X-Google-Smtp-Source: AMsMyM7zc6prS8uR4b3KOrhY0adVhR9NmhhrHCa3CBp7mSaJS3isYh571BeYQWM6TiZfTQQ1/Yt3ojg=
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3uxyzgBF4YLw1FGPryWNIz4KO9fXpQNdVePNc1oTLIE=;
+        b=SbG6Jqno/mI1vXBNfYm+UP2ILUKS7sLgH+23SYPZcEcjZanilFUr44BnaiZS/cC0wP
+         bhnfblzP6w0oPg7f/romk1ba8AzZyalPjfrcsm66T36ZWO21fl4m//IVB/HV1CgTpsa1
+         RuGOL9XfE0ANngpQOKzln1fTBb4Ozi8l0cx2p0OueNTJBcTHo7mMs08MY0E03xb95bGU
+         IKqDH12kzKzLTswaWOqcZb35VducZkDVi2m0DWxUOpQjGrD7OueVV+6UT6Z5DQtxh/+u
+         9IdvGY81+bGSEtcqJU/IzQ82CgdXuKpmcKvTLvU/Yju6ua5km37gQMDCaJK2IbLoB1g4
+         yOww==
+X-Gm-Message-State: ACrzQf11/FPY5mrP5ABSlYJcnkpmG0rw+/1ByFk4B8maRIy/J0ot/mZn
+        Em8GOyFnmB+hx3bE2MS1FRsSR0WtGpblVhldoFHAnQ2TCKcgnzIkm2n/e4FrQtpFzz4Lak0tYxL
+        vggIlFlBBJFtJ2SI4VaSv4T0MjXHY6WG+D9DMjGU2w2UsQdeyUA==
+X-Google-Smtp-Source: AMsMyM4d36b5kkP3aFDJ+5pk6ZqhzqyUOCjw+TOsIoiSOgKjnA6XD50odUYXqtqrvTo5Tq9y04BBLv0=
 X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a0d:e647:0:b0:36f:f93f:7f7d with SMTP id
- p68-20020a0de647000000b0036ff93f7f7dmr33503616ywe.149.1667532334126; Thu, 03
- Nov 2022 20:25:34 -0700 (PDT)
-Date:   Thu,  3 Nov 2022 20:25:18 -0700
+ (user=sdf job=sendgmr) by 2002:a05:6a00:1706:b0:56d:3028:23f0 with SMTP id
+ h6-20020a056a00170600b0056d302823f0mr29856181pfc.59.1667532339131; Thu, 03
+ Nov 2022 20:25:39 -0700 (PDT)
+Date:   Thu,  3 Nov 2022 20:25:21 -0700
+In-Reply-To: <20221104032532.1615099-1-sdf@google.com>
 Mime-Version: 1.0
+References: <20221104032532.1615099-1-sdf@google.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221104032532.1615099-1-sdf@google.com>
-Subject: [RFC bpf-next v2 00/14] xdp: hints via kfuncs
+Message-ID: <20221104032532.1615099-4-sdf@google.com>
+Subject: [RFC bpf-next v2 03/14] veth: Introduce veth_xdp_buff wrapper for xdp_buff
 From:   Stanislav Fomichev <sdf@google.com>
 To:     bpf@vger.kernel.org
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
@@ -71,153 +73,7 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Changes since the original RFC:
-
-- 'struct bpf_patch' to more easily manage insn arrays
-
-  While working on longer unrolled functions I've bumped into verifier's
-  insn_buf[16]. Instead of increasing it, I've added a simple
-  abstraction that handles resizing.
-
-  *insn++ = BPF_XXX_XXX();
-  *insn++ = BPF_YYY_YYY();
-
-  vs
-
-  bpf_patch_append(patch,
-          BPF_XXX_XXX(),
-          BPF_YYY_YYY(),
-  );
-
-  There are also some tricks where we resolve BPF_JMP_IMM(op, dst, imm,
-  S16_MAX) to the real end of the program; mostly to make it easy to generate
-  the following:
-
-  if (some_condition) {
-          if (some_other_condition) {
-                  // insns
-          }
-  }
-
-- Drop xdp_buff->priv in favor of container_of (Jakub)
-
-  The drivers might need to maintain more data, so instead of
-  constraining them to a single ->priv pointer in xdp_buff, use container_of
-  and require the users to define the outer struct. xdp_buff should
-  be the first member.
-
-  Each driver now has two patches: the first one introduces new struct
-  wrapper; the second one does the actual work.
-
-- bpf_xdp_metadata_export_to_skb (Toke)
-
-  To solve the case where we're constructing skb from a redirected
-  frame. bpf_xdp_metadata_export_to_skb is an unrolled kfunc
-  that prepares 'struct xdp_to_skb_metadata' in the metadata.
-  The layout is randomized and it has a randomized magic number
-  to make sure userspace doesn't depend on it. I'm not sure how
-  strict we should be here? Toke/Jesper seem to be ok with
-  userspace depending on this but as long as they read the
-  layout via BTF, so maybe having a fixed magic is ok/better her?
-
-  Later, at skb_metadata_set time, we call into
-  skb_metadata_import_from_xdp that tries to parse this fixed format
-  and extract relevant metadata.
-
-  Note that because we are unrolling bpf_xdp_metadata_export_to_skb,
-  we have to constrain other kfuncs to R2-R5 only; I've added the
-  reasoning to the comments. It might be better idea to do a real
-  kfunc call (but we have to generate this kfunc anyway)?
-
-- helper to make it easier to call kernel code from unrolled kfuncs
-
-  Since we're unrolling, we're running in a somewhat constrained
-  environment. R6-R9 belong to the real callee, so we can't use them
-  to stash our R1-R5. We also can't use stack in any way. Another
-  constraint comes from bpf_xdp_metadata_export_to_skb which
-  might call several metadata kfuncs and wants its R1 to be preserved.
-
-  Thus, we add xdp_kfunc_call_preserving_r1, which generates the
-  bytecode to preserve r1 somewhere in the user-supplied context.
-
-  Again, we have to do this because we unroll bpf_xdp_metadata_export_to_skb.
-
-- mlx4/bnxt/ice examples (Jesper)
-
-  ice is the only one where it seems feasible to unroll. The code is
-  untested, but at least it shows that it's somewhat possible to
-  get to the timestamp in our R2-R5-constrained environment.
-
-  mlx4/bnxt do spinlocks/seqlocks, so I'm just calling into the kernel
-  code.
-
-- Unroll default implementation to return false/0/NULL
-
-  Original RFC left default kfuncs calls when the driver doesn't
-  do the unrolling. Here, instead, we unroll to single 'return 0'
-  instruction.
-
-- Drop prog_ifindex libbpf patch, use bpf_program__set_ifindex instead (Andrii)
-
-- Keep returning metadata by value instead of using a pointer
-
-  I've tried using the pointer, it works currently, but it requires extra
-  argument per commit eb1f7f71c126 ("bpf/verifier: allow kfunc to return
-  an allocated mem"). The requirement can probably be lifted for our
-  case, but not sure it's necessary for now.
-
-  While adding rx_timestamp support for the drivers, it turns out
-  we never really return the raw pointer to the descriptor field. We read
-  the descriptor field, do shifts/multiplies, convert to kernel clock,
-  etc/etc. So returning a value instead of a pointer seems more logical,
-  at least for the rx timestamp case. For the other types of metadata,
-  we might reconsider.
-
-- rename bpf_xdp_metadata_have_<xxx> to bpf_xdp_metadata_<xxx>_supported
-
-  Spotted in one of Toke's emails. Seems like it better conveys
-  the intent that it actually tests that the device supports the
-  metadata, not that the particular packet has the metadata.
-
-The following is unchanged since the original RFC:
-
-This is an RFC for the alternative approach suggested by Martin and
-Jakub. I've tried to CC most of the people from the original discussion,
-feel free to add more if you think I've missed somebody.
-
-Summary:
-- add new BPF_F_XDP_HAS_METADATA program flag and abuse
-  attr->prog_ifindex to pass target device ifindex at load time
-- at load time, find appropriate ndo_unroll_kfunc and call
-  it to unroll/inline kfuncs; kfuncs have the default "safe"
-  implementation if unrolling is not supported by a particular
-  device
-- rewrite xskxceiver test to use C bpf program and extend
-  it to export rx_timestamp (plus add rx timestamp to veth driver)
-
-I've intentionally kept it small and hacky to see whether the approach is
-workable or not.
-
-Pros:
-- we avoid BTF complexity; the BPF programs themselves are now responsible
-  for agreeing on the metadata layout with the AF_XDP consumer
-- the metadata is free if not used
-- the metadata should, in theory, be cheap if used; kfuncs should be
-  unrolled to the same code as if the metadata was pre-populated and
-  passed with a BTF id
-- it's not all or nothing; users can use small subset of metadata which
-  is more efficient than the BTF id approach where all metadata has to be
-  exposed for every frame (and selectively consumed by the users)
-
-Cons:
-- forwarding has to be handled explicitly; the BPF programs have to
-  agree on the metadata layout (IOW, the forwarding program
-  has to be aware of the final AF_XDP consumer metadata layout)
-- TX picture is not clear; but it's not clear with BTF ids as well;
-  I think we've agreed that just reusing whatever we have at RX
-  won't fly at TX; seems like TX XDP program might be the answer
-  here? (with a set of another tx kfuncs to "expose" bpf/af_xdp metatata
-  back into the kernel)
+No functional changes. Boilerplate to allow stuffing more data after xdp_buff.
 
 Cc: John Fastabend <john.fastabend@gmail.com>
 Cc: David Ahern <dsahern@gmail.com>
@@ -231,56 +87,166 @@ Cc: Magnus Karlsson <magnus.karlsson@gmail.com>
 Cc: Maryam Tahhan <mtahhan@redhat.com>
 Cc: xdp-hints@xdp-project.net
 Cc: netdev@vger.kernel.org
+Signed-off-by: Stanislav Fomichev <sdf@google.com>
+---
+ drivers/net/veth.c | 56 +++++++++++++++++++++++++---------------------
+ 1 file changed, 31 insertions(+), 25 deletions(-)
 
-Stanislav Fomichev (14):
-  bpf: Introduce bpf_patch
-  bpf: Support inlined/unrolled kfuncs for xdp metadata
-  veth: Introduce veth_xdp_buff wrapper for xdp_buff
-  veth: Support rx timestamp metadata for xdp
-  selftests/bpf: Verify xdp_metadata xdp->af_xdp path
-  xdp: Carry over xdp metadata into skb context
-  selftests/bpf: Verify xdp_metadata xdp->skb path
-  bpf: Helper to simplify calling kernel routines from unrolled kfuncs
-  ice: Introduce ice_xdp_buff wrapper for xdp_buff
-  ice: Support rx timestamp metadata for xdp
-  mlx4: Introduce mlx4_xdp_buff wrapper for xdp_buff
-  mxl4: Support rx timestamp metadata for xdp
-  bnxt: Introduce bnxt_xdp_buff wrapper for xdp_buff
-  bnxt: Support rx timestamp metadata for xdp
-
- drivers/net/ethernet/broadcom/bnxt/bnxt.c     |  73 +++-
- drivers/net/ethernet/intel/ice/ice.h          |   5 +
- drivers/net/ethernet/intel/ice/ice_main.c     |   1 +
- drivers/net/ethernet/intel/ice/ice_txrx.c     | 105 ++++-
- .../net/ethernet/mellanox/mlx4/en_netdev.c    |   1 +
- drivers/net/ethernet/mellanox/mlx4/en_rx.c    |  66 ++-
- drivers/net/veth.c                            |  89 ++--
- include/linux/bpf.h                           |   1 +
- include/linux/bpf_patch.h                     |  29 ++
- include/linux/btf.h                           |   1 +
- include/linux/btf_ids.h                       |   4 +
- include/linux/mlx4/device.h                   |   7 +
- include/linux/netdevice.h                     |   5 +
- include/linux/skbuff.h                        |   4 +
- include/net/xdp.h                             |  41 ++
- include/uapi/linux/bpf.h                      |   5 +
- kernel/bpf/Makefile                           |   2 +-
- kernel/bpf/bpf_patch.c                        |  81 ++++
- kernel/bpf/syscall.c                          |  28 +-
- kernel/bpf/verifier.c                         |  85 ++++
- net/core/dev.c                                |   7 +
- net/core/skbuff.c                             |  25 ++
- net/core/xdp.c                                | 165 +++++++-
- tools/include/uapi/linux/bpf.h                |   5 +
- tools/testing/selftests/bpf/Makefile          |   2 +-
- .../selftests/bpf/prog_tests/xdp_metadata.c   | 394 ++++++++++++++++++
- .../selftests/bpf/progs/xdp_metadata.c        |  78 ++++
- 27 files changed, 1244 insertions(+), 65 deletions(-)
- create mode 100644 include/linux/bpf_patch.h
- create mode 100644 kernel/bpf/bpf_patch.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
- create mode 100644 tools/testing/selftests/bpf/progs/xdp_metadata.c
-
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index b1ed5a93b6c5..917ba57453c1 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -116,6 +116,10 @@ static struct {
+ 	{ "peer_ifindex" },
+ };
+ 
++struct veth_xdp_buff {
++	struct xdp_buff xdp;
++};
++
+ static int veth_get_link_ksettings(struct net_device *dev,
+ 				   struct ethtool_link_ksettings *cmd)
+ {
+@@ -592,23 +596,24 @@ static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
+ 	rcu_read_lock();
+ 	xdp_prog = rcu_dereference(rq->xdp_prog);
+ 	if (likely(xdp_prog)) {
+-		struct xdp_buff xdp;
++		struct veth_xdp_buff vxbuf;
++		struct xdp_buff *xdp = &vxbuf.xdp;
+ 		u32 act;
+ 
+-		xdp_convert_frame_to_buff(frame, &xdp);
+-		xdp.rxq = &rq->xdp_rxq;
++		xdp_convert_frame_to_buff(frame, xdp);
++		xdp->rxq = &rq->xdp_rxq;
+ 
+-		act = bpf_prog_run_xdp(xdp_prog, &xdp);
++		act = bpf_prog_run_xdp(xdp_prog, xdp);
+ 
+ 		switch (act) {
+ 		case XDP_PASS:
+-			if (xdp_update_frame_from_buff(&xdp, frame))
++			if (xdp_update_frame_from_buff(xdp, frame))
+ 				goto err_xdp;
+ 			break;
+ 		case XDP_TX:
+ 			orig_frame = *frame;
+-			xdp.rxq->mem = frame->mem;
+-			if (unlikely(veth_xdp_tx(rq, &xdp, bq) < 0)) {
++			xdp->rxq->mem = frame->mem;
++			if (unlikely(veth_xdp_tx(rq, xdp, bq) < 0)) {
+ 				trace_xdp_exception(rq->dev, xdp_prog, act);
+ 				frame = &orig_frame;
+ 				stats->rx_drops++;
+@@ -619,8 +624,8 @@ static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
+ 			goto xdp_xmit;
+ 		case XDP_REDIRECT:
+ 			orig_frame = *frame;
+-			xdp.rxq->mem = frame->mem;
+-			if (xdp_do_redirect(rq->dev, &xdp, xdp_prog)) {
++			xdp->rxq->mem = frame->mem;
++			if (xdp_do_redirect(rq->dev, xdp, xdp_prog)) {
+ 				frame = &orig_frame;
+ 				stats->rx_drops++;
+ 				goto err_xdp;
+@@ -801,7 +806,8 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+ {
+ 	void *orig_data, *orig_data_end;
+ 	struct bpf_prog *xdp_prog;
+-	struct xdp_buff xdp;
++	struct veth_xdp_buff vxbuf;
++	struct xdp_buff *xdp = &vxbuf.xdp;
+ 	u32 act, metalen;
+ 	int off;
+ 
+@@ -815,22 +821,22 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+ 	}
+ 
+ 	__skb_push(skb, skb->data - skb_mac_header(skb));
+-	if (veth_convert_skb_to_xdp_buff(rq, &xdp, &skb))
++	if (veth_convert_skb_to_xdp_buff(rq, xdp, &skb))
+ 		goto drop;
+ 
+-	orig_data = xdp.data;
+-	orig_data_end = xdp.data_end;
++	orig_data = xdp->data;
++	orig_data_end = xdp->data_end;
+ 
+-	act = bpf_prog_run_xdp(xdp_prog, &xdp);
++	act = bpf_prog_run_xdp(xdp_prog, xdp);
+ 
+ 	switch (act) {
+ 	case XDP_PASS:
+ 		break;
+ 	case XDP_TX:
+-		veth_xdp_get(&xdp);
++		veth_xdp_get(xdp);
+ 		consume_skb(skb);
+-		xdp.rxq->mem = rq->xdp_mem;
+-		if (unlikely(veth_xdp_tx(rq, &xdp, bq) < 0)) {
++		xdp->rxq->mem = rq->xdp_mem;
++		if (unlikely(veth_xdp_tx(rq, xdp, bq) < 0)) {
+ 			trace_xdp_exception(rq->dev, xdp_prog, act);
+ 			stats->rx_drops++;
+ 			goto err_xdp;
+@@ -839,10 +845,10 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+ 		rcu_read_unlock();
+ 		goto xdp_xmit;
+ 	case XDP_REDIRECT:
+-		veth_xdp_get(&xdp);
++		veth_xdp_get(xdp);
+ 		consume_skb(skb);
+-		xdp.rxq->mem = rq->xdp_mem;
+-		if (xdp_do_redirect(rq->dev, &xdp, xdp_prog)) {
++		xdp->rxq->mem = rq->xdp_mem;
++		if (xdp_do_redirect(rq->dev, xdp, xdp_prog)) {
+ 			stats->rx_drops++;
+ 			goto err_xdp;
+ 		}
+@@ -862,7 +868,7 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+ 	rcu_read_unlock();
+ 
+ 	/* check if bpf_xdp_adjust_head was used */
+-	off = orig_data - xdp.data;
++	off = orig_data - xdp->data;
+ 	if (off > 0)
+ 		__skb_push(skb, off);
+ 	else if (off < 0)
+@@ -871,21 +877,21 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+ 	skb_reset_mac_header(skb);
+ 
+ 	/* check if bpf_xdp_adjust_tail was used */
+-	off = xdp.data_end - orig_data_end;
++	off = xdp->data_end - orig_data_end;
+ 	if (off != 0)
+ 		__skb_put(skb, off); /* positive on grow, negative on shrink */
+ 
+ 	/* XDP frag metadata (e.g. nr_frags) are updated in eBPF helpers
+ 	 * (e.g. bpf_xdp_adjust_tail), we need to update data_len here.
+ 	 */
+-	if (xdp_buff_has_frags(&xdp))
++	if (xdp_buff_has_frags(xdp))
+ 		skb->data_len = skb_shinfo(skb)->xdp_frags_size;
+ 	else
+ 		skb->data_len = 0;
+ 
+ 	skb->protocol = eth_type_trans(skb, rq->dev);
+ 
+-	metalen = xdp.data - xdp.data_meta;
++	metalen = xdp->data - xdp->data_meta;
+ 	if (metalen)
+ 		skb_metadata_set(skb, metalen);
+ out:
+@@ -898,7 +904,7 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+ 	return NULL;
+ err_xdp:
+ 	rcu_read_unlock();
+-	xdp_return_buff(&xdp);
++	xdp_return_buff(xdp);
+ xdp_xmit:
+ 	return NULL;
+ }
 -- 
 2.38.1.431.g37b22c650d-goog
 
