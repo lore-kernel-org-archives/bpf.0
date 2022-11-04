@@ -2,57 +2,57 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E93BCC4167D
-	for <bpf@archiver.kernel.org>; Fri,  4 Nov 2022 03:27:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB101C43219
+	for <bpf@archiver.kernel.org>; Fri,  4 Nov 2022 03:27:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbiKDD1X (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Nov 2022 23:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58704 "EHLO
+        id S229708AbiKDD1V (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Nov 2022 23:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231404AbiKDD0I (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 3 Nov 2022 23:26:08 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB044134
-        for <bpf@vger.kernel.org>; Thu,  3 Nov 2022 20:25:39 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id i17-20020a170902cf1100b00183e2a963f5so2606490plg.5
-        for <bpf@vger.kernel.org>; Thu, 03 Nov 2022 20:25:39 -0700 (PDT)
+        with ESMTP id S230504AbiKDDZ4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Nov 2022 23:25:56 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4438E64ED
+        for <bpf@vger.kernel.org>; Thu,  3 Nov 2022 20:25:36 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id u18-20020a627912000000b0056d93d8b8bdso1686999pfc.16
+        for <bpf@vger.kernel.org>; Thu, 03 Nov 2022 20:25:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3uxyzgBF4YLw1FGPryWNIz4KO9fXpQNdVePNc1oTLIE=;
-        b=bDCJk6STvPJfESg83z4MQdHgvU/DIjnVye3uYwBXTWNWKkXJvwRk1iWNIG3IhNT8tB
-         LBPbboRkqxAOdeee59ZwR0q/c0GAXyaRjSpUehFY5kNSN9hmzhfqpQ1iaipxj/Rr/UhS
-         Kp8fSqVb+Nv5H0FLeUMCyph+lRa87HetxPDgCmTY2SCgJyCifGqCy2pevHDHeepiWmzS
-         uw9gDlq0hQBuvaBeC4kk2gAf9XQpSh3yYReSQmokuQxhxvOTmu/h29jnpFZFaw7Kym1+
-         BvJyUGRD9bPBMX0eEhF5vuge7dAmiFOZNGFi9jTdygN9cq4NDiwc3Aq6j1d0VE29M6Cx
-         a3vw==
+        bh=YbRm3I0sewWtsZIHwhErDFMz3x0ncMPhKVqkK3e/Kzk=;
+        b=F/j+r+DQWgWU+H64J7k+Tlw9APbvQO6yhhwJkgncOiWnKlmmd7ff3U0fDMWcrIM6eA
+         Rrc6+HsRPDXVFkN/1Ol4jOSGhYk5Cu9FHGQdp5u2VJzi/qceoBkwLigm8V1aSgsBQSyH
+         t2yGCOTZY8ZguLjd7JLXNalfPBqujqIfzSAqmR9dudUMpphE2D4hoDFPrK6M3xMipjdv
+         kqgjtByufledR5lP2KjsFzIIRNsUFCQbD0UXrW6ZohJ2eQLFOicozTT+r4+rEsHhQ2a5
+         PDPpXcDvhQeczI4vZMBENr+pBOUlgphRkuSIuEzsnnUi4HLZf13zUZMJMQtvH7HcspTF
+         P9Ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3uxyzgBF4YLw1FGPryWNIz4KO9fXpQNdVePNc1oTLIE=;
-        b=SbG6Jqno/mI1vXBNfYm+UP2ILUKS7sLgH+23SYPZcEcjZanilFUr44BnaiZS/cC0wP
-         bhnfblzP6w0oPg7f/romk1ba8AzZyalPjfrcsm66T36ZWO21fl4m//IVB/HV1CgTpsa1
-         RuGOL9XfE0ANngpQOKzln1fTBb4Ozi8l0cx2p0OueNTJBcTHo7mMs08MY0E03xb95bGU
-         IKqDH12kzKzLTswaWOqcZb35VducZkDVi2m0DWxUOpQjGrD7OueVV+6UT6Z5DQtxh/+u
-         9IdvGY81+bGSEtcqJU/IzQ82CgdXuKpmcKvTLvU/Yju6ua5km37gQMDCaJK2IbLoB1g4
-         yOww==
-X-Gm-Message-State: ACrzQf11/FPY5mrP5ABSlYJcnkpmG0rw+/1ByFk4B8maRIy/J0ot/mZn
-        Em8GOyFnmB+hx3bE2MS1FRsSR0WtGpblVhldoFHAnQ2TCKcgnzIkm2n/e4FrQtpFzz4Lak0tYxL
-        vggIlFlBBJFtJ2SI4VaSv4T0MjXHY6WG+D9DMjGU2w2UsQdeyUA==
-X-Google-Smtp-Source: AMsMyM4d36b5kkP3aFDJ+5pk6ZqhzqyUOCjw+TOsIoiSOgKjnA6XD50odUYXqtqrvTo5Tq9y04BBLv0=
+        bh=YbRm3I0sewWtsZIHwhErDFMz3x0ncMPhKVqkK3e/Kzk=;
+        b=W2dN4VAwtVkv4yNtR6ZhPYCVkh1ZuNmTIa/L4mXeSJni+raE+sRxpkT96niN/BByi0
+         dHRN8MPLp8LgUPs3K67Nib2ywun4xN7Fkc+xryR7as6So4aDVj2FgLv0+7X4kuinBZDe
+         Eua7Dfd7WCaqdHBIHVBwS629Lgn0oqSCrNfsRNl/B1YwnPUwn5lZQAwKZ4K6z+Jb2tF+
+         vxpN6dAhx7XhA80R9Ioh2IJ4inRLVXLXScekYO13K+O0tcuMBb/WxjYRisbgI9nJO20m
+         FLeTpkrwvErGGYbv44C4POEbfMiqyCot8FpR9EGHYBk+HJsOmq/U6bC9rfVmmOiwGsUx
+         UmyQ==
+X-Gm-Message-State: ACrzQf2+ZQeuQv+vQqCS1UNm3QZtQLNeTKXYq14NO/PAuRKwot0X1PqN
+        O3uCdD4iHOgZEMgkiAJxlyKFWpDjz6s2Bwgp8akpqtWLmUxXNFMbm2bbQ2PcVy21UUa9jC/A8MT
+        7ViBLBooUYJxo0LauXel3nCq113vQRkTkoavMd/o8LEaHpJ4V9g==
+X-Google-Smtp-Source: AMsMyM7Z6bdvew+CNuqL+zRO4xlM9NhZdHxVH3wfWepJiyS61542z1snHXjcv2qO5a2qvaaQV4BBXL8=
 X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a05:6a00:1706:b0:56d:3028:23f0 with SMTP id
- h6-20020a056a00170600b0056d302823f0mr29856181pfc.59.1667532339131; Thu, 03
- Nov 2022 20:25:39 -0700 (PDT)
-Date:   Thu,  3 Nov 2022 20:25:21 -0700
+ (user=sdf job=sendgmr) by 2002:aa7:9421:0:b0:56b:b2a8:6822 with SMTP id
+ y1-20020aa79421000000b0056bb2a86822mr33149365pfo.86.1667532335655; Thu, 03
+ Nov 2022 20:25:35 -0700 (PDT)
+Date:   Thu,  3 Nov 2022 20:25:19 -0700
 In-Reply-To: <20221104032532.1615099-1-sdf@google.com>
 Mime-Version: 1.0
 References: <20221104032532.1615099-1-sdf@google.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221104032532.1615099-4-sdf@google.com>
-Subject: [RFC bpf-next v2 03/14] veth: Introduce veth_xdp_buff wrapper for xdp_buff
+Message-ID: <20221104032532.1615099-2-sdf@google.com>
+Subject: [RFC bpf-next v2 01/14] bpf: Introduce bpf_patch
 From:   Stanislav Fomichev <sdf@google.com>
 To:     bpf@vger.kernel.org
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
@@ -73,7 +73,14 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-No functional changes. Boilerplate to allow stuffing more data after xdp_buff.
+A simple abstraction around a series of instructions that transparently
+handles resizing.
+
+Currently, we have insn_buf[16] in convert_ctx_accesses which might
+not be enough for xdp kfuncs.
+
+If we find this abstraction helpful, we might convert existing
+insn_buf[16] to it in the future.
 
 Cc: John Fastabend <john.fastabend@gmail.com>
 Cc: David Ahern <dsahern@gmail.com>
@@ -89,164 +96,116 @@ Cc: xdp-hints@xdp-project.net
 Cc: netdev@vger.kernel.org
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- drivers/net/veth.c | 56 +++++++++++++++++++++++++---------------------
- 1 file changed, 31 insertions(+), 25 deletions(-)
+ include/linux/bpf_patch.h | 27 +++++++++++++++++++++
+ kernel/bpf/Makefile       |  2 +-
+ kernel/bpf/bpf_patch.c    | 51 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 79 insertions(+), 1 deletion(-)
+ create mode 100644 include/linux/bpf_patch.h
+ create mode 100644 kernel/bpf/bpf_patch.c
 
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index b1ed5a93b6c5..917ba57453c1 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -116,6 +116,10 @@ static struct {
- 	{ "peer_ifindex" },
- };
- 
-+struct veth_xdp_buff {
-+	struct xdp_buff xdp;
+diff --git a/include/linux/bpf_patch.h b/include/linux/bpf_patch.h
+new file mode 100644
+index 000000000000..81ff738eef8d
+--- /dev/null
++++ b/include/linux/bpf_patch.h
+@@ -0,0 +1,27 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef _LINUX_BPF_PATCH_H
++#define _LINUX_BPF_PATCH_H 1
++
++#include <linux/bpf.h>
++
++struct bpf_patch {
++	struct bpf_insn *insn;
++	size_t capacity;
++	size_t len;
++	int err;
 +};
 +
- static int veth_get_link_ksettings(struct net_device *dev,
- 				   struct ethtool_link_ksettings *cmd)
- {
-@@ -592,23 +596,24 @@ static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
- 	rcu_read_lock();
- 	xdp_prog = rcu_dereference(rq->xdp_prog);
- 	if (likely(xdp_prog)) {
--		struct xdp_buff xdp;
-+		struct veth_xdp_buff vxbuf;
-+		struct xdp_buff *xdp = &vxbuf.xdp;
- 		u32 act;
- 
--		xdp_convert_frame_to_buff(frame, &xdp);
--		xdp.rxq = &rq->xdp_rxq;
-+		xdp_convert_frame_to_buff(frame, xdp);
-+		xdp->rxq = &rq->xdp_rxq;
- 
--		act = bpf_prog_run_xdp(xdp_prog, &xdp);
-+		act = bpf_prog_run_xdp(xdp_prog, xdp);
- 
- 		switch (act) {
- 		case XDP_PASS:
--			if (xdp_update_frame_from_buff(&xdp, frame))
-+			if (xdp_update_frame_from_buff(xdp, frame))
- 				goto err_xdp;
- 			break;
- 		case XDP_TX:
- 			orig_frame = *frame;
--			xdp.rxq->mem = frame->mem;
--			if (unlikely(veth_xdp_tx(rq, &xdp, bq) < 0)) {
-+			xdp->rxq->mem = frame->mem;
-+			if (unlikely(veth_xdp_tx(rq, xdp, bq) < 0)) {
- 				trace_xdp_exception(rq->dev, xdp_prog, act);
- 				frame = &orig_frame;
- 				stats->rx_drops++;
-@@ -619,8 +624,8 @@ static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
- 			goto xdp_xmit;
- 		case XDP_REDIRECT:
- 			orig_frame = *frame;
--			xdp.rxq->mem = frame->mem;
--			if (xdp_do_redirect(rq->dev, &xdp, xdp_prog)) {
-+			xdp->rxq->mem = frame->mem;
-+			if (xdp_do_redirect(rq->dev, xdp, xdp_prog)) {
- 				frame = &orig_frame;
- 				stats->rx_drops++;
- 				goto err_xdp;
-@@ -801,7 +806,8 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
- {
- 	void *orig_data, *orig_data_end;
- 	struct bpf_prog *xdp_prog;
--	struct xdp_buff xdp;
-+	struct veth_xdp_buff vxbuf;
-+	struct xdp_buff *xdp = &vxbuf.xdp;
- 	u32 act, metalen;
- 	int off;
- 
-@@ -815,22 +821,22 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
- 	}
- 
- 	__skb_push(skb, skb->data - skb_mac_header(skb));
--	if (veth_convert_skb_to_xdp_buff(rq, &xdp, &skb))
-+	if (veth_convert_skb_to_xdp_buff(rq, xdp, &skb))
- 		goto drop;
- 
--	orig_data = xdp.data;
--	orig_data_end = xdp.data_end;
-+	orig_data = xdp->data;
-+	orig_data_end = xdp->data_end;
- 
--	act = bpf_prog_run_xdp(xdp_prog, &xdp);
-+	act = bpf_prog_run_xdp(xdp_prog, xdp);
- 
- 	switch (act) {
- 	case XDP_PASS:
- 		break;
- 	case XDP_TX:
--		veth_xdp_get(&xdp);
-+		veth_xdp_get(xdp);
- 		consume_skb(skb);
--		xdp.rxq->mem = rq->xdp_mem;
--		if (unlikely(veth_xdp_tx(rq, &xdp, bq) < 0)) {
-+		xdp->rxq->mem = rq->xdp_mem;
-+		if (unlikely(veth_xdp_tx(rq, xdp, bq) < 0)) {
- 			trace_xdp_exception(rq->dev, xdp_prog, act);
- 			stats->rx_drops++;
- 			goto err_xdp;
-@@ -839,10 +845,10 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
- 		rcu_read_unlock();
- 		goto xdp_xmit;
- 	case XDP_REDIRECT:
--		veth_xdp_get(&xdp);
-+		veth_xdp_get(xdp);
- 		consume_skb(skb);
--		xdp.rxq->mem = rq->xdp_mem;
--		if (xdp_do_redirect(rq->dev, &xdp, xdp_prog)) {
-+		xdp->rxq->mem = rq->xdp_mem;
-+		if (xdp_do_redirect(rq->dev, xdp, xdp_prog)) {
- 			stats->rx_drops++;
- 			goto err_xdp;
- 		}
-@@ -862,7 +868,7 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
- 	rcu_read_unlock();
- 
- 	/* check if bpf_xdp_adjust_head was used */
--	off = orig_data - xdp.data;
-+	off = orig_data - xdp->data;
- 	if (off > 0)
- 		__skb_push(skb, off);
- 	else if (off < 0)
-@@ -871,21 +877,21 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
- 	skb_reset_mac_header(skb);
- 
- 	/* check if bpf_xdp_adjust_tail was used */
--	off = xdp.data_end - orig_data_end;
-+	off = xdp->data_end - orig_data_end;
- 	if (off != 0)
- 		__skb_put(skb, off); /* positive on grow, negative on shrink */
- 
- 	/* XDP frag metadata (e.g. nr_frags) are updated in eBPF helpers
- 	 * (e.g. bpf_xdp_adjust_tail), we need to update data_len here.
- 	 */
--	if (xdp_buff_has_frags(&xdp))
-+	if (xdp_buff_has_frags(xdp))
- 		skb->data_len = skb_shinfo(skb)->xdp_frags_size;
- 	else
- 		skb->data_len = 0;
- 
- 	skb->protocol = eth_type_trans(skb, rq->dev);
- 
--	metalen = xdp.data - xdp.data_meta;
-+	metalen = xdp->data - xdp->data_meta;
- 	if (metalen)
- 		skb_metadata_set(skb, metalen);
- out:
-@@ -898,7 +904,7 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
- 	return NULL;
- err_xdp:
- 	rcu_read_unlock();
--	xdp_return_buff(&xdp);
-+	xdp_return_buff(xdp);
- xdp_xmit:
- 	return NULL;
- }
++void bpf_patch_free(struct bpf_patch *patch);
++size_t bpf_patch_len(const struct bpf_patch *patch);
++int bpf_patch_err(const struct bpf_patch *patch);
++void __bpf_patch_append(struct bpf_patch *patch, struct bpf_insn insn);
++struct bpf_insn *bpf_patch_data(const struct bpf_patch *patch);
++
++#define bpf_patch_append(patch, ...) ({ \
++	struct bpf_insn insn[] = { __VA_ARGS__ }; \
++	int i; \
++	for (i = 0; i < ARRAY_SIZE(insn); i++) \
++		__bpf_patch_append(patch, insn[i]); \
++})
++
++#endif
+diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+index 3a12e6b400a2..5724f36292a5 100644
+--- a/kernel/bpf/Makefile
++++ b/kernel/bpf/Makefile
+@@ -13,7 +13,7 @@ obj-$(CONFIG_BPF_SYSCALL) += bpf_local_storage.o bpf_task_storage.o
+ obj-${CONFIG_BPF_LSM}	  += bpf_inode_storage.o
+ obj-$(CONFIG_BPF_SYSCALL) += disasm.o
+ obj-$(CONFIG_BPF_JIT) += trampoline.o
+-obj-$(CONFIG_BPF_SYSCALL) += btf.o memalloc.o
++obj-$(CONFIG_BPF_SYSCALL) += btf.o memalloc.o bpf_patch.o
+ obj-$(CONFIG_BPF_JIT) += dispatcher.o
+ ifeq ($(CONFIG_NET),y)
+ obj-$(CONFIG_BPF_SYSCALL) += devmap.o
+diff --git a/kernel/bpf/bpf_patch.c b/kernel/bpf/bpf_patch.c
+new file mode 100644
+index 000000000000..82a10bf5624a
+--- /dev/null
++++ b/kernel/bpf/bpf_patch.c
+@@ -0,0 +1,51 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <linux/bpf_patch.h>
++
++void bpf_patch_free(struct bpf_patch *patch)
++{
++	kfree(patch->insn);
++}
++
++size_t bpf_patch_len(const struct bpf_patch *patch)
++{
++	return patch->len;
++}
++
++int bpf_patch_err(const struct bpf_patch *patch)
++{
++	return patch->err;
++}
++
++void __bpf_patch_append(struct bpf_patch *patch, struct bpf_insn insn)
++{
++	void *arr;
++
++	if (patch->err)
++		return;
++
++	if (patch->len + 1 > patch->capacity) {
++		if (!patch->capacity)
++			patch->capacity = 16;
++		else
++			patch->capacity *= 2;
++
++		arr = krealloc_array(patch->insn, patch->capacity, sizeof(insn), GFP_KERNEL);
++		if (!arr) {
++			patch->err = -ENOMEM;
++			kfree(patch->insn);
++			return;
++		}
++
++		patch->insn = arr;
++		patch->capacity *= 2;
++	}
++
++	patch->insn[patch->len++] = insn;
++}
++EXPORT_SYMBOL(__bpf_patch_append);
++
++struct bpf_insn *bpf_patch_data(const struct bpf_patch *patch)
++{
++	return patch->insn;
++}
 -- 
 2.38.1.431.g37b22c650d-goog
 
