@@ -2,124 +2,198 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76FCBC433FE
-	for <bpf@archiver.kernel.org>; Fri,  4 Nov 2022 16:37:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95E9CC4321E
+	for <bpf@archiver.kernel.org>; Fri,  4 Nov 2022 16:37:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbiKDQhF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Nov 2022 12:37:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60678 "EHLO
+        id S231689AbiKDQhG convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 4 Nov 2022 12:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231857AbiKDQhB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 4 Nov 2022 12:37:01 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E41C27156
-        for <bpf@vger.kernel.org>; Fri,  4 Nov 2022 09:36:59 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id d3so832724ils.1
-        for <bpf@vger.kernel.org>; Fri, 04 Nov 2022 09:36:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yoi4SgoXxG2si25isu4xW2Q1SrdJci1qbnXfZSaIdso=;
-        b=rn/JdTuEssdkW6hUEJf4Zna2IuyZLWDt6rCjIriPeTVt2Biv37aoNoh4tb3l+rZJ1H
-         HGe9XFZjCXsQSwYR9muntOCyUNYRBtRHRI16A6dmU+VqTFUbmQstyEw9yu3GK4SGiu6L
-         xJ7gFzBPdKoKYZoe6zQbiTcJcSxf04cM7MzzLuzzWb+w65pLfhp2QAQQ3+L2YY1wnrL1
-         o6EuR75woA4qcHnn+P0dNE4skVUXBI0uyWs3MmzQQmPuXxfmCK33bz1KEhF9kMqHME9U
-         av5/4htku5unbPD9qbWq+TnagkpFrf/SlFbJAfzIAhpLTi4ZH8Cb8D+pAX1U1TdEFOYx
-         Vixg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yoi4SgoXxG2si25isu4xW2Q1SrdJci1qbnXfZSaIdso=;
-        b=FayMPXR/yp8hTzIC4sD9jf5vkZ3eyR53XDlFCcD43e2+Orb+WGacoAk2ryGKkxcIRl
-         sOR25G8mWEHDhQ/O6fiomDaVp6PxTa88yaQj3sxhMEdAHe3kTg8LjoTe8hTnjTo7SAwq
-         X6ndrrQ60pAGifckfq2I8lQUUmexFKmtDp//IFFbZV9IgDhkxhsSv5gqfCiWKMNoHm0Y
-         P7AdzXekci6fJjZFp9kCIp5U3tfYwHwYmJ5Rp1NTxDo7919A9NVH3vOVJwAT6gcDG73g
-         v2yurorWOig+RVcAwgwLH3+E7Nx290z55pBFizxwdfdpIwwprdgpDQoHhlSY9lZ/M8Yo
-         MpJw==
-X-Gm-Message-State: ACrzQf1+vM3jzqRbdZGzUoAy3gp/othojhlV0PV6YB+5yJaQ2B/Papdz
-        D1aYUNOa04l+0kTlnT0CIMXQbPsupDNjKIE3bnv/DA==
-X-Google-Smtp-Source: AMsMyM648QwPmPn4H6x1eIoT9HB9DcnyMH+EQwUDCdb/Izl5tNCcsM30bie3hIC5qM2EoVXFtlUIfXtvJiWU66i1ubM=
-X-Received: by 2002:a05:6e02:d49:b0:300:d893:a3f8 with SMTP id
- h9-20020a056e020d4900b00300d893a3f8mr5335739ilj.53.1667579818679; Fri, 04 Nov
- 2022 09:36:58 -0700 (PDT)
+        with ESMTP id S231861AbiKDQhC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 4 Nov 2022 12:37:02 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B90627148
+        for <bpf@vger.kernel.org>; Fri,  4 Nov 2022 09:37:01 -0700 (PDT)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A4FNs0M015464
+        for <bpf@vger.kernel.org>; Fri, 4 Nov 2022 09:37:00 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3kmpgcf91p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 04 Nov 2022 09:37:00 -0700
+Received: from twshared18648.14.prn3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 4 Nov 2022 09:36:59 -0700
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id 856B92117FE8B; Fri,  4 Nov 2022 09:36:56 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH v2 bpf-next 2/6] bpf: propagate precision across all frames, not just the last one
+Date:   Fri, 4 Nov 2022 09:36:45 -0700
+Message-ID: <20221104163649.121784-3-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221104163649.121784-1-andrii@kernel.org>
+References: <20221104163649.121784-1-andrii@kernel.org>
 MIME-Version: 1.0
-References: <CAJD7tkYKmr0daXhCSkvNZYgx_rDuBaq1OExnw=AEMJ+fSzaHwg@mail.gmail.com>
- <CAADnVQ+MgOdgQYXPWUOyqs4p7nFKtHCj_H1V_AWkYfnosy2PBg@mail.gmail.com>
-In-Reply-To: <CAADnVQ+MgOdgQYXPWUOyqs4p7nFKtHCj_H1V_AWkYfnosy2PBg@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Fri, 4 Nov 2022 09:36:22 -0700
-Message-ID: <CAJD7tkYA61FBsAEuzHCt2evK1NLyBrKy2wAsXcWzdQNq=v+LKA@mail.gmail.com>
-Subject: Re: Question: BPF maps reliability
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: e4pTLIH_86mYSpk74jE14qKJ78Lg5xmD
+X-Proofpoint-ORIG-GUID: e4pTLIH_86mYSpk74jE14qKJ78Lg5xmD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-04_11,2022-11-03_01,2022-06-22_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Nov 3, 2022 at 11:28 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Wed, Nov 2, 2022 at 11:48 AM Yosry Ahmed <yosryahmed@google.com> wrote:
-> >
-> > Hey everyone,
-> >
-> > TL;DR Are BPF map operations guaranteed to succeed if the map is
-> > configured correctly and accesses to the map do not interrupt each
-> > other? Can this be relied on in the future as well?
-> >
-> > I am looking into migrating some cgroup statistics we internally
-> > maintain to use BPF instead of in-kernel code. I am considering
-> > several aspects of that, including reliability. With in-kernel code
-> > things are really simple, we add the data structures containing the
-> > stats to cgroup controller struct, we update them as appropriate, and
-> > we export them when needed. With BPF, we need to hook progs to the
-> > right locations and store the stats in BPF maps (cgroup local
-> > storages, task local storages, hash tables, trees - in the future -)
-> > etc.
-> >
-> > The question I am asking here is about the reliability of such map
-> > operations. Looking at the code for lookups and updates for some map
-> > types, I can see a lot of failure cases. Looking deeper into them it
-> > *seems* to me like in an ideal scenario nothing should fail. By an
-> > ideal scenario I mean:
-> > - The map size is set correctly,
-> > - There is sufficient memory on the system,
-> > - We don't use the BPF maps in any progs attached to the BPF maps
-> > manipulation code itself,
-> > - We don't use the BPF maps in any progs that can interrupt each other
-> > (e.g. NMI context).
-> >
-> > IOW, there are no cases where we fail because two programs running in
-> > parallel are trying to access the same map (or map element) or because
-> > we couldn't acquire a resource that we don't want to wait on (that
-> > wouldn't result in a deadlock)., situations where we might prefer the
-> > caller to retry later or where we don't care about one missed
-> > operation.
-> >
-> > Maybe all of this is obvious and I am being paranoid, or maybe there
-> > are other obvious failure cases that I missed, or maybe this is just a
-> > dumb question, so I apologize in advance if any of this is true :)
->
-> It's a correct summary.
-> The reliability of map and local storage is certainly required in some cases.
+When equivalent completed state is found and it has additional precision
+restrictions, BPF verifier propagates precision to
+currently-being-verified state chain (i.e., including parent states) so
+that if some of the states in the chain are not yet completed, necessary
+precision restrictions are enforced.
 
-Thanks for taking a look and confirming my thoughts!
+Unfortunately, right now this happens only for the last frame (deepest
+active subprogram's frame), not all the frames. This can lead to
+incorrect matching of states due to missing precision marker. Currently
+this doesn't seem possible as BPF verifier forces everything to precise
+when validated BPF program has any subprograms. But with the next patch
+lifting this restriction, this becomes problematic.
 
-> The "new generation" map types with bpf_obj_new and explicit
-> map operation will make it easier to audit all the code when
-> memory allocation can fail or recursion prevention can kick in.
+In fact, without this fix, we'll start getting failure in one of the
+existing test_verifier test cases:
 
-Makes sense, looking forward to that!
+  #906/p precise: cross frame pruning FAIL
+  Unexpected success to load!
+  verification time 48 usec
+  stack depth 0+0
+  processed 26 insns (limit 1000000) max_states_per_insn 3 total_states 17 peak_states 17 mark_read 8
+
+This patch adds precision propagation across all frames.
+
+Fixes: a3ce685dd01a ("bpf: fix precision tracking")
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ kernel/bpf/verifier.c | 71 ++++++++++++++++++++++++-------------------
+ 1 file changed, 39 insertions(+), 32 deletions(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index ddfb4b0ab35f..5c708eb30664 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2756,7 +2756,7 @@ static void mark_all_scalars_precise(struct bpf_verifier_env *env,
+ 		}
+ }
+ 
+-static int __mark_chain_precision(struct bpf_verifier_env *env, int regno,
++static int __mark_chain_precision(struct bpf_verifier_env *env, int frame, int regno,
+ 				  int spi)
+ {
+ 	struct bpf_verifier_state *st = env->cur_state;
+@@ -2773,7 +2773,7 @@ static int __mark_chain_precision(struct bpf_verifier_env *env, int regno,
+ 	if (!env->bpf_capable)
+ 		return 0;
+ 
+-	func = st->frame[st->curframe];
++	func = st->frame[frame];
+ 	if (regno >= 0) {
+ 		reg = &func->regs[regno];
+ 		if (reg->type != SCALAR_VALUE) {
+@@ -2854,7 +2854,7 @@ static int __mark_chain_precision(struct bpf_verifier_env *env, int regno,
+ 			break;
+ 
+ 		new_marks = false;
+-		func = st->frame[st->curframe];
++		func = st->frame[frame];
+ 		bitmap_from_u64(mask, reg_mask);
+ 		for_each_set_bit(i, mask, 32) {
+ 			reg = &func->regs[i];
+@@ -2920,12 +2920,17 @@ static int __mark_chain_precision(struct bpf_verifier_env *env, int regno,
+ 
+ int mark_chain_precision(struct bpf_verifier_env *env, int regno)
+ {
+-	return __mark_chain_precision(env, regno, -1);
++	return __mark_chain_precision(env, env->cur_state->curframe, regno, -1);
+ }
+ 
+-static int mark_chain_precision_stack(struct bpf_verifier_env *env, int spi)
++static int mark_chain_precision_frame(struct bpf_verifier_env *env, int frame, int regno)
+ {
+-	return __mark_chain_precision(env, -1, spi);
++	return __mark_chain_precision(env, frame, regno, -1);
++}
++
++static int mark_chain_precision_stack_frame(struct bpf_verifier_env *env, int frame, int spi)
++{
++	return __mark_chain_precision(env, frame, -1, spi);
+ }
+ 
+ static bool is_spillable_regtype(enum bpf_reg_type type)
+@@ -11794,34 +11799,36 @@ static int propagate_precision(struct bpf_verifier_env *env,
+ {
+ 	struct bpf_reg_state *state_reg;
+ 	struct bpf_func_state *state;
+-	int i, err = 0;
++	int i, err = 0, fr;
+ 
+-	state = old->frame[old->curframe];
+-	state_reg = state->regs;
+-	for (i = 0; i < BPF_REG_FP; i++, state_reg++) {
+-		if (state_reg->type != SCALAR_VALUE ||
+-		    !state_reg->precise)
+-			continue;
+-		if (env->log.level & BPF_LOG_LEVEL2)
+-			verbose(env, "propagating r%d\n", i);
+-		err = mark_chain_precision(env, i);
+-		if (err < 0)
+-			return err;
+-	}
++	for (fr = old->curframe; fr >= 0; fr--) {
++		state = old->frame[fr];
++		state_reg = state->regs;
++		for (i = 0; i < BPF_REG_FP; i++, state_reg++) {
++			if (state_reg->type != SCALAR_VALUE ||
++			    !state_reg->precise)
++				continue;
++			if (env->log.level & BPF_LOG_LEVEL2)
++				verbose(env, "frame %d: propagating r%d\n", i, fr);
++			err = mark_chain_precision_frame(env, fr, i);
++			if (err < 0)
++				return err;
++		}
+ 
+-	for (i = 0; i < state->allocated_stack / BPF_REG_SIZE; i++) {
+-		if (!is_spilled_reg(&state->stack[i]))
+-			continue;
+-		state_reg = &state->stack[i].spilled_ptr;
+-		if (state_reg->type != SCALAR_VALUE ||
+-		    !state_reg->precise)
+-			continue;
+-		if (env->log.level & BPF_LOG_LEVEL2)
+-			verbose(env, "propagating fp%d\n",
+-				(-i - 1) * BPF_REG_SIZE);
+-		err = mark_chain_precision_stack(env, i);
+-		if (err < 0)
+-			return err;
++		for (i = 0; i < state->allocated_stack / BPF_REG_SIZE; i++) {
++			if (!is_spilled_reg(&state->stack[i]))
++				continue;
++			state_reg = &state->stack[i].spilled_ptr;
++			if (state_reg->type != SCALAR_VALUE ||
++			    !state_reg->precise)
++				continue;
++			if (env->log.level & BPF_LOG_LEVEL2)
++				verbose(env, "frame %d: propagating fp%d\n",
++					(-i - 1) * BPF_REG_SIZE, fr);
++			err = mark_chain_precision_stack_frame(env, fr, i);
++			if (err < 0)
++				return err;
++		}
+ 	}
+ 	return 0;
+ }
+-- 
+2.30.2
+
