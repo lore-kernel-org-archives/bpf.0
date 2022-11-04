@@ -2,46 +2,44 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95E9CC4321E
-	for <bpf@archiver.kernel.org>; Fri,  4 Nov 2022 16:37:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C3ACC43217
+	for <bpf@archiver.kernel.org>; Fri,  4 Nov 2022 16:37:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231689AbiKDQhG convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 4 Nov 2022 12:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60680 "EHLO
+        id S231716AbiKDQhI convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 4 Nov 2022 12:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231861AbiKDQhC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 4 Nov 2022 12:37:02 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B90627148
-        for <bpf@vger.kernel.org>; Fri,  4 Nov 2022 09:37:01 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A4FNs0M015464
-        for <bpf@vger.kernel.org>; Fri, 4 Nov 2022 09:37:00 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3kmpgcf91p-1
+        with ESMTP id S231886AbiKDQhE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 4 Nov 2022 12:37:04 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A7B27148
+        for <bpf@vger.kernel.org>; Fri,  4 Nov 2022 09:37:03 -0700 (PDT)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A4Eg5Zr007623
+        for <bpf@vger.kernel.org>; Fri, 4 Nov 2022 09:37:03 -0700
+Received: from maileast.thefacebook.com ([163.114.130.8])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3kmpg372tc-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 04 Nov 2022 09:37:00 -0700
-Received: from twshared18648.14.prn3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 04 Nov 2022 09:37:03 -0700
+Received: from twshared16837.02.prn6.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 4 Nov 2022 09:36:59 -0700
+ 15.1.2375.31; Fri, 4 Nov 2022 09:37:00 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 856B92117FE8B; Fri,  4 Nov 2022 09:36:56 -0700 (PDT)
+        id 663F72117FE2B; Fri,  4 Nov 2022 09:36:52 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v2 bpf-next 2/6] bpf: propagate precision across all frames, not just the last one
-Date:   Fri, 4 Nov 2022 09:36:45 -0700
-Message-ID: <20221104163649.121784-3-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 0/6] BPF verifier precision tracking improvements
+Date:   Fri, 4 Nov 2022 09:36:43 -0700
+Message-ID: <20221104163649.121784-1-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221104163649.121784-1-andrii@kernel.org>
-References: <20221104163649.121784-1-andrii@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: e4pTLIH_86mYSpk74jE14qKJ78Lg5xmD
-X-Proofpoint-ORIG-GUID: e4pTLIH_86mYSpk74jE14qKJ78Lg5xmD
+X-Proofpoint-GUID: 76O27Fn6ts8h3JfLjfS39MA3pg-mHNoa
+X-Proofpoint-ORIG-GUID: 76O27Fn6ts8h3JfLjfS39MA3pg-mHNoa
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-04_11,2022-11-03_01,2022-06-22_01
@@ -49,151 +47,50 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When equivalent completed state is found and it has additional precision
-restrictions, BPF verifier propagates precision to
-currently-being-verified state chain (i.e., including parent states) so
-that if some of the states in the chain are not yet completed, necessary
-precision restrictions are enforced.
+This patch set fixes and improves BPF verifier's precision tracking logic for
+SCALAR registers.
 
-Unfortunately, right now this happens only for the last frame (deepest
-active subprogram's frame), not all the frames. This can lead to
-incorrect matching of states due to missing precision marker. Currently
-this doesn't seem possible as BPF verifier forces everything to precise
-when validated BPF program has any subprograms. But with the next patch
-lifting this restriction, this becomes problematic.
+Patches #1 and #2 are bug fixes discovered while working on these changes.
 
-In fact, without this fix, we'll start getting failure in one of the
-existing test_verifier test cases:
+Patch #3 enables precision tracking for BPF programs that contain subprograms.
+This was disabled before and prevent any modern BPF programs that use
+subprograms from enjoying the benefits of SCALAR (im)precise logic.
 
-  #906/p precise: cross frame pruning FAIL
-  Unexpected success to load!
-  verification time 48 usec
-  stack depth 0+0
-  processed 26 insns (limit 1000000) max_states_per_insn 3 total_states 17 peak_states 17 mark_read 8
+Patch #4 is few lines of code changes and many lines of explaining why those
+changes are correct. We establish why ignoring precise markings in current
+state is OK.
 
-This patch adds precision propagation across all frames.
+Patch #5 build on explanation in patch #4 and pushes it to the limit by
+forcefully forgetting inherited precise markins. Patch #4 by itself doesn't
+prevent current state from having precise=true SCALARs, so patch #5 is
+necessary to prevent such stray precise=true registers from creeping in.
 
-Fixes: a3ce685dd01a ("bpf: fix precision tracking")
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- kernel/bpf/verifier.c | 71 ++++++++++++++++++++++++-------------------
- 1 file changed, 39 insertions(+), 32 deletions(-)
+Patch #6 adjusts test_align selftests to work around BPF verifier log's
+limitations when it comes to interactions between state output and precision
+backtracking output.
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ddfb4b0ab35f..5c708eb30664 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2756,7 +2756,7 @@ static void mark_all_scalars_precise(struct bpf_verifier_env *env,
- 		}
- }
- 
--static int __mark_chain_precision(struct bpf_verifier_env *env, int regno,
-+static int __mark_chain_precision(struct bpf_verifier_env *env, int frame, int regno,
- 				  int spi)
- {
- 	struct bpf_verifier_state *st = env->cur_state;
-@@ -2773,7 +2773,7 @@ static int __mark_chain_precision(struct bpf_verifier_env *env, int regno,
- 	if (!env->bpf_capable)
- 		return 0;
- 
--	func = st->frame[st->curframe];
-+	func = st->frame[frame];
- 	if (regno >= 0) {
- 		reg = &func->regs[regno];
- 		if (reg->type != SCALAR_VALUE) {
-@@ -2854,7 +2854,7 @@ static int __mark_chain_precision(struct bpf_verifier_env *env, int regno,
- 			break;
- 
- 		new_marks = false;
--		func = st->frame[st->curframe];
-+		func = st->frame[frame];
- 		bitmap_from_u64(mask, reg_mask);
- 		for_each_set_bit(i, mask, 32) {
- 			reg = &func->regs[i];
-@@ -2920,12 +2920,17 @@ static int __mark_chain_precision(struct bpf_verifier_env *env, int regno,
- 
- int mark_chain_precision(struct bpf_verifier_env *env, int regno)
- {
--	return __mark_chain_precision(env, regno, -1);
-+	return __mark_chain_precision(env, env->cur_state->curframe, regno, -1);
- }
- 
--static int mark_chain_precision_stack(struct bpf_verifier_env *env, int spi)
-+static int mark_chain_precision_frame(struct bpf_verifier_env *env, int frame, int regno)
- {
--	return __mark_chain_precision(env, -1, spi);
-+	return __mark_chain_precision(env, frame, regno, -1);
-+}
-+
-+static int mark_chain_precision_stack_frame(struct bpf_verifier_env *env, int frame, int spi)
-+{
-+	return __mark_chain_precision(env, frame, -1, spi);
- }
- 
- static bool is_spillable_regtype(enum bpf_reg_type type)
-@@ -11794,34 +11799,36 @@ static int propagate_precision(struct bpf_verifier_env *env,
- {
- 	struct bpf_reg_state *state_reg;
- 	struct bpf_func_state *state;
--	int i, err = 0;
-+	int i, err = 0, fr;
- 
--	state = old->frame[old->curframe];
--	state_reg = state->regs;
--	for (i = 0; i < BPF_REG_FP; i++, state_reg++) {
--		if (state_reg->type != SCALAR_VALUE ||
--		    !state_reg->precise)
--			continue;
--		if (env->log.level & BPF_LOG_LEVEL2)
--			verbose(env, "propagating r%d\n", i);
--		err = mark_chain_precision(env, i);
--		if (err < 0)
--			return err;
--	}
-+	for (fr = old->curframe; fr >= 0; fr--) {
-+		state = old->frame[fr];
-+		state_reg = state->regs;
-+		for (i = 0; i < BPF_REG_FP; i++, state_reg++) {
-+			if (state_reg->type != SCALAR_VALUE ||
-+			    !state_reg->precise)
-+				continue;
-+			if (env->log.level & BPF_LOG_LEVEL2)
-+				verbose(env, "frame %d: propagating r%d\n", i, fr);
-+			err = mark_chain_precision_frame(env, fr, i);
-+			if (err < 0)
-+				return err;
-+		}
- 
--	for (i = 0; i < state->allocated_stack / BPF_REG_SIZE; i++) {
--		if (!is_spilled_reg(&state->stack[i]))
--			continue;
--		state_reg = &state->stack[i].spilled_ptr;
--		if (state_reg->type != SCALAR_VALUE ||
--		    !state_reg->precise)
--			continue;
--		if (env->log.level & BPF_LOG_LEVEL2)
--			verbose(env, "propagating fp%d\n",
--				(-i - 1) * BPF_REG_SIZE);
--		err = mark_chain_precision_stack(env, i);
--		if (err < 0)
--			return err;
-+		for (i = 0; i < state->allocated_stack / BPF_REG_SIZE; i++) {
-+			if (!is_spilled_reg(&state->stack[i]))
-+				continue;
-+			state_reg = &state->stack[i].spilled_ptr;
-+			if (state_reg->type != SCALAR_VALUE ||
-+			    !state_reg->precise)
-+				continue;
-+			if (env->log.level & BPF_LOG_LEVEL2)
-+				verbose(env, "frame %d: propagating fp%d\n",
-+					(-i - 1) * BPF_REG_SIZE, fr);
-+			err = mark_chain_precision_stack_frame(env, fr, i);
-+			if (err < 0)
-+				return err;
-+		}
- 	}
- 	return 0;
- }
+Overall, the goal of this patch set is to make BPF verifier's state tracking
+a bit more efficient by trying to preserve as much generality in checkpointed
+states as possible.
+
+v1->v2:
+- adjusted patch #1 commit message to make it clear we are fixing forward
+  step, not precision backtracking (Alexei);
+- moved last_idx/first_idx verbose logging up to make it clear when global
+  func reaches the first empty state (Alexei).
+
+Andrii Nakryiko (6):
+  bpf: propagate precision in ALU/ALU64 operations
+  bpf: propagate precision across all frames, not just the last one
+  bpf: allow precision tracking for programs with subprogs
+  bpf: stop setting precise in current state
+  bpf: aggressively forget precise markings during state checkpointing
+  selftests/bpf: make test_align selftest more robust
+
+ kernel/bpf/verifier.c                         | 278 +++++++++++++++---
+ .../testing/selftests/bpf/prog_tests/align.c  |  38 ++-
+ 2 files changed, 257 insertions(+), 59 deletions(-)
+
 -- 
 2.30.2
 
