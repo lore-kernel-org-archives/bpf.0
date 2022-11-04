@@ -2,53 +2,123 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FF11C433FE
-	for <bpf@archiver.kernel.org>; Fri,  4 Nov 2022 05:16:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0F7AC4332F
+	for <bpf@archiver.kernel.org>; Fri,  4 Nov 2022 05:30:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229485AbiKDFQs (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Nov 2022 01:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44034 "EHLO
+        id S230127AbiKDFaR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Nov 2022 01:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiKDFQq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 4 Nov 2022 01:16:46 -0400
-Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF250658C
-        for <bpf@vger.kernel.org>; Thu,  3 Nov 2022 22:16:45 -0700 (PDT)
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id C2F4872C983;
-        Fri,  4 Nov 2022 08:16:44 +0300 (MSK)
-Received: from altlinux.org (sole.flsd.net [185.75.180.6])
-        by imap.altlinux.org (Postfix) with ESMTPSA id A03874A472A;
-        Fri,  4 Nov 2022 08:16:44 +0300 (MSK)
-Date:   Fri, 4 Nov 2022 08:16:44 +0300
-From:   Vitaly Chikunov <vt@altlinux.org>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>
-Subject: bpf: Is it possible to move .BTF data into a module
-Message-ID: <20221104051644.nogfilmnjred2dt2@altlinux.org>
+        with ESMTP id S229553AbiKDFaR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 4 Nov 2022 01:30:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14562408B
+        for <bpf@vger.kernel.org>; Thu,  3 Nov 2022 22:30:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 689E9620B5
+        for <bpf@vger.kernel.org>; Fri,  4 Nov 2022 05:30:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B8894C433B5;
+        Fri,  4 Nov 2022 05:30:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667539814;
+        bh=cqfkvxvjo/MkQvv3IHlN0iws12Sxm4bsdlXxX4xRdbg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=R6U/MXYNz270WTwhfRiIrQ7EGqs5D/sKK8Gf9Lt5nIxlNRQG89MiQFvQtub45jEmh
+         6EOd/CDUPYpKGuwQh53HIiqAW9HgPCQK3AoPoU4m4J705uhqc+dNa9jucVRsEzSkG3
+         xVyiFzt32gC9vP9vmin/TqcCXUL53AqNOt+bI2Uy6IVyIiUXxzMG3tn9G1iKf92pwl
+         xGdCT2HUu4FbKw/prbrcJq8oiejpeWemi5RObv2zMioUXT0ou0/mMTsStah9HLvEG3
+         AjBtkFzm9yz0hyqoHc3/+HW0LcLIyvngz5v0xQ9gCoHRvkTug2ax4+4p74uWPgEvNa
+         m/Ge0SStTiHGg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9D892E270EA;
+        Fri,  4 Nov 2022 05:30:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v4 00/24] Local kptrs, BPF linked lists
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166753981464.11870.10486560059847217334.git-patchwork-notify@kernel.org>
+Date:   Fri, 04 Nov 2022 05:30:14 +0000
+References: <20221103191013.1236066-1-memxor@gmail.com>
+In-Reply-To: <20221103191013.1236066-1-memxor@gmail.com>
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, martin.lau@kernel.org,
+        davemarchevsky@meta.com, delyank@meta.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+Hello:
 
-We need to reduce kernel size for aarch64, because it does not fit into
-U-Boot loader on Raspberry Pi (due to it having fdt_addr_r=0x02600000)
-and one of big ELF sections in vmlinuz is .BTF taking around 5MB.
-Compression does not help because on aarch64 kernels are
-uncompressed[1].
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-Is it theoretically possible to make sysfs_btf a module?
+On Fri,  4 Nov 2022 00:39:49 +0530 you wrote:
+> This series introduces user defined BPF objects, by introducing the idea
+> of local kptrs. These are kptrs (strongly typed pointers) that refer to
+> objects of a user defined type, hence called "local" kptrs. This allows
+> BPF programs to allocate their own objects, build their own object
+> hierarchies, and use the basic building blocks provided by BPF runtime
+> to build their own data structures flexibly.
+> 
+> [...]
 
-Yes this will reduce tracing at boot times, but at least it will give
-option for occasional tracing after boot.
+Here is the summary with links:
+  - [bpf-next,v4,01/24] bpf: Document UAPI details for special BPF types
+    (no matching commit)
+  - [bpf-next,v4,02/24] bpf: Allow specifying volatile type modifier for kptrs
+    (no matching commit)
+  - [bpf-next,v4,03/24] bpf: Clobber stack slot when writing over spilled PTR_TO_BTF_ID
+    (no matching commit)
+  - [bpf-next,v4,04/24] bpf: Fix slot type check in check_stack_write_var_off
+    (no matching commit)
+  - [bpf-next,v4,05/24] bpf: Drop reg_type_may_be_refcounted_or_null
+    (no matching commit)
+  - [bpf-next,v4,06/24] bpf: Refactor kptr_off_tab into btf_record
+    (no matching commit)
+  - [bpf-next,v4,07/24] bpf: Consolidate spin_lock, timer management into btf_record
+    https://git.kernel.org/bpf/bpf-next/c/db559117828d
+  - [bpf-next,v4,08/24] bpf: Refactor map->off_arr handling
+    (no matching commit)
+  - [bpf-next,v4,09/24] bpf: Support bpf_list_head in map values
+    (no matching commit)
+  - [bpf-next,v4,10/24] bpf: Introduce local kptrs
+    (no matching commit)
+  - [bpf-next,v4,11/24] bpf: Recognize bpf_{spin_lock,list_head,list_node} in local kptrs
+    (no matching commit)
+  - [bpf-next,v4,12/24] bpf: Verify ownership relationships for user BTF types
+    (no matching commit)
+  - [bpf-next,v4,13/24] bpf: Support locking bpf_spin_lock in local kptr
+    (no matching commit)
+  - [bpf-next,v4,14/24] bpf: Allow locking bpf_spin_lock global variables
+    (no matching commit)
+  - [bpf-next,v4,15/24] bpf: Rewrite kfunc argument handling
+    (no matching commit)
+  - [bpf-next,v4,16/24] bpf: Drop kfunc bits from btf_check_func_arg_match
+    (no matching commit)
+  - [bpf-next,v4,17/24] bpf: Support constant scalar arguments for kfuncs
+    (no matching commit)
+  - [bpf-next,v4,18/24] bpf: Teach verifier about non-size constant arguments
+    (no matching commit)
+  - [bpf-next,v4,19/24] bpf: Introduce bpf_obj_new
+    (no matching commit)
+  - [bpf-next,v4,20/24] bpf: Introduce bpf_obj_drop
+    (no matching commit)
+  - [bpf-next,v4,21/24] bpf: Permit NULL checking pointer with non-zero fixed offset
+    (no matching commit)
+  - [bpf-next,v4,22/24] bpf: Introduce single ownership BPF linked list API
+    (no matching commit)
+  - [bpf-next,v4,23/24] selftests/bpf: Add __contains macro to bpf_experimental.h
+    (no matching commit)
+  - [bpf-next,v4,24/24] selftests/bpf: Add BPF linked list API tests
+    (no matching commit)
 
-Thanks,
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-[1] https://www.kernel.org/doc/Documentation/arm64/booting.txt #3.
+
