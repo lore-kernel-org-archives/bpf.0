@@ -2,142 +2,269 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0D4FC4332F
-	for <bpf@archiver.kernel.org>; Fri,  4 Nov 2022 15:39:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFB9BC4332F
+	for <bpf@archiver.kernel.org>; Fri,  4 Nov 2022 15:58:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232691AbiKDPju (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Nov 2022 11:39:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49506 "EHLO
+        id S232142AbiKDP6z (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Nov 2022 11:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232686AbiKDPjt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 4 Nov 2022 11:39:49 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075AF31DE9
-        for <bpf@vger.kernel.org>; Fri,  4 Nov 2022 08:39:48 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id b2so14274231eja.6
-        for <bpf@vger.kernel.org>; Fri, 04 Nov 2022 08:39:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7LgYurN7VD2CzC5a2zyT5/knojv+7ACyX8w4NIjJdyA=;
-        b=HkOVIbAjNn3fQ99NNYoSLHw5WDO0W0CQGoMsIdMOs2YRxcfu5fVvmFgceF2ThbjrYT
-         gZDgOS7Pv/jUjm8TSAKqjmUuUyhQQcWtZECUcFsH0vipLGhBfDw7Eb1Lj3jNuLRXcCTv
-         Vu2in/TnfhXq7PRhK52io5L9AdNmQ2PQKa8yze+gr/efTBXHv7cQXvXsMeQgGBueZHI6
-         NWnVfFzqxZjwCN3ZBgiI8LC70/eGZTYbaC9mptnvc/6FPr8iW7uEK8HSvMgoPPWtqO58
-         o8kdCl/d94OyalhpcS06WGHpMY/fbBM+mlKw75nlGlA19BjbpQmk3dxlZDf56hNRbhqB
-         RvSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7LgYurN7VD2CzC5a2zyT5/knojv+7ACyX8w4NIjJdyA=;
-        b=loePTBJrgggG959vgUDM0bWm7uTnQTOeYBa8hAaXXVs5muvPKPOLci8lBfC+RF8mgW
-         CqVNtiRUzP8YC5jjWX9uY2dOG+D+TxEaEcKUJW2PXoEmx0ar+zCjkB4FqSF85ZRL+eVY
-         IAOt+1Epw53A+jA6r6jjPn+69m9xkGBgnmaAxYLjLGIABDpklL7kvZJc90+7kXK/0AUm
-         P1q5g3COjhv4UvS0BVeJAGTj/GSTet5ciD4dVHksqZdD9nAnNiXttgTkSoN+rcll6Mu/
-         /x3OqMSXAoGZBG2C1gWzVAqdd/jHY1+/Rm4QlKRsFjga7CDWmkqhhusJtPbWLXy5ym8n
-         pPiA==
-X-Gm-Message-State: ACrzQf1GmBMWdkFiBxb38FW8mD+qrN7KPmNl+oSWgN+I5k+OS+vCR3Qo
-        6usqN5xErLGMSgvL9scHtAXCZp6+2sTpdkSn3mI=
-X-Google-Smtp-Source: AMsMyM6hKnFWvBBLNpX8klzOePuUyfGo8ZaycXgDAhIhvqhz2RcULkVtXjxPjOHhsARRxHmSMVphOBvfWRx1cb1g9Lw=
-X-Received: by 2002:a17:906:1f48:b0:7ae:77d:bac with SMTP id
- d8-20020a1709061f4800b007ae077d0bacmr13907601ejk.708.1667576387391; Fri, 04
- Nov 2022 08:39:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221103191013.1236066-1-memxor@gmail.com> <20221103191013.1236066-20-memxor@gmail.com>
- <ba1a01b3-8028-fdbb-910b-19612e22bf5f@meta.com> <20221104080943.fud4grm5tzp6tl3h@apollo>
-In-Reply-To: <20221104080943.fud4grm5tzp6tl3h@apollo>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 4 Nov 2022 08:39:36 -0700
-Message-ID: <CAADnVQ+T467LJafoc5ehDg-4PPepqiGfkEcpZFfTyv4X2JidWQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 19/24] bpf: Introduce bpf_obj_new
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     Dave Marchevsky <davemarchevsky@meta.com>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Delyan Kratunov <delyank@meta.com>
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S232208AbiKDP6t (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 4 Nov 2022 11:58:49 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F5D31228
+        for <bpf@vger.kernel.org>; Fri,  4 Nov 2022 08:58:46 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A4FVKhA001418;
+        Fri, 4 Nov 2022 15:58:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=corp-2022-7-12;
+ bh=AENL95pD2+cZZmiVHzd6he+R8Xv9064Yg0E+GgIptsc=;
+ b=pZbAYawz878gxgb8f/Y1gzeTSQeNVxkzYGESUQ7Kh0zbr06IiarFbVUlxIYR5IevrzJm
+ Nw6AJO0uExyYmTK63G/i1yrqxYRPGbxFtaUFR9dwIpjAhhmX3KlQ6AbLOs0EC1erWXrH
+ T1ofvGWVSgZ4JnjbIJAZvpFwJvRiDEfMH7FUGNltZviuWB8j11Eo18tdtunz+51bO3fX
+ nOgqQ3QoBfWcjnc2B7j3NgCgHuuXJvCd7669wQ8LRyDEBgZnwhLxRV0NNoqqSQ1ocWda
+ 1WL5r1scQxZ31rVu9Qnk3xpQXZ8410b1GZjioBmKDhKQHw79ufcO5rHnCTUS20k7ij/e 9Q== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kgtkdfhud-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 04 Nov 2022 15:58:23 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2A4EjkcT023392;
+        Fri, 4 Nov 2022 15:58:23 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3kmpwnpec8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 04 Nov 2022 15:58:22 +0000
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A4FwITk025431;
+        Fri, 4 Nov 2022 15:58:22 GMT
+Received: from myrouter.uk.oracle.com (dhcp-10-175-178-135.vpn.oracle.com [10.175.178.135])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3kmpwnpe7w-2;
+        Fri, 04 Nov 2022 15:58:22 +0000
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     andrii@kernel.org, ast@kernel.org, martin.lau@linux.dev,
+        daniel@iogearbox.net
+Cc:     song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, masahiroy@kernel.org, michal.lkml@markovi.net,
+        ndesaulniers@google.com, bpf@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [RFC bpf-next 1/2] bpf: support standalone BTF in modules
+Date:   Fri,  4 Nov 2022 15:58:06 +0000
+Message-Id: <1667577487-9162-2-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1667577487-9162-1-git-send-email-alan.maguire@oracle.com>
+References: <1667577487-9162-1-git-send-email-alan.maguire@oracle.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-04_11,2022-11-03_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 adultscore=0 mlxscore=0
+ suspectscore=0 mlxlogscore=999 malwarescore=0 bulkscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211040104
+X-Proofpoint-ORIG-GUID: PVozCsLJlrk6sAMfZxCmGqebEtBeN1tg
+X-Proofpoint-GUID: PVozCsLJlrk6sAMfZxCmGqebEtBeN1tg
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Nov 4, 2022 at 1:09 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
->
-> On Fri, Nov 04, 2022 at 08:07:25AM IST, Dave Marchevsky wrote:
-> > On 11/3/22 3:10 PM, Kumar Kartikeya Dwivedi wrote:
-> > > Introduce type safe memory allocator bpf_obj_new for BPF programs. The
-> > > kernel side kfunc is named bpf_obj_new_impl, as passing hidden arguments
-> > > to kfuncs still requires having them in prototype, unlike BPF helpers
-> > > which always take 5 arguments and have them checked using bpf_func_proto
-> > > in verifier, ignoring unset argument types.
-> > >
-> > > Introduce __ign suffix to ignore a specific kfunc argument during type
-> > > checks, then use this to introduce support for passing type metadata to
-> > > the bpf_obj_new_impl kfunc.
-> > >
-> > > The user passes BTF ID of the type it wants to allocates in program BTF,
-> > > the verifier then rewrites the first argument as the size of this type,
-> > > after performing some sanity checks (to ensure it exists and it is a
-> > > struct type).
-> > >
-> > > The second argument is also fixed up and passed by the verifier. This is
-> > > the btf_struct_meta for the type being allocated. It would be needed
-> > > mostly for the offset array which is required for zero initializing
-> > > special fields while leaving the rest of storage in unitialized state.
-> > >
-> > > It would also be needed in the next patch to perform proper destruction
-> > > of the object's special fields.
-> > >
-> > > A convenience macro is included in the bpf_experimental.h header to hide
-> > > over the ugly details of the implementation, leading to user code
-> > > looking similar to a language level extension which allocates and
-> > > constructs fields of a user type.
-> > >
-> > > struct bar {
-> > >     struct bpf_list_node node;
-> > > };
-> > >
-> > > struct foo {
-> > >     struct bpf_spin_lock lock;
-> > >     struct bpf_list_head head __contains(bar, node);
-> > > };
-> > >
-> > > void prog(void) {
-> > >     struct foo *f;
-> > >
-> > >     f = bpf_obj_new(typeof(*f));
-> > >     if (!f)
-> > >             return;
-> > >     ...
-> > > }
-> > >
-> > > A key piece of this story is still missing, i.e. the free function,
-> > > which will come in the next patch.
-> > >
-> > > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> > > ---
-> >
-> > [...]
-> >
-> > > diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-> > > new file mode 100644
-> > > index 000000000000..1d3451084a68
-> > > --- /dev/null
-> > > +++ b/tools/testing/selftests/bpf/bpf_experimental.h
-> >
-> > Maybe bpf_experimental.h should go in libbpf as part of this series? If
-> > including vmlinux.h is an issue - nothing in libbpf currently includes it - you
-> > could rely on the BPF program including it, with a comment similar to "Note
-> > that bpf programs need to include..." in lib/bpf/bpf_helpers.h .
-> >
->
-> I don't have a problem with that, but I would like to also know Andrii's opinion
-> on this, since it won't work properly if people don't keep libbpf and kernel
-> version in sync.
+Not all kernel modules can be built in-tree when the core
+kernel is built. This presents a problem for split BTF, because
+split module BTF refers to type ids in the base kernel BTF, and
+if that base kernel BTF changes (even in minor ways) those
+references become invalid.  Such modules then cannot take
+advantage of BTF (or at least they only can until the kernel
+changes enough to invalidate their vmlinux type id references).
+This problem has been discussed before, and the initial approach
+was to allow BTF mismatch but fail to load BTF.  See [1]
+for more discussion.
 
-let's do the directory bikeshedding later.
-bpf_experimental.h can be moved to libbpf dir in the follow up.
+Generating standalone BTF for modules helps solve this problem
+because the BTF generated is self-referential only.  However,
+tooling is geared towards split BTF - for example bpftool assumes
+a module's BTF is defined relative to vmlinux BTF.  To handle
+this, dynamic remapping of standalone BTF is done on module
+load to make it appear like split BTF - type ids and string
+offsets are remapped such that they appear as they would in
+split BTF.  It just so happens that the BTF is self-referential.
+With this approach, existing tooling works with standalone
+module BTF from /sys/kernel/btf in the same way as before;
+no knowledge of split versus standalone BTF is required.
+
+Currently, the approach taken is to assume that the BTF
+associated with a module is split BTF.  If however the
+checking of types fails, we fall back to interpreting it as
+standalone BTF and carrying out remapping.  As discussed in [1]
+there are some heuristics we could use to identify standalone
+versus split module BTF, but for now the simplistic fallback
+method is used.
+
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+
+[1] https://lore.kernel.org/bpf/YfK18x%2FXrYL4Vw8o@syu-laptop/
+---
+ kernel/bpf/btf.c | 132 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 132 insertions(+)
+
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 5579ff3..5efdcaf 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -5315,11 +5315,120 @@ struct btf *btf_parse_vmlinux(void)
+ 
+ #ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+ 
++static u32 btf_name_off_renumber(struct btf *btf, u32 name_off)
++{
++	return name_off + btf->start_str_off;
++}
++
++static u32 btf_id_renumber(struct btf *btf, u32 id)
++{
++	/* no need to renumber void */
++	if (id == 0)
++		return id;
++	return id + btf->start_id - 1;
++}
++
++/* Renumber standalone BTF to appear as split BTF; name offsets must
++ * be relative to btf->start_str_offset and ids relative to btf->start_id.
++ * When user sees BTF it will appear as normal module split BTF, the only
++ * difference being it is fully self-referential and does not refer back
++ * to vmlinux BTF (aside from 0 "void" references).
++ */
++static void btf_type_renumber(struct btf_verifier_env *env, struct btf_type *t)
++{
++	struct btf_var_secinfo *secinfo;
++	struct btf *btf = env->btf;
++	struct btf_member *member;
++	struct btf_param *param;
++	struct btf_array *array;
++	struct btf_enum64 *e64;
++	struct btf_enum *e;
++	int i;
++
++	t->name_off = btf_name_off_renumber(btf, t->name_off);
++
++	switch (BTF_INFO_KIND(t->info)) {
++	case BTF_KIND_INT:
++	case BTF_KIND_FLOAT:
++	case BTF_KIND_TYPE_TAG:
++		/* nothing to renumber here, no type references */
++		break;
++	case BTF_KIND_PTR:
++	case BTF_KIND_FWD:
++	case BTF_KIND_TYPEDEF:
++	case BTF_KIND_VOLATILE:
++	case BTF_KIND_CONST:
++	case BTF_KIND_RESTRICT:
++	case BTF_KIND_FUNC:
++	case BTF_KIND_VAR:
++	case BTF_KIND_DECL_TAG:
++		/* renumber the referenced type */
++		t->type = btf_id_renumber(btf, t->type);
++		break;
++	case BTF_KIND_ARRAY:
++		array = btf_array(t);
++		array->type = btf_id_renumber(btf, array->type);
++		array->index_type = btf_id_renumber(btf, array->index_type);
++		break;
++	case BTF_KIND_STRUCT:
++	case BTF_KIND_UNION:
++		member = (struct btf_member *)(t + 1);
++		for (i = 0; i < btf_type_vlen(t); i++) {
++			member->type = btf_id_renumber(btf, member->type);
++			member->name_off = btf_name_off_renumber(btf, member->name_off);
++			member++;
++		}
++		break;
++	case BTF_KIND_FUNC_PROTO:
++		param = (struct btf_param *)(t + 1);
++		for (i = 0; i < btf_type_vlen(t); i++) {
++			param->type = btf_id_renumber(btf, param->type);
++			param->name_off = btf_name_off_renumber(btf, param->name_off);
++			param++;
++		}
++		break;
++	case BTF_KIND_DATASEC:
++		secinfo = (struct btf_var_secinfo *)(t + 1);
++		for (i = 0; i < btf_type_vlen(t); i++) {
++			secinfo->type = btf_id_renumber(btf, secinfo->type);
++			secinfo++;
++		}
++		break;
++	case BTF_KIND_ENUM:
++		e = (struct btf_enum *)(t + 1);
++		for (i = 0; i < btf_type_vlen(t); i++) {
++			e->name_off = btf_name_off_renumber(btf, e->name_off);
++			e++;
++		}
++		break;
++	case BTF_KIND_ENUM64:
++		e64 = (struct btf_enum64 *)(t + 1);
++		for (i = 0; i < btf_type_vlen(t); i++) {
++			e64->name_off = btf_name_off_renumber(btf, e64->name_off);
++			e64++;
++		}
++		break;
++	}
++}
++
++static void btf_renumber(struct btf_verifier_env *env, struct btf *base_btf)
++{
++	struct btf *btf = env->btf;
++	int i;
++
++	btf->start_id = base_btf->nr_types;
++	btf->start_str_off = base_btf->hdr.str_len;
++
++	for (i = 0; i < btf->nr_types; i++)
++		btf_type_renumber(env, btf->types[i]);
++}
++
+ static struct btf *btf_parse_module(const char *module_name, const void *data, unsigned int data_size)
+ {
+ 	struct btf_verifier_env *env = NULL;
+ 	struct bpf_verifier_log *log;
+ 	struct btf *btf = NULL, *base_btf;
++	bool standalone = false;
+ 	int err;
+ 
+ 	base_btf = bpf_get_btf_vmlinux();
+@@ -5367,9 +5476,32 @@ static struct btf *btf_parse_module(const char *module_name, const void *data, u
+ 		goto errout;
+ 
+ 	err = btf_check_all_metas(env);
++	if (err) {
++		/* BTF may be standalone; in that case meta checks will
++		 * fail and we fall back to standalone BTF processing.
++		 * Later on, once we have checked all metas, we will
++		 * retain start id from  base BTF so it will look like
++		 * split BTF (but is self-contained); renumbering is done
++		 * also to give the split BTF-like appearance and not
++		 * confuse pahole which assumes split BTF for modules.
++		 */
++		btf->base_btf = NULL;
++		if (btf->types)
++			kvfree(btf->types);
++		btf->types = NULL;
++		btf->types_size = 0;
++		btf->start_id = 0;
++		btf->nr_types = 0;
++		btf->start_str_off = 0;
++		standalone = true;
++		err = btf_check_all_metas(env);
++	}
+ 	if (err)
+ 		goto errout;
+ 
++	if (standalone)
++		btf_renumber(env, base_btf);
++
+ 	err = btf_check_type_tags(env, btf, btf_nr_types(base_btf));
+ 	if (err)
+ 		goto errout;
+-- 
+1.8.3.1
+
