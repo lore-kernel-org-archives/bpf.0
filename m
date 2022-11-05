@@ -2,77 +2,142 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0936C4332F
-	for <bpf@archiver.kernel.org>; Sat,  5 Nov 2022 11:07:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 856D3C4332F
+	for <bpf@archiver.kernel.org>; Sat,  5 Nov 2022 12:54:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbiKELHm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 5 Nov 2022 07:07:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49344 "EHLO
+        id S229531AbiKEMyZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 5 Nov 2022 08:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiKELHl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 5 Nov 2022 07:07:41 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE09FCE3;
-        Sat,  5 Nov 2022 04:07:41 -0700 (PDT)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N4F432pPLzpW8R;
-        Sat,  5 Nov 2022 19:04:03 +0800 (CST)
-Received: from [10.174.179.215] (10.174.179.215) by
- canpemm500007.china.huawei.com (7.192.104.62) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 5 Nov 2022 19:07:38 +0800
-Subject: Re: [PATCH] selftests/xsk: Fix unsigned comparison with less than
- zero
-To:     <bjorn@kernel.org>, <magnus.karlsson@intel.com>,
-        <maciej.fijalkowski@intel.com>, <jonathan.lemon@gmail.com>,
-        <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>, <mykolal@fb.com>,
-        <shuah@kernel.org>, <shibin.koikkara.reeny@intel.com>
-CC:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221105110443.23872-1-yuehaibing@huawei.com>
-From:   YueHaibing <yuehaibing@huawei.com>
-Message-ID: <de5cae26-cc6a-0c07-8bab-40296f9598a8@huawei.com>
-Date:   Sat, 5 Nov 2022 19:07:37 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        with ESMTP id S229493AbiKEMyY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 5 Nov 2022 08:54:24 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C299427CD0;
+        Sat,  5 Nov 2022 05:54:23 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id p21so7217009plr.7;
+        Sat, 05 Nov 2022 05:54:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KZ42H0SLRCb6moReftXhDXdbBURVm/UoF5wzsM8xUyc=;
+        b=bt94TcYPdUT795A9mV804QOy+ZtYX4QrjGifmwqZU6WM6efHicX/Zuv1VYJdYBFy/Z
+         nwrV81Q/boSKhUlv0UMrBpbAo2WqQerfscW0Wf8fp4cwpt40A+dCSRAmqudgTe8S2wXS
+         W9pwBtMFI/8rQpuDXh6rRzArdDHActoQgJxpcJFJxGtRN0Ff+8pUpuifgfW6aLqf746s
+         k2TqjlYa4VB3pyMOKJBItFYwCES2HSyvvSVo3b+RwW3kk/yy41SUrkCr3OI3mmzM+Oth
+         aMmx5ZedOooqUimIcGAQ727gQQDIrcpYKsmYEasnAFUhPC5AyHs01F9bn4n5EeuyPUKL
+         bXWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KZ42H0SLRCb6moReftXhDXdbBURVm/UoF5wzsM8xUyc=;
+        b=WnCFvNi5CXhqv88MbnYdCzPPDCDAIaIILHAV4NdxzQe343vrAq7wt3gQT6OkOc1Z/Q
+         Xn0NvV4iF0O7i2W5r/cmPksJiRSVr/uoz59GgJWMob7BA6++Q2vU/YkNtRKR0gyjoATU
+         aIAq+30RQ0o2hAJ00/ASuyjsjhmIdPwtS17Ia1Kl/hPVuH3D/oWzSh8ODysVEwiDRTzQ
+         f73vYps5VT5vhd1RWOv6Gh+H3JpvMMpwx7ogycCEKyoKISxBPiWSUusj3n6AjxRdv+Gu
+         t+a7uEePaSDTC/TaV0EdBjh9ZdS+w+ikzFk3ORnMqZkmo4MF5Kn7YIdLGIM/02ZP4Q+K
+         H5kQ==
+X-Gm-Message-State: ACrzQf09DoRUKuw3PVCM63CEX4agrz74uqtg8MG8bRB/OE3r/Fq/iy8w
+        oHn/pW5XJVuDi5yNn3rDTn0=
+X-Google-Smtp-Source: AMsMyM5a+/nqgJ2p7Kn5x1+j6lOJAvpowKnoiKWCtowjrieFISNII+1U1wzCXSLPCB0uqGFGwajAhA==
+X-Received: by 2002:a17:90b:3a81:b0:213:ff6a:aa0d with SMTP id om1-20020a17090b3a8100b00213ff6aaa0dmr26881004pjb.86.1667652863308;
+        Sat, 05 Nov 2022 05:54:23 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-7.three.co.id. [180.214.233.7])
+        by smtp.gmail.com with ESMTPSA id 101-20020a17090a0fee00b0020669c8bd87sm1202427pjz.36.2022.11.05.05.54.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Nov 2022 05:54:22 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id A8F8510403A; Sat,  5 Nov 2022 19:54:18 +0700 (WIB)
+Date:   Sat, 5 Nov 2022 19:54:18 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Donald Hunter <donald.hunter@gmail.com>
+Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Maryam Tahhan <mtahhan@redhat.com>
+Subject: Re: [PATCH bpf-next v2] docs/bpf: document BPF ARRAY_OF_MAPS and
+ HASH_OF_MAPS
+Message-ID: <Y2Zc+vdyQF9a0NnV@debian.me>
+References: <20221104101928.9479-1-donald.hunter@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20221105110443.23872-1-yuehaibing@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.179.215]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500007.china.huawei.com (7.192.104.62)
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="itayzI8Iw9S89a8P"
+Content-Disposition: inline
+In-Reply-To: <20221104101928.9479-1-donald.hunter@gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-someone has post a fix, pls ignore this.
 
-On 2022/11/5 19:04, YueHaibing wrote:
-> poll() may return negative on error, 'ret' should be int.
->
-> Fixes: 3143d10b0945 ("selftests/xsk: Update poll test cases")
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-> ---
->  tools/testing/selftests/bpf/xskxceiver.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-> index 681a5db80dae..162d3a516f2c 100644
-> --- a/tools/testing/selftests/bpf/xskxceiver.c
-> +++ b/tools/testing/selftests/bpf/xskxceiver.c
-> @@ -1006,7 +1006,8 @@ static int __send_pkts(struct ifobject *ifobject, u32 *pkt_nb, struct pollfd *fd
->  {
->  	struct xsk_socket_info *xsk = ifobject->xsk;
->  	bool use_poll = ifobject->use_poll;
-> -	u32 i, idx = 0, ret, valid_pkts = 0;
-> +	u32 i, idx = 0, valid_pkts = 0;
-> +	int ret;
->  
->  	while (xsk_ring_prod__reserve(&xsk->tx, BATCH_SIZE, &idx) < BATCH_SIZE) {
->  		if (use_poll) {
+--itayzI8Iw9S89a8P
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Nov 04, 2022 at 10:19:28AM +0000, Donald Hunter wrote:
+> +Kernel BPF
+> +----------
+<snipped>...
+> +Kernel BPF
+> +----------
+> +
+
+As kernel test robot has reported [1], you need to disambiguate both heading
+titles above:
+
+---- >8 ----
+
+diff --git a/Documentation/bpf/map_of_maps.rst b/Documentation/bpf/map_of_m=
+aps.rst
+index d5a09bc669a34c..4dfe6ef9938e70 100644
+--- a/Documentation/bpf/map_of_maps.rst
++++ b/Documentation/bpf/map_of_maps.rst
+@@ -50,8 +50,8 @@ used to disable pre-allocation when it is too memory expe=
+nsive.
+ Usage
+ =3D=3D=3D=3D=3D
+=20
+-Kernel BPF
+-----------
++Helpers for kernel BPF
++----------------------
+=20
+ .. c:function::
+    void *bpf_map_lookup_elem(struct bpf_map *map, const void *key)
+@@ -62,8 +62,8 @@ helper returns a pointer to the inner map, or ``NULL`` if=
+ no entry was found.
+ Examples
+ =3D=3D=3D=3D=3D=3D=3D=3D
+=20
+-Kernel BPF
+-----------
++Kernel BPF examples
++-------------------
+=20
+ This snippet shows how to create an array of devmaps in a BPF program. Not=
+e that
+ the outer array can only be modified from user space using the syscall API.
+
+Thanks.
+
+[1]: https://lore.kernel.org/linux-doc/202211051940.yqd37TmX-lkp@intel.com/
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--itayzI8Iw9S89a8P
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY2Zc9AAKCRD2uYlJVVFO
+owv9AQCew1ehLnZ3zQ5cuvQ+b5S3pG4hE73oeIhKgFsWWRVZkAEA3E7xPbyTRxo8
+kKKQoeX3msv+iVY42ZY7NU7QuWZ2ygA=
+=U1Mq
+-----END PGP SIGNATURE-----
+
+--itayzI8Iw9S89a8P--
