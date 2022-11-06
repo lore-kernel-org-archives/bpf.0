@@ -2,282 +2,112 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 052CBC4321E
-	for <bpf@archiver.kernel.org>; Sun,  6 Nov 2022 21:07:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67590C433FE
+	for <bpf@archiver.kernel.org>; Sun,  6 Nov 2022 21:20:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbiKFVHu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 6 Nov 2022 16:07:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34248 "EHLO
+        id S230137AbiKFVU0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 6 Nov 2022 16:20:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbiKFVHh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 6 Nov 2022 16:07:37 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABC011A38;
-        Sun,  6 Nov 2022 13:07:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1667768855; x=1699304855;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=AcKbgq8eHUcebSnBNXishcsZ6PGYC2M9sFMuWQxliLM=;
-  b=vq9048FYKtjMkIHLfO+JXNFPB80w778heYRDKITAicDZB+SoC8Ze+9yu
-   Y6btuVKq1qlyMzN3hh/IvVTdG6YZ5EbeKCshgDcVtTHRwIzqqajfEjAB0
-   QEOW+dqKYe/g2zn1fTTQ3Q0X8O5AwPHg0Kg2Yg5cbEzQDS4uBJlmaoYO+
-   cSseZ+AeeS6+mdBCjy8Q4NMojh/X1znSIEVoSVVw9ixpxMTREGVaEKDsT
-   HhbqBm61+WWy2aiBeXhQs8mzdrmTSqva4ILSgXqQoh49B1f2Qke9MfaeO
-   s3aRVCw/FUeNL0ojSNWaWY/P3x3+lcH/x0Bb/ZIU7wtntbt7155eGh89s
-   w==;
-X-IronPort-AV: E=Sophos;i="5.96,142,1665471600"; 
-   d="scan'208";a="187885510"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Nov 2022 14:07:35 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Sun, 6 Nov 2022 14:07:34 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Sun, 6 Nov 2022 14:07:32 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <hawk@kernel.org>, <john.fastabend@gmail.com>,
-        <linux@armlinux.org.uk>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next v2 3/4] net: lan966x: Add basic XDP support
-Date:   Sun, 6 Nov 2022 22:11:53 +0100
-Message-ID: <20221106211154.3225784-4-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221106211154.3225784-1-horatiu.vultur@microchip.com>
-References: <20221106211154.3225784-1-horatiu.vultur@microchip.com>
+        with ESMTP id S229919AbiKFVUX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 6 Nov 2022 16:20:23 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFCC1182A
+        for <bpf@vger.kernel.org>; Sun,  6 Nov 2022 13:20:21 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id i21so14773643edj.10
+        for <bpf@vger.kernel.org>; Sun, 06 Nov 2022 13:20:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=oK5igal3q6ayeZfSf7symOA5kf21Ap76cUtu3OT6iJM=;
+        b=VNWJsUvJkZGo1bGouelVFDvxlrNmd3ctchL1nHD1fnWW31ffHEE6DiP9fzXgOyxXq3
+         YGxwiG5FNT15TL7SkRLlDIjh0H/WipPp73gJ6nKoFBMmoxTtpPqp0LCDKvJG9NYGk6S4
+         /cu2kdP38Hm3SYS1jgbzup3VqEmNuKzQeWx6QwCuCiTCNZLX3hOquro7aHrS7aILPkCr
+         fWOcQ1LoQGVME3ChJAFXu0m1x31R41TV6bUYwcbfeekLqAdg17zsyXWZ8DVvUsJCi+/y
+         xqPpkTwSwsLSlm3/cQs0IQwpl+79ZYb1TOJmB8ctzOxU46hdcGoGhNg9tNwbEJeCXkcS
+         IVfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oK5igal3q6ayeZfSf7symOA5kf21Ap76cUtu3OT6iJM=;
+        b=m/cYVmwz6S3QwxP81rs+rytiCtso6JJoqTNPffiSpQyjIwH5wZiBdRn1s2H9TchyXm
+         5Qfy45owG2au5S9/3AMW4WP4Drd7SlOsmOWotGBZbV9Pi4H4qBqp/ngfi+ir9n8Ue7ih
+         SUThT6bJSJ71UxccZ/jUIR9vPksEYqijMvvqugYyovPlUwVvEHXP2l4Fo+4aqNbSeh+S
+         INgB4Svo848iKRQUtw/7SmiRN1uLbRlYbsFeRf5JUnKAntWOiIaCzfi4ZhK83Zl7Mv45
+         mwKvZy6TbIqA5fEhbldBfe3UZUlDicWKyai3bxh2Ssk2XBuJ7fkhkPLVVk8m1U8EBaR9
+         ZXgA==
+X-Gm-Message-State: ACrzQf3UO+yQ7rA92bp6o6adwPj+QIdK6uHIaUeB0zLUlZ/T6Wg0Y6tX
+        l0GrCyyhLjO+n6LFwwUfhrfFvTqpi+NHlGJDtMs=
+X-Google-Smtp-Source: AMsMyM5gHR858R6ASOYIODJC0qNkBx/WwU0frJySrPVZjMXEwG+5nJiZrJo0cUJ57TqbUPqt9MjVsvvK+/q6iK1mpAY=
+X-Received: by 2002:a05:6402:2791:b0:461:c5b4:d114 with SMTP id
+ b17-20020a056402279100b00461c5b4d114mr46306049ede.357.1667769620458; Sun, 06
+ Nov 2022 13:20:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+References: <20221106015152.2556188-1-memxor@gmail.com> <20221106015152.2556188-2-memxor@gmail.com>
+In-Reply-To: <20221106015152.2556188-2-memxor@gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Sun, 6 Nov 2022 13:20:08 -0800
+Message-ID: <CAADnVQ+iuB6abH0=N0su6DGAW1FnOtgUQ+Zq6x9bH1w5X_6P=w@mail.gmail.com>
+Subject: Re: [PATCH RFC bpf-next v1 1/2] bpf: Fix deadlock for bpf_timer's spinlock
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce basic XDP support to lan966x driver. Currently the driver
-supports only the actions XDP_PASS, XDP_DROP and XDP_ABORTED.
+On Sat, Nov 5, 2022 at 6:52 PM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+>
+> Currently, unlike other tracing program types, BPF_PROG_TYPE_TRACING is
+> excluded is_tracing_prog_type checks. This means that they can use maps
+> containing bpf_spin_lock, bpf_timer, etc. without verification failure.
+>
+> However, allowing fentry/fexit programs to use maps that have such
+> bpf_timer in the map value can lead to deadlock.
+>
+> Suppose that an fentry program is attached to bpf_prog_put, and a TC
+> program executes and does bpf_map_update_elem on an array map that both
+> progs share. If the fentry programs calls bpf_map_update_elem for the
+> same key, it will lead to acquiring of the same lock from within the
+> critical section protecting the timer.
+>
+> The call chain is:
+>
+> bpf_prog_test_run_opts() // TC
+>   bpf_prog_TC
+>     bpf_map_update_elem(array_map, key=0)
+>       bpf_obj_free_fields
+>         bpf_timer_cancel_and_free
+>           __bpf_spin_lock_irqsave
+>             drop_prog_refcnt
+>               bpf_prog_put
+>                 bpf_prog_FENTRY // FENTRY
+>                   bpf_map_update_elem(array_map, key=0)
+>                     bpf_obj_free_fields
+>                       bpf_timer_cancel_and_free
+>                         __bpf_spin_lock_irqsave // DEADLOCK
+>
+> BPF_TRACE_ITER attach type can be excluded because it always executes in
+> process context.
+>
+> Update selftests using bpf_timer in fentry to TC as they will be broken
+> by this change.
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- .../net/ethernet/microchip/lan966x/Makefile   |  3 +-
- .../ethernet/microchip/lan966x/lan966x_fdma.c | 11 ++-
- .../ethernet/microchip/lan966x/lan966x_main.c |  5 ++
- .../ethernet/microchip/lan966x/lan966x_main.h | 13 +++
- .../ethernet/microchip/lan966x/lan966x_xdp.c  | 81 +++++++++++++++++++
- 5 files changed, 111 insertions(+), 2 deletions(-)
- create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
-
-diff --git a/drivers/net/ethernet/microchip/lan966x/Makefile b/drivers/net/ethernet/microchip/lan966x/Makefile
-index 962f7c5f9e7dd..251a7d561d633 100644
---- a/drivers/net/ethernet/microchip/lan966x/Makefile
-+++ b/drivers/net/ethernet/microchip/lan966x/Makefile
-@@ -11,4 +11,5 @@ lan966x-switch-objs  := lan966x_main.o lan966x_phylink.o lan966x_port.o \
- 			lan966x_ptp.o lan966x_fdma.o lan966x_lag.o \
- 			lan966x_tc.o lan966x_mqprio.o lan966x_taprio.o \
- 			lan966x_tbf.o lan966x_cbs.o lan966x_ets.o \
--			lan966x_tc_matchall.o lan966x_police.o lan966x_mirror.o
-+			lan966x_tc_matchall.o lan966x_police.o lan966x_mirror.o \
-+			lan966x_xdp.o
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-index d37765ddd53ae..fa4198c617667 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-@@ -423,6 +423,7 @@ static bool lan966x_fdma_rx_more_frames(struct lan966x_rx *rx)
- static int lan966x_fdma_rx_check_frame(struct lan966x_rx *rx, u64 *src_port)
- {
- 	struct lan966x *lan966x = rx->lan966x;
-+	struct lan966x_port *port;
- 	struct lan966x_db *db;
- 	struct page *page;
- 
-@@ -443,7 +444,11 @@ static int lan966x_fdma_rx_check_frame(struct lan966x_rx *rx, u64 *src_port)
- 	if (WARN_ON(*src_port >= lan966x->num_phys_ports))
- 		return FDMA_ERROR;
- 
--	return FDMA_PASS;
-+	port = lan966x->ports[*src_port];
-+	if (!lan966x_xdp_port_present(port))
-+		return FDMA_PASS;
-+
-+	return lan966x_xdp_run(port, page, FDMA_DCB_STATUS_BLOCKL(db->status));
- }
- 
- static struct sk_buff *lan966x_fdma_rx_get_frame(struct lan966x_rx *rx,
-@@ -524,6 +529,10 @@ static int lan966x_fdma_napi_poll(struct napi_struct *napi, int weight)
- 			lan966x_fdma_rx_free_page(rx);
- 			lan966x_fdma_rx_advance_dcb(rx);
- 			goto allocate_new;
-+		case FDMA_DROP:
-+			lan966x_fdma_rx_free_page(rx);
-+			lan966x_fdma_rx_advance_dcb(rx);
-+			continue;
- 		}
- 
- 		skb = lan966x_fdma_rx_get_frame(rx, src_port);
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-index 1a27946ccaf44..42be5d0f1f015 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-@@ -468,6 +468,7 @@ static const struct net_device_ops lan966x_port_netdev_ops = {
- 	.ndo_get_port_parent_id		= lan966x_port_get_parent_id,
- 	.ndo_eth_ioctl			= lan966x_port_ioctl,
- 	.ndo_setup_tc			= lan966x_tc_setup,
-+	.ndo_bpf			= lan966x_xdp,
- };
- 
- bool lan966x_netdevice_check(const struct net_device *dev)
-@@ -694,6 +695,7 @@ static void lan966x_cleanup_ports(struct lan966x *lan966x)
- 		if (port->dev)
- 			unregister_netdev(port->dev);
- 
-+		lan966x_xdp_port_deinit(port);
- 		if (lan966x->fdma && lan966x->fdma_ndev == port->dev)
- 			lan966x_fdma_netdev_deinit(lan966x, port->dev);
- 
-@@ -1136,6 +1138,9 @@ static int lan966x_probe(struct platform_device *pdev)
- 		lan966x->ports[p]->serdes = serdes;
- 
- 		lan966x_port_init(lan966x->ports[p]);
-+		err = lan966x_xdp_port_init(lan966x->ports[p]);
-+		if (err)
-+			goto cleanup_ports;
- 	}
- 
- 	lan966x_mdb_init(lan966x);
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-index 464fb5e4a8ff6..18f727f397fd6 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-@@ -103,10 +103,12 @@ enum macaccess_entry_type {
- /* FDMA return action codes for checking if the frame is valid
-  * FDMA_PASS, frame is valid and can be used
-  * FDMA_ERROR, something went wrong, stop getting more frames
-+ * FDMA_DROP, frame is dropped, but continue to get more frames
-  */
- enum lan966x_fdma_action {
- 	FDMA_PASS = 0,
- 	FDMA_ERROR,
-+	FDMA_DROP,
- };
- 
- struct lan966x_port;
-@@ -329,6 +331,9 @@ struct lan966x_port {
- 	enum netdev_lag_hash hash_type;
- 
- 	struct lan966x_port_tc tc;
-+
-+	struct bpf_prog *xdp_prog;
-+	struct xdp_rxq_info xdp_rxq;
- };
- 
- extern const struct phylink_mac_ops lan966x_phylink_mac_ops;
-@@ -536,6 +541,14 @@ void lan966x_mirror_port_stats(struct lan966x_port *port,
- 			       struct flow_stats *stats,
- 			       bool ingress);
- 
-+int lan966x_xdp_port_init(struct lan966x_port *port);
-+void lan966x_xdp_port_deinit(struct lan966x_port *port);
-+int lan966x_xdp(struct net_device *dev, struct netdev_bpf *xdp);
-+int lan966x_xdp_run(struct lan966x_port *port,
-+		    struct page *page,
-+		    u32 data_len);
-+bool lan966x_xdp_port_present(struct lan966x_port *port);
-+
- static inline void __iomem *lan_addr(void __iomem *base[],
- 				     int id, int tinst, int tcnt,
- 				     int gbase, int ginst,
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
-new file mode 100644
-index 0000000000000..b8f30abf4f795
---- /dev/null
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
-@@ -0,0 +1,81 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+
-+#include <linux/bpf.h>
-+#include <linux/bpf_trace.h>
-+#include <linux/filter.h>
-+
-+#include "lan966x_main.h"
-+
-+static int lan966x_xdp_setup(struct net_device *dev, struct netdev_bpf *xdp)
-+{
-+	struct lan966x_port *port = netdev_priv(dev);
-+	struct lan966x *lan966x = port->lan966x;
-+	struct bpf_prog *old_prog;
-+
-+	if (!lan966x->fdma) {
-+		NL_SET_ERR_MSG_MOD(xdp->extack,
-+				   "Allow to set xdp only when using fdma");
-+		return -EOPNOTSUPP;
-+	}
-+
-+	old_prog = xchg(&port->xdp_prog, xdp->prog);
-+	if (old_prog)
-+		bpf_prog_put(old_prog);
-+
-+	return 0;
-+}
-+
-+int lan966x_xdp(struct net_device *dev, struct netdev_bpf *xdp)
-+{
-+	switch (xdp->command) {
-+	case XDP_SETUP_PROG:
-+		return lan966x_xdp_setup(dev, xdp);
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+int lan966x_xdp_run(struct lan966x_port *port, struct page *page, u32 data_len)
-+{
-+	struct bpf_prog *xdp_prog = port->xdp_prog;
-+	struct lan966x *lan966x = port->lan966x;
-+	struct xdp_buff xdp;
-+	u32 act;
-+
-+	xdp_init_buff(&xdp, PAGE_SIZE << lan966x->rx.page_order,
-+		      &port->xdp_rxq);
-+	xdp_prepare_buff(&xdp, page_address(page), IFH_LEN_BYTES,
-+			 data_len - IFH_LEN_BYTES, false);
-+	act = bpf_prog_run_xdp(xdp_prog, &xdp);
-+	switch (act) {
-+	case XDP_PASS:
-+		return FDMA_PASS;
-+	default:
-+		bpf_warn_invalid_xdp_action(port->dev, xdp_prog, act);
-+		fallthrough;
-+	case XDP_ABORTED:
-+		trace_xdp_exception(port->dev, xdp_prog, act);
-+		fallthrough;
-+	case XDP_DROP:
-+		return FDMA_DROP;
-+	}
-+}
-+
-+bool lan966x_xdp_port_present(struct lan966x_port *port)
-+{
-+	return !!port->xdp_prog;
-+}
-+
-+int lan966x_xdp_port_init(struct lan966x_port *port)
-+{
-+	struct lan966x *lan966x = port->lan966x;
-+
-+	return xdp_rxq_info_reg(&port->xdp_rxq, port->dev, 0,
-+				lan966x->napi.napi_id);
-+}
-+
-+void lan966x_xdp_port_deinit(struct lan966x_port *port)
-+{
-+	if (xdp_rxq_info_is_reg(&port->xdp_rxq))
-+		xdp_rxq_info_unreg(&port->xdp_rxq);
-+}
--- 
-2.38.0
-
+which is an obvious red flag and the reason why we cannot do
+this change.
+This specific issue could be addressed with addition of
+notrace in drop_prog_refcnt, bpf_prog_put, __bpf_prog_put.
+Other calls from __bpf_prog_put can stay as-is,
+since they won't be called in this convoluted case.
+I frankly don't get why you're spending time digging such
+odd corner cases that no one can hit in real use.
+There are probably other equally weird corner cases and sooner
+or later will just declare them as 'wont-fix'. Not kidding.
+Please channel your energy to something that helps.
+Positive patches are more pleasant to review.
