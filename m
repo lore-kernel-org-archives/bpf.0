@@ -2,160 +2,109 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F29EC433FE
-	for <bpf@archiver.kernel.org>; Mon,  7 Nov 2022 09:22:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F380C433FE
+	for <bpf@archiver.kernel.org>; Mon,  7 Nov 2022 09:23:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbiKGJWN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Nov 2022 04:22:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48452 "EHLO
+        id S230239AbiKGJXw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Nov 2022 04:23:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231791AbiKGJWK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Nov 2022 04:22:10 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCE217062;
-        Mon,  7 Nov 2022 01:22:08 -0800 (PST)
+        with ESMTP id S231346AbiKGJXt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Nov 2022 04:23:49 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C70656E;
+        Mon,  7 Nov 2022 01:23:48 -0800 (PST)
 Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N5Qf34bQkzJnWR;
-        Mon,  7 Nov 2022 17:19:07 +0800 (CST)
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N5QlJ0H8NzRnsk;
+        Mon,  7 Nov 2022 17:23:40 +0800 (CST)
 Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
  dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 7 Nov 2022 17:22:06 +0800
-Received: from [10.67.111.205] (10.67.111.205) by
+ 15.1.2375.31; Mon, 7 Nov 2022 17:23:46 +0800
+Received: from ubuntu1804.huawei.com (10.67.174.61) by
  kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 7 Nov 2022 17:22:05 +0800
-Subject: Re: [PATCH bpf RESEND 2/4] bpf: Remove size check for sk in
- bpf_skb_is_valid_access for 32-bit architecture
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shubham Bansal <illusionist.neo@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Delyan Kratunov <delyank@fb.com>,
-        Artem Savkov <asavkov@redhat.com>, bpf <bpf@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-References: <20221103092118.248600-1-yangjihong1@huawei.com>
- <20221103092118.248600-3-yangjihong1@huawei.com>
- <Y2OknBtLgqTHSrvy@shell.armlinux.org.uk>
- <CAADnVQ+gX8Xc57K2hSG5ZNfU1RtKBFgEp2yOWq08X68bWjMqsg@mail.gmail.com>
- <CAEf4BzaJMfCXf_uUgyuWBddyd3qrV7SgpVy-hicuOn87FigMSg@mail.gmail.com>
- <CAADnVQJAp4=ouSTn2UM=N-EHvO=v2RMVN1dH8erkyMU9ZF1QCA@mail.gmail.com>
+ 15.1.2375.31; Mon, 7 Nov 2022 17:23:45 +0800
 From:   Yang Jihong <yangjihong1@huawei.com>
-Message-ID: <dd998453-1baf-272a-8130-76529d338f2f@huawei.com>
-Date:   Mon, 7 Nov 2022 17:22:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <haoluo@google.com>, <jolsa@kernel.org>,
+        <illusionist.neo@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <mykolal@fb.com>, <shuah@kernel.org>,
+        <benjamin.tissoires@redhat.com>, <memxor@gmail.com>,
+        <asavkov@redhat.com>, <delyank@fb.com>, <bpf@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+CC:     <yangjihong1@huawei.com>
+Subject: [PATCH bpf v2 0/5] bpf: Support kernel function call in 32-bit ARM
+Date:   Mon, 7 Nov 2022 17:20:27 +0800
+Message-ID: <20221107092032.178235-1-yangjihong1@huawei.com>
+X-Mailer: git-send-email 2.30.GIT
 MIME-Version: 1.0
-In-Reply-To: <CAADnVQJAp4=ouSTn2UM=N-EHvO=v2RMVN1dH8erkyMU9ZF1QCA@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.61]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
  kwepemm600003.china.huawei.com (7.193.23.202)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello,
+1. Patch1 is dependent patch to fix zext extension error in 32-bit ARM.
+2. Patch2 and patch3 solve the problem that the bpf check fails because
+   load's mem size is modified in CO_RE from the kernel and user modes,
+   Currently, there are different opinions and a final solution needs to
+   be selected.
+3. Patch4 supports bpf fkunc in 32-bit ARM for EABI.
+4. Patch5 is used to add test cases to cover some parameter scenarios
+   states by AAPCS.
 
-On 2022/11/5 7:37, Alexei Starovoitov wrote:
-> On Fri, Nov 4, 2022 at 3:43 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
->>
->> On Thu, Nov 3, 2022 at 11:15 AM Alexei Starovoitov
->> <alexei.starovoitov@gmail.com> wrote:
->>>
->>> On Thu, Nov 3, 2022 at 4:23 AM Russell King (Oracle)
->>> <linux@armlinux.org.uk> wrote:
->>>>
->>>> On Thu, Nov 03, 2022 at 05:21:16PM +0800, Yang Jihong wrote:
->>>>> The error code -EACCES is returned when bpf prog is tested in 32-bit environment,
->>>>> This is because bpf_object__relocate modifies the instruction to change memory
->>>>> size to 4 bytes, as shown in the following messages:
->>>>>
->>>>> libbpf: prog 'kfunc_call_test1': relo #2: matching candidate #0 <byte_off> [18342] struct __sk_buff.sk (0:30:0 @ offset 168)
->>>>> libbpf: prog 'kfunc_call_test1': relo #2: patched insn #1 (LDX/ST/STX) off 168 -> 168
->>>>> libbpf: prog 'kfunc_call_test1': relo #2: patched insn #1 (LDX/ST/STX) mem_sz 8 -> 4
->>>>>
->>>>> As a result, the bpf_skb_is_valid_access check fails. For 32-bit architecture,
->>>>> unnecessary checks need to be deleted.
->>>>
->>>> Isn't the purpose of this check to ensure that the entire pointer is
->>>> written, and BPF can't write half of it?
->>>>
->>>>
->>>>>        case offsetof(struct __sk_buff, sk):
->>>>> -             if (type == BPF_WRITE || size != sizeof(__u64))
->>>>> -                     return false;
->>>>
->>>> Wouldn't "(size != sizeof(struct bpf_sock *) && size != sizeof(__u64))"
->>>> be more appropriate here, so 32-bit can only write the 32-bit pointer
->>>> or the full 64-bit value, and 64-bit can only write the 64-bit pointer?
->>>> Or is there a reason not to? bpf folk?
->>>
->>> You're correct. The patch is completely wrong.
->>> The bug is elsewhere.
->>
->> So I looked at this a bit (and replied to the old version of this
->> patch). What happens in the kernel is that we expect 64-bit load but
->> rewrite it to 32-bit load on 32-bit architectures (because we just use
->> sizeof(struct sk_buff, sk) which is 4 bytes on 32-bit arch.
->>
->> The problem here is that libbpf adjusts such pointer accesses from
->> 8-byte read to 4-byte reads for preserve_access_index (because libbpf
->> sees that pointer is really 4 byte long), which is what we actually
->> want in the general case. Here the assumption was made before CO-RE
->> that __sk_buff is a stable (and fake) UAPI and the correct BPF program
->> will access sk as a 64-bit pointer because BPF-side pointers always
->> appear as 64-bit.
->>
->> But from a correctness standpoint I think it should be fine to enable
->> both 32- and 64-bit loads for such pointers in __sk_buff for 32-bit
->> host arch. This will work well with CO-RE and will be correctly
->> rewritten to 32-bit or 64-bit accesses, depending on host
->> architecture.
->>
->> We should still reject 32-bit load on 64-bit host arch, though.
-> 
-> Replied in the other thread as well :)
-> The CO_RE screws up access here.
-> Since it's a load of a pointer the verifier has to see it as a 8-byte load.
-> When CO-RE converts it to 4 byte the verifier won't recognize it
-> as a pointer load anymore.
-> We cannot easily convert 64-bit BPF ISA into 32-bit.
-> It's a massive amount of work.
-> .
+The following is the test_progs result in the 32-bit ARM environment:
 
- From the above discussion, there are two different solutions:
-1. Modify bpf_skb_is_valid_access to ensure that 32-bit can only load 
-the 32-bit pointer or the full 64-bit value, and 64-bit can only load 
-the 64-bit pointer
-2. Modify libbpf, CO_RE skips adjust load's mem size and retains the 
-8-byte load.
-The two fixes will be added in the next version.
-Please review the solution to be selected.
+  # uname -m
+  armv7l
+  # echo 1 > /proc/sys/net/core/bpf_jit_enable
+  # ./test_progs -t kfunc_call
+  #1/1     kfunc_call/kfunc_syscall_test_fail:OK
+  #1/2     kfunc_call/kfunc_syscall_test_null_fail:OK
+  #1/3     kfunc_call/kfunc_call_test_get_mem_fail_rdonly:OK
+  #1/4     kfunc_call/kfunc_call_test_get_mem_fail_use_after_free:OK
+  #1/5     kfunc_call/kfunc_call_test_get_mem_fail_oob:OK
+  #1/6     kfunc_call/kfunc_call_test_get_mem_fail_not_const:OK
+  #1/7     kfunc_call/kfunc_call_test_mem_acquire_fail:OK
+  #1/8     kfunc_call/kfunc_call_test1:OK
+  #1/9     kfunc_call/kfunc_call_test2:OK
+  #1/10    kfunc_call/kfunc_call_test4:OK
+  #1/11    kfunc_call/kfunc_call_test_ref_btf_id:OK
+  #1/12    kfunc_call/kfunc_call_test_get_mem:OK
+  #1/13    kfunc_call/kfunc_syscall_test:OK
+  #1/14    kfunc_call/kfunc_syscall_test_null:OK
+  #1/17    kfunc_call/destructive:OK
 
-Thanks,
-Yang
+
+Yang Jihong (5):
+  bpf: Adapt 32-bit return value kfunc for 32-bit ARM when zext
+    extension
+  bpf: Adjust sk size check for sk in bpf_skb_is_valid_access for CO_RE
+    in 32-bit arch
+  libbpf: Skip adjust mem size for load pointer in 32-bit arch in CO_RE
+  bpf: Add kernel function call support in 32-bit ARM for EABI
+  bpf:selftests: Add kfunc_call test for mixing 32-bit and 64-bit
+    parameters
+
+ arch/arm/net/bpf_jit_32.c                     | 142 ++++++++++++++++++
+ kernel/bpf/verifier.c                         |   3 +
+ net/bpf/test_run.c                            |  18 +++
+ net/core/filter.c                             |   8 +-
+ tools/lib/bpf/libbpf.c                        |  34 ++++-
+ .../selftests/bpf/prog_tests/kfunc_call.c     |   3 +
+ .../selftests/bpf/progs/kfunc_call_test.c     |  52 +++++++
+ 7 files changed, 254 insertions(+), 6 deletions(-)
+
+-- 
+2.30.GIT
+
