@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A22BC4332F
-	for <bpf@archiver.kernel.org>; Mon,  7 Nov 2022 23:10:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DA57C4332F
+	for <bpf@archiver.kernel.org>; Mon,  7 Nov 2022 23:10:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232420AbiKGXKL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Nov 2022 18:10:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46898 "EHLO
+        id S232375AbiKGXKQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Nov 2022 18:10:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232375AbiKGXKJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Nov 2022 18:10:09 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96BAD24BE7
-        for <bpf@vger.kernel.org>; Mon,  7 Nov 2022 15:10:07 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id b29so12171889pfp.13
-        for <bpf@vger.kernel.org>; Mon, 07 Nov 2022 15:10:07 -0800 (PST)
+        with ESMTP id S232274AbiKGXKO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Nov 2022 18:10:14 -0500
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20171FCD6
+        for <bpf@vger.kernel.org>; Mon,  7 Nov 2022 15:10:13 -0800 (PST)
+Received: by mail-pf1-x441.google.com with SMTP id k15so12212361pfg.2
+        for <bpf@vger.kernel.org>; Mon, 07 Nov 2022 15:10:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VEFwB6dYPn2S6gtavk14IeHvIx35vWmMY6ZMPqt7ZFo=;
-        b=bs34dEqzODn/nH7VMn82bHUFLkMa8z4THlyZ6azFoV7N5Ajp7XAY87DOzDxqBgceU5
-         rVwdw9buULEpZJdBRNpJaN3vyrnTZ5K9MOnQhKGEceOVvjibvb5fXr8HGx1liDnYgtmj
-         x43xVYodTM+m7O58G0JrWZjMl09tUYHzGSeSTSL47hYTNWlMVLieXOgOMUaL6Exw8lNG
-         /kkBqAbdUZHRua3J0bPMHRW8mOCx2dr2fz8FTckMCvvG2xZJxp+uqacOp6b3aGLO5IY6
-         HQPNBdpE40Oyupu6LSaXgWCgzPw76wZEAB6P0oE576scNFlvXSET62xZd7gWc3qDwhl8
-         zRbQ==
+        bh=7Qn946/Dfi7ihlJL944GILOqS6Benn+3+4NY3sXoxuY=;
+        b=XMwK30ZTTwl1vVsJa6DnR4Hfu9pWzDKwaCk7c7NHjZ8NkN2rBcDCqVDIxBk4mRrlTc
+         Tf5KgH59BOb884gu+epRQ9ZqQgU1rwrm/8VYEBINo+umYEF2WGV/caIXcYKyO5GZtssv
+         JkHpxg5zSMuqmA9/oMG7guJtkiGRyJ0Gxg0A4IP4SP2FoythCAZ85GNRcCayW/QgfB2O
+         1VWUDmj9IPwpU3SLmqL6Q3Rt4xwyUboiAGSmKlAMYifQBS7EAuvAa0ftd0DkgIj5lkW7
+         lp+0/y7vV4LkEsdCIAXB5DLoh0sR1AmFYdYdccLfubJBHrQiU/qJFYbC9zuF8w7A+7ZB
+         3FfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VEFwB6dYPn2S6gtavk14IeHvIx35vWmMY6ZMPqt7ZFo=;
-        b=fgBxGnkF/SsAqtwK13U01UrwVQy0DOlkWP6BdWFW1cC+5RS1+gEIpvnklT0DZWfI2x
-         x228AtIWcTQ5j4ch7Hb9lLVmF6m5vsjHPHNNyM3bPTSZ6jmi5pwa1Jr1+3zsSDXw71+E
-         4mwYWYA4RGsD7VPY/Nds7CxW6rD+ISmZxK4aouy2lTL1gbo+Ce/Qccg/JhLcOJHQVDGd
-         OCbIzWE5lYm0ivKISw6ud79jMITF4oOg1JrevgIcSKhbqblbJomt5QQ5yrqNrkDPQUPy
-         X7GKUZ+oQFHOSJhmYlfX2S4XQfA5nNz+w+VxLM7s6sZh3uOQ9LVCf4L4N0cr96HKzFKZ
-         /elA==
-X-Gm-Message-State: ACrzQf0COoOz9tllyFbegamLGZD3dryHGWzTmVYDJH+7oLQomYID9ZFE
-        kiHyuAE978sd1wmk88IznnpAZMtofEwROQ==
-X-Google-Smtp-Source: AMsMyM5gOFguqm3DYiIhovjWjeCZtpBydypwg/yvkd0G9bP2KyO4KnrenCAfkKjf1QacnkkiMXR7Fg==
-X-Received: by 2002:a05:6a00:2285:b0:56d:5d42:3aa8 with SMTP id f5-20020a056a00228500b0056d5d423aa8mr45135888pfe.79.1667862606687;
-        Mon, 07 Nov 2022 15:10:06 -0800 (PST)
+        bh=7Qn946/Dfi7ihlJL944GILOqS6Benn+3+4NY3sXoxuY=;
+        b=czecHbh9dFLiaTQ7+Pp3WFSBDNxPoLLjQKTF7r5ZrvxnaFy/uJ2BZsq9tLee5bjmHm
+         4PRs/dtnDoqNEoRphZXLa83OXU+tZpHwbhTC73JmAzE1j7ZConhCHy50SBo7ojCuYcuK
+         m0dmvGl27pLjZFQORWzCGraemjqx7HL/ponAIZjOsT+9xD1Sn/IZ2Pc/oQi7qkXg9ocD
+         AoJbDQdtFxXF3MEbpIkXjmgPrRh7lfgLbg7FfKnkDMeAFSP/IqCpQe3E+1lACgSVxOXf
+         ewknvqxZLjWbZCedB3ki5hjAxJ74LRXrFvSHPu2e/RTT4LRV5m/HsHJ1w3UQGLmCC+ms
+         tG8A==
+X-Gm-Message-State: ACrzQf1XkEKANRkz6TUy3/Jd+XZKC7icfI2OM+yw8e03tZro90b7mHW5
+        nZwlKabtIjtzL0se5qwEel/OvvJEwsuhBw==
+X-Google-Smtp-Source: AMsMyM79IR6O7oohYfE264eixE1mbMnECOnodhqANdwKw0qvBzPHHfl2uqplnl7iENOJixC8aXN1Zw==
+X-Received: by 2002:a62:ea0d:0:b0:55f:8624:4d8b with SMTP id t13-20020a62ea0d000000b0055f86244d8bmr52836284pfh.74.1667862612840;
+        Mon, 07 Nov 2022 15:10:12 -0800 (PST)
 Received: from localhost ([14.96.13.220])
-        by smtp.gmail.com with ESMTPSA id j21-20020a170902c3d500b00186c9d17af2sm5513167plj.17.2022.11.07.15.10.05
+        by smtp.gmail.com with ESMTPSA id b4-20020a170902650400b001869079d083sm5520176plk.90.2022.11.07.15.10.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 15:10:06 -0800 (PST)
+        Mon, 07 Nov 2022 15:10:12 -0800 (PST)
 From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -57,534 +57,216 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Martin KaFai Lau <martin.lau@kernel.org>,
         Dave Marchevsky <davemarchevsky@meta.com>,
         Delyan Kratunov <delyank@meta.com>
-Subject: [PATCH bpf-next v5 03/25] bpf: Support bpf_list_head in map values
-Date:   Tue,  8 Nov 2022 04:39:28 +0530
-Message-Id: <20221107230950.7117-4-memxor@gmail.com>
+Subject: [PATCH bpf-next v5 05/25] bpf: Rename MEM_ALLOC to MEM_RINGBUF
+Date:   Tue,  8 Nov 2022 04:39:30 +0530
+Message-Id: <20221107230950.7117-6-memxor@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221107230950.7117-1-memxor@gmail.com>
 References: <20221107230950.7117-1-memxor@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=16579; i=memxor@gmail.com; h=from:subject; bh=ftOaE2WRB3lp74ANQAmDow4oJIZ7qZn7IimT/1j3Ius=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBjaY+1f5mA2kLUZP6gRstqKMbLVe4mGWUOCqegDMcE T8mNi1yJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCY2mPtQAKCRBM4MiGSL8RykV1D/ 9Z8YCpFcgImEVm5ixbCWVSdefB3Xc7RzHRGh+rPRX8JzFToSmMVqhJGe12dHtgTzu2Znl5BhSpBaJI nl4Ek6bE4eadcok4+FNOJEihkbcUT2LYQSqsxaaL0CU1cBSScCO63Ii3TxHDFNb2GiD8G8K9PgOeNq HHfTIDDa3p1FJ3tAz47rp1lM8QQxPqO3pqSyf+4BVMHpiO9DHZuAEWk/OlUghcprWOnh+y4kHLMmNh 5DqCrthVYPRaWdh7ji5qXrEvvGGOVYdOkBQQuKRBeWJwdkkJuV191r2n7kOdGF2BMrMWe5PzV/LBfb 9Bw/PFF6uBx0dS11Z6QPfiYe6Yu/gySOzddVo/7alO6asUlPd6yCmlzPyJKFuMV4O7mxoVYZ68FLnk 7c9Q+kpXgE182UBpnhG+3JNph+5FZ7OT033a5BeNYH8WQzTKxwuaz7tsibDZuaZSW6fkzhRTEOd278 vPLYdgDUNQhfgKuProRLQYv3CD0kYwN36DFjIstqaK/XliyfCixxyvvoN6oWr0A7ZTcDImiJd/W+oe g12wTzrMSaMYPCpMEpw6a+dNLxiLbnV95Fgvr9jDgX5ZqgDZz01y+bRCSGcaLoGi21piBtpoTLMreQ aoXN7+DXgI265A4QqjxG9IK8+hArQUb7zNTAF6VppJ80hckyCINDH1krAJtQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=9098; i=memxor@gmail.com; h=from:subject; bh=QiF5aiMWdeVPrX2X+RNmqO7yjZn/FhBvFcVkHpPSfBU=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBjaY+16ZPke4vV7BNRjXfeS4Pi5fu52IQiEddTUb6G YQ5duCiJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCY2mPtQAKCRBM4MiGSL8RyhNhD/ oCCPkYYpmE1Zear4NJ/VDyUdlW8fz0ddybq/sGhmRDvtia58pKWM18LIWD7LNWbBluiQxmWq3FWf+j w2UdWO93j6DfK9ytrhNmaxTIUicpFqrjjtE8FAnK+1e7YmTBicvcEAdxsZkPMJVWmhVTBDneofKwBH lOIDUmsn2Py6LJMGTG28AX2Kt1ybEoLx1a016SlPfIoCzMBJyW83HHDTN8kGa3skAEsLVDy0BOIhau 0Ae3EW6nDlVKzHcqIQP09/XxLXD7b80FHZxP+vDf/rePFRfY0lrA2yyfjRMfCdOwFldKkG8fX3+ldi gsdi020DJg0KdNNAIFkRbS9ljs1nDvJL2pmlo91DySemrbFLWrmuBE2bfZZEVZ2H8ZV8m7lLoYSdw6 87QYL3WRetQLNh8wGUKj7znv8Ykg9S7pEJgFZVtQb2Mddh7usfmepDZ38WDubrDWaJCT3ezHn4hrJB 0iZQt835KmrSNAHwU9c7IYhpyivLpzn5mkyM0kzdqd/kv7RiodwkqCJ/4ZIDD4te3Qe5atMIjC57R8 K5BxJk4hMpGSMvN8aPLkwx9jbRqRDp/sN18zYjZ906+BpvRoT6qkMgTNdfkRgGzOCDO4fg7/Ahph/z x4VCk3L5lul7BwpvUfqcnz6ZWHnpprYtzw3UuR2KL/r2UolPNSGFsReLy7hg==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add the support on the map side to parse, recognize, verify, and build
-metadata table for a new special field of the type struct bpf_list_head.
-To parameterize the bpf_list_head for a certain value type and the
-list_node member it will accept in that value type, we use BTF
-declaration tags.
+Currently, verifier uses MEM_ALLOC type tag to specially tag memory
+returned from bpf_ringbuf_reserve helper. However, this is currently
+only used for this purpose and there is an implicit assumption that it
+only refers to ringbuf memory (e.g. the check for ARG_PTR_TO_ALLOC_MEM
+in check_func_arg_reg_off).
 
-The definition of bpf_list_head in a map value will be done as follows:
+Hence, rename MEM_ALLOC to MEM_RINGBUF to indicate this special
+relationship and instead open the use of MEM_ALLOC for more generic
+allocations made for user types.
 
-struct foo {
-	struct bpf_list_node node;
-	int data;
-};
+Also, since ARG_PTR_TO_ALLOC_MEM_OR_NULL is unused, simply drop it.
 
-struct map_value {
-	struct bpf_list_head head __contains(foo, node);
-};
-
-Then, the bpf_list_head only allows adding to the list 'head' using the
-bpf_list_node 'node' for the type struct foo.
-
-The 'contains' annotation is a BTF declaration tag composed of four
-parts, "contains:name:node" where the name is then used to look up the
-type in the map BTF, with its kind hardcoded to BTF_KIND_STRUCT during
-the lookup. The node defines name of the member in this type that has
-the type struct bpf_list_node, which is actually used for linking into
-the linked list. For now, 'kind' part is hardcoded as struct.
-
-This allows building intrusive linked lists in BPF, using container_of
-to obtain pointer to entry, while being completely type safe from the
-perspective of the verifier. The verifier knows exactly the type of the
-nodes, and knows that list helpers return that type at some fixed offset
-where the bpf_list_node member used for this list exists. The verifier
-also uses this information to disallow adding types that are not
-accepted by a certain list.
-
-For now, no elements can be added to such lists. Support for that is
-coming in future patches, hence draining and freeing items is done with
-a TODO that will be resolved in a future patch.
-
-Note that the bpf_list_head_free function moves the list out to a local
-variable under the lock and releases it, doing the actual draining of
-the list items outside the lock. While this helps with not holding the
-lock for too long pessimizing other concurrent list operations, it is
-also necessary for deadlock prevention: unless every function called in
-the critical section would be notrace, a fentry/fexit program could
-attach and call bpf_map_update_elem again on the map, leading to the
-same lock being acquired if the key matches and lead to a deadlock.
-While this requires some special effort on part of the BPF programmer to
-trigger and is highly unlikely to occur in practice, it is always better
-if we can avoid such a condition.
-
-While notrace would prevent this, doing the draining outside the lock
-has advantages of its own, hence it is used to also fix the deadlock
-related problem.
+Finally, update selftests using 'alloc_' verifier string to 'ringbuf_'.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf.h            |  17 ++++
- include/uapi/linux/bpf.h       |  10 +++
- kernel/bpf/btf.c               | 143 ++++++++++++++++++++++++++++++++-
- kernel/bpf/helpers.c           |  32 ++++++++
- kernel/bpf/syscall.c           |  22 ++++-
- kernel/bpf/verifier.c          |   7 ++
- tools/include/uapi/linux/bpf.h |  10 +++
- 7 files changed, 237 insertions(+), 4 deletions(-)
+ include/linux/bpf.h                               | 11 ++++-------
+ kernel/bpf/ringbuf.c                              |  6 +++---
+ kernel/bpf/verifier.c                             | 14 +++++++-------
+ tools/testing/selftests/bpf/prog_tests/dynptr.c   |  2 +-
+ tools/testing/selftests/bpf/verifier/ringbuf.c    |  2 +-
+ tools/testing/selftests/bpf/verifier/spill_fill.c |  2 +-
+ 6 files changed, 17 insertions(+), 20 deletions(-)
 
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index f08eb2d27de0..05f98e9e5c48 100644
+index 2fe3ec620d54..afc1c51b59ff 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -175,6 +175,7 @@ enum btf_field_type {
- 	BPF_KPTR_UNREF = (1 << 2),
- 	BPF_KPTR_REF   = (1 << 3),
- 	BPF_KPTR       = BPF_KPTR_UNREF | BPF_KPTR_REF,
-+	BPF_LIST_HEAD  = (1 << 4),
+@@ -488,10 +488,8 @@ enum bpf_type_flag {
+ 	 */
+ 	MEM_RDONLY		= BIT(1 + BPF_BASE_TYPE_BITS),
+ 
+-	/* MEM was "allocated" from a different helper, and cannot be mixed
+-	 * with regular non-MEM_ALLOC'ed MEM types.
+-	 */
+-	MEM_ALLOC		= BIT(2 + BPF_BASE_TYPE_BITS),
++	/* MEM points to BPF ring buffer reservation. */
++	MEM_RINGBUF		= BIT(2 + BPF_BASE_TYPE_BITS),
+ 
+ 	/* MEM is in user address space. */
+ 	MEM_USER		= BIT(3 + BPF_BASE_TYPE_BITS),
+@@ -565,7 +563,7 @@ enum bpf_arg_type {
+ 	ARG_PTR_TO_LONG,	/* pointer to long */
+ 	ARG_PTR_TO_SOCKET,	/* pointer to bpf_sock (fullsock) */
+ 	ARG_PTR_TO_BTF_ID,	/* pointer to in-kernel struct */
+-	ARG_PTR_TO_ALLOC_MEM,	/* pointer to dynamically allocated memory */
++	ARG_PTR_TO_RINGBUF_MEM,	/* pointer to dynamically reserved ringbuf memory */
+ 	ARG_CONST_ALLOC_SIZE_OR_ZERO,	/* number of allocated bytes requested */
+ 	ARG_PTR_TO_BTF_ID_SOCK_COMMON,	/* pointer to in-kernel sock_common or bpf-mirrored bpf_sock */
+ 	ARG_PTR_TO_PERCPU_BTF_ID,	/* pointer to in-kernel percpu type */
+@@ -582,7 +580,6 @@ enum bpf_arg_type {
+ 	ARG_PTR_TO_MEM_OR_NULL		= PTR_MAYBE_NULL | ARG_PTR_TO_MEM,
+ 	ARG_PTR_TO_CTX_OR_NULL		= PTR_MAYBE_NULL | ARG_PTR_TO_CTX,
+ 	ARG_PTR_TO_SOCKET_OR_NULL	= PTR_MAYBE_NULL | ARG_PTR_TO_SOCKET,
+-	ARG_PTR_TO_ALLOC_MEM_OR_NULL	= PTR_MAYBE_NULL | ARG_PTR_TO_ALLOC_MEM,
+ 	ARG_PTR_TO_STACK_OR_NULL	= PTR_MAYBE_NULL | ARG_PTR_TO_STACK,
+ 	ARG_PTR_TO_BTF_ID_OR_NULL	= PTR_MAYBE_NULL | ARG_PTR_TO_BTF_ID,
+ 	/* pointer to memory does not need to be initialized, helper function must fill
+@@ -617,7 +614,7 @@ enum bpf_return_type {
+ 	RET_PTR_TO_SOCKET_OR_NULL	= PTR_MAYBE_NULL | RET_PTR_TO_SOCKET,
+ 	RET_PTR_TO_TCP_SOCK_OR_NULL	= PTR_MAYBE_NULL | RET_PTR_TO_TCP_SOCK,
+ 	RET_PTR_TO_SOCK_COMMON_OR_NULL	= PTR_MAYBE_NULL | RET_PTR_TO_SOCK_COMMON,
+-	RET_PTR_TO_ALLOC_MEM_OR_NULL	= PTR_MAYBE_NULL | MEM_ALLOC | RET_PTR_TO_MEM,
++	RET_PTR_TO_RINGBUF_MEM_OR_NULL	= PTR_MAYBE_NULL | MEM_RINGBUF | RET_PTR_TO_MEM,
+ 	RET_PTR_TO_DYNPTR_MEM_OR_NULL	= PTR_MAYBE_NULL | RET_PTR_TO_MEM,
+ 	RET_PTR_TO_BTF_ID_OR_NULL	= PTR_MAYBE_NULL | RET_PTR_TO_BTF_ID,
+ 
+diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
+index 9e832acf4692..80f4b4d88aaf 100644
+--- a/kernel/bpf/ringbuf.c
++++ b/kernel/bpf/ringbuf.c
+@@ -447,7 +447,7 @@ BPF_CALL_3(bpf_ringbuf_reserve, struct bpf_map *, map, u64, size, u64, flags)
+ 
+ const struct bpf_func_proto bpf_ringbuf_reserve_proto = {
+ 	.func		= bpf_ringbuf_reserve,
+-	.ret_type	= RET_PTR_TO_ALLOC_MEM_OR_NULL,
++	.ret_type	= RET_PTR_TO_RINGBUF_MEM_OR_NULL,
+ 	.arg1_type	= ARG_CONST_MAP_PTR,
+ 	.arg2_type	= ARG_CONST_ALLOC_SIZE_OR_ZERO,
+ 	.arg3_type	= ARG_ANYTHING,
+@@ -490,7 +490,7 @@ BPF_CALL_2(bpf_ringbuf_submit, void *, sample, u64, flags)
+ const struct bpf_func_proto bpf_ringbuf_submit_proto = {
+ 	.func		= bpf_ringbuf_submit,
+ 	.ret_type	= RET_VOID,
+-	.arg1_type	= ARG_PTR_TO_ALLOC_MEM | OBJ_RELEASE,
++	.arg1_type	= ARG_PTR_TO_RINGBUF_MEM | OBJ_RELEASE,
+ 	.arg2_type	= ARG_ANYTHING,
  };
  
- struct btf_field_kptr {
-@@ -184,11 +185,18 @@ struct btf_field_kptr {
- 	u32 btf_id;
+@@ -503,7 +503,7 @@ BPF_CALL_2(bpf_ringbuf_discard, void *, sample, u64, flags)
+ const struct bpf_func_proto bpf_ringbuf_discard_proto = {
+ 	.func		= bpf_ringbuf_discard,
+ 	.ret_type	= RET_VOID,
+-	.arg1_type	= ARG_PTR_TO_ALLOC_MEM | OBJ_RELEASE,
++	.arg1_type	= ARG_PTR_TO_RINGBUF_MEM | OBJ_RELEASE,
+ 	.arg2_type	= ARG_ANYTHING,
  };
  
-+struct btf_field_list_head {
-+	struct btf *btf;
-+	u32 value_btf_id;
-+	u32 node_offset;
-+};
-+
- struct btf_field {
- 	u32 offset;
- 	enum btf_field_type type;
- 	union {
- 		struct btf_field_kptr kptr;
-+		struct btf_field_list_head list_head;
- 	};
- };
- 
-@@ -266,6 +274,8 @@ static inline const char *btf_field_type_name(enum btf_field_type type)
- 	case BPF_KPTR_UNREF:
- 	case BPF_KPTR_REF:
- 		return "kptr";
-+	case BPF_LIST_HEAD:
-+		return "bpf_list_head";
- 	default:
- 		WARN_ON_ONCE(1);
- 		return "unknown";
-@@ -282,6 +292,8 @@ static inline u32 btf_field_type_size(enum btf_field_type type)
- 	case BPF_KPTR_UNREF:
- 	case BPF_KPTR_REF:
- 		return sizeof(u64);
-+	case BPF_LIST_HEAD:
-+		return sizeof(struct bpf_list_head);
- 	default:
- 		WARN_ON_ONCE(1);
- 		return 0;
-@@ -298,6 +310,8 @@ static inline u32 btf_field_type_align(enum btf_field_type type)
- 	case BPF_KPTR_UNREF:
- 	case BPF_KPTR_REF:
- 		return __alignof__(u64);
-+	case BPF_LIST_HEAD:
-+		return __alignof__(struct bpf_list_head);
- 	default:
- 		WARN_ON_ONCE(1);
- 		return 0;
-@@ -403,6 +417,9 @@ static inline void zero_map_value(struct bpf_map *map, void *dst)
- void copy_map_value_locked(struct bpf_map *map, void *dst, void *src,
- 			   bool lock_src);
- void bpf_timer_cancel_and_free(void *timer);
-+void bpf_list_head_free(const struct btf_field *field, void *list_head,
-+			struct bpf_spin_lock *spin_lock);
-+
- int bpf_obj_name_cpy(char *dst, const char *src, unsigned int size);
- 
- struct bpf_offload_dev;
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 94659f6b3395..dd381086bad9 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -6887,6 +6887,16 @@ struct bpf_dynptr {
- 	__u64 :64;
- } __attribute__((aligned(8)));
- 
-+struct bpf_list_head {
-+	__u64 :64;
-+	__u64 :64;
-+} __attribute__((aligned(8)));
-+
-+struct bpf_list_node {
-+	__u64 :64;
-+	__u64 :64;
-+} __attribute__((aligned(8)));
-+
- struct bpf_sysctl {
- 	__u32	write;		/* Sysctl is being read (= 0) or written (= 1).
- 				 * Allows 1,2,4-byte read, but no write.
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 12361d7b2498..d8f083b09e5e 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -3205,9 +3205,15 @@ enum {
- struct btf_field_info {
- 	enum btf_field_type type;
- 	u32 off;
--	struct {
--		u32 type_id;
--	} kptr;
-+	union {
-+		struct {
-+			u32 type_id;
-+		} kptr;
-+		struct {
-+			const char *node_name;
-+			u32 value_btf_id;
-+		} list_head;
-+	};
- };
- 
- static int btf_find_struct(const struct btf *btf, const struct btf_type *t,
-@@ -3261,6 +3267,63 @@ static int btf_find_kptr(const struct btf *btf, const struct btf_type *t,
- 	return BTF_FIELD_FOUND;
- }
- 
-+static const char *btf_find_decl_tag_value(const struct btf *btf,
-+					   const struct btf_type *pt,
-+					   int comp_idx, const char *tag_key)
-+{
-+	int i;
-+
-+	for (i = 1; i < btf_nr_types(btf); i++) {
-+		const struct btf_type *t = btf_type_by_id(btf, i);
-+		int len = strlen(tag_key);
-+
-+		if (!btf_type_is_decl_tag(t))
-+			continue;
-+		if (pt != btf_type_by_id(btf, t->type) ||
-+		    btf_type_decl_tag(t)->component_idx != comp_idx)
-+			continue;
-+		if (strncmp(__btf_name_by_offset(btf, t->name_off), tag_key, len))
-+			continue;
-+		return __btf_name_by_offset(btf, t->name_off) + len;
-+	}
-+	return NULL;
-+}
-+
-+static int btf_find_list_head(const struct btf *btf, const struct btf_type *pt,
-+			      const struct btf_type *t, int comp_idx,
-+			      u32 off, int sz, struct btf_field_info *info)
-+{
-+	const char *value_type;
-+	const char *list_node;
-+	s32 id;
-+
-+	if (!__btf_type_is_struct(t))
-+		return BTF_FIELD_IGNORE;
-+	if (t->size != sz)
-+		return BTF_FIELD_IGNORE;
-+	value_type = btf_find_decl_tag_value(btf, pt, comp_idx, "contains:");
-+	if (!value_type)
-+		return -EINVAL;
-+	list_node = strstr(value_type, ":");
-+	if (!list_node)
-+		return -EINVAL;
-+	value_type = kstrndup(value_type, list_node - value_type, GFP_KERNEL | __GFP_NOWARN);
-+	if (!value_type)
-+		return -ENOMEM;
-+	id = btf_find_by_name_kind(btf, value_type, BTF_KIND_STRUCT);
-+	kfree(value_type);
-+	if (id < 0)
-+		return id;
-+	list_node++;
-+	if (str_is_empty(list_node))
-+		return -EINVAL;
-+	info->type = BPF_LIST_HEAD;
-+	info->off = off;
-+	info->list_head.value_btf_id = id;
-+	info->list_head.node_name = list_node;
-+	return BTF_FIELD_FOUND;
-+}
-+
- static int btf_get_field_type(const char *name, u32 field_mask, u32 *seen_mask,
- 			      int *align, int *sz)
- {
-@@ -3284,6 +3347,12 @@ static int btf_get_field_type(const char *name, u32 field_mask, u32 *seen_mask,
- 			goto end;
- 		}
- 	}
-+	if (field_mask & BPF_LIST_HEAD) {
-+		if (!strcmp(name, "bpf_list_head")) {
-+			type = BPF_LIST_HEAD;
-+			goto end;
-+		}
-+	}
- 	/* Only return BPF_KPTR when all other types with matchable names fail */
- 	if (field_mask & BPF_KPTR) {
- 		type = BPF_KPTR_REF;
-@@ -3317,6 +3386,8 @@ static int btf_find_struct_field(const struct btf *btf,
- 			return field_type;
- 
- 		off = __btf_member_bit_offset(t, member);
-+		if (i && !off)
-+			return -EFAULT;
- 		if (off % 8)
- 			/* valid C code cannot generate such BTF */
- 			return -EINVAL;
-@@ -3339,6 +3410,12 @@ static int btf_find_struct_field(const struct btf *btf,
- 			if (ret < 0)
- 				return ret;
- 			break;
-+		case BPF_LIST_HEAD:
-+			ret = btf_find_list_head(btf, t, member_type, i, off, sz,
-+						 idx < info_cnt ? &info[idx] : &tmp);
-+			if (ret < 0)
-+				return ret;
-+			break;
- 		default:
- 			return -EFAULT;
- 		}
-@@ -3373,6 +3450,8 @@ static int btf_find_datasec_var(const struct btf *btf, const struct btf_type *t,
- 			return field_type;
- 
- 		off = vsi->offset;
-+		if (i && !off)
-+			return -EFAULT;
- 		if (vsi->size != sz)
- 			continue;
- 		if (off % align)
-@@ -3393,6 +3472,12 @@ static int btf_find_datasec_var(const struct btf *btf, const struct btf_type *t,
- 			if (ret < 0)
- 				return ret;
- 			break;
-+		case BPF_LIST_HEAD:
-+			ret = btf_find_list_head(btf, var, var_type, -1, off, sz,
-+						 idx < info_cnt ? &info[idx] : &tmp);
-+			if (ret < 0)
-+				return ret;
-+			break;
- 		default:
- 			return -EFAULT;
- 		}
-@@ -3491,6 +3576,46 @@ static int btf_parse_kptr(const struct btf *btf, struct btf_field *field,
- 	return ret;
- }
- 
-+static int btf_parse_list_head(const struct btf *btf, struct btf_field *field,
-+			       struct btf_field_info *info)
-+{
-+	const struct btf_type *t, *n = NULL;
-+	const struct btf_member *member;
-+	u32 offset;
-+	int i;
-+
-+	t = btf_type_by_id(btf, info->list_head.value_btf_id);
-+	/* We've already checked that value_btf_id is a struct type. We
-+	 * just need to figure out the offset of the list_node, and
-+	 * verify its type.
-+	 */
-+	for_each_member(i, t, member) {
-+		if (strcmp(info->list_head.node_name, __btf_name_by_offset(btf, member->name_off)))
-+			continue;
-+		/* Invalid BTF, two members with same name */
-+		if (n)
-+			return -EINVAL;
-+		n = btf_type_by_id(btf, member->type);
-+		if (!__btf_type_is_struct(n))
-+			return -EINVAL;
-+		if (strcmp("bpf_list_node", __btf_name_by_offset(btf, n->name_off)))
-+			return -EINVAL;
-+		offset = __btf_member_bit_offset(n, member);
-+		if (offset % 8)
-+			return -EINVAL;
-+		offset /= 8;
-+		if (offset % __alignof__(struct bpf_list_node))
-+			return -EINVAL;
-+
-+		field->list_head.btf = (struct btf *)btf;
-+		field->list_head.value_btf_id = info->list_head.value_btf_id;
-+		field->list_head.node_offset = offset;
-+	}
-+	if (!n)
-+		return -ENOENT;
-+	return 0;
-+}
-+
- struct btf_record *btf_parse_fields(const struct btf *btf, const struct btf_type *t,
- 				    u32 field_mask, u32 value_size)
- {
-@@ -3539,12 +3664,24 @@ struct btf_record *btf_parse_fields(const struct btf *btf, const struct btf_type
- 			if (ret < 0)
- 				goto end;
- 			break;
-+		case BPF_LIST_HEAD:
-+			ret = btf_parse_list_head(btf, &rec->fields[i], &info_arr[i]);
-+			if (ret < 0)
-+				goto end;
-+			break;
- 		default:
- 			ret = -EFAULT;
- 			goto end;
- 		}
- 		rec->cnt++;
- 	}
-+
-+	/* bpf_list_head requires bpf_spin_lock */
-+	if (btf_record_has_field(rec, BPF_LIST_HEAD) && rec->spin_lock_off < 0) {
-+		ret = -EINVAL;
-+		goto end;
-+	}
-+
- 	return rec;
- end:
- 	btf_record_free(rec);
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 283f55bbeb70..7bc71995f17c 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1706,6 +1706,38 @@ bpf_base_func_proto(enum bpf_func_id func_id)
- 	}
- }
- 
-+void bpf_list_head_free(const struct btf_field *field, void *list_head,
-+			struct bpf_spin_lock *spin_lock)
-+{
-+	struct list_head *head = list_head, *orig_head = list_head;
-+
-+	BUILD_BUG_ON(sizeof(struct list_head) > sizeof(struct bpf_list_head));
-+	BUILD_BUG_ON(__alignof__(struct list_head) > __alignof__(struct bpf_list_head));
-+
-+	/* Do the actual list draining outside the lock to not hold the lock for
-+	 * too long, and also prevent deadlocks if tracing programs end up
-+	 * executing on entry/exit of functions called inside the critical
-+	 * section, and end up doing map ops that call bpf_list_head_free for
-+	 * the same map value again.
-+	 */
-+	__bpf_spin_lock_irqsave(spin_lock);
-+	if (!head->next || list_empty(head))
-+		goto unlock;
-+	head = head->next;
-+unlock:
-+	INIT_LIST_HEAD(orig_head);
-+	__bpf_spin_unlock_irqrestore(spin_lock);
-+
-+	while (head != orig_head) {
-+		void *obj = head;
-+
-+		obj -= field->list_head.node_offset;
-+		head = head->next;
-+		/* TODO: Rework later */
-+		kfree(obj);
-+	}
-+}
-+
- BTF_SET8_START(tracing_btf_ids)
- #ifdef CONFIG_KEXEC_CORE
- BTF_ID_FLAGS(func, crash_kexec, KF_DESTRUCTIVE)
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 85532d301124..fdbae52f463f 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -536,6 +536,9 @@ void btf_record_free(struct btf_record *rec)
- 				module_put(rec->fields[i].kptr.module);
- 			btf_put(rec->fields[i].kptr.btf);
- 			break;
-+		case BPF_LIST_HEAD:
-+			/* Nothing to release for bpf_list_head */
-+			break;
- 		default:
- 			WARN_ON_ONCE(1);
- 			continue;
-@@ -578,6 +581,9 @@ struct btf_record *btf_record_dup(const struct btf_record *rec)
- 				goto free;
- 			}
- 			break;
-+		case BPF_LIST_HEAD:
-+			/* Nothing to acquire for bpf_list_head */
-+			break;
- 		default:
- 			ret = -EFAULT;
- 			WARN_ON_ONCE(1);
-@@ -637,6 +643,11 @@ void bpf_obj_free_fields(const struct btf_record *rec, void *obj)
- 		case BPF_KPTR_REF:
- 			field->kptr.dtor((void *)xchg((unsigned long *)field_ptr, 0));
- 			break;
-+		case BPF_LIST_HEAD:
-+			if (WARN_ON_ONCE(rec->spin_lock_off < 0))
-+				continue;
-+			bpf_list_head_free(field, field_ptr, obj + rec->spin_lock_off);
-+			break;
- 		default:
- 			WARN_ON_ONCE(1);
- 			continue;
-@@ -965,7 +976,8 @@ static int map_check_btf(struct bpf_map *map, const struct btf *btf,
- 	if (!value_type || value_size != map->value_size)
- 		return -EINVAL;
- 
--	map->record = btf_parse_fields(btf, value_type, BPF_SPIN_LOCK | BPF_TIMER | BPF_KPTR,
-+	map->record = btf_parse_fields(btf, value_type,
-+				       BPF_SPIN_LOCK | BPF_TIMER | BPF_KPTR | BPF_LIST_HEAD,
- 				       map->value_size);
- 	if (!IS_ERR_OR_NULL(map->record)) {
- 		int i;
-@@ -1012,6 +1024,14 @@ static int map_check_btf(struct bpf_map *map, const struct btf *btf,
- 					goto free_map_tab;
- 				}
- 				break;
-+			case BPF_LIST_HEAD:
-+				if (map->map_type != BPF_MAP_TYPE_HASH &&
-+				    map->map_type != BPF_MAP_TYPE_LRU_HASH &&
-+				    map->map_type != BPF_MAP_TYPE_ARRAY) {
-+					ret = -EOPNOTSUPP;
-+					goto free_map_tab;
-+				}
-+				break;
- 			default:
- 				/* Fail if map_type checks are missing for a field type */
- 				ret = -EOPNOTSUPP;
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d3b75aa0c54d..0374f03d1f56 100644
+index 2407e3b179ec..5fca156eca43 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -12805,6 +12805,13 @@ static int check_map_prog_compatibility(struct bpf_verifier_env *env,
+@@ -577,8 +577,8 @@ static const char *reg_type_str(struct bpf_verifier_env *env,
+ 
+ 	if (type & MEM_RDONLY)
+ 		strncpy(prefix, "rdonly_", 32);
+-	if (type & MEM_ALLOC)
+-		strncpy(prefix, "alloc_", 32);
++	if (type & MEM_RINGBUF)
++		strncpy(prefix, "ringbuf_", 32);
+ 	if (type & MEM_USER)
+ 		strncpy(prefix, "user_", 32);
+ 	if (type & MEM_PERCPU)
+@@ -5780,7 +5780,7 @@ static const struct bpf_reg_types mem_types = {
+ 		PTR_TO_MAP_KEY,
+ 		PTR_TO_MAP_VALUE,
+ 		PTR_TO_MEM,
+-		PTR_TO_MEM | MEM_ALLOC,
++		PTR_TO_MEM | MEM_RINGBUF,
+ 		PTR_TO_BUF,
+ 	},
+ };
+@@ -5798,7 +5798,7 @@ static const struct bpf_reg_types int_ptr_types = {
+ static const struct bpf_reg_types fullsock_types = { .types = { PTR_TO_SOCKET } };
+ static const struct bpf_reg_types scalar_types = { .types = { SCALAR_VALUE } };
+ static const struct bpf_reg_types context_types = { .types = { PTR_TO_CTX } };
+-static const struct bpf_reg_types alloc_mem_types = { .types = { PTR_TO_MEM | MEM_ALLOC } };
++static const struct bpf_reg_types ringbuf_mem_types = { .types = { PTR_TO_MEM | MEM_RINGBUF } };
+ static const struct bpf_reg_types const_map_ptr_types = { .types = { CONST_PTR_TO_MAP } };
+ static const struct bpf_reg_types btf_ptr_types = { .types = { PTR_TO_BTF_ID } };
+ static const struct bpf_reg_types spin_lock_types = { .types = { PTR_TO_MAP_VALUE } };
+@@ -5831,7 +5831,7 @@ static const struct bpf_reg_types *compatible_reg_types[__BPF_ARG_TYPE_MAX] = {
+ 	[ARG_PTR_TO_BTF_ID]		= &btf_ptr_types,
+ 	[ARG_PTR_TO_SPIN_LOCK]		= &spin_lock_types,
+ 	[ARG_PTR_TO_MEM]		= &mem_types,
+-	[ARG_PTR_TO_ALLOC_MEM]		= &alloc_mem_types,
++	[ARG_PTR_TO_RINGBUF_MEM]	= &ringbuf_mem_types,
+ 	[ARG_PTR_TO_INT]		= &int_ptr_types,
+ 	[ARG_PTR_TO_LONG]		= &int_ptr_types,
+ 	[ARG_PTR_TO_PERCPU_BTF_ID]	= &percpu_btf_ptr_types,
+@@ -5952,14 +5952,14 @@ int check_func_arg_reg_off(struct bpf_verifier_env *env,
+ 	case PTR_TO_MAP_VALUE:
+ 	case PTR_TO_MEM:
+ 	case PTR_TO_MEM | MEM_RDONLY:
+-	case PTR_TO_MEM | MEM_ALLOC:
++	case PTR_TO_MEM | MEM_RINGBUF:
+ 	case PTR_TO_BUF:
+ 	case PTR_TO_BUF | MEM_RDONLY:
+ 	case SCALAR_VALUE:
+ 		/* Some of the argument types nevertheless require a
+ 		 * zero register offset.
+ 		 */
+-		if (base_type(arg_type) != ARG_PTR_TO_ALLOC_MEM)
++		if (base_type(arg_type) != ARG_PTR_TO_RINGBUF_MEM)
+ 			return 0;
+ 		break;
+ 	/* All the rest must be rejected, except PTR_TO_BTF_ID which allows
+diff --git a/tools/testing/selftests/bpf/prog_tests/dynptr.c b/tools/testing/selftests/bpf/prog_tests/dynptr.c
+index 8fc4e6c02bfd..b0c06f821cb8 100644
+--- a/tools/testing/selftests/bpf/prog_tests/dynptr.c
++++ b/tools/testing/selftests/bpf/prog_tests/dynptr.c
+@@ -17,7 +17,7 @@ static struct {
+ 	{"ringbuf_missing_release2", "Unreleased reference id=2"},
+ 	{"ringbuf_missing_release_callback", "Unreleased reference id"},
+ 	{"use_after_invalid", "Expected an initialized dynptr as arg #3"},
+-	{"ringbuf_invalid_api", "type=mem expected=alloc_mem"},
++	{"ringbuf_invalid_api", "type=mem expected=ringbuf_mem"},
+ 	{"add_dynptr_to_map1", "invalid indirect read from stack"},
+ 	{"add_dynptr_to_map2", "invalid indirect read from stack"},
+ 	{"data_slice_out_of_bounds_ringbuf", "value is outside of the allowed memory range"},
+diff --git a/tools/testing/selftests/bpf/verifier/ringbuf.c b/tools/testing/selftests/bpf/verifier/ringbuf.c
+index b64d33e4833c..84838feba47f 100644
+--- a/tools/testing/selftests/bpf/verifier/ringbuf.c
++++ b/tools/testing/selftests/bpf/verifier/ringbuf.c
+@@ -28,7 +28,7 @@
+ 	},
+ 	.fixup_map_ringbuf = { 1 },
+ 	.result = REJECT,
+-	.errstr = "dereference of modified alloc_mem ptr R1",
++	.errstr = "dereference of modified ringbuf_mem ptr R1",
+ },
  {
- 	enum bpf_prog_type prog_type = resolve_prog_type(prog);
- 
-+	if (btf_record_has_field(map->record, BPF_LIST_HEAD)) {
-+		if (is_tracing_prog_type(prog_type)) {
-+			verbose(env, "tracing progs cannot use bpf_list_head yet\n");
-+			return -EINVAL;
-+		}
-+	}
-+
- 	if (btf_record_has_field(map->record, BPF_SPIN_LOCK)) {
- 		if (prog_type == BPF_PROG_TYPE_SOCKET_FILTER) {
- 			verbose(env, "socket filter progs cannot use bpf_spin_lock yet\n");
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 94659f6b3395..dd381086bad9 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -6887,6 +6887,16 @@ struct bpf_dynptr {
- 	__u64 :64;
- } __attribute__((aligned(8)));
- 
-+struct bpf_list_head {
-+	__u64 :64;
-+	__u64 :64;
-+} __attribute__((aligned(8)));
-+
-+struct bpf_list_node {
-+	__u64 :64;
-+	__u64 :64;
-+} __attribute__((aligned(8)));
-+
- struct bpf_sysctl {
- 	__u32	write;		/* Sysctl is being read (= 0) or written (= 1).
- 				 * Allows 1,2,4-byte read, but no write.
+ 	"ringbuf: invalid reservation offset 2",
+diff --git a/tools/testing/selftests/bpf/verifier/spill_fill.c b/tools/testing/selftests/bpf/verifier/spill_fill.c
+index e23f07175e1b..9bb302dade23 100644
+--- a/tools/testing/selftests/bpf/verifier/spill_fill.c
++++ b/tools/testing/selftests/bpf/verifier/spill_fill.c
+@@ -84,7 +84,7 @@
+ 	},
+ 	.fixup_map_ringbuf = { 1 },
+ 	.result = REJECT,
+-	.errstr = "R0 pointer arithmetic on alloc_mem_or_null prohibited",
++	.errstr = "R0 pointer arithmetic on ringbuf_mem_or_null prohibited",
+ },
+ {
+ 	"check corrupted spill/fill",
 -- 
 2.38.1
 
