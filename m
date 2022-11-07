@@ -2,150 +2,247 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88B01C4321E
-	for <bpf@archiver.kernel.org>; Mon,  7 Nov 2022 12:20:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F36E9C433FE
+	for <bpf@archiver.kernel.org>; Mon,  7 Nov 2022 12:31:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232017AbiKGMUO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Nov 2022 07:20:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
+        id S232335AbiKGMbz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Nov 2022 07:31:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232078AbiKGMUO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Nov 2022 07:20:14 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D1AE62DF;
-        Mon,  7 Nov 2022 04:20:13 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id v7so6774466wmn.0;
-        Mon, 07 Nov 2022 04:20:13 -0800 (PST)
+        with ESMTP id S232154AbiKGMbM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Nov 2022 07:31:12 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6641B9C5;
+        Mon,  7 Nov 2022 04:31:11 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id g12so15927129wrs.10;
+        Mon, 07 Nov 2022 04:31:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:user-agent:references:message-id:date:in-reply-to
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BoLI3U1WVnPhAczgDn3YmTPplH4mN49yQEHTg2jEwe0=;
-        b=p5scd/zuJFtUC2MaytxT5KcwnRqUQVJAk1gLUrkS+N8dp3m5IKxk6bFuVykUDIPfnz
-         fU2S4DeBvfOgEjGoWcQ1PirSBnsdzssrQLx/LDn7pM2Xfo0tGVyOTk4YLNCumL4iBkQa
-         JovIiyd1CLQ5cQEm2lrE5n9vRn3UELWW9vIzb90A3PAJqXan/niaG8zayQmkd0KkA9l/
-         KpTO7Yp66qHRPK8MAvp5YJLNkKukhZiqaA68FAyAPbPUm80NbiMDgZ0DLx+2t3Numk5U
-         G3fb4aYSi7mA9Q43zoLVjOUTUCCiu7GrNz1xzzYwWTi8jx6G17oyAPCkFkGO1gxHh5il
-         dqQA==
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=yC8xgVazfP+f7YY+MmwlBVPU23N1YUdB4Go1JaLvyaM=;
+        b=DdzJxJAgNMs9+fhBDxWJ9SLu0wpVHnn58T0rAqTG+lkYqt2r0ipW4Ej5kxraxDeMEV
+         Q1Rtbc5vc/72qgZg4d7uha2Q2GzDkk+BJ7q9yuFQ1FE3+8qyTR3f/+q+ZLXup0VdBzhi
+         NJGs55U4lxOwfUrHaA5QJRZ4WMy6lLhbYAkyDQhB4ZSt00qaDhKopvhqFAhYB39sJKMx
+         KaZ5XMUQvCpLC9vEKSh/6o7aCiG4KB6rQfFcvmGLZlKW9SgmfjBVil4JyV5LfEOmyAVg
+         M1G5VZ9xp9uBifAGetbjmEiWJVGKaqN2YmM89COENECKqjWRqRllm9ysyF+mEyA9XcKQ
+         4crQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:references:message-id:date:in-reply-to
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BoLI3U1WVnPhAczgDn3YmTPplH4mN49yQEHTg2jEwe0=;
-        b=actVxP1//dMDew8nNjyEkiyFdECEEYflkFrVkBMAMajvscoLk7UL2BSYv6y7r8myDY
-         0B6gx7hwCV4GoeiRRowwOfTsF0RzMADYKEQP0Mkw+x0OFVYFJk+LWFcHDl5rckHR6jKr
-         KKtYDOom9soWDLSUKsOJbji2f6AL6VfCf7wQdeMX5XO0tIREqyfcCqkzYvPJhRpM0Ku5
-         QJRg211O2ZgjtLV/cFGIUQlrHJRwtDz733n4mUK5t2joIe2vpWGlhXSGJuad93jvC9q7
-         Nncur/joqDeYWGkjZr1cskzvlZQjGzmy8ATv7VZp3xuJAqh5DZH/9wSY/7wBuXvkrc7V
-         C09Q==
-X-Gm-Message-State: ACrzQf1uQt7KKFEwZhW6751+pyHBJxPKzy4F+OFcxpm+NYIPKlZ0nTuI
-        AEb+OaIlpW3a85k1ncVrvbKrN/lEPEA9UA==
-X-Google-Smtp-Source: AMsMyM4eh/W2xbyCsfIom4ZVUN3r5j7HjgFgmv17tiKE5MHQcfGC0ItE97zOF8hj3oNvM+aJYzq5nA==
-X-Received: by 2002:a05:600c:1508:b0:3cf:6cc1:c3b4 with SMTP id b8-20020a05600c150800b003cf6cc1c3b4mr30216373wmg.156.1667823611258;
-        Mon, 07 Nov 2022 04:20:11 -0800 (PST)
-Received: from imac ([2a02:8010:60a0:0:5c58:5d45:1992:a386])
-        by smtp.gmail.com with ESMTPSA id v13-20020adfe28d000000b0022e3538d305sm8494058wri.117.2022.11.07.04.20.10
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yC8xgVazfP+f7YY+MmwlBVPU23N1YUdB4Go1JaLvyaM=;
+        b=ZfsHr4PMC5882gZu70WL/xtO/jmYek9fRWDG5g3kbLZeD4YU9yOuC2Zii2pbNsyJZg
+         etw+AArVkLdzrtEjWtHqkUbAiJsAzEmAN0EhcdiQVmY6Jjp9ojsGjf0Al7TbVt7L3gtg
+         noSJg69V4LypgPbZmeWzBg3NumNkgM+lq3sNz5CaysK4NfcNKDw096tTOdUd18aB74/2
+         dv8LBK2cjwbJCtOxLkpiwm1HEjrpkfsA9SBhb91NHSUlfuMLsPewEk0GVLhqDy37/3ai
+         Ejm5ZU7vJ5cXevmmpP3Qqtazm2xPKk97ElSUsUdRa4pColIkweDCC1JFTwaUnMWGtSsT
+         PmnQ==
+X-Gm-Message-State: ACrzQf3gVeaYKyUozEwuEvSsg1EBW9FG+cPDS50UQjayTPJra3dAyaTG
+        v6sZj8qmcnd/JaGc89rZqy8=
+X-Google-Smtp-Source: AMsMyM4rZ0g9bl931hSQC+RmUdmDMLLUpzU1HkY+7SRwliWbZgmg36+xnF7W52a3SaHaNgeKvLiImQ==
+X-Received: by 2002:adf:e94b:0:b0:236:64a5:4038 with SMTP id m11-20020adfe94b000000b0023664a54038mr33063834wrn.321.1667824269727;
+        Mon, 07 Nov 2022 04:31:09 -0800 (PST)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id w2-20020a5d6802000000b0023662245d3csm7171950wru.95.2022.11.07.04.31.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 04:20:10 -0800 (PST)
-From:   Donald Hunter <donald.hunter@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH bpf-next v1] bpf, docs: document
- BPF_MAP_TYPE_ARRAY_OF_MAPS and *_HASH_OF_MAPS
-In-Reply-To: <CAEf4BzYiSyps09esMH407WnzPvND+c56EQHeooLUF9RKcs-Y3Q@mail.gmail.com>
-        (Andrii Nakryiko's message of "Fri, 4 Nov 2022 14:26:33 -0700")
-Date:   Mon, 07 Nov 2022 11:41:49 +0000
-Message-ID: <m2r0yfrnya.fsf@gmail.com>
-References: <20221010112154.39494-1-donald.hunter@gmail.com>
-        <CAEf4BzYiSyps09esMH407WnzPvND+c56EQHeooLUF9RKcs-Y3Q@mail.gmail.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (darwin)
+        Mon, 07 Nov 2022 04:31:09 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Mon, 7 Nov 2022 13:31:06 +0100
+To:     Hao Sun <sunhao.th@gmail.com>, ast@kernel.org
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        andrii@kernel.org, bpf <bpf@vger.kernel.org>, daniel@iogearbox.net,
+        haoluo@google.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        martin.lau@linux.dev, sdf@google.com, song@kernel.org, yhs@fb.com
+Subject: Re: WARNING in bpf_bprintf_prepare
+Message-ID: <Y2j6ivTwFmA0FtvY@krava>
+References: <CACkBjsakT_yWxnSWr4r-0TpPvbKm9-OBmVUhJb7hV3hY8fdCkw@mail.gmail.com>
+ <Y1pqWPRmP0M+hcXf@krava>
+ <CACkBjsbP-iw-gpnYN=Ormcu2zXAeOgjeptjGAFXNNJRRVhRAag@mail.gmail.com>
+ <Y2J+n7SqmtfyA7ZM@krava>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y2J+n7SqmtfyA7ZM@krava>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+On Wed, Nov 02, 2022 at 03:28:47PM +0100, Jiri Olsa wrote:
+> On Thu, Oct 27, 2022 at 07:45:16PM +0800, Hao Sun wrote:
+> > Jiri Olsa <olsajiri@gmail.com> 于2022年10月27日周四 19:24写道：
+> > >
+> > > On Thu, Oct 27, 2022 at 10:27:28AM +0800, Hao Sun wrote:
+> > > > Hi,
+> > > >
+> > > > The following warning can be triggered with the C reproducer in the link.
+> > > > Syzbot also reported this several days ago, Jiri posted a patch that
+> > > > uses bpf prog `active` field to fix this by 05b24ff9b2cfab (bpf:
+> > > > Prevent bpf program recursion...) according to syzbot dashboard
+> > > > (https://syzkaller.appspot.com/bug?id=179313fb375161d50a98311a28b8e2fc5f7350f9).
+> > > > But this warning can still be triggered on 247f34f7b803
+> > > > (Linux-v6.1-rc2) that already merged the patch, so it seems that this
+> > > > still is an issue.
+> > > >
+> > > > HEAD commit: 247f34f7b803 Linux 6.1-rc2
+> > > > git tree: upstream
+> > > > console output: https://pastebin.com/raw/kNw8JCu5
+> > > > kernel config: https://pastebin.com/raw/sE5QK5HL
+> > > > C reproducer: https://pastebin.com/raw/X96ASi27
+> > >
+> > > hi,
+> > > right, that fix addressed that issue for single bpf program,
+> > > and it won't prevent if there are multiple programs hook on
+> > > contention_begin tracepoint and calling bpf_trace_printk,
+> > >
+> > > I'm not sure we can do something there.. will check
+> > >
+> > > do you run just the reproducer, or you load the server somehow?
+> > > I cannot hit the issue so far
+> > >
+> > 
+> > Hi,
+> > 
+> > Last email has format issues, resend it here.
+> > 
+> > I built the kernel with the config in the link, which contains
+> > “CONFIG_CMDLINE="earlyprintk=serial net.ifnames=0
+> > sysctl.kernel.hung_task_all_cpu_backtrace=1 panic_on_warn=1 …”, and
+> > boot the kernel with normal qemu setup and then the warning can be
+> > triggered by executing the reproducer.
+> > 
+> > Also, I’m willing to test the proposed patch if any.
+> 
+> fyi I reproduced that.. will check if we can do anything about that
 
-> On Mon, Oct 10, 2022 at 4:32 AM Donald Hunter <donald.hunter@gmail.com> wrote:
->>
->> Add documentation for the ARRAY_OF_MAPS and HASH_OF_MAPS map types,
->> including usage and examples.
->>
->> Signed-off-by: Donald Hunter <donald.hunter@gmail.com>
->> ---
->
-> subject suggestion (as it's pretty long):
->
-> bpf, docs: document BPF_MAP_TYPE_{ARRAY,HASH}_OF_MAPS
+I reproduced this with set of 8 programs all hooked to contention_begin
+tracepoint and here's what I think is happening:
 
-Thanks for the tip. Hopefully already resolved well enough in v2+.
+all programs (prog1 .. prog8) call just bpf_trace_printk helper and I'm
+running 'perf bench sched messaging' to load the machine
 
->> +Examples
->> +========
->> +
->> +Kernel BPF
->> +----------
->> +
->> +This snippet shows how to create an array of devmaps in a BPF program. Note that
->> +the outer array can only be modified from user space using the syscall API.
->> +
->> +.. code-block:: c
->> +
->> +    struct redirect_map {
->> +            __uint(type, BPF_MAP_TYPE_DEVMAP);
->> +            __uint(max_entries, 32);
->> +            __type(key, enum skb_drop_reason);
->> +            __type(value, __u64);
->> +    } redirect_map SEC(".maps");
->> +
->> +    struct {
->> +            __uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
->> +            __uint(max_entries, 2);
->> +            __uint(key_size, sizeof(int));
->> +            __uint(value_size, sizeof(int));
->> +            __array(values, struct redirect_map);
->> +    } outer_map SEC(".maps");
->> +
->
-> Let's also demonstrate libbpf's declarative way to initialize entries
-> in outer map? See progs/test_btf_map_in_map.c under selftests/bpf for
-> various examples.
+at some point some contended lock triggers trace_contention_begin:
 
-Will do, thanks!
+  trace_contention_begin
+    __traceiter_contention_begin                                <-- iterates all functions attached to tracepoint
+      __bpf_trace_run(prog1)
+        prog1->active = 1
+        bpf_prog_run(prog1)
+          bpf_trace_printk
+            bpf_bprintf_prepare                                 <-- takes buffer 1 out of 3
+            raw_spin_lock_irqsave(trace_printk_lock)
 
->> +This snippet shows how to lookup an outer map to retrieve an inner map.
->> +
->> +.. code-block:: c
->> +
->> +    SEC("xdp")
->> +    int redirect_by_priority(struct xdp_md *ctx) {
->> +            struct bpf_map *devmap;
->> +            int action = XDP_PASS;
->> +            int index = 0;
->> +
->> +            devmap = bpf_map_lookup_elem(&outer_arr, &index);
->> +            if (!devmap)
->> +                    return XDP_PASS;
->> +
->> +            /* use inner devmap here */
->> +
->> +            return action;
->> +    }
->> +
->> +User Space
->> +----------
->> +
->> +This snippet shows how to create an array based outer map:
->> +
->> +.. code-block:: c
->> +
->> +    int create_outer_array(int inner_fd) {
->> +            int fd;
->> +            LIBBPF_OPTS(bpf_map_create_opts, opts);
->> +            opts.inner_map_fd = inner_fd;
->
-> LIBBPF_OPTS(bpf_map_create_opts, opts, .inner_map_fd = inner_fd);
+              # we have global single trace_printk_lock, so we will trigger
+              # its trace_contention_begin at some point
 
-+1, thanks.
+              trace_contention_begin
+                __traceiter_contention_begin
+                  __bpf_trace_run(prog1)
+                    prog1->active block                         <-- prog1 is already 'running', skipping the execution
+                  __bpf_trace_run(prog2)
+                    prog2->active = 1
+                    bpf_prog_run(prog2)
+                      bpf_trace_printk
+                        bpf_bprintf_prepare                     <-- takes buffer 2 out of 3
+                        raw_spin_lock_irqsave(trace_printk_lock)
+                          trace_contention_begin
+                            __traceiter_contention_begin
+                              __bpf_trace_run(prog1)
+                                prog1->active block             <-- prog1 is already 'running', skipping the execution
+                              __bpf_trace_run(prog2)
+                                prog2->active block             <-- prog2 is already 'running', skipping the execution
+                              __bpf_trace_run(prog3)
+                                 prog3->active = 1
+                                 bpf_prog_run(prog3)
+                                   bpf_trace_printk
+                                     bpf_bprintf_prepare        <-- takes buffer 3 out of 3
+                                     raw_spin_lock_irqsave(trace_printk_lock)
+                                       trace_contention_begin
+                                         __traceiter_contention_begin
+                                           __bpf_trace_run(prog1)
+                                             prog1->active block      <-- prog1 is already 'running', skipping the execution
+                                           __bpf_trace_run(prog2)
+                                             prog2->active block      <-- prog2 is already 'running', skipping the execution
+                                           __bpf_trace_run(prog3)
+                                             prog3->active block      <-- prog3 is already 'running', skipping the execution
+                                           __bpf_trace_run(prog4)
+                                             prog4->active = 1
+                                             bpf_prog_run(prog4)
+                                               bpf_trace_printk
+                                                 bpf_bprintf_prepare  <-- tries to take buffer 4 out of 3 -> WARNING
+
+
+the code path may vary based on the contention of the trace_printk_lock,
+so I saw different nesting within 8 programs, but all eventually ended up
+at 4 levels of nesting and hit the warning
+
+I think we could perhaps move the 'active' flag protection from program
+to the tracepoint level (in the patch below), to prevent nesting execution
+of the same tracepoint, so it'd look like:
+
+  trace_contention_begin
+    __traceiter_contention_begin
+      __bpf_trace_run(prog1) {
+        contention_begin.active = 1
+        bpf_prog_run(prog1)
+          bpf_trace_printk
+            bpf_bprintf_prepare
+            raw_spin_lock_irqsave(trace_printk_lock)
+              trace_contention_begin
+                __traceiter_contention_begin
+                  __bpf_trace_run(prog1)
+                    blocked because contention_begin.active == 1
+                  __bpf_trace_run(prog2)
+                    blocked because contention_begin.active == 1
+                  __bpf_trace_run(prog3)
+                  ...
+                  __bpf_trace_run(prog8)
+                    blocked because contention_begin.active == 1
+
+            raw_spin_unlock_irqrestore
+            bpf_bprintf_cleanup
+
+        contention_begin.active = 0
+      }
+
+      __bpf_trace_run(prog2) {
+        contention_begin.active = 1
+        bpf_prog_run(prog2)
+          ...
+        contention_begin.active = 0
+      }
+
+do we need bpf program execution in nested tracepoints?
+we could actually allow 3 nesting levels for this case.. thoughts?
+
+thanks,
+jirka
+
+
+---
+diff --git a/include/trace/bpf_probe.h b/include/trace/bpf_probe.h
+index 6a13220d2d27..5a354ae096e5 100644
+--- a/include/trace/bpf_probe.h
++++ b/include/trace/bpf_probe.h
+@@ -78,11 +78,15 @@
+ #define CAST_TO_U64(...) CONCATENATE(__CAST, COUNT_ARGS(__VA_ARGS__))(__VA_ARGS__)
+ 
+ #define __BPF_DECLARE_TRACE(call, proto, args)				\
++static DEFINE_PER_CPU(int, __bpf_trace_tp_active_##call);		\
+ static notrace void							\
+ __bpf_trace_##call(void *__data, proto)					\
+ {									\
+ 	struct bpf_prog *prog = __data;					\
+-	CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(prog, CAST_TO_U64(args));	\
++									\
++	if (likely(this_cpu_inc_return(__bpf_trace_tp_active_##call) == 1))		\
++		CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(prog, CAST_TO_U64(args));	\
++	this_cpu_dec(__bpf_trace_tp_active_##call);					\
+ }
+ 
+ #undef DECLARE_EVENT_CLASS
