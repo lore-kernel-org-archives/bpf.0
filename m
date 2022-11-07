@@ -2,115 +2,116 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A78AC433FE
-	for <bpf@archiver.kernel.org>; Mon,  7 Nov 2022 06:58:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D188C433FE
+	for <bpf@archiver.kernel.org>; Mon,  7 Nov 2022 07:18:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbiKGG6l (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Nov 2022 01:58:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54214 "EHLO
+        id S231328AbiKGHSR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Nov 2022 02:18:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiKGG6k (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Nov 2022 01:58:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A14D385
-        for <bpf@vger.kernel.org>; Sun,  6 Nov 2022 22:58:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0EBD1B808C8
-        for <bpf@vger.kernel.org>; Mon,  7 Nov 2022 06:58:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84B43C433C1;
-        Mon,  7 Nov 2022 06:58:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667804316;
-        bh=/nsnjaPdz26XUOTcvh1Wl+FSv7xUUdqY1hb0BkBhvnQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J0ohsC7MNJPHCWuCd8UPzFCklAY4c5FqCvUnAu5N/ByDcUXyamQt8w6GvPTQyNwVl
-         aRD96lgNDkqMcY7Lqsht3sn7BbsHO2yNgwm6BmgfgjpTrKgFfSHKESnb0bvxz1tvm7
-         AOVDvhPKDl5OPRQh6MqIgN0Bd2GKSe11NjUGIGKi/U8S6jw9UhGINKVZ9U/G70iT7L
-         WPKEnV1BLfeGcef7bQmA0vk2JVzA7BFEGLxt1humZgcl6QOgdEjHwDARC1rYGGetbT
-         LlKCBbk+e3AFI3buWGAiGZzNp7IT6ISVKvZ9P/oqt45wfPwsHD3aZ0EpcfAMvhsJBz
-         WrvYs31EBmhWw==
-Date:   Mon, 7 Nov 2022 08:58:17 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Song Liu <song@kernel.org>, bpf@vger.kernel.org,
-        linux-mm@kvack.org, akpm@linux-foundation.org, x86@kernel.org,
-        peterz@infradead.org, hch@lst.de, rick.p.edgecombe@intel.com,
-        dave.hansen@intel.com, zhengjun.xing@linux.intel.com,
-        kbusch@kernel.org, p.raghav@samsung.com, dave@stgolabs.net,
-        vbabka@suse.cz, mgorman@suse.de, willy@infradead.org,
-        torvalds@linux-foundation.org, a.manzanares@samsung.com
-Subject: Re: [PATCH bpf-next v1 RESEND 1/5] vmalloc: introduce vmalloc_exec,
- vfree_exec, and vcopy_exec
-Message-ID: <Y2isiVZcd9vA/kec@kernel.org>
-References: <20221031222541.1773452-1-song@kernel.org>
- <20221031222541.1773452-2-song@kernel.org>
- <Y2MAR0aj+jcq+15H@bombadil.infradead.org>
- <Y2Pjnd3mxA9fTlox@kernel.org>
- <Y2QPpODzdP+2YSMN@bombadil.infradead.org>
+        with ESMTP id S231391AbiKGHR5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Nov 2022 02:17:57 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB6315737
+        for <bpf@vger.kernel.org>; Sun,  6 Nov 2022 23:16:44 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N5Mwk1q6Lz4f3lB3
+        for <bpf@vger.kernel.org>; Mon,  7 Nov 2022 15:16:38 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP4 (Coremail) with SMTP id gCh0CgC329jWsGhjUEl6AA--.47516S5;
+        Mon, 07 Nov 2022 15:16:41 +0800 (CST)
+From:   Hou Tao <houtao@huaweicloud.com>
+To:     bpf@vger.kernel.org, Hao Luo <haoluo@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>
+Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Tejun Heo <tj@kernel.org>, houtao1@huawei.com
+Subject: [PATCH bpf 1/3] bpf: Pin the start cgroup in cgroup_iter_seq_init()
+Date:   Mon,  7 Nov 2022 15:42:20 +0800
+Message-Id: <20221107074222.1323017-2-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20221107074222.1323017-1-houtao@huaweicloud.com>
+References: <20221107074222.1323017-1-houtao@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2QPpODzdP+2YSMN@bombadil.infradead.org>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgC329jWsGhjUEl6AA--.47516S5
+X-Coremail-Antispam: 1UD129KBjvJXoW7WFW8ZF1rXry7uw1DKF1DAwb_yoW8AF4Upr
+        1kCwnFyw4Fgw4qgr18t3yj9a1Fyw4Sqr1UWrZ7Jr45AwsrW34UWw1Iyr1SyF45AF9rKrya
+        yr1Yka1Fk34jvFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUB0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
+        A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+        6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+        Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+        Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64
+        vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+        jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2I
+        x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK
+        8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
+        0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2mL9UUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 11:59:48AM -0700, Luis Chamberlain wrote:
-> On Thu, Nov 03, 2022 at 05:51:57PM +0200, Mike Rapoport wrote:
-> 
-> > I had to put this project on a backburner for $VARIOUS_REASONS, but I still
-> > think that we need a generic allocator for memory with non-default
-> > permissions in the direct map and that code allocation should build on that
-> > allocator.
-> 
-> It seems this generalization of the bpf prog pack to possibly be used
-> for modules / kprobes / ftrace is a small step in that direction.
-> 
-> > All that said, the direct map fragmentation problem is currently relevant
-> > only to x86 because it's the only architecture that supports splitting of
-> > the large pages in the direct map.
-> 
-> I was thinking even more long term too, using this as a proof of concept. If
-> this practice in general helps with fragmentation, could it be used for
-> experimetnation with compound pages later, as a way to reduce possible
-> fragmentation.
+From: Hou Tao <houtao1@huawei.com>
 
-As Rick already mentioned, these patches help with the direct map
-fragmentation only indirectly. With these patches memory is freed in
-PMD_SIZE chunks and this makes the changes to the direct map in
-vm_remove_mappings() to happen in in PMD_SIZE units and this is pretty much
-the only effect of this series on the direct map layout.
+bpf_iter_attach_cgroup() has already acquired an extra reference for the
+start cgroup, but the reference will be released if the iterator link fd
+is closed after the creation of iterator fd, and it may lead to
+User-After-Free when reading the iterator fd.
 
-A bit unrelated, but I'm wondering now if we want to have the direct map
-alias of the pages allocated for code also to be read-only...
+So fixing it by acquiring another reference for the start cgroup.
 
-> > Whenever a large page in the direct map is split, all
-> > kernel accesses via the direct map will use small pages which requires
-> > dealing with 512 page table entries instead of one for 2M range.
-> > 
-> > Since small pages in the direct map are never collapsed back to large
-> > pages, long living system that heavily uses eBPF programs will have its
-> > direct map severely fragmented, higher TLB miss rate and worse overall
-> > performance. 
-> 
-> Shouldn't compaction help with those situations?
+Fixes: d4ccaf58a847 ("bpf: Introduce cgroup iter")
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ kernel/bpf/cgroup_iter.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-Compaction helps to reduce fragmentation of the physical memory, it tries
-to bring free physical pages next to each other to create large contiguous
-chunks, but it does not change the virtual addresses the users of the
-underlying data see.
-
-Changing permissions of a small page in the direct map causes
-"discontinuity" in the virtual space. E.g. if we have 2M mapped RW with a
-single PMD changing several page in the middle of those 2M to R+X will
-require to remap that range with 512 PTEs.
+diff --git a/kernel/bpf/cgroup_iter.c b/kernel/bpf/cgroup_iter.c
+index 9fcf09f2ef00..c187a9e62bdb 100644
+--- a/kernel/bpf/cgroup_iter.c
++++ b/kernel/bpf/cgroup_iter.c
+@@ -164,16 +164,30 @@ static int cgroup_iter_seq_init(void *priv, struct bpf_iter_aux_info *aux)
+ 	struct cgroup_iter_priv *p = (struct cgroup_iter_priv *)priv;
+ 	struct cgroup *cgrp = aux->cgroup.start;
  
-> Thanks!
-> 
->   Luis
-
++	/* bpf_iter_attach_cgroup() has already acquired an extra reference
++	 * for the start cgroup, but the reference may be released after
++	 * cgroup_iter_seq_init(), so acquire another reference for the
++	 * start cgroup.
++	 */
+ 	p->start_css = &cgrp->self;
++	css_get(p->start_css);
+ 	p->terminate = false;
+ 	p->visited_all = false;
+ 	p->order = aux->cgroup.order;
+ 	return 0;
+ }
+ 
++static void cgroup_iter_seq_fini(void *priv)
++{
++	struct cgroup_iter_priv *p = (struct cgroup_iter_priv *)priv;
++
++	css_put(p->start_css);
++}
++
+ static const struct bpf_iter_seq_info cgroup_iter_seq_info = {
+ 	.seq_ops		= &cgroup_iter_seq_ops,
+ 	.init_seq_private	= cgroup_iter_seq_init,
++	.fini_seq_private	= cgroup_iter_seq_fini,
+ 	.seq_priv_size		= sizeof(struct cgroup_iter_priv),
+ };
+ 
 -- 
-Sincerely yours,
-Mike.
+2.29.2
+
