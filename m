@@ -2,24 +2,24 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14CF4C4332F
-	for <bpf@archiver.kernel.org>; Mon,  7 Nov 2022 07:18:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BA57C43219
+	for <bpf@archiver.kernel.org>; Mon,  7 Nov 2022 07:30:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbiKGHSU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Nov 2022 02:18:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59630 "EHLO
+        id S230328AbiKGHax (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Nov 2022 02:30:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231406AbiKGHR5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Nov 2022 02:17:57 -0500
+        with ESMTP id S231451AbiKGHai (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Nov 2022 02:30:38 -0500
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A7D1573B
-        for <bpf@vger.kernel.org>; Sun,  6 Nov 2022 23:16:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ADDED68
+        for <bpf@vger.kernel.org>; Sun,  6 Nov 2022 23:29:58 -0800 (PST)
 Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N5Mwk69F5z4f43vy
-        for <bpf@vger.kernel.org>; Mon,  7 Nov 2022 15:16:38 +0800 (CST)
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N5NCz4d4Wz4f3m0Y
+        for <bpf@vger.kernel.org>; Mon,  7 Nov 2022 15:29:51 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP4 (Coremail) with SMTP id gCh0CgC329jWsGhjUEl6AA--.47516S6;
-        Mon, 07 Nov 2022 15:16:41 +0800 (CST)
+        by APP4 (Coremail) with SMTP id gCh0CgCXu9jws2hjwsx6AA--.50928S4;
+        Mon, 07 Nov 2022 15:29:54 +0800 (CST)
 From:   Hou Tao <houtao@huaweicloud.com>
 To:     bpf@vger.kernel.org, Hao Luo <haoluo@google.com>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -30,32 +30,29 @@ Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
         Daniel Borkmann <daniel@iogearbox.net>,
         KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
-        Tejun Heo <tj@kernel.org>, houtao1@huawei.com
-Subject: [PATCH bpf 2/3] selftests/bpf: Add cgroup helper remove_cgroup()
-Date:   Mon,  7 Nov 2022 15:42:21 +0800
-Message-Id: <20221107074222.1323017-3-houtao@huaweicloud.com>
+        Xu Kuohai <xukuohai@huawei.com>, houtao1@huawei.com
+Subject: [PATCH bpf-next] bpf: Pass map file to .map_update_batch directly
+Date:   Mon,  7 Nov 2022 15:55:37 +0800
+Message-Id: <20221107075537.1445644-1-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20221107074222.1323017-1-houtao@huaweicloud.com>
-References: <20221107074222.1323017-1-houtao@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgC329jWsGhjUEl6AA--.47516S6
-X-Coremail-Antispam: 1UD129KBjvJXoW7tw47XFy7tr4kJFWkArWkWFg_yoW8tFyfpa
-        1kJr13Ka4rKF17Xw18t34qga1rKF4kXrWUG340qr4UZanrJryxXr4SyFyYqFy5JFZaqrZx
-        Ar1S9w1kCF1Ut3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUB0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
-        A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-        Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-        Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64
-        vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
-        jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2I
-        x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK
-        8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
-        0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFa9-UUUUU
+X-CM-TRANSID: gCh0CgCXu9jws2hjwsx6AA--.50928S4
+X-Coremail-Antispam: 1UD129KBjvJXoW3JFWUJF48AryUAFy5uF4xtFb_yoWxJrW3pF
+        WrKFy7Gr48WFW7Xr4aqa1UWay3Zr40gw15KrWktayFywnFgr929Fy8ta97ur4Yvr1DJr48
+        J3W2qFW8Z3yxArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkab4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIx
+        AIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UQzVbUUUUU=
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 X-CFilter-Loop: Reflected
 Precedence: bulk
@@ -64,58 +61,167 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Hou Tao <houtao1@huawei.com>
 
-Add remove_cgroup() to remove a cgroup which doesn't have any children
-or live processes. It will be used by the following patch to test cgroup
-iterator on a dead cgroup.
+Currently generic_map_update_batch() will get map file from
+attr->batch.map_fd and pass it to bpf_map_update_value(). The problem is
+map_fd may have been closed or reopened as a different file type and
+generic_map_update_batch() doesn't check the validity of map_fd.
+
+It doesn't incur any problem as for now, because only
+BPF_MAP_TYPE_PERF_EVENT_ARRAY uses the passed map file and it doesn't
+support batch update operation. But it is better to fix the potential
+use of an invalid map file.
+
+Checking the validity of map file returned from fdget() in
+generic_map_update_batch() can not fix the problem, because the returned
+map file may be different with map file got in bpf_map_do_batch() due to
+the reopening of fd, so just passing the map file directly to
+.map_update_batch() in bpf_map_do_batch().
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- tools/testing/selftests/bpf/cgroup_helpers.c | 19 +++++++++++++++++++
- tools/testing/selftests/bpf/cgroup_helpers.h |  1 +
- 2 files changed, 20 insertions(+)
+ include/linux/bpf.h  |  5 +++--
+ kernel/bpf/syscall.c | 31 ++++++++++++++++++-------------
+ 2 files changed, 21 insertions(+), 15 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
-index e914cc45b766..d1fef58b41c7 100644
---- a/tools/testing/selftests/bpf/cgroup_helpers.c
-+++ b/tools/testing/selftests/bpf/cgroup_helpers.c
-@@ -332,6 +332,25 @@ int get_root_cgroup(void)
- 	return fd;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 798aec816970..20cfe88ee6df 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -85,7 +85,8 @@ struct bpf_map_ops {
+ 	int (*map_lookup_and_delete_batch)(struct bpf_map *map,
+ 					   const union bpf_attr *attr,
+ 					   union bpf_attr __user *uattr);
+-	int (*map_update_batch)(struct bpf_map *map, const union bpf_attr *attr,
++	int (*map_update_batch)(struct bpf_map *map, struct file *map_file,
++				const union bpf_attr *attr,
+ 				union bpf_attr __user *uattr);
+ 	int (*map_delete_batch)(struct bpf_map *map, const union bpf_attr *attr,
+ 				union bpf_attr __user *uattr);
+@@ -1776,7 +1777,7 @@ void bpf_map_init_from_attr(struct bpf_map *map, union bpf_attr *attr);
+ int  generic_map_lookup_batch(struct bpf_map *map,
+ 			      const union bpf_attr *attr,
+ 			      union bpf_attr __user *uattr);
+-int  generic_map_update_batch(struct bpf_map *map,
++int  generic_map_update_batch(struct bpf_map *map, struct file *map_file,
+ 			      const union bpf_attr *attr,
+ 			      union bpf_attr __user *uattr);
+ int  generic_map_delete_batch(struct bpf_map *map,
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 85532d301124..cb8a87277bf8 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -175,8 +175,8 @@ static void maybe_wait_bpf_programs(struct bpf_map *map)
+ 		synchronize_rcu();
  }
  
-+/*
-+ * remove_cgroup() - Remove a cgroup
-+ * @relative_path: The cgroup path, relative to the workdir, to remove
-+ *
-+ * This function expects a cgroup to already be created, relative to the cgroup
-+ * work dir. It also expects the cgroup doesn't have any children or live
-+ * processes and it removes the cgroup.
-+ *
-+ * On failure, it will print an error to stderr.
-+ */
-+void remove_cgroup(const char *relative_path)
-+{
-+	char cgroup_path[PATH_MAX + 1];
-+
-+	format_cgroup_path(cgroup_path, relative_path);
-+	if (rmdir(cgroup_path))
-+		log_err("rmdiring cgroup %s .. %s", relative_path, cgroup_path);
-+}
-+
- /**
-  * create_and_get_cgroup() - Create a cgroup, relative to workdir, and get the FD
-  * @relative_path: The cgroup path, relative to the workdir, to join
-diff --git a/tools/testing/selftests/bpf/cgroup_helpers.h b/tools/testing/selftests/bpf/cgroup_helpers.h
-index 3358734356ab..f099a166c94d 100644
---- a/tools/testing/selftests/bpf/cgroup_helpers.h
-+++ b/tools/testing/selftests/bpf/cgroup_helpers.h
-@@ -18,6 +18,7 @@ int write_cgroup_file_parent(const char *relative_path, const char *file,
- int cgroup_setup_and_join(const char *relative_path);
- int get_root_cgroup(void);
- int create_and_get_cgroup(const char *relative_path);
-+void remove_cgroup(const char *relative_path);
- unsigned long long get_cgroup_id(const char *relative_path);
+-static int bpf_map_update_value(struct bpf_map *map, struct fd f, void *key,
+-				void *value, __u64 flags)
++static int bpf_map_update_value(struct bpf_map *map, struct file *map_file,
++				void *key, void *value, __u64 flags)
+ {
+ 	int err;
  
- int join_cgroup(const char *relative_path);
+@@ -190,7 +190,7 @@ static int bpf_map_update_value(struct bpf_map *map, struct fd f, void *key,
+ 		   map->map_type == BPF_MAP_TYPE_SOCKMAP) {
+ 		return sock_map_update_elem_sys(map, key, value, flags);
+ 	} else if (IS_FD_PROG_ARRAY(map)) {
+-		return bpf_fd_array_map_update_elem(map, f.file, key, value,
++		return bpf_fd_array_map_update_elem(map, map_file, key, value,
+ 						    flags);
+ 	}
+ 
+@@ -205,12 +205,12 @@ static int bpf_map_update_value(struct bpf_map *map, struct fd f, void *key,
+ 						       flags);
+ 	} else if (IS_FD_ARRAY(map)) {
+ 		rcu_read_lock();
+-		err = bpf_fd_array_map_update_elem(map, f.file, key, value,
++		err = bpf_fd_array_map_update_elem(map, map_file, key, value,
+ 						   flags);
+ 		rcu_read_unlock();
+ 	} else if (map->map_type == BPF_MAP_TYPE_HASH_OF_MAPS) {
+ 		rcu_read_lock();
+-		err = bpf_fd_htab_map_update_elem(map, f.file, key, value,
++		err = bpf_fd_htab_map_update_elem(map, map_file, key, value,
+ 						  flags);
+ 		rcu_read_unlock();
+ 	} else if (map->map_type == BPF_MAP_TYPE_REUSEPORT_SOCKARRAY) {
+@@ -1390,7 +1390,7 @@ static int map_update_elem(union bpf_attr *attr, bpfptr_t uattr)
+ 		goto free_key;
+ 	}
+ 
+-	err = bpf_map_update_value(map, f, key, value, attr->flags);
++	err = bpf_map_update_value(map, f.file, key, value, attr->flags);
+ 
+ 	kvfree(value);
+ free_key:
+@@ -1576,16 +1576,14 @@ int generic_map_delete_batch(struct bpf_map *map,
+ 	return err;
+ }
+ 
+-int generic_map_update_batch(struct bpf_map *map,
++int generic_map_update_batch(struct bpf_map *map, struct file *map_file,
+ 			     const union bpf_attr *attr,
+ 			     union bpf_attr __user *uattr)
+ {
+ 	void __user *values = u64_to_user_ptr(attr->batch.values);
+ 	void __user *keys = u64_to_user_ptr(attr->batch.keys);
+ 	u32 value_size, cp, max_count;
+-	int ufd = attr->batch.map_fd;
+ 	void *key, *value;
+-	struct fd f;
+ 	int err = 0;
+ 
+ 	if (attr->batch.elem_flags & ~BPF_F_LOCK)
+@@ -1612,7 +1610,6 @@ int generic_map_update_batch(struct bpf_map *map,
+ 		return -ENOMEM;
+ 	}
+ 
+-	f = fdget(ufd); /* bpf_map_do_batch() guarantees ufd is valid */
+ 	for (cp = 0; cp < max_count; cp++) {
+ 		err = -EFAULT;
+ 		if (copy_from_user(key, keys + cp * map->key_size,
+@@ -1620,7 +1617,7 @@ int generic_map_update_batch(struct bpf_map *map,
+ 		    copy_from_user(value, values + cp * value_size, value_size))
+ 			break;
+ 
+-		err = bpf_map_update_value(map, f, key, value,
++		err = bpf_map_update_value(map, map_file, key, value,
+ 					   attr->batch.elem_flags);
+ 
+ 		if (err)
+@@ -1633,7 +1630,6 @@ int generic_map_update_batch(struct bpf_map *map,
+ 
+ 	kvfree(value);
+ 	kvfree(key);
+-	fdput(f);
+ 	return err;
+ }
+ 
+@@ -4435,6 +4431,15 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
+ 		err = fn(map, attr, uattr);	\
+ 	} while (0)
+ 
++#define BPF_DO_BATCH_WITH_FILE(fn)			\
++	do {						\
++		if (!fn) {				\
++			err = -ENOTSUPP;		\
++			goto err_put;			\
++		}					\
++		err = fn(map, f.file, attr, uattr);	\
++	} while (0)
++
+ static int bpf_map_do_batch(const union bpf_attr *attr,
+ 			    union bpf_attr __user *uattr,
+ 			    int cmd)
+@@ -4470,7 +4475,7 @@ static int bpf_map_do_batch(const union bpf_attr *attr,
+ 	else if (cmd == BPF_MAP_LOOKUP_AND_DELETE_BATCH)
+ 		BPF_DO_BATCH(map->ops->map_lookup_and_delete_batch);
+ 	else if (cmd == BPF_MAP_UPDATE_BATCH)
+-		BPF_DO_BATCH(map->ops->map_update_batch);
++		BPF_DO_BATCH_WITH_FILE(map->ops->map_update_batch);
+ 	else
+ 		BPF_DO_BATCH(map->ops->map_delete_batch);
+ err_put:
 -- 
 2.29.2
 
