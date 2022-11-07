@@ -2,89 +2,108 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E162C433FE
-	for <bpf@archiver.kernel.org>; Mon,  7 Nov 2022 09:51:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C33D5C433FE
+	for <bpf@archiver.kernel.org>; Mon,  7 Nov 2022 10:33:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbiKGJve (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Nov 2022 04:51:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44078 "EHLO
+        id S231216AbiKGKdz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Nov 2022 05:33:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231859AbiKGJva (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Nov 2022 04:51:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5311B140D0;
-        Mon,  7 Nov 2022 01:51:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 10376B80EF9;
-        Mon,  7 Nov 2022 09:51:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6247C433D6;
-        Mon,  7 Nov 2022 09:51:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667814686;
-        bh=yFtr5NwT5oxVf9dNsf2MiplTPMOy/7oTu3kRIntFCeA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GSb24CPeZouO/AzSbV6btBgLeEaepf/CpgIT5EyKaJ3NDM4hjs2VNG5rrlMnbkeF2
-         tItxuw84tc9IBFrbVbP1G+cjhmWr5eqg37wVVFxf+gxT5zHu2jxmKSFWSt+NETtaK3
-         n2GHqNWZ66LEbq7ArM1jWAvgr6egZNNTMzATCBYM=
-Date:   Mon, 7 Nov 2022 10:51:21 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jonas Rabenstein <rabenstein@cs.fau.de>
-Cc:     stable@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
-        Song Liu <song@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] bpf: mark get_entry_ip as __maybe_unused
-Message-ID: <Y2jVGX7syVuMdAlu@kroah.com>
-References: <20221103150303.974028-1-rabenstein@cs.fau.de>
- <20221103153247.zal3czlsxvanfnc3@kashyyyk>
- <Y2jISpQUOTxXxpxN@kroah.com>
- <Y2jQEwGJZ0fANWAb@kroah.com>
- <20221107094849.gowmplkn3ozskrk2@kashyyyk>
+        with ESMTP id S231807AbiKGKdu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Nov 2022 05:33:50 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD3B6EA6;
+        Mon,  7 Nov 2022 02:33:49 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DDB7A1FB;
+        Mon,  7 Nov 2022 02:33:54 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.69.132])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 96A1D3F534;
+        Mon,  7 Nov 2022 02:33:46 -0800 (PST)
+Date:   Mon, 7 Nov 2022 10:33:25 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Baisong Zhong <zhongbaisong@huawei.com>, elver@google.com,
+        Catalin Marinas <catalin.marinas@arm.com>, edumazet@google.com,
+        keescook@chromium.org, kuba@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, pabeni@redhat.com,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH -next,v2] bpf, test_run: fix alignment problem in
+ bpf_prog_test_run_skb()
+Message-ID: <Y2je9dJxUjEchB9k@FVFF77S0Q05N>
+References: <20221102081620.1465154-1-zhongbaisong@huawei.com>
+ <CAG_fn=UDAjNd2xFrRxSVyLTZOAGapjSq2Zu5Xht12JNq-A7S=A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221107094849.gowmplkn3ozskrk2@kashyyyk>
+In-Reply-To: <CAG_fn=UDAjNd2xFrRxSVyLTZOAGapjSq2Zu5Xht12JNq-A7S=A@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 10:48:49AM +0100, Jonas Rabenstein wrote:
-> On Mon, Nov 07, 2022 at 10:29:55AM +0100, Greg KH wrote:
-> > On Mon, Nov 07, 2022 at 09:56:42AM +0100, Greg KH wrote:
-> > > On Thu, Nov 03, 2022 at 04:32:47PM +0100, Jonas Rabenstein wrote:
-> > > > Hi again,
-> > > > after sending this out, I noticed this is only a problem in the stable
-> > > > versions (starting from v6.0.3), as c09eb2e578eb1668bbc has been applied (as
-> > > > 03f148c159a250dd454) but not 0e253f7e558a3e250902 ("bpf: Return value in kprobe
-> > > > get_func_ip only for entry address") which makes always use of get_entry_ip.
-> > > > I therefore think, 0e253f7e558a3e250902 needs to be added to the stable v6.0
-> > > > series as well as otherwise it can't be compiled with -Werror if
-> > > > CONFIG_X6_KERNEL_IBT is set but CONFIG_FPROBE isn't.
-> > > 
-> > > Ok, now queued up, thanks.
-> > 
-> > Oops, this breaks the build, now dropping.
-> Sorry, 0e253f7e558a3e250902 ("bpf: Return value in kprobe get_func_ip only for
-> entry address") uses the macro KPROBE_FLAG_ON_FUNC_ENTRY that was introduced
-> in bf7a87f1075f67c286f7 ("kprobes: Add new KPROBE_FLAG_ON_FUNC_ENTRY kprobe
-> flag"). Applying those on top of v6.0.7 fixes the original compilation problem
-> (CONFIG_X6_KERNEL_IBT but !CONFIG_FPROBE) and should not break anything
+On Fri, Nov 04, 2022 at 06:06:05PM +0100, Alexander Potapenko wrote:
+> On Wed, Nov 2, 2022 at 9:16 AM Baisong Zhong <zhongbaisong@huawei.com> wrote:
+> >
+> > we got a syzkaller problem because of aarch64 alignment fault
+> > if KFENCE enabled.
+> >
+> > When the size from user bpf program is an odd number, like
+> > 399, 407, etc, it will cause the struct skb_shared_info's
+> > unaligned access. As seen below:
+> >
+> > BUG: KFENCE: use-after-free read in __skb_clone+0x23c/0x2a0 net/core/skbuff.c:1032
+> 
+> It's interesting that KFENCE is reporting a UAF without a deallocation
+> stack here.
+> 
+> Looks like an unaligned access to 0xffff6254fffac077 causes the ARM
+> CPU to throw a fault handled by __do_kernel_fault()
 
-Please submit a set of backports that you have verified works properly
-so that I know it is correct.
+Importantly, an unaligned *atomic*, which is a bug regardless of KFENCE.
 
-thanks,
+> This isn't technically a page fault, but anyway the access address
+> gets passed to kfence_handle_page_fault(), which defaults to a
+> use-after-free, because the address belongs to the object page, not
+> the redzone page.
+> 
+> Catalin, Mark, what is the right way to only handle traps caused by
+> reading/writing to a page for which `set_memory_valid(addr, 1, 0)` was
+> called?
 
-greg k-h
+That should appear as a translation fault, so we could add an
+is_el1_translation_fault() helper for that. I can't immediately recall how
+misaligned atomics are presented, but I presume as something other than a
+translation fault.
+
+If the below works for you, I can go spin that as a real patch.
+
+Mark.
+
+---->8----
+diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
+index 5b391490e045b..1de4b6afa8515 100644
+--- a/arch/arm64/mm/fault.c
++++ b/arch/arm64/mm/fault.c
+@@ -239,6 +239,11 @@ static bool is_el1_data_abort(unsigned long esr)
+        return ESR_ELx_EC(esr) == ESR_ELx_EC_DABT_CUR;
+ }
+ 
++static bool is_el1_translation_fault(unsigned long esr)
++{
++       return (esr & ESR_ELx_FSC_TYPE) == ESR_ELx_FSC_FAULT;
++}
++
+ static inline bool is_el1_permission_fault(unsigned long addr, unsigned long esr,
+                                           struct pt_regs *regs)
+ {
+@@ -385,7 +390,8 @@ static void __do_kernel_fault(unsigned long addr, unsigned long esr,
+        } else if (addr < PAGE_SIZE) {
+                msg = "NULL pointer dereference";
+        } else {
+-               if (kfence_handle_page_fault(addr, esr & ESR_ELx_WNR, regs))
++               if (is_el1_translation_fault(esr) &&
++                   kfence_handle_page_fault(addr, esr & ESR_ELx_WNR, regs))
+                        return;
+ 
+                msg = "paging request";
