@@ -2,101 +2,90 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85FC7C4332F
-	for <bpf@archiver.kernel.org>; Tue,  8 Nov 2022 18:49:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 450FFC433FE
+	for <bpf@archiver.kernel.org>; Tue,  8 Nov 2022 18:50:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbiKHStN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Nov 2022 13:49:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
+        id S229814AbiKHSup (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Nov 2022 13:50:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiKHSsy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Nov 2022 13:48:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463FE83B9C
-        for <bpf@vger.kernel.org>; Tue,  8 Nov 2022 10:47:21 -0800 (PST)
+        with ESMTP id S229762AbiKHSuR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Nov 2022 13:50:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5479961779;
+        Tue,  8 Nov 2022 10:50:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 00244B81C18
-        for <bpf@vger.kernel.org>; Tue,  8 Nov 2022 18:47:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A454AC433B5
-        for <bpf@vger.kernel.org>; Tue,  8 Nov 2022 18:47:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C235561752;
+        Tue,  8 Nov 2022 18:50:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1FB66C4314C;
+        Tue,  8 Nov 2022 18:50:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667933238;
-        bh=z+CPLTjXOvcKaHD7sqdmx5cvgbmmPAEMI+9ZTDKgU5Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=g/KilDaRGmIWdlgjLmZcCW+rDC+8T/amW2KqpxeJVna1+TvIWZHNkDVhor4iY0GLm
-         9cLJuYwrEBvIv7vqXhs+8QD83Jyss4F9zDbT5awlwdq9GzS9y3H3jN4D7dxwCptGkz
-         8Salt6utZaWGoHVYcpZ9ml1Bck2H5N8WkqoqMnS95QB1CdVWmTHaQiJo34+SYpJe0u
-         sHbtgsp12PSJKDj6j1VQRgADZGi4WaFNOQD2iZK5DAMBDJqCrHeUN0giDqI8EEv5QN
-         PyqTsZQDRKFs6G/UXUAZ7SaMPnTFNx2h20f3t0JblKZ445JP/pe3WUEflyyGqjrwya
-         gLHue/6Zdnq8w==
-Received: by mail-ej1-f53.google.com with SMTP id n12so40896115eja.11
-        for <bpf@vger.kernel.org>; Tue, 08 Nov 2022 10:47:18 -0800 (PST)
-X-Gm-Message-State: ACrzQf1b1fwS8dsySko4GobNurfsSlK/AEZVM9q5hwH5uReg2nitceaB
-        mRihaI4UYwMJKCpE/OGg3MDFKCxgj0hnIwS61hQ=
-X-Google-Smtp-Source: AMsMyM6/n5sNyYm3bPxmQ3Bi8IhUP0Itp6tKeAntlNLg5w8zLtfvooWXxV2+9DtQzViBforLIbg38ELWFGdIgkdfrC4=
-X-Received: by 2002:a17:907:b602:b0:7ad:e82c:3355 with SMTP id
- vl2-20020a170907b60200b007ade82c3355mr41167636ejc.3.1667933236913; Tue, 08
- Nov 2022 10:47:16 -0800 (PST)
+        s=k20201202; t=1667933415;
+        bh=YBZGHj7xrvB55I8T16VnIE0Mvnal19xm3rExq9pkV6c=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=e5qy4pwSxAHAXRcRARcLW+wA0SoYAfT+5enkbnRQsQLHxnf5SNieo0AM9zmD2EIhJ
+         i42lZl6FbOyZDKur43eOv7JDxjkPwFuAPe7KM8okio/QlauaWBdTUS0/bbRfloMzqi
+         8dIZLyCq8cI9LAE8k2Ul1WsXclfUqpr7WCejJFExEn4cW/2iy8TB9Wb8misVgrItUL
+         0jvVU/5f4mL5gYdBbM5M6sg5lx9QaouoYnM9W2jnrDA3dBKHxbjua6dbS/JSE8XPhi
+         /UXm/abBLwfuXO0QxoTRLEYcPRf6OO6n20Jzf6GzQQgtylXPpTBbt+7djeLpXgRwKV
+         xcpR2YydEJa7Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 05E8EE270CE;
+        Tue,  8 Nov 2022 18:50:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20221107223921.3451913-1-song@kernel.org> <83277694-6cb3-3fc7-b300-d39f82ac5b04@csgroup.eu>
-In-Reply-To: <83277694-6cb3-3fc7-b300-d39f82ac5b04@csgroup.eu>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 8 Nov 2022 10:47:04 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW7a6dAHQC1Qt7ryxxZ0RA8kfL3SWh+jrAKFaGDKguCexg@mail.gmail.com>
-Message-ID: <CAPhsuW7a6dAHQC1Qt7ryxxZ0RA8kfL3SWh+jrAKFaGDKguCexg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 0/5] execmem_alloc for BPF programs
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "hch@lst.de" <hch@lst.de>,
-        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>,
-        "aaron.lu@intel.com" <aaron.lu@intel.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v4] bpf: Fix memory leaks in __check_func_call
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166793341502.24064.11585625251989325212.git-patchwork-notify@kernel.org>
+Date:   Tue, 08 Nov 2022 18:50:15 +0000
+References: <1667884291-15666-1-git-send-email-wangyufen@huawei.com>
+In-Reply-To: <1667884291-15666-1-git-send-email-wangyufen@huawei.com>
+To:     Wang Yufen <wangyufen@huawei.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org,
+        martin.lau@linux.dev, yhs@fb.com, joe@wand.net.nz
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Nov 8, 2022 at 3:44 AM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
->
-[...]
-> >
-> > execmem_alloc() manages a set of PMD_SIZE RO+X memory, and allocates these
-> > memory to its users. execmem_alloc() is used to free memory allocated by
-> > execmem_alloc(). execmem_fill() is used to update memory allocated by
-> > execmem_alloc().
-> >
-> > Memory allocated by execmem_alloc() is RO+X, so this doesnot violate W^X.
-> > The caller has to update the content with text_poke like mechanism.
-> > Specifically, execmem_fill() is provided to update memory allocated by
-> > execmem_alloc(). execmem_fill() also makes sure the update stays in the
-> > boundary of one chunk allocated by execmem_alloc(). Please refer to patch
-> > 1/5 for more details of
-> >
-> > Patch 3/5 uses these new APIs in bpf program and bpf dispatcher.
-> >
-> > Patch 4/5 and 5/5 allows static kernel text (_stext to _etext) to share
-> > PMD_SIZE pages with dynamic kernel text on x86_64. This is achieved by
-> > allocating PMD_SIZE pages to roundup(_etext, PMD_SIZE), and then use
-> > _etext to roundup(_etext, PMD_SIZE) for dynamic kernel text.
->
-> Would it be possible to have something more generic than being stuck to
-> PMD_SIZE ?
->
-> On powerpc 8xx, PMD_SIZE is 4MB and hugepages are 512kB and 8MB.
+Hello:
 
-Currently, __vmalloc_node_range() tries to allocate huge pages when
-size_per_node >= PMD_SIZE
+This patch was applied to bpf/bpf.git (master)
+by Martin KaFai Lau <martin.lau@kernel.org>:
 
-How do we handle this in powerpc 8xx? I guess we can use the same logic
-here?
+On Tue, 8 Nov 2022 13:11:31 +0800 you wrote:
+> kmemleak reports this issue:
+> 
+> unreferenced object 0xffff88817139d000 (size 2048):
+>   comm "test_progs", pid 33246, jiffies 4307381979 (age 45851.820s)
+>   hex dump (first 32 bytes):
+>     01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<0000000045f075f0>] kmalloc_trace+0x27/0xa0
+>     [<0000000098b7c90a>] __check_func_call+0x316/0x1230
+>     [<00000000b4c3c403>] check_helper_call+0x172e/0x4700
+>     [<00000000aa3875b7>] do_check+0x21d8/0x45e0
+>     [<000000001147357b>] do_check_common+0x767/0xaf0
+>     [<00000000b5a595b4>] bpf_check+0x43e3/0x5bc0
+>     [<0000000011e391b1>] bpf_prog_load+0xf26/0x1940
+>     [<0000000007f765c0>] __sys_bpf+0xd2c/0x3650
+>     [<00000000839815d6>] __x64_sys_bpf+0x75/0xc0
+>     [<00000000946ee250>] do_syscall_64+0x3b/0x90
+>     [<0000000000506b7f>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> [...]
 
-Thanks,
-Song
+Here is the summary with links:
+  - [bpf,v4] bpf: Fix memory leaks in __check_func_call
+    https://git.kernel.org/bpf/bpf/c/eb86559a691c
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
