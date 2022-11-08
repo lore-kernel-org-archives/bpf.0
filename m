@@ -2,115 +2,124 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C233C433FE
-	for <bpf@archiver.kernel.org>; Tue,  8 Nov 2022 14:05:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0D74C4332F
+	for <bpf@archiver.kernel.org>; Tue,  8 Nov 2022 14:07:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235034AbiKHOFO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Nov 2022 09:05:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
+        id S235077AbiKHOHM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Nov 2022 09:07:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235047AbiKHOFL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Nov 2022 09:05:11 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ACFC69DC1;
-        Tue,  8 Nov 2022 06:05:07 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N68xT54KNz4f3xRM;
-        Tue,  8 Nov 2022 22:05:01 +0800 (CST)
-Received: from k01.huawei.com (unknown [10.67.174.197])
-        by APP4 (Coremail) with SMTP id gCh0CgDX+9gPYmpjfcbAAA--.7279S2;
-        Tue, 08 Nov 2022 22:05:04 +0800 (CST)
-From:   Xu Kuohai <xukuohai@huaweicloud.com>
-To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S235092AbiKHOHH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Nov 2022 09:07:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6468770540
+        for <bpf@vger.kernel.org>; Tue,  8 Nov 2022 06:06:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667916366;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=mhVuivBI13XN7hFJRIVsKLRsld9h+iIMpKP8ks7YdsA=;
+        b=dPHY97fOjqxv+lnN7zZmLfpW9uXWKCqaRdcavGEcEphqjvmrp0boMVT8P4HaoBM8+TI7mr
+        AZgcOPxdNttjzSZTsefhi/1eMZDe+V5UQcXUEEGsFEHQP2wuk895aYKBmC7kEhE/r6VBwk
+        Nxol8nxWvhT7ZWN13V7/jrHt/DHGbWg=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-412--VaAZ9stPw6IyXAaLwgvPA-1; Tue, 08 Nov 2022 09:06:05 -0500
+X-MC-Unique: -VaAZ9stPw6IyXAaLwgvPA-1
+Received: by mail-ej1-f69.google.com with SMTP id nb1-20020a1709071c8100b007ae4083d6f5so5639113ejc.15
+        for <bpf@vger.kernel.org>; Tue, 08 Nov 2022 06:06:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mhVuivBI13XN7hFJRIVsKLRsld9h+iIMpKP8ks7YdsA=;
+        b=FdvrcqxL20g80V1Hyo9r02kzV+5TrLBKfe3m4vL0ZCY0Kp705onhxWB3pG5v3Ymh+h
+         1sBddWEMC0L3N/iOBZ/to9pUJpCRikWPPmPPEVIu6iAoQCethYzpBB8jAyIwjYElA4fQ
+         SB2EE4nRaUtX1+n6On6PF7sOyT/z2/NovkMgfLKmK6hJROq2/PS6yho2L/BdGDNSd0hU
+         Ln8B6q+pMKdx/OV93PLLFA1J/xHWFvPebjU9q7wBdVW8qdBweCMFaRlKvfH9MHMv8XXo
+         ME+K23ZXUvrSdELgL4rVyXxsbmPSQrI1CQPIrODblBERMDtxvzjrtqi9n9FlWA9y2FdR
+         yepQ==
+X-Gm-Message-State: ACrzQf2IKg75LrRLboxx8iCEHlnm5r6w16HBUHeSOj44/4L7d2fhgoe6
+        KuD5jEwkalfORjhKm3ya7sombInGVT6CAGk0o6a8RCAh5NJlBmzUOyCKMeCGGjeH1OSZlh9WeiU
+        SxTM599L9kkM+
+X-Received: by 2002:a17:907:7fa5:b0:791:9a5f:101a with SMTP id qk37-20020a1709077fa500b007919a5f101amr53393794ejc.453.1667916364074;
+        Tue, 08 Nov 2022 06:06:04 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM7djvw8VkYFn6W6euariW0OoAZIMaedqHxBcgsFjLFzV0ydAI5gULLr0JxSI5H6L4acct260w==
+X-Received: by 2002:a17:907:7fa5:b0:791:9a5f:101a with SMTP id qk37-20020a1709077fa500b007919a5f101amr53393746ejc.453.1667916363488;
+        Tue, 08 Nov 2022 06:06:03 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id w23-20020aa7dcd7000000b00443d657d8a4sm5531703edu.61.2022.11.08.06.06.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 06:06:03 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id B375678152B; Tue,  8 Nov 2022 15:06:02 +0100 (CET)
+From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
-Subject: [PATCH bpf-next v2] bpf: Initialize same number of free nodes for each pcpu_freelist
-Date:   Tue,  8 Nov 2022 09:22:07 -0500
-Message-Id: <20221108142207.4079521-1-xukuohai@huaweicloud.com>
-X-Mailer: git-send-email 2.30.2
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>
+Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH bpf-next v3 0/3] A couple of small refactorings of BPF program call sites
+Date:   Tue,  8 Nov 2022 15:05:58 +0100
+Message-Id: <20221108140601.149971-1-toke@redhat.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgDX+9gPYmpjfcbAAA--.7279S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFyxArWrAw15ZF1xWw48WFg_yoW8CF4rpF
-        4fAw1jqw1vgryrWws5G3W8W343t3yDGw17Gan8Kr15Zry3KFyqqw1vyF4aqFW7WF4Ivr4F
-        kFsI9FZFyayUWFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkIb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
-        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
-        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
-        IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
-        z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Xu Kuohai <xukuohai@huawei.com>
+Stanislav suggested[0] that these small refactorings could be split out from the
+XDP queueing RFC series and merged separately. The first change is a small
+repacking of struct softnet_data, the others change the BPF call sites to
+support full 64-bit values as arguments to bpf_redirect_map() and as the return
+value of a BPF program, relying on the fact that BPF registers are always 64-bit
+wide to maintain backwards compatibility.
 
-pcpu_freelist_populate() initializes nr_elems / num_possible_cpus() + 1
-free nodes for some CPUs, and then possibly one CPU with fewer nodes,
-followed by remaining cpus with 0 nodes. For example, when nr_elems == 256
-and num_possible_cpus() == 32, if CPU 0 is the current cpu, CPU 0~27
-each gets 9 free nodes, CPU 28 gets 4 free nodes, CPU 29~31 get 0 free
-nodes, while in fact each CPU should get 8 nodes equally.
+Please see the individual patches for details.
 
-This patch initializes nr_elems / num_possible_cpus() free nodes for each
-CPU firstly, then allocates the remaining free nodes by one for each CPU
-until no free nodes left.
+v3:
+- In patch 3, don't change types of return values that are copied to
+  userspace (which should fix selftest errors on big-endian archs like s390)
+- Rebase on bpf-next
+- Collect Song's ACKs
 
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-Acked-by: Yonghong Song <yhs@fb.com>
----
-v2: Update commit message and add Yonghong's ack
----
- kernel/bpf/percpu_freelist.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+v2:
+- Rebase on bpf-next (CI failure seems to be unrelated to this series)
+- Collect Stanislav's Reviewed-by
 
-diff --git a/kernel/bpf/percpu_freelist.c b/kernel/bpf/percpu_freelist.c
-index b6e7f5c5b9ab..89e84f7381cc 100644
---- a/kernel/bpf/percpu_freelist.c
-+++ b/kernel/bpf/percpu_freelist.c
-@@ -100,12 +100,15 @@ void pcpu_freelist_populate(struct pcpu_freelist *s, void *buf, u32 elem_size,
- 			    u32 nr_elems)
- {
- 	struct pcpu_freelist_head *head;
--	int i, cpu, pcpu_entries;
-+	int i, cpu, pcpu_entries, remain_entries;
-+
-+	pcpu_entries = nr_elems / num_possible_cpus();
-+	remain_entries = nr_elems % num_possible_cpus();
- 
--	pcpu_entries = nr_elems / num_possible_cpus() + 1;
- 	i = 0;
- 
- 	for_each_possible_cpu(cpu) {
-+		int j = i + pcpu_entries + (remain_entries-- > 0 ? 1 : 0);
- again:
- 		head = per_cpu_ptr(s->freelist, cpu);
- 		/* No locking required as this is not visible yet. */
-@@ -114,7 +117,7 @@ void pcpu_freelist_populate(struct pcpu_freelist *s, void *buf, u32 elem_size,
- 		buf += elem_size;
- 		if (i == nr_elems)
- 			break;
--		if (i % pcpu_entries)
-+		if (i < j)
- 			goto again;
- 	}
- }
+[0] https://lore.kernel.org/r/CAKH8qBtdnku7StcQ-SamadvAF==DRuLLZO94yOR1WJ9Bg=uX1w@mail.gmail.com
+
+Kumar Kartikeya Dwivedi (1):
+  bpf: Use 64-bit return value for bpf_prog_run
+
+Toke Høiland-Jørgensen (2):
+  dev: Move received_rps counter next to RPS members in softnet data
+  bpf: Expand map key argument of bpf_redirect_map to u64
+
+ include/linux/bpf-cgroup.h | 12 +++++------
+ include/linux/bpf.h        | 24 +++++++++++-----------
+ include/linux/filter.h     | 42 +++++++++++++++++++-------------------
+ include/linux/netdevice.h  |  2 +-
+ include/uapi/linux/bpf.h   |  2 +-
+ kernel/bpf/cgroup.c        | 12 +++++------
+ kernel/bpf/core.c          | 14 ++++++-------
+ kernel/bpf/cpumap.c        |  4 ++--
+ kernel/bpf/devmap.c        |  4 ++--
+ kernel/bpf/offload.c       |  4 ++--
+ kernel/bpf/verifier.c      |  2 +-
+ net/core/filter.c          |  4 ++--
+ net/packet/af_packet.c     |  7 +++++--
+ net/xdp/xskmap.c           |  4 ++--
+ 14 files changed, 70 insertions(+), 67 deletions(-)
+
 -- 
-2.30.2
+2.38.1
 
