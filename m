@@ -2,168 +2,285 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FD8FC43217
-	for <bpf@archiver.kernel.org>; Tue,  8 Nov 2022 17:01:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F3ECC433FE
+	for <bpf@archiver.kernel.org>; Tue,  8 Nov 2022 17:05:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233903AbiKHRBb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Nov 2022 12:01:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42482 "EHLO
+        id S231740AbiKHRFC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Nov 2022 12:05:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233372AbiKHRBa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Nov 2022 12:01:30 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2083.outbound.protection.outlook.com [40.107.237.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8333F28F;
-        Tue,  8 Nov 2022 09:01:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G7I0Vj+zumiHUT55UM120Fp2CowqjaLtqnYBsJSoyppha6+HImFXcothgTwUr2Ufe7Hnzu7/phiU5hXSepexRZkdDFnVfSD1W1/DagCbbHM6Qs/Y2AuZ29IBIqAkUUpf5R9oybzj+R2HzbVis6OwaTQiegLBmwHE5RoEflNzrjNqcCRWHzp/CUGSSPidyyutiNfxYElpWukPCN1+O7zIkNzSFPfk5nuzL2Lvk/43eByCL96qmLg9bWFWRIAKb6k1h6J/YbU3aD++comiVahP7qlbEjYtYDQ8lAURe3wXMRVQ0kYd4veo7VtzWdRtcUKwsFsRA3s+pZ+drxgy4OEpgw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IDFL3fml/XZezdxJwN7sXPwJdXONiV8GGQIFXpK3eL4=;
- b=QlC+dp19kIh30c5gU0i06JxEfp6dT8xX4IVs3SN9mGvv8X5R7pZgqMD6wCDhT4x+EEWXEmgXVoDq9CDSYxUiE750kTqt9Ah1TU0tOhOpaux1Up98vvV9ZP12H9FnpbYmh+xO73YnoR+HfOwnX/Y0HeGWhfJ7h/5g7Y5TsBsDZidWcTkasR8ZC6dqGhBFz8o3kGjNUj7ACWsk3Xnf4GZvhcm1vqQFdRRVvyNIh5lts06s1fXyBgZreuqLAio3vJ738JJJMoAaX+8Ex2sRHutJm2cW6h2p8hdvsOgpdBB2oVTvVViBi+eLebYyt1R2qVayASZnhikI0riE0d0rB79zVg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IDFL3fml/XZezdxJwN7sXPwJdXONiV8GGQIFXpK3eL4=;
- b=lbO05Jvji4FTyTMfSZoLe9i3ywBvlfarZlAkXXDuhQgcFbMO+Coghp0QibFez/8XEeyljOnuin7wTi/Gjq7x1nLcDl0Ni6EiNn9RcI3upNWi+CRigdLC5iwJ6O25XzstOz1+16YPaN2V1x/fzrcGmgJJo/TPmis0PEUrGon0i1941zw1/hYyLsPcurwgcl0Z7wBcnOqWYFxtstcnPiJl/bfGREsui41h7JSXJsz5AV4ZFIZ+6ArZsRTUwHPntkIi056xFAihZ7L32a65g5wRgod6+BxLb+RG9aKLA5nWu09G0sVmShi0fNvG8HRdqdYRDr8watkl/Bm27WZquucMWg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by CH0PR12MB5187.namprd12.prod.outlook.com (2603:10b6:610:ba::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Tue, 8 Nov
- 2022 17:01:27 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5791.026; Tue, 8 Nov 2022
- 17:01:27 +0000
-Date:   Tue, 8 Nov 2022 13:01:26 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     bpf@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>,
-        Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        David Gibson <david@gibson.dropbear.id.au>,
-        Eric Auger <eric.auger@redhat.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Shameerali Kolothum Thodi 
-        <shameerali.kolothum.thodi@huawei.com>,
-        Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
-Subject: Re: [PATCH v4 10/17] iommufd: IOCTLs for the io_pagetable
-Message-ID: <Y2qLZtnpuBooH2t4@nvidia.com>
-References: <0-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
- <10-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
- <Y2pZMSejF7nHinIr@debian.me>
+        with ESMTP id S231341AbiKHRFA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Nov 2022 12:05:00 -0500
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174441B9EA
+        for <bpf@vger.kernel.org>; Tue,  8 Nov 2022 09:04:59 -0800 (PST)
+Received: by mail-pg1-x543.google.com with SMTP id o13so4613559pgu.7
+        for <bpf@vger.kernel.org>; Tue, 08 Nov 2022 09:04:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=t8PT/sI7LbB8xs92ZEYzV7KdyM4gIu794+lDAeMz9zo=;
+        b=MAbLnuHRNafr2e1H7Xaxo3GWU1yp2sqRCw5+1c0LWIwvWJWIDEjfJpKfzwaDxNZJJ9
+         UPKoMCk3trApVHkfA82ReOMBySw6OvQ6miLgb5xxmRG3FtPauFPh1uBmtIGhnzxI2oGF
+         evdWikwqIJKunSMjKaKVWhUx/AmjRmkMOjZMxoPgCWLx/aC6d4HcdNNHXYPo7v257Ms9
+         I0G79tmtfamNUy9zcepVFXplWLoDzNHHcP3iFY3Y0T9OCFElzhszxQnUbdjQgaXzYvgu
+         wJyNLxpntp33uO5j7xRREjQKxPSFUJfSZ4Ow4iYDyY4VSQa+8J+DjUUbCv590bbPkutb
+         P9iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t8PT/sI7LbB8xs92ZEYzV7KdyM4gIu794+lDAeMz9zo=;
+        b=a1mwHRNsNQXTXDfHF8B/cKQQfH/ADFU+jARQQDWSfk5SIS/2rCxL+yI4lmzR39ZGBT
+         ewpgDjsWzoh8U1RZ2o8p6JbxjvjdjokA311n41nkmdjA31vS5sZas7BQTCbBHKBVmkp0
+         mlb0HkoSRJ5nYxnzMFLuBPxCwyZDGf4ug4yEFMCUj7L+ax9e/ubEBGyhXXaEoQHplMV8
+         cyc7FIZK5agD3nWpfT+hZumMAH12+ceRBkUwkKgmWX2AaU6FwyQud5k4vjxAgbKmMqUB
+         4s75frJMILnNUkdbEoct4Ev2X0dZrG+1ZsDHbGKIz/VpMZ9lhiyyDAYadwlO+9leeMG9
+         Z9qA==
+X-Gm-Message-State: ACrzQf2XalGDNlEUU/dbOBw05NvaoqKEFSLj5oivLjhSjwzF9ZBWqzI4
+        Oygqm24gINtUkZM4p0A/kYc=
+X-Google-Smtp-Source: AMsMyM4TgnrC5Jcv8abyArYv5a/6yOzgbwmRn2uK+fAf+zA+65HTs5h/7sebJ8NJWBKL9FTPAvlC2A==
+X-Received: by 2002:a05:6a02:18f:b0:44a:3972:898d with SMTP id bj15-20020a056a02018f00b0044a3972898dmr47660303pgb.525.1667927098397;
+        Tue, 08 Nov 2022 09:04:58 -0800 (PST)
+Received: from localhost ([14.96.13.220])
+        by smtp.gmail.com with ESMTPSA id o27-20020aa7979b000000b0056b932f3280sm6619570pfp.103.2022.11.08.09.04.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 09:04:57 -0800 (PST)
+Date:   Tue, 8 Nov 2022 22:34:52 +0530
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     Yonghong Song <yhs@fb.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
+        Martin KaFai Lau <martin.lau@kernel.org>
+Subject: Re: [PATCH bpf-next v2 5/8] bpf: Add bpf_rcu_read_lock() verifier
+ support
+Message-ID: <20221108170452.jq24rymkfeozxtwj@apollo>
+References: <20221108074047.261848-1-yhs@fb.com>
+ <20221108074114.264485-1-yhs@fb.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y2pZMSejF7nHinIr@debian.me>
-X-ClientProxiedBy: BLAPR03CA0176.namprd03.prod.outlook.com
- (2603:10b6:208:32f::26) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CH0PR12MB5187:EE_
-X-MS-Office365-Filtering-Correlation-Id: d41fe0bc-5573-43bf-237b-08dac1aadfe3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VFbeIUD4gCSTzBNbqB70HopkEKK3rlF/+tcYGkz8RF4utijsmx2rmxqmc20uKK8ntL5PRJhHzQldNAjmCxngmxTphd2sHF6KvruA0nR/zIjYF/dN8Pu5zZT8JlmmWBs35bOCRDggTQeWgKS+D3oKWKGn6+JDDXHbPtoctIMHeCVbhCKkgOupqGXDWpTRnfQIQVcwnnHK47AV97Nqt4dNBtbyaT7NQA9etByFhGBdxWj5bxCiyEMwNG0ClnN6J18nrsOzXhlahTXCW8C87aIh3z/3fMQtpOihEvGac9e4UxcSNeTC3HKpLu9gtG/md0vv8+i2dBWJV1lVE6BNZA8D/Daa1Ix5JlVK4d21a0jhrPIyCRI7tkl5+ecbunAmIrewkd3H2XSDGUsAAKJSfgjm9NEVHTlTlRLQXwrBEjqGF2jPGFYRb3H5yTth3WaZ2TQB8yeFEYfPRXac17MhK7/k2q3Ul9+QzUXgRlaChh/iKnbufmkz5uRX/SoM7NrsNS0abYi09zlTGAAIpLhsMJO50OtcLEAlyfxon7jgElwJBmnUkoLX4LF8zCLz7XnQ6/6Ze/sJ6Q1ro/jXjYfzy3T+OoN7Um7ZvjwDj3eaNVnGXbRP//kqCBNU+g4lqvcyk6HPEbR+DUK37iUT9YeK3jERN56Pcrh0THsAJ19TtATv2Y9zh5NVtsN/NFh0qBrEsa/Ry1cfrRct54NMLuHzSu4eBA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(39860400002)(346002)(366004)(136003)(451199015)(6512007)(83380400001)(66476007)(186003)(2616005)(26005)(38100700002)(8936002)(7416002)(54906003)(7406005)(5660300002)(2906002)(478600001)(6486002)(53546011)(6506007)(41300700001)(316002)(8676002)(66556008)(4326008)(66946007)(86362001)(6916009)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pfa7eF+1rz7cJv5BMljMjyEuu4McEJRC9k8JegHn303HqrvbV+w6KFg690tX?=
- =?us-ascii?Q?/+ELLhvpSaVQabAP6cXVmWiWEjw2fyivAThQJffSUBHTCENExpvLUQwP8y/B?=
- =?us-ascii?Q?zl7f/AAPrKm7vLh5TGzNdsGC1KeJsrpLd0rC2qMyQ07Wgmm2tzH3F3XcmxQO?=
- =?us-ascii?Q?pkwqbW8bvq/47DtK9P9LAcKXXVR1OCfhBfppUynkZN5MjLdkmONBEiMKovR9?=
- =?us-ascii?Q?nVQtUxU1nkcIUHm3kFjENBZvo972vKGi26UcztBIysrhMHoTwxqeYTeylyoX?=
- =?us-ascii?Q?rMr1eAZoN8Beaf9FxXf7ukwU7L/iZjb2CETOkUWitsH68AsHM6tqpuGMUnM/?=
- =?us-ascii?Q?Wzz4L7Kukb6AJoT+lFImmwGtA2e1Wu63VsRZf33gZjVxACAW9KA8KmyZoGzF?=
- =?us-ascii?Q?K+NrCcUnlUaDO6TGZGLNFHAOdUtCvSusSaV+jLRgxEgGZq/wK5mrAjBwifZQ?=
- =?us-ascii?Q?FhuWascmDyvrVIdoOW9H6x9naqlh6moWUQcgaLV3y8NJ17cvIjARHeMT9Wg2?=
- =?us-ascii?Q?vkKHmN8Hgg4nOOhI2DIQFxLxocgPF0gMcNroQfxLIsASZT1bm0vZlg6pWvgg?=
- =?us-ascii?Q?KjJfniGhE7KzxktRoD75wcXP5xE3L6oQBV2fmrZqWdmp0OIfF6PgINElYMOW?=
- =?us-ascii?Q?NudZYiP0uxBA62J7V6aoczjQilM+RRaasBtBKdYTq7wOwGp24unaJkXGa3t0?=
- =?us-ascii?Q?1K/qkllBeTfGNv04Q53RY/7ZWi2O1pOeanGxRe8of64w4ywFJ+aV0amrBBOW?=
- =?us-ascii?Q?mNDn/VwVHyR8RB5CTBGhvTMFeq1ESrTRjoZQTZYgQ1c1HiduW964F2rLcHHy?=
- =?us-ascii?Q?QUV90dSi9PrDMS1JH7UYEEX+Scsvl4or1vTjRNqZvRhwIMgkjgSAFFRMuCAP?=
- =?us-ascii?Q?5e/MYXhE23umrvOBFIhrv3IWFVzsoEED9F9GDoBaReJVGwfu9qP4lfcvdO51?=
- =?us-ascii?Q?lUyPJ0E4ZBVl8R/fbFdnPGE2QOcp1kI7eztd6ekwTzVR9Xmt1XO016wFAcKi?=
- =?us-ascii?Q?rvAOUMSv+dYbLFmKlzb1jIzqFtAmmXn5SLDLFZ0qpO9qsWqbVhePnUNSWFXk?=
- =?us-ascii?Q?xyZCzNw/Z1FT1K/GX3aj1TXoHRuSEC8Ot6+B5Hl8qZl3U1CcwHOFjzJ5RBva?=
- =?us-ascii?Q?oExlHB5N1CzL521bWhminb/tBGrzdTfnnEfoNmeawV1GPL+fjF/tsbKboIj1?=
- =?us-ascii?Q?f2fiH2tDg47O1W8fBdmCoQxDrnxyWaaCvEwBo7zsn5m9ByyHP/G88lhzokCu?=
- =?us-ascii?Q?PWb1a/kctxJdiCpxHZehVjJr72liq+Q9jYGCB6DfiUldQb5RICYn9QgR0nNZ?=
- =?us-ascii?Q?vJoTT2i5Y+5X2iERtidHs8t0nLZpyAzqb+5bO7VyEhuudvMFObrrhvIAS61X?=
- =?us-ascii?Q?rDTCzLVFfWbzQvHP9KOJS/mzdCKFavtxMaWEUiBA1Pr+/BTlgDk549p4ELgs?=
- =?us-ascii?Q?09Dnj+hBQtBGjiB4o3QX4282WSgZhWZx97E501XcVKFqTQM6ETigMtnu7bmZ?=
- =?us-ascii?Q?llSBdVK65ZxdFKrSkQTJxWCZwT3RIx6n1/QR63zB9h0noGgrJkb8ooat+GbL?=
- =?us-ascii?Q?KBH0+Qmio9pYZLIq/vM=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d41fe0bc-5573-43bf-237b-08dac1aadfe3
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Nov 2022 17:01:27.3495
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: skQzoImjpaDdxcE0t4JEs3lJRW1baQMP3Q2S13dcnTDfRjTmQjSmlxAApCsC7Asr
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5187
+In-Reply-To: <20221108074114.264485-1-yhs@fb.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 08:27:13PM +0700, Bagas Sanjaya wrote:
-> I see kernel-doc warnings (missing short descriptions) when making
-> htmldocs, so I have applied the fixup:
-> 
-> ---- >8 ----
-> 
-> From 5643b202ae9853c11434466c76aeaaa044e88b07 Mon Sep 17 00:00:00 2001
-> From: Bagas Sanjaya <bagasdotme@gmail.com>
-> Date: Tue, 8 Nov 2022 20:14:25 +0700
-> Subject: [PATCH] iommufd: Add missing ioctl short descriptions
-> 
-> Checking kernel-doc comments in iommufd.h header with scripts/kernel-doc
-> produces missing short description warnings:
-> 
-> include/uapi/linux/iommufd.h:80: warning: missing initial short description on line:
->  * struct iommu_iova_range
-> include/uapi/linux/iommufd.h:250: warning: missing initial short description on line:
->  * enum iommufd_option
-> include/uapi/linux/iommufd.h:267: warning: missing initial short description on line:
->  * enum iommufd_option_ops
-> include/uapi/linux/iommufd.h:277: warning: Cannot understand  * @size: sizeof(struct iommu_option)
->  on line 277 - I thought it was a doc line
-> include/uapi/linux/iommufd.h:299: warning: missing initial short description on line:
->  * enum iommufd_vfio_ioas_op
+On Tue, Nov 08, 2022 at 01:11:14PM IST, Yonghong Song wrote:
+> To simplify the design and support the common practice, no
+> nested bpf_rcu_read_lock() is allowed. During verification,
+> each paired bpf_rcu_read_lock()/unlock() has a unique
+> region id, starting from 1. Each rcu ptr register also
+> remembers the region id when the ptr reg is initialized.
+> The following is a simple example to illustrate the
+> rcu lock regions and usage of rcu ptr's.
 >
-> One of them is reported by Stephen Rothwell when merging iommufd tree for
-> linux-next.
+>      ...                    <=== rcu lock region 0
+>      bpf_rcu_read_lock()    <=== rcu lock region 1
+>      rcu_ptr1 = ...         <=== rcu_ptr1 with region 1
+>      ... using rcu_ptr1 ...
+>      bpf_rcu_read_unlock()
+>      ...                    <=== rcu lock region -1
+>      bpf_rcu_read_lock()    <=== rcu lock region 2
+>      rcu_ptr2 = ...         <=== rcu_ptr2 with region 2
+>      ... using rcu_ptr2 ...
+>      ... using rcu_ptr1 ... <=== wrong, region 1 rcu_ptr in region 2
+>      bpf_rcu_read_unlock()
+>
+> Outside the rcu lock region, the rcu lock region id is 0 or negative of
+> previous valid rcu lock region id, so the next valid rcu lock region
+> id can be easily computed.
+>
+> Note that rcu protection is not needed for non-sleepable program. But
+> it is supported to make cross-sleepable/nonsleepable development easier.
+> For non-sleepable program, the following insns can be inside the rcu
+> lock region:
+>   - any non call insns except BPF_ABS/BPF_IND
+>   - non sleepable helpers or kfuncs
+> Also, bpf_*_storage_get() helper's 5th hidden argument (for memory
+> allocation flag) should be GFP_ATOMIC.
+>
+> If a pointer (PTR_TO_BTF_ID) is marked as rcu, then any use of
+> this pointer and the load which gets this pointer needs to be
+> protected by bpf_rcu_read_lock(). The following shows a couple
+> of examples:
+>   struct task_struct {
+>         ...
+>         struct task_struct __rcu        *real_parent;
+>         struct css_set __rcu            *cgroups;
+>         ...
+>   };
+>   struct css_set {
+>         ...
+>         struct cgroup *dfl_cgrp;
+>         ...
+>   }
+>   ...
+>   task = bpf_get_current_task_btf();
+>   cgroups = task->cgroups;
+>   dfl_cgroup = cgroups->dfl_cgrp;
+>   ... using dfl_cgroup ...
+>
+> The bpf_rcu_read_lock/unlock() should be added like below to
+> avoid verification failures.
+>   task = bpf_get_current_task_btf();
+>   bpf_rcu_read_lock();
+>   cgroups = task->cgroups;
+>   dfl_cgroup = cgroups->dfl_cgrp;
+>   bpf_rcu_read_unlock();
+>   ... using dfl_cgroup ...
+>
+> The following is another example for task->real_parent.
+>   task = bpf_get_current_task_btf();
+>   bpf_rcu_read_lock();
+>   real_parent = task->real_parent;
+>   ... bpf_task_storage_get(&map, real_parent, 0, 0);
+>   bpf_rcu_read_unlock();
+>
+> Signed-off-by: Yonghong Song <yhs@fb.com>
+> ---
+>  include/linux/bpf.h          |  1 +
+>  include/linux/bpf_verifier.h |  7 +++
+>  kernel/bpf/btf.c             | 32 ++++++++++++-
+>  kernel/bpf/verifier.c        | 92 +++++++++++++++++++++++++++++++-----
+>  4 files changed, 120 insertions(+), 12 deletions(-)
+>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index b4bbcafd1c9b..98af0c9ec721 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -761,6 +761,7 @@ struct bpf_prog_ops {
+>  struct btf_struct_access_info {
+>  	u32 next_btf_id;
+>  	enum bpf_type_flag flag;
+> +	bool is_rcu;
+>  };
+>
+>  struct bpf_verifier_ops {
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index 1a32baa78ce2..5d703637bb12 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -179,6 +179,10 @@ struct bpf_reg_state {
+>  	 */
+>  	s32 subreg_def;
+>  	enum bpf_reg_liveness live;
+> +	/* 0: not rcu ptr; > 0: rcu ptr, id of the rcu read lock region where
+> +	 * the rcu ptr reg is initialized.
+> +	 */
+> +	int active_rcu_lock;
+>  	/* if (!precise && SCALAR_VALUE) min/max/tnum don't affect safety */
+>  	bool precise;
+>  };
+> @@ -324,6 +328,8 @@ struct bpf_verifier_state {
+>  	u32 insn_idx;
+>  	u32 curframe;
+>  	u32 active_spin_lock;
+> +	/* <= 0: not in rcu read lock region; > 0: the rcu lock region id */
+> +	int active_rcu_lock;
+>  	bool speculative;
+>
+>  	/* first and last insn idx of this verifier state */
+> @@ -424,6 +430,7 @@ struct bpf_insn_aux_data {
+>  	u32 seen; /* this insn was processed by the verifier at env->pass_cnt */
+>  	bool sanitize_stack_spill; /* subject to Spectre v4 sanitation */
+>  	bool zext_dst; /* this insn zero extends dst reg */
+> +	bool storage_get_func_atomic; /* bpf_*_storage_get() with atomic memory alloc */
+>  	u8 alu_state; /* used in combination with alu_limit */
+>
+>  	/* below fields are initialized once */
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index d2ee1669a2f3..c5a9569f2ae0 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -5831,6 +5831,7 @@ static int btf_struct_walk(struct bpf_verifier_log *log, const struct btf *btf,
+>  		if (btf_type_is_ptr(mtype)) {
+>  			const struct btf_type *stype, *t;
+>  			enum bpf_type_flag tmp_flag = 0;
+> +			bool is_rcu = false;
+>  			u32 id;
+>
+>  			if (msize != size || off != moff) {
+> @@ -5850,12 +5851,16 @@ static int btf_struct_walk(struct bpf_verifier_log *log, const struct btf *btf,
+>  				/* check __percpu tag */
+>  				if (strcmp(tag_value, "percpu") == 0)
+>  					tmp_flag = MEM_PERCPU;
+> +				/* check __rcu tag */
+> +				if (strcmp(tag_value, "rcu") == 0)
+> +					is_rcu = true;
+>  			}
+>
+>  			stype = btf_type_skip_modifiers(btf, mtype->type, &id);
+>  			if (btf_type_is_struct(stype)) {
+>  				info->next_btf_id = id;
+>  				info->flag = tmp_flag;
+> +				info->is_rcu = is_rcu;
+>  				return WALK_PTR;
+>  			}
+>  		}
+> @@ -6317,7 +6322,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+>  {
+>  	enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
+>  	bool rel = false, kptr_get = false, trusted_args = false;
+> -	bool sleepable = false;
+> +	bool sleepable = false, rcu_lock = false, rcu_unlock = false;
+>  	struct bpf_verifier_log *log = &env->log;
+>  	u32 i, nargs, ref_id, ref_obj_id = 0;
+>  	bool is_kfunc = btf_is_kernel(btf);
+> @@ -6356,6 +6361,31 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+>  		kptr_get = kfunc_meta->flags & KF_KPTR_GET;
+>  		trusted_args = kfunc_meta->flags & KF_TRUSTED_ARGS;
+>  		sleepable = kfunc_meta->flags & KF_SLEEPABLE;
+> +		rcu_lock = kfunc_meta->flags & KF_RCU_LOCK;
+> +		rcu_unlock = kfunc_meta->flags & KF_RCU_UNLOCK;
+> +	}
+> +
+> +	/* checking rcu read lock/unlock */
+> +	if (env->cur_state->active_rcu_lock > 0) {
+> +		if (rcu_lock) {
+> +			bpf_log(log, "nested rcu read lock (kernel function %s)\n", func_name);
+> +			return -EINVAL;
+> +		} else if (rcu_unlock) {
+> +			/* change active_rcu_lock to its corresponding negative value to
+> +			 * preserve the previous lock region id.
+> +			 */
+> +			env->cur_state->active_rcu_lock = -env->cur_state->active_rcu_lock;
+> +		} else if (sleepable) {
+> +			bpf_log(log, "kernel func %s is sleepable within rcu_read_lock region\n",
+> +				func_name);
+> +			return -EINVAL;
+> +		}
+> +	} else if (rcu_lock) {
+> +		/* a new lock region started, increase the region id. */
+> +		env->cur_state->active_rcu_lock = (-env->cur_state->active_rcu_lock) + 1;
+> +	} else if (rcu_unlock) {
+> +		bpf_log(log, "unmatched rcu read unlock (kernel function %s)\n", func_name);
+> +		return -EINVAL;
+>  	}
+>
 
-Thanks, I was about to try to figure out what that was. I squashed it in.
+Can you provide more context on why having ids is better than simply
+invalidating the registers when the section ends, and making active_rcu_lock a
+boolean instead? You can use bpf_for_each_reg_in_vstate to find every reg having
+MEM_RCU and mark it unknown.
 
-Jason
+You won't have to match the id in btf_struct_access as such registers won't ever
+reach that function (if marked unknown on invalidation, they become scalars).
+The reg state won't need another active_rcu_lock member either, it is simply
+part of reg->type.
+
+It seems to that simply invalidating registers when rcu_read_unlock is called is
+both less code to write and simpler to understand.
+
+Having ids also makes the pruning algorithm unecessarily conservative.
+Later in states_equal, the check is:
+
+> +	if (old->active_rcu_lock != cur->active_rcu_lock)
+> +		return false;
+
+which means even though the current state just holding the RCU read lock would
+be enough to prune search, it would be rejected now due to distinct IDs (e.g. if
+the current path didn't make exactly the same number of rcu_read_lock calls
+compared to the old state).
