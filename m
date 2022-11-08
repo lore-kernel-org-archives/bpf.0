@@ -2,299 +2,162 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83AD7C433FE
-	for <bpf@archiver.kernel.org>; Tue,  8 Nov 2022 22:07:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C356CC433FE
+	for <bpf@archiver.kernel.org>; Tue,  8 Nov 2022 22:08:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbiKHWH3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Nov 2022 17:07:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39536 "EHLO
+        id S229907AbiKHWIE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Nov 2022 17:08:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbiKHWH1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Nov 2022 17:07:27 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C2222B02
-        for <bpf@vger.kernel.org>; Tue,  8 Nov 2022 14:07:26 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id j5-20020a05600c410500b003cfa9c0ea76so76016wmi.3
-        for <bpf@vger.kernel.org>; Tue, 08 Nov 2022 14:07:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+1mUjdZ54+QPDalwWmDM1Wvlv8fynQMUFliQp99sevY=;
-        b=DsnZuAFkKsFG/k0XFoVa0QhxTrnFR/6PDOazsno3rWhBr9RbasUUkMX/4W4RMSzkoZ
-         MUqIVQhN4MoTOH5vCcc/SC3oR/XrCZIxZmgM9Df0zRhV51OQDmEJ8a0VgntNrbDBbZN+
-         nErB64G+SwmjyB6P/RYhrlWgbfO6xxVIAPZGQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+1mUjdZ54+QPDalwWmDM1Wvlv8fynQMUFliQp99sevY=;
-        b=G7kTvf80ZZ+XdZHeoM6wocHAO4l/aMzlfalK2QtCxSE3J7Hm//1DXqjBhgwoQToVAG
-         25x/KtvVwgzgUZvK9phNNSQ69MhubWq7AXHo65gEZoTA7WTeGti1+J0Phr12uQeSRgF7
-         K73Y40O0acivdF1V186eJpxdzJNETGodRrNmHdhe2p7qM0gDRvCP7nm5IqDMquYY2P+b
-         ScjYMp+ujj6Tax+6niDVenHMrIEroK71hF6yFiTjewVKbepeXB/trGFvaxofbDUE9vwB
-         SA5lO/6dSWcwdnlfLx2kZiuA7v0mbsltSuk0RxfukhVL1EhcEj8QQrRL/xsO8CDjFRxm
-         R0Zw==
-X-Gm-Message-State: ACrzQf17+i6Mn16GG6Xyg7CxXfq6XyI1YiGloXNt4BQ6bDOhNFRVDkkY
-        UX7g8KhZxNPYkdIifyqFLNE4JgMGRfDkLQ==
-X-Google-Smtp-Source: AMsMyM6/OcGc43TWZBRenL/KnoQ7WKuZraiisgP0GI/mhCqRe4YyA/Xq8S+fGnkMu1XI58gymPwvEw==
-X-Received: by 2002:a7b:c303:0:b0:3b4:6e89:e5d5 with SMTP id k3-20020a7bc303000000b003b46e89e5d5mr38995760wmj.111.1667945244325;
-        Tue, 08 Nov 2022 14:07:24 -0800 (PST)
-Received: from revest.zrh.corp.google.com ([2a00:79e0:9d:6:8b01:3c16:212f:91df])
-        by smtp.gmail.com with ESMTPSA id bw9-20020a0560001f8900b00236c1f2cecesm14001004wrb.81.2022.11.08.14.07.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 14:07:23 -0800 (PST)
-From:   Florent Revest <revest@chromium.org>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kpsingh@kernel.org, jackmanb@google.com, markowsky@google.com,
-        mark.rutland@arm.com, mhiramat@kernel.org, rostedt@goodmis.org,
-        xukuohai@huawei.com, linux-kernel@vger.kernel.org,
-        Florent Revest <revest@chromium.org>
-Subject: [RFC 1/1] bpf: Invoke tracing progs using fprobe on archs without direct call
-Date:   Tue,  8 Nov 2022 23:06:51 +0100
-Message-Id: <20221108220651.24492-2-revest@chromium.org>
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-In-Reply-To: <20221108220651.24492-1-revest@chromium.org>
-References: <20221108220651.24492-1-revest@chromium.org>
+        with ESMTP id S229526AbiKHWIC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Nov 2022 17:08:02 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE541E726;
+        Tue,  8 Nov 2022 14:07:59 -0800 (PST)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A8JRKGO024346;
+        Tue, 8 Nov 2022 14:06:21 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=s2048-2021-q4;
+ bh=/aeC5P4a6geIBycwczBlQ0s+Lqao1x8HrCtNp5ECyTQ=;
+ b=Wxal9tea1bDoTxFwdr8YE+LhGEr+brXxn3ajrocOpoQd2agjzB6eIdXqprfAW7dgR7de
+ v1SxKTNsxJdco8jenU5Z52LshNbZrDHHpT6DUQPA+N/gel/snrEM8erVCbr80RZy8B57
+ 8iEh+x8pIHGUA1OVn+2cMPKwkJ19qqRojVg+wnHrFikCXDomDnUQYroettk9KVZNjzYS
+ 9G5wj/7RqMMUR+BcxwHr0S8ZlWLvtJKniHz+kWQ7yahMztyBYlIRBIrS4pN2hgIqWgVJ
+ UkurK74n27se5qEz6zCCmXT72KRGi50LV94gVSjHEQdngqZUEQKBMyj6xY4NGtcaAM+r Vg== 
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2104.outbound.protection.outlook.com [104.47.55.104])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3kqh9wf2d7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Nov 2022 14:06:20 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EEVUYpcVgVzrh/w/NP1y5u/2oQhUnyyq6H/hXGvzf0Bl4u7JXksUCqy9+0IsOXObnF+dLmKlOR03co7K4We6DdLpUqqJfeB0DWCwYcY79nFFUnP6irhSO5QDz2NsBH8rsrjV6E1hq8KZ2/UPZSWayLdtMdSv/NROJL0LuvOzKlLzkrKDMqohyNXxZvsN90MQK0Nb7K2tI5ZIWLb48fIDutk3eBFRmBsGElqr67aoh/lmrEfWgCiXnzzKkmWFVkK/jFiRzPnXSrTYyMzTXs6X11A0DP1imuXCZY1y3IZG6Dv3/9HzKnudv8t4fQrsnhLMnPE3IjEOEJI6cHl9XlsHUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/aeC5P4a6geIBycwczBlQ0s+Lqao1x8HrCtNp5ECyTQ=;
+ b=QoKnrqIG2Tc2ZG/ho6dT89NuFbv6JAveP2tvM4EeL54QuqJz8xLQH/C6Bmn+LIdCzgsV2TiVQUghvO+WFmhH9sndvcQ6yRdDkpC4ni3EIRZOo/1V7wP7kpp4tMkIRquM3aYUA4zq3tyun+Qvo+ZKaMfqkZi5AvoY94SsrLYIYLOyonQ/YpTAYwXg+t1UIjnriuSx0BOjcDLlT81v+WzOHcAdxvjCXHxlFz63mwQ10c8kxPRf2hBvHXqwil6vUEiafgdYGh/8WR9slThH74mDmnimex2rb7/MX2mbsHpQaT4m5+HrmUX/bXu19boycJ4m5/Szwv0z8ar14XWI7Qphbw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by BN8PR15MB3396.namprd15.prod.outlook.com (2603:10b6:408:a7::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.24; Tue, 8 Nov
+ 2022 22:06:17 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::1f2:1491:9990:c8e3]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::1f2:1491:9990:c8e3%4]) with mapi id 15.20.5791.027; Tue, 8 Nov 2022
+ 22:06:17 +0000
+Message-ID: <e38ccca6-52b6-27e0-5d10-3a5b8c80432a@meta.com>
+Date:   Tue, 8 Nov 2022 14:06:14 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [RFC PATCH v1 2/2] selftests: bpf: add a test when
+ bpf_probe_read_kernel_str() returns EFAULT
+Content-Language: en-US
+To:     Francis Laniel <flaniel@linux.microsoft.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Alban Crequy <alban.crequy@gmail.com>,
+        Alban Crequy <albancrequy@microsoft.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        linux-mm@kvack.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <20221108195211.214025-1-flaniel@linux.microsoft.com>
+ <20221108195211.214025-3-flaniel@linux.microsoft.com>
+From:   Yonghong Song <yhs@meta.com>
+In-Reply-To: <20221108195211.214025-3-flaniel@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR03CA0334.namprd03.prod.outlook.com
+ (2603:10b6:a03:39c::9) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|BN8PR15MB3396:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0a55f573-7f81-447b-a00c-08dac1d575c5
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: a5Ez905mlT+39EhayGlUlizYnd8kjgZj07kK3VAtidiaL1TNLuvAEX4me8e76MiUokqAskFuLhfzFrAZeu+nwMgfwurNroPbig4sxwCn1GgLVP4JkiNaOjERoLrkUE+LCWyL54e7/XkPNA9/3jn1t2IjV8zTq1+w/9NWASBz429pgiMGVe+ktI+uu0yMxcLClsoK5z+U3NYMk2sGH/OPd0UEG1iVRgiDsS3UYNPlUxoCh7Wdoi4oheggSuOQLgNIsdVysQsD5jaW39LUocIzZLG9RyInE2dX6iflT5thZpULBTGHINeNBmOFtv1ohm+CxytK2olNMK2N3zO7oK6rFFehJABaQ2IiTOFGV8UrM8AzxbJBVKDsUleJam+i4MKHkI/dzXdi1MHN+mCWAxsGWBuYV3PJsfPwqnpjReHJyTQvRNGIz8+g8n5wiDmSQZZfcbCYxEJjlesyItpGHP+IQEV3qMGJAsO/ZD3+JpY4Ml85U0GOyWRQdtQ1eezDuy2p1E7eJgTrB9BXKd6p1Hb9vy75gnsuRdKpKqqsMEFgZKGxaFU4e52bz/5Wo8mSOwxfiB33BnrJxvBsV+DdbGtvaeQEz3xc1SMGf2ddoeFU5sCZZybKw4ADzp4RiveUp7N1YaPcNNHx58dfL5aWit+Y5Ijn5oyqTrHiLrVXQ3v5M6KHcjmTg+fLIO+bepEmBxK9QWTe86Mqkr9gdMBBPadUHFknbw7HEcgMFWNjnx2wvefy4M88ZYJoDyjPXD02pZ3WyHLWIX4of0XNKGyyCX0mEmHSDN6t+ET5ks8hCOYTclA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(366004)(396003)(346002)(39860400002)(451199015)(4326008)(66946007)(66476007)(66556008)(2906002)(53546011)(6506007)(6666004)(45080400002)(478600001)(6486002)(86362001)(31696002)(186003)(8676002)(36756003)(2616005)(6512007)(54906003)(316002)(5660300002)(7416002)(31686004)(8936002)(41300700001)(38100700002)(4744005)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VHN6SmNKR1dFenROdEh2ZEpnZjlYM2tLN1VuYWZ1bUNuVVk5MkN6Mm5sTVNF?=
+ =?utf-8?B?anRPbWNYSUVMelNoT3BCR2U2K0VTZGdsTkhDbFdDM1FRT2tIcjBkZXVZcTl3?=
+ =?utf-8?B?RHhYV1JoRlFrUURLMHlleFljRThNaU14SmxVNm5IbHNPaXNaL3JMNnhmbCtw?=
+ =?utf-8?B?Mlk1VUdGaFJ6a0psbWhBcGxzSHkzOFY4eDhWcnM1Zkt2OWkyc0RiNGdTZXNh?=
+ =?utf-8?B?SzhkYUZDWFFJV3pQNXZSUWdYTFVsS2szZm9uSHovVXhsZGpJb2V2NWlGQlZP?=
+ =?utf-8?B?ZW1DeE9WMkFHbk0yN3QzV05OYVRiMjVPT3FzYWlFU1VUNkFlUThYWm5zblVa?=
+ =?utf-8?B?aU84YjkxbkpvK1FENHNrVkYydHd1eUJlYnFuMDEvSXJxZnh6cWwxbVhiVUIr?=
+ =?utf-8?B?dWFDSERlbTdEM2szR1VlNCtIY1lLWlNnV2pzNDBmQmIrd0xNZ1JpclltYUY2?=
+ =?utf-8?B?bFI2Y0U1Z2Z0dTByellIWkMyVGlYZHBUYlRWQU5pVVkveEc5Y3BmdmxjWUVI?=
+ =?utf-8?B?WTJMYWpLWWNZRlV5K1dHYmtpTUhrNnd2UjBRSFRYRXdhUHlnNm1hdHpKUTBH?=
+ =?utf-8?B?cjd1TGlGSWp4WDc0MU9jL2tEd1BHWEpXNUJSalRlOUV3L1M5YWtkNFRRQ2lj?=
+ =?utf-8?B?aTk3LzhnUXFvMDhhYWRyZ0pEVExMWWZzT2MxaE9yWWVwcDRUNkdCSWVCZzRR?=
+ =?utf-8?B?SXU4a3djalFjblkwVkFnSVh6WjhxUU5wUmY1eEc2a2ZpUEtPa3RBNFE3VXlZ?=
+ =?utf-8?B?Vm9UK0xhellnaWpKeThYU2kvL0pENGYzK25pTlMza0NoM0k4c0ExZlpLenl6?=
+ =?utf-8?B?KzdjNnBpcXUyd1RPMUZtL0tTYVdWbWp1U0k3VkJqWVVVNVJ5V2N5UlVzUkVC?=
+ =?utf-8?B?VTBnUnN5ODljek9ZUHI5WDNuUDZ5U2VvWmlyUDZ4RHl1QzZIVU84YTdyZjBZ?=
+ =?utf-8?B?djdSazA4c1VwOThOU3Q5WVMyYkZJdWd2VE8vRWZhL2liOFdjbmZlRzdjTE1B?=
+ =?utf-8?B?SkhwRzZKZWJRSzRwK0tvaGhLU2dzRFVnWmVWSDRIaVZtd05zLzZVS1JLMHBk?=
+ =?utf-8?B?S09NWlgydUZ5Ym85WVdrNWdSUE5sYmU1Ry83RFBmRG5QZkwzaXMxN2l4Wjlm?=
+ =?utf-8?B?eFg4QUZaUHVka3NZMVpWSldRL0pDMXVMTkFKVUwvWXhBOXdOZzRPdENvdHUw?=
+ =?utf-8?B?VmF1VDZNQlBkeWtad01BWkVWR1JsTVRFeTFGU1dubWR3TDJEZUpoS0g4aGg5?=
+ =?utf-8?B?NTQyWVFXNENqaXk5cjNIbU0zZnFJb2d0QVZHcG9yWnRDOWhOTXF6YTh0SXFH?=
+ =?utf-8?B?eFFvU1dYVzltbzVaMmN5TStweXl3YmZhdGhiNkkxM3RQSXNxeFJRWktEWEE3?=
+ =?utf-8?B?NG1ldGpnRkhXK2JaM1J5L0MxWG80ZDVoVzVSVmsrUG5QSjc1YVVlV09lWkMy?=
+ =?utf-8?B?dUlFWm1BNkc3WGZhYlNOYVFWdmNIbFdUTlJ2Nk1wd01lR2NVWHlacWZ2UWQ3?=
+ =?utf-8?B?emZqMmt5dEluTlRVcW9wakFDeG5JcHFKTlBOdmc5Ry9uWFhxaEJqTm5ZRXhZ?=
+ =?utf-8?B?Q0JOTmZzWHRxT2FWVWFReEswbFVIVDdQaEtJLzZvMWxTQnoyemlQc2duQmp2?=
+ =?utf-8?B?cUZTUlN4NWhBa2g2bUtDdm1uZGoyZWhZdGpzMnJkTUVPN1dtNWtNYlZ2U0hk?=
+ =?utf-8?B?MWZjR3h0TjQzRmtIYVJqZHJtNG9rbDE4MWRZV21LNHNDaFhDMmE4cnRkREI2?=
+ =?utf-8?B?NFpHVzBFWFk1Z3BpSVVKM0JTKzIxUXBzRmxHRG5yankrSUVWL2JJci9RdVVO?=
+ =?utf-8?B?eS9iNTBGRytTTko2cWQrQTcrZVNyNlhKZ2FCRThpVXp2eVBxSEU5TzF2R0Zm?=
+ =?utf-8?B?QzNZMk0yU1VQeEFNc2NNcWF5Z3NHckgxOVpENnZxbmREMWdVOWRUN1YzdjZB?=
+ =?utf-8?B?SzBqZzFtd3FwaGUyeTdpVVM0ekNrb0E3WVhGd1p2Z2hsdUp4WG5sbE1FUzlV?=
+ =?utf-8?B?RXNubXhvSFBxdStPVE1EVSttTWl6ci9rMXQwVWE1aWNwdTd0VzJ0Rk85WE1Z?=
+ =?utf-8?B?OCs1RWcwOEFPSXhBa2dUeE1BRHVsVXZ2c2pDSWo4bnRkNVhMUGxoMXg1OWd5?=
+ =?utf-8?B?U1I5SnVSYytYTld1OWFlQ1BBUS84by9VSzdCSGR2bzBmbjUwUHJxcFo0S2Zz?=
+ =?utf-8?B?ZWc9PQ==?=
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0a55f573-7f81-447b-a00c-08dac1d575c5
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Nov 2022 22:06:17.6926
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mHThuFdnty+ZIaarWlkYg9oGDqA6tz64qS06zVoCjCJJt035YbzigT6S+yFgcKhr
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR15MB3396
+X-Proofpoint-ORIG-GUID: 8MuyCova3LIRHPm0SFoZYNVmQ20OjlLB
+X-Proofpoint-GUID: 8MuyCova3LIRHPm0SFoZYNVmQ20OjlLB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-07_11,2022-11-08_01,2022-06-22_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Some architectures may not support ftrace direct calls and can not jump
-directly to a BPF trampoline. This provides a fallback built on fprobe
-(itself built on a ftrace ops and rethook) so that BPF tracing programs
-can still be called on these architectures.
 
-The behavior of the entry and exit hooks somewhat mirrors JITted
-trampolines but it has a few implementation differences. First of all,
-the code is not JITed. Arguments are converted from a ftrace_regs
-structure to a BPF context instead of being read from registers
-directly. And arguments for fexit are saved in the rethook nodes pool
-rather than in a stack frame below the traced function.
 
-Signed-off-by: Florent Revest <revest@chromium.org>
----
- include/linux/bpf.h     |   5 ++
- kernel/bpf/trampoline.c | 120 ++++++++++++++++++++++++++++++++++++++--
- 2 files changed, 121 insertions(+), 4 deletions(-)
+On 11/8/22 11:52 AM, Francis Laniel wrote:
+> From: Alban Crequy <albancrequy@microsoft.com>
+> 
+> This commit tests previous fix of bpf_probe_read_kernel_str().
+> 
+> Signed-off-by: Alban Crequy <albancrequy@microsoft.com>
+> Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 798aec816970..8f11b8255440 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -11,6 +11,7 @@
- #include <linux/file.h>
- #include <linux/percpu.h>
- #include <linux/err.h>
-+#include <linux/fprobe.h>
- #include <linux/rbtree_latch.h>
- #include <linux/numa.h>
- #include <linux/mm_types.h>
-@@ -952,7 +953,11 @@ struct bpf_tramp_image {
- struct bpf_trampoline {
- 	/* hlist for trampoline_table */
- 	struct hlist_node hlist;
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
- 	struct ftrace_ops *fops;
-+#elif defined(CONFIG_FPROBE)
-+	struct fprobe probe;
-+#endif
- 	/* serializes access to fields of this trampoline */
- 	struct mutex mutex;
- 	refcount_t refcnt;
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index d6395215b849..c64a4805be24 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -103,6 +103,91 @@ static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *ops, enum ftrace_ops_cmd
- 	mutex_unlock(&tr->mutex);
- 	return ret;
- }
-+#elif defined(CONFIG_FPROBE)
-+static unsigned int call_bpf_prog(struct bpf_tramp_link *l,
-+				  struct bpf_tramp_run_ctx *ctx, u64 *args)
-+{
-+	struct bpf_prog *p = l->link.prog;
-+	bpf_trampoline_enter_t enter = bpf_trampoline_enter(p);
-+	bpf_trampoline_exit_t exit = bpf_trampoline_exit(p);
-+	unsigned int ret;
-+	u64 start_time;
-+
-+	ctx->bpf_cookie = l->cookie;
-+
-+	start_time = enter(p, ctx);
-+	if (!start_time)
-+		return 0;
-+
-+	ret = p->bpf_func(args, p->insnsi);
-+
-+	exit(p, start_time, ctx);
-+
-+	return ret;
-+}
-+
-+struct bpf_fprobe_call_context {
-+	struct bpf_tramp_run_ctx ctx;
-+	/* ip and args_cnt are expected to be located before args by helpers */
-+	u64 ip;
-+	u64 args_cnt;
-+	u64 args[7];
-+};
-+
-+static void bpf_fprobe_exit(struct fprobe *fp, unsigned long ip,
-+			    unsigned long ret_ip, struct ftrace_regs *regs,
-+			    void *private)
-+{
-+	struct bpf_trampoline *tr = container_of(fp, struct bpf_trampoline, probe);
-+	struct bpf_fprobe_call_context *call_ctx = private;
-+	struct hlist_head *fexit_links = &tr->progs_hlist[BPF_TRAMP_FEXIT];
-+	struct bpf_tramp_link *link;
-+	struct hlist_node *tmp;
-+
-+	call_ctx->args[call_ctx->args_cnt] = ftrace_regs_get_return_value(regs);
-+
-+	hlist_for_each_entry_safe(link, tmp, fexit_links, tramp_hlist)
-+		call_bpf_prog(link, &call_ctx->ctx, call_ctx->args);
-+}
-+
-+static int bpf_fprobe_entry(struct fprobe *fp, unsigned long ip,
-+			    unsigned long ret_ip, struct ftrace_regs *regs,
-+			    void *private)
-+{
-+	struct bpf_trampoline *tr = container_of(fp, struct bpf_trampoline, probe);
-+	struct bpf_fprobe_call_context *call_ctx = private;
-+	struct hlist_head *fentry_links = &tr->progs_hlist[BPF_TRAMP_FENTRY],
-+		*fmod_ret_links = &tr->progs_hlist[BPF_TRAMP_MODIFY_RETURN];
-+	struct bpf_tramp_link *link;
-+	struct hlist_node *tmp;
-+	int i, ret;
-+
-+	memset(&call_ctx->ctx, 0, sizeof(call_ctx->ctx));
-+	call_ctx->ip = (u64)tr->func.addr;
-+	call_ctx->args_cnt = tr->func.model.nr_args;
-+	for (i = 0; i < call_ctx->args_cnt; i++)
-+		call_ctx->args[i] = ftrace_regs_get_argument(regs, i);
-+
-+	hlist_for_each_entry_safe(link, tmp, fentry_links, tramp_hlist)
-+		call_bpf_prog(link, &call_ctx->ctx, call_ctx->args);
-+
-+	call_ctx->args[call_ctx->args_cnt] = 0;
-+	hlist_for_each_entry_safe(link, tmp, fmod_ret_links, tramp_hlist) {
-+		ret = call_bpf_prog(link, &call_ctx->ctx, call_ctx->args);
-+
-+		if (ret) {
-+			/* Skip the traced function */
-+			ftrace_regs_set_return_value(regs, ret);
-+			ftrace_override_function_with_return(regs);
-+
-+			/* Skip the return handler */
-+			bpf_fprobe_exit(fp, ip, ret_ip, regs, private);
-+			return 1;
-+		}
-+	}
-+
-+	return !tr->progs_cnt[BPF_TRAMP_FEXIT];
-+}
- #endif
- 
- bool bpf_prog_has_trampoline(const struct bpf_prog *prog)
-@@ -158,6 +243,10 @@ static struct bpf_trampoline *bpf_trampoline_lookup(u64 key)
- 	}
- 	tr->fops->private = tr;
- 	tr->fops->ops_func = bpf_tramp_ftrace_ops_func;
-+#elif defined(CONFIG_FPROBE)
-+	tr->probe.entry_data_size = sizeof(struct bpf_fprobe_call_context);
-+	tr->probe.entry_handler = &bpf_fprobe_entry;
-+	tr->probe.exit_handler = &bpf_fprobe_exit;
- #endif
- 
- 	tr->key = key;
-@@ -172,6 +261,7 @@ static struct bpf_trampoline *bpf_trampoline_lookup(u64 key)
- 	return tr;
- }
- 
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
- static int bpf_trampoline_module_get(struct bpf_trampoline *tr)
- {
- 	struct module *mod;
-@@ -455,12 +545,10 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
- 	if (ip_arg)
- 		tr->flags |= BPF_TRAMP_F_IP_ARG;
- 
--#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
- again:
- 	if ((tr->flags & BPF_TRAMP_F_SHARE_IPMODIFY) &&
- 	    (tr->flags & BPF_TRAMP_F_CALL_ORIG))
- 		tr->flags |= BPF_TRAMP_F_ORIG_STACK;
--#endif
- 
- 	err = arch_prepare_bpf_trampoline(im, im->image, im->image + PAGE_SIZE,
- 					  &tr->func.model, tr->flags, tlinks,
-@@ -480,7 +568,6 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
- 		/* first time registering */
- 		err = register_fentry(tr, im->image);
- 
--#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
- 	if (err == -EAGAIN) {
- 		/* -EAGAIN from bpf_tramp_ftrace_ops_func. Now
- 		 * BPF_TRAMP_F_SHARE_IPMODIFY is set, we can generate the
-@@ -491,7 +578,6 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
- 		tr->fops->trampoline = 0;
- 		goto again;
- 	}
--#endif
- 	if (err)
- 		goto out;
- 
-@@ -506,6 +592,30 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
- 	kfree(tlinks);
- 	return err;
- }
-+#elif defined(CONFIG_FPROBE)
-+static int bpf_trampoline_update(struct bpf_trampoline *tr,
-+				 bool lock_direct_mutex)
-+{
-+	int total = 0, err = 0, kind;
-+
-+	for (kind = 0; kind < BPF_TRAMP_MAX; kind++)
-+		total += tr->progs_cnt[kind];
-+
-+	if (total == 0)
-+		err = unregister_fprobe(&tr->probe);
-+	else if (!fprobe_is_registered(&tr->probe))
-+		err = register_fprobe_ips(&tr->probe,
-+					  (unsigned long *)(&tr->func.addr), 1);
-+
-+	return err;
-+}
-+#else
-+static int bpf_trampoline_update(struct bpf_trampoline *tr,
-+				 bool lock_direct_mutex)
-+{
-+	return -ENODEV;
-+}
-+#endif
- 
- static enum bpf_tramp_prog_type bpf_attach_type_to_tramp(struct bpf_prog *prog)
- {
-@@ -829,10 +939,12 @@ void bpf_trampoline_put(struct bpf_trampoline *tr)
- 	 * multiple rcu callbacks.
- 	 */
- 	hlist_del(&tr->hlist);
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
- 	if (tr->fops) {
- 		ftrace_free_filter(tr->fops);
- 		kfree(tr->fops);
- 	}
-+#endif
- 	kfree(tr);
- out:
- 	mutex_unlock(&trampoline_mutex);
--- 
-2.38.1.431.g37b22c650d-goog
-
+Acked-by: Yonghong Song <yhs@fb.com>
