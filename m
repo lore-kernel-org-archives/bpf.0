@@ -2,201 +2,445 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC57CC4332F
-	for <bpf@archiver.kernel.org>; Tue,  8 Nov 2022 16:51:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79F9FC4332F
+	for <bpf@archiver.kernel.org>; Tue,  8 Nov 2022 16:55:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234317AbiKHQvV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Nov 2022 11:51:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37652 "EHLO
+        id S233925AbiKHQzK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Nov 2022 11:55:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234236AbiKHQvU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Nov 2022 11:51:20 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221CF58BE0
-        for <bpf@vger.kernel.org>; Tue,  8 Nov 2022 08:51:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667926279; x=1699462279;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=LKNI3KQ7o8dRGtP5mg3C30709hcqI27piggqvq+ZVDQ=;
-  b=fc5mhNXcH6n5DFZmGkiNiu/0WDk/t/fZ+UKpLQHn0qGs1lFljawFlYp2
-   9NKWzL4GEs/PIUJ55yrQtKDPIPvS/F3ory+PeJKl5umV5x+CabBxuajt0
-   LqhTaKQjTbz+MEZtb3QAhnhMNNWSiw+U+fEVWayyPkYQpqml64EGrHjmS
-   TwGkfgWgE7AiIN6pFl9W5kw/KLMvcm8msIEBR3jzEIvUxiRAhA7yOj+x5
-   Hsg6vvwQifyAOJLoF7Dyo4R9YuIDLYghwG41splnLsJk5zlg0AWd1yXNK
-   fW49x1QH9xIhhVbQUOVIky655pmDjpx95enaA5FgxLXXL/itSfgdPsHuV
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="298264336"
-X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
-   d="scan'208";a="298264336"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 08:51:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="725623406"
-X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
-   d="scan'208";a="725623406"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Nov 2022 08:51:17 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 8 Nov 2022 08:51:16 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Tue, 8 Nov 2022 08:51:16 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.100)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Tue, 8 Nov 2022 08:51:15 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SvjfmNZMk7c+h4tIxmEHWUNH6TLghjx9cnmkuaQbZvJP5PuhWqJa18zf0x+uuiPEZMkpvbgbduf9pRoNh9+xfJl00RsGj2N5Q1lDHuA6va2Aou7s9pnWaEseioFlY/EANd/c4lNrZTiGgoqRrLAGxVIT2d5jUblE87anOfhomBnhd/kDETRIUNGzf/eDn6FvCTdDfyrYNt/ikUNIDFXcFo/PtLq1ndztV2DayZfOHNZbr6OjWy/ezUR7g887qxRRwewQ6UkvP2kZq+rt1jkY2jb8HzoICi9TkTvjzo2AVi300gpQoPTm0N0yBz1ndfip6pG5ustx00X8n5Oriy6jcA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LKNI3KQ7o8dRGtP5mg3C30709hcqI27piggqvq+ZVDQ=;
- b=i5jCqe4aw3Q+/tzneskgRDc+SUZpkLaARQJa2ub+vDfd9z4RHBs6RqaJ1UD382NtetkLLgdlDcrkZvUv2oyz3CWBFI01NjrVJkYa5uKZEXLM2rtxdwXUZlCOqf5GbgTvH/ZsyXrKDGNoZ2BhN3nbP1FuWWhMXa8CW9LPW5E814wHaYVXvdJD33M56HhBwHCM21SQF8e8W5iuMTdPTcNNgal8DuqO8X8YirOGpvOKX/06Z4T7brdgWgPKluaiWUSOm4oegcezUjGwHZt0CEetFjqLnlvQGZcqh+5/vRRTZxaAlBXCjJESnTWdwgPUQukANVT0QJ7PykRICnwJTi6PLw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by IA0PR11MB7356.namprd11.prod.outlook.com (2603:10b6:208:432::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.24; Tue, 8 Nov
- 2022 16:51:13 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::99f8:3b5c:33c9:359a]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::99f8:3b5c:33c9:359a%4]) with mapi id 15.20.5791.027; Tue, 8 Nov 2022
- 16:51:12 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "song@kernel.org" <song@kernel.org>,
-        "rppt@kernel.org" <rppt@kernel.org>
-CC:     "peterz@infradead.org" <peterz@infradead.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "hch@lst.de" <hch@lst.de>, "x86@kernel.org" <x86@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "Lu, Aaron" <aaron.lu@intel.com>
-Subject: Re: [PATCH bpf-next v2 0/5] execmem_alloc for BPF programs
-Thread-Topic: [PATCH bpf-next v2 0/5] execmem_alloc for BPF programs
-Thread-Index: AQHY8vohJKeDurB03UipOT/gu9SMC6405DmAgABab4A=
-Date:   Tue, 8 Nov 2022 16:51:12 +0000
-Message-ID: <9e59a4e8b6f071cf380b9843cdf1e9160f798255.camel@intel.com>
-References: <20221107223921.3451913-1-song@kernel.org>
-         <Y2o9Iz30A3Nruqs4@kernel.org>
-In-Reply-To: <Y2o9Iz30A3Nruqs4@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MWHPR11MB1392:EE_|IA0PR11MB7356:EE_
-x-ms-office365-filtering-correlation-id: 2f02b670-42e8-4afc-ab68-08dac1a9717e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: uRGnoT6No1yZU720YrN5penwdpQsBrMfkz1T3YPXEntXGmEGcq3SIml/xw8ywT7rzugAVtCo2UdtentbNRmUHtafYgQJIcGliAXbozAM2hrHMkAN7vVHKNjVKG2psrIxDVtTd4BsKzIX3FMgl7ChXHDiOWbNuFGmzQlftR6NY0265ZpkJrZfyB7yct9+mCCM5RRlQYTyp4DAEQOijW8qTmDFIbNie8qA8Dcw/gM1ToZMrJdywKaZlWtDVonwocy8Qx2NCCToi7lgHfRQRqNpzFpFTr4FBdB1uap8dfD5mbcr+bOfrB1UKqbaRG02APL7RenbSWYnz9lEZ9HHbHB3llBv7DijWfcVTLSkIq2HnR4rf3n8NYLkmkInVnXMaLlGgNcaJw6Ij9E0Qc5g4iTn21Z+nWUik+CPggm19rpNqSDz7kmQ/XX9rORnLPWJHomY2R/W2raeWXwRGQ9k8XxgUtwZpnbxTPTZSG3xMnxGPCzWP6cAoMMjVMJ1q5qprdIZ0hZ2eMvYPOpCR9+p4YFzUw1g88HKLNl1DL6Lfrkzs5zeMEOT3p0sBJBb7tD5l7hRV67AX6wIJ4j5YWNKVUoGIzUqU87YoL5X5fvNeD9Z0HDILiS+hkB/Vodw1HoUY0nUk22swaVMUmmg0+iDKfEp41tfJzdtCNSHQqggZckkopdG2FXjs3bh6vsNdLYqCakbZmFZYOV/JECBhiScm31/FtCqGICnlQtAKrMWp10VTI94FEkSYDf9+IIbt/QrAkWQcHF22/D7jB38914aGnGSdF0xwz0eI64tlFdZ1B9XH2o=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(396003)(346002)(39860400002)(136003)(376002)(451199015)(26005)(107886003)(86362001)(36756003)(6512007)(186003)(110136005)(76116006)(82960400001)(2906002)(5660300002)(316002)(2616005)(122000001)(38100700002)(66946007)(8936002)(66556008)(54906003)(66476007)(38070700005)(41300700001)(8676002)(4326008)(64756008)(6506007)(478600001)(6486002)(71200400001)(66446008)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cjRXN1hvRjlVM0V1WGxnV1Z5ZVhqTFF6SXBmNk5IT2RyaTVuOU10MVRiY0dN?=
- =?utf-8?B?aExFRWI5K0ZSTGd4TlF6MzNhNGcrOFRlZzBPWm9JTFFvVTlhL3dMcUVIQjV0?=
- =?utf-8?B?S21LK3VqL0NhdXFybk0wWTFmNkZnbjFtbzVVbk5rMXpTUUlqN0pxVnFROEcw?=
- =?utf-8?B?NlMvdmpYcHp6bVNRblYrM0QrWkNkNEJlRUhUQnVtREV6UFIxSGVsRGNRRnRM?=
- =?utf-8?B?eHlnTjY3WEtkUlhOL1U0djRjckdkYU5EZHhWR0NtdjlQRE9YSGJjVS9ObGF4?=
- =?utf-8?B?czFjV3FZZ29tUlR2cWFBdjBIUnhFenhCZ29nRDJFZFhQNUNCaUg5aXM3RU1P?=
- =?utf-8?B?WTNtaTFJS0hmMk5pbk4wcE9vakJQWmE1anUrazV4K2Z3Q0tsaHZiR3U4enk4?=
- =?utf-8?B?RnROcUhHVzE0Z1VHL3VlQkZUUExKSnZuM2dZczZKVVBvUjBrWnJKWFh3QkVF?=
- =?utf-8?B?bmxBMytCVENFUEtjSEZUbEJPSWxKYlB3WWlUdytVeE11Zk84UFpXM1MxSmo3?=
- =?utf-8?B?NEVUanBwRnhJVkFJSzVvcWUxQ0dVckpOQUprWXNvWnlxS2tSeFBzb2dZK2dv?=
- =?utf-8?B?bWxKUHdNeHJiU1AyazBORFdWdVgweUQ3OE5BcTRxTmVnUXBpWXhyWU1nTXFn?=
- =?utf-8?B?WGdRdVBDckVqZzhic25PRFVOZmtHWnJ1bVNxZlJCajNscURwZHRJYWtDcWhz?=
- =?utf-8?B?L3p3ZVRTcFBURXhsRXZ3NGNTVEdIVjVkRHhsaTJPbmltUHh0N2JmMnllUFM5?=
- =?utf-8?B?dVVtOEhINmJ1TG9vdWFaRDJ1WlZXVzlHS0RWNUtxOHp3QVpXUkZUQzJRUGd6?=
- =?utf-8?B?ZzU4SXJzNzJuL0w4RmZXOTFuMEE0QTJsandmU01OaGdQT2k4YTk4QURhV0R4?=
- =?utf-8?B?bXZUNVg4VTZYc05MK1Y1ekRCYmJtYXJLeTRqL0FZVlFiNGlXTTlFRHFVV2FB?=
- =?utf-8?B?Y1FPbWdSZWNMaDIwdDk0clJQc3Q2cE53Y2R4NWt0L2NpWGFVRG1uVk1wN1dM?=
- =?utf-8?B?U1oxN083WWNQNERBZ2I0M0ZpSWp6aWtxZGduZmQxS1VqTUJtTWJyWkVPVk8z?=
- =?utf-8?B?d2pGUDZQSEZ5MEZvclFubWw4SlFnZkYrMHVkMVdOSEc3L1g0NXFteE9oTmF1?=
- =?utf-8?B?UExkaHk5OHlnWGR2Q2Jla0d3M29FeEQrcDJFKzVKTTBnYk1FeDJyVzlGRVFa?=
- =?utf-8?B?K2FIcGdxMjhnSElFdVZlSDRqZUJ2T1kreHpSd1p4MnJBYTRFaTlNN0EzUjVt?=
- =?utf-8?B?M3BPNDdVdElpV3RFVVJhMEk0amcraEZ2VS95ZFB0Tm5kS3hyZ0haWW9reGlS?=
- =?utf-8?B?RENFMzhIWnVSdXM0ZkUvMGlUSkVveEtpOW55bXRpRDYwdFpOVVNSNXFpU3Vw?=
- =?utf-8?B?aFU5Qy9KMVBmM2hyWVJLczZTUkwyTE1mUmFhK0dSc1hMZUtWSXZNTlJOZHpo?=
- =?utf-8?B?VVBqbkJzd2tNYWgwbi91QXllUXEvczU0ODdySUVrTSs3Y3R0VExZUWRVL1V2?=
- =?utf-8?B?L1g3Q3RBcHpjalI2MXh5Z3RYSC9DdWNEbE9NYU92OFdDem8yU2RTbXlYZysy?=
- =?utf-8?B?bVZmRlVSK2NlYVBxMSs0QzRkRitXOGpMc1Z1YzYxOGNZdlJSTG43R1M4Vmhq?=
- =?utf-8?B?eVZvNERNUGI1OG85a2NBT0FZeTJHVzcva2YzaXNHY2Fndy9PcTNTZ0lycklP?=
- =?utf-8?B?Y2VtVXV6aExQdkFGc1l1YmJQbEhIbkx1NjlWSGpjRU1BK09BSnFGWDMzYkdL?=
- =?utf-8?B?RjIwVS81Z3lYVUdzR0pQV1NaUEwwZlZGZDFzL2xUZnVHRlJUSUxKTm9NWFYx?=
- =?utf-8?B?U1NGVHR6SnIydFRWSUZocmlTUm5WTXo2M1ZrZWx5TlJYc2N3OTQ0UUgrd0dq?=
- =?utf-8?B?V3pyTHpMSFUyVkF0MzRPMzVaTDArODBmZzB4MldqWGV4YUQ2eStUUGRZMDJ2?=
- =?utf-8?B?Y0hnZWMvdlJwS0hyMkY1b00vRlFvckYxcTgrK29Uemp6QjVHaG50QmNNK2ZG?=
- =?utf-8?B?Q2ZlUzNjOHQzWE9PeHlMVDNTdDIyVzBDc3I3bjYydEF5RU1MOU5QRjRRSDNo?=
- =?utf-8?B?WFhPTjJlMlU5eFgrc2RVSmFBVDJKSCtwL1Rtc1E2bXc4dElZams5WjNkQWZ3?=
- =?utf-8?B?ZWpEVjQ5WE0yTlVjOHZScGpNb2Q1ODhCT2E0NlpWOFA2WXBvSFpIWEJ6eU9O?=
- =?utf-8?Q?0HCp0UmBgSnDI1Cmw0FkRmQ=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <DF9F4EDC36FB624585AA151AB6D450FF@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        with ESMTP id S233985AbiKHQzJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Nov 2022 11:55:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33ABD22538
+        for <bpf@vger.kernel.org>; Tue,  8 Nov 2022 08:54:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667926456;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yT5CT3CE8cx3Cmdsmk9ITCoXgAwEgNVGTFZhVA9hU1U=;
+        b=cZK7m/qcQTZCDaKIfOGBtxq7sl4nsFuj3AUF2ANTKiatGHObNhi022uUvXKl3g2FBi1/Xm
+        tqlyg4U5S7W7OHPE/L0kN8oURlkF2hBZeQY6byoiWvjwEyuH69g+ug9KzUUrXU7mQpKBhW
+        N1XQvLSFdfeg9R3brPSsc3TtaaUi6is=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-650-bcc_eMN1M3S04-cgCdSFCw-1; Tue, 08 Nov 2022 11:54:15 -0500
+X-MC-Unique: bcc_eMN1M3S04-cgCdSFCw-1
+Received: by mail-qv1-f69.google.com with SMTP id z18-20020a0cfed2000000b004bc28af6f7dso9973038qvs.4
+        for <bpf@vger.kernel.org>; Tue, 08 Nov 2022 08:54:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yT5CT3CE8cx3Cmdsmk9ITCoXgAwEgNVGTFZhVA9hU1U=;
+        b=Xj2aVyaKmWFFS3g35Qrh4ClPPz3Fgmu/pr8Rb8npaWAHm7TUkzqauDbnyT1MtFR597
+         caYAcUOUwpmSNnNQEiFTaNzkoPUHabOKkJeNon4+gNtCLhdd0vpmBdhlCnsn5ILUIj6R
+         cOQGEPMFr8q59WB2JIGPcGBl6KlClWyuS5G/oTUQjCfoIwP4IB87hWva1D3+QfFN0Svo
+         Tq09RucHzfKRYlD+3mMoHVP+uGVJDF9WsxynasMY8HyopGlsQB8jDikV7IA69QSyFiMg
+         pWo1/tZh5G2fle6/X+Wh0VQjbBiSig2DUWmJpxIycqzfgsyu4XWDFLQKHrqiO5hNbDo7
+         CXlw==
+X-Gm-Message-State: ACrzQf2WMKzxlGDCx2K95w1RQ3jRnH4LvNt+g8CjdtMs0d4TwYtcfmod
+        FJ5iPIjoLIYX7dNuJpWG91SBsdgj4kQ1HkpNY8R45gPCbnOWLe9lj+NGxXSZbpzeGKUjLfR1Pvp
+        qca7LJJRDTTuk9ssf7Zo5AYx7oPUExbhKtBdwM+AD6z2+OP+fccltZAb9IN4GxII=
+X-Received: by 2002:a05:6214:19ea:b0:4bc:1388:8d7c with SMTP id q10-20020a05621419ea00b004bc13888d7cmr36370597qvc.84.1667926454340;
+        Tue, 08 Nov 2022 08:54:14 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM7gflIR+WWnr2ezFkR+zPceQbz3P0QSlD23uYIniu7OIiXNyTtLDp7SN4h+TplfU/5oshzHjA==
+X-Received: by 2002:a05:6214:19ea:b0:4bc:1388:8d7c with SMTP id q10-20020a05621419ea00b004bc13888d7cmr36370567qvc.84.1667926453930;
+        Tue, 08 Nov 2022 08:54:13 -0800 (PST)
+Received: from nfvsdn-06.testing.baremetal.edge-sites.net (nat-pool-232-132.redhat.com. [66.187.232.132])
+        by smtp.gmail.com with ESMTPSA id h18-20020ac85852000000b003a57eb7f212sm7444579qth.10.2022.11.08.08.54.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 08:54:13 -0800 (PST)
+From:   mtahhan@redhat.com
+To:     bpf@vger.kernel.org, linux-doc@vger.kernel.org
+Cc:     jbrouer@redhat.com, thoiland@redhat.com, donhunte@redhat.com,
+        Maryam Tahhan <mtahhan@redhat.com>
+Subject: [PATCH bpf-next v6 1/1] doc: DEVMAPs and XDP_REDIRECT
+Date:   Tue,  8 Nov 2022 12:48:33 -0500
+Message-Id: <20221108174833.1106947-2-mtahhan@redhat.com>
+X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20221108174833.1106947-1-mtahhan@redhat.com>
+References: <20221108174833.1106947-1-mtahhan@redhat.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2f02b670-42e8-4afc-ab68-08dac1a9717e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Nov 2022 16:51:12.3794
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Ez9jfqJq9HPnM1peim6SGR2KRWhh1Jco4BHGFm6uLzhYgHvkMZIIwBYVFcpkPPJXRTADkcqm4S+hJRuDuUcqMN6OnTR142ESJEBFqrYfI8o=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR11MB7356
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-T24gVHVlLCAyMDIyLTExLTA4IGF0IDEzOjI3ICswMjAwLCBNaWtlIFJhcG9wb3J0IHdyb3RlOg0K
-PiA+IEJhc2VkIG9uIG91ciBleHBlcmltZW50cyBbNV0sIHdlIG1lYXN1cmVkIDAuNSUgcGVyZm9y
-bWFuY2UNCj4gPiBpbXByb3ZlbWVudA0KPiA+IGZyb20gYnBmX3Byb2dfcGFjay4gVGhpcyBwYXRj
-aHNldCBmdXJ0aGVyIGJvb3N0cyB0aGUgaW1wcm92ZW1lbnQgdG8NCj4gPiAwLjclLg0KPiA+IFRo
-ZSBkaWZmZXJlbmNlIGlzIGJlY2F1c2UgYnBmX3Byb2dfcGFjayB1c2VzIDUxMnggNGtCIHBhZ2Vz
-IGluc3RlYWQNCj4gPiBvZg0KPiA+IDF4IDJNQiBwYWdlLCBicGZfcHJvZ19wYWNrIGFzLWlzIGRv
-ZXNuJ3QgcmVzb2x2ZSAjMiBhYm92ZS4NCj4gPiANCj4gPiBUaGlzIHBhdGNoc2V0IHJlcGxhY2Vz
-IGJwZl9wcm9nX3BhY2sgd2l0aCBhIGJldHRlciBBUEkgYW5kIG1ha2VzIGl0DQo+ID4gYXZhaWxh
-YmxlIGZvciBvdGhlciBkeW5hbWljIGtlcm5lbCB0ZXh0LCBzdWNoIGFzIG1vZHVsZXMsIGZ0cmFj
-ZSwNCj4gPiBrcHJvYmUuDQo+IA0KPiAgDQo+IFRoZSBwcm9wb3NlZCBleGVjbWVtX2FsbG9jKCkg
-bG9va3MgdG8gbWUgdmVyeSBtdWNoIHRhaWxvcmVkIGZvciB4ODYNCj4gdG8gYmUNCj4gdXNlZCBh
-cyBhIHJlcGxhY2VtZW50IGZvciBtb2R1bGVfYWxsb2MoKS4gU29tZSBhcmNoaXRlY3R1cmVzIGhh
-dmUNCj4gbW9kdWxlX2FsbG9jKCkgdGhhdCBpcyBxdWl0ZSBkaWZmZXJlbnQgZnJvbSB0aGUgZGVm
-YXVsdCBvciB4ODYNCj4gdmVyc2lvbiwgc28NCj4gSSdkIGV4cGVjdCBhdCBsZWFzdCBzb21lIGV4
-cGxhbmF0aW9uIGhvdyBtb2R1bGVzIGV0YyBjYW4gdXNlIGV4ZWNtZW1fDQo+IEFQSXMNCj4gd2l0
-aG91dCBicmVha2luZyAheDg2IGFyY2hpdGVjdHVyZXMuDQoNCkkgdGhpbmsgdGhpcyBpcyBmYWly
-LCBidXQgSSB0aGluayB3ZSBzaG91bGQgYXNrIGFzayBvdXJzZWx2ZXMgLSBob3cNCm11Y2ggc2hv
-dWxkIHdlIGRvIGluIG9uZSBzdGVwPw0KDQpGb3Igbm9uLXRleHRfcG9rZSgpIGFyY2hpdGVjdHVy
-ZXMsIHRoZSB3YXkgeW91IGNhbiBtYWtlIGl0IHdvcmsgaXMgaGF2ZQ0KdGhlIEFQSSBsb29rIGxp
-a2U6DQpleGVjbWVtX2FsbG9jKCkgIDwtIERvZXMgdGhlIGFsbG9jYXRpb24sIGJ1dCBuZWNlc3Nh
-cmlseSB1c2FibGUgeWV0DQpleGVjbWVtX3dyaXRlKCkgIDwtIExvYWRzIHRoZSBtYXBwaW5nLCBk
-b2Vzbid0IHdvcmsgYWZ0ZXIgZmluaXNoKCkNCmV4ZWNtZW1fZmluaXNoKCkgPC0gTWFrZXMgdGhl
-IG1hcHBpbmcgbGl2ZSAobG9hZGVkLCBleGVjdXRhYmxlLCByZWFkeSkNCg0KU28gZm9yIHRleHRf
-cG9rZSgpOg0KZXhlY21lbV9hbGxvYygpICA8LSByZXNlcnZlcyB0aGUgbWFwcGluZw0KZXhlY21l
-bV93cml0ZSgpICA8LSB0ZXh0X3Bva2VzKCkgdG8gdGhlIG1hcHBpbmcNCmV4ZWNtZW1fZmluaXNo
-KCkgPC0gZG9lcyBub3RoaW5nDQoNCkFuZCBub24tdGV4dF9wb2tlKCk6DQpleGVjbWVtX2FsbG9j
-KCkgIDwtIEFsbG9jYXRlcyBhIHJlZ3VsYXIgUlcgdm1hbGxvYyBhbGxvY2F0aW9uDQpleGVjbWVt
-X3dyaXRlKCkgIDwtIFdyaXRlcyBub3JtYWxseSB0byBpdA0KZXhlY21lbV9maW5pc2goKSA8LSBk
-b2VzIHNldF9tZW1vcnlfcm8oKS9zZXRfbWVtb3J5X3goKSBvbiBpdA0KDQpOb24tdGV4dF9wb2tl
-KCkgb25seSBnZXRzIHRoZSBiZW5lZml0cyBvZiBjZW50cmFsaXplZCBsb2dpYywgYnV0IHRoZQ0K
-aW50ZXJmYWNlIHdvcmtzIGZvciBib3RoLiBUaGlzIGlzIHByZXR0eSBtdWNoIHdoYXQgdGhlIHBl
-cm1fYWxsb2MoKSBSRkMNCmRpZCB0byBtYWtlIGl0IHdvcmsgd2l0aCBvdGhlciBhcmNoJ3MgYW5k
-IG1vZHVsZXMuIEJ1dCB0byBmaXQgd2l0aCB0aGUNCmV4aXN0aW5nIG1vZHVsZXMgY29kZSAod2hp
-Y2ggaXMgYWN0dWFsbHkgc3ByZWFkIGFsbCBvdmVyKSBhbmQgYWxzbw0KaGFuZGxlIFJPIHNlY3Rp
-b25zLCBpdCBhbHNvIG5lZWRlZCBzb21lIGFkZGl0aW9uYWwgYmVsbHMgYW5kIHdoaXN0bGVzLg0K
-DQpTbyB0aGUgcXVlc3Rpb24gSSdtIHRyeWluZyB0byBhc2sgaXMsIGhvdyBtdWNoIHNob3VsZCB3
-ZSB0YXJnZXQgZm9yIHRoZQ0KbmV4dCBzdGVwPyBJIGZpcnN0IHRob3VnaHQgdGhhdCB0aGlzIGZ1
-bmN0aW9uYWxpdHkgd2FzIHNvIGludGVydHdpbmVkLA0KaXQgd291bGQgYmUgdG9vIGhhcmQgdG8g
-ZG8gaXRlcmF0aXZlbHkuIFNvIGlmIHdlIHdhbnQgdG8gdHJ5DQppdGVyYXRpdmVseSwgSSdtIG9r
-IGlmIGl0IGRvZXNuJ3Qgc29sdmUgZXZlcnl0aGluZy4NCg0KDQo=
+From: Maryam Tahhan <mtahhan@redhat.com>
+
+Add documentation for BPF_MAP_TYPE_DEVMAP and
+BPF_MAP_TYPE_DEVMAP_HASH including kernel version
+introduced, usage and examples.
+
+Add documentation that describes XDP_REDIRECT.
+
+Signed-off-by: Maryam Tahhan <mtahhan@redhat.com>
+---
+ Documentation/bpf/index.rst      |   1 +
+ Documentation/bpf/map_devmap.rst | 221 +++++++++++++++++++++++++++++++
+ Documentation/bpf/redirect.rst   |  81 +++++++++++
+ net/core/filter.c                |   8 +-
+ 4 files changed, 309 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/bpf/map_devmap.rst
+ create mode 100644 Documentation/bpf/redirect.rst
+
+diff --git a/Documentation/bpf/index.rst b/Documentation/bpf/index.rst
+index 1b50de1983ee..1088d44634d6 100644
+--- a/Documentation/bpf/index.rst
++++ b/Documentation/bpf/index.rst
+@@ -29,6 +29,7 @@ that goes into great technical depth about the BPF Architecture.
+    clang-notes
+    linux-notes
+    other
++   redirect
+ 
+ .. only::  subproject and html
+ 
+diff --git a/Documentation/bpf/map_devmap.rst b/Documentation/bpf/map_devmap.rst
+new file mode 100644
+index 000000000000..77a7a10ee1b6
+--- /dev/null
++++ b/Documentation/bpf/map_devmap.rst
+@@ -0,0 +1,221 @@
++.. SPDX-License-Identifier: GPL-2.0-only
++.. Copyright (C) 2022 Red Hat, Inc.
++
++=================================================
++BPF_MAP_TYPE_DEVMAP and BPF_MAP_TYPE_DEVMAP_HASH
++=================================================
++
++.. note::
++   - ``BPF_MAP_TYPE_DEVMAP`` was introduced in kernel version 4.14
++   - ``BPF_MAP_TYPE_DEVMAP_HASH`` was introduced in kernel version 5.4
++
++``BPF_MAP_TYPE_DEVMAP`` and ``BPF_MAP_TYPE_DEVMAP_HASH`` are BPF maps primarily
++used as backend maps for the XDP BPF helper call ``bpf_redirect_map()``.
++``BPF_MAP_TYPE_DEVMAP`` is backed by an array that uses the key as
++the index to lookup a reference to a net device. While ``BPF_MAP_TYPE_DEVMAP_HASH``
++is backed by a hash table that uses a key to lookup a reference to a net device.
++The user provides either <``key``/ ``ifindex``> or <``key``/ ``struct bpf_devmap_val``>
++pairs to update the maps with new net devices.
++
++.. note::
++    - The key to a hash map doesn't have to be an ``ifindex``.
++    - While ``BPF_MAP_TYPE_DEVMAP_HASH`` allows for densely packing the net devices
++      it comes at the cost of a hash of the key when performing a look up.
++
++The setup and packet enqueue/send code is shared between the two types of
++devmap; only the lookup and insertion is different.
++
++Usage
++=====
++Kernel BPF
++----------
++.. c:function::
++     long bpf_redirect_map(struct bpf_map *map, u32 key, u64 flags)
++
++Redirect the packet to the endpoint referenced by ``map`` at index ``key``.
++For ``BPF_MAP_TYPE_DEVMAP`` and ``BPF_MAP_TYPE_DEVMAP_HASH`` this map contains
++references to net devices (for forwarding packets through other ports).
++
++The lower two bits of *flags* are used as the return code if the map lookup
++fails. This is so that the return value can be one of the XDP program return
++codes up to ``XDP_TX``, as chosen by the caller. The higher bits of ``flags``
++can be set to ``BPF_F_BROADCAST`` or ``BPF_F_EXCLUDE_INGRESS`` as defined
++below.
++
++With ``BPF_F_BROADCAST`` the packet will be broadcast to all the interfaces
++in the map, with ``BPF_F_EXCLUDE_INGRESS`` the ingress interface will be excluded
++from the broadcast.
++
++.. note::
++    - The key is ignored if BPF_F_BROADCAST is set.
++    - Multicast can also be achieved using multiple DEVMAPs.
++
++This helper will return ``XDP_REDIRECT`` on success, or the value of the two
++lower bits of the ``flags`` argument if the map lookup fails.
++
++More information about redirection can be found :doc:`redirect`
++
++.. c:function::
++   void *bpf_map_lookup_elem(struct bpf_map *map, const void *key)
++
++Net device entries can be retrieved using the ``bpf_map_lookup_elem()``
++helper.
++
++Userspace
++---------
++.. note::
++    DEVMAP entries can only be updated/deleted from user space and not
++    from an eBPF program. Trying to call these functions from a kernel eBPF
++    program will result in the program failing to load and a verifier warning.
++
++.. c:function::
++   int bpf_map_update_elem(int fd, const void *key, const void *value, __u64 flags);
++
++ Net device entries can be added or updated using the ``bpf_map_update_elem()``
++ helper. This helper replaces existing elements atomically. The ``value`` parameter
++ can be ``struct bpf_devmap_val`` or a simple ``int ifindex`` for backwards
++ compatibility.
++
++ .. code-block:: c
++
++    struct bpf_devmap_val {
++        __u32 ifindex;   /* device index */
++        union {
++            int   fd;  /* prog fd on map write */
++            __u32 id;  /* prog id on map read */
++        } bpf_prog;
++    };
++
++ The ``flags`` argument can be one of the following:
++
++  - ``BPF_ANY``: Create a new element or update an existing element.
++  - ``BPF_NOEXIST``: Create a new element only if it did not exist.
++  - ``BPF_EXIST``: Update an existing element.
++
++ DEVMAPs can associate a program with a device entry by adding a ``bpf_prog.fd``
++ to ``struct bpf_devmap_val``. Programs are run after ``XDP_REDIRECT`` and have
++ access to both Rx device and Tx device. The  program associated with the ``fd``
++ must have type XDP with expected attach type ``xdp_devmap``.
++ When a program is associated with a device index, the program is run on an
++ ``XDP_REDIRECT`` and before the buffer is added to the per-cpu queue. Examples
++ of how to attach/use xdp_devmap progs can be found in the kernel selftests:
++
++ - ``tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c``
++ - ``tools/testing/selftests/bpf/progs/test_xdp_with_devmap_helpers.c``
++
++.. c:function::
++   int bpf_map_lookup_elem(int fd, const void *key, void *value);
++
++ Net device entries can be retrieved using the ``bpf_map_lookup_elem()``
++ helper.
++
++.. c:function::
++   int bpf_map_delete_elem(int fd, const void *key);
++
++ Net device entries can be deleted using the ``bpf_map_delete_elem()``
++ helper. This helper will return 0 on success, or negative error in case of
++ failure.
++
++Examples
++========
++
++Kernel BPF
++----------
++
++The following code snippet shows how to declare a ``BPF_MAP_TYPE_DEVMAP``
++called tx_port.
++
++.. code-block:: c
++
++    struct {
++        __uint(type, BPF_MAP_TYPE_DEVMAP);
++        __type(key, __u32);
++        __type(value, __u32);
++        __uint(max_entries, 256);
++    } tx_port SEC(".maps");
++
++The following code snippet shows how to declare a ``BPF_MAP_TYPE_DEVMAP_HASH``
++called forward_map.
++
++.. code-block:: c
++
++    struct {
++        __uint(type, BPF_MAP_TYPE_DEVMAP_HASH);
++        __type(key, __u32);
++        __type(value, struct bpf_devmap_val);
++        __uint(max_entries, 32);
++    } forward_map SEC(".maps");
++
++.. note::
++
++    The value type in the DEVMAP above is a ``struct bpf_devmap_val``
++
++The following code snippet shows a simple xdp_redirect_map program. This program
++would work with a user space program that populates the devmap ``forward_map`` based
++on ingress ifindexes. The BPF program (below) is redirecting packets using the
++ingress ``ifindex`` as the ``key``.
++
++.. code-block:: c
++
++    SEC("xdp")
++    int xdp_redirect_map_func(struct xdp_md *ctx)
++    {
++        int index = ctx->ingress_ifindex;
++
++        return bpf_redirect_map(&forward_map, index, 0);
++    }
++
++The following code snippet shows a BPF program that is broadcasting packets to
++all the interfaces in the ``tx_port`` devmap.
++
++.. code-block:: c
++
++    SEC("xdp")
++    int xdp_redirect_map_func(struct xdp_md *ctx)
++    {
++        return bpf_redirect_map(&tx_port, 0, BPF_F_BROADCAST | BPF_F_EXCLUDE_INGRESS);
++    }
++
++User space
++----------
++
++The following code snippet shows how to update a devmap called ``tx_port``.
++
++.. code-block:: c
++
++    int update_devmap(int ifindex, int redirect_ifindex)
++    {
++        int ret = -1;
++
++        ret = bpf_map_update_elem(bpf_map__fd(tx_port), &ifindex, &redirect_ifindex, 0);
++        if (ret < 0) {
++            fprintf(stderr, "Failed to update devmap_ value: %s\n",
++                strerror(errno));
++        }
++
++        return ret;
++    }
++
++The following code snippet shows how to update a hash_devmap called ``forward_map``.
++
++.. code-block:: c
++
++    int update_devmap(int ifindex, int redirect_ifindex)
++    {
++        struct bpf_devmap_val devmap_val = { .ifindex = redirect_ifindex };
++        int ret = -1;
++
++        ret = bpf_map_update_elem(bpf_map__fd(forward_map), &ifindex, &devmap_val, 0);
++        if (ret < 0) {
++            fprintf(stderr, "Failed to update devmap_ value: %s\n",
++                strerror(errno));
++        }
++        return ret;
++    }
++
++References
++===========
++
++- https://lwn.net/Articles/728146/
++- https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=6f9d451ab1a33728adb72d7ff66a7b374d665176
++- https://elixir.bootlin.com/linux/latest/source/net/core/filter.c#L4106
+diff --git a/Documentation/bpf/redirect.rst b/Documentation/bpf/redirect.rst
+new file mode 100644
+index 000000000000..9440a913c185
+--- /dev/null
++++ b/Documentation/bpf/redirect.rst
+@@ -0,0 +1,81 @@
++.. SPDX-License-Identifier: GPL-2.0-only
++.. Copyright (C) 2022 Red Hat, Inc.
++
++========
++Redirect
++========
++XDP_REDIRECT
++############
++Supported maps
++--------------
++
++XDP_REDIRECT works with the following map types:
++
++- ``BPF_MAP_TYPE_DEVMAP``
++- ``BPF_MAP_TYPE_DEVMAP_HASH``
++- ``BPF_MAP_TYPE_CPUMAP``
++- ``BPF_MAP_TYPE_XSKMAP``
++
++For more information on these maps, please see the specific map documentation.
++
++Process
++-------
++
++.. kernel-doc:: net/core/filter.c
++   :doc: xdp redirect
++
++.. note::
++    Not all drivers support transmitting frames after a redirect, and for
++    those that do, not all of them support non-linear frames. Non-linear xdp
++    bufs/frames are bufs/frames that contain more than one fragment.
++
++Debugging packet drops
++----------------------
++Silent packet drops for ``XDP_REDIRECT`` can be debugged using:
++
++- bpf_trace
++- perf_record
++
++bpf_trace
++^^^^^^^^^
++The following bpftrace command can be used to capture and count all XDP tracepoints:
++
++.. code-block:: none
++
++    sudo bpftrace -e 'tracepoint:xdp:* { @cnt[probe] = count(); }'
++    Attaching 12 probes...
++    ^C
++
++    @cnt[tracepoint:xdp:mem_connect]: 18
++    @cnt[tracepoint:xdp:mem_disconnect]: 18
++    @cnt[tracepoint:xdp:xdp_exception]: 19605
++    @cnt[tracepoint:xdp:xdp_devmap_xmit]: 1393604
++    @cnt[tracepoint:xdp:xdp_redirect]: 22292200
++
++.. note::
++    The various xdp tracepoints can be found in ``source/include/trace/events/xdp.h``
++
++The following bpftrace command can be used to extract the ``ERRNO`` being returned as
++part of the err parameter:
++
++.. code-block:: none
++
++    sudo bpftrace -e \
++    'tracepoint:xdp:xdp_redirect*_err {@redir_errno[-args->err] = count();}
++    tracepoint:xdp:xdp_devmap_xmit {@devmap_errno[-args->err] = count();}'
++
++perf record
++^^^^^^^^^^^
++The perf tool also supports recording tracepoints:
++
++.. code-block:: none
++
++    perf record -a -e xdp:xdp_redirect_err \
++        -e xdp:xdp_redirect_map_err \
++        -e xdp:xdp_exception \
++        -e xdp:xdp_devmap_xmit
++
++References
++===========
++
++- https://github.com/xdp-project/xdp-tutorial/tree/master/tracing02-xdp-monitor
+diff --git a/net/core/filter.c b/net/core/filter.c
+index bb0136e7a8e4..d582cb025f4c 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -4104,7 +4104,10 @@ static const struct bpf_func_proto bpf_xdp_adjust_meta_proto = {
+ 	.arg2_type	= ARG_ANYTHING,
+ };
+ 
+-/* XDP_REDIRECT works by a three-step process, implemented in the functions
++/**
++ * DOC: xdp redirect
++ *
++ * XDP_REDIRECT works by a three-step process, implemented in the functions
+  * below:
+  *
+  * 1. The bpf_redirect() and bpf_redirect_map() helpers will lookup the target
+@@ -4119,7 +4122,8 @@ static const struct bpf_func_proto bpf_xdp_adjust_meta_proto = {
+  * 3. Before exiting its NAPI poll loop, the driver will call xdp_do_flush(),
+  *    which will flush all the different bulk queues, thus completing the
+  *    redirect.
+- *
++ */
++/*
+  * Pointers to the map entries will be kept around for this whole sequence of
+  * steps, protected by RCU. However, there is no top-level rcu_read_lock() in
+  * the core code; instead, the RCU protection relies on everything happening
+-- 
+2.35.3
+
