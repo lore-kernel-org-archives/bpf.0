@@ -2,427 +2,213 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EABDC433FE
-	for <bpf@archiver.kernel.org>; Tue,  8 Nov 2022 00:47:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1085C433FE
+	for <bpf@archiver.kernel.org>; Tue,  8 Nov 2022 00:49:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232602AbiKHArH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Nov 2022 19:47:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57332 "EHLO
+        id S232270AbiKHAtP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Nov 2022 19:49:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232545AbiKHArG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Nov 2022 19:47:06 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A7920BC6
-        for <bpf@vger.kernel.org>; Mon,  7 Nov 2022 16:47:04 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id sc25so34525817ejc.12
-        for <bpf@vger.kernel.org>; Mon, 07 Nov 2022 16:47:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gLoiTEIqT0L7IglWBe/aHweeZf5c4tGDupcFHFa/LyM=;
-        b=pEz+EXZ03uvvAaAXv1VUWA8xw/jrT2FcdmIqBaLcuclHL7e0p2731DwN9h5oUKfj++
-         S7gn8Bs8PrbwOl/3nevO953Z0ym1FVB0eU1bxwPSNztqWk01ONzvsOdvRkzlylg9JoVw
-         Gx0EkV3hYXD0xrr+ocbyDLFrHuA8NrCcrysVw+D835o4WAGGSDK43oJb/lilG+LARqKV
-         uymCtCWkujnOm3u/eIRNW1HalPkAmkE1JxXIrwUZbFJNYVh51eLqoR3HNiU9hR2ouuUK
-         Z08LH7PUV1E+m9zVSrTaHFwSalqMIDeHkwu7aq2Wyr3VyFU+7XbaBIXPbgw9iMxVF4gY
-         bV3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gLoiTEIqT0L7IglWBe/aHweeZf5c4tGDupcFHFa/LyM=;
-        b=wxbkEHuqFeUWn0GUw/9SPgRgCIAU8HKWKY11XMjtQAddVGkEohmZmWqkeXd/qFYMIc
-         RXy92NQA5bQbGyHZO36FJEfvCEGCPMgFTb8xFNRr42tmglJh8KRFZviLeILEPS0UCf+W
-         bmqZ/+XhDfnDMUiIksImcOs9E68rOVW5Nr3T5OhJDtx6v6SY9rDSXqzoXsM0XO2AlozE
-         mo+1TEYrHjhbVaagejN/UBveMvhQS8Km1yO13PdHenXoL3FvQsUzAs839U9oSb6jbSLH
-         oq98tlXvkyY6PvcGKxy9egaObE9m92DQz71iVil6i6lBdVvQo9+PNFD3f+Ms6eCCIDd/
-         WSmg==
-X-Gm-Message-State: ACrzQf2uc1eLEJMf1LVAMvNr3FE0j11rt+AnEZ2w68Y0/kNeZ+En+agL
-        bjkHMZJwhP7ezu2oAK7jQWFXRva9MPtbPCVEzRQ=
-X-Google-Smtp-Source: AMsMyM6DqmV0nsgoERJl8gtidZwn8yrt3uHw9bS1pvZGzkWE6pJvLA+si05Dn2skwSMnjxg/8DklA36FiunfuysRCLQ=
-X-Received: by 2002:a17:907:8a24:b0:795:bb7d:643b with SMTP id
- sc36-20020a1709078a2400b00795bb7d643bmr51367356ejc.115.1667868423170; Mon, 07
- Nov 2022 16:47:03 -0800 (PST)
+        with ESMTP id S232060AbiKHAtN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Nov 2022 19:49:13 -0500
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2067.outbound.protection.outlook.com [40.107.101.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CB241F2C4;
+        Mon,  7 Nov 2022 16:49:12 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kvcgy9yYJyvKU1CmPh7BuhZXtWlD+0114f4k4iz+hMoIgFeY1VJJeIsNNlEb9xNzjfYEDoGadEeWdOKuHIV5y0KHixfFYMkgUtXqQMNMu4bUm2m9G0p7Aj6E90nC3MkAQXsrIrxrO7c+liOMrKE+XWLVWX3fml/0/HHQvc/XcsPjaSYadKf4XXyo4ms0SUiCJWVBF0nJSupJk9usYaCKbOmcvczWCLKKZxQlclTNl5yPj/hVHNKBFjA4B5DqiM8vpnz5ieZevWr3ZOiNXMCC4l02es6c1pXO/kbU9elRlxtYolM0wyc/KipS4iN5Zg6GBvWuOgXzxUeGBW42yTjxCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=W89ELSrT2sbv+QarvfmuTntLl8jGIhpFjsXbcqb1eyc=;
+ b=FlCY+O0gV7n5EH3reAGeMtG9svcaJL+Vxpl2qsPHY7Xb0BSSyClXs2YMB4hAsQ2aPe3o0/bh8ZU2/GXHuElpPpGNdXL/w3yKZe4OIBA6zgKi7kVbBlvacB1+ylM9goM8/bmylGyiZIr9vYAOYvEqYTNEBiISGECY6YITTcBvML7PzhSHXq84+w1HOGboKe6jtA+mmXjRq9dqzjx/Rbd++G4yB0ut5ODNYLxEksCQGV8fjcmE37dF5Dz9FUdTMiTQqtK0Qu/aKe28j8GGVpca3PPjiR0DrqhNONNCM/zsX3vHWz3rJ+1sdCuToMoRRkT7u7AdImdN23+U+A0u4KUTLA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=W89ELSrT2sbv+QarvfmuTntLl8jGIhpFjsXbcqb1eyc=;
+ b=sfBjIP+U2ApgklZKyfJRst2zjcVWoVfmRkzMMYNiUcTKnLAnDXWQoE2XWCBY1WTBgJDaDhVYkN7e2kUwjZTbsNm7yPSb+yG1ygcnB2uHEBCkTCxxeKGrnMsnGcjgHdxy3S1jawH/OPvQf37TmoDjn7kBgt6RYWsoexSScXRXQuJg+gziYGxQivlsdCIesUikGGlKUjP49elp2aYE1QgHhciEv6g69+fagjmG7tCDEnjXoDSCFgdGfevfVbH5o3u+dcgwi+/YG2s0tJGTsmmpMSd2OEnJn8b8rQpPkr9lrJXP0dVXci7ToylcxAhMfrMAkil2wNwxmotLTiQKdabySA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by BN9PR12MB5212.namprd12.prod.outlook.com (2603:10b6:408:11d::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Tue, 8 Nov
+ 2022 00:49:11 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5791.026; Tue, 8 Nov 2022
+ 00:49:11 +0000
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     bpf@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>,
+        Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        David Gibson <david@gibson.dropbear.id.au>,
+        Eric Auger <eric.auger@redhat.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Shameerali Kolothum Thodi 
+        <shameerali.kolothum.thodi@huawei.com>,
+        Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
+Subject: [PATCH v4 01/17] iommu: Add IOMMU_CAP_ENFORCE_CACHE_COHERENCY
+Date:   Mon,  7 Nov 2022 20:48:54 -0400
+Message-Id: <1-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
+In-Reply-To: <0-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
+References: 
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BL1PR13CA0438.namprd13.prod.outlook.com
+ (2603:10b6:208:2c3::23) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-References: <20221106202910.4193104-1-eddyz87@gmail.com> <20221106202910.4193104-2-eddyz87@gmail.com>
- <CAADnVQJNFqGE+5b9kicHnfxd37bpeCJV1Cz+5rXi-vt8imTMaQ@mail.gmail.com>
-In-Reply-To: <CAADnVQJNFqGE+5b9kicHnfxd37bpeCJV1Cz+5rXi-vt8imTMaQ@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 7 Nov 2022 16:46:51 -0800
-Message-ID: <CAEf4BzZ8KFneEJxFAaNCCFPGqp20hSpS2aCj76uRk3-qZUH5xg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/3] libbpf: hashmap interface update to long
- -> long
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Eduard Zingerman <eddyz87@gmail.com>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>, Yonghong Song <yhs@fb.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BN9PR12MB5212:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9220ab46-6123-4676-b1b6-08dac1230cac
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gKjIQnGMPRKtOkHsjW6aBRi88oQRYcLBX8Jv5Pl6MYpoiwH+WR5xEwh7UsZC5ck8SEkNGTZaaRlQhKK1VIKK31UaJc9pPwlSsRJTSHsnSQZQ6l9A+bJeho0yQzFbu75fsvHRn2NDJKCz5xhov4z225VAYM6Wz/aSdgpxXgXn8cURnopPvZSBNFI77ARghah3N/W/lHKuW/V/QwawvyaPVUuAuBJLCHMpxh3kNxvRcOoE3QOB9fXx0WcVmf3tJ05DRWz4lwPyOZcNLsQ8U3jeBWR0LXnC5wGT08Qv5ZBgFa74Eqga7mAenBucDLl9K/rZP5614Ua35r/P1RizPNL/TUrMhyqYSQUdVbGu2mR1X+CaBIjZLGZtqQLH4GT+gd2RrC3GdfgIA1ud4f3TkBUYmAygol45oJQcGQpWKi/v7iUzFpsfRKgNvV//S9VwR7HX4227XZUrzXkIK6somcYR4pFTa24JhJ9BongsCUOvGvPpvsVk3pgB3egzhG9R+OszJwKHbbGUJdg0X5jtlKlXeUScQWQ3pi123dH3gR/ce1wfakooB2PlOReQfxcse758Jiq9t1D1AQ4ESirfQij+FrKt3LAdCLbtcW+tdhvQ77HOH4JIa6lUSSB1kjF6ziPaS43GdDI2ocNTKof9w06wCbJAnbeau7NCqTLXievm7FEN1PoqTr1GouG4Uk4vwA1EPvH3Z8b0eNsBMUkzgH371cjM0MSxSoFnCYr0huf1hfmTCq+mM9oodS2lksTk/bbXNzEI+vbsp850UmUREmA7HA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(396003)(366004)(39860400002)(451199015)(83380400001)(36756003)(86362001)(478600001)(2906002)(6486002)(38100700002)(921005)(26005)(186003)(6512007)(2616005)(54906003)(316002)(4326008)(66476007)(6666004)(6506007)(110136005)(41300700001)(8676002)(8936002)(7416002)(7406005)(66946007)(66556008)(5660300002)(4216001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uxamuUdY7ZMjMRqD7E/gr+S5zvHUeeuRabxEvwHHUuWa7X9oyPopm3Qg71wy?=
+ =?us-ascii?Q?E68fYjVZwghXQYRBgHQxCTP7NctKJ/EfgxfYNdDNo092u/eCvuEas9hpzJEd?=
+ =?us-ascii?Q?aEcFUBEUKnkkay1ovQNjbGvAICDeyKKx6WOC9cWVPWx/Kib3aW5YwHm1nMyv?=
+ =?us-ascii?Q?hNQIUqJm0xWkSW8ZhhsrE2Oca/zD4YhqSLHydezEJKtj2SbPorOySPih4VjR?=
+ =?us-ascii?Q?ZhjHjKLEAn77sxWpVRmw26fSaLC6LJAUpxKk3oFZJOFbluwzDF5gxZ3wOuqK?=
+ =?us-ascii?Q?vTaMbxGtjwDtNV8NpF4Zl0CCI+grCYp4y8A2163+MY4b0yJgAq7vRrFUnMvz?=
+ =?us-ascii?Q?j9Kd89L6YhFanawbTA+jSRw0PdYkvuodt/86vXj/7IlnLpFY7qLBlEND7ynh?=
+ =?us-ascii?Q?cIPqiXrWPyg5+HCNudQGfxxKM9mzWwSvUCfhuApzPJfer6BvssAsW+sAnG28?=
+ =?us-ascii?Q?v2+MtkdPb4gP2420wlF9nJ/JPGRHTpgBLTqm/npXw48HXTGdFtpyki+kzXLK?=
+ =?us-ascii?Q?8vePwVg7bVlZjMxK/ipdzTl+w7WWRonOUqnqzl4Y+CHoCygnkua0p5rU7uBG?=
+ =?us-ascii?Q?aRAm1+TnIul/oGHrIwDi/jCu/ZiZSBiVqN6NkZqQAqOKiyWW/h8wuysDb/MO?=
+ =?us-ascii?Q?nQaOiSGETsxLUwW2xNsHmU3lxaLMVyx5t27pecp7ed4hHlsi9TfhorPWQ+0s?=
+ =?us-ascii?Q?4yKy9rq4o+9gAgUPv89SllYXe2eANj3gWK3uee/eWTMfZw2qteI5ODWopKfG?=
+ =?us-ascii?Q?aGb2eVZzWDX2X20fEI7q9uMTqYF298BlQzt+2rWFOrzU9L1ISmHT1J2kMhiq?=
+ =?us-ascii?Q?xaOIl9QM2j+z+P5XVTUKByCh8LAYF7CMhciouDVG8Giyx7tSDLU04V4lX1fO?=
+ =?us-ascii?Q?uvQ56tLyI3X1R+prxYHaRnCRKq1rA4jD5NMF2jikvXu7B9+Wq80m1yAW/WOj?=
+ =?us-ascii?Q?TRFgjT0vIjhCIBeaO4Uh8lU0MagLopcHSNE+uOUj6F+ZLKwuLejFKFy/1OeH?=
+ =?us-ascii?Q?nihbNp4EwKmfV7NgA5pLDwRcRtDa1gPeKClErDeurdmP4zEQ89kyD+eDZCps?=
+ =?us-ascii?Q?hshumg/9QMypN5yJ2ceWSx4qimoKB8xrOyOw2/85upMDNvqYF3PbitjA/f6o?=
+ =?us-ascii?Q?6k3SdlMtM/YpiUzIUaGNI+pRRu5c4Qx9q5C6+VAlITItuSYYjm9iOIUw38lY?=
+ =?us-ascii?Q?B03idg3q8vJMX3waB+YutBtImCT6S8+jVazdHC6ajQ3893hV0pKDfYqGlKzy?=
+ =?us-ascii?Q?y/5N0OkRtT1vsYSfAd/E1jv29cnayA3Sf85gK+U+iyuruzLxu6dv9Pn16lKY?=
+ =?us-ascii?Q?lwUpKsPVrt2xFRKakQTZps9S5GakCXLDzqUBQflbESww2SC0pwGkjaGe2BgY?=
+ =?us-ascii?Q?aVqVyUamfOCo7ihmMgngGxWq3/eVbInISJeKqE4Hl+fC/u+mstzmWlllL3JL?=
+ =?us-ascii?Q?SbujQufcJJQQqQXWEfFjyXqRty6jCkAYBVXYATYQKtui2aN9Dgqbd5G7XZkm?=
+ =?us-ascii?Q?vkUeywOhU7TGegru4Srys69y75I0lKkZCVvLvr3dJBYpr9N8n0wc8pOBFMRa?=
+ =?us-ascii?Q?tI990naqnBixD7B8uJs=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9220ab46-6123-4676-b1b6-08dac1230cac
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Nov 2022 00:49:10.8726
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jnhGyQ8zMhg5IDP9+8K/SoG0O0So/whH8HxEkZ5N/NEPcAC+kkH19O35X2QvSREd
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5212
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, Nov 6, 2022 at 12:43 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Sun, Nov 6, 2022 at 12:29 PM Eduard Zingerman <eddyz87@gmail.com> wrote:
-> >
-> > An update for libbpf's hashmap interface from void* -> void* to
-> > long -> long. Removes / simplifies some type casts when hashmap
-> > keys or values are 32-bit integers.
-> >
-> > In libbpf hashmap is more often used with integral keys / values
-> > rather than with pointer keys / values.
-> >
-> > Perf copies hashmap implementation from libbpf and has to be
-> > updated as well.
-> >
-> > Changes to libbpf, selftests/bpf and perf are packed as a single
-> > commit to avoid compilation issues with any future bisect.
-> >
-> > The net number of casts is decreased after this refactoring. Although
-> > perf mostly uses ptr to ptr maps, thus a lot of casts have to be
-> > added there:
-> >
-> >              Casts    Casts
-> >              removed  added
-> > libbpf       ~50      ~20
-> > libbpf tests ~55      ~0
-> > perf         ~0       ~33
-> > perf tests   ~0       ~13
-> >
-> > This is a follow up for [1].
-> >
-> > [1] https://lore.kernel.org/bpf/af1facf9-7bc8-8a3d-0db4-7b3f333589a2@meta.com/T/#m65b28f1d6d969fcd318b556db6a3ad499a42607d
-> >
-> > Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
-> > ---
-> >  tools/bpf/bpftool/btf.c                       |  25 ++---
-> >  tools/bpf/bpftool/common.c                    |  10 +-
-> >  tools/bpf/bpftool/gen.c                       |  19 ++--
-> >  tools/bpf/bpftool/link.c                      |   8 +-
-> >  tools/bpf/bpftool/main.h                      |  14 +--
-> >  tools/bpf/bpftool/map.c                       |   8 +-
-> >  tools/bpf/bpftool/pids.c                      |  16 +--
-> >  tools/bpf/bpftool/prog.c                      |   8 +-
-> >  tools/lib/bpf/btf.c                           |  41 ++++---
-> >  tools/lib/bpf/btf_dump.c                      |  16 +--
-> >  tools/lib/bpf/hashmap.c                       |  16 +--
-> >  tools/lib/bpf/hashmap.h                       |  34 +++---
-> >  tools/lib/bpf/libbpf.c                        |  18 ++--
-> >  tools/lib/bpf/strset.c                        |  18 ++--
-> >  tools/lib/bpf/usdt.c                          |  31 +++---
-> >  tools/perf/tests/expr.c                       |  40 +++----
-> >  tools/perf/tests/pmu-events.c                 |   6 +-
-> >  tools/perf/util/bpf-loader.c                  |  23 ++--
-> >  tools/perf/util/expr.c                        |  32 +++---
-> >  tools/perf/util/hashmap.c                     |  16 +--
-> >  tools/perf/util/hashmap.h                     |  34 +++---
-> >  tools/perf/util/metricgroup.c                 |  12 +--
-> >  tools/perf/util/stat.c                        |   9 +-
-> >  .../selftests/bpf/prog_tests/hashmap.c        | 102 +++++++++---------
-> >  .../bpf/prog_tests/kprobe_multi_test.c        |   6 +-
-> >  25 files changed, 257 insertions(+), 305 deletions(-)
->
-> Looks like the churn is not worth it.
-> I'd keep it as-is.
+This queries if a domain linked to a device should expect to support
+enforce_cache_coherency() so iommufd can negotiate the rules for when a
+domain should be shared or not.
 
-No-no, this is already a big win for libbpf/bpftool as is, but we can
-do even better for perf and some uses in selftest and libbpf itself.
-Given a hashmap can be used with a pointer or an integer as the
-key/value, we can use a bit of smartness (while keeping the safety)
-through simple macro wrapper for operations like hashmap__find and
-hashmap__insert (and co). That will avoid most of if not all casts for
-hashmap lookups/updates. And then for hashmap__for_each_entry and
-such, we can define hashmap_entry to have a union of long-based and
-void*-based key:
+For iommufd a device that declares IOMMU_CAP_ENFORCE_CACHE_COHERENCY will
+not be attached to a domain that does not support it.
 
-struct hashmap_entry {
-  union {
-    long key;
-    const void *pkey;
-  };
-  union {
-    long value;
-    void *pvalue;
-  };
-  ...
-}
+Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Tested-by: Nicolin Chen <nicolinc@nvidia.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+---
+ drivers/iommu/amd/iommu.c   |  2 ++
+ drivers/iommu/intel/iommu.c | 16 +++++++++++-----
+ include/linux/iommu.h       |  5 +++++
+ 3 files changed, 18 insertions(+), 5 deletions(-)
 
-I have it a try in few perf places, and it allows to avoid all the
-casts while thanks to that _Statis_assert we should be even safer than
-it was before. Eduard, please check the diff below and see if you can
-incorporate similar changes for other operations, if necessary.
-
-$ git diff
-diff --git a/tools/lib/bpf/hashmap.c b/tools/lib/bpf/hashmap.c
-index dfe99e766f30..0c1c1289a694 100644
---- a/tools/lib/bpf/hashmap.c
-+++ b/tools/lib/bpf/hashmap.c
-@@ -203,7 +203,7 @@ int hashmap__insert(struct hashmap *map, long key,
-long value,
-        return 0;
- }
-
--bool hashmap__find(const struct hashmap *map, long key, long *value)
-+bool hashmap_find(const struct hashmap *map, long key, long *value)
+diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
+index 45299eb7e8e306..240c535e317cc7 100644
+--- a/drivers/iommu/amd/iommu.c
++++ b/drivers/iommu/amd/iommu.c
+@@ -2278,6 +2278,8 @@ static bool amd_iommu_capable(struct device *dev, enum iommu_cap cap)
+ 		return false;
+ 	case IOMMU_CAP_PRE_BOOT_PROTECTION:
+ 		return amdr_ivrs_remap_support;
++	case IOMMU_CAP_ENFORCE_CACHE_COHERENCY:
++		return true;
+ 	default:
+ 		break;
+ 	}
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index f298e51d5aa67a..157c9727411076 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -4450,14 +4450,20 @@ static bool intel_iommu_enforce_cache_coherency(struct iommu_domain *domain)
+ 
+ static bool intel_iommu_capable(struct device *dev, enum iommu_cap cap)
  {
-        struct hashmap_entry *entry;
-        size_t h;
-diff --git a/tools/lib/bpf/hashmap.h b/tools/lib/bpf/hashmap.h
-index 7393ef616920..daec29012808 100644
---- a/tools/lib/bpf/hashmap.h
-+++ b/tools/lib/bpf/hashmap.h
-@@ -47,8 +47,14 @@ typedef size_t (*hashmap_hash_fn)(long key, void *ctx);
- typedef bool (*hashmap_equal_fn)(long key1, long key2, void *ctx);
-
- struct hashmap_entry {
--       long key;
--       long value;
-+       union {
-+               long key;
-+               const void *pkey;
-+       };
-+       union {
-+               long value;
-+               void *pvalue;
-+       };
-        struct hashmap_entry *next;
- };
-
-@@ -144,7 +150,13 @@ static inline int hashmap__append(struct hashmap
-*map, long key, long value)
-
- bool hashmap__delete(struct hashmap *map, long key, long *old_key,
-long *old_value);
-
--bool hashmap__find(const struct hashmap *map, long key, long *value);
-+bool hashmap_find(const struct hashmap *map, long key, long *value);
+-	if (cap == IOMMU_CAP_CACHE_COHERENCY)
++	struct device_domain_info *info = dev_iommu_priv_get(dev);
 +
-+#define hashmap__find(map, key, value) ({
-                         \
-+               _Static_assert(value == NULL || sizeof(*value) ==
-sizeof(long),                 \
-+                              "Value pointee should be a long-sized
-integer or a pointer");    \
-+               hashmap_find(map, (long)key, (long *)value);
-                         \
-+})
-
- /*
-  * hashmap__for_each_entry - iterate over all entries in hashmap
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 96092c9cb34b..1a1a76357f72 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -5669,7 +5669,7 @@ static int bpf_core_resolve_relo(struct bpf_program *prog,
-                return -EINVAL;
-
-        if (relo->kind != BPF_CORE_TYPE_ID_LOCAL &&
--           !hashmap__find(cand_cache, local_id, (long *)&cands)) {
-+           !hashmap__find(cand_cache, local_id, &cands)) {
-                cands = bpf_core_find_cands(prog->obj, local_btf, local_id);
-                if (IS_ERR(cands)) {
-                        pr_warn("prog '%s': relo #%d: target candidate
-search failed for [%d] %s %s: %ld\n",
-diff --git a/tools/perf/tests/expr.c b/tools/perf/tests/expr.c
-index 8107ed0428c2..cb206003c1f0 100644
---- a/tools/perf/tests/expr.c
-+++ b/tools/perf/tests/expr.c
-@@ -130,12 +130,9 @@ static int test__expr(struct test_suite *t
-__maybe_unused, int subtest __maybe_u
-                        expr__find_ids("FOO + BAR + BAZ + BOZO", "FOO",
-                                        ctx) == 0);
-        TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 3);
--       TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids, (long)"BAR",
--                                                 (long *)&val_ptr));
--       TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids, (long)"BAZ",
--                                                 (long *)&val_ptr));
--       TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids, (long)"BOZO",
--                                                 (long *)&val_ptr));
-+       TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids,
-(long)"BAR", &val_ptr));
-+       TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids,
-(long)"BAZ", &val_ptr));
-+       TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids,
-(long)"BOZO", &val_ptr));
-
-        expr__ctx_clear(ctx);
-        ctx->sctx.runtime = 3;
-@@ -143,20 +140,16 @@ static int test__expr(struct test_suite *t
-__maybe_unused, int subtest __maybe_u
-                        expr__find_ids("EVENT1\\,param\\=?@ +
-EVENT2\\,param\\=?@",
-                                        NULL, ctx) == 0);
-        TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 2);
--       TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids,
-(long)"EVENT1,param=3@",
--                                                 (long *)&val_ptr));
--       TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids,
-(long)"EVENT2,param=3@",
--                                                 (long *)&val_ptr));
-+       TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids,
-(long)"EVENT1,param=3@", &val_ptr));
-+       TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids,
-(long)"EVENT2,param=3@", &val_ptr));
-
-        expr__ctx_clear(ctx);
-        TEST_ASSERT_VAL("find ids",
-                        expr__find_ids("dash\\-event1 - dash\\-event2",
-                                       NULL, ctx) == 0);
-        TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 2);
--       TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids, (long)"dash-event1",
--                                                 (long *)&val_ptr));
--       TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids, (long)"dash-event2",
--                                                 (long *)&val_ptr));
-+       TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids,
-(long)"dash-event1", &val_ptr));
-+       TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids,
-(long)"dash-event2", &val_ptr));
-
-        /* Only EVENT1 or EVENT2 need be measured depending on the
-value of smt_on. */
-        {
-@@ -174,7 +167,7 @@ static int test__expr(struct test_suite *t
-__maybe_unused, int subtest __maybe_u
-                TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 1);
-                TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids,
-                                                          (long)(smton
-? "EVENT1" : "EVENT2"),
--                                                         (long *)&val_ptr));
-+                                                         &val_ptr));
-
-                expr__ctx_clear(ctx);
-                TEST_ASSERT_VAL("find ids",
-@@ -183,7 +176,7 @@ static int test__expr(struct test_suite *t
-__maybe_unused, int subtest __maybe_u
-                TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 1);
-                TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids,
-
-(long)(corewide ? "EVENT1" : "EVENT2"),
--                                                         (long *)&val_ptr));
-+                                                         &val_ptr));
-
-        }
-        /* The expression is a constant 1.0 without needing to
-evaluate EVENT1. */
-@@ -220,8 +213,7 @@ static int test__expr(struct test_suite *t
-__maybe_unused, int subtest __maybe_u
-                        expr__find_ids("source_count(EVENT1)",
-                        NULL, ctx) == 0);
-        TEST_ASSERT_VAL("source count", hashmap__size(ctx->ids) == 1);
--       TEST_ASSERT_VAL("source count", hashmap__find(ctx->ids, (long)"EVENT1",
--                                                     (long *)&val_ptr));
-+       TEST_ASSERT_VAL("source count", hashmap__find(ctx->ids,
-(long)"EVENT1", &val_ptr));
-
-        expr__ctx_free(ctx);
-
-diff --git a/tools/perf/util/bpf-loader.c b/tools/perf/util/bpf-loader.c
-index 55f114450316..2430b8965268 100644
---- a/tools/perf/util/bpf-loader.c
-+++ b/tools/perf/util/bpf-loader.c
-@@ -131,7 +131,7 @@ static void *program_priv(const struct bpf_program *prog)
-
-        if (IS_ERR_OR_NULL(bpf_program_hash))
-                return NULL;
--       if (!hashmap__find(bpf_program_hash, (long)prog, (long *)&priv))
-+       if (!hashmap__find(bpf_program_hash, prog, &priv))
-                return NULL;
-        return priv;
++	switch (cap) {
++	case IOMMU_CAP_CACHE_COHERENCY:
+ 		return true;
+-	if (cap == IOMMU_CAP_INTR_REMAP)
++	case IOMMU_CAP_INTR_REMAP:
+ 		return irq_remapping_enabled == 1;
+-	if (cap == IOMMU_CAP_PRE_BOOT_PROTECTION)
++	case IOMMU_CAP_PRE_BOOT_PROTECTION:
+ 		return dmar_platform_optin();
+-
+-	return false;
++	case IOMMU_CAP_ENFORCE_CACHE_COHERENCY:
++		return ecap_sc_support(info->iommu->ecap);
++	default:
++		return false;
++	}
  }
-@@ -1170,7 +1170,7 @@ static void *map_priv(const struct bpf_map *map)
-
-        if (IS_ERR_OR_NULL(bpf_map_hash))
-                return NULL;
--       if (!hashmap__find(bpf_map_hash, (long)map, (long *)&priv))
-+       if (!hashmap__find(bpf_map_hash, map, &priv))
-                return NULL;
-        return priv;
- }
-@@ -1184,7 +1184,7 @@ static void bpf_map_hash_free(void)
-                return;
-
-        hashmap__for_each_entry(bpf_map_hash, cur, bkt)
--               bpf_map_priv__clear((struct bpf_map *)cur->key, (void
-*)cur->value);
-+               bpf_map_priv__clear(cur->pkey, cur->pvalue);
-
-        hashmap__free(bpf_map_hash);
-        bpf_map_hash = NULL;
-diff --git a/tools/perf/util/hashmap.c b/tools/perf/util/hashmap.c
-index dfe99e766f30..0c1c1289a694 100644
---- a/tools/perf/util/hashmap.c
-+++ b/tools/perf/util/hashmap.c
-@@ -203,7 +203,7 @@ int hashmap__insert(struct hashmap *map, long key,
-long value,
-        return 0;
- }
-
--bool hashmap__find(const struct hashmap *map, long key, long *value)
-+bool hashmap_find(const struct hashmap *map, long key, long *value)
- {
-        struct hashmap_entry *entry;
-        size_t h;
-diff --git a/tools/perf/util/hashmap.h b/tools/perf/util/hashmap.h
-index 7393ef616920..edbadb712725 100644
---- a/tools/perf/util/hashmap.h
-+++ b/tools/perf/util/hashmap.h
-@@ -47,8 +47,14 @@ typedef size_t (*hashmap_hash_fn)(long key, void *ctx);
- typedef bool (*hashmap_equal_fn)(long key1, long key2, void *ctx);
-
- struct hashmap_entry {
--       long key;
--       long value;
-+       union {
-+               long key;
-+               const void *pkey;
-+       };
-+       union {
-+               long value;
-+               void *pvalue;
-+       };
-        struct hashmap_entry *next;
+ 
+ static struct iommu_device *intel_iommu_probe_device(struct device *dev)
+diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+index 68d7d304cdb761..a09fd32d8cc273 100644
+--- a/include/linux/iommu.h
++++ b/include/linux/iommu.h
+@@ -124,6 +124,11 @@ enum iommu_cap {
+ 	IOMMU_CAP_NOEXEC,		/* IOMMU_NOEXEC flag */
+ 	IOMMU_CAP_PRE_BOOT_PROTECTION,	/* Firmware says it used the IOMMU for
+ 					   DMA protection and we should too */
++	/*
++	 * Per-device flag indicating if enforce_cache_coherency() will work on
++	 * this device.
++	 */
++	IOMMU_CAP_ENFORCE_CACHE_COHERENCY,
  };
+ 
+ /* These are the possible reserved region types */
+-- 
+2.38.1
 
-@@ -144,7 +150,13 @@ static inline int hashmap__append(struct hashmap
-*map, long key, long value)
-
- bool hashmap__delete(struct hashmap *map, long key, long *old_key,
-long *old_value);
-
--bool hashmap__find(const struct hashmap *map, long key, long *value);
-+bool hashmap_find(const struct hashmap *map, long key, long *value);
-+
-+#define hashmap__find(map, key, value) ({
-                         \
-+               _Static_assert(sizeof(*value) == sizeof(long),
-                         \
-+                              "Value pointee should be a long-sized
-integer or a pointer");    \
-+               hashmap_find(map, (long)key, (long *)value);
-                         \
-+})
-
- /*
-  * hashmap__for_each_entry - iterate over all entries in hashmap
-diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
-index e9bd881c6912..2059ed3164ae 100644
---- a/tools/perf/util/metricgroup.c
-+++ b/tools/perf/util/metricgroup.c
-@@ -288,7 +288,7 @@ static int setup_metric_events(struct hashmap *ids,
-                 * combined or shared groups, this metric may not care
-                 * about this event.
-                 */
--               if (hashmap__find(ids, (long)metric_id, (long *)&val_ptr)) {
-+               if (hashmap__find(ids, metric_id, &val_ptr)) {
-                        metric_events[matched_events++] = ev;
-
-                        if (matched_events >= ids_size)
-11/07 16:45:42.699 andriin@devbig019:~/linux/tools/lib/bpf (master)
-$
