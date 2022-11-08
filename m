@@ -2,262 +2,193 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C163C4332F
-	for <bpf@archiver.kernel.org>; Tue,  8 Nov 2022 21:55:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08A92C4332F
+	for <bpf@archiver.kernel.org>; Tue,  8 Nov 2022 22:07:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbiKHVy7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Nov 2022 16:54:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34564 "EHLO
+        id S229818AbiKHWH2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Nov 2022 17:07:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbiKHVy6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Nov 2022 16:54:58 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBCF63172
-        for <bpf@vger.kernel.org>; Tue,  8 Nov 2022 13:54:53 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id p141so12589073iod.6
-        for <bpf@vger.kernel.org>; Tue, 08 Nov 2022 13:54:53 -0800 (PST)
+        with ESMTP id S230046AbiKHWH1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Nov 2022 17:07:27 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB0559847
+        for <bpf@vger.kernel.org>; Tue,  8 Nov 2022 14:07:24 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so93849wmb.0
+        for <bpf@vger.kernel.org>; Tue, 08 Nov 2022 14:07:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wJw7dUyTQ/kSM/LgDsfH6662JpZHpPR4MTrASZnPAAY=;
-        b=rsRuvSwiM1PvHvUlS3h5AXXAOSatkIGwx3us0QmTTtQ3N/EH7E13CSkXNmYBDLAFfj
-         ZaBmBKrA5SUN5nK7VjI0JYn9V8ndX3Lvwaus5dCZZWA0XJNgdvnjB8PfSjQ+kV8GFCvJ
-         QLX+0x14k8IhuUScnrmsbEZK3VqXNTtHEHCvgzowA2sKn8YRR8OIsaXAy2VK/ny+XRD7
-         7cWu6tHy+qGNuU/DWTkM7CVBfAbQCZLdJx4YTikj37Mg2o64sbSSWHT/DLkXWsQXp4Zc
-         zQrQQAciCZrzcisqNob4AKp6jzyRo17sPHp/fb4wdrhgGdmiyOfDkLXCE51REjGZqgLt
-         B+gQ==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oZa2XsBC7LSTs3tg2Aekhd4AeoshIZpxVnZl6SEC4lk=;
+        b=KxBQ4KUBSA33jXcR3gUddQwWIISKgRvrB4BVa64HjRHCGWzmit4A9fuj7o0bS0O32j
+         CmvZ6prPCzADMDdPDl1qyf/nXRqvi9Ayg561y+JRo08oheNEq+pzV92L7gnMQPbKT2+B
+         gGjE0IDl/8gAxB+fL4VPyLAq+KdUhcL1tkBXc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wJw7dUyTQ/kSM/LgDsfH6662JpZHpPR4MTrASZnPAAY=;
-        b=gRyRvrCmifPpgF7EKWBPe93iiePgu6leESPGFc8AJuPmITecytwoniBsdhYVHNLWl2
-         vriZgXINa65cu5Z5AjkPo2JQ6iANuSLNSy1C12XTYVVCBt1SldLZRVmFTcd0f3e+y5an
-         JoTvycsZyiUprr7VkXxmOEVBDo796pJNvJmikuNkXTP3RPjXdYJiK5KYT1qEVWi51dBe
-         hx6W0fy7bWTUXao30vFOfzKpJtfILeR26VpEr3L/G2p7HBOIKrWNtrNNEHCARaV4FZlu
-         1xgF2atB3yglyqjGF01p6nFHOBINbyTaafEk9r6P23viwthXpMfAWDb/KtElzf5Bsvue
-         4/pQ==
-X-Gm-Message-State: ACrzQf2Lrso8v8qJvnp7f7JmNN0lQO8CATDBvIO1AyeWnfO7JjBSqRLJ
-        2DkBWIinLL6C2PobI42atIrejl8kqw+gW8+GIka8mw==
-X-Google-Smtp-Source: AMsMyM5inAjGP5aW3gKcGUsL0qc+y7ufgG48iVUvb8COUL0n92UFv/6koC7l7Z+yLxnh06eEteGE/ffB6OTS4SGtGRk=
-X-Received: by 2002:a05:6638:3043:b0:341:d8a4:73e8 with SMTP id
- u3-20020a056638304300b00341d8a473e8mr34008716jak.239.1667944492914; Tue, 08
- Nov 2022 13:54:52 -0800 (PST)
-MIME-Version: 1.0
-References: <20221104032532.1615099-1-sdf@google.com> <20221104032532.1615099-7-sdf@google.com>
- <187e89c3-d7de-7bec-c72e-d9d6eb5bcca0@linux.dev>
-In-Reply-To: <187e89c3-d7de-7bec-c72e-d9d6eb5bcca0@linux.dev>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Tue, 8 Nov 2022 13:54:41 -0800
-Message-ID: <CAKH8qBv_ZO=rsJcq2Lvq36d9sTAXs6kfUmW1Hk17bB=BGiGzhw@mail.gmail.com>
-Subject: Re: [RFC bpf-next v2 06/14] xdp: Carry over xdp metadata into skb context
-To:     Martin KaFai Lau <martin.lau@linux.dev>
+        bh=oZa2XsBC7LSTs3tg2Aekhd4AeoshIZpxVnZl6SEC4lk=;
+        b=gDfUAYsPMnqTXLxd8UBfmTJJIatEggm59vETdS5Z5lAWZ2xuwGVM37RcfMny09RbL6
+         gLybcuNM//qMWmxERcWnoAQpkR/79fwH61Qd4JQs9IXaD1sB9ReVddHOjL13tH09CS1o
+         pmyby2pBn1YOdXexOCZVv7za23HUkGTfND1ILsHKvPRFsy8dnN6OChh0emtSnljlV4tE
+         5HuArQr5spEV00z4EfDriAeBTBIdNBCpiXoZSt9T9ii+79UsdUyaljzi+JGRsRUOPkIo
+         Uk3rwHS7lRhDugEoEqf6CRPQ2OGybYE6TKNfqR9Jgt5ar7fr06I+CscpigM79lPDf06p
+         1dJg==
+X-Gm-Message-State: ACrzQf3qUy3wqs2DvZQkDnKu80DbEohUzcfp+ziHvJOFYZ+dCXYdVK5V
+        Rh2B3zXZ6rQgHcl1Iy9YJMHgwDiVCL/iSA==
+X-Google-Smtp-Source: AMsMyM5pJq+k2FsxumM1/v0O/EpJeObWC2YCk8fWIOp9a76FfNHAaKBpgJmd4Nw45KOA7D3JTGizpQ==
+X-Received: by 2002:a05:600c:3587:b0:3cf:9aab:ab4a with SMTP id p7-20020a05600c358700b003cf9aabab4amr16653350wmq.155.1667945242563;
+        Tue, 08 Nov 2022 14:07:22 -0800 (PST)
+Received: from revest.zrh.corp.google.com ([2a00:79e0:9d:6:8b01:3c16:212f:91df])
+        by smtp.gmail.com with ESMTPSA id bw9-20020a0560001f8900b00236c1f2cecesm14001004wrb.81.2022.11.08.14.07.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 14:07:21 -0800 (PST)
+From:   Florent Revest <revest@chromium.org>
+To:     bpf@vger.kernel.org
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, haoluo@google.com, jolsa@kernel.org,
-        David Ahern <dsahern@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Willem de Bruijn <willemb@google.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Anatoly Burakov <anatoly.burakov@intel.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        kpsingh@kernel.org, jackmanb@google.com, markowsky@google.com,
+        mark.rutland@arm.com, mhiramat@kernel.org, rostedt@goodmis.org,
+        xukuohai@huawei.com, linux-kernel@vger.kernel.org,
+        Florent Revest <revest@chromium.org>
+Subject: [RFC 0/1] BPF tracing for arm64 using fprobe
+Date:   Tue,  8 Nov 2022 23:06:50 +0100
+Message-Id: <20221108220651.24492-1-revest@chromium.org>
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Nov 7, 2022 at 2:02 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
->
-> On 11/3/22 8:25 PM, Stanislav Fomichev wrote:
-> > > diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-> > index 59c9fd55699d..dba857f212d7 100644
-> > --- a/include/linux/skbuff.h
-> > +++ b/include/linux/skbuff.h
-> > @@ -4217,9 +4217,13 @@ static inline bool skb_metadata_differs(const struct sk_buff *skb_a,
-> >              true : __skb_metadata_differs(skb_a, skb_b, len_a);
-> >   }
-> >
-> > +void skb_metadata_import_from_xdp(struct sk_buff *skb, size_t len);
-> > +
-> >   static inline void skb_metadata_set(struct sk_buff *skb, u8 meta_len)
-> >   {
-> >       skb_shinfo(skb)->meta_len = meta_len;
-> > +     if (meta_len)
-> > +             skb_metadata_import_from_xdp(skb, meta_len);
-> >   }
-> >
-> [ ... ]
->
-> > +struct xdp_to_skb_metadata {
-> > +     u32 magic; /* xdp_metadata_magic */
-> > +     u64 rx_timestamp;
-> > +} __randomize_layout;
-> > +
-> > +struct bpf_patch;
-> > +
->
-> [ ... ]
->
-> > +void skb_metadata_import_from_xdp(struct sk_buff *skb, size_t len)
-> > +{
-> > +     struct xdp_to_skb_metadata *meta = (void *)(skb_mac_header(skb) - len);
-> > +
-> > +     /* Optional SKB info, currently missing:
-> > +      * - HW checksum info           (skb->ip_summed)
-> > +      * - HW RX hash                 (skb_set_hash)
-> > +      * - RX ring dev queue index    (skb_record_rx_queue)
-> > +      */
-> > +
-> > +     if (len != sizeof(struct xdp_to_skb_metadata))
-> > +             return;
-> > +
-> > +     if (meta->magic != xdp_metadata_magic)
-> > +             return;
-> > +
-> > +     if (meta->rx_timestamp) {
-> > +             *skb_hwtstamps(skb) = (struct skb_shared_hwtstamps){
-> > +                     .hwtstamp = ns_to_ktime(meta->rx_timestamp),
-> > +             };
-> > +     }
-> > +}
->
-> Considering the metadata will affect the gro, should the meta be cleared after
-> importing to the skb?
+Hi!
 
-Yeah, good suggestion, will clear it here.
+With this RFC, I'd like to revive the conversation between BPF, ARM and tracing
+folks on what BPF tracing (fentry/fexit/fmod_ret) could/should look like on
+arm64.
 
-> [ ... ]
->
-> > +/* Since we're not actually doing a call but instead rewriting
-> > + * in place, we can only afford to use R0-R5 scratch registers.
-> > + *
-> > + * We reserve R1 for bpf_xdp_metadata_export_to_skb and let individual
-> > + * metadata kfuncs use only R0,R4-R5.
-> > + *
-> > + * The above also means we _cannot_ easily call any other helper/kfunc
-> > + * because there is no place for us to preserve our R1 argument;
-> > + * existing R6-R9 belong to the callee.
-> > + */
-> > +void xdp_metadata_export_to_skb(const struct bpf_prog *prog, struct bpf_patch *patch)
-> > +{
-> > +     u32 func_id;
-> > +
-> > +     /*
-> > +      * The code below generates the following:
-> > +      *
-> > +      * void bpf_xdp_metadata_export_to_skb(struct xdp_md *ctx)
-> > +      * {
-> > +      *      struct xdp_to_skb_metadata *meta;
-> > +      *      int ret;
-> > +      *
-> > +      *      ret = bpf_xdp_adjust_meta(ctx, -sizeof(*meta));
-> > +      *      if (!ret)
-> > +      *              return;
-> > +      *
-> > +      *      meta = ctx->data_meta;
-> > +      *      meta->magic = xdp_metadata_magic;
-> > +      *      meta->rx_timestamp = bpf_xdp_metadata_rx_timestamp(ctx);
-> > +      * }
-> > +      *
-> > +      */
-> > +
-> > +     bpf_patch_append(patch,
-> > +             /* r2 = ((struct xdp_buff *)r1)->data_meta; */
-> > +             BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1,
-> > +                         offsetof(struct xdp_buff, data_meta)),
-> > +             /* r3 = ((struct xdp_buff *)r1)->data; */
-> > +             BPF_LDX_MEM(BPF_DW, BPF_REG_3, BPF_REG_1,
-> > +                         offsetof(struct xdp_buff, data)),
-> > +             /* if (data_meta != data) return;
-> > +              *
-> > +              *      data_meta > data: xdp_data_meta_unsupported()
-> > +              *      data_meta < data: already used, no need to touch
-> > +              */
-> > +             BPF_JMP_REG(BPF_JNE, BPF_REG_2, BPF_REG_3, S16_MAX),
-> > +
-> > +             /* r2 -= sizeof(struct xdp_to_skb_metadata); */
-> > +             BPF_ALU64_IMM(BPF_SUB, BPF_REG_2,
-> > +                           sizeof(struct xdp_to_skb_metadata)),
-> > +             /* r3 = ((struct xdp_buff *)r1)->data_hard_start; */
-> > +             BPF_LDX_MEM(BPF_DW, BPF_REG_3, BPF_REG_1,
-> > +                         offsetof(struct xdp_buff, data_hard_start)),
-> > +             /* r3 += sizeof(struct xdp_frame) */
-> > +             BPF_ALU64_IMM(BPF_ADD, BPF_REG_3,
-> > +                           sizeof(struct xdp_frame)),
-> > +             /* if (data-sizeof(struct xdp_to_skb_metadata) < data_hard_start+sizeof(struct xdp_frame)) return; */
-> > +             BPF_JMP_REG(BPF_JLT, BPF_REG_2, BPF_REG_3, S16_MAX),
-> > +
-> > +             /* ((struct xdp_buff *)r1)->data_meta = r2; */
-> > +             BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2,
-> > +                         offsetof(struct xdp_buff, data_meta)),
-> > +
-> > +             /* *((struct xdp_to_skb_metadata *)r2)->magic = xdp_metadata_magic; */
-> > +             BPF_ST_MEM(BPF_W, BPF_REG_2,
-> > +                        offsetof(struct xdp_to_skb_metadata, magic),
-> > +                        xdp_metadata_magic),
-> > +     );
-> > +
-> > +     /*      r0 = bpf_xdp_metadata_rx_timestamp(ctx); */
-> > +     func_id = xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_TIMESTAMP);
-> > +     prog->aux->xdp_kfunc_ndo->ndo_unroll_kfunc(prog, func_id, patch);
-> > +
-> > +     bpf_patch_append(patch,
-> > +             /* r2 = ((struct xdp_buff *)r1)->data_meta; */
-> > +             BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1,
-> > +                         offsetof(struct xdp_buff, data_meta)),
-> > +             /* *((struct xdp_to_skb_metadata *)r2)->rx_timestamp = r0; */
-> > +             BPF_STX_MEM(BPF_DW, BPF_REG_2, BPF_REG_0,
-> > +                         offsetof(struct xdp_to_skb_metadata, rx_timestamp)),
->
-> Can the xdp prog still change the metadata through xdp->data_meta? tbh, I am not
-> sure it is solid enough by asking the xdp prog not to use the same random number
-> in its own metadata + not to change the metadata through xdp->data_meta after
-> calling bpf_xdp_metadata_export_to_skb().
+Current status of BPF tracing
+=============================
 
-What do you think the usecase here might be? Or are you suggesting we
-reject further access to data_meta after
-bpf_xdp_metadata_export_to_skb somehow?
+On currently supported architectures (like x86), BPF tracing programs are
+called from a JITted BPF trampoline, itself called from the ftrace patch site
+thanks to the ftrace "direct call" API. (or from the end of the ftrace
+trampoline if a ftrace ops is also tracing that function, but this is
+transparent to BPF)
 
-If we want to let the programs override some of this
-bpf_xdp_metadata_export_to_skb() metadata, it feels like we can add
-more kfuncs instead of exposing the layout?
+Thanks to Xu's work [1], we now have BPF trampolines on arm64 (these can be
+used for struct ops programs already), but Xu's attempts at getting ftrace
+direct calls support [2][3] on arm64 have been unsucessful so far so we still
+do not support BPF tracing programs. This prompted me to try a different
+approach. I'd like to collect feedback on it here.
 
-bpf_xdp_metadata_export_to_skb(ctx);
-bpf_xdp_metadata_export_skb_hash(ctx, 1234);
-...
+Why not direct calls ?
+======================
 
-> Does xdp_to_skb_metadata have a use case for XDP_PASS (like patch 7) or the
-> xdp_to_skb_metadata can be limited to XDP_REDIRECT only?
+Mark and Steven have not been too keen on getting direct calls on arm64 because:
+- working around BL instruction's limited range introduces complexity [4]
+- it's difficult to get reliable stacktraces right with direct calls [5]
+- direct calls are complex to maintain on the arch/ftrace side [5]
 
-XDP_PASS cases where we convert xdp_buff into skb in the drivers right
-now usually have C code to manually pull out the metadata (out of hw
-desc) and put it into skb.
+In the absence of ftrace direct calls support, BPF tracing programs would need
+to be called from an ftrace ops instead. Note that the BPF callback signature
+would have to be different, so we can't re-use trampolines (direct called
+callbacks receive arguments in registers whereas ftrace ops callbacks receive
+arguments in a struct ftrace_regs pointer)
 
-So, currently, if we're calling bpf_xdp_metadata_export_to_skb() for
-XDP_PASS, we're doing a double amount of work:
-skb_metadata_import_from_xdp first, then custom driver code second.
+Why fprobe ?
+============
 
-In theory, maybe we should completely skip drivers custom parsing when
-there is a prog with BPF_F_XDP_HAS_METADATA?
-Then both xdp->skb paths (XDP_PASS+XDP_REDIRECT) will be bpf-driven
-and won't require any mental work (plus, the drivers won't have to
-care either in the future).
+Ftrace ops per-se only expose an API to hook before a function. There are two
+systems built on top of ftrace ops that also allow hooking the function exit:
+fprobe (using rethook) and the function graph tracer. There are plans from
+Masami and Steven to unify these two systems but, as they stand, only fprobe
+gives enough flexibility to implement BPF tracing.
 
-WDYT?
+In order not to reinvent the wheel, if direct calls aren't available on the
+arch, BPF could leverage fprobe to hook before and after the traced function.
+Note that return hooking is implemented a bit differently than it is in BPF
+trampolines. Instead of keeping arguments on a stack frame and calling the
+traced function, rethook saves arguments in a memory pool and returns to the
+traced function with a hijacked return pointer that will have its ret jump back
+to the rethook trampoline.
 
-> > +     );
-> > +
-> > +     bpf_patch_resolve_jmp(patch);
-> > +}
-> > +
-> >   static int __init xdp_metadata_init(void)
-> >   {
-> > +     xdp_metadata_magic = get_random_u32() | 1;
-> >       return register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &xdp_metadata_kfunc_set);
-> >   }
-> >   late_initcall(xdp_metadata_init);
+What about performances ?
+=========================
+
+In its current state, a fprobe callback on arm64 is very expensive because:
+1- the ftrace trampoline saves all registers (including many unnecessary ones)
+2- it calls ftrace_ops_list_func which iterates over all ops and is very slow
+3- the fprobe ops unconditionally hooks a rethook
+4- rethook grabs memory from a freelist which is slow under high contention
+
+However, all the above points are currently being addressed:
+1- by Mark's series to save argument registers only [6]
+2- by Mark's series to call single ops directly [7]
+3- by Masami's patch to skip rethooks if not needed [8]
+4- Masami said the rethook freelist would be replaced by a per-task stack as
+   part of its unification with the function graph tracer [9]
+
+I measured the costs of BPF on different approaches on my RPi4 here: [10]
+tl;dr: the BPF "bench" takes a performance hit of:
+- 28.6% w/ BPF tracing on direct calls (best case scenario for reference) [11]
+- 66.8% w/ BPF on kprobe (just for reference)
+- 62.6% w/ BPF tracing on fprobe without any optimizations (current state) [12]
+- 34.1% w/ BPF tracing on fprobe with all optimizations (near-future state) [13]
+
+On top of Mark's and Masami's existing and planned work, BPF tracing programs
+called from a fprobe callback become much closer to the performances of direct
+calls but there's still a hit. If we want to try optimizing even further, we
+could potentially go even one step further by JITting the fprobe callbacks.
+This would let us unroll the argument loop and use direct calls instead of
+indirect calls. However this would introduce quite some complexity and I expect
+the performance impact should be fairly minimal. (arm64 doesn't have repotlines
+so it doesn't suffer too much from indirect calls anyway)
+
+Two other performance discrepancies I can think of, that would stay anyway are:
+1- the ftrace trampoline saves all argument registers while BPF trampolines can
+   get away with only saving the number of arguments that are actually used by
+   that function (thanks to BTF info), consequentially, we need to convert the
+   ftrace_regs structure into a BPF "ctx" array which inevitably takes some
+   cycles
+2- When a fexit program is attached, going through the rethook trampoline means
+   that we need to save argument registers a second time while BPF trampolines
+   can just rely on arguments kept on the stack
+
+How to apply this RFC ?
+=======================
+
+This RFC only brings up to discussion the eventual patch that would
+touch the BPF subsystem because the ftrace and fprobe optimizations it
+is built on are not as controversial and already on the way. However,
+this patch is meant to apply on top of Mark's and Masami's work. If
+you'd like to run this patch you can use my branch. [13]
+
+Links
+=====
+
+1: https://lore.kernel.org/bpf/20220711144722.2100039-1-xukuohai@huawei.com/
+2: https://lore.kernel.org/bpf/20220518131638.3401509-2-xukuohai@huawei.com/
+3: https://lore.kernel.org/bpf/20220913162732.163631-1-xukuohai@huaweicloud.com/
+4: https://lore.kernel.org/bpf/Yo4xb2w+FHhUtJNw@FVFF77S0Q05N/
+5: https://lore.kernel.org/bpf/YzR5WSLux4mmFIXg@FVFF77S0Q05N/
+6: https://lore.kernel.org/all/20221103170520.931305-1-mark.rutland@arm.com/
+7: https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/ftrace/per-callsite-ops
+8: https://lore.kernel.org/all/166792255429.919356.14116090269057513181.stgit@devnote3/T/#m9d43fbdc91f48b03d644be77ac18017963a08df5
+9: https://lore.kernel.org/bpf/20221024220008.48780b0f58903afed2dc8d4a@kernel.org/
+10: https://paste.debian.net/1260011/
+11: https://github.com/FlorentRevest/linux/commits/bpf-direct-calls
+12: https://github.com/FlorentRevest/linux/commits/bpf-fprobe-slow
+13: https://github.com/FlorentRevest/linux/commits/bpf-fprobe-rfc
+
+Florent Revest (1):
+  bpf: Invoke tracing progs using fprobe on archs without direct call
+
+ include/linux/bpf.h     |   5 ++
+ kernel/bpf/trampoline.c | 120 ++++++++++++++++++++++++++++++++++++++--
+ 2 files changed, 121 insertions(+), 4 deletions(-)
+
+-- 
+2.38.1.431.g37b22c650d-goog
+
