@@ -2,154 +2,96 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FC1AC433FE
-	for <bpf@archiver.kernel.org>; Wed,  9 Nov 2022 21:53:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0359C4332F
+	for <bpf@archiver.kernel.org>; Wed,  9 Nov 2022 21:53:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232046AbiKIVxy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Nov 2022 16:53:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50836 "EHLO
+        id S232166AbiKIVxt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Nov 2022 16:53:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232098AbiKIVxe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Nov 2022 16:53:34 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325CA3C6E4;
-        Wed,  9 Nov 2022 13:52:49 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id io19so18348578plb.8;
-        Wed, 09 Nov 2022 13:52:49 -0800 (PST)
+        with ESMTP id S232084AbiKIVxa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Nov 2022 16:53:30 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5FED3C6D4;
+        Wed,  9 Nov 2022 13:52:45 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id l6so142011pjj.0;
+        Wed, 09 Nov 2022 13:52:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pJTZwmsusxeJbHgIbDeXz7BpaeNwMKLsmROONoqlOjE=;
-        b=H/3JK2glHGKHQmBjgr/T3CI+6HuQBpwZIg8qPfl2Yd9ldmHZmb/MivqlJD6MnnOK5z
-         DLCFTNq6lk42MZdxkMmUxZtvtn1G/1Q5S5TDu9v/ujpwIxtlp1aO9QXJaJfqtN28gSDw
-         IiAoDnvYovEdp996YnvYQwGDpz8rcUaFVn+7fCj1LXhxH3wdyFv7O/Q/KAJ8mL/wQI4H
-         JoDeQiW0LNjQiQqTqXhztUXyrOmrpHTc2B6/lL83+slc9SfEamyP8g/nNQ2tX5Zkal9h
-         /U2jtjdYOqQ+oyrQZR+RE+oXmEdoJtPn+bL28t+WProX3PrYNq4Oev4ALXWw9DysNbcP
-         XfSA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+pEds6xbqwO7ZXoU8W3gHnIf1FWaQAruuWLiKMGCYv4=;
+        b=noWKz8oim+7TAut/OpvNfUAgB0AkG9Tqpy9pvoP3Tlb+G6BuTjdd5OSH6colst1uQV
+         w1CZK9NfLgzTmkXVeECCX194Vk3lZclqPJKv5dnrpqJ689SdWhqEWtlS2/hMh9y64m3r
+         C0zS7WYShkWRTJjds0RK5hS3J83TETqF3HB/XSLQhLOkqBLYyNZ28vxiiuRHDSp99ilE
+         SIQpTiHhek6XRCoHiqL/id9DwkqeRywi1KaEqnFvpWqzWokmK2iQUU+zIu2jtYdBYzvo
+         HrasUxJlmAZXRTziz9WDKqeJCoNjbuin1K6/XoEGVLRnoZJ6qASSUfovrqQX95Ab4WXI
+         V15Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pJTZwmsusxeJbHgIbDeXz7BpaeNwMKLsmROONoqlOjE=;
-        b=SmieTHP5dSdTlB4/6dZO7IsPvR7Rxa4QTJm3wkgSXrYNqsZNGpC3blxpDzuK1myqBi
-         tGG1V1euR1rkxe1dRKo2BDWJwnp7FrSf40bKrqOa9ycFva4LBgxF4jeKf5S3GnH8IStk
-         Mwhc/swe3EJQudZANztlQE1PM1wjG+9anQTY1o7X1wABoUMCGkEw30mkVNDo3uxUf/UP
-         brgqM8ZoLvZvDKPC0DagM4zeVHhViCgHHc/ZReWeDbwxVx1LW5X3z6Qk6pXdSThMPQgn
-         VQtWNGLB0SJp3JZFCaBfMu85UGTI0QQNOcjupWDdzpA4hXCuZbu3x78y06SYaWjhYSZI
-         NyOQ==
-X-Gm-Message-State: ACrzQf2+d/5po+WOuKcwUQVwHaSVyaO/nIsASzMIc4kpg0OB0kC8YK4H
-        Fxn+GsNV/1O/oTnTxJzXa9o=
-X-Google-Smtp-Source: AMsMyM4exJa57YfJAKglk9vp6YGZ4kqPRGXRaLAlt1PCAnNVvhd87UIKOjVga0q5SZRH/zQvxyr8+g==
-X-Received: by 2002:a17:902:f691:b0:186:b250:9763 with SMTP id l17-20020a170902f69100b00186b2509763mr63945311plg.62.1668030768681;
-        Wed, 09 Nov 2022 13:52:48 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+pEds6xbqwO7ZXoU8W3gHnIf1FWaQAruuWLiKMGCYv4=;
+        b=Bj1F1rpFLEy5i8fYZDrlu4jpMCOw7mmfStZFajcsuJz4MSYw4Agafl5UjGKG6UEN5V
+         gVwdo7GlsXhfvzpTWry5ImgH9HuQON8D2A4shnQyQNcs79OahrapY2cMK4jWnHfPTIDd
+         5pEqrGp/vj4HtyebQdrjuIO5iFgHyKgBMpf4YpYWi49ysBLRSOAYCXnNWyVRStLgs5ow
+         MtzUK/Ro8FjkLPgdvaQF6EwyfVl6Yd6/DcvqsTrjeHYHx+9lzP3+UVDQYf35v+T1/85p
+         Z3WOA/QI9rHFufmYpb9nwwZqtXfmzHgl94+Ve8MNroy6hRP3IortbX17j5bUeKLaGVio
+         uAng==
+X-Gm-Message-State: ACrzQf3R6d0A2ksalVYwt1I0enr1+cS0n2PQqcvKighYM9PCm7+S3p0z
+        Y3AfnKKIcvAUUjSu8cpfTve8+g4LBJ4=
+X-Google-Smtp-Source: AMsMyM7neTbb3h1g/UqwjocBOeWvSnDGRv645zNWHAQsfF+nxUVmQgcn/AOxD7w+4XRzFkW2vy+plA==
+X-Received: by 2002:a17:902:b284:b0:187:a99:8178 with SMTP id u4-20020a170902b28400b001870a998178mr61038510plr.98.1668030765118;
+        Wed, 09 Nov 2022 13:52:45 -0800 (PST)
 Received: from john.lan ([98.97.44.95])
-        by smtp.gmail.com with ESMTPSA id h3-20020aa796c3000000b0056246403534sm8727802pfq.88.2022.11.09.13.52.47
+        by smtp.gmail.com with ESMTPSA id h3-20020aa796c3000000b0056246403534sm8727802pfq.88.2022.11.09.13.52.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 13:52:48 -0800 (PST)
+        Wed, 09 Nov 2022 13:52:44 -0800 (PST)
 From:   John Fastabend <john.fastabend@gmail.com>
 To:     hawk@kernel.org, daniel@iogearbox.net, kuba@kernel.org,
         davem@davemloft.net, ast@kernel.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         john.fastabend@gmail.com, sdf@google.com
-Subject: [2/2 bpf-next] bpf: add selftest to read xdp_md fields
-Date:   Wed,  9 Nov 2022 13:52:42 -0800
-Message-Id: <20221109215242.1279993-3-john.fastabend@gmail.com>
+Subject: [0/2 bpf-next] Expose netdev in XDP progs with BTF_ID
+Date:   Wed,  9 Nov 2022 13:52:40 -0800
+Message-Id: <20221109215242.1279993-1-john.fastabend@gmail.com>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20221109215242.1279993-1-john.fastabend@gmail.com>
-References: <20221109215242.1279993-1-john.fastabend@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This adds a selftest to read the xdp_md net_device and extract common
-fields we use. This will also compare xdp_md->ifindex with the value
-extracted through the dev pointer.
+In one of our network monitoring tools we collect metadata about the
+interfaces. This is done in a map and then userspace can read the
+stats out as needed. Currently, this is done through kprobes but
+it causes unnecessary overhead (we have an XDP program running and
+its slower than XDP anyways) and extra complexity as we have two
+programs instead of one. The main hook we use to chase down the
+needed data is the net_device. From this we can get the name of
+the interface, its network namespace (and eventually pod in K8s
+world), qdisc information, etc.
 
-Signed-off-by: John Fastabend <john.fastabend@gmail.com>
----
+Because some of the data is per packet data, e.g. getting a unique
+key for the ifindex+inum, we can't simply do it with an iterator.
+
+Patch1 exposes the net_device in the xdp_md and patch 2 adds some
+tests to walk the net_device to report name, ifindex, and inum.
+
+John Fastabend (2):
+  bpf: expose net_device from xdp for additional metadata
+  bpf: add selftest to read xdp_md fields
+
+ include/uapi/linux/bpf.h                      |  1 +
+ net/core/filter.c                             | 19 ++++++++++
+ tools/include/uapi/linux/bpf.h                |  1 +
  .../testing/selftests/bpf/prog_tests/xdp_md.c | 35 +++++++++++++++++++
  .../testing/selftests/bpf/progs/test_xdp_md.c | 25 +++++++++++++
- 2 files changed, 60 insertions(+)
+ 5 files changed, 81 insertions(+)
  create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_md.c
  create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_md.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_md.c b/tools/testing/selftests/bpf/prog_tests/xdp_md.c
-new file mode 100644
-index 000000000000..facf3f3ab86f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_md.c
-@@ -0,0 +1,35 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include <network_helpers.h>
-+#include "test_xdp_md.skel.h"
-+
-+void test_xdp_md(void)
-+{
-+	struct test_xdp_md *skel;
-+	int err, prog_fd;
-+	char buf[128];
-+
-+	LIBBPF_OPTS(bpf_test_run_opts, topts,
-+		.data_in = &pkt_v4,
-+		.data_size_in = sizeof(pkt_v4),
-+		.data_out = buf,
-+		.data_size_out = sizeof(buf),
-+		.repeat = 1,
-+	);
-+
-+	skel = test_xdp_md__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+
-+	prog_fd = bpf_program__fd(skel->progs.md_xdp);
-+	err = bpf_prog_test_run_opts(prog_fd, &topts);
-+	ASSERT_OK(err, "test_run");
-+	ASSERT_EQ(topts.retval, XDP_PASS, "xdp_md test_run retval");
-+
-+	ASSERT_EQ(skel->bss->ifindex, 1, "xdp_md ifindex");
-+	ASSERT_EQ(skel->bss->ifindex, skel->bss->ingress_ifindex, "xdp_md ingress_ifindex");
-+	ASSERT_STREQ(skel->bss->name, "lo", "xdp_md name");
-+	ASSERT_NEQ(skel->bss->inum, 0, "xdp_md inum");
-+
-+	test_xdp_md__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_md.c b/tools/testing/selftests/bpf/progs/test_xdp_md.c
-new file mode 100644
-index 000000000000..66ad4a7c80cd
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_md.c
-@@ -0,0 +1,25 @@
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <string.h>
-+
-+#define	IFNAMSIZ 16
-+
-+int ifindex, ingress_ifindex;
-+char name[IFNAMSIZ];
-+unsigned int inum;
-+
-+SEC("xdp")
-+int md_xdp(struct xdp_md *ctx)
-+{
-+	struct net_device *dev;
-+
-+	dev = ctx->rx_dev;
-+
-+	ifindex = dev->ifindex;
-+	inum = dev->nd_net.net->ns.inum;
-+	memcpy(name, dev->name, IFNAMSIZ);
-+	ingress_ifindex = ctx->ingress_ifindex;
-+	return XDP_PASS;
-+}
-+
-+char _license[] SEC("license") = "GPL";
 -- 
 2.33.0
 
