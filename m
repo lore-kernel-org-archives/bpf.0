@@ -2,199 +2,180 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3EC7C4332F
-	for <bpf@archiver.kernel.org>; Wed,  9 Nov 2022 21:43:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0206FC43217
+	for <bpf@archiver.kernel.org>; Wed,  9 Nov 2022 21:53:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbiKIVn5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Nov 2022 16:43:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47274 "EHLO
+        id S232084AbiKIVxv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Nov 2022 16:53:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiKIVn4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Nov 2022 16:43:56 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD25F2612A
-        for <bpf@vger.kernel.org>; Wed,  9 Nov 2022 13:43:55 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id d3so138177ils.1
-        for <bpf@vger.kernel.org>; Wed, 09 Nov 2022 13:43:55 -0800 (PST)
+        with ESMTP id S232173AbiKIVxc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Nov 2022 16:53:32 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91EB331ED7;
+        Wed,  9 Nov 2022 13:52:47 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id d59-20020a17090a6f4100b00213202d77e1so3127621pjk.2;
+        Wed, 09 Nov 2022 13:52:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GdAEt6KovCYY+VvwhAcPGME29rPsv1BM1egHu99tC4E=;
-        b=M4PTdhbQF4bi7mDtdJB7anN/q4vZnWpIgn8KNPow05g+e61MUxe5+FYiqjZMOS3YPP
-         YRf0rtHeDwn2hFASRGvgX9ZsA0imP0pb38atmWGRcRG6oDn3bvKY+eqIYxp3hxkcTG7F
-         EP2hY3Uq3eK3U+utycRQnRdy1hQRHyracn0yJS8ZzBVrkmYxtZfxkRGtdq0J687JzBYi
-         YoRq7xh1G+mKJKzmp3zgZ76nRNbfgjCrLUIgwTMumK+PTwyFEG9uMMjRA/5F/yJ7SLRz
-         gkZ4dq03FemWF3zGy9KDV/SORdDb4OX4TuDNZV4jY17M9suUw3/RpL0k58OqaybfpCJS
-         uTdw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9yrMnjVPG4cOOqiZYZR1WL3gTbiRvMDdOGJcJaC5E70=;
+        b=foCuYIvAy5RbnThGkpxQ5X+07GLMfgIUbArzLtLyDyVTxYTmbWJ+vwAXSj31YDCk7x
+         6QdBtbbcfVVSbNX0zRVsQQqc9ksv+KS+qs2rTt2UTzE0r6jdLGudtiQxa0A+WbpAmBh6
+         C3zW5rSGImi3Se/jmjA79w4d2RNmfIUzbrjIdo/hMhKLe6EhzBNReRKdiO5DHs1QIb4e
+         uF/EmIxMM6CCOBFkX5qtvJ/m3IlTLhQkEvk6UJxcmRE4zHXaznAT7H7JgJ0T6pZZzu/u
+         DZTQs35gfFgfaSYtuAXkZTquNOA40otzmjWlEqwW1D1Org2nRGAUzYxhbs948F9eH9I1
+         djig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GdAEt6KovCYY+VvwhAcPGME29rPsv1BM1egHu99tC4E=;
-        b=NWZftb1xxH053qyCs3TLRtJzkLxURAiZEUOzfq+9mRCH/jKEClB/r8/vI2H6KxpcQx
-         oAAEAOZOun0DR6tNakTJo634Hoz3UMfGJLaSk4m+77QTzrTrtmW3Ff7LyaThiJJ7IeTT
-         ouPI/dlTZOPtp2mGEACqS0qOjA0eGwhmk8PS61z9pp/kYoIEbhPoW7V4/YG5BbAH2Uq1
-         4UjMX+jfU98Ft7YbGX5v0s0g/LffXvk3YAMF4Kd7ubEY5+P/nHxWVUgibgF4oeIMJsd7
-         nd708mSoitGXIiZKRRGmWM95xF08LyZZkQcBqsWSsXbSEDs807YMWZzYWUaj7Gx+o3jT
-         ts0w==
-X-Gm-Message-State: ACrzQf3Nb5ievQDg9aO0JHI24NZ0E4Dai4HEW+JoNoIcR5WPK+eMAa4b
-        S02IW1oWM+2TXgkq9+sw3BEzR/OhGi8s6HFXvCRunw==
-X-Google-Smtp-Source: AMsMyM5HkLig+9Bvay3DzW40yHUKzD64q8jrhvw0aqghwr8eIG3ItFnLKiric0ZyjxZq0YvhqJ9Cu5PnZRfJIKTTmlY=
-X-Received: by 2002:a92:d74f:0:b0:300:ad95:35c5 with SMTP id
- e15-20020a92d74f000000b00300ad9535c5mr31019963ilq.137.1668030235042; Wed, 09
- Nov 2022 13:43:55 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9yrMnjVPG4cOOqiZYZR1WL3gTbiRvMDdOGJcJaC5E70=;
+        b=FdP4q9gppoXjCyzgB17ks9rhRc0/VB4xIfGfkZoPYd1AllUG/l10BI8gK+bR50P0zj
+         q7sR6k171HlyLNJVVkvmXdMey0AxG5YdZr9vQun8W4yqqh0OsHuxx0ih/rNh4QaeCLGE
+         xi9lI5XGmZlh3bQg80d3hY7wAfpXidEozU6HKROvkRM3Z0394wEstk2e6vFXHVq9IRS4
+         scoSb/qmPELbYoqvJrWYrvlNNidTrh4OH0g8jKxO652myXUHnAKlgZkUg54bY3xHCe5o
+         pmuxKgNf1IoSyAD+8ff3tsc1yyCW7wo1+ul0OPWD1sC+to40IYJ2FUK90SKJFw9a6csP
+         ei9g==
+X-Gm-Message-State: ACrzQf2aNIxpsPefBxTjPuEGh+Umvuoy1zAD3f5WNhJ+1F+WcS9+/qIN
+        4sMI7JwZ0vxPX5bFAGL3FI0=
+X-Google-Smtp-Source: AMsMyM4PjZRb1eAT5hZOYvYgfF4sAZjmh3I2hSgwGXtWQEzgoJXKUavNVBxrSXVU9jWYZR55fMAEAw==
+X-Received: by 2002:a17:90a:5d06:b0:212:f8e5:81ab with SMTP id s6-20020a17090a5d0600b00212f8e581abmr1254282pji.114.1668030767077;
+        Wed, 09 Nov 2022 13:52:47 -0800 (PST)
+Received: from john.lan ([98.97.44.95])
+        by smtp.gmail.com with ESMTPSA id h3-20020aa796c3000000b0056246403534sm8727802pfq.88.2022.11.09.13.52.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 13:52:46 -0800 (PST)
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     hawk@kernel.org, daniel@iogearbox.net, kuba@kernel.org,
+        davem@davemloft.net, ast@kernel.org
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        john.fastabend@gmail.com, sdf@google.com
+Subject: [1/2 bpf-next] bpf: expose net_device from xdp for metadata
+Date:   Wed,  9 Nov 2022 13:52:41 -0800
+Message-Id: <20221109215242.1279993-2-john.fastabend@gmail.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20221109215242.1279993-1-john.fastabend@gmail.com>
+References: <20221109215242.1279993-1-john.fastabend@gmail.com>
 MIME-Version: 1.0
-References: <20220715115559.139691-1-shaozhengchao@huawei.com>
- <f0bb3cd6-6986-6ca1-aa40-7a10302c8586@linux.dev> <CAKH8qBvLGaX_+ye5Wdmj1FS+p8K8gBsKUEDRb1x8KzxQE+oDuA@mail.gmail.com>
- <0e69cc92-fece-3673-f7f8-24f5397183b3@linux.dev> <CAKH8qBtOoQ9ig-+rANhje=NCE7NE2bSAW2dBoGujApp-KxA=aw@mail.gmail.com>
-In-Reply-To: <CAKH8qBtOoQ9ig-+rANhje=NCE7NE2bSAW2dBoGujApp-KxA=aw@mail.gmail.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Wed, 9 Nov 2022 13:43:44 -0800
-Message-ID: <CAKH8qBuiuzS9fmRz+Tro090pdOLTwEgEj=_6GiDx-RjYJgcdig@mail.gmail.com>
-Subject: Re: [PATCH v4,bpf-next] bpf: Don't redirect packets with invalid pkt_len
-To:     Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     Zhengchao Shao <shaozhengchao@huawei.com>, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        bigeasy@linutronix.de, imagedong@tencent.com, petrm@nvidia.com,
-        arnd@arndb.de, dsahern@kernel.org, talalahmad@google.com,
-        keescook@chromium.org, haoluo@google.com, jolsa@kernel.org,
-        weiyongjun1@huawei.com, yuehaibing@huawei.com, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, hawk@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-"
+Allow xdp progs to read the net_device structure. Its useful to extract
+info from the dev itself. Currently, our tracing tooling uses kprobes
+to capture statistics and information about running net devices. We use
+kprobes instead of other hooks tc/xdp because we need to collect
+information about the interface not exposed through the xdp_md structures.
+This has some down sides that we want to avoid by moving these into the
+XDP hook itself. First, placing the kprobes in a generic function in
+the kernel is after XDP so we miss redirects and such done by the
+XDP networking program. And its needless overhead because we are
+already paying the cost for calling the XDP program, calling yet
+another prog is a waste. Better to do everything in one hook from
+performance side.
 
-On Thu, Nov 3, 2022 at 3:58 PM Stanislav Fomichev <sdf@google.com> wrote:
->
-> On Thu, Nov 3, 2022 at 3:42 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
-> >
-> > On 11/3/22 2:36 PM, Stanislav Fomichev wrote:
-> > > On Thu, Nov 3, 2022 at 2:07 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
-> > >>
-> > >> On 7/15/22 4:55 AM, Zhengchao Shao wrote:
-> > >>> Syzbot found an issue [1]: fq_codel_drop() try to drop a flow whitout any
-> > >>> skbs, that is, the flow->head is null.
-> > >>> The root cause, as the [2] says, is because that bpf_prog_test_run_skb()
-> > >>> run a bpf prog which redirects empty skbs.
-> > >>> So we should determine whether the length of the packet modified by bpf
-> > >>> prog or others like bpf_prog_test is valid before forwarding it directly.
-> > >>>
-> > >>> LINK: [1] https://syzkaller.appspot.com/bug?id=0b84da80c2917757915afa89f7738a9d16ec96c5
-> > >>> LINK: [2] https://www.spinics.net/lists/netdev/msg777503.html
-> > >>>
-> > >>> Reported-by: syzbot+7a12909485b94426aceb@syzkaller.appspotmail.com
-> > >>> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
-> > >>> ---
-> > >>> v3: modify debug print
-> > >>> v2: need move checking to convert___skb_to_skb and add debug info
-> > >>> v1: should not check len in fast path
-> > >>>
-> > >>>    include/linux/skbuff.h | 8 ++++++++
-> > >>>    net/bpf/test_run.c     | 3 +++
-> > >>>    net/core/dev.c         | 1 +
-> > >>>    3 files changed, 12 insertions(+)
-> > >>>
-> > >>> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-> > >>> index f6a27ab19202..82e8368ba6e6 100644
-> > >>> --- a/include/linux/skbuff.h
-> > >>> +++ b/include/linux/skbuff.h
-> > >>> @@ -2459,6 +2459,14 @@ static inline void skb_set_tail_pointer(struct sk_buff *skb, const int offset)
-> > >>>
-> > >>>    #endif /* NET_SKBUFF_DATA_USES_OFFSET */
-> > >>>
-> > >>> +static inline void skb_assert_len(struct sk_buff *skb)
-> > >>> +{
-> > >>> +#ifdef CONFIG_DEBUG_NET
-> > >>> +     if (WARN_ONCE(!skb->len, "%s\n", __func__))
-> > >>> +             DO_ONCE_LITE(skb_dump, KERN_ERR, skb, false);
-> > >>> +#endif /* CONFIG_DEBUG_NET */
-> > >>> +}
-> > >>> +
-> > >>>    /*
-> > >>>     *  Add data to an sk_buff
-> > >>>     */
-> > >>> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> > >>> index 2ca96acbc50a..dc9dc0bedca0 100644
-> > >>> --- a/net/bpf/test_run.c
-> > >>> +++ b/net/bpf/test_run.c
-> > >>> @@ -955,6 +955,9 @@ static int convert___skb_to_skb(struct sk_buff *skb, struct __sk_buff *__skb)
-> > >>>    {
-> > >>>        struct qdisc_skb_cb *cb = (struct qdisc_skb_cb *)skb->cb;
-> > >>>
-> > >>> +     if (!skb->len)
-> > >>> +             return -EINVAL;
-> > >>
-> > >>   From another recent report [0], I don't think this change is fixing the report
-> > >> from syzbot.  It probably makes sense to revert this patch.
-> > >>
-> > >> afaict, This '!skb->len' test is done after
-> > >>          if (is_l2)
-> > >>                  __skb_push(skb, hh_len);
-> > >>
-> > >> Hence, skb->len is not zero in convert___skb_to_skb().  The proper place to test
-> > >> skb->len is before __skb_push() to ensure there is some network header after the
-> > >> mac or may as well ensure "data_size_in > ETH_HLEN" at the beginning.
-> > >
-> > > When is_l2==true, __skb_push will result in non-zero skb->len, so we
-> > > should be good, right?
-> > > The only issue is when we do bpf_redirect into a tunneling device and
-> > > do __skb_pull, but that's now fixed by [0].
-> > >
-> > > When is_l2==false, the existing check in convert___skb_to_skb will
-> > > make sure there is something in the l3 headers.
-> > >
-> > > So it seems like this patch is still needed. Or am I missing something?
-> >
-> > Replied in [0].  I think a small change in [0] will make this patch obsolete.
-> >
-> > My thinking is the !skb->len test in this patch does not address all cases, at
-> > least not the most common one (the sch_cls prog where is_l2 == true) and then it
-> > needs another change in __bpf_redirect_no_mac [0].  Then, instead of breaking
-> > the existing test cases,  may as well solely depend on the change in
-> > __bpf_redirect_no_mac which seems to be the only redirect function that does not
-> > have the len check now.
->
-> Removing this check in convert___skb_to_skb and moving the new one in
-> __bpf_redirect_no_mac out of (mlen) SGTM.
-> Can follow up unless you or Zhengchao prefer to do it.
-> There were some concerns about doing this len check at runtime per
-> packet, but not sure whether it really affects anything..
+Of course we could one-off each one of these fields, but that would
+explode the xdp_md struct and then require writing convert_ctx_access
+writers for each field. By using BTF we avoid writing field specific
+convertion logic, BTF just knows how to read the fields, we don't
+have to add many fields to xdp_md, and I don't have to get every
+field we will use in the future correct.
 
-I've implemented a simple selftest for both mac/no-mac cases, and I
-feel like this explicit len==0 has to happen in both cases.
-That "skb->mac_header >= skb->network_header" check is not enough :-(
-I'll send the series early next week after another round of xdp metadata..
+For reference current examples in our code base use the ifindex,
+ifname, qdisc stats, net_ns fields, among others. With this
+patch we can now do the following,
 
-> > >> The fix in [0] is applied.  If it turns out there are other cases caused by the
-> > >> skb generated by test_run that needs extra fixes in bpf_redirect_*,  it needs to
-> > >> revisit an earlier !skb->len check mentioned above and the existing test cases
-> > >> outside of test_progs would have to adjust accordingly.
-> > >>
-> > >> [0]: https://lore.kernel.org/bpf/20221027225537.353077-1-sdf@google.com/
-> > >>
-> > >>> +
-> > >>>        if (!__skb)
-> > >>>                return 0;
-> > >>>
-> > >>> diff --git a/net/core/dev.c b/net/core/dev.c
-> > >>> index d588fd0a54ce..716df64fcfa5 100644
-> > >>> --- a/net/core/dev.c
-> > >>> +++ b/net/core/dev.c
-> > >>> @@ -4168,6 +4168,7 @@ int __dev_queue_xmit(struct sk_buff *skb, struct net_device *sb_dev)
-> > >>>        bool again = false;
-> > >>>
-> > >>>        skb_reset_mac_header(skb);
-> > >>> +     skb_assert_len(skb);
-> > >>>
-> > >>>        if (unlikely(skb_shinfo(skb)->tx_flags & SKBTX_SCHED_TSTAMP))
-> > >>>                __skb_tstamp_tx(skb, NULL, NULL, skb->sk, SCM_TSTAMP_SCHED);
-> > >>
-> >
+        dev = ctx->rx_dev;
+        net = dev->nd_net.net;
+
+	uid.ifindex = dev->ifindex;
+	memcpy(uid.ifname, dev->ifname, NAME);
+        if (net)
+		uid.inum = net->ns.inum;
+
+to report the name, index and ns.inum which identifies an
+interface in our system.
+
+Signed-off-by: John Fastabend <john.fastabend@gmail.com>
+---
+ include/uapi/linux/bpf.h       |  1 +
+ net/core/filter.c              | 19 +++++++++++++++++++
+ tools/include/uapi/linux/bpf.h |  1 +
+ 3 files changed, 21 insertions(+)
+
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 94659f6b3395..50403eb3b6cf 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -6123,6 +6123,7 @@ struct xdp_md {
+ 	__u32 rx_queue_index;  /* rxq->queue_index  */
+ 
+ 	__u32 egress_ifindex;  /* txq->dev->ifindex */
++	__bpf_md_ptr(struct net_device *, rx_dev); /* rxq->dev */
+ };
+ 
+ /* DEVMAP map-value layout
+diff --git a/net/core/filter.c b/net/core/filter.c
+index bb0136e7a8e4..d445ffbea8f1 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -8686,6 +8686,8 @@ static bool __is_valid_xdp_access(int off, int size)
+ 	return true;
+ }
+ 
++BTF_ID_LIST_SINGLE(btf_xdp_get_netdev_id, struct, net_device)
++
+ static bool xdp_is_valid_access(int off, int size,
+ 				enum bpf_access_type type,
+ 				const struct bpf_prog *prog,
+@@ -8718,6 +8720,15 @@ static bool xdp_is_valid_access(int off, int size,
+ 	case offsetof(struct xdp_md, data_end):
+ 		info->reg_type = PTR_TO_PACKET_END;
+ 		break;
++	case offsetof(struct xdp_md, rx_dev):
++		info->reg_type = PTR_TO_BTF_ID;
++		info->btf_id = btf_xdp_get_netdev_id[0];
++		info->btf = bpf_get_btf_vmlinux();
++	        if (IS_ERR_OR_NULL(info->btf))
++			return false;
++		if (size != sizeof(u64))
++			return false;
++		return true;
+ 	}
+ 
+ 	return __is_valid_xdp_access(off, size);
+@@ -9808,6 +9819,14 @@ static u32 xdp_convert_ctx_access(enum bpf_access_type type,
+ 		*insn++ = BPF_LDX_MEM(BPF_W, si->dst_reg, si->dst_reg,
+ 				      offsetof(struct net_device, ifindex));
+ 		break;
++	case offsetof(struct xdp_md, rx_dev):
++		*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct xdp_buff, rxq),
++				      si->dst_reg, si->src_reg,
++				      offsetof(struct xdp_buff, rxq));
++		*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct xdp_rxq_info, dev),
++				      si->dst_reg, si->dst_reg,
++				      offsetof(struct xdp_rxq_info, dev));
++		break;
+ 	}
+ 
+ 	return insn - insn_buf;
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 94659f6b3395..50403eb3b6cf 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -6123,6 +6123,7 @@ struct xdp_md {
+ 	__u32 rx_queue_index;  /* rxq->queue_index  */
+ 
+ 	__u32 egress_ifindex;  /* txq->dev->ifindex */
++	__bpf_md_ptr(struct net_device *, rx_dev); /* rxq->dev */
+ };
+ 
+ /* DEVMAP map-value layout
+-- 
+2.33.0
+
