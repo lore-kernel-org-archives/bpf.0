@@ -2,47 +2,47 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6922BC4332F
-	for <bpf@archiver.kernel.org>; Thu, 10 Nov 2022 18:02:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E1ADC433FE
+	for <bpf@archiver.kernel.org>; Thu, 10 Nov 2022 18:02:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231718AbiKJSCr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Nov 2022 13:02:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43356 "EHLO
+        id S231251AbiKJSCt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Nov 2022 13:02:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231761AbiKJSCW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Nov 2022 13:02:22 -0500
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534624D5C9
-        for <bpf@vger.kernel.org>; Thu, 10 Nov 2022 10:02:03 -0800 (PST)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 2AAELOsN025954
-        for <bpf@vger.kernel.org>; Thu, 10 Nov 2022 10:02:02 -0800
+        with ESMTP id S231243AbiKJSC0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Nov 2022 13:02:26 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DACC47314
+        for <bpf@vger.kernel.org>; Thu, 10 Nov 2022 10:02:06 -0800 (PST)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2AAFQv2G014500
+        for <bpf@vger.kernel.org>; Thu, 10 Nov 2022 10:02:06 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=NKQB4Ev1rEtTcyg271Lvtr5zhSjiWNaEOiL1osiMzvk=;
- b=FTI9n76qnNKG04ssAYJh9uRAaV4uuev9t53RWuHmHlkLcSpm/Tlsdhk0moQb3zmF3gDW
- YjktD1+uvUQLWOgRFhj/lthw7PTfjxeJdQQ0Pq+m911pxKNF/p3+pzD6iK1iJN0VtVzQ
- xwtbvpfUfGBDWSxFPRbQ90ztN10vWSPWeGA= 
+ bh=F2A6plehrPUA6Hy5MqYis1yg9Ub+V3rmUI5gFYvjk+w=;
+ b=T2q2X5SCivGeZSPkfd7yG0mlcKkdtbdZ8pUbs2EEXes9PayQ8Llpm9KXr/0ycruA1Lps
+ QAacEFVhd2peNHugcF9miK1CELpC4TQIjGlcdMBMLWKnwEjahrYmYCiOAEGzyeG4KT6S
+ wCLTv5m89wAVPeHE4byTFnWmeonDeMnopQA= 
 Received: from maileast.thefacebook.com ([163.114.130.3])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3krca3brq6-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3krnrhesfd-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 10 Nov 2022 10:02:02 -0800
-Received: from twshared14438.02.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 10 Nov 2022 10:02:06 -0800
+Received: from twshared6758.06.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 10:02:01 -0800
+ 15.1.2375.31; Thu, 10 Nov 2022 10:02:03 -0800
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id 1C6B211F22DFB; Thu, 10 Nov 2022 10:01:51 -0800 (PST)
+        id 94BD411F22E1C; Thu, 10 Nov 2022 10:02:01 -0800 (PST)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v4 5/7] bpf: Enable sleeptable support for cgrp local storage
-Date:   Thu, 10 Nov 2022 10:01:51 -0800
-Message-ID: <20221110180151.915563-1-yhs@fb.com>
+Subject: [PATCH bpf-next v4 7/7] selftests/bpf: Add rcu_read_lock test to s390x deny list
+Date:   Thu, 10 Nov 2022 10:02:01 -0800
+Message-ID: <20221110180201.917531-1-yhs@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221110180124.913882-1-yhs@fb.com>
 References: <20221110180124.913882-1-yhs@fb.com>
@@ -50,8 +50,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: IKmqYS9ra0iULwMVa7jFQuO9c-YYaKtC
-X-Proofpoint-ORIG-GUID: IKmqYS9ra0iULwMVa7jFQuO9c-YYaKtC
+X-Proofpoint-GUID: eqXi3Sue_bapVRBkD_F1sAdiE7S1elAN
+X-Proofpoint-ORIG-GUID: eqXi3Sue_bapVRBkD_F1sAdiE7S1elAN
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-10_12,2022-11-09_01,2022-06-22_01
@@ -59,34 +59,48 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-With proper bpf_rcu_read_lock() support, sleepable support for cgrp local
-storage can be enabled as typical use case task->cgroups->dfl_cgrp
-can be protected with bpf_rcu_read_lock().
+The new rcu_read_lock test will fail on s390x with the following error me=
+ssage:
+
+  ...
+  test_rcu_read_lock:PASS:join_cgroup /rcu_read_lock 0 nsec
+  test_local_storage:PASS:skel_open 0 nsec
+  libbpf: prog 'cgrp_succ': failed to find kernel BTF type ID of '__s390x=
+_sys_getpgid': -3
+  libbpf: prog 'cgrp_succ': failed to prepare load attributes: -3
+  libbpf: prog 'cgrp_succ': failed to load: -3
+  libbpf: failed to load object 'rcu_read_lock'
+  libbpf: failed to load BPF skeleton 'rcu_read_lock': -3
+  test_local_storage:FAIL:skel_load unexpected error: -3 (errno 3)
+  ...
+
+So add it to the s390x deny list.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- kernel/bpf/verifier.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/DENYLIST.s390x | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 2aa140dceb9a..92cd1cf64026 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -12958,10 +12958,11 @@ static int check_map_prog_compatibility(struct =
-bpf_verifier_env *env,
- 		case BPF_MAP_TYPE_INODE_STORAGE:
- 		case BPF_MAP_TYPE_SK_STORAGE:
- 		case BPF_MAP_TYPE_TASK_STORAGE:
-+		case BPF_MAP_TYPE_CGRP_STORAGE:
- 			break;
- 		default:
- 			verbose(env,
--				"Sleepable programs can only use array, hash, and ringbuf maps\n");
-+				"Sleepable programs can only use array, hash, ringbuf and local stor=
-age maps\n");
- 			return -EINVAL;
- 		}
-=20
+diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x b/tools/testing/s=
+elftests/bpf/DENYLIST.s390x
+index be4e3d47ea3e..dd5db40b5a09 100644
+--- a/tools/testing/selftests/bpf/DENYLIST.s390x
++++ b/tools/testing/selftests/bpf/DENYLIST.s390x
+@@ -41,6 +41,7 @@ module_attach                            # skel_attach =
+skeleton attach failed: -
+ mptcp
+ netcnt                                   # failed to load BPF skeleton '=
+netcnt_prog': -7                               (?)
+ probe_user                               # check_kprobe_res wrong kprobe=
+ res from probe read                           (?)
++rcu_read_lock                            # failed to find kernel BTF typ=
+e ID of '__x64_sys_getpgid': -3                (?)
+ recursion                                # skel_attach unexpected error:=
+ -524                                          (trampoline)
+ ringbuf                                  # skel_load skeleton load faile=
+d                                              (?)
+ select_reuseport                         # intermittently fails on new s=
+390x setup
 --=20
 2.30.2
 
