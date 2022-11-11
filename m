@@ -2,112 +2,176 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF115C43217
-	for <bpf@archiver.kernel.org>; Fri, 11 Nov 2022 09:04:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7FEDC433FE
+	for <bpf@archiver.kernel.org>; Fri, 11 Nov 2022 09:39:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233435AbiKKJEH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 11 Nov 2022 04:04:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52736 "EHLO
+        id S233575AbiKKJjN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 11 Nov 2022 04:39:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233188AbiKKJDp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 11 Nov 2022 04:03:45 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57212DF28
-        for <bpf@vger.kernel.org>; Fri, 11 Nov 2022 01:01:05 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N7t3H3LRtz4f44pP
-        for <bpf@vger.kernel.org>; Fri, 11 Nov 2022 17:00:59 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP4 (Coremail) with SMTP id gCh0CgC329hLD25jbi9eAQ--.31717S6;
-        Fri, 11 Nov 2022 17:01:02 +0800 (CST)
-From:   Hou Tao <houtao@huaweicloud.com>
-To:     bpf@vger.kernel.org, Yonghong Song <yhs@fb.com>
-Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Hao Luo <haoluo@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>, houtao1@huawei.com
-Subject: [PATCH bpf 2/4] libbpf: Handle size overflow for ringbuf mmap
-Date:   Fri, 11 Nov 2022 17:26:40 +0800
-Message-Id: <20221111092642.2333724-3-houtao@huaweicloud.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20221111092642.2333724-1-houtao@huaweicloud.com>
-References: <20221111092642.2333724-1-houtao@huaweicloud.com>
+        with ESMTP id S232749AbiKKJjM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 11 Nov 2022 04:39:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F386DCE4
+        for <bpf@vger.kernel.org>; Fri, 11 Nov 2022 01:38:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668159494;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CuzRwI1mSTi/386dr9HtHu+gFAxlK7t/8OnS9h0/MI8=;
+        b=AhnIctxeCpN8RqRjsz/pQFU3vd7pUSZcStlVe43xd+0Mya5BN5YJGYgW2hwvaOXB7WgLYi
+        F3d99aBORvAZc+4klCjqu4PKlg9bZ5+V9Wk4zEiqQ7HDFsxTh/CcAQnoEorUWIE6jiVCWZ
+        DpO5Oqvz0GArLtPTtc2AOxOvGYOJMtA=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-613-Dt8ah1ovP76rlLa2bJaqSQ-1; Fri, 11 Nov 2022 04:38:12 -0500
+X-MC-Unique: Dt8ah1ovP76rlLa2bJaqSQ-1
+Received: by mail-ej1-f70.google.com with SMTP id xc12-20020a170907074c00b007416699ea14so2730965ejb.19
+        for <bpf@vger.kernel.org>; Fri, 11 Nov 2022 01:38:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CuzRwI1mSTi/386dr9HtHu+gFAxlK7t/8OnS9h0/MI8=;
+        b=H/hT2cv3if5koA3dmGBv7Vu38wQKcBa5t+SQA2T0Yc2diW41Ff+MyVgoWKbBv/KR8x
+         8f00mjiz6Zk3A2nPFslXspRLYqSATC0Ez6AeVX3Pyzd+X5r6Na3Dkv44YewnmdXw9yGL
+         vB4Jqdv72VcOE7RLSlbcAo0ys7QkGVxrJPzPm8VJ1dLCME0ziYBh6Sb/fJGiz7fcEETH
+         jw/hngQ0xlE+B02ONh8jH0UBsYarIfV8bH5Q5ZRxOOU3kn+Gvj1sID711H8/41InHrY9
+         sW18Gb5Jw19JG9nyBd9FjUy5eERQyhUeiVjuovYIXbvvX7Vs7iQZPT4tsbId2uS3i98S
+         zLBg==
+X-Gm-Message-State: ANoB5pkEXKshHcLkJrRi3xEyK88j4MagCbsrVhrpldqlbG7w25SFcRJL
+        2Idwnf5IJx6KKqGQyh7toNSlrWmtmSY7OicP/mK84mG170YqT9ygBmvClR9uEhuKYp54MLPmDIM
+        koR2tmoRSwnJJ
+X-Received: by 2002:a05:6402:34f:b0:460:12ef:cc45 with SMTP id r15-20020a056402034f00b0046012efcc45mr731711edw.249.1668159491246;
+        Fri, 11 Nov 2022 01:38:11 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5BoVg5/sQIOxSVn1Wrw0hWRqLlG7VKbMrBd99qOGof+9QDVLhrIqKUJpzb0Jcybgy+fNljWA==
+X-Received: by 2002:a05:6402:34f:b0:460:12ef:cc45 with SMTP id r15-20020a056402034f00b0046012efcc45mr731679edw.249.1668159490817;
+        Fri, 11 Nov 2022 01:38:10 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id eg25-20020a056402289900b00457b5ba968csm875513edb.27.2022.11.11.01.38.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 01:38:10 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 3E3EE7A689F; Fri, 11 Nov 2022 10:37:53 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Martin KaFai Lau <martin.lau@linux.dev>,
+        Stanislav Fomichev <sdf@google.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, haoluo@google.com, jolsa@kernel.org,
+        David Ahern <dsahern@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Willem de Bruijn <willemb@google.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Anatoly Burakov <anatoly.burakov@intel.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Magnus Karlsson <magnus.karlsson@gmail.com>,
+        Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [xdp-hints] Re: [RFC bpf-next v2 06/14] xdp: Carry over xdp
+ metadata into skb context
+In-Reply-To: <d403ef7d-6dfd-bcaf-6088-cff5081f49e9@linux.dev>
+References: <20221104032532.1615099-1-sdf@google.com>
+ <20221104032532.1615099-7-sdf@google.com>
+ <187e89c3-d7de-7bec-c72e-d9d6eb5bcca0@linux.dev>
+ <CAKH8qBv_ZO=rsJcq2Lvq36d9sTAXs6kfUmW1Hk17bB=BGiGzhw@mail.gmail.com>
+ <9a8fefe4-2fcb-95b7-cda0-06509feee78e@linux.dev>
+ <6f57370f-7ec3-07dd-54df-04423cab6d1f@linux.dev> <87leokz8lq.fsf@toke.dk>
+ <5a23b856-88a3-a57a-2191-b673f4160796@linux.dev>
+ <CAKH8qBsfVOoR1MNAFx3uR9Syoc0APHABsf97kb8SGpK+T1qcew@mail.gmail.com>
+ <32f81955-8296-6b9a-834a-5184c69d3aac@linux.dev>
+ <CAKH8qBuLMZrFmmi77Qbt7DCd1w9FJwdeK5CnZTJqHYiWxwDx6w@mail.gmail.com>
+ <87y1siyjf6.fsf@toke.dk>
+ <CAKH8qBsfzYmQ9SZXhFetf_zQPNmE_L=_H_rRxJEwZzNbqtoKJA@mail.gmail.com>
+ <87o7texv08.fsf@toke.dk>
+ <CAKH8qBtjYV=tb28y6bvo3tGonzjvm2JLyis9AFPSMTuXsL3NPA@mail.gmail.com>
+ <87eduaxsep.fsf@toke.dk> <d403ef7d-6dfd-bcaf-6088-cff5081f49e9@linux.dev>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Fri, 11 Nov 2022 10:37:53 +0100
+Message-ID: <87o7td7rwu.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgC329hLD25jbi9eAQ--.31717S6
-X-Coremail-Antispam: 1UD129KBjvJXoW7KFWxuFWrXw15GFW5Jw1xuFg_yoW8AF4Upa
-        1Y9ry8GFs3Zr18Aw1DZ3yvv390kFZ2gr47GrZ7Jw1rAr1UXFs2qr1DKFW5CrW7JrWkKrWx
-        KrWqga4kKr1jqFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
-        A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-        Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-        Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64
-        vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
-        jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2I
-        x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK
-        8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
-        0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU1sa9DUUUUU==
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Hou Tao <houtao1@huawei.com>
+Martin KaFai Lau <martin.lau@linux.dev> writes:
 
-The maximum size of ringbuf is 2GB on x86-64 host, so 2 * max_entries
-will overflow u32 when mapping producer page and data pages. Only
-casting max_entries to size_t is not enough, because for 32-bits
-application on 64-bits kernel the size of read-only mmap region
-also could overflow size_t.
+> On 11/10/22 4:10 PM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+>>> The problem with AF_XDP is that, IIUC, it doesn't have a data_meta
+>>> pointer in the userspace.
+>>>
+>>> You get an rx descriptor where the address points to the 'data':
+>>> | 256 bytes headroom where metadata can go | data |
+>>=20
+>> Ah, I was missing the bit where the data pointer actually points at
+>> data, not the start of the buf. Oops, my bad!
+>>=20
+>>> So you have (at most) 256 bytes of headroom, some of that might be the
+>>> metadata, but you really don't know where it starts. But you know it
+>>> definitely ends where the data begins.
+>>>
+>>> So if we have the following, we can locate skb_metadata:
+>>> | 256-sizeof(skb_metadata) headroom | custom metadata | skb_metadata | =
+data |
+>>> data - sizeof(skb_metadata) will get you there
+>>>
+>>> But if it's the other way around, the program has to know
+>>> sizeof(custom metadata) to locate skb_metadata:
+>>> | 256-sizeof(skb_metadata) headroom | skb_metadata | custom metadata | =
+data |
+>>>
+>>> Am I missing something here?
+>>=20
+>> Hmm, so one could argue that the only way AF_XDP can consume custom
+>> metadata today is if it knows out of band what the size of it is. And if
+>> it knows that, it can just skip over it to go back to the skb_metadata,
+>> no?
+>
+> +1 I replied with a similar point in another email. I also think we
+> can safely assume this.
 
-So fixing it by casting the size of read-only mmap region into a __u64
-and checking whether or not there will be overflow during mmap.
+Great!
 
-Fixes: bf99c936f947 ("libbpf: Add BPF ring buffer support")
-Signed-off-by: Hou Tao <houtao1@huawei.com>
----
- tools/lib/bpf/ringbuf.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+>>=20
+>> The only problem left then is if there were multiple XDP programs called
+>> in sequence (whether before a redirect, or by libxdp chaining or tail
+>> calls), and the first one resized the metadata area without the last one
+>> knowing about it. For this, we could add a CLOBBER_PROGRAM_META flag to
+>> the skb_metadata helper which if set will ensure that the program
+>> metadata length is reset to 0?
+>
+> How is it different from the same xdp prog calling bpf_xdp_adjust_meta() =
+and=20
+> bpf_xdp_metadata_export_to_skb() multiple times.  The earlier stored=20
+> skb_metadata needs to be moved during the latter bpf_xdp_adjust_meta().  =
+The=20
+> latter bpf_xdp_metadata_export_to_skb() will overwrite the earlier skb_me=
+tadata.
 
-diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
-index d285171d4b69..c4bdc88af672 100644
---- a/tools/lib/bpf/ringbuf.c
-+++ b/tools/lib/bpf/ringbuf.c
-@@ -77,6 +77,7 @@ int ring_buffer__add(struct ring_buffer *rb, int map_fd,
- 	__u32 len = sizeof(info);
- 	struct epoll_event *e;
- 	struct ring *r;
-+	__u64 ro_size;
- 	void *tmp;
- 	int err;
- 
-@@ -129,8 +130,14 @@ int ring_buffer__add(struct ring_buffer *rb, int map_fd,
- 	 * data size to allow simple reading of samples that wrap around the
- 	 * end of a ring buffer. See kernel implementation for details.
- 	 * */
--	tmp = mmap(NULL, rb->page_size + 2 * info.max_entries, PROT_READ,
--		   MAP_SHARED, map_fd, rb->page_size);
-+	ro_size = rb->page_size + 2 * (__u64)info.max_entries;
-+	if (ro_size != (__u64)(size_t)ro_size) {
-+		pr_warn("ringbuf: ring buffer size (%u) is too big\n",
-+			info.max_entries);
-+		return libbpf_err(-E2BIG);
-+	}
-+	tmp = mmap(NULL, (size_t)ro_size, PROT_READ, MAP_SHARED, map_fd,
-+		   rb->page_size);
- 	if (tmp == MAP_FAILED) {
- 		err = -errno;
- 		ringbuf_unmap_ring(rb, r);
--- 
-2.29.2
+Well, it would just be a convenience flag, so instead of doing:
+
+metalen =3D ctx->data - ctx->data_meta;
+if (metalen)
+  xdp_adjust_meta(-metalen);
+bpf_xdp_metadata_export_to_skb(ctx);
+
+you could just do:
+
+bpf_xdp_metadata_export_to_skb(ctx, CLOBBER_PROGRAM_META);
+
+and the kernel would do the check+move for you. But, well, the couple of
+extra instructions to do the check in BPF is probably fine.
+
+(I'm talking here about a program that wants to make sure that any
+custom metadata that may have been added by an earlier program is
+removed before redirecting to an XSK socket; I expect we'd want to do
+something like this in the default program in libxdp).
+
+-Toke
 
