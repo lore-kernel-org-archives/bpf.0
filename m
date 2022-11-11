@@ -2,51 +2,50 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95F13C43217
-	for <bpf@archiver.kernel.org>; Fri, 11 Nov 2022 19:40:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27FFBC4321E
+	for <bpf@archiver.kernel.org>; Fri, 11 Nov 2022 19:40:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234195AbiKKTkV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S234222AbiKKTkV (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Fri, 11 Nov 2022 14:40:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39322 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234224AbiKKTkT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S233965AbiKKTkT (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 11 Nov 2022 14:40:19 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBCE7C8D6;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCE87C8F7;
         Fri, 11 Nov 2022 11:40:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CE3D8B827A9;
+        by ams.source.kernel.org (Postfix) with ESMTPS id CA2E3B82796;
         Fri, 11 Nov 2022 19:40:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 50247C433C1;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5A1C8C43470;
         Fri, 11 Nov 2022 19:40:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1668195616;
-        bh=jl6LdFrqv+4TDnoTaN8guBf6tvRCL8sNT2to4vgs/us=;
+        bh=FUIVSUE9JgMaiKo3srXQLhxGnj9uHH3tx+khRQncnmo=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=UDEh8fZl/ZnGleej3x34oNsi4pLaij4CQJ36lfhEXorhvdPY125u/NXlDEpDw9vcg
-         RitZACDN350XkWQXdc6JEYBmDH8qO1yQat9CY/mwuvGcwbEPss/xmkmo9DX9DgPhXL
-         0QJcEiwTIgmRvib/A4ZcmuXb+HjUtAYTC4aDB4VcjoFhccnxBHfyJkYtdfqsxV+STN
-         N+JGBCg4RsUrepqHyUZ3/PjgNRcFX2hLkUYxQeD3bSn3niGWCEWSpMcgb/5pWgnJZW
-         E5pC+BixHNCbIDuO8JlE6wOhTUsse3Xr4cTI31Hcpdqe6G5sYcjpJrL4n3JKDau8wk
-         keJPbKIiK/aUw==
+        b=gJtia0YvlGB2OWFlpX7/EsyKU4OIt6xuVqbrm+jmX6Yq1gmLOJRRkrF11Sx+cDY37
+         Gvbpmcbrn5ffCUCT7nfmCebi3gmbkj6AAesi0IokDriU3PGFQ0PQzNMzQvZctjrQ0b
+         +c99YB0HM8TFYmcmaXmEVlFGjOV4WdFsKYgLQ2PqsZtVDJzj2+ROZcScj8kURA3kag
+         8e8Lp74uFHyovCm4JGqgkmCTIc6buD5o3dhp5VkC4/C065VbIBgdkPUAs3O43dPHdr
+         rQz6gtf/VnvJCKhFAClfqZy6cBrjrjjaEBkN62NZTw4mldpKJS24pL/yY/r/hBgF7Y
+         5A9ZVSkowuiXg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 32766E270EF;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 427E5E50D93;
         Fri, 11 Nov 2022 19:40:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3] docs/bpf: Document BPF map types QUEUE and STACK
+Subject: Re: [PATCH bpf-next v10 0/1] Document BPF_MAP_TYPE_ARRAY
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166819561620.2662.16682077750068932473.git-patchwork-notify@kernel.org>
+Message-Id: <166819561626.2662.1576356651622652024.git-patchwork-notify@kernel.org>
 Date:   Fri, 11 Nov 2022 19:40:16 +0000
-References: <20221108093314.44851-1-donald.hunter@gmail.com>
-In-Reply-To: <20221108093314.44851-1-donald.hunter@gmail.com>
+References: <20221109174604.31673-1-donald.hunter@gmail.com>
+In-Reply-To: <20221109174604.31673-1-donald.hunter@gmail.com>
 To:     Donald Hunter <donald.hunter@gmail.com>
 Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, corbet@lwn.net,
-        yhs@meta.com
+        daniel@iogearbox.net, andrii@kernel.org, corbet@lwn.net
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
@@ -56,21 +55,22 @@ Hello:
 This patch was applied to bpf/bpf-next.git (master)
 by Andrii Nakryiko <andrii@kernel.org>:
 
-On Tue,  8 Nov 2022 09:33:14 +0000 you wrote:
-> Add documentation for BPF_MAP_TYPE_QUEUE and BPF_MAP_TYPE_STACK,
-> including usage and examples.
+On Wed,  9 Nov 2022 17:46:03 +0000 you wrote:
+> Add documentation for BPF_MAP_TYPE_ARRAY and BPF_MAP_TYPE_PERCPU_ARRAY
+> variant, including kernel version introduced, usage and examples.
 > 
-> Signed-off-by: Donald Hunter <donald.hunter@gmail.com>
-> ---
-> v2 -> v3:
-> - Add BPF_EXIST to valid flags as reported by Yonghong Song
-> - Clarify valid flags for bpf_map_push_elem
+> v9->v10:
+> - Add missing Reviewed-by tag
+> 
+> v8->v9:
+> - Add "Kernel BPF" heading suggested by Jesper Brouer
+> - Tidy up wording to clarify BPF vs userspace APIs
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v3] docs/bpf: Document BPF map types QUEUE and STACK
-    https://git.kernel.org/bpf/bpf-next/c/64488ca57ab8
+  - [bpf-next,v10,1/1] bpf, docs: document BPF_MAP_TYPE_ARRAY
+    https://git.kernel.org/bpf/bpf-next/c/1cfa97b30c5a
 
 You are awesome, thank you!
 -- 
