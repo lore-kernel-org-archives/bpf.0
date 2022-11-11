@@ -2,47 +2,47 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E019C4332F
-	for <bpf@archiver.kernel.org>; Fri, 11 Nov 2022 16:58:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D844EC433FE
+	for <bpf@archiver.kernel.org>; Fri, 11 Nov 2022 16:58:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232949AbiKKQ6B (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 11 Nov 2022 11:58:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43328 "EHLO
+        id S233651AbiKKQ6J (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 11 Nov 2022 11:58:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233668AbiKKQ6A (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 11 Nov 2022 11:58:00 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D7B63B9B
-        for <bpf@vger.kernel.org>; Fri, 11 Nov 2022 08:57:59 -0800 (PST)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2ABFa8Tu017862
-        for <bpf@vger.kernel.org>; Fri, 11 Nov 2022 08:57:59 -0800
+        with ESMTP id S234121AbiKKQ6H (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 11 Nov 2022 11:58:07 -0500
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF086A77D
+        for <bpf@vger.kernel.org>; Fri, 11 Nov 2022 08:58:06 -0800 (PST)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 2ABFm6Cd002508
+        for <bpf@vger.kernel.org>; Fri, 11 Nov 2022 08:58:05 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=Oa+FvLKeePjCM0Bs5FnU6oFps/r/BqeeRojKd+8rWBU=;
- b=Tm244yCGoJeeqlyVn8OkBUmVStqJN/tcZFFQ0STt3rBY6IG1kb6xsTabkoizhUWXC3R7
- drVgAOYHmjn8yMcxEvv9QyabvF0CmGTmj0TfAGtTkG3yszjAHO/slj3EGzM/Paw4Dida
- TZ2J2pRhZzFfbIas6hMITl5hI+ue5P1TN+k= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ksbjwdefu-19
+ bh=NKQB4Ev1rEtTcyg271Lvtr5zhSjiWNaEOiL1osiMzvk=;
+ b=g3/hnTwmNVcqgIYKqnXmoZXpuFOI37ijxq/9JsSbhR+fDBEy0MG4MMCcgXQy7j3ny7fG
+ Mj9/aFw7QUmFB9GBJ7ccFxCOYc1gxODvwktn/mc9yuNt4VGuDdzUv3u8weFmzleBe4Xo
+ ASstAkORd219R1P2seFXYTXB3HRt8kgnKcA= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3ksbha58a1-7
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 11 Nov 2022 08:57:59 -0800
-Received: from twshared5476.02.ash7.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 11 Nov 2022 08:58:05 -0800
+Received: from twshared16963.27.frc3.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 11 Nov 2022 08:57:55 -0800
+ 15.1.2375.31; Fri, 11 Nov 2022 08:58:03 -0800
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id DB9D811FF3DFF; Fri, 11 Nov 2022 08:57:44 -0800 (PST)
+        id A126511FF3EDB; Fri, 11 Nov 2022 08:58:00 -0800 (PST)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v5 2/7] bpf: Abstract out functions to check sleepable helpers
-Date:   Fri, 11 Nov 2022 08:57:44 -0800
-Message-ID: <20221111165744.2526104-1-yhs@fb.com>
+Subject: [PATCH bpf-next v5 5/7] bpf: Enable sleeptable support for cgrp local storage
+Date:   Fri, 11 Nov 2022 08:58:00 -0800
+Message-ID: <20221111165800.2527898-1-yhs@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221111165734.2524596-1-yhs@fb.com>
 References: <20221111165734.2524596-1-yhs@fb.com>
@@ -50,8 +50,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: n0rLiPabrJe99206YjkyvOY8e7QIoSe6
-X-Proofpoint-ORIG-GUID: n0rLiPabrJe99206YjkyvOY8e7QIoSe6
+X-Proofpoint-GUID: u3jVi39NgifeXmLr1xTOSlHtfxPS8DZE
+X-Proofpoint-ORIG-GUID: u3jVi39NgifeXmLr1xTOSlHtfxPS8DZE
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-11_08,2022-11-11_01,2022-06-22_01
@@ -59,189 +59,34 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Abstract out two functions to check whether a particular helper
-is sleepable or not for bpf_lsm and bpf_trace. These two
-functions will be used later to check whether a helper is
-sleepable or not in verifier. There is no functionality
-change.
+With proper bpf_rcu_read_lock() support, sleepable support for cgrp local
+storage can be enabled as typical use case task->cgroups->dfl_cgrp
+can be protected with bpf_rcu_read_lock().
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- include/linux/bpf_lsm.h      |  6 ++++++
- include/linux/trace_events.h |  8 ++++++++
- kernel/bpf/bpf_lsm.c         | 20 ++++++++++++++++----
- kernel/trace/bpf_trace.c     | 22 ++++++++++++++++++----
- 4 files changed, 48 insertions(+), 8 deletions(-)
+ kernel/bpf/verifier.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
-index 4bcf76a9bb06..d99b1caf118e 100644
---- a/include/linux/bpf_lsm.h
-+++ b/include/linux/bpf_lsm.h
-@@ -28,6 +28,7 @@ int bpf_lsm_verify_prog(struct bpf_verifier_log *vlog,
- 			const struct bpf_prog *prog);
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 2aa140dceb9a..92cd1cf64026 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -12958,10 +12958,11 @@ static int check_map_prog_compatibility(struct =
+bpf_verifier_env *env,
+ 		case BPF_MAP_TYPE_INODE_STORAGE:
+ 		case BPF_MAP_TYPE_SK_STORAGE:
+ 		case BPF_MAP_TYPE_TASK_STORAGE:
++		case BPF_MAP_TYPE_CGRP_STORAGE:
+ 			break;
+ 		default:
+ 			verbose(env,
+-				"Sleepable programs can only use array, hash, and ringbuf maps\n");
++				"Sleepable programs can only use array, hash, ringbuf and local stor=
+age maps\n");
+ 			return -EINVAL;
+ 		}
 =20
- bool bpf_lsm_is_sleepable_hook(u32 btf_id);
-+const struct bpf_func_proto *bpf_lsm_sleepable_func_proto(enum bpf_func_=
-id func_id);
-=20
- static inline struct bpf_storage_blob *bpf_inode(
- 	const struct inode *inode)
-@@ -50,6 +51,11 @@ static inline bool bpf_lsm_is_sleepable_hook(u32 btf_i=
-d)
- {
- 	return false;
- }
-+static inline const struct bpf_func_proto *
-+bpf_lsm_sleepable_func_proto(enum bpf_func_id func_id)
-+{
-+	return NULL;
-+}
-=20
- static inline int bpf_lsm_verify_prog(struct bpf_verifier_log *vlog,
- 				      const struct bpf_prog *prog)
-diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
-index 20749bd9db71..c3eb4fb78ea5 100644
---- a/include/linux/trace_events.h
-+++ b/include/linux/trace_events.h
-@@ -9,6 +9,7 @@
- #include <linux/hardirq.h>
- #include <linux/perf_event.h>
- #include <linux/tracepoint.h>
-+#include <uapi/linux/bpf.h>
-=20
- struct trace_array;
- struct array_buffer;
-@@ -16,6 +17,7 @@ struct tracer;
- struct dentry;
- struct bpf_prog;
- union bpf_attr;
-+struct bpf_func_proto;
-=20
- const char *trace_print_flags_seq(struct trace_seq *p, const char *delim=
-,
- 				  unsigned long flags,
-@@ -748,6 +750,7 @@ int bpf_get_perf_event_info(const struct perf_event *=
-event, u32 *prog_id,
- 			    u32 *fd_type, const char **buf,
- 			    u64 *probe_offset, u64 *probe_addr);
- int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_=
-prog *prog);
-+const struct bpf_func_proto *bpf_tracing_sleepable_func_proto(enum bpf_f=
-unc_id func_id);
- #else
- static inline unsigned int trace_call_bpf(struct trace_event_call *call,=
- void *ctx)
- {
-@@ -794,6 +797,11 @@ bpf_kprobe_multi_link_attach(const union bpf_attr *a=
-ttr, struct bpf_prog *prog)
- {
- 	return -EOPNOTSUPP;
- }
-+static inline const struct bpf_func_proto *
-+bpf_tracing_sleepable_func_proto(enum bpf_func_id func_id)
-+{
-+	return NULL;
-+}
- #endif
-=20
- enum {
-diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-index d6c9b3705f24..2f993a003389 100644
---- a/kernel/bpf/bpf_lsm.c
-+++ b/kernel/bpf/bpf_lsm.c
-@@ -192,6 +192,18 @@ static const struct bpf_func_proto bpf_get_attach_co=
-okie_proto =3D {
- 	.arg1_type	=3D ARG_PTR_TO_CTX,
- };
-=20
-+const struct bpf_func_proto *bpf_lsm_sleepable_func_proto(enum bpf_func_=
-id func_id)
-+{
-+	switch (func_id) {
-+	case BPF_FUNC_ima_inode_hash:
-+		return &bpf_ima_inode_hash_proto;
-+	case BPF_FUNC_ima_file_hash:
-+		return &bpf_ima_file_hash_proto;
-+	default:
-+		return NULL;
-+	}
-+}
-+
- static const struct bpf_func_proto *
- bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog=
-)
- {
-@@ -203,6 +215,10 @@ bpf_lsm_func_proto(enum bpf_func_id func_id, const s=
-truct bpf_prog *prog)
- 			return func_proto;
- 	}
-=20
-+	func_proto =3D bpf_lsm_sleepable_func_proto(func_id);
-+	if (func_proto)
-+		return prog->aux->sleepable ? func_proto : NULL;
-+
- 	switch (func_id) {
- 	case BPF_FUNC_inode_storage_get:
- 		return &bpf_inode_storage_get_proto;
-@@ -220,10 +236,6 @@ bpf_lsm_func_proto(enum bpf_func_id func_id, const s=
-truct bpf_prog *prog)
- 		return &bpf_spin_unlock_proto;
- 	case BPF_FUNC_bprm_opts_set:
- 		return &bpf_bprm_opts_set_proto;
--	case BPF_FUNC_ima_inode_hash:
--		return prog->aux->sleepable ? &bpf_ima_inode_hash_proto : NULL;
--	case BPF_FUNC_ima_file_hash:
--		return prog->aux->sleepable ? &bpf_ima_file_hash_proto : NULL;
- 	case BPF_FUNC_get_attach_cookie:
- 		return bpf_prog_has_trampoline(prog) ? &bpf_get_attach_cookie_proto : =
-NULL;
- #ifdef CONFIG_NET
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index f2d8d070d024..7804fa71d3f1 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1383,9 +1383,27 @@ static int __init bpf_key_sig_kfuncs_init(void)
- late_initcall(bpf_key_sig_kfuncs_init);
- #endif /* CONFIG_KEYS */
-=20
-+const struct bpf_func_proto *bpf_tracing_sleepable_func_proto(enum bpf_f=
-unc_id func_id)
-+{
-+	switch (func_id) {
-+	case BPF_FUNC_copy_from_user:
-+		return &bpf_copy_from_user_proto;
-+	case BPF_FUNC_copy_from_user_task:
-+		return &bpf_copy_from_user_task_proto;
-+	default:
-+		return NULL;
-+	}
-+}
-+
- static const struct bpf_func_proto *
- bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *=
-prog)
- {
-+	const struct bpf_func_proto *func_proto;
-+
-+	func_proto =3D bpf_tracing_sleepable_func_proto(func_id);
-+	if (func_proto)
-+		return prog->aux->sleepable ? func_proto : NULL;
-+
- 	switch (func_id) {
- 	case BPF_FUNC_map_lookup_elem:
- 		return &bpf_map_lookup_elem_proto;
-@@ -1484,10 +1502,6 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, c=
-onst struct bpf_prog *prog)
- 		return &bpf_jiffies64_proto;
- 	case BPF_FUNC_get_task_stack:
- 		return &bpf_get_task_stack_proto;
--	case BPF_FUNC_copy_from_user:
--		return prog->aux->sleepable ? &bpf_copy_from_user_proto : NULL;
--	case BPF_FUNC_copy_from_user_task:
--		return prog->aux->sleepable ? &bpf_copy_from_user_task_proto : NULL;
- 	case BPF_FUNC_snprintf_btf:
- 		return &bpf_snprintf_btf_proto;
- 	case BPF_FUNC_per_cpu_ptr:
 --=20
 2.30.2
 
