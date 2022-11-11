@@ -2,24 +2,24 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D59BDC4332F
-	for <bpf@archiver.kernel.org>; Fri, 11 Nov 2022 12:39:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B0A8C433FE
+	for <bpf@archiver.kernel.org>; Fri, 11 Nov 2022 13:07:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231778AbiKKMjc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 11 Nov 2022 07:39:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52516 "EHLO
+        id S233906AbiKKNHF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 11 Nov 2022 08:07:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233475AbiKKMj1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 11 Nov 2022 07:39:27 -0500
+        with ESMTP id S233950AbiKKNGg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 11 Nov 2022 08:06:36 -0500
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6658E7B20B;
-        Fri, 11 Nov 2022 04:39:26 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N7yvD2yLsz4f3w0C;
-        Fri, 11 Nov 2022 20:39:20 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC5087B2B;
+        Fri, 11 Nov 2022 05:06:05 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N7zTy3sdhz4f3lX0;
+        Fri, 11 Nov 2022 21:05:58 +0800 (CST)
 Received: from k01.huawei.com (unknown [10.67.174.197])
-        by APP4 (Coremail) with SMTP id gCh0CgDX+9h6Qm5j+2ZmAQ--.47155S2;
-        Fri, 11 Nov 2022 20:39:23 +0800 (CST)
+        by APP2 (Coremail) with SMTP id Syh0CgA3m7a4SG5jnj9jAQ--.40398S2;
+        Fri, 11 Nov 2022 21:06:01 +0800 (CST)
 From:   Xu Kuohai <xukuohai@huaweicloud.com>
 To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -31,20 +31,20 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         KP Singh <kpsingh@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: [PATCH bpf] bpf: Fix offset calculation error in __copy_map_value and zero_map_value
-Date:   Fri, 11 Nov 2022 07:56:20 -0500
-Message-Id: <20221111125620.754855-1-xukuohai@huaweicloud.com>
+        wuqiang <wuqiang.matt@bytedance.com>
+Subject: [PATCH bpf-next v5] bpf: Initialize same number of free nodes for each pcpu_freelist
+Date:   Fri, 11 Nov 2022 08:22:58 -0500
+Message-Id: <20221111132258.762033-1-xukuohai@huaweicloud.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgDX+9h6Qm5j+2ZmAQ--.47155S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFyDJFy8Kr4ktry3uFWfZrb_yoW8GF4kpF
-        Z8KFyjkr1kXrWjqrZ8Xw1xCr95Aw4qkw1UGr98CayrtF1fJrnFqryxGF42q398Gr4vvr4U
-        ZF12qFZYk3yIqrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+X-CM-TRANSID: Syh0CgA3m7a4SG5jnj9jAQ--.40398S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFyxArWrAw15ZF1xtF18Krg_yoW8ZFWDpr
+        Z3Jw1Yqw1vqrs5uws5Ka1fu34ftw4DGw17Way5Kr1rZry5Ja4vqr10yF4SqFWrWr1Ivr4F
+        yrs09FZ8Aa4UuFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
         6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
         xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
         0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
         x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
@@ -52,8 +52,8 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7uFyDJFy8Kr4ktry3uFWfZrb_yoW8GF4kpF
         c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
         026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
         0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+        vE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
 X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 X-CFilter-Loop: Reflected
 Precedence: bulk
@@ -62,40 +62,64 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Xu Kuohai <xukuohai@huawei.com>
 
-Function __copy_map_value and zero_map_value miscalculated copy offset,
-resulting in possible copy of unwanted data to user or kernel.
+pcpu_freelist_populate() initializes nr_elems / num_possible_cpus() + 1
+free nodes for some CPUs, and then possibly one CPU with fewer nodes,
+followed by remaining cpus with 0 nodes. For example, when nr_elems == 256
+and num_possible_cpus() == 32, CPU 0~27 each gets 9 free nodes, CPU 28 gets
+4 free nodes, CPU 29~31 get 0 free nodes, while in fact each CPU should get
+8 nodes equally.
 
-Fix it.
+This patch initializes nr_elems / num_possible_cpus() free nodes for each
+CPU firstly, then allocates the remaining free nodes by one for each CPU
+until no free nodes left.
 
-Fixes: cc48755808c6 ("bpf: Add zero_map_value to zero map value with special fields")
-Fixes: 4d7d7f69f4b1 ("bpf: Adapt copy_map_value for multiple offset case")
 Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+Acked-by: Yonghong Song <yhs@fb.com>
 ---
- include/linux/bpf.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+v5: Move "head = per_cpu_ptr ..." out of the i-loop as suggesetd by wuqiang
+v4: Remove unneeded min() 
+v3: Simplify code as suggested by Andrii
+v2: Update commit message and add Yonghong's ack
+---
+ kernel/bpf/percpu_freelist.c | 21 +++++++++------------
+ 1 file changed, 9 insertions(+), 12 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 74c6f449d81e..c1bd1bd10506 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -315,7 +315,7 @@ static inline void __copy_map_value(struct bpf_map *map, void *dst, void *src, b
- 		u32 next_off = map->off_arr->field_off[i];
+diff --git a/kernel/bpf/percpu_freelist.c b/kernel/bpf/percpu_freelist.c
+index b6e7f5c5b9ab..de336e3dffee 100644
+--- a/kernel/bpf/percpu_freelist.c
++++ b/kernel/bpf/percpu_freelist.c
+@@ -100,22 +100,19 @@ void pcpu_freelist_populate(struct pcpu_freelist *s, void *buf, u32 elem_size,
+ 			    u32 nr_elems)
+ {
+ 	struct pcpu_freelist_head *head;
+-	int i, cpu, pcpu_entries;
++	unsigned int cpu_idx = 0, cpu, i, j, n, m;
  
- 		memcpy(dst + curr_off, src + curr_off, next_off - curr_off);
--		curr_off += map->off_arr->field_sz[i];
-+		curr_off = next_off + map->off_arr->field_sz[i];
- 	}
- 	memcpy(dst + curr_off, src + curr_off, map->value_size - curr_off);
- }
-@@ -344,7 +344,7 @@ static inline void zero_map_value(struct bpf_map *map, void *dst)
- 		u32 next_off = map->off_arr->field_off[i];
+-	pcpu_entries = nr_elems / num_possible_cpus() + 1;
+-	i = 0;
++	n = nr_elems / num_possible_cpus();
++	m = nr_elems % num_possible_cpus();
  
- 		memset(dst + curr_off, 0, next_off - curr_off);
--		curr_off += map->off_arr->field_sz[i];
-+		curr_off = next_off + map->off_arr->field_sz[i];
+ 	for_each_possible_cpu(cpu) {
+-again:
+ 		head = per_cpu_ptr(s->freelist, cpu);
+-		/* No locking required as this is not visible yet. */
+-		pcpu_freelist_push_node(head, buf);
+-		i++;
+-		buf += elem_size;
+-		if (i == nr_elems)
+-			break;
+-		if (i % pcpu_entries)
+-			goto again;
++		j = n + (cpu_idx++ < m ? 1 : 0);
++		for (i = 0; i < j; i++) {
++			/* No locking required as this is not visible yet. */
++			pcpu_freelist_push_node(head, buf);
++			buf += elem_size;
++		}
  	}
- 	memset(dst + curr_off, 0, map->value_size - curr_off);
  }
+ 
 -- 
 2.30.2
 
