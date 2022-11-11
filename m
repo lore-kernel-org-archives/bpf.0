@@ -2,66 +2,106 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25E86C4332F
-	for <bpf@archiver.kernel.org>; Fri, 11 Nov 2022 02:23:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C9C6C433FE
+	for <bpf@archiver.kernel.org>; Fri, 11 Nov 2022 03:11:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbiKKCX4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Nov 2022 21:23:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43374 "EHLO
+        id S230280AbiKKDLq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Nov 2022 22:11:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiKKCXz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Nov 2022 21:23:55 -0500
-Received: from out162-62-58-211.mail.qq.com (out162-62-58-211.mail.qq.com [162.62.58.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C77471A04E;
-        Thu, 10 Nov 2022 18:23:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1668133429;
-        bh=7iJKokxuUjBIOn6wbzdHXufK/C8oDwn9NjLD/zCCRRY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=TYOKaEkcvUweNWpJAXwEwm9PaCn0atDPNNPVzO0Fpgsh1Eh2mm3G9VrglrX3wBCiC
-         +3rofAnkJrIIr9T49W5bSeFprNGP2HhFA2QaPFcKNlxN8J78DVRoVEknCaU+5hSZpW
-         jW/JmNHEbwX/pe+05L/8isCcKEq4UvUUQ1zk+5sQ=
-Received: from localhost.localdomain ([111.199.191.46])
-        by newxmesmtplogicsvrszb6-0.qq.com (NewEsmtp) with SMTP
-        id 5EE088D2; Fri, 11 Nov 2022 10:23:46 +0800
-X-QQ-mid: xmsmtpt1668133426tuae2lc93
-Message-ID: <tencent_9BC988B1066D426A591B97A02A43AF1EA308@qq.com>
-X-QQ-XMAILINFO: OZsapEVPoiO6i2VupZGcD9JwYl8dwgYlrh0QadPdjMF/2Zq++q94mkvr0ruGmU
-         u9bgFg8nCxgr7bIlyH0ba9wn5MM5GwB+i7LbbIB/iJVgkRt5CW6nj6+5JGVlOzqVonvh10p0Bb+f
-         eJJeoE58rKvua2uduASufeo2AK1mkCqZkmXs8cASXvweDHFY0aZgFzQK25AejG8kTXtM0l9A7xrs
-         px47JvF1enw5Y6abjaDWgHK/sGZ8FtS/U5lY7QPyVDum6KgXpJWT2W7FDy1wGIMKYmtKWtuXn3cs
-         uv7d1WHYrMKoq7C/yYZeYcTqEOe6hKj0NFRDc/FqA9s3Ict870KK90+MxNwTrxGDPPAq7pDzMNtr
-         nNEFpZpNAEmIRXOp1m5MeIwTZcN/5wQY+J7KGJEk6cUUg4mGbNN9I3qQosEBXs8tzAeXaurZWw5D
-         SvfLJpBtb0FshsK/eHQ0Vs9XzTrcau9rv+BhKKd/H/smdmSBGAorwFXipSLIZKe3JWq5FCrvf4O1
-         Czy/q88elA1G8vIwEIAtssxtDZBpqDQgsMifMJhvkX/L7TuBF58rN1yLEQIuRkHJeZoM6PwM5nxD
-         g5GwxE57DVao3RZRnI1BH2PHoYv4WbGjQqlWVrJiaZ4G2GDamPB0g+Py3V9AkMW0Tow7q/2yFgoX
-         y+tMoEAyuW2bMEvSVAusziwIlBAjFl1CrDjs1KHTKa+w4Oo5SoLKy5HEUU92gQBOj1Drxg/msFVd
-         yMRnrHPDFwjif8LyVbHgACudWzkNaS4F8LaEKlWmWhH50WxuTyzxr0qbu4NtFv6SoYkL+ceRVL6i
-         33CyPKlM9Drbcnp2hq71QSkyFfQvFrFPD5sk1Eeql4lomKhpVX005qhWv/6X5r5pdpLwq+aPm9gc
-         coBH0RxXgO0ou2S8P1nytzUCfIa6inOT9k/eLATwV81YKWsc7Fp+L8tJ+GxC22oWWpfzLzBA1HEA
-         Q1cw2StnmhwBjGFuQEtVJOE06MBnv7DCvpnu7NZ+sXFbh8FcGrt+hhkn0DY4BfXgJryBXRjhg=
-From:   Rong Tao <rtoax@foxmail.com>
-To:     yhs@meta.com
-Cc:     acme@redhat.com, bpf@vger.kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, rongtao@cestc.cn,
-        rtoax@foxmail.com
-Subject: The subject of the previous email error
-Date:   Fri, 11 Nov 2022 10:23:45 +0800
-X-OQ-MSGID: <20221111022345.13164-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <4ed2ebee-26a8-f0ab-2bc4-a0b6a29768af@meta.com>
-References: <4ed2ebee-26a8-f0ab-2bc4-a0b6a29768af@meta.com>
+        with ESMTP id S231167AbiKKDLp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Nov 2022 22:11:45 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260552EF48;
+        Thu, 10 Nov 2022 19:11:42 -0800 (PST)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N7kDh5RrKzJnbh;
+        Fri, 11 Nov 2022 11:08:36 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 11 Nov 2022 11:11:39 +0800
+Received: from [10.67.111.205] (10.67.111.205) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 11 Nov 2022 11:11:38 +0800
+Subject: Re: [PATCH bpf] selftests/bpf: Fix xdp_synproxy compilation failure
+ in 32-bit arch
+To:     Yonghong Song <yhs@meta.com>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <hawk@kernel.org>, <john.fastabend@gmail.com>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <kpsingh@kernel.org>, <sdf@google.com>, <haoluo@google.com>,
+        <jolsa@kernel.org>, <mykolal@fb.com>, <shuah@kernel.org>,
+        <tariqt@nvidia.com>, <maximmi@nvidia.com>,
+        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221108131242.17362-1-yangjihong1@huawei.com>
+ <c8bd9f3b-52fa-08bd-e5df-e87b68ffdbba@meta.com>
+From:   Yang Jihong <yangjihong1@huawei.com>
+Message-ID: <f5391830-352a-6daa-9233-a177db43ba71@huawei.com>
+Date:   Fri, 11 Nov 2022 11:11:37 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <c8bd9f3b-52fa-08bd-e5df-e87b68ffdbba@meta.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-I'm sorry, The subject of the previous email error. Please Just Ignore 
+Hello,
 
-https://lore.kernel.org/lkml/tencent_754AAA6CBDDE8DB223CE1BF009D566E55E0A@qq.com/
+On 2022/11/8 23:59, Yonghong Song wrote:
+> 
+> 
+> On 11/8/22 5:12 AM, Yang Jihong wrote:
+>> xdp_synproxy fails to be compiled in the 32-bit arch, log is as follows:
+>>
+>>    xdp_synproxy.c: In function 'parse_options':
+>>    xdp_synproxy.c:175:36: error: left shift count >= width of type 
+>> [-Werror=shift-count-overflow]
+>>      175 |                 *tcpipopts = (mss6 << 32) | (ttl << 24) | 
+>> (wscale << 16) | mss4;
+>>          |                                    ^~
+>>    xdp_synproxy.c: In function 'syncookie_open_bpf_maps':
+>>    xdp_synproxy.c:289:28: error: cast from pointer to integer of 
+>> different size [-Werror=pointer-to-int-cast]
+>>      289 |                 .map_ids = (__u64)map_ids,
+>>          |                            ^
+>>
+>> Fix it.
+>>
+>> Fixes: fb5cd0ce70d4 ("selftests/bpf: Add selftests for raw syncookie 
+>> helpers")
+>> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+>> ---
+>>   tools/testing/selftests/bpf/xdp_synproxy.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/xdp_synproxy.c 
+>> b/tools/testing/selftests/bpf/xdp_synproxy.c
+>> index ff35320d2be9..45fef01a87a8 100644
+>> --- a/tools/testing/selftests/bpf/xdp_synproxy.c
+>> +++ b/tools/testing/selftests/bpf/xdp_synproxy.c
+>> @@ -172,7 +172,7 @@ static void parse_options(int argc, char *argv[], 
+>> unsigned int *ifindex, __u32 *
+>>       if (tcpipopts_mask == 0xf) {
+>>           if (mss4 == 0 || mss6 == 0 || wscale == 0 || ttl == 0)
+>>               usage(argv[0]);
+>> -        *tcpipopts = (mss6 << 32) | (ttl << 24) | (wscale << 16) | mss4;
+>> +        *tcpipopts = ((unsigned long long)mss6 << 32) | (ttl << 24) | 
+>> (wscale << 16) | mss4;
+> 
+> This looks weird. Maybe we should define mss6 as unsigned long long to 
+> avoid this casting at all?
+OK, will fix in next version.
 
-It's not a PATCH.
-
+Thanks,
+Yang
