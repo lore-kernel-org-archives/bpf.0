@@ -2,48 +2,47 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FBA9C43217
-	for <bpf@archiver.kernel.org>; Fri, 11 Nov 2022 16:57:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C99C2C433FE
+	for <bpf@archiver.kernel.org>; Fri, 11 Nov 2022 16:58:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234067AbiKKQ5t (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 11 Nov 2022 11:57:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43200 "EHLO
+        id S233180AbiKKQ55 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 11 Nov 2022 11:57:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234005AbiKKQ5s (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 11 Nov 2022 11:57:48 -0500
+        with ESMTP id S233651AbiKKQ54 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 11 Nov 2022 11:57:56 -0500
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F9F4AF34
-        for <bpf@vger.kernel.org>; Fri, 11 Nov 2022 08:57:47 -0800 (PST)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2AB7QdsL030636
-        for <bpf@vger.kernel.org>; Fri, 11 Nov 2022 08:57:47 -0800
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504BA14083
+        for <bpf@vger.kernel.org>; Fri, 11 Nov 2022 08:57:56 -0800 (PST)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2ABDIq0t030159
+        for <bpf@vger.kernel.org>; Fri, 11 Nov 2022 08:57:56 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=Nbtmoc9lLSKreYlbRoKrmsrKIDLlzBEi1cQlB9kvHQI=;
- b=TwbFKG3B7jArkutjj7Di9aXucrqOBA+MlVuFXOksygJigO8iodyu2jDFEI4pLfr6tnpV
- v3IIzytNP9D4icVJV/of+O0tRRHyBLWyNz0BQZzf4ypY+B3pjLoQXVHLm8whc4r7cPeI
- dzfTGzjxy4tPvz2FX3wWM17V53Ly59zfe18= 
-Received: from maileast.thefacebook.com ([163.114.130.8])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ksj0hu4s0-14
+ bh=Em/LHiN9t8Yi46+1Thh1R9aX+wsPId5UQwGHRJGjuTE=;
+ b=kApWUOjctWEwIfGc/Es2ln8LTAIQ751OUXT4GpHDJEpJxSyc6jlpjZRn2gsPlFAleus8
+ MHLEhJr3BRNqCYf9emHy6kxugGeBVi/2LnGY4SlQi8noS60gwUfecHN6V03kMyX/mv5b
+ g/FthZsO7leVos6mwwXSU2CpLnc2UI413Wk= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ksq5rhbvm-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 11 Nov 2022 08:57:47 -0800
-Received: from twshared15216.17.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 11 Nov 2022 08:57:55 -0800
+Received: from twshared10308.07.ash9.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 11 Nov 2022 08:57:45 -0800
+ 15.1.2375.31; Fri, 11 Nov 2022 08:57:55 -0800
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id A04E611FF3DB5; Fri, 11 Nov 2022 08:57:39 -0800 (PST)
+        id 22ABF11FF3E1B; Fri, 11 Nov 2022 08:57:50 -0800 (PST)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        KP Singh <kpsingh@kernel.org>
-Subject: [PATCH bpf-next v5 1/7] compiler_types: Define __rcu as __attribute__((btf_type_tag("rcu")))
-Date:   Fri, 11 Nov 2022 08:57:39 -0800
-Message-ID: <20221111165739.2525370-1-yhs@fb.com>
+        Martin KaFai Lau <martin.lau@kernel.org>
+Subject: [PATCH bpf-next v5 3/7] bpf: Add kfunc bpf_rcu_read_lock/unlock()
+Date:   Fri, 11 Nov 2022 08:57:50 -0800
+Message-ID: <20221111165750.2526371-1-yhs@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221111165734.2524596-1-yhs@fb.com>
 References: <20221111165734.2524596-1-yhs@fb.com>
@@ -51,8 +50,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: LMVbPSBTOOuzFEtDWbTPvtSShSEWzXHi
-X-Proofpoint-GUID: LMVbPSBTOOuzFEtDWbTPvtSShSEWzXHi
+X-Proofpoint-GUID: _2RhuZK9pLxnCaeJCeRM7zIV_ddH06A5
+X-Proofpoint-ORIG-GUID: _2RhuZK9pLxnCaeJCeRM7zIV_ddH06A5
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-11_08,2022-11-11_01,2022-06-22_01
@@ -60,43 +59,114 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, without rcu attribute info in BTF, the verifier treats
-rcu tagged pointer as a normal pointer. This might be a problem
-for sleepable program where rcu_read_lock()/unlock() is not available.
-For example, for a sleepable fentry program, if rcu protected memory
-access is interleaved with a sleepable helper/kfunc, it is possible
-the memory access after the sleepable helper/kfunc might be invalid
-since the object might have been freed then. To prevent such cases,
-introducing rcu tagging for memory accesses in verifier can help
-to reject such programs.
+Add two kfunc's bpf_rcu_read_lock() and bpf_rcu_read_unlock(). These two =
+kfunc's
+can be used for all program types. A new kfunc hook type BTF_KFUNC_HOOK_G=
+ENERIC
+is added which corresponds to prog type BPF_PROG_TYPE_UNSPEC, indicating =
+the
+kfunc intends to be used for all prog types.
 
-To enable rcu tagging in BTF, during kernel compilation,
-define __rcu as attribute btf_type_tag("rcu") so __rcu information can
-be preserved in dwarf and btf, and later can be used for bpf prog verific=
-ation.
-
-Acked-by: KP Singh <kpsingh@kernel.org>
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- include/linux/compiler_types.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ include/linux/bpf.h  |  3 +++
+ kernel/bpf/btf.c     |  8 ++++++++
+ kernel/bpf/helpers.c | 25 ++++++++++++++++++++++++-
+ 3 files changed, 35 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_type=
-s.h
-index eb0466236661..7c1afe0f4129 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -49,7 +49,8 @@ static inline void __chk_io_ptr(const volatile void __i=
-omem *ptr) { }
- # endif
- # define __iomem
- # define __percpu	BTF_TYPE_TAG(percpu)
--# define __rcu
-+# define __rcu		BTF_TYPE_TAG(rcu)
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 798aec816970..3ed817cf191d 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2113,6 +2113,9 @@ bool bpf_prog_has_kfunc_call(const struct bpf_prog =
+*prog);
+ const struct btf_func_model *
+ bpf_jit_find_kfunc_model(const struct bpf_prog *prog,
+ 			 const struct bpf_insn *insn);
++void bpf_rcu_read_lock(void);
++void bpf_rcu_read_unlock(void);
 +
- # define __chk_user_ptr(x)	(void)0
- # define __chk_io_ptr(x)	(void)0
- /* context/locking */
+ struct bpf_core_ctx {
+ 	struct bpf_verifier_log *log;
+ 	const struct btf *btf;
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 5579ff3a5b54..84f09235857c 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -199,6 +199,7 @@ DEFINE_IDR(btf_idr);
+ DEFINE_SPINLOCK(btf_idr_lock);
+=20
+ enum btf_kfunc_hook {
++	BTF_KFUNC_HOOK_GENERIC,
+ 	BTF_KFUNC_HOOK_XDP,
+ 	BTF_KFUNC_HOOK_TC,
+ 	BTF_KFUNC_HOOK_STRUCT_OPS,
+@@ -7499,6 +7500,8 @@ static u32 *__btf_kfunc_id_set_contains(const struc=
+t btf *btf,
+ static int bpf_prog_type_to_kfunc_hook(enum bpf_prog_type prog_type)
+ {
+ 	switch (prog_type) {
++	case BPF_PROG_TYPE_UNSPEC:
++		return BTF_KFUNC_HOOK_GENERIC;
+ 	case BPF_PROG_TYPE_XDP:
+ 		return BTF_KFUNC_HOOK_XDP;
+ 	case BPF_PROG_TYPE_SCHED_CLS:
+@@ -7527,6 +7530,11 @@ u32 *btf_kfunc_id_set_contains(const struct btf *b=
+tf,
+ 			       u32 kfunc_btf_id)
+ {
+ 	enum btf_kfunc_hook hook;
++	u32 *kfunc_flags;
++
++	kfunc_flags =3D __btf_kfunc_id_set_contains(btf, BTF_KFUNC_HOOK_GENERIC=
+, kfunc_btf_id);
++	if (kfunc_flags)
++		return kfunc_flags;
+=20
+ 	hook =3D bpf_prog_type_to_kfunc_hook(prog_type);
+ 	return __btf_kfunc_id_set_contains(btf, hook, kfunc_btf_id);
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 283f55bbeb70..0c8382103625 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1717,9 +1717,32 @@ static const struct btf_kfunc_id_set tracing_kfunc=
+_set =3D {
+ 	.set   =3D &tracing_btf_ids,
+ };
+=20
++void bpf_rcu_read_lock(void)
++{
++	rcu_read_lock();
++}
++
++void bpf_rcu_read_unlock(void)
++{
++	rcu_read_unlock();
++}
++
++BTF_SET8_START(generic_btf_ids)
++BTF_ID_FLAGS(func, bpf_rcu_read_lock)
++BTF_ID_FLAGS(func, bpf_rcu_read_unlock)
++BTF_SET8_END(generic_btf_ids)
++
++static const struct btf_kfunc_id_set generic_kfunc_set =3D {
++	.owner =3D THIS_MODULE,
++	.set   =3D &generic_btf_ids,
++};
++
+ static int __init kfunc_init(void)
+ {
+-	return register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &tracing_kfunc_=
+set);
++	int ret;
++
++	ret =3D register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &tracing_kfunc=
+_set);
++	return ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC, &generic_=
+kfunc_set);
+ }
+=20
+ late_initcall(kfunc_init);
 --=20
 2.30.2
 
