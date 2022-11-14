@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EAC90C4167B
-	for <bpf@archiver.kernel.org>; Mon, 14 Nov 2022 19:16:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FAEFC4332F
+	for <bpf@archiver.kernel.org>; Mon, 14 Nov 2022 19:16:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237136AbiKNTQc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Nov 2022 14:16:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56354 "EHLO
+        id S235969AbiKNTQf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Nov 2022 14:16:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237063AbiKNTQX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Nov 2022 14:16:23 -0500
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD3026AEB
-        for <bpf@vger.kernel.org>; Mon, 14 Nov 2022 11:16:22 -0800 (PST)
-Received: by mail-pj1-x1044.google.com with SMTP id f5-20020a17090a4a8500b002131bb59d61so12968310pjh.1
-        for <bpf@vger.kernel.org>; Mon, 14 Nov 2022 11:16:22 -0800 (PST)
+        with ESMTP id S237123AbiKNTQ3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Nov 2022 14:16:29 -0500
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6612655F
+        for <bpf@vger.kernel.org>; Mon, 14 Nov 2022 11:16:28 -0800 (PST)
+Received: by mail-pf1-x443.google.com with SMTP id z26so11954986pff.1
+        for <bpf@vger.kernel.org>; Mon, 14 Nov 2022 11:16:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qnt6anqQzqYDHqUQyjvXxXZhTpxeJ8+rhETmsNNiKKM=;
-        b=bnWGTKMHx57Rx5R+RQWQw6ujZN08ia1ihTGT6IQVOBFTUXkm+1p6NBn3Xq+4DFX1l5
-         jYLDhVOWcIk2SOHexS+yUcY74TXl8BlvyF5b7QPYXkU5Ou1pZyGCxr+n2UU6soTwHsmt
-         brT8DuFUNl17ktulUPL2shtMFBTHUjVOg7tQBqFv9UVLCnkV0opspv9hZSe6OINgfwQs
-         OYg4p6EBnZSs70PbTG7e/Lcse6T/x4qTjSI9bhNMLki1K/M+oHg8pF85pFBjR1MLHPgi
-         jiyzC2QGEUvgJ4oOokCtTeDPx4SxRSYaOOaJIT2lGx+elxTnTkAd03oYoloFw06eZj2I
-         4qyw==
+        bh=7bdRYjhA7/4SvqymiC//VxctBitwMX6pPdrBNrwmhX4=;
+        b=l/QSM8H2DALnmB8T2BI2ZPtIpiYkDTQPMLc7Xk7gsbbTJVECAYTgBj4ZTYO9PY0Sa/
+         fZ9miuXvUnKxm3wRTvZIb+D+L3i1tyvLgodhGd8I+ZbGcWZ9n89w7ICwPPSvEnVjkdqh
+         7ByanSBxKNVmXlVRiAxsk3jkr/6u1MBue3qm/17JFHFD5hfk7a3ok5MaxhTZK+aBrWBd
+         UpbFaQ23OcddT3ZsPEwLhkybCHe3MBCpj90yoaUcbDJmHUNvWD5RBIzhdvHtg+mTUOKr
+         L6zBkk4xHK3HFD3aDm7QfZooEuu3ih/P4XFTrDfG8Lbi5T8lV3CIGBWfLNZW+iZ+KhBF
+         ITDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qnt6anqQzqYDHqUQyjvXxXZhTpxeJ8+rhETmsNNiKKM=;
-        b=4tKejnyQSGUTOOl/im72iMKhTU6u80Ue4zxNtHkP3m3/moNh3mn0/kS15T91FLlWII
-         QFIe9Y3g58fDm9Ac8EvPrmYQ6TChKY+lG0X+VbMmvlebeDKta6f3648CY5QKJKuCL3Zj
-         GIs6dUUtB8XmH627iMNfPTfuEnzyHAhuV/HlUBN133Yqn2/XaWItbUYkZX5l7GigSlCo
-         lNB2AYVZR6n34t5g1rFDbEJLOkO0CA6Qk8GJsLmLUyB7kXfTGX2myQzxwgLiKKBNaorU
-         KP6/puqDitgfax3Gp6VU/JiFdBvYr1syx4Dq+ISF0gbzwToc9IYD8+sT3p8pCOuyH3B7
-         2P3Q==
-X-Gm-Message-State: ANoB5pm3tDQy8rddDbEB2Fj39STrzNIfaQxMvFgzzsiE1glyls1BCnlg
-        gKpzYb9wnrSFhVvYwHvE2KixA4QJEVcEyQ==
-X-Google-Smtp-Source: AA0mqf4VHTBQ1rSXVV/SqPXkARPjpxFZ4F+eP3a6Cuf/7ZOYoe0GbdPLLrDFQBhJ0DW6jyvE7/Jozw==
-X-Received: by 2002:a17:90a:c393:b0:213:8126:867c with SMTP id h19-20020a17090ac39300b002138126867cmr14795011pjt.183.1668453381940;
-        Mon, 14 Nov 2022 11:16:21 -0800 (PST)
+        bh=7bdRYjhA7/4SvqymiC//VxctBitwMX6pPdrBNrwmhX4=;
+        b=ln+r6NZ6QHy2JFDtMU43KvRjTUVoQfKIiB0DEDEXYk/WRf2jPgjdhEkmh6DBvPz1li
+         y+Gd7aZEkKxYm8n0GpMgRQx+BiNsOGiQIobe2BwMzVEUlN5ELkx+SAZ3Epwixb3pB6Mx
+         KQQRLCuwJSNAxMlFldP8EFDnT/Fcra+EdQOvkrbN2V+XNpZocE4pqvA5MMH94+FFeYI+
+         EzQX3oznZwdv41L0jHofv/QwVMLwLpHL4mUeT0BxzpujoTNN6qIGF6rcKoFnU4i+QpMs
+         r/KXQlkCT72LBOl6RA+3rXZRMyuV2ye0PhIWcHjN+MS0ef32jJyWL/LSH92ySkqlmj4H
+         vcFg==
+X-Gm-Message-State: ANoB5plQiEZioIb7sqXHGTfpBObF/iaf9ZuDzhWdeLsy6ljwew4ftmPp
+        JtEMlZm7c+zS/zVajVAQXMh34FwoectQuA==
+X-Google-Smtp-Source: AA0mqf5QasjN9cJayGn0Uo91NlE0ZgBvC9eA0GEVg9AZiPXoYS480VLPDxy0dsOUlQDwrkkCJuubug==
+X-Received: by 2002:a65:4984:0:b0:470:8e:6003 with SMTP id r4-20020a654984000000b00470008e6003mr12944213pgs.19.1668453387858;
+        Mon, 14 Nov 2022 11:16:27 -0800 (PST)
 Received: from localhost ([59.152.80.69])
-        by smtp.gmail.com with ESMTPSA id o28-20020aa7979c000000b0056babe4fb8asm6188777pfp.49.2022.11.14.11.16.21
+        by smtp.gmail.com with ESMTPSA id l5-20020a170903120500b0018863dbf3b0sm7974862plh.45.2022.11.14.11.16.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 11:16:21 -0800 (PST)
+        Mon, 14 Nov 2022 11:16:27 -0800 (PST)
 From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -56,170 +56,198 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <martin.lau@kernel.org>,
         Dave Marchevsky <davemarchevsky@meta.com>
-Subject: [PATCH bpf-next v7 10/26] bpf: Verify ownership relationships for user BTF types
-Date:   Tue, 15 Nov 2022 00:45:31 +0530
-Message-Id: <20221114191547.1694267-11-memxor@gmail.com>
+Subject: [PATCH bpf-next v7 12/26] bpf: Allow locking bpf_spin_lock global variables
+Date:   Tue, 15 Nov 2022 00:45:33 +0530
+Message-Id: <20221114191547.1694267-13-memxor@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221114191547.1694267-1-memxor@gmail.com>
 References: <20221114191547.1694267-1-memxor@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5571; i=memxor@gmail.com; h=from:subject; bh=S5uXjiFY72vxSDVNadqIFQRVCO6rmBYigteqvunocwU=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBjcpPI0f7fhq5upMc2hexjc+2pS5EY8TS1fdAcuPSL vlyKqQeJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCY3KTyAAKCRBM4MiGSL8RyivzD/ 0YdmvxCcyRaQQ0TV0x1g9ZNj+Hon4sTu2wbbhqQFTaiA1doQ8EATEe0N3TrE7mtLqSdqUsLnBvzY2/ VH4+7URhh3zN0KoN50YsfUq6SAWIdmvn8i4vz0qOow2DjoyJFC0yr/u+0IRH6xKt/br7pyd95agoAk zjRc4qiOamAS1ibjnCoxZ3OiVvKpk8pi0pzAQlsyyjp6JSt0CVQxUzvvf91TEXXaXTqZLiYTsu5cBx OxckqgsKq9y39jiGsWL+EBmsLav97duYWK7CTktz7wCa7rdTCTWUwOGrp/X2BSl0DYRhxwhIzpYpHm O2rxcBF2kPITlV5VlLggqr6Qas/Ooxw72fn7n4GVXo2fLj9pQ5HxtK/D0YgwsMH79B2jv80zEwgywe TyvYsqg60SuSljx3eGq0z/StVpY46QbWFq30695vxcxjuU/JY/MXM+2a/ylteipKgtKwGrXZ2yRRob qigBVF/hrrc6D9vAykDWp1iLd69JD+O0LwbjECJDkTmYSRpNyhydOKygxjTHu/WRs4wRIgwcVtyILT ZmJ2O6kWafCLt4ZI6bWVoCjnYErnkI75cTtnbRUbzx2lihigW1PA5BNsAnYv8Ho1AzBfuAzJ+C7hqe EI+MUC1nON+k2+94aETNYLYrLJEg5WRRn23uZoW8sR+vPZ0Llfhbfv339epQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6954; i=memxor@gmail.com; h=from:subject; bh=nE42Ao32jrqG05ryyQ1whpx3jrA83r4xm2MpN5cZW+o=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBjcpPJbQ8mcMrlLy8wMaVInXdyPzuSQ27PEHq0dxF7 m0odajmJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCY3KTyQAKCRBM4MiGSL8Ryq6fD/ 91RexHoptmSd2alUPArzSM/f2GJHhV8XIguwVtPsqcyXL4wQKw7hC24VzvCmRC8UNVUW0WQ199qKmQ eleP3fnnZEGbwWiATUOWpCq2HKM8M64G0/SNCQ1PZWN3Kxg82tYcFKA2PxPcne6sONIiDbvUjtZVwn zCV/50Zow8jJgGVLi49ZLU9Xgt5IIq3nNz6Y8WvrKUi/b9wLjCVVX2Z0nPxmmDTc0UraXVw7ifHvbI PgCG5Zd0VraalCm7MdwxPcRWB0eSDTY7pj9ZxsiwXqQSm1UQjGSDgEwefri5A2x6qBXTSQbFehS6H+ NLlg0/+lSIKy4XFFTxJ/4USgNGmpel0UfIGKKHAECRt/OQi/fv2XdPPzW6N+4OLw5WD4bI5KFrSw76 fMtroMGeK4pOeIbVC9WvcL1IImjOGtEO6CV4M1oj0mzZ/ADf69vp/2m7V3mcyhBvAutBNOc0/cPfwz MEiumDtHZFLNvRUGgp1JIWCZ48dKY9IRibvu+/VMKqlY6bRgheEB+ZIt3DYY2ATK3cFc6dASOy4Pvb ZQfD8yPJ96xFQCrsKD4PVQr8+RrjeUBtOmZXpxXBmbUkydoMMw19vgRf/FJb/W8t3ZILF5MbHAYHC1 zVcYZ54G1uOvkzaKJq7NDehNK0neL/ExNKwfUJfIxGdS+TgZsEuYjtwQR47Q==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Ensure that there can be no ownership cycles among different types by
-way of having owning objects that can hold some other type as their
-element. For instance, a map value can only hold allocated objects, but
-these are allowed to have another bpf_list_head. To prevent unbounded
-recursion while freeing resources, elements of bpf_list_head in local
-kptrs can never have a bpf_list_head which are part of list in a map
-value. Later patches will verify this by having dedicated BTF selftests.
+Global variables reside in maps accessible using direct_value_addr
+callbacks, so giving each load instruction's rewrite a unique reg->id
+disallows us from holding locks which are global.
 
-Also, to make runtime destruction easier, once btf_struct_metas is fully
-populated, we can stash the metadata of the value type directly in the
-metadata of the list_head fields, as that allows easier access to the
-value type's layout to destruct it at runtime from the btf_field entry
-of the list head itself.
+The reason for preserving reg->id as a unique value for registers that
+may point to spin lock is that two separate lookups are treated as two
+separate memory regions, and any possible aliasing is ignored for the
+purposes of spin lock correctness.
+
+This is not great especially for the global variable case, which are
+served from maps that have max_entries == 1, i.e. they always lead to
+map values pointing into the same map value.
+
+So refactor the active_spin_lock into a 'active_lock' structure which
+represents the lock identity, and instead of the reg->id, remember two
+fields, a pointer and the reg->id. The pointer will store reg->map_ptr
+or reg->btf. It's only necessary to distinguish for the id == 0 case of
+global variables, but always setting the pointer to a non-NULL value and
+using the pointer to check whether the lock is held simplifies code in
+the verifier.
+
+This is generic enough to allow it for global variables, map lookups,
+and allocated objects at the same time.
+
+Note that while whether a lock is held can be answered by just comparing
+active_lock.ptr to NULL, to determine whether the register is pointing
+to the same held lock requires comparing _both_ ptr and id.
+
+Finally, as a result of this refactoring, pseudo load instructions are
+not given a unique reg->id, as they are doing lookup for the same map
+value (max_entries is never greater than 1).
+
+Essentially, we consider that the tuple of (ptr, id) will always be
+unique for any kind of argument to bpf_spin_{lock,unlock}.
+
+Note that this can be extended in the future to also remember offset
+used for locking, so that we can introduce multiple bpf_spin_lock fields
+in the same allocation.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf.h  |  1 +
- include/linux/btf.h  |  1 +
- kernel/bpf/btf.c     | 71 ++++++++++++++++++++++++++++++++++++++++++++
- kernel/bpf/syscall.c |  4 +++
- 4 files changed, 77 insertions(+)
+ include/linux/bpf_verifier.h | 10 ++++++++-
+ kernel/bpf/verifier.c        | 41 ++++++++++++++++++++++++------------
+ 2 files changed, 37 insertions(+), 14 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 4cd3c9e6f50b..c88f75a68893 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -190,6 +190,7 @@ struct btf_field_list_head {
- 	struct btf *btf;
- 	u32 value_btf_id;
- 	u32 node_offset;
-+	struct btf_record *value_rec;
- };
- 
- struct btf_field {
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index a01a8da20021..42d8f3730a8d 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -178,6 +178,7 @@ int btf_find_spin_lock(const struct btf *btf, const struct btf_type *t);
- int btf_find_timer(const struct btf *btf, const struct btf_type *t);
- struct btf_record *btf_parse_fields(const struct btf *btf, const struct btf_type *t,
- 				    u32 field_mask, u32 value_size);
-+int btf_check_and_fixup_fields(const struct btf *btf, struct btf_record *rec);
- struct btf_field_offs *btf_parse_field_offs(struct btf_record *rec);
- bool btf_type_is_void(const struct btf_type *t);
- s32 btf_find_by_name_kind(const struct btf *btf, const char *name, u8 kind);
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index c0c2db93e0de..10644343d877 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -3723,6 +3723,67 @@ struct btf_record *btf_parse_fields(const struct btf *btf, const struct btf_type
- 	return ERR_PTR(ret);
- }
- 
-+int btf_check_and_fixup_fields(const struct btf *btf, struct btf_record *rec)
-+{
-+	int i;
-+
-+	/* There are two owning types, kptr_ref and bpf_list_head. The former
-+	 * only supports storing kernel types, which can never store references
-+	 * to program allocated local types, atleast not yet. Hence we only need
-+	 * to ensure that bpf_list_head ownership does not form cycles.
-+	 */
-+	if (IS_ERR_OR_NULL(rec) || !(rec->field_mask & BPF_LIST_HEAD))
-+		return 0;
-+	for (i = 0; i < rec->cnt; i++) {
-+		struct btf_struct_meta *meta;
-+		u32 btf_id;
-+
-+		if (!(rec->fields[i].type & BPF_LIST_HEAD))
-+			continue;
-+		btf_id = rec->fields[i].list_head.value_btf_id;
-+		meta = btf_find_struct_meta(btf, btf_id);
-+		if (!meta)
-+			return -EFAULT;
-+		rec->fields[i].list_head.value_rec = meta->record;
-+
-+		if (!(rec->field_mask & BPF_LIST_NODE))
-+			continue;
-+
-+		/* We need to ensure ownership acyclicity among all types. The
-+		 * proper way to do it would be to topologically sort all BTF
-+		 * IDs based on the ownership edges, since there can be multiple
-+		 * bpf_list_head in a type. Instead, we use the following
-+		 * reasoning:
-+		 *
-+		 * - A type can only be owned by another type in user BTF if it
-+		 *   has a bpf_list_node.
-+		 * - A type can only _own_ another type in user BTF if it has a
-+		 *   bpf_list_head.
-+		 *
-+		 * We ensure that if a type has both bpf_list_head and
-+		 * bpf_list_node, its element types cannot be owning types.
-+		 *
-+		 * To ensure acyclicity:
-+		 *
-+		 * When A only has bpf_list_head, ownership chain can be:
-+		 *	A -> B -> C
-+		 * Where:
-+		 * - B has both bpf_list_head and bpf_list_node.
-+		 * - C only has bpf_list_node.
-+		 *
-+		 * When A has both bpf_list_head and bpf_list_node, some other
-+		 * type already owns it in the BTF domain, hence it can not own
-+		 * another owning type through any of the bpf_list_head edges.
-+		 *	A -> B
-+		 * Where:
-+		 * - B only has bpf_list_node.
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 1a32baa78ce2..fa738abea267 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -323,7 +323,15 @@ struct bpf_verifier_state {
+ 	u32 branches;
+ 	u32 insn_idx;
+ 	u32 curframe;
+-	u32 active_spin_lock;
++	struct {
++		/* This can either be reg->map_ptr or reg->btf, but it is only
++		 * used to check whether the lock is held or not by comparing to
++		 * NULL.
 +		 */
-+		if (meta->record->field_mask & BPF_LIST_HEAD)
-+			return -ELOOP;
-+	}
-+	return 0;
-+}
-+
- static int btf_field_offs_cmp(const void *_a, const void *_b, const void *priv)
- {
- 	const u32 a = *(const u32 *)_a;
-@@ -5414,6 +5475,16 @@ static struct btf *btf_parse(bpfptr_t btf_data, u32 btf_data_size,
- 	}
- 	btf->struct_meta_tab = struct_meta_tab;
++		void *ptr;
++		/* This will be reg->id */
++		u32 id;
++	} active_lock;
+ 	bool speculative;
  
-+	if (struct_meta_tab) {
-+		int i;
-+
-+		for (i = 0; i < struct_meta_tab->cnt; i++) {
-+			err = btf_check_and_fixup_fields(btf, struct_meta_tab->types[i].record);
-+			if (err < 0)
-+				goto errout_meta;
-+		}
-+	}
-+
- 	if (log->level && bpf_verifier_log_full(log)) {
- 		err = -ENOSPC;
- 		goto errout_meta;
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index c96039a4e57f..4669020bb47d 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1044,6 +1044,10 @@ static int map_check_btf(struct bpf_map *map, const struct btf *btf,
+ 	/* first and last insn idx of this verifier state */
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 070d003a99f0..99b5edb56978 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -1215,7 +1215,8 @@ static int copy_verifier_state(struct bpf_verifier_state *dst_state,
+ 	}
+ 	dst_state->speculative = src->speculative;
+ 	dst_state->curframe = src->curframe;
+-	dst_state->active_spin_lock = src->active_spin_lock;
++	dst_state->active_lock.ptr = src->active_lock.ptr;
++	dst_state->active_lock.id = src->active_lock.id;
+ 	dst_state->branches = src->branches;
+ 	dst_state->parent = src->parent;
+ 	dst_state->first_insn_idx = src->first_insn_idx;
+@@ -5587,7 +5588,7 @@ int check_kfunc_mem_size_reg(struct bpf_verifier_env *env, struct bpf_reg_state
+  * Since only one bpf_spin_lock is allowed the checks are simpler than
+  * reg_is_refcounted() logic. The verifier needs to remember only
+  * one spin_lock instead of array of acquired_refs.
+- * cur_state->active_spin_lock remembers which map value element got locked
++ * cur_state->active_lock remembers which map value element got locked
+  * and clears it after bpf_spin_unlock.
+  */
+ static int process_spin_lock(struct bpf_verifier_env *env, int regno,
+@@ -5636,22 +5637,35 @@ static int process_spin_lock(struct bpf_verifier_env *env, int regno,
+ 		return -EINVAL;
+ 	}
+ 	if (is_lock) {
+-		if (cur->active_spin_lock) {
++		if (cur->active_lock.ptr) {
+ 			verbose(env,
+ 				"Locking two bpf_spin_locks are not allowed\n");
+ 			return -EINVAL;
  		}
+-		cur->active_spin_lock = reg->id;
++		if (map)
++			cur->active_lock.ptr = map;
++		else
++			cur->active_lock.ptr = btf;
++		cur->active_lock.id = reg->id;
+ 	} else {
+-		if (!cur->active_spin_lock) {
++		void *ptr;
++
++		if (map)
++			ptr = map;
++		else
++			ptr = btf;
++
++		if (!cur->active_lock.ptr) {
+ 			verbose(env, "bpf_spin_unlock without taking a lock\n");
+ 			return -EINVAL;
+ 		}
+-		if (cur->active_spin_lock != reg->id) {
++		if (cur->active_lock.ptr != ptr ||
++		    cur->active_lock.id != reg->id) {
+ 			verbose(env, "bpf_spin_unlock of different lock\n");
+ 			return -EINVAL;
+ 		}
+-		cur->active_spin_lock = 0;
++		cur->active_lock.ptr = NULL;
++		cur->active_lock.id = 0;
+ 	}
+ 	return 0;
+ }
+@@ -10582,8 +10596,8 @@ static int check_ld_imm(struct bpf_verifier_env *env, struct bpf_insn *insn)
+ 	    insn->src_reg == BPF_PSEUDO_MAP_IDX_VALUE) {
+ 		dst_reg->type = PTR_TO_MAP_VALUE;
+ 		dst_reg->off = aux->map_off;
+-		if (btf_record_has_field(map->record, BPF_SPIN_LOCK))
+-			dst_reg->id = ++env->id_gen;
++		WARN_ON_ONCE(map->max_entries != 1);
++		/* We want reg->id to be same (0) as map_value is not distinct */
+ 	} else if (insn->src_reg == BPF_PSEUDO_MAP_FD ||
+ 		   insn->src_reg == BPF_PSEUDO_MAP_IDX) {
+ 		dst_reg->type = CONST_PTR_TO_MAP;
+@@ -10661,7 +10675,7 @@ static int check_ld_abs(struct bpf_verifier_env *env, struct bpf_insn *insn)
+ 		return err;
  	}
  
-+	ret = btf_check_and_fixup_fields(btf, map->record);
-+	if (ret < 0)
-+		goto free_map_tab;
-+
- 	if (map->ops->map_check_btf) {
- 		ret = map->ops->map_check_btf(map, btf, key_type, value_type);
- 		if (ret < 0)
+-	if (env->cur_state->active_spin_lock) {
++	if (env->cur_state->active_lock.ptr) {
+ 		verbose(env, "BPF_LD_[ABS|IND] cannot be used inside bpf_spin_lock-ed region\n");
+ 		return -EINVAL;
+ 	}
+@@ -11927,7 +11941,8 @@ static bool states_equal(struct bpf_verifier_env *env,
+ 	if (old->speculative && !cur->speculative)
+ 		return false;
+ 
+-	if (old->active_spin_lock != cur->active_spin_lock)
++	if (old->active_lock.ptr != cur->active_lock.ptr ||
++	    old->active_lock.id != cur->active_lock.id)
+ 		return false;
+ 
+ 	/* for states to be equal callsites have to be the same
+@@ -12572,7 +12587,7 @@ static int do_check(struct bpf_verifier_env *env)
+ 					return -EINVAL;
+ 				}
+ 
+-				if (env->cur_state->active_spin_lock &&
++				if (env->cur_state->active_lock.ptr &&
+ 				    (insn->src_reg == BPF_PSEUDO_CALL ||
+ 				     insn->imm != BPF_FUNC_spin_unlock)) {
+ 					verbose(env, "function calls are not allowed while holding a lock\n");
+@@ -12609,7 +12624,7 @@ static int do_check(struct bpf_verifier_env *env)
+ 					return -EINVAL;
+ 				}
+ 
+-				if (env->cur_state->active_spin_lock) {
++				if (env->cur_state->active_lock.ptr) {
+ 					verbose(env, "bpf_spin_unlock is missing\n");
+ 					return -EINVAL;
+ 				}
 -- 
 2.38.1
 
