@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14D59C433FE
-	for <bpf@archiver.kernel.org>; Mon, 14 Nov 2022 19:17:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 978F9C43217
+	for <bpf@archiver.kernel.org>; Mon, 14 Nov 2022 19:17:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235800AbiKNTRI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Nov 2022 14:17:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56990 "EHLO
+        id S236537AbiKNTRN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Nov 2022 14:17:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237340AbiKNTQx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Nov 2022 14:16:53 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC1B29361
-        for <bpf@vger.kernel.org>; Mon, 14 Nov 2022 11:16:49 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id 140so10474749pfz.6
-        for <bpf@vger.kernel.org>; Mon, 14 Nov 2022 11:16:49 -0800 (PST)
+        with ESMTP id S237153AbiKNTRB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Nov 2022 14:17:01 -0500
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0885927B3F
+        for <bpf@vger.kernel.org>; Mon, 14 Nov 2022 11:16:56 -0800 (PST)
+Received: by mail-pj1-x1044.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso11630996pjc.5
+        for <bpf@vger.kernel.org>; Mon, 14 Nov 2022 11:16:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qWiYAsRgE6BX8qJ0Iu8jZXDm2tAGkdrg9ETQquXoTlI=;
-        b=QRVu4fG/sV68FEzalpq4wde8k2XK2PKZnTvpnREks7okA046FlAJvDFjyT5e4rpY2r
-         0sXeuF1vBubW0/lqHXUbOTZrXXSdvB1Iuq0JpQw3ubinAnOwY4V1ghH24VmO2H3kPLRG
-         kk3uD2QFptyJc5vDUqs9CJ3CdyLpS4rsD+C5CqNwuPsNI6OS9uHaraJRDvhx7z/h2PVs
-         vDn/fX9vZTjB8EaNCnZqgsLOi3SS9vKAtN2enZenJhiwdXbDR5bvNPh4UNBDoJnEDpEc
-         SXWj6oPYnkpBtYGmOx5/IajhyrZKCjjzS0sLZzNeQkOT0NUom0e8zkofiBLrS8vTx24r
-         9npg==
+        bh=S7tY5u6yMRQNosh2VIGkVKHtaOl/+ZUuNBZUXf6u/ww=;
+        b=AC8qPZXjjllbsHT1b+PgGcYQKTXmodAtdXbhOK+vnwORoqfihD05sUV5X7ydklf3qz
+         6yYOfsFWhYkH9OP78IKJFodmskQLeYFwxmHD09Zm9uIjpLtpnTDvfuR+i5LSn/MeRfmu
+         /wOQeDdiuflZxN9SvFy6SGYn3hinSrdeziOjw0euYEKvYy8V8cqQfZxrpgPMgucBUpYV
+         uw6CtMZ1hDdphGrYCjt1SCcn9VSJ833cZ4FT46YYXbqQg5pdrCdbNRBlkCqLcAHYMFmH
+         jT3V0/D6YQO3HdUCwkj+3hv5u1g3f2aQMDHiOsezHKGZPBPaTzrGfW0Er1GZUbulKwEI
+         sFqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qWiYAsRgE6BX8qJ0Iu8jZXDm2tAGkdrg9ETQquXoTlI=;
-        b=xATtYLGVGzH9+KwwWLhDH+j/JezMl3eChQyimIq7fLIsEMc/2uxd+sOAgkSZpB5rP6
-         7VhEJ7jYgkfTscvAmy1ili1VtTk8Sy/Mxs/E1gezU2OwAXE7P7XvfvNBXvt/6ybHdh1d
-         0j8JOIH4+Ynmk1kRsRUe4O9LrxkJUNMT+pEHc0ROcg1TXvOx5xitPN+nCWw+yYtHs0GN
-         Hl0YYJsCJmc7O1g4+9Rx4Q9cDvfvlANZ7qn7ai703KeXHczKzrN42mS/UVa0NQUNxDW4
-         LmH6xB9x1l5ACZCc8xYF6G/fj29AuiivwfRcniWeX37aOSVDMDPbQE5+T3Zic3EL9LA1
-         yUSw==
-X-Gm-Message-State: ANoB5pks56WjyN0/+NdYmcWZ+5XOxK7FfDiQs0jR2DLqAdrvk7IVFX5Z
-        zOURfY91gJl3/waWk1BlKvX/AraQQVCylw==
-X-Google-Smtp-Source: AA0mqf4P0INbQDx/ifVJwKXR1ahUnXCKfXUk44hJU4eRWwySdXay/iGhGY/PCXkVw6GPUfk4mUBd1Q==
-X-Received: by 2002:a63:1949:0:b0:46f:38ad:de99 with SMTP id 9-20020a631949000000b0046f38adde99mr13050820pgz.218.1668453409427;
-        Mon, 14 Nov 2022 11:16:49 -0800 (PST)
+        bh=S7tY5u6yMRQNosh2VIGkVKHtaOl/+ZUuNBZUXf6u/ww=;
+        b=3wA/SDzktCDWf0MKtMNEYp2Wx8E5wuoFj1gGPFzL/S5haQEADTnM+f4fSx0iijkYBr
+         JQ+LCR8IC/ZAJuYYZi5fIrV1UZkrPFA4LhLDsnrWfnJzwiyEd0vXZFohWh5eHgQKifj7
+         9rlQM3Gdc+YaaxhJ6cLPaD/2krXfDsIB9HtpNjT9UPNsyMearXtoK5271FHc7Pf6BqJs
+         d1MmuGpkgMoS+LDV4lY2odo5MWx/he8iCzqx3+TNbf9l3PGtIF76KpvE/eoZCPGalECE
+         o9twjLDxvM+zgpoaOeSOsu2FLw70yJafgl1IQOrcO4tZsPC6+G+iDvb4S23qINn2imDN
+         Zydg==
+X-Gm-Message-State: ANoB5pnmvQoMaxp6FNIgp18PBtju9We2mGf1JpjmR5uuiqiZYrOQhfhF
+        vXlEUbbOS2/IanwOS70gYtmIOfg+wcHZyQ==
+X-Google-Smtp-Source: AA0mqf4Ud+dtR8uDqSCWe7lNt4Evkp9ody7ZQCzl9f4YH/d2n8OqSt1Kv5V4Dz0EI5lm/KsQ2C1/Lw==
+X-Received: by 2002:a17:90a:ea98:b0:212:ec36:4d04 with SMTP id h24-20020a17090aea9800b00212ec364d04mr15196658pjz.158.1668453415176;
+        Mon, 14 Nov 2022 11:16:55 -0800 (PST)
 Received: from localhost ([59.152.80.69])
-        by smtp.gmail.com with ESMTPSA id v64-20020a626143000000b0056bcd7e1e04sm7081365pfb.124.2022.11.14.11.16.48
+        by smtp.gmail.com with ESMTPSA id y17-20020a17090322d100b0017bb38e4588sm7923159plg.135.2022.11.14.11.16.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 11:16:49 -0800 (PST)
+        Mon, 14 Nov 2022 11:16:54 -0800 (PST)
 From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -56,69 +56,151 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <martin.lau@kernel.org>,
         Dave Marchevsky <davemarchevsky@meta.com>
-Subject: [PATCH bpf-next v7 19/26] bpf: Permit NULL checking pointer with non-zero fixed offset
-Date:   Tue, 15 Nov 2022 00:45:40 +0530
-Message-Id: <20221114191547.1694267-20-memxor@gmail.com>
+Subject: [PATCH bpf-next v7 21/26] bpf: Add 'release on unlock' logic for bpf_list_push_{front,back}
+Date:   Tue, 15 Nov 2022 00:45:42 +0530
+Message-Id: <20221114191547.1694267-22-memxor@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221114191547.1694267-1-memxor@gmail.com>
 References: <20221114191547.1694267-1-memxor@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2227; i=memxor@gmail.com; h=from:subject; bh=6Xyei5T2AP1FaAFXmRhfrqj1zOfW3ny611AeNkXJLek=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBjcpPJKfgXhqUoqyJsCCsCEvXFyun4/h/CISksRirh Gy+8s76JAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCY3KTyQAKCRBM4MiGSL8Ryqi8EA C9lxKSSHIs/86mXCDuRVZ0SAQMM1+i3eRUC0/NkGWPl94SGQ5d0DW93J6JkGHJdQOl9xAmJJLowVoX XUBytFukbja1u91DDX7tNEQn4VDMvErnIrRu46HXIUktXBu7hjSTSAkkXQA0pDEYuQ6yeteax/hTt1 RiLeowgw+LFoF48NFiti+2lzuKxcfbgSsNfp4rmteWkklvd/3PfX1ocWxAIEGPSCs6J5n0uanvUp+d Gl8DsY8cE4iMS8f7DSFSjonEo7Uxfhq5WzF4IU57RbC99QhtbwMFCvBPWmIN2YxOU5dTLrNPDxXP2X TvKzpXoLhLkfjhKq9096knbmSPzjKxqFmBKeWL28JfNS2FiAD8ixI2cFci05zWKIeKXJc46iUZ0zMa cyHLyU5tpt6Cz9QuQZjXQOCbdwOh2N94d59643/0TLAT5kDtuvesIjVNz33v0EbefkP4qE/VnjZJ4J jow9WRCzKKNv8xrVrey4yPWO5SVTEnmoYkODoRRzv8BxOrLVH0mqEhTTwjx8ruK49vZAbYK32sY8Tu G9AO7wg1J8GG1/jZ6EmOvdUtuc5Wj1F+ZZFMY33f0mKm7EAj9eheawqNlDoav6Elfu67Nv0rZ2Vcap wuW1aHPkiilDb9UXuZ0kc0W+GAJ0YBe3FCnarikJtbXQkds0LebZZIX7WtSg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5174; i=memxor@gmail.com; h=from:subject; bh=CRPhTjFlo/zGiQz/ST2tY8babKNLG0Y1BEeMid8sYPs=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBjcpPJaY1RS8gBjKbZ9dEeB6QXy2sCIZP9eT449jiM MxES8VaJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCY3KTyQAKCRBM4MiGSL8RyvheEA CkLsEihclOj8QG4z0EUkEkBbQMUIoCoYVMPSCz87SzVKjJihuiwweFmKM0RJxAab5MZL77iHOF8uAv 9utPqhHpZeoG3xYrt9+cd0r707Ce+qY6oL7UAVBSvybQmO32LKOYGcfRWiTLzWxe94bsxg+Uk7resk j9IBwOz5Uel60Gp/eUdXreXpPf+JH08SI1KSr2LZJGyDw+1Q3wgK4Jpn2mbYArXUSL8B7FNp+tZcGX 6aZOfMfFS6WqLIx8DeAZk1a32BmNcf+pbhR2eLPKe3lLI6TxpKL+BLYOPJ+OgV/qzUTHs0bW1J2Kwu ruJ2Ud5E7gcnVm00O6K5w8HCcfZH2TAPUY7pHZTFDikTw6O3F09F4vfdd+1yMyhfcTsmQdZm6Dju0N 0sFnKjgWvfIuQ3OorrPiLVb600PCkZgZ9LhzjlFGLAlVUAMrmlhya7fERiPzD8xKHh79lY/Qw75I4y M+z2JY4y833OhX605VdOF8y+ABBr2VQNfPMSYLU/JfnPNJKkxkgd8QXG5cWrPPFNrWJyAPWP2ovpXC wBxk2LT6OdGUJtPda1DLReYv5ZRldKRvrEOhkTnD5AD5omYRvjl7FKl1SoTSjASm5WRZ6qug/VaVyk W9tRFGvQAQ7iIBEZxw+TT4lRbzpfcdEaAylNGp6Fh+I9ttbF+JdQ1KSXXAWw==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Pointer increment on seeing PTR_MAYBE_NULL is already protected against,
-hence make an exception for PTR_TO_BTF_ID | MEM_ALLOC while still
-keeping the warning for other unintended cases that might creep in.
+This commit implements the delayed release logic for bpf_list_push_front
+and bpf_list_push_back.
 
-bpf_list_pop_{front,_back} helpers planned to be introduced in next
-commit will return a MEM_ALLOC register with incremented offset pointing
-to bpf_list_node field. The user is supposed to then obtain the pointer
-to the entry using container_of after NULL checking it. The current
-restrictions trigger a warning when doing the NULL checking. Revisiting
-the reason, it is meant as an assertion which seems to actually work and
-catch the bad case.
+Once a node has been added to the list, it's pointer changes to
+PTR_UNTRUSTED. However, it is only released once the lock protecting the
+list is unlocked. For such PTR_TO_BTF_ID | MEM_ALLOC with PTR_UNTRUSTED
+set but an active ref_obj_id, it is still permitted to read them as long
+as the lock is held. Writing to them is not allowed.
 
-Hence, under no other circumstances can reg->off be non-zero for a
-register that has the PTR_MAYBE_NULL type flag set.
+This allows having read access to push items we no longer own until we
+release the lock guarding the list, allowing a little more flexibility
+when working with these APIs.
+
+Note that enabling write support has fairly tricky interactions with
+what happens inside the critical section. Just as an example, currently,
+bpf_obj_drop is not permitted, but if it were, being able to write to
+the PTR_UNTRUSTED pointer while the object gets released back to the
+memory allocator would violate safety properties we wish to guarantee
+(i.e. not crashing the kernel). The memory could be reused for a
+different type in the BPF program or even in the kernel as it gets
+eventually kfree'd.
+
+Not enabling bpf_obj_drop inside the critical section would appear to
+prevent all of the above, but that is more of an artifical limitation
+right now. Since the write support is tangled with how we handle
+potential aliasing of nodes inside the critical section that may or may
+not be part of the list anymore, it has been deferred to a future patch.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/verifier.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ include/linux/bpf_verifier.h |  5 ++++
+ kernel/bpf/verifier.c        | 48 +++++++++++++++++++++++++++++++++++-
+ 2 files changed, 52 insertions(+), 1 deletion(-)
 
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 306fc1d6cc4a..740e774e1c7a 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -223,6 +223,11 @@ struct bpf_reference_state {
+ 	 * exiting a callback function.
+ 	 */
+ 	int callback_ref;
++	/* Mark the reference state to release the registers sharing the same id
++	 * on bpf_spin_unlock (for nodes that we will lose ownership to but are
++	 * safe to access inside the critical section).
++	 */
++	bool release_on_unlock;
+ };
+ 
+ /* state of the program:
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 7372737cbde9..e194c3feb01f 100644
+index c034ca2d9479..8725c2ee7eb4 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -10800,15 +10800,20 @@ static void mark_ptr_or_null_reg(struct bpf_func_state *state,
- {
- 	if (type_may_be_null(reg->type) && reg->id == id &&
- 	    !WARN_ON_ONCE(!reg->id)) {
--		if (WARN_ON_ONCE(reg->smin_value || reg->smax_value ||
--				 !tnum_equals_const(reg->var_off, 0) ||
--				 reg->off)) {
-+		if (reg->smin_value || reg->smax_value || !tnum_equals_const(reg->var_off, 0) || reg->off) {
- 			/* Old offset (both fixed and variable parts) should
- 			 * have been known-zero, because we don't allow pointer
- 			 * arithmetic on pointers that might be NULL. If we
- 			 * see this happening, don't convert the register.
-+			 *
-+			 * But in some cases, some helpers that return local
-+			 * kptrs advance offset for the returned pointer.
-+			 * In those cases, it is fine to expect to see reg->off.
- 			 */
--			return;
-+			if (WARN_ON_ONCE(reg->type != (PTR_TO_BTF_ID | MEM_ALLOC | PTR_MAYBE_NULL)))
-+				return;
-+			if (WARN_ON_ONCE(reg->smin_value || reg->smax_value || !tnum_equals_const(reg->var_off, 0)))
-+				return;
+@@ -5648,7 +5648,9 @@ static int process_spin_lock(struct bpf_verifier_env *env, int regno,
+ 			cur->active_lock.ptr = btf;
+ 		cur->active_lock.id = reg->id;
+ 	} else {
++		struct bpf_func_state *fstate = cur_func(env);
+ 		void *ptr;
++		int i;
+ 
+ 		if (map)
+ 			ptr = map;
+@@ -5666,6 +5668,16 @@ static int process_spin_lock(struct bpf_verifier_env *env, int regno,
  		}
- 		if (is_null) {
- 			reg->type = SCALAR_VALUE;
+ 		cur->active_lock.ptr = NULL;
+ 		cur->active_lock.id = 0;
++
++		for (i = 0; i < fstate->acquired_refs; i++) {
++			/* WARN because this reference state cannot be freed
++			 * before this point, as bpf_spin_lock critical section
++			 * does not allow functions that release the allocated
++			 * object immediately.
++			 */
++			if (fstate->refs[i].release_on_unlock)
++				WARN_ON_ONCE(release_reference(env, fstate->refs[i].id));
++		}
+ 	}
+ 	return 0;
+ }
+@@ -8262,6 +8274,39 @@ static int process_kf_arg_ptr_to_kptr_strong(struct bpf_verifier_env *env,
+ 	return 0;
+ }
+ 
++static int ref_set_release_on_unlock(struct bpf_verifier_env *env, u32 ref_obj_id)
++{
++	struct bpf_func_state *state = cur_func(env);
++	struct bpf_reg_state *reg;
++	int i;
++
++	/* bpf_spin_lock only allows calling list_push and list_pop, no BPF
++	 * subprogs, no global functions. This means that the references would
++	 * not be released inside the critical section but they may be added to
++	 * the reference state, and the acquired_refs are never copied out for a
++	 * different frame as BPF to BPF calls don't work in bpf_spin_lock
++	 * critical sections.
++	 */
++	if (!ref_obj_id) {
++		verbose(env, "verifier internal error: ref_obj_id is zero for release_on_unlock\n");
++		return -EFAULT;
++	}
++	for (i = 0; i < state->acquired_refs; i++) {
++		if (state->refs[i].id == ref_obj_id) {
++			WARN_ON_ONCE(state->refs[i].release_on_unlock);
++			state->refs[i].release_on_unlock = true;
++			/* Now mark everyone sharing same ref_obj_id as untrusted */
++			bpf_for_each_reg_in_vstate(env->cur_state, state, reg, ({
++				if (reg->ref_obj_id == ref_obj_id)
++					reg->type |= PTR_UNTRUSTED;
++			}));
++			return 0;
++		}
++	}
++	verbose(env, "verifier internal error: ref state missing for ref_obj_id\n");
++	return -EFAULT;
++}
++
+ /* Implementation details:
+  *
+  * Each register points to some region of memory, which we define as an
+@@ -8447,7 +8492,8 @@ static int process_kf_arg_ptr_to_list_node(struct bpf_verifier_env *env,
+ 			field->list_head.node_offset);
+ 		return -EINVAL;
+ 	}
+-	return 0;
++	/* Set arg#1 for expiration after unlock */
++	return ref_set_release_on_unlock(env, reg->ref_obj_id);
+ }
+ 
+ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_arg_meta *meta)
 -- 
 2.38.1
 
