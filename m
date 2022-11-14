@@ -2,99 +2,105 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C012FC4332F
-	for <bpf@archiver.kernel.org>; Mon, 14 Nov 2022 09:11:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FAA2C4332F
+	for <bpf@archiver.kernel.org>; Mon, 14 Nov 2022 09:32:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235889AbiKNJLJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Nov 2022 04:11:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
+        id S236722AbiKNJcE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Nov 2022 04:32:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236003AbiKNJLI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Nov 2022 04:11:08 -0500
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048C425DE
-        for <bpf@vger.kernel.org>; Mon, 14 Nov 2022 01:11:06 -0800 (PST)
-Received: by mail-pj1-x1041.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so13165980pjc.3
-        for <bpf@vger.kernel.org>; Mon, 14 Nov 2022 01:11:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XtpGUTIvcbVcBcCeHMdtVclFveGnvGgjA5lPc1XoL+E=;
-        b=nUmF5wsnAOTKZInKWNu47y2qvbiYKSD7RM+d7TtTVe/V/6/rBxzL25ESsTOnWtfsb+
-         yeaLSdL3wlIJ/jUGMDnR+kKq5mf6EYC0lSGVFtFeaPRr4Wf0C+9xf4/R+svTc0BAhNd6
-         B20/WGgSKiTSKSBYR3Hr/8cZd8HsgtPKxH+6JyTNTrfxkMPKY/c4uNHeyUg+4XBE2K3O
-         3JGLG4LLA6olZRa5/+k9x7gvJtgeWPvi57gjuKsr1z8VB+c2KVwGmZ3NMZ2WZamoexNS
-         I7M8cZsxCB0NffYiIAmhj8V8xwx/qqrgIqKgxfsHSaXpDh87pBYPTVKtnE7qoMdT3fTi
-         YyeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XtpGUTIvcbVcBcCeHMdtVclFveGnvGgjA5lPc1XoL+E=;
-        b=E8HqL5atEo5e4YXCdRb8Y8RwJcBSgXGH7ABT7XpIOo3dBJOlsXzE6xdxMBeEVKHZbo
-         uvJ3/z51YoSON+ahMouMzvaFka77pU2t0T/I8+tspHnjOBKTkLDCkm+LGzShPPtyCrvX
-         o3Kuto/pJJGt2r+3kV7222yn/eHf16SGH+VadMZjvZZnVzAN4TEATn/H8gJTgdILdFWS
-         ACMS4hC0pDG6J1Y3iYumcO183zrYxOFelcpSIg1LY7XYKqtNVOdZm4jNzLznaqrlyYM9
-         dHa59irtI2aaEWeo0JiuhprpvC7pl2OPqVt6Z5kNIkoHmpXrBWg5mTKkmU0FiQzeDBT7
-         pxsQ==
-X-Gm-Message-State: ANoB5plY2IuId6eqG/NTTHZ0ebBpMubIE8nLGlh3mP932uGmyq8nRGkH
-        1979moUH3cjK1Eu7ZJBUzBc=
-X-Google-Smtp-Source: AA0mqf6L7YR/LReZ3rAijt6j+W3Xtbn39N1XZAaqyf7Ial22Wyi+OtlX9SX5TwzOKaRe0xGiYNMFYg==
-X-Received: by 2002:a17:902:eb52:b0:186:cb27:4e01 with SMTP id i18-20020a170902eb5200b00186cb274e01mr12771579pli.139.1668417065330;
-        Mon, 14 Nov 2022 01:11:05 -0800 (PST)
-Received: from localhost ([14.96.13.220])
-        by smtp.gmail.com with ESMTPSA id y7-20020aa79e07000000b0056e8eb09d58sm6387207pfq.170.2022.11.14.01.11.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 01:11:05 -0800 (PST)
-Date:   Mon, 14 Nov 2022 14:41:00 +0530
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     oe-kbuild@lists.linux.dev, bpf@vger.kernel.org, lkp@intel.com,
-        oe-kbuild-all@lists.linux.dev, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        with ESMTP id S235793AbiKNJb5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Nov 2022 04:31:57 -0500
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7639BE03;
+        Mon, 14 Nov 2022 01:31:55 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4N9kbT1kGLz4f3thC;
+        Mon, 14 Nov 2022 17:31:49 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP4 (Coremail) with SMTP id gCh0CgB3m9gGC3JjGIwHAg--.15506S4;
+        Mon, 14 Nov 2022 17:31:52 +0800 (CST)
+From:   Hou Tao <houtao@huaweicloud.com>
+To:     bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>
+Cc:     Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Dave Marchevsky <davemarchevsky@meta.com>,
-        Delyan Kratunov <delyank@meta.com>
-Subject: Re: [PATCH bpf-next v6 11/26] bpf: Allow locking bpf_spin_lock in
- allocated objects
-Message-ID: <20221114091100.xc6manlxdjad2t24@apollo>
-References: <20221111193224.876706-12-memxor@gmail.com>
- <202211140520.Q5kvXPSL-lkp@intel.com>
+        Stanislav Fomichev <sdf@google.com>, houtao1@huawei.com,
+        linux-perf-users@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Subject: [PATCH bpf] perf, bpf: Use subprog name when reporting subprog ksymbol
+Date:   Mon, 14 Nov 2022 17:57:33 +0800
+Message-Id: <20221114095733.158588-1-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202211140520.Q5kvXPSL-lkp@intel.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgB3m9gGC3JjGIwHAg--.15506S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zw43Zr17Wr4xtw48CF1UAwb_yoW8Ww1kpF
+        yUtr10k34UKF4jk347AFWSq3yUArs8W3yxtw1rtr4a9w47WrykWay7Wa90vr90vryftFyS
+        v3yqyrW3tr98JrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
+        IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 01:55:01PM IST, Dan Carpenter wrote:
-> Hi Kumar,
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Kumar-Kartikeya-Dwivedi/Allocated-objects-BPF-linked-lists/20221112-033643
-> base:   e5659e4e19e49f1eac58bb07ce8bc2d78a89fe65
-> patch link:    https://lore.kernel.org/r/20221111193224.876706-12-memxor%40gmail.com
-> patch subject: [PATCH bpf-next v6 11/26] bpf: Allow locking bpf_spin_lock in allocated objects
-> config: x86_64-randconfig-m001
-> compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Reported-by: Dan Carpenter <error27@gmail.com>
->
-> smatch warnings:
-> kernel/bpf/verifier.c:5623 process_spin_lock() error: uninitialized symbol 'rec'.
->
-> vim +/rec +5623 kernel/bpf/verifier.c
+From: Hou Tao <houtao1@huawei.com>
 
-Hi Dan,
+Since commit bfea9a8574f3 ("bpf: Add name to struct bpf_ksym"), when
+reporting subprog ksymbol to perf, prog name instead of subprog name is
+used. The backtrace of bpf program with subprogs will be incorrect as
+shown below:
 
-Thanks for the report! I noticed it yesterday night.
+  ffffffffc02deace bpf_prog_e44a3057dcb151f8_overwrite+0x66
+  ffffffffc02de9f7 bpf_prog_e44a3057dcb151f8_overwrite+0x9f
+  ffffffffa71d8d4e trace_call_bpf+0xce
+  ffffffffa71c2938 perf_call_bpf_enter.isra.0+0x48
 
-How should I be crediting you in the respin? Not sure Reported-by: is ok if I
-incorporate the fix into the patch and resend it. Would Fixed-by: be better?
+overwrite is the entry program and it invokes the overwrite_htab subprog
+through bpf_loop, but in above backtrace, overwrite program just jumps
+inside itself.
 
-> [...]
+Fixing it by using subprog name when reporting subprog ksymbol. After
+the fix, the output of perf script will be correct as shown below:
+
+  ffffffffc031aad2 bpf_prog_37c0bec7d7c764a4_overwrite_htab+0x66
+  ffffffffc031a9e7 bpf_prog_c7eb827ef4f23e71_overwrite+0x9f
+  ffffffffa3dd8d4e trace_call_bpf+0xce
+  ffffffffa3dc2938 perf_call_bpf_enter.isra.0+0x48
+
+Fixes: bfea9a8574f3 ("bpf: Add name to struct bpf_ksym")
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ kernel/events/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 4ec3717003d5..8b50ef2569d9 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -9030,7 +9030,7 @@ static void perf_event_bpf_emit_ksymbols(struct bpf_prog *prog,
+ 				PERF_RECORD_KSYMBOL_TYPE_BPF,
+ 				(u64)(unsigned long)subprog->bpf_func,
+ 				subprog->jited_len, unregister,
+-				prog->aux->ksym.name);
++				subprog->aux->ksym.name);
+ 		}
+ 	}
+ }
+-- 
+2.29.2
+
