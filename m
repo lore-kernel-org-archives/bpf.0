@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38407C433FE
-	for <bpf@archiver.kernel.org>; Mon, 14 Nov 2022 19:16:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26E7FC4332F
+	for <bpf@archiver.kernel.org>; Mon, 14 Nov 2022 19:16:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237103AbiKNTQg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S237119AbiKNTQg (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Mon, 14 Nov 2022 14:16:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55860 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237091AbiKNTQ0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Nov 2022 14:16:26 -0500
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B08727146
-        for <bpf@vger.kernel.org>; Mon, 14 Nov 2022 11:16:25 -0800 (PST)
-Received: by mail-pg1-x541.google.com with SMTP id q1so11056798pgl.11
-        for <bpf@vger.kernel.org>; Mon, 14 Nov 2022 11:16:25 -0800 (PST)
+        with ESMTP id S237086AbiKNTQc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Nov 2022 14:16:32 -0500
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9B4264BF
+        for <bpf@vger.kernel.org>; Mon, 14 Nov 2022 11:16:31 -0800 (PST)
+Received: by mail-pf1-x442.google.com with SMTP id g62so11922768pfb.10
+        for <bpf@vger.kernel.org>; Mon, 14 Nov 2022 11:16:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yWIbGV+DYS+tw6h00wRIr63WFHoC77MSAByntOXPym0=;
-        b=RmViMI2JC7KuJv3K8h9u0VWLXNov7IfPQEKLA52bXn0EjTt1szv5KVHSWBnmaImroR
-         u+YPwtndO7QdbB0f1nbRFmtUS4qOVGuK6D5ir6ddCMZqS7i9NbmtMcCvXB5nALZbnwj7
-         ukhORugYvXgSiWBxsay9pS9vl99KUZoXM1xRxQVpkIQv0WDQ7Iq8+IhZkqd6dL90Np+K
-         zDhQhub4sFv4YaKSfeBOojNdCa8wrWOycxTGjPq4Bf95FmgDCHh2UnYNYAIynbHpjLDb
-         Fz49MdGunH/WTRYO/KPtWO3LLy78j8B94s/KC07zGGLhmpXn21fhDt+yvKn0r7oAwP4k
-         PT7Q==
+        bh=hYvHeXAuVygr4ZcQHncrz4UIBOo5UsmMrsEx+4QLuhc=;
+        b=fPYo/BT+M5gjOzRAA70Wb/DVvcXEx2jFAxcEZdoPz0VKxdcX4p3kz64r2zeTUZi9gl
+         QDXlclg2eJj2a/bHwfDEl66G1e11MnxdbqM5cSLvJpf5LzW98d72SMbu4QgINKZoEqzy
+         jSKInhrmIuBTv9SNCx17Nimk88jVjFSYMYVJFms1YL9ijZhNNOZ9mjAgEUQ2jaN4gv8Q
+         lCHeU1C1mLBNKp2j/ct8Iks1/F9KnwhxulEufwoZTwbqhceFvMd+9SKu4/NAgaZJxwv8
+         CjT+3zi8Q9K6cZVJqekDuqgCrR2W6FFjQvxIRkkkqIGIazSr41vas8rhAP8c0+k+06dK
+         pf1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yWIbGV+DYS+tw6h00wRIr63WFHoC77MSAByntOXPym0=;
-        b=Ax0FsVWkU9IKi6RSSPQq0Wba9TB5UWBgzuSmtPmpL8oNatmpTu8ivv9Ov5pEy6rk2w
-         Bbrwqg+FPL+Vwj5tZPSm6L6pE/v6ecA7LvSxliG9/7FtoOc7706VbSYS6vMUy0S2GTaN
-         Id6pK5ReCW5wis+qRar8hlsTRCgXuOGlMq7F2ip29/9shvMyZDbRy/0Onuh7z4aYmpWW
-         Pz13mUr8gg1CXNZBmHsulFhbwOp6q3/nQ1Rqivko0KFuwWEYvraUnQqewjWeQWEzA8jq
-         //DM8EZv5zGS2MThPCHapOh18j6Koc8xUr9jNN8BZzo05NozD2CdEHheUXJwdmxy8QnT
-         dOUA==
-X-Gm-Message-State: ANoB5pmZax8i0AQqBmrSw2h4DmEa/qjWel28mpFJu7LnlvxKVg9Oxpd1
-        qBR7STkwtTk/91qUZOXk3p7ZYSi5FONefA==
-X-Google-Smtp-Source: AA0mqf7733W5Yq5SD2eSeNZO+oyW+7kSIUoyoY7Bx8rgS0QcgnMlXheX3J7GASvQBuZtJAE+/pLbtg==
-X-Received: by 2002:a63:c001:0:b0:46f:e657:7d25 with SMTP id h1-20020a63c001000000b0046fe6577d25mr12517541pgg.347.1668453384903;
-        Mon, 14 Nov 2022 11:16:24 -0800 (PST)
+        bh=hYvHeXAuVygr4ZcQHncrz4UIBOo5UsmMrsEx+4QLuhc=;
+        b=GgFVcx9L2YIbKW4uVfc8PO3prVIGS9PjtT1C2hrYyoSDagyJXcdYRJ8j3vjejWl+/A
+         9pFnIxo7BM5DTrkIg3UAFdVIr+umHbNmzch94PLdLSpox0WnMs1LsOhex5zPDarddDSt
+         b8VuAiCI7kBdztm+ns9UrcDUHvhsIycwQzPvlnzxv82dGubGg9r3SweAANJpLoq09sco
+         pEQJPXyduCpt6anuJye2Z+hnpLtQ5yrn32hdbkJgEr4eY1/XPzn6y7pRrkkRl+2KW5Le
+         8PqUdu3qofyWEKqeMAe0eYYR7rUiMmhJ4PjFgK7lWLplzeYGEjMCdXlTyBmRA/SLsRm2
+         /w0Q==
+X-Gm-Message-State: ANoB5pkZk3bQ2XNYmAodtbJ97G2LgJbZrq6yXI4sqB1iEFXYJK3s/AG9
+        6cPVHkH/QdX1/BrG3JHagrMpBKO6V2ufQw==
+X-Google-Smtp-Source: AA0mqf7bARKReq5MgRNPlsHgOqffQytDxVaPa/ZetEXebHStVc3SkdO8osZlxXW56i/CguwNrme/Sw==
+X-Received: by 2002:a63:1a19:0:b0:46f:f4c1:7d34 with SMTP id a25-20020a631a19000000b0046ff4c17d34mr12946661pga.75.1668453390489;
+        Mon, 14 Nov 2022 11:16:30 -0800 (PST)
 Received: from localhost ([59.152.80.69])
-        by smtp.gmail.com with ESMTPSA id t21-20020a1709028c9500b00176d218889esm7836781plo.228.2022.11.14.11.16.24
+        by smtp.gmail.com with ESMTPSA id s19-20020a17090a441300b0020af2bab83fsm6899723pjg.23.2022.11.14.11.16.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 11:16:24 -0800 (PST)
+        Mon, 14 Nov 2022 11:16:30 -0800 (PST)
 From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -56,192 +56,51 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <martin.lau@kernel.org>,
         Dave Marchevsky <davemarchevsky@meta.com>
-Subject: [PATCH bpf-next v7 11/26] bpf: Allow locking bpf_spin_lock in allocated objects
-Date:   Tue, 15 Nov 2022 00:45:32 +0530
-Message-Id: <20221114191547.1694267-12-memxor@gmail.com>
+Subject: [PATCH bpf-next v7 13/26] bpf: Allow locking bpf_spin_lock in inner map values
+Date:   Tue, 15 Nov 2022 00:45:34 +0530
+Message-Id: <20221114191547.1694267-14-memxor@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221114191547.1694267-1-memxor@gmail.com>
 References: <20221114191547.1694267-1-memxor@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6766; i=memxor@gmail.com; h=from:subject; bh=iEwNzupo2wEP+IFJ7zBWqno/omrHd/+4eO1JPSsEq9c=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBjcpPJ8xKPku/FblQ+LroVn2lest98veZ0IYNimwbR 8JvF7TyJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCY3KTyQAKCRBM4MiGSL8RyhUUEA CQ4ex9ezQBZFDRvpAltgcu9RGgzudwwD1w6NW2l6Qzk5Zz8rzL2rslWri+XWyBLybvFS2dAblKWsqL zQnLr/9DeRKALPic5vtZKWm/9OFtKbYW9hinC+FvJXoRxGtrjcpnNt9deCemwDn6MdvEBodxgA7hh8 5/Gs+s04vvJoejWqsFRmZQlzGj/QLrKahWpwFkopNnb+QCQmkdUpL5LXAyHgMjk06twpD6fxcBhyzT xwr05WvR4aYSOfQBJPGt7PVbvkK8Xa/laupI+ZY0t4UOrVABHc+PlbGyLHB/wYeeaWvsbIigmAmbTN kGPN7RGYPa4ktnd7yc3sLowxZhhU4eG4Yl+EW1s1j3dEFuYiI6qFQAL3VXR6Fv4VDMW82fPtVjijTY 0du44UMediMzzdr/tLsOzsnrhZeax7Kr0urjFB9VSQpq4332qTblkpmIj9+DUDWMYPxjZV7omN8hiY JppyiBapSgsOEYSlByQ+ziAGo5JOFWICFkQFBBiQGcCrEpaCK+xc/QYbJP5rR6Xm7LfBmKkxDTvLMs SOca+zhTn8XEPUu11JLoXvMJbX3NgKF47c5fskKaJ8B6Q9Cw528HhJJDrNjpnohkbpgXgdkabUnKvF 1kWaIesvAS51KbbhWjrbOWSlY4gtEW+wkd7jJlDsp7o+2EvSh6eCZlH6TdeQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1237; i=memxor@gmail.com; h=from:subject; bh=vEeT2/iSWZHC3KMjxfZP18u7ktP/IseF8QZTy1MJn24=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBjcpPJHwor9e+vDGcaQsSs/hJmvUZYJzEVob7xslb7 HsZAtuOJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCY3KTyQAKCRBM4MiGSL8Rys7+D/ 9aHZAugrk/mRYwdbRDLBrP1EuqblnypI30UswomWd7kVV24T1cpQpzKn+J//tTYkmUx8N/2ePoYRfg JNh3DjIVrS//NFzSbr2fOgBqRNq9/dzVVkR4d/M01g/FT5xiOAhkcGfkhdavC2sINuWB1uIpR3x7hR 5kMPtOBzzA1G9Icq64YktVXL5xPcLs4oAYc8cWOEMautRfdyujsLNZFNU1WytLELEUKam6L1axSkVc 6SfgfBb+StMNDO4IiPVOdVyjCyUhFIa9NdC83Dg3VfP2MY6k3ZFNLscTJE5Jh9/xRgtwZ7zwfAM30E t60Py8U4psKPzqCmwegXQnM5K0lWhOisMEfpJ+JH424WchG40B64RrhrsYMJKeop1ubSHEbkzR68Y2 HW0PsFdZAzm9bwwcrA91KhJ4tstXqYyob6d4PICjWOYBHD/gRZWueOCq4B9HJwI7/aE9QwrioK0nlq EwZFJrx7bLklGGYN61GLYN8lf0ZobQ7VUcGsQrFyaijewMcxZX1NWCfdffb4T6DjvC9vN4gbhCM8y4 N2ndW+teDdj2MJDPuUdLHs7hH9E3a/+fwTtWyq+ZKAXqdHAhE5TTrp1tfJuKQyuJ67CnD0o20iKBrx y9ivSZakdRdGjM8Sr8b+Ac+scfyFTbq5FeEnE3uoXqLwTJqKE2mQ/IICL5Sw==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Allow locking a bpf_spin_lock in an allocated object, in addition to
-already support map value pointers. The handling is similar to that of
-map values, by just preserving the reg->id of PTR_TO_BTF_ID | MEM_ALLOC
-as well, and adjusting process_spin_lock to work with them  and remember
-the id in verifier state.
+There is no need to restrict users from locking bpf_spin_lock in map
+values of inner maps. Each inner map lookup gets a unique reg->id
+assigned to the returned PTR_TO_MAP_VALUE which will be preserved after
+the NULL check. Distinct lookups into different inner map get unique
+IDs, and distinct lookups into same inner map also get unique IDs.
 
-Refactor the existing process_spin_lock to work with PTR_TO_BTF_ID |
-MEM_ALLOC in addition to PTR_TO_MAP_VALUE. We need to update the
-reg_may_point_to_spin_lock which is used in mark_ptr_or_null_reg to
-preserve reg->id, that will be used in env->cur_state->active_spin_lock
-to remember the currently held spin lock.
+Hence, lift the restriction by removing the check return -ENOTSUPP in
+map_in_map.c. Later commits will add comprehensive test cases to ensure
+that invalid cases are rejected.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/helpers.c  |  2 ++
- kernel/bpf/verifier.c | 70 ++++++++++++++++++++++++++++++++-----------
- 2 files changed, 55 insertions(+), 17 deletions(-)
+ kernel/bpf/map_in_map.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 7bc71995f17c..5bc0b9f0f306 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -336,6 +336,7 @@ const struct bpf_func_proto bpf_spin_lock_proto = {
- 	.gpl_only	= false,
- 	.ret_type	= RET_VOID,
- 	.arg1_type	= ARG_PTR_TO_SPIN_LOCK,
-+	.arg1_btf_id    = BPF_PTR_POISON,
- };
- 
- static inline void __bpf_spin_unlock_irqrestore(struct bpf_spin_lock *lock)
-@@ -358,6 +359,7 @@ const struct bpf_func_proto bpf_spin_unlock_proto = {
- 	.gpl_only	= false,
- 	.ret_type	= RET_VOID,
- 	.arg1_type	= ARG_PTR_TO_SPIN_LOCK,
-+	.arg1_btf_id    = BPF_PTR_POISON,
- };
- 
- void copy_map_value_locked(struct bpf_map *map, void *dst, void *src,
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d726d55622c9..070d003a99f0 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -453,8 +453,16 @@ static bool reg_type_not_null(enum bpf_reg_type type)
- 
- static bool reg_may_point_to_spin_lock(const struct bpf_reg_state *reg)
- {
--	return reg->type == PTR_TO_MAP_VALUE &&
--	       btf_record_has_field(reg->map_ptr->record, BPF_SPIN_LOCK);
-+	struct btf_record *rec = NULL;
-+
-+	if (reg->type == PTR_TO_MAP_VALUE) {
-+		rec = reg->map_ptr->record;
-+	} else if (reg->type == (PTR_TO_BTF_ID | MEM_ALLOC)) {
-+		struct btf_struct_meta *meta = btf_find_struct_meta(reg->btf, reg->btf_id);
-+		if (meta)
-+			rec = meta->record;
-+	}
-+	return btf_record_has_field(rec, BPF_SPIN_LOCK);
- }
- 
- static bool type_is_rdonly_mem(u32 type)
-@@ -5588,8 +5596,10 @@ static int process_spin_lock(struct bpf_verifier_env *env, int regno,
- 	struct bpf_reg_state *regs = cur_regs(env), *reg = &regs[regno];
- 	struct bpf_verifier_state *cur = env->cur_state;
- 	bool is_const = tnum_is_const(reg->var_off);
--	struct bpf_map *map = reg->map_ptr;
-+	struct btf_record *rec = NULL;
- 	u64 val = reg->var_off.value;
-+	struct bpf_map *map = NULL;
-+	struct btf *btf = NULL;
- 
- 	if (!is_const) {
- 		verbose(env,
-@@ -5597,19 +5607,32 @@ static int process_spin_lock(struct bpf_verifier_env *env, int regno,
- 			regno);
- 		return -EINVAL;
- 	}
--	if (!map->btf) {
--		verbose(env,
--			"map '%s' has to have BTF in order to use bpf_spin_lock\n",
--			map->name);
--		return -EINVAL;
-+	if (reg->type == PTR_TO_MAP_VALUE) {
-+		map = reg->map_ptr;
-+		if (!map->btf) {
-+			verbose(env,
-+				"map '%s' has to have BTF in order to use bpf_spin_lock\n",
-+				map->name);
-+			return -EINVAL;
-+		}
-+		rec = map->record;
-+	} else {
-+		struct btf_struct_meta *meta;
-+
-+		btf = reg->btf;
-+		meta = btf_find_struct_meta(reg->btf, reg->btf_id);
-+		if (meta)
-+			rec = meta->record;
- 	}
--	if (!btf_record_has_field(map->record, BPF_SPIN_LOCK)) {
--		verbose(env, "map '%s' has no valid bpf_spin_lock\n", map->name);
-+
-+	if (!btf_record_has_field(rec, BPF_SPIN_LOCK)) {
-+		verbose(env, "%s '%s' has no valid bpf_spin_lock\n", map ? "map" : "local",
-+			map ? map->name : "kptr");
- 		return -EINVAL;
- 	}
--	if (map->record->spin_lock_off != val + reg->off) {
-+	if (rec->spin_lock_off != val + reg->off) {
- 		verbose(env, "off %lld doesn't point to 'struct bpf_spin_lock' that is at %d\n",
--			val + reg->off, map->record->spin_lock_off);
-+			val + reg->off, rec->spin_lock_off);
- 		return -EINVAL;
- 	}
- 	if (is_lock) {
-@@ -5815,13 +5838,19 @@ static const struct bpf_reg_types int_ptr_types = {
- 	},
- };
- 
-+static const struct bpf_reg_types spin_lock_types = {
-+	.types = {
-+		PTR_TO_MAP_VALUE,
-+		PTR_TO_BTF_ID | MEM_ALLOC,
-+	}
-+};
-+
- static const struct bpf_reg_types fullsock_types = { .types = { PTR_TO_SOCKET } };
- static const struct bpf_reg_types scalar_types = { .types = { SCALAR_VALUE } };
- static const struct bpf_reg_types context_types = { .types = { PTR_TO_CTX } };
- static const struct bpf_reg_types ringbuf_mem_types = { .types = { PTR_TO_MEM | MEM_RINGBUF } };
- static const struct bpf_reg_types const_map_ptr_types = { .types = { CONST_PTR_TO_MAP } };
- static const struct bpf_reg_types btf_ptr_types = { .types = { PTR_TO_BTF_ID } };
--static const struct bpf_reg_types spin_lock_types = { .types = { PTR_TO_MAP_VALUE } };
- static const struct bpf_reg_types percpu_btf_ptr_types = { .types = { PTR_TO_BTF_ID | MEM_PERCPU } };
- static const struct bpf_reg_types func_ptr_types = { .types = { PTR_TO_FUNC } };
- static const struct bpf_reg_types stack_ptr_types = { .types = { PTR_TO_STACK } };
-@@ -5946,6 +5975,11 @@ static int check_reg_type(struct bpf_verifier_env *env, u32 regno,
- 				return -EACCES;
- 			}
- 		}
-+	} else if (type_is_alloc(reg->type)) {
-+		if (meta->func_id != BPF_FUNC_spin_lock && meta->func_id != BPF_FUNC_spin_unlock) {
-+			verbose(env, "verifier internal error: unimplemented handling of MEM_ALLOC\n");
-+			return -EFAULT;
-+		}
+diff --git a/kernel/bpf/map_in_map.c b/kernel/bpf/map_in_map.c
+index 8ca0cca39d49..f31893a123a2 100644
+--- a/kernel/bpf/map_in_map.c
++++ b/kernel/bpf/map_in_map.c
+@@ -29,11 +29,6 @@ struct bpf_map *bpf_map_meta_alloc(int inner_map_ufd)
+ 		return ERR_PTR(-ENOTSUPP);
  	}
  
- 	return 0;
-@@ -6062,7 +6096,8 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 		goto skip_type_check;
- 
- 	/* arg_btf_id and arg_size are in a union. */
--	if (base_type(arg_type) == ARG_PTR_TO_BTF_ID)
-+	if (base_type(arg_type) == ARG_PTR_TO_BTF_ID ||
-+	    base_type(arg_type) == ARG_PTR_TO_SPIN_LOCK)
- 		arg_btf_id = fn->arg_btf_id[arg];
- 
- 	err = check_reg_type(env, regno, arg_type, arg_btf_id, meta);
-@@ -6680,9 +6715,10 @@ static bool check_btf_id_ok(const struct bpf_func_proto *fn)
- 	int i;
- 
- 	for (i = 0; i < ARRAY_SIZE(fn->arg_type); i++) {
--		if (base_type(fn->arg_type[i]) == ARG_PTR_TO_BTF_ID && !fn->arg_btf_id[i])
--			return false;
+-	if (btf_record_has_field(inner_map->record, BPF_SPIN_LOCK)) {
+-		fdput(f);
+-		return ERR_PTR(-ENOTSUPP);
+-	}
 -
-+		if (base_type(fn->arg_type[i]) == ARG_PTR_TO_BTF_ID)
-+			return !!fn->arg_btf_id[i];
-+		if (base_type(fn->arg_type[i]) == ARG_PTR_TO_SPIN_LOCK)
-+			return fn->arg_btf_id[i] == BPF_PTR_POISON;
- 		if (base_type(fn->arg_type[i]) != ARG_PTR_TO_BTF_ID && fn->arg_btf_id[i] &&
- 		    /* arg_btf_id and arg_size are in a union. */
- 		    (base_type(fn->arg_type[i]) != ARG_PTR_TO_MEM ||
+ 	inner_map_meta_size = sizeof(*inner_map_meta);
+ 	/* In some cases verifier needs to access beyond just base map. */
+ 	if (inner_map->ops == &array_map_ops)
 -- 
 2.38.1
 
