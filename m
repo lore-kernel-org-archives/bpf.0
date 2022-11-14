@@ -2,67 +2,68 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37FC4C4332F
-	for <bpf@archiver.kernel.org>; Mon, 14 Nov 2022 13:05:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF8FCC4332F
+	for <bpf@archiver.kernel.org>; Mon, 14 Nov 2022 13:31:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237769AbiKNNFF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Nov 2022 08:05:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59688 "EHLO
+        id S236205AbiKNNbD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Nov 2022 08:31:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237766AbiKNNFF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Nov 2022 08:05:05 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0132A273;
-        Mon, 14 Nov 2022 05:05:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=2y401i8RHooQYJjpyKGYLxQ8w5xfHy0k3TPsSzf0CGA=; b=eSL/pC96cN8kEPu5RWSDqWXolS
-        ST7oY5KrZkL2r7mOdgFqhzgx/uS9F9A9dNr4lmTkKfc7oKEGyI0Sb3SLFo52pQe7K0h+4v3M0NSn1
-        rjM81IGwTY4dd2Ou+T4OuSLdIc7Uk+5aJgTc82sSRD3LDwoZ2EXnuuG233yCEUihuYXo=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1ouZ7i-002Kls-44; Mon, 14 Nov 2022 14:03:38 +0100
-Date:   Mon, 14 Nov 2022 14:03:38 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Xiaolei Wang <xiaolei.wang@windriver.com>
-Cc:     qiangqing.zhang@nxp.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, richardcochran@gmail.com,
-        lgirdwood@gmail.com, broonie@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH] net: fec: Create device link between fec0 and fec1
-Message-ID: <Y3I8qnNj1EUmPDmd@lunn.ch>
-References: <20221114041143.2189624-1-xiaolei.wang@windriver.com>
+        with ESMTP id S236252AbiKNNbB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Nov 2022 08:31:01 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F59222AF;
+        Mon, 14 Nov 2022 05:30:58 -0800 (PST)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N9qv03cCwzmVsp;
+        Mon, 14 Nov 2022 21:30:36 +0800 (CST)
+Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 14 Nov
+ 2022 21:30:55 +0800
+From:   Xu Kuohai <xukuohai@huawei.com>
+To:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+CC:     Martin KaFai Lau <martin.lau@linux.dev>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Subject: [PATCH bpf 0/2] Bug fix and test case for special map value field 
+Date:   Mon, 14 Nov 2022 08:47:18 -0500
+Message-ID: <20221114134720.1057939-1-xukuohai@huawei.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221114041143.2189624-1-xiaolei.wang@windriver.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.197]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 12:11:43PM +0800, Xiaolei Wang wrote:
-> On imx6sx, there are two fec interfaces, but the external
-> phys can only be configured by fec0 mii_bus. That means
-> the fec1 can't work independently, it only work when the
-> fec0 is active. It is alright in the normal boot since the
-> fec0 will be probed first. But then the fec0 maybe moved
-> behind of fec1 in the dpm_list due to various device link.
-> So in system suspend and resume, we would get the following
-> warning when configuring the external phy of fec1 via the
-> fec0 mii_bus due to the inactive of fec0. In order to fix
-> this issue, we create a device link between fec0 and fec1.
-> This will make sure that fec0 is always active when fec1
-> is in active mode.
+This series is a follow-up to [0]. patch 1 updates sk_storage_map_test to
+ensure special map value fields are not copied between user and kernel.
+patch 0 fixes a bug found by the updated test.
 
-I'm wondering if this should be more generic? I have seen this setup
-more frequently on the FEC, but there are other dual MAC SoCs which
-can have a similar setup, two PHYs sharing one MDIO bus.
+[0] https://lore.kernel.org/bpf/1ca2e4e8-ed7e-9174-01f6-c14539b8b8b2@huawei.com/
 
-Can this be pushed into phylib?
+Xu Kuohai (2):
+  bpf: Do not copy spin lock field from user in bpf_selem_alloc
+  bpf: Set and check spin lock value in sk_storage_map_test
 
-    Andrew
+ kernel/bpf/bpf_local_storage.c                |  2 +-
+ .../selftests/bpf/map_tests/sk_storage_map.c  | 36 ++++++++++---------
+ 2 files changed, 21 insertions(+), 17 deletions(-)
+
+-- 
+2.30.2
+
