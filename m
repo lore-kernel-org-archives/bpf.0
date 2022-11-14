@@ -2,103 +2,156 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1236AC433FE
-	for <bpf@archiver.kernel.org>; Mon, 14 Nov 2022 10:57:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F8CCC4332F
+	for <bpf@archiver.kernel.org>; Mon, 14 Nov 2022 11:46:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235709AbiKNK5R (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Nov 2022 05:57:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52260 "EHLO
+        id S236612AbiKNLqD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Nov 2022 06:46:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235617AbiKNK5Q (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Nov 2022 05:57:16 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F22301A207;
-        Mon, 14 Nov 2022 02:57:15 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id z14so17315957wrn.7;
-        Mon, 14 Nov 2022 02:57:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:references:message-id:date:in-reply-to
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6WjFufgdkg/OkYWcIaQRnwXicBL1zcGqAln66oAXCb8=;
-        b=IOHD6TkkM8jJW1lWBwzRJ+XOJPBdntJ3gje1DWAKn0tKNsIVypUozdO7F1tPI6XclJ
-         phOcu5JlJPmOOm9qjcuSIYnCSkBAzz56R7kMNQIY1kx/kdHvKgE8smpBHgf9BBlKNDkY
-         wZ/Q2PF/CHyrp/DfekjEqJ7DWwLaFrmnw/wyJOC50+8cjLif0HQRYPN2qZq5BTcd2oNi
-         Trxjuq4ZAuaWV/vpfvvHcNR7lUA7Dwe+N1DymWTQ7SjAycBIwY0bLE9yAWLWSRExGdNs
-         +tRnvCMSJiSakDTYAyDNtkKfA1y+vcaNaCUima1R6QyrEHPB6O3wCmkxpt5zYT7c96JQ
-         NwRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:references:message-id:date:in-reply-to
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6WjFufgdkg/OkYWcIaQRnwXicBL1zcGqAln66oAXCb8=;
-        b=FpSn/Sdtx20kZXL5qVx+AgtnFs6qxzM5ahIrFFrMo1CIiSzvs1lxMbYPl6PVra02Dx
-         d7/25FuL2z344MagWyqBkLXlsjmyHuvxU7qkVddBt6qnmYvImNKvRJWVx129vZO1RPIo
-         e7GDAsY06Lejz+p/aoASfK91naPVTQOpwnRxdIHcfttGYXy3+h3fwkYfQ5I/+UrDY0Mu
-         6hLT1PNGKYPBYtmN2ny1Lok9HhNeItfmCX0LsEgh9SMVffE3UTatwNkdpTV6Znb10/cp
-         wb3Fm3BH4rPw0gZxb1v63sV5FE7rru4p40JMemv+63g+X9dj+IXld9/oxWi6tmOPWwBu
-         Ijxg==
-X-Gm-Message-State: ANoB5pkfCWGLnMZDBHu/3eusSIiMrrTA7RGIyJ4zTwy3JeLEJ0Oqo6hn
-        WWQF9abHesTghERgtt6g6ZU=
-X-Google-Smtp-Source: AA0mqf4WeoJGh9UpaiS0ZkbteiHw+SNHbGFL2jdaBsDx/ANXC8uS0rBqB7yo48ZbBV0/pCVspdwFPg==
-X-Received: by 2002:adf:ef8b:0:b0:236:5700:d4cb with SMTP id d11-20020adfef8b000000b002365700d4cbmr7361348wro.597.1668423434278;
-        Mon, 14 Nov 2022 02:57:14 -0800 (PST)
-Received: from imac ([2a02:8010:60a0:0:6942:6e2a:2257:aa49])
-        by smtp.gmail.com with ESMTPSA id p16-20020adfe610000000b002364c77bc96sm9276977wrm.33.2022.11.14.02.57.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 02:57:13 -0800 (PST)
-From:   Donald Hunter <donald.hunter@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S236672AbiKNLp2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Nov 2022 06:45:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1D1222BF;
+        Mon, 14 Nov 2022 03:44:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BDD5C61045;
+        Mon, 14 Nov 2022 11:44:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F566C433D6;
+        Mon, 14 Nov 2022 11:44:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668426286;
+        bh=l68sB4NnR3/f4L7VL19WvqH6Dh8yt/aVZ1uJVefQMtI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=XtUJF22t1vMETfxkDkDoQaLgCdasT1mX3SAV8kKRXx4VF8SppR8kmCPcKMKny+Dbh
+         +R5/4ermD/vAqhbI6Jfl2IqEnpgRKohqOPuvB4Lr0fp79bgVEMQTN7nYEURG2V56sP
+         uAL+oq9za5RvSqWqnegWHtzmApX55dYD+0jXvOKiYAaATRPll3qAZUolXRKuXdwIp3
+         tZijCM3cQmnJskEoxRP80Y42UARhTetm5DtR4MNQJ6vgwf4jlfGRFsTa01Fyg8IIcV
+         8YhXFJHgBjabJP8rmmWYRTzNu549Kt7BxT7QTjZNordAq51h+KaB/RMfFHwsvewfck
+         BMu5d6NEToxzA==
+From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Jiri Slaby <jslaby@suse.cz>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Dave Tucker <dave@dtucker.co.uk>,
-        Maryam Tahhan <mtahhan@redhat.com>
-Subject: Re: [PATCH bpf-next v10 1/1] bpf, docs: document BPF_MAP_TYPE_ARRAY
-In-Reply-To: <CAEf4Bzak4A-vP=NeJheA0poiu_8fK53cvbq1EnnSHC78FB7mtQ@mail.gmail.com>
-        (Andrii Nakryiko's message of "Fri, 11 Nov 2022 11:39:51 -0800")
-Date:   Mon, 14 Nov 2022 10:18:04 +0000
-Message-ID: <m24jv17sbn.fsf@gmail.com>
-References: <20221109174604.31673-1-donald.hunter@gmail.com>
-        <20221109174604.31673-2-donald.hunter@gmail.com>
-        <CAEf4Bzak4A-vP=NeJheA0poiu_8fK53cvbq1EnnSHC78FB7mtQ@mail.gmail.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (darwin)
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, Martin Liska <mliska@suse.cz>
+Subject: [PATCH 21/46] btf, lto: pass scope as strings
+Date:   Mon, 14 Nov 2022 12:43:19 +0100
+Message-Id: <20221114114344.18650-22-jirislaby@kernel.org>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221114114344.18650-1-jirislaby@kernel.org>
+References: <20221114114344.18650-1-jirislaby@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+From: Jiri Slaby <jslaby@suse.cz>
 
-> On Wed, Nov 9, 2022 at 9:46 AM Donald Hunter <donald.hunter@gmail.com> wrote:
->>
->> +This example BPF program shows how to access an array element.
->> +
->> +.. code-block:: c
->> +
->> +    int bpf_prog(struct __sk_buff *skb)
->> +    {
->> +            struct iphdr ip;
->> +            int index;
->> +            long *value;
->> +
->> +            if (bpf_skb_load_bytes(skb, ETH_HLEN, &ip, sizeof(ip)) < 0)
->> +                    return 0;
->> +
->> +            index = ip.protocol;
->> +            value = bpf_map_lookup_elem(&my_map, &index);
->> +            if (value)
->> +                    __sync_fetch_and_add(value, skb->len);
->
-> should be &value
->
-> I fixed it up and applied to bpf-next, thanks.
+gcc LTO can put assembler top level statements into other assembler
+files. The BTF IDs assumed that they are in the same file. We need to
+make all BTF IDs global to work around this.
 
-I double checked and it really should be value, which is already a
-pointer.
+This is a preparation for that, as we will pass __global_on_lto as
+scope. That is macro that expands either to "globl" or "local" depending
+whether LTO is enabled.
 
-Do you want me to send a patch to fix it up?
+That wouldn't work without this patch as we stringify scope at the
+moment.
+
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Song Liu <song@kernel.org>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: Stanislav Fomichev <sdf@google.com>
+Cc: Hao Luo <haoluo@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: bpf@vger.kernel.org
+Cc: Martin Liska <mliska@suse.cz>
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+---
+ include/linux/btf_ids.h | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
+index 2aea877d644f..3011757a48ef 100644
+--- a/include/linux/btf_ids.h
++++ b/include/linux/btf_ids.h
+@@ -83,16 +83,16 @@ word							\
+ #define __BTF_ID_LIST(name, scope)			\
+ asm(							\
+ ".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
+-"." #scope " " #name ";                        \n"	\
++"." scope " " #name ";                         \n"	\
+ #name ":;                                      \n"	\
+ ".popsection;                                  \n");
+ 
+ #define BTF_ID_LIST(name)				\
+-__BTF_ID_LIST(name, local)				\
++__BTF_ID_LIST(name, "local")				\
+ extern u32 name[];
+ 
+ #define BTF_ID_LIST_GLOBAL(name, n)			\
+-__BTF_ID_LIST(name, globl)
++__BTF_ID_LIST(name, "globl")
+ 
+ /* The BTF_ID_LIST_SINGLE macro defines a BTF_ID_LIST with
+  * a single entry.
+@@ -142,18 +142,18 @@ asm(							\
+ #define __BTF_SET_START(name, scope)			\
+ asm(							\
+ ".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
+-"." #scope " __BTF_ID__set__" #name ";         \n"	\
++"." scope " __BTF_ID__set__" #name ";          \n"	\
+ "__BTF_ID__set__" #name ":;                    \n"	\
+ ".zero 4                                       \n"	\
+ ".popsection;                                  \n");
+ 
+ #define BTF_SET_START(name)				\
+-__BTF_ID_LIST(name, local)				\
+-__BTF_SET_START(name, local)
++__BTF_ID_LIST(name, "local")				\
++__BTF_SET_START(name, "local")
+ 
+ #define BTF_SET_START_GLOBAL(name)			\
+-__BTF_ID_LIST(name, globl)				\
+-__BTF_SET_START(name, globl)
++__BTF_ID_LIST(name, "globl")				\
++__BTF_SET_START(name, "globl")
+ 
+ #define BTF_SET_END(name)				\
+ asm(							\
+@@ -186,14 +186,14 @@ extern struct btf_id_set name;
+ #define __BTF_SET8_START(name, scope)			\
+ asm(							\
+ ".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
+-"." #scope " __BTF_ID__set8__" #name ";        \n"	\
++"." scope " __BTF_ID__set8__" #name ";         \n"	\
+ "__BTF_ID__set8__" #name ":;                   \n"	\
+ ".zero 8                                       \n"	\
+ ".popsection;                                  \n");
+ 
+ #define BTF_SET8_START(name)				\
+-__BTF_ID_LIST(name, local)				\
+-__BTF_SET8_START(name, local)
++__BTF_ID_LIST(name, "local")				\
++__BTF_SET8_START(name, "local")
+ 
+ #define BTF_SET8_END(name)				\
+ asm(							\
+-- 
+2.38.1
+
