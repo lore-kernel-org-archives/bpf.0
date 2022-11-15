@@ -2,204 +2,614 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED7A8C43217
-	for <bpf@archiver.kernel.org>; Tue, 15 Nov 2022 03:04:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5F11C4332F
+	for <bpf@archiver.kernel.org>; Tue, 15 Nov 2022 03:04:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236982AbiKODED (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Nov 2022 22:04:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46686 "EHLO
+        id S237321AbiKODEF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Nov 2022 22:04:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237555AbiKODDN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Nov 2022 22:03:13 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A08810B6
-        for <bpf@vger.kernel.org>; Mon, 14 Nov 2022 19:02:19 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id x11-20020a056a000bcb00b0056c6ec11eefso7090729pfu.14
-        for <bpf@vger.kernel.org>; Mon, 14 Nov 2022 19:02:19 -0800 (PST)
+        with ESMTP id S237649AbiKODDP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Nov 2022 22:03:15 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AE02AC7
+        for <bpf@vger.kernel.org>; Mon, 14 Nov 2022 19:02:23 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id b2-20020a170902d50200b001871a3c51afso10232426plg.8
+        for <bpf@vger.kernel.org>; Mon, 14 Nov 2022 19:02:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=a5AIkCTUh38LdhgjcqmXMopWX95gOLvjqlIhAbQ6HyA=;
-        b=ZwvO7zet084WHw2NNbL2nH/2JhepQmESb/xkbKDrZhFD7rXiVClnYJnNz2HPlkFqu9
-         Ry+yzF0yZ8oiV7/OJEQazrwgilIw6a7C3V6GeatC+nPUohEmxF7rcFqep8BVmsZ4zkdl
-         qIG4GOhaL3WMrLDYlnxvKEIY5Ylaxa6JSxZOOzAiFjFY3/b1+tjCPqlMaoLb2+zbfmLh
-         3eXcY6OTSJHXwqYPdiE1zqOsrpaMF2Hpq9pgIVOlpSKWdIYvsKQB0/Z+svvx1rsMcFN1
-         AVfAGx4kLB4T3kV4jIyy3345Y0VqRwtwiSAEWOShlAMxnRJs8FuZfe7+g8Td1QxXybYd
-         YbKA==
+        bh=dTHRlkKLabXAtQPLHvb8Vrt1mLuPnrRmBOPa7WfDJFo=;
+        b=PSbO1KyGXRAvZ8j1J3jSGk9bHxjCktcbSbe4QgM9nd39etPIqzG2GeYPRqdEEuLE/t
+         vadXutMRJql9/LPtK4MbUWpmGbfCoPDCII+aWNzEHbzwae6S4WjHzLeLPHp3ofY/B4eQ
+         rDYUQHIxpGADNHf1XYF3IH8/Vs63ANPNQgFED0ewym9kJiv7pklXNyQoey99CEgJv6aC
+         g1YxFnlhewNbV4+q1XvQpY/msGlOAlT9t5W0DXeBIWpd8KdiHIbbyeP/nIQg242Zyqqx
+         kzJBl1m7x+Apo5QSGpUnGOXrJG+VoudvBEMJrbfX+4JetLE8KLgvbndHmDjXFn1ipHp1
+         5YVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a5AIkCTUh38LdhgjcqmXMopWX95gOLvjqlIhAbQ6HyA=;
-        b=xKzc6RpfjyIT/5wZseRcbtcK3xu0hr4ndYe5kASB7as7aCQTDH39YhrM6uRyGTglSN
-         E5yk1h0KlpXG+JFOFIoiIhrO0UlZ5Qb/MO9knbyZvburOiXKqfJxgruDPJhZ3PbjOOpZ
-         0ZxGSL1ynVEM6t6oGXjHFWsh5RTQ3VdLLqRujcFgGcM1R84dL+RCWyvd64/FqyzE5AwN
-         t+KAcc2IQv0YeG4YXg8Sz8NiuKJ+uGeZ2CEl7TvlMGCfTrZr/C/1YrNwmNqosTFKWNYt
-         sNMpmyBxnAFqE4vmyt5OOxSLFSMrhADoe987/J0tosrlGIUYNJvV7tuS+qXmdZslhg7n
-         cEoQ==
-X-Gm-Message-State: ANoB5pkMBoteXGzqsmDkSKbPAs0YO6EFdXcIac4txZ7czisxjStnkQG+
-        jPGKgulhd+y8wOMMOVGwEyz7qaBbdOilQyGvho+G+OteIM9GkYz2YV/kPbHVAUb7Khj2eZN9NcO
-        sF+ZU0Gr7vdyAcmlKk0Avrd/oYW2ZMnhqd5lUSI0ZnKBKrIqs7A==
-X-Google-Smtp-Source: AA0mqf5ShA3hCnfBoDvhrowJbJznEs4r+D7gQF9n9YYWRe0n8Vk+I8CK63wpuPvFahtMYEOmePixyTA=
+        bh=dTHRlkKLabXAtQPLHvb8Vrt1mLuPnrRmBOPa7WfDJFo=;
+        b=VjgHnmThqRWrXzWs8bFt02MKFfBz9fBbHDtxeByiJgk0jq4aSuBnzm/F7kMKRY7FnY
+         af/1U5+DtVCoYxVHzwdGLg2Y7etZlXT066cwcOep41l1vuUQ+YGOxchzMYcAr/D8c7hN
+         2oHoPajaNeDY8O7k/H5lAVUKn3vaCVDDqFf1WiWAqmVxXik2V6NX3/MDG1BR3Dd3F9UY
+         /OXahgbmZBr5p8I+oW+odcorsi1O9CIr1ChgbYTIo3WS9Qlsp8uXtd9eM3cXpExWPBF5
+         8bbWiFDH0I3YhUAleE16GVsfF1eQEe260vj8oYcxdrhGSVJ3aiI8qOkaucpz9o68eDUY
+         JN4g==
+X-Gm-Message-State: ANoB5plBvQT0w725MQYVWQNieKq3zUpmn9Dk/U4EJQyF4OeQgLQ4rDJ/
+        wOBCcFX66dCDLsYJr2Yqhznv1Vfu64EwBhNDtwkSg/wf08Ougd6py6kg47M7nNNd+bPWMXa/mUW
+        i3QKNFwSHss+ElBjAdB8e/+zmlyRASGXdm4nZMYftBaSc9bsxmw==
+X-Google-Smtp-Source: AA0mqf7KV4otaR0D1CCR7hnm1sbTUQBk76wwUgieCkNqG3pbAo/Knjb6lkgclLoShn7O+/WeTPlAdW0=
 X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a62:6283:0:b0:56e:989d:7410 with SMTP id
- w125-20020a626283000000b0056e989d7410mr16594601pfb.1.1668481339043; Mon, 14
- Nov 2022 19:02:19 -0800 (PST)
-Date:   Mon, 14 Nov 2022 19:02:03 -0800
+ (user=sdf job=sendgmr) by 2002:a62:e919:0:b0:56d:3180:e885 with SMTP id
+ j25-20020a62e919000000b0056d3180e885mr16605597pfh.82.1668481342776; Mon, 14
+ Nov 2022 19:02:22 -0800 (PST)
+Date:   Mon, 14 Nov 2022 19:02:05 -0800
 In-Reply-To: <20221115030210.3159213-1-sdf@google.com>
 Mime-Version: 1.0
 References: <20221115030210.3159213-1-sdf@google.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221115030210.3159213-5-sdf@google.com>
-Subject: [PATCH bpf-next 04/11] bpf: Implement hidden BPF_PUSH64 and BPF_POP64 instructions
+Message-ID: <20221115030210.3159213-7-sdf@google.com>
+Subject: [PATCH bpf-next 06/11] xdp: Carry over xdp metadata into skb context
 From:   Stanislav Fomichev <sdf@google.com>
 To:     bpf@vger.kernel.org
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
         haoluo@google.com, jolsa@kernel.org,
-        Zi Shen Lim <zlim.lnx@gmail.com>
+        David Ahern <dsahern@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Willem de Bruijn <willemb@google.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Anatoly Burakov <anatoly.burakov@intel.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Magnus Karlsson <magnus.karlsson@gmail.com>,
+        Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
+        netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Implemented for:
-- x86_64 jit (tested)
-- arm64 jit (untested)
+Implement new bpf_xdp_metadata_export_to_skb kfunc which
+prepares compatible xdp metadata for kernel consumption.
+This kfunc should be called prior to bpf_redirect
+or when XDP_PASS'ing the frame into the kernel (note, the drivers
+have to be updated to enable consuming XDP_PASS'ed metadata).
 
-Interpreter is not implemented because push/pop are currently
-used only with xdp kfunc and jit is required to use kfuncs.
+veth driver is amended to consume this metadata when converting to skb.
 
-Fundamentally:
-  BPF_ST | BPF_STACK + src_reg == store into the stack
-  BPF_LD | BPF_STACK + dst_reg == load from the stack
-  off/imm are unused
+Internally, XDP_FLAGS_HAS_SKB_METADATA flag is used to indicate
+whether the frame has skb metadata. The metadata is currently
+stored prior to xdp->data_meta. bpf_xdp_adjust_meta refuses
+to work after a call to bpf_xdp_metadata_export_to_skb (can lift
+this requirement later on if needed, we'd have to memmove
+xdp_skb_metadata).
 
-Updated disasm code to properly dump these new instructions:
-
-  31: (e2) push r1
-  32: (79) r5 = *(u64 *)(r1 +56)
-  33: (55) if r5 != 0x0 goto pc+2
-  34: (b7) r0 = 0
-  35: (05) goto pc+1
-  36: (79) r0 = *(u64 *)(r5 +32)
-  37: (e0) pop r1
-
-Cc: Zi Shen Lim <zlim.lnx@gmail.com>
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: David Ahern <dsahern@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Willem de Bruijn <willemb@google.com>
+Cc: Jesper Dangaard Brouer <brouer@redhat.com>
+Cc: Anatoly Burakov <anatoly.burakov@intel.com>
+Cc: Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc: Magnus Karlsson <magnus.karlsson@gmail.com>
+Cc: Maryam Tahhan <mtahhan@redhat.com>
+Cc: xdp-hints@xdp-project.net
+Cc: netdev@vger.kernel.org
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- arch/arm64/net/bpf_jit_comp.c |  8 ++++++++
- arch/x86/net/bpf_jit_comp.c   |  8 ++++++++
- include/linux/filter.h        | 23 +++++++++++++++++++++++
- kernel/bpf/disasm.c           |  6 ++++++
- 4 files changed, 45 insertions(+)
+ drivers/net/veth.c             |  10 +--
+ include/linux/skbuff.h         |   4 +
+ include/net/xdp.h              |  17 ++++
+ include/uapi/linux/bpf.h       |   7 ++
+ kernel/bpf/verifier.c          |  15 ++++
+ net/core/filter.c              |  40 +++++++++
+ net/core/skbuff.c              |  20 +++++
+ net/core/xdp.c                 | 145 +++++++++++++++++++++++++++++++--
+ tools/include/uapi/linux/bpf.h |   7 ++
+ 9 files changed, 255 insertions(+), 10 deletions(-)
 
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 62f805f427b7..4c0e70e6572a 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -1185,6 +1185,14 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 		 */
- 		break;
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index c626580a2294..35349a232209 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -803,7 +803,7 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+ 	void *orig_data, *orig_data_end;
+ 	struct bpf_prog *xdp_prog;
+ 	struct xdp_buff xdp;
+-	u32 act, metalen;
++	u32 act;
+ 	int off;
  
-+		/* kernel hidden stack operations */
-+	case BPF_ST | BPF_STACK:
-+		emit(A64_PUSH(src, src, A64_SP), ctx);
-+		break;
-+	case BPF_LD | BPF_STACK:
-+		emit(A64_POP(dst, dst, A64_SP), ctx);
-+		break;
-+
- 	/* ST: *(size *)(dst + off) = imm */
- 	case BPF_ST | BPF_MEM | BPF_W:
- 	case BPF_ST | BPF_MEM | BPF_H:
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index cec5195602bc..528bece87ca4 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -1324,6 +1324,14 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image, u8 *rw_image
- 			EMIT_LFENCE();
- 			break;
+ 	skb_prepare_for_gro(skb);
+@@ -886,9 +886,7 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
  
-+			/* kernel hidden stack operations */
-+		case BPF_ST | BPF_STACK:
-+			EMIT1(add_1reg(0x50, src_reg)); /* pushq  */
-+			break;
-+		case BPF_LD | BPF_STACK:
-+			EMIT1(add_1reg(0x58, dst_reg)); /* popq */
-+			break;
+ 	skb->protocol = eth_type_trans(skb, rq->dev);
+ 
+-	metalen = xdp.data - xdp.data_meta;
+-	if (metalen)
+-		skb_metadata_set(skb, metalen);
++	xdp_convert_skb_metadata(&xdp, skb);
+ out:
+ 	return skb;
+ drop:
+@@ -1663,7 +1661,9 @@ static int veth_xdp(struct net_device *dev, struct netdev_bpf *xdp)
+ static void veth_unroll_kfunc(const struct bpf_prog *prog, u32 func_id,
+ 			      struct bpf_patch *patch)
+ {
+-	if (func_id == xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_TIMESTAMP_SUPPORTED)) {
++	if (func_id == xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_EXPORT_TO_SKB)) {
++		return xdp_metadata_export_to_skb(prog, patch);
++	} else if (func_id == xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_TIMESTAMP_SUPPORTED)) {
+ 		/* return true; */
+ 		bpf_patch_append(patch, BPF_MOV64_IMM(BPF_REG_0, 1));
+ 	} else if (func_id == xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_TIMESTAMP)) {
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index 4e464a27adaf..be6a9559dbf1 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -4219,6 +4219,10 @@ static inline bool skb_metadata_differs(const struct sk_buff *skb_a,
+ 	       true : __skb_metadata_differs(skb_a, skb_b, len_a);
+ }
+ 
++struct xdp_skb_metadata;
++bool skb_metadata_import_from_xdp(struct sk_buff *skb,
++				  struct xdp_skb_metadata *meta);
 +
- 			/* ST: *(u8*)(dst_reg + off) = imm */
- 		case BPF_ST | BPF_MEM | BPF_B:
- 			if (is_ereg(dst_reg))
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index efc42a6e3aed..42c61ec8f895 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -76,6 +76,9 @@ struct ctl_table_header;
+ static inline void skb_metadata_set(struct sk_buff *skb, u8 meta_len)
+ {
+ 	skb_shinfo(skb)->meta_len = meta_len;
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index 2a82a98f2f9f..547a6a0e99f8 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -73,6 +73,7 @@ enum xdp_buff_flags {
+ 	XDP_FLAGS_FRAGS_PF_MEMALLOC	= BIT(1), /* xdp paged memory is under
+ 						   * pressure
+ 						   */
++	XDP_FLAGS_HAS_SKB_METADATA	= BIT(2), /* xdp_skb_metadata */
+ };
+ 
+ struct xdp_buff {
+@@ -91,6 +92,11 @@ static __always_inline bool xdp_buff_has_frags(struct xdp_buff *xdp)
+ 	return !!(xdp->flags & XDP_FLAGS_HAS_FRAGS);
+ }
+ 
++static __always_inline bool xdp_buff_has_skb_metadata(struct xdp_buff *xdp)
++{
++	return !!(xdp->flags & XDP_FLAGS_HAS_SKB_METADATA);
++}
++
+ static __always_inline void xdp_buff_set_frags_flag(struct xdp_buff *xdp)
+ {
+ 	xdp->flags |= XDP_FLAGS_HAS_FRAGS;
+@@ -306,6 +312,8 @@ struct xdp_frame *xdp_convert_buff_to_frame(struct xdp_buff *xdp)
+ 	return xdp_frame;
+ }
+ 
++bool xdp_convert_skb_metadata(struct xdp_buff *xdp, struct sk_buff *skb);
++
+ void __xdp_return(void *data, struct xdp_mem_info *mem, bool napi_direct,
+ 		  struct xdp_buff *xdp);
+ void xdp_return_frame(struct xdp_frame *xdpf);
+@@ -411,6 +419,8 @@ void xdp_attachment_setup(struct xdp_attachment_info *info,
+ #define DEV_MAP_BULK_SIZE XDP_BULK_QUEUE_SIZE
+ 
+ #define XDP_METADATA_KFUNC_xxx	\
++	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_EXPORT_TO_SKB, \
++			   bpf_xdp_metadata_export_to_skb) \
+ 	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_TIMESTAMP_SUPPORTED, \
+ 			   bpf_xdp_metadata_rx_timestamp_supported) \
+ 	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_TIMESTAMP, \
+@@ -423,14 +433,21 @@ XDP_METADATA_KFUNC_xxx
+ MAX_XDP_METADATA_KFUNC,
+ };
+ 
++struct bpf_patch;
++
+ #ifdef CONFIG_DEBUG_INFO_BTF
+ extern struct btf_id_set8 xdp_metadata_kfunc_ids;
+ static inline u32 xdp_metadata_kfunc_id(int id)
+ {
+ 	return xdp_metadata_kfunc_ids.pairs[id].id;
+ }
++void xdp_metadata_export_to_skb(const struct bpf_prog *prog, struct bpf_patch *patch);
+ #else
+ static inline u32 xdp_metadata_kfunc_id(int id) { return 0; }
++static void xdp_metadata_export_to_skb(const struct bpf_prog *prog, struct bpf_patch *patch)
++{
++	return 0;
++}
+ #endif
+ 
+ #endif /* __LINUX_NET_XDP_H__ */
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index b444b1118c4f..71e3bc7ad839 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -6116,6 +6116,12 @@ enum xdp_action {
+ 	XDP_REDIRECT,
+ };
+ 
++/* Subset of XDP metadata exported to skb context.
++ */
++struct xdp_skb_metadata {
++	__u64 rx_timestamp;
++};
++
+ /* user accessible metadata for XDP packet hook
+  * new fields must be added to the end of this structure
   */
- #define BPF_NOSPEC	0xc0
+@@ -6128,6 +6134,7 @@ struct xdp_md {
+ 	__u32 rx_queue_index;  /* rxq->queue_index  */
  
-+/* unused opcode for kernel hidden stack operations */
-+#define BPF_STACK	0xe0
-+
- /* As per nm, we expose JITed images as text (code) section for
-  * kallsyms. That way, tools like perf can find it to match
-  * addresses.
-@@ -402,6 +405,26 @@ static inline bool insn_is_zext(const struct bpf_insn *insn)
- 		.off   = 0,					\
- 		.imm   = 0 })
+ 	__u32 egress_ifindex;  /* txq->dev->ifindex */
++	__bpf_md_ptr(struct xdp_skb_metadata *, skb_metadata);
+ };
  
-+/* Push SRC register value onto the stack */
-+
-+#define BPF_PUSH64(SRC)						\
-+	((struct bpf_insn) {					\
-+		.code  = BPF_ST | BPF_STACK,			\
-+		.dst_reg = 0,					\
-+		.src_reg = SRC,					\
-+		.off   = 0,					\
-+		.imm   = 0 })
-+
-+/* Pop stack value into DST register */
-+
-+#define BPF_POP64(DST)						\
-+	((struct bpf_insn) {					\
-+		.code  = BPF_LD | BPF_STACK,			\
-+		.dst_reg = DST,					\
-+		.src_reg = 0,					\
-+		.off   = 0,					\
-+		.imm   = 0 })
-+
- /* Internal classic blocks for direct assignment */
+ /* DEVMAP map-value layout
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index b657ed6eb277..6879ad3a6026 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -14023,6 +14023,7 @@ static int unroll_kfunc_call(struct bpf_verifier_env *env,
+ 	enum bpf_prog_type prog_type;
+ 	struct bpf_prog_aux *aux;
+ 	struct btf *desc_btf;
++	u32 allowed, mangled;
+ 	u32 *kfunc_flags;
+ 	u32 func_id;
  
- #define __BPF_STMT(CODE, K)					\
-diff --git a/kernel/bpf/disasm.c b/kernel/bpf/disasm.c
-index 7b4afb7d96db..9cd22f3591de 100644
---- a/kernel/bpf/disasm.c
-+++ b/kernel/bpf/disasm.c
-@@ -214,6 +214,9 @@ void print_bpf_insn(const struct bpf_insn_cbs *cbs,
- 				insn->off, insn->imm);
- 		} else if (BPF_MODE(insn->code) == 0xc0 /* BPF_NOSPEC, no UAPI */) {
- 			verbose(cbs->private_data, "(%02x) nospec\n", insn->code);
-+		} else if (BPF_MODE(insn->code) == 0xe0 /* BPF_STACK, no UAPI */) {
-+			verbose(cbs->private_data, "(%02x) push r%d\n",
-+				insn->code, insn->src_reg);
- 		} else {
- 			verbose(cbs->private_data, "BUG_st_%02x\n", insn->code);
- 		}
-@@ -254,6 +257,9 @@ void print_bpf_insn(const struct bpf_insn_cbs *cbs,
- 				insn->code, insn->dst_reg,
- 				__func_imm_name(cbs, insn, imm,
- 						tmp, sizeof(tmp)));
-+		} else if (BPF_MODE(insn->code) == 0xe0 /* BPF_STACK, no UAPI */) {
-+			verbose(cbs->private_data, "(%02x) pop r%d\n",
-+				insn->code, insn->dst_reg);
- 		} else {
- 			verbose(cbs->private_data, "BUG_ld_%02x\n", insn->code);
- 			return;
+@@ -14050,6 +14051,20 @@ static int unroll_kfunc_call(struct bpf_verifier_env *env,
+ 		 */
+ 		bpf_patch_append(patch, BPF_MOV64_IMM(BPF_REG_0, 0));
+ 	}
++
++	allowed = 1 << BPF_REG_0;
++	allowed |= 1 << BPF_REG_1;
++	allowed |= 1 << BPF_REG_2;
++	allowed |= 1 << BPF_REG_3;
++	allowed |= 1 << BPF_REG_4;
++	allowed |= 1 << BPF_REG_5;
++	mangled = bpf_patch_magles_registers(patch);
++	if (WARN_ON_ONCE(mangled & ~allowed)) {
++		bpf_patch_free(patch);
++		verbose(env, "bpf verifier is misconfigured\n");
++		return -EINVAL;
++	}
++
+ 	return bpf_patch_err(patch);
+ }
+ 
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 6dd2baf5eeb2..2497144e4216 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -4094,6 +4094,8 @@ BPF_CALL_2(bpf_xdp_adjust_meta, struct xdp_buff *, xdp, int, offset)
+ 		return -EINVAL;
+ 	if (unlikely(xdp_metalen_invalid(metalen)))
+ 		return -EACCES;
++	if (unlikely(xdp_buff_has_skb_metadata(xdp)))
++		return -EACCES;
+ 
+ 	xdp->data_meta = meta;
+ 
+@@ -8690,6 +8692,8 @@ static bool __is_valid_xdp_access(int off, int size)
+ 	return true;
+ }
+ 
++BTF_ID_LIST_SINGLE(xdp_to_skb_metadata_btf_ids, struct, xdp_skb_metadata);
++
+ static bool xdp_is_valid_access(int off, int size,
+ 				enum bpf_access_type type,
+ 				const struct bpf_prog *prog,
+@@ -8722,6 +8726,18 @@ static bool xdp_is_valid_access(int off, int size,
+ 	case offsetof(struct xdp_md, data_end):
+ 		info->reg_type = PTR_TO_PACKET_END;
+ 		break;
++	case offsetof(struct xdp_md, skb_metadata):
++		info->btf = bpf_get_btf_vmlinux();
++		if (IS_ERR(info->btf))
++			return PTR_ERR(info->btf);
++		if (!info->btf)
++			return -EINVAL;
++
++		info->reg_type = PTR_TO_BTF_ID_OR_NULL;
++		info->btf_id = xdp_to_skb_metadata_btf_ids[0];
++		if (size == sizeof(__u64))
++			return true;
++		return false;
+ 	}
+ 
+ 	return __is_valid_xdp_access(off, size);
+@@ -9814,6 +9830,30 @@ static u32 xdp_convert_ctx_access(enum bpf_access_type type,
+ 		*insn++ = BPF_LDX_MEM(BPF_W, si->dst_reg, si->dst_reg,
+ 				      offsetof(struct net_device, ifindex));
+ 		break;
++	case offsetof(struct xdp_md, skb_metadata):
++		/* dst_reg = xdp_buff->flags; */
++		*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct xdp_buff, flags),
++				      si->dst_reg, si->src_reg,
++				      offsetof(struct xdp_buff, flags));
++		/* dst_reg &= XDP_FLAGS_HAS_SKB_METADATA; */
++		*insn++ = BPF_ALU64_IMM(BPF_AND, si->dst_reg,
++					XDP_FLAGS_HAS_SKB_METADATA);
++
++		/* if (dst_reg != 0) { */
++		*insn++ = BPF_JMP_IMM(BPF_JEQ, si->dst_reg, 0, 3);
++		/*	dst_reg = xdp_buff->data_meta; */
++		*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct xdp_buff, data_meta),
++				      si->dst_reg, si->src_reg,
++				      offsetof(struct xdp_buff, data_meta));
++		/*	dst_reg -= sizeof(struct xdp_skb_metadata); */
++		*insn++ = BPF_ALU64_IMM(BPF_SUB, si->dst_reg,
++					sizeof(struct xdp_skb_metadata));
++		*insn++ = BPF_JMP_A(1);
++		/* } else { */
++		/*	return 0; */
++		*insn++ = BPF_MOV32_IMM(si->dst_reg, 0);
++		/* } */
++		break;
+ 	}
+ 
+ 	return insn - insn_buf;
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index 90d085290d49..0cc24ca20e4d 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -72,6 +72,7 @@
+ #include <net/mptcp.h>
+ #include <net/mctp.h>
+ #include <net/page_pool.h>
++#include <net/xdp.h>
+ 
+ #include <linux/uaccess.h>
+ #include <trace/events/skb.h>
+@@ -6675,3 +6676,22 @@ nodefer:	__kfree_skb(skb);
+ 	if (unlikely(kick) && !cmpxchg(&sd->defer_ipi_scheduled, 0, 1))
+ 		smp_call_function_single_async(cpu, &sd->defer_csd);
+ }
++
++bool skb_metadata_import_from_xdp(struct sk_buff *skb,
++				  struct xdp_skb_metadata *meta)
++{
++	/* Optional SKB info, currently missing:
++	 * - HW checksum info		(skb->ip_summed)
++	 * - HW RX hash			(skb_set_hash)
++	 * - RX ring dev queue index	(skb_record_rx_queue)
++	 */
++
++	if (meta->rx_timestamp) {
++		*skb_hwtstamps(skb) = (struct skb_shared_hwtstamps){
++			.hwtstamp = ns_to_ktime(meta->rx_timestamp),
++		};
++	}
++
++	return true;
++}
++EXPORT_SYMBOL(skb_metadata_import_from_xdp);
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index 22f1e44700eb..ede9b1b987d9 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -368,6 +368,22 @@ int xdp_rxq_info_reg_mem_model(struct xdp_rxq_info *xdp_rxq,
+ 
+ EXPORT_SYMBOL_GPL(xdp_rxq_info_reg_mem_model);
+ 
++bool xdp_convert_skb_metadata(struct xdp_buff *xdp, struct sk_buff *skb)
++{
++	struct xdp_skb_metadata *meta;
++	u32 metalen;
++
++	metalen = xdp->data - xdp->data_meta;
++	if (metalen)
++		skb_metadata_set(skb, metalen);
++	if (xdp_buff_has_skb_metadata(xdp)) {
++		meta = xdp->data_meta - sizeof(*meta);
++		return skb_metadata_import_from_xdp(skb, meta);
++	}
++	return false;
++}
++EXPORT_SYMBOL(xdp_convert_skb_metadata);
++
+ /* XDP RX runs under NAPI protection, and in different delivery error
+  * scenarios (e.g. queue full), it is possible to return the xdp_frame
+  * while still leveraging this protection.  The @napi_direct boolean
+@@ -619,6 +635,7 @@ struct sk_buff *__xdp_build_skb_from_frame(struct xdp_frame *xdpf,
+ {
+ 	struct skb_shared_info *sinfo = xdp_get_shared_info_from_frame(xdpf);
+ 	unsigned int headroom, frame_size;
++	struct xdp_skb_metadata *meta;
+ 	void *hard_start;
+ 	u8 nr_frags;
+ 
+@@ -653,11 +670,10 @@ struct sk_buff *__xdp_build_skb_from_frame(struct xdp_frame *xdpf,
+ 	/* Essential SKB info: protocol and skb->dev */
+ 	skb->protocol = eth_type_trans(skb, dev);
+ 
+-	/* Optional SKB info, currently missing:
+-	 * - HW checksum info		(skb->ip_summed)
+-	 * - HW RX hash			(skb_set_hash)
+-	 * - RX ring dev queue index	(skb_record_rx_queue)
+-	 */
++	if (xdpf->flags & XDP_FLAGS_HAS_SKB_METADATA) {
++		meta = xdpf->data - xdpf->metasize - sizeof(*meta);
++		skb_metadata_import_from_xdp(skb, meta);
++	}
+ 
+ 	/* Until page_pool get SKB return path, release DMA here */
+ 	xdp_release_frame(xdpf);
+@@ -712,6 +728,14 @@ struct xdp_frame *xdpf_clone(struct xdp_frame *xdpf)
+ 	return nxdpf;
+ }
+ 
++/* For the packets directed to the kernel, this kfunc exports XDP metadata
++ * into skb context.
++ */
++noinline int bpf_xdp_metadata_export_to_skb(const struct xdp_md *ctx)
++{
++	return 0;
++}
++
+ /* Indicates whether particular device supports rx_timestamp metadata.
+  * This is an optional helper to support marking some branches as
+  * "dead code" in the BPF programs.
+@@ -736,15 +760,126 @@ BTF_SET8_START_GLOBAL(xdp_metadata_kfunc_ids)
+ XDP_METADATA_KFUNC_xxx
+ #undef XDP_METADATA_KFUNC
+ BTF_SET8_END(xdp_metadata_kfunc_ids)
++EXPORT_SYMBOL(xdp_metadata_kfunc_ids);
+ 
+ static const struct btf_kfunc_id_set xdp_metadata_kfunc_set = {
+ 	.owner = THIS_MODULE,
+ 	.set   = &xdp_metadata_kfunc_ids,
+ };
+ 
++/* Since we're not actually doing a call but instead rewriting
++ * in place, we can only afford to use R0-R5 scratch registers
++ * and hidden BPF_PUSH64/BPF_POP64 opcodes to spill to the stack.
++ */
++void xdp_metadata_export_to_skb(const struct bpf_prog *prog, struct bpf_patch *patch)
++{
++	u32 func_id;
++
++	/* The code below generates the following:
++	 *
++	 * int bpf_xdp_metadata_export_to_skb(struct xdp_md *ctx)
++	 * {
++	 *	struct xdp_skb_metadata *meta = ctx->data_meta - sizeof(*meta);
++	 *	int ret;
++	 *
++	 *	if (ctx->flags & XDP_FLAGS_HAS_SKB_METADATA)
++	 *		return -1;
++	 *
++	 *	if (meta < ctx->data_hard_start + sizeof(struct xdp_frame))
++	 *		return -1;
++	 *
++	 *	meta->rx_timestamp = bpf_xdp_metadata_rx_timestamp(ctx);
++	 *	ctx->flags |= BPF_F_XDP_HAS_METADATA;
++	 *
++	 *	return 0;
++	 * }
++	 */
++
++	bpf_patch_append(patch,
++		BPF_MOV64_IMM(BPF_REG_0, -1),
++
++		/* r2 = ((struct xdp_buff *)r1)->flags; */
++		BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct xdp_buff, flags),
++			    BPF_REG_2, BPF_REG_1,
++			    offsetof(struct xdp_buff, flags)),
++
++		/* r2 &= XDP_FLAGS_HAS_SKB_METADATA; */
++		BPF_ALU64_IMM(BPF_AND, BPF_REG_2, XDP_FLAGS_HAS_SKB_METADATA),
++
++		/* if (xdp_buff->flags & XDP_FLAGS_HAS_SKB_METADATA) return -1; */
++		BPF_JMP_IMM(BPF_JNE, BPF_REG_2, 0, S16_MAX),
++
++		/* r2 = ((struct xdp_buff *)r1)->data_meta; */
++		BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1,
++			    offsetof(struct xdp_buff, data_meta)),
++		/* r2 -= sizeof(struct xdp_skb_metadata); */
++		BPF_ALU64_IMM(BPF_SUB, BPF_REG_2,
++			      sizeof(struct xdp_skb_metadata)),
++		/* r3 = ((struct xdp_buff *)r1)->data_hard_start; */
++		BPF_LDX_MEM(BPF_DW, BPF_REG_3, BPF_REG_1,
++			    offsetof(struct xdp_buff, data_hard_start)),
++		/* r3 += sizeof(struct xdp_frame) */
++		BPF_ALU64_IMM(BPF_ADD, BPF_REG_3,
++			      sizeof(struct xdp_frame)),
++		/* if (data_meta-sizeof(struct xdp_skb_metadata) <
++		 *     data_hard_start+sizeof(struct xdp_frame)) return -1;
++		 */
++		BPF_JMP_REG(BPF_JLT, BPF_REG_2, BPF_REG_3, S16_MAX),
++
++		/* r2 = ((struct xdp_buff *)r1)->flags; */
++		BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct xdp_buff, flags),
++			    BPF_REG_2, BPF_REG_1,
++			    offsetof(struct xdp_buff, flags)),
++
++		/* r2 |= XDP_FLAGS_HAS_SKB_METADATA; */
++		BPF_ALU64_IMM(BPF_OR, BPF_REG_2, XDP_FLAGS_HAS_SKB_METADATA),
++
++		/* ((struct xdp_buff *)r1)->flags = r2; */
++		BPF_STX_MEM(BPF_FIELD_SIZEOF(struct xdp_buff, flags),
++			    BPF_REG_1, BPF_REG_2,
++			    offsetof(struct xdp_buff, flags)),
++
++		/* push r1 */
++		BPF_PUSH64(BPF_REG_1),
++	);
++
++	/*	r0 = bpf_xdp_metadata_rx_timestamp(ctx); */
++	func_id = xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_TIMESTAMP);
++	prog->aux->xdp_kfunc_ndo->ndo_unroll_kfunc(prog, func_id, patch);
++
++	bpf_patch_append(patch,
++		/* pop r1 */
++		BPF_POP64(BPF_REG_1),
++
++		/* r2 = ((struct xdp_buff *)r1)->data_meta; */
++		BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1,
++			    offsetof(struct xdp_buff, data_meta)),
++		/* r2 -= sizeof(struct xdp_skb_metadata); */
++		BPF_ALU64_IMM(BPF_SUB, BPF_REG_2,
++			      sizeof(struct xdp_skb_metadata)),
++
++		/* *((struct xdp_skb_metadata *)r2)->rx_timestamp = r0; */
++		BPF_STX_MEM(BPF_DW, BPF_REG_2, BPF_REG_0,
++			    offsetof(struct xdp_skb_metadata, rx_timestamp)),
++
++		/* return 0; */
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++	);
++
++	bpf_patch_resolve_jmp(patch);
++}
++EXPORT_SYMBOL(xdp_metadata_export_to_skb);
++
+ static int __init xdp_metadata_init(void)
+ {
+ 	return register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &xdp_metadata_kfunc_set);
+ }
+ late_initcall(xdp_metadata_init);
++#else
++struct btf_id_set8 xdp_metadata_kfunc_ids = {};
++EXPORT_SYMBOL(xdp_metadata_kfunc_ids);
++void xdp_metadata_export_to_skb(const struct bpf_prog *prog, struct bpf_patch *patch)
++{
++}
++EXPORT_SYMBOL(xdp_metadata_export_to_skb);
+ #endif
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index b444b1118c4f..71e3bc7ad839 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -6116,6 +6116,12 @@ enum xdp_action {
+ 	XDP_REDIRECT,
+ };
+ 
++/* Subset of XDP metadata exported to skb context.
++ */
++struct xdp_skb_metadata {
++	__u64 rx_timestamp;
++};
++
+ /* user accessible metadata for XDP packet hook
+  * new fields must be added to the end of this structure
+  */
+@@ -6128,6 +6134,7 @@ struct xdp_md {
+ 	__u32 rx_queue_index;  /* rxq->queue_index  */
+ 
+ 	__u32 egress_ifindex;  /* txq->dev->ifindex */
++	__bpf_md_ptr(struct xdp_skb_metadata *, skb_metadata);
+ };
+ 
+ /* DEVMAP map-value layout
 -- 
 2.38.1.431.g37b22c650d-goog
 
