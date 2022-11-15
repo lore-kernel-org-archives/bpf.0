@@ -2,90 +2,227 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1345C4332F
-	for <bpf@archiver.kernel.org>; Tue, 15 Nov 2022 09:59:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC039C4332F
+	for <bpf@archiver.kernel.org>; Tue, 15 Nov 2022 10:03:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232338AbiKOJ7R (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Nov 2022 04:59:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50362 "EHLO
+        id S229935AbiKOKDR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Nov 2022 05:03:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232705AbiKOJ7R (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 15 Nov 2022 04:59:17 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192D7DF4E;
-        Tue, 15 Nov 2022 01:59:16 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id m7-20020a05600c090700b003cf8a105d9eso9828306wmp.5;
-        Tue, 15 Nov 2022 01:59:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=61NlKiTNTDTVesE8Rv6V0GdCCK+sgb98OdfqledH+Uw=;
-        b=qX4VJxyLwawd96elL++aETjrkSldaVvegyD1tQNdcvGcWe+3N4p+PJC+8gfQC0uHXT
-         cC8ZU5XEUWLQbx0CUwJ/A/lHTVr77FRihNMlg/LtpOPVqc8/e24U9vLgoSHarSxVAadX
-         uDphyW+r4mcr8D7fmWmiVYO05JlkBl4GJ+tryzGRVwanNW/1NIKgnqwOAuQSJKZp3A4B
-         /5DyBENYhaa9qQb4xCma/FBa+HFs30RMNwI598N1p9pWlCzkMtNk7CikNInXmL+uGd34
-         233AgBJesN2GcRSKpRAp+m9+ulhuZ0eFAkuytSjYnGXq/ukzdz6j9qYPCkFDtxMlUiCs
-         dYog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=61NlKiTNTDTVesE8Rv6V0GdCCK+sgb98OdfqledH+Uw=;
-        b=dwL+7ct/v7SglQBw056wjaKqcOsebrYLoNvtF9KaHUxlfuyIBMLRYyqOs7xKDtS7r4
-         uv4hiK9ffSjvK8ZBu89Vqe2u//D9iIkAgbEXs4exv73AXanjkkXgFrDzu4ynK8+hhEvf
-         q/sFSf8x9zfb9tJF2Fm7M2M/BzT7Yqdm0d8HCgkTDL69hwn8UzYnIGZRsyagfyQ4oVX/
-         qhz3cADnxUdfCIGb/1c1/C1o3yOZMj243o+K3TH9KxgIAjDn9hxjvZrQgsWrzVMvgo3o
-         QPLBdUQl7UQNjDfKBLknjPsuvOi+5LA3QQN250YHGC4HKDrU1AovFL6yIFqfXTITxJCu
-         Dyzg==
-X-Gm-Message-State: ANoB5pmWb110ny7ZNu2aGQ369OBcj7EC7KE5pN+VIXAy+AyIiofD4RSG
-        Z7r9M6gqsvvWmCeRUD84nTWiedqclrXHhA==
-X-Google-Smtp-Source: AA0mqf56Qz3ENxFWWlCFaXoZ07IcXWek/ED1sU8Wdv2BApLayvzB3U3+T+ckj6RgoW/y9tyCgwb/wQ==
-X-Received: by 2002:a05:600c:688b:b0:3cf:9efc:a9b7 with SMTP id fn11-20020a05600c688b00b003cf9efca9b7mr883623wmb.10.1668506354121;
-        Tue, 15 Nov 2022 01:59:14 -0800 (PST)
-Received: from imac.fritz.box ([2a02:8010:60a0:0:c14:eac2:879e:46a4])
-        by smtp.gmail.com with ESMTPSA id e24-20020a5d5958000000b002356c051b9csm11727492wri.66.2022.11.15.01.59.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 01:59:13 -0800 (PST)
-From:   Donald Hunter <donald.hunter@gmail.com>
-To:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Donald Hunter <donald.hunter@gmail.com>
-Subject: [PATCH bpf-next v1] docs/bpf: Fix sample code in MAP_TYPE_ARRAY docs
-Date:   Tue, 15 Nov 2022 09:59:10 +0000
-Message-Id: <20221115095910.86407-1-donald.hunter@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S232761AbiKOKDP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 15 Nov 2022 05:03:15 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58AC424081;
+        Tue, 15 Nov 2022 02:03:13 -0800 (PST)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NBM8r5nBwzqSRb;
+        Tue, 15 Nov 2022 17:59:24 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.70) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 15 Nov 2022 18:03:11 +0800
+From:   Wang Yufen <wangyufen@huawei.com>
+To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <shuah@kernel.org>, <andrii@kernel.org>,
+        <mykolal@fb.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <martin.lau@linux.dev>, Wang Yufen <wangyufen@huawei.com>,
+        =?UTF-8?q?Daniel=20M=C3=BCller?= <deso@posteo.net>
+Subject: [PATCH v2 1/2] selftests/net: fix missing xdp_dummy
+Date:   Tue, 15 Nov 2022 18:23:19 +0800
+Message-ID: <1668507800-45450-2-git-send-email-wangyufen@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1668507800-45450-1-git-send-email-wangyufen@huawei.com>
+References: <1668507800-45450-1-git-send-email-wangyufen@huawei.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.175.112.70]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Remove mistaken & from code example in MAP_TYPE_ARRAY docs
+After commit afef88e65554 ("selftests/bpf: Store BPF object files with
+.bpf.o extension"), we should use xdp_dummy.bpf.o instade of xdp_dummy.o.
 
-Fixes: 1cfa97b30c5a ("bpf, docs: Document BPF_MAP_TYPE_ARRAY")
-Signed-off-by: Donald Hunter <donald.hunter@gmail.com>
+In addition, use the BPF_FILE variable to save the BPF object file name,
+which can be better identified and modified.
+
+Fixes: afef88e65554 ("selftests/bpf: Store BPF object files with .bpf.o extension")
+Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+Cc: Daniel Müller <deso@posteo.net>
 ---
- Documentation/bpf/map_array.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/net/udpgro.sh         | 6 ++++--
+ tools/testing/selftests/net/udpgro_bench.sh   | 6 ++++--
+ tools/testing/selftests/net/udpgro_frglist.sh | 6 ++++--
+ tools/testing/selftests/net/udpgro_fwd.sh     | 3 ++-
+ tools/testing/selftests/net/veth.sh           | 9 +++++----
+ 5 files changed, 19 insertions(+), 11 deletions(-)
 
-diff --git a/Documentation/bpf/map_array.rst b/Documentation/bpf/map_array.rst
-index b2cceb6c696b..97bb80333254 100644
---- a/Documentation/bpf/map_array.rst
-+++ b/Documentation/bpf/map_array.rst
-@@ -119,7 +119,7 @@ This example BPF program shows how to access an array element.
-             index = ip.protocol;
-             value = bpf_map_lookup_elem(&my_map, &index);
-             if (value)
--                    __sync_fetch_and_add(&value, skb->len);
-+                    __sync_fetch_and_add(value, skb->len);
+diff --git a/tools/testing/selftests/net/udpgro.sh b/tools/testing/selftests/net/udpgro.sh
+index 6a443ca..a66d62e 100755
+--- a/tools/testing/selftests/net/udpgro.sh
++++ b/tools/testing/selftests/net/udpgro.sh
+@@ -5,6 +5,8 @@
  
-             return 0;
-     }
+ readonly PEER_NS="ns-peer-$(mktemp -u XXXXXX)"
+ 
++BPF_FILE="../bpf/xdp_dummy.bpf.o"
++
+ # set global exit status, but never reset nonzero one.
+ check_err()
+ {
+@@ -34,7 +36,7 @@ cfg_veth() {
+ 	ip -netns "${PEER_NS}" addr add dev veth1 192.168.1.1/24
+ 	ip -netns "${PEER_NS}" addr add dev veth1 2001:db8::1/64 nodad
+ 	ip -netns "${PEER_NS}" link set dev veth1 up
+-	ip -n "${PEER_NS}" link set veth1 xdp object ../bpf/xdp_dummy.o section xdp
++	ip -n "${PEER_NS}" link set veth1 xdp object ${BPF_FILE} section xdp
+ }
+ 
+ run_one() {
+@@ -195,7 +197,7 @@ run_all() {
+ 	return $ret
+ }
+ 
+-if [ ! -f ../bpf/xdp_dummy.o ]; then
++if [ ! -f ${BPF_FILE} ]; then
+ 	echo "Missing xdp_dummy helper. Build bpf selftest first"
+ 	exit -1
+ fi
+diff --git a/tools/testing/selftests/net/udpgro_bench.sh b/tools/testing/selftests/net/udpgro_bench.sh
+index 8a1109a..09c4934 100755
+--- a/tools/testing/selftests/net/udpgro_bench.sh
++++ b/tools/testing/selftests/net/udpgro_bench.sh
+@@ -5,6 +5,8 @@
+ 
+ readonly PEER_NS="ns-peer-$(mktemp -u XXXXXX)"
+ 
++BPF_FILE="../bpf/xdp_dummy.bpf.o"
++
+ cleanup() {
+ 	local -r jobs="$(jobs -p)"
+ 	local -r ns="$(ip netns list|grep $PEER_NS)"
+@@ -34,7 +36,7 @@ run_one() {
+ 	ip -netns "${PEER_NS}" addr add dev veth1 2001:db8::1/64 nodad
+ 	ip -netns "${PEER_NS}" link set dev veth1 up
+ 
+-	ip -n "${PEER_NS}" link set veth1 xdp object ../bpf/xdp_dummy.o section xdp
++	ip -n "${PEER_NS}" link set veth1 xdp object ${BPF_FILE} section xdp
+ 	ip netns exec "${PEER_NS}" ./udpgso_bench_rx ${rx_args} -r &
+ 	ip netns exec "${PEER_NS}" ./udpgso_bench_rx -t ${rx_args} -r &
+ 
+@@ -80,7 +82,7 @@ run_all() {
+ 	run_udp "${ipv6_args}"
+ }
+ 
+-if [ ! -f ../bpf/xdp_dummy.o ]; then
++if [ ! -f ${BPF_FILE} ]; then
+ 	echo "Missing xdp_dummy helper. Build bpf selftest first"
+ 	exit -1
+ fi
+diff --git a/tools/testing/selftests/net/udpgro_frglist.sh b/tools/testing/selftests/net/udpgro_frglist.sh
+index 7fe85ba..7f94175 100755
+--- a/tools/testing/selftests/net/udpgro_frglist.sh
++++ b/tools/testing/selftests/net/udpgro_frglist.sh
+@@ -5,6 +5,8 @@
+ 
+ readonly PEER_NS="ns-peer-$(mktemp -u XXXXXX)"
+ 
++BPF_FILE="../bpf/xdp_dummy.bpf.o"
++
+ cleanup() {
+ 	local -r jobs="$(jobs -p)"
+ 	local -r ns="$(ip netns list|grep $PEER_NS)"
+@@ -36,7 +38,7 @@ run_one() {
+ 	ip netns exec "${PEER_NS}" ethtool -K veth1 rx-gro-list on
+ 
+ 
+-	ip -n "${PEER_NS}" link set veth1 xdp object ../bpf/xdp_dummy.o section xdp
++	ip -n "${PEER_NS}" link set veth1 xdp object ${BPF_FILE} section xdp
+ 	tc -n "${PEER_NS}" qdisc add dev veth1 clsact
+ 	tc -n "${PEER_NS}" filter add dev veth1 ingress prio 4 protocol ipv6 bpf object-file ../bpf/nat6to4.o section schedcls/ingress6/nat_6  direct-action
+ 	tc -n "${PEER_NS}" filter add dev veth1 egress prio 4 protocol ip bpf object-file ../bpf/nat6to4.o section schedcls/egress4/snat4 direct-action
+@@ -81,7 +83,7 @@ run_all() {
+ 	run_udp "${ipv6_args}"
+ }
+ 
+-if [ ! -f ../bpf/xdp_dummy.o ]; then
++if [ ! -f ${BPF_FILE} ]; then
+ 	echo "Missing xdp_dummy helper. Build bpf selftest first"
+ 	exit -1
+ fi
+diff --git a/tools/testing/selftests/net/udpgro_fwd.sh b/tools/testing/selftests/net/udpgro_fwd.sh
+index 1bcd82e..c079565 100755
+--- a/tools/testing/selftests/net/udpgro_fwd.sh
++++ b/tools/testing/selftests/net/udpgro_fwd.sh
+@@ -1,6 +1,7 @@
+ #!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0
+ 
++BPF_FILE="../bpf/xdp_dummy.bpf.o"
+ readonly BASE="ns-$(mktemp -u XXXXXX)"
+ readonly SRC=2
+ readonly DST=1
+@@ -46,7 +47,7 @@ create_ns() {
+ 		ip -n $BASE$ns addr add dev veth$ns $BM_NET_V4$ns/24
+ 		ip -n $BASE$ns addr add dev veth$ns $BM_NET_V6$ns/64 nodad
+ 	done
+-	ip -n $NS_DST link set veth$DST xdp object ../bpf/xdp_dummy.o section xdp 2>/dev/null
++	ip -n $NS_DST link set veth$DST xdp object ${BPF_FILE} section xdp 2>/dev/null
+ }
+ 
+ create_vxlan_endpoint() {
+diff --git a/tools/testing/selftests/net/veth.sh b/tools/testing/selftests/net/veth.sh
+index 430895d..c9732f7 100755
+--- a/tools/testing/selftests/net/veth.sh
++++ b/tools/testing/selftests/net/veth.sh
+@@ -1,6 +1,7 @@
+ #!/bin/sh
+ # SPDX-License-Identifier: GPL-2.0
+ 
++BPF_FILE="../bpf/xdp_dummy.bpf.o"
+ readonly STATS="$(mktemp -p /tmp ns-XXXXXX)"
+ readonly BASE=`basename $STATS`
+ readonly SRC=2
+@@ -216,7 +217,7 @@ while getopts "hs:" option; do
+ 	esac
+ done
+ 
+-if [ ! -f ../bpf/xdp_dummy.o ]; then
++if [ ! -f ${BPF_FILE} ]; then
+ 	echo "Missing xdp_dummy helper. Build bpf selftest first"
+ 	exit 1
+ fi
+@@ -288,14 +289,14 @@ if [ $CPUS -gt 1 ]; then
+ 	ip netns exec $NS_DST ethtool -L veth$DST rx 1 tx 2 2>/dev/null
+ 	ip netns exec $NS_SRC ethtool -L veth$SRC rx 1 tx 2 2>/dev/null
+ 	printf "%-60s" "bad setting: XDP with RX nr less than TX"
+-	ip -n $NS_DST link set dev veth$DST xdp object ../bpf/xdp_dummy.o \
++	ip -n $NS_DST link set dev veth$DST xdp object ${BPF_FILE} \
+ 		section xdp 2>/dev/null &&\
+ 		echo "fail - set operation successful ?!?" || echo " ok "
+ 
+ 	# the following tests will run with multiple channels active
+ 	ip netns exec $NS_SRC ethtool -L veth$SRC rx 2
+ 	ip netns exec $NS_DST ethtool -L veth$DST rx 2
+-	ip -n $NS_DST link set dev veth$DST xdp object ../bpf/xdp_dummy.o \
++	ip -n $NS_DST link set dev veth$DST xdp object ${BPF_FILE} \
+ 		section xdp 2>/dev/null
+ 	printf "%-60s" "bad setting: reducing RX nr below peer TX with XDP set"
+ 	ip netns exec $NS_DST ethtool -L veth$DST rx 1 2>/dev/null &&\
+@@ -311,7 +312,7 @@ if [ $CPUS -gt 2 ]; then
+ 	chk_channels "setting invalid channels nr" $DST 2 2
+ fi
+ 
+-ip -n $NS_DST link set dev veth$DST xdp object ../bpf/xdp_dummy.o section xdp 2>/dev/null
++ip -n $NS_DST link set dev veth$DST xdp object ${BPF_FILE} section xdp 2>/dev/null
+ chk_gro_flag "with xdp attached - gro flag" $DST on
+ chk_gro_flag "        - peer gro flag" $SRC off
+ chk_tso_flag "        - tso flag" $SRC off
 -- 
-2.35.1
+1.8.3.1
 
