@@ -2,683 +2,198 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23FD0C433FE
-	for <bpf@archiver.kernel.org>; Tue, 15 Nov 2022 03:04:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43FE1C4332F
+	for <bpf@archiver.kernel.org>; Tue, 15 Nov 2022 03:07:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237874AbiKODEM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Nov 2022 22:04:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46708 "EHLO
+        id S232430AbiKODHv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Nov 2022 22:07:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237702AbiKODDW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Nov 2022 22:03:22 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5B615731
-        for <bpf@vger.kernel.org>; Mon, 14 Nov 2022 19:02:32 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id bq9-20020a056a000e0900b00571802a2eaaso6460326pfb.22
-        for <bpf@vger.kernel.org>; Mon, 14 Nov 2022 19:02:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=G+qAGOGJeiSRN/c9VTgDhqmHnVCRAYQw0nUJ4nC0eLc=;
-        b=QYILD6UjxDDYBtywFRA4u5O6cZXK4U4oNiop/Bu2MOj3FUfblryFcTEXh4hK4azjEO
-         lkLGEgkUtaoW66d5xcDme7F1IpZ1Y5L1/W/D0nYrCQYYbYZT3KQQAwZlPwUNUOWFh/tl
-         54aOj2R34n5JHBcwnN3sQ0CGAGRg1ZK2jPPIOkKQt82XmtfY9r6W9EKf/H3DhnJG5aE/
-         yAAqP9mhjfvRKbpdhrJ/XbMuhTFNHvBiWSeH88t/LYprccU3upeT3I4CtZ3yzf5fQ4vv
-         cpWYuPCyTmrNvEqitWGXD8ikk5pzjIxuLrM3TpDR+qZ9KVn0aj+QBZ6POhQQB2ZniADY
-         35uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G+qAGOGJeiSRN/c9VTgDhqmHnVCRAYQw0nUJ4nC0eLc=;
-        b=K9UhB5TW3ViY63AazpRbdV6m1fb4G62iHtW8rhMVd+jNlZimpYtGOVZs9TUSqHTGTZ
-         QqnIz536DKrt7fXN5Xj0/5ioBRnmoMbmJpFQ9TmGf45GCdF39+gJyalxSXYTJNdHdwry
-         2JxO5XpH2JqgLTSnUElVL1sySk0l5DHbzAt8RpFzHYIOtcJOMZE2K9IsxnBXYidIcSss
-         wV0VzdzPK7O7kOFt91hvgiUTPwNp7/p3+Oy+2ryFt6tztwS3tOTOn0PGJW9AOLt/V06K
-         gYuOcF+n0TXnHF5Cz9nceD5i4Q4crR4WZlxXkNzWzJdaZeRZrcZDwSIEGsO7n0mdm+ZA
-         iPVg==
-X-Gm-Message-State: ANoB5pmYZgx1LTQn3yFI3CZas5dVR8izazZP/lttsuNndcWJLb6i5b1d
-        GuFV9MBaFNatHl2JuzRq2FxytxHx/EBc91jYInselGaWo/PbsIqAXHES0lfmY3kgHotHnkGghMe
-        diGT0mSzi2vHqXlq6qgtLjIlp8FLLTIZnrV/Uu2ZXLMair5GsMA==
-X-Google-Smtp-Source: AA0mqf52/firdP/8HuCdLe1fFEb6+300WlxL47Uyq+gvDuZiNP2+ZuoGm/5/uFAzEib7pf+bXDH9DiM=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a17:90a:9503:b0:20a:eab5:cf39 with SMTP id
- t3-20020a17090a950300b0020aeab5cf39mr74647pjo.1.1668481351496; Mon, 14 Nov
- 2022 19:02:31 -0800 (PST)
-Date:   Mon, 14 Nov 2022 19:02:10 -0800
-In-Reply-To: <20221115030210.3159213-1-sdf@google.com>
-Mime-Version: 1.0
-References: <20221115030210.3159213-1-sdf@google.com>
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221115030210.3159213-12-sdf@google.com>
-Subject: [PATCH bpf-next 11/11] selftests/bpf: Simple program to dump XDP RX metadata
-From:   Stanislav Fomichev <sdf@google.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S232503AbiKODHL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Nov 2022 22:07:11 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE70D72;
+        Mon, 14 Nov 2022 19:07:06 -0800 (PST)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NB9wj5v66zqSHH;
+        Tue, 15 Nov 2022 11:03:17 +0800 (CST)
+Received: from [10.174.179.191] (10.174.179.191) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 15 Nov 2022 11:07:03 +0800
+Message-ID: <c6c98d38-17bc-c0d1-a83b-be666bb24f74@huawei.com>
+Date:   Tue, 15 Nov 2022 11:07:03 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH bpf] selftests/bpf: fix memory leak of lsm_cgroup
+To:     <sdf@google.com>
+CC:     <linux-security-module@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <martin.lau@linux.dev>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <andrii@kernel.org>, <paul@paul-moore.com>
+References: <1668401942-6309-1-git-send-email-wangyufen@huawei.com>
+ <Y3J8HyIfhm7rgpvI@google.com>
+From:   wangyufen <wangyufen@huawei.com>
+In-Reply-To: <Y3J8HyIfhm7rgpvI@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.191]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To be used for verification of driver implementations:
 
-$ xdp_hw_metadata <ifname>
+在 2022/11/15 1:34, sdf@google.com 写道:
+> On 11/14, Wang Yufen wrote:
+>> kmemleak reports this issue:
+>
+>> unreferenced object 0xffff88810b7835c0 (size 32):
+>>    comm "test_progs", pid 270, jiffies 4294969007 (age 1621.315s)
+>>    hex dump (first 32 bytes):
+>>      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+>>      03 00 00 00 03 00 00 00 0f 00 00 00 00 00 00 00 ................
+>>    backtrace:
+>>      [<00000000376cdeab>] kmalloc_trace+0x27/0x110
+>>      [<000000003bcdb3b6>] selinux_sk_alloc_security+0x66/0x110
+>>      [<000000003959008f>] security_sk_alloc+0x47/0x80
+>>      [<00000000e7bc6668>] sk_prot_alloc+0xbd/0x1a0
+>>      [<0000000002d6343a>] sk_alloc+0x3b/0x940
+>>      [<000000009812a46d>] unix_create1+0x8f/0x3d0
+>>      [<000000005ed0976b>] unix_create+0xa1/0x150
+>>      [<0000000086a1d27f>] __sock_create+0x233/0x4a0
+>>      [<00000000cffe3a73>] __sys_socket_create.part.0+0xaa/0x110
+>>      [<0000000007c63f20>] __sys_socket+0x49/0xf0
+>>      [<00000000b08753c8>] __x64_sys_socket+0x42/0x50
+>>      [<00000000b56e26b3>] do_syscall_64+0x3b/0x90
+>>      [<000000009b4871b8>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+>> The issue occurs in the following scenarios:
+>
+>> unix_create1()
+>>    sk_alloc()
+>>      sk_prot_alloc()
+>>        security_sk_alloc()
+>>          call_int_hook()
+>>            hlist_for_each_entry()
+>>              entry1->hook.sk_alloc_security
+>>              <-- selinux_sk_alloc_security() succeeded,
+>>              <-- sk->security alloced here.
+>>              entry2->hook.sk_alloc_security
+>>              <-- bpf_lsm_sk_alloc_security() failed
+>>        goto out_free;
+>>          ...    <-- the sk->security not freed, memleak
+>
+>> The core problem is that the LSM is not yet fully stacked (work is
+>> actively going on in this space) which means that some LSM hooks do
+>> not support multiple LSMs at the same time. To fix, skip the
+>> "EPERM" test when it runs in the environments that already have
+>> non-bpf lsms installed
+>
+>> Fixes: dca85aac8895 ("selftests/bpf: lsm_cgroup functional test")
+>> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+>> Cc: Stanislav Fomichev <sdf@google.com>
+>> ---
+>>   tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c | 19 
+>> +++++++++++++++----
+>>   tools/testing/selftests/bpf/progs/lsm_cgroup.c      |  8 ++++++++
+>>   2 files changed, 23 insertions(+), 4 deletions(-)
+>
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c 
+>> b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
+>> index 1102e4f..a927ade 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
+>> @@ -173,10 +173,14 @@ static void test_lsm_cgroup_functional(void)
+>>       ASSERT_EQ(query_prog_cnt(cgroup_fd, NULL), 4, "total prog count");
+>>       ASSERT_EQ(query_prog_cnt(cgroup_fd2, NULL), 1, "total prog 
+>> count");
+>
+>> -    /* AF_UNIX is prohibited. */
+>> -
+>>       fd = socket(AF_UNIX, SOCK_STREAM, 0);
+>> -    ASSERT_LT(fd, 0, "socket(AF_UNIX)");
+>> +    if (skel->kconfig->CONFIG_SECURITY_APPARMOR
+>> +        || skel->kconfig->CONFIG_SECURITY_SELINUX
+>> +        || skel->kconfig->CONFIG_SECURITY_SMACK)
+>
+> [..]
+>
+>> +        ASSERT_GE(fd, 0, "socket(AF_UNIX)");
+>
+> nit: maybe skip this completely instead of having ASSERT_GE+close?
+>
+>     if (!(skel->kconfig->CONFIG_SECURITY_APPARMOR || _SELINUX || _SMACK)
+>         /* AF_UNIX is prohibited. */
+>         ASSERT_LT(fd, 0, "socket(AF_UNIX)");
 
-On the other machine:
 
-$ echo -n xdp | nc -u -q1 <target> 9091 # for AF_XDP
-$ echo -n skb | nc -u -q1 <target> 9092 # for skb
+OK, thanks! Will change in v2
 
-Sample output:
-
-  # xdp
-  xsk_ring_cons__peek: 1
-  0x19f9090: rx_desc[0]->addr=100000000008000 addr=8100 comp_addr=8000
-  rx_timestamp_supported: 1
-  rx_timestamp: 1667850075063948829
-  0x19f9090: complete idx=8 addr=8000
-
-  # skb
-  found skb hwtstamp = 1668314052.854274681
-
-Decoding:
-  # xdp
-  rx_timestamp=1667850075.063948829
-
-  $ date -d @1667850075
-  Mon Nov  7 11:41:15 AM PST 2022
-  $ date
-  Mon Nov  7 11:42:05 AM PST 2022
-
-  # skb
-  $ date -d @1668314052
-  Sat Nov 12 08:34:12 PM PST 2022
-  $ date
-  Sat Nov 12 08:37:06 PM PST 2022
-
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
----
- tools/testing/selftests/bpf/.gitignore        |   1 +
- tools/testing/selftests/bpf/Makefile          |   6 +-
- .../selftests/bpf/progs/xdp_hw_metadata.c     |  99 +++++
- tools/testing/selftests/bpf/xdp_hw_metadata.c | 404 ++++++++++++++++++
- tools/testing/selftests/bpf/xdp_hw_metadata.h |   6 +
- 5 files changed, 515 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
- create mode 100644 tools/testing/selftests/bpf/xdp_hw_metadata.c
- create mode 100644 tools/testing/selftests/bpf/xdp_hw_metadata.h
-
-diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-index 07d2d0a8c5cb..01e3baeefd4f 100644
---- a/tools/testing/selftests/bpf/.gitignore
-+++ b/tools/testing/selftests/bpf/.gitignore
-@@ -46,3 +46,4 @@ test_cpp
- xskxceiver
- xdp_redirect_multi
- xdp_synproxy
-+xdp_hw_metadata
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index b645cf5a5021..74d6ed307157 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -83,7 +83,7 @@ TEST_PROGS_EXTENDED := with_addr.sh \
- TEST_GEN_PROGS_EXTENDED = test_sock_addr test_skb_cgroup_id_user \
- 	flow_dissector_load test_flow_dissector test_tcp_check_syncookie_user \
- 	test_lirc_mode2_user xdping test_cpp runqslower bench bpf_testmod.ko \
--	xskxceiver xdp_redirect_multi xdp_synproxy veristat
-+	xskxceiver xdp_redirect_multi xdp_synproxy veristat xdp_hw_metadata
- 
- TEST_CUSTOM_PROGS = $(OUTPUT)/urandom_read $(OUTPUT)/sign-file
- TEST_GEN_FILES += liburandom_read.so
-@@ -241,6 +241,9 @@ $(OUTPUT)/test_maps: $(TESTING_HELPERS)
- $(OUTPUT)/test_verifier: $(TESTING_HELPERS) $(CAP_HELPERS)
- $(OUTPUT)/xsk.o: $(BPFOBJ)
- $(OUTPUT)/xskxceiver: $(OUTPUT)/xsk.o
-+$(OUTPUT)/xdp_hw_metadata: $(OUTPUT)/xsk.o $(OUTPUT)/xdp_hw_metadata.skel.h
-+$(OUTPUT)/xdp_hw_metadata: $(OUTPUT)/network_helpers.o
-+$(OUTPUT)/xdp_hw_metadata: LDFLAGS += -static
- 
- BPFTOOL ?= $(DEFAULT_BPFTOOL)
- $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)    \
-@@ -379,6 +382,7 @@ linked_maps.skel.h-deps := linked_maps1.bpf.o linked_maps2.bpf.o
- test_subskeleton.skel.h-deps := test_subskeleton_lib2.bpf.o test_subskeleton_lib.bpf.o test_subskeleton.bpf.o
- test_subskeleton_lib.skel.h-deps := test_subskeleton_lib2.bpf.o test_subskeleton_lib.bpf.o
- test_usdt.skel.h-deps := test_usdt.bpf.o test_usdt_multispec.bpf.o
-+xdp_hw_metadata.skel.h-deps := xdp_hw_metadata.bpf.o
- 
- LINKED_BPF_SRCS := $(patsubst %.bpf.o,%.c,$(foreach skel,$(LINKED_SKELS),$($(skel)-deps)))
- 
-diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-new file mode 100644
-index 000000000000..549ec3b1f3a0
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-@@ -0,0 +1,99 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/bpf.h>
-+#include <linux/if_ether.h>
-+#include <linux/ip.h>
-+#include <linux/ipv6.h>
-+#include <linux/in.h>
-+#include <linux/udp.h>
-+
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_endian.h>
-+
-+#include "xdp_hw_metadata.h"
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_XSKMAP);
-+	__uint(max_entries, 256);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} xsk SEC(".maps");
-+
-+extern int bpf_xdp_metadata_export_to_skb(const struct xdp_md *ctx) __ksym;
-+extern int bpf_xdp_metadata_rx_timestamp_supported(const struct xdp_md *ctx) __ksym;
-+extern const __u64 bpf_xdp_metadata_rx_timestamp(const struct xdp_md *ctx) __ksym;
-+
-+SEC("xdp")
-+int rx(struct xdp_md *ctx)
-+{
-+	void *data, *data_meta, *data_end;
-+	struct ipv6hdr *ip6h = NULL;
-+	struct ethhdr *eth = NULL;
-+	struct udphdr *udp = NULL;
-+	struct xsk_metadata *meta;
-+	struct iphdr *iph = NULL;
-+	int ret;
-+
-+	data = (void *)(long)ctx->data;
-+	data_end = (void *)(long)ctx->data_end;
-+	eth = data;
-+	if (eth + 1 < data_end) {
-+		if (eth->h_proto == bpf_htons(ETH_P_IP)) {
-+			iph = (void *)(eth + 1);
-+			if (iph + 1 < data_end && iph->protocol == IPPROTO_UDP)
-+				udp = (void *)(iph + 1);
-+		}
-+		if (eth->h_proto == bpf_htons(ETH_P_IPV6)) {
-+			ip6h = (void *)(eth + 1);
-+			if (ip6h + 1 < data_end && ip6h->nexthdr == IPPROTO_UDP)
-+				udp = (void *)(ip6h + 1);
-+		}
-+		if (udp && udp + 1 > data_end)
-+			udp = NULL;
-+	}
-+
-+	if (!udp)
-+		return XDP_PASS;
-+
-+	if (udp->dest == bpf_htons(9092)) {
-+		bpf_printk("forwarding UDP:9092 to socket listener");
-+
-+		if (!bpf_xdp_metadata_export_to_skb(ctx)) {
-+			bpf_printk("bpf_xdp_metadata_export_to_skb failed");
-+			return XDP_DROP;
-+		}
-+
-+		return XDP_PASS;
-+	}
-+
-+	if (udp->dest != bpf_htons(9091))
-+		return XDP_PASS;
-+
-+	bpf_printk("forwarding UDP:9091 to AF_XDP");
-+
-+	ret = bpf_xdp_adjust_meta(ctx, -(int)sizeof(struct xsk_metadata));
-+	if (ret != 0) {
-+		bpf_printk("bpf_xdp_adjust_meta returned %d", ret);
-+		return XDP_PASS;
-+	}
-+
-+	data = (void *)(long)ctx->data;
-+	data_meta = (void *)(long)ctx->data_meta;
-+	meta = data_meta;
-+
-+	if (meta + 1 > data) {
-+		bpf_printk("bpf_xdp_adjust_meta doesn't appear to work");
-+		return XDP_PASS;
-+	}
-+
-+
-+	if (bpf_xdp_metadata_rx_timestamp_supported(ctx)) {
-+		meta->rx_timestamp_supported = 1;
-+		meta->rx_timestamp = bpf_xdp_metadata_rx_timestamp(ctx);
-+		bpf_printk("populated rx_timestamp with %u", meta->rx_timestamp);
-+	}
-+
-+	return bpf_redirect_map(&xsk, ctx->rx_queue_index, XDP_PASS);
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-new file mode 100644
-index 000000000000..a043e9ef5691
---- /dev/null
-+++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-@@ -0,0 +1,404 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/* Reference program for verifying XDP metadata on real HW. Functional test
-+ * only, doesn't test the performance.
-+ *
-+ * RX:
-+ * - UDP 9091 packets are diverted into AF_XDP
-+ * - Metadata verified:
-+ *   - rx_timestamp
-+ *
-+ * TX:
-+ * - TBD
-+ */
-+
-+#include <test_progs.h>
-+#include <network_helpers.h>
-+#include "xdp_hw_metadata.skel.h"
-+#include "xsk.h"
-+
-+#include <error.h>
-+#include <linux/errqueue.h>
-+#include <linux/if_link.h>
-+#include <linux/net_tstamp.h>
-+#include <linux/udp.h>
-+#include <linux/sockios.h>
-+#include <sys/mman.h>
-+#include <net/if.h>
-+#include <poll.h>
-+
-+#include "xdp_hw_metadata.h"
-+
-+#define UMEM_NUM 16
-+#define UMEM_FRAME_SIZE XSK_UMEM__DEFAULT_FRAME_SIZE
-+#define UMEM_SIZE (UMEM_FRAME_SIZE * UMEM_NUM)
-+#define XDP_FLAGS (XDP_FLAGS_DRV_MODE | XDP_FLAGS_REPLACE)
-+
-+struct xsk {
-+	void *umem_area;
-+	struct xsk_umem *umem;
-+	struct xsk_ring_prod fill;
-+	struct xsk_ring_cons comp;
-+	struct xsk_ring_prod tx;
-+	struct xsk_ring_cons rx;
-+	struct xsk_socket *socket;
-+};
-+
-+struct xdp_hw_metadata *bpf_obj;
-+struct xsk *rx_xsk;
-+const char *ifname;
-+int ifindex;
-+int rxq;
-+
-+void test__fail(void) { /* for network_helpers.c */ }
-+
-+static int open_xsk(const char *ifname, struct xsk *xsk, __u32 queue_id)
-+{
-+	int mmap_flags = MAP_PRIVATE | MAP_ANONYMOUS | MAP_NORESERVE;
-+	const struct xsk_socket_config socket_config = {
-+		.rx_size = XSK_RING_PROD__DEFAULT_NUM_DESCS,
-+		.tx_size = XSK_RING_PROD__DEFAULT_NUM_DESCS,
-+		.libbpf_flags = XSK_LIBBPF_FLAGS__INHIBIT_PROG_LOAD,
-+		.xdp_flags = XDP_FLAGS,
-+		.bind_flags = XDP_COPY,
-+	};
-+	const struct xsk_umem_config umem_config = {
-+		.fill_size = XSK_RING_PROD__DEFAULT_NUM_DESCS,
-+		.comp_size = XSK_RING_CONS__DEFAULT_NUM_DESCS,
-+		.frame_size = XSK_UMEM__DEFAULT_FRAME_SIZE,
-+		.flags = XDP_UMEM_UNALIGNED_CHUNK_FLAG,
-+	};
-+	__u32 idx;
-+	u64 addr;
-+	int ret;
-+	int i;
-+
-+	xsk->umem_area = mmap(NULL, UMEM_SIZE, PROT_READ | PROT_WRITE, mmap_flags, -1, 0);
-+	if (xsk->umem_area == MAP_FAILED)
-+		return -ENOMEM;
-+
-+	ret = xsk_umem__create(&xsk->umem,
-+			       xsk->umem_area, UMEM_SIZE,
-+			       &xsk->fill,
-+			       &xsk->comp,
-+			       &umem_config);
-+	if (ret)
-+		return ret;
-+
-+	ret = xsk_socket__create(&xsk->socket, ifname, queue_id,
-+				 xsk->umem,
-+				 &xsk->rx,
-+				 &xsk->tx,
-+				 &socket_config);
-+	if (ret)
-+		return ret;
-+
-+	/* First half of umem is for TX. This way address matches 1-to-1
-+	 * to the completion queue index.
-+	 */
-+
-+	for (i = 0; i < UMEM_NUM / 2; i++) {
-+		addr = i * UMEM_FRAME_SIZE;
-+		printf("%p: tx_desc[%d] -> %lx\n", xsk, i, addr);
-+	}
-+
-+	/* Second half of umem is for RX. */
-+
-+	ret = xsk_ring_prod__reserve(&xsk->fill, UMEM_NUM / 2, &idx);
-+	for (i = 0; i < UMEM_NUM / 2; i++) {
-+		addr = (UMEM_NUM / 2 + i) * UMEM_FRAME_SIZE;
-+		printf("%p: rx_desc[%d] -> %lx\n", xsk, i, addr);
-+		*xsk_ring_prod__fill_addr(&xsk->fill, i) = addr;
-+	}
-+	xsk_ring_prod__submit(&xsk->fill, ret);
-+
-+	return 0;
-+}
-+
-+static void close_xsk(struct xsk *xsk)
-+{
-+	if (xsk->umem)
-+		xsk_umem__delete(xsk->umem);
-+	if (xsk->socket)
-+		xsk_socket__delete(xsk->socket);
-+	munmap(xsk->umem, UMEM_SIZE);
-+}
-+
-+static void refill_rx(struct xsk *xsk, __u64 addr)
-+{
-+	__u32 idx;
-+
-+	if (xsk_ring_prod__reserve(&xsk->fill, 1, &idx) == 1) {
-+		printf("%p: complete idx=%u addr=%llx\n", xsk, idx, addr);
-+		*xsk_ring_prod__fill_addr(&xsk->fill, idx) = addr;
-+		xsk_ring_prod__submit(&xsk->fill, 1);
-+	}
-+}
-+
-+static void verify_xdp_metadata(void *data)
-+{
-+	struct xsk_metadata *meta;
-+
-+	meta = data - sizeof(*meta);
-+
-+	printf("rx_timestamp_supported: %u\n", meta->rx_timestamp_supported);
-+	printf("rx_timestamp: %llu\n", meta->rx_timestamp);
-+}
-+
-+static void verify_skb_metadata(int fd)
-+{
-+	char cmsg_buf[1024];
-+	char packet_buf[128];
-+
-+	struct scm_timestamping *ts;
-+	struct iovec packet_iov;
-+	struct cmsghdr *cmsg;
-+	struct msghdr hdr;
-+
-+	memset(&hdr, 0, sizeof(hdr));
-+	hdr.msg_iov = &packet_iov;
-+	hdr.msg_iovlen = 1;
-+	packet_iov.iov_base = packet_buf;
-+	packet_iov.iov_len = sizeof(packet_buf);
-+
-+	hdr.msg_control = cmsg_buf;
-+	hdr.msg_controllen = sizeof(cmsg_buf);
-+
-+	if (recvmsg(fd, &hdr, 0) < 0)
-+		error(-1, errno, "recvmsg");
-+
-+	for (cmsg = CMSG_FIRSTHDR(&hdr); cmsg != NULL;
-+	     cmsg = CMSG_NXTHDR(&hdr, cmsg)) {
-+
-+		if (cmsg->cmsg_level != SOL_SOCKET)
-+			continue;
-+
-+		switch (cmsg->cmsg_type) {
-+		case SCM_TIMESTAMPING:
-+			ts = (struct scm_timestamping *)CMSG_DATA(cmsg);
-+			if (ts->ts[2].tv_sec || ts->ts[2].tv_nsec) {
-+				printf("found skb hwtstamp = %lu.%lu\n",
-+				       ts->ts[2].tv_sec, ts->ts[2].tv_nsec);
-+				return;
-+			}
-+			break;
-+		default:
-+			break;
-+		}
-+	}
-+
-+	printf("skb hwtstamp is not found!\n");
-+}
-+
-+static int verify_metadata(struct xsk *rx_xsk, int rxq, int server_fd)
-+{
-+	const struct xdp_desc *rx_desc;
-+	struct pollfd fds[rxq + 1];
-+	__u64 comp_addr;
-+	__u64 addr;
-+	__u32 idx;
-+	int ret;
-+	int i;
-+
-+	for (i = 0; i < rxq; i++) {
-+		fds[i].fd = xsk_socket__fd(rx_xsk[i].socket);
-+		fds[i].events = POLLIN;
-+		fds[i].revents = 0;
-+	}
-+
-+	fds[rxq].fd = server_fd;
-+	fds[rxq].events = POLLIN;
-+	fds[rxq].revents = 0;
-+
-+	while (true) {
-+		errno = 0;
-+		ret = poll(fds, rxq + 1, 1000);
-+		printf("poll: %d (%d)\n", ret, errno);
-+		if (ret < 0)
-+			break;
-+		if (ret == 0)
-+			continue;
-+
-+		if (fds[rxq].revents)
-+			verify_skb_metadata(server_fd);
-+
-+		for (i = 0; i < rxq; i++) {
-+			if (fds[i].revents == 0)
-+				continue;
-+
-+			struct xsk *xsk = &rx_xsk[i];
-+
-+			ret = xsk_ring_cons__peek(&xsk->rx, 1, &idx);
-+			printf("xsk_ring_cons__peek: %d\n", ret);
-+			if (ret != 1)
-+				continue;
-+
-+			rx_desc = xsk_ring_cons__rx_desc(&xsk->rx, idx);
-+			comp_addr = xsk_umem__extract_addr(rx_desc->addr);
-+			addr = xsk_umem__add_offset_to_addr(rx_desc->addr);
-+			printf("%p: rx_desc[%u]->addr=%llx addr=%llx comp_addr=%llx\n",
-+			       xsk, idx, rx_desc->addr, addr, comp_addr);
-+			verify_xdp_metadata(xsk_umem__get_data(xsk->umem_area, addr));
-+			xsk_ring_cons__release(&xsk->rx, 1);
-+			refill_rx(xsk, comp_addr);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+struct ethtool_channels {
-+	__u32	cmd;
-+	__u32	max_rx;
-+	__u32	max_tx;
-+	__u32	max_other;
-+	__u32	max_combined;
-+	__u32	rx_count;
-+	__u32	tx_count;
-+	__u32	other_count;
-+	__u32	combined_count;
-+};
-+
-+#define ETHTOOL_GCHANNELS	0x0000003c /* Get no of channels */
-+
-+static int rxq_num(const char *ifname)
-+{
-+	struct ethtool_channels ch = {
-+		.cmd = ETHTOOL_GCHANNELS,
-+	};
-+
-+	struct ifreq ifr = {
-+		.ifr_data = (void *)&ch,
-+	};
-+	strcpy(ifr.ifr_name, ifname);
-+	int fd, ret;
-+
-+	fd = socket(AF_UNIX, SOCK_DGRAM, 0);
-+	if (fd < 0)
-+		error(-1, errno, "socket");
-+
-+	ret = ioctl(fd, SIOCETHTOOL, &ifr);
-+	if (ret < 0)
-+		error(-1, errno, "socket");
-+
-+	close(fd);
-+
-+	return ch.rx_count;
-+}
-+
-+static void cleanup(void)
-+{
-+	LIBBPF_OPTS(bpf_xdp_attach_opts, opts);
-+	int ret;
-+	int i;
-+
-+	if (bpf_obj) {
-+		opts.old_prog_fd = bpf_program__fd(bpf_obj->progs.rx);
-+		if (opts.old_prog_fd >= 0) {
-+			printf("detaching bpf program....\n");
-+			ret = bpf_xdp_detach(ifindex, XDP_FLAGS, &opts);
-+			if (ret)
-+				printf("failed to detach XDP program: %d\n", ret);
-+		}
-+	}
-+
-+	for (i = 0; i < rxq; i++)
-+		close_xsk(&rx_xsk[i]);
-+
-+	if (bpf_obj)
-+		xdp_hw_metadata__destroy(bpf_obj);
-+}
-+
-+static void handle_signal(int sig)
-+{
-+	/* interrupting poll() is all we need */
-+}
-+
-+static void timestamping_enable(int fd, int val)
-+{
-+	int ret;
-+
-+	ret = setsockopt(fd, SOL_SOCKET, SO_TIMESTAMPING, &val, sizeof(val));
-+	if (ret < 0)
-+		error(-1, errno, "setsockopt(SO_TIMESTAMPING)");
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	int server_fd = -1;
-+	int ret;
-+	int i;
-+
-+	struct bpf_program *prog;
-+
-+	if (argc != 2) {
-+		fprintf(stderr, "pass device name\n");
-+		return -1;
-+	}
-+
-+	ifname = argv[1];
-+	ifindex = if_nametoindex(ifname);
-+	rxq = rxq_num(ifname);
-+
-+	printf("rxq: %d\n", rxq);
-+
-+	rx_xsk = malloc(sizeof(struct xsk) * rxq);
-+	if (!rx_xsk)
-+		error(-1, ENOMEM, "malloc");
-+
-+	for (i = 0; i < rxq; i++) {
-+		printf("open_xsk(%s, %p, %d)\n", ifname, &rx_xsk[i], i);
-+		ret = open_xsk(ifname, &rx_xsk[i], i);
-+		if (ret)
-+			error(-1, -ret, "open_xsk");
-+
-+		printf("xsk_socket__fd() -> %d\n", xsk_socket__fd(rx_xsk[i].socket));
-+	}
-+
-+	printf("open bpf program...\n");
-+	bpf_obj = xdp_hw_metadata__open();
-+	if (libbpf_get_error(bpf_obj))
-+		error(-1, libbpf_get_error(bpf_obj), "xdp_hw_metadata__open");
-+
-+	prog = bpf_object__find_program_by_name(bpf_obj->obj, "rx");
-+	bpf_program__set_ifindex(prog, ifindex);
-+	bpf_program__set_flags(prog, BPF_F_XDP_HAS_METADATA);
-+
-+	printf("load bpf program...\n");
-+	ret = xdp_hw_metadata__load(bpf_obj);
-+	if (ret)
-+		error(-1, -ret, "xdp_hw_metadata__load");
-+
-+	printf("prepare skb endpoint...\n");
-+	server_fd = start_server(AF_INET6, SOCK_DGRAM, NULL, 9092, 1000);
-+	if (server_fd < 0)
-+		error(-1, errno, "start_server");
-+	timestamping_enable(server_fd,
-+			    SOF_TIMESTAMPING_SOFTWARE |
-+			    SOF_TIMESTAMPING_RAW_HARDWARE);
-+
-+	printf("prepare xsk map...\n");
-+	for (i = 0; i < rxq; i++) {
-+		int sock_fd = xsk_socket__fd(rx_xsk[i].socket);
-+		__u32 queue_id = i;
-+
-+		printf("map[%d] = %d\n", queue_id, sock_fd);
-+		ret = bpf_map_update_elem(bpf_map__fd(bpf_obj->maps.xsk), &queue_id, &sock_fd, 0);
-+		if (ret)
-+			error(-1, -ret, "bpf_map_update_elem");
-+	}
-+
-+	printf("attach bpf program...\n");
-+	ret = bpf_xdp_attach(ifindex,
-+			     bpf_program__fd(bpf_obj->progs.rx),
-+			     XDP_FLAGS, NULL);
-+	if (ret)
-+		error(-1, -ret, "bpf_xdp_attach");
-+
-+	signal(SIGINT, handle_signal);
-+	ret = verify_metadata(rx_xsk, rxq, server_fd);
-+	close(server_fd);
-+	cleanup();
-+	if (ret)
-+		error(-1, -ret, "verify_metadata");
-+}
-diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.h b/tools/testing/selftests/bpf/xdp_hw_metadata.h
-new file mode 100644
-index 000000000000..b4580015ee93
---- /dev/null
-+++ b/tools/testing/selftests/bpf/xdp_hw_metadata.h
-@@ -0,0 +1,6 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+struct xsk_metadata {
-+	__u32 rx_timestamp_supported:1;
-+	__u64 rx_timestamp;
-+};
--- 
-2.38.1.431.g37b22c650d-goog
-
+>
+>
+>> +    else
+>> +        /* AF_UNIX is prohibited. */
+>> +        ASSERT_LT(fd, 0, "socket(AF_UNIX)");
+>>       close(fd);
+>
+>>       /* AF_INET6 gets default policy (sk_priority). */
+>> @@ -233,11 +237,18 @@ static void test_lsm_cgroup_functional(void)
+>
+>>       /* AF_INET6+SOCK_STREAM
+>>        * AF_PACKET+SOCK_RAW
+>> +     * AF_UNIX+SOCK_RAW if already have non-bpf lsms installed
+>>        * listen_fd
+>>        * client_fd
+>>        * accepted_fd
+>>        */
+>> -    ASSERT_EQ(skel->bss->called_socket_post_create2, 5, 
+>> "called_create2");
+>> +    if (skel->kconfig->CONFIG_SECURITY_APPARMOR
+>> +        || skel->kconfig->CONFIG_SECURITY_SELINUX
+>> +        || skel->kconfig->CONFIG_SECURITY_SMACK)
+>> +        /* AF_UNIX+SOCK_RAW if already have non-bpf lsms installed */
+>> +        ASSERT_EQ(skel->bss->called_socket_post_create2, 6, 
+>> "called_create2");
+>> +    else
+>> +        ASSERT_EQ(skel->bss->called_socket_post_create2, 5, 
+>> "called_create2");
+>
+>>       /* start_server
+>>        * bind(ETH_P_ALL)
+>> diff --git a/tools/testing/selftests/bpf/progs/lsm_cgroup.c 
+>> b/tools/testing/selftests/bpf/progs/lsm_cgroup.c
+>> index 4f2d60b..02c11d1 100644
+>> --- a/tools/testing/selftests/bpf/progs/lsm_cgroup.c
+>> +++ b/tools/testing/selftests/bpf/progs/lsm_cgroup.c
+>> @@ -7,6 +7,10 @@
+>
+>>   char _license[] SEC("license") = "GPL";
+>
+>> +extern bool CONFIG_SECURITY_SELINUX __kconfig __weak;
+>> +extern bool CONFIG_SECURITY_SMACK __kconfig __weak;
+>> +extern bool CONFIG_SECURITY_APPARMOR __kconfig __weak;
+>> +
+>>   #ifndef AF_PACKET
+>>   #define AF_PACKET 17
+>>   #endif
+>> @@ -140,6 +144,10 @@ int BPF_PROG(socket_bind2, struct socket *sock, 
+>> struct sockaddr *address,
+>>   int BPF_PROG(socket_alloc, struct sock *sk, int family, gfp_t 
+>> priority)
+>>   {
+>>       called_socket_alloc++;
+>> +    /* if already have non-bpf lsms installed, EPERM will cause 
+>> memory leak of non-bpf lsms */
+>> +    if (CONFIG_SECURITY_SELINUX || CONFIG_SECURITY_SMACK || 
+>> CONFIG_SECURITY_APPARMOR)
+>> +        return 1;
+>> +
+>>       if (family == AF_UNIX)
+>>           return 0; /* EPERM */
+>
+>> -- 
+>> 1.8.3.1
+>
