@@ -2,476 +2,390 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F219C433FE
-	for <bpf@archiver.kernel.org>; Tue, 15 Nov 2022 13:56:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2142BC4332F
+	for <bpf@archiver.kernel.org>; Tue, 15 Nov 2022 14:15:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbiKON4T (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Nov 2022 08:56:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55824 "EHLO
+        id S229937AbiKOOPJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Nov 2022 09:15:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiKON4S (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 15 Nov 2022 08:56:18 -0500
+        with ESMTP id S229485AbiKOOPI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 15 Nov 2022 09:15:08 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC13EE5D
-        for <bpf@vger.kernel.org>; Tue, 15 Nov 2022 05:55:21 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC36C4B
+        for <bpf@vger.kernel.org>; Tue, 15 Nov 2022 06:14:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668520520;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=eFdL4nhZRxMMTeHllh9QF7/l1CzlEg0rGyJT8FZeWSI=;
-        b=Hf3Nga5w9q4t6ngzl4EeHxArzxe6ZluTJSO3pCmWUSK6VZH2nW4Hp5+KkZzBKwctKoqUix
-        RTNaHhBHF0OLad5fNckzN/VLPeMATb/JVYHFR1JHJ4VLtYUuwNtCPA+zWv1V6cJ5lZkUXR
-        eSHo0139JXjH/6qIrTT0vv1D7lXB4Dw=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        s=mimecast20190719; t=1668521650;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uBHWqy78eJDHtx/+9ycGf77SRANac5lVpltsrKsyVRI=;
+        b=g11X/doUmRrKaZ16YJSquQ7fRANv395WcGHe1SkSQ1i9/jC7DBhj/4YPabzKOalpEvzi7z
+        4SzVw+gC2ZND05dIJuN9pMqZ8GE/4zysoNXdF5DfjHyWR9/EByYeX2sQJ+OZIh3MuUm7yk
+        xL1Q896BAmlx/Fk8DH7j+IlKSCzkQ3A=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-546-02VCrFUxNueRtwit18lqTA-1; Tue, 15 Nov 2022 08:55:19 -0500
-X-MC-Unique: 02VCrFUxNueRtwit18lqTA-1
-Received: by mail-qk1-f197.google.com with SMTP id bl21-20020a05620a1a9500b006fa35db066aso13709722qkb.19
-        for <bpf@vger.kernel.org>; Tue, 15 Nov 2022 05:55:19 -0800 (PST)
+ us-mta-108-5bMF3qWlPDSb8XPna2BHtw-1; Tue, 15 Nov 2022 09:14:09 -0500
+X-MC-Unique: 5bMF3qWlPDSb8XPna2BHtw-1
+Received: by mail-qv1-f70.google.com with SMTP id mi12-20020a056214558c00b004bb63393567so10810094qvb.21
+        for <bpf@vger.kernel.org>; Tue, 15 Nov 2022 06:14:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=eFdL4nhZRxMMTeHllh9QF7/l1CzlEg0rGyJT8FZeWSI=;
-        b=wmrAmrWhHn4gDYE3uCnxEcPf32aK/emoqnfswU7/25qpvFrihsUaHYSI5JaQHxX1sP
-         KbJXni/qwCQUOb+Ars2/sneZ5UPgod2U4gnY7fqbFsuju2XxUxyQVOvbvjU9bGMvXecr
-         bOJnFC7HQB+xGZvBpVlGIV1QfUZOMo2XD76VOV9qZDKYQuVKQL5UsTHI6bmEhfN9BPHb
-         50GYJvsLzPqvatE225D1B8V/+6oNyaNzdHw7Spek/RlSzG9GLAoGmcL1ydZtwsYN9jW3
-         v9j2sCoi3hR8gg4Tb8wFov9J/Ig7pc9PvQBzRsoJoWmXDTlJfr17jLsoLaMIMUzquqCY
-         DKTA==
-X-Gm-Message-State: ANoB5plQEslwzNGvJEoylti8vOQFiL0ru1I8cYMWM5OOvhokeno6Dzkx
-        jdELj3ZwY/l1hx1jQyJEhi5GzE3sAti91nBlkQ0GuLo6Wu+eBDShTr8AWomI3cXg3az/F06BDoE
-        JgSkgLLcfBoi+K7LgdxzW5q3qed0Q+GV6ywocU5a+V9bqo9VSFVhV26ev3ZxNl+w=
-X-Received: by 2002:a05:6214:380e:b0:4b4:5d18:40 with SMTP id ns14-20020a056214380e00b004b45d180040mr16797403qvb.67.1668520518546;
-        Tue, 15 Nov 2022 05:55:18 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5CvXlLjd9TkkphnHGxRR4FS12ghCq4c1gxroMaVHLHc+iPXYHgQaxNbC9O3WDZa7bd3Gy0ug==
-X-Received: by 2002:a05:6214:380e:b0:4b4:5d18:40 with SMTP id ns14-20020a056214380e00b004b45d180040mr16797369qvb.67.1668520518085;
-        Tue, 15 Nov 2022 05:55:18 -0800 (PST)
-Received: from nfvsdn-06.redhat.com (nat-pool-232-132.redhat.com. [66.187.232.132])
-        by smtp.gmail.com with ESMTPSA id y14-20020a05620a44ce00b006fb7c42e73asm3723682qkp.21.2022.11.15.05.55.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 05:55:17 -0800 (PST)
-From:   mtahhan@redhat.com
-To:     bpf@vger.kernel.org, linux-doc@vger.kernel.org
-Cc:     jbrouer@redhat.com, thoiland@redhat.com, donhunte@redhat.com,
-        bagasdotme@gmail.com, Maryam Tahhan <mtahhan@redhat.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Yonghong Song <yhs@fb.com>
-Subject: [PATCH bpf-next v9 1/1] doc: DEVMAPs and XDP_REDIRECT
-Date:   Tue, 15 Nov 2022 09:49:21 -0500
-Message-Id: <20221115144921.165483-1-mtahhan@redhat.com>
-X-Mailer: git-send-email 2.38.1
+        bh=uBHWqy78eJDHtx/+9ycGf77SRANac5lVpltsrKsyVRI=;
+        b=zNr4qwxFpAeNyQUv5/UKPwgq4DqV8V5gxJhBvRKcD11lFffcavwsFl+gTLkBZJ3SH3
+         w/hWm7GWoGBg2aUtpmWKph0H+XjdmPXHE/getrRd6lJGDnJhaJ+Qo6MuMbVTTADVt3H3
+         aesN/TqFEdqc5BBRCmCRku+uMnD9rtxcSZ/RWl3x6iM6P70APEAHfrCcAlrM8m51/jqS
+         82Jfo/I8gmjI/jewsJMkh6dXMLyYZXB4/kUAo/PkS2OjumN1EdBCBp+F/ZR/kR65Gh5E
+         Kgw4RuA6ncClOcFbfW2EzZuV/P+1i/MmuTKYL8z+JSI5hyqkKT3Db1aG9zTHcSgGevoJ
+         rjIQ==
+X-Gm-Message-State: ANoB5plZFMWe6SgaZvKvHLzLAd4SUrvRCX/3g1vrMuarSMOW0iKDjlfR
+        iKmdxmyg3ksGv5yq+q7F72zWlOS6TmHB4z0Jrjf/yNdE8g+nC5s4a+13H3noYGOl+HafnbXuKk9
+        X3frAumteLaSc
+X-Received: by 2002:ac8:5787:0:b0:3a5:ef4:675d with SMTP id v7-20020ac85787000000b003a50ef4675dmr17018448qta.409.1668521648897;
+        Tue, 15 Nov 2022 06:14:08 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4Y4TimZPGdX70IP8PmI8c9rCynvQENWzgkJNWsyiaJkaR7UUVYgMweGq+PBlV4dXb9mUSPFA==
+X-Received: by 2002:ac8:5787:0:b0:3a5:ef4:675d with SMTP id v7-20020ac85787000000b003a50ef4675dmr17018410qta.409.1668521648505;
+        Tue, 15 Nov 2022 06:14:08 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
+        by smtp.gmail.com with ESMTPSA id x81-20020a376354000000b006cfc9846594sm8029860qkb.93.2022.11.15.06.14.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Nov 2022 06:14:07 -0800 (PST)
+Message-ID: <112905a9-ed6f-4aaa-2bfc-46502e558ab5@redhat.com>
+Date:   Tue, 15 Nov 2022 15:14:00 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Reply-To: eric.auger@redhat.com
+Subject: Re: [PATCH v4 03/17] interval-tree: Add a utility to iterate over
+ spans in an interval tree
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>, bpf@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>,
+        Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        David Gibson <david@gibson.dropbear.id.au>,
+        Eric Farman <farman@linux.ibm.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Shameerali Kolothum Thodi 
+        <shameerali.kolothum.thodi@huawei.com>,
+        Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
+References: <3-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
+From:   Eric Auger <eric.auger@redhat.com>
+In-Reply-To: <3-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Maryam Tahhan <mtahhan@redhat.com>
+Hi Jason,
 
-Add documentation for BPF_MAP_TYPE_DEVMAP and
-BPF_MAP_TYPE_DEVMAP_HASH including kernel version
-introduced, usage and examples.
+On 11/8/22 01:48, Jason Gunthorpe wrote:
+> The span iterator travels over the indexes of the interval_tree, not the
+> nodes, and classifies spans of indexes as either 'used' or 'hole'.
+>
+> 'used' spans are fully covered by nodes in the tree and 'hole' spans have
+> no node intersecting the span.
+>
+> This is done greedily such that spans are maximally sized and every
+> iteration step switches between used/hole.
+>
+> As an example a trivial allocator can be written as:
+>
+> 	for (interval_tree_span_iter_first(&span, itree, 0, ULONG_MAX);
+> 	     !interval_tree_span_iter_done(&span);
+> 	     interval_tree_span_iter_next(&span))
+> 		if (span.is_hole &&
+> 		    span.last_hole - span.start_hole >= allocation_size - 1)
+> 			return span.start_hole;
+>
+> With all the tricky boundary conditions handled by the library code.
+>
+> The following iommufd patches have several algorithms for its overlapping
+> node interval trees that are significantly simplified with this kind of
+> iteration primitive. As it seems generally useful, put it into lib/.
+>
+> Tested-by: Nicolin Chen <nicolinc@nvidia.com>
+> Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> ---
+>  .clang-format                 |   1 +
+>  include/linux/interval_tree.h |  58 +++++++++++++++
+>  lib/Kconfig                   |   4 ++
+>  lib/interval_tree.c           | 132 ++++++++++++++++++++++++++++++++++
+>  4 files changed, 195 insertions(+)
+>
+> diff --git a/.clang-format b/.clang-format
+> index 1247d54f9e49fa..96d07786dcfb46 100644
+> --- a/.clang-format
+> +++ b/.clang-format
+> @@ -440,6 +440,7 @@ ForEachMacros:
+>    - 'inet_lhash2_for_each_icsk'
+>    - 'inet_lhash2_for_each_icsk_continue'
+>    - 'inet_lhash2_for_each_icsk_rcu'
+> +  - 'interval_tree_for_each_span'
+>    - 'intlist__for_each_entry'
+>    - 'intlist__for_each_entry_safe'
+>    - 'kcore_copy__for_each_phdr'
+> diff --git a/include/linux/interval_tree.h b/include/linux/interval_tree.h
+> index 288c26f50732d7..2b8026a3990645 100644
+> --- a/include/linux/interval_tree.h
+> +++ b/include/linux/interval_tree.h
+> @@ -27,4 +27,62 @@ extern struct interval_tree_node *
+>  interval_tree_iter_next(struct interval_tree_node *node,
+>  			unsigned long start, unsigned long last);
+>  
+> +/**
+> + * struct interval_tree_span_iter - Find used and unused spans.
+> + * @start_hole: Start of an interval for a hole when is_hole == 1
+> + * @last_hole: Inclusive end of an interval for a hole when is_hole == 1
+> + * @start_used: Start of a used interval when is_hole == 0
+> + * @last_used: Inclusive end of a used interval when is_hole == 0
+> + * @is_hole: 0 == used, 1 == is_hole, -1 == done iteration
+> + *
+> + * This iterator travels over spans in an interval tree. It does not return
+> + * nodes but classifies each span as either a hole, where no nodes intersect, or
+> + * a used, which is fully covered by nodes. Each iteration step toggles between
+> + * hole and used until the entire range is covered. The returned spans always
+> + * fully cover the requested range.
+> + *
+> + * The iterator is greedy, it always returns the largest hole or used possible,
+> + * consolidating all consecutive nodes.
+> + *
+> + * Use interval_tree_span_iter_done() to detect end of iteration.
+> + */
+> +struct interval_tree_span_iter {
+> +	/* private: not for use by the caller */
+> +	struct interval_tree_node *nodes[2];
+> +	unsigned long first_index;
+> +	unsigned long last_index;
+> +
+> +	/* public: */
+> +	union {
+> +		unsigned long start_hole;
+> +		unsigned long start_used;
+> +	};
+> +	union {
+> +		unsigned long last_hole;
+> +		unsigned long last_used;
+> +	};
+> +	int is_hole;
+> +};
+> +
+> +void interval_tree_span_iter_first(struct interval_tree_span_iter *state,
+> +				   struct rb_root_cached *itree,
+> +				   unsigned long first_index,
+> +				   unsigned long last_index);
+> +void interval_tree_span_iter_advance(struct interval_tree_span_iter *iter,
+> +				     struct rb_root_cached *itree,
+> +				     unsigned long new_index);
+> +void interval_tree_span_iter_next(struct interval_tree_span_iter *state);
+> +
+> +static inline bool
+> +interval_tree_span_iter_done(struct interval_tree_span_iter *state)
+> +{
+> +	return state->is_hole == -1;
+> +}
+> +
+> +#define interval_tree_for_each_span(span, itree, first_index, last_index)      \
+> +	for (interval_tree_span_iter_first(span, itree,                        \
+> +					   first_index, last_index);           \
+> +	     !interval_tree_span_iter_done(span);                              \
+> +	     interval_tree_span_iter_next(span))
+> +
+>  #endif	/* _LINUX_INTERVAL_TREE_H */
+> diff --git a/lib/Kconfig b/lib/Kconfig
+> index 9bbf8a4b2108e6..c6c323fd251721 100644
+> --- a/lib/Kconfig
+> +++ b/lib/Kconfig
+> @@ -479,6 +479,10 @@ config INTERVAL_TREE
+>  
+>  	  for more information.
+>  
+> +config INTERVAL_TREE_SPAN_ITER
+> +	bool
+> +	depends on INTERVAL_TREE
+> +
+>  config XARRAY_MULTI
+>  	bool
+>  	help
+> diff --git a/lib/interval_tree.c b/lib/interval_tree.c
+> index 593ce56ece5050..d2882db8fa2a07 100644
+> --- a/lib/interval_tree.c
+> +++ b/lib/interval_tree.c
+> @@ -15,3 +15,135 @@ EXPORT_SYMBOL_GPL(interval_tree_insert);
+>  EXPORT_SYMBOL_GPL(interval_tree_remove);
+>  EXPORT_SYMBOL_GPL(interval_tree_iter_first);
+>  EXPORT_SYMBOL_GPL(interval_tree_iter_next);
+> +
+> +#ifdef CONFIG_INTERVAL_TREE_SPAN_ITER
+Maybe add in a kernel doc that a prerequisite is state.nodes[1] must be
+populated
+> +static void
+> +interval_tree_span_iter_next_gap(struct interval_tree_span_iter *state)
+> +{
+> +	struct interval_tree_node *cur = state->nodes[1];
+> +
+> +	/*
+> +	 * Roll nodes[1] into nodes[0] by advancing nodes[1] to the end of a
+> +	 * contiguous span of nodes. This makes nodes[0]->last the end of that
+> +	 * contiguous span of valid indexes that started at the original
+I would suggest s/contiguous span/contiguous used span and remove "of
+valid indexes"
+> +	 * nodes[1]->start. nodes[1] is now the next node and a hole is between
+nodes[1] is now the first node starting the next used span. A hole span
+is between nodes[0]->last and nodes[1]->start
+> +	 * nodes[0] and [1].
+> +	 */
+> +	state->nodes[0] = cur;
+> +	do {
+> +		if (cur->last > state->nodes[0]->last)
+> +			state->nodes[0] = cur;
+> +		cur = interval_tree_iter_next(cur, state->first_index,
+> +					      state->last_index);
+> +	} while (cur && (state->nodes[0]->last >= cur->start ||
+> +			 state->nodes[0]->last + 1 == cur->start));
+> +	state->nodes[1] = cur;
+> +}
+> +
+> +void interval_tree_span_iter_first(struct interval_tree_span_iter *iter,
+> +				   struct rb_root_cached *itree,
+> +				   unsigned long first_index,
+> +				   unsigned long last_index)
+> +{
+> +	iter->first_index = first_index;
+> +	iter->last_index = last_index;
+> +	iter->nodes[0] = NULL;
+> +	iter->nodes[1] =
+> +		interval_tree_iter_first(itree, first_index, last_index);
+> +	if (!iter->nodes[1]) {
+> +		/* No nodes intersect the span, whole span is hole */
+> +		iter->start_hole = first_index;
+> +		iter->last_hole = last_index;
+> +		iter->is_hole = 1;
+> +		return;
+> +	}
+> +	if (iter->nodes[1]->start > first_index) {
+> +		/* Leading hole on first iteration */
+> +		iter->start_hole = first_index;
+> +		iter->last_hole = iter->nodes[1]->start - 1;
+> +		iter->is_hole = 1;
+> +		interval_tree_span_iter_next_gap(iter);
+> +		return;
+> +	}
+> +
+> +	/* Starting inside a used */
+> +	iter->start_used = first_index;
+> +	iter->is_hole = 0;
+> +	interval_tree_span_iter_next_gap(iter);
+> +	iter->last_used = iter->nodes[0]->last;
+> +	if (iter->last_used >= last_index) {
+> +		iter->last_used = last_index;
+> +		iter->nodes[0] = NULL;
+> +		iter->nodes[1] = NULL;
+> +	}
+> +}
+> +EXPORT_SYMBOL_GPL(interval_tree_span_iter_first);
+> +
+> +void interval_tree_span_iter_next(struct interval_tree_span_iter *iter)
+> +{
+> +	if (!iter->nodes[0] && !iter->nodes[1]) {
+> +		iter->is_hole = -1;
+> +		return;
+> +	}
+> +
+> +	if (iter->is_hole) {
+> +		iter->start_used = iter->last_hole + 1;
+> +		iter->last_used = iter->nodes[0]->last;
+> +		if (iter->last_used >= iter->last_index) {
+> +			iter->last_used = iter->last_index;
+> +			iter->nodes[0] = NULL;
+> +			iter->nodes[1] = NULL;
+> +		}
+> +		iter->is_hole = 0;
+> +		return;
+> +	}
+> +
+> +	if (!iter->nodes[1]) {
+> +		/* Trailing hole */
+> +		iter->start_hole = iter->nodes[0]->last + 1;
+> +		iter->last_hole = iter->last_index;
+> +		iter->nodes[0] = NULL;
+> +		iter->is_hole = 1;
+> +		return;
+> +	}
+> +
+> +	/* must have both nodes[0] and [1], interior hole */
+> +	iter->start_hole = iter->nodes[0]->last + 1;
+> +	iter->last_hole = iter->nodes[1]->start - 1;
+> +	iter->is_hole = 1;
+> +	interval_tree_span_iter_next_gap(iter);
+> +}
+> +EXPORT_SYMBOL_GPL(interval_tree_span_iter_next);
+> +
+> +/*
+> + * Advance the iterator index to a specific position. The returned used/hole is
+> + * updated to start at new_index. This is faster than calling
+> + * interval_tree_span_iter_first() as it can avoid full searches in several
+> + * cases where the iterator is already set.
+> + */
+> +void interval_tree_span_iter_advance(struct interval_tree_span_iter *iter,
+> +				     struct rb_root_cached *itree,
+> +				     unsigned long new_index)
+> +{
+> +	if (iter->is_hole == -1)
+> +		return;
+> +
+> +	iter->first_index = new_index;
+check new_index > iter->first_index?
+> +	if (new_index > iter->last_index) {
+> +		iter->is_hole = -1;
+> +		return;
+> +	}
+> +
+> +	/* Rely on the union aliasing hole/used */
+> +	if (iter->start_hole <= new_index && new_index <= iter->last_hole) {
+> +		iter->start_hole = new_index;
+> +		return;
+> +	}
+> +	if (new_index == iter->last_hole + 1)
+> +		interval_tree_span_iter_next(iter);
+> +	else
+> +		interval_tree_span_iter_first(iter, itree, new_index,
+> +					      iter->last_index);
+> +}
+> +EXPORT_SYMBOL_GPL(interval_tree_span_iter_advance);
+> +#endif
 
-Add documentation that describes XDP_REDIRECT.
+Besides, looks good to me
+Reviewed-by: Eric Auger <eric.auger@redhat.com>
 
-v8->v9:
-- Unqouted XDP_REDIRECT reference.
-
-v7->v8:
-- Updated multicast to use description suggested by Toke Høiland-Jørgensen.
-
-v6-v7:
-- Got rid of unnecessary initializations in examples.
-
-v5->v6:
-- Separate Kernel BPF and userspace functions for devmaps.
-- Include some packet/tracepoint debug info in the redirect
-  documentation.
-
-v4->v5:
-- Remove unused 'index' variable in example.
-
-v3->v4:
-- Prepend supported map section for XDP_REDIRECT documentation.
-
-v2->v3:
-- Fixed indentations in usage section to exclude non note text.
-- Replace links to selftest with actual paths.
-
-v1->v2:
-- Separate xdp_redirect documentation to its own file.
-- Clean up and simplify examples and usage function descriptions.
-
-Signed-off-by: Maryam Tahhan <mtahhan@redhat.com>
-Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Acked-by: Yonghong Song <yhs@fb.com>
----
- Documentation/bpf/index.rst      |   1 +
- Documentation/bpf/map_devmap.rst | 222 +++++++++++++++++++++++++++++++
- Documentation/bpf/redirect.rst   |  81 +++++++++++
- net/core/filter.c                |   8 +-
- 4 files changed, 310 insertions(+), 2 deletions(-)
- create mode 100644 Documentation/bpf/map_devmap.rst
- create mode 100644 Documentation/bpf/redirect.rst
-
-diff --git a/Documentation/bpf/index.rst b/Documentation/bpf/index.rst
-index 1b50de1983ee..1088d44634d6 100644
---- a/Documentation/bpf/index.rst
-+++ b/Documentation/bpf/index.rst
-@@ -29,6 +29,7 @@ that goes into great technical depth about the BPF Architecture.
-    clang-notes
-    linux-notes
-    other
-+   redirect
- 
- .. only::  subproject and html
- 
-diff --git a/Documentation/bpf/map_devmap.rst b/Documentation/bpf/map_devmap.rst
-new file mode 100644
-index 000000000000..f64da348dbfe
---- /dev/null
-+++ b/Documentation/bpf/map_devmap.rst
-@@ -0,0 +1,222 @@
-+.. SPDX-License-Identifier: GPL-2.0-only
-+.. Copyright (C) 2022 Red Hat, Inc.
-+
-+=================================================
-+BPF_MAP_TYPE_DEVMAP and BPF_MAP_TYPE_DEVMAP_HASH
-+=================================================
-+
-+.. note::
-+   - ``BPF_MAP_TYPE_DEVMAP`` was introduced in kernel version 4.14
-+   - ``BPF_MAP_TYPE_DEVMAP_HASH`` was introduced in kernel version 5.4
-+
-+``BPF_MAP_TYPE_DEVMAP`` and ``BPF_MAP_TYPE_DEVMAP_HASH`` are BPF maps primarily
-+used as backend maps for the XDP BPF helper call ``bpf_redirect_map()``.
-+``BPF_MAP_TYPE_DEVMAP`` is backed by an array that uses the key as
-+the index to lookup a reference to a net device. While ``BPF_MAP_TYPE_DEVMAP_HASH``
-+is backed by a hash table that uses a key to lookup a reference to a net device.
-+The user provides either <``key``/ ``ifindex``> or <``key``/ ``struct bpf_devmap_val``>
-+pairs to update the maps with new net devices.
-+
-+.. note::
-+    - The key to a hash map doesn't have to be an ``ifindex``.
-+    - While ``BPF_MAP_TYPE_DEVMAP_HASH`` allows for densely packing the net devices
-+      it comes at the cost of a hash of the key when performing a look up.
-+
-+The setup and packet enqueue/send code is shared between the two types of
-+devmap; only the lookup and insertion is different.
-+
-+Usage
-+=====
-+Kernel BPF
-+----------
-+.. c:function::
-+     long bpf_redirect_map(struct bpf_map *map, u32 key, u64 flags)
-+
-+Redirect the packet to the endpoint referenced by ``map`` at index ``key``.
-+For ``BPF_MAP_TYPE_DEVMAP`` and ``BPF_MAP_TYPE_DEVMAP_HASH`` this map contains
-+references to net devices (for forwarding packets through other ports).
-+
-+The lower two bits of *flags* are used as the return code if the map lookup
-+fails. This is so that the return value can be one of the XDP program return
-+codes up to ``XDP_TX``, as chosen by the caller. The higher bits of ``flags``
-+can be set to ``BPF_F_BROADCAST`` or ``BPF_F_EXCLUDE_INGRESS`` as defined
-+below.
-+
-+With ``BPF_F_BROADCAST`` the packet will be broadcast to all the interfaces
-+in the map, with ``BPF_F_EXCLUDE_INGRESS`` the ingress interface will be excluded
-+from the broadcast.
-+
-+.. note::
-+    - The key is ignored if BPF_F_BROADCAST is set.
-+    - The broadcast feature can also be used to implement multicast forwarding:
-+      simply create multiple DEVMAPs, each one corresponding to a single multicast group.
-+
-+This helper will return ``XDP_REDIRECT`` on success, or the value of the two
-+lower bits of the ``flags`` argument if the map lookup fails.
-+
-+More information about redirection can be found :doc:`redirect`
-+
-+.. c:function::
-+   void *bpf_map_lookup_elem(struct bpf_map *map, const void *key)
-+
-+Net device entries can be retrieved using the ``bpf_map_lookup_elem()``
-+helper.
-+
-+Userspace
-+---------
-+.. note::
-+    DEVMAP entries can only be updated/deleted from user space and not
-+    from an eBPF program. Trying to call these functions from a kernel eBPF
-+    program will result in the program failing to load and a verifier warning.
-+
-+.. c:function::
-+   int bpf_map_update_elem(int fd, const void *key, const void *value, __u64 flags);
-+
-+ Net device entries can be added or updated using the ``bpf_map_update_elem()``
-+ helper. This helper replaces existing elements atomically. The ``value`` parameter
-+ can be ``struct bpf_devmap_val`` or a simple ``int ifindex`` for backwards
-+ compatibility.
-+
-+ .. code-block:: c
-+
-+    struct bpf_devmap_val {
-+        __u32 ifindex;   /* device index */
-+        union {
-+            int   fd;  /* prog fd on map write */
-+            __u32 id;  /* prog id on map read */
-+        } bpf_prog;
-+    };
-+
-+ The ``flags`` argument can be one of the following:
-+
-+  - ``BPF_ANY``: Create a new element or update an existing element.
-+  - ``BPF_NOEXIST``: Create a new element only if it did not exist.
-+  - ``BPF_EXIST``: Update an existing element.
-+
-+ DEVMAPs can associate a program with a device entry by adding a ``bpf_prog.fd``
-+ to ``struct bpf_devmap_val``. Programs are run after ``XDP_REDIRECT`` and have
-+ access to both Rx device and Tx device. The  program associated with the ``fd``
-+ must have type XDP with expected attach type ``xdp_devmap``.
-+ When a program is associated with a device index, the program is run on an
-+ ``XDP_REDIRECT`` and before the buffer is added to the per-cpu queue. Examples
-+ of how to attach/use xdp_devmap progs can be found in the kernel selftests:
-+
-+ - ``tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c``
-+ - ``tools/testing/selftests/bpf/progs/test_xdp_with_devmap_helpers.c``
-+
-+.. c:function::
-+   int bpf_map_lookup_elem(int fd, const void *key, void *value);
-+
-+ Net device entries can be retrieved using the ``bpf_map_lookup_elem()``
-+ helper.
-+
-+.. c:function::
-+   int bpf_map_delete_elem(int fd, const void *key);
-+
-+ Net device entries can be deleted using the ``bpf_map_delete_elem()``
-+ helper. This helper will return 0 on success, or negative error in case of
-+ failure.
-+
-+Examples
-+========
-+
-+Kernel BPF
-+----------
-+
-+The following code snippet shows how to declare a ``BPF_MAP_TYPE_DEVMAP``
-+called tx_port.
-+
-+.. code-block:: c
-+
-+    struct {
-+        __uint(type, BPF_MAP_TYPE_DEVMAP);
-+        __type(key, __u32);
-+        __type(value, __u32);
-+        __uint(max_entries, 256);
-+    } tx_port SEC(".maps");
-+
-+The following code snippet shows how to declare a ``BPF_MAP_TYPE_DEVMAP_HASH``
-+called forward_map.
-+
-+.. code-block:: c
-+
-+    struct {
-+        __uint(type, BPF_MAP_TYPE_DEVMAP_HASH);
-+        __type(key, __u32);
-+        __type(value, struct bpf_devmap_val);
-+        __uint(max_entries, 32);
-+    } forward_map SEC(".maps");
-+
-+.. note::
-+
-+    The value type in the DEVMAP above is a ``struct bpf_devmap_val``
-+
-+The following code snippet shows a simple xdp_redirect_map program. This program
-+would work with a user space program that populates the devmap ``forward_map`` based
-+on ingress ifindexes. The BPF program (below) is redirecting packets using the
-+ingress ``ifindex`` as the ``key``.
-+
-+.. code-block:: c
-+
-+    SEC("xdp")
-+    int xdp_redirect_map_func(struct xdp_md *ctx)
-+    {
-+        int index = ctx->ingress_ifindex;
-+
-+        return bpf_redirect_map(&forward_map, index, 0);
-+    }
-+
-+The following code snippet shows a BPF program that is broadcasting packets to
-+all the interfaces in the ``tx_port`` devmap.
-+
-+.. code-block:: c
-+
-+    SEC("xdp")
-+    int xdp_redirect_map_func(struct xdp_md *ctx)
-+    {
-+        return bpf_redirect_map(&tx_port, 0, BPF_F_BROADCAST | BPF_F_EXCLUDE_INGRESS);
-+    }
-+
-+User space
-+----------
-+
-+The following code snippet shows how to update a devmap called ``tx_port``.
-+
-+.. code-block:: c
-+
-+    int update_devmap(int ifindex, int redirect_ifindex)
-+    {
-+        int ret;
-+
-+        ret = bpf_map_update_elem(bpf_map__fd(tx_port), &ifindex, &redirect_ifindex, 0);
-+        if (ret < 0) {
-+            fprintf(stderr, "Failed to update devmap_ value: %s\n",
-+                strerror(errno));
-+        }
-+
-+        return ret;
-+    }
-+
-+The following code snippet shows how to update a hash_devmap called ``forward_map``.
-+
-+.. code-block:: c
-+
-+    int update_devmap(int ifindex, int redirect_ifindex)
-+    {
-+        struct bpf_devmap_val devmap_val = { .ifindex = redirect_ifindex };
-+        int ret;
-+
-+        ret = bpf_map_update_elem(bpf_map__fd(forward_map), &ifindex, &devmap_val, 0);
-+        if (ret < 0) {
-+            fprintf(stderr, "Failed to update devmap_ value: %s\n",
-+                strerror(errno));
-+        }
-+        return ret;
-+    }
-+
-+References
-+===========
-+
-+- https://lwn.net/Articles/728146/
-+- https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=6f9d451ab1a33728adb72d7ff66a7b374d665176
-+- https://elixir.bootlin.com/linux/latest/source/net/core/filter.c#L4106
-diff --git a/Documentation/bpf/redirect.rst b/Documentation/bpf/redirect.rst
-new file mode 100644
-index 000000000000..2fa2b0b05004
---- /dev/null
-+++ b/Documentation/bpf/redirect.rst
-@@ -0,0 +1,81 @@
-+.. SPDX-License-Identifier: GPL-2.0-only
-+.. Copyright (C) 2022 Red Hat, Inc.
-+
-+========
-+Redirect
-+========
-+XDP_REDIRECT
-+############
-+Supported maps
-+--------------
-+
-+XDP_REDIRECT works with the following map types:
-+
-+- ``BPF_MAP_TYPE_DEVMAP``
-+- ``BPF_MAP_TYPE_DEVMAP_HASH``
-+- ``BPF_MAP_TYPE_CPUMAP``
-+- ``BPF_MAP_TYPE_XSKMAP``
-+
-+For more information on these maps, please see the specific map documentation.
-+
-+Process
-+-------
-+
-+.. kernel-doc:: net/core/filter.c
-+   :doc: xdp redirect
-+
-+.. note::
-+    Not all drivers support transmitting frames after a redirect, and for
-+    those that do, not all of them support non-linear frames. Non-linear xdp
-+    bufs/frames are bufs/frames that contain more than one fragment.
-+
-+Debugging packet drops
-+----------------------
-+Silent packet drops for XDP_REDIRECT can be debugged using:
-+
-+- bpf_trace
-+- perf_record
-+
-+bpf_trace
-+^^^^^^^^^
-+The following bpftrace command can be used to capture and count all XDP tracepoints:
-+
-+.. code-block:: none
-+
-+    sudo bpftrace -e 'tracepoint:xdp:* { @cnt[probe] = count(); }'
-+    Attaching 12 probes...
-+    ^C
-+
-+    @cnt[tracepoint:xdp:mem_connect]: 18
-+    @cnt[tracepoint:xdp:mem_disconnect]: 18
-+    @cnt[tracepoint:xdp:xdp_exception]: 19605
-+    @cnt[tracepoint:xdp:xdp_devmap_xmit]: 1393604
-+    @cnt[tracepoint:xdp:xdp_redirect]: 22292200
-+
-+.. note::
-+    The various xdp tracepoints can be found in ``source/include/trace/events/xdp.h``
-+
-+The following bpftrace command can be used to extract the ``ERRNO`` being returned as
-+part of the err parameter:
-+
-+.. code-block:: none
-+
-+    sudo bpftrace -e \
-+    'tracepoint:xdp:xdp_redirect*_err {@redir_errno[-args->err] = count();}
-+    tracepoint:xdp:xdp_devmap_xmit {@devmap_errno[-args->err] = count();}'
-+
-+perf record
-+^^^^^^^^^^^
-+The perf tool also supports recording tracepoints:
-+
-+.. code-block:: none
-+
-+    perf record -a -e xdp:xdp_redirect_err \
-+        -e xdp:xdp_redirect_map_err \
-+        -e xdp:xdp_exception \
-+        -e xdp:xdp_devmap_xmit
-+
-+References
-+===========
-+
-+- https://github.com/xdp-project/xdp-tutorial/tree/master/tracing02-xdp-monitor
-diff --git a/net/core/filter.c b/net/core/filter.c
-index bb0136e7a8e4..d582cb025f4c 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -4104,7 +4104,10 @@ static const struct bpf_func_proto bpf_xdp_adjust_meta_proto = {
- 	.arg2_type	= ARG_ANYTHING,
- };
- 
--/* XDP_REDIRECT works by a three-step process, implemented in the functions
-+/**
-+ * DOC: xdp redirect
-+ *
-+ * XDP_REDIRECT works by a three-step process, implemented in the functions
-  * below:
-  *
-  * 1. The bpf_redirect() and bpf_redirect_map() helpers will lookup the target
-@@ -4119,7 +4122,8 @@ static const struct bpf_func_proto bpf_xdp_adjust_meta_proto = {
-  * 3. Before exiting its NAPI poll loop, the driver will call xdp_do_flush(),
-  *    which will flush all the different bulk queues, thus completing the
-  *    redirect.
-- *
-+ */
-+/*
-  * Pointers to the map entries will be kept around for this whole sequence of
-  * steps, protected by RCU. However, there is no top-level rcu_read_lock() in
-  * the core code; instead, the RCU protection relies on everything happening
--- 
-2.38.1
+Eric
 
