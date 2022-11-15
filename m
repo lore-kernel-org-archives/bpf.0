@@ -2,141 +2,155 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FD26C433FE
-	for <bpf@archiver.kernel.org>; Tue, 15 Nov 2022 00:02:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7392EC43219
+	for <bpf@archiver.kernel.org>; Tue, 15 Nov 2022 00:02:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237668AbiKOABz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Nov 2022 19:01:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54592 "EHLO
+        id S230415AbiKOACB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Nov 2022 19:02:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbiKOABk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Nov 2022 19:01:40 -0500
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9EC60ED
-        for <bpf@vger.kernel.org>; Mon, 14 Nov 2022 16:01:39 -0800 (PST)
-Received: by mail-pj1-x1041.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso15328759pjg.5
-        for <bpf@vger.kernel.org>; Mon, 14 Nov 2022 16:01:39 -0800 (PST)
+        with ESMTP id S237649AbiKOABz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Nov 2022 19:01:55 -0500
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A17EF3F
+        for <bpf@vger.kernel.org>; Mon, 14 Nov 2022 16:01:54 -0800 (PST)
+Received: by mail-pf1-x442.google.com with SMTP id m6so12610020pfb.0
+        for <bpf@vger.kernel.org>; Mon, 14 Nov 2022 16:01:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bPS13dYNuF95/UnFyu3fB5t8wmLAjV6BId42u1eCjj8=;
-        b=JDV7cNezr2C5AIeeS4jG81im9yafoikbj9wuqTCR4jgJSTEgwx9Nd84rjLwtsQHSbX
-         m+2uzNtwnCJGq7s+44ETPHo/rA28QIHBHguBqncINxvOfVd+uwbOQHHGNncvzhMYV0N6
-         cDtL8RR3dqCG0RkpGh5O5z6IOm5naocrncke2m1SsrYm7heEYZuMMaoXvUeGlgK4bNzi
-         sfcAEh4Nv5gxNQI9g5taErOhMT8sgq1xBX+RNe4m+qSB8WnJVSOf8sA9ty8TsIt+DL4X
-         Oxln3TKy2L4EOhH02asl+Jgg6sNubVwxaoj07wyBm28bagj3ldiqOiVrPLzzKKWTj/xC
-         kBUA==
+        bh=6qiFDbqjXUxto4VZlgYzZmUfXOGly2z0K0YGSO0F0m8=;
+        b=GDF4RsjJyLpg+kMFiMSR2t1PJY1t+uB37VdqwwkWCSJjOcc7YIbUa6/Tng+33FrqGr
+         b2tHLO2BOYmphwWMw5AfQkAgrFqlsHj7/zvtqK5Ttc2CHfL+tBEdQ0vCOLyTYkHu1/R8
+         xQTSY3T6E4PtIPVSE32O+ULKzqvd5NgjyK4bMDd4oi65sVulDp3jQLnZV/GPNwr0ROMo
+         EM9RRmgHUvoroJ/N06L0ornc7eQSK7GzB6URWOp5aXBWZ+/hwrcCyNEkPGLwCgWw0ah9
+         R+QZff+wqRI49164exImOHGN1tsO/w6wqNcKdQMgvk2WxKNYbDccTWsl8JZNY+QT8W3y
+         40bA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bPS13dYNuF95/UnFyu3fB5t8wmLAjV6BId42u1eCjj8=;
-        b=Pjt9oWbCqRxZiKbponavUVd00TEwau5p/vjWf2xjm+f+Q42gO2Utk+b+UPvlTbFXsI
-         hG6YEhuBaC3TjiCAjP1AnFMTWTcABZfmlRaX3kUHtaZoMX/+lOCqutCzFU67ZBUeaD1S
-         RaZ2ngW9mtvvmWmuO6CGq+MvbFQlFeCuNqkDq1eC8tfbJiuEAwxEcvWtBXGXEIxC6XQR
-         dZuwtcIUQ0XdkeWNE72fWGyToAH8+/P1DIERCjiun8Fn2uMO2jAf/NQP2Cb/vZWjcT8o
-         5Y0i36QMq7gsKVQLwNZIN9zGplfJrnnG88cj4L2pvUlbg8Jd1I9u8ihXXGD7MXkXpuxn
-         3UiQ==
-X-Gm-Message-State: ANoB5pnM5NskqptFouLdQ4ND7rpQrkZurVkT89yKqQ4jHakP//G4hFys
-        810dKy535oKtU9jbt6O+Idw5fsuBdF0cBg==
-X-Google-Smtp-Source: AA0mqf4eYmwwpIsdzkwxDQYIDMNRZWAH4b3jdVA8q8DujnhsPX5flPdVvU+B1meZ7Vghuuc6oZ53gA==
-X-Received: by 2002:a17:90a:b894:b0:20a:7294:47dd with SMTP id o20-20020a17090ab89400b0020a729447ddmr15208720pjr.207.1668470498982;
-        Mon, 14 Nov 2022 16:01:38 -0800 (PST)
+        bh=6qiFDbqjXUxto4VZlgYzZmUfXOGly2z0K0YGSO0F0m8=;
+        b=8HJwtGgY6t57NnPXznDvgxs6WB/d6Eta5eMXn25AfcyXeHxfvxTPQtksnwHviygLrB
+         cbfnd7WzSv1e7AMnJhATq8uAySybwl88eJinzS7sGiAO0k25ntLgDHqwyjNKn70M61N5
+         eY+VtgOQTQMO4T+dMa/BS7TuJWQcX9nkHiIeup0rce+7rrVMRGHXaguKLlkJKfwXvL1n
+         Xjh9UnuGY4dFfhpUlwirfRCOPY+FvSJDwdZuTerVXcU9e45Ii7EjyGD7Aq+on5C5J46S
+         95dFfUmzigwwztcrqHlK5MujWZut2Zrv742ABdi56GZNPKd5toU2jNQpgrpfKQEktDLP
+         XR/g==
+X-Gm-Message-State: ANoB5pkJB3z6VW6VH/6rQXkexRv4zBKzIFvqdWylgA2+BoxXgqFs/mc3
+        1FD3yXfbOSmEi7oiWl3qKBDiON8wNktMRw==
+X-Google-Smtp-Source: AA0mqf713gNI7CTI0lgC1Cjvu/j4qEblzw5kPeDjohTT4UI66o3oPPav5hRFdAIdQIz4hW8i8EPhTQ==
+X-Received: by 2002:a63:e242:0:b0:473:e502:71d3 with SMTP id y2-20020a63e242000000b00473e50271d3mr13742939pgj.227.1668470513707;
+        Mon, 14 Nov 2022 16:01:53 -0800 (PST)
 Received: from localhost ([59.152.80.69])
-        by smtp.gmail.com with ESMTPSA id t6-20020a1709027fc600b0018703bf3ec9sm8155152plb.61.2022.11.14.16.01.38
+        by smtp.gmail.com with ESMTPSA id ne5-20020a17090b374500b0020b2082e0acsm7112233pjb.0.2022.11.14.16.01.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 16:01:38 -0800 (PST)
+        Mon, 14 Nov 2022 16:01:53 -0800 (PST)
 From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+Cc:     David Vernet <void@manifault.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <martin.lau@kernel.org>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        David Vernet <void@manifault.com>
-Subject: [PATCH bpf-next v1 2/7] bpf: Propagate errors from process_* checks in check_func_arg
-Date:   Tue, 15 Nov 2022 05:31:25 +0530
-Message-Id: <20221115000130.1967465-3-memxor@gmail.com>
+        Joanne Koong <joannelkoong@gmail.com>
+Subject: [PATCH bpf-next v1 7/7] selftests/bpf: Add test for dynptr reinit in user_ringbuf callback
+Date:   Tue, 15 Nov 2022 05:31:30 +0530
+Message-Id: <20221115000130.1967465-8-memxor@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221115000130.1967465-1-memxor@gmail.com>
 References: <20221115000130.1967465-1-memxor@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2133; i=memxor@gmail.com; h=from:subject; bh=HjZ8n14OOOglk/GCqR2IboCzYEj0fP9YCcqR8T20538=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBjctaC5wXp4g+aRZb0CeKDmgilfOm58S1Jtm41e5WG 3eiReXuJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCY3LWggAKCRBM4MiGSL8RyqZ+D/ 9o09168Vw6GJdLfJ2KB7FseMuCHZQ4SAqyA2AC+xyYQQp2TJ70FIgqcud/b7rDB5AWJjaJG8W0IYNm aeD80aAnnK7MuNdftKxjzNyxDJrOhu0dUvfIevs0YWksaHN73GDIXIbVq+W7XYSGkrB7kDkhmriFrW E830acQd2T+Oss3BZ5zst7zW4IJtDEMVCzrVxyHUWUZXW/MbzgUnwFGxiwEEPVL+y/H9arBdw6w6kg bkT11TeMXrXe5n9hbfEir4Zunl22GnLxoKiyM/5W/olx9RI/GgZmIe7N9BVoX2RkAMmx1dRJnixatq VmLFsg0Sq9EcVt2wvv0WtLDlVFIy1iv3t3HWLuIb9MYaCdf3AtrjkLywTwBpawhPMKu40lCh0oO8G7 dtaThNUnUZC+kKoKP7al2zrvZLGYQ1lGBjl70MNNyiHZsK/Vm6V2O4Dmv6q3c5cUozt1hI/MsHju7b f/g4sEXmHM4tlvHthC5GOS9sAPxCmvA3LNivg63c2+kpukagzq+QgOhjc4X8SXwylEWNZU61alSt53 u8HwJ1yuwWhAaL0opthJ4U4cL+hN0D3PRZ+M0WP09aA8TJxU8j7E5vildM7EkGdciHZV0ysB5n2l2/ cVlWalU3uiOeg3Q6SNVrhl7knouUWG74rqjDejbPg84WbbfIvUPxsBSgOZdA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3072; i=memxor@gmail.com; h=from:subject; bh=KGMe3EiZxZpqYFfmV01eKi4iWDkcxxO+yLBDjrSQ6BI=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBjctaCB6l5QzhsTIZ2pAWx0VJpr8Fn4ORBOChmz815 qyXDiXaJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCY3LWggAKCRBM4MiGSL8RypFNEA CellLPu+8tenKkc0gDDOhuSDOp8xh6cgKl8lGpMeGw+H9C+6sDaYOe79psNl1BqRTkH74EbTR5BPq7 cDU/kZKMIekG+9/S1xXcVUIDgxj8vfCQm9GaVMgmj4ZNC4nngcXjdslk0cU695pqEtAo2SVr47Z+hr FoBWTJiqYl6zgaV2NC969SD06nuHdncekkt/t30FsH2luj7BMHbPbbprq1R3rPSAFfDdoeYu6ZBviq FFLRNRmHlzD7cD8ArGU6yYDrXT7JNKNb7LdRCiqAzNyZT/HKdTomm7rxABjIVfoiLtZGiZnVMcV+lI qGFm+S7pgv9g9PZiTHEfdLuPsa11XpLwn8eJ5Mb0sDT/jI0wEXVxb61pBfXbMfJJyUdKUrs7grUnk/ cJKcxUDt5b4S0miC4PTK5a2lmpI+HStSAw5YffXqy/xORHf1H7x9eg3g3nMgsmnBMG0ID2Vm0ZgEJr 63a7KsaRrh5vH95+21zZGDgXtZyKnc5zJkU7lcccy9J21MZYW0B71R2H3Qlyf/NamI2QM+BI4B9fa2 1/gOtoAvsE5Ynwz5EbQn/GVKQ8rO3E+47YGdnwHeIEYNZhY4lv5C36H6lOo3gxnf0TfbXE5JTu7FAK Z6HK8QPXuVIeaHjIjKab+ZqfkUAJW3aGQ46mJtPjPtco6AjCUB0TiFJqjhCQ==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, we simply ignore the errors in process_spin_lock,
-process_timer_func, process_kptr_func, process_dynptr_func.
-Instead, bubble up storing and checking err variable.
+The original support for bpf_user_ringbuf_drain callbacks simply
+short-circuited checks for the dynptr state, allowing users to pass
+PTR_TO_DYNPTR (now CONST_PTR_TO_DYNPTR) to helpers that initialize a
+dynptr. This bug would have also surfaced with other dynptr helpers in
+the future that changed dynptr view or modified it in some way.
 
+Include test cases for all cases, i.e. both bpf_dynptr_from_mem and
+bpf_ringbuf_reserve_dynptr, and ensure verifier rejects both of them.
+Without the fix, both of these programs load and pass verification.
+
+Acked-by: David Vernet <void@manifault.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/verifier.c | 25 +++++++++++++++----------
- 1 file changed, 15 insertions(+), 10 deletions(-)
+ .../selftests/bpf/prog_tests/user_ringbuf.c   |  2 ++
+ .../selftests/bpf/progs/user_ringbuf_fail.c   | 35 +++++++++++++++++++
+ 2 files changed, 37 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 56f48ab9827f..41ef7e4b73e4 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -6220,19 +6220,22 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 		break;
- 	case ARG_PTR_TO_SPIN_LOCK:
- 		if (meta->func_id == BPF_FUNC_spin_lock) {
--			if (process_spin_lock(env, regno, true))
--				return -EACCES;
-+			err = process_spin_lock(env, regno, true);
-+			if (err)
-+				return err;
- 		} else if (meta->func_id == BPF_FUNC_spin_unlock) {
--			if (process_spin_lock(env, regno, false))
--				return -EACCES;
-+			err = process_spin_lock(env, regno, false);
-+			if (err)
-+				return err;
- 		} else {
- 			verbose(env, "verifier internal error\n");
- 			return -EFAULT;
- 		}
- 		break;
- 	case ARG_PTR_TO_TIMER:
--		if (process_timer_func(env, regno, meta))
--			return -EACCES;
-+		err = process_timer_func(env, regno, meta);
-+		if (err)
-+			return err;
- 		break;
- 	case ARG_PTR_TO_FUNC:
- 		meta->subprogno = reg->subprogno;
-@@ -6255,8 +6258,9 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 		err = check_mem_size_reg(env, reg, regno, true, meta);
- 		break;
- 	case ARG_PTR_TO_DYNPTR:
--		if (process_dynptr_func(env, regno, arg_type, meta))
--			return -EACCES;
-+		err = process_dynptr_func(env, regno, arg_type, meta);
-+		if (err)
-+			return err;
- 		break;
- 	case ARG_CONST_ALLOC_SIZE_OR_ZERO:
- 		if (!tnum_is_const(reg->var_off)) {
-@@ -6323,8 +6327,9 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 		break;
- 	}
- 	case ARG_PTR_TO_KPTR:
--		if (process_kptr_func(env, regno, meta))
--			return -EACCES;
-+		err = process_kptr_func(env, regno, meta);
-+		if (err)
-+			return err;
- 		break;
- 	}
+diff --git a/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c b/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
+index 39882580cb90..500a63bb70a8 100644
+--- a/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
++++ b/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
+@@ -676,6 +676,8 @@ static struct {
+ 	{"user_ringbuf_callback_discard_dynptr", "cannot release unowned const bpf_dynptr"},
+ 	{"user_ringbuf_callback_submit_dynptr", "cannot release unowned const bpf_dynptr"},
+ 	{"user_ringbuf_callback_invalid_return", "At callback return the register R0 has value"},
++	{"user_ringbuf_callback_reinit_dynptr_mem", "Dynptr has to be an uninitialized dynptr"},
++	{"user_ringbuf_callback_reinit_dynptr_ringbuf", "Dynptr has to be an uninitialized dynptr"},
+ };
  
+ #define SUCCESS_TEST(_func) { _func, #_func }
+diff --git a/tools/testing/selftests/bpf/progs/user_ringbuf_fail.c b/tools/testing/selftests/bpf/progs/user_ringbuf_fail.c
+index 82aba4529aa9..7730d13c0cea 100644
+--- a/tools/testing/selftests/bpf/progs/user_ringbuf_fail.c
++++ b/tools/testing/selftests/bpf/progs/user_ringbuf_fail.c
+@@ -18,6 +18,13 @@ struct {
+ 	__uint(type, BPF_MAP_TYPE_USER_RINGBUF);
+ } user_ringbuf SEC(".maps");
+ 
++struct {
++	__uint(type, BPF_MAP_TYPE_RINGBUF);
++	__uint(max_entries, 2);
++} ringbuf SEC(".maps");
++
++static int map_value;
++
+ static long
+ bad_access1(struct bpf_dynptr *dynptr, void *context)
+ {
+@@ -175,3 +182,31 @@ int user_ringbuf_callback_invalid_return(void *ctx)
+ 
+ 	return 0;
+ }
++
++static long
++try_reinit_dynptr_mem(struct bpf_dynptr *dynptr, void *context)
++{
++	bpf_dynptr_from_mem(&map_value, 4, 0, dynptr);
++	return 0;
++}
++
++static long
++try_reinit_dynptr_ringbuf(struct bpf_dynptr *dynptr, void *context)
++{
++	bpf_ringbuf_reserve_dynptr(&ringbuf, 8, 0, dynptr);
++	return 0;
++}
++
++SEC("?raw_tp/sys_nanosleep")
++int user_ringbuf_callback_reinit_dynptr_mem(void *ctx)
++{
++	bpf_user_ringbuf_drain(&user_ringbuf, try_reinit_dynptr_mem, NULL, 0);
++	return 0;
++}
++
++SEC("?raw_tp/sys_nanosleep")
++int user_ringbuf_callback_reinit_dynptr_ringbuf(void *ctx)
++{
++	bpf_user_ringbuf_drain(&user_ringbuf, try_reinit_dynptr_ringbuf, NULL, 0);
++	return 0;
++}
 -- 
 2.38.1
 
