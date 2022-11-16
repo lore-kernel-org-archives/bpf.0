@@ -2,277 +2,260 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5B53C4332F
-	for <bpf@archiver.kernel.org>; Wed, 16 Nov 2022 20:51:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F4D3C4332F
+	for <bpf@archiver.kernel.org>; Wed, 16 Nov 2022 20:51:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233199AbiKPUvH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 16 Nov 2022 15:51:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33818 "EHLO
+        id S233973AbiKPUvU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Nov 2022 15:51:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233407AbiKPUvF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 16 Nov 2022 15:51:05 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397326239C
-        for <bpf@vger.kernel.org>; Wed, 16 Nov 2022 12:51:04 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id t19-20020a9d7753000000b0066d77a3d474so7334960otl.10
-        for <bpf@vger.kernel.org>; Wed, 16 Nov 2022 12:51:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3N0wFzR5FyAsFWPa4gr/lirFit7N85TOT/gSD2G/EnU=;
-        b=P+cNr2w4eA7F8agu2DRBP6C6+6wLNr9sT4+rS3IsXP31Hm0qi0/XDOP0R1wPuytgLP
-         0ES4Urij55T+wlxYO9QJ94NNyI996E7MXbEOjwxsNpMOGE/KtQxTffIkHL2qcxZdZHDt
-         4N2vZNCbISbTPmmxw8y/q5ZJeLdZrFCvhqewPOBQIV+4EohDCaeP9XEdAN7cdSbQOum2
-         lOqRcHdgdy+jeUkhZ2IdynmF/HE/WHRnzC8znsURMWTkeyK/35qIO1mS/9JI4bRVmFgv
-         ozMMZjN1xNW/PjOgWh+tFIvWwq+PzcWzRlqZyQP9Uqo/E7uRIXyGih0La05egx13dB63
-         B0Gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3N0wFzR5FyAsFWPa4gr/lirFit7N85TOT/gSD2G/EnU=;
-        b=a7HhbnglEOTRnnCCIUK52ePCy8I5Vg0OaeWfOn+xpx1cwRg0SHnP0CLAGQN5168fn/
-         UxhoKVJp59Hg9m3ReXeCYrZfTHRJ/MK9e6BZ9d7Wwlm1R3BbO2J+07/VlZW5vwrAIf9k
-         NypgqoRXsSxsoyzTmJSrGdd8/OwIJ9/fu1suJcIw8pXspCpdxGnbLjzNiwUtDjscPUup
-         dVsc48IjbxgfkQnXvag3NLrNKl3l0Q+G0iOo/g1sjbWpjNekU9OdymGQR2lLed3Y7t/L
-         DOG1ClbDsO6q8UZGEP4uHYl4/HouTWNXAOgdY8wT5zOGaXuuX1TeIcvwqjEsf4z4ISvE
-         bd3w==
-X-Gm-Message-State: ANoB5pl1c9O2kf6V39+vlpgNJGCJRvl/Gs6LGO23dyd7inrBt80ohN4w
-        ys9ndXWdCjYTlItc3ACVKjI25ItYPylBBZ7LpvNDyA==
-X-Google-Smtp-Source: AA0mqf6Kl2xcBdgYVmS4QSY1eOzyavqDPQPoApoPvXKoW4JBG4LXtttbFXJJIm/75GeGSjxeqar7eTB4yJB6Tqs47ko=
-X-Received: by 2002:a9d:685a:0:b0:66c:dd29:813d with SMTP id
- c26-20020a9d685a000000b0066cdd29813dmr12288355oto.312.1668631863360; Wed, 16
- Nov 2022 12:51:03 -0800 (PST)
+        with ESMTP id S234009AbiKPUvM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 16 Nov 2022 15:51:12 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45176239C;
+        Wed, 16 Nov 2022 12:51:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1668631871; x=1700167871;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UDnbWDn1Suvfq7/a1/IelPvg33/zJoDKzvhhwvyK76c=;
+  b=ueVyv/m2WAoA0ar4ssZqWR2AzynFMzIPMYsK4/bZqHlIfNufKQcsFDgh
+   /lOxGkdBLGjdecunplyT/baGg6TAp5Ohn2bh9HSVgDdmzujPDCAV09SFx
+   ebHQh70/Y/B9CYG5fAICD0emsF9xzU+L1u5ZGPIpOSe2c/BZQdi3urhAN
+   6qK8rEA5xMZ+8/HnjomZ3snFVBJjUJV7idFKnXshlbAwTz/ObgOV5if+a
+   vRP7qm2i08zXbbSim0I+6/gp0/GRBiD1xBJRdFVrwROCwkkFFZIu1F/6y
+   vdrsMTUtgW8P8oqXjkor0UnXIqccicaNwzOT8Qn72MWGyYb5VCzabHB9/
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
+   d="scan'208";a="189277080"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Nov 2022 13:51:10 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 16 Nov 2022 13:51:09 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Wed, 16 Nov 2022 13:51:09 -0700
+Date:   Wed, 16 Nov 2022 21:55:57 +0100
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
+        <john.fastabend@gmail.com>, <UNGLinuxDriver@microchip.com>
+Subject: Re: [PATCH net-next v2 4/5] net: lan966x: Add support for XDP_TX
+Message-ID: <20221116205557.2syftn3jqx357myg@soft-dev3-1>
+References: <20221115214456.1456856-1-horatiu.vultur@microchip.com>
+ <20221115214456.1456856-5-horatiu.vultur@microchip.com>
+ <20221116153418.3389630-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-References: <20221115030210.3159213-1-sdf@google.com> <20221115030210.3159213-6-sdf@google.com>
- <87h6z0i449.fsf@toke.dk> <CAKH8qBsEGD3L0XAVzVHcTW6k_RhEt74pfXrPLANuznSAJw7bEg@mail.gmail.com>
- <8735ajet05.fsf@toke.dk> <CAKH8qBsg4aoFuiajuXmRN3VPKYVJZ-Z5wGzBy9pH3pV5RKCDzQ@mail.gmail.com>
- <6374854883b22_5d64b208e3@john.notmuch> <34f89a95-a79e-751c-fdd2-93889420bf96@linux.dev>
- <878rkbjjnp.fsf@toke.dk> <6375340a6c284_66f16208aa@john.notmuch>
-In-Reply-To: <6375340a6c284_66f16208aa@john.notmuch>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Wed, 16 Nov 2022 12:50:52 -0800
-Message-ID: <CAKH8qBs1rYXf0GGto9hPz-ELLZ9c692cFnKC9JLwAq5b7JRK-A@mail.gmail.com>
-Subject: Re: [xdp-hints] Re: [PATCH bpf-next 05/11] veth: Support rx timestamp
- metadata for xdp
-To:     John Fastabend <john.fastabend@gmail.com>
-Cc:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, haoluo@google.com,
-        jolsa@kernel.org, David Ahern <dsahern@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Willem de Bruijn <willemb@google.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Anatoly Burakov <anatoly.burakov@intel.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20221116153418.3389630-1-alexandr.lobakin@intel.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 11:03 AM John Fastabend
-<john.fastabend@gmail.com> wrote:
->
-> Toke H=C3=B8iland-J=C3=B8rgensen wrote:
-> > Martin KaFai Lau <martin.lau@linux.dev> writes:
-> >
-> > > On 11/15/22 10:38 PM, John Fastabend wrote:
-> > >>>>>>> +static void veth_unroll_kfunc(const struct bpf_prog *prog, u32=
- func_id,
-> > >>>>>>> +                           struct bpf_patch *patch)
-> > >>>>>>> +{
-> > >>>>>>> +     if (func_id =3D=3D xdp_metadata_kfunc_id(XDP_METADATA_KFU=
-NC_RX_TIMESTAMP_SUPPORTED)) {
-> > >>>>>>> +             /* return true; */
-> > >>>>>>> +             bpf_patch_append(patch, BPF_MOV64_IMM(BPF_REG_0, =
-1));
-> > >>>>>>> +     } else if (func_id =3D=3D xdp_metadata_kfunc_id(XDP_METAD=
-ATA_KFUNC_RX_TIMESTAMP)) {
-> > >>>>>>> +             /* return ktime_get_mono_fast_ns(); */
-> > >>>>>>> +             bpf_patch_append(patch, BPF_EMIT_CALL(ktime_get_m=
-ono_fast_ns));
-> > >>>>>>> +     }
-> > >>>>>>> +}
-> > >>>>>>
-> > >>>>>> So these look reasonable enough, but would be good to see some e=
-xamples
-> > >>>>>> of kfunc implementations that don't just BPF_CALL to a kernel fu=
-nction
-> > >>>>>> (with those helper wrappers we were discussing before).
-> > >>>>>
-> > >>>>> Let's maybe add them if/when needed as we add more metadata suppo=
-rt?
-> > >>>>> xdp_metadata_export_to_skb has an example, and rfc 1/2 have more
-> > >>>>> examples, so it shouldn't be a problem to resurrect them back at =
-some
-> > >>>>> point?
-> > >>>>
-> > >>>> Well, the reason I asked for them is that I think having to mainta=
-in the
-> > >>>> BPF code generation in the drivers is probably the biggest drawbac=
-k of
-> > >>>> the kfunc approach, so it would be good to be relatively sure that=
- we
-> > >>>> can manage that complexity (via helpers) before we commit to this =
-:)
-> > >>>
-> > >>> Right, and I've added a bunch of examples in v2 rfc so we can judge
-> > >>> whether that complexity is manageable or not :-)
-> > >>> Do you want me to add those wrappers you've back without any real u=
-sers?
-> > >>> Because I had to remove my veth tstamp accessors due to John/Jesper
-> > >>> objections; I can maybe bring some of this back gated by some
-> > >>> static_branch to avoid the fastpath cost?
-> > >>
-> > >> I missed the context a bit what did you mean "would be good to see s=
-ome
-> > >> examples of kfunc implementations that don't just BPF_CALL to a kern=
-el
-> > >> function"? In this case do you mean BPF code directly without the ca=
-ll?
-> > >>
-> > >> Early on I thought we should just expose the rx_descriptor which wou=
-ld
-> > >> be roughly the same right? (difference being code embedded in driver=
- vs
-> > >> a lib) Trouble I ran into is driver code using seqlock_t and mutexs
-> > >> which wasn't as straight forward as the simpler just read it from
-> > >> the descriptor. For example in mlx getting the ts would be easy from
-> > >> BPF with the mlx4_cqe struct exposed
-> > >>
-> > >> u64 mlx4_en_get_cqe_ts(struct mlx4_cqe *cqe)
-> > >> {
-> > >>          u64 hi, lo;
-> > >>          struct mlx4_ts_cqe *ts_cqe =3D (struct mlx4_ts_cqe *)cqe;
-> > >>
-> > >>          lo =3D (u64)be16_to_cpu(ts_cqe->timestamp_lo);
-> > >>          hi =3D ((u64)be32_to_cpu(ts_cqe->timestamp_hi) + !lo) << 16=
-;
-> > >>
-> > >>          return hi | lo;
-> > >> }
-> > >>
-> > >> but converting that to nsec is a bit annoying,
-> > >>
-> > >> void mlx4_en_fill_hwtstamps(struct mlx4_en_dev *mdev,
-> > >>                              struct skb_shared_hwtstamps *hwts,
-> > >>                              u64 timestamp)
-> > >> {
-> > >>          unsigned int seq;
-> > >>          u64 nsec;
-> > >>
-> > >>          do {
-> > >>                  seq =3D read_seqbegin(&mdev->clock_lock);
-> > >>                  nsec =3D timecounter_cyc2time(&mdev->clock, timesta=
-mp);
-> > >>          } while (read_seqretry(&mdev->clock_lock, seq));
-> > >>
-> > >>          memset(hwts, 0, sizeof(struct skb_shared_hwtstamps));
-> > >>          hwts->hwtstamp =3D ns_to_ktime(nsec);
-> > >> }
-> > >>
-> > >> I think the nsec is what you really want.
-> > >>
-> > >> With all the drivers doing slightly different ops we would have
-> > >> to create read_seqbegin, read_seqretry, mutex_lock, ... to get
-> > >> at least the mlx and ice drivers it looks like we would need some
-> > >> more BPF primitives/helpers. Looks like some more work is needed
-> > >> on ice driver though to get rx tstamps on all packets.
-> > >>
-> > >> Anyways this convinced me real devices will probably use BPF_CALL
-> > >> and not BPF insns directly.
-> > >
-> > > Some of the mlx5 path looks like this:
-> > >
-> > > #define REAL_TIME_TO_NS(hi, low) (((u64)hi) * NSEC_PER_SEC + ((u64)lo=
-w))
-> > >
-> > > static inline ktime_t mlx5_real_time_cyc2time(struct mlx5_clock *cloc=
-k,
-> > >                                                u64 timestamp)
-> > > {
-> > >          u64 time =3D REAL_TIME_TO_NS(timestamp >> 32, timestamp & 0x=
-FFFFFFFF);
-> > >
-> > >          return ns_to_ktime(time);
-> > > }
-> > >
-> > > If some hints are harder to get, then just doing a kfunc call is bett=
-er.
-> >
-> > Sure, but if we end up having a full function call for every field in
-> > the metadata, that will end up having a significant performance impact
-> > on the XDP data path (thinking mostly about the skb metadata case here,
-> > which will collect several bits of metadata).
-> >
-> > > csum may have a better chance to inline?
-> >
-> > Yup, I agree. Including that also makes it possible to benchmark this
-> > series against Jesper's; which I think we should definitely be doing
-> > before merging this.
->
-> Good point I got sort of singularly focused on timestamp because I have
-> a use case for it now.
->
-> Also hash is often sitting in the rx descriptor.
+The 11/16/2022 16:34, Alexander Lobakin wrote:
+> 
+> From: Horatiu Vultur <horatiu.vultur@microchip.com>
+> Date: Tue, 15 Nov 2022 22:44:55 +0100
 
-Ack, let me try to add something else (that's more inline-able) on the
-rx side for a v2.
+Hi Olek,
 
-> >
-> > > Regardless, BPF in-lining is a well solved problem and used in many
-> > > bpf helpers already, so there are many examples in the kernel. I don'=
-t
-> > > think it is necessary to block this series because of missing some
-> > > helper wrappers for inlining. The driver can always start with the
-> > > simpler kfunc call first and optimize later if some hints from the
-> > > drivers allow it.
-> >
-> > Well, "solved" in the sense of "there are a few handfuls of core BPF
-> > people who know how to do it". My concern is that we'll end up with
-> > either the BPF devs having to maintain all these bits of BPF byte code
-> > in all the drivers; or drivers just punting to regular function calls
-> > because the inlining is too complicated, with sub-par performance as pe=
-r
-> > the above. I don't think we should just hand-wave this away as "solved"=
-,
-> > but rather treat this as an integral part of the initial series.
->
-> This was my motivation for pushing the rx_descriptor into the xdp_buff.
-> At this point if I'm going to have a kfunc call into the driver and
-> have the driver rewrite the code into some BPF instructions I would
-> just assume maintain this as a library code where I can hook it
-> into my BPF program directly from user space. Maybe a few drivers
-> will support all the things I want to read, but we run on lots of
-> hardware (mlx, intel, eks, azure, gke, etc) and its been a lot of work
-> to just get the basic feature parity. I also don't want to run around
-> writing driver code for each vendor if I can avoid it. Having raw
-> access to the rx descriptor gets me the escape hatch where I can
-> just do it myself. And the last piece of info from my point of view
-> (Tetragon, Cilium) I can run whatever libs I want and freely upgrade
-> libbpf and cilium/ebpf but have a lot less ability to get users
-> to upgrade kernels outside the LTS they picked. Meaning I can
-> add new things much easier if its lifted into BPF code placed
-> by user space.
->
-> I appreciate that it means I import the problem of hardware detection
-> and BTF CO-RE on networking codes, but we've already solved these
-> problems for other reasons. For example just configuring the timestamp
-> is a bit of an exercise in does my hardware support timestamping
-> and does it support timestamping the packets I care about,  e.g.
-> all pkts, just ptp pkts, etc.
->
-> I don't think they are mutual exclusive with this series though
-> because I can't see how to write these timestamping logic directly
-> in BPF. But for rxhash and csum it seems doable. My preference
-> is to have both the kfuncs and expose the descriptor directly.
->
-> .John
+> 
+> Extend lan966x XDP support with the action XDP_TX. In this case when the
+> received buffer needs to execute XDP_TX, the buffer will be moved to the
+> TX buffers. So a new RX buffer will be allocated.
+> When the TX finish with the frame, it would release completely this
+> buffer.
+> 
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> ---
+>  .../ethernet/microchip/lan966x/lan966x_fdma.c | 78 +++++++++++++++++--
+>  .../ethernet/microchip/lan966x/lan966x_main.c |  4 +-
+>  .../ethernet/microchip/lan966x/lan966x_main.h |  8 ++
+>  .../ethernet/microchip/lan966x/lan966x_xdp.c  |  8 ++
+>  4 files changed, 91 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> index 384ed34197d58..c2e56233a8da5 100644
+> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> @@ -394,13 +394,21 @@ static void lan966x_fdma_tx_clear_buf(struct lan966x *lan966x, int weight)
+>                 dcb_buf->dev->stats.tx_bytes += dcb_buf->len;
+> 
+>                 dcb_buf->used = false;
+> -               dma_unmap_single(lan966x->dev,
+> -                                dcb_buf->dma_addr,
+> -                                dcb_buf->len,
+> -                                DMA_TO_DEVICE);
+> -               if (!dcb_buf->ptp)
+> +               if (dcb_buf->skb)
+> +                       dma_unmap_single(lan966x->dev,
+> +                                        dcb_buf->dma_addr,
+> +                                        dcb_buf->len,
+> +                                        DMA_TO_DEVICE);
+> +
+> +               if (dcb_buf->skb && !dcb_buf->ptp)
+>                         dev_kfree_skb_any(dcb_buf->skb);
+> 
+> +               if (dcb_buf->page) {
+> +                       page_pool_release_page(lan966x->rx.page_pool,
+> +                                              dcb_buf->page);
+> +                       put_page(dcb_buf->page);
+> +               }
+> 
+> Hmm, that's not really correct.
+> 
+> For skb, you need to unmap + free, true (BPW, just use
+> napi_consume_skb()).
+
+What does BPW stand for?
+Yes, I can use napi_consume_skb instead of dev_kfree_skb_any();
+
+> For %XDP_TX, as you use Page Pool, you don't need to unmap, but you
+> need to do xdp_return_frame{,_bulk}. Plus, as Tx is being done here
+> directly from an Rx NAPI polling cycle, xdp_return_frame_rx_napi()
+> is usually used. Anyway, each of xdp_return_frame()'s variants will
+> call page_pool_put_full_page() for you.
+
+If I understand correctly this part that you describe, the page will
+be added back in the page_pool cache. While in my case, I am giving
+back the page to the page allocator. In this way the page_pool needs
+to allocate more pages every time when the action XDP_TX is happening.
+
+BTW, this shows that there is a missing xdp_rxq_info_reg_mem_model call,
+because when calling xdp_return_frame_rx_napi, the frame was not going
+to page_pool but the was simply freed because xdp_mem_info was the wrong
+type.
+
+> For %XDP_REDIRECT, as you don't know the source of the XDP frame,
+
+Why I don't know the source?
+Will it not be from an RX page that is allocated by Page Pool?
+
+> you need to unmap it (as it was previously mapped in
+> ::ndo_xdp_xmit()), plus call xdp_return_frame{,_bulk} to free the
+> XDP frame. Note that _rx_napi() variant is not applicable here.
+> 
+> That description might be confusing, so you can take a look at the
+> already existing code[0] to get the idea. I think this piece shows
+> the expected logics rather well.
+
+I think you forgot to write the link to the code.
+I looked also at different drivers but I didn't figure it out why the
+frame needed to be mapped and where is happening that.
+
+> 
+> +
+>                 clear = true;
+>         }
+> 
+> @@ -532,6 +540,9 @@ static int lan966x_fdma_napi_poll(struct napi_struct *napi, int weight)
+>                         lan966x_fdma_rx_free_page(rx);
+>                         lan966x_fdma_rx_advance_dcb(rx);
+>                         goto allocate_new;
+> +               case FDMA_TX:
+> +                       lan966x_fdma_rx_advance_dcb(rx);
+> +                       continue;
+>                 case FDMA_DROP:
+>                         lan966x_fdma_rx_free_page(rx);
+>                         lan966x_fdma_rx_advance_dcb(rx);
+> @@ -653,6 +664,62 @@ static void lan966x_fdma_tx_start(struct lan966x_tx *tx, int next_to_use)
+>         tx->last_in_use = next_to_use;
+>  }
+> 
+> +int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
+> +                          struct xdp_frame *xdpf,
+> +                          struct page *page)
+> +{
+> +       struct lan966x *lan966x = port->lan966x;
+> +       struct lan966x_tx_dcb_buf *next_dcb_buf;
+> +       struct lan966x_tx *tx = &lan966x->tx;
+> +       dma_addr_t dma_addr;
+> +       int next_to_use;
+> +       __be32 *ifh;
+> +       int ret = 0;
+> +
+> +       spin_lock(&lan966x->tx_lock);
+> +
+> +       /* Get next index */
+> +       next_to_use = lan966x_fdma_get_next_dcb(tx);
+> +       if (next_to_use < 0) {
+> +               netif_stop_queue(port->dev);
+> +               ret = NETDEV_TX_BUSY;
+> +               goto out;
+> +       }
+> +
+> +       /* Generate new IFH */
+> +       ifh = page_address(page) + XDP_PACKET_HEADROOM;
+> +       memset(ifh, 0x0, sizeof(__be32) * IFH_LEN);
+> +       lan966x_ifh_set_bypass(ifh, 1);
+> +       lan966x_ifh_set_port(ifh, BIT_ULL(port->chip_port));
+> +
+> +       dma_addr = page_pool_get_dma_addr(page);
+> +       dma_sync_single_for_device(lan966x->dev, dma_addr + XDP_PACKET_HEADROOM,
+> +                                  xdpf->len + IFH_LEN_BYTES,
+> +                                  DMA_TO_DEVICE);
+> 
+> Also not correct. This page was mapped with %DMA_FROM_DEVICE in the
+> Rx code, now you sync it for the opposite.
+> Most drivers in case of XDP enabled create Page Pools with ::dma_dir
+> set to %DMA_BIDIRECTIONAL. Now you would need only to sync it here
+> with the same direction (bidir) and that's it.
+
+That is a really good catch!
+I was wondering why the things were working when I tested this. Because
+definitely, I can see the right behaviour.
+
+> 
+> +
+> +       /* Setup next dcb */
+> +       lan966x_fdma_tx_setup_dcb(tx, next_to_use, xdpf->len + IFH_LEN_BYTES,
+> +                                 dma_addr + XDP_PACKET_HEADROOM);
+> +
+> +       /* Fill up the buffer */
+> +       next_dcb_buf = &tx->dcbs_buf[next_to_use];
+> +       next_dcb_buf->skb = NULL;
+> +       next_dcb_buf->page = page;
+> +       next_dcb_buf->len = xdpf->len + IFH_LEN_BYTES;
+> +       next_dcb_buf->dma_addr = dma_addr;
+> +       next_dcb_buf->used = true;
+> +       next_dcb_buf->ptp = false;
+> +       next_dcb_buf->dev = port->dev;
+> +
+> +       /* Start the transmission */
+> +       lan966x_fdma_tx_start(tx, next_to_use);
+> +
+> +out:
+> +       spin_unlock(&lan966x->tx_lock);
+> +
+> +       return ret;
+> +}
+> +
+>  int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev)
+>  {
+>         struct lan966x_port *port = netdev_priv(dev);
+> @@ -709,6 +776,7 @@ int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev)
+>         /* Fill up the buffer */
+>         next_dcb_buf = &tx->dcbs_buf[next_to_use];
+>         next_dcb_buf->skb = skb;
+> +       next_dcb_buf->page = NULL;
+>         next_dcb_buf->len = skb->len;
+>         next_dcb_buf->dma_addr = dma_addr;
+>         next_dcb_buf->used = true;
+> 
+> [...]
+> 
+> --
+> 2.38.0
+> 
+> Thanks,
+> Olek
+
+-- 
+/Horatiu
