@@ -2,75 +2,85 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15FC6C4321E
-	for <bpf@archiver.kernel.org>; Wed, 16 Nov 2022 05:41:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5570C4332F
+	for <bpf@archiver.kernel.org>; Wed, 16 Nov 2022 05:43:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232032AbiKPFlE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 16 Nov 2022 00:41:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54324 "EHLO
+        id S230284AbiKPFnQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Nov 2022 00:43:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232116AbiKPFkt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 16 Nov 2022 00:40:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AEF3C6E6;
-        Tue, 15 Nov 2022 21:40:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 093D5B81BE8;
-        Wed, 16 Nov 2022 05:40:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A48D3C433D7;
-        Wed, 16 Nov 2022 05:40:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668577215;
-        bh=xzp73soH9qhxMMprTJUUEmiRXnNqGTejgKHr/P4shEY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=pt7Y6zRzNt7yrW5SuzWvyKrQdZyTErOocX0WPhpMNYANKQw95u6Ah4Z5U1lEmxlR3
-         Lcprsn2uHXjycz1jf7CXwEKe1p1TnwVouQoFr8lS0qVpU7p+/p2KidQnA1uhiCb999
-         X1eu+WOWr+dk+3nKn6uBV1OIxXIpUcCqQ5yUemFP5sjlubBQ5/zWc5ZaNyP6mHsF79
-         w3PdW6W7KjOAWzJlZOIw4sAf7TOIDxHT+DLhd8OBsiKHQLq/j6I3zRQLNYTQBtqQbA
-         MiA/0KsyaKz15uSsrTXynEy5ZudKq9Co1f/9aOnL5maxgM7A9G98s34bquuwspZh3j
-         dHYGIvC3dP/+Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 82122C395F6;
-        Wed, 16 Nov 2022 05:40:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229766AbiKPFnP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 16 Nov 2022 00:43:15 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DADC38C
+        for <bpf@vger.kernel.org>; Tue, 15 Nov 2022 21:43:14 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id bj12so41419614ejb.13
+        for <bpf@vger.kernel.org>; Tue, 15 Nov 2022 21:43:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+uVYVC1IsyRibZiskPpQmqHqIsNepLyAUfybOMLz6ns=;
+        b=Lw4yzlxjQ7EM5Fdxx2jvmhUY14guzuQjFq0W2nrp8t3IJMk+8avspToXudqhC0P3Vq
+         CXR/FoG+s/dH7Dz0OLHSQzuIIcNm34kbx58GbGCqq6M7PjwsgUXyMTziwhVnqhQd5DNC
+         7Kdqgyq5+qRghhYKwjeg1y4isvDqYbkesXjSq+XlRnrTavQltMYg7RuYlP4RpYRDPSei
+         jFqeJzgQIe1ghIPg8vH0mkGNb0+APCEuoYtifUW0D4tEkcs8XpR1zenpcOnyH7h5TZyP
+         n9yLcJjx486F0GZUoI+ATLhTsdYLpQTxyQplwypqBYg/H0WfyQm0C2hzcBQm6Wu7Cn71
+         WT5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+uVYVC1IsyRibZiskPpQmqHqIsNepLyAUfybOMLz6ns=;
+        b=O6Rqr/RAMQ0DI4VwcSQ1K5FI7MRSaZeRR3uR24BDbDvIcVQR+ubhFbKUkB1Eb9KMlA
+         Z2r39UN6Qeat6H5/ac+hscGSnXqtjjiEvn67l3MxWBE0YdSrdYE0C0RkrWCIMMGJot+V
+         OzeQmYaGjIZ5KvM3tNCCzc3i65EPQOT5MIHIqQB+rzHkxI9G5ilf62qxKN7rfTTCzW6A
+         tvUmcOy95f1eIQ+qnvV6khXp8XJy1fUxb7InropT2uYjGmbPLtT9BjZRl5YL2WTH1ewP
+         kdSa2UAUXPgsTJpdEoTFCjNVcPIPL0u4uIYC08yLl+c9s38vOGlXqfCTyouBpaF8dCe3
+         S6SA==
+X-Gm-Message-State: ANoB5pnR26JCm16q6uir25MDSFJW4ruFUaQFTW4/25ymBx81xR49pg1y
+        pOmqy41Wicz04JJ/lV+dwlkK2pAGJUIZ7JrGu28=
+X-Google-Smtp-Source: AA0mqf4t/fwPB/PTgNlmobxsk5Bnj5K+9NxaW3AKKnJJakv6fWF08MuggL5JN2fDn7vF3RvAA8nsxQuBCrd9zHi8U8k=
+X-Received: by 2002:a17:906:a3cc:b0:78d:513d:f447 with SMTP id
+ ca12-20020a170906a3cc00b0078d513df447mr263931ejb.708.1668577393142; Tue, 15
+ Nov 2022 21:43:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v1] docs/bpf: Fix sample code in MAP_TYPE_ARRAY docs
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166857721552.26805.16201329385041554291.git-patchwork-notify@kernel.org>
-Date:   Wed, 16 Nov 2022 05:40:15 +0000
-References: <20221115095910.86407-1-donald.hunter@gmail.com>
-In-Reply-To: <20221115095910.86407-1-donald.hunter@gmail.com>
-To:     Donald Hunter <donald.hunter@gmail.com>
-Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org, andrii@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, corbet@lwn.net
+References: <20221111063417.1603111-1-houtao@huaweicloud.com>
+ <20221111063417.1603111-2-houtao@huaweicloud.com> <33b5fc4e-be12-3aa8-b063-47aa998b951c@linux.dev>
+ <CAADnVQ+Mxb8Wj3pODPovh9L1S+VDsj=4ufP3M70LQz4fSBaDww@mail.gmail.com> <71933d25-b160-3e19-c544-1e12b934f07f@huaweicloud.com>
+In-Reply-To: <71933d25-b160-3e19-c544-1e12b934f07f@huaweicloud.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 15 Nov 2022 21:43:01 -0800
+Message-ID: <CAADnVQLdJVUsM-ZsOjsCS1aQZkzDQD-iBr_hDLG_OAs5xrmBFg@mail.gmail.com>
+Subject: Re: [PATCH bpf v2 1/3] bpf: Pin iterator link when opening iterator
+To:     Hou Tao <houtao@huaweicloud.com>
+Cc:     Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>,
+        Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Hao Luo <haoluo@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Hou Tao <houtao1@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+On Tue, Nov 15, 2022 at 6:40 PM Hou Tao <houtao@huaweicloud.com> wrote:
+> >
+> > Also pls target this kind of change to bpf-next especially
+> > when there is a consideration to revert other fixes.
+> > This kind of questionable fixes are not suitable for bpf tree
+> > regardless of how long the "bug" was present.
+> The reason to post the fix to bpf tree instead bpf-next is that cgroup iterator
+> is merged in v6.1 and I think it is better to merge the fix into v6.1 instead of
+> v6.2. And patchset v1 is not a questionable fixes, because iterator link has
+> already acquired the reference of the start cgroup.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Tue, 15 Nov 2022 09:59:10 +0000 you wrote:
-> Remove mistaken & from code example in MAP_TYPE_ARRAY docs
-> 
-> Fixes: 1cfa97b30c5a ("bpf, docs: Document BPF_MAP_TYPE_ARRAY")
-> Signed-off-by: Donald Hunter <donald.hunter@gmail.com>
-> ---
->  Documentation/bpf/map_array.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-
-Here is the summary with links:
-  - [bpf-next,v1] docs/bpf: Fix sample code in MAP_TYPE_ARRAY docs
-    https://git.kernel.org/bpf/bpf-next/c/e0eb60829a6e
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+These "fixes are not suitable for bpf tree regardless of how long the
+"bug" was present".
