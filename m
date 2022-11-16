@@ -2,202 +2,221 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8C6EC43219
-	for <bpf@archiver.kernel.org>; Wed, 16 Nov 2022 22:47:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7B63C43219
+	for <bpf@archiver.kernel.org>; Wed, 16 Nov 2022 23:04:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234439AbiKPWrW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 16 Nov 2022 17:47:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60516 "EHLO
+        id S238368AbiKPXEa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Nov 2022 18:04:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238876AbiKPWqw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 16 Nov 2022 17:46:52 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57796DCDD
-        for <bpf@vger.kernel.org>; Wed, 16 Nov 2022 14:46:46 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id ci1-20020a17090afc8100b00212e5b4c3afso3887pjb.3
-        for <bpf@vger.kernel.org>; Wed, 16 Nov 2022 14:46:46 -0800 (PST)
+        with ESMTP id S238244AbiKPXE2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 16 Nov 2022 18:04:28 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430EB32066
+        for <bpf@vger.kernel.org>; Wed, 16 Nov 2022 15:04:27 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id 130so348549pgc.5
+        for <bpf@vger.kernel.org>; Wed, 16 Nov 2022 15:04:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ECsizzUPW5YOb7oAQXRNb+Xilf4/6y3zdt9/ywk2ZNg=;
-        b=qNC0+/AKAGeX7QXSDmOijuSzD2DiyM9sVGtBjQ1/WbBZTIsLX7UfefxzoDCmh+c0FV
-         kKc+5FpNGTnvySO8PwEYHs/O0o1wL5InFD6wxutOJ3qHyn+G8ABP2WOOLpgW6maSPeez
-         K/ln6bD+PAEyrmoUp3sHHwJ/aho+eRdjcfkYfBlqmco+sQEio9Yz5txQeXR3hSbcDetU
-         nc1vOiKMDCBFO/LfQcRoC7WHtMmYfbK1k9pfB4UuIPj2xZS9qebD8XgvQEoDEu8juXoV
-         /iMZDiObHA4YlXBjtHUtb5UySCVZGgNaU7ke3DjhIdaDWDnzybrAUTwkHZJtvH+maS4S
-         ZAZQ==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3XP941acguvK1ZAkrhvPDttgcSVa1z7xUK43PRl+uio=;
+        b=56syu10yY4F1zazjA7qQqh2STRuHElk9eY+YEZ2JcKVraIu6zSy+d7hqJ6YBhnyKnk
+         1+LuOwiNiju5AdvI9xdh5g/G80aKnuJ11AaNiNKaHFRuda9VJx8tJcobAEuesbGIYHgS
+         tMzqZ7quPD44w/BpPwpIxIYOAHQ0Eu6vcZcGfDNkWyxWllI9JW5MvHxeDqabzek7mvJF
+         lRPHcIEV4pjuGc5AmAsFH4Jf4S3BLYvw3FN1EFQw3CaTcsnQ/rxPpU5CayDHenZMNu9J
+         ZglvH/USVkAoU8iRANLUdGJML73p0sP2EWzu5aiesLr10lbTtOu9kbvOSISR4gHJF93H
+         u1/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ECsizzUPW5YOb7oAQXRNb+Xilf4/6y3zdt9/ywk2ZNg=;
-        b=qkqE+lehBxK/VtCOBEhX3jU12xIqfBh3nDttuWlGPNfGAn4Lp7nfqy71kT7fGP6FJF
-         NF6oav7yhUOn2+NsNyshxtVU8LS4/PVmS6t5CqYk9+z6XDc78abhVL3n72LnOLb/nsqz
-         jLooJL+ac3gJ9+uUDH37mHTr0aKUFUUOVd7RY02Q5AWL36nWIPtBMXzHwtlKW6bPGSfY
-         MDL4Y4yYxwcJ3k8Dc/JyVt1EVfP7yf79VDdar7jSXD2wGV5qnAMOhC3mzNv69asewwF6
-         KnfzJUACGyjZqEbp7OeMLFq6NhDHJro5tXE4KD5Iq1g0ntZTBKgt/kQQplcDaSIFNzNm
-         vLQg==
-X-Gm-Message-State: ANoB5pn7GTDxEgWQuXi/+mzWxapY+ti8kzVb0byRpoJpDhB07rvlb5Fq
-        OS4TckuezL0djcQ+CQjkhbPRXvK2Bc7I
-X-Google-Smtp-Source: AA0mqf6KCza6YCJzHP2PSBWkF/0xN8AVuNgjgtwg5BZnmY6GxKCZQaTel+e7L2cemRPEQEZbcitL1gMfHocZ
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:c14c:6035:5882:8faa])
- (user=irogers job=sendgmr) by 2002:a05:6a00:1696:b0:571:2b7c:6693 with SMTP
- id k22-20020a056a00169600b005712b7c6693mr145885pfc.48.1668638806175; Wed, 16
- Nov 2022 14:46:46 -0800 (PST)
-Date:   Wed, 16 Nov 2022 14:46:31 -0800
-Message-Id: <20221116224631.207631-1-irogers@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Subject: [PATCH] perf build: Fix LIBTRACEEVENT_DYNAMIC
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3XP941acguvK1ZAkrhvPDttgcSVa1z7xUK43PRl+uio=;
+        b=D61b02rwmpXSQWN6uMt5WDpgeLKNXlUD1a0M1ZYA/UtiAeYBiAJVVarztuWi/2OPGy
+         wpmgV3uPHoFYOdb/teZlzXQVnT+wtuNF1nYFW5DNoX3BK5WniCR4RirB46c8lFL5f9O7
+         tBTGu2vFhTzMS8ME0dDBU8cMzYFIMqc33b5/NzubLYO3cDrxB5pXfkXhWsgslNBMRP5A
+         cCd01fOq4tqtqqC3RLdE2piydTy32lDcg1X7vfL8UBE8MdYurvauxpeUjwhFCGSXYvk7
+         gSUm9SSwneWV6ehYV3HNoU0yVijvaa7b1uwGrFJQjDMrMiQt2tzaltztm1B5GI+P+5Wu
+         Bbbg==
+X-Gm-Message-State: ANoB5pmZ0V/gF1UzivkljwuakPWJemjtEodZf60FyamJrnd4PSBx/ge+
+        IvBFlvEsBYEUTenqGAe1EVoEQY5KoVLezjkOqw/jokO/zBi5
+X-Google-Smtp-Source: AA0mqf4KnTW/Rs1/rqT5ydHUWbdtFyquLEB9AfGl4n344VRBZodroHoiuUE+EPtZ149p+/6c710BcebRhYhln41jNs4=
+X-Received: by 2002:aa7:9518:0:b0:56c:8c13:24fd with SMTP id
+ b24-20020aa79518000000b0056c8c1324fdmr319516pfp.2.1668639866677; Wed, 16 Nov
+ 2022 15:04:26 -0800 (PST)
+MIME-Version: 1.0
+References: <20221102000525.gonna.409-kees@kernel.org>
+In-Reply-To: <20221102000525.gonna.409-kees@kernel.org>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 16 Nov 2022 18:04:15 -0500
+Message-ID: <CAHC9VhRh2VSEHSOdiTg-1K0zbpa_oj9iKJHi6ZLYj3Ubt4tGRQ@mail.gmail.com>
+Subject: Re: [PATCH v2] LSM: Better reporting of actual LSMs at boot
+To:     Kees Cook <keescook@chromium.org>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The tools/lib includes fixes break LIBTRACEVENT_DYNAMIC as the
-makefile erroneously had depdendencies on building libtraceevent even
-when not linking with it. This change fixes the issues with
-LIBTRACEEVENT_DYNAMIC by making the built files optional.
+On Tue, Nov 1, 2022 at 8:05 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> Enhance the details reported by "lsm.debug" in several ways:
+>
+> - report contents of "security=3D"
+> - report contents of "CONFIG_LSM"
+> - report contents of "lsm=3D"
+> - report any early LSM details
+> - whitespace-align the output of similar phases for easier visual parsing
+> - change "disabled" to more accurate "skipped"
+> - explain what "skipped" and "ignored" mean in a parenthetical
+>
+> Upgrade the "security=3D is ignored" warning from pr_info to pr_warn,
+> and include full arguments list to make the cause even more clear.
+>
+> Replace static "Security Framework initializing" pr_info with specific
+> list of the resulting order of enabled LSMs.
+>
+> For example, if the kernel is built with:
+>
+> CONFIG_SECURITY_SELINUX=3Dy
+> CONFIG_SECURITY_APPARMOR=3Dy
+> CONFIG_SECURITY_LOADPIN=3Dy
+> CONFIG_SECURITY_YAMA=3Dy
+> CONFIG_SECURITY_SAFESETID=3Dy
+> CONFIG_SECURITY_LOCKDOWN_LSM=3Dy
+> CONFIG_SECURITY_LANDLOCK=3Dy
+> CONFIG_INTEGRITY=3Dy
+> CONFIG_BPF_LSM=3Dy
+> CONFIG_DEFAULT_SECURITY_APPARMOR=3Dy
+> CONFIG_LSM=3D"landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,=
+smack,tomoyo,apparmor,bpf"
+>
+> Booting without options will show:
+>
+> LSM: initializing lsm=3Dlockdown,capability,landlock,yama,loadpin,safeset=
+id,integrity,selinux,bpf
+> landlock: Up and running.
+> Yama: becoming mindful.
+> LoadPin: ready to pin (currently not enforcing)
+> SELinux:  Initializing.
+> LSM support for eBPF active
+>
+> Boot with "lsm.debug" will show:
+>
+> LSM: legacy security=3D *unspecified*
+> LSM: CONFIG_LSM=3Dlandlock,lockdown,yama,loadpin,safesetid,integrity,seli=
+nux,smack,tomoyo,apparmor,bpf
+> LSM: boot arg lsm=3D *unspecified*
+> LSM:   early started: lockdown (enabled)
+> LSM:   first ordered: capability (enabled)
+> LSM: builtin ordered: landlock (enabled)
+> LSM: builtin ignored: lockdown (not built into kernel)
+> LSM: builtin ordered: yama (enabled)
+> LSM: builtin ordered: loadpin (enabled)
+> LSM: builtin ordered: safesetid (enabled)
+> LSM: builtin ordered: integrity (enabled)
+> LSM: builtin ordered: selinux (enabled)
+> LSM: builtin ignored: smack (not built into kernel)
+> LSM: builtin ignored: tomoyo (not built into kernel)
+> LSM: builtin ordered: apparmor (enabled)
+> LSM: builtin ordered: bpf (enabled)
+> LSM: exclusive chosen:   selinux
+> LSM: exclusive disabled: apparmor
+> LSM: initializing lsm=3Dlockdown,capability,landlock,yama,loadpin,safeset=
+id,integrity,selinux,bpf
+> LSM: cred blob size       =3D 32
+> LSM: file blob size       =3D 16
+> LSM: inode blob size      =3D 72
+> LSM: ipc blob size        =3D 8
+> LSM: msg_msg blob size    =3D 4
+> LSM: superblock blob size =3D 80
+> LSM: task blob size       =3D 8
+> LSM: initializing capability
+> LSM: initializing landlock
+> landlock: Up and running.
+> LSM: initializing yama
+> Yama: becoming mindful.
+> LSM: initializing loadpin
+> LoadPin: ready to pin (currently not enforcing)
+> LSM: initializing safesetid
+> LSM: initializing integrity
+> LSM: initializing selinux
+> SELinux:  Initializing.
+> LSM: initializing bpf
+> LSM support for eBPF active
+>
+> And some examples of how the lsm.debug ordering report changes...
+>
+> With "lsm.debug security=3Dselinux":
+>
+> LSM: legacy security=3Dselinux
+> LSM: CONFIG_LSM=3Dlandlock,lockdown,yama,loadpin,safesetid,integrity,seli=
+nux,smack,tomoyo,apparmor,bpf
+> LSM: boot arg lsm=3D *unspecified*
+> LSM:   early started: lockdown (enabled)
+> LSM:   first ordered: capability (enabled)
+> LSM: security=3Dselinux disabled: apparmor (only one legacy major LSM)
+> LSM: builtin ordered: landlock (enabled)
+> LSM: builtin ignored: lockdown (not built into kernel)
+> LSM: builtin ordered: yama (enabled)
+> LSM: builtin ordered: loadpin (enabled)
+> LSM: builtin ordered: safesetid (enabled)
+> LSM: builtin ordered: integrity (enabled)
+> LSM: builtin ordered: selinux (enabled)
+> LSM: builtin ignored: smack (not built into kernel)
+> LSM: builtin ignored: tomoyo (not built into kernel)
+> LSM: builtin ordered: apparmor (disabled)
+> LSM: builtin ordered: bpf (enabled)
+> LSM: exclusive chosen:   selinux
+> LSM: initializing lsm=3Dlockdown,capability,landlock,yama,loadpin,safeset=
+id,integrity,selinux,bpf
+>
+> With "lsm.debug lsm=3Dintegrity,selinux,loadpin,crabability,bpf,loadpin,l=
+oadpin":
+>
+> LSM: legacy security=3D *unspecified*
+> LSM: CONFIG_LSM=3Dlandlock,lockdown,yama,loadpin,safesetid,integrity,seli=
+nux,smack,tomoyo,apparmor,bpf
+> LSM: boot arg lsm=3Dintegrity,selinux,loadpin,capability,bpf,loadpin,load=
+pin
+> LSM:   early started: lockdown (enabled)
+> LSM:   first ordered: capability (enabled)
+> LSM: cmdline ordered: integrity (enabled)
+> LSM: cmdline ordered: selinux (enabled)
+> LSM: cmdline ordered: loadpin (enabled)
+> LSM: cmdline ignored: crabability (not built into kernel)
+> LSM: cmdline ordered: bpf (enabled)
+> LSM: cmdline skipped: apparmor (not in requested order)
+> LSM: cmdline skipped: yama (not in requested order)
+> LSM: cmdline skipped: safesetid (not in requested order)
+> LSM: cmdline skipped: landlock (not in requested order)
+> LSM: exclusive chosen:   selinux
+> LSM: initializing lsm=3Dlockdown,capability,integrity,selinux,loadpin,bpf
+>
+> Cc: Paul Moore <paul@paul-moore.com>
+> Cc: James Morris <jmorris@namei.org>
+> Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> Cc: linux-security-module@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+> v2: en/dis-enabled expanded, example output in commit log, use pr_cont.
+> v1: https://lore.kernel.org/lkml/20221018064825.never.323-kees@kernel.org=
+/
+> ---
+>  security/security.c | 45 ++++++++++++++++++++++++++++++++++++---------
+>  1 file changed, 36 insertions(+), 9 deletions(-)
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/Makefile.perf | 25 ++++++++++++++++++++++---
- tools/perf/util/setup.py |  3 ++-
- 2 files changed, 24 insertions(+), 4 deletions(-)
+I tend to agree with Micka=C3=ABl regarding the aligned output, but that's
+not worth worrying too much about for debug stuff.  Merged into
+lsm/next, thanks Kees.
 
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index dd096aba4430..59c4e8f9b014 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -242,8 +242,10 @@ sub-make: fixdep
- else # force_fixdep
- 
- LIBAPI_DIR      = $(srctree)/tools/lib/api/
-+ifndef LIBTRACEEVENT_DYNAMIC
- LIBTRACEEVENT_DIR = $(srctree)/tools/lib/traceevent/
- LIBTRACEEVENT_PLUGINS_DIR = $(LIBTRACEEVENT_DIR)/plugins
-+endif
- LIBBPF_DIR      = $(srctree)/tools/lib/bpf/
- LIBSUBCMD_DIR   = $(srctree)/tools/lib/subcmd/
- LIBSYMBOL_DIR   = $(srctree)/tools/lib/symbol/
-@@ -293,6 +295,7 @@ SCRIPT_SH += perf-iostat.sh
- grep-libs = $(filter -l%,$(1))
- strip-libs = $(filter-out -l%,$(1))
- 
-+ifndef LIBTRACEEVENT_DYNAMIC
- ifneq ($(OUTPUT),)
-   LIBTRACEEVENT_OUTPUT = $(abspath $(OUTPUT))/libtraceevent
- else
-@@ -306,13 +309,16 @@ LIBTRACEEVENT = $(LIBTRACEEVENT_OUTPUT)/libtraceevent.a
- export LIBTRACEEVENT
- LIBTRACEEVENT_DYNAMIC_LIST = $(LIBTRACEEVENT_PLUGINS_OUTPUT)/libtraceevent-dynamic-list
- CFLAGS += -I$(LIBTRACEEVENT_OUTPUT)/include
--
- #
- # The static build has no dynsym table, so this does not work for
- # static build. Looks like linker starts to scream about that now
- # (in Fedora 26) so we need to switch it off for static build.
- DYNAMIC_LIST_LDFLAGS               = -Xlinker --dynamic-list=$(LIBTRACEEVENT_DYNAMIC_LIST)
- LIBTRACEEVENT_DYNAMIC_LIST_LDFLAGS = $(if $(findstring -static,$(LDFLAGS)),,$(DYNAMIC_LIST_LDFLAGS))
-+else
-+LIBTRACEEVENT_DYNAMIC_LIST =
-+LIBTRACEEVENT_DYNAMIC_LIST_LDFLAGS =
-+endif
- 
- ifneq ($(OUTPUT),)
-   LIBAPI_OUTPUT = $(abspath $(OUTPUT))/libapi
-@@ -375,7 +381,11 @@ export PYTHON_EXTBUILD_LIB PYTHON_EXTBUILD_TMP
- python-clean := $(call QUIET_CLEAN, python) $(RM) -r $(PYTHON_EXTBUILD) $(OUTPUT)python/perf*.so
- 
- PYTHON_EXT_SRCS := $(shell grep -v ^\# util/python-ext-sources)
-+ifndef LIBTRACEEVENT_DYNAMIC
- PYTHON_EXT_DEPS := util/python-ext-sources util/setup.py $(LIBTRACEEVENT) $(LIBAPI)
-+else
-+PYTHON_EXT_DEPS := util/python-ext-sources util/setup.py $(LIBAPI)
-+endif
- 
- SCRIPTS = $(patsubst %.sh,%,$(SCRIPT_SH))
- 
-@@ -785,9 +795,12 @@ prepare: $(OUTPUT)PERF-VERSION-FILE $(OUTPUT)common-cmds.h archheaders $(drm_ioc
- 	$(LIBPERF) \
- 	$(LIBSUBCMD) \
- 	$(LIBSYMBOL) \
--	$(LIBTRACEEVENT) \
- 	bpf-skel
- 
-+ifndef LIBTRACEEVENT_DYNAMIC
-+prepare: $(LIBTRACEEVENT)
-+endif
-+
- $(OUTPUT)%.o: %.c prepare FORCE
- 	$(Q)$(MAKE) -f $(srctree)/tools/build/Makefile.build dir=$(build-dir) $@
- 
-@@ -843,6 +856,7 @@ endif
- 
- $(patsubst perf-%,%.o,$(PROGRAMS)): $(wildcard */*.h)
- 
-+ifndef LIBTRACEEVENT_DYNAMIC
- LIBTRACEEVENT_FLAGS += plugin_dir=$(plugindir_SQ) 'EXTRA_CFLAGS=$(EXTRA_CFLAGS)' 'LDFLAGS=$(filter-out -static,$(LDFLAGS))'
- 
- $(LIBTRACEEVENT): FORCE | $(LIBTRACEEVENT_OUTPUT)
-@@ -872,6 +886,7 @@ install-traceevent-plugins: libtraceevent_plugins
- 	$(Q)$(MAKE) -C $(LIBTRACEEVENT_PLUGINS_DIR) O=$(LIBTRACEEVENT_PLUGINS_OUTPUT) \
- 		DESTDIR=$(LIBTRACEEVENT_PLUGINS_DESTDIR) prefix= \
- 		$(LIBTRACEEVENT_FLAGS) install
-+endif
- 
- $(LIBAPI): FORCE | $(LIBAPI_OUTPUT)
- 	$(Q)$(MAKE) -C $(LIBAPI_DIR) O=$(LIBAPI_OUTPUT) \
-@@ -1152,7 +1167,7 @@ endif # BUILD_BPF_SKEL
- bpf-skel-clean:
- 	$(call QUIET_CLEAN, bpf-skel) $(RM) -r $(SKEL_TMP_OUT) $(SKELETONS)
- 
--clean:: $(LIBTRACEEVENT)-clean $(LIBAPI)-clean $(LIBBPF)-clean $(LIBSUBCMD)-clean $(LIBSYMBOL)-clean $(LIBPERF)-clean fixdep-clean python-clean bpf-skel-clean tests-coresight-targets-clean libtraceevent_plugins-clean
-+clean:: $(LIBAPI)-clean $(LIBBPF)-clean $(LIBSUBCMD)-clean $(LIBSYMBOL)-clean $(LIBPERF)-clean fixdep-clean python-clean bpf-skel-clean tests-coresight-targets-clean
- 	$(call QUIET_CLEAN, core-objs)  $(RM) $(LIBPERF_A) $(OUTPUT)perf-archive $(OUTPUT)perf-iostat $(LANG_BINDINGS)
- 	$(Q)find $(or $(OUTPUT),.) -name '*.o' -delete -o -name '\.*.cmd' -delete -o -name '\.*.d' -delete
- 	$(Q)$(RM) $(OUTPUT).config-detected
-@@ -1192,6 +1207,10 @@ clean:: $(LIBTRACEEVENT)-clean $(LIBAPI)-clean $(LIBBPF)-clean $(LIBSUBCMD)-clea
- 	$(call QUIET_CLEAN, Documentation) \
- 	$(MAKE) -C $(DOC_DIR) O=$(OUTPUT) clean >/dev/null
- 
-+ifndef LIBTRACEEVENT_DYNAMIC
-+clean:: $(LIBTRACEEVENT)-clean libtraceevent_plugins-clean
-+endif
-+
- #
- # To provide FEATURE-DUMP into $(FEATURE_DUMP_COPY)
- # file if defined, with no further action.
-diff --git a/tools/perf/util/setup.py b/tools/perf/util/setup.py
-index 5b1e6468d5e8..43e7ca40b2ec 100644
---- a/tools/perf/util/setup.py
-+++ b/tools/perf/util/setup.py
-@@ -77,7 +77,8 @@ perf = Extension('perf',
- 		  include_dirs = ['util/include'],
- 		  libraries = extra_libraries,
- 		  extra_compile_args = cflags,
--		  extra_objects = [libtraceevent, libapikfs, libperf],
-+		  extra_objects = [ x for x in [libtraceevent, libapikfs, libperf]
-+                                    if x is not None],
-                  )
- 
- setup(name='perf',
--- 
-2.38.1.431.g37b22c650d-goog
-
+--=20
+paul-moore.com
