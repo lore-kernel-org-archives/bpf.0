@@ -2,249 +2,206 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E523CC433FE
-	for <bpf@archiver.kernel.org>; Wed, 16 Nov 2022 07:25:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC794C4332F
+	for <bpf@archiver.kernel.org>; Wed, 16 Nov 2022 07:29:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231270AbiKPHZZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 16 Nov 2022 02:25:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45502 "EHLO
+        id S232338AbiKPH3k (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Nov 2022 02:29:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiKPHZX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 16 Nov 2022 02:25:23 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E22A1BA
-        for <bpf@vger.kernel.org>; Tue, 15 Nov 2022 23:25:22 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NBvhX4t6rz4f3jZl
-        for <bpf@vger.kernel.org>; Wed, 16 Nov 2022 15:25:16 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP4 (Coremail) with SMTP id gCh0CgCXu9hckHRjjPhzAg--.13472S4;
-        Wed, 16 Nov 2022 15:25:18 +0800 (CST)
-From:   Hou Tao <houtao@huaweicloud.com>
-To:     bpf@vger.kernel.org
-Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Hao Luo <haoluo@google.com>,
-        Yonghong Song <yhs@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S232438AbiKPH3f (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 16 Nov 2022 02:29:35 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4553EB7D7
+        for <bpf@vger.kernel.org>; Tue, 15 Nov 2022 23:29:33 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id bj12so41872977ejb.13
+        for <bpf@vger.kernel.org>; Tue, 15 Nov 2022 23:29:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=K1Y99RO47dfeR0gK8clWXAfbdWlFMBk6bW7ab+0e2TE=;
+        b=BzZ+lZ2wfM+2sUVO6p9glZYjC3zC1wS+H+ZKNXrtSKJHjeSD1zN25j+0sa9wAWYdqY
+         4ULu4x5JUfiTuCPCHMcxcmkfCTxghbKbJPw2wM8J78TnXZv6/OICMlOoPEAr9q/8cc4M
+         GK+qKbl2yJYc7xubaYBDygItKTgieremOl4QCaSTl4Pt5pi9eLiwZglJOVtIIbZEYsMX
+         VSq12S63449p72/9cCJjc+i8fkJU0R2A1EbNH9/Qz2MxoIPy3rtOADUf0P0OSIj43MMX
+         NSoVhsvHl0YfcwaeIXjuR6znMIokHg+xy4irWiFyukH66bGCN/mdn4KL2Vq+f7qN897V
+         yQcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K1Y99RO47dfeR0gK8clWXAfbdWlFMBk6bW7ab+0e2TE=;
+        b=I8lizbns0df1H1A68vWUEk48mt78DC4va61DPgUMLCroAf8TqkNnRpKTpfLIqktZO2
+         Ojum4wQMZw+8hiR6oDvPWIew4R4mtorsDrNRIXwaI0Xv+gm/LivfpeADqxUyd3UIADWK
+         an6qA1vFmMTM0ytbfjJDOc2C8AEn2/bqX4KRSgl2/d8v+JLay9FzZscuzManeMsYyBql
+         KG2U68Qn8jozEx+b13V3QXbUOWnqR1S2U2YQEBVGy7RTxffNJ+PhT4Xu80RRcNvCygG0
+         uvR5Tj1E4YB8xw41gBZJRSHn0UAxkVmBwaILUmqqV2uRQNPu1LC9nddBMZIuAk2jjYKs
+         qO+w==
+X-Gm-Message-State: ANoB5pklRtvGLU6DN1dxxaEcubFgOTGSX/aTYi2XpbSLm0+ri2PpnCLO
+        TpROmoruKmIyBQjGbK/Rp2+asAwjzC6AmQ==
+X-Google-Smtp-Source: AA0mqf40DJtmaOuVVURrWcZVEgASg8S/GEnJ8fxBJL+0F0V/8e5siZGoNj+XTWi2VT5yXIptBv+yRw==
+X-Received: by 2002:a17:906:e241:b0:7ae:e592:6d83 with SMTP id gq1-20020a170906e24100b007aee5926d83mr11859585ejb.699.1668583771626;
+        Tue, 15 Nov 2022 23:29:31 -0800 (PST)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id 21-20020a170906309500b007add62dafbasm6455394ejv.157.2022.11.15.23.29.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 23:29:31 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Wed, 16 Nov 2022 08:29:29 +0100
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        KP Singh <kpsingh@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
         Stanislav Fomichev <sdf@google.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>, houtao1@huawei.com
-Subject: [PATCH bpf-next v3] bpf: Pass map file to .map_update_batch directly
-Date:   Wed, 16 Nov 2022 15:50:58 +0800
-Message-Id: <20221116075059.1551277-1-houtao@huaweicloud.com>
-X-Mailer: git-send-email 2.29.2
+        Hao Luo <haoluo@google.com>, Jakub Kicinski <kuba@kernel.org>
+Subject: Re: [RFC bpf-next] bpf: Fix perf bpf event and audit prog id logging
+Message-ID: <Y3SRWVoycV290S16@krava>
+References: <20221115095043.1249776-1-jolsa@kernel.org>
+ <4d91b1d3-3ffc-11f9-50a6-bfb503e4b3cd@iogearbox.net>
+ <Y3QgJMsknnAvvYqU@krava>
+ <CAADnVQLz4BWZM+74mjxeHpr=1-Nx3hnVts-4kxJ-UqtoD54yFw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgCXu9hckHRjjPhzAg--.13472S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxtFyxJr1xurW3Wr47Cr48WFg_yoWxKrykpF
-        W5KFy7Cr48WrW7Xr4aqw4UWa47Zr4Fg345KrWkKa4FyrnrX34I9Fy8ta97uF1Yvrn8Jr4k
-        Ja12qa48Aw4IyrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
-        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
-        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
-        IY6xAIw20EY4v20xvaj40_Gr0_Zr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
-        aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAADnVQLz4BWZM+74mjxeHpr=1-Nx3hnVts-4kxJ-UqtoD54yFw@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Hou Tao <houtao1@huawei.com>
+On Tue, Nov 15, 2022 at 03:34:55PM -0800, Alexei Starovoitov wrote:
+> On Tue, Nov 15, 2022 at 3:26 PM Jiri Olsa <olsajiri@gmail.com> wrote:
+> >
+> > On Tue, Nov 15, 2022 at 01:49:54PM +0100, Daniel Borkmann wrote:
+> > > On 11/15/22 10:50 AM, Jiri Olsa wrote:
+> > > > hi,
+> > > > perf_event_bpf_event and bpf_audit_prog calls currently report zero
+> > > > program id for unload path.
+> > > >
+> > > > It's because of the [1] change moved those audit calls into work queue
+> > > > and they are executed after the id is zeroed in bpf_prog_free_id.
+> > > >
+> > > > I originally made a change that added 'id_audit' field to struct
+> > > > bpf_prog, which would be initialized as id, untouched and used
+> > > > in audit callbacks.
+> > > >
+> > > > Then I realized we might actually not need to zero prog->aux->id
+> > > > in bpf_prog_free_id. It seems to be called just once on release
+> > > > paths. Tests seems ok with that.
+> > > >
+> > > > thoughts?
+> > > >
+> > > > thanks,
+> > > > jirka
+> > > >
+> > > >
+> > > > [1] d809e134be7a ("bpf: Prepare bpf_prog_put() to be called from irq context.")
+> > > > ---
+> > > >   kernel/bpf/syscall.c | 1 -
+> > > >   1 file changed, 1 deletion(-)
+> > > >
+> > > > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> > > > index fdbae52f463f..426529355c29 100644
+> > > > --- a/kernel/bpf/syscall.c
+> > > > +++ b/kernel/bpf/syscall.c
+> > > > @@ -1991,7 +1991,6 @@ void bpf_prog_free_id(struct bpf_prog *prog, bool do_idr_lock)
+> > > >             __acquire(&prog_idr_lock);
+> > > >     idr_remove(&prog_idr, prog->aux->id);
+> > > > -   prog->aux->id = 0;
+> > >
+> > > This would trigger a race when offloaded progs are used, see also ad8ad79f4f60 ("bpf:
+> > > offload: free program id when device disappears"). __bpf_prog_offload_destroy() calls
+> > > it, and my read is that later bpf_prog_free_id() then hits the early !prog->aux->id
+> > > return path. Is there a reason for irq context to not defer the bpf_prog_free_id()?
+> >
+> > there's comment saying:
+> >   /* bpf_prog_free_id() must be called first */
+> >
+> > it was added together with the BPF_(PROG|MAP)_GET_NEXT_ID api:
+> >   34ad5580f8f9 bpf: Add BPF_(PROG|MAP)_GET_NEXT_ID command
+> >
+> > Martin, any idea?
+> >
+> > while looking on this I noticed we can remove the do_idr_lock argument
+> > (patch below) because it's always true and I think we need to upgrade
+> > all the prog_idr_lock locks to spin_lock_irqsave because bpf_prog_put
+> > could be called from irq context because of d809e134be7a
+> 
+> before we dive into rabbit hole let's understand
+> the severity of
+> "perf_event_bpf_event and bpf_audit_prog calls currently report zero
+>  program id for unload path"
+> 
+> and why we cannot leave it as-is.
 
-Currently bpf_map_do_batch() first invokes fdget(batch.map_fd) to get
-the target map file, then it invokes generic_map_update_batch() to do
-batch update. generic_map_update_batch() will get the target map file
-by using fdget(batch.map_fd) again and pass it to
-bpf_map_update_value().
+I found this because I wanted use perf bpf-event to monitor bpf
+programs loads/unloads.. and I need 'id' on the unload event
 
-The problem is map file returned by the second fdget() may be NULL or a
-totally different file compared by map file in bpf_map_do_batch(). The
-reason is that the first fdget() only guarantees the liveness of struct
-file instead of file descriptor and the file description may be released
-by concurrent close() through pick_file().
+perf_event_bpf_event is irq safe so quick fix for me would be
+to move it back:
 
-It doesn't incur any problem as for now, because maps with batch update
-support don't use map file in .map_fd_get_ptr() ops. But it is better to
-fix the potential access of an invalid map file.
+        if (atomic64_dec_and_test(&aux->refcnt)) {
++               perf_event_bpf_event(prog, PERF_BPF_EVENT_PROG_UNLOAD, 0);
+                /* bpf_prog_free_id() must be called first */
+                bpf_prog_free_id(prog, do_idr_lock);
 
-Using __bpf_map_get() again in generic_map_update_batch() can not fix
-the problem, because batch.map_fd may be closed and reopened, and the
-returned map file may be different with map file got in
-bpf_map_do_batch(), so just passing the map file directly to
-.map_update_batch() in bpf_map_do_batch().
+FWIW I also used fix below for a while for testing
 
-Signed-off-by: Hou Tao <houtao1@huawei.com>
+jirka
+
+
 ---
-v3:
- * extend BPF_DO_BATCH by __VA_ARGS__ instead of adding
-   BPF_DO_BATCH_WITH_FILE (suggested by Daniel)
-v2: https://lore.kernel.org/bpf/4317f99a-f466-23e1-366e-890f34624c65@huaweicloud.com
- * rewrite the commit message to explain the problem and the reasoning.
-v1: https://lore.kernel.org/bpf/20221107075537.1445644-1-houtao@huaweicloud.com
-
- include/linux/bpf.h  |  5 +++--
- kernel/bpf/syscall.c | 32 ++++++++++++++------------------
- 2 files changed, 17 insertions(+), 20 deletions(-)
-
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 54462dd28824..e60a5c052473 100644
+index d88e0741b381..6b752d4815e6 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -85,7 +85,8 @@ struct bpf_map_ops {
- 	int (*map_lookup_and_delete_batch)(struct bpf_map *map,
- 					   const union bpf_attr *attr,
- 					   union bpf_attr __user *uattr);
--	int (*map_update_batch)(struct bpf_map *map, const union bpf_attr *attr,
-+	int (*map_update_batch)(struct bpf_map *map, struct file *map_file,
-+				const union bpf_attr *attr,
- 				union bpf_attr __user *uattr);
- 	int (*map_delete_batch)(struct bpf_map *map, const union bpf_attr *attr,
- 				union bpf_attr __user *uattr);
-@@ -1789,7 +1790,7 @@ void bpf_map_init_from_attr(struct bpf_map *map, union bpf_attr *attr);
- int  generic_map_lookup_batch(struct bpf_map *map,
- 			      const union bpf_attr *attr,
- 			      union bpf_attr __user *uattr);
--int  generic_map_update_batch(struct bpf_map *map,
-+int  generic_map_update_batch(struct bpf_map *map, struct file *map_file,
- 			      const union bpf_attr *attr,
- 			      union bpf_attr __user *uattr);
- int  generic_map_delete_batch(struct bpf_map *map,
+@@ -1163,6 +1163,7 @@ struct bpf_prog_aux {
+ 	u32 max_tp_access;
+ 	u32 stack_depth;
+ 	u32 id;
++	u32 id_audit;
+ 	u32 func_cnt; /* used by non-func prog as the number of func progs */
+ 	u32 func_idx; /* 0 for non-func prog, the index in func array for func prog */
+ 	u32 attach_btf_id; /* in-kernel BTF type id to attach to */
 diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index fdbae52f463f..b078965999e6 100644
+index d6081e8336c6..1f4fdf0aaac6 100644
 --- a/kernel/bpf/syscall.c
 +++ b/kernel/bpf/syscall.c
-@@ -175,8 +175,8 @@ static void maybe_wait_bpf_programs(struct bpf_map *map)
- 		synchronize_rcu();
+@@ -1930,7 +1930,7 @@ static void bpf_audit_prog(const struct bpf_prog *prog, unsigned int op)
+ 	if (unlikely(!ab))
+ 		return;
+ 	audit_log_format(ab, "prog-id=%u op=%s",
+-			 prog->aux->id, bpf_audit_str[op]);
++			 prog->aux->id_audit, bpf_audit_str[op]);
+ 	audit_log_end(ab);
  }
  
--static int bpf_map_update_value(struct bpf_map *map, struct fd f, void *key,
--				void *value, __u64 flags)
-+static int bpf_map_update_value(struct bpf_map *map, struct file *map_file,
-+				void *key, void *value, __u64 flags)
- {
- 	int err;
+@@ -1942,7 +1942,7 @@ static int bpf_prog_alloc_id(struct bpf_prog *prog)
+ 	spin_lock_bh(&prog_idr_lock);
+ 	id = idr_alloc_cyclic(&prog_idr, prog, 1, INT_MAX, GFP_ATOMIC);
+ 	if (id > 0)
+-		prog->aux->id = id;
++		prog->aux->id = prog->aux->id_audit = id;
+ 	spin_unlock_bh(&prog_idr_lock);
+ 	idr_preload_end();
  
-@@ -190,7 +190,7 @@ static int bpf_map_update_value(struct bpf_map *map, struct fd f, void *key,
- 		   map->map_type == BPF_MAP_TYPE_SOCKMAP) {
- 		return sock_map_update_elem_sys(map, key, value, flags);
- 	} else if (IS_FD_PROG_ARRAY(map)) {
--		return bpf_fd_array_map_update_elem(map, f.file, key, value,
-+		return bpf_fd_array_map_update_elem(map, map_file, key, value,
- 						    flags);
- 	}
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 0f0bfcf5adce..32edb3a4360e 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -9065,7 +9065,7 @@ void perf_event_bpf_event(struct bpf_prog *prog,
+ 			},
+ 			.type = type,
+ 			.flags = flags,
+-			.id = prog->aux->id,
++			.id = prog->aux->id_audit,
+ 		},
+ 	};
  
-@@ -205,12 +205,12 @@ static int bpf_map_update_value(struct bpf_map *map, struct fd f, void *key,
- 						       flags);
- 	} else if (IS_FD_ARRAY(map)) {
- 		rcu_read_lock();
--		err = bpf_fd_array_map_update_elem(map, f.file, key, value,
-+		err = bpf_fd_array_map_update_elem(map, map_file, key, value,
- 						   flags);
- 		rcu_read_unlock();
- 	} else if (map->map_type == BPF_MAP_TYPE_HASH_OF_MAPS) {
- 		rcu_read_lock();
--		err = bpf_fd_htab_map_update_elem(map, f.file, key, value,
-+		err = bpf_fd_htab_map_update_elem(map, map_file, key, value,
- 						  flags);
- 		rcu_read_unlock();
- 	} else if (map->map_type == BPF_MAP_TYPE_REUSEPORT_SOCKARRAY) {
-@@ -1410,7 +1410,7 @@ static int map_update_elem(union bpf_attr *attr, bpfptr_t uattr)
- 		goto free_key;
- 	}
- 
--	err = bpf_map_update_value(map, f, key, value, attr->flags);
-+	err = bpf_map_update_value(map, f.file, key, value, attr->flags);
- 
- 	kvfree(value);
- free_key:
-@@ -1596,16 +1596,14 @@ int generic_map_delete_batch(struct bpf_map *map,
- 	return err;
- }
- 
--int generic_map_update_batch(struct bpf_map *map,
-+int generic_map_update_batch(struct bpf_map *map, struct file *map_file,
- 			     const union bpf_attr *attr,
- 			     union bpf_attr __user *uattr)
- {
- 	void __user *values = u64_to_user_ptr(attr->batch.values);
- 	void __user *keys = u64_to_user_ptr(attr->batch.keys);
- 	u32 value_size, cp, max_count;
--	int ufd = attr->batch.map_fd;
- 	void *key, *value;
--	struct fd f;
- 	int err = 0;
- 
- 	if (attr->batch.elem_flags & ~BPF_F_LOCK)
-@@ -1632,7 +1630,6 @@ int generic_map_update_batch(struct bpf_map *map,
- 		return -ENOMEM;
- 	}
- 
--	f = fdget(ufd); /* bpf_map_do_batch() guarantees ufd is valid */
- 	for (cp = 0; cp < max_count; cp++) {
- 		err = -EFAULT;
- 		if (copy_from_user(key, keys + cp * map->key_size,
-@@ -1640,7 +1637,7 @@ int generic_map_update_batch(struct bpf_map *map,
- 		    copy_from_user(value, values + cp * value_size, value_size))
- 			break;
- 
--		err = bpf_map_update_value(map, f, key, value,
-+		err = bpf_map_update_value(map, map_file, key, value,
- 					   attr->batch.elem_flags);
- 
- 		if (err)
-@@ -1653,7 +1650,6 @@ int generic_map_update_batch(struct bpf_map *map,
- 
- 	kvfree(value);
- 	kvfree(key);
--	fdput(f);
- 	return err;
- }
- 
-@@ -4446,13 +4442,13 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
- 
- #define BPF_MAP_BATCH_LAST_FIELD batch.flags
- 
--#define BPF_DO_BATCH(fn)			\
-+#define BPF_DO_BATCH(fn, ...)			\
- 	do {					\
- 		if (!fn) {			\
- 			err = -ENOTSUPP;	\
- 			goto err_put;		\
- 		}				\
--		err = fn(map, attr, uattr);	\
-+		err = fn(__VA_ARGS__);		\
- 	} while (0)
- 
- static int bpf_map_do_batch(const union bpf_attr *attr,
-@@ -4486,13 +4482,13 @@ static int bpf_map_do_batch(const union bpf_attr *attr,
- 	}
- 
- 	if (cmd == BPF_MAP_LOOKUP_BATCH)
--		BPF_DO_BATCH(map->ops->map_lookup_batch);
-+		BPF_DO_BATCH(map->ops->map_lookup_batch, map, attr, uattr);
- 	else if (cmd == BPF_MAP_LOOKUP_AND_DELETE_BATCH)
--		BPF_DO_BATCH(map->ops->map_lookup_and_delete_batch);
-+		BPF_DO_BATCH(map->ops->map_lookup_and_delete_batch, map, attr, uattr);
- 	else if (cmd == BPF_MAP_UPDATE_BATCH)
--		BPF_DO_BATCH(map->ops->map_update_batch);
-+		BPF_DO_BATCH(map->ops->map_update_batch, map, f.file, attr, uattr);
- 	else
--		BPF_DO_BATCH(map->ops->map_delete_batch);
-+		BPF_DO_BATCH(map->ops->map_delete_batch, map, attr, uattr);
- err_put:
- 	if (has_write)
- 		bpf_map_write_active_dec(map);
--- 
-2.29.2
-
