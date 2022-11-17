@@ -2,67 +2,70 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D22F9C433FE
-	for <bpf@archiver.kernel.org>; Thu, 17 Nov 2022 10:28:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE950C4332F
+	for <bpf@archiver.kernel.org>; Thu, 17 Nov 2022 11:33:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239263AbiKQK2N (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Nov 2022 05:28:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57956 "EHLO
+        id S234751AbiKQLde (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Nov 2022 06:33:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239379AbiKQK2J (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 17 Nov 2022 05:28:09 -0500
+        with ESMTP id S234125AbiKQLdc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Nov 2022 06:33:32 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C695528BF
-        for <bpf@vger.kernel.org>; Thu, 17 Nov 2022 02:27:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244F84B9A6
+        for <bpf@vger.kernel.org>; Thu, 17 Nov 2022 03:32:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668680827;
+        s=mimecast20190719; t=1668684756;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=xlbf4XMXjAAtZtTfrsNX3coW79/AxwrRMideQvPGziY=;
-        b=bET3uoQtbrsQK/yVauVZm41145LBFctSn3JtWB/o+SROC1V2yd1Nf9OAhoByMPxkPDTY7P
-        COYFnQrbfkFObtKVCGVC0EwYMZPJTmlca6+ouke9og/S44CEqMnPpyOB8bU/G2dW2OFt6Y
-        ol8t+09peNJKh+Qpc6F9CEUbJD/mz2g=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=TqGQL7f1VO0oELXAbLB5ugC34/GyGd79wtlJNVZt8i4=;
+        b=AfWJS63HRuee6RQKnnQqTxJD/a1ChM3XLv8GaW0x3XFmcZd5jLj9Seb19UHkLmlzTl5ZUg
+        o8XWbB2hYOqrjmd1y0gvWc+uPQgFD2KXojhUeFMgLLSK1fA5Z44F0zGUFE+RDuhsyX0XE5
+        vrPrhdd9MU+D4rnlPRMPjsfQ0RrM1cc=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-209-R1MMfDy3P3aoI6S9j5A32w-1; Thu, 17 Nov 2022 05:27:05 -0500
-X-MC-Unique: R1MMfDy3P3aoI6S9j5A32w-1
-Received: by mail-ej1-f71.google.com with SMTP id xj11-20020a170906db0b00b0077b6ecb23fcso882422ejb.5
-        for <bpf@vger.kernel.org>; Thu, 17 Nov 2022 02:27:05 -0800 (PST)
+ us-mta-493-6BGPQFPsOLyH2ELHFqHqwQ-1; Thu, 17 Nov 2022 06:32:35 -0500
+X-MC-Unique: 6BGPQFPsOLyH2ELHFqHqwQ-1
+Received: by mail-ed1-f70.google.com with SMTP id x18-20020a05640226d200b00461e027f704so1041037edd.7
+        for <bpf@vger.kernel.org>; Thu, 17 Nov 2022 03:32:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xlbf4XMXjAAtZtTfrsNX3coW79/AxwrRMideQvPGziY=;
-        b=nsdBpGqm5Na3mfAPClLsRr40Snu94gwPyTB3wj7j2G5BAk+5Va2m9bMjapHPrBozmZ
-         GJM1b9DYiFJenan45mwj/8ESX2arBwmoh8jzUSzoqh0zAqSrQQLzPXSfssvCG/yUbWwf
-         Q0aYrYz1xRwm5Amrg+6qtK3Ia1HCAVgQj7a92FV6mD4MnAUunexCbK2UhOXmPYeVcdGd
-         yIhLk1w9m9qktRPDvWylJWiQvZEg4aSX7kLEXxpl0klSlBhmPO39nyuMnk534mGnaWSx
-         cwdDrrNI+JhLa8xYyVV3sV9sDjXvRZa0gvu0v6RHguZ99qvGDsheyv4vtWroH/IBaG68
-         p20Q==
-X-Gm-Message-State: ANoB5plj+PBuDKOKeOg39+8ktVE9c5d3JLnL5O9DGShEh7BNbAYBrf0p
-        i0GqodGIPO/ieGvwRq8GlJfURFvUV439t15008DXxvrM3oVRANBIP83Si/7JU4pW0kdl0Hy4XWO
-        yqpDpIgjurn9N
-X-Received: by 2002:a17:906:254f:b0:7ac:d0ae:feba with SMTP id j15-20020a170906254f00b007acd0aefebamr1573822ejb.646.1668680824267;
-        Thu, 17 Nov 2022 02:27:04 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7LIpp0Gv2shAYk1X+0qGt/Bbdy+J07gPYzUVDRuy1tpjEPTaB+4v//C8khZ3yBq2rJTWDoAw==
-X-Received: by 2002:a17:906:254f:b0:7ac:d0ae:feba with SMTP id j15-20020a170906254f00b007acd0aefebamr1573792ejb.646.1668680823936;
-        Thu, 17 Nov 2022 02:27:03 -0800 (PST)
+        bh=TqGQL7f1VO0oELXAbLB5ugC34/GyGd79wtlJNVZt8i4=;
+        b=GZTsXDUKQDYVbfHEbuVQpqVvTyn/FDetIWUB0Qjlp5ojmcMYkVrOkQN5+xLdLSqC8v
+         lQY2NQy3ObcgAOh2DjDxivsXEznQdEZAspkKGxyS1W3d/cpbGiiIs22lW8c+6wlNUxPa
+         SRy0ADg8Gt7ry69vb+6DFXGQ3nGYg4I/acLsBAftITlD0IY0fvUJM18lFlgvFCw4mzGH
+         iVJhS1L6vwT9HiAZ8tle8OoH8Bgnht8dBDuR8YXV7jTBBbj6+YmdVG13YagpSsbwlazb
+         H7vc9QYG0/9bCRY6wkOZA9ocBWalGUFltPEHSCPxDxLH4S8M+JQMnfYVAu6g8+3n0r+k
+         0Gcg==
+X-Gm-Message-State: ANoB5pnUp3vOQM9kHPsHa57PEEC7oxuV2bURH+PdaEzn9BRLn0Fmqz/j
+        LxgrrK6n/jUW/4RyZkunMTF8o89dJb8S1nuUuOAXOU1aPrr/VIo57F5JhMcoujTkSYGYXIgpE2q
+        4GKac7/x0MKxV
+X-Received: by 2002:a17:907:7611:b0:7ae:bc3b:d9c6 with SMTP id jx17-20020a170907761100b007aebc3bd9c6mr1633132ejc.770.1668684753727;
+        Thu, 17 Nov 2022 03:32:33 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4FDPSA2bFot9pEEWUNSs2DyZF1gHv0A8iE/vXrtKslN50mPd5zjItty36Nhjk3PExk7IhqkA==
+X-Received: by 2002:a17:907:7611:b0:7ae:bc3b:d9c6 with SMTP id jx17-20020a170907761100b007aebc3bd9c6mr1633108ejc.770.1668684753381;
+        Thu, 17 Nov 2022 03:32:33 -0800 (PST)
 Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id d23-20020a056402001700b00461aca1c7b6sm351336edu.6.2022.11.17.02.27.03
+        by smtp.gmail.com with ESMTPSA id bw10-20020a170906c1ca00b0078dce9984afsm238635ejb.220.2022.11.17.03.32.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 02:27:03 -0800 (PST)
+        Thu, 17 Nov 2022 03:32:32 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id D11907A6F2C; Thu, 17 Nov 2022 11:27:01 +0100 (CET)
+        id 638917A6F66; Thu, 17 Nov 2022 12:32:31 +0100 (CET)
 From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        John Fastabend <john.fastabend@gmail.com>
-Cc:     Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, haoluo@google.com,
-        jolsa@kernel.org, David Ahern <dsahern@gmail.com>,
+To:     Stanislav Fomichev <sdf@google.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     John Fastabend <john.fastabend@gmail.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Willem de Bruijn <willemb@google.com>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
@@ -70,10 +73,10 @@ Cc:     Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org,
         Alexander Lobakin <alexandr.lobakin@intel.com>,
         Magnus Karlsson <magnus.karlsson@gmail.com>,
         Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
-        netdev@vger.kernel.org
+        Network Development <netdev@vger.kernel.org>
 Subject: Re: [xdp-hints] Re: [PATCH bpf-next 05/11] veth: Support rx
  timestamp metadata for xdp
-In-Reply-To: <637576962dada_8cd03208b0@john.notmuch>
+In-Reply-To: <CAKH8qBvTdnyRYT+ocNS_ZmOfoN+nBEJ5jcBcKcqZ1hx0a5WrSw@mail.gmail.com>
 References: <20221115030210.3159213-1-sdf@google.com>
  <20221115030210.3159213-6-sdf@google.com> <87h6z0i449.fsf@toke.dk>
  <CAKH8qBsEGD3L0XAVzVHcTW6k_RhEt74pfXrPLANuznSAJw7bEg@mail.gmail.com>
@@ -84,52 +87,121 @@ References: <20221115030210.3159213-1-sdf@google.com>
  <6375340a6c284_66f16208aa@john.notmuch>
  <CAKH8qBs1rYXf0GGto9hPz-ELLZ9c692cFnKC9JLwAq5b7JRK-A@mail.gmail.com>
  <637576962dada_8cd03208b0@john.notmuch>
+ <CAKH8qBtOATGBMPkgdE0jZ+76AWMsUWau360u562bB=cGYq+gdQ@mail.gmail.com>
+ <CAADnVQKTXuBvP_2O6coswXL7MSvqVo1d+qXLabeOikcbcbAKPQ@mail.gmail.com>
+ <CAKH8qBvTdnyRYT+ocNS_ZmOfoN+nBEJ5jcBcKcqZ1hx0a5WrSw@mail.gmail.com>
 X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Thu, 17 Nov 2022 11:27:01 +0100
-Message-ID: <87zgcp511m.fsf@toke.dk>
+Date:   Thu, 17 Nov 2022 12:32:31 +0100
+Message-ID: <87wn7t4y0g.fsf@toke.dk>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Just a separate comment on this bit:
+Stanislav Fomichev <sdf@google.com> writes:
 
-John Fastabend <john.fastabend@gmail.com> writes:
-> If you go with in-kernel BPF kfunc approach (vs user space side) I think
-> you also need to add CO-RE to be friendly for driver developers? Otherwise
-> they have to keep that read in sync with the descriptors?
+>> > Doesn't look like the descriptors are as nice as you're trying to
+>> > paint them (with clear hash/csum fields) :-) So not sure how much
+>> > CO-RE would help.
+>> > At least looking at mlx4 rx_csum, the driver consults three different
+>> > sets of flags to figure out the hash_type. Or am I just unlucky with
+>> > mlx4?
+>>
+>> Which part are you talking about ?
+>>         hw_checksum = csum_unfold((__force __sum16)cqe->checksum);
+>> is trivial enough for bpf prog to do if it has access to 'cqe' pointer
+>> which is what John is proposing (I think).
+>
+> I'm talking about mlx4_en_process_rx_cq, the caller of that check_csum.
+> In particular: if (likely(dev->features & NETIF_F_RXCSUM)) branch
+> I'm assuming we want to have hash_type available to the progs?
 
-CO-RE is for doing relocations of field offsets without having to
-recompile. That's not really relevant for the kernel, that gets
-recompiled whenever the layout changes. So the field offsets are just
-kept in sync with offsetof(), like in Stanislav's RFCv2 where he had
-this snippet:
+I agree we should expose the hash_type, but that doesn't actually look
+to be that complicated, see below.
 
-+			/*	return ((struct sk_buff *)r5)->tstamp; */
-+			BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_5,
-+				    offsetof(struct sk_buff, tstamp)),
+> But also, check_csum handles other corner cases:
+> - short_frame: we simply force all those small frames to skip checksum complete
+> - get_fixed_ipv6_csum: In IPv6 packets, hw_checksum lacks 6 bytes from
+> IPv6 header
+> - get_fixed_ipv4_csum: Although the stack expects checksum which
+> doesn't include the pseudo header, the HW adds it
+>
+> So it doesn't look like we can just unconditionally use cqe->checksum?
+> The driver does a lot of massaging around that field to make it
+> palatable.
 
-So I definitely don't think this is an argument against the kfunc
-approach?
+Poking around a bit in the other drivers, AFAICT it's only a subset of
+drivers that support CSUM_COMPLETE at all; for instance, the Intel
+drivers just set CHECKSUM_UNNECESSARY for TCP/UDP/SCTP. I think the
+CHECKSUM_UNNECESSARY is actually the most important bit we'd want to
+propagate?
 
-> Also need to handle versioning of descriptors where depending on
-> specific options and firmware and chip being enabled the descriptor
-> might be moving around.
+AFAICT, the drivers actually implementing CHECKSUM_COMPLETE need access
+to other data structures than the rx descriptor to determine the status
+of the checksum (mlx4 looks at priv->flags, mlx5 checks rq->state), so
+just exposing the rx descriptor to BPF as John is suggesting does not
+actually give the XDP program enough information to act on the checksum
+field on its own. We could still have a separate kfunc to just expose
+the hw checksum value (see below), but I think it probably needs to be
+paired with other kfuncs to be useful.
 
-This is exactly the kind of thing the driver is supposed to take care
-of; it knows the hardware configuration and can pick the right
-descriptor format. Either by just picking an entirely different kfunc
-unroll depending on the config (if it's static), or by adding the right
-checks to the unroll. You'd have to replicate all this logic in BPF
-anyway, and while I'm not doubting *you* are capable of doing this, I
-don't think we should be forcing every XDP developer to deal with all
-this.
+Looking at the mlx4 code, I think the following mapping to kfuncs (in
+pseudo-C) would give the flexibility for XDP to access all the bits it
+needs, while inlining everything except getting the full checksum for
+non-TCP/UDP traffic. An (admittedly cursory) glance at some of the other
+drivers (mlx5, ice, i40e) indicates that this would work for those
+drivers as well.
 
-Or to put it another way, a proper hardware abstraction and high-quality
-drivers is one of the main selling points of XDP over DPDK and other
-kernel bypass solutions; we should not jettison this when enabling
-metadata support!
+
+bpf_xdp_metadata_rx_hash_supported() {
+  return dev->features & NETIF_F_RXHASH;
+}
+
+bpf_xdp_metadata_rx_hash() {
+  return be32_to_cpu(cqe->immed_rss_invalid);
+}
+
+bpf_xdp_metdata_rx_hash_type() {
+  if (likely(dev->features & NETIF_F_RXCSUM) &&
+      (cqe->status & cpu_to_be16(MLX4_CQE_STATUS_TCP | MLX4_CQE_STATUS_UDP)) &&
+	(cqe->status & cpu_to_be16(MLX4_CQE_STATUS_IPOK)) &&
+	  cqe->checksum == cpu_to_be16(0xffff))
+     return PKT_HASH_TYPE_L4;
+
+   return PKT_HASH_TYPE_L3;
+}
+
+bpf_xdp_metadata_rx_csum_supported() {
+  return dev->features & NETIF_F_RXCSUM;
+}
+
+bpf_xdp_metadata_rx_csum_level() {
+	if ((cqe->status & cpu_to_be16(MLX4_CQE_STATUS_TCP |
+				       MLX4_CQE_STATUS_UDP)) &&
+	    (cqe->status & cpu_to_be16(MLX4_CQE_STATUS_IPOK)) &&
+	    cqe->checksum == cpu_to_be16(0xffff))
+            return CHECKSUM_UNNECESSARY;
+            
+	if (!(priv->flags & MLX4_EN_FLAG_RX_CSUM_NON_TCP_UDP &&
+	      (cqe->status & cpu_to_be16(MLX4_CQE_STATUS_IP_ANY))) &&
+              !short_frame(len))
+            return CHECKSUM_COMPLETE; /* we could also omit this case entirely */
+
+        return CHECKSUM_NONE;
+}
+
+/* this one could be called by the metadata_to_skb code */
+bpf_xdp_metadata_rx_csum_full() {
+  return check_csum() /* BPF_CALL this after refactoring so it is skb-agnostic */
+}
+
+/* this one would be for people like John who want to re-implement
+ * check_csum() themselves */
+bpf_xdp_metdata_rx_csum_raw() {
+  return cqe->checksum;
+}
+
 
 -Toke
 
