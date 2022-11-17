@@ -2,130 +2,251 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AF88C433FE
-	for <bpf@archiver.kernel.org>; Thu, 17 Nov 2022 09:37:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 043A4C433FE
+	for <bpf@archiver.kernel.org>; Thu, 17 Nov 2022 09:55:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233023AbiKQJhp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Nov 2022 04:37:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58362 "EHLO
+        id S239354AbiKQJzU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Nov 2022 04:55:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbiKQJhp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 17 Nov 2022 04:37:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4022A13F61
-        for <bpf@vger.kernel.org>; Thu, 17 Nov 2022 01:37:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CEFFD62167
-        for <bpf@vger.kernel.org>; Thu, 17 Nov 2022 09:37:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5840C433C1;
-        Thu, 17 Nov 2022 09:37:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668677863;
-        bh=fI0jTTB7wOYIYQJoOVSc5UZCnbdgBK5QE0bS64cYiFw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GJHqrpli8gMYLJADQlc717nYlE/OIrB4da6IRxcFLTQJk7IyzujgMg/g8n3ltGqOj
-         4nzve9yCsptYgqytYXRXm1fQGs9VRGaX2jIflX/reAcDmKUIiB8LQBUVR6qR5/53WA
-         xF4bQGdVeVDa6Z6wgvVakrYPLuN9xo1R39JI0TM/o3oOrDPqsUEZ+0GWUuxk/gdHZ1
-         0qt0Z2/bC9LqLGnPNK/iLKjIj7BCpocrgBTQzHgfYozBD6pKFGJDIJFJo12wIAfjUd
-         /UtbTpdbNpX7O/D+klfi4JVhHtpxJ+lYGmhJSiNS6/GkScpbDnKG1+kfpx+Dp/r6/8
-         dxicLy+pKGIvg==
-Date:   Thu, 17 Nov 2022 11:37:30 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Song Liu <song@kernel.org>, bpf@vger.kernel.org,
-        linux-mm@kvack.org, peterz@infradead.org,
-        akpm@linux-foundation.org, x86@kernel.org, hch@lst.de,
-        rick.p.edgecombe@intel.com, aaron.lu@intel.com
-Subject: Re: [PATCH bpf-next v2 0/5] execmem_alloc for BPF programs
-Message-ID: <Y3YA2mRZDJkB4lmP@kernel.org>
-References: <20221107223921.3451913-1-song@kernel.org>
- <CAPhsuW5pq+hzS87Rb3pyoD3z8WH+R7EOAGkTkh-KwEKt9HV_mA@mail.gmail.com>
- <Y3P/9DXAjKhmoIvm@bombadil.infradead.org>
- <CAPhsuW4_aYvPJUfCBkMygKPpHx7Y3xPCV7ewLGGAhyztJq3dhA@mail.gmail.com>
- <Y3VlQcsiEi273S+n@bombadil.infradead.org>
+        with ESMTP id S239376AbiKQJzA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Nov 2022 04:55:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E717164CC
+        for <bpf@vger.kernel.org>; Thu, 17 Nov 2022 01:53:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668678805;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=iDCB9fgd0Mu9h/tKpdz8x9GzaTGBDxvpI7X/JZuqRQo=;
+        b=UTVCCXa+EnW72N9HNP0gHuCUbGylVuIPPVFDbWoW/a6RUSwy4qOMZzY5nHgiVnVusoNUoX
+        /ZzyFfSOjdJ9TWaMMxz4SkRydVP54VEf3Ot2G2qoMv2vRUJCFL+o22M5Wn0g4Jt7/nKtWt
+        W4cW8K+4ysrsj1RQQsgcrvbjP2YgUKk=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-426-U7iHRXURMQK4HpNJcsjaLw-1; Thu, 17 Nov 2022 04:53:24 -0500
+X-MC-Unique: U7iHRXURMQK4HpNJcsjaLw-1
+Received: by mail-qk1-f197.google.com with SMTP id bq13-20020a05620a468d00b006fa5a75759aso1536318qkb.13
+        for <bpf@vger.kernel.org>; Thu, 17 Nov 2022 01:53:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iDCB9fgd0Mu9h/tKpdz8x9GzaTGBDxvpI7X/JZuqRQo=;
+        b=esWEbJsLBlOcCPKVua3JbKDOjlH8l7Ii/8i0bfUzjn/dstMFddXBzYvAt1GuJaOfty
+         46U5kqUZNZrsXsJqHo9betAg3cqrwVgVepHaSnG69UPTyOVhuYpQPSpEbTZphyhWvqTg
+         s20pJ47XNpEoQwIz+eghFn63R0fx/LQy/PEWwprnTInp1Hmhb6cLV3Mo2cFlDaMtFg5E
+         wto7HbNyFopLDrtSU0gs2Dj0SmBpRyYJ1iHxsvJ6nopXgBm1KMBIJebzA9pQlMlgnAAa
+         1zSGeAEF957A8xIu8Q9ro7lBFC/1CKUTMWZHW8pM1tF2U4soAbhOBhUWQUg4yDy/txXq
+         P3/g==
+X-Gm-Message-State: ANoB5pnzwMqNAyP2bzDEuQ6hASQGSfVbtqdN/jcVVexWKyYyM5EK4YZN
+        MIpKKltXinPUeyIuol4ESdaQv9Hvz13DOMuvhGAoPxRaUMitjTdzqHj1N5Oe1l75D7e2KfoYL91
+        jl/oTqfDwLMLZhOFhC3RhiWFu7jMO4M2KA+2k0OuyygwaNQLDQcNOwX9zwhQ3goM=
+X-Received: by 2002:a05:620a:15bc:b0:6fa:e58e:f006 with SMTP id f28-20020a05620a15bc00b006fae58ef006mr938793qkk.343.1668678803373;
+        Thu, 17 Nov 2022 01:53:23 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4qw6LjK9buAd0lPa9YkFN6rXwB2g0BN1k58Cs+CL1eITY/UeS+G+34l2ziHZXW0JYik/SYug==
+X-Received: by 2002:a05:620a:15bc:b0:6fa:e58e:f006 with SMTP id f28-20020a05620a15bc00b006fae58ef006mr938774qkk.343.1668678803014;
+        Thu, 17 Nov 2022 01:53:23 -0800 (PST)
+Received: from nfvsdn-06.testing.baremetal.edge-sites.net (nat-pool-232-132.redhat.com. [66.187.232.132])
+        by smtp.gmail.com with ESMTPSA id t20-20020a05620a451400b006ceb933a9fesm152083qkp.81.2022.11.17.01.53.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 01:53:22 -0800 (PST)
+From:   mtahhan@redhat.com
+To:     bpf@vger.kernel.org, linux-doc@vger.kernel.org
+Cc:     jbrouer@redhat.com, thoiland@redhat.com, donhunte@redhat.com,
+        magnus.karlsson@gmail.com, Maryam Tahhan <mtahhan@redhat.com>
+Subject: [PATCH bpf-next v1 1/1] docs: BPF_MAP_TYPE_XSKMAP
+Date:   Thu, 17 Nov 2022 05:50:44 -0500
+Message-Id: <20221117105044.1935488-1-mtahhan@redhat.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3VlQcsiEi273S+n@bombadil.infradead.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 02:33:37PM -0800, Luis Chamberlain wrote:
-> On Tue, Nov 15, 2022 at 02:48:05PM -0800, Song Liu wrote:
-> > On Tue, Nov 15, 2022 at 1:09 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > >
-> > > On Mon, Nov 14, 2022 at 05:30:39PM -0800, Song Liu wrote:
-> > > > On Mon, Nov 7, 2022 at 2:41 PM Song Liu <song@kernel.org> wrote:
-> > >
-> > > > Currently, I have got the following action items for v3:
-> > > > 1. Add unify API to allocate text memory to motivation;
-> > > > 2. Update Documentation/x86/x86_64/mm.rst;
-> > > > 3. Allow none PMD_SIZE allocation for powerpc.
-> > >
-> > > - I am really exausted of asking again for real performance tests,
-> > >   you keep saying you can't and I keep saying you can, you are not
-> > >   trying hard enough. Stop thinking about your internal benchmark which
-> > >   you cannot publish. There should be enough crap out which you can use.
-> > >
-> > > - A new selftest or set of selftests which demonstrates gain in
-> > >   performance
-> > 
-> > I didn't mean to not show the result with publically available. I just
-> > thought the actual benchmark was better (and we do use that to
-> > demonstrate the benefit of a lot of kernel improvement).
-> > 
-> > For something publically available, how about the following:
-> > 
-> > Run 100 instances of the following benchmark from bpf selftests:
-> >   tools/testing/selftests/bpf/bench -w2 -d100 -a trig-kprobe
-> > which loads 7 BPF programs, and triggers one of them.
-> > 
-> > Then use perf to monitor TLB related counters:
-> >    perf stat -e iTLB-load-misses,itlb_misses.walk_completed_4k, \
-> >         itlb_misses.walk_completed_2m_4m -a
-> > 
-> > The following results are from a qemu VM with 32 cores.
-> > 
-> > Before bpf_prog_pack:
-> >   iTLB-load-misses: 350k/s
-> >   itlb_misses.walk_completed_4k: 90k/s
-> >   itlb_misses.walk_completed_2m_4m: 0.1/s
-> > 
-> > With bpf_prog_pack (current upstream):
-> >   iTLB-load-misses: 220k/s
-> >   itlb_misses.walk_completed_4k: 68k/s
-> >   itlb_misses.walk_completed_2m_4m: 0.2/s
-> > 
-> > With execmem_alloc (with this set):
-> >   iTLB-load-misses: 185k/s
-> >   itlb_misses.walk_completed_4k: 58k/s
-> >   itlb_misses.walk_completed_2m_4m: 1/s
-> > 
-> > Do these address your questions with this?
-> 
-> More in lines with what I was hoping for. Can something just do
-> the parallelization for you in one shot? Can bench alone do it for you?
-> Is there no interest to have soemthing which generically showcases
-> multithreading / hammering a system with tons of eBPF JITs? It may
-> prove useful.
-> 
-> And also, it begs the question, what if you had another iTLB generic
-> benchmark or genearl memory pressure workload running *as* you run the
-> above? I as, as it was my understanding that one of the issues was the
-> long term slowdown caused by the directmap fragmentation without
-> bpf_prog_pack, and so such an application should crawl to its knees
-> over time, and there should be numbers you could show to prove that
-> too, before and after.
+From: Maryam Tahhan <mtahhan@redhat.com>
 
-I'd add to that that benchmarking iTLB performance on an idle system is not
-very representative. TLB is a scarce resource, so it'd be interesting to
-see this benchmark on a loaded system.
- 
->   Luis
+Add documentation for BPF_MAP_TYPE_XSKMAP
+including kernel version introduced, usage
+and examples.
 
+Signed-off-by: Maryam Tahhan <mtahhan@redhat.com>
+---
+ Documentation/bpf/map_xskmap.rst | 161 +++++++++++++++++++++++++++++++
+ 1 file changed, 161 insertions(+)
+ create mode 100644 Documentation/bpf/map_xskmap.rst
+
+diff --git a/Documentation/bpf/map_xskmap.rst b/Documentation/bpf/map_xskmap.rst
+new file mode 100644
+index 000000000000..5699a89851ef
+--- /dev/null
++++ b/Documentation/bpf/map_xskmap.rst
+@@ -0,0 +1,161 @@
++.. SPDX-License-Identifier: GPL-2.0-only
++.. Copyright (C) 2022 Red Hat, Inc.
++
++===================
++BPF_MAP_TYPE_XSKMAP
++===================
++
++.. note::
++   - ``BPF_MAP_TYPE_XSKMAP`` was introduced in kernel version 4.18
++
++The ``BPF_MAP_TYPE_XSKMAP`` is used as a backend map for XDP BPF helper
++call ``bpf_redirect_map()`` and XDP_REDIRECT action, like 'devmap' and 'cpumap'.
++This map type redirects raw XDP frames to AF_XDP sockets (XSKs). An AF_XDP socket
++binds to a single netdev queue. A mapping of XSKs to queues is shown below:
++
++.. code-block:: none
++
++    +---------------------------------------------------+
++    |     xsk A      |     xsk B       |      xsk C     |<---+ Userspace
++    =========================================================|==========
++    |    Queue 0     |     Queue 1     |     Queue 2    |    |  Kernel
++    +---------------------------------------------------+    |
++    |                  Netdev eth0                      |    |
++    +---------------------------------------------------+    |
++    |                            +=============+        |    |
++    |                            | key |  xsk  |        |    |
++    |  +---------+               +=============+        |    |
++    |  |         |               |  0  | xsk A |        |    |
++    |  |         |               +-------------+        |    |
++    |  |         |               |  1  | xsk B |        |    |
++    |  | eBPF    |-- redirect -->+-------------+-------------+
++    |  | prog    |               |  2  | xsk C |        |
++    |  |         |               +-------------+        |
++    |  |         |                                      |
++    |  |         |                                      |
++    |  +---------+                                      |
++    |                                                   |
++    +---------------------------------------------------+
++
++.. note::
++    An AF_XDP socket that is bound to a certain <netdev/queue_id> will *only*
++    accept XDP frames from that <netdev/queue_id>. If an XDP program tries to redirect
++    from a <netdev/queue_id> other than what the socket is bound to, the frame will
++    not be received on the socket.
++
++Typically an XSKMAP is created per netdev. This map contains an array of XSK File
++Descriptors (FDs). The number of array elements is typically set or adjusted using
++the ``max_entries`` map parameter. For AF_XDP ``max_entries`` is equal to the number
++of queues supported by the netdev.
++
++Usage
++=====
++
++Kernel BPF
++----------
++.. c:function::
++     long bpf_redirect_map(struct bpf_map *map, u32 key, u64 flags)
++
++ Redirect the packet to the endpoint referenced by ``map`` at index ``key``.
++ For ``BPF_MAP_TYPE_XSKMAP`` this map contains references to AF_XDP socket FDs
++ for sockets attached to a netdev's queues.
++
++ .. note::
++    If the map is empty at an index, the packet is dropped. This means that it is
++    mandatory to have an XDP program loaded (and one AF_XDP socket in the XSKMAP)
++    to be able to get any traffic to user space through the socket.
++
++.. c:function::
++    void *bpf_map_lookup_elem(struct bpf_map *map, const void *key)
++
++ XSK FD entries can be retrieved using the ``bpf_map_lookup_elem()`` helper.
++
++Userspace
++---------
++.. note::
++    AF_XDP socket entries can only be updated/deleted from user space and not from
++    an eBPF program. Trying to call these functions from a kernel eBPF program will
++    result in the program failing to load and a verifier warning.
++
++.. c:function::
++   int bpf_map_update_elem(int fd, const void *key, const void *value, __u64 flags)
++
++ AF_XDP socket entries can be added or updated using the ``bpf_map_update_elem()``
++ helper. The ``key`` parameter is equal to the queue_id of the queue the AF_XDP
++ socket is attaching to. And the ``value`` parameter is the file descriptor (fd))
++ value of that socket.
++
++ Under the hood, the AF_XDP map update function uses the XSK FD value to retrieve the
++ associated ``struct xdp_sock`` instance.
++
++ The flags argument can be one of the following:
++  - BPF_ANY: Create a new element or update an existing element.
++  - BPF_NOEXIST: Create a new element only if it did not exist.
++  - BPF_EXIST: Update an existing element.
++
++.. c:function::
++    int bpf_map_lookup_elem(int fd, const void *key, void *value)
++
++ AF_XDP socket entries can be retrieved using the ``bpf_map_lookup_elem()``
++ helper.
++
++.. c:function::
++    int bpf_map_delete_elem(int fd, const void *key)
++
++ AF_XDP socket entries can be deleted using the ``bpf_map_delete_elem()``
++ helper. This helper will return 0 on success, or negative error in case of
++ failure.
++
++Examples
++========
++Kernel
++------
++
++The following code snippet shows how to declare a ``BPF_MAP_TYPE_XSKMAP`` called
++``xsks_map`` and how to redirect packets to an AF_XDP socket.
++
++.. code-block:: c
++
++   struct {
++        __uint(type, BPF_MAP_TYPE_XSKMAP);
++        __type(key_size, int);
++        __type(value_size, int);
++        __uint(max_entries, 64);
++    } xsks_map SEC(".maps");
++
++
++    SEC("xdp")
++    int xsk_redir_prog(struct xdp_md *ctx)
++    {
++        int index = ctx->rx_queue_id;
++
++        if (bpf_map_lookup_elem(&xsks_map, &index))
++            return bpf_redirect_map(&xsks_map, index, 0);
++        return XDP_PASS;
++    }
++
++Userspace
++---------
++
++The following code snippet shows how to update an XSK map with an AF_XDP socket
++entry.
++
++.. code-block:: c
++
++    int update_xsks_map(struct bpf_map *xsks_map, int queue_id, int xsk_fd)
++    {
++        int ret;
++
++        ret = bpf_map_update_elem(bpf_map__fd(xsks_map), &queue_id, &xsk_fd, 0);
++        if (ret < 0) {
++            fprintf(stderr, "Failed to update xsks_map: %s\n",
++                strerror(errno));
++        }
++
++        return ret;
++    }
++
++.. note::
++    The most comprehensive resource for using XSKMAPs is `libxdp`_.
++
++.. _libxdp: https://github.com/xdp-project/xdp-tools/tree/master/lib/libxdp
 -- 
-Sincerely yours,
-Mike.
+2.38.1
+
