@@ -2,79 +2,137 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB1E5C4332F
-	for <bpf@archiver.kernel.org>; Thu, 17 Nov 2022 15:30:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0BB5C43219
+	for <bpf@archiver.kernel.org>; Thu, 17 Nov 2022 15:32:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233725AbiKQPaX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Nov 2022 10:30:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47022 "EHLO
+        id S234810AbiKQPcB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Nov 2022 10:32:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232342AbiKQPaW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 17 Nov 2022 10:30:22 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3B4DFFF
-        for <bpf@vger.kernel.org>; Thu, 17 Nov 2022 07:30:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 27082CE1E55
-        for <bpf@vger.kernel.org>; Thu, 17 Nov 2022 15:30:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 619F0C433C1;
-        Thu, 17 Nov 2022 15:30:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668699017;
-        bh=B8yiHKXMBuUNiVsCHYhK67iKUcuh8K9tIyCJLdF3lT4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=W+5GmUrBpoFHlWgaD72K1V6gEhSVKkyCghO2hyO65ANxVdfmT6E+A+rEA3w5tNOmz
-         MPUcI7WVZPRR8DdcBxi68XBK9c4S2dApWyOY1UO67itlJB9M+F1dYaXb+84IGKn1dA
-         xowxDj9ekb3B2ucYUVgSDKis58zBj6+4KSc1QGq3ykXmSHvywEwl+jbIh0tVsxfSJC
-         Kke5ejgCiUF/2w4EegvhTQwuHOEQAcaDNFk6hburIOgIzJMXexVI4AsELShdqwgvBx
-         c93guHF4r1gX4YGehTc6XD0sTCd2pnvD3RQ+6hWEy8etuMj7HbzDRXUwpstGSQposO
-         HvSaOjfF3RzVA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 40B36E270F6;
-        Thu, 17 Nov 2022 15:30:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S233502AbiKQPb4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Nov 2022 10:31:56 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4708F583
+        for <bpf@vger.kernel.org>; Thu, 17 Nov 2022 07:31:55 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so5708802pjs.4
+        for <bpf@vger.kernel.org>; Thu, 17 Nov 2022 07:31:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YYbyGvr7R4QJ31YRKXqxJVIlaxGSfN/nVPLH9/segYo=;
+        b=bhV42qvhSh6JlAr5LOzLdUDf3KEvgkBFoxSgGMdYhoPh4wNmiNmakO5pya7uYnFNX3
+         9vKnTRjuljBe+GvnX2CkYyrlclqY1/0MWPRPksqKeLO4NhA2lGk5oFt9yTwq7qAyaDQy
+         16zGofSttVBr7KsWP7JC5kJoDoJSMlh/tUIaMbm1gFflZT41h1lXXpfZvGjWMUnexXSC
+         XFbOfhqZ8rRfdbenEkZQfMLMWRZ+KDxBAeflZifNmraa/XKSUNql8j51PuZNSs1hVJDw
+         GmMGb3ZTI2FOYZ7Yes6t/xn8JvLFzyDsxqCyMmVIi3WtCSCO1fEfFREmA+vUGKciNLHl
+         MI8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YYbyGvr7R4QJ31YRKXqxJVIlaxGSfN/nVPLH9/segYo=;
+        b=cqhNdo/3ZlzOFLpcTDJ5e+ETj3VPaokYrLKuSagY8ZwPAtgfHMEnMxWgpbJ7Pht4to
+         iAEpmtkw4ZYUzt6YUulfSuY00p1X+HoBpNCEuVgsmp/K6z1y/uACKLgYg1lIWUuZwyVm
+         hcZgdfdmOc8C+uttrnzYQnYVJsQhM984vWj8v5SS9C8V/CPJGvS1nhAmPI5DRxtLpsfd
+         dX6m+6GGUnPuTOyDsu0toAFtI8HAXXBcSpxrcPWVu7qLLyni096AYvbMlWRJyZIlxu0V
+         j6mh54+DYZSRS1JOTOiqdFyVo2s54qRWX6n4YSnVgvevoYiWLtuSGOVBvqqEd9h7Qlcq
+         HcOw==
+X-Gm-Message-State: ANoB5pmGuf6RejIBBepsAM/aVD/qMTH1XsO14YS9T6hTfxgPnF4FCV53
+        zm7LRE+K/ieT/askQtnEZ69be0IMB3Y0gl5HyTc3mjv6xtTB
+X-Google-Smtp-Source: AA0mqf7PTUB1E6jT7w2n1cqUSGbsHd4TwbTJSD3G3paAWrXk8kz5NT/xoC/cgmw9kA0xw6mqSK8TjJ9No6As8SS+Zq4=
+X-Received: by 2002:a17:902:b097:b0:17b:4ace:b67f with SMTP id
+ p23-20020a170902b09700b0017b4aceb67fmr3442926plr.12.1668699115322; Thu, 17
+ Nov 2022 07:31:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf/docs: Include blank lines between bullet points
- in bpf_devel_QA.rst
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166869901724.18310.7893818294368402542.git-patchwork-notify@kernel.org>
-Date:   Thu, 17 Nov 2022 15:30:17 +0000
-References: <20221116174358.2744613-1-deso@posteo.net>
-In-Reply-To: <20221116174358.2744613-1-deso@posteo.net>
-To:     =?utf-8?q?Daniel_M=C3=BCller_=3Cdeso=40posteo=2Enet=3E?=@ci.codeaurora.org
-Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net, kafai@fb.com, kernel-team@fb.com,
-        akiyks@gmail.com
+References: <20221115175652.3836811-1-roberto.sassu@huaweicloud.com>
+ <20221115175652.3836811-4-roberto.sassu@huaweicloud.com> <CAHC9VhTA7SgFnTFGNxOGW38WSkWu7GSizBmNz=TuazUR4R_jUg@mail.gmail.com>
+ <83cbff40f16a46e733a877d499b904cdf06949b6.camel@huaweicloud.com>
+ <CAHC9VhRX0J8Z61_fH9T5O1ZpRQWSppQekxP8unJqStHuTwQkLQ@mail.gmail.com> <Y3XLgrYbIEpdW0vy@kroah.com>
+In-Reply-To: <Y3XLgrYbIEpdW0vy@kroah.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 17 Nov 2022 10:31:44 -0500
+Message-ID: <CAHC9VhTXegLqVH18AXTYrFPBn1WF0Wu8hbybc1Y5LTr-StFrOw@mail.gmail.com>
+Subject: Re: [RFC][PATCH 3/4] lsm: Redefine LSM_HOOK() macro to add return
+ value flags as argument
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, revest@chromium.org, jackmanb@chromium.org,
+        jmorris@namei.org, serge@hallyn.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+On Thu, Nov 17, 2022 at 12:50 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> On Wed, Nov 16, 2022 at 05:04:05PM -0500, Paul Moore wrote:
+> > On Wed, Nov 16, 2022 at 3:11 AM Roberto Sassu
+> > <roberto.sassu@huaweicloud.com> wrote:
+> > > On Tue, 2022-11-15 at 21:27 -0500, Paul Moore wrote:
+> > > > On Tue, Nov 15, 2022 at 12:58 PM Roberto Sassu
+> > > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > >
+> > > > > Define four return value flags (LSM_RET_NEG, LSM_RET_ZERO, LSM_RET_ONE,
+> > > > > LSM_RET_GT_ONE), one for each interval of interest (< 0, = 0, = 1, > 1).
+> > > > >
+> > > > > Redefine the LSM_HOOK() macro to add return value flags as argument, and
+> > > > > set the correct flags for each LSM hook.
+> > > > >
+> > > > > Implementors of new LSM hooks should do the same as well.
+> > > > >
+> > > > > Cc: stable@vger.kernel.org # 5.7.x
+> > > > > Fixes: 9d3fdea789c8 ("bpf: lsm: Provide attachment points for BPF LSM programs")
+> > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > ---
+> > > > >  include/linux/bpf_lsm.h       |   2 +-
+> > > > >  include/linux/lsm_hook_defs.h | 779 ++++++++++++++++++++--------------
+> > > > >  include/linux/lsm_hooks.h     |   9 +-
+> > > > >  kernel/bpf/bpf_lsm.c          |   5 +-
+> > > > >  security/bpf/hooks.c          |   2 +-
+> > > > >  security/security.c           |   4 +-
+> > > > >  6 files changed, 466 insertions(+), 335 deletions(-)
+> > > >
+> > > > Just a quick note here that even if we wanted to do something like
+> > > > this, it is absolutely not -stable kernel material.  No way.
+> > >
+> > > I was unsure about that. We need a proper fix for this issue that needs
+> > > to be backported to some kernels. I saw this more like a dependency.
+> > > But I agree with you that it would be unlikely that this patch is
+> > > applied to stable kernels.
+> > >
+> > > For stable kernels, what it would be the proper way? We still need to
+> > > maintain an allow list of functions that allow a positive return value,
+> > > at least. Should it be in the eBPF code only?
+> >
+> > Ideally the fix for -stable is the same as what is done for Linus'
+> > kernel (ignoring backport fuzzing), so I would wait and see how that
+> > ends up first.  However, if the patchset for Linus' tree is
+> > particularly large and touches a lot of code, you may need to work on
+> > something a bit more targeted to the specific problem.  I tend to be
+> > more conservative than most kernel devs when it comes to -stable
+> > patches, but if you can't backport the main upstream patchset, smaller
+> > (both in terms of impact and lines changed) is almost always better.
+>
+> No, the mainline patch (what is in Linus's tree), is almost always
+> better and preferred for stable backports.  When you diverge, bugs
+> happen, almost every time, and it makes later fixes harder to backport
+> as well.
+>
+> But first work on solving the problem in Linus's tree.  Don't worry
+> about stable trees until after the correct solution is merged.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+Perhaps you missed my very first sentence where I mentioned exactly
+the same things: solve it in Linus' tree first, backports of patches
+in Linus' tree is ideal.
 
-On Wed, 16 Nov 2022 17:43:58 +0000 you wrote:
-> Commit 26a9b433cf08 ("bpf/docs: Document how to run CI without patch
-> submission") caused a warning to be generated when compiling the
-> documentation:
->  > bpf_devel_QA.rst:55: WARNING: Unexpected indentation.
->  > bpf_devel_QA.rst:56: WARNING: Block quote ends without a blank line
-> 
-> This change fixes the problem by inserting the required blank lines.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next] bpf/docs: Include blank lines between bullet points in bpf_devel_QA.rst
-    https://git.kernel.org/bpf/bpf-next/c/383f1a8df8fa
-
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+paul-moore.com
