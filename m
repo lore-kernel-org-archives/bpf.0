@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74014C43217
-	for <bpf@archiver.kernel.org>; Thu, 17 Nov 2022 22:56:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 434D7C4332F
+	for <bpf@archiver.kernel.org>; Thu, 17 Nov 2022 22:56:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234992AbiKQW4G (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Nov 2022 17:56:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53374 "EHLO
+        id S234954AbiKQW4I (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Nov 2022 17:56:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235089AbiKQWz6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 17 Nov 2022 17:55:58 -0500
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227BE6454C
-        for <bpf@vger.kernel.org>; Thu, 17 Nov 2022 14:55:55 -0800 (PST)
-Received: by mail-pj1-x1041.google.com with SMTP id u6-20020a17090a5e4600b0021881a8d264so1056865pji.4
-        for <bpf@vger.kernel.org>; Thu, 17 Nov 2022 14:55:55 -0800 (PST)
+        with ESMTP id S234843AbiKQW4E (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Nov 2022 17:56:04 -0500
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2536186FC
+        for <bpf@vger.kernel.org>; Thu, 17 Nov 2022 14:56:02 -0800 (PST)
+Received: by mail-pl1-x642.google.com with SMTP id y10so1803450plp.3
+        for <bpf@vger.kernel.org>; Thu, 17 Nov 2022 14:56:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XI0cSLMpOLZbEZfTLKGuck/t/mpojqsult6wbsm/RSE=;
-        b=BLz3MumpGVit8d3jGVSUkxlczr/6dJ09pCifGtXOCYHGWetNHaHG3pkaRSo09RAdoU
-         qPhACvjNK+BOC/+J5P9At6XQjt6Nu3y7amm1fwAcZ4OmZrDtaxJKTMc0S5R1+UcLRarw
-         71SX3xjeq4V7cYdZsA52BZk0bgjVteZOA62EmZaAv6TmHGebp2dcScUQEvXsPe7fX3mp
-         19C2ppVHykLO5rnIr1ZIp9SeFn5/fjVq37NnlIV8EhnQqPOboFpDejIRjqWe0HhxFWMz
-         0O1PzOCMqIhlzlpGqDXuB+/J+WNhwzbQgogyuGPUTvOemKO9aunQ7GSOTl9TLlfZ19jd
-         6LKg==
+        bh=eADGO9O0PgU+rJUyTCDLhtk/CaV3wC5RG4davPZNCZE=;
+        b=RdOc6J3/baOUpj4dvkJZ+Hi2iT3rnQmqE1JC23VorolDr75Lzweam301CN5xdHTBA4
+         5gohP7sbFPSAr2sEBxzSlQpe56bFK6Yk7dNi0d26fodBUt+aCU6/Mch9ptMtd46w7QpB
+         omPDpj2VkUaNl95ieO2HZPjzmbBEecDCZrDsQy/lHX3h6+Ad0eTScPTsaIxPjB3caRi2
+         jU8MZckF430gsGrp0L1PTJ32S4SmYOqrRl9kYar4aUq+Lxfcbucs2Pmop2jl/zRmfYRB
+         ZBIM5NPXTIUY1GjiL47RaGXdpRav5fjqnrEHIVvMcWj3plR0Gob1XZ1t+D8905unRvq+
+         7uYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XI0cSLMpOLZbEZfTLKGuck/t/mpojqsult6wbsm/RSE=;
-        b=iQiGAlqFrx856ulOQBS3ji9I8399HKMyukSrmPIcgnMY98kMcYclccMiesnkLzoJhc
-         CkSDFdwYjuZrQfSPPhmq8b0tTlUL49GAVTgrm4IA2tTw476U+u0CyYkrrwkG2H9BDDYw
-         zKfeQVMTY7yyejSl8uwFjsinbcQAw4Xg/P+8asr4YsjBmVfs1+ys1DHvt5KZjy8RG9BY
-         3nxKeHkW9jsCsqY7Mh+X49Kqlz3RamA/EUncEY6/Xz8rPwJCgDtQdLbN6Pj7AZf5At6Q
-         TFXHbOcY76FhPk7wRGf6h2FC6GSd8iQn7y18/2eRr01T1W53SiZxU0K+NWBKKNIlsQq8
-         uuaw==
-X-Gm-Message-State: ANoB5plkICF7Yaadb4sQUh5Lv4/k3rH5HE9RsxK2krZxszik36dX27RU
-        7AzHMgQHQgUX9GzTiwBOyaIMeBwtOlM=
-X-Google-Smtp-Source: AA0mqf5KxXtXVFD394Hs2dRIiPE4iHqdVdV5ACkhhAsAN7DCsbxyZb+vozzxZQ/dqd3b2rup+fNGYQ==
-X-Received: by 2002:a17:902:f152:b0:188:5581:c8de with SMTP id d18-20020a170902f15200b001885581c8demr4654998plb.140.1668725754453;
-        Thu, 17 Nov 2022 14:55:54 -0800 (PST)
+        bh=eADGO9O0PgU+rJUyTCDLhtk/CaV3wC5RG4davPZNCZE=;
+        b=4rMXacm4QGe7Ez8B8if8rr5VtLLzY5SBZP5fJfaUr5v/y0DO3FbxGrN0MgS5CmooFg
+         qUuLyYwqLlveNrBShDWNBIuVCJmaV2APBP82H/Xx8yLMfrOpVjOXkRhANI72rs9eoo2O
+         v63Y140AsMf9wmHRGvwhKOjV3fUoHUVtWha6KIJzOfzwUbwJhGichC/ytUhbJIULC8V4
+         HPad5UnPQnTKhA6IT+VpZkXSZVHGu4SWyNcAYPYIgrESaHAw+H18GBtEC8UENvFUmmyu
+         TITaXrYhuoDfSE8eeVu7CYCtgJmv0YNGHnxkJUqX9lNPdB858Nqkdq4fiYWd+356/SIP
+         TFGQ==
+X-Gm-Message-State: ANoB5pmH6re8Vyu8zdX8nQ06wE2ovKetaYFn09Rsgr14A1CIMdXCIbk0
+        X1YlIwkw7GNpgZIGnr1nRUERJe0857Y=
+X-Google-Smtp-Source: AA0mqf7kaaV/AOnAc1/YkhSpcKCjBVTt9iSofz8kknCwM85nhQgq0N9stzLYtSf0NyhPkBXx1ztZCQ==
+X-Received: by 2002:a17:902:cf05:b0:186:de22:7968 with SMTP id i5-20020a170902cf0500b00186de227968mr4842657plg.3.1668725762249;
+        Thu, 17 Nov 2022 14:56:02 -0800 (PST)
 Received: from localhost ([2409:40f4:8:955c:5484:8048:c08:7b3])
-        by smtp.gmail.com with ESMTPSA id b15-20020a170902d50f00b0018863e1bd3csm1950283plg.134.2022.11.17.14.55.53
+        by smtp.gmail.com with ESMTPSA id p188-20020a625bc5000000b0056e32a2b88esm1630466pfb.219.2022.11.17.14.56.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 14:55:54 -0800 (PST)
+        Thu, 17 Nov 2022 14:56:01 -0800 (PST)
 From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -56,51 +56,170 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <martin.lau@kernel.org>,
         Dave Marchevsky <davemarchevsky@meta.com>
-Subject: [PATCH bpf-next v9 10/23] bpf: Allow locking bpf_spin_lock in inner map values
-Date:   Fri, 18 Nov 2022 04:24:57 +0530
-Message-Id: <20221117225510.1676785-11-memxor@gmail.com>
+Subject: [PATCH bpf-next v9 12/23] bpf: Support constant scalar arguments for kfuncs
+Date:   Fri, 18 Nov 2022 04:24:59 +0530
+Message-Id: <20221117225510.1676785-13-memxor@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221117225510.1676785-1-memxor@gmail.com>
 References: <20221117225510.1676785-1-memxor@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1210; i=memxor@gmail.com; h=from:subject; bh=P1undU+At1PLzL1SYYwDyVj3bpoUrN/Ux1z3PCPdpx8=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBjdrkbGd5ei57JxekHdh/Q140Pjn7yTFd8i7NCFmoN wsh9V0OJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCY3a5GwAKCRBM4MiGSL8RysreD/ 9EXKsZB3mpmw8EBsET/tFVYFh5E0d5y4kb2NNDa+XKCuq6mwarT93wCe7UEn1UNXykML7TUWp0o9S0 WHkLHPuvEoYftCaoytG+cw8VzQCT413u6EMf8HkRFWweRWpm7plvM2EPxiYjfF6dm4z+uJ+oWSOGl4 mQ8hWINLVPmFDx6cGIAFkKSh4ZvTD3L+e9jDtzzYF20YNA0/D4f3YaV3skfHu0WTkzTlJIDlyX06R7 vhxBTMOnNhpqUSS+sXc1OTFHFUuUAiUob8V9DSYprWtjNDtAOdgf2+BspLivx8kq4KTLwdBQNB0/T1 NIsu6MUQ9SDks4lYxD0kgX6FBrsurClX0qcPGnq4NNvXFXoD7wagm9D7/2KPOKQpaZGYJ1B8wUNNoY CLR/aUVpCGnRsjcQsXRqX2wPLTjNfPlIBBe1WZto9AK+Xxh3CIguzrAyE9UCt6XA3S8c/9T3XYVNLg oPvcmHb6HNK+Agc8jSltZxxS1tPFQ9CAk6munnomv+RGvs1d2q+bqVXn7u0Y2lUBhcgpAAaUgS9DZh X7HiD+tZfCmRL/nmelwqSKyVtdvW7M5E5YdkCBUc2HmdunN07dfnyeuZ2Cu8ygozd4KIq7pbaQHHQI ma/e6dkRU0lsEk1IEjOS0uhJQIXrBkEdrykMxyEvUyQnrxoN1Lmm5XBIUcHw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5687; i=memxor@gmail.com; h=from:subject; bh=u9Qjbd5URIRAYF6yjvJAaOF9VBbO7P61kGUXFF2hQC8=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBjdrkb4DuaBoKZ23L+NfrC+h4L+X+ye0wfHKmzQ4Su b3KhvUaJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCY3a5GwAKCRBM4MiGSL8RytwLD/ 48kBJjdyYEa7Mqz2HTZ6xy7ck9VlH2kks5OZO2txfFDzrzEYtoaInLTn1RsRrZNAH08BVOVMO4MwAU Uqneabu2n/lN97Ol47Xil/yYDogoPIE56cFAqssiwq3napw2gai7NWXfKh6uwYX4QJpvrSD+bZwPsp OkJt80WFEn/Wz5NUYFxDQ4nR9JVUNokPeKkkvlJUxJFfEcjl4F312iVoXSv5t5Kro3+UF0S1xkXtLN /eybJXuwBIdpJXmDwORnReWuLfjeUxLo3+BQ3x6kYa0vfw9UHk988RuZuyDBF3E4k80I+ckGn57BVG 0bGSkX4D4AT9DvB0+jwvYK2moTOA76ukv+ym8zaL93MdN9nVdAK3Wmt+PzDCNPUYEmn6BhxRk/k+F1 Y3M21It0R6Z5XywkowNOZqTU54A5MJNkAzLpnjTIj6VBa7vUbcyftbDIwLnWqm+hTu8nth+FzPLvjE 3Y0NHyLuxkBcqYmGfUfl51AxlOPlXNGRle1WUcFRQfAvVCJQnw+qPkRG+AFdFuKM7dJjGaXHypQZqA wFvofExlEMYYY7r34gHgd6Fmsc2bw5pfviqDJ4+c0BB4V4IikK2xNp/GM86yYK8cvDO2le3Z8bR8pb YX2bg2sIRwJrXqd9yNyH9q/Rpl5Q7JPfuZPrAgVSFnhSXeJk8KcvPQXii4kA==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-There is no need to restrict users from locking bpf_spin_lock in map
-values of inner maps. Each inner map lookup gets a unique reg->id
-assigned to the returned PTR_TO_MAP_VALUE which will be preserved after
-the NULL check. Distinct lookups into different inner map get unique
-IDs, and distinct lookups into same inner map also get unique IDs.
+Allow passing known constant scalars as arguments to kfuncs that do not
+represent a size parameter. We use mark_chain_precision for the constant
+scalar argument to mark it precise. This makes the search pruning
+optimization of verifier more conservative for such kfunc calls, and
+each non-distinct argument is considered unequivalent.
 
-Hence, lift the restriction by removing the check return -ENOTSUPP in
-map_in_map.c. Later commits will add comprehensive test cases to ensure
-that invalid cases are rejected.
+We will use this support to then expose a bpf_obj_new function where it
+takes the local type ID of a type in program BTF, and returns a
+PTR_TO_BTF_ID | MEM_ALLOC to the local type, and allows programs to
+allocate their own objects.
+
+Each type ID resolves to a distinct type with a possibly distinct size,
+hence the type ID constant matters in terms of program safety and its
+precision needs to be checked between old and cur states inside regsafe.
+The use of mark_chain_precision enables this.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/map_in_map.c | 5 -----
- 1 file changed, 5 deletions(-)
+ Documentation/bpf/kfuncs.rst | 24 +++++++++++++++
+ kernel/bpf/verifier.c        | 57 +++++++++++++++++++++++++++---------
+ 2 files changed, 67 insertions(+), 14 deletions(-)
 
-diff --git a/kernel/bpf/map_in_map.c b/kernel/bpf/map_in_map.c
-index fae6a6c33e2d..7cce2047c6ef 100644
---- a/kernel/bpf/map_in_map.c
-+++ b/kernel/bpf/map_in_map.c
-@@ -30,11 +30,6 @@ struct bpf_map *bpf_map_meta_alloc(int inner_map_ufd)
- 		goto put;
- 	}
+diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+index 0f858156371d..3b1501c3b6cd 100644
+--- a/Documentation/bpf/kfuncs.rst
++++ b/Documentation/bpf/kfuncs.rst
+@@ -72,6 +72,30 @@ argument as its size. By default, without __sz annotation, the size of the type
+ of the pointer is used. Without __sz annotation, a kfunc cannot accept a void
+ pointer.
  
--	if (btf_record_has_field(inner_map->record, BPF_SPIN_LOCK)) {
--		ret = -ENOTSUPP;
--		goto put;
--	}
++2.2.2 __k Annotation
++--------------------
++
++This annotation is only understood for scalar arguments, where it indicates that
++the verifier must check the scalar argument to be a known constant, which does
++not indicate a size parameter, and the value of the constant is relevant to the
++safety of the program.
++
++An example is given below::
++
++        void *bpf_obj_new(u32 local_type_id__k, ...)
++        {
++        ...
++        }
++
++Here, bpf_obj_new uses local_type_id argument to find out the size of that type
++ID in program's BTF and return a sized pointer to it. Each type ID will have a
++distinct size, hence it is crucial to treat each such call as distinct when
++values don't match during verifier state pruning checks.
++
++Hence, whenever a constant scalar argument is accepted by a kfunc which is not a
++size parameter, and the value of the constant matters for program safety, __k
++suffix should be used.
++
+ .. _BPF_kfunc_nodef:
+ 
+ 2.3 Using an existing kernel function
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index d85ecc673631..293417e5d732 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7874,6 +7874,10 @@ struct bpf_kfunc_call_arg_meta {
+ 	u8 release_regno;
+ 	bool r0_rdonly;
+ 	u64 r0_size;
++	struct {
++		u64 value;
++		bool found;
++	} arg_constant;
+ };
+ 
+ static bool is_kfunc_acquire(struct bpf_kfunc_call_arg_meta *meta)
+@@ -7911,30 +7915,40 @@ static bool is_kfunc_arg_kptr_get(struct bpf_kfunc_call_arg_meta *meta, int arg)
+ 	return arg == 0 && (meta->kfunc_flags & KF_KPTR_GET);
+ }
+ 
+-static bool is_kfunc_arg_mem_size(const struct btf *btf,
+-				  const struct btf_param *arg,
+-				  const struct bpf_reg_state *reg)
++static bool __kfunc_param_match_suffix(const struct btf *btf,
++				       const struct btf_param *arg,
++				       const char *suffix)
+ {
+-	int len, sfx_len = sizeof("__sz") - 1;
+-	const struct btf_type *t;
++	int suffix_len = strlen(suffix), len;
+ 	const char *param_name;
+ 
+-	t = btf_type_skip_modifiers(btf, arg->type, NULL);
+-	if (!btf_type_is_scalar(t) || reg->type != SCALAR_VALUE)
+-		return false;
 -
- 	inner_map_meta_size = sizeof(*inner_map_meta);
- 	/* In some cases verifier needs to access beyond just base map. */
- 	if (inner_map->ops == &array_map_ops)
+ 	/* In the future, this can be ported to use BTF tagging */
+ 	param_name = btf_name_by_offset(btf, arg->name_off);
+ 	if (str_is_empty(param_name))
+ 		return false;
+ 	len = strlen(param_name);
+-	if (len < sfx_len)
++	if (len < suffix_len)
+ 		return false;
+-	param_name += len - sfx_len;
+-	if (strncmp(param_name, "__sz", sfx_len))
++	param_name += len - suffix_len;
++	return !strncmp(param_name, suffix, suffix_len);
++}
++
++static bool is_kfunc_arg_mem_size(const struct btf *btf,
++				  const struct btf_param *arg,
++				  const struct bpf_reg_state *reg)
++{
++	const struct btf_type *t;
++
++	t = btf_type_skip_modifiers(btf, arg->type, NULL);
++	if (!btf_type_is_scalar(t) || reg->type != SCALAR_VALUE)
+ 		return false;
+ 
+-	return true;
++	return __kfunc_param_match_suffix(btf, arg, "__sz");
++}
++
++static bool is_kfunc_arg_constant(const struct btf *btf, const struct btf_param *arg)
++{
++	return __kfunc_param_match_suffix(btf, arg, "__k");
+ }
+ 
+ static bool is_kfunc_arg_scalar_with_name(const struct btf *btf,
+@@ -8204,7 +8218,22 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+ 				verbose(env, "R%d is not a scalar\n", regno);
+ 				return -EINVAL;
+ 			}
+-			if (is_kfunc_arg_scalar_with_name(btf, &args[i], "rdonly_buf_size")) {
++
++			if (is_kfunc_arg_constant(meta->btf, &args[i])) {
++				if (meta->arg_constant.found) {
++					verbose(env, "verifier internal error: only one constant argument permitted\n");
++					return -EFAULT;
++				}
++				if (!tnum_is_const(reg->var_off)) {
++					verbose(env, "R%d must be a known constant\n", regno);
++					return -EINVAL;
++				}
++				ret = mark_chain_precision(env, regno);
++				if (ret < 0)
++					return ret;
++				meta->arg_constant.found = true;
++				meta->arg_constant.value = reg->var_off.value;
++			} else if (is_kfunc_arg_scalar_with_name(btf, &args[i], "rdonly_buf_size")) {
+ 				meta->r0_rdonly = true;
+ 				is_ret_buf_sz = true;
+ 			} else if (is_kfunc_arg_scalar_with_name(btf, &args[i], "rdwr_buf_size")) {
 -- 
 2.38.1
 
