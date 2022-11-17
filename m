@@ -2,47 +2,47 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7F8BC433FE
-	for <bpf@archiver.kernel.org>; Thu, 17 Nov 2022 04:29:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48B08C433FE
+	for <bpf@archiver.kernel.org>; Thu, 17 Nov 2022 04:29:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239145AbiKQE3A (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 16 Nov 2022 23:29:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49410 "EHLO
+        id S239229AbiKQE3M (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Nov 2022 23:29:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239184AbiKQE25 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 16 Nov 2022 23:28:57 -0500
+        with ESMTP id S233900AbiKQE3C (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 16 Nov 2022 23:29:02 -0500
 Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF3D22B0B
-        for <bpf@vger.kernel.org>; Wed, 16 Nov 2022 20:28:56 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDF01FCCF
+        for <bpf@vger.kernel.org>; Wed, 16 Nov 2022 20:29:01 -0800 (PST)
 Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 2AH0bm80017564
-        for <bpf@vger.kernel.org>; Wed, 16 Nov 2022 20:28:55 -0800
+        by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 2AH0bmWn017546
+        for <bpf@vger.kernel.org>; Wed, 16 Nov 2022 20:29:01 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=S59NeVu2RZQB4adWnGHav0b+ilPQ+zmm4Gh8Ygz2tpo=;
- b=Ehsu27rhG22itN62QUEXUziBgMorikGDSRz0kObp641YpFbXbL1db+z2sn/RrFu0I2xy
- QFWdeqx6asDxLNGeK+taNsLEjKo8m88HLMl7KJXazKdZXGfnFHqH4kQJeZ85nVSOTk10
- zcvqcBnHhLDcmO7crlv18kYwioiqbHGDrFI= 
+ bh=gn/mpXdzqFUbDxT/p4jEJDcMoK7eHpCVUCOI+zk5JbM=;
+ b=nQ6v5gWeh3XMFDeBdp0uZNYzTiMb6sElLZmDE8gxrurzT7WjMqbKWoJ7ca2piEp39Jmy
+ +FdOgM/DeSKXIuIpW9Ubu5JxUVTTiIFUuuimSk8WldQFwAm9NNov/vSeNFrlJ2y4hM+1
+ aDLpfE3evorUTS+Cq5EUCjfwyAHloEzsgMk= 
 Received: from maileast.thefacebook.com ([163.114.130.3])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3kw33fwhtt-1
+        by m0089730.ppops.net (PPS) with ESMTPS id 3kw33fwhu4-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 16 Nov 2022 20:28:55 -0800
-Received: from twshared10308.07.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 16 Nov 2022 20:29:01 -0800
+Received: from twshared9088.05.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 16 Nov 2022 20:28:55 -0800
+ 15.1.2375.31; Wed, 16 Nov 2022 20:29:00 -0800
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id 50480124860C7; Wed, 16 Nov 2022 20:28:44 -0800 (PST)
+        id CA502124860E6; Wed, 16 Nov 2022 20:28:54 -0800 (PST)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v6 5/7] bpf: Enable sleeptable support for cgrp local storage
-Date:   Wed, 16 Nov 2022 20:28:44 -0800
-Message-ID: <20221117042844.1090968-1-yhs@fb.com>
+Subject: [PATCH bpf-next v6 7/7] selftests/bpf: Add rcu_read_lock test to s390x/aarch64 deny lists
+Date:   Wed, 16 Nov 2022 20:28:54 -0800
+Message-ID: <20221117042854.1091570-1-yhs@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221117042818.1086954-1-yhs@fb.com>
 References: <20221117042818.1086954-1-yhs@fb.com>
@@ -50,8 +50,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: efhRh5Aq1BrlZD038HkPYVqkarNXpPDh
-X-Proofpoint-GUID: efhRh5Aq1BrlZD038HkPYVqkarNXpPDh
+X-Proofpoint-ORIG-GUID: ByUDhxqqblKDm_NxoBEBH6eehPJsmvEC
+X-Proofpoint-GUID: ByUDhxqqblKDm_NxoBEBH6eehPJsmvEC
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-16_03,2022-11-16_01,2022-06-22_01
@@ -59,34 +59,83 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-With proper bpf_rcu_read_lock() support, sleepable support for cgrp local
-storage can be enabled as typical use case task->cgroups->dfl_cgrp
-can be protected with bpf_rcu_read_lock().
+The new rcu_read_lock test failed on s390x with the following error messa=
+ge:
+
+  ...
+  test_rcu_read_lock:PASS:join_cgroup /rcu_read_lock 0 nsec
+  test_local_storage:PASS:skel_open 0 nsec
+  libbpf: prog 'cgrp_succ': failed to find kernel BTF type ID of '__s390x=
+_sys_getpgid': -3
+  libbpf: prog 'cgrp_succ': failed to prepare load attributes: -3
+  libbpf: prog 'cgrp_succ': failed to load: -3
+  libbpf: failed to load object 'rcu_read_lock'
+  libbpf: failed to load BPF skeleton 'rcu_read_lock': -3
+  test_local_storage:FAIL:skel_load unexpected error: -3 (errno 3)
+  ...
+
+It failed on aarch64 with the following error message due to inadequate
+trampoline support.
+
+  ...
+  test_rcu_read_lock:PASS:join_cgroup /rcu_read_lock 0 nsec
+  test_local_storage:PASS:skel_open 0 nsec
+  test_local_storage:PASS:skel_load 0 nsec
+  libbpf: prog 'cgrp_succ': failed to attach: ERROR: strerror_r(-524)=3D2=
+2
+  libbpf: prog 'cgrp_succ': failed to auto-attach: -524
+  test_local_storage:FAIL:skel_attach unexpected error: -524 (errno 524)
+  ...
+
+So add the test to s390x and aarch64 deny lists.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- kernel/bpf/verifier.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/DENYLIST.aarch64 | 1 +
+ tools/testing/selftests/bpf/DENYLIST.s390x   | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 44633a1a2565..6ced46deeae5 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -13007,10 +13007,11 @@ static int check_map_prog_compatibility(struct =
-bpf_verifier_env *env,
- 		case BPF_MAP_TYPE_INODE_STORAGE:
- 		case BPF_MAP_TYPE_SK_STORAGE:
- 		case BPF_MAP_TYPE_TASK_STORAGE:
-+		case BPF_MAP_TYPE_CGRP_STORAGE:
- 			break;
- 		default:
- 			verbose(env,
--				"Sleepable programs can only use array, hash, and ringbuf maps\n");
-+				"Sleepable programs can only use array, hash, ringbuf and local stor=
-age maps\n");
- 			return -EINVAL;
- 		}
-=20
+diff --git a/tools/testing/selftests/bpf/DENYLIST.aarch64 b/tools/testing=
+/selftests/bpf/DENYLIST.aarch64
+index 09416d5d2e33..2ff8a40ed9dd 100644
+--- a/tools/testing/selftests/bpf/DENYLIST.aarch64
++++ b/tools/testing/selftests/bpf/DENYLIST.aarch64
+@@ -44,6 +44,7 @@ modify_return                                    # modi=
+fy_return__attach failed
+ module_attach                                    # skel_attach skeleton =
+attach failed: -524
+ mptcp/base                                       # run_test mptcp unexpe=
+cted error: -524 (errno 524)
+ netcnt                                           # packets unexpected pa=
+ckets: actual 10001 !=3D expected 10000
++rcu_read_lock                                    # failed to attach: ERR=
+OR: strerror_r(-524)=3D22
+ recursion                                        # skel_attach unexpecte=
+d error: -524 (errno 524)
+ ringbuf                                          # skel_attach skeleton =
+attachment failed: -1
+ setget_sockopt                                   # attach_cgroup unexpec=
+ted error: -524
+diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x b/tools/testing/s=
+elftests/bpf/DENYLIST.s390x
+index be4e3d47ea3e..dd5db40b5a09 100644
+--- a/tools/testing/selftests/bpf/DENYLIST.s390x
++++ b/tools/testing/selftests/bpf/DENYLIST.s390x
+@@ -41,6 +41,7 @@ module_attach                            # skel_attach =
+skeleton attach failed: -
+ mptcp
+ netcnt                                   # failed to load BPF skeleton '=
+netcnt_prog': -7                               (?)
+ probe_user                               # check_kprobe_res wrong kprobe=
+ res from probe read                           (?)
++rcu_read_lock                            # failed to find kernel BTF typ=
+e ID of '__x64_sys_getpgid': -3                (?)
+ recursion                                # skel_attach unexpected error:=
+ -524                                          (trampoline)
+ ringbuf                                  # skel_load skeleton load faile=
+d                                              (?)
+ select_reuseport                         # intermittently fails on new s=
+390x setup
 --=20
 2.30.2
 
