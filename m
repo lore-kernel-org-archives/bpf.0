@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B677C43219
-	for <bpf@archiver.kernel.org>; Fri, 18 Nov 2022 01:56:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76286C4332F
+	for <bpf@archiver.kernel.org>; Fri, 18 Nov 2022 01:57:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234053AbiKRB45 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Nov 2022 20:56:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33670 "EHLO
+        id S240752AbiKRB5B (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Nov 2022 20:57:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240959AbiKRB4u (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 17 Nov 2022 20:56:50 -0500
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15E98756A
-        for <bpf@vger.kernel.org>; Thu, 17 Nov 2022 17:56:48 -0800 (PST)
-Received: by mail-pj1-x1044.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso3483921pjt.0
-        for <bpf@vger.kernel.org>; Thu, 17 Nov 2022 17:56:48 -0800 (PST)
+        with ESMTP id S240672AbiKRB5A (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Nov 2022 20:57:00 -0500
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9608F786DA
+        for <bpf@vger.kernel.org>; Thu, 17 Nov 2022 17:56:59 -0800 (PST)
+Received: by mail-pg1-x544.google.com with SMTP id s196so3775125pgs.3
+        for <bpf@vger.kernel.org>; Thu, 17 Nov 2022 17:56:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=680O5ghX0Kvi4oZdK0wuqtRrRb8KoMWSYqDIANShvnM=;
-        b=DI+hr6rzWmHFS40ffOGbJ8BGaQE5X8/S99olis3w32uizZLEROXMw948j4O0TotCG+
-         4krw/IJhHNc2d8ykegaut2G5smOfHpFn5hEnPxzwENDYSKWi0DSwegq47fiXgAyit8dZ
-         1hXAPfhGGM/gsmsw5VFpdvUjkkI22e7pPQCfbMYxu1/lgp21Jw1+2TxqVG+cOklSgFcr
-         YuFSxu4sLfpjpi9E4GMCMeG/cAGbjbWjvNTvQ0YkPnMs9frVKZo7iUdqHUwVcHHgm/QR
-         zWmPUa5mM1hf/9Z8tvBgfyXbR5zVEcPkXReXGgz4TVgNLeebbBOXmaF2tfSLDf0Su9+m
-         p9JQ==
+        bh=e5I6eG5hjgciNIVJ7w3PdGRUS0/VDW9TOrEC14dAJ3g=;
+        b=Plmp50GgGooHq32dx3orfnLS09hDxsaOCHNWQPBxTP+k+KGOnBjMjPYOifZSpEyuO1
+         BI7Z0+8PeVipaoaWwc4hppW9Pon8T5GzYSX9lR5rawIPFGNHUi/DJuJ6avoJ5nLe/KGf
+         JL8AphhCjYsoQ0vXMAeNyVy1+5KoQDuijwUm8Yl/UP8wrMXc1JbsybZDZanuZp7z3kbA
+         zoEE6PKMJasOnmjuQDcY5ddIHPhdm26OKlLCQ2y8wKQ+opgrecNK5HMTvuzIEUDFG7tw
+         4iTfK1a5owXqvHhDwHVEqFek6MmMSvzFEI4JPwfYaptFR+al96HZ9nE67Apaegopbj6X
+         nqPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=680O5ghX0Kvi4oZdK0wuqtRrRb8KoMWSYqDIANShvnM=;
-        b=iPZArkr/fGXzvXs7/3BlCSW6y9wsA3hChlxdMk8MWyJotapoEIP3kKRACK9VYSzHif
-         9JZAlHBrrjIkY0sW8oPJuKNLiyC8TEY9WYmQZrIrmrS1eL+S5FH3R5+a0QjKkd1Xtgkr
-         f330GXSmxFtEqbR2l6M6DJ7/xlz2eVbh46pvwBC0fPuy+BpvyqclND7VrFIFPFC6YK/0
-         +lVjMs5c01lOb7ase8rvWbVHkAIprC89q5cbGpSlsZ17iSviY0IJ4Vv4kLAiARvQW1kE
-         bexPQFCM+m2ZGTbIipW/C5MjGSZ8F0PvtKeMIPfOfmUyNWbjpbXkPjKkGgADt8Q49xmV
-         jSwg==
-X-Gm-Message-State: ANoB5plG1HSwzqCTZtjhAvbuNTEcUSDT1hj7Cr38C6CH235uOEUMwmhL
-        0ZK76pTWexLDSIcNKkSHf9eAEUjvLh8=
-X-Google-Smtp-Source: AA0mqf553s3GGoYQ/tAWcN8MsQO9okI1QCVNXs/7lLGKFPQ1sE87OMHioOUDNfsV+JVGAivwylHJOg==
-X-Received: by 2002:a17:902:b782:b0:188:6300:57ad with SMTP id e2-20020a170902b78200b00188630057admr5443210pls.7.1668736608004;
-        Thu, 17 Nov 2022 17:56:48 -0800 (PST)
+        bh=e5I6eG5hjgciNIVJ7w3PdGRUS0/VDW9TOrEC14dAJ3g=;
+        b=ZQiBo9JQ6T0ifZ+B2DnGDrHKZZaru66pUXskTH1cYslCfPA+FHKtm46AgbjxE+lCrH
+         gctl5/sG3i22qOobmuNe+mxDA+AVHN9D5ybRuAQ3WVlzc4Xwa5mHmXsuJcz6xii/gECB
+         JGM94JRiJ0umS5zwSsZmX+1WiKmIvQH1R8gY2FBPL31Ql3wbOlfcx9aXM9zoMt9t24pV
+         sxmP7XGYtzTBBWhm7YIjWdcsk0Do8zI0tyAbpSfsGFyRELZZGxHMAzNED9xkAbr6q7V1
+         5I71onL3vVktDfgDkmtG0zL6yGA7SeCfzcTC0KoxjAS8JVnaXzD7VTdwiEpcMRq6qX+k
+         08eA==
+X-Gm-Message-State: ANoB5pnXV6OS2GR0GdYwrut0Hb6drq4c3GsVYIcF5Xa2aWt+RVdnKVP6
+        PNhpLKFTM6rv/J3l/unqzdwSb27ddtc=
+X-Google-Smtp-Source: AA0mqf4frL7e35NdceTpTgB4myF+nO1j+h2uWyAQ92GpzB5uGdyZseJUDODIgGuZRPu1ENbQ5eKJsg==
+X-Received: by 2002:a63:f1d:0:b0:475:a06:50ae with SMTP id e29-20020a630f1d000000b004750a0650aemr4658833pgl.67.1668736618972;
+        Thu, 17 Nov 2022 17:56:58 -0800 (PST)
 Received: from localhost ([2409:40f4:8:955c:5484:8048:c08:7b3])
-        by smtp.gmail.com with ESMTPSA id 12-20020a170902c20c00b00172f6726d8esm2031423pll.277.2022.11.17.17.56.47
+        by smtp.gmail.com with ESMTPSA id l12-20020a170903120c00b0016c5306917fsm2177916plh.53.2022.11.17.17.56.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 17:56:47 -0800 (PST)
+        Thu, 17 Nov 2022 17:56:58 -0800 (PST)
 From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -56,204 +56,170 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <martin.lau@kernel.org>,
         Dave Marchevsky <davemarchevsky@meta.com>
-Subject: [PATCH bpf-next v10 09/24] bpf: Allow locking bpf_spin_lock global variables
-Date:   Fri, 18 Nov 2022 07:25:59 +0530
-Message-Id: <20221118015614.2013203-10-memxor@gmail.com>
+Subject: [PATCH bpf-next v10 12/24] bpf: Support constant scalar arguments for kfuncs
+Date:   Fri, 18 Nov 2022 07:26:02 +0530
+Message-Id: <20221118015614.2013203-13-memxor@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118015614.2013203-1-memxor@gmail.com>
 References: <20221118015614.2013203-1-memxor@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7353; i=memxor@gmail.com; h=from:subject; bh=xOb0HmxbHFXCl145PGXBVuOK0IaP2FoJId5LwZB4IUo=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBjduXO1SX4kqJ2ZkXfjomhw409xsV+EhgodsH+nwvf nOmQZVyJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCY3blzgAKCRBM4MiGSL8Ryr7rEA COFZevUyMaJ/O5ZknNrAlMhd+enrZ/GK3ols+FP7C74Mc6/Fi0QSykmT4hbFL0EbDQMXAoe03ZV4Ys pvcW3ivWmDsZ6nFZB7MAC6m1YyqXYqYOlQZ4O21aAcZhSzqR1CYej01eU1UQY/Irwo5eeysKLiQwAB qJZRBRP16R62VtdICavAXsXPC4FK4l5HbGEOeQCoIEfyHmIi1oCuJ46NPLJZ8qV1bmTMmPuMOePwJL jeRx+IJqLP7V0DX/IsMGnbzmObD3bIxTraWC3KjMPfwMeC+nO5qvzYcEYyTxMBWrmhKzL0zhgmgeor feTVdsBZmr6xxy+SgUxOvE6Xd/veaYx3aefe3wtZU70qav0g2xbCMBnMbs/j7/p6obx7CfOBdi9ELS Bk/C1ZAauSGH/YLUKfh83MkGiYSYJz2IFKAOPkfwVXMWELL6tPNTAwWzxY+WOU0O1ZowFqfEsm73J8 4KSO2V9HCDggsXzZo+cWZ2g0b0KiL77a9NGuLVZO7J7OnvSK+tEEeTDx/UyA0hn7CtKu4ZgImVQeHR KDsbP53pSNdCmdot+BrEx0Hqf6RwMJn0KViN2+mXcRTe3mgtIT4EIu7JqusYpjGzmv/IJaQwn0hpU0 bNd4w6CVaxyNwwG44bamE6LhTKYCBjq2ilkkBZ3dKXb2l5/0dwIhFJCp/zKA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5687; i=memxor@gmail.com; h=from:subject; bh=dpGMp6irNNkoPnlw2c6Jfien8u/vDsbbzE2UokAJ72E=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBjduXPX4h//5Gdr6N8wZoCs82xY0NNe7J8mo9ZjeXg BQS4+n+JAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCY3blzwAKCRBM4MiGSL8RyrYEEA CGcuEOHu+Xk0WYtLTAaLGyG/Y4tN6iH9PPAvE6eDbNSBpS5B+laqOV5pC6o2cfblUmJUpxXrOZcEew /7/9qhTT/mSMrwomA/4bVUgQ736LoJA3fSG++jzHs4k3/rN7id5iuNPUZ9d89JNB5+G7IcTZrVsFUM WTwRl6XkhrC0WWk4rkFHHGfvcmqLlqlOqW0vAn9jFmqI16Kev7nv79g8G+UZZiPUIJingPjmkUykrz 4+61IDm9wnT7Up6eHpy2fn6PfK98vNSGfgn3QaTHMqdcDeUsXxQqDm0sOU4gxjAVCPZumcGyRgU/0t 30GTbdckKrcRHd4U5sxFELp4k4cJWbITqyMQ2pdvebskw9LaowPwh0EcWrhsp1X5fqkH/biwTpSNcu nq+SkPZzWYI2nY1RRvNJdAyP9pHJhK1sCAJzO+mRmLD3lzbNEfd67f1EBM4UH5ocaIlS3DLdkmbGBk KtQunBnGO2N2wAO0IBzKVHQh5FE0HETXDszGzabQO1kmBpPSRGx0sDgJbf+RnL9QXIG4LI+uMp6zTT 7hrqIjd6xcuoAr4PFvL/LYWbja/S2Jx2vGp76vv8rD553bdGn6Bu6140RiFnOwPPjX6B2ERUQvdN5U Ku5mRIDRSEiT1ZdN8OPeaxWFw+7so+iPWAAGxM3WP7s5xSm3+N7qzxSPN1pQ==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Global variables reside in maps accessible using direct_value_addr
-callbacks, so giving each load instruction's rewrite a unique reg->id
-disallows us from holding locks which are global.
+Allow passing known constant scalars as arguments to kfuncs that do not
+represent a size parameter. We use mark_chain_precision for the constant
+scalar argument to mark it precise. This makes the search pruning
+optimization of verifier more conservative for such kfunc calls, and
+each non-distinct argument is considered unequivalent.
 
-The reason for preserving reg->id as a unique value for registers that
-may point to spin lock is that two separate lookups are treated as two
-separate memory regions, and any possible aliasing is ignored for the
-purposes of spin lock correctness.
+We will use this support to then expose a bpf_obj_new function where it
+takes the local type ID of a type in program BTF, and returns a
+PTR_TO_BTF_ID | MEM_ALLOC to the local type, and allows programs to
+allocate their own objects.
 
-This is not great especially for the global variable case, which are
-served from maps that have max_entries == 1, i.e. they always lead to
-map values pointing into the same map value.
-
-So refactor the active_spin_lock into a 'active_lock' structure which
-represents the lock identity, and instead of the reg->id, remember two
-fields, a pointer and the reg->id. The pointer will store reg->map_ptr
-or reg->btf. It's only necessary to distinguish for the id == 0 case of
-global variables, but always setting the pointer to a non-NULL value and
-using the pointer to check whether the lock is held simplifies code in
-the verifier.
-
-This is generic enough to allow it for global variables, map lookups,
-and allocated objects at the same time.
-
-Note that while whether a lock is held can be answered by just comparing
-active_lock.ptr to NULL, to determine whether the register is pointing
-to the same held lock requires comparing _both_ ptr and id.
-
-Finally, as a result of this refactoring, pseudo load instructions are
-not given a unique reg->id, as they are doing lookup for the same map
-value (max_entries is never greater than 1).
-
-Essentially, we consider that the tuple of (ptr, id) will always be
-unique for any kind of argument to bpf_spin_{lock,unlock}.
-
-Note that this can be extended in the future to also remember offset
-used for locking, so that we can introduce multiple bpf_spin_lock fields
-in the same allocation.
+Each type ID resolves to a distinct type with a possibly distinct size,
+hence the type ID constant matters in terms of program safety and its
+precision needs to be checked between old and cur states inside regsafe.
+The use of mark_chain_precision enables this.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf_verifier.h | 16 +++++++++++++-
- kernel/bpf/verifier.c        | 41 ++++++++++++++++++++++++------------
- 2 files changed, 43 insertions(+), 14 deletions(-)
+ Documentation/bpf/kfuncs.rst | 24 +++++++++++++++
+ kernel/bpf/verifier.c        | 57 +++++++++++++++++++++++++++---------
+ 2 files changed, 67 insertions(+), 14 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 1a32baa78ce2..1db2b4dc7009 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -323,7 +323,21 @@ struct bpf_verifier_state {
- 	u32 branches;
- 	u32 insn_idx;
- 	u32 curframe;
--	u32 active_spin_lock;
-+	/* For every reg representing a map value or allocated object pointer,
-+	 * we consider the tuple of (ptr, id) for them to be unique in verifier
-+	 * context and conside them to not alias each other for the purposes of
-+	 * tracking lock state.
-+	 */
-+	struct {
-+		/* This can either be reg->map_ptr or reg->btf. If ptr is NULL,
-+		 * there's no active lock held, and other fields have no
-+		 * meaning. If non-NULL, it indicates that a lock is held and
-+		 * id member has the reg->id of the register which can be >= 0.
-+		 */
-+		void *ptr;
-+		/* This will be reg->id */
-+		u32 id;
-+	} active_lock;
- 	bool speculative;
+diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+index 0f858156371d..3b1501c3b6cd 100644
+--- a/Documentation/bpf/kfuncs.rst
++++ b/Documentation/bpf/kfuncs.rst
+@@ -72,6 +72,30 @@ argument as its size. By default, without __sz annotation, the size of the type
+ of the pointer is used. Without __sz annotation, a kfunc cannot accept a void
+ pointer.
  
- 	/* first and last insn idx of this verifier state */
++2.2.2 __k Annotation
++--------------------
++
++This annotation is only understood for scalar arguments, where it indicates that
++the verifier must check the scalar argument to be a known constant, which does
++not indicate a size parameter, and the value of the constant is relevant to the
++safety of the program.
++
++An example is given below::
++
++        void *bpf_obj_new(u32 local_type_id__k, ...)
++        {
++        ...
++        }
++
++Here, bpf_obj_new uses local_type_id argument to find out the size of that type
++ID in program's BTF and return a sized pointer to it. Each type ID will have a
++distinct size, hence it is crucial to treat each such call as distinct when
++values don't match during verifier state pruning checks.
++
++Hence, whenever a constant scalar argument is accepted by a kfunc which is not a
++size parameter, and the value of the constant matters for program safety, __k
++suffix should be used.
++
+ .. _BPF_kfunc_nodef:
+ 
+ 2.3 Using an existing kernel function
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 19467dda5dd9..c8f3abe9b08e 100644
+index ac6476104983..29a0cfa62d14 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -1221,7 +1221,8 @@ static int copy_verifier_state(struct bpf_verifier_state *dst_state,
- 	}
- 	dst_state->speculative = src->speculative;
- 	dst_state->curframe = src->curframe;
--	dst_state->active_spin_lock = src->active_spin_lock;
-+	dst_state->active_lock.ptr = src->active_lock.ptr;
-+	dst_state->active_lock.id = src->active_lock.id;
- 	dst_state->branches = src->branches;
- 	dst_state->parent = src->parent;
- 	dst_state->first_insn_idx = src->first_insn_idx;
-@@ -5596,7 +5597,7 @@ int check_kfunc_mem_size_reg(struct bpf_verifier_env *env, struct bpf_reg_state
-  * Since only one bpf_spin_lock is allowed the checks are simpler than
-  * reg_is_refcounted() logic. The verifier needs to remember only
-  * one spin_lock instead of array of acquired_refs.
-- * cur_state->active_spin_lock remembers which map value element or allocated
-+ * cur_state->active_lock remembers which map value element or allocated
-  * object got locked and clears it after bpf_spin_unlock.
-  */
- static int process_spin_lock(struct bpf_verifier_env *env, int regno,
-@@ -5640,22 +5641,35 @@ static int process_spin_lock(struct bpf_verifier_env *env, int regno,
- 		return -EINVAL;
- 	}
- 	if (is_lock) {
--		if (cur->active_spin_lock) {
-+		if (cur->active_lock.ptr) {
- 			verbose(env,
- 				"Locking two bpf_spin_locks are not allowed\n");
- 			return -EINVAL;
- 		}
--		cur->active_spin_lock = reg->id;
-+		if (map)
-+			cur->active_lock.ptr = map;
-+		else
-+			cur->active_lock.ptr = btf;
-+		cur->active_lock.id = reg->id;
- 	} else {
--		if (!cur->active_spin_lock) {
-+		void *ptr;
-+
-+		if (map)
-+			ptr = map;
-+		else
-+			ptr = btf;
-+
-+		if (!cur->active_lock.ptr) {
- 			verbose(env, "bpf_spin_unlock without taking a lock\n");
- 			return -EINVAL;
- 		}
--		if (cur->active_spin_lock != reg->id) {
-+		if (cur->active_lock.ptr != ptr ||
-+		    cur->active_lock.id != reg->id) {
- 			verbose(env, "bpf_spin_unlock of different lock\n");
- 			return -EINVAL;
- 		}
--		cur->active_spin_lock = 0;
-+		cur->active_lock.ptr = NULL;
-+		cur->active_lock.id = 0;
- 	}
- 	return 0;
+@@ -7875,6 +7875,10 @@ struct bpf_kfunc_call_arg_meta {
+ 	u8 release_regno;
+ 	bool r0_rdonly;
+ 	u64 r0_size;
++	struct {
++		u64 value;
++		bool found;
++	} arg_constant;
+ };
+ 
+ static bool is_kfunc_acquire(struct bpf_kfunc_call_arg_meta *meta)
+@@ -7912,30 +7916,40 @@ static bool is_kfunc_arg_kptr_get(struct bpf_kfunc_call_arg_meta *meta, int arg)
+ 	return arg == 0 && (meta->kfunc_flags & KF_KPTR_GET);
  }
-@@ -10617,8 +10631,8 @@ static int check_ld_imm(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 	    insn->src_reg == BPF_PSEUDO_MAP_IDX_VALUE) {
- 		dst_reg->type = PTR_TO_MAP_VALUE;
- 		dst_reg->off = aux->map_off;
--		if (btf_record_has_field(map->record, BPF_SPIN_LOCK))
--			dst_reg->id = ++env->id_gen;
-+		WARN_ON_ONCE(map->max_entries != 1);
-+		/* We want reg->id to be same (0) as map_value is not distinct */
- 	} else if (insn->src_reg == BPF_PSEUDO_MAP_FD ||
- 		   insn->src_reg == BPF_PSEUDO_MAP_IDX) {
- 		dst_reg->type = CONST_PTR_TO_MAP;
-@@ -10696,7 +10710,7 @@ static int check_ld_abs(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 		return err;
- 	}
  
--	if (env->cur_state->active_spin_lock) {
-+	if (env->cur_state->active_lock.ptr) {
- 		verbose(env, "BPF_LD_[ABS|IND] cannot be used inside bpf_spin_lock-ed region\n");
- 		return -EINVAL;
- 	}
-@@ -11962,7 +11976,8 @@ static bool states_equal(struct bpf_verifier_env *env,
- 	if (old->speculative && !cur->speculative)
+-static bool is_kfunc_arg_mem_size(const struct btf *btf,
+-				  const struct btf_param *arg,
+-				  const struct bpf_reg_state *reg)
++static bool __kfunc_param_match_suffix(const struct btf *btf,
++				       const struct btf_param *arg,
++				       const char *suffix)
+ {
+-	int len, sfx_len = sizeof("__sz") - 1;
+-	const struct btf_type *t;
++	int suffix_len = strlen(suffix), len;
+ 	const char *param_name;
+ 
+-	t = btf_type_skip_modifiers(btf, arg->type, NULL);
+-	if (!btf_type_is_scalar(t) || reg->type != SCALAR_VALUE)
+-		return false;
+-
+ 	/* In the future, this can be ported to use BTF tagging */
+ 	param_name = btf_name_by_offset(btf, arg->name_off);
+ 	if (str_is_empty(param_name))
+ 		return false;
+ 	len = strlen(param_name);
+-	if (len < sfx_len)
++	if (len < suffix_len)
+ 		return false;
+-	param_name += len - sfx_len;
+-	if (strncmp(param_name, "__sz", sfx_len))
++	param_name += len - suffix_len;
++	return !strncmp(param_name, suffix, suffix_len);
++}
++
++static bool is_kfunc_arg_mem_size(const struct btf *btf,
++				  const struct btf_param *arg,
++				  const struct bpf_reg_state *reg)
++{
++	const struct btf_type *t;
++
++	t = btf_type_skip_modifiers(btf, arg->type, NULL);
++	if (!btf_type_is_scalar(t) || reg->type != SCALAR_VALUE)
  		return false;
  
--	if (old->active_spin_lock != cur->active_spin_lock)
-+	if (old->active_lock.ptr != cur->active_lock.ptr ||
-+	    old->active_lock.id != cur->active_lock.id)
- 		return false;
+-	return true;
++	return __kfunc_param_match_suffix(btf, arg, "__sz");
++}
++
++static bool is_kfunc_arg_constant(const struct btf *btf, const struct btf_param *arg)
++{
++	return __kfunc_param_match_suffix(btf, arg, "__k");
+ }
  
- 	/* for states to be equal callsites have to be the same
-@@ -12607,7 +12622,7 @@ static int do_check(struct bpf_verifier_env *env)
- 					return -EINVAL;
- 				}
- 
--				if (env->cur_state->active_spin_lock &&
-+				if (env->cur_state->active_lock.ptr &&
- 				    (insn->src_reg == BPF_PSEUDO_CALL ||
- 				     insn->imm != BPF_FUNC_spin_unlock)) {
- 					verbose(env, "function calls are not allowed while holding a lock\n");
-@@ -12644,7 +12659,7 @@ static int do_check(struct bpf_verifier_env *env)
- 					return -EINVAL;
- 				}
- 
--				if (env->cur_state->active_spin_lock) {
-+				if (env->cur_state->active_lock.ptr) {
- 					verbose(env, "bpf_spin_unlock is missing\n");
- 					return -EINVAL;
- 				}
+ static bool is_kfunc_arg_scalar_with_name(const struct btf *btf,
+@@ -8205,7 +8219,22 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+ 				verbose(env, "R%d is not a scalar\n", regno);
+ 				return -EINVAL;
+ 			}
+-			if (is_kfunc_arg_scalar_with_name(btf, &args[i], "rdonly_buf_size")) {
++
++			if (is_kfunc_arg_constant(meta->btf, &args[i])) {
++				if (meta->arg_constant.found) {
++					verbose(env, "verifier internal error: only one constant argument permitted\n");
++					return -EFAULT;
++				}
++				if (!tnum_is_const(reg->var_off)) {
++					verbose(env, "R%d must be a known constant\n", regno);
++					return -EINVAL;
++				}
++				ret = mark_chain_precision(env, regno);
++				if (ret < 0)
++					return ret;
++				meta->arg_constant.found = true;
++				meta->arg_constant.value = reg->var_off.value;
++			} else if (is_kfunc_arg_scalar_with_name(btf, &args[i], "rdonly_buf_size")) {
+ 				meta->r0_rdonly = true;
+ 				is_ret_buf_sz = true;
+ 			} else if (is_kfunc_arg_scalar_with_name(btf, &args[i], "rdwr_buf_size")) {
 -- 
 2.38.1
 
