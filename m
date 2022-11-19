@@ -2,191 +2,215 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A237EC43217
-	for <bpf@archiver.kernel.org>; Sat, 19 Nov 2022 21:08:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 351AAC4332F
+	for <bpf@archiver.kernel.org>; Sat, 19 Nov 2022 22:02:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235126AbiKSVHz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 19 Nov 2022 16:07:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57126 "EHLO
+        id S234334AbiKSWCx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 19 Nov 2022 17:02:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235049AbiKSVHy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 19 Nov 2022 16:07:54 -0500
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F3D165A9;
-        Sat, 19 Nov 2022 13:07:53 -0800 (PST)
-Received: by mail-qk1-f169.google.com with SMTP id 8so5798157qka.1;
-        Sat, 19 Nov 2022 13:07:53 -0800 (PST)
+        with ESMTP id S229635AbiKSWCw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 19 Nov 2022 17:02:52 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFBB6262;
+        Sat, 19 Nov 2022 14:02:51 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id d192so8135708pfd.0;
+        Sat, 19 Nov 2022 14:02:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EebatYo3O/AC36Z3zpp8STKWNpTkrz+6XYDKU8WPVes=;
+        b=aGtKr+U7iwMo5hm/zHLr6aaU7F/8cS3j3rmnMki4hnLNfPLxDpRALE5A37eY+6M3RD
+         MOpzY5AoTA0AQF3vN4mz7fsTTynZ2VJAwn3h/gLAm6qKEMfmvl3Wzj4vgAM4+DepGP5f
+         odmUjA23yl9dI01qPJjuk5K/uDDBxI/GxTG1BY3Quz9883GNsnrvbV4gxxGBLalAMYOZ
+         RkQ52H8ttF5y8J5YNNCHQzgovTkG+IeAcK9+O7ETVc1ymoo9nmvF4Rww6hdNYVk9dvyy
+         KIM2QGfn3D7iicZ2yHYuznuOw7iam7KzZJLeb+2KngtLko9Ith2IJC5xsteMMO3G8Vm2
+         2WhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HG783cJBzhJI3FEVV7fYqSL6/RL6gVAUQblCpuAVDEg=;
-        b=6TMzDNs8610JbKmtxsdkaipJdf/dqy/H/NVI/HYY2fmytyX0JUWgYSuJE4GbwiehjV
-         2hHcU3j8bi/twSGTZ3qqSmRty0bmKDqcWKdzuImERRVFaJMpbuDQbDcn1l+2/u8u5456
-         RyWxhRQ2YQdMM9M2WyfiXehGtmyoTLX92CkOJe8k89FAP9Y3cPwFBL6hdq95jYccVpo3
-         +rKTYXHsuOMPpWyPNHOZfTgI9Gx0k1RQiWTeKurtU7Kq4ol9P2auUKzVjHU8JYZjjaga
-         xNZIxw4pdTAkCqmMLid6Q5DPBjkCrLxFhA/0Ct1eFLl0mmOVvVA/aSdzi4yZ6/+xZeM+
-         zZaw==
-X-Gm-Message-State: ANoB5plzO4S2HH+57Ocwvjt6iZPJEB3OC1WRh/LKyi4biAdVAMzC33Uy
-        9G1+ZN/SxkgPWqPV2TvncO0rth8D5niEwEu7
-X-Google-Smtp-Source: AA0mqf7MYyO6iNZi7npFxcGBbEha9m7GNtFKKho5wW5yvztvIRU25HXgACS0Awgbjk/JvN+IG1TlDA==
-X-Received: by 2002:a05:620a:6011:b0:6e8:1fa:13e9 with SMTP id dw17-20020a05620a601100b006e801fa13e9mr11050158qkb.393.1668892072683;
-        Sat, 19 Nov 2022 13:07:52 -0800 (PST)
-Received: from localhost ([2620:10d:c091:480::1:6319])
-        by smtp.gmail.com with ESMTPSA id j8-20020a05620a410800b006ecb9dfdd15sm5215733qko.92.2022.11.19.13.07.51
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EebatYo3O/AC36Z3zpp8STKWNpTkrz+6XYDKU8WPVes=;
+        b=U1i0k1OYMU7I6kGZufmgOpid8BqmTqlvvmzSv8WKXxMn1h8Z2TIOnvWOGA+Kj880sy
+         EgHJnenYQM1pURPFMsXoYhBJueIhDVREyniCTCdtJaT5E0Ouoaw9kDI5oJ15FcaPPgEC
+         Mzdrq/1/UpK9CRHoUKPvZLv/wfZlXmozvGn8WO5C54Y4k4jsfevPr2pL4XWJVrdCisV3
+         rGESrVG8gkJsbGvbY9moz5Auj4/dPD6tYpkUdRUSWANxbwy5L4lB5brxF8U+PLmjEIkm
+         RjAnAFrbk0qrw5432vN8zv/0zxoo/ee1wfJnQkfVCfW/8rqy4bM0xunGoT4VvD22Fqcj
+         A0fg==
+X-Gm-Message-State: ANoB5pk6Z0L9pZ1ja+Q9J/Lf8xjx8Z/VSKv+NoZnxXOjpeW5nE0ivqty
+        0MvN0epdDVrcY5t+Pp1czDM=
+X-Google-Smtp-Source: AA0mqf7Zwkuj7WAIIxTMs3hKoGYFzIFLsZZDj4yJX1eXRu1LDczYhwRVSa44mOfx8GPz6C2cVRWGOg==
+X-Received: by 2002:a05:6a00:b84:b0:563:4643:db33 with SMTP id g4-20020a056a000b8400b005634643db33mr13794741pfj.22.1668895370526;
+        Sat, 19 Nov 2022 14:02:50 -0800 (PST)
+Received: from macbook-pro-5.dhcp.thefacebook.com ([2620:10d:c090:400::5:7165])
+        by smtp.gmail.com with ESMTPSA id p4-20020a170902e74400b0018691ce1696sm6317480plf.131.2022.11.19.14.02.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Nov 2022 13:07:52 -0800 (PST)
-From:   David Vernet <void@manifault.com>
-To:     ast@kernel.org
-Cc:     andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
-        yhs@fb.com, song@kernel.org, sdf@google.com,
+        Sat, 19 Nov 2022 14:02:49 -0800 (PST)
+Date:   Sat, 19 Nov 2022 14:02:46 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     David Vernet <void@manifault.com>
+Cc:     ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+        martin.lau@linux.dev, yhs@fb.com, song@kernel.org, sdf@google.com,
         john.fastabend@gmail.com, haoluo@google.com, jolsa@kernel.org,
         kpsingh@kernel.org, memxor@gmail.com, tj@kernel.org,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         kernel-team@fb.com
-Subject: [PATCH bpf-next v8 2/3] bpf: Add kfuncs for storing struct task_struct * as a kptr
-Date:   Sat, 19 Nov 2022 15:07:47 -0600
-Message-Id: <20221119210748.3325667-3-void@manifault.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221119210748.3325667-1-void@manifault.com>
+Subject: Re: [PATCH bpf-next v8 1/3] bpf: Allow trusted pointers to be passed
+ to KF_TRUSTED_ARGS kfuncs
+Message-ID: <20221119220246.k4i3zp5wmsm6g2al@macbook-pro-5.dhcp.thefacebook.com>
 References: <20221119210748.3325667-1-void@manifault.com>
+ <20221119210748.3325667-2-void@manifault.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221119210748.3325667-2-void@manifault.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Now that BPF supports adding new kernel functions with kfuncs, and
-storing kernel objects in maps with kptrs, we can add a set of kfuncs
-which allow struct task_struct objects to be stored in maps as
-referenced kptrs. The possible use cases for doing this are plentiful.
-During tracing, for example, it would be useful to be able to collect
-some tasks that performed a certain operation, and then periodically
-summarize who they are, which cgroup they're in, how much CPU time
-they've utilized, etc.
+On Sat, Nov 19, 2022 at 03:07:46PM -0600, David Vernet wrote:
+> @@ -6887,6 +6895,7 @@ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog,
+>  			}
+>  
+>  			reg->type = PTR_TO_MEM | PTR_MAYBE_NULL;
+> +
 
-In order to enable this, this patch adds three new kfuncs:
+No need to add empty line here.
 
-struct task_struct *bpf_task_acquire(struct task_struct *p);
-struct task_struct *bpf_task_kptr_get(struct task_struct **pp);
-void bpf_task_release(struct task_struct *p);
+>  			reg->id = ++env->id_gen;
+>  
+>  			continue;
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 195d24316750..3a90a1c7613f 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -557,7 +557,7 @@ static bool is_cmpxchg_insn(const struct bpf_insn *insn)
+>  static const char *reg_type_str(struct bpf_verifier_env *env,
+>  				enum bpf_reg_type type)
+>  {
+> -	char postfix[16] = {0}, prefix[32] = {0};
+> +	char postfix[16] = {0}, prefix[64] = {0};
+>  	static const char * const str[] = {
+>  		[NOT_INIT]		= "?",
+>  		[SCALAR_VALUE]		= "scalar",
+> @@ -589,16 +589,14 @@ static const char *reg_type_str(struct bpf_verifier_env *env,
+>  			strncpy(postfix, "_or_null", 16);
+>  	}
+>  
+> -	if (type & MEM_RDONLY)
+> -		strncpy(prefix, "rdonly_", 32);
+> -	if (type & MEM_RINGBUF)
+> -		strncpy(prefix, "ringbuf_", 32);
+> -	if (type & MEM_USER)
+> -		strncpy(prefix, "user_", 32);
+> -	if (type & MEM_PERCPU)
+> -		strncpy(prefix, "percpu_", 32);
+> -	if (type & PTR_UNTRUSTED)
+> -		strncpy(prefix, "untrusted_", 32);
+> +	snprintf(prefix, sizeof(prefix), "%s%s%s%s%s%s",
+> +		 type & MEM_RDONLY ? "rdonly_" : "",
+> +		 type & MEM_RINGBUF ? "ringbuf_" : "",
+> +		 type & MEM_USER ? "user_" : "",
+> +		 type & MEM_PERCPU ? "percpu_" : "",
+> +		 type & PTR_UNTRUSTED ? "untrusted_" : "",
+> +		 type & PTR_TRUSTED ? "trusted_" : ""
+> +	);
 
-A follow-on patch will add selftests validating these kfuncs.
+Nice. Could have been a separate patch, but ok.
 
-Signed-off-by: David Vernet <void@manifault.com>
----
- kernel/bpf/helpers.c | 78 ++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 75 insertions(+), 3 deletions(-)
+>  
+>  found:
+> -	if (reg->type == PTR_TO_BTF_ID) {
+> +	if (reg->type == PTR_TO_BTF_ID || (reg->type & PTR_TRUSTED)) {
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 212e791d7452..89a95f3d854c 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1824,6 +1824,63 @@ struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head *head)
- 	return __bpf_list_del(head, true);
- }
- 
-+/**
-+ * bpf_task_acquire - Acquire a reference to a task. A task acquired by this
-+ * kfunc which is not stored in a map as a kptr, must be released by calling
-+ * bpf_task_release().
-+ * @p: The task on which a reference is being acquired.
-+ */
-+struct task_struct *bpf_task_acquire(struct task_struct *p)
-+{
-+	refcount_inc(&p->rcu_users);
-+	return p;
-+}
-+
-+/**
-+ * bpf_task_kptr_get - Acquire a reference on a struct task_struct kptr. A task
-+ * kptr acquired by this kfunc which is not subsequently stored in a map, must
-+ * be released by calling bpf_task_release().
-+ * @pp: A pointer to a task kptr on which a reference is being acquired.
-+ */
-+struct task_struct *bpf_task_kptr_get(struct task_struct **pp)
-+{
-+	struct task_struct *p;
-+
-+	rcu_read_lock();
-+	p = READ_ONCE(*pp);
-+
-+	/* Another context could remove the task from the map and release it at
-+	 * any time, including after we've done the lookup above. This is safe
-+	 * because we're in an RCU read region, so the task is guaranteed to
-+	 * remain valid until at least the rcu_read_unlock() below.
-+	 */
-+	if (p && !refcount_inc_not_zero(&p->rcu_users))
-+		/* If the task had been removed from the map and freed as
-+		 * described above, refcount_inc_not_zero() will return false.
-+		 * The task will be freed at some point after the current RCU
-+		 * gp has ended, so just return NULL to the user.
-+		 */
-+		p = NULL;
-+	rcu_read_unlock();
-+
-+	return p;
-+}
-+
-+/**
-+ * bpf_task_release - Release the reference acquired on a struct task_struct *.
-+ * If this kfunc is invoked in an RCU read region, the task_struct is
-+ * guaranteed to not be freed until the current grace period has ended, even if
-+ * its refcount drops to 0.
-+ * @p: The task on which a reference is being released.
-+ */
-+void bpf_task_release(struct task_struct *p)
-+{
-+	if (!p)
-+		return;
-+
-+	put_task_struct_rcu_user(p);
-+}
-+
- __diag_pop();
- 
- BTF_SET8_START(generic_btf_ids)
-@@ -1836,6 +1893,9 @@ BTF_ID_FLAGS(func, bpf_list_push_front)
- BTF_ID_FLAGS(func, bpf_list_push_back)
- BTF_ID_FLAGS(func, bpf_list_pop_front, KF_ACQUIRE | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_list_pop_back, KF_ACQUIRE | KF_RET_NULL)
-+BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_TRUSTED_ARGS)
-+BTF_ID_FLAGS(func, bpf_task_kptr_get, KF_ACQUIRE | KF_KPTR_GET | KF_RET_NULL)
-+BTF_ID_FLAGS(func, bpf_task_release, KF_RELEASE)
- BTF_SET8_END(generic_btf_ids)
- 
- static const struct btf_kfunc_id_set generic_kfunc_set = {
-@@ -1843,14 +1903,26 @@ static const struct btf_kfunc_id_set generic_kfunc_set = {
- 	.set   = &generic_btf_ids,
- };
- 
-+BTF_ID_LIST(generic_dtor_ids)
-+BTF_ID(struct, task_struct)
-+BTF_ID(func, bpf_task_release)
-+
- static int __init kfunc_init(void)
- {
- 	int ret;
-+	const struct btf_id_dtor_kfunc generic_dtors[] = {
-+		{
-+			.btf_id       = generic_dtor_ids[0],
-+			.kfunc_btf_id = generic_dtor_ids[1]
-+		},
-+	};
- 
- 	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &generic_kfunc_set);
--	if (ret)
--		return ret;
--	return register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &generic_kfunc_set);
-+	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &generic_kfunc_set);
-+	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &generic_kfunc_set);
-+	return ret ?: register_btf_id_dtor_kfuncs(generic_dtors,
-+						  ARRAY_SIZE(generic_dtors),
-+						  THIS_MODULE);
- }
- 
- late_initcall(kfunc_init);
--- 
-2.38.1
+No need for (). The operator precedence is pretty clear.
 
+>  		/* For bpf_sk_release, it needs to match against first member
+>  		 * 'struct sock_common', hence make an exception for it. This
+>  		 * allows bpf_sk_release to work for multiple socket types.
+> @@ -6058,6 +6070,8 @@ int check_func_arg_reg_off(struct bpf_verifier_env *env,
+>  	 */
+>  	case PTR_TO_BTF_ID:
+>  	case PTR_TO_BTF_ID | MEM_ALLOC:
+> +	case PTR_TO_BTF_ID | PTR_TRUSTED:
+> +	case PTR_TO_BTF_ID | MEM_ALLOC | PTR_TRUSTED:
+>  		/* When referenced PTR_TO_BTF_ID is passed to release function,
+>  		 * it's fixed offset must be 0.	In the other cases, fixed offset
+>  		 * can be non-zero.
+> @@ -7942,6 +7956,25 @@ static bool is_kfunc_arg_kptr_get(struct bpf_kfunc_call_arg_meta *meta, int arg)
+>  	return arg == 0 && (meta->kfunc_flags & KF_KPTR_GET);
+>  }
+>  
+> +static bool is_trusted_reg(const struct bpf_reg_state *reg)
+> +{
+> +	/* A referenced register is always trusted. */
+> +	if (reg->ref_obj_id)
+> +		return true;
+> +
+> +	/* If a register is not referenced, it is trusted if it has either the
+> +	 * MEM_ALLOC or PTR_TRUSTED type modifiers, and no others. Some of the
+> +	 * other type modifiers may be safe, but we elect to take an opt-in
+> +	 * approach here as some (e.g. PTR_UNTRUSTED and PTR_MAYBE_NULL) are
+> +	 * not.
+> +	 *
+> +	 * Eventually, we should make PTR_TRUSTED the single source of truth
+> +	 * for whether a register is trusted.
+> +	 */
+> +	return (type_flag(reg->type) & BPF_REG_TRUSTED_MODIFIERS) &&
+
+No need for ().
+
+> +	       !bpf_type_has_unsafe_modifiers(reg->type);
+> +}
+> +
+...
+> -		if (is_kfunc_release(meta) && reg->ref_obj_id)
+> +		if (is_kfunc_release(meta) && reg->ref_obj_id) {
+>  			arg_type |= OBJ_RELEASE;
+> +			if (bpf_type_has_unsafe_modifiers(reg->type)) {
+> +				verbose(env, "R%d release reg has unsafe modifiers\n", i);
+> +				return -EINVAL;
+> +			}
+
+This part is a bit controversial, sicne it messes up the verifier messages.
+Meaning that doing the check that early is losing important context.
+
+> +		}
+>  		ret = check_func_arg_reg_off(env, reg, regno, arg_type);
+>  		if (ret < 0)
+>  			return ret;
+> @@ -8705,7 +8745,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+>  			break;
+>  		case KF_ARG_PTR_TO_BTF_ID:
+>  			/* Only base_type is checked, further checks are done here */
+> -			if (reg->type != PTR_TO_BTF_ID &&
+> +			if (base_type(reg->type) != PTR_TO_BTF_ID &&
+>  			    (!reg2btf_ids[base_type(reg->type)] || type_flag(reg->type))) {
+>  				verbose(env, "arg#%d expected pointer to btf or socket\n", i);
+
+With base_type() addition maybe the bpf_type_has_unsafe_modifiers() check
+should be done here ?
+Then test_verifier wouldn't need to change.
+It's not the change itself that is a concern, but the loss of context in the messages.
+I guess one can argue that erroring on PTR_TO_BTF_ID | PTR_MAYBE_NULL
+with "reg has unsafe modifiers" is just as correct as saying
+"expected pointer to btf or socket" a bit later.
+Both could be improved.
+If we keep it early while doing is_kfunc_release(meta) && reg->ref_obj_id
+we could say:
+"%s is not allowed in release function"
+reg_type_str(env,reg->type)
+Which for verifier/calls.c test case will be:
+"ptr_prog_test_ref_kfunc_or_null is not allowed in release function"
+
+If we do it later here it could be:
+"arg#$d is %s. Expected %s or socket",
+reg_type_str(env,reg->type)
+reg_type_str(env,base_type(reg->type) | type_flag(reg->type) & ~BPF_REG_TRUSTED_MODIFIERS)
+"arg#0 is ptr_prog_test_ref_kfunc_or_null. Expected ptr_prog_test_ref_kfunc or socket"
+
+which is even better and it will make it easier for user to fix the code.
+
+wdyt?
