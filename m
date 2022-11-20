@@ -2,54 +2,58 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFF44C4332F
-	for <bpf@archiver.kernel.org>; Sun, 20 Nov 2022 22:35:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CE1DC4332F
+	for <bpf@archiver.kernel.org>; Sun, 20 Nov 2022 23:32:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229449AbiKTWe7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 20 Nov 2022 17:34:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34916 "EHLO
+        id S229449AbiKTXcd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 20 Nov 2022 18:32:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiKTWe6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 20 Nov 2022 17:34:58 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3230A222A5
-        for <bpf@vger.kernel.org>; Sun, 20 Nov 2022 14:34:58 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id c203so9721728pfc.11
-        for <bpf@vger.kernel.org>; Sun, 20 Nov 2022 14:34:58 -0800 (PST)
+        with ESMTP id S229530AbiKTXcb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 20 Nov 2022 18:32:31 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A8E273B
+        for <bpf@vger.kernel.org>; Sun, 20 Nov 2022 15:32:30 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id h23so6104217edj.1
+        for <bpf@vger.kernel.org>; Sun, 20 Nov 2022 15:32:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zj1YTiDYMKN+U/iJe/mExzifsiwf4vYVCerk4Qjccqc=;
-        b=CTbGoV3ga46W8aGNDeoQF7Isc/tVufgNGyUjCTt7mxLjmr4dtjGLb5hBZq0XgR+BBO
-         eVUES3qdlXCz2YupadREAeDB35JzmCc/KqGF/9OAELtAauFDpgo7TDfCn98fRB3jdmGI
-         Mo8zf3YEWaspBxCuhLeg8rx1nU4yuzL8PDFQXSvmNypWXY6jFkGvNwlTZaYegY/9GlDm
-         efe4DdZ8zV6f7iw1452tpL/Iyz+76ujMR2avHD0WgLsrOON48nTCvTpk8hEUZv6tF/lv
-         Gjk6eIyefxlsY3EXYZvvipQ2FwgCC0rmCebM41K8cYsVkI9o14jIl2Ip7szcG38mnV3m
-         bBLA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2vH7CaspSfOv0yFdPtoIRPf9eJTqDVx1lM47pAAdf18=;
+        b=kXLJ5Fet6hsMSvebG/1qLKTNg1nQbickGOFkrNF54fgczA3Eie/cOnym2pM7/vJf9v
+         s27M7+R+6AiIu4LNzYpGzI7Gsr5EjC4O9/YLSH0KVC3CRVjiVndBI2aD/8CZ7487lIny
+         PmXgOmOQdCuz2Gef0o53LgFxV7zOE38W/SkA3EBI7G2gwkNjZhpUh1JyReeJlcOF53Ts
+         WpCLSpkGKRK2DsSlGsPYfs7/1N7ZcYYj+NdeAe4/h8OHwHZZHYZQh+ktWPWNTYDQZIQ6
+         JEaXbRsod/qy66XbpNSsXFB66pIQjyIks6FnS4+RDaa+tLeTM5knfAUHdGJ6nYssRoSO
+         fcqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Zj1YTiDYMKN+U/iJe/mExzifsiwf4vYVCerk4Qjccqc=;
-        b=0IPEqwknrWGIZh2k6qUV0fCcXtQKF8pGWdBphb1PgphAr9976uUowWmuKRDBQx/5iq
-         s9LA/ep4brGlqAcN1OD0alrucbyMy5Lyn2g0BYFI7EphRANtJPlWNBrpiJbCKRggeloh
-         VWnKe/0gqWa2vC2d0zjLDKSm8YSFdTOSyRdvj4Jy7ArOLVH25wCZpCDIAegTDHN9lvAT
-         foYjje8vfeCMlgxCAy1C/CoQwHWDIyZrinnN6ypgG6Zxccca7dYGAhedSWbYP974WnYB
-         kO16JYGFvDoPCI/WZOLlP68yiNrTzbD0Fn0EiyYnAPTPWG0zFelJ+4VhhH0dIe8OPlSa
-         6q/g==
-X-Gm-Message-State: ANoB5pnIKvD98FfZzvQhWwIR45RHHyd/lvd7cpLz6z+p3its77SkMo0Z
-        VVsgEI3WKem9i1RZqVTnsSs=
-X-Google-Smtp-Source: AA0mqf7fuEmQIAPkuMRzBQrG3dRcQanhMRsN/gzaxhb+MByVxYKEb6UbmIEOqz3rUk/dUdAi4YzuRw==
-X-Received: by 2002:a62:f94c:0:b0:56e:174e:efdf with SMTP id g12-20020a62f94c000000b0056e174eefdfmr17257684pfm.29.1668983697635;
-        Sun, 20 Nov 2022 14:34:57 -0800 (PST)
-Received: from macbook-pro-5.dhcp.thefacebook.com ([2620:10d:c090:400::5:7165])
-        by smtp.gmail.com with ESMTPSA id o67-20020a17090a0a4900b00218b3f1b430sm615389pjo.54.2022.11.20.14.34.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 14:34:57 -0800 (PST)
-Date:   Sun, 20 Nov 2022 14:34:54 -0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2vH7CaspSfOv0yFdPtoIRPf9eJTqDVx1lM47pAAdf18=;
+        b=5048Ap5bv8TrHyMqXA67M04zPUQKv8j1ZNgj6jI3EqfDbrd2UfSMNHT/ByuNuDoN0W
+         QLA0yKxQiaU/jG6xqY1kCh1ulQD8iT6+4e/cdnjXdG8aB/aXxp2sFoCX3qUvGmENN2SV
+         XisngHPOXxNJWow0YBuBab5wOvEBS4RW7QtgsMlnj+OtvmyL0sXnWVDELSfbLsS3aJAH
+         hmUY6nasLdpQ2y0ZPl0iho3lLW5VsSs+43uROm3wULXlAlTgpfnvxSkj5CZI6EkNwtaa
+         o9nDdXiyOeNPLamd8tY33EzdpTxAlJlwY7evkaxVL3KgHDoyjG2BW6s3PAnuAPSgGyb1
+         qJtg==
+X-Gm-Message-State: ANoB5pnW+uGtXSyXZiyrm5I5HFbHLWFoiouMRaC+oyJvWNVr6etL2wfT
+        NeGua4mGJbYLxA21mcw6ImVuoO9pI1WKoUUjtBQ=
+X-Google-Smtp-Source: AA0mqf5faS5Nc6NOGc59eRnHGe8MhRmiHXtYAjlUMUOpgcnbLa/JbpO74wax5RJANLMF8QAGcwCatAjyXlftRNFPnYo=
+X-Received: by 2002:a05:6402:5289:b0:462:70ee:fdb8 with SMTP id
+ en9-20020a056402528900b0046270eefdb8mr14267730edb.66.1668987148251; Sun, 20
+ Nov 2022 15:32:28 -0800 (PST)
+MIME-Version: 1.0
+References: <20221120195421.3112414-1-yhs@fb.com> <20221120195437.3114585-1-yhs@fb.com>
+ <CAADnVQ+92vwqUB=J-QJYtrW0Yqvx2HAJJBREkXPJtW0+gyS1mQ@mail.gmail.com>
+ <20221120204930.uuinebxndf7vkdwy@apollo> <20221120223454.ymzd4oqt7nsrbgkn@macbook-pro-5.dhcp.thefacebook.com>
+In-Reply-To: <20221120223454.ymzd4oqt7nsrbgkn@macbook-pro-5.dhcp.thefacebook.com>
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Sun, 20 Nov 2022 15:32:17 -0800
+Message-ID: <CAADnVQLMi-5Avxxd89+wpWksZnxGkCxzjDHrBLzuGUoVmp1Azw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 3/4] bpf: Add a kfunc for generic type cast
 To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Cc:     Yonghong Song <yhs@fb.com>, bpf <bpf@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -58,52 +62,58 @@ Cc:     Yonghong Song <yhs@fb.com>, bpf <bpf@vger.kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
         Kernel Team <kernel-team@fb.com>,
         Martin KaFai Lau <martin.lau@kernel.org>
-Subject: Re: [PATCH bpf-next v4 3/4] bpf: Add a kfunc for generic type cast
-Message-ID: <20221120223454.ymzd4oqt7nsrbgkn@macbook-pro-5.dhcp.thefacebook.com>
-References: <20221120195421.3112414-1-yhs@fb.com>
- <20221120195437.3114585-1-yhs@fb.com>
- <CAADnVQ+92vwqUB=J-QJYtrW0Yqvx2HAJJBREkXPJtW0+gyS1mQ@mail.gmail.com>
- <20221120204930.uuinebxndf7vkdwy@apollo>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221120204930.uuinebxndf7vkdwy@apollo>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 02:19:30AM +0530, Kumar Kartikeya Dwivedi wrote:
-> On Mon, Nov 21, 2022 at 01:46:04AM IST, Alexei Starovoitov wrote:
-> > On Sun, Nov 20, 2022 at 11:57 AM Yonghong Song <yhs@fb.com> wrote:
+On Sun, Nov 20, 2022 at 2:34 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Mon, Nov 21, 2022 at 02:19:30AM +0530, Kumar Kartikeya Dwivedi wrote:
+> > On Mon, Nov 21, 2022 at 01:46:04AM IST, Alexei Starovoitov wrote:
+> > > On Sun, Nov 20, 2022 at 11:57 AM Yonghong Song <yhs@fb.com> wrote:
+> > > >
+> > > > @@ -8938,6 +8941,24 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+> > > >                                 regs[BPF_REG_0].type = PTR_TO_BTF_ID | PTR_TRUSTED;
+> > > >                                 regs[BPF_REG_0].btf = desc_btf;
+> > > >                                 regs[BPF_REG_0].btf_id = meta.ret_btf_id;
+> > > > +                       } else if (meta.func_id == special_kfunc_list[KF_bpf_rdonly_cast]) {
+> > > > +                               if (!capable(CAP_PERFMON)) {
+> > > > +                                       verbose(env,
+> > > > +                                               "kfunc bpf_rdonly_cast requires CAP_PERFMON capability\n");
+> > > > +                                       return -EACCES;
+> > > > +                               }
 > > >
-> > > @@ -8938,6 +8941,24 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
-> > >                                 regs[BPF_REG_0].type = PTR_TO_BTF_ID | PTR_TRUSTED;
-> > >                                 regs[BPF_REG_0].btf = desc_btf;
-> > >                                 regs[BPF_REG_0].btf_id = meta.ret_btf_id;
-> > > +                       } else if (meta.func_id == special_kfunc_list[KF_bpf_rdonly_cast]) {
-> > > +                               if (!capable(CAP_PERFMON)) {
-> > > +                                       verbose(env,
-> > > +                                               "kfunc bpf_rdonly_cast requires CAP_PERFMON capability\n");
-> > > +                                       return -EACCES;
-> > > +                               }
+> > > Just realized that bpf_cast_to_kern_ctx() has to be
+> > > gated by cap_perfmon as well.
+> > >
+> > > Also the direct capable(CAP_PERFMON) is not quite correct.
+> > > It should at least be perfmon_capable().
+> > > But even better to use env->allow_ptr_leaks here.
 > >
-> > Just realized that bpf_cast_to_kern_ctx() has to be
-> > gated by cap_perfmon as well.
+> > Based on this, I wonder if this needs to be done for bpf_obj_new as well? It
+> > doesn't zero initialize the memory it returns (except special fields, which is
+> > required for correctness), so technically it allows leaking kernel addresses
+> > with just CAP_BPF (apart from capabilities needed for the specific program types
+> > it is available to).
 > >
-> > Also the direct capable(CAP_PERFMON) is not quite correct.
-> > It should at least be perfmon_capable().
-> > But even better to use env->allow_ptr_leaks here.
-> 
-> Based on this, I wonder if this needs to be done for bpf_obj_new as well? It
-> doesn't zero initialize the memory it returns (except special fields, which is
-> required for correctness), so technically it allows leaking kernel addresses
-> with just CAP_BPF (apart from capabilities needed for the specific program types
-> it is available to).
-> 
-> Should that also have a env->allow_ptr_leaks check?
+> > Should that also have a env->allow_ptr_leaks check?
+>
+> Yeah. Good point.
+> My first reaction was to audit everything where the verifier produces
+> PTR_TO_BTF_ID and gate it with allow_ptr_leaks.
+> But then it looks simpler to gate it once in check_ptr_to_btf_access().
+> Then bpf_rdonly_cast and everything wouldn't need those checks.
 
-Yeah. Good point.
-My first reaction was to audit everything where the verifier produces
-PTR_TO_BTF_ID and gate it with allow_ptr_leaks.
-But then it looks simpler to gate it once in check_ptr_to_btf_access().
-Then bpf_rdonly_cast and everything wouldn't need those checks.
+Noticed that check_ptr_to_map_access is doing
+"Simulate access to a PTR_TO_BTF_ID"
+and has weird allow_ptr_to_map_access bool
+which is the same as allow_ptr_leaks.
+So I'm thinking we can remove allow_ptr_to_map_access
+and add allow_ptr_leaks check to btf_struct_access()
+which will cover all these cases.
+
+Also since bpf_cast_to_kern_ctx() is expected to be used out of
+networking progs and those progs are not always GPL we should add
+env->prog->gpl_compatible to btf_struct_access() too.
