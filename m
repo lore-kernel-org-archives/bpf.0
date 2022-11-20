@@ -2,96 +2,148 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C76CC4332F
-	for <bpf@archiver.kernel.org>; Sun, 20 Nov 2022 15:35:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D228C433FE
+	for <bpf@archiver.kernel.org>; Sun, 20 Nov 2022 16:15:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbiKTPfx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 20 Nov 2022 10:35:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48498 "EHLO
+        id S229572AbiKTQPW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 20 Nov 2022 11:15:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiKTPfv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 20 Nov 2022 10:35:51 -0500
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92A72CE08
-        for <bpf@vger.kernel.org>; Sun, 20 Nov 2022 07:35:50 -0800 (PST)
-Received: by mail-qv1-xf34.google.com with SMTP id j6so6556439qvn.12
-        for <bpf@vger.kernel.org>; Sun, 20 Nov 2022 07:35:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fpwqVOW797gAFKaMlFf8rbbV9ogLoKN+pyL9Kzxq/Hw=;
-        b=ZOYD2TgVj7T0xPjQ+jIUtjU+vq3fPR84XpXCvebYPPYI/9fbZ/LXfWaRbovc0z8xhF
-         T92nk65v1UW8rGSGTU0kq/sd+X3cK+yxmdLeYUnNazHqzDUwruJW1OHmfKfx2IVWIpsM
-         W/R7inVlGR6fgSXZ0p9DUkEuURjiCjmyt68bxxWIbuX0Z44vYEQllW2OWh928+1v0Al9
-         t1fPpjX3Mrr0pzMHvhvP7GxJEHcFQEDdWS5lRyKW/j2f4xDgZQS205INk4CaYjgIjpnN
-         3cRMBLdCnmlOxuMZX/CPyrlVkEZvMzwwbvksujODSQCmhyhNPhSvUDT1ZDcMyvumN7JY
-         7suA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fpwqVOW797gAFKaMlFf8rbbV9ogLoKN+pyL9Kzxq/Hw=;
-        b=ENDk0tqkAwNfsIETkARamqBPlk4AeR8fjbsJW+3JL1di6jF91fGkW0DsMONBpUephs
-         VN1dHdQIuKlL0x1ADXbBGu24H/9BKe7hcR1Wz85gSliXvkUyr3lus2tTb6toGfE8KxXG
-         zFblvz6WOn9Au7DKknmxJ+rUAtUYVlrHfEXr8aKeoPDuz1SQmw/MGxP1HMdgcvpzDHSb
-         LvZohKBX2xC5eAyfSbrjYK3v6SHWsuU3YLzmvV3DOzJ/j97/6Oruse7VVEcum27b1jkd
-         8a93Pj6xd4V11ggIH7Kqr7BFZ2xIOZ2LZ0q35a3vSO1NgiRAsIFtQUC40iFOygkA/1VM
-         CL8g==
-X-Gm-Message-State: ANoB5pkV+7PCqjuvoFZJshszXVQwCZP8fSRfe3hzBlNeOtELLtZjSLni
-        KElMFw5kG2KRijH9r4SlvOXf3Y2sxGsBT/RCtqqISA==
-X-Google-Smtp-Source: AA0mqf77324nlIUY+wS5UtR45efI3byUqSKuoV/Lx7tqebN/IvrA3fZ+8rxnGBBVRkUUFdRiGdp5ovZSRIghWZJ4pXs=
-X-Received: by 2002:a0c:914d:0:b0:4b1:af7a:7f67 with SMTP id
- q71-20020a0c914d000000b004b1af7a7f67mr14190954qvq.67.1668958549981; Sun, 20
- Nov 2022 07:35:49 -0800 (PST)
+        with ESMTP id S229587AbiKTQPV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 20 Nov 2022 11:15:21 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B7E1B7A3
+        for <bpf@vger.kernel.org>; Sun, 20 Nov 2022 08:15:20 -0800 (PST)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AKDbVOb021359
+        for <bpf@vger.kernel.org>; Sun, 20 Nov 2022 08:15:20 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=S3W75C8gHyzu/9wEnsmuToL5y6VP0ZKvYifnlw69OFs=;
+ b=Hh5uM3CIizM8j5qbmJD2noOMi/FL3IyKvLsgWS8C7QhhQP8eRsrpJ9OLjobwe5pi1qJm
+ Yt3szc+9izZK4vk1zET3UP6YGU5L6BkG/wdNZaNGxbtSUh7BrIVp+eAvtRuSKEffsE5H
+ 9wKWK338WNkJcgcof4NSjNHV6Gb6EOpLIaI= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3kxv2qy8sf-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Sun, 20 Nov 2022 08:15:20 -0800
+Received: from twshared16963.27.frc3.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sun, 20 Nov 2022 08:15:19 -0800
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+        id 2BA9A127558B6; Sun, 20 Nov 2022 08:15:17 -0800 (PST)
+From:   Yonghong Song <yhs@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        <kernel-team@fb.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Martin KaFai Lau <martin.lau@kernel.org>
+Subject: [PATCH bpf-next v2 1/4] bpf: Add support for kfunc set with common btf_ids
+Date:   Sun, 20 Nov 2022 08:15:17 -0800
+Message-ID: <20221120161517.832281-1-yhs@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221120161511.831691-1-yhs@fb.com>
+References: <20221120161511.831691-1-yhs@fb.com>
 MIME-Version: 1.0
-References: <20221120112515.38165-1-sahid.ferdjaoui@industrialdiscipline.com>
-In-Reply-To: <20221120112515.38165-1-sahid.ferdjaoui@industrialdiscipline.com>
-From:   Quentin Monnet <quentin@isovalent.com>
-Date:   Sun, 20 Nov 2022 15:35:38 +0000
-Message-ID: <CACdoK4+0_q_6T5gF_TGhceVTcq5+77qYOY-sC3Di8kqQkGXWBg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 0/5] clean-up bpftool from legacy support
-To:     Sahid Orentino Ferdjaoui 
-        <sahid.ferdjaoui@industrialdiscipline.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, yhs@fb.com, martin.lau@linux.dev,
-        song@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: JJ9NJ1yvJYZ_lGlmflxIPSCSlvD9qiXu
+X-Proofpoint-GUID: JJ9NJ1yvJYZ_lGlmflxIPSCSlvD9qiXu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-20_11,2022-11-18_01,2022-06-22_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, 20 Nov 2022 at 11:25, Sahid Orentino Ferdjaoui
-<sahid.ferdjaoui@industrialdiscipline.com> wrote:
->
-> As part of commit 93b8952d223a ("libbpf: deprecate legacy BPF map
-> definitions") and commit bd054102a8c7 ("libbpf: enforce strict libbpf
-> 1.0 behaviors") The --legacy option is not relevant anymore. #1 is
-> removing it. #4 is cleaning the code from using libbpf_get_error().
->
-> About patches #2 and #3 They are changes discovered while working on
-> this series (credits to Quentin Monnet). #2 is cleaning-up usage of an
-> unnecessary PTR_ERR(NULL), finally #3 is fixing an invalid value
-> passed to strerror().
->
-> v1 -> v2:
->    - Addressed review comments from Yonghong Song on patch #4
->    - Added a patch #5 that removes unwanted function noticed by
->      Yonghong Song
-> v2 -> v3
->    - Addressed review comments from Andrii Nakryiko on patch #2, #3, #4
->      * clean-up usage of libbpf_get_error() (#2, #3)
->      * fix possible return of an uninitialized local variable err
->      * fix returned errors using errno
-> v3 -> v4
->    - Addressed review comments from Quentin Monnet
->      * fix line moved from patch #2 to patch #3
->      * fix missing returned errors using errno
->      * fix some returned values to errno instead of -1
+Later on, we will introduce kfuncs bpf_cast_to_kern_ctx() and
+bpf_rdonly_cast() which apply to all program types. Currently kfunc set
+only supports individual prog types. This patch added support for kfunc
+applying to all program types.
 
-For the series:
-Reviewed-by: Quentin Monnet <quentin@isovalent.com>
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ kernel/bpf/btf.c     |  8 ++++++++
+ kernel/bpf/helpers.c | 13 ++++++++++++-
+ 2 files changed, 20 insertions(+), 1 deletion(-)
 
-Thanks for this work!
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index f7d5fab61535..0a3abbe56c5d 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -199,6 +199,7 @@ DEFINE_IDR(btf_idr);
+ DEFINE_SPINLOCK(btf_idr_lock);
+=20
+ enum btf_kfunc_hook {
++	BTF_KFUNC_HOOK_COMMON,
+ 	BTF_KFUNC_HOOK_XDP,
+ 	BTF_KFUNC_HOOK_TC,
+ 	BTF_KFUNC_HOOK_STRUCT_OPS,
+@@ -7523,6 +7524,8 @@ static u32 *__btf_kfunc_id_set_contains(const struc=
+t btf *btf,
+ static int bpf_prog_type_to_kfunc_hook(enum bpf_prog_type prog_type)
+ {
+ 	switch (prog_type) {
++	case BPF_PROG_TYPE_UNSPEC:
++		return BTF_KFUNC_HOOK_COMMON;
+ 	case BPF_PROG_TYPE_XDP:
+ 		return BTF_KFUNC_HOOK_XDP;
+ 	case BPF_PROG_TYPE_SCHED_CLS:
+@@ -7551,6 +7554,11 @@ u32 *btf_kfunc_id_set_contains(const struct btf *b=
+tf,
+ 			       u32 kfunc_btf_id)
+ {
+ 	enum btf_kfunc_hook hook;
++	u32 *kfunc_flags;
++
++	kfunc_flags =3D __btf_kfunc_id_set_contains(btf, BTF_KFUNC_HOOK_COMMON,=
+ kfunc_btf_id);
++	if (kfunc_flags)
++		return kfunc_flags;
+=20
+ 	hook =3D bpf_prog_type_to_kfunc_hook(prog_type);
+ 	return __btf_kfunc_id_set_contains(btf, hook, kfunc_btf_id);
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 212e791d7452..eaae7f474eda 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1843,6 +1843,14 @@ static const struct btf_kfunc_id_set generic_kfunc=
+_set =3D {
+ 	.set   =3D &generic_btf_ids,
+ };
+=20
++BTF_SET8_START(common_btf_ids)
++BTF_SET8_END(common_btf_ids)
++
++static const struct btf_kfunc_id_set common_kfunc_set =3D {
++	.owner =3D THIS_MODULE,
++	.set   =3D &common_btf_ids,
++};
++
+ static int __init kfunc_init(void)
+ {
+ 	int ret;
+@@ -1850,7 +1858,10 @@ static int __init kfunc_init(void)
+ 	ret =3D register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &generic_kfunc=
+_set);
+ 	if (ret)
+ 		return ret;
+-	return register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &generic_kfun=
+c_set);
++	ret =3D register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &generic_kfu=
+nc_set);
++	if (ret)
++		return ret;
++	return register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC, &common_kfunc_se=
+t);
+ }
+=20
+ late_initcall(kfunc_init);
+--=20
+2.30.2
+
