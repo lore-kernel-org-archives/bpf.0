@@ -2,199 +2,85 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F195C433FE
-	for <bpf@archiver.kernel.org>; Sun, 20 Nov 2022 19:57:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4075C4332F
+	for <bpf@archiver.kernel.org>; Sun, 20 Nov 2022 20:16:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbiKTT5I (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 20 Nov 2022 14:57:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51294 "EHLO
+        id S229498AbiKTUQV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 20 Nov 2022 15:16:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiKTT5C (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 20 Nov 2022 14:57:02 -0500
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546AF13D1F
-        for <bpf@vger.kernel.org>; Sun, 20 Nov 2022 11:56:58 -0800 (PST)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 2AK7gUSP005656
-        for <bpf@vger.kernel.org>; Sun, 20 Nov 2022 11:56:57 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=mCkCwerHM440pWEv+HBQUhkQqSt2aaQX2dbeZJmY6Eg=;
- b=WYtHVf922P4+RCCqyHicNBJKkY8fyFOClUdckvmQcf8kxQHGe4MkdmGhGK1Dd1eurejm
- p0Wm1vY9DN3PdPdtK+di+m1fQazAbOCKkQVsFo9eLTU8Sdk6QV+I7pesEwkYvHYuzGjK
- OQ/vU5mLFADz5P4cma1J5Ywk3/41yHignro= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3kxuq08f2y-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sun, 20 Nov 2022 11:56:57 -0800
-Received: from twshared13940.35.frc1.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sun, 20 Nov 2022 11:56:55 -0800
-Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id 67D1B12774494; Sun, 20 Nov 2022 11:54:37 -0800 (PST)
-From:   Yonghong Song <yhs@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S229551AbiKTUQT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 20 Nov 2022 15:16:19 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9D712092
+        for <bpf@vger.kernel.org>; Sun, 20 Nov 2022 12:16:17 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id ud5so24390796ejc.4
+        for <bpf@vger.kernel.org>; Sun, 20 Nov 2022 12:16:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jnzFQrxoyceIbScrTKdd4o19W60/hsaKzMsKCUpT7SE=;
+        b=h9D0CiO7sJCSYQMqdsaUXuHWPC+qJqTyiwWMIIrvJJMe17oJk0Ea1vrulGhpxU/5EU
+         9wX/6wgNRbB0fnjeQJh7yh7z2GTo9TwSwPOZg2u7x1GGmx9gjcIBpARz8RVgOC9MuUbY
+         Yy0lqkY7Vdu+BvKKCFTm5cBgrZn+9aiXCOYNgYp0lr1l1eTrpOdZk7ZoSINC+jumG5jn
+         onmh90IdX8ZyvwqBeXXLm1yXQ9qP4zBSc35cczDWnfiM5bU0qiyL5RnxtXgrg/HXCeAW
+         ZTHE4VZW5yXBCeEVudpirk9dP17W3VTCtzKS2oSawzDELvZpbMupP7yVyBv4c+Ge0C+d
+         hPTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jnzFQrxoyceIbScrTKdd4o19W60/hsaKzMsKCUpT7SE=;
+        b=uDh7jKA1Z0OJ1OUu5X57bMz3v+7k7K3JNvtElMqNGqEyZnXMWBz+Hl+Pe4ItZmv8vr
+         dPxJDfWon9ZIaG1Fcr75kLdZhi52GIOsrE8fLZ1VKX+x+SbWMHaO7dX/crfe9V2iTsEe
+         g+ETxzI6UbbJ7MxEqC96/+7tlJAf2bdC2E1Ooe0I7x3Y8DOcdvHbiLKuV/z0UEAU1Rbm
+         zW8T4yO+BN18DHkj1RvweJA8aU4TIv0iM6VbImLu14QwWPBlxgMADg7BJ2bEYIB3doBb
+         zSwluFyEh8vgsjQS4URHzByio0p4f1RxN9ulYYTVE8kBwk/TMDVcVuXxC/iiI+7V3V8a
+         TxGQ==
+X-Gm-Message-State: ANoB5pn+6p3sdZZcXNTRQWkPMxpkzHVGAAzDfPc51BDGFmst6htpKXCE
+        ReyG9q8UiGexLSjxEJcvzIwa+NL1cOh+EZ28uTE=
+X-Google-Smtp-Source: AA0mqf5AlDZH7FYpeKZgAOrqENm69Cviray6sF8Tx5gN1+NmSTHAnupwa4YgTa0Jj3foKqGFL+lVXMAWGZ5CaLNkmew=
+X-Received: by 2002:a17:906:2ac3:b0:7ad:f2f9:2b49 with SMTP id
+ m3-20020a1709062ac300b007adf2f92b49mr2112838eje.94.1668975375430; Sun, 20 Nov
+ 2022 12:16:15 -0800 (PST)
+MIME-Version: 1.0
+References: <20221120195421.3112414-1-yhs@fb.com> <20221120195437.3114585-1-yhs@fb.com>
+In-Reply-To: <20221120195437.3114585-1-yhs@fb.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Sun, 20 Nov 2022 12:16:04 -0800
+Message-ID: <CAADnVQ+92vwqUB=J-QJYtrW0Yqvx2HAJJBREkXPJtW0+gyS1mQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 3/4] bpf: Add a kfunc for generic type cast
+To:     Yonghong Song <yhs@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         John Fastabend <john.fastabend@gmail.com>,
-        <kernel-team@fb.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Kernel Team <kernel-team@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
         Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v4 3/4] bpf: Add a kfunc for generic type cast
-Date:   Sun, 20 Nov 2022 11:54:37 -0800
-Message-ID: <20221120195437.3114585-1-yhs@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221120195421.3112414-1-yhs@fb.com>
-References: <20221120195421.3112414-1-yhs@fb.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: ELt0__ekbcoDgjiJwJD5bi4fpTTi9GXG
-X-Proofpoint-GUID: ELt0__ekbcoDgjiJwJD5bi4fpTTi9GXG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-20_13,2022-11-18_01,2022-06-22_01
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Implement bpf_rdonly_cast() which tries to cast the object
-to a specified type. This tries to support use case like below:
-  #define skb_shinfo(SKB) ((struct skb_shared_info *)(skb_end_pointer(SKB=
-)))
-where skb_end_pointer(SKB) is a 'unsigned char *' and needs to
-be casted to 'struct skb_shared_info *'.
+On Sun, Nov 20, 2022 at 11:57 AM Yonghong Song <yhs@fb.com> wrote:
+>
+> @@ -8938,6 +8941,24 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>                                 regs[BPF_REG_0].type = PTR_TO_BTF_ID | PTR_TRUSTED;
+>                                 regs[BPF_REG_0].btf = desc_btf;
+>                                 regs[BPF_REG_0].btf_id = meta.ret_btf_id;
+> +                       } else if (meta.func_id == special_kfunc_list[KF_bpf_rdonly_cast]) {
+> +                               if (!capable(CAP_PERFMON)) {
+> +                                       verbose(env,
+> +                                               "kfunc bpf_rdonly_cast requires CAP_PERFMON capability\n");
+> +                                       return -EACCES;
+> +                               }
 
-The signature of bpf_rdonly_cast() looks like
-   void *bpf_rdonly_cast(void *obj, __u32 btf_id)
-The function returns the same 'obj' but with PTR_TO_BTF_ID with
-btf_id. The verifier will ensure btf_id being a struct type.
+Just realized that bpf_cast_to_kern_ctx() has to be
+gated by cap_perfmon as well.
 
-Since the supported type cast may not reflect what the 'obj'
-represents, the returned btf_id is marked as PTR_UNTRUSTED, so
-the return value and subsequent pointer chasing cannot be
-used as helper/kfunc arguments.
-
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- kernel/bpf/helpers.c  |  6 ++++++
- kernel/bpf/verifier.c | 26 ++++++++++++++++++++++++--
- 2 files changed, 30 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index a4b9cfcecb00..89310c2ca03e 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1886,6 +1886,11 @@ void *bpf_cast_to_kern_ctx(void *obj)
- 	return obj;
- }
-=20
-+void *bpf_rdonly_cast(void *obj__ign, u32 btf_id__k)
-+{
-+	return obj__ign;
-+}
-+
- __diag_pop();
-=20
- BTF_SET8_START(generic_btf_ids)
-@@ -1915,6 +1920,7 @@ BTF_ID(func, bpf_task_release)
-=20
- BTF_SET8_START(common_btf_ids)
- BTF_ID_FLAGS(func, bpf_cast_to_kern_ctx)
-+BTF_ID_FLAGS(func, bpf_rdonly_cast)
- BTF_SET8_END(common_btf_ids)
-=20
- static const struct btf_kfunc_id_set common_kfunc_set =3D {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index a035356ed5df..8e01a7eebf7f 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -8153,6 +8153,7 @@ enum special_kfunc_type {
- 	KF_bpf_list_pop_front,
- 	KF_bpf_list_pop_back,
- 	KF_bpf_cast_to_kern_ctx,
-+	KF_bpf_rdonly_cast,
- };
-=20
- BTF_SET_START(special_kfunc_set)
-@@ -8163,6 +8164,7 @@ BTF_ID(func, bpf_list_push_back)
- BTF_ID(func, bpf_list_pop_front)
- BTF_ID(func, bpf_list_pop_back)
- BTF_ID(func, bpf_cast_to_kern_ctx)
-+BTF_ID(func, bpf_rdonly_cast)
- BTF_SET_END(special_kfunc_set)
-=20
- BTF_ID_LIST(special_kfunc_list)
-@@ -8173,6 +8175,7 @@ BTF_ID(func, bpf_list_push_back)
- BTF_ID(func, bpf_list_pop_front)
- BTF_ID(func, bpf_list_pop_back)
- BTF_ID(func, bpf_cast_to_kern_ctx)
-+BTF_ID(func, bpf_rdonly_cast)
-=20
- static enum kfunc_ptr_arg_type
- get_kfunc_ptr_arg_type(struct bpf_verifier_env *env,
-@@ -8809,6 +8812,7 @@ static int check_kfunc_call(struct bpf_verifier_env=
- *env, struct bpf_insn *insn,
- 	u32 i, nargs, func_id, ptr_type_id;
- 	int err, insn_idx =3D *insn_idx_p;
- 	const struct btf_param *args;
-+	const struct btf_type *ret_t;
- 	struct btf *desc_btf;
- 	u32 *kfunc_flags;
-=20
-@@ -8888,7 +8892,6 @@ static int check_kfunc_call(struct bpf_verifier_env=
- *env, struct bpf_insn *insn,
-=20
- 		if (meta.btf =3D=3D btf_vmlinux && btf_id_set_contains(&special_kfunc_=
-set, meta.func_id)) {
- 			if (meta.func_id =3D=3D special_kfunc_list[KF_bpf_obj_new_impl]) {
--				const struct btf_type *ret_t;
- 				struct btf *ret_btf;
- 				u32 ret_btf_id;
-=20
-@@ -8938,6 +8941,24 @@ static int check_kfunc_call(struct bpf_verifier_en=
-v *env, struct bpf_insn *insn,
- 				regs[BPF_REG_0].type =3D PTR_TO_BTF_ID | PTR_TRUSTED;
- 				regs[BPF_REG_0].btf =3D desc_btf;
- 				regs[BPF_REG_0].btf_id =3D meta.ret_btf_id;
-+			} else if (meta.func_id =3D=3D special_kfunc_list[KF_bpf_rdonly_cast]=
-) {
-+				if (!capable(CAP_PERFMON)) {
-+					verbose(env,
-+						"kfunc bpf_rdonly_cast requires CAP_PERFMON capability\n");
-+					return -EACCES;
-+				}
-+
-+				ret_t =3D btf_type_by_id(desc_btf, meta.arg_constant.value);
-+				if (!ret_t || !btf_type_is_struct(ret_t)) {
-+					verbose(env,
-+						"kfunc bpf_rdonly_cast type ID argument must be of a struct\n");
-+					return -EINVAL;
-+				}
-+
-+				mark_reg_known_zero(env, regs, BPF_REG_0);
-+				regs[BPF_REG_0].type =3D PTR_TO_BTF_ID | PTR_UNTRUSTED;
-+				regs[BPF_REG_0].btf =3D desc_btf;
-+				regs[BPF_REG_0].btf_id =3D meta.arg_constant.value;
- 			} else {
- 				verbose(env, "kernel function %s unhandled dynamic return type\n",
- 					meta.func_name);
-@@ -15191,7 +15212,8 @@ static int fixup_kfunc_call(struct bpf_verifier_e=
-nv *env, struct bpf_insn *insn,
- 		insn_buf[1] =3D addr[1];
- 		insn_buf[2] =3D *insn;
- 		*cnt =3D 3;
--	} else if (desc->func_id =3D=3D special_kfunc_list[KF_bpf_cast_to_kern_=
-ctx]) {
-+	} else if (desc->func_id =3D=3D special_kfunc_list[KF_bpf_cast_to_kern_=
-ctx] ||
-+		   desc->func_id =3D=3D special_kfunc_list[KF_bpf_rdonly_cast]) {
- 		insn_buf[0] =3D BPF_MOV64_REG(BPF_REG_0, BPF_REG_1);
- 		*cnt =3D 1;
- 	}
---=20
-2.30.2
-
+Also the direct capable(CAP_PERFMON) is not quite correct.
+It should at least be perfmon_capable().
+But even better to use env->allow_ptr_leaks here.
