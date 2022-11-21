@@ -2,113 +2,246 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96531C43217
-	for <bpf@archiver.kernel.org>; Mon, 21 Nov 2022 17:05:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9801C433FE
+	for <bpf@archiver.kernel.org>; Mon, 21 Nov 2022 17:05:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbiKURFc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 21 Nov 2022 12:05:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55498 "EHLO
+        id S229991AbiKURFd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 21 Nov 2022 12:05:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiKURF3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 21 Nov 2022 12:05:29 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24931CB6B9
-        for <bpf@vger.kernel.org>; Mon, 21 Nov 2022 09:05:28 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id x17so7359093wrn.6
-        for <bpf@vger.kernel.org>; Mon, 21 Nov 2022 09:05:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uAhMDGyM6Mu00oQqbenfJR6XolkWxTwD70LEM2vZY50=;
-        b=j8h40C0M7V/jU09PjuZo0L21V/WuiMTtk+xlVnA4+qWUUpaML5vGeXPw916ROtRQbg
-         sUNF4KMq9dxCgz12UzP7I5/cwvPF03PfMLeb9Sq25BPp5yOw/Qc8qv080MAkSJT6FryY
-         6vlYcd8LJ9drK17/4RojiNE9S/5VJt6e+HgqzwV3R3MRONl12pEUCXiQdmOYMpWMOcuP
-         EJE+NPArPbyGmU32+SFTnq3YpNCMQcNvo+4g5wnxtvkJ7V3Kv5mqmjoSp/ernX92mnsG
-         0lPuDH0bo1mU4nsJoAzIjXr3GjzJOlwRzxm75atXjSr0eWVAnovtN8U1l6FRjkklqY1A
-         xRcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uAhMDGyM6Mu00oQqbenfJR6XolkWxTwD70LEM2vZY50=;
-        b=jEyVIhf+URiJkSZou3mVAuoL0j/98L+rE7i/wPRAiJuboIoGpPMDMVC9zHYH9APue8
-         4saA6Euldd3K8fHBJL9iVAVXRu7As8V8Dk29pW96rhrNfYJAcc6A4XRlACfFdVZFN4f8
-         V00ZueN3NLNC+uGmnJL9uGVjIkW1PZ+uswkbgk1CKQjs4BXdhBifTfNXb3Y86HkaaSkM
-         QFyEO3JorCqGJVfIJWr5TEEz6ONI4/zMOQyPAHI3FYKBkwbGCxlLZeC6JB2wpO8S8O3q
-         PlVOYxjHmEBZa1qX0kPYVxyegASf2jwV3CwMObeWzDpuFVWHOlxncKPT/cm1bNY4/7Bd
-         0UlA==
-X-Gm-Message-State: ANoB5pmWlFuKvhXPmDVj+E1j3d1rV4chZx36np58EXpD1t3GwkGkU4DE
-        NIpjUN1fhyAjZdWHVuepNRjhrFK7XG1ACGmZOQtO9Q==
-X-Google-Smtp-Source: AA0mqf4FeQf6K8LNzD3P2zmQIxzZUbCH+yD5d8P8GvWxDHPnexp/cnQU+5z1w1kK0h9Q2DaUtfEE45Swq90ibr8FFcU=
-X-Received: by 2002:a5d:6747:0:b0:22e:34ee:c67d with SMTP id
- l7-20020a5d6747000000b0022e34eec67dmr1128924wrw.300.1669050326395; Mon, 21
- Nov 2022 09:05:26 -0800 (PST)
+        with ESMTP id S229924AbiKURFa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 21 Nov 2022 12:05:30 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F3EC8CB6
+        for <bpf@vger.kernel.org>; Mon, 21 Nov 2022 09:05:29 -0800 (PST)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ALGdwJa026362
+        for <bpf@vger.kernel.org>; Mon, 21 Nov 2022 09:05:29 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=e4CzWuukwXxx/Cy3KKqlTpm4D24eoA/5mEEbs08zczY=;
+ b=Kc0e4+NNL7QCR4S1NKfUvJlGjE3AhlkMg6TA8rA1118gQp7PYKH25z9Wx/ZJFhKUK4RG
+ mDg2joYIEBtWaIA8PdX24Rbur/mFRXczBtKDEdA+B5p2Jh5mnSKqMxW5uVO747oYBpPm
+ q1431iEQr5+551Ca/sfeAAXhVCuee5N6lYU= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3m08k52bn4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 21 Nov 2022 09:05:28 -0800
+Received: from twshared10308.07.ash9.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 21 Nov 2022 09:05:28 -0800
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+        id AD2C41282A57D; Mon, 21 Nov 2022 09:05:25 -0800 (PST)
+From:   Yonghong Song <yhs@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        Martin KaFai Lau <martin.lau@kernel.org>
+Subject: [PATCH bpf-next v7 2/4] bpf: Abstract out functions to check sleepable helpers
+Date:   Mon, 21 Nov 2022 09:05:25 -0800
+Message-ID: <20221121170525.1196049-1-yhs@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221121170515.1193967-1-yhs@fb.com>
+References: <20221121170515.1193967-1-yhs@fb.com>
 MIME-Version: 1.0
-References: <20221121075237.127706-1-leo.yan@linaro.org>
-In-Reply-To: <20221121075237.127706-1-leo.yan@linaro.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 21 Nov 2022 09:05:14 -0800
-Message-ID: <CAP-5=fVHpzT1Q0U=e_svzQ2+a0iSoYppL8hRmOTAHZ0_nk2Z_g@mail.gmail.com>
-Subject: Re: [PATCH v1 0/5] perf trace: Cleanup and remove unused bpf map
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: gr49DC-XWaz7DX1jV5N9fA5AeNz2Ty_T
+X-Proofpoint-GUID: gr49DC-XWaz7DX1jV5N9fA5AeNz2Ty_T
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-21_14,2022-11-18_01,2022-06-22_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, Nov 20, 2022 at 11:52 PM Leo Yan <leo.yan@linaro.org> wrote:
->
-> The initial purpose of this series is to cleanup the unused bpf map
-> 'syscalls' in the eBPF program augmented_raw_syscalls and perf trace
-> tool.  The relality is perf trace tool initializes system call table
-> based on map 'syscalls' and wrongly returns syscall pointer for
-> non-existed system calls based on the previous initialization.
->
-> So the patch set firstly addresses the issue for handling non-existed
-> system calls, then it removes unused local variable and bpf map in
-> augmented_raw_syscalls.c.
->
-> Patch 01 is a minor refactoring to use macro to replace number, patch 02
-> is to return error if a system call doesn't exist, especially when we
-> cannot find corresponding trace point in sysfs node, patch 03 is to fix
-> the issue that trace__syscall_info() returns a syscall pointer even the
-> system call doesn't exist, the corrected result is to always return NULL
-> pointer for non-existed system call.
->
-> The last two patches remove the unused local variable and bpf map
-> 'syscalls'.
->
-> This patch set has been tested with mainline kernel on Arm64 Ampere
-> Altra platform.
->
-> Leo Yan (5):
->   perf trace: Use macro RAW_SYSCALL_ARGS_NUM to replace number
->   perf trace: Return error if a system call doesn't exist
->   perf trace: Handle failure when trace point folder is missed
->   perf augmented_raw_syscalls: Remove unused variable 'syscall'
->   perf trace: Remove unused bpf map 'syscalls'
+Abstract out two functions to check whether a particular helper
+is sleepable or not for bpf_lsm and bpf_trace. These two
+functions will be used later to check whether a helper is
+sleepable or not in verifier. There is no functionality
+change.
 
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ include/linux/bpf_lsm.h      |  6 ++++++
+ include/linux/trace_events.h |  8 ++++++++
+ kernel/bpf/bpf_lsm.c         | 20 ++++++++++++++++----
+ kernel/trace/bpf_trace.c     | 22 ++++++++++++++++++----
+ 4 files changed, 48 insertions(+), 8 deletions(-)
 
-Acked-by: Ian Rogers <irogers@google.com>
+diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
+index 4bcf76a9bb06..d99b1caf118e 100644
+--- a/include/linux/bpf_lsm.h
++++ b/include/linux/bpf_lsm.h
+@@ -28,6 +28,7 @@ int bpf_lsm_verify_prog(struct bpf_verifier_log *vlog,
+ 			const struct bpf_prog *prog);
+=20
+ bool bpf_lsm_is_sleepable_hook(u32 btf_id);
++const struct bpf_func_proto *bpf_lsm_sleepable_func_proto(enum bpf_func_=
+id func_id);
+=20
+ static inline struct bpf_storage_blob *bpf_inode(
+ 	const struct inode *inode)
+@@ -50,6 +51,11 @@ static inline bool bpf_lsm_is_sleepable_hook(u32 btf_i=
+d)
+ {
+ 	return false;
+ }
++static inline const struct bpf_func_proto *
++bpf_lsm_sleepable_func_proto(enum bpf_func_id func_id)
++{
++	return NULL;
++}
+=20
+ static inline int bpf_lsm_verify_prog(struct bpf_verifier_log *vlog,
+ 				      const struct bpf_prog *prog)
+diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
+index 20749bd9db71..c3eb4fb78ea5 100644
+--- a/include/linux/trace_events.h
++++ b/include/linux/trace_events.h
+@@ -9,6 +9,7 @@
+ #include <linux/hardirq.h>
+ #include <linux/perf_event.h>
+ #include <linux/tracepoint.h>
++#include <uapi/linux/bpf.h>
+=20
+ struct trace_array;
+ struct array_buffer;
+@@ -16,6 +17,7 @@ struct tracer;
+ struct dentry;
+ struct bpf_prog;
+ union bpf_attr;
++struct bpf_func_proto;
+=20
+ const char *trace_print_flags_seq(struct trace_seq *p, const char *delim=
+,
+ 				  unsigned long flags,
+@@ -748,6 +750,7 @@ int bpf_get_perf_event_info(const struct perf_event *=
+event, u32 *prog_id,
+ 			    u32 *fd_type, const char **buf,
+ 			    u64 *probe_offset, u64 *probe_addr);
+ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_=
+prog *prog);
++const struct bpf_func_proto *bpf_tracing_sleepable_func_proto(enum bpf_f=
+unc_id func_id);
+ #else
+ static inline unsigned int trace_call_bpf(struct trace_event_call *call,=
+ void *ctx)
+ {
+@@ -794,6 +797,11 @@ bpf_kprobe_multi_link_attach(const union bpf_attr *a=
+ttr, struct bpf_prog *prog)
+ {
+ 	return -EOPNOTSUPP;
+ }
++static inline const struct bpf_func_proto *
++bpf_tracing_sleepable_func_proto(enum bpf_func_id func_id)
++{
++	return NULL;
++}
+ #endif
+=20
+ enum {
+diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+index d6c9b3705f24..2f993a003389 100644
+--- a/kernel/bpf/bpf_lsm.c
++++ b/kernel/bpf/bpf_lsm.c
+@@ -192,6 +192,18 @@ static const struct bpf_func_proto bpf_get_attach_co=
+okie_proto =3D {
+ 	.arg1_type	=3D ARG_PTR_TO_CTX,
+ };
+=20
++const struct bpf_func_proto *bpf_lsm_sleepable_func_proto(enum bpf_func_=
+id func_id)
++{
++	switch (func_id) {
++	case BPF_FUNC_ima_inode_hash:
++		return &bpf_ima_inode_hash_proto;
++	case BPF_FUNC_ima_file_hash:
++		return &bpf_ima_file_hash_proto;
++	default:
++		return NULL;
++	}
++}
++
+ static const struct bpf_func_proto *
+ bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog=
+)
+ {
+@@ -203,6 +215,10 @@ bpf_lsm_func_proto(enum bpf_func_id func_id, const s=
+truct bpf_prog *prog)
+ 			return func_proto;
+ 	}
+=20
++	func_proto =3D bpf_lsm_sleepable_func_proto(func_id);
++	if (func_proto)
++		return prog->aux->sleepable ? func_proto : NULL;
++
+ 	switch (func_id) {
+ 	case BPF_FUNC_inode_storage_get:
+ 		return &bpf_inode_storage_get_proto;
+@@ -220,10 +236,6 @@ bpf_lsm_func_proto(enum bpf_func_id func_id, const s=
+truct bpf_prog *prog)
+ 		return &bpf_spin_unlock_proto;
+ 	case BPF_FUNC_bprm_opts_set:
+ 		return &bpf_bprm_opts_set_proto;
+-	case BPF_FUNC_ima_inode_hash:
+-		return prog->aux->sleepable ? &bpf_ima_inode_hash_proto : NULL;
+-	case BPF_FUNC_ima_file_hash:
+-		return prog->aux->sleepable ? &bpf_ima_file_hash_proto : NULL;
+ 	case BPF_FUNC_get_attach_cookie:
+ 		return bpf_prog_has_trampoline(prog) ? &bpf_get_attach_cookie_proto : =
+NULL;
+ #ifdef CONFIG_NET
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 5b9008bc597b..5e4b1566a174 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1383,9 +1383,27 @@ static int __init bpf_key_sig_kfuncs_init(void)
+ late_initcall(bpf_key_sig_kfuncs_init);
+ #endif /* CONFIG_KEYS */
+=20
++const struct bpf_func_proto *bpf_tracing_sleepable_func_proto(enum bpf_f=
+unc_id func_id)
++{
++	switch (func_id) {
++	case BPF_FUNC_copy_from_user:
++		return &bpf_copy_from_user_proto;
++	case BPF_FUNC_copy_from_user_task:
++		return &bpf_copy_from_user_task_proto;
++	default:
++		return NULL;
++	}
++}
++
+ static const struct bpf_func_proto *
+ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *=
+prog)
+ {
++	const struct bpf_func_proto *func_proto;
++
++	func_proto =3D bpf_tracing_sleepable_func_proto(func_id);
++	if (func_proto)
++		return prog->aux->sleepable ? func_proto : NULL;
++
+ 	switch (func_id) {
+ 	case BPF_FUNC_map_lookup_elem:
+ 		return &bpf_map_lookup_elem_proto;
+@@ -1484,10 +1502,6 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, c=
+onst struct bpf_prog *prog)
+ 		return &bpf_jiffies64_proto;
+ 	case BPF_FUNC_get_task_stack:
+ 		return &bpf_get_task_stack_proto;
+-	case BPF_FUNC_copy_from_user:
+-		return prog->aux->sleepable ? &bpf_copy_from_user_proto : NULL;
+-	case BPF_FUNC_copy_from_user_task:
+-		return prog->aux->sleepable ? &bpf_copy_from_user_task_proto : NULL;
+ 	case BPF_FUNC_snprintf_btf:
+ 		return &bpf_snprintf_btf_proto;
+ 	case BPF_FUNC_per_cpu_ptr:
+--=20
+2.30.2
 
-Thanks,
-Ian
-
->  tools/perf/builtin-trace.c                    | 131 +++---------------
->  .../examples/bpf/augmented_raw_syscalls.c     |  18 ---
->  2 files changed, 18 insertions(+), 131 deletions(-)
->
-> --
-> 2.34.1
->
