@@ -2,100 +2,108 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF245C433FE
-	for <bpf@archiver.kernel.org>; Mon, 21 Nov 2022 07:30:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48692C433FE
+	for <bpf@archiver.kernel.org>; Mon, 21 Nov 2022 07:52:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbiKUHav (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 21 Nov 2022 02:30:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45466 "EHLO
+        id S229907AbiKUHww (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 21 Nov 2022 02:52:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbiKUHae (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 21 Nov 2022 02:30:34 -0500
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53037450B1;
-        Sun, 20 Nov 2022 23:29:51 -0800 (PST)
-Received: by mail-qv1-f46.google.com with SMTP id h10so7513602qvq.7;
-        Sun, 20 Nov 2022 23:29:51 -0800 (PST)
+        with ESMTP id S229826AbiKUHwt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 21 Nov 2022 02:52:49 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60ECB865
+        for <bpf@vger.kernel.org>; Sun, 20 Nov 2022 23:52:46 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so10551567pjl.3
+        for <bpf@vger.kernel.org>; Sun, 20 Nov 2022 23:52:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6WjVfFYLcTfewafnon3KVt0ktJTiMVy1KnjVKkT5rpE=;
+        b=b79/fyAq/YHmS0tOjEAtCmJdzJ1Ua36rMCUO8ivApIafNLtN6kTGfwicRGJWxwKqJH
+         lJqTjXKFQSETXnz1A4FO28qxJns3MyYYipxX7PqKjsNMbL6scsAern/+29y+tK3yRLiz
+         Y3LRr9VjVmgT1PnZ6dOgikEtWkRy25Ry0OuR/0PI2mEoOSrjuzFBXMfg1jtCepGjgbqy
+         UgvpV52e2CQo+J9euy+0nkAgV5wY/EDEiHyK4PfX08gIIZEqnh4jFb5OUx/HeIQ2hpfV
+         EUnU/V/yKi6jiFZsTr6ubsWvFNhGJSlwWY2QQHqL7Vi0pVoCKYzysbYlKNYGskbqywlQ
+         3SLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1MY3mj3l+5CfCCInAcDlHvG3PSUH4yIPKLve52bAsu4=;
-        b=qzVfHEkoMlxwASUliqg0rGXoW5wMBjzwf/hJ7Xav+ikzVov0jHewVMvVzBDneR+HES
-         FjxW5v/yV9h/cpC9tNSVYtBERfXvx+GLc6gL3tbl+s+D0ZAVn1g9IgFuJiy1cCreGkLN
-         sEepvoMov1/JCVAkQ0Tuw6iuidjPG+CtiYL25Alr3oM82xhXHap/GntQDMEechfmjO4t
-         5E5gpMk7eMYCzo3q8X5hcT0Dd7DXlfEL/Em3tJf4XdzoZt5Gng5Iiimkn4M4f5tvN2f7
-         XL1PyksWvwZVKs94Lx89YqhzoXNAI1NfmsP2NQ05MqJPDO2TZ9d0p+j3MOt1gbgkmkB5
-         f0Hw==
-X-Gm-Message-State: ANoB5pkCaPHRlwJU8Onvs5RH0RZ0MLH8hPawz346M1gZ/iKgpabhuZXB
-        1HS2nC/ogANmiHhJP2Y0ld8=
-X-Google-Smtp-Source: AA0mqf7jFCwahDzu6/UEgnqDJ+xx5vPjDH4fb0zlJQA7ZwTmATqqkab/aWh/ah9AOk9CLa8ehGH9og==
-X-Received: by 2002:ad4:414d:0:b0:4b1:9872:85c5 with SMTP id z13-20020ad4414d000000b004b1987285c5mr3215991qvp.23.1669015790198;
-        Sun, 20 Nov 2022 23:29:50 -0800 (PST)
-Received: from maniforge.lan (c-24-15-214-156.hsd1.il.comcast.net. [24.15.214.156])
-        by smtp.gmail.com with ESMTPSA id dt18-20020a05620a479200b006ea7f9d8644sm7721596qkb.96.2022.11.20.23.29.48
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6WjVfFYLcTfewafnon3KVt0ktJTiMVy1KnjVKkT5rpE=;
+        b=oUfsXNYFXn0g3zoe2sXMlsIXE9xsVyne+tTa19O/Q3DxQNRRrm2N4W+Ie9OeJmKu2j
+         2x1Lr+CggT5zrlLwUNFKAJjHOByz+0dGvSVfC35k1V7knILUHNs6NCG3JiwtEDUy6sP9
+         HV+8zo87k52t3AEMa9yRhssZvq8iu4cKj8NVYyN/OOeIfZ9YOd3wzySUDihklXtLvHhz
+         gegAICLjYFDxJlVqHVPNSPjZZ+IKnEyIk/8TYuAUPjwsHkcYgtV03w1dP0ZBSLNA4hOM
+         ku1k0i4QA1gikbbkKCSehXmDSWXZfk9P0xc8OdALzFU15pnoTwkBmNC6IuAWgsmEwFTe
+         5QBA==
+X-Gm-Message-State: ANoB5pnXfuoyScXRtZ93vsBorb6Vy8nbGfmbHoy+oojIxJCvTu7o9qoR
+        3CvrBuog8ReOCEDKqbNKeJnCLQ==
+X-Google-Smtp-Source: AA0mqf5nMvHnG2tzrfyG/pKaCg//dI3l1l5t28l8zrVad0SYYerVDasQyvTv7S7qhLyrX4NgNp1FzQ==
+X-Received: by 2002:a17:902:ec8a:b0:188:640f:f400 with SMTP id x10-20020a170902ec8a00b00188640ff400mr1182661plg.143.1669017165937;
+        Sun, 20 Nov 2022 23:52:45 -0800 (PST)
+Received: from leoy-huangpu.lan (211-75-219-204.hinet-ip.hinet.net. [211.75.219.204])
+        by smtp.gmail.com with ESMTPSA id h31-20020a63575f000000b0047696938911sm7006277pgm.74.2022.11.20.23.52.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 23:29:49 -0800 (PST)
-Date:   Mon, 21 Nov 2022 01:29:54 -0600
-From:   David Vernet <void@manifault.com>
-To:     Rong Tao <rtoax@foxmail.com>
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        corbet@lwn.net, daniel@iogearbox.net, haoluo@google.com,
-        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        martin.lau@linux.dev, rongtao@cestc.cn, sdf@google.com,
-        song@kernel.org, yhs@fb.com
-Subject: Re: [PATCH bpf-next] docs/bpf: Update btf selftests program and add
- link
-Message-ID: <Y3so8nndjYTpRVHn@maniforge.lan>
-References: <Y3pj9FCI5SOEHZXz@maniforge.lan>
- <tencent_A24996F06584CAF86BC2A822E2A2C1BA1006@qq.com>
+        Sun, 20 Nov 2022 23:52:45 -0800 (PST)
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Leo Yan <leo.yan@linaro.org>
+Subject: [PATCH v1 0/5] perf trace: Cleanup and remove unused bpf map
+Date:   Mon, 21 Nov 2022 07:52:32 +0000
+Message-Id: <20221121075237.127706-1-leo.yan@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <tencent_A24996F06584CAF86BC2A822E2A2C1BA1006@qq.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 10:07:34AM +0800, Rong Tao wrote:
-> From: Rong Tao <rongtao@cestc.cn>
-> 
-> commit c64779e24e88("selftests/bpf: Merge most of test_btf into
-> test_progs") rename selftests/bpf btf test from 'test_btf.c' to
-> 'prog_tests/btf.c'.
-> 
-> Signed-off-by: Rong Tao <rongtao@cestc.cn>
-> ---
+The initial purpose of this series is to cleanup the unused bpf map
+'syscalls' in the eBPF program augmented_raw_syscalls and perf trace
+tool.  The relality is perf trace tool initializes system call table
+based on map 'syscalls' and wrongly returns syscall pointer for
+non-existed system calls based on the previous initialization.
 
-Please send this out as a v2 patch, as described in [0].
+So the patch set firstly addresses the issue for handling non-existed
+system calls, then it removes unused local variable and bpf map in
+augmented_raw_syscalls.c.
 
-[0]: https://www.kernel.org/doc/html/latest/process/submitting-patches.html
+Patch 01 is a minor refactoring to use macro to replace number, patch 02
+is to return error if a system call doesn't exist, especially when we
+cannot find corresponding trace point in sysfs node, patch 03 is to fix
+the issue that trace__syscall_info() returns a syscall pointer even the
+system call doesn't exist, the corrected result is to always return NULL
+pointer for non-existed system call.
 
->  Documentation/bpf/btf.rst | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
-> index cf8722f96090..dca0b0e9dd35 100644
-> --- a/Documentation/bpf/btf.rst
-> +++ b/Documentation/bpf/btf.rst
-> @@ -1062,4 +1062,9 @@ format.::
->  7. Testing
->  ==========
->  
-> -Kernel bpf selftest `test_btf.c` provides extensive set of BTF-related tests.
-> +Kernel bpf selftest `tools/testing/selftests/bpf/prog_tests/btf.c`_ provides
+The last two patches remove the unused local variable and bpf map
+'syscalls'.
 
-You added the hyperlink, but don't seem to have applied my other
-suggestions. Please do so in v2.
+This patch set has been tested with mainline kernel on Arm64 Ampere
+Altra platform.
 
-> +extensive set of BTF-related tests.
-> +
-> +.. Links
-> +.. _tools/testing/selftests/bpf/prog_tests/btf.c:
-> +   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/tools/testing/selftests/bpf/prog_tests/btf.c
-> -- 
-> 2.38.1
-> 
+Leo Yan (5):
+  perf trace: Use macro RAW_SYSCALL_ARGS_NUM to replace number
+  perf trace: Return error if a system call doesn't exist
+  perf trace: Handle failure when trace point folder is missed
+  perf augmented_raw_syscalls: Remove unused variable 'syscall'
+  perf trace: Remove unused bpf map 'syscalls'
+
+ tools/perf/builtin-trace.c                    | 131 +++---------------
+ .../examples/bpf/augmented_raw_syscalls.c     |  18 ---
+ 2 files changed, 18 insertions(+), 131 deletions(-)
+
+-- 
+2.34.1
+
