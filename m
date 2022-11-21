@@ -2,90 +2,135 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A022AC4332F
-	for <bpf@archiver.kernel.org>; Mon, 21 Nov 2022 16:50:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79ECEC4332F
+	for <bpf@archiver.kernel.org>; Mon, 21 Nov 2022 17:05:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbiKUQuX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 21 Nov 2022 11:50:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44332 "EHLO
+        id S229604AbiKURFZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 21 Nov 2022 12:05:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbiKUQuR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 21 Nov 2022 11:50:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093455BD6F
-        for <bpf@vger.kernel.org>; Mon, 21 Nov 2022 08:50:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 907EB6132E
-        for <bpf@vger.kernel.org>; Mon, 21 Nov 2022 16:50:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EB84EC433D6;
-        Mon, 21 Nov 2022 16:50:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669049416;
-        bh=F5y43aei7454lMIhWh9LlcVKdSGbBXxyvLIVb64VsjI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=F5GWotr0BiOzmG2nVw1PDfJpaCqF+pibhhziwRrnZku4gBDyFx73hJrP3D9ARVzRH
-         eH/i8RoYZlcKUTDrHc45uYMvRqS6ymUqwBBWSwJ33mCq4/Xmiq6uQbwQjdyrhyW8yS
-         gzqWDoe7bm8Q4guE23egutusTVYQguwqOlRtBy2x6nj2IiGA1TRaf7k9ybFUvuzEFG
-         y0ew0pppdbwN4BEcGV49DGw8sZm3Ni/9Yc2oY4I6OaqLI+4+1ChQSlbIjWm0YvA7r/
-         2BFpZICTIEO6zklg2/wYwUJuIlM/xGjqXQAiotTWCcG0LGyk4C/9USIMMm7yqkiimG
-         UcGvP3+31e+uQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BE65BE270C7;
-        Mon, 21 Nov 2022 16:50:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229920AbiKURFY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 21 Nov 2022 12:05:24 -0500
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F88C67E5
+        for <bpf@vger.kernel.org>; Mon, 21 Nov 2022 09:05:23 -0800 (PST)
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ALDmkpo006243
+        for <bpf@vger.kernel.org>; Mon, 21 Nov 2022 09:05:22 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=kz+VZhpHCF78jJbRnLgP/DT8adAIQT6AE/RN6h3wVUw=;
+ b=eXUnLglqvC0CH+39/STBx1Oau2pAHO5X1R0qQ8VIoM+VVT8FyQXEOBfIXetMTV7yF2IY
+ 4WrmKkiT1Z3Q6mkh9m+h/UQpS0ZKnT9jJBK3nVJWYlkDhu5deFQ0/TR84j8yzm0/WEw2
+ Aac1qIg+l+/zqwWo3iNwg+cBhvnVQlnRcYM= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3kxws6xcpt-6
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 21 Nov 2022 09:05:22 -0800
+Received: from twshared24004.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 21 Nov 2022 09:05:19 -0800
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+        id 306D81282A53B; Mon, 21 Nov 2022 09:05:15 -0800 (PST)
+From:   Yonghong Song <yhs@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        Martin KaFai Lau <martin.lau@kernel.org>
+Subject: [PATCH bpf-next v7 0/4] bpf: Add bpf_rcu_read_lock() support
+Date:   Mon, 21 Nov 2022 09:05:15 -0800
+Message-ID: <20221121170515.1193967-1-yhs@fb.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3 0/3] bpf: Pin the start cgroup for cgroup iterator
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166904941577.16961.4100589791651140735.git-patchwork-notify@kernel.org>
-Date:   Mon, 21 Nov 2022 16:50:15 +0000
-References: <20221121073440.1828292-1-houtao@huaweicloud.com>
-In-Reply-To: <20221121073440.1828292-1-houtao@huaweicloud.com>
-To:     Hou Tao <houtao@huaweicloud.com>
-Cc:     bpf@vger.kernel.org, martin.lau@linux.dev, haoluo@google.com,
-        yhs@fb.com, andrii@kernel.org, song@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, kpsingh@kernel.org, sdf@google.com,
-        jolsa@kernel.org, john.fastabend@gmail.com, houtao1@huawei.com
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: nGWGI7bATalJMRqEquDC8zi8lJrY9uwy
+X-Proofpoint-ORIG-GUID: nGWGI7bATalJMRqEquDC8zi8lJrY9uwy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-21_14,2022-11-18_01,2022-06-22_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+Currently, without rcu attribute info in BTF, the verifier treats
+rcu tagged pointer as a normal pointer. This might be a problem
+for sleepable program where rcu_read_lock()/unlock() is not available.
+For example, for a sleepable fentry program, if rcu protected memory
+access is interleaved with a sleepable helper/kfunc, it is possible
+the memory access after the sleepable helper/kfunc might be invalid
+since the object might have been freed then. Even without
+a sleepable helper/kfunc, without rcu_read_lock() protection,
+it is possible that the rcu protected object might be release
+in the middle of bpf program execution which may cause incorrect
+result.
 
-This series was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+To prevent above cases, enable btf_type_tag("rcu") attributes,
+introduce new bpf_rcu_read_lock/unlock() kfuncs and add verifier support.
 
-On Mon, 21 Nov 2022 15:34:37 +0800 you wrote:
-> From: Hou Tao <houtao1@huawei.com>
-> 
-> Hi,
-> 
-> The patchset tries to fix the potential use-after-free problem in cgroup
-> iterator. The problem is similar with the UAF problem fixed in map
-> iterator and the fix is also similar: pinning the iterated resource in
-> .init_seq_private() and unpinning it in .fini_seq_private(). An
-> alternative fix is pinning iterator link when opening iterator fd, but
-> it will make iterator link still being visible after the close of
-> iterator link fd and the behavior is different with other link types, so
-> just fixing the bug alone by pinning the start cgroup when creating
-> cgroup iterator. Also adding a selftests to demonstrate the UAF problem
-> when iterating a dead cgroup.
-> 
-> [...]
+In the rest of patch set, Patch 1 enabled btf_type_tag for __rcu
+attribute. Patche 2 is a refactoring patch. Patch 3 added new
+bpf_rcu_read_lock/unlock() kfuncs and verifier support.
+Patch 4 added some tests for these two new kfuncs.
 
-Here is the summary with links:
-  - [bpf-next,v3,1/3] bpf: Pin the start cgroup in cgroup_iter_seq_init()
-    https://git.kernel.org/bpf/bpf-next/c/1a5160d4d8fe
-  - [bpf-next,v3,2/3] selftests/bpf: Add cgroup helper remove_cgroup()
-    https://git.kernel.org/bpf/bpf-next/c/2a42461a8831
-  - [bpf-next,v3,3/3] selftests/bpf: Add test for cgroup iterator on a dead cgroup
-    https://git.kernel.org/bpf/bpf-next/c/8589e92675aa
+Changelogs:
+  v6 -> v7:
+    . rebase on top of bpf-next.
+    . remove the patch which enables sleepable program using
+      cgrp_local_storage map. This is orthogonal to this patch set
+      and will be addressed separately.
+    . mark the rcu pointer dereference result as UNTRUSTED if inside
+      a bpf_rcu_read_lock() region.
+  v5 -> v6:=20
+    . fix selftest prog miss_unlock which tested nested locking.
+    . add comments in selftest prog cgrp_succ to explain how to handle
+      nested memory access after rcu memory load.
+  v4 -> v5:
+    . add new test to aarch64 deny list.
+  v3 -> v4:
+    . fix selftest failures when built with gcc. gcc doesn't support
+      btf_type_tag yet and some tests relies on that. skip these
+      tests if vmlinux BTF does not have btf_type_tag("rcu").
+  v2 -> v3:
+    . went back to MEM_RCU approach with invalidate rcu ptr registers
+      at bpf_rcu_read_unlock() place.
+    . remove KF_RCU_LOCK/UNLOCK flag and compare btf_id at verification
+      time instead.
+  v1 -> v2:
+    . use kfunc instead of helper for bpf_rcu_read_lock/unlock.
+    . not use MEM_RCU bpf_type_flag, instead use active_rcu_lock
+      in reg state to identify rcu ptr's.
+    . Add more self tests.
+    . add new test to s390x deny list.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Yonghong Song (4):
+  compiler_types: Define __rcu as __attribute__((btf_type_tag("rcu")))
+  bpf: Abstract out functions to check sleepable helpers
+  bpf: Add kfunc bpf_rcu_read_lock/unlock()
+  selftests/bpf: Add tests for bpf_rcu_read_lock()
 
+ include/linux/bpf.h                           |   3 +
+ include/linux/bpf_lsm.h                       |   6 +
+ include/linux/bpf_verifier.h                  |   2 +
+ include/linux/compiler_types.h                |   3 +-
+ include/linux/trace_events.h                  |   8 +
+ kernel/bpf/bpf_lsm.c                          |  20 +-
+ kernel/bpf/btf.c                              |   3 +
+ kernel/bpf/helpers.c                          |  12 +
+ kernel/bpf/verifier.c                         | 156 ++++++++-
+ kernel/trace/bpf_trace.c                      |  22 +-
+ tools/testing/selftests/bpf/DENYLIST.aarch64  |   1 +
+ tools/testing/selftests/bpf/DENYLIST.s390x    |   1 +
+ .../selftests/bpf/prog_tests/rcu_read_lock.c  | 153 +++++++++
+ .../selftests/bpf/progs/rcu_read_lock.c       | 325 ++++++++++++++++++
+ 14 files changed, 695 insertions(+), 20 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/rcu_read_lock.=
+c
+ create mode 100644 tools/testing/selftests/bpf/progs/rcu_read_lock.c
+
+--=20
+2.30.2
 
