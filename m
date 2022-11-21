@@ -2,82 +2,151 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20F88C433FE
-	for <bpf@archiver.kernel.org>; Mon, 21 Nov 2022 21:00:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54CA6C4332F
+	for <bpf@archiver.kernel.org>; Mon, 21 Nov 2022 21:24:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbiKUVAS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 21 Nov 2022 16:00:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
+        id S229476AbiKUVYq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 21 Nov 2022 16:24:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiKUVAR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 21 Nov 2022 16:00:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41976CC142
-        for <bpf@vger.kernel.org>; Mon, 21 Nov 2022 13:00:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D30866147A
-        for <bpf@vger.kernel.org>; Mon, 21 Nov 2022 21:00:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2BED2C433C1;
-        Mon, 21 Nov 2022 21:00:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669064416;
-        bh=LEmczhYwKFc3yd6L3h1dGxSmGAYfBuJu/YFu62cvfhA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=nRhSkMIuEebiWw+Egw9TzL+fvxvK3hpg7kJMSpiCc46snpdF/VHnzB2uQsKCdtPsG
-         DF9IhzR7gSskvGQQKMNMxv2xB+d2xld9cEGwHHK806MQXsWdL4q88wW8Kj6d5+bkG0
-         OVgy8srdhR/3mU/pFIklhle+VGBVWyY6nJS2yMsGwslKoAEqOb36GVllltk+/jzRwM
-         uazPNTAWjiiR9Bbet9YMoan259hl8pByZHsmiozV2hb9BnSCoTWReo0p9JRQk1Gjv+
-         X4IM8B/0xZX4eF180Vp58l/6zn6ymv9+GPra67vRZT6tbnyEHGR37/I5VnzUln5otr
-         ZLO0W3heOIniQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0C353E29F3E;
-        Mon, 21 Nov 2022 21:00:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229449AbiKUVYp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 21 Nov 2022 16:24:45 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4DB14D3A;
+        Mon, 21 Nov 2022 13:24:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1669065881; x=1700601881;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=WQHtk5rD0UFDH3ezGkF35r6wv2LNLOm3eEkyD65lDDA=;
+  b=XVf0aCtL/681SfdVnHJYCcRLGwk2h6KS2DhLTGV35rVRl61SnuRKQxcD
+   1miEamsZQ0BdFSwinx677UyR6A/SmfitHH+ubDB5jtKK5vSvUiV98Vvg0
+   sKSK1QKmiA1TLAhdFBsIdj2VwlrQYhzVzl9URQPfF9WwGAs0MnLYno+Ml
+   aDiIHYUPgVybIxKF17d91junP6h4Ic+TaHFaGTPYBY/ovCt3/dBs9CbDx
+   SsVdmyCkbZi+42nkmxebCQB4lxhmpLBm8YiTN7EI93MxgINKGhE+cAWxQ
+   Qh1kCpUy/rGNNeewpLA/knQdWgjc9ltP76pze88R4FPJXd35G/vnscYe6
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
+   d="scan'208";a="124468619"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Nov 2022 14:24:40 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Mon, 21 Nov 2022 14:24:35 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Mon, 21 Nov 2022 14:24:33 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <hawk@kernel.org>, <john.fastabend@gmail.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next v3 1/7] net: lan966x: Add XDP_PACKET_HEADROOM
+Date:   Mon, 21 Nov 2022 22:28:44 +0100
+Message-ID: <20221121212850.3212649-2-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.38.0
+In-Reply-To: <20221121212850.3212649-1-horatiu.vultur@microchip.com>
+References: <20221121212850.3212649-1-horatiu.vultur@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: Move skb->len == 0 checks into
- __bpf_redirect
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166906441604.30065.754596253753413287.git-patchwork-notify@kernel.org>
-Date:   Mon, 21 Nov 2022 21:00:16 +0000
-References: <20221121180340.1983627-1-sdf@google.com>
-In-Reply-To: <20221121180340.1983627-1-sdf@google.com>
-To:     Stanislav Fomichev <sdf@google.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        haoluo@google.com, jolsa@kernel.org
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+Update the page_pool params to allocate XDP_PACKET_HEADROOM space as
+headroom for all received frames.
+This is needed for when the XDP_TX and XDP_REDIRECT are implemented.
 
-This series was applied to bpf/bpf-next.git (master)
-by Martin KaFai Lau <martin.lau@kernel.org>:
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+ .../ethernet/microchip/lan966x/lan966x_fdma.c    | 16 +++++++++++-----
+ .../net/ethernet/microchip/lan966x/lan966x_xdp.c |  3 ++-
+ 2 files changed, 13 insertions(+), 6 deletions(-)
 
-On Mon, 21 Nov 2022 10:03:39 -0800 you wrote:
-> To avoid potentially breaking existing users.
-> 
-> Both mac/no-mac cases have to be amended; mac_header >= network_header
-> is not enough (verified with a new test, see next patch).
-> 
-> Fixes: fd1894224407 ("bpf: Don't redirect packets with invalid pkt_len")
-> Signed-off-by: Stanislav Fomichev <sdf@google.com>
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,v2,1/2] bpf: Move skb->len == 0 checks into __bpf_redirect
-    https://git.kernel.org/bpf/bpf-next/c/114039b34201
-  - [bpf-next,v2,2/2] selftests/bpf: Make sure zero-len skbs aren't redirectable
-    https://git.kernel.org/bpf/bpf-next/c/68f8e3d4b916
-
-You are awesome, thank you!
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+index 5fbbd479cfb06..3055124b4dd79 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+@@ -1,5 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0+
+ 
++#include <linux/bpf.h>
++
+ #include "lan966x_main.h"
+ 
+ static int lan966x_fdma_channel_active(struct lan966x *lan966x)
+@@ -16,7 +18,7 @@ static struct page *lan966x_fdma_rx_alloc_page(struct lan966x_rx *rx,
+ 	if (unlikely(!page))
+ 		return NULL;
+ 
+-	db->dataptr = page_pool_get_dma_addr(page);
++	db->dataptr = page_pool_get_dma_addr(page) + XDP_PACKET_HEADROOM;
+ 
+ 	return page;
+ }
+@@ -72,7 +74,7 @@ static int lan966x_fdma_rx_alloc_page_pool(struct lan966x_rx *rx)
+ 		.nid = NUMA_NO_NODE,
+ 		.dev = lan966x->dev,
+ 		.dma_dir = DMA_FROM_DEVICE,
+-		.offset = 0,
++		.offset = XDP_PACKET_HEADROOM,
+ 		.max_len = rx->max_mtu -
+ 			   SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
+ 	};
+@@ -432,11 +434,13 @@ static int lan966x_fdma_rx_check_frame(struct lan966x_rx *rx, u64 *src_port)
+ 	if (unlikely(!page))
+ 		return FDMA_ERROR;
+ 
+-	dma_sync_single_for_cpu(lan966x->dev, (dma_addr_t)db->dataptr,
++	dma_sync_single_for_cpu(lan966x->dev,
++				(dma_addr_t)db->dataptr + XDP_PACKET_HEADROOM,
+ 				FDMA_DCB_STATUS_BLOCKL(db->status),
+ 				DMA_FROM_DEVICE);
+ 
+-	lan966x_ifh_get_src_port(page_address(page), src_port);
++	lan966x_ifh_get_src_port(page_address(page) + XDP_PACKET_HEADROOM,
++				 src_port);
+ 	if (WARN_ON(*src_port >= lan966x->num_phys_ports))
+ 		return FDMA_ERROR;
+ 
+@@ -466,6 +470,7 @@ static struct sk_buff *lan966x_fdma_rx_get_frame(struct lan966x_rx *rx,
+ 
+ 	skb_mark_for_recycle(skb);
+ 
++	skb_reserve(skb, XDP_PACKET_HEADROOM);
+ 	skb_put(skb, FDMA_DCB_STATUS_BLOCKL(db->status));
+ 
+ 	lan966x_ifh_get_timestamp(skb->data, &timestamp);
+@@ -786,7 +791,8 @@ static int lan966x_fdma_get_max_frame(struct lan966x *lan966x)
+ 	return lan966x_fdma_get_max_mtu(lan966x) +
+ 	       IFH_LEN_BYTES +
+ 	       SKB_DATA_ALIGN(sizeof(struct skb_shared_info)) +
+-	       VLAN_HLEN * 2;
++	       VLAN_HLEN * 2 +
++	       XDP_PACKET_HEADROOM;
+ }
+ 
+ int lan966x_fdma_change_mtu(struct lan966x *lan966x)
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
+index e77d9f2aad2b4..8ebde1eb6a09c 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
+@@ -44,7 +44,8 @@ int lan966x_xdp_run(struct lan966x_port *port, struct page *page, u32 data_len)
+ 
+ 	xdp_init_buff(&xdp, PAGE_SIZE << lan966x->rx.page_order,
+ 		      &port->xdp_rxq);
+-	xdp_prepare_buff(&xdp, page_address(page), IFH_LEN_BYTES,
++	xdp_prepare_buff(&xdp, page_address(page),
++			 IFH_LEN_BYTES + XDP_PACKET_HEADROOM,
+ 			 data_len - IFH_LEN_BYTES, false);
+ 	act = bpf_prog_run_xdp(xdp_prog, &xdp);
+ 	switch (act) {
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.38.0
 
