@@ -2,22 +2,22 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F68CC433FE
-	for <bpf@archiver.kernel.org>; Tue, 22 Nov 2022 07:44:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6308C433FE
+	for <bpf@archiver.kernel.org>; Tue, 22 Nov 2022 07:44:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232525AbiKVHoJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 22 Nov 2022 02:44:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54234 "EHLO
+        id S232498AbiKVHoY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 22 Nov 2022 02:44:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232521AbiKVHoD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 22 Nov 2022 02:44:03 -0500
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEEA131DC3;
-        Mon, 21 Nov 2022 23:44:00 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=hengqi@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VVR4CFe_1669103037;
-Received: from localhost(mailfrom:hengqi@linux.alibaba.com fp:SMTPD_---0VVR4CFe_1669103037)
+        with ESMTP id S232502AbiKVHoF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 22 Nov 2022 02:44:05 -0500
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E198D3136F;
+        Mon, 21 Nov 2022 23:44:03 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=hengqi@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VVRCoB6_1669103039;
+Received: from localhost(mailfrom:hengqi@linux.alibaba.com fp:SMTPD_---0VVRCoB6_1669103039)
           by smtp.aliyun-inc.com;
-          Tue, 22 Nov 2022 15:43:58 +0800
+          Tue, 22 Nov 2022 15:44:00 +0800
 From:   Heng Qi <hengqi@linux.alibaba.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     Jason Wang <jasowang@redhat.com>,
@@ -29,9 +29,9 @@ Cc:     Jason Wang <jasowang@redhat.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>,
         Eric Dumazet <edumazet@google.com>
-Subject: [RFC PATCH 7/9] virtio_net: build skb from multi-buffer xdp
-Date:   Tue, 22 Nov 2022 15:43:46 +0800
-Message-Id: <20221122074348.88601-8-hengqi@linux.alibaba.com>
+Subject: [RFC PATCH 9/9] virtio_net: support multi-buffer xdp
+Date:   Tue, 22 Nov 2022 15:43:48 +0800
+Message-Id: <20221122074348.88601-10-hengqi@linux.alibaba.com>
 X-Mailer: git-send-email 2.19.1.6.gb485710b
 In-Reply-To: <20221122074348.88601-1-hengqi@linux.alibaba.com>
 References: <20221122074348.88601-1-hengqi@linux.alibaba.com>
@@ -41,78 +41,125 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This converts a multi-buffer xdp_buff directly to a skb.
+Driver can pass the skb to stack by build_skb_from_xdp_buff().
 
-Now, we have isolated the construction of skb based on
-multi-buffer xdp from page_to_skb().
+Driver forwards multi-buffer packets using the send queue
+when XDP_TX and XDP_REDIRECT, and clears the reference of multi
+pages when XDP_DROP.
 
 Signed-off-by: Heng Qi <hengqi@linux.alibaba.com>
 Reviewed-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- drivers/net/virtio_net.c | 50 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
+ drivers/net/virtio_net.c | 65 ++++++----------------------------------
+ 1 file changed, 9 insertions(+), 56 deletions(-)
 
 diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 83e6933ae62b..260ce722c687 100644
+index 431f2126a2b5..bbd5cd9bfd47 100644
 --- a/drivers/net/virtio_net.c
 +++ b/drivers/net/virtio_net.c
-@@ -911,6 +911,56 @@ static struct sk_buff *receive_big(struct net_device *dev,
- 	return NULL;
- }
+@@ -1065,7 +1065,6 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 	struct bpf_prog *xdp_prog;
+ 	unsigned int truesize = mergeable_ctx_to_truesize(ctx);
+ 	unsigned int headroom = mergeable_ctx_to_headroom(ctx);
+-	unsigned int metasize = 0;
+ 	unsigned int frame_sz;
+ 	int err;
  
-+/* Why not use xdp_build_skb_from_frame() ?
-+ * XDP core assumes that xdp frags are PAGE_SIZE in length, while in
-+ * virtio-net there are 2 points that do not match its requirements:
-+ *  1. The size of the prefilled buffer is not fixed before xdp is set.
-+ *  2. When xdp is loaded, virtio-net has a hole mechanism (refer to
-+ *     add_recvbuf_mergeable()), which will make the size of a buffer
-+ *     exceed PAGE_SIZE.
-+ */
-+static struct sk_buff *build_skb_from_xdp_buff(struct net_device *dev,
-+					       struct virtnet_info *vi,
-+					       struct xdp_buff *xdp,
-+					       unsigned int xdp_frags_truesz)
-+{
-+	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
-+	unsigned int headroom, data_len;
-+	struct sk_buff *skb;
-+	int metasize;
-+	u8 nr_frags;
-+
-+	if (unlikely(xdp->data_end > xdp_data_hard_end(xdp))) {
-+		pr_debug("Error building skb as missing reserved tailroom for xdp");
-+		return NULL;
-+	}
-+
-+	if (unlikely(xdp_buff_has_frags(xdp)))
-+		nr_frags = sinfo->nr_frags;
-+
-+	skb = build_skb(xdp->data_hard_start, xdp->frame_sz);
-+	if (unlikely(!skb))
-+		return NULL;
-+
-+	headroom = xdp->data - xdp->data_hard_start;
-+	data_len = xdp->data_end - xdp->data;
-+	skb_reserve(skb, headroom);
-+	__skb_put(skb, data_len);
-+
-+	metasize = xdp->data - xdp->data_meta;
-+	metasize = metasize > 0 ? metasize : 0;
-+	if (metasize)
-+		skb_metadata_set(skb, metasize);
-+
-+	if (unlikely(xdp_buff_has_frags(xdp)))
-+		xdp_update_skb_shared_info(skb, nr_frags,
-+					   sinfo->xdp_frags_size,
-+					   xdp_frags_truesz,
-+					   xdp_buff_is_frag_pfmemalloc(xdp));
-+
-+	return skb;
-+}
-+
- static int virtnet_build_xdp_buff(struct net_device *dev,
- 				  struct virtnet_info *vi,
- 				  struct receive_queue *rq,
+@@ -1137,63 +1136,22 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 
+ 		switch (act) {
+ 		case XDP_PASS:
+-			metasize = xdp.data - xdp.data_meta;
+-
+-			/* recalculate offset to account for any header
+-			 * adjustments and minus the metasize to copy the
+-			 * metadata in page_to_skb(). Note other cases do not
+-			 * build an skb and avoid using offset
+-			 */
+-			offset = xdp.data - page_address(xdp_page) -
+-				 vi->hdr_len - metasize;
+-
+-			/* recalculate len if xdp.data, xdp.data_end or
+-			 * xdp.data_meta were adjusted
+-			 */
+-			len = xdp.data_end - xdp.data + vi->hdr_len + metasize;
+-
+-			/* recalculate headroom if xdp.data or xdp_data_meta
+-			 * were adjusted, note that offset should always point
+-			 * to the start of the reserved bytes for virtio_net
+-			 * header which are followed by xdp.data, that means
+-			 * that offset is equal to the headroom (when buf is
+-			 * starting at the beginning of the page, otherwise
+-			 * there is a base offset inside the page) but it's used
+-			 * with a different starting point (buf start) than
+-			 * xdp.data (buf start + vnet hdr size). If xdp.data or
+-			 * data_meta were adjusted by the xdp prog then the
+-			 * headroom size has changed and so has the offset, we
+-			 * can use data_hard_start, which points at buf start +
+-			 * vnet hdr size, to calculate the new headroom and use
+-			 * it later to compute buf start in page_to_skb()
+-			 */
+-			headroom = xdp.data - xdp.data_hard_start - metasize;
+-
+-			/* We can only create skb based on xdp_page. */
+-			if (unlikely(xdp_page != page)) {
+-				rcu_read_unlock();
+-				put_page(page);
+-				head_skb = page_to_skb(vi, rq, xdp_page, offset,
+-						       len, PAGE_SIZE);
+-				return head_skb;
+-			}
+-			break;
++			head_skb = build_skb_from_xdp_buff(dev, vi, &xdp, xdp_frags_truesz);
++			rcu_read_unlock();
++			return head_skb;
+ 		case XDP_TX:
+ 			stats->xdp_tx++;
+ 			xdpf = xdp_convert_buff_to_frame(&xdp);
+ 			if (unlikely(!xdpf)) {
+-				if (unlikely(xdp_page != page))
+-					put_page(xdp_page);
+-				goto err_xdp;
++				pr_debug("%s: convert buff to frame failed for xdp\n", dev->name);
++				goto err_xdp_frags;
+ 			}
+ 			err = virtnet_xdp_xmit(dev, 1, &xdpf, 0);
+ 			if (unlikely(!err)) {
+ 				xdp_return_frame_rx_napi(xdpf);
+ 			} else if (unlikely(err < 0)) {
+ 				trace_xdp_exception(vi->dev, xdp_prog, act);
+-				if (unlikely(xdp_page != page))
+-					put_page(xdp_page);
+-				goto err_xdp;
++				goto err_xdp_frags;
+ 			}
+ 			*xdp_xmit |= VIRTIO_XDP_TX;
+ 			if (unlikely(xdp_page != page))
+@@ -1203,11 +1161,8 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 		case XDP_REDIRECT:
+ 			stats->xdp_redirects++;
+ 			err = xdp_do_redirect(dev, &xdp, xdp_prog);
+-			if (err) {
+-				if (unlikely(xdp_page != page))
+-					put_page(xdp_page);
+-				goto err_xdp;
+-			}
++			if (err)
++				goto err_xdp_frags;
+ 			*xdp_xmit |= VIRTIO_XDP_REDIR;
+ 			if (unlikely(xdp_page != page))
+ 				put_page(page);
+@@ -1220,9 +1175,7 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 			trace_xdp_exception(vi->dev, xdp_prog, act);
+ 			fallthrough;
+ 		case XDP_DROP:
+-			if (unlikely(xdp_page != page))
+-				__free_pages(xdp_page, 0);
+-			goto err_xdp;
++			goto err_xdp_frags;
+ 		}
+ err_xdp_frags:
+ 		shinfo = xdp_get_shared_info_from_buff(&xdp);
 -- 
 2.19.1.6.gb485710b
 
