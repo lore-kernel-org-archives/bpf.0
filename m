@@ -2,22 +2,22 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E0FEC43217
-	for <bpf@archiver.kernel.org>; Tue, 22 Nov 2022 07:44:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE99CC433FE
+	for <bpf@archiver.kernel.org>; Tue, 22 Nov 2022 07:44:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232526AbiKVHoD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 22 Nov 2022 02:44:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54124 "EHLO
+        id S232491AbiKVHoF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 22 Nov 2022 02:44:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232491AbiKVHn6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 22 Nov 2022 02:43:58 -0500
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B0FA2FC1B;
-        Mon, 21 Nov 2022 23:43:57 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=hengqi@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VVRAvuo_1669103031;
-Received: from localhost(mailfrom:hengqi@linux.alibaba.com fp:SMTPD_---0VVRAvuo_1669103031)
+        with ESMTP id S232507AbiKVHoC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 22 Nov 2022 02:44:02 -0500
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9E831341;
+        Mon, 21 Nov 2022 23:43:58 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=hengqi@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VVR66o2_1669103034;
+Received: from localhost(mailfrom:hengqi@linux.alibaba.com fp:SMTPD_---0VVR66o2_1669103034)
           by smtp.aliyun-inc.com;
-          Tue, 22 Nov 2022 15:43:52 +0800
+          Tue, 22 Nov 2022 15:43:55 +0800
 From:   Heng Qi <hengqi@linux.alibaba.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     Jason Wang <jasowang@redhat.com>,
@@ -29,9 +29,9 @@ Cc:     Jason Wang <jasowang@redhat.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>,
         Eric Dumazet <edumazet@google.com>
-Subject: [RFC PATCH 2/9] virtio_net: set up xdp for multi buffer packets
-Date:   Tue, 22 Nov 2022 15:43:41 +0800
-Message-Id: <20221122074348.88601-3-hengqi@linux.alibaba.com>
+Subject: [RFC PATCH 4/9] virtio_net: remove xdp related info from page_to_skb()
+Date:   Tue, 22 Nov 2022 15:43:43 +0800
+Message-Id: <20221122074348.88601-5-hengqi@linux.alibaba.com>
 X-Mailer: git-send-email 2.19.1.6.gb485710b
 In-Reply-To: <20221122074348.88601-1-hengqi@linux.alibaba.com>
 References: <20221122074348.88601-1-hengqi@linux.alibaba.com>
@@ -41,71 +41,116 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When the xdp program sets xdp.frags, which means it can process
-multi-buffer packets, so we continue to open xdp support when
-features such as GRO_HW are negotiated.
+For the clear construction of multi-buffer xdp_buff, we now remove the xdp
+processing interleaved with page_to_skb() before, and the logic of xdp and
+building skb from xdp will be separate and independent.
 
 Signed-off-by: Heng Qi <hengqi@linux.alibaba.com>
 Reviewed-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- drivers/net/virtio_net.c | 30 +++++++++++++++++-------------
- 1 file changed, 17 insertions(+), 13 deletions(-)
+ drivers/net/virtio_net.c | 41 +++++++++-------------------------------
+ 1 file changed, 9 insertions(+), 32 deletions(-)
 
 diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index c5046d21b281..8f7d207d58d6 100644
+index d3e8c63b9c4b..cd65f85d5075 100644
 --- a/drivers/net/virtio_net.c
 +++ b/drivers/net/virtio_net.c
-@@ -3080,14 +3080,21 @@ static int virtnet_xdp_set(struct net_device *dev, struct bpf_prog *prog,
- 	u16 xdp_qp = 0, curr_qp;
- 	int i, err;
+@@ -439,9 +439,7 @@ static unsigned int mergeable_ctx_to_truesize(void *mrg_ctx)
+ static struct sk_buff *page_to_skb(struct virtnet_info *vi,
+ 				   struct receive_queue *rq,
+ 				   struct page *page, unsigned int offset,
+-				   unsigned int len, unsigned int truesize,
+-				   bool hdr_valid, unsigned int metasize,
+-				   unsigned int headroom)
++				   unsigned int len, unsigned int truesize)
+ {
+ 	struct sk_buff *skb;
+ 	struct virtio_net_hdr_mrg_rxbuf *hdr;
+@@ -459,21 +457,11 @@ static struct sk_buff *page_to_skb(struct virtnet_info *vi,
+ 	else
+ 		hdr_padded_len = sizeof(struct padded_vnet_hdr);
  
--	if (!virtio_has_feature(vi->vdev, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS)
--	    && (virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_TSO4) ||
--	        virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_TSO6) ||
--	        virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_ECN) ||
--		virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_UFO) ||
--		virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_CSUM))) {
--		NL_SET_ERR_MSG_MOD(extack, "Can't set XDP while host is implementing GRO_HW/CSUM, disable GRO_HW/CSUM first");
--		return -EOPNOTSUPP;
-+	if (!virtio_has_feature(vi->vdev, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS)) {
-+		if (virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_CSUM)) {
-+			NL_SET_ERR_MSG_MOD(extack, "Can't set XDP without frags while guest is implementing GUEST_CSUM");
-+			return -EOPNOTSUPP;
-+		}
-+
-+		if (prog && !prog->aux->xdp_has_frags) {
-+			if (virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_TSO4) ||
-+			    virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_TSO6) ||
-+			    virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_ECN) ||
-+			    virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_UFO)) {
-+				NL_SET_ERR_MSG_MOD(extack, "Can't set XDP without frags while guest is implementing GUEST_GRO_HW");
-+				return -EOPNOTSUPP;
-+			}
-+		}
- 	}
- 
- 	if (vi->mergeable_rx_bufs && !vi->any_header_sg) {
-@@ -3095,8 +3102,8 @@ static int virtnet_xdp_set(struct net_device *dev, struct bpf_prog *prog,
- 		return -EINVAL;
- 	}
- 
--	if (dev->mtu > max_sz) {
--		NL_SET_ERR_MSG_MOD(extack, "MTU too large to enable XDP");
-+	if (prog && !prog->aux->xdp_has_frags && dev->mtu > max_sz) {
-+		NL_SET_ERR_MSG_MOD(extack, "MTU too large to enable XDP without frags");
- 		netdev_warn(dev, "XDP requires MTU less than %lu\n", max_sz);
- 		return -EINVAL;
- 	}
-@@ -3218,9 +3225,6 @@ static int virtnet_set_features(struct net_device *dev,
- 	int err;
- 
- 	if ((dev->features ^ features) & NETIF_F_GRO_HW) {
--		if (vi->xdp_enabled)
--			return -EBUSY;
+-	/* If headroom is not 0, there is an offset between the beginning of the
+-	 * data and the allocated space, otherwise the data and the allocated
+-	 * space are aligned.
+-	 *
+-	 * Buffers with headroom use PAGE_SIZE as alloc size, see
+-	 * add_recvbuf_mergeable() + get_mergeable_buf_len()
+-	 */
+-	truesize = headroom ? PAGE_SIZE : truesize;
+-	tailroom = truesize - headroom;
+-	buf = p - headroom;
 -
- 		if (features & NETIF_F_GRO_HW)
- 			offloads = vi->guest_offloads_capable;
- 		else
++	buf = p;
+ 	len -= hdr_len;
+ 	offset += hdr_padded_len;
+ 	p += hdr_padded_len;
+-	tailroom -= hdr_padded_len + len;
++	tailroom = truesize - hdr_padded_len - len;
+ 
+ 	shinfo_size = SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+ 
+@@ -503,7 +491,7 @@ static struct sk_buff *page_to_skb(struct virtnet_info *vi,
+ 	if (len <= skb_tailroom(skb))
+ 		copy = len;
+ 	else
+-		copy = ETH_HLEN + metasize;
++		copy = ETH_HLEN;
+ 	skb_put_data(skb, p, copy);
+ 
+ 	len -= copy;
+@@ -542,19 +530,11 @@ static struct sk_buff *page_to_skb(struct virtnet_info *vi,
+ 		give_pages(rq, page);
+ 
+ ok:
+-	/* hdr_valid means no XDP, so we can copy the vnet header */
+-	if (hdr_valid) {
+-		hdr = skb_vnet_hdr(skb);
+-		memcpy(hdr, hdr_p, hdr_len);
+-	}
++	hdr = skb_vnet_hdr(skb);
++	memcpy(hdr, hdr_p, hdr_len);
+ 	if (page_to_free)
+ 		put_page(page_to_free);
+ 
+-	if (metasize) {
+-		__skb_pull(skb, metasize);
+-		skb_metadata_set(skb, metasize);
+-	}
+-
+ 	return skb;
+ }
+ 
+@@ -917,7 +897,7 @@ static struct sk_buff *receive_big(struct net_device *dev,
+ {
+ 	struct page *page = buf;
+ 	struct sk_buff *skb =
+-		page_to_skb(vi, rq, page, 0, len, PAGE_SIZE, true, 0, 0);
++		page_to_skb(vi, rq, page, 0, len, PAGE_SIZE);
+ 
+ 	stats->bytes += len - vi->hdr_len;
+ 	if (unlikely(!skb))
+@@ -1060,9 +1040,7 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 				rcu_read_unlock();
+ 				put_page(page);
+ 				head_skb = page_to_skb(vi, rq, xdp_page, offset,
+-						       len, PAGE_SIZE, false,
+-						       metasize,
+-						       headroom);
++						       len, PAGE_SIZE);
+ 				return head_skb;
+ 			}
+ 			break;
+@@ -1116,8 +1094,7 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 	rcu_read_unlock();
+ 
+ skip_xdp:
+-	head_skb = page_to_skb(vi, rq, page, offset, len, truesize, !xdp_prog,
+-			       metasize, headroom);
++	head_skb = page_to_skb(vi, rq, page, offset, len, truesize);
+ 	curr_skb = head_skb;
+ 
+ 	if (unlikely(!curr_skb))
 -- 
 2.19.1.6.gb485710b
 
