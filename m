@@ -2,37 +2,36 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10213C433FE
-	for <bpf@archiver.kernel.org>; Tue, 22 Nov 2022 01:56:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8A62C4332F
+	for <bpf@archiver.kernel.org>; Tue, 22 Nov 2022 01:58:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbiKVB43 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 21 Nov 2022 20:56:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56258 "EHLO
+        id S231512AbiKVB6q (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 21 Nov 2022 20:58:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231895AbiKVB41 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 21 Nov 2022 20:56:27 -0500
-X-Greylist: delayed 100 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Nov 2022 17:56:22 PST
-Received: from zg8tmty1ljiyny4xntuumtyw.icoremail.net (zg8tmty1ljiyny4xntuumtyw.icoremail.net [165.227.155.160])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 8CD7317889;
-        Mon, 21 Nov 2022 17:56:22 -0800 (PST)
+        with ESMTP id S229730AbiKVB6n (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 21 Nov 2022 20:58:43 -0500
+Received: from wangsu.com (unknown [180.101.34.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D072FC5B4E;
+        Mon, 21 Nov 2022 17:58:41 -0800 (PST)
 Received: from 102.wangsu.com (unknown [59.61.78.232])
-        by app2 (Coremail) with SMTP id SyJltADnLkvJK3xjPGsAAA--.529S2;
-        Tue, 22 Nov 2022 09:54:17 +0800 (CST)
+        by app2 (Coremail) with SMTP id SyJltADnLkvOLHxjiGsAAA--.531S2;
+        Tue, 22 Nov 2022 09:58:40 +0800 (CST)
 From:   Pengcheng Yang <yangpc@wangsu.com>
-To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         John Fastabend <john.fastabend@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Jakub Sitnicki <jakub@cloudflare.com>,
         Lorenz Bauer <lmb@cloudflare.com>
 Cc:     Pengcheng Yang <yangpc@wangsu.com>
 Subject: [PATCH RESEND bpf 0/4] bpf, sockmap: Fix some issues with using apply_bytes
-Date:   Tue, 22 Nov 2022 09:53:59 +0800
-Message-Id: <1669082043-2508-1-git-send-email-yangpc@wangsu.com>
+Date:   Tue, 22 Nov 2022 09:58:25 +0800
+Message-Id: <1669082309-2546-1-git-send-email-yangpc@wangsu.com>
 X-Mailer: git-send-email 1.8.3.1
-X-CM-TRANSID: SyJltADnLkvJK3xjPGsAAA--.529S2
+X-CM-TRANSID: SyJltADnLkvOLHxjiGsAAA--.531S2
 X-Coremail-Antispam: 1UD129KBjvdXoWrZr1xGrWxtF4rZw1rCryfZwb_yoWxtrXEvr
         W8tr98GrW8ZF18CayY9rZ8AF97Ga1DZrykGF9Iqry2gry8Zrn8Grs5Zr9Yyry8G3yYkr92
-        gr1kGrWkJr1jgjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        gr1kGrWkJr1jgjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
         9fnUUIcSsGvfJ3UbIYCTnIWIevJa73UjIFyTuYvj4RJUUUUUUUU
 X-CM-SenderInfo: p1dqw1nf6zt0xjvxhudrp/
 Precedence: bulk
