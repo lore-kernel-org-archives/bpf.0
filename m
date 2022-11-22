@@ -2,136 +2,84 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12840C433FE
-	for <bpf@archiver.kernel.org>; Tue, 22 Nov 2022 21:20:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EB05C4332F
+	for <bpf@archiver.kernel.org>; Tue, 22 Nov 2022 21:23:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234298AbiKVVUW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 22 Nov 2022 16:20:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46154 "EHLO
+        id S234928AbiKVVXY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 22 Nov 2022 16:23:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233174AbiKVVUV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 22 Nov 2022 16:20:21 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3EC18F3C3;
-        Tue, 22 Nov 2022 13:20:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669152017; x=1700688017;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ads2cVRvZI8k8jJJ/EENd7OUJlc/7SM5FY/+3wbCKkk=;
-  b=RbwD1C3BA7JaRZqFrOM/Ty1NNyWBKb4cMJM6DBscm3k6rG6z5FcyggF+
-   JYxJ6YhtZOYq4nAyXEhC/H1jD15LuM8gKj+NTNszABb6KWq2ijk9c963u
-   BCZWsb6aPxBuZhbXHGsZGHJYgoGg7Qhow/bTIM5bTbd9gBsZHoF76z7WX
-   qZSYMFzFmXeFAmjtCyp+/HEJmVnOiBVRgZ5WGeef9XbIG64c81ka84BXU
-   XTIio4mS26CiPH1sN0mdj0+OWg5gOxWXDfkvOZIxvKg9IE6raDzYqIKxg
-   iShtMwfCguKHL9XyuHPvGaE2ePz0RhZ4Z3XLYrjzF7ceISZKhPpbEWVTt
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,185,1665471600"; 
-   d="scan'208";a="190134967"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Nov 2022 14:20:17 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 22 Nov 2022 14:20:14 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Tue, 22 Nov 2022 14:20:14 -0700
-Date:   Tue, 22 Nov 2022 22:25:04 +0100
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
-        <john.fastabend@gmail.com>, <UNGLinuxDriver@microchip.com>
-Subject: Re: [PATCH net-next v3 5/7] net: lan966x: Update dma_dir of
- page_pool_params
-Message-ID: <20221122212504.nrwaucgab3lqqxpo@soft-dev3-1>
-References: <20221121212850.3212649-1-horatiu.vultur@microchip.com>
- <20221121212850.3212649-6-horatiu.vultur@microchip.com>
- <20221122114339.419188-1-alexandr.lobakin@intel.com>
+        with ESMTP id S234913AbiKVVXW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 22 Nov 2022 16:23:22 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59C523BE9
+        for <bpf@vger.kernel.org>; Tue, 22 Nov 2022 13:23:21 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id c7so11881814iof.13
+        for <bpf@vger.kernel.org>; Tue, 22 Nov 2022 13:23:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=io661+dNfxoEO20qUW/6J+6nYl2fudHXUp0XJ6CzRak=;
+        b=rcn5Ssf6R9mCT4CzmKOXenY+pbjaS92fqt2NvtqqkmlAadHSvRkAMAYdSrfUfIwK5/
+         vvFdgrWUY/TpsHqBTVKNHJgbrtVOqGVhEsrW202OSXK0WzyfFil/cA7+XwW7MO5F57CP
+         b0SopjqTUfk16jHO7iUpcUOyy5+k3AFma6MGzbjbNuJ7UJ1/UrQpi6dO/J2dHCrLOr+V
+         cOA1GbZ+WjVAMBeKONYIaL1nzqGJ+HFoGjlixnLpeo05BVGBnfI8tTzIWCugDwDv+xWW
+         gCM/OeN4tP0JUbqUwD7K7yBbDnrOu5Kt7ZhHoT3JtRZcx92Clbcnamf6wgiC8DaGMlnE
+         rHKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=io661+dNfxoEO20qUW/6J+6nYl2fudHXUp0XJ6CzRak=;
+        b=NW4Jdjs1RByM+6UD8clivBND/slT/RWeR/eiaswxuFdGbOcEtPlw40xB1FgiVHXjfL
+         YHchuAntqjHLY8pL+y9jX9MWDJERUI8vK9betZtqgFgyOkZL3MqGhQJNxFODEcUKIwGh
+         IrW9ax0Oyv4ZR/u1/nj6/GKPNOaN+e4eFcRwQG6YqME9uevzUq2BEjCzm54gkBzYpYWT
+         Z802yKZNi6OdzjX1WkmgW7kbICXrgAERIsynKyYC4VD/+e/lbqbDZGdkpQhjS90dNytC
+         vrrQG6Pon4wPsdO/7wgmQ6Sme99kSAg7pnuQTMTG7Qj72+J+SP+bacQP6JGuKzrZ5HSC
+         zesQ==
+X-Gm-Message-State: ANoB5pnVveQHdrm71dJOgzEpqzJjmUwaPKWb5Q47sIFzxTEH1pw1Qdw8
+        y+cpmZ3aFCwXgs1ePjD2F75I+zlLgs2CiucCu6Iiuw==
+X-Google-Smtp-Source: AA0mqf6j27rtk5QqfpU1n2G7f0HKRuEXryQzebEWQwgQKaNiSIdYcrTiMD+WuvwIC+GwzdJAlIKU/J1aJVvLyUVGoyQ=
+X-Received: by 2002:a02:7115:0:b0:36f:a831:4497 with SMTP id
+ n21-20020a027115000000b0036fa8314497mr11958860jac.209.1669152201047; Tue, 22
+ Nov 2022 13:23:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20221122114339.419188-1-alexandr.lobakin@intel.com>
+References: <20221122021536.1629178-1-drosen@google.com> <20221122021536.1629178-5-drosen@google.com>
+ <CAOQ4uxiVqR_HxCytweO_uKR=gdRHTjGG9SgHaNTFb1+5b6ucGQ@mail.gmail.com>
+In-Reply-To: <CAOQ4uxiVqR_HxCytweO_uKR=gdRHTjGG9SgHaNTFb1+5b6ucGQ@mail.gmail.com>
+From:   Daniel Rosenberg <drosen@google.com>
+Date:   Tue, 22 Nov 2022 13:23:09 -0800
+Message-ID: <CA+PiJmR4rtSHveW_wntt5X2g6zOwarSg3mseRUyo9mSD8ZfyRg@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 04/21] fuse: Add fuse-bpf, a stacked fs extension
+ for FUSE
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-team@android.com,
+        Paul Lawrence <paullawrence@google.com>,
+        Alessio Balsini <balsini@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The 11/22/2022 12:43, Alexander Lobakin wrote:
-> 
-> From: Horatiu Vultur <horatiu.vultur@microchip.com>
-> Date: Mon, 21 Nov 2022 22:28:48 +0100
-> 
-> > To add support for XDP_TX it is required to be able to write to the DMA
-> > area therefore it is required that the pages will be mapped using
-> > DMA_BIDIRECTIONAL flag.
-> > Therefore check if there are any xdp programs on the interfaces and in
-> > that case set DMA_BIDRECTIONAL otherwise use DMA_FROM_DEVICE.
-> > Therefore when a new XDP program is added it is required to redo the
-> > page_pool.
-> >
-> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> > ---
-> >  .../ethernet/microchip/lan966x/lan966x_fdma.c | 29 ++++++++++++++----
-> >  .../ethernet/microchip/lan966x/lan966x_main.h |  2 ++
-> >  .../ethernet/microchip/lan966x/lan966x_xdp.c  | 30 +++++++++++++++++++
-> >  3 files changed, 55 insertions(+), 6 deletions(-)
-> 
-> [...]
-> 
-> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
-> > index 8ebde1eb6a09c..05c5a28206558 100644
-> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
-> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
-> > @@ -11,6 +11,8 @@ static int lan966x_xdp_setup(struct net_device *dev, struct netdev_bpf *xdp)
-> >       struct lan966x_port *port = netdev_priv(dev);
-> >       struct lan966x *lan966x = port->lan966x;
-> >       struct bpf_prog *old_prog;
-> > +     bool old_xdp, new_xdp;
-> > +     int err;
-> >
-> >       if (!lan966x->fdma) {
-> >               NL_SET_ERR_MSG_MOD(xdp->extack,
-> > @@ -18,7 +20,20 @@ static int lan966x_xdp_setup(struct net_device *dev, struct netdev_bpf *xdp)
-> >               return -EOPNOTSUPP;
-> >       }
-> >
-> > +     old_xdp = lan966x_xdp_present(lan966x);
-> >       old_prog = xchg(&port->xdp_prog, xdp->prog);
-> > +     new_xdp = lan966x_xdp_present(lan966x);
-> > +
-> > +     if (old_xdp != new_xdp)
-> > +             goto out;
-> 
-> Shouldn't it be the other way around? E.g. when there's no prog and
-> you're installing it or there is a prog and we're removing it from
-> the interface, DMA dir must be changed, so we reload the Pools, but
-> if `old_xdp == new_xdp` we should just hotswap them and goto out?
-
-Argh! Yes, it needs to be the other way around.
-> 
-> > +
-> > +     err = lan966x_fdma_reload_page_pool(lan966x);
-> > +     if (err) {
-> > +             xchg(&port->xdp_prog, old_prog);
-> > +             return err;
-> > +     }
-> > +
-> > +out:
-> >       if (old_prog)
-> >               bpf_prog_put(old_prog);
-> >
-> 
-> [...]
-> 
-> > --
-> > 2.38.0
-> 
+On Tue, Nov 22, 2022 at 2:19 AM Amir Goldstein <amir73il@gmail.com> wrote:
+>
+> I hope there is a better way than this macro...
+> Haven't studied the patches enough to be able to suggest one.
+>
 > Thanks,
-> Olek
+> Amir.
 
--- 
-/Horatiu
+I'm certainly open to suggestions there. Currently the main thing
+stopping us from moving away from that macro are the four
+functions/var args we pass in. We've thought about alternatives there,
+but we haven't found one we like so far. Since we've refactored all
+the uses of the macro into function calls, we can avoid most of it
+now. The ugliest bit would be moving the var args into a struct and
+passing it in as a void*. Then we could have all the function
+signatures match and pass them as function pointers. The remaining
+things we use the macro for could either be pushed into the struct, or
+extra boilerplate around the function call.
