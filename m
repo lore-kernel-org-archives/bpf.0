@@ -2,22 +2,22 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BA9AC43219
-	for <bpf@archiver.kernel.org>; Tue, 22 Nov 2022 07:43:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36AABC4332F
+	for <bpf@archiver.kernel.org>; Tue, 22 Nov 2022 07:44:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbiKVHn4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 22 Nov 2022 02:43:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54030 "EHLO
+        id S232504AbiKVHoC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 22 Nov 2022 02:44:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232467AbiKVHnz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 22 Nov 2022 02:43:55 -0500
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C296170;
-        Mon, 21 Nov 2022 23:43:53 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R771e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=hengqi@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VVR4CBY_1669103030;
-Received: from localhost(mailfrom:hengqi@linux.alibaba.com fp:SMTPD_---0VVR4CBY_1669103030)
+        with ESMTP id S232467AbiKVHn6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 22 Nov 2022 02:43:58 -0500
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66B110B6E;
+        Mon, 21 Nov 2022 23:43:56 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R841e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=hengqi@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VVRCo6W_1669103032;
+Received: from localhost(mailfrom:hengqi@linux.alibaba.com fp:SMTPD_---0VVRCo6W_1669103032)
           by smtp.aliyun-inc.com;
-          Tue, 22 Nov 2022 15:43:51 +0800
+          Tue, 22 Nov 2022 15:43:53 +0800
 From:   Heng Qi <hengqi@linux.alibaba.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     Jason Wang <jasowang@redhat.com>,
@@ -29,9 +29,9 @@ Cc:     Jason Wang <jasowang@redhat.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>,
         Eric Dumazet <edumazet@google.com>
-Subject: [RFC PATCH 1/9] virtio_net: disable the hole mechanism for xdp
-Date:   Tue, 22 Nov 2022 15:43:40 +0800
-Message-Id: <20221122074348.88601-2-hengqi@linux.alibaba.com>
+Subject: [RFC PATCH 3/9] virtio_net: update bytes calculation for xdp_frame
+Date:   Tue, 22 Nov 2022 15:43:42 +0800
+Message-Id: <20221122074348.88601-4-hengqi@linux.alibaba.com>
 X-Mailer: git-send-email 2.19.1.6.gb485710b
 In-Reply-To: <20221122074348.88601-1-hengqi@linux.alibaba.com>
 References: <20221122074348.88601-1-hengqi@linux.alibaba.com>
@@ -41,34 +41,37 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-XDP core assumes that the frame_size of xdp_buff and the length of
-the frag are PAGE_SIZE. But before xdp is set, the length of the prefilled
-buffer may exceed PAGE_SIZE, which may cause the processing of xdp to fail,
-so we disable the hole mechanism when xdp is loaded.
+Update relative record value for xdp_frame as basis
+for multi-buffer xdp transmission.
 
 Signed-off-by: Heng Qi <hengqi@linux.alibaba.com>
 Reviewed-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- drivers/net/virtio_net.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/net/virtio_net.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 9cce7dec7366..c5046d21b281 100644
+index 8f7d207d58d6..d3e8c63b9c4b 100644
 --- a/drivers/net/virtio_net.c
 +++ b/drivers/net/virtio_net.c
-@@ -1419,8 +1419,11 @@ static int add_recvbuf_mergeable(struct virtnet_info *vi,
- 		/* To avoid internal fragmentation, if there is very likely not
- 		 * enough space for another buffer, add the remaining space to
- 		 * the current buffer.
-+		 * XDP core assumes that frame_size of xdp_buff and the length
-+		 * of the frag are PAGE_SIZE, so we disable the hole mechanism.
- 		 */
--		len += hole;
-+		if (!vi->xdp_enabled)
-+			len += hole;
- 		alloc_frag->offset += hole;
- 	}
+@@ -658,7 +658,7 @@ static int virtnet_xdp_xmit(struct net_device *dev,
+ 		if (likely(is_xdp_frame(ptr))) {
+ 			struct xdp_frame *frame = ptr_to_xdp(ptr);
  
+-			bytes += frame->len;
++			bytes += xdp_get_frame_len(frame);
+ 			xdp_return_frame(frame);
+ 		} else {
+ 			struct sk_buff *skb = ptr;
+@@ -1604,7 +1604,7 @@ static void free_old_xmit_skbs(struct send_queue *sq, bool in_napi)
+ 		} else {
+ 			struct xdp_frame *frame = ptr_to_xdp(ptr);
+ 
+-			bytes += frame->len;
++			bytes += xdp_get_frame_len(frame);
+ 			xdp_return_frame(frame);
+ 		}
+ 		packets++;
 -- 
 2.19.1.6.gb485710b
 
