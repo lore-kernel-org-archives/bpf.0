@@ -2,42 +2,42 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D3FDC433FE
-	for <bpf@archiver.kernel.org>; Tue, 22 Nov 2022 21:40:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E65A4C4332F
+	for <bpf@archiver.kernel.org>; Tue, 22 Nov 2022 21:40:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235170AbiKVVkW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 22 Nov 2022 16:40:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34480 "EHLO
+        id S235173AbiKVVkd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 22 Nov 2022 16:40:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235109AbiKVVkO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 22 Nov 2022 16:40:14 -0500
+        with ESMTP id S235131AbiKVVkQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 22 Nov 2022 16:40:16 -0500
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A0DC6549;
-        Tue, 22 Nov 2022 13:40:09 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B7CC6573;
+        Tue, 22 Nov 2022 13:40:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669153209; x=1700689209;
+  t=1669153210; x=1700689210;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=j2O7GMy+IIz1SySbZrYhpOJz3Xy8edTsWmZxxV8XFC4=;
-  b=MUUHP5FFQzIX/szcWm7WhYV5XZG8UbLgEPgxCV+2EyY87524CyQ2i3j6
-   GRzBySIRnoeu70Z52Ud7TuLQWfm0LLffU1WsayjXxqRLi9N5/pR59maqg
-   miSIVPmWokTDs7Kwbu/LOi81zzVR7FT4TCHS+XaVKpYLegizuQbTUT1lP
-   T/pjyXT5j3/4FGEO+JCRAfgZnxTGNb2BKST68gpYutCWxD8yq4Vq4S/3i
-   G/W0OcTda1XLgE7w6Hmv0wA5I3Tys6OvW1QKl5LecZsjVQnvgKT3fWSGM
-   RpEwc/ziaFhLMu1FlTTeUaK8ze73O2KFBxuCKG1sZJGLI0C6/oDmjMoZo
-   g==;
+  bh=obJtr/G3rsFbTvmv0elb28yG/l1gJjEBiISYCkuPoSg=;
+  b=gXRRU00dypzUGMpp/hIV6sASuTaQ6MvzkzKQ0n057jFjlCxbMrLc4ouz
+   KjGgjsuNz4piMGerPDJgoez1QyDlmfo/dMR8vs+qQxpyowPuietCVDkTk
+   EYihNCsUzEkorIofAithReV5b+URff1rm61+8TcZJD3QvLcG4K5eHh0OR
+   grqcY8acEuA+URMp5tplOZIAZAJiYP2JbvdY0X/JcSBHOarDgxPDLqeo8
+   ZhCQU22TNnDq1hWhpWgxrOxHQU6T+t49uuCdkG8ajLjXhfXsUROx4g/Fd
+   NCe7lGYv2jfTPXup18zaRxDX0CrgsJMLO2ZDADJWfVH9TZerz4PRXwyEr
+   w==;
 X-IronPort-AV: E=Sophos;i="5.96,185,1665471600"; 
-   d="scan'208";a="201008054"
+   d="scan'208";a="201008067"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Nov 2022 14:40:08 -0700
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Nov 2022 14:40:10 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 22 Nov 2022 14:40:00 -0700
+ 15.1.2507.12; Tue, 22 Nov 2022 14:40:08 -0700
 Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Tue, 22 Nov 2022 14:39:57 -0700
+ 15.1.2507.12 via Frontend Transport; Tue, 22 Nov 2022 14:40:06 -0700
 From:   Horatiu Vultur <horatiu.vultur@microchip.com>
 To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <bpf@vger.kernel.org>
@@ -46,9 +46,9 @@ CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
         <hawk@kernel.org>, <john.fastabend@gmail.com>,
         <alexandr.lobakin@intel.com>, <UNGLinuxDriver@microchip.com>,
         Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next v4 2/7] net: lan966x: Introduce helper functions
-Date:   Tue, 22 Nov 2022 22:44:08 +0100
-Message-ID: <20221122214413.3446006-3-horatiu.vultur@microchip.com>
+Subject: [PATCH net-next v4 5/7] net: lan966x: Update dma_dir of page_pool_params
+Date:   Tue, 22 Nov 2022 22:44:11 +0100
+Message-ID: <20221122214413.3446006-6-horatiu.vultur@microchip.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221122214413.3446006-1-horatiu.vultur@microchip.com>
 References: <20221122214413.3446006-1-horatiu.vultur@microchip.com>
@@ -59,119 +59,155 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce lan966x_fdma_tx_setup_dcb and lan966x_fdma_tx_start functions
-and use of them inside lan966x_fdma_xmit. There is no functional change
-in here.
-They are introduced to be used when XDP_TX/REDIRECT actions are
-introduced.
+To add support for XDP_TX it is required to be able to write to the DMA
+area therefore it is required that the pages will be mapped using
+DMA_BIDIRECTIONAL flag.
+Therefore check if there are any xdp programs on the interfaces and in
+that case set DMA_BIDRECTIONAL otherwise use DMA_FROM_DEVICE.
+Therefore when a new XDP program is added it is required to redo the
+page_pool.
 
 Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 ---
- .../ethernet/microchip/lan966x/lan966x_fdma.c | 71 ++++++++++++-------
- 1 file changed, 44 insertions(+), 27 deletions(-)
+ .../ethernet/microchip/lan966x/lan966x_fdma.c | 29 ++++++++++++++----
+ .../ethernet/microchip/lan966x/lan966x_main.h |  2 ++
+ .../ethernet/microchip/lan966x/lan966x_xdp.c  | 30 +++++++++++++++++++
+ 3 files changed, 55 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-index 3055124b4dd79..94c720e59caee 100644
+index 483d1470c8362..f8287a6a86ed5 100644
 --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
 +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-@@ -612,14 +612,53 @@ static int lan966x_fdma_get_next_dcb(struct lan966x_tx *tx)
- 	return -1;
+@@ -81,6 +81,9 @@ static int lan966x_fdma_rx_alloc_page_pool(struct lan966x_rx *rx)
+ 	struct lan966x_port *port;
+ 	int i;
+ 
++	if (lan966x_xdp_present(lan966x))
++		pp_params.dma_dir = DMA_BIDIRECTIONAL;
++
+ 	rx->page_pool = page_pool_create(&pp_params);
+ 
+ 	for (i = 0; i < lan966x->num_phys_ports; ++i) {
+@@ -827,16 +830,11 @@ static int lan966x_fdma_get_max_frame(struct lan966x *lan966x)
+ 	       XDP_PACKET_HEADROOM;
  }
  
-+static void lan966x_fdma_tx_setup_dcb(struct lan966x_tx *tx,
-+				      int next_to_use, int len,
-+				      dma_addr_t dma_addr)
-+{
-+	struct lan966x_tx_dcb *next_dcb;
-+	struct lan966x_db *next_db;
-+
-+	next_dcb = &tx->dcbs[next_to_use];
-+	next_dcb->nextptr = FDMA_DCB_INVALID_DATA;
-+
-+	next_db = &next_dcb->db[0];
-+	next_db->dataptr = dma_addr;
-+	next_db->status = FDMA_DCB_STATUS_SOF |
-+			  FDMA_DCB_STATUS_EOF |
-+			  FDMA_DCB_STATUS_INTR |
-+			  FDMA_DCB_STATUS_BLOCKO(0) |
-+			  FDMA_DCB_STATUS_BLOCKL(len);
-+}
-+
-+static void lan966x_fdma_tx_start(struct lan966x_tx *tx, int next_to_use)
-+{
-+	struct lan966x *lan966x = tx->lan966x;
-+	struct lan966x_tx_dcb *dcb;
-+
-+	if (likely(lan966x->tx.activated)) {
-+		/* Connect current dcb to the next db */
-+		dcb = &tx->dcbs[tx->last_in_use];
-+		dcb->nextptr = tx->dma + (next_to_use *
-+					  sizeof(struct lan966x_tx_dcb));
-+
-+		lan966x_fdma_tx_reload(tx);
-+	} else {
-+		/* Because it is first time, then just activate */
-+		lan966x->tx.activated = true;
-+		lan966x_fdma_tx_activate(tx);
-+	}
-+
-+	/* Move to next dcb because this last in use */
-+	tx->last_in_use = next_to_use;
-+}
-+
- int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev)
+-int lan966x_fdma_change_mtu(struct lan966x *lan966x)
++static int __lan966x_fdma_reload(struct lan966x *lan966x, int max_mtu)
  {
+-	int max_mtu;
+ 	int err;
+ 	u32 val;
+ 
+-	max_mtu = lan966x_fdma_get_max_frame(lan966x);
+-	if (max_mtu == lan966x->rx.max_mtu)
+-		return 0;
+-
+ 	/* Disable the CPU port */
+ 	lan_rmw(QSYS_SW_PORT_MODE_PORT_ENA_SET(0),
+ 		QSYS_SW_PORT_MODE_PORT_ENA,
+@@ -862,6 +860,25 @@ int lan966x_fdma_change_mtu(struct lan966x *lan966x)
+ 	return err;
+ }
+ 
++int lan966x_fdma_change_mtu(struct lan966x *lan966x)
++{
++	int max_mtu;
++
++	max_mtu = lan966x_fdma_get_max_frame(lan966x);
++	if (max_mtu == lan966x->rx.max_mtu)
++		return 0;
++
++	return __lan966x_fdma_reload(lan966x, max_mtu);
++}
++
++int lan966x_fdma_reload_page_pool(struct lan966x *lan966x)
++{
++	int max_mtu;
++
++	max_mtu = lan966x_fdma_get_max_frame(lan966x);
++	return __lan966x_fdma_reload(lan966x, max_mtu);
++}
++
+ void lan966x_fdma_netdev_init(struct lan966x *lan966x, struct net_device *dev)
+ {
+ 	if (lan966x->fdma_ndev)
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+index c762e3732f88f..81c0b11097ce2 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+@@ -466,6 +466,7 @@ void lan966x_fdma_netdev_deinit(struct lan966x *lan966x, struct net_device *dev)
+ int lan966x_fdma_init(struct lan966x *lan966x);
+ void lan966x_fdma_deinit(struct lan966x *lan966x);
+ irqreturn_t lan966x_fdma_irq_handler(int irq, void *args);
++int lan966x_fdma_reload_page_pool(struct lan966x *lan966x);
+ 
+ int lan966x_lag_port_join(struct lan966x_port *port,
+ 			  struct net_device *brport_dev,
+@@ -556,6 +557,7 @@ int lan966x_xdp(struct net_device *dev, struct netdev_bpf *xdp);
+ int lan966x_xdp_run(struct lan966x_port *port,
+ 		    struct page *page,
+ 		    u32 data_len);
++bool lan966x_xdp_present(struct lan966x *lan966x);
+ static inline bool lan966x_xdp_port_present(struct lan966x_port *port)
+ {
+ 	return !!port->xdp_prog;
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
+index 8ebde1eb6a09c..a99657154cca4 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
+@@ -11,6 +11,8 @@ static int lan966x_xdp_setup(struct net_device *dev, struct netdev_bpf *xdp)
  	struct lan966x_port *port = netdev_priv(dev);
  	struct lan966x *lan966x = port->lan966x;
- 	struct lan966x_tx_dcb_buf *next_dcb_buf;
--	struct lan966x_tx_dcb *next_dcb, *dcb;
- 	struct lan966x_tx *tx = &lan966x->tx;
--	struct lan966x_db *next_db;
- 	int needed_headroom;
- 	int needed_tailroom;
- 	dma_addr_t dma_addr;
-@@ -665,16 +704,7 @@ int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev)
+ 	struct bpf_prog *old_prog;
++	bool old_xdp, new_xdp;
++	int err;
+ 
+ 	if (!lan966x->fdma) {
+ 		NL_SET_ERR_MSG_MOD(xdp->extack,
+@@ -18,7 +20,20 @@ static int lan966x_xdp_setup(struct net_device *dev, struct netdev_bpf *xdp)
+ 		return -EOPNOTSUPP;
  	}
  
- 	/* Setup next dcb */
--	next_dcb = &tx->dcbs[next_to_use];
--	next_dcb->nextptr = FDMA_DCB_INVALID_DATA;
--
--	next_db = &next_dcb->db[0];
--	next_db->dataptr = dma_addr;
--	next_db->status = FDMA_DCB_STATUS_SOF |
--			  FDMA_DCB_STATUS_EOF |
--			  FDMA_DCB_STATUS_INTR |
--			  FDMA_DCB_STATUS_BLOCKO(0) |
--			  FDMA_DCB_STATUS_BLOCKL(skb->len);
-+	lan966x_fdma_tx_setup_dcb(tx, next_to_use, skb->len, dma_addr);
++	old_xdp = lan966x_xdp_present(lan966x);
+ 	old_prog = xchg(&port->xdp_prog, xdp->prog);
++	new_xdp = lan966x_xdp_present(lan966x);
++
++	if (old_xdp == new_xdp)
++		goto out;
++
++	err = lan966x_fdma_reload_page_pool(lan966x);
++	if (err) {
++		xchg(&port->xdp_prog, old_prog);
++		return err;
++	}
++
++out:
+ 	if (old_prog)
+ 		bpf_prog_put(old_prog);
  
- 	/* Fill up the buffer */
- 	next_dcb_buf = &tx->dcbs_buf[next_to_use];
-@@ -688,21 +718,8 @@ int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev)
- 	    LAN966X_SKB_CB(skb)->rew_op == IFH_REW_OP_TWO_STEP_PTP)
- 		next_dcb_buf->ptp = true;
+@@ -62,6 +77,21 @@ int lan966x_xdp_run(struct lan966x_port *port, struct page *page, u32 data_len)
+ 	}
+ }
  
--	if (likely(lan966x->tx.activated)) {
--		/* Connect current dcb to the next db */
--		dcb = &tx->dcbs[tx->last_in_use];
--		dcb->nextptr = tx->dma + (next_to_use *
--					  sizeof(struct lan966x_tx_dcb));
--
--		lan966x_fdma_tx_reload(tx);
--	} else {
--		/* Because it is first time, then just activate */
--		lan966x->tx.activated = true;
--		lan966x_fdma_tx_activate(tx);
--	}
--
--	/* Move to next dcb because this last in use */
--	tx->last_in_use = next_to_use;
-+	/* Start the transmission */
-+	lan966x_fdma_tx_start(tx, next_to_use);
- 
- 	return NETDEV_TX_OK;
- 
++bool lan966x_xdp_present(struct lan966x *lan966x)
++{
++	int p;
++
++	for (p = 0; p < lan966x->num_phys_ports; ++p) {
++		if (!lan966x->ports[p])
++			continue;
++
++		if (lan966x_xdp_port_present(lan966x->ports[p]))
++			return true;
++	}
++
++	return false;
++}
++
+ int lan966x_xdp_port_init(struct lan966x_port *port)
+ {
+ 	struct lan966x *lan966x = port->lan966x;
 -- 
 2.38.0
 
