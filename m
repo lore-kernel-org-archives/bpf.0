@@ -2,46 +2,46 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C451CC4332F
-	for <bpf@archiver.kernel.org>; Wed, 23 Nov 2022 17:42:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C67DBC43219
+	for <bpf@archiver.kernel.org>; Wed, 23 Nov 2022 17:42:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237496AbiKWRmg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 23 Nov 2022 12:42:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34184 "EHLO
+        id S236642AbiKWRmi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 23 Nov 2022 12:42:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236639AbiKWRmd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 23 Nov 2022 12:42:33 -0500
+        with ESMTP id S236767AbiKWRme (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 23 Nov 2022 12:42:34 -0500
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1C1F78
-        for <bpf@vger.kernel.org>; Wed, 23 Nov 2022 09:42:31 -0800 (PST)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ANHeffX006310;
-        Wed, 23 Nov 2022 17:42:03 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2792C55BE
+        for <bpf@vger.kernel.org>; Wed, 23 Nov 2022 09:42:32 -0800 (PST)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ANGTV5S015410;
+        Wed, 23 Nov 2022 17:42:14 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references; s=corp-2022-7-12;
- bh=bg/zdPZMnoM6xrcIe1D3mIvFscb7+6Jxb0xZHy15ijg=;
- b=AEk9SDLQxZgf+SiTsQZHXh642nx5VK2e8uxFsyZDwgfrqbwSZ1MyQILbZGZAR2JAWLVv
- p3ILf/h3tF/REPOSwjXodqQYBef1sQfQ2q0EwHzy+VctoQor3mvv+Q0p1oabW1dF1Brl
- GPCoiL4BhCSySjM6zH8HglMDMQISEeGi7ouwqFaM+hwQVX+tK/V8Ueo8I3y/g05cSkRE
- YyKkF4Rh6Hjn+LTJ5fDwKl0bginq3L4GL38WIZ6plBAW1JH2EEq+ez6ATZFEfZDkID5p
- OSxoNERpablNgh+jc8HiFQyMIPX3sFM8dfTo54W9aG+HJk+dwrbKXWhD1/3xyXsL6IXM 9g== 
+ bh=kRQdqPZJLvnUf9AmGNLTWIW5o2boEbDaFN6o71qDERk=;
+ b=ENmj9FRYFQ/F09s1ybDj7FFyK6kDHi0WYGZoVdi+q76udV0Fvyk2hhkh8mtFDBo+ln1S
+ /2m1tXSAu2CLOlcrNNot+CmlbZ0q/rPms50D381PD7Md3u1U2JXEZtlSesu2pZMhg4vB
+ GfYv2UqA996sP5SS6+FPLayG/VqAID1Tf8nRLog8cd2vnsef4waD4MCGjWdhXfXb9hwc
+ c05gUqYGSFItBvPVTQ+m1+vmmcwTrS77IgBNhg5mX1tQWZADLBeAafEImC6mZfwNJrsj
+ l191T4wZgj5j2hhbRX4CkC1qj7uPBD5lTeZImKhfTjGJWc3aAdafJMIOlz4QtxQSz+wz eg== 
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3m1nd88h35-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3m1p5fgd4v-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Nov 2022 17:42:03 +0000
+        Wed, 23 Nov 2022 17:42:14 +0000
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2ANH74tV015641;
-        Wed, 23 Nov 2022 17:42:02 GMT
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2ANHFO8A015584;
+        Wed, 23 Nov 2022 17:42:13 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3kxnk74a9t-1
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3kxnk74agn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Nov 2022 17:42:01 +0000
+        Wed, 23 Nov 2022 17:42:13 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2ANHfvqC028233;
-        Wed, 23 Nov 2022 17:42:01 GMT
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2ANHfvqI028233;
+        Wed, 23 Nov 2022 17:42:12 GMT
 Received: from myrouter.uk.oracle.com (dhcp-10-175-201-76.vpn.oracle.com [10.175.201.76])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3kxnk74a4g-2;
-        Wed, 23 Nov 2022 17:42:01 +0000
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3kxnk74a4g-5;
+        Wed, 23 Nov 2022 17:42:12 +0000
 From:   Alan Maguire <alan.maguire@oracle.com>
 To:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net
 Cc:     martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
@@ -49,9 +49,9 @@ Cc:     martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
         haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
         haiyue.wang@intel.com, bpf@vger.kernel.org,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [RFC bpf-next 1/5] bpf: add kind/metadata prefixes to uapi/linux/btf.h
-Date:   Wed, 23 Nov 2022 17:41:48 +0000
-Message-Id: <1669225312-28949-2-git-send-email-alan.maguire@oracle.com>
+Subject: [RFC bpf-next 4/5] bpf: parse unrecognized kind info using encoded kind information (if present)
+Date:   Wed, 23 Nov 2022 17:41:51 +0000
+Message-Id: <1669225312-28949-5-git-send-email-alan.maguire@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1669225312-28949-1-git-send-email-alan.maguire@oracle.com>
 References: <1669225312-28949-1-git-send-email-alan.maguire@oracle.com>
@@ -62,53 +62,153 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxs
  malwarescore=0 spamscore=0 bulkscore=0 mlxlogscore=999 phishscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
  definitions=main-2211230130
-X-Proofpoint-GUID: MhMso8frcz_nrSERh6X5EfskHZ63VBpO
-X-Proofpoint-ORIG-GUID: MhMso8frcz_nrSERh6X5EfskHZ63VBpO
+X-Proofpoint-ORIG-GUID: H6UFZBBfIIcxajFft0sncl0tqkQsPHCe
+X-Proofpoint-GUID: H6UFZBBfIIcxajFft0sncl0tqkQsPHCe
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This allows us to share them with kernel and userspace so that
-both libbpf and the kernel can parse BTF kind information.
+When BTF parsing encounters an unrecognized kind (> BTF_KIND_MAX), look
+for __BTF_KIND_<num> typedef which points at the associated kind struct;
+it tells us if there is metadata and how much.  This all allows us to
+proceed with BTF parsing rather than bailing when hitting a kind we
+do not support.
 
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- include/uapi/linux/btf.h       | 7 +++++++
- tools/include/uapi/linux/btf.h | 7 +++++++
- 2 files changed, 14 insertions(+)
+ kernel/bpf/btf.c | 87 +++++++++++++++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 80 insertions(+), 7 deletions(-)
 
-diff --git a/include/uapi/linux/btf.h b/include/uapi/linux/btf.h
-index ec1798b..68628e9 100644
---- a/include/uapi/linux/btf.h
-+++ b/include/uapi/linux/btf.h
-@@ -197,4 +197,11 @@ struct btf_enum64 {
- 	__u32	val_hi32;
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 1a59cc7..ce00a4c5 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -222,6 +222,14 @@ struct btf_id_dtor_kfunc_tab {
+ 	struct btf_id_dtor_kfunc dtors[];
  };
  
-+/* Prefixes used for names encoding BTF kind information via structs;
-+ * a "struct __BTF_KIND_ARRAY" represents how BTF_KIND_ARRAY is encoded,
-+ * while a "struct __BTF_KIND_META_ARRAY" represents the metadata encoding.
-+ */
-+#define BTF_KIND_PFX		"__BTF_KIND_"
-+#define BTF_KIND_META_PFX	"__BTF_KIND_META_"
++struct btf_kind_desc {
++	u16 kind;
++	u16 nr_meta;
++	u32 meta_size;
++};
 +
- #endif /* _UAPI__LINUX_BTF_H__ */
-diff --git a/tools/include/uapi/linux/btf.h b/tools/include/uapi/linux/btf.h
-index ec1798b..68628e9 100644
---- a/tools/include/uapi/linux/btf.h
-+++ b/tools/include/uapi/linux/btf.h
-@@ -197,4 +197,11 @@ struct btf_enum64 {
- 	__u32	val_hi32;
++#define NR_BTF_KINDS_POSSIBLE	0x20
++
+ struct btf {
+ 	void *data;
+ 	struct btf_type **types;
+@@ -246,6 +254,7 @@ struct btf {
+ 	u32 start_str_off; /* first string offset (0 for base BTF) */
+ 	char name[MODULE_NAME_LEN];
+ 	bool kernel_btf;
++	struct btf_kind_desc unrecognized_kinds[NR_BTF_KINDS_POSSIBLE - NR_BTF_KINDS];
  };
  
-+/* Prefixes used for names encoding BTF kind information via structs;
-+ * a "struct __BTF_KIND_ARRAY" represents how BTF_KIND_ARRAY is encoded,
-+ * while a "struct __BTF_KIND_META_ARRAY" represents the metadata encoding.
-+ */
-+#define BTF_KIND_PFX		"__BTF_KIND_"
-+#define BTF_KIND_META_PFX	"__BTF_KIND_META_"
+ enum verifier_phase {
+@@ -4873,7 +4882,7 @@ static s32 btf_check_meta(struct btf_verifier_env *env,
+ 			  u32 meta_left)
+ {
+ 	u32 saved_meta_left = meta_left;
+-	s32 var_meta_size;
++	s32 var_meta_size = 0;
+ 
+ 	if (meta_left < sizeof(*t)) {
+ 		btf_verifier_log(env, "[%u] meta_left:%u meta_needed:%zu",
+@@ -4888,12 +4897,80 @@ static s32 btf_check_meta(struct btf_verifier_env *env,
+ 		return -EINVAL;
+ 	}
+ 
+-	if (BTF_INFO_KIND(t->info) > BTF_KIND_MAX ||
+-	    BTF_INFO_KIND(t->info) == BTF_KIND_UNKN) {
++	if (BTF_INFO_KIND(t->info) == BTF_KIND_UNKN ||
++	    BTF_INFO_KIND(t->info) >= NR_BTF_KINDS_POSSIBLE) {
+ 		btf_verifier_log(env, "[%u] Invalid kind:%u",
+ 				 env->log_type_id, BTF_INFO_KIND(t->info));
+ 		return -EINVAL;
+ 	}
++	if (BTF_INFO_KIND(t->info) <= BTF_KIND_MAX) {
++		var_meta_size = btf_type_ops(t)->check_meta(env, t, meta_left);
++		if (var_meta_size < 0)
++			return var_meta_size;
++	} else {
++		struct btf_kind_desc *unrec_kind;
++		u8 kind = BTF_INFO_KIND(t->info);
++		struct btf *btf = env->btf;
 +
- #endif /* _UAPI__LINUX_BTF_H__ */
++		unrec_kind = &btf->unrecognized_kinds[kind - NR_BTF_KINDS];
++
++		if (unrec_kind->kind != kind) {
++			const struct btf_member *m;
++			const struct btf_type *kt;
++			const struct btf_array *a;
++			char name[64];
++			s32 id;
++
++			/* BTF may encode info about unrecognized kinds; check for this here. */
++			snprintf(name, sizeof(name), BTF_KIND_PFX "%u", kind);
++			id = btf_find_by_name_kind(btf, name, BTF_KIND_TYPEDEF);
++			if (id > 0) {
++				kt = btf_type_by_id(btf, id);
++				if (kt)
++					kt = btf_type_by_id(btf, kt->type);
++			}
++			if (id < 0 || !kt) {
++				btf_verifier_log_type(env, t, "[%u] invalid kind:%u",
++						      env->log_type_id, kind);
++				return -EINVAL;
++			}
++			switch (btf_type_vlen(kt)) {
++			case 1:
++				/* no metadata */
++				unrec_kind->kind = kind;
++				unrec_kind->nr_meta = 0;
++				unrec_kind->meta_size = 0;
++				break;
++			case 2:
++				m = btf_members(kt);
++				kt = btf_type_by_id(btf, (++m)->type);
++				if (btf_kind(kt) != BTF_KIND_ARRAY) {
++					btf_verifier_log_type(env, t, "[%u] invalid metadata:%u",
++							      env->log_type_id, kind);
++					return -EINVAL;
++				}
++				a = btf_array(kt);
++				kt = btf_type_by_id(btf, a->type);
++				if (!kt) {
++					btf_verifier_log_type(env, t, "[%u] invalid metadata:%u",
++							      env->log_type_id, kind);
++					return -EINVAL;
++				}
++				unrec_kind->kind = kind;
++				unrec_kind->nr_meta = a->nelems;
++				unrec_kind->meta_size = kt->size;
++				break;
++			default:
++				btf_verifier_log_type(env, t, "[%u] invalid metadata:%u",
++						      env->log_type_id, kind);
++				return -EINVAL;
++			}
++		}
++		if (!unrec_kind->nr_meta)
++			var_meta_size = btf_type_vlen(t) * unrec_kind->meta_size;
++		else
++			var_meta_size = unrec_kind->nr_meta * unrec_kind->meta_size;
++	}
+ 
+ 	if (!btf_name_offset_valid(env->btf, t->name_off)) {
+ 		btf_verifier_log(env, "[%u] Invalid name_offset:%u",
+@@ -4901,10 +4978,6 @@ static s32 btf_check_meta(struct btf_verifier_env *env,
+ 		return -EINVAL;
+ 	}
+ 
+-	var_meta_size = btf_type_ops(t)->check_meta(env, t, meta_left);
+-	if (var_meta_size < 0)
+-		return var_meta_size;
+-
+ 	meta_left -= var_meta_size;
+ 
+ 	return saved_meta_left - meta_left;
 -- 
 1.8.3.1
 
