@@ -2,175 +2,82 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45E1AC433FE
-	for <bpf@archiver.kernel.org>; Wed, 23 Nov 2022 19:55:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 501C2C433FE
+	for <bpf@archiver.kernel.org>; Wed, 23 Nov 2022 20:01:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235950AbiKWTzy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 23 Nov 2022 14:55:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
+        id S235215AbiKWUBV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 23 Nov 2022 15:01:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238799AbiKWTz0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 23 Nov 2022 14:55:26 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1159C559C
-        for <bpf@vger.kernel.org>; Wed, 23 Nov 2022 11:54:43 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id v81so20150656oie.5
-        for <bpf@vger.kernel.org>; Wed, 23 Nov 2022 11:54:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eQl93HEhRmcc+8LTIdGNUusyREPeMDHDu6DRujzaCG0=;
-        b=Q6fDIV1lSS5ZOfmdya8zwmVEVtif6Jifbx8zP/r8kQMv5WJJTZcDn6DMHuJWWgSusX
-         trHqMUhcFipzLVFSi2OqytNqNK51xTjtP0KviNU5YbXX88kyHezFkVvAtX1LFhJ3LFhX
-         Fn+i7NdeCsQzwxRv+KBkNuE4zYHYqpMTpFVjBmXDlUncsVEbZBFwmER64IGQMbxUsqRV
-         VVZVm0QahLST99zs5UrpCr0tlw40vNPAoMUsh0Ovvl9YgOguOyhj+D++KsqDNRJitKI2
-         mFefcpb+WbKYsHSwp4DpeYoQBpXGUPpJQ+2sGgeN5jsChMCrTEr4mspGYoo0BuTxscyD
-         Z0cQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eQl93HEhRmcc+8LTIdGNUusyREPeMDHDu6DRujzaCG0=;
-        b=e1qO1K7EeSBjlO8XkOctNaZKUZuuKCC+Wh/M+M+bnzo15j+spdnMQIWkKJy41IHNvj
-         IitvY7REkqtDYgk74oUl34O78xUbitQWAfmGPUyywRD3nqkySz7U7rPoXYSQSgxQK4YG
-         ssmWx2+XIepnQQi8Ud6SEA0KTGRwsRQd+AyDLgP4DRbIy+Lqkp3TiKKHjP0R8cRWQ8D5
-         l5lYHfVw206xJIggraRsV6vMw0dfgNXMUrYqigP6zm81DgKoa2PxOIZ0lAS+XLbs4xxE
-         xmSxpBiG/lnpSpc0NyNXQtV1j6+x439wogb2vAlpO7ApJ7aoODyDuXRXaABhAPu+SPvu
-         dhIg==
-X-Gm-Message-State: ANoB5pkjcZ+Gr9mUzV4QsMAXgmCMdQmTBW8RBd1paYp5gtvfeGPdw7Jx
-        ZRJdZXc5WGqIYnKoELPRKNHwSmhdGSed/7Ki9YeDUA==
-X-Google-Smtp-Source: AA0mqf6WmcjvmwTSaoqaXCB2AQL4HovLythZstxlN8MyIxgcXujQXzUYC8KpyhbnqbhLloe9gp36GY8M/WU9YH89yzo=
-X-Received: by 2002:aca:674c:0:b0:35b:79ca:2990 with SMTP id
- b12-20020aca674c000000b0035b79ca2990mr1938505oiy.125.1669233282262; Wed, 23
- Nov 2022 11:54:42 -0800 (PST)
+        with ESMTP id S239064AbiKWUA7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 23 Nov 2022 15:00:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2217972084;
+        Wed, 23 Nov 2022 12:00:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B46F761EEB;
+        Wed, 23 Nov 2022 20:00:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1824CC433D7;
+        Wed, 23 Nov 2022 20:00:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669233617;
+        bh=/rn1PzmD7jbMZAzucVrrjH77YxRrb54TP7UDsr2ApnY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Nq6nXsT+mcnFq58GaYBeHy+bw708f/70jWl47X7vPl/oRAefbNTcdtj8GMzFUkGZa
+         HLk0QEBtnbWwDl1Y5SlIevCuUaa7NCAbigHlwU/o+hn3Ot2wM1Zh7C17f3jq29ztH9
+         ghhR3ytldx7L2IPW89IBCZlv+jJ25wfmeeveZOqfRme3GSlE4guv7Z1FHgyeyu/h+s
+         T1w9NxmFME/BUtdcBZGrflayxK/fCFfTbpUPANKN/ebyNwVkWuc2ERhr7q9lG63ID9
+         3DgPYxhDn8uzf97Et2Q2WJvLVE9JykTrKv1RmlyWnHWvEqc+QuJhUKsZUPRRApkzdQ
+         ks5WRix51fbqQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ED919C395ED;
+        Wed, 23 Nov 2022 20:00:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20221121180340.1983627-1-sdf@google.com> <20221121180340.1983627-2-sdf@google.com>
- <Y34QpET78/KX9JLh@krava> <34cb2b2f-ac3b-65c4-c479-0c4ed3dda096@meta.com>
- <Y35VrXvKBFg2RJ7y@google.com> <63b85917-a2ea-8e35-620c-808560910819@meta.com>
-In-Reply-To: <63b85917-a2ea-8e35-620c-808560910819@meta.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Wed, 23 Nov 2022 11:54:31 -0800
-Message-ID: <CAKH8qBsdzj=4k5jR3n2mncxRZAwB-qqNWLFTfGWS5EPun-0XjQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Make sure zero-len skbs
- aren't redirectable
-To:     Yonghong Song <yhs@meta.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>, bpf@vger.kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, haoluo@google.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] bpf: Don't use idx variable when registering kfunc
+ dtors
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166923361696.21034.18352770057506612392.git-patchwork-notify@kernel.org>
+Date:   Wed, 23 Nov 2022 20:00:16 +0000
+References: <20221123135253.637525-1-void@manifault.com>
+In-Reply-To: <20221123135253.637525-1-void@manifault.com>
+To:     David Vernet <void@manifault.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, yhs@fb.com,
+        song@kernel.org, sdf@google.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, jolsa@kernel.org, haoluo@google.com,
+        tj@kernel.org, kernel-team@fb.com, linux-kernel@vger.kernel.org,
+        lkp@intel.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 11:07 AM Yonghong Song <yhs@meta.com> wrote:
->
->
->
-> On 11/23/22 9:17 AM, sdf@google.com wrote:
-> > On 11/23, Yonghong Song wrote:
-> >
-> >
-> >> On 11/23/22 4:23 AM, Jiri Olsa wrote:
-> >> > On Mon, Nov 21, 2022 at 10:03:40AM -0800, Stanislav Fomichev wrote:
-> >> > > LWT_XMIT to test L3 case, TC to test L2 case.
-> >> > >
-> >> > > v2:
-> >> > > - s/veth_ifindex/ipip_ifindex/ in two places (Martin)
-> >> > > - add comment about which condition triggers the rejection (Martin)
-> >> > >
-> >> > > Signed-off-by: Stanislav Fomichev <sdf@google.com>
-> >> >
-> >> > hi,
-> >> > I'm getting selftest fails and it looks like it's because of this test:
-> >> >
-> >> >     [root@qemu bpf]# ./test_progs -n 62,98
-> >> >     #62      empty_skb:OK
-> >> >     execute_one_variant:PASS:skel_open 0 nsec
-> >> >     execute_one_variant:PASS:my_pid_map_update 0 nsec
-> >> >     libbpf: failed to determine tracepoint 'raw_syscalls/sys_enter'
-> >> perf event ID: No such file or directory
-> >> >     libbpf: prog 'handle_legacy': failed to create tracepoint
-> >> 'raw_syscalls/sys_enter' perf event: No such file or directory
-> >> >     libbpf: prog 'handle_legacy': failed to auto-attach: -2
-> >> >     execute_one_variant:FAIL:skel_attach unexpected error: -2 (errno 2)
-> >> >     test_legacy_printk:FAIL:legacy_case unexpected error: -2 (errno 2)
-> >> >     execute_one_variant:PASS:skel_open 0 nsec
-> >> >     libbpf: failed to determine tracepoint 'raw_syscalls/sys_enter'
-> >> perf event ID: No such file or directory
-> >> >     libbpf: prog 'handle_modern': failed to create tracepoint
-> >> 'raw_syscalls/sys_enter' perf event: No such file or directory
-> >> >     libbpf: prog 'handle_modern': failed to auto-attach: -2
-> >> >     execute_one_variant:FAIL:skel_attach unexpected error: -2 (errno 2)
-> >> >     #98      legacy_printk:FAIL
-> >> >
-> >> >     All error logs:
-> >> >     execute_one_variant:PASS:skel_open 0 nsec
-> >> >     execute_one_variant:PASS:my_pid_map_update 0 nsec
-> >> >     libbpf: failed to determine tracepoint 'raw_syscalls/sys_enter'
-> >> perf event ID: No such file or directory
-> >> >     libbpf: prog 'handle_legacy': failed to create tracepoint
-> >> 'raw_syscalls/sys_enter' perf event: No such file or directory
-> >> >     libbpf: prog 'handle_legacy': failed to auto-attach: -2
-> >> >     execute_one_variant:FAIL:skel_attach unexpected error: -2 (errno 2)
-> >> >     test_legacy_printk:FAIL:legacy_case unexpected error: -2 (errno 2)
-> >> >     execute_one_variant:PASS:skel_open 0 nsec
-> >> >     libbpf: failed to determine tracepoint 'raw_syscalls/sys_enter'
-> >> perf event ID: No such file or directory
-> >> >     libbpf: prog 'handle_modern': failed to create tracepoint
-> >> 'raw_syscalls/sys_enter' perf event: No such file or directory
-> >> >     libbpf: prog 'handle_modern': failed to auto-attach: -2
-> >> >     execute_one_variant:FAIL:skel_attach unexpected error: -2 (errno 2)
-> >> >     #98      legacy_printk:FAIL
-> >> >     Summary: 1/0 PASSED, 0 SKIPPED, 1 FAILED
-> >> >
-> >> > when I run separately it passes:
-> >> >
-> >> >     [root@qemu bpf]# ./test_progs -n 98
-> >> >     #98      legacy_printk:OK
-> >> >     Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-> >> >
-> >> >
-> >> > it seems that the open_netns/close_netns does not work properly,
-> >> > and screw up access to tracefs for following tests
-> >> >
-> >> > if I comment out all the umounts in setns_by_fd, it does not fail
-> >
-> >> Agreed with the above observations.
-> >> With the current bpf-next, I can easily hit the above perf event ID
-> >> issue.
-> >
-> >> But if I backout the following two patches:
-> >> 68f8e3d4b916531ea3bb8b83e35138cf78f2fce5 selftests/bpf: Make sure
-> >> zero-len
-> >> skbs aren't redirectable
-> >> 114039b342014680911c35bd6b72624180fd669a bpf: Move skb->len == 0
-> >> checks into
-> >> __bpf_redirect
-> >
-> >
-> >> and run a few times with './test_progs -j' and I didn't hit any issues.
-> >
-> > My guess would be that we need to remount debugfs in setns_by_fd?
-> >
-> > diff --git a/tools/testing/selftests/bpf/network_helpers.c
-> > b/tools/testing/selftests/bpf/network_helpers.c
-> > index bec15558fd93..1f37adff7632 100644
-> > --- a/tools/testing/selftests/bpf/network_helpers.c
-> > +++ b/tools/testing/selftests/bpf/network_helpers.c
-> > @@ -426,6 +426,10 @@ static int setns_by_fd(int nsfd)
-> >       if (!ASSERT_OK(err, "mount /sys/fs/bpf"))
-> >           return err;
-> >
-> > +    err = mount("debugfs", "/sys/kernel/debug", "debugfs", 0, NULL);
-> > +    if (!ASSERT_OK(err, "mount /sys/kernel/debug"))
-> > +        return err;
-> > +
-> >       return 0;
-> >   }
->
-> Ya, this does fix the problem. Could you craft a patch for this?
+Hello:
 
-Sure, give me a second..
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Wed, 23 Nov 2022 07:52:53 -0600 you wrote:
+> In commit fda01efc6160 ("bpf: Enable cgroups to be used as kptrs"), I
+> added an 'int idx' variable to kfunc_init() which was meant to
+> dynamically set the index of the btf id entries of the
+> 'generic_dtor_ids' array. This was done to make the code slightly less
+> brittle as the struct cgroup * kptr kfuncs such as bpf_cgroup_aquire()
+> are compiled out if CONFIG_CGROUPS is not defined. This, however, causes
+> an lkp build warning:
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next] bpf: Don't use idx variable when registering kfunc dtors
+    https://git.kernel.org/bpf/bpf-next/c/2fcc6081a7bf
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
