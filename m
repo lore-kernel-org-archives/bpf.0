@@ -2,122 +2,181 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A13EC4332F
-	for <bpf@archiver.kernel.org>; Wed, 23 Nov 2022 14:48:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3404C3A59F
+	for <bpf@archiver.kernel.org>; Wed, 23 Nov 2022 14:49:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236806AbiKWOsC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 23 Nov 2022 09:48:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46968 "EHLO
+        id S237579AbiKWOtx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 23 Nov 2022 09:49:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237105AbiKWOrx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 23 Nov 2022 09:47:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A0E663EA
-        for <bpf@vger.kernel.org>; Wed, 23 Nov 2022 06:46:52 -0800 (PST)
+        with ESMTP id S237611AbiKWOtv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 23 Nov 2022 09:49:51 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C0E6E546
+        for <bpf@vger.kernel.org>; Wed, 23 Nov 2022 06:48:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669214811;
+        s=mimecast20190719; t=1669214933;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=h4AIn+quvPgiVICTvsFmAlgR+g1gZGyh/F5Rd1nBfOI=;
-        b=YDXb++VvFd7oKQwH47j9uFcIuevVqEjUQyRKO04SozzeVy2N56Qnm+OjwYdtGiQuKOI4un
-        COwFrccBjtLWfF/RtigHoac7WcVi+E3sJkCvVUbLrYNTngIgs8kg31ZzFdIQcvP+JukVh9
-        nu4Zn4S4u+N1TxjpglXEw92TTzsPx70=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=XVwsHMkeuOJlctKFKAb4Da/8dTubU4VpbLh+0BeUA34=;
+        b=XHcWS4/sHyXelC1GCNqeIT/Yp/tY7Xh0S73ueC/xdqQB2mUoUNcMb0QaO8YH+IJG9dCUT+
+        4CM919R4Gw29+6HMSOdQ0Thv+G9s69OCHrIqVwoPD+A9e56NTPH7AueYthNOoiy1gvVqLQ
+        PyPKptfkkdb4PPx8R/Sj2L4QoE+TGFk=
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
+ [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-543-XQtCS63iPVqmbhT_mEVABg-1; Wed, 23 Nov 2022 09:46:50 -0500
-X-MC-Unique: XQtCS63iPVqmbhT_mEVABg-1
-Received: by mail-ej1-f71.google.com with SMTP id hr21-20020a1709073f9500b007b29ccd1228so10047784ejc.16
-        for <bpf@vger.kernel.org>; Wed, 23 Nov 2022 06:46:49 -0800 (PST)
+ us-mta-190-Ag4_FCSWMUmTnSWqRFS-TA-1; Wed, 23 Nov 2022 09:48:51 -0500
+X-MC-Unique: Ag4_FCSWMUmTnSWqRFS-TA-1
+Received: by mail-il1-f199.google.com with SMTP id d2-20020a056e020be200b00300ecc7e0d4so12995409ilu.5
+        for <bpf@vger.kernel.org>; Wed, 23 Nov 2022 06:48:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=h4AIn+quvPgiVICTvsFmAlgR+g1gZGyh/F5Rd1nBfOI=;
-        b=vWj2A8bHy9UQKZd477dejM9EaptWMGFOjWELd1A8l5q+3qJ0RvM8ZHHLZxhOGgVvkG
-         /5tCQbOWV0AObKJ92Mn5p2Rq5TlepeJS94j8+Yct7gYQFYIPs7OooBfyGpWrsKbjPiFl
-         TEEMGGt1Y3oterRJehazed1gug0VGqkOmL/71vcYzp+Nn9Jr6+V+NMH9EJL9QhBv+F37
-         smWBhD+QqtzS1vrUqBZt5s77PupsVFw2MzEd6dJNq3Rk6Z+gXSjS4wT3inBisMI7o9qW
-         vdX/sNn/pXLSHXq2V/FbNsWFk2e5VlBCXoZomA56M/XwS7qLnm7r7HBoh0pqo7mWExQc
-         VuXA==
-X-Gm-Message-State: ANoB5pnHM74g8tddIqCJ/ZYD7WdLrDJunp5nP3zmqoTDphTgmlTUnp9a
-        NxcN8kZH3m+muGvBYGnqeZIsPl1kMaOE5IUHL0MM5qx4YNW9vJjp3rrTF7sYoLQXdaJaOP7Sovh
-        IJeADPrfQIPoi
-X-Received: by 2002:aa7:db98:0:b0:46a:d57:d9d0 with SMTP id u24-20020aa7db98000000b0046a0d57d9d0mr4617908edt.113.1669214808093;
-        Wed, 23 Nov 2022 06:46:48 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf76Xwlecz3uWnEPrUVfOZ2j2sVz2PufzKSvKkuGlwgVHmxvQrWUtXtZI6kmUXc9mVNmnnYO8A==
-X-Received: by 2002:aa7:db98:0:b0:46a:d57:d9d0 with SMTP id u24-20020aa7db98000000b0046a0d57d9d0mr4617851edt.113.1669214807256;
-        Wed, 23 Nov 2022 06:46:47 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id g3-20020aa7c843000000b0043bbb3535d6sm7631864edt.66.2022.11.23.06.46.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 06:46:46 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 5E7F97D5120; Wed, 23 Nov 2022 15:46:46 +0100 (CET)
-From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     bpf@vger.kernel.org
-Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        David Ahern <dsahern@gmail.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Willem de Bruijn <willemb@google.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Anatoly Burakov <anatoly.burakov@intel.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        Maryam Tahhan <mtahhan@redhat.com>,
-        Stanislav Fomichev <sdf@google.com>, xdp-hints@xdp-project.net,
-        netdev@vger.kernel.org
-Subject: [PATCH bpf-next 1/2] xdp: Add drv_priv pointer to struct xdp_buff
-Date:   Wed, 23 Nov 2022 15:46:40 +0100
-Message-Id: <20221123144641.339138-1-toke@redhat.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221121182552.2152891-1-sdf@google.com>
-References: <20221121182552.2152891-1-sdf@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XVwsHMkeuOJlctKFKAb4Da/8dTubU4VpbLh+0BeUA34=;
+        b=eDtAlgX6jB/wS/C5yv1ZNz/LIw4/cRoMPdgtoH+DLrWH7g1/iCILV9LUuEPeyvyPgD
+         LAc5IAb5My26s//P5Z8DJetYzko4LDFDE1W5/PmiO5VtTHpubAL85XWBRVBeejJUlLb4
+         vPSjvvllJboVwF7FtR05qGIew+5kFO4EuHlhHwoVzZEdl2N1AB4OtHUfOaZGuBCxIJe2
+         XBZhwLMZJJAHUwLJXqaQ9GnMlbmZc0a1lwda82k6FW0J5zPoW6SMjoXNI6lr2jQj1U8K
+         qfwsuSwQcwP/7cdYUGO9H6cVXeWRXM0MUsC7MMF1xEEAgj679OItni6JVFV9NzULrOkT
+         wlBA==
+X-Gm-Message-State: ANoB5pmfEg5fVAsn9epTJd/TRhfwV8W+H7yovfmJxdGK/fwagaJB8hIw
+        8NoMmwwU2Py7qWmI9ecLHzQYjh1pP4CwOvnyDNA3t13o7H90HLod3x8FBlhc1tcUsFLu3SNbkf+
+        HVSNlxeWTbjqJsLIq/nHC8TC+JiSK
+X-Received: by 2002:a92:c691:0:b0:302:75c9:5d55 with SMTP id o17-20020a92c691000000b0030275c95d55mr4126273ilg.34.1669214931052;
+        Wed, 23 Nov 2022 06:48:51 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7t6tBPN8sYXy8dh8uHxD1HawZPKG6isYlau3hUqFJFGOIk/LhU7kZ8leId0LJjjgLzaxuDzjr+0sIG2p/qtrU=
+X-Received: by 2002:a92:c691:0:b0:302:75c9:5d55 with SMTP id
+ o17-20020a92c691000000b0030275c95d55mr4126263ilg.34.1669214930760; Wed, 23
+ Nov 2022 06:48:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20221103155756.687789-1-benjamin.tissoires@redhat.com>
+ <20221103155756.687789-4-benjamin.tissoires@redhat.com> <ff1a0b34-71f2-cebe-a6ef-675936b276eb@nvidia.com>
+In-Reply-To: <ff1a0b34-71f2-cebe-a6ef-675936b276eb@nvidia.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Wed, 23 Nov 2022 15:48:39 +0100
+Message-ID: <CAO-hwJJZxgeTT8mLwFrYynSVASva=o7qL9Kr4xOywV3KDUu2GA@mail.gmail.com>
+Subject: Re: [PATCH hid v12 03/15] HID: initial BPF implementation
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This allows drivers to add more context data to the xdp_buff object, which
-they can use for metadata kfunc implementations.
+Hi Jon,
 
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: David Ahern <dsahern@gmail.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Willem de Bruijn <willemb@google.com>
-Cc: Jesper Dangaard Brouer <brouer@redhat.com>
-Cc: Anatoly Burakov <anatoly.burakov@intel.com>
-Cc: Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc: Magnus Karlsson <magnus.karlsson@gmail.com>
-Cc: Maryam Tahhan <mtahhan@redhat.com>
-Cc: Stanislav Fomichev <sdf@google.com>
-Cc: xdp-hints@xdp-project.net
-Cc: netdev@vger.kernel.org
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
----
- include/net/xdp.h | 1 +
- 1 file changed, 1 insertion(+)
+On Wed, Nov 23, 2022 at 2:25 PM Jon Hunter <jonathanh@nvidia.com> wrote:
+>
+>
+> On 03/11/2022 15:57, Benjamin Tissoires wrote:
+> > Declare an entry point that can use fmod_ret BPF programs, and
+> > also an API to access and change the incoming data.
+> >
+> > A simpler implementation would consist in just calling
+> > hid_bpf_device_event() for any incoming event and let users deal
+> > with the fact that they will be called for any event of any device.
+> >
+> > The goal of HID-BPF is to partially replace drivers, so this situation
+> > can be problematic because we might have programs which will step on
+> > each other toes.
+> >
+> > For that, we add a new API hid_bpf_attach_prog() that can be called
+> > from a syscall and we manually deal with a jump table in hid-bpf.
+> >
+> > Whenever we add a program to the jump table (in other words, when we
+> > attach a program to a HID device), we keep the number of time we added
+> > this program in the jump table so we can release it whenever there are
+> > no other users.
+> >
+> > HID devices have an RCU protected list of available programs in the
+> > jump table, and those programs are called one after the other thanks
+> > to bpf_tail_call().
+> >
+> > To achieve the detection of users losing their fds on the programs we
+> > attached, we add 2 tracing facilities on bpf_prog_release() (for when
+> > a fd is closed) and bpf_free_inode() (for when a pinned program gets
+> > unpinned).
+> >
+> > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+>
+> ...
+>
+> > +static int __init hid_bpf_init(void)
+> > +{
+> > +     int err;
+> > +
+> > +     /* Note: if we exit with an error any time here, we would entirely break HID, which
+> > +      * is probably not something we want. So we log an error and return success.
+> > +      *
+> > +      * This is not a big deal: the syscall allowing to attach a BPF program to a HID device
+> > +      * will not be available, so nobody will be able to use the functionality.
+> > +      */
+> > +
+> > +     err = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &hid_bpf_kfunc_set);
+> > +     if (err) {
+> > +             pr_warn("error while setting HID BPF tracing kfuncs: %d", err);
+> > +             return 0;
+> > +     }
+> > +
+> > +     err = hid_bpf_preload_skel();
+> > +     if (err) {
+> > +             pr_warn("error while preloading HID BPF dispatcher: %d", err);
+> > +             return 0;
+> > +     }
+> > +
+> > +     /* register syscalls after we are sure we can load our preloaded bpf program */
+> > +     err = register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &hid_bpf_syscall_kfunc_set);
+> > +     if (err) {
+> > +             pr_warn("error while setting HID BPF syscall kfuncs: %d", err);
+> > +             return 0;
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+>
+>
+> We have a kernel test that checks for new warning and error messages on
+> boot and with this change I am now seeing the following error message on
+> our Tegra platforms ...
+>
+>   WARNING KERN hid_bpf: error while preloading HID BPF dispatcher: -13
+>
+> I have a quick look at the code, but I can't say I am familiar with
+> this. So I wanted to ask if a way to fix this or avoid this? I see the
+> code returns 0, so one option would be to make this an informational or
+> debug print.
 
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 348aefd467ed..27c54ad3c8e2 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -84,6 +84,7 @@ struct xdp_buff {
- 	struct xdp_txq_info *txq;
- 	u32 frame_sz; /* frame size to deduce data_hard_end/reserved tailroom*/
- 	u32 flags; /* supported values defined in xdp_buff_flags */
-+	void *drv_priv;
- };
- 
- static __always_inline bool xdp_buff_has_frags(struct xdp_buff *xdp)
--- 
-2.38.1
+I am not in favor of debug in that case, because I suspect it'll hide
+too much when getting a bug report. Informational could do, yes.
+
+However, before that, I'd like to dig a little bit more on why it is
+failing. I thought arm64 now has support of tracing bpf programs, so I
+would not expect this to fail.
+
+Would you mind sending me your .config so I can check in it if you are
+missing anything? I am thinking that maybe I need to also depend on
+BPF_JIT.
+
+Cheers,
+Benjamin
+
+>
+> Thanks
+> Jon
+>
+> --
+> nvpublic
+>
 
