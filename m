@@ -2,124 +2,91 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F199DC433FE
-	for <bpf@archiver.kernel.org>; Wed, 23 Nov 2022 19:55:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68C6BC3A59F
+	for <bpf@archiver.kernel.org>; Wed, 23 Nov 2022 19:55:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238816AbiKWTzt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 23 Nov 2022 14:55:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
+        id S239529AbiKWTzu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 23 Nov 2022 14:55:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238866AbiKWTzX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S238965AbiKWTzX (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 23 Nov 2022 14:55:23 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8131478D43;
-        Wed, 23 Nov 2022 11:54:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669233258; x=1700769258;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9IaGz3nksRi+gF01rW+BvME2pa7n+X6zBZlnddfrqbk=;
-  b=KWMeqo2FiDHbxNJlvSOWdDrNO+l2jgknDLNwXOeL5DvU/qsFDWrO99jt
-   sVOSo2eySRQpgnbFtNPC8Y/7AbEmQ9u3Y6NagIGibHUnNU02EIbj+XVTL
-   FXUvXA4Wq+uxd5MkOnc6BDQP4IKfY7NctImiJYIL9CknMQWJKjPI+pl1N
-   mrLs0YWYM8F8/MMOM5SfqWEm2CO6rUBxGfNOW921JTcXGw7bOjrAH3hq6
-   +w4bMIrVFYJ3JGL2xo+DsZZFigqLxsMVgcCmbKR9Qa2mo6w7gtyX0wy9y
-   SJdeDhNyoyoBQNlHOw59jZ3CU1iwxcHYNBPt1iDl7JsfACRBjJZI8FXJO
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="184915519"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Nov 2022 12:54:17 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 23 Nov 2022 12:54:09 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Wed, 23 Nov 2022 12:54:09 -0700
-Date:   Wed, 23 Nov 2022 20:59:00 +0100
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
-        <john.fastabend@gmail.com>, <alexandr.lobakin@intel.com>,
-        <UNGLinuxDriver@microchip.com>
-Subject: Re: [PATCH net-next v4 4/7] net: lan966x: Update rxq memory model
-Message-ID: <20221123195900.wvql3v3mnmtixccs@soft-dev3-1>
-References: <20221122214413.3446006-1-horatiu.vultur@microchip.com>
- <20221122214413.3446006-5-horatiu.vultur@microchip.com>
- <Y31GsPEhDOsCB70i@boxer>
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1201BC4
+        for <bpf@vger.kernel.org>; Wed, 23 Nov 2022 11:54:29 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id s206so20172591oie.3
+        for <bpf@vger.kernel.org>; Wed, 23 Nov 2022 11:54:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gSrw9jy1DdzW54uya3GLAzT+2OzZzkDqg6d87pvhaPs=;
+        b=SAyowW6EeaGJkplgTyVYsNTgVZAj3MA2J302awudfKDjd5fS8bB3p1TBBDmTvaWmg0
+         32OEuu1INff6VrcU9+xzLOtQEs7mbMft4spDWOxBlGx8ap7TbVuPHDRUxaPmRhVLyQMo
+         L1+uFh8dK9K4YCABZ1L+GBC3932cxmZ8w1jVgYUR2u0iXOO69FPUdpZL+gV6j8vLzZhV
+         ugxFbRuiOo4mBno+r83w1ZgP5cIDQKPhKgJpbGX8NUds2D7x18naTjdiPnU4288Lr7H8
+         NYbZFr4ITE0I5AGGPF4oj26+HkbXCcNHTLE1sb5+guYANDen7ZHoDUK3caH0aXFnOaGK
+         tbYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gSrw9jy1DdzW54uya3GLAzT+2OzZzkDqg6d87pvhaPs=;
+        b=nQTYUd0mPaOLLljCkhxTTQFxGY7RoFMIBc/6aoCoZ/0tTASrK+W0krcy55bURU0Veh
+         qWapJRXRc7SHKJ+7B/ODnq99zwu2y8Qqkcwy/xQW5mD/PUAu3isFLNRqdfDRK5o4JZol
+         pclpiq38ATXvCWIHR2KEmO/PwJs7t7NYPsZY2Nm7Fw4W+8PKtzEMYRsK4T8YNNZ0lE0q
+         /0BOdoPEmi7JxtjnYJWzjW+JHThNeBdsQzOgbPU+DxDwHMomVv1D+CWmYh57QTxTikAS
+         bRhfaa/9emz3zArlm3OV8e7y8sKxcHVzTJ91Zdxl7V9MyQZ1mhKpLL8cnQNbh0/Fvr0O
+         w7cw==
+X-Gm-Message-State: ANoB5plXOBiTxPT/q2gArTONxizigwhd7gyJuDoDubBt2fMZIO5l00BH
+        BhEVoPo67KvrBe6m2L1Ojhv7UCkw8JXJAEStOpsMnw==
+X-Google-Smtp-Source: AA0mqf58BXp5+AhLwQziFGPiG4v1/XH+Cf8sshn7xXTcS5qy+Lwx5aKIXOwJyLY2Av5mDzybwp0vDHSZz4knu12MJt8=
+X-Received: by 2002:aca:674c:0:b0:35b:79ca:2990 with SMTP id
+ b12-20020aca674c000000b0035b79ca2990mr1938077oiy.125.1669233268889; Wed, 23
+ Nov 2022 11:54:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <Y31GsPEhDOsCB70i@boxer>
+References: <20221121182552.2152891-1-sdf@google.com> <20221121182552.2152891-9-sdf@google.com>
+ <877czlvj9x.fsf@toke.dk> <CAKH8qBsSFg+3ULN-+aqabXZJRVwPtq9P71d0VZCuT2tMrx4DHw@mail.gmail.com>
+ <20221123111712.1da24f54@kernel.org>
+In-Reply-To: <20221123111712.1da24f54@kernel.org>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Wed, 23 Nov 2022 11:54:18 -0800
+Message-ID: <CAKH8qBv-tvmrE-YfrFFO6ivw-8uXCHFhT2g=5UeNuh3-W=CcZg@mail.gmail.com>
+Subject: Re: [xdp-hints] [PATCH bpf-next v2 8/8] selftests/bpf: Simple program
+ to dump XDP RX metadata
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        haoluo@google.com, jolsa@kernel.org,
+        David Ahern <dsahern@gmail.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Anatoly Burakov <anatoly.burakov@intel.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Magnus Karlsson <magnus.karlsson@gmail.com>,
+        Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The 11/22/2022 23:01, Maciej Fijalkowski wrote:
-> 
-> On Tue, Nov 22, 2022 at 10:44:10PM +0100, Horatiu Vultur wrote:
-> > By default the rxq memory model is MEM_TYPE_PAGE_SHARED but to be able
-> > to reuse pages on the TX side, when the XDP action XDP_TX it is required
-> > to update the memory model to PAGE_POOL.
+On Wed, Nov 23, 2022 at 11:17 AM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Wed, 23 Nov 2022 10:29:23 -0800 Stanislav Fomichev wrote:
+> > > return ch.rx_count ?: ch.combined_count;
+> > >
+> > > works though :)
 > >
-> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> > ---
-> >  .../net/ethernet/microchip/lan966x/lan966x_fdma.c  | 14 ++++++++++++++
-> >  1 file changed, 14 insertions(+)
-> >
-> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-> > index 384ed34197d58..483d1470c8362 100644
-> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-> > @@ -78,8 +78,22 @@ static int lan966x_fdma_rx_alloc_page_pool(struct lan966x_rx *rx)
-> >               .max_len = rx->max_mtu -
-> >                          SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
-> >       };
-> > +     struct lan966x_port *port;
-> 
-> port can be scoped only for the loop below?
+> > Perfect, will do the same :-) Thank you for running and testing!
+>
+> The correct value is ch.rx_count + ch.combined_count
+>
+> We've been over this many times, I thought it was coded up in libbpf
+> but I don't see it now :S
 
-Yes, I will change this.
-
-> 
-> > +     int i;
-> >
-> >       rx->page_pool = page_pool_create(&pp_params);
-> > +
-> > +     for (i = 0; i < lan966x->num_phys_ports; ++i) {
-> 
-> Quoting Alex from some other thread:
-> 
-> "Since we're on -std=gnu11 for a bunch of releases already, all new
-> loops are expected to go with the iterator declarations inside them."
-> 
-> TBH I wasn't aware of that personally :)
-
-Me neither, I will update this and all the other lops introduced in this
-series.
-
-> 
-> > +             if (!lan966x->ports[i])
-> > +                     continue;
-> > +
-> > +             port = lan966x->ports[i];
-> > +
-> > +             xdp_rxq_info_unreg_mem_model(&port->xdp_rxq);
-> > +             xdp_rxq_info_reg_mem_model(&port->xdp_rxq, MEM_TYPE_PAGE_POOL,
-> > +                                        rx->page_pool);
-> > +     }
-> > +
-> >       return PTR_ERR_OR_ZERO(rx->page_pool);
-> >  }
-> >
-> > --
-> > 2.38.0
-> >
-
--- 
-/Horatiu
+Yeah, can't find it. Also doesn't exist on libxdp/libxsk. Will apply
+your fix, thank you!
