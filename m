@@ -2,42 +2,42 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B34BC4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61ADDC43219
 	for <bpf@archiver.kernel.org>; Wed, 23 Nov 2022 20:31:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239928AbiKWUbf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 23 Nov 2022 15:31:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56002 "EHLO
+        id S239299AbiKWUbg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 23 Nov 2022 15:31:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239147AbiKWUbI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S239064AbiKWUbI (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 23 Nov 2022 15:31:08 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA3E13CEB;
-        Wed, 23 Nov 2022 12:27:28 -0800 (PST)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2F0B46;
+        Wed, 23 Nov 2022 12:27:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669235248; x=1700771248;
+  t=1669235247; x=1700771247;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=dF7aDB2VwyWKLU0Vwp0ficgmb8OQHa7Dy9YaZOLlgUs=;
-  b=Of+h8KDoamw41twmAfwA89e5BfAuN19qh+0GGa8Jiy+c1EWFr3SK4VlJ
-   ceo89NhlifzWuSYNRZziDMO9piPEyHq+tLfH7IPQB82OltLLlcSCAAarN
-   dZ9dFq7wsW27RBWZedaMzD6H4ee2rsTHRIVq8e95G2k7RR/C/NJNcE7ja
-   WrrP76FPXKeUs/sIOoc7DibEu5GxO5iBkOCDFXXf12No4PGR3a64OF4JW
-   UbW/OkBNEu9qpbT8/xYKCyj/CdT/V/h4I3zM4vGEICvIcHbI0p7XtwmpO
-   4xjLa/4r/Px/fPnfpjtZbKdZowVwFzT4FHvNrHJLDRFaqN/R/TMXwZ0Gh
-   Q==;
+  bh=iKDTlOAUZqqB5RQV8RImjoFEKIKyw5FL5Cc7xV3NePg=;
+  b=ihj3wKVO9hnRNld1pAUpHgTe1ukP3WggtLea3/HiVg9yKraZPdaFFqLk
+   n7PVLsZfO6RAazz9wJztKN6ufEgRh6ZSpRxbm3cxtS5WT4wrQb4yJ/IBB
+   kQWRyD2kA+Fgesh9fmyDV5NLSr2kxLy+tUv70tBarQHvhjgBA8eFKmUZB
+   S7+bet21Jgzk298xFeo471MzbBeDZBQoY2BMBJUmkdvkZQ3HTASeruv+M
+   lwXDZhkuXuO7tTbwSiNbXCgcrqxJnAY2Osw7kwJgRe9tI4LlMI12cHYhZ
+   VyyTg5bjNSFCej6NRmuDCWxGJAy6wsxJ8UK8BD11G2/X2FY0u/0pOm1t2
+   A==;
 X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="190333711"
+   d="scan'208";a="184921921"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Nov 2022 13:27:27 -0700
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Nov 2022 13:27:26 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 23 Nov 2022 13:27:27 -0700
+ 15.1.2507.12; Wed, 23 Nov 2022 13:27:21 -0700
 Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 23 Nov 2022 13:27:24 -0700
+ 15.1.2507.12 via Frontend Transport; Wed, 23 Nov 2022 13:27:18 -0700
 From:   Horatiu Vultur <horatiu.vultur@microchip.com>
 To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <bpf@vger.kernel.org>
@@ -47,9 +47,9 @@ CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
         <UNGLinuxDriver@microchip.com>, <alexandr.lobakin@intel.com>,
         <maciej.fijalkowski@intel.com>,
         Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next v5 7/7] net: lan966x: Add support for XDP_REDIRECT
-Date:   Wed, 23 Nov 2022 21:31:39 +0100
-Message-ID: <20221123203139.3828548-8-horatiu.vultur@microchip.com>
+Subject: [PATCH net-next v5 5/7] net: lan966x: Update dma_dir of page_pool_params
+Date:   Wed, 23 Nov 2022 21:31:37 +0100
+Message-ID: <20221123203139.3828548-6-horatiu.vultur@microchip.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221123203139.3828548-1-horatiu.vultur@microchip.com>
 References: <20221123203139.3828548-1-horatiu.vultur@microchip.com>
@@ -60,288 +60,153 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Extend lan966x XDP support with the action XDP_REDIRECT. This is similar
-with the XDP_TX, so a lot of functionality can be reused.
+To add support for XDP_TX it is required to be able to write to the DMA
+area therefore it is required that the pages will be mapped using
+DMA_BIDIRECTIONAL flag.
+Therefore check if there are any xdp programs on the interfaces and in
+that case set DMA_BIDRECTIONAL otherwise use DMA_FROM_DEVICE.
+Therefore when a new XDP program is added it is required to redo the
+page_pool.
 
 Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 ---
- .../ethernet/microchip/lan966x/lan966x_fdma.c | 79 ++++++++++++++++---
- .../ethernet/microchip/lan966x/lan966x_main.c |  1 +
- .../ethernet/microchip/lan966x/lan966x_main.h | 10 ++-
- .../ethernet/microchip/lan966x/lan966x_xdp.c  | 29 ++++++-
- 4 files changed, 104 insertions(+), 15 deletions(-)
+ .../ethernet/microchip/lan966x/lan966x_fdma.c | 29 +++++++++++++++----
+ .../ethernet/microchip/lan966x/lan966x_main.h |  2 ++
+ .../ethernet/microchip/lan966x/lan966x_xdp.c  | 28 ++++++++++++++++++
+ 3 files changed, 53 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-index cd622310385bd..5314c064ceae7 100644
+index 3df3b3d29b4ff..bc30c31c43602 100644
 --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
 +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0+
+@@ -79,6 +79,9 @@ static int lan966x_fdma_rx_alloc_page_pool(struct lan966x_rx *rx)
+ 			   SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
+ 	};
  
- #include <linux/bpf.h>
-+#include <linux/filter.h>
- 
- #include "lan966x_main.h"
- 
-@@ -390,11 +391,14 @@ static void lan966x_fdma_tx_clear_buf(struct lan966x *lan966x, int weight)
- {
- 	struct lan966x_tx *tx = &lan966x->tx;
- 	struct lan966x_tx_dcb_buf *dcb_buf;
-+	struct xdp_frame_bulk bq;
- 	struct lan966x_db *db;
- 	unsigned long flags;
- 	bool clear = false;
- 	int i;
- 
-+	xdp_frame_bulk_init(&bq);
++	if (lan966x_xdp_present(lan966x))
++		pp_params.dma_dir = DMA_BIDIRECTIONAL;
 +
- 	spin_lock_irqsave(&lan966x->tx_lock, flags);
- 	for (i = 0; i < FDMA_DCB_MAX; ++i) {
- 		dcb_buf = &tx->dcbs_buf[i];
-@@ -419,12 +423,23 @@ static void lan966x_fdma_tx_clear_buf(struct lan966x *lan966x, int weight)
- 			if (!dcb_buf->ptp)
- 				napi_consume_skb(dcb_buf->data.skb, weight);
- 		} else {
--			xdp_return_frame_rx_napi(dcb_buf->data.xdpf);
-+			if (dcb_buf->xdp_ndo)
-+				dma_unmap_single(lan966x->dev,
-+						 dcb_buf->dma_addr,
-+						 dcb_buf->len,
-+						 DMA_TO_DEVICE);
-+
-+			if (dcb_buf->xdp_ndo)
-+				xdp_return_frame_bulk(dcb_buf->data.xdpf, &bq);
-+			else
-+				xdp_return_frame_rx_napi(dcb_buf->data.xdpf);
- 		}
+ 	rx->page_pool = page_pool_create(&pp_params);
  
- 		clear = true;
- 	}
- 
-+	xdp_flush_frame_bulk(&bq);
-+
- 	if (clear)
- 		lan966x_fdma_wakeup_netdev(lan966x);
- 
-@@ -531,6 +546,7 @@ static int lan966x_fdma_napi_poll(struct napi_struct *napi, int weight)
- 	int dcb_reload = rx->dcb_index;
- 	struct lan966x_rx_dcb *old_dcb;
- 	struct lan966x_db *db;
-+	bool redirect = false;
- 	struct sk_buff *skb;
- 	struct page *page;
- 	int counter = 0;
-@@ -553,6 +569,9 @@ static int lan966x_fdma_napi_poll(struct napi_struct *napi, int weight)
- 			lan966x_fdma_rx_free_page(rx);
- 			lan966x_fdma_rx_advance_dcb(rx);
- 			goto allocate_new;
-+		case FDMA_REDIRECT:
-+			redirect = true;
-+			fallthrough;
- 		case FDMA_TX:
- 			lan966x_fdma_rx_advance_dcb(rx);
- 			continue;
-@@ -592,6 +611,9 @@ static int lan966x_fdma_napi_poll(struct napi_struct *napi, int weight)
- 	if (counter < weight && napi_complete_done(napi, counter))
- 		lan_wr(0xff, lan966x, FDMA_INTR_DB_ENA);
- 
-+	if (redirect)
-+		xdp_do_flush();
-+
- 	return counter;
+ 	for (int i = 0; i < lan966x->num_phys_ports; ++i) {
+@@ -826,16 +829,11 @@ static int lan966x_fdma_get_max_frame(struct lan966x *lan966x)
+ 	       XDP_PACKET_HEADROOM;
  }
  
-@@ -679,7 +701,8 @@ static void lan966x_fdma_tx_start(struct lan966x_tx *tx, int next_to_use)
- 
- int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
- 			   struct xdp_frame *xdpf,
--			   struct page *page)
-+			   struct page *page,
-+			   bool dma_map)
+-int lan966x_fdma_change_mtu(struct lan966x *lan966x)
++static int __lan966x_fdma_reload(struct lan966x *lan966x, int max_mtu)
  {
- 	struct lan966x *lan966x = port->lan966x;
- 	struct lan966x_tx_dcb_buf *next_dcb_buf;
-@@ -700,24 +723,53 @@ int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
- 	}
+-	int max_mtu;
+ 	int err;
+ 	u32 val;
  
- 	/* Generate new IFH */
--	ifh = page_address(page) + XDP_PACKET_HEADROOM;
--	memset(ifh, 0x0, sizeof(__be32) * IFH_LEN);
--	lan966x_ifh_set_bypass(ifh, 1);
--	lan966x_ifh_set_port(ifh, BIT_ULL(port->chip_port));
-+	if (dma_map) {
-+		if (xdpf->headroom < IFH_LEN_BYTES) {
-+			ret = NETDEV_TX_OK;
-+			goto out;
-+		}
+-	max_mtu = lan966x_fdma_get_max_frame(lan966x);
+-	if (max_mtu == lan966x->rx.max_mtu)
+-		return 0;
+-
+ 	/* Disable the CPU port */
+ 	lan_rmw(QSYS_SW_PORT_MODE_PORT_ENA_SET(0),
+ 		QSYS_SW_PORT_MODE_PORT_ENA,
+@@ -861,6 +859,25 @@ int lan966x_fdma_change_mtu(struct lan966x *lan966x)
+ 	return err;
+ }
  
--	dma_addr = page_pool_get_dma_addr(page);
--	dma_sync_single_for_device(lan966x->dev, dma_addr + XDP_PACKET_HEADROOM,
--				   xdpf->len + IFH_LEN_BYTES,
--				   DMA_TO_DEVICE);
-+		ifh = xdpf->data - IFH_LEN_BYTES;
-+		memset(ifh, 0x0, sizeof(__be32) * IFH_LEN);
-+		lan966x_ifh_set_bypass(ifh, 1);
-+		lan966x_ifh_set_port(ifh, BIT_ULL(port->chip_port));
++int lan966x_fdma_change_mtu(struct lan966x *lan966x)
++{
++	int max_mtu;
 +
-+		dma_addr = dma_map_single(lan966x->dev,
-+					  xdpf->data - IFH_LEN_BYTES,
-+					  xdpf->len + IFH_LEN_BYTES,
-+					  DMA_TO_DEVICE);
-+		if (dma_mapping_error(lan966x->dev, dma_addr)) {
-+			ret = NETDEV_TX_OK;
-+			goto out;
-+		}
- 
--	/* Setup next dcb */
--	lan966x_fdma_tx_setup_dcb(tx, next_to_use, xdpf->len + IFH_LEN_BYTES,
--				  dma_addr + XDP_PACKET_HEADROOM);
-+		/* Setup next dcb */
-+		lan966x_fdma_tx_setup_dcb(tx, next_to_use,
-+					  xdpf->len + IFH_LEN_BYTES,
-+					  dma_addr);
-+	} else {
-+		ifh = page_address(page) + XDP_PACKET_HEADROOM;
-+		memset(ifh, 0x0, sizeof(__be32) * IFH_LEN);
-+		lan966x_ifh_set_bypass(ifh, 1);
-+		lan966x_ifh_set_port(ifh, BIT_ULL(port->chip_port));
++	max_mtu = lan966x_fdma_get_max_frame(lan966x);
++	if (max_mtu == lan966x->rx.max_mtu)
++		return 0;
 +
-+		dma_addr = page_pool_get_dma_addr(page);
-+		dma_sync_single_for_device(lan966x->dev,
-+					   dma_addr + XDP_PACKET_HEADROOM,
-+					   xdpf->len + IFH_LEN_BYTES,
-+					   DMA_TO_DEVICE);
++	return __lan966x_fdma_reload(lan966x, max_mtu);
++}
 +
-+		/* Setup next dcb */
-+		lan966x_fdma_tx_setup_dcb(tx, next_to_use,
-+					  xdpf->len + IFH_LEN_BYTES,
-+					  dma_addr + XDP_PACKET_HEADROOM);
-+	}
- 
- 	/* Fill up the buffer */
- 	next_dcb_buf = &tx->dcbs_buf[next_to_use];
- 	next_dcb_buf->use_skb = false;
- 	next_dcb_buf->data.xdpf = xdpf;
-+	next_dcb_buf->xdp_ndo = dma_map;
- 	next_dcb_buf->len = xdpf->len + IFH_LEN_BYTES;
- 	next_dcb_buf->dma_addr = dma_addr;
- 	next_dcb_buf->used = true;
-@@ -790,6 +842,7 @@ int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev)
- 	next_dcb_buf = &tx->dcbs_buf[next_to_use];
- 	next_dcb_buf->use_skb = true;
- 	next_dcb_buf->data.skb = skb;
-+	next_dcb_buf->xdp_ndo = false;
- 	next_dcb_buf->len = skb->len;
- 	next_dcb_buf->dma_addr = dma_addr;
- 	next_dcb_buf->used = true;
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-index 0b7707306da26..0aed244826d39 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-@@ -469,6 +469,7 @@ static const struct net_device_ops lan966x_port_netdev_ops = {
- 	.ndo_eth_ioctl			= lan966x_port_ioctl,
- 	.ndo_setup_tc			= lan966x_tc_setup,
- 	.ndo_bpf			= lan966x_xdp,
-+	.ndo_xdp_xmit			= lan966x_xdp_xmit,
- };
- 
- bool lan966x_netdevice_check(const struct net_device *dev)
++int lan966x_fdma_reload_page_pool(struct lan966x *lan966x)
++{
++	int max_mtu;
++
++	max_mtu = lan966x_fdma_get_max_frame(lan966x);
++	return __lan966x_fdma_reload(lan966x, max_mtu);
++}
++
+ void lan966x_fdma_netdev_init(struct lan966x *lan966x, struct net_device *dev)
+ {
+ 	if (lan966x->fdma_ndev)
 diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-index 3c18fcec51629..a0170a3fb9760 100644
+index c762e3732f88f..81c0b11097ce2 100644
 --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
 +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-@@ -106,12 +106,14 @@ enum macaccess_entry_type {
-  * FDMA_ERROR, something went wrong, stop getting more frames
-  * FDMA_DROP, frame is dropped, but continue to get more frames
-  * FDMA_TX, frame is given to TX, but continue to get more frames
-+ * FDMA_REDIRECT, frame is given to TX, but continue to get more frames
-  */
- enum lan966x_fdma_action {
- 	FDMA_PASS = 0,
- 	FDMA_ERROR,
- 	FDMA_DROP,
- 	FDMA_TX,
-+	FDMA_REDIRECT,
- };
+@@ -466,6 +466,7 @@ void lan966x_fdma_netdev_deinit(struct lan966x *lan966x, struct net_device *dev)
+ int lan966x_fdma_init(struct lan966x *lan966x);
+ void lan966x_fdma_deinit(struct lan966x *lan966x);
+ irqreturn_t lan966x_fdma_irq_handler(int irq, void *args);
++int lan966x_fdma_reload_page_pool(struct lan966x *lan966x);
  
- struct lan966x_port;
-@@ -185,6 +187,7 @@ struct lan966x_tx_dcb_buf {
- 	u32 used : 1;
- 	u32 ptp : 1;
- 	u32 use_skb : 1;
-+	u32 xdp_ndo : 1;
- };
- 
- struct lan966x_tx {
-@@ -470,7 +473,8 @@ int lan966x_ptp_gettime64(struct ptp_clock_info *ptp, struct timespec64 *ts);
- int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev);
- int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
- 			   struct xdp_frame *frame,
--			   struct page *page);
-+			   struct page *page,
-+			   bool dma_map);
- int lan966x_fdma_change_mtu(struct lan966x *lan966x);
- void lan966x_fdma_netdev_init(struct lan966x *lan966x, struct net_device *dev);
- void lan966x_fdma_netdev_deinit(struct lan966x *lan966x, struct net_device *dev);
-@@ -568,6 +572,10 @@ int lan966x_xdp(struct net_device *dev, struct netdev_bpf *xdp);
+ int lan966x_lag_port_join(struct lan966x_port *port,
+ 			  struct net_device *brport_dev,
+@@ -556,6 +557,7 @@ int lan966x_xdp(struct net_device *dev, struct netdev_bpf *xdp);
  int lan966x_xdp_run(struct lan966x_port *port,
  		    struct page *page,
  		    u32 data_len);
-+int lan966x_xdp_xmit(struct net_device *dev,
-+		     int n,
-+		     struct xdp_frame **frames,
-+		     u32 flags);
- bool lan966x_xdp_present(struct lan966x *lan966x);
++bool lan966x_xdp_present(struct lan966x *lan966x);
  static inline bool lan966x_xdp_port_present(struct lan966x_port *port)
  {
+ 	return !!port->xdp_prog;
 diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
-index 8996110a0846a..2e6f486ec67d7 100644
+index 8ebde1eb6a09c..ba7aa6df9d0e6 100644
 --- a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
 +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
-@@ -50,6 +50,28 @@ int lan966x_xdp(struct net_device *dev, struct netdev_bpf *xdp)
+@@ -11,6 +11,8 @@ static int lan966x_xdp_setup(struct net_device *dev, struct netdev_bpf *xdp)
+ 	struct lan966x_port *port = netdev_priv(dev);
+ 	struct lan966x *lan966x = port->lan966x;
+ 	struct bpf_prog *old_prog;
++	bool old_xdp, new_xdp;
++	int err;
+ 
+ 	if (!lan966x->fdma) {
+ 		NL_SET_ERR_MSG_MOD(xdp->extack,
+@@ -18,7 +20,20 @@ static int lan966x_xdp_setup(struct net_device *dev, struct netdev_bpf *xdp)
+ 		return -EOPNOTSUPP;
+ 	}
+ 
++	old_xdp = lan966x_xdp_present(lan966x);
+ 	old_prog = xchg(&port->xdp_prog, xdp->prog);
++	new_xdp = lan966x_xdp_present(lan966x);
++
++	if (old_xdp == new_xdp)
++		goto out;
++
++	err = lan966x_fdma_reload_page_pool(lan966x);
++	if (err) {
++		xchg(&port->xdp_prog, old_prog);
++		return err;
++	}
++
++out:
+ 	if (old_prog)
+ 		bpf_prog_put(old_prog);
+ 
+@@ -62,6 +77,19 @@ int lan966x_xdp_run(struct lan966x_port *port, struct page *page, u32 data_len)
  	}
  }
  
-+int lan966x_xdp_xmit(struct net_device *dev,
-+		     int n,
-+		     struct xdp_frame **frames,
-+		     u32 flags)
++bool lan966x_xdp_present(struct lan966x *lan966x)
 +{
-+	struct lan966x_port *port = netdev_priv(dev);
-+	int nxmit = 0;
++	for (int p = 0; p < lan966x->num_phys_ports; ++p) {
++		if (!lan966x->ports[p])
++			continue;
 +
-+	for (int i = 0; i < n; ++i) {
-+		struct xdp_frame *xdpf = frames[i];
-+		int err;
-+
-+		err = lan966x_fdma_xmit_xdpf(port, xdpf, NULL, true);
-+		if (err)
-+			break;
-+
-+		nxmit++;
++		if (lan966x_xdp_port_present(lan966x->ports[p]))
++			return true;
 +	}
 +
-+	return nxmit;
++	return false;
 +}
 +
- int lan966x_xdp_run(struct lan966x_port *port, struct page *page, u32 data_len)
+ int lan966x_xdp_port_init(struct lan966x_port *port)
  {
- 	struct bpf_prog *xdp_prog = port->xdp_prog;
-@@ -72,8 +94,13 @@ int lan966x_xdp_run(struct lan966x_port *port, struct page *page, u32 data_len)
- 		if (!xdpf)
- 			return FDMA_DROP;
- 
--		return lan966x_fdma_xmit_xdpf(port, xdpf, page) ?
-+		return lan966x_fdma_xmit_xdpf(port, xdpf, page, false) ?
- 		       FDMA_DROP : FDMA_TX;
-+	case XDP_REDIRECT:
-+		if (xdp_do_redirect(port->dev, &xdp, xdp_prog))
-+			return FDMA_DROP;
-+
-+		return FDMA_REDIRECT;
- 	default:
- 		bpf_warn_invalid_xdp_action(port->dev, xdp_prog, act);
- 		fallthrough;
+ 	struct lan966x *lan966x = port->lan966x;
 -- 
 2.38.0
 
