@@ -2,79 +2,76 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EE48C3A59F
-	for <bpf@archiver.kernel.org>; Wed, 23 Nov 2022 21:50:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B98ADC433FE
+	for <bpf@archiver.kernel.org>; Wed, 23 Nov 2022 21:50:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238834AbiKWVuT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 23 Nov 2022 16:50:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59114 "EHLO
+        id S238854AbiKWVuX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 23 Nov 2022 16:50:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238816AbiKWVuS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 23 Nov 2022 16:50:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267DB391DC;
-        Wed, 23 Nov 2022 13:50:17 -0800 (PST)
+        with ESMTP id S238816AbiKWVuV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 23 Nov 2022 16:50:21 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA57D391DC;
+        Wed, 23 Nov 2022 13:50:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B7EAF61EF6;
-        Wed, 23 Nov 2022 21:50:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 19DC9C433D7;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 324A0CE27AF;
+        Wed, 23 Nov 2022 21:50:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1EA87C433B5;
         Wed, 23 Nov 2022 21:50:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1669240216;
-        bh=3IvjOhpLwY8E04jMOjqOKEJf+tfwBXK+QgyiSFSrKas=;
+        bh=3LSSRgZSld/tV8zacrq4t/+3c7qpcv4KkJalQ0f9+eo=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=aRPYjaB1L/sCTFvU54rf+OYNjQ7FOqaFSNst2LtGe74CptT1AUoSv5S0j5p3dsBGO
-         dRu57ok4qXizsugtrWttVSHnbAbmd5jxfkWWltBwTRa6QSKhAMRE2Am7IDNFhNnq6R
-         an5uB0Ot0Bw6jJlZ5yNDCkpuZlvqis2HZ+Cv3+79RIxEPLT4b78C4+i6RcCTo5yrFU
-         8osy5Hx9NMCcypfLm+1zi76I8K6DUFn6RTkevAl7m8YfCrRCQNDOOS3QXfHXGATGrb
-         qH68PSvR4KxK30PfTOd++VkosgBT8YP2bAcjBmS7v7H4QwZCNgoSQSdJWDFFqX2obn
-         BXPYPke2HUbIg==
+        b=DatZu5ZS9k931BvNVNRSYDbE99rIQ7H+/5MRu6O7wQQC4/XUEOzAszQX+kuoT5CQA
+         42twU8ytY/56HvI67cXbXJgzFbbtgXGb/m9MjBxTlnu8unFYGbqrVcAxGRScR6hIe7
+         TZuAsduCErJljB+5ZwwXqLqH+vp758E0t0SHPl+gEzCH0GdwQDtyAQ2KdkG4YjtAwv
+         L3Q1bZ4y69z54aVao7Jy0Ecg4rrmjOf0PajnDRkH3kS8K1NDNUY8e8/zUUPaAp1TIb
+         FT3FELLjyQtLDfoDBDG3i4XKQGwca0LpoSgnodoeLs1hcSsro1XrUJkW9+pCwGDfDw
+         0G6s53M3T313w==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E0388C395C5;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EBCBAE21EFD;
         Wed, 23 Nov 2022 21:50:15 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3 0/2] docs: fix sphinx warnings for cpu+dev maps
+Subject: Re: [PATCH bpf-next v3] bpf, docs: Document BPF_MAP_TYPE_BLOOM_FILTER
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166924021591.18548.16235386943960699108.git-patchwork-notify@kernel.org>
+Message-Id: <166924021596.18548.15812705164474691942.git-patchwork-notify@kernel.org>
 Date:   Wed, 23 Nov 2022 21:50:15 +0000
-References: <20221123092321.88558-1-mtahhan@redhat.com>
-In-Reply-To: <20221123092321.88558-1-mtahhan@redhat.com>
-To:     Maryam Tahhan <mtahhan@redhat.com>
-Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org, jbrouer@redhat.com,
-        thoiland@redhat.com, donhunte@redhat.com, akiyks@gmail.com
+References: <20221123141151.54556-1-donald.hunter@gmail.com>
+In-Reply-To: <20221123141151.54556-1-donald.hunter@gmail.com>
+To:     Donald Hunter <donald.hunter@gmail.com>
+Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, corbet@lwn.net,
+        joannelkoong@gmail.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 Hello:
 
-This series was applied to bpf/bpf-next.git (master)
+This patch was applied to bpf/bpf-next.git (master)
 by Daniel Borkmann <daniel@iogearbox.net>:
 
-On Wed, 23 Nov 2022 09:23:19 +0000 you wrote:
-> From: Maryam Tahhan <mtahhan@redhat.com>
+On Wed, 23 Nov 2022 14:11:51 +0000 you wrote:
+> Add documentation for BPF_MAP_TYPE_BLOOM_FILTER including
+> kernel BPF helper usage, userspace usage and examples.
 > 
-> Sphinx version >=3.1 warns about duplicate function declarations in the
-> CPUMAP and DEVMAP documentation. This is because the function name is the
-> same for Kernel and User space BPF progs but the parameters and return types
-> they take is what differs. This patch moves from using the ``c:function::``
-> directive to using the ``code-block:: c`` directive. The patches also fix
-> the indentation for the text associated with the "new" code block delcarations.
-> The missing support of c:namespace-push:: and c:namespace-pop:: directives by
-> helper scripts for kernel documentation prevents using the ``c:function::``
-> directive with proper namespacing.
+> Signed-off-by: Donald Hunter <donald.hunter@gmail.com>
+> Acked-by: Joanne Koong <joannelkoong@gmail.com>
+> ---
+> v2 -> v3:
+> - Use NULL instead of 0 and show use of bpf_map__fd()
+>   as suggested by Joanne Koong
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v3,1/2] docs: fix sphinx warnings for cpumap
-    (no matching commit)
-  - [bpf-next,v3,2/2] docs: fix sphinx warnings for devmap
-    https://git.kernel.org/bpf/bpf-next/c/c645eee4d35b
+  - [bpf-next,v3] bpf, docs: Document BPF_MAP_TYPE_BLOOM_FILTER
+    https://git.kernel.org/bpf/bpf-next/c/264c21867a0e
 
 You are awesome, thank you!
 -- 
