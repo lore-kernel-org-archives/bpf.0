@@ -2,208 +2,124 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87677C433FE
-	for <bpf@archiver.kernel.org>; Wed, 23 Nov 2022 19:54:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F199DC433FE
+	for <bpf@archiver.kernel.org>; Wed, 23 Nov 2022 19:55:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239274AbiKWTyG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 23 Nov 2022 14:54:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41424 "EHLO
+        id S238816AbiKWTzt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 23 Nov 2022 14:55:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239308AbiKWTxo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 23 Nov 2022 14:53:44 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FECC7202
-        for <bpf@vger.kernel.org>; Wed, 23 Nov 2022 11:52:15 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id g13-20020a056a000b8d00b0056e28b15757so11452428pfj.1
-        for <bpf@vger.kernel.org>; Wed, 23 Nov 2022 11:52:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Md9ZWXHDLM85YwaZa/3mJElMaCka2JtXSIbE+IlBCds=;
-        b=SdZWtsaRUwsnRl7l4iGx3Q8mmajbRUbVsT04AU6mUvnB2mzjIUJAH9DeWSKHkG6XWk
-         hD3ytudVB7Lk+nDClU+1crv7MHoU/8Ds1vvdt32/Ftqne2KTcttnFGFLZffwPnJpzs7Z
-         nrBqOk08IwQLjdJPzYK6GOSc6gYZdeFP2a0QxB/FJVSGOjabt1ZgyZyoTAbsE9ZK7btW
-         aYiGBVvDeVvW8iJ0P2GJjmz8krDfZImkRU1UZvq0YM/Ty8mAxexOqK7c16LYvI7k4dYH
-         GMkxa1d4QtmISwHuOfKoa8lzQZJ0WfxSWOZ0wV4I+bQci7JRHvXgZ68WgzqofW+3giyU
-         4GYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Md9ZWXHDLM85YwaZa/3mJElMaCka2JtXSIbE+IlBCds=;
-        b=d7JB/HzAN/f8IN3fvOKl2f3TPsdosdbW8fNlZAD0vznAaXxC5n7JbpTQvSTYRDz5aa
-         bPxnG/y3RWMIoXEWvqYO7Skk1uFoaJGD1XC3nU5gLeZ2p2QulQfy2ZYjMxX3yzsC85Hs
-         QmWsOe9uMlnpqpdTMWZwFsedzpLa807+eb78v268lx8St163XdM4r61y3vy/3Wvy3A6u
-         EYUzFaFTj6zOYmEwXh9QrDi5AqwvZaONcb7HKyNJ7P/vrXv7bPlyLWN+NtF2OI2XsB7Q
-         Kot+onkMmV9UBBw/+F+L5gv4NewT+ced2gwGHr6kkGvFpqiFiRIbyjIMGBsZ9yUTJLkI
-         u4rQ==
-X-Gm-Message-State: ANoB5pmKbSH3w0XQe4CvAEiH2MZ0hm1ygobuo/WJgdo0LFMeGvET5EOe
-        KVQpjyn6Mn3Mq3TiYEesNIEEzCQ=
-X-Google-Smtp-Source: AA0mqf6D3mjyGd46PLpkf4SCynyVivIxr+D0ItYoiaFgU5Sy5wjbFedEvH0VS5j1Oz4Z0Lbp6UOw2V8=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a17:903:2013:b0:188:f7d0:3952 with SMTP id
- s19-20020a170903201300b00188f7d03952mr9949169pla.164.1669233134546; Wed, 23
- Nov 2022 11:52:14 -0800 (PST)
-Date:   Wed, 23 Nov 2022 11:52:12 -0800
-In-Reply-To: <20221123111431.7b54668e@kernel.org>
-Mime-Version: 1.0
-References: <20221121182552.2152891-1-sdf@google.com> <20221121182552.2152891-7-sdf@google.com>
- <874jupviyc.fsf@toke.dk> <CAKH8qBuF_1UoUPzh_X6FMrJ61zCNDroqSuc-Pp2uH7Q4azmN8Q@mail.gmail.com>
- <20221123111431.7b54668e@kernel.org>
-Message-ID: <Y3557Ecr80Y9ZD2z@google.com>
-Subject: Re: [xdp-hints] [PATCH bpf-next v2 6/8] mlx4: Introduce mlx4_xdp_buff
- wrapper for xdp_buff
-From:   sdf@google.com
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     "Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?=" <toke@redhat.com>,
-        bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        haoluo@google.com, jolsa@kernel.org,
-        Tariq Toukan <tariqt@nvidia.com>,
-        David Ahern <dsahern@gmail.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Anatoly Burakov <anatoly.burakov@intel.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+        with ESMTP id S238866AbiKWTzX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 23 Nov 2022 14:55:23 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8131478D43;
+        Wed, 23 Nov 2022 11:54:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1669233258; x=1700769258;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9IaGz3nksRi+gF01rW+BvME2pa7n+X6zBZlnddfrqbk=;
+  b=KWMeqo2FiDHbxNJlvSOWdDrNO+l2jgknDLNwXOeL5DvU/qsFDWrO99jt
+   sVOSo2eySRQpgnbFtNPC8Y/7AbEmQ9u3Y6NagIGibHUnNU02EIbj+XVTL
+   FXUvXA4Wq+uxd5MkOnc6BDQP4IKfY7NctImiJYIL9CknMQWJKjPI+pl1N
+   mrLs0YWYM8F8/MMOM5SfqWEm2CO6rUBxGfNOW921JTcXGw7bOjrAH3hq6
+   +w4bMIrVFYJ3JGL2xo+DsZZFigqLxsMVgcCmbKR9Qa2mo6w7gtyX0wy9y
+   SJdeDhNyoyoBQNlHOw59jZ3CU1iwxcHYNBPt1iDl7JsfACRBjJZI8FXJO
+   A==;
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="184915519"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Nov 2022 12:54:17 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 23 Nov 2022 12:54:09 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Wed, 23 Nov 2022 12:54:09 -0700
+Date:   Wed, 23 Nov 2022 20:59:00 +0100
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
+        <john.fastabend@gmail.com>, <alexandr.lobakin@intel.com>,
+        <UNGLinuxDriver@microchip.com>
+Subject: Re: [PATCH net-next v4 4/7] net: lan966x: Update rxq memory model
+Message-ID: <20221123195900.wvql3v3mnmtixccs@soft-dev3-1>
+References: <20221122214413.3446006-1-horatiu.vultur@microchip.com>
+ <20221122214413.3446006-5-horatiu.vultur@microchip.com>
+ <Y31GsPEhDOsCB70i@boxer>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <Y31GsPEhDOsCB70i@boxer>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 11/23, Jakub Kicinski wrote:
-> On Wed, 23 Nov 2022 10:26:41 -0800 Stanislav Fomichev wrote:
-> > > This embedding trick works for drivers that put xdp_buff on the stack,
-> > > but mlx5 supports XSK zerocopy, which uses the xsk_buff_pool for
-> > > allocating them. This makes it a bit awkward to do the same thing  
-> there;
-> > > and since it's probably going to be fairly common to do something like
-> > > this, how about we just add a 'void *drv_priv' pointer to struct
-> > > xdp_buff that the drivers can use? The xdp_buff already takes up a  
-> full
-> > > cache line anyway, so any data stuffed after it will spill over to a  
-> new
-> > > one; so I don't think there's much difference performance-wise.
+The 11/22/2022 23:01, Maciej Fijalkowski wrote:
+> 
+> On Tue, Nov 22, 2022 at 10:44:10PM +0100, Horatiu Vultur wrote:
+> > By default the rxq memory model is MEM_TYPE_PAGE_SHARED but to be able
+> > to reuse pages on the TX side, when the XDP action XDP_TX it is required
+> > to update the memory model to PAGE_POOL.
 > >
-> > I guess the alternative is to extend xsk_buff_pool with some new
-> > argument for xdp_buff tailroom? (so it can kmalloc(sizeof(xdp_buff) +
-> > xdp_buff_tailroom))
-> > But it seems messy because there is no way of knowing what the target
-> > device's tailroom is, so it has to be a user setting :-/
-> > I've started with a priv pointer in xdp_buff initially, it seems fine
-> > to go back. I'll probably convert veth/mlx4 to the same mode as well
-> > to avoid having different approaches in different places..
-
-> Can we not do this please? Add 16B of "private driver space" after
-> the xdp_buff in xdp_buff_xsk (we have 16B to full cacheline), the
-> drivers decide how they use it. Drivers can do BUILD_BUG_ON() for their
-> expected size and cast that to whatever struct they want. This is how
-> various offloads work, the variable size tailroom would be an over
-> design IMO.
-
-> And this way non XSK paths can keep its normal typing.
-
-Good idea, prototyped below, lmk if it that's not what you had in mind.
-
-struct xdp_buff_xsk {
-	struct xdp_buff            xdp;                  /*     0    56 */
-	u8                         cb[16];               /*    56    16 */
-	/* --- cacheline 1 boundary (64 bytes) was 8 bytes ago --- */
-	dma_addr_t                 dma;                  /*    72     8 */
-	dma_addr_t                 frame_dma;            /*    80     8 */
-	struct xsk_buff_pool *     pool;                 /*    88     8 */
-	u64                        orig_addr;            /*    96     8 */
-	struct list_head           free_list_node;       /*   104    16 */
-
-	/* size: 120, cachelines: 2, members: 7 */
-	/* last cacheline: 56 bytes */
-};
-
-Toke, I can try to merge this into your patch + keep your SoB (or feel free
-to try this and retest yourself, whatever works).
-
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.h  
-b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.h
-index bc2d9034af5b..837bf103b871 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.h
-@@ -44,6 +44,11 @@
-  	(MLX5E_XDP_INLINE_WQE_MAX_DS_CNT * MLX5_SEND_WQE_DS - \
-  	 sizeof(struct mlx5_wqe_inline_seg))
-
-+struct mlx5_xdp_cb {
-+	struct mlx5_cqe64 *cqe;
-+	struct mlx5e_rq *rq;
-+};
-+
-  struct mlx5e_xsk_param;
-  int mlx5e_xdp_max_mtu(struct mlx5e_params *params, struct mlx5e_xsk_param  
-*xsk);
-  bool mlx5e_xdp_handle(struct mlx5e_rq *rq, struct page *page,
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/rx.c  
-b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/rx.c
-index c91b54d9ff27..84d23b2da7ce 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/rx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/rx.c
-@@ -5,6 +5,7 @@
-  #include "en/xdp.h"
-  #include <net/xdp_sock_drv.h>
-  #include <linux/filter.h>
-+#include <linux/build_bug.h>
-
-  /* RX data path */
-
-@@ -286,8 +287,14 @@ struct sk_buff *mlx5e_xsk_skb_from_cqe_linear(struct  
-mlx5e_rq *rq,
-  					      u32 cqe_bcnt)
-  {
-  	struct xdp_buff *xdp = wi->au->xsk;
-+	struct mlx5_xdp_cb *cb;
-  	struct bpf_prog *prog;
-
-+	BUILD_BUG_ON(sizeof(struct mlx5_xdp_cb) > XSKB_CB_SIZE);
-+	cb = xp_get_cb(xdp);
-+	cb->cqe = NULL /*cqe*/;
-+	cb->rq = rq;
-+
-  	/* wi->offset is not used in this function, because xdp->data and the
-  	 * DMA address point directly to the necessary place. Furthermore, the
-  	 * XSK allocator allocates frames per packet, instead of pages, so
-diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
-index f787c3f524b0..b298590429e7 100644
---- a/include/net/xsk_buff_pool.h
-+++ b/include/net/xsk_buff_pool.h
-@@ -19,8 +19,11 @@ struct xdp_sock;
-  struct device;
-  struct page;
-
-+#define XSKB_CB_SIZE 16
-+
-  struct xdp_buff_xsk {
-  	struct xdp_buff xdp;
-+	u8 cb[XSKB_CB_SIZE]; /* Private area for the drivers to use. */
-  	dma_addr_t dma;
-  	dma_addr_t frame_dma;
-  	struct xsk_buff_pool *pool;
-@@ -143,6 +146,11 @@ static inline dma_addr_t xp_get_frame_dma(struct  
-xdp_buff_xsk *xskb)
-  	return xskb->frame_dma;
-  }
-
-+static inline void *xp_get_cb(struct xdp_buff *xdp)
-+{
-+	return (void *)xdp + offsetof(struct xdp_buff_xsk, cb);
-+}
-+
-  void xp_dma_sync_for_cpu_slow(struct xdp_buff_xsk *xskb);
-  static inline void xp_dma_sync_for_cpu(struct xdp_buff_xsk *xskb)
-  {
-
-> > > I'll send my patch to add support to mlx5 (using the drv_priv pointer
-> > > approach) separately.
+> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> > ---
+> >  .../net/ethernet/microchip/lan966x/lan966x_fdma.c  | 14 ++++++++++++++
+> >  1 file changed, 14 insertions(+)
 > >
-> > Saw them, thanks! Will include them in v3+.
+> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> > index 384ed34197d58..483d1470c8362 100644
+> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> > @@ -78,8 +78,22 @@ static int lan966x_fdma_rx_alloc_page_pool(struct lan966x_rx *rx)
+> >               .max_len = rx->max_mtu -
+> >                          SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
+> >       };
+> > +     struct lan966x_port *port;
+> 
+> port can be scoped only for the loop below?
+
+Yes, I will change this.
+
+> 
+> > +     int i;
+> >
+> >       rx->page_pool = page_pool_create(&pp_params);
+> > +
+> > +     for (i = 0; i < lan966x->num_phys_ports; ++i) {
+> 
+> Quoting Alex from some other thread:
+> 
+> "Since we're on -std=gnu11 for a bunch of releases already, all new
+> loops are expected to go with the iterator declarations inside them."
+> 
+> TBH I wasn't aware of that personally :)
+
+Me neither, I will update this and all the other lops introduced in this
+series.
+
+> 
+> > +             if (!lan966x->ports[i])
+> > +                     continue;
+> > +
+> > +             port = lan966x->ports[i];
+> > +
+> > +             xdp_rxq_info_unreg_mem_model(&port->xdp_rxq);
+> > +             xdp_rxq_info_reg_mem_model(&port->xdp_rxq, MEM_TYPE_PAGE_POOL,
+> > +                                        rx->page_pool);
+> > +     }
+> > +
+> >       return PTR_ERR_OR_ZERO(rx->page_pool);
+> >  }
+> >
+> > --
+> > 2.38.0
+> >
+
+-- 
+/Horatiu
