@@ -2,211 +2,116 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61ADDC43219
-	for <bpf@archiver.kernel.org>; Wed, 23 Nov 2022 20:31:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93B2DC433FE
+	for <bpf@archiver.kernel.org>; Wed, 23 Nov 2022 20:40:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239299AbiKWUbg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 23 Nov 2022 15:31:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
+        id S238516AbiKWUk5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 23 Nov 2022 15:40:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239064AbiKWUbI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 23 Nov 2022 15:31:08 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2F0B46;
-        Wed, 23 Nov 2022 12:27:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669235247; x=1700771247;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=iKDTlOAUZqqB5RQV8RImjoFEKIKyw5FL5Cc7xV3NePg=;
-  b=ihj3wKVO9hnRNld1pAUpHgTe1ukP3WggtLea3/HiVg9yKraZPdaFFqLk
-   n7PVLsZfO6RAazz9wJztKN6ufEgRh6ZSpRxbm3cxtS5WT4wrQb4yJ/IBB
-   kQWRyD2kA+Fgesh9fmyDV5NLSr2kxLy+tUv70tBarQHvhjgBA8eFKmUZB
-   S7+bet21Jgzk298xFeo471MzbBeDZBQoY2BMBJUmkdvkZQ3HTASeruv+M
-   lwXDZhkuXuO7tTbwSiNbXCgcrqxJnAY2Osw7kwJgRe9tI4LlMI12cHYhZ
-   VyyTg5bjNSFCej6NRmuDCWxGJAy6wsxJ8UK8BD11G2/X2FY0u/0pOm1t2
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="184921921"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Nov 2022 13:27:26 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 23 Nov 2022 13:27:21 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 23 Nov 2022 13:27:18 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bpf@vger.kernel.org>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <hawk@kernel.org>, <john.fastabend@gmail.com>,
-        <UNGLinuxDriver@microchip.com>, <alexandr.lobakin@intel.com>,
-        <maciej.fijalkowski@intel.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next v5 5/7] net: lan966x: Update dma_dir of page_pool_params
-Date:   Wed, 23 Nov 2022 21:31:37 +0100
-Message-ID: <20221123203139.3828548-6-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221123203139.3828548-1-horatiu.vultur@microchip.com>
-References: <20221123203139.3828548-1-horatiu.vultur@microchip.com>
+        with ESMTP id S239193AbiKWUkm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 23 Nov 2022 15:40:42 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A28E68698
+        for <bpf@vger.kernel.org>; Wed, 23 Nov 2022 12:39:37 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id ud5so45331022ejc.4
+        for <bpf@vger.kernel.org>; Wed, 23 Nov 2022 12:39:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=seXLexgw60Xn7ofUIebWQx4O0czDeSndM+Fe72T2ROo=;
+        b=iyczBRnW1aka4fRuRNQo1LAOjmmjxcMlLpjqPNxhwjSKL3OxEOp5lAAlM/70iG3Cc9
+         v2ovnzlSD0cThSibHI3qrfN5qYwbMq4ZjaZWnJH2nWV03UjIe87dn/Sn70u/tt1haY+l
+         kSY8i98cGOen2fVbZpg/s0dA6kzDKJzw1U6Z6ESzx6MNvWAFWqVvJcPCFHfNXKOcHC4c
+         RvL7nO4ebOWo8gdp89PLfzXP4qdO61JqaYVPnCfwNvRjRyyCB0/+iqewS0RTlCq6rxf1
+         9W+uvxECqzxfW5mScGxi8Z/qSbXTc9T/Usja4KJcBaYDQDb16cUnxmf9k/neyKQCKp53
+         FGrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=seXLexgw60Xn7ofUIebWQx4O0czDeSndM+Fe72T2ROo=;
+        b=aqR2/J1b+WGKBsmLNCYI5Wx6tqE3/j7ybVJ6XxfGfCFZmhTvvBpaieIafNiy7ZgWbC
+         0Lz103ChXmHo+oMqA0NFpomigtRe5SdOPftCkH6GOaGomhUjwlF88gIh1RSSuaMFW37r
+         SGCHBHvmwHBzGL0A1WGgZPk9rqH3dibvrMTQrZJOcVB3FcoOK+0G62J1ELXTPVSyVvMw
+         P+0kwmLE5UQI61HMVRxlSefvXtCSBRgQl2a3MGtHZiyUMJANYDUhItJZAkuBmlQHbyr8
+         NjXkcWerhxyfREjnwJw6NG7mLkV+s96jqwFPeVYORQrQWs/QTR7ikcb4UtTSYS9ng3r8
+         AqKw==
+X-Gm-Message-State: ANoB5pluokFQ+KM0tCSgbflgZ+aaosXAe1wsixwAT0QIPzpHYSyHlphU
+        UuLMst8iD/wZxkuqC6g5xqimbvbi4VL20KvtJ3Y=
+X-Google-Smtp-Source: AA0mqf6SesD4psS/qk9sSJ4Fvk04sYLwcW/cqlxRhzcgJNo9Wr90mYsUYNRjmbM90bzFlfQ6eXBEPrv/paJ2ZkrfagI=
+X-Received: by 2002:a17:906:2ac3:b0:7ad:f2f9:2b49 with SMTP id
+ m3-20020a1709062ac300b007adf2f92b49mr13597787eje.94.1669235975828; Wed, 23
+ Nov 2022 12:39:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+References: <20221123200829.2226254-1-sdf@google.com>
+In-Reply-To: <20221123200829.2226254-1-sdf@google.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 23 Nov 2022 12:39:24 -0800
+Message-ID: <CAADnVQ+dauPf-BhcmM4O7qSqzZFLK2+56N3djzR6zRPB_yawsA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Mount debugfs in setns_by_fd
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Jiri Olsa <olsajiri@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To add support for XDP_TX it is required to be able to write to the DMA
-area therefore it is required that the pages will be mapped using
-DMA_BIDIRECTIONAL flag.
-Therefore check if there are any xdp programs on the interfaces and in
-that case set DMA_BIDRECTIONAL otherwise use DMA_FROM_DEVICE.
-Therefore when a new XDP program is added it is required to redo the
-page_pool.
+On Wed, Nov 23, 2022 at 12:08 PM Stanislav Fomichev <sdf@google.com> wrote:
+>
+> Jiri reports broken test_progs after recent commit 68f8e3d4b916
+> ("selftests/bpf: Make sure zero-len skbs aren't redirectable").
+> Apparently we don't remount debugfs when we switch back networking namespace.
+> Let's explicitly mount /sys/kernel/debug.
+>
+> 0: https://lore.kernel.org/bpf/63b85917-a2ea-8e35-620c-808560910819@meta.com/T/#ma66ca9c92e99eee0a25e40f422489b26ee0171c1
+>
+> Fixes: a30338840fa5 ("selftests/bpf: Move open_netns() and close_netns() into network_helpers.c")
+> Reported-by: Jiri Olsa <olsajiri@gmail.com>
+> Signed-off-by: Stanislav Fomichev <sdf@google.com>
+> ---
+>  tools/testing/selftests/bpf/network_helpers.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+> index bec15558fd93..1f37adff7632 100644
+> --- a/tools/testing/selftests/bpf/network_helpers.c
+> +++ b/tools/testing/selftests/bpf/network_helpers.c
+> @@ -426,6 +426,10 @@ static int setns_by_fd(int nsfd)
+>         if (!ASSERT_OK(err, "mount /sys/fs/bpf"))
+>                 return err;
+>
+> +       err = mount("debugfs", "/sys/kernel/debug", "debugfs", 0, NULL);
+> +       if (!ASSERT_OK(err, "mount /sys/kernel/debug"))
+> +               return err;
+> +
+>         return 0;
+>  }
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- .../ethernet/microchip/lan966x/lan966x_fdma.c | 29 +++++++++++++++----
- .../ethernet/microchip/lan966x/lan966x_main.h |  2 ++
- .../ethernet/microchip/lan966x/lan966x_xdp.c  | 28 ++++++++++++++++++
- 3 files changed, 53 insertions(+), 6 deletions(-)
+Thanks.
+It fixes part of it but it's still racy.
+I see:
+do_read:FAIL:open open /sys/fs/bpf/bpf_iter_test1 failed: No such file
+or directory
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-index 3df3b3d29b4ff..bc30c31c43602 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-@@ -79,6 +79,9 @@ static int lan966x_fdma_rx_alloc_page_pool(struct lan966x_rx *rx)
- 			   SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
- 	};
- 
-+	if (lan966x_xdp_present(lan966x))
-+		pp_params.dma_dir = DMA_BIDIRECTIONAL;
-+
- 	rx->page_pool = page_pool_create(&pp_params);
- 
- 	for (int i = 0; i < lan966x->num_phys_ports; ++i) {
-@@ -826,16 +829,11 @@ static int lan966x_fdma_get_max_frame(struct lan966x *lan966x)
- 	       XDP_PACKET_HEADROOM;
- }
- 
--int lan966x_fdma_change_mtu(struct lan966x *lan966x)
-+static int __lan966x_fdma_reload(struct lan966x *lan966x, int max_mtu)
- {
--	int max_mtu;
- 	int err;
- 	u32 val;
- 
--	max_mtu = lan966x_fdma_get_max_frame(lan966x);
--	if (max_mtu == lan966x->rx.max_mtu)
--		return 0;
--
- 	/* Disable the CPU port */
- 	lan_rmw(QSYS_SW_PORT_MODE_PORT_ENA_SET(0),
- 		QSYS_SW_PORT_MODE_PORT_ENA,
-@@ -861,6 +859,25 @@ int lan966x_fdma_change_mtu(struct lan966x *lan966x)
- 	return err;
- }
- 
-+int lan966x_fdma_change_mtu(struct lan966x *lan966x)
-+{
-+	int max_mtu;
-+
-+	max_mtu = lan966x_fdma_get_max_frame(lan966x);
-+	if (max_mtu == lan966x->rx.max_mtu)
-+		return 0;
-+
-+	return __lan966x_fdma_reload(lan966x, max_mtu);
-+}
-+
-+int lan966x_fdma_reload_page_pool(struct lan966x *lan966x)
-+{
-+	int max_mtu;
-+
-+	max_mtu = lan966x_fdma_get_max_frame(lan966x);
-+	return __lan966x_fdma_reload(lan966x, max_mtu);
-+}
-+
- void lan966x_fdma_netdev_init(struct lan966x *lan966x, struct net_device *dev)
- {
- 	if (lan966x->fdma_ndev)
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-index c762e3732f88f..81c0b11097ce2 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-@@ -466,6 +466,7 @@ void lan966x_fdma_netdev_deinit(struct lan966x *lan966x, struct net_device *dev)
- int lan966x_fdma_init(struct lan966x *lan966x);
- void lan966x_fdma_deinit(struct lan966x *lan966x);
- irqreturn_t lan966x_fdma_irq_handler(int irq, void *args);
-+int lan966x_fdma_reload_page_pool(struct lan966x *lan966x);
- 
- int lan966x_lag_port_join(struct lan966x_port *port,
- 			  struct net_device *brport_dev,
-@@ -556,6 +557,7 @@ int lan966x_xdp(struct net_device *dev, struct netdev_bpf *xdp);
- int lan966x_xdp_run(struct lan966x_port *port,
- 		    struct page *page,
- 		    u32 data_len);
-+bool lan966x_xdp_present(struct lan966x *lan966x);
- static inline bool lan966x_xdp_port_present(struct lan966x_port *port)
- {
- 	return !!port->xdp_prog;
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
-index 8ebde1eb6a09c..ba7aa6df9d0e6 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
-@@ -11,6 +11,8 @@ static int lan966x_xdp_setup(struct net_device *dev, struct netdev_bpf *xdp)
- 	struct lan966x_port *port = netdev_priv(dev);
- 	struct lan966x *lan966x = port->lan966x;
- 	struct bpf_prog *old_prog;
-+	bool old_xdp, new_xdp;
-+	int err;
- 
- 	if (!lan966x->fdma) {
- 		NL_SET_ERR_MSG_MOD(xdp->extack,
-@@ -18,7 +20,20 @@ static int lan966x_xdp_setup(struct net_device *dev, struct netdev_bpf *xdp)
- 		return -EOPNOTSUPP;
- 	}
- 
-+	old_xdp = lan966x_xdp_present(lan966x);
- 	old_prog = xchg(&port->xdp_prog, xdp->prog);
-+	new_xdp = lan966x_xdp_present(lan966x);
-+
-+	if (old_xdp == new_xdp)
-+		goto out;
-+
-+	err = lan966x_fdma_reload_page_pool(lan966x);
-+	if (err) {
-+		xchg(&port->xdp_prog, old_prog);
-+		return err;
-+	}
-+
-+out:
- 	if (old_prog)
- 		bpf_prog_put(old_prog);
- 
-@@ -62,6 +77,19 @@ int lan966x_xdp_run(struct lan966x_port *port, struct page *page, u32 data_len)
- 	}
- }
- 
-+bool lan966x_xdp_present(struct lan966x *lan966x)
-+{
-+	for (int p = 0; p < lan966x->num_phys_ports; ++p) {
-+		if (!lan966x->ports[p])
-+			continue;
-+
-+		if (lan966x_xdp_port_present(lan966x->ports[p]))
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
- int lan966x_xdp_port_init(struct lan966x_port *port)
- {
- 	struct lan966x *lan966x = port->lan966x;
--- 
-2.38.0
+I suspect it happens when iter tests are running while test_empty_skb
+is cleaning the netns.
 
+So I've added:
+-void test_empty_skb(void)
++void serial_test_empty_skb(void)
+-void test_xdp_do_redirect(void)
++void serial_test_xdp_do_redirect(void)
+-void test_xdp_synproxy(void)
++void serial_test_xdp_synproxy(void)
+
+to stop the bleeding and applied.
