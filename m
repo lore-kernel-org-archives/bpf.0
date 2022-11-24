@@ -2,105 +2,64 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 207BFC352A1
-	for <bpf@archiver.kernel.org>; Thu, 24 Nov 2022 15:19:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEA9FC433FE
+	for <bpf@archiver.kernel.org>; Thu, 24 Nov 2022 15:22:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbiKXPTt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 24 Nov 2022 10:19:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57386 "EHLO
+        id S229960AbiKXPWS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 24 Nov 2022 10:22:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbiKXPTH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 24 Nov 2022 10:19:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6144416F0FA
-        for <bpf@vger.kernel.org>; Thu, 24 Nov 2022 07:16:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669302991;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YVpzZ9PuKYYYwbqGuIV03fYvtpDzSokFyED3tXA9BEI=;
-        b=fjWrFeY256Jf/3h0iPSaU3rWSNHuzoDY6Iq3k3yrTGJJXKHh/cNxfypfgKKRHN49Gu3shi
-        wn5CMT7vGnt0L7w3xPZktlh3Xrti0VoWErmEVuTSjZEz9jEgu5VigiVXhNTmlnaf4q9hJT
-        C5dTyIsvZvR039ohKR6tnFp1u/fvJEk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-246-nlR9u26LOHi58kiUJjaWYA-1; Thu, 24 Nov 2022 10:16:28 -0500
-X-MC-Unique: nlR9u26LOHi58kiUJjaWYA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B97293C01E0F;
-        Thu, 24 Nov 2022 15:16:27 +0000 (UTC)
-Received: from plouf.redhat.com (unknown [10.39.193.200])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 06D4940C2064;
-        Thu, 24 Nov 2022 15:16:25 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [RFC hid v1 09/10] selftests: hid: ensure the program is correctly pinned
-Date:   Thu, 24 Nov 2022 16:16:02 +0100
-Message-Id: <20221124151603.807536-10-benjamin.tissoires@redhat.com>
-In-Reply-To: <20221124151603.807536-1-benjamin.tissoires@redhat.com>
-References: <20221124151603.807536-1-benjamin.tissoires@redhat.com>
+        with ESMTP id S229635AbiKXPVy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 24 Nov 2022 10:21:54 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5DF10BC
+        for <bpf@vger.kernel.org>; Thu, 24 Nov 2022 07:21:38 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id z192so2183924yba.0
+        for <bpf@vger.kernel.org>; Thu, 24 Nov 2022 07:21:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ihut9iEAujirpurbKCNL/zw1Q0Wu/szAUozcuq6crd8=;
+        b=kLvkNNhrq1JQdyx/WAaeyr/+FrsK220fe1a3ZWGr4Db56S//zpEIRuGVdGUKckKMwo
+         7EF94MP72Dv/ibJN1cRlVhOsyPs3qmnbVcVk+SOo6P73oZiov7oJC5SsbatPI5kQHvPu
+         RRLiL2lW0Cv9DOAXFQ9TFjfb5uODX3nEt/yDsXkpFQdC6GONVV/9IVluOEY/bnOjYZvx
+         icPkIybNXS5mk83QnJo6B3gXWjprdAnQQ1SkENu2brtImccrUcacfnebBEb/zylEQR/1
+         8sgUye7qjNQmu8aBCoBdKZr1sCERiPcTvVoyZHGOr2DvsBwNtHxhJI5Btd+eEgPuwXyw
+         KSLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ihut9iEAujirpurbKCNL/zw1Q0Wu/szAUozcuq6crd8=;
+        b=taVflxwz2LfDvC1AQp4JZhiTrlOBxDV4caJbtHlaxkvEeHG+nZAnuN4ABXo1maYOpV
+         Hle7D2ifUIRz+qiZkMa0ljpYqcSP2ELVOiq21loRyQD2EaY+/VBoVNfekrxGGA8wYGXp
+         zwAIAvx0a18J/gMEMOOVs9FAZs1m6pWazPg5go712TGs+cCkG1D7FrbMxIq0RK1dGChm
+         bnzud4x7cYxFrzuHr2vGbL4ujh306RZKgUuWTbAvk+o+gap9rWze4SY469jg2hgvL60C
+         jRcMWq0vwwe31m//aTZJqPbCyuAHpA/wbJVZzL/UcRSw24gQceiQxu7VBNM8HIgumKYN
+         UkLA==
+X-Gm-Message-State: ANoB5pk2LihYwPZ96iKCadyf2LVow9eZ9OUxD8ujAi7XCBfbAg7XbMLe
+        S603yHIPP7y2Z8muBuMvSl4+PCHLgym7iPxTLHnv+ReHK094rhzB
+X-Google-Smtp-Source: AA0mqf6Ky0pbvfRoYwZhFpfiheWgO/DIIySWrko793BVtTH4UX7ONMFvZb2H1NB1iB2lkDJh8mAFS0lgRXBWgxCLyY0=
+X-Received: by 2002:a25:ad8b:0:b0:6de:6c43:3991 with SMTP id
+ z11-20020a25ad8b000000b006de6c433991mr12135978ybi.604.1669303297424; Thu, 24
+ Nov 2022 07:21:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Reply-To: tjcw@cantab.net
+From:   Chris Ward <tjcw01@gmail.com>
+Date:   Thu, 24 Nov 2022 15:21:26 +0000
+Message-ID: <CAC=wTOgOMCh7bBdiQMLPPKRUui53oQUKtBUim5LVZz3w9Aqp5w@mail.gmail.com>
+Subject: Re: xdp/bpf application getting unexpected ENOTSOCK
+To:     bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Turns out that if bpffs was not mounted, the test was silently passing.
+The reason was a mismatch between the levels of libxdp and libbpf in
+use. To fix this it was necessary to add -fPIC to the CFLAGS when
+building libbpf. I have raised a PR
+https://github.com/libbpf/libbpf/pull/631 with the fix and a little
+more detail as to why I need it. Please review and merge.
 
-So ensure it passes, but also force the mount of the bpffs in vmtest.sh
-so we get passing results.
-
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
----
- tools/testing/selftests/hid/hid_bpf.c | 3 ++-
- tools/testing/selftests/hid/vmtest.sh | 4 +++-
- 2 files changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/hid/hid_bpf.c b/tools/testing/selftests/hid/hid_bpf.c
-index 4bdd1cfa7d13..3ae544bf24fe 100644
---- a/tools/testing/selftests/hid/hid_bpf.c
-+++ b/tools/testing/selftests/hid/hid_bpf.c
-@@ -712,7 +712,8 @@ TEST_F(hid_bpf, test_attach_detach)
- 
- 	/* pin the program and immediately unpin it */
- #define PIN_PATH "/sys/fs/bpf/hid_first_event"
--	bpf_program__pin(self->skel->progs.hid_first_event, PIN_PATH);
-+	err = bpf_program__pin(self->skel->progs.hid_first_event, PIN_PATH);
-+	ASSERT_OK(err) TH_LOG("error while calling bpf_program__pin");
- 	remove(PIN_PATH);
- #undef PIN_PATH
- 	usleep(100000);
-diff --git a/tools/testing/selftests/hid/vmtest.sh b/tools/testing/selftests/hid/vmtest.sh
-index f124cf6b0d0f..bd60f65acb72 100755
---- a/tools/testing/selftests/hid/vmtest.sh
-+++ b/tools/testing/selftests/hid/vmtest.sh
-@@ -108,8 +108,10 @@ EOF
- 	if [[ "${debug_shell}" != "yes" ]]
- 	then
- 		touch ${OUTPUT_DIR}/${LOG_FILE}
--		command="set -o pipefail ; ${command} 2>&1 | tee ${OUTPUT_DIR}/${LOG_FILE}"
-+		command="mount bpffs -t bpf /sys/fs/bpf/; set -o pipefail ; ${command} 2>&1 | tee ${OUTPUT_DIR}/${LOG_FILE}"
- 		post_command="cat ${OUTPUT_DIR}/${LOG_FILE}"
-+	else
-+		command="mount bpffs -t bpf /sys/fs/bpf/; ${command}"
- 	fi
- 
- 	set +e
--- 
-2.38.1
-
+Chris Ward, IBM
