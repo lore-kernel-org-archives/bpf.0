@@ -2,53 +2,56 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33DB1C4332F
-	for <bpf@archiver.kernel.org>; Thu, 24 Nov 2022 05:32:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC2F7C4332F
+	for <bpf@archiver.kernel.org>; Thu, 24 Nov 2022 05:32:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229379AbiKXFcO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 24 Nov 2022 00:32:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48404 "EHLO
+        id S229468AbiKXFcU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 24 Nov 2022 00:32:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiKXFcM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 24 Nov 2022 00:32:12 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACBD8C1F4B
-        for <bpf@vger.kernel.org>; Wed, 23 Nov 2022 21:32:11 -0800 (PST)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ANNUHZO005939
-        for <bpf@vger.kernel.org>; Wed, 23 Nov 2022 21:32:11 -0800
+        with ESMTP id S229479AbiKXFcS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 24 Nov 2022 00:32:18 -0500
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 125C3C1F60
+        for <bpf@vger.kernel.org>; Wed, 23 Nov 2022 21:32:17 -0800 (PST)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 2ANHsCUU030197
+        for <bpf@vger.kernel.org>; Wed, 23 Nov 2022 21:32:17 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=ri0gGphGnhvanuWBhPVTrQggfo67y+obbELUtNSK5Ow=;
- b=kfUU6+pFUyMOH7BF+HtL2kj5+XHREjMbsJRvD4ufZ/oJ931c0O4B3hC9Vmk3uJlX9RTT
- vDd9zXxSk51k/xCU0pekqEGijyN5jNp8F2jk46q5yECnhLPDPA9eY++8SZDEyMp5i3Yc
- ITG55bkcqYFBftZvvfETt+CnlVL9xOdBHzM= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=5m/B39cycueel+lTz9FUc9hsDj8KwVE1wLGy8vvMvqY=;
+ b=XfVOdot6L6UArgG6L/kUC+aGnS7c9MkINSNsUj6vxiTC2yeVQw9LJlv+xB6sO7CQvMum
+ 7lL/8Bfy902IZXDcccdfP8cAiY4MssuGdFdjZjyYgijmz4ODr9WXJ1oefb9PLbwa6Mt0
+ L/OGh9n21aPp5FWQbyO4cVMvvlAefa+Sp98= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3m1w88sm85-4
+        by m0089730.ppops.net (PPS) with ESMTPS id 3m1c7rgd4k-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 23 Nov 2022 21:32:11 -0800
-Received: from twshared0705.02.ash8.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 23 Nov 2022 21:32:17 -0800
+Received: from twshared21592.39.frc1.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 23 Nov 2022 21:32:10 -0800
+ 15.1.2375.31; Wed, 23 Nov 2022 21:32:14 -0800
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id 52DBA12A419F7; Wed, 23 Nov 2022 21:32:01 -0800 (PST)
+        id CD11F12A41A27; Wed, 23 Nov 2022 21:32:11 -0800 (PST)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v10 0/4] bpf: Add bpf_rcu_read_lock() support
-Date:   Wed, 23 Nov 2022 21:32:01 -0800
-Message-ID: <20221124053201.2372298-1-yhs@fb.com>
+Subject: [PATCH bpf-next v10 2/4] bpf: Introduce might_sleep field in bpf_func_proto
+Date:   Wed, 23 Nov 2022 21:32:11 -0800
+Message-ID: <20221124053211.2373553-1-yhs@fb.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221124053201.2372298-1-yhs@fb.com>
+References: <20221124053201.2372298-1-yhs@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: jD_YLHOWy8FZpGcyOTaXHGTBh3JImThM
-X-Proofpoint-GUID: jD_YLHOWy8FZpGcyOTaXHGTBh3JImThM
+X-Proofpoint-GUID: ykSrrj5JP00hNQ_klBjfdnZ4j2szPxn1
+X-Proofpoint-ORIG-GUID: ykSrrj5JP00hNQ_klBjfdnZ4j2szPxn1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-24_03,2022-11-23_01,2022-06-22_01
@@ -56,103 +59,124 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, without rcu attribute info in BTF, the verifier treats
-rcu tagged pointer as a normal pointer. This might be a problem
-for sleepable program where rcu_read_lock()/unlock() is not available.
-For example, for a sleepable fentry program, if rcu protected memory
-access is interleaved with a sleepable helper/kfunc, it is possible
-the memory access after the sleepable helper/kfunc might be invalid
-since the object might have been freed then. Even without
-a sleepable helper/kfunc, without rcu_read_lock() protection,
-it is possible that the rcu protected object might be release
-in the middle of bpf program execution which may cause incorrect
-result.
+Introduce bpf_func_proto->might_sleep to indicate a particular helper
+might sleep. This will make later check whether a helper might be
+sleepable or not easier.
 
-To prevent above cases, enable btf_type_tag("rcu") attributes,
-introduce new bpf_rcu_read_lock/unlock() kfuncs and add verifier support.
+Acked-by: Martin KaFai Lau <martin.lau@kernel.org>
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ include/linux/bpf.h      | 1 +
+ kernel/bpf/bpf_lsm.c     | 6 ++++--
+ kernel/bpf/helpers.c     | 2 ++
+ kernel/bpf/verifier.c    | 5 +++++
+ kernel/trace/bpf_trace.c | 4 ++--
+ 5 files changed, 14 insertions(+), 4 deletions(-)
 
-In the rest of patch set, Patch 1 enabled btf_type_tag for __rcu
-attribute. Patche 2 added might_sleep in bpf_func_proto. Patch 3 added ne=
-w
-bpf_rcu_read_lock/unlock() kfuncs and verifier support.
-Patch 4 added some tests for these two new kfuncs.
-
-Changelogs:
-  v9 -> v10:
-    . if no rcu tag support in vmlinux btf, using bpf_rcu_read_lock/unloc=
-k()
-      will cause verification error.
-    . at bpf_rcu_read_unlock(), invalidate rcu ptr to PTR_UNTRUSTED
-      instead of SCALAR_VALUE.
-    . a few other comment changes and other minor changes.
-  v8 -> v9:
-    . remove sleepable prog check for ld_abs/ind checking in rcu read
-      lock region.
-    . fix a test failure with gcc-compiled kernel.
-    . a couple of other minor fixes.
-  v7 -> v8:
-    . add might_sleep in bpf_func_proto so we can easily identify whether
-      a helper is sleepable or not.
-    . do not enforce rcu rules for sleepable, e.g., rcu dereference must
-      be in a bpf_rcu_read_lock region. This is to keep old code working
-      fine.
-    . Mark 'b' in 'b =3D a->b' (b is tagged with __rcu) as MEM_RCU only i=
-f
-      'b =3D a->b' in rcu read region and 'a' is trusted. This adds safet=
-y
-      guarantee for 'b' inside the rcu read region.
-  v6 -> v7:
-    . rebase on top of bpf-next.
-    . remove the patch which enables sleepable program using
-      cgrp_local_storage map. This is orthogonal to this patch set
-      and will be addressed separately.
-    . mark the rcu pointer dereference result as UNTRUSTED if inside
-      a bpf_rcu_read_lock() region.
-  v5 -> v6:
-    . fix selftest prog miss_unlock which tested nested locking.
-    . add comments in selftest prog cgrp_succ to explain how to handle
-      nested memory access after rcu memory load.
-  v4 -> v5:
-    . add new test to aarch64 deny list.
-  v3 -> v4:
-    . fix selftest failures when built with gcc. gcc doesn't support
-      btf_type_tag yet and some tests relies on that. skip these
-      tests if vmlinux BTF does not have btf_type_tag("rcu").
-  v2 -> v3:
-    . went back to MEM_RCU approach with invalidate rcu ptr registers
-      at bpf_rcu_read_unlock() place.
-    . remove KF_RCU_LOCK/UNLOCK flag and compare btf_id at verification
-      time instead.
-  v1 -> v2:
-    . use kfunc instead of helper for bpf_rcu_read_lock/unlock.
-    . not use MEM_RCU bpf_type_flag, instead use active_rcu_lock
-      in reg state to identify rcu ptr's.
-    . Add more self tests.
-    . add new test to s390x deny list.
-
-Yonghong Song (4):
-  compiler_types: Define __rcu as __attribute__((btf_type_tag("rcu")))
-  bpf: Introduce might_sleep field in bpf_func_proto
-  bpf: Add kfunc bpf_rcu_read_lock/unlock()
-  selftests/bpf: Add tests for bpf_rcu_read_lock()
-
- include/linux/bpf.h                           |   4 +
- include/linux/bpf_verifier.h                  |   5 +-
- include/linux/compiler_types.h                |   3 +-
- kernel/bpf/bpf_lsm.c                          |   6 +-
- kernel/bpf/btf.c                              |   3 +
- kernel/bpf/helpers.c                          |  14 +
- kernel/bpf/verifier.c                         | 167 ++++++++--
- kernel/trace/bpf_trace.c                      |   4 +-
- tools/testing/selftests/bpf/DENYLIST.aarch64  |   1 +
- tools/testing/selftests/bpf/DENYLIST.s390x    |   1 +
- .../selftests/bpf/prog_tests/rcu_read_lock.c  | 158 ++++++++++
- .../selftests/bpf/progs/rcu_read_lock.c       | 290 ++++++++++++++++++
- 12 files changed, 621 insertions(+), 35 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/rcu_read_lock.=
-c
- create mode 100644 tools/testing/selftests/bpf/progs/rcu_read_lock.c
-
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index c9eafa67f2a2..43fd7eeeeabb 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -682,6 +682,7 @@ struct bpf_func_proto {
+ 	u64 (*func)(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
+ 	bool gpl_only;
+ 	bool pkt_access;
++	bool might_sleep;
+ 	enum bpf_return_type ret_type;
+ 	union {
+ 		struct {
+diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+index d6c9b3705f24..ae0267f150b5 100644
+--- a/kernel/bpf/bpf_lsm.c
++++ b/kernel/bpf/bpf_lsm.c
+@@ -151,6 +151,7 @@ BTF_ID_LIST_SINGLE(bpf_ima_inode_hash_btf_ids, struct=
+, inode)
+ static const struct bpf_func_proto bpf_ima_inode_hash_proto =3D {
+ 	.func		=3D bpf_ima_inode_hash,
+ 	.gpl_only	=3D false,
++	.might_sleep	=3D true,
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_PTR_TO_BTF_ID,
+ 	.arg1_btf_id	=3D &bpf_ima_inode_hash_btf_ids[0],
+@@ -169,6 +170,7 @@ BTF_ID_LIST_SINGLE(bpf_ima_file_hash_btf_ids, struct,=
+ file)
+ static const struct bpf_func_proto bpf_ima_file_hash_proto =3D {
+ 	.func		=3D bpf_ima_file_hash,
+ 	.gpl_only	=3D false,
++	.might_sleep	=3D true,
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_PTR_TO_BTF_ID,
+ 	.arg1_btf_id	=3D &bpf_ima_file_hash_btf_ids[0],
+@@ -221,9 +223,9 @@ bpf_lsm_func_proto(enum bpf_func_id func_id, const st=
+ruct bpf_prog *prog)
+ 	case BPF_FUNC_bprm_opts_set:
+ 		return &bpf_bprm_opts_set_proto;
+ 	case BPF_FUNC_ima_inode_hash:
+-		return prog->aux->sleepable ? &bpf_ima_inode_hash_proto : NULL;
++		return &bpf_ima_inode_hash_proto;
+ 	case BPF_FUNC_ima_file_hash:
+-		return prog->aux->sleepable ? &bpf_ima_file_hash_proto : NULL;
++		return &bpf_ima_file_hash_proto;
+ 	case BPF_FUNC_get_attach_cookie:
+ 		return bpf_prog_has_trampoline(prog) ? &bpf_get_attach_cookie_proto : =
+NULL;
+ #ifdef CONFIG_NET
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 2299bb0d89e5..9296b654dbd7 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -661,6 +661,7 @@ BPF_CALL_3(bpf_copy_from_user, void *, dst, u32, size=
+,
+ const struct bpf_func_proto bpf_copy_from_user_proto =3D {
+ 	.func		=3D bpf_copy_from_user,
+ 	.gpl_only	=3D false,
++	.might_sleep	=3D true,
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_PTR_TO_UNINIT_MEM,
+ 	.arg2_type	=3D ARG_CONST_SIZE_OR_ZERO,
+@@ -691,6 +692,7 @@ BPF_CALL_5(bpf_copy_from_user_task, void *, dst, u32,=
+ size,
+ const struct bpf_func_proto bpf_copy_from_user_task_proto =3D {
+ 	.func		=3D bpf_copy_from_user_task,
+ 	.gpl_only	=3D true,
++	.might_sleep	=3D true,
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_PTR_TO_UNINIT_MEM,
+ 	.arg2_type	=3D ARG_CONST_SIZE_OR_ZERO,
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 9528a066cfa5..068cc885903c 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7516,6 +7516,11 @@ static int check_helper_call(struct bpf_verifier_e=
+nv *env, struct bpf_insn *insn
+ 		return -EINVAL;
+ 	}
+=20
++	if (!env->prog->aux->sleepable && fn->might_sleep) {
++		verbose(env, "helper call might sleep in a non-sleepable prog\n");
++		return -EINVAL;
++	}
++
+ 	/* With LD_ABS/IND some JITs save/restore skb from r1. */
+ 	changes_data =3D bpf_helper_changes_pkt_data(fn->func);
+ 	if (changes_data && fn->arg1_type !=3D ARG_PTR_TO_CTX) {
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 5b9008bc597b..3bbd3f0c810c 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1485,9 +1485,9 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, co=
+nst struct bpf_prog *prog)
+ 	case BPF_FUNC_get_task_stack:
+ 		return &bpf_get_task_stack_proto;
+ 	case BPF_FUNC_copy_from_user:
+-		return prog->aux->sleepable ? &bpf_copy_from_user_proto : NULL;
++		return &bpf_copy_from_user_proto;
+ 	case BPF_FUNC_copy_from_user_task:
+-		return prog->aux->sleepable ? &bpf_copy_from_user_task_proto : NULL;
++		return &bpf_copy_from_user_task_proto;
+ 	case BPF_FUNC_snprintf_btf:
+ 		return &bpf_snprintf_btf_proto;
+ 	case BPF_FUNC_per_cpu_ptr:
 --=20
 2.30.2
 
