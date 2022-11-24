@@ -2,41 +2,41 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3ED23C43217
-	for <bpf@archiver.kernel.org>; Thu, 24 Nov 2022 15:18:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08F13C43217
+	for <bpf@archiver.kernel.org>; Thu, 24 Nov 2022 15:19:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229468AbiKXPSJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 24 Nov 2022 10:18:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57410 "EHLO
+        id S230048AbiKXPTG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 24 Nov 2022 10:19:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiKXPSC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 24 Nov 2022 10:18:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB8216E8F5
-        for <bpf@vger.kernel.org>; Thu, 24 Nov 2022 07:16:22 -0800 (PST)
+        with ESMTP id S229693AbiKXPTC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 24 Nov 2022 10:19:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A01116F0C8
+        for <bpf@vger.kernel.org>; Thu, 24 Nov 2022 07:16:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669302981;
+        s=mimecast20190719; t=1669302985;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=G4mRjiCLMtLsImdt9LVO/5YkmYrf/jxzVEf75LrlJsQ=;
-        b=JvnAmQdTDEGXWmKt2zn5eF+QiQIUZpr3hmnPUVycmnJrDbV++rpdDsc2r4dU4q39W3OTvG
-        FXy41S3ABurCUj1ZPq4GYEldil7jqBbB1rdcRXS8klk7ugE+WD+j0ANA1VB6DxUCpu8Ozo
-        fJDse6wwaxH88nzFL+bDTRmdxynzJeg=
+        bh=nnQks2BxOzRnMOP9aelQae29VWIgWtLn+Wzeg2Waiik=;
+        b=b0KJn9BO/WCNFAdll1iEtCWo2oP9oTjuaoXK93mxArWCZBEejKozHevLpqnIoEh3cVJd2D
+        HokGlL7wWZx7wYbia4iGMrvs4wZPE4rJch4jR90yEEZxNSQ/QBTatStsL2TnoxKsjIRKls
+        InzcTNL6C4ubUwwN6K+p/SsiruPNKZ0=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-360-LihkDvwXO72orWAoMDlcbQ-1; Thu, 24 Nov 2022 10:16:18 -0500
-X-MC-Unique: LihkDvwXO72orWAoMDlcbQ-1
+ us-mta-541-Oec3o72EPpGcjuQUJS90Cg-1; Thu, 24 Nov 2022 10:16:22 -0500
+X-MC-Unique: Oec3o72EPpGcjuQUJS90Cg-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8FBE58582B9;
-        Thu, 24 Nov 2022 15:16:17 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9EE8E185A79C;
+        Thu, 24 Nov 2022 15:16:21 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.193.200])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BD6CA40C2064;
-        Thu, 24 Nov 2022 15:16:15 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E0CB140C2064;
+        Thu, 24 Nov 2022 15:16:19 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -48,9 +48,9 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [RFC hid v1 04/10] HID: add the bpf loader that can attach a generic hid-bpf program
-Date:   Thu, 24 Nov 2022 16:15:57 +0100
-Message-Id: <20221124151603.807536-5-benjamin.tissoires@redhat.com>
+Subject: [RFC hid v1 06/10] selftests: hid: add vmtest.sh
+Date:   Thu, 24 Nov 2022 16:15:59 +0100
+Message-Id: <20221124151603.807536-7-benjamin.tissoires@redhat.com>
 In-Reply-To: <20221124151603.807536-1-benjamin.tissoires@redhat.com>
 References: <20221124151603.807536-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
@@ -60,336 +60,575 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When a device is added to the hid bus, we check if there are any known
-in-kernel bpf programs related to this device, and when found, we
-load them, run the probe syscall if any, and then attach and pin
-those programs to the HID device before presenting it to the userspace.
-
-There are still a few bits missing right now:
-- the list of programs should not be in kernel but in a separated module
-  at least
-- the pinned program has an incorrect path (not namespaced to the device)
-- the pinned program stay around when the device is disconnected
-- we could use the firmware interface to replace the array of programs,
-  but how do we distribute and install them?
+Similar-ish in many points from the script in selftests/bpf, with a few
+differences:
+- relies on boot2container instead of a plain qemu image (meaning that
+  we can take any container in a registry as a base)
+- runs in the hid selftest dir, and such uses the test program from there
 
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 ---
- drivers/hid/bpf/Makefile           |   3 +-
- drivers/hid/bpf/hid_bpf_dispatch.c |   3 +-
- drivers/hid/bpf/hid_bpf_loader.c   | 243 +++++++++++++++++++++++++++++
- drivers/hid/hid-core.c             |   2 +
- include/linux/hid_bpf.h            |   2 +
- 5 files changed, 251 insertions(+), 2 deletions(-)
- create mode 100644 drivers/hid/bpf/hid_bpf_loader.c
+ tools/testing/selftests/hid/.gitignore    |   1 +
+ tools/testing/selftests/hid/config.common | 241 +++++++++++++++++++
+ tools/testing/selftests/hid/config.x86_64 |   4 +
+ tools/testing/selftests/hid/vmtest.sh     | 280 ++++++++++++++++++++++
+ 4 files changed, 526 insertions(+)
+ create mode 100644 tools/testing/selftests/hid/config.common
+ create mode 100644 tools/testing/selftests/hid/config.x86_64
+ create mode 100755 tools/testing/selftests/hid/vmtest.sh
 
-diff --git a/drivers/hid/bpf/Makefile b/drivers/hid/bpf/Makefile
-index cf55120cf7d6..d0c5fbc506b4 100644
---- a/drivers/hid/bpf/Makefile
-+++ b/drivers/hid/bpf/Makefile
-@@ -8,4 +8,5 @@ LIBBPF_INCLUDE = $(srctree)/tools/lib
- obj-$(CONFIG_HID_BPF) += hid_bpf.o
- CFLAGS_hid_bpf_dispatch.o += -I$(LIBBPF_INCLUDE)
- CFLAGS_hid_bpf_jmp_table.o += -I$(LIBBPF_INCLUDE)
--hid_bpf-objs += hid_bpf_dispatch.o hid_bpf_jmp_table.o
-+CFLAGS_hid_bpf_loader.o += -I$(LIBBPF_INCLUDE)
-+hid_bpf-objs += hid_bpf_dispatch.o hid_bpf_jmp_table.o hid_bpf_loader.o
-diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dispatch.c
-index c3920c7964dc..3c989e74d249 100644
---- a/drivers/hid/bpf/hid_bpf_dispatch.c
-+++ b/drivers/hid/bpf/hid_bpf_dispatch.c
-@@ -238,7 +238,8 @@ static int hid_bpf_allocate_event_data(struct hid_device *hdev)
- 
- int hid_bpf_reconnect(struct hid_device *hdev)
- {
--	if (!test_and_set_bit(ffs(HID_STAT_REPROBED), &hdev->status))
-+	if (hdev->status & HID_STAT_ADDED &&
-+	    !test_and_set_bit(ffs(HID_STAT_REPROBED), &hdev->status))
- 		return device_reprobe(&hdev->dev);
- 
- 	return 0;
-diff --git a/drivers/hid/bpf/hid_bpf_loader.c b/drivers/hid/bpf/hid_bpf_loader.c
+diff --git a/tools/testing/selftests/hid/.gitignore b/tools/testing/selftests/hid/.gitignore
+index a462ca6ab2c0..995af0670f69 100644
+--- a/tools/testing/selftests/hid/.gitignore
++++ b/tools/testing/selftests/hid/.gitignore
+@@ -2,3 +2,4 @@ bpftool
+ *.skel.h
+ /tools
+ hid_bpf
++results
+diff --git a/tools/testing/selftests/hid/config.common b/tools/testing/selftests/hid/config.common
 new file mode 100644
-index 000000000000..d2aa0a8e78c7
+index 000000000000..0617275d93cc
 --- /dev/null
-+++ b/drivers/hid/bpf/hid_bpf_loader.c
-@@ -0,0 +1,243 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2022 Benjamin Tissoires
-+ */
++++ b/tools/testing/selftests/hid/config.common
+@@ -0,0 +1,241 @@
++CONFIG_9P_FS_POSIX_ACL=y
++CONFIG_9P_FS_SECURITY=y
++CONFIG_9P_FS=y
++CONFIG_AUDIT=y
++CONFIG_BINFMT_MISC=y
++CONFIG_BLK_CGROUP_IOLATENCY=y
++CONFIG_BLK_CGROUP=y
++CONFIG_BLK_DEV_BSGLIB=y
++CONFIG_BLK_DEV_IO_TRACE=y
++CONFIG_BLK_DEV_RAM_SIZE=16384
++CONFIG_BLK_DEV_RAM=y
++CONFIG_BLK_DEV_THROTTLING=y
++CONFIG_BONDING=y
++CONFIG_BOOTPARAM_HARDLOCKUP_PANIC=y
++CONFIG_BOOTTIME_TRACING=y
++CONFIG_BSD_DISKLABEL=y
++CONFIG_BSD_PROCESS_ACCT=y
++CONFIG_CFS_BANDWIDTH=y
++CONFIG_CGROUP_CPUACCT=y
++CONFIG_CGROUP_DEBUG=y
++CONFIG_CGROUP_DEVICE=y
++CONFIG_CGROUP_FREEZER=y
++CONFIG_CGROUP_HUGETLB=y
++CONFIG_CGROUP_NET_CLASSID=y
++CONFIG_CGROUP_NET_PRIO=y
++CONFIG_CGROUP_PERF=y
++CONFIG_CGROUP_PIDS=y
++CONFIG_CGROUP_RDMA=y
++CONFIG_CGROUP_SCHED=y
++CONFIG_CGROUPS=y
++CONFIG_CGROUP_WRITEBACK=y
++CONFIG_CMA_AREAS=7
++CONFIG_CMA=y
++CONFIG_COMPAT_32BIT_TIME=y
++CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=y
++CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
++CONFIG_CPU_FREQ_GOV_ONDEMAND=y
++CONFIG_CPU_FREQ_GOV_USERSPACE=y
++CONFIG_CPU_FREQ_STAT=y
++CONFIG_CPU_IDLE_GOV_LADDER=y
++CONFIG_CPUSETS=y
++CONFIG_CRC_T10DIF=y
++CONFIG_CRYPTO_BLAKE2B=y
++CONFIG_CRYPTO_DEV_VIRTIO=y
++CONFIG_CRYPTO_SEQIV=y
++CONFIG_CRYPTO_XXHASH=y
++CONFIG_DCB=y
++CONFIG_DEBUG_ATOMIC_SLEEP=y
++CONFIG_DEBUG_CREDENTIALS=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
++CONFIG_DEBUG_MEMORY_INIT=y
++CONFIG_DEFAULT_FQ_CODEL=y
++CONFIG_DEFAULT_RENO=y
++CONFIG_DEFAULT_SECURITY_DAC=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_DEVTMPFS=y
++CONFIG_DMA_CMA=y
++CONFIG_DNS_RESOLVER=y
++CONFIG_EFI_STUB=y
++CONFIG_EFI=y
++CONFIG_EXPERT=y
++CONFIG_EXT4_FS_POSIX_ACL=y
++CONFIG_EXT4_FS_SECURITY=y
++CONFIG_EXT4_FS=y
++CONFIG_FAIL_FUNCTION=y
++CONFIG_FAULT_INJECTION_DEBUG_FS=y
++CONFIG_FAULT_INJECTION=y
++CONFIG_FB_MODE_HELPERS=y
++CONFIG_FB_TILEBLITTING=y
++CONFIG_FB_VESA=y
++CONFIG_FB=y
++CONFIG_FONT_8x16=y
++CONFIG_FONT_MINI_4x6=y
++CONFIG_FONTS=y
++CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY=y
++CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=y
++CONFIG_FRAMEBUFFER_CONSOLE=y
++CONFIG_FUSE_FS=y
++CONFIG_FW_LOADER_USER_HELPER=y
++CONFIG_GART_IOMMU=y
++CONFIG_GENERIC_PHY=y
++CONFIG_HARDLOCKUP_DETECTOR=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_HPET=y
++CONFIG_HUGETLBFS=y
++CONFIG_HUGETLB_PAGE=y
++CONFIG_HWPOISON_INJECT=y
++CONFIG_HZ_1000=y
++CONFIG_INET=y
++CONFIG_INTEL_POWERCLAMP=y
++CONFIG_IP6_NF_FILTER=y
++CONFIG_IP6_NF_IPTABLES=y
++CONFIG_IP6_NF_NAT=y
++CONFIG_IP6_NF_TARGET_MASQUERADE=y
++CONFIG_IP_ADVANCED_ROUTER=y
++CONFIG_IP_MROUTE=y
++CONFIG_IP_MULTICAST=y
++CONFIG_IP_MULTIPLE_TABLES=y
++CONFIG_IP_NF_FILTER=y
++CONFIG_IP_NF_IPTABLES=y
++CONFIG_IP_NF_NAT=y
++CONFIG_IP_NF_TARGET_MASQUERADE=y
++CONFIG_IP_PIMSM_V1=y
++CONFIG_IP_PIMSM_V2=y
++CONFIG_IP_ROUTE_MULTIPATH=y
++CONFIG_IP_ROUTE_VERBOSE=y
++CONFIG_IPV6_MIP6=y
++CONFIG_IPV6_ROUTE_INFO=y
++CONFIG_IPV6_ROUTER_PREF=y
++CONFIG_IPV6_SEG6_LWTUNNEL=y
++CONFIG_IPV6_SUBTREES=y
++CONFIG_IRQ_POLL=y
++CONFIG_JUMP_LABEL=y
++CONFIG_KARMA_PARTITION=y
++CONFIG_KEXEC=y
++CONFIG_KPROBES=y
++CONFIG_KSM=y
++CONFIG_LEGACY_VSYSCALL_NONE=y
++CONFIG_LOG_BUF_SHIFT=21
++CONFIG_LOG_CPU_MAX_BUF_SHIFT=0
++CONFIG_LOGO=y
++CONFIG_LSM="selinux,bpf,integrity"
++CONFIG_MAC_PARTITION=y
++CONFIG_MAGIC_SYSRQ=y
++CONFIG_MCORE2=y
++CONFIG_MEMCG=y
++CONFIG_MEMORY_FAILURE=y
++CONFIG_MINIX_SUBPARTITION=y
++CONFIG_MODULES=y
++CONFIG_NAMESPACES=y
++CONFIG_NET_9P_VIRTIO=y
++CONFIG_NET_9P=y
++CONFIG_NET_ACT_BPF=y
++CONFIG_NET_CLS_CGROUP=y
++CONFIG_NETDEVICES=y
++CONFIG_NET_EMATCH=y
++CONFIG_NETFILTER_NETLINK_LOG=y
++CONFIG_NETFILTER_NETLINK_QUEUE=y
++CONFIG_NETFILTER_XTABLES=y
++CONFIG_NETFILTER_XT_MATCH_ADDRTYPE=y
++CONFIG_NETFILTER_XT_MATCH_BPF=y
++CONFIG_NETFILTER_XT_MATCH_COMMENT=y
++CONFIG_NETFILTER_XT_MATCH_CONNTRACK=y
++CONFIG_NETFILTER_XT_MATCH_MARK=y
++CONFIG_NETFILTER_XT_MATCH_MULTIPORT=y
++CONFIG_NETFILTER_XT_MATCH_STATISTIC=y
++CONFIG_NETFILTER_XT_NAT=y
++CONFIG_NETFILTER_XT_TARGET_MASQUERADE=y
++CONFIG_NET_IPGRE_BROADCAST=y
++CONFIG_NET_L3_MASTER_DEV=y
++CONFIG_NETLABEL=y
++CONFIG_NET_SCH_DEFAULT=y
++CONFIG_NET_SCHED=y
++CONFIG_NET_SCH_FQ_CODEL=y
++CONFIG_NET_TC_SKB_EXT=y
++CONFIG_NET_VRF=y
++CONFIG_NET=y
++CONFIG_NF_CONNTRACK=y
++CONFIG_NF_NAT_MASQUERADE=y
++CONFIG_NF_NAT=y
++CONFIG_NLS_ASCII=y
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_DEFAULT="utf8"
++CONFIG_NO_HZ=y
++CONFIG_NR_CPUS=128
++CONFIG_NUMA_BALANCING=y
++CONFIG_NUMA=y
++CONFIG_NVMEM=y
++CONFIG_OSF_PARTITION=y
++CONFIG_OVERLAY_FS_INDEX=y
++CONFIG_OVERLAY_FS_METACOPY=y
++CONFIG_OVERLAY_FS_XINO_AUTO=y
++CONFIG_OVERLAY_FS=y
++CONFIG_PACKET=y
++CONFIG_PANIC_ON_OOPS=y
++CONFIG_PARTITION_ADVANCED=y
++CONFIG_PCIEPORTBUS=y
++CONFIG_PCI_IOV=y
++CONFIG_PCI_MSI=y
++CONFIG_PCI=y
++CONFIG_PHYSICAL_ALIGN=0x1000000
++CONFIG_POSIX_MQUEUE=y
++CONFIG_POWER_SUPPLY=y
++CONFIG_PREEMPT=y
++CONFIG_PRINTK_TIME=y
++CONFIG_PROC_KCORE=y
++CONFIG_PROFILING=y
++CONFIG_PROVE_LOCKING=y
++CONFIG_PTP_1588_CLOCK=y
++CONFIG_RC_DEVICES=y
++CONFIG_RC_LOOPBACK=y
++CONFIG_RCU_CPU_STALL_TIMEOUT=60
++CONFIG_SCHED_STACK_END_CHECK=y
++CONFIG_SCHEDSTATS=y
++CONFIG_SECURITY_NETWORK=y
++CONFIG_SECURITY_SELINUX=y
++CONFIG_SERIAL_8250_CONSOLE=y
++CONFIG_SERIAL_8250_DETECT_IRQ=y
++CONFIG_SERIAL_8250_EXTENDED=y
++CONFIG_SERIAL_8250_MANY_PORTS=y
++CONFIG_SERIAL_8250_NR_UARTS=32
++CONFIG_SERIAL_8250_RSA=y
++CONFIG_SERIAL_8250_SHARE_IRQ=y
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_NONSTANDARD=y
++CONFIG_SERIO_LIBPS2=y
++CONFIG_SGI_PARTITION=y
++CONFIG_SMP=y
++CONFIG_SOCK_CGROUP_DATA=y
++CONFIG_SOLARIS_X86_PARTITION=y
++CONFIG_SUN_PARTITION=y
++CONFIG_SYNC_FILE=y
++CONFIG_SYSVIPC=y
++CONFIG_TASK_DELAY_ACCT=y
++CONFIG_TASK_IO_ACCOUNTING=y
++CONFIG_TASKSTATS=y
++CONFIG_TASK_XACCT=y
++CONFIG_TCP_CONG_ADVANCED=y
++CONFIG_TCP_MD5SIG=y
++CONFIG_TLS=y
++CONFIG_TMPFS_POSIX_ACL=y
++CONFIG_TMPFS=y
++CONFIG_TRANSPARENT_HUGEPAGE_MADVISE=y
++CONFIG_TRANSPARENT_HUGEPAGE=y
++CONFIG_TUN=y
++CONFIG_UNIXWARE_DISKLABEL=y
++CONFIG_UNIX=y
++CONFIG_USER_NS=y
++CONFIG_VALIDATE_FS_PARSER=y
++CONFIG_VETH=y
++CONFIG_VIRT_DRIVERS=y
++CONFIG_VIRTIO_BALLOON=y
++CONFIG_VIRTIO_BLK=y
++CONFIG_VIRTIO_CONSOLE=y
++CONFIG_VIRTIO_FS=y
++CONFIG_VIRTIO_NET=y
++CONFIG_VIRTIO_PCI=y
++CONFIG_VLAN_8021Q=y
++CONFIG_XFRM_SUB_POLICY=y
++CONFIG_XFRM_USER=y
++CONFIG_ZEROPLUS_FF=y
+diff --git a/tools/testing/selftests/hid/config.x86_64 b/tools/testing/selftests/hid/config.x86_64
+new file mode 100644
+index 000000000000..a8721f403c21
+--- /dev/null
++++ b/tools/testing/selftests/hid/config.x86_64
+@@ -0,0 +1,4 @@
++CONFIG_X86_ACPI_CPUFREQ=y
++CONFIG_X86_CPUID=y
++CONFIG_X86_MSR=y
++CONFIG_X86_POWERNOW_K8=y
+diff --git a/tools/testing/selftests/hid/vmtest.sh b/tools/testing/selftests/hid/vmtest.sh
+new file mode 100755
+index 000000000000..f124cf6b0d0f
+--- /dev/null
++++ b/tools/testing/selftests/hid/vmtest.sh
+@@ -0,0 +1,280 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
 +
-+#include <bpf/skel_internal.h>
-+#include <linux/hid.h>
-+#include <linux/hid_bpf.h>
-+#include <linux/minmax.h>
++set -u
++set -e
 +
-+#include "hid_bpf_dispatch.h"
-+#include "progs/hid_bpf.h"
-+#include "progs/hid_bpf_progs.h"
++# This script currently only works for x86_64
++ARCH="$(uname -m)"
++case "${ARCH}" in
++x86_64)
++	QEMU_BINARY=qemu-system-x86_64
++	BZIMAGE="arch/x86/boot/bzImage"
++	;;
++*)
++	echo "Unsupported architecture"
++	exit 1
++	;;
++esac
++DEFAULT_COMMAND="./hid_bpf"
++OUTPUT_DIR="$PWD/results"
++KCONFIG_REL_PATHS=("tools/testing/selftests/hid/config" "tools/testing/selftests/hid/config.common" "tools/testing/selftests/hid/config.${ARCH}")
++B2C_URL="https://gitlab.freedesktop.org/mupuf/boot2container/-/raw/master/vm2c.py"
++NUM_COMPILE_JOBS="$(nproc)"
++LOG_FILE_BASE="$(date +"hid_selftests.%Y-%m-%d_%H-%M-%S")"
++LOG_FILE="${LOG_FILE_BASE}.log"
++EXIT_STATUS_FILE="${LOG_FILE_BASE}.exit_status"
 +
-+struct generic_bpf_skel {
-+	struct hid_bpf_object *obj;
-+	struct bpf_map_desc *maps;
-+	struct bpf_prog_desc *progs;
-+	int *links;
-+	void *rodata;
-+	/*
-+	 * ctx needs to come last, it is populated by the bpf loader
-+	 * beyond the end of the struct, which we get through maps
-+	 * and progs above.
-+	 */
-+	struct bpf_loader_ctx ctx;
-+};
-+
-+static size_t hid_bpf_get_obj_ctx_size(struct hid_bpf_object *obj)
++usage()
 +{
-+	return sizeof(struct generic_bpf_skel) +
-+	       sizeof(struct bpf_map_desc) * obj->map_cnt +
-+	       sizeof(struct bpf_prog_desc) * obj->prog_cnt +
-+	       sizeof(int) * obj->prog_cnt;
++	cat <<EOF
++Usage: $0 [-i] [-s] [-d <output_dir>] -- [<command>]
++
++<command> is the command you would normally run when you are in
++tools/testing/selftests/bpf. e.g:
++
++	$0 -- ./hid_bpf
++
++If no command is specified and a debug shell (-s) is not requested,
++"${DEFAULT_COMMAND}" will be run by default.
++
++If you build your kernel using KBUILD_OUTPUT= or O= options, these
++can be passed as environment variables to the script:
++
++  O=<kernel_build_path> $0 -- ./hid_bpf
++
++or
++
++  KBUILD_OUTPUT=<kernel_build_path> $0 -- ./hid_bpf
++
++Options:
++
++	-u)		Update the boot2container script to a newer version.
++	-d)		Update the output directory (default: ${OUTPUT_DIR})
++	-j)		Number of jobs for compilation, similar to -j in make
++			(default: ${NUM_COMPILE_JOBS})
++	-s)		Instead of powering off the VM, start an interactive
++			shell. If <command> is specified, the shell runs after
++			the command finishes executing
++EOF
 +}
 +
-+static void
-+generic_bpf_skel__detach(struct generic_bpf_skel *skel)
++download()
 +{
-+	int i;
++	local file="$1"
 +
-+	for (i = 0; i < skel->obj->prog_cnt; i++)
-+		skel_closenz(skel->links[i]);
++	echo "Downloading $file..." >&2
++	curl -Lsf "$file" -o "${@:2}"
 +}
 +
-+static void
-+generic_bpf_skel__destroy(struct generic_bpf_skel *skel)
++recompile_kernel()
 +{
-+	int i;
++	local kernel_checkout="$1"
++	local make_command="$2"
 +
-+	if (!skel)
-+		return;
++	cd "${kernel_checkout}"
 +
-+	generic_bpf_skel__detach(skel);
-+
-+	for (i = 0; i < skel->obj->prog_cnt; i++)
-+		skel_closenz(skel->progs[i].prog_fd);
-+
-+	if (skel->obj->rodata < skel->obj->map_cnt) {
-+		skel_free_map_data(skel->rodata,
-+				   skel->maps[skel->obj->rodata].initial_value,
-+				   skel->obj->maps[skel->obj->rodata].mmap_sz);
-+	}
-+
-+	for (i = 0; i < skel->obj->map_cnt; i++)
-+		skel_closenz(skel->maps[i].map_fd);
-+
-+	skel_free(skel);
++	${make_command} olddefconfig
++	${make_command}
 +}
 +
-+static struct generic_bpf_skel *
-+generic_bpf_skel__open(struct hid_bpf_object *obj)
++update_selftests()
 +{
-+	struct generic_bpf_skel *skel;
++	local kernel_checkout="$1"
++	local selftests_dir="${kernel_checkout}/tools/testing/selftests/hid"
 +
-+	skel = skel_alloc(hid_bpf_get_obj_ctx_size(obj));
-+	if (!skel)
-+		goto cleanup;
-+	skel->obj = obj;
-+	skel->ctx.sz = hid_bpf_get_obj_ctx_size(obj) - offsetof(struct generic_bpf_skel, ctx);
-+
-+	skel->maps = (struct bpf_map_desc *)(skel + 1);
-+	skel->progs = (struct bpf_prog_desc *)(skel->maps + obj->map_cnt);
-+	skel->links = (int *)(skel->progs + obj->prog_cnt);
-+
-+	if (obj->rodata < obj->map_cnt) {
-+		skel->rodata = skel_prep_map_data((void *)obj->maps[obj->rodata].data,
-+						  obj->maps[obj->rodata].mmap_sz,
-+						  obj->maps[obj->rodata].size);
-+
-+		if (!skel->rodata)
-+			goto cleanup;
-+		skel->maps[obj->rodata].initial_value = (__u64) (long) skel->rodata;
-+	}
-+
-+	return (struct generic_bpf_skel *)skel;
-+
-+cleanup:
-+	generic_bpf_skel__destroy((struct generic_bpf_skel *)skel);
-+	return NULL;
++	cd "${selftests_dir}"
++	${make_command}
 +}
 +
-+static int
-+generic_bpf_skel__load(struct generic_bpf_skel *skel)
++run_vm()
 +{
-+	struct bpf_load_and_run_opts opts = {};
-+	int err;
++	local b2c="$1"
++	local kernel_bzimage="$2"
++	local command="$3"
++	local post_command=""
 +
-+	opts.ctx = &skel->ctx;
-+	opts.data_sz = skel->obj->data_sz;
-+	opts.data = (void *)skel->obj->data;
-+	opts.insns_sz = skel->obj->insns_sz;
-+	opts.insns = skel->obj->insns;
++	if ! which "${QEMU_BINARY}" &> /dev/null; then
++		cat <<EOF
++Could not find ${QEMU_BINARY}
++Please install qemu or set the QEMU_BINARY environment variable.
++EOF
++		exit 1
++	fi
 +
-+	err = bpf_load_and_run(&opts);
-+	if (err < 0)
-+		return err;
++	# alpine (used in post-container requires the PATH to have /bin
++	export PATH=$PATH:/bin
 +
-+	if (skel->obj->rodata < skel->obj->map_cnt) {
-+		skel->rodata = skel_finalize_map_data(&skel->maps[skel->obj->rodata].initial_value,
-+						      skel->obj->maps[skel->obj->rodata].mmap_sz,
-+						      PROT_READ,
-+						      skel->maps[skel->obj->rodata].map_fd);
-+		if (!skel->rodata)
-+			return -ENOMEM;
-+	}
++	if [[ "${debug_shell}" != "yes" ]]
++	then
++		touch ${OUTPUT_DIR}/${LOG_FILE}
++		command="set -o pipefail ; ${command} 2>&1 | tee ${OUTPUT_DIR}/${LOG_FILE}"
++		post_command="cat ${OUTPUT_DIR}/${LOG_FILE}"
++	fi
 +
-+	return 0;
++	set +e
++	$b2c --command "${command}" \
++	     --kernel ${kernel_bzimage} \
++	     --workdir ${OUTPUT_DIR} \
++	     --image registry.fedoraproject.org/fedora:36
++
++	echo $? > ${OUTPUT_DIR}/${EXIT_STATUS_FILE}
++
++	set -e
++
++	${post_command}
 +}
 +
-+static struct generic_bpf_skel *
-+generic_bpf_skel__open_and_load(struct hid_bpf_object *obj)
++is_rel_path()
 +{
-+	struct generic_bpf_skel *skel;
++	local path="$1"
 +
-+	skel = generic_bpf_skel__open(obj);
-+	if (!skel)
-+		return NULL;
-+	if (generic_bpf_skel__load(skel)) {
-+		generic_bpf_skel__destroy(skel);
-+		return NULL;
-+	}
-+	return skel;
++	[[ ${path:0:1} != "/" ]]
 +}
 +
-+static int
-+execute_probe(struct hid_device *hdev, struct generic_bpf_skel *skel)
++do_update_kconfig()
 +{
-+	const size_t test_run_attr_sz = offsetofend(union bpf_attr, test);
-+	struct hid_bpf_probe_args *ctx;
-+	union bpf_attr attr;
-+	int err;
++	local kernel_checkout="$1"
++	local kconfig_file="$2"
 +
-+	/* early abort if there is no probe program */
-+	if (skel->obj->probe >= skel->obj->prog_cnt)
-+		return 0;
++	rm -f "$kconfig_file" 2> /dev/null
 +
-+	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
-+	if (!ctx)
-+		return -ENOMEM;
-+
-+	memset(&attr, 0, test_run_attr_sz);
-+
-+	attr.test.prog_fd = skel->progs[skel->obj->probe].prog_fd;
-+
-+	attr.test.ctx_in = (long) ctx;
-+	attr.test.ctx_size_in = sizeof(*ctx);
-+
-+	ctx->hid = hdev->id;
-+
-+	ctx->rdesc_size = hdev->dev_rsize;
-+
-+	memcpy(ctx->rdesc, hdev->dev_rdesc,
-+	       min_t(unsigned int, sizeof(ctx->rdesc), hdev->dev_rsize));
-+
-+	err = skel_sys_bpf(BPF_PROG_RUN, &attr, test_run_attr_sz);
-+	if (err < 0 || (int)attr.test.retval < 0) {
-+		if (err == 0)
-+			err = (int)attr.test.retval;
-+	} else {
-+		err = ctx->retval;
-+	}
-+
-+	kfree(ctx);
-+	return err;
++	for config in "${KCONFIG_REL_PATHS[@]}"; do
++		local kconfig_src="${kernel_checkout}/${config}"
++		cat "$kconfig_src" >> "$kconfig_file"
++	done
 +}
 +
-+static void __hid_load_internal_bpf_program(struct hid_device *hdev, struct hid_bpf_object *obj)
++update_kconfig()
 +{
-+	struct generic_bpf_skel *skel;
-+	int err;
++	local kernel_checkout="$1"
++	local kconfig_file="$2"
 +
-+	skel = generic_bpf_skel__open_and_load(obj);
-+	if (!skel)
-+		return;
++	if [[ -f "${kconfig_file}" ]]; then
++		local local_modified="$(stat -c %Y "${kconfig_file}")"
 +
-+	err = execute_probe(hdev, skel);
-+	if (err)
-+		goto out;
-+
-+	/*
-+	 * The bpf object is loaded and probe returned 0, we can bind
-+	 * all of its HID-BPF programs to the device.
-+	 */
-+	for (int i = 0; i < obj->prog_cnt; i++) {
-+		int prog_fd = skel->progs[i].prog_fd;
-+		enum hid_bpf_prog_type prog_type;
-+		struct bpf_prog *prog;
-+
-+		if (i == obj->probe)
-+			continue;
-+
-+		prog_type = hid_bpf_get_prog_attach_type(prog_fd);
-+
-+		/* ignore non HID-BPF programs */
-+		if (prog_type < 0 || prog_type >= HID_BPF_PROG_TYPE_MAX)
-+			continue;
-+
-+		err = __hid_bpf_attach_prog(hdev, prog_type, prog_fd, 0);
-+
-+		if (!err) {
-+			prog = bpf_prog_get(prog_fd);
-+			/* TODO: prefix the name with 'hid/bus_vid_pid_id/' */
-+			err = bpf_prog_pin_kernel(prog->aux->name, prog);
-+			if (err)
-+				bpf_prog_put(prog);
-+		}
-+	}
-+
-+ out:
-+	generic_bpf_skel__destroy(skel);
++		for config in "${KCONFIG_REL_PATHS[@]}"; do
++			local kconfig_src="${kernel_checkout}/${config}"
++			local src_modified="$(stat -c %Y "${kconfig_src}")"
++			# Only update the config if it has been updated after the
++			# previously cached config was created. This avoids
++			# unnecessarily compiling the kernel and selftests.
++			if [[ "${src_modified}" -gt "${local_modified}" ]]; then
++				do_update_kconfig "$kernel_checkout" "$kconfig_file"
++				# Once we have found one outdated configuration
++				# there is no need to check other ones.
++				break
++			fi
++		done
++	else
++		do_update_kconfig "$kernel_checkout" "$kconfig_file"
++	fi
 +}
 +
-+int hid_load_internal_bpf_programs(struct hid_device *hdev)
++main()
 +{
-+	struct hid_bpf_object *obj;
++	local script_dir="$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
++	local kernel_checkout=$(realpath "${script_dir}"/../../../../)
++	# By default the script searches for the kernel in the checkout directory but
++	# it also obeys environment variables O= and KBUILD_OUTPUT=
++	local kernel_bzimage="${kernel_checkout}/${BZIMAGE}"
++	local command="${DEFAULT_COMMAND}"
++	local update_b2c="no"
++	local debug_shell="no"
 +
-+	for (obj = &hid_objects[0]; obj->id.bus; obj++) {
-+		if (hid_match_one_id(hdev, &obj->id))
-+			__hid_load_internal_bpf_program(hdev, obj);
-+	}
-+	return 0;
++	while getopts ':hsud:j:' opt; do
++		case ${opt} in
++		u)
++			update_b2c="yes"
++			;;
++		d)
++			OUTPUT_DIR="$OPTARG"
++			;;
++		j)
++			NUM_COMPILE_JOBS="$OPTARG"
++			;;
++		s)
++			command="/bin/sh"
++			debug_shell="yes"
++			;;
++		h)
++			usage
++			exit 0
++			;;
++		\? )
++			echo "Invalid Option: -$OPTARG"
++			usage
++			exit 1
++			;;
++		: )
++			echo "Invalid Option: -$OPTARG requires an argument"
++			usage
++			exit 1
++			;;
++		esac
++	done
++	shift $((OPTIND -1))
++
++	# trap 'catch "$?"' EXIT
++
++	if [[ "${debug_shell}" == "no" ]]; then
++		if [[ $# -eq 0 ]]; then
++			echo "No command specified, will run ${DEFAULT_COMMAND} in the vm"
++		else
++			command="$@"
++
++			if [[ "${command}" == "/bin/bash" || "${command}" == "bash" ]]
++			then
++				debug_shell="yes"
++			fi
++		fi
++	fi
++
++	local kconfig_file="${OUTPUT_DIR}/latest.config"
++	local make_command="make -j ${NUM_COMPILE_JOBS} KCONFIG_CONFIG=${kconfig_file}"
++
++	# Figure out where the kernel is being built.
++	# O takes precedence over KBUILD_OUTPUT.
++	if [[ "${O:=""}" != "" ]]; then
++		if is_rel_path "${O}"; then
++			O="$(realpath "${PWD}/${O}")"
++		fi
++		kernel_bzimage="${O}/${BZIMAGE}"
++		make_command="${make_command} O=${O}"
++	elif [[ "${KBUILD_OUTPUT:=""}" != "" ]]; then
++		if is_rel_path "${KBUILD_OUTPUT}"; then
++			KBUILD_OUTPUT="$(realpath "${PWD}/${KBUILD_OUTPUT}")"
++		fi
++		kernel_bzimage="${KBUILD_OUTPUT}/${BZIMAGE}"
++		make_command="${make_command} KBUILD_OUTPUT=${KBUILD_OUTPUT}"
++	fi
++
++	local b2c="${OUTPUT_DIR}/vm2c.py"
++
++	echo "Output directory: ${OUTPUT_DIR}"
++
++	mkdir -p "${OUTPUT_DIR}"
++	update_kconfig "${kernel_checkout}" "${kconfig_file}"
++
++	recompile_kernel "${kernel_checkout}" "${make_command}"
++
++	if [[ "${update_b2c}" == "no" && ! -f "${b2c}" ]]; then
++		echo "vm2c script not found in ${b2c}"
++		update_b2c="yes"
++	fi
++
++	if [[ "${update_b2c}" == "yes" ]]; then
++		download $B2C_URL $b2c
++		chmod +x $b2c
++	fi
++
++	update_selftests "${kernel_checkout}" "${make_command}"
++	run_vm $b2c "${kernel_bzimage}" "${command}"
++	if [[ "${debug_shell}" != "yes" ]]; then
++		echo "Logs saved in ${OUTPUT_DIR}/${LOG_FILE}"
++	fi
++
++	exit $(cat ${OUTPUT_DIR}/${EXIT_STATUS_FILE})
 +}
-+EXPORT_SYMBOL_GPL(hid_load_internal_bpf_programs);
-diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-index fa4436b8101e..b27b4faad5bc 100644
---- a/drivers/hid/hid-core.c
-+++ b/drivers/hid/hid-core.c
-@@ -2761,6 +2761,8 @@ int hid_add_device(struct hid_device *hdev)
- 	dev_set_name(&hdev->dev, "%04X:%04X:%04X.%04X", hdev->bus,
- 		     hdev->vendor, hdev->product, hdev->id);
- 
-+	hid_load_internal_bpf_programs(hdev);
 +
- 	hid_debug_register(hdev, dev_name(&hdev->dev));
- 	ret = device_add(&hdev->dev);
- 	if (!ret)
-diff --git a/include/linux/hid_bpf.h b/include/linux/hid_bpf.h
-index 3ca85ab91325..2b06ddf64c1c 100644
---- a/include/linux/hid_bpf.h
-+++ b/include/linux/hid_bpf.h
-@@ -146,6 +146,7 @@ void hid_bpf_disconnect_device(struct hid_device *hdev);
- void hid_bpf_destroy_device(struct hid_device *hid);
- void hid_bpf_device_init(struct hid_device *hid);
- u8 *call_hid_bpf_rdesc_fixup(struct hid_device *hdev, u8 *rdesc, unsigned int *size);
-+int hid_load_internal_bpf_programs(struct hid_device *hdev);
- #else /* CONFIG_HID_BPF */
- static inline u8 *dispatch_hid_bpf_device_event(struct hid_device *hid, enum hid_report_type type,
- 						u8 *data, u32 *size, int interrupt) { return data; }
-@@ -157,6 +158,7 @@ static inline u8 *call_hid_bpf_rdesc_fixup(struct hid_device *hdev, u8 *rdesc, u
- {
- 	return kmemdup(rdesc, *size, GFP_KERNEL);
- }
-+static inline int hid_load_internal_bpf_programs(struct hid_device *hdev) { return 0; }
- 
- #endif /* CONFIG_HID_BPF */
- 
++main "$@"
 -- 
 2.38.1
 
