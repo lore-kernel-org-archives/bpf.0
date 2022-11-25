@@ -2,195 +2,155 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95441C4167B
-	for <bpf@archiver.kernel.org>; Fri, 25 Nov 2022 17:54:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69971C4167B
+	for <bpf@archiver.kernel.org>; Fri, 25 Nov 2022 18:35:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbiKYRyQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 25 Nov 2022 12:54:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48596 "EHLO
+        id S229842AbiKYSfx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 25 Nov 2022 13:35:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiKYRyP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 25 Nov 2022 12:54:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBF719017
-        for <bpf@vger.kernel.org>; Fri, 25 Nov 2022 09:53:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669398792;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UxymgvoRb75YnJ81c1gkcFnYTyArrxEPhdaiOtE1h3M=;
-        b=GlrxIzrzGZEYbHo5FlKhLv6Wmnwa1q1Zc1ODfTKHNqb7zwoJtsGBbjUKvdzwPChRTxHsYK
-        9pSHni8w1Et22orCaZzT0k20mkR1vPXEgWtbk4wGHOkAuhtzzu7ezXejwu42IphgX0JRp1
-        iUlmv1PcwBaNnJw/jf2ik8SrByP0ka0=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-629-7KwMXJSsNdahgNTCFbjLCw-1; Fri, 25 Nov 2022 12:53:11 -0500
-X-MC-Unique: 7KwMXJSsNdahgNTCFbjLCw-1
-Received: by mail-ej1-f70.google.com with SMTP id oz34-20020a1709077da200b007adc8d68e90so2499012ejc.11
-        for <bpf@vger.kernel.org>; Fri, 25 Nov 2022 09:53:11 -0800 (PST)
+        with ESMTP id S229806AbiKYSfv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 25 Nov 2022 13:35:51 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA1654755
+        for <bpf@vger.kernel.org>; Fri, 25 Nov 2022 10:35:50 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id t17so4303769pjo.3
+        for <bpf@vger.kernel.org>; Fri, 25 Nov 2022 10:35:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ql/f6C0KatNsw796d2F8H00l4lkKqoiDEV1Oq0E2AIc=;
+        b=Wn1/zdfwH23KRXEGVT+zDd6hzo64Olpzbk7sPXgpdQUDcXiAQUDcWuGc6IBajQJVX+
+         LKN7HpF4XfcltUwFaJv9d+9IordVdiUN6y9zvoWwPLc5y+BUoxdnv/qK/w8VHxYjtfl6
+         cwye5GudquBGeFDmETPsORY6f70wpyWegbaDS0GEIfB3JdsGRfRSrk9Khyi9gu+SEe5h
+         dhF6k79b7xEHa2Dr7J/tUO/mX7shn6VG5732e4AbqG9Q16538D5DdRWHnjtRFefb7O2+
+         oq/nLTuHUkO2zBtH9QfJ21UA1t2+EA2d/5DaR6q1cfntrIBosMflGtp/V7Ka0nzAhvyz
+         +E6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UxymgvoRb75YnJ81c1gkcFnYTyArrxEPhdaiOtE1h3M=;
-        b=G2FMt8GPcJuH07FuPHsESD3ARCL9g0OFD3xT6bs3Uz3T0wj4al1Mr0NlK5g4EO8ddI
-         8FmcymU+AJEckYAlTmg9XmC5dNsmY3cNCVzzyYpcl6rBf8NBshEVkSssCZJBVnNSIeH9
-         +Qx7PKuNBpQ4mSKPtNVe5tKkv7BBAtQaC9pYCd3ZpaBjOAw46k76cPcfrlqL/cv3b+Ye
-         9A4xXxG/ROU4KpbbxvARjbxlYzoY3kV3kl9bwcy4w6z1HluGGPPNIq4LDi52OVMFjNyg
-         5pODsq3LItB3tiuLUy+G648hUC6XADqfkm0w8rQah3Vm4aC4krvvg6cC3BuX2THnwrex
-         mnuQ==
-X-Gm-Message-State: ANoB5pn2wPESHqaQP+553+/RBQayQ7yV6ma3lema3j2ZTxNfrJ7rsBSK
-        kIEbVoZSJwlcgK2ReT4OMmrdouD8aK4u80yGvrBw1TTafp/NKmVwzGMPk/mqWtMGZcMfvk585Y1
-        QCY35uGkfsiRz
-X-Received: by 2002:a05:6402:5406:b0:467:4b3d:f2ed with SMTP id ev6-20020a056402540600b004674b3df2edmr19275526edb.101.1669398787602;
-        Fri, 25 Nov 2022 09:53:07 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5R8pWavkI3tbvmohJtTsOG5ZrCTcOHNS6Z8g5HUL9eMSaRf2lfX9ce0BuGT57XtBntrtFBSA==
-X-Received: by 2002:a05:6402:5406:b0:467:4b3d:f2ed with SMTP id ev6-20020a056402540600b004674b3df2edmr19275310edb.101.1669398784850;
-        Fri, 25 Nov 2022 09:53:04 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id e22-20020a50ec96000000b00461aca1c7b6sm2027996edr.6.2022.11.25.09.53.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Nov 2022 09:53:04 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 2D30B7EB86B; Fri, 25 Nov 2022 18:53:02 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Stanislav Fomichev <sdf@google.com>, bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org,
-        David Ahern <dsahern@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Willem de Bruijn <willemb@google.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Anatoly Burakov <anatoly.burakov@intel.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
-        netdev@vger.kernel.org
-Subject: Re: [xdp-hints] [PATCH bpf-next v2 2/8] bpf: XDP metadata RX kfuncs
-In-Reply-To: <20221121182552.2152891-3-sdf@google.com>
-References: <20221121182552.2152891-1-sdf@google.com>
- <20221121182552.2152891-3-sdf@google.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Fri, 25 Nov 2022 18:53:02 +0100
-Message-ID: <87mt8e2a69.fsf@toke.dk>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ql/f6C0KatNsw796d2F8H00l4lkKqoiDEV1Oq0E2AIc=;
+        b=iAkwoNEhIzvo21fr/RF7+eY+Uu8Jx25KuFr/1HAkXGmmgR1wMPPtlr1THykzSSXXxB
+         O18M6AIGqJDymY/8AiHqhvUSCX/Oxz+G5deqO9igCYQBhyINR/oYshp9NKKOG9FQy6Pv
+         +UjC8U1uyp+bQlfuCMXcUQUr3ZIPl9dOvVKtm4X8yfSLO8u6IqoUmT7ENYWm/69DBy3w
+         9XwwnljHW00jizvPGQjJNgmiMdsnmFN/ynqHjJN44mp7lEDQ1JBfGm+62UiXPnl/3apr
+         MAEApXpwKdKShlhcrCa5veuE5zpDPNFDKfzPZ9Ef1uVdrBapKDj6tn7xLx0kOp9qVbbq
+         jUrw==
+X-Gm-Message-State: ANoB5pm8OpclHsJMTZgg0nxp9e0FCOsKZfFp5809LHhw31pQQOldVriB
+        3QMw+Upb0AAjarAPW2HiiL8=
+X-Google-Smtp-Source: AA0mqf48BHBhCR+c7d0+siCG4ZkGdJTTBNX0fGpp0I174PiT5t4db1LJSL5zc/UUZQmHVeFRqXySMQ==
+X-Received: by 2002:a17:90b:4b4a:b0:214:6fc:31cf with SMTP id mi10-20020a17090b4b4a00b0021406fc31cfmr46405210pjb.21.1669401349941;
+        Fri, 25 Nov 2022 10:35:49 -0800 (PST)
+Received: from localhost.localdomain ([2620:10d:c090:400::5:9e9c])
+        by smtp.gmail.com with ESMTPSA id o7-20020aa79787000000b005745635c5b5sm3389180pfp.183.2022.11.25.10.35.47
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Fri, 25 Nov 2022 10:35:49 -0800 (PST)
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     davem@davemloft.net
+Cc:     daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
+        yhs@fb.com, bpf@vger.kernel.org, kernel-team@fb.com
+Subject: [PATCH bpf-next] bpf: Tighten ptr_to_btf_id checks.
+Date:   Fri, 25 Nov 2022 10:35:46 -0800
+Message-Id: <20221125183546.1964-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Stanislav Fomichev <sdf@google.com> writes:
+From: Alexei Starovoitov <ast@kernel.org>
 
-> There is an ndo handler per kfunc, the verifier replaces a call to the
-> generic kfunc with a call to the per-device one.
->
-> For XDP, we define a new kfunc set (xdp_metadata_kfunc_ids) which
-> implements all possible metatada kfuncs. Not all devices have to
-> implement them. If kfunc is not supported by the target device,
-> the default implementation is called instead.
+The networking programs typically don't require CAP_PERFMON, but through kfuncs
+like bpf_cast_to_kern_ctx() they can access memory through PTR_TO_BTF_ID. In
+such case enforce CAP_PERFMON. Also make sure that those programs are GPL if
+they access kernel data structures. All kfuncs require GPL anyway.
 
-BTW, this "the default implementation is called instead" bit is not
-included in this version... :)
+Also remove allow_ptr_to_map_access. It's the same as allow_ptr_leaks and
+different name for the same check only causes confusion.
 
-[...]
+Fixes: fd264ca02094 ("bpf: Add a kfunc to type cast from bpf uapi ctx to kernel ctx")
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ include/linux/bpf.h          |  5 -----
+ include/linux/bpf_verifier.h |  1 -
+ kernel/bpf/verifier.c        | 17 ++++++++++++++---
+ 3 files changed, 14 insertions(+), 9 deletions(-)
 
-> +#ifdef CONFIG_DEBUG_INFO_BTF
-> +BTF_SET8_START(xdp_metadata_kfunc_ids)
-> +#define XDP_METADATA_KFUNC(name, str) BTF_ID_FLAGS(func, str, 0)
-> +XDP_METADATA_KFUNC_xxx
-> +#undef XDP_METADATA_KFUNC
-> +BTF_SET8_END(xdp_metadata_kfunc_ids)
-> +
-> +static const struct btf_kfunc_id_set xdp_metadata_kfunc_set = {
-> +	.owner = THIS_MODULE,
-> +	.set   = &xdp_metadata_kfunc_ids,
-> +};
-> +
-> +u32 xdp_metadata_kfunc_id(int id)
-> +{
-> +	return xdp_metadata_kfunc_ids.pairs[id].id;
-> +}
-> +EXPORT_SYMBOL_GPL(xdp_metadata_kfunc_id);
-
-So I was getting some really weird values when testing (always getting a
-timestamp value of '1'), and it turns out to be because this way of
-looking up the ID doesn't work: The set is always sorted by the BTF ID,
-not the order it was defined. Which meant that the mapping code got the
-functions mixed up, and would call a different one instead (so the
-timestamp value I was getting was really the return value of
-rx_hash_enabled()).
-
-I fixed it by building a secondary lookup table as below; feel free to
-incorporate that (or if you can come up with a better way, go ahead!).
-
--Toke
-
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index e43f7d4ef4cf..dc0a9644dacc 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -738,6 +738,15 @@ XDP_METADATA_KFUNC_xxx
- #undef XDP_METADATA_KFUNC
- BTF_SET8_END(xdp_metadata_kfunc_ids)
- 
-+static struct xdp_metadata_kfunc_map {
-+       const char *fname;
-+       u32 btf_id;
-+} xdp_metadata_kfunc_lookup_map[MAX_XDP_METADATA_KFUNC] = {
-+#define XDP_METADATA_KFUNC(name, str) { .fname = __stringify(str) },
-+XDP_METADATA_KFUNC_xxx
-+#undef XDP_METADATA_KFUNC
-+};
-+
- static const struct btf_kfunc_id_set xdp_metadata_kfunc_set = {
-        .owner = THIS_MODULE,
-        .set   = &xdp_metadata_kfunc_ids,
-@@ -745,13 +754,41 @@ static const struct btf_kfunc_id_set xdp_metadata_kfunc_set = {
- 
- u32 xdp_metadata_kfunc_id(int id)
- {
--       return xdp_metadata_kfunc_ids.pairs[id].id;
-+       return xdp_metadata_kfunc_lookup_map[id].btf_id;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index c6aa6912ea16..4235ac4ed1c8 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1891,11 +1891,6 @@ static inline bool bpf_allow_uninit_stack(void)
+ 	return perfmon_capable();
  }
- EXPORT_SYMBOL_GPL(xdp_metadata_kfunc_id);
  
- static int __init xdp_metadata_init(void)
+-static inline bool bpf_allow_ptr_to_map_access(void)
+-{
+-	return perfmon_capable();
+-}
+-
+ static inline bool bpf_bypass_spec_v1(void)
  {
--       return register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &xdp_metadata_kfunc_set);
-+       const struct btf *btf;
-+       int i, j, ret;
-+
-+       ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &xdp_metadata_kfunc_set);
-+       if (ret)
-+               return ret;
-+
-+       btf = bpf_get_btf_vmlinux();
-+
-+       for (i = 0; i < MAX_XDP_METADATA_KFUNC; i++) {
-+               u32 btf_id = xdp_metadata_kfunc_ids.pairs[i].id;
-+               const struct btf_type *t;
-+               const char *name;
-+
-+               t = btf_type_by_id(btf, btf_id);
-+               if (WARN_ON_ONCE(!t || !t->name_off))
-+                       continue;
-+
-+               name = btf_name_by_offset(btf, t->name_off);
-+
-+               for (j = 0; j < MAX_XDP_METADATA_KFUNC; j++) {
-+                       if (!strcmp(name, xdp_metadata_kfunc_lookup_map[j].fname)) {
-+                               xdp_metadata_kfunc_lookup_map[j].btf_id = btf_id;
-+                               break;
-+                       }
-+               }
-+       }
-+
-+       return 0;
- }
- late_initcall(xdp_metadata_init);
- #else /* CONFIG_DEBUG_INFO_BTF */
+ 	return perfmon_capable();
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index c05aa6e1f6f5..b5090e89cb3f 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -531,7 +531,6 @@ struct bpf_verifier_env {
+ 	bool explore_alu_limits;
+ 	bool allow_ptr_leaks;
+ 	bool allow_uninit_stack;
+-	bool allow_ptr_to_map_access;
+ 	bool bpf_capable;
+ 	bool bypass_spec_v1;
+ 	bool bypass_spec_v4;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 6599d25dae38..69040c09f4f5 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4703,6 +4703,18 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
+ 	u32 btf_id;
+ 	int ret;
+ 
++	if (!env->allow_ptr_leaks) {
++		verbose(env,
++			"'struct %s' access is allowed only to CAP_PERFMON and CAP_SYS_ADMIN\n",
++			tname);
++		return -EPERM;
++	}
++	if (!env->prog->gpl_compatible && btf_is_kernel(reg->btf)) {
++		verbose(env,
++			"Cannot access kernel 'struct %s' from non-GPL compatible program\n",
++			tname);
++		return -EINVAL;
++	}
+ 	if (off < 0) {
+ 		verbose(env,
+ 			"R%d is ptr_%s invalid negative access: off=%d\n",
+@@ -4823,9 +4835,9 @@ static int check_ptr_to_map_access(struct bpf_verifier_env *env,
+ 	t = btf_type_by_id(btf_vmlinux, *map->ops->map_btf_id);
+ 	tname = btf_name_by_offset(btf_vmlinux, t->name_off);
+ 
+-	if (!env->allow_ptr_to_map_access) {
++	if (!env->allow_ptr_leaks) {
+ 		verbose(env,
+-			"%s access is allowed only to CAP_PERFMON and CAP_SYS_ADMIN\n",
++			"'struct %s' access is allowed only to CAP_PERFMON and CAP_SYS_ADMIN\n",
+ 			tname);
+ 		return -EPERM;
+ 	}
+@@ -16675,7 +16687,6 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr)
+ 
+ 	env->allow_ptr_leaks = bpf_allow_ptr_leaks();
+ 	env->allow_uninit_stack = bpf_allow_uninit_stack();
+-	env->allow_ptr_to_map_access = bpf_allow_ptr_to_map_access();
+ 	env->bypass_spec_v1 = bpf_bypass_spec_v1();
+ 	env->bypass_spec_v4 = bpf_bypass_spec_v4();
+ 	env->bpf_capable = bpf_capable();
+-- 
+2.30.2
 
