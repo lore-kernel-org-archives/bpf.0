@@ -2,112 +2,113 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FB92C47088
-	for <bpf@archiver.kernel.org>; Sat, 26 Nov 2022 09:49:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2A4CC4332F
+	for <bpf@archiver.kernel.org>; Sat, 26 Nov 2022 10:54:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiKZJtE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 26 Nov 2022 04:49:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55102 "EHLO
+        id S229526AbiKZKyE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 26 Nov 2022 05:54:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiKZJs6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 26 Nov 2022 04:48:58 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A9929359;
-        Sat, 26 Nov 2022 01:48:52 -0800 (PST)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NK6Nw0cDlzRpYp;
-        Sat, 26 Nov 2022 17:48:16 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 26 Nov 2022 17:48:31 +0800
-Received: from ubuntu1804.huawei.com (10.67.174.61) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 26 Nov 2022 17:48:30 +0800
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>,
-        <illusionist.neo@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <mykolal@fb.com>, <shuah@kernel.org>,
-        <benjamin.tissoires@redhat.com>, <memxor@gmail.com>,
-        <colin.i.king@gmail.com>, <asavkov@redhat.com>, <delyank@fb.com>,
-        <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-CC:     <yangjihong1@huawei.com>
-Subject: [PATCH bpf-next v3 0/4] bpf: Support kernel function call in 32-bit ARM
-Date:   Sat, 26 Nov 2022 17:45:26 +0800
-Message-ID: <20221126094530.226629-1-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
+        with ESMTP id S229513AbiKZKyD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 26 Nov 2022 05:54:03 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFCC19284
+        for <bpf@vger.kernel.org>; Sat, 26 Nov 2022 02:54:03 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id o5-20020a17090a678500b00218cd5a21c9so6191976pjj.4
+        for <bpf@vger.kernel.org>; Sat, 26 Nov 2022 02:54:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YSYDlKL3Z1/BGWaIJQOht5oxOtXn/1L0eMJQR1ocH+c=;
+        b=EifM15TcBTfVY8sEc5KLPETlc1+jDyCY7bqPd1/NdOXcKEqfYx6uTaiEtwDAhcDt/L
+         77KJ/cWF9UXYQ9aBReyu82AfffTChgi1w3g3NopLt3SS930lidXzCFh3zm+oFuBiphzD
+         kb3qxygTwxe6pRIprkwqceyslRJRPCfP2nsOZj3AhIrw/2ZZLy3EKiMNC8FBbsQAfNxK
+         MDzkAhvjS4T19PZFRBjfPgLxpjBBwlX/TuT4p+A7Fb2pzZSI00OqAJB75TDLzx8IUtUh
+         ItpiCRso8vPmBIspQ5KDWrQTNbYtU1qGpiFq+l0tL1RuOWH4U++ik0QFaQkhpCtxZ474
+         b0dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YSYDlKL3Z1/BGWaIJQOht5oxOtXn/1L0eMJQR1ocH+c=;
+        b=ixyA7iQcnvWZdWEhXBYGEeRhC4qu/V3mmNsnWvhU25AThgDMX2qMalnyLuhOlBSMRU
+         9JcUTlNZMB9CLyFU2m2YISTLNZZ0QU91xHwAS54NJtzwpJeZqObpadETnhpp3X0I9vT8
+         QUuoJeJG9YdErRg5ZW0Q0zO7KDUJGSXT+j2TT/4E+nFOwu3DFt8jeicXV1YxG+1Zq7tP
+         M1WcOsS8SQAK6NUL+HEYT6KECsS235Jaq2+Tu7WxFMtidZ2Lo4Rb2KL5+3QbYei+RcRN
+         V6gukhqHzMRW1pf+reyOBF2+QQO+g9ZwsuikumR68pJKeUShNWLpljpQ1mzI1LT+G5tF
+         +jMQ==
+X-Gm-Message-State: ANoB5pk6K/NBPrpZhFWCKXKDMbdSFsJSPERSOdkYWd8QlVYKWqTYaekz
+        JH/lD7rYyLeSBMBNPgsXmAj4dSZvleI=
+X-Google-Smtp-Source: AA0mqf6K0q4GUKePBr5knLRdDX8xzxaw2irUgh9NcBvV+sle0LgGD0PKzDo3qsqXdac13ensimJf4Q==
+X-Received: by 2002:a17:90a:9f03:b0:211:59c6:6133 with SMTP id n3-20020a17090a9f0300b0021159c66133mr45171533pjp.238.1669460042637;
+        Sat, 26 Nov 2022 02:54:02 -0800 (PST)
+Received: from localhost.localdomain ([119.28.83.143])
+        by smtp.gmail.com with ESMTPSA id z14-20020a1709027e8e00b00188fdae6e0esm5079904pla.44.2022.11.26.02.54.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Nov 2022 02:54:02 -0800 (PST)
+From:   Hengqi Chen <hengqi.chen@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com, toke@redhat.com,
+        hengqi.chen@gmail.com
+Subject: [PATCH bpf 0/2] Check timer_off for map_in_map only when map value has timer
+Date:   Sat, 26 Nov 2022 18:53:49 +0800
+Message-Id: <20221126105351.2578782-1-hengqi.chen@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.61]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-1. Patch1 is dependent patch to fix zext extension error in 32-bit ARM.
-2. Patch2 supports bpf fkunc in 32-bit ARM for EABI.
-3. Patch3 is used to add test cases to cover some parameter scenarios
-   states by AAPCS.
-4. Patch4 fix a comment error.
+The timer_off value could be -EINVAL or -ENOENT when map value of
+inner map is struct and contains no bpf_timer.
 
-The following is the test_progs result in the 32-bit ARM environment:
+The EINVAL case happens when the map is created without BTF key/value
+info, map->timer_off is set to -EINVAL in map_create(). For example:
 
-  # uname -m
-  armv7l
-  # echo 1 > /proc/sys/net/core/bpf_jit_enable
-  # ./test_progs -t kfunc_call
-  #1/1     kfunc_call/kfunc_syscall_test_fail:OK
-  #1/2     kfunc_call/kfunc_syscall_test_null_fail:OK
-  #1/3     kfunc_call/kfunc_call_test_get_mem_fail_rdonly:OK
-  #1/4     kfunc_call/kfunc_call_test_get_mem_fail_use_after_free:OK
-  #1/5     kfunc_call/kfunc_call_test_get_mem_fail_oob:OK
-  #1/6     kfunc_call/kfunc_call_test_get_mem_fail_not_const:OK
-  #1/7     kfunc_call/kfunc_call_test_mem_acquire_fail:OK
-  #1/8     kfunc_call/kfunc_call_test1:OK
-  #1/9     kfunc_call/kfunc_call_test2:OK
-  #1/10    kfunc_call/kfunc_call_test4:OK
-  #1/11    kfunc_call/kfunc_call_test5:OK
-  #1/12    kfunc_call/kfunc_call_test6:OK
-  #1/13    kfunc_call/kfunc_call_test_ref_btf_id:OK
-  #1/14    kfunc_call/kfunc_call_test_get_mem:OK
-  #1/15    kfunc_call/kfunc_syscall_test:OK
-  #1/16    kfunc_call/kfunc_syscall_test_null:OK
-  #1/19    kfunc_call/destructive:OK
+    map_fd = bpf_map_create(BPF_MAP_TYPE_LRU_HASH, NULL, 4, 4, 1, NULL);
 
----
-Changes since v2:
-  - Remove patches to adjust sk size check for CO_RE in 32-bit arch.
-  - Add check of kfunc's return value in insn_def_regno.
-  - Adjust is_reg64 for insn_def_regno.
-  - The check of CONFIG_AEABI is moved from emit_kfunc_call to
-    bpf_jit_supports_kfunc_call.
-  - Fix a comment error in fixup_kfunc_call.
+The ENOENT case happens when the map is created with BTF key/value
+info (e.g. from BPF skeleton), map->timer_off is set to -ENOENT as
+what btf_find_timer() returns. For example, map created from BPF skeleton:
 
-Yang Jihong (4):
-  bpf: Adapt 32-bit return value kfunc for 32-bit ARM when zext
-    extension
-  bpf: Add kernel function call support in 32-bit ARM for EABI
-  bpf:selftests: Add kfunc_call test for mixing 32-bit and 64-bit
-    parameters
-  bpf: Fix comment error in fixup_kfunc_call function
+    struct inner_key {
+    	__u32 x;
+    };
 
- arch/arm/net/bpf_jit_32.c                     | 137 ++++++++++++++++++
- kernel/bpf/verifier.c                         |  46 +++++-
- net/bpf/test_run.c                            |  18 +++
- .../selftests/bpf/prog_tests/kfunc_call.c     |   3 +
- .../selftests/bpf/progs/kfunc_call_test.c     |  52 +++++++
- 5 files changed, 252 insertions(+), 4 deletions(-)
+    struct inner_value {
+    	__u32 y;
+    };
 
--- 
-2.30.GIT
+    struct inner {
+    	__uint(type, BPF_MAP_TYPE_LRU_HASH);
+    	__uint(max_entries, 1);
+    	__type(key, struct inner_key);
+    	__type(value, struct inner_value);
+    } inner SEC(".maps");
 
+    struct {
+    	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
+    	__uint(max_entries, 1);
+    	__type(key, __u32);
+    	__array(values, struct inner);
+    } outer SEC(".maps");
+
+Since timer_off is different, the map_in_map outer in the above case
+can NOT be updated using map_fd in the first case. This patch tries
+to fix such restriction.
+
+Hengqi Chen (2):
+  bpf: Check timer_off for map_in_map only when map value have timer
+  selftests/bpf: Update map_in_map using map without BTF key/value info
+
+ kernel/bpf/map_in_map.c                       |  9 ++++++-
+ .../selftests/bpf/prog_tests/btf_map_in_map.c | 27 +++++++++++++++++++
+ .../selftests/bpf/progs/test_btf_map_in_map.c | 22 +++++++++++++++
+ 3 files changed, 57 insertions(+), 1 deletion(-)
+
+--
+2.34.1
