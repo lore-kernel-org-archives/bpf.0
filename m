@@ -2,29 +2,29 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8FAAC4708B
-	for <bpf@archiver.kernel.org>; Sat, 26 Nov 2022 09:49:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FB92C47088
+	for <bpf@archiver.kernel.org>; Sat, 26 Nov 2022 09:49:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbiKZJtA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 26 Nov 2022 04:49:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54950 "EHLO
+        id S229661AbiKZJtE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 26 Nov 2022 04:49:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiKZJsw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 26 Nov 2022 04:48:52 -0500
+        with ESMTP id S229599AbiKZJs6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 26 Nov 2022 04:48:58 -0500
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82D01B1DD;
-        Sat, 26 Nov 2022 01:48:46 -0800 (PST)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NK6Np3YBVzRpXy;
-        Sat, 26 Nov 2022 17:48:10 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A9929359;
+        Sat, 26 Nov 2022 01:48:52 -0800 (PST)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NK6Nw0cDlzRpYp;
+        Sat, 26 Nov 2022 17:48:16 +0800 (CST)
 Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 26 Nov 2022 17:48:36 +0800
+ 15.1.2375.31; Sat, 26 Nov 2022 17:48:31 +0800
 Received: from ubuntu1804.huawei.com (10.67.174.61) by
  kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 26 Nov 2022 17:48:34 +0800
+ 15.1.2375.31; Sat, 26 Nov 2022 17:48:30 +0800
 From:   Yang Jihong <yangjihong1@huawei.com>
 To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
@@ -39,12 +39,10 @@ To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
         <linux-kselftest@vger.kernel.org>
 CC:     <yangjihong1@huawei.com>
-Subject: [PATCH bpf-next v3 4/4] bpf: Fix comment error in fixup_kfunc_call function
-Date:   Sat, 26 Nov 2022 17:45:30 +0800
-Message-ID: <20221126094530.226629-5-yangjihong1@huawei.com>
+Subject: [PATCH bpf-next v3 0/4] bpf: Support kernel function call in 32-bit ARM
+Date:   Sat, 26 Nov 2022 17:45:26 +0800
+Message-ID: <20221126094530.226629-1-yangjihong1@huawei.com>
 X-Mailer: git-send-email 2.30.GIT
-In-Reply-To: <20221126094530.226629-1-yangjihong1@huawei.com>
-References: <20221126094530.226629-1-yangjihong1@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -56,27 +54,60 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-insn->imm for kfunc is the relative address of __bpf_call_base,
-instead of __bpf_base_call, Fix the comment error.
+1. Patch1 is dependent patch to fix zext extension error in 32-bit ARM.
+2. Patch2 supports bpf fkunc in 32-bit ARM for EABI.
+3. Patch3 is used to add test cases to cover some parameter scenarios
+   states by AAPCS.
+4. Patch4 fix a comment error.
 
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+The following is the test_progs result in the 32-bit ARM environment:
+
+  # uname -m
+  armv7l
+  # echo 1 > /proc/sys/net/core/bpf_jit_enable
+  # ./test_progs -t kfunc_call
+  #1/1     kfunc_call/kfunc_syscall_test_fail:OK
+  #1/2     kfunc_call/kfunc_syscall_test_null_fail:OK
+  #1/3     kfunc_call/kfunc_call_test_get_mem_fail_rdonly:OK
+  #1/4     kfunc_call/kfunc_call_test_get_mem_fail_use_after_free:OK
+  #1/5     kfunc_call/kfunc_call_test_get_mem_fail_oob:OK
+  #1/6     kfunc_call/kfunc_call_test_get_mem_fail_not_const:OK
+  #1/7     kfunc_call/kfunc_call_test_mem_acquire_fail:OK
+  #1/8     kfunc_call/kfunc_call_test1:OK
+  #1/9     kfunc_call/kfunc_call_test2:OK
+  #1/10    kfunc_call/kfunc_call_test4:OK
+  #1/11    kfunc_call/kfunc_call_test5:OK
+  #1/12    kfunc_call/kfunc_call_test6:OK
+  #1/13    kfunc_call/kfunc_call_test_ref_btf_id:OK
+  #1/14    kfunc_call/kfunc_call_test_get_mem:OK
+  #1/15    kfunc_call/kfunc_syscall_test:OK
+  #1/16    kfunc_call/kfunc_syscall_test_null:OK
+  #1/19    kfunc_call/destructive:OK
+
 ---
- kernel/bpf/verifier.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes since v2:
+  - Remove patches to adjust sk size check for CO_RE in 32-bit arch.
+  - Add check of kfunc's return value in insn_def_regno.
+  - Adjust is_reg64 for insn_def_regno.
+  - The check of CONFIG_AEABI is moved from emit_kfunc_call to
+    bpf_jit_supports_kfunc_call.
+  - Fix a comment error in fixup_kfunc_call.
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 193ea927aa69..eb58fea645ca 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -13927,7 +13927,7 @@ static int fixup_kfunc_call(struct bpf_verifier_env *env,
- 	}
- 
- 	/* insn->imm has the btf func_id. Replace it with
--	 * an address (relative to __bpf_base_call).
-+	 * an address (relative to __bpf_call_base).
- 	 */
- 	desc = find_kfunc_desc(env->prog, insn->imm, insn->off);
- 	if (!desc) {
+Yang Jihong (4):
+  bpf: Adapt 32-bit return value kfunc for 32-bit ARM when zext
+    extension
+  bpf: Add kernel function call support in 32-bit ARM for EABI
+  bpf:selftests: Add kfunc_call test for mixing 32-bit and 64-bit
+    parameters
+  bpf: Fix comment error in fixup_kfunc_call function
+
+ arch/arm/net/bpf_jit_32.c                     | 137 ++++++++++++++++++
+ kernel/bpf/verifier.c                         |  46 +++++-
+ net/bpf/test_run.c                            |  18 +++
+ .../selftests/bpf/prog_tests/kfunc_call.c     |   3 +
+ .../selftests/bpf/progs/kfunc_call_test.c     |  52 +++++++
+ 5 files changed, 252 insertions(+), 4 deletions(-)
+
 -- 
 2.30.GIT
 
