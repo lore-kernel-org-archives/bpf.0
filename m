@@ -2,39 +2,39 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDE0CC4321E
-	for <bpf@archiver.kernel.org>; Mon, 28 Nov 2022 19:03:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 281BDC4332F
+	for <bpf@archiver.kernel.org>; Mon, 28 Nov 2022 19:03:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231714AbiK1TDS convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 28 Nov 2022 14:03:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35070 "EHLO
+        id S232529AbiK1TDT convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Mon, 28 Nov 2022 14:03:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233160AbiK1TDO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 28 Nov 2022 14:03:14 -0500
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D1E2DD
-        for <bpf@vger.kernel.org>; Mon, 28 Nov 2022 11:03:14 -0800 (PST)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 2ASI100P021099
-        for <bpf@vger.kernel.org>; Mon, 28 Nov 2022 11:03:13 -0800
+        with ESMTP id S232994AbiK1TDR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 28 Nov 2022 14:03:17 -0500
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3EC27FFA
+        for <bpf@vger.kernel.org>; Mon, 28 Nov 2022 11:03:16 -0800 (PST)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ASI0kpM000379
+        for <bpf@vger.kernel.org>; Mon, 28 Nov 2022 11:03:16 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3m3f6ej26x-2
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3m4xqaahsx-10
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 28 Nov 2022 11:03:13 -0800
-Received: from twshared21592.39.frc1.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 28 Nov 2022 11:03:15 -0800
+Received: from twshared16963.27.frc3.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 28 Nov 2022 11:03:11 -0800
+ 15.1.2375.31; Mon, 28 Nov 2022 11:03:09 -0800
 Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
-        id D530210980373; Mon, 28 Nov 2022 11:02:58 -0800 (PST)
+        id 6133E109803A8; Mon, 28 Nov 2022 11:03:03 -0800 (PST)
 From:   Song Liu <song@kernel.org>
 To:     <bpf@vger.kernel.org>, <linux-mm@kvack.org>
 CC:     <akpm@linux-foundation.org>, <x86@kernel.org>,
         <peterz@infradead.org>, <hch@lst.de>, <rick.p.edgecombe@intel.com>,
         <rppt@kernel.org>, <mcgrof@kernel.org>, Song Liu <song@kernel.org>
-Subject: [PATCH bpf-next v5 3/6] selftests/vm: extend test_vmalloc to test execmem_* APIs
-Date:   Mon, 28 Nov 2022 11:02:42 -0800
-Message-ID: <20221128190245.2337461-4-song@kernel.org>
+Subject: [PATCH bpf-next v5 5/6] vmalloc: introduce register_text_tail_vm()
+Date:   Mon, 28 Nov 2022 11:02:44 -0800
+Message-ID: <20221128190245.2337461-6-song@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221128190245.2337461-1-song@kernel.org>
 References: <20221128190245.2337461-1-song@kernel.org>
@@ -42,8 +42,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: dU4DjrZNtmTrBfbXHOexWRZrTe7eaj5g
-X-Proofpoint-ORIG-GUID: dU4DjrZNtmTrBfbXHOexWRZrTe7eaj5g
+X-Proofpoint-ORIG-GUID: fHAipAgllHwbwFa8H2zsHGGbb3FGMdYF
+X-Proofpoint-GUID: fHAipAgllHwbwFa8H2zsHGGbb3FGMdYF
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-28_17,2022-11-28_02,2022-06-22_01
@@ -51,122 +51,96 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add logic to test execmem_[alloc|fill|free] in test_vmalloc.c.
-No need to change tools/testing/selftests/vm/test_vmalloc.sh.
-
-Gate the export of execmem_* with DEBUG_TEST_VMALLOC_EXEMEM_ALLOC so
-they are only exported when the developers are running tests.
+Allow arch code to register some memory to be used by execmem_alloc().
+One possible use case is to allocate PMD pages for kernl text up to
+PMD_ALIGN(_etext), and use (_etext, PMD_ALIGN(_etext)) for
+execmem_alloc. Currently, only one such region is supported.
 
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- lib/test_vmalloc.c | 35 +++++++++++++++++++++++++++++++++++
- mm/vmalloc.c       | 12 ++++++++++++
- 2 files changed, 47 insertions(+)
+ include/linux/vmalloc.h |  4 ++++
+ mm/vmalloc.c            | 34 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 38 insertions(+)
 
-diff --git a/lib/test_vmalloc.c b/lib/test_vmalloc.c
-index cf7780572f5b..9c78f0693f59 100644
---- a/lib/test_vmalloc.c
-+++ b/lib/test_vmalloc.c
-@@ -50,6 +50,7 @@ __param(int, run_test_mask, INT_MAX,
- 		"\t\tid: 128,  name: pcpu_alloc_test\n"
- 		"\t\tid: 256,  name: kvfree_rcu_1_arg_vmalloc_test\n"
- 		"\t\tid: 512,  name: kvfree_rcu_2_arg_vmalloc_test\n"
-+		"\t\tid: 1024, name: execmem_alloc_test\n"
- 		/* Add a new test case description here. */
- );
- 
-@@ -352,6 +353,39 @@ kvfree_rcu_2_arg_vmalloc_test(void)
- 	return 0;
+diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
+index 30aa8c187d40..2babbe3031a5 100644
+--- a/include/linux/vmalloc.h
++++ b/include/linux/vmalloc.h
+@@ -132,11 +132,15 @@ extern void vm_unmap_aliases(void);
+ #ifdef CONFIG_MMU
+ extern void __init vmalloc_init(void);
+ extern unsigned long vmalloc_nr_pages(void);
++void register_text_tail_vm(unsigned long start, unsigned long end);
+ #else
+ static inline void vmalloc_init(void)
+ {
  }
- 
-+/* This should match the define in vmalloc.c */
-+#define DEBUG_TEST_VMALLOC_EXEMEM_ALLOC 0
-+
-+static int
-+execmem_alloc_test(void)
+ static inline unsigned long vmalloc_nr_pages(void) { return 0; }
++void register_text_tail_vm(unsigned long start, unsigned long end)
 +{
-+	int i;
-+
-+	for (i = 0; i < test_loop_count; i++) {
-+#if DEBUG_TEST_VMALLOC_EXEMEM_ALLOC
-+		/* allocate variable size, up to 64kB */
-+		size_t size = (i % 1024 + 1) * 64;
-+		void *p, *tmp;
-+
-+		p = execmem_alloc(size, 64);
-+		if (!p)
-+			return -1;
-+
-+		tmp = execmem_fill(p, "a", 1);
-+		if (tmp != p)
-+			return -1;
-+
-+		tmp = execmem_fill(p + size - 1, "b", 1);
-+		if (tmp != p + size - 1)
-+			return -1;
-+
-+		execmem_free(p);
-+#endif
-+	}
-+
-+	return 0;
 +}
-+
- struct test_case_desc {
- 	const char *test_name;
- 	int (*test_func)(void);
-@@ -368,6 +402,7 @@ static struct test_case_desc test_case_array[] = {
- 	{ "pcpu_alloc_test", pcpu_alloc_test },
- 	{ "kvfree_rcu_1_arg_vmalloc_test", kvfree_rcu_1_arg_vmalloc_test },
- 	{ "kvfree_rcu_2_arg_vmalloc_test", kvfree_rcu_2_arg_vmalloc_test },
-+	{ "execmem_alloc_test", execmem_alloc_test },
- 	/* Add a new test case here. */
- };
+ #endif
  
+ extern void *vmalloc(unsigned long size) __alloc_size(1);
 diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 1f7f2134f9bd..95ee8282b66c 100644
+index 95ee8282b66c..fe5c8e5a5ec7 100644
 --- a/mm/vmalloc.c
 +++ b/mm/vmalloc.c
-@@ -3387,6 +3387,9 @@ static void move_vmap_to_free_text_tree(void *addr)
- 	spin_unlock(&free_text_area_lock);
- }
+@@ -77,6 +77,9 @@ static const bool vmap_allow_huge = false;
+ #endif
+ #define PMD_ALIGN_DOWN(addr) ALIGN_DOWN(addr, PMD_SIZE)
  
-+/* This should match the define in test_vmalloc.c */
-+#define DEBUG_TEST_VMALLOC_EXEMEM_ALLOC 0
++static struct vm_struct text_tail_vm;
++static struct vmap_area text_tail_va;
 +
- /**
-  * execmem_alloc - allocate virtually contiguous RO+X memory
-  * @size:    allocation size
-@@ -3459,6 +3462,9 @@ void *execmem_alloc(unsigned long size, unsigned long align)
- 	kmem_cache_free(vmap_area_cachep, va);
- 	return NULL;
- }
-+#if DEBUG_TEST_VMALLOC_EXEMEM_ALLOC
-+EXPORT_SYMBOL_GPL(execmem_alloc);
-+#endif
- 
- void __weak *arch_fill_execmem(void *dst, void *src, size_t len)
+ bool is_vmalloc_addr(const void *x)
  {
-@@ -3510,6 +3516,9 @@ void *execmem_fill(void *dst, void *src, size_t len)
- 	spin_unlock(&vmap_area_lock);
- 	return ERR_PTR(-EINVAL);
+ 	unsigned long addr = (unsigned long)kasan_reset_tag(x);
+@@ -655,6 +658,8 @@ int is_vmalloc_or_module_addr(const void *x)
+ 	unsigned long addr = (unsigned long)kasan_reset_tag(x);
+ 	if (addr >= MODULES_VADDR && addr < MODULES_END)
+ 		return 1;
++	if (addr >= text_tail_va.va_start && addr < text_tail_va.va_end)
++		return 1;
+ #endif
+ 	return is_vmalloc_addr(x);
  }
-+#if DEBUG_TEST_VMALLOC_EXEMEM_ALLOC
-+EXPORT_SYMBOL_GPL(execmem_fill);
-+#endif
+@@ -2439,6 +2444,35 @@ static void vmap_init_free_space(void)
+ 	}
+ }
  
- static struct vm_struct *find_and_unlink_text_vm(unsigned long start, unsigned long end)
++/*
++ * register_text_tail_vm() allows arch code to register memory regions
++ * for execmem_alloc. Unlike regular memory regions used by execmem_alloc,
++ * this region is never freed by vfree_exec.
++ *
++ * One possible use case is to allocate PMD pages for kernl text up to
++ * PMD_ALIGN(_etext), and use (_etext, PMD_ALIGN(_etext)) for
++ * execmem_alloc.
++ */
++void register_text_tail_vm(unsigned long start, unsigned long end)
++{
++	struct vmap_area *va;
++
++	/* only support one region */
++	if (WARN_ON_ONCE(text_tail_vm.addr))
++		return;
++
++	va = kmem_cache_zalloc(vmap_area_cachep, GFP_NOWAIT);
++	if (WARN_ON_ONCE(!va))
++		return;
++	text_tail_vm.addr = (void *)start;
++	text_tail_vm.size = end - start;
++	text_tail_va.va_start = start;
++	text_tail_va.va_end = end;
++	text_tail_va.vm = &text_tail_vm;
++	memcpy(va, &text_tail_va, sizeof(*va));
++	insert_vmap_area_augment(va, NULL, &free_text_area_root, &free_text_area_list);
++}
++
+ void __init vmalloc_init(void)
  {
-@@ -3633,6 +3642,9 @@ void execmem_free(void *addr)
- out:
- 	spin_unlock(&free_text_area_lock);
- }
-+#if DEBUG_TEST_VMALLOC_EXEMEM_ALLOC
-+EXPORT_SYMBOL_GPL(execmem_free);
-+#endif
- 
- /**
-  * vmalloc_huge - allocate virtually contiguous memory, allow huge pages
+ 	struct vmap_area *va;
 -- 
 2.30.2
 
