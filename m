@@ -2,98 +2,252 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13A61C433FE
-	for <bpf@archiver.kernel.org>; Mon, 28 Nov 2022 11:26:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6A02C43217
+	for <bpf@archiver.kernel.org>; Mon, 28 Nov 2022 11:33:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbiK1L0f (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 28 Nov 2022 06:26:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45014 "EHLO
+        id S230171AbiK1Ldw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 28 Nov 2022 06:33:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbiK1LZv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 28 Nov 2022 06:25:51 -0500
-Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 5848321A5;
-        Mon, 28 Nov 2022 03:25:50 -0800 (PST)
-Received: from 102.wangsu.com (unknown [59.61.78.232])
-        by app2 (Coremail) with SMTP id SyJltADXxwySmoRjSUsAAA--.450S6;
-        Mon, 28 Nov 2022 19:25:32 +0800 (CST)
-From:   Pengcheng Yang <yangpc@wangsu.com>
-To:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        John Fastabend <john.fastabend@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Lorenz Bauer <lmb@cloudflare.com>
-Cc:     Pengcheng Yang <yangpc@wangsu.com>
-Subject: [PATCH bpf v2 4/4] selftests/bpf: Add ingress tests for txmsg with apply_bytes
-Date:   Mon, 28 Nov 2022 19:24:45 +0800
-Message-Id: <1669634685-1717-5-git-send-email-yangpc@wangsu.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1669634685-1717-1-git-send-email-yangpc@wangsu.com>
-References: <1669634685-1717-1-git-send-email-yangpc@wangsu.com>
-X-CM-TRANSID: SyJltADXxwySmoRjSUsAAA--.450S6
-X-Coremail-Antispam: 1UD129KBjvJXoW7ArWkWr45KFyrCw4UZF4DCFg_yoW8Gr1xp3
-        ZxJ39xKF95J3y7XF43JFy3tF4F9rW0qrWjyF4xAr1qvw43AFyxtrWrtFWYqF98JrWFq3Wa
-        vayUGF4Uuw15Ja7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_UUUUUUUUU==
-X-CM-SenderInfo: p1dqw1nf6zt0xjvxhudrp/
+        with ESMTP id S230036AbiK1Ldv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 28 Nov 2022 06:33:51 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C1012754
+        for <bpf@vger.kernel.org>; Mon, 28 Nov 2022 03:33:50 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id n21so24973350ejb.9
+        for <bpf@vger.kernel.org>; Mon, 28 Nov 2022 03:33:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=n/0AR+XUvHAQpL1RlhgVd3/YWU5WZhXuH/csAwCA6p8=;
+        b=UysEO1M59eAgxnBRAF4Pm7UxLxvG4QmnLsWEvcSLP5PrRart7cG69oQ0kbvvUiLI3F
+         RF9RTGmGFy7fM728a7n3VH2HTSr9kPyD4rnYH5PYdiOCl4dMTGf32wofx8zfFCMuJOpU
+         SwtXl/j0061xTV1tZ2GKXlwSBl03YO0EHqs4E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n/0AR+XUvHAQpL1RlhgVd3/YWU5WZhXuH/csAwCA6p8=;
+        b=ypurDMwLT88HY8qsHxe38FwxZ03qnKZHua0Yxh6TQo44r0QCXVd8UkrNcG9Jaa/Zyj
+         9ocNfb5guZmbXL2XZpjvWOV1YJCR+R11qsDFZlGY17co7lX5nL1GNkIi9CmRmIY5JUIo
+         qP20eIjwtjn0liQt5TgvOINLOLm5Q5rHSoTz5jGSrFIWjHv3jPwZBnSkTGHSM3AiQXmD
+         UVSnnqtNmib3yvg9IHDrz5hHulDfgVtOA1cwIIDX4iU4vFWHz4rUr+rF9qGLk8035M5/
+         gqclNldsGAnGioKlFI8iw9MS5prHD8N0OT53VL5cDIfuE/cDdFTL7FdVQcLpnbcWeWoO
+         hJ1Q==
+X-Gm-Message-State: ANoB5pkOoq7MbwJiTe/B63TTU2IAgv3ISXjnKEv3koeR6Zv033YTNynY
+        XsPY/sitaFer4kkI7RVI/3uIjA==
+X-Google-Smtp-Source: AA0mqf54aDrJEQlrysClgRz1HTez+VgioM/ddgWxF9nLRhhfROR1NHyj6n8Z324bF+Dbcn92QwWzuQ==
+X-Received: by 2002:a17:907:8c8e:b0:78d:4167:cf08 with SMTP id td14-20020a1709078c8e00b0078d4167cf08mr9200822ejc.337.1669635229033;
+        Mon, 28 Nov 2022 03:33:49 -0800 (PST)
+Received: from cloudflare.com ([2a09:bac1:5bc0:40::49:10a])
+        by smtp.gmail.com with ESMTPSA id la21-20020a170907781500b007c03fa39c33sm924736ejc.71.2022.11.28.03.33.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 03:33:48 -0800 (PST)
+References: <1669082309-2546-1-git-send-email-yangpc@wangsu.com>
+ <1669082309-2546-3-git-send-email-yangpc@wangsu.com>
+ <637d8d5bd4e27_2b649208eb@john.notmuch>
+ <000001d8ff01$053529d0$0f9f7d70$@wangsu.com>
+User-agent: mu4e 1.6.10; emacs 27.2
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     Pengcheng Yang <yangpc@wangsu.com>
+Cc:     'John Fastabend' <john.fastabend@gmail.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, 'Daniel Borkmann' <daniel@iogearbox.net>,
+        'Lorenz Bauer' <lmb@cloudflare.com>
+Subject: Re: [PATCH RESEND bpf 2/4] bpf, sockmap: Fix missing BPF_F_INGRESS
+ flag when using apply_bytes
+Date:   Mon, 28 Nov 2022 12:22:20 +0100
+In-reply-to: <000001d8ff01$053529d0$0f9f7d70$@wangsu.com>
+Message-ID: <87cz97cnz8.fsf@cloudflare.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, the ingress redirect is not covered in "txmsg test apply".
+On Wed, Nov 23, 2022 at 02:01 PM +08, Pengcheng Yang wrote:
+> John Fastabend <john.fastabend@gmail.com> wrote:
+>> 
+>> Pengcheng Yang wrote:
+>> > When redirecting, we use sk_msg_to_ingress() to get the BPF_F_INGRESS
+>> > flag from the msg->flags. If apply_bytes is used and it is larger than
+>> > the current data being processed, sk_psock_msg_verdict() will not be
+>> > called when sendmsg() is called again. At this time, the msg->flags is 0,
+>> > and we lost the BPF_F_INGRESS flag.
+>> >
+>> > So we need to save the BPF_F_INGRESS flag in sk_psock and assign it to
+>> > msg->flags before redirection.
+>> >
+>> > Fixes: 8934ce2fd081 ("bpf: sockmap redirect ingress support")
+>> > Signed-off-by: Pengcheng Yang <yangpc@wangsu.com>
+>> > ---
+>> >  include/linux/skmsg.h | 1 +
+>> >  net/core/skmsg.c      | 1 +
+>> >  net/ipv4/tcp_bpf.c    | 1 +
+>> >  net/tls/tls_sw.c      | 1 +
+>> >  4 files changed, 4 insertions(+)
+>> >
+>> > diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
+>> > index 48f4b64..e1d463f 100644
+>> > --- a/include/linux/skmsg.h
+>> > +++ b/include/linux/skmsg.h
+>> > @@ -82,6 +82,7 @@ struct sk_psock {
+>> >  	u32				apply_bytes;
+>> >  	u32				cork_bytes;
+>> >  	u32				eval;
+>> > +	u32				flags;
+>> >  	struct sk_msg			*cork;
+>> >  	struct sk_psock_progs		progs;
+>> >  #if IS_ENABLED(CONFIG_BPF_STREAM_PARSER)
+>> > diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+>> > index 188f855..ab2f8f3 100644
+>> > --- a/net/core/skmsg.c
+>> > +++ b/net/core/skmsg.c
+>> > @@ -888,6 +888,7 @@ int sk_psock_msg_verdict(struct sock *sk, struct sk_psock *psock,
+>> >  		if (psock->sk_redir)
+>> >  			sock_put(psock->sk_redir);
+>> >  		psock->sk_redir = msg->sk_redir;
+>> > +		psock->flags = msg->flags;
+>> >  		if (!psock->sk_redir) {
+>> >  			ret = __SK_DROP;
+>> >  			goto out;
+>> > diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+>> > index ef5de4f..1390d72 100644
+>> > --- a/net/ipv4/tcp_bpf.c
+>> > +++ b/net/ipv4/tcp_bpf.c
+>> > @@ -323,6 +323,7 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
+>> >  		break;
+>> >  	case __SK_REDIRECT:
+>> >  		sk_redir = psock->sk_redir;
+>> > +		msg->flags = psock->flags;
+>> >  		sk_msg_apply_bytes(psock, tosend);
+>> >  		if (!psock->apply_bytes) {
+>> >  			/* Clean up before releasing the sock lock. */
+>>                  ^^^^^^^^^^^^^^^
+>> In this block reposted here with the rest of the block
+>> 
+>> 
+>> 		if (!psock->apply_bytes) {
+>> 			/* Clean up before releasing the sock lock. */
+>> 			eval = psock->eval;
+>> 			psock->eval = __SK_NONE;
+>> 			psock->sk_redir = NULL;
+>> 		}
+>> 
+>> Now that we have a psock->flags we should clera that as
+>> well right?
+>
+> According to my understanding, it is not necessary (but can) to clear
+> psock->flags here, because psock->flags will be overwritten by msg->flags
+> at the beginning of each redirection (in sk_psock_msg_verdict()).
 
-Signed-off-by: Pengcheng Yang <yangpc@wangsu.com>
----
- tools/testing/selftests/bpf/test_sockmap.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+1. We should at least document that psock->flags value can be garbage
+   (undefined) if psock->sk_redir is null.
 
-diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
-index 0fbaccd..9bc0cb4 100644
---- a/tools/testing/selftests/bpf/test_sockmap.c
-+++ b/tools/testing/selftests/bpf/test_sockmap.c
-@@ -1649,24 +1649,42 @@ static void test_txmsg_apply(int cgrp, struct sockmap_options *opt)
+2. 'flags' is amiguous (flags for what?). I'd suggest to rename to
+   something like redir_flags.
+
+   Also, since we don't care about all flags, but just the ingress bit,
+   we should store just that. It's not about size. Less state passed
+   around is easier to reason about. See patch below.
+
+3. Alternatively, I'd turn psock->sk_redir into a tagged pointer, like
+   skb->_sk_redir is. This way all state (pointer & flags) is bundled
+   and managed together. It would be a bigger change. Would have to be
+   split out from this patch set.
+
+--8<--
+
+diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
+index 70d6cb94e580..84f787416a54 100644
+--- a/include/linux/skmsg.h
++++ b/include/linux/skmsg.h
+@@ -82,6 +82,7 @@ struct sk_psock {
+ 	u32				apply_bytes;
+ 	u32				cork_bytes;
+ 	u32				eval;
++	bool				redir_ingress; /* undefined if sk_redir is null */
+ 	struct sk_msg			*cork;
+ 	struct sk_psock_progs		progs;
+ #if IS_ENABLED(CONFIG_BPF_STREAM_PARSER)
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index 14d45661a84d..5b70b241ce71 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -2291,8 +2291,8 @@ int tcp_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore);
+ void tcp_bpf_clone(const struct sock *sk, struct sock *newsk);
+ #endif /* CONFIG_BPF_SYSCALL */
+ 
+-int tcp_bpf_sendmsg_redir(struct sock *sk, struct sk_msg *msg, u32 bytes,
+-			  int flags);
++int tcp_bpf_sendmsg_redir(struct sock *sk, bool ingress,
++			  struct sk_msg *msg, u32 bytes, int flags);
+ #endif /* CONFIG_NET_SOCK_MSG */
+ 
+ #if !defined(CONFIG_BPF_SYSCALL) || !defined(CONFIG_NET_SOCK_MSG)
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index e6b9ced3eda8..53d0251788aa 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -886,13 +886,16 @@ int sk_psock_msg_verdict(struct sock *sk, struct sk_psock *psock,
+ 	ret = sk_psock_map_verd(ret, msg->sk_redir);
+ 	psock->apply_bytes = msg->apply_bytes;
+ 	if (ret == __SK_REDIRECT) {
+-		if (psock->sk_redir)
++		if (psock->sk_redir) {
+ 			sock_put(psock->sk_redir);
+-		psock->sk_redir = msg->sk_redir;
+-		if (!psock->sk_redir) {
++			psock->sk_redir = NULL;
++		}
++		if (!msg->sk_redir) {
+ 			ret = __SK_DROP;
+ 			goto out;
+ 		}
++		psock->redir_ingress = sk_msg_to_ingress(msg);
++		psock->sk_redir = msg->sk_redir;
+ 		sock_hold(psock->sk_redir);
+ 	}
+ out:
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index cf9c3e8f7ccb..490b359dc814 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -131,10 +131,9 @@ static int tcp_bpf_push_locked(struct sock *sk, struct sk_msg *msg,
+ 	return ret;
+ }
+ 
+-int tcp_bpf_sendmsg_redir(struct sock *sk, struct sk_msg *msg,
+-			  u32 bytes, int flags)
++int tcp_bpf_sendmsg_redir(struct sock *sk, bool ingress,
++			  struct sk_msg *msg, u32 bytes, int flags)
  {
- 	txmsg_pass = 1;
- 	txmsg_redir = 0;
-+	txmsg_ingress = 0;
- 	txmsg_apply = 1;
- 	txmsg_cork = 0;
- 	test_send_one(opt, cgrp);
+-	bool ingress = sk_msg_to_ingress(msg);
+ 	struct sk_psock *psock = sk_psock_get(sk);
+ 	int ret;
  
- 	txmsg_pass = 0;
- 	txmsg_redir = 1;
-+	txmsg_ingress = 0;
-+	txmsg_apply = 1;
-+	txmsg_cork = 0;
-+	test_send_one(opt, cgrp);
-+
-+	txmsg_pass = 0;
-+	txmsg_redir = 1;
-+	txmsg_ingress = 1;
- 	txmsg_apply = 1;
- 	txmsg_cork = 0;
- 	test_send_one(opt, cgrp);
+@@ -337,7 +336,8 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
+ 		release_sock(sk);
  
- 	txmsg_pass = 1;
- 	txmsg_redir = 0;
-+	txmsg_ingress = 0;
-+	txmsg_apply = 1024;
-+	txmsg_cork = 0;
-+	test_send_large(opt, cgrp);
-+
-+	txmsg_pass = 0;
-+	txmsg_redir = 1;
-+	txmsg_ingress = 0;
- 	txmsg_apply = 1024;
- 	txmsg_cork = 0;
- 	test_send_large(opt, cgrp);
+ 		origsize = msg->sg.size;
+-		ret = tcp_bpf_sendmsg_redir(sk_redir, msg, tosend, flags);
++		ret = tcp_bpf_sendmsg_redir(sk_redir, psock->redir_ingress,
++					    msg, tosend, flags);
+ 		sent = origsize - msg->sg.size;
  
- 	txmsg_pass = 0;
- 	txmsg_redir = 1;
-+	txmsg_ingress = 1;
- 	txmsg_apply = 1024;
- 	txmsg_cork = 0;
- 	test_send_large(opt, cgrp);
--- 
-1.8.3.1
-
+ 		if (eval == __SK_REDIRECT)
+diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+index 264cf367e265..b22d97610b9a 100644
+--- a/net/tls/tls_sw.c
++++ b/net/tls/tls_sw.c
+@@ -846,7 +846,8 @@ static int bpf_exec_tx_verdict(struct sk_msg *msg, struct sock *sk,
+ 		sk_msg_return_zero(sk, msg, send);
+ 		msg->sg.size -= send;
+ 		release_sock(sk);
+-		err = tcp_bpf_sendmsg_redir(sk_redir, &msg_redir, send, flags);
++		err = tcp_bpf_sendmsg_redir(sk_redir, psock->redir_ingress,
++					    &msg_redir, send, flags);
+ 		lock_sock(sk);
+ 		if (err < 0) {
+ 			*copied -= sk_msg_free_nocharge(sk, &msg_redir);
