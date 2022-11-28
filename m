@@ -2,154 +2,134 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B957AC4321E
-	for <bpf@archiver.kernel.org>; Mon, 28 Nov 2022 04:11:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0D25C4321E
+	for <bpf@archiver.kernel.org>; Mon, 28 Nov 2022 07:27:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiK1EL3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 27 Nov 2022 23:11:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53244 "EHLO
+        id S229970AbiK1H1j (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 28 Nov 2022 02:27:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiK1EL2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 27 Nov 2022 23:11:28 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48867C4
-        for <bpf@vger.kernel.org>; Sun, 27 Nov 2022 20:11:27 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id k2-20020a17090a4c8200b002187cce2f92so12743892pjh.2
-        for <bpf@vger.kernel.org>; Sun, 27 Nov 2022 20:11:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6TTNVq8KlwMWNDt6prBttynq1f8pAp4ny7XN9tOp038=;
-        b=MTxuyf4KWdpR7isd8x7awUWaDlw16icwuI3uPgrMqb1cBZmq7LrdzxChonz2Be79u/
-         t9T4Xtu/cW5d3f6ts4UjVfGdJm6FbYzIpQBv0bw4tQlW+ICoWiBRzXmPNatyjUoEl7pZ
-         1BJwdu2cJ2EFLOgzNkFRCAJpeHmG59jafZg7dQT9OB8z3g12uGacF0v5/MiY4TIjrzFT
-         Ait/KI6OHPr696880xzEb9wLs3K+utMLrAwy99zAcfFewpZH2gNadQvwkQz6tMkzx/h8
-         677RhqWPSCSwmnVqUF2SRZ2uBI598V5TqmEk/FED1jX+aGKZROa56nm3r+MIQZ68Kwc2
-         ipcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6TTNVq8KlwMWNDt6prBttynq1f8pAp4ny7XN9tOp038=;
-        b=GQfO7HtRFtmhowdyuesMqiiulgtz1TzEvfjUWY1PQ2/e3Jww8pVm/SwCP+nQrKkYQj
-         D73dO0N1ejbrExicAVK35Q77ir3jafEuZzrfOMyD2oXG3m4Xc4bskYoOd5UtZER40AGV
-         PmSsWYclDFNrHZZcIdiDmwATiYXyqegUAtmR8STT4FtAs8ZFuMRT238p3QbP2RlrLfsp
-         rlyw0HsPv1hglKOYThELiGLteew0SyZPitAEodScpvkfo9JFU8XDjUV4DPDM6wNQEk66
-         K7O1tVZB+FslkmHxchLQgkhaqc0kd4rP7f5dSWaY3fATM92KYfDvP1i97wWoVMAL+cL8
-         9X8w==
-X-Gm-Message-State: ANoB5pnYMT+MfNWWeTVbwDNoRcZY4rSc+vuou672WqvVlll6CA4xDQoG
-        SkwDjyoyV5d16Vz8/4nGZc3ZBtZdx1NhUw==
-X-Google-Smtp-Source: AA0mqf56coNToBltXUR3MTTTFEYH5/J3ix0OyIrnyA1Z0gjfXsl1nYfcvO7OMZsxom+u+OVrxCVpLQ==
-X-Received: by 2002:a17:90b:e18:b0:219:31ed:22be with SMTP id ge24-20020a17090b0e1800b0021931ed22bemr4373904pjb.75.1669608686762;
-        Sun, 27 Nov 2022 20:11:26 -0800 (PST)
-Received: from [192.168.255.10] ([43.132.98.43])
-        by smtp.gmail.com with ESMTPSA id z10-20020a170903018a00b00177f4ef7970sm7676763plg.11.2022.11.27.20.11.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Nov 2022 20:11:26 -0800 (PST)
-Message-ID: <5ea24d9b-97b9-3da2-5d9e-5f4ea5ecea8e@gmail.com>
-Date:   Mon, 28 Nov 2022 12:11:23 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.1
-Subject: Re: [PATCH bpf 1/2] bpf: Check timer_off for map_in_map only when map
- value have timer
-Content-Language: en-US
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S229968AbiK1H1i (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 28 Nov 2022 02:27:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6E4A463
+        for <bpf@vger.kernel.org>; Sun, 27 Nov 2022 23:26:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669620406;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6zK6dP0XpiEvbMh+MStSVKQQA+Ww92c90Z58azKzrgE=;
+        b=SzM3zGMFDcFA9pOuvWH86DbE2rj0QNAsCVA/NrKJZHNv0QD9wMMp3BoIovOEGFKVqNWPT3
+        zqWsOWc186CfCvFHlKS1DYhGs7wY4jxxLkm9niMxZS7ImguCFZ/PbbbJgMIhEFYipT7+Z3
+        7wyOs3tZnMGnkLFTJnNk5e4o4vJOqPU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-308-UDWKSn34O86X-WCGqCa-1g-1; Mon, 28 Nov 2022 02:26:45 -0500
+X-MC-Unique: UDWKSn34O86X-WCGqCa-1g-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5DDF929AA3B5;
+        Mon, 28 Nov 2022 07:26:44 +0000 (UTC)
+Received: from ovpn-192-85.brq.redhat.com (ovpn-192-85.brq.redhat.com [10.40.192.85])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 620EC1415100;
+        Mon, 28 Nov 2022 07:26:41 +0000 (UTC)
+From:   Viktor Malik <vmalik@redhat.com>
+To:     bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <martin.lau@linux.dev>,
         Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>
-References: <20221126105351.2578782-1-hengqi.chen@gmail.com>
- <20221126105351.2578782-2-hengqi.chen@gmail.com>
- <CAADnVQJ8B0oDss95P+qfQx7r0Xr8RmY-_9dAincqESzyD+ZG+w@mail.gmail.com>
- <94b5a28c-56dd-74a1-e4f5-5b5c2ffeca2a@gmail.com>
- <CAADnVQJRjW+nWtj5Kd6pHCyjKkRnjLiMSG22vXBPCp41UbASag@mail.gmail.com>
- <f6d20c9c-a411-92aa-798a-27e1bc341b1a@gmail.com>
- <CAADnVQJp-GHNCbGCJENZvnA70Hwy=-5OUHTQxx+iEK5D=hDmsQ@mail.gmail.com>
-From:   Hengqi Chen <hengqi.chen@gmail.com>
-In-Reply-To: <CAADnVQJp-GHNCbGCJENZvnA70Hwy=-5OUHTQxx+iEK5D=hDmsQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Viktor Malik <vmalik@redhat.com>
+Subject: [PATCH bpf-next 1/2] bpf: Fix attaching fentry/fexit/fmod_ret/lsm to modules
+Date:   Mon, 28 Nov 2022 08:26:29 +0100
+Message-Id: <2ec861621e283ba2a54f7e939eafed1c29f77bf4.1669216157.git.vmalik@redhat.com>
+In-Reply-To: <cover.1669216157.git.vmalik@redhat.com>
+References: <cover.1669216157.git.vmalik@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+When attaching fentry/fexit/fmod_ret/lsm to a function located in a
+module without specifying the target program, the verifier tries to find
+the address to attach to in kallsyms. This is always done by searching
+the entire kallsyms, not respecting the module in which the function is
+located.
 
+This approach causes an incorrect attachment address to be computed if
+the function to attach to is shadowed by a function of the same name
+located earlier in kallsyms.
 
-On 2022/11/28 11:14, Alexei Starovoitov wrote:
-> On Sun, Nov 27, 2022 at 7:07 PM Hengqi Chen <hengqi.chen@gmail.com> wrote:
->>
->>
->>
->> On 2022/11/28 10:49, Alexei Starovoitov wrote:
->>> On Sun, Nov 27, 2022 at 6:42 PM Hengqi Chen <hengqi.chen@gmail.com> wrote:
->>>>
->>>> Hi, Alexei:
->>>>
->>>> On 2022/11/28 08:44, Alexei Starovoitov wrote:
->>>>> On Sat, Nov 26, 2022 at 2:54 AM Hengqi Chen <hengqi.chen@gmail.com> wrote:
->>>>>>
->>>>>> The timer_off value could be -EINVAL or -ENOENT when map value of
->>>>>> inner map is struct and contains no bpf_timer. The EINVAL case happens
->>>>>> when the map is created without BTF key/value info, map->timer_off
->>>>>> is set to -EINVAL in map_create(). The ENOENT case happens when
->>>>>> the map is created with BTF key/value info (e.g. from BPF skeleton),
->>>>>> map->timer_off is set to -ENOENT as what btf_find_timer() returns.
->>>>>> In bpf_map_meta_equal(), we expect timer_off to be equal even if
->>>>>> map value does not contains bpf_timer. This rejects map_in_map created
->>>>>> with BTF key/value info to be updated using inner map without BTF
->>>>>> key/value info in case inner map value is struct. This commit lifts
->>>>>> such restriction.
->>>>>
->>>>> Sorry, but I prefer to label this issue as 'wont-fix'.
->>>>> Mixing BTF enabled and non-BTF inner maps is a corner case
->>>>
->>>> We do have such usecase. The BPF progs and maps are pinned to bpffs
->>>> using BPF object file. And the map_in_map is updated by some other
->>>> process which don't have access to such BTF info.
->>>>
->>>>> that is not worth fixing.
->>>>
->>>> Is there a way to get this fixed for v5.x series only ?
->>>>
->>>>> At some point we will require all programs and maps to contain BTF.
->>>>> It's necessary for introspection.
->>>>
->>>> We don't care much about BTF for introspection. In production, we always
->>>> have a version field and some reserved fields in the map value for backward
->>>> compatibility. The interpretation of such map values are left to upper layer.
->>>
->>> That "interpretation of such map values are left to upper layer"...
->>> is exactly the reason why we will enforce BTF in the future.
->>> Production engineers and people outside of "upper layer" sw team
->>> has to be able to debug maps and progs.
->>
->> Fine.
->>
->> In libbpf, we have:
->>
->>   if (is_inner) {
->>         pr_warn("map '%s': inner def can't be pinned.\n", map_name);
->>         return -EINVAL;
->>   }
->>
->>
->> Can we lift this restriction so that we can have an easy way to access BTF info
->> via pinned map ?
-> 
-> Probably. Note that __uint(pinning, LIBBPF_PIN_BY_NAME)
-> is the only mode libbpf understands. It's simplistic.
-> but why do you want to use that mode?
-> Just pin it directly with bpf_map__pin() ?
-> Or even more low level bpf_obj_pin() ?
+Since the attachment must contain the BTF of the program to attach to,
+we may extract the module name from it (if the attach target is a
+module) and search for the function address in the correct module.
 
-Will try. 
+Signed-off-by: Viktor Malik <vmalik@redhat.com>
+---
+ include/linux/btf.h   | 1 +
+ kernel/bpf/btf.c      | 5 +++++
+ kernel/bpf/verifier.c | 9 ++++++++-
+ 3 files changed, 14 insertions(+), 1 deletion(-)
 
-Currently, we use `__uint(pinning, LIBBPF_PIN_BY_NAME)` and let
-libbpf and Cilium's ebpf go library handle all the pinning jobs.
+diff --git a/include/linux/btf.h b/include/linux/btf.h
+index 9ed00077db6e..bdbf3eb7083d 100644
+--- a/include/linux/btf.h
++++ b/include/linux/btf.h
+@@ -187,6 +187,7 @@ u32 btf_obj_id(const struct btf *btf);
+ bool btf_is_kernel(const struct btf *btf);
+ bool btf_is_module(const struct btf *btf);
+ struct module *btf_try_get_module(const struct btf *btf);
++const char *btf_module_name(const struct btf *btf);
+ u32 btf_nr_types(const struct btf *btf);
+ bool btf_member_is_reg_int(const struct btf *btf, const struct btf_type *s,
+ 			   const struct btf_member *m,
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 1a59cc7ad730..211fcbb7649d 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -7192,6 +7192,11 @@ bool btf_is_module(const struct btf *btf)
+ 	return btf->kernel_btf && strcmp(btf->name, "vmlinux") != 0;
+ }
+ 
++const char *btf_module_name(const struct btf *btf)
++{
++	return btf->name;
++}
++
+ enum {
+ 	BTF_MODULE_F_LIVE = (1 << 0),
+ };
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 9528a066cfa5..acbe62a73559 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -16343,7 +16343,14 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 			else
+ 				addr = (long) tgt_prog->aux->func[subprog]->bpf_func;
+ 		} else {
+-			addr = kallsyms_lookup_name(tname);
++			if (btf_is_module(btf)) {
++				char tmodname[MODULE_NAME_LEN + KSYM_NAME_LEN + 1];
++				snprintf(tmodname, sizeof(tmodname), "%s:%s",
++					 btf_module_name(btf), tname);
++				addr = module_kallsyms_lookup_name(tmodname);
++			}
++			else
++				addr = kallsyms_lookup_name(tname);
+ 			if (!addr) {
+ 				bpf_log(log,
+ 					"The address of function %s cannot be found\n",
+-- 
+2.38.1
 
