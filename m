@@ -2,142 +2,48 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C13F4C433FE
-	for <bpf@archiver.kernel.org>; Mon, 28 Nov 2022 19:05:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EDE4C4332F
+	for <bpf@archiver.kernel.org>; Mon, 28 Nov 2022 19:05:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230507AbiK1TFG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 28 Nov 2022 14:05:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
+        id S231206AbiK1TFX convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Mon, 28 Nov 2022 14:05:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiK1TFF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 28 Nov 2022 14:05:05 -0500
+        with ESMTP id S229904AbiK1TFW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 28 Nov 2022 14:05:22 -0500
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD0F727FE9
-        for <bpf@vger.kernel.org>; Mon, 28 Nov 2022 11:05:04 -0800 (PST)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ASI0mWT008645;
-        Mon, 28 Nov 2022 11:04:44 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=4gc6BMeWtT/FHUZw7C4XzhT2/asE4rTpSlbdwIWXq10=;
- b=MVsDNl5kY3wPOT9ADkx3GprCb5KKDivI+G88NMfzfVveb5L1cgTNEX4dCzqqJSVw4M3s
- jGW1gLQvVevQZMsLmlNT70WF6EYz3TD1Ireqj41yTwZyUq/NTH1Jt/N8ew1ztYvzoyDB
- Mvaneq6qkYELAsGMhz7MSF/uERakqSYSnifkoTTtGHPfqJpFvRZQO8lIRHWIIvlNuPlV
- tyXv7OtakMWWm7KYhxvsc6fD+yPiXjIkfpP5I+SFWxTM6X/RmTG9bA1vTzWGLDTXjCKY
- JfBDR6IYtWGyBjA6TLLoOPcPPZt7gA6K5zofbpnAaXZGG0ZIbfrk8A/S/JHVDQ6Vgz1b Vw== 
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3m3gt00wga-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Nov 2022 11:04:44 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Hw9L7uU93a/Zn64sY8n5/V1uiFrj2JS8Vph8UuDZ3GqCMta5dhWbe1qLWpC7sZ7p9QIK5yxIg0UjiUY1xuM04xST8bPyUN2P6Uqmc/HYu9vOZe+YoOg61BOBHJpqr8lBPx8ebLUjIS/OFw4YHy2/WQSuL+AXWi+5v4hwz+FHLwYDWoOdVg7dCZp8kPMcaVrYdD1b6D5OhlFhcHIHsFb1RD+sxMlVH2rB56MvxZ70FDgRrlpgbYmI+dY52u/9JEwh49Bg4zkjmMwkjYqlCVtqAgL1be5tc5ZQDKR3LnzcTHTOB+veE498L+25DWm4YYb0d+afbVgVMFTSTpEnjDt57Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4gc6BMeWtT/FHUZw7C4XzhT2/asE4rTpSlbdwIWXq10=;
- b=ogCWXdMFrBOaNNSfl9BGjHGLxcez62alxlGldYkrVO/omSvU+EobkKtOJGVkkMQ8tDjntqCG1eX3zpSctkJi21crHuze2/1u8qWnzT19/m1WIaXDA9Z/5D/YoeIPb1VWWI2+ViX4669yVI8b97x3cYcVfBzLrxhd9/fUwpT6N2P4gabGWnb6jHmgR2CKvFoSvtrat0nTYB6EknQyrSKzScnXImFZQ3QgTQTxjLqSDeL3aWxp7QwaiF0Q/YwbntbPZYQRKQ6RJVPuQN+zYUrYbbYVwiqos1OOOpGt/HEblln/F3w2J8opTd9F71FfdbiftSnpYPbrQd5EZLBZQR18PA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by SJ0PR15MB4471.namprd15.prod.outlook.com (2603:10b6:a03:374::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.20; Mon, 28 Nov
- 2022 19:04:41 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::d665:7e05:61d1:aebf]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::d665:7e05:61d1:aebf%7]) with mapi id 15.20.5857.019; Mon, 28 Nov 2022
- 19:04:41 +0000
-Message-ID: <f4b16d4c-9ab9-ad3c-c518-294b564a6348@meta.com>
-Date:   Mon, 28 Nov 2022 11:04:38 -0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.0
-Subject: Re: [PATCHv4 bpf-next 1/4] bpf: Mark vma objects as trusted for
- task_vma iter and find_vma callback
-Content-Language: en-US
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>
-References: <20221128132915.141211-1-jolsa@kernel.org>
- <20221128132915.141211-2-jolsa@kernel.org>
- <CAADnVQKED=Ue_s88Ru25s1UQ+xe2eWXTq_02v_h=qiuxXTck=g@mail.gmail.com>
-From:   Yonghong Song <yhs@meta.com>
-In-Reply-To: <CAADnVQKED=Ue_s88Ru25s1UQ+xe2eWXTq_02v_h=qiuxXTck=g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0270.namprd03.prod.outlook.com
- (2603:10b6:a03:3a0::35) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C147286E8
+        for <bpf@vger.kernel.org>; Mon, 28 Nov 2022 11:05:21 -0800 (PST)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ASI0euF027659
+        for <bpf@vger.kernel.org>; Mon, 28 Nov 2022 11:05:20 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3m4yjht0mt-5
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 28 Nov 2022 11:05:20 -0800
+Received: from twshared25017.14.frc2.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 28 Nov 2022 11:05:19 -0800
+Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
+        id E16EF10980379; Mon, 28 Nov 2022 11:03:00 -0800 (PST)
+From:   Song Liu <song@kernel.org>
+To:     <bpf@vger.kernel.org>, <linux-mm@kvack.org>
+CC:     <akpm@linux-foundation.org>, <x86@kernel.org>,
+        <peterz@infradead.org>, <hch@lst.de>, <rick.p.edgecombe@intel.com>,
+        <rppt@kernel.org>, <mcgrof@kernel.org>, Song Liu <song@kernel.org>
+Subject: [PATCH bpf-next v5 4/6] bpf: use execmem_alloc for bpf program and bpf dispatcher
+Date:   Mon, 28 Nov 2022 11:02:43 -0800
+Message-ID: <20221128190245.2337461-5-song@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221128190245.2337461-1-song@kernel.org>
+References: <20221128190245.2337461-1-song@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|SJ0PR15MB4471:EE_
-X-MS-Office365-Filtering-Correlation-Id: b6545bc6-af3d-474c-6434-08dad1736759
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +fpM+ai5IGm9S2TINyidQe8P4TNUAby7+RuVoG8FXqjfTCHTB5RN+a8vu8QY2VsgOTsHEqnF4/a03SVCiBs5F1H3Fkm+tJpIxXdFW7hOV7Hg2JI4eYZ5Mls/ZtDcD1rgMl0HxWX88j+KzKgpXKfMcLzPNhxbXgHC0glpgbtyGukt5uRYgOAH9z+KqQmdT/lopUMTE1y4r1jCgGhF3BVyT/Bygf3ZLckGggQkU6y131LDxjSYyUCq+K4zyGxgQzdDY6DRJozCyuB6so9GO8/2eJdko7Pa5n3X2gSdUqLVBJUgQxDPGmTVlW8F/ebG0FI1KHqSeeVpfq/RgxguW1aJWsAiHjK7pDVbeQToLzoU6NQgFqZ9jBmra5C/CBb8fKL47uLc/fUrx7D1Pw3KvtlYa80JStz9gMWrZhN8KM+HVVkRyTnzPNZcdkBTq+ytBnH5b1Tdt+Acek5LWpv/5nX2GU0u2fqBUqLxP2AKBZDq2TyRARX34GEY8Do40OYtyJ+ZMve2mb5L5UmFzefiBl0Ej7vTyBX+xmiCJvrAnXcrHkseRgtI0npISPCauzEoMR4nyaKmrrlERQqxcFYmzBgWe1P3p2pLSSEqwrmJCp1Pse76DDBdh6sQaptlGzsbOqRLU9x/MWov7UxP8z9pAXu33ncYL9wneeQHLoWYTQIsQh5aSfQDlIka/q3+lAAi5IfADeRsSPOSwX9EqukROdM2rGFxcbHBh4DPzrdn8WbLNJU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(136003)(39860400002)(346002)(376002)(451199015)(2906002)(5660300002)(7416002)(31686004)(36756003)(41300700001)(66946007)(66556008)(8676002)(66476007)(4326008)(8936002)(316002)(54906003)(38100700002)(86362001)(110136005)(31696002)(6486002)(478600001)(6512007)(6666004)(53546011)(6506007)(186003)(83380400001)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cGp5Q043c3Jia2xFL0pVVFlvQXZoZjdQRHFscnJiUGxHTUh2aUx4Tll6OVB5?=
- =?utf-8?B?b2pXRHhqNzNXbEtVQlNINTZkb2xXdnJ0V1BnUGNyZlFBQXBRdU1LOTFuNVRV?=
- =?utf-8?B?QkJOTzIrK0ppcmptbXFFcmpEVFgxSkpNUzNRRllTSFpiTWNINm81d0ZFYWVz?=
- =?utf-8?B?K09yNVRmVW04VU1MZ2dSYlpmbmpkcmp1T2Y4MFJDSGExYnR5N1BzS1l0NGNu?=
- =?utf-8?B?UjdQSUlQY0hnaFZWY3k1OEd1bVc2aXlkVXI5QXVpN0llR1FRNUN2NVZEVENu?=
- =?utf-8?B?MWxoL1RZZFRHMkdyT3EvQlQ3aEFiWmI2UE9Cak41Z1o5T0dnOGNqWlBPSmpL?=
- =?utf-8?B?MThRSnpUMDZmMFRLZ3gzUGlTOEpvUGlMM1RnREtkRGU4ODZDSGhYZUtmZzdH?=
- =?utf-8?B?cFdoRzRTSDl0TU1uZWRxK3VyR3NkSnh5N3NQaWhPU0o4M3pHY0M4a0daT01L?=
- =?utf-8?B?V3doaVdrTWgzcmdYdGU4UlJuYWh3RnpoblZ1UXJ5N2w1MVBGQTl2ZExjQU90?=
- =?utf-8?B?M0NEeHFSU0pDbDZURGx5UDRiQVFhVkU0NncwbmJuQkpJams1NTc2U3JSQVBX?=
- =?utf-8?B?KzVnK0JNVXIrQUIyMzFpZHQ5eWhjdmlVUEE4SUoxUHJMcG5Cdk00NGhnWUVD?=
- =?utf-8?B?TktiNGxrNy8vZ0RsS1BIbkhZbWdQSGplUDFaWm5DbW1nKy9lUjVETlp4Q056?=
- =?utf-8?B?R1ZvQk1BbWJXKzFJUjQ1VFVVMW5nRjYrTHhvbStncnhGVHhJclQycFFScDhJ?=
- =?utf-8?B?L0xXTzArcVhZdkVYSzRPaE1RZFJYb2tsUlVVSEY2QWQ5Um1xUlpteUlCaldK?=
- =?utf-8?B?Wm80TzRDNHUwZ2RBVU53K3JzamMweFJ3eEcrellieFhKQ2NhWSs2eGRVUDFM?=
- =?utf-8?B?SWZCcFIyUW0xWHdYblpTait3ZUlOUmd0VlZSQXNSb1BUMFpoMzlsOGdqd1pk?=
- =?utf-8?B?UEJXM2R2QTdMaUd3dHhOTm1uMTdKUmFoWGxubzJyRWxxWFlpQ09JWitBS1ho?=
- =?utf-8?B?WWx5UHVmeVhVdncxU2x5UnVVUGRUa1J2Q3ZjQ1Z3RUphQkp6Z203WlhlRGdm?=
- =?utf-8?B?WkFzTTF1VDdXMEZLSXRGMHNwUjYzMHdCTDRjY3E4a0VVR0FjNm9sUkM0Z3B0?=
- =?utf-8?B?RzlSSURRbFI3dWpkK09PS1FkZXFLUytCMkgwYWZnTlRVTmVpbGdPbEFCWkJF?=
- =?utf-8?B?NEx2bXBvdmxpTCtsVFpCaTdUemZ2a0ZsaDd3a21iOGdCM0dyTC9nanh4a3dD?=
- =?utf-8?B?cExzSUtYRjJXbkpXVE1YZVhJUEpRbEpCTDdMbUxMTXZVTk9XMkx6WWhSZEZM?=
- =?utf-8?B?QVFaamlyc214VW1UaVc0TXN0cDhWcTArT3NYbjZjUUJ2MzZQbThQWmtOc2Nv?=
- =?utf-8?B?MTN3UFFOQjRpMzNzeHJNSDJ5aHdOOENKMzFHaUpYVmF6WWxwaDVFc1VmMFFx?=
- =?utf-8?B?ZjFWTFdxMHozWVVEODJUbzRhbzg1b1JyRUc2MDZPQjBCKzYydnlHVlVTRzda?=
- =?utf-8?B?eXpjT25JdW9JL0l0OTRlTndIOWY4RmllS1JZdDV4SnRyc1UwcFRRdG9CeGt2?=
- =?utf-8?B?bEhYRVJEZkMwcVQ5QmpSdDVDTTc3WHQxOGkzNkF1VTAwQlU1QkxVU2ZxZDVN?=
- =?utf-8?B?TU96YkNlRXBvSGV2NjdGQmdXdHA5R0Z3SUswc1RCeEhZZTRnMlJGT2N0b0Ns?=
- =?utf-8?B?c2V0TFZoc011UnlqQnZ6eDlQTUIrTHd1ZmhOU3dCYmsrZUwwbmxzQVBwZVpK?=
- =?utf-8?B?UVNzNnpTSVEyUG02T0Y1ZkllNmFaOTlTN3JmTmtuVUNxTGZCaGpyNzV6cnlT?=
- =?utf-8?B?ZFFGcWxaOW5UNXo3eFpaMTNHMjV0aDhjdTRvSFpVRk8vOEdDSnQybEtvYWxU?=
- =?utf-8?B?QnBQMlhoc1cwdDRSaHVUOUh3TlA1RTlqSDFsMHJUWUx3R3lsWGxGZWlUMEJh?=
- =?utf-8?B?U25TSlE1NmtSc2c4NWloVUJSSGt5ZWpuYXhvam5lbnA5bnVhQzlJV0lMOUtj?=
- =?utf-8?B?VWNYWDRYZ2NaODdha2RGUDNRVUd0a0tBc2RqT0cycCt5THZoajlLTHo1ZEZV?=
- =?utf-8?B?UmI2d0VMRGxxTC9BeHo0cnp2WUd2S0VlSThCTzZBRnFvek42UW1IcjhwT1k0?=
- =?utf-8?B?WlNseEZ3SzlqcnRNN0VlaXFnRnBDcXhBZHRzWWNmTzNLSnpOZkdLWkZIRUZW?=
- =?utf-8?B?dmc9PQ==?=
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b6545bc6-af3d-474c-6434-08dad1736759
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2022 19:04:41.3420
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cJeCU0fDpzxgqx4gW4z9hlSG/YHy9wmiZlam66WYB/Vq2eTh3uP/YKhCucLf5b6Y
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR15MB4471
-X-Proofpoint-GUID: Hodhkz_n9YWaGkzVIMkCLa_QMPjV_pTl
-X-Proofpoint-ORIG-GUID: Hodhkz_n9YWaGkzVIMkCLa_QMPjV_pTl
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: zEa5Ftd_NY0_dzPM6d-yTi6ViuFMhjzH
+X-Proofpoint-GUID: zEa5Ftd_NY0_dzPM6d-yTi6ViuFMhjzH
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-28_16,2022-11-28_02,2022-06-22_01
@@ -145,46 +51,436 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Use execmem_alloc, execmem_free, and execmem_fill instead of
+bpf_prog_pack_alloc, bpf_prog_pack_free, and bpf_arch_text_copy.
 
+execmem_free doesn't require extra size information. Therefore, the free
+and error handling path can be simplified.
 
-On 11/28/22 10:43 AM, Alexei Starovoitov wrote:
-> On Mon, Nov 28, 2022 at 5:29 AM Jiri Olsa <jolsa@kernel.org> wrote:
->>
->> Marking following vma objects as trusted so they can be used
->> as arguments for kfunc function added in following changes:
->>
->>    - vma object argument in find_vma callback function
->>    - vma object in context of task_vma iterator program
->>
->> Both places lock vma object so it can't go away while running
->> the bpf program.
->>
->> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
->> ---
->>   kernel/bpf/task_iter.c | 2 +-
->>   kernel/bpf/verifier.c  | 2 +-
->>   2 files changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
->> index c2a2182ce570..cd67b3cadd91 100644
->> --- a/kernel/bpf/task_iter.c
->> +++ b/kernel/bpf/task_iter.c
->> @@ -755,7 +755,7 @@ static struct bpf_iter_reg task_vma_reg_info = {
->>                  { offsetof(struct bpf_iter__task_vma, task),
->>                    PTR_TO_BTF_ID_OR_NULL },
->>                  { offsetof(struct bpf_iter__task_vma, vma),
->> -                 PTR_TO_BTF_ID_OR_NULL },
->> +                 PTR_TO_BTF_ID_OR_NULL | PTR_TRUSTED },
-> 
-> Yonghong, Song,
-> 
-> Do you remember when task or vma is NULL here?
-> Maybe we can do: if (!task || !vma) skip prog run
-> in __task_vma_seq_show()
-> and make both pointers as PTR_TO_BTF_ID | PTR_TRUSTED?
+There are some tests that show the benefit of execmem_alloc.
 
-The 'NULL' is to indicate the last bpf prog run before iteration
-ends. It is to provide an opportunity for bpf program to know
-all regular iterations are done and the bpf program can do
-end aggregation or print a footer if the prog link is cat'able.
+Run 100 instances of the following benchmark from bpf selftests:
+  tools/testing/selftests/bpf/bench -w2 -d100 -a trig-kprobe
+which loads 7 BPF programs, and triggers one of them.
+
+Then use perf to monitor TLB related counters:
+   perf stat -e iTLB-load-misses,itlb_misses.walk_completed_4k, \
+           itlb_misses.walk_completed_2m_4m -a
+
+The following results are from a qemu VM with 32 cores.
+
+Before bpf_prog_pack:
+  iTLB-load-misses: 350k/s
+  itlb_misses.walk_completed_4k: 90k/s
+  itlb_misses.walk_completed_2m_4m: 0.1/s
+
+With bpf_prog_pack (current upstream):
+  iTLB-load-misses: 220k/s
+  itlb_misses.walk_completed_4k: 68k/s
+  itlb_misses.walk_completed_2m_4m: 0.2/s
+
+With execmem_alloc (with this set):
+  iTLB-load-misses: 185k/s
+  itlb_misses.walk_completed_4k: 58k/s
+  itlb_misses.walk_completed_2m_4m: 1/s
+
+Signed-off-by: Song Liu <song@kernel.org>
+---
+ arch/x86/net/bpf_jit_comp.c |  23 +----
+ include/linux/bpf.h         |   3 -
+ include/linux/filter.h      |   5 -
+ kernel/bpf/core.c           | 180 +++---------------------------------
+ kernel/bpf/dispatcher.c     |  11 +--
+ 5 files changed, 21 insertions(+), 201 deletions(-)
+
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index cec5195602bc..43b93570d8f9 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -229,11 +229,6 @@ static void jit_fill_hole(void *area, unsigned int size)
+ 	memset(area, 0xcc, size);
+ }
+ 
+-int bpf_arch_text_invalidate(void *dst, size_t len)
+-{
+-	return IS_ERR_OR_NULL(text_poke_set(dst, 0xcc, len));
+-}
+-
+ struct jit_context {
+ 	int cleanup_addr; /* Epilogue code offset */
+ 
+@@ -2509,11 +2504,9 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+ 		if (proglen <= 0) {
+ out_image:
+ 			image = NULL;
+-			if (header) {
+-				bpf_arch_text_copy(&header->size, &rw_header->size,
+-						   sizeof(rw_header->size));
++			if (header)
+ 				bpf_jit_binary_pack_free(header, rw_header);
+-			}
++
+ 			/* Fall back to interpreter mode */
+ 			prog = orig_prog;
+ 			if (extra_pass) {
+@@ -2563,8 +2556,9 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+ 		if (!prog->is_func || extra_pass) {
+ 			/*
+ 			 * bpf_jit_binary_pack_finalize fails in two scenarios:
+-			 *   1) header is not pointing to proper module memory;
+-			 *   2) the arch doesn't support bpf_arch_text_copy().
++			 *   1) header is not pointing to memory allocated by
++			 *      execmem_alloc;
++			 *   2) the arch doesn't support execmem_free().
+ 			 *
+ 			 * Both cases are serious bugs and justify WARN_ON.
+ 			 */
+@@ -2610,13 +2604,6 @@ bool bpf_jit_supports_kfunc_call(void)
+ 	return true;
+ }
+ 
+-void *bpf_arch_text_copy(void *dst, void *src, size_t len)
+-{
+-	if (text_poke_copy(dst, src, len) == NULL)
+-		return ERR_PTR(-EINVAL);
+-	return dst;
+-}
+-
+ /* Indicate the JIT backend supports mixing bpf2bpf and tailcalls. */
+ bool bpf_jit_supports_subprog_tailcalls(void)
+ {
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index c6aa6912ea16..e04c63b621da 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2775,9 +2775,6 @@ enum bpf_text_poke_type {
+ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
+ 		       void *addr1, void *addr2);
+ 
+-void *bpf_arch_text_copy(void *dst, void *src, size_t len);
+-int bpf_arch_text_invalidate(void *dst, size_t len);
+-
+ struct btf_id_set;
+ bool btf_id_set_contains(const struct btf_id_set *set, u32 id);
+ 
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index bf701976056e..4373ff388759 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -1023,8 +1023,6 @@ extern long bpf_jit_limit_max;
+ 
+ typedef void (*bpf_jit_fill_hole_t)(void *area, unsigned int size);
+ 
+-void bpf_jit_fill_hole_with_zero(void *area, unsigned int size);
+-
+ struct bpf_binary_header *
+ bpf_jit_binary_alloc(unsigned int proglen, u8 **image_ptr,
+ 		     unsigned int alignment,
+@@ -1037,9 +1035,6 @@ void bpf_jit_free(struct bpf_prog *fp);
+ struct bpf_binary_header *
+ bpf_jit_binary_pack_hdr(const struct bpf_prog *fp);
+ 
+-void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_insns);
+-void bpf_prog_pack_free(struct bpf_binary_header *hdr);
+-
+ static inline bool bpf_prog_kallsyms_verify_off(const struct bpf_prog *fp)
+ {
+ 	return list_empty(&fp->aux->ksym.lnode) ||
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 2e57fc839a5c..56397556c622 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -810,149 +810,6 @@ int bpf_jit_add_poke_descriptor(struct bpf_prog *prog,
+ 	return slot;
+ }
+ 
+-/*
+- * BPF program pack allocator.
+- *
+- * Most BPF programs are pretty small. Allocating a hole page for each
+- * program is sometime a waste. Many small bpf program also adds pressure
+- * to instruction TLB. To solve this issue, we introduce a BPF program pack
+- * allocator. The prog_pack allocator uses HPAGE_PMD_SIZE page (2MB on x86)
+- * to host BPF programs.
+- */
+-#define BPF_PROG_CHUNK_SHIFT	6
+-#define BPF_PROG_CHUNK_SIZE	(1 << BPF_PROG_CHUNK_SHIFT)
+-#define BPF_PROG_CHUNK_MASK	(~(BPF_PROG_CHUNK_SIZE - 1))
+-
+-struct bpf_prog_pack {
+-	struct list_head list;
+-	void *ptr;
+-	unsigned long bitmap[];
+-};
+-
+-void bpf_jit_fill_hole_with_zero(void *area, unsigned int size)
+-{
+-	memset(area, 0, size);
+-}
+-
+-#define BPF_PROG_SIZE_TO_NBITS(size)	(round_up(size, BPF_PROG_CHUNK_SIZE) / BPF_PROG_CHUNK_SIZE)
+-
+-static DEFINE_MUTEX(pack_mutex);
+-static LIST_HEAD(pack_list);
+-
+-/* PMD_SIZE is not available in some special config, e.g. ARCH=arm with
+- * CONFIG_MMU=n. Use PAGE_SIZE in these cases.
+- */
+-#ifdef PMD_SIZE
+-#define BPF_PROG_PACK_SIZE (PMD_SIZE * num_possible_nodes())
+-#else
+-#define BPF_PROG_PACK_SIZE PAGE_SIZE
+-#endif
+-
+-#define BPF_PROG_CHUNK_COUNT (BPF_PROG_PACK_SIZE / BPF_PROG_CHUNK_SIZE)
+-
+-static struct bpf_prog_pack *alloc_new_pack(bpf_jit_fill_hole_t bpf_fill_ill_insns)
+-{
+-	struct bpf_prog_pack *pack;
+-
+-	pack = kzalloc(struct_size(pack, bitmap, BITS_TO_LONGS(BPF_PROG_CHUNK_COUNT)),
+-		       GFP_KERNEL);
+-	if (!pack)
+-		return NULL;
+-	pack->ptr = module_alloc(BPF_PROG_PACK_SIZE);
+-	if (!pack->ptr) {
+-		kfree(pack);
+-		return NULL;
+-	}
+-	bpf_fill_ill_insns(pack->ptr, BPF_PROG_PACK_SIZE);
+-	bitmap_zero(pack->bitmap, BPF_PROG_PACK_SIZE / BPF_PROG_CHUNK_SIZE);
+-	list_add_tail(&pack->list, &pack_list);
+-
+-	set_vm_flush_reset_perms(pack->ptr);
+-	set_memory_ro((unsigned long)pack->ptr, BPF_PROG_PACK_SIZE / PAGE_SIZE);
+-	set_memory_x((unsigned long)pack->ptr, BPF_PROG_PACK_SIZE / PAGE_SIZE);
+-	return pack;
+-}
+-
+-void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_insns)
+-{
+-	unsigned int nbits = BPF_PROG_SIZE_TO_NBITS(size);
+-	struct bpf_prog_pack *pack;
+-	unsigned long pos;
+-	void *ptr = NULL;
+-
+-	mutex_lock(&pack_mutex);
+-	if (size > BPF_PROG_PACK_SIZE) {
+-		size = round_up(size, PAGE_SIZE);
+-		ptr = module_alloc(size);
+-		if (ptr) {
+-			bpf_fill_ill_insns(ptr, size);
+-			set_vm_flush_reset_perms(ptr);
+-			set_memory_ro((unsigned long)ptr, size / PAGE_SIZE);
+-			set_memory_x((unsigned long)ptr, size / PAGE_SIZE);
+-		}
+-		goto out;
+-	}
+-	list_for_each_entry(pack, &pack_list, list) {
+-		pos = bitmap_find_next_zero_area(pack->bitmap, BPF_PROG_CHUNK_COUNT, 0,
+-						 nbits, 0);
+-		if (pos < BPF_PROG_CHUNK_COUNT)
+-			goto found_free_area;
+-	}
+-
+-	pack = alloc_new_pack(bpf_fill_ill_insns);
+-	if (!pack)
+-		goto out;
+-
+-	pos = 0;
+-
+-found_free_area:
+-	bitmap_set(pack->bitmap, pos, nbits);
+-	ptr = (void *)(pack->ptr) + (pos << BPF_PROG_CHUNK_SHIFT);
+-
+-out:
+-	mutex_unlock(&pack_mutex);
+-	return ptr;
+-}
+-
+-void bpf_prog_pack_free(struct bpf_binary_header *hdr)
+-{
+-	struct bpf_prog_pack *pack = NULL, *tmp;
+-	unsigned int nbits;
+-	unsigned long pos;
+-
+-	mutex_lock(&pack_mutex);
+-	if (hdr->size > BPF_PROG_PACK_SIZE) {
+-		module_memfree(hdr);
+-		goto out;
+-	}
+-
+-	list_for_each_entry(tmp, &pack_list, list) {
+-		if ((void *)hdr >= tmp->ptr && (tmp->ptr + BPF_PROG_PACK_SIZE) > (void *)hdr) {
+-			pack = tmp;
+-			break;
+-		}
+-	}
+-
+-	if (WARN_ONCE(!pack, "bpf_prog_pack bug\n"))
+-		goto out;
+-
+-	nbits = BPF_PROG_SIZE_TO_NBITS(hdr->size);
+-	pos = ((unsigned long)hdr - (unsigned long)pack->ptr) >> BPF_PROG_CHUNK_SHIFT;
+-
+-	WARN_ONCE(bpf_arch_text_invalidate(hdr, hdr->size),
+-		  "bpf_prog_pack bug: missing bpf_arch_text_invalidate?\n");
+-
+-	bitmap_clear(pack->bitmap, pos, nbits);
+-	if (bitmap_find_next_zero_area(pack->bitmap, BPF_PROG_CHUNK_COUNT, 0,
+-				       BPF_PROG_CHUNK_COUNT, 0) == 0) {
+-		list_del(&pack->list);
+-		module_memfree(pack->ptr);
+-		kfree(pack);
+-	}
+-out:
+-	mutex_unlock(&pack_mutex);
+-}
+-
+ static atomic_long_t bpf_jit_current;
+ 
+ /* Can be overridden by an arch's JIT compiler if it has a custom,
+@@ -1052,6 +909,9 @@ void bpf_jit_binary_free(struct bpf_binary_header *hdr)
+ 	bpf_jit_uncharge_modmem(size);
+ }
+ 
++#define BPF_PROG_EXEC_ALIGN	64
++#define BPF_PROG_EXEC_MASK	(~(BPF_PROG_EXEC_ALIGN - 1))
++
+ /* Allocate jit binary from bpf_prog_pack allocator.
+  * Since the allocated memory is RO+X, the JIT engine cannot write directly
+  * to the memory. To solve this problem, a RW buffer is also allocated at
+@@ -1074,11 +934,11 @@ bpf_jit_binary_pack_alloc(unsigned int proglen, u8 **image_ptr,
+ 		     alignment > BPF_IMAGE_ALIGNMENT);
+ 
+ 	/* add 16 bytes for a random section of illegal instructions */
+-	size = round_up(proglen + sizeof(*ro_header) + 16, BPF_PROG_CHUNK_SIZE);
++	size = round_up(proglen + sizeof(*ro_header) + 16, BPF_PROG_EXEC_ALIGN);
+ 
+ 	if (bpf_jit_charge_modmem(size))
+ 		return NULL;
+-	ro_header = bpf_prog_pack_alloc(size, bpf_fill_ill_insns);
++	ro_header = execmem_alloc(size, BPF_PROG_EXEC_ALIGN);
+ 	if (!ro_header) {
+ 		bpf_jit_uncharge_modmem(size);
+ 		return NULL;
+@@ -1086,8 +946,7 @@ bpf_jit_binary_pack_alloc(unsigned int proglen, u8 **image_ptr,
+ 
+ 	*rw_header = kvmalloc(size, GFP_KERNEL);
+ 	if (!*rw_header) {
+-		bpf_arch_text_copy(&ro_header->size, &size, sizeof(size));
+-		bpf_prog_pack_free(ro_header);
++		execmem_free(ro_header);
+ 		bpf_jit_uncharge_modmem(size);
+ 		return NULL;
+ 	}
+@@ -1097,7 +956,7 @@ bpf_jit_binary_pack_alloc(unsigned int proglen, u8 **image_ptr,
+ 	(*rw_header)->size = size;
+ 
+ 	hole = min_t(unsigned int, size - (proglen + sizeof(*ro_header)),
+-		     BPF_PROG_CHUNK_SIZE - sizeof(*ro_header));
++		     BPF_PROG_EXEC_ALIGN - sizeof(*ro_header));
+ 	start = prandom_u32_max(hole) & ~(alignment - 1);
+ 
+ 	*image_ptr = &ro_header->image[start];
+@@ -1113,12 +972,12 @@ int bpf_jit_binary_pack_finalize(struct bpf_prog *prog,
+ {
+ 	void *ptr;
+ 
+-	ptr = bpf_arch_text_copy(ro_header, rw_header, rw_header->size);
++	ptr = execmem_fill(ro_header, rw_header, rw_header->size);
+ 
+ 	kvfree(rw_header);
+ 
+ 	if (IS_ERR(ptr)) {
+-		bpf_prog_pack_free(ro_header);
++		execmem_free(ro_header);
+ 		return PTR_ERR(ptr);
+ 	}
+ 	return 0;
+@@ -1128,18 +987,13 @@ int bpf_jit_binary_pack_finalize(struct bpf_prog *prog,
+  *   1) when the program is freed after;
+  *   2) when the JIT engine fails (before bpf_jit_binary_pack_finalize).
+  * For case 2), we need to free both the RO memory and the RW buffer.
+- *
+- * bpf_jit_binary_pack_free requires proper ro_header->size. However,
+- * bpf_jit_binary_pack_alloc does not set it. Therefore, ro_header->size
+- * must be set with either bpf_jit_binary_pack_finalize (normal path) or
+- * bpf_arch_text_copy (when jit fails).
+  */
+ void bpf_jit_binary_pack_free(struct bpf_binary_header *ro_header,
+ 			      struct bpf_binary_header *rw_header)
+ {
+-	u32 size = ro_header->size;
++	u32 size = rw_header ? rw_header->size : ro_header->size;
+ 
+-	bpf_prog_pack_free(ro_header);
++	execmem_free(ro_header);
+ 	kvfree(rw_header);
+ 	bpf_jit_uncharge_modmem(size);
+ }
+@@ -1150,7 +1004,7 @@ bpf_jit_binary_pack_hdr(const struct bpf_prog *fp)
+ 	unsigned long real_start = (unsigned long)fp->bpf_func;
+ 	unsigned long addr;
+ 
+-	addr = real_start & BPF_PROG_CHUNK_MASK;
++	addr = real_start & BPF_PROG_EXEC_MASK;
+ 	return (void *)addr;
+ }
+ 
+@@ -2740,16 +2594,6 @@ int __weak bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
+ 	return -ENOTSUPP;
+ }
+ 
+-void * __weak bpf_arch_text_copy(void *dst, void *src, size_t len)
+-{
+-	return ERR_PTR(-ENOTSUPP);
+-}
+-
+-int __weak bpf_arch_text_invalidate(void *dst, size_t len)
+-{
+-	return -ENOTSUPP;
+-}
+-
+ #ifdef CONFIG_BPF_SYSCALL
+ static int __init bpf_global_ma_init(void)
+ {
+diff --git a/kernel/bpf/dispatcher.c b/kernel/bpf/dispatcher.c
+index 04f0a045dcaa..c41dff3379db 100644
+--- a/kernel/bpf/dispatcher.c
++++ b/kernel/bpf/dispatcher.c
+@@ -126,11 +126,11 @@ static void bpf_dispatcher_update(struct bpf_dispatcher *d, int prev_num_progs)
+ 	tmp = d->num_progs ? d->rw_image + noff : NULL;
+ 	if (new) {
+ 		/* Prepare the dispatcher in d->rw_image. Then use
+-		 * bpf_arch_text_copy to update d->image, which is RO+X.
++		 * execmem_fill to update d->image, which is RO+X.
+ 		 */
+ 		if (bpf_dispatcher_prepare(d, new, tmp))
+ 			return;
+-		if (IS_ERR(bpf_arch_text_copy(new, tmp, PAGE_SIZE / 2)))
++		if (IS_ERR(execmem_fill(new, tmp, PAGE_SIZE / 2)))
+ 			return;
+ 	}
+ 
+@@ -152,15 +152,12 @@ void bpf_dispatcher_change_prog(struct bpf_dispatcher *d, struct bpf_prog *from,
+ 
+ 	mutex_lock(&d->mutex);
+ 	if (!d->image) {
+-		d->image = bpf_prog_pack_alloc(PAGE_SIZE, bpf_jit_fill_hole_with_zero);
++		d->image = execmem_alloc(PAGE_SIZE, PAGE_SIZE /* align */);
+ 		if (!d->image)
+ 			goto out;
+ 		d->rw_image = bpf_jit_alloc_exec(PAGE_SIZE);
+ 		if (!d->rw_image) {
+-			u32 size = PAGE_SIZE;
+-
+-			bpf_arch_text_copy(d->image, &size, sizeof(size));
+-			bpf_prog_pack_free((struct bpf_binary_header *)d->image);
++			execmem_free((struct bpf_binary_header *)d->image);
+ 			d->image = NULL;
+ 			goto out;
+ 		}
+-- 
+2.30.2
 
