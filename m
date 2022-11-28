@@ -2,39 +2,39 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0569AC433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DDE0CC4321E
 	for <bpf@archiver.kernel.org>; Mon, 28 Nov 2022 19:03:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233057AbiK1TDR convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 28 Nov 2022 14:03:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35072 "EHLO
+        id S231714AbiK1TDS convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Mon, 28 Nov 2022 14:03:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232512AbiK1TDO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S233160AbiK1TDO (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 28 Nov 2022 14:03:14 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6EC286DD
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D1E2DD
         for <bpf@vger.kernel.org>; Mon, 28 Nov 2022 11:03:14 -0800 (PST)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ASI0kC3000383
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 2ASI100P021099
         for <bpf@vger.kernel.org>; Mon, 28 Nov 2022 11:03:13 -0800
-Received: from maileast.thefacebook.com ([163.114.130.8])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3m4xqaahtn-3
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3m3f6ej26x-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Mon, 28 Nov 2022 11:03:13 -0800
-Received: from twshared15216.17.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+Received: from twshared21592.39.frc1.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.31; Mon, 28 Nov 2022 11:03:11 -0800
 Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
-        id 5F2BE10980404; Mon, 28 Nov 2022 11:03:05 -0800 (PST)
+        id D530210980373; Mon, 28 Nov 2022 11:02:58 -0800 (PST)
 From:   Song Liu <song@kernel.org>
 To:     <bpf@vger.kernel.org>, <linux-mm@kvack.org>
 CC:     <akpm@linux-foundation.org>, <x86@kernel.org>,
         <peterz@infradead.org>, <hch@lst.de>, <rick.p.edgecombe@intel.com>,
         <rppt@kernel.org>, <mcgrof@kernel.org>, Song Liu <song@kernel.org>
-Subject: [PATCH bpf-next v5 6/6] x86: use register_text_tail_vm
-Date:   Mon, 28 Nov 2022 11:02:45 -0800
-Message-ID: <20221128190245.2337461-7-song@kernel.org>
+Subject: [PATCH bpf-next v5 3/6] selftests/vm: extend test_vmalloc to test execmem_* APIs
+Date:   Mon, 28 Nov 2022 11:02:42 -0800
+Message-ID: <20221128190245.2337461-4-song@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221128190245.2337461-1-song@kernel.org>
 References: <20221128190245.2337461-1-song@kernel.org>
@@ -42,8 +42,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: CxB5JrxzCM_IJU50WoJsWsc6NiQxadTQ
-X-Proofpoint-GUID: CxB5JrxzCM_IJU50WoJsWsc6NiQxadTQ
+X-Proofpoint-GUID: dU4DjrZNtmTrBfbXHOexWRZrTe7eaj5g
+X-Proofpoint-ORIG-GUID: dU4DjrZNtmTrBfbXHOexWRZrTe7eaj5g
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-28_17,2022-11-28_02,2022-06-22_01
@@ -51,93 +51,122 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Allocate 2MB pages up to round_up(_etext, 2MB), and register memory
-[round_up(_etext, 4kb), round_up(_etext, 2MB)] with register_text_tail_vm
-so that we can use this part of memory for dynamic kernel text (BPF
-programs, etc.).
+Add logic to test execmem_[alloc|fill|free] in test_vmalloc.c.
+No need to change tools/testing/selftests/vm/test_vmalloc.sh.
 
-Here is an example:
-
-[root@eth50-1 ~]# grep _etext /proc/kallsyms
-ffffffff82202a08 T _etext
-
-[root@eth50-1 ~]# grep bpf_prog_ /proc/kallsyms  | tail -n 3
-ffffffff8220f920 t bpf_prog_cc61a5364ac11d93_handle__sched_wakeup       [bpf]
-ffffffff8220fa28 t bpf_prog_cc61a5364ac11d93_handle__sched_wakeup_new   [bpf]
-ffffffff8220fad4 t bpf_prog_3bf73fa16f5e3d92_handle__sched_switch       [bpf]
-
-[root@eth50-1 ~]#  grep 0xffffffff82200000 /sys/kernel/debug/page_tables/kernel
-0xffffffff82200000-0xffffffff82400000     2M     ro   PSE         x  pmd
-
-ffffffff82200000-ffffffff82400000 is a 2MB page, serving kernel text, and
-bpf programs.
-
-Also update Documentation/x86/x86_64/mm.rst to show execmem can be mapped
-to kernel text addresses.
+Gate the export of execmem_* with DEBUG_TEST_VMALLOC_EXEMEM_ALLOC so
+they are only exported when the developers are running tests.
 
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- Documentation/x86/x86_64/mm.rst         | 4 ++--
- arch/x86/include/asm/pgtable_64_types.h | 1 +
- arch/x86/mm/init_64.c                   | 4 +++-
- 3 files changed, 6 insertions(+), 3 deletions(-)
+ lib/test_vmalloc.c | 35 +++++++++++++++++++++++++++++++++++
+ mm/vmalloc.c       | 12 ++++++++++++
+ 2 files changed, 47 insertions(+)
 
-diff --git a/Documentation/x86/x86_64/mm.rst b/Documentation/x86/x86_64/mm.rst
-index 9798676bb0bf..6ee95e5fa7e9 100644
---- a/Documentation/x86/x86_64/mm.rst
-+++ b/Documentation/x86/x86_64/mm.rst
-@@ -62,7 +62,7 @@ Complete virtual memory map with 4-level page tables
-    ffffff8000000000 | -512    GB | ffffffeeffffffff |  444 GB | ... unused hole
-    ffffffef00000000 |  -68    GB | fffffffeffffffff |   64 GB | EFI region mapping space
-    ffffffff00000000 |   -4    GB | ffffffff7fffffff |    2 GB | ... unused hole
--   ffffffff80000000 |   -2    GB | ffffffff9fffffff |  512 MB | kernel text mapping, mapped to physical address 0
-+   ffffffff80000000 |   -2    GB | ffffffff9fffffff |  512 MB | kernel text mapping and execmem, mapped to physical address 0
-    ffffffff80000000 |-2048    MB |                  |         |
-    ffffffffa0000000 |-1536    MB | fffffffffeffffff | 1520 MB | module mapping space
-    ffffffffff000000 |  -16    MB |                  |         |
-@@ -121,7 +121,7 @@ Complete virtual memory map with 5-level page tables
-    ffffff8000000000 | -512    GB | ffffffeeffffffff |  444 GB | ... unused hole
-    ffffffef00000000 |  -68    GB | fffffffeffffffff |   64 GB | EFI region mapping space
-    ffffffff00000000 |   -4    GB | ffffffff7fffffff |    2 GB | ... unused hole
--   ffffffff80000000 |   -2    GB | ffffffff9fffffff |  512 MB | kernel text mapping, mapped to physical address 0
-+   ffffffff80000000 |   -2    GB | ffffffff9fffffff |  512 MB | kernel text mapping and execmem, mapped to physical address 0
-    ffffffff80000000 |-2048    MB |                  |         |
-    ffffffffa0000000 |-1536    MB | fffffffffeffffff | 1520 MB | module mapping space
-    ffffffffff000000 |  -16    MB |                  |         |
-diff --git a/arch/x86/include/asm/pgtable_64_types.h b/arch/x86/include/asm/pgtable_64_types.h
-index 04f36063ad54..c0f9cceb109a 100644
---- a/arch/x86/include/asm/pgtable_64_types.h
-+++ b/arch/x86/include/asm/pgtable_64_types.h
-@@ -101,6 +101,7 @@ extern unsigned int ptrs_per_p4d;
- #define PUD_MASK	(~(PUD_SIZE - 1))
- #define PGDIR_SIZE	(_AC(1, UL) << PGDIR_SHIFT)
- #define PGDIR_MASK	(~(PGDIR_SIZE - 1))
-+#define PMD_ALIGN(x)	(((unsigned long)(x) + (PMD_SIZE - 1)) & PMD_MASK)
+diff --git a/lib/test_vmalloc.c b/lib/test_vmalloc.c
+index cf7780572f5b..9c78f0693f59 100644
+--- a/lib/test_vmalloc.c
++++ b/lib/test_vmalloc.c
+@@ -50,6 +50,7 @@ __param(int, run_test_mask, INT_MAX,
+ 		"\t\tid: 128,  name: pcpu_alloc_test\n"
+ 		"\t\tid: 256,  name: kvfree_rcu_1_arg_vmalloc_test\n"
+ 		"\t\tid: 512,  name: kvfree_rcu_2_arg_vmalloc_test\n"
++		"\t\tid: 1024, name: execmem_alloc_test\n"
+ 		/* Add a new test case description here. */
+ );
  
- /*
-  * See Documentation/x86/x86_64/mm.rst for a description of the memory map.
-diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
-index 3f040c6e5d13..5b42fc0c6099 100644
---- a/arch/x86/mm/init_64.c
-+++ b/arch/x86/mm/init_64.c
-@@ -1373,7 +1373,7 @@ void mark_rodata_ro(void)
- 	unsigned long start = PFN_ALIGN(_text);
- 	unsigned long rodata_start = PFN_ALIGN(__start_rodata);
- 	unsigned long end = (unsigned long)__end_rodata_hpage_align;
--	unsigned long text_end = PFN_ALIGN(_etext);
-+	unsigned long text_end = PMD_ALIGN(_etext);
- 	unsigned long rodata_end = PFN_ALIGN(__end_rodata);
- 	unsigned long all_end;
- 
-@@ -1414,6 +1414,8 @@ void mark_rodata_ro(void)
- 				(void *)rodata_end, (void *)_sdata);
- 
- 	debug_checkwx();
-+	register_text_tail_vm(PFN_ALIGN((unsigned long)_etext),
-+			      PMD_ALIGN((unsigned long)_etext));
+@@ -352,6 +353,39 @@ kvfree_rcu_2_arg_vmalloc_test(void)
+ 	return 0;
  }
  
- int kern_addr_valid(unsigned long addr)
++/* This should match the define in vmalloc.c */
++#define DEBUG_TEST_VMALLOC_EXEMEM_ALLOC 0
++
++static int
++execmem_alloc_test(void)
++{
++	int i;
++
++	for (i = 0; i < test_loop_count; i++) {
++#if DEBUG_TEST_VMALLOC_EXEMEM_ALLOC
++		/* allocate variable size, up to 64kB */
++		size_t size = (i % 1024 + 1) * 64;
++		void *p, *tmp;
++
++		p = execmem_alloc(size, 64);
++		if (!p)
++			return -1;
++
++		tmp = execmem_fill(p, "a", 1);
++		if (tmp != p)
++			return -1;
++
++		tmp = execmem_fill(p + size - 1, "b", 1);
++		if (tmp != p + size - 1)
++			return -1;
++
++		execmem_free(p);
++#endif
++	}
++
++	return 0;
++}
++
+ struct test_case_desc {
+ 	const char *test_name;
+ 	int (*test_func)(void);
+@@ -368,6 +402,7 @@ static struct test_case_desc test_case_array[] = {
+ 	{ "pcpu_alloc_test", pcpu_alloc_test },
+ 	{ "kvfree_rcu_1_arg_vmalloc_test", kvfree_rcu_1_arg_vmalloc_test },
+ 	{ "kvfree_rcu_2_arg_vmalloc_test", kvfree_rcu_2_arg_vmalloc_test },
++	{ "execmem_alloc_test", execmem_alloc_test },
+ 	/* Add a new test case here. */
+ };
+ 
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index 1f7f2134f9bd..95ee8282b66c 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -3387,6 +3387,9 @@ static void move_vmap_to_free_text_tree(void *addr)
+ 	spin_unlock(&free_text_area_lock);
+ }
+ 
++/* This should match the define in test_vmalloc.c */
++#define DEBUG_TEST_VMALLOC_EXEMEM_ALLOC 0
++
+ /**
+  * execmem_alloc - allocate virtually contiguous RO+X memory
+  * @size:    allocation size
+@@ -3459,6 +3462,9 @@ void *execmem_alloc(unsigned long size, unsigned long align)
+ 	kmem_cache_free(vmap_area_cachep, va);
+ 	return NULL;
+ }
++#if DEBUG_TEST_VMALLOC_EXEMEM_ALLOC
++EXPORT_SYMBOL_GPL(execmem_alloc);
++#endif
+ 
+ void __weak *arch_fill_execmem(void *dst, void *src, size_t len)
+ {
+@@ -3510,6 +3516,9 @@ void *execmem_fill(void *dst, void *src, size_t len)
+ 	spin_unlock(&vmap_area_lock);
+ 	return ERR_PTR(-EINVAL);
+ }
++#if DEBUG_TEST_VMALLOC_EXEMEM_ALLOC
++EXPORT_SYMBOL_GPL(execmem_fill);
++#endif
+ 
+ static struct vm_struct *find_and_unlink_text_vm(unsigned long start, unsigned long end)
+ {
+@@ -3633,6 +3642,9 @@ void execmem_free(void *addr)
+ out:
+ 	spin_unlock(&free_text_area_lock);
+ }
++#if DEBUG_TEST_VMALLOC_EXEMEM_ALLOC
++EXPORT_SYMBOL_GPL(execmem_free);
++#endif
+ 
+ /**
+  * vmalloc_huge - allocate virtually contiguous memory, allow huge pages
 -- 
 2.30.2
 
