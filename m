@@ -2,21 +2,21 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A43FCC47089
-	for <bpf@archiver.kernel.org>; Tue, 29 Nov 2022 10:41:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CB10C4332F
+	for <bpf@archiver.kernel.org>; Tue, 29 Nov 2022 10:41:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231425AbiK2Kl1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 29 Nov 2022 05:41:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59070 "EHLO
+        id S231849AbiK2Kle (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 29 Nov 2022 05:41:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiK2KlZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 29 Nov 2022 05:41:25 -0500
-Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id A8F8FC6E;
-        Tue, 29 Nov 2022 02:41:18 -0800 (PST)
+        with ESMTP id S229514AbiK2Kl3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 29 Nov 2022 05:41:29 -0500
+Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 6FEE24EC3C;
+        Tue, 29 Nov 2022 02:41:23 -0800 (PST)
 Received: from 102.wangsu.com (unknown [59.61.78.232])
-        by app2 (Coremail) with SMTP id SyJltAAH+Ay44YVjAYkAAA--.821S2;
-        Tue, 29 Nov 2022 18:40:57 +0800 (CST)
+        by app2 (Coremail) with SMTP id SyJltAAH+Ay44YVjAYkAAA--.821S5;
+        Tue, 29 Nov 2022 18:41:21 +0800 (CST)
 From:   Pengcheng Yang <yangpc@wangsu.com>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         John Fastabend <john.fastabend@gmail.com>,
@@ -24,47 +24,51 @@ To:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         Jakub Sitnicki <jakub@cloudflare.com>,
         Lorenz Bauer <lmb@cloudflare.com>
 Cc:     Pengcheng Yang <yangpc@wangsu.com>
-Subject: [PATCH bpf v3 0/4] bpf, sockmap: Fix some issues with using apply_bytes
-Date:   Tue, 29 Nov 2022 18:40:37 +0800
-Message-Id: <1669718441-2654-1-git-send-email-yangpc@wangsu.com>
+Subject: [PATCH bpf v3 3/4] bpf, sockmap: Fix data loss caused by using apply_bytes on ingress redirect
+Date:   Tue, 29 Nov 2022 18:40:40 +0800
+Message-Id: <1669718441-2654-4-git-send-email-yangpc@wangsu.com>
 X-Mailer: git-send-email 1.8.3.1
-X-CM-TRANSID: SyJltAAH+Ay44YVjAYkAAA--.821S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrZr1xJw43uFWxuFWxuF47XFb_yoWDXrcEv3
-        yUtFZ8JFW8XF1rCaya9FZ8CF97Cw4DZrykJF98trW3Gr1xZr1UGrs5Xry0yr18Gay3Kr97
-        XrykCrWvqr1FgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+In-Reply-To: <1669718441-2654-1-git-send-email-yangpc@wangsu.com>
+References: <1669718441-2654-1-git-send-email-yangpc@wangsu.com>
+X-CM-TRANSID: SyJltAAH+Ay44YVjAYkAAA--.821S5
+X-Coremail-Antispam: 1UD129KBjvdXoWrKr4ftw4rGrW8Xr45CryDZFb_yoWfWwbE9r
+        W0yF9xGry8WF1Ikr4Du3y5tFyIgrn2vFnagr1xJFW7t348AF1UArs5XFn3uFWkWFW2yFyq
+        qrykXr1UZa42gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
         9fnUUIcSsGvfJ3UbIYCTnIWIevJa73UjIFyTuYvj4RJUUUUUUUU
 X-CM-SenderInfo: p1dqw1nf6zt0xjvxhudrp/
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Patch 1~3 fixes three issues with using apply_bytes when redirecting.
-Patch 4 adds ingress tests for txmsg with apply_bytes in selftests.
+Use apply_bytes on ingress redirect, when apply_bytes is less than
+the length of msg data, some data may be skipped and lost in
+bpf_tcp_ingress().
+If there is still data in the scatterlist that has not been consumed,
+we cannot move the msg iter.
 
-Thanks to John Fastabend and Jakub Sitnicki for correct solution.
-
+Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
+Signed-off-by: Pengcheng Yang <yangpc@wangsu.com>
 ---
-Changes in v3:
-*Patch 2: Rename 'flags', modify based on Jakub Sitnicki's patch
+ net/ipv4/tcp_bpf.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Changes in v2:
-*Patch 2: Clear psock->flags explicitly before releasing the sock lock
-
-Pengcheng Yang (4):
-  bpf, sockmap: Fix repeated calls to sock_put() when msg has more_data
-  bpf, sockmap: Fix missing BPF_F_INGRESS flag when using apply_bytes
-  bpf, sockmap: Fix data loss caused by using apply_bytes on ingress
-    redirect
-  selftests/bpf: Add ingress tests for txmsg with apply_bytes
-
- include/linux/skmsg.h                      |  1 +
- include/net/tcp.h                          |  4 ++--
- net/core/skmsg.c                           |  9 ++++++---
- net/ipv4/tcp_bpf.c                         | 19 ++++++++++++-------
- net/tls/tls_sw.c                           |  6 ++++--
- tools/testing/selftests/bpf/test_sockmap.c | 18 ++++++++++++++++++
- 6 files changed, 43 insertions(+), 14 deletions(-)
-
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index b3d9023..d99c3b7 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -45,8 +45,11 @@ static int bpf_tcp_ingress(struct sock *sk, struct sk_psock *psock,
+ 		tmp->sg.end = i;
+ 		if (apply) {
+ 			apply_bytes -= size;
+-			if (!apply_bytes)
++			if (!apply_bytes) {
++				if (sge->length)
++					sk_msg_iter_var_prev(i);
+ 				break;
++			}
+ 		}
+ 	} while (i != msg->sg.end);
+ 
 -- 
 1.8.3.1
 
