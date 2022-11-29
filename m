@@ -2,95 +2,107 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CEF6C4332F
-	for <bpf@archiver.kernel.org>; Tue, 29 Nov 2022 10:24:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2529CC4332F
+	for <bpf@archiver.kernel.org>; Tue, 29 Nov 2022 10:41:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231226AbiK2KYC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 29 Nov 2022 05:24:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
+        id S230255AbiK2Kl0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 29 Nov 2022 05:41:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232271AbiK2KXl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 29 Nov 2022 05:23:41 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4FC64DA
-        for <bpf@vger.kernel.org>; Tue, 29 Nov 2022 02:23:19 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669717397;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=znPXvxz3kz6ID7zX6kCLMH9Eop2P9SgAGV/kZSx6/e0=;
-        b=V027JSBo5uFP6TX3Lf8rRrU22Mn2Pjay+3rXWjG0eexUWUDu2eAXFntcSOGMPMkLdmp54q
-        C+NoyFUyKQ3fOjwmodIrCXckYziK7RMeuI20yHuygajK8VPtuMiAEaW4H5abRBP13IrZZl
-        uCWwuNmJqBCB3v+T29EteeyL+yes0sj14iOiQQu0LQjSIlhMdFJAEbXBADoBbwS3masNmh
-        m5lnuqb5YA+wk2iGi2SjpIiF+YnD5oAZoiXoT7zJzgtmKYKQakscZ5LkzSdVYKhQqTeYxK
-        Iu9ictSeTcQ3gCd/QgSXJrSVjtMrCXEMGDyD+1H2lWvVSf/6AqzyrjT23u5qzQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669717397;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=znPXvxz3kz6ID7zX6kCLMH9Eop2P9SgAGV/kZSx6/e0=;
-        b=01fI197c3emeb97I5YstKIxQJ1dj0jh1u5z0sZBrc2ZfJ/vrmxeSbjCXlHzikUdSdDznoC
-        vteyR0edggT5pUAw==
-To:     Song Liu <song@kernel.org>, bpf@vger.kernel.org,
-        linux-mm@kvack.org, peterz@infradead.org, akpm@linux-foundation.org
-Cc:     x86@kernel.org, hch@lst.de, rick.p.edgecombe@intel.com,
-        aaron.lu@intel.com, rppt@kernel.org, mcgrof@kernel.org
-Subject: Re: [PATCH bpf-next v2 0/5] execmem_alloc for BPF programs
-In-Reply-To: <CAPhsuW5pq+hzS87Rb3pyoD3z8WH+R7EOAGkTkh-KwEKt9HV_mA@mail.gmail.com>
-References: <20221107223921.3451913-1-song@kernel.org>
- <CAPhsuW5pq+hzS87Rb3pyoD3z8WH+R7EOAGkTkh-KwEKt9HV_mA@mail.gmail.com>
-Date:   Tue, 29 Nov 2022 11:23:15 +0100
-Message-ID: <87lenuukj0.ffs@tglx>
-MIME-Version: 1.0
-Content-Type: text/plain
+        with ESMTP id S229701AbiK2KlZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 29 Nov 2022 05:41:25 -0500
+Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id B623632052;
+        Tue, 29 Nov 2022 02:41:20 -0800 (PST)
+Received: from 102.wangsu.com (unknown [59.61.78.232])
+        by app2 (Coremail) with SMTP id SyJltAAH+Ay44YVjAYkAAA--.821S3;
+        Tue, 29 Nov 2022 18:41:04 +0800 (CST)
+From:   Pengcheng Yang <yangpc@wangsu.com>
+To:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Lorenz Bauer <lmb@cloudflare.com>
+Cc:     Pengcheng Yang <yangpc@wangsu.com>
+Subject: [PATCH bpf v3 1/4] bpf, sockmap: Fix repeated calls to sock_put() when msg has more_data
+Date:   Tue, 29 Nov 2022 18:40:38 +0800
+Message-Id: <1669718441-2654-2-git-send-email-yangpc@wangsu.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1669718441-2654-1-git-send-email-yangpc@wangsu.com>
+References: <1669718441-2654-1-git-send-email-yangpc@wangsu.com>
+X-CM-TRANSID: SyJltAAH+Ay44YVjAYkAAA--.821S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ar4DXFWkJr4rAryruryrCrg_yoW8tFy3pF
+        W5Gw1akr43JrW7Cw4rtFWvvF18u3yrGFn0krZaqr1fAFZ3JFyUJF1jgryFka4FgrWxCw13
+        Zryqgr1UA3ZrZ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_UUUUUUUUU==
+X-CM-SenderInfo: p1dqw1nf6zt0xjvxhudrp/
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Nov 14 2022 at 17:30, Song Liu wrote:
-> On Mon, Nov 7, 2022 at 2:41 PM Song Liu <song@kernel.org> wrote:
-> Currently, I have got the following action items for v3:
-> 1. Add unify API to allocate text memory to motivation;
-> 2. Update Documentation/x86/x86_64/mm.rst;
-> 3. Allow none PMD_SIZE allocation for powerpc.
->
-> 1 and 2 are relatively simple. We can probably do 3 in a follow up patch
-> (as I don't have powerpc environments for testing). Did I miss anything?
->
-> Besides these, does this set look reasonable? Andrew and Peter, could
-> you please share your comments on this?
+In tcp_bpf_send_verdict() redirection, the eval variable is assigned to
+__SK_REDIRECT after the apply_bytes data is sent, if msg has more_data,
+sock_put() will be called multiple times.
+We should reset the eval variable to __SK_NONE every time more_data
+starts.
 
-This is a step into the right direction, but is it a solution which has
-a broader benefit? I don't think so.
+This causes:
 
-While you are so concerned about (i)TLB usage for BPF, I'm way more
-concerned about modules. Just from a random server class workstation:
+IPv4: Attempt to release TCP socket in state 1 00000000b4c925d7
+------------[ cut here ]------------
+refcount_t: addition on 0; use-after-free.
+WARNING: CPU: 5 PID: 4482 at lib/refcount.c:25 refcount_warn_saturate+0x7d/0x110
+Modules linked in:
+CPU: 5 PID: 4482 Comm: sockhash_bypass Kdump: loaded Not tainted 6.0.0 #1
+Hardware name: Red Hat KVM, BIOS 1.11.0-2.el7 04/01/2014
+Call Trace:
+ <TASK>
+ __tcp_transmit_skb+0xa1b/0xb90
+ ? __alloc_skb+0x8c/0x1a0
+ ? __kmalloc_node_track_caller+0x184/0x320
+ tcp_write_xmit+0x22a/0x1110
+ __tcp_push_pending_frames+0x32/0xf0
+ do_tcp_sendpages+0x62d/0x640
+ tcp_bpf_push+0xae/0x2c0
+ tcp_bpf_sendmsg_redir+0x260/0x410
+ ? preempt_count_add+0x70/0xa0
+ tcp_bpf_send_verdict+0x386/0x4b0
+ tcp_bpf_sendmsg+0x21b/0x3b0
+ sock_sendmsg+0x58/0x70
+ __sys_sendto+0xfa/0x170
+ ? xfd_validate_state+0x1d/0x80
+ ? switch_fpu_return+0x59/0xe0
+ __x64_sys_sendto+0x24/0x30
+ do_syscall_64+0x37/0x90
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-Total module memory:	12.4609 MB
-Number of 4k PTEs:         3190
+Fixes: cd9733f5d75c ("tcp_bpf: Fix one concurrency problem in the tcp_bpf_send_verdict function")
+Signed-off-by: Pengcheng Yang <yangpc@wangsu.com>
+---
+ net/ipv4/tcp_bpf.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-The above would nicely fit into 7 or 8 2M mappings.
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index f8b12b9..ef5de4f 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -279,7 +279,7 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
+ 	bool cork = false, enospc = sk_msg_full(msg);
+ 	struct sock *sk_redir;
+ 	u32 tosend, origsize, sent, delta = 0;
+-	u32 eval = __SK_NONE;
++	u32 eval;
+ 	int ret;
+ 
+ more_data:
+@@ -310,6 +310,7 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
+ 	tosend = msg->sg.size;
+ 	if (psock->apply_bytes && psock->apply_bytes < tosend)
+ 		tosend = psock->apply_bytes;
++	eval = __SK_NONE;
+ 
+ 	switch (psock->eval) {
+ 	case __SK_PASS:
+-- 
+1.8.3.1
 
-Guess how much memory is occupied by BPF on that machine and how much
-BPF contributes to iTLB pressure? In comparison to the above very close
-to zero.
-
-Modules have exactly the same problem as BPF, just an order of magnitude
-larger.
-
-So we don't need a "works" for BPF solution which comes with the
-handwaving assumption that it could be used for modules too. We need
-something which demonstrates that it solves the entire problem class.
-
-Modules are the obvious starting point. Once that is solved pretty much
-everything else falls into place including BPF.
-
-Without modules support this whole exercise is pointless and not going
-anywhere near x86.
-
-Thanks,
-
-        tglx
