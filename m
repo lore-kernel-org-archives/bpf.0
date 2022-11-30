@@ -2,120 +2,194 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C964FC352A1
-	for <bpf@archiver.kernel.org>; Wed, 30 Nov 2022 09:55:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17A0BC433FE
+	for <bpf@archiver.kernel.org>; Wed, 30 Nov 2022 10:12:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234952AbiK3JzJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 30 Nov 2022 04:55:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56090 "EHLO
+        id S235720AbiK3KM0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 30 Nov 2022 05:12:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231821AbiK3JzI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 30 Nov 2022 04:55:08 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB6428E1E;
-        Wed, 30 Nov 2022 01:55:07 -0800 (PST)
+        with ESMTP id S235740AbiK3KMW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 30 Nov 2022 05:12:22 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD7231DF0;
+        Wed, 30 Nov 2022 02:12:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669802107; x=1701338107;
+  t=1669803142; x=1701339142;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=pNLXsxeNGGkHQ/txi5YKruCJGisFk3qEwRDZxwc6iG0=;
-  b=Rp5qP5Nh4tJgUpOfH6wkd+W7S5ImgGBTqPC+okV7eHQ/rmrlQS5wE2jO
-   r4bT7LQ37YeUHuxCe7wNzRKgY/xzbBSIEyLN9EvCeVq4KuqRZgwd4LlIA
-   379WqxLmLxyDtfiIYXgF86NYLelKco7nAjCN2f43VT3SVFBgwyTrclRVG
-   zAUQJYSwBpask3ept7/gYxRZmCm3qFqiUerWphwv2+7n3ZoS0O0WSY1Z5
-   f7rDZInIY/XIJsfeUSYK3Jl4EapZtpp4ycR1TFzY9ZkquqoBjzM7KZjHU
-   IsLdZQOGMLP3dgvBO/6y8x6V1EBinIZjTON2ICuPsP3VNboTKTa02CYZd
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="314047836"
+  bh=gkLkJR8RE36XG9BI0LgN87G1MnvrwDX8Iwn1/fvXg/U=;
+  b=V4x8Six4JXLpmprvqJntS6w7bbIKKj/HSn7BGYTvxlvvde2rRn7UNP43
+   tXSUt+p07FdJJ374nVYneE8FKH12Teur29W6dqn1KD/byuSM44OAC6Yl+
+   n8IvNrD70oJ6u1Fp53D1STqz8xIrczI7LzUdmXiBkxsbU4GpQT8LXNhmP
+   Lu7nRgsgMDIPCQJsQUXJ/9Eiz4oH44qwMEoFqNiC39cPwRAHgXcsyLfLF
+   uSEt8xkyeDVMEcpcYfprIJ+D1BiI3dFxJVUoMq0m0kR6GKycDRschA27i
+   oWxphPAAKOgy3v+rL4sciqcu0FmDO6J2pMoNj0iTUFPN1taZduPHIjnIQ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="316511239"
 X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
-   d="scan'208";a="314047836"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 01:55:07 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="621823959"
+   d="scan'208";a="316511239"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 02:12:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="818575930"
 X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
-   d="scan'208";a="621823959"
-Received: from unknown (HELO paamrpdk12-S2600BPB.aw.intel.com) ([10.228.151.145])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 01:55:06 -0800
-From:   Tirthendu Sarkar <tirthendu.sarkar@intel.com>
-To:     bjorn@kernel.org, magnus.karlsson@intel.com,
-        maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com,
-        ast@kernel.org, daniel@iogearbox.net
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next] selftests: xsk: changes for setting up NICs to run xsk self-tests
-Date:   Wed, 30 Nov 2022 15:11:42 +0530
-Message-Id: <20221130094142.545051-1-tirthendu.sarkar@intel.com>
+   d="scan'208";a="818575930"
+Received: from b49691a74bf0.jf.intel.com ([10.165.59.99])
+  by orsmga005.jf.intel.com with ESMTP; 30 Nov 2022 02:12:20 -0800
+From:   Chen Hu <hu1.chen@intel.com>
+Cc:     hu1.chen@intel.com, jpoimboe@kernel.org, memxor@gmail.com,
+        bpf@vger.kernel.org, Pengfei Xu <pengfei.xu@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH bpf v3] selftests/bpf: Fix "missing ENDBR" BUG for destructor kfunc
+Date:   Wed, 30 Nov 2022 02:11:31 -0800
+Message-Id: <20221130101135.26806-1-hu1.chen@intel.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-ETH devies need to be set up for running xsk self-tests, like enable
-loopback, set promiscuous mode, MTU etc. This patch adds those settings
-before running xsk self-tests and reverts them back once done.
+With CONFIG_X86_KERNEL_IBT enabled, the test_verifier triggers the
+following BUG:
 
-Signed-off-by: Tirthendu Sarkar <tirthendu.sarkar@intel.com>
+  traps: Missing ENDBR: bpf_kfunc_call_test_release+0x0/0x30
+  ------------[ cut here ]------------
+  kernel BUG at arch/x86/kernel/traps.c:254!
+  invalid opcode: 0000 [#1] PREEMPT SMP
+  <TASK>
+   asm_exc_control_protection+0x26/0x50
+  RIP: 0010:bpf_kfunc_call_test_release+0x0/0x30
+  Code: 00 48 c7 c7 18 f2 e1 b4 e8 0d ca 8c ff 48 c7 c0 00 f2 e1 b4 c3
+	0f 1f 44 00 00 66 0f 1f 00 0f 1f 44 00 00 0f 0b 31 c0 c3 66 90
+       <66> 0f 1f 00 0f 1f 44 00 00 48 85 ff 74 13 4c 8d 47 18 b8 ff ff ff
+   bpf_map_free_kptrs+0x2e/0x70
+   array_map_free+0x57/0x140
+   process_one_work+0x194/0x3a0
+   worker_thread+0x54/0x3a0
+   ? rescuer_thread+0x390/0x390
+   kthread+0xe9/0x110
+   ? kthread_complete_and_exit+0x20/0x20
+
+It turns out that ENDBR in bpf_kfunc_call_test_release() is converted to
+NOP by apply_ibt_endbr().
+
+The only text references to this function from kernel side are:
+
+  $ grep -r bpf_kfunc_call_test_release
+  net/bpf/test_run.c:noinline void bpf_kfunc_call_test_release(...)
+  net/bpf/test_run.c:BTF_ID_FLAGS(func, bpf_kfunc_call_test_release, ...)
+  net/bpf/test_run.c:BTF_ID(func, bpf_kfunc_call_test_release)
+
+but it may be called from bpf program as kfunc. (no other caller from
+kernel)
+
+This fix creates dummy references to destructor kfuncs so ENDBR stay
+there.
+
+Also modify macro XXX_NOSEAL slightly:
+- ASM_IBT_NOSEAL now stands for pure asm
+- IBT_NOSEAL can be used directly in C
+
+Signed-off-by: Chen Hu <hu1.chen@intel.com>
+Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 ---
- tools/testing/selftests/bpf/test_xsk.sh | 27 ++++++++++++++++++++++++-
- 1 file changed, 26 insertions(+), 1 deletion(-)
+v3:
+- Macro go to IBT related header as suggested by Jiri Olsa
+- Describe reference to the func clearly in commit message as suggested
+  by Peter Zijlstra and Jiri Olsa
+ 
+v2: https://lore.kernel.org/all/20221122073244.21279-1-hu1.chen@intel.com/
 
-diff --git a/tools/testing/selftests/bpf/test_xsk.sh b/tools/testing/selftests/bpf/test_xsk.sh
-index d821fd098504..e7a5c5fc4f71 100755
---- a/tools/testing/selftests/bpf/test_xsk.sh
-+++ b/tools/testing/selftests/bpf/test_xsk.sh
-@@ -106,7 +106,11 @@ MTU=1500
- trap ctrl_c INT
+v1: https://lore.kernel.org/all/20221121085113.611504-1-hu1.chen@intel.com/
+
+ arch/x86/include/asm/ibt.h | 6 +++++-
+ arch/x86/kvm/emulate.c     | 2 +-
+ net/bpf/test_run.c         | 5 +++++
+ 3 files changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/include/asm/ibt.h b/arch/x86/include/asm/ibt.h
+index 9b08082a5d9f..be86dc31661c 100644
+--- a/arch/x86/include/asm/ibt.h
++++ b/arch/x86/include/asm/ibt.h
+@@ -36,11 +36,14 @@
+  * the function as needing to be "sealed" (i.e. ENDBR converted to NOP by
+  * apply_ibt_endbr()).
+  */
+-#define IBT_NOSEAL(fname)				\
++#define ASM_IBT_NOSEAL(fname)				\
+ 	".pushsection .discard.ibt_endbr_noseal\n\t"	\
+ 	_ASM_PTR fname "\n\t"				\
+ 	".popsection\n\t"
  
- function ctrl_c() {
--        cleanup_exit ${VETH0} ${VETH1} ${NS1}
-+	if [ ! -z $ETH ]; then
-+		cleanup_exit ${VETH0} ${VETH1} ${NS1}
-+	else
-+		cleanup_eth
-+	fi
- 	exit 1
++#define IBT_NOSEAL(name)				\
++	asm(ASM_IBT_NOSEAL(#name))
++
+ static inline __attribute_const__ u32 gen_endbr(void)
+ {
+ 	u32 endbr;
+@@ -94,6 +97,7 @@ extern __noendbr void ibt_restore(u64 save);
+ #ifndef __ASSEMBLY__
+ 
+ #define ASM_ENDBR
++#define ASM_IBT_NOSEAL(name)
+ #define IBT_NOSEAL(name)
+ 
+ #define __noendbr
+diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+index 4a43261d25a2..d870c8bb5831 100644
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -327,7 +327,7 @@ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
+ 	".type " name ", @function \n\t" \
+ 	name ":\n\t" \
+ 	ASM_ENDBR \
+-	IBT_NOSEAL(name)
++	ASM_IBT_NOSEAL(name)
+ 
+ #define FOP_FUNC(name) \
+ 	__FOP_FUNC(#name)
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index fcb3e6c5e03c..9e9c8e8d50d7 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -601,6 +601,11 @@ noinline void bpf_kfunc_call_memb_release(struct prog_test_member *p)
+ {
  }
  
-@@ -138,9 +142,28 @@ setup_vethPairs() {
- 	ip link set ${VETH0} up
- }
- 
-+setup_eth() {
-+       sudo ethtool -L ${ETH} combined 1
-+       sudo ethtool -K ${ETH} loopback on
-+       sudo ip link set ${ETH} promisc on
-+       sudo ip link set ${ETH} mtu ${MTU}
-+       sudo ip link set ${ETH} up
-+       IPV6_DISABLE_CMD="sudo sysctl -n net.ipv6.conf.${ETH}.disable_ipv6"
-+       IPV6_DISABLE=`$IPV6_DISABLE_CMD 2> /dev/null`
-+       [[ $IPV6_DISABLE == "0" ]] && $IPV6_DISABLE_CMD=1
-+       sleep 1
-+}
++#ifdef CONFIG_X86_KERNEL_IBT
++IBT_NOSEAL(bpf_kfunc_call_test_release);
++IBT_NOSEAL(bpf_kfunc_call_memb_release);
++#endif
 +
-+cleanup_eth() {
-+       [[ $IPV6_DISABLE == "0" ]] && $IPV6_DISABLE_CMD=0
-+       sudo ethtool -K ${ETH} loopback off
-+       sudo ip link set ${ETH} promisc off
-+}
-+
- if [ ! -z $ETH ]; then
- 	VETH0=${ETH}
- 	VETH1=${ETH}
-+	setup_eth
- 	NS1=""
- else
- 	validate_root_exec
-@@ -191,6 +214,8 @@ exec_xskxceiver
- 
- if [ -z $ETH ]; then
- 	cleanup_exit ${VETH0} ${VETH1} ${NS1}
-+else
-+	cleanup_eth
- fi
- 
- failures=0
+ noinline void bpf_kfunc_call_memb1_release(struct prog_test_member1 *p)
+ {
+ 	WARN_ON_ONCE(1);
 -- 
 2.34.1
 
