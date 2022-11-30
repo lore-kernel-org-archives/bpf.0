@@ -2,88 +2,76 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DEB3C433FE
-	for <bpf@archiver.kernel.org>; Wed, 30 Nov 2022 09:40:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35A74C433FE
+	for <bpf@archiver.kernel.org>; Wed, 30 Nov 2022 09:42:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234415AbiK3Jkw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 30 Nov 2022 04:40:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42782 "EHLO
+        id S230361AbiK3JmS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 30 Nov 2022 04:42:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235061AbiK3Jkc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 30 Nov 2022 04:40:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15B1663D0
-        for <bpf@vger.kernel.org>; Wed, 30 Nov 2022 01:40:05 -0800 (PST)
+        with ESMTP id S234888AbiK3JmP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 30 Nov 2022 04:42:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3453132
+        for <bpf@vger.kernel.org>; Wed, 30 Nov 2022 01:42:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69C6F61AB3
-        for <bpf@vger.kernel.org>; Wed, 30 Nov 2022 09:40:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57F6FC433D6;
-        Wed, 30 Nov 2022 09:40:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8371F61A5E
+        for <bpf@vger.kernel.org>; Wed, 30 Nov 2022 09:42:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2CF2C433C1;
+        Wed, 30 Nov 2022 09:42:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669801204;
-        bh=j4pbxURSkB/qMAGKhX3c71/EfzCnkVfnezE1/DTusgY=;
+        s=k20201202; t=1669801333;
+        bh=+hFunFOckwGRMYLvfCOQLQTdvGbAc7QBclk3Vh6O+Ro=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qWusOV3BBSkYy7rrN42u80HXQwwdVYZOFUGbiEihPaSrqL2ILGP8e1vaCHK2E2lTZ
-         S7WkLtjnjui8RQQW3//nhppG3vhYZOhtZS4ibsuCM68bewY08jB8YrelFxVN46yITz
-         6vBdiV5AtEMGKWlOCjeKkk2fL4F+1N432YCxdLHjLWEuH/rTiMLDUYma1AAL15yOTh
-         oGi83OUsyDR/N3bh/pm1v8RdKaGX4cLTw0eEfBYq9pG3oMXVUHdCvNSSaxVU35H5HJ
-         1WjylIAn3qadSUyNbO9ut3S0ZagD+OrfQ4XjAgTkRVil1dYQnhLJ660Nfs1gQ2HmPn
-         Su0xPK1NkLdJA==
-Date:   Wed, 30 Nov 2022 11:39:47 +0200
+        b=uFDP+URli+rlZfs0AsL9hl1RblewQawNLqNKaIgBBNKiOIEZiIcOB4s6SwuggEwA9
+         AAg8IBh7xeLw97kpxXzK54o4ob5oncsytUhsG3wEAYbWZYKNPS/tr2PFGtQ1g/QHNs
+         LBMfF2EsQxXM9x9WMP/TCIz7u2tp7BqAt14miqBXZtU3MHlO/Ziswo5F0SxMNCh7l/
+         xCOjKQw65lW6l7xhzofYxzEUz/Ay3eRIkef7AyknVuIYgkqrLGbp4cDH+OGvslRf43
+         SwYvyfrgBWHz3fMB0HWggKNTk5vvEeFDz9fPRpAQ/Pm8NHPMdwxHAH1gKBlGrFvxrG
+         SZM7CcUnvITIg==
+Date:   Wed, 30 Nov 2022 11:41:56 +0200
 From:   Mike Rapoport <rppt@kernel.org>
 To:     Song Liu <song@kernel.org>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "hch@lst.de" <hch@lst.de>, "x86@kernel.org" <x86@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "Lu, Aaron" <aaron.lu@intel.com>
-Subject: Re: [PATCH bpf-next v2 0/5] execmem_alloc for BPF programs
-Message-ID: <Y4ck40Wv3n5Q5ByK@kernel.org>
-References: <Y2o9Iz30A3Nruqs4@kernel.org>
- <9e59a4e8b6f071cf380b9843cdf1e9160f798255.camel@intel.com>
- <Y2uMWvmiPlaNXlZz@kernel.org>
- <bcdc5a31570f87267183496f06963ac58b41bfe1.camel@intel.com>
- <Y3DITs3J8koEw3Hz@kernel.org>
- <CAPhsuW4zKABHC_Stwnkac05Lvww4C_tz-T4JfALDcQusRmsCEw@mail.gmail.com>
- <Y3X1uHNTLQJxmJnm@kernel.org>
- <CAPhsuW51j8P+DNXvFh4uf5Mem7=egHyYMVK7-Zq2qeFoArYREQ@mail.gmail.com>
- <Y3oEXP3UqHd1L6Z9@kernel.org>
- <CAPhsuW4ZBShuBf39TLmich0ts07zWGFuHvfAB0Jbg_bG-fjjWw@mail.gmail.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>, bpf@vger.kernel.org,
+        linux-mm@kvack.org, akpm@linux-foundation.org, x86@kernel.org,
+        peterz@infradead.org, hch@lst.de, rick.p.edgecombe@intel.com,
+        willy@infradead.org, dave@stgolabs.net, a.manzanares@samsung.com
+Subject: Re: [PATCH bpf-next v4 0/6] execmem_alloc for BPF programs
+Message-ID: <Y4clZK5nPInMfgb3@kernel.org>
+References: <20221117202322.944661-1-song@kernel.org>
+ <Y3vbwMptiNP6aJDh@bombadil.infradead.org>
+ <CAPhsuW7AfwpV6G8U7VRXMcjBEUf7OCOY5eR7eagEoXVK-AmBRg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPhsuW4ZBShuBf39TLmich0ts07zWGFuHvfAB0Jbg_bG-fjjWw@mail.gmail.com>
+In-Reply-To: <CAPhsuW7AfwpV6G8U7VRXMcjBEUf7OCOY5eR7eagEoXVK-AmBRg@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 07:52:12AM -0700, Song Liu wrote:
-> On Sun, Nov 20, 2022 at 3:41 AM Mike Rapoport <rppt@kernel.org> wrote:
-> > > >
-> > > > The most obvious one to implement Peter's suggestion with VM_TOPDOWN_VMAP
-> > > > so that execmem_alloc() can be actually used by modules.
-> > >
-> > > Current implementation is an alternative to VM_TOPDOWN_VMAP. I am
-> > > very sure it works for modules just like VM_TOPDOWN_VMAP solution.
+On Mon, Nov 21, 2022 at 07:28:36PM -0700, Song Liu wrote:
+> On Mon, Nov 21, 2022 at 1:12 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
 > >
-> > It might, but it still does not. And until they do I consider these
-> > patches as an optimization for BFP rather than unification of code
-> > allocations.
+> > Also, you mention your perf stats are run on a VM, I am curious what
+> > things you need to get TLB to be properly measured on the VM and if
+> > this is really reliable data Vs bare metal. I haven't yet been sucessful
+> > on getting perf stat for TBL to work on a VM and based on what I've read
+> > have been catious about the results.
 > 
-> We haven't got module to use execmem_alloc yet, that's true. But
-> this has nothing to do with VM_TOPDOWN_VMAP at all.
+> To make these perf counters work on VM, we need a newer host kernel
+> (my system is running 5.6 based kernel, but I am not sure what is the
+> minimum required version). Then we need to run qemu with option
+> "-cpu host" (both host and guest are x86_64).
+> 
+> >
+> > So curious if you'd see something different on bare metal.
+> 
+> Once the above all worked out, VM runs the same as bare metal from
+> perf counter's point of view.
 
-The point is that Peter suggested a way to make module_alloc() use 2M
-pages, so that all code allocations could benefit from it. Your
-execmem_alloc() isn't anywhere near this.
- 
-> Thanks,
-> Song
+TLBs behave differently because of EPT.
 
 -- 
 Sincerely yours,
