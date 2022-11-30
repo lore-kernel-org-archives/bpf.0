@@ -2,123 +2,120 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17931C433FE
-	for <bpf@archiver.kernel.org>; Wed, 30 Nov 2022 09:53:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C964FC352A1
+	for <bpf@archiver.kernel.org>; Wed, 30 Nov 2022 09:55:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbiK3Jxf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 30 Nov 2022 04:53:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55606 "EHLO
+        id S234952AbiK3JzJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 30 Nov 2022 04:55:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiK3Jxd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 30 Nov 2022 04:53:33 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6773621810
-        for <bpf@vger.kernel.org>; Wed, 30 Nov 2022 01:53:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9FA5FCE1847
-        for <bpf@vger.kernel.org>; Wed, 30 Nov 2022 09:53:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 030EEC433D6;
-        Wed, 30 Nov 2022 09:53:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669802008;
-        bh=8LDAH5jowxJdqYzypcXmz8TIH3y51pjOj93bPJGjblc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VlIjuvV5EafTOoAIfX60xMoCjWT7vKPKVPwGMDrj8m4otGJoxz1Kbi/ZwjtxmU5Dk
-         FWgtEnIY20plDJPmPBa5Ekf+owWSA9n7WD38DywXpuxpX6w+fFEq0ZT/2SUw+f8FiN
-         qPDeIAZZGMBTCYgcxBZD8MlXE8azTO1maWV88badkcqZMt3nDU12Ms6bR8jPlsjiXA
-         uRZhrt9w4FmKUPnXc5Odv55zVe49ozFlAiHA4/GGXDnUNSs8wey86sWdmF513BIVVE
-         VIj17/Ym3L4UW4bZGuawYM/D2ALlLNGCdtC35KcYDEo05lJgxMJ0n8LriarKG0B3C/
-         yB4LnfBvtinnA==
-Date:   Wed, 30 Nov 2022 11:53:09 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Song Liu <song@kernel.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>, Mel Gorman <mgorman@suse.de>,
-        Michal Hocko <mhocko@kernel.org>,
-        Aaron Lu <aaron.lu@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        tglx@linutronix.de, bpf@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, x86@kernel.org, peterz@infradead.org,
-        hch@lst.de, rick.p.edgecombe@intel.com, willy@infradead.org,
-        dave@stgolabs.net, a.manzanares@samsung.com,
-        Javier =?iso-8859-1?Q?Gonz=E1lez?= <javier.gonz@samsung.com>,
-        anton@ozlabs.org, colin.i.king@gmail.com
-Subject: Re: [PATCH bpf-next v4 0/6] execmem_alloc for BPF programs
-Message-ID: <Y4coBTe08HiZFMFC@kernel.org>
-References: <20221117202322.944661-1-song@kernel.org>
- <Y3vbwMptiNP6aJDh@bombadil.infradead.org>
- <CAPhsuW7AfwpV6G8U7VRXMcjBEUf7OCOY5eR7eagEoXVK-AmBRg@mail.gmail.com>
- <Y31ngcvzHCzWTg1f@bombadil.infradead.org>
- <CAPhsuW5g02Ahub+OX5WomzP24E74-T4K_x8pr1rkiC3uba2QBw@mail.gmail.com>
+        with ESMTP id S231821AbiK3JzI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 30 Nov 2022 04:55:08 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB6428E1E;
+        Wed, 30 Nov 2022 01:55:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669802107; x=1701338107;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=pNLXsxeNGGkHQ/txi5YKruCJGisFk3qEwRDZxwc6iG0=;
+  b=Rp5qP5Nh4tJgUpOfH6wkd+W7S5ImgGBTqPC+okV7eHQ/rmrlQS5wE2jO
+   r4bT7LQ37YeUHuxCe7wNzRKgY/xzbBSIEyLN9EvCeVq4KuqRZgwd4LlIA
+   379WqxLmLxyDtfiIYXgF86NYLelKco7nAjCN2f43VT3SVFBgwyTrclRVG
+   zAUQJYSwBpask3ept7/gYxRZmCm3qFqiUerWphwv2+7n3ZoS0O0WSY1Z5
+   f7rDZInIY/XIJsfeUSYK3Jl4EapZtpp4ycR1TFzY9ZkquqoBjzM7KZjHU
+   IsLdZQOGMLP3dgvBO/6y8x6V1EBinIZjTON2ICuPsP3VNboTKTa02CYZd
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="314047836"
+X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
+   d="scan'208";a="314047836"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 01:55:07 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="621823959"
+X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
+   d="scan'208";a="621823959"
+Received: from unknown (HELO paamrpdk12-S2600BPB.aw.intel.com) ([10.228.151.145])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 01:55:06 -0800
+From:   Tirthendu Sarkar <tirthendu.sarkar@intel.com>
+To:     bjorn@kernel.org, magnus.karlsson@intel.com,
+        maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com,
+        ast@kernel.org, daniel@iogearbox.net
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH bpf-next] selftests: xsk: changes for setting up NICs to run xsk self-tests
+Date:   Wed, 30 Nov 2022 15:11:42 +0530
+Message-Id: <20221130094142.545051-1-tirthendu.sarkar@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPhsuW5g02Ahub+OX5WomzP24E74-T4K_x8pr1rkiC3uba2QBw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 10:06:06PM -0700, Song Liu wrote:
-> On Tue, Nov 22, 2022 at 5:21 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >
-> > On Mon, Nov 21, 2022 at 07:28:36PM -0700, Song Liu wrote:
-> > > On Mon, Nov 21, 2022 at 1:12 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > > >
-> [...]
-> > > fixes a bug that splits the page table (from 2MB to 4kB) for the WHOLE kernel
-> > > text. The bug stayed in the kernel for almost a year. None of all the available
-> > > open source benchmark had caught it before this specific benchmark.
-> >
-> > That doesn't mean enterpise level testing would not have caught it, and
-> > enteprise kernels run on ancient kernels so they would not catch up that
-> > fast. RHEL uses even more ancient kernels than SUSE so let's consider
-> > where SUSE was during this regression. The commit you mentioned the fix
-> > 7af0145067bc went upstream on v5.3-rc7~4^2, and that was in August 2019.
-> > The bug was introduced through commit 585948f4f695 ("x86/mm/cpa: Avoid
-> > the 4k pages check completely") and that was on v4.20-rc1~159^2~41
-> > around September 2018. Around September 2018, the time the regression was
-> > committed, the most bleeding edge Enterprise Linux kernel in the industry was
-> > that on SLE15 and so v4.12 and so there is no way in hell the performance
-> > team at SUSE for instance would have even come close to evaluating code with
-> > that regression. In fact, they wouldn't come accross it in testing until
-> > SLE15-SP2 on the v5.3 kernel but by then the regression would have been fixed.
-> 
-> Can you refer me to one enterprise performance report with open source
-> benchmark that shows ~1% performance regression? If it is available, I am
-> more than happy to try it out. Note that, we need some BPF programs to show
-> the benefit of this set. In most production hosts, network related BPF programs
-> are the busiest. Therefore, single host benchmarks will not show the benefit.
-> 
-> Thanks,
-> Song
-> 
-> PS: Data in [1] if full of noise:
-> 
-> """
-> 2. For each benchmark/system combination, the 1G mapping had the highest
-> performance for 45% of the tests, 2M for ~30%, and 4k for~20%.
-> 
-> 3. From the average delta, among 1G/2M/4K, 4K gets the lowest
-> performance in all the 4 test machines, while 1G gets the best
-> performance on 2 test machines and 2M gets the best performance on the
-> other 2 machines.
-> """
+ETH devies need to be set up for running xsk self-tests, like enable
+loopback, set promiscuous mode, MTU etc. This patch adds those settings
+before running xsk self-tests and reverts them back once done.
 
-I don't think it's noise. IMO, this means that performance degradation
-caused by the fragmentation of the direct map highly depends on workload
-and microarchitecture.
+Signed-off-by: Tirthendu Sarkar <tirthendu.sarkar@intel.com>
+---
+ tools/testing/selftests/bpf/test_xsk.sh | 27 ++++++++++++++++++++++++-
+ 1 file changed, 26 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/bpf/test_xsk.sh b/tools/testing/selftests/bpf/test_xsk.sh
+index d821fd098504..e7a5c5fc4f71 100755
+--- a/tools/testing/selftests/bpf/test_xsk.sh
++++ b/tools/testing/selftests/bpf/test_xsk.sh
+@@ -106,7 +106,11 @@ MTU=1500
+ trap ctrl_c INT
  
-> There is no way we can get consistent result of 1% performance improvement
-> from experiments like those.
-
-Experiments like those show how a change in the kernel behaviour affects
-different workloads and not a single benchmark. Having a performance
-improvement in a single benchmark does necessarily not mean other
-benchmarks won't regress.
+ function ctrl_c() {
+-        cleanup_exit ${VETH0} ${VETH1} ${NS1}
++	if [ ! -z $ETH ]; then
++		cleanup_exit ${VETH0} ${VETH1} ${NS1}
++	else
++		cleanup_eth
++	fi
+ 	exit 1
+ }
  
-> [1] https://lore.kernel.org/linux-mm/213b4567-46ce-f116-9cdf-bbd0c884eb3c@linux.intel.com/
-
+@@ -138,9 +142,28 @@ setup_vethPairs() {
+ 	ip link set ${VETH0} up
+ }
+ 
++setup_eth() {
++       sudo ethtool -L ${ETH} combined 1
++       sudo ethtool -K ${ETH} loopback on
++       sudo ip link set ${ETH} promisc on
++       sudo ip link set ${ETH} mtu ${MTU}
++       sudo ip link set ${ETH} up
++       IPV6_DISABLE_CMD="sudo sysctl -n net.ipv6.conf.${ETH}.disable_ipv6"
++       IPV6_DISABLE=`$IPV6_DISABLE_CMD 2> /dev/null`
++       [[ $IPV6_DISABLE == "0" ]] && $IPV6_DISABLE_CMD=1
++       sleep 1
++}
++
++cleanup_eth() {
++       [[ $IPV6_DISABLE == "0" ]] && $IPV6_DISABLE_CMD=0
++       sudo ethtool -K ${ETH} loopback off
++       sudo ip link set ${ETH} promisc off
++}
++
+ if [ ! -z $ETH ]; then
+ 	VETH0=${ETH}
+ 	VETH1=${ETH}
++	setup_eth
+ 	NS1=""
+ else
+ 	validate_root_exec
+@@ -191,6 +214,8 @@ exec_xskxceiver
+ 
+ if [ -z $ETH ]; then
+ 	cleanup_exit ${VETH0} ${VETH1} ${NS1}
++else
++	cleanup_eth
+ fi
+ 
+ failures=0
 -- 
-Sincerely yours,
-Mike.
+2.34.1
+
