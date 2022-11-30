@@ -2,108 +2,173 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F358FC4321E
-	for <bpf@archiver.kernel.org>; Wed, 30 Nov 2022 20:00:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBF19C4321E
+	for <bpf@archiver.kernel.org>; Wed, 30 Nov 2022 20:21:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbiK3UA2 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 30 Nov 2022 15:00:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36624 "EHLO
+        id S229997AbiK3UV1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 30 Nov 2022 15:21:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiK3UA0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 30 Nov 2022 15:00:26 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05148C6B0
-        for <bpf@vger.kernel.org>; Wed, 30 Nov 2022 12:00:25 -0800 (PST)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AUJVjVH027883
-        for <bpf@vger.kernel.org>; Wed, 30 Nov 2022 12:00:25 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3m65bcn0bw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 30 Nov 2022 12:00:25 -0800
-Received: from twshared13940.35.frc1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 30 Nov 2022 12:00:24 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id F3EBA22AFC7F1; Wed, 30 Nov 2022 12:00:14 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 1/2] libbpf: avoid enum forward-declarations in public API in C++ mode
-Date:   Wed, 30 Nov 2022 12:00:12 -0800
-Message-ID: <20221130200013.2997831-1-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: sEJHKoSpZtwRvjDIwpwKqcQh5cbQAHQ9
-X-Proofpoint-ORIG-GUID: sEJHKoSpZtwRvjDIwpwKqcQh5cbQAHQ9
-Content-Transfer-Encoding: 8BIT
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        with ESMTP id S230017AbiK3UVA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 30 Nov 2022 15:21:00 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643A223E90
+        for <bpf@vger.kernel.org>; Wed, 30 Nov 2022 12:17:51 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id o66so144411oih.5
+        for <bpf@vger.kernel.org>; Wed, 30 Nov 2022 12:17:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lf9T1oLTLGP7W1nyGzAWDJnXj7/p/jhbbGGie8srQTE=;
+        b=oyjPOqyvujryB0noATPgxFc1sZrUuyqCS42aJvokKs436/eoSp+6+rX5OnvbD/yudk
+         V4iUo/Vniin/nJ/YbejysoUYCSCNFrm2tr2Z6r3quoycxz9Er1VHsCEflLBrCgbUlwDS
+         T5hMQ69PojAo5M1RCFf7Adfgt31nFng5t1rPIBBTWwTzD72JVPXkOWztq0BHsZFYDD+u
+         9fZoJ+eLrQRK86s5hN34vPDG1190r1SkDHKB6JixGV2EwoaNeLsqH0beSMFQGQw7qJNd
+         xfSzNQYPtYnWhhf4EFvcAP2oOcF0lItBfNJYqM6YiZsl7Mz4rJXxDc+9yKmDhsQMZV/d
+         Q/xQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lf9T1oLTLGP7W1nyGzAWDJnXj7/p/jhbbGGie8srQTE=;
+        b=2hxmTnQnRhf6zTbZAZI86BVwdGyhWCxVWMi6Cbhd3JGzdG9aUg0PsrQ5wxt7HWz71w
+         OBj91wjpSgrpE8/i3JRYi9ygQzZnQtfNZZZFGXok3GH7SrpKeIW2ZzVj6zFD84uhBzo4
+         /BgjZRx7/BQnKW/S9AL/Grif7LcPmHpV1BH5FxlW4QRXWHdn3ymnkHUGV4du8nwFTWay
+         7FtHk+GKMP2KViqQxbisxVQC93HdfMEytDYo3FUU9ccWMQMlHQzA6DPFkFJpeH8INojg
+         pTgBiHJ2JaAxs5M+UM9cK9SeG0XApXgdnvZsn+HGteG8b0z2zNKL7v0LurOGCNigMA1d
+         9/TA==
+X-Gm-Message-State: ANoB5plhF+K1gRu9gyp10ZSkvzDBxwZHA3hqaxM5cMX8wtk5cMgjtNQ1
+        KN30OimpIRr1qjA1l/Qbf6TthUeMC5cQggvqbKYx8w==
+X-Google-Smtp-Source: AA0mqf58r7hvvVKvPt+x5p4U9j23auwntSydB7vAJx+mEf6lB9a3wE0iSXe0uiA5Oj5jDTqA693mK202zDElOVGC9bM=
+X-Received: by 2002:aca:d01:0:b0:35b:d6f7:c569 with SMTP id
+ 1-20020aca0d01000000b0035bd6f7c569mr1552485oin.125.1669839470579; Wed, 30 Nov
+ 2022 12:17:50 -0800 (PST)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-30_04,2022-11-30_02,2022-06-22_01
+References: <20221121182552.2152891-1-sdf@google.com> <20221121182552.2152891-3-sdf@google.com>
+ <Y4eRtJOPWBOCKe1Q@lincoln> <CAKH8qBtseOmsWmeprdRsvz0T=vAObYE_CpsYQOX0CsLR_iXNFA@mail.gmail.com>
+In-Reply-To: <CAKH8qBtseOmsWmeprdRsvz0T=vAObYE_CpsYQOX0CsLR_iXNFA@mail.gmail.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Wed, 30 Nov 2022 12:17:39 -0800
+Message-ID: <CAKH8qBstSJEN5wvcPAcrnD0at8fNeyLNwijiT4wv=wD9eAd1TA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/8] bpf: XDP metadata RX kfuncs
+To:     Larysa Zaremba <larysa.zaremba@intel.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        haoluo@google.com, jolsa@kernel.org,
+        David Ahern <dsahern@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Willem de Bruijn <willemb@google.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Anatoly Burakov <anatoly.burakov@intel.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Magnus Karlsson <magnus.karlsson@gmail.com>,
+        Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-C++ enum forward declarations are fundamentally not compatible with pure
-C enum definitions, and so libbpf's use of `enum bpf_stats_type;`
-forward declaration in libbpf/bpf.h public API header is causing C++
-compilation issues.
+On Wed, Nov 30, 2022 at 11:06 AM Stanislav Fomichev <sdf@google.com> wrote:
+>
+> On Wed, Nov 30, 2022 at 9:38 AM Larysa Zaremba <larysa.zaremba@intel.com> wrote:
+> >
+> > On Mon, Nov 21, 2022 at 10:25:46AM -0800, Stanislav Fomichev wrote:
+> >
+> > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > > index 9528a066cfa5..315876fa9d30 100644
+> > > --- a/kernel/bpf/verifier.c
+> > > +++ b/kernel/bpf/verifier.c
+> > > @@ -15171,6 +15171,25 @@ static int fixup_call_args(struct bpf_verifier_env *env)
+> > >       return err;
+> > >  }
+> > >
+> > > +static int fixup_xdp_kfunc_call(struct bpf_verifier_env *env, u32 func_id)
+> > > +{
+> > > +     struct bpf_prog_aux *aux = env->prog->aux;
+> > > +     void *resolved = NULL;
+> >
+> > First I would like to say I really like the kfunc hints impementation.
+> >
+> > I am currently trying to test possible performace benefits of the unrolled
+> > version in the ice driver. I was working on top of the RFC v2,
+> > when I noticed a problem that also persists in this newer version.
+> >
+> > For debugging purposes, I have put the following logs in this place in code.
+> >
+> > printk(KERN_ERR "func_id=%u\n", func_id);
+> > printk(KERN_ERR "XDP_METADATA_KFUNC_RX_TIMESTAMP_SUPPORTED=%u\n",
+> >        xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_TIMESTAMP_SUPPORTED));
+> > printk(KERN_ERR "XDP_METADATA_KFUNC_RX_TIMESTAMP=%u\n",
+> >        xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_TIMESTAMP));
+> > printk(KERN_ERR "XDP_METADATA_KFUNC_RX_HASH_SUPPORTED=%u\n",
+> >        xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_HASH_SUPPORTED));
+> > printk(KERN_ERR "XDP_METADATA_KFUNC_RX_HASH=%u\n",
+> >        xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_HASH));
+> >
+> > Loading the program, which uses bpf_xdp_metadata_rx_timestamp_supported()
+> > and bpf_xdp_metadata_rx_timestamp(), has resulted in such messages:
+> >
+> > [  412.611888] func_id=108131
+> > [  412.611891] XDP_METADATA_KFUNC_RX_TIMESTAMP_SUPPORTED=108126
+> > [  412.611892] XDP_METADATA_KFUNC_RX_TIMESTAMP=108128
+> > [  412.611892] XDP_METADATA_KFUNC_RX_HASH_SUPPORTED=108130
+> > [  412.611893] XDP_METADATA_KFUNC_RX_HASH=108131
+> > [  412.611894] func_id=108130
+> > [  412.611894] XDP_METADATA_KFUNC_RX_TIMESTAMP_SUPPORTED=108126
+> > [  412.611895] XDP_METADATA_KFUNC_RX_TIMESTAMP=108128
+> > [  412.611895] XDP_METADATA_KFUNC_RX_HASH_SUPPORTED=108130
+> > [  412.611895] XDP_METADATA_KFUNC_RX_HASH=108131
+> >
+> > As you can see, I've got 108131 and 108130 IDs in program,
+> > while 108126 and 108128 would be more reasonable.
+> > It's hard to proceed with the implementation, when IDs cannot be sustainably
+> > compared.
+>
+> Thanks for the report!
+> Toke has reported a similar issue in [0], have you tried his patch?
+> I've also tried to address it in v3 [1], could you retry on top of it?
+> I'll try to insert your printk in my local build to see what happens
+> with btf ids on my side. Will get back to you..
+>
+> 0: https://lore.kernel.org/bpf/87mt8e2a69.fsf@toke.dk/
+> 1: https://lore.kernel.org/bpf/20221129193452.3448944-3-sdf@google.com/T/#u
 
-More details can be found in [0], but it comes down to C++ supporting
-enum forward declaration only with explicitly specified backing type:
+Nope, even if I go back to v2, I still can't reproduce locally.
+Somehow in my setup they are sorted properly :-/
+Would appreciate it if you can test the v3 patch and confirm whether
+it's fixed on your side or not.
 
-  enum bpf_stats_type: int;
-
-In C (and I believe it's a GCC extension also), such forward declaration
-is simply:
-
-  enum bpf_stats_type;
-
-Further, in Linux UAPI this enum is defined in pure C way:
-
-enum bpf_stats_type { BPF_STATS_RUN_TIME = 0; }
-
-And even though in both cases backing type is int, which can be
-confirmed by looking at DWARF information, for C++ compiler actual enum
-definition and forward declaration are incompatible.
-
-To eliminate this problem, for C++ mode define input argument as int,
-which makes enum unnecessary in libbpf public header. This solves the
-issue and as demonstrated by next patch doesn't cause any unwanted
-compiler warnings, at least with default warnings setting.
-
-  [0] https://stackoverflow.com/questions/42766839/c11-enum-forward-causes-underlying-type-mismatch
-  [1] Closes: https://github.com/libbpf/libbpf/issues/249
-
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/lib/bpf/bpf.h | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index a112e0ed1b19..7468978d3c27 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -409,8 +409,15 @@ LIBBPF_API int bpf_task_fd_query(int pid, int fd, __u32 flags, char *buf,
- 				 __u32 *buf_len, __u32 *prog_id, __u32 *fd_type,
- 				 __u64 *probe_offset, __u64 *probe_addr);
- 
-+#ifdef __cplusplus
-+/* forward-declaring enums in C++ isn't compatible with pure C enums, so
-+ * instead define bpf_enable_stats() as accepting int as an input
-+ */
-+LIBBPF_API int bpf_enable_stats(int type);
-+#else
- enum bpf_stats_type; /* defined in up-to-date linux/bpf.h */
- LIBBPF_API int bpf_enable_stats(enum bpf_stats_type type);
-+#endif
- 
- struct bpf_prog_bind_opts {
- 	size_t sz; /* size of this struct for forward/backward compatibility */
--- 
-2.30.2
-
+> > Furthermore, dumped vmlinux BTF shows the IDs is in the exactly reversed
+> > order:
+> >
+> > [108126] FUNC 'bpf_xdp_metadata_rx_hash' type_id=108125 linkage=static
+> > [108128] FUNC 'bpf_xdp_metadata_rx_hash_supported' type_id=108127 linkage=static
+> > [108130] FUNC 'bpf_xdp_metadata_rx_timestamp' type_id=108129 linkage=static
+> > [108131] FUNC 'bpf_xdp_metadata_rx_timestamp_supported' type_id=108127 linkage=static
+> >
+> > > +
+> > > +     if (func_id == xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_TIMESTAMP_SUPPORTED))
+> > > +             resolved = aux->xdp_netdev->netdev_ops->ndo_xdp_rx_timestamp_supported;
+> > > +     else if (func_id == xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_TIMESTAMP))
+> > > +             resolved = aux->xdp_netdev->netdev_ops->ndo_xdp_rx_timestamp;
+> > > +     else if (func_id == xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_HASH_SUPPORTED))
+> > > +             resolved = aux->xdp_netdev->netdev_ops->ndo_xdp_rx_hash_supported;
+> > > +     else if (func_id == xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_HASH))
+> > > +             resolved = aux->xdp_netdev->netdev_ops->ndo_xdp_rx_hash;
+> > > +
+> > > +     if (resolved)
+> > > +             return BPF_CALL_IMM(resolved);
+> > > +     return 0;
+> > > +}
+> > > +
+> >
+> > My working tree (based on this version) is available on github [0]. Situation
+> > is also described in the last commit message.
+> > I would be great, if you could check, whether this behaviour can be reproduced
+> > on your setup.
+> >
+> > [0] https://github.com/walking-machine/linux/tree/hints-v2
