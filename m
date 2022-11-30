@@ -2,120 +2,275 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73FDCC433FE
-	for <bpf@archiver.kernel.org>; Wed, 30 Nov 2022 01:50:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C259C4167B
+	for <bpf@archiver.kernel.org>; Wed, 30 Nov 2022 02:29:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231515AbiK3BuQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 29 Nov 2022 20:50:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
+        id S230063AbiK3C3s (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 29 Nov 2022 21:29:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiK3BuP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 29 Nov 2022 20:50:15 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C776C729;
-        Tue, 29 Nov 2022 17:50:11 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NMMbK5lcCz4f3k6L;
-        Wed, 30 Nov 2022 09:50:05 +0800 (CST)
-Received: from [10.174.176.117] (unknown [10.174.176.117])
-        by APP2 (Coremail) with SMTP id Syh0CgAXerXMtoZjR757BQ--.34895S2;
-        Wed, 30 Nov 2022 09:50:08 +0800 (CST)
-Subject: Re: [net-next] bpf: avoid hashtab deadlock with try_lock
-To:     Hao Luo <haoluo@google.com>
-Cc:     Waiman Long <longman@redhat.com>,
-        Tonghao Zhang <xiangxia.m.yue@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>,
-        "houtao1@huawei.com" <houtao1@huawei.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-References: <41eda0ea-0ed4-1ffb-5520-06fda08e5d38@huawei.com>
- <CAMDZJNVSv3Msxw=5PRiXyO8bxNsA-4KyxU8BMCVyHxH-3iuq2Q@mail.gmail.com>
- <fdb3b69c-a29c-2d5b-a122-9d98ea387fda@huawei.com>
- <CAMDZJNWTry2eF_n41a13tKFFSSLFyp3BVKakOOWhSDApdp0f=w@mail.gmail.com>
- <CA+khW7jgsyFgBqU7hCzZiSSANE7f=A+M-0XbcKApz6Nr-ZnZDg@mail.gmail.com>
- <07a7491e-f391-a9b2-047e-cab5f23decc5@huawei.com>
- <CAMDZJNUTaiXMe460P7a7NfK1_bbaahpvi3Q9X85o=G7v9x-w=g@mail.gmail.com>
- <59fc54b7-c276-2918-6741-804634337881@huaweicloud.com>
- <541aa740-dcf3-35f5-9f9b-e411978eaa06@redhat.com>
- <Y4ZABpDSs4/uRutC@Boquns-Mac-mini.local>
- <Y4ZCKaQFqDY3aLTy@Boquns-Mac-mini.local>
- <CA+khW7hkQRFcC1QgGxEK_NeaVvCe3Hbe_mZ-_UkQKaBaqnOLEQ@mail.gmail.com>
-From:   Hou Tao <houtao@huaweicloud.com>
-Message-ID: <23b5de45-1a11-b5c9-d0d3-4dbca0b7661e@huaweicloud.com>
-Date:   Wed, 30 Nov 2022 09:50:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        with ESMTP id S231948AbiK3C3r (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 29 Nov 2022 21:29:47 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3136A76B
+        for <bpf@vger.kernel.org>; Tue, 29 Nov 2022 18:29:46 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id ud5so38170467ejc.4
+        for <bpf@vger.kernel.org>; Tue, 29 Nov 2022 18:29:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=NpN8m2rGJOqcna6uXpvOIEGM/1jOUuz4XXUb9q5YuSQ=;
+        b=bGn5mbyEsF0TpHbOddNHf9uwWncn0BKq7UgLCnmK1CUsfh5GL8Jm2MOaxSTur+UQjv
+         UADsqEMHkae3RUdBBkTObY07Hucf5wdsHey8AvYft82lw/zp4PxUkpsF9HHFzxa9pYdr
+         nTIxpxG2webVUBotZVgyex7BOIl0jy1GTe375bWWEu9UGicWk16tRtAwpCgvWvVUg3i/
+         +nv5M3f4Fur8BIaZjJafTBwDsvekACY2MfNPosP3vbWSJzjPFQj03MalpfFMsqvr/Is4
+         dNR3ynmBD1//Ye8UBXEpJJ4Q9AMhT2dgRL/iB3P0mVu6LDl2hHEOJ7j1RgtoqL5iZZ97
+         UPYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NpN8m2rGJOqcna6uXpvOIEGM/1jOUuz4XXUb9q5YuSQ=;
+        b=DyUTnzjcklyN6IIM3CmbgbR9jqYqkkQCqwiOyS0JWgqCBLCqaRCfedeUxbwo3z/hRx
+         r31RzWUktppsuUVunkh80E3I7jnfqb7q6iODCwThG9NAjy0+bByRGQjw60eUzsJ6A5Il
+         kps0Ctg9TdM20o6jTOsXexyJuReLkG7f87D5xfstT8urf9lq3EW7vL8CkhqCWWyukqPf
+         Hl9R7S3XHKU/6r3wFoZIZ98WlnsPfZZ9jPfKFieXdYzEK/GDe5rNWZnKATUbojnPM3x+
+         jjSgC9hcf6BMKBdAvPB8Oug7gNvJym6S9yIs6ZBdRIJ21KNxVf1+g8ltvPhPIqHXCD7G
+         zsdQ==
+X-Gm-Message-State: ANoB5pkjD4nFWiibTDRz+2g/ze7NmaoZgDVhN56lJDRxxgxEfTIWl7K2
+        /7syiwAfe7pzMwi+aV0+2tVMEUhsL4Y=
+X-Google-Smtp-Source: AA0mqf6sfkHwo/IiDhCzdaCR1ceocbjjnkuUFyFbsXX521eWmKJJes2GbhFJZ/zIh0l+S9NAlD9UtA==
+X-Received: by 2002:a17:906:2e82:b0:7ae:44b2:cb7f with SMTP id o2-20020a1709062e8200b007ae44b2cb7fmr35399113eji.437.1669775384484;
+        Tue, 29 Nov 2022 18:29:44 -0800 (PST)
+Received: from [192.168.1.113] (boundsly.muster.volia.net. [93.72.16.93])
+        by smtp.gmail.com with ESMTPSA id z5-20020aa7cf85000000b0045d74aa401fsm83166edx.60.2022.11.29.18.29.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Nov 2022 18:29:44 -0800 (PST)
+Message-ID: <a95d7cae1ba418bac8d024c2590c34849a73472a.camel@gmail.com>
+Subject: Re: Sv: Bad padding with bpftool btf dump .. format c
+From:   Eduard Zingerman <eddyz87@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Per =?ISO-8859-1?Q?Sundstr=F6m?= XP 
+        <per.xp.sundstrom@ericsson.com>,
+        "olsajiri@gmail.com" <olsajiri@gmail.com>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Date:   Wed, 30 Nov 2022 04:29:43 +0200
+In-Reply-To: <CAEf4BzZt0VCEf-PVK0=aKBzqHHS4EBDiRc0tA23rrC7_amnxDQ@mail.gmail.com>
+References: <9cfc736f2b45422a50a21b90b94de04b19836682.camel@ericsson.com>
+         <Y3d9mYrkWjrkJ9q2@krava>
+         <HE1PR07MB3321F2F4C156BCA6EFD3A3DBBD099@HE1PR07MB3321.eurprd07.prod.outlook.com>
+         <b529c3fa5946537f96430d679b9e8a4280f03e4b.camel@ericsson.com>
+         <CAEf4Bza8c59wH05pRaBL2hHznFVs0_yWpVy1GHexURu3Ln-a=g@mail.gmail.com>
+         <c4a265caf1653412ac88b8e6c56a694a0d50879c.camel@gmail.com>
+         <CAEf4BzZt0VCEf-PVK0=aKBzqHHS4EBDiRc0tA23rrC7_amnxDQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-In-Reply-To: <CA+khW7hkQRFcC1QgGxEK_NeaVvCe3Hbe_mZ-_UkQKaBaqnOLEQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-CM-TRANSID: Syh0CgAXerXMtoZjR757BQ--.34895S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7KFW8ZF47ZF4Dtr4rKr1xKrg_yoW8WF1DpF
-        W2g343KF4kZr1UZ3WvvF18tw4rAw12ka1jkrW5Xr1vvr45W343ZFW8K3y8ZFyjqr4fJrs0
-        vrsFva48CFZ0vaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvab4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
-        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv
-        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
-        uYvjxUo0eHDUUUU
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Hao,
+On Tue, 2022-11-29 at 16:27 -0800, Andrii Nakryiko wrote:
+> On Tue, Nov 29, 2022 at 9:38 AM Eduard Zingerman <eddyz87@gmail.com> wrot=
+e:
+> >=20
+> > On Wed, 2022-11-23 at 18:37 -0800, Andrii Nakryiko wrote:
+> > > On Fri, Nov 18, 2022 at 9:26 AM Per Sundstr=C3=B6m XP
+> > > <per.xp.sundstrom@ericsson.com> wrote:
+> > > >=20
+> > > >=20
+> > > > > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D Vanilla =3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+> > > > > > struct foo {
+> > > > > >     struct {
+> > > > > >         int  aa;
+> > > > > >         char ab;
+> > > > > >     } a;
+> > > > > >     long   :64;
+> > > > > >     int    :4;
+> > > > > >     char   b;
+> > > > > >     short  c;
+> > > > > > };
+> > > > > > offsetof(struct foo, c)=3D18
+> > > > > >=20
+> > > > > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D Custom =3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+> > > > > > struct foo {
+> > > > > >         long: 8;
+> > > > > >         long: 64;
+> > > > > >         long: 64;
+> > > > > >         char b;
+> > > > > >         short c;
+> > > > > > };
+> > > > >=20
+> > > > > so I guess the issue is that the first 'long: 8' is padded to ful=
+l
+> > > > > long: 64 ?
+> > > > >=20
+> > > > > looks like btf_dump_emit_bit_padding did not take into accout the=
+ gap
+> > > > > on the
+> > > > > begining of the struct
+> > > > >=20
+> > > > > on the other hand you generated that header file from 'min_core_b=
+tf'
+> > > > > btf data,
+> > > > > which takes away all the unused fields.. it might not beeen
+> > > > > considered as a
+> > > > > use case before
+> > > > >=20
+> > > > > jirka
+> > > > >=20
+> > > >=20
+> > > > > That could be the case, but I think the 'emit_bit_padding()' will=
+ not
+> > > > > really have a
+> > > > > lot to do for the non sparse headers ..
+> > > > >   /Per
+> > > >=20
+> > > >=20
+> > > > Looks like something like this makes tings a lot better:
+> > >=20
+> > > yep, this helps, though changes output with padding to more verbose
+> > > version, quite often unnecessarily. I need to thing a bit more on
+> > > this, but the way we currently calculate alignment of a type is not
+> > > always going to be correct. E.g., just because there is an int field,
+> > > doesn't mean that struct actually has 4-byte alignment.
+> > >=20
+> > > We must take into account natural alignment, but also actual
+> > > alignment, which might be different due to __attribute__((packed)).
+> > >=20
+> > > Either way, thanks for reporting!
+> >=20
+> > Hi everyone,
+> >=20
+> > I think the fix is simpler:
+> >=20
+> > diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+> > index deb2bc9a0a7b..23a00818854b 100644
+> > --- a/tools/lib/bpf/btf_dump.c
+> > +++ b/tools/lib/bpf/btf_dump.c
+> > @@ -860,7 +860,7 @@ static bool btf_is_struct_packed(const struct btf *=
+btf, __u32 id,
+> >=20
+> >  static int chip_away_bits(int total, int at_most)
+> >  {
+> > -       return total % at_most ? : at_most;
+> > +       return total > at_most ? at_most : total;
+> >  }
+> >=20
+> > It changes the order in which btf_dump_emit_bit_padding() prints field
+> > sizes. Right now it returns the division remainder on a first call and
+> > full 'at_most' values at subsequent calls. For this particular example
+> > the bit offset of 'b' is 136, so the output looks as follows:
+> >=20
+> > struct foo {
+> >         long: 8;    // first call pad_bits =3D 136 % 64 ? : 64; off_dif=
+f -=3D 8;
+> >         long: 64;   // second call pad_bits =3D 128 % 64 ? : 64; off_di=
+ff -=3D 64; ...
+> >         long: 64;
+> >         char b;
+> >         short c;
+> > };
+> >=20
+> > This is incorrect, because compiler would always add padding between
+> > the first and second members to account for the second member alignment=
+.
+> >=20
+> > However, my change inverts the order, which avoids the accidental
+> > padding and gets the desired output:
+> >=20
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D Custom =3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+> > struct foo {
+> >         long: 64;
+> >         long: 64;
+> >         char: 8;
+> >         char b;
+> >         short c;
+> > };
+> > offsetof(struct foo, c)=3D18
+> >=20
+> > =3D=3D=3D BTF offsets =3D=3D=3D
+> > full   :        'c' type_id=3D6 bits_offset=3D144
+> > custom :        'c' type_id=3D3 bits_offset=3D144
+> >=20
+> > wdyt?
+>=20
+> There were at least two issues I realized when I was thinking about
+> fixing this, and I think you are missing at least one of them.
+>=20
+> 1. Adding `long :xxx` as padding makes struct at least 8-byte aligned.
+> If the struct originally had a smaller alignment requirement, you are
+> now potentially breaking the struct layout by changing its layout.
+>
+> 2. The way btf__align_of() is calculating alignment doesn't work
+> correctly for __attribute__((packed)) structs.
 
-On 11/30/2022 3:36 AM, Hao Luo wrote:
-> On Tue, Nov 29, 2022 at 9:32 AM Boqun Feng <boqun.feng@gmail.com> wrote:
->> Just to be clear, I meant to refactor htab_lock_bucket() into a try
->> lock pattern. Also after a second thought, the below suggestion doesn't
->> work. I think the proper way is to make htab_lock_bucket() as a
->> raw_spin_trylock_irqsave().
->>
->> Regards,
->> Boqun
->>
-> The potential deadlock happens when the lock is contended from the
-> same cpu. When the lock is contended from a remote cpu, we would like
-> the remote cpu to spin and wait, instead of giving up immediately. As
-> this gives better throughput. So replacing the current
-> raw_spin_lock_irqsave() with trylock sacrifices this performance gain.
->
-> I suspect the source of the problem is the 'hash' that we used in
-> htab_lock_bucket(). The 'hash' is derived from the 'key', I wonder
-> whether we should use a hash derived from 'bucket' rather than from
-> 'key'. For example, from the memory address of the 'bucket'. Because,
-> different keys may fall into the same bucket, but yield different
-> hashes. If the same bucket can never have two different 'hashes' here,
-> the map_locked check should behave as intended. Also because
-> ->map_locked is per-cpu, execution flows from two different cpus can
-> both pass.
-The warning from lockdep is due to the reason the bucket lock A is used in a
-no-NMI context firstly, then the same bucke lock is used a NMI context, so
-lockdep deduces that may be a dead-lock. I have already tried to use the same
-map_locked for keys with the same bucket, the dead-lock is gone, but still got
-lockdep warning.
->
-> Hao
-> .
+Missed these point, sorry.
+On the other hand isn't this information lost in the custom.btf?
+
+$ bpftool btf dump file custom.btf
+[1] STRUCT 'foo' size=3D20 vlen=3D2
+	'b' type_id=3D2 bits_offset=3D136
+	'c' type_id=3D3 bits_offset=3D144
+[2] INT 'char' size=3D1 bits_offset=3D0 nr_bits=3D8 encoding=3DSIGNED
+[3] INT 'short' size=3D2 bits_offset=3D0 nr_bits=3D16 encoding=3DSIGNED
+
+This has no info that 'foo' had fields of size 'long'. It does not
+matter for structs used inside BTF because 'bits_offset' is specified
+everywhere, but would matter if STRUCT 'foo' is used as a member of a
+non-BTF struct.
+
+>=20
+> So we need to fix btf__align_of() first. What btf__align_of() is
+> calculating right now is a natural alignment requirement if we ignore
+> actual field offsets. This might be useful (at the very least to
+> determine if the struct is packed or not), so maybe we should have a
+> separate btf__natural_align_of() or something along those lines?
+>=20
+> And then we need to fix btf_dump_emit_bit_padding() to better handle
+> alignment and padding rules. This is what Per Sundstr=C3=B6m is trying to
+> do, I believe, but I haven't carefully thought about his latest code
+> suggestion.
+>=20
+> In general, the most obvious solution would be to pad with `char :8;`
+> everywhere, but that's very ugly and I'd prefer us to have as
+> "natural" output as possible. That is, only emit strictly necessary
+> padding fields and rely on natural alignment otherwise.
+>=20
+> >=20
+> >=20
+> > >=20
+> > > >=20
+> > > > diff --git a/src/btf_dump.c b/src/btf_dump.c
+> > > > index 12f7039..a8bd52a 100644
+> > > > --- a/src/btf_dump.c
+> > > > +++ b/src/btf_dump.c
+> > > > @@ -881,13 +881,13 @@ static void btf_dump_emit_bit_padding(const
+> > > > struct btf_dump *d,
+> > > >                 const char *pad_type;
+> > > >                 int pad_bits;
+> > > >=20
+> > > > -               if (ptr_bits > 32 && off_diff > 32) {
+> > > > +               if (align > 4 && ptr_bits > 32 && off_diff > 32) {
+> > > >                         pad_type =3D "long";
+> > > >                         pad_bits =3D chip_away_bits(off_diff, ptr_b=
+its);
+> > > > -               } else if (off_diff > 16) {
+> > > > +               } else if (align > 2 && off_diff > 16) {
+> > > >                         pad_type =3D "int";
+> > > >                         pad_bits =3D chip_away_bits(off_diff, 32);
+> > > > -               } else if (off_diff > 8) {
+> > > > +               } else if (align > 1 && off_diff > 8) {
+> > > >                         pad_type =3D "short";
+> > > >                         pad_bits =3D chip_away_bits(off_diff, 16);
+> > > >                 } else {
+> > > >   /Per
+> >=20
 
