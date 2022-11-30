@@ -2,75 +2,119 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E10CC433FE
-	for <bpf@archiver.kernel.org>; Wed, 30 Nov 2022 19:10:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DFB1DC47089
+	for <bpf@archiver.kernel.org>; Wed, 30 Nov 2022 19:26:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbiK3TK1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 30 Nov 2022 14:10:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57776 "EHLO
+        id S229507AbiK3TZ2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 30 Nov 2022 14:25:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiK3TKX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 30 Nov 2022 14:10:23 -0500
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C7254460;
-        Wed, 30 Nov 2022 11:10:20 -0800 (PST)
-Message-ID: <953fb82c-0871-748e-e0f0-6ecca6ec80ee@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1669835418;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cpYTRvMJdbirKiTMceU5QudTQHf/OZVy3iDsQKagpcc=;
-        b=MbBHoiG3ypuLon1XvmHnqfAFhYvpJHUUxDB47JsIJrgGF+tAzFEuhoXhnDuGEZ2pTv+PA6
-        kRDR96StL8CFtRq0vcWProtUzhj6Hd2iCeQHH7SJ5Lq9pJCA46usYhvEh+zE6d7MFMPGEX
-        4pHBdDjgBWPkCy0Bzx7EAMuTr2t6yjM=
-Date:   Wed, 30 Nov 2022 11:10:13 -0800
+        with ESMTP id S229630AbiK3TZS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 30 Nov 2022 14:25:18 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55151862C4
+        for <bpf@vger.kernel.org>; Wed, 30 Nov 2022 11:25:17 -0800 (PST)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AUD0HKr002620
+        for <bpf@vger.kernel.org>; Wed, 30 Nov 2022 11:25:16 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=c21/RxjJ+X/zCJbYrlHYzEi17+2XCtf38q7aL5Vgz00=;
+ b=k34LSJcUZk0M0fcxjXabVyKNw0LvXCsR9gzUbs8MIWKgBPqPMAbBehpiB2HnmbhX9mEf
+ zjk8t3KxRaF+PDiyY1iXQUrk2J4hkvyNW0bqFKq7m0liHnnlzI29dOIRcwtbpqNmT/z3
+ y0eDUEL4h39lisgHAOzFhfHgeYDpQ7PhUD0= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3m67nvkfxt-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 30 Nov 2022 11:25:16 -0800
+Received: from twshared13940.35.frc1.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 30 Nov 2022 11:25:15 -0800
+Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
+        id F3D4411AE2D56; Wed, 30 Nov 2022 11:25:12 -0800 (PST)
+From:   Dave Marchevsky <davemarchevsky@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Kernel Team <kernel-team@fb.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Validate multiple ref release_on_unlock logic
+Date:   Wed, 30 Nov 2022 11:25:05 -0800
+Message-ID: <20221130192505.914566-2-davemarchevsky@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221130192505.914566-1-davemarchevsky@fb.com>
+References: <20221130192505.914566-1-davemarchevsky@fb.com>
 MIME-Version: 1.0
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-Subject: Re: [PATCH ipsec-next 2/3] xfrm: interface: Add unstable helpers for
- setting/getting XFRM metadata from TC-BPF
-To:     Steffen Klassert <steffen.klassert@secunet.com>
-Cc:     Eyal Birger <eyal.birger@gmail.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        herbert@gondor.apana.org.au, andrii@kernel.org,
-        daniel@iogearbox.net, nicolas.dichtel@6wind.com,
-        razor@blackwall.org, mykolal@fb.com, ast@kernel.org,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, shuah@kernel.org,
-        Jakub Kicinski <kuba@kernel.org>
-References: <20221128160501.769892-1-eyal.birger@gmail.com>
- <20221128160501.769892-3-eyal.birger@gmail.com>
- <c8a2d940-ff85-c952-74d0-25ad2c33c1af@linux.dev>
- <20221129095001.GV704954@gauss3.secunet.de>
- <20221129081510.56b1025e@kernel.org>
-Content-Language: en-US
-In-Reply-To: <20221129081510.56b1025e@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: W5MQFiYN1Pf9692Z88VZ26c6GcSKrRHW
+X-Proofpoint-GUID: W5MQFiYN1Pf9692Z88VZ26c6GcSKrRHW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-30_04,2022-11-30_02,2022-06-22_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 11/29/22 8:15 AM, Jakub Kicinski wrote:
-> On Tue, 29 Nov 2022 10:50:01 +0100 Steffen Klassert wrote:
->>> Please tag for bpf-next
->>
->> This is a change to xfrm ipsec, so it should go
->> through the ipsec-next tree, unless there is
->> a good reason for handling that different.
+Modify list_push_pop_multiple to alloc and insert nodes 2-at-a-time.
+Without the previous patch's fix, this block of code:
 
-The set is mostly depending on the bpf features.  Patch 2 is mostly depending on 
-bpf and patch 3 is also a bpf selftest.  I assume the set should have been 
-developed based on the bpf-next tree instead.  It is also good to have the test 
-run in bpf CI sooner than later to bar on-going bpf changes that may break it. 
-It is the reason I think bpf-next makes more sense.
+  bpf_spin_lock(lock);
+  bpf_list_push_front(head, &f[i]->node);
+  bpf_list_push_front(head, &f[i + 1]->node);
+  bpf_spin_unlock(lock);
 
-If it is preferred to go through ipsec-next, the set should at least be tested 
-against the bpf-next before posting.
+would fail check_reference_leak check as release_on_unlock logic would mi=
+ss
+a ref that should've been released.
 
-https://patchwork.kernel.org/project/netdevbpf/patch/20221129132018.985887-4-eyal.birger@gmail.com/
+Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
+cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ tools/testing/selftests/bpf/progs/linked_list.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/bpf/progs/linked_list.c b/tools/test=
+ing/selftests/bpf/progs/linked_list.c
+index 2c7b615c6d41..4ad88da5cda2 100644
+--- a/tools/testing/selftests/bpf/progs/linked_list.c
++++ b/tools/testing/selftests/bpf/progs/linked_list.c
+@@ -99,13 +99,28 @@ int list_push_pop_multiple(struct bpf_spin_lock *lock=
+, struct bpf_list_head *hea
+ 	struct foo *f[8], *pf;
+ 	int i;
+=20
+-	for (i =3D 0; i < ARRAY_SIZE(f); i++) {
++	/* Loop following this check adds nodes 2-at-a-time in order to
++	 * validate multiple release_on_unlock release logic
++	 */
++	if (ARRAY_SIZE(f) % 2)
++		return 10;
++
++	for (i =3D 0; i < ARRAY_SIZE(f); i +=3D 2) {
+ 		f[i] =3D bpf_obj_new(typeof(**f));
+ 		if (!f[i])
+ 			return 2;
+ 		f[i]->data =3D i;
++
++		f[i + 1] =3D bpf_obj_new(typeof(**f));
++		if (!f[i + 1]) {
++			bpf_obj_drop(f[i]);
++			return 9;
++		}
++		f[i + 1]->data =3D i + 1;
++
+ 		bpf_spin_lock(lock);
+ 		bpf_list_push_front(head, &f[i]->node);
++		bpf_list_push_front(head, &f[i + 1]->node);
+ 		bpf_spin_unlock(lock);
+ 	}
+=20
+--=20
+2.30.2
+
