@@ -2,55 +2,46 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDC6BC4321E
-	for <bpf@archiver.kernel.org>; Wed, 30 Nov 2022 19:26:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F398CC4321E
+	for <bpf@archiver.kernel.org>; Wed, 30 Nov 2022 20:00:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbiK3TZ3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 30 Nov 2022 14:25:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40198 "EHLO
+        id S229513AbiK3UAX convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 30 Nov 2022 15:00:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiK3TZW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 30 Nov 2022 14:25:22 -0500
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC5D862C3
-        for <bpf@vger.kernel.org>; Wed, 30 Nov 2022 11:25:21 -0800 (PST)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 2AUG0s3h004606
-        for <bpf@vger.kernel.org>; Wed, 30 Nov 2022 11:25:20 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=fGHjDTwCXQs5a505HsJR5Kmp5sLU5IYj8Jwwjl960sE=;
- b=p77dHYUcQhET9FcvUqgEBBJcH4g0+3lCfeeGzc0RtDgJVYv/cO8onTivNYc1Lqpr+ufC
- 7ZCZycTDyW5TYCRKEWyATwS4snz9Bq9J8w/V8qd5dhnaCczL7Hdd4c6mrV/mSLri/fPu
- AL8sXda11tLq7U2fyvgalkZQ5zUmH1NpP34= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3m5v7595wu-2
+        with ESMTP id S229503AbiK3UAX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 30 Nov 2022 15:00:23 -0500
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301458C6B0
+        for <bpf@vger.kernel.org>; Wed, 30 Nov 2022 12:00:22 -0800 (PST)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AUJWFGu009806
+        for <bpf@vger.kernel.org>; Wed, 30 Nov 2022 12:00:21 -0800
+Received: from maileast.thefacebook.com ([163.114.130.8])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3m5w6agx75-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 30 Nov 2022 11:25:20 -0800
-Received: from twshared8047.05.ash9.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 30 Nov 2022 12:00:21 -0800
+Received: from twshared21592.39.frc1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 30 Nov 2022 11:25:18 -0800
-Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
-        id A5DD211AE2CD1; Wed, 30 Nov 2022 11:25:08 -0800 (PST)
-From:   Dave Marchevsky <davemarchevsky@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Kernel Team <kernel-team@fb.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: [PATCH bpf-next 1/2] bpf: Fix release_on_unlock release logic for multiple refs
-Date:   Wed, 30 Nov 2022 11:25:04 -0800
-Message-ID: <20221130192505.914566-1-davemarchevsky@fb.com>
+ 15.1.2375.31; Wed, 30 Nov 2022 12:00:19 -0800
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id 0AA9222AFC7FA; Wed, 30 Nov 2022 12:00:17 -0800 (PST)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: make sure enum-less bpf_enable_stats() API works in C++ mode
+Date:   Wed, 30 Nov 2022 12:00:13 -0800
+Message-ID: <20221130200013.2997831-2-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221130200013.2997831-1-andrii@kernel.org>
+References: <20221130200013.2997831-1-andrii@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 8Iyh87MekAo4IkqKBEStDqufhhDwNtHJ
-X-Proofpoint-GUID: 8Iyh87MekAo4IkqKBEStDqufhhDwNtHJ
+X-Proofpoint-ORIG-GUID: GMd6cQX9RCZNouo-ZUR2pTDy_lT_CC6X
+X-Proofpoint-GUID: GMd6cQX9RCZNouo-ZUR2pTDy_lT_CC6X
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-30_04,2022-11-30_02,2022-06-22_01
@@ -58,88 +49,52 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Consider a verifier state with three acquired references, all with
-release_on_unlock =3D true:
+Just a simple test to make sure we don't introduce unwanted compiler
+warnings and API still supports passing enums as input argument.
 
-            idx  0 1 2
-  state->refs =3D [2 4 6]
-
-(with 2, 4, and 6 being the ref ids).
-
-When bpf_spin_unlock is called, process_spin_lock will loop through all
-acquired_refs and, for each ref, if it's release_on_unlock, calls
-release_reference on it. That function in turn calls
-release_reference_state, which removes the reference from state->refs by
-swapping the reference state with the last reference state in
-refs array and decrements acquired_refs count.
-
-process_spin_lock's loop logic, which is essentially:
-
-  for (i =3D 0; i < state->acquired_refs; i++) {
-    if (!state->refs[i].release_on_unlock)
-      continue;
-    release_reference(state->refs[i].id);
-  }
-
-will fail to release release_on_unlock references which are swapped from
-the end. Running this logic on our example demonstrates:
-
-  state->refs =3D [2 4 6] (start of idx=3D0 iter)
-    release state->refs[0] by swapping w/ state->refs[2]
-
-  state->refs =3D [6 4]   (start of idx=3D1)
-    release state->refs[1], no need to swap as it's the last idx
-
-  state->refs =3D [6]     (start of idx=3D2, loop terminates)
-
-ref_id 6 should have been removed but was skipped.
-
-Fix this by looping from back-to-front, which results in refs that are
-candidates for removal being swapped with refs which have already been
-examined and kept. If we modify our initial example such that ref 6 is
-not release_on_unlock and loop from the back, we'd see:
-
-  state->refs =3D [2 4 6] (start of idx=3D2)
-
-  state->refs =3D [2 4 6] (start of idx=3D1)
-
-  state->refs =3D [2 6]   (start of idx=3D0)
-
-  state->refs =3D [6]     (after idx=3D0, loop terminates)
-
-Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
-cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Fixes: 534e86bc6c66 ("bpf: Add 'release on unlock' logic for bpf_list_pus=
-h_{front,back}")
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
+ tools/testing/selftests/bpf/test_cpp.cpp | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-I noticed this while testing ng_ds version of rbtree. Submitting
-separately so that this fix can be applied before the rest of rbtree
-work, as the latter will likely need a few respins.
-
-An alternative to this fix would be to modify or add new helper
-functions which enable safe release_reference in a loop. The additional
-complexity of this alternative seems unnecessary to me for now as this
-is currently the only place in verifier where release_reference in a
-loop is used.
-
- kernel/bpf/verifier.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 4e7f1d085e53..ac3e1219a7a5 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -5726,7 +5726,7 @@ static int process_spin_lock(struct bpf_verifier_en=
-v *env, int regno,
- 		cur->active_lock.ptr =3D NULL;
- 		cur->active_lock.id =3D 0;
-=20
--		for (i =3D 0; i < fstate->acquired_refs; i++) {
-+		for (i =3D fstate->acquired_refs - 1; i >=3D 0; i--) {
- 			int err;
-=20
- 			/* Complain on error because this reference state cannot
---=20
+diff --git a/tools/testing/selftests/bpf/test_cpp.cpp b/tools/testing/selftests/bpf/test_cpp.cpp
+index 19ad172036da..0bd9990e83fa 100644
+--- a/tools/testing/selftests/bpf/test_cpp.cpp
++++ b/tools/testing/selftests/bpf/test_cpp.cpp
+@@ -1,9 +1,9 @@
+ /* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
+ #include <iostream>
+-#pragma GCC diagnostic push
+-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
++#include <unistd.h>
++#include <linux/bpf.h>
++#include <linux/btf.h>
+ #include <bpf/libbpf.h>
+-#pragma GCC diagnostic pop
+ #include <bpf/bpf.h>
+ #include <bpf/btf.h>
+ #include "test_core_extern.skel.h"
+@@ -99,6 +99,7 @@ int main(int argc, char *argv[])
+ 	struct btf_dump_opts opts = { };
+ 	struct test_core_extern *skel;
+ 	struct btf *btf;
++	int fd;
+ 
+ 	try_skeleton_template();
+ 
+@@ -117,6 +118,12 @@ int main(int argc, char *argv[])
+ 	skel = test_core_extern__open_and_load();
+ 	test_core_extern__destroy(skel);
+ 
++	fd = bpf_enable_stats(BPF_STATS_RUN_TIME);
++	if (fd < 0)
++		std::cout << "FAILED to enable stats: " << fd << std::endl;
++	else
++		::close(fd);
++
+ 	std::cout << "DONE!" << std::endl;
+ 
+ 	return 0;
+-- 
 2.30.2
 
