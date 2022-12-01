@@ -2,117 +2,152 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D3D3C47088
-	for <bpf@archiver.kernel.org>; Thu,  1 Dec 2022 08:26:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B219C47088
+	for <bpf@archiver.kernel.org>; Thu,  1 Dec 2022 09:08:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbiLAI0s (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 1 Dec 2022 03:26:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57196 "EHLO
+        id S229861AbiLAJIX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 1 Dec 2022 04:08:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbiLAI0o (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 1 Dec 2022 03:26:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B8C64543;
-        Thu,  1 Dec 2022 00:26:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9F1461ECE;
-        Thu,  1 Dec 2022 08:26:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 921A6C433D6;
-        Thu,  1 Dec 2022 08:26:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669883202;
-        bh=bYN7sFnrzXsqdokyyNjsM57Xzrjedk4SiEcICca4yv8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jBziYPIcz32Zipj7BRwvOAXfBQOI7SAumemnTscF+KrvwpcQ6o6LPYwqi465aB2cN
-         zwgN9DbsD4LMtEgamCL8UVshzL4U0OJeXGgJ5ieVLBX74ESoA+n1jJjJUL6WEDodKw
-         g7R9/qpkKEb7oSxwnYCIWEc0NAyKKq+GpVd5Fd7M=
-Date:   Thu, 1 Dec 2022 08:56:58 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, stable@vger.kernel.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de, bpf <bpf@vger.kernel.org>,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH 6.0 000/289] 6.0.11-rc1 review
-Message-ID: <Y4heSvsjubdeCT1P@kroah.com>
-References: <20221130180544.105550592@linuxfoundation.org>
- <CA+G9fYuJVxhKbeN9OGCr2_zyfa1k3j4DS1gAoTW0P89Eyz2FHg@mail.gmail.com>
- <Y4hQVCBYfwU0abvO@dev-arch.thelio-3990X>
+        with ESMTP id S229468AbiLAJIW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 1 Dec 2022 04:08:22 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F10D5C751
+        for <bpf@vger.kernel.org>; Thu,  1 Dec 2022 01:08:22 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669885699;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to; bh=0rWtjsBt+5Cysfx0xzhc9mhhUbbC+XlWwfb46YxmE9I=;
+        b=k6BdSNWo+Va/ulwjOYTqHfmFqYf3cnLL92L1d0nAvowgMUSvLxvTEKA8PrFQw5RbMNb1oE
+        Ulf1BgUbq6HtnraXe3K5MdZ2dH2P063NQ+dKB0M4BZFrwqidq27vEJB4eLRoaotvmZfjMY
+        8XURH474BoDIUPYxLAETm3sJqsCOjKJrlpZGxQ7zt4J8rpVhJWFEkslaGfsV3C2DZY88JG
+        1gFkjwxmiETzvYiq44Q9tjS7oDaNpWEhICMDXxPzql25Oqf/PtIE/FeWIKD7PCWTNgK4t9
+        mqDVGIKzQSPgIIi7SzDTk0sEMzKNX6upAKxncYWDo2tXArK5v2LEQvu+cctLkQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669885699;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to; bh=0rWtjsBt+5Cysfx0xzhc9mhhUbbC+XlWwfb46YxmE9I=;
+        b=t9FytE1kekYN4UzRTUGD6g703eq0b5c48DVXNipYmp7uYinKMB5thFVYmO6cYT7kTuSQQF
+        Jv5GYJhn1ffQvvBA==
+To:     Song Liu <song@kernel.org>
+Cc:     bpf@vger.kernel.org, linux-mm@kvack.org, peterz@infradead.org,
+        akpm@linux-foundation.org, x86@kernel.org, hch@lst.de,
+        rick.p.edgecombe@intel.com, aaron.lu@intel.com, rppt@kernel.org,
+        mcgrof@kernel.org
+Subject: Re: [PATCH bpf-next v2 0/5] execmem_alloc for BPF programs
+In-Reply-To: <CAPhsuW4Fy4kdTqK0rHXrPprUqiab4LgcTUG6YhDQaPrWkgZjwQ@mail.gmail.com>
+Date:   Thu, 01 Dec 2022 10:08:18 +0100
+Message-ID: <87v8mvsd8d.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4hQVCBYfwU0abvO@dev-arch.thelio-3990X>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 11:57:24PM -0700, Nathan Chancellor wrote:
-> On Thu, Dec 01, 2022 at 11:44:53AM +0530, Naresh Kamboju wrote:
-> > On Thu, 1 Dec 2022 at 00:13, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > This is the start of the stable review cycle for the 6.0.11 release.
-> > > There are 289 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, please
-> > > let me know.
-> > >
-> > > Responses should be made by Fri, 02 Dec 2022 18:05:05 +0000.
-> > > Anything received after that time might be too late.
-> > >
-> > > The whole patch series can be found in one patch at:
-> > >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.11-rc1.gz
-> > > or in the git tree and branch at:
-> > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-> > > and the diffstat can be found below.
-> > >
-> > > thanks,
-> > >
-> > > greg k-h
-> > 
-> > Results from Linaro's test farm.
-> > Regressions found on x86_64:
-> > 
-> >     - build-clang-15-allmodconfig-x86_64
-> >     - build-clang-nightly-allmodconfig-x86_64
-> > 
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > 
-> >     bpf: Convert BPF_DISPATCHER to use static_call() (not ftrace)
-> >     [ Upstream commit c86df29d11dfba27c0a1f5039cd6fe387fbf4239 ]
-> > 
-> > Causing the following build warnings / errors with clang-15 allmodconfig
-> > on x86_64,
-> > 
-> > Build error:
-> > make --silent --keep-going --jobs=8
-> > O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
-> > ARCH=x86_64 SRCARCH=x86 CROSS_COMPILE=x86_64-linux-gnu-
-> > 'HOSTCC=sccache clang' 'CC=sccache clang'
-> > kernel/bpf/dispatcher.c:126:33: error: pointer type mismatch ('void *'
-> > and 'unsigned int (*)(const void *, const struct bpf_insn *,
-> > bpf_func_t)' (aka 'unsigned int (*)(const void *, const struct
-> > bpf_insn *, unsigned int (*)(const void *, const struct bpf_insn
-> > *))')) [-Werror,-Wpointer-type-mismatch]
-> >         __BPF_DISPATCHER_UPDATE(d, new ?: &bpf_dispatcher_nop_func);
-> >                                    ~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~
-> > include/linux/bpf.h:938:54: note: expanded from macro '__BPF_DISPATCHER_UPDATE'
-> >         __static_call_update((_d)->sc_key, (_d)->sc_tramp, (_new))
-> >                                                             ^~~~
-> > 1 error generated.
-> 
-> Thanks for the report! This is fixed with upstream commit a679120edfcf
-> ("bpf: Add explicit cast to 'void *' for __BPF_DISPATCHER_UPDATE()"),
-> which was marked as a fix for c86df29d11df.
+Song!
 
-Now queued up.  I forgot to run my "do we need fixes for the fixes"
-script on the queues, sorry about that.
+On Wed, Nov 30 2022 at 08:18, Song Liu wrote:
+> On Tue, Nov 29, 2022 at 3:56 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>> You are not making anything easier. You are violating the basic
+>> engineering principle of "Fix the root cause, not the symptom".
+>>
+>
+> I am not sure what is the root cause and the symptom here.
 
-greg k-h
+The symptom is iTLB pressure. The root cause is the way how module
+memory is allocated, which in turn causes the fragmentation into
+4k PTEs. That's the same problem for anything which uses module_alloc()
+to get space for text allocated, e.g. kprobes, tracing....
+
+A module consists of:
+
+  - text sections
+  - data sections
+
+Except for PPC32, which has the module data in vmalloc space, all others
+allocate text and data sections in one lump.
+
+This en-bloc allocation is one reason for the 4k splits:
+
+   - text is RX
+   - data is RW or RO
+
+Truly vmalloc'ed module data is not an option for 64bit architectures
+which use PC relative addressing as vmalloc does not guarantee that the
+data ends up within the limited displacement range (s32 on x8664)
+
+This made me look at your allocator again:
+
+> +#if defined(CONFIG_MODULES) && defined(MODULES_VADDR)
+> +#define EXEC_MEM_START MODULES_VADDR
+> +#define EXEC_MEM_END MODULES_END
+> +#else
+> +#define EXEC_MEM_START VMALLOC_START
+> +#define EXEC_MEM_END VMALLOC_END
+> +#endif
+
+The #else part is completely broken on x86/64 and any other
+architecture, which has PC relative restricted displacement.
+
+Even if modules are disabled in Kconfig the only safe place to allocate
+executable kernel text from (on these architectures) is the modules
+address space. The ISA restrictions do not go magically away when
+modules are disabled.
+
+In the early version of the SKX retbleed mitigation work I had
+
+  https://lore.kernel.org/all/20220716230953.442937066@linutronix.de
+
+exactly to handle this correctly for the !MODULE case. It went nowhere
+as we did not need the trampolines in the final version.
+
+This is why Peter suggested to 'split' the module address range into a
+top down and bottom up part:
+
+  https://lore.kernel.org/bpf/Ys6cWUMHO8XwyYgr@hirez.programming.kicks-ass.net/
+  
+That obviously separates text and data, but keeps everything within the
+defined working range.
+
+It immediately solves the text problem for _all_ module_alloc() users
+and still leaves the data split into 4k pages due to RO/RW sections.
+
+But after staring at it for a while I think this top down and bottom up
+dance is too much effort for not much gain. The module address space is
+sized generously, so the straight forward solution is to split that
+space into two blocks and use them to allocate text and data separately.
+
+The rest of Peter's suggestions how to migrate there still apply.
+
+The init sections of a module are obviously separate as they are freed
+after the module is initialized, but they are not really special either.
+Today they leave holes in the address range. With the new scheme these
+holes will be in the memory backed large mapping, but I don't see a real
+issue with that, especially as those holes at least in text can be
+reused for small allocations (kprobes, trace, bpf).
+
+As a logical next step we make that three blocks and allocate text,
+data and rodata separately, which will preserve the large mappings for
+text and data. rodata still needs to be split because we need a space to
+accomodate ro_after_init data.
+
+Alternatively, instead of splitting the module address space, the
+allocation mechanism can keep track of the types (text, data, rodata)
+and manage large mapping blocks per type. There are pros and cons for
+both approaches, so that needs some thought.
+
+But at the end we want an allocation mechanism which:
+
+  - preserves large mappings
+  - handles a distinct address range
+  - is mapping type aware
+
+That solves _all_ the issues of modules, kprobes, tracing, bpf in one
+go. See?
+
+Thanks,
+
+        tglx
