@@ -2,155 +2,120 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79408C47088
-	for <bpf@archiver.kernel.org>; Thu,  1 Dec 2022 18:35:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03238C43217
+	for <bpf@archiver.kernel.org>; Thu,  1 Dec 2022 19:11:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbiLASf3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 1 Dec 2022 13:35:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60850 "EHLO
+        id S229667AbiLATK4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 1 Dec 2022 14:10:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230462AbiLASf1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 1 Dec 2022 13:35:27 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67D0B90C9
-        for <bpf@vger.kernel.org>; Thu,  1 Dec 2022 10:35:20 -0800 (PST)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B1IZCxJ017474
-        for <bpf@vger.kernel.org>; Thu, 1 Dec 2022 10:35:20 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=FyxDG0tELAO3dBVdkMyGpq01rNquhcb1h6PzCWb1nlg=;
- b=ZbGLXO38J8H7IBdvNp/3ty8yqb2uR3ctgohrG7dfXbJVn6jpTXqVDzWFXSo1JPsbjUWo
- osChEoKYYVBuarZJvToDPlW8oODLQKffxDjNHGKw5HHZ7AeRp73m3EkHJg5OB0BEmYWP
- I3MEaW/nPaXaO9a/Ccu0E8BlRuRU2sieKeQ= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3m65bcxvhj-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 01 Dec 2022 10:35:20 -0800
-Received: from twshared24004.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Dec 2022 10:34:16 -0800
-Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
-        id 6AEE411BCBE15; Thu,  1 Dec 2022 10:34:08 -0800 (PST)
-From:   Dave Marchevsky <davemarchevsky@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S230244AbiLATKs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 1 Dec 2022 14:10:48 -0500
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8878C5E04;
+        Thu,  1 Dec 2022 11:10:47 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id fz10so2121966qtb.3;
+        Thu, 01 Dec 2022 11:10:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8lBn7HA8s73zkhGBNG3m4Sb/6k6XYlgLSYhUWX2vb1I=;
+        b=R1N6Q+6EHAvFNQV7/6IZX3Aixg6UnmIt/9PjjzdEbOApqMebnO6IX1H7Mb50Gm02gz
+         VXdj+LWNboN0dcXgELaAg69k6+dZ4o68EkPz+PyNYIIo2VN1SQo89z8JZtKnvL9057it
+         leOaMYglJnV+FUMHAgoarShMntNo1M1DLtf34CvYeOjRmsXWyjkoZFYOM570hcHsHqGJ
+         xpMlzjuNgXuC0ILwBMhTPAsg9vA6a7InK0DJmlHmuCPCY8GgUKwob5zyBYaJHdTKBEF1
+         6N9919eAfx3ZqrhGhRfecNzr7v13/YbmRVEyYbhbdqqSc1SX6k+JorAXSrFE3d5DDvMd
+         3EIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8lBn7HA8s73zkhGBNG3m4Sb/6k6XYlgLSYhUWX2vb1I=;
+        b=okGilCwvprJ5/rkBpGExkY+Sgm3fvsF/dnwKYWsa2hMFbeGmrx/Km/mn/cWXTUgK3m
+         +FVAVs6Boz5rJnVccVaY0TBe2mA5VBP6CHAXSGjNXhcwBIsP2peuk+y9iRCGHKp0IArg
+         SMPi6nupN0JYt6RaZhITGhgD4633GIp4danywS54rR5Bvpw0TsDmVB8PRIBwfSLYL6og
+         SkmZZxqFMoMZctPiOBjEy8uF5AxO50PSgH/GCznmfYPMU/UZlOGmtwa+6y2YN+yU2gpM
+         mp9AcerXncv3t3wrpGVhvZJLHb2hmigjJPgyaO4vxWOZC0OqCnsNwlbdhLNjGTs3YOBF
+         UGiA==
+X-Gm-Message-State: ANoB5plw8vh+h/cprNjwE3GiE+Nlxa1quiu8wGE3hzqa3lT17j2YnxvF
+        QWEDB6VYu78264gPyq4nUeb1mPxrXYm+mn1R
+X-Google-Smtp-Source: AA0mqf4KtmNIsiq/zeXOvH+tkCJJ6Gmy0Ia5DiailXwqblPE+ac8gkWv7sEJwtKzv1A5t2Ns4XyLOQ==
+X-Received: by 2002:a37:be45:0:b0:6fb:f7a0:987d with SMTP id o66-20020a37be45000000b006fbf7a0987dmr48096466qkf.191.1669921846406;
+        Thu, 01 Dec 2022 11:10:46 -0800 (PST)
+Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net. [71.33.132.231])
+        by smtp.gmail.com with ESMTPSA id bs17-20020a05620a471100b006bbc3724affsm4006972qkb.45.2022.12.01.11.10.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 11:10:45 -0800 (PST)
+From:   James Hilliard <james.hilliard1@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     James Hilliard <james.hilliard1@gmail.com>,
+        "Jose E . Marchesi" <jose.marchesi@oracle.com>,
+        David Faust <david.faust@oracle.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Kernel Team <kernel-team@fb.com>, Yonghong Song <yhs@meta.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: [PATCH v2 bpf-next 1/2] bpf: Fix release_on_unlock release logic for multiple refs
-Date:   Thu, 1 Dec 2022 10:34:05 -0800
-Message-ID: <20221201183406.1203621-1-davemarchevsky@fb.com>
-X-Mailer: git-send-email 2.30.2
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH] selftests/bpf: add GCC compatible builtins to bpf_legacy.h
+Date:   Thu,  1 Dec 2022 12:09:39 -0700
+Message-Id: <20221201190939.3230513-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: 07DMRD22qE8BonQiAMRyauXNlB3vEiQM
-X-Proofpoint-ORIG-GUID: 07DMRD22qE8BonQiAMRyauXNlB3vEiQM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-01_12,2022-12-01_01,2022-06-22_01
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Consider a verifier state with three acquired references, all with
-release_on_unlock =3D true:
+The bpf_legacy.h header uses llvm specific load functions, add
+GCC compatible variants as well to fix tests using these functions
+under GCC.
 
-            idx  0 1 2
-  state->refs =3D [2 4 6]
-
-(with 2, 4, and 6 being the ref ids).
-
-When bpf_spin_unlock is called, process_spin_lock will loop through all
-acquired_refs and, for each ref, if it's release_on_unlock, calls
-release_reference on it. That function in turn calls
-release_reference_state, which removes the reference from state->refs by
-swapping the reference state with the last reference state in
-refs array and decrements acquired_refs count.
-
-process_spin_lock's loop logic, which is essentially:
-
-  for (i =3D 0; i < state->acquired_refs; i++) {
-    if (!state->refs[i].release_on_unlock)
-      continue;
-    release_reference(state->refs[i].id);
-  }
-
-will fail to release release_on_unlock references which are swapped from
-the end. Running this logic on our example demonstrates:
-
-  state->refs =3D [2 4 6] (start of idx=3D0 iter)
-    release state->refs[0] by swapping w/ state->refs[2]
-
-  state->refs =3D [6 4]   (start of idx=3D1)
-    release state->refs[1], no need to swap as it's the last idx
-
-  state->refs =3D [6]     (start of idx=3D2, loop terminates)
-
-ref_id 6 should have been removed but was skipped.
-
-Fix this by looping from back-to-front, which results in refs that are
-candidates for removal being swapped with refs which have already been
-examined and kept.
-
-If we modify our initial example such that ref 6 is replaced with ref 7,
-which is _not_ release_on_unlock, and loop from the back, we'd see:
-
-  state->refs =3D [2 4 7] (start of idx=3D2)
-
-  state->refs =3D [2 4 7] (start of idx=3D1)
-
-  state->refs =3D [2 7]   (start of idx=3D0, refs 7 and 4 swapped)
-
-  state->refs =3D [7]     (after idx=3D0, 7 and 2 swapped, loop terminate=
-s)
-
-Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
-Acked-by: Yonghong Song <yhs@fb.com>
-cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Fixes: 534e86bc6c66 ("bpf: Add 'release on unlock' logic for bpf_list_pus=
-h_{front,back}")
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Cc: Jose E. Marchesi <jose.marchesi@oracle.com>
+Cc: David Faust <david.faust@oracle.com>
 ---
-v1 -> v2 lore.kernel.org/bpf/b5d46fd5-2693-cd46-9515-700fef1a110b@meta.co=
-m:
+ tools/testing/selftests/bpf/bpf_legacy.h | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-  * Update second example in patch summary to use a new ref_id for the
-    non-release_on_unlock ref. (Yonghong)
-  * Add Yonghong's ack
-
-I noticed this while testing ng_ds version of rbtree. Submitting
-separately so that this fix can be applied before the rest of rbtree
-work, as the latter will likely need a few respins.
-
-An alternative to this fix would be to modify or add new helper
-functions which enable safe release_reference in a loop. The additional
-complexity of this alternative seems unnecessary to me for now as this
-is currently the only place in verifier where release_reference in a
-loop is used.
-
- kernel/bpf/verifier.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d0ecc0b18b20..b0db9c10567b 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -5738,7 +5738,7 @@ static int process_spin_lock(struct bpf_verifier_en=
-v *env, int regno,
- 		cur->active_lock.ptr =3D NULL;
- 		cur->active_lock.id =3D 0;
-=20
--		for (i =3D 0; i < fstate->acquired_refs; i++) {
-+		for (i =3D fstate->acquired_refs - 1; i >=3D 0; i--) {
- 			int err;
-=20
- 			/* Complain on error because this reference state cannot
---=20
-2.30.2
+diff --git a/tools/testing/selftests/bpf/bpf_legacy.h b/tools/testing/selftests/bpf/bpf_legacy.h
+index 845209581440..256c2a90aa20 100644
+--- a/tools/testing/selftests/bpf/bpf_legacy.h
++++ b/tools/testing/selftests/bpf/bpf_legacy.h
+@@ -2,6 +2,15 @@
+ #ifndef __BPF_LEGACY__
+ #define __BPF_LEGACY__
+ 
++#if __GNUC__ && !__clang__
++/* Functions to emit BPF_LD_ABS and BPF_LD_IND instructions.  We
++ * provide the "standard" names as synonyms of the corresponding GCC
++ * builtins.  Note how the SKB argument is ignored.
++ */
++#define load_byte(skb,off) __builtin_bpf_load_byte((off))
++#define load_half(skb,off) __builtin_bpf_load_half((off))
++#define load_word(skb,off) __builtin_bpf_load_word((off))
++#else
+ /* llvm builtin functions that eBPF C program may use to
+  * emit BPF_LD_ABS and BPF_LD_IND instructions
+  */
+@@ -11,6 +20,7 @@ unsigned long long load_half(void *skb,
+ 			     unsigned long long off) asm("llvm.bpf.load.half");
+ unsigned long long load_word(void *skb,
+ 			     unsigned long long off) asm("llvm.bpf.load.word");
++#endif
+ 
+ #endif
+ 
+-- 
+2.34.1
 
