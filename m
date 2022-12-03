@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 287EFC47088
-	for <bpf@archiver.kernel.org>; Sat,  3 Dec 2022 08:47:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4ED33C352A1
+	for <bpf@archiver.kernel.org>; Sat,  3 Dec 2022 08:47:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231657AbiLCIrV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 3 Dec 2022 03:47:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36874 "EHLO
+        id S231712AbiLCIrd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 3 Dec 2022 03:47:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbiLCIrR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 3 Dec 2022 03:47:17 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF9C7DA53;
-        Sat,  3 Dec 2022 00:47:16 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id fc4so9655018ejc.12;
-        Sat, 03 Dec 2022 00:47:16 -0800 (PST)
+        with ESMTP id S231623AbiLCIrY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 3 Dec 2022 03:47:24 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E5EE7DA73;
+        Sat,  3 Dec 2022 00:47:23 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id v8so9342815edi.3;
+        Sat, 03 Dec 2022 00:47:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=d1/BEU+Gh3yZCofE7EQRT991qKfijn26P08IEHM1GPc=;
-        b=cG5peFTZZup68qgxzcROlAC3JGIzLbyEKAtL5HHBu6CBFyhsVGaJsGqq7mlUdLnDE7
-         kNkQZKRR7mtBgztR6FuJW/xqcqjlP90DOaUKrfMOv4Qe3BFMlsJty4lBS2Rqxm8IzGMc
-         Woy6Wur+wJ73L2mj3W3tckY6i3PkSHNbB3wM/ISo0Bxol1F5NRBBSdNeGep9WS8f6Ict
-         oR+ijcHCz67HKLwg0yM1oUoiEchrMqDjLOeB5QNFTxnAsuCyacpfqBFc+AMR9Hi7vYMc
-         JA9dSW9FGs4dFuHXGKCD/IcVkm5ZTSHA+2LzXeArOk+1i/gh4T1zv3Ef70rRUMLrNhQ6
-         XsUg==
+        bh=0A0l8Aq8F2C+mYk2zfzbUY+wD5in9yH+VedMvZeY0AI=;
+        b=Jt+lja152ZCYCikhJLgbHCZMFMkmPfuHTmf3JV84Tqm90sF7gdmgYG//y0M1qfKEwe
+         W/UncV18TOlsufdT4kl0OYeqykMMH8RJl3fI33Nj1nSH0mbyXqESOlfs6hC23JM/JWkp
+         b5irnwn0DkEuaU4X9S0FPElFQc0ZYYANDk0FFggA6gzHpbvuGHG/U3rzBMhkuD8hKqGJ
+         yfmCACqMSOVKADUbDR3SC+1AMqpIwlG+boXogyS3jVW3KUel+0cAUp3qXXPbk+uDdtnJ
+         KqiSs72adycDPvgMMpYPxwYJ5cI44jNisW9tf3I4t4I6ramRRzNpdnhau8pRVrD1TVYW
+         ZROg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=d1/BEU+Gh3yZCofE7EQRT991qKfijn26P08IEHM1GPc=;
-        b=FCYqa02Ii2dj/ZVULhkleF8s3/sgebzOksZljwJGDhEG8fdk7lqjDzRmq+PXwvLdhL
-         DTIxHEv6XS5Vx6ZCWDltU5TMZjCICw0nlhmQn+k2TkzvgHwUx6irMlBvhYlf2dqcycUL
-         77jUT5erZmia+TbeqA8F94QjcOBD7wf9KOdTav/GCDEgoF4I/wYgANsjFopKivVeLick
-         hykpHud3qJeRVMjH3El28yvYneDitGZqc7r2OYW0MLRp3yBZQX0WQNHm2wQlyE5g8MP/
-         W08qa6i1z53cvCTU5xNwCNsBqnqEw1g6kBwz/vGdlGd+/8Xu5KxS/MG7hdbPypRDXCi1
-         zQmw==
-X-Gm-Message-State: ANoB5pl6bJAtUJy6D4wTWiAnwIMom41tgCQejz9847wG9wFCi7sI1X9J
-        i73PcREJ3kSg6j2uaE+8A7KVIFpB8J/2ZA==
-X-Google-Smtp-Source: AA0mqf6fi8dfa39ADPCovkrYoHQS3ZRMVRGeArSGwUPEwFHpJAt1lxbiZXh+Oyz4NSven9fHFyMxmQ==
-X-Received: by 2002:a17:906:547:b0:7ad:9028:4b17 with SMTP id k7-20020a170906054700b007ad90284b17mr62965814eja.366.1670057234865;
-        Sat, 03 Dec 2022 00:47:14 -0800 (PST)
+        bh=0A0l8Aq8F2C+mYk2zfzbUY+wD5in9yH+VedMvZeY0AI=;
+        b=X9Dhb0vj6pFMJk1pThmvxrGkEkzu6oanAxj0C4qyzFMBeclbIWcRhG5+CamnngD9zH
+         lOGaQaxbECfi0wG74S9yLCGUYJmKF/yNVNwjPhHm7RQQmLk+zjtQ6foOjth35Va1StYH
+         cn0ccKXMXHqYjUQB4cwYzXMkiCpPSbROTZhiV8oIa249zZeE1UYhbVmQ3Li6EKaJ57W6
+         Tfco01pZKKevNaprD1QQZcvyQP2JeUQh2KcHxCkucgYSbTn/aV9Mw2a1EPLBkRtnGhLZ
+         OXR8sSeENNOjoOsS8iuDI8J/uef0V+sjYC0See79z+eictoRviKnYWF1z8QqCWyk0tPm
+         3TiA==
+X-Gm-Message-State: ANoB5pko5He7zpmGIlKW8yA9/D5OqzeFqzbSiiowBtassI8Ra9c3ksGs
+        FCsjGbTB2F7a7V+S8mu9MwQ=
+X-Google-Smtp-Source: AA0mqf4tVriSypImtNHZqJag1GEVm0xB+wvjZnmKCMbWMtMjAMyTu0ITFwzmRV1wMTEZMui/zLo2Dg==
+X-Received: by 2002:aa7:cf01:0:b0:46b:d6d1:faaa with SMTP id a1-20020aa7cf01000000b0046bd6d1faaamr11016239edy.326.1670057241515;
+        Sat, 03 Dec 2022 00:47:21 -0800 (PST)
 Received: from jimi.localdomain ([213.57.189.88])
-        by smtp.gmail.com with ESMTPSA id q26-20020a170906389a00b007bdc2de90e6sm3964200ejd.42.2022.12.03.00.47.12
+        by smtp.gmail.com with ESMTPSA id q26-20020a170906389a00b007bdc2de90e6sm3964200ejd.42.2022.12.03.00.47.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Dec 2022 00:47:14 -0800 (PST)
+        Sat, 03 Dec 2022 00:47:21 -0800 (PST)
 From:   Eyal Birger <eyal.birger@gmail.com>
 To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         pabeni@redhat.com, steffen.klassert@secunet.com,
@@ -63,9 +63,9 @@ To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         Eyal Birger <eyal.birger@gmail.com>
-Subject: [PATCH bpf-next,v6 1/4] xfrm: interface: rename xfrm_interface.c to xfrm_interface_core.c
-Date:   Sat,  3 Dec 2022 10:46:56 +0200
-Message-Id: <20221203084659.1837829-2-eyal.birger@gmail.com>
+Subject: [PATCH bpf-next,v6 3/4] tools: add IFLA_XFRM_COLLECT_METADATA to uapi/linux/if_link.h
+Date:   Sat,  3 Dec 2022 10:46:58 +0200
+Message-Id: <20221203084659.1837829-4-eyal.birger@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221203084659.1837829-1-eyal.birger@gmail.com>
 References: <20221203084659.1837829-1-eyal.birger@gmail.com>
@@ -75,32 +75,25 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This change allows adding additional files to the xfrm_interface module.
+Needed for XFRM metadata tests.
 
 Signed-off-by: Eyal Birger <eyal.birger@gmail.com>
 ---
- net/xfrm/Makefile                                    | 2 ++
- net/xfrm/{xfrm_interface.c => xfrm_interface_core.c} | 0
- 2 files changed, 2 insertions(+)
- rename net/xfrm/{xfrm_interface.c => xfrm_interface_core.c} (100%)
+ tools/include/uapi/linux/if_link.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/xfrm/Makefile b/net/xfrm/Makefile
-index 494aa744bfb9..08a2870fdd36 100644
---- a/net/xfrm/Makefile
-+++ b/net/xfrm/Makefile
-@@ -3,6 +3,8 @@
- # Makefile for the XFRM subsystem.
- #
+diff --git a/tools/include/uapi/linux/if_link.h b/tools/include/uapi/linux/if_link.h
+index 0242f31e339c..901d98b865a1 100644
+--- a/tools/include/uapi/linux/if_link.h
++++ b/tools/include/uapi/linux/if_link.h
+@@ -673,6 +673,7 @@ enum {
+ 	IFLA_XFRM_UNSPEC,
+ 	IFLA_XFRM_LINK,
+ 	IFLA_XFRM_IF_ID,
++	IFLA_XFRM_COLLECT_METADATA,
+ 	__IFLA_XFRM_MAX
+ };
  
-+xfrm_interface-$(CONFIG_XFRM_INTERFACE) += xfrm_interface_core.o
-+
- obj-$(CONFIG_XFRM) := xfrm_policy.o xfrm_state.o xfrm_hash.o \
- 		      xfrm_input.o xfrm_output.o \
- 		      xfrm_sysctl.o xfrm_replay.o xfrm_device.o
-diff --git a/net/xfrm/xfrm_interface.c b/net/xfrm/xfrm_interface_core.c
-similarity index 100%
-rename from net/xfrm/xfrm_interface.c
-rename to net/xfrm/xfrm_interface_core.c
 -- 
 2.34.1
 
