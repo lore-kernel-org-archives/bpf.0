@@ -2,64 +2,236 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF998C47088
-	for <bpf@archiver.kernel.org>; Sat,  3 Dec 2022 20:58:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E626C4332F
+	for <bpf@archiver.kernel.org>; Sat,  3 Dec 2022 22:11:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbiLCU6l (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 3 Dec 2022 15:58:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46456 "EHLO
+        id S229481AbiLCWLa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 3 Dec 2022 17:11:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiLCU6l (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 3 Dec 2022 15:58:41 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6FE1B9F7
-        for <bpf@vger.kernel.org>; Sat,  3 Dec 2022 12:58:39 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1670101117;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=BqfCLn7bZHOUBcGvmtVJYpLj50IzdShCNo2WG6T9+CY=;
-        b=yH/7vUcXfCU05YGuuFIV3X3YgjG0in+XcrSW1/enJSKobPMdsjxhRRyZmUVtOES9NXZ4t6
-        3n9W/366mj/Zlwxau8W8Qh8bu/VF/O6JuYzo/d9PU8peZaI4GN3DhFrDoRIkdCIVMmzoxE
-        Bqz/zZ22wWoQ3PhmR7h9u9sgD/Ct1gqPaMfCZy1/ydBtfKXRqtzJqXB9/Q8K5wXflv5OD0
-        t0DSv4zaPVIeO6kd6PpNUCfCLw4QzoBtOzva8DMQSeloL9+PPwr5vmjtNt5NKovut2rVnH
-        tQwkW/rEXZUMMVsGdp5ScbiedA7Xl+gm3BZaKVrPIyz7nBUkLU1JJ2Nm84AmVQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1670101117;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=BqfCLn7bZHOUBcGvmtVJYpLj50IzdShCNo2WG6T9+CY=;
-        b=gJVJzxFT2vA+2YS53faI0fsq1CMcOc45zmMQdCUlmu5eG0DEvr7Jr+a4q6IgTNdoMCAIOr
-        dq/h8Y5XaJHwzwBg==
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Song Liu <song@kernel.org>, bpf@vger.kernel.org,
-        linux-mm@kvack.org, peterz@infradead.org,
-        akpm@linux-foundation.org, x86@kernel.org, hch@lst.de,
-        rick.p.edgecombe@intel.com, aaron.lu@intel.com, mcgrof@kernel.org
-Subject: Re: [PATCH bpf-next v2 0/5] execmem_alloc for BPF programs
-In-Reply-To: <Y4thNkNW30x8Wcx8@kernel.org>
-Date:   Sat, 03 Dec 2022 21:58:36 +0100
-Message-ID: <871qpggq6b.ffs@tglx>
+        with ESMTP id S229450AbiLCWL3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 3 Dec 2022 17:11:29 -0500
+X-Greylist: delayed 1015 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 03 Dec 2022 14:11:27 PST
+Received: from mx01lb.world4you.com (mx01lb.world4you.com [81.19.149.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726A61C434;
+        Sat,  3 Dec 2022 14:11:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=6mLp75EylkcS0zpNAr3dcPmCuuK0krLzoFoUhQH+z4I=; b=vR03Cm1oW93PCAWvF74IEVt2xT
+        P0//q7CKk9Lok/+xYtZ/lH4wXoUAlDOXekR1qrdEwsmFBgpRDBCFEYy0XyQ2hadAefTcL3uySWIyx
+        RyantghYPnTbsTAZXFssJG8eAaV+i3hFvPdMIuQ5VZ2stgbcLNB6fEo2lG5skfiiiAuY=;
+Received: from 88-117-56-227.adsl.highway.telekom.at ([88.117.56.227] helo=hornet.engleder.at)
+        by mx01lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <gerhard@engleder-embedded.com>)
+        id 1p1aSv-0003Ir-N5; Sat, 03 Dec 2022 22:54:33 +0100
+From:   Gerhard Engleder <gerhard@engleder-embedded.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
+        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com,
+        Gerhard Engleder <gerhard@engleder-embedded.com>
+Subject: [PATCH net-next 6/6] tsnep: Add XDP RX support
+Date:   Sat,  3 Dec 2022 22:54:16 +0100
+Message-Id: <20221203215416.13465-7-gerhard@engleder-embedded.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221203215416.13465-1-gerhard@engleder-embedded.com>
+References: <20221203215416.13465-1-gerhard@engleder-embedded.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-AV-Do-Run: Yes
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Dec 03 2022 at 16:46, Mike Rapoport wrote:
-> On Thu, Dec 01, 2022 at 11:34:57PM +0100, Thomas Gleixner wrote:
->> If you mix this, then you end up with RWX for the whole 2M page. Not an
->> option really as you lose _all_ protections in one go.
->
-> I meant to take one 2M page from the direct map and split it to 4K in the
-> module address space. Then the protection could be done at PTE level after
-> relocations etc and it would save the dance with text poking.
+If BPF program is set up, then run BPF program for every received frame
+and execute the selected action.
 
-I see what you meant.
+Test results with A53 1.2GHz:
 
-> But if mapping the code with 2M pages gives massive performance
-> improvements, it's surely better to keep 2M pages in the modules
-> space.
+XDP_DROP (samples/bpf/xdp1)
+proto 17:     865683 pkt/s
 
-Yes.
+XDP_TX (samples/bpf/xdp2)
+proto 17:     253594 pkt/s
+
+XDP_REDIRECT (samples/bpf/xdpsock)
+ sock0@eth2:0 rxdrop xdp-drv
+                   pps            pkts           1.00
+rx                 862,258        4,514,166
+tx                 0              0
+
+XDP_REDIRECT (samples/bpf/xdp_redirect)
+eth2->eth1         608,895 rx/s   0 err,drop/s   608,895 xmit/s
+
+Signed-off-by: Gerhard Engleder <gerhard@engleder-embedded.com>
+---
+ drivers/net/ethernet/engleder/tsnep_main.c | 100 +++++++++++++++++++++
+ 1 file changed, 100 insertions(+)
+
+diff --git a/drivers/net/ethernet/engleder/tsnep_main.c b/drivers/net/ethernet/engleder/tsnep_main.c
+index 725b2a1e7be4..4e3c6bd3dc9f 100644
+--- a/drivers/net/ethernet/engleder/tsnep_main.c
++++ b/drivers/net/ethernet/engleder/tsnep_main.c
+@@ -27,6 +27,7 @@
+ #include <linux/phy.h>
+ #include <linux/iopoll.h>
+ #include <linux/bpf.h>
++#include <linux/bpf_trace.h>
+ 
+ #define TSNEP_SKB_PAD (NET_SKB_PAD + NET_IP_ALIGN)
+ #define TSNEP_HEADROOM ALIGN(max(TSNEP_SKB_PAD, XDP_PACKET_HEADROOM), 4)
+@@ -44,6 +45,11 @@
+ #define TSNEP_COALESCE_USECS_MAX     ((ECM_INT_DELAY_MASK >> ECM_INT_DELAY_SHIFT) * \
+ 				      ECM_INT_DELAY_BASE_US + ECM_INT_DELAY_BASE_US - 1)
+ 
++#define TSNEP_XDP_PASS		0
++#define TSNEP_XDP_CONSUMED	BIT(0)
++#define TSNEP_XDP_TX		BIT(1)
++#define TSNEP_XDP_REDIRECT	BIT(2)
++
+ enum {
+ 	__TSNEP_DOWN,
+ };
+@@ -819,6 +825,11 @@ static inline unsigned int tsnep_rx_offset(struct tsnep_rx *rx)
+ 	return TSNEP_SKB_PAD;
+ }
+ 
++static inline unsigned int tsnep_rx_offset_xdp(void)
++{
++	return XDP_PACKET_HEADROOM;
++}
++
+ static void tsnep_rx_ring_cleanup(struct tsnep_rx *rx)
+ {
+ 	struct device *dmadev = rx->adapter->dmadev;
+@@ -1024,6 +1035,65 @@ static int tsnep_rx_refill(struct tsnep_rx *rx, int count, bool reuse)
+ 	return i;
+ }
+ 
++static int tsnep_xdp_run_prog(struct tsnep_rx *rx, struct bpf_prog *prog,
++			      struct xdp_buff *xdp)
++{
++	unsigned int length;
++	unsigned int sync;
++	u32 act;
++
++	length = xdp->data_end - xdp->data_hard_start - tsnep_rx_offset_xdp();
++
++	act = bpf_prog_run_xdp(prog, xdp);
++
++	/* Due xdp_adjust_tail: DMA sync for_device cover max len CPU touch */
++	sync = xdp->data_end - xdp->data_hard_start - tsnep_rx_offset_xdp();
++	sync = max(sync, length);
++
++	switch (act) {
++	case XDP_PASS:
++		return TSNEP_XDP_PASS;
++	case XDP_TX:
++		if (tsnep_xdp_xmit_back(rx->adapter, xdp) < 0)
++			goto out_failure;
++		return TSNEP_XDP_TX;
++	case XDP_REDIRECT:
++		if (xdp_do_redirect(rx->adapter->netdev, xdp, prog) < 0)
++			goto out_failure;
++		return TSNEP_XDP_REDIRECT;
++	default:
++		bpf_warn_invalid_xdp_action(rx->adapter->netdev, prog, act);
++		fallthrough;
++	case XDP_ABORTED:
++out_failure:
++		trace_xdp_exception(rx->adapter->netdev, prog, act);
++		fallthrough;
++	case XDP_DROP:
++		page_pool_put_page(rx->page_pool, virt_to_head_page(xdp->data),
++				   sync, true);
++		return TSNEP_XDP_CONSUMED;
++	}
++}
++
++static void tsnep_finalize_xdp(struct tsnep_adapter *adapter, int status)
++{
++	int cpu = smp_processor_id();
++	int queue;
++	struct netdev_queue *nq;
++
++	if (status & TSNEP_XDP_TX) {
++		queue = cpu % adapter->num_tx_queues;
++		nq = netdev_get_tx_queue(adapter->netdev, queue);
++
++		__netif_tx_lock(nq, cpu);
++		tsnep_xdp_xmit_flush(&adapter->tx[queue]);
++		__netif_tx_unlock(nq);
++	}
++
++	if (status & TSNEP_XDP_REDIRECT)
++		xdp_do_flush();
++}
++
+ static struct sk_buff *tsnep_build_skb(struct tsnep_rx *rx, struct page *page,
+ 				       int length)
+ {
+@@ -1062,12 +1132,17 @@ static int tsnep_rx_poll(struct tsnep_rx *rx, struct napi_struct *napi,
+ 	int desc_available;
+ 	int done = 0;
+ 	enum dma_data_direction dma_dir;
++	struct bpf_prog *prog;
+ 	struct tsnep_rx_entry *entry;
++	struct xdp_buff xdp;
++	int xdp_status = 0;
+ 	struct sk_buff *skb;
+ 	int length;
++	int retval;
+ 
+ 	desc_available = tsnep_rx_desc_available(rx);
+ 	dma_dir = page_pool_get_dma_dir(rx->page_pool);
++	prog = READ_ONCE(rx->adapter->xdp_prog);
+ 
+ 	while (likely(done < budget) && (rx->read != rx->write)) {
+ 		entry = &rx->entry[rx->read];
+@@ -1111,6 +1186,28 @@ static int tsnep_rx_poll(struct tsnep_rx *rx, struct napi_struct *napi,
+ 		rx->read = (rx->read + 1) % TSNEP_RING_SIZE;
+ 		desc_available++;
+ 
++		if (prog) {
++			xdp_init_buff(&xdp, PAGE_SIZE, &rx->xdp_rxq);
++			xdp_prepare_buff(&xdp, page_address(entry->page),
++					 tsnep_rx_offset_xdp() + TSNEP_RX_INLINE_METADATA_SIZE,
++					 length - TSNEP_RX_INLINE_METADATA_SIZE,
++					 false);
++			retval = tsnep_xdp_run_prog(rx, prog, &xdp);
++		} else {
++			retval = TSNEP_XDP_PASS;
++		}
++		if (retval) {
++			if (retval & (TSNEP_XDP_TX | TSNEP_XDP_REDIRECT))
++				xdp_status |= retval;
++
++			rx->packets++;
++			rx->bytes += length - TSNEP_RX_INLINE_METADATA_SIZE;
++
++			entry->page = NULL;
++
++			continue;
++		}
++
+ 		skb = tsnep_build_skb(rx, entry->page, length);
+ 		if (skb) {
+ 			page_pool_release_page(rx->page_pool, entry->page);
+@@ -1129,6 +1226,9 @@ static int tsnep_rx_poll(struct tsnep_rx *rx, struct napi_struct *napi,
+ 		entry->page = NULL;
+ 	}
+ 
++	if (xdp_status)
++		tsnep_finalize_xdp(rx->adapter, xdp_status);
++
+ 	if (desc_available)
+ 		tsnep_rx_refill(rx, desc_available, false);
+ 
+-- 
+2.30.2
+
