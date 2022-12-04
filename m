@@ -2,71 +2,81 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF0C4C4332F
-	for <bpf@archiver.kernel.org>; Sat,  3 Dec 2022 22:24:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F0DAC4332F
+	for <bpf@archiver.kernel.org>; Sun,  4 Dec 2022 21:00:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbiLCWYg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 3 Dec 2022 17:24:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
+        id S230108AbiLDVAU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 4 Dec 2022 16:00:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiLCWYf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 3 Dec 2022 17:24:35 -0500
-Received: from mx01lb.world4you.com (mx01lb.world4you.com [81.19.149.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C785015A1C;
-        Sat,  3 Dec 2022 14:24:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=RbdhlXXoe5aVhZ+1+W4Zdbyv2o4f8zympuEgxFctAV8=; b=QMxghBxPYh2tkjQEQmY/oPbR97
-        fnBYMqmkxvBE6WoLyp2RtTmVu1cZluJ0RtdxKUZ1jpSOk1hdDg7OHwlmyOIycs+fSPWc5O0/I7RtT
-        Xw0JGCH4pq0oCO5wNdO+n0llE5bZCPSQOYu5gL7TSPp2vk+TiSvDxoUVI3U4ZWO1FTVA=;
-Received: from [88.117.56.227] (helo=hornet.engleder.at)
-        by mx01lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <gerhard@engleder-embedded.com>)
-        id 1p1aSr-0003Ir-6Q; Sat, 03 Dec 2022 22:54:29 +0100
-From:   Gerhard Engleder <gerhard@engleder-embedded.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
-        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
-        hawk@kernel.org, john.fastabend@gmail.com,
-        Gerhard Engleder <gerhard@engleder-embedded.com>
-Subject: [PATCH net-next 0/6] tsnep: XDP support
-Date:   Sat,  3 Dec 2022 22:54:10 +0100
-Message-Id: <20221203215416.13465-1-gerhard@engleder-embedded.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S230201AbiLDVAT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 4 Dec 2022 16:00:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC1612A9A
+        for <bpf@vger.kernel.org>; Sun,  4 Dec 2022 13:00:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0D60DB80C03
+        for <bpf@vger.kernel.org>; Sun,  4 Dec 2022 21:00:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 99592C433D7;
+        Sun,  4 Dec 2022 21:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670187615;
+        bh=oY+wE7OtYAI3Lm0sGWWz0MQFh2bYtSYOUB2Po3Wa/9Y=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=PhC3NTSS7kQ8U20h/EPE1GoxZxJN5TBSwMxnUO2MstFh4j0ksxUf89SLP91Geu9AU
+         du2baH8n++j0a6GCbwZHHLcW4u69XQcnRrC3wzWkjHz2O1X/5h/BuoJJ/Ak6g+MUU0
+         shSsyQhliCs13TQb8SAEvERUZK1fS6GK2d9X9k7+LIEoj6OTVWcv0AYkDAxCyipCcX
+         UF6SJErzYXLbkIBEVNswqXKDIB3qv/vx1TAubwglhz2NG6l4OSWEvaQAJqogp68hse
+         Lrj+QjQn9w8Y04EpZPznnHjqvBXRN3bto+4uJ9FxVzHcC2cYt2yie0zKTwGaUD1bPw
+         a9N8aKdYhkY8A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 70F6DE21EF9;
+        Sun,  4 Dec 2022 21:00:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-AV-Do-Run: Yes
+Subject: Re: [PATCH bpf-next v2 0/3] bpf: Handle MEM_RCU type properly
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167018761545.21113.14652815039544773708.git-patchwork-notify@kernel.org>
+Date:   Sun, 04 Dec 2022 21:00:15 +0000
+References: <20221203184557.476871-1-yhs@fb.com>
+In-Reply-To: <20221203184557.476871-1-yhs@fb.com>
+To:     Yonghong Song <yhs@fb.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, kernel-team@fb.com, martin.lau@kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Implement XDP support for tsnep driver. I tried to follow existing
-drivers like igb/igc as far as possible. Some prework was already done
-in previous patch series, so in this series only actual XDP stuff is
-included.
+Hello:
 
-Thanks for the NetDev 0x14 slides "Add XDP support on a NIC driver".
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-Gerhard Engleder (6):
-  tsnep: Add adapter down state
-  tsnep: Add XDP TX support
-  tsnep: Support XDP BPF program setup
-  tsnep: Prepare RX buffer for XDP support
-  tsnep: Add RX queue info for XDP support
-  tsnep: Add XDP RX support
+On Sat, 3 Dec 2022 10:45:57 -0800 you wrote:
+> Patch set [1] added rcu support for bpf programs. In [1], a rcu
+> pointer is considered to be trusted and not null. This is actually
+> not true in some cases. The rcu pointer could be null, and for non-null
+> rcu pointer, it may have reference count of 0. This small patch set
+> fixed this problem. Patch 1 is the kernel fix. Patch 2 adjusted
+> selftests properly. Patch 3 added documentation for newly-introduced
+> KF_RCU flag.
+> 
+> [...]
 
- drivers/net/ethernet/engleder/Makefile     |   2 +-
- drivers/net/ethernet/engleder/tsnep.h      |  31 +-
- drivers/net/ethernet/engleder/tsnep_main.c | 424 +++++++++++++++++++--
- drivers/net/ethernet/engleder/tsnep_xdp.c  |  27 ++
- 4 files changed, 454 insertions(+), 30 deletions(-)
- create mode 100644 drivers/net/ethernet/engleder/tsnep_xdp.c
+Here is the summary with links:
+  - [bpf-next,v2,1/3] bpf: Handle MEM_RCU type properly
+    https://git.kernel.org/bpf/bpf-next/c/fca1aa75518c
+  - [bpf-next,v2,2/3] selftests/bpf: Fix rcu_read_lock test with new MEM_RCU semantics
+    https://git.kernel.org/bpf/bpf-next/c/8723ec22a31d
+  - [bpf-next,v2,3/3] docs/bpf: Add KF_RCU documentation
+    https://git.kernel.org/bpf/bpf-next/c/f53625649888
 
+You are awesome, thank you!
 -- 
-2.30.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
