@@ -2,222 +2,245 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B282C4321E
-	for <bpf@archiver.kernel.org>; Mon,  5 Dec 2022 16:16:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D172EC4332F
+	for <bpf@archiver.kernel.org>; Mon,  5 Dec 2022 16:51:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbiLEQQM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 5 Dec 2022 11:16:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45318 "EHLO
+        id S232636AbiLEQvX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 5 Dec 2022 11:51:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbiLEQQL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 5 Dec 2022 11:16:11 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006B4273F;
-        Mon,  5 Dec 2022 08:16:09 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id n16-20020a05600c3b9000b003d08febff59so5392114wms.3;
-        Mon, 05 Dec 2022 08:16:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5+qxFvyZ68J9KkefVwXjrljIu6tiSqfHk3mjKfN4Iac=;
-        b=GGWV9fd2ancmpFmA0TvgcQQs+y+bSwSwALBh6QfnIG1lWBhxRVNT6VFFSLO838pdKz
-         nMQfhhSsADV1SaEnixyZLhShsn7Lc+Wj+/yt+tdjwKfREB0D6IR48LftCds/mNXq7pkz
-         HFnjinE7aqdGMujWaxr6A4qqV0L3b5gT4Eg7dGL0sqOjh2cgbVGVOYcNec59u32mUhhY
-         V/FsgZ+/eiKJD2dKQqfSukiYcA6FY1aNRD4zXqM4AZWZsx8hIZVCRASASMQLKTTh7G4e
-         5hB042VMzNvMY/UIqpdbRNEDv4Dsk1V/QWc53raZ8TaR8QGt4bovi3G8JcOtc8JyiPHv
-         vVew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5+qxFvyZ68J9KkefVwXjrljIu6tiSqfHk3mjKfN4Iac=;
-        b=rgMSwk44kZYNGWxY/DAf4XbUs7Z4vS8aC8CjpbAi3RsxafBideBOv0JrHCK4z49lzm
-         bxZ7uiLOie8mIIcZ3qZK0ZtIm7952zVLHO0XNQodsuy7XcY7c2VxDow0XxBmq02T6qU2
-         areLoVoHtgsnM/yb+ZCBpHDq1r1grk6YubE/aJJJSxlLEciTBI/2fu9TU/fkJHbvg913
-         1JqwYx6RJldoO0n7iGJutIJMuMCxHs4A9TQjotxAK+Z3CpfEFUCOlSpoyTGtgY4Fmp21
-         QoXpWDcBgYqSibrFcM3h0d/VQPVe49nN2R2pBdP6GXIQWf2iY+FhMTfY2HbzKnOn3LPo
-         xSCA==
-X-Gm-Message-State: ANoB5pmYyc3GlhgJ7D43SD2M74fqnGeEVXODLoVrF4T3WE14MWe4OziR
-        QFegUetRBxZ4fIAZWcASFWW8mHe91GwyyQ==
-X-Google-Smtp-Source: AA0mqf5Eib78dyLVR/PyQDZI9I2hHs0cb0L1bgLFPBl/2gNVo77npFgvV+R64FDUZWE3izQn1DuXeQ==
-X-Received: by 2002:a1c:f616:0:b0:3cf:b1c2:c911 with SMTP id w22-20020a1cf616000000b003cfb1c2c911mr52264123wmc.16.1670256967928;
-        Mon, 05 Dec 2022 08:16:07 -0800 (PST)
-Received: from imac.fritz.box ([2a02:8010:60a0:0:8553:ec6:7ede:322a])
-        by smtp.gmail.com with ESMTPSA id f18-20020a05600c4e9200b003c6c182bef9sm30333831wmq.36.2022.12.05.08.16.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 08:16:07 -0800 (PST)
-From:   Donald Hunter <donald.hunter@gmail.com>
-To:     bpf@vger.kernel.org, linux-doc@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S232720AbiLEQus (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 5 Dec 2022 11:50:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E21BE17
+        for <bpf@vger.kernel.org>; Mon,  5 Dec 2022 08:49:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670258946;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QsBvXKlr8/ZXxysANtnuvwsqOxsB1GOMFs9Y2NQRG7U=;
+        b=VlWaoAVLfPQKZtbosHBO6DZQy/hKPKlNsVbaAqclStT8zb/QAfjBglxyvuRtxCx21vYbgb
+        mnAASoQ/t6b6HUFb8FbmnYyaH1+JHbkWd1/Cg2q37PW4Cc8ZGcQuY+zSR6d828d0CgXVk6
+        NCktEl1Oaeb2qIbnb37kff7tGGMjMPo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-442-XYIlecXDPXeDGSdCJ-LndA-1; Mon, 05 Dec 2022 11:49:05 -0500
+X-MC-Unique: XYIlecXDPXeDGSdCJ-LndA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 057A2800B23;
+        Mon,  5 Dec 2022 16:49:05 +0000 (UTC)
+Received: from plouf.redhat.com (unknown [10.39.194.203])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 616F91401C20;
+        Mon,  5 Dec 2022 16:49:03 +0000 (UTC)
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Donald Hunter <donald.hunter@gmail.com>
-Subject: [PATCH bpf-next v1] docs/bpf: Add documentation for BPF_MAP_TYPE_SK_STORAGE
-Date:   Mon,  5 Dec 2022 16:15:55 +0000
-Message-Id: <20221205161555.34943-1-donald.hunter@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH HID for-next v2 1/4] bpf: do not rely on ALLOW_ERROR_INJECTION for fmod_ret
+Date:   Mon,  5 Dec 2022 17:48:53 +0100
+Message-Id: <20221205164856.705656-2-benjamin.tissoires@redhat.com>
+In-Reply-To: <20221205164856.705656-1-benjamin.tissoires@redhat.com>
+References: <20221205164856.705656-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add documentation for the BPF_MAP_TYPE_SK_STORAGE including
-kernel version introduced, usage and examples.
+The current way of expressing that a non-bpf kernel component is willing
+to accept that bpf programs can be attached to it and that they can change
+the return value is to abuse ALLOW_ERROR_INJECTION.
+This is debated in the link below, and the result is that it is not a
+reasonable thing to do.
 
-Signed-off-by: Donald Hunter <donald.hunter@gmail.com>
+Reuse the kfunc declaration structure to also tag the kernel functions
+we want to be fmodret. This way we can control from any subsystem which
+functions are being modified by bpf without touching the verifier.
+
+
+Link: https://lore.kernel.org/all/20221121104403.1545f9b5@gandalf.local.home/
+Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 ---
- Documentation/bpf/map_sk_storage.rst | 138 +++++++++++++++++++++++++++
- 1 file changed, 138 insertions(+)
- create mode 100644 Documentation/bpf/map_sk_storage.rst
+ include/linux/btf.h   |  3 +++
+ kernel/bpf/btf.c      | 41 +++++++++++++++++++++++++++++++++++++++++
+ kernel/bpf/verifier.c | 17 +++++++++++++++--
+ net/bpf/test_run.c    | 14 +++++++++++---
+ 4 files changed, 70 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/bpf/map_sk_storage.rst b/Documentation/bpf/map_sk_storage.rst
-new file mode 100644
-index 000000000000..abb0c60ec5a4
---- /dev/null
-+++ b/Documentation/bpf/map_sk_storage.rst
-@@ -0,0 +1,138 @@
-+.. SPDX-License-Identifier: GPL-2.0-only
-+.. Copyright (C) 2022 Red Hat, Inc.
+diff --git a/include/linux/btf.h b/include/linux/btf.h
+index f9aababc5d78..f71cfb20b9bf 100644
+--- a/include/linux/btf.h
++++ b/include/linux/btf.h
+@@ -412,8 +412,11 @@ struct btf *bpf_prog_get_target_btf(const struct bpf_prog *prog);
+ u32 *btf_kfunc_id_set_contains(const struct btf *btf,
+ 			       enum bpf_prog_type prog_type,
+ 			       u32 kfunc_btf_id);
++u32 *btf_kern_func_is_modify_return(const struct btf *btf,
++				    u32 kfunc_btf_id);
+ int register_btf_kfunc_id_set(enum bpf_prog_type prog_type,
+ 			      const struct btf_kfunc_id_set *s);
++int register_btf_fmodret_id_set(const struct btf_kfunc_id_set *kset);
+ s32 btf_find_dtor_kfunc(struct btf *btf, u32 btf_id);
+ int register_btf_id_dtor_kfuncs(const struct btf_id_dtor_kfunc *dtors, u32 add_cnt,
+ 				struct module *owner);
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 35c07afac924..a22f3f45aca3 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -204,6 +204,7 @@ enum btf_kfunc_hook {
+ 	BTF_KFUNC_HOOK_STRUCT_OPS,
+ 	BTF_KFUNC_HOOK_TRACING,
+ 	BTF_KFUNC_HOOK_SYSCALL,
++	BTF_KFUNC_HOOK_FMODRET,
+ 	BTF_KFUNC_HOOK_MAX,
+ };
+ 
+@@ -7448,6 +7449,19 @@ u32 *btf_kfunc_id_set_contains(const struct btf *btf,
+ 	return __btf_kfunc_id_set_contains(btf, hook, kfunc_btf_id);
+ }
+ 
++/* Caution:
++ * Reference to the module (obtained using btf_try_get_module) corresponding to
++ * the struct btf *MUST* be held when calling this function from verifier
++ * context. This is usually true as we stash references in prog's kfunc_btf_tab;
++ * keeping the reference for the duration of the call provides the necessary
++ * protection for looking up a well-formed btf->kfunc_set_tab.
++ */
++u32 *btf_kern_func_is_modify_return(const struct btf *btf,
++				    u32 kfunc_btf_id)
++{
++	return __btf_kfunc_id_set_contains(btf, BTF_KFUNC_HOOK_FMODRET, kfunc_btf_id);
++}
 +
-+=======================
-+BPF_MAP_TYPE_SK_STORAGE
-+=======================
+ /* This function must be invoked only from initcalls/module init functions */
+ int register_btf_kfunc_id_set(enum bpf_prog_type prog_type,
+ 			      const struct btf_kfunc_id_set *kset)
+@@ -7478,6 +7492,33 @@ int register_btf_kfunc_id_set(enum bpf_prog_type prog_type,
+ }
+ EXPORT_SYMBOL_GPL(register_btf_kfunc_id_set);
+ 
++/* This function must be invoked only from initcalls/module init functions */
++int register_btf_fmodret_id_set(const struct btf_kfunc_id_set *kset)
++{
++	struct btf *btf;
++	int ret;
 +
-+.. note::
-+   - ``BPF_MAP_TYPE_SK_STORAGE`` was introduced in kernel version 5.2
++	btf = btf_get_module_btf(kset->owner);
++	if (!btf) {
++		if (!kset->owner && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) {
++			pr_err("missing vmlinux BTF, cannot register kfuncs\n");
++			return -ENOENT;
++		}
++		if (kset->owner && IS_ENABLED(CONFIG_DEBUG_INFO_BTF_MODULES)) {
++			pr_err("missing module BTF, cannot register kfuncs\n");
++			return -ENOENT;
++		}
++		return 0;
++	}
++	if (IS_ERR(btf))
++		return PTR_ERR(btf);
 +
-+``BPF_MAP_TYPE_SK_STORAGE`` is used to provide socket-local storage for BPF programs. A map of
-+type ``BPF_MAP_TYPE_SK_STORAGE`` declares the type of storage to be provided and acts as the
-+handle for accessing the socket-local storage from a BPF program. The key type must be ``int``
-+and ``max_entries`` must be set to ``0``.
++	ret = btf_populate_kfunc_set(btf, BTF_KFUNC_HOOK_FMODRET, kset->set);
++	btf_put(btf);
++	return ret;
++}
++EXPORT_SYMBOL_GPL(register_btf_fmodret_id_set);
 +
-+The ``BPF_F_NO_PREALLOC`` must be used when creating a map for socket-local storage. The kernel
-+is responsible for allocating storage for a socket when requested and for freeing the storage
-+when either the map or the socket is deleted.
+ s32 btf_find_dtor_kfunc(struct btf *btf, u32 btf_id)
+ {
+ 	struct btf_id_dtor_kfunc_tab *tab = btf->dtor_kfunc_tab;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 225666307bba..0525972de998 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -15021,12 +15021,22 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 			ret = -EINVAL;
+ 			switch (prog->type) {
+ 			case BPF_PROG_TYPE_TRACING:
+-				/* fentry/fexit/fmod_ret progs can be sleepable only if they are
 +
-+Usage
-+=====
++				/* fentry/fexit/fmod_ret progs can be sleepable if they are
+ 				 * attached to ALLOW_ERROR_INJECTION and are not in denylist.
+ 				 */
+ 				if (!check_non_sleepable_error_inject(btf_id) &&
+ 				    within_error_injection_list(addr))
+ 					ret = 0;
++				/* fentry/fexit/fmod_ret progs can also be sleepable if they are
++				 * in the fmodret id set with the KF_SLEEPABLE flag.
++				 */
++				else {
++					u32 *flags = btf_kern_func_is_modify_return(btf, btf_id);
 +
-+Kernel BPF
-+----------
++					if (flags && (*flags & KF_SLEEPABLE))
++						ret = 0;
++				}
+ 				break;
+ 			case BPF_PROG_TYPE_LSM:
+ 				/* LSM progs check that they are attached to bpf_lsm_*() funcs.
+@@ -15047,7 +15057,10 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 				bpf_log(log, "can't modify return codes of BPF programs\n");
+ 				return -EINVAL;
+ 			}
+-			ret = check_attach_modify_return(addr, tname);
++			ret = -EINVAL;
++			if (btf_kern_func_is_modify_return(btf, btf_id) ||
++			    !check_attach_modify_return(addr, tname))
++				ret = 0;
+ 			if (ret) {
+ 				bpf_log(log, "%s() is not modifiable\n", tname);
+ 				return ret;
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 13d578ce2a09..5079fb089b5f 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -489,7 +489,6 @@ int noinline bpf_fentry_test1(int a)
+ 	return a + 1;
+ }
+ EXPORT_SYMBOL_GPL(bpf_fentry_test1);
+-ALLOW_ERROR_INJECTION(bpf_fentry_test1, ERRNO);
+ 
+ int noinline bpf_fentry_test2(int a, u64 b)
+ {
+@@ -733,7 +732,15 @@ noinline void bpf_kfunc_call_test_destructive(void)
+ 
+ __diag_pop();
+ 
+-ALLOW_ERROR_INJECTION(bpf_modify_return_test, ERRNO);
++BTF_SET8_START(bpf_test_modify_return_ids)
++BTF_ID_FLAGS(func, bpf_modify_return_test)
++BTF_ID_FLAGS(func, bpf_fentry_test1, KF_SLEEPABLE)
++BTF_SET8_END(bpf_test_modify_return_ids)
 +
-+bpf_sk_storage_get()
-+~~~~~~~~~~~~~~~~~~~~
-+
-+.. code-block:: c
-+
-+   long bpf_sk_storage_get(struct bpf_map *map, struct bpf_sock *sk, void *value, u64 flags)
-+
-+Socket-local storage can be retrieved using the ``bpf_sk_storage_get()`` helper. The helper gets
-+the storage from ``sk`` that is identified by ``map``.  If the
-+``BPF_LOCAL_STORAGE_GET_F_CREATE`` flag is used then ``bpf_sk_storage_get()`` will create the
-+storage for ``sk`` if it does not already exist. ``value`` can be used together with
-+``BPF_LOCAL_STORAGE_GET_F_CREATE`` to initialize the storage value, otherwise it will be zero
-+initialized. Returns a pointer to the storage on success, or ``0`` in case of failure.
-+
-+bpf_sk_storage_delete()
-+~~~~~~~~~~~~~~~~~~~~~~~
-+
-+.. code-block:: c
-+
-+   long bpf_sk_storage_delete(struct bpf_map *map, struct bpf_sock *sk)
-+
-+Socket-local storage can be deleted using the ``bpf_sk_storage_delete()`` helper. The helper
-+deletes the storage from ``sk`` that is identified by ``map``. Returns ``0`` on success, or negative
-+error in case of failure.
-+
-+User space
-+----------
-+
-+bpf_map_update_elem()
-+~~~~~~~~~~~~~~~~~~~~~
-+
-+.. code-block:: c
-+
-+   int bpf_map_update_elem(int map_fd, const void *key, const void *value, __u64 flags)
-+
-+Socket-local storage with type identified by ``map_fd`` for the socket identified by ``key`` can
-+be added or updated using the ``bpf_map_update_elem()`` libbpf function. ``key`` must be a
-+pointer to a valid ``fd`` in the user space program. The ``flags`` parameter can be used to
-+control the update behaviour:
-+
-+- ``BPF_ANY`` will create storage for ``fd`` or update existing storage.
-+- ``BPF_NOEXIST`` will create storage for ``fd`` only if it did not already
-+  exist
-+- ``BPF_EXIST`` will update existing storage for ``fd``
-+
-+Returns ``0`` on success, or negative error in case of failure.
-+
-+bpf_map_lookup_elem()
-+~~~~~~~~~~~~~~~~~~~~~
-+
-+.. code-block:: c
-+
-+   int bpf_map_lookup_elem(int map_fd, const void *key, void *value)
-+
-+Socket-local storage for the socket identified by ``key`` belonging to ``map_fd`` can be
-+retrieved using the ``bpf_map_lookup_elem()`` libbpf function. ``key`` must be a pointer to a
-+valid ``fd`` in the user space program. Returns ``0`` on success, or negative error in case of
-+failure.
-+
-+bpf_map_delete_elem()
-+~~~~~~~~~~~~~~~~~~~~~
-+
-+.. code-block:: c
-+
-+   int bpf_map_delete_elem (int map_fd, const void *key)
-+
-+Socket-local storage for the socket identified by ``key`` belonging to ``map_fd`` can be deleted
-+using the ``bpf_map_delete_elem()`` libbpf function. Returns ``0`` on success, or negative error
-+in case of failure.
-+
-+Examples
-+========
-+
-+Kernel BPF
-+----------
-+
-+This snippet shows how to declare socket-local storage in a BPF program:
-+
-+.. code-block:: c
-+
-+    struct {
-+            __uint(type, BPF_MAP_TYPE_SK_STORAGE);
-+            __uint(map_flags, BPF_F_NO_PREALLOC);
-+            __type(key, int);
-+            __type(value, struct my_storage);
-+    } socket_storage SEC(".maps");
-+
-+This snippet shows how to retrieve socket-local storage in a BPF program:
-+
-+.. code-block:: c
-+
-+    SEC("sockops")
-+    int _sockops(struct bpf_sock_ops *ctx)
-+    {
-+            struct my_storage *storage;
-+            struct bpf_sock *sk;
-+
-+            sk = ctx->sk;
-+            if (!sk)
-+                    return 1;
-+
-+            storage = bpf_sk_storage_get(&socket_storage, sk, 0,
-+                                         BPF_SK_STORAGE_GET_F_CREATE);
-+            if (!storage)
-+                    return 1;
-+
-+            /* Use 'storage' here */
-+    }
-+
-+References
-+==========
-+
-+https://lwn.net/ml/netdev/20190426171103.61892-1-kafai@fb.com/
++static const struct btf_kfunc_id_set bpf_test_modify_return_set = {
++	.owner = THIS_MODULE,
++	.set   = &bpf_test_modify_return_ids,
++};
+ 
+ BTF_SET8_START(test_sk_check_kfunc_ids)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test1)
+@@ -1668,7 +1675,8 @@ static int __init bpf_prog_test_run_init(void)
+ 	};
+ 	int ret;
+ 
+-	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_prog_test_kfunc_set);
++	ret = register_btf_fmodret_id_set(&bpf_test_modify_return_set);
++	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_prog_test_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &bpf_prog_test_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &bpf_prog_test_kfunc_set);
+ 	return ret ?: register_btf_id_dtor_kfuncs(bpf_prog_test_dtor_kfunc,
 -- 
 2.38.1
 
