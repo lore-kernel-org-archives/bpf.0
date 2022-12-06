@@ -2,264 +2,248 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EA82C352A1
-	for <bpf@archiver.kernel.org>; Tue,  6 Dec 2022 18:38:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A30F6C352A1
+	for <bpf@archiver.kernel.org>; Tue,  6 Dec 2022 18:39:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbiLFSiw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 6 Dec 2022 13:38:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59010 "EHLO
+        id S229479AbiLFSjt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 6 Dec 2022 13:39:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbiLFSir (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 6 Dec 2022 13:38:47 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54901303C3;
-        Tue,  6 Dec 2022 10:38:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 88233CE1930;
-        Tue,  6 Dec 2022 18:38:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D807C433D7;
-        Tue,  6 Dec 2022 18:38:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670351921;
-        bh=SPe/vIOGKve9pGxoOhlXGkyCNGXdFzI5bv2oZeZRU84=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=iDHy4D0ZqrdamW0gWdhyqIssOMIL8qWKkEfYy1fJCksoBgnFTFCyRda8/MnAHNmDo
-         YQQDaZzsQEnii84oRkdx/ehoBCFC0aZT3dA0fOufyfYE0biLzLPxz/Wrut8/XN9jNg
-         vTPMQ0/OoPN3OemB0hzizojtfxWWHAT5OYnzP3Ig4GDsr0Koqkmfj+wlZv+H0/7NE0
-         p/uPJir/pAy9G/PQYI9AfZ2E15d4t9me+oIbIwXV+Kyo15Bb1qFo0vus2CZog+fF1F
-         Mm7dY9+d2jl3xAnXdRx8skObznCmoYOvVEEYtaTkUit+0X3he3RPzEExuGDRJgaeS0
-         1AV14k9Si/Lyw==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     Yonghong Song <yhs@meta.com>, Ilya Leoshkevich <iii@linux.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        Brendan Jackman <jackmanb@google.com>
-Subject: Re: [PATCH bpf] bpf: Proper R0 zero-extension for BPF_CALL
- instructions
-In-Reply-To: <9af1b919-ea15-e44c-b9cc-765c743dd617@meta.com>
-References: <20221202103620.1915679-1-bjorn@kernel.org>
- <3b77aa12a864ab2db081e99aec1bfad78e3b9b51.camel@linux.ibm.com>
- <d26622c6-d51e-e280-6c8a-38c893c49446@meta.com>
- <9af1b919-ea15-e44c-b9cc-765c743dd617@meta.com>
-Date:   Tue, 06 Dec 2022 19:38:39 +0100
-Message-ID: <87v8mos7gw.fsf@all.your.base.are.belong.to.us>
+        with ESMTP id S229548AbiLFSjs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 6 Dec 2022 13:39:48 -0500
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A46192F3BD
+        for <bpf@vger.kernel.org>; Tue,  6 Dec 2022 10:39:47 -0800 (PST)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-144b21f5e5fso6513159fac.12
+        for <bpf@vger.kernel.org>; Tue, 06 Dec 2022 10:39:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KqUAYb/fXjf+DnnONFt9R7wczdlGsDniuWCIhYP8EcQ=;
+        b=TNO6BxsIVU6eCOU2Do84isXfsLDc0DgZ8a10aCZhInQH6K7nuMPuT3blwZdef3Xzhm
+         9wtnCP+z5u02o9pxfWhXV7P0UeDUWn2R85ZUTA261U3VpMRCbpUKdlN8wYox6DkUk/JR
+         Xr3fAkNmZJpL/Me3+wknDBYGuZNhx15gLdTCY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KqUAYb/fXjf+DnnONFt9R7wczdlGsDniuWCIhYP8EcQ=;
+        b=jDEwu9p28eqdNEv2k2vQwtzp6MOH2FAaNUXazeyJBPN9UJz1ZCrtvWGXJND7S8m8Lg
+         XkdWBD30Sa5P5WwNzEzs5R8AfOA+KqHTBtoz+78g/3WLbYuqXULIm+yYHfhEALGkCgcn
+         /L5Zq3Bme198h7qKTC7w94axAOceP+IA/Z02fxP1VYUMOrQoKn6lTWJp4uNhFq0CdzCX
+         enbKBabiPDhIAM8yG4bHbJgIcxO9bpHjyrfeRGLoGt6V/7uVr43S5iVUb1C9Qy1oc0p4
+         1PAv7JGj7uGJK8NuQOE2l7GKs2yt90DZFB8tlGokqHJT2Ofdw5H9bBEBZku04P0z4oP4
+         izGQ==
+X-Gm-Message-State: ANoB5pnElDlYYudeE3HvaPP1xewB4cHQRUhUYAT9modZmasZ5oi7U+cS
+        /vjvuTdyltdIkIffHoaKzWNhO8gm29kd+GE8wE4=
+X-Google-Smtp-Source: AA0mqf4GyWKFzxZZwkfIZGLaqF/XUDDM+FqfH4UKi1w1awOaxn+nyzCqtkRRk6p7+7F2R/Hjei+28A==
+X-Received: by 2002:a05:6871:a691:b0:143:c3bf:be6d with SMTP id wh17-20020a056871a69100b00143c3bfbe6dmr21387035oab.103.1670351986703;
+        Tue, 06 Dec 2022 10:39:46 -0800 (PST)
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com. [209.85.210.45])
+        by smtp.gmail.com with ESMTPSA id i6-20020a9d53c6000000b0066cacb8343bsm9487172oth.41.2022.12.06.10.39.46
+        for <bpf@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Dec 2022 10:39:46 -0800 (PST)
+Received: by mail-ot1-f45.google.com with SMTP id m6-20020a9d7e86000000b0066ec505ae93so4274215otp.9
+        for <bpf@vger.kernel.org>; Tue, 06 Dec 2022 10:39:46 -0800 (PST)
+X-Received: by 2002:a81:8644:0:b0:3c7:3c2b:76b5 with SMTP id
+ w65-20020a818644000000b003c73c2b76b5mr39379193ywf.22.1670351506938; Tue, 06
+ Dec 2022 10:31:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <000000000000fa798505ee880a25@google.com> <ac0d8823-e7b3-4524-8864-89b4c85315b5n@googlegroups.com>
+ <CACT4Y+bz-z9s+sDh916rfw9ezW0XROkAKfMDvdVi-wDuf849MQ@mail.gmail.com>
+In-Reply-To: <CACT4Y+bz-z9s+sDh916rfw9ezW0XROkAKfMDvdVi-wDuf849MQ@mail.gmail.com>
+From:   Kees Cook <keescook@chromium.org>
+Date:   Tue, 6 Dec 2022 10:31:10 -0800
+X-Gmail-Original-Message-ID: <CAGXu5jLCdfVLz9PLVs4XkyOY3=V=W8x7WF=E+yRUnsE=425vAw@mail.gmail.com>
+Message-ID: <CAGXu5jLCdfVLz9PLVs4XkyOY3=V=W8x7WF=E+yRUnsE=425vAw@mail.gmail.com>
+Subject: Re: [syzbot] KASAN: slab-out-of-bounds Write in __build_skb_around
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     pepsipu <soopthegoop@gmail.com>,
+        syzbot+fda18eaa8c12534ccb3b@syzkaller.appspotmail.com,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Andrii Nakryiko <andrii@kernel.org>, ast@kernel.org,
+        bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Miller <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>, jolsa@kernel.org,
+        KP Singh <kpsingh@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, martin.lau@linux.dev,
+        netdev <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        Stanislav Fomichev <sdf@google.com>, song@kernel.org,
+        Yonghong Song <yhs@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Yonghong Song <yhs@meta.com> writes:
-
-> On 12/6/22 9:47 AM, Yonghong Song wrote:
->>=20
->>=20
->> On 12/6/22 5:21 AM, Ilya Leoshkevich wrote:
->>> On Fri, 2022-12-02 at 11:36 +0100, Bj=C3=B6rn T=C3=B6pel wrote:
->>>> From: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
->>>>
->>>> A BPF call instruction can be, correctly, marked with zext_dst set to
->>>> true. An example of this can be found in the BPF selftests
->>>> progs/bpf_cubic.c:
->>>>
->>>> =C2=A0=C2=A0 ...
->>>> =C2=A0=C2=A0 extern __u32 tcp_reno_undo_cwnd(struct sock *sk) __ksym;
->>>>
->>>> =C2=A0=C2=A0 __u32 BPF_STRUCT_OPS(bpf_cubic_undo_cwnd, struct sock *sk)
->>>> =C2=A0=C2=A0 {
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return tc=
-p_reno_undo_cwnd(sk);
->>>> =C2=A0=C2=A0 }
->>>> =C2=A0=C2=A0 ...
->>>>
->>>> which compiles to:
->>>> =C2=A0=C2=A0 0:=C2=A0 r1 =3D *(u64 *)(r1 + 0x0)
->>>> =C2=A0=C2=A0 1:=C2=A0 call -0x1
->>>> =C2=A0=C2=A0 2:=C2=A0 exit
->>>>
->>>> The call will be marked as zext_dst set to true, and for some
->>>> backends
->>>> (bpf_jit_needs_zext() returns true) expanded to:
->>>> =C2=A0=C2=A0 0:=C2=A0 r1 =3D *(u64 *)(r1 + 0x0)
->>>> =C2=A0=C2=A0 1:=C2=A0 call -0x1
->>>> =C2=A0=C2=A0 2:=C2=A0 w0 =3D w0
->>>> =C2=A0=C2=A0 3:=C2=A0 exit
->>>
->>> In the verifier, the marking is done by check_kfunc_call() (added in
->>> e6ac2450d6de), right? So the problem occurs only for kfuncs?
->>>
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Check return type */
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 t =3D btf_type_skip_mo=
-difiers(desc_btf, func_proto->type, NULL);
->>>
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ...
->>>
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (btf_type_is_scalar=
-(t)) {
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 mark_reg_unknown(env, regs, BPF_REG_0);
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 mark_btf_func_reg_size(env, BPF_REG_0, t->size);
->>>
->>> I tried to find some official information whether the eBPF calling
->>> convention requires sign- or zero- extending return values and
->>> arguments, but unfortunately [1] doesn't mention this.
->>>
->>> LLVM's lib/Target/BPF/BPFCallingConv.td mentions both R* and W*
->>> registers, but since assigning to W* leads to zero-extension, it seems
->>> to me that this is the case.
->>=20
->> We actually follow the clang convention, the zero-extension is either
->> done in caller or callee, but not both. See=20
->> https://reviews.llvm.org/D131598=C2=A0 how the convention could be chang=
-ed.
->>=20
->> The following is an example.
->>=20
->> $ cat t.c
->> extern unsigned foo(void);
->> unsigned bar1(void) {
->>  =C2=A0=C2=A0=C2=A0 return foo();
->> }
->> unsigned bar2(void) {
->>  =C2=A0=C2=A0=C2=A0 if (foo()) return 10; else return 20;
->> }
->> $ clang -target bpf -mcpu=3Dv3 -O2 -c t.c && llvm-objdump -d t.o
->>=20
->> t.o:=C2=A0=C2=A0=C2=A0 file format elf64-bpf
->>=20
->> Disassembly of section .text:
->>=20
->> 0000000000000000 <bar1>:
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 85 10 00 00 ff ff ff ff call -0x1
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 1:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 95 00 00 00 00 00 00 00 exit
->>=20
->> 0000000000000010 <bar2>:
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 2:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 85 10 00 00 ff ff ff ff call -0x1
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 3:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 bc 01 00 00 00 00 00 00 w1 =3D w0
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 4:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 b4 00 00 00 14 00 00 00 w0 =3D 0x14
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 5:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 16 01 01 00 00 00 00 00 if w1 =3D=3D 0x0 goto +0x1 <LBB1_2>
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 6:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 b4 00 00 00 0a 00 00 00 w0 =3D 0xa
->>=20
->> 0000000000000038 <LBB1_2>:
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 7:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 95 00 00 00 00 00 00 00 exit
->> $
->>=20
->> If the return value of 'foo()' is actually used in the bpf program, the
->> proper zero extension will be done. Otherwise, it is not done.
->>=20
->> This is with latest llvm16. I guess we need to check llvm whether
->> we could enforce to add a w0 =3D w0 in bar1().
->>=20
->> Otherwise, with this patch, it will add w0 =3D w0 in all cases which
->> is not necessary in most of practical cases.
->>=20
->>>
->>> If the above is correct, then shouldn't we rather use sizeof(void *) in
->>> the mark_btf_func_reg_size() call above?
->>>
->>>> The opt_subreg_zext_lo32_rnd_hi32() function which is responsible for
->>>> the zext patching, relies on insn_def_regno() to fetch the register
->>>> to
->>>> zero-extend. However, this function does not handle call instructions
->>>> correctly, and opt_subreg_zext_lo32_rnd_hi32() fails the
->>>> verification.
->>>>
->>>> Make sure that R0 is correctly resolved for (BPF_JMP | BPF_CALL)
->>>> instructions.
->>>>
->>>> Fixes: 83a2881903f3 ("bpf: Account for BPF_FETCH in
->>>> insn_has_def32()")
->>>> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
->>>> ---
->>>> I'm not super happy about the additional special case -- first
->>>> cmpxchg, and now call. :-( A more elegant/generic solution is
->>>> welcome!
->>>> ---
->>>> =C2=A0=C2=A0kernel/bpf/verifier.c | 3 +++
->>>> =C2=A0=C2=A01 file changed, 3 insertions(+)
->>>>
->>>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->>>> index 264b3dc714cc..4f9660eafc72 100644
->>>> --- a/kernel/bpf/verifier.c
->>>> +++ b/kernel/bpf/verifier.c
->>>> @@ -13386,6 +13386,9 @@ static int
->>>> opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!bpf_jit_needs_zext() && !is_cmpxchg_i=
-nsn(&insn))
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0continue;
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0if (insn.code =3D=3D (BPF_JMP | BPF_CALL))
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0load_r=
-eg =3D BPF_REG_0;
+On Mon, Dec 5, 2022 at 12:04 AM Dmitry Vyukov <dvyukov@google.com> wrote:
 >
-> Want to double check. Do we actually have a problem here?
-> For example, on x64, we probably won't have this issue.
-
-The "problem" is that I hit this:
-		if (WARN_ON(load_reg =3D=3D -1)) {
-			verbose(env, "verifier bug. zext_dst is set, but no reg is defined\n");
-			return -EFAULT;
-		}
-
-This path is only taken for archs which have bpf_jit_needs_zext() =3D=3D
-true. In my case it's riscv64, but it should hit i386, sparc, s390, ppc,
-mips, and arm.
-
-My reading of this thread has been that "marking the call has
-zext_dst=3Dtrue, is incorrect", i.e. that LLVM will insert the correct
-zext instructions.
-
-So, on way of not hitting this path, is what Ilya suggest -- in
-check_kfunc_call():
-
-  if (btf_type_is_scalar(t)) {
-  	mark_reg_unknown(env, regs, BPF_REG_0);
-  	mark_btf_func_reg_size(env, BPF_REG_0, t->size);
-  }
-
-change t->size to sizeof(u64). Then the call wont be marked.
-
->  >>>    ...
->  >>>    extern __u32 tcp_reno_undo_cwnd(struct sock *sk) __ksym;
->  >>>
->  >>>    __u32 BPF_STRUCT_OPS(bpf_cubic_undo_cwnd, struct sock *sk)
->  >>>    {
->  >>>            return tcp_reno_undo_cwnd(sk);
->  >>>    }
+> On Sun, 4 Dec 2022 at 19:16, pepsipu <soopthegoop@gmail.com> wrote:
+> >
+> > I believe this is a KASAN bug.
+> >
+> > I made an easier to read version that still triggers KASAN:
+> >
+> > #define _GNU_SOURCE
+> >
+> > #include <stdio.h>
+> > #include <stdlib.h>
+> > #include <string.h>
+> > #include <sys/syscall.h>
+> > #include <sys/types.h>
+> > #include <linux/bpf.h>
+> > #include <unistd.h>
+> >
+> > #include "bpf.h"
+> >
+> > int main(void)
+> > {
+> >     __u64 insns[] = {
+> >         (BPF_CALL | BPF_JMP) | ((__u64)0x61 << 32),
+> >         (BPF_AND | BPF_ALU),
+> >         (BPF_EXIT | BPF_JMP),
+> >     };
+> >     bpf_load_attr_t load_attr = {
+> >         .prog_type = BPF_PROG_TYPE_CGROUP_SKB,
+> >         .insn_cnt = sizeof(insns) / sizeof(__u64),
+> >         .insns = (__u64)insns,
+> >         .license = (__u64) "GPL",
+> >     };
+> >     long prog_fd = syscall(__NR_bpf, BPF_PROG_LOAD, &load_attr, sizeof(bpf_load_attr_t));
+> >     if (prog_fd == -1)
+> >     {
+> >         printf("could not load bpf prog");
+> >         exit(-1);
+> >     }
+> >     bpf_trun_attr_t trun_attr = {
+> >         .prog_fd = prog_fd,
+> >         .data_size_in = 0x81,
+> >         .data_size_out = -1,
+> >         .data_in = (__u64) "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+> >     };
+> >
+> >     syscall(__NR_bpf, BPF_PROG_TEST_RUN, &trun_attr, sizeof(bpf_trun_attr_t));
+> >     return 0;
+> > }
+> >
+> > It looks like KASAN believes the tail access of SKB's backing buffer, the SKB shared info struct, allocated by bpf_test_init is out-of-bounds.
+> > This is likely because when the SKB is setup, in build_skb, the tail is calculated as "data + ksize(data) - sizeof(skb_shared_info)". ksize returns the size of the slab, not the allocation, so the tail is much further past the allocation.
+> > However, KASAN is usually supposed to correct for ksize calls by unpoisioning the entire slab it's called on... I'm not sure why this is happening.
 >
-> The native code will return a 32-bit subreg to bpf program,
-> and bpf didn't do anything and return r0 to the kernel func.
-> In the kernel func, the kernel will take 32-bit subreg by
-> x86_64 convention. This applies to some other return types
-> like u8/s8/u16/s16/u32/s32.
+> Hi,
 >
-> Which architecture you actually see the issue?
+> [+orignal CC list, please keep it in replies, almost none of relevant
+> receivers read syzkaller-bugs@ mailing list]
+>
+> Also +Kees and kasan-dev for ksize.
+>
+> After the following patch the behavior has changed and KASAN does not
+> unpoison the fail of the object:
+>
+> mm: Make ksize() a reporting-only function
+> https://lore.kernel.org/all/20221118035656.gonna.698-kees@kernel.org/
+>
+> Kees, is this bpf case is a remaining ksize() use that needs to be fixed?
+>
 
-This is riscv64, but the nature of the problem is more of an assertion
-failure, than codegen AFAIK.
+Hi, yes, this seems like a missed ksize() usage. I will take a look at
+it -- nothing should be using ksize() to resize the allocation any
+more: it should either fully allocate the bucket at the start, or use
+krealloc().
 
-I hit is when I load progs/bpf_cubic.o from the selftest. Nightly clang
-from apt.llvm.org: clang version 16.0.0
-(++20221204034339+7a194cfb327a-1~exp1~20221204154444.167)
+-Kees
 
+> > On Monday, November 28, 2022 at 5:42:31 AM UTC-8 syzbot wrote:
+> >>
+> >> Hello,
+> >>
+> >> syzbot found the following issue on:
+> >>
+> >> HEAD commit: c35bd4e42885 Add linux-next specific files for 20221124
+> >> git tree: linux-next
+> >> console+strace: https://syzkaller.appspot.com/x/log.txt?x=15e5d7e5880000
+> >> kernel config: https://syzkaller.appspot.com/x/.config?x=11e19c740a0b2926
+> >> dashboard link: https://syzkaller.appspot.com/bug?extid=fda18eaa8c12534ccb3b
+> >> compiler: gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> >> syz repro: https://syzkaller.appspot.com/x/repro.syz?x=1096f205880000
+> >> C reproducer: https://syzkaller.appspot.com/x/repro.c?x=10b2d68d880000
+> >>
+> >> Downloadable assets:
+> >> disk image: https://storage.googleapis.com/syzbot-assets/968fee464d14/disk-c35bd4e4.raw.xz
+> >> vmlinux: https://storage.googleapis.com/syzbot-assets/4f46fe801b5b/vmlinux-c35bd4e4.xz
+> >> kernel image: https://storage.googleapis.com/syzbot-assets/c2cdf8fb264e/bzImage-c35bd4e4.xz
+> >>
+> >> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> >> Reported-by: syzbot+fda18e...@syzkaller.appspotmail.com
+> >>
+> >> ==================================================================
+> >> BUG: KASAN: slab-out-of-bounds in __build_skb_around+0x235/0x340 net/core/skbuff.c:294
+> >> Write of size 32 at addr ffff88802aa172c0 by task syz-executor413/5295
+> >>
+> >> CPU: 0 PID: 5295 Comm: syz-executor413 Not tainted 6.1.0-rc6-next-20221124-syzkaller #0
+> >> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+> >> Call Trace:
+> >> <TASK>
+> >> __dump_stack lib/dump_stack.c:88 [inline]
+> >> dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+> >> print_address_description mm/kasan/report.c:253 [inline]
+> >> print_report+0x15e/0x45d mm/kasan/report.c:364
+> >> kasan_report+0xbf/0x1f0 mm/kasan/report.c:464
+> >> check_region_inline mm/kasan/generic.c:183 [inline]
+> >> kasan_check_range+0x141/0x190 mm/kasan/generic.c:189
+> >> memset+0x24/0x50 mm/kasan/shadow.c:44
+> >> __build_skb_around+0x235/0x340 net/core/skbuff.c:294
+> >> __build_skb+0x4f/0x60 net/core/skbuff.c:328
+> >> build_skb+0x22/0x280 net/core/skbuff.c:340
+> >> bpf_prog_test_run_skb+0x343/0x1e10 net/bpf/test_run.c:1131
+> >> bpf_prog_test_run kernel/bpf/syscall.c:3644 [inline]
+> >> __sys_bpf+0x1599/0x4ff0 kernel/bpf/syscall.c:4997
+> >> __do_sys_bpf kernel/bpf/syscall.c:5083 [inline]
+> >> __se_sys_bpf kernel/bpf/syscall.c:5081 [inline]
+> >> __x64_sys_bpf+0x79/0xc0 kernel/bpf/syscall.c:5081
+> >> do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >> do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+> >> entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> >> RIP: 0033:0x7f30de9aad19
+> >> Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> >> RSP: 002b:00007ffeaee34318 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+> >> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f30de9aad19
+> >> RDX: 0000000000000028 RSI: 0000000020000180 RDI: 000000000000000a
+> >> RBP: 00007f30de96eec0 R08: 0000000000000000 R09: 0000000000000000
+> >> R10: 0000000000000000 R11: 0000000000000246 R12: 00007f30de96ef50
+> >> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+> >> </TASK>
+> >>
+> >> Allocated by task 5295:
+> >> kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+> >> kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+> >> ____kasan_kmalloc mm/kasan/common.c:376 [inline]
+> >> ____kasan_kmalloc mm/kasan/common.c:335 [inline]
+> >> __kasan_kmalloc+0xa5/0xb0 mm/kasan/common.c:385
+> >> kasan_kmalloc include/linux/kasan.h:212 [inline]
+> >> __do_kmalloc_node mm/slab_common.c:955 [inline]
+> >> __kmalloc+0x5a/0xd0 mm/slab_common.c:968
+> >> kmalloc include/linux/slab.h:575 [inline]
+> >> kzalloc include/linux/slab.h:711 [inline]
+> >> bpf_test_init.isra.0+0xa5/0x150 net/bpf/test_run.c:778
+> >> bpf_prog_test_run_skb+0x22e/0x1e10 net/bpf/test_run.c:1097
+> >> bpf_prog_test_run kernel/bpf/syscall.c:3644 [inline]
+> >> __sys_bpf+0x1599/0x4ff0 kernel/bpf/syscall.c:4997
+> >> __do_sys_bpf kernel/bpf/syscall.c:5083 [inline]
+> >> __se_sys_bpf kernel/bpf/syscall.c:5081 [inline]
+> >> __x64_sys_bpf+0x79/0xc0 kernel/bpf/syscall.c:5081
+> >> do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >> do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+> >> entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-Bj=C3=B6rn
+-- 
+Kees Cook
