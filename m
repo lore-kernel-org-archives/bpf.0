@@ -2,302 +2,429 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 458F2C47089
-	for <bpf@archiver.kernel.org>; Tue,  6 Dec 2022 01:11:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0F56C4708C
+	for <bpf@archiver.kernel.org>; Tue,  6 Dec 2022 01:12:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232414AbiLFBLO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 5 Dec 2022 20:11:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38498 "EHLO
+        id S230182AbiLFBMP convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Mon, 5 Dec 2022 20:12:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiLFBLL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 5 Dec 2022 20:11:11 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D74CDF6C;
-        Mon,  5 Dec 2022 17:11:09 -0800 (PST)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B60Ills008770;
-        Tue, 6 Dec 2022 01:10:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=fvTQIjB8O81EdP3X5jxGp4zsfztZu208KRuo0TZm5J0=;
- b=KPfpRD3yLlbStYMoy7S47cLehfVXzw43HQd88FoVbGEp5CQuhwPZR720vSqaSgqOUD7V
- N3nAYKXpFAGIEzPrX227/kBEDYRSzA6U+CB18eM7xCuiIazy2Kzibzt0lukqwhY3LeFS
- cNGoDsDWeTnrjyOfALcvc7jDzZ4tS0B0ak7UqinWtBre8Rx6suWjLKzl7XX/+R5D4Xym
- 4PNg931S+3EgA9pBFKZCusp21T1ZxK+VlC/u4vNevrRpzecVq4y9+egzWU+kvLsMZdpz
- BXL3OqtjFIEPNl22B+7AXkoZpC7YuSbCbLXQYSYl8thMDz3KqUjcj4rwSL6RvMYx+blW pg== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3m7yeqnmee-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 06 Dec 2022 01:10:59 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2B5NJFrY028011;
-        Tue, 6 Dec 2022 01:10:58 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3m8uaa2wq7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 06 Dec 2022 01:10:58 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N+gdz/UObGgMKNBSwdmVPlVh3/qZOgRohdaQ+2ZudBktUA2SWcALS0kF5MvzMjSSGZOA6ljr5YS/1zyb4kmLKsoVeOEM6ilCrQJnH+KUWCmwWnP32cTa+veREjfMEKb6XlayEgXicQxTEJWNzy3sstX+hhjrfpsGfWt9PhEbpMA6M8pAw9EIG+dTUyLvlazEFBv1AUYgj/4hvZ02+fw74cuRN36xC5Rbi+GWkNRULwPi1QpQwkrTbw2kC47BNrqKQcfNXiDK0+tEtlv8DCsgX07CjGjGiWfMv1lnNZIQ4QxFNn1ZstVTpMyjMqVwHoEAbuUzEBhI7mSk9GD5+DHyGg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fvTQIjB8O81EdP3X5jxGp4zsfztZu208KRuo0TZm5J0=;
- b=e5hwLJpX99dCrOLyNxYDAPZyyxuxT4eIizSSrdaBVLOAhBEJ/rLrRKpyVlKcbS66zKSDxhLe5izEj/2cBtI6WreJd/By1+CVvCdIrTXtCyYJJv7oe0bUHwA5PSz/JIwXceEcgvWp4LdvQqAdEvIcqo1+dAepen1/PxPQ5ENGZOERLWzKK0uKJlnsAdxQQHKGXDFl29VefeWbGheXWXoU1AjWYTk0yvObU6vpvCGKGm/QYY//soQKcbexP6K3Fy31yOKwvHAiUD1PCtHPZEZIpoLDg/AnhPNvW7z53WKWQ7dethO+z8E9fsxSDv3w6IEUG1q9O/d5rlrlsAbdzOpU0Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fvTQIjB8O81EdP3X5jxGp4zsfztZu208KRuo0TZm5J0=;
- b=vyd/dtrZCAA51fEOQ0L0gQ3qES8HMrIg/GbZHz81XOM8UrxIMwEmXWQUt0CBUchOSJ3CzUYtKri9az0QvYQlimwOidPxW4a88gbGG02YzaJALw2Q6OSGomzp4f0nT7excJf8MuLfPUnjzgWU7aJh4auSRWyWx1gS/ug5VzVBJy8=
-Received: from PH0PR10MB5895.namprd10.prod.outlook.com (2603:10b6:510:14c::22)
- by SJ0PR10MB5647.namprd10.prod.outlook.com (2603:10b6:a03:3da::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Tue, 6 Dec
- 2022 01:10:56 +0000
-Received: from PH0PR10MB5895.namprd10.prod.outlook.com
- ([fe80::5900:4c18:5b47:6a9e]) by PH0PR10MB5895.namprd10.prod.outlook.com
- ([fe80::5900:4c18:5b47:6a9e%3]) with mapi id 15.20.5880.014; Tue, 6 Dec 2022
- 01:10:55 +0000
-Message-ID: <ae736328-56de-7985-8a9a-0279a123544f@oracle.com>
-Date:   Mon, 5 Dec 2022 20:10:50 -0500
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] net: check for dev pointer being NULL in
- dev_hard_header() to avoid GPF
-Content-Language: en-US
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Pavan Chebbi <pavan.chebbi@broadcom.com>, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        harshit.m.mogalapalli@oracle.com
-References: <1669817512-4560-1-git-send-email-george.kennedy@oracle.com>
- <CALs4sv2ZfT1SAYY0oOYhrBBCjsG_th5g=QtSsbKJnPbW8faQ+w@mail.gmail.com>
- <CANn89iL9obgd==tdp9DgdxXk78UvzF6D4J1OeihB1kx9_U4oZw@mail.gmail.com>
- <99adf483-ae89-8010-4689-fd50a77ff023@oracle.com>
- <CANn89iL18gPus7YWMMX_UFg9PSxAv0SkWTjLYCPhncOCEKrWuQ@mail.gmail.com>
-From:   George Kennedy <george.kennedy@oracle.com>
-Organization: Oracle Corporation
-In-Reply-To: <CANn89iL18gPus7YWMMX_UFg9PSxAv0SkWTjLYCPhncOCEKrWuQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN7PR04CA0064.namprd04.prod.outlook.com
- (2603:10b6:806:121::9) To PH0PR10MB5895.namprd10.prod.outlook.com
- (2603:10b6:510:14c::22)
+        with ESMTP id S229471AbiLFBMO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 5 Dec 2022 20:12:14 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82FDDF6C
+        for <bpf@vger.kernel.org>; Mon,  5 Dec 2022 17:12:12 -0800 (PST)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B5L7p9F001760
+        for <bpf@vger.kernel.org>; Mon, 5 Dec 2022 17:12:12 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3m9r9hh8dg-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 05 Dec 2022 17:12:12 -0800
+Received: from twshared9179.35.frc1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 5 Dec 2022 17:12:10 -0800
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id 25C8122F7FD0F; Mon,  5 Dec 2022 17:12:00 -0800 (PST)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH bpf-next 1/2] selftests/bpf: add generic BPF program verification tester
+Date:   Mon, 5 Dec 2022 17:11:58 -0800
+Message-ID: <20221206011159.1208452-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR10MB5895:EE_|SJ0PR10MB5647:EE_
-X-MS-Office365-Filtering-Correlation-Id: 889e2cfd-73d5-4b09-8aa9-08dad726b90d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Xhsvk5mJnSdtJ8tJ9fyJR7eZT1epDMBPHZ4f0yi+pCVeuWD8RICYhLQHqGHh7KjhpEMg7cVHp2/VLhIGAfYuzu8hCphOFuWgy6INtKUrF434WRVd6jYNaY9P0yxSrS2MkIQdryk1Inm61RCBo1gBu+wU5jUvTGHQfZnLqCqnEDTe1E7PiXOZz524Z3RQR/zs3uN77sktdo+001wApVPYym0PtknvBJPrV1Z/xrslIfp73MaMaIcMmxKItebZBO/cYVpPb5SdWOFJi75O0xIEFcN8xRlxAu/ELAuMXgq5MWivvCKEH9Xf178ahX/4cKzFctALgVlpRc6B3T+aaOnEyJ9kod/I/3M1+1AA4FjPLke0ArhAs+0egsYCog3Y1Vi+yXpjkgyOGZDrGheHnnQWECvlj/s12He14dwtdnwjWjmtsVxl91ZQJzpTh1F+FxtYhbumRnxkwK0wX28au7V0eBa3MLKYEAfmvHidkaQBHDKlN9Izw8NOczsS2vsdbiOIXt1WpVnH+KaDLl2Gbb/HqxknOLwOoUmnuWW+Ll0WfUVsLhIE6Y9qCm33vKdn5IIJR0h3pspQkPt+hvY1Wmp7F9t59uaYcN+nxscZgRzdu6opeCGpu/Tyu3hLO6mDxraTJmqa9+ahSADHeQmdOFD9TYfgdpiwvKXFNs8IWoK6iF5qzYMRnCHkevaVFEzUWZHP2rFiM9kBLRLJzlGg86PIw5QqFON+P7hwQBkU7ZMMx2k=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB5895.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(39860400002)(136003)(376002)(346002)(366004)(451199015)(36756003)(31686004)(31696002)(86362001)(2906002)(4326008)(66476007)(41300700001)(66946007)(8936002)(8676002)(66556008)(44832011)(38100700002)(83380400001)(478600001)(6916009)(2616005)(316002)(36916002)(6486002)(45080400002)(5660300002)(186003)(6666004)(107886003)(6506007)(53546011)(26005)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c1RxeGZsdS9WK204QkNtNFZrQU9tV3FMRGhIdEZ0VzBldVlSeWUzY25sQytB?=
- =?utf-8?B?dzkwaVVub0d6OUNYWXM5eGRiSWVQaVJVTDFvL0gvbHZ3YTl3RklMY0VBbzNL?=
- =?utf-8?B?VHRBTCtkVk9lZXcrT0k2dTJLd3dWSGhMNHZzSUI2MWtFaXV6VmExbFVuL2xs?=
- =?utf-8?B?ZG9rTU1sdkRYV044dWZLTnhacithWmNtcWFobDdYa2xWQWN6QWh6MER5RE8x?=
- =?utf-8?B?VUhyUHNVZ3hjc2tnOFg0eVBTbm1CUUFMdGVMbE5QZkpYSjYyeE1rSmxEdGVC?=
- =?utf-8?B?bFI4M2tFU2Z0ckszM0pxM1hyMTlmTFp6aGpIQnFFOCtFL1F2SjQ4Q21teSto?=
- =?utf-8?B?QkpmeVRZZ2s3aGhZaEh4WDJONzJISUhyOEd6TGVidzFCNjJHUEVwbWpTamNR?=
- =?utf-8?B?Y3YwcWhjMGJPRDQyMXZhbXkwQjBuMTl1bEdITWsyRzBTRnExTEpCTzhUYVNN?=
- =?utf-8?B?QnFpMXA4WFgzbFpIWHdNTDJlK1BsSXFJQ0haSHNLNkhVMzE5Q2tOMTdPWDFt?=
- =?utf-8?B?UmZYelJFbC9MWlR6ZHg1ZitZWnhDaCs4a0FzTHNzOCtDN1RvbUhNTzcxMFow?=
- =?utf-8?B?aHpMd0o3UUdqL1l6clBqeWhudCtvRWxmbE13Mk5XQjJuZFJuL2g5bzMwcjdO?=
- =?utf-8?B?R2gvMGxCbzZpcnduRklHYjNXTTJkNTFDQVNqMERDYjFhRmE0c1owMlFmSzVH?=
- =?utf-8?B?dWM4MXh3R0x5RFZhRllSV1Zub0ZDVlUyRm9LMEZHalQ5Y3p4SHRPTjhZaG10?=
- =?utf-8?B?dUJaUlg3MTJYbUdtZW5rK2tQMUJsaGh5bnY2SnhkT0ZiRUVJY3NHL1ZyWWFZ?=
- =?utf-8?B?OENCazk0VDZYRXU5MGxtWno3NENTd3dyajNuK3NwdGhsVHluR3IyWjZSMnB5?=
- =?utf-8?B?Yk91eUZMcmdtdHpCVzRqTkMyeHdFZ3l4NnovYWxjVXpoWEU5VkF5TzJCaGQ0?=
- =?utf-8?B?S3ZTcFBqSWhuVmRLZkhzUExDYU5yTHNtdUxhczZBUTM2eXVJa3g3WEVGUnFN?=
- =?utf-8?B?S1FqM2wrQytzM1FaZzVEa3FJVHhpTGw0RFhpTUNkTWZvc0g5VjJBR3R3aXhY?=
- =?utf-8?B?UmduckNNbStmSXFmZmVCUXI5aldTcWNaWmlpSFZvK0EwUElncEovb3BFcjNQ?=
- =?utf-8?B?VW9OeXgxU2hiN0E0bGZXSmlPTy9rZlZwaEpYZzVNc2RRS0pzbHM5bklweFEr?=
- =?utf-8?B?RVlYaDJuRzE0OW1LRHY3REtPMFZJY3VVTDNXd2NNa2hjSHZvK3FCUTE3ZDJV?=
- =?utf-8?B?RS8yenAwdUtNRGdGamJvNTdseHBCNGtYK0tYQzdWaVY5S1k5QVRkQndHOGM0?=
- =?utf-8?B?cE5vN0JIZUNEZ0pNVUdtWUlKSlZDNnpGMVk0NE9hcDVJeGNZWklzM3BTam0z?=
- =?utf-8?B?YjhLc0h6dis4VWZSV29mQWxZZlArZW14bmcwOEVvdjBiL0VJd2p1U0EvNE8v?=
- =?utf-8?B?VlFZZEZQOWpHdHROUkZCTVhnZ2dUM3ZLT2JIa2l4cEkvcWg1clR6SThPNFA1?=
- =?utf-8?B?M3RVRFFMZTdjbW5tNk1PQ2NzNFZBWXBTQ20zS3l5SGhEVk94eHVPMlFUdTJu?=
- =?utf-8?B?V0dpL24yUE1KN0NaU1l5eC9ITGNJVmZyMmwxVENmTUpTMG9IOEU5bThvc0c4?=
- =?utf-8?B?bUFlOEdldUxpclBZN2hJdjMra1pyYWI1K2pSZEFSaTZUZGt5dTJ5RFB2KzVV?=
- =?utf-8?B?K0YyNVNkNmhiandTMy9VQy8zYk5acGg5c2g5OXY4ZVFqL1JKQ3dtcExieHVr?=
- =?utf-8?B?Wm9POFRnWGROMUdMbll0bXVTVitPUWZyckZ3a3Q4ajQ0NWJtaXQ0SzZBWnJ4?=
- =?utf-8?B?NitOMXRLYWNrUE1jNWdFM1hPVjRQK1RvUll6QUZkSzZoNkxXTTVYTGtJVllq?=
- =?utf-8?B?RXJQNGpzMnJhaUdqYWJjWjVySzFqUzNYU0dvd1ExVzRwc205a3JxVGx5Z1hN?=
- =?utf-8?B?ZHFFN1RjaXJKQXdCSGt1VExVNXdsaDFmTDgzdWdhb3NheGZTTmxxK2xwNjRB?=
- =?utf-8?B?VmJVandkYllDcFdLNVRuQXVtRW5xdTdLMEV6SHNUK1dGMFlLUWtyMmZ5dHJa?=
- =?utf-8?B?UTdxRzNRQzI3UndwYU42M3Y1NEwwYzZkTU9tS3BvelNPY0dxVndpL2w0K1J1?=
- =?utf-8?B?dWlxSVFEUWtOeTgzZTNqYUduc1Qrb01iMk9oN2hLQ1ZReW82T0VKN2dLa2tk?=
- =?utf-8?B?Tmc9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?eENOMEprdnNkbVFUdVk1TGEvMDd3VjF4S0VEdzRVZHZ4QTNEa1ZyOFFSMmJD?=
- =?utf-8?B?RjcyNWlUUG40S3RVOE9TV3JDUFJyV1oxK1pxR2k0Ymx4YVppdUs1ZGNJZFV6?=
- =?utf-8?B?VXh3THdEazFvOXJxanNUU1E4cnYvdC9rOW9XL1dCWHZINGJ6WXhUN2N5NmxZ?=
- =?utf-8?B?bnVWcHY2cFljOG5YVHZjOU03MmVSQUlZbFN5UVdJc0p6a3RkT2RZZnFQandW?=
- =?utf-8?B?TnoxV0g4UGlBRkxyTWRWYlhEM09LNTdUZ2pUOEhpR3U2Sy8rK1UvRzBqdTBG?=
- =?utf-8?B?RzJ4ekFTMndqb0ZwQzhxYWtOQVJtS05pTWlMOHFMWm9yeTVhakYrYUo3dUdu?=
- =?utf-8?B?VTJYcHByODhBbGtSZzh3NisrMlNmUGdqRWpTd0JBdVRucjB0WFZPVUlzSWxM?=
- =?utf-8?B?N3MzR1owbm1tb1BpN0RZWjJHN0Z3R0NDSVFpSDZOTnRzQlFIM1JrSEhPWnpv?=
- =?utf-8?B?cm44VGI5VVpqV09Kd2tWeFpsdkRHQ3F3TmxXRVM3by9hS2JrSkNTUkwxZjJR?=
- =?utf-8?B?Z1hnMXBidndlUmJYNXRVckVpbkF1RkJMTVhkRHpzajk3ZzJEa1dNMHhPRExi?=
- =?utf-8?B?TjZaRlFabmhjUUxmQzJxeFpnKzljYU1mVTJUd1dvREhGclFhZDZ3YW9SeGQr?=
- =?utf-8?B?QnJPdXN0UlluM0p0ZmlLYlRFampDd0Erc2ltc2MwYW9kS0hsRUFHcHNGRm9k?=
- =?utf-8?B?cXB5OHAyQXU0MUhIV0FwY2lXb1RKdHZwWndQV094T0dzeXVTNFQ4eU5qUkNY?=
- =?utf-8?B?ZkU0dk1HbkdwTmV2TnB0OGVoUzI0Vjg1WWZ5d0FRMGFqajFtaVNhVitYY1Nl?=
- =?utf-8?B?Vyt5eEhxYVpyTDVoNHpIQjNKaWhnVXZBdlhObDVLam1nTHlaRFRvZ25Eakxx?=
- =?utf-8?B?QnJ4dWZHWElQSElWYlhodTlzMXZ4MWl5VmtRM0VuS3dlQnlaQXlvN0xucnJs?=
- =?utf-8?B?ZUdHdHZycU9aSGR6VEF2ajEvbEFJR2pndVpWb3U5RU5JS253YVduTzhQNUZv?=
- =?utf-8?B?dEhPcVhsRnNTV0RQRnAzWkpKaEFjaWZpTFU1RnFwdmVLUW56V2txcWRpa2VQ?=
- =?utf-8?B?QXhIaTBxRnRvVEhnZ2FDWTlXSkh1UC9ycWNGVXdkUzZOcHpUYWt4ZDk0dUN1?=
- =?utf-8?B?b1RYVGJteGNMb0o4L0t2QkdQVUdBQm9XME9nR29haTJyVVlOVjNDeExBbmtn?=
- =?utf-8?B?QysreVFJQmUvdm04dnR2R3UrV3ByUGtHWnkwQkMzNDZLVDlMcCtOKzNMN0xT?=
- =?utf-8?B?MUZFZVlURTZHdE1DTmMzRjd2YlZESk9JOExPdE9KWjBSUjJEL2pRcm5CS0Yr?=
- =?utf-8?Q?uUxtHUxlSeOPgrYpYSQnpa/0O9H0CWxOfm?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 889e2cfd-73d5-4b09-8aa9-08dad726b90d
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB5895.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2022 01:10:55.5171
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pBmiRGt4qdPGdvFy/FRbU5/dTAUeGBmlN8Q1ojz+kmUTslTQ0bOWD1rfpXAfwV4zvhQrzKg2G7hcS7Y2Skp1fa7GSaFVzjRADmJqZ5y16lE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB5647
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: lZK2b6qjxw0XPR9DdVbZxPwM7ihxyGcH
+X-Proofpoint-GUID: lZK2b6qjxw0XPR9DdVbZxPwM7ihxyGcH
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-12-05_01,2022-12-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0
- malwarescore=0 bulkscore=0 mlxscore=0 spamscore=0 phishscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212060004
-X-Proofpoint-GUID: nYf1pjF6kHL6Z8RbuZTQzJCYCD14Bqqq
-X-Proofpoint-ORIG-GUID: nYf1pjF6kHL6Z8RbuZTQzJCYCD14Bqqq
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Eric,
+It's become a common pattern to have a collection of small BPF programs
+in one BPF object file, each representing one test case. On user-space
+side of such tests we maintain a table of program names and expected
+failure or success, along with optional expected verifier log message.
 
-More info...
+This works, but each set of tests reimplement this mundane code over and
+over again, which is a waste of time for anyone trying to add a new set
+of tests. Furthermore, it's quite error prone as it's way too easy to miss
+some entries in these manually maintained test tables (as evidences by
+dynptr_fail tests, in which ringbuf_release_uninit_dynptr subtest was
+accidentally missed; this is fixed in next patch).
 
-On 12/1/2022 11:11 PM, Eric Dumazet wrote:
-> On Thu, Dec 1, 2022 at 9:44 PM George Kennedy <george.kennedy@oracle.com> wrote:
->>
->>
->> On 12/1/2022 2:25 PM, Eric Dumazet wrote:
->>> On Thu, Dec 1, 2022 at 2:16 PM Pavan Chebbi <pavan.chebbi@broadcom.com> wrote:
->>>> On Wed, Nov 30, 2022 at 7:43 PM George Kennedy
->>>> <george.kennedy@oracle.com> wrote:
->>>>> The dev pointer can be NULL in dev_hard_header(). Add check for dev being
->>>>> NULL in dev_hard_header() to avoid GPF.
->>>>>
->>>>> general protection fault, probably for non-canonical address
->>>>>       0xdffffc0000000046: 0000 [#1] PREEMPT SMP KASAN NOPTI
->>>>> KASAN: null-ptr-deref in range [0x0000000000000230-0x0000000000000237]
->>>>> CPU: 1 PID: 45 Comm: kworker/1:1 Not tainted 6.1.0-rc7+ #2
->>>>> Hardware name: Red Hat KVM, BIOS 1.15.0-2.module+el8.6.0+20659+3dcf7c70
->>>>> Workqueue: mld mld_ifc_work
->>>>> RIP: 0010:macvlan_hard_header (./include/linux/netdevice.h:3057
->>>>>       (discriminator 4) drivers/net/macvlan.c:594 (discriminator 4))
->>>>> RSP: 0018:ffff888103d377d0 EFLAGS: 00010212
->>>>> RAX: dffffc0000000000 RBX: ffff88801cf1a000 RCX: 0000000000000000
->>>>> RDX: 0000000000000046 RSI: 0000000000000000 RDI: 0000000000000230
->>>>> RBP: ffff88801e8ef328 R08: 0000000000000000 R09: 0000000000000060
->>>>> R10: 0000000000000000 R11: 0000000000000000 R12: ffff88801f0497c0
->>>>> R13: 0000000000000000 R14: ffff888045187c98 R15: 0000000000000060
->>>>> FS:  0000000000000000(0000) GS:ffff888106c80000(0000)
->>>>>       knlGS:0000000000000000
->>>>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>>> CR2: 00007fbf3f1c1840 CR3: 0000000014e36000 CR4: 00000000000006e0
->>>>> Call Trace:
->>>>>    <TASK>
->>>>> neigh_connected_output (./include/linux/netdevice.h:3060
->>>>>       net/core/neighbour.c:1595)
->>>>> ip6_finish_output2 (./include/net/neighbour.h:546
->>>>>       net/ipv6/ip6_output.c:134)
->>>>> ip6_finish_output (net/ipv6/ip6_output.c:195 net/ipv6/ip6_output.c:206)
->>>>> ip6_output (./include/linux/netfilter.h:291 net/ipv6/ip6_output.c:227)
->>>>> NF_HOOK.constprop.0 (./include/net/dst.h:445
->>>>>       ./include/linux/netfilter.h:302)
->>>>> mld_sendpack (net/ipv6/mcast.c:1824)
->>>>> mld_send_cr (net/ipv6/mcast.c:2122)
->>>>> mld_ifc_work (net/ipv6/mcast.c:2655)
->>>>> process_one_work (kernel/workqueue.c:2294)
->>>>> worker_thread (./include/linux/list.h:292 kernel/workqueue.c:2437)
->>>>> kthread (kernel/kthread.c:376)
->>>>> ret_from_fork (arch/x86/entry/entry_64.S:312)
->>>>>    </TASK>
->>>>> Modules linked in:
->>>>> Dumping ftrace buffer:
->>>>>      (ftrace buffer empty)
->>>>> ---[ end trace 0000000000000000 ]---
->>>>>
->>>>> Fixes: 0c4e85813d0a ("[NET]: Wrap netdevice hardware header creation.")
->>>>> Reported-by: syzkaller <syzkaller@googlegroups.com>
->>>>> Signed-off-by: George Kennedy <george.kennedy@oracle.com>
->>>>> ---
->>>>>    include/linux/netdevice.h | 2 +-
->>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
->>>>> index eddf8ee270e7..9b25a6301fa5 100644
->>>>> --- a/include/linux/netdevice.h
->>>>> +++ b/include/linux/netdevice.h
->>>>> @@ -3054,7 +3054,7 @@ static inline int dev_hard_header(struct sk_buff *skb, struct net_device *dev,
->>>>>                                     const void *daddr, const void *saddr,
->>>>>                                     unsigned int len)
->>>>>    {
->>>>> -       if (!dev->header_ops || !dev->header_ops->create)
->>>>> +       if (!dev || !dev->header_ops || !dev->header_ops->create)
->>> Do  you have a repro ?
->> See syzkaller repros attached.
->>
->>> This patch will not prevent a crash later I think.
->> The repro ran overnight without failure with the patch applied.
-> Yes, but the patch is hiding a potential bug that might show up with
-> other 'repros'
-The repro fails when these devices are configured (seem like small mtu):
+So this patch implements generic verification_tester, which accepts
+skeleton name and handles the rest of details: opens and loads BPF
+object file, making sure each program is tested in isolation. Optionally
+each test case can specify expected BPF verifier log message. In case of
+failure, tester makes sure to report verifier log, but it also reports
+verifier log in verbose mode unconditionally.
 
-20: vxcan0@vxcan1: <NOARP,UP,LOWER_UP> mtu 72 qdisc noqueue state UP group default qlen 1000
-     link/can
-     inet 172.20.20.38/24 scope global vxcan0
-        valid_lft forever preferred_lft forever
-21: vxcan1@vxcan0: <NOARP,UP,LOWER_UP> mtu 72 qdisc noqueue state UP group default qlen 1000
-     link/can
-     inet 172.20.20.39/24 scope global vxcan1
-        valid_lft forever preferred_lft forever
+Now, the interesting deviation from existing custom implementations is
+the use of btf_decl_tag attribute to specify expected-to-fail vs
+expected-to-succeed markers and, optionally, expected log message
+directly next to BPF program source code, eliminating the need to
+manually create and update table of tests.
 
+We define few macros wrapping btf_decl_tag with a convention that all
+values of btf_decl_tag start with "comment:" prefix, and then utilizing
+a very simple "just_some_text_tag" or "some_key_name=<value>" pattern to
+define things like expected success/failure, expected verifier message,
+extra verifier log level (if necessary). This approach is demonstrated
+by next patch in which two existing sets of failure tests are converted.
 
-# diff ../config.fail .config
-3325c3325
-< CONFIG_CAN_VXCAN=y
+Tester supports both expected-to-fail and expected-to-succeed programs,
+though this patch set didn't convert any existing expected-to-succeed
+programs yet, as existing tests couple BPF program loading with their
+further execution through attach or test_prog_run. One way to allow
+testing scenarios like this would be ability to specify custom callback,
+executed for each successfully loaded BPF program. This is left for
+follow up patches, after some more analysis of existing test cases.
+
+This verification_tester is, hopefully, a start of a test_verifier
+runner, which allows much better "user experience" of defining low-level
+verification types that can take advantage of all the libbpf-provided
+nicety features on BPF side: global variables, declarative maps, etc.
+All while having a choice of defining it in C or as BPF assembly
+(through __attribute__((naked)) functions and using embedded asm). This
+will be explored in follow up patches as well.
+
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
-> # CONFIG_CAN_VXCAN is not set
+ tools/testing/selftests/bpf/Makefile          |   2 +-
+ tools/testing/selftests/bpf/progs/bpf_misc.h  |   5 +
+ tools/testing/selftests/bpf/test_progs.h      |  33 +++
+ tools/testing/selftests/bpf/verifier_tester.c | 233 ++++++++++++++++++
+ 4 files changed, 272 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/verifier_tester.c
 
-Thanks,
-George
-
->>> Please fix the root cause, thanks !
->> Will try.
-> Thanks, having a repro definitely should help to find the real bug.
->
-> I took a look at macvlan , and could not see how vlan->lowerdev  could
-> be NULL in the first place.
->
->> Thanks,
->> George
->>>>>                   return 0;
->>>> net_device being NULL during eth header construction? seems like a
->>>> more serious issue?
->>>> If it indeed is a genuine scenario I think a better description is needed...
->>>>
->>>>>           return dev->header_ops->create(skb, dev, type, daddr, saddr, len);
->>>>> --
->>>>> 2.31.1
->>>>>
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 6a0f043dc410..526cb6a6b90a 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -527,7 +527,7 @@ TRUNNER_BPF_PROGS_DIR := progs
+ TRUNNER_EXTRA_SOURCES := test_progs.c cgroup_helpers.c trace_helpers.c	\
+ 			 network_helpers.c testing_helpers.c		\
+ 			 btf_helpers.c flow_dissector_load.h		\
+-			 cap_helpers.c
++			 cap_helpers.c verifier_tester.c
+ TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read $(OUTPUT)/bpf_testmod.ko	\
+ 		       $(OUTPUT)/liburandom_read.so			\
+ 		       $(OUTPUT)/xdp_synproxy				\
+diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
+index 5bb11fe595a4..4a01ea9113bf 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_misc.h
++++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
+@@ -2,6 +2,11 @@
+ #ifndef __BPF_MISC_H__
+ #define __BPF_MISC_H__
+ 
++#define __msg(msg)		__attribute__((btf_decl_tag("comment:test_expect_msg=" msg)))
++#define __failure		__attribute__((btf_decl_tag("comment:test_expect_failure")))
++#define __success		__attribute__((btf_decl_tag("comment:test_expect_success")))
++#define __log_level(lvl)	__attribute__((btf_decl_tag("comment:test_log_level="#lvl)))
++
+ #if defined(__TARGET_ARCH_x86)
+ #define SYSCALL_WRAPPER 1
+ #define SYS_PREFIX "__x64_"
+diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
+index b090996daee5..fd355b54dc24 100644
+--- a/tools/testing/selftests/bpf/test_progs.h
++++ b/tools/testing/selftests/bpf/test_progs.h
+@@ -1,4 +1,7 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __TEST_PROGS_H
++#define __TEST_PROGS_H
++
+ #include <stdio.h>
+ #include <unistd.h>
+ #include <errno.h>
+@@ -210,6 +213,12 @@ int test__join_cgroup(const char *path);
+ #define CHECK_ATTR(condition, tag, format...) \
+ 	_CHECK(condition, tag, tattr.duration, format)
+ 
++#define ASSERT_FAIL(fmt, args...) ({					\
++	static int duration = 0;					\
++	CHECK(false, "", fmt"\n", ##args);				\
++	false;								\
++})
++
+ #define ASSERT_TRUE(actual, name) ({					\
+ 	static int duration = 0;					\
+ 	bool ___ok = (actual);						\
+@@ -397,3 +406,27 @@ int write_sysctl(const char *sysctl, const char *value);
+ #endif
+ 
+ #define BPF_TESTMOD_TEST_FILE "/sys/kernel/bpf_testmod"
++
++struct verification_tester {
++	char *log_buf;
++	size_t log_buf_sz;
++
++	struct bpf_object *obj;
++};
++
++typedef const void *(*skel_elf_bytes_fn)(size_t *sz);
++
++extern void verification_tester__run_subtests(struct verification_tester *tester,
++					      const char *skel_name,
++					      skel_elf_bytes_fn elf_bytes_factory);
++
++extern void tester_fini(struct verification_tester *tester);
++
++#define RUN_VERIFICATION_TESTS(skel) ({					       \
++	struct verification_tester tester = {};				       \
++									       \
++	verification_tester__run_subtests(&tester, #skel, skel##__elf_bytes);  \
++	tester_fini(&tester);						       \
++})
++
++#endif /* __TEST_PROGS_H */
+diff --git a/tools/testing/selftests/bpf/verifier_tester.c b/tools/testing/selftests/bpf/verifier_tester.c
+new file mode 100644
+index 000000000000..8aa28c2a6f31
+--- /dev/null
++++ b/tools/testing/selftests/bpf/verifier_tester.c
+@@ -0,0 +1,233 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
++#include <stdlib.h>
++#include <test_progs.h>
++#include <bpf/btf.h>
++
++#define str_has_pfx(str, pfx) \
++	(strncmp(str, pfx, __builtin_constant_p(pfx) ? sizeof(pfx) - 1 : strlen(pfx)) == 0)
++
++#define VERIFICATION_TESTER_LOG_BUF_SZ 1048576
++
++#define TEST_TAG_EXPECT_FAILURE "comment:test_expect_failure"
++#define TEST_TAG_EXPECT_SUCCESS "comment:test_expect_success"
++#define TEST_TAG_EXPECT_MSG_PFX "comment:test_expect_msg="
++#define TEST_TAG_LOG_LEVEL_PFX "comment:test_log_level="
++
++struct test_spec {
++	const char *name;
++	bool expect_failure;
++	const char *expect_msg;
++	int log_level;
++};
++
++static int tester_init(struct verification_tester *tester)
++{
++	if (!tester->log_buf) {
++		tester->log_buf_sz = VERIFICATION_TESTER_LOG_BUF_SZ;
++		tester->log_buf = malloc(tester->log_buf_sz);
++		if (!ASSERT_OK_PTR(tester->log_buf, "tester_log_buf"))
++			return -ENOMEM;
++	}
++
++	return 0;
++}
++
++void tester_fini(struct verification_tester *tester)
++{
++	if (!tester)
++		return;
++
++	free(tester->log_buf);
++}
++
++static int parse_test_spec(struct verification_tester *tester,
++			   struct bpf_object *obj,
++			   struct bpf_program *prog,
++			   struct test_spec *spec)
++{
++	struct btf *btf;
++	int func_id, i;
++
++	memset(spec, 0, sizeof(*spec));
++
++	spec->name = bpf_program__name(prog);
++
++	btf = bpf_object__btf(obj);
++	if (!btf) {
++		ASSERT_FAIL("BPF object has no BTF");
++		return -EINVAL;
++	}
++
++	func_id = btf__find_by_name_kind(btf, spec->name, BTF_KIND_FUNC);
++	if (func_id < 0) {
++		ASSERT_FAIL("failed to find FUNC BTF type for '%s'", spec->name);
++		return -EINVAL;
++	}
++
++	for (i = 1; i < btf__type_cnt(btf); i++) {
++		const struct btf_type *t;
++		const char *s;
++
++		t = btf__type_by_id(btf, i);
++		if (!btf_is_decl_tag(t))
++			continue;
++
++		if (t->type != func_id || btf_decl_tag(t)->component_idx != -1)
++			continue;
++
++		s = btf__str_by_offset(btf, t->name_off);
++		if (strcmp(s, TEST_TAG_EXPECT_FAILURE) == 0) {
++			spec->expect_failure = true;
++		} else if (strcmp(s, TEST_TAG_EXPECT_SUCCESS) == 0) {
++			spec->expect_failure = false;
++		} else if (str_has_pfx(s, TEST_TAG_EXPECT_MSG_PFX)) {
++			spec->expect_msg = s + sizeof(TEST_TAG_EXPECT_MSG_PFX) - 1;
++		} else if (str_has_pfx(s, TEST_TAG_LOG_LEVEL_PFX)) {
++			errno = 0;
++			spec->log_level = strtol(s + sizeof(TEST_TAG_LOG_LEVEL_PFX) - 1, NULL, 0);
++			if (errno) {
++				ASSERT_FAIL("failed to parse test log level from '%s'", s);
++				return -EINVAL;
++			}
++		}
++	}
++
++	return 0;
++}
++
++static void prepare_case(struct verification_tester *tester,
++			 struct test_spec *spec,
++			 struct bpf_object *obj,
++			 struct bpf_program *prog)
++{
++	int min_log_level = 0;
++
++	if (env.verbosity > VERBOSE_NONE)
++		min_log_level = 1;
++	if (env.verbosity > VERBOSE_VERY)
++		min_log_level = 2;
++
++	bpf_program__set_log_buf(prog, tester->log_buf, tester->log_buf_sz);
++
++	/* Make sure we set at least minimal log level, unless test requirest
++	 * even higher level already. Make sure to preserve independent log
++	 * level 4 (verifier stats), though.
++	 */
++	if ((spec->log_level & 3) < min_log_level)
++		bpf_program__set_log_level(prog, (spec->log_level & 4) | min_log_level);
++	else
++		bpf_program__set_log_level(prog, spec->log_level);
++
++	tester->log_buf[0] = '\0';
++}
++
++static void emit_verifier_log(const char *log_buf, bool force)
++{
++	if (!force && env.verbosity == VERBOSE_NONE)
++		return;
++	fprintf(stdout, "VERIFIER LOG:\n=============\n%s=============\n", log_buf);
++}
++
++static void validate_case(struct verification_tester *tester,
++			  struct test_spec *spec,
++			  struct bpf_object *obj,
++			  struct bpf_program *prog,
++			  int load_err)
++{
++	if (spec->expect_msg) {
++		char *match;
++
++		match = strstr(tester->log_buf, spec->expect_msg);
++		if (!ASSERT_OK_PTR(match, "expect_msg")) {
++			/* if we are in verbose mode, we've already emitted log */
++			if (env.verbosity == VERBOSE_NONE)
++				emit_verifier_log(tester->log_buf, true /*force*/);
++			fprintf(stderr, "EXPECTED MSG: '%s'\n", spec->expect_msg);
++			return;
++		}
++	}
++}
++
++/* this function is forced noinline and has short generic name to look better
++ * in test_progs output (in case of a failure)
++ */
++static noinline
++void run_subtest(struct verification_tester *tester,
++		 const char *skel_name,
++		 skel_elf_bytes_fn elf_bytes_factory)
++{
++	LIBBPF_OPTS(bpf_object_open_opts, open_opts, .object_name = skel_name);
++	struct bpf_object *obj = NULL, *tobj;
++	struct bpf_program *prog, *tprog;
++	const void *obj_bytes;
++	size_t obj_byte_cnt;
++	int err;
++
++	if (tester_init(tester) < 0)
++		return; /* failed to initialize tester */
++
++	obj_bytes = elf_bytes_factory(&obj_byte_cnt);
++	obj = bpf_object__open_mem(obj_bytes, obj_byte_cnt, &open_opts);
++	if (!ASSERT_OK_PTR(obj, "obj_open_mem"))
++		return;
++
++	bpf_object__for_each_program(prog, obj) {
++		const char *prog_name = bpf_program__name(prog);
++		struct test_spec spec;
++
++		if (!test__start_subtest(prog_name))
++			continue;
++
++		/* if we can't derive test specification, go to the next test */
++		err = parse_test_spec(tester, obj, prog, &spec);
++		if (!ASSERT_OK(err, "parse_test_spec"))
++			continue;
++
++		tobj = bpf_object__open_mem(obj_bytes, obj_byte_cnt, &open_opts);
++		if (!ASSERT_OK_PTR(tobj, "obj_open_mem")) /* shouldn't happen */
++			continue;
++
++		bpf_object__for_each_program(tprog, tobj)
++			bpf_program__set_autoload(tprog, false);
++
++		bpf_object__for_each_program(tprog, tobj) {
++			/* only load specified program */
++			if (strcmp(bpf_program__name(tprog), prog_name) == 0) {
++				bpf_program__set_autoload(tprog, true);
++				break;
++			}
++		}
++
++		prepare_case(tester, &spec, tobj, tprog);
++
++		err = bpf_object__load(tobj);
++		if (spec.expect_failure) {
++			if (!ASSERT_ERR(err, "unexpected_load_success")) {
++				emit_verifier_log(tester->log_buf, false /*force*/);
++				goto tobj_cleanup;
++			}
++		} else {
++			if (!ASSERT_OK(err, "unexpected_load_failure")) {
++				emit_verifier_log(tester->log_buf, true /*force*/);
++				goto tobj_cleanup;
++			}
++		}
++
++		emit_verifier_log(tester->log_buf, false /*force*/);
++		validate_case(tester, &spec, tobj, tprog, err);
++
++tobj_cleanup:
++		bpf_object__close(tobj);
++	}
++
++	bpf_object__close(obj);
++}
++
++void verification_tester__run_subtests(struct verification_tester *tester,
++				       const char *skel_name,
++				       skel_elf_bytes_fn elf_bytes_factory)
++{
++	/* see comment in run_subtest() for why we do this function nesting */
++	run_subtest(tester, skel_name, elf_bytes_factory);
++}
+-- 
+2.30.2
 
