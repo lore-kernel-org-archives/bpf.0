@@ -2,64 +2,63 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72D03C47089
-	for <bpf@archiver.kernel.org>; Tue,  6 Dec 2022 02:46:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6E2BC4708C
+	for <bpf@archiver.kernel.org>; Tue,  6 Dec 2022 02:46:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233884AbiLFCqQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 5 Dec 2022 21:46:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54530 "EHLO
+        id S233910AbiLFCq0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 5 Dec 2022 21:46:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233609AbiLFCqB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 5 Dec 2022 21:46:01 -0500
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128D31DF1B
-        for <bpf@vger.kernel.org>; Mon,  5 Dec 2022 18:45:59 -0800 (PST)
-Received: by mail-pg1-x549.google.com with SMTP id g193-20020a636bca000000b00476a2298bd1so11291098pgc.12
-        for <bpf@vger.kernel.org>; Mon, 05 Dec 2022 18:45:59 -0800 (PST)
+        with ESMTP id S233790AbiLFCqQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 5 Dec 2022 21:46:16 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B8E23E94
+        for <bpf@vger.kernel.org>; Mon,  5 Dec 2022 18:46:03 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id t1-20020a170902b20100b001893ac9f0feso15101275plr.4
+        for <bpf@vger.kernel.org>; Mon, 05 Dec 2022 18:46:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2s5tkfUtrjY9e7dgcwIr7AZZzwkdx7V7QVbuyAt4CHQ=;
-        b=WRTw0F739LQtFI0x9DzUVTTdXm/HtHGw+r0P81NoDmBvgkzeQI/gamFmmCTPvFs+mL
-         p1TDW2fVOxYhqj0yH9/sfsiF6X73l4Dqxl1R0hDafoMO7nho/QTf9Nvi1yRdf6hdBmsO
-         757K6tY7KcKC5GVphURQCJ98xhraMqBDwx/MIr+9Q41kMr2dmfPOw0+fCyE7y6O/ZhtG
-         j24t0oiNUxr96WpMYJ6Nm+tjpVe7FwVnK69bKa85aItVum7Syilmy8tE8UXZQxjbX/WB
-         Pk+5jN5psTlZa9ISciEBY+Hc14yy9iZmxVn0Ep9wzXdmBsccghYMOSllqCYcdoLB6XeG
-         dxLg==
+        bh=RxMjhTzUkbwHoPeyROnfkSZfd8dhlgBj6i85dt8cvpI=;
+        b=GaPN+AEk51sXWl/I0dibiO4F0GNrSPRPa8PcnSGs/z1OBrRrIdc15DTgW9V3lQY0OG
+         4K6PQQ+2TZIlI1xf+KSuK+WMKTMyfKUpaAKFUMKQAFzy4+2N/5I85rI2oqUAjroOcDqf
+         Vc0RW17n0e+4dZHt4MQTk8GYPW+wWDd49Nfb+lEKhKJibhhdrQwWGTBSWLW7YDnbzgbS
+         /kKzC77g3yr9HHK1L9zn5udq4PIyr2e5FIFR4GuEVmRuNuKuteub22WLea+30RPkz4X6
+         aNo65rjSwdKLZWyDHS0QdSFHn7kRpdAjWksvcJgXBh5OuFpHdYSNnAS7giotNiNGV+6y
+         4pQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2s5tkfUtrjY9e7dgcwIr7AZZzwkdx7V7QVbuyAt4CHQ=;
-        b=xc77qegnEBxbRgs7wEz9WTHluLNtjoigrKW/SwNb3xXbE+B34uOyuD+dEWBQONqi8G
-         d3/7d4b/BYvlJOZLD6SPNCRd029we6T7mG5KAXQoKfwRh1gb/3rV5HDhR0D87jHarEIZ
-         +wg7bI2rji6F3+oDaNBW5o2Yb6yu33ouNvbMD9XfOJHmCk17R7KAJHCpP4S8dy7sJP3l
-         RBR0Al2zLlpELcs4pw3odxalk6qWMKA0L6SdOS5Q9huN1Belbj0or/fdu3U5o9rVQQbC
-         FJ2K+M6uXEKjj5pmlQ8cnHfkpoTsntYpVqdSQAFm35MfJRBDS4o+b3RIX2HoZBxtUSe6
-         JE/Q==
-X-Gm-Message-State: ANoB5pmCu8aKjQWk3wmrifBDamU2iSpv7RRDsseODmf3483ODHMLekek
-        ImVZ5jDjsJJbP9ZjHi9a7Yu7QV/PyhexsKZ9mMWguEMB0RiwiYqd6E+fMn8DFm1OLRw4QnyUZzs
-        B8qAfh+B7tRoxpC+bqUIcL68X2DSKLCMwaFFZXK+MQKxDLEGKiw==
-X-Google-Smtp-Source: AA0mqf4xLGWgxfXypfdIFWbf+3hvHoAG6gf6hajKjfhPNo1co8iABwJeQa0IpP3eboR/MKY2dSAd0u8=
+        bh=RxMjhTzUkbwHoPeyROnfkSZfd8dhlgBj6i85dt8cvpI=;
+        b=hZgP6Foa6H5x7lw39lIi97ohhlR42Q09k4V4yFCHf9yXY7nl4GsnLmZgZjTzyduN/q
+         +k3dN9GpxtMWTxQVj4ySTRMbBhcKgtYeu6IX39Fpx+3ExUad8/jLbvgTUfAVi+iOucNg
+         6r2KflCNUTX7Y4O3iWD5D3w5+0i1SNzuMGdr7MqJpBbppEtjKbVnDaCbyNm8Iczwlbuq
+         kRwi9pUN3C+DzIepxptJKuB8e6f9LYK2/viDeB9zqa6arErGxoz5COdUoSmNT/lC9JDd
+         0/WGiA1XBniSl5zbLmHatha+DaJQAdRgytYmynqxicko8I3MgHLiz7ONlWDhRNb+Je3r
+         2MrQ==
+X-Gm-Message-State: ANoB5pmPtAipzSYiamYNzwL3MUjcBoVvIwt7hS5R9om5qjXFapA2J661
+        QpblP6Wj3xubgVeDl0tuEWoJhg0PnyTnKOH1kEXW6CsZ2vwLQVBifBymMglJLO94YkorD+cBBKs
+        AAEhg4IwSZT/ZybvrjENP4XF5KCRTRHRp9Ds24zyDlBW3HigokA==
+X-Google-Smtp-Source: AA0mqf6zjDDqZE4AF0xxySYtiTB5ixzhibX1V+wJant4SO1aBVYYG9Q7Y/dipe43X7upfidS648p5e0=
 X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a05:6a00:2918:b0:576:386d:8db1 with SMTP id
- cg24-20020a056a00291800b00576386d8db1mr21330091pfb.50.1670294759061; Mon, 05
- Dec 2022 18:45:59 -0800 (PST)
-Date:   Mon,  5 Dec 2022 18:45:44 -0800
+ (user=sdf job=sendgmr) by 2002:a17:902:aa06:b0:182:f36b:3221 with SMTP id
+ be6-20020a170902aa0600b00182f36b3221mr67309551plb.36.1670294762777; Mon, 05
+ Dec 2022 18:46:02 -0800 (PST)
+Date:   Mon,  5 Dec 2022 18:45:46 -0800
 In-Reply-To: <20221206024554.3826186-1-sdf@google.com>
 Mime-Version: 1.0
 References: <20221206024554.3826186-1-sdf@google.com>
 X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
-Message-ID: <20221206024554.3826186-3-sdf@google.com>
-Subject: [PATCH bpf-next v3 02/12] bpf: Rename bpf_{prog,map}_is_dev_bound to is_offloaded
+Message-ID: <20221206024554.3826186-5-sdf@google.com>
+Subject: [PATCH bpf-next v3 04/12] veth: Introduce veth_xdp_buff wrapper for xdp_buff
 From:   Stanislav Fomichev <sdf@google.com>
 To:     bpf@vger.kernel.org
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
         haoluo@google.com, jolsa@kernel.org,
-        David Ahern <dsahern@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Willem de Bruijn <willemb@google.com>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
@@ -73,12 +72,8 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-BPF offloading infra will be reused to implement
-bound-but-not-offloaded bpf programs. Rename existing
-helpers for clarity. No functional changes.
+No functional changes. Boilerplate to allow stuffing more data after xdp_buff.
 
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: David Ahern <dsahern@gmail.com>
 Cc: Martin KaFai Lau <martin.lau@linux.dev>
 Cc: Jakub Kicinski <kuba@kernel.org>
 Cc: Willem de Bruijn <willemb@google.com>
@@ -89,310 +84,166 @@ Cc: Magnus Karlsson <magnus.karlsson@gmail.com>
 Cc: Maryam Tahhan <mtahhan@redhat.com>
 Cc: xdp-hints@xdp-project.net
 Cc: netdev@vger.kernel.org
-
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- include/linux/bpf.h   |  8 ++++----
- kernel/bpf/core.c     |  4 ++--
- kernel/bpf/offload.c  |  4 ++--
- kernel/bpf/syscall.c  | 22 +++++++++++-----------
- kernel/bpf/verifier.c | 18 +++++++++---------
- net/core/dev.c        |  2 +-
- net/core/filter.c     |  2 +-
- 7 files changed, 30 insertions(+), 30 deletions(-)
+ drivers/net/veth.c | 56 +++++++++++++++++++++++++---------------------
+ 1 file changed, 31 insertions(+), 25 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 4920ac252754..d5d479dae118 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2481,12 +2481,12 @@ void unpriv_ebpf_notify(int new_state);
- #if defined(CONFIG_NET) && defined(CONFIG_BPF_SYSCALL)
- int bpf_prog_offload_init(struct bpf_prog *prog, union bpf_attr *attr);
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index ac7c0653695f..04ffd8cb2945 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -116,6 +116,10 @@ static struct {
+ 	{ "peer_ifindex" },
+ };
  
--static inline bool bpf_prog_is_dev_bound(const struct bpf_prog_aux *aux)
-+static inline bool bpf_prog_is_offloaded(const struct bpf_prog_aux *aux)
++struct veth_xdp_buff {
++	struct xdp_buff xdp;
++};
++
+ static int veth_get_link_ksettings(struct net_device *dev,
+ 				   struct ethtool_link_ksettings *cmd)
  {
- 	return aux->offload_requested;
- }
+@@ -592,23 +596,24 @@ static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
+ 	rcu_read_lock();
+ 	xdp_prog = rcu_dereference(rq->xdp_prog);
+ 	if (likely(xdp_prog)) {
+-		struct xdp_buff xdp;
++		struct veth_xdp_buff vxbuf;
++		struct xdp_buff *xdp = &vxbuf.xdp;
+ 		u32 act;
  
--static inline bool bpf_map_is_dev_bound(struct bpf_map *map)
-+static inline bool bpf_map_is_offloaded(struct bpf_map *map)
+-		xdp_convert_frame_to_buff(frame, &xdp);
+-		xdp.rxq = &rq->xdp_rxq;
++		xdp_convert_frame_to_buff(frame, xdp);
++		xdp->rxq = &rq->xdp_rxq;
+ 
+-		act = bpf_prog_run_xdp(xdp_prog, &xdp);
++		act = bpf_prog_run_xdp(xdp_prog, xdp);
+ 
+ 		switch (act) {
+ 		case XDP_PASS:
+-			if (xdp_update_frame_from_buff(&xdp, frame))
++			if (xdp_update_frame_from_buff(xdp, frame))
+ 				goto err_xdp;
+ 			break;
+ 		case XDP_TX:
+ 			orig_frame = *frame;
+-			xdp.rxq->mem = frame->mem;
+-			if (unlikely(veth_xdp_tx(rq, &xdp, bq) < 0)) {
++			xdp->rxq->mem = frame->mem;
++			if (unlikely(veth_xdp_tx(rq, xdp, bq) < 0)) {
+ 				trace_xdp_exception(rq->dev, xdp_prog, act);
+ 				frame = &orig_frame;
+ 				stats->rx_drops++;
+@@ -619,8 +624,8 @@ static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
+ 			goto xdp_xmit;
+ 		case XDP_REDIRECT:
+ 			orig_frame = *frame;
+-			xdp.rxq->mem = frame->mem;
+-			if (xdp_do_redirect(rq->dev, &xdp, xdp_prog)) {
++			xdp->rxq->mem = frame->mem;
++			if (xdp_do_redirect(rq->dev, xdp, xdp_prog)) {
+ 				frame = &orig_frame;
+ 				stats->rx_drops++;
+ 				goto err_xdp;
+@@ -801,7 +806,8 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
  {
- 	return unlikely(map->ops == &bpf_map_offload_ops);
- }
-@@ -2513,12 +2513,12 @@ static inline int bpf_prog_offload_init(struct bpf_prog *prog,
- 	return -EOPNOTSUPP;
- }
+ 	void *orig_data, *orig_data_end;
+ 	struct bpf_prog *xdp_prog;
+-	struct xdp_buff xdp;
++	struct veth_xdp_buff vxbuf;
++	struct xdp_buff *xdp = &vxbuf.xdp;
+ 	u32 act, metalen;
+ 	int off;
  
--static inline bool bpf_prog_is_dev_bound(struct bpf_prog_aux *aux)
-+static inline bool bpf_prog_is_offloaded(struct bpf_prog_aux *aux)
- {
- 	return false;
- }
- 
--static inline bool bpf_map_is_dev_bound(struct bpf_map *map)
-+static inline bool bpf_map_is_offloaded(struct bpf_map *map)
- {
- 	return false;
- }
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 2e57fc839a5c..641ab412ad7e 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2183,7 +2183,7 @@ struct bpf_prog *bpf_prog_select_runtime(struct bpf_prog *fp, int *err)
- 	 * valid program, which in this case would simply not
- 	 * be JITed, but falls back to the interpreter.
- 	 */
--	if (!bpf_prog_is_dev_bound(fp->aux)) {
-+	if (!bpf_prog_is_offloaded(fp->aux)) {
- 		*err = bpf_prog_alloc_jited_linfo(fp);
- 		if (*err)
- 			return fp;
-@@ -2554,7 +2554,7 @@ static void bpf_prog_free_deferred(struct work_struct *work)
- #endif
- 	bpf_free_used_maps(aux);
- 	bpf_free_used_btfs(aux);
--	if (bpf_prog_is_dev_bound(aux))
-+	if (bpf_prog_is_offloaded(aux))
- 		bpf_prog_offload_destroy(aux->prog);
- #ifdef CONFIG_PERF_EVENTS
- 	if (aux->prog->has_callchain_buf)
-diff --git a/kernel/bpf/offload.c b/kernel/bpf/offload.c
-index 13e4efc971e6..f5769a8ecbee 100644
---- a/kernel/bpf/offload.c
-+++ b/kernel/bpf/offload.c
-@@ -549,7 +549,7 @@ static bool __bpf_offload_dev_match(struct bpf_prog *prog,
- 	struct bpf_offload_netdev *ondev1, *ondev2;
- 	struct bpf_prog_offload *offload;
- 
--	if (!bpf_prog_is_dev_bound(prog->aux))
-+	if (!bpf_prog_is_offloaded(prog->aux))
- 		return false;
- 
- 	offload = prog->aux->offload;
-@@ -581,7 +581,7 @@ bool bpf_offload_prog_map_match(struct bpf_prog *prog, struct bpf_map *map)
- 	struct bpf_offloaded_map *offmap;
- 	bool ret;
- 
--	if (!bpf_map_is_dev_bound(map))
-+	if (!bpf_map_is_offloaded(map))
- 		return bpf_map_offload_neutral(map);
- 	offmap = map_to_offmap(map);
- 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 35972afb6850..13bc96035116 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -181,7 +181,7 @@ static int bpf_map_update_value(struct bpf_map *map, struct file *map_file,
- 	int err;
- 
- 	/* Need to create a kthread, thus must support schedule */
--	if (bpf_map_is_dev_bound(map)) {
-+	if (bpf_map_is_offloaded(map)) {
- 		return bpf_map_offload_update_elem(map, key, value, flags);
- 	} else if (map->map_type == BPF_MAP_TYPE_CPUMAP ||
- 		   map->map_type == BPF_MAP_TYPE_STRUCT_OPS) {
-@@ -238,7 +238,7 @@ static int bpf_map_copy_value(struct bpf_map *map, void *key, void *value,
- 	void *ptr;
- 	int err;
- 
--	if (bpf_map_is_dev_bound(map))
-+	if (bpf_map_is_offloaded(map))
- 		return bpf_map_offload_lookup_elem(map, key, value);
- 
- 	bpf_disable_instrumentation();
-@@ -1483,7 +1483,7 @@ static int map_delete_elem(union bpf_attr *attr, bpfptr_t uattr)
- 		goto err_put;
+@@ -815,22 +821,22 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
  	}
  
--	if (bpf_map_is_dev_bound(map)) {
-+	if (bpf_map_is_offloaded(map)) {
- 		err = bpf_map_offload_delete_elem(map, key);
- 		goto out;
- 	} else if (IS_FD_PROG_ARRAY(map) ||
-@@ -1547,7 +1547,7 @@ static int map_get_next_key(union bpf_attr *attr)
- 	if (!next_key)
- 		goto free_key;
+ 	__skb_push(skb, skb->data - skb_mac_header(skb));
+-	if (veth_convert_skb_to_xdp_buff(rq, &xdp, &skb))
++	if (veth_convert_skb_to_xdp_buff(rq, xdp, &skb))
+ 		goto drop;
  
--	if (bpf_map_is_dev_bound(map)) {
-+	if (bpf_map_is_offloaded(map)) {
- 		err = bpf_map_offload_get_next_key(map, key, next_key);
- 		goto out;
- 	}
-@@ -1605,7 +1605,7 @@ int generic_map_delete_batch(struct bpf_map *map,
- 				   map->key_size))
- 			break;
+-	orig_data = xdp.data;
+-	orig_data_end = xdp.data_end;
++	orig_data = xdp->data;
++	orig_data_end = xdp->data_end;
  
--		if (bpf_map_is_dev_bound(map)) {
-+		if (bpf_map_is_offloaded(map)) {
- 			err = bpf_map_offload_delete_elem(map, key);
- 			break;
+-	act = bpf_prog_run_xdp(xdp_prog, &xdp);
++	act = bpf_prog_run_xdp(xdp_prog, xdp);
+ 
+ 	switch (act) {
+ 	case XDP_PASS:
+ 		break;
+ 	case XDP_TX:
+-		veth_xdp_get(&xdp);
++		veth_xdp_get(xdp);
+ 		consume_skb(skb);
+-		xdp.rxq->mem = rq->xdp_mem;
+-		if (unlikely(veth_xdp_tx(rq, &xdp, bq) < 0)) {
++		xdp->rxq->mem = rq->xdp_mem;
++		if (unlikely(veth_xdp_tx(rq, xdp, bq) < 0)) {
+ 			trace_xdp_exception(rq->dev, xdp_prog, act);
+ 			stats->rx_drops++;
+ 			goto err_xdp;
+@@ -839,10 +845,10 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+ 		rcu_read_unlock();
+ 		goto xdp_xmit;
+ 	case XDP_REDIRECT:
+-		veth_xdp_get(&xdp);
++		veth_xdp_get(xdp);
+ 		consume_skb(skb);
+-		xdp.rxq->mem = rq->xdp_mem;
+-		if (xdp_do_redirect(rq->dev, &xdp, xdp_prog)) {
++		xdp->rxq->mem = rq->xdp_mem;
++		if (xdp_do_redirect(rq->dev, xdp, xdp_prog)) {
+ 			stats->rx_drops++;
+ 			goto err_xdp;
  		}
-@@ -1851,7 +1851,7 @@ static int map_lookup_and_delete_elem(union bpf_attr *attr)
- 		   map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
- 		   map->map_type == BPF_MAP_TYPE_LRU_HASH ||
- 		   map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH) {
--		if (!bpf_map_is_dev_bound(map)) {
-+		if (!bpf_map_is_offloaded(map)) {
- 			bpf_disable_instrumentation();
- 			rcu_read_lock();
- 			err = map->ops->map_lookup_and_delete_elem(map, key, value, attr->flags);
-@@ -1944,7 +1944,7 @@ static int find_prog_type(enum bpf_prog_type type, struct bpf_prog *prog)
- 	if (!ops)
- 		return -EINVAL;
+@@ -862,7 +868,7 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+ 	rcu_read_unlock();
  
--	if (!bpf_prog_is_dev_bound(prog->aux))
-+	if (!bpf_prog_is_offloaded(prog->aux))
- 		prog->aux->ops = ops;
+ 	/* check if bpf_xdp_adjust_head was used */
+-	off = orig_data - xdp.data;
++	off = orig_data - xdp->data;
+ 	if (off > 0)
+ 		__skb_push(skb, off);
+ 	else if (off < 0)
+@@ -871,21 +877,21 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+ 	skb_reset_mac_header(skb);
+ 
+ 	/* check if bpf_xdp_adjust_tail was used */
+-	off = xdp.data_end - orig_data_end;
++	off = xdp->data_end - orig_data_end;
+ 	if (off != 0)
+ 		__skb_put(skb, off); /* positive on grow, negative on shrink */
+ 
+ 	/* XDP frag metadata (e.g. nr_frags) are updated in eBPF helpers
+ 	 * (e.g. bpf_xdp_adjust_tail), we need to update data_len here.
+ 	 */
+-	if (xdp_buff_has_frags(&xdp))
++	if (xdp_buff_has_frags(xdp))
+ 		skb->data_len = skb_shinfo(skb)->xdp_frags_size;
  	else
- 		prog->aux->ops = &bpf_offload_prog_ops;
-@@ -2255,7 +2255,7 @@ bool bpf_prog_get_ok(struct bpf_prog *prog,
+ 		skb->data_len = 0;
  
- 	if (prog->type != *attach_type)
- 		return false;
--	if (bpf_prog_is_dev_bound(prog->aux) && !attach_drv)
-+	if (bpf_prog_is_offloaded(prog->aux) && !attach_drv)
- 		return false;
+ 	skb->protocol = eth_type_trans(skb, rq->dev);
  
- 	return true;
-@@ -2598,7 +2598,7 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
- 	atomic64_set(&prog->aux->refcnt, 1);
- 	prog->gpl_compatible = is_gpl ? 1 : 0;
- 
--	if (bpf_prog_is_dev_bound(prog->aux)) {
-+	if (bpf_prog_is_offloaded(prog->aux)) {
- 		err = bpf_prog_offload_init(prog, attr);
- 		if (err)
- 			goto free_prog_sec;
-@@ -3997,7 +3997,7 @@ static int bpf_prog_get_info_by_fd(struct file *file,
- 			return -EFAULT;
- 	}
- 
--	if (bpf_prog_is_dev_bound(prog->aux)) {
-+	if (bpf_prog_is_offloaded(prog->aux)) {
- 		err = bpf_prog_offload_info_fill(&info, prog);
- 		if (err)
- 			return err;
-@@ -4225,7 +4225,7 @@ static int bpf_map_get_info_by_fd(struct file *file,
- 	}
- 	info.btf_vmlinux_value_type_id = map->btf_vmlinux_value_type_id;
- 
--	if (bpf_map_is_dev_bound(map)) {
-+	if (bpf_map_is_offloaded(map)) {
- 		err = bpf_map_offload_info_fill(&info, map);
- 		if (err)
- 			return err;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 1d51bd9596da..fc4e313a4d2e 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -13648,7 +13648,7 @@ static int do_check(struct bpf_verifier_env *env)
- 			env->prev_log_len = env->log.len_used;
- 		}
- 
--		if (bpf_prog_is_dev_bound(env->prog->aux)) {
-+		if (bpf_prog_is_offloaded(env->prog->aux)) {
- 			err = bpf_prog_offload_verify_insn(env, env->insn_idx,
- 							   env->prev_insn_idx);
- 			if (err)
-@@ -14128,7 +14128,7 @@ static int check_map_prog_compatibility(struct bpf_verifier_env *env,
- 		}
- 	}
- 
--	if ((bpf_prog_is_dev_bound(prog->aux) || bpf_map_is_dev_bound(map)) &&
-+	if ((bpf_prog_is_offloaded(prog->aux) || bpf_map_is_offloaded(map)) &&
- 	    !bpf_offload_prog_map_match(prog, map)) {
- 		verbose(env, "offload device mismatch between prog and map\n");
- 		return -EINVAL;
-@@ -14609,7 +14609,7 @@ static int verifier_remove_insns(struct bpf_verifier_env *env, u32 off, u32 cnt)
- 	unsigned int orig_prog_len = env->prog->len;
- 	int err;
- 
--	if (bpf_prog_is_dev_bound(env->prog->aux))
-+	if (bpf_prog_is_offloaded(env->prog->aux))
- 		bpf_prog_offload_remove_insns(env, off, cnt);
- 
- 	err = bpf_remove_insns(env->prog, off, cnt);
-@@ -14690,7 +14690,7 @@ static void opt_hard_wire_dead_code_branches(struct bpf_verifier_env *env)
- 		else
- 			continue;
- 
--		if (bpf_prog_is_dev_bound(env->prog->aux))
-+		if (bpf_prog_is_offloaded(env->prog->aux))
- 			bpf_prog_offload_replace_insn(env, i, &ja);
- 
- 		memcpy(insn, &ja, sizeof(ja));
-@@ -14873,7 +14873,7 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
- 		}
- 	}
- 
--	if (bpf_prog_is_dev_bound(env->prog->aux))
-+	if (bpf_prog_is_offloaded(env->prog->aux))
- 		return 0;
- 
- 	insn = env->prog->insnsi + delta;
-@@ -15273,7 +15273,7 @@ static int fixup_call_args(struct bpf_verifier_env *env)
- 	int err = 0;
- 
- 	if (env->prog->jit_requested &&
--	    !bpf_prog_is_dev_bound(env->prog->aux)) {
-+	    !bpf_prog_is_offloaded(env->prog->aux)) {
- 		err = jit_subprogs(env);
- 		if (err == 0)
- 			return 0;
-@@ -16747,7 +16747,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr)
- 	if (ret < 0)
- 		goto skip_full_check;
- 
--	if (bpf_prog_is_dev_bound(env->prog->aux)) {
-+	if (bpf_prog_is_offloaded(env->prog->aux)) {
- 		ret = bpf_prog_offload_verifier_prep(env->prog);
- 		if (ret)
- 			goto skip_full_check;
-@@ -16760,7 +16760,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr)
- 	ret = do_check_subprogs(env);
- 	ret = ret ?: do_check_main(env);
- 
--	if (ret == 0 && bpf_prog_is_dev_bound(env->prog->aux))
-+	if (ret == 0 && bpf_prog_is_offloaded(env->prog->aux))
- 		ret = bpf_prog_offload_finalize(env);
- 
- skip_full_check:
-@@ -16795,7 +16795,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr)
- 	/* do 32-bit optimization after insn patching has done so those patched
- 	 * insns could be handled correctly.
- 	 */
--	if (ret == 0 && !bpf_prog_is_dev_bound(env->prog->aux)) {
-+	if (ret == 0 && !bpf_prog_is_offloaded(env->prog->aux)) {
- 		ret = opt_subreg_zext_lo32_rnd_hi32(env, attr);
- 		env->prog->aux->verifier_zext = bpf_jit_needs_zext() ? !ret
- 								     : false;
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 7627c475d991..5b221568dfd4 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -9224,7 +9224,7 @@ static int dev_xdp_attach(struct net_device *dev, struct netlink_ext_ack *extack
- 			NL_SET_ERR_MSG(extack, "Native and generic XDP can't be active at the same time");
- 			return -EEXIST;
- 		}
--		if (!offload && bpf_prog_is_dev_bound(new_prog->aux)) {
-+		if (!offload && bpf_prog_is_offloaded(new_prog->aux)) {
- 			NL_SET_ERR_MSG(extack, "Using device-bound program without HW_MODE flag is not supported");
- 			return -EINVAL;
- 		}
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 8607136b6e2c..d89c30ba2623 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -8719,7 +8719,7 @@ static bool xdp_is_valid_access(int off, int size,
- 	}
- 
- 	if (type == BPF_WRITE) {
--		if (bpf_prog_is_dev_bound(prog->aux)) {
-+		if (bpf_prog_is_offloaded(prog->aux)) {
- 			switch (off) {
- 			case offsetof(struct xdp_md, rx_queue_index):
- 				return __is_valid_xdp_access(off, size);
+-	metalen = xdp.data - xdp.data_meta;
++	metalen = xdp->data - xdp->data_meta;
+ 	if (metalen)
+ 		skb_metadata_set(skb, metalen);
+ out:
+@@ -898,7 +904,7 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+ 	return NULL;
+ err_xdp:
+ 	rcu_read_unlock();
+-	xdp_return_buff(&xdp);
++	xdp_return_buff(xdp);
+ xdp_xmit:
+ 	return NULL;
+ }
 -- 
 2.39.0.rc0.267.gcb52ba06e7-goog
 
