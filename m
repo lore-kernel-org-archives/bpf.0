@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BBCDC63706
-	for <bpf@archiver.kernel.org>; Tue,  6 Dec 2022 23:10:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4267C4708D
+	for <bpf@archiver.kernel.org>; Tue,  6 Dec 2022 23:10:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbiLFXKc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 6 Dec 2022 18:10:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55682 "EHLO
+        id S229565AbiLFXKb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 6 Dec 2022 18:10:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbiLFXKa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 6 Dec 2022 18:10:30 -0500
+        with ESMTP id S229649AbiLFXK3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 6 Dec 2022 18:10:29 -0500
 Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C3F429AE
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C35429AC
         for <bpf@vger.kernel.org>; Tue,  6 Dec 2022 15:10:28 -0800 (PST)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 2B6LhKLX020825
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 2B6LhAMG013912
         for <bpf@vger.kernel.org>; Tue, 6 Dec 2022 15:10:28 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=YNK9Y1Lrn83gq4Dlrhl4SQoz5DZE4jYE8+PAFCc56xg=;
- b=j57MH0WXkjb+QlsFHLcnXYC83qQqdu+4XZUe7XIR6iOXLtmrRKWiKJaOMtmWMPzCRGo4
- XLjNOcQM6YwiayfH2NhYXIYcNu/Qn/4OQEzVw2a1Djo+K+/6NcTi0OqE2YY1o2Vqtjap
- cqlVNaf60248zri/BQ0OOuKum8sfys3tR24= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3m9g8cdfa0-3
+ bh=AbOeVTPiDkhygRitG0ME7dPETq/dImrFr6jfY7hkL/8=;
+ b=XG84iKE9fHOSBu9RbaBopIzRcURWEq5R51mg0Bbb705dHZAMl2jexOmLxJ8FjZjpo8o0
+ fzs8h815ODzqOdzrzPaGENST0PIHhpLxYhhOConooiD+B+oL0pceCjxMkbp+XxSgJQp/
+ 1Jqa5sRwnfc9ywXIh5atEVtZo0rI6v58HsI= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3m9s5q0c24-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Tue, 06 Dec 2022 15:10:28 -0800
-Received: from twshared8047.05.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+Received: from twshared15216.17.frc2.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 6 Dec 2022 15:10:26 -0800
+ 15.1.2375.31; Tue, 6 Dec 2022 15:10:26 -0800
 Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
-        id C0C96120B3795; Tue,  6 Dec 2022 15:10:07 -0800 (PST)
+        id E154A120B3768; Tue,  6 Dec 2022 15:10:03 -0800 (PST)
 From:   Dave Marchevsky <davemarchevsky@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -43,9 +43,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Kumar Kartikeya Dwivedi <memxor@gmail.com>,
         Tejun Heo <tj@kernel.org>,
         Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [PATCH bpf-next 11/13] bpf: Add bpf_rbtree_{add,remove,first} decls to bpf_experimental.h
-Date:   Tue, 6 Dec 2022 15:09:58 -0800
-Message-ID: <20221206231000.3180914-12-davemarchevsky@fb.com>
+Subject: [PATCH bpf-next 03/13] bpf: Minor refactor of ref_set_release_on_unlock
+Date:   Tue, 6 Dec 2022 15:09:50 -0800
+Message-ID: <20221206231000.3180914-4-davemarchevsky@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221206231000.3180914-1-davemarchevsky@fb.com>
 References: <20221206231000.3180914-1-davemarchevsky@fb.com>
@@ -53,8 +53,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: YlFIlbmHPYIlPCrstybK3gCdJUx6CBiz
-X-Proofpoint-ORIG-GUID: YlFIlbmHPYIlPCrstybK3gCdJUx6CBiz
+X-Proofpoint-GUID: 4IoK4-7AJT2-aBCLMb8beEwuuW0xi-9c
+X-Proofpoint-ORIG-GUID: 4IoK4-7AJT2-aBCLMb8beEwuuW0xi-9c
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-12-06_12,2022-12-06_01,2022-06-22_01
@@ -62,51 +62,57 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+This is mostly a nonfunctional change. The verifier log message
+"expected false release_on_unlock" was missing a newline, so add it and
+move some checks around to reduce indentation level.
+
 Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
 ---
- .../testing/selftests/bpf/bpf_experimental.h  | 24 +++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ kernel/bpf/verifier.c | 26 ++++++++++++++------------
+ 1 file changed, 14 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testi=
-ng/selftests/bpf/bpf_experimental.h
-index 424f7bbbfe9b..dbd2c729781a 100644
---- a/tools/testing/selftests/bpf/bpf_experimental.h
-+++ b/tools/testing/selftests/bpf/bpf_experimental.h
-@@ -65,4 +65,28 @@ extern struct bpf_list_node *bpf_list_pop_front(struct=
- bpf_list_head *head) __ks
-  */
- extern struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head *hea=
-d) __ksym;
-=20
-+/* Description
-+ *	Remove 'node' from rbtree with root 'root'
-+ * Returns
-+ * 	Pointer to the removed node, or NULL if 'root' didn't contain 'node'
-+ */
-+extern struct bpf_rb_node *bpf_rbtree_remove(struct bpf_rb_root *root,
-+					     struct bpf_rb_node *node) __ksym;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 67a13110bc22..6f0aac837d77 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -8438,19 +8438,21 @@ static int ref_set_release_on_unlock(struct bpf_v=
+erifier_env *env, u32 ref_obj_i
+ 		return -EFAULT;
+ 	}
+ 	for (i =3D 0; i < state->acquired_refs; i++) {
+-		if (state->refs[i].id =3D=3D ref_obj_id) {
+-			if (state->refs[i].release_on_unlock) {
+-				verbose(env, "verifier internal error: expected false release_on_unl=
+ock");
+-				return -EFAULT;
+-			}
+-			state->refs[i].release_on_unlock =3D true;
+-			/* Now mark everyone sharing same ref_obj_id as untrusted */
+-			bpf_for_each_reg_in_vstate(env->cur_state, state, reg, ({
+-				if (reg->ref_obj_id =3D=3D ref_obj_id)
+-					reg->type |=3D PTR_UNTRUSTED;
+-			}));
+-			return 0;
++		if (state->refs[i].id !=3D ref_obj_id)
++			continue;
 +
-+/* Description
-+ *	Add 'node' to rbtree with root 'root' using comparator 'less'
-+ * Returns
-+ *	Nothing
-+ */
-+extern void bpf_rbtree_add(struct bpf_rb_root *root, struct bpf_rb_node =
-*node,
-+			   bool (less)(struct bpf_rb_node *a, const struct bpf_rb_node *b)) _=
-_ksym;
++		if (state->refs[i].release_on_unlock) {
++			verbose(env, "verifier internal error: expected false release_on_unlo=
+ck\n");
++			return -EFAULT;
+ 		}
 +
-+/* Description
-+ *	Return the first (leftmost) node in input tree
-+ * Returns
-+ *	Pointer to the node, which is _not_ removed from the tree. If the tre=
-e
-+ *	contains no nodes, returns NULL.
-+ */
-+extern struct bpf_rb_node *bpf_rbtree_first(struct bpf_rb_root *root) __=
-ksym;
-+
- #endif
++		state->refs[i].release_on_unlock =3D true;
++		/* Now mark everyone sharing same ref_obj_id as untrusted */
++		bpf_for_each_reg_in_vstate(env->cur_state, state, reg, ({
++			if (reg->ref_obj_id =3D=3D ref_obj_id)
++				reg->type |=3D PTR_UNTRUSTED;
++		}));
++		return 0;
+ 	}
+ 	verbose(env, "verifier internal error: ref state missing for ref_obj_id=
+\n");
+ 	return -EFAULT;
 --=20
 2.30.2
 
