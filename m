@@ -2,37 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39FDCC3A5A7
-	for <bpf@archiver.kernel.org>; Tue,  6 Dec 2022 23:10:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C613C352A1
+	for <bpf@archiver.kernel.org>; Tue,  6 Dec 2022 23:10:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbiLFXKJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 6 Dec 2022 18:10:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
+        id S229576AbiLFXKN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 6 Dec 2022 18:10:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiLFXKJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 6 Dec 2022 18:10:09 -0500
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDBE42990
-        for <bpf@vger.kernel.org>; Tue,  6 Dec 2022 15:10:07 -0800 (PST)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 2B6LhKOw020816
-        for <bpf@vger.kernel.org>; Tue, 6 Dec 2022 15:10:07 -0800
+        with ESMTP id S229607AbiLFXKM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 6 Dec 2022 18:10:12 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96AF14298E
+        for <bpf@vger.kernel.org>; Tue,  6 Dec 2022 15:10:11 -0800 (PST)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B6LhDGo023764
+        for <bpf@vger.kernel.org>; Tue, 6 Dec 2022 15:10:11 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=wfxnHkqNHn/3/1si8yzPfSWKfKX/d5k5FyRfB4cYt5Q=;
- b=LTv8N9UMEIlwE6tNcHUme8td9Xcfl/lR6DioYbLaGX6nYnOYtDLjrX6ewN+VOeFCwTEl
- 5sf1F6gj542SVNA+XLWQhba7O4JFGtXIF1VocMHIIn0LiwyQbfbRt7yVhSRKwQ6Vnc6W
- LgO7azN+rqIiEVCo2w0YrUs2y+S3GTCXykA= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=UPfqMIeSSu1MikIa77B5XLfGlxDRi8Svjkb+c38YdQ8=;
+ b=hiFmp+2IqrJND/CVvEbf7ARRs7v7dYzQ/7hwc6Vxx7dzAPvfAEX2hFU5okaCT6Ml04On
+ c4gLzh5eC4mYHCkskoVObbZrctP8H5/lsG09JGe/W8qXoISg38xo7KMr9711dN7KniJV
+ Mksn7xHxXwAzgE0hMiy6ZUB6pxCYZrGV5PI= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3m9g8cdf80-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3m9sbt8bwm-8
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 06 Dec 2022 15:10:07 -0800
-Received: from twshared15216.17.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 06 Dec 2022 15:10:11 -0800
+Received: from twshared8047.05.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 6 Dec 2022 15:10:06 -0800
+ 15.1.2375.34; Tue, 6 Dec 2022 15:10:08 -0800
 Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
-        id D6D74120B375D; Tue,  6 Dec 2022 15:10:01 -0800 (PST)
+        id 52EFE120B3762; Tue,  6 Dec 2022 15:10:03 -0800 (PST)
 From:   Dave Marchevsky <davemarchevsky@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -42,16 +43,18 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Kumar Kartikeya Dwivedi <memxor@gmail.com>,
         Tejun Heo <tj@kernel.org>,
         Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [PATCH bpf-next 00/13] BPF rbtree next-gen datastructure
-Date:   Tue, 6 Dec 2022 15:09:47 -0800
-Message-ID: <20221206231000.3180914-1-davemarchevsky@fb.com>
+Subject: [PATCH bpf-next 02/13] bpf: map_check_btf should fail if btf_parse_fields fails
+Date:   Tue, 6 Dec 2022 15:09:49 -0800
+Message-ID: <20221206231000.3180914-3-davemarchevsky@fb.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221206231000.3180914-1-davemarchevsky@fb.com>
+References: <20221206231000.3180914-1-davemarchevsky@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: T8j2h4qgt1T5-xPD9GJk0EIujU6Es1h2
-X-Proofpoint-ORIG-GUID: T8j2h4qgt1T5-xPD9GJk0EIujU6Es1h2
+X-Proofpoint-GUID: 3irBWWqr4eRC1PvLL3gEo35BPFNJ_Hf_
+X-Proofpoint-ORIG-GUID: 3irBWWqr4eRC1PvLL3gEo35BPFNJ_Hf_
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-12-06_12,2022-12-06_01,2022-06-22_01
@@ -59,180 +62,56 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series adds a rbtree datastructure following the "next-gen
-datastructure" precedent set by recently-added linked-list [0]. This is
-a reimplementation of previous rbtree RFC [1] to use kfunc + kptr
-instead of adding a new map type. This series adds a smaller set of API
-functions than that RFC - just the minimum needed to support current
-cgfifo example scheduler in ongoing sched_ext effort [2], namely:
+map_check_btf calls btf_parse_fields to create a btf_record for its
+value_type. If there are no special fields in the value_type
+btf_parse_fields returns NULL, whereas if there special value_type
+fields but they are invalid in some way an error is returned.
 
-  bpf_rbtree_add
-  bpf_rbtree_remove
-  bpf_rbtree_first
-
-The meat of this series is bugfixes and verifier infra work to support
-these API functions. Adding more rbtree kfuncs in future patches should
-be straightforward as a result.
-
-BPF rbtree uses struct rb_root_cached + existing rbtree lib under the
-hood. From the BPF program writer's perspective, a BPF rbtree is very
-similar to existing linked list. Consider the following example:
+An example invalid state would be:
 
   struct node_data {
-    long key;
-    long data;
     struct bpf_rb_node node;
-  }
-
-  static bool less(struct bpf_rb_node *a, const struct bpf_rb_node *b)
-  {
-    struct node_data *node_a;
-    struct node_data *node_b;
-
-    node_a =3D container_of(a, struct node_data, node);
-    node_b =3D container_of(b, struct node_data, node);
-
-    return node_a->key < node_b->key;
-  }
+    int data;
+  };
 
   private(A) struct bpf_spin_lock glock;
-  private(A) struct bpf_rb_root groot __contains(node_data, node);
+  private(A) struct bpf_list_head ghead __contains(node_data, node);
 
-  /* ... in BPF program */
-  struct node_data *n, *m;
-  struct bpf_rb_node *res;
+groot should be invalid as its __contains tag points to a field with
+type !=3D "bpf_list_node".
 
-  n =3D bpf_obj_new(typeof(*n));
-  if (!n)
-    /* skip */
-  n->key =3D 5;
-  n->data =3D 10;
+Before this patch, such a scenario would result in btf_parse_fields
+returning an error ptr, subsequent !IS_ERR_OR_NULL check failing,
+and btf_check_and_fixup_fields returning 0, which would then be
+returned by map_check_btf.
 
-  bpf_spin_lock(&glock);
-  bpf_rbtree_add(&groot, &n->node, less);
-  bpf_spin_unlock(&glock);
+After this patch's changes, -EINVAL would be returned by map_check_btf
+and the map would correctly fail to load.
 
-  bpf_spin_lock(&glock);
-  res =3D bpf_rbtree_first(&groot);
-  if (!res)
-    /* skip */
-  res =3D bpf_rbtree_remove(&groot, res);
-  if (!res)
-    /* skip */
-  bpf_spin_unlock(&glock);
+Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
+cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Fixes: aa3496accc41 ("bpf: Refactor kptr_off_tab into btf_record")
+---
+ kernel/bpf/syscall.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-  m =3D container_of(res, struct node_data, node);
-  bpf_obj_drop(m);
-
-Some obvious similarities:
-
-  * Special bpf_rb_root and bpf_rb_node types have same semantics
-    as bpf_list_head and bpf_list_node, respectively
-  * __contains is used to associated node type with root
-  * The spin_lock associated with a rbtree must be held when using
-    rbtree API kfuncs
-  * Nodes are allocated via bpf_obj_new and dropped via bpf_obj_drop
-  * Rbtree takes ownership of node lifetime when a node is added.
-    Removing a node gives ownership back to the program, requiring a
-    bpf_obj_drop before program exit
-
-Some new additions as well:
-
-  * Support for callbacks in kfunc args is added to enable 'less'
-    callback use above
-  * bpf_rbtree_first's release_on_unlock handling is a bit novel, as
-    it's the first next-gen ds API function to release_on_unlock its
-    return reg instead of nonexistent node arg
-  * Because all references to nodes already added to the rbtree are
-    'non-owning', i.e. release_on_unlock and PTR_UNTRUSTED,
-    bpf_rbtree_remove must accept such a reference in order to remove it
-    from the tree
-
-It seemed better to special-case some 'new additions' verifier logic for
-now instead of adding new type flags and concepts, as some of the concept=
-s
-(e.g. PTR_UNTRUSTED + release_on_unlock) need a refactoring pass before
-we pile more on. Regardless, the net-new verifier logic added in this
-patchset is minimal. Verifier changes are mostly generaliztion of
-existing linked-list logic and some bugfixes.
-
-A note on naming:=20
-
-Some existing list-specific helpers are renamed to 'datastructure_head',
-'datastructure_node', etc. Probably a more concise and accurate naming
-would be something like 'ng_ds_head' for 'next-gen datastructure'.
-
-For folks who weren't following the conversations over past few months,=20
-though, such a naming scheme might seem to indicate that _all_ next-gen
-datastructures must have certain semantics, like release_on_unlock,
-which aren't necessarily required. For this reason I'd like some
-feedback on how to name things.
-
-Summary of patches:
-
-  Patches 1, 2, and 10 are bugfixes which are likely worth applying
-  independently of rbtree implementation. Patch 12 is somewhere between
-  nice-to-have and bugfix.
-
-  Patches 3 and 4 are nonfunctional refactor/rename.
-
-  Patches 5 - 9 implement the meat of rbtree support in this series,
-  gradually building up to implemented kfuncs that verify as expected.
-  Patch 11 adds the bpf_rbtree_{add,first,remove} to bpf_experimental.h.
-
-  Patch 13 adds tests.
-
-  [0]: lore.kernel.org/bpf/20221118015614.2013203-1-memxor@gmail.com
-  [1]: lore.kernel.org/bpf/20220830172759.4069786-1-davemarchevsky@fb.com
-  [2]: lore.kernel.org/bpf/20221130082313.3241517-1-tj@kernel.org
-
-Future work:
-  Enabling writes to release_on_unlock refs should be done before the
-  functionality of BPF rbtree can truly be considered complete.
-  Implementing this proved more complex than expected so it's been
-  pushed off to a future patch.
-
-Dave Marchevsky (13):
-  bpf: Loosen alloc obj test in verifier's reg_btf_record
-  bpf: map_check_btf should fail if btf_parse_fields fails
-  bpf: Minor refactor of ref_set_release_on_unlock
-  bpf: rename list_head -> datastructure_head in field info types
-  bpf: Add basic bpf_rb_{root,node} support
-  bpf: Add bpf_rbtree_{add,remove,first} kfuncs
-  bpf: Add support for bpf_rb_root and bpf_rb_node in kfunc args
-  bpf: Add callback validation to kfunc verifier logic
-  bpf: Special verifier handling for bpf_rbtree_{remove, first}
-  bpf, x86: BPF_PROBE_MEM handling for insn->off < 0
-  bpf: Add bpf_rbtree_{add,remove,first} decls to bpf_experimental.h
-  libbpf: Make BTF mandatory if program BTF has spin_lock or alloc_obj
-    type
-  selftests/bpf: Add rbtree selftests
-
- arch/x86/net/bpf_jit_comp.c                   | 123 +++--
- include/linux/bpf.h                           |  21 +-
- include/uapi/linux/bpf.h                      |  11 +
- kernel/bpf/btf.c                              | 181 ++++---
- kernel/bpf/helpers.c                          |  75 ++-
- kernel/bpf/syscall.c                          |  33 +-
- kernel/bpf/verifier.c                         | 506 +++++++++++++++---
- tools/include/uapi/linux/bpf.h                |  11 +
- tools/lib/bpf/libbpf.c                        |  50 +-
- .../testing/selftests/bpf/bpf_experimental.h  |  24 +
- .../selftests/bpf/prog_tests/linked_list.c    |  12 +-
- .../testing/selftests/bpf/prog_tests/rbtree.c | 184 +++++++
- tools/testing/selftests/bpf/progs/rbtree.c    | 180 +++++++
- .../progs/rbtree_btf_fail__add_wrong_type.c   |  48 ++
- .../progs/rbtree_btf_fail__wrong_node_type.c  |  21 +
- .../testing/selftests/bpf/progs/rbtree_fail.c | 263 +++++++++
- 16 files changed, 1549 insertions(+), 194 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/rbtree.c
- create mode 100644 tools/testing/selftests/bpf/progs/rbtree.c
- create mode 100644 tools/testing/selftests/bpf/progs/rbtree_btf_fail__ad=
-d_wrong_type.c
- create mode 100644 tools/testing/selftests/bpf/progs/rbtree_btf_fail__wr=
-ong_node_type.c
- create mode 100644 tools/testing/selftests/bpf/progs/rbtree_fail.c
-
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 35972afb6850..c3599a7902f0 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -1007,7 +1007,10 @@ static int map_check_btf(struct bpf_map *map, cons=
+t struct btf *btf,
+ 	map->record =3D btf_parse_fields(btf, value_type,
+ 				       BPF_SPIN_LOCK | BPF_TIMER | BPF_KPTR | BPF_LIST_HEAD,
+ 				       map->value_size);
+-	if (!IS_ERR_OR_NULL(map->record)) {
++	if (IS_ERR(map->record))
++		return -EINVAL;
++
++	if (map->record) {
+ 		int i;
+=20
+ 		if (!bpf_capable()) {
 --=20
 2.30.2
 
