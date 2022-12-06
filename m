@@ -2,105 +2,92 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A4C8C352A1
-	for <bpf@archiver.kernel.org>; Tue,  6 Dec 2022 18:24:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94941C3A5A7
+	for <bpf@archiver.kernel.org>; Tue,  6 Dec 2022 18:36:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbiLFSYK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 6 Dec 2022 13:24:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33988 "EHLO
+        id S229613AbiLFSgo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 6 Dec 2022 13:36:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiLFSXg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 6 Dec 2022 13:23:36 -0500
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B957429A2
-        for <bpf@vger.kernel.org>; Tue,  6 Dec 2022 10:21:21 -0800 (PST)
-Received: by mail-io1-f52.google.com with SMTP id e189so10273031iof.1
-        for <bpf@vger.kernel.org>; Tue, 06 Dec 2022 10:21:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zNsrgktQf590sYBrNYcupAeuiRqMUo7PmRbZTzg2EYA=;
-        b=Ik534o+EiJUrpShJ1G/jaUl+A6JiRbnzwlNgN3hG3JUrcbojFHknf6tBwKw5cdAfNZ
-         bj4TppBN1OgGEGPFNljd9KDkdg3xhkl647ML48tBZHBpiFbED1MsKxhVW7pqwsmec5QK
-         ZY5S3ruBFXeJdGvcawTpVkNAnf+uMpvCJsE/+QZLnkfSoLobjROB7PiHDnFxQ0pLMFHK
-         s3LgYmUvW7bpZku5Y5LsBAw4PRq6x6g+fOBjCpeTj0E3r4euT8aXuf60Sfs6keAZA5a3
-         od1Z80I/NrebUnlRDLT24GMq7QTDURVf63sqsIeF3/vlhwc/uDJmR6v0a8NdLnNWpQxc
-         zcyQ==
-X-Gm-Message-State: ANoB5pmzO/exRLP3pnRMnGRIo9daUHXyAY1ry/B3vShyCxNzA8XemXQF
-        1xx4/NosmKik8idRFkvJmv2fBF3KuO5hvJ6HQYw=
-X-Google-Smtp-Source: AA0mqf7b8NsYyS0azJ+OAqwQyezasHpys2zrEqJg8dJOILMc5CurjKjJt3I9mjC0S1RYLtY957kAnBEOyUf5xcNawbw=
-X-Received: by 2002:a5d:87c8:0:b0:6e0:1ddd:7da6 with SMTP id
- q8-20020a5d87c8000000b006e01ddd7da6mr3300859ios.145.1670350839722; Tue, 06
- Dec 2022 10:20:39 -0800 (PST)
+        with ESMTP id S229775AbiLFSg2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 6 Dec 2022 13:36:28 -0500
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B404DD65;
+        Tue,  6 Dec 2022 10:36:26 -0800 (PST)
+Message-ID: <deb77161-3091-a134-4b82-78fef06efe85@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1670351785;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vVTQ+Ap4e/KZs2xYUNBsyqF85aC6jCpJzIZ0LtrQ85k=;
+        b=glcRjbZtMXKskaTlgnihbci7XEeagGKW4gAqUbiZx/A22Q9dduxcNX3r9oZe563RaXN7zP
+        +rSMcc9XOIjJ7+Y9PEBekdgpwjzC/SZSfRlkBIhLrX2H6ax3iLTeYIEhVvDV5FGoN7CJ+n
+        rPDMlG4x+XxRJfJYErvZusj5Toa0bks=
+Date:   Tue, 6 Dec 2022 10:36:20 -0800
 MIME-Version: 1.0
-References: <20221121213123.1373229-1-jolsa@kernel.org> <bcdac077-3043-a648-449d-1b60037388de@iogearbox.net>
- <Y388m6wOktvZo1d4@krava> <CAADnVQJ5knvWaxVa=9_Ag3DU_qewGBbHGv_ZH=K+ETUWM1qAmA@mail.gmail.com>
- <Y4CMbTeVud0WfPtK@krava> <CAEf4BzZP9z3kdzn=04EvAprG-Ldrsegy5JkzvoBPvcdMG_vvGg@mail.gmail.com>
- <Y4uOSrXBxVwnxZkX@google.com> <Y43j3IGvLKgshuhR@krava> <CAM9d7cj2QGH2x=J=7LVEEOfcDUYLU0Cmd_O7KEHZM-9FRmX3OA@mail.gmail.com>
- <Y4750mbd7XEzue0r@krava>
-In-Reply-To: <Y4750mbd7XEzue0r@krava>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 6 Dec 2022 10:20:28 -0800
-Message-ID: <CAM9d7cj-QRCk-1TnHj0YGteRupjPR4-=pCMO-dDNya_M3X38cw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Restrict attachment of bpf program to some tracepoints
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Hao Sun <sunhao.th@gmail.com>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH bpf-next v2] bpf: Upgrade bpf_{g,s}etsockopt return values
+Content-Language: en-US
+To:     Ji Rongfeng <SikoJobs@outlook.com>
+Cc:     daniel@iogearbox.net, john.fastabend@gmail.com, ast@kernel.org,
+        andrii@kernel.org, song@kernel.org, yhs@fb.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <DU0P192MB1547FE6F35CC1A3EEA1AFDECD6179@DU0P192MB1547.EURP192.PROD.OUTLOOK.COM>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <DU0P192MB1547FE6F35CC1A3EEA1AFDECD6179@DU0P192MB1547.EURP192.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Dec 6, 2022 at 12:14 AM Jiri Olsa <olsajiri@gmail.com> wrote:
->
-> On Mon, Dec 05, 2022 at 08:00:16PM -0800, Namhyung Kim wrote:
-> > On Mon, Dec 5, 2022 at 4:28 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> > >
-> > > On Sat, Dec 03, 2022 at 09:58:34AM -0800, Namhyung Kim wrote:
-> > > > What about contention_begin?  I wonder if we can disallow recursions
-> > > > for those in the deny list like using bpf_prog_active..
-> > >
-> > > I was testing change below which allows to check recursion just
-> > > for contention_begin tracepoint
-> > >
-> > > for the reported issue we might be ok with the change that Andrii
-> > > suggested, but we could have the change below as extra precaution
-> >
-> > Looks ok to me.  But it seems it'd add the recursion check to every
->
-> hm, it should allocate recursion variable just for the contention_begin
-> tracepoint, rest should see NULL pointer
+On 12/2/22 9:39 AM, Ji Rongfeng wrote:
+> Returning -EINVAL almost all the time when error occurs is not very
+> helpful for the bpf prog to figure out what is wrong. This patch
+> upgrades some return values so that they will be much more helpful.
+> 
+> * return -ENOPROTOOPT when optname is unsupported
+> 
+>    The same as {g,s}etsockopt() syscall does. Before this patch,
+>    bpf_setsockopt(TCP_SAVED_SYN) already returns -ENOPROTOOPT, which
+>    may confuse the user, as -EINVAL is returned on other unsupported
+>    optnames. This patch also rejects TCP_SAVED_SYN right in
+>    sol_tcp_sockopt() when getopt is false, since do_tcp_setsockopt()
+>    is just the executor and it's not its duty to discover such error
+>    in bpf. We should maintain a precise allowlist to control whether
+>    an optname is supported and allowed to enter the executor or not.
+>    Functions like do_tcp_setsockopt(), their behaviour are not fully
+>    controllable by bpf. Imagine we let an optname pass, expecting
+>    -ENOPROTOOPT will be returned, but someday that optname is
+>    actually processed and unfortunately causes deadlock when calling
+>    from bpf. Thus, precise access control is essential.
 
-Oh, right.  I meant the NULL check.
+Please leave the current -EINVAL to distinguish between optnames rejected by bpf 
+and optnames rejected by the do_*_{get,set}sockopt().
 
->
-> > tracepoint.  Can we just change the affected tracepoints only by
-> > using a kind of wrapped btp->bpf_func with some macro magic? ;-)
->
-> I tried that and the only other ways I found are:
->
->   - add something like TRACE_EVENT_FLAGS macro and have __init call
->     for specific tracepoint that sets the flag
->
->   - add extra new 'bpf_func' that checks the re-entry, but that'd mean
->     around 1000 extra mostly unused small functions
+> 
+> * return -EOPNOTSUPP on level-related errors
+> 
+>    In do_ip_getsockopt(), -EOPNOTSUPP will be returned if level !=
+>    SOL_IP. In ipv6_getsockopt(), -ENOPROTOOPT will be returned if
+>    level != SOL_IPV6. To be distinguishable, the former is chosen.
 
-Hmm.. ok, that's not what I want.  I'm fine with the patch then.
-With the 'likely' change,
+I would leave this one as is also.  Are you sure the do_ip_*sockopt cannot 
+handle sk_family == AF_INET6?  afaict, bpf is rejecting those optnames instead.
 
-Acked-by: Namhyung Kim <namhyung@kernel.org>
+> 
+> * return -EBADFD when sk is not a full socket
+> 
+>    -EPERM or -EBUSY was an option, but in many cases one of them
+>    will be returned, especially under level SOL_TCP. -EBADFD is the
+>    better choice, since it is hardly returned in all cases. The bpf
+>    prog will be able to recognize it and decide what to do next.
 
-Thanks,
-Namhyung
+This one makes sense and is useful.
+
