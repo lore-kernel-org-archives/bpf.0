@@ -2,383 +2,175 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B5CAC4708D
-	for <bpf@archiver.kernel.org>; Wed,  7 Dec 2022 21:25:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2B44C4708D
+	for <bpf@archiver.kernel.org>; Wed,  7 Dec 2022 21:49:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiLGVZn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 7 Dec 2022 16:25:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
+        id S229997AbiLGVtj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 7 Dec 2022 16:49:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiLGVZm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 7 Dec 2022 16:25:42 -0500
-Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F3AB9C
-        for <bpf@vger.kernel.org>; Wed,  7 Dec 2022 13:25:41 -0800 (PST)
-Received: by devvm15675.prn0.facebook.com (Postfix, from userid 115148)
-        id D31B313553A4; Wed,  7 Dec 2022 12:56:48 -0800 (PST)
-From:   Joanne Koong <joannelkoong@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     andrii@kernel.org, kernel-team@meta.com, ast@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
-        Joanne Koong <joannelkoong@gmail.com>
-Subject: [PATCH v2 bpf-next 5/6] bpf: Add bpf_dynptr_iterator
-Date:   Wed,  7 Dec 2022 12:55:36 -0800
-Message-Id: <20221207205537.860248-6-joannelkoong@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221207205537.860248-1-joannelkoong@gmail.com>
-References: <20221207205537.860248-1-joannelkoong@gmail.com>
+        with ESMTP id S229993AbiLGVtV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 7 Dec 2022 16:49:21 -0500
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-pr2fra01on2089.outbound.protection.outlook.com [40.107.12.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED55B862F5
+        for <bpf@vger.kernel.org>; Wed,  7 Dec 2022 13:48:58 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iZrBXAeCZ8SbQdSejJSWjA83gJ1VIjKf9A2gBqnJH42d/0m211fLuqzstSlOos7mSzQixeYs/mwYai1WCv0wYJ8xncZzVEA6witI2eSoYS05ahOV5OF+LzONx9UaLOHc/EZeBXkWg3Nv5X1R/1rdNJ7Epwbu2HGYT+Gt9O/EDCGVHG8rObEUs5CNsVk6dFuk1HGsQWjdKBkLNGugIzfwM/DTajuLwWc9JkNFVZmjGrNj9So8W5OvrOOaAgF/toGKvLTcWU6y9DXmeky+YYvugf3FGv+Fe7BdDhjd60ChcG1dRwN99J7npyL5u3EcyDSAxSbd92Ey1aWQEPA6IRtBqA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ftpE7YS/i9poAfjx1mg0oXFLeksMXzBaokvd9jn2fOM=;
+ b=Y1MnABtpMaoc8fd2h2rjwjevLb0j2UTSUzt5b4EnVh4tGqiRDLd37in3c5W/Z7IeKTeSeaoyW2ondEe67HaYVVw2NgoH4XqJ4alyI3WQ9lusR3K5kg3Lz7bcBf8GNYVt7P5QCI/0AeI/oVIdfx9IFkBuEhqgZ6hXPLjea/OjHd5UALCX9hsOhH5ZemGDSt21wH+1ovmciewrMBYNwhROvMjd+mTgCfD/O5NK2rmt8BbNF1oHip5NHc7PHmowxJq8m4LpZUbGWsHoXr8WF8avzLDO7EP/hzKSWkrZspE43pwX+FcIL7Hh7+dCmkawGdeEp5Sqrj51c8sBIGCKhKq7ww==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ftpE7YS/i9poAfjx1mg0oXFLeksMXzBaokvd9jn2fOM=;
+ b=yXqsX8SJ8OrKPeOoAHvSuz1w1OmjWFhFxev37hDzRp34siwuBCVRkstwjwp6D2NcneppWgYUxhUKZ4IV05m+T6p17IqE+tEVh20c1cE+RaeRdir7XVvJW+N+LRraUGzRt3bVG0PgZeFho/jJM3JNihNdYcOkchahYF8cyi2/+j5XjSBqBpxGCGk0AqRfxKHpkZqgCUvqMMJr5H61Pzkdk2wkWItxj7fg51tYgErmYF9wszm7nqBxyXaKYz9ufQxekPdSLk7vxu5YlMuERqrpSGNcFOGjoo9h8KeG8Y/SsdeEjy7w6OIMsBUIdmOfsxhDUzbP3tqfTcDtugEoUkMaqg==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR0P264MB2156.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:16d::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Wed, 7 Dec
+ 2022 21:48:55 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::a85b:a9b6:cb36:fa6]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::a85b:a9b6:cb36:fa6%9]) with mapi id 15.20.5880.014; Wed, 7 Dec 2022
+ 21:48:55 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Thomas Gleixner <tglx@linutronix.de>, Song Liu <song@kernel.org>
+CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "x86@kernel.org" <x86@kernel.org>, "hch@lst.de" <hch@lst.de>,
+        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>,
+        "aaron.lu@intel.com" <aaron.lu@intel.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Subject: Re: [PATCH bpf-next v2 0/5] execmem_alloc for BPF programs
+Thread-Topic: [PATCH bpf-next v2 0/5] execmem_alloc for BPF programs
+Thread-Index: AQHY8voad8K6jE28j02RCI2Gw4PNuq4/PciAgBaVcoCAAHZiAIAAbN6AgAESV4CAARoiAIAAri6AgABmeACAAHVtgIAADBoAgAcClYCAAUHIgIAAFYsAgABGIICAAAxKAA==
+Date:   Wed, 7 Dec 2022 21:48:55 +0000
+Message-ID: <4f7d2060-b2a7-46e7-0195-989b7d9a49dd@csgroup.eu>
+References: <CAPhsuW4Fy4kdTqK0rHXrPprUqiab4LgcTUG6YhDQaPrWkgZjwQ@mail.gmail.com>
+ <87v8mvsd8d.ffs@tglx>
+ <CAPhsuW5g45D+CFHBYR53nR17zG3dJ=3UJem-GCJwT0v6YCsxwg@mail.gmail.com>
+ <87k03ar3e3.ffs@tglx>
+ <CAPhsuW592J1+Z1e_g_1YPn9KcyX65WFfbbBx6hjyuj0wgN4_XQ@mail.gmail.com>
+ <878rjqqhxf.ffs@tglx>
+ <CAPhsuW65K5TBbT_noTMnAEQ58rNGe-MfnjHF-arG8SZV9nfhzg@mail.gmail.com>
+ <87v8mndy3y.ffs@tglx> <de7c70bc-94df-a372-ecfe-d2c707ad9014@csgroup.eu>
+ <87h6y7dix4.ffs@tglx>
+In-Reply-To: <87h6y7dix4.ffs@tglx>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR0P264MB2156:EE_
+x-ms-office365-filtering-correlation-id: 2928ce9d-10c0-4d29-af4f-08dad89cd67f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: YN50hrewn/c6CTywIpbRn77a5NBN2nZynNJVeMZVGovJ7ZolvLXSut0ap+udYu4CsAOo+gu+4gJGHRcE0icMIILB0g8uewbFYNhTNWYba5HOUfXKGl7nghF+oCDKcQAdqPwaI9bHxijiQO+vEpGSpxda6LmZtMFH8k796HSUzYit7h5ZCcqtYFP9F0XK6dxtgl23TpcpPvk9mEkUeRhexbl09h1Qtyahg5DFz7f0+Ph4Ikv2JsSICMeeUGXTEKznU0kgelg00SpyoK1wIK9CDvl9Lrolbzlg6dVtf3As7JWjX1lz+HBvvo/naBLY7Ni7coiOFHf5EmNmJfUiuThNiwBIz9cAgtUrLISK/e+3pgOQAMkPI84iIZAnzCnFL0viZsmmNdOK+FjkasaP9cX5pJ69qLAb8oxBXaTtU0FiqA8Ia+UA5XZDdKG/VshKLakwON+pJwhgW2OxCQHADvHAPGKjRj/N5fWH/NObsaSK6hI+mvOGe6zYQre0Ezm0+c3DCjYUdAfpCpJ8cihkQ2djvn3ZVo5/ByJ4Zo5yynbe9lPY51O0Zz5W9ghrqI4jR2SUr0tBgvBc9VaV37DpjUcOVXYe2hI2cPiiL0MKeRfNN6uqw+HoHUcBwQP13xpYyr5TDCmxBNFty0STV41IZiYxlNSxiW/GOszVtK1hy1nCyQOqD5bP3msPoiTdJqIeAOQQUFzSH4D4FEMreM4g0rUgCnGElhUHa7HHan1lAYNl5LEKDfeXrAFugpjuPIhn2lkNgZ0jb1Aaq6z8F0LJdRNR2w==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(376002)(366004)(136003)(396003)(451199015)(41300700001)(38100700002)(2616005)(2906002)(186003)(83380400001)(5660300002)(36756003)(122000001)(44832011)(478600001)(8936002)(7416002)(6486002)(38070700005)(6506007)(31686004)(71200400001)(66476007)(91956017)(66446008)(76116006)(8676002)(64756008)(31696002)(66556008)(66946007)(6512007)(316002)(26005)(4326008)(86362001)(54906003)(110136005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZWt2WVh3dkplT3M3ODRtdXNEdGd3NUlkdVBvRXNoYWxlVWZ2bStkSzJxeFl1?=
+ =?utf-8?B?VTZnNHlGTis2RkFqa1NUSVRVTXNiQVIzdUd2RE9HZ2ZFMnRqcktLSi9aK3ZE?=
+ =?utf-8?B?cE1VaElCOGtzSzJrL1pZUTkzZ0VUUVJGWiszMmZESkZNbWxKZFpDQVcwc3Jx?=
+ =?utf-8?B?bHdPMk1KMHJFSWVPNFRxZjZjTDZmaTlod09pa3RjaVQybndnazlEdUFCUUtv?=
+ =?utf-8?B?NGl0Y0NzYlVlSXJSTGJWUGdhSFkyZytGc0hhbzNycXcwOFV4NkN3cXh4VUtw?=
+ =?utf-8?B?MFdHTFc3V3pzTGUwUGhHTGY3eDBCcEhsK0FrT1djTm41OXByUEVPYWhLQmJL?=
+ =?utf-8?B?M0xPVzNQRmUzM2ZoMFVYRFZhMTczSnlyeTkrOUtxQUtOSTI5eVZxZGtDNU9M?=
+ =?utf-8?B?dmErUERkT2Z1MkphK0FCSVFMVmdudDliRE1vNVdQNlE3OWg3WDJwTUNVUGpK?=
+ =?utf-8?B?QmxiT3R6d3Npb0twZnJDYmVXcFcxNU5lVnVTcTBIUk44bmNuQ0ViS2w4a1E2?=
+ =?utf-8?B?ZDg2OERqb28zb2VhbHlZWHRQUStMNEtUUGIyUW9QVE1nN2VzL1VTZmo0MTU3?=
+ =?utf-8?B?aTJOUkZDeVZFdkZrWk1Yd1RvU1VReG5hY3lYRWtnYXVnQTRubVZOMTRuT1h2?=
+ =?utf-8?B?anYzbGg3VDNaZHlwWkhwTXNad3hEeTZnT3VCTXZ0cVBOTFpZOEZvOWtMTGNT?=
+ =?utf-8?B?OEtwaXBqeG1xR3BaeVFuKzkybEN0cCtLeTkyb21Lb2EvVlQ1OGZwSHRuTGs4?=
+ =?utf-8?B?TTRrTkdORE1PQmZuM1JKTjY2bnZGSXJWNGtVR1V0dHZXQjB3V2ZtRmorNXl6?=
+ =?utf-8?B?ZDBwc0FKSllidDY0dEwyQkNpd0VzTXFqeTlrV0NvTXJDQmFwYVhiQ1JwRzVW?=
+ =?utf-8?B?aElxVitLYmtUMGV1RDNZd1dac1FkREtWZ01aSEhwRTRiTGt6NnNDNzlVa3Y1?=
+ =?utf-8?B?OThZb0k3WXhGdlU2OUVNZGEzT0FydjFDenB6NmRoSEFSL1d5NkJRUHdEREo2?=
+ =?utf-8?B?TmErVHMvdWJJMW16aGJIQ2FqOGtmTGs3SG5uMCswY2JLaGVXckRNaDR1S0k4?=
+ =?utf-8?B?NGdFOHZOdjhWbTltU1JXeGxTbUc0bStXelJsUUFxbXFlWEFNZnhaeVNLSkw4?=
+ =?utf-8?B?WnpFdFhhYUR6dkhUcE5LdXZtVEdlL09FSkRkaUVZbWpSaER4U1dva2JRUjZm?=
+ =?utf-8?B?OGNuVnE3UmdyYlJsNUc3MGgvQkY3ajhZMjZZSHlscjV0OWlKbVQ2M05ZQjc2?=
+ =?utf-8?B?QTJBUGxvUXhJMUFENzM0VFBxTE4yRGEzNkxjNHJDaVFlY2FFUWE2UzRSa3V4?=
+ =?utf-8?B?OUlSZjhXZFM2VGtmRm03UFNBOHlpZ2xJZG1wbGNoK2VPQkk0MlB6enBQRXRU?=
+ =?utf-8?B?aTlQZkVBMlVkQm5LZmNJT29lWE81WDJ4M2Z5T25FQmJvUFNaMnJDdDdST3NL?=
+ =?utf-8?B?Q1d1QWN6dHJjZUJDV3FOaWk5VFZsQjViWUdib0RxbUdBQkJxK0Rvc3hsZk5n?=
+ =?utf-8?B?NFI0amhtUWpoWXRFWDJYcU1HRndEQmdvbnhrekU3azFvRXFlcnFnckhLdVQ5?=
+ =?utf-8?B?TGVCbkkwaFlDRlFCQ1B3L3ZNenpGMFZlRC9MNTFNWU9ubytSR1J6NmczSEF3?=
+ =?utf-8?B?R0V1djlTTzNKZmhoODRlckxUeFBQUFo1cWVIR2xWdk5xcmphRjVEcm5kTkZO?=
+ =?utf-8?B?Y2YxcU5VTHd4azNDemkrWlFWVHg5RTJJOEg2R245YytRSkJxdFNOanJ0M1BX?=
+ =?utf-8?B?YmJEUmRWcW9yZmZLTWFwaUhXZVpBT1BYdU1BK1BEZ2tUaVV4Mlg3UWQrWnpK?=
+ =?utf-8?B?ZXlYNlhDam04WWN3dFlmM2tRUFFjcjRBZjNOcXhzYnU0c0JWQW90cWVNcncr?=
+ =?utf-8?B?S203UWpMTEQ5bTJoRnJHRmF6amp3MFdQR3pUWU43cFE5N1FuaUl5UWNNZ1ha?=
+ =?utf-8?B?SGN5YzhzbDlRMTEydGtId3lydGdEVllkSXdxNzlESUQyK1JlMVphbng0SVJW?=
+ =?utf-8?B?ZVBSZk9vQ2pBOG1Bd29waW40N216VTdiZlJBUGJjZ3h6NS9HL2x1bFo4SkdM?=
+ =?utf-8?B?SkU5UkhrMEUzUG4yMnN2ODZvME1LOXNuZXdqcW1ybkZNM3I3OXYrYVhUdy9y?=
+ =?utf-8?B?NEs2VDNZcDhQRUN6NTdFRWdKQ3ZzYzMxczY3cjN2SmpXRld0Rkt0TlN2TFNu?=
+ =?utf-8?B?UXc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <1BE26C6BF18A89448BFDB38FB6966579@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2928ce9d-10c0-4d29-af4f-08dad89cd67f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Dec 2022 21:48:55.0911
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fXn72YxEc/wZB8bu7dSGbcmjaJCVrx2r2bAnTEvrhMbCTCAR9HjuxffjFgYWLQZrcsTcVK9ivtl+cAaquBi0csxKWblz84wy19ljd1HnO7c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB2156
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a new helper function, bpf_dynptr_iterator:
-
-  long bpf_dynptr_iterator(struct bpf_dynptr *ptr, void *callback_fn,
-			   void *callback_ctx, u64 flags)
-
-where callback_fn is defined as:
-
-  long (*callback_fn)(struct bpf_dynptr *ptr, void *ctx)
-
-and callback_fn returns the number of bytes to advance the
-dynptr by (or an error code in the case of error). The iteration
-will stop if the callback_fn returns 0 or an error or tries to
-advance by more bytes than available.
-
-Signed-off-by: Joanne Koong <joannelkoong@gmail.com>
----
- include/uapi/linux/bpf.h       | 25 +++++++++
- kernel/bpf/helpers.c           | 42 +++++++++++++++
- kernel/bpf/verifier.c          | 93 ++++++++++++++++++++++++++++------
- tools/include/uapi/linux/bpf.h | 25 +++++++++
- 4 files changed, 170 insertions(+), 15 deletions(-)
-
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index f9387c5aba2b..11c7e1e52f4d 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -5619,6 +5619,30 @@ union bpf_attr {
-  *	Return
-  *		0 on success, -EINVAL if the dynptr to clone is invalid, -ERANGE
-  *		if attempting to clone the dynptr at an out of range offset.
-+ *
-+ * long bpf_dynptr_iterator(struct bpf_dynptr *ptr, void *callback_fn, v=
-oid *callback_ctx, u64 flags)
-+ *	Description
-+ *		Iterate through the dynptr data, calling **callback_fn** on each
-+ *		iteration with **callback_ctx** as the context parameter.
-+ *		The **callback_fn** should be a static function and
-+ *		the **callback_ctx** should be a pointer to the stack.
-+ *		Currently **flags** is unused and must be 0.
-+ *
-+ *		int (\*callback_fn)(struct bpf_dynptr \*ptr, void \*ctx);
-+ *
-+ *		where **callback_fn** returns the number of bytes to advance
-+ *		the callback dynptr by or an error. The iteration will stop if
-+ *		**callback_fn** returns 0 or an error or tries to advance by more
-+ *		bytes than the remaining size.
-+ *
-+ *		Please note that **ptr** will remain untouched (eg offset and
-+ *		size will not be modified) though the data pointed to by **ptr**
-+ *		may have been modified. Please also note that you cannot release
-+ *		a dynptr within the callback function.
-+ *	Return
-+ *		0 on success, -EINVAL if the dynptr is invalid or **flags** is not 0=
-,
-+ *		-ERANGE if attempting to iterate more bytes than available, or other
-+ *		error code if **callback_fn** returns an error.
-  */
- #define ___BPF_FUNC_MAPPER(FN, ctx...)			\
- 	FN(unspec, 0, ##ctx)				\
-@@ -5842,6 +5866,7 @@ union bpf_attr {
- 	FN(dynptr_get_size, 218, ##ctx)		\
- 	FN(dynptr_get_offset, 219, ##ctx)		\
- 	FN(dynptr_clone, 220, ##ctx)			\
-+	FN(dynptr_iterator, 221, ##ctx)			\
- 	/* */
-=20
- /* backwards-compatibility macros for users of __BPF_FUNC_MAPPER that do=
-n't
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 0c2cfb4ed33c..0e612007601e 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1792,6 +1792,46 @@ static const struct bpf_func_proto bpf_dynptr_clon=
-e_proto =3D {
- 	.arg3_type	=3D ARG_ANYTHING,
- };
-=20
-+BPF_CALL_4(bpf_dynptr_iterator, struct bpf_dynptr_kern *, ptr, void *, c=
-allback_fn,
-+	   void *, callback_ctx, u64, flags)
-+{
-+	bpf_callback_t callback =3D (bpf_callback_t)callback_fn;
-+	struct bpf_dynptr_kern ptr_copy;
-+	int nr_bytes, err;
-+
-+	if (flags)
-+		return -EINVAL;
-+
-+	err =3D ____bpf_dynptr_clone(ptr, &ptr_copy, 0);
-+	if (err)
-+		return err;
-+
-+	while (ptr_copy.size > 0) {
-+		nr_bytes =3D callback((uintptr_t)&ptr_copy, (uintptr_t)callback_ctx, 0=
-, 0, 0);
-+		if (nr_bytes <=3D 0)
-+			return nr_bytes;
-+
-+		if (nr_bytes > U32_MAX)
-+			return -ERANGE;
-+
-+		err =3D bpf_dynptr_adjust(&ptr_copy, nr_bytes, nr_bytes);
-+		if (err)
-+			return err;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct bpf_func_proto bpf_dynptr_iterator_proto =3D {
-+	.func		=3D bpf_dynptr_iterator,
-+	.gpl_only	=3D false,
-+	.ret_type	=3D RET_INTEGER,
-+	.arg1_type	=3D ARG_PTR_TO_DYNPTR,
-+	.arg2_type	=3D ARG_PTR_TO_FUNC,
-+	.arg3_type	=3D ARG_PTR_TO_STACK_OR_NULL,
-+	.arg4_type	=3D ARG_ANYTHING,
-+};
-+
- const struct bpf_func_proto bpf_get_current_task_proto __weak;
- const struct bpf_func_proto bpf_get_current_task_btf_proto __weak;
- const struct bpf_func_proto bpf_probe_read_user_proto __weak;
-@@ -1910,6 +1950,8 @@ bpf_base_func_proto(enum bpf_func_id func_id)
- 		return &bpf_dynptr_get_offset_proto;
- 	case BPF_FUNC_dynptr_clone:
- 		return &bpf_dynptr_clone_proto;
-+	case BPF_FUNC_dynptr_iterator:
-+		return &bpf_dynptr_iterator_proto;
- #ifdef CONFIG_CGROUPS
- 	case BPF_FUNC_cgrp_storage_get:
- 		return &bpf_cgrp_storage_get_proto;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 3f617f7040b7..8abdc392a48e 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -524,7 +524,8 @@ static bool is_callback_calling_function(enum bpf_fun=
-c_id func_id)
- 	       func_id =3D=3D BPF_FUNC_timer_set_callback ||
- 	       func_id =3D=3D BPF_FUNC_find_vma ||
- 	       func_id =3D=3D BPF_FUNC_loop ||
--	       func_id =3D=3D BPF_FUNC_user_ringbuf_drain;
-+	       func_id =3D=3D BPF_FUNC_user_ringbuf_drain ||
-+	       func_id =3D=3D BPF_FUNC_dynptr_iterator;
- }
-=20
- static bool is_storage_get_function(enum bpf_func_id func_id)
-@@ -703,6 +704,19 @@ static void mark_verifier_state_scratched(struct bpf=
-_verifier_env *env)
- 	env->scratched_stack_slots =3D ~0ULL;
- }
-=20
-+static enum bpf_dynptr_type stack_slot_get_dynptr_info(struct bpf_verifi=
-er_env *env,
-+						       struct bpf_reg_state *reg,
-+						       int *ref_obj_id)
-+{
-+	struct bpf_func_state *state =3D func(env, reg);
-+	int spi =3D get_spi(reg->off);
-+
-+	if (ref_obj_id)
-+		*ref_obj_id =3D state->stack[spi].spilled_ptr.id;
-+
-+	return state->stack[spi].spilled_ptr.dynptr.type;
-+}
-+
- static enum bpf_dynptr_type arg_to_dynptr_type(enum bpf_arg_type arg_typ=
-e)
- {
- 	switch (arg_type & DYNPTR_TYPE_FLAG_MASK) {
-@@ -719,6 +733,25 @@ static enum bpf_dynptr_type arg_to_dynptr_type(enum =
-bpf_arg_type arg_type)
- 	}
- }
-=20
-+static enum bpf_type_flag dynptr_flag_type(struct bpf_verifier_env *env,
-+					   struct bpf_reg_state *state)
-+{
-+	enum bpf_dynptr_type type =3D stack_slot_get_dynptr_info(env, state, NU=
-LL);
-+
-+	switch (type) {
-+	case BPF_DYNPTR_TYPE_LOCAL:
-+		return DYNPTR_TYPE_LOCAL;
-+	case BPF_DYNPTR_TYPE_RINGBUF:
-+		return DYNPTR_TYPE_RINGBUF;
-+	case BPF_DYNPTR_TYPE_SKB:
-+		return DYNPTR_TYPE_SKB;
-+	case BPF_DYNPTR_TYPE_XDP:
-+		return DYNPTR_TYPE_XDP;
-+	default:
-+		return 0;
-+	}
-+}
-+
- static bool arg_type_is_dynptr(enum bpf_arg_type type)
- {
- 	return base_type(type) =3D=3D ARG_PTR_TO_DYNPTR;
-@@ -744,19 +777,6 @@ static struct bpf_reg_state *get_dynptr_arg_reg(cons=
-t struct bpf_func_proto *fn,
- 	return NULL;
- }
-=20
--static enum bpf_dynptr_type stack_slot_get_dynptr_info(struct bpf_verifi=
-er_env *env,
--						       struct bpf_reg_state *reg,
--						       int *ref_obj_id)
--{
--	struct bpf_func_state *state =3D func(env, reg);
--	int spi =3D get_spi(reg->off);
--
--	if (ref_obj_id)
--		*ref_obj_id =3D state->stack[spi].spilled_ptr.id;
--
--	return state->stack[spi].spilled_ptr.dynptr.type;
--}
--
- static int mark_stack_slots_dynptr(struct bpf_verifier_env *env,
- 				   const struct bpf_func_proto *fn,
- 				   struct bpf_reg_state *reg,
-@@ -6053,6 +6073,9 @@ static const struct bpf_reg_types dynptr_types =3D =
-{
- 	.types =3D {
- 		PTR_TO_STACK,
- 		PTR_TO_DYNPTR | DYNPTR_TYPE_LOCAL,
-+		PTR_TO_DYNPTR | DYNPTR_TYPE_RINGBUF,
-+		PTR_TO_DYNPTR | DYNPTR_TYPE_SKB,
-+		PTR_TO_DYNPTR | DYNPTR_TYPE_XDP,
- 	}
- };
-=20
-@@ -6440,8 +6463,13 @@ static int check_func_arg(struct bpf_verifier_env =
-*env, u32 arg,
- 		 * assumption is that if it is, that a helper function
- 		 * initialized the dynptr on behalf of the BPF program.
- 		 */
--		if (base_type(reg->type) =3D=3D PTR_TO_DYNPTR)
-+		if (base_type(reg->type) =3D=3D PTR_TO_DYNPTR) {
-+			if (arg_type & MEM_UNINIT) {
-+				verbose(env, "PTR_TO_DYNPTR is already an initialized dynptr\n");
-+				return -EINVAL;
-+			}
- 			break;
-+		}
- 		if (arg_type & MEM_UNINIT) {
- 			if (!is_dynptr_reg_valid_uninit(env, reg)) {
- 				verbose(env, "Dynptr has to be an uninitialized dynptr\n");
-@@ -7342,6 +7370,37 @@ static int set_user_ringbuf_callback_state(struct =
-bpf_verifier_env *env,
- 	return 0;
- }
-=20
-+static int set_dynptr_iterator_callback_state(struct bpf_verifier_env *e=
-nv,
-+					      struct bpf_func_state *caller,
-+					      struct bpf_func_state *callee,
-+					      int insn_idx)
-+{
-+	/* bpf_dynptr_iterator(struct bpf_dynptr *ptr, void *callback_fn,
-+	 * void *callback_ctx, u64 flags);
-+	 *
-+	 * callback_fn(struct bpf_dynptr *ptr, void *callback_ctx);
-+	 */
-+
-+	enum bpf_type_flag dynptr_flag =3D
-+		dynptr_flag_type(env, &caller->regs[BPF_REG_1]);
-+
-+	if (dynptr_flag =3D=3D 0)
-+		return -EFAULT;
-+
-+	callee->regs[BPF_REG_1].type =3D PTR_TO_DYNPTR | dynptr_flag;
-+	__mark_reg_known_zero(&callee->regs[BPF_REG_1]);
-+	callee->regs[BPF_REG_2] =3D caller->regs[BPF_REG_3];
-+	callee->callback_ret_range =3D tnum_range(0, U32_MAX);
-+
-+	/* unused */
-+	__mark_reg_not_init(env, &callee->regs[BPF_REG_3]);
-+	__mark_reg_not_init(env, &callee->regs[BPF_REG_4]);
-+	__mark_reg_not_init(env, &callee->regs[BPF_REG_5]);
-+
-+	callee->in_callback_fn =3D true;
-+	return 0;
-+}
-+
- static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx=
-)
- {
- 	struct bpf_verifier_state *state =3D env->cur_state;
-@@ -7857,6 +7916,10 @@ static int check_helper_call(struct bpf_verifier_e=
-nv *env, struct bpf_insn *insn
- 		err =3D __check_func_call(env, insn, insn_idx_p, meta.subprogno,
- 					set_user_ringbuf_callback_state);
- 		break;
-+	case BPF_FUNC_dynptr_iterator:
-+		err =3D __check_func_call(env, insn, insn_idx_p, meta.subprogno,
-+					set_dynptr_iterator_callback_state);
-+		break;
- 	}
-=20
- 	if (err)
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index f9387c5aba2b..11c7e1e52f4d 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -5619,6 +5619,30 @@ union bpf_attr {
-  *	Return
-  *		0 on success, -EINVAL if the dynptr to clone is invalid, -ERANGE
-  *		if attempting to clone the dynptr at an out of range offset.
-+ *
-+ * long bpf_dynptr_iterator(struct bpf_dynptr *ptr, void *callback_fn, v=
-oid *callback_ctx, u64 flags)
-+ *	Description
-+ *		Iterate through the dynptr data, calling **callback_fn** on each
-+ *		iteration with **callback_ctx** as the context parameter.
-+ *		The **callback_fn** should be a static function and
-+ *		the **callback_ctx** should be a pointer to the stack.
-+ *		Currently **flags** is unused and must be 0.
-+ *
-+ *		int (\*callback_fn)(struct bpf_dynptr \*ptr, void \*ctx);
-+ *
-+ *		where **callback_fn** returns the number of bytes to advance
-+ *		the callback dynptr by or an error. The iteration will stop if
-+ *		**callback_fn** returns 0 or an error or tries to advance by more
-+ *		bytes than the remaining size.
-+ *
-+ *		Please note that **ptr** will remain untouched (eg offset and
-+ *		size will not be modified) though the data pointed to by **ptr**
-+ *		may have been modified. Please also note that you cannot release
-+ *		a dynptr within the callback function.
-+ *	Return
-+ *		0 on success, -EINVAL if the dynptr is invalid or **flags** is not 0=
-,
-+ *		-ERANGE if attempting to iterate more bytes than available, or other
-+ *		error code if **callback_fn** returns an error.
-  */
- #define ___BPF_FUNC_MAPPER(FN, ctx...)			\
- 	FN(unspec, 0, ##ctx)				\
-@@ -5842,6 +5866,7 @@ union bpf_attr {
- 	FN(dynptr_get_size, 218, ##ctx)		\
- 	FN(dynptr_get_offset, 219, ##ctx)		\
- 	FN(dynptr_clone, 220, ##ctx)			\
-+	FN(dynptr_iterator, 221, ##ctx)			\
- 	/* */
-=20
- /* backwards-compatibility macros for users of __BPF_FUNC_MAPPER that do=
-n't
---=20
-2.30.2
-
+DQoNCkxlIDA3LzEyLzIwMjIgw6AgMjI6MDQsIFRob21hcyBHbGVpeG5lciBhIMOpY3JpdMKgOg0K
+PiBDaHJpc3RvcGhlLA0KPiANCj4gT24gV2VkLCBEZWMgMDcgMjAyMiBhdCAxNjo1MywgQ2hyaXN0
+b3BoZSBMZXJveSB3cm90ZToNCj4+IExlIDA3LzEyLzIwMjIgw6AgMTY6MzYsIFRob21hcyBHbGVp
+eG5lciBhIMOpY3JpdMKgOg0KPj4+IFRoZSAidXNlIGZyZWUgc3BhY2UgaW4gZXhpc3RpbmcgbWFw
+cGluZ3MiIG1lY2hhbmlzbSBpcyBub3QgcmVxdWlyZWQgdG8NCj4+PiBiZSBQTURfU0laRSBiYXNl
+ZCwgcmlnaHQ/DQo+IA0KPiBDb3JyZWN0LiBJIGp1c3QgdXNlZCBpdCBmb3IgdGhlIGV4YW1wbGUu
+DQo+IA0KPj4+IExhcmdlIHBhZ2Ugc2l6ZSwgc3RyaWN0IHNlcGFyYXRpb246DQo+Pj4NCj4+PiBz
+dHJ1Y3QgbW9kX2FsbG9jX3R5cGVfcGFyYW1zIHsNCj4+PiAgICAgIAlbTU9EX0FMTE9DX1RZUEVf
+VEVYVF0gPSB7DQo+Pj4gICAgICAgICAgIAkubWFwdG9fdHlwZQk9IE1PRF9BTExPQ19UWVBFX1RF
+WFQsDQo+Pj4gICAgICAgICAgICAgICAgICAgLmZsYWdzCQk9IEZMQUdfU0hBUkVEX1BNRCB8IEZM
+QUdfU0VDT05EX0FERFJFU1NfU1BBQ0UsDQo+Pj4gICAgICAgICAgICAgICAgICAgLmdyYW51bGFy
+aXR5CT0gUE1EX1NJWkUsDQo+Pj4gICAgICAgICAgICAgICAgICAgLmFsaWdubWVudAk9IE1PRF9B
+UkNIX0FMSUdOTUVOVCwNCj4+PiAgICAgICAgICAgICAgICAgICAuc3RhcnRbMF0JPSBNT0RVTEVT
+X1ZBRERSLA0KPj4+ICAgICAgICAgICAgICAgICAgIC5lbmRbMF0JCT0gTU9EVUxFU19FTkQsDQo+
+Pj4gICAgICAgICAgICAgICAgICAgLnN0YXJ0WzFdCT0gTU9EVUxFU19WQUREUl8yTkQsDQo+Pj4g
+ICAgICAgICAgICAgICAgICAgLmVuZFsxXQkJPSBNT0RVTEVTX0VORF8yTkQsDQo+Pj4gICAgICAg
+ICAgICAgICAgICAgLnBncHJvdAkJPSBQQUdFX0tFUk5FTF9FWEVDLA0KPj4+ICAgICAgICAgICAg
+ICAgICAgIC5maWxsCQk9IHRleHRfcG9rZSwNCj4+PiAgICAgICAgICAgICAgICAgICAuaW52YWxp
+ZGF0ZQk9IHRleHRfcG9rZV9pbnZhbGlkYXRlLA0KPj4+IAl9LA0KPj4NCj4+IERvbid0IHJlc3Ry
+aWN0IGltcGxlbWVudGF0aW9uIHRvIFBNRF9TSVpFIG9ubHkuDQo+Pg0KPj4gT24gcG93ZXJwYyA4
+eHg6DQo+PiAtIFBNRF9TSVpFIGlzIDQgTWJ5dGVzDQo+PiAtIExhcmdlIHBhZ2VzIGFyZSA1MTIg
+a2J5dGVzIGFuZCA4IE1ieXRlcy4NCj4+DQo+PiBJdCBldmVuIGhhcyBsYXJnZSBwYWdlcyBvZiBz
+aXplIDE2IGtieXRlcyB3aGVuIGJ1aWxkIGZvciA0ayBub3JtYWwgcGFnZQ0KPj4gc2l6ZS4NCj4g
+DQo+IEBncmFudWxhcml0eSB0YWtlcyBhbnkgc2l6ZSB3aGljaCBpcyB2YWxpZCBmcm9tIHRoZSBh
+cmNoaXRlY3R1cmUgc2lkZQ0KPiBhbmQgY2FuIGhhbmRsZSB0aGUgQHBncHJvdCBkaXN0aW5jdGlv
+bnMuDQo+IA0KPiBUaGF0J3Mgd2h5IEkgc2VwYXJhdGVkIGZ1bmN0aW9uYWxpdHkgYW5kIGNvbmZp
+Z3VyYXRpb24uDQo+IA0KPiBOb3RlLCBpdCdzIG5vdCBzdHJpY3QgY29tcGlsZSB0aW1lIGNvbmZp
+Z3VyYXRpb24uIFlvdSBjYW4gZWl0aGVyIGJ1aWxkDQo+IGl0IGNvbXBsZXRlbHkgZHluYW1pYyBh
+dCBib290IG9yIGhhdmUgYSBzdGF0aWMgY29uZmlndXJhdGlvbiBzdHJ1Y3R1cmUNCj4gYXMgY29t
+cGlsZSB0aW1lIGRlZmF1bHQuDQo+IA0KPiBUaGF0IHN0YXRpYyBkZWZhdWx0IG1pZ2h0IGJlIF9f
+aW5pdGNvbnN0IGZvciBhcmNoaXRlY3R1cmVzIHdoZXJlIHRoZXJlDQo+IGlzIG5vIGJvb3QgdGlt
+ZSBkZXRlY3Rpb24gYW5kIGNoYW5nZSByZXF1aXJlZCwgYnV0IGNhbiBiZSBfX2luaXRkYXRhIGZv
+cg0KPiB0aG9zZSB3aGljaCBuZWVkIHRvIGFkanVzdCBpdCB0byB0aGUgbmVlZHMgb2YgdGhlIGRl
+dGVjdGVkIENQVS9wbGF0Zm9ybQ0KPiBiZWZvcmUgZmVlZGluZyBpdCBpbnRvIHRoZSBtb2R1bGUg
+YWxsb2NhdG9yIGluaXQgZnVuY3Rpb24uDQo+IA0KPiBEb2VzIHRoYXQgYW5zd2VyIHlvdXIgcXVl
+c3Rpb24/DQo+IA0KDQpZZXMgaXQgZG9lcywgdGhhbmtzLg0KDQpDaHJpc3RvcGhlDQo=
