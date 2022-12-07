@@ -2,88 +2,125 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72B46C352A1
-	for <bpf@archiver.kernel.org>; Wed,  7 Dec 2022 10:28:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65D38C4708D
+	for <bpf@archiver.kernel.org>; Wed,  7 Dec 2022 10:31:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbiLGK2m (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 7 Dec 2022 05:28:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49950 "EHLO
+        id S229559AbiLGKbG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 7 Dec 2022 05:31:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiLGK2G (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 7 Dec 2022 05:28:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200F51B7AC
-        for <bpf@vger.kernel.org>; Wed,  7 Dec 2022 02:27:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670408826;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sl7ZkZKZiHSlbw4B4KJ5Z2VQTqLGIn8DjZOU7SMMFyU=;
-        b=VwB7Oc44bpYcxAHUtsGBGbhidh3Tzgc2iP6XsBb0bQpDLEpYk1AnJG3gR7MLF0eA5GOVNe
-        VN9s6biKwH7or1vg/SLfrB2UlHuusHkepuMIp9lwwwr3uKlxget99L8Vr0R9fG16UWLCiu
-        0B2smk0YvMJrs/ix3kHn+Z94AlqZq6E=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-173-mOmG6CSYMOaqDWjiBf4e5g-1; Wed, 07 Dec 2022 05:26:56 -0500
-X-MC-Unique: mOmG6CSYMOaqDWjiBf4e5g-1
-Received: by mail-wm1-f70.google.com with SMTP id r7-20020a1c4407000000b003d153a83d27so1268678wma.0
-        for <bpf@vger.kernel.org>; Wed, 07 Dec 2022 02:26:56 -0800 (PST)
+        with ESMTP id S229522AbiLGKbE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 7 Dec 2022 05:31:04 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97AB9F
+        for <bpf@vger.kernel.org>; Wed,  7 Dec 2022 02:31:01 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id d131so18724018ybh.4
+        for <bpf@vger.kernel.org>; Wed, 07 Dec 2022 02:31:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Te+qRfL0gSPa2I5bK5OY5bAXbxohK6qh4ntuX06onLw=;
+        b=eBPc6LCdVbJNZrD/vNuWi34IC2I2EByvcZ8T0bOHHwJG02J4XKMyBtJKL5TXNyKr4l
+         d2If4UglHwt630P/gso8MBO1XAPD4/15iytfqwluNRAjCjHvYaQX6lqz92qU1KueqWLl
+         NmEtQ6abKgUm6qF8HpC29w+VmYMpJBX6lk06RhkXqIM9gvHs/UgSHGt9e1c749PUkstn
+         JEkgkYj0nWksUc/pyFxQvgoiSB+fxrbCrHfYpt751cz2XxTcjqE/hdsmUs5eBIkUlkj6
+         Y0xvfCUPe9v+Y3nCGvY+7x0g7pjw9eqxhnA819SOFLRlldbiFVDZtpE2xX/6x/MdWLVi
+         l40Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sl7ZkZKZiHSlbw4B4KJ5Z2VQTqLGIn8DjZOU7SMMFyU=;
-        b=E7TOSdyhLxopgqds5oncxNQ1fJpCTLsd4Rby9wpbPyfMqF3XZF5dOdoUA68p37xu/N
-         wrUmYJ414yAcCyABDrejT68sW6vg0zOaGAJi/PkLO+vnDHtcXTd5rVXmUoMd32yTbScF
-         ik30Egkrp1e2K1U46iDFqQQfW7OI5dPYKWX8D0Os4dYSAy8hULjwfklMLH+4+IdQG5IU
-         vPSIK4o60Q6Ww3Zrw+6OASwZmqyvcRvSNCmu3L6SgUK8HQBjP9jfWQU0r3dMID+WGGDj
-         60LRPK7lnKVLdaOJV1Q9hZDO2aLc7F5PKdoMURF/mncgxRunHvFzijV/s9JZQWq+Ifqc
-         rxUg==
-X-Gm-Message-State: ANoB5pm6pLb+wjSfhAl5qOxzil6IwInE9eWgSAkUdRifFA4ygTzS6CO+
-        9g4B1UGPpUn6Pm/H9PDhEnRi+tdNuwPguEvQ4CsKNAQedVP/SMU0zU9CN19ThLolTx2ILmEDfsU
-        tgirmd+JE233S
-X-Received: by 2002:a5d:6b8a:0:b0:242:248a:a7c9 with SMTP id n10-20020a5d6b8a000000b00242248aa7c9mr22493582wrx.57.1670408815642;
-        Wed, 07 Dec 2022 02:26:55 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5Dsg4TGfhL2Cv/1eglm3fO6XYoXLJiTR62jdhwp51aRaeh+VbVjfokmXoyisqu3+FtTzNEYQ==
-X-Received: by 2002:a5d:6b8a:0:b0:242:248a:a7c9 with SMTP id n10-20020a5d6b8a000000b00242248aa7c9mr22493567wrx.57.1670408815352;
-        Wed, 07 Dec 2022 02:26:55 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-106-100.dyn.eolo.it. [146.241.106.100])
-        by smtp.gmail.com with ESMTPSA id r22-20020a05600c35d600b003a84375d0d1sm1281842wmq.44.2022.12.07.02.26.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 02:26:55 -0800 (PST)
-Message-ID: <619913f8fc11ab502e73d526eee7ada6066843a2.camel@redhat.com>
-Subject: Re: [PATCH net-next 2/6] tsnep: Add XDP TX support
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Gerhard Engleder <gerhard@engleder-embedded.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
-        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-        john.fastabend@gmail.com
-Date:   Wed, 07 Dec 2022 11:26:53 +0100
-In-Reply-To: <20221203215416.13465-3-gerhard@engleder-embedded.com>
-References: <20221203215416.13465-1-gerhard@engleder-embedded.com>
-         <20221203215416.13465-3-gerhard@engleder-embedded.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Te+qRfL0gSPa2I5bK5OY5bAXbxohK6qh4ntuX06onLw=;
+        b=ixjbUYhDsRx2RyentRleKGs2j7IPb121d0CjUGEoVFGvET4TaQzBMrGgE6+V246VkL
+         ohlkkuTxZcsYaKEzV0QbuoJwsXPXow7wNcw1YFnXmsI8QfFmwEKU2YrQUBh7PV/BaPzG
+         z4BNf0LcberCXDIRkW3t4T9y69xw+emgg8j/j5w6WiUVXuOF4+qR3iW2qPw5pD8bM2Ph
+         Xl9nvPe99cB57WsmDjlc77XnmBmYmz37tQSVSRC6SBItsKhAX37cTVaP+0udhuDgp3F4
+         Cb3vDxtdR1B5qkZKh21T4HzupzvlPpMLkErh0vinB6ZY7vhCLrFKvlz00cN/88kOh46/
+         8lZQ==
+X-Gm-Message-State: ANoB5pkhhegCgmFbEqsUWoLKDDdRcCMkaUYfTBkzUkWF2JUHq/JnW5aI
+        EUNuwRR1jlNYI4sDuqfT4c6UWDH4W/0ZB+arOb6onw==
+X-Google-Smtp-Source: AA0mqf6t39Rs8bP0A/bgsq+RjfUaGFwDeeFVVvJr2EUDgik0KecD4HhEv5Xo7lS6iqkDVNk/fFXWXXRma5m/Cfa/4Mw=
+X-Received: by 2002:a05:6902:1004:b0:6fe:d784:282a with SMTP id
+ w4-20020a056902100400b006fed784282amr17363367ybt.598.1670409060680; Wed, 07
+ Dec 2022 02:31:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <20221206231659.never.929-kees@kernel.org> <20221206175557.1cbd3baa@kernel.org>
+In-Reply-To: <20221206175557.1cbd3baa@kernel.org>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 7 Dec 2022 11:30:36 +0100
+Message-ID: <CANn89i+A49o1zXLJHTjQPrGrdATv7Mkis06FahZ0Yy2gLB1BXQ@mail.gmail.com>
+Subject: Re: [PATCH] skbuff: Reallocate to ksize() in __build_skb_around()
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        syzbot+fda18eaa8c12534ccb3b@syzkaller.appspotmail.com,
+        Paolo Abeni <pabeni@redhat.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        pepsipu <soopthegoop@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Andrii Nakryiko <andrii@kernel.org>, ast@kernel.org,
+        bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>, jolsa@kernel.org,
+        KP Singh <kpsingh@kernel.org>, martin.lau@linux.dev,
+        Stanislav Fomichev <sdf@google.com>, song@kernel.org,
+        Yonghong Song <yhs@fb.com>, netdev@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Menglong Dong <imagedong@tencent.com>,
+        David Ahern <dsahern@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Richard Gobert <richardbgobert@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        David Rientjes <rientjes@google.com>,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, 2022-12-03 at 22:54 +0100, Gerhard Engleder wrote:
-> For complete TX support tsnep_xdp_xmit_back() is already added, which is
-> used later by the XDP RX path if BPF programs return XDP_TX.
+On Wed, Dec 7, 2022 at 2:56 AM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Tue,  6 Dec 2022 15:17:14 -0800 Kees Cook wrote:
+> > -     unsigned int size = frag_size ? : ksize(data);
+> > +     unsigned int size = frag_size;
+> > +
+> > +     /* When frag_size == 0, the buffer came from kmalloc, so we
+> > +      * must find its true allocation size (and grow it to match).
+> > +      */
+> > +     if (unlikely(size == 0)) {
+> > +             void *resized;
+> > +
+> > +             size = ksize(data);
+> > +             /* krealloc() will immediate return "data" when
+> > +              * "ksize(data)" is requested: it is the existing upper
+> > +              * bounds. As a result, GFP_ATOMIC will be ignored.
+> > +              */
+> > +             resized = krealloc(data, size, GFP_ATOMIC);
+> > +             if (WARN_ON(resized != data))
+> > +                     data = resized;
+> > +     }
+> >
+>
+> Aammgh. build_skb(0) is plain silly, AFAIK. The performance hit of
+> using kmalloc()'ed heads is large because GRO can't free the metadata.
+> So we end up carrying per-MTU skbs across to the application and then
+> freeing them one by one. With pages we just aggregate up to 64k of data
+> in a single skb.
+>
+> I can only grep out 3 cases of build_skb(.. 0), could we instead
+> convert them into a new build_skb_slab(), and handle all the silliness
+> in such a new helper? That'd be a win both for the memory safety and one
+> fewer branch for the fast path.
+>
+> I think it's worth doing, so LMK if you're okay to do this extra work,
+> otherwise I can help (unless e.g. Eric tells me I'm wrong..).
 
-Oops, I almost forgot... It's better to introduce tsnep_xdp_xmit_back()
-in the patch using it: this patch introduces a build warning fixed by
-the later patch, and we want to avoid it.
-
-Cheers,
-
-Paolo
-
+I totally agree, I would indeed remove ksize() use completely,
+let callers give us the size, and the head_frag boolean,
+instead of inferring from size==0
