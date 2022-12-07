@@ -2,90 +2,123 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DD89C47089
-	for <bpf@archiver.kernel.org>; Wed,  7 Dec 2022 05:27:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8765C352A1
+	for <bpf@archiver.kernel.org>; Wed,  7 Dec 2022 06:21:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229449AbiLGF1A convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 7 Dec 2022 00:27:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51772 "EHLO
+        id S229451AbiLGGVY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 7 Dec 2022 01:21:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiLGF06 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 7 Dec 2022 00:26:58 -0500
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6EFE4AF27
-        for <bpf@vger.kernel.org>; Tue,  6 Dec 2022 21:26:53 -0800 (PST)
-Received: from omf11.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay04.hostedemail.com (Postfix) with ESMTP id 97EFD1A08DE;
-        Wed,  7 Dec 2022 05:18:29 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf11.hostedemail.com (Postfix) with ESMTPA id 1E0EF2002D;
-        Wed,  7 Dec 2022 05:17:58 +0000 (UTC)
-Date:   Wed, 07 Dec 2022 00:18:17 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC:     Masami Hiramatsu <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Florent Revest <revest@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Chris Mason <clm@meta.com>
-Subject: Re: [PATCH v2] panic: Taint kernel if fault injection has been used
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CAADnVQKDZfP51WeVOeY-6RNH=MHT2BhtW6F8PaJV5-RoJOtMkQ@mail.gmail.com>
-References: <167019256481.3792653.4369637751468386073.stgit@devnote3> <20221204223001.6wea7cgkofjsiy2z@macbook-pro-6.dhcp.thefacebook.com> <20221205075921.02edfe6b54abc5c2f9831875@kernel.org> <20221206021700.oryt26otos7vpxjh@macbook-pro-6.dhcp.thefacebook.com> <20221206162035.97ae19674d6d17108bed1910@kernel.org> <20221207040146.zhm3kyduqp7kosqa@macbook-pro-6.dhcp.thefacebook.com> <20221206233947.4c27cc9d@gandalf.local.home> <CAADnVQKDZfP51WeVOeY-6RNH=MHT2BhtW6F8PaJV5-RoJOtMkQ@mail.gmail.com>
-Message-ID: <2ED74AA5-B2A5-43FA-ADF9-B6752FE410C4@goodmis.org>
-MIME-Version: 1.0
+        with ESMTP id S229437AbiLGGVX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 7 Dec 2022 01:21:23 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617123AC28
+        for <bpf@vger.kernel.org>; Tue,  6 Dec 2022 22:21:22 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id k88-20020a17090a4ce100b00219d0b857bcso580627pjh.1
+        for <bpf@vger.kernel.org>; Tue, 06 Dec 2022 22:21:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EgvTT+rWJQzHxzvAI2L3QICT1OOCxoZleoBKp4KDXls=;
+        b=esLqktraLMLFAj/IQCzBbzdbpPvtiJp4Blm2ZuFZRvn6efVb/Ca9x/fVltGeUQB5Zo
+         1EUMgfzN5z1hteP+P0Unbrl1n9IOmCc0pLkhv2b6xjNFz1PyAKNTd1j6MPc3eFmSUsek
+         JFmWtUIcfB1iaCFoQS5D9Yl06b0tZzcpQIdDL9keK69Fw8B4+O/s4jOf8Eh0ByODqTYm
+         0hwccSpGurAI2Zr95SQyh/wyaDTISErhI5k4ubnYFY+cepqHg9iQ9hZy4N9RiWGQsMUH
+         Or1IhFZI1dGvPzdKZAnJ7mJby2Y/SLyEAEaJ2PgVMZ9AQ856Sy2p8dKG6pVtp5odoLMC
+         QulA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=EgvTT+rWJQzHxzvAI2L3QICT1OOCxoZleoBKp4KDXls=;
+        b=jG14OHhqYoRmMuEKtRVcTmV6i9F+Wx1kO73KXH6UM/QouSaArHBWYwp8DbnsBZuXUa
+         WXq4qku358a8pflOoJCJrBDYE+zIciRgYXBptBvdoYaVs0WvPg3/qE7ZbmXcRtJY5myX
+         jj9I06rWnwZ8AWzQrQ635YmINan2wisk8AiHlzoDlSzKtOfvm8nntZHc5ANa2aayThoE
+         8puvx/ArBm/fN5Ql78HpxAY74D44u9/lURyGyvRAUArUUZqnemQOPS48QU4FrUFKRdHP
+         4yg59fFnZPmIOqTtcfIXsSCiqXq06zEn3QPXu0EEzxXyZgjpfuq2WmTZ5WE26Hy0Mnsz
+         oStA==
+X-Gm-Message-State: ANoB5pmkYKTY28NfR7agxkX0mouOVNgnz3GbFYiAA7zyJoMT/8mAgsqb
+        3to5VPAVr1Y/krg4Oor51h0N4sscOdQ=
+X-Google-Smtp-Source: AA0mqf4lgvqaag7fuYZX6GJfSajgbRn9CMBxI6k50x/orQK8sxmakdOcXx6hLGjg23Tq3dbSr44e7w==
+X-Received: by 2002:a17:90b:4384:b0:219:c705:3d7d with SMTP id in4-20020a17090b438400b00219c7053d7dmr15949189pjb.104.1670394081856;
+        Tue, 06 Dec 2022 22:21:21 -0800 (PST)
+Received: from localhost ([98.97.38.190])
+        by smtp.gmail.com with ESMTPSA id n1-20020a632701000000b0047899d0d62csm6329735pgn.52.2022.12.06.22.21.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 22:21:21 -0800 (PST)
+Date:   Tue, 06 Dec 2022 22:21:19 -0800
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        ast@kernel.org, daniel@iogearbox.net
+Cc:     andrii@kernel.org, kernel-team@fb.com
+Message-ID: <639030df9ec4e_bb36208e6@john.notmuch>
+In-Reply-To: <20221206011159.1208452-1-andrii@kernel.org>
+References: <20221206011159.1208452-1-andrii@kernel.org>
+Subject: RE: [PATCH bpf-next 1/2] selftests/bpf: add generic BPF program
+ verification tester
+Mime-Version: 1.0
 Content-Type: text/plain;
  charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Rspamd-Queue-Id: 1E0EF2002D
-X-Rspamd-Server: rspamout03
-X-Stat-Signature: 6q5ataj4w1quggag3oa4ox39gd6km3rb
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1/eMrmZsD4+Eahg02CQ10Y97AFleKyzqq0=
-X-HE-Tag: 1670390278-928139
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Andrii Nakryiko wrote:
+> It's become a common pattern to have a collection of small BPF programs
+> in one BPF object file, each representing one test case. On user-space
+> side of such tests we maintain a table of program names and expected
+> failure or success, along with optional expected verifier log message.
+> 
+> This works, but each set of tests reimplement this mundane code over and
+> over again, which is a waste of time for anyone trying to add a new set
+> of tests. Furthermore, it's quite error prone as it's way too easy to miss
+> some entries in these manually maintained test tables (as evidences by
+> dynptr_fail tests, in which ringbuf_release_uninit_dynptr subtest was
+> accidentally missed; this is fixed in next patch).
+> 
+> So this patch implements generic verification_tester, which accepts
+> skeleton name and handles the rest of details: opens and loads BPF
+> object file, making sure each program is tested in isolation. Optionally
+> each test case can specify expected BPF verifier log message. In case of
+> failure, tester makes sure to report verifier log, but it also reports
+> verifier log in verbose mode unconditionally.
+> 
+> Now, the interesting deviation from existing custom implementations is
+> the use of btf_decl_tag attribute to specify expected-to-fail vs
+> expected-to-succeed markers and, optionally, expected log message
+> directly next to BPF program source code, eliminating the need to
+> manually create and update table of tests.
+> 
+> We define few macros wrapping btf_decl_tag with a convention that all
+> values of btf_decl_tag start with "comment:" prefix, and then utilizing
+> a very simple "just_some_text_tag" or "some_key_name=<value>" pattern to
+> define things like expected success/failure, expected verifier message,
+> extra verifier log level (if necessary). This approach is demonstrated
+> by next patch in which two existing sets of failure tests are converted.
+> 
+> Tester supports both expected-to-fail and expected-to-succeed programs,
+> though this patch set didn't convert any existing expected-to-succeed
+> programs yet, as existing tests couple BPF program loading with their
+> further execution through attach or test_prog_run. One way to allow
+> testing scenarios like this would be ability to specify custom callback,
+> executed for each successfully loaded BPF program. This is left for
+> follow up patches, after some more analysis of existing test cases.
+> 
+> This verification_tester is, hopefully, a start of a test_verifier
+> runner, which allows much better "user experience" of defining low-level
+> verification types that can take advantage of all the libbpf-provided
+> nicety features on BPF side: global variables, declarative maps, etc.
+> All while having a choice of defining it in C or as BPF assembly
+> (through __attribute__((naked)) functions and using embedded asm). This
+> will be explored in follow up patches as well.
+> 
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
 
+LGTM.
 
-On December 6, 2022 11:45:17 PM EST, Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
->On Tue, Dec 6, 2022 at 8:39 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->> >
->> > [   49.281382] general protection fault, probably for non-canonical address 0x57e006e00000000: 0000 [#1] PREEMPT SMP KASAN
->> > [   49.282226] CPU: 6 PID: 1688 Comm: test_progs Tainted: G    B      O       6.1.0-rc7-01508-gf0c5a2d9f234 #4343
->> > [   49.283751] RIP: 0010:rethook_trampoline_handler+0xff/0x1d0
->> > [   49.289900] Call Trace:
->> > [   49.290083]  <TASK>
->> > [   49.290248]  arch_rethook_trampoline_callback+0x6c/0xa0
->> > [   49.290631]  arch_rethook_trampoline+0x2c/0x50
->> > [   49.290964]  ? lock_release+0xad/0x3f0
->> > [   49.291245]  ? bpf_prog_test_run_tracing+0x235/0x380
->> > [   49.291609]  trace_clock_x86_tsc+0x10/0x10
->> >
->> > This is just running bpf selftests in parallel mode on 16-cpu VM on bpf-next.
->> > Notice 'Tained' flags.
->> > Please take a look.
->> >
->>
->> "G - Proprietary module" - "O - out of tree module"
->>
->> Can you reproduce this without those taints?
->
->Lol. That question is exactly the reason why my Nack stands.
-
-I only said the above *because* of your comment ;-) 
-
--- Steve
-
-
--- 
-Sent from my Android device with K-9 Mail. Please excuse my brevity and top posting.
+Acked-by: John Fastabend <john.fastabend@gmail.com>
