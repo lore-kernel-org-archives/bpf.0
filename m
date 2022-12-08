@@ -2,97 +2,124 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 886BDC4167B
-	for <bpf@archiver.kernel.org>; Thu,  8 Dec 2022 18:26:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF09EC4332F
+	for <bpf@archiver.kernel.org>; Thu,  8 Dec 2022 18:57:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbiLHS0s (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 8 Dec 2022 13:26:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44686 "EHLO
+        id S229793AbiLHS5U convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 8 Dec 2022 13:57:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiLHS0q (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 8 Dec 2022 13:26:46 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A340AD32B;
-        Thu,  8 Dec 2022 10:26:38 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id p24so2339732plw.1;
-        Thu, 08 Dec 2022 10:26:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=ze6sTd98o+g+6IIqM1P3HBE6uRWEE3mJ5ZQRVJK3+kI=;
-        b=ir+BkFOqTEnIwxMwiDi1qxBss3dcDnH4LP4ATiGGOkJHtkbTjaXxCN2LVPi/O94LN5
-         Hw6lfqXHVmjrmFFioKM5dca8WX3ut2gwdqbDo5rj8T2nea5dm9CCgWIVlVmOBPJ0cs8u
-         0H67qvZ1PkYImLRJKpK0Q7Hcq/egl2NPvTYnpH2O0NTkj1jOvFNLFddpUiJVfK82D7ll
-         vcsg2xEtEZWDAIxP2z/Bh+0/U8DNPxxTvVPfHXiN5E0M7NInh28qx46egKMJ6BiHLodb
-         CxGcwO1Yc+FEVn/w/hx55yANIY2vSgWIQVJQiDBzDaKD8OGcALxu9woAg6bOFovVBBt3
-         5aKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ze6sTd98o+g+6IIqM1P3HBE6uRWEE3mJ5ZQRVJK3+kI=;
-        b=urUhWwYE6rKl+UZVfJOIN50U30uqf5E8xcxAe7geJkaYQoxMDN/L2AfvSxVQcTdBs8
-         lPSBjxd8fgYkGsGlupxZesUzmjFOVcQEO3idKBFvtk/os/yGuH2FMsDNOnjFagBVK3HF
-         9cCqqPBoKxuDhr4okJ9mQTGIkAZBUeK4sU0bY34HOxM04DCbtIJZ9MYAzQ4Jhck6nvI0
-         H4T2D22+/ocjmUCFnyEYxHoQcQPtj0HDuNSYnei5xAAJ7Wk+bkhDXzYKSS+tnHH891iQ
-         OpFeJ0uBulZF0Hyeb0AVpNXgQEYlAKNJe3R5rLxU0Pj3iF4KZPOGXwNMQ0uXvsyO5MGt
-         S4Dg==
-X-Gm-Message-State: ANoB5plgBhBdDGmzgesi3XDu1fHcUqpgQNCXqy9cXH4m0Cq4zxGpUDAo
-        65Q+NqZ3U97Wu/5mpBUlvxs=
-X-Google-Smtp-Source: AA0mqf7AFaUGxBh2S1oElEAgW5c2HAmruuZ/tSpzAO7F8OJItjGNTEszfpHSMAtxbYyoRmWNyDMKPQ==
-X-Received: by 2002:a17:90a:2d81:b0:219:9676:fef4 with SMTP id p1-20020a17090a2d8100b002199676fef4mr27870762pjd.89.1670523997544;
-        Thu, 08 Dec 2022 10:26:37 -0800 (PST)
-Received: from balhae.corp.google.com ([2620:15c:2c1:200:e288:d3e1:a97a:4b35])
-        by smtp.gmail.com with ESMTPSA id c133-20020a621c8b000000b00575cdd7c0adsm15606679pfc.80.2022.12.08.10.26.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 10:26:37 -0800 (PST)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, Song Liu <song@kernel.org>,
-        bpf@vger.kernel.org
-Subject: [PATCH] perf tools: Fix a typo in BTF tracepoint name
-Date:   Thu,  8 Dec 2022 10:26:36 -0800
-Message-Id: <20221208182636.524139-1-namhyung@kernel.org>
-X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
+        with ESMTP id S229650AbiLHS5T (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 8 Dec 2022 13:57:19 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EFB7A192
+        for <bpf@vger.kernel.org>; Thu,  8 Dec 2022 10:57:18 -0800 (PST)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B8IYtCt011080
+        for <bpf@vger.kernel.org>; Thu, 8 Dec 2022 10:57:18 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3mbgeyafj9-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 08 Dec 2022 10:57:18 -0800
+Received: from twshared4568.42.prn1.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Thu, 8 Dec 2022 10:57:17 -0800
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id E3FE9231D99AC; Thu,  8 Dec 2022 10:57:11 -0800 (PST)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
+        Eduard Zingerman <eddyz87@gmail.com>,
+        =?UTF-8?q?Per=20Sundstr=C3=B6m=20XP?= 
+        <per.xp.sundstrom@ericsson.com>
+Subject: [PATCH bpf-next 2/6] libbpf: handle non-standardly sized enums better in BTF-to-C dumper
+Date:   Thu, 8 Dec 2022 10:56:59 -0800
+Message-ID: <20221208185703.2681797-3-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221208185703.2681797-1-andrii@kernel.org>
+References: <20221208185703.2681797-1-andrii@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: 13P-w87LpY6vbx_dzKS8WI4RUEhcMAo5
+X-Proofpoint-GUID: 13P-w87LpY6vbx_dzKS8WI4RUEhcMAo5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-08_11,2022-12-08_01,2022-06-22_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In the BTF, tracepoint definitions have the prefix of "btf_trace_".
-The off-cpu profilier needs to check the signature of sched_switch
-event using the definition.  But there's a typo (s/bpf/btf/) so it
-failed always.
+Turns out C allows to force enum to be 1-byte or 8-byte explicitly using
+mode(byte) or mode(word), respecticely. Linux sources are using this in
+some cases. This is imporant to handle correctly, as enum size
+determines corresponding fields in a struct that use that enum type. And
+if enum size is incorrect, this will lead to invalid struct layout. So
+add mode(byte) and mode(word) attribute support to btf_dump APIs.
 
-Fixes: b36888f71c85 ("perf record: Handle argument change in sched_switch")
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/perf/util/bpf_off_cpu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/lib/bpf/btf_dump.c | 38 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-diff --git a/tools/perf/util/bpf_off_cpu.c b/tools/perf/util/bpf_off_cpu.c
-index c257813e674e..01f70b8e705a 100644
---- a/tools/perf/util/bpf_off_cpu.c
-+++ b/tools/perf/util/bpf_off_cpu.c
-@@ -102,7 +102,7 @@ static void check_sched_switch_args(void)
- 	const struct btf_type *t1, *t2, *t3;
- 	u32 type_id;
+diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+index 69e80ee5f70e..234e82334d56 100644
+--- a/tools/lib/bpf/btf_dump.c
++++ b/tools/lib/bpf/btf_dump.c
+@@ -13,6 +13,7 @@
+ #include <ctype.h>
+ #include <endian.h>
+ #include <errno.h>
++#include <limits.h>
+ #include <linux/err.h>
+ #include <linux/btf.h>
+ #include <linux/kernel.h>
+@@ -1076,6 +1077,43 @@ static void btf_dump_emit_enum_def(struct btf_dump *d, __u32 id,
+ 	else
+ 		btf_dump_emit_enum64_val(d, t, lvl, vlen);
+ 	btf_dump_printf(d, "\n%s}", pfx(lvl));
++
++	/* special case enums with special sizes */
++	if (t->size == 1) {
++		/* one-byte enums can be forced with mode(byte) attribute */
++		btf_dump_printf(d, " __attribute__((mode(byte)))");
++	} else if (t->size == 8 && d->ptr_sz == 8) {
++		/* enum can be 8-byte sized if one of the enumerator values
++		 * doesn't fit in 32-bit integer, or by adding mode(word)
++		 * attribute (but probably only on 64-bit architectures); do
++		 * our best here to try to satisfy the contract without adding
++		 * unnecessary attributes
++		 */
++		bool needs_word_mode;
++
++		if (btf_is_enum(t)) {
++			/* enum can't represent 64-bit values, so we need word mode */
++			needs_word_mode = true;
++		} else {
++			/* enum64 needs mode(word) if none of its values has
++			 * non-zero upper 32-bits (which means that all values
++			 * fit in 32-bit integers and won't cause compiler to
++			 * bump enum to be 64-bit naturally
++			 */
++			int i;
++
++			needs_word_mode = true;
++			for (i = 0; i < vlen; i++) {
++				if (btf_enum64(t)[i].val_hi32 != 0) {
++					needs_word_mode = false;
++					break;
++				}
++			}
++		}
++		if (needs_word_mode)
++			btf_dump_printf(d, " __attribute__((mode(word)))");
++	}
++
+ }
  
--	type_id = btf__find_by_name_kind(btf, "bpf_trace_sched_switch",
-+	type_id = btf__find_by_name_kind(btf, "btf_trace_sched_switch",
- 					 BTF_KIND_TYPEDEF);
- 	if ((s32)type_id < 0)
- 		return;
+ static void btf_dump_emit_fwd_def(struct btf_dump *d, __u32 id,
 -- 
-2.39.0.rc1.256.g54fd8350bd-goog
+2.30.2
 
