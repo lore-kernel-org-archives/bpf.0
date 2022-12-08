@@ -2,49 +2,50 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 932CAC4332F
-	for <bpf@archiver.kernel.org>; Thu,  8 Dec 2022 18:57:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7CD4C4332F
+	for <bpf@archiver.kernel.org>; Thu,  8 Dec 2022 18:57:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbiLHS52 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 8 Dec 2022 13:57:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59390 "EHLO
+        id S229879AbiLHS5d convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 8 Dec 2022 13:57:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbiLHS51 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 8 Dec 2022 13:57:27 -0500
+        with ESMTP id S229943AbiLHS5c (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 8 Dec 2022 13:57:32 -0500
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53DEC84248
-        for <bpf@vger.kernel.org>; Thu,  8 Dec 2022 10:57:26 -0800 (PST)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B8IZ7jC007936
-        for <bpf@vger.kernel.org>; Thu, 8 Dec 2022 10:57:26 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3mbaxjm4bu-1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686C184255
+        for <bpf@vger.kernel.org>; Thu,  8 Dec 2022 10:57:31 -0800 (PST)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B8IZ66m024848
+        for <bpf@vger.kernel.org>; Thu, 8 Dec 2022 10:57:31 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3mbk6p986r-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 08 Dec 2022 10:57:26 -0800
-Received: from twshared25383.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 08 Dec 2022 10:57:31 -0800
+Received: from twshared4568.42.prn1.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Thu, 8 Dec 2022 10:57:24 -0800
+ 15.1.2375.34; Thu, 8 Dec 2022 10:57:29 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 07BEB231D99B6; Thu,  8 Dec 2022 10:57:15 -0800 (PST)
+        id 2CA7B231D99DE; Thu,  8 Dec 2022 10:57:20 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
         Eduard Zingerman <eddyz87@gmail.com>,
         =?UTF-8?q?Per=20Sundstr=C3=B6m=20XP?= 
         <per.xp.sundstrom@ericsson.com>
-Subject: [PATCH bpf-next 4/6] libbpf: fix btf__align_of() by taking into account field offsets
-Date:   Thu, 8 Dec 2022 10:57:01 -0800
-Message-ID: <20221208185703.2681797-5-andrii@kernel.org>
+Subject: [PATCH bpf-next 6/6] selftests/bpf: add few corner cases to test padding handling of btf_dump
+Date:   Thu, 8 Dec 2022 10:57:03 -0800
+Message-ID: <20221208185703.2681797-7-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221208185703.2681797-1-andrii@kernel.org>
 References: <20221208185703.2681797-1-andrii@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: -G0OqzSzlbyGyDW-NgKc5mYs0WhE2dcs
-X-Proofpoint-ORIG-GUID: -G0OqzSzlbyGyDW-NgKc5mYs0WhE2dcs
+X-Proofpoint-GUID: LoWJ0GINu345_dtUF9Mw3DTNQf5Q6e1x
+X-Proofpoint-ORIG-GUID: LoWJ0GINu345_dtUF9Mw3DTNQf5Q6e1x
+Content-Transfer-Encoding: 8BIT
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-12-08_11,2022-12-08_01,2022-06-22_01
@@ -52,50 +53,202 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-btf__align_of() is supposed to be return alignment requirement of
-a requested BTF type. For STRUCT/UNION it doesn't always return correct
-value, because it calculates alignment only based on field types. But
-for packed structs this is not enough, we need to also check field
-offsets and struct size. If field offset isn't aligned according to
-field type's natural alignment, then struct must be packed. Similarly,
-if struct size is not a multiple of struct's natural alignment, then
-struct must be packed as well.
+Add few hand-crafted cases and few randomized cases found using script
+from [0] that tests btf_dump's padding logic.
 
-This patch fixes this issue precisely by additionally checking these
-conditions.
+  [0] https://lore.kernel.org/bpf/85f83c333f5355c8ac026f835b18d15060725fcb.camel@ericsson.com/
 
-Fixes: 3d208f4ca111 ("libbpf: Expose btf__align_of() API")
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/btf.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ .../bpf/progs/btf_dump_test_case_packing.c    | 61 ++++++++++++-
+ .../bpf/progs/btf_dump_test_case_padding.c    | 88 +++++++++++++++++++
+ 2 files changed, 148 insertions(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 71e165b09ed5..8cbcef959456 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -688,8 +688,21 @@ int btf__align_of(const struct btf *btf, __u32 id)
- 			if (align <= 0)
- 				return libbpf_err(align);
- 			max_align = max(max_align, align);
-+
-+			/* if field offset isn't aligned according to field
-+			 * type's alignment, then struct must be packed
-+			 */
-+			if (btf_member_bitfield_size(t, i) == 0 &&
-+			    (m->offset % (8 * align)) != 0)
-+				return 1;
- 		}
+diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_packing.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_packing.c
+index e304b6204bd9..5c6c62f7ed32 100644
+--- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_packing.c
++++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_packing.c
+@@ -58,7 +58,64 @@ union jump_code_union {
+ 	} __attribute__((packed));
+ };
  
-+		/* if struct/union size isn't a multiple of its alignment,
-+		 * then struct must be packed
-+		 */
-+		if ((t->size % max_align) != 0)
-+			return 1;
+-/*------ END-EXPECTED-OUTPUT ------ */
++/* ----- START-EXPECTED-OUTPUT ----- */
++/*
++ *struct nested_packed_but_aligned_struct {
++ *	int x1;
++ *	int x2;
++ *};
++ *
++ *struct outer_implicitly_packed_struct {
++ *	char y1;
++ *	struct nested_packed_but_aligned_struct y2;
++ *} __attribute__((packed));
++ *
++ */
++/* ------ END-EXPECTED-OUTPUT ------ */
 +
- 		return max_align;
- 	}
- 	default:
++struct nested_packed_but_aligned_struct {
++	int x1;
++	int x2;
++} __attribute__((packed));
++
++struct outer_implicitly_packed_struct {
++	char y1;
++	struct nested_packed_but_aligned_struct y2;
++};
++/* ----- START-EXPECTED-OUTPUT ----- */
++/*
++ *struct usb_ss_ep_comp_descriptor {
++ *	char: 8;
++ *	char bDescriptorType;
++ *	char bMaxBurst;
++ *	short wBytesPerInterval;
++ *};
++ *
++ *struct usb_host_endpoint {
++ *	long: 64;
++ *	char: 8;
++ *	struct usb_ss_ep_comp_descriptor ss_ep_comp;
++ *	long: 0;
++ *} __attribute__((packed));
++ *
++ */
++/* ------ END-EXPECTED-OUTPUT ------ */
++
++struct usb_ss_ep_comp_descriptor {
++	char: 8;
++	char bDescriptorType;
++	char bMaxBurst;
++	int: 0;
++	short wBytesPerInterval;
++} __attribute__((packed));
++
++struct usb_host_endpoint {
++	long: 64;
++	char: 8;
++	struct usb_ss_ep_comp_descriptor ss_ep_comp;
++	long: 0;
++};
++
+ 
+ int f(struct {
+ 	struct packed_trailing_space _1;
+@@ -69,6 +126,8 @@ int f(struct {
+ 	union union_is_never_packed _6;
+ 	union union_does_not_need_packing _7;
+ 	union jump_code_union _8;
++	struct outer_implicitly_packed_struct _9;
++	struct usb_host_endpoint _10;
+ } *_)
+ {
+ 	return 0;
+diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
+index 6f963d34c45b..d6ae08ecd6a1 100644
+--- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
++++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
+@@ -128,6 +128,83 @@ struct padding_weird_2 {
+ 	char: 8;
+ };
+ 
++/* ----- START-EXPECTED-OUTPUT ----- */
++struct exact_1byte {
++	char x;
++};
++
++struct padded_1byte {
++	char: 8;
++};
++
++struct exact_2bytes {
++	short x;
++};
++
++struct padded_2bytes {
++	short: 16;
++};
++
++struct exact_4bytes {
++	int x;
++};
++
++struct padded_4bytes {
++	int: 32;
++};
++
++struct exact_8bytes {
++	long x;
++};
++
++struct padded_8bytes {
++	long: 64;
++};
++
++struct ff_periodic_effect {
++	int: 32;
++	short magnitude;
++	long: 0;
++	short phase;
++	long: 0;
++	int: 32;
++	int custom_len;
++	short *custom_data;
++};
++
++struct ib_wc {
++	long: 64;
++	long: 64;
++	int: 32;
++	int byte_len;
++	void *qp;
++	union {} ex;
++	long: 64;
++	int slid;
++	int wc_flags;
++	long: 64;
++	char smac[6];
++	long: 0;
++	char network_hdr_type;
++};
++
++struct acpi_object_method {
++	long: 64;
++	char: 8;
++	char type;
++	short reference_count;
++	char flags;
++	short: 0;
++	char: 8;
++	char sync_level;
++	long: 64;
++	void *node;
++	void *aml_start;
++	union {} dispatch;
++	long: 64;
++	int aml_length;
++};
++
+ /* ------ END-EXPECTED-OUTPUT ------ */
+ 
+ int f(struct {
+@@ -139,6 +216,17 @@ int f(struct {
+ 	struct padding_wo_named_members _6;
+ 	struct padding_weird_1 _7;
+ 	struct padding_weird_2 _8;
++	struct exact_1byte _100;
++	struct padded_1byte _101;
++	struct exact_2bytes _102;
++	struct padded_2bytes _103;
++	struct exact_4bytes _104;
++	struct padded_4bytes _105;
++	struct exact_8bytes _106;
++	struct padded_8bytes _107;
++	struct ff_periodic_effect _200;
++	struct ib_wc _201;
++	struct acpi_object_method _202;
+ } *_)
+ {
+ 	return 0;
 -- 
 2.30.2
 
