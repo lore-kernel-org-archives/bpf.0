@@ -2,83 +2,97 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5984FC4332F
-	for <bpf@archiver.kernel.org>; Thu,  8 Dec 2022 18:10:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 886BDC4167B
+	for <bpf@archiver.kernel.org>; Thu,  8 Dec 2022 18:26:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbiLHSKU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 8 Dec 2022 13:10:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37244 "EHLO
+        id S229712AbiLHS0s (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 8 Dec 2022 13:26:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiLHSKS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 8 Dec 2022 13:10:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E2C52145;
-        Thu,  8 Dec 2022 10:10:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E8482B825D8;
-        Thu,  8 Dec 2022 18:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 954FCC433F1;
-        Thu,  8 Dec 2022 18:10:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670523015;
-        bh=ZwoLITpYJUg/4eyY8ICNvEFmUk3kJC1ymqqYSVhpR6A=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=JIoKYn48FoPTix+ULlNoYrAtp/nL+Ult1yLRM5p0VLYdwG/sagZsuWmcJnHdS3dhX
-         zhBTC0GJtc6/M0OC//5nlvfFD6D7BN5ba2I0vZu6ZJuIA54n0lwFQrsvQ/VJdAGEKi
-         URHi8We4+C8qA4yyEdg8s9lbLakGEFlGht/Slo7kIRnHCvRuq769GJUDjCKAYduBnx
-         ECqzYrx54RWvtc9V83XfHj56UwWVnzGm3qRftbZtA922UWiBC1VQ9/ws+4nxZLPUi+
-         BJqlfzwltsT32x4Jfp/wC/m8ElUR1UL8yBFPK2LTyFEPSPnFhL/X6vnH/56oyz9gts
-         Qw7JJMsIofklA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7D205C433D7;
-        Thu,  8 Dec 2022 18:10:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229824AbiLHS0q (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 8 Dec 2022 13:26:46 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A340AD32B;
+        Thu,  8 Dec 2022 10:26:38 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id p24so2339732plw.1;
+        Thu, 08 Dec 2022 10:26:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=ze6sTd98o+g+6IIqM1P3HBE6uRWEE3mJ5ZQRVJK3+kI=;
+        b=ir+BkFOqTEnIwxMwiDi1qxBss3dcDnH4LP4ATiGGOkJHtkbTjaXxCN2LVPi/O94LN5
+         Hw6lfqXHVmjrmFFioKM5dca8WX3ut2gwdqbDo5rj8T2nea5dm9CCgWIVlVmOBPJ0cs8u
+         0H67qvZ1PkYImLRJKpK0Q7Hcq/egl2NPvTYnpH2O0NTkj1jOvFNLFddpUiJVfK82D7ll
+         vcsg2xEtEZWDAIxP2z/Bh+0/U8DNPxxTvVPfHXiN5E0M7NInh28qx46egKMJ6BiHLodb
+         CxGcwO1Yc+FEVn/w/hx55yANIY2vSgWIQVJQiDBzDaKD8OGcALxu9woAg6bOFovVBBt3
+         5aKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ze6sTd98o+g+6IIqM1P3HBE6uRWEE3mJ5ZQRVJK3+kI=;
+        b=urUhWwYE6rKl+UZVfJOIN50U30uqf5E8xcxAe7geJkaYQoxMDN/L2AfvSxVQcTdBs8
+         lPSBjxd8fgYkGsGlupxZesUzmjFOVcQEO3idKBFvtk/os/yGuH2FMsDNOnjFagBVK3HF
+         9cCqqPBoKxuDhr4okJ9mQTGIkAZBUeK4sU0bY34HOxM04DCbtIJZ9MYAzQ4Jhck6nvI0
+         H4T2D22+/ocjmUCFnyEYxHoQcQPtj0HDuNSYnei5xAAJ7Wk+bkhDXzYKSS+tnHH891iQ
+         OpFeJ0uBulZF0Hyeb0AVpNXgQEYlAKNJe3R5rLxU0Pj3iF4KZPOGXwNMQ0uXvsyO5MGt
+         S4Dg==
+X-Gm-Message-State: ANoB5plgBhBdDGmzgesi3XDu1fHcUqpgQNCXqy9cXH4m0Cq4zxGpUDAo
+        65Q+NqZ3U97Wu/5mpBUlvxs=
+X-Google-Smtp-Source: AA0mqf7AFaUGxBh2S1oElEAgW5c2HAmruuZ/tSpzAO7F8OJItjGNTEszfpHSMAtxbYyoRmWNyDMKPQ==
+X-Received: by 2002:a17:90a:2d81:b0:219:9676:fef4 with SMTP id p1-20020a17090a2d8100b002199676fef4mr27870762pjd.89.1670523997544;
+        Thu, 08 Dec 2022 10:26:37 -0800 (PST)
+Received: from balhae.corp.google.com ([2620:15c:2c1:200:e288:d3e1:a97a:4b35])
+        by smtp.gmail.com with ESMTPSA id c133-20020a621c8b000000b00575cdd7c0adsm15606679pfc.80.2022.12.08.10.26.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 10:26:37 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Song Liu <song@kernel.org>,
+        bpf@vger.kernel.org
+Subject: [PATCH] perf tools: Fix a typo in BTF tracepoint name
+Date:   Thu,  8 Dec 2022 10:26:36 -0800
+Message-Id: <20221208182636.524139-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v2] bpf: Do not zero-extend kfunc return values
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167052301550.11439.10680948622430616083.git-patchwork-notify@kernel.org>
-Date:   Thu, 08 Dec 2022 18:10:15 +0000
-References: <20221207103540.396496-1-bjorn@kernel.org>
-In-Reply-To: <20221207103540.396496-1-bjorn@kernel.org>
-To:     =?utf-8?b?QmrDtnJuIFTDtnBlbCA8Ympvcm5Aa2VybmVsLm9yZz4=?=@ci.codeaurora.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
-        bpf@vger.kernel.org, netdev@vger.kernel.org, bjorn@rivosinc.com,
-        iii@linux.ibm.com, jackmanb@google.com, yhs@meta.com,
-        yangjihong1@huawei.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+In the BTF, tracepoint definitions have the prefix of "btf_trace_".
+The off-cpu profilier needs to check the signature of sched_switch
+event using the definition.  But there's a typo (s/bpf/btf/) so it
+failed always.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Fixes: b36888f71c85 ("perf record: Handle argument change in sched_switch")
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/util/bpf_off_cpu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Wed,  7 Dec 2022 11:35:40 +0100 you wrote:
-> From: Björn Töpel <bjorn@rivosinc.com>
-> 
-> In BPF all global functions, and BPF helpers return a 64-bit
-> value. For kfunc calls, this is not the case, and they can return
-> e.g. 32-bit values.
-> 
-> The return register R0 for kfuncs calls can therefore be marked as
-> subreg_def != DEF_NOT_SUBREG. In general, if a register is marked with
-> subreg_def != DEF_NOT_SUBREG, some archs (where bpf_jit_needs_zext()
-> returns true) require the verifier to insert explicit zero-extension
-> instructions.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf,v2] bpf: Do not zero-extend kfunc return values
-    https://git.kernel.org/bpf/bpf-next/c/d35af0a7feb0
-
-You are awesome, thank you!
+diff --git a/tools/perf/util/bpf_off_cpu.c b/tools/perf/util/bpf_off_cpu.c
+index c257813e674e..01f70b8e705a 100644
+--- a/tools/perf/util/bpf_off_cpu.c
++++ b/tools/perf/util/bpf_off_cpu.c
+@@ -102,7 +102,7 @@ static void check_sched_switch_args(void)
+ 	const struct btf_type *t1, *t2, *t3;
+ 	u32 type_id;
+ 
+-	type_id = btf__find_by_name_kind(btf, "bpf_trace_sched_switch",
++	type_id = btf__find_by_name_kind(btf, "btf_trace_sched_switch",
+ 					 BTF_KIND_TYPEDEF);
+ 	if ((s32)type_id < 0)
+ 		return;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.39.0.rc1.256.g54fd8350bd-goog
 
