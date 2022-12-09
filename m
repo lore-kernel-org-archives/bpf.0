@@ -2,61 +2,61 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7236FC4332F
-	for <bpf@archiver.kernel.org>; Fri,  9 Dec 2022 13:59:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71CB8C10F31
+	for <bpf@archiver.kernel.org>; Fri,  9 Dec 2022 13:59:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbiLIN67 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 9 Dec 2022 08:58:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58748 "EHLO
+        id S229751AbiLIN7A (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 9 Dec 2022 08:59:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbiLIN6z (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 9 Dec 2022 08:58:55 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A75675BCC
-        for <bpf@vger.kernel.org>; Fri,  9 Dec 2022 05:58:54 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id b2so11663522eja.7
-        for <bpf@vger.kernel.org>; Fri, 09 Dec 2022 05:58:54 -0800 (PST)
+        with ESMTP id S229894AbiLIN66 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 9 Dec 2022 08:58:58 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF7C54778
+        for <bpf@vger.kernel.org>; Fri,  9 Dec 2022 05:58:56 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id n20so11777124ejh.0
+        for <bpf@vger.kernel.org>; Fri, 09 Dec 2022 05:58:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=abgGM9CUNndqrEA1w+pChD0KCjzJooML7RT1geS+xYQ=;
-        b=VcqW1lfHmpWiDG3Bwhfkor4jx4FT+jvCSMBU8zoKfOkwIE4RtD076wS4ZWopaMtL+V
-         f1MHCyRyfjd18s1QaNkMAqwVqvHkGCzleaoSB3LgumozUxB3AeINNtnVHPzhyWgxHi2s
-         YzRZuEW1z/662635Wz6TPLBTu85RypGmTwC7afpxLzx/32qwVIq8wq1mGO/QargEPFIM
-         763Omdp7epNNNxt7CHmcxcACgpzpWwHMewHbNVzw0rQxeonVGKyJwE2+kILf+wN1k8YA
-         bVQQrCmJGdBxZBc1Vdn5WpVqMUDm0RhTGBw+9JlMwG//ThOjUgZfItgY7zI662YTmR1o
-         g2eA==
+        bh=wzjyzNxTIAqPjPKUEr8bfwrktvhNTDX4WTTNouBssS8=;
+        b=lMHI2M6w2HVZot/sx0Llbpqjz41Nl5Omy24J25xLqTygY5cGHlPe5AOuvxYxDSsHYE
+         lmJ+ynwGaeWJjMrt/G1vzWRKuGSDsvQ0hoWUKydPk3h7XQzWDsjh6MKE1sel5eT5gqQZ
+         o1Lllgx2gJw+fWipMQbUjhuAAd311B7iHUTgqQvzekdMJ1KmiwrQCuNBOTq+AQ2I17Bc
+         NpixJsuT0ydWcaHrcCh2zxZw1rgRz2FeL8fLS8v8xU7a2BxOaA5sQ9g0VCklkTg9bB37
+         Xen35NuSetLx3Mc6I5H/qzJJ0X3k/FItSv4pL25zr7q/DR2k3l1Tzh075sOlTR8RRmBh
+         oLNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=abgGM9CUNndqrEA1w+pChD0KCjzJooML7RT1geS+xYQ=;
-        b=dS+HLbCaIIDfsOc5AusEGM9nlIiKfmNzQpwYLqByDkMH9tzN/9QZ391fWwS7PUP+2k
-         qB0Sax+w3Fxbdr7CuPX5js1tqdVuyy2r+qWJzWdkKqA4cxne5Uq9CiMKClkDzWZmUvy3
-         VGCTRcMwWPlXScIGuXb0ZiHNjc0SCxzASHvc9r6gPsSWTKtmvbarE1eN7ikyTF97AGuE
-         RgNarjVOWukiqBvAlQ0oLaNvfHYv2D7YKtW+s7Pa/gGmhrrbGfGGLRTm1AGNHa1k6jpd
-         83NTt/c/wPWPlxHTJwJa9DtwKV1UOfLParlA0O6E7ZSV2LPItUUUQK4+kjhGqpfziTz6
-         PEcA==
-X-Gm-Message-State: ANoB5pn7ac0gAcLdvWp1eYhVnOFYeCizc9e3d9rtX9DCANv9PzQX144R
-        dAtX8tZgoLjVlo4gWZCPDnUluU6JeOMhwg==
-X-Google-Smtp-Source: AA0mqf5MZ+LnJWJEyy9N4h0OupkaJcKMqmRNUs46Sv4pr9+jbF0uelk4vgECRD9uozvF2zfe1O1uAg==
-X-Received: by 2002:a17:906:1685:b0:7c1:458b:a947 with SMTP id s5-20020a170906168500b007c1458ba947mr1911436ejd.26.1670594332472;
-        Fri, 09 Dec 2022 05:58:52 -0800 (PST)
+        bh=wzjyzNxTIAqPjPKUEr8bfwrktvhNTDX4WTTNouBssS8=;
+        b=1sousk0c5NYeLurM8Wujc5RmfkHSN4cmj7OUoUN4Q/ptoNYeWoXdE/k+s56c36VZLD
+         X57J+9Fh6rc0vEqw5woX0Ra5Kyzxqf+xYyEf8ph6ecY6fD5mQLhwcf6YPxyfZqlNeW0R
+         +wDEmXm+RkFxSqhVx3Az50yWyF6uZ2vzc9S9w+Dxm2TjTHsM+wLEsl68A699fqnioCas
+         jqJ+j7XjbIFCEkEx9sJH/r/v2u20MQg4z/IIYJUCd9gtzwliSN1emUivwcNP7NPaLsAs
+         fSHRm6M+yFcowzIxUvwwzQslrrI4eY9fnV9E/CWkXfLkKt7/VoKT/JfZO4N+mcx5QPaY
+         YpGg==
+X-Gm-Message-State: ANoB5pkDcv6mB9pNyPvGNwisSzChwSUqAO4Dcmch6EPOQoi/sOYyoLqs
+        43aqGDU2y467xt+75RuqjpGLjkdKY47x9g==
+X-Google-Smtp-Source: AA0mqf4Wm09JtaAmjklB366PY55uNsclwHTlXwbvs6OCIEkqwrZm66tVkhwEPsCn2u1KTxPLXRW9XQ==
+X-Received: by 2002:a17:906:3ac1:b0:7c0:ba3b:8e04 with SMTP id z1-20020a1709063ac100b007c0ba3b8e04mr4845627ejd.43.1670594334845;
+        Fri, 09 Dec 2022 05:58:54 -0800 (PST)
 Received: from pluto.. (178-133-28-80.mobile.vf-ua.net. [178.133.28.80])
-        by smtp.gmail.com with ESMTPSA id j6-20020a170906830600b007c10fe64c5dsm589028ejx.86.2022.12.09.05.58.51
+        by smtp.gmail.com with ESMTPSA id j6-20020a170906830600b007c10fe64c5dsm589028ejx.86.2022.12.09.05.58.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 05:58:52 -0800 (PST)
+        Fri, 09 Dec 2022 05:58:54 -0800 (PST)
 From:   Eduard Zingerman <eddyz87@gmail.com>
 To:     bpf@vger.kernel.org, ast@kernel.org
 Cc:     andrii@kernel.org, daniel@iogearbox.net, kernel-team@fb.com,
         yhs@fb.com, memxor@gmail.com, ecree.xilinx@gmail.com,
         Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next 5/7] bpf: use check_ids() for active_lock comparison
-Date:   Fri,  9 Dec 2022 15:57:31 +0200
-Message-Id: <20221209135733.28851-6-eddyz87@gmail.com>
+Subject: [PATCH bpf-next 7/7] selftests/bpf: test case for relaxed prunning of active_lock.id
+Date:   Fri,  9 Dec 2022 15:57:33 +0200
+Message-Id: <20221209135733.28851-8-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221209135733.28851-1-eddyz87@gmail.com>
 References: <20221209135733.28851-1-eddyz87@gmail.com>
@@ -66,82 +66,99 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-An update for verifier.c:states_equal()/regsafe() to use check_ids()
-for active spin lock comparisons. This fixes the issue reported by
-Kumar Kartikeya Dwivedi in [1] using technique suggested by Edward Cree.
+Check that verifier.c:states_equal() uses check_ids() to match
+consistent active_lock/map_value configurations. This allows to prune
+states with active spin locks even if numerical values of
+active_lock ids do not match across compared states.
 
-W/o this commit the verifier might be tricked to accept the following
-program working with a map containing spin locks:
-
-  0: r9 = map_lookup_elem(...)  ; Returns PTR_TO_MAP_VALUE_OR_NULL id=1.
-  1: r8 = map_lookup_elem(...)  ; Returns PTR_TO_MAP_VALUE_OR_NULL id=2.
-  2: if r9 == 0 goto exit       ; r9 -> PTR_TO_MAP_VALUE.
-  3: if r8 == 0 goto exit       ; r8 -> PTR_TO_MAP_VALUE.
-  4: r7 = ktime_get_ns()        ; Unbound SCALAR_VALUE.
-  5: r6 = ktime_get_ns()        ; Unbound SCALAR_VALUE.
-  6: bpf_spin_lock(r8)          ; active_lock.id == 2.
-  7: if r6 > r7 goto +1         ; No new information about the state
-                                ; is derived from this check, thus
-                                ; produced verifier states differ only
-                                ; in 'insn_idx'.
-  8: r9 = r8                    ; Optionally make r9.id == r8.id.
-  --- checkpoint ---            ; Assume is_state_visisted() creates a
-                                ; checkpoint here.
-  9: bpf_spin_unlock(r9)        ; (a,b) active_lock.id == 2.
-                                ; (a) r9.id == 2, (b) r9.id == 1.
- 10: exit(0)
-
-Consider two verification paths:
-(a) 0-10
-(b) 0-7,9-10
-
-The path (a) is verified first. If checkpoint is created at (8)
-the (b) would assume that (8) is safe because regsafe() does not
-compare register ids for registers of type PTR_TO_MAP_VALUE.
-
-[1] https://lore.kernel.org/bpf/20221111202719.982118-1-memxor@gmail.com/
-
-Reported-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Suggested-by: Edward Cree <ecree.xilinx@gmail.com>
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/verifier.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ .../selftests/bpf/verifier/spin_lock.c        | 75 +++++++++++++++++++
+ 1 file changed, 75 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 9188370a7ebe..27caea773491 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -12981,7 +12981,8 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
- 		 */
- 		return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) == 0 &&
- 		       range_within(rold, rcur) &&
--		       tnum_in(rold->var_off, rcur->var_off);
-+		       tnum_in(rold->var_off, rcur->var_off) &&
-+		       check_ids(rold->id, rcur->id, idmap);
- 	case PTR_TO_PACKET_META:
- 	case PTR_TO_PACKET:
- 		if (rcur->type != rold->type)
-@@ -13153,8 +13154,17 @@ static bool states_equal(struct bpf_verifier_env *env,
- 	if (old->speculative && !cur->speculative)
- 		return false;
- 
--	if (old->active_lock.ptr != cur->active_lock.ptr ||
--	    old->active_lock.id != cur->active_lock.id)
-+	if (old->active_lock.ptr != cur->active_lock.ptr)
-+		return false;
-+
-+	/* Old and cur active_lock's have to be either both present
-+	 * or both absent.
+diff --git a/tools/testing/selftests/bpf/verifier/spin_lock.c b/tools/testing/selftests/bpf/verifier/spin_lock.c
+index 0a8dcfc37fc6..eaf114f07e2e 100644
+--- a/tools/testing/selftests/bpf/verifier/spin_lock.c
++++ b/tools/testing/selftests/bpf/verifier/spin_lock.c
+@@ -370,3 +370,78 @@
+ 	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
+ 	.flags = BPF_F_TEST_STATE_FREQ,
+ },
++/* Make sure that regsafe() compares ids for spin lock records using
++ * check_ids():
++ *  1: r9 = map_lookup_elem(...)  ; r9.id == 1
++ *  2: r8 = map_lookup_elem(...)  ; r8.id == 2
++ *  3: r7 = ktime_get_ns()
++ *  4: r6 = ktime_get_ns()
++ *  5: if r6 > r7 goto <9>
++ *  6: spin_lock(r8)
++ *  7: r9 = r8
++ *  8: goto <10>
++ *  9: spin_lock(r9)
++ * 10: spin_unlock(r9)             ; r9.id == 1 || r9.id == 2 and lock is active,
++ *                                 ; second visit to (10) should be considered safe
++ *                                 ; if check_ids() is used.
++ * 11: exit(0)
++ */
++{
++	"spin_lock: regsafe() check_ids() similar id mappings",
++	.insns = {
++	BPF_ST_MEM(BPF_W, BPF_REG_10, -4, 0),
++	/* r9 = map_lookup_elem(...) */
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -4),
++	BPF_LD_MAP_FD(BPF_REG_1,
++		      0),
++	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 24),
++	BPF_MOV64_REG(BPF_REG_9, BPF_REG_0),
++	/* r8 = map_lookup_elem(...) */
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -4),
++	BPF_LD_MAP_FD(BPF_REG_1,
++		      0),
++	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 18),
++	BPF_MOV64_REG(BPF_REG_8, BPF_REG_0),
++	/* r7 = ktime_get_ns() */
++	BPF_EMIT_CALL(BPF_FUNC_ktime_get_ns),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	/* r6 = ktime_get_ns() */
++	BPF_EMIT_CALL(BPF_FUNC_ktime_get_ns),
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_0),
++	/* if r6 > r7 goto +5      ; no new information about the state is derived from
++	 *                         ; this check, thus produced verifier states differ
++	 *                         ; only in 'insn_idx'
++	 * spin_lock(r8)
++	 * r9 = r8
++	 * goto unlock
 +	 */
-+	if (!!old->active_lock.id != !!cur->active_lock.id)
-+		return false;
-+
-+	if (old->active_lock.id &&
-+	    !check_ids(old->active_lock.id, cur->active_lock.id, env->idmap_scratch))
- 		return false;
- 
- 	if (old->active_rcu_lock != cur->active_rcu_lock)
++	BPF_JMP_REG(BPF_JGT, BPF_REG_6, BPF_REG_7, 5),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_8),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 4),
++	BPF_EMIT_CALL(BPF_FUNC_spin_lock),
++	BPF_MOV64_REG(BPF_REG_9, BPF_REG_8),
++	BPF_JMP_A(3),
++	/* spin_lock(r9) */
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_9),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 4),
++	BPF_EMIT_CALL(BPF_FUNC_spin_lock),
++	/* spin_unlock(r9) */
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_9),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 4),
++	BPF_EMIT_CALL(BPF_FUNC_spin_unlock),
++	/* exit(0) */
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_spin_lock = { 3, 10 },
++	.result = VERBOSE_ACCEPT,
++	.errstr = "28: safe",
++	.result_unpriv = REJECT,
++	.errstr_unpriv = "",
++	.prog_type = BPF_PROG_TYPE_CGROUP_SKB,
++	.flags = BPF_F_TEST_STATE_FREQ,
++},
 -- 
 2.34.1
 
