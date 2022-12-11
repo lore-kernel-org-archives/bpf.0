@@ -2,91 +2,126 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23506C4332F
-	for <bpf@archiver.kernel.org>; Sun, 11 Dec 2022 17:02:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE979C4167B
+	for <bpf@archiver.kernel.org>; Sun, 11 Dec 2022 21:31:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbiLKRCg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 11 Dec 2022 12:02:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33358 "EHLO
+        id S230186AbiLKVbX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 11 Dec 2022 16:31:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbiLKRCf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 11 Dec 2022 12:02:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E0AB2E;
-        Sun, 11 Dec 2022 09:02:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C504FB80A2B;
-        Sun, 11 Dec 2022 17:02:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7FA3C433EF;
-        Sun, 11 Dec 2022 17:02:28 +0000 (UTC)
-Date:   Sun, 11 Dec 2022 12:02:26 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     KP Singh <kpsingh@kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Florent Revest <revest@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Chris Mason <clm@meta.com>
-Subject: Re: [PATCH v2] panic: Taint kernel if fault injection has been used
-Message-ID: <20221211120226.11c97578@rorschach.local.home>
-In-Reply-To: <CACYkzJ72-hJweZoFN_YN8u3NOmp5x82M2xA-ZKBi5ubt6yrzZA@mail.gmail.com>
-References: <167019256481.3792653.4369637751468386073.stgit@devnote3>
-        <20221204223001.6wea7cgkofjsiy2z@macbook-pro-6.dhcp.thefacebook.com>
-        <20221205075921.02edfe6b54abc5c2f9831875@kernel.org>
-        <20221206021700.oryt26otos7vpxjh@macbook-pro-6.dhcp.thefacebook.com>
-        <20221206162035.97ae19674d6d17108bed1910@kernel.org>
-        <20221207040146.zhm3kyduqp7kosqa@macbook-pro-6.dhcp.thefacebook.com>
-        <20221206233947.4c27cc9d@gandalf.local.home>
-        <CAADnVQKDZfP51WeVOeY-6RNH=MHT2BhtW6F8PaJV5-RoJOtMkQ@mail.gmail.com>
-        <20221207074806.6f869be2@gandalf.local.home>
-        <20221208043628.el5yykpjr4j45zqx@macbook-pro-6.dhcp.thefacebook.com>
-        <20221211115218.2e6e289bb85f8cf53c11aa97@kernel.org>
-        <CACYkzJ72-hJweZoFN_YN8u3NOmp5x82M2xA-ZKBi5ubt6yrzZA@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S230031AbiLKVbW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 11 Dec 2022 16:31:22 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD7ADE93;
+        Sun, 11 Dec 2022 13:31:21 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id f13-20020a1cc90d000000b003d08c4cf679so3631074wmb.5;
+        Sun, 11 Dec 2022 13:31:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iT8jy7hXGuLdSI3WnW19MAFpxEEAB5GqxCDkyx7KpM4=;
+        b=bHIaQoWiU/RqdS0GRKzMghm5tUXLJ+904G799bZNyECaA+xGQUUX5VrxuxK60g4z1n
+         ngvtGi9jl+kCHdtgF0pR7EywnsK79hRXBKqaeJB7YvykSu+dv3RGDRBDup5d+lIuKe3/
+         B+3y71WOzZdUAnsPbvB6H4Fndjt0fS/VtB1i37X3gr896cbtSB+Qxi2unLBTDyxx6UcC
+         F5mzvNnVp3c/baEZLDKJKe4KKn3YpB8VlNJs0i5ZCxfwqT+1oDdT12CFjm+pxWPckD8M
+         cAUtAtvKLgwtxI0Q1IO2y0ezzQ0OJpGi5mBU6ghnuvBKIM8TOToMwV0KANPkWM42kE62
+         macw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iT8jy7hXGuLdSI3WnW19MAFpxEEAB5GqxCDkyx7KpM4=;
+        b=0juqYqG7XVTesbxuRUg9S87e5Nza6+NxJw6jykgZKYwQZpwAes1nJugVw6Oa13H6Ar
+         Vz9vaYciAoL1o/Czciw4/gViDw3qXkybQiPuR1as2p30BfEFwyEkTxSUs1cVjEWFUhZ9
+         N1UIaaLpWfvyU2t9ZRNIidZxdF50HfFmuG8EXprPWMFjyi2aP/QK8KKoNj1eql7QcOF9
+         ccCdLDpjyL8Hh8wfZNWwfuK3t+nItDw8LUFe2yF7cjOydgnnhoTyVRjWE43thwi9OAxW
+         a98OIma1XsQ7yOgnlBH0O9M6wLqSxOndINnL9ujbtqwiCjAntpLMH8tlNDFmss0rpzet
+         Otig==
+X-Gm-Message-State: ANoB5pmMx6BEumNACpGgKgySa7RAAx9pkCNo7l1+Dc+qLjbRqkeQuXg3
+        uaWNZ7mE/oDDb/saZhf8K70=
+X-Google-Smtp-Source: AA0mqf5zWAFa4VcpAunSbDQqJ17B48IWR0tqfODzum12dcsBaja0xsp9d+A8KtyFeJosx1va5PbGOw==
+X-Received: by 2002:a05:600c:3584:b0:3d1:bf7c:391c with SMTP id p4-20020a05600c358400b003d1bf7c391cmr10228233wmq.4.1670794279732;
+        Sun, 11 Dec 2022 13:31:19 -0800 (PST)
+Received: from localhost.localdomain (host-95-247-100-134.retail.telecomitalia.it. [95.247.100.134])
+        by smtp.gmail.com with ESMTPSA id m127-20020a1c2685000000b003d1d5a83b2esm6866350wmm.35.2022.12.11.13.31.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 11 Dec 2022 13:31:19 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Evgeniy Dushistov <dushistov@mail.ru>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Subject: [PATCH 1/3] fs/ufs: Use the offset_in_page() helper
+Date:   Sun, 11 Dec 2022 22:31:09 +0100
+Message-Id: <20221211213111.30085-2-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221211213111.30085-1-fmdefrancesco@gmail.com>
+References: <20221211213111.30085-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, 11 Dec 2022 08:49:01 +0100
-KP Singh <kpsingh@kernel.org> wrote:
+Use the offset_in_page() helper because it is more suitable than doing
+explicit subtractions between pointers to directory entries and kernel
+virtual addresses of mapped pages.
 
-> Let's take a step back and focus on solving debuggability and
-> introspection as we clearly have some perception issues about taints
-> in the community. (distro maintainers, users) before we go and add
-> more taints.
+Cc: Ira Weiny <ira.weiny@intel.com>
+Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
+ fs/ufs/dir.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-Note, you will likely get the same push back if the dump includes bpf
-programs known to change the return of a function that may be involved
-with the bug report. That is, if a crash is reported to code I
-maintain, and I see that the bug report includes a list of BPF programs
-that can modify the return of a function, and one of those functions
-could affect the place that crashed, I'd push back and ask if the crash
-could be done without that BPF program loaded, regardless of taints.
+diff --git a/fs/ufs/dir.c b/fs/ufs/dir.c
+index 391efaf1d528..69f78583c9c1 100644
+--- a/fs/ufs/dir.c
++++ b/fs/ufs/dir.c
+@@ -87,8 +87,7 @@ void ufs_set_link(struct inode *dir, struct ufs_dir_entry *de,
+ 		  struct page *page, struct inode *inode,
+ 		  bool update_times)
+ {
+-	loff_t pos = page_offset(page) +
+-			(char *) de - (char *) page_address(page);
++	loff_t pos = page_offset(page) + offset_in_page(de);
+ 	unsigned len = fs16_to_cpu(dir->i_sb, de->d_reclen);
+ 	int err;
+ 
+@@ -371,8 +370,7 @@ int ufs_add_link(struct dentry *dentry, struct inode *inode)
+ 	return -EINVAL;
+ 
+ got_it:
+-	pos = page_offset(page) +
+-			(char*)de - (char*)page_address(page);
++	pos = page_offset(page) + offset_in_page(de);
+ 	err = ufs_prepare_chunk(page, pos, rec_len);
+ 	if (err)
+ 		goto out_unlock;
+@@ -497,8 +495,8 @@ int ufs_delete_entry(struct inode *inode, struct ufs_dir_entry *dir,
+ {
+ 	struct super_block *sb = inode->i_sb;
+ 	char *kaddr = page_address(page);
+-	unsigned from = ((char*)dir - kaddr) & ~(UFS_SB(sb)->s_uspi->s_dirblksize - 1);
+-	unsigned to = ((char*)dir - kaddr) + fs16_to_cpu(sb, dir->d_reclen);
++	unsigned int from = offset_in_page(dir) & ~(UFS_SB(sb)->s_uspi->s_dirblksize - 1);
++	unsigned int to = offset_in_page(dir) + fs16_to_cpu(sb, dir->d_reclen);
+ 	loff_t pos;
+ 	struct ufs_dir_entry *pde = NULL;
+ 	struct ufs_dir_entry *de = (struct ufs_dir_entry *) (kaddr + from);
+@@ -522,7 +520,7 @@ int ufs_delete_entry(struct inode *inode, struct ufs_dir_entry *dir,
+ 		de = ufs_next_entry(sb, de);
+ 	}
+ 	if (pde)
+-		from = (char*)pde - (char*)page_address(page);
++		from = offset_in_page(pde);
+ 
+ 	pos = page_offset(page) + from;
+ 	lock_page(page);
+-- 
+2.38.1
 
-I agree that a taint is just a hint and it can include something that
-caused the bug or it may not. I would like to see more details in how
-the crashed kernel was configured. That includes loaded BPF programs
-(just like we include loaded modules). And if any BPF program modifies
-a core function (outside of syscall returns) I'd be a bit suspect of
-what happened.
-
-I also agree that if a function that checks error paths fails, it
-should be fixed, but knowing that the error path was caused by fault
-injection will prevent the wasted effort that most developers will go
-through to find out why the error path was hit in the first place.
-
--- Steve
