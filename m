@@ -2,111 +2,201 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC146C00145
-	for <bpf@archiver.kernel.org>; Mon, 12 Dec 2022 20:32:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 608FCC10F1E
+	for <bpf@archiver.kernel.org>; Mon, 12 Dec 2022 20:59:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232576AbiLLUct (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 12 Dec 2022 15:32:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33568 "EHLO
+        id S233442AbiLLU7D (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 12 Dec 2022 15:59:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232180AbiLLUcr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 12 Dec 2022 15:32:47 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB8730A;
-        Mon, 12 Dec 2022 12:32:38 -0800 (PST)
-Received: from leknes.fjasle.eu ([46.142.98.187]) by mrelayeu.kundenserver.de
- (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1N5G1V-1oucA71QdJ-01171N; Mon, 12 Dec 2022 21:31:42 +0100
-Received: by leknes.fjasle.eu (Postfix, from userid 1000)
-        id F41C03C1BA; Mon, 12 Dec 2022 21:31:34 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
-        t=1670877095; bh=nxwnxqjAjgVwT5akycdILq2xF3x3T7jbclBRpYvebKA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BHwwSClVQEiCMkeGU0a2VtIArgQ0VdHgcme8hBeaPzIH0A38SOUYE4QFSfQlvSu3r
-         cH/Qjk5/WDBnq/unjNIzEMLNnJA1szFxe0q+AZe3xUwn2dHwRRq5aieSjfUxin3BA2
-         0edYlpDVltvU7VJ43z+1gUDLW3BuHm87PXERBT3Y=
-Date:   Mon, 12 Dec 2022 21:31:34 +0100
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, llvm@lists.linux.dev,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH 0/5] Improvements to incremental builds
-Message-ID: <Y5ePpm3HKts3b+gJ@fjasle.eu>
-References: <20221202045743.2639466-1-irogers@google.com>
+        with ESMTP id S233463AbiLLU67 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 12 Dec 2022 15:58:59 -0500
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A2E18385;
+        Mon, 12 Dec 2022 12:58:58 -0800 (PST)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 2BCHZAC4020735;
+        Mon, 12 Dec 2022 12:58:37 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=s2048-2021-q4;
+ bh=WgOUMr8z6oZ40qc4ivDGi3tUC3eAS9ETrP3dlY67HCw=;
+ b=a7S9jNjvQIKQxBfISEUyxD/QfiVFXllBvTiuwhYSnxnwjtgFutmMCEbWzlabSv4B10Ec
+ +ekmg8j7sRXJgiOJrU04K6nPChGgOFs6yMhcQhjDh88wL1rgGljnkOzQj9T5/Z2BAu6C
+ NcDhoIE0eGIXrGyEnAEbVok4VQI/PWlHVwYQR6iAe93Spb142b4PRxzY75U4h/j3lB5I
+ 1x+KP1N3UwggPbeVVAsIOa0n/lHN513X1pI4jQSmKw0k+hFo6Zx2/JnyMQQcGJ4G3Eur
+ QvSSjTdmuVmwwxcw27f+aUIi4vLFTMO/UqnAmTdqfh70wYx2ICv7izfFY55FCuCMRrjP 1w== 
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam04lp2043.outbound.protection.outlook.com [104.47.73.43])
+        by m0001303.ppops.net (PPS) with ESMTPS id 3me4u241ap-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Dec 2022 12:58:37 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WZxJnsCUo/mIM4VkfilYP/n8VdL7bCuKFyz29zgJO/qFuHIlt3zt68CWAbGYshAgTIP42WzeUJ08+Peg1dVKrfCkTwi8szQ/nzRySanHUpDCLsXVtZvDET2A8retKJQBdX2i9ExyRevs82FHFYN3Lf/YIdlDH4FGRqO+O5ncMdzss3tI7Pec1Wo/Wz1rGs4Ek+lFuTMNbs6Q356q1oiYRCWy+PK540D0PkAL3M7h4+qgJibjxuUNXh5cequC+DWDpjAg7CKGQEkALdJfL/M/ry2ayUPJMnzk+f212yJkRyMf+xL6+5mo6WVB+rdn6Og9OKJK4tZcXW5VecoLTyD7tw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WgOUMr8z6oZ40qc4ivDGi3tUC3eAS9ETrP3dlY67HCw=;
+ b=Dqg2U9xFLAM55eqfeP1bBIcG0LBaGexAx0ITYC+cvNods7IUm0TpteIeWq9P5RFsHTF3kGjCos4PuZ52aG09oG4ep3WCGbPE9mM5ucTorWy12tlC5vVCvfMuaLMMbLT57g7tth0zg9TYAMsbT4ZkqsEyInlanXrRJhR+4hFG9c/DR/rLA1NK1Q/PEnMUP2G1DirOCBDYjbax4V5OttjhOOyG6XPghfx1vBWL8FNRCzMNP9abTRKcWnhhHCDe+WGUMkFIvsfUTBHJIKGECgirURZZtHn4SB9pmNL/Vk0bk0ug7qjWFsniUZn8bEdcdHggrDdfkX8jAFf7xwfId6vdTw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from DM5PR1501MB2055.namprd15.prod.outlook.com (2603:10b6:4:a1::13)
+ by MN2PR15MB2830.namprd15.prod.outlook.com (2603:10b6:208:132::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.18; Mon, 12 Dec
+ 2022 20:58:26 +0000
+Received: from DM5PR1501MB2055.namprd15.prod.outlook.com
+ ([fe80::f462:bf61:5f19:e2e9]) by DM5PR1501MB2055.namprd15.prod.outlook.com
+ ([fe80::f462:bf61:5f19:e2e9%4]) with mapi id 15.20.5880.019; Mon, 12 Dec 2022
+ 20:58:26 +0000
+Message-ID: <474389f3-b50c-e941-5459-8a1318a7117f@meta.com>
+Date:   Mon, 12 Dec 2022 12:58:23 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.1
+Subject: Re: [PATCH bpf-next 1/2] bpf: fix nullness propagation for reg to reg
+ comparisons
+Content-Language: en-US
+To:     Hao Sun <sunhao.th@gmail.com>, bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, davem@davemloft.net, linux-kernel@vger.kernel.org
+References: <20221212040911.2337521-1-sunhao.th@gmail.com>
+From:   Yonghong Song <yhs@meta.com>
+In-Reply-To: <20221212040911.2337521-1-sunhao.th@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-ClientProxiedBy: SJ0PR03CA0068.namprd03.prod.outlook.com
+ (2603:10b6:a03:331::13) To DM5PR1501MB2055.namprd15.prod.outlook.com
+ (2603:10b6:4:a1::13)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM5PR1501MB2055:EE_|MN2PR15MB2830:EE_
+X-MS-Office365-Filtering-Correlation-Id: db46f678-0872-4af4-96a4-08dadc839cf5
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: p14lSqu+H++BK09KdX9oU+17G8Bv6elESlFDlMcczM4L/I4bZknP7QhS7pVC7DNJMLNMEiJwc2HiiZCXCZCDuSox42imyJjLVTGQtqhLQ4b9dR5PyfXRpreEtzEZzQ9xiwHiyoqdoiAKbwHSrIP8vMRfawIxSoiUMMFjI4gvXX40fPcJQnCL/6ODxO8j28IADCmboULMiaJUZhNGiP5zZJ64YaD8m+FauF4dYgspy3Y8YNLgjPCsA1scxNut+QZYOhdOvxrBC1bemTznUhGHT/uFFYyi3dJTETjXvCyeAMyq6v3an0Q2tMSV/d/GZxPGOCgEp0zcUn+RfVe66BsR+KJxHQHt4eDHIgthGjV+byNYYCi3gYvnwPgQYyLsvfk89c27bg4Q/F1pEt1Zz/+EyUmqofumx8sMV2HaKF+kTyEU8SrAOtvMUO1pjn5HK/Tx/aMAiX8005A43iHWum4f0m3wObrrulT3bQxxRHWTshbhc0IUJ4yXQRE48I2aCIi/3xeYplZLW/O2gih+LEvNwtAxkKD2WR6uO7IgJ+4wRoiS8uBTPHT3opgUIISI25tySpt5ioeTQO60z3QXnNwvkdNWpjr6N/DNSv/6Ot94A1HKdIsHHb00ZFb51cQ695bMg6NJxZJLlrozPTZCrhXhQ1Dv2D8XlSVy2k5icMZm5UNSBNwabjG2H0cQzSDnHg45d8wT3yiDBTtSA+Xw1zyVZhntN+WfZCIxJwRJ1sqA9rDHrzG1x4k1TT/ZZKWHdmLZ
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR1501MB2055.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(376002)(396003)(366004)(39860400002)(451199015)(83380400001)(45954011)(186003)(2906002)(2616005)(38100700002)(86362001)(6512007)(41300700001)(31696002)(36756003)(5660300002)(8936002)(7416002)(6666004)(31686004)(6486002)(316002)(478600001)(966005)(8676002)(53546011)(4326008)(6506007)(66476007)(66556008)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VFFvdmV0aWlpdGxxTTJIalBSVUdxWW1sK3JBM1k4WWdXSG1wcFppbWlZc2J3?=
+ =?utf-8?B?cHcyM29aR2pzVW9URlV3ZDRnY3psWmRHVmdNdHFqMGE3Z09YcFgvWEpjaU5z?=
+ =?utf-8?B?R2pBWkN1OUpTV1Blb21BVzNQeTVxSHJlSlN1T2ZyWjV5SzRzcHZpTjVhY2wx?=
+ =?utf-8?B?bTVTcVFaOUVTN0pzd0krb1FVOTRLaVVCOHc5OGw2eHVVZ292c2xIK1BjR2l5?=
+ =?utf-8?B?bENxODdQOUcyV2hFSi85ZTNTY083Y2xEa2lsSGZjNGloTjRiUTZzaGszYWNU?=
+ =?utf-8?B?QUI3akxJTFNZak5hcGdjUU5jWXRycHE3UjhWK212clpZaTdYWnVybXdYbHha?=
+ =?utf-8?B?WVV4dEI3VGFWcGIvVlJWamlvRVFSREtlQlZmMUJkWVJuWGE4VkNsdWx3MkpZ?=
+ =?utf-8?B?YU1oanFUY3JFSEc2Ynp3d2JrRGhTT2ZIa052Q3N0NFMrSkdYTmQ1Mm9mQzJW?=
+ =?utf-8?B?TXh3T0prZHovQTUwTWNHUitiU3N2eERkRUhkaWhsZTIzb2kzU0dHcFVQOTUx?=
+ =?utf-8?B?blZKY0FHaDIyN0dkTWNNRi9XWXFHcldWTjdhQnl2Y1pFNXRsckxWaTQ2MDZO?=
+ =?utf-8?B?cGhjM3NqcUpPNCtiaFliQU5BMERRQnE0V2FWUUI5TUF2dS9OdE9BeHgzVmRR?=
+ =?utf-8?B?TGsvdCs3THBhRnpUZHpRS2dPMWNDK0FZTGltaHBsUXdwUEV0K09GWEw2bVV0?=
+ =?utf-8?B?U2pqemE0VHJCUUdKRGVsY09CaXRoaGs1bWlPUkFpaTVBNWhwZmQ1bWFJSjJu?=
+ =?utf-8?B?dGxWMGpmWFhkTmJVTUhvWHI4YXlyRndGdFZoY3JLMEZVL21pYS9Fb3dIRm9M?=
+ =?utf-8?B?N3NsVWlvWUxlZEV0dUxrR1JQVDBhNThJVEd5RTdBUVJsZ1UzVmMxbUk5d1U0?=
+ =?utf-8?B?Q21PWnQvQ2Z0eXAzSER1ckJLa2ZENGg4UHVWWEhsNVE4NHV3QUdEOGIzMkc4?=
+ =?utf-8?B?ZTNtaFI3K1ZnTWxXSWtVYmtQSzM4NVBnWmd2cHdhaWQ4Z291cjJ4cjk1SU1z?=
+ =?utf-8?B?WFhBSWptQ0tobmsyYm5pVFB4MERIOGdFY1U0bEJRc3U1QjBBWG1jR0c5T2JU?=
+ =?utf-8?B?MzNKSHhOaTVCMGxHS0o2U2NvVFBjRTdsckRMd1ZPQ1M0U09aalNUanV5S1Za?=
+ =?utf-8?B?Z3BYQTB0U2JRYURHVTZwaWM3UDUxNS9kMUJrU0JDVHVvREtxZ1FtMkxoMlVP?=
+ =?utf-8?B?aVZrdGRwNWtiMi9uTHh1UTJTeFpwdWdIVzZVUTExWHNvdjhydzQwT3Z0dnJS?=
+ =?utf-8?B?dnBwMktSSnAxdWRUMkNvc3RESVN6YXJidTJsaGRxZjdnM2hXeGo4Q2RhR2Vx?=
+ =?utf-8?B?Zkk0SXE2R1BoV0ZIR25HOGp1ZGVteUdDTlhpM3IyNklmS3dzeWU0WjJITURP?=
+ =?utf-8?B?M0VWYUZaVzRuZzdoOVVmY2xDZkx3OTRnWTNrVCtac1B5dUFram1YYmNQcFA4?=
+ =?utf-8?B?Z0lZaE8veW5Gd1JjR3ZIRFcwNTQ1QmVXbU4xMHJyVWtMZjU0ek1nbCs2SElP?=
+ =?utf-8?B?RXZOS1pCUUZrMzhFRC9TbDVvREhqVVBFRUhhUDZpUklqR1NLblNybGE3M1Zz?=
+ =?utf-8?B?dzVYdk1Md0w2c0FzUno0Tm5keGg2SXZFSnBuZzVOdW1aQ3RQUTZjQ2hXQVNK?=
+ =?utf-8?B?YzFaeWRzbzQvR004aUxuMzVXUExoS3VIU3BSTDlXQVljMHVINGVnckJhWGlX?=
+ =?utf-8?B?cnZCc2hSaFdKSHBDR0VwYm9qMUZua1p1ajVwcjY3N0hCK2M3TXU4amcvK1pt?=
+ =?utf-8?B?K0tsSEhHd3V4Lzg1MHFmRW1MYzRBeEFpdHZjZGNWZ1BFbXNkcHlxWGpveG5O?=
+ =?utf-8?B?Ty8vYXJiakxYTnpFam1ZdnlWUm9VL2gvejMwZXMyTlVwUERHQklMeVNmRlNF?=
+ =?utf-8?B?UzhkQzRxNXFVdmxoRGF6UU1IUGhhR015a29kQXQ3OWw1ZU9jSHM4bDhKbldQ?=
+ =?utf-8?B?cTdPNENkRVpGM1VYRTUraUNEeitBM29PV3BVeDlHV0cwcjBhNUNtczBGNFJD?=
+ =?utf-8?B?REsxRElZaEZaTU9taDcrQzZXeVdnVk1RNGhqdGxxY1JzVUphYWp6STRRUzFY?=
+ =?utf-8?B?Z0RHbVdKM3JNdDJCRmVyQmphcXV3Q29weC9XaXliNU10NnJGOUhsT1pWSEdG?=
+ =?utf-8?B?VXRCYzE4VG5lRjRiZU5rL1ZqL0c5RmJmY0JOcms2L1JkeHhLM0I3V09zUjdZ?=
+ =?utf-8?B?Qmc9PQ==?=
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: db46f678-0872-4af4-96a4-08dadc839cf5
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR1501MB2055.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2022 20:58:26.0857
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /vyvdmw/w8dmPplVGbonPPDVkxKkEBMuTiiCqWGsiTd1KQMCCrv6/+5gAzMfj9nk
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR15MB2830
+X-Proofpoint-ORIG-GUID: ZpWYz7z3eK1pD_AEQ_3UpeXH-FHoze24
+X-Proofpoint-GUID: ZpWYz7z3eK1pD_AEQ_3UpeXH-FHoze24
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221202045743.2639466-1-irogers@google.com>
-X-Provags-ID: V03:K1:Q5tTJtvP+OI+UVlSCti/RJFZLupxY/4hPPzq2moZ9pa7JrEvtwM
- ft2PS2S2w3HPVHOCQ+BzHC0MOmMI5c8JE7cGMFkb9tBSUCz41D7lKie3SvGmEDlb9G1liv5
- CysdTktoc6kxQSDGJBNQwvp6IpXEy35zKHix5qSDNOa/HGoiQJb6v/8hAVk6uld5Rar8rP/
- EX8yQg6Cxwaq5KGiGWc6A==
-UI-OutboundReport: notjunk:1;M01:P0:srtxlQSFqI8=;EFiRNw0p2P7eEd1nkNBqWsU7Hf5
- bQVMEHU3DRCp67FcD3GjOFeLGwaq2hrPNQVFomHSp2/uyqB21NMypyDXUabhQcbmsSKLheAM9
- JfSO7Tw7dSTqL9F8XuE+XT8IdNZJTJcpUsfcqNm6i9MT6iZIIP3N6mow0KYShu81tf/EkK8WY
- ydgsNLijrvE6AcNwbiLrac5HCsl4FeOCNSjRJOlc3HSSC4FgvAQ7Z93QLFMKXzwJwXgRbzzjc
- 8KJxBgtbK2zr38QZSQTN4NfM2uBtikl+Un/WmDQYWkXorPjSi7olRZXRCfCVduHg6WPQtwY81
- VkWIAn/h5tAW2K9CW+9IsiG4h35uLxpTG5R0LX+xht32j6+Ym3HO0zI5qGd8gfkpx3WmNaTSR
- X6NWCw0kKovUVmlwrA9uXOqK+pNBjR7GLe9sc7n+gA96cdV9U5S2okmRCYg9Qcoum+kmJcKnm
- m6c5bUcoyDesN2Q0Rjm7elC2tIheSRhObPW3Uy8maZey3a1foxy8t6U7ghwA7BGOaEVv+74F2
- C29GIZjvlHg3P3M1vhxkJzNY6T+HBH25DVkWQGpLqaw4VEetuoSVOQMD/aunBOq2LaDo2JYAA
- 2BNkRiK2p8KOVDsgXAA95udGQeoxeE+XIFAEJgaWu6dx7V3tE7NE16eiGDA516c4GXBGk2hDh
- X5Q11ivXw6OXDKAFp1Bhmg4gZhssQXX9ypGVzAKwsw==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-12_02,2022-12-12_02,2022-06-22_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 08:57:38PM -0800 Ian Rogers wrote:
-> Switching to using install_headers caused incremental builds to always
-> rebuild most targets. This was caused by the headers always being
-> reinstalled and then getting new timestamps causing dependencies to be
-> rebuilt. Follow the convention in libbpf where the install targets are
-> separated and trigger when the target isn't present or is out-of-date.
-> 
-> Further, fix an issue in the perf build with libpython where
-> python/perf.so was also regenerated as the target name was incorrect.
-> 
-> Ian Rogers (5):
->   tools lib api: Add dependency test to install_headers
->   tools lib perf: Add dependency test to install_headers
->   tools lib subcmd: Add dependency test to install_headers
->   tools lib symbol: Add dependency test to install_headers
->   perf build: Fix python/perf.so library's name
-> 
->  tools/lib/api/Makefile     | 38 ++++++++++++++++++++++-----------
->  tools/lib/perf/Makefile    | 43 +++++++++++++++++++-------------------
->  tools/lib/subcmd/Makefile  | 23 +++++++++++---------
->  tools/lib/symbol/Makefile  | 21 ++++++++++++-------
->  tools/perf/Makefile.config |  4 +++-
->  tools/perf/Makefile.perf   |  2 +-
->  6 files changed, 79 insertions(+), 52 deletions(-)
-> 
-> -- 
-> 2.39.0.rc0.267.gcb52ba06e7-goog
 
-Hi Ian,
 
-which tree is your patch set based on?  At least it doesn't apply on the
-current kbuild trees.
+On 12/11/22 8:09 PM, Hao Sun wrote:
+> After befae75856ab, the verifier would propagate null information after
+> JEQ/JNE, e.g., if two pointers, one is maybe_null and the other is not,
+> the former would be marked as non-null in eq path. However, as comment
+> "PTR_TO_BTF_ID points to a kernel struct that does not need to be null
+> checked by the BPF program ... The verifier must keep this in mind and
+> can make no assumptions about null or non-null when doing branch ...".
+> If one pointer is maybe_null and the other is PTR_TO_BTF_ID, the former
+> is incorrectly marked non-null. The following BPF prog can trigger a
+> null-ptr-deref, also see this report for more details[1]:
+> 
+> 	0: (18) r1 = map_fd	        ; R1_w=map_ptr(ks=4, vs=4)
+> 	2: (79) r6 = *(u64 *)(r1 +8)    ; R6_w=bpf_map->inner_map_data
+> 					; R6 is PTR_TO_BTF_ID
+> 					; equals to null at runtime
+> 	3: (bf) r2 = r10
+> 	4: (07) r2 += -4
+> 	5: (62) *(u32 *)(r2 +0) = 0
+> 	6: (85) call bpf_map_lookup_elem#1    ; R0_w=map_value_or_null
+> 	7: (1d) if r6 == r0 goto pc+1
+> 	8: (95) exit
+> 	; from 7 to 9: R0=map_value R6=ptr_bpf_map
+> 	9: (61) r0 = *(u32 *)(r0 +0)          ; null-ptr-deref
+> 	10: (95) exit
+> 
+> So, make the verifier propagate nullness information for reg to reg
+> comparisons only if neither reg is PTR_TO_BTF_ID.
+> 
+> [1] https://lore.kernel.org/bpf/CACkBjsaFJwjC5oiw-1KXvcazywodwXo4zGYsRHwbr2gSG9WcSw@mail.gmail.com/T/#u
+> 
+> Fixes: befae75856ab4 ("bpf: propagate nullness information for reg to reg comparisons")
+> Signed-off-by: Hao Sun <sunhao.th@gmail.com>
 
-Kind regards,
-Nicolas
+Ack with a small nit below.
 
--- 
-epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-↳ gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
-     -- frykten for herren er opphav til kunnskap --
+Acked-by: Yonghong Song <yhs@fb.com>
+
+> ---
+>   kernel/bpf/verifier.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index a5255a0dcbb6..aa651e4517e0 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -11825,7 +11825,9 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
+>   	 */
+
+Could you add explanation why PTR_TO_BTF_ID reg type should be excluded
+in the above comments?
+
+>   	if (!is_jmp32 && BPF_SRC(insn->code) == BPF_X &&
+>   	    __is_pointer_value(false, src_reg) && __is_pointer_value(false, dst_reg) &&
+> -	    type_may_be_null(src_reg->type) != type_may_be_null(dst_reg->type)) {
+> +	    type_may_be_null(src_reg->type) != type_may_be_null(dst_reg->type) &&
+> +	    base_type(src_reg->type) != PTR_TO_BTF_ID &&
+> +	    base_type(dst_reg->type) != PTR_TO_BTF_ID) {
+>   		eq_branch_regs = NULL;
+>   		switch (opcode) {
+>   		case BPF_JEQ:
