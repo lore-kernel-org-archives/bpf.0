@@ -2,465 +2,190 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECF50C4332F
-	for <bpf@archiver.kernel.org>; Mon, 12 Dec 2022 21:18:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BD55C4332F
+	for <bpf@archiver.kernel.org>; Mon, 12 Dec 2022 21:33:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233285AbiLLVSe convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 12 Dec 2022 16:18:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56768 "EHLO
+        id S231295AbiLLVdR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 12 Dec 2022 16:33:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233360AbiLLVSH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 12 Dec 2022 16:18:07 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F421AD81
-        for <bpf@vger.kernel.org>; Mon, 12 Dec 2022 13:16:19 -0800 (PST)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BCHZ7lf014494
-        for <bpf@vger.kernel.org>; Mon, 12 Dec 2022 13:16:18 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3me4xsc2c9-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 12 Dec 2022 13:16:18 -0800
-Received: from twshared19053.17.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Mon, 12 Dec 2022 13:15:31 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id E1B112354520E; Mon, 12 Dec 2022 13:15:16 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        =?UTF-8?q?Per=20Sundstr=C3=B6m=20XP?= 
-        <per.xp.sundstrom@ericsson.com>
-Subject: [PATCH v2 bpf-next 5/6] libbpf: fix BTF-to-C converter's padding logic
-Date:   Mon, 12 Dec 2022 13:15:04 -0800
-Message-ID: <20221212211505.558851-6-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221212211505.558851-1-andrii@kernel.org>
-References: <20221212211505.558851-1-andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-FB-Internal: Safe
-X-Proofpoint-GUID: UoRiqTbbid0GFYpxVU2tP59upLuuNivz
-X-Proofpoint-ORIG-GUID: UoRiqTbbid0GFYpxVU2tP59upLuuNivz
-Content-Transfer-Encoding: 8BIT
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        with ESMTP id S229872AbiLLVdP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 12 Dec 2022 16:33:15 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C534DDC;
+        Mon, 12 Dec 2022 13:33:14 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so1412821pjm.2;
+        Mon, 12 Dec 2022 13:33:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DAwiiJ3gzBmaogwEMCs5wwB0PWSWlCpNEYVO2I6Gx2A=;
+        b=WGRXmtvVuu6kPUpvgb4SRtKcVotSdyJUJzDOzCG42ZzUpb6qhS0dY9lSlBLeQTKu/i
+         48c3/Z172q3e+bemEtGPMeA2eaPJgq6fcLQ3/r6LHGjdWUYxZhKxmTPVecDpc+WMO+Mr
+         Yd2nGNvHCAe0GIMEgTJ9NiYVV0hgy5LTgYHBIcJfxmXVm1vr/u7P1RN3Md8jMbagciUL
+         6NWjn5vf9ZDuMCK/vfOCoKN4+Nw8vSXvm25/LfsIbzVyzQjUt0B8adSEnbxbTAM50sw/
+         E/umkAe/0Ueild7o7vIUzVVEqRm0Gsofaou7cY8doooLeNdBYX3pcAQKm6WxDj3BxcMi
+         Ja4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DAwiiJ3gzBmaogwEMCs5wwB0PWSWlCpNEYVO2I6Gx2A=;
+        b=qXmK2Oz677zeNPaTcytDhpae/bK7zFsMyuVOA+LtYRFB+5diz9XDhv5twh+lRl3UaT
+         Uof+fFbJzLXzxRUzUw70AMdFFXt9iH1OMALB3juQcEJVwASAatGhjgONsP1/RBXigeAB
+         uGC6btp16/nLpDixeZCXBpnAoQwrdHiW+8THCcd7YtV8yAo1HUkRfsaZYkpgdAdtB8ZX
+         aos/sXJGFnWq92jpwyjcvfEjD6lHxVudTzIdhkmXm3Ag+HBzUhGOxXDEG/muvasyNzfw
+         8H74fe0y2hhoGDDFOY5O07Y+YcynQy010YbpkMNxBAldpDrk7LciZ1mH0yikHqjcVv/F
+         wPPA==
+X-Gm-Message-State: ANoB5pmyIgDnHTSeyyBdpUXzrjKmE5SsPAw+8eJGREIUKO3N/y1RvFwW
+        JhxzdXmYCJU6FI7dPTVuFl4=
+X-Google-Smtp-Source: AA0mqf6qqt7P5sZgPWb2d/3ZdsVhc85L0yyAivW6G3O+FWF9vxSUkK+zgywGm9geQ8J+YBKza9RQvA==
+X-Received: by 2002:a17:902:eb82:b0:189:da3b:17ae with SMTP id q2-20020a170902eb8200b00189da3b17aemr19154032plg.14.1670880793761;
+        Mon, 12 Dec 2022 13:33:13 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id b18-20020a170903229200b00182a9c27acfsm6842253plh.227.2022.12.12.13.33.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 13:33:13 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 12 Dec 2022 11:33:12 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@kernel.org, joshdon@google.com, brho@google.com,
+        pjt@google.com, derkling@google.com, haoluo@google.com,
+        dvernet@meta.com, dschatzberg@meta.com, dskarlat@cs.cmu.edu,
+        riel@surriel.com, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH 14/31] sched_ext: Implement BPF extensible scheduler class
+Message-ID: <Y5eeGMpr/SuyGBQO@slm.duckdns.org>
+References: <20221130082313.3241517-1-tj@kernel.org>
+ <20221130082313.3241517-15-tj@kernel.org>
+ <Y5ckYyz14bxCvv40@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-12_02,2022-12-12_02,2022-06-22_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5ckYyz14bxCvv40@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Turns out that btf_dump API doesn't handle a bunch of tricky corner
-cases, as reported by Per, and further discovered using his testing
-Python script ([0]).
+Hello,
 
-This patch revamps btf_dump's padding logic significantly, making it
-more correct and also avoiding unnecessary explicit padding, where
-compiler would pad naturally. This overall topic turned out to be very
-tricky and subtle, there are lots of subtle corner cases. The comments
-in the code tries to give some clues, but comments themselves are
-supposed to be paired with good understanding of C alignment and padding
-rules. Plus some experimentation to figure out subtle things like
-whether `long :0;` means that struct is now forced to be long-aligned
-(no, it's not, turns out).
+On Mon, Dec 12, 2022 at 01:53:55PM +0100, Peter Zijlstra wrote:
+> Perhaps the saner way to write this is:
+> 
+> #ifdef CONFIG_SMP
+> 	BUG_ON(!sched_class_above(&stop_sched_class, &dl_sched_class));
+> #endif
+> 	BUG_ON(!sched_class_above(&dl_sched_class, &rt_sched_class));
+> 	BUG_ON(!sched_class_above(&rt_sched_class, &fair_sched_class));
+> 	BUG_ON(!sched_class_above(&fair_sched_class, &idle_sched_class));
+> #ifdef CONFIG_...
+> 	BUG_ON(!sched_class_above(&fair_sched_class, &ext_sched_class));
+> 	BUG_ON(!sched_class_above(&ext_sched_class, &idle_sched_class));
+> #endif
 
-Anyways, Per's script, while not completely correct in some known
-situations, doesn't show any obvious cases where this logic breaks, so
-this is a nice improvement over the previous state of this logic.
+Yeah, this looks way better. Will update.
 
-Some selftests had to be adjusted to accommodate better use of natural
-alignment rules, eliminating some unnecessary padding, or changing it to
-`type: 0;` alignment markers.
+> > +static inline const struct sched_class *next_active_class(const struct sched_class *class)
+> > +{
+> > +	class++;
+> > +	if (!scx_enabled() && class == &ext_sched_class)
+> > +		class++;
+> > +	return class;
+> > +}
+> > +
+> > +#define for_active_class_range(class, _from, _to)				\
+> > +	for (class = (_from); class != (_to); class = next_active_class(class))
+> > +
+> > +#define for_each_active_class(class)						\
+> > +	for_active_class_range(class, __sched_class_highest, __sched_class_lowest)
+> > +
+> > +/*
+> > + * SCX requires a balance() call before every pick_next_task() call including
+> > + * when waking up from idle.
+> > + */
+> > +#define for_balance_class_range(class, prev_class, end_class)			\
+> > +	for_active_class_range(class, (prev_class) > &ext_sched_class ?		\
+> > +			       &ext_sched_class : (prev_class), (end_class))
+> > +
+> 
+> This seems quite insane; why not simply make the ext methods effective
+> no-ops? Both balance and pick explicitly support that already, no?
 
-Note also that for when we are in between bitfields, we emit explicit
-bit size, while otherwise we use `: 0`, this feels much more natural in
-practice.
+Yeah, we can definitely do that. It's just nice to guarantee from the core
+code that we aren't calling into a sched class which isn't enabled at the
+moment. If you take a look at "[PATCH 20/31] sched_ext: Allow BPF schedulers
+to switch all eligible tasks into sched_ext", it's used the other way around
+too to elide calling into CFS when it knows that there are no tasks there.
+If the core code doesn't elide the calls, we might need some gating in CFS
+too.
 
-Next patch will add few more test cases, found through randomized Per's
-script.
+> > @@ -5800,10 +5812,13 @@ static void put_prev_task_balance(struct rq *rq, struct task_struct *prev,
+> >  	 * We can terminate the balance pass as soon as we know there is
+> >  	 * a runnable task of @class priority or higher.
+> >  	 */
+> > -	for_class_range(class, prev->sched_class, &idle_sched_class) {
+> > +	for_balance_class_range(class, prev->sched_class, &idle_sched_class) {
+> >  		if (class->balance(rq, prev, rf))
+> >  			break;
+> >  	}
+> > +#else
+> > +	/* SCX needs the balance call even in UP, call it explicitly */
+> 
+> This, *WHY* !?!
 
-  [0] https://lore.kernel.org/bpf/85f83c333f5355c8ac026f835b18d15060725fcb.camel@ericsson.com/
+This comes from the fact that there are no strict rq boundaries and the BPF
+scheduler can share scheduling queues across any subset of CPUs however they
+see fit. So, task <-> rq association is flexible until the very last moment
+the task gets picked for execution. For the dispatch path to support this,
+it needs to be able to migrate tasks across rq's which requires unlocking
+the current rq which can only be done in ->balance(). So, sched_ext uses
+->balance() to run the dispatch path and thus needs it called even on UP.
 
-Reported-by: Per Sundström XP <per.xp.sundstrom@ericsson.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/lib/bpf/btf_dump.c                      | 169 +++++++++++++-----
- .../bpf/progs/btf_dump_test_case_bitfields.c  |   2 +-
- .../bpf/progs/btf_dump_test_case_padding.c    |  58 ++++--
- 3 files changed, 164 insertions(+), 65 deletions(-)
+Given that UP doesn't need to transfer tasks across, it might be possible to
+move the whole dispatch operation into ->pick_next_task() but the current
+state would be different, so it's more complicated and will likely be more
+brittle.
 
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index 234e82334d56..d6fd93a57f11 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -830,6 +830,25 @@ static void btf_dump_emit_type(struct btf_dump *d, __u32 id, __u32 cont_id)
- 	}
- }
- 
-+static int btf_natural_align_of(const struct btf *btf, __u32 id)
-+{
-+	const struct btf_type *t = btf__type_by_id(btf, id);
-+	int i, align, vlen;
-+	const struct btf_member *m;
-+
-+	if (!btf_is_composite(t))
-+		return btf__align_of(btf, id);
-+
-+	align = 1;
-+	m = btf_members(t);
-+	vlen = btf_vlen(t);
-+	for (i = 0; i < vlen; i++, m++) {
-+		align = max(align, btf__align_of(btf, m->type));
-+	}
-+
-+	return align;
-+}
-+
- static bool btf_is_struct_packed(const struct btf *btf, __u32 id,
- 				 const struct btf_type *t)
- {
-@@ -837,16 +856,16 @@ static bool btf_is_struct_packed(const struct btf *btf, __u32 id,
- 	int align, i, bit_sz;
- 	__u16 vlen;
- 
--	align = btf__align_of(btf, id);
--	/* size of a non-packed struct has to be a multiple of its alignment*/
--	if (align && t->size % align)
-+	align = btf_natural_align_of(btf, id);
-+	/* size of a non-packed struct has to be a multiple of its alignment */
-+	if (align && (t->size % align) != 0)
- 		return true;
- 
- 	m = btf_members(t);
- 	vlen = btf_vlen(t);
- 	/* all non-bitfield fields have to be naturally aligned */
- 	for (i = 0; i < vlen; i++, m++) {
--		align = btf__align_of(btf, m->type);
-+		align = btf_natural_align_of(btf, m->type);
- 		bit_sz = btf_member_bitfield_size(t, i);
- 		if (align && bit_sz == 0 && m->offset % (8 * align) != 0)
- 			return true;
-@@ -859,44 +878,97 @@ static bool btf_is_struct_packed(const struct btf *btf, __u32 id,
- 	return false;
- }
- 
--static int chip_away_bits(int total, int at_most)
--{
--	return total % at_most ? : at_most;
--}
--
- static void btf_dump_emit_bit_padding(const struct btf_dump *d,
--				      int cur_off, int m_off, int m_bit_sz,
--				      int align, int lvl)
-+				      int cur_off, int next_off, int next_align,
-+				      bool in_bitfield, int lvl)
- {
--	int off_diff = m_off - cur_off;
--	int ptr_bits = d->ptr_sz * 8;
-+	const struct {
-+		const char *name;
-+		int bits;
-+	} pads[] = {
-+		{"long", d->ptr_sz * 8}, {"int", 32}, {"short", 16}, {"char", 8}
-+	};
-+	int new_off, pad_bits, bits, i;
-+	const char *pad_type;
-+
-+	if (cur_off >= next_off)
-+		return; /* no gap */
-+
-+	/* For filling out padding we want to take advantage of
-+	 * natural alignment rules to minimize unnecessary explicit
-+	 * padding. First, we find the largest type (among long, int,
-+	 * short, or char) that can be used to force naturally aligned
-+	 * boundary. Once determined, we'll use such type to fill in
-+	 * the remaining padding gap. In some cases we can rely on
-+	 * compiler filling some gaps, but sometimes we need to force
-+	 * alignment to close natural alignment with markers like
-+	 * `long: 0` (this is always the case for bitfields).  Note
-+	 * that even if struct itself has, let's say 4-byte alignment
-+	 * (i.e., it only uses up to int-aligned types), using `long:
-+	 * X;` explicit padding doesn't actually change struct's
-+	 * overall alignment requirements, but compiler does take into
-+	 * account that type's (long, in this example) natural
-+	 * alignment requirements when adding implicit padding. We use
-+	 * this fact heavily and don't worry about ruining correct
-+	 * struct alignment requirement.
-+	 */
-+	for (i = 0; i < ARRAY_SIZE(pads); i++) {
-+		pad_bits = pads[i].bits;
-+		pad_type = pads[i].name;
- 
--	if (off_diff <= 0)
--		/* no gap */
--		return;
--	if (m_bit_sz == 0 && off_diff < align * 8)
--		/* natural padding will take care of a gap */
--		return;
-+		new_off = roundup(cur_off, pad_bits);
-+		if (new_off <= next_off)
-+			break;
-+	}
- 
--	while (off_diff > 0) {
--		const char *pad_type;
--		int pad_bits;
--
--		if (ptr_bits > 32 && off_diff > 32) {
--			pad_type = "long";
--			pad_bits = chip_away_bits(off_diff, ptr_bits);
--		} else if (off_diff > 16) {
--			pad_type = "int";
--			pad_bits = chip_away_bits(off_diff, 32);
--		} else if (off_diff > 8) {
--			pad_type = "short";
--			pad_bits = chip_away_bits(off_diff, 16);
--		} else {
--			pad_type = "char";
--			pad_bits = chip_away_bits(off_diff, 8);
-+	if (new_off > cur_off && new_off <= next_off) {
-+		/* We need explicit `<type>: 0` aligning mark if next
-+		 * field is right on alignment offset and its
-+		 * alignment requirement is less strict than <type>'s
-+		 * alignment (so compiler won't naturally align to the
-+		 * offset we expect), or if subsequent `<type>: X`,
-+		 * will actually completely fit in the remaining hole,
-+		 * making compiler basically ignore `<type>: X`
-+		 * completely.
-+		 */
-+		if (in_bitfield ||
-+		    (new_off == next_off && roundup(cur_off, next_align * 8) != new_off) ||
-+		    (new_off != next_off && next_off - new_off <= new_off - cur_off))
-+			/* but for bitfields we'll emit explicit bit count */
-+			btf_dump_printf(d, "\n%s%s: %d;", pfx(lvl), pad_type,
-+					in_bitfield ? new_off - cur_off : 0);
-+		cur_off = new_off;
-+	}
-+
-+	/* Now we know we start at naturally aligned offset for a chosen
-+	 * padding type (long, int, short, or char), and so the rest is just
-+	 * a straightforward filling of remaining padding gap with full
-+	 * `<type>: sizeof(<type>);` markers, except for the last one, which
-+	 * might need smaller than sizeof(<type>) padding.
-+	 */
-+	while (cur_off != next_off) {
-+		bits = min(next_off - cur_off, pad_bits);
-+		if (bits == pad_bits) {
-+			btf_dump_printf(d, "\n%s%s: %d;", pfx(lvl), pad_type, pad_bits);
-+			cur_off += bits;
-+			continue;
-+		}
-+		/* For the remainder padding that doesn't cover entire
-+		 * pad_type bit length, we pick the smallest necessary type.
-+		 * This is pure aesthetics, we could have just used `long`,
-+		 * but having smallest necessary one communicates better the
-+		 * scale of the padding gap.
-+		 */
-+		for (i = ARRAY_SIZE(pads) - 1; i >= 0; i--) {
-+			pad_type = pads[i].name;
-+			pad_bits = pads[i].bits;
-+			if (pad_bits < bits)
-+				continue;
-+
-+			btf_dump_printf(d, "\n%s%s: %d;", pfx(lvl), pad_type, bits);
-+			cur_off += bits;
-+			break;
- 		}
--		btf_dump_printf(d, "\n%s%s: %d;", pfx(lvl), pad_type, pad_bits);
--		off_diff -= pad_bits;
- 	}
- }
- 
-@@ -916,9 +988,11 @@ static void btf_dump_emit_struct_def(struct btf_dump *d,
- {
- 	const struct btf_member *m = btf_members(t);
- 	bool is_struct = btf_is_struct(t);
--	int align, i, packed, off = 0;
-+	bool packed, prev_bitfield = false;
-+	int align, i, off = 0;
- 	__u16 vlen = btf_vlen(t);
- 
-+	align = btf__align_of(d->btf, id);
- 	packed = is_struct ? btf_is_struct_packed(d->btf, id, t) : 0;
- 
- 	btf_dump_printf(d, "%s%s%s {",
-@@ -928,33 +1002,36 @@ static void btf_dump_emit_struct_def(struct btf_dump *d,
- 
- 	for (i = 0; i < vlen; i++, m++) {
- 		const char *fname;
--		int m_off, m_sz;
-+		int m_off, m_sz, m_align;
-+		bool in_bitfield;
- 
- 		fname = btf_name_of(d, m->name_off);
- 		m_sz = btf_member_bitfield_size(t, i);
- 		m_off = btf_member_bit_offset(t, i);
--		align = packed ? 1 : btf__align_of(d->btf, m->type);
-+		m_align = packed ? 1 : btf__align_of(d->btf, m->type);
-+
-+		in_bitfield = prev_bitfield && m_sz != 0;
- 
--		btf_dump_emit_bit_padding(d, off, m_off, m_sz, align, lvl + 1);
-+		btf_dump_emit_bit_padding(d, off, m_off, m_align, in_bitfield, lvl + 1);
- 		btf_dump_printf(d, "\n%s", pfx(lvl + 1));
- 		btf_dump_emit_type_decl(d, m->type, fname, lvl + 1);
- 
- 		if (m_sz) {
- 			btf_dump_printf(d, ": %d", m_sz);
- 			off = m_off + m_sz;
-+			prev_bitfield = true;
- 		} else {
- 			m_sz = max((__s64)0, btf__resolve_size(d->btf, m->type));
- 			off = m_off + m_sz * 8;
-+			prev_bitfield = false;
- 		}
-+
- 		btf_dump_printf(d, ";");
- 	}
- 
- 	/* pad at the end, if necessary */
--	if (is_struct) {
--		align = packed ? 1 : btf__align_of(d->btf, id);
--		btf_dump_emit_bit_padding(d, off, t->size * 8, 0, align,
--					  lvl + 1);
--	}
-+	if (is_struct)
-+		btf_dump_emit_bit_padding(d, off, t->size * 8, align, false, lvl + 1);
- 
- 	/*
- 	 * Keep `struct empty {}` on a single line,
-diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_bitfields.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_bitfields.c
-index e5560a656030..e01690618e1e 100644
---- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_bitfields.c
-+++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_bitfields.c
-@@ -53,7 +53,7 @@ struct bitfields_only_mixed_types {
-  */
- /* ------ END-EXPECTED-OUTPUT ------ */
- struct bitfield_mixed_with_others {
--	long: 4; /* char is enough as a backing field */
-+	char: 4; /* char is enough as a backing field */
- 	int a: 4;
- 	/* 8-bit implicit padding */
- 	short b; /* combined with previous bitfield */
-diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
-index 7cb522d22a66..6f963d34c45b 100644
---- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
-+++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
-@@ -19,7 +19,7 @@ struct padded_implicitly {
- /*
-  *struct padded_explicitly {
-  *	int a;
-- *	int: 32;
-+ *	long: 0;
-  *	int b;
-  *};
-  *
-@@ -28,41 +28,28 @@ struct padded_implicitly {
- 
- struct padded_explicitly {
- 	int a;
--	int: 1; /* algo will explicitly pad with full 32 bits here */
-+	int: 1; /* algo will emit aligning `long: 0;` here */
- 	int b;
- };
- 
- /* ----- START-EXPECTED-OUTPUT ----- */
--/*
-- *struct padded_a_lot {
-- *	int a;
-- *	long: 32;
-- *	long: 64;
-- *	long: 64;
-- *	int b;
-- *};
-- *
-- */
--/* ------ END-EXPECTED-OUTPUT ------ */
--
- struct padded_a_lot {
- 	int a;
--	/* 32 bit of implicit padding here, which algo will make explicit */
- 	long: 64;
- 	long: 64;
- 	int b;
- };
- 
-+/* ------ END-EXPECTED-OUTPUT ------ */
-+
- /* ----- START-EXPECTED-OUTPUT ----- */
- /*
-  *struct padded_cache_line {
-  *	int a;
-- *	long: 32;
-  *	long: 64;
-  *	long: 64;
-  *	long: 64;
-  *	int b;
-- *	long: 32;
-  *	long: 64;
-  *	long: 64;
-  *	long: 64;
-@@ -85,7 +72,7 @@ struct padded_cache_line {
-  *struct zone {
-  *	int a;
-  *	short b;
-- *	short: 16;
-+ *	long: 0;
-  *	struct zone_padding __pad__;
-  *};
-  *
-@@ -108,6 +95,39 @@ struct padding_wo_named_members {
- 	long: 64;
- };
- 
-+struct padding_weird_1 {
-+	int a;
-+	long: 64;
-+	short: 16;
-+	short b;
-+};
-+
-+/* ------ END-EXPECTED-OUTPUT ------ */
-+
-+/* ----- START-EXPECTED-OUTPUT ----- */
-+/*
-+ *struct padding_weird_2 {
-+ *	long: 56;
-+ *	char a;
-+ *	long: 56;
-+ *	char b;
-+ *	char: 8;
-+ *};
-+ *
-+ */
-+/* ------ END-EXPECTED-OUTPUT ------ */
-+struct padding_weird_2 {
-+	int: 32;	/* these paddings will be collapsed into `long: 56;` */
-+	short: 16;
-+	char: 8;
-+	char a;
-+	int: 32;	/* these paddings will be collapsed into `long: 56;` */
-+	short: 16;
-+	char: 8;
-+	char b;
-+	char: 8;
-+};
-+
- /* ------ END-EXPECTED-OUTPUT ------ */
- 
- int f(struct {
-@@ -117,6 +137,8 @@ int f(struct {
- 	struct padded_cache_line _4;
- 	struct zone _5;
- 	struct padding_wo_named_members _6;
-+	struct padding_weird_1 _7;
-+	struct padding_weird_2 _8;
- } *_)
- {
- 	return 0;
+> > @@ -5876,7 +5894,7 @@ static inline struct task_struct *pick_task(struct rq *rq)
+> >  	const struct sched_class *class;
+> >  	struct task_struct *p;
+> >  
+> > -	for_each_class(class) {
+> > +	for_each_active_class(class) {
+> >  		p = class->pick_task(rq);
+> >  		if (p)
+> >  			return p;
+> 
+> 
+> But this.. afaict that means that:
+> 
+>  - the whole EXT thing is incompatible with SCHED_CORE
+
+Can you expand on why this would be? I didn't test against SCHED_CORE, so am
+sure things might be broken but can't think of a reason why it'd be
+fundamentally incompatible.
+
+>  - the whole EXT thing can be trivially starved by the presence of a
+>    single CFS/BATCH/IDLE task.
+
+It's a simliar situation w/ RT vs. CFS, which is resolved via RT having
+starvation avoidance. Here, the way it's handled is a bit different, SCX has
+a watchdog mechanism implemented in "[PATCH 18/31] sched_ext: Implement
+runnable task stall watchdog", so if SCX tasks hang for whatever reason
+including being starved by CFS, it will get aborted and all tasks will be
+handed back to CFS. IOW, it's treated like any other BPF scheduler errors
+that can lead to stalls and recovered the same way.
+
+Thanks.
+
 -- 
-2.30.2
-
+tejun
