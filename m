@@ -2,148 +2,118 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBBEBC00145
-	for <bpf@archiver.kernel.org>; Mon, 12 Dec 2022 20:09:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D39C7C4332F
+	for <bpf@archiver.kernel.org>; Mon, 12 Dec 2022 20:12:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232450AbiLLUJB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 12 Dec 2022 15:09:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48898 "EHLO
+        id S233495AbiLLUMT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 12 Dec 2022 15:12:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233105AbiLLUI6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 12 Dec 2022 15:08:58 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223F1175AE;
-        Mon, 12 Dec 2022 12:08:53 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id co23so13382111wrb.4;
-        Mon, 12 Dec 2022 12:08:53 -0800 (PST)
+        with ESMTP id S233478AbiLLUMK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 12 Dec 2022 15:12:10 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 575FB17A88;
+        Mon, 12 Dec 2022 12:12:09 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id c7so678288pfc.12;
+        Mon, 12 Dec 2022 12:12:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SBYX0Bgct53uW6OYZnLeYHLy/9+c4kuah33Xo7h5GMc=;
-        b=MVl5ZiJTcKmUY1/MYMx9OVoFugiZCKG6Ah+BAinij8e0fX5ra7K78mqtzyLq94FWsA
-         In14DzMhzoiX2ZkEKYnOxCKVmOXg4w0HqKCmjztjwAXkGd7LmaZ55iJ2aokxhHoCZWBs
-         MeKLtTggXzJFLK22L3FQR+T9FLg4tndpSIXd/fVlQWzk/iXC7RPoKU5RYSJLxOXact+L
-         z0q/lyEpw3noibsLuXSBpOdQm79ep0K2S8ApF8Zfxy7m2PXKx+Y8pvOW/WM/2r5VR8K7
-         Y+KQZEYAriGwBWIQTq9/Js9p6bLMXRvOLa1kOVtMXFzcINS+sYqqxr6ksMfFiqsRey7w
-         Ei2A==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JycGeHZQgGrR3Psb0cbPm6Vf1oXcF21kd3SE0DZ2yo4=;
+        b=Kri5aIP83EFUaVFxglJ0ZLakLbzT8kxMysOZ3eCHzGn2x3oqajfeE4IRIYiMLYHqFU
+         BZSVvsL6FfK5+Oy2D1a/oqNpoIWwfJYT2K5WPEf3hvJC6737OiosPtT4vBq0KFrEDY+y
+         jneAMXdDKLOizabDJCxAR9DN4tf7SpQNYYiWSKQOEwdTmkSb8DhC1MWmyrvbQI+RC3CR
+         xV1IMuZCUVPE+KBDnaVkkUMqNPY45FMNY7UofzUxxl1wh0G8eqkQoVOCozgvtO6AMraA
+         eSorP+mLvTGP8PiwKs2aH9or25T4PM94bjhvHRUS0D0lhe50iQYM+6S0hU1M5meZIBkZ
+         +44g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SBYX0Bgct53uW6OYZnLeYHLy/9+c4kuah33Xo7h5GMc=;
-        b=OGmMZdeWZIkpIa2w/8P8MpcIyGSsKJ4hFitXgDMrvWLbE/vSSlPcGSXhoS8poTqlsq
-         hXGGxo1rhg4/ktYN/EHJAGH6bgtd/04Ng4vwK1sI70JvnCzEIfXARu3rdJfFzYJduwEt
-         z799Q2NUZigXVNTeTUV5A83Z85zS1erHBRZVbxLq5FbBk0+GSogFOsjtpdV5Sw6/yz25
-         1viuV7tro8gQWLQqkM/lSWTcKqkpIStJN9RCh/fv2p9XlO+iCYvD1TFzmOfpdRJM65aj
-         DwPDZx6EfgTpm41TWQJ/t6dG5GbUwUgOH1MmgJWxlGkeU5jBAsOPQ4nnkWtZQY5Nc8wh
-         bsZQ==
-X-Gm-Message-State: ANoB5pnUqLJhJwLUU46WZzjxKSiBzJ0PoD95ghLRXb/V7O3V68cBAOnv
-        uYoxdG/r4NWNPVCkJmP0PhU=
-X-Google-Smtp-Source: AA0mqf7mkN6VaKEXNOipzgBKrRs07XriztMXV512rHubp1p0SIIhGRx3Jlc3O4VZszf/5HOLKLHdIQ==
-X-Received: by 2002:a05:6000:38e:b0:242:2390:15a with SMTP id u14-20020a056000038e00b002422390015amr16877183wrf.71.1670875731570;
-        Mon, 12 Dec 2022 12:08:51 -0800 (PST)
-Received: from suse.localnet (host-79-41-27-125.retail.telecomitalia.it. [79.41.27.125])
-        by smtp.gmail.com with ESMTPSA id h17-20020a5d4fd1000000b0024246991121sm9527080wrw.116.2022.12.12.12.08.49
+        bh=JycGeHZQgGrR3Psb0cbPm6Vf1oXcF21kd3SE0DZ2yo4=;
+        b=3H0hUKAVzpcf9ONY0uypPpKQR2bo3Jd9e4D2sNZTVkK5pHpgh07YhVNRQCTQHN7fjW
+         2XNKxSMcdR4PKnPO5z8suR7eFK1VsCE73hDb2hvq244qUuaoU9mWHWZ4yJaH+E0njvFM
+         SxVn5C9Umamw6+RMxh9B8koZpQGOw61LHB9GsP8MJEDpPQNfFvMfGiuT7GoHwEzPnbcb
+         vuVIU4Z1COjHIOYeHIyMlrej+VMSjAYwFeE3CxBZ6Pq5roPgANPk+TSecfEPDRrLqMHB
+         7rX0Vgw0lTIybwCJr59iuZELCL5sYOV9pZkfY1l8EdtigLSvrJRgZYHq5iv5gcYRtqPE
+         muuA==
+X-Gm-Message-State: ANoB5pnl10uwyt4H+l12JVWxFVoCVLpnZXtYoFS1yEmRJX0VfRh8MuN7
+        Wm+Z0Mx50jxAIMwKgUnZwbM=
+X-Google-Smtp-Source: AA0mqf4+OpCZs23r/RARw8lS96d+0eGJIKR4mL7IJE1PAG/OBUTkZg3Fb4ouNR+bCGHUouzIV7RPbQ==
+X-Received: by 2002:a62:ee14:0:b0:566:900d:6073 with SMTP id e20-20020a62ee14000000b00566900d6073mr16634417pfi.24.1670875928671;
+        Mon, 12 Dec 2022 12:12:08 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id b6-20020a62cf06000000b00573eb4a775esm6400366pfg.17.2022.12.12.12.12.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 12:08:50 -0800 (PST)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Evgeniy Dushistov <dushistov@mail.ru>,
-        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Evgeniy Dushistov <dushistov@mail.ru>,
-        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH 2/3] fs/ufs: Change the signature of ufs_get_page()
-Date:   Mon, 12 Dec 2022 21:08:49 +0100
-Message-ID: <8194794.NyiUUSuA9g@suse>
-In-Reply-To: <Y5Zc0qZ3+zsI74OZ@ZenIV>
-References: <20221211213111.30085-1-fmdefrancesco@gmail.com>
- <20221211213111.30085-3-fmdefrancesco@gmail.com> <Y5Zc0qZ3+zsI74OZ@ZenIV>
+        Mon, 12 Dec 2022 12:12:08 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 12 Dec 2022 10:12:06 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@kernel.org, joshdon@google.com, brho@google.com,
+        pjt@google.com, derkling@google.com, haoluo@google.com,
+        dvernet@meta.com, dschatzberg@meta.com, dskarlat@cs.cmu.edu,
+        riel@surriel.com, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH 04/31] sched: Allow sched_cgroup_fork() to fail and
+ introduce sched_cancel_fork()
+Message-ID: <Y5eLFi/Yot3XZj8O@slm.duckdns.org>
+References: <20221130082313.3241517-1-tj@kernel.org>
+ <20221130082313.3241517-5-tj@kernel.org>
+ <Y5cM24M4007WcPod@hirez.programming.kicks-ass.net>
+ <Y5ds7G7qTmpAyaKU@slm.duckdns.org>
+ <Y5eJ75pH87c+ngmo@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5eJ75pH87c+ngmo@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On domenica 11 dicembre 2022 23:42:26 CET Al Viro wrote:
-> On Sun, Dec 11, 2022 at 10:31:10PM +0100, Fabio M. De Francesco wrote:
-> >  out_put:
-> >  	ufs_put_page(page);
+On Mon, Dec 12, 2022 at 09:07:11PM +0100, Peter Zijlstra wrote:
+> On Mon, Dec 12, 2022 at 08:03:24AM -1000, Tejun Heo wrote:
+> > On Mon, Dec 12, 2022 at 12:13:31PM +0100, Peter Zijlstra wrote:
+> > > On Tue, Nov 29, 2022 at 10:22:46PM -1000, Tejun Heo wrote:
+> > > > A new sched_clas needs a bit more control over forking. This patch makes the
+> > >                  ^
+> > >                  (insufficient s's)
 > > 
-> > -out:
-> > -	return err;
+> > Will update.
 > > 
-> >  out_unlock:
-> >  	unlock_page(page);
-> >  	goto out_put;
+> > > > following changes:
+> > > > 
+> > > > * Add sched_cancel_fork() which is called if fork fails after sched_fork()
+> > > >   succeeds so that the preparation can be undone.
+> > > > 
+> > > > * Allow sched_cgroup_fork() to fail.
+> > > > 
+> > > > Neither is used yet and this patch shouldn't cause any behavior changes.
+> > > 
+> > > Fails to explain why this would be needed and why that would be a good
+> > > thing. IOW, total lack of justification.
+> > 
+> > This is because sched_ext calls out to BPF scheduler's prepare_enable()
+> > operation to prepare the task. The operation is allowed to fail (e.g. it
+> > might need to allocate something which can fail), so we need a way back back
+> > out of it.
 > 
-> Something strange has happened, all right - look at the situation
-> after that patch.  You've got
-> 
-> out_put:
-> 	ufs_put_page(page);
-> out_unlock:
-> 	unlock_page(page);
-> 	goto out_put;
-> 
-> Which is obviously bogus.
+> sched_fork() can already fail; why isn't that a suitable location to do
+> what needs doing?
 
-I finally could go back to this small series and while working to fix the 
-errors that yesterday you had found out I think I saw what happened...
+Because SCX's ops.prepare_enable() wants the cgroup (p->sched_task_group) to
+be initialized in case the BPF scheduler wants to perform cgroup related
+initializations.
 
-Are you talking about ufs_add_link, right?
+Thanks.
 
-If so, you wrote what follows at point 14 of one of your emails:
-
------
-
-14) ufs_add_link() - similar adjustment to new calling conventions
-for ufs_get_page().  Uses of page_addr: fed to ufs_put_page() (same as
-in ufs_find_entry() kaddr is guaranteed to point into the same page and
-thus can be used instead) and calculation of position in directory, same
-as we'd seen in ufs_set_link().  The latter becomes page_offset(page) +
-offset_in_page(de), killing page_addr off.  BTW, we get
-                kaddr = ufs_get_page(dir, n, &page);
-                err = PTR_ERR(kaddr);
-                if (IS_ERR(kaddr))
-                        goto out;
-with out: being just 'return err;', which suggests
-                kaddr = ufs_get_page(dir, n, &page);
-                if (IS_ERR(kaddr))
-                        return ERR_PTR(kaddr);
-instead (and that was the only goto out; so the label can be removed).
-The value stored in err in case !IS_ERR(kaddr) is (thankfully) never
-used - would've been a bug otherwise.  So this is an equivalent 
-transformation.
-
------
-
-Did you notice "so the label can be removed"?
-I must have misinterpreted what you wrote there. Did I?
-
-I removed the "out" label, according to what it seemed to me the correct way 
-to interpret your words.
-
-However at that moment I didn't see the endless loop at the end of the 
-function. Then I "fixed" (sigh!) it in 3/3 by terminating that endless loop
-with a "return 0". 
-
-However that was another mistake because after "got_it:" label we have "err = 
-ufs_commit_chunk(page, pos, rec_len);". 
-
-To summarize: I can delete _only_ the label and leave the "return err;" in the 
-block after the "out_put:" label. 
-
-Am I looking at it correctly now?
-
-Thanks,
-
-Fabio
-
-
+-- 
+tejun
