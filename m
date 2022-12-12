@@ -2,211 +2,333 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77A32C4332F
-	for <bpf@archiver.kernel.org>; Mon, 12 Dec 2022 17:08:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93E2AC4332F
+	for <bpf@archiver.kernel.org>; Mon, 12 Dec 2022 17:16:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232912AbiLLRIg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 12 Dec 2022 12:08:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60846 "EHLO
+        id S232852AbiLLRQL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 12 Dec 2022 12:16:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232801AbiLLRIa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 12 Dec 2022 12:08:30 -0500
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDEA6373
-        for <bpf@vger.kernel.org>; Mon, 12 Dec 2022 09:08:28 -0800 (PST)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 2BCG7kEw021283;
-        Mon, 12 Dec 2022 09:08:09 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=15TrgPY7ZNe333fDWrB/uJHRDLO2+8SEEoRM3az1K7k=;
- b=TcRkHZ0GXauYQVjBbrft3nlmCtACiUnioUBRXM7ntl5diWVfd9lUcveBuTWKLKeC4RTq
- 0SxHerad/oNXiIw70Oo1ScyuSg3rGQy3AwejNB8gtK6Sm3mhYNWKodP0IYEWfeHhsdI5
- 9CDII2RgLa5SEgjjYR2Kztpwyo5qqQq4/j9h0jEKpSQ0S0d0CZFOtiyYxwgwuxgDLnkF
- 9rFW1bNrviyK2D37pOsByRS+5dze0ZMk8AgdPk7ney2kp13JN1TqEizcoInhIuaJezkX
- OzQRW4OSaB2T5azC0MgW2wPPyvScNDLRTjfRHvUbf0cmxnZWgsmAwT8b7/2RnWlntuyR Pg== 
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2043.outbound.protection.outlook.com [104.47.66.43])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3me4u21yxq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Dec 2022 09:08:09 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gZ2S6iod8n8BissS8lREynFSP/sjPeKT+0bsR05ApxuNvD/SedEOVl6tWuk7rZV8P0Rjj/75OSQgsQETzvFBnoG29DBb3MJ2boBHjZCzt9TKhTobqYc+WCbuQv1lLYFkCYaDGYgZ9HRbdyqN42OnHDCxrglR4yBkLxUVaWJ/VzW1mP9ne/fVbgEaVEBjRid77yquzQpPlmTMgTI4eWAgbFwEz+q9ehC5II6zleM8PDNgrP33KYH6qlUcJ3ncWi8Kc37fiP1xRY0x6NgyRTSM9xsl/qLcfEmN1hSBOET0ecyz1waZDoBizz9nMvQ3ulZqCpgjj1FLQclsD32RDlkVlA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=15TrgPY7ZNe333fDWrB/uJHRDLO2+8SEEoRM3az1K7k=;
- b=kW2t71tpbItoDGKA8Z2OoIsXwEL3f2c4C0gjbs5r9FXsxQBxgdgUhokcNyloLFBCRRujwUu9FcrxrpNW7w5EGawDDP5rYafvnbmCNJ020nUCnThtw73K1Vl3g0OKTcEO+1FOGCmyEpXIQugiR1fx+02xk0I0glPXdaQCQmhY8uqvrjEqXrMIT7zD/y3M2X7wqoBM/wD7ZfbkaBRWQvnDEG5yK+jlzquD5b59evfBhqkBdnQvEDI9wP93Vctur+p/4V7bfD9KfjdYajIRSb4mqq3aCkrubRZ79oQqkGmF4Ey/hwKuESSzEFZNtqNF2AtNsg3x5gg9D7QHCTt3c5ZpcQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from DM5PR1501MB2055.namprd15.prod.outlook.com (2603:10b6:4:a1::13)
- by MWHPR15MB1230.namprd15.prod.outlook.com (2603:10b6:320:23::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.8; Mon, 12 Dec
- 2022 17:08:07 +0000
-Received: from DM5PR1501MB2055.namprd15.prod.outlook.com
- ([fe80::f462:bf61:5f19:e2e9]) by DM5PR1501MB2055.namprd15.prod.outlook.com
- ([fe80::f462:bf61:5f19:e2e9%4]) with mapi id 15.20.5880.019; Mon, 12 Dec 2022
- 17:08:07 +0000
-Message-ID: <b1698393-2bec-edb9-5adc-d076bfc2b188@meta.com>
-Date:   Mon, 12 Dec 2022 09:08:02 -0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.1
-Subject: Re: [PATCH bpf-next v4 1/2] bpf: Fix attaching
- fentry/fexit/fmod_ret/lsm to modules
-To:     Viktor Malik <vmalik@redhat.com>, bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
-References: <cover.1670847888.git.vmalik@redhat.com>
- <d4a7235586e3ca1b667f220de7b4835a1382397c.1670847888.git.vmalik@redhat.com>
-Content-Language: en-US
-From:   Yonghong Song <yhs@meta.com>
-In-Reply-To: <d4a7235586e3ca1b667f220de7b4835a1382397c.1670847888.git.vmalik@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR05CA0115.namprd05.prod.outlook.com
- (2603:10b6:a03:334::30) To DM5PR1501MB2055.namprd15.prod.outlook.com
- (2603:10b6:4:a1::13)
+        with ESMTP id S232244AbiLLRQI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 12 Dec 2022 12:16:08 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D08912A82;
+        Mon, 12 Dec 2022 09:16:07 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id x66so349972pfx.3;
+        Mon, 12 Dec 2022 09:16:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KkETVtjNql38ee8U9feqE4wHK2PcTNpDFmLjvIwrvXA=;
+        b=VYx3w9d+j77ACI97pFFJiiVhnFEBP4ZG5nUGeA1+sv9wkkRyLmbtZNKegUSNvP/lWA
+         F4+bi7XkVLNYh/xRxzhM2g61Q6zwKsv6I+bqHrcC8ktX5q8TiZTo6yvRlESnSzbEb7fX
+         X8nIunviPh7DpRbtRSvPyIX4rUg3n4uRR85Ac4L1Ul2STSoOoSPwmZS0+FB829oTZh1U
+         pEmjYbwqDnoXJzLXdXjihkbjtk8IvZ9w6UQtpnMdCiBk56suwV1z7l87rKA47/3qy7PK
+         4PaIxDGRvPu9AHhqYqB7/vxFQRsDWS0BpUSprJy4ZVSr4i8cMxaHuBSczo0ZYVQT9LKS
+         IkBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KkETVtjNql38ee8U9feqE4wHK2PcTNpDFmLjvIwrvXA=;
+        b=hNfAFOyy8HtuEIddtw+QkIRenU4aCYG8lgChhj800QiZ68oWUvMZBjcvSOFa/pFRU0
+         CcWpNnnoJWbrZ75YHFuOkDW21ZhTbk3xVrV49UpsfVvIR5zFvJWY89x/5w2tPQa6HlBF
+         eMiq5EhFFzCMPc8lGe6j9OlSKiYs3Bkkx6avxFs3fLnE5HItkk5yg3QlxAoi7T4KYoQ7
+         ig2pqLE/J8lmIa80k3q91EJtiPsxIztZeJpD40VQ3jtyG6KtnJtWCEzjXBQoOHmgv3T8
+         Bi2yM6w6xGLM4zTKsQbcsPdGCxDJuxVAW9qkbmWcnF3I+WPMyQ957Xgba7DkL1gixcfU
+         YpYQ==
+X-Gm-Message-State: ANoB5pl2GKEJLhLBFoYS3UY3oVus6GqTOt4vM29QEBZThirItVsn+Io5
+        iAQQIz3MHNGLQWeD5I5Wt7I=
+X-Google-Smtp-Source: AA0mqf79wMrtwyJxk3t9uzBUVB0XXjqL/Cdh7BSgYvAlGok23onw8EHJOM79xmUV2D5GkTibE3gB/A==
+X-Received: by 2002:aa7:8093:0:b0:574:cc3d:a24e with SMTP id v19-20020aa78093000000b00574cc3da24emr14413968pff.5.1670865365926;
+        Mon, 12 Dec 2022 09:16:05 -0800 (PST)
+Received: from localhost ([2620:10d:c090:400::5:9159])
+        by smtp.gmail.com with ESMTPSA id o11-20020aa7978b000000b00576e4c7b9ecsm6034131pfp.214.2022.12.12.09.16.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 09:16:05 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 12 Dec 2022 07:16:03 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@kernel.org, joshdon@google.com, brho@google.com,
+        pjt@google.com, derkling@google.com, haoluo@google.com,
+        dvernet@meta.com, dschatzberg@meta.com, dskarlat@cs.cmu.edu,
+        riel@surriel.com, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH 28/31] sched_ext: Add
+ Documentation/scheduler/sched-ext.rst
+Message-ID: <Y5dh0yejx4t2iIe8@slm.duckdns.org>
+References: <20221130082313.3241517-1-tj@kernel.org>
+ <20221130082313.3241517-29-tj@kernel.org>
+ <Y5cg6FgDnYkVES0R@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR1501MB2055:EE_|MWHPR15MB1230:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5f738105-5b50-4306-50e7-08dadc636f6e
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FCZqvuvGH+xw8LEC0Li6JYec5GKIKvIyZI73du8yPnY68vlqXDHEtL3hvdwQnD94OzXzHkH6hTMJ/aszjH/xowSeM72iae3DnlnID9+zwiAYjLA8nEEBKZoJrW2P5BV1GRZ8KS8EIByZ3QpGMmbEJlzjgAcNA4TZz4uP9h+/7amj36XaZHMIRMjLRjF8hgoJPI8/0kihk1LsfnsNtXEXVWrmS6W2ysx8E93LZZF52pTYXqD6w2PdVpyTRXkvBcueUrWzNSQ3al8jI4gHxXMyILKh8qGquQhDEnwAi47UMGnq418M6fIfdoQ0RHXefYagD5S+twgYXlXVf82ltk1oGdGQotiDnJlMTNpKa0i8D6QiX4bxlOvTITAmqnaIRQz1pFFWa+qGym0zuiAwDNoZNa9KIa+inYZLJ/et2UJ/fYqltWSL0pZ/aTBLBF1xxzSrdVdAE/o5MJZpfX5PvXplT4q5Qcmw6hcRFhT+z6rNIhHrfTGey4Nw1R0CMVoVvasSawfV7l9PsnhKt17Du0ysa1AI9Gg54dl8tYY3foToEFFP34c+XEEXCep6gkGejAqlMiHpPRCbkKgB2jA8SX9xYZ2c/Fj0NDQKrmSOP6Rl4RAoFsPpceXzh24DbJTGXGVlBdLOEX42K9+ewrznmbwILayOkELzCJBjsobijZJ8gtBDh/bAww9AJorSlKjFRZEN+utdRRplYfVTkrsi3uf8K+MCJ87Nhhg51PuqFLwL1EI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR1501MB2055.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(136003)(396003)(346002)(366004)(451199015)(6486002)(2906002)(41300700001)(83380400001)(2616005)(186003)(478600001)(6506007)(6666004)(6512007)(53546011)(36756003)(31696002)(86362001)(5660300002)(31686004)(66476007)(66556008)(66946007)(8676002)(316002)(4326008)(54906003)(38100700002)(7416002)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z1luaSsvMnc2NExrNWFYekVtYUllN3NPZ09SdmZhWkVZbGRvaXo0L2RqU0w1?=
- =?utf-8?B?a2VPeVNkRitpalZwNHlUcFlnYXZwcTVXV2VJQkF6b1hUanVYUE9udmljS1Fu?=
- =?utf-8?B?dFJJaVo3TDFQSEpjL1NGRURtSm5SRlNDVzFuMzM1dXFhQ2l1dEYvQm0xL1BW?=
- =?utf-8?B?eU9Zc3lMdG82Qk15c094OFRKT24rSmZpNUYrYzJoWDFTbkxIbFVzSkwwRHVl?=
- =?utf-8?B?QTFTbUxlbER3Nk03bSs1Sk9STSt3K05qMS9yVzczVDQ3eDVpMXFsNEd0T25K?=
- =?utf-8?B?TlM4bldFTGxsMkF2ejdJbFpQcWFwZFpZTi9ZZHZFd1V0eWk1dDYxVC9vbXZq?=
- =?utf-8?B?OXFSWDc5TUNjeUxwUWcwS2xTK2NtRUV6L1JjWEdkZlMzUWdxMkFQZDUxSWFu?=
- =?utf-8?B?UlZCU2d0WFFHNXFFMUtjWUhzMHFXWlNSMk5BUVRkZkpOaERnWm9ocTRkcTRJ?=
- =?utf-8?B?VjNFdG1WSHVMaWY0aWtFQjNkMU91b3MzMlkvbC9JZVFuSi9SRHB0d2pEcTlE?=
- =?utf-8?B?M3p6K2VOSjZRbHlKTVV4KzRCNTliOWtHc0YvREMwc1pydHdITktWd2F0a1Vy?=
- =?utf-8?B?a0M0RnJOMHdUZXQxYzFqUlk5M0gxcDlDYkNBaFhoUGlGTFZZcVA5RElxa2dI?=
- =?utf-8?B?cnRXUXFXQXkydm9iZ1pXclRkdFcxb2FYNHNOSDRkUGl1aktyU2kvRUtsU3pB?=
- =?utf-8?B?cndGWURTRHNsN0ptRElHMzF5REM2alY2N3pkR3FSY1Y3eDZUR2grWTBnYXJG?=
- =?utf-8?B?U1ZSZkNwN0ZOOUlRR2gyMFlQOXpVNFVkWFFBaWgwbE1Oczk1Vzh0ZzlEdU4v?=
- =?utf-8?B?VkJrMzlkdWYxZjE2RUFyaGZzZFpGTGY4ZjBFaUhENG9FaDBkWjhRNGttUEF1?=
- =?utf-8?B?cVFZRWt0R0taWFVja3hPaDArMVFFSi9QaElsM3Y1cExvT01ObkN4UVNyVkgr?=
- =?utf-8?B?RUlhWlorTWRuUDRVREVHcytTbThjVncxL2gwTmhNKy9hbHVtRDU3dGVjaWgz?=
- =?utf-8?B?NS9kZ1IweitrUnV4aVU0b1RybDF2b2oxZkFRZ2prTDNvc0pGdTk0M3pSa1lD?=
- =?utf-8?B?N2RsTFUrMHlIMm5UbVh0M09GenU2QWpYUUg4WFlNZXZqaWszcFdCQjF0cDZ3?=
- =?utf-8?B?b3J3azlhUkpFN3JaTnhpa0JlYmk1UWVKT2IxS0xzazV1eC9kaklxZlM5akYr?=
- =?utf-8?B?SzhuQzhIU3o1NjVCV3ZDMmpSWTZhV3h2N251N1Z3T3Qvd3BlY0hmS3JXSVJr?=
- =?utf-8?B?VG1wczFFcVEwSW1aQkR5djVDTTlWelE3UjVrL1pTOU5OVkp3UUVqVVNQZ1M5?=
- =?utf-8?B?L2M0QkVteG5pa0RVSDRnd25WcFFoWHRmbTlwRk11QzVxNytUaVNpSEhpMzlD?=
- =?utf-8?B?OGRaM0xhS0w3dVhlNmF0UXBURzVyQ1VGWFBVdmRpUVF3SkxaeTdLSnlNQVVs?=
- =?utf-8?B?UlN0b1VRSmR4L3ZyazlrdVBlbmM2VU16N0FpaFFiUURiSmk4Qk5Kcm81a05E?=
- =?utf-8?B?UnJ6Ti9jWFJvNlJtTEY1cElYcjB6YVF6Z1NURUJZVXNrREFyS3MyaVY5NEJE?=
- =?utf-8?B?YVdiYlI2R1ZJR3dkTDdZZEdjSjZ2YU5oTy8vbUYxWDY0dzlWbkh4SHhIekhi?=
- =?utf-8?B?NURtMklzOHNYMlNtOFhTOHA3akFFM1NzbVFFTGM5cklaRE1DTEUwOHNUd1ZT?=
- =?utf-8?B?N1c3UitxODdXdDhFT3JuTnpBSURWUlluOXpERUhLVmJHVks5ai9WK0tHMHds?=
- =?utf-8?B?eGh2c2QwR1pWUEJiWXU5QXZoMVg3Um8xUlkyZzBicmhBZWZMS1ZZWDcvRTNK?=
- =?utf-8?B?dzJ5VGVyUHdhLzYzSE9sM2ViTVBOZ3NITFNmOXdGZi9DZmY3WXNPdll4N0VW?=
- =?utf-8?B?YmgrK2Zxb0FaUGttaG9VMDlZSTFWRC9CZWtkcm11RVN6anJ4amtkYWF6Vk11?=
- =?utf-8?B?ekdLWWw1Q2phdmJ5ZmlidFlENm11ZDhhMnVXQzBJdVZ0ZXBIUksxQ1M1Szdo?=
- =?utf-8?B?WGpDTWVxMHBheXlSWU0xOEpsNkZLOTMrKzlLVUZGTHVzWXp6dWpBTXJPNmJW?=
- =?utf-8?B?bE5KWVRnR0RyMVUxRXZlSG9SVTM1cUhRTE9YYmxseTFEQytjbWZkTU1pc2NF?=
- =?utf-8?B?STdjdW0yM3c0QU8vNnFpK3Y0a1l2RStFbFQvTE9ud2h6cWJyMzhVeFFmWXdk?=
- =?utf-8?B?WVE9PQ==?=
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5f738105-5b50-4306-50e7-08dadc636f6e
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR1501MB2055.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2022 17:08:06.9937
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lOAcb9st7QcYAIIAzR1M/8LUpzMr9JA762L1r5KHAnV/Po31xMpMOdoV2obPMMAP
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR15MB1230
-X-Proofpoint-ORIG-GUID: 33x71t0Se_VNMDozGEVi554cMd0Ej6aV
-X-Proofpoint-GUID: 33x71t0Se_VNMDozGEVi554cMd0Ej6aV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-12_02,2022-12-12_02,2022-06-22_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5cg6FgDnYkVES0R@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Hello,
+
+On Mon, Dec 12, 2022 at 01:39:04PM +0100, Peter Zijlstra wrote:
+> On Tue, Nov 29, 2022 at 10:23:10PM -1000, Tejun Heo wrote:
+> 
+> If you expect me to read this, please as to provide something readable,
+> not markup gibberish.
+
+Hmmm... Everything under Documentation/scheduler is in rst markup. I don't
+care about the file format. If plain text is preferable, that's fine but
+that'd look odd in that directory.
+
+For your reading convenience, the following is the formatted output:
+
+ https://github.com/htejun/sched_ext/blob/sched_ext/Documentation/scheduler/sched-ext.rst
+
+and the following is the plain text version with markups stripped out. FWIW,
+while the double-backtick quoting is a bit distracting, there aren't whole
+lot of markups to strip out.
+
+==========================
+Extensible Scheduler Class
+==========================
+
+sched_ext is a scheduler class whose behavior can be defined by a set of BPF
+programs - the BPF scheduler.
+
+* sched_ext exports a full scheduling interface so that any scheduling
+  algorithm can be implemented on top.
+
+* The BPF scheduler can group CPUs however it sees fit and schedule them
+  together, as tasks aren't tied to specific CPUs at the time of wakeup.
+
+* The BPF scheduler can be turned on and off dynamically anytime.
+
+* The system integrity is maintained no matter what the BPF scheduler does.
+  The default scheduling behavior is restored anytime an error is detected,
+  a runnable task stalls, or on invoking SysRq key sequence like `SysRq-s`.
+
+Switching to and from sched_ext
+===============================
+
+CONFIG_SCHED_CLASS_EXT is the config option to enable sched_ext and
+tools/sched_ext contains the example schedulers.
+
+sched_ext is used only when the BPF scheduler is loaded and running.
+
+If a task explicitly sets its scheduling policy to SCHED_EXT, it will be
+treated as SCHED_NORMAL and scheduled by CFS until the BPF scheduler is
+loaded. On load, such tasks will be switched to and scheduled by sched_ext.
+
+The BPF scheduler can choose to schedule all normal and lower class tasks by
+calling scx_bpf_switch_all() from its init() operation. In this case, all
+SCHED_NORMAL, SCHED_BATCH, SCHED_IDLE and SCHED_EXT tasks are scheduled by
+sched_ext. In the example schedulers, this mode can be selected with the -a
+option.
+
+Terminating the sched_ext scheduler program, triggering SysRq key, or
+detection of any internal error including stalled runnable tasks aborts the
+BPF scheduler and reverts all tasks back to CFS.
+
+    # make -j16 -C tools/sched_ext
+    # tools/sched_ext/scx_example_dummy -a
+    local=0 global=3
+    local=5 global=24
+    local=9 global=44
+    local=13 global=56
+    local=17 global=72
+    ^CEXIT: BPF scheduler unregistered
+
+If CONFIG_SCHED_DEBUG is set, the current status of the BPF scheduler and
+whether a given task is on sched_ext can be determined as follows:
+
+    # cat /sys/kernel/debug/sched/ext
+    ops                           : dummy
+    enabled                       : 1
+    switching_all                 : 1
+    switched_all                  : 1
+    enable_state                  : enabled
+
+    # grep ext /proc/self/sched
+    ext.enabled                                  :                    1
+
+The Basics
+==========
+
+Userspace can implement an arbitrary BPF scheduler by loading a set of BPF
+programs that implement struct sched_ext_ops. The only mandatory field is
+ops.name which must be a valid BPF object name. All operations are optional.
+The following modified excerpt is from tools/sched/scx_example_dummy.bpf.c
+showing a minimal global FIFO scheduler.
+
+    s32 BPF_STRUCT_OPS(dummy_init)
+    {
+            if (switch_all)
+                    scx_bpf_switch_all();
+            return 0;
+    }
+
+    void BPF_STRUCT_OPS(dummy_enqueue, struct task_struct *p, u64 enq_flags)
+    {
+            if (enq_flags & SCX_ENQ_LOCAL)
+                    scx_bpf_dispatch(p, SCX_DSQ_LOCAL, enq_flags);
+            else
+                    scx_bpf_dispatch(p, SCX_DSQ_GLOBAL, enq_flags);
+    }
+
+    void BPF_STRUCT_OPS(dummy_exit, struct scx_exit_info *ei)
+    {
+            exit_type = ei->type;
+    }
+
+    SEC(".struct_ops")
+    struct sched_ext_ops dummy_ops = {
+            .enqueue                = (void *)dummy_enqueue,
+            .init                   = (void *)dummy_init,
+            .exit                   = (void *)dummy_exit,
+            .name                   = "dummy",
+    };
+
+Dispatch Queues
+---------------
+
+To match the impedance between the scheduler core and the BPF scheduler,
+sched_ext uses simple FIFOs called DSQs (dispatch queues). By default, there
+is one global FIFO (SCX_DSQ_GLOBAL), and one local dsq per CPU
+(SCX_DSQ_LOCAL). The BPF scheduler can manage an arbitrary number of dsq's
+using scx_bpf_create_dsq() and scx_bpf_destroy_dsq().
+
+A CPU always executes a task from its local DSQ. A task is "dispatched" to a
+DSQ. A non-local DSQ is "consumed" to transfer a task to the consuming CPU's
+local DSQ.
+
+When a CPU is looking for the next task to run, if the local DSQ is not
+empty, the first task is picked. Otherwise, the CPU tries to consume the
+global DSQ. If that doesn't yield a runnable task either, ops.dispatch() is
+invoked.
+
+Scheduling Cycle
+----------------
+
+The following briefly shows how a waking task is scheduled and executed.
+
+1. When a task is waking up, ops.select_cpu() is the first operation
+   invoked. This serves two purposes. First, CPU selection optimization
+   hint. Second, waking up the selected CPU if idle.
+
+   The CPU selected by ops.select_cpu() is an optimization hint and not
+   binding. The actual decision is made at the last step of scheduling.
+   However, there is a small performance gain if the CPU ops.select_cpu()
+   returns matches the CPU the task eventually runs on.
+
+   A side-effect of selecting a CPU is waking it up from idle. While a BPF
+   scheduler can wake up any cpu using the scx_bpf_kick_cpu() helper, using
+   ops.select_cpu() judiciously can be simpler and more efficient.
+
+   Note that the scheduler core will ignore an invalid CPU selection, for
+   example, if it's outside the allowed cpumask of the task.
+
+2. Once the target CPU is selected, ops.enqueue() is invoked. It can make
+   one of the following decisions:
+
+   * Immediately dispatch the task to either the global or local DSQ by
+     calling scx_bpf_dispatch() with SCX_DSQ_GLOBAL or SCX_DSQ_LOCAL,
+     respectively.
+
+   * Immediately dispatch the task to a custom DSQ by calling
+     scx_bpf_dispatch() with a DSQ ID which is smaller than 2^63.
+
+   * Queue the task on the BPF side.
+
+3. When a CPU is ready to schedule, it first looks at its local DSQ. If
+   empty, it then looks at the global DSQ. If there still isn't a task to
+   run, ops.dispatch() is invoked which can use the following two functions
+   to populate the local DSQ.
+
+   * scx_bpf_dispatch() dispatches a task to a DSQ. Any target DSQ can be
+     used - SCX_DSQ_LOCAL, SCX_DSQ_LOCAL_ON | cpu, SCX_DSQ_GLOBAL or a
+     custom DSQ. While scx_bpf_dispatch() currently can't be called with BPF
+     locks held, this is being worked on and will be supported.
+     scx_bpf_dispatch() schedules dispatching rather than performing them
+     immediately. There can be up to ops.dispatch_max_batch pending tasks.
+
+   * scx_bpf_consume() tranfers a task from the specified non-local DSQ to
+     the dispatching DSQ. This function cannot be called with any BPF locks
+     held. scx_bpf_consume() flushes the pending dispatched tasks before
+     trying to consume the specified DSQ.
+
+4. After ops.dispatch() returns, if there are tasks in the local DSQ, the
+   CPU runs the first one. If empty, the following steps are taken:
+
+   * Try to consume the global DSQ. If successful, run the task.
+
+   * If ops.dispatch() has dispatched any tasks, retry #3.
+
+   * If the previous task is an SCX task and still runnable, keep executing
+     it (see SCX_OPS_ENQ_LAST).
+
+   * Go idle.
+
+Note that the BPF scheduler can always choose to dispatch tasks immediately
+in ops.enqueue() as illustrated in the above dummy example. If only the
+built-in DSQs are used, there is no need to implement ops.dispatch() as a
+task is never queued on the BPF scheduler and both the local and global DSQs
+are consumed automatically.
+
+Where to Look
+=============
+
+* include/linux/sched/ext.h defines the core data structures, ops table and
+  constants.
+
+* kernel/sched/ext.c contains sched_ext core implementation and helpers. The
+  functions prefixed with scx_bpf_ can be called from the BPF scheduler.
+
+* tools/sched_ext/ hosts example BPF scheduler implementations.
+
+  * scx_example_dummy[.bpf].c: Minimal global FIFO scheduler example using a
+    custom DSQ.
+
+  * scx_example_qmap[.bpf].c: A multi-level FIFO scheduler supporting five
+    levels of priority implemented with BPF_MAP_TYPE_QUEUE.
+
+ABI Instability
+===============
+
+The APIs provided by sched_ext to BPF schedulers programs have no stability
+guarantees. This includes the ops table callbacks and constants defined in
+include/linux/sched/ext.h, as well as the scx_bpf_ kfuncs defined in
+kernel/sched/ext.c.
+
+While we will attempt to provide a relatively stable API surface when
+possible, they are subject to change without warning between kernel
+versions.
+
+Caveats
+=======
+
+* The current implementation isn't safe in that the BPF scheduler can crash
+  the kernel.
+
+  * Unsafe cpumask helpers should be replaced by proper generic BPF helpers.
+
+  * Currently, all kfunc helpers can be called by any operation as BPF
+    doesn't yet support filtering kfunc calls per struct_ops operation. Some
+    helpers are context sensitive as should be restricted accordingly.
+
+  * Timers used by the BPF scheduler should be shut down when aborting.
+
+* There are a couple BPF hacks which are still needed even for sched_ext
+  proper. They should be removed in the near future.
 
 
-On 12/12/22 4:59 AM, Viktor Malik wrote:
-> When attaching fentry/fexit/fmod_ret/lsm to a function located in a
-> module without specifying the target program, the verifier tries to find
-> the address to attach to in kallsyms. This is always done by searching
-> the entire kallsyms, not respecting the module in which the function is
-> located.
-> 
-> This approach causes an incorrect attachment address to be computed if
-> the function to attach to is shadowed by a function of the same name
-> located earlier in kallsyms.
-> 
-> Since the attachment must contain the BTF of the program to attach to,
-> we may extract the module from it and search for the function address in
-> the module.
-> 
-> Signed-off-by: Viktor Malik <vmalik@redhat.com>
-> ---
->   kernel/bpf/verifier.c | 16 +++++++++++++++-
->   1 file changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index a5255a0dcbb6..d646c5263bc5 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -24,6 +24,7 @@
->   #include <linux/bpf_lsm.h>
->   #include <linux/btf_ids.h>
->   #include <linux/poison.h>
-> +#include "../module/internal.h"
->   
->   #include "disasm.h"
->   
-> @@ -16478,6 +16479,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
->   	const char *tname;
->   	struct btf *btf;
->   	long addr = 0;
-> +	struct module *mod;
->   
->   	if (!btf_id) {
->   		bpf_log(log, "Tracing programs must provide btf_id\n");
-> @@ -16645,7 +16647,19 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
->   			else
->   				addr = (long) tgt_prog->aux->func[subprog]->bpf_func;
->   		} else {
-> -			addr = kallsyms_lookup_name(tname);
-> +			if (btf_is_module(btf)) {
-> +				preempt_disable();
-> +				mod = btf_try_get_module(btf);
-> +				if (mod) {
-> +					addr = find_kallsyms_symbol_value(mod, tname);
-> +					module_put(mod);
-> +				} else {
-> +					addr = 0;
-> +				}
-> +				preempt_enable();
-
-What if module is unloaded right after preempt_enabled so 'addr' becomes 
-invalid? Is this a corner case we should consider?
-
-> +			} else {
-> +				addr = kallsyms_lookup_name(tname);
-> +			}
->   			if (!addr) {
->   				bpf_log(log,
->   					"The address of function %s cannot be found\n",
+-- 
+tejun
