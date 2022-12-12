@@ -2,140 +2,77 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1649DC4332F
-	for <bpf@archiver.kernel.org>; Mon, 12 Dec 2022 20:59:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00E80C00145
+	for <bpf@archiver.kernel.org>; Mon, 12 Dec 2022 21:01:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233274AbiLLU7c (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 12 Dec 2022 15:59:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40978 "EHLO
+        id S233544AbiLLVBh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 12 Dec 2022 16:01:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbiLLU7O (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 12 Dec 2022 15:59:14 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF8A183B6;
-        Mon, 12 Dec 2022 12:59:07 -0800 (PST)
-Received: from leknes.fjasle.eu ([46.142.98.187]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1Mleo0-1odmn242ug-00imxM; Mon, 12 Dec 2022 21:57:47 +0100
-Received: by leknes.fjasle.eu (Postfix, from userid 1000)
-        id 770693C1BA; Mon, 12 Dec 2022 21:57:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
-        t=1670878658; bh=qnQ4b4OQQYBi41zkGd5uOCUPLtZ3tfRTJtk/z24yVwk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=4x5ahCDLnX1Nwswko43mNTdERhxKyMuflqrcHjLjKRvKaeLkFF/p80sxO1Leyq3vE
-         SgfxTSm+ivpt3Ilu3P5k+ScZ9gLFNObyr7D/iamJou6F57djITqC4AiietPvAb4Np3
-         tSvtnIjNRvuVhDLdwGqgJM1IZrqJwzl6wBgsXZHs=
-Date:   Mon, 12 Dec 2022 21:57:38 +0100
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, llvm@lists.linux.dev,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH 3/5] tools lib subcmd: Add dependency test to
- install_headers
-Message-ID: <Y5eVwlId2A2/pN40@fjasle.eu>
-References: <20221202045743.2639466-1-irogers@google.com>
- <20221202045743.2639466-4-irogers@google.com>
+        with ESMTP id S233412AbiLLVBK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 12 Dec 2022 16:01:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87861901E;
+        Mon, 12 Dec 2022 13:00:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7FEE0B80E4C;
+        Mon, 12 Dec 2022 21:00:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 14156C433F0;
+        Mon, 12 Dec 2022 21:00:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670878816;
+        bh=olY/2/zUA2Vqrl5pxOVYLl11ZZ2pXRb7tLPrGknn3wE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Xoinmmtiepef7+orbXQY2ZcqS/1ba0WFQ8oBIdfyDFf2kKya8ADtB7jeHe13WQ3v3
+         HBvlSwSurz6ldFHQyySWMbzPRLrdKA+N67R7iURPzQBJm/vu24ZvI5SJd747/utHVN
+         PD3/yviMqJOK4ifcgZxAqde+qlZjxXuayxfv02et9+0OwVDN3eGPY7hGsDhjMG/XsD
+         6u8rNYZif591chD40EAxQpf7iG+raafH/+t76FibHVKv/EPf1w3SO4OLn5eCTdDP4H
+         ARvm0QITjFcDrjIvr31yHyIxBaJf7oMlutT24R5djegz59z7GKUDFTGIiFfrxkHRRb
+         ATZJDBm/kWY5g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EB4E7C41606;
+        Mon, 12 Dec 2022 21:00:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221202045743.2639466-4-irogers@google.com>
-X-Provags-ID: V03:K1:3GmCeNNSVVdhmJX5HMTzbhSdxI6R4yUF6tJQCtwPq/TnqvO5APk
- /+xEZtzMC83be00kVnu0kgC6dao9my0lKfrnr1YkOYOcQvaLg8Xb4nj0q1VtsXhowaQ/C3M
- Lp+WOdtyKO9zX/bGvpytzbjN50dCkbTyUfajmSLE/HnaMQ+J62EhxWaNErXiXf4p0QSZUJd
- LZC/vbAoFLWwVn81ixpTA==
-UI-OutboundReport: notjunk:1;M01:P0:n+AMtI/h5nQ=;uzd76xvlXBHZvc/0DeTuUmklTpb
- 8FO3mEpw3fol4NJq85+yLNJrcHHP1fKpUs1QXjlcBU6IKe/E12GRsJ5d+HiHz4pjkQbVszauo
- AJji12/4UPffp8K42/ei4zyYLFdHZ7kHOXGLri9P7NsnAu+SkSqvXkDX5c0zMx8hd26vk3UZQ
- yPSLWSyd2GqEVSXagA9LdzMIjUFRmMdvQd5KN+ZvCItUd5B1FDQgT1ZnXUMoJO+yldMJORKxl
- 6+LznW8Ix/4zQpxm99RZ2l/+D+DyWDTK2TXUtrheXC5aKMC83h/jzFUiuj67/sWXKiOMa6ih9
- TA5nuTZjGq/J2YH/ztOBhk9XwW0YayQ3INKYlMD67JlY6MYYkym42b9AFUrA2qikNRhdLxGZI
- 8G5Wy2yR+OLGhxJzdYwID48Hm1iPWCvAz24qtfrlBIIQRtANxOb5qAbWS/lYk6VeSEamOd4y9
- ImkhLJ75hMsePDFLKx+pCmz1A9Qv5sL/NHtQkfDOqmoubAoLRXD2vlg5vbOARHg5gRzGIFbaQ
- YItcecrqtpPFk0Yuz8wxVV5/VIec8ypTY0tWruX5nsSUKWUZ+V/nLdieu++oT3BShJ05Dr6eY
- ozO0UGFk5161umJ0GpuSidNQ9PlVS8meDmaAUA+gsMT6q9dQu4up3ivjFUicK4D8/7lpZCc7J
- PK0/aRD3OF5Qr6zMczu8CicEUcxrLXexa55HsKAmCw==
+Subject: Re: [PATCH bpf-next v1] docs/bpf: Reword docs for BPF_MAP_TYPE_SK_STORAGE
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167087881595.21711.9569936101646684324.git-patchwork-notify@kernel.org>
+Date:   Mon, 12 Dec 2022 21:00:15 +0000
+References: <20221212101600.56026-1-donald.hunter@gmail.com>
+In-Reply-To: <20221212101600.56026-1-donald.hunter@gmail.com>
+To:     Donald Hunter <donald.hunter@gmail.com>
+Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
+        martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, corbet@lwn.net, yhs@meta.com, void@manifault.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 08:57:41PM -0800 Ian Rogers wrote:
-> Compute the headers to be installed from their source headers and make
-> each have its own build target to install it. Using dependencies
-> avoids headers being reinstalled and getting a new timestamp which
-> then causes files that depend on the header to be rebuilt.
+Hello:
+
+This patch was applied to bpf/bpf-next.git (master)
+by Martin KaFai Lau <martin.lau@kernel.org>:
+
+On Mon, 12 Dec 2022 10:16:00 +0000 you wrote:
+> Improve the grammar of the function descriptions and highlight
+> that the key is a socket fd.
 > 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/lib/subcmd/Makefile | 23 +++++++++++++----------
->  1 file changed, 13 insertions(+), 10 deletions(-)
+> Signed-off-by: Donald Hunter <donald.hunter@gmail.com>
+> Fixes: f3212ad5b7e9 ("docs/bpf: Add documentation for BPF_MAP_TYPE_SK_STORAGE")
+> Reported-by: Martin KaFai Lau <martin.lau@linux.dev>
 > 
-> diff --git a/tools/lib/subcmd/Makefile b/tools/lib/subcmd/Makefile
-> index 9a316d8b89df..b87213263a5e 100644
-> --- a/tools/lib/subcmd/Makefile
-> +++ b/tools/lib/subcmd/Makefile
-> @@ -89,10 +89,10 @@ define do_install_mkdir
->  endef
->  
->  define do_install
-> -	if [ ! -d '$(DESTDIR_SQ)$2' ]; then             \
-> -		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$2'; \
-> +	if [ ! -d '$2' ]; then             \
-> +		$(INSTALL) -d -m 755 '$2'; \
->  	fi;                                             \
-> -	$(INSTALL) $1 $(if $3,-m $3,) '$(DESTDIR_SQ)$2'
-> +	$(INSTALL) $1 $(if $3,-m $3,) '$2'
+> [...]
 
-What about using '$(INSTALL) -D ...' instead of the if-mkdir-block above?
-(E.g. as in tools/debugging/Makefile.)
+Here is the summary with links:
+  - [bpf-next,v1] docs/bpf: Reword docs for BPF_MAP_TYPE_SK_STORAGE
+    https://git.kernel.org/bpf/bpf-next/c/2e75f9aa2bdc
 
-Kind regards,
-Nicolas
-
->  endef
->  
->  install_lib: $(LIBFILE)
-> @@ -100,13 +100,16 @@ install_lib: $(LIBFILE)
->  		$(call do_install_mkdir,$(libdir_SQ)); \
->  		cp -fpR $(LIBFILE) $(DESTDIR)$(libdir_SQ)
->  
-> -install_headers:
-> -	$(call QUIET_INSTALL, libsubcmd_headers) \
-> -		$(call do_install,exec-cmd.h,$(prefix)/include/subcmd,644); \
-> -		$(call do_install,help.h,$(prefix)/include/subcmd,644); \
-> -		$(call do_install,pager.h,$(prefix)/include/subcmd,644); \
-> -		$(call do_install,parse-options.h,$(prefix)/include/subcmd,644); \
-> -		$(call do_install,run-command.h,$(prefix)/include/subcmd,644);
-> +HDRS := exec-cmd.h help.h pager.h parse-options.h run-command.h
-> +INSTALL_HDRS_PFX := $(DESTDIR)$(prefix)/include/subcmd
-> +INSTALL_HDRS := $(addprefix $(INSTALL_HDRS_PFX)/, $(HDRS))
-> +
-> +$(INSTALL_HDRS): $(INSTALL_HDRS_PFX)/%.h: %.h
-> +	$(call QUIET_INSTALL, $@) \
-> +		$(call do_install,$<,$(INSTALL_HDRS_PFX)/,644)
-> +
-> +install_headers: $(INSTALL_HDRS)
-> +	$(call QUIET_INSTALL, libsubcmd_headers)
->  
->  install: install_lib install_headers
->  
-> -- 
-> 2.39.0.rc0.267.gcb52ba06e7-goog
-
+You are awesome, thank you!
 -- 
-epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-↳ gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
-     -- frykten for herren er opphav til kunnskap --
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
