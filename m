@@ -2,216 +2,198 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF1C9C4332F
-	for <bpf@archiver.kernel.org>; Tue, 13 Dec 2022 11:54:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FEACC10F1D
+	for <bpf@archiver.kernel.org>; Tue, 13 Dec 2022 13:12:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234809AbiLMLxi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 13 Dec 2022 06:53:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47494 "EHLO
+        id S235258AbiLMNMG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 13 Dec 2022 08:12:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235440AbiLMLxW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 13 Dec 2022 06:53:22 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AB61EAEC
-        for <bpf@vger.kernel.org>; Tue, 13 Dec 2022 03:53:20 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id a19so3086694ljk.0
-        for <bpf@vger.kernel.org>; Tue, 13 Dec 2022 03:53:20 -0800 (PST)
+        with ESMTP id S235523AbiLMNL4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 13 Dec 2022 08:11:56 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461F02657;
+        Tue, 13 Dec 2022 05:11:52 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id kw15so36330650ejc.10;
+        Tue, 13 Dec 2022 05:11:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=i6IFpnMTfmRr3kFmgbjHtFr+GF79ljZTaif9Ph+5OO4=;
-        b=FqQLpsoyitz+DpFlktyuljXToLIJSfdd29qWJj0/ZMurgTjOvIDJapsR2/Y5NctGJl
-         WEeLqcKfmNh5formF/PDRxt1NiMWAtpHN/HZXqsGJxQtP4RU3eZbONk71ZgCDMGVCF9f
-         9AZnAyzzFPfmfw6ngVkHdHM+9P9XimRkJyDkl+rDnZBAk/mRFqBHm5/rW/OLIYkDrz04
-         pTHo6vV/qw4vDT5oCpfOExkfM9um34m1WMvMCMq7dM8zyiR7x+Rufcz6OgRseirgmyBQ
-         s2iY9hwVUkm426jas3IUybgiQ81PfLkeWokY3YCNWVC6HSfOFUKYG5rofk5ZDKziQ5x2
-         psZg==
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=OCA9EB9LKetY79m77VlC6M0hSYOaeN1AdMgT0kQGhBw=;
+        b=NocRLvvbdUDm8VP8WWAbrIKzt9Ttkh86KrkRUEvDXfOzDQrlO6S0vzZrT4rSdwl6Zr
+         N28JSQykgjRG5VfferltdhL2kKckxJ3izRwjg0TQ785MAxIoMgNE6Kuc50l2n6AU//7B
+         xe7jgmLI3msRWFalxO0dwOyCdcM61k82t02MSTTPQg1FqZ2vKnaMZN84H4Pk9mob7ovu
+         p2KcIqko4eoK1wxo15ZN/7PjNMxV1czwLuomaaWZRnuOgjg3VFe2caB2h6YSRQgcIzgb
+         e9bnB2ldzN+RBT3WvwrBxmjCJZ3G1qH7CPia561dlztbbil/Fn6/QM1llVdUhL6Jo6G1
+         KZ8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=i6IFpnMTfmRr3kFmgbjHtFr+GF79ljZTaif9Ph+5OO4=;
-        b=8ABW4j1BFkrxPZbJJfDpiipz2/PtvekjAXDPksgBebMNYBVdZjEgjhYMkM8XaQ9c8i
-         B6PdA++dypYCuPOsJiHOs30LBphBNfo5relz2+juhIB0BDBHMI7y8D6ata0XA3JA0XuR
-         H4e/4oHHtaVRdwS/7cIEnfSKrEIwTpDLL1BEhjpYaQlwd9c+5HjTHDUXiVfKkLIy3ycQ
-         Av3u5S2kWwEvHuhvElu72EqPpV4ow6nKa0M2Q7Jbx6G/ed5zXN3Sx+b7b3iGkDQVbPUD
-         g/G5BAm8rI/PVrAjkVU6w6AnJXBuIf8nAbppfHMjRZtlhCwnggflhbM3TUK2G1/TVyk2
-         KMZQ==
-X-Gm-Message-State: ANoB5pnH0YuAGdX5PCpN3oWSj+7NCD62LniD8Nww3bCqdg+kILtv4Ejy
-        WsSROBNg5WiPBpfXo1t+HKwgkrEr5QeQipz9hkGFguvwsRU=
-X-Google-Smtp-Source: AA0mqf5c2uhfDyzRJn9HqplZJE2TB77aI6sgkYqA/4CDC6bEA160LEvTM3CT1MDN+1PeK6BtAdreJbGyVskPdSbrhRA=
-X-Received: by 2002:a05:651c:2328:b0:27a:eae:9ecc with SMTP id
- bi40-20020a05651c232800b0027a0eae9eccmr5003213ljb.248.1670932398702; Tue, 13
- Dec 2022 03:53:18 -0800 (PST)
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OCA9EB9LKetY79m77VlC6M0hSYOaeN1AdMgT0kQGhBw=;
+        b=LcmdsKwef2mY7KkGxBHL9iKf/WUK+Zt8RRCjUbCByNiGbGg+s9Rvq4eEqb8mx4crWO
+         zRNPJNu9pcp7DSaCz1iRGrjD5t5a7nCexi04vAjsxqZX0hq5E4CkesqpzMwZPwxc1WOj
+         aw9oqW2k8L5HF6OfGaQesQx99Pzs4arZznXwOH7QhdMfxrkr799hnKMEdPPUrW9F7m4W
+         7eR6d8XEQx57g4l89ZcVL7q0VCYYaHKJz8tKsDL+ncChOYbOIDDXSHzLzVUrOpRMTCvx
+         L91vPjw/07C7tWNJZEj80MLK++CkPKnExr6QDcj34k5IZw0AiavIrWBQJxMXDgcatJUB
+         6fqQ==
+X-Gm-Message-State: ANoB5pnN2WgB8KBEtLVNFNrwWxQUmA+uiYXeNzzcvD6hEYha4a2NKMMQ
+        ZDNt1i4EmcrqAxQP4ebeTSBKJNtIQR9jTUUTn6JrlEca5cNWsA==
+X-Google-Smtp-Source: AA0mqf7zwtPyaBWk8dtksho1p5lOuaxcfg1Dfk+alO3fwAnrdFkEUODM9qdE2N2Ib5BUn8ermKofd++RsgFwzRxNNFs=
+X-Received: by 2002:a17:906:c358:b0:7c1:15ff:ce80 with SMTP id
+ ci24-20020a170906c35800b007c115ffce80mr8762394ejb.172.1670937110471; Tue, 13
+ Dec 2022 05:11:50 -0800 (PST)
 MIME-Version: 1.0
-References: <20221212003711.24977-1-laoar.shao@gmail.com> <c43d8d42-ecb1-a044-eb9a-b68d5808562a@suse.cz>
-In-Reply-To: <c43d8d42-ecb1-a044-eb9a-b68d5808562a@suse.cz>
-From:   Yafang Shao <laoar.shao@gmail.com>
-Date:   Tue, 13 Dec 2022 19:52:42 +0800
-Message-ID: <CALOAHbC7xWFAYz0qc1XpREbw8=nAquFNTi5k4TA02UQ_7w5k0A@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 0/9] mm, bpf: Add BPF into /proc/meminfo
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, tj@kernel.org,
-        dennis@kernel.org, cl@linux.com, akpm@linux-foundation.org,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com, linux-mm@kvack.org,
-        bpf@vger.kernel.org
+From:   Wei Chen <harperchen1110@gmail.com>
+Date:   Tue, 13 Dec 2022 21:11:14 +0800
+Message-ID: <CAO4mrffvqv1TrMO2A9rmysq4QrGcn8PdrzNWpLDjP_u_3U-7Cw@mail.gmail.com>
+Subject: BUG: unable to handle kernel paging request in tcp_write_wakeup
+To:     Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>, yoshfuji@linux-ipv6.org,
+        dsahern@kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        bpf@vger.kernel.org, syzbot <syzkaller@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 1:54 AM Vlastimil Babka <vbabka@suse.cz> wrote:
->
-> On 12/12/22 01:37, Yafang Shao wrote:
-> > Currently there's no way to get BPF memory usage, while we can only
-> > estimate the usage by bpftool or memcg, both of which are not reliable.
-> >
-> > - bpftool
-> >   `bpftool {map,prog} show` can show us the memlock of each map and
-> >   prog, but the memlock is vary from the real memory size. The memlock
-> >   of a bpf object is approximately
-> >   `round_up(key_size + value_size, 8) * max_entries`,
-> >   so 1) it can't apply to the non-preallocated bpf map which may
-> >   increase or decrease the real memory size dynamically. 2) the element
-> >   size of some bpf map is not `key_size + value_size`, for example the
-> >   element size of htab is
-> >   `sizeof(struct htab_elem) + round_up(key_size, 8) + round_up(value_size, 8)`
-> >   That said the differece between these two values may be very great if
-> >   the key_size and value_size is small. For example in my verifaction,
-> >   the size of memlock and real memory of a preallocated hash map are,
-> >
-> >   $ grep BPF /proc/meminfo
-> >   BPF:             1026048 B <<< the size of preallocated memalloc pool
-> >
-> >   (create hash map)
-> >
-> >   $ bpftool map show
-> >   3: hash  name count_map  flags 0x0
-> >           key 4B  value 4B  max_entries 1048576  memlock 8388608B
-> >
-> >   $ grep BPF /proc/meminfo
-> >   BPF:            84919344 B
-> >
-> >   So the real memory size is $((84919344 - 1026048)) which is 83893296
-> >   bytes while the memlock is only 8388608 bytes.
-> >
-> > - memcg
-> >   With memcg we only know that the BPF memory usage is less than
-> >   memory.usage_in_bytes (or memory.current in v2). Furthermore, we only
-> >   know that the BPF memory usage is less than $MemTotal if the BPF
-> >   object is charged into root memcg :)
-> >
-> > So we need a way to get the BPF memory usage especially there will be
-> > more and more bpf programs running on the production environment. The
-> > memory usage of BPF memory is not trivial, which deserves a new item in
-> > /proc/meminfo.
-> >
-> > This patchset introduce a solution to calculate the BPF memory usage.
-> > This solution is similar to how memory is charged into memcg, so it is
-> > easy to understand. It counts three types of memory usage -
-> >  - page
-> >    via kmalloc, vmalloc, kmem_cache_alloc or alloc pages directly and
-> >    their families.
-> >    When a page is allocated, we will count its size and mark the head
-> >    page, and then check the head page at page freeing.
-> >  - slab
-> >    via kmalloc, kmem_cache_alloc and their families.
-> >    When a slab object is allocated, we will mark this object in this
-> >    slab and check it at slab object freeing. That said we need extra memory
-> >    to store the information of each object in a slab.
-> >  - percpu
-> >    via alloc_percpu and its family.
-> >    When a percpu area is allocated, we will mark this area in this
-> >    percpu chunk and check it at percpu area freeing. That said we need
-> >    extra memory to store the information of each area in a percpu chunk.
-> >
-> > So we only need to annotate the allcation to add the BPF memory size,
-> > and the sub of the BPF memory size will be handled automatically at
-> > freeing. We can annotate it in irq, softirq or process context. To avoid
-> > counting the nested allcations, for example the percpu backing allocator,
-> > we reuse the __GFP_ACCOUNT to filter them out. __GFP_ACCOUNT also make
-> > the count consistent with memcg accounting.
->
-> So you can't easily annotate the freeing places as well, to avoid the whole
-> tracking infrastructure?
+Dear Linux Developers,
 
-The trouble is kfree_rcu().  for example,
-    old_item = active_vm_item_set(ACTIVE_VM_BPF);
-    kfree_rcu();
-    active_vm_item_set(old_item);
-If we want to pass the ACTIVE_VM_BPF into the deferred rcu context, we
-will change lots of code in the RCU subsystem. I'm not sure if it is
-worth it.
+Recently, when using our tool to fuzz kernel, the following crash was triggered.
 
->  I thought there was a patchset for a whole
-> bfp-specific memory allocator, where accounting would be implemented
-> naturally, I would imagine.
->
+HEAD commit: 76dcd734eca
+git tree: linux-next
+compiler: clang 12.0.0
+console output:
+https://drive.google.com/file/d/1mHUUrG4QFkrmP3xw7QgiytT7xWE6lbPy/view?usp=share_link
+kernel config: https://drive.google.com/file/d/1jH4qV5XblPADvMDUlvS7DwtW0FroMoVB/view?usp=share_link
 
-I posted a patchset[1] which annotates both allocating and freeing
-several months ago.
-But unfortunately after more investigation and verification I found
-the deferred freeing context is a problem, which can't be resolved
-easily.
-That's why I finally decided to annotate allocating only.
+Unfortunately, I do not have a reproducer for this crash. My manual
+investigation found that the value of %rax may be invalid. When adding
+statistics to net_statistics of the current network namespace, the
+value of net->mib (which is %rax) is invalid. I'm wondering if sk or
+net is freed, which causes an invalid address of mib.
 
-[1]. https://lore.kernel.org/linux-mm/20220921170002.29557-1-laoar.shao@gmail.com/
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: Wei Chen <harperchen1110@gmail.com>
 
-> > To store the information of a slab or a page, we need to create a new
-> > member in struct page, but we can do it in page extension which can
-> > avoid changing the size of struct page. So a new page extension
-> > active_vm is introduced. Each page and each slab which is allocated as
-> > BPF memory will have a struct active_vm. The reason it is named as
-> > active_vm is that we can extend it to other areas easily, for example in
-> > the future we may use it to count other memory usage.
-> >
-> > The new page extension active_vm can be disabled via CONFIG_ACTIVE_VM at
-> > compile time or kernel parameter `active_vm=` at runtime.
->
-> The issue with page_ext is the extra memory usage, so it was rather intended
-> for debugging features that can be always compiled in, but only enabled at
-> runtime when debugging is needed. The overhead is only paid when enabled.
-> That's at least the case of page_owner and page_table_check. The 32bit
-> page_idle is rather an oddity that could have instead stayed 64-bit only.
->
+BUG: unable to handle page fault for address: ffff88800167981d
+#PF: supervisor write access in kernel mode
+#PF: error_code(0x0003) - permissions violation
+PGD 7201067 P4D 7201067 PUD 7202067 PMD 80000000016001e1
+Oops: 0003 [#1] PREEMPT SMP
+CPU: 0 PID: 1425 Comm: systemd-udevd Not tainted 6.1.0-rc8 #3
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
+RIP: 0010:tcp_xmit_probe_skb net/ipv4/tcp_output.c:4024 [inline]
+RIP: 0010:tcp_write_wakeup+0x450/0x710 net/ipv4/tcp_output.c:4078
+Code: fd 44 89 6d 2c 49 8d 7c 24 30 e8 9b 93 49 fd 49 8b 5c 24 30 48
+8d bb c8 01 00 00 e8 8a 93 49 fd 48 8b 83 c8 01 00 00 49 63 cf <65> 48
+ff 04 c8 49 8d bc 24 90 05 00 00 e8 ee 8e 49 fd 45 8b 84 24
+RSP: 0018:ffffc90000003cb8 EFLAGS: 00010246
+RAX: ffffffff83a794b5 RBX: ffff88800bbe8040 RCX: 000000000000006d
+RDX: 0000000000000855 RSI: 0000000000000000 RDI: ffff88800bbe8208
+RBP: ffff88800bb1a000 R08: 000188800bbe820f R09: 0000000000000000
+R10: 0001ffffffffffff R11: 000188800bb1a02c R12: ffff8880368d00c0
+R13: 00000000ffffffff R14: ffff88800bb1a028 R15: 000000000000006d
+FS:  00007fa45b07c8c0(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88800167981d CR3: 000000000ac20000 CR4: 00000000003506f0
+Call Trace:
+ <IRQ>
+ tcp_send_probe0+0x2c/0x2b0 net/ipv4/tcp_output.c:4093
+ tcp_probe_timer net/ipv4/tcp_timer.c:393 [inline]
+ tcp_write_timer_handler+0x322/0x4c0 net/ipv4/tcp_timer.c:624
+ tcp_write_timer+0xb9/0x160 net/ipv4/tcp_timer.c:637
+ call_timer_fn+0x2e/0x240 kernel/time/timer.c:1474
+ expire_timers+0x116/0x240 kernel/time/timer.c:1519
+ __run_timers+0x368/0x410 kernel/time/timer.c:1790
+ run_timer_softirq+0x2e/0x60 kernel/time/timer.c:1803
+ __do_softirq+0xf2/0x2c9 kernel/softirq.c:571
+ __irq_exit_rcu kernel/softirq.c:650 [inline]
+ irq_exit_rcu+0x41/0x70 kernel/softirq.c:662
+ sysvec_apic_timer_interrupt+0x8d/0xb0 arch/x86/kernel/apic/apic.c:1107
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x16/0x20 arch/x86/include/asm/idtentry.h:649
+RIP: 0010:check_kcov_mode kernel/kcov.c:173 [inline]
+RIP: 0010:write_comp_data kernel/kcov.c:236 [inline]
+RIP: 0010:__sanitizer_cov_trace_const_cmp4+0x14/0xa0 kernel/kcov.c:304
+Code: 12 4d 89 44 fa 18 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00
+00 4c 8b 04 24 65 48 8b 14 25 80 ac 01 00 65 8b 05 04 22 da 7e <a9> 00
+01 ff 00 74 10 a9 00 01 00 00 74 6e 83 ba c4 0a 00 00 00 74
+RSP: 0018:ffffc9000059ba10 EFLAGS: 00000246
+RAX: 0000000080000000 RBX: ffff8880090653c0 RCX: 0000000000000000
+RDX: ffff888009b60e80 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffff818fa64f R09: ffffc9000059ba30
+R10: 0001ffffffffffff R11: 00018880095f63f0 R12: 0000000000000001
+R13: ffff8880095f63a8 R14: 0000000000000000 R15: ffff8880095f63a8
+ selinux_inode_permission+0x6f/0x400 security/selinux/hooks.c:3073
+ security_inode_permission+0x72/0xc0 security/security.c:1326
+ inode_permission+0xc5/0x460 fs/namei.c:533
+ may_lookup fs/namei.c:1715 [inline]
+ link_path_walk+0x1b2/0x7e0 fs/namei.c:2262
+ path_lookupat+0x8b/0x3c0 fs/namei.c:2473
+ filename_lookup+0x133/0x310 fs/namei.c:2503
+ vfs_statx+0xa3/0x460 fs/stat.c:229
+ vfs_fstatat fs/stat.c:267 [inline]
+ vfs_lstat include/linux/fs.h:3304 [inline]
+ __do_sys_newlstat fs/stat.c:423 [inline]
+ __se_sys_newlstat+0x6c/0x270 fs/stat.c:417
+ __x64_sys_newlstat+0x2d/0x40 fs/stat.c:417
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fa459eef335
+Code: 69 db 2b 00 64 c7 00 16 00 00 00 b8 ff ff ff ff c3 0f 1f 40 00
+83 ff 01 48 89 f0 77 30 48 89 c7 48 89 d6 b8 06 00 00 00 0f 05 <48> 3d
+00 f0 ff ff 77 03 f3 c3 90 48 8b 15 31 db 2b 00 f7 d8 64 89
+RSP: 002b:00007ffeff53e148 EFLAGS: 00000246 ORIG_RAX: 0000000000000006
+RAX: ffffffffffffffda RBX: 000055cd6b8d7780 RCX: 00007fa459eef335
+RDX: 00007ffeff53e180 RSI: 00007ffeff53e180 RDI: 000055cd6b8d6780
+RBP: 00007ffeff53e240 R08: 00007fa45a1ae248 R09: 0000000000001010
+R10: 0000000000000020 R11: 0000000000000246 R12: 000055cd6b8d6780
+R13: 000055cd6b8d67a0 R14: 000055cd6b8cabbb R15: 000055cd6b8cabc0
+ </TASK>
+Modules linked in:
+CR2: ffff88800167981d
+---[ end trace 0000000000000000 ]---
+RIP: 0010:tcp_xmit_probe_skb net/ipv4/tcp_output.c:4024 [inline]
+RIP: 0010:tcp_write_wakeup+0x450/0x710 net/ipv4/tcp_output.c:4078
+Code: fd 44 89 6d 2c 49 8d 7c 24 30 e8 9b 93 49 fd 49 8b 5c 24 30 48
+8d bb c8 01 00 00 e8 8a 93 49 fd 48 8b 83 c8 01 00 00 49 63 cf <65> 48
+ff 04 c8 49 8d bc 24 90 05 00 00 e8 ee 8e 49 fd 45 8b 84 24
+RSP: 0018:ffffc90000003cb8 EFLAGS: 00010246
+RAX: ffffffff83a794b5 RBX: ffff88800bbe8040 RCX: 000000000000006d
+RDX: 0000000000000855 RSI: 0000000000000000 RDI: ffff88800bbe8208
+RBP: ffff88800bb1a000 R08: 000188800bbe820f R09: 0000000000000000
+R10: 0001ffffffffffff R11: 000188800bb1a02c R12: ffff8880368d00c0
+R13: 00000000ffffffff R14: ffff88800bb1a028 R15: 000000000000006d
+FS:  00007fa45b07c8c0(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88800167981d CR3: 000000000ac20000 CR4: 00000000003506f0
+----------------
+Code disassembly (best guess):
+   0: fd                   std
+   1: 44 89 6d 2c           mov    %r13d,0x2c(%rbp)
+   5: 49 8d 7c 24 30       lea    0x30(%r12),%rdi
+   a: e8 9b 93 49 fd       callq  0xfd4993aa
+   f: 49 8b 5c 24 30       mov    0x30(%r12),%rbx
+  14: 48 8d bb c8 01 00 00 lea    0x1c8(%rbx),%rdi
+  1b: e8 8a 93 49 fd       callq  0xfd4993aa
+  20: 48 8b 83 c8 01 00 00 mov    0x1c8(%rbx),%rax
+  27: 49 63 cf             movslq %r15d,%rcx
+* 2a: 65 48 ff 04 c8       incq   %gs:(%rax,%rcx,8) <-- trapping instruction
+  2f: 49 8d bc 24 90 05 00 lea    0x590(%r12),%rdi
+  36: 00
+  37: e8 ee 8e 49 fd       callq  0xfd498f2a
+  3c: 45                   rex.RB
+  3d: 8b                   .byte 0x8b
+  3e: 84                   .byte 0x84
+  3f: 24                   .byte 0x24
 
-Right, it seems currently page_ext is for debugging purposes only.
-
-> But this is proposing a page_ext functionality supposed to be enabled at all
-> times in production, with the goal of improved accounting. Not an on-demand
-> debugging. I'm afraid the costs will outweight the benefits.
->
-
-The memory overhead of this new page extension is (8/4096), which is
-0.2% of total memory. Not too big to be acceptable. If the user really
-thinks this overhead is not accepted, he can set "active_vm=off" to
-disable it.
-
-To reduce the memory overhead further, I have a bold idea.
-Actually we don't need to allocate such a page extension for every
-page,  while we only need to allocate it if the user needs to access
-it. That said it seems that we can allocate some kind of page
-extensions dynamically rather than preallocate at booting, but I
-haven't investigated it deeply to check if it can work. What do you
-think?
-
-> Just a quick thought, in case the bpf accounting really can't be handled
-> without marking pages and slab objects - since memcg already has hooks there
-> without need of page_ext, couldn't it be done by extending the memcg infra
-> instead?
->
-
-We need to make sure the accounting of BPF memory usage is still
-workable even without memcg, see also the previous discussion[2].
-
-[2]. https://lore.kernel.org/linux-mm/Yy53cgcwx+hTll4R@slm.duckdns.org/
-
--- 
-Regards
-Yafang
+Best,
+Wei
