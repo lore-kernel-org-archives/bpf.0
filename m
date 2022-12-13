@@ -2,76 +2,97 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1FE2C4332F
-	for <bpf@archiver.kernel.org>; Tue, 13 Dec 2022 11:04:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E506DC4167B
+	for <bpf@archiver.kernel.org>; Tue, 13 Dec 2022 11:04:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235229AbiLMLEm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 13 Dec 2022 06:04:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46882 "EHLO
+        id S235244AbiLMLEn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 13 Dec 2022 06:04:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235225AbiLMLEP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 13 Dec 2022 06:04:15 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C32625D1;
-        Tue, 13 Dec 2022 03:04:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670929454; x=1702465454;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=qUgI9kJMyxfeIBUg1MqvWukhfpYdTN7aNnJshDSAb0o=;
-  b=IPw/dRoPVE1aEQp0LPUWPHFQly03zqFLYB4zhoMg8AceZR0eqeaa1cKE
-   LrmBpxsSlNAiQptWVgfDUGkUXv9NaQL8n64rvbUvdRkxjXcF791O0mK8X
-   3GPSb4jkM0MVxbtNBNscVhEwSmhz1oZeQKmlYVMKjKWlU7YArwxHLbX3T
-   NqZpp73vCZo1f9Pvz7wR99ai0Kn18NW6wDmFyLxaEGNCeH7JXH7Yn6yG4
-   deXb/cm2jB0aYvLmc7Fa9ICULqTWh0S82IkhGi06G5efsYHnlRDaC+I1+
-   RJz1J3exr9uM+GZ7UItAf3AWJ2xnXDVfwspuXHqCdURWWmFp22GthxuDD
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="305744344"
-X-IronPort-AV: E=Sophos;i="5.96,241,1665471600"; 
-   d="scan'208";a="305744344"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 03:04:13 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="679263020"
-X-IronPort-AV: E=Sophos;i="5.96,241,1665471600"; 
-   d="scan'208";a="679263020"
-Received: from unknown (HELO paamrpdk12-S2600BPB.aw.intel.com) ([10.228.151.145])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 03:04:11 -0800
-From:   Tirthendu Sarkar <tirthendu.sarkar@intel.com>
-To:     tirtha@gmail.com, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-        john.fastabend@gmail.com, intel-wired-lan@lists.osuosl.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, magnus.karlsson@intel.com,
-        maciej.fijalkowski@intel.com
-Subject: [PATCH intel-next 0/5] i40e: support XDP multi-buffer
-Date:   Tue, 13 Dec 2022 16:20:18 +0530
-Message-Id: <20221213105023.196409-1-tirthendu.sarkar@intel.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S235247AbiLMLET (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 13 Dec 2022 06:04:19 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A67F1928F;
+        Tue, 13 Dec 2022 03:04:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=fYOzy/gUcxxXzkKA87qx2IW3m1L2Q171uzRWvTbvKRU=; b=PiyD44bm27wPMzLX9FrSsGiflk
+        gZ76ezkF0kLRfI+NreMZZPbcydxTWCC5GNewm3/LVzcDrO7jnUPFedVEBo8X9lmDPklsGtzY3Ohc8
+        It8ZJBqmcfWbI0dr3ACQFJoAzEGxS18RXWfqiEm8rq2axizRiHeBeI3Ee/VEOyTCWXLRIbGQ5n9Wk
+        ZSXz5PmAOqL1rYAZQ4XDRJ+Ku7GRsYdMDt/sZluW1Kilre5K0r7zTH5hrfDWPeHACX0RKZq/Htp3a
+        Btdj1Fbg0lWhz8221Z4U64wqC7Ws4SrK8xyJvUcwjxOdM8JXvadFtw++LkB4i9O05bWEfeNd3fWA9
+        CnFxTTRQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p534s-00A3Ue-FF; Tue, 13 Dec 2022 11:04:02 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A49C3300465;
+        Tue, 13 Dec 2022 11:57:12 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B1BA820BC8BEB; Tue, 13 Dec 2022 11:57:12 +0100 (CET)
+Date:   Tue, 13 Dec 2022 11:57:12 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@kernel.org, joshdon@google.com, brho@google.com,
+        pjt@google.com, derkling@google.com, haoluo@google.com,
+        dvernet@meta.com, dschatzberg@meta.com, dskarlat@cs.cmu.edu,
+        riel@surriel.com, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH 14/31] sched_ext: Implement BPF extensible scheduler class
+Message-ID: <Y5haiM8qx1eOLjIr@hirez.programming.kicks-ass.net>
+References: <20221130082313.3241517-1-tj@kernel.org>
+ <20221130082313.3241517-15-tj@kernel.org>
+ <Y5ckYyz14bxCvv40@hirez.programming.kicks-ass.net>
+ <Y5eeGMpr/SuyGBQO@slm.duckdns.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5eeGMpr/SuyGBQO@slm.duckdns.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patchset adds multi-buffer support for XDP. The first four patches
-are prepatory patches while the fifth one contains actual multi-buffer
-changes. 
+On Mon, Dec 12, 2022 at 11:33:12AM -1000, Tejun Heo wrote:
 
-Tirthendu Sarkar (5):
-  i40e: add pre-xdp page_count in rx_buffer
-  i40e: avoid per buffer next_to_clean access from i40e_ring
-  i40e: introduce next_to_process to i40e_ring
-  i40e: pull out rx buffer allocation to end of i40e_clean_rx_irq()
-  i40e: add support for XDP multi-buffer Rx
+> > > @@ -5800,10 +5812,13 @@ static void put_prev_task_balance(struct rq *rq, struct task_struct *prev,
+> > >  	 * We can terminate the balance pass as soon as we know there is
+> > >  	 * a runnable task of @class priority or higher.
+> > >  	 */
+> > > -	for_class_range(class, prev->sched_class, &idle_sched_class) {
+> > > +	for_balance_class_range(class, prev->sched_class, &idle_sched_class) {
+> > >  		if (class->balance(rq, prev, rf))
+> > >  			break;
+> > >  	}
+> > > +#else
+> > > +	/* SCX needs the balance call even in UP, call it explicitly */
+> > 
+> > This, *WHY* !?!
+> 
+> This comes from the fact that there are no strict rq boundaries and the BPF
+> scheduler can share scheduling queues across any subset of CPUs however they
+> see fit. So, task <-> rq association is flexible until the very last moment
+> the task gets picked for execution. For the dispatch path to support this,
+> it needs to be able to migrate tasks across rq's which requires unlocking
+> the current rq which can only be done in ->balance(). So, sched_ext uses
+> ->balance() to run the dispatch path and thus needs it called even on UP.
 
- drivers/net/ethernet/intel/i40e/i40e_main.c |  18 +-
- drivers/net/ethernet/intel/i40e/i40e_txrx.c | 378 ++++++++++++++------
- drivers/net/ethernet/intel/i40e/i40e_txrx.h |  13 +-
- 3 files changed, 280 insertions(+), 129 deletions(-)
+Fundamentally none of that makes sense, on UP there is no placement,
+there is only the one CPU, very little choice to be had.
 
--- 
-2.34.1
+> Given that UP doesn't need to transfer tasks across, it might be possible to
+> move the whole dispatch operation into ->pick_next_task() but the current
+> state would be different, so it's more complicated and will likely be more
+> brittle.
 
+That sounds like something is amiss, you fundamentally hold all the
+right locks, there is only one.
