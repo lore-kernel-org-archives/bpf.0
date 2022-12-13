@@ -2,154 +2,270 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A244AC4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7A57C4167B
 	for <bpf@archiver.kernel.org>; Tue, 13 Dec 2022 23:25:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236836AbiLMXZl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 13 Dec 2022 18:25:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38732 "EHLO
+        id S236994AbiLMXZm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 13 Dec 2022 18:25:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236942AbiLMXZi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 13 Dec 2022 18:25:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B9B26AD1
-        for <bpf@vger.kernel.org>; Tue, 13 Dec 2022 15:24:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670973891;
+        with ESMTP id S236790AbiLMXZj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 13 Dec 2022 18:25:39 -0500
+Received: from out-102.mta0.migadu.com (out-102.mta0.migadu.com [IPv6:2001:41d0:1004:224b::66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892B72AC6
+        for <bpf@vger.kernel.org>; Tue, 13 Dec 2022 15:25:37 -0800 (PST)
+Message-ID: <94d8cd3a-fc07-88aa-94f8-6b08940a2087@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1670973934;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=6MH72Wfu4odDI7DR27EaCIxLzF+Z90J2GkF6LgI966g=;
-        b=JK0srtsxMz4Zk+tipTxbOBosPZA2ic9wJYSkMYhRIeCgC7vWJnrnJsepleptJeNI+sBS57
-        aOtIocjZ32oAfHcaE4DIq+W7FmrBoIJM8qMODQDBGYxJ/d62PqGdbiWOkCd3HJLZcxigp0
-        b8U3TO5uyHdoMcU30W8OtlSaxog85eE=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-448-3xT5REwDMqawt-lSychaxw-1; Tue, 13 Dec 2022 18:24:50 -0500
-X-MC-Unique: 3xT5REwDMqawt-lSychaxw-1
-Received: by mail-ed1-f71.google.com with SMTP id y20-20020a056402271400b0046c9a6ec30fso8200012edd.14
-        for <bpf@vger.kernel.org>; Tue, 13 Dec 2022 15:24:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6MH72Wfu4odDI7DR27EaCIxLzF+Z90J2GkF6LgI966g=;
-        b=3YTffuIyxXpv0YRFnDmLedPLSFoF301x2POzLZktx+nnPCrBiXWwQUqaFguPA4eNcy
-         Eh5bcZdRU2Fkoo2SeHaSONtje14FxpP0wQQLu8StjdGHsDKk1jLnfZnNEHdIWgaiv3fW
-         04lzp1a4P3RWmowZNf/Do9Csk2g81hYVb2EVTF5j/SmOBsTK3Tqdp/BqqqCbTQD00oP1
-         ez7zxvW7ELL+0lceum1pOD/oLEwbu4Bqn9GnjGmv8bkd0BSFhXjPw2A8yNe8ST9XN1ee
-         MhZ0ZCkVYRDtSTMEBPtX3EhCkax0pC3KrVPL/IlP2mMO7ro248wQtoSft7i6s+WFdgsg
-         SVHQ==
-X-Gm-Message-State: ANoB5pmm5CWkyKj7vhCAv+tKIg36pH9oqKpdIj/W8w/MMAF8Cof52pye
-        WQctFWcXJ+GrMGhr5gPg9dwFkYk94lEADmU7YW0q/SScsZu4CkauRohPeQGDGhHdND/kJ2E8EVO
-        7XTwfne64Arf/
-X-Received: by 2002:a17:906:2bd7:b0:7c1:4c46:30a0 with SMTP id n23-20020a1709062bd700b007c14c4630a0mr14389801ejg.65.1670973888531;
-        Tue, 13 Dec 2022 15:24:48 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4w8RWo8/QGSUQWUf/XKBf3HpQOIdTl9c8cI09hMSNYYMpXjN1W8uLnCkeePADoRfFVXbzFtQ==
-X-Received: by 2002:a17:906:2bd7:b0:7c1:4c46:30a0 with SMTP id n23-20020a1709062bd700b007c14c4630a0mr14389709ejg.65.1670973885576;
-        Tue, 13 Dec 2022 15:24:45 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id w6-20020a170906480600b007c0baedc9d0sm5168999ejq.95.2022.12.13.15.24.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 15:24:45 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 6F08982F3F8; Wed, 14 Dec 2022 00:24:44 +0100 (CET)
-From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Toke Hoiland-Jorgensen <toke@redhat.com>
-Cc:     bpf@vger.kernel.org
-Subject: [PATCH bpf v3 1/2] bpf: Resolve fext program type when checking map compatibility
-Date:   Wed, 14 Dec 2022 00:24:39 +0100
-Message-Id: <20221213232441.652313-1-toke@redhat.com>
-X-Mailer: git-send-email 2.38.1
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=d6xG0/lKADN0SB52GMYb9zCvexOtVfuo0FM3nceD6Hg=;
+        b=SgPsMVEj9R/6Scaf46X/2CvcIVcdjrCCpob5fTMFQ4n8VR6u/PIVxS3b2C46XfTLcXSg2I
+        JnNhHG3wMhBsobH6jgfiUskz3yleb0UN6XG27E9aXV3TH6ndR2Ky7AjbnhC8S8XEe9O5Ww
+        q5dle0F4Vcpuvrl2r8xsZmEN22Mu+Gs=
+Date:   Tue, 13 Dec 2022 15:25:26 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v4 03/15] bpf: Introduce device-bound XDP
+ programs
+Content-Language: en-US
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, haoluo@google.com, jolsa@kernel.org,
+        David Ahern <dsahern@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Willem de Bruijn <willemb@google.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Anatoly Burakov <anatoly.burakov@intel.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Magnus Karlsson <magnus.karlsson@gmail.com>,
+        Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+References: <20221213023605.737383-1-sdf@google.com>
+ <20221213023605.737383-4-sdf@google.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20221213023605.737383-4-sdf@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The bpf_prog_map_compatible() check makes sure that BPF program types are
-not mixed inside BPF map types that can contain programs (tail call maps,
-cpumaps and devmaps). It does this by setting the fields of the map->owner
-struct to the values of the first program being checked against, and
-rejecting any subsequent programs if the values don't match.
+On 12/12/22 6:35 PM, Stanislav Fomichev wrote:
+> New flag BPF_F_XDP_DEV_BOUND_ONLY plus all the infra to have a way
+> to associate a netdev with a BPF program at load time.
+> 
+> Some existing 'offloaded' routines are renamed to 'dev_bound' for
+> consistency with the rest.
+> 
+> Also moved a bunch of code around to avoid forward declarations.
 
-One of the values being set in the map owner struct is the program type,
-and since the code did not resolve the prog type for fext programs, the map
-owner type would be set to PROG_TYPE_EXT and subsequent loading of programs
-of the target type into the map would fail.
+There are too many things in one patch.  It becomes quite hard to follow, eg. I 
+have to go back-and-forth a few times within this patch to confirm what change 
+is just a move.  Please put the "moved a bunch of code around to avoid forward 
+declarations" in one individual patch and also the 
+"late_initcall(bpf_offload_init)" change in another individual patch.
 
-This bug is seen in particular for XDP programs that are loaded as
-PROG_TYPE_EXT using libxdp; these cannot insert programs into devmaps and
-cpumaps because the check fails as described above.
+[ ... ]
 
-Fix the bug by resolving the fext program type to its target program type
-as elsewhere in the verifier. This requires constifying the parameter of
-resolve_prog_type() to avoid a compiler warning from the new call site.
+> -int bpf_prog_offload_init(struct bpf_prog *prog, union bpf_attr *attr)
+> +static int __bpf_offload_dev_netdev_register(struct bpf_offload_dev *offdev,
+> +					     struct net_device *netdev)
+> +{
+> +	struct bpf_offload_netdev *ondev;
+> +	int err;
+> +
+> +	ondev = kzalloc(sizeof(*ondev), GFP_KERNEL);
+> +	if (!ondev)
+> +		return -ENOMEM;
+> +
+> +	ondev->netdev = netdev;
+> +	ondev->offdev = offdev;
+> +	INIT_LIST_HEAD(&ondev->progs);
+> +	INIT_LIST_HEAD(&ondev->maps);
+> +
+> +	err = rhashtable_insert_fast(&offdevs, &ondev->l, offdevs_params);
+> +	if (err) {
+> +		netdev_warn(netdev, "failed to register for BPF offload\n");
+> +		goto err_unlock_free;
+> +	}
+> +
+> +	if (offdev)
+> +		list_add(&ondev->offdev_netdevs, &offdev->netdevs);
+> +	return 0;
+> +
+> +err_unlock_free:
+> +	up_write(&bpf_devs_lock);
 
-v3:
-- Add Yonghong's ACk
+No need to handle bpf_devs_lock in the "__" version of the register() helper? 
+The goto label probably also needs another name, eg. "err_free".
 
-Fixes: f45d5b6ce2e8 ("bpf: generalise tail call map compatibility check")
-Acked-by: Yonghong Song <yhs@fb.com>
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
----
- include/linux/bpf_verifier.h | 2 +-
- kernel/bpf/core.c            | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+> +	kfree(ondev);
+> +	return err;
+> +}
+> +
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 9e1e6965f407..0eb8f035b3d9 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -642,7 +642,7 @@ static inline u32 type_flag(u32 type)
- }
- 
- /* only use after check_attach_btf_id() */
--static inline enum bpf_prog_type resolve_prog_type(struct bpf_prog *prog)
-+static inline enum bpf_prog_type resolve_prog_type(const struct bpf_prog *prog)
- {
- 	return prog->type == BPF_PROG_TYPE_EXT ?
- 		prog->aux->dst_prog->type : prog->type;
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 25a54e04560e..17ab3e15ac25 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2088,6 +2088,7 @@ static unsigned int __bpf_prog_ret0_warn(const void *ctx,
- bool bpf_prog_map_compatible(struct bpf_map *map,
- 			     const struct bpf_prog *fp)
- {
-+	enum bpf_prog_type prog_type = resolve_prog_type(fp);
- 	bool ret;
- 
- 	if (fp->kprobe_override)
-@@ -2098,12 +2099,12 @@ bool bpf_prog_map_compatible(struct bpf_map *map,
- 		/* There's no owner yet where we could check for
- 		 * compatibility.
- 		 */
--		map->owner.type  = fp->type;
-+		map->owner.type  = prog_type;
- 		map->owner.jited = fp->jited;
- 		map->owner.xdp_has_frags = fp->aux->xdp_has_frags;
- 		ret = true;
- 	} else {
--		ret = map->owner.type  == fp->type &&
-+		ret = map->owner.type  == prog_type &&
- 		      map->owner.jited == fp->jited &&
- 		      map->owner.xdp_has_frags == fp->aux->xdp_has_frags;
- 	}
--- 
-2.38.1
+[ ... ]
+
+> +int bpf_prog_dev_bound_init(struct bpf_prog *prog, union bpf_attr *attr)
+>   {
+>   	struct bpf_offload_netdev *ondev;
+>   	struct bpf_prog_offload *offload;
+> @@ -87,7 +198,7 @@ int bpf_prog_offload_init(struct bpf_prog *prog, union bpf_attr *attr)
+>   	    attr->prog_type != BPF_PROG_TYPE_XDP)
+>   		return -EINVAL;
+>   
+> -	if (attr->prog_flags)
+> +	if (attr->prog_flags & ~BPF_F_XDP_DEV_BOUND_ONLY)
+>   		return -EINVAL;
+>   
+>   	offload = kzalloc(sizeof(*offload), GFP_USER);
+> @@ -102,11 +213,25 @@ int bpf_prog_offload_init(struct bpf_prog *prog, union bpf_attr *attr)
+>   	if (err)
+>   		goto err_maybe_put;
+>   
+> +	prog->aux->offload_requested = !(attr->prog_flags & BPF_F_XDP_DEV_BOUND_ONLY);
+> +
+>   	down_write(&bpf_devs_lock);
+>   	ondev = bpf_offload_find_netdev(offload->netdev);
+>   	if (!ondev) {
+> -		err = -EINVAL;
+> -		goto err_unlock;
+> +		if (!bpf_prog_is_offloaded(prog->aux)) {
+> +			/* When only binding to the device, explicitly
+> +			 * create an entry in the hashtable. See related
+> +			 * bpf_dev_bound_try_remove_netdev.
+> +			 */
+> +			err = __bpf_offload_dev_netdev_register(NULL, offload->netdev);
+> +			if (err)
+> +				goto err_unlock;
+> +			ondev = bpf_offload_find_netdev(offload->netdev);
+> +		}
+> +		if (!ondev) {
+
+nit.  A bit confusing because the "ondev = bpf_offload_find_netdev(...)" above 
+should not fail but "!ondev" is tested again here.  I think the intention is to 
+fail on the 'bpf_prog_is_offloaded() == true' case. May be:
+
+		if (bpf_prog_is_offloaded(prog->aux)) {
+			err = -EINVAL;
+			goto err_unlock;
+		}
+		/* When only binding to the device, explicitly
+		 * ...
+		 */
+		err = __bpf_offload_dev_netdev_register(NULL, offload->netdev);
+		if (err)
+			goto err_unlock;
+		ondev = bpf_offload_find_netdev(offload->netdev);
+
+> +			err = -EINVAL;
+> +			goto err_unlock;
+> +		}
+>   	}
+>   	offload->offdev = ondev->offdev;
+>   	prog->aux->offload = offload;
+> @@ -209,27 +334,28 @@ bpf_prog_offload_remove_insns(struct bpf_verifier_env *env, u32 off, u32 cnt)
+>   	up_read(&bpf_devs_lock);
+>   }
+>   
+> -static void __bpf_prog_offload_destroy(struct bpf_prog *prog)
+> +static void bpf_dev_bound_try_remove_netdev(struct net_device *dev)
+>   {
+> -	struct bpf_prog_offload *offload = prog->aux->offload;
+> -
+> -	if (offload->dev_state)
+> -		offload->offdev->ops->destroy(prog);
+> +	struct bpf_offload_netdev *ondev;
+>   
+> -	/* Make sure BPF_PROG_GET_NEXT_ID can't find this dead program */
+> -	bpf_prog_free_id(prog, true);
+> +	if (!dev)
+> +		return;
+>   
+> -	list_del_init(&offload->offloads);
+> -	kfree(offload);
+> -	prog->aux->offload = NULL;
+> +	ondev = bpf_offload_find_netdev(dev);
+> +	if (ondev && !ondev->offdev && list_empty(&ondev->progs))
+
+hmm....list_empty(&ondev->progs) is tested here but will it be empty? ...
+
+> +		__bpf_offload_dev_netdev_unregister(NULL, dev);
+>   }
+>   
+> -void bpf_prog_offload_destroy(struct bpf_prog *prog)
+> +void bpf_prog_dev_bound_destroy(struct bpf_prog *prog)
+>   {
+> +	rtnl_lock();
+>   	down_write(&bpf_devs_lock);
+> -	if (prog->aux->offload)
+> -		__bpf_prog_offload_destroy(prog);
+> +	if (prog->aux->offload) {
+> +		bpf_dev_bound_try_remove_netdev(prog->aux->offload->netdev);
+
+... the "prog" here is still linked to ondev->progs, right?
+because __bpf_prog_dev_bound_destroy() is called later below.
+
+nit. May be the bpf_dev_bound_try_remove_netdev() should be folded/merged back 
+into bpf_prog_dev_bound_destroy() to make things more clear.
+
+> +		__bpf_prog_dev_bound_destroy(prog); > +	}
+>   	up_write(&bpf_devs_lock);
+> +	rtnl_unlock();
+>   }
+
+[ ... ]
+
+> +static int __init bpf_offload_init(void)
+> +{
+> +	int err;
+> +
+> +	down_write(&bpf_devs_lock);
+
+lock is probably not needed.
+
+> +	err = rhashtable_init(&offdevs, &offdevs_params);
+> +	up_write(&bpf_devs_lock);
+> +
+> +	return err;
+> +}
+> +
+> +late_initcall(bpf_offload_init);
+
+[ ... ]
+
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 5d51999cba30..194f8116aad4 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -9228,6 +9228,10 @@ static int dev_xdp_attach(struct net_device *dev, struct netlink_ext_ack *extack
+>   			NL_SET_ERR_MSG(extack, "Using offloaded program without HW_MODE flag is not supported");
+>   			return -EINVAL;
+>   		}
+> +		if (bpf_prog_is_dev_bound(new_prog->aux) && !bpf_offload_dev_match(new_prog, dev)) {
+> +			NL_SET_ERR_MSG(extack, "Program bound to different device");
+> +			return -EINVAL;
+> +		}
+>   		if (new_prog->expected_attach_type == BPF_XDP_DEVMAP) {
+>   			NL_SET_ERR_MSG(extack, "BPF_XDP_DEVMAP programs can not be attached to a device");
+>   			return -EINVAL;
+> @@ -10813,6 +10817,7 @@ void unregister_netdevice_many_notify(struct list_head *head,
+>   		/* Shutdown queueing discipline. */
+>   		dev_shutdown(dev);
+>   
+> +		bpf_dev_bound_netdev_unregister(dev);
+
+Does it matter if bpf_dev_bound_netdev_unregister(dev) is called before 
+dev_xdp_uninstall(dev)?  Asking because it seems more logic to unregister dev 
+after detaching xdp progs.
+
+>   		dev_xdp_uninstall(dev);
+>   
+>   		netdev_offload_xstats_disable_all(dev);
+
 
