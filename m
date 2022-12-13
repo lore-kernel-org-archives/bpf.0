@@ -2,278 +2,250 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 045AFC10F1B
-	for <bpf@archiver.kernel.org>; Tue, 13 Dec 2022 23:50:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B79D5C4332F
+	for <bpf@archiver.kernel.org>; Tue, 13 Dec 2022 23:53:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237129AbiLMXuY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 13 Dec 2022 18:50:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57346 "EHLO
+        id S236628AbiLMXxG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 13 Dec 2022 18:53:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237095AbiLMXuW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 13 Dec 2022 18:50:22 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8509FCF2
-        for <bpf@vger.kernel.org>; Tue, 13 Dec 2022 15:50:19 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id y135so19599946yby.12
-        for <bpf@vger.kernel.org>; Tue, 13 Dec 2022 15:50:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4HZ7m/FdD8ks+ysv8UbV3LwACN94GPw+g1vwwbcTm34=;
-        b=XGAxLcTqdOu850x3PeILuvtLQ+yoJCY00RmjZ3FXHrX/HE/JXUL5/HFNYQNMr6uTcd
-         VSTRtoA7IpwgmNU27OjiGAqyRH59oTtUJ5+nIjFrLWVVhkdXFKCOj4/I3ZunTTnKrTUF
-         yoOZAIkAyrLqV2B/imv18HCzRhjeXthPFcs+Ncuf6SMB5C2gp9jd/lU/LBvTHZAPJVMS
-         K6OneOLuB+QrVKjTUNZLlLfuSp52sk8WwOjQJZdGLow05zFEea87qif7sfmfFPzP+HO8
-         oS9asUYPgj/jMi9kVI3KZW+462QjEF+mgBTNvOIcNPvrPV3hJGQ9E9SAEjJR8uoKkkVi
-         RteA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4HZ7m/FdD8ks+ysv8UbV3LwACN94GPw+g1vwwbcTm34=;
-        b=WRt29UQ9vyjIhie8oCVG2i1iRGkm0snUgGllgFF0hi+jOZOp0laI9Dk44fX/Wu2MyJ
-         rPeYO8OaOjC8zfJbPnlzJrS8uHJk+VxrjujiFO8v17Ahi3qTL92w3Ytv+vzkaG8mtxWR
-         2WROGBBtd/Y+sk9h/XYr9jYPnc7jSD6CZkC4433sCb5fGNlLJ5sG1hbdYfeZLSJV6FHT
-         rMsb7nS+5HuKk9+Urkdg8gt1VVjgo1SNSXUGmWxePwOKkjQbb8jGAH5UtOpfiE5gb6Iq
-         iJMLOQ6y0csa6ZK2fPEXpMxj8E+fj9VRo+lLatFL58Mac3HPi6qz1HZ3zn+ZHV25XclJ
-         88oA==
-X-Gm-Message-State: ANoB5pnK1xKPrmZV3yIOMepimu+A1SjFbvXl38uYEha1EWeDUP5dZcnx
-        Sv4Smbk/lA0m7euzOxNANlJTQf2FiF2Ev0CG5NY=
-X-Google-Smtp-Source: AA0mqf5nXTi9EH0ndU7hW4DLhKaL+5VkxR9wdVJVN7W+NjeU74/8K32i17k9siw3CmlbffNY4VVBZBSA5V1LezHgncg=
-X-Received: by 2002:a25:a290:0:b0:6fe:efb3:2e29 with SMTP id
- c16-20020a25a290000000b006feefb32e29mr24798595ybi.616.1670975418794; Tue, 13
- Dec 2022 15:50:18 -0800 (PST)
-MIME-Version: 1.0
-References: <20221207205537.860248-1-joannelkoong@gmail.com>
- <20221208015434.ervz6q5j7bb4jt4a@macbook-pro-6.dhcp.thefacebook.com>
- <CAEf4BzYGUf=yMry5Ezen2PZqvkfS+o1jSF2e1Fpa+pgAmx+OcA@mail.gmail.com>
- <CAADnVQKgTCwzLHRXRzTDGAkVOv4fTKX_r9v=OavUc1JOWtqOew@mail.gmail.com> <CAEf4BzZM0+j6DXMgu2o2UvjtzoOxcjsJtT8j-jqVZYvAqxc52g@mail.gmail.com>
-In-Reply-To: <CAEf4BzZM0+j6DXMgu2o2UvjtzoOxcjsJtT8j-jqVZYvAqxc52g@mail.gmail.com>
-From:   Joanne Koong <joannelkoong@gmail.com>
-Date:   Tue, 13 Dec 2022 15:50:07 -0800
-Message-ID: <CAJnrk1aAULjB_nXmMXd-t16oR6dN4bfLna_PCfafeBgCEoKhdQ@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 0/6] Dynptr convenience helpers
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
-        kernel-team@meta.com, Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S237177AbiLMXxE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 13 Dec 2022 18:53:04 -0500
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D9713DDE
+        for <bpf@vger.kernel.org>; Tue, 13 Dec 2022 15:53:01 -0800 (PST)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDMIYPE011102;
+        Tue, 13 Dec 2022 15:52:45 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=s2048-2021-q4;
+ bh=Z9ukFXpcSkLksOGUqktaobQviIK948zC02KcyJ7kv4k=;
+ b=kBLo91CvcFIuKdrd04fRdr6+iYURT5LLHg1aZv/hPDcP5zhme8ysTYLXDI5o1D5l8zBO
+ Rq1mNSAhve87ddlYjXVG9F1NPg2Vi6OMEmAOT2gUSfi/Upw64ExdXDbHKKUwD331wTAh
+ 6GzS9dgwdIbhujgtqk3SZHt0aDOFBaCn8oXSP9qX2n+xJeIRMGj2V9W77Y7GX8VKQZQm
+ tTJO2JSBks5JcwtLf5ifczr6KuAUhGR7DPTdEUshC22aJo2qyTWFZ36Hf2id+tcAw47r
+ oQdtn6w/8mwX0vZiNBYP/Zb1AeMEGpE8o3U8ARcSGC3DdFmMMhJy5IKRakKC7m9Ozj3v rA== 
+Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam04lp2177.outbound.protection.outlook.com [104.47.73.177])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3meyfju5ta-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 15:52:45 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=akPi5KslpaY+1A897WI/6noiJV+h6oVeekyYxVh0Qm3zoF+fTvT755/aI4W/oA3TqPBYdvDUjpkwMX76V8zo2xcbuZnpob8s/JF9jTuppas7m2YJkt4H/OBC40YGJwlbCSV7EXwTFU+6+Xo8e+lahtarIr5X+ImV/QsLSED6C/dlKbmAj2nxPH7g8Fcza7sqLWDb5nuRWli/OPS7dxsmnwye/BRSFMv1Jh8qJL9Cpr+Ukdy/XBsOOtS1+eQX+5j3GSkFKsecgUIbgAX3AB6nlH4aLzn7kEj0H6og0Zp+ySaikwMreZcPzUNh7LFkX3vYXK+9iF6tqOjxGChAeA1WaA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Z9ukFXpcSkLksOGUqktaobQviIK948zC02KcyJ7kv4k=;
+ b=VkA1bCXlpYNXeVnVdRAHp0/By4Zlv2oc24Zw5u3+u/ZriytxBpLuDnEeSwvdN7CLhmwVvZ7V0ZQpeM3sYgi53eIuB6DPrCO2HJ/TIbGl5h4SkMyRRz/1sPLTG1nofzSYWpJo9fCqwWThHllhx5+BQW79Tnai+kZzQ08AoZt6DPyXr7Nvq6+a0RiR3IusAyhIEJ7ZuoErZV7zHIGNKRMAACyh3RA0e5f3Jf/VU9ghvGg0oFyQbqmjnuyGrH7Nq5EPbXPrGNPCjp/e4E0FL6jDk0Dr5eplkyrvj/jtQBe2Uip0kAveLKOeYfgZDn6XFuSnsDEzQW1uOad9ncxUEOHDEQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by BN7PR15MB2323.namprd15.prod.outlook.com (2603:10b6:406:82::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.16; Tue, 13 Dec
+ 2022 23:52:41 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::d665:7e05:61d1:aebf]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::d665:7e05:61d1:aebf%7]) with mapi id 15.20.5880.019; Tue, 13 Dec 2022
+ 23:52:41 +0000
+Message-ID: <aef233ff-095d-0f51-735e-8054fafcb4bf@meta.com>
+Date:   Tue, 13 Dec 2022 15:52:38 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.1
+Subject: Re: [PATCH bpf-next] bpf: Remove trace_printk_lock lock
+Content-Language: en-US
+To:     Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Andrii Nakryiko <andrii@kernel.org>,
+        Hao Sun <sunhao.th@gmail.com>, bpf@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>
+References: <20221213140843.803293-1-jolsa@kernel.org>
+ <CAPhsuW5sQaspOhurLWm0igDUJk+V9ihmt0WnjaKsq1gJ66F6Gw@mail.gmail.com>
+ <Y5j0XYQyiDP1Uu68@krava>
+From:   Yonghong Song <yhs@meta.com>
+In-Reply-To: <Y5j0XYQyiDP1Uu68@krava>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-ClientProxiedBy: BYAPR08CA0061.namprd08.prod.outlook.com
+ (2603:10b6:a03:117::38) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|BN7PR15MB2323:EE_
+X-MS-Office365-Filtering-Correlation-Id: 85b1425d-faa9-48bc-b23a-08dadd651f2f
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BEGvljV3IBXmwHFsT39kcB7yScugwHfdLPp/eV6AN6Ch2/nGscCMFw3kyr1PwgZIqju4UTCDHhRscwcTDbiyADLEMkkczWJB3yXjwW9ALs8Zo4vflH3q1GfWw7ZwVbjxrj+ZVboos0K7Ho+qgsqY+cjnAOIktgfvKbYNHVEFrkuHuaWyyJYb2otvEPvxRodsgIcbUigBtbPDtGn94ghB0uQFTgnADUUm8cSVpSshSteIr4d5vejQn3mhMX9XwRiqnzooQrEQgjgx03ex5+0fjjWYoqsrPJr9gocUsPZ3DxJoXAjneJn71CCPrwm4ucTUFAXMYEb8BSgpHnuNNcS6Ko5xb8fctuopfXVNtyQw9YAT8h6nlmw8RFhKzQ1X7OKvd0hZZ5kp13JMcmKmlVRnqFQwUrzJ/hQGqN7FPqxI3dwAnoMzwqXW1OHhYVI9SwffErMgWLjpx4ArceIXxXhMYBKqdiC8QdYDiUiYnw6DzI7LZd4lUThIDTTGFKfE2sXxmPzTPo61r0bl6Te0oe49vihj9bhy7q8adjwZkfzGDdUsWRsB3J0nXuvSGKKhkrrLmH0o0UNkp/xFHGRaZtWF4vD+4H6IlV5a07sWf7jzT53ppDJixBkZ6oQKaqpu4QvoviPdMZJpGfvyg6FwIIi659AnmVTYcxAnXzhHbPs9CJIdcPDIrRDUav2N9WtiMO93JcN8AHdMbHqrbJjeyyVeCByLFpGb5f+nUBfKmwwnMY0Hrx/qfKUiuIcjUiYGieIBAeLtVwItqqfP0uYtscomNBWfy8yVmR9K3G6/lfhxHxo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(396003)(136003)(39860400002)(366004)(451199015)(41300700001)(2906002)(8676002)(4326008)(86362001)(66946007)(66476007)(66556008)(31686004)(38100700002)(7416002)(8936002)(316002)(110136005)(54906003)(53546011)(6512007)(6506007)(2616005)(36756003)(5660300002)(83380400001)(31696002)(478600001)(6666004)(966005)(6486002)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dUFEZGp3YXBpRm1EcVVVMHdLSm55TER4eFkzZGdTVE8zdVFuT0d4Q2lCbDBo?=
+ =?utf-8?B?OUlkR0xmdDY5WUdreHVtRWhKdjB3UDRCQzE4SGR2VWNVejhpcS9ubE9mZ2NY?=
+ =?utf-8?B?OFhrQmh0NUtGODlmdTR2UjhPNEZSblRBOXhUTzVWWmhGL3R5SjI2K1FhRjdm?=
+ =?utf-8?B?b05GejZDbExCWkRFQi8xTkh4Z0VpSG1CVUNUcWVrZGowODQzdTZUbk9MdU1p?=
+ =?utf-8?B?YkNHQVdrWGh0emZEQ2UrSElVYXhxZGVjTjVFNE9SMjF4ZXNzaDNqK0VUVGlO?=
+ =?utf-8?B?TkhGblUvcDNPVzl4dlN6YzYxM0c5Zy9vZWRhQjhSejQwOVZ5RUI5SkhQUkV1?=
+ =?utf-8?B?VTBZc1E1RHB4cFd4NDh0ZkN5VFlpeC9CTmdRZnZ4TjhYZDVXYmxIdmUvdUw2?=
+ =?utf-8?B?Njd4clFjRFliVnljdm85eWxBSkJRUmpieWx2djlZNk9Kd1VNbnNvbU0vQzYr?=
+ =?utf-8?B?MG1HWGd3NGo4bmwvSjN2Q2kyYVlQVkgvL3BFNWEzWWozSSttcG1IbHlxM1R2?=
+ =?utf-8?B?Znd6ZkZnYm5SSDhKcVVQWlFhWnBKSDcranZqL0dYNzJGUUFJZHlsSmw1UVRG?=
+ =?utf-8?B?ZGdOTjNhRHhNalpjSG9mMEhtMzBHdkhDYTRqSlRBMXhYNitxRWJpREtJbWpV?=
+ =?utf-8?B?YW9aZUVBaEZ1YlREQkJha0NqUmFxdTNDNTYwTkxLcnRuTzlNL3MzdmxYRXBl?=
+ =?utf-8?B?Q2pvMkRWS2NFVnhOcFZFNHJvR1NUTGJDZGs4RFJ0dlFvUWVIQ0V3a1FwN2ZT?=
+ =?utf-8?B?WWk4TExuc09MOC9vTWEzc2RMMFFUdllQT1BHNTdVbGRMZmlKSzdrQjUwMVh2?=
+ =?utf-8?B?VWlvY3g4UzVMV1NqSTF0S2xNendtT1VKeVNLYXFsYUdpUGg4TDlkdHhiT3ZS?=
+ =?utf-8?B?ck9mS3dteFg0Q0FYWDRrQzBCdytzbWRlcjF0cUxTTDZPOU96aHo3Y2ZFRCtO?=
+ =?utf-8?B?U0VVMFlpREljam1yL004WFF0Q0tLT29jVVVYa3RObFpLa29ZTlZ5bEFyMjll?=
+ =?utf-8?B?ZWdBTXdQOGpUSWRmVUl1T1YvNkZNV2Y2d09sRi9NeERzdzkwdkkyR3Zvdnp3?=
+ =?utf-8?B?RFA3T3dBcGZyQWFGRzhhV1ozMnVjaEpGQ3ViNUJHaU5zSThxYlVnOEdhSnhP?=
+ =?utf-8?B?KzFNOGhCRlc4bDZTTFlXbUdjYTAxdnhQYmxpODdCUUVubWRnRVhSNHIzNmxL?=
+ =?utf-8?B?dFBqWjg5bFdHMDZraTNnT2tWTmZ0K29UWGNxS0lqR3dSYzhJd2dXaVNhbm1Y?=
+ =?utf-8?B?eTVRM2FmWmE4NGVjQk1nTTlWUU5tVXBVditIalFjNDFDUzBocWJQL1h1NXVL?=
+ =?utf-8?B?elFnQ2JOQ2w3UXBDWUFXbUhqMzU0RWxxdVhTY3BLalJRcC9RWjFpZjNReWR5?=
+ =?utf-8?B?UG9PNUFvUzVsQ2lFK0FJUEUvWlRkMGxVUVRMR1lkWEliWWZPYWNFaUpwQTB4?=
+ =?utf-8?B?RllxdGZ6ZW5Obzd3RXowb3pydjgwTGd2bDJ0UTA3QjhFbkk3YXJVcWJxc3Z0?=
+ =?utf-8?B?ei9SeGNubDIwVnJoQmtONG5FVnE5SkQrQVZzczQ5VmEyTklGVkZWMHlVSlRr?=
+ =?utf-8?B?M1J1Z3NVN1hDOWpMdHhBMU1JTDFjTWJ6WDRqUWR5VmtwMklDQ01kb0RCUGsr?=
+ =?utf-8?B?RWE4VWhKcnpPNm8vTThmNDJwZVVVMEQ0bFdCYzNrcS9PN1FtQnNxU0ZRVEVj?=
+ =?utf-8?B?VWpBOEdzNzU2L2FIMVM1SStJWTlhdEVJQkpoMkt4anYwZ0ZCUHBjYlFFRkUv?=
+ =?utf-8?B?R09mSmloYU9zT3pVeCtKUmpSd25vNHJLZzhaQXp4ZlZJQlNVcmwxcTVvK0lT?=
+ =?utf-8?B?UDhPSy9LU0JjalZvMDB2Z0thUVZ5UzZmOTJNU084UG12RUxhOVZ4MHNnOUhl?=
+ =?utf-8?B?MlVIY0FxUHZzT0JpaFJsa3FZTEVPay94VndVcU1zdHBtTGdFb3RwL1UrSlo5?=
+ =?utf-8?B?QXRZWXVSRnBPcjVTdzdMNlFmcE9TbUtUUEI1S1MyNm90NVo3Z3hQbEVhM0py?=
+ =?utf-8?B?UW5ydk1OZGJGYm8wbG1jM3g0djhITnA1bVFYZkJ2OW45eFBTd0J0ZU9aTVgx?=
+ =?utf-8?B?eGxNaWVKbmY5QjF0dExyQk9YYURkMlpYL0hRQlNyTlVEL0JYL0E0Z1ZoRXJV?=
+ =?utf-8?B?dmYrUCs0bW5BYVBMZnpXOUpzTUFlSC9CZTBRbkY1U1lHeGhDUnpubXVGb0dq?=
+ =?utf-8?B?Nmc9PQ==?=
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 85b1425d-faa9-48bc-b23a-08dadd651f2f
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2022 23:52:41.2407
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tF6tKaxcLpbwusYIH2Z8WHuZ6sob/dETiJ+DRvdJt5wQhztQBQsDZ/qNT1BW3f4K
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR15MB2323
+X-Proofpoint-ORIG-GUID: yy71-dY09SkHo07WC4K5LvvkmmghPtSG
+X-Proofpoint-GUID: yy71-dY09SkHo07WC4K5LvvkmmghPtSG
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-13_03,2022-12-13_01,2022-06-22_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 12:12 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Thu, Dec 8, 2022 at 5:30 PM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Thu, Dec 8, 2022 at 4:42 PM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > On Wed, Dec 7, 2022 at 5:54 PM Alexei Starovoitov
-> > > <alexei.starovoitov@gmail.com> wrote:
-> > > >
-> > > > On Wed, Dec 07, 2022 at 12:55:31PM -0800, Joanne Koong wrote:
-> > > > > This patchset is the 3rd in the dynptr series. The 1st can be found here [0]
-> > > > > and the 2nd can be found here [1].
-> > > > >
-> > > > > In this patchset, the following convenience helpers are added for interacting
-> > > > > with bpf dynamic pointers:
-> > > > >
-> > > > >     * bpf_dynptr_data_rdonly
-> > > > >     * bpf_dynptr_trim
-> > > > >     * bpf_dynptr_advance
-> > > > >     * bpf_dynptr_is_null
-> > > > >     * bpf_dynptr_is_rdonly
-> > > > >     * bpf_dynptr_get_size
-> > > > >     * bpf_dynptr_get_offset
-> > > > >     * bpf_dynptr_clone
-> > > > >     * bpf_dynptr_iterator
-> > > >
-> > > > This is great, but it really stretches uapi limits.
-> > >
-> > > Stretches in what sense? They are simple and straightforward getters
-> > > and trim/advance/clone are fundamental modifiers to be able to work
-> > > with a subset of dynptr's overall memory area.
-> > >
-> > > > Please convert the above and those in [1] to kfuncs.
-> > > > I know that there can be an argument made for consistency with existing dynptr uapi
-> > >
-> > > yeah, given we have bpf_dynptr_{read,write} and bpf_dynptr_data() as
-> > > BPF helpers, it makes sense to have such basic things like is_null and
-> > > trim/advance/clone as BPF helpers as well. Both for consistency and
-> > > because there is nothing unstable about them. We are not going to
-> > > remove dynptr as a concept, it's pretty well defined.
-> > >
-> > > Out of the above list perhaps only move bpf_dynptr_iterator() might be
-> > > a candidate for kfunc. Though, personally, it makes sense to me to
-> > > keep it as BPF helper without GPL restriction as well, given it is
-> > > meant for networking applications in the first place, and you don't
-> > > need to be GPL-compatible to write useful networking BPF program, from
-> > > what I understand. But all the other ones is something you'd need to
-> > > make actual use of dynptr concept in real-world BPF programs.
-> > >
-> > > Can we please have those as BPF helpers, and we can decide to move
-> > > slightly fancier bpf_dynptr_iterator() (and future dynptr-related
-> > > extras) into kfunc?
-> >
-> > Sorry, uapi concerns are more important here.
->
-> What about the overall user experience and adoption?
->
-> There is no clean way to ever move from unstable kfunc to a stable helper.
->
-> BPF helpers also have the advantage of working on all architectures,
-> whether that architecture supports kfuncs or not, whether it supports
-> JIT or not.
 
-Oh interesting, I didn't realize some architectures do not support kfuncs.
 
-Out of curiosity, can you elaborate on "no clean way to move from
-unstable kfunc to a stable helper"? If for example we needed to move
-something from kfunc -> helper, could we not just remove the code
-where we added it as a kfunc (eg defining a BTF_ID for it) and add it
-as a helper instead?
+On 12/13/22 1:53 PM, Jiri Olsa wrote:
+> On Tue, Dec 13, 2022 at 10:48:43AM -0800, Song Liu wrote:
+>> On Tue, Dec 13, 2022 at 6:09 AM Jiri Olsa <jolsa@kernel.org> wrote:
+>>>
+>>> Both bpf_trace_printk and bpf_trace_vprintk helpers use static buffer
+>>> guarded with trace_printk_lock spin lock.
+>>>
+>>> The spin lock contention causes issues with bpf programs attached to
+>>> contention_begin tracepoint [1] [2].
+>>>
+>>> Andrii suggested we could get rid of the contention by using trylock,
+>>> but we could actually get rid of the spinlock completely by using
+>>> percpu buffers the same way as for bin_args in bpf_bprintf_prepare
+>>> function.
+>>>
+>>> Adding 4 per cpu buffers (1k each) which should be enough for all
+>>> possible nesting contexts (normal, softirq, irq, nmi) or possible
+>>> (yet unlikely) probe within the printk helpers.
+>>>
+>>> In very unlikely case we'd run out of the nesting levels the printk
+>>> will be omitted.
+>>>
+>>> [1] https://lore.kernel.org/bpf/CACkBjsakT_yWxnSWr4r-0TpPvbKm9-OBmVUhJb7hV3hY8fdCkw@mail.gmail.com/
+>>> [2] https://lore.kernel.org/bpf/CACkBjsaCsTovQHFfkqJKto6S4Z8d02ud1D7MPESrHa1cVNNTrw@mail.gmail.com/
+>>>
+>>> Reported-by: Hao Sun <sunhao.th@gmail.com>
+>>> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+>>> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 
->
-> BPF helpers are also nicely self-discoverable and documented in
-> include/uapi/linux/bpf.h, in one place where other BPF helpers are.
-> This is a big deal, especially for non-expert BPF users (a vast
-> majority of BPF users).
->
-> > non-gpl and consistency don't even come close.
-> > We've been doing everything new as kfuncs and dynptr is not special.
->
-> I think dynptr is quite special. It's a very generic and fundamental
-> concept, part of core BPF experience. It's a more dynamic counterpart
-> to an inflexible statically sized `void * + size` pair of arguments
-> sent to helpers for input or output memory regions. Dynptr has no
-> inherent dependencies on BTF, kfuncs, trampolines, JIT, nothing.
->
-> By requiring kfunc-based helpers we are significantly raising the
-> obstacles towards adopting dynptr across a wide range of BPF
-> applications.
->
-> And the only advantage in return is that we get a hypothetical chance
-> to change something in the future. But let's see if that will ever be
-> necessary for the helpers Joanne is adding:
->
-> 1. Generic accessors to check validity of *any* dynptr, and it's
-> inherent properties like offset, available size, read-only property
-> (just as useful somethings as bpf_ringbuf_query() is for ringbufs,
-> both for debugging and for various heuristics in production).
->
-> bpf_dynptr_is_null(struct bpf_dynptr *ptr)
-> long bpf_dynptr_get_size(struct bpf_dynptr *ptr)
-> long bpf_dynptr_get_offset(struct bpf_dynptr *ptr)
-> bpf_dynptr_is_rdonly(struct bpf_dynptr *ptr)
->
-> There is nothing to add or remove here. No flags, no change in semantics.
->
-> 2. Manipulators to copy existing dynptr's view and narrow it down to a
-> subset (e.g., for when you have a large memory blog, but need to
-> calculate hashes over smaller subset, without destroying original
-> dynptr, because it will be used later for some other access). We can
-> debate whether clone should get offset or not, but it doesn't change
-> much (except usability in common cases). Again, nothing to add or
-> remove otherwise, and pretty fundamental for real use of full power of
-> dynptr.
->
-> long bpf_dynptr_clone(struct bpf_dynptr *ptr, struct bpf_dynptr
-> *clone, u32 offset)
-> long bpf_dynptr_trim(struct bpf_dynptr *ptr, u32 len)
-> long bpf_dynptr_advance(struct bpf_dynptr *ptr, u32 len)
->
-> 3. This one is the only one I feel less strongly about, but mostly
-> because I can implement the same (even though less ergonomically, of
-> course) with bpf_loop() and bpf_dynptr_{clone,advance}.
->
-> long bpf_dynptr_iterator(struct bpf_dynptr *ptr, void *callback_fn,
-> void *callback_ctx, u64 flags)
->
->
-> All of the above don't add or change any semantics to dynptr as a
-> concept. There is nothing that we'd need to change.
->
->
-> >
-> > > > helpers, but we got burned on them once and scrambled to add 'flags' argument.
-> > > > kfuncs are unstable and can be adjusted/removed at any time later.
->
-> It's unfair to block these helpers just because we recided to add
-> flags to one of the previous ones (before the final release). And even
-> if we didn't managed to do it in time, the worst things would probably
-> be another variant of BPF helper. Definitely something to avoid, but
-> not end of the world. But as I pointed out above, this set of helpers
-> won't be change, as they just complete already established dynptr
-> ecosystem of helpers.
->
-> > >
-> > > I don't see why we would remove any of the above list ever? They are
-> > > generic and fundamental to dynptr as a concept, they can't restrict
-> > > what dynptr can do in the future.
-> >
-> > It's not about removing them, but about changing them.
-> >
-> > Just for example the whole discussion of whether frags should
-> > be handled transparently and how write is handled didn't inspire
-> > confidence that there is a strong consensus on semantics
-> > of these new dynptr accessors.
->
-> So let's start with acknowledging that skb and xdp buffer abstractions
-> as logically contiguous memory area are inherently complex and
-> non-perfect due to the way that kernel handles them for performance
-> and flexibility reasons.
->
-> Let's also note that verifier knows specific flavor of dynptr and thus
-> can enforce additional restrictions based on specifically SKB/XDP
-> flavor vs LOCAL/RINGBUF. So just because there is no perfect way to
-> handle all the SKB/XDP physical non-contiguity, doesn't mean that the
-> dynptr concept itself is flawed or not well thought out. It's just
-> that for SKB/XDP there is no perfect solution. Dynptr doesn't change
-> anything here, rather it actually simplifies a bunch of stuff,
-> especially for common scenarios.
->
-> I'd argue that for wider SKB/XDP dynptr adoption in the networking
-> world, those dynptr constructor helpers should be helpers and not
-> kfuncs as well. But I'd wish someone with more networking tie-ins
-> would argue this instead of me.
+Maybe change to subject to 'Remove trace_printk_lock' instead
+of 'Remove trace_printk_lock lock'? The 'trace_printk_lock'
+should already imply 'lock'?
 
-I'm not that familiar with the semantics of bpf kfuncs, so to clarify:
-from a user API perspective, is there any difference in calling the
-function from the bpf program as a helper vs. kfunc?
+>>> ---
+>>>   kernel/trace/bpf_trace.c | 61 +++++++++++++++++++++++++++++++---------
+>>>   1 file changed, 47 insertions(+), 14 deletions(-)
+>>>
+>>> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+>>> index 3bbd3f0c810c..b9287b3a5540 100644
+>>> --- a/kernel/trace/bpf_trace.c
+>>> +++ b/kernel/trace/bpf_trace.c
+>>> @@ -369,33 +369,62 @@ static const struct bpf_func_proto *bpf_get_probe_write_proto(void)
+>>>          return &bpf_probe_write_user_proto;
+>>>   }
+>>>
+>>> -static DEFINE_RAW_SPINLOCK(trace_printk_lock);
+>>> -
+>>>   #define MAX_TRACE_PRINTK_VARARGS       3
+>>>   #define BPF_TRACE_PRINTK_SIZE          1024
+>>> +#define BPF_TRACE_PRINTK_LEVELS                4
+>>> +
+>>> +struct trace_printk_buf {
+>>> +       char data[BPF_TRACE_PRINTK_LEVELS][BPF_TRACE_PRINTK_SIZE];
+>>> +       int level;
+>>> +};
+>>> +static DEFINE_PER_CPU(struct trace_printk_buf, printk_buf);
+>>> +
+>>> +static void put_printk_buf(struct trace_printk_buf __percpu *buf)
+>>> +{
+>>> +       if (WARN_ON_ONCE(this_cpu_read(buf->level) == 0))
+>>> +               return;
+>>> +       this_cpu_dec(buf->level);
+>>> +       preempt_enable();
+>>> +}
+>>> +
+>>> +static bool get_printk_buf(struct trace_printk_buf __percpu *buf, char **data)
+>>> +{
+>>> +       int level;
+>>> +
+>>> +       preempt_disable();
+>>
+>> Can we use migrate_disable() instead?
+> 
+> I think that should work.. while checking on that I found
+> comment in in include/linux/preempt.h (though dated):
 
->
-> >
-> > Scrambling to add flags to dynptr helpers was another red flag.
-> >
-> > All signs are pointing out that we're not ready do fix dynptr api.
->
-> I disagree, it's an overly harsh generalization.
->
-> > It will evolve and has to evolve without uapi pain.
-> >
-> > kfuncs only. For everything. Please.
->
-> This is yet another generalized blanket statement I disagree with.
-> Over the years I've got an impression that the BPF subsystem is
-> generally a  proud proponent of pragmatic, flexible, and common sense
-> engineering approaches, so this hard-and-fast rule with no room for
-> nuance sounds weird.
->
-> There are things that belong in fundamental and core BPF concepts, and
-> it makes sense to keep them as stable abstractions and helpers. And
-> there are various things (like interfacing into kernel mechanics, its
-> types and systems) which totally make sense to keep unstable.
+I am not sure about whether migrate_disable() will work. For example,
+   . task1 takes over level=0 buffer, level = 1
+   . task1 yields to task2 with preemption in the same cpu
+   . task2 takes over level=1 buffer, level = 2
+   . task2 yields to task1 in the same cpu
+   . task1 releases the buffer, level = 1
+   . task1 yields to task3 in the same cpu
+   . task3 takes over level=1 buffer, level = 2
+     <=== we have an issue here, both task2 and task3 use level=1 buffer.
 
-I agree with all of your points. I know Alexei is on PTO these next
-two weeks, so I will in the meantime table this and work on the dynptr
-memory allocation patchset and a dynptr documentation write-up.
-
-Thanks for the discussion!
+> 
+>    The end goal must be to get rid of migrate_disable
+> 
+> but looks like both should work here and there are trade offs
+> for using each of them
+> 
+>>
+>>> +       level = this_cpu_inc_return(buf->level);
+>>> +       if (level > BPF_TRACE_PRINTK_LEVELS) {
+>>
+>> Maybe add WARN_ON_ONCE() here?
+> 
+> ok, will add
+> 
+> thanks,
+> jirka
