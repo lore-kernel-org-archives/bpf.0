@@ -2,118 +2,139 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE237C4332F
-	for <bpf@archiver.kernel.org>; Tue, 13 Dec 2022 18:48:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2501BC4167B
+	for <bpf@archiver.kernel.org>; Tue, 13 Dec 2022 18:49:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236329AbiLMSsz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 13 Dec 2022 13:48:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43384 "EHLO
+        id S236286AbiLMStA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 13 Dec 2022 13:49:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235875AbiLMSss (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 13 Dec 2022 13:48:48 -0500
-X-Greylist: delayed 473 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 13 Dec 2022 10:48:48 PST
-Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618C8E07
-        for <bpf@vger.kernel.org>; Tue, 13 Dec 2022 10:48:48 -0800 (PST)
-Received: from imladris.home.surriel.com ([10.0.13.28] helo=imladris.surriel.com)
-        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <riel@shelob.surriel.com>)
-        id 1p5ACn-00072R-0m;
-        Tue, 13 Dec 2022 13:40:41 -0500
-Message-ID: <52c9d084d9852cc7c769dbb76f03a13df014c37f.camel@surriel.com>
-Subject: Re: [PATCH 14/31] sched_ext: Implement BPF extensible scheduler
- class
-From:   Rik van Riel <riel@surriel.com>
-To:     Tejun Heo <tj@kernel.org>, Peter Zijlstra <peterz@infradead.org>
-Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@kernel.org, joshdon@google.com, brho@google.com,
-        pjt@google.com, derkling@google.com, haoluo@google.com,
-        dvernet@meta.com, dschatzberg@meta.com, dskarlat@cs.cmu.edu,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        kernel-team@meta.com
-Date:   Tue, 13 Dec 2022 13:40:40 -0500
-In-Reply-To: <Y5jAc/Gs4gVRzkDe@slm.duckdns.org>
-References: <20221130082313.3241517-1-tj@kernel.org>
-         <20221130082313.3241517-15-tj@kernel.org>
-         <Y5ckYyz14bxCvv40@hirez.programming.kicks-ass.net>
-         <Y5eeGMpr/SuyGBQO@slm.duckdns.org>
-         <Y5haDh3sYUFcXkBx@hirez.programming.kicks-ass.net>
-         <Y5jAc/Gs4gVRzkDe@slm.duckdns.org>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-J5NzES9P4xwtTmKA+te4"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        with ESMTP id S235875AbiLMStA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 13 Dec 2022 13:49:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46EE2F5F
+        for <bpf@vger.kernel.org>; Tue, 13 Dec 2022 10:48:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 09781B81227
+        for <bpf@vger.kernel.org>; Tue, 13 Dec 2022 18:48:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB44DC433F0
+        for <bpf@vger.kernel.org>; Tue, 13 Dec 2022 18:48:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670957336;
+        bh=nXcMLwWVry7qGVvIoxwBK7/8pvJ1JyQOQ3Kg8qEEmDY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Ym+Ktq4039dg59E1XNFy/VEGTmi2OTqH1PQQp9QlB35XoADEsEzQb2K+918Ntf5Oh
+         5sRMNaedfOCdYcVynYS7ByuUc6z+RuzBVQtjVQSn7Z88l1lIy1oTIuxfYhKcn2Wj59
+         QkLlvxyh1EhBMVl0BIutwyjZItaeDx0I9LtCJxC11u5/f5rc/Mk+2esSy7B3frXarx
+         7zN/WK8nZb72eCQcIFpj2IN65VG/2A+nSZZRZ7oPKWbqo502PyfLSMOPO1+kPiGvhr
+         +CK1+zdeyXfcgtDTQxjJvENW0gaJoMFfi51Ge0i8Ihgl8Pweis/hIu5LZytOdeKe6i
+         wvdxgdfvfE/xA==
+Received: by mail-lf1-f46.google.com with SMTP id z26so6433702lfu.8
+        for <bpf@vger.kernel.org>; Tue, 13 Dec 2022 10:48:56 -0800 (PST)
+X-Gm-Message-State: ANoB5pk0PZeK2NECdnciMJnMfY64b2+k3TWNRYg0i7XIOyXUT7s7RjGw
+        lRwmGTJuz9O3yhuja+SzO24w6o/sslCq/etJStk=
+X-Google-Smtp-Source: AA0mqf54rV41lQh/TW03VNTxK7H8uPMjc0/t9+DZt0Gb4SEF1EaGhWw77fYtiwMB9takmg7CtXrDgH6OKES/XJwAqHk=
+X-Received: by 2002:ac2:4c93:0:b0:4b5:b46b:17c7 with SMTP id
+ d19-20020ac24c93000000b004b5b46b17c7mr1609186lfl.215.1670957334748; Tue, 13
+ Dec 2022 10:48:54 -0800 (PST)
 MIME-Version: 1.0
-Sender: riel@shelob.surriel.com
+References: <20221213140843.803293-1-jolsa@kernel.org>
+In-Reply-To: <20221213140843.803293-1-jolsa@kernel.org>
+From:   Song Liu <song@kernel.org>
+Date:   Tue, 13 Dec 2022 10:48:43 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW5sQaspOhurLWm0igDUJk+V9ihmt0WnjaKsq1gJ66F6Gw@mail.gmail.com>
+Message-ID: <CAPhsuW5sQaspOhurLWm0igDUJk+V9ihmt0WnjaKsq1gJ66F6Gw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: Remove trace_printk_lock lock
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Hao Sun <sunhao.th@gmail.com>, bpf@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+On Tue, Dec 13, 2022 at 6:09 AM Jiri Olsa <jolsa@kernel.org> wrote:
+>
+> Both bpf_trace_printk and bpf_trace_vprintk helpers use static buffer
+> guarded with trace_printk_lock spin lock.
+>
+> The spin lock contention causes issues with bpf programs attached to
+> contention_begin tracepoint [1] [2].
+>
+> Andrii suggested we could get rid of the contention by using trylock,
+> but we could actually get rid of the spinlock completely by using
+> percpu buffers the same way as for bin_args in bpf_bprintf_prepare
+> function.
+>
+> Adding 4 per cpu buffers (1k each) which should be enough for all
+> possible nesting contexts (normal, softirq, irq, nmi) or possible
+> (yet unlikely) probe within the printk helpers.
+>
+> In very unlikely case we'd run out of the nesting levels the printk
+> will be omitted.
+>
+> [1] https://lore.kernel.org/bpf/CACkBjsakT_yWxnSWr4r-0TpPvbKm9-OBmVUhJb7hV3hY8fdCkw@mail.gmail.com/
+> [2] https://lore.kernel.org/bpf/CACkBjsaCsTovQHFfkqJKto6S4Z8d02ud1D7MPESrHa1cVNNTrw@mail.gmail.com/
+>
+> Reported-by: Hao Sun <sunhao.th@gmail.com>
+> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  kernel/trace/bpf_trace.c | 61 +++++++++++++++++++++++++++++++---------
+>  1 file changed, 47 insertions(+), 14 deletions(-)
+>
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 3bbd3f0c810c..b9287b3a5540 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -369,33 +369,62 @@ static const struct bpf_func_proto *bpf_get_probe_write_proto(void)
+>         return &bpf_probe_write_user_proto;
+>  }
+>
+> -static DEFINE_RAW_SPINLOCK(trace_printk_lock);
+> -
+>  #define MAX_TRACE_PRINTK_VARARGS       3
+>  #define BPF_TRACE_PRINTK_SIZE          1024
+> +#define BPF_TRACE_PRINTK_LEVELS                4
+> +
+> +struct trace_printk_buf {
+> +       char data[BPF_TRACE_PRINTK_LEVELS][BPF_TRACE_PRINTK_SIZE];
+> +       int level;
+> +};
+> +static DEFINE_PER_CPU(struct trace_printk_buf, printk_buf);
+> +
+> +static void put_printk_buf(struct trace_printk_buf __percpu *buf)
+> +{
+> +       if (WARN_ON_ONCE(this_cpu_read(buf->level) == 0))
+> +               return;
+> +       this_cpu_dec(buf->level);
+> +       preempt_enable();
+> +}
+> +
+> +static bool get_printk_buf(struct trace_printk_buf __percpu *buf, char **data)
+> +{
+> +       int level;
+> +
+> +       preempt_disable();
 
---=-J5NzES9P4xwtTmKA+te4
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Can we use migrate_disable() instead?
 
-On Tue, 2022-12-13 at 08:12 -1000, Tejun Heo wrote:
-> Hello,
->=20
-> On Tue, Dec 13, 2022 at 11:55:10AM +0100, Peter Zijlstra wrote:
-> > On Mon, Dec 12, 2022 at 11:33:12AM -1000, Tejun Heo wrote:
-> >=20
-> > > Here, the way it's handled is a bit different, SCX has
-> > > a watchdog mechanism implemented in "[PATCH 18/31] sched_ext:
-> > > Implement
-> > > runnable task stall watchdog", so if SCX tasks hang for whatever
-> > > reason
-> > > including being starved by CFS, it will get aborted and all tasks
-> > > will be
-> > > handed back to CFS. IOW, it's treated like any other BPF
-> > > scheduler errors
-> > > that can lead to stalls and recovered the same way.
-> >=20
-> > That all sounds quite terrible.. :/
->=20
-> The main source of difference is that we can't implicitly trust the
-> BPF
-> scheduler and if it malfunctions or on user request, the system
-> should
-> always be recoverable, so there are some extra things which are
-> inherently
-> necessary to support that.
->=20
-That makes me wonder whether loading an SCX policy
-should just have that policy take over all of the
-SCHED_OTHER tasks by default, and have a failure of
-the policy just return those tasks to CFS?
+> +       level = this_cpu_inc_return(buf->level);
+> +       if (level > BPF_TRACE_PRINTK_LEVELS) {
 
-Having the two be operative at the same time seems
-to be a cause of hard to resolve issues, while simply
-running all non-RT tasks under the loadable policy
-could simplify both internal kernel interfaces, as
-well as externally visible effects?
+Maybe add WARN_ON_ONCE() here?
 
---=20
-All Rights Reversed.
+Thanks,
+Song
 
---=-J5NzES9P4xwtTmKA+te4
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEEKR73pCCtJ5Xj3yADznnekoTE3oMFAmOYxygACgkQznnekoTE
-3oPFQgf8DXDaQVDEPmB52FNhGpq0/9CS1pbuYsFWFntBlTO9Rh4wj4pr19aZg8i1
-D3RflOvjgZASN82WRgKdh6sHWKgwQMeCUcpQy9Exly2vsWFHgFwHx7p+j3udjyc3
-LCDz8dRRoN4s17ahTvCitZk2YKLz7IV4igYANkl/u2q7X9nXFKFX8CW7CWRHlrkS
-3CtxEt3A4wwUgp3NXiiKWsEGxkNmvAQJSzzglSnfp65lyvLfV4JHAznWHFXHie4r
-VeTivRteu11k1CF81NyWIg/eKnlbz1LjE4zeWpKlZCq1mUuCISiTWhfg8g7OW/jS
-LhguLYFv6LRNAukNTvxMxUvJ1RNCxA==
-=f/5v
------END PGP SIGNATURE-----
-
---=-J5NzES9P4xwtTmKA+te4--
+[...]
