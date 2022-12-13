@@ -2,110 +2,76 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FC7CC4332F
-	for <bpf@archiver.kernel.org>; Tue, 13 Dec 2022 11:03:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1FE2C4332F
+	for <bpf@archiver.kernel.org>; Tue, 13 Dec 2022 11:04:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235227AbiLMLDF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 13 Dec 2022 06:03:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45936 "EHLO
+        id S235229AbiLMLEm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 13 Dec 2022 06:04:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235247AbiLMLC6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 13 Dec 2022 06:02:58 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6986F11C05;
-        Tue, 13 Dec 2022 03:02:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=nVeAC07Szykku1yuUAuCP4jwMN/7vl8k2vkxnnVo4AE=; b=cO7zzKzKp/ruXYRkCGrznk3k0W
-        syUETTAVyHKjkjP6YDdnFHd3fjUitq3WJKJ8qexU31R/9fYJH/Dj5hJ+2R8k848C/ySdz00LjL4Hc
-        tpWgUM50ycNpRpGDfSd0k4jZ7ixH0cTw6Q4KLejPAGrqdmbHlwsdGUxidmWtQKP9aMKBmJggBAPSq
-        FoGvFodLZYvWXy5oyH8xvheK10ru0AXZJqCTfOdzhqz40T/WYM3OCGOXroxJpiRpCbHfcWe2jllhY
-        ymAAyfKC+ttQ18MtXl65Qj/46AHjiuYDhisgCCziQrJ4vTuuefnAD2jpWmr/4KBfl29jp+3d4AFU5
-        +H4iadFw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p5337-00A3T8-0D; Tue, 13 Dec 2022 11:02:13 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id ED0CF30036B;
-        Tue, 13 Dec 2022 11:55:10 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id AED67201FEA66; Tue, 13 Dec 2022 11:55:10 +0100 (CET)
-Date:   Tue, 13 Dec 2022 11:55:10 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@kernel.org, joshdon@google.com, brho@google.com,
-        pjt@google.com, derkling@google.com, haoluo@google.com,
-        dvernet@meta.com, dschatzberg@meta.com, dskarlat@cs.cmu.edu,
-        riel@surriel.com, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH 14/31] sched_ext: Implement BPF extensible scheduler class
-Message-ID: <Y5haDh3sYUFcXkBx@hirez.programming.kicks-ass.net>
-References: <20221130082313.3241517-1-tj@kernel.org>
- <20221130082313.3241517-15-tj@kernel.org>
- <Y5ckYyz14bxCvv40@hirez.programming.kicks-ass.net>
- <Y5eeGMpr/SuyGBQO@slm.duckdns.org>
+        with ESMTP id S235225AbiLMLEP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 13 Dec 2022 06:04:15 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C32625D1;
+        Tue, 13 Dec 2022 03:04:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670929454; x=1702465454;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=qUgI9kJMyxfeIBUg1MqvWukhfpYdTN7aNnJshDSAb0o=;
+  b=IPw/dRoPVE1aEQp0LPUWPHFQly03zqFLYB4zhoMg8AceZR0eqeaa1cKE
+   LrmBpxsSlNAiQptWVgfDUGkUXv9NaQL8n64rvbUvdRkxjXcF791O0mK8X
+   3GPSb4jkM0MVxbtNBNscVhEwSmhz1oZeQKmlYVMKjKWlU7YArwxHLbX3T
+   NqZpp73vCZo1f9Pvz7wR99ai0Kn18NW6wDmFyLxaEGNCeH7JXH7Yn6yG4
+   deXb/cm2jB0aYvLmc7Fa9ICULqTWh0S82IkhGi06G5efsYHnlRDaC+I1+
+   RJz1J3exr9uM+GZ7UItAf3AWJ2xnXDVfwspuXHqCdURWWmFp22GthxuDD
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="305744344"
+X-IronPort-AV: E=Sophos;i="5.96,241,1665471600"; 
+   d="scan'208";a="305744344"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 03:04:13 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="679263020"
+X-IronPort-AV: E=Sophos;i="5.96,241,1665471600"; 
+   d="scan'208";a="679263020"
+Received: from unknown (HELO paamrpdk12-S2600BPB.aw.intel.com) ([10.228.151.145])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 03:04:11 -0800
+From:   Tirthendu Sarkar <tirthendu.sarkar@intel.com>
+To:     tirtha@gmail.com, jesse.brandeburg@intel.com,
+        anthony.l.nguyen@intel.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+        john.fastabend@gmail.com, intel-wired-lan@lists.osuosl.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, magnus.karlsson@intel.com,
+        maciej.fijalkowski@intel.com
+Subject: [PATCH intel-next 0/5] i40e: support XDP multi-buffer
+Date:   Tue, 13 Dec 2022 16:20:18 +0530
+Message-Id: <20221213105023.196409-1-tirthendu.sarkar@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5eeGMpr/SuyGBQO@slm.duckdns.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 11:33:12AM -1000, Tejun Heo wrote:
+This patchset adds multi-buffer support for XDP. The first four patches
+are prepatory patches while the fifth one contains actual multi-buffer
+changes. 
 
-> > But this.. afaict that means that:
-> > 
-> >  - the whole EXT thing is incompatible with SCHED_CORE
-> 
-> Can you expand on why this would be? I didn't test against SCHED_CORE, so am
-> sure things might be broken but can't think of a reason why it'd be
-> fundamentally incompatible.
+Tirthendu Sarkar (5):
+  i40e: add pre-xdp page_count in rx_buffer
+  i40e: avoid per buffer next_to_clean access from i40e_ring
+  i40e: introduce next_to_process to i40e_ring
+  i40e: pull out rx buffer allocation to end of i40e_clean_rx_irq()
+  i40e: add support for XDP multi-buffer Rx
 
-For starters, SCHED_CORE doesn't use __pick_next_task() (much). But I
-think you're going to have more trouble with prio_less() (which is the
-3rd implementation of the scheduling function :/)
+ drivers/net/ethernet/intel/i40e/i40e_main.c |  18 +-
+ drivers/net/ethernet/intel/i40e/i40e_txrx.c | 378 ++++++++++++++------
+ drivers/net/ethernet/intel/i40e/i40e_txrx.h |  13 +-
+ 3 files changed, 280 insertions(+), 129 deletions(-)
 
-> >  - the whole EXT thing can be trivially starved by the presence of a
-> >    single CFS/BATCH/IDLE task.
-> 
-> It's a simliar situation w/ RT vs. CFS, which is resolved via RT having
-> starvation avoidance.
-
-That is a horrible situation as is, FIFO/RR are very crap scheduling
-policies for a number of reasons but we're stuck with them due to
-history and POSIX :-(, that is not something you should justify anything
-with.
-
-In fact, it should be an example of what to avoid.
-
-Specifically, FIFO/RR fail at the fundamentals of OS
-abstractions -- they provide neither resource distribution nor
-isolation.
-
-> Here, the way it's handled is a bit different, SCX has
-> a watchdog mechanism implemented in "[PATCH 18/31] sched_ext: Implement
-> runnable task stall watchdog", so if SCX tasks hang for whatever reason
-> including being starved by CFS, it will get aborted and all tasks will be
-> handed back to CFS. IOW, it's treated like any other BPF scheduler errors
-> that can lead to stalls and recovered the same way.
-
-That all sounds quite terrible.. :/
-
-When the scheduler isn't available it should be an error to switch a
-task to the policy, when there are tasks in the policy, it must not go
-away.
-
-The policy itself should never cause policy changes.
-
+-- 
+2.34.1
 
