@@ -2,160 +2,201 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B253C4332F
-	for <bpf@archiver.kernel.org>; Tue, 13 Dec 2022 13:45:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9898AC4332F
+	for <bpf@archiver.kernel.org>; Tue, 13 Dec 2022 14:09:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234969AbiLMNpg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 13 Dec 2022 08:45:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54406 "EHLO
+        id S235857AbiLMOJn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 13 Dec 2022 09:09:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234932AbiLMNpf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 13 Dec 2022 08:45:35 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53162B23;
-        Tue, 13 Dec 2022 05:45:34 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDD2QXT010257;
-        Tue, 13 Dec 2022 13:45:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : mime-version : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=eUgPrthoCID6QwmABsTsBu6qOsnjoUKBNQdpMF81+W4=;
- b=DOTv2MvLjSpqYEV438WPXJiOF4v3r4AoVwb1uUsd5r0e6lA18xhhWnG9bMNEkfmV9wIZ
- fFGHaVU/S2fft1VGalvyFSyHfdNhqoEyO5sMBULsooW3/OpAF7AD7I8fohteDEjEvVrT
- h/Rqo3pd9Ark/i08dPipDXsTYEQkPMZhl1XdO8n1EyJYcVKoF4U55qxEA5IuSaDlBB3V
- DjW08B6oItIGOhHccxEexQCQd48n6XEceJU0wGHkyYgs73kQoXE8pnE4EVyE4av8h856
- E568UdMl2kBazEjen3i7ycjnJPamSiSjtyc5mU8enec4Tm6xfVs6bz9D07KgPqkoD7uz 6Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mejre449n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 13:45:06 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BDD6KLS019710;
-        Tue, 13 Dec 2022 13:45:06 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mejre448u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 13:45:05 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BD5UCPh028384;
-        Tue, 13 Dec 2022 13:45:04 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3mchr648eq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 13:45:03 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BDDj1Bv46793140
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Dec 2022 13:45:01 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AB79D2004B;
-        Tue, 13 Dec 2022 13:45:01 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4711C20043;
-        Tue, 13 Dec 2022 13:45:01 +0000 (GMT)
-Received: from localhost (unknown [9.43.37.38])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 13 Dec 2022 13:45:01 +0000 (GMT)
-Date:   Tue, 13 Dec 2022 15:53:48 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
-Subject: Re: [PATCH v1 06/10] powerpc/bpf: Perform complete extra passes to
- update addresses
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
+        with ESMTP id S235896AbiLMOJA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 13 Dec 2022 09:09:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C77C639A
+        for <bpf@vger.kernel.org>; Tue, 13 Dec 2022 06:08:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B43EC6154C
+        for <bpf@vger.kernel.org>; Tue, 13 Dec 2022 14:08:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1FE6C433D2;
+        Tue, 13 Dec 2022 14:08:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670940529;
+        bh=+KAyifsdNsFUdcOitS6tkBdqEqiit/PqqTCsG5drDeo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ruTtT1smoFSxj2PeK8gls3GGwev1uknK+nXB4oWju5JzXOuXzjSZXlEOV07GkEAOR
+         U2c7kql+l7rm4HUzTjEM4gW+mWeUnS2/0Y4JTlKQfjK8jgHYo1+ORz0OPk4r1hG7vD
+         yLfIDJ31IUxk6CUWPYrmap7qu5eYhpgM3aKpfakss7GdLw2AgyGJSvRcsoRCpxqS2D
+         zhbAd0FOMtDSB0LBog63KFiNssQhDBBlIT4q9WmgyIyme3xqW5eg3hTPX2Cs0OJ0vD
+         VUx0wkwP/zHD6yWOxqkQSNok1IcWVWLaISB8AhVhiKn8eg9uip/Ek7sieBrdNXZKoD
+         yE+HnK0o2JuQg==
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Hao Luo <haoluo@google.com>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Hao Sun <sunhao.th@gmail.com>, bpf@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        Jiri Olsa <jolsa@kernel.org>, KP Singh <kpsingh@kernel.org>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Martin KaFai Lau <martin.lau@linux.dev>,
+        KP Singh <kpsingh@chromium.org>,
         Stanislav Fomichev <sdf@google.com>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>
-References: <fa025537f584599c0271fc129c5cf4f57fbe7505.1669881248.git.christophe.leroy@csgroup.eu>
-        <c13ebeb4d5d169bda6d1d60ccaa6cc956308308d.1669881248.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <c13ebeb4d5d169bda6d1d60ccaa6cc956308308d.1669881248.git.christophe.leroy@csgroup.eu>
+        Hao Luo <haoluo@google.com>
+Subject: [PATCH bpf-next] bpf: Remove trace_printk_lock lock
+Date:   Tue, 13 Dec 2022 15:08:43 +0100
+Message-Id: <20221213140843.803293-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1670926819.9nqhz2fj7v.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 7UTJ-JytMBoZWiQz5BZHWlwz3MrF3EJl
-X-Proofpoint-ORIG-GUID: 3yIsWCYYIwCAqrzqIKaNf220JG_gsuBE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-13_03,2022-12-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 mlxlogscore=999 clxscore=1011 mlxscore=0
- lowpriorityscore=0 malwarescore=0 adultscore=0 spamscore=0 impostorscore=0
- bulkscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212130120
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Christophe Leroy wrote:
-> BPF core calls the jit compiler again for an extra pass in order
-> to properly set subprog addresses.
->=20
-> Unlike other architectures, powerpc only updates the addresses
-> during that extra pass. It means that holes must have been left
-> in the code in order to enable the maximum possible instruction
-> size.
->=20
-> In order avoid waste of space, and waste of CPU time on powerpc
-> processors on which the NOP instruction is not 0-cycle, perform
-> two real additional passes.
->=20
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
->  arch/powerpc/net/bpf_jit_comp.c | 85 ---------------------------------
->  1 file changed, 85 deletions(-)
->=20
-> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_c=
-omp.c
-> index 43e634126514..8833bf23f5aa 100644
-> --- a/arch/powerpc/net/bpf_jit_comp.c
-> +++ b/arch/powerpc/net/bpf_jit_comp.c
-> @@ -23,74 +23,6 @@ static void bpf_jit_fill_ill_insns(void *area, unsigne=
-d int size)
->  	memset32(area, BREAKPOINT_INSTRUCTION, size / 4);
->  }
-> =20
-> -/* Fix updated addresses (for subprog calls, ldimm64, et al) during extr=
-a pass */
-> -static int bpf_jit_fixup_addresses(struct bpf_prog *fp, u32 *image,
-> -				   struct codegen_context *ctx, u32 *addrs)
-> -{
-> -	const struct bpf_insn *insn =3D fp->insnsi;
-> -	bool func_addr_fixed;
-> -	u64 func_addr;
-> -	u32 tmp_idx;
-> -	int i, j, ret;
-> -
-> -	for (i =3D 0; i < fp->len; i++) {
-> -		/*
-> -		 * During the extra pass, only the branch target addresses for
-> -		 * the subprog calls need to be fixed. All other instructions
-> -		 * can left untouched.
-> -		 *
-> -		 * The JITed image length does not change because we already
-> -		 * ensure that the JITed instruction sequence for these calls
-> -		 * are of fixed length by padding them with NOPs.
-> -		 */
-> -		if (insn[i].code =3D=3D (BPF_JMP | BPF_CALL) &&
-> -		    insn[i].src_reg =3D=3D BPF_PSEUDO_CALL) {
-> -			ret =3D bpf_jit_get_func_addr(fp, &insn[i], true,
-> -						    &func_addr,
-> -						    &func_addr_fixed);
+Both bpf_trace_printk and bpf_trace_vprintk helpers use static buffer
+guarded with trace_printk_lock spin lock.
 
-I don't see you updating calls to bpf_jit_get_func_addr() in=20
-bpf_jit_build_body() to set extra_pass to true. Afaics, that's required=20
-to get the correct address to be branched to for subprogs.
+The spin lock contention causes issues with bpf programs attached to
+contention_begin tracepoint [1] [2].
 
+Andrii suggested we could get rid of the contention by using trylock,
+but we could actually get rid of the spinlock completely by using
+percpu buffers the same way as for bin_args in bpf_bprintf_prepare
+function.
 
-- Naveen
+Adding 4 per cpu buffers (1k each) which should be enough for all
+possible nesting contexts (normal, softirq, irq, nmi) or possible
+(yet unlikely) probe within the printk helpers.
+
+In very unlikely case we'd run out of the nesting levels the printk
+will be omitted.
+
+[1] https://lore.kernel.org/bpf/CACkBjsakT_yWxnSWr4r-0TpPvbKm9-OBmVUhJb7hV3hY8fdCkw@mail.gmail.com/
+[2] https://lore.kernel.org/bpf/CACkBjsaCsTovQHFfkqJKto6S4Z8d02ud1D7MPESrHa1cVNNTrw@mail.gmail.com/
+
+Reported-by: Hao Sun <sunhao.th@gmail.com>
+Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+ kernel/trace/bpf_trace.c | 61 +++++++++++++++++++++++++++++++---------
+ 1 file changed, 47 insertions(+), 14 deletions(-)
+
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 3bbd3f0c810c..b9287b3a5540 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -369,33 +369,62 @@ static const struct bpf_func_proto *bpf_get_probe_write_proto(void)
+ 	return &bpf_probe_write_user_proto;
+ }
+ 
+-static DEFINE_RAW_SPINLOCK(trace_printk_lock);
+-
+ #define MAX_TRACE_PRINTK_VARARGS	3
+ #define BPF_TRACE_PRINTK_SIZE		1024
++#define BPF_TRACE_PRINTK_LEVELS		4
++
++struct trace_printk_buf {
++	char data[BPF_TRACE_PRINTK_LEVELS][BPF_TRACE_PRINTK_SIZE];
++	int level;
++};
++static DEFINE_PER_CPU(struct trace_printk_buf, printk_buf);
++
++static void put_printk_buf(struct trace_printk_buf __percpu *buf)
++{
++	if (WARN_ON_ONCE(this_cpu_read(buf->level) == 0))
++		return;
++	this_cpu_dec(buf->level);
++	preempt_enable();
++}
++
++static bool get_printk_buf(struct trace_printk_buf __percpu *buf, char **data)
++{
++	int level;
++
++	preempt_disable();
++	level = this_cpu_inc_return(buf->level);
++	if (level > BPF_TRACE_PRINTK_LEVELS) {
++		put_printk_buf(buf);
++		return false;
++	}
++	*data = (char *) this_cpu_ptr(&buf->data[level - 1]);
++	return true;
++}
+ 
+ BPF_CALL_5(bpf_trace_printk, char *, fmt, u32, fmt_size, u64, arg1,
+ 	   u64, arg2, u64, arg3)
+ {
+ 	u64 args[MAX_TRACE_PRINTK_VARARGS] = { arg1, arg2, arg3 };
+ 	u32 *bin_args;
+-	static char buf[BPF_TRACE_PRINTK_SIZE];
+-	unsigned long flags;
++	char *buf;
+ 	int ret;
+ 
++	if (!get_printk_buf(&printk_buf, &buf))
++		return -EBUSY;
++
+ 	ret = bpf_bprintf_prepare(fmt, fmt_size, args, &bin_args,
+ 				  MAX_TRACE_PRINTK_VARARGS);
+ 	if (ret < 0)
+-		return ret;
++		goto out;
+ 
+-	raw_spin_lock_irqsave(&trace_printk_lock, flags);
+-	ret = bstr_printf(buf, sizeof(buf), fmt, bin_args);
++	ret = bstr_printf(buf, BPF_TRACE_PRINTK_SIZE, fmt, bin_args);
+ 
+ 	trace_bpf_trace_printk(buf);
+-	raw_spin_unlock_irqrestore(&trace_printk_lock, flags);
+ 
+ 	bpf_bprintf_cleanup();
+ 
++out:
++	put_printk_buf(&printk_buf);
+ 	return ret;
+ }
+ 
+@@ -427,31 +456,35 @@ const struct bpf_func_proto *bpf_get_trace_printk_proto(void)
+ 	return &bpf_trace_printk_proto;
+ }
+ 
++static DEFINE_PER_CPU(struct trace_printk_buf, vprintk_buf);
++
+ BPF_CALL_4(bpf_trace_vprintk, char *, fmt, u32, fmt_size, const void *, data,
+ 	   u32, data_len)
+ {
+-	static char buf[BPF_TRACE_PRINTK_SIZE];
+-	unsigned long flags;
+ 	int ret, num_args;
+ 	u32 *bin_args;
++	char *buf;
+ 
+ 	if (data_len & 7 || data_len > MAX_BPRINTF_VARARGS * 8 ||
+ 	    (data_len && !data))
+ 		return -EINVAL;
+ 	num_args = data_len / 8;
+ 
++	if (!get_printk_buf(&vprintk_buf, &buf))
++		return -EBUSY;
++
+ 	ret = bpf_bprintf_prepare(fmt, fmt_size, data, &bin_args, num_args);
+ 	if (ret < 0)
+-		return ret;
++		goto out;
+ 
+-	raw_spin_lock_irqsave(&trace_printk_lock, flags);
+-	ret = bstr_printf(buf, sizeof(buf), fmt, bin_args);
++	ret = bstr_printf(buf, BPF_TRACE_PRINTK_SIZE, fmt, bin_args);
+ 
+ 	trace_bpf_trace_printk(buf);
+-	raw_spin_unlock_irqrestore(&trace_printk_lock, flags);
+ 
+ 	bpf_bprintf_cleanup();
+ 
++out:
++	put_printk_buf(&vprintk_buf);
+ 	return ret;
+ }
+ 
+-- 
+2.38.1
 
