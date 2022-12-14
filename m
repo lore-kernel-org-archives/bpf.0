@@ -2,260 +2,306 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64971C4332F
-	for <bpf@archiver.kernel.org>; Wed, 14 Dec 2022 23:48:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12BDBC4332F
+	for <bpf@archiver.kernel.org>; Wed, 14 Dec 2022 23:48:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbiLNXsD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 14 Dec 2022 18:48:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40606 "EHLO
+        id S229563AbiLNXso (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 14 Dec 2022 18:48:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiLNXsC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 14 Dec 2022 18:48:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A16442DE
-        for <bpf@vger.kernel.org>; Wed, 14 Dec 2022 15:47:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671061632;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=78LWSsIPJ1XVGL0zlNrTSoo4bL68pZNIsDEq2wZNj8A=;
-        b=YfAKYp3WYaynurVghzJACncL6SrWCO55WmEj6x0QJ5oubQxTZUUwL096jdM/FKk/+nxqHN
-        EphzGBXKHte8zWRlEMcVckTjSMa5InNqoKx69uElbISK4Gupp+eK4xXSCjbYV4BAGyKDWe
-        vyPbvk0+dN9EqBE388D5P50MIEpr1Hs=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-2-BIEy2zgXNlGrjH3qMiGjZA-1; Wed, 14 Dec 2022 18:46:07 -0500
-X-MC-Unique: BIEy2zgXNlGrjH3qMiGjZA-1
-Received: by mail-ej1-f72.google.com with SMTP id ne1-20020a1709077b8100b007c198bb8c0eso3452801ejc.8
-        for <bpf@vger.kernel.org>; Wed, 14 Dec 2022 15:46:06 -0800 (PST)
+        with ESMTP id S229670AbiLNXsb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 14 Dec 2022 18:48:31 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E974730A
+        for <bpf@vger.kernel.org>; Wed, 14 Dec 2022 15:48:25 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id i15so24882033edf.2
+        for <bpf@vger.kernel.org>; Wed, 14 Dec 2022 15:48:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EMVfBatjQJ8Apd1FbUQ/t7YW99jbbgQQnVdjObsHWFU=;
+        b=IiPdEl3CywqTncD3qfXHfROJcQJxyegXve36buaTXLt6YIIMiD6C4pyKQWpBFLe/oQ
+         +tbei6CyGo7LY15/IbwA5JwGVBUFdVC3pKzPsTLvA2tv3opf6nWpy6g4grd7bXgLjpjq
+         nrNsa7FhgJ2lY27zbiBDHtIVFp8Secs2My7uVVfYCAVxzFc37zhTevK9Erj+YXskHvCZ
+         36WFkuVDLBonRzLAjyUG1IzS/e982Cx311L0Q/15EYdtjhDtPTuUGtCrl9iEwikINamN
+         UQq973GfErEDFAkxjdAWWCsdxBXNlGa9BozFBtT965KeYzsjPpkBG6jZhwkDVO0N4nuh
+         ibBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=78LWSsIPJ1XVGL0zlNrTSoo4bL68pZNIsDEq2wZNj8A=;
-        b=oairrKC7tZWZFk0k/3VAam7tqM1KE6Oaea9vRmURNzDi7PrSIHEAUiqbN2QKitKE/q
-         aK9rCbENpPwxM0Vz8qDCllZv1QNK2UHyu78A2Od/4jUOZAPO3vFNUBAvqveY8iRuDzGZ
-         tfWMoEStHRdtkCUGXYQHSzjMzMFHGkdy4eypogM14TM1MqnvXj0A4NVuss98Qt38qR1E
-         r0N1QOakQy5COBULlPc5rEVQ8XWE3b0lFekCfBjlZw2ohG6OWoutRzIU4Niq/lzEQuK/
-         73fz6xPon0OQoqizHd0prndqjRAVRL+2J14dx7Sai20gU/HeIA8lI6Od/kw0sPXDlm6k
-         BhiQ==
-X-Gm-Message-State: ANoB5pnKhxCyf1+8pUS+f0TKuRe1OYPilkRpCn72gKxVf7+bhERAjZt2
-        6c4LZRwO5cLv4BK7XDOi9sSPiGLOzmh3aKRFLyoenZMYYcR8FKIHw4dg9uH22Gaeg8cIyCIJQ8n
-        5Ud/7+9Wvt3rH
-X-Received: by 2002:a17:906:2284:b0:7c0:4030:ae20 with SMTP id p4-20020a170906228400b007c04030ae20mr23372480eja.24.1671061565174;
-        Wed, 14 Dec 2022 15:46:05 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6Kj2IAiZK6tBE55SMpMMy5/RbSQAJVRnIh9peLku4AtIQs4/zPgn0O75+ZteBEVeLMyv2/KQ==
-X-Received: by 2002:a17:906:2284:b0:7c0:4030:ae20 with SMTP id p4-20020a170906228400b007c04030ae20mr23372449eja.24.1671061564314;
-        Wed, 14 Dec 2022 15:46:04 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id x22-20020a170906711600b007be3aa82543sm6461002ejj.35.2022.12.14.15.46.03
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EMVfBatjQJ8Apd1FbUQ/t7YW99jbbgQQnVdjObsHWFU=;
+        b=hy9tr9jdvWqqYVpojVaDhnmNxBH83mGxh5RWp6lvXDAvjd9UAyWe/kU690t2ivIJbw
+         PT//MkVUqnwIsdLtcMfAuVUmaxL8XK7mnWJtozXRKwWZRsX5OB7Cn0mnVI6jb7pHxs/u
+         uRqGea2/NoQ2J2eGEeHxhzHBQIOnx0m65k4Dz/O/fUNgVpWzjQ9zL/Mn5iiimoXBkIwv
+         pYOeiW3QANyyNU+bI1vUgSrHcAn4MJLFrFFtfSzwevHxOqWaSCZ7VhFzopJIkzObh8QQ
+         c7Am46sa0wXePEB/g71ilKfT/NIoCdzAA7YAxGMPwvqWLu0a44enB/9Rl4DgSRx82jJn
+         FBcQ==
+X-Gm-Message-State: ANoB5pnreM7bXjsYwYLgKmOk5AIBxZP66+97nDKCSBZeV5/HoJ8szsdG
+        nKidhQc4EOMikUuOlrGbZkc=
+X-Google-Smtp-Source: AA0mqf4PJxkYGxHMrxoMSTvRLknrW5XjNGGPZZ8KavbC6EuWZlS5nNB8Zwc/dZXaYPv5LQvWsrjGuA==
+X-Received: by 2002:a05:6402:1f08:b0:467:f0e7:15f7 with SMTP id b8-20020a0564021f0800b00467f0e715f7mr21942627edb.31.1671061704308;
+        Wed, 14 Dec 2022 15:48:24 -0800 (PST)
+Received: from krava ([83.240.63.35])
+        by smtp.gmail.com with ESMTPSA id f4-20020a170906560400b0078de26f66b9sm6390893ejq.114.2022.12.14.15.48.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 15:46:03 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 1B59982F66F; Thu, 15 Dec 2022 00:46:02 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Stanislav Fomichev <sdf@google.com>, bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org,
-        David Ahern <dsahern@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Willem de Bruijn <willemb@google.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Anatoly Burakov <anatoly.burakov@intel.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
-        netdev@vger.kernel.org
-Subject: Re: [xdp-hints] [PATCH bpf-next v4 01/15] bpf: Document XDP RX
- metadata
-In-Reply-To: <20221213023605.737383-2-sdf@google.com>
-References: <20221213023605.737383-1-sdf@google.com>
- <20221213023605.737383-2-sdf@google.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Thu, 15 Dec 2022 00:46:02 +0100
-Message-ID: <87tu1xeeh1.fsf@toke.dk>
+        Wed, 14 Dec 2022 15:48:23 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Thu, 15 Dec 2022 00:48:21 +0100
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Hao Sun <sunhao.th@gmail.com>, bpf@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>
+Subject: Re: [PATCHv2 bpf-next] bpf: Remove trace_printk_lock
+Message-ID: <Y5pgxd9+G2wHROlp@krava>
+References: <20221214100424.1209771-1-jolsa@kernel.org>
+ <CAEf4BzYmt+7k-eovdj2MWMKOj5FCwhExHa7jSFUX+9Q2NfHHLg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzYmt+7k-eovdj2MWMKOj5FCwhExHa7jSFUX+9Q2NfHHLg@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Stanislav Fomichev <sdf@google.com> writes:
+On Wed, Dec 14, 2022 at 11:48:06AM -0800, Andrii Nakryiko wrote:
 
-> Document all current use-cases and assumptions.
+SNIP
 
-Below is a set of slightly more constructive suggestions for how to edit
-this so it's not confusing the metadata area description with the kfunc
-list:
+> >
+> > -       raw_spin_lock_irqsave(&trace_printk_lock, flags);
+> > -       ret = bstr_printf(buf, sizeof(buf), fmt, bin_args);
+> > +       ret = bstr_printf(buf, BPF_TRACE_PRINTK_SIZE, fmt, bin_args);
+> >
+> >         trace_bpf_trace_printk(buf);
+> > -       raw_spin_unlock_irqrestore(&trace_printk_lock, flags);
+> >
+> >         bpf_bprintf_cleanup();
+> 
+> I checked what this is doing. And it seems like we have a very similar
+> thing there already, with preempt_disable(), 3-level buffers, etc.
+> Would it make sense to roll this new change into bpf_bprintf_prepare()
+> and make it return the buffer for bpf_trace_printk(), even if it is
+> not used for bpf_snprintf() ?
 
-> Cc: John Fastabend <john.fastabend@gmail.com>
-> Cc: David Ahern <dsahern@gmail.com>
-> Cc: Martin KaFai Lau <martin.lau@linux.dev>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Willem de Bruijn <willemb@google.com>
-> Cc: Jesper Dangaard Brouer <brouer@redhat.com>
-> Cc: Anatoly Burakov <anatoly.burakov@intel.com>
-> Cc: Alexander Lobakin <alexandr.lobakin@intel.com>
-> Cc: Magnus Karlsson <magnus.karlsson@gmail.com>
-> Cc: Maryam Tahhan <mtahhan@redhat.com>
-> Cc: xdp-hints@xdp-project.net
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Stanislav Fomichev <sdf@google.com>
-> ---
->  Documentation/bpf/xdp-rx-metadata.rst | 90 +++++++++++++++++++++++++++
->  1 file changed, 90 insertions(+)
->  create mode 100644 Documentation/bpf/xdp-rx-metadata.rst
->
-> diff --git a/Documentation/bpf/xdp-rx-metadata.rst b/Documentation/bpf/xdp-rx-metadata.rst
-> new file mode 100644
-> index 000000000000..498eae718275
-> --- /dev/null
-> +++ b/Documentation/bpf/xdp-rx-metadata.rst
-> @@ -0,0 +1,90 @@
-> +===============
-> +XDP RX Metadata
-> +===============
-> +
-> +XDP programs support creating and passing custom metadata via
-> +``bpf_xdp_adjust_meta``. This metadata can be consumed by the following
-> +entities:
-> +
-> +1. ``AF_XDP`` consumer.
-> +2. Kernel core stack via ``XDP_PASS``.
-> +3. Another device via ``bpf_redirect_map``.
-> +4. Other BPF programs via ``bpf_tail_call``.
+I thought adding another arg to bpf_bprintf_prepare would be too much,
+but it actually does not look that bad
 
-I'd replace the above with a short introduction, like:
+I'll do some more testing and send another version
 
-"This document describes how an XDP program can access hardware metadata
-related to a packet using a set of helper functions, and how it can pass
-that metadata on to other consumers."
+jirka
 
-> +General Design
-> +==============
-> +
-> +XDP has access to a set of kfuncs to manipulate the metadata. Every
-> +device driver implements these kfuncs. The set of kfuncs is
-> +declared in ``include/net/xdp.h`` via ``XDP_METADATA_KFUNC_xxx``.
-> +
-> +Currently, the following kfuncs are supported. In the future, as more
-> +metadata is supported, this set will grow:
-> +
-> +- ``bpf_xdp_metadata_rx_timestamp_supported`` returns true/false to
-> +  indicate whether the device supports RX timestamps
-> +- ``bpf_xdp_metadata_rx_timestamp`` returns packet RX timestamp
-> +- ``bpf_xdp_metadata_rx_hash_supported`` returns true/false to
-> +  indicate whether the device supports RX hash
-> +- ``bpf_xdp_metadata_rx_hash`` returns packet RX hash
 
-Keep the above (with David's comments), then add a bit of extra text,
-here:
-
-"The XDP program can use these kfuncs to read the metadata into stack
-variables for its own consumption. Or, to pass the metadata on to other
-consumers, an XDP program can store it into the metadata area carried
-ahead of the packet.
-
-> +Within the XDP frame, the metadata layout is as follows::
-> +
-> +  +----------+-----------------+------+
-> +  | headroom | custom metadata | data |
-> +  +----------+-----------------+------+
-> +             ^                 ^
-> +             |                 |
-> +   xdp_buff->data_meta   xdp_buff->data
-
-Add:
-
-"The XDP program can store individual metadata items into this data_meta
-area in whichever format it chooses. Later consumers of the metadata
-will have to agree on the format by some out of band contract (like for
-the AF_XDP use case, see below)."
-
-> +AF_XDP
-> +======
-> +
-> +``AF_XDP`` use-case implies that there is a contract between the BPF program
-> +that redirects XDP frames into the ``XSK`` and the final consumer.
-> +Thus the BPF program manually allocates a fixed number of
-> +bytes out of metadata via ``bpf_xdp_adjust_meta`` and calls a subset
-> +of kfuncs to populate it. User-space ``XSK`` consumer, looks
-> +at ``xsk_umem__get_data() - METADATA_SIZE`` to locate its metadata.
-> +
-> +Here is the ``AF_XDP`` consumer layout (note missing ``data_meta`` pointer)::
-> +
-> +  +----------+-----------------+------+
-> +  | headroom | custom metadata | data |
-> +  +----------+-----------------+------+
-> +                               ^
-> +                               |
-> +                        rx_desc->address
-> +
-> +XDP_PASS
-> +========
-> +
-> +This is the path where the packets processed by the XDP program are passed
-> +into the kernel. The kernel creates ``skb`` out of the ``xdp_buff`` contents.
-> +Currently, every driver has a custom kernel code to parse the descriptors and
-> +populate ``skb`` metadata when doing this ``xdp_buff->skb`` conversion.
-
-Add: ", and the XDP metadata is not used by the kernel when building
-skbs. However, TC-BPF programs can access the XDP metadata area using
-the data_meta pointer."
-
-> +In the future, we'd like to support a case where XDP program can override
-> +some of that metadata.
-
-s/some of that metadata/some of the metadata used for building skbs/.
-
-> +The plan of record is to make this path similar to ``bpf_redirect_map``
-> +so the program can control which metadata is passed to the skb layer.
-
-I'm not sure we are quite agreed on this part, just drop for now (it's
-sorta covered by the above)?
-
-> +bpf_redirect_map
-> +================
-> +
-> +``bpf_redirect_map`` can redirect the frame to a different device.
-> +In this case we don't know ahead of time whether that final consumer
-> +will further redirect to an ``XSK`` or pass it to the kernel via ``XDP_PASS``.
-> +Additionally, the final consumer doesn't have access to the original
-> +hardware descriptor and can't access any of the original metadata.
-
-Replace this paragraph with: "``bpf_redirect_map`` can redirect the
-frame to a different device. Some devices (like virtual ethernet links)
-support running a second XDP program after the redirect. However, the
-final consumer doesn't have access to the original hardware descriptor
-and can't access any of the original metadata. The same applies to XDP
-programs installed into devmaps and cpumaps."
-
-> +For this use-case, only custom metadata is currently supported. If
-> +the frame is eventually passed to the kernel, the skb created from such
-> +a frame won't have any skb metadata. The ``XSK`` consumer will only
-> +have access to the custom metadata.
-
-Reword as:
-
-"This means that for redirected packets only custom metadata is
-currently supported, which has to be prepared by the initial XDP program
-before redirect. If +the frame is eventually passed to the kernel, the
-skb created from such a frame won't have any hardware metadata populated
-in its skb. And if such a packet is later redirected into an ``XSK``,
-that will also only have access to the custom metadata."
-
-> +bpf_tail_call
-> +=============
-> +
-> +No special handling here. Tail-called program operates on the same context
-> +as the original one.
-
-Replace this with a statement that it is in fact *not* supported in tail
-maps :)
-
--Toke
-
+---
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 3de24cfb7a3d..da5733f15994 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2795,9 +2795,10 @@ struct btf_id_set;
+ bool btf_id_set_contains(const struct btf_id_set *set, u32 id);
+ 
+ #define MAX_BPRINTF_VARARGS		12
++#define MAX_PRINTF_BUF			1024
+ 
+ int bpf_bprintf_prepare(char *fmt, u32 fmt_size, const u64 *raw_args,
+-			u32 **bin_buf, u32 num_args);
++			u32 **bin_buf, char **buf, u32 num_args);
+ void bpf_bprintf_cleanup(void);
+ 
+ /* the implementation of the opaque uapi struct bpf_dynptr */
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index af30c6cbd65d..e2c1e573401b 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -756,19 +756,20 @@ static int bpf_trace_copy_string(char *buf, void *unsafe_ptr, char fmt_ptype,
+ /* Per-cpu temp buffers used by printf-like helpers to store the bprintf binary
+  * arguments representation.
+  */
+-#define MAX_BPRINTF_BUF_LEN	512
++#define MAX_PRINTF_BIN_ARGS	512
+ 
+ /* Support executing three nested bprintf helper calls on a given CPU */
+ #define MAX_BPRINTF_NEST_LEVEL	3
+ struct bpf_bprintf_buffers {
+-	char tmp_bufs[MAX_BPRINTF_NEST_LEVEL][MAX_BPRINTF_BUF_LEN];
++	char bin_args[MAX_PRINTF_BIN_ARGS];
++	char buf[MAX_PRINTF_BUF];
+ };
+-static DEFINE_PER_CPU(struct bpf_bprintf_buffers, bpf_bprintf_bufs);
++
++static DEFINE_PER_CPU(struct bpf_bprintf_buffers[MAX_BPRINTF_NEST_LEVEL], bpf_bprintf_bufs);
+ static DEFINE_PER_CPU(int, bpf_bprintf_nest_level);
+ 
+-static int try_get_fmt_tmp_buf(char **tmp_buf)
++static int try_get_buffers(struct bpf_bprintf_buffers **bufs)
+ {
+-	struct bpf_bprintf_buffers *bufs;
+ 	int nest_level;
+ 
+ 	preempt_disable();
+@@ -778,9 +779,7 @@ static int try_get_fmt_tmp_buf(char **tmp_buf)
+ 		preempt_enable();
+ 		return -EBUSY;
+ 	}
+-	bufs = this_cpu_ptr(&bpf_bprintf_bufs);
+-	*tmp_buf = bufs->tmp_bufs[nest_level - 1];
+-
++	*bufs = this_cpu_ptr(&bpf_bprintf_bufs[nest_level]);
+ 	return 0;
+ }
+ 
+@@ -807,27 +806,33 @@ void bpf_bprintf_cleanup(void)
+  * allocated and bpf_bprintf_cleanup should be called to free them after use.
+  */
+ int bpf_bprintf_prepare(char *fmt, u32 fmt_size, const u64 *raw_args,
+-			u32 **bin_args, u32 num_args)
++			u32 **bin_args, char **buf, u32 num_args)
+ {
+ 	char *unsafe_ptr = NULL, *tmp_buf = NULL, *tmp_buf_end, *fmt_end;
++	struct bpf_bprintf_buffers *buffers = NULL;
+ 	size_t sizeof_cur_arg, sizeof_cur_ip;
+ 	int err, i, num_spec = 0;
+ 	u64 cur_arg;
+ 	char fmt_ptype, cur_ip[16], ip_spec[] = "%pXX";
++	bool get_buffers = bin_args || buf;
+ 
+ 	fmt_end = strnchr(fmt, fmt_size, 0);
+ 	if (!fmt_end)
+ 		return -EINVAL;
+ 	fmt_size = fmt_end - fmt;
+ 
+-	if (bin_args) {
+-		if (num_args && try_get_fmt_tmp_buf(&tmp_buf))
+-			return -EBUSY;
++	if (get_buffers && try_get_buffers(&buffers))
++		return -EBUSY;
+ 
+-		tmp_buf_end = tmp_buf + MAX_BPRINTF_BUF_LEN;
++	if (bin_args) {
++		tmp_buf = buffers->bin_args;
++		tmp_buf_end = tmp_buf + MAX_PRINTF_BIN_ARGS;
+ 		*bin_args = (u32 *)tmp_buf;
+ 	}
+ 
++	if (buf)
++		*buf = buffers->buf;
++
+ 	for (i = 0; i < fmt_size; i++) {
+ 		if ((!isprint(fmt[i]) && !isspace(fmt[i])) || !isascii(fmt[i])) {
+ 			err = -EINVAL;
+@@ -1020,7 +1025,7 @@ int bpf_bprintf_prepare(char *fmt, u32 fmt_size, const u64 *raw_args,
+ 
+ 	err = 0;
+ out:
+-	if (err)
++	if (err && get_buffers)
+ 		bpf_bprintf_cleanup();
+ 	return err;
+ }
+@@ -1039,7 +1044,7 @@ BPF_CALL_5(bpf_snprintf, char *, str, u32, str_size, char *, fmt,
+ 	/* ARG_PTR_TO_CONST_STR guarantees that fmt is zero-terminated so we
+ 	 * can safely give an unbounded size.
+ 	 */
+-	err = bpf_bprintf_prepare(fmt, UINT_MAX, data, &bin_args, num_args);
++	err = bpf_bprintf_prepare(fmt, UINT_MAX, data, &bin_args, NULL, num_args);
+ 	if (err < 0)
+ 		return err;
+ 
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index a5255a0dcbb6..798f65c532b1 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7636,7 +7636,7 @@ static int check_bpf_snprintf_call(struct bpf_verifier_env *env,
+ 	/* We are also guaranteed that fmt+fmt_map_off is NULL terminated, we
+ 	 * can focus on validating the format specifiers.
+ 	 */
+-	err = bpf_bprintf_prepare(fmt, UINT_MAX, NULL, NULL, num_args);
++	err = bpf_bprintf_prepare(fmt, UINT_MAX, NULL, NULL, NULL, num_args);
+ 	if (err < 0)
+ 		verbose(env, "Invalid format string\n");
+ 
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 3bbd3f0c810c..7a6a07b2180e 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -369,8 +369,6 @@ static const struct bpf_func_proto *bpf_get_probe_write_proto(void)
+ 	return &bpf_probe_write_user_proto;
+ }
+ 
+-static DEFINE_RAW_SPINLOCK(trace_printk_lock);
+-
+ #define MAX_TRACE_PRINTK_VARARGS	3
+ #define BPF_TRACE_PRINTK_SIZE		1024
+ 
+@@ -379,20 +377,17 @@ BPF_CALL_5(bpf_trace_printk, char *, fmt, u32, fmt_size, u64, arg1,
+ {
+ 	u64 args[MAX_TRACE_PRINTK_VARARGS] = { arg1, arg2, arg3 };
+ 	u32 *bin_args;
+-	static char buf[BPF_TRACE_PRINTK_SIZE];
+-	unsigned long flags;
++	char *buf;
+ 	int ret;
+ 
+-	ret = bpf_bprintf_prepare(fmt, fmt_size, args, &bin_args,
++	ret = bpf_bprintf_prepare(fmt, fmt_size, args, &bin_args, &buf,
+ 				  MAX_TRACE_PRINTK_VARARGS);
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	raw_spin_lock_irqsave(&trace_printk_lock, flags);
+-	ret = bstr_printf(buf, sizeof(buf), fmt, bin_args);
++	ret = bstr_printf(buf, MAX_PRINTF_BUF, fmt, bin_args);
+ 
+ 	trace_bpf_trace_printk(buf);
+-	raw_spin_unlock_irqrestore(&trace_printk_lock, flags);
+ 
+ 	bpf_bprintf_cleanup();
+ 
+@@ -430,25 +425,22 @@ const struct bpf_func_proto *bpf_get_trace_printk_proto(void)
+ BPF_CALL_4(bpf_trace_vprintk, char *, fmt, u32, fmt_size, const void *, data,
+ 	   u32, data_len)
+ {
+-	static char buf[BPF_TRACE_PRINTK_SIZE];
+-	unsigned long flags;
+ 	int ret, num_args;
+ 	u32 *bin_args;
++	char *buf;
+ 
+ 	if (data_len & 7 || data_len > MAX_BPRINTF_VARARGS * 8 ||
+ 	    (data_len && !data))
+ 		return -EINVAL;
+ 	num_args = data_len / 8;
+ 
+-	ret = bpf_bprintf_prepare(fmt, fmt_size, data, &bin_args, num_args);
++	ret = bpf_bprintf_prepare(fmt, fmt_size, data, &bin_args, &buf, num_args);
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	raw_spin_lock_irqsave(&trace_printk_lock, flags);
+-	ret = bstr_printf(buf, sizeof(buf), fmt, bin_args);
++	ret = bstr_printf(buf, MAX_PRINTF_BUF, fmt, bin_args);
+ 
+ 	trace_bpf_trace_printk(buf);
+-	raw_spin_unlock_irqrestore(&trace_printk_lock, flags);
+ 
+ 	bpf_bprintf_cleanup();
+ 
+@@ -482,7 +474,7 @@ BPF_CALL_5(bpf_seq_printf, struct seq_file *, m, char *, fmt, u32, fmt_size,
+ 		return -EINVAL;
+ 	num_args = data_len / 8;
+ 
+-	err = bpf_bprintf_prepare(fmt, fmt_size, data, &bin_args, num_args);
++	err = bpf_bprintf_prepare(fmt, fmt_size, data, &bin_args, NULL, num_args);
+ 	if (err < 0)
+ 		return err;
+ 
