@@ -2,333 +2,135 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E541C001B2
-	for <bpf@archiver.kernel.org>; Wed, 14 Dec 2022 14:12:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D651EC001B2
+	for <bpf@archiver.kernel.org>; Wed, 14 Dec 2022 14:22:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238437AbiLNOMH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 14 Dec 2022 09:12:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38480 "EHLO
+        id S237935AbiLNOWw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 14 Dec 2022 09:22:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238540AbiLNOL4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 14 Dec 2022 09:11:56 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A359F2099A;
-        Wed, 14 Dec 2022 06:11:53 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BEE1GTT009986;
-        Wed, 14 Dec 2022 14:11:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=BmerlqSR20iXY1AW90rudtU+sgKlczfAG9hYaah/+mE=;
- b=c93MiR9dxS+hSy5Jx+PYnQqCdTWsbLOqvqJO/AGSVtjpd/JLapUKkA/vJoUGYqLJlesq
- Aw/Psf11xnEeqpqJdNaScez/7BA03CvIGs67ITrHkXytMP6EoMoE494F+hOQMJSs9zoA
- ETuKXcNnG8hQ+9J6q6fPTpdU09N3gXAoQDaixMfjxL3oKiofgAwOGldMiB1QgXks0J6E
- ifkMiI/88fumcTETP93grlVD/eSnrva54zDUKQ9qD6ntplA+I4Ff+aFIFWVMqIXeRFNf
- oVCGzaMLn97dvEi1JaiHuikUFoKAv8e8THVhBIYRm15utGf9fMXnsuSXU5NGmg08nMnv vQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mf6rehc5u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 14:11:50 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BEEBnIn023322
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 14:11:49 GMT
-Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 14 Dec 2022 06:11:47 -0800
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: [RFC PATCH 1/2] trace: add new file under include/trace/stages/ for perf/bpf
-Date:   Wed, 14 Dec 2022 22:11:41 +0800
-Message-ID: <1671027102-21403-1-git-send-email-quic_linyyuan@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        with ESMTP id S237347AbiLNOWv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 14 Dec 2022 09:22:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D79275F9;
+        Wed, 14 Dec 2022 06:22:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C2BB61AAF;
+        Wed, 14 Dec 2022 14:22:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92F69C433D2;
+        Wed, 14 Dec 2022 14:22:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671027768;
+        bh=L/6XW+ZNaYBnNXDgz9LNIZ/Q7OYbAfpqXmx5Wzw2qkE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k7/zSKAJKvG7+Zwh+DD4UGlFvaZgRCvibaA0dl7Kjlnhnsy6KTWrxtQQ19tjTCgoR
+         mHSXJ9tzVfw30SaPC4zisqeZ6adHrRegKJwJC/aQ8cGImGF3wIsMFHyEPbR9yK2UjZ
+         tFR/Hgl34OUOB9K6Llbp9d4jxONI8mBHG0+urs5n7/4PgWtYE/x+ymQTgVtFbGTRff
+         RE5JjZK4Z6a4mv285VRNGlkg8ZjpfWYa+tI9fh6T39MTHmpNnW5U3F5/DoE3hLx5yJ
+         Vl87uKGKHfs5xDtSdzlo6FSKE2G70V0EwIEVry6rHsSaqEI4+T64QdfGmGiUU3g3km
+         ewwjAfGtSd+Lw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 35BAE40367; Wed, 14 Dec 2022 11:22:45 -0300 (-03)
+Date:   Wed, 14 Dec 2022 11:22:45 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        German Gomez <german.gomez@arm.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Timothy Hayes <timothy.hayes@arm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Sean Christopherson <seanjc@google.com>,
+        shaomin Deng <dengshaomin@cdjrlc.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v1 0/5] build/libtraceevent resends
+Message-ID: <Y5ncNQfPzq8qBP/f@kernel.org>
+References: <20221213232651.1269909-1-irogers@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: eSvRr9Ec5rJini9S1MY9AvJvtTLB0ynG
-X-Proofpoint-GUID: eSvRr9Ec5rJini9S1MY9AvJvtTLB0ynG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-14_06,2022-12-14_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- malwarescore=0 spamscore=0 priorityscore=1501 adultscore=0
- lowpriorityscore=0 clxscore=1011 bulkscore=0 impostorscore=0
- mlxlogscore=889 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2212140112
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221213232651.1269909-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-when experiment change for trace operation, the files under
-include/trace/stages/ will be changed, perf/bpf trace may compile fail.
+Em Tue, Dec 13, 2022 at 03:26:46PM -0800, Ian Rogers escreveu:
+> All patches on the acme perf/core branch.
+> 
+> Resend incremental build fix python plugin:
+> https://lore.kernel.org/lkml/20221205225940.3079667-4-irogers@google.com/
+> 
+> Break apart and resend libtraceevent debug logging support:
+> https://lore.kernel.org/linux-perf-users/20210923001024.550263-4-irogers@google.com/
+> 
+> Switch "#if HAVE_LIBTRACEEVENT_TEP_FIELD_IS_RELATIVE" to "#if
+> MAKE_LIBTRACEEVENT_VERSION(1, 5, 0) <= LIBTRACEEVENT_VERSION",
+> ensuring trace-event.h is included as discussed on the mailing list.
+> 
+> Resend removal of --group option:
+> https://lore.kernel.org/lkml/20220707195610.303254-1-irogers@google.com/
 
-add new file stage_perf_call.h and stage_bpf_call.h under
-include/trace/stages, it will make sure no missing change when expriment.
+Thanks, applied.
 
-Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
----
- include/trace/bpf_probe.h              | 51 +-------------------------------
- include/trace/perf.h                   | 52 +-------------------------------
- include/trace/stages/stage_bpf_call.h  | 53 +++++++++++++++++++++++++++++++++
- include/trace/stages/stage_perf_call.h | 54 ++++++++++++++++++++++++++++++++++
- 4 files changed, 109 insertions(+), 101 deletions(-)
- create mode 100644 include/trace/stages/stage_bpf_call.h
- create mode 100644 include/trace/stages/stage_perf_call.h
+- Arnaldo
 
-diff --git a/include/trace/bpf_probe.h b/include/trace/bpf_probe.h
-index 155c495..a6eeb9e 100644
---- a/include/trace/bpf_probe.h
-+++ b/include/trace/bpf_probe.h
-@@ -4,56 +4,7 @@
  
- #ifdef CONFIG_BPF_EVENTS
- 
--#undef __entry
--#define __entry entry
--
--#undef __get_dynamic_array
--#define __get_dynamic_array(field)	\
--		((void *)__entry + (__entry->__data_loc_##field & 0xffff))
--
--#undef __get_dynamic_array_len
--#define __get_dynamic_array_len(field)	\
--		((__entry->__data_loc_##field >> 16) & 0xffff)
--
--#undef __get_str
--#define __get_str(field) ((char *)__get_dynamic_array(field))
--
--#undef __get_bitmask
--#define __get_bitmask(field) (char *)__get_dynamic_array(field)
--
--#undef __get_cpumask
--#define __get_cpumask(field) (char *)__get_dynamic_array(field)
--
--#undef __get_sockaddr
--#define __get_sockaddr(field) ((struct sockaddr *)__get_dynamic_array(field))
--
--#undef __get_rel_dynamic_array
--#define __get_rel_dynamic_array(field)	\
--		((void *)(&__entry->__rel_loc_##field) +	\
--		 sizeof(__entry->__rel_loc_##field) +		\
--		 (__entry->__rel_loc_##field & 0xffff))
--
--#undef __get_rel_dynamic_array_len
--#define __get_rel_dynamic_array_len(field)	\
--		((__entry->__rel_loc_##field >> 16) & 0xffff)
--
--#undef __get_rel_str
--#define __get_rel_str(field) ((char *)__get_rel_dynamic_array(field))
--
--#undef __get_rel_bitmask
--#define __get_rel_bitmask(field) (char *)__get_rel_dynamic_array(field)
--
--#undef __get_rel_cpumask
--#define __get_rel_cpumask(field) (char *)__get_rel_dynamic_array(field)
--
--#undef __get_rel_sockaddr
--#define __get_rel_sockaddr(field) ((struct sockaddr *)__get_rel_dynamic_array(field))
--
--#undef __perf_count
--#define __perf_count(c)	(c)
--
--#undef __perf_task
--#define __perf_task(t)	(t)
-+#include "stages/stage_bpf_call.h"
- 
- /* cast any integer, pointer, or small struct to u64 */
- #define UINTTYPE(size) \
-diff --git a/include/trace/perf.h b/include/trace/perf.h
-index 8f3bf1e..e899bf7 100644
---- a/include/trace/perf.h
-+++ b/include/trace/perf.h
-@@ -4,57 +4,7 @@
- 
- #ifdef CONFIG_PERF_EVENTS
- 
--#undef __entry
--#define __entry entry
--
--#undef __get_dynamic_array
--#define __get_dynamic_array(field)	\
--		((void *)__entry + (__entry->__data_loc_##field & 0xffff))
--
--#undef __get_dynamic_array_len
--#define __get_dynamic_array_len(field)	\
--		((__entry->__data_loc_##field >> 16) & 0xffff)
--
--#undef __get_str
--#define __get_str(field) ((char *)__get_dynamic_array(field))
--
--#undef __get_bitmask
--#define __get_bitmask(field) (char *)__get_dynamic_array(field)
--
--#undef __get_cpumask
--#define __get_cpumask(field) (char *)__get_dynamic_array(field)
--
--#undef __get_sockaddr
--#define __get_sockaddr(field) ((struct sockaddr *)__get_dynamic_array(field))
--
--#undef __get_rel_dynamic_array
--#define __get_rel_dynamic_array(field)	\
--		((void *)__entry +					\
--		 offsetof(typeof(*__entry), __rel_loc_##field) +	\
--		 sizeof(__entry->__rel_loc_##field) +			\
--		 (__entry->__rel_loc_##field & 0xffff))
--
--#undef __get_rel_dynamic_array_len
--#define __get_rel_dynamic_array_len(field)	\
--		((__entry->__rel_loc_##field >> 16) & 0xffff)
--
--#undef __get_rel_str
--#define __get_rel_str(field) ((char *)__get_rel_dynamic_array(field))
--
--#undef __get_rel_bitmask
--#define __get_rel_bitmask(field) (char *)__get_rel_dynamic_array(field)
--
--#undef __get_rel_cpumask
--#define __get_rel_cpumask(field) (char *)__get_rel_dynamic_array(field)
--
--#undef __get_rel_sockaddr
--#define __get_rel_sockaddr(field) ((struct sockaddr *)__get_rel_dynamic_array(field))
--
--#undef __perf_count
--#define __perf_count(c)	(__count = (c))
--
--#undef __perf_task
--#define __perf_task(t)	(__task = (t))
-+#include "stages/stage_perf_call.h"
- 
- #undef DECLARE_EVENT_CLASS
- #define DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print)	\
-diff --git a/include/trace/stages/stage_bpf_call.h b/include/trace/stages/stage_bpf_call.h
-new file mode 100644
-index 0000000..b5e2fd5
---- /dev/null
-+++ b/include/trace/stages/stage_bpf_call.h
-@@ -0,0 +1,53 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#undef __entry
-+#define __entry entry
-+
-+#undef __get_dynamic_array
-+#define __get_dynamic_array(field)	\
-+		((void *)__entry + (__entry->__data_loc_##field & 0xffff))
-+
-+#undef __get_dynamic_array_len
-+#define __get_dynamic_array_len(field)	\
-+		((__entry->__data_loc_##field >> 16) & 0xffff)
-+
-+#undef __get_str
-+#define __get_str(field) ((char *)__get_dynamic_array(field))
-+
-+#undef __get_bitmask
-+#define __get_bitmask(field) (char *)__get_dynamic_array(field)
-+
-+#undef __get_cpumask
-+#define __get_cpumask(field) (char *)__get_dynamic_array(field)
-+
-+#undef __get_sockaddr
-+#define __get_sockaddr(field) ((struct sockaddr *)__get_dynamic_array(field))
-+
-+#undef __get_rel_dynamic_array
-+#define __get_rel_dynamic_array(field)	\
-+		((void *)(&__entry->__rel_loc_##field) +	\
-+		 sizeof(__entry->__rel_loc_##field) +		\
-+		 (__entry->__rel_loc_##field & 0xffff))
-+
-+#undef __get_rel_dynamic_array_len
-+#define __get_rel_dynamic_array_len(field)	\
-+		((__entry->__rel_loc_##field >> 16) & 0xffff)
-+
-+#undef __get_rel_str
-+#define __get_rel_str(field) ((char *)__get_rel_dynamic_array(field))
-+
-+#undef __get_rel_bitmask
-+#define __get_rel_bitmask(field) (char *)__get_rel_dynamic_array(field)
-+
-+#undef __get_rel_cpumask
-+#define __get_rel_cpumask(field) (char *)__get_rel_dynamic_array(field)
-+
-+#undef __get_rel_sockaddr
-+#define __get_rel_sockaddr(field) ((struct sockaddr *)__get_rel_dynamic_array(field))
-+
-+#undef __perf_count
-+#define __perf_count(c)	(c)
-+
-+#undef __perf_task
-+#define __perf_task(t)	(t)
-+
-diff --git a/include/trace/stages/stage_perf_call.h b/include/trace/stages/stage_perf_call.h
-new file mode 100644
-index 0000000..c67478c
---- /dev/null
-+++ b/include/trace/stages/stage_perf_call.h
-@@ -0,0 +1,54 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#undef __entry
-+#define __entry entry
-+
-+#undef __get_dynamic_array
-+#define __get_dynamic_array(field)	\
-+		((void *)__entry + (__entry->__data_loc_##field & 0xffff))
-+
-+#undef __get_dynamic_array_len
-+#define __get_dynamic_array_len(field)	\
-+		((__entry->__data_loc_##field >> 16) & 0xffff)
-+
-+#undef __get_str
-+#define __get_str(field) ((char *)__get_dynamic_array(field))
-+
-+#undef __get_bitmask
-+#define __get_bitmask(field) (char *)__get_dynamic_array(field)
-+
-+#undef __get_cpumask
-+#define __get_cpumask(field) (char *)__get_dynamic_array(field)
-+
-+#undef __get_sockaddr
-+#define __get_sockaddr(field) ((struct sockaddr *)__get_dynamic_array(field))
-+
-+#undef __get_rel_dynamic_array
-+#define __get_rel_dynamic_array(field)	\
-+		((void *)__entry +					\
-+		 offsetof(typeof(*__entry), __rel_loc_##field) +	\
-+		 sizeof(__entry->__rel_loc_##field) +			\
-+		 (__entry->__rel_loc_##field & 0xffff))
-+
-+#undef __get_rel_dynamic_array_len
-+#define __get_rel_dynamic_array_len(field)	\
-+		((__entry->__rel_loc_##field >> 16) & 0xffff)
-+
-+#undef __get_rel_str
-+#define __get_rel_str(field) ((char *)__get_rel_dynamic_array(field))
-+
-+#undef __get_rel_bitmask
-+#define __get_rel_bitmask(field) (char *)__get_rel_dynamic_array(field)
-+
-+#undef __get_rel_cpumask
-+#define __get_rel_cpumask(field) (char *)__get_rel_dynamic_array(field)
-+
-+#undef __get_rel_sockaddr
-+#define __get_rel_sockaddr(field) ((struct sockaddr *)__get_rel_dynamic_array(field))
-+
-+#undef __perf_count
-+#define __perf_count(c)	(__count = (c))
-+
-+#undef __perf_task
-+#define __perf_task(t)	(__task = (t))
-+
+> Ian Rogers (5):
+>   perf build: Fix python/perf.so library's name
+>   perf trace-event: Add libtraceevent version tools to header
+>   libtraceevent: Increase libtraceevent logging when verbose
+>   perf trace-event: Use version check to avoid 1 define
+>   perf evlist: Remove group option.
+> 
+>  tools/perf/Documentation/perf-record.txt      |  4 ----
+>  tools/perf/Documentation/perf-top.txt         |  7 ++----
+>  tools/perf/Makefile.config                    |  8 +++----
+>  tools/perf/Makefile.perf                      |  2 +-
+>  tools/perf/builtin-record.c                   |  2 --
+>  tools/perf/builtin-stat.c                     |  6 -----
+>  tools/perf/builtin-top.c                      |  2 --
+>  tools/perf/builtin-trace.c                    |  2 +-
+>  tools/perf/tests/attr/README                  |  2 --
+>  tools/perf/tests/attr/test-record-group       | 22 -------------------
+>  tools/perf/tests/attr/test-stat-group         | 17 --------------
+>  tools/perf/util/data-convert-bt.c             |  3 ++-
+>  tools/perf/util/debug.c                       | 10 +++++++++
+>  tools/perf/util/evlist.c                      |  2 +-
+>  tools/perf/util/evlist.h                      |  2 --
+>  tools/perf/util/evsel.c                       |  2 +-
+>  tools/perf/util/python.c                      | 10 +--------
+>  tools/perf/util/record.c                      |  7 ------
+>  tools/perf/util/record.h                      |  1 -
+>  .../util/scripting-engines/trace-event-perl.c |  2 +-
+>  .../scripting-engines/trace-event-python.c    |  2 +-
+>  tools/perf/util/sort.c                        |  3 ++-
+>  tools/perf/util/trace-event.h                 | 13 +++++++++++
+>  23 files changed, 39 insertions(+), 92 deletions(-)
+>  delete mode 100644 tools/perf/tests/attr/test-record-group
+>  delete mode 100644 tools/perf/tests/attr/test-stat-group
+> 
+> -- 
+> 2.39.0.314.g84b9a713c41-goog
+
 -- 
-2.7.4
 
+- Arnaldo
