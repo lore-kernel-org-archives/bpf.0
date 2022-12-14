@@ -2,140 +2,88 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1468EC4332F
-	for <bpf@archiver.kernel.org>; Wed, 14 Dec 2022 23:03:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CE99C4332F
+	for <bpf@archiver.kernel.org>; Wed, 14 Dec 2022 23:10:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229454AbiLNXDw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 14 Dec 2022 18:03:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43250 "EHLO
+        id S229469AbiLNXKU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 14 Dec 2022 18:10:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiLNXDt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 14 Dec 2022 18:03:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64D626555
-        for <bpf@vger.kernel.org>; Wed, 14 Dec 2022 15:03:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671058983;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ZHSXyh7zaj9r9sENIMQYkVDLO9dHghWoEQNR6Io1KOs=;
-        b=QtAXSu6LNAj0zrIeMYVuiDyBTdw5zRtT6oyrxhMx+hgyUsDTolWzMw+6pA6udoI9TVf6fR
-        DFIgkToE9cRs/GYLjmqqCIDUH449ujWbZ3FrXo3fcAOzL+nnHXvK8fPoA8LoBYOqyezqd9
-        0roUQr0TXl2STdRn0JH86WScxkERqlM=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-321-y3z3W3oTPCWqL7Ie3XFrBg-1; Wed, 14 Dec 2022 18:03:02 -0500
-X-MC-Unique: y3z3W3oTPCWqL7Ie3XFrBg-1
-Received: by mail-ej1-f70.google.com with SMTP id xj11-20020a170906db0b00b0077b6ecb23fcso12311840ejb.5
-        for <bpf@vger.kernel.org>; Wed, 14 Dec 2022 15:03:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZHSXyh7zaj9r9sENIMQYkVDLO9dHghWoEQNR6Io1KOs=;
-        b=zSc2Kv74T09OQp/NZoVMTM4nldoWGnjsPRL92wvJkIVX1N5a06yv+lrIf4N3qmtBtK
-         zfz08ZdCE0Cb6xAc4ot3M64M8gAXIrX7M8nKgYlXBQO5MERlc6U/7USnQFk3rthgp1eP
-         szMipYXcFbwqnO9kW6lUfbISHA5q1kkNIiecBFv+rVVGlq9BehBpO9a+Iu7h/UTwWqU3
-         BAZlmPaq8rUohRgMj3T5LXtJ7eECOblfe6g2o/d7wfWYfsqTQgUZvvuPN7PKVZ79uaI1
-         iacS4zo7OeMT5KjE6qSBGhjA9mENn+m4xIOoeLe6Hldv0Iz9/qH56acvyWmxCTWd/8EO
-         u4lA==
-X-Gm-Message-State: ANoB5pnP+oDI+gnyd7UGRsHFcJzqwyqwweUKMbE/ncx4K8kTlLDWLYTu
-        +q+kqO/Lp2jJZAkf9wpnblAjkwtRq+KpF9S1KjPdmFhSOETxmeA5brhJnFMIpwPyq62XKAXIw2I
-        ZwQEG/ke0I/1X
-X-Received: by 2002:a17:906:5208:b0:7a5:e8d9:a305 with SMTP id g8-20020a170906520800b007a5e8d9a305mr21799653ejm.70.1671058979129;
-        Wed, 14 Dec 2022 15:02:59 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6ITvrOYSFal+EOeRIqt2beliVm1KmgTO7kn4NKAkbfxpnjXfRd4BaqlJq5JZlHHXgkcT/d4g==
-X-Received: by 2002:a17:906:5208:b0:7a5:e8d9:a305 with SMTP id g8-20020a170906520800b007a5e8d9a305mr21799603ejm.70.1671058977567;
-        Wed, 14 Dec 2022 15:02:57 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id 4-20020a170906328400b007aed2057ea1sm6339275ejw.167.2022.12.14.15.02.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 15:02:57 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 75D3182F657; Thu, 15 Dec 2022 00:02:56 +0100 (CET)
-From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Toke Hoiland-Jorgensen <toke@redhat.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>
-Cc:     bpf@vger.kernel.org
-Subject: [PATCH bpf v5 1/2] bpf: Resolve fext program type when checking map compatibility
-Date:   Thu, 15 Dec 2022 00:02:53 +0100
-Message-Id: <20221214230254.790066-1-toke@redhat.com>
-X-Mailer: git-send-email 2.38.1
+        with ESMTP id S229448AbiLNXKT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 14 Dec 2022 18:10:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF0C29832
+        for <bpf@vger.kernel.org>; Wed, 14 Dec 2022 15:10:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 657BC61C5B
+        for <bpf@vger.kernel.org>; Wed, 14 Dec 2022 23:10:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B3868C433F0;
+        Wed, 14 Dec 2022 23:10:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671059417;
+        bh=kPEvysOt03Ksj5GRNm9yxtICdYBt2AorVohilxq3cYM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ToE0NrWd6bRDnOUxvOWYgRklzgexREB2Ty+2MntqqZcOCggh8selfreohm1DUiVvw
+         MVcimEYXp9p28zodc3puYTw7++7PxJ2Rtunz5KjFP6rGEusDBQKpBg0c32ZNmDWs0i
+         vhbi52NaEpgCQzZZ/9XBiHBixEDktyIqVWMOGyoKgxXYfLdJQNnD5G+DchF7d77yXH
+         /HLSG7Gf0DQA5kaYumClVgdITRED9WgsrJ7kUIvKcZwN6nJ5J69zE6zxeum1/RZHZ5
+         zWiG0qXoFJFKfm+ET0bMpg2/D7JFk0zjtHwODCKEHW9vMM17qGk/WAeD2HjjxVv+P6
+         4dAngJFzXlTpw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 94386C41612;
+        Wed, 14 Dec 2022 23:10:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 bpf-next 0/6] BTF-to-C dumper fixes and improvements
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167105941758.13017.10011652519415863225.git-patchwork-notify@kernel.org>
+Date:   Wed, 14 Dec 2022 23:10:17 +0000
+References: <20221212211505.558851-1-andrii@kernel.org>
+In-Reply-To: <20221212211505.558851-1-andrii@kernel.org>
+To:     Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        kernel-team@fb.com, eddyz87@gmail.com,
+        per.xp.sundstrom@ericsson.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The bpf_prog_map_compatible() check makes sure that BPF program types are
-not mixed inside BPF map types that can contain programs (tail call maps,
-cpumaps and devmaps). It does this by setting the fields of the map->owner
-struct to the values of the first program being checked against, and
-rejecting any subsequent programs if the values don't match.
+Hello:
 
-One of the values being set in the map owner struct is the program type,
-and since the code did not resolve the prog type for fext programs, the map
-owner type would be set to PROG_TYPE_EXT and subsequent loading of programs
-of the target type into the map would fail.
+This series was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-This bug is seen in particular for XDP programs that are loaded as
-PROG_TYPE_EXT using libxdp; these cannot insert programs into devmaps and
-cpumaps because the check fails as described above.
+On Mon, 12 Dec 2022 13:14:59 -0800 you wrote:
+> Fix few tricky issues in libbpf's BTF-to-C converter, discovered thanks to
+> Per's reports and his randomized testing script.
+> 
+> Most notably there is a much improved and correct padding handling.  But also
+> it turned out that some corner cases with enums weren't handled correctly
+> (mode(byte) attribute was a new discovery for me). See respective patches for
+> more details.
+> 
+> [...]
 
-Fix the bug by resolving the fext program type to its target program type
-as elsewhere in the verifier. This requires constifying the parameter of
-resolve_prog_type() to avoid a compiler warning from the new call site.
+Here is the summary with links:
+  - [v2,bpf-next,1/6] libbpf: fix single-line struct definition output in btf_dump
+    https://git.kernel.org/bpf/bpf-next/c/872aec4b5f63
+  - [v2,bpf-next,2/6] libbpf: handle non-standardly sized enums better in BTF-to-C dumper
+    https://git.kernel.org/bpf/bpf-next/c/21a9a1bcccaa
+  - [v2,bpf-next,3/6] selftests/bpf: add non-standardly sized enum tests for btf_dump
+    https://git.kernel.org/bpf/bpf-next/c/9d2349740e43
+  - [v2,bpf-next,4/6] libbpf: fix btf__align_of() by taking into account field offsets
+    https://git.kernel.org/bpf/bpf-next/c/25a4481b4136
+  - [v2,bpf-next,5/6] libbpf: fix BTF-to-C converter's padding logic
+    https://git.kernel.org/bpf/bpf-next/c/ea2ce1ba99aa
+  - [v2,bpf-next,6/6] selftests/bpf: add few corner cases to test padding handling of btf_dump
+    https://git.kernel.org/bpf/bpf-next/c/b148c8b9b926
 
-v3:
-- Add Yonghong's ACK
-
-Fixes: f45d5b6ce2e8 ("bpf: generalise tail call map compatibility check")
-Acked-by: Yonghong Song <yhs@fb.com>
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
----
- kernel/bpf/core.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 7f98dec6e90f..b334f4ddc4d5 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2092,6 +2092,7 @@ static unsigned int __bpf_prog_ret0_warn(const void *ctx,
- bool bpf_prog_map_compatible(struct bpf_map *map,
- 			     const struct bpf_prog *fp)
- {
-+	enum bpf_prog_type prog_type = resolve_prog_type(fp);
- 	bool ret;
- 
- 	if (fp->kprobe_override)
-@@ -2102,12 +2103,12 @@ bool bpf_prog_map_compatible(struct bpf_map *map,
- 		/* There's no owner yet where we could check for
- 		 * compatibility.
- 		 */
--		map->owner.type  = fp->type;
-+		map->owner.type  = prog_type;
- 		map->owner.jited = fp->jited;
- 		map->owner.xdp_has_frags = fp->aux->xdp_has_frags;
- 		ret = true;
- 	} else {
--		ret = map->owner.type  == fp->type &&
-+		ret = map->owner.type  == prog_type &&
- 		      map->owner.jited == fp->jited &&
- 		      map->owner.xdp_has_frags == fp->aux->xdp_has_frags;
- 	}
+You are awesome, thank you!
 -- 
-2.38.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
