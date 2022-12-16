@@ -2,262 +2,210 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6286BC4167B
-	for <bpf@archiver.kernel.org>; Fri, 16 Dec 2022 07:29:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83AA0C001B2
+	for <bpf@archiver.kernel.org>; Fri, 16 Dec 2022 08:18:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbiLPH3E (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 16 Dec 2022 02:29:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46974 "EHLO
+        id S229874AbiLPISJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 16 Dec 2022 03:18:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbiLPH3D (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 16 Dec 2022 02:29:03 -0500
-Received: from out-55.mta0.migadu.com (out-55.mta0.migadu.com [IPv6:2001:41d0:1004:224b::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57DA928704
-        for <bpf@vger.kernel.org>; Thu, 15 Dec 2022 23:29:01 -0800 (PST)
-Message-ID: <74fde08a-56d7-0567-4e68-abe2a6fe3ae0@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1671175738;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yJtGIbW7FvmOK5uz3n60SmVF0U+xSVc9hm5CzxhSGUc=;
-        b=PbOuFnNDGftjgqFJAS6aAkasZ2kQa1AJvaUov3QXB3Mhcebwnzp0JgUhA2+TYIG8JCc9LM
-        8PCz3jgHVkHo+q9Yo9HUG7xHTf/OjJNAyOKjBPK4K59fTsCuvcTBCtE4/VYltJsvQyGFG/
-        YxvHzwmzHf+aCcghanAdvU+RPFOKS1U=
-Date:   Thu, 15 Dec 2022 23:28:51 -0800
+        with ESMTP id S229471AbiLPISI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 16 Dec 2022 03:18:08 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C173C2EF5F;
+        Fri, 16 Dec 2022 00:18:07 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BG3uldR007481;
+        Fri, 16 Dec 2022 08:18:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=qcppdkim1;
+ bh=Zu8GVg8xbH/TKayTGCeBJ4FNIr0zdDfGM02S/ROHzvg=;
+ b=Hdswwj7YY/fPbtSJome9rHpKvk3z4AfJ33ieISOuAUTnrhmdSkXTdvKKy4GaxrWiiKI+
+ r7n4xzzvbzY1JXeGvflHJOfhzCxAXPZe4HmZjRfPlrfeSmaHkpphzClAWzh1PCdfPU/G
+ D6S846ZIUQ3Iv1TXLqfXA90NTPNBYbqjJZvOqcuKToh2qjY8tqnYkPipT0vUld7SlIqq
+ YKQ8a8bp+hwpMMq60IbLbQJoVbJwoHKJvcD6V3IG82hbw+EXsZZdmoFKpKOLpyg4Atr6
+ ewPYhHSBOAuIkowSFLFpkdE/nTq/AU1gGq4QJCpFkOJ/nzAQH4s4Tk+8tMLMNzyWdSc7 QQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mg6tetfj2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Dec 2022 08:18:04 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BG8I2wo003887
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Dec 2022 08:18:02 GMT
+Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Fri, 16 Dec 2022 00:18:01 -0800
+From:   Linyu Yuan <quic_linyyuan@quicinc.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        Linyu Yuan <quic_linyyuan@quicinc.com>
+Subject: [PATCH v3 2/2] trace: acquire buffer from temparary trace sequence
+Date:   Fri, 16 Dec 2022 16:17:55 +0800
+Message-ID: <1671178675-28720-2-git-send-email-quic_linyyuan@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1671178675-28720-1-git-send-email-quic_linyyuan@quicinc.com>
+References: <1671178675-28720-1-git-send-email-quic_linyyuan@quicinc.com>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 2/9] bpf: Allow read access to addr_len from
- cgroup sockaddr programs
-Content-Language: en-US
-To:     Daan De Meyer <daan.j.demeyer@gmail.com>
-Cc:     kernel-team@meta.com, bpf@vger.kernel.org
-References: <20221210193559.371515-1-daan.j.demeyer@gmail.com>
- <20221210193559.371515-3-daan.j.demeyer@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20221210193559.371515-3-daan.j.demeyer@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: EHx9u3JSEuaasd35o1N1vgb-Hb7Bv9Z2
+X-Proofpoint-GUID: EHx9u3JSEuaasd35o1N1vgb-Hb7Bv9Z2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-16_04,2022-12-15_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 clxscore=1015 adultscore=0 mlxscore=0 bulkscore=0
+ spamscore=0 phishscore=0 mlxlogscore=999 lowpriorityscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212160071
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 12/10/22 11:35 AM, Daan De Meyer wrote:
-> diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-> index 57e9e109257e..3ab2f06ddc8a 100644
-> --- a/include/linux/bpf-cgroup.h
-> +++ b/include/linux/bpf-cgroup.h
-> @@ -120,6 +120,7 @@ int __cgroup_bpf_run_filter_sk(struct sock *sk,
->   
->   int __cgroup_bpf_run_filter_sock_addr(struct sock *sk,
->   				      struct sockaddr *uaddr,
-> +				      int *uaddrlen,
->   				      enum cgroup_bpf_attach_type atype,
->   				      void *t_ctx,
->   				      u32 *flags);
-> @@ -230,75 +231,76 @@ static inline bool cgroup_bpf_sock_enabled(struct sock *sk,
->   #define BPF_CGROUP_RUN_PROG_INET6_POST_BIND(sk)				       \
->   	BPF_CGROUP_RUN_SK_PROG(sk, CGROUP_INET6_POST_BIND)
->   
-> -#define BPF_CGROUP_RUN_SA_PROG(sk, uaddr, atype)				       \
-> -({									       \
-> -	int __ret = 0;							       \
-> -	if (cgroup_bpf_enabled(atype))					       \
-> -		__ret = __cgroup_bpf_run_filter_sock_addr(sk, uaddr, atype,     \
-> -							  NULL, NULL);	       \
-> -	__ret;								       \
-> -})
-> -
-> -#define BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, atype, t_ctx)		       \
-> -({									       \
-> -	int __ret = 0;							       \
-> -	if (cgroup_bpf_enabled(atype))	{				       \
-> -		lock_sock(sk);						       \
-> -		__ret = __cgroup_bpf_run_filter_sock_addr(sk, uaddr, atype,     \
-> -							  t_ctx, NULL);	       \
-> -		release_sock(sk);					       \
-> -	}								       \
-> -	__ret;								       \
-> -})
-> +#define BPF_CGROUP_RUN_SA_PROG(sk, uaddr, uaddrlen, atype)               \
-> +	({                                                               \
-> +		int __ret = 0;                                           \
-> +		if (cgroup_bpf_enabled(atype))                           \
-> +			__ret = __cgroup_bpf_run_filter_sock_addr(       \
-> +				sk, uaddr, uaddrlen, atype, NULL, NULL); \
-> +		__ret;                                                   \
-> +	})
-> +
-> +#define BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, uaddrlen, atype, t_ctx)    \
-> +	({                                                                \
-> +		int __ret = 0;                                            \
-> +		if (cgroup_bpf_enabled(atype)) {                          \
-> +			lock_sock(sk);                                    \
-> +			__ret = __cgroup_bpf_run_filter_sock_addr(        \
-> +				sk, uaddr, uaddrlen, atype, t_ctx, NULL); \
-> +			release_sock(sk);                                 \
-> +		}                                                         \
-> +		__ret;                                                    \
-> +	} >
->   /* BPF_CGROUP_INET4_BIND and BPF_CGROUP_INET6_BIND can return extra flags
->    * via upper bits of return code. The only flag that is supported
->    * (at bit position 0) is to indicate CAP_NET_BIND_SERVICE capability check
->    * should be bypassed (BPF_RET_BIND_NO_CAP_NET_BIND_SERVICE).
->    */
-> -#define BPF_CGROUP_RUN_PROG_INET_BIND_LOCK(sk, uaddr, atype, bind_flags)	       \
-> -({									       \
-> -	u32 __flags = 0;						       \
-> -	int __ret = 0;							       \
-> -	if (cgroup_bpf_enabled(atype))	{				       \
-> -		lock_sock(sk);						       \
-> -		__ret = __cgroup_bpf_run_filter_sock_addr(sk, uaddr, atype,     \
-> -							  NULL, &__flags);     \
-> -		release_sock(sk);					       \
-> -		if (__flags & BPF_RET_BIND_NO_CAP_NET_BIND_SERVICE)	       \
-> -			*bind_flags |= BIND_NO_CAP_NET_BIND_SERVICE;	       \
-> -	}								       \
-> -	__ret;								       \
-> -})
-> +#define BPF_CGROUP_RUN_PROG_INET_BIND_LOCK(sk, uaddr, uaddrlen, atype,       \
-> +					   bind_flags)                       \
-> +	({                                                                   \
-> +		u32 __flags = 0;                                             \
-> +		int __ret = 0;                                               \
-> +		if (cgroup_bpf_enabled(atype)) {                             \
-> +			lock_sock(sk);                                       \
-> +			__ret = __cgroup_bpf_run_filter_sock_addr(           \
-> +				sk, uaddr, uaddrlen, atype, NULL, &__flags); \
-> +			release_sock(sk);                                    \
-> +			if (__flags & BPF_RET_BIND_NO_CAP_NET_BIND_SERVICE)  \
-> +				*bind_flags |= BIND_NO_CAP_NET_BIND_SERVICE; \
-> +		}                                                            \
-> +		__ret;                                                       \
-> +	})
+there is one dwc3 trace event declare as below,
+DECLARE_EVENT_CLASS(dwc3_log_event,
+	TP_PROTO(u32 event, struct dwc3 *dwc),
+	TP_ARGS(event, dwc),
+	TP_STRUCT__entry(
+		__field(u32, event)
+		__field(u32, ep0state)
+		__dynamic_array(char, str, DWC3_MSG_MAX)
+	),
+	TP_fast_assign(
+		__entry->event = event;
+		__entry->ep0state = dwc->ep0state;
+	),
+	TP_printk("event (%08x): %s", __entry->event,
+			dwc3_decode_event(__get_str(str), DWC3_MSG_MAX,
+				__entry->event, __entry->ep0state))
+);
+the problem is when trace function called, it will allocate up to
+DWC3_MSG_MAX bytes from trace event buffer, but never fill the buffer
+during fast assignment, it only fill the buffer when output function are
+called, so this means if output function are not called, the buffer will
+never used.
 
+add __get_buf(len) which acquiree buffer from iter->tmp_seq when trace
+output function called, it allow user write string to acquired buffer.
 
-Some comments on review logistics:
+the mentioned dwc3 trace event will changed as below,
+DECLARE_EVENT_CLASS(dwc3_log_event,
+	TP_PROTO(u32 event, struct dwc3 *dwc),
+	TP_ARGS(event, dwc),
+	TP_STRUCT__entry(
+		__field(u32, event)
+		__field(u32, ep0state)
+	),
+	TP_fast_assign(
+		__entry->event = event;
+		__entry->ep0state = dwc->ep0state;
+	),
+	TP_printk("event (%08x): %s", __entry->event,
+		dwc3_decode_event(__get_buf(DWC3_MSG_MAX), DWC3_MSG_MAX,
+				__entry->event, __entry->ep0state))
+);.
 
-1. Other than empty commit message, please add 'Sign-off-by:'.
-It is likely one of the red ERROR that the ./script/checkpatch.pl script will 
-complain.  This patch set was quickly put into 'Changes Requested' status:
-https://patchwork.kernel.org/project/netdevbpf/patch/20221210193559.371515-2-daan.j.demeyer@gmail.com/
+Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+---
+v3: fix comment from maintainer in v2
 
-Documentation/process/submitting-patches.rst
-and Documentation/bpf/bpf_devel_QA.rst have useful details.
+ include/linux/trace_seq.h                  |  6 ++++++
+ include/trace/stages/stage3_trace_output.h |  8 ++++++++
+ include/trace/stages/stage7_class_define.h |  1 +
+ kernel/trace/trace_seq.c                   | 22 ++++++++++++++++++++++
+ 4 files changed, 37 insertions(+)
 
-
-2. Please avoid unnecessary indentation changes like the above 
-BPF_CGROUP_RUN_XXX macros.  It makes the review much harder, eg. which line has 
-the real change?
-
->   
->   #define BPF_CGROUP_PRE_CONNECT_ENABLED(sk)				       \
->   	((cgroup_bpf_enabled(CGROUP_INET4_CONNECT) ||		       \
->   	  cgroup_bpf_enabled(CGROUP_INET6_CONNECT)) &&		       \
->   	 (sk)->sk_prot->pre_connect)
->   
-> -#define BPF_CGROUP_RUN_PROG_INET4_CONNECT(sk, uaddr)			       \
-> -	BPF_CGROUP_RUN_SA_PROG(sk, uaddr, CGROUP_INET4_CONNECT)
-> +#define BPF_CGROUP_RUN_PROG_INET4_CONNECT(sk, uaddr, uaddrlen)		       \
-> +	BPF_CGROUP_RUN_SA_PROG(sk, uaddr, uaddrlen, CGROUP_INET4_CONNECT)
->   
-> -#define BPF_CGROUP_RUN_PROG_INET6_CONNECT(sk, uaddr)			       \
-> -	BPF_CGROUP_RUN_SA_PROG(sk, uaddr, CGROUP_INET6_CONNECT)
-> +#define BPF_CGROUP_RUN_PROG_INET6_CONNECT(sk, uaddr, uaddrlen)		       \
-> +	BPF_CGROUP_RUN_SA_PROG(sk, uaddr, uaddrlen, CGROUP_INET6_CONNECT)
->   
-> -#define BPF_CGROUP_RUN_PROG_INET4_CONNECT_LOCK(sk, uaddr)		       \
-> -	BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, CGROUP_INET4_CONNECT, NULL)
-> +#define BPF_CGROUP_RUN_PROG_INET4_CONNECT_LOCK(sk, uaddr, uaddrlen)	       \
-> +	BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, uaddrlen, CGROUP_INET4_CONNECT, NULL)
->   
-> -#define BPF_CGROUP_RUN_PROG_INET6_CONNECT_LOCK(sk, uaddr)		       \
-> -	BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, CGROUP_INET6_CONNECT, NULL)
-> +#define BPF_CGROUP_RUN_PROG_INET6_CONNECT_LOCK(sk, uaddr, uaddrlen)	       \
-> +	BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, uaddrlen, CGROUP_INET6_CONNECT, NULL)
->   
-> -#define BPF_CGROUP_RUN_PROG_UDP4_SENDMSG_LOCK(sk, uaddr, t_ctx)		       \
-> -	BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, CGROUP_UDP4_SENDMSG, t_ctx)
-> +#define BPF_CGROUP_RUN_PROG_UDP4_SENDMSG_LOCK(sk, uaddr, uaddrlen, t_ctx)       \
-> +	BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, uaddrlen, CGROUP_UDP4_SENDMSG, t_ctx)
->   
-> -#define BPF_CGROUP_RUN_PROG_UDP6_SENDMSG_LOCK(sk, uaddr, t_ctx)		       \
-> -	BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, CGROUP_UDP6_SENDMSG, t_ctx)
-> +#define BPF_CGROUP_RUN_PROG_UDP6_SENDMSG_LOCK(sk, uaddr, uaddrlen, t_ctx)       \
-> +	BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, uaddrlen, CGROUP_UDP6_SENDMSG, t_ctx)
->   
-> -#define BPF_CGROUP_RUN_PROG_UDP4_RECVMSG_LOCK(sk, uaddr)			\
-> -	BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, CGROUP_UDP4_RECVMSG, NULL)
-> +#define BPF_CGROUP_RUN_PROG_UDP4_RECVMSG_LOCK(sk, uaddr, uaddrlen)		\
-> +	BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, uaddrlen, CGROUP_UDP4_RECVMSG, NULL)
->   
-> -#define BPF_CGROUP_RUN_PROG_UDP6_RECVMSG_LOCK(sk, uaddr)			\
-> -	BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, CGROUP_UDP6_RECVMSG, NULL)
-> +#define BPF_CGROUP_RUN_PROG_UDP6_RECVMSG_LOCK(sk, uaddr, uaddrlen)		\
-> +	BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, uaddrlen, CGROUP_UDP6_RECVMSG, NULL)
-
-Can the above changes to the INET[4|6] macro be avoided?  If I read the patch 
-set correctly, the uaddrlen is not useful for INET.
-
-[ ... ]
-
-> diff --git a/include/linux/filter.h b/include/linux/filter.h
-> index bf701976056e..510cf4042f8b 100644
-> --- a/include/linux/filter.h
-> +++ b/include/linux/filter.h
-> @@ -1294,6 +1294,7 @@ struct bpf_sock_addr_kern {
->   	 */
->   	u64 tmp_reg;
->   	void *t_ctx;	/* Attach type specific context. */
-> +	int *uaddrlen;
-
-If I read this patch 2, 3, and 5 right, the newly added "int *uaddrlen" allows 
-the bpf prog to specify the length of the kernel address "struct sockaddr 
-*uaddr" in bpf_sock_addr_kern.  This feels a bit unease for potential memory 
-related issue.  I saw patch 5 added some new unix_validate_addr(sunaddr, 
-addr_len) in a few places after the prog is run.  How about the existing INET 
-cases?  It doesn't make sense to allow the prog changing the INET[4|6] addrlen. 
-Ignoring the change for INET in the kernel also feels wrong.  Checking in the 
-kernel after the bpf prog run also seems too late and there are many grounds to 
-audit for the INET[4|6] alone.  I think all of these seems crying for a new 
-kfunc to set the uaddr and uaddrlen together.  The kfunc can check for incorrect 
-addrlen and directly return error to the bpf prog.  Something like this:
-
-int bpf_sock_addr_set(struct bpf_sock_addr_kern *sa_kern,
-		const struct sockaddr *addr, u32 addrlen__sz);
-
-This kfunc should work for INET also.  Documentation/bpf/kfuncs.rst has some 
-details and net/netfilter/nf_conntrack_bpf.c has some kfunc examples that use a 
-similar "__sz" arg.
-
-Also, there are some recent advancements in bpf. Instead of adding a "int *" 
-pointer, I would suggest to directly add the value "u32 uaddrlen" to the struct 
-bpf_sock_addr"_kern" instead.  Then
-
-SEC("cgroup/bindun")
-int bind_un_prog(struct bpf_sock_addr *ctx)
-{
-	struct bpf_sock_addr_kern *sa_kern;
-	struct sockaddr_un *unaddr;
-	u32 unaddrlen;
-
-	sa_kern = bpf_cast_to_kern_ctx(ctx);
-	unaddrlen = sa_kern->uaddrlen;
-	unaddr = bpf_rdonly_cast(sa_kern->uaddr,
-				bpf_core_type_id_kernel(struct sockaddr_un));
-
-	/* Read unaddr->sun_path here */
-}
-
-
-In above, sa_kern and unaddr are read only. Let the CO-RE do the job instead 
-and no need to do the conversion in convert_ctx_access().  Together with the 
-bpf_sock_addr_set() kfunc which takes care of the WRITE, the changes in 
-convert_ctx_access() and is_valid_access() should not be needed.   There is also 
-no need to add new field "user_path[108]" and "user_addrlen" to the uapi's 
-"struct bpf_sock_addr".
-
-
+diff --git a/include/linux/trace_seq.h b/include/linux/trace_seq.h
+index 5a2c650..4a3bbab 100644
+--- a/include/linux/trace_seq.h
++++ b/include/linux/trace_seq.h
+@@ -95,6 +95,7 @@ extern void trace_seq_bitmask(struct trace_seq *s, const unsigned long *maskp,
+ extern int trace_seq_hex_dump(struct trace_seq *s, const char *prefix_str,
+ 			      int prefix_type, int rowsize, int groupsize,
+ 			      const void *buf, size_t len, bool ascii);
++char *trace_seq_acquire(struct trace_seq *s, size_t len);
+ 
+ #else /* CONFIG_TRACING */
+ static inline void trace_seq_printf(struct trace_seq *s, const char *fmt, ...)
+@@ -138,6 +139,11 @@ static inline int trace_seq_path(struct trace_seq *s, const struct path *path)
+ {
+ 	return 0;
+ }
++
++static inline char *trace_seq_acquire(struct trace_seq *s, size_t len)
++{
++	return NULL;
++}
+ #endif /* CONFIG_TRACING */
+ 
+ #endif /* _LINUX_TRACE_SEQ_H */
+diff --git a/include/trace/stages/stage3_trace_output.h b/include/trace/stages/stage3_trace_output.h
+index 66374df..f60c453 100644
+--- a/include/trace/stages/stage3_trace_output.h
++++ b/include/trace/stages/stage3_trace_output.h
+@@ -139,3 +139,11 @@
+ 		u64 ____val = (u64)(value);		\
+ 		(u32) do_div(____val, NSEC_PER_SEC);	\
+ 	})
++
++/* Macros with flow control statements should be avoided */
++#undef __get_buf
++#define __get_buf(len)							\
++	({								\
++		WARN_ON_ONCE(seq_buf_buffer_left(&p->seq) < (len));	\
++		trace_seq_acquire(p, (len));				\
++	})
+diff --git a/include/trace/stages/stage7_class_define.h b/include/trace/stages/stage7_class_define.h
+index 8795429..bcb960d 100644
+--- a/include/trace/stages/stage7_class_define.h
++++ b/include/trace/stages/stage7_class_define.h
+@@ -23,6 +23,7 @@
+ #undef __get_rel_sockaddr
+ #undef __print_array
+ #undef __print_hex_dump
++#undef __get_buf
+ 
+ /*
+  * The below is not executed in the kernel. It is only what is
+diff --git a/kernel/trace/trace_seq.c b/kernel/trace/trace_seq.c
+index 9c90b3a..c900b7c 100644
+--- a/kernel/trace/trace_seq.c
++++ b/kernel/trace/trace_seq.c
+@@ -403,3 +403,25 @@ int trace_seq_hex_dump(struct trace_seq *s, const char *prefix_str,
+ 	return 1;
+ }
+ EXPORT_SYMBOL(trace_seq_hex_dump);
++
++/**
++ * trace_seq_acquire - acquire seq buffer with size len
++ * @s: trace sequence descriptor
++ * @len: size of buffer to be acquired
++ *
++ * acquire buffer with size of @len from trace_seq for output usage,
++ * user can fill string into that buffer.
++ *
++ * Returns start address of acquired buffer.
++ *
++ * it allow multiple usage in one trace output function call.
++ */
++char *trace_seq_acquire(struct trace_seq *s, size_t len)
++{
++	char *ret = trace_seq_buffer_ptr(s);
++
++	seq_buf_commit(&s->seq, len);
++
++	return ret;
++}
++EXPORT_SYMBOL(trace_seq_acquire);
+-- 
+2.7.4
 
