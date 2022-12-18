@@ -2,216 +2,111 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47108C4167B
-	for <bpf@archiver.kernel.org>; Sun, 18 Dec 2022 05:18:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C48D8C10F1E
+	for <bpf@archiver.kernel.org>; Sun, 18 Dec 2022 06:15:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230282AbiLRFSa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 18 Dec 2022 00:18:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55854 "EHLO
+        id S230309AbiLRGPG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 18 Dec 2022 01:15:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230280AbiLRFSP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 18 Dec 2022 00:18:15 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A37264C3
-        for <bpf@vger.kernel.org>; Sat, 17 Dec 2022 21:18:13 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id z8-20020a05600c220800b003d33b0bda11so4111553wml.0
-        for <bpf@vger.kernel.org>; Sat, 17 Dec 2022 21:18:12 -0800 (PST)
+        with ESMTP id S230280AbiLRGPD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 18 Dec 2022 01:15:03 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF94CBF71;
+        Sat, 17 Dec 2022 22:15:02 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id 17so6204155pll.0;
+        Sat, 17 Dec 2022 22:15:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VZjrql4GzJFHQJkJaKmcf2NkEXsxLrfG96nTce813zM=;
-        b=q9j+E6sC/Mv5x8/TehXbtRXdQiQqqENXX7LLpqFkYiBa55+8Ym66+zW4pq4VTXeHWl
-         XZr7HRd5XthTvqPx42b23iS0OD7LaAtKz2N0BA+hLNO8iCmYfCxo2bGU3/dePc/hYCAo
-         zv5jSj5r3eaI8nCWSLh179yoY1FpO9pdnwRNU=
+        bh=oGJubt8HF7jBnIg3wM08JRpJ2gzwaKNjVWAVkyCf2Ao=;
+        b=AWTw7bywADk0RpYc2IwKGa8FLo1KHB5vXZEjt+blt0YvgfOSyEimPqPEHrbpTVfcpV
+         XULNszBTku7gFSJLeSRqSW81uGKmJJaQrdUIi/8dJQfOelVdj7UQ/L4fBZ/CAKGgUwrd
+         lKcLdrzCg4PZEXI0vxDcbyPVDfgZcPqRYDSpJ3Wfpq5IwyXKDdkVaaweKbchpJrsJb7J
+         MJ8BhnLjzKZ+/JeF88IalQAJNIQ4UYn3FRX3PhXCIsM7vdPdSc0aIJASZWOeMl+9Kv5b
+         4LmCIxopmm0s6aRaaB3nlAxm26zZ7TvY34eo5gkx445/3G9BPO/2/Bd4AHJhJbw0hxUA
+         FGAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VZjrql4GzJFHQJkJaKmcf2NkEXsxLrfG96nTce813zM=;
-        b=UKj7kWvvSIegZ85fxy7ddDJK0Cut53sLBE1FLjDvYWgDzkHkmrAzzVjkbl4DZKFkXX
-         doNJ2Jf2/mIg7/yf1bjtjHUGkfqmLZEPbLahQdrXw55iCewTJ3lDRP0oxnxd/Z9/4CDP
-         MCStg3aYLlV04y6HMAehY6HsjSwHGaJWuvi6ute+ufcvPLNsvD3H9rBtQcDnHTlTTuNv
-         5ivujmXSKgpb2PnAQ54zMEQ0ZIo3M6bcob6wGbaewaCUeFDvMVgqnpAy+RrjD0Koe7zJ
-         UtNheaoWvCgk7FA9EAW6s5FRjVeq2PRkBfGhDZsf2/dqo71oK+z1l2Icqjr+Bnj0c6Ew
-         DXVg==
-X-Gm-Message-State: ANoB5pnF5XahovuPbSC2ovtzqr3ulMxWIFC/duaIesx+2AAwFbAPc1DU
-        MF6iKN02HLH3gHJ/liNKy1pXDeCfm5zS87FCxuXuaQ==
-X-Google-Smtp-Source: AA0mqf6f3ef5BuwOP85Gx7YZu5EIiEpnxNCOl1r7V0jE6yQouke8p5FYLVXungY9c4+QkgtMwi2lfg==
-X-Received: by 2002:a7b:cbd1:0:b0:3d1:ed41:57c0 with SMTP id n17-20020a7bcbd1000000b003d1ed4157c0mr28766562wmi.30.1671340691305;
-        Sat, 17 Dec 2022 21:18:11 -0800 (PST)
-Received: from workstation.ehrig.io (tmo-122-74.customers.d1-online.com. [80.187.122.74])
-        by smtp.gmail.com with ESMTPSA id k62-20020a1ca141000000b003cf894dbc4fsm7805231wme.25.2022.12.17.21.18.09
+        bh=oGJubt8HF7jBnIg3wM08JRpJ2gzwaKNjVWAVkyCf2Ao=;
+        b=P87ko44umWxPsWhcVMoM+gyPi0cY12fSTqWlKx5WbTXpBURgDymWgcjrJQ77kWiN70
+         OzR55nRbhp+GF3BmG+qOLvLprvaHWAyvGQvcorNTk1m44lOgzj1LllC5iFATizh3glFN
+         tOYbCeEsX+r0XURwSdDYaHtUvepWmXm8eJNbNEhZG4yjgADdtCDpx33k9gsD7vMgXxlI
+         JyWJqRE4fh+76ogrky0CVf9sEOihfR8YWsh/w/lhQxkZK0aDhsySQmgdQkhXC1x9jjO5
+         UYR79ryq83TA7CPer8PqBtvMW/g59FtFTM+DiI5H+cBVa0ONIb/B5EN+g/TtCrnd6vfu
+         ZXmg==
+X-Gm-Message-State: ANoB5pmjgZW5Z0SFTk9Jobw1C9bE7TFmu3jY24AuLYcucX2Ox9p1rKYU
+        /gYdUGmqRoivcsCcD915Wg==
+X-Google-Smtp-Source: AA0mqf4bF8HMkMPUIBBLy0nhqJ9H215Pb0yd3hG7HofIfJ5qlYCaJt3wW10Y/p3SKJvPmI0hSIdMQw==
+X-Received: by 2002:a17:90a:b281:b0:219:e761:97e0 with SMTP id c1-20020a17090ab28100b00219e76197e0mr38678814pjr.33.1671344102264;
+        Sat, 17 Dec 2022 22:15:02 -0800 (PST)
+Received: from WDIR.. ([182.209.58.25])
+        by smtp.gmail.com with ESMTPSA id r21-20020a17090b051500b00219eefe47c7sm3721836pjz.47.2022.12.17.22.15.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Dec 2022 21:18:10 -0800 (PST)
-From:   Christian Ehrig <cehrig@cloudflare.com>
-To:     bpf@vger.kernel.org
-Cc:     cehrig@cloudflare.com, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Kui-Feng Lee <kuifeng@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Maxim Mikityanskiy <maximmi@nvidia.com>,
-        Kaixi Fan <fankaixi.li@bytedance.com>,
-        Paul Chaignon <paul@isovalent.com>,
-        Shmulik Ladkani <shmulik@metanetworks.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Add BPF_F_NO_TUNNEL_KEY test
-Date:   Sun, 18 Dec 2022 06:17:32 +0100
-Message-Id: <20221218051734.31411-2-cehrig@cloudflare.com>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20221218051734.31411-1-cehrig@cloudflare.com>
-References: <20221218051734.31411-1-cehrig@cloudflare.com>
+        Sat, 17 Dec 2022 22:15:01 -0800 (PST)
+From:   "Daniel T. Lee" <danieltimlee@gmail.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Yonghong Song <yhs@fb.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org
+Subject: [bpf-next v4 2/3] samples/bpf: replace meaningless counter with tracex4
+Date:   Sun, 18 Dec 2022 15:14:52 +0900
+Message-Id: <20221218061453.6287-3-danieltimlee@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221218061453.6287-1-danieltimlee@gmail.com>
+References: <20221218061453.6287-1-danieltimlee@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds a selftest simulating a GRE sender and receiver using
-tunnel headers without tunnel keys. It validates if packets encapsulated
-using BPF_F_NO_TUNNEL_KEY are decapsulated by a GRE receiver not
-configured with tunnel keys.
+Currently, compiling samples/bpf with LLVM warns about the unused but
+set variable with tracex4_user.
 
-Signed-off-by: Christian Ehrig <cehrig@cloudflare.com>
+    ./samples/bpf/tracex4_user.c:54:14:
+    warning: variable 'i' set but not used [-Wunused-but-set-variable]
+        int map_fd, i, j = 0;
+                    ^
+                    1 warning generated.
+
+This commit resolve this compiler warning by replacing the meaningless
+counter.
+
+Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
+Acked-by: Yonghong Song <yhs@fb.com>
 ---
- .../selftests/bpf/progs/test_tunnel_kern.c    | 21 ++++++++++
- tools/testing/selftests/bpf/test_tunnel.sh    | 40 +++++++++++++++++--
- 2 files changed, 58 insertions(+), 3 deletions(-)
+ samples/bpf/tracex4_user.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-index 98af55f0bcd3..508da4a23c4f 100644
---- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-@@ -81,6 +81,27 @@ int gre_set_tunnel(struct __sk_buff *skb)
- 	return TC_ACT_OK;
- }
+diff --git a/samples/bpf/tracex4_user.c b/samples/bpf/tracex4_user.c
+index 227b05a0bc88..dee8f0a091ba 100644
+--- a/samples/bpf/tracex4_user.c
++++ b/samples/bpf/tracex4_user.c
+@@ -51,7 +51,7 @@ int main(int ac, char **argv)
+ 	struct bpf_program *prog;
+ 	struct bpf_object *obj;
+ 	char filename[256];
+-	int map_fd, i, j = 0;
++	int map_fd, j = 0;
  
-+SEC("tc")
-+int gre_set_tunnel_no_key(struct __sk_buff *skb)
-+{
-+	int ret;
-+	struct bpf_tunnel_key key;
-+
-+	__builtin_memset(&key, 0x0, sizeof(key));
-+	key.remote_ipv4 = 0xac100164; /* 172.16.1.100 */
-+	key.tunnel_ttl = 64;
-+
-+	ret = bpf_skb_set_tunnel_key(skb, &key, sizeof(key),
-+				     BPF_F_ZERO_CSUM_TX | BPF_F_SEQ_NUMBER |
-+				     BPF_F_NO_TUNNEL_KEY);
-+	if (ret < 0) {
-+		log_err(ret);
-+		return TC_ACT_SHOT;
-+	}
-+
-+	return TC_ACT_OK;
-+}
-+
- SEC("tc")
- int gre_get_tunnel(struct __sk_buff *skb)
- {
-diff --git a/tools/testing/selftests/bpf/test_tunnel.sh b/tools/testing/selftests/bpf/test_tunnel.sh
-index 2eaedc1d9ed3..06857b689c11 100755
---- a/tools/testing/selftests/bpf/test_tunnel.sh
-+++ b/tools/testing/selftests/bpf/test_tunnel.sh
-@@ -66,15 +66,20 @@ config_device()
+ 	snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
+ 	obj = bpf_object__open_file(filename, NULL);
+@@ -82,7 +82,7 @@ int main(int ac, char **argv)
+ 		j++;
+ 	}
  
- add_gre_tunnel()
- {
-+	tun_key=
-+	if [ -n "$1" ]; then
-+		tun_key="key $1"
-+	fi
-+
- 	# at_ns0 namespace
- 	ip netns exec at_ns0 \
--        ip link add dev $DEV_NS type $TYPE seq key 2 \
-+        ip link add dev $DEV_NS type $TYPE seq $tun_key \
- 		local 172.16.1.100 remote 172.16.1.200
- 	ip netns exec at_ns0 ip link set dev $DEV_NS up
- 	ip netns exec at_ns0 ip addr add dev $DEV_NS 10.1.1.100/24
- 
- 	# root namespace
--	ip link add dev $DEV type $TYPE key 2 external
-+	ip link add dev $DEV type $TYPE $tun_key external
- 	ip link set dev $DEV up
- 	ip addr add dev $DEV 10.1.1.200/24
- }
-@@ -238,7 +243,7 @@ test_gre()
- 
- 	check $TYPE
- 	config_device
--	add_gre_tunnel
-+	add_gre_tunnel 2
- 	attach_bpf $DEV gre_set_tunnel gre_get_tunnel
- 	ping $PING_ARG 10.1.1.100
- 	check_err $?
-@@ -253,6 +258,30 @@ test_gre()
-         echo -e ${GREEN}"PASS: $TYPE"${NC}
- }
- 
-+test_gre_no_tunnel_key()
-+{
-+	TYPE=gre
-+	DEV_NS=gre00
-+	DEV=gre11
-+	ret=0
-+
-+	check $TYPE
-+	config_device
-+	add_gre_tunnel
-+	attach_bpf $DEV gre_set_tunnel_no_key gre_get_tunnel
-+	ping $PING_ARG 10.1.1.100
-+	check_err $?
-+	ip netns exec at_ns0 ping $PING_ARG 10.1.1.200
-+	check_err $?
-+	cleanup
-+
-+        if [ $ret -ne 0 ]; then
-+                echo -e ${RED}"FAIL: $TYPE"${NC}
-+                return 1
-+        fi
-+        echo -e ${GREEN}"PASS: $TYPE"${NC}
-+}
-+
- test_ip6gre()
- {
- 	TYPE=ip6gre
-@@ -589,6 +618,7 @@ cleanup()
- 	ip link del ipip6tnl11 2> /dev/null
- 	ip link del ip6ip6tnl11 2> /dev/null
- 	ip link del gretap11 2> /dev/null
-+	ip link del gre11 2> /dev/null
- 	ip link del ip6gre11 2> /dev/null
- 	ip link del ip6gretap11 2> /dev/null
- 	ip link del geneve11 2> /dev/null
-@@ -641,6 +671,10 @@ bpf_tunnel_test()
- 	test_gre
- 	errors=$(( $errors + $? ))
- 
-+	echo "Testing GRE tunnel (without tunnel keys)..."
-+	test_gre_no_tunnel_key
-+	errors=$(( $errors + $? ))
-+
- 	echo "Testing IP6GRE tunnel..."
- 	test_ip6gre
- 	errors=$(( $errors + $? ))
+-	for (i = 0; ; i++) {
++	while (1) {
+ 		print_old_objects(map_fd);
+ 		sleep(1);
+ 	}
 -- 
-2.37.4
+2.34.1
 
