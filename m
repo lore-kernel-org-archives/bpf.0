@@ -2,89 +2,111 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D33EDC4167B
-	for <bpf@archiver.kernel.org>; Sun, 18 Dec 2022 00:43:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0500C4332F
+	for <bpf@archiver.kernel.org>; Sun, 18 Dec 2022 00:43:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbiLRAnO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 17 Dec 2022 19:43:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47450 "EHLO
+        id S229537AbiLRAnU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 17 Dec 2022 19:43:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiLRAnO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 17 Dec 2022 19:43:14 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74509BC99;
-        Sat, 17 Dec 2022 16:43:13 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id n4so5821800plp.1;
-        Sat, 17 Dec 2022 16:43:13 -0800 (PST)
+        with ESMTP id S229892AbiLRAnS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 17 Dec 2022 19:43:18 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ABADBE0F;
+        Sat, 17 Dec 2022 16:43:18 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id d7so5777189pll.9;
+        Sat, 17 Dec 2022 16:43:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=e2c8ZL/8/h1Gdu4/0xKpRnjB2QYVOuqhbuJPyLPQI/Y=;
-        b=TCTkFdIGC5brUhfozD1SJQhdJu0UuD0T/DRL2jqnkaLQ20XHRadU19oz8nmwD/UUSt
-         plVkHmA9o2kRstAMV6aiq66VlNoPQJ8oNA+UwrNFTU82M/Ay3SXkKAXjmeSPjcNA9OUp
-         EcB76+ugoPTZZWRCl0bbrXFpq1eywPVDHGrXFvICKrjN0YybtbtgM+NwC8aetA6h/pPb
-         SzimkXUKkco/G4cXBVv8JQzY2rRdr4DnGOi77KrH9exFuipp/rxjf0zmtLRAbcEoYW4X
-         Yu4oCTsGqTxCZhMQg2OJ1pLX/3wKflCVdt9VSQ+4MXqbcNPCzoj48O3UrWl+iYhj3DFu
-         9YDQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oGJubt8HF7jBnIg3wM08JRpJ2gzwaKNjVWAVkyCf2Ao=;
+        b=ZvIAwzTcU+CbYY5kUHU5e709XFUhpyoCNTswg6h0hSAHV3Pir3/Z/rxV+2Yq5/KfiC
+         g+ohZ8h47zANPaA6e9QkNN0q6tT3M2D51diM+9TaZ1sAay42li2/gJAgV4MOcNxEmtgb
+         qJ69WBoKaJm19RgsQfHULgfwwxKiTNd/yv7FeDsW1gPt0j0OxEnvVJM2JsIbX3hMOC9q
+         k381oE7c+Vs8w1EbldQ/RT/FHJos6xt4JOekXNbrCAhj/5TZEOwBY7tkr+SPQFbK4aKI
+         nxzRacvj/w5/rN1IN+VALOCendRgzof9Gj4Rqm/zd3oqmMIp1oz7KW2Y2i5E95owecHn
+         LxYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e2c8ZL/8/h1Gdu4/0xKpRnjB2QYVOuqhbuJPyLPQI/Y=;
-        b=ScRr36diGmIJCqe7UV89X/oxL9iimGLUHMPFJYxjt7MN2axOrRemRS0AvzzOSKBPMR
-         bOGk0hZV2VEs1xt+9b/fi4LM/gH5oQHVe3AJunLWqYPXZYlJliS8VZEAXvW26+bo19E3
-         m7dWA0oWMM+cSaWjbA0tSaVOC3ehtlOFHU/Q6Dg4B3A3NhneTxYsIT4z0CANVFB4UfXu
-         qff4vvaWW20+blY4YwxBp+6Qs+vijT+s+j61/gkPG2aB3RROkpuwdHoq4bn3O0fOEdVF
-         FvQJ9dS2oGzTgWJqmmobdRH+TCcukYzF7w4W/aRT/t2p+UWD/nRAIDrJgidFzSmchrSR
-         KPog==
-X-Gm-Message-State: ANoB5pl7Qw5rXg5YqIzQ07Iq6d82XPRX08JH+lOGsoR0vYIy5rn2Noh7
-        LL9TlIdun+Vp5h3EmppVCGGWysCq/wru
-X-Google-Smtp-Source: AA0mqf6kFhcAUjvJfYKVsmHmG2NnbE5uQSiXjpQ26jjS9p3YSWZZE1hksdSJUizzeZbR9Ih4L7q6hw==
-X-Received: by 2002:a17:903:251:b0:189:7891:574d with SMTP id j17-20020a170903025100b001897891574dmr43532883plh.47.1671324192929;
-        Sat, 17 Dec 2022 16:43:12 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oGJubt8HF7jBnIg3wM08JRpJ2gzwaKNjVWAVkyCf2Ao=;
+        b=LoXlcWSyfzUzsqWMO7j0HRsFfdem3GQ1jBDe9cNNL1ZN2Jyj0i9BimASikW7YXarXy
+         clUYHJAdqIfBrFm4UO+F/lH+CfzkaiWAUXqnsgNjc9HTkPKAsgvgL2zsVY4MJe/aHSe8
+         gCi62PcoYd9P7JrIRRqMonXNPYKosOkX25sK/W5BQC0zJhMmx8s8Ug3IisuHdmjh8aNH
+         LEtezsVDODzLR4M0q8ONGp7kL83vYn0yjuN1eO8EB/Cc0TOTKxTS6g0/K42WM5pdlRgf
+         XJkkIy3QAsWH9ZH6p20/UJ0aIyJFoOY/2r49dh1mstRdaKfAsWlNf+SDz5Cp2TrpISoR
+         GwjA==
+X-Gm-Message-State: ANoB5pmRe+arlj738KrNuGWnCJUvTTqzYAbUctGCYEOIYJrbJL3wpDzK
+        x2osWbnE0bL6zdRUMUYz+A==
+X-Google-Smtp-Source: AA0mqf5cYXpx7BMY7mQIfJg+ZejDxYTLXZYZUUDjroJAmpxKguBo5q82cn6W7jmDTUA6h0QowpOjXg==
+X-Received: by 2002:a05:6a20:9b9a:b0:ab:fe5a:df95 with SMTP id mr26-20020a056a209b9a00b000abfe5adf95mr43045423pzb.15.1671324197553;
+        Sat, 17 Dec 2022 16:43:17 -0800 (PST)
 Received: from WDIR.. ([182.209.58.25])
-        by smtp.gmail.com with ESMTPSA id k10-20020a63ff0a000000b0047048c201e3sm3639458pgi.33.2022.12.17.16.43.10
+        by smtp.gmail.com with ESMTPSA id k10-20020a63ff0a000000b0047048c201e3sm3639458pgi.33.2022.12.17.16.43.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Dec 2022 16:43:12 -0800 (PST)
+        Sat, 17 Dec 2022 16:43:17 -0800 (PST)
 From:   "Daniel T. Lee" <danieltimlee@gmail.com>
 To:     Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         Yonghong Song <yhs@fb.com>
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org
-Subject: [bpf-next v3 0/3] samples/bpf: fix LLVM compilation warning with samples
-Date:   Sun, 18 Dec 2022 09:43:04 +0900
-Message-Id: <20221218004307.4872-1-danieltimlee@gmail.com>
+Subject: [bpf-next v3 2/3] samples/bpf: replace meaningless counter with tracex4
+Date:   Sun, 18 Dec 2022 09:43:06 +0900
+Message-Id: <20221218004307.4872-3-danieltimlee@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221218004307.4872-1-danieltimlee@gmail.com>
+References: <20221218004307.4872-1-danieltimlee@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, compiling samples/bpf with LLVM emits several warning. They
-are only small details, but they do not appear when compiled with GCC.
-Detailed compilation command and warning logs can be found from bpf CI.
+Currently, compiling samples/bpf with LLVM warns about the unused but
+set variable with tracex4_user.
 
-Daniel T. Lee (3):
-  samples/bpf: remove unused function with test_lru_dist
-  samples/bpf: replace meaningless counter with tracex4
-  samples/bpf: fix uninitialized warning with
-    test_current_task_under_cgroup
+    ./samples/bpf/tracex4_user.c:54:14:
+    warning: variable 'i' set but not used [-Wunused-but-set-variable]
+        int map_fd, i, j = 0;
+                    ^
+                    1 warning generated.
 
- samples/bpf/test_current_task_under_cgroup_user.c | 6 ++++--
- samples/bpf/test_lru_dist.c                       | 5 -----
- samples/bpf/tracex4_user.c                        | 4 ++--
- 3 files changed, 6 insertions(+), 9 deletions(-)
+This commit resolve this compiler warning by replacing the meaningless
+counter.
 
+Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
+Acked-by: Yonghong Song <yhs@fb.com>
 ---
-Changes in V2:
-- Change the cover letter subject
-Changes in V3:
-- Fix style problem with the patch
+ samples/bpf/tracex4_user.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/samples/bpf/tracex4_user.c b/samples/bpf/tracex4_user.c
+index 227b05a0bc88..dee8f0a091ba 100644
+--- a/samples/bpf/tracex4_user.c
++++ b/samples/bpf/tracex4_user.c
+@@ -51,7 +51,7 @@ int main(int ac, char **argv)
+ 	struct bpf_program *prog;
+ 	struct bpf_object *obj;
+ 	char filename[256];
+-	int map_fd, i, j = 0;
++	int map_fd, j = 0;
+ 
+ 	snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
+ 	obj = bpf_object__open_file(filename, NULL);
+@@ -82,7 +82,7 @@ int main(int ac, char **argv)
+ 		j++;
+ 	}
+ 
+-	for (i = 0; ; i++) {
++	while (1) {
+ 		print_old_objects(map_fd);
+ 		sleep(1);
+ 	}
 -- 
 2.34.1
 
