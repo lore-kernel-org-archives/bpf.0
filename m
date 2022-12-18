@@ -2,49 +2,46 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81DB8C10F1E
-	for <bpf@archiver.kernel.org>; Sun, 18 Dec 2022 16:54:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55106C10F1E
+	for <bpf@archiver.kernel.org>; Sun, 18 Dec 2022 16:57:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232858AbiLRQya (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 18 Dec 2022 11:54:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58222 "EHLO
+        id S232312AbiLRQ5u (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 18 Dec 2022 11:57:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231453AbiLRQxs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 18 Dec 2022 11:53:48 -0500
+        with ESMTP id S233072AbiLRQ5G (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 18 Dec 2022 11:57:06 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9691B9FF;
-        Sun, 18 Dec 2022 08:19:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2498E1C411;
+        Sun, 18 Dec 2022 08:19:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F34260DCC;
-        Sun, 18 Dec 2022 16:18:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53EB7C433EF;
-        Sun, 18 Dec 2022 16:18:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B126060C99;
+        Sun, 18 Dec 2022 16:19:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C5ECC433D2;
+        Sun, 18 Dec 2022 16:19:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671380336;
-        bh=VVlTLDWs3Bb+3kdngYIGmu167yNlfAdZc1WbVPbTswM=;
+        s=k20201202; t=1671380380;
+        bh=L7QBOubpQX1WNlFRy75XautUJd4viMxIeZ6KVlGJcfk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qJ9THhadUzOLLgvNtobY3SU2Nqu07zhY1avn91IHf4nd5JR6H1egzZhBtYjC5Mgcp
-         kEMQeyilvl0Jwa1v3f8lMevxLTVUVxc2nFZLaIBNOQjFNq+E0oT1HJkMoa9Qv1JCnh
-         WrRP3V5+KOcDkp1qfQiHuivrBqC6WJIdyWJjCTuCglSMeQplHkITq6W3ftshBDyg7N
-         Our7YkIf/b7HnGlxOyScACBoMlJyMzylreE+SfqlKNh5805HjtzSVgXQqOdASTaQ7w
-         HboPfKRdkPGDw+ahX8tsHtfx4LWV3CbbyJZwQzZLzQ439UzzyfRx1zTxzXwJBN7IY8
-         gNWelhTMh/QJw==
+        b=Fwvmv8uhMXO3uSxfyBf7inrXTsaRSWZDUm09nO1GeoYv8XePJ0iyDglDq/Ylvun2R
+         n3oB1oazcuJyrdS85SYX/Tsk0WDnQaMn9L0acmVkzTffJ+jzrJ2q42U6Kx4cCIygh3
+         E20zJxU80FGvz88XniV8Ugt/XThKWz4HRwY3N1QAHaF7Lv2yrijK7nq2pLeCgkjGcN
+         G84ChZQMTzCuvPnc5QpGC/ldxI/jqDN98Ox9NVN0FHMeM/xLcTUs/QXUztU8q2l57a
+         aQbN3FxNdn7VEbCVZRU59WMzzszddhG1zp35fwtBWMucxmDHCJ2oxyKenfOx3IpgYa
+         SZTj0bqLO4r3w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Stanislav Fomichev <sdf@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        syzbot+f635e86ec3fa0a37e019@syzkaller.appspotmail.com,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, bpf@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 07/30] bpf: make sure skb->len != 0 when redirecting to a tunneling device
-Date:   Sun, 18 Dec 2022 11:18:12 -0500
-Message-Id: <20221218161836.933697-7-sashal@kernel.org>
+        syzbot+8dd0551dda6020944c5d@syzkaller.appspotmail.com,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>,
+        martin.lau@linux.dev, ast@kernel.org, andrii@kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 22/30] bpf: Prevent decl_tag from being referenced in func_proto arg
+Date:   Sun, 18 Dec 2022 11:18:27 -0500
+Message-Id: <20221218161836.933697-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221218161836.933697-1-sashal@kernel.org>
 References: <20221218161836.933697-1-sashal@kernel.org>
@@ -58,69 +55,51 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Stanislav Fomichev <sdf@google.com>
 
-[ Upstream commit 07ec7b502800ba9f7b8b15cb01dd6556bb41aaca ]
+[ Upstream commit f17472d4599697d701aa239b4c475a506bccfd19 ]
 
-syzkaller managed to trigger another case where skb->len == 0
-when we enter __dev_queue_xmit:
+Syzkaller managed to hit another decl_tag issue:
 
-WARNING: CPU: 0 PID: 2470 at include/linux/skbuff.h:2576 skb_assert_len include/linux/skbuff.h:2576 [inline]
-WARNING: CPU: 0 PID: 2470 at include/linux/skbuff.h:2576 __dev_queue_xmit+0x2069/0x35e0 net/core/dev.c:4295
+  btf_func_proto_check kernel/bpf/btf.c:4506 [inline]
+  btf_check_all_types kernel/bpf/btf.c:4734 [inline]
+  btf_parse_type_sec+0x1175/0x1980 kernel/bpf/btf.c:4763
+  btf_parse kernel/bpf/btf.c:5042 [inline]
+  btf_new_fd+0x65a/0xb00 kernel/bpf/btf.c:6709
+  bpf_btf_load+0x6f/0x90 kernel/bpf/syscall.c:4342
+  __sys_bpf+0x50a/0x6c0 kernel/bpf/syscall.c:5034
+  __do_sys_bpf kernel/bpf/syscall.c:5093 [inline]
+  __se_sys_bpf kernel/bpf/syscall.c:5091 [inline]
+  __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:5091
+  do_syscall_64+0x54/0x70 arch/x86/entry/common.c:48
 
-Call Trace:
- dev_queue_xmit+0x17/0x20 net/core/dev.c:4406
- __bpf_tx_skb net/core/filter.c:2115 [inline]
- __bpf_redirect_no_mac net/core/filter.c:2140 [inline]
- __bpf_redirect+0x5fb/0xda0 net/core/filter.c:2163
- ____bpf_clone_redirect net/core/filter.c:2447 [inline]
- bpf_clone_redirect+0x247/0x390 net/core/filter.c:2419
- bpf_prog_48159a89cb4a9a16+0x59/0x5e
- bpf_dispatcher_nop_func include/linux/bpf.h:897 [inline]
- __bpf_prog_run include/linux/filter.h:596 [inline]
- bpf_prog_run include/linux/filter.h:603 [inline]
- bpf_test_run+0x46c/0x890 net/bpf/test_run.c:402
- bpf_prog_test_run_skb+0xbdc/0x14c0 net/bpf/test_run.c:1170
- bpf_prog_test_run+0x345/0x3c0 kernel/bpf/syscall.c:3648
- __sys_bpf+0x43a/0x6c0 kernel/bpf/syscall.c:5005
- __do_sys_bpf kernel/bpf/syscall.c:5091 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5089 [inline]
- __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:5089
- do_syscall_64+0x54/0x70 arch/x86/entry/common.c:48
- entry_SYSCALL_64_after_hwframe+0x61/0xc6
+This seems similar to commit ea68376c8bed ("bpf: prevent decl_tag from being
+referenced in func_proto") but for the argument.
 
-The reproducer doesn't really reproduce outside of syzkaller
-environment, so I'm taking a guess here. It looks like we
-do generate correct ETH_HLEN-sized packet, but we redirect
-the packet to the tunneling device. Before we do so, we
-__skb_pull l2 header and arrive again at skb->len == 0.
-Doesn't seem like we can do anything better than having
-an explicit check after __skb_pull?
-
-Cc: Eric Dumazet <edumazet@google.com>
-Reported-by: syzbot+f635e86ec3fa0a37e019@syzkaller.appspotmail.com
+Reported-by: syzbot+8dd0551dda6020944c5d@syzkaller.appspotmail.com
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
-Link: https://lore.kernel.org/r/20221027225537.353077-1-sdf@google.com
-Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/bpf/20221123035422.872531-2-sdf@google.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/filter.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ kernel/bpf/btf.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 72bf78032f45..49b31c2b4179 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2073,6 +2073,10 @@ static int __bpf_redirect_no_mac(struct sk_buff *skb, struct net_device *dev,
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index a28bbec8c59f..8fd65a0eb7f3 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -2849,6 +2849,11 @@ static int btf_func_proto_check(struct btf_verifier_env *env,
+ 			break;
+ 		}
  
- 	if (mlen) {
- 		__skb_pull(skb, mlen);
-+		if (unlikely(!skb->len)) {
-+			kfree_skb(skb);
-+			return -ERANGE;
++		if (btf_type_is_resolve_source_only(arg_type)) {
++			btf_verifier_log_type(env, t, "Invalid arg#%u", i + 1);
++			return -EINVAL;
 +		}
- 
- 		/* At ingress, the mac header has already been pulled once.
- 		 * At egress, skb_pospull_rcsum has to be done in case that
++
+ 		if (args[i].name_off &&
+ 		    (!btf_name_offset_valid(btf, args[i].name_off) ||
+ 		     !btf_name_valid_identifier(btf, args[i].name_off))) {
 -- 
 2.35.1
 
