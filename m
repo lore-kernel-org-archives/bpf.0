@@ -2,86 +2,130 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BBCFC3DA6E
-	for <bpf@archiver.kernel.org>; Sun, 18 Dec 2022 00:08:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE082C4332F
+	for <bpf@archiver.kernel.org>; Sun, 18 Dec 2022 00:08:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiLRAIA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 17 Dec 2022 19:08:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39320 "EHLO
+        id S229991AbiLRAIJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 17 Dec 2022 19:08:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiLRAH7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 17 Dec 2022 19:07:59 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0553AE53;
-        Sat, 17 Dec 2022 16:07:58 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso9679607pjt.0;
-        Sat, 17 Dec 2022 16:07:58 -0800 (PST)
+        with ESMTP id S230024AbiLRAIH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 17 Dec 2022 19:08:07 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B8EFAE4;
+        Sat, 17 Dec 2022 16:08:05 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id a9so5745728pld.7;
+        Sat, 17 Dec 2022 16:08:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8F6Uzn3qPKjW7Pu2TCTFXqCvGwILHe72RxqksnsVPog=;
-        b=foC9eFpeLiQU0CZM+xYWE4qgkadktQxQC2tDTw0fVu4oO0Zkr6hNg3schdixANV9Ld
-         jFL5Cyh5+BIX5gMceD6BlIaaWS0KnXNNmxISv7IbhpA6auKsvFJ9FT8hUj2w1IdXF3V8
-         NcH/n88sq4RtiA34ilsfBxG6fhNFWHuNjVc5tnbQKK1qTmEeR3tjpH2sXsjCLjiKuwyd
-         mZKIsRx+Y+pdBEiXXgHfzpT9FSynIVksxj4l7jzTP8V4NnuRXHZS2/IB3sUgFJD1qJ68
-         W+4rJQrxIY+ryEnRFc/VAMZovPdPg5txAvGGTYVvUkS8/C3g4Oaz12knI6HSyXIIbwlu
-         wQGg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OnAU/FC5uHJjclWRokeb4prP8VtXKwpPQow8jIA2gqk=;
+        b=GeutwiTKyu8xwmjY1Vpq75p6UYm3jHTNyWmpECiwvU7zCHEn6Tk3/4K3rGSydyTQqu
+         7bAPZBDD3MI5oaDFKdq9wltvzi7fVvE+rtSWEBVymk6nmpFI5fdjP7rMiet7Z0XZHgb0
+         XDL0OhQcGzaiAeWzRv6maADcaY28EM64Sjksqra0M5WTyHk6ZcRiKfhVIjVuzg/ZHJ8D
+         0j8wgm8dJqPyYFveJM/FA4dFmsRQYIH6zZK6bi1OJKJLYys7eXAM/P27/vT+cYryfkJW
+         HPWWBJevrYZWfqPEy46IJftlYjn43sbtBBiZc8zpcag1lr170YEC9y8rufSHBNHU7HVx
+         Vh3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8F6Uzn3qPKjW7Pu2TCTFXqCvGwILHe72RxqksnsVPog=;
-        b=ywUtyniCHZRohp6/g1e2LjIXE+xk4VFVTtnalVi/B2y7+IvF9a+u/T+zfo3QsxPQsQ
-         pwL7KCLu+RWIcfvUHJ78Z3ssrY9HkUstQlbcrzw6n7d1qG8JSweMxdZZ77I7i9oSv7EO
-         Y1eCldrCbJBOEHYsA/4xHl1+IBqkRx6nOY7qzch+iH+RkrtQPGFzasT/LVZ8nG7TijB7
-         LTdCC7CCgYDXFBAsID3z2W2A3HxcEPqjvWPZvoBRcJ0nkDCml5zjuO8BVGWzrU0W6LxR
-         uRAqxdvHCPciyuObvBJeff7rgHieuFGvzh4Z1K1zOpJHjQuQRtLNYd6KgcnuhbyUlmQj
-         PBfw==
-X-Gm-Message-State: AFqh2kpwhhxHwC9nlAugaYmNz+XPnYWULaFABgs4wcJGEBMdBCPz9PvS
-        WSBGvunHWiC1tk6qIGI3kQ==
-X-Google-Smtp-Source: AMrXdXuwS9fBXDVNhvZYhzLqlKL1DAN09f55FDStkvg4NxqIVUSHP3/BmYi3UpaQ7aOuWztzB+reQg==
-X-Received: by 2002:a05:6a20:5488:b0:af:b771:1d01 with SMTP id i8-20020a056a20548800b000afb7711d01mr15073627pzk.49.1671322077967;
-        Sat, 17 Dec 2022 16:07:57 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OnAU/FC5uHJjclWRokeb4prP8VtXKwpPQow8jIA2gqk=;
+        b=GMsphv/pvGlIHkLC5abxPVsUjAU6rEYpAhh5WxWTaYP/z7+eIU6uXiNT5GdWE9UKkm
+         ummGqh/Pc6sKHY/gdhP2RJH9xraLMzBQECXM+aj2W1Fp5GLEpvT4jUZsQ9X2Ccff9YnC
+         eYXecZs1xtZShbxxdKlp2+yzmy9GjZwUbouJ1NwyZIusGtUEXWp6XQbozsUZU1HsIzZr
+         4Uel+BvYFZzIby3S9eOehZ6dGQmuFt+bC9cfcKDbeTbCjt5NqcJBlGxDTpAuSFOZFZd9
+         E6c/4APFajg+Z1IguzuAnZ9gCOUcZjTPi9X/4e7qTr30RxZvuIDRBjSknomenm6RFNUL
+         GGtA==
+X-Gm-Message-State: ANoB5pk6uUuPLJHcqoOBIAC0uOaHvcWg39IsCM75QpCVoFv+JQaEaqge
+        wu+g7fRuhVwNw+SCDCZq4mx4Vueyz4Gp
+X-Google-Smtp-Source: AA0mqf45Hkxl5oK0sU7WiE9FAUeymhJYW/ZStyJX77UcUu2lvLWIrn55+tJK2UUuLDD5Se0KSIXBKQ==
+X-Received: by 2002:a05:6a20:3b20:b0:ac:16ae:6204 with SMTP id c32-20020a056a203b2000b000ac16ae6204mr45350120pzh.41.1671322085416;
+        Sat, 17 Dec 2022 16:08:05 -0800 (PST)
 Received: from WDIR.. ([182.209.58.25])
-        by smtp.gmail.com with ESMTPSA id r7-20020a63b107000000b00478bd458bdfsm3554330pgf.88.2022.12.17.16.07.55
+        by smtp.gmail.com with ESMTPSA id r7-20020a63b107000000b00478bd458bdfsm3554330pgf.88.2022.12.17.16.08.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Dec 2022 16:07:57 -0800 (PST)
+        Sat, 17 Dec 2022 16:08:04 -0800 (PST)
 From:   "Daniel T. Lee" <danieltimlee@gmail.com>
 To:     Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         Yonghong Song <yhs@fb.com>
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org
-Subject: [bpf-next v2 0/3] samples/bpf: fix LLVM compilation warning with samples
-Date:   Sun, 18 Dec 2022 09:07:50 +0900
-Message-Id: <20221218000753.4519-1-danieltimlee@gmail.com>
+Subject: [bpf-next v1 3/3] samples/bpf: fix uninitialized warning with test_current_task_under_cgroup
+Date:   Sun, 18 Dec 2022 09:07:53 +0900
+Message-Id: <20221218000753.4519-4-danieltimlee@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221218000753.4519-1-danieltimlee@gmail.com>
+References: <20221218000753.4519-1-danieltimlee@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, compiling samples/bpf with LLVM emits several warning. They
-are only small details, but they do not appear when compiled with GCC.
-Detailed compilation command and warning logs can be found from bpf CI.
+Currently, compiling samples/bpf with LLVM warns about the uninitialized
+use of variable with test_current_task_under_cgroup.
 
-Daniel T. Lee (3):
-  samples/bpf: remove unused function with test_lru_dist
-  samples/bpf: replace meaningless counter with tracex4
-  samples/bpf: fix uninitialized warning with
-    test_current_task_under_cgroup
+    samples/bpf $ export LLVM=-16;
+    samples/bpf $ make
+    /tmp/bpf/samples/bpf/test_current_task_under_cgroup_user.c:57:6:
+    warning: variable 'cg2' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+	    if (setup_cgroup_environment())
+		^~~~~~~~~~~~~~~~~~~~~~~~~~
+    /tmp/bpf/samples/bpf/test_current_task_under_cgroup_user.c:106:8:
+    note: uninitialized use occurs here
+	    close(cg2);
+		  ^~~
+    /tmp/bpf/samples/bpf/test_current_task_under_cgroup_user.c:57:2:
+    note: remove the 'if' if its condition is always false
+	    if (setup_cgroup_environment())
+	    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /tmp/bpf/samples/bpf/test_current_task_under_cgroup_user.c:19:9:
+    note: initialize the variable 'cg2' to silence this warning
+	    int cg2, idx = 0, rc = 1;
+		   ^
+		    = 0
+    1 warning generated.
 
+This commit resolve this compiler warning by pre-initialize the variable
+with error for safeguard.
+
+Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
+Acked-by: Yonghong Song <yhs@fb.com>
+---
  samples/bpf/test_current_task_under_cgroup_user.c | 6 ++++--
- samples/bpf/test_lru_dist.c                       | 5 -----
- samples/bpf/tracex4_user.c                        | 4 ++--
- 3 files changed, 6 insertions(+), 9 deletions(-)
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
+diff --git a/samples/bpf/test_current_task_under_cgroup_user.c b/samples/bpf/test_current_task_under_cgroup_user.c
+index ac251a417f45..6fb25906835e 100644
+--- a/samples/bpf/test_current_task_under_cgroup_user.c
++++ b/samples/bpf/test_current_task_under_cgroup_user.c
+@@ -14,9 +14,9 @@
+ int main(int argc, char **argv)
+ {
+ 	pid_t remote_pid, local_pid = getpid();
++	int cg2 = -1, idx = 0, rc = 1;
+ 	struct bpf_link *link = NULL;
+ 	struct bpf_program *prog;
+-	int cg2, idx = 0, rc = 1;
+ 	struct bpf_object *obj;
+ 	char filename[256];
+ 	int map_fd[2];
+@@ -103,7 +103,9 @@ int main(int argc, char **argv)
+ 	rc = 0;
+ 
+ err:
+-	close(cg2);
++	if (cg2 != -1)
++		close(cg2);
++
+ 	cleanup_cgroup_environment();
+ 
+ cleanup:
 -- 
 2.34.1
-
-Changes in V2: 
-- Change the cover letter subject
 
