@@ -2,24 +2,24 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E30D9C10F1B
-	for <bpf@archiver.kernel.org>; Mon, 19 Dec 2022 13:36:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5137BC46467
+	for <bpf@archiver.kernel.org>; Mon, 19 Dec 2022 13:36:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbiLSNgi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 19 Dec 2022 08:36:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43140 "EHLO
+        id S232119AbiLSNgj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 19 Dec 2022 08:36:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231733AbiLSNgg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S231786AbiLSNgg (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 19 Dec 2022 08:36:36 -0500
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8DA110A;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E632605;
         Mon, 19 Dec 2022 05:36:34 -0800 (PST)
 Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NbLMc3RvFz4f3p1J;
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NbLMc1NDtz4f3jqP;
         Mon, 19 Dec 2022 21:36:28 +0800 (CST)
 Received: from localhost.localdomain (unknown [10.67.175.61])
-        by APP2 (Coremail) with SMTP id Syh0CgAH++jcaKBjpueTAA--.19298S4;
-        Mon, 19 Dec 2022 21:36:31 +0800 (CST)
+        by APP2 (Coremail) with SMTP id Syh0CgAH++jcaKBjpueTAA--.19298S2;
+        Mon, 19 Dec 2022 21:36:29 +0800 (CST)
 From:   Pu Lehui <pulehui@huaweicloud.com>
 To:     bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
         linux-kernel@vger.kernel.org
@@ -38,140 +38,72 @@ Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Pu Lehui <pulehui@huawei.com>,
         Pu Lehui <pulehui@huaweicloud.com>
-Subject: [RFC PATCH bpf-next 2/4] riscv, bpf: Factor out emit_call for kernel and bpf context
-Date:   Mon, 19 Dec 2022 21:37:34 +0800
-Message-Id: <20221219133736.1387008-3-pulehui@huaweicloud.com>
+Subject: [RFC PATCH bpf-next 0/4] Support bpf trampoline for RV64
+Date:   Mon, 19 Dec 2022 21:37:32 +0800
+Message-Id: <20221219133736.1387008-1-pulehui@huaweicloud.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221219133736.1387008-1-pulehui@huaweicloud.com>
-References: <20221219133736.1387008-1-pulehui@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgAH++jcaKBjpueTAA--.19298S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxurWfuw13GrWUJr4rXw47Jwb_yoW5Zr4xpF
-        W5CFn3C3yvqFySgFyDGFs5Zw1akr4v9ry3tF93W39YkFsFqrsxKF15Ka1Yqa4Yyry8Gr4r
-        JFsFkFnxu3WUArJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPj14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-        x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2
-        xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v2
-        6r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2
-        Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_
-        Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8Jw
-        CI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOJPEUUUU
-        U
+X-CM-TRANSID: Syh0CgAH++jcaKBjpueTAA--.19298S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tw17GrWfJw4xAF4fArWDurg_yoW8Gryfpa
+        yFkry3CFyDXFy7Jwnaqa1UZ3WFv3ykX3W3Gw13J3yrCan8Xry7Jr1Yga15t34rCFyfu3WU
+        trn0qF4jkas8Aa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvF14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AK
+        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+        fUOmhFUUUUU
 X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Pu Lehui <pulehui@huawei.com>
+BPF trampoline is the critical infrastructure of the bpf
+subsystem, acting as a mediator between kernel functions
+and BPF programs. Numerous important features, such as
+using ebpf program for zero overhead kernel introspection,
+rely on this key component. We can't wait to support bpf
+trampoline on RV64. The implementation of bpf trampoline
+was closely to x86 and arm64 for future development.
 
-The current emit_call function is not suitable for kernel
-function call as it store return value to bpf R0 register.
-We can separate it out for common use. Meanwhile, simplify
-judgment logic, that is, fixed function address can use jal
-or auipc+jalr, while the unfixed can use only auipc+jalr.
+As most of riscv cpu support unaligned memory accesses,
+we temporarily use patch [1] to facilitate testing. The
+test results are as follow, and test_verifier with no
+new failure ceses.
 
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
- arch/riscv/net/bpf_jit_comp64.c | 30 +++++++++++++-----------------
- 1 file changed, 13 insertions(+), 17 deletions(-)
+- fexit_test:OK
+- fentry_test:OK
+- fentry_fexit:OK
+- fexit_stress:OK
+- fexit_bpf2bpf:OK
+- dummy_st_ops:OK
+- modify_return:OK
+- get_func_ip_test:OK
+- get_func_args_test:OK
+- trampoline_count:OK
 
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index 5b568ba6dcfe..bf4721a99a09 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -428,12 +428,12 @@ static void emit_sext_32_rd(u8 *rd, struct rv_jit_context *ctx)
- 	*rd = RV_REG_T2;
- }
- 
--static int emit_jump_and_link(u8 rd, s64 rvoff, bool force_jalr,
-+static int emit_jump_and_link(u8 rd, s64 rvoff, bool fixed_addr,
- 			      struct rv_jit_context *ctx)
- {
- 	s64 upper, lower;
- 
--	if (rvoff && is_21b_int(rvoff) && !force_jalr) {
-+	if (rvoff && fixed_addr && is_21b_int(rvoff)) {
- 		emit(rv_jal(rd, rvoff >> 1), ctx);
- 		return 0;
- 	} else if (in_auipc_jalr_range(rvoff)) {
-@@ -454,24 +454,17 @@ static bool is_signed_bpf_cond(u8 cond)
- 		cond == BPF_JSGE || cond == BPF_JSLE;
- }
- 
--static int emit_call(bool fixed, u64 addr, struct rv_jit_context *ctx)
-+static int emit_call(u64 addr, bool fixed_addr, struct rv_jit_context *ctx)
- {
- 	s64 off = 0;
- 	u64 ip;
--	u8 rd;
--	int ret;
- 
- 	if (addr && ctx->insns) {
- 		ip = (u64)(long)(ctx->insns + ctx->ninsns);
- 		off = addr - ip;
- 	}
- 
--	ret = emit_jump_and_link(RV_REG_RA, off, !fixed, ctx);
--	if (ret)
--		return ret;
--	rd = bpf_to_rv_reg(BPF_REG_0, ctx);
--	emit_mv(rd, RV_REG_A0, ctx);
--	return 0;
-+	return emit_jump_and_link(RV_REG_RA, off, fixed_addr, ctx);
- }
- 
- static void emit_atomic(u8 rd, u8 rs, s16 off, s32 imm, bool is64,
-@@ -913,7 +906,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	/* JUMP off */
- 	case BPF_JMP | BPF_JA:
- 		rvoff = rv_offset(i, off, ctx);
--		ret = emit_jump_and_link(RV_REG_ZERO, rvoff, false, ctx);
-+		ret = emit_jump_and_link(RV_REG_ZERO, rvoff, true, ctx);
- 		if (ret)
- 			return ret;
- 		break;
-@@ -1032,17 +1025,20 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	/* function call */
- 	case BPF_JMP | BPF_CALL:
- 	{
--		bool fixed;
-+		bool fixed_addr;
- 		u64 addr;
- 
- 		mark_call(ctx);
--		ret = bpf_jit_get_func_addr(ctx->prog, insn, extra_pass, &addr,
--					    &fixed);
-+		ret = bpf_jit_get_func_addr(ctx->prog, insn, extra_pass,
-+					    &addr, &fixed_addr);
- 		if (ret < 0)
- 			return ret;
--		ret = emit_call(fixed, addr, ctx);
-+
-+		ret = emit_call(addr, fixed_addr, ctx);
- 		if (ret)
- 			return ret;
-+
-+		emit_mv(bpf_to_rv_reg(BPF_REG_0, ctx), RV_REG_A0, ctx);
- 		break;
- 	}
- 	/* tail call */
-@@ -1057,7 +1053,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 			break;
- 
- 		rvoff = epilogue_offset(ctx);
--		ret = emit_jump_and_link(RV_REG_ZERO, rvoff, false, ctx);
-+		ret = emit_jump_and_link(RV_REG_ZERO, rvoff, true, ctx);
- 		if (ret)
- 			return ret;
- 		break;
+[1] https://lore.kernel.org/linux-riscv/20210916130855.4054926-2-chenhuang5@huawei.com/
+
+Pu Lehui (4):
+  bpf: Rollback to text_poke when arch not supported ftrace direct call
+  riscv, bpf: Factor out emit_call for kernel and bpf context
+  riscv, bpf: Add bpf_arch_text_poke support for RV64
+  riscv, bpf: Add bpf trampoline support for RV64
+
+ arch/riscv/net/bpf_jit.h        |   5 +
+ arch/riscv/net/bpf_jit_comp64.c | 484 ++++++++++++++++++++++++++++++--
+ kernel/bpf/trampoline.c         |   8 +-
+ 3 files changed, 472 insertions(+), 25 deletions(-)
+
 -- 
 2.25.1
 
