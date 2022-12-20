@@ -2,505 +2,366 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0CD2C4332F
-	for <bpf@archiver.kernel.org>; Tue, 20 Dec 2022 22:21:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14DDCC4332F
+	for <bpf@archiver.kernel.org>; Tue, 20 Dec 2022 22:21:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234102AbiLTWVJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 20 Dec 2022 17:21:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37920 "EHLO
+        id S234213AbiLTWVY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 20 Dec 2022 17:21:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234168AbiLTWU4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 20 Dec 2022 17:20:56 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153CEFF1
-        for <bpf@vger.kernel.org>; Tue, 20 Dec 2022 14:20:55 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id mn20-20020a17090b189400b0021941492f66so1507510pjb.0
-        for <bpf@vger.kernel.org>; Tue, 20 Dec 2022 14:20:55 -0800 (PST)
+        with ESMTP id S233921AbiLTWVD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 20 Dec 2022 17:21:03 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD339FD0C
+        for <bpf@vger.kernel.org>; Tue, 20 Dec 2022 14:21:00 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id nb2-20020a17090b35c200b00221433a393dso5810841pjb.5
+        for <bpf@vger.kernel.org>; Tue, 20 Dec 2022 14:21:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=F4KpgBgmxtqPss0z6NnuyIHtGf9yFTOSo0Z+jprIOPs=;
-        b=gsa4/O+w2cghvuYvGEzw249i/n4Ppz2mUGsT0fB4hJPKNw/mp4VV1hDVKw8oowy3u0
-         mNhMbhGYT2jwCn/J+LgauMGrslqeZpu98dpbacg4buLA9JsszvWFLUvU50AKjDa9wsH6
-         l6vTLFgKsAqR+NsQZY7Ja3vUurM/fBax3pwBGREkmxlDsikPMtDCSJ1TI8o81yKl3W7a
-         nIY/o7l69Yj4IpPQJlxY9hDc8cHB/u6h7p4d1WpcBrDaB7N/7ZvF6ukksKd39ptkktLm
-         en3hACKCueJHw40cvj7sOnBufaC+k/66u/EJ78ULN6hhGJ+Mb5Q0nxeHG2baScmTxM6t
-         UEgg==
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q/zYVK3w8gZZTHQB/nLhb/Pojc2PCw1BBaC3QtGAel4=;
+        b=HFYfKm55Yqhkk5M0JcHec7+xPyP5MRv7vvJqPAdrEm9W//kdiSMWgUFOzynri2TNIz
+         1oJfB96VONPCgWNw5DmSdj8xG6HxrkQvPzvCEsxP2MuTYpDnEvXHn3xN4HddvIh3QKgZ
+         kKXErq3cyXJDk2/19Rc4fPdXJQpl8IZ451n9zfsDSJ8hgQcXMRUaaMnt0rcNz4ItfWkr
+         pyvQux+jQIlkjs7GojHhDIt6D8w7qb/0G3Z75ZBNrBiQNDccaXsp4RBcu0VARdYigl4p
+         w/c+XVUyEgVC0cMuiHNdj6l0T56Daw2R4F+Q+HGE+t0T47UIGFyVvB4nxUeHxabz75gJ
+         0wlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F4KpgBgmxtqPss0z6NnuyIHtGf9yFTOSo0Z+jprIOPs=;
-        b=tgpuuIi9zUWJR9w3teMxpLbcfEV9nZ4Rze81neM+wDKTCzwt+vq9y+eILY3ZJqL6dL
-         NUNNHcQ1CFPWRmpl9z98ol/Uu60eh/ly2PjF3CZFMxGhwjCHfryMDejzqttsorp/pK6p
-         HvpXlPrLkE2Qc45YgTIsWmTjZFpenZJCs3hyBLaIEMQnVPLORtipiUWWXWJwMKpove/j
-         k/U9UTzz/+a4sPqrGWICuxOuz4JNjlwo/hPtcDMl9XmgGnTBfJxfk9X6GFJSlzT3me/N
-         jGe2kl4Ga7vy3DspMo0FGWh5a/i2XzQcZ2Z6KDrDwywwLn2ExOMbZs47r/NK4pHK0MEv
-         2+mw==
-X-Gm-Message-State: AFqh2kqGg+vyUxbr94u6LOi2YRpnzFF3f8Rwbk3Pz4uYl0QsMUGf0oBi
-        LEADjzeRBsad9xXD8nyVRl5sBNnLQp+M96epR9MDsoWZzjsS6qtbC8e07uA+Nh89Kkuz3lUg/gP
-        xUsdsV9kHXnzM1rZcDxI8KHHnsHADFb+p66tOkjztMofj63/BEA==
-X-Google-Smtp-Source: AMrXdXv5ZpEoBUCRcttIdOWNcvstS/OJD+JSUVS07VDbA2zasweOzJ85clsZ22UXwlfEqmaqkCjN6zg=
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=q/zYVK3w8gZZTHQB/nLhb/Pojc2PCw1BBaC3QtGAel4=;
+        b=UbxSggFozUmyJUjUqN09frEg7jBh5AmkhpcBaiG2ZkC2TdCIG5ITiuzRlKoVIosumk
+         cl8zrHz9T5UMglWRfbEh/7hgA9PaMUfn+J1tlVeCahIvdF8AHgtM9eayWboeh+FmJsjY
+         xJ3bTPE4WzHveVaYlLfn9vRGkbs5OqULav8X67PqSqC9bCvlqrwlwKcUHud5pnAIfF2h
+         6kDukKSqfMvKCCx5ewYFhjX2rm+wil2giZmQC/aBGZAJdu+JsqsXP3OljVXLb/UrRX7X
+         qZ+4I4560QePUAiryDHCc2mNE+pntxPifXUlU5Af1PCiIZmkDwPwji/GWdIsnZziZpzf
+         Wy2g==
+X-Gm-Message-State: ANoB5pmGIb3lghEQd9zEUX3IjS3XKVU7x65U86pv1cS3zylsAFna4AJF
+        ufSVmC2F94Ta2HqyfUgfmIpt6ab9AKME7GtAldpO1RvhH5PfFIc1Z1XiuBtwZ/J8QhV7P7JCkdR
+        g3Lyp9ZRSeh0TOOGeVhwZvOWQtbMnLpmmwquzjgBbdMDmSNV75g==
+X-Google-Smtp-Source: AA0mqf63j/b6b+G4A8oa11wgdZdQZx6rV1mROvfZY1AgpzdlGcF/SQ430IWLPSAkvd02Bcxu6kkuT2I=
 X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a17:90b:3144:b0:219:629a:8ad8 with SMTP id
- ip4-20020a17090b314400b00219629a8ad8mr2992281pjb.159.1671574854407; Tue, 20
- Dec 2022 14:20:54 -0800 (PST)
-Date:   Tue, 20 Dec 2022 14:20:31 -0800
+ (user=sdf job=sendgmr) by 2002:a05:6a00:10cd:b0:567:546c:718b with SMTP id
+ d13-20020a056a0010cd00b00567546c718bmr80528639pfu.17.1671574860068; Tue, 20
+ Dec 2022 14:21:00 -0800 (PST)
+Date:   Tue, 20 Dec 2022 14:20:34 -0800
 In-Reply-To: <20221220222043.3348718-1-sdf@google.com>
 Mime-Version: 1.0
 References: <20221220222043.3348718-1-sdf@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20221220222043.3348718-6-sdf@google.com>
-Subject: [PATCH bpf-next v5 05/17] bpf: Introduce device-bound XDP programs
+Message-ID: <20221220222043.3348718-9-sdf@google.com>
+Subject: [PATCH bpf-next v5 08/17] bpf: Support consuming XDP HW metadata from
+ fext programs
 From:   Stanislav Fomichev <sdf@google.com>
 To:     bpf@vger.kernel.org
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
         haoluo@google.com, jolsa@kernel.org,
-        David Ahern <dsahern@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Willem de Bruijn <willemb@google.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Anatoly Burakov <anatoly.burakov@intel.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
-        netdev@vger.kernel.org
+        "=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?=" <toke@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-New flag BPF_F_XDP_DEV_BOUND_ONLY plus all the infra to have a way
-to associate a netdev with a BPF program at load time.
+From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
 
-Some existing 'offloaded' routines are renamed to 'dev_bound' for
-consistency with the rest.
+Instead of rejecting the attaching of PROG_TYPE_EXT programs to XDP
+programs that consume HW metadata, implement support for propagating the
+offload information. The extension program doesn't need to set a flag or
+ifindex, these will just be propagated from the target by the verifier.
+We need to create a separate offload object for the extension program,
+though, since it can be reattached to a different program later (which
+means we can't just inherit the offload information from the target).
 
-netdevsim checks are dropped in favor of generic check in dev_xdp_attach.
+An additional check is added on attach that the new target is compatible
+with the offload information in the extension prog.
 
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: David Ahern <dsahern@gmail.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Willem de Bruijn <willemb@google.com>
-Cc: Jesper Dangaard Brouer <brouer@redhat.com>
-Cc: Anatoly Burakov <anatoly.burakov@intel.com>
-Cc: Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc: Magnus Karlsson <magnus.karlsson@gmail.com>
-Cc: Maryam Tahhan <mtahhan@redhat.com>
-Cc: xdp-hints@xdp-project.net
-Cc: netdev@vger.kernel.org
+Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- drivers/net/netdevsim/bpf.c    |   4 --
- include/linux/bpf.h            |  24 ++++++--
- include/uapi/linux/bpf.h       |   5 ++
- kernel/bpf/core.c              |   4 +-
- kernel/bpf/offload.c           | 109 +++++++++++++++++++++++++--------
- kernel/bpf/syscall.c           |   9 +--
- net/core/dev.c                 |   5 ++
- tools/include/uapi/linux/bpf.h |   5 ++
- 8 files changed, 126 insertions(+), 39 deletions(-)
+ include/linux/bpf.h   |  14 ++++++
+ kernel/bpf/offload.c  | 107 ++++++++++++++++++++++++++++++++----------
+ kernel/bpf/syscall.c  |  12 +++++
+ kernel/bpf/verifier.c |   5 --
+ 4 files changed, 109 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/net/netdevsim/bpf.c b/drivers/net/netdevsim/bpf.c
-index 50854265864d..f60eb97e3a62 100644
---- a/drivers/net/netdevsim/bpf.c
-+++ b/drivers/net/netdevsim/bpf.c
-@@ -315,10 +315,6 @@ nsim_setup_prog_hw_checks(struct netdevsim *ns, struct netdev_bpf *bpf)
- 		NSIM_EA(bpf->extack, "xdpoffload of non-bound program");
- 		return -EINVAL;
- 	}
--	if (!bpf_offload_dev_match(bpf->prog, ns->netdev)) {
--		NSIM_EA(bpf->extack, "program bound to different dev");
--		return -EINVAL;
--	}
- 
- 	state = bpf->prog->aux->offload->dev_priv;
- 	if (WARN_ON(strcmp(state->state, "xlated"))) {
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 630f259d0447..4c9649e69993 100644
+index 969f53691dd4..f1bacd8ee402 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -1261,7 +1261,8 @@ struct bpf_prog_aux {
- 	enum bpf_prog_type saved_dst_prog_type;
- 	enum bpf_attach_type saved_dst_attach_type;
- 	bool verifier_zext; /* Zero extensions has been inserted by verifier. */
--	bool offload_requested;
-+	bool dev_bound; /* Program is bound to the netdev. */
-+	bool offload_requested; /* Program is bound and offloaded to the netdev. */
- 	bool attach_btf_trace; /* true if attaching to BTF-enabled raw tp */
- 	bool func_proto_unreliable;
- 	bool sleepable;
-@@ -2451,7 +2452,7 @@ void __bpf_free_used_maps(struct bpf_prog_aux *aux,
- bool bpf_prog_get_ok(struct bpf_prog *, enum bpf_prog_type *, bool);
- 
- int bpf_prog_offload_compile(struct bpf_prog *prog);
--void bpf_prog_offload_destroy(struct bpf_prog *prog);
-+void bpf_prog_dev_bound_destroy(struct bpf_prog *prog);
- int bpf_prog_offload_info_fill(struct bpf_prog_info *info,
- 			       struct bpf_prog *prog);
- 
-@@ -2479,7 +2480,13 @@ bool bpf_offload_dev_match(struct bpf_prog *prog, struct net_device *netdev);
- void unpriv_ebpf_notify(int new_state);
- 
+@@ -2482,6 +2482,7 @@ void unpriv_ebpf_notify(int new_state);
  #if defined(CONFIG_NET) && defined(CONFIG_BPF_SYSCALL)
--int bpf_prog_offload_init(struct bpf_prog *prog, union bpf_attr *attr);
-+int bpf_prog_dev_bound_init(struct bpf_prog *prog, union bpf_attr *attr);
-+void bpf_dev_bound_netdev_unregister(struct net_device *dev);
+ void *bpf_dev_bound_resolve_kfunc(struct bpf_prog *prog, u32 func_id);
+ int bpf_prog_dev_bound_init(struct bpf_prog *prog, union bpf_attr *attr);
++int bpf_prog_dev_bound_inherit(struct bpf_prog *new_prog, struct bpf_prog =
+*old_prog);
+ void bpf_dev_bound_netdev_unregister(struct net_device *dev);
+=20
+ static inline bool bpf_prog_is_dev_bound(const struct bpf_prog_aux *aux)
+@@ -2494,6 +2495,8 @@ static inline bool bpf_prog_is_offloaded(const struct=
+ bpf_prog_aux *aux)
+ 	return aux->offload_requested;
+ }
+=20
++bool bpf_prog_dev_bound_match(struct bpf_prog *lhs, struct bpf_prog *rhs);
 +
-+static inline bool bpf_prog_is_dev_bound(const struct bpf_prog_aux *aux)
-+{
-+	return aux->dev_bound;
-+}
- 
- static inline bool bpf_prog_is_offloaded(const struct bpf_prog_aux *aux)
+ static inline bool bpf_map_is_offloaded(struct bpf_map *map)
  {
-@@ -2507,12 +2514,21 @@ void sock_map_unhash(struct sock *sk);
- void sock_map_destroy(struct sock *sk);
- void sock_map_close(struct sock *sk, long timeout);
- #else
--static inline int bpf_prog_offload_init(struct bpf_prog *prog,
-+static inline int bpf_prog_dev_bound_init(struct bpf_prog *prog,
- 					union bpf_attr *attr)
- {
+ 	return unlikely(map->ops =3D=3D &bpf_map_offload_ops);
+@@ -2527,6 +2530,12 @@ static inline int bpf_prog_dev_bound_init(struct bpf=
+_prog *prog,
  	return -EOPNOTSUPP;
  }
- 
-+static inline void bpf_dev_bound_netdev_unregister(struct net_device *dev)
+=20
++static inline int bpf_prog_dev_bound_inherit(struct bpf_prog *new_prog,
++					     struct bpf_prog *old_prog)
 +{
++	return -EOPNOTSUPP;
 +}
 +
-+static inline bool bpf_prog_is_dev_bound(const struct bpf_prog_aux *aux)
+ static inline void bpf_dev_bound_netdev_unregister(struct net_device *dev)
+ {
+ }
+@@ -2541,6 +2550,11 @@ static inline bool bpf_prog_is_offloaded(struct bpf_=
+prog_aux *aux)
+ 	return false;
+ }
+=20
++static inline bool bpf_prog_dev_bound_match(struct bpf_prog *lhs, struct b=
+pf_prog *rhs)
 +{
 +	return false;
 +}
 +
- static inline bool bpf_prog_is_offloaded(struct bpf_prog_aux *aux)
+ static inline bool bpf_map_is_offloaded(struct bpf_map *map)
  {
  	return false;
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index bc1a3d232ae4..d0b6ac896699 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1156,6 +1156,11 @@ enum bpf_link_type {
-  */
- #define BPF_F_XDP_HAS_FRAGS	(1U << 5)
- 
-+/* If BPF_F_XDP_DEV_BOUND_ONLY is used in BPF_PROG_LOAD command, the loaded
-+ * program becomes device-bound but can access XDP metadata.
-+ */
-+#define BPF_F_XDP_DEV_BOUND_ONLY	(1U << 6)
-+
- /* link_create.kprobe_multi.flags used in LINK_CREATE command for
-  * BPF_TRACE_KPROBE_MULTI attach type to create return probe.
-  */
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index e9d64e26ef5b..bafcb7a3ae6f 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2554,8 +2554,8 @@ static void bpf_prog_free_deferred(struct work_struct *work)
- #endif
- 	bpf_free_used_maps(aux);
- 	bpf_free_used_btfs(aux);
--	if (bpf_prog_is_offloaded(aux))
--		bpf_prog_offload_destroy(aux->prog);
-+	if (bpf_prog_is_dev_bound(aux))
-+		bpf_prog_dev_bound_destroy(aux->prog);
- #ifdef CONFIG_PERF_EVENTS
- 	if (aux->prog->has_callchain_buf)
- 		put_callchain_buffers();
 diff --git a/kernel/bpf/offload.c b/kernel/bpf/offload.c
-index deb06498da0b..e803824c1ddd 100644
+index 0e3fc743e0a8..60978a1f9baa 100644
 --- a/kernel/bpf/offload.c
 +++ b/kernel/bpf/offload.c
-@@ -41,7 +41,7 @@ struct bpf_offload_dev {
- struct bpf_offload_netdev {
- 	struct rhash_head l;
- 	struct net_device *netdev;
--	struct bpf_offload_dev *offdev;
-+	struct bpf_offload_dev *offdev; /* NULL when bound-only */
- 	struct list_head progs;
- 	struct list_head maps;
- 	struct list_head offdev_netdevs;
-@@ -89,19 +89,17 @@ static int __bpf_offload_dev_netdev_register(struct bpf_offload_dev *offdev,
- 	INIT_LIST_HEAD(&ondev->progs);
- 	INIT_LIST_HEAD(&ondev->maps);
- 
--	down_write(&bpf_devs_lock);
- 	err = rhashtable_insert_fast(&offdevs, &ondev->l, offdevs_params);
- 	if (err) {
- 		netdev_warn(netdev, "failed to register for BPF offload\n");
--		goto err_unlock_free;
-+		goto err_free;
- 	}
- 
--	list_add(&ondev->offdev_netdevs, &offdev->netdevs);
--	up_write(&bpf_devs_lock);
-+	if (offdev)
-+		list_add(&ondev->offdev_netdevs, &offdev->netdevs);
- 	return 0;
- 
--err_unlock_free:
--	up_write(&bpf_devs_lock);
-+err_free:
+@@ -187,17 +187,13 @@ static void __bpf_offload_dev_netdev_unregister(struc=
+t bpf_offload_dev *offdev,
  	kfree(ondev);
- 	return err;
  }
-@@ -149,24 +147,26 @@ static void __bpf_map_offload_destroy(struct bpf_offloaded_map *offmap)
- static void __bpf_offload_dev_netdev_unregister(struct bpf_offload_dev *offdev,
- 						struct net_device *netdev)
- {
--	struct bpf_offload_netdev *ondev, *altdev;
-+	struct bpf_offload_netdev *ondev, *altdev = NULL;
- 	struct bpf_offloaded_map *offmap, *mtmp;
- 	struct bpf_prog_offload *offload, *ptmp;
- 
- 	ASSERT_RTNL();
- 
--	down_write(&bpf_devs_lock);
- 	ondev = rhashtable_lookup_fast(&offdevs, &netdev, offdevs_params);
- 	if (WARN_ON(!ondev))
--		goto unlock;
-+		return;
- 
- 	WARN_ON(rhashtable_remove_fast(&offdevs, &ondev->l, offdevs_params));
--	list_del(&ondev->offdev_netdevs);
- 
- 	/* Try to move the objects to another netdev of the device */
--	altdev = list_first_entry_or_null(&offdev->netdevs,
--					  struct bpf_offload_netdev,
--					  offdev_netdevs);
-+	if (offdev) {
-+		list_del(&ondev->offdev_netdevs);
-+		altdev = list_first_entry_or_null(&offdev->netdevs,
-+						  struct bpf_offload_netdev,
-+						  offdev_netdevs);
-+	}
-+
- 	if (altdev) {
- 		list_for_each_entry(offload, &ondev->progs, offloads)
- 			offload->netdev = altdev->netdev;
-@@ -185,11 +185,9 @@ static void __bpf_offload_dev_netdev_unregister(struct bpf_offload_dev *offdev,
- 	WARN_ON(!list_empty(&ondev->progs));
- 	WARN_ON(!list_empty(&ondev->maps));
- 	kfree(ondev);
--unlock:
--	up_write(&bpf_devs_lock);
- }
- 
--int bpf_prog_offload_init(struct bpf_prog *prog, union bpf_attr *attr)
-+int bpf_prog_dev_bound_init(struct bpf_prog *prog, union bpf_attr *attr)
+=20
+-int bpf_prog_dev_bound_init(struct bpf_prog *prog, union bpf_attr *attr)
++static int __bpf_prog_dev_bound_init(struct bpf_prog *prog, struct net_dev=
+ice *netdev)
  {
  	struct bpf_offload_netdev *ondev;
  	struct bpf_prog_offload *offload;
-@@ -199,7 +197,7 @@ int bpf_prog_offload_init(struct bpf_prog *prog, union bpf_attr *attr)
- 	    attr->prog_type != BPF_PROG_TYPE_XDP)
+ 	int err;
+=20
+-	if (attr->prog_type !=3D BPF_PROG_TYPE_SCHED_CLS &&
+-	    attr->prog_type !=3D BPF_PROG_TYPE_XDP)
+-		return -EINVAL;
+-
+-	if (attr->prog_flags & ~BPF_F_XDP_DEV_BOUND_ONLY)
++	if (!netdev)
  		return -EINVAL;
- 
--	if (attr->prog_flags)
-+	if (attr->prog_flags & ~BPF_F_XDP_DEV_BOUND_ONLY)
- 		return -EINVAL;
- 
- 	offload = kzalloc(sizeof(*offload), GFP_USER);
-@@ -214,11 +212,23 @@ int bpf_prog_offload_init(struct bpf_prog *prog, union bpf_attr *attr)
- 	if (err)
- 		goto err_maybe_put;
- 
-+	prog->aux->offload_requested = !(attr->prog_flags & BPF_F_XDP_DEV_BOUND_ONLY);
-+
- 	down_write(&bpf_devs_lock);
- 	ondev = bpf_offload_find_netdev(offload->netdev);
+=20
+ 	offload =3D kzalloc(sizeof(*offload), GFP_USER);
+@@ -205,21 +201,13 @@ int bpf_prog_dev_bound_init(struct bpf_prog *prog, un=
+ion bpf_attr *attr)
+ 		return -ENOMEM;
+=20
+ 	offload->prog =3D prog;
++	offload->netdev =3D netdev;
+=20
+-	offload->netdev =3D dev_get_by_index(current->nsproxy->net_ns,
+-					   attr->prog_ifindex);
+-	err =3D bpf_dev_offload_check(offload->netdev);
+-	if (err)
+-		goto err_maybe_put;
+-
+-	prog->aux->offload_requested =3D !(attr->prog_flags & BPF_F_XDP_DEV_BOUND=
+_ONLY);
+-
+-	down_write(&bpf_devs_lock);
+ 	ondev =3D bpf_offload_find_netdev(offload->netdev);
  	if (!ondev) {
--		err = -EINVAL;
--		goto err_unlock;
-+		if (bpf_prog_is_offloaded(prog->aux)) {
-+			err = -EINVAL;
-+			goto err_unlock;
-+		}
-+
-+		/* When only binding to the device, explicitly
-+		 * create an entry in the hashtable.
-+		 */
-+		err = __bpf_offload_dev_netdev_register(NULL, offload->netdev);
-+		if (err)
-+			goto err_unlock;
-+		ondev = bpf_offload_find_netdev(offload->netdev);
+ 		if (bpf_prog_is_offloaded(prog->aux)) {
+ 			err =3D -EINVAL;
+-			goto err_unlock;
++			goto err_free;
+ 		}
+=20
+ 		/* When only binding to the device, explicitly
+@@ -227,25 +215,80 @@ int bpf_prog_dev_bound_init(struct bpf_prog *prog, un=
+ion bpf_attr *attr)
+ 		 */
+ 		err =3D __bpf_offload_dev_netdev_register(NULL, offload->netdev);
+ 		if (err)
+-			goto err_unlock;
++			goto err_free;
+ 		ondev =3D bpf_offload_find_netdev(offload->netdev);
  	}
- 	offload->offdev = ondev->offdev;
- 	prog->aux->offload = offload;
-@@ -321,12 +331,41 @@ bpf_prog_offload_remove_insns(struct bpf_verifier_env *env, u32 off, u32 cnt)
- 	up_read(&bpf_devs_lock);
+ 	offload->offdev =3D ondev->offdev;
+ 	prog->aux->offload =3D offload;
+ 	list_add_tail(&offload->offloads, &ondev->progs);
+-	dev_put(offload->netdev);
+-	up_write(&bpf_devs_lock);
+=20
+ 	return 0;
+-err_unlock:
+-	up_write(&bpf_devs_lock);
+-err_maybe_put:
+-	if (offload->netdev)
+-		dev_put(offload->netdev);
++err_free:
+ 	kfree(offload);
+ 	return err;
  }
- 
--void bpf_prog_offload_destroy(struct bpf_prog *prog)
-+static void __bpf_prog_dev_bound_destroy(struct bpf_prog *prog)
+=20
++int bpf_prog_dev_bound_init(struct bpf_prog *prog, union bpf_attr *attr)
 +{
-+	struct bpf_prog_offload *offload = prog->aux->offload;
-+
-+	if (offload->dev_state)
-+		offload->offdev->ops->destroy(prog);
-+
-+	/* Make sure BPF_PROG_GET_NEXT_ID can't find this dead program */
-+	bpf_prog_free_id(prog, true);
-+
-+	kfree(offload);
-+	prog->aux->offload = NULL;
-+}
-+
-+void bpf_prog_dev_bound_destroy(struct bpf_prog *prog)
- {
-+	struct bpf_offload_netdev *ondev;
 +	struct net_device *netdev;
-+
-+	rtnl_lock();
- 	down_write(&bpf_devs_lock);
--	if (prog->aux->offload)
--		__bpf_prog_offload_destroy(prog);
-+	if (prog->aux->offload) {
-+		list_del_init(&prog->aux->offload->offloads);
-+
-+		netdev = prog->aux->offload->netdev;
-+		if (netdev) {
-+			ondev = bpf_offload_find_netdev(netdev);
-+			if (ondev && !ondev->offdev && list_empty(&ondev->progs))
-+				__bpf_offload_dev_netdev_unregister(NULL, netdev);
-+		}
-+
-+		__bpf_prog_dev_bound_destroy(prog);
-+	}
- 	up_write(&bpf_devs_lock);
-+	rtnl_unlock();
- }
- 
- static int bpf_prog_offload_translate(struct bpf_prog *prog)
-@@ -621,7 +660,7 @@ static bool __bpf_offload_dev_match(struct bpf_prog *prog,
- 	struct bpf_offload_netdev *ondev1, *ondev2;
- 	struct bpf_prog_offload *offload;
- 
--	if (!bpf_prog_is_offloaded(prog->aux))
-+	if (!bpf_prog_is_dev_bound(prog->aux))
- 		return false;
- 
- 	offload = prog->aux->offload;
-@@ -667,14 +706,21 @@ bool bpf_offload_prog_map_match(struct bpf_prog *prog, struct bpf_map *map)
- int bpf_offload_dev_netdev_register(struct bpf_offload_dev *offdev,
- 				    struct net_device *netdev)
- {
--	return __bpf_offload_dev_netdev_register(offdev, netdev);
 +	int err;
 +
++	if (attr->prog_type !=3D BPF_PROG_TYPE_SCHED_CLS &&
++	    attr->prog_type !=3D BPF_PROG_TYPE_XDP)
++		return -EINVAL;
++
++	if (attr->prog_flags & ~BPF_F_XDP_DEV_BOUND_ONLY)
++		return -EINVAL;
++
++	netdev =3D dev_get_by_index(current->nsproxy->net_ns, attr->prog_ifindex)=
+;
++	if (!netdev)
++		return -EINVAL;
++
 +	down_write(&bpf_devs_lock);
-+	err = __bpf_offload_dev_netdev_register(offdev, netdev);
++	err =3D bpf_dev_offload_check(netdev);
++	if (err)
++		goto out;
++
++	prog->aux->offload_requested =3D !(attr->prog_flags & BPF_F_XDP_DEV_BOUND=
+_ONLY);
++
++	err =3D __bpf_prog_dev_bound_init(prog, netdev);
++	if (err)
++		goto out;
++
++out:
++	dev_put(netdev);
 +	up_write(&bpf_devs_lock);
 +	return err;
- }
- EXPORT_SYMBOL_GPL(bpf_offload_dev_netdev_register);
- 
- void bpf_offload_dev_netdev_unregister(struct bpf_offload_dev *offdev,
- 				       struct net_device *netdev)
- {
-+	down_write(&bpf_devs_lock);
- 	__bpf_offload_dev_netdev_unregister(offdev, netdev);
-+	up_write(&bpf_devs_lock);
- }
- EXPORT_SYMBOL_GPL(bpf_offload_dev_netdev_unregister);
- 
-@@ -708,6 +754,19 @@ void *bpf_offload_dev_priv(struct bpf_offload_dev *offdev)
- }
- EXPORT_SYMBOL_GPL(bpf_offload_dev_priv);
- 
-+void bpf_dev_bound_netdev_unregister(struct net_device *dev)
-+{
-+	struct bpf_offload_netdev *ondev;
-+
-+	ASSERT_RTNL();
-+
-+	down_write(&bpf_devs_lock);
-+	ondev = bpf_offload_find_netdev(dev);
-+	if (ondev && !ondev->offdev)
-+		__bpf_offload_dev_netdev_unregister(NULL, ondev->netdev);
-+	up_write(&bpf_devs_lock);
 +}
 +
- static int __init bpf_offload_init(void)
++int bpf_prog_dev_bound_inherit(struct bpf_prog *new_prog, struct bpf_prog =
+*old_prog)
++{
++	int err;
++
++	if (!bpf_prog_is_dev_bound(old_prog->aux))
++		return 0;
++
++	if (bpf_prog_is_offloaded(old_prog->aux))
++		return -EINVAL;
++
++	down_write(&bpf_devs_lock);
++	if (!old_prog->aux->offload) {
++		err =3D -EINVAL;
++		goto out;
++	}
++
++	new_prog->aux->dev_bound =3D old_prog->aux->dev_bound;
++	new_prog->aux->offload_requested =3D old_prog->aux->offload_requested;
++
++	err =3D __bpf_prog_dev_bound_init(new_prog, old_prog->aux->offload->netde=
+v);
++	if (err)
++		goto out;
++
++out:
++	up_write(&bpf_devs_lock);
++	return err;
++}
++
+ int bpf_prog_offload_verifier_prep(struct bpf_prog *prog)
  {
- 	return rhashtable_init(&offdevs, &offdevs_params);
+ 	struct bpf_prog_offload *offload;
+@@ -687,6 +730,22 @@ bool bpf_offload_dev_match(struct bpf_prog *prog, stru=
+ct net_device *netdev)
+ }
+ EXPORT_SYMBOL_GPL(bpf_offload_dev_match);
+=20
++bool bpf_prog_dev_bound_match(struct bpf_prog *lhs, struct bpf_prog *rhs)
++{
++	bool ret;
++
++	if (bpf_prog_is_offloaded(lhs->aux) !=3D bpf_prog_is_offloaded(rhs->aux))
++		return false;
++
++	down_read(&bpf_devs_lock);
++	ret =3D lhs->aux->offload && rhs->aux->offload &&
++	      lhs->aux->offload->netdev &&
++	      lhs->aux->offload->netdev =3D=3D rhs->aux->offload->netdev;
++	up_read(&bpf_devs_lock);
++
++	return ret;
++}
++
+ bool bpf_offload_prog_map_match(struct bpf_prog *prog, struct bpf_map *map=
+)
+ {
+ 	struct bpf_offloaded_map *offmap;
 diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 13bc96035116..11c558be4992 100644
+index 11c558be4992..64a68e8fb072 100644
 --- a/kernel/bpf/syscall.c
 +++ b/kernel/bpf/syscall.c
-@@ -2491,7 +2491,8 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
- 				 BPF_F_TEST_STATE_FREQ |
- 				 BPF_F_SLEEPABLE |
- 				 BPF_F_TEST_RND_HI32 |
--				 BPF_F_XDP_HAS_FRAGS))
-+				 BPF_F_XDP_HAS_FRAGS |
-+				 BPF_F_XDP_DEV_BOUND_ONLY))
- 		return -EINVAL;
- 
- 	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) &&
-@@ -2575,7 +2576,7 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
- 	prog->aux->attach_btf = attach_btf;
- 	prog->aux->attach_btf_id = attr->attach_btf_id;
- 	prog->aux->dst_prog = dst_prog;
--	prog->aux->offload_requested = !!attr->prog_ifindex;
-+	prog->aux->dev_bound = !!attr->prog_ifindex;
- 	prog->aux->sleepable = attr->prog_flags & BPF_F_SLEEPABLE;
- 	prog->aux->xdp_has_frags = attr->prog_flags & BPF_F_XDP_HAS_FRAGS;
- 
-@@ -2598,8 +2599,8 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
- 	atomic64_set(&prog->aux->refcnt, 1);
- 	prog->gpl_compatible = is_gpl ? 1 : 0;
- 
--	if (bpf_prog_is_offloaded(prog->aux)) {
--		err = bpf_prog_offload_init(prog, attr);
-+	if (bpf_prog_is_dev_bound(prog->aux)) {
-+		err = bpf_prog_dev_bound_init(prog, attr);
- 		if (err)
+@@ -2605,6 +2605,12 @@ static int bpf_prog_load(union bpf_attr *attr, bpfpt=
+r_t uattr)
  			goto free_prog_sec;
  	}
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 7d31c57ddd7e..573b819c219a 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -9228,6 +9228,10 @@ static int dev_xdp_attach(struct net_device *dev, struct netlink_ext_ack *extack
- 			NL_SET_ERR_MSG(extack, "Using offloaded program without HW_MODE flag is not supported");
- 			return -EINVAL;
- 		}
-+		if (bpf_prog_is_dev_bound(new_prog->aux) && !bpf_offload_dev_match(new_prog, dev)) {
-+			NL_SET_ERR_MSG(extack, "Program bound to different device");
-+			return -EINVAL;
-+		}
- 		if (new_prog->expected_attach_type == BPF_XDP_DEVMAP) {
- 			NL_SET_ERR_MSG(extack, "BPF_XDP_DEVMAP programs can not be attached to a device");
- 			return -EINVAL;
-@@ -10830,6 +10834,7 @@ void unregister_netdevice_many_notify(struct list_head *head,
- 		dev_shutdown(dev);
- 
- 		dev_xdp_uninstall(dev);
-+		bpf_dev_bound_netdev_unregister(dev);
- 
- 		netdev_offload_xstats_disable_all(dev);
- 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index bc1a3d232ae4..d0b6ac896699 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1156,6 +1156,11 @@ enum bpf_link_type {
-  */
- #define BPF_F_XDP_HAS_FRAGS	(1U << 5)
- 
-+/* If BPF_F_XDP_DEV_BOUND_ONLY is used in BPF_PROG_LOAD command, the loaded
-+ * program becomes device-bound but can access XDP metadata.
-+ */
-+#define BPF_F_XDP_DEV_BOUND_ONLY	(1U << 6)
+=20
++	if (type =3D=3D BPF_PROG_TYPE_EXT && dst_prog) {
++		err =3D bpf_prog_dev_bound_inherit(prog, dst_prog);
++		if (err)
++			goto free_prog_sec;
++	}
 +
- /* link_create.kprobe_multi.flags used in LINK_CREATE command for
-  * BPF_TRACE_KPROBE_MULTI attach type to create return probe.
-  */
--- 
+ 	/* find program type: socket_filter vs tracing_filter */
+ 	err =3D find_prog_type(type, prog);
+ 	if (err < 0)
+@@ -3021,6 +3027,12 @@ static int bpf_tracing_prog_attach(struct bpf_prog *=
+prog,
+ 			goto out_put_prog;
+ 		}
+=20
++		if (bpf_prog_is_dev_bound(prog->aux) &&
++		    !bpf_prog_dev_bound_match(prog, tgt_prog)) {
++			err =3D -EINVAL;
++			goto out_put_prog;
++		}
++
+ 		key =3D bpf_trampoline_compute_key(tgt_prog, NULL, btf_id);
+ 	}
+=20
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 320451a0be3e..64f4d2b5824f 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -16537,11 +16537,6 @@ int bpf_check_attach_target(struct bpf_verifier_lo=
+g *log,
+ 	if (tgt_prog) {
+ 		struct bpf_prog_aux *aux =3D tgt_prog->aux;
+=20
+-		if (bpf_prog_is_dev_bound(tgt_prog->aux)) {
+-			bpf_log(log, "Replacing device-bound programs not supported\n");
+-			return -EINVAL;
+-		}
+-
+ 		for (i =3D 0; i < aux->func_info_cnt; i++)
+ 			if (aux->func_info[i].type_id =3D=3D btf_id) {
+ 				subprog =3D i;
+--=20
 2.39.0.314.g84b9a713c41-goog
 
