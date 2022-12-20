@@ -2,62 +2,62 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B09EC3DA6E
-	for <bpf@archiver.kernel.org>; Tue, 20 Dec 2022 11:59:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DC2BC4332F
+	for <bpf@archiver.kernel.org>; Tue, 20 Dec 2022 12:00:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233331AbiLTL7m (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 20 Dec 2022 06:59:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56402 "EHLO
+        id S233416AbiLTL76 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 20 Dec 2022 06:59:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232097AbiLTL7i (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 20 Dec 2022 06:59:38 -0500
+        with ESMTP id S233336AbiLTL7n (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 20 Dec 2022 06:59:43 -0500
 Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0722F17418;
-        Tue, 20 Dec 2022 03:59:38 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id fy4so12214288pjb.0;
-        Tue, 20 Dec 2022 03:59:38 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7753917E13;
+        Tue, 20 Dec 2022 03:59:42 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id fy4so12214434pjb.0;
+        Tue, 20 Dec 2022 03:59:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aLG3GskQNPwnXFfpwtJ413hWYf/t2snRdM+z5Y/9OjI=;
-        b=bO4WmYNgwHhIxAa7x0d1hfbTp0QKCgUN6m5itRIuH+KaGIJ+Hh8zMm0yfypqO6U9xH
-         e5OfrRDDgs5lAmUgQ1SsWTXVReDLHl1sNaeAG2Qss+jfMcS0f1UUBLUNSHFd2KaZkIKD
-         spA7sEkGSe0/VKVV1fyF4X8IZiElqP3xqqwMQ6WZbUphpknJstAcr3MwUnIU8iScuvHv
-         cRN2he5ULh17VgcQx+ye9/z+lDsfF2Q1/tzjhWcIF36vusdVLQ4fB8dtiiju/x9fD/AE
-         yCorpYHO3+3x50hIMrFu/VCdz2U/e6pZZFD9aiQ6facFpm/3k93mdCytEXFtFMu8yRJJ
-         gdiQ==
+        bh=0ChfKO2eeBoMULr5ewcllVR5YsnxKeW8Y85F/urf2ac=;
+        b=lCsRlQYDOx2sddcCaiYgxCKvCzigmio9/pLm2MwR43zRRkivbD1iQ1Y0Suuu+j2hHi
+         PAgPg3fPTZ0Pt8unFbCCHo3xfRq8SVMAwQsx9exDb7II71o8OqiWuVJMzEv5CcNrgYb/
+         msoLmj9pDELBOGMeKkLJklWIKL9p7JjW07zmeRVU/nbYzRzuEjwuaOaNaH1AzRJrndPb
+         GDElWpPbVHuKOy8lU6syu7umesa8p/aOiTbfLXwxttSVQvTF8iBuiR09Zsv6nfiURDIy
+         lcTr9C0emMQWax4LSy3bqDho4754z6TDdnDB9JtQXqmkP1+/kVsLE25WDuUiJ4lXlIcC
+         Js1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=aLG3GskQNPwnXFfpwtJ413hWYf/t2snRdM+z5Y/9OjI=;
-        b=UlaKjMmCuyCwEIGda15D0r4xqZgZ5QSNNecr0wk0AJyrcAug/7LosT8ZElpEZNxlRo
-         Vo87P1LxEMHTYOPFyS6pMvLTXKucAOA0OJ1RINsdwjb4MaNlBbSQi4y+Fk3F9IrtvakE
-         uEyRV7stA4x9WdvBdlkjkSb4tjz1rUnY/FHoWAJHoQ7fFON9MC2Vb8x8l1ScWhRrbjpS
-         ptr/DsISpjhN8vtL0vVBOdbNns1q9Eqfc21V5lhCdzaP2XqzDBCb+OxoFzPsHtFubu4T
-         0nfZ3n0pYBSTT36otx7mB2O8vUVwMfQte03G7dXaQv8Uu+2pXoNcOSvnzRItouBANaG8
-         tgrg==
-X-Gm-Message-State: AFqh2krR9EkMvuxF3Tz7Z/Md4ySW/Wfch8ccSfbkRygOrv02Mi7E3VQM
-        Ds8+5TX4YxA5zgwDNeVFPQ==
-X-Google-Smtp-Source: AMrXdXtYSfJp/0jM/pisFSi9G4vronmQYRAX+oYx0+sMN7q4Hm6qZrcAS13Cg8P1jT0iz7YnWYJnHw==
-X-Received: by 2002:a17:90a:bd98:b0:221:5c1a:dca9 with SMTP id z24-20020a17090abd9800b002215c1adca9mr12943297pjr.30.1671537577491;
-        Tue, 20 Dec 2022 03:59:37 -0800 (PST)
+        bh=0ChfKO2eeBoMULr5ewcllVR5YsnxKeW8Y85F/urf2ac=;
+        b=VB1cbljceNQcvO0Jy3n2XsXUf50UL6mFVKLAbENBlaTVOaAgEmU5FurSf1wAazIYrG
+         VOioBBWzII1XLubyIWp1yPng5V5S1k1Sw3pci2u82vRhB+xXhLMC9SDRg4NsqscS1ZRq
+         oJNPWVxX6v4g4cIP6K0IU33j7MdHkzrbXuom0+ClRHruULrG56258HTCQR2gQMfVqt/Y
+         0jJpi70x/uboGx7vSr9pg+6ycLwqQARa3EGQFP9bxkO6MwaPjceul+ib263rF8h9snl0
+         MtqbgiSGHUmtycdjjYhiQMfS3XaOMkYcYkf8R6Wet65274HerJw1zxdZGvuZ7Z2N1O9x
+         mtGQ==
+X-Gm-Message-State: AFqh2krtP1zKTs9/zcSMBOZ163tSTo04ttX35eEOm/tt2AV63Tb40cZZ
+        RcWMXSpAVaVN4ZzGMPI9WA==
+X-Google-Smtp-Source: AMrXdXvnmaib6VFB94aIo/5L34sh7JlfjZcfF3Ure3MXIMQ7dAt7O2L8mVmlKnXGA0jcBLJOAq/Ryg==
+X-Received: by 2002:a17:90a:d910:b0:213:9bf5:6a10 with SMTP id c16-20020a17090ad91000b002139bf56a10mr13005905pjv.49.1671537582074;
+        Tue, 20 Dec 2022 03:59:42 -0800 (PST)
 Received: from WDIR.. ([182.209.58.25])
-        by smtp.gmail.com with ESMTPSA id z10-20020a17090a170a00b00219752c8ea3sm10982482pjd.48.2022.12.20.03.59.35
+        by smtp.gmail.com with ESMTPSA id z10-20020a17090a170a00b00219752c8ea3sm10982482pjd.48.2022.12.20.03.59.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 03:59:37 -0800 (PST)
+        Tue, 20 Dec 2022 03:59:41 -0800 (PST)
 From:   "Daniel T. Lee" <danieltimlee@gmail.com>
 To:     Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         Yonghong Song <yhs@fb.com>
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org
-Subject: [bpf-next v2 2/5] samples/bpf: use vmlinux.h instead of implicit headers in syscall tracing program
-Date:   Tue, 20 Dec 2022 20:59:25 +0900
-Message-Id: <20221220115928.11979-3-danieltimlee@gmail.com>
+Subject: [bpf-next v2 4/5] samples/bpf: fix tracex2 by using BPF_KSYSCALL macro
+Date:   Tue, 20 Dec 2022 20:59:27 +0900
+Message-Id: <20221220115928.11979-5-danieltimlee@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221220115928.11979-1-danieltimlee@gmail.com>
 References: <20221220115928.11979-1-danieltimlee@gmail.com>
@@ -67,98 +67,73 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This commit applies vmlinux.h to syscall tracing program. This change
-allows the bpf program to refer to the internal structure as a single
-"vmlinux.h" instead of including each header referenced by the bpf
-program.
+Currently, there is a problem with tracex2, as it doesn't print the
+histogram properly and the results are misleading. (all results report
+as 0)
+
+The problem is caused by a change in arguments of the function to which
+the kprobe connects. This tracex2 bpf program uses kprobe (attached
+to __x64_sys_write) to figure out the size of the write system call. In
+order to achieve this, the third argument 'count' must be intact.
+
+The following is a prototype of the sys_write variant. (checked with
+pfunct)
+
+    ~/git/linux$ pfunct -P fs/read_write.o | grep sys_write
+    ssize_t ksys_write(unsigned int fd, const char  * buf, size_t count);
+    long int __x64_sys_write(const struct pt_regs  * regs);
+    ... cross compile with s390x ...
+    long int __s390_sys_write(struct pt_regs * regs);
+
+Since the nature of SYSCALL_WRAPPER function wraps the argument once,
+additional process of argument extraction is required to properly parse
+the argument.
+
+    #define BPF_KSYSCALL(name, args...)
+    ... snip ...
+    struct pt_regs *regs = LINUX_HAS_SYSCALL_WRAPPER                    \
+			   ? (struct pt_regs *)PT_REGS_PARM1(ctx)       \
+			   : ctx;                                       \
+
+In order to fix this problem, the BPF_SYSCALL macro has been used. This
+reduces the hassle of parsing arguments from pt_regs. Since the macro
+uses the CORE version of argument extraction, additional portability
+comes too.
 
 Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
 ---
- samples/bpf/map_perf_test_kern.c                  | 5 ++---
- samples/bpf/test_current_task_under_cgroup_kern.c | 4 +---
- samples/bpf/test_probe_write_user_kern.c          | 5 ++---
- samples/bpf/trace_output_kern.c                   | 3 +--
- samples/bpf/tracex2_kern.c                        | 4 +---
- 5 files changed, 7 insertions(+), 14 deletions(-)
+ samples/bpf/tracex2.bpf.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/samples/bpf/map_perf_test_kern.c b/samples/bpf/map_perf_test_kern.c
-index 874e2f7e3d5d..0c7885057ffe 100644
---- a/samples/bpf/map_perf_test_kern.c
-+++ b/samples/bpf/map_perf_test_kern.c
-@@ -4,10 +4,9 @@
-  * modify it under the terms of version 2 of the GNU General Public
-  * License as published by the Free Software Foundation.
-  */
--#include <linux/skbuff.h>
--#include <linux/netdevice.h>
-+#include "vmlinux.h"
-+#include <errno.h>
+diff --git a/samples/bpf/tracex2.bpf.c b/samples/bpf/tracex2.bpf.c
+index a712eefc742e..0a5c75b367be 100644
+--- a/samples/bpf/tracex2.bpf.c
++++ b/samples/bpf/tracex2.bpf.c
+@@ -8,6 +8,7 @@
  #include <linux/version.h>
--#include <uapi/linux/bpf.h>
  #include <bpf/bpf_helpers.h>
  #include <bpf/bpf_tracing.h>
- #include <bpf/bpf_core_read.h>
-diff --git a/samples/bpf/test_current_task_under_cgroup_kern.c b/samples/bpf/test_current_task_under_cgroup_kern.c
-index 541fc861b984..0b059cee3cba 100644
---- a/samples/bpf/test_current_task_under_cgroup_kern.c
-+++ b/samples/bpf/test_current_task_under_cgroup_kern.c
-@@ -5,11 +5,9 @@
-  * License as published by the Free Software Foundation.
-  */
- 
--#include <linux/ptrace.h>
--#include <uapi/linux/bpf.h>
-+#include "vmlinux.h"
- #include <linux/version.h>
- #include <bpf/bpf_helpers.h>
--#include <uapi/linux/utsname.h>
++#include <bpf/bpf_core_read.h>
  
  struct {
- 	__uint(type, BPF_MAP_TYPE_CGROUP_ARRAY);
-diff --git a/samples/bpf/test_probe_write_user_kern.c b/samples/bpf/test_probe_write_user_kern.c
-index d60cabaaf753..a0f10c5ca273 100644
---- a/samples/bpf/test_probe_write_user_kern.c
-+++ b/samples/bpf/test_probe_write_user_kern.c
-@@ -4,9 +4,8 @@
-  * modify it under the terms of version 2 of the GNU General Public
-  * License as published by the Free Software Foundation.
-  */
--#include <linux/skbuff.h>
--#include <linux/netdevice.h>
--#include <uapi/linux/bpf.h>
-+#include "vmlinux.h"
-+#include <string.h>
- #include <linux/version.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
-diff --git a/samples/bpf/trace_output_kern.c b/samples/bpf/trace_output_kern.c
-index a481abf8c4c5..565a73b51b04 100644
---- a/samples/bpf/trace_output_kern.c
-+++ b/samples/bpf/trace_output_kern.c
-@@ -1,6 +1,5 @@
--#include <linux/ptrace.h>
-+#include "vmlinux.h"
- #include <linux/version.h>
--#include <uapi/linux/bpf.h>
- #include <bpf/bpf_helpers.h>
+ 	__uint(type, BPF_MAP_TYPE_HASH);
+@@ -76,14 +77,13 @@ struct {
+ } my_hist_map SEC(".maps");
  
- struct {
-diff --git a/samples/bpf/tracex2_kern.c b/samples/bpf/tracex2_kern.c
-index 82091facb83c..a712eefc742e 100644
---- a/samples/bpf/tracex2_kern.c
-+++ b/samples/bpf/tracex2_kern.c
-@@ -4,10 +4,8 @@
-  * modify it under the terms of version 2 of the GNU General Public
-  * License as published by the Free Software Foundation.
-  */
--#include <linux/skbuff.h>
--#include <linux/netdevice.h>
-+#include "vmlinux.h"
- #include <linux/version.h>
--#include <uapi/linux/bpf.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
+ SEC("ksyscall/write")
+-int bpf_prog3(struct pt_regs *ctx)
++int BPF_KSYSCALL(bpf_prog3, unsigned int fd, const char *buf, size_t count)
+ {
+-	long write_size = PT_REGS_PARM3(ctx);
+ 	long init_val = 1;
+ 	long *value;
+ 	struct hist_key key;
  
+-	key.index = log2l(write_size);
++	key.index = log2l(count);
+ 	key.pid_tgid = bpf_get_current_pid_tgid();
+ 	key.uid_gid = bpf_get_current_uid_gid();
+ 	bpf_get_current_comm(&key.comm, sizeof(key.comm));
 -- 
 2.34.1
 
