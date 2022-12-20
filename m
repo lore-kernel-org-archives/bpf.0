@@ -2,62 +2,62 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2D08C10F1E
-	for <bpf@archiver.kernel.org>; Tue, 20 Dec 2022 12:00:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DAA49C3DA6E
+	for <bpf@archiver.kernel.org>; Tue, 20 Dec 2022 12:00:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233491AbiLTL77 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 20 Dec 2022 06:59:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56452 "EHLO
+        id S233522AbiLTMAA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 20 Dec 2022 07:00:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233296AbiLTL7l (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 20 Dec 2022 06:59:41 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6530017598;
-        Tue, 20 Dec 2022 03:59:40 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so11893327pjm.2;
-        Tue, 20 Dec 2022 03:59:40 -0800 (PST)
+        with ESMTP id S232097AbiLTL7p (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 20 Dec 2022 06:59:45 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E6D16598;
+        Tue, 20 Dec 2022 03:59:44 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id fy4so12214527pjb.0;
+        Tue, 20 Dec 2022 03:59:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cMexRh2hV7YkgsRsAbZsGjx/dMRsJTIV708VtJ9ksKY=;
-        b=MMjfl6mHjdM5rbC5G1TnaDK+dkG6R6WuNClrWwcTFDbKxlrO+07tltWBEQZm+U6Qdz
-         90e7xoARG5ipkVPAnCqBCip9nThjRQiOGCIQWNbSWQLWuvUYaAlUf4DwkKOXtIxzqTC/
-         S8SLPXw14WLjZCKMAnw66LlxJb0QhjqufCCMaxTGQebWEeeLWVLYdfseonR3e2zRyy6Y
-         Yt8LjnkiwpLpJKRiDYjeYra/dQMPznnLdFHLXHC+Y85nNT8HcnlQLxNP6RxXarE09Bgi
-         38ARodr2kVDkBRhfebQ0DHqHeJXjkUxHmh2h07ZUZFmAnNXVvpLbHwB2xXRx0eahJmcK
-         9u4g==
+        bh=YZV/Ygg5ZLK/icKlwhdiYUcrDkEBcDRF0QNzCkC6zPE=;
+        b=KnAXW0kFi43Q478adbdX8W+JEMl1sSx3fiivWNYoQ1WAhPGMmvN9yQYcXRQaLq5O+O
+         6LTMT58pWHvfDSIDbD2w1DSew8tZXkMegOxx/qz9F1HXLQbQiU3ks80bOF0SadqAs8Kf
+         1bYOLZ3PrDW1RuGccmsEr8SKzaedHnRDTz8CR+n2bPpePERFCoShUNVi/gph2+TkSsjw
+         YouDtAX8qHDRVaAPN7fL0zqEve5ABl8O/MZ058hPYCBQJ7LC0QJtksRZL7k6InzcWM7K
+         BRP2HAYB+OSbtJed6VajdU/dqE8IFFpzvLl+YbJvJje8cGll5lAFK8CLywJCKtDR7Jbz
+         +8ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cMexRh2hV7YkgsRsAbZsGjx/dMRsJTIV708VtJ9ksKY=;
-        b=uSjvzEWxAnPS+hrXFIvP+umUzRCdY1cKGNTQgIpgK6YGDbsrRlMC1hNWwGFbkn8TdS
-         u0kJBZQHggYo/HN5If6R+CTbRSYWqUKBP7qPj+EsFOsbOpT+VoIyovvYi32hfJsBN04+
-         UHb76yV4l06ifHjKx3Beaxqocc0EAbYEzIOdL6UpMPlmOiVxDSJpChYxRLRK5PH/ze0P
-         ZHYozjoUCUCNLEGHdg0sIZ2I+C5V7at42qzchZZMWfeW0ejizaVN+yUhGtxRLolh7C51
-         wt7GADjUJL2I2D4q7HDOXboRBX+XgE+JVBmGjrpH+zdKCyqu6lijPzB29aKjDWFIk2p3
-         MZVw==
-X-Gm-Message-State: AFqh2kqeHJ4U8cCDrJuElDTCi3Ofpf67EQvdP+AJ+uVCu5hjXSVb2cKE
-        T6UQFToaGpwOyMtLqma6lg==
-X-Google-Smtp-Source: AMrXdXst5WSgeJm4UHJR9rINP1UVaQexaz9krffjbJ0L1lXVyrDguLHUnIxkx+ab7pB2KCVzgsU1bw==
-X-Received: by 2002:a17:90b:b17:b0:219:1a4e:349d with SMTP id bf23-20020a17090b0b1700b002191a4e349dmr14122871pjb.44.1671537579790;
-        Tue, 20 Dec 2022 03:59:39 -0800 (PST)
+        bh=YZV/Ygg5ZLK/icKlwhdiYUcrDkEBcDRF0QNzCkC6zPE=;
+        b=EhgReimKL0X/issNAFFwuQMN6DofTr3ZNng1pWhSXD1jgpfhLYgQG4mSmuZ1D6pe36
+         mI8k2bMx1Hbw72O20kP6T3626UoXqWbrwcaDpCngEjiISc1fh+aVM+qlv+s9NIF2yIzl
+         N78mtzoYZrE6AzVj2nhamqOlQqKYtc+12LY8aDY/Tw7PaYgPyAJrJZCaY3RD6mFDgFoK
+         cung8E81VUC+cpccNnELe51i+LkfcNuXQkZROIkJsFCot9GyLvXE2jVg41DKpFCV1aWW
+         2qkGQrY6yx5VKhihvYYqOi0pwVbbAmTDVJm8R3eB2z/0IuAiGtSi3naUO4yEdQOrC0uc
+         5Y7Q==
+X-Gm-Message-State: ANoB5pk0aSrLVJzPWI1vLCXrBuOSWjA4Fz+tUyHILyLrZkUzIdY+Yj5R
+        bTA0nHIVnPpJum7HWL0LkQ==
+X-Google-Smtp-Source: AA0mqf4cC9ovgUH8iqDQBDUrfZ47OoxQUaOkQKsKXu3VnDq/oEimiPN5x3Wi5NkpGDsXCQyj2P7j9Q==
+X-Received: by 2002:a17:90b:702:b0:219:5f68:586e with SMTP id s2-20020a17090b070200b002195f68586emr48418537pjz.18.1671537584364;
+        Tue, 20 Dec 2022 03:59:44 -0800 (PST)
 Received: from WDIR.. ([182.209.58.25])
-        by smtp.gmail.com with ESMTPSA id z10-20020a17090a170a00b00219752c8ea3sm10982482pjd.48.2022.12.20.03.59.37
+        by smtp.gmail.com with ESMTPSA id z10-20020a17090a170a00b00219752c8ea3sm10982482pjd.48.2022.12.20.03.59.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 03:59:39 -0800 (PST)
+        Tue, 20 Dec 2022 03:59:43 -0800 (PST)
 From:   "Daniel T. Lee" <danieltimlee@gmail.com>
 To:     Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         Yonghong Song <yhs@fb.com>
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org
-Subject: [bpf-next v2 3/5] samples/bpf: change _kern suffix to .bpf with syscall tracing program
-Date:   Tue, 20 Dec 2022 20:59:26 +0900
-Message-Id: <20221220115928.11979-4-danieltimlee@gmail.com>
+Subject: [bpf-next v2 5/5] samples/bpf: use BPF_KSYSCALL macro in syscall tracing programs
+Date:   Tue, 20 Dec 2022 20:59:28 +0900
+Message-Id: <20221220115928.11979-6-danieltimlee@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221220115928.11979-1-danieltimlee@gmail.com>
 References: <20221220115928.11979-1-danieltimlee@gmail.com>
@@ -67,180 +67,172 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently old compile rule (CLANG-bpf) doesn't contains VMLINUX_H define
-flag which is essential for the bpf program that includes "vmlinux.h".
-Also old compile rule doesn't directly specify the compile target as bpf,
-instead it uses bunch of extra options with clang followed by long chain
-of commands. (e.g. clang | opt | llvm-dis | llc)
-
-In Makefile, there is already new compile rule which is more simple and
-neat. And it also has -D__VMLINUX_H__ option. By just changing the _kern
-suffix to .bpf will inherit the benefit of the new CLANG-BPF compile
-target.
-
-Also, this commit adds dummy gnu/stub.h to the samples/bpf directory.
-As commit 1c2dd16add7e ("selftests/bpf: get rid of -D__x86_64__") noted,
-compiling with 'clang -target bpf' will raise an error with stubs.h
-unless workaround (-D__x86_64) is used. This commit solves this problem
-by adding dummy stub.h to make /usr/include/features.h to follow the
-expected path as the same way selftests/bpf dealt with.
+This commit enhances the syscall tracing programs by using the
+BPF_SYSCALL macro to reduce the inconvenience of parsing arguments from
+pt_regs. By simplifying argument extraction, bpf program will become
+clear to understand.
 
 Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
 ---
-Changes in V2:
-- add gnu/stub.h hack to fix compile error with 'clang -target bpf'
+ samples/bpf/map_perf_test.bpf.c               | 26 ++++++++-----------
+ .../bpf/test_current_task_under_cgroup.bpf.c  |  4 ++-
+ samples/bpf/test_probe_write_user.bpf.c       | 12 ++++-----
+ 3 files changed, 19 insertions(+), 23 deletions(-)
 
- samples/bpf/Makefile                                   | 10 +++++-----
- samples/bpf/gnu/stubs.h                                |  1 +
- .../bpf/{map_perf_test_kern.c => map_perf_test.bpf.c}  |  0
- samples/bpf/map_perf_test_user.c                       |  2 +-
- ...oup_kern.c => test_current_task_under_cgroup.bpf.c} |  0
- samples/bpf/test_current_task_under_cgroup_user.c      |  2 +-
- ...e_write_user_kern.c => test_probe_write_user.bpf.c} |  0
- samples/bpf/test_probe_write_user_user.c               |  2 +-
- .../bpf/{trace_output_kern.c => trace_output.bpf.c}    |  0
- samples/bpf/trace_output_user.c                        |  2 +-
- samples/bpf/{tracex2_kern.c => tracex2.bpf.c}          |  0
- samples/bpf/tracex2_user.c                             |  2 +-
- 12 files changed, 11 insertions(+), 10 deletions(-)
- create mode 100644 samples/bpf/gnu/stubs.h
- rename samples/bpf/{map_perf_test_kern.c => map_perf_test.bpf.c} (100%)
- rename samples/bpf/{test_current_task_under_cgroup_kern.c => test_current_task_under_cgroup.bpf.c} (100%)
- rename samples/bpf/{test_probe_write_user_kern.c => test_probe_write_user.bpf.c} (100%)
- rename samples/bpf/{trace_output_kern.c => trace_output.bpf.c} (100%)
- rename samples/bpf/{tracex2_kern.c => tracex2.bpf.c} (100%)
-
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 727da3c5879b..22039a0a5b35 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -125,21 +125,21 @@ always-y += sockex1_kern.o
- always-y += sockex2_kern.o
- always-y += sockex3_kern.o
- always-y += tracex1_kern.o
--always-y += tracex2_kern.o
-+always-y += tracex2.bpf.o
- always-y += tracex3_kern.o
- always-y += tracex4_kern.o
- always-y += tracex5_kern.o
- always-y += tracex6_kern.o
- always-y += tracex7_kern.o
- always-y += sock_flags_kern.o
--always-y += test_probe_write_user_kern.o
--always-y += trace_output_kern.o
-+always-y += test_probe_write_user.bpf.o
-+always-y += trace_output.bpf.o
- always-y += tcbpf1_kern.o
- always-y += tc_l2_redirect_kern.o
- always-y += lathist_kern.o
- always-y += offwaketime_kern.o
- always-y += spintest_kern.o
--always-y += map_perf_test_kern.o
-+always-y += map_perf_test.bpf.o
- always-y += test_overhead_tp_kern.o
- always-y += test_overhead_raw_tp_kern.o
- always-y += test_overhead_kprobe_kern.o
-@@ -147,7 +147,7 @@ always-y += parse_varlen.o parse_simple.o parse_ldabs.o
- always-y += test_cgrp2_tc_kern.o
- always-y += xdp1_kern.o
- always-y += xdp2_kern.o
--always-y += test_current_task_under_cgroup_kern.o
-+always-y += test_current_task_under_cgroup.bpf.o
- always-y += trace_event_kern.o
- always-y += sampleip_kern.o
- always-y += lwt_len_hist_kern.o
-diff --git a/samples/bpf/gnu/stubs.h b/samples/bpf/gnu/stubs.h
-new file mode 100644
-index 000000000000..719225b16626
---- /dev/null
-+++ b/samples/bpf/gnu/stubs.h
-@@ -0,0 +1 @@
-+/* dummy .h to trick /usr/include/features.h to work with 'clang -target bpf' */
-diff --git a/samples/bpf/map_perf_test_kern.c b/samples/bpf/map_perf_test.bpf.c
-similarity index 100%
-rename from samples/bpf/map_perf_test_kern.c
-rename to samples/bpf/map_perf_test.bpf.c
-diff --git a/samples/bpf/map_perf_test_user.c b/samples/bpf/map_perf_test_user.c
-index 1bb53f4b29e1..d2fbcf963cdf 100644
---- a/samples/bpf/map_perf_test_user.c
-+++ b/samples/bpf/map_perf_test_user.c
-@@ -443,7 +443,7 @@ int main(int argc, char **argv)
- 	if (argc > 4)
- 		max_cnt = atoi(argv[4]);
+diff --git a/samples/bpf/map_perf_test.bpf.c b/samples/bpf/map_perf_test.bpf.c
+index 0c7885057ffe..3cdeba2afe12 100644
+--- a/samples/bpf/map_perf_test.bpf.c
++++ b/samples/bpf/map_perf_test.bpf.c
+@@ -101,7 +101,7 @@ struct {
+ } lru_hash_lookup_map SEC(".maps");
  
--	snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
-+	snprintf(filename, sizeof(filename), "%s.bpf.o", argv[0]);
- 	obj = bpf_object__open_file(filename, NULL);
- 	if (libbpf_get_error(obj)) {
- 		fprintf(stderr, "ERROR: opening BPF object file failed\n");
-diff --git a/samples/bpf/test_current_task_under_cgroup_kern.c b/samples/bpf/test_current_task_under_cgroup.bpf.c
-similarity index 100%
-rename from samples/bpf/test_current_task_under_cgroup_kern.c
-rename to samples/bpf/test_current_task_under_cgroup.bpf.c
-diff --git a/samples/bpf/test_current_task_under_cgroup_user.c b/samples/bpf/test_current_task_under_cgroup_user.c
-index 6fb25906835e..9726ed2a8a8b 100644
---- a/samples/bpf/test_current_task_under_cgroup_user.c
-+++ b/samples/bpf/test_current_task_under_cgroup_user.c
-@@ -21,7 +21,7 @@ int main(int argc, char **argv)
- 	char filename[256];
- 	int map_fd[2];
+ SEC("ksyscall/getuid")
+-int stress_hmap(struct pt_regs *ctx)
++int BPF_KSYSCALL(stress_hmap)
+ {
+ 	u32 key = bpf_get_current_pid_tgid();
+ 	long init_val = 1;
+@@ -119,7 +119,7 @@ int stress_hmap(struct pt_regs *ctx)
+ }
  
--	snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
-+	snprintf(filename, sizeof(filename), "%s.bpf.o", argv[0]);
- 	obj = bpf_object__open_file(filename, NULL);
- 	if (libbpf_get_error(obj)) {
- 		fprintf(stderr, "ERROR: opening BPF object file failed\n");
-diff --git a/samples/bpf/test_probe_write_user_kern.c b/samples/bpf/test_probe_write_user.bpf.c
-similarity index 100%
-rename from samples/bpf/test_probe_write_user_kern.c
-rename to samples/bpf/test_probe_write_user.bpf.c
-diff --git a/samples/bpf/test_probe_write_user_user.c b/samples/bpf/test_probe_write_user_user.c
-index 00ccfb834e45..2a539aec4116 100644
---- a/samples/bpf/test_probe_write_user_user.c
-+++ b/samples/bpf/test_probe_write_user_user.c
-@@ -24,7 +24,7 @@ int main(int ac, char **argv)
- 	mapped_addr_in = (struct sockaddr_in *)&mapped_addr;
- 	tmp_addr_in = (struct sockaddr_in *)&tmp_addr;
+ SEC("ksyscall/geteuid")
+-int stress_percpu_hmap(struct pt_regs *ctx)
++int BPF_KSYSCALL(stress_percpu_hmap)
+ {
+ 	u32 key = bpf_get_current_pid_tgid();
+ 	long init_val = 1;
+@@ -136,7 +136,7 @@ int stress_percpu_hmap(struct pt_regs *ctx)
+ }
  
--	snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
-+	snprintf(filename, sizeof(filename), "%s.bpf.o", argv[0]);
- 	obj = bpf_object__open_file(filename, NULL);
- 	if (libbpf_get_error(obj)) {
- 		fprintf(stderr, "ERROR: opening BPF object file failed\n");
-diff --git a/samples/bpf/trace_output_kern.c b/samples/bpf/trace_output.bpf.c
-similarity index 100%
-rename from samples/bpf/trace_output_kern.c
-rename to samples/bpf/trace_output.bpf.c
-diff --git a/samples/bpf/trace_output_user.c b/samples/bpf/trace_output_user.c
-index 371732f9cf8e..d316fd2c8e24 100644
---- a/samples/bpf/trace_output_user.c
-+++ b/samples/bpf/trace_output_user.c
-@@ -51,7 +51,7 @@ int main(int argc, char **argv)
- 	char filename[256];
- 	FILE *f;
+ SEC("ksyscall/getgid")
+-int stress_hmap_alloc(struct pt_regs *ctx)
++int BPF_KSYSCALL(stress_hmap_alloc)
+ {
+ 	u32 key = bpf_get_current_pid_tgid();
+ 	long init_val = 1;
+@@ -153,7 +153,7 @@ int stress_hmap_alloc(struct pt_regs *ctx)
+ }
  
--	snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
-+	snprintf(filename, sizeof(filename), "%s.bpf.o", argv[0]);
- 	obj = bpf_object__open_file(filename, NULL);
- 	if (libbpf_get_error(obj)) {
- 		fprintf(stderr, "ERROR: opening BPF object file failed\n");
-diff --git a/samples/bpf/tracex2_kern.c b/samples/bpf/tracex2.bpf.c
-similarity index 100%
-rename from samples/bpf/tracex2_kern.c
-rename to samples/bpf/tracex2.bpf.c
-diff --git a/samples/bpf/tracex2_user.c b/samples/bpf/tracex2_user.c
-index 089e408abd7a..2131f1648cf1 100644
---- a/samples/bpf/tracex2_user.c
-+++ b/samples/bpf/tracex2_user.c
-@@ -123,7 +123,7 @@ int main(int ac, char **argv)
- 	int i, j = 0;
- 	FILE *f;
+ SEC("ksyscall/getegid")
+-int stress_percpu_hmap_alloc(struct pt_regs *ctx)
++int BPF_KSYSCALL(stress_percpu_hmap_alloc)
+ {
+ 	u32 key = bpf_get_current_pid_tgid();
+ 	long init_val = 1;
+@@ -168,11 +168,10 @@ int stress_percpu_hmap_alloc(struct pt_regs *ctx)
+ 	}
+ 	return 0;
+ }
+-
+ SEC("ksyscall/connect")
+-int stress_lru_hmap_alloc(struct pt_regs *ctx)
++int BPF_KSYSCALL(stress_lru_hmap_alloc, int fd, struct sockaddr_in *uservaddr,
++		 int addrlen)
+ {
+-	struct pt_regs *real_regs = (struct pt_regs *)PT_REGS_PARM1_CORE(ctx);
+ 	char fmt[] = "Failed at stress_lru_hmap_alloc. ret:%dn";
+ 	union {
+ 		u16 dst6[8];
+@@ -185,14 +184,11 @@ int stress_lru_hmap_alloc(struct pt_regs *ctx)
+ 			u32 key;
+ 		};
+ 	} test_params;
+-	struct sockaddr_in6 *in6;
++	struct sockaddr_in6 *in6 = (struct sockaddr_in6 *)uservaddr;
+ 	u16 test_case;
+-	int addrlen, ret;
+ 	long val = 1;
+ 	u32 key = 0;
+-
+-	in6 = (struct sockaddr_in6 *)PT_REGS_PARM2_CORE(real_regs);
+-	addrlen = (int)PT_REGS_PARM3_CORE(real_regs);
++	int ret;
  
--	snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
-+	snprintf(filename, sizeof(filename), "%s.bpf.o", argv[0]);
- 	obj = bpf_object__open_file(filename, NULL);
- 	if (libbpf_get_error(obj)) {
- 		fprintf(stderr, "ERROR: opening BPF object file failed\n");
+ 	if (addrlen != sizeof(*in6))
+ 		return 0;
+@@ -250,7 +246,7 @@ int stress_lru_hmap_alloc(struct pt_regs *ctx)
+ }
+ 
+ SEC("ksyscall/gettid")
+-int stress_lpm_trie_map_alloc(struct pt_regs *ctx)
++int BPF_KSYSCALL(stress_lpm_trie_map_alloc)
+ {
+ 	union {
+ 		u32 b32[2];
+@@ -272,7 +268,7 @@ int stress_lpm_trie_map_alloc(struct pt_regs *ctx)
+ }
+ 
+ SEC("ksyscall/getpgid")
+-int stress_hash_map_lookup(struct pt_regs *ctx)
++int BPF_KSYSCALL(stress_hash_map_lookup)
+ {
+ 	u32 key = 1, i;
+ 	long *value;
+@@ -285,7 +281,7 @@ int stress_hash_map_lookup(struct pt_regs *ctx)
+ }
+ 
+ SEC("ksyscall/getppid")
+-int stress_array_map_lookup(struct pt_regs *ctx)
++int BPF_KSYSCALL(stress_array_map_lookup)
+ {
+ 	u32 key = 1, i;
+ 	long *value;
+diff --git a/samples/bpf/test_current_task_under_cgroup.bpf.c b/samples/bpf/test_current_task_under_cgroup.bpf.c
+index 0b059cee3cba..58b9cf7ed659 100644
+--- a/samples/bpf/test_current_task_under_cgroup.bpf.c
++++ b/samples/bpf/test_current_task_under_cgroup.bpf.c
+@@ -8,6 +8,8 @@
+ #include "vmlinux.h"
+ #include <linux/version.h>
+ #include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_core_read.h>
+ 
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_CGROUP_ARRAY);
+@@ -25,7 +27,7 @@ struct {
+ 
+ /* Writes the last PID that called sync to a map at index 0 */
+ SEC("ksyscall/sync")
+-int bpf_prog1(struct pt_regs *ctx)
++int BPF_KSYSCALL(bpf_prog1)
+ {
+ 	u64 pid = bpf_get_current_pid_tgid();
+ 	int idx = 0;
+diff --git a/samples/bpf/test_probe_write_user.bpf.c b/samples/bpf/test_probe_write_user.bpf.c
+index a0f10c5ca273..a4f3798b7fb0 100644
+--- a/samples/bpf/test_probe_write_user.bpf.c
++++ b/samples/bpf/test_probe_write_user.bpf.c
+@@ -27,24 +27,22 @@ struct {
+  * of course, across platforms, and over time, the ABI may change.
+  */
+ SEC("ksyscall/connect")
+-int bpf_prog1(struct pt_regs *ctx)
++int BPF_KSYSCALL(bpf_prog1, int fd, struct sockaddr_in *uservaddr,
++		 int addrlen)
+ {
+-	struct pt_regs *real_regs = (struct pt_regs *)PT_REGS_PARM1_CORE(ctx);
+-	void *sockaddr_arg = (void *)PT_REGS_PARM2_CORE(real_regs);
+-	int sockaddr_len = (int)PT_REGS_PARM3_CORE(real_regs);
+ 	struct sockaddr_in new_addr, orig_addr = {};
+ 	struct sockaddr_in *mapped_addr;
+ 
+-	if (sockaddr_len > sizeof(orig_addr))
++	if (addrlen > sizeof(orig_addr))
+ 		return 0;
+ 
+-	if (bpf_probe_read_user(&orig_addr, sizeof(orig_addr), sockaddr_arg) != 0)
++	if (bpf_probe_read_user(&orig_addr, sizeof(orig_addr), uservaddr) != 0)
+ 		return 0;
+ 
+ 	mapped_addr = bpf_map_lookup_elem(&dnat_map, &orig_addr);
+ 	if (mapped_addr != NULL) {
+ 		memcpy(&new_addr, mapped_addr, sizeof(new_addr));
+-		bpf_probe_write_user(sockaddr_arg, &new_addr,
++		bpf_probe_write_user(uservaddr, &new_addr,
+ 				     sizeof(new_addr));
+ 	}
+ 	return 0;
 -- 
 2.34.1
 
