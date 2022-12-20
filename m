@@ -2,175 +2,223 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD00CC4332F
-	for <bpf@archiver.kernel.org>; Tue, 20 Dec 2022 22:11:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AF04C4332F
+	for <bpf@archiver.kernel.org>; Tue, 20 Dec 2022 22:21:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiLTWLo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 20 Dec 2022 17:11:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36122 "EHLO
+        id S229560AbiLTWU5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 20 Dec 2022 17:20:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiLTWLn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 20 Dec 2022 17:11:43 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2AC3B1EC;
-        Tue, 20 Dec 2022 14:11:42 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id m19so19517993edj.8;
-        Tue, 20 Dec 2022 14:11:42 -0800 (PST)
+        with ESMTP id S229626AbiLTWUz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 20 Dec 2022 17:20:55 -0500
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25372BC4
+        for <bpf@vger.kernel.org>; Tue, 20 Dec 2022 14:20:47 -0800 (PST)
+Received: by mail-pg1-x549.google.com with SMTP id a33-20020a630b61000000b00429d91cc649so7763499pgl.8
+        for <bpf@vger.kernel.org>; Tue, 20 Dec 2022 14:20:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=T/2atre4fqcaQWMoy90Y5c5y8r7zl/7TlfkEDDKjaPc=;
-        b=XcL2vSQOhOS8sMQoxX+9NInFqIHnIBx83y5aUKny/mrm9vhhZ5p6KDDT5A9GB40o8c
-         HAJ+O+ZfQFNLfb3tGHVEK4ROaUvSsgjvThmFyE6aQtROVkiSrmR1CCEdsEltJ+hRp66x
-         M/b2OA1JggnbVJQKzlrdSUdrsJmXHHHqj3CLvKJQR4ZY3xu6rBSSvdB+Ij5izOkZebgd
-         QW8knvlVtKsh/lDsGO4l1Y2gGoQHbAefTmEOdGa7eJOtYdPMpLX1JvCCJy7wpZ7C/UFK
-         zCgZXtZg4+0aLv15j1aW5OoLOrysGeGPqj1PEgccDuAEmCEEDY5cWN99+GUL7iXkgVEQ
-         1fNw==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=e9Lkq4/A6zPieb8tRyXJZSCMrT+1yCsHBU9Tu08+BlM=;
+        b=UecwM7rjmCJSMpS1ctcVIZhsSq7zIrzMBjWLLoncLJ0pnnkOxCPiNzeHP7lwlyEU7S
+         N4XEBf3HNWQJU+QcbtseXWhtK9pefSrqhU5LLl4aQdioRhmM+o96zegIYXay1FERjFle
+         9MhOnudncLKXuCF6AFO3quwZt1r4xh8kQKkAT47m8RVAQTXHyhZB//7nTrv5GhXC0xRN
+         a+aVNziHSSLPDsI5PZxzwrsCPLrW0gzY5zNvZoL8l68E/S53OYTj6jJ7AR5sGpk+77RO
+         8peUTZXTR9TtKwQANqQ5GOoyp76VRWZXr65aVDmwI+4JjcwHAhcH8JjD7/PCrv2OQYee
+         VZEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=T/2atre4fqcaQWMoy90Y5c5y8r7zl/7TlfkEDDKjaPc=;
-        b=Dw/9E6P19/VPCrFo3QdRtWyh/CUL2txldFEiNSP3fLlKEa3fxWuVqv1nPZMg+iBzhj
-         ebqcbxo65wnoMndTR5OzS6S/Glo/zV38GW1k9s1E52un2mUiyhZqjP8vDAav94qahtam
-         ApuH/NLItxyGKydl27mPKlfUQBjqQCPRv0QCZ9zvgdMOfPXV3+f6Wi+pqWG7hEspznql
-         IgxVIQA0FZN0iJUixAJGvXozcpSFVZLZSJaGh2sOn7BJMDj6fILxA1aj9Q5zi/jj2ZhQ
-         SY5YZL1duWGZUkIhpFPJtGLWL4uyc5mai8qSEs5Yaa3lcqL+mdGVSH3nDjdudP10Rq1Y
-         l1yA==
-X-Gm-Message-State: ANoB5pn9mak/Vc8Iodqxp6QGFHOnyynd0fzbl5KkL+SXgZUmOTeMwiV8
-        MUd1NZlI0vs7hyUEQysC8KRzPVNU/PGOJ8gZ1MQ=
-X-Google-Smtp-Source: AA0mqf7UVFbJnkjONnKYPvSbXdCh3YuMhG3ja1r1HUzIWRe7Q0T22Q2cY9hfkKfMZdhkNp/68jILn9lPlVsXh+Egu8U=
-X-Received: by 2002:a05:6402:2421:b0:461:524f:a8f4 with SMTP id
- t33-20020a056402242100b00461524fa8f4mr89321779eda.260.1671574301228; Tue, 20
- Dec 2022 14:11:41 -0800 (PST)
-MIME-Version: 1.0
-References: <20221215005315.186787-1-connoro@google.com> <0fc1e9bd-e70b-28a2-bc09-629414a619b0@meta.com>
-In-Reply-To: <0fc1e9bd-e70b-28a2-bc09-629414a619b0@meta.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 20 Dec 2022 14:11:28 -0800
-Message-ID: <CAEf4Bzbw4acHiWie=jgqHY63JEZosN4t_KBcQfzS=012GgGBTA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] bpf: btf: limit logging of ignored BTF mismatches
-To:     Yonghong Song <yhs@meta.com>
-Cc:     "Connor O'Brien" <connoro@google.com>, bpf@vger.kernel.org,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        linux-kernel@vger.kernel.org
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=e9Lkq4/A6zPieb8tRyXJZSCMrT+1yCsHBU9Tu08+BlM=;
+        b=z+RB1hnJgKyCIRNjTZ8w2uFGU8RnOIROPl22G3GmXXhizQD9C0j344KaM5b/GB9sBX
+         lR6QbZFjfg1sYp4S64Rg8+5UcScpdIu8/u2Yge84fWJTpohGtgHGiOnpP4CQDU+bnYIg
+         2T9selorvelBHilR/j57Z5ar2lxpOq9W9X8q6Q0o/K6PnD8rNdEFHOMK++b2e+SXUOxq
+         H5qLJqESdjH0+dl9peN1SU0MkLiPhiov55NLq9V6q196FX0Q6ZgmtwuCCuoA4hdTrx6h
+         jQ7ixVkO5Wi1lQIU+1j5fa3UBwJfsaZnqauq39Py/E0b7e4u7koScjgRgYJyvkeR/tpu
+         WCMQ==
+X-Gm-Message-State: AFqh2krMqB5QnehAVoX2cckq4odaj4HklS5EeFKS8LLJWO5883JC8oEf
+        7aIEmDM5ndI/HOsZT+k/GdrsDHPY2nDcn66DiWAWDU/5T2F9vkNKG+hwl0DSb8Ag5ytjCrLlQH6
+        PS/EZQ0PX20tUMPn76S6fNbmlzFI2of2oAoVBM9/4yP6YM6L3Mg==
+X-Google-Smtp-Source: AMrXdXsivygEcEwL+VAVuk0P0l8J3nETK6FPuBfFOMLnpKueW15/LKOHnObysKdaVDpQGRXkD/aLbS8=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:aa7:870f:0:b0:57e:c08b:b7bc with SMTP id
+ b15-20020aa7870f000000b0057ec08bb7bcmr1006220pfo.77.1671574847102; Tue, 20
+ Dec 2022 14:20:47 -0800 (PST)
+Date:   Tue, 20 Dec 2022 14:20:27 -0800
+In-Reply-To: <20221220222043.3348718-1-sdf@google.com>
+Mime-Version: 1.0
+References: <20221220222043.3348718-1-sdf@google.com>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Message-ID: <20221220222043.3348718-2-sdf@google.com>
+Subject: [PATCH bpf-next v5 01/17] bpf: Document XDP RX metadata
+From:   Stanislav Fomichev <sdf@google.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org,
+        David Ahern <dsahern@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Willem de Bruijn <willemb@google.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Anatoly Burakov <anatoly.burakov@intel.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Magnus Karlsson <magnus.karlsson@gmail.com>,
+        Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
+        netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 9:06 PM Yonghong Song <yhs@meta.com> wrote:
->
->
->
-> On 12/14/22 4:53 PM, Connor O'Brien wrote:
-> > Enabling CONFIG_MODULE_ALLOW_BTF_MISMATCH is an indication that BTF
-> > mismatches are expected and module loading should proceed
-> > anyway. Logging with pr_warn() on every one of these "benign"
-> > mismatches creates unnecessary noise when many such modules are
-> > loaded. Instead, handle this case with a single log warning that BTF
-> > info may be unavailable.
-> >
-> > Mismatches also result in calls to __btf_verifier_log() via
-> > __btf_verifier_log_type() or btf_verifier_log_member(), adding several
-> > additional lines of logging per mismatched module. Add checks to these
-> > paths to skip logging for module BTF mismatches in the "allow
-> > mismatch" case.
-> >
-> > All existing logging behavior is preserved in the default
-> > CONFIG_MODULE_ALLOW_BTF_MISMATCH=n case.
-> >
-> > Signed-off-by: Connor O'Brien <connoro@google.com>
->
-> Ack with a few nits below.
->
-> Acked-by: Yonghong Song <yhs@fb.com>
->
-> > ---
-> > v2:
-> > - Use pr_warn_once instead of skipping logging entirely
-> > - Also skip btf verifier logs for ignored mismatches
-> >
-> > v1: https://lore.kernel.org/bpf/20221109024155.2810410-1-connoro@google.com/
-> > ---
-> >   kernel/bpf/btf.c | 24 +++++++++++++++++++++---
-> >   1 file changed, 21 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> > index f7dd8af06413..16b959b49595 100644
-> > --- a/kernel/bpf/btf.c
-> > +++ b/kernel/bpf/btf.c
-> > @@ -1404,6 +1404,13 @@ __printf(4, 5) static void __btf_verifier_log_type(struct btf_verifier_env *env,
-> >       if (log->level == BPF_LOG_KERNEL && !fmt)
-> >               return;
-> >
-> > +     /*
-> > +      * Skip logging when loading module BTF with mismatches permitted
-> > +      */
->
-> Just use one line for the above comment.
->
-> > +     if (env->btf->base_btf && env->btf->kernel_btf &&
-> > +         IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH))
-> > +             return;
->
-> I believe env->btf->base_btf alone is enough to test it should be a
-> module btf. If env->btf->base_btf is true, env->btf->kernel_btf should
-> also be true. The other way is not true, env->btf->kernel_btf is true,
-> the btf could be vmlinux (env->btf->base_btf == NULL) or be a module.
->
+Document all current use-cases and assumptions.
 
-Seems like we are also using log->level == BPF_LOG_KERNEL check for
-when working with kernel BTFs, so let's stick to the same pattern?
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: David Ahern <dsahern@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Willem de Bruijn <willemb@google.com>
+Cc: Jesper Dangaard Brouer <brouer@redhat.com>
+Cc: Anatoly Burakov <anatoly.burakov@intel.com>
+Cc: Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc: Magnus Karlsson <magnus.karlsson@gmail.com>
+Cc: Maryam Tahhan <mtahhan@redhat.com>
+Cc: xdp-hints@xdp-project.net
+Cc: netdev@vger.kernel.org
+Signed-off-by: Stanislav Fomichev <sdf@google.com>
+---
+ Documentation/networking/index.rst           |   1 +
+ Documentation/networking/xdp-rx-metadata.rst | 107 +++++++++++++++++++
+ 2 files changed, 108 insertions(+)
+ create mode 100644 Documentation/networking/xdp-rx-metadata.rst
 
+diff --git a/Documentation/networking/index.rst b/Documentation/networking/index.rst
+index 4f2d1f682a18..4ddcae33c336 100644
+--- a/Documentation/networking/index.rst
++++ b/Documentation/networking/index.rst
+@@ -120,6 +120,7 @@ Refer to :ref:`netdev-FAQ` for a guide on netdev development process specifics.
+    xfrm_proc
+    xfrm_sync
+    xfrm_sysctl
++   xdp-rx-metadata
+ 
+ .. only::  subproject and html
+ 
+diff --git a/Documentation/networking/xdp-rx-metadata.rst b/Documentation/networking/xdp-rx-metadata.rst
+new file mode 100644
+index 000000000000..37e8192d9b60
+--- /dev/null
++++ b/Documentation/networking/xdp-rx-metadata.rst
+@@ -0,0 +1,107 @@
++===============
++XDP RX Metadata
++===============
++
++This document describes how an XDP program can access hardware metadata
++related to a packet using a set of helper functions, and how it can pass
++that metadata on to other consumers.
++
++General Design
++==============
++
++XDP has access to a set of kfuncs to manipulate the metadata in an XDP frame.
++Every device driver that wishes to expose additional packet metadata can
++implement these kfuncs. The set of kfuncs is declared in ``include/net/xdp.h``
++via ``XDP_METADATA_KFUNC_xxx``.
++
++Currently, the following kfuncs are supported. In the future, as more
++metadata is supported, this set will grow:
++
++- ``bpf_xdp_metadata_rx_timestamp`` returns a packet's RX timestamp
++- ``bpf_xdp_metadata_rx_hash`` returns a packet's RX hash
++
++The XDP program can use these kfuncs to read the metadata into stack
++variables for its own consumption. Or, to pass the metadata on to other
++consumers, an XDP program can store it into the metadata area carried
++ahead of the packet.
++
++Not all kfuncs have to be implemented by the device driver; when not
++implemented, the default ones that return ``-EOPNOTSUPP`` will be used.
++
++Within the XDP frame, the metadata layout is as follows::
++
++  +----------+-----------------+------+
++  | headroom | custom metadata | data |
++  +----------+-----------------+------+
++             ^                 ^
++             |                 |
++   xdp_buff->data_meta   xdp_buff->data
++
++The XDP program can store individual metadata items into this data_meta
++area in whichever format it chooses. Later consumers of the metadata
++will have to agree on the format by some out of band contract (like for
++the AF_XDP use case, see below).
++
++AF_XDP
++======
++
++``AF_XDP`` use-case implies that there is a contract between the BPF program
++that redirects XDP frames into the ``AF_XDP`` socket (``XSK``) and the final
++consumer. Thus the BPF program manually allocates a fixed number of
++bytes out of metadata via ``bpf_xdp_adjust_meta`` and calls a subset
++of kfuncs to populate it. The userspace ``XSK`` consumer computes
++``xsk_umem__get_data() - METADATA_SIZE`` to locate its metadata.
++
++Here is the ``AF_XDP`` consumer layout (note missing ``data_meta`` pointer)::
++
++  +----------+-----------------+------+
++  | headroom | custom metadata | data |
++  +----------+-----------------+------+
++                               ^
++                               |
++                        rx_desc->address
++
++XDP_PASS
++========
++
++This is the path where the packets processed by the XDP program are passed
++into the kernel. The kernel creates the ``skb`` out of the ``xdp_buff``
++contents. Currently, every driver has custom kernel code to parse
++the descriptors and populate ``skb`` metadata when doing this ``xdp_buff->skb``
++conversion, and the XDP metadata is not used by the kernel when building
++skbs. However, TC-BPF programs can access the XDP metadata area using
++the data_meta pointer.
++
++In the future, we'd like to support a case where an XDP program
++can override some of the metadata used for building skbs.
++
++bpf_redirect_map
++================
++
++``bpf_redirect_map`` can redirect the frame to a different device.
++Some devices (like virtual ethernet links) support running a second XDP
++program after the redirect. However, the final consumer doesn't have
++access to the original hardware descriptor and can't access any of
++the original metadata. The same applies to XDP programs installed
++into devmaps and cpumaps.
++
++This means that for redirected packets only custom metadata is
++currently supported, which has to be prepared by the initial XDP program
++before redirect. If the frame is eventually passed to the kernel, the
++skb created from such a frame won't have any hardware metadata populated
++in its skb. And if such a packet is later redirected into an ``XSK``,
++that will also only have access to the custom metadata.
++
++
++bpf_tail_call
++=============
++
++Adding programs that access metadata kfuncs to the ``BPF_MAP_TYPE_PROG_ARRAY``
++is currently not supported.
++
++Example
++=======
++
++See ``tools/testing/selftests/bpf/progs/xdp_metadata.c`` and
++``tools/testing/selftests/bpf/prog_tests/xdp_metadata.c`` for an example of
++BPF program that handles XDP metadata.
+-- 
+2.39.0.314.g84b9a713c41-goog
 
-> > +
-> >       __btf_verifier_log(log, "[%u] %s %s%s",
-> >                          env->log_type_id,
-> >                          btf_type_str(t),
-> > @@ -1443,6 +1450,14 @@ static void btf_verifier_log_member(struct btf_verifier_env *env,
-> >
-> >       if (log->level == BPF_LOG_KERNEL && !fmt)
-> >               return;
-> > +
-> > +     /*
-> > +      * Skip logging when loading module BTF with mismatches permitted
-> > +      */
->
-> Same, just use one line for the above comments.
->
-> > +     if (env->btf->base_btf && env->btf->kernel_btf &&
-> > +         IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH))
-> > +             return;
-> > +
-> >       /* The CHECK_META phase already did a btf dump.
-> >        *
-> >        * If member is logged again, it must hit an error in
-> > @@ -7260,11 +7275,14 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
-> >               }
-> >               btf = btf_parse_module(mod->name, mod->btf_data, mod->btf_data_size);
-> >               if (IS_ERR(btf)) {
-> > -                     pr_warn("failed to validate module [%s] BTF: %ld\n",
-> > -                             mod->name, PTR_ERR(btf));
-> >                       kfree(btf_mod);
-> > -                     if (!IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH))
-> > +                     if (!IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH)) {
-> > +                             pr_warn("failed to validate module [%s] BTF: %ld\n",
-> > +                                     mod->name, PTR_ERR(btf));
-> >                               err = PTR_ERR(btf);
-> > +                     } else {
-> > +                             pr_warn_once("Kernel module BTF mismatch detected, BTF debug info may be unavailable for some modules\n");
-> > +                     }
-> >                       goto out;
-> >               }
-> >               err = btf_alloc_id(btf);
