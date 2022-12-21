@@ -2,130 +2,103 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8323C4167B
-	for <bpf@archiver.kernel.org>; Wed, 21 Dec 2022 01:15:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 354B6C4332F
+	for <bpf@archiver.kernel.org>; Wed, 21 Dec 2022 01:17:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234294AbiLUBP4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 20 Dec 2022 20:15:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42910 "EHLO
+        id S234255AbiLUBRl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 20 Dec 2022 20:17:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234192AbiLUBPy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 20 Dec 2022 20:15:54 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F40F20345
-        for <bpf@vger.kernel.org>; Tue, 20 Dec 2022 17:15:50 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id m19so19977604edj.8
-        for <bpf@vger.kernel.org>; Tue, 20 Dec 2022 17:15:50 -0800 (PST)
+        with ESMTP id S233966AbiLUBRj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 20 Dec 2022 20:17:39 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8DD100B
+        for <bpf@vger.kernel.org>; Tue, 20 Dec 2022 17:17:38 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id kw15so33291728ejc.10
+        for <bpf@vger.kernel.org>; Tue, 20 Dec 2022 17:17:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MSxjHqQVmsvAqdAktDzJq1Aaq4WkRfg4dNDMnFRlXJE=;
-        b=VrDVe24FHaDSkP65tI54UK7fLaALS1pS5jFeOxPQ1kDDnh3sN1RhHR1YSx+wnbXlA+
-         NbWw8lZujY6H54BLcSPCC/f1Zu+lo4kbfueL8eSRYVZ8U/qhDNXC0fuksNveGIMOy20b
-         LSsYY4WMilHkek8xwkgEpvVIQaUo64Mtdb4wUkosnkDOAzRAWkfBHfnz7/ikMLiMYp+s
-         uE7E6L1LVaSgmEY8fwpHHIBA9MECQqvk4z1AhOrP/Pt80Tya/G6rsxDbGkNay/T7MXJz
-         Y8inQkZaznD6hml8uADsWdBvGpzswyNqjq/+lvGrEubHNdwV5ZmjAjoSQSdLYueP+/Ya
-         x1zw==
+        bh=//vvrCr9VKhA/WnEwOcQxIHFZ1MSlnGzEDzWbS+C8WQ=;
+        b=W5pKH3IfZgvstdB+tdIgXByqTHnJSbjmJAc3fdqDxLfCTli6mxkHSdz15JAKmSUh9E
+         qw/3J1Vi79Kjf9xmlrzsfDfBwzmXVf1pJmCP0D66GoFnsiU5Ypj83gb6f2vqa8FYXp/e
+         iHF2vLudXkycqoH1kJ8nhO/eIzh8zQE9Rvh6/E9bwD6TRvc7V4Ih+rTiGFYfI/7yMTMR
+         oemMNdztj8GHtdQBTxSmJLQk32ch6KTeybefvCa5NNl//pQjYNDiQq2ULWdys4kViUA1
+         STB8oMzuDTAXCENjJkLv7OmsltCUwyBbgwCyZY6yjEY3/pgJ/5+aPwCvgg3wvykR9s8H
+         IPwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=MSxjHqQVmsvAqdAktDzJq1Aaq4WkRfg4dNDMnFRlXJE=;
-        b=7rki8j2NhuwNHDOblpRBint2Mv5jY3rA87nibrapbCzTY54OYhKaFnXt/eXtFMlR43
-         0pBNjH2AL9EYlUJ52QUPiKtYBV/y31EK7bFhmuVuhUanbgQonCXmAwidkZEl24wE0UX2
-         wTl4GoM4GvmINY6qe2TSogucZ2nBHnX3IFbICG+i+X45l/Z81jTCDTloWat2eEr/xIeu
-         q2/nlQKGBoYC2L9iTuTBoav3acxDozydXsuypyHHBLdHx41kYcjQA9tsU3CofjuRRCpT
-         nUUtKSHbZSEdDH9xGnBfVGeIFepGrrf8b279nVQzkhxUTOdchVC9VY34Db6snBnlLJ3/
-         ChLQ==
-X-Gm-Message-State: ANoB5plufPcXdJRQi7I2mDw4PwAtzkQmmeN256qg20hjqYjvgqorPXxg
-        lYXB1u1w7Kc8vkTKmJlUujw5nH7AgB2c8cc0LaqyzSaQyWFV3Q==
-X-Google-Smtp-Source: AA0mqf6qc2LiyZvaSQXsjN2h5hAFiCgw1XRys8QcH//usSVpkPzL4fR28ordcBx7nokAK6srfF02EB7Nt84McYL+pw4=
-X-Received: by 2002:a05:6402:2421:b0:461:524f:a8f4 with SMTP id
- t33-20020a056402242100b00461524fa8f4mr89362464eda.260.1671585348961; Tue, 20
- Dec 2022 17:15:48 -0800 (PST)
+        bh=//vvrCr9VKhA/WnEwOcQxIHFZ1MSlnGzEDzWbS+C8WQ=;
+        b=VwLHYVz4h99toRaDClp8Demlv50FiL5y5FI7jYMT6+lXAlmIK4sqTntPljOzjUZKie
+         YcuH7uqX1iKM5vDyUOYlh9zVYy4nEDmu7j5tb8ujwcwO8r4VKW3NcJarm8gP8xJq6Jp/
+         A0D+GXAs+o1BaFxs/qJVbd0Pz0x+QPLxS0/ArEdHSIixH+id49aFh79nCVfwXmgp302k
+         STebPWA8iF8kQl/Cwr10ikcM8niKfuizHOnjws+Sezr9rIim/27jh0B1neCdQnkOFExv
+         rHSezVsFNqootXg7XsWJ2f+mZA1xIATP3uzZCDjy+1h50DHF5JUwunW5DbawQ0XxZsnL
+         Ts0w==
+X-Gm-Message-State: ANoB5plh7jjW3NhgUhlN5D0aUyrX5HhdSVxP52fVjpFMjIkhTvcdLkgQ
+        QX2H/k5rhrI9llcwEic+7nNz4igMuigoMKU0MWaStyaH+qBbTQ==
+X-Google-Smtp-Source: AA0mqf7JKrTlVxfz8GmL6W7d81MjDwpazDknmpjiqWdBb5Yp4yGKPg0HoZ6HpQL7lyJOoYUjvMHo1OQZyDrIc7fdKrQ=
+X-Received: by 2002:a17:906:2b04:b0:7c0:dd4e:3499 with SMTP id
+ a4-20020a1709062b0400b007c0dd4e3499mr22538604ejg.545.1671585457261; Tue, 20
+ Dec 2022 17:17:37 -0800 (PST)
 MIME-Version: 1.0
-References: <20221216232951.3575596-1-martin.lau@linux.dev>
- <e68b892a-c688-f266-3819-0282ba5a1ac9@meta.com> <844f94a4-a003-55da-dc29-adf9f448fc45@linux.dev>
- <CAEf4BzbJGpkhyio9+S1U=bnYycaknw0SNada6orzNV_+VfPwGw@mail.gmail.com> <34389727-b9ee-4745-debf-935292bdaf3a@linux.dev>
-In-Reply-To: <34389727-b9ee-4745-debf-935292bdaf3a@linux.dev>
+References: <20221221011538.3263935-1-martin.lau@linux.dev>
+In-Reply-To: <20221221011538.3263935-1-martin.lau@linux.dev>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 20 Dec 2022 17:15:36 -0800
-Message-ID: <CAEf4BzasdKc35Aewj2xMGbtdMGua7TGkVjBXDgjM76cZ0oELNA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Reduce smap->elem_size
+Date:   Tue, 20 Dec 2022 17:17:25 -0800
+Message-ID: <CAEf4BzZq5cHGP=e+F1vue4L1kgUwz3Hw_bZ9GMtr9gA75rvT1A@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next] bpf: Reduce smap->elem_size
 To:     Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     Yonghong Song <yhs@meta.com>, Alexei Starovoitov <ast@kernel.org>,
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, kernel-team@meta.com,
-        bpf <bpf@vger.kernel.org>
+        Yonghong Song <yhs@fb.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 4:56 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
+On Tue, Dec 20, 2022 at 5:15 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
 >
-> [ Cc: the bpf list back.  I dropped it by mistake in my last reply. ]
+> From: Martin KaFai Lau <martin.lau@kernel.org>
 >
-> On 12/20/22 3:43 PM, Andrii Nakryiko wrote:
-> > On Mon, Dec 19, 2022 at 11:47 AM Martin KaFai Lau <martin.lau@linux.dev> wrote:
-> >>
-> >> On 12/16/22 5:23 PM, Yonghong Song wrote:
-> >>>
-> >>>
-> >>> On 12/16/22 3:29 PM, Martin KaFai Lau wrote:
-> >>>> From: Martin KaFai Lau <martin.lau@kernel.org>
-> >>>>
-> >>>> 'struct bpf_local_storage_elem' has a 56 bytes padding at the end
-> >>>> which can be used for attr->value_size.  The current smap->elem_size
-> >>>
-> >>> 'can be' => 'will be'?
-> >>
-> >> I used 'can be' to describe the current situation that the padding is not used
-> >> for the map's value.  I may have used the wrong tense?
-> >>
-> >> I can rephrase it to something like,
-> >>
-> >> 'struct bpf_local_storage_elem' has a 56 bytes padding at the end which is
-> >> currently not used for the attr->value_size.
-> >
-> > I actually found the use of attr->value_size to mean "value content"
-> > more confusing than can vs will be.
-> >
-> > As a suggestion something like the below?
-> >
-> >
-> > 'struct bpf_local_storage_elem' has an unused 56 byte padding at the
-> > end due to struct's cache-line alignment requirement. This padding
-> > space is overlapped by storage value contents, so if we use sizeof()
-> > to calculate the total size, we overinflate it by 56 bytes. Use
-> > offsetof() instead to calculate more exact memory use.
+> 'struct bpf_local_storage_elem' has an unused 56 byte padding at the
+> end due to struct's cache-line alignment requirement. This padding
+> space is overlapped by storage value contents, so if we use sizeof()
+> to calculate the total size, we overinflate it by 56 bytes. Use
+> offsetofend() instead to calculate more exact memory use.
 >
-> SGTM.
+> Acked-by: Yonghong Song <yhs@fb.com>
+> Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
+> ---
+> v2:
+>   Rephrase the commit message (Andrii and Yonghong)
+>   Use offsetofend instead of offsetof (Andrii)
 >
-> >
-> >
-> > btw, I think you can calculate the same arguably a bit more
-> > straightforwardly as:
-> >
-> > smap->elem_size = offsetofend(struct bpf_local_storage_elem, sdata) +
-> > attr->value_size;
+>  kernel/bpf/bpf_local_storage.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> Sure. will change.
+> diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
+> index b39a46e8fb08..e73fc70071b0 100644
+> --- a/kernel/bpf/bpf_local_storage.c
+> +++ b/kernel/bpf/bpf_local_storage.c
+> @@ -580,8 +580,8 @@ static struct bpf_local_storage_map *__bpf_local_storage_map_alloc(union bpf_att
+>                 raw_spin_lock_init(&smap->buckets[i].lock);
+>         }
 >
-> >
-> > right?
-> >
-> > but TIL that offsetof(struct bpf_local_storage_data,
-> > data[attr->value_size]) does the right thing
->
-> Yeah, I think I have seen other places using it also.  I found it more intuitive
-> to read with array[size] to tell there is a flexible array at the end.  I am not
-> super attached to it and will change to the way above.
->
+> -       smap->elem_size =
+> -               sizeof(struct bpf_local_storage_elem) + attr->value_size;
+> +       smap->elem_size = offsetofend(struct bpf_local_storage_elem, sdata) +
+> +               attr->value_size;
 
-I don't care either, was just surprised. But it just occurred to me
+Heh, we raced down to a minute. Copy/pasting my latest reply from
+original thread.
+
+it just occurred to me
 that your change can be written equivalently (but now I do think it's
 cleaner) as:
 
@@ -135,3 +108,15 @@ sdata.data[attr->value_size]);
 
 sdata is embedded struct, no pointer dereference, so single offsetof()
 should be enough to peer inside it
+
+
+Whichever you prefer, both versions work for me:
+
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+
+>
+>         return smap;
+>  }
+> --
+> 2.30.2
+>
