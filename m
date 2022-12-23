@@ -2,29 +2,30 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D7AAC4332F
-	for <bpf@archiver.kernel.org>; Sat, 24 Dec 2022 00:22:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B55D3C4332F
+	for <bpf@archiver.kernel.org>; Sat, 24 Dec 2022 00:31:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232053AbiLXAV6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 23 Dec 2022 19:21:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46210 "EHLO
+        id S232973AbiLXAbN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 23 Dec 2022 19:31:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232881AbiLXAV5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 23 Dec 2022 19:21:57 -0500
-X-Greylist: delayed 597 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Dec 2022 16:21:55 PST
-Received: from 4.mo541.mail-out.ovh.net (4.mo541.mail-out.ovh.net [46.105.61.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA18BF54
-        for <bpf@vger.kernel.org>; Fri, 23 Dec 2022 16:21:55 -0800 (PST)
-Received: from ex4.mail.ovh.net (unknown [10.108.16.78])
-        by mo541.mail-out.ovh.net (Postfix) with ESMTPS id A59B124F31;
-        Sat, 24 Dec 2022 00:04:30 +0000 (UTC)
+        with ESMTP id S230312AbiLXAbM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 23 Dec 2022 19:31:12 -0500
+X-Greylist: delayed 1202 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Dec 2022 16:31:10 PST
+Received: from 1.mo619.mail-out.ovh.net (1.mo619.mail-out.ovh.net [178.33.253.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6F4645F
+        for <bpf@vger.kernel.org>; Fri, 23 Dec 2022 16:31:10 -0800 (PST)
+Received: from ex4.mail.ovh.net (unknown [10.111.208.157])
+        by mo619.mail-out.ovh.net (Postfix) with ESMTPS id DB864219BD;
+        Fri, 23 Dec 2022 23:51:16 +0000 (UTC)
 Received: from dev-fedora-x86-64.naccy.de (37.65.8.229) by
  DAG10EX1.indiv4.local (172.16.2.91) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Sat, 24 Dec 2022 01:04:29 +0100
+ 15.1.2507.16; Sat, 24 Dec 2022 00:51:15 +0100
 From:   Quentin Deslandes <qde@naccy.de>
 To:     <qde@naccy.de>
-CC:     Alexei Starovoitov <ast@kernel.org>,
+CC:     <kernel-team@meta.com>, Dmitrii Banshchikov <me@ubique.spb.ru>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <martin.lau@linux.dev>,
@@ -38,248 +39,379 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Dmitrii Banshchikov <me@ubique.spb.ru>,
         <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
-        Kernel Team <kernel-team@meta.com>
-Subject: [PATCH bpf-next v3 04/16] bpfilter: add map container
-Date:   Sat, 24 Dec 2022 01:03:50 +0100
-Message-ID: <20221224000402.476079-5-qde@naccy.de>
+        <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: [PATCH bpf-next v3 08/16] bpfilter: add match structure
+Date:   Sat, 24 Dec 2022 00:40:16 +0100
+Message-ID: <20221223234127.474463-9-qde@naccy.de>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221224000402.476079-1-qde@naccy.de>
-References: <20221224000402.476079-1-qde@naccy.de>
+In-Reply-To: <20221223234127.474463-1-qde@naccy.de>
+References: <20221223234127.474463-1-qde@naccy.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [37.65.8.229]
 X-ClientProxiedBy: CAS6.indiv4.local (172.16.1.6) To DAG10EX1.indiv4.local
  (172.16.2.91)
-X-Ovh-Tracer-Id: 4760023332849315447
+X-Ovh-Tracer-Id: 4536532202992299639
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: -85
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrheefgddujecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogetfedtuddqtdduucdludehmdenucfjughrpefhvfevufffkffojghfggfgtghisehtkeertdertddtnecuhfhrohhmpefsuhgvnhhtihhnucffvghslhgrnhguvghsuceoqhguvgesnhgrtggthidruggvqeenucggtffrrghtthgvrhhnpeduledugfeileetvdelieeujedttedtvedtgfetteevfeejhfffkeeujeetfffgudenucfkphepuddvjedrtddrtddruddpfeejrdeihedrkedrvddvleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehquggvsehnrggttgihrdguvgeqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepjhholhhsrgeskhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdgsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpmhgvsehusghiqhhuvgdrshhpsgdrrhhupdhshhhurghhsehkvghrnhgvlhdrohhrghdpmhihkhholhgrlhesfhgsrdgtohhmpdhprggsvghnihesrhgvughhrghtrdgtohhmpdhkuhgsrg
- eskhgvrhhnvghlrdhorhhgpdgvughumhgriigvthesghhoohhglhgvrdgtohhmpdgurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhkvghrnhgvlhdqthgvrghmsehmvghtrgdrtghomhdphhgrohhluhhosehgohhoghhlvgdrtghomhdpshgufhesghhoohhglhgvrdgtohhmpdhkphhsihhnghhhsehkvghrnhgvlhdrohhrghdpjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdihhhhssehfsgdrtghomhdpshhonhhgsehkvghrnhgvlhdrohhrghdpmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdgrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdgurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprghstheskhgvrhhnvghlrdhorhhgpdhnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheeguddpmhhouggvpehsmhhtphhouhht
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrheefgdduhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogetfedtuddqtdduucdludehmdenucfjughrpefhvfevufffkffojghfggfgtghisehtkeertdertddtnecuhfhrohhmpefsuhgvnhhtihhnucffvghslhgrnhguvghsuceoqhguvgesnhgrtggthidruggvqeenucggtffrrghtthgvrhhnpeffveejjeeiffekueefgfdvudffveetleehiedvheekkeejfedufedvieduudeiffenucffohhmrghinhepuhhsvghrrdhnrghmvgenucfkphepuddvjedrtddrtddruddpfeejrdeihedrkedrvddvleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehquggvsehnrggttgihrdguvgeqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepshgufhesghhoohhglhgvrdgtohhmpdgsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhmhihkohhlrghlsehfsgdrtghomhdpphgrsggvnhhisehrvgguhhgrthdrtghomhdpkhhusggrsehkvghrnhgvlhdrohhrghdpvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdpug
+ grvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdpjhholhhsrgeskhgvrhhnvghlrdhorhhgpdhhrgholhhuohesghhoohhglhgvrdgtohhmpdhlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhkphhsihhnghhhsehkvghrnhgvlhdrohhrghdpjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdihhhhssehfsgdrtghomhdpshhonhhgsehkvghrnhgvlhdrohhrghdpmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdgrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdgurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprghstheskhgvrhhnvghlrdhorhhgpdhmvgesuhgsihhquhgvrdhsphgsrdhruhdpkhgvrhhnvghlqdhtvggrmhesmhgvthgrrdgtohhmpdhnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoieduledpmhhouggvpehsmhhtphhouhht
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce common code for an associative container. This common code
-will be used for maps of matches, targets, and tables. Hash search
-tables from libc are used as an index.
+struct match_ops defines a polymorphic interface for matches. A match
+consists of pointers to struct match_ops and struct xt_entry_match which
+contains a payload for the match's type.
 
-The supported sets of operations is: create, find, upsert, free.
+The match interface supports the following operations:
+- check: validate a rule's match.
+- gen_inline: generate eBPF bytecode for the match.
+
+All match_ops structures are kept in a map by their name.
 
 Co-developed-by: Dmitrii Banshchikov <me@ubique.spb.ru>
 Signed-off-by: Dmitrii Banshchikov <me@ubique.spb.ru>
 Signed-off-by: Quentin Deslandes <qde@naccy.de>
 ---
- net/bpfilter/Makefile                         |  2 +-
- net/bpfilter/map-common.c                     | 51 +++++++++++++++
- net/bpfilter/map-common.h                     | 19 ++++++
- .../testing/selftests/bpf/bpfilter/.gitignore |  2 +
- tools/testing/selftests/bpf/bpfilter/Makefile | 19 ++++++
- .../testing/selftests/bpf/bpfilter/test_map.c | 63 +++++++++++++++++++
- 6 files changed, 155 insertions(+), 1 deletion(-)
- create mode 100644 net/bpfilter/map-common.c
- create mode 100644 net/bpfilter/map-common.h
- create mode 100644 tools/testing/selftests/bpf/bpfilter/.gitignore
- create mode 100644 tools/testing/selftests/bpf/bpfilter/Makefile
- create mode 100644 tools/testing/selftests/bpf/bpfilter/test_map.c
+ net/bpfilter/Makefile                         |  1 +
+ net/bpfilter/context.c                        | 43 ++++++++++++
+ net/bpfilter/context.h                        |  3 +
+ net/bpfilter/match.c                          | 55 +++++++++++++++
+ net/bpfilter/match.h                          | 35 ++++++++++
+ .../testing/selftests/bpf/bpfilter/.gitignore |  1 +
+ tools/testing/selftests/bpf/bpfilter/Makefile |  7 ++
+ .../selftests/bpf/bpfilter/bpfilter_util.h    | 22 ++++++
+ .../selftests/bpf/bpfilter/test_match.c       | 69 +++++++++++++++++++
+ 9 files changed, 236 insertions(+)
+ create mode 100644 net/bpfilter/match.c
+ create mode 100644 net/bpfilter/match.h
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/bpfilter_util.h
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/test_match.c
 
 diff --git a/net/bpfilter/Makefile b/net/bpfilter/Makefile
-index 8d9c726ba1a5..1b0c399c19df 100644
+index ac039f1fac34..2f8d867a6038 100644
 --- a/net/bpfilter/Makefile
 +++ b/net/bpfilter/Makefile
-@@ -4,7 +4,7 @@
- #
- 
+@@ -13,6 +13,7 @@ $(LIBBPF_A):
  userprogs := bpfilter_umh
--bpfilter_umh-objs := main.o logger.o
-+bpfilter_umh-objs := main.o logger.o map-common.o
+ bpfilter_umh-objs := main.o logger.o map-common.o
+ bpfilter_umh-objs += context.o codegen.o
++bpfilter_umh-objs += match.o
+ bpfilter_umh-userldlibs := $(LIBBPF_A) -lelf -lz
  userccflags += -I $(srctree)/tools/include/ -I $(srctree)/tools/include/uapi
  
- ifeq ($(CONFIG_BPFILTER_UMH), y)
-diff --git a/net/bpfilter/map-common.c b/net/bpfilter/map-common.c
+diff --git a/net/bpfilter/context.c b/net/bpfilter/context.c
+index fdfd5fe78424..b5e172412fab 100644
+--- a/net/bpfilter/context.c
++++ b/net/bpfilter/context.c
+@@ -8,11 +8,54 @@
+ 
+ #include "context.h"
+ 
++#include <linux/kernel.h>
++
++#include <string.h>
++
++#include "logger.h"
++#include "map-common.h"
++#include "match.h"
++
++static const struct match_ops *match_ops[] = { };
++
++static int init_match_ops_map(struct context *ctx)
++{
++	int r;
++
++	r = create_map(&ctx->match_ops_map, ARRAY_SIZE(match_ops));
++	if (r) {
++		BFLOG_ERR("failed to create matches map: %s", STRERR(r));
++		return r;
++	}
++
++	for (int i = 0; i < ARRAY_SIZE(match_ops); ++i) {
++		const struct match_ops *m = match_ops[i];
++
++		r = map_upsert(&ctx->match_ops_map, m->name, (void *)m);
++		if (r) {
++			BFLOG_ERR("failed to upsert in matches map: %s",
++				  STRERR(r));
++			return r;
++		}
++	}
++
++	return 0;
++}
++
+ int create_context(struct context *ctx)
+ {
++	int r;
++
++	r = init_match_ops_map(ctx);
++	if (r) {
++		BFLOG_ERR("failed to initialize matches map: %s", STRERR(r));
++		return r;
++	}
++
+ 	return 0;
+ }
+ 
+ void free_context(struct context *ctx)
+ {
++	free_map(&ctx->match_ops_map);
+ }
+diff --git a/net/bpfilter/context.h b/net/bpfilter/context.h
+index df41b9707a81..e36aa8ebf57e 100644
+--- a/net/bpfilter/context.h
++++ b/net/bpfilter/context.h
+@@ -7,7 +7,10 @@
+ #ifndef NET_BPFILTER_CONTEXT_H
+ #define NET_BPFILTER_CONTEXT_H
+ 
++#include <search.h>
++
+ struct context {
++	struct hsearch_data match_ops_map;
+ };
+ 
+ int create_context(struct context *ctx);
+diff --git a/net/bpfilter/match.c b/net/bpfilter/match.c
 new file mode 100644
-index 000000000000..cc6c3a59b315
+index 000000000000..fdb0926442a8
 --- /dev/null
-+++ b/net/bpfilter/map-common.c
-@@ -0,0 +1,51 @@
++++ b/net/bpfilter/match.c
+@@ -0,0 +1,55 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (c) 2021 Telegram FZ-LLC
 + * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
 + */
 +
-+#include "map-common.h"
++#define _GNU_SOURCE
++
++#include "match.h"
 +
 +#include <linux/err.h>
 +
 +#include <errno.h>
 +#include <string.h>
 +
-+int create_map(struct hsearch_data *htab, size_t nelem)
++#include "context.h"
++#include "logger.h"
++#include "map-common.h"
++
++int init_match(struct context *ctx, const struct bpfilter_ipt_match *ipt_match,
++	       struct match *match)
 +{
-+	memset(htab, 0, sizeof(*htab));
-+	if (!hcreate_r(nelem, htab))
-+		return -errno;
++	const size_t maxlen = sizeof(ipt_match->u.user.name);
++	const struct match_ops *found;
++	int r;
++
++	if (strnlen(ipt_match->u.user.name, maxlen) == maxlen) {
++		BFLOG_ERR("failed to init match: name too long");
++		return -EINVAL;
++	}
++
++	found = map_find(&ctx->match_ops_map, ipt_match->u.user.name);
++	if (IS_ERR(found)) {
++		BFLOG_ERR("failed to find match by name: '%s'",
++			  ipt_match->u.user.name);
++		return PTR_ERR(found);
++	}
++
++	if (found->size + sizeof(*ipt_match) != ipt_match->u.match_size ||
++	    found->revision != ipt_match->u.user.revision) {
++		BFLOG_ERR("invalid match: '%s'", ipt_match->u.user.name);
++		return -EINVAL;
++	}
++
++	r = found->check(ctx, ipt_match);
++	if (r) {
++		BFLOG_ERR("match check failed: %s", STRERR(r));
++		return r;
++	}
++
++	match->match_ops = found;
++	match->ipt_match = ipt_match;
 +
 +	return 0;
 +}
-+
-+void *map_find(struct hsearch_data *htab, const char *key)
-+{
-+	const ENTRY needle = { .key = (char *)key };
-+	ENTRY *found;
-+
-+	if (!hsearch_r(needle, FIND, &found, htab))
-+		return ERR_PTR(-ENOENT);
-+
-+	return found->data;
-+}
-+
-+int map_upsert(struct hsearch_data *htab, const char *key, void *value)
-+{
-+	const ENTRY needle = { .key = (char *)key, .data = value };
-+	ENTRY *found;
-+
-+	if (!hsearch_r(needle, ENTER, &found, htab))
-+		return -errno;
-+
-+	found->key = (char *)key;
-+	found->data = value;
-+
-+	return 0;
-+}
-+
-+void free_map(struct hsearch_data *htab)
-+{
-+	hdestroy_r(htab);
-+}
-diff --git a/net/bpfilter/map-common.h b/net/bpfilter/map-common.h
+diff --git a/net/bpfilter/match.h b/net/bpfilter/match.h
 new file mode 100644
-index 000000000000..666a4ffe9b29
+index 000000000000..c6541e6a6567
 --- /dev/null
-+++ b/net/bpfilter/map-common.h
-@@ -0,0 +1,19 @@
++++ b/net/bpfilter/match.h
+@@ -0,0 +1,35 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (c) 2021 Telegram FZ-LLC
 + * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
 + */
 +
-+#ifndef NET_BPFILTER_MAP_COMMON_H
-+#define NET_BPFILTER_MAP_COMMON_H
++#ifndef NET_BPFILTER_MATCH_H
++#define NET_BPFILTER_MATCH_H
++
++#include "../../include/uapi/linux/bpfilter.h"
++
++#include <stdint.h>
++
++struct bpfilter_ipt_match;
++struct codegen;
++struct context;
++struct match;
++
++struct match_ops {
++	char name[BPFILTER_EXTENSION_MAXNAMELEN];
++	uint8_t revision;
++	uint16_t size;
++	int (*check)(struct context *ctx, const struct bpfilter_ipt_match *ipt_match);
++	int (*gen_inline)(struct codegen *ctx, const struct match *match);
++};
++
++struct match {
++	const struct match_ops *match_ops;
++	const struct bpfilter_ipt_match *ipt_match;
++};
++
++int init_match(struct context *ctx, const struct bpfilter_ipt_match *ipt_match,
++	       struct match *match);
++
++#endif // NET_BPFILTER_MATCH_H
+diff --git a/tools/testing/selftests/bpf/bpfilter/.gitignore b/tools/testing/selftests/bpf/bpfilter/.gitignore
+index 39ec0c09dff4..9ac1b3caf246 100644
+--- a/tools/testing/selftests/bpf/bpfilter/.gitignore
++++ b/tools/testing/selftests/bpf/bpfilter/.gitignore
+@@ -1,3 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ tools/**
+ test_map
++test_match
+diff --git a/tools/testing/selftests/bpf/bpfilter/Makefile b/tools/testing/selftests/bpf/bpfilter/Makefile
+index e3b8bf76a10c..10642c1d6a87 100644
+--- a/tools/testing/selftests/bpf/bpfilter/Makefile
++++ b/tools/testing/selftests/bpf/bpfilter/Makefile
+@@ -11,6 +11,7 @@ BPFDIR := $(LIBDIR)/bpf
+ CFLAGS += -Wall -g -pthread -I$(TOOLSINCDIR) -I$(APIDIR) -I$(BPFILTERSRCDIR)
+ 
+ TEST_GEN_PROGS += test_map
++TEST_GEN_PROGS += test_match
+ 
+ KSFT_KHDR_INSTALL := 1
+ 
+@@ -34,5 +35,11 @@ $(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)			\
+ 
+ BPFILTER_MAP_SRCS := $(BPFILTERSRCDIR)/map-common.c
+ BPFILTER_CODEGEN_SRCS := $(BPFILTERSRCDIR)/codegen.c $(BPFOBJ) -lelf -lz
++BPFILTER_MATCH_SRCS := $(BPFILTERSRCDIR)/match.c
++
++BPFILTER_COMMON_SRCS := $(BPFILTER_MAP_SRCS)
++BPFILTER_COMMON_SRCS += $(BPFILTERSRCDIR)/context.c $(BPFILTERSRCDIR)/logger.c
++BPFILTER_COMMON_SRCS += $(BPFILTER_MATCH_SRCS)
+ 
+ $(OUTPUT)/test_map: test_map.c $(BPFILTER_MAP_SRCS)
++$(OUTPUT)/test_match: test_match.c $(BPFILTER_COMMON_SRCS)
+diff --git a/tools/testing/selftests/bpf/bpfilter/bpfilter_util.h b/tools/testing/selftests/bpf/bpfilter/bpfilter_util.h
+new file mode 100644
+index 000000000000..705fd1777a67
+--- /dev/null
++++ b/tools/testing/selftests/bpf/bpfilter/bpfilter_util.h
+@@ -0,0 +1,22 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef BPFILTER_UTIL_H
++#define BPFILTER_UTIL_H
++
++#include <linux/netfilter/x_tables.h>
++
++#include <stdio.h>
++#include <stdint.h>
++#include <string.h>
++
++static inline void init_entry_match(struct xt_entry_match *match,
++				    uint16_t size, uint8_t revision,
++				    const char *name)
++{
++	memset(match, 0, sizeof(*match));
++	sprintf(match->u.user.name, "%s", name);
++	match->u.user.match_size = size;
++	match->u.user.revision = revision;
++}
++
++#endif // BPFILTER_UTIL_H
+diff --git a/tools/testing/selftests/bpf/bpfilter/test_match.c b/tools/testing/selftests/bpf/bpfilter/test_match.c
+new file mode 100644
+index 000000000000..4a0dc1b14e4d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/bpfilter/test_match.c
+@@ -0,0 +1,69 @@
++// SPDX-License-Identifier: GPL-2.0
 +
 +#define _GNU_SOURCE
 +
-+#include <search.h>
-+
-+int create_map(struct hsearch_data *htab, size_t nelem);
-+void *map_find(struct hsearch_data *htab, const char *key);
-+int map_upsert(struct hsearch_data *htab, const char *key, void *value);
-+void free_map(struct hsearch_data *htab);
-+
-+#endif // NET_BPFILTER_MAP_COMMON_H
-diff --git a/tools/testing/selftests/bpf/bpfilter/.gitignore b/tools/testing/selftests/bpf/bpfilter/.gitignore
-new file mode 100644
-index 000000000000..983fd06cbefa
---- /dev/null
-+++ b/tools/testing/selftests/bpf/bpfilter/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+test_map
-diff --git a/tools/testing/selftests/bpf/bpfilter/Makefile b/tools/testing/selftests/bpf/bpfilter/Makefile
-new file mode 100644
-index 000000000000..c262aad8c2a4
---- /dev/null
-+++ b/tools/testing/selftests/bpf/bpfilter/Makefile
-@@ -0,0 +1,19 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+top_srcdir = ../../../../..
-+TOOLSDIR := $(abspath ../../../../)
-+TOOLSINCDIR := $(TOOLSDIR)/include
-+APIDIR := $(TOOLSINCDIR)/uapi
-+BPFILTERSRCDIR := $(top_srcdir)/net/bpfilter
-+
-+CFLAGS += -Wall -g -pthread -I$(TOOLSINCDIR) -I$(APIDIR) -I$(BPFILTERSRCDIR)
-+
-+TEST_GEN_PROGS += test_map
-+
-+KSFT_KHDR_INSTALL := 1
-+
-+include ../../lib.mk
-+
-+BPFILTER_MAP_SRCS := $(BPFILTERSRCDIR)/map-common.c
-+
-+$(OUTPUT)/test_map: test_map.c $(BPFILTER_MAP_SRCS)
-diff --git a/tools/testing/selftests/bpf/bpfilter/test_map.c b/tools/testing/selftests/bpf/bpfilter/test_map.c
-new file mode 100644
-index 000000000000..7ed737b78816
---- /dev/null
-+++ b/tools/testing/selftests/bpf/bpfilter/test_map.c
-@@ -0,0 +1,63 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "map-common.h"
-+
-+#include <linux/err.h>
++#include <linux/netfilter/x_tables.h>
++#include <linux/netfilter/xt_tcpudp.h>
 +
 +#include "../../kselftest_harness.h"
 +
-+FIXTURE(test_map)
-+{
-+	struct hsearch_data map;
-+	const char *key;
-+	void *expected;
-+	void *actual;
++#include "context.h"
++#include "logger.h"
++#include "match.h"
++
++#include "bpfilter_util.h"
++
++/**
++ * struct udp_match - Dummy test structure.
++ *
++ * This structure provides enough space to allow for name too long, so it
++ * doesn't overwrite anything.
++ */
++struct udp_match {
++	struct xt_entry_match ipt_match;
++	char placeholder[32];
 +};
 +
-+FIXTURE_SETUP(test_map)
++FIXTURE(test_match_init)
 +{
-+	const int max_nelements = 100;
++	struct context ctx;
++	struct udp_match udp_match;
++	struct match match;
++};
 +
-+	create_map(&self->map, max_nelements);
-+	self->key = "key";
-+	self->expected = "expected";
-+	self->actual = "actual";
++FIXTURE_SETUP(test_match_init)
++{
++	logger_set_file(stderr);
++	ASSERT_EQ(0, create_context(&self->ctx));
++};
++
++FIXTURE_TEARDOWN(test_match_init)
++{
++	free_context(&self->ctx);
 +}
 +
-+FIXTURE_TEARDOWN(test_map)
++TEST_F(test_match_init, name_too_long)
 +{
-+	free_map(&self->map);
++	init_entry_match(&self->udp_match.ipt_match, sizeof(self->udp_match), 0,
++			 "this match name is supposed to be way too long...");
++
++	ASSERT_EQ(init_match(&self->ctx,
++			     (const struct bpfilter_ipt_match *)&self->udp_match
++				     .ipt_match,
++			     &self->match),
++		  -EINVAL);
 +}
 +
-+TEST_F(test_map, upsert_and_find)
++TEST_F(test_match_init, not_found)
 +{
-+	void *found;
++	init_entry_match(&self->udp_match.ipt_match, sizeof(self->udp_match), 0,
++			 "doesn't exist");
 +
-+	found = map_find(&self->map, self->key);
-+	ASSERT_TRUE(IS_ERR(found))
-+	ASSERT_EQ(-ENOENT, PTR_ERR(found))
-+
-+	ASSERT_EQ(0, map_upsert(&self->map, self->key, self->expected));
-+	ASSERT_EQ(0, map_upsert(&self->map, self->key, self->expected));
-+	ASSERT_EQ(0, map_upsert(&self->map, self->key, self->actual));
-+
-+	found = map_find(&self->map, self->key);
-+
-+	ASSERT_FALSE(IS_ERR(found));
-+	ASSERT_STREQ(self->actual, found);
-+}
-+
-+TEST_F(test_map, update)
-+{
-+	void *found;
-+
-+	ASSERT_EQ(0, map_upsert(&self->map, self->key, self->actual));
-+	ASSERT_EQ(0, map_upsert(&self->map, self->key, self->expected));
-+
-+	found = map_find(&self->map, self->key);
-+
-+	ASSERT_FALSE(IS_ERR(found));
-+	ASSERT_STREQ(self->expected, found);
++	ASSERT_EQ(init_match(&self->ctx,
++			     (const struct bpfilter_ipt_match *)&self->udp_match
++				     .ipt_match,
++			     &self->match),
++		  -ENOENT);
 +}
 +
 +TEST_HARNESS_MAIN
