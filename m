@@ -2,139 +2,154 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A77A7C4167B
-	for <bpf@archiver.kernel.org>; Fri, 23 Dec 2022 07:53:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 927AEC4332F
+	for <bpf@archiver.kernel.org>; Fri, 23 Dec 2022 09:51:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235946AbiLWHxj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 23 Dec 2022 02:53:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41864 "EHLO
+        id S235480AbiLWJva (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 23 Dec 2022 04:51:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiLWHxi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 23 Dec 2022 02:53:38 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D59D31EDF;
-        Thu, 22 Dec 2022 23:53:37 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id u28so1249292edd.10;
-        Thu, 22 Dec 2022 23:53:37 -0800 (PST)
+        with ESMTP id S235811AbiLWJuy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 23 Dec 2022 04:50:54 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6A0532C6
+        for <bpf@vger.kernel.org>; Fri, 23 Dec 2022 01:46:34 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id f9so3003912pgf.7
+        for <bpf@vger.kernel.org>; Fri, 23 Dec 2022 01:46:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=theori.io; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8WKoOMPsmNwyEfgMM+9XAivDWwN5pCyQ5XhkIU1BGH4=;
-        b=kcHZylwZirfcKWkwvdrtVgDTcsDUqU50o7awL9XBQ7nfteDUXq3p9DO3n8HKhglVK6
-         tnVG/rwgBR0tO4fGtRV8WPvOYZX0jMmU5bjtmQ2kwdB3DMYVl9tWeff4Qp5RxHjJePL8
-         awO8a/upMKNKWaQqekOje2rQVXreaPTDlHLAe3ZfYiXCKOhffyH4An7NUTMvN3Lt7LZS
-         28tqOvOjWiPTd26N47r8EiIvUg8mgSyRxQ2Ncn4y5EB+DOwVVdM+HFY97aoKzZPXAbyd
-         KU84P/BpOt4RFURxBnkvP5Qznozqkcjqehk0HvqwqbRxGpBMvcuzgeM4IspYENCGjjwh
-         hSlQ==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+WKoLIABwo+u1Fq4H0zGMt0eyWpWpm9fvY8EwGWoFJ8=;
+        b=hznX9A2Q4O7umlkcuwP22V2+yaWYzaVhXHCGVoJDcbTdnPhaXfufB+WsF5SKNB1Gvf
+         SElthpxh2m024cwwq/LihYtLNZzWhJ7lpAMdvF7jPS3B9hQ+brf9uQw8DEqI8e+XStEL
+         6bxNGOV6S/RDeNPEx0DU2jxzi77Oh/OT4uasI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8WKoOMPsmNwyEfgMM+9XAivDWwN5pCyQ5XhkIU1BGH4=;
-        b=U08FG6fTdBwayQX+8mQo2RAUkhedK/JNqeYk3lQ36mpBe4ags9vcjW0ruJpF32148R
-         gEvxwOtbOh64vSJyEXDN3gKwHMhzXq2aoWA7k03if7LWmQrESuaa+7VGo5bTeoH2i3Y7
-         DYQwSV/6Jr53jKIAJBq8Fd/S/Vs6YtIXM/hMYFpqfkR7HGbTkh+bgj9cgZsuIfHVchcV
-         dKsKEsL3IE/Zc2JL7DoClNx0LXmePgHH8RGYO5+NFV6UpJ7hl70BB90T3VAjHQwvnoAt
-         BptqWiXz4IScZVlz4fSzuewL4U1RlLc7A0skEqOf2ko2qTRP4hi4IhlGJX6MrFE1i+Zb
-         VxFw==
-X-Gm-Message-State: AFqh2kqoiIm//7ek3+7rSfVy1nGqE3qlZORKZtaCM0/oMe1+rkHjyq+F
-        Wo3wDjnbTg43oITM0O5Lkrs=
-X-Google-Smtp-Source: AMrXdXsCi64Chzl267PLU056ZrjMyCU/JJgj17w+RqHuxyhtFz74b19GEI8h62OB6dQUtTFJV8UFSw==
-X-Received: by 2002:aa7:d513:0:b0:462:9baa:7507 with SMTP id y19-20020aa7d513000000b004629baa7507mr7488843edq.8.1671782015874;
-        Thu, 22 Dec 2022 23:53:35 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id h26-20020a0564020e9a00b004822681a671sm303648eda.37.2022.12.22.23.53.34
+        bh=+WKoLIABwo+u1Fq4H0zGMt0eyWpWpm9fvY8EwGWoFJ8=;
+        b=NsofqQZv2auDuHxAR9nSJ/qYchv6XUxTxAWPTdzTD4IE4AGkTpGJ7kp17RldJNvae/
+         OJIIb1iewyBXGQzRiVoUmIY81HjCc/ZZbNTZTOuxlYnCOsmHUR2p+EYwhP/kRcIuGJRi
+         ALeevXPDcqWwvlWems57zZCjmt234OH1C/FhtT50cu2u0hzEDOvvgviNGSVYLK2L4wks
+         tviH/WLdnXZbkqy08+jaaGtLnapGBDQ91aOx57Cvvycb3bL4GiWvvgAsIKiXwqS4IGDX
+         rLzb8x5Uk3rIx2S21nY6Q1MtujWCrm9KlFVab3nQ/mnCTemfQboGMhsSsimBn9zc1nBM
+         Symw==
+X-Gm-Message-State: AFqh2kpgNt9JHRDp0bSZR/RRXaqQlIaJjVi32JD9wDxzPWMFYTdLWicM
+        He1cafHGdl60qM/X7BShzUw34Q==
+X-Google-Smtp-Source: AMrXdXurnA6li5fBYOAoBCQZkq+oGa/9RAYZqfEs4ZHYxs++R0+I2qRWCOry1qeNOL2QYQ86+odRIg==
+X-Received: by 2002:a05:6a00:3254:b0:579:6402:64ce with SMTP id bn20-20020a056a00325400b00579640264cemr24245725pfb.8.1671788757507;
+        Fri, 23 Dec 2022 01:45:57 -0800 (PST)
+Received: from ubuntu ([121.133.63.188])
+        by smtp.gmail.com with ESMTPSA id v65-20020a622f44000000b00575d06e53edsm2163497pfv.149.2022.12.23.01.45.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Dec 2022 23:53:35 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Fri, 23 Dec 2022 08:53:33 +0100
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        LKML <linux-kernel@vger.kernel.org>, bpf@vger.kernel.org,
-        Ingo Molnar <mingo@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Subject: Re: [PATCH bpf-next 1/2] bpf/perf: Call perf_prepare_sample() before
- bpf_prog_run()
-Message-ID: <Y6VefZAWVzwmkfjd@krava>
-References: <20221220220144.4016213-1-namhyung@kernel.org>
- <20221220220144.4016213-2-namhyung@kernel.org>
- <Y6RTy29ULXp8WJ/Q@hirez.programming.kicks-ass.net>
- <2d164a5f-2885-2a6e-581a-2673ca0b1b81@iogearbox.net>
- <CAM9d7cj=iuxhLndNMBMeff6Ayp2hLfdz+6CHsZL7g213aWbUYQ@mail.gmail.com>
- <Y6S7BcblAHO4nQTf@hirez.programming.kicks-ass.net>
- <CAM9d7chi6ijPEwkTbmLJGz+_fQFvnFxwc44M-g93ym2-ZPN9tw@mail.gmail.com>
+        Fri, 23 Dec 2022 01:45:57 -0800 (PST)
+Date:   Fri, 23 Dec 2022 01:45:51 -0800
+From:   Hyunwoo Kim <v4bel@theori.io>
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     Kees Cook <kees@kernel.org>, keescook@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org,
+        martin.lau@linux.dev,
+        syzbot+b1e1f7feb407b56d0355@syzkaller.appspotmail.com,
+        bpf@vger.kernel.org, v4bel@theori.io
+Subject: Re: [report] OOB in bpf_load_prog() flow
+Message-ID: <20221223094551.GA1439509@ubuntu>
+References: <20221219135939.GA296131@ubuntu>
+ <Y6C1SFEj9MOOnAnb@google.com>
+ <20221220113718.GA1109523@ubuntu>
+ <CAKH8qBuerUeU7M2x5cfjJUuSjNTZj84Hd5s+rLZ+h-XHG_a4GA@mail.gmail.com>
+ <AA40C8DF-45F6-4BFB-8A2D-F4714B754479@kernel.org>
+ <CAKH8qBukDoBYZh+qvGw_Q4iXd2D9YJoWV5+gzyaU01j5b0tFPA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAM9d7chi6ijPEwkTbmLJGz+_fQFvnFxwc44M-g93ym2-ZPN9tw@mail.gmail.com>
+In-Reply-To: <CAKH8qBukDoBYZh+qvGw_Q4iXd2D9YJoWV5+gzyaU01j5b0tFPA@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 02:25:49PM -0800, Namhyung Kim wrote:
-> On Thu, Dec 22, 2022 at 12:16 PM Peter Zijlstra <peterz@infradead.org> wrote:
+On Tue, Dec 20, 2022 at 01:03:47PM -0800, Stanislav Fomichev wrote:
+> On Tue, Dec 20, 2022 at 11:08 AM Kees Cook <kees@kernel.org> wrote:
 > >
-> > On Thu, Dec 22, 2022 at 09:34:42AM -0800, Namhyung Kim wrote:
-> >
-> > > Sorry about that.  Let me rephrase it like below:
+> > On December 20, 2022 9:32:51 AM PST, Stanislav Fomichev <sdf@google.com> wrote:
+> > >On Tue, Dec 20, 2022 at 3:37 AM Hyunwoo Kim <v4bel@theori.io> wrote:
+> > >>
+> > >> On Mon, Dec 19, 2022 at 11:02:32AM -0800, sdf@google.com wrote:
+> > >> > On 12/19, Hyunwoo Kim wrote:
+> > >> > > Dear,
+> > >> >
+> > >> > > This slab-out-of-bounds occurs in the bpf_prog_load() flow:
+> > >> > > https://syzkaller.appspot.com/text?tag=CrashLog&x=172e2510480000
+> > >> >
+> > >> > > I was able to trigger KASAN using this syz reproduce code:
+> > [...]
+> > >> >
+> > >> > > IMHO, the root cause of this seems to be commit
+> > >> > > ceb35b666d42c2e91b1f94aeca95bb5eb0943268.
+> > >> >
+> > >> > > Also, a user with permission to load a BPF program can use this OOB to
+> > >> > > execute the desired code with kernel privileges.
+> > >> >
+> > >> > Let's CC Kees if you suspect the commit above. Maybe we can run
+> > >> > with/without it to confirm?
+> > >>
+> > >> I built and tested each commit of 'kernel/bpf/verifier.c' that caused
+> > >> OOB, but I couldn't find the commit that caused OOB.
+> > >>
+> > >> So, starting from upstream, I reversed commits one by one and
+> > >> found the commit that triggers KASAN.
+> > >>
+> > >> As a result of testing, OOB is triggered from commit
+> > >> 8fa590bf344816c925810331eea8387627bbeb40.
+> > >>
+> > >> However, this commit seems to be a kvm related patch,
+> > >> not directly related to the bpf subsystem.
+> > >>
+> > >> IMHO, the cause of this seems to be one of these:
+> > >> 1. I ran this KASAN test on a nested guest in L2. That is,
+> > >> there is a problem with the kvm patch 8fa590bf34481.
+> > >>
+> > >> 2. Previously, the BPF subsystem had a patch that triggers KASAN,
+> > >> and KASAN is induced when kvm is patched.
+> > >>
+> > >> 3. There was confusion in the .config I tested, so the wrong
+> > >> patch was derived as a test result.
+> > >>
+> > >> I haven't been able to pinpoint what the root cause is yet.
+> > >> So I didn't add a CC for 8fa590bf34481 commit.
 > > >
-> > > With bpf_cast_to_kern_ctx(), BPF programs attached to a perf event
-> > > can access perf sample data directly from the ctx.
+> > >Thanks for the details! Even if this particular one is unrelated,
+> > >there are a couple of reports which still somewhat look like they are
+> > >related to commit ceb35b666d42 ("bpf/verifier: Use
+> > >kmalloc_size_roundup() to match ksize() usage") ?
+> > >
+> > >https://lore.kernel.org/bpf/000000000000ab724705ee87e321@google.com/
+> > >https://lore.kernel.org/bpf/000000000000269f9a05f02be9d8@google.com/
 > >
-> > This is the bpf_prog_run() in bpf_overflow_handler(), right?
+> > I suspect something is hitting array_resize() that wasn't maximal-bucket-size allocated. Does reverting 38931d8989b5760b0bd17c9ec99e81986258e4cb make it go away?
 > 
-> Yes.
+> Reverting makes it go away for at least one of them:
+> https://lore.kernel.org/bpf/0000000000004bee2205f0484e1d@google.com/T/#m60dba18e94e01094a899ab7fe8d19aa1a3cf26fe
 > 
-> >
-> > > But the perf sample
-> > > data is not fully prepared at this point, and some fields can have invalid
-> > > uninitialized values.  So it needs to call perf_prepare_sample() before
-> > > calling the BPF overflow handler.
-> >
-> > It never was, why is it a problem now?
-> 
-> BPF used to allow selected fields only like period and addr, and they
-> are initialized always by perf_sample_data_init().  This is relaxed
-> by the bpf_cast_to_kern_ctx() and it can easily access arbitrary
-> fields of perf_sample_data now.
-> 
-> The background of this change is to use BPF as a filter for perf
-> event samples.  The code is there already and returning 0 from
-> BPF can drop perf samples.  With access to more sample data,
-> it'd make more educated decisions.
-> 
-> For example, I got some requests to limit perf samples in a
-> selected region of address (code or data).  Or it can collect
-> samples only if some hardware specific information is set in
-> the raw data like in AMD IBS.  We can easily extend it to other
-> sample info based on users' needs.
-> 
-> >
-> > > But just calling perf_prepare_sample() can be costly when the BPF
-> >
-> > So you potentially call it twice now, how's that useful?
-> 
-> Right.  I think we can check data->sample_flags in
-> perf_prepare_sample() to minimize the duplicate work.
-> It already does it for some fields, but misses others.
+> The second one didn't like my patch, I'm trying again now:
+> https://lore.kernel.org/bpf/Y6Iipad5vz55tl2A@google.com/T/#m032bed8c3d47f33a9fccd660446beabce98ff5fe
 
-we used to have __PERF_SAMPLE_CALLCHAIN_EARLY to avoid extra perf_callchain,
-could we add some flag like __PERF_SAMPLE_INIT_EARLY to avoid double call to
-perf_prepare_sample?
+I have found the root cause of this issue.
 
-jirka 
+This happens when krealloc() in push_jmp_history() receives an allocation 
+request with a size smaller than the existing slab object.
+Based on the poc code I first reported, it occurs when cur->jmp_history 
+of 64 bytes is krealloc()ed to 32 bytes.
 
-> 
-> Thanks,
-> Namhyung
+When krealloc() is called with a smaller size than the previous one as an argument, 
+krealloc() does not 'kfree&reallocate', but only resets the slab redzone based on the newly received size (if KASAN is activated).
+That's why `ksize(dst)` in copy_array() afterward returns the actual allocation size of 64 bytes. 
+However, KASAN recognizes memcpy(dst, src, 64) as OOB because the redzone is set after 32 bytes by krealloc().
+
+In any case, since the actually allocated size of dst is 64 bytes, exploiting this is close to impossible.
+However, it seems that copy_array() needs to be patched in the direction of not using ksize().
+
+
+Regards,
+Hyunwoo Kim
