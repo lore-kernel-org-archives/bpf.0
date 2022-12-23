@@ -2,26 +2,26 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01A78C4167B
-	for <bpf@archiver.kernel.org>; Fri, 23 Dec 2022 23:57:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C1E4C4332F
+	for <bpf@archiver.kernel.org>; Fri, 23 Dec 2022 23:57:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232401AbiLWX5I (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 23 Dec 2022 18:57:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33762 "EHLO
+        id S232661AbiLWX5R (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 23 Dec 2022 18:57:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231793AbiLWX5G (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 23 Dec 2022 18:57:06 -0500
-X-Greylist: delayed 539 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Dec 2022 15:57:05 PST
-Received: from 8.mo511.mail-out.ovh.net (8.mo511.mail-out.ovh.net [46.105.79.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9DE15F19
-        for <bpf@vger.kernel.org>; Fri, 23 Dec 2022 15:57:04 -0800 (PST)
-Received: from ex4.mail.ovh.net (unknown [10.108.20.222])
-        by mo511.mail-out.ovh.net (Postfix) with ESMTPS id E165C26446;
-        Fri, 23 Dec 2022 23:48:02 +0000 (UTC)
+        with ESMTP id S230419AbiLWX5O (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 23 Dec 2022 18:57:14 -0500
+X-Greylist: delayed 420 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Dec 2022 15:57:13 PST
+Received: from smtpout7.r2.mail-out.ovh.net (smtpout7.r2.mail-out.ovh.net [54.36.141.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B6D15F1E
+        for <bpf@vger.kernel.org>; Fri, 23 Dec 2022 15:57:13 -0800 (PST)
+Received: from ex4.mail.ovh.net (unknown [10.110.115.38])
+        by mo511.mail-out.ovh.net (Postfix) with ESMTPS id 639DE26719;
+        Fri, 23 Dec 2022 23:50:12 +0000 (UTC)
 Received: from dev-fedora-x86-64.naccy.de (37.65.8.229) by
  DAG10EX1.indiv4.local (172.16.2.91) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Sat, 24 Dec 2022 00:48:01 +0100
+ 15.1.2507.16; Sat, 24 Dec 2022 00:50:10 +0100
 From:   Quentin Deslandes <qde@naccy.de>
 To:     <qde@naccy.de>
 CC:     <kernel-team@meta.com>, Dmitrii Banshchikov <me@ubique.spb.ru>,
@@ -41,9 +41,9 @@ CC:     <kernel-team@meta.com>, Dmitrii Banshchikov <me@ubique.spb.ru>,
         Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
         <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
         <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH bpf-next v3 05/16] bpfilter: add runtime context
-Date:   Sat, 24 Dec 2022 00:40:13 +0100
-Message-ID: <20221223234127.474463-6-qde@naccy.de>
+Subject: [PATCH bpf-next v3 07/16] bpfilter: add support for TC bytecode generation
+Date:   Sat, 24 Dec 2022 00:40:15 +0100
+Message-ID: <20221223234127.474463-8-qde@naccy.de>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221223234127.474463-1-qde@naccy.de>
 References: <20221223234127.474463-1-qde@naccy.de>
@@ -53,88 +53,207 @@ Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [37.65.8.229]
 X-ClientProxiedBy: CAS6.indiv4.local (172.16.1.6) To DAG10EX1.indiv4.local
  (172.16.2.91)
-X-Ovh-Tracer-Id: 4481926058408472183
+X-Ovh-Tracer-Id: 4518236328503275127
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: -85
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrheefgddugecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogetfedtuddqtdduucdludehmdenucfjughrpefhvfevufffkffojghfggfgtghisehtkeertdertddtnecuhfhrohhmpefsuhgvnhhtihhnucffvghslhgrnhguvghsuceoqhguvgesnhgrtggthidruggvqeenucggtffrrghtthgvrhhnpeduledugfeileetvdelieeujedttedtvedtgfetteevfeejhfffkeeujeetfffgudenucfkphepuddvjedrtddrtddruddpfeejrdeihedrkedrvddvleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehquggvsehnrggttgihrdguvgeqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepshgufhesghhoohhglhgvrdgtohhmpdgsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhmhihkohhlrghlsehfsgdrtghomhdpphgrsggvnhhisehrvgguhhgrthdrtghomhdpkhhusggrsehkvghrnhgvlhdrohhrghdpvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdpuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvth
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrheefgddugecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogetfedtuddqtdduucdludehmdenucfjughrpefhvfevufffkffojghfggfgtghisehtkeertdertddtnecuhfhrohhmpefsuhgvnhhtihhnucffvghslhgrnhguvghsuceoqhguvgesnhgrtggthidruggvqeenucggtffrrghtthgvrhhnpeduledugfeileetvdelieeujedttedtvedtgfetteevfeejhfffkeeujeetfffgudenucfkphepuddvjedrtddrtddruddpfeejrdeihedrkedrvddvleenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehquggvsehnrggttgihrdguvgeqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepshgufhesghhoohhglhgvrdgtohhmpdgsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhmhihkohhlrghlsehfsgdrtghomhdpphgrsggvnhhisehrvgguhhgrthdrtghomhdpkhhusggrsehkvghrnhgvlhdrohhrghdpvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdpuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvth
  dpjhholhhsrgeskhgvrhhnvghlrdhorhhgpdhhrgholhhuohesghhoohhglhgvrdgtohhmpdhlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhkphhsihhnghhhsehkvghrnhgvlhdrohhrghdpjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdihhhhssehfsgdrtghomhdpshhonhhgsehkvghrnhgvlhdrohhrghdpmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdgrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdgurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprghstheskhgvrhhnvghlrdhorhhgpdhmvgesuhgsihhquhgvrdhsphgsrdhruhdpkhgvrhhnvghlqdhtvggrmhesmhgvthgrrdgtohhmpdhnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheduuddpmhhouggvpehsmhhtphhouhht
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Create struct context to store bpfilter's runtime context. Eventually,
-this structure will contain the maps/tables containing ops structures
-for matches, targets, tables...
+Add code generation support for TC hooks.
 
 Co-developed-by: Dmitrii Banshchikov <me@ubique.spb.ru>
 Signed-off-by: Dmitrii Banshchikov <me@ubique.spb.ru>
 Signed-off-by: Quentin Deslandes <qde@naccy.de>
 ---
- net/bpfilter/Makefile  |  1 +
- net/bpfilter/context.c | 18 ++++++++++++++++++
- net/bpfilter/context.h | 16 ++++++++++++++++
- 3 files changed, 35 insertions(+)
- create mode 100644 net/bpfilter/context.c
- create mode 100644 net/bpfilter/context.h
+ net/bpfilter/codegen.c | 151 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 151 insertions(+)
 
-diff --git a/net/bpfilter/Makefile b/net/bpfilter/Makefile
-index 1b0c399c19df..9878f5fd8152 100644
---- a/net/bpfilter/Makefile
-+++ b/net/bpfilter/Makefile
-@@ -5,6 +5,7 @@
+diff --git a/net/bpfilter/codegen.c b/net/bpfilter/codegen.c
+index 545bc7aeb77c..e7ae7dfa5118 100644
+--- a/net/bpfilter/codegen.c
++++ b/net/bpfilter/codegen.c
+@@ -8,6 +8,8 @@
  
- userprogs := bpfilter_umh
- bpfilter_umh-objs := main.o logger.o map-common.o
-+bpfilter_umh-objs += context.o
- userccflags += -I $(srctree)/tools/include/ -I $(srctree)/tools/include/uapi
+ #include "../../include/uapi/linux/bpfilter.h"
  
- ifeq ($(CONFIG_BPFILTER_UMH), y)
-diff --git a/net/bpfilter/context.c b/net/bpfilter/context.c
-new file mode 100644
-index 000000000000..fdfd5fe78424
---- /dev/null
-+++ b/net/bpfilter/context.c
-@@ -0,0 +1,18 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2021 Telegram FZ-LLC
-+ * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
-+ */
++#include <linux/pkt_cls.h>
 +
-+#define _GNU_SOURCE
+ #include <unistd.h>
+ #include <sys/syscall.h>
+ 
+@@ -15,6 +17,8 @@
+ #include <stdlib.h>
+ #include <string.h>
+ 
++#include <bpf/libbpf.h>
 +
-+#include "context.h"
-+
-+int create_context(struct context *ctx)
+ #include "logger.h"
+ 
+ enum fixup_insn_type {
+@@ -390,6 +394,150 @@ static void unload_maps(struct codegen *codegen)
+ 	}
+ }
+ 
++static int tc_gen_inline_prologue(struct codegen *codegen)
 +{
++	EMIT(codegen, BPF_MOV64_REG(CODEGEN_REG_CTX, BPF_REG_ARG1));
++	EMIT(codegen, BPF_MOV64_REG(CODEGEN_REG_RUNTIME_CTX, BPF_REG_FP));
++	EMIT(codegen, BPF_MOV32_IMM(CODEGEN_REG_RETVAL, TC_ACT_OK));
++
 +	return 0;
 +}
 +
-+void free_context(struct context *ctx)
++static int tc_load_packet_data(struct codegen *codegen, int dst_reg)
 +{
++	EMIT(codegen, BPF_LDX_MEM(BPF_W, dst_reg, CODEGEN_REG_CTX,
++				  offsetof(struct __sk_buff, data)));
++
++	return 0;
 +}
-diff --git a/net/bpfilter/context.h b/net/bpfilter/context.h
-new file mode 100644
-index 000000000000..df41b9707a81
---- /dev/null
-+++ b/net/bpfilter/context.h
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2021 Telegram FZ-LLC
-+ * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
-+ */
 +
-+#ifndef NET_BPFILTER_CONTEXT_H
-+#define NET_BPFILTER_CONTEXT_H
++static int tc_load_packet_data_end(struct codegen *codegen, int dst_reg)
++{
++	EMIT(codegen, BPF_LDX_MEM(BPF_W, CODEGEN_REG_DATA_END, CODEGEN_REG_CTX,
++				  offsetof(struct __sk_buff, data_end)));
 +
-+struct context {
++	return 0;
++}
++
++static int tc_emit_ret_code(struct codegen *codegen, int ret_code)
++{
++	int tc_ret_code;
++
++	if (ret_code == BPFILTER_NF_ACCEPT)
++		tc_ret_code = TC_ACT_UNSPEC;
++	else if (ret_code == BPFILTER_NF_DROP)
++		tc_ret_code = TC_ACT_SHOT;
++	else
++		return -EINVAL;
++
++	EMIT(codegen, BPF_MOV32_IMM(BPF_REG_0, tc_ret_code));
++
++	return 0;
++}
++
++static int tc_gen_inline_epilogue(struct codegen *codegen)
++{
++	EMIT(codegen, BPF_EXIT_INSN());
++
++	return 0;
++}
++
++struct tc_img_ctx {
++	int fd;
++	struct bpf_tc_hook hook;
++	struct bpf_tc_opts opts;
 +};
 +
-+int create_context(struct context *ctx);
-+void free_context(struct context *ctx);
++static int tc_load_img(struct codegen *codegen)
++{
++	struct tc_img_ctx *img_ctx;
++	int fd;
++	int r;
 +
-+#endif // NET_BPFILTER_CONTEXT_H
++	if (codegen->img_ctx) {
++		BFLOG_ERR("TC context missing from codegen");
++		return -EINVAL;
++	}
++
++	img_ctx = calloc(1, sizeof(*img_ctx));
++	if (!img_ctx) {
++		BFLOG_ERR("out of memory");
++		return -ENOMEM;
++	}
++
++	img_ctx->hook.sz = sizeof(img_ctx->hook);
++	img_ctx->hook.ifindex = 2;
++	img_ctx->hook.attach_point = codegen->bpf_tc_hook;
++
++	fd = load_img(codegen);
++	if (fd < 0) {
++		BFLOG_ERR("failed to load TC codegen image: %s", STRERR(fd));
++		r = fd;
++		goto err_free;
++	}
++
++	r = bpf_tc_hook_create(&img_ctx->hook);
++	if (r && r != -EEXIST) {
++		BFLOG_ERR("failed to create TC hook: %s\n", STRERR(r));
++		goto err_free;
++	}
++
++	img_ctx->opts.sz = sizeof(img_ctx->opts);
++	img_ctx->opts.handle = codegen->iptables_hook;
++	img_ctx->opts.priority = 0;
++	img_ctx->opts.prog_fd = fd;
++	r = bpf_tc_attach(&img_ctx->hook, &img_ctx->opts);
++	if (r) {
++		BFLOG_ERR("failed to attach TC program: %s", STRERR(r));
++		goto err_free;
++	}
++
++	img_ctx->fd = fd;
++	codegen->img_ctx = img_ctx;
++
++	return fd;
++
++err_free:
++	if (fd > -1)
++		close(fd);
++	free(img_ctx);
++	return r;
++}
++
++static void tc_unload_img(struct codegen *codegen)
++{
++	struct tc_img_ctx *img_ctx;
++	int r;
++
++	BUG_ON(!codegen->img_ctx);
++
++	img_ctx = (struct tc_img_ctx *)codegen->img_ctx;
++	img_ctx->opts.flags = 0;
++	img_ctx->opts.prog_fd = 0;
++	img_ctx->opts.prog_id = 0;
++	r = bpf_tc_detach(&img_ctx->hook, &img_ctx->opts);
++	if (r)
++		BFLOG_EMERG("failed to detach TC program: %s", STRERR(r));
++
++	BUG_ON(img_ctx->fd < 0);
++	close(img_ctx->fd);
++	free(img_ctx);
++
++	codegen->img_ctx = NULL;
++
++	unload_img(codegen);
++}
++
++static const struct codegen_ops tc_codegen_ops = {
++	.gen_inline_prologue = tc_gen_inline_prologue,
++	.load_packet_data = tc_load_packet_data,
++	.load_packet_data_end = tc_load_packet_data_end,
++	.emit_ret_code = tc_emit_ret_code,
++	.gen_inline_epilogue = tc_gen_inline_epilogue,
++	.load_img = tc_load_img,
++	.unload_img = tc_unload_img,
++};
++
+ void create_shared_codegen(struct shared_codegen *shared_codegen)
+ {
+ 	shared_codegen->maps_refcnt = 0;
+@@ -413,6 +561,9 @@ int create_codegen(struct codegen *codegen, enum bpf_prog_type type)
+ 	memset(codegen, 0, sizeof(*codegen));
+ 
+ 	switch (type) {
++	case BPF_PROG_TYPE_SCHED_CLS:
++		codegen->codegen_ops = &tc_codegen_ops;
++		break;
+ 	default:
+ 		BFLOG_ERR("unsupported BPF program type %d", type);
+ 		return -EINVAL;
 -- 
 2.38.1
 
