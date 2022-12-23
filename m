@@ -2,124 +2,246 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5353C4332F
-	for <bpf@archiver.kernel.org>; Fri, 23 Dec 2022 22:24:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 907A6C4332F
+	for <bpf@archiver.kernel.org>; Fri, 23 Dec 2022 23:52:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230312AbiLWWTM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 23 Dec 2022 17:19:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
+        id S231970AbiLWXwe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 23 Dec 2022 18:52:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiLWWTM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 23 Dec 2022 17:19:12 -0500
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA53A10B49;
-        Fri, 23 Dec 2022 14:19:10 -0800 (PST)
-Received: from 226.206.1.85.dynamic.wline.res.cust.swisscom.ch ([85.1.206.226] helo=localhost)
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1p8qNg-0007sF-49; Fri, 23 Dec 2022 23:19:08 +0100
-From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     davem@davemloft.net
-Cc:     kuba@kernel.org, pabeni@redhat.com, edumazet@google.com,
-        daniel@iogearbox.net, ast@kernel.org, andrii@kernel.org,
-        martin.lau@linux.dev, netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: pull-request: bpf 2022-12-23
-Date:   Fri, 23 Dec 2022 23:19:07 +0100
-Message-Id: <20221223221907.10465-1-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
+        with ESMTP id S231140AbiLWXwd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 23 Dec 2022 18:52:33 -0500
+X-Greylist: delayed 524 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Dec 2022 15:52:31 PST
+Received: from 2.mo546.mail-out.ovh.net (2.mo546.mail-out.ovh.net [178.33.110.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984A413F5E
+        for <bpf@vger.kernel.org>; Fri, 23 Dec 2022 15:52:31 -0800 (PST)
+Received: from ex4.mail.ovh.net (unknown [10.108.20.92])
+        by mo546.mail-out.ovh.net (Postfix) with ESMTPS id DADF62711D;
+        Fri, 23 Dec 2022 23:43:44 +0000 (UTC)
+Received: from dev-fedora-x86-64.naccy.de (37.65.8.229) by
+ DAG10EX1.indiv4.local (172.16.2.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Sat, 24 Dec 2022 00:43:43 +0100
+From:   Quentin Deslandes <qde@naccy.de>
+To:     <qde@naccy.de>
+CC:     <kernel-team@meta.com>, Dmitrii Banshchikov <me@ubique.spb.ru>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: [PATCH bpf-next v3 01/16] bpfilter: add types for usermode helper
+Date:   Sat, 24 Dec 2022 00:40:09 +0100
+Message-ID: <20221223234127.474463-2-qde@naccy.de>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221223234127.474463-1-qde@naccy.de>
+References: <20221223234127.474463-1-qde@naccy.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.7/26759/Fri Dec 23 10:30:57 2022)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [37.65.8.229]
+X-ClientProxiedBy: CAS6.indiv4.local (172.16.1.6) To DAG10EX1.indiv4.local
+ (172.16.2.91)
+X-Ovh-Tracer-Id: 4409305514236374647
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -85
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrheefgddufecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogetfedtuddqtdduucdludehmdenucfjughrpefhvfevufffkffojghfggfgtghisehtkeertdertddtnecuhfhrohhmpefsuhgvnhhtihhnucffvghslhgrnhguvghsuceoqhguvgesnhgrtggthidruggvqeenucggtffrrghtthgvrhhnpeduledugfeileetvdelieeujedttedtvedtgfetteevfeejhfffkeeujeetfffgudenucfkphepuddvjedrtddrtddruddpfeejrdeihedrkedrvddvleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehquggvsehnrggttgihrdguvgeqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepshgufhesghhoohhglhgvrdgtohhmpdgsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhmhihkohhlrghlsehfsgdrtghomhdpphgrsggvnhhisehrvgguhhgrthdrtghomhdpkhhusggrsehkvghrnhgvlhdrohhrghdpvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdpuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvth
+ dpjhholhhsrgeskhgvrhhnvghlrdhorhhgpdhhrgholhhuohesghhoohhglhgvrdgtohhmpdhlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhkphhsihhnghhhsehkvghrnhgvlhdrohhrghdpjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdihhhhssehfsgdrtghomhdpshhonhhgsehkvghrnhgvlhdrohhrghdpmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdgrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdgurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprghstheskhgvrhhnvghlrdhorhhgpdhmvgesuhgsihhquhgvrdhsphgsrdhruhdpkhgvrhhnvghlqdhtvggrmhesmhgvthgrrdgtohhmpdhnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheegiedpmhhouggvpehsmhhtphhouhht
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi David, hi Jakub, hi Paolo, hi Eric,
+Add required definitions that mirror existing iptables' ABI. Those
+definitions are needed by usermode helper.
 
-The following pull-request contains BPF updates for your *net* tree.
+Co-developed-by: Dmitrii Banshchikov <me@ubique.spb.ru>
+Signed-off-by: Dmitrii Banshchikov <me@ubique.spb.ru>
+Signed-off-by: Quentin Deslandes <qde@naccy.de>
+---
+ include/uapi/linux/bpfilter.h | 154 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 154 insertions(+)
 
-We've added 7 non-merge commits during the last 5 day(s) which contain
-a total of 11 files changed, 231 insertions(+), 3 deletions(-).
+diff --git a/include/uapi/linux/bpfilter.h b/include/uapi/linux/bpfilter.h
+index cbc1f5813f50..295fd9caa3c8 100644
+--- a/include/uapi/linux/bpfilter.h
++++ b/include/uapi/linux/bpfilter.h
+@@ -3,6 +3,10 @@
+ #define _UAPI_LINUX_BPFILTER_H
+ 
+ #include <linux/if.h>
++#include <linux/const.h>
++
++#define BPFILTER_STANDARD_TARGET        ""
++#define BPFILTER_ERROR_TARGET           "ERROR"
+ 
+ enum {
+ 	BPFILTER_IPT_SO_SET_REPLACE = 64,
+@@ -18,4 +22,154 @@ enum {
+ 	BPFILTER_IPT_GET_MAX,
+ };
+ 
++enum {
++	BPFILTER_XT_TABLE_MAXNAMELEN = 32,
++	BPFILTER_FUNCTION_MAXNAMELEN = 30,
++	BPFILTER_EXTENSION_MAXNAMELEN = 29,
++};
++
++enum {
++	BPFILTER_NF_DROP = 0,
++	BPFILTER_NF_ACCEPT = 1,
++	BPFILTER_NF_STOLEN = 2,
++	BPFILTER_NF_QUEUE = 3,
++	BPFILTER_NF_REPEAT = 4,
++	BPFILTER_NF_STOP = 5,
++	BPFILTER_NF_MAX_VERDICT = BPFILTER_NF_STOP,
++	BPFILTER_RETURN = (-BPFILTER_NF_REPEAT - 1),
++};
++
++enum {
++	BPFILTER_INET_HOOK_PRE_ROUTING = 0,
++	BPFILTER_INET_HOOK_LOCAL_IN = 1,
++	BPFILTER_INET_HOOK_FORWARD = 2,
++	BPFILTER_INET_HOOK_LOCAL_OUT = 3,
++	BPFILTER_INET_HOOK_POST_ROUTING = 4,
++	BPFILTER_INET_HOOK_MAX,
++};
++
++enum {
++	BPFILTER_IPT_F_MASK = 0x03,
++	BPFILTER_IPT_INV_MASK = 0x7f
++};
++
++struct bpfilter_ipt_match {
++	union {
++		struct {
++			__u16 match_size;
++			char name[BPFILTER_EXTENSION_MAXNAMELEN];
++			__u8 revision;
++		} user;
++		struct {
++			__u16 match_size;
++			void *match;
++		} kernel;
++		__u16 match_size;
++	} u;
++	unsigned char data[];
++};
++
++struct bpfilter_ipt_target {
++	union {
++		struct {
++			__u16 target_size;
++			char name[BPFILTER_EXTENSION_MAXNAMELEN];
++			__u8 revision;
++		} user;
++		struct {
++			__u16 target_size;
++			void *target;
++		} kernel;
++		__u16 target_size;
++	} u;
++	unsigned char data[];
++};
++
++struct bpfilter_ipt_standard_target {
++	struct bpfilter_ipt_target target;
++	int verdict;
++};
++
++struct bpfilter_ipt_error_target {
++	struct bpfilter_ipt_target target;
++	char error_name[BPFILTER_FUNCTION_MAXNAMELEN];
++};
++
++struct bpfilter_ipt_get_info {
++	char name[BPFILTER_XT_TABLE_MAXNAMELEN];
++	__u32 valid_hooks;
++	__u32 hook_entry[BPFILTER_INET_HOOK_MAX];
++	__u32 underflow[BPFILTER_INET_HOOK_MAX];
++	__u32 num_entries;
++	__u32 size;
++};
++
++struct bpfilter_ipt_counters {
++	__u64 packet_cnt;
++	__u64 byte_cnt;
++};
++
++struct bpfilter_ipt_counters_info {
++	char name[BPFILTER_XT_TABLE_MAXNAMELEN];
++	__u32 num_counters;
++	struct bpfilter_ipt_counters counters[];
++};
++
++struct bpfilter_ipt_get_revision {
++	char name[BPFILTER_EXTENSION_MAXNAMELEN];
++	__u8 revision;
++};
++
++struct bpfilter_ipt_ip {
++	__u32 src;
++	__u32 dst;
++	__u32 src_mask;
++	__u32 dst_mask;
++	char in_iface[IFNAMSIZ];
++	char out_iface[IFNAMSIZ];
++	__u8 in_iface_mask[IFNAMSIZ];
++	__u8 out_iface_mask[IFNAMSIZ];
++	__u16 protocol;
++	__u8 flags;
++	__u8 invflags;
++};
++
++struct bpfilter_ipt_entry {
++	struct bpfilter_ipt_ip ip;
++	__u32 bfcache;
++	__u16 target_offset;
++	__u16 next_offset;
++	__u32 comefrom;
++	struct bpfilter_ipt_counters counters;
++	__u8 elems[];
++};
++
++struct bpfilter_ipt_standard_entry {
++	struct bpfilter_ipt_entry entry;
++	struct bpfilter_ipt_standard_target target;
++};
++
++struct bpfilter_ipt_error_entry {
++	struct bpfilter_ipt_entry entry;
++	struct bpfilter_ipt_error_target target;
++};
++
++struct bpfilter_ipt_get_entries {
++	char name[BPFILTER_XT_TABLE_MAXNAMELEN];
++	__u32 size;
++	struct bpfilter_ipt_entry entries[];
++};
++
++struct bpfilter_ipt_replace {
++	char name[BPFILTER_XT_TABLE_MAXNAMELEN];
++	__u32 valid_hooks;
++	__u32 num_entries;
++	__u32 size;
++	__u32 hook_entry[BPFILTER_INET_HOOK_MAX];
++	__u32 underflow[BPFILTER_INET_HOOK_MAX];
++	__u32 num_counters;
++	struct bpfilter_ipt_counters *cntrs;
++	struct bpfilter_ipt_entry entries[];
++};
++
+ #endif /* _UAPI_LINUX_BPFILTER_H */
+-- 
+2.38.1
 
-The main changes are:
-
-1) Fix a splat in bpf_skb_generic_pop() under CHECKSUM_PARTIAL due to
-   misuse of skb_postpull_rcsum(), from Jakub Kicinski with test case
-   from Martin Lau.
-
-2) Fix BPF verifier's nullness propagation when registers are of
-   type PTR_TO_BTF_ID, from Hao Sun.
-
-3) Fix bpftool build for JIT disassembler under statically built
-   libllvm, from Anton Protopopov.
-
-4) Fix warnings reported by resolve_btfids when building vmlinux
-   with CONFIG_SECURITY_NETWORK disabled, from Hou Tao.
-
-5) Minor fix up for BPF selftest gitignore, from Stanislav Fomichev.
-
-Please consider pulling these changes from:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/for-netdev
-
-Thanks a lot and merry Xmas everyone!
-
-Also thanks to reporters, reviewers and testers of commits in this pull-request:
-
-Anand Parthasarathy, John Sperbeck, Stanislav Fomichev, Yonghong Song
-
-----------------------------------------------------------------
-
-The following changes since commit 2856a62762c8409e360d4fd452194c8e57ba1058:
-
-  mctp: serial: Fix starting value for frame check sequence (2022-12-19 12:38:45 +0000)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/for-netdev
-
-for you to fetch changes up to fcbb408a1aaf426f88d8fb3b4c14e3625745b02f:
-
-  selftests/bpf: Add host-tools to gitignore (2022-12-23 22:49:19 +0100)
-
-----------------------------------------------------------------
-bpf-for-netdev
-
-----------------------------------------------------------------
-Anton Protopopov (1):
-      bpftool: Fix linkage with statically built libllvm
-
-Hao Sun (2):
-      bpf: fix nullness propagation for reg to reg comparisons
-      selftests/bpf: check null propagation only neither reg is PTR_TO_BTF_ID
-
-Hou Tao (1):
-      bpf: Define sock security related BTF IDs under CONFIG_SECURITY_NETWORK
-
-Jakub Kicinski (1):
-      bpf: pull before calling skb_postpull_rcsum()
-
-Martin KaFai Lau (1):
-      selftests/bpf: Test bpf_skb_adjust_room on CHECKSUM_PARTIAL
-
-Stanislav Fomichev (1):
-      selftests/bpf: Add host-tools to gitignore
-
- kernel/bpf/bpf_lsm.c                               |  2 +
- kernel/bpf/verifier.c                              |  9 ++-
- net/core/filter.c                                  |  7 +-
- tools/bpf/bpftool/Makefile                         |  4 +
- tools/testing/selftests/bpf/.gitignore             |  1 +
- tools/testing/selftests/bpf/DENYLIST.s390x         |  1 +
- .../selftests/bpf/prog_tests/decap_sanity.c        | 85 ++++++++++++++++++++++
- .../selftests/bpf/prog_tests/jeq_infer_not_null.c  |  9 +++
- .../testing/selftests/bpf/progs/bpf_tracing_net.h  |  6 ++
- tools/testing/selftests/bpf/progs/decap_sanity.c   | 68 +++++++++++++++++
- .../selftests/bpf/progs/jeq_infer_not_null_fail.c  | 42 +++++++++++
- 11 files changed, 231 insertions(+), 3 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/decap_sanity.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/jeq_infer_not_null.c
- create mode 100644 tools/testing/selftests/bpf/progs/decap_sanity.c
- create mode 100644 tools/testing/selftests/bpf/progs/jeq_infer_not_null_fail.c
