@@ -2,37 +2,37 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 247B9C4167B
-	for <bpf@archiver.kernel.org>; Fri, 23 Dec 2022 05:49:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41F3AC4332F
+	for <bpf@archiver.kernel.org>; Fri, 23 Dec 2022 05:49:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbiLWFtg convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 23 Dec 2022 00:49:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35716 "EHLO
+        id S229625AbiLWFth convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 23 Dec 2022 00:49:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiLWFtf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 23 Dec 2022 00:49:35 -0500
+        with ESMTP id S229923AbiLWFth (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 23 Dec 2022 00:49:37 -0500
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC52E2657E
-        for <bpf@vger.kernel.org>; Thu, 22 Dec 2022 21:49:34 -0800 (PST)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BN13QJP013297
-        for <bpf@vger.kernel.org>; Thu, 22 Dec 2022 21:49:34 -0800
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F2D2657E
+        for <bpf@vger.kernel.org>; Thu, 22 Dec 2022 21:49:36 -0800 (PST)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BN144se005437
+        for <bpf@vger.kernel.org>; Thu, 22 Dec 2022 21:49:36 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3mm4p9a6qr-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3mmc5jrap4-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 22 Dec 2022 21:49:34 -0800
+        for <bpf@vger.kernel.org>; Thu, 22 Dec 2022 21:49:35 -0800
 Received: from twshared18509.43.prn1.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.34; Thu, 22 Dec 2022 21:49:34 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id BE0C223EA756C; Thu, 22 Dec 2022 21:49:25 -0800 (PST)
+        id EB1F823EA75B6; Thu, 22 Dec 2022 21:49:29 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 1/7] bpf: teach refsafe() to take into account ID remapping
-Date:   Thu, 22 Dec 2022 21:49:15 -0800
-Message-ID: <20221223054921.958283-2-andrii@kernel.org>
+Subject: [PATCH bpf-next 3/7] bpf: generalize MAYBE_NULL vs non-MAYBE_NULL rule
+Date:   Thu, 22 Dec 2022 21:49:17 -0800
+Message-ID: <20221223054921.958283-4-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221223054921.958283-1-andrii@kernel.org>
 References: <20221223054921.958283-1-andrii@kernel.org>
@@ -40,8 +40,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: 0EarYQsKS6Qp9y65012eJ-TiovbDuBct
-X-Proofpoint-ORIG-GUID: 0EarYQsKS6Qp9y65012eJ-TiovbDuBct
+X-Proofpoint-GUID: isQUbYDqhwOvw182uQFwXNi5ODW5q7iz
+X-Proofpoint-ORIG-GUID: isQUbYDqhwOvw182uQFwXNi5ODW5q7iz
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-12-23_02,2022-12-22_03,2022-06-22_01
@@ -49,59 +49,76 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-states_equal() check performs ID mapping between old and new states to
-establish a 1-to-1 correspondence between IDs, even if their absolute
-numberic values across two equivalent states differ. This is important
-both for correctness and to avoid unnecessary work when two states are
-equivalent.
+Make generic check to prevent XXX_OR_NULL and XXX register types to be
+intermixed. While technically in some situations it could be safe, it's
+impossible to enforce due to the loss of an ID when converting
+XXX_OR_NULL to its non-NULL variant. So prevent this in general, not
+just for PTR_TO_MAP_KEY and PTR_TO_MAP_VALUE.
 
-With recent changes we partially fixed this logic by maintaining ID map
-across all function frames. This patch also makes refsafe() check take
-into account (and maintain) ID map, making states_equal() behavior more
-optimal and correct.
+PTR_TO_MAP_KEY_OR_NULL and PTR_TO_MAP_VALUE_OR_NULL checks, which were
+previously special-cased, are simplified to generic check that takes
+into account range_within() and tnum_in(). This is correct as BPF
+verifier doesn't allow arithmetic on XXX_OR_NULL register types, so
+var_off and ranges should stay zero. But even if in the future this
+restriction is lifted, it's even more important to enforce that var_off
+and ranges are compatible, otherwise it's possible to construct case
+where this can be exploited to bypass verifier's memory range safety
+checks.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/bpf/verifier.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+ kernel/bpf/verifier.c | 31 +++++++++++++++----------------
+ 1 file changed, 15 insertions(+), 16 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index faa358b3d5d7..ab8337f6a576 100644
+index e419e6024251..218a7ace4210 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -13223,12 +13223,20 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
- 	return true;
- }
- 
--static bool refsafe(struct bpf_func_state *old, struct bpf_func_state *cur)
-+static bool refsafe(struct bpf_func_state *old, struct bpf_func_state *cur,
-+		    struct bpf_id_pair *idmap)
- {
-+	int i;
-+
- 	if (old->acquired_refs != cur->acquired_refs)
+@@ -13074,6 +13074,21 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
+ 		return true;
+ 	if (rcur->type == NOT_INIT)
  		return false;
--	return !memcmp(old->refs, cur->refs,
--		       sizeof(*old->refs) * old->acquired_refs);
 +
-+	for (i = 0; i < old->acquired_refs; i++) {
-+		if (!check_ids(old->refs[i].id, cur->refs[i].id, idmap))
-+			return false;
-+	}
++	/* Register types that are *not* MAYBE_NULL could technically be safe
++	 * to use as their MAYBE_NULL variants (e.g., PTR_TO_MAP_VALUE  is
++	 * safe to be used as PTR_TO_MAP_VALUE_OR_NULL, provided both point to
++	 * the same map).
++	 * However, if the old MAYBE_NULL register then got NULL checked,
++	 * doing so could have affected others with the same id, and we can't
++	 * check for that because we lost the id when we converted to
++	 * a non-MAYBE_NULL variant.
++	 * So, as a general rule we don't allow mixing MAYBE_NULL and
++	 * non-MAYBE_NULL registers.
++	 */
++	if (type_may_be_null(rold->type) != type_may_be_null(rcur->type))
++		return false;
 +
-+	return true;
- }
- 
- /* compare two verifier states
-@@ -13270,7 +13278,7 @@ static bool func_states_equal(struct bpf_verifier_env *env, struct bpf_func_stat
- 	if (!stacksafe(env, old, cur, env->idmap_scratch))
- 		return false;
- 
--	if (!refsafe(old, cur))
-+	if (!refsafe(old, cur, env->idmap_scratch))
- 		return false;
- 
- 	return true;
+ 	switch (base_type(rold->type)) {
+ 	case SCALAR_VALUE:
+ 		if (equal)
+@@ -13098,22 +13113,6 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
+ 		}
+ 	case PTR_TO_MAP_KEY:
+ 	case PTR_TO_MAP_VALUE:
+-		/* a PTR_TO_MAP_VALUE could be safe to use as a
+-		 * PTR_TO_MAP_VALUE_OR_NULL into the same map.
+-		 * However, if the old PTR_TO_MAP_VALUE_OR_NULL then got NULL-
+-		 * checked, doing so could have affected others with the same
+-		 * id, and we can't check for that because we lost the id when
+-		 * we converted to a PTR_TO_MAP_VALUE.
+-		 */
+-		if (type_may_be_null(rold->type)) {
+-			if (!type_may_be_null(rcur->type))
+-				return false;
+-			if (memcmp(rold, rcur, offsetof(struct bpf_reg_state, var_off)))
+-				return false;
+-			/* Check our ids match any regs they're supposed to */
+-			return check_ids(rold->id, rcur->id, idmap);
+-		}
+-
+ 		/* If the new min/max/var_off satisfy the old ones and
+ 		 * everything else matches, we are OK.
+ 		 */
 -- 
 2.30.2
 
