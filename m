@@ -2,37 +2,37 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CBEFC4332F
-	for <bpf@archiver.kernel.org>; Fri, 23 Dec 2022 05:49:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A631CC4332F
+	for <bpf@archiver.kernel.org>; Fri, 23 Dec 2022 05:49:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbiLWFto convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 23 Dec 2022 00:49:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35756 "EHLO
+        id S230062AbiLWFtt convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 23 Dec 2022 00:49:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbiLWFti (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 23 Dec 2022 00:49:38 -0500
+        with ESMTP id S230022AbiLWFtp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 23 Dec 2022 00:49:45 -0500
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6809D2657E
-        for <bpf@vger.kernel.org>; Thu, 22 Dec 2022 21:49:37 -0800 (PST)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BN3kwjS027926
-        for <bpf@vger.kernel.org>; Thu, 22 Dec 2022 21:49:37 -0800
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B792A52D
+        for <bpf@vger.kernel.org>; Thu, 22 Dec 2022 21:49:44 -0800 (PST)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BN3uSN5001003
+        for <bpf@vger.kernel.org>; Thu, 22 Dec 2022 21:49:44 -0800
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3mmgpbf11u-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3mmc5jraq2-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 22 Dec 2022 21:49:37 -0800
+        for <bpf@vger.kernel.org>; Thu, 22 Dec 2022 21:49:44 -0800
 Received: from twshared22340.15.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Thu, 22 Dec 2022 21:49:35 -0800
+ 15.1.2375.34; Thu, 22 Dec 2022 21:49:41 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 11B3723EA75F6; Thu, 22 Dec 2022 21:49:34 -0800 (PST)
+        id 2868823EA760D; Thu, 22 Dec 2022 21:49:38 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 5/7] bpf: perform byte-by-byte comparison only when necessary in regsafe()
-Date:   Thu, 22 Dec 2022 21:49:19 -0800
-Message-ID: <20221223054921.958283-6-andrii@kernel.org>
+Subject: [PATCH bpf-next 7/7] bpf: unify PTR_TO_MAP_{KEY,VALUE} with default case in regsafe()
+Date:   Thu, 22 Dec 2022 21:49:21 -0800
+Message-ID: <20221223054921.958283-8-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221223054921.958283-1-andrii@kernel.org>
 References: <20221223054921.958283-1-andrii@kernel.org>
@@ -40,8 +40,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: OWJ3_ILu9UStV_M08Ge-N4p7hsWooDEb
-X-Proofpoint-ORIG-GUID: OWJ3_ILu9UStV_M08Ge-N4p7hsWooDEb
+X-Proofpoint-GUID: 9QXaeyhpkRxU8lnbpiae7djTDlTLxtuJ
+X-Proofpoint-ORIG-GUID: 9QXaeyhpkRxU8lnbpiae7djTDlTLxtuJ
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-12-23_02,2022-12-22_03,2022-06-22_01
@@ -49,77 +49,86 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Extract byte-by-byte comparison of bpf_reg_state in regsafe() into
-a helper function, which makes it more convenient to use it "on demand"
-only for registers that benefit from such checks, instead of doing it
-all the time, even if result of such comparison is ignored.
+Make default case in regsafe() safer. Instead of doing byte-by-byte
+comparison, take into account ID remapping and also range and var_off
+checks. For most of registers range and var_off will be zero (not set),
+which doesn't matter. For some, like PTR_TO_MAP_{KEY,VALUE}, this
+generalized logic is exactly matching what regsafe() was doing as
+a special case. But in any case, if register has id and/or ref_obj_id
+set, check it using check_ids() logic, taking into account idmap.
 
-Also, remove WARN_ON_ONCE(1)+return false dead code. There is no risk of
-missing some case as compiler will warn about non-void function not
-returning value in some branches (and that under assumption that default
-case is removed in the future).
+With these changes, default case should be handling most registers more
+correctly, and even for future register would be a good default. For some
+special cases, like PTR_TO_PACKET, one would still need to implement extra
+checks (like special handling of reg->range) to get better state
+equivalence, but default logic shouldn't be wrong.
+
+With these changes veristat shows no difference in verifier stats across
+selftests and Cilium BPF programs (which is a good thing).
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/bpf/verifier.c | 21 +++++++++------------
- 1 file changed, 9 insertions(+), 12 deletions(-)
+ kernel/bpf/verifier.c | 26 ++++++++++++++------------
+ 1 file changed, 14 insertions(+), 12 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 5133d0a5b0cb..6431b994b3f6 100644
+index b23812d2bb49..7e0fa3924f01 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -13057,18 +13057,19 @@ static void clean_live_states(struct bpf_verifier_env *env, int insn,
- 	}
+@@ -12919,8 +12919,8 @@ static int check_btf_info(struct bpf_verifier_env *env,
  }
  
-+static bool regs_exact(const struct bpf_reg_state *rold,
-+		       const struct bpf_reg_state *rcur)
+ /* check %cur's range satisfies %old's */
+-static bool range_within(struct bpf_reg_state *old,
+-			 struct bpf_reg_state *cur)
++static bool range_within(const struct bpf_reg_state *old,
++			 const struct bpf_reg_state *cur)
+ {
+ 	return old->umin_value <= cur->umin_value &&
+ 	       old->umax_value >= cur->umax_value &&
+@@ -13073,6 +13073,17 @@ static bool regs_exact(const struct bpf_reg_state *rold,
+ 	       check_ids(rold->ref_obj_id, rcur->ref_obj_id, idmap);
+ }
+ 
++static bool regs_equal(const struct bpf_reg_state *rold,
++		       const struct bpf_reg_state *rcur,
++		       struct bpf_id_pair *idmap)
 +{
-+	return memcmp(rold, rcur, offsetof(struct bpf_reg_state, parent)) == 0;
++	return memcmp(rold, rcur, offsetof(struct bpf_reg_state, var_off)) == 0 &&
++	       range_within(rold, rcur) &&
++	       tnum_in(rold->var_off, rcur->var_off) &&
++	       check_ids(rold->id, rcur->id, idmap) &&
++	       check_ids(rold->ref_obj_id, rcur->ref_obj_id, idmap);
 +}
 +
  /* Returns true if (rold safe implies rcur safe) */
  static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
  		    struct bpf_reg_state *rcur, struct bpf_id_pair *idmap)
- {
--	bool equal;
--
- 	if (!(rold->live & REG_LIVE_READ))
- 		/* explored state didn't use this */
- 		return true;
--
--	equal = memcmp(rold, rcur, offsetof(struct bpf_reg_state, parent)) == 0;
--
- 	if (rold->type == NOT_INIT)
- 		/* explored state can't have used this */
- 		return true;
-@@ -13101,7 +13102,7 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
- 
- 	switch (base_type(rold->type)) {
- 	case SCALAR_VALUE:
--		if (equal)
-+		if (regs_exact(rold, rcur))
- 			return true;
- 		if (env->explore_alu_limits)
- 			return false;
-@@ -13144,15 +13145,11 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
- 		/* two stack pointers are equal only if they're pointing to
- 		 * the same stack frame, since fp-8 in foo != fp-8 in bar
+@@ -13121,15 +13132,6 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
+ 		/* new val must satisfy old val knowledge */
+ 		return range_within(rold, rcur) &&
+ 		       tnum_in(rold->var_off, rcur->var_off);
+-	case PTR_TO_MAP_KEY:
+-	case PTR_TO_MAP_VALUE:
+-		/* If the new min/max/var_off satisfy the old ones and
+-		 * everything else matches, we are OK.
+-		 */
+-		return memcmp(rold, rcur, offsetof(struct bpf_reg_state, var_off)) == 0 &&
+-		       range_within(rold, rcur) &&
+-		       tnum_in(rold->var_off, rcur->var_off) &&
+-		       check_ids(rold->id, rcur->id, idmap);
+ 	case PTR_TO_PACKET_META:
+ 	case PTR_TO_PACKET:
+ 		/* We must have at least as much range as the old ptr
+@@ -13157,7 +13159,7 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
  		 */
--		return equal && rold->frameno == rcur->frameno;
-+		return regs_exact(rold, rcur) && rold->frameno == rcur->frameno;
+ 		return regs_exact(rold, rcur, idmap) && rold->frameno == rcur->frameno;
  	default:
- 		/* Only valid matches are exact, which memcmp() */
--		return equal;
-+		return regs_exact(rold, rcur);
+-		return regs_exact(rold, rcur, idmap);
++		return regs_equal(rold, rcur, idmap);
  	}
--
--	/* Shouldn't get here; if we do, say it's not safe */
--	WARN_ON_ONCE(1);
--	return false;
  }
  
- static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
 -- 
 2.30.2
 
