@@ -2,542 +2,286 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E55EC4332F
-	for <bpf@archiver.kernel.org>; Sat, 24 Dec 2022 01:58:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C63CEC4332F
+	for <bpf@archiver.kernel.org>; Sat, 24 Dec 2022 02:12:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236819AbiLXB6r (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 23 Dec 2022 20:58:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33410 "EHLO
+        id S230294AbiLXCMc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 23 Dec 2022 21:12:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236842AbiLXB6T (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 23 Dec 2022 20:58:19 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4845BFAD2
-        for <bpf@vger.kernel.org>; Fri, 23 Dec 2022 17:49:48 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id t18so4269692pfq.13
-        for <bpf@vger.kernel.org>; Fri, 23 Dec 2022 17:49:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=l+YSWrLoRWt20bzc2pGw0VBFmTcHhJSUQorr2hCIJmQ=;
-        b=hX2B2z+1DWhDSmRITiMC+bZVEOhX7C23VSi+NnHIjDGIlZ/0k0QH3GOB/ADcCFnKdr
-         rUg9yS10sf8ThimYa8IzarP+q60p1LDGCaanRpldD4EYog9QBtjN+clc70bN9JA7HBgn
-         LUcTfY6C9FpMOhfuDqYP76ds1LpZPn+hoeYuNwzDtLCsqhAYUU4qhlXbgU2CXcj1N4qG
-         M6AkGZqpESigKtnhQKZj23EY9uZXwQdV3dVe34QGY0cZQ6DbC4BiADIIYGNH08TZsU0r
-         9x8RSiTQwBxw+Do/LGHbFSzIaT5NUMpw354aRojwpAt1r2dm0iCVDk94/a5hM+YXiey1
-         UQ0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=l+YSWrLoRWt20bzc2pGw0VBFmTcHhJSUQorr2hCIJmQ=;
-        b=V967/RVhFKmTmF7kYhufGbB0C5yegbw4UD9pPu4mqHHms2LC9swL4Opf1+UDTDKyCW
-         miBsCe5mlTclQLdmOQDr8g2VdRPzl4Ls30UhiwkHHlRcX5lvU0ine29PCOdXDQVAtdDx
-         JTi8YYCIo6Y1e54VyZa8RDdVNNOTXrXPJYsb9BwMoyTibHL71Y+mCOYGbCYJWDHU9Yq8
-         e75TvEqebh+bBPDETBNfD8dKfCDheCNgL+73jrzEStAxI2Axvc1LwTTYV/lH+o90RvKp
-         DJdFbEH/G5bVX88dcXaXvfJoENvHV0fMak4LiA2x1mSIaJ2MNHMWCD6+qCQXmtV8Cj8Z
-         Z+wg==
-X-Gm-Message-State: AFqh2kqtjkgXLCQOsAc8Era3xaQLdKxtLGrp4qHYHJrllpZPvBO1Nj2/
-        ktrUMl+DToPwIfdNAXtIJQ/lSsMU9g7j4MY93HVQaA==
-X-Google-Smtp-Source: AMrXdXsLp1MS7/lUmmVM3+7bZeILpcs+7vdbzn79SthwyxV3EByei1OPozMf1aLwAtAghoWGHhnRu3eenS/yAHB3ph4=
-X-Received: by 2002:a62:e702:0:b0:576:bb84:7b50 with SMTP id
- s2-20020a62e702000000b00576bb847b50mr753285pfh.71.1671846587258; Fri, 23 Dec
- 2022 17:49:47 -0800 (PST)
+        with ESMTP id S230231AbiLXCMb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 23 Dec 2022 21:12:31 -0500
+X-Greylist: delayed 4200 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Dec 2022 18:12:28 PST
+Received: from 4.mo546.mail-out.ovh.net (4.mo546.mail-out.ovh.net [46.105.32.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52CCDF53
+        for <bpf@vger.kernel.org>; Fri, 23 Dec 2022 18:12:28 -0800 (PST)
+Received: from ex4.mail.ovh.net (unknown [10.111.208.63])
+        by mo546.mail-out.ovh.net (Postfix) with ESMTPS id 920EF24CA9;
+        Fri, 23 Dec 2022 23:42:40 +0000 (UTC)
+Received: from dev-fedora-x86-64.naccy.de (37.65.8.229) by
+ DAG10EX1.indiv4.local (172.16.2.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Sat, 24 Dec 2022 00:42:38 +0100
+From:   Quentin Deslandes <qde@naccy.de>
+To:     <qde@naccy.de>
+CC:     <kernel-team@meta.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Dmitrii Banshchikov <me@ubique.spb.ru>,
+        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: [PATCH bpf-next v3 00/16] bpfilter
+Date:   Sat, 24 Dec 2022 00:40:08 +0100
+Message-ID: <20221223234127.474463-1-qde@naccy.de>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221223185531.222689-1-paul@paul-moore.com>
-In-Reply-To: <20221223185531.222689-1-paul@paul-moore.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Fri, 23 Dec 2022 17:49:35 -0800
-Message-ID: <CAKH8qBu30bdiMWmUzZsYaVRTpSXfKjeBHD9deSPQmk_v_seDuA@mail.gmail.com>
-Subject: Re: [PATCH v2] bpf: restore the ebpf program ID for BPF_AUDIT_UNLOAD
- and PERF_BPF_EVENT_PROG_UNLOAD
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     linux-audit@redhat.com, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Burn Alting <burn.alting@iinet.net.au>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [37.65.8.229]
+X-ClientProxiedBy: CAS6.indiv4.local (172.16.1.6) To DAG10EX1.indiv4.local
+ (172.16.2.91)
+X-Ovh-Tracer-Id: 4391572586693783159
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -85
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrheefgddufecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogetfedtuddqtdduucdludehmdenucfjughrpefhvfevufffkffoggfgtghisehtkeertdertddtnecuhfhrohhmpefsuhgvnhhtihhnucffvghslhgrnhguvghsuceoqhguvgesnhgrtggthidruggvqeenucggtffrrghtthgvrhhnpeejgeehueefjeeihfeugefftdehtdeikeduvdettefgieekffekuefgveekgedvheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhusghunhhtuhdrtghomhenucfkphepuddvjedrtddrtddruddpfeejrdeihedrkedrvddvleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehquggvsehnrggttgihrdguvgeqpdhnsggprhgtphhtthhopedupdhrtghpthhtohephhgrohhluhhosehgohhoghhlvgdrtghomhdpsghpfhesvhhgvghrrdhkvghrnhgvlhdrohhrghdplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhmvgesuhgsihhquhgvrdhsphgsrdhruhdpshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhmhihkohhlrghlsehfsgdrtghomhdpphgrsggvnhhisehrvgguhhgrthdrtghomhdpkhhusggrsehkvg
+ hrnhgvlhdrohhrghdpvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdpuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdpjhholhhsrgeskhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhsughfsehgohhoghhlvgdrtghomhdpkhhpshhinhhghheskhgvrhhnvghlrdhorhhgpdhjohhhnhdrfhgrshhtrggsvghnugesghhmrghilhdrtghomhdphihhshesfhgsrdgtohhmpdhsohhngheskhgvrhhnvghlrdhorhhgpdhmrghrthhinhdrlhgruheslhhinhhugidruggvvhdprghnughrihhisehkvghrnhgvlhdrohhrghdpuggrnhhivghlsehiohhgvggrrhgsohigrdhnvghtpdgrshhtsehkvghrnhgvlhdrohhrghdpkhgvrhhnvghlqdhtvggrmhesmhgvthgrrdgtohhmpdhnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheegiedpmhhouggvpehsmhhtphhouhht
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
- a
+The patchset is based on the patches from David S. Miller [1],
+Daniel Borkmann [2], and Dmitrii Banshchikov [3].
 
-On Fri, Dec 23, 2022 at 10:55 AM Paul Moore <paul@paul-moore.com> wrote:
->
-> When changing the ebpf program put() routines to support being called
-> from within IRQ context the program ID was reset to zero prior to
-> calling the perf event and audit UNLOAD record generators, which
-> resulted in problems as the ebpf program ID was bogus (always zero).
-> This patch resolves this by adding a new flag, bpf_prog::valid_id, to
-> indicate when the bpf_prog_aux ID field is valid; it is set to true/1
-> in bpf_prog_alloc_id() and set to false/0 in bpf_prog_free_id().  In
-> order to help ensure that access to the bpf_prog_aux ID field takes
-> into account the new valid_id flag, the bpf_prog_aux ID field is
-> renamed to bpf_prog_aux::__id and a getter function,
-> bpf_prog_get_id(), was created and all users of bpf_prog_aux::id were
-> converted to the new caller.  Exceptions to this include some of the
-> internal ebpf functions and the xdp trace points, although the latter
-> still take into account the valid_id flag.
->
-> I also modified the bpf_audit_prog() logic used to associate the
-> AUDIT_BPF record with other associated records, e.g. @ctx != NULL.
-> Instead of keying off the operation, it now keys off the execution
-> context, e.g. '!in_irg && !irqs_disabled()', which is much more
-> appropriate and should help better connect the UNLOAD operations with
-> the associated audit state (other audit records).
->
-> Fixes: d809e134be7a ("bpf: Prepare bpf_prog_put() to be called from irq context.")
-> Reported-by: Burn Alting <burn.alting@iinet.net.au>
-> Reported-by: Jiri Olsa <olsajiri@gmail.com>
-> Signed-off-by: Paul Moore <paul@paul-moore.com>
->
-> --
-> * v2
->   - change subj
->   - add mention of the perf regression
->   - drop the dedicated program audit ID
->   - add the bpf_prog::valid_id flag, bpf_prog_get_id() getter
->   - convert prog ID users to new ID getter
-> * v1
->   - subj was: "bpf: restore the ebpf audit UNLOAD id field"
->   - initial draft
-> ---
->  drivers/net/netdevsim/bpf.c  |  6 ++++--
->  include/linux/bpf.h          | 11 +++++++++--
->  include/linux/bpf_verifier.h |  2 +-
->  include/trace/events/xdp.h   |  4 ++--
->  kernel/bpf/arraymap.c        |  2 +-
->  kernel/bpf/bpf_struct_ops.c  |  2 +-
->  kernel/bpf/cgroup.c          |  2 +-
->  kernel/bpf/core.c            |  2 +-
->  kernel/bpf/cpumap.c          |  2 +-
->  kernel/bpf/devmap.c          |  2 +-
->  kernel/bpf/syscall.c         | 27 +++++++++++++++------------
->  kernel/events/core.c         |  6 +++++-
->  kernel/trace/bpf_trace.c     |  2 +-
->  net/core/dev.c               |  2 +-
->  net/core/filter.c            |  3 ++-
->  net/core/rtnetlink.c         |  2 +-
->  net/core/sock_map.c          |  2 +-
->  net/ipv6/seg6_local.c        |  3 ++-
->  net/sched/act_bpf.c          |  2 +-
->  net/sched/cls_bpf.c          |  2 +-
->  20 files changed, 52 insertions(+), 34 deletions(-)
->
-> diff --git a/drivers/net/netdevsim/bpf.c b/drivers/net/netdevsim/bpf.c
-> index 50854265864d..2795f03f5f34 100644
-> --- a/drivers/net/netdevsim/bpf.c
-> +++ b/drivers/net/netdevsim/bpf.c
-> @@ -109,7 +109,7 @@ nsim_bpf_offload(struct netdevsim *ns, struct bpf_prog *prog, bool oldprog)
->              "bad offload state, expected offload %sto be active",
->              oldprog ? "" : "not ");
->         ns->bpf_offloaded = prog;
-> -       ns->bpf_offloaded_id = prog ? prog->aux->id : 0;
-> +       ns->bpf_offloaded_id = prog ? bpf_prog_get_id(prog) : 0;
->         nsim_prog_set_loaded(prog, true);
->
->         return 0;
-> @@ -221,6 +221,7 @@ static int nsim_bpf_create_prog(struct nsim_dev *nsim_dev,
->         struct nsim_bpf_bound_prog *state;
->         char name[16];
->         int ret;
-> +       u32 id;
->
->         state = kzalloc(sizeof(*state), GFP_KERNEL);
->         if (!state)
-> @@ -239,7 +240,8 @@ static int nsim_bpf_create_prog(struct nsim_dev *nsim_dev,
->                 return ret;
->         }
->
-> -       debugfs_create_u32("id", 0400, state->ddir, &prog->aux->id);
-> +       id = bpf_prog_get_id(prog);
-> +       debugfs_create_u32("id", 0400, state->ddir, &id);
->         debugfs_create_file("state", 0400, state->ddir,
->                             &state->state, &nsim_bpf_string_fops);
->         debugfs_create_bool("loaded", 0400, state->ddir, &state->is_loaded);
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 9e7d46d16032..18e965bd7db9 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1102,7 +1102,7 @@ struct bpf_prog_aux {
->         u32 max_pkt_offset;
->         u32 max_tp_access;
->         u32 stack_depth;
-> -       u32 id;
-> +       u32 __id; /* access via bpf_prog_get_id() to check bpf_prog::valid_id */
->         u32 func_cnt; /* used by non-func prog as the number of func progs */
->         u32 func_idx; /* 0 for non-func prog, the index in func array for func prog */
->         u32 attach_btf_id; /* in-kernel BTF type id to attach to */
-> @@ -1197,7 +1197,8 @@ struct bpf_prog {
->                                 enforce_expected_attach_type:1, /* Enforce expected_attach_type checking at attach time */
->                                 call_get_stack:1, /* Do we call bpf_get_stack() or bpf_get_stackid() */
->                                 call_get_func_ip:1, /* Do we call get_func_ip() */
-> -                               tstamp_type_access:1; /* Accessed __sk_buff->tstamp_type */
-> +                               tstamp_type_access:1, /* Accessed __sk_buff->tstamp_type */
-> +                               valid_id:1; /* Is bpf_prog::aux::__id valid? */
->         enum bpf_prog_type      type;           /* Type of BPF program */
->         enum bpf_attach_type    expected_attach_type; /* For some prog types */
->         u32                     len;            /* Number of filter blocks */
-> @@ -1688,6 +1689,12 @@ void bpf_prog_inc(struct bpf_prog *prog);
->  struct bpf_prog * __must_check bpf_prog_inc_not_zero(struct bpf_prog *prog);
->  void bpf_prog_put(struct bpf_prog *prog);
->
-> +static inline u32 bpf_prog_get_id(const struct bpf_prog *prog)
-> +{
-> +       if (WARN(!prog->valid_id, "Attempting to use an invalid eBPF program"))
-> +               return 0;
-> +       return prog->aux->__id;
-> +}
+The main goal of the patchset is to prepare bpfilter for
+iptables' configuration blob parsing and code generation.
 
-I'm still missing why we need to have this WARN and have a check at all.
-IIUC, we're actually too eager in resetting the id to 0, and need to
-keep that stale id around at least for perf/audit.
-Why not have a flag only to protect against double-idr_remove
-bpf_prog_free_id and keep the rest as is?
-Which places are we concerned about that used to report id=0 but now
-would report stale id?
+The patchset introduces data structures and code for matches,
+targets, rules and tables. Beside that the code generation
+is introduced.
 
+The first version of the code generation supports only "inline"
+mode - all chains and their rules emit instructions in linear
+approach.
 
->  void bpf_prog_free_id(struct bpf_prog *prog, bool do_idr_lock);
->  void bpf_map_free_id(struct bpf_map *map, bool do_idr_lock);
->
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index 9e1e6965f407..525c02cc12ea 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -604,7 +604,7 @@ static inline u64 bpf_trampoline_compute_key(const struct bpf_prog *tgt_prog,
->                                              struct btf *btf, u32 btf_id)
->  {
->         if (tgt_prog)
-> -               return ((u64)tgt_prog->aux->id << 32) | btf_id;
-> +               return ((u64)bpf_prog_get_id(tgt_prog) << 32) | btf_id;
->         else
->                 return ((u64)btf_obj_id(btf) << 32) | 0x80000000 | btf_id;
->  }
-> diff --git a/include/trace/events/xdp.h b/include/trace/events/xdp.h
-> index c40fc97f9417..a1c3048872ea 100644
-> --- a/include/trace/events/xdp.h
-> +++ b/include/trace/events/xdp.h
-> @@ -39,7 +39,7 @@ TRACE_EVENT(xdp_exception,
->         ),
->
->         TP_fast_assign(
-> -               __entry->prog_id        = xdp->aux->id;
-> +               __entry->prog_id        = (xdp->valid_id ? xdp->aux->__id : 0);
->                 __entry->act            = act;
->                 __entry->ifindex        = dev->ifindex;
->         ),
-> @@ -120,7 +120,7 @@ DECLARE_EVENT_CLASS(xdp_redirect_template,
->                         map_index = 0;
->                 }
->
-> -               __entry->prog_id        = xdp->aux->id;
-> +               __entry->prog_id        = (xdp->valid_id ? xdp->aux->__id : 0);
->                 __entry->act            = XDP_REDIRECT;
->                 __entry->ifindex        = dev->ifindex;
->                 __entry->err            = err;
-> diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-> index 832b2659e96e..d19db5980b1b 100644
-> --- a/kernel/bpf/arraymap.c
-> +++ b/kernel/bpf/arraymap.c
-> @@ -905,7 +905,7 @@ static void prog_fd_array_put_ptr(void *ptr)
->
->  static u32 prog_fd_array_sys_lookup_elem(void *ptr)
->  {
-> -       return ((struct bpf_prog *)ptr)->aux->id;
-> +       return bpf_prog_get_id((struct bpf_prog *)ptr);
->  }
->
->  /* decrement refcnt of all bpf_progs that are stored in this map */
-> diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-> index 84b2d9dba79a..6c20e6cd9442 100644
-> --- a/kernel/bpf/bpf_struct_ops.c
-> +++ b/kernel/bpf/bpf_struct_ops.c
-> @@ -488,7 +488,7 @@ static int bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
->                 image += err;
->
->                 /* put prog_id to udata */
-> -               *(unsigned long *)(udata + moff) = prog->aux->id;
-> +               *(unsigned long *)(udata + moff) = bpf_prog_get_id(prog);
->         }
->
->         refcount_set(&kvalue->refcnt, 1);
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index bf2fdb33fb31..4a8d26f1d5d1 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
-> @@ -1091,7 +1091,7 @@ static int __cgroup_bpf_query(struct cgroup *cgrp, const union bpf_attr *attr,
->                         i = 0;
->                         hlist_for_each_entry(pl, progs, node) {
->                                 prog = prog_list_prog(pl);
-> -                               id = prog->aux->id;
-> +                               id = bpf_prog_get_id(prog);
->                                 if (copy_to_user(prog_ids + i, &id, sizeof(id)))
->                                         return -EFAULT;
->                                 if (++i == cnt)
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 25a54e04560e..ea3938ab6f5b 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -2293,7 +2293,7 @@ static bool bpf_prog_array_copy_core(struct bpf_prog_array *array,
->         for (item = array->items; item->prog; item++) {
->                 if (item->prog == &dummy_bpf_prog.prog)
->                         continue;
-> -               prog_ids[i] = item->prog->aux->id;
-> +               prog_ids[i] = bpf_prog_get_id(item->prog);
->                 if (++i == request_cnt) {
->                         item++;
->                         break;
-> diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-> index b5ba34ddd4b6..3f3423d03aea 100644
-> --- a/kernel/bpf/cpumap.c
-> +++ b/kernel/bpf/cpumap.c
-> @@ -413,7 +413,7 @@ static int __cpu_map_load_bpf_program(struct bpf_cpu_map_entry *rcpu,
->                 return -EINVAL;
->         }
->
-> -       rcpu->value.bpf_prog.id = prog->aux->id;
-> +       rcpu->value.bpf_prog.id = bpf_prog_get_id(prog);
->         rcpu->prog = prog;
->
->         return 0;
-> diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
-> index f9a87dcc5535..d46309d4aa9e 100644
-> --- a/kernel/bpf/devmap.c
-> +++ b/kernel/bpf/devmap.c
-> @@ -868,7 +868,7 @@ static struct bpf_dtab_netdev *__dev_map_alloc_node(struct net *net,
->         dev->dtab = dtab;
->         if (prog) {
->                 dev->xdp_prog = prog;
-> -               dev->val.bpf_prog.id = prog->aux->id;
-> +               dev->val.bpf_prog.id = bpf_prog_get_id(prog);
->         } else {
->                 dev->xdp_prog = NULL;
->                 dev->val.bpf_prog.id = 0;
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 7b373a5e861f..9e862ef792cb 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -1958,13 +1958,14 @@ static void bpf_audit_prog(const struct bpf_prog *prog, unsigned int op)
->                 return;
->         if (audit_enabled == AUDIT_OFF)
->                 return;
-> -       if (op == BPF_AUDIT_LOAD)
-> +       if (!in_irq() && !irqs_disabled())
->                 ctx = audit_context();
->         ab = audit_log_start(ctx, GFP_ATOMIC, AUDIT_BPF);
->         if (unlikely(!ab))
->                 return;
-> +       /* log the id regardless of bpf_prog::valid_id */
->         audit_log_format(ab, "prog-id=%u op=%s",
-> -                        prog->aux->id, bpf_audit_str[op]);
-> +                        prog->aux->__id, bpf_audit_str[op]);
->         audit_log_end(ab);
->  }
->
-> @@ -1975,8 +1976,10 @@ static int bpf_prog_alloc_id(struct bpf_prog *prog)
->         idr_preload(GFP_KERNEL);
->         spin_lock_bh(&prog_idr_lock);
->         id = idr_alloc_cyclic(&prog_idr, prog, 1, INT_MAX, GFP_ATOMIC);
-> -       if (id > 0)
-> -               prog->aux->id = id;
-> +       if (id > 0) {
-> +               prog->aux->__id = id;
-> +               prog->valid_id = true;
-> +       }
->         spin_unlock_bh(&prog_idr_lock);
->         idr_preload_end();
->
-> @@ -1996,7 +1999,7 @@ void bpf_prog_free_id(struct bpf_prog *prog, bool do_idr_lock)
->          * disappears - even if someone grabs an fd to them they are unusable,
->          * simply waiting for refcnt to drop to be freed.
->          */
-> -       if (!prog->aux->id)
-> +       if (!prog->valid_id)
->                 return;
->
->         if (do_idr_lock)
-> @@ -2004,8 +2007,8 @@ void bpf_prog_free_id(struct bpf_prog *prog, bool do_idr_lock)
->         else
->                 __acquire(&prog_idr_lock);
->
-> -       idr_remove(&prog_idr, prog->aux->id);
-> -       prog->aux->id = 0;
-> +       idr_remove(&prog_idr, prog->aux->__id);
-> +       prog->valid_id = false;
->
->         if (do_idr_lock)
->                 spin_unlock_irqrestore(&prog_idr_lock, flags);
-> @@ -2154,7 +2157,7 @@ static void bpf_prog_show_fdinfo(struct seq_file *m, struct file *filp)
->                    prog->jited,
->                    prog_tag,
->                    prog->pages * 1ULL << PAGE_SHIFT,
-> -                  prog->aux->id,
-> +                  bpf_prog_get_id(prog),
->                    stats.nsecs,
->                    stats.cnt,
->                    stats.misses,
-> @@ -2786,7 +2789,7 @@ static void bpf_link_show_fdinfo(struct seq_file *m, struct file *filp)
->                    bpf_link_type_strs[link->type],
->                    link->id,
->                    prog_tag,
-> -                  prog->aux->id);
-> +                  bpf_prog_get_id(prog));
->         if (link->ops->show_fdinfo)
->                 link->ops->show_fdinfo(link, m);
->  }
-> @@ -3914,7 +3917,7 @@ static int bpf_prog_get_info_by_fd(struct file *file,
->                 return -EFAULT;
->
->         info.type = prog->type;
-> -       info.id = prog->aux->id;
-> +       info.id = bpf_prog_get_id(prog);
->         info.load_time = prog->aux->load_time;
->         info.created_by_uid = from_kuid_munged(current_user_ns(),
->                                                prog->aux->user->uid);
-> @@ -4261,7 +4264,7 @@ static int bpf_link_get_info_by_fd(struct file *file,
->
->         info.type = link->type;
->         info.id = link->id;
-> -       info.prog_id = link->prog->aux->id;
-> +       info.prog_id = bpf_prog_get_id(link->prog);
->
->         if (link->ops->fill_link_info) {
->                 err = link->ops->fill_link_info(link, &info);
-> @@ -4426,7 +4429,7 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
->                         struct bpf_raw_event_map *btp = raw_tp->btp;
->
->                         err = bpf_task_fd_query_copy(attr, uattr,
-> -                                                    raw_tp->link.prog->aux->id,
-> +                                                    bpf_prog_get_id(raw_tp->link.prog),
->                                                      BPF_FD_TYPE_RAW_TRACEPOINT,
->                                                      btp->tp->name, 0, 0);
->                         goto put_file;
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index aefc1e08e015..c24e897d27f1 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -9001,7 +9001,11 @@ void perf_event_bpf_event(struct bpf_prog *prog,
->                         },
->                         .type = type,
->                         .flags = flags,
-> -                       .id = prog->aux->id,
-> +                       /*
-> +                        * don't use bpf_prog_get_id() as the id may be marked
-> +                        * invalid on PERF_BPF_EVENT_PROG_UNLOAD events
-> +                        */
-> +                       .id = prog->aux->__id,
->                 },
->         };
->
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 49fb9ec8366d..7cd0eb83b137 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -2344,7 +2344,7 @@ int bpf_get_perf_event_info(const struct perf_event *event, u32 *prog_id,
->         if (prog->type == BPF_PROG_TYPE_PERF_EVENT)
->                 return -EOPNOTSUPP;
->
-> -       *prog_id = prog->aux->id;
-> +       *prog_id = bpf_prog_get_id(prog);
->         flags = event->tp_event->flags;
->         is_tracepoint = flags & TRACE_EVENT_FL_TRACEPOINT;
->         is_syscall_tp = is_syscall_trace_event(event->tp_event);
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index fa53830d0683..0d39ef22cf4b 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -9068,7 +9068,7 @@ u32 dev_xdp_prog_id(struct net_device *dev, enum bpf_xdp_mode mode)
->  {
->         struct bpf_prog *prog = dev_xdp_prog(dev, mode);
->
-> -       return prog ? prog->aux->id : 0;
-> +       return prog ? bpf_prog_get_id(prog) : 0;
->  }
->
->  static void dev_xdp_set_link(struct net_device *dev, enum bpf_xdp_mode mode,
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index bb0136e7a8e4..282ccfe34ced 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -8729,7 +8729,8 @@ void bpf_warn_invalid_xdp_action(struct net_device *dev, struct bpf_prog *prog,
->
->         pr_warn_once("%s XDP return value %u on prog %s (id %d) dev %s, expect packet loss!\n",
->                      act > act_max ? "Illegal" : "Driver unsupported",
-> -                    act, prog->aux->name, prog->aux->id, dev ? dev->name : "N/A");
-> +                    act, prog->aux->name, bpf_prog_get_id(prog),
-> +                    dev ? dev->name : "N/A");
->  }
->  EXPORT_SYMBOL_GPL(bpf_warn_invalid_xdp_action);
->
-> diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
-> index 74864dc46a7e..1f7e36909541 100644
-> --- a/net/core/rtnetlink.c
-> +++ b/net/core/rtnetlink.c
-> @@ -1453,7 +1453,7 @@ static u32 rtnl_xdp_prog_skb(struct net_device *dev)
->         generic_xdp_prog = rtnl_dereference(dev->xdp_prog);
->         if (!generic_xdp_prog)
->                 return 0;
-> -       return generic_xdp_prog->aux->id;
-> +       return bpf_prog_get_id(generic_xdp_prog);
->  }
->
->  static u32 rtnl_xdp_prog_drv(struct net_device *dev)
-> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-> index a660baedd9e7..550ec6cb3aee 100644
-> --- a/net/core/sock_map.c
-> +++ b/net/core/sock_map.c
-> @@ -1518,7 +1518,7 @@ int sock_map_bpf_prog_query(const union bpf_attr *attr,
->         /* we do not hold the refcnt, the bpf prog may be released
->          * asynchronously and the id would be set to 0.
->          */
-> -       id = data_race(prog->aux->id);
-> +       id = data_race(bpf_prog_get_id(prog));
->         if (id == 0)
->                 prog_cnt = 0;
->
-> diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
-> index 8370726ae7bf..440ce3aba802 100644
-> --- a/net/ipv6/seg6_local.c
-> +++ b/net/ipv6/seg6_local.c
-> @@ -1543,7 +1543,8 @@ static int put_nla_bpf(struct sk_buff *skb, struct seg6_local_lwt *slwt)
->         if (!nest)
->                 return -EMSGSIZE;
->
-> -       if (nla_put_u32(skb, SEG6_LOCAL_BPF_PROG, slwt->bpf.prog->aux->id))
-> +       if (nla_put_u32(skb, SEG6_LOCAL_BPF_PROG,
-> +                       bpf_prog_get_id(slwt->bpf.prog)))
->                 return -EMSGSIZE;
->
->         if (slwt->bpf.name &&
-> diff --git a/net/sched/act_bpf.c b/net/sched/act_bpf.c
-> index b79eee44e24e..604a29e482b0 100644
-> --- a/net/sched/act_bpf.c
-> +++ b/net/sched/act_bpf.c
-> @@ -121,7 +121,7 @@ static int tcf_bpf_dump_ebpf_info(const struct tcf_bpf *prog,
->             nla_put_string(skb, TCA_ACT_BPF_NAME, prog->bpf_name))
->                 return -EMSGSIZE;
->
-> -       if (nla_put_u32(skb, TCA_ACT_BPF_ID, prog->filter->aux->id))
-> +       if (nla_put_u32(skb, TCA_ACT_BPF_ID, bpf_prog_get_id(prog->filter)))
->                 return -EMSGSIZE;
->
->         nla = nla_reserve(skb, TCA_ACT_BPF_TAG, sizeof(prog->filter->tag));
-> diff --git a/net/sched/cls_bpf.c b/net/sched/cls_bpf.c
-> index bc317b3eac12..eb5ac6be589e 100644
-> --- a/net/sched/cls_bpf.c
-> +++ b/net/sched/cls_bpf.c
-> @@ -565,7 +565,7 @@ static int cls_bpf_dump_ebpf_info(const struct cls_bpf_prog *prog,
->             nla_put_string(skb, TCA_BPF_NAME, prog->bpf_name))
->                 return -EMSGSIZE;
->
-> -       if (nla_put_u32(skb, TCA_BPF_ID, prog->filter->aux->id))
-> +       if (nla_put_u32(skb, TCA_BPF_ID, bpf_prog_get_id(prog->filter)))
->                 return -EMSGSIZE;
->
->         nla = nla_reserve(skb, TCA_BPF_TAG, sizeof(prog->filter->tag));
-> --
-> 2.39.0
->
+Things that are not implemented yet:
+  1) The process of switching from the previous BPF programs to the
+     new set isn't atomic.
+  2) No support of device ifindex - it's hardcoded
+  3) No helper subprog for counters update
+
+Another problem is using iptables' blobs for tests and filter
+table initialization. While it saves lines something more
+maintainable should be done here.
+
+The plan for the next iteration:
+  1) Add a helper program for counters update
+  2) Handle ifindex
+
+Patches 1/2 adds definitions of the used types.
+Patch 3 adds logging to bpfilter.
+Patch 4 adds an associative map.
+Patch 5 add runtime context structure.
+Patches 6/7 add code generation infrastructure and TC code generator.
+Patches 8/9/10/11/12 add code for matches, targets, rules and table.
+Patch 13 adds code generation for table.
+Patch 14 handles hooked setsockopt(2) calls.
+Patch 15 adds filter table
+Patch 16 uses prepared code in main().
+
+Due to poor hardware availability on my side, I've not been able to
+benchmark those changes. I plan to get some numbers for the next iteration.
+
+FORWARD filter chain is now supported, however, it's attached to
+TC INGRESS along with INPUT filter chain. This is due to XDP not supporting
+multiple programs to be attached. I could generate a single program
+out of both INPUT and FORWARD chains, but that would prevent another
+BPF program to be attached to the interface anyway. If a solution
+exists to attach both those programs to XDP while allowing for other
+programs to be attached, it requires more investigation. In the meantime,
+INPUT and FORWARD filtering is supported using TC.
+
+Most of the code in this series was written by Dmitrii Banshchikov,
+my changes are limited to v3. I've tried to reflect this fact in the
+commits by adding 'Co-developed-by:' and 'Signed-off-by:' for Dmitrii,
+please tell me this was done the wrong way.
+
+v2 -> v3
+Chains:
+  * Add support for FORWARD filter chain.
+  * Add generation of BPF bytecode to assess whether a packet should be
+    forwarded or not, using bpf_fib_lookup().
+  * Allow for multiple programs to be attached to TC.
+  * Allow for multiple TC hooks to be used.
+Code generation:
+  * Remove duplicated BPF bytecode generation.
+  * Fix a bug regarding jump offset during generation.
+  * Remove support for XDP from the series, as it's not currently
+    used.
+Table:
+  * Add new filter_table_update_counters() virtual call. It updates
+    the table's counter stored in the ipt_entry structure. This way,
+    when iptables tries to fetch the values of the counters, bpfilter only
+    has to copy the ipt_entry cached in the table structure.
+Logging:
+  * Refactor logging primitives.
+Sockopts:
+  * Add support for userspace counters querying.
+Rule:
+  * Store the rule's index inside struct rule, to each counters'
+    map usage.
+
+v1 -> v2
+Maps:
+  * Use map_upsert instead of separate map_insert and map_update
+Matches:
+  * Add a new virtual call - gen_inline. The call is used for
+  * inline generating of a rule's match.
+Targets:
+  * Add a new virtual call - gen_inline. The call is used for inline
+    generating of a rule's target.
+Rules:
+  * Add code generation for rules
+Table:
+  * Add struct table_ops
+  * Add map for table_ops
+  * Add filter table
+  * Reorganize the way filter table is initialized
+Sockopts:
+  * Install/uninstall BPF programs while handling
+    IPT_SO_SET_REPLACE
+Code generation:
+  * Add first version of the code generation
+Dependencies:
+  * Add libbpf
+
+v0 -> v1
+IO:
+  * Use ssize_t in pvm_read, pvm_write for total_bytes
+  * Move IO functions into sockopt.c and main.c
+Logging:
+  * Use LOGLEVEL_EMERG, LOGLEVEL_NOTICE, LOGLEVE_DEBUG
+    while logging to /dev/kmsg
+  * Prepend log message with <n> where n is log level
+  * Conditionally enable BFLOG_DEBUG messages
+  * Merge bflog.{h,c} into context.h
+Matches:
+  * Reorder fields in struct match_ops for tight packing
+  * Get rid of struct match_ops_map
+  * Rename udp_match_ops to xt_udp
+  * Use XT_ALIGN macro
+  * Store payload size in match size
+  * Move udp match routines into a separate file
+Targets:
+  * Reorder fields in struct target_ops for tight packing
+  * Get rid of struct target_ops_map
+  * Add comments for convert_verdict function
+Rules:
+  * Add validation
+Tables:
+  * Combine table_map and table_list into table_index
+  * Add validation
+Sockopts:
+  * Handle IPT_SO_GET_REVISION_TARGET
+
+1. https://lore.kernel.org/patchwork/patch/902785/
+2. https://lore.kernel.org/patchwork/patch/902783/
+3. https://kernel.ubuntu.com/~cking/stress-ng/stress-ng.pdf
+
+Quentin Deslandes (16):
+  bpfilter: add types for usermode helper
+  tools: add bpfilter usermode helper header
+  bpfilter: add logging facility
+  bpfilter: add map container
+  bpfilter: add runtime context
+  bpfilter: add BPF bytecode generation infrastructure
+  bpfilter: add support for TC bytecode generation
+  bpfilter: add match structure
+  bpfilter: add support for src/dst addr and ports
+  bpfilter: add target structure
+  bpfilter: add rule structure
+  bpfilter: add table structure
+  bpfilter: add table code generation
+  bpfilter: add setsockopt() support
+  bpfilter: add filter table
+  bpfilter: handle setsockopt() calls
+
+ include/uapi/linux/bpfilter.h                 |  154 +++
+ net/bpfilter/Makefile                         |   16 +-
+ net/bpfilter/codegen.c                        | 1040 +++++++++++++++++
+ net/bpfilter/codegen.h                        |  183 +++
+ net/bpfilter/context.c                        |  168 +++
+ net/bpfilter/context.h                        |   24 +
+ net/bpfilter/filter-table.c                   |  344 ++++++
+ net/bpfilter/filter-table.h                   |   18 +
+ net/bpfilter/logger.c                         |   52 +
+ net/bpfilter/logger.h                         |   80 ++
+ net/bpfilter/main.c                           |  132 ++-
+ net/bpfilter/map-common.c                     |   51 +
+ net/bpfilter/map-common.h                     |   19 +
+ net/bpfilter/match.c                          |   55 +
+ net/bpfilter/match.h                          |   37 +
+ net/bpfilter/rule.c                           |  286 +++++
+ net/bpfilter/rule.h                           |   37 +
+ net/bpfilter/sockopt.c                        |  533 +++++++++
+ net/bpfilter/sockopt.h                        |   15 +
+ net/bpfilter/table.c                          |  391 +++++++
+ net/bpfilter/table.h                          |   59 +
+ net/bpfilter/target.c                         |  203 ++++
+ net/bpfilter/target.h                         |   57 +
+ net/bpfilter/xt_udp.c                         |  111 ++
+ tools/include/uapi/linux/bpfilter.h           |  175 +++
+ .../testing/selftests/bpf/bpfilter/.gitignore |    8 +
+ tools/testing/selftests/bpf/bpfilter/Makefile |   57 +
+ .../selftests/bpf/bpfilter/bpfilter_util.h    |   80 ++
+ .../selftests/bpf/bpfilter/test_codegen.c     |  338 ++++++
+ .../testing/selftests/bpf/bpfilter/test_map.c |   63 +
+ .../selftests/bpf/bpfilter/test_match.c       |   69 ++
+ .../selftests/bpf/bpfilter/test_rule.c        |   56 +
+ .../selftests/bpf/bpfilter/test_target.c      |   83 ++
+ .../selftests/bpf/bpfilter/test_xt_udp.c      |   48 +
+ 34 files changed, 4999 insertions(+), 43 deletions(-)
+ create mode 100644 net/bpfilter/codegen.c
+ create mode 100644 net/bpfilter/codegen.h
+ create mode 100644 net/bpfilter/context.c
+ create mode 100644 net/bpfilter/context.h
+ create mode 100644 net/bpfilter/filter-table.c
+ create mode 100644 net/bpfilter/filter-table.h
+ create mode 100644 net/bpfilter/logger.c
+ create mode 100644 net/bpfilter/logger.h
+ create mode 100644 net/bpfilter/map-common.c
+ create mode 100644 net/bpfilter/map-common.h
+ create mode 100644 net/bpfilter/match.c
+ create mode 100644 net/bpfilter/match.h
+ create mode 100644 net/bpfilter/rule.c
+ create mode 100644 net/bpfilter/rule.h
+ create mode 100644 net/bpfilter/sockopt.c
+ create mode 100644 net/bpfilter/sockopt.h
+ create mode 100644 net/bpfilter/table.c
+ create mode 100644 net/bpfilter/table.h
+ create mode 100644 net/bpfilter/target.c
+ create mode 100644 net/bpfilter/target.h
+ create mode 100644 net/bpfilter/xt_udp.c
+ create mode 100644 tools/include/uapi/linux/bpfilter.h
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/.gitignore
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/Makefile
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/bpfilter_util.h
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/test_codegen.c
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/test_map.c
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/test_match.c
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/test_rule.c
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/test_target.c
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/test_xt_udp.c
+
+--
+2.38.1
