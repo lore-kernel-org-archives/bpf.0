@@ -2,160 +2,139 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09008C3DA6E
-	for <bpf@archiver.kernel.org>; Fri, 23 Dec 2022 05:49:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A77A7C4167B
+	for <bpf@archiver.kernel.org>; Fri, 23 Dec 2022 07:53:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbiLWFtu convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 23 Dec 2022 00:49:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35864 "EHLO
+        id S235946AbiLWHxj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 23 Dec 2022 02:53:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbiLWFts (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 23 Dec 2022 00:49:48 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690C72A27F
-        for <bpf@vger.kernel.org>; Thu, 22 Dec 2022 21:49:47 -0800 (PST)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BN13ATV021737
-        for <bpf@vger.kernel.org>; Thu, 22 Dec 2022 21:49:47 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3mmgpbf13c-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 22 Dec 2022 21:49:47 -0800
-Received: from twshared19054.43.prn1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Thu, 22 Dec 2022 21:49:45 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 1C0C123EA7602; Thu, 22 Dec 2022 21:49:36 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 6/7] bpf: fix regs_exact() logic in regsafe() to remap IDs correctly
-Date:   Thu, 22 Dec 2022 21:49:20 -0800
-Message-ID: <20221223054921.958283-7-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221223054921.958283-1-andrii@kernel.org>
-References: <20221223054921.958283-1-andrii@kernel.org>
+        with ESMTP id S229637AbiLWHxi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 23 Dec 2022 02:53:38 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D59D31EDF;
+        Thu, 22 Dec 2022 23:53:37 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id u28so1249292edd.10;
+        Thu, 22 Dec 2022 23:53:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8WKoOMPsmNwyEfgMM+9XAivDWwN5pCyQ5XhkIU1BGH4=;
+        b=kcHZylwZirfcKWkwvdrtVgDTcsDUqU50o7awL9XBQ7nfteDUXq3p9DO3n8HKhglVK6
+         tnVG/rwgBR0tO4fGtRV8WPvOYZX0jMmU5bjtmQ2kwdB3DMYVl9tWeff4Qp5RxHjJePL8
+         awO8a/upMKNKWaQqekOje2rQVXreaPTDlHLAe3ZfYiXCKOhffyH4An7NUTMvN3Lt7LZS
+         28tqOvOjWiPTd26N47r8EiIvUg8mgSyRxQ2Ncn4y5EB+DOwVVdM+HFY97aoKzZPXAbyd
+         KU84P/BpOt4RFURxBnkvP5Qznozqkcjqehk0HvqwqbRxGpBMvcuzgeM4IspYENCGjjwh
+         hSlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8WKoOMPsmNwyEfgMM+9XAivDWwN5pCyQ5XhkIU1BGH4=;
+        b=U08FG6fTdBwayQX+8mQo2RAUkhedK/JNqeYk3lQ36mpBe4ags9vcjW0ruJpF32148R
+         gEvxwOtbOh64vSJyEXDN3gKwHMhzXq2aoWA7k03if7LWmQrESuaa+7VGo5bTeoH2i3Y7
+         DYQwSV/6Jr53jKIAJBq8Fd/S/Vs6YtIXM/hMYFpqfkR7HGbTkh+bgj9cgZsuIfHVchcV
+         dKsKEsL3IE/Zc2JL7DoClNx0LXmePgHH8RGYO5+NFV6UpJ7hl70BB90T3VAjHQwvnoAt
+         BptqWiXz4IScZVlz4fSzuewL4U1RlLc7A0skEqOf2ko2qTRP4hi4IhlGJX6MrFE1i+Zb
+         VxFw==
+X-Gm-Message-State: AFqh2kqoiIm//7ek3+7rSfVy1nGqE3qlZORKZtaCM0/oMe1+rkHjyq+F
+        Wo3wDjnbTg43oITM0O5Lkrs=
+X-Google-Smtp-Source: AMrXdXsCi64Chzl267PLU056ZrjMyCU/JJgj17w+RqHuxyhtFz74b19GEI8h62OB6dQUtTFJV8UFSw==
+X-Received: by 2002:aa7:d513:0:b0:462:9baa:7507 with SMTP id y19-20020aa7d513000000b004629baa7507mr7488843edq.8.1671782015874;
+        Thu, 22 Dec 2022 23:53:35 -0800 (PST)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id h26-20020a0564020e9a00b004822681a671sm303648eda.37.2022.12.22.23.53.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Dec 2022 23:53:35 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Fri, 23 Dec 2022 08:53:33 +0100
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        LKML <linux-kernel@vger.kernel.org>, bpf@vger.kernel.org,
+        Ingo Molnar <mingo@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Subject: Re: [PATCH bpf-next 1/2] bpf/perf: Call perf_prepare_sample() before
+ bpf_prog_run()
+Message-ID: <Y6VefZAWVzwmkfjd@krava>
+References: <20221220220144.4016213-1-namhyung@kernel.org>
+ <20221220220144.4016213-2-namhyung@kernel.org>
+ <Y6RTy29ULXp8WJ/Q@hirez.programming.kicks-ass.net>
+ <2d164a5f-2885-2a6e-581a-2673ca0b1b81@iogearbox.net>
+ <CAM9d7cj=iuxhLndNMBMeff6Ayp2hLfdz+6CHsZL7g213aWbUYQ@mail.gmail.com>
+ <Y6S7BcblAHO4nQTf@hirez.programming.kicks-ass.net>
+ <CAM9d7chi6ijPEwkTbmLJGz+_fQFvnFxwc44M-g93ym2-ZPN9tw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: UZjIc_5TegUe63eoifGxlGpf7sxBfjQP
-X-Proofpoint-ORIG-GUID: UZjIc_5TegUe63eoifGxlGpf7sxBfjQP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-23_02,2022-12-22_03,2022-06-22_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAM9d7chi6ijPEwkTbmLJGz+_fQFvnFxwc44M-g93ym2-ZPN9tw@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Comparing IDs exactly between two separate states is not just
-suboptimal, but also incorrect in some cases. So update regs_exact()
-check to do byte-by-byte memcmp() only up to id/ref_obj_id. For id and
-ref_obj_id perform proper check_ids() checks, taking into account idmap.
+On Thu, Dec 22, 2022 at 02:25:49PM -0800, Namhyung Kim wrote:
+> On Thu, Dec 22, 2022 at 12:16 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Thu, Dec 22, 2022 at 09:34:42AM -0800, Namhyung Kim wrote:
+> >
+> > > Sorry about that.  Let me rephrase it like below:
+> > >
+> > > With bpf_cast_to_kern_ctx(), BPF programs attached to a perf event
+> > > can access perf sample data directly from the ctx.
+> >
+> > This is the bpf_prog_run() in bpf_overflow_handler(), right?
+> 
+> Yes.
+> 
+> >
+> > > But the perf sample
+> > > data is not fully prepared at this point, and some fields can have invalid
+> > > uninitialized values.  So it needs to call perf_prepare_sample() before
+> > > calling the BPF overflow handler.
+> >
+> > It never was, why is it a problem now?
+> 
+> BPF used to allow selected fields only like period and addr, and they
+> are initialized always by perf_sample_data_init().  This is relaxed
+> by the bpf_cast_to_kern_ctx() and it can easily access arbitrary
+> fields of perf_sample_data now.
+> 
+> The background of this change is to use BPF as a filter for perf
+> event samples.  The code is there already and returning 0 from
+> BPF can drop perf samples.  With access to more sample data,
+> it'd make more educated decisions.
+> 
+> For example, I got some requests to limit perf samples in a
+> selected region of address (code or data).  Or it can collect
+> samples only if some hardware specific information is set in
+> the raw data like in AMD IBS.  We can easily extend it to other
+> sample info based on users' needs.
+> 
+> >
+> > > But just calling perf_prepare_sample() can be costly when the BPF
+> >
+> > So you potentially call it twice now, how's that useful?
+> 
+> Right.  I think we can check data->sample_flags in
+> perf_prepare_sample() to minimize the duplicate work.
+> It already does it for some fields, but misses others.
 
-This change makes more states equivalent improving insns and states
-stats across a bunch of selftest BPF programs:
+we used to have __PERF_SAMPLE_CALLCHAIN_EARLY to avoid extra perf_callchain,
+could we add some flag like __PERF_SAMPLE_INIT_EARLY to avoid double call to
+perf_prepare_sample?
 
-File                                         Program                           Insns (A)  Insns (B)  Insns   (DIFF)  States (A)  States (B)  States (DIFF)
--------------------------------------------  --------------------------------  ---------  ---------  --------------  ----------  ----------  -------------
-cgrp_kfunc_success.bpf.linked1.o             test_cgrp_get_release                   141        137     -4 (-2.84%)          13          13    +0 (+0.00%)
-cgrp_kfunc_success.bpf.linked1.o             test_cgrp_xchg_release                  142        139     -3 (-2.11%)          14          13    -1 (-7.14%)
-connect6_prog.bpf.linked1.o                  connect_v6_prog                         139        102   -37 (-26.62%)           9           6   -3 (-33.33%)
-ima.bpf.linked1.o                            bprm_creds_for_exec                      68         61    -7 (-10.29%)           6           5   -1 (-16.67%)
-linked_list.bpf.linked1.o                    global_list_in_list                     569        499   -70 (-12.30%)          60          52   -8 (-13.33%)
-linked_list.bpf.linked1.o                    global_list_push_pop                    167        150   -17 (-10.18%)          18          16   -2 (-11.11%)
-linked_list.bpf.linked1.o                    global_list_push_pop_multiple           881        815    -66 (-7.49%)          74          63  -11 (-14.86%)
-linked_list.bpf.linked1.o                    inner_map_list_in_list                  579        534    -45 (-7.77%)          61          55    -6 (-9.84%)
-linked_list.bpf.linked1.o                    inner_map_list_push_pop                 190        181     -9 (-4.74%)          19          18    -1 (-5.26%)
-linked_list.bpf.linked1.o                    inner_map_list_push_pop_multiple        916        850    -66 (-7.21%)          75          64  -11 (-14.67%)
-linked_list.bpf.linked1.o                    map_list_in_list                        588        525   -63 (-10.71%)          62          55   -7 (-11.29%)
-linked_list.bpf.linked1.o                    map_list_push_pop                       183        174     -9 (-4.92%)          18          17    -1 (-5.56%)
-linked_list.bpf.linked1.o                    map_list_push_pop_multiple              909        843    -66 (-7.26%)          75          64  -11 (-14.67%)
-map_kptr.bpf.linked1.o                       test_map_kptr                           264        256     -8 (-3.03%)          26          26    +0 (+0.00%)
-map_kptr.bpf.linked1.o                       test_map_kptr_ref                        95         91     -4 (-4.21%)           9           8   -1 (-11.11%)
-task_kfunc_success.bpf.linked1.o             test_task_xchg_release                  139        136     -3 (-2.16%)          14          13    -1 (-7.14%)
-test_bpf_nf.bpf.linked1.o                    nf_skb_ct_test                          815        509  -306 (-37.55%)          57          30  -27 (-47.37%)
-test_bpf_nf.bpf.linked1.o                    nf_xdp_ct_test                          815        509  -306 (-37.55%)          57          30  -27 (-47.37%)
-test_cls_redirect.bpf.linked1.o              cls_redirect                          78925      78390   -535 (-0.68%)        4782        4704   -78 (-1.63%)
-test_cls_redirect_subprogs.bpf.linked1.o     cls_redirect                          64901      63897  -1004 (-1.55%)        4612        4470  -142 (-3.08%)
-test_sk_lookup.bpf.linked1.o                 access_ctx_sk                           181         95   -86 (-47.51%)          19          10   -9 (-47.37%)
-test_sk_lookup.bpf.linked1.o                 ctx_narrow_access                       447        437    -10 (-2.24%)          38          37    -1 (-2.63%)
-test_sk_lookup_kern.bpf.linked1.o            sk_lookup_success                       148        133   -15 (-10.14%)          14          12   -2 (-14.29%)
-test_tcp_check_syncookie_kern.bpf.linked1.o  check_syncookie_clsact                  304        300     -4 (-1.32%)          23          22    -1 (-4.35%)
-test_tcp_check_syncookie_kern.bpf.linked1.o  check_syncookie_xdp                     304        300     -4 (-1.32%)          23          22    -1 (-4.35%)
-test_verify_pkcs7_sig.bpf.linked1.o          bpf                                      87         76   -11 (-12.64%)           7           6   -1 (-14.29%)
--------------------------------------------  --------------------------------  ---------  ---------  --------------  ----------  ----------  -------------
+jirka 
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- kernel/bpf/verifier.c | 23 ++++++++++++++++-------
- 1 file changed, 16 insertions(+), 7 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 6431b994b3f6..b23812d2bb49 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -12946,6 +12946,13 @@ static bool check_ids(u32 old_id, u32 cur_id, struct bpf_id_pair *idmap)
- {
- 	unsigned int i;
- 
-+	/* either both IDs should be set or both should be zero */
-+	if (!!old_id != !!cur_id)
-+		return false;
-+
-+	if (old_id == 0) /* cur_id == 0 as well */
-+		return true;
-+
- 	for (i = 0; i < BPF_ID_MAP_SIZE; i++) {
- 		if (!idmap[i].old) {
- 			/* Reached an empty slot; haven't seen this id before */
-@@ -13058,9 +13065,12 @@ static void clean_live_states(struct bpf_verifier_env *env, int insn,
- }
- 
- static bool regs_exact(const struct bpf_reg_state *rold,
--		       const struct bpf_reg_state *rcur)
-+		       const struct bpf_reg_state *rcur,
-+		       struct bpf_id_pair *idmap)
- {
--	return memcmp(rold, rcur, offsetof(struct bpf_reg_state, parent)) == 0;
-+	return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) == 0 && 
-+	       check_ids(rold->id, rcur->id, idmap) &&
-+	       check_ids(rold->ref_obj_id, rcur->ref_obj_id, idmap);
- }
- 
- /* Returns true if (rold safe implies rcur safe) */
-@@ -13102,7 +13112,7 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
- 
- 	switch (base_type(rold->type)) {
- 	case SCALAR_VALUE:
--		if (regs_exact(rold, rcur))
-+		if (regs_exact(rold, rcur, idmap))
- 			return true;
- 		if (env->explore_alu_limits)
- 			return false;
-@@ -13136,7 +13146,7 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
- 		if (rold->off != rcur->off)
- 			return false;
- 		/* id relations must be preserved */
--		if (rold->id && !check_ids(rold->id, rcur->id, idmap))
-+		if (!check_ids(rold->id, rcur->id, idmap))
- 			return false;
- 		/* new val must satisfy old val knowledge */
- 		return range_within(rold, rcur) &&
-@@ -13145,10 +13155,9 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
- 		/* two stack pointers are equal only if they're pointing to
- 		 * the same stack frame, since fp-8 in foo != fp-8 in bar
- 		 */
--		return regs_exact(rold, rcur) && rold->frameno == rcur->frameno;
-+		return regs_exact(rold, rcur, idmap) && rold->frameno == rcur->frameno;
- 	default:
--		/* Only valid matches are exact, which memcmp() */
--		return regs_exact(rold, rcur);
-+		return regs_exact(rold, rcur, idmap);
- 	}
- }
- 
--- 
-2.30.2
-
+> 
+> Thanks,
+> Namhyung
