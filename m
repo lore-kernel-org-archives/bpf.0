@@ -2,25 +2,26 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0196FC3DA79
-	for <bpf@archiver.kernel.org>; Sat, 24 Dec 2022 00:21:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C84C0C4167B
+	for <bpf@archiver.kernel.org>; Sat, 24 Dec 2022 00:22:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbiLXAVM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 23 Dec 2022 19:21:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45664 "EHLO
+        id S230510AbiLXAV7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 23 Dec 2022 19:21:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbiLXAVL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 23 Dec 2022 19:21:11 -0500
-Received: from 2.mo619.mail-out.ovh.net (2.mo619.mail-out.ovh.net [178.33.254.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274FAD2E7
-        for <bpf@vger.kernel.org>; Fri, 23 Dec 2022 16:21:09 -0800 (PST)
-Received: from ex4.mail.ovh.net (unknown [10.109.143.210])
-        by mo619.mail-out.ovh.net (Postfix) with ESMTPS id EDD8922EA5;
-        Sat, 24 Dec 2022 00:04:36 +0000 (UTC)
+        with ESMTP id S230474AbiLXAV7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 23 Dec 2022 19:21:59 -0500
+X-Greylist: delayed 1031 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Dec 2022 16:21:57 PST
+Received: from 3.mo541.mail-out.ovh.net (3.mo541.mail-out.ovh.net [46.105.74.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A26FEE22;
+        Fri, 23 Dec 2022 16:21:57 -0800 (PST)
+Received: from ex4.mail.ovh.net (unknown [10.110.115.208])
+        by mo541.mail-out.ovh.net (Postfix) with ESMTPS id 1F37724F45;
+        Sat, 24 Dec 2022 00:04:43 +0000 (UTC)
 Received: from dev-fedora-x86-64.naccy.de (37.65.8.229) by
  DAG10EX1.indiv4.local (172.16.2.91) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Sat, 24 Dec 2022 01:04:35 +0100
+ 15.1.2507.16; Sat, 24 Dec 2022 01:04:41 +0100
 From:   Quentin Deslandes <qde@naccy.de>
 To:     <qde@naccy.de>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -41,9 +42,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
         <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
         Kernel Team <kernel-team@meta.com>
-Subject: [PATCH bpf-next v3 09/16] bpfilter: add support for src/dst addr and ports
-Date:   Sat, 24 Dec 2022 01:03:55 +0100
-Message-ID: <20221224000402.476079-10-qde@naccy.de>
+Subject: [PATCH bpf-next v3 14/16] bpfilter: add setsockopt() support
+Date:   Sat, 24 Dec 2022 01:04:00 +0100
+Message-ID: <20221224000402.476079-15-qde@naccy.de>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221224000402.476079-1-qde@naccy.de>
 References: <20221224000402.476079-1-qde@naccy.de>
@@ -53,78 +54,50 @@ Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [37.65.8.229]
 X-ClientProxiedBy: CAS6.indiv4.local (172.16.1.6) To DAG10EX1.indiv4.local
  (172.16.2.91)
-X-Ovh-Tracer-Id: 4761712181562895991
+X-Ovh-Tracer-Id: 4763401031628484215
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: -85
 X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrheefgddujecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogetfedtuddqtdduucdludehmdenucfjughrpefhvfevufffkffojghfggfgtghisehtkeertdertddtnecuhfhrohhmpefsuhgvnhhtihhnucffvghslhgrnhguvghsuceoqhguvgesnhgrtggthidruggvqeenucggtffrrghtthgvrhhnpeduledugfeileetvdelieeujedttedtvedtgfetteevfeejhfffkeeujeetfffgudenucfkphepuddvjedrtddrtddruddpfeejrdeihedrkedrvddvleenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehquggvsehnrggttgihrdguvgeqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepjhholhhsrgeskhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdgsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpmhgvsehusghiqhhuvgdrshhpsgdrrhhupdhshhhurghhsehkvghrnhgvlhdrohhrghdpmhihkhholhgrlhesfhgsrdgtohhmpdhprggsvghnihesrhgvughhrghtrdgtohhmpdhkuhgsrg
- eskhgvrhhnvghlrdhorhhgpdgvughumhgriigvthesghhoohhglhgvrdgtohhmpdgurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhkvghrnhgvlhdqthgvrghmsehmvghtrgdrtghomhdphhgrohhluhhosehgohhoghhlvgdrtghomhdpshgufhesghhoohhglhgvrdgtohhmpdhkphhsihhnghhhsehkvghrnhgvlhdrohhrghdpjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdihhhhssehfsgdrtghomhdpshhonhhgsehkvghrnhgvlhdrohhrghdpmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdgrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdgurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprghstheskhgvrhhnvghlrdhorhhgpdhnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoieduledpmhhouggvpehsmhhtphhouhht
+ eskhgvrhhnvghlrdhorhhgpdgvughumhgriigvthesghhoohhglhgvrdgtohhmpdgurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhkvghrnhgvlhdqthgvrghmsehmvghtrgdrtghomhdphhgrohhluhhosehgohhoghhlvgdrtghomhdpshgufhesghhoohhglhgvrdgtohhmpdhkphhsihhnghhhsehkvghrnhgvlhdrohhrghdpjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdihhhhssehfsgdrtghomhdpshhonhhgsehkvghrnhgvlhdrohhrghdpmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdgrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdgurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprghstheskhgvrhhnvghlrdhorhhgpdhnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheeguddpmhhouggvpehsmhhtphhouhht
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Implement support for source and destination addresses and ports
-matching.
+Add support of iptables' setsockopt(2).
+The parameters of a setsockopt(2) call are passed by struct mbox_request
+which contains a type of the setsockopt(2) call and its memory buffer
+description. The supplied memory buffer is read-written by
+process_vm_readv(2)/process_vm_writev(2).
 
 Co-developed-by: Dmitrii Banshchikov <me@ubique.spb.ru>
 Signed-off-by: Dmitrii Banshchikov <me@ubique.spb.ru>
 Signed-off-by: Quentin Deslandes <qde@naccy.de>
 ---
- net/bpfilter/Makefile                         |   2 +-
- net/bpfilter/context.c                        |   2 +-
- net/bpfilter/match.h                          |   2 +
- net/bpfilter/xt_udp.c                         | 111 ++++++++++++++++++
- .../testing/selftests/bpf/bpfilter/.gitignore |   1 +
- tools/testing/selftests/bpf/bpfilter/Makefile |   6 +-
- .../selftests/bpf/bpfilter/test_xt_udp.c      |  48 ++++++++
- 7 files changed, 168 insertions(+), 4 deletions(-)
- create mode 100644 net/bpfilter/xt_udp.c
- create mode 100644 tools/testing/selftests/bpf/bpfilter/test_xt_udp.c
+ net/bpfilter/Makefile  |   1 +
+ net/bpfilter/sockopt.c | 533 +++++++++++++++++++++++++++++++++++++++++
+ net/bpfilter/sockopt.h |  15 ++
+ 3 files changed, 549 insertions(+)
+ create mode 100644 net/bpfilter/sockopt.c
+ create mode 100644 net/bpfilter/sockopt.h
 
 diff --git a/net/bpfilter/Makefile b/net/bpfilter/Makefile
-index 2f8d867a6038..345341a9ee30 100644
+index 9f5b46c70a41..4a78a665b3f1 100644
 --- a/net/bpfilter/Makefile
 +++ b/net/bpfilter/Makefile
-@@ -13,7 +13,7 @@ $(LIBBPF_A):
- userprogs := bpfilter_umh
+@@ -14,6 +14,7 @@ userprogs := bpfilter_umh
  bpfilter_umh-objs := main.o logger.o map-common.o
  bpfilter_umh-objs += context.o codegen.o
--bpfilter_umh-objs += match.o
-+bpfilter_umh-objs += match.o xt_udp.o
+ bpfilter_umh-objs += match.o xt_udp.o target.o rule.o table.o
++bpfilter_umh-objs += sockopt.o
  bpfilter_umh-userldlibs := $(LIBBPF_A) -lelf -lz
  userccflags += -I $(srctree)/tools/include/ -I $(srctree)/tools/include/uapi
  
-diff --git a/net/bpfilter/context.c b/net/bpfilter/context.c
-index b5e172412fab..f420fb8b6507 100644
---- a/net/bpfilter/context.c
-+++ b/net/bpfilter/context.c
-@@ -16,7 +16,7 @@
- #include "map-common.h"
- #include "match.h"
- 
--static const struct match_ops *match_ops[] = { };
-+static const struct match_ops *match_ops[] = { &xt_udp };
- 
- static int init_match_ops_map(struct context *ctx)
- {
-diff --git a/net/bpfilter/match.h b/net/bpfilter/match.h
-index c6541e6a6567..7de3d2a07dc5 100644
---- a/net/bpfilter/match.h
-+++ b/net/bpfilter/match.h
-@@ -29,6 +29,8 @@ struct match {
- 	const struct bpfilter_ipt_match *ipt_match;
- };
- 
-+extern const struct match_ops xt_udp;
-+
- int init_match(struct context *ctx, const struct bpfilter_ipt_match *ipt_match,
- 	       struct match *match);
- 
-diff --git a/net/bpfilter/xt_udp.c b/net/bpfilter/xt_udp.c
+diff --git a/net/bpfilter/sockopt.c b/net/bpfilter/sockopt.c
 new file mode 100644
-index 000000000000..c78cd4341f81
+index 000000000000..15de8e6ee31c
 --- /dev/null
-+++ b/net/bpfilter/xt_udp.c
-@@ -0,0 +1,111 @@
++++ b/net/bpfilter/sockopt.c
+@@ -0,0 +1,533 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (c) 2021 Telegram FZ-LLC
@@ -133,199 +106,552 @@ index 000000000000..c78cd4341f81
 +
 +#define _GNU_SOURCE
 +
-+#include <linux/filter.h>
++#include "sockopt.h"
++
++#include <linux/err.h>
++#include <linux/list.h>
 +#include <linux/netfilter/x_tables.h>
-+#include <linux/netfilter/xt_tcpudp.h>
-+#include <linux/udp.h>
 +
-+#include <arpa/inet.h>
++#include <sys/types.h>
++#include <sys/uio.h>
++
 +#include <errno.h>
++#include <limits.h>
++#include <stdlib.h>
++#include <string.h>
 +
-+#include "codegen.h"
 +#include "context.h"
 +#include "logger.h"
++#include "map-common.h"
 +#include "match.h"
++#include "msgfmt.h"
++#include "table.h"
 +
-+static int xt_udp_check(struct context *ctx,
-+			const struct bpfilter_ipt_match *ipt_match)
++static int pvm_read(pid_t pid, void *to, const void *from, size_t count)
 +{
-+	const struct xt_udp *udp;
++	ssize_t total_bytes;
++	const struct iovec l_iov = {
++		.iov_base = to,
++		.iov_len = count
++	};
++	const struct iovec r_iov = {
++		.iov_base = (void *)from,
++		.iov_len = count
++	};
 +
-+	udp = (const struct xt_udp *)&ipt_match->data;
++	total_bytes = process_vm_readv(pid, &l_iov, 1, &r_iov, 1, 0);
++	if (total_bytes == -1) {
++		BFLOG_ERR("failed to read from PID %d: %s", pid, STRERR(errno));
++		return -errno;
++	}
 +
-+	if (udp->invflags & XT_UDP_INV_MASK) {
-+		BFLOG_ERR("cannot check match 'udp': invalid flags\n");
++	if (total_bytes != count) {
++		BFLOG_ERR("invalid amount a data transferred: %ld bytes, %ld expected",
++			  total_bytes, count);
++		return -EFAULT;
++	}
++
++	return 0;
++}
++
++static int pvm_read_from_offset(pid_t pid, void *to, const void *from,
++				size_t offset, size_t count)
++{
++	return pvm_read(pid, to + offset, from + offset, count);
++}
++
++static int pvm_write(pid_t pid, void *to, const void *from, size_t count)
++{
++	ssize_t total_bytes;
++	const struct iovec l_iov = {
++		.iov_base = (void *)from,
++		.iov_len = count
++	};
++	const struct iovec r_iov = {
++		.iov_base = to,
++		.iov_len = count
++	};
++
++	total_bytes = process_vm_writev(pid, &l_iov, 1, &r_iov, 1, 0);
++	if (total_bytes == -1) {
++		BFLOG_ERR("failed to write to PID %d: %s", pid, STRERR(errno));
++		return -errno;
++	}
++
++	if (total_bytes != count) {
++		BFLOG_ERR("invalid amount a data transferred: %ld bytes, %ld expected",
++			  total_bytes, count);
++		return -EFAULT;
++	}
++
++	return 0;
++}
++
++static int read_ipt_get_info(const struct mbox_request *req,
++			     struct bpfilter_ipt_get_info *info)
++{
++	int r;
++
++	if (req->len != sizeof(*info)) {
++		BFLOG_ERR("invalid request size: %d", req->len);
 +		return -EINVAL;
 +	}
 +
-+	return 0;
-+}
-+
-+static int xt_udp_gen_inline_ports(struct codegen *ctx, int regno, bool inv,
-+				   const u16 (*ports)[2])
-+{
-+	if ((*ports)[0] == 0 && (*ports)[1] == 65535) {
-+		if (inv)
-+			EMIT_FIXUP(ctx, CODEGEN_FIXUP_NEXT_RULE,
-+				   BPF_JMP_IMM(BPF_JA, 0, 0, 0));
-+	} else if ((*ports)[0] == (*ports)[1]) {
-+		const u16 port = htons((*ports)[0]);
-+
-+		EMIT_FIXUP(ctx, CODEGEN_FIXUP_NEXT_RULE,
-+			   BPF_JMP_IMM((inv ? BPF_JEQ : BPF_JNE), regno, port, 0));
-+	} else {
-+		EMIT_LITTLE_ENDIAN(ctx, BPF_ENDIAN(BPF_TO_BE, regno, 16));
-+		EMIT_FIXUP(ctx, CODEGEN_FIXUP_NEXT_RULE,
-+			   BPF_JMP_IMM(inv ? BPF_JGT : BPF_JLT, regno, (*ports)[0], 0));
-+		EMIT_FIXUP(ctx, CODEGEN_FIXUP_NEXT_RULE,
-+			   BPF_JMP_IMM(inv ? BPF_JLT : BPF_JGT, regno, (*ports)[1], 0));
++	r = pvm_read(req->pid, info, (const void *)req->addr, sizeof(*info));
++	if (r) {
++		BFLOG_ERR("failed to read from PID %d", req->pid);
++		return r;
 +	}
 +
++	info->name[sizeof(info->name) - 1] = '\0';
++
 +	return 0;
 +}
 +
-+static int xt_udp_gen_inline(struct codegen *ctx, const struct match *match)
++static int sockopt_get_info(struct context *ctx, const struct mbox_request *req)
 +{
-+	const struct xt_udp *udp;
++	struct bpfilter_ipt_get_info info;
++	struct table *table;
 +	int r;
 +
-+	udp = (const struct xt_udp *)&match->ipt_match->data;
++	if (req->len != sizeof(info)) {
++		BFLOG_ERR("invalid request size: %d", req->len);
++		return -EINVAL;
++	}
 +
-+	EMIT(ctx, BPF_MOV64_REG(CODEGEN_REG_SCRATCH1, CODEGEN_REG_L4));
-+	EMIT(ctx, BPF_ALU64_IMM(BPF_ADD, CODEGEN_REG_SCRATCH1, sizeof(struct udphdr)));
-+	r = ctx->codegen_ops->load_packet_data_end(ctx, CODEGEN_REG_DATA_END);
++	r = read_ipt_get_info(req, &info);
 +	if (r) {
-+		BFLOG_ERR("failed to generate code to load packet data end: %s",
-+			  STRERR(r));
++		BFLOG_ERR("failed to read struct ipt_get_info : %s", STRERR(r));
 +		return r;
 +	}
 +
-+	EMIT_FIXUP(ctx, CODEGEN_FIXUP_NEXT_RULE,
-+		   BPF_JMP_REG(BPF_JGT, CODEGEN_REG_SCRATCH1, CODEGEN_REG_DATA_END, 0));
++	table = map_find(&ctx->table_index.map, info.name);
++	if (IS_ERR(table)) {
++		BFLOG_ERR("cannot find table '%s' in map", info.name);
++		return -ENOENT;
++	}
 +
-+	EMIT(ctx, BPF_LDX_MEM(BPF_H, CODEGEN_REG_SCRATCH4, CODEGEN_REG_L4,
-+			      offsetof(struct udphdr, source)));
-+	EMIT(ctx, BPF_LDX_MEM(BPF_H, CODEGEN_REG_SCRATCH5, CODEGEN_REG_L4,
-+			      offsetof(struct udphdr, dest)));
++	table_get_info(table, &info);
 +
-+	r = xt_udp_gen_inline_ports(ctx, CODEGEN_REG_SCRATCH4,
-+				    udp->invflags & XT_UDP_INV_SRCPT,
-+				    &udp->spts);
++	return pvm_write(req->pid, (void *)req->addr, &info, sizeof(info));
++}
++
++static int read_ipt_get_entries(const struct mbox_request *req,
++				struct bpfilter_ipt_get_entries *entries)
++{
++	int r;
++
++	if (req->len < sizeof(*entries)) {
++		BFLOG_ERR("invalid request size: %d", req->len);
++		return -EINVAL;
++	}
++
++	r = pvm_read(req->pid, entries, (const void *)req->addr,
++		     sizeof(*entries));
 +	if (r) {
-+		BFLOG_ERR("failed to generate code to match source ports: %s",
-+			  STRERR(r));
++		BFLOG_ERR("failed to read from PID %d", req->pid);
 +		return r;
 +	}
 +
-+	r = xt_udp_gen_inline_ports(ctx, CODEGEN_REG_SCRATCH5,
-+				    udp->invflags & XT_UDP_INV_DSTPT,
-+				    &udp->dpts);
-+	if (r) {
-+		BFLOG_ERR("failed to generate code to match destination ports: %s",
-+			  STRERR(r));
-+		return r;
-+	}
++	entries->name[sizeof(entries->name) - 1] = '\0';
 +
 +	return 0;
 +}
 +
-+const struct match_ops xt_udp = {
-+	.name = "udp",
-+	.size = XT_ALIGN(sizeof(struct xt_udp)),
-+	.revision = 0,
-+	.check = xt_udp_check,
-+	.gen_inline = xt_udp_gen_inline
-+};
-diff --git a/tools/testing/selftests/bpf/bpfilter/.gitignore b/tools/testing/selftests/bpf/bpfilter/.gitignore
-index 9ac1b3caf246..f84cc86493df 100644
---- a/tools/testing/selftests/bpf/bpfilter/.gitignore
-+++ b/tools/testing/selftests/bpf/bpfilter/.gitignore
-@@ -2,3 +2,4 @@
- tools/**
- test_map
- test_match
-+test_xt_udp
-diff --git a/tools/testing/selftests/bpf/bpfilter/Makefile b/tools/testing/selftests/bpf/bpfilter/Makefile
-index 10642c1d6a87..97f8d596de36 100644
---- a/tools/testing/selftests/bpf/bpfilter/Makefile
-+++ b/tools/testing/selftests/bpf/bpfilter/Makefile
-@@ -12,6 +12,7 @@ CFLAGS += -Wall -g -pthread -I$(TOOLSINCDIR) -I$(APIDIR) -I$(BPFILTERSRCDIR)
- 
- TEST_GEN_PROGS += test_map
- TEST_GEN_PROGS += test_match
-+TEST_GEN_PROGS += test_xt_udp
- 
- KSFT_KHDR_INSTALL := 1
- 
-@@ -35,11 +36,12 @@ $(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)			\
- 
- BPFILTER_MAP_SRCS := $(BPFILTERSRCDIR)/map-common.c
- BPFILTER_CODEGEN_SRCS := $(BPFILTERSRCDIR)/codegen.c $(BPFOBJ) -lelf -lz
--BPFILTER_MATCH_SRCS := $(BPFILTERSRCDIR)/match.c
-+BPFILTER_MATCH_SRCS := $(BPFILTERSRCDIR)/match.c $(BPFILTERSRCDIR)/xt_udp.c
- 
--BPFILTER_COMMON_SRCS := $(BPFILTER_MAP_SRCS)
-+BPFILTER_COMMON_SRCS := $(BPFILTER_MAP_SRCS) $(BPFILTER_CODEGEN_SRCS)
- BPFILTER_COMMON_SRCS += $(BPFILTERSRCDIR)/context.c $(BPFILTERSRCDIR)/logger.c
- BPFILTER_COMMON_SRCS += $(BPFILTER_MATCH_SRCS)
- 
- $(OUTPUT)/test_map: test_map.c $(BPFILTER_MAP_SRCS)
- $(OUTPUT)/test_match: test_match.c $(BPFILTER_COMMON_SRCS)
-+$(OUTPUT)/test_xt_udp: test_xt_udp.c $(BPFILTER_COMMON_SRCS)
-diff --git a/tools/testing/selftests/bpf/bpfilter/test_xt_udp.c b/tools/testing/selftests/bpf/bpfilter/test_xt_udp.c
-new file mode 100644
-index 000000000000..c0898b0eca30
---- /dev/null
-+++ b/tools/testing/selftests/bpf/bpfilter/test_xt_udp.c
-@@ -0,0 +1,48 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define _GNU_SOURCE
-+
-+#include <linux/netfilter/x_tables.h>
-+#include <linux/netfilter/xt_tcpudp.h>
-+
-+#include "../../kselftest_harness.h"
-+
-+#include "context.h"
-+#include "logger.h"
-+#include "match.h"
-+
-+#include "bpfilter_util.h"
-+
-+FIXTURE(test_xt_udp)
++static int sockopt_get_entries(struct context *ctx,
++			       const struct mbox_request *req)
 +{
-+	struct context ctx;
-+	struct {
-+		struct xt_entry_match match;
-+		struct xt_udp udp;
++	struct bpfilter_ipt_get_entries get_entries;
++	struct bpfilter_ipt_get_entries *entries;
++	struct table *table;
++	int r;
 +
-+	} ipt_match;
-+	struct match match;
-+};
++	r = read_ipt_get_entries(req, &get_entries);
++	if (r) {
++		BFLOG_ERR("failed to read struct ipt_get_entries: %s",
++			  STRERR(r));
++		return r;
++	}
 +
-+FIXTURE_SETUP(test_xt_udp)
-+{
-+	logger_set_file(stderr);
-+	ASSERT_EQ(0, create_context(&self->ctx));
-+};
++	table = map_find(&ctx->table_index.map, get_entries.name);
++	if (IS_ERR(table)) {
++		BFLOG_ERR("cannot find table '%s' in map", get_entries.name);
++		return -ENOENT;
++	}
 +
-+FIXTURE_TEARDOWN(test_xt_udp)
-+{
-+	free_context(&self->ctx);
-+};
++	if (get_entries.size != table->size) {
++		BFLOG_ERR("table '%s' get entries size mismatch",
++			  get_entries.name);
++		return -EINVAL;
++	}
 +
-+TEST_F(test_xt_udp, init)
-+{
-+	init_entry_match((struct xt_entry_match *)&self->ipt_match,
-+			 sizeof(self->ipt_match), 0, "udp");
-+	ASSERT_EQ(init_match(&self->ctx,
-+			     (const struct bpfilter_ipt_match *)&self->ipt_match,
-+			     &self->match),
-+		 0);
++	entries = (struct bpfilter_ipt_get_entries *)req->addr;
++
++	table->table_ops->update_counters(table);
++
++	r = pvm_write(req->pid, entries->name, table->table_ops->name,
++		      sizeof(entries->name));
++	if (r) {
++		BFLOG_ERR("failed to write to PID %d", req->pid);
++		return r;
++	}
++
++	r = pvm_write(req->pid, &entries->size, &table->size,
++		      sizeof(table->size));
++	if (r) {
++		BFLOG_ERR("failed to write to PID %d", req->pid);
++		return r;
++	}
++
++	return pvm_write(req->pid, entries->entries, table->entries, table->size);
 +}
 +
-+TEST_HARNESS_MAIN
++static int read_ipt_get_revision(const struct mbox_request *req,
++				 struct bpfilter_ipt_get_revision *revision)
++{
++	int r;
++
++	if (req->len != sizeof(*revision)) {
++		BFLOG_ERR("invalid request size: %d", req->len);
++		return -EINVAL;
++	}
++
++	r = pvm_read(req->pid, revision, (const void *)req->addr,
++		     sizeof(*revision));
++	if (r) {
++		BFLOG_ERR("failed to read to PID %d", req->pid);
++		return r;
++	}
++
++	revision->name[sizeof(revision->name) - 1] = '\0';
++
++	return 0;
++}
++
++static int sockopt_get_revision_match(struct context *ctx,
++				      const struct mbox_request *req)
++{
++	struct bpfilter_ipt_get_revision get_revision;
++	const struct match_ops *found;
++	int r;
++
++	r = read_ipt_get_revision(req, &get_revision);
++	if (r) {
++		BFLOG_ERR("failed to read struct ipt_get_revision: %s", STRERR(r));
++		return r;
++	}
++
++	found = map_find(&ctx->match_ops_map, get_revision.name);
++	if (IS_ERR(found)) {
++		BFLOG_ERR("cannot find match '%s' in map", get_revision.name);
++		return PTR_ERR(found);
++	}
++
++	return found->revision;
++}
++
++static int sockopt_get_revision_target(struct context *ctx,
++				       const struct mbox_request *req)
++{
++	struct bpfilter_ipt_get_revision get_revision;
++	const struct match_ops *found;
++	int r;
++
++	r = read_ipt_get_revision(req, &get_revision);
++	if (r) {
++		BFLOG_ERR("failed to read struct ipt_get_revision: %s",
++			  STRERR(r));
++		return r;
++	}
++
++	found = map_find(&ctx->target_ops_map, get_revision.name);
++	if (IS_ERR(found)) {
++		BFLOG_ERR("cannot find target '%s' in map", get_revision.name);
++		return PTR_ERR(found);
++	}
++
++	return found->revision;
++}
++
++static struct bpfilter_ipt_replace *read_ipt_replace(struct context *ctx,
++						     const struct mbox_request *req)
++{
++	struct bpfilter_ipt_replace ipt_header;
++	struct bpfilter_ipt_replace *ipt_replace;
++	int r;
++
++	if (req->len < sizeof(ipt_header)) {
++		BFLOG_ERR("invalid request size: %d", req->len);
++		return ERR_PTR(-EINVAL);
++	}
++
++	r = pvm_read(req->pid, &ipt_header, (const void *)req->addr,
++		     sizeof(ipt_header));
++	if (r) {
++		BFLOG_ERR("failed to read from PID %d: %s", req->pid,
++			  STRERR(r));
++		return ERR_PTR(r);
++	}
++
++	if (ipt_header.num_counters == 0) {
++		BFLOG_ERR("no counter defined in struct ipt_header");
++		return ERR_PTR(-EINVAL);
++	}
++
++	if (ipt_header.num_counters >= INT_MAX / sizeof(struct bpfilter_ipt_counters)) {
++		BFLOG_ERR("too many counters defined: %u",
++			  ipt_header.num_counters);
++		return ERR_PTR(-ENOMEM);
++	}
++
++	ipt_header.name[sizeof(ipt_header.name) - 1] = '\0';
++
++	ipt_replace = malloc(sizeof(ipt_header) + ipt_header.size);
++	if (!ipt_replace) {
++		BFLOG_ERR("out of memory");
++		return ERR_PTR(-ENOMEM);
++	}
++
++	memcpy(ipt_replace, &ipt_header, sizeof(ipt_header));
++
++	r = pvm_read_from_offset(req->pid, ipt_replace, (const void *)req->addr,
++				 sizeof(ipt_header), ipt_header.size);
++	if (r) {
++		free(ipt_replace);
++		BFLOG_ERR("failed to read from PID %u at offset %lu: %s",
++			  req->pid, sizeof(ipt_header), STRERR(r));
++		return ERR_PTR(r);
++	}
++
++	return ipt_replace;
++}
++
++static int sockopt_set_replace(struct context *ctx,
++			       const struct mbox_request *req)
++{
++	struct bpfilter_ipt_replace *ipt_replace;
++	struct table *table;
++	struct table *new_table = NULL;
++	struct table_ops *table_ops;
++	int r;
++
++	ipt_replace = read_ipt_replace(ctx, req);
++	if (IS_ERR(ipt_replace)) {
++		BFLOG_ERR("failed to read struct ipt_replace: %s",
++			  STRERR(PTR_ERR(ipt_replace)));
++		return PTR_ERR(ipt_replace);
++	}
++
++	table_ops = map_find(&ctx->table_ops_map, ipt_replace->name);
++	if (IS_ERR(table_ops)) {
++		r = PTR_ERR(table_ops);
++		BFLOG_ERR("cannot find table_ops '%s' in map", ipt_replace->name);
++		goto cleanup;
++	}
++
++	new_table = table_ops->create(ctx, ipt_replace);
++	if (IS_ERR(new_table)) {
++		r = PTR_ERR(table_ops);
++		BFLOG_ERR("failed to create table '%s'", ipt_replace->name);
++		goto cleanup;
++	}
++
++	r = new_table->table_ops->codegen(ctx, new_table);
++	if (r) {
++		BFLOG_ERR("failed to generate code for table '%s'",
++			  ipt_replace->name);
++		goto cleanup;
++	}
++
++	table = map_find(&ctx->table_index.map, ipt_replace->name);
++	if (IS_ERR(table) && PTR_ERR(table) == -ENOENT)
++		table = NULL;
++
++	if (IS_ERR(table)) {
++		r = PTR_ERR(table);
++		BFLOG_ERR("cannot find table '%s' in map", ipt_replace->name);
++		goto cleanup;
++	}
++
++	if (table)
++		table->table_ops->uninstall(ctx, table);
++
++	r = new_table->table_ops->install(ctx, new_table);
++	if (r) {
++		BFLOG_ERR("failed to install new table '%s': %s",
++			  ipt_replace->name, STRERR(r));
++		if (table) {
++			int r2 = table->table_ops->install(ctx, table);
++
++			if (r2)
++				BFLOG_EMERG("failed to restore old table '%s': %s",
++					    table->table_ops->name,
++					    STRERR(r2));
++		}
++
++		goto cleanup;
++	}
++
++	r = map_upsert(&ctx->table_index.map, new_table->table_ops->name,
++		       new_table);
++	if (r) {
++		BFLOG_ERR("failed to upsert table map for '%s': %s",
++			  new_table->table_ops->name, STRERR(r));
++		goto cleanup;
++	}
++
++	list_add_tail(&new_table->list, &ctx->table_index.list);
++
++	new_table = table;
++
++cleanup:
++	if (!IS_ERR_OR_NULL(new_table))
++		new_table->table_ops->free(new_table);
++
++	free(ipt_replace);
++
++	return r;
++}
++
++static struct bpfilter_ipt_counters_info *read_ipt_counters_info(const struct mbox_request *req)
++{
++	struct bpfilter_ipt_counters_info *info;
++	size_t size;
++	int r;
++
++	if (req->len < sizeof(*info)) {
++		BFLOG_ERR("invalid request size: %d", req->len);
++		return ERR_PTR(-EINVAL);
++	}
++
++	info = malloc(req->len);
++	if (!info) {
++		BFLOG_ERR("out of memory");
++		return ERR_PTR(-ENOMEM);
++	}
++
++	r = pvm_read(req->pid, info, (const void *)req->addr, sizeof(*info));
++	if (r) {
++		BFLOG_ERR("failed to read from PID %d", req->pid);
++		goto err_free;
++	}
++
++	size = info->num_counters * sizeof(info->counters[0]);
++	if (req->len != sizeof(*info) + size) {
++		BFLOG_ERR("not enough space to return counters");
++		r = -EINVAL;
++		goto err_free;
++	}
++
++	info->name[sizeof(info->name) - 1] = '\0';
++
++	r = pvm_read_from_offset(req->pid, info, (const void *)req->addr,
++				 sizeof(*info), size);
++	if (r) {
++		BFLOG_ERR("failed to read from PID %u at offset %lu: %s",
++			  req->pid, sizeof(*info), STRERR(r));
++		goto err_free;
++	}
++
++	return info;
++
++err_free:
++	free(info);
++
++	return ERR_PTR(r);
++}
++
++static int sockopt_set_add_counters(struct context *ctx,
++				    const struct mbox_request *req)
++{
++	struct bpfilter_ipt_counters_info *info;
++	struct table *table;
++	int r = 0;
++
++	info = read_ipt_counters_info(req);
++	if (IS_ERR(info)) {
++		r = PTR_ERR(info);
++		BFLOG_ERR("failed to read struct ipt_counters_info: %s",
++			  STRERR(r));
++		goto err_free;
++	}
++
++	table = map_find(&ctx->table_index.map, info->name);
++	if (IS_ERR(table)) {
++		r = PTR_ERR(table);
++		BFLOG_ERR("cannot find table '%s' in map", info->name);
++		goto err_free;
++	}
++
++	// TODO handle counters
++
++err_free:
++	free(info);
++
++	return r;
++}
++
++static int handle_get_request(struct context *ctx,
++			      const struct mbox_request *req)
++{
++	switch (req->cmd) {
++	case 0:
++		return 0;
++	case BPFILTER_IPT_SO_GET_INFO:
++		return sockopt_get_info(ctx, req);
++	case BPFILTER_IPT_SO_GET_ENTRIES:
++		return sockopt_get_entries(ctx, req);
++	case BPFILTER_IPT_SO_GET_REVISION_MATCH:
++		return sockopt_get_revision_match(ctx, req);
++	case BPFILTER_IPT_SO_GET_REVISION_TARGET:
++		return sockopt_get_revision_target(ctx, req);
++	}
++
++	BFLOG_ERR("unsupported SO_GET command: %d", req->cmd);
++	return -ENOPROTOOPT;
++}
++
++static int handle_set_request(struct context *ctx,
++			      const struct mbox_request *req)
++{
++	switch (req->cmd) {
++	case BPFILTER_IPT_SO_SET_REPLACE:
++		return sockopt_set_replace(ctx, req);
++	case BPFILTER_IPT_SO_SET_ADD_COUNTERS:
++		return sockopt_set_add_counters(ctx, req);
++	}
++
++	BFLOG_ERR("unsupported SO_SET command: %d", req->cmd);
++	return -ENOPROTOOPT;
++}
++
++int handle_sockopt_request(struct context *ctx,
++			   const struct mbox_request *req)
++{
++	return req->is_set ? handle_set_request(ctx, req) :
++			     handle_get_request(ctx, req);
++}
+diff --git a/net/bpfilter/sockopt.h b/net/bpfilter/sockopt.h
+new file mode 100644
+index 000000000000..faf0502959b3
+--- /dev/null
++++ b/net/bpfilter/sockopt.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2021 Telegram FZ-LLC
++ * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
++ */
++
++#ifndef NET_BPFILTER_SOCKOPT_H
++#define NET_BPFILTER_SOCKOPT_H
++
++struct context;
++struct mbox_request;
++
++int handle_sockopt_request(struct context *ctx, const struct mbox_request *req);
++
++#endif // NET_BPFILTER_SOCKOPT_H
 -- 
 2.38.1
 
