@@ -2,25 +2,25 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5622C4332F
-	for <bpf@archiver.kernel.org>; Sat, 24 Dec 2022 00:06:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A4CEC4332F
+	for <bpf@archiver.kernel.org>; Sat, 24 Dec 2022 00:06:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233081AbiLXAGD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 23 Dec 2022 19:06:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37448 "EHLO
+        id S231615AbiLXAGX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 23 Dec 2022 19:06:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232706AbiLXAFd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 23 Dec 2022 19:05:33 -0500
-Received: from smtpout1.r2.mail-out.ovh.net (smtpout1.r2.mail-out.ovh.net [54.36.141.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706C71E728
-        for <bpf@vger.kernel.org>; Fri, 23 Dec 2022 16:04:41 -0800 (PST)
-Received: from ex4.mail.ovh.net (unknown [10.110.103.144])
-        by mo511.mail-out.ovh.net (Postfix) with ESMTPS id 8D54226732;
-        Sat, 24 Dec 2022 00:04:39 +0000 (UTC)
+        with ESMTP id S236480AbiLXAFq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 23 Dec 2022 19:05:46 -0500
+Received: from smtpout5.r2.mail-out.ovh.net (smtpout5.r2.mail-out.ovh.net [54.36.141.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9572623145
+        for <bpf@vger.kernel.org>; Fri, 23 Dec 2022 16:04:45 -0800 (PST)
+Received: from ex4.mail.ovh.net (unknown [10.110.171.195])
+        by mo511.mail-out.ovh.net (Postfix) with ESMTPS id 2B2A326733;
+        Sat, 24 Dec 2022 00:04:44 +0000 (UTC)
 Received: from dev-fedora-x86-64.naccy.de (37.65.8.229) by
  DAG10EX1.indiv4.local (172.16.2.91) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Sat, 24 Dec 2022 01:04:38 +0100
+ 15.1.2507.16; Sat, 24 Dec 2022 01:04:42 +0100
 From:   Quentin Deslandes <qde@naccy.de>
 To:     <qde@naccy.de>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -41,9 +41,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
         <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
         Kernel Team <kernel-team@meta.com>
-Subject: [PATCH bpf-next v3 11/16] bpfilter: add rule structure
-Date:   Sat, 24 Dec 2022 01:03:57 +0100
-Message-ID: <20221224000402.476079-12-qde@naccy.de>
+Subject: [PATCH bpf-next v3 15/16] bpfilter: add filter table
+Date:   Sat, 24 Dec 2022 01:04:01 +0100
+Message-ID: <20221224000402.476079-16-qde@naccy.de>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221224000402.476079-1-qde@naccy.de>
 References: <20221224000402.476079-1-qde@naccy.de>
@@ -53,62 +53,84 @@ Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [37.65.8.229]
 X-ClientProxiedBy: CAS6.indiv4.local (172.16.1.6) To DAG10EX1.indiv4.local
  (172.16.2.91)
-X-Ovh-Tracer-Id: 4762556610060873335
+X-Ovh-Tracer-Id: 4763682507135774327
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: -85
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrheefgddujecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogetfedtuddqtdduucdludehmdenucfjughrpefhvfevufffkffojghfggfgtghisehtkeertdertddtnecuhfhrohhmpefsuhgvnhhtihhnucffvghslhgrnhguvghsuceoqhguvgesnhgrtggthidruggvqeenucggtffrrghtthgvrhhnpeduledugfeileetvdelieeujedttedtvedtgfetteevfeejhfffkeeujeetfffgudenucfkphepuddvjedrtddrtddruddpfeejrdeihedrkedrvddvleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehquggvsehnrggttgihrdguvgeqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepjhholhhsrgeskhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdgsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpmhgvsehusghiqhhuvgdrshhpsgdrrhhupdhshhhurghhsehkvghrnhgvlhdrohhrghdpmhihkhholhgrlhesfhgsrdgtohhmpdhprggsvghnihesrhgvughhrghtrdgtohhmpdhkuhgsrg
- eskhgvrhhnvghlrdhorhhgpdgvughumhgriigvthesghhoohhglhgvrdgtohhmpdgurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhkvghrnhgvlhdqthgvrghmsehmvghtrgdrtghomhdphhgrohhluhhosehgohhoghhlvgdrtghomhdpshgufhesghhoohhglhgvrdgtohhmpdhkphhsihhnghhhsehkvghrnhgvlhdrohhrghdpjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdihhhhssehfsgdrtghomhdpshhonhhgsehkvghrnhgvlhdrohhrghdpmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdgrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdgurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprghstheskhgvrhhnvghlrdhorhhgpdhnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheduuddpmhhouggvpehsmhhtphhouhht
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrheefgddujecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogetfedtuddqtdduucdludehmdenucfjughrpefhvfevufffkffojghfggfgtghisehtkeertdertddtnecuhfhrohhmpefsuhgvnhhtihhnucffvghslhgrnhguvghsuceoqhguvgesnhgrtggthidruggvqeenucggtffrrghtthgvrhhnpeeuveetteejieegkeehvdejkeeiieegudeghedttefgtdfgueelhfdvleeftdelieenucffohhmrghinhepthgvshhtrdgurghtrgenucfkphepuddvjedrtddrtddruddpfeejrdeihedrkedrvddvleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehquggvsehnrggttgihrdguvgeqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepjhholhhsrgeskhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdgsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpmhgvsehusghiqhhuvgdrshhpsgdrrhhupdhshhhurghhsehkvghrnhgvlhdrohhrghdpmhihkhholhgrlhesfhgsrdgtohhmpdhprggsvg
+ hnihesrhgvughhrghtrdgtohhmpdhkuhgsrgeskhgvrhhnvghlrdhorhhgpdgvughumhgriigvthesghhoohhglhgvrdgtohhmpdgurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhkvghrnhgvlhdqthgvrghmsehmvghtrgdrtghomhdphhgrohhluhhosehgohhoghhlvgdrtghomhdpshgufhesghhoohhglhgvrdgtohhmpdhkphhsihhnghhhsehkvghrnhgvlhdrohhrghdpjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdihhhhssehfsgdrtghomhdpshhonhhgsehkvghrnhgvlhdrohhrghdpmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdgrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdgurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprghstheskhgvrhhnvghlrdhorhhgpdhnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheduuddpmhhouggvpehsmhhtphhouhht
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The rule structure is an equivalent to ipt_entry structure. A rule
-consists of zero or more matches and a target. A rule has a pointer to
-its ipt_entry structure in entries blob. This structure is defined to
-ease iteration over the various rules of a given chain. The original
-ipt_entry blob is kept to simplify interaction with iptables binary.
+Introduce filter table support for INPUT, FORWARD, and OUTPUT chains.
+All those chains are supported by SCHED_CLS_BPF.
 
-Inline bytecode generation is performed by gen_inline_rule(), and
-consists of the following steps:
-1. Emit instructions for rule's L3 src/dst addresses and protocol.
-2. Emit instructions for each rule's match by calling match's interface.
-3. Emit instructions for rule's target by calling target's interface.
+INPUT and FORWARD programs are attached to TC_INGRESS hook and leverage
+generate_inline_forward_packet_assessment() to check whether they should
+or not process the incoming packet.
+
+OUTPUT program is attached to TC_EGRESS hook.
+
+create_filter_table() is used to create a default filter table
+(statically stored in filter_table_replace_blob). This table doesn't
+contain any rule and defaults to ACCEPTing packets on each chain.
 
 Co-developed-by: Dmitrii Banshchikov <me@ubique.spb.ru>
 Signed-off-by: Dmitrii Banshchikov <me@ubique.spb.ru>
 Signed-off-by: Quentin Deslandes <qde@naccy.de>
 ---
- net/bpfilter/Makefile                         |   2 +-
- net/bpfilter/rule.c                           | 286 ++++++++++++++++++
- net/bpfilter/rule.h                           |  37 +++
+ net/bpfilter/Makefile                         |   1 +
+ net/bpfilter/context.c                        |   3 +-
+ net/bpfilter/filter-table.c                   | 344 ++++++++++++++++++
+ net/bpfilter/filter-table.h                   |  18 +
  .../testing/selftests/bpf/bpfilter/.gitignore |   1 +
- tools/testing/selftests/bpf/bpfilter/Makefile |   4 +
- .../selftests/bpf/bpfilter/bpfilter_util.h    |   8 +
- .../selftests/bpf/bpfilter/test_rule.c        |  56 ++++
- 7 files changed, 393 insertions(+), 1 deletion(-)
- create mode 100644 net/bpfilter/rule.c
- create mode 100644 net/bpfilter/rule.h
- create mode 100644 tools/testing/selftests/bpf/bpfilter/test_rule.c
+ tools/testing/selftests/bpf/bpfilter/Makefile |   3 +
+ .../selftests/bpf/bpfilter/bpfilter_util.h    |  27 ++
+ .../selftests/bpf/bpfilter/test_codegen.c     | 338 +++++++++++++++++
+ 8 files changed, 734 insertions(+), 1 deletion(-)
+ create mode 100644 net/bpfilter/filter-table.c
+ create mode 100644 net/bpfilter/filter-table.h
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/test_codegen.c
 
 diff --git a/net/bpfilter/Makefile b/net/bpfilter/Makefile
-index 7e642e0ae932..759fb6c847d1 100644
+index 4a78a665b3f1..7def305f0af3 100644
 --- a/net/bpfilter/Makefile
 +++ b/net/bpfilter/Makefile
-@@ -13,7 +13,7 @@ $(LIBBPF_A):
- userprogs := bpfilter_umh
- bpfilter_umh-objs := main.o logger.o map-common.o
+@@ -15,6 +15,7 @@ bpfilter_umh-objs := main.o logger.o map-common.o
  bpfilter_umh-objs += context.o codegen.o
--bpfilter_umh-objs += match.o xt_udp.o target.o
-+bpfilter_umh-objs += match.o xt_udp.o target.o rule.o
+ bpfilter_umh-objs += match.o xt_udp.o target.o rule.o table.o
+ bpfilter_umh-objs += sockopt.o
++bpfilter_umh-objs += filter-table.o
  bpfilter_umh-userldlibs := $(LIBBPF_A) -lelf -lz
  userccflags += -I $(srctree)/tools/include/ -I $(srctree)/tools/include/uapi
  
-diff --git a/net/bpfilter/rule.c b/net/bpfilter/rule.c
+diff --git a/net/bpfilter/context.c b/net/bpfilter/context.c
+index 81c9751a2a2d..6bb0362a79c8 100644
+--- a/net/bpfilter/context.c
++++ b/net/bpfilter/context.c
+@@ -13,6 +13,7 @@
+ 
+ #include <string.h>
+ 
++#include "filter-table.h"
+ #include "logger.h"
+ #include "map-common.h"
+ #include "match.h"
+@@ -73,7 +74,7 @@ static int init_target_ops_map(struct context *ctx)
+ 	return 0;
+ }
+ 
+-static const struct table_ops *table_ops[] = {};
++static const struct table_ops *table_ops[] = { &filter_table_ops };
+ 
+ static int init_table_ops_map(struct context *ctx)
+ {
+diff --git a/net/bpfilter/filter-table.c b/net/bpfilter/filter-table.c
 new file mode 100644
-index 000000000000..0f5217f6ab16
+index 000000000000..452a6d5b2fd0
 --- /dev/null
-+++ b/net/bpfilter/rule.c
-@@ -0,0 +1,286 @@
++++ b/net/bpfilter/filter-table.c
+@@ -0,0 +1,344 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (c) 2021 Telegram FZ-LLC
@@ -117,447 +139,784 @@ index 000000000000..0f5217f6ab16
 +
 +#define _GNU_SOURCE
 +
-+#include "rule.h"
++#include "filter-table.h"
 +
 +#include "../../include/uapi/linux/bpfilter.h"
 +
-+#include <linux/filter.h>
-+#include <linux/ip.h>
-+#include <linux/netfilter/x_tables.h>
-+#include <linux/netfilter_ipv4/ip_tables.h>
++#include <linux/kernel.h>
++#include <linux/err.h>
 +
 +#include <errno.h>
 +#include <stdlib.h>
-+#include <string.h>
++#include <unistd.h>
++
++#include <bpf/bpf.h>
 +
 +#include "codegen.h"
 +#include "context.h"
 +#include "logger.h"
-+#include "match.h"
++#include "msgfmt.h"
++#include "rule.h"
++#include "sockopt.h"
 +
-+static const struct bpfilter_ipt_target *ipt_entry_target(const struct bpfilter_ipt_entry *ipt_entry)
++struct filter_table_context {
++	struct shared_codegen shared;
++	struct codegen local_in;
++	struct codegen forward;
++	struct codegen local_out;
++};
++
++static struct table *filter_table_create(struct context *ctx,
++					 const struct bpfilter_ipt_replace *ipt_replace)
 +{
-+	return (const void *)ipt_entry + ipt_entry->target_offset;
++	struct table *t = create_table(ctx, ipt_replace);
++
++	if (!IS_ERR_OR_NULL(t))
++		t->table_ops = &filter_table_ops;
++
++	return t;
 +}
 +
-+static const struct bpfilter_ipt_match *ipt_entry_match(const struct bpfilter_ipt_entry *entry,
-+							size_t offset)
++static int filter_table_codegen(struct context *ctx, struct table *table)
 +{
-+	return (const void *)entry + offset;
-+}
++	struct filter_table_context *table_ctx;
++	int r;
 +
-+static int ipt_entry_num_matches(const struct bpfilter_ipt_entry *ipt_entry)
-+{
-+	const struct bpfilter_ipt_match *ipt_match;
-+	uint32_t offset = sizeof(*ipt_entry);
-+	int num_matches = 0;
++	BUG_ON(table->table_ops != &filter_table_ops);
 +
-+	while (offset < ipt_entry->target_offset) {
-+		ipt_match = ipt_entry_match(ipt_entry, offset);
-+
-+		if ((uintptr_t)ipt_match % __alignof__(struct bpfilter_ipt_match)) {
-+			BFLOG_ERR("match must be aligned on struct bpfilter_ipt_match size");
-+			return -EINVAL;
-+		}
-+
-+		if (ipt_entry->target_offset < offset + sizeof(*ipt_match)) {
-+			BFLOG_ERR("invalid target offset for struct ipt_entry");
-+			return -EINVAL;
-+		}
-+
-+		if (ipt_match->u.match_size < sizeof(*ipt_match)) {
-+			BFLOG_ERR("invalid match size for struct ipt_match");
-+			return -EINVAL;
-+		}
-+
-+		if (ipt_entry->target_offset < offset + ipt_match->u.match_size) {
-+			BFLOG_ERR("invalid target offset for struct ipt_entry");
-+			return -EINVAL;
-+		}
-+
-+		++num_matches;
-+		offset += ipt_match->u.match_size;
-+	}
-+
-+	if (offset != ipt_entry->target_offset) {
-+		BFLOG_ERR("invalid offset");
++	if (table->ctx) {
++		BFLOG_ERR("filter table has no context");
 +		return -EINVAL;
 +	}
 +
-+	return num_matches;
-+}
-+
-+static int init_rule_matches(struct context *ctx,
-+			     const struct bpfilter_ipt_entry *ipt_entry,
-+			     struct rule *rule)
-+{
-+	const struct bpfilter_ipt_match *ipt_match;
-+	uint32_t offset = sizeof(*ipt_entry);
-+	struct match *match;
-+	int r;
-+
-+	rule->matches = calloc(rule->num_matches, sizeof(rule->matches[0]));
-+	if (!rule->matches) {
++	table_ctx = calloc(1, sizeof(*table_ctx));
++	if (!table_ctx) {
 +		BFLOG_ERR("out of memory");
 +		return -ENOMEM;
 +	}
 +
-+	match = rule->matches;
-+	while (offset < ipt_entry->target_offset) {
-+		ipt_match = ipt_entry_match(ipt_entry, offset);
-+		r = init_match(ctx, ipt_match, match);
-+		if (r) {
-+			free(rule->matches);
-+			rule->matches = NULL;
-+			BFLOG_ERR("failed to initialize match: %s", STRERR(r));
-+			return r;
-+		}
++	create_shared_codegen(&table_ctx->shared);
 +
-+		++match;
-+		offset += ipt_match->u.match_size;
++	// INPUT chain
++	r = create_codegen(&table_ctx->local_in, BPF_PROG_TYPE_SCHED_CLS);
++	if (r) {
++		BFLOG_ERR("TC codegen for INPUT chain creation failed");
++		goto err_free_table_ctx;
 +	}
++
++	table_ctx->local_in.ctx = ctx;
++	table_ctx->local_in.shared_codegen = &table_ctx->shared;
++	table_ctx->local_in.iptables_hook = BPFILTER_INET_HOOK_LOCAL_IN;
++	table_ctx->local_in.bpf_tc_hook = BPF_TC_INGRESS;
++
++	r = try_codegen(&table_ctx->local_in, table);
++	if (r) {
++		BFLOG_ERR("failed to generate LOCAL_IN code");
++		goto err_free_local_in;
++	}
++
++	// FORWARD chain
++	r = create_codegen(&table_ctx->forward, BPF_PROG_TYPE_SCHED_CLS);
++	if (r) {
++		BFLOG_ERR("TC codegen for FORWARD chain create failed");
++		goto err_free_local_in;
++	}
++
++	table_ctx->forward.ctx = ctx;
++	table_ctx->forward.shared_codegen = &table_ctx->shared;
++	table_ctx->forward.iptables_hook = BPFILTER_INET_HOOK_FORWARD;
++	table_ctx->forward.bpf_tc_hook = BPF_TC_INGRESS;
++
++	r = try_codegen(&table_ctx->forward, table);
++	if (r) {
++		BFLOG_ERR("failed to generate LOCAL_FORWARD code");
++		goto err_free_local_fwd;
++	}
++
++	// OUTPUT chain
++	r = create_codegen(&table_ctx->local_out, BPF_PROG_TYPE_SCHED_CLS);
++	if (r) {
++		BFLOG_ERR("TC codegen for OUTPUT chain creation failed");
++		goto err_free_local_fwd;
++	}
++
++	table_ctx->local_out.ctx = ctx;
++	table_ctx->local_out.shared_codegen = &table_ctx->shared;
++	table_ctx->local_out.iptables_hook = BPFILTER_INET_HOOK_LOCAL_OUT;
++	table_ctx->local_out.bpf_tc_hook = BPF_TC_EGRESS;
++
++	r = try_codegen(&table_ctx->local_out, table);
++	if (r) {
++		BFLOG_ERR("failed to generate LOCAL_OUT code");
++		goto err_free_local_out;
++	}
++
++	table->ctx = table_ctx;
 +
 +	return 0;
++
++err_free_local_out:
++	free_codegen(&table_ctx->local_out);
++err_free_local_fwd:
++	free_codegen(&table_ctx->forward);
++err_free_local_in:
++	free_codegen(&table_ctx->local_in);
++err_free_table_ctx:
++	free(table_ctx);
++
++	return r;
 +}
 +
-+static int check_ipt_entry_ip(const struct bpfilter_ipt_ip *ip)
++static int filter_table_install(struct context *ctx, struct table *table)
 +{
-+	if (ip->flags & ~BPFILTER_IPT_F_MASK) {
-+		BFLOG_ERR("invalid flags: %d", ip->flags);
-+		return -EINVAL;
-+	}
-+
-+	if (ip->invflags & ~BPFILTER_IPT_INV_MASK) {
-+		BFLOG_ERR("invalid inverse flags: %d", ip->invflags);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+bool rule_has_standard_target(const struct rule *rule)
-+{
-+	return rule->target.target_ops == &standard_target_ops;
-+}
-+
-+bool rule_is_unconditional(const struct rule *rule)
-+{
-+	static const struct bpfilter_ipt_ip unconditional;
-+
-+	if (rule->num_matches)
-+		return false;
-+
-+	return !memcmp(&rule->ipt_entry->ip, &unconditional,
-+		       sizeof(unconditional));
-+}
-+
-+int init_rule(struct context *ctx, const struct bpfilter_ipt_entry *ipt_entry,
-+	      struct rule *rule)
-+{
-+	const struct bpfilter_ipt_target *ipt_target;
++	struct filter_table_context *table_ctx;
 +	int r;
 +
-+	r = check_ipt_entry_ip(&ipt_entry->ip);
-+	if (r) {
-+		BFLOG_ERR("failed to check IPT entry IP: %s", STRERR(r));
++	if (!table->ctx)
++		return -EINVAL;
++
++	table_ctx = (struct filter_table_context *)table->ctx;
++
++	r = table_ctx->local_in.codegen_ops->load_img(&table_ctx->local_in);
++	if (r < 0) {
++		BFLOG_ERR("failed to load chain INPUT in table filter: %s",
++			  table_ctx->local_in.log_buf);
 +		return r;
 +	}
 +
-+	if (ipt_entry->target_offset < sizeof(*ipt_entry)) {
-+		BFLOG_ERR("invalid struct ipt_entry target offset: %d",
-+			  ipt_entry->target_offset);
-+		return -EINVAL;
++	r = table_ctx->forward.codegen_ops->load_img(&table_ctx->forward);
++	if (r < 0) {
++		BFLOG_ERR("failed to load chain FORWARD in table filter: %s",
++			  table_ctx->forward.log_buf);
++		goto err_unload_local_in;
 +	}
 +
-+	if (ipt_entry->next_offset <
-+	    ipt_entry->target_offset + sizeof(*ipt_target)) {
-+		BFLOG_ERR("invalid struct ipt_entry next offset: %d",
-+			  ipt_entry->next_offset);
-+		return -EINVAL;
++	r = table_ctx->local_out.codegen_ops->load_img(&table_ctx->local_out);
++	if (r < 0) {
++		BFLOG_ERR("failed to load chain OUTPUT in table filter: %s",
++			  table_ctx->local_out.log_buf);
++		goto err_unload_forward;
 +	}
 +
-+	ipt_target = ipt_entry_target(ipt_entry);
-+
-+	if (ipt_target->u.target_size < sizeof(*ipt_target)) {
-+		BFLOG_ERR("invalid struct ipt_target target size: %d",
-+			  ipt_target->u.target_size);
-+		return -EINVAL;
-+	}
-+
-+	if (ipt_entry->next_offset <
-+	    ipt_entry->target_offset + ipt_target->u.target_size) {
-+		BFLOG_ERR("invalid struct ipt_entry next offset: %d",
-+			  ipt_entry->next_offset);
-+		return -EINVAL;
-+	}
-+
-+	rule->ipt_entry = ipt_entry;
-+
-+	r = init_target(ctx, ipt_target, &rule->target);
-+	if (r) {
-+		BFLOG_ERR("failed to initialise target: %s", STRERR(r));
-+		return r;
-+	}
-+
-+	if (rule_has_standard_target(rule)) {
-+		if (XT_ALIGN(ipt_entry->target_offset + sizeof(struct bpfilter_ipt_standard_target)) !=
-+		    ipt_entry->next_offset) {
-+			BFLOG_ERR("invalid struct ipt_entry target offset alignment");
-+			return -EINVAL;
-+		}
-+	}
-+
-+	rule->num_matches = ipt_entry_num_matches(ipt_entry);
-+	if (rule->num_matches < 0)
-+		return rule->num_matches;
-+
-+	return init_rule_matches(ctx, ipt_entry, rule);
-+}
-+
-+int gen_inline_rule(struct codegen *ctx, const struct rule *rule)
-+{
-+	int r;
-+
-+	const struct bpfilter_ipt_ip *ipt_ip = &rule->ipt_entry->ip;
-+
-+	if (!ipt_ip->src_mask && !ipt_ip->src) {
-+		if (ipt_ip->invflags & IPT_INV_SRCIP)
-+			return 0;
-+	}
-+
-+	if (!ipt_ip->dst_mask && !ipt_ip->dst) {
-+		if (ipt_ip->invflags & IPT_INV_DSTIP)
-+			return 0;
-+	}
-+
-+	if (ipt_ip->src_mask || ipt_ip->src) {
-+		const int op = ipt_ip->invflags & IPT_INV_SRCIP ? BPF_JEQ : BPF_JNE;
-+
-+		EMIT(ctx, BPF_LDX_MEM(BPF_W, CODEGEN_REG_SCRATCH1, CODEGEN_REG_L3,
-+				      offsetof(struct iphdr, saddr)));
-+		EMIT(ctx, BPF_ALU32_IMM(BPF_AND, CODEGEN_REG_SCRATCH1, ipt_ip->src_mask));
-+		EMIT_FIXUP(ctx, CODEGEN_FIXUP_NEXT_RULE,
-+			   BPF_JMP_IMM(op, CODEGEN_REG_SCRATCH1, ipt_ip->src, 0));
-+	}
-+
-+	if (ipt_ip->dst_mask || ipt_ip->dst) {
-+		const int op = ipt_ip->invflags & IPT_INV_DSTIP ? BPF_JEQ : BPF_JNE;
-+
-+		EMIT(ctx, BPF_LDX_MEM(BPF_W, CODEGEN_REG_SCRATCH2, CODEGEN_REG_L3,
-+				      offsetof(struct iphdr, daddr)));
-+		EMIT(ctx, BPF_ALU32_IMM(BPF_AND, CODEGEN_REG_SCRATCH2, ipt_ip->dst_mask));
-+		EMIT_FIXUP(ctx, CODEGEN_FIXUP_NEXT_RULE,
-+			   BPF_JMP_IMM(op, CODEGEN_REG_SCRATCH2, ipt_ip->dst, 0));
-+	}
-+
-+	if (ipt_ip->protocol) {
-+		EMIT(ctx, BPF_LDX_MEM(BPF_B, CODEGEN_REG_SCRATCH4, CODEGEN_REG_L3,
-+				      offsetof(struct iphdr, protocol)));
-+		EMIT_FIXUP(ctx, CODEGEN_FIXUP_NEXT_RULE,
-+			   BPF_JMP_IMM(BPF_JNE, CODEGEN_REG_SCRATCH4, ipt_ip->protocol, 0));
-+
-+		EMIT(ctx, BPF_LDX_MEM(BPF_B, CODEGEN_REG_SCRATCH4, CODEGEN_REG_L3,
-+				      offsetof(struct iphdr, protocol)));
-+		EMIT(ctx, BPF_MOV64_REG(CODEGEN_REG_L4, CODEGEN_REG_L3));
-+		EMIT(ctx, BPF_LDX_MEM(BPF_B, CODEGEN_REG_SCRATCH1, CODEGEN_REG_L3, 0));
-+		EMIT(ctx, BPF_ALU32_IMM(BPF_AND, CODEGEN_REG_SCRATCH1, 0x0f));
-+		EMIT(ctx, BPF_ALU32_IMM(BPF_LSH, CODEGEN_REG_SCRATCH1, 2));
-+		EMIT(ctx, BPF_ALU64_REG(BPF_ADD, CODEGEN_REG_L4, CODEGEN_REG_SCRATCH1));
-+	}
-+
-+	for (int i = 0; i < rule->num_matches; ++i) {
-+		const struct match *match;
-+
-+		match = &rule->matches[i];
-+		r = match->match_ops->gen_inline(ctx, match);
-+		if (r) {
-+			BFLOG_ERR("failed to generate inline code match: %s",
-+				  STRERR(r));
-+			return r;
-+		}
-+	}
-+
-+	EMIT_ADD_COUNTER(ctx);
-+
-+	r = rule->target.target_ops->gen_inline(ctx, &rule->target);
-+	if (r) {
-+		BFLOG_ERR("failed to generate inline code for target: %s",
-+			  STRERR(r));
-+		return r;
-+	}
-+
-+	codegen_fixup(ctx, CODEGEN_FIXUP_NEXT_RULE);
++	BFLOG_DBG("installed filter table");
 +
 +	return 0;
++
++err_unload_forward:
++	table_ctx->forward.codegen_ops->unload_img(&table_ctx->forward);
++err_unload_local_in:
++	table_ctx->local_in.codegen_ops->unload_img(&table_ctx->local_in);
++
++	return r;
 +}
 +
-+void free_rule(struct rule *rule)
++static void filter_table_uninstall(struct context *ctx, struct table *table)
 +{
-+	free(rule->matches);
++	struct filter_table_context *table_ctx;
++
++	BUG_ON(!table->ctx);
++
++	table_ctx = (struct filter_table_context *)table->ctx;
++
++	table_ctx->local_in.codegen_ops->unload_img(&table_ctx->local_in);
++	table_ctx->forward.codegen_ops->unload_img(&table_ctx->forward);
++	table_ctx->local_out.codegen_ops->unload_img(&table_ctx->local_out);
 +}
-diff --git a/net/bpfilter/rule.h b/net/bpfilter/rule.h
++
++static void filter_table_free(struct table *table)
++{
++	if (table->ctx) {
++		struct filter_table_context *table_ctx;
++
++		table_ctx = (struct filter_table_context *)table->ctx;
++
++		free_codegen(&table_ctx->local_in);
++		free_codegen(&table_ctx->forward);
++		free_codegen(&table_ctx->local_out);
++		free(table_ctx);
++	}
++
++	free_table(table);
++}
++
++static void filter_table_update_counters(struct table *table)
++{
++	int r;
++	struct rule *rule;
++	struct filter_table_context *ctx = table->ctx;
++	struct shared_codegen *shared = &ctx->shared;
++	int map_fd = shared->maps_fd[CODEGEN_MAP_COUNTERS];
++
++	for (uint32_t i = 0; i < table->num_rules; ++i) {
++		rule = &table->rules[i];
++
++		r = bpf_map_lookup_elem(map_fd, &rule->index,
++					(void *)&rule->ipt_entry->counters);
++		if (r < 0) {
++			BFLOG_DBG("couldn't fetch counter for rule at %p",
++				  rule);
++		}
++	}
++}
++
++const struct table_ops filter_table_ops = {
++	.name = "filter",
++	.create = filter_table_create,
++	.codegen = filter_table_codegen,
++	.install = filter_table_install,
++	.uninstall = filter_table_uninstall,
++	.free = filter_table_free,
++	.update_counters = filter_table_update_counters
++};
++
++static uint8_t filter_table_replace_blob[] = {
++	0x66, 0x69, 0x6c, 0x74, 0x65, 0x72, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x0e, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00,
++	0x78, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x98, 0x00, 0x00, 0x00,
++	0x30, 0x01, 0x00, 0x00,	0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x98, 0x00, 0x00, 0x00, 0x30, 0x01, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00,
++	0x10, 0x32, 0x40, 0x36, 0x43, 0x56, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x70, 0x00, 0x98, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0xfe, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x70, 0x00, 0x98, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0xfe, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x70, 0x00, 0x98, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0xfe, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x70, 0x00, 0xb0, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x40, 0x00, 0x45, 0x52, 0x52, 0x4f, 0x52, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x45, 0x52, 0x52, 0x4f, 0x52, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++};
++
++int create_filter_table(struct context *ctx)
++{
++	struct mbox_request req;
++
++	req.addr = (__u64)filter_table_replace_blob;
++	req.len = ARRAY_SIZE(filter_table_replace_blob);
++	req.is_set = 1;
++	req.cmd = BPFILTER_IPT_SO_SET_REPLACE;
++	req.pid = getpid();
++
++	return handle_sockopt_request(ctx, &req);
++}
+diff --git a/net/bpfilter/filter-table.h b/net/bpfilter/filter-table.h
 new file mode 100644
-index 000000000000..3a50c6112d3b
+index 000000000000..7d5a8464456f
 --- /dev/null
-+++ b/net/bpfilter/rule.h
-@@ -0,0 +1,37 @@
++++ b/net/bpfilter/filter-table.h
+@@ -0,0 +1,18 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (c) 2021 Telegram FZ-LLC
 + * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
 + */
 +
-+#ifndef NET_BPFILTER_RULE_H
-+#define NET_BPFILTER_RULE_H
++#ifndef NET_BPFILTER_FILTER_TABLE_H
++#define NET_BPFILTER_FILTER_TABLE_H
 +
-+#include <stdint.h>
-+#include <stdbool.h>
++#include "table.h"
 +
-+#include "target.h"
-+
-+struct bpfilter_ipt_entry;
-+struct codegen;
 +struct context;
-+struct match;
 +
-+struct rule {
-+	const struct bpfilter_ipt_entry *ipt_entry;
-+	uint32_t came_from;
-+	uint32_t hook_mask;
-+	uint16_t num_matches;
-+	struct match *matches;
-+	struct target target;
-+	uint32_t index;
-+};
++extern const struct table_ops filter_table_ops;
 +
-+bool rule_has_standard_target(const struct rule *rule);
-+bool rule_is_unconditional(const struct rule *rule);
-+int init_rule(struct context *ctx, const struct bpfilter_ipt_entry *ipt_entry,
-+	      struct rule *rule);
-+int gen_inline_rule(struct codegen *ctx, const struct rule *rule);
-+void free_rule(struct rule *rule);
++int create_filter_table(struct context *ctx);
 +
-+#endif // NET_BPFILTER_RULE_H
++#endif // NET_BPFILTER_FILTER_TABLE_H
 diff --git a/tools/testing/selftests/bpf/bpfilter/.gitignore b/tools/testing/selftests/bpf/bpfilter/.gitignore
-index 89912a44109f..a934ddef58d2 100644
+index a934ddef58d2..926cbb0cfb59 100644
 --- a/tools/testing/selftests/bpf/bpfilter/.gitignore
 +++ b/tools/testing/selftests/bpf/bpfilter/.gitignore
-@@ -4,3 +4,4 @@ test_map
- test_match
+@@ -5,3 +5,4 @@ test_match
  test_xt_udp
  test_target
-+test_rule
+ test_rule
++test_codegen
 diff --git a/tools/testing/selftests/bpf/bpfilter/Makefile b/tools/testing/selftests/bpf/bpfilter/Makefile
-index 587951d14c0c..4ef52bfe2d21 100644
+index 53634699d427..9eb558dfc99a 100644
 --- a/tools/testing/selftests/bpf/bpfilter/Makefile
 +++ b/tools/testing/selftests/bpf/bpfilter/Makefile
-@@ -14,6 +14,7 @@ TEST_GEN_PROGS += test_map
- TEST_GEN_PROGS += test_match
+@@ -15,6 +15,7 @@ TEST_GEN_PROGS += test_match
  TEST_GEN_PROGS += test_xt_udp
  TEST_GEN_PROGS += test_target
-+TEST_GEN_PROGS += test_rule
+ TEST_GEN_PROGS += test_rule
++TEST_GEN_PROGS += test_codegen
  
  KSFT_KHDR_INSTALL := 1
  
-@@ -39,12 +40,15 @@ BPFILTER_MAP_SRCS := $(BPFILTERSRCDIR)/map-common.c
- BPFILTER_CODEGEN_SRCS := $(BPFILTERSRCDIR)/codegen.c $(BPFOBJ) -lelf -lz
- BPFILTER_MATCH_SRCS := $(BPFILTERSRCDIR)/match.c $(BPFILTERSRCDIR)/xt_udp.c
- BPFILTER_TARGET_SRCS := $(BPFILTERSRCDIR)/target.c
-+BPFILTER_RULE_SRCS := $(BPFILTERSRCDIR)/rule.c
- 
- BPFILTER_COMMON_SRCS := $(BPFILTER_MAP_SRCS) $(BPFILTER_CODEGEN_SRCS)
+@@ -46,9 +47,11 @@ BPFILTER_COMMON_SRCS := $(BPFILTER_MAP_SRCS) $(BPFILTER_CODEGEN_SRCS)
  BPFILTER_COMMON_SRCS += $(BPFILTERSRCDIR)/context.c $(BPFILTERSRCDIR)/logger.c
  BPFILTER_COMMON_SRCS += $(BPFILTER_MATCH_SRCS) $(BPFILTER_TARGET_SRCS)
-+BPFILTER_COMMON_SRCS += $(BPFILTER_RULE_SRCS)
+ BPFILTER_COMMON_SRCS += $(BPFILTER_RULE_SRCS) $(BPFILTERSRCDIR)/table.c
++BPFILTER_COMMON_SRCS +=  $(BPFILTERSRCDIR)/filter-table.c $(BPFILTERSRCDIR)/sockopt.c
  
  $(OUTPUT)/test_map: test_map.c $(BPFILTER_MAP_SRCS)
  $(OUTPUT)/test_match: test_match.c $(BPFILTER_COMMON_SRCS)
  $(OUTPUT)/test_xt_udp: test_xt_udp.c $(BPFILTER_COMMON_SRCS)
  $(OUTPUT)/test_target: test_target.c $(BPFILTER_COMMON_SRCS)
-+$(OUTPUT)/test_rule: test_rule.c $(BPFILTER_COMMON_SRCS)
+ $(OUTPUT)/test_rule: test_rule.c $(BPFILTER_COMMON_SRCS)
++$(OUTPUT)/test_codegen: test_codegen.c $(BPFILTER_COMMON_SRCS)
 diff --git a/tools/testing/selftests/bpf/bpfilter/bpfilter_util.h b/tools/testing/selftests/bpf/bpfilter/bpfilter_util.h
-index 0d6a6bee5514..8dd7911fa06f 100644
+index 8dd7911fa06f..846b50bdab07 100644
 --- a/tools/testing/selftests/bpf/bpfilter/bpfilter_util.h
 +++ b/tools/testing/selftests/bpf/bpfilter/bpfilter_util.h
-@@ -4,6 +4,7 @@
+@@ -3,12 +3,39 @@
+ #ifndef BPFILTER_UTIL_H
  #define BPFILTER_UTIL_H
  
++#include <linux/bpf.h>
  #include <linux/netfilter/x_tables.h>
-+#include <linux/netfilter_ipv4/ip_tables.h>
+ #include <linux/netfilter_ipv4/ip_tables.h>
  
  #include <stdio.h>
  #include <stdint.h>
-@@ -42,4 +43,11 @@ static inline void init_error_target(struct xt_error_target *ipt_target,
- 		 error_name);
- }
- 
-+static inline void init_standard_entry(struct ipt_entry *entry, __u16 matches_size)
+ #include <string.h>
++#include <sys/syscall.h>
++#include <unistd.h>
++
++static inline int sys_bpf(int cmd, union bpf_attr *attr, unsigned int size)
 +{
-+	memset(entry, 0, sizeof(*entry));
-+	entry->target_offset = sizeof(*entry) + matches_size;
-+	entry->next_offset = sizeof(*entry) + matches_size + sizeof(struct xt_standard_target);
++	return syscall(SYS_bpf, cmd, attr, size);
 +}
 +
- #endif // BPFILTER_UTIL_H
-diff --git a/tools/testing/selftests/bpf/bpfilter/test_rule.c b/tools/testing/selftests/bpf/bpfilter/test_rule.c
++static inline int bpf_prog_test_run(int fd, const void *data,
++				    unsigned int data_size, uint32_t *retval)
++{
++	union bpf_attr attr = {};
++	int r;
++
++	attr.test.prog_fd = fd;
++	attr.test.data_in = (uintptr_t)data;
++	attr.test.data_size_in = data_size;
++	attr.test.repeat = 1000000;
++
++	r = sys_bpf(BPF_PROG_TEST_RUN, &attr, sizeof(attr));
++
++	if (retval)
++		*retval = attr.test.retval;
++
++	return r;
++}
+ 
+ static inline void init_entry_match(struct xt_entry_match *match,
+ 				    uint16_t size, uint8_t revision,
+diff --git a/tools/testing/selftests/bpf/bpfilter/test_codegen.c b/tools/testing/selftests/bpf/bpfilter/test_codegen.c
 new file mode 100644
-index 000000000000..db2cc7c5586a
+index 000000000000..9f11b7b8a126
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/bpfilter/test_rule.c
-@@ -0,0 +1,56 @@
++++ b/tools/testing/selftests/bpf/bpfilter/test_codegen.c
+@@ -0,0 +1,338 @@
 +// SPDX-License-Identifier: GPL-2.0
 +
 +#define _GNU_SOURCE
 +
-+#include "rule.h"
-+
++#include <linux/bpf.h>
 +#include <linux/bpfilter.h>
++
 +#include <linux/err.h>
-+
-+#include <linux/netfilter_ipv4/ip_tables.h>
-+
-+#include <stdio.h>
-+#include <stdlib.h>
++#include <linux/pkt_cls.h>
 +
 +#include "../../kselftest_harness.h"
 +
++#include <stdint.h>
++
++#include "codegen.h"
 +#include "context.h"
++#include "filter-table.h"
 +#include "logger.h"
-+#include "rule.h"
++#include "table.h"
 +
 +#include "bpfilter_util.h"
 +
-+FIXTURE(test_standard_rule)
++FIXTURE(test_codegen)
 +{
 +	struct context ctx;
-+	struct {
-+		struct ipt_entry entry;
-+		struct xt_standard_target target;
-+	} entry;
-+	struct rule rule;
++	struct shared_codegen shared_codegen;
++	struct codegen codegen;
++	struct table *table;
++	int prog_fd;
++	uint32_t retval;
++	union bpf_attr attr;
 +};
 +
-+FIXTURE_SETUP(test_standard_rule)
++FIXTURE_VARIANT(test_codegen)
 +{
-+	const int verdict = BPFILTER_NF_ACCEPT;
++	const struct bpfilter_ipt_replace *replace_blob;
++	size_t replace_blob_size;
++	const uint8_t *packet;
++	size_t packet_size;
++	enum bpf_prog_type prog_type;
++	int hook;
++	int expected_retval;
++};
 +
++/*
++ *  Generated by iptables-save v1.8.2 on Sat May  8 05:22:41 2021
++ * *filter
++ * :INPUT ACCEPT [0:0]
++ * :FORWARD ACCEPT [0:0]
++ * :OUTPUT ACCEPT [0:0]
++ * -A INPUT -s 1.1.1.1/32 -d 2.2.2.2/32 -j DROP
++ * -A INPUT -s 2.2.0.0/16 -d 3.0.0.0/8 -j DROP
++ * -A INPUT -p udp -m udp --sport 100 --dport 500 -j DROP
++ * COMMIT
++ */
++
++static const uint8_t user_defined_chain_blob[] = {
++	0x66, 0x69, 0x6c, 0x74, 0x65, 0x72, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x0e, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00,
++	0x70, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x90, 0x02, 0x00, 0x00,
++	0x28, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0xf8, 0x01, 0x00, 0x00,
++	0x90, 0x02, 0x00, 0x00, 0x28, 0x03, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00,
++	0xe0, 0x26, 0x99, 0xca, 0x67, 0x55, 0x00, 0x00,
++	0x01, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02, 0x02,
++	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x70, 0x00, 0x98, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
++	0x02, 0x02, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00,
++	0xff, 0xff, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x70, 0x00, 0x98, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0xa0, 0x00, 0xc8, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x30, 0x00, 0x75, 0x64, 0x70, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x64, 0x00, 0x64, 0x00, 0xf4, 0x01, 0xf4, 0x01,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x70, 0x00, 0x98, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0xfe, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x70, 0x00, 0x98, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0xfe, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x70, 0x00, 0x98, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0xfe, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x70, 0x00, 0xb0, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x40, 0x00, 0x45, 0x52, 0x52, 0x4f, 0x52, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x45, 0x52, 0x52, 0x4f, 0x52, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++};
++
++// Generated by scapy
++// Ether(src='00:11:22:33:44:55',dst='66:77:88:99:aa:bb')/IP(src='1.1.1.1',dst='2.2.2.2')/UDP(sport=100,dport=200)
++static const uint8_t udp_packet_1[] = {
++	0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0x00, 0x11,
++	0x22, 0x33, 0x44, 0x55, 0x08, 0x00, 0x45, 0x00,
++	0x00, 0x1c, 0x00, 0x01, 0x00, 0x00, 0x40, 0x11,
++	0x74, 0xcb, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02,
++	0x02, 0x02, 0x00, 0x64, 0x00, 0xc8, 0x00, 0x08,
++	0xf8, 0xac,
++};
++
++// Ether(src='00:11:22:33:44:55',dst='66:77:88:99:aa:bb')/IP(src='2.2.2.2',dst='3.1.4.1')/UDP(sport=100,dport=200)
++static const uint8_t udp_packet_2[] = {
++	0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0x00, 0x11,
++	0x22, 0x33, 0x44, 0x55, 0x08, 0x00, 0x45, 0x00,
++	0x00, 0x1c, 0x00, 0x01, 0x00, 0x00, 0x40, 0x11,
++	0x6f, 0xcb, 0x02, 0x02, 0x02, 0x02, 0x03, 0x01,
++	0x04, 0x01, 0x00, 0x64, 0x00, 0xc8, 0x00, 0x08,
++	0xf3, 0xac,
++};
++
++// Ether(src='00:11:22:33:44:55',dst='66:77:88:99:aa:bb')/IP(src='2.7.1.8',dst='3.1.4.1')/UDP(sport=100,dport=500)
++static const uint8_t udp_packet_3[] = {
++	0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0x00, 0x11,
++	0x22, 0x33, 0x44, 0x55, 0x08, 0x00, 0x45, 0x00,
++	0x00, 0x1c, 0x00, 0x01, 0x00, 0x00, 0x40, 0x11,
++	0x70, 0xc0, 0x02, 0x07, 0x01, 0x08, 0x03, 0x01,
++	0x04, 0x01, 0x00, 0x64, 0x01, 0xf4, 0x00, 0x08,
++	0xf3, 0x75,
++};
++
++// Ether(src='00:11:22:33:44:55',dst='66:77:88:99:aa:bb')/IP(src='5.5.5.5',dst='5.5.5.5')/UDP(sport=300,dport=300)
++static const uint8_t udp_packet_4[] = {
++	0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0x00, 0x11,
++	0x22, 0x33, 0x44, 0x55, 0x08, 0x00, 0x45, 0x00,
++	0x00, 0x1c, 0x00, 0x01, 0x00, 0x00, 0x40, 0x11,
++	0x66, 0xbd, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05,
++	0x05, 0x05, 0x01, 0x2c, 0x01, 0x2c, 0x00, 0x08,
++	0xe9, 0x72,
++};
++
++FIXTURE_VARIANT_ADD(test_codegen, drop_by_ip_tc) {
++	.replace_blob = (const struct bpfilter_ipt_replace *)user_defined_chain_blob,
++	.replace_blob_size = ARRAY_SIZE(user_defined_chain_blob),
++	.packet = udp_packet_1,
++	.packet_size = ARRAY_SIZE(udp_packet_1),
++	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
++	.hook = BPFILTER_INET_HOOK_LOCAL_IN,
++	.expected_retval = TC_ACT_SHOT,
++};
++
++FIXTURE_VARIANT_ADD(test_codegen, drop_by_net_tc) {
++	.replace_blob = (const struct bpfilter_ipt_replace *)user_defined_chain_blob,
++	.replace_blob_size = ARRAY_SIZE(user_defined_chain_blob),
++	.packet = udp_packet_2,
++	.packet_size = ARRAY_SIZE(udp_packet_2),
++	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
++	.hook = BPFILTER_INET_HOOK_LOCAL_IN,
++	.expected_retval = TC_ACT_SHOT,
++};
++
++FIXTURE_VARIANT_ADD(test_codegen, drop_by_udp_port_tc) {
++	.replace_blob = (const struct bpfilter_ipt_replace *)user_defined_chain_blob,
++	.replace_blob_size = ARRAY_SIZE(user_defined_chain_blob),
++	.packet = udp_packet_3,
++	.packet_size = ARRAY_SIZE(udp_packet_3),
++	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
++	.hook = BPFILTER_INET_HOOK_LOCAL_IN,
++	.expected_retval = TC_ACT_SHOT,
++};
++
++FIXTURE_VARIANT_ADD(test_codegen, accept_tc) {
++	.replace_blob = (const struct bpfilter_ipt_replace *)user_defined_chain_blob,
++	.replace_blob_size = ARRAY_SIZE(user_defined_chain_blob),
++	.packet = udp_packet_4,
++	.packet_size = ARRAY_SIZE(udp_packet_4),
++	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
++	.hook = BPFILTER_INET_HOOK_LOCAL_IN,
++	.expected_retval = TC_ACT_UNSPEC,
++};
++
++FIXTURE_SETUP(test_codegen)
++{
 +	logger_set_file(stderr);
 +	ASSERT_EQ(create_context(&self->ctx), 0);
 +
-+	init_standard_entry(&self->entry.entry, 0);
-+	init_standard_target(&self->entry.target, 0, -verdict - 1);
-+}
++	create_shared_codegen(&self->shared_codegen);
++	ASSERT_EQ(0, create_codegen(&self->codegen, variant->prog_type));
 +
-+FIXTURE_TEARDOWN(test_standard_rule)
++	self->codegen.ctx = &self->ctx;
++	self->codegen.shared_codegen = &self->shared_codegen;
++	self->codegen.iptables_hook = variant->hook;
++
++	self->table = filter_table_ops.create(&self->ctx, variant->replace_blob);
++	ASSERT_FALSE(IS_ERR_OR_NULL(self->table));
++
++	ASSERT_EQ(0, try_codegen(&self->codegen, self->table));
++
++	self->prog_fd = load_img(&self->codegen);
++	ASSERT_GT(self->prog_fd, -1)
++	TH_LOG("load_img(): '%s': %s", STRERR(self->prog_fd),
++	       self->codegen.log_buf);
++};
++
++FIXTURE_TEARDOWN(test_codegen)
 +{
-+	free_rule(&self->rule);
++	filter_table_ops.free(self->table);
++	unload_img(&self->codegen);
++	free_codegen(&self->codegen);
 +	free_context(&self->ctx);
-+}
++	if (self->prog_fd > -1)
++		close(self->prog_fd);
++};
 +
-+TEST_F(test_standard_rule, init)
++TEST_F(test_codegen, test_run)
 +{
-+	ASSERT_EQ(0, init_rule(&self->ctx, (const struct bpfilter_ipt_entry *)&self->entry.entry,
-+			       &self->rule));
++	EXPECT_EQ(0, bpf_prog_test_run(self->prog_fd, variant->packet,
++				       variant->packet_size, &self->retval))
++	TH_LOG("cannot bpf_prog_test_run(): '%s'", STRERR(errno));
++	EXPECT_EQ(self->retval, variant->expected_retval)
++	TH_LOG("expected: %d, actual: %d\n", variant->expected_retval,
++	       self->retval);
 +}
 +
 +TEST_HARNESS_MAIN
