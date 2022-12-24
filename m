@@ -2,29 +2,36 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C63CEC4332F
-	for <bpf@archiver.kernel.org>; Sat, 24 Dec 2022 02:12:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5B87C4332F
+	for <bpf@archiver.kernel.org>; Sat, 24 Dec 2022 06:23:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbiLXCMc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 23 Dec 2022 21:12:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
+        id S229826AbiLXGXI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 24 Dec 2022 01:23:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbiLXCMb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 23 Dec 2022 21:12:31 -0500
-X-Greylist: delayed 4200 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Dec 2022 18:12:28 PST
-Received: from 4.mo546.mail-out.ovh.net (4.mo546.mail-out.ovh.net [46.105.32.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52CCDF53
-        for <bpf@vger.kernel.org>; Fri, 23 Dec 2022 18:12:28 -0800 (PST)
-Received: from ex4.mail.ovh.net (unknown [10.111.208.63])
-        by mo546.mail-out.ovh.net (Postfix) with ESMTPS id 920EF24CA9;
-        Fri, 23 Dec 2022 23:42:40 +0000 (UTC)
-Received: from dev-fedora-x86-64.naccy.de (37.65.8.229) by
- DAG10EX1.indiv4.local (172.16.2.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Sat, 24 Dec 2022 00:42:38 +0100
-From:   Quentin Deslandes <qde@naccy.de>
-To:     <qde@naccy.de>
-CC:     <kernel-team@meta.com>, Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S229503AbiLXGXG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 24 Dec 2022 01:23:06 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5958164BC;
+        Fri, 23 Dec 2022 22:23:04 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NfDW62ZMgz4f3k6G;
+        Sat, 24 Dec 2022 14:22:58 +0800 (CST)
+Received: from [10.67.109.184] (unknown [10.67.109.184])
+        by APP2 (Coremail) with SMTP id Syh0CgC3XevBmqZjip+oAQ--.41973S2;
+        Sat, 24 Dec 2022 14:22:59 +0800 (CST)
+Message-ID: <b3fb772a-db85-05ca-a1bf-4781526fae1d@huaweicloud.com>
+Date:   Sat, 24 Dec 2022 14:22:57 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [RFC PATCH RESEND bpf-next 0/4] Support bpf trampoline for RV64
+Content-Language: en-US
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <martin.lau@linux.dev>,
@@ -33,255 +40,66 @@ CC:     <kernel-team@meta.com>, Alexei Starovoitov <ast@kernel.org>,
         KP Singh <kpsingh@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Dmitrii Banshchikov <me@ubique.spb.ru>,
-        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH bpf-next v3 00/16] bpfilter
-Date:   Sat, 24 Dec 2022 00:40:08 +0100
-Message-ID: <20221223234127.474463-1-qde@naccy.de>
-X-Mailer: git-send-email 2.38.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [37.65.8.229]
-X-ClientProxiedBy: CAS6.indiv4.local (172.16.1.6) To DAG10EX1.indiv4.local
- (172.16.2.91)
-X-Ovh-Tracer-Id: 4391572586693783159
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -85
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrheefgddufecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogetfedtuddqtdduucdludehmdenucfjughrpefhvfevufffkffoggfgtghisehtkeertdertddtnecuhfhrohhmpefsuhgvnhhtihhnucffvghslhgrnhguvghsuceoqhguvgesnhgrtggthidruggvqeenucggtffrrghtthgvrhhnpeejgeehueefjeeihfeugefftdehtdeikeduvdettefgieekffekuefgveekgedvheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhusghunhhtuhdrtghomhenucfkphepuddvjedrtddrtddruddpfeejrdeihedrkedrvddvleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehquggvsehnrggttgihrdguvgeqpdhnsggprhgtphhtthhopedupdhrtghpthhtohephhgrohhluhhosehgohhoghhlvgdrtghomhdpsghpfhesvhhgvghrrdhkvghrnhgvlhdrohhrghdplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhmvgesuhgsihhquhgvrdhsphgsrdhruhdpshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhmhihkohhlrghlsehfsgdrtghomhdpphgrsggvnhhisehrvgguhhgrthdrtghomhdpkhhusggrsehkvg
- hrnhgvlhdrohhrghdpvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdpuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdpjhholhhsrgeskhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhsughfsehgohhoghhlvgdrtghomhdpkhhpshhinhhghheskhgvrhhnvghlrdhorhhgpdhjohhhnhdrfhgrshhtrggsvghnugesghhmrghilhdrtghomhdphihhshesfhgsrdgtohhmpdhsohhngheskhgvrhhnvghlrdhorhhgpdhmrghrthhinhdrlhgruheslhhinhhugidruggvvhdprghnughrihhisehkvghrnhgvlhdrohhrghdpuggrnhhivghlsehiohhgvggrrhgsohigrdhnvghtpdgrshhtsehkvghrnhgvlhdrohhrghdpkhgvrhhnvghlqdhtvggrmhesmhgvthgrrdgtohhmpdhnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheegiedpmhhouggvpehsmhhtphhouhht
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Pu Lehui <pulehui@huawei.com>
+References: <20221220021319.1655871-1-pulehui@huaweicloud.com>
+ <87ili3a8zy.fsf@all.your.base.are.belong.to.us>
+From:   Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <87ili3a8zy.fsf@all.your.base.are.belong.to.us>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgC3XevBmqZjip+oAQ--.41973S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7XrW3Jr4fCF1kGFyUZw1rCrg_yoWfZrgEkr
+        ZxtrySvr45ta1Dtw1Ygw43urZxXr40qFyvyrWUXFZ2k395ZF1kXFn8u39xArWfZ3ySqFnx
+        tF98AFyxAasFvjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbIxYFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
+        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
+        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+        7IU13rcDUUUUU==
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The patchset is based on the patches from David S. Miller [1],
-Daniel Borkmann [2], and Dmitrii Banshchikov [3].
 
-The main goal of the patchset is to prepare bpfilter for
-iptables' configuration blob parsing and code generation.
 
-The patchset introduces data structures and code for matches,
-targets, rules and tables. Beside that the code generation
-is introduced.
+On 2022/12/22 21:00, Björn Töpel wrote:
+> Pu Lehui <pulehui@huaweicloud.com> writes:
+> 
+>> BPF trampoline is the critical infrastructure of the bpf
+>> subsystem, acting as a mediator between kernel functions
+>> and BPF programs. Numerous important features, such as
+>> using ebpf program for zero overhead kernel introspection,
+>> rely on this key component. We can't wait to support bpf
+>> trampoline on RV64. The implementation of bpf trampoline
+>> was closely to x86 and arm64 for future development.
+> 
+> Thank you for working on this! BPF trampoline is the "missing piece"
+> from getting proper kfunc support.
+> 
+> Unfortunately, I wont be able to do a proper review until next week.
+> 
 
-The first version of the code generation supports only "inline"
-mode - all chains and their rules emit instructions in linear
-approach.
+Take your time, it might take several rounds of optimization. Yep, riscv 
+bpf will look more complete when bpf trampoline and kfunc are supported.
 
-Things that are not implemented yet:
-  1) The process of switching from the previous BPF programs to the
-     new set isn't atomic.
-  2) No support of device ifindex - it's hardcoded
-  3) No helper subprog for counters update
+Anyway, have a nice christmas holidays.😄
 
-Another problem is using iptables' blobs for tests and filter
-table initialization. While it saves lines something more
-maintainable should be done here.
+Lehui
 
-The plan for the next iteration:
-  1) Add a helper program for counters update
-  2) Handle ifindex
+> 
+> Happy holidays,
+> Björn
 
-Patches 1/2 adds definitions of the used types.
-Patch 3 adds logging to bpfilter.
-Patch 4 adds an associative map.
-Patch 5 add runtime context structure.
-Patches 6/7 add code generation infrastructure and TC code generator.
-Patches 8/9/10/11/12 add code for matches, targets, rules and table.
-Patch 13 adds code generation for table.
-Patch 14 handles hooked setsockopt(2) calls.
-Patch 15 adds filter table
-Patch 16 uses prepared code in main().
-
-Due to poor hardware availability on my side, I've not been able to
-benchmark those changes. I plan to get some numbers for the next iteration.
-
-FORWARD filter chain is now supported, however, it's attached to
-TC INGRESS along with INPUT filter chain. This is due to XDP not supporting
-multiple programs to be attached. I could generate a single program
-out of both INPUT and FORWARD chains, but that would prevent another
-BPF program to be attached to the interface anyway. If a solution
-exists to attach both those programs to XDP while allowing for other
-programs to be attached, it requires more investigation. In the meantime,
-INPUT and FORWARD filtering is supported using TC.
-
-Most of the code in this series was written by Dmitrii Banshchikov,
-my changes are limited to v3. I've tried to reflect this fact in the
-commits by adding 'Co-developed-by:' and 'Signed-off-by:' for Dmitrii,
-please tell me this was done the wrong way.
-
-v2 -> v3
-Chains:
-  * Add support for FORWARD filter chain.
-  * Add generation of BPF bytecode to assess whether a packet should be
-    forwarded or not, using bpf_fib_lookup().
-  * Allow for multiple programs to be attached to TC.
-  * Allow for multiple TC hooks to be used.
-Code generation:
-  * Remove duplicated BPF bytecode generation.
-  * Fix a bug regarding jump offset during generation.
-  * Remove support for XDP from the series, as it's not currently
-    used.
-Table:
-  * Add new filter_table_update_counters() virtual call. It updates
-    the table's counter stored in the ipt_entry structure. This way,
-    when iptables tries to fetch the values of the counters, bpfilter only
-    has to copy the ipt_entry cached in the table structure.
-Logging:
-  * Refactor logging primitives.
-Sockopts:
-  * Add support for userspace counters querying.
-Rule:
-  * Store the rule's index inside struct rule, to each counters'
-    map usage.
-
-v1 -> v2
-Maps:
-  * Use map_upsert instead of separate map_insert and map_update
-Matches:
-  * Add a new virtual call - gen_inline. The call is used for
-  * inline generating of a rule's match.
-Targets:
-  * Add a new virtual call - gen_inline. The call is used for inline
-    generating of a rule's target.
-Rules:
-  * Add code generation for rules
-Table:
-  * Add struct table_ops
-  * Add map for table_ops
-  * Add filter table
-  * Reorganize the way filter table is initialized
-Sockopts:
-  * Install/uninstall BPF programs while handling
-    IPT_SO_SET_REPLACE
-Code generation:
-  * Add first version of the code generation
-Dependencies:
-  * Add libbpf
-
-v0 -> v1
-IO:
-  * Use ssize_t in pvm_read, pvm_write for total_bytes
-  * Move IO functions into sockopt.c and main.c
-Logging:
-  * Use LOGLEVEL_EMERG, LOGLEVEL_NOTICE, LOGLEVE_DEBUG
-    while logging to /dev/kmsg
-  * Prepend log message with <n> where n is log level
-  * Conditionally enable BFLOG_DEBUG messages
-  * Merge bflog.{h,c} into context.h
-Matches:
-  * Reorder fields in struct match_ops for tight packing
-  * Get rid of struct match_ops_map
-  * Rename udp_match_ops to xt_udp
-  * Use XT_ALIGN macro
-  * Store payload size in match size
-  * Move udp match routines into a separate file
-Targets:
-  * Reorder fields in struct target_ops for tight packing
-  * Get rid of struct target_ops_map
-  * Add comments for convert_verdict function
-Rules:
-  * Add validation
-Tables:
-  * Combine table_map and table_list into table_index
-  * Add validation
-Sockopts:
-  * Handle IPT_SO_GET_REVISION_TARGET
-
-1. https://lore.kernel.org/patchwork/patch/902785/
-2. https://lore.kernel.org/patchwork/patch/902783/
-3. https://kernel.ubuntu.com/~cking/stress-ng/stress-ng.pdf
-
-Quentin Deslandes (16):
-  bpfilter: add types for usermode helper
-  tools: add bpfilter usermode helper header
-  bpfilter: add logging facility
-  bpfilter: add map container
-  bpfilter: add runtime context
-  bpfilter: add BPF bytecode generation infrastructure
-  bpfilter: add support for TC bytecode generation
-  bpfilter: add match structure
-  bpfilter: add support for src/dst addr and ports
-  bpfilter: add target structure
-  bpfilter: add rule structure
-  bpfilter: add table structure
-  bpfilter: add table code generation
-  bpfilter: add setsockopt() support
-  bpfilter: add filter table
-  bpfilter: handle setsockopt() calls
-
- include/uapi/linux/bpfilter.h                 |  154 +++
- net/bpfilter/Makefile                         |   16 +-
- net/bpfilter/codegen.c                        | 1040 +++++++++++++++++
- net/bpfilter/codegen.h                        |  183 +++
- net/bpfilter/context.c                        |  168 +++
- net/bpfilter/context.h                        |   24 +
- net/bpfilter/filter-table.c                   |  344 ++++++
- net/bpfilter/filter-table.h                   |   18 +
- net/bpfilter/logger.c                         |   52 +
- net/bpfilter/logger.h                         |   80 ++
- net/bpfilter/main.c                           |  132 ++-
- net/bpfilter/map-common.c                     |   51 +
- net/bpfilter/map-common.h                     |   19 +
- net/bpfilter/match.c                          |   55 +
- net/bpfilter/match.h                          |   37 +
- net/bpfilter/rule.c                           |  286 +++++
- net/bpfilter/rule.h                           |   37 +
- net/bpfilter/sockopt.c                        |  533 +++++++++
- net/bpfilter/sockopt.h                        |   15 +
- net/bpfilter/table.c                          |  391 +++++++
- net/bpfilter/table.h                          |   59 +
- net/bpfilter/target.c                         |  203 ++++
- net/bpfilter/target.h                         |   57 +
- net/bpfilter/xt_udp.c                         |  111 ++
- tools/include/uapi/linux/bpfilter.h           |  175 +++
- .../testing/selftests/bpf/bpfilter/.gitignore |    8 +
- tools/testing/selftests/bpf/bpfilter/Makefile |   57 +
- .../selftests/bpf/bpfilter/bpfilter_util.h    |   80 ++
- .../selftests/bpf/bpfilter/test_codegen.c     |  338 ++++++
- .../testing/selftests/bpf/bpfilter/test_map.c |   63 +
- .../selftests/bpf/bpfilter/test_match.c       |   69 ++
- .../selftests/bpf/bpfilter/test_rule.c        |   56 +
- .../selftests/bpf/bpfilter/test_target.c      |   83 ++
- .../selftests/bpf/bpfilter/test_xt_udp.c      |   48 +
- 34 files changed, 4999 insertions(+), 43 deletions(-)
- create mode 100644 net/bpfilter/codegen.c
- create mode 100644 net/bpfilter/codegen.h
- create mode 100644 net/bpfilter/context.c
- create mode 100644 net/bpfilter/context.h
- create mode 100644 net/bpfilter/filter-table.c
- create mode 100644 net/bpfilter/filter-table.h
- create mode 100644 net/bpfilter/logger.c
- create mode 100644 net/bpfilter/logger.h
- create mode 100644 net/bpfilter/map-common.c
- create mode 100644 net/bpfilter/map-common.h
- create mode 100644 net/bpfilter/match.c
- create mode 100644 net/bpfilter/match.h
- create mode 100644 net/bpfilter/rule.c
- create mode 100644 net/bpfilter/rule.h
- create mode 100644 net/bpfilter/sockopt.c
- create mode 100644 net/bpfilter/sockopt.h
- create mode 100644 net/bpfilter/table.c
- create mode 100644 net/bpfilter/table.h
- create mode 100644 net/bpfilter/target.c
- create mode 100644 net/bpfilter/target.h
- create mode 100644 net/bpfilter/xt_udp.c
- create mode 100644 tools/include/uapi/linux/bpfilter.h
- create mode 100644 tools/testing/selftests/bpf/bpfilter/.gitignore
- create mode 100644 tools/testing/selftests/bpf/bpfilter/Makefile
- create mode 100644 tools/testing/selftests/bpf/bpfilter/bpfilter_util.h
- create mode 100644 tools/testing/selftests/bpf/bpfilter/test_codegen.c
- create mode 100644 tools/testing/selftests/bpf/bpfilter/test_map.c
- create mode 100644 tools/testing/selftests/bpf/bpfilter/test_match.c
- create mode 100644 tools/testing/selftests/bpf/bpfilter/test_rule.c
- create mode 100644 tools/testing/selftests/bpf/bpfilter/test_target.c
- create mode 100644 tools/testing/selftests/bpf/bpfilter/test_xt_udp.c
-
---
-2.38.1
