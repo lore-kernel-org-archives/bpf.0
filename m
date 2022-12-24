@@ -2,26 +2,26 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF8CEC4332F
-	for <bpf@archiver.kernel.org>; Sat, 24 Dec 2022 00:12:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 008E1C4167B
+	for <bpf@archiver.kernel.org>; Sat, 24 Dec 2022 00:12:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236241AbiLXAMe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 23 Dec 2022 19:12:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42628 "EHLO
+        id S233600AbiLXAMh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 23 Dec 2022 19:12:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232728AbiLXAMb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 23 Dec 2022 19:12:31 -0500
-X-Greylist: delayed 453 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Dec 2022 16:12:23 PST
-Received: from 5.mo545.mail-out.ovh.net (5.mo545.mail-out.ovh.net [46.105.46.236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C11613F9E
-        for <bpf@vger.kernel.org>; Fri, 23 Dec 2022 16:12:22 -0800 (PST)
-Received: from ex4.mail.ovh.net (unknown [10.111.172.143])
-        by mo545.mail-out.ovh.net (Postfix) with ESMTPS id 3E70125F95;
-        Sat, 24 Dec 2022 00:04:33 +0000 (UTC)
+        with ESMTP id S233226AbiLXAMd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 23 Dec 2022 19:12:33 -0500
+X-Greylist: delayed 471 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Dec 2022 16:12:28 PST
+Received: from 1.mo546.mail-out.ovh.net (1.mo546.mail-out.ovh.net [178.33.109.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB3717420
+        for <bpf@vger.kernel.org>; Fri, 23 Dec 2022 16:12:27 -0800 (PST)
+Received: from ex4.mail.ovh.net (unknown [10.108.1.236])
+        by mo546.mail-out.ovh.net (Postfix) with ESMTPS id 9EFBA277BB;
+        Sat, 24 Dec 2022 00:04:40 +0000 (UTC)
 Received: from dev-fedora-x86-64.naccy.de (37.65.8.229) by
  DAG10EX1.indiv4.local (172.16.2.91) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Sat, 24 Dec 2022 01:04:31 +0100
+ 15.1.2507.16; Sat, 24 Dec 2022 01:04:39 +0100
 From:   Quentin Deslandes <qde@naccy.de>
 To:     <qde@naccy.de>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -42,9 +42,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
         <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
         Kernel Team <kernel-team@meta.com>
-Subject: [PATCH bpf-next v3 06/16] bpfilter: add BPF bytecode generation infrastructure
-Date:   Sat, 24 Dec 2022 01:03:52 +0100
-Message-ID: <20221224000402.476079-7-qde@naccy.de>
+Subject: [PATCH bpf-next v3 12/16] bpfilter: add table structure
+Date:   Sat, 24 Dec 2022 01:03:58 +0100
+Message-ID: <20221224000402.476079-13-qde@naccy.de>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221224000402.476079-1-qde@naccy.de>
 References: <20221224000402.476079-1-qde@naccy.de>
@@ -54,867 +54,651 @@ Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [37.65.8.229]
 X-ClientProxiedBy: CAS6.indiv4.local (172.16.1.6) To DAG10EX1.indiv4.local
  (172.16.2.91)
-X-Ovh-Tracer-Id: 4760586281833131639
+X-Ovh-Tracer-Id: 4762838084792544887
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: -85
 X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrheefgddujecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogetfedtuddqtdduucdludehmdenucfjughrpefhvfevufffkffojghfggfgtghisehtkeertdertddtnecuhfhrohhmpefsuhgvnhhtihhnucffvghslhgrnhguvghsuceoqhguvgesnhgrtggthidruggvqeenucggtffrrghtthgvrhhnpeduledugfeileetvdelieeujedttedtvedtgfetteevfeejhfffkeeujeetfffgudenucfkphepuddvjedrtddrtddruddpfeejrdeihedrkedrvddvleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehquggvsehnrggttgihrdguvgeqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepjhholhhsrgeskhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdgsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpmhgvsehusghiqhhuvgdrshhpsgdrrhhupdhshhhurghhsehkvghrnhgvlhdrohhrghdpmhihkhholhgrlhesfhgsrdgtohhmpdhprggsvghnihesrhgvughhrghtrdgtohhmpdhkuhgsrg
- eskhgvrhhnvghlrdhorhhgpdgvughumhgriigvthesghhoohhglhgvrdgtohhmpdgurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhkvghrnhgvlhdqthgvrghmsehmvghtrgdrtghomhdphhgrohhluhhosehgohhoghhlvgdrtghomhdpshgufhesghhoohhglhgvrdgtohhmpdhkphhsihhnghhhsehkvghrnhgvlhdrohhrghdpjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdihhhhssehfsgdrtghomhdpshhonhhgsehkvghrnhgvlhdrohhrghdpmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdgrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdgurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprghstheskhgvrhhnvghlrdhorhhgpdhnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheeghedpmhhouggvpehsmhhtphhouhht
+ eskhgvrhhnvghlrdhorhhgpdgvughumhgriigvthesghhoohhglhgvrdgtohhmpdgurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhkvghrnhgvlhdqthgvrghmsehmvghtrgdrtghomhdphhgrohhluhhosehgohhoghhlvgdrtghomhdpshgufhesghhoohhglhgvrdgtohhmpdhkphhsihhnghhhsehkvghrnhgvlhdrohhrghdpjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdihhhhssehfsgdrtghomhdpshhonhhgsehkvghrnhgvlhdrohhrghdpmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdgrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdgurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprghstheskhgvrhhnvghlrdhorhhgpdhnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheegiedpmhhouggvpehsmhhtphhouhht
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Prepare codegen infrastructure to be used by matches, targets, rules,
-and tables.
+The table_ops structure describes a set of operations for an individual
+table type.
 
-struct codegen contains an array of struct bpf_insn representing the
-generated BPF program.
+Tables support the following set of operations:
+- create: create an instance of a table from an ipt_replace blob.
+- codegen: generate eBPF bytecode for a table.
+- install: load BPF maps, progs, and attach them.
+- uninstall: detach loaded BPF maps and progs, and unload them.
+- free: free all resources used by a table.
 
-The current infrastructure allows for multiple BPF program flavours to
-be supported (TC, XDP...). Most of the logic will be shared, but each
-flavour will be able to define its own prologue and epilogue bytecode,
-as well as packet data access. Loading and unloading flow is also
-flavour-dependent.
+Each table keeps an instance of iptables' table blob and an array of
+rules for this blob. The array of rules provides a more convenient way
+to interact with the blob's entries, while having a copy of the blob
+will ease communication with iptables.
 
-Not all required information is known during generation. This commit
-introduces two bpfilter concepts to resolve this issue:
-- Fixup: placeholder to replace once code generation is complete. For
-example, fixup is used to jump to the next rule. The next rule's
-offset is only known once it has been generated.
-- Relocation: placeholder to replace before loading the BPF program. BPF
-maps are an example of features using relocation. Maps are created
-before the programs are loaded, so their FD is only known at that
-point in time.
-
-Subprogs are required to support user-defined chains and helper
-subprograms. All already generated subprogs are stored in subprogs
-array. This sorted array acts as an index. All subprogs awaiting
-the generation phase are stored in awaiting_subprogs list.
-
-struct shared_codegen is used to share data between various BPF programs
-created by BPF filter. The only currently supported shared data is the
-map containing the counters for each rule defined: a unique map shared
-between all the programs stores the counters for all the bpfilter
-programs.
-
-Besides that, there is a runtime_context struct that might be used to
-store frequently required data such as the size of the packet and pointer to
-L3/L4 headers. This context is stored on the stack and there are macros
-to access individual fields of this struct.  Immediately after
-runtime_context on stack, there is a scratchpad area.
-
-The calling convention follows the BPF calling convention with a couple
-of additions:
-* CODEGEN_REG_CTX(BPF_REG_9) is a pointer to the program context
-* CODEGEN_REG_RUNTIME_CTX(BPF_REG_8) is a pointer to the runtime context
+All tables created are stored in a map, used for lookups. Also, all
+tables are linked into a list to ease cleanup.
 
 Co-developed-by: Dmitrii Banshchikov <me@ubique.spb.ru>
 Signed-off-by: Dmitrii Banshchikov <me@ubique.spb.ru>
 Signed-off-by: Quentin Deslandes <qde@naccy.de>
 ---
- net/bpfilter/Makefile                         |  12 +-
- net/bpfilter/codegen.c                        | 530 ++++++++++++++++++
- net/bpfilter/codegen.h                        | 181 ++++++
- .../testing/selftests/bpf/bpfilter/.gitignore |   1 +
- tools/testing/selftests/bpf/bpfilter/Makefile |  19 +
- 5 files changed, 742 insertions(+), 1 deletion(-)
- create mode 100644 net/bpfilter/codegen.c
- create mode 100644 net/bpfilter/codegen.h
+ net/bpfilter/Makefile                         |   2 +-
+ net/bpfilter/context.c                        |  64 +++
+ net/bpfilter/context.h                        |   4 +
+ net/bpfilter/table.c                          | 391 ++++++++++++++++++
+ net/bpfilter/table.h                          |  59 +++
+ tools/testing/selftests/bpf/bpfilter/Makefile |   2 +-
+ 6 files changed, 520 insertions(+), 2 deletions(-)
+ create mode 100644 net/bpfilter/table.c
+ create mode 100644 net/bpfilter/table.h
 
 diff --git a/net/bpfilter/Makefile b/net/bpfilter/Makefile
-index 9878f5fd8152..ac039f1fac34 100644
+index 759fb6c847d1..9f5b46c70a41 100644
 --- a/net/bpfilter/Makefile
 +++ b/net/bpfilter/Makefile
-@@ -3,11 +3,21 @@
- # Makefile for the Linux BPFILTER layer.
- #
- 
-+LIBBPF_SRCS = $(srctree)/tools/lib/bpf/
-+LIBBPF_A = $(obj)/libbpf.a
-+LIBBPF_OUT = $(abspath $(obj))
-+
-+$(LIBBPF_A):
-+	$(Q)$(MAKE) -C $(LIBBPF_SRCS) O=$(LIBBPF_OUT)/ OUTPUT=$(LIBBPF_OUT)/ $(LIBBPF_OUT)/libbpf.a
-+
+@@ -13,7 +13,7 @@ $(LIBBPF_A):
  userprogs := bpfilter_umh
  bpfilter_umh-objs := main.o logger.o map-common.o
--bpfilter_umh-objs += context.o
-+bpfilter_umh-objs += context.o codegen.o
-+bpfilter_umh-userldlibs := $(LIBBPF_A) -lelf -lz
+ bpfilter_umh-objs += context.o codegen.o
+-bpfilter_umh-objs += match.o xt_udp.o target.o rule.o
++bpfilter_umh-objs += match.o xt_udp.o target.o rule.o table.o
+ bpfilter_umh-userldlibs := $(LIBBPF_A) -lelf -lz
  userccflags += -I $(srctree)/tools/include/ -I $(srctree)/tools/include/uapi
  
-+$(obj)/bpfilter_umh: $(LIBBPF_A)
+diff --git a/net/bpfilter/context.c b/net/bpfilter/context.c
+index ac07b678baa7..81c9751a2a2d 100644
+--- a/net/bpfilter/context.c
++++ b/net/bpfilter/context.c
+@@ -9,6 +9,7 @@
+ #include "context.h"
+ 
+ #include <linux/kernel.h>
++#include <linux/list.h>
+ 
+ #include <string.h>
+ 
+@@ -72,6 +73,39 @@ static int init_target_ops_map(struct context *ctx)
+ 	return 0;
+ }
+ 
++static const struct table_ops *table_ops[] = {};
 +
- ifeq ($(CONFIG_BPFILTER_UMH), y)
- # builtin bpfilter_umh should be linked with -static
- # since rootfs isn't mounted at the time of __init
-diff --git a/net/bpfilter/codegen.c b/net/bpfilter/codegen.c
++static int init_table_ops_map(struct context *ctx)
++{
++	int r;
++
++	r = create_map(&ctx->table_ops_map, ARRAY_SIZE(table_ops));
++	if (r) {
++		BFLOG_ERR("failed to create tables map: %s", STRERR(r));
++		return r;
++	}
++
++	for (int i = 0; i < ARRAY_SIZE(table_ops); ++i) {
++		const struct table_ops *t = table_ops[i];
++
++		r = map_upsert(&ctx->table_ops_map, t->name, (void *)t);
++		if (r) {
++			BFLOG_ERR("failed to upsert in tables map: %s",
++				  STRERR(r));
++			return r;
++		}
++	}
++
++	return 0;
++}
++
++static int init_table_index(struct context *ctx)
++{
++	INIT_LIST_HEAD(&ctx->table_index.list);
++
++	return create_map(&ctx->table_index.map, ARRAY_SIZE(table_ops));
++}
++
+ int create_context(struct context *ctx)
+ {
+ 	int r;
+@@ -88,8 +122,26 @@ int create_context(struct context *ctx)
+ 		goto err_free_match_ops_map;
+ 	}
+ 
++	r = init_table_ops_map(ctx);
++	if (r) {
++		BFLOG_ERR("failed to initialize tables map: %s", STRERR(r));
++		goto err_free_target_ops_map;
++	}
++
++	r = init_table_index(ctx);
++	if (r) {
++		BFLOG_ERR("failed to initialize tables index: %s", STRERR(r));
++		goto err_free_table_ops_map;
++	}
++
+ 	return 0;
+ 
++err_free_table_ops_map:
++	free_map(&ctx->table_ops_map);
++
++err_free_target_ops_map:
++	free_map(&ctx->target_ops_map);
++
+ err_free_match_ops_map:
+ 	free_map(&ctx->match_ops_map);
+ 
+@@ -98,6 +150,18 @@ int create_context(struct context *ctx)
+ 
+ void free_context(struct context *ctx)
+ {
++	struct list_head *t;
++	struct list_head *n;
++
++	list_for_each_safe(t, n, &ctx->table_index.list) {
++		struct table *table;
++
++		table = list_entry(t, struct table, list);
++		table->table_ops->uninstall(ctx, table);
++		table->table_ops->free(table);
++	}
++	free_map(&ctx->table_index.map);
++	free_map(&ctx->table_ops_map);
+ 	free_map(&ctx->target_ops_map);
+ 	free_map(&ctx->match_ops_map);
+ }
+diff --git a/net/bpfilter/context.h b/net/bpfilter/context.h
+index f9c34a9968b8..b0e91e37d057 100644
+--- a/net/bpfilter/context.h
++++ b/net/bpfilter/context.h
+@@ -9,9 +9,13 @@
+ 
+ #include <search.h>
+ 
++#include "table.h"
++
+ struct context {
+ 	struct hsearch_data match_ops_map;
+ 	struct hsearch_data target_ops_map;
++	struct hsearch_data table_ops_map;
++	struct table_index table_index;
+ };
+ 
+ int create_context(struct context *ctx);
+diff --git a/net/bpfilter/table.c b/net/bpfilter/table.c
 new file mode 100644
-index 000000000000..545bc7aeb77c
+index 000000000000..4094c82c31de
 --- /dev/null
-+++ b/net/bpfilter/codegen.c
-@@ -0,0 +1,530 @@
++++ b/net/bpfilter/table.c
+@@ -0,0 +1,391 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (c) 2021 Telegram FZ-LLC
 + * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
 + */
 +
-+#include "codegen.h"
++#define _GNU_SOURCE
 +
-+#include "../../include/uapi/linux/bpfilter.h"
++#include "table.h"
 +
-+#include <unistd.h>
-+#include <sys/syscall.h>
++#include <linux/err.h>
++#include <linux/list.h>
 +
++#include <errno.h>
++#include <stdbool.h>
 +#include <stdio.h>
 +#include <stdlib.h>
 +#include <string.h>
 +
++#include "context.h"
 +#include "logger.h"
++#include "rule.h"
 +
-+enum fixup_insn_type {
-+	FIXUP_INSN_OFF,
-+	FIXUP_INSN_IMM,
-+	__MAX_FIXUP_INSN_TYPE
-+};
-+
-+static int sys_bpf(int cmd, union bpf_attr *attr, unsigned int size)
++static int rule_offset_comparator(const void *x, const void *y)
 +{
-+	return syscall(SYS_bpf, cmd, attr, size);
++	const struct rule *rule = y;
++
++	return x - (const void *)rule->ipt_entry;
 +}
 +
-+static __u64 bpf_ptr_to_u64(const void *ptr)
++static bool table_has_hook(const struct table *table, uint32_t hook)
 +{
-+	return (__u64)(unsigned long)ptr;
++	BUG_ON(hook >= BPFILTER_INET_HOOK_MAX);
++
++	return table->valid_hooks & (1 << hook);
 +}
 +
-+static int subprog_desc_comparator(const void *x, const void *y)
++static int table_init_rules(struct context *ctx, struct table *table,
++			    const struct bpfilter_ipt_replace *ipt_replace)
 +{
-+	const struct codegen_subprog_desc *subprog_x = *(const struct codegen_subprog_desc **)x;
-+	const struct codegen_subprog_desc *subprog_y = *(const struct codegen_subprog_desc **)y;
++	uint32_t offset;
 +
-+	if (subprog_x->type != subprog_y->type)
-+		return subprog_x->type - subprog_y->type;
-+
-+	if (subprog_x->type == CODEGEN_SUBPROG_USER_CHAIN)
-+		return subprog_x->offset - subprog_y->offset;
-+
-+	BUG_ON(1);
-+
-+	return -1;
-+}
-+
-+static const struct codegen_subprog_desc *codegen_find_subprog(struct codegen *codegen,
-+							       const struct codegen_subprog_desc **subprog)
-+{
-+	const struct codegen_subprog_desc **found;
-+
-+	found = bsearch(subprog, codegen->subprogs, codegen->subprogs_cur,
-+			sizeof(codegen->subprogs[0]), subprog_desc_comparator);
-+
-+	return found ? *found : NULL;
-+}
-+
-+static const struct codegen_subprog_desc *codegen_find_user_chain_subprog(struct codegen *codegen,
-+									  uint32_t offset)
-+{
-+	const struct codegen_subprog_desc subprog = {
-+		.type = CODEGEN_SUBPROG_USER_CHAIN,
-+		.offset = offset
-+	};
-+	const struct codegen_subprog_desc *subprog_ptr = &subprog;
-+
-+	return codegen_find_subprog(codegen, &subprog_ptr);
-+}
-+
-+int codegen_push_awaiting_subprog(struct codegen *codegen,
-+				  struct codegen_subprog_desc *subprog)
-+{
-+	struct list_head *t, *n;
-+
-+	if (codegen_find_subprog(codegen, (const struct codegen_subprog_desc **)&subprog)) {
-+		free(subprog);
-+		return 0;
++	table->entries = malloc(table->size);
++	if (!table->entries) {
++		BFLOG_ERR("out of memory");
++		return -ENOMEM;
 +	}
 +
-+	list_for_each_safe(t, n, &codegen->awaiting_subprogs) {
-+		struct codegen_subprog_desc *awaiting_subprog;
++	memcpy(table->entries, ipt_replace->entries, table->size);
 +
-+		awaiting_subprog = list_entry(t, struct codegen_subprog_desc, list);
-+		if (!subprog_desc_comparator(&awaiting_subprog, &subprog)) {
-+			free(subprog);
-+			return 0;
-+		}
++	table->rules = calloc(table->num_rules, sizeof(table->rules[0]));
++	if (!table->rules) {
++		BFLOG_ERR("out of memory");
++		return -ENOMEM;
 +	}
 +
-+	list_add_tail(&subprog->list, &codegen->awaiting_subprogs);
-+
-+	return 0;
-+}
-+
-+static int codegen_fixup_insn(struct bpf_insn *insn, enum fixup_insn_type type,
-+			      __s32 v)
-+{
-+	switch (type) {
-+	case FIXUP_INSN_OFF:
-+		if (insn->off) {
-+			BFLOG_ERR("missing instruction offset");
-+			return -EINVAL;
-+		}
-+
-+		insn->off = v;
-+
-+		return 0;
-+	case FIXUP_INSN_IMM:
-+		if (insn->imm) {
-+			BFLOG_ERR("missing instruction immediate value");
-+			return -EINVAL;
-+		}
-+
-+		insn->imm = v;
-+
-+		return 0;
-+	default:
-+		BFLOG_ERR("invalid fixup instruction type");
-+		return -EINVAL;
-+	}
-+}
-+
-+int codegen_fixup(struct codegen *codegen, enum codegen_fixup_type fixup_type)
-+{
-+	struct list_head *t, *n;
-+
-+	list_for_each_safe(t, n, &codegen->fixup) {
-+		enum fixup_insn_type type = __MAX_FIXUP_INSN_TYPE;
-+		struct codegen_fixup_desc *fixup;
-+		struct bpf_insn *insn;
-+		__s32 v;
++	offset = 0;
++	for (int i = 0; i < table->num_rules; ++i) {
++		const struct bpfilter_ipt_entry *ipt_entry;
 +		int r;
 +
-+		fixup = list_entry(t, struct codegen_fixup_desc, list);
-+		if (fixup->type != fixup_type)
-+			continue;
-+
-+		if (fixup->type >= __MAX_CODEGEN_FIXUP_TYPE) {
-+			BFLOG_ERR("invalid instruction fixup type: %d",
-+				  fixup->type);
++		if (table->size < offset + sizeof(*ipt_entry)) {
++			BFLOG_ERR("invalid table size: %d", table->size);
 +			return -EINVAL;
 +		}
 +
-+		if (fixup->insn > codegen->len_cur) {
-+			BFLOG_ERR("invalid instruction fixup offset");
++		ipt_entry = table->entries + offset;
++
++		if ((uintptr_t)ipt_entry % __alignof__(struct bpfilter_ipt_entry)) {
++			BFLOG_ERR("invalid alignment for struct ipt_entry");
 +			return -EINVAL;
 +		}
 +
-+		insn = &codegen->img[fixup->insn];
-+
-+		if (fixup_type == CODEGEN_FIXUP_NEXT_RULE ||
-+		    fixup_type == CODEGEN_FIXUP_END_OF_CHAIN) {
-+			type = FIXUP_INSN_OFF;
-+			v = codegen->len_cur - fixup->insn - 1;
++		if (table->size < offset + ipt_entry->next_offset) {
++			BFLOG_ERR("invalid table size: %d", table->size);
++			return -EINVAL;
 +		}
 +
-+		if (fixup_type == CODEGEN_FIXUP_JUMP_TO_CHAIN) {
-+			const struct codegen_subprog_desc *subprog;
-+
-+			subprog = codegen_find_user_chain_subprog(codegen,
-+								  fixup->offset);
-+			if (!subprog) {
-+				BFLOG_ERR("subprogram not found for offset %d",
-+					  fixup->offset);
-+				return -EINVAL;
-+			}
-+
-+			type = FIXUP_INSN_OFF;
-+			v = subprog->insn - fixup->insn - 1;
-+		}
-+
-+		if (fixup_type == CODEGEN_FIXUP_COUNTERS_INDEX) {
-+			type = FIXUP_INSN_IMM;
-+			BFLOG_DBG("fixup counter for rule %d", codegen->rule_index);
-+			v = codegen->rule_index;
-+		}
-+
-+		r = codegen_fixup_insn(insn, type, v);
++		r = init_rule(ctx, ipt_entry, &table->rules[i]);
 +		if (r) {
-+			BFLOG_ERR("failed to fixup codegen instruction: %s",
++			BFLOG_ERR("failed to initialize rule: %s",
 +				  STRERR(r));
 +			return r;
 +		}
 +
-+		list_del(t);
-+		free(fixup);
++		table->rules[i].ipt_entry = ipt_entry;
++		offset += ipt_entry->next_offset;
++	}
++
++	if (offset != ipt_replace->size) {
++		BFLOG_ERR("invalid final offset: %d", offset);
++		return -EINVAL;
++	}
++
++	if (table->num_rules != ipt_replace->num_entries) {
++		BFLOG_ERR("mismatch in number of rules: got %d, expected %d",
++			  table->num_rules, ipt_replace->num_entries);
++		return -EINVAL;
 +	}
 +
 +	return 0;
 +}
 +
-+int emit_fixup(struct codegen *codegen, enum codegen_fixup_type fixup_type,
-+	       struct bpf_insn insn)
++static int table_check_hooks(const struct table *table)
 +{
-+	struct codegen_fixup_desc *fixup;
++	uint32_t max_rule_front, max_rule_last;
++	bool check = false;
 +
-+	fixup = malloc(sizeof(*fixup));
-+	if (!fixup) {
-+		BFLOG_ERR("out of memory");
-+		return -ENOMEM;
++	for (int i = 0; i < BPFILTER_INET_HOOK_MAX; ++i) {
++		if (!table_has_hook(table, i))
++			continue;
++
++		if (check) {
++			if (table->hook_entry[i] <= max_rule_front) {
++				BFLOG_ERR("invalid hook entry");
++				return -EINVAL;
++			}
++
++			if (table->underflow[i] <= max_rule_last) {
++				BFLOG_ERR("invalid underflow entry");
++				return -EINVAL;
++			}
++		}
++
++		max_rule_front = table->hook_entry[i];
++		max_rule_last = table->underflow[i];
++		check = true;
 +	}
-+
-+	INIT_LIST_HEAD(&fixup->list);
-+	fixup->type = fixup_type;
-+	fixup->insn = codegen->len_cur;
-+	list_add_tail(&fixup->list, &codegen->fixup);
-+
-+	EMIT(codegen, insn);
 +
 +	return 0;
 +}
 +
-+int emit_add_counter(struct codegen *codegen)
++static int table_init_hooks(struct table *table,
++			    const struct bpfilter_ipt_replace *ipt_replace)
 +{
-+	struct bpf_insn insns[2] = { BPF_LD_MAP_FD(BPF_REG_ARG1, 0) };
-+	struct codegen_reloc_desc *reloc;
++	for (int i = 0; i < BPFILTER_INET_HOOK_MAX; ++i) {
++		struct rule *rule_front;
++		struct rule *rule_last;
++		int verdict;
 +
-+	reloc = malloc(sizeof(*reloc));
-+	if (!reloc) {
-+		BFLOG_ERR("out of memory");
-+		return -ENOMEM;
-+	}
++		if (!table_has_hook(table, i))
++			continue;
 +
-+	INIT_LIST_HEAD(&reloc->list);
-+	reloc->type = CODEGEN_RELOC_MAP;
-+	reloc->map = CODEGEN_MAP_COUNTERS;
-+	reloc->insn = codegen->len_cur;
-+	list_add_tail(&reloc->list, &codegen->relocs);
++		rule_front = table_find_rule_by_offset(table, ipt_replace->hook_entry[i]);
++		rule_last = table_find_rule_by_offset(table, ipt_replace->underflow[i]);
 +
-+	EMIT(codegen, insns[0]);
-+	EMIT(codegen, insns[1]);
-+
-+	EMIT_FIXUP(codegen, CODEGEN_FIXUP_COUNTERS_INDEX,
-+		   BPF_ST_MEM(BPF_W, BPF_REG_10, STACK_SCRATCHPAD_OFFSET - 4, 0));
-+	EMIT(codegen, BPF_MOV64_REG(BPF_REG_ARG2, BPF_REG_10));
-+	EMIT(codegen,
-+	     BPF_ALU64_IMM(BPF_ADD, BPF_REG_ARG2, STACK_SCRATCHPAD_OFFSET - 4));
-+	EMIT(codegen, BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem));
-+	EMIT(codegen, BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 14));
-+
-+	reloc = malloc(sizeof(*reloc));
-+	if (!reloc) {
-+		BFLOG_ERR("out of memory");
-+		return -ENOMEM;
-+	}
-+
-+	INIT_LIST_HEAD(&reloc->list);
-+	reloc->type = CODEGEN_RELOC_MAP;
-+	reloc->map = CODEGEN_MAP_COUNTERS;
-+	reloc->insn = codegen->len_cur;
-+	list_add_tail(&reloc->list, &codegen->relocs);
-+
-+	EMIT(codegen, insns[0]);
-+	EMIT(codegen, insns[1]);
-+
-+	EMIT(codegen, BPF_LDX_MEM(BPF_DW, CODEGEN_REG_SCRATCH5, BPF_REG_0, 0));
-+	EMIT(codegen, BPF_LDX_MEM(BPF_DW, CODEGEN_REG_SCRATCH4, BPF_REG_0, 8));
-+	EMIT(codegen, BPF_LDX_MEM(BPF_W, CODEGEN_REG_SCRATCH3, CODEGEN_REG_RUNTIME_CTX,
-+				  STACK_RUNTIME_CONTEXT_OFFSET(data_size)));
-+	EMIT(codegen, BPF_ALU64_IMM(BPF_ADD, CODEGEN_REG_SCRATCH5, 1));
-+	EMIT(codegen,
-+	     BPF_ALU64_REG(BPF_ADD, CODEGEN_REG_SCRATCH4, CODEGEN_REG_SCRATCH3));
-+	EMIT(codegen, BPF_STX_MEM(BPF_DW, BPF_REG_0, CODEGEN_REG_SCRATCH5, 0));
-+	EMIT(codegen, BPF_STX_MEM(BPF_DW, BPF_REG_0, CODEGEN_REG_SCRATCH4, 8));
-+	EMIT(codegen, BPF_MOV64_REG(BPF_REG_ARG2, BPF_REG_10));
-+	EMIT(codegen,
-+	     BPF_ALU64_IMM(BPF_ADD, BPF_REG_ARG2, STACK_SCRATCHPAD_OFFSET - 4));
-+	EMIT(codegen, BPF_MOV64_REG(BPF_REG_ARG3, BPF_REG_0));
-+	EMIT(codegen, BPF_MOV32_IMM(BPF_REG_ARG4, BPF_EXIST));
-+	EMIT(codegen, BPF_EMIT_CALL(BPF_FUNC_map_update_elem));
-+
-+	return 0;
-+}
-+
-+static int codegen_reloc(struct codegen *codegen)
-+{
-+	struct shared_codegen *shared_codegen;
-+	struct list_head *t;
-+
-+	shared_codegen = codegen->shared_codegen;
-+
-+	list_for_each(t, &codegen->relocs) {
-+		struct codegen_reloc_desc *reloc;
-+		struct bpf_insn *insn;
-+
-+		reloc = list_entry(t, struct codegen_reloc_desc, list);
-+
-+		if (reloc->insn >= codegen->len_cur) {
-+			BFLOG_ERR("invalid instruction relocation offset");
++		if (!rule_front || !rule_last) {
++			BFLOG_ERR("expected a first and last rule");
 +			return -EINVAL;
 +		}
 +
-+		insn = &codegen->img[reloc->insn];
++		if (!rule_is_unconditional(rule_last)) {
++			BFLOG_ERR("expected unconditional rule");
++			return -EINVAL;
++		}
 +
-+		if (reloc->type == CODEGEN_RELOC_MAP) {
-+			enum codegen_map_type map_type;
++		if (!rule_has_standard_target(rule_last)) {
++			BFLOG_ERR("expected rule for a standard target");
++			return -EINVAL;
++		}
 +
-+			if (codegen->len_cur <= reloc->insn + 1) {
-+				BFLOG_ERR("invalid instruction relocation map offset");
-+				return -EINVAL;
-+			}
++		verdict = standard_target_verdict(rule_last->target.ipt_target);
++		if (verdict >= 0) {
++			BFLOG_ERR("expected a valid standard target verdict: %d",
++				  verdict);
++			return -EINVAL;
++		}
 +
-+			if (insn->code != (BPF_LD | BPF_DW | BPF_IMM)) {
-+				BFLOG_ERR("invalid instruction relocation code %d",
-+					  insn->code);
-+				return -EINVAL;
-+			}
++		verdict = convert_verdict(verdict);
 +
-+			map_type = insn->imm;
-+			if (map_type < 0 || map_type >= __MAX_CODEGEN_MAP_TYPE) {
-+				BFLOG_ERR("invalid instruction relocation map type: %d",
-+					  map_type);
-+				return -EINVAL;
-+			}
++		if (verdict != BPFILTER_NF_DROP && verdict != BPFILTER_NF_ACCEPT) {
++			BFLOG_ERR("verdict must be either NF_DROP or NF_ACCEPT");
++			return -EINVAL;
++		}
 +
-+			BUG_ON(shared_codegen->maps_fd[map_type] < 0);
-+			insn->imm = shared_codegen->maps_fd[map_type];
++		table->hook_entry[i] = rule_front - table->rules;
++		table->underflow[i] = rule_last - table->rules;
++	}
 +
++	return table_check_hooks(table);
++}
++
++static struct rule *next_rule(const struct table *table, struct rule *rule)
++{
++	const uint32_t i = rule - table->rules;
++
++	if (table->num_rules <= i + 1) {
++		BFLOG_ERR("rule index is out of range");
++		return ERR_PTR(-EINVAL);
++	}
++
++	++rule;
++	rule->came_from = i;
++
++	return rule;
++}
++
++static struct rule *backtrack_rule(const struct table *table, struct rule *rule)
++{
++	uint32_t i = rule - table->rules;
++	int prev_i;
++
++	do {
++		rule->hook_mask ^= (1 << BPFILTER_INET_HOOK_MAX);
++		prev_i = i;
++		i = rule->came_from;
++		rule->came_from = 0;
++
++		if (i == prev_i)
++			return NULL;
++
++		rule = &table->rules[i];
++	} while (prev_i == i + 1);
++
++	return next_rule(table, rule);
++}
++
++static int table_check_chain(struct table *table, uint32_t hook,
++			     struct rule *rule)
++{
++	uint32_t i = rule - table->rules;
++
++	rule->came_from = i;
++
++	for (;;) {
++		bool visited;
++		int verdict;
++
++		if (!rule)
++			return 0;
++
++		if (IS_ERR(rule))
++			return PTR_ERR(rule);
++
++		i = rule - table->rules;
++
++		if (table->num_rules <= i) {
++			BFLOG_ERR("rule index is out of range: %d", i);
++			return -EINVAL;
++		}
++
++		if (rule->hook_mask & (1 << BPFILTER_INET_HOOK_MAX)) {
++			BFLOG_ERR("hook index out of range");
++			return -EINVAL;
++		}
++
++		// already visited
++		visited = rule->hook_mask & (1 << hook);
++		rule->hook_mask |= (1 << hook) | (1 << BPFILTER_INET_HOOK_MAX);
++
++		if (visited) {
++			rule = backtrack_rule(table, rule);
 +			continue;
 +		}
 +
-+		BFLOG_ERR("invalid instruction relocation type %d", reloc->type);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int load_maps(struct codegen *codegen)
-+{
-+	struct shared_codegen *shared_codegen;
-+	int i;
-+
-+	shared_codegen = codegen->shared_codegen;
-+
-+	if (shared_codegen->maps_refcnt++)
-+		return 0;
-+
-+	for (i = 0; i < __MAX_CODEGEN_MAP_TYPE; ++i) {
-+		int j;
-+		int fd;
-+		int saved_errno;
-+		union bpf_attr *map;
-+
-+		BUG_ON(shared_codegen->maps_fd[i] > -1);
-+
-+		map = &shared_codegen->maps[i];
-+		fd = sys_bpf(BPF_MAP_CREATE, map, sizeof(*map));
-+		if (fd > -1) {
-+			BFLOG_DBG("opened BPF map with FD %d", fd);
-+			shared_codegen->maps_fd[i] = fd;
++		if (!rule_has_standard_target(rule)) {
++			rule = next_rule(table, rule);
 +			continue;
 +		}
 +
-+		BFLOG_ERR("bpf syscall failed during map creation: %s",
-+			  STRERR(fd));
-+		saved_errno = errno;
++		verdict = standard_target_verdict(rule->target.ipt_target);
++		if (verdict > 0) {
++			rule = table_find_rule_by_offset(table, verdict);
++			if (!rule) {
++				BFLOG_ERR("failed to find rule by offset");
++				return -EINVAL;
++			}
 +
-+		for (j = 0; j < i; ++j) {
-+			close(shared_codegen->maps_fd[j]);
-+			shared_codegen->maps_fd[j] = -1;
++			rule->came_from = i;
++			continue;
 +		}
 +
-+		return saved_errno;
++		if (!rule_is_unconditional(rule)) {
++			rule = next_rule(table, rule);
++			continue;
++		}
++
++		rule = backtrack_rule(table, rule);
 +	}
 +
 +	return 0;
 +}
 +
-+static void unload_maps(struct codegen *codegen)
++static int table_check_chains(struct table *table)
 +{
-+	struct shared_codegen *shared_codegen;
-+	int i;
++	int r = 0;
 +
-+	shared_codegen = codegen->shared_codegen;
-+
-+	if (--shared_codegen->maps_refcnt)
-+		return;
-+
-+	for (i = 0; i < __MAX_CODEGEN_MAP_TYPE; ++i) {
-+		if (shared_codegen->maps_fd[i] > -1) {
-+			close(shared_codegen->maps_fd[i]);
-+			shared_codegen->maps_fd[i] = -1;
-+		}
++	for (int i = 0, r = 0; !r && i < BPFILTER_INET_HOOK_MAX; ++i) {
++		if (table_has_hook(table, i))
++			r = table_check_chain(table, i, &table->rules[table->hook_entry[i]]);
 +	}
-+}
-+
-+void create_shared_codegen(struct shared_codegen *shared_codegen)
-+{
-+	shared_codegen->maps_refcnt = 0;
-+
-+	shared_codegen->maps[CODEGEN_MAP_COUNTERS].map_type =
-+		BPF_MAP_TYPE_PERCPU_ARRAY;
-+	shared_codegen->maps[CODEGEN_MAP_COUNTERS].key_size = 4;
-+	shared_codegen->maps[CODEGEN_MAP_COUNTERS].value_size =
-+		sizeof(struct bpfilter_ipt_counters);
-+	shared_codegen->maps[CODEGEN_MAP_COUNTERS].max_entries = 0;
-+	snprintf(shared_codegen->maps[CODEGEN_MAP_COUNTERS].map_name,
-+		 sizeof(shared_codegen->maps[CODEGEN_MAP_COUNTERS].map_name),
-+			"bpfilter_cntrs");
-+	shared_codegen->maps_fd[CODEGEN_MAP_COUNTERS] = -1;
-+}
-+
-+int create_codegen(struct codegen *codegen, enum bpf_prog_type type)
-+{
-+	int r;
-+
-+	memset(codegen, 0, sizeof(*codegen));
-+
-+	switch (type) {
-+	default:
-+		BFLOG_ERR("unsupported BPF program type %d", type);
-+		return -EINVAL;
-+	}
-+
-+	codegen->prog_type = type;
-+
-+	codegen->log_buf_size = 1 << 20;
-+	codegen->log_buf = malloc(codegen->log_buf_size);
-+	if (!codegen->log_buf) {
-+		BFLOG_ERR("out of memory");
-+		r = -ENOMEM;
-+		goto err_free;
-+	}
-+
-+	codegen->len_max = BPF_MAXINSNS;
-+	codegen->img = malloc(codegen->len_max * sizeof(codegen->img[0]));
-+	if (!codegen->img) {
-+		BFLOG_ERR("out of memory");
-+		r = -ENOMEM;
-+		goto err_free;
-+	}
-+
-+	codegen->shared_codegen = NULL;
-+
-+	INIT_LIST_HEAD(&codegen->fixup);
-+	INIT_LIST_HEAD(&codegen->relocs);
-+	INIT_LIST_HEAD(&codegen->awaiting_subprogs);
-+
-+	return 0;
-+
-+err_free:
-+	free(codegen->img);
 +
 +	return r;
 +}
 +
-+int load_img(struct codegen *codegen)
++struct table *create_table(struct context *ctx,
++			   const struct bpfilter_ipt_replace *ipt_replace)
 +{
-+	union bpf_attr attr = {};
-+	int fd;
++	struct table *table;
 +	int r;
 +
-+	r = load_maps(codegen);
++	table = calloc(1, sizeof(*table));
++	if (!table) {
++		BFLOG_ERR("out of memory");
++		return ERR_PTR(-ENOMEM);
++	}
++
++	INIT_LIST_HEAD(&table->list);
++	table->valid_hooks = ipt_replace->valid_hooks;
++	table->num_rules = ipt_replace->num_entries;
++	table->num_counters = ipt_replace->num_counters;
++	table->size = ipt_replace->size;
++
++	r = table_init_rules(ctx, table, ipt_replace);
 +	if (r) {
-+		BFLOG_ERR("failed to load maps: %s", STRERR(r));
-+		return r;
++		BFLOG_ERR("failed to initialise table rules: %s", STRERR(r));
++		goto err_free;
 +	}
 +
-+	r = codegen_reloc(codegen);
++	r = table_init_hooks(table, ipt_replace);
 +	if (r) {
-+		BFLOG_ERR("failed to generate relocations: %s", STRERR(r));
-+		return r;
++		BFLOG_ERR("failed to initialise table hooks: %s", STRERR(r));
++		goto err_free;
 +	}
 +
-+	attr.prog_type = codegen->prog_type;
-+	attr.insns = bpf_ptr_to_u64(codegen->img);
-+	attr.insn_cnt = codegen->len_cur;
-+	attr.license = bpf_ptr_to_u64("GPL");
-+	attr.prog_ifindex = 0;
-+	snprintf(attr.prog_name, sizeof(attr.prog_name), "bpfilter");
-+
-+	if (codegen->log_buf && codegen->log_buf_size) {
-+		attr.log_buf = bpf_ptr_to_u64(codegen->log_buf);
-+		attr.log_size = codegen->log_buf_size;
-+		attr.log_level = 1;
++	r = table_check_chains(table);
++	if (r) {
++		BFLOG_ERR("failed to check table chains: %s", STRERR(r));
++		goto err_free;
 +	}
 +
-+	fd = sys_bpf(BPF_PROG_LOAD, &attr, sizeof(attr));
-+	if (fd == -1) {
-+		BFLOG_ERR("failed to load BPF program: %s", codegen->log_buf);
-+		return -errno;
-+	}
++	return table;
 +
-+	return fd;
++err_free:
++	free_table(table);
++
++	return ERR_PTR(r);
 +}
 +
-+void unload_img(struct codegen *codegen)
++struct rule *table_find_rule_by_offset(const struct table *table,
++				       uint32_t offset)
 +{
-+	unload_maps(codegen);
++	const struct bpfilter_ipt_entry *key;
++
++	key = table->entries + offset;
++
++	return bsearch(key, table->rules, table->num_rules,
++		       sizeof(table->rules[0]), rule_offset_comparator);
 +}
 +
-+void free_codegen(struct codegen *codegen)
++void table_get_info(const struct table *table,
++		    struct bpfilter_ipt_get_info *info)
 +{
-+	struct list_head *t, *n;
-+	int i;
++	snprintf(info->name, sizeof(info->name), "%s", table->table_ops->name);
++	info->valid_hooks = table->valid_hooks;
 +
-+	list_for_each_safe(t, n, &codegen->fixup) {
-+		struct codegen_fixup_desc *fixup;
++	for (int i = 0; i < BPFILTER_INET_HOOK_MAX; ++i) {
++		const struct rule *rule_front, *rule_last;
 +
-+		fixup = list_entry(t, struct codegen_fixup_desc, list);
-+		free(fixup);
++		if (!table_has_hook(table, i)) {
++			info->hook_entry[i] = 0;
++			info->underflow[i] = 0;
++			continue;
++		}
++
++		rule_front = &table->rules[table->hook_entry[i]];
++		rule_last = &table->rules[table->underflow[i]];
++		info->hook_entry[i] = (const void *)rule_front->ipt_entry - table->entries;
++		info->underflow[i] = (const void *)rule_last->ipt_entry - table->entries;
 +	}
 +
-+	list_for_each_safe(t, n, &codegen->relocs) {
-+		struct codegen_reloc_desc *reloc;
-+
-+		reloc = list_entry(t, struct codegen_reloc_desc, list);
-+		free(reloc);
-+	}
-+
-+	list_for_each_safe(t, n, &codegen->awaiting_subprogs) {
-+		struct codegen_subprog_desc *subprog;
-+
-+		subprog = list_entry(t, struct codegen_subprog_desc, list);
-+		free(subprog);
-+	}
-+
-+	for (i = 0; i < codegen->subprogs_cur; ++i)
-+		free(codegen->subprogs[i]);
-+	free(codegen->subprogs);
-+
-+	free(codegen->log_buf);
-+	free(codegen->img);
++	info->num_entries = table->num_rules;
++	info->size = table->size;
 +}
-diff --git a/net/bpfilter/codegen.h b/net/bpfilter/codegen.h
++
++void free_table(struct table *table)
++{
++	if (!table)
++		return;
++
++	list_del(&table->list);
++
++	if (table->rules) {
++		for (int i = 0; i < table->num_rules; ++i)
++			free_rule(&table->rules[i]);
++		free(table->rules);
++	}
++
++	free(table->entries);
++	free(table);
++}
+diff --git a/net/bpfilter/table.h b/net/bpfilter/table.h
 new file mode 100644
-index 000000000000..cca45a13c4aa
+index 000000000000..d683005e1755
 --- /dev/null
-+++ b/net/bpfilter/codegen.h
-@@ -0,0 +1,181 @@
++++ b/net/bpfilter/table.h
+@@ -0,0 +1,59 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (c) 2021 Telegram FZ-LLC
 + * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
 + */
 +
-+#ifndef NET_BPFILTER_CODEGEN_H
-+#define NET_BPFILTER_CODEGEN_H
++#ifndef NET_BPFILTER_TABLE_H
++#define NET_BPFILTER_TABLE_H
 +
-+#include <linux/bpf.h>
-+#include <linux/filter.h>
-+#include <linux/list.h>
++#include "../../include/uapi/linux/bpfilter.h"
 +
-+#include <bpf/libbpf.h>
++#include <linux/types.h>
 +
-+#include <errno.h>
-+#include <stddef.h>
++#include <search.h>
 +#include <stdint.h>
 +
 +struct context;
++struct rule;
++struct table;
 +
-+#define CODEGEN_REG_RETVAL	BPF_REG_0
-+#define CODEGEN_REG_SCRATCH1	BPF_REG_1
-+#define CODEGEN_REG_SCRATCH2	BPF_REG_2
-+#define CODEGEN_REG_SCRATCH3	BPF_REG_3
-+#define CODEGEN_REG_SCRATCH4	BPF_REG_4
-+#define CODEGEN_REG_SCRATCH5	BPF_REG_5
-+#define CODEGEN_REG_DATA_END	CODEGEN_REG_SCRATCH5
-+#define CODEGEN_REG_L3		BPF_REG_6
-+#define CODEGEN_REG_L4		BPF_REG_7
-+#define CODEGEN_REG_RUNTIME_CTX BPF_REG_8
-+#define CODEGEN_REG_CTX		BPF_REG_9
-+
-+#define EMIT(codegen, x)					     \
-+	do {							     \
-+		typeof(codegen) __codegen = codegen;		     \
-+		if ((__codegen)->len_cur + 1 > (__codegen)->len_max) \
-+			return -ENOMEM;				     \
-+		(__codegen)->img[codegen->len_cur++] = (x);	     \
-+	} while (0)
-+
-+#define EMIT_FIXUP(codegen, fixup_type, insn)				       \
-+	do {								       \
-+		const int __err = emit_fixup((codegen), (fixup_type), (insn)); \
-+		if (__err)						       \
-+			return __err;					       \
-+	} while (0)
-+
-+#define EMIT_ADD_COUNTER(codegen)			     \
-+	do {						     \
-+		const int __err = emit_add_counter(codegen); \
-+		if (__err)				     \
-+			return __err;			     \
-+	} while (0)
-+
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+#define EMIT_LITTLE_ENDIAN(codegen, x) EMIT(codegen, x)
-+#else
-+#define EMIT_LITTLE_ENDIAN(codegen, x)
-+#endif
-+
-+struct runtime_context {
-+	uint32_t data_size;
-+	void *l3;
-+	void *l4;
++struct table_ops {
++	char name[BPFILTER_XT_TABLE_MAXNAMELEN];
++	struct table *(*create)(struct context *ctx,
++				const struct bpfilter_ipt_replace *ipt_replace);
++	int (*codegen)(struct context *ctx, struct table *table);
++	int (*install)(struct context *ctx, struct table *table);
++	void (*uninstall)(struct context *ctx, struct table *table);
++	void (*free)(struct table *table);
++	void (*update_counters)(struct table *table);
 +};
 +
-+#define STACK_RUNTIME_CONTEXT_OFFSET(field)		    \
-+	(-(short)(offsetof(struct runtime_context, field) + \
-+		  sizeof(((struct runtime_context *)NULL)->field)))
-+
-+#define STACK_SCRATCHPAD_OFFSET (-(short)sizeof(struct runtime_context))
-+
-+enum codegen_map_type {
-+	CODEGEN_MAP_COUNTERS,
-+	__MAX_CODEGEN_MAP_TYPE
-+};
-+
-+enum codegen_fixup_type {
-+	CODEGEN_FIXUP_NEXT_RULE,
-+	CODEGEN_FIXUP_END_OF_CHAIN,
-+	CODEGEN_FIXUP_JUMP_TO_CHAIN,
-+	CODEGEN_FIXUP_COUNTERS_INDEX,
-+	__MAX_CODEGEN_FIXUP_TYPE
-+};
-+
-+struct codegen_fixup_desc {
++struct table {
++	const struct table_ops *table_ops;
++	uint32_t valid_hooks;
++	uint32_t num_rules;
++	uint32_t num_counters;
++	uint32_t size;
++	uint32_t hook_entry[BPFILTER_INET_HOOK_MAX];
++	uint32_t underflow[BPFILTER_INET_HOOK_MAX];
++	struct rule *rules;
++	void *entries;
++	void *ctx;
 +	struct list_head list;
-+	enum codegen_fixup_type type;
-+	uint32_t insn;
-+	union {
-+		uint32_t offset;
-+	};
 +};
 +
-+enum codegen_reloc_type {
-+	CODEGEN_RELOC_MAP,
-+	__MAX_CODEGEN_RELOC_TYPE
-+};
-+
-+struct codegen_reloc_desc {
++struct table_index {
++	struct hsearch_data map;
 +	struct list_head list;
-+	enum codegen_reloc_type type;
-+	uint32_t insn;
-+	union {
-+		struct {
-+			enum codegen_map_type map;
-+			// TODO: add BTF
-+		};
-+	};
 +};
 +
-+enum codegen_subprog_type {
-+	CODEGEN_SUBPROG_USER_CHAIN,
-+};
++struct table *create_table(struct context *ctx,
++			   const struct bpfilter_ipt_replace *ipt_replace);
++struct rule *table_find_rule_by_offset(const struct table *table,
++				       uint32_t offset);
++void table_get_info(const struct table *table,
++		    struct bpfilter_ipt_get_info *info);
++void free_table(struct table *table);
 +
-+struct codegen_subprog_desc {
-+	struct list_head list;
-+	enum codegen_subprog_type type;
-+	uint32_t insn;
-+	union {
-+		uint32_t offset;
-+	};
-+};
-+
-+struct codegen_ops;
-+struct shared_codegen;
-+
-+struct codegen {
-+	struct context *ctx;
-+	struct bpf_insn *img;
-+	char *log_buf;
-+	size_t log_buf_size;
-+	int iptables_hook;
-+	union {
-+		enum bpf_tc_attach_point bpf_tc_hook;
-+	};
-+	enum bpf_prog_type prog_type;
-+	uint32_t len_cur;
-+	uint32_t len_max;
-+	uint32_t rule_index;
-+	const struct codegen_ops *codegen_ops;
-+	struct shared_codegen *shared_codegen;
-+	struct list_head fixup;
-+	struct list_head relocs;
-+	struct list_head awaiting_subprogs;
-+	uint16_t subprogs_cur;
-+	uint16_t subprogs_max;
-+	struct codegen_subprog_desc **subprogs;
-+	void *img_ctx;
-+};
-+
-+struct shared_codegen {
-+	int maps_refcnt;
-+	union bpf_attr maps[__MAX_CODEGEN_MAP_TYPE];
-+	int maps_fd[__MAX_CODEGEN_MAP_TYPE];
-+};
-+
-+struct codegen_ops {
-+	int (*gen_inline_prologue)(struct codegen *codegen);
-+	int (*load_packet_data)(struct codegen *codegen, int dst_reg);
-+	int (*load_packet_data_end)(struct codegen *codegen, int dst_reg);
-+	int (*emit_ret_code)(struct codegen *codegen, int ret_code);
-+	int (*gen_inline_epilogue)(struct codegen *codegen);
-+	int (*load_img)(struct codegen *codegen);
-+	void (*unload_img)(struct codegen *codegen);
-+};
-+
-+void create_shared_codegen(struct shared_codegen *shared_codegen);
-+int create_codegen(struct codegen *codegen, enum bpf_prog_type type);
-+int codegen_push_awaiting_subprog(struct codegen *codegen,
-+				  struct codegen_subprog_desc *subprog);
-+int codegen_fixup(struct codegen *codegen, enum codegen_fixup_type fixup_type);
-+int emit_fixup(struct codegen *codegen, enum codegen_fixup_type fixup_type,
-+	       struct bpf_insn insn);
-+int emit_add_counter(struct codegen *codegen);
-+int load_img(struct codegen *codegen);
-+void unload_img(struct codegen *codegen);
-+void free_codegen(struct codegen *codegen);
-+
-+#endif // NET_BPFILTER_CODEGEN_H
-diff --git a/tools/testing/selftests/bpf/bpfilter/.gitignore b/tools/testing/selftests/bpf/bpfilter/.gitignore
-index 983fd06cbefa..39ec0c09dff4 100644
---- a/tools/testing/selftests/bpf/bpfilter/.gitignore
-+++ b/tools/testing/selftests/bpf/bpfilter/.gitignore
-@@ -1,2 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+tools/**
- test_map
++#endif // NET_BPFILTER_TABLE_H
 diff --git a/tools/testing/selftests/bpf/bpfilter/Makefile b/tools/testing/selftests/bpf/bpfilter/Makefile
-index c262aad8c2a4..e3b8bf76a10c 100644
+index 4ef52bfe2d21..53634699d427 100644
 --- a/tools/testing/selftests/bpf/bpfilter/Makefile
 +++ b/tools/testing/selftests/bpf/bpfilter/Makefile
-@@ -5,6 +5,8 @@ TOOLSDIR := $(abspath ../../../../)
- TOOLSINCDIR := $(TOOLSDIR)/include
- APIDIR := $(TOOLSINCDIR)/uapi
- BPFILTERSRCDIR := $(top_srcdir)/net/bpfilter
-+LIBDIR := $(TOOLSDIR)/lib
-+BPFDIR := $(LIBDIR)/bpf
- 
- CFLAGS += -Wall -g -pthread -I$(TOOLSINCDIR) -I$(APIDIR) -I$(BPFILTERSRCDIR)
- 
-@@ -14,6 +16,23 @@ KSFT_KHDR_INSTALL := 1
- 
- include ../../lib.mk
- 
-+SCRATCH_DIR := $(OUTPUT)/tools
-+BUILD_DIR := $(SCRATCH_DIR)/build
-+BPFOBJ_DIR := $(BUILD_DIR)/libbpf
-+BPFOBJ := $(BPFOBJ_DIR)/libbpf.a
-+
-+MAKE_DIRS := $(BPFOBJ_DIR)
-+$(MAKE_DIRS):
-+	$(call msg,MKDIR,,$@)
-+	$(Q)mkdir -p $@
-+
-+$(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)			\
-+	   ../../../../include/uapi/linux/bpf.h					\
-+	   | $(INCLUDE_DIR) $(BUILD_DIR)/libbpf
-+	$(Q)$(MAKE) $(submake_extras) -C $(BPFDIR) OUTPUT=$(BUILD_DIR)/libbpf/ 	\
-+		    DESTDIR=$(SCRATCH_DIR) prefix= all install_headers
-+
- BPFILTER_MAP_SRCS := $(BPFILTERSRCDIR)/map-common.c
-+BPFILTER_CODEGEN_SRCS := $(BPFILTERSRCDIR)/codegen.c $(BPFOBJ) -lelf -lz
+@@ -45,7 +45,7 @@ BPFILTER_RULE_SRCS := $(BPFILTERSRCDIR)/rule.c
+ BPFILTER_COMMON_SRCS := $(BPFILTER_MAP_SRCS) $(BPFILTER_CODEGEN_SRCS)
+ BPFILTER_COMMON_SRCS += $(BPFILTERSRCDIR)/context.c $(BPFILTERSRCDIR)/logger.c
+ BPFILTER_COMMON_SRCS += $(BPFILTER_MATCH_SRCS) $(BPFILTER_TARGET_SRCS)
+-BPFILTER_COMMON_SRCS += $(BPFILTER_RULE_SRCS)
++BPFILTER_COMMON_SRCS += $(BPFILTER_RULE_SRCS) $(BPFILTERSRCDIR)/table.c
  
  $(OUTPUT)/test_map: test_map.c $(BPFILTER_MAP_SRCS)
+ $(OUTPUT)/test_match: test_match.c $(BPFILTER_COMMON_SRCS)
 -- 
 2.38.1
 
