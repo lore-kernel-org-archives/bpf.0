@@ -2,161 +2,175 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26401C3DA7A
-	for <bpf@archiver.kernel.org>; Sun, 25 Dec 2022 19:14:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C000C4332F
+	for <bpf@archiver.kernel.org>; Sun, 25 Dec 2022 21:52:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbiLYTON (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 25 Dec 2022 14:14:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57022 "EHLO
+        id S229821AbiLYVwT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 25 Dec 2022 16:52:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiLYTOM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 25 Dec 2022 14:14:12 -0500
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB97E87
-        for <bpf@vger.kernel.org>; Sun, 25 Dec 2022 11:14:09 -0800 (PST)
-Received: by mail-qv1-xf35.google.com with SMTP id d2so6412854qvp.12
-        for <bpf@vger.kernel.org>; Sun, 25 Dec 2022 11:14:09 -0800 (PST)
+        with ESMTP id S229445AbiLYVwS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 25 Dec 2022 16:52:18 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670232720
+        for <bpf@vger.kernel.org>; Sun, 25 Dec 2022 13:52:15 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id hd14-20020a17090b458e00b0021909875bccso11446894pjb.1
+        for <bpf@vger.kernel.org>; Sun, 25 Dec 2022 13:52:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google;
-        h=content-transfer-encoding:mime-version:subject:user-agent
-         :references:in-reply-to:message-id:date:cc:to:from:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=L9k4ddpmPgxClO2/idn9r0y8xUw2nToQbpPtNTZGn7o=;
-        b=adgSxHvv0+vIDN1ymUd/dWRNkNljBngGO3fSZWf9EQvOI+r+tduBwu+4oGqCDhPXVE
-         6vctBqOKeCFZPcmpSoNyn1Le7pl0AYNjVQ2nCkledWdIEpNAVPMMoX19T+TrKd2zWaE7
-         9wR5feeQUiweMbeIT76Q8n2gnTzp8GDDiroYKThkGE2k1/+jt1KJG2+SlFYUzhpwmIRu
-         zk/ceFkpMUOVO15W9wOnxgZV/xu48sYLVfmCCjjzXSiaDTzOCo3aOyuFD4S8u2kIwF9h
-         fjMoqmVIGRsc0zjdPY4YiTpXkEltFfYmC+T8l9KTACRqOlrZ9YcpPY2qQsdWyV/o1UsZ
-         XoCQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=grOYH7hEEediwHZ9rTSJgHKGU7n+Zxw5IeM6JXac7Y8=;
+        b=Ec+Wm4kAmh7erZdb0Kq0agyZYeSp+hwkVOpJb4oWLKO76RdNyiYvVkn/ms/GfaK8yi
+         /jHcDF60BHQ5h6klR0AJAMOh+UfWrXEzc3ok3wrev/KpaWS8ANf7+6GVPZsDXfWJVmGq
+         TlRTES05R6ehdxy26mz4g/SZ/pqWfu1IWYKts6tRcNr2XAEaWop3K19dGphat5Rcd7nt
+         EXdlydSeeovJIxCnz636ws99B0xa2bp5Y985AMBh6jruhNkpSnffjtSUvdB9brgYMj7y
+         118MVK/dg8z/WSc/z8xH812VDgFwr0VNx5UPgirwY1SEeoAwTN5Y4gbj44ZwRqNQIRy6
+         sSPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:subject:user-agent
-         :references:in-reply-to:message-id:date:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L9k4ddpmPgxClO2/idn9r0y8xUw2nToQbpPtNTZGn7o=;
-        b=ic8p8HvB8zqfjcqwUwuP/yE94JGRZScTKi02qItyl/BaHZ+1JXwskpv0epkEPlghHl
-         xghWDjr4ZVVHmFqN899VKVHpTf3goexjmuOIbHFrE4D3tvZ6nzbkoVAvC79mNfcZQm+L
-         tfedxei76PQWkcdH508Zqq+SCtSngOEqvf/vNzpMGNaLSGlfIradXgByZK+PgCh3zdjI
-         UM/skaEoin19SsyCz4ILy79gCt4GjG0v2lIFLniedxo2AcRSuv/5P6jKFdTpBiT+zIcc
-         Wu/TIRcZbz3TGZoNBzZMjgiiopXD2Pdo8wtM89pyC7DafQ5GFpL69MGJWhom0KGDBxxe
-         xFGA==
-X-Gm-Message-State: AFqh2kpn4tUk49cpvMK/BaGOqTJjEWmL5tkYcsqansK5Jb5/9aE3mSVu
-        Jq6ULBrxZLb0P9S3PAoAd+H6
-X-Google-Smtp-Source: AMrXdXvkgJcevqx0yEBp/OXwofy0Rj3yDKjefHgBfl6xVW0EqX7iDT+jkS0A6I+mPjKThlUW55g3og==
-X-Received: by 2002:a05:6214:418e:b0:515:5e33:5059 with SMTP id ld14-20020a056214418e00b005155e335059mr21909271qvb.26.1671995649068;
-        Sun, 25 Dec 2022 11:14:09 -0800 (PST)
-Received: from [10.104.7.245] (mobile-107-107-57-41.mycingular.net. [107.107.57.41])
-        by smtp.gmail.com with ESMTPSA id x14-20020a05620a258e00b006fcb2d3f284sm6468823qko.67.2022.12.25.11.14.06
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 25 Dec 2022 11:14:07 -0800 (PST)
-From:   Paul Moore <paul@paul-moore.com>
-To:     Jiri Olsa <olsajiri@gmail.com>
-CC:     <linux-audit@redhat.com>, <bpf@vger.kernel.org>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=grOYH7hEEediwHZ9rTSJgHKGU7n+Zxw5IeM6JXac7Y8=;
+        b=286xnZW90ZiBFP16cXzT/3EiKvyyZDK+CAJb3z4bnAfg1Z4/MTUM/R21M/QvYonrtE
+         H/WwjDMhzIbbHdxbjcnK8eJwb8H2so3oEkfOt1ZNe62W7eeiUOKM+rlbePxkodHkdbnO
+         lqHWkKGFKVQ01lAy4xvn6IUcC3GoRftQlxx3O5v8aliy6uxcWfx2kZ+syLS+dSVKM0ul
+         CDasu8Fp0IIueSJ3ZLqrvQVC1SldipwQLLh768fVy3zkKAzhijLP9LhJTZkke/ZjhgoM
+         5ftOHdOGUGduJ/OsrILSgYXxISW3y9xdpUrQl5Ah+JRLUoo7WHL/c16wk439+6/ITgJP
+         v6AA==
+X-Gm-Message-State: AFqh2kpq2SUe76ZOtnNq1GNvXLDp+O3oSud4/86mvWfQXq+MLK4xPKO8
+        AnOjzFujLGqttLNk8OoDhhk=
+X-Google-Smtp-Source: AMrXdXtMAi8r9F60mRNKGG9AG9daHglm4CuqSsCUf4ViNVvAk4sm/zsxpVJO/K6m0CnWNDYgU0GCxg==
+X-Received: by 2002:a05:6a20:2d28:b0:b2:5a61:da0e with SMTP id g40-20020a056a202d2800b000b25a61da0emr21318177pzl.62.1672005134698;
+        Sun, 25 Dec 2022 13:52:14 -0800 (PST)
+Received: from macbook-pro-6.dhcp.thefacebook.com ([2620:10d:c090:400::5:68a7])
+        by smtp.gmail.com with ESMTPSA id g7-20020aa79f07000000b005758d26fbf7sm5668139pfr.58.2022.12.25.13.52.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Dec 2022 13:52:13 -0800 (PST)
+Date:   Sun, 25 Dec 2022 13:52:10 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Joanne Koong <joannelkoong@gmail.com>, bpf <bpf@vger.kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, kernel-team@meta.com,
         Alexei Starovoitov <ast@kernel.org>,
-        Burn Alting <burn.alting@iinet.net.au>,
-        Stanislav Fomichev <sdf@google.com>
-Date:   Sun, 25 Dec 2022 14:14:06 -0500
-Message-ID: <1854ab4e030.28e3.85c95baa4474aabc7814e68940a78392@paul-moore.com>
-In-Reply-To: <Y6hakaFw+Oph7xmB@krava>
-References: <20221223185531.222689-1-paul@paul-moore.com>
- <Y6hakaFw+Oph7xmB@krava>
-User-Agent: AquaMail/1.41.0 (build: 104100234)
-Subject: Re: [PATCH v2] bpf: restore the ebpf program ID for BPF_AUDIT_UNLOAD and PERF_BPF_EVENT_PROG_UNLOAD
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>
+Subject: bpf helpers freeze. Was: [PATCH v2 bpf-next 0/6] Dynptr convenience
+ helpers
+Message-ID: <20221225215210.ekmfhyczgubx4rih@macbook-pro-6.dhcp.thefacebook.com>
+References: <20221207205537.860248-1-joannelkoong@gmail.com>
+ <20221208015434.ervz6q5j7bb4jt4a@macbook-pro-6.dhcp.thefacebook.com>
+ <CAEf4BzYGUf=yMry5Ezen2PZqvkfS+o1jSF2e1Fpa+pgAmx+OcA@mail.gmail.com>
+ <CAADnVQKgTCwzLHRXRzTDGAkVOv4fTKX_r9v=OavUc1JOWtqOew@mail.gmail.com>
+ <CAEf4BzZM0+j6DXMgu2o2UvjtzoOxcjsJtT8j-jqVZYvAqxc52g@mail.gmail.com>
+ <20221216173526.y3e5go6mgmjrv46l@MacBook-Pro-6.local>
+ <CAEf4BzbVoiVSa1_49CMNu-q5NnOvmaaHsOWxed-nZo9rioooWg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset="us-ascii"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzbVoiVSa1_49CMNu-q5NnOvmaaHsOWxed-nZo9rioooWg@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Apologies for the top post, but as I mentioned in my last message in this 
-thread, next week I'll post a version without the getter/checks so this 
-should not be an issue.
+On Tue, Dec 20, 2022 at 11:31:25AM -0800, Andrii Nakryiko wrote:
+> On Fri, Dec 16, 2022 at 9:35 AM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Mon, Dec 12, 2022 at 12:12:09PM -0800, Andrii Nakryiko wrote:
+> > >
+> > > There is no clean way to ever move from unstable kfunc to a stable helper.
+> >
+> > No clean way? Yet in the other email you proposed a way.
+> > Not pretty, but workable.
+> > I'm sure if ever there will be a need to stabilize the kfunc we will
+> > find a clean way to do it.
+> 
+> You can't have stable and unstable helper definition in the same .c
+> file,
 
---
-paul-moore.com
+of course we can.
+uapi helpers vs kfuncs argument is not a black and white comparison.
+It's not just stable vs unstable.
+uapi has strict rules and helpers in uapi/bpf.h have to follow those rules.
+While kfuncs in terms of stability are equivalent to EXPORT_SYMBOL_GPL.
+Meaning they are largely unstable.
+The upsteam kernel keeps changing those EXPORT_SYMBOL* functions,
+but distros can apply their own "stability rules".
+See Redhat's kABI, for example. A distro can guarantee a stability
+of certain EXPORT_SYMBOL* for their customers, but that doesn't bind
+upstream development.
 
-On December 25, 2022 9:13:40 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+With uapi bpf helpers we have to guarantee their stability,
+while with kfuncs we can do whatever we want. Right now all kfuncs are
+unstable and to prove the point we changed them couple times already (nf_conn*).
+We also have bpf_obj_new_impl() kfunc which is equivalent to EXPORT_SYMBOL(__kmalloc).
+Hard to imagine more stable and more fundamental function.
+Of course we want bpf programs to use bpf_obj_new() and assume
+that it's going to be available in all future kernel releases.
+But at the same time we're not bound by uapi rules.
+bpf_obj_new() will likely be stable, but not uapi stable.
+If we screw up (or find better way to allocate memory in the future)
+we can change it.
+We can invent our own deprecation rules for stable-ish kfuncs and
+invent our more-unstable-than-current-unstable rules for kfuncs that
+are too much kernel release dependent.
 
-> On Fri, Dec 23, 2022 at 01:55:31PM -0500, Paul Moore wrote:
->
-> SNIP
->
->> diff --git a/drivers/net/netdevsim/bpf.c b/drivers/net/netdevsim/bpf.c
->> index 50854265864d..2795f03f5f34 100644
->> --- a/drivers/net/netdevsim/bpf.c
->> +++ b/drivers/net/netdevsim/bpf.c
->> @@ -109,7 +109,7 @@ nsim_bpf_offload(struct netdevsim *ns, struct bpf_prog 
->> *prog, bool oldprog)
->> "bad offload state, expected offload %sto be active",
->> oldprog ? "" : "not ");
->> ns->bpf_offloaded = prog;
->> - ns->bpf_offloaded_id = prog ? prog->aux->id : 0;
->> + ns->bpf_offloaded_id = prog ? bpf_prog_get_id(prog) : 0;
->> nsim_prog_set_loaded(prog, true);
->>
->> return 0;
->> @@ -221,6 +221,7 @@ static int nsim_bpf_create_prog(struct nsim_dev *nsim_dev,
->> struct nsim_bpf_bound_prog *state;
->> char name[16];
->> int ret;
->> + u32 id;
->>
->> state = kzalloc(sizeof(*state), GFP_KERNEL);
->> if (!state)
->> @@ -239,7 +240,8 @@ static int nsim_bpf_create_prog(struct nsim_dev *nsim_dev,
->> return ret;
->> }
->>
->> - debugfs_create_u32("id", 0400, state->ddir, &prog->aux->id);
->> + id = bpf_prog_get_id(prog);
->> + debugfs_create_u32("id", 0400, state->ddir, &id);
->> debugfs_create_file("state", 0400, state->ddir,
->> &state->state, &nsim_bpf_string_fops);
->> debugfs_create_bool("loaded", 0400, state->ddir, &state->is_loaded);
->> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
->> index 9e7d46d16032..18e965bd7db9 100644
->> --- a/include/linux/bpf.h
->> +++ b/include/linux/bpf.h
->> @@ -1102,7 +1102,7 @@ struct bpf_prog_aux {
->> u32 max_pkt_offset;
->> u32 max_tp_access;
->> u32 stack_depth;
->> - u32 id;
->> + u32 __id; /* access via bpf_prog_get_id() to check bpf_prog::valid_id */
->
-> it breaks bpftool that uses
->
->  BPF_CORE_READ((struct bpf_prog *)ent, aux, id);
->
-> and bpffs selftest because of preload iter object uses aux->id
->
->  kernel/bpf/preload/iterators/iterators.bpf.c
->
-> it'd be great to have a solution that keep 'id' field,
-> because it's probably used in many bpf programs already
->
-> jirka
->
->> u32 func_cnt; /* used by non-func prog as the number of func progs */
->> u32 func_idx; /* 0 for non-func prog, the index in func array for func prog */
->> u32 attach_btf_id; /* in-kernel BTF type id to attach to */
->> @@ -1197,7 +1197,8 @@ struct bpf_prog {
->> enforce_expected_attach_type:1, /* Enforce expected_attach_type checking at 
->> attach time */
->> call_get_stack:1, /* Do we call bpf_get_stack() or bpf_get_stackid() */
->> call_get_func_ip:1, /* Do we call get_func_ip() */
->> - tstamp_type_access:1; /* Accessed __sk_buff->tstamp_type */
->> + tstamp_type_access:1, /* Accessed __sk_buff->tstamp_type */
->> + valid_id:1; /* Is bpf_prog::aux::__id valid? */
->> enum bpf_prog_type type; /* Type of BPF program */
->> enum bpf_attach_type expected_attach_type; /* For some prog types */
->> u32 len; /* Number of filter blocks */
->> @@ -1688,6 +1689,12 @@ void bpf_prog_inc(struct bpf_prog *prog);
->> struct bpf_prog * __must_check bpf_prog_inc_not_zero(struct bpf_prog *prog);
->> void bpf_prog_put(struct bpf_prog *prog);
->
-> SNIP
+> But regardless, dynptr is modeled as black box with hidden state, and
+> its API surface area is bigger (offset, size, is null or not,
+> manipulations over those aspects; then there is skb/xdp abstraction to
+> be taken care of for generic read/write). It has a wider *generic* API
+> surface to be useful and effectively used.
 
+tbh dynptr as an abstraction of skb/xdp is not convincing.
+cilium created their own abstraction on top of skb and xdp and it's zero cost.
+While dynptr is not free, so xdp users unlikely to use dynptr(xdp) for perf reasons.
+So I suspect it won't be a success story in the long run, but we
+can certainly try it out since they will be kfuncs and can be deprecated
+if maintenance outweighs the number of users.
 
+> All *two* of them, bpf_get_current_task() and
+> bpf_get_current_task_btf(), right? They are 2 years apart.
+> bpf_get_current_task() was added before BTF era. It is still actively
+> used today and there is nothing wrong with it. It works on older
+> kernels just fine, even with BPF CO-RE (as backporting a few simple
+> patches to generate BTF is simple and easy; not so much with BPF
+> verifier changes to add native BTF support). I don't see much problem
+> having both, they are not maintenance burden.
 
+bpf_get_current_pid_tgid
+bpf_get_current_uid_gid
+bpf_get_current_comm
+bpf_get_current_task
+bpf_get_current_task_btf
+bpf_get_current_cgroup_id
+bpf_get_current_ancestor_cgroup_id
+bpf_skb_ancestor_cgroup_id
+bpf_sk_cgroup_id
+bpf_sk_ancestor_cgroup_id
+
+_are_ a maintenance burden.
+The verifier got smarter and we could have removed all of them,
+but uapi rules makes it impossible.
+The bpf prog could have been enabled to access all these task_struct
+and cgroup fields directly. Likely without any kfuncs.
+
+bpf_send_signal vs bpf_send_signal_thread
+bpf_jiffies64 vs bpf_this_cpu_ptr
+etc
+there are plenty examples where uapi bpf helpers became a burden.
+They are working and will keep working, but we could have done
+much better job if not for uapi.
+These are the examples where uapi rules are too strong for bpf development.
+Our pace of adding new features is high.
+The kernel uapi rules are too strict for us.
+
+At one point DaveM declared freeze on sizeof(struct sk_buff).
+It was a difficult, but correct decision.
+We have to declare freeze on bpf helpers.
+211 helpers that have to be maintained forever is a huge burden.
+All new features should use kfuncs and we need to figure out a deprecation
+and stability story for them. How to document kfuncs cleanly,
+how to discover them, etc.
