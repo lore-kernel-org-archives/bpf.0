@@ -2,118 +2,167 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7E97C4332F
-	for <bpf@archiver.kernel.org>; Tue, 27 Dec 2022 00:13:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B311C4332F
+	for <bpf@archiver.kernel.org>; Tue, 27 Dec 2022 03:20:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiL0ANt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 26 Dec 2022 19:13:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
+        id S230245AbiL0DUV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 26 Dec 2022 22:20:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiL0ANs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 26 Dec 2022 19:13:48 -0500
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033C525E6
-        for <bpf@vger.kernel.org>; Mon, 26 Dec 2022 16:13:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1672100020; bh=ORItN6HMFDhSfD5AXRtkrNg+ZN77mDIU+g1ZnrIzloI=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=Qc/d73mA+Ctu9mXfY+hpOnKyMLzZydaW7/ky1g2FXhj7UvhaFO2raCsQCiKzE/dwY
-         fXR6ZavQqWaalLV1tFjW7/xlDStf4nfW81dBZC4cOqRFR2Ff9QtT02DqkGqHjEvGpq
-         KRX+pEjWw2PWvom6cMJOdEsKlm+eMboMRmdWFurI=
-Received: from [192.168.9.172] (unknown [101.88.134.93])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 538D2600DA;
-        Tue, 27 Dec 2022 08:13:40 +0800 (CST)
-Message-ID: <45308e1d-4cbb-5f77-f66d-94917b7e26a4@xen0n.name>
-Date:   Tue, 27 Dec 2022 08:13:39 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101
- Firefox/110.0 Thunderbird/110.0a1
-Subject: Re: [PATCH bpf-next] libbpf: Add LoongArch support to bpf_tracing.h
-To:     Hengqi Chen <hengqi.chen@gmail.com>, bpf@vger.kernel.org,
-        loongarch@lists.linux.dev, andrii@kernel.org
-References: <20221225120138.1236072-1-hengqi.chen@gmail.com>
-Content-Language: en-US
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <20221225120138.1236072-1-hengqi.chen@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        with ESMTP id S230203AbiL0DUV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 26 Dec 2022 22:20:21 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9342DEAF
+        for <bpf@vger.kernel.org>; Mon, 26 Dec 2022 19:20:20 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id s9so9670088qtx.6
+        for <bpf@vger.kernel.org>; Mon, 26 Dec 2022 19:20:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Sg3sbHFsH2dQzukHN//ne0r4jOPYXWpJhmZZCzGYMiY=;
+        b=D6x9wt3N9UAhIn/k8z00z8MTZ7CQLi4oV1knBsIGvjRoyB/i4Yqf6jWCQMBwqOt9Yv
+         TIKDGIVEGpZTn1kF+RMZtLmzlmPqTV7sAgOl/6fSx6YcxO/AL3xMjkJ16QnW4hW+lEHP
+         iKmF9lM3B2GqafpbrkaWsBsgmEqqd9PHJHbm8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Sg3sbHFsH2dQzukHN//ne0r4jOPYXWpJhmZZCzGYMiY=;
+        b=H7wwVjozBgZsNRfIi9XAIEUT6auySRXHsd9ymesq0plnlMcHGwrFinD+AgBZbZLgKi
+         NMtItCkgMCn5biO2FftmjgSMA/ZzGQKlMIG9dXT7kgx6Xmj5S8BuXjnB28aI/5QYQ7Wu
+         jYVFFT+w0jdCr4OWWxnjAH0EzEde1S++ioJmdBanYfrhrKBhvYnC6pvcZRMNsTUyVk6M
+         4sLViAFmHlRyed9jIwMYEEJlR1hWI/gCy0gHgvz7eS7JnFwOLQ81EvGio4ZgOxAXurcV
+         /zT/ZjguMxcR40cwDYsFlGv+YLRK0ECfTU1FDabEWp+2gP6nM+qCKrtTjkwHhacJjKfY
+         Ff0A==
+X-Gm-Message-State: AFqh2kqIjqfh4B2ZHpDLMp2HYafAeli9fJxpxMPodNxxxtbtbLP8avdN
+        w3NVzuRXXjH8lhfbPWUJnHzOoA==
+X-Google-Smtp-Source: AMrXdXv+M3Xrp7vR5xWKgy0S+d7KxpHlLmnuwlvSLk8YtRciEop4s2LnD03Zmwtf+ppRjntxAl53FQ==
+X-Received: by 2002:ac8:4f06:0:b0:3a9:8610:f9af with SMTP id b6-20020ac84f06000000b003a98610f9afmr26824078qte.14.1672111219607;
+        Mon, 26 Dec 2022 19:20:19 -0800 (PST)
+Received: from localhost.swdvt.lab.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id fa11-20020a05622a4ccb00b003a68fe872a5sm7751262qtb.96.2022.12.26.19.20.18
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 26 Dec 2022 19:20:19 -0800 (PST)
+From:   Michael Chan <michael.chan@broadcom.com>
+To:     davem@davemloft.net
+Cc:     netdev@vger.kernel.org, kuba@kernel.org, edumazet@google.com,
+        pabeni@redhat.com, bpf@vger.kernel.org, gospo@broadcom.com
+Subject: [PATCH net 0/5] bnxt_en: Bug fixes
+Date:   Mon, 26 Dec 2022 22:19:35 -0500
+Message-Id: <1672111180-19463-1-git-send-email-michael.chan@broadcom.com>
+X-Mailer: git-send-email 1.8.3.1
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000004a9f1305f0c6bb5a"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+--0000000000004a9f1305f0c6bb5a
 
-On 12/25/22 20:01, Hengqi Chen wrote:
-> Add PT_REGS macros for LoongArch64 ([0]).
->
->    [0]: https://loongson.github.io/LoongArch-Documentation/LoongArch-ELF-ABI-EN.html
->
-> Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
-> ---
->   tools/lib/bpf/bpf_tracing.h | 21 +++++++++++++++++++++
->   1 file changed, 21 insertions(+)
->
-> diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
-> index 2972dc25ff72..5a8a0830d133 100644
-> --- a/tools/lib/bpf/bpf_tracing.h
-> +++ b/tools/lib/bpf/bpf_tracing.h
-> @@ -32,6 +32,9 @@
->   #elif defined(__TARGET_ARCH_arc)
->   	#define bpf_target_arc
->   	#define bpf_target_defined
-> +#elif defined(__TARGET_ARCH_loongarch)
-> +	#define bpf_target_loongarch
-> +	#define bpf_target_defined
->   #else
->
->   /* Fall back to what the compiler says */
-> @@ -62,6 +65,9 @@
->   #elif defined(__arc__)
->   	#define bpf_target_arc
->   	#define bpf_target_defined
-> +#elif defined(__loongarch__) && __loongarch_grlen == 64
+This series fixes a devlink bug and several XDP related bugs.  The
+devlink bug causes a kernel crash on VF devices.  The XDP driver
+patches fix and clean up the RX XDP path and re-enable header-data
+split that was disabled by mistake when adding the XDP multi-buffer
+support.
 
-Isn't the whole patch independent of bitness? I'd suggest just removing 
-this GRLen check so we don't need another change when we want 
-LoongArch32 too.
+Michael Chan (4):
+  bnxt_en: Simplify bnxt_xdp_buff_init()
+  bnxt_en: Fix XDP RX path
+  bnxt_en: Fix first buffer size calculations for XDP multi-buffer
+  bnxt_en: Fix HDS and jumbo thresholds for RX packets
 
-Please adjust the commit message wording accordingly too.
+Vikas Gupta (1):
+  bnxt_en: fix devlink port registration to netdev
 
-> +	#define bpf_target_loongarch
-> +	#define bpf_target_defined
->   #endif /* no compiler target */
->
->   #endif
-> @@ -258,6 +264,21 @@ struct pt_regs___arm64 {
->   /* arc does not select ARCH_HAS_SYSCALL_WRAPPER. */
->   #define PT_REGS_SYSCALL_REGS(ctx) ctx
->
-> +#elif defined(bpf_target_loongarch)
-> +
-> +#define __PT_PARM1_REG regs[4]
-> +#define __PT_PARM2_REG regs[5]
-> +#define __PT_PARM3_REG regs[6]
-> +#define __PT_PARM4_REG regs[7]
-> +#define __PT_PARM5_REG regs[8]
-> +#define __PT_RET_REG regs[1]
-> +#define __PT_FP_REG regs[22]
-> +#define __PT_RC_REG regs[4]
-> +#define __PT_SP_REG regs[3]
-> +#define __PT_IP_REG csr_era
-> +/* loongarch does not select ARCH_HAS_SYSCALL_WRAPPER. */
-> +#define PT_REGS_SYSCALL_REGS(ctx) ctx
-> +
->   #endif
->
->   #if defined(bpf_target_defined)
-> --
-> 2.31.1
->
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c     | 27 +++++++++++--------
+ drivers/net/ethernet/broadcom/bnxt/bnxt.h     | 15 ++++++++---
+ drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c | 20 +++++++-------
+ drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h |  6 ++---
+ 4 files changed, 39 insertions(+), 29 deletions(-)
+
 -- 
-WANG "xen0n" Xuerui
+2.18.1
 
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
 
+--0000000000004a9f1305f0c6bb5a
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+OnaLEot1MoQO7BIe5S9H4AcCEXXcrJJiAtMCl47ARpyHmvQFQFFTrHgUYEd9V+9bOzY7MBIGSV1N
+/JfsT1sZw6HT0lJkSQefhPGpBniAob62DJP3qr11tu8CAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
+AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
+c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
+AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
+TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
+bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
+L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
+BB0wG4EZbWljaGFlbC5jaGFuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
+HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQU31rAyTdZweIF0tJTFYwfOv2w
+L4QwDQYJKoZIhvcNAQELBQADggEBACcuyaGmk0NSZ7Kio7O7WSZ0j0f9xXcBnLbJvQXFYM7JI5uS
+kw5ozATEN5gfmNIe0AHzqwoYjAf3x8Dv2w7HgyrxWdpjTKQFv5jojxa3A5LVuM8mhPGZfR/L5jSk
+5xc3llsKqrWI4ov4JyW79p0E99gfPA6Waixoavxvv1CZBQ4Stu7N660kTu9sJrACf20E+hdKLoiU
+hd5wiQXo9B2ncm5P3jFLYLBmPltIn/uzdiYpFj+E9kS9XYDd+boBZhN1Vh0296zLQZobLfKFzClo
+E6IFyTTANonrXvCRgodKS+QJEH8Syu2jSKe023aVemkuZjzvPK7o9iU7BKkPG2pzLPgxggJtMIIC
+aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
+EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxeQGjDntHGb2iaQkIw
+DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILWkudzzpYoCgSkQRncEzAkrEjwR7/6v
+vjxqBoBFcFxeMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMTIy
+NzAzMjAxOVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
+SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
+ATANBgkqhkiG9w0BAQEFAASCAQAtOyD36dSlzWQdbX67URSKOqT4X/VS1LoJhy2adqv9X2ZxFpdX
+i10s2DPuYICEjRWiR5pCtLoXK6/ZWEN+I++MzmKHbpJV0CnXOen2oFT3mHw9u4MSl1hzRW0OMnx0
+a9dNOSi4Bg/N3avwu4T4TmwE0CGz13wWlPdgt4UmfTaICoCmjwJDl07cJEKT1QEKo5UhLXGDSnB/
+jYUoS/JErvQtU9WvvTf9/kuGaZ363bVG3zsD3bVhpwLN9XGAxdc7C3XiMuDJfNaGsWxLCGRwx2Rr
++NQzpm9Rrrbq3DvoWuQ/CaLjgqea6r+bxZsN776ZfjgPovgrOOHWd5Ub275QJHZv
+--0000000000004a9f1305f0c6bb5a--
