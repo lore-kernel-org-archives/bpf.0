@@ -2,47 +2,47 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FC04C10F1B
-	for <bpf@archiver.kernel.org>; Tue, 27 Dec 2022 20:36:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FECDC46467
+	for <bpf@archiver.kernel.org>; Tue, 27 Dec 2022 20:40:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232227AbiL0UgR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 27 Dec 2022 15:36:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38166 "EHLO
+        id S232903AbiL0Ujj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 27 Dec 2022 15:39:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232272AbiL0Uee (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 27 Dec 2022 15:34:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB66A65CA;
-        Tue, 27 Dec 2022 12:33:56 -0800 (PST)
+        with ESMTP id S232756AbiL0Uir (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 27 Dec 2022 15:38:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD53DEAF;
+        Tue, 27 Dec 2022 12:34:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 79D94B8109A;
-        Tue, 27 Dec 2022 20:33:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ACECC433F0;
-        Tue, 27 Dec 2022 20:33:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD29CB81203;
+        Tue, 27 Dec 2022 20:34:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB528C433F2;
+        Tue, 27 Dec 2022 20:34:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672173234;
-        bh=ie148qpRt6z9C2iaLSshGaAAoSR2OLbFzSIO1HD1v1s=;
+        s=k20201202; t=1672173285;
+        bh=OsWpM7VMqAeoAF4eCneiyqb1FOaCm6d8gpiZhGJ7kpI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EiBp9nVrGgenP4cJRP+L/H0O12PhWQI7rPhUBurYJO3OPLaK9sxF23zctTqpUdn/Q
-         ev/AfRj+Bwe4j/rbXGw7MyMymsrFK+mW9Y8w/mrCLVkZK2NTGuYqfWXm1ajmipTpIj
-         2cEpOhgks2ywU33CPRvEwumEL3QV4Yapt0HvyvVcAZS6he11rKg/lLZVX1B85oScOG
-         Y7GEHqaX/hOQCgq+uGT/i0MAp/E7mozEPR65grOq5pAm5yl5v2rIS4wi0McJ7hm5bT
-         QVA8UXt8eoPaP7YhISuMV2wATStHfx92/DWX36SKRzaBPjySsTzeJtQ5X/uNKs8I2n
-         Jy6cJiVOrdbJQ==
+        b=neJDhL3GVgHZlQTYR81+M1dZ/pZ15oi68xwcZrJKQut76dG7VyPGVW5mfMLn3MxGq
+         T6wCrv+sfbM9hkjS4mQStvsUCuWjKkzGX6sckW9yQYv8DqOSnP+M6oMuHmMysloUCy
+         3Nyym0Vb9uEvl/VihHhB0V49OGs8HRn0Z4g522+UzeE+xp122m3E07W5xuwjLdV+Ql
+         QuWFeEG2Qu+/yPBuoOwm68Zy7ZUdQyT8AJ8EQaB0I+ooWC4UStVjJpnn8JXUJUBmx8
+         jIH1h1khpPidd9rZ/TpLkDlJyf5HX/CO5fdIzTRIsMlZbxDq0BY/ITkZptMChZ52qM
+         T7hV3jq4XhEbg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Edward Lo <edward.lo@ambergroup.io>,
         Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
         Sasha Levin <sashal@kernel.org>, ntfs3@lists.linux.dev,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.0 09/27] fs/ntfs3: Validate resident attribute name
-Date:   Tue, 27 Dec 2022 15:33:24 -0500
-Message-Id: <20221227203342.1213918-9-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 09/22] fs/ntfs3: Validate resident attribute name
+Date:   Tue, 27 Dec 2022 15:34:19 -0500
+Message-Id: <20221227203433.1214255-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221227203342.1213918-1-sashal@kernel.org>
-References: <20221227203342.1213918-1-sashal@kernel.org>
+In-Reply-To: <20221227203433.1214255-1-sashal@kernel.org>
+References: <20221227203433.1214255-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -201,7 +201,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 5 insertions(+)
 
 diff --git a/fs/ntfs3/record.c b/fs/ntfs3/record.c
-index 9f81944441ae..af1e4b364ea8 100644
+index 30751fd618df..fd342da398be 100644
 --- a/fs/ntfs3/record.c
 +++ b/fs/ntfs3/record.c
 @@ -265,6 +265,11 @@ struct ATTRIB *mi_enum_attr(struct mft_inode *mi, struct ATTRIB *attr)
