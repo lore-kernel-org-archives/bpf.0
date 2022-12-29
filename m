@@ -2,82 +2,126 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D81F1C3DA79
-	for <bpf@archiver.kernel.org>; Thu, 29 Dec 2022 22:40:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBC5AC3DA7A
+	for <bpf@archiver.kernel.org>; Thu, 29 Dec 2022 22:51:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbiL2WkV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 29 Dec 2022 17:40:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56514 "EHLO
+        id S233866AbiL2WvN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 29 Dec 2022 17:51:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbiL2WkT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 29 Dec 2022 17:40:19 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1228214024;
-        Thu, 29 Dec 2022 14:40:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 555BACE16CA;
-        Thu, 29 Dec 2022 22:40:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 93C77C433F0;
-        Thu, 29 Dec 2022 22:40:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672353615;
-        bh=YTeAya3sAyksUTVeAFd2g0dgm0CJ8kwV1GO3dUbPplk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Ny3DUGBA4s30f60TxXPwnszhkld9uYfhdFwc0NDzXt5z5hTyY9ozd9PztLLvNSZST
-         oVnV9SPBccKKm6AAk4U3PIA9UAMdtE1a6V3ZxeGrzjP6qrt8+4EQoBtl2DRhHqEzQo
-         xDXxatjiJ+2rToHKB93j+l0rsr1icwxXRRrVwMb9pEcuHR239VB8/BqVNu4GVKh2ag
-         huEjZ/m0hc34/Nmf1TFsqHDHK3bmP4611gJAohWM37xMii8QrZvJbJw6+/kOIucIl7
-         DHNo4BI1j6PmT7d/1Qq8RXLkHDuLJU2HJdXBDL8La8sEDdQDN5SA8LuVikuOsivu5r
-         sKrO7NP8C079g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7C24BE50D71;
-        Thu, 29 Dec 2022 22:40:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S234268AbiL2WvI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 29 Dec 2022 17:51:08 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56CE920A;
+        Thu, 29 Dec 2022 14:51:07 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id z16so2008646wrw.1;
+        Thu, 29 Dec 2022 14:51:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5jghot3JZGfw4NoEk9T1OvZadmJ48FJEB71fkAQxUvE=;
+        b=o+bfXuHUlhYapQjk1affWWJ5VDYcRMCuwcxk/BkE7p2ZX5N8fbd8xHK0eN7DI4Tm4J
+         FAQKxN2KRfhhFuESXYtXtPS4c8UIIey4brcGY3n+cqBU/4KpKQlV7ces3PUCueqcxWEf
+         egWSvyrKN/YvDaACP5ZDTuUv8o82JypJ/DQcq3f1hABLw9fEPeemn5HuFMipMdJxYC3m
+         VbUYSrPgehW8gPjFF2A8ruwbotv4aTL1aC478VWx3z7rt2/YdcwYHJn1XnZKceT4rL/6
+         2/QQQ+FqPhNxiYy5EARt5CPc+mEXlKgZ7eCR02n4Xa8dHsHoSMuZ0TJ2v47kh2ueMKQr
+         Yk1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5jghot3JZGfw4NoEk9T1OvZadmJ48FJEB71fkAQxUvE=;
+        b=QD/c+425XYmyql7JvgmL8xsrCTf3azLtBaDI6UoIOdnYGq9P4lKIkoZLtN2KXe4dhJ
+         ZrMZ0LJ4E+EEJtlGWKGqm/bAMu/ifvGeqwWqO4rU/ITQ9zWZf22bM3DAQUk8skJnFY6g
+         WxukBdIUpnu+iUDalN7Mk0jJcyOUHsMaL1HznXqfSIrIXI44jOAC39Egpu/mVoxxcBSR
+         ep7B2uFbMUkOANkImc8Ots07wr3hAvFXJGRzBJNWogociyXplsVOhkM1CDHoZ+UO4I4p
+         3btUrh12/smJs1uVQ90IYQ+s6t1/iw5nRiyipI6u3RUETP8PhCiX41ObiqV5mqppAZfM
+         8zsQ==
+X-Gm-Message-State: AFqh2kpVwDsR85c41+6pxc8rmAz8CqXN77+8KSh7/bRE3rgkpfga1m2j
+        nwt8ykaK34KbkOyG1j6A3NY2oZaZLrg=
+X-Google-Smtp-Source: AMrXdXsaWAGUC+UA0qhQ6XWvSkTpLuxHWR1u6yMco/+swVl4+AlFMaIIsO+Vl2cKprfKRIfpwFcJiw==
+X-Received: by 2002:adf:fd8c:0:b0:28e:f7a:9fec with SMTP id d12-20020adffd8c000000b0028e0f7a9fecmr1175004wrr.69.1672354265933;
+        Thu, 29 Dec 2022 14:51:05 -0800 (PST)
+Received: from localhost.localdomain (host-79-56-217-20.retail.telecomitalia.it. [79.56.217.20])
+        by smtp.gmail.com with ESMTPSA id p3-20020adfcc83000000b0027a57c1a6fbsm13493312wrj.22.2022.12.29.14.51.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Dec 2022 14:51:05 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Evgeniy Dushistov <dushistov@mail.ru>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Subject: [PATCH v5 1/4] fs/ufs: Use the offset_in_page() helper
+Date:   Thu, 29 Dec 2022 23:50:57 +0100
+Message-Id: <20221229225100.22141-2-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20221229225100.22141-1-fmdefrancesco@gmail.com>
+References: <20221229225100.22141-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] libbpf: Added the description of some API functions
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167235361550.16779.392269015773043979.git-patchwork-notify@kernel.org>
-Date:   Thu, 29 Dec 2022 22:40:15 +0000
-References: <20221224112058.12038-1-liuxin350@huawei.com>
-In-Reply-To: <20221224112058.12038-1-liuxin350@huawei.com>
-To:     Xin Liu <liuxin350@huawei.com>
-Cc:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yanan@huawei.com,
-        wuchangye@huawei.com, xiesongyang@huawei.com,
-        kongweibin2@huawei.com, zhangmingyi5@huawei.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+Use the offset_in_page() helper because it is more suitable than doing
+explicit subtractions between pointers to directory entries and kernel
+virtual addresses of mapped pages.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+Cc: Ira Weiny <ira.weiny@intel.com>
+Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
+ fs/ufs/dir.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-On Sat, 24 Dec 2022 19:20:58 +0800 you wrote:
-> Currently, many API functions are not described in the document.
-> I have tried to add the API description of the following four API
-> functions:
->  libbpf_set_print
->  bpf_object__open
->  bpf_object__load
->  bpf_object__close
-> 
-> [...]
-
-Here is the summary with links:
-  - libbpf: Added the description of some API functions
-    https://git.kernel.org/bpf/bpf-next/c/678a1c036199
-
-You are awesome, thank you!
+diff --git a/fs/ufs/dir.c b/fs/ufs/dir.c
+index 391efaf1d528..69f78583c9c1 100644
+--- a/fs/ufs/dir.c
++++ b/fs/ufs/dir.c
+@@ -87,8 +87,7 @@ void ufs_set_link(struct inode *dir, struct ufs_dir_entry *de,
+ 		  struct page *page, struct inode *inode,
+ 		  bool update_times)
+ {
+-	loff_t pos = page_offset(page) +
+-			(char *) de - (char *) page_address(page);
++	loff_t pos = page_offset(page) + offset_in_page(de);
+ 	unsigned len = fs16_to_cpu(dir->i_sb, de->d_reclen);
+ 	int err;
+ 
+@@ -371,8 +370,7 @@ int ufs_add_link(struct dentry *dentry, struct inode *inode)
+ 	return -EINVAL;
+ 
+ got_it:
+-	pos = page_offset(page) +
+-			(char*)de - (char*)page_address(page);
++	pos = page_offset(page) + offset_in_page(de);
+ 	err = ufs_prepare_chunk(page, pos, rec_len);
+ 	if (err)
+ 		goto out_unlock;
+@@ -497,8 +495,8 @@ int ufs_delete_entry(struct inode *inode, struct ufs_dir_entry *dir,
+ {
+ 	struct super_block *sb = inode->i_sb;
+ 	char *kaddr = page_address(page);
+-	unsigned from = ((char*)dir - kaddr) & ~(UFS_SB(sb)->s_uspi->s_dirblksize - 1);
+-	unsigned to = ((char*)dir - kaddr) + fs16_to_cpu(sb, dir->d_reclen);
++	unsigned int from = offset_in_page(dir) & ~(UFS_SB(sb)->s_uspi->s_dirblksize - 1);
++	unsigned int to = offset_in_page(dir) + fs16_to_cpu(sb, dir->d_reclen);
+ 	loff_t pos;
+ 	struct ufs_dir_entry *pde = NULL;
+ 	struct ufs_dir_entry *de = (struct ufs_dir_entry *) (kaddr + from);
+@@ -522,7 +520,7 @@ int ufs_delete_entry(struct inode *inode, struct ufs_dir_entry *dir,
+ 		de = ufs_next_entry(sb, de);
+ 	}
+ 	if (pde)
+-		from = (char*)pde - (char*)page_address(page);
++		from = offset_in_page(pde);
+ 
+ 	pos = page_offset(page) + from;
+ 	lock_page(page);
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.39.0
 
