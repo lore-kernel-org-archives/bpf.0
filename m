@@ -2,22 +2,22 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B6CFC3DA7D
-	for <bpf@archiver.kernel.org>; Tue,  3 Jan 2023 06:40:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7257C3DA7D
+	for <bpf@archiver.kernel.org>; Tue,  3 Jan 2023 06:40:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232861AbjACGkU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 3 Jan 2023 01:40:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59640 "EHLO
+        id S233069AbjACGkV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 3 Jan 2023 01:40:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbjACGkT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 3 Jan 2023 01:40:19 -0500
-Received: from out30-6.freemail.mail.aliyun.com (out30-6.freemail.mail.aliyun.com [115.124.30.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823361088;
-        Mon,  2 Jan 2023 22:40:17 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R431e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=hengqi@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VYiqoEI_1672728012;
-Received: from localhost(mailfrom:hengqi@linux.alibaba.com fp:SMTPD_---0VYiqoEI_1672728012)
+        with ESMTP id S230254AbjACGkV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 3 Jan 2023 01:40:21 -0500
+Received: from out30-7.freemail.mail.aliyun.com (out30-7.freemail.mail.aliyun.com [115.124.30.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D8C1088;
+        Mon,  2 Jan 2023 22:40:19 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=hengqi@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VYj.ouq_1672728015;
+Received: from localhost(mailfrom:hengqi@linux.alibaba.com fp:SMTPD_---0VYj.ouq_1672728015)
           by smtp.aliyun-inc.com;
-          Tue, 03 Jan 2023 14:40:13 +0800
+          Tue, 03 Jan 2023 14:40:16 +0800
 From:   Heng Qi <hengqi@linux.alibaba.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     Jason Wang <jasowang@redhat.com>,
@@ -30,63 +30,56 @@ Cc:     Jason Wang <jasowang@redhat.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Eric Dumazet <edumazet@google.com>,
         Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Subject: [PATCH v3 0/9] virtio-net: support multi buffer xdp
-Date:   Tue,  3 Jan 2023 14:40:03 +0800
-Message-Id: <20230103064012.108029-1-hengqi@linux.alibaba.com>
+Subject: [PATCH v3 2/9] virtio-net: set up xdp for multi buffer packets
+Date:   Tue,  3 Jan 2023 14:40:05 +0800
+Message-Id: <20230103064012.108029-3-hengqi@linux.alibaba.com>
 X-Mailer: git-send-email 2.19.1.6.gb485710b
+In-Reply-To: <20230103064012.108029-1-hengqi@linux.alibaba.com>
+References: <20230103064012.108029-1-hengqi@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Changes since PATCH v2:
-- Even if single buffer xdp has a hole mechanism, there will be no
-  problem (limiting mtu and turning off GUEST GSO), so there is no
-  need to backport "[PATCH 1/9]";
-- Modify calculation of MTU for single buffer xdp in virtnet_xdp_set();
-- Make truesize in mergeable mode return to literal meaning;
-- Add some comments for legibility;
+When the xdp program sets xdp.frags, which means it can process
+multi-buffer packets over larger MTU, so we continue to support xdp.
+But for single-buffer xdp, we should keep checking for MTU.
 
-Changes since RFC:
-- Using headroom instead of vi->xdp_enabled to avoid re-reading
-  in add_recvbuf_mergeable();
-- Disable GRO_HW and keep linearization for single buffer xdp;
-- Renamed to virtnet_build_xdp_buff_mrg();
-- pr_debug() to netdev_dbg();
-- Adjusted the order of the patch series.
+Signed-off-by: Heng Qi <hengqi@linux.alibaba.com>
+Reviewed-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+---
+ drivers/net/virtio_net.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-Currently, virtio net only supports xdp for single-buffer packets
-or linearized multi-buffer packets. This patchset supports xdp for
-multi-buffer packets, then larger MTU can be used if xdp sets the
-xdp.frags. This does not affect single buffer handling.
-
-In order to build multi-buffer xdp neatly, we integrated the code
-into virtnet_build_xdp_buff_mrg() for xdp. The first buffer is used
-for prepared xdp buff, and the rest of the buffers are added to
-its skb_shared_info structure. This structure can also be
-conveniently converted during XDP_PASS to get the corresponding skb.
-
-Since virtio net uses comp pages, and bpf_xdp_frags_increase_tail()
-is based on the assumption of the page pool,
-(rxq->frag_size - skb_frag_size(frag) - skb_frag_off(frag))
-is negative in most cases. So we didn't set xdp_rxq->frag_size in
-virtnet_open() to disable the tail increase.
-
-Heng Qi (9):
-  virtio-net: disable the hole mechanism for xdp
-  virtio-net: set up xdp for multi buffer packets
-  virtio-net: update bytes calculation for xdp_frame
-  virtio-net: build xdp_buff with multi buffers
-  virtio-net: construct multi-buffer xdp in mergeable
-  virtio-net: transmit the multi-buffer xdp
-  virtio-net: build skb from multi-buffer xdp
-  virtio-net: remove xdp related info from page_to_skb()
-  virtio-net: support multi-buffer xdp
-
- drivers/net/virtio_net.c | 371 ++++++++++++++++++++++++++-------------
- 1 file changed, 250 insertions(+), 121 deletions(-)
-
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index 443aa7b8f0ad..60e199811212 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -3074,7 +3074,9 @@ static int virtnet_restore_guest_offloads(struct virtnet_info *vi)
+ static int virtnet_xdp_set(struct net_device *dev, struct bpf_prog *prog,
+ 			   struct netlink_ext_ack *extack)
+ {
+-	unsigned long int max_sz = PAGE_SIZE - sizeof(struct padded_vnet_hdr);
++	unsigned int room = SKB_DATA_ALIGN(VIRTIO_XDP_HEADROOM +
++					   sizeof(struct skb_shared_info));
++	unsigned int max_sz = PAGE_SIZE - room - ETH_HLEN;
+ 	struct virtnet_info *vi = netdev_priv(dev);
+ 	struct bpf_prog *old_prog;
+ 	u16 xdp_qp = 0, curr_qp;
+@@ -3095,9 +3097,9 @@ static int virtnet_xdp_set(struct net_device *dev, struct bpf_prog *prog,
+ 		return -EINVAL;
+ 	}
+ 
+-	if (dev->mtu > max_sz) {
+-		NL_SET_ERR_MSG_MOD(extack, "MTU too large to enable XDP");
+-		netdev_warn(dev, "XDP requires MTU less than %lu\n", max_sz);
++	if (prog && !prog->aux->xdp_has_frags && dev->mtu > max_sz) {
++		NL_SET_ERR_MSG_MOD(extack, "MTU too large to enable XDP without frags");
++		netdev_warn(dev, "single-buffer XDP requires MTU less than %u\n", max_sz);
+ 		return -EINVAL;
+ 	}
+ 
 -- 
 2.19.1.6.gb485710b
 
