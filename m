@@ -2,117 +2,121 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B419C54EBC
-	for <bpf@archiver.kernel.org>; Tue,  3 Jan 2023 06:40:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1148C5479D
+	for <bpf@archiver.kernel.org>; Tue,  3 Jan 2023 06:53:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236771AbjACGkf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 3 Jan 2023 01:40:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
+        id S231956AbjACGxo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 3 Jan 2023 01:53:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236775AbjACGk1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 3 Jan 2023 01:40:27 -0500
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB82D107;
-        Mon,  2 Jan 2023 22:40:24 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R701e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=hengqi@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VYiMPAE_1672728020;
-Received: from localhost(mailfrom:hengqi@linux.alibaba.com fp:SMTPD_---0VYiMPAE_1672728020)
-          by smtp.aliyun-inc.com;
-          Tue, 03 Jan 2023 14:40:20 +0800
-From:   Heng Qi <hengqi@linux.alibaba.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     Jason Wang <jasowang@redhat.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Subject: [PATCH v3 7/9] virtio-net: build skb from multi-buffer xdp
-Date:   Tue,  3 Jan 2023 14:40:10 +0800
-Message-Id: <20230103064012.108029-8-hengqi@linux.alibaba.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
-In-Reply-To: <20230103064012.108029-1-hengqi@linux.alibaba.com>
-References: <20230103064012.108029-1-hengqi@linux.alibaba.com>
+        with ESMTP id S230254AbjACGxn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 3 Jan 2023 01:53:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AAE1B48
+        for <bpf@vger.kernel.org>; Mon,  2 Jan 2023 22:53:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C94CEB80E14
+        for <bpf@vger.kernel.org>; Tue,  3 Jan 2023 06:53:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E037C433EF
+        for <bpf@vger.kernel.org>; Tue,  3 Jan 2023 06:53:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672728819;
+        bh=wbWN2d3IanVfbt0qnVLEs1kFgkAHIJ7y4rljhzLPY8U=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Qjrhz9ud2ZdY5LEz7riR0Atr5StTgwPHE6xvDOBcoQl6jMqUgE+QWn02erYe4a//v
+         Ego/2Saxw7Zv0yS+HtVYq24qll4+0YaOh8bLb0wHFPMQmW7QtuWc5+75ovzyJPLEEC
+         FYFPtR4y9BGoXcE74hnI3Q1j8B6QCLi+mbWCZhHTqP9GPIbXCKK/mM6AX/Nm+B+eu6
+         v2niHbIkcH3Of2vFUplrCIptJN/srX8Cq7IDdPKJad0CVx4hXBeWEpoLHngRpEDvhh
+         Cl5eEsTW8zQ06fF50Pdr/jzjxezwUJBvvKx0O2XujKhW4f12752WUb6fgzjfGY0Gbz
+         +cwv1pKNnzzmQ==
+Received: by mail-ed1-f54.google.com with SMTP id u28so37763985edd.10
+        for <bpf@vger.kernel.org>; Mon, 02 Jan 2023 22:53:39 -0800 (PST)
+X-Gm-Message-State: AFqh2kp8BB80EcIBYIX48a2YARKU6ClHcFsPuPxkndDhfi/2LvJgrGRR
+        GnBuVhkXjXmHwdxOxY/D51+gbeJXLKxbzWL9N5k=
+X-Google-Smtp-Source: AMrXdXtsCm2upyz5f+49LawIIF8A7kWqG7pOZzLb+iBBtm0rcndCRzkmW6uY8SF8DerP1ABCrUAJDqvFp3GsAT3vLPA=
+X-Received: by 2002:aa7:d44e:0:b0:47f:5431:89ea with SMTP id
+ q14-20020aa7d44e000000b0047f543189eamr3703643edr.284.1672728817812; Mon, 02
+ Jan 2023 22:53:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20221231100757.3177034-1-hengqi.chen@gmail.com>
+In-Reply-To: <20221231100757.3177034-1-hengqi.chen@gmail.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Tue, 3 Jan 2023 14:53:25 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6hdXXE4EwFe66rUxJMixc=s7PYuxeyCjaQ5z3Fck40jA@mail.gmail.com>
+Message-ID: <CAAhV-H6hdXXE4EwFe66rUxJMixc=s7PYuxeyCjaQ5z3Fck40jA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] libbpf: Add LoongArch support to bpf_tracing.h
+To:     Hengqi Chen <hengqi.chen@gmail.com>
+Cc:     bpf@vger.kernel.org, loongarch@lists.linux.dev, andrii@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This converts the xdp_buff directly to a skb, including
-multi-buffer and single buffer xdp. We'll isolate the
-construction of skb based on xdp from page_to_skb().
+LGTM, I will queue this patch for loongarch-next if no one has
+objections. Thank you.
 
-Signed-off-by: Heng Qi <hengqi@linux.alibaba.com>
-Reviewed-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
----
- drivers/net/virtio_net.c | 49 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index fee9ce31f6c7..87d65b7a5033 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -952,6 +952,55 @@ static struct sk_buff *receive_big(struct net_device *dev,
- 	return NULL;
- }
- 
-+/* Why not use xdp_build_skb_from_frame() ?
-+ * XDP core assumes that xdp frags are PAGE_SIZE in length, while in
-+ * virtio-net there are 2 points that do not match its requirements:
-+ *  1. The size of the prefilled buffer is not fixed before xdp is set.
-+ *  2. xdp_build_skb_from_frame() does more checks that we don't need,
-+ *     like eth_type_trans() (which virtio-net does in receive_buf()).
-+ */
-+static struct sk_buff *build_skb_from_xdp_buff(struct net_device *dev,
-+					       struct virtnet_info *vi,
-+					       struct xdp_buff *xdp,
-+					       unsigned int xdp_frags_truesz)
-+{
-+	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
-+	unsigned int headroom, data_len;
-+	struct sk_buff *skb;
-+	int metasize;
-+	u8 nr_frags;
-+
-+	if (unlikely(xdp->data_end > xdp_data_hard_end(xdp))) {
-+		pr_debug("Error building skb as missing reserved tailroom for xdp");
-+		return NULL;
-+	}
-+
-+	if (unlikely(xdp_buff_has_frags(xdp)))
-+		nr_frags = sinfo->nr_frags;
-+
-+	skb = build_skb(xdp->data_hard_start, xdp->frame_sz);
-+	if (unlikely(!skb))
-+		return NULL;
-+
-+	headroom = xdp->data - xdp->data_hard_start;
-+	data_len = xdp->data_end - xdp->data;
-+	skb_reserve(skb, headroom);
-+	__skb_put(skb, data_len);
-+
-+	metasize = xdp->data - xdp->data_meta;
-+	metasize = metasize > 0 ? metasize : 0;
-+	if (metasize)
-+		skb_metadata_set(skb, metasize);
-+
-+	if (unlikely(xdp_buff_has_frags(xdp)))
-+		xdp_update_skb_shared_info(skb, nr_frags,
-+					   sinfo->xdp_frags_size,
-+					   xdp_frags_truesz,
-+					   xdp_buff_is_frag_pfmemalloc(xdp));
-+
-+	return skb;
-+}
-+
- /* TODO: build xdp in big mode */
- static int virtnet_build_xdp_buff_mrg(struct net_device *dev,
- 				      struct virtnet_info *vi,
--- 
-2.19.1.6.gb485710b
-
+On Sat, Dec 31, 2022 at 6:08 PM Hengqi Chen <hengqi.chen@gmail.com> wrote:
+>
+> Add PT_REGS macros for LoongArch ([0]).
+>
+>   [0]: https://loongson.github.io/LoongArch-Documentation/LoongArch-ELF-ABI-EN.html
+>
+> Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
+> ---
+>  tools/lib/bpf/bpf_tracing.h | 23 +++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
+>
+> diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
+> index 9c1b1689068d..bdb0f6b5be84 100644
+> --- a/tools/lib/bpf/bpf_tracing.h
+> +++ b/tools/lib/bpf/bpf_tracing.h
+> @@ -32,6 +32,9 @@
+>  #elif defined(__TARGET_ARCH_arc)
+>         #define bpf_target_arc
+>         #define bpf_target_defined
+> +#elif defined(__TARGET_ARCH_loongarch)
+> +       #define bpf_target_loongarch
+> +       #define bpf_target_defined
+>  #else
+>
+>  /* Fall back to what the compiler says */
+> @@ -62,6 +65,9 @@
+>  #elif defined(__arc__)
+>         #define bpf_target_arc
+>         #define bpf_target_defined
+> +#elif defined(__loongarch__)
+> +       #define bpf_target_loongarch
+> +       #define bpf_target_defined
+>  #endif /* no compiler target */
+>
+>  #endif
+> @@ -258,6 +264,23 @@ struct pt_regs___arm64 {
+>  /* arc does not select ARCH_HAS_SYSCALL_WRAPPER. */
+>  #define PT_REGS_SYSCALL_REGS(ctx) ctx
+>
+> +#elif defined(bpf_target_loongarch)
+> +
+> +/* https://loongson.github.io/LoongArch-Documentation/LoongArch-ELF-ABI-EN.html */
+> +
+> +#define __PT_PARM1_REG regs[4]
+> +#define __PT_PARM2_REG regs[5]
+> +#define __PT_PARM3_REG regs[6]
+> +#define __PT_PARM4_REG regs[7]
+> +#define __PT_PARM5_REG regs[8]
+> +#define __PT_RET_REG regs[1]
+> +#define __PT_FP_REG regs[22]
+> +#define __PT_RC_REG regs[4]
+> +#define __PT_SP_REG regs[3]
+> +#define __PT_IP_REG csr_era
+> +/* loongarch does not select ARCH_HAS_SYSCALL_WRAPPER. */
+> +#define PT_REGS_SYSCALL_REGS(ctx) ctx
+> +
+>  #endif
+>
+>  #if defined(bpf_target_defined)
+> --
+> 2.31.1
+>
