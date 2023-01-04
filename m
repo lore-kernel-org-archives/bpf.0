@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DAEF9C54EBD
-	for <bpf@archiver.kernel.org>; Wed,  4 Jan 2023 12:18:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6215AC4708E
+	for <bpf@archiver.kernel.org>; Wed,  4 Jan 2023 12:18:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234419AbjADMS4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Jan 2023 07:18:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
+        id S239212AbjADMS5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Jan 2023 07:18:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbjADMSr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 4 Jan 2023 07:18:47 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 956DAF5AA;
-        Wed,  4 Jan 2023 04:18:46 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id ja17so25407131wmb.3;
-        Wed, 04 Jan 2023 04:18:46 -0800 (PST)
+        with ESMTP id S239179AbjADMSp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 4 Jan 2023 07:18:45 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3250314D17;
+        Wed,  4 Jan 2023 04:18:41 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id m8-20020a05600c3b0800b003d96f801c48so23863607wms.0;
+        Wed, 04 Jan 2023 04:18:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=huOhL7D9Jyth4UUa2iSMii1CNgBq5CuBgEOXmYynEqw=;
-        b=X92Gf432GifAD3o8wsxpEEe2ins9lDlQxQdJPm9cleFoWXQAg0pd/XDJJbdHGgzFtA
-         12pGm71EU5MeHHVdEhNlvVAGdmUzVdDjc5BgKF8TW52QRYWJ3pzYC5Ye+ozqcCyBZhQL
-         1bzpD4WhX9NrsNKiLzS1xfr6lLjz2nbe1mwxE2NM7j63husn10k/Kz8ia6/bjez8oLe2
-         a/6yy4rTwJTtm9Qh+AU6q1HsXmjNORFv/7BcbIiezJeU6nqFAIo2hXdsOPMFUlwwpEUX
-         rcuh7yzurD7dI1IOfD5qEJDu6Jil29MQPPHhACiDy+u4k1tM8N13ysVWM/CWZ12AhVPg
-         BbEw==
+        bh=oBDrhciyUnzlxX/TZMPkmc1oT4VfvbpsEGpcqBYnyMo=;
+        b=MmHdGhCyeFJtrUxZJ9v0BQ5bScIgl0w0CMHU8c8GG31iY8cNt10nMdKdXM234nibz5
+         Tht0mviR9obD4i3lcq7IFVTcqe+/I/PnBz64vTdCr/j8kvSDgK10pntpVqnMlPS4tY75
+         +CAdTHzkimwSNZHQ0bfFaR9jpMj63SFcRmexD7nI36dCSAceZxwLc4PoOfCU+MLLRMYu
+         OXpslUKoZZKu7+Mm/UwHNjDvC910J1MciaT79a6Oo4uZ0r1Js45UScA1eMAVO+q/lsmi
+         tfrwk7z3zeqerkey9Ma8aNlJDUCDDCPkJCKcwQ4CLb25OBpGTPOou/UtbmABOGgM3PJm
+         SJeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=huOhL7D9Jyth4UUa2iSMii1CNgBq5CuBgEOXmYynEqw=;
-        b=YD3DFvFPSrcotxRYxRAbTWx9XgViii+Z5OCsgUa1LjZT8nk2YBdbRYlk11YcDcp+hD
-         vgUEEf10TIYcFfePlOPuhixawDqWBbqLCLxovhnYTtq5VFWUM8Y4EiXOq0r/kXiGduAY
-         /zpGDXap/SzUO1Oo83RUfgOk01J3vMASioD3DbT3fWC7B3pfh/MMAZ9bBHXtxRMr5ISh
-         CXQhhouG54Xv0q0M8TX0zhpsQq4NQmrrdYn4BNHCiAgtBvYTrtsGbFSpQD8wfztaVPJu
-         hPqYMLvDrjjuqmq+1RnJSTJL5mUIM5uB6L3W5Oqy0Kc9BiU52PghGQbQiIRTijTQF1SV
-         6TUg==
-X-Gm-Message-State: AFqh2kpz4LPdccZBwWG0dQwwj35Mmmzdg1NTrHNAGt9j7JGevR0LsHKm
-        3RG4IjPHKK4t/QMm1Na+ioc=
-X-Google-Smtp-Source: AMrXdXuWwKo+NWybJwZNHTnMmB1OHb42oKBym7atK8oZiOxowZdwIBUvexmG8pJ27YEDYH7wTBqFRQ==
-X-Received: by 2002:a05:600c:556f:b0:3d2:2a74:3a90 with SMTP id ja15-20020a05600c556f00b003d22a743a90mr35890746wmb.22.1672834725022;
-        Wed, 04 Jan 2023 04:18:45 -0800 (PST)
+        bh=oBDrhciyUnzlxX/TZMPkmc1oT4VfvbpsEGpcqBYnyMo=;
+        b=FTj+iO5G3gCsnFCRsk4qJXnNfbtxyYiYV3ybkBGDHRidz+w+Q+qKLEJvPLmzMNVp+W
+         NiojE7tVQ+X3GpnLbWqCZ+tH7Hx+8jJ2wd47azfC4V9j7zGsO0U6oe8vYkQvlV5gh4Qh
+         iCj1qDR03NBSgHnBRea6Vd9t6PCueWXAs1e+hgEKgrdR1GegoSJI/PSoVKG449QeN7rL
+         Eu0jbBUkKvPw8AwloxyGNvs1/RH86rKi4aL7rfFF/O29Az659SeTpSxXh9N3PRfTcI5/
+         eZW620S0sNXWLb6is6pMueiPtWyGSc7OcTUrokLbkd8+vIjgqqdKC2n8m1+d0G1TK7tz
+         99ow==
+X-Gm-Message-State: AFqh2krZtc3tZpROtnJqgxqU9URN9T/QvJ77h4TZIFiBr6dy7G9213cl
+        Bw4SZ02fK+Qs69XjlrrNLxA=
+X-Google-Smtp-Source: AMrXdXsO2FZuJymBTj5jL9YtMI6L+vB2DfrjbehfOAiNDB8zmbZfITTaWQaEtppB+SJShk9zJHnEEw==
+X-Received: by 2002:a05:600c:54ef:b0:3d0:5254:8a43 with SMTP id jb15-20020a05600c54ef00b003d052548a43mr41924166wmb.38.1672834719647;
+        Wed, 04 Jan 2023 04:18:39 -0800 (PST)
 Received: from localhost.localdomain (h-176-10-254-193.A165.priv.bahnhof.se. [176.10.254.193])
-        by smtp.gmail.com with ESMTPSA id w12-20020a05600c474c00b003d04e4ed873sm35013749wmo.22.2023.01.04.04.18.43
+        by smtp.gmail.com with ESMTPSA id w12-20020a05600c474c00b003d04e4ed873sm35013749wmo.22.2023.01.04.04.18.37
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 04 Jan 2023 04:18:44 -0800 (PST)
+        Wed, 04 Jan 2023 04:18:39 -0800 (PST)
 From:   Magnus Karlsson <magnus.karlsson@gmail.com>
 To:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
         daniel@iogearbox.net, netdev@vger.kernel.org,
@@ -57,9 +57,9 @@ To:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
         john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
         haoluo@google.com, jolsa@kernel.org, tirthendu.sarkar@intel.com
 Cc:     jonathan.lemon@gmail.com
-Subject: [PATCH bpf-next v2 04/15] selftests/xsk: print correct error codes when exiting
-Date:   Wed,  4 Jan 2023 13:17:33 +0100
-Message-Id: <20230104121744.2820-5-magnus.karlsson@gmail.com>
+Subject: [PATCH bpf-next v2 01/15] selftests/xsk: print correct payload for packet dump
+Date:   Wed,  4 Jan 2023 13:17:30 +0100
+Message-Id: <20230104121744.2820-2-magnus.karlsson@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230104121744.2820-1-magnus.karlsson@gmail.com>
 References: <20230104121744.2820-1-magnus.karlsson@gmail.com>
@@ -71,97 +71,39 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Magnus Karlsson <magnus.karlsson@intel.com>
 
-Print the correct error codes when exiting the test suite due to some
-terminal error. Some of these had a switched sign and some of them
-printed zero instead of errno.
+Print the correct payload when the packet dump option is selected. The
+network to host conversion was forgotten and the payload was
+erronously declared to be an int instead of an unsigned int.
 
 Fixes: facb7cb2e909 ("selftests/bpf: Xsk selftests - SKB POLL, NOPOLL")
 Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
 ---
- tools/testing/selftests/bpf/xskxceiver.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ tools/testing/selftests/bpf/xskxceiver.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-index a239e975ab66..72578cebfbf7 100644
+index 162d3a516f2c..2ff43b22180f 100644
 --- a/tools/testing/selftests/bpf/xskxceiver.c
 +++ b/tools/testing/selftests/bpf/xskxceiver.c
-@@ -350,7 +350,7 @@ static bool ifobj_zc_avail(struct ifobject *ifobject)
- 	umem = calloc(1, sizeof(struct xsk_umem_info));
- 	if (!umem) {
- 		munmap(bufs, umem_sz);
--		exit_with_error(-ENOMEM);
-+		exit_with_error(ENOMEM);
- 	}
- 	umem->frame_size = XSK_UMEM__DEFAULT_FRAME_SIZE;
- 	ret = xsk_configure_umem(umem, bufs, umem_sz);
-@@ -936,7 +936,7 @@ static int receive_pkts(struct test_spec *test, struct pollfd *fds)
- 		if (ifobj->use_poll) {
- 			ret = poll(fds, 1, POLL_TMOUT);
- 			if (ret < 0)
--				exit_with_error(-ret);
-+				exit_with_error(errno);
+@@ -767,7 +767,7 @@ static void pkt_dump(void *pkt, u32 len)
+ 	struct ethhdr *ethhdr;
+ 	struct udphdr *udphdr;
+ 	struct iphdr *iphdr;
+-	int payload, i;
++	u32 payload, i;
  
- 			if (!ret) {
- 				if (!is_umem_valid(test->ifobj_tx))
-@@ -963,7 +963,7 @@ static int receive_pkts(struct test_spec *test, struct pollfd *fds)
- 				if (xsk_ring_prod__needs_wakeup(&umem->fq)) {
- 					ret = poll(fds, 1, POLL_TMOUT);
- 					if (ret < 0)
--						exit_with_error(-ret);
-+						exit_with_error(errno);
- 				}
- 				ret = xsk_ring_prod__reserve(&umem->fq, rcvd, &idx_fq);
- 			}
-@@ -1015,7 +1015,7 @@ static int __send_pkts(struct ifobject *ifobject, u32 *pkt_nb, struct pollfd *fd
- 			if (timeout) {
- 				if (ret < 0) {
- 					ksft_print_msg("ERROR: [%s] Poll error %d\n",
--						       __func__, ret);
-+						       __func__, errno);
- 					return TEST_FAILURE;
- 				}
- 				if (ret == 0)
-@@ -1024,7 +1024,7 @@ static int __send_pkts(struct ifobject *ifobject, u32 *pkt_nb, struct pollfd *fd
- 			}
- 			if (ret <= 0) {
- 				ksft_print_msg("ERROR: [%s] Poll error %d\n",
--					       __func__, ret);
-+					       __func__, errno);
- 				return TEST_FAILURE;
- 			}
- 		}
-@@ -1323,18 +1323,18 @@ static void thread_common_ops(struct test_spec *test, struct ifobject *ifobject)
- 	if (ifobject->xdp_flags & XDP_FLAGS_SKB_MODE) {
- 		if (opts.attach_mode != XDP_ATTACHED_SKB) {
- 			ksft_print_msg("ERROR: [%s] XDP prog not in SKB mode\n");
--			exit_with_error(-EINVAL);
-+			exit_with_error(EINVAL);
- 		}
- 	} else if (ifobject->xdp_flags & XDP_FLAGS_DRV_MODE) {
- 		if (opts.attach_mode != XDP_ATTACHED_DRV) {
- 			ksft_print_msg("ERROR: [%s] XDP prog not in DRV mode\n");
--			exit_with_error(-EINVAL);
-+			exit_with_error(EINVAL);
- 		}
- 	}
+ 	ethhdr = pkt;
+ 	iphdr = pkt + sizeof(*ethhdr);
+@@ -792,7 +792,7 @@ static void pkt_dump(void *pkt, u32 len)
+ 	fprintf(stdout, "DEBUG>> L4: udp_hdr->src: %d\n", ntohs(udphdr->source));
+ 	fprintf(stdout, "DEBUG>> L4: udp_hdr->dst: %d\n", ntohs(udphdr->dest));
+ 	/*extract L5 frame */
+-	payload = *((uint32_t *)(pkt + PKT_HDR_SIZE));
++	payload = ntohl(*((u32 *)(pkt + PKT_HDR_SIZE)));
  
- 	ret = xsk_socket__update_xskmap(ifobject->xsk->xsk, ifobject->xsk_map_fd);
- 	if (ret)
--		exit_with_error(-ret);
-+		exit_with_error(errno);
- }
- 
- static void *worker_testapp_validate_tx(void *arg)
-@@ -1541,7 +1541,7 @@ static void swap_xsk_resources(struct ifobject *ifobj_tx, struct ifobject *ifobj
- 
- 	ret = xsk_socket__update_xskmap(ifobj_rx->xsk->xsk, ifobj_rx->xsk_map_fd);
- 	if (ret)
--		exit_with_error(-ret);
-+		exit_with_error(errno);
- }
- 
- static void testapp_bpf_res(struct test_spec *test)
+ 	fprintf(stdout, "DEBUG>> L5: payload: %d\n", payload);
+ 	fprintf(stdout, "---------------------------------------\n");
 -- 
 2.34.1
 
