@@ -2,420 +2,289 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E462C53210
-	for <bpf@archiver.kernel.org>; Wed,  4 Jan 2023 22:01:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AACFC53210
+	for <bpf@archiver.kernel.org>; Wed,  4 Jan 2023 22:08:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240327AbjADWBY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Jan 2023 17:01:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60926 "EHLO
+        id S240432AbjADWIa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Jan 2023 17:08:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240460AbjADWAk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 4 Jan 2023 17:00:40 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26BA4261A
-        for <bpf@vger.kernel.org>; Wed,  4 Jan 2023 14:00:16 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id z4-20020a17090ab10400b002195a146546so23165556pjq.9
-        for <bpf@vger.kernel.org>; Wed, 04 Jan 2023 14:00:16 -0800 (PST)
+        with ESMTP id S240429AbjADWI3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 4 Jan 2023 17:08:29 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325B2113
+        for <bpf@vger.kernel.org>; Wed,  4 Jan 2023 14:08:27 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id z11so34715376ede.1
+        for <bpf@vger.kernel.org>; Wed, 04 Jan 2023 14:08:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hOAPPGNXqjjvZ23gkqyigMWwZjhekyJ81ZMmeSOOs3Y=;
-        b=VSFDb+yDsyy2miCVfHomVIVfFyCnKB9rACclmdLuI7rkb9L7FFKKktwv2SS0VYzI83
-         0VurGUSM5e1Fvv+RR73LuJhoVfvX7yrvLK5hhSUalI9XacndQ0H4MhlBwmTw2lJ68atP
-         wLZFh80lVAtismafqoK7KRFjp5tudKSIlnqQTjuFgTx8r7Mr0BZx50utAwWL9+vbTZG5
-         ijfprKd/J1TemH+k8/ksxJVE3RfE+sKNmJGnQar52Cnu28iy00OPeKKf/GlBJsdTMvSF
-         VOljzU2Q0e3JOST/UHU48rtNxkBVuSx28A8XNNReS/gR6/kKy6AfTHFj9NPTv0mpsZom
-         6BpA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=P20c0FyGWwS6cc7yjXHO6cVba1Aod5FBFvsvrEDhQWo=;
+        b=Vktz7m30h+l7Wf07kRc4ovdVSjZ8uhH6G7C356GORy3W21JUaFkQOtqgl2WWRGPsHq
+         YFwkkog7wuxBsqm7zJprEbcSRZvB5pQFKXdUbxzoZNMWiHp3riWzkidNpACGEDRLx5QE
+         F6B14TIejDQNF5lICY+FwZNZKAyToVn+clr1ei9ofkMPFCcGM1DbuDccFqEMQcdX50xP
+         QEZ/nt55pejD3SCfv82X3yV02IerQ0Y2xoe06n+E20xfOG3DXAHjfllpCitQgqwqkiSh
+         99y0dzAVNWpVlPfbE1hfNl6+QzPeB1JJw9yLqCYn/Dl+Fkjz3Apa+ry6Hlug+9cra7s/
+         IEeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=hOAPPGNXqjjvZ23gkqyigMWwZjhekyJ81ZMmeSOOs3Y=;
-        b=5Tf+At3OJM5tBjmCekH7RYHCJyKH23PihLdD+leL+9yQXfWBNEcwTH3IwRpfxc/9OK
-         gwwu2cYpfajLqYUOdZldii/BY6U9zdUl6JDnY33RMEadojNPy03dmz2m3hJHJ5pk6+hT
-         Hyy9T9x/c7Zld42/JO5tqy7cEc2pGOMRd1UQyMZ+YMwkYXGc66Kj2aXIj6aP4pZnVxiO
-         lxBiuMbgUggmyurQeLiituXjHiuDlR5oXoXM5V2y3sRUhAB0ZVRs0/oeCkTLCP7dxeIP
-         0p68yaOLnP1jUkbGHxKQZdUFMPvPq5R5/h8uIdRGzJgs7HI72yMdhePAYmu7AbPXdsQl
-         InQw==
-X-Gm-Message-State: AFqh2kqndnv1mcaSF0tZw1sr1rOlN4UpRoFr0X5xoflFcXWuj/k1w81s
-        OhNvDm3y8QgBVD6DGZSt/S7bKJ8WA7J2wm9ASOyqHdNfspWgy41XjUfwX4O8HFfvacTAFGNybTM
-        uAkGAACCknBHYgndOt6CXJ1gcfmiuHIf4judFapdcbVpSGOqJAg==
-X-Google-Smtp-Source: AMrXdXvY98S+wv9zupgDNrjP1u7iHIN6Hwp0Pyu3F6U45LGMeJeVW0JCC6Hu130479FBO1VRYBSCRN0=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a17:903:1ca:b0:192:7c1f:ac35 with SMTP id
- e10-20020a17090301ca00b001927c1fac35mr2755701plh.110.1672869616123; Wed, 04
- Jan 2023 14:00:16 -0800 (PST)
-Date:   Wed,  4 Jan 2023 13:59:47 -0800
-In-Reply-To: <20230104215949.529093-1-sdf@google.com>
-Mime-Version: 1.0
-References: <20230104215949.529093-1-sdf@google.com>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230104215949.529093-16-sdf@google.com>
-Subject: [PATCH bpf-next v6 15/17] net/mlx5e: Introduce wrapper for xdp_buff
-From:   Stanislav Fomichev <sdf@google.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org,
-        "=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?=" <toke@redhat.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        David Ahern <dsahern@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Willem de Bruijn <willemb@google.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Anatoly Burakov <anatoly.burakov@intel.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P20c0FyGWwS6cc7yjXHO6cVba1Aod5FBFvsvrEDhQWo=;
+        b=kr5eFrbO/JvGq4v7Xe79oREeRovnHUn8FY2NiiBN8mPHLBFHwJwmlgtv4KAIbJhw01
+         QhO/BKklfl3EL2glfz06I5x0M+tUVDjf2aPl0J8eb4sHzr7Ak1NjEpJJ5otJEnpGE+Bw
+         bk1CGOYSJ4q9suUQ/mSCu26HUbAkDdReHQwrYKUI08BdCC+IiIZPsAnPVN0yPLpbuxI2
+         LHY5qSSKsGGiJNdgKeSS1G9IbVzjmvFPa2OlpptY8n4RyjFeza2JBXt9MLoj0r8lAWc6
+         1t1tSopkoIHoJAAdIm9TQeE8vviY8Y5LWFS9pw/dMQoavHsjWaY41Pf5XmrIAo1sRLtn
+         ePEw==
+X-Gm-Message-State: AFqh2kqk3K0noYbJnTodbQTGPlyzncAW5RTkXVf2XJjfQzG4xln+Ke0x
+        tlvBpBCFlS89ggrputdg6zI=
+X-Google-Smtp-Source: AMrXdXv16fNcklkbl/D/iC2pVNkM1buFT8dMC0O0uem7q5LirEmKssCh2ePhhUFUit4Okc6rKbvaFg==
+X-Received: by 2002:a05:6402:1490:b0:480:190:5d90 with SMTP id e16-20020a056402149000b0048001905d90mr36411348edv.14.1672870105680;
+        Wed, 04 Jan 2023 14:08:25 -0800 (PST)
+Received: from krava ([83.240.60.168])
+        by smtp.gmail.com with ESMTPSA id fd5-20020a056402388500b0048ebe118a46sm2507363edb.77.2023.01.04.14.08.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 14:08:25 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Wed, 4 Jan 2023 23:08:23 +0100
+To:     Victor Laforet <victor.laforet@ip-paris.fr>
+Cc:     Jiri Olsa <olsajiri@gmail.com>, bpf@vger.kernel.org
+Subject: Re: bpf_probe_read_user EFAULT
+Message-ID: <Y7X3qEOXeimw1JmF@krava>
+References: <346230382.476954.1672152966557.JavaMail.zimbra@ip-paris.fr>
+ <Y6sWqgncfvtRHp+b@krava>
+ <505155146.488099.1672236042622.JavaMail.zimbra@ip-paris.fr>
+ <42d3f4d8-fa8b-5774-0f6b-b12162c24736@meta.com>
+ <5692f180-5b78-48e0-b974-b60bd58c0839@Spark>
+ <Y7PhWlqdG/TjwT75@krava>
+ <1105578275.675049.1672845867568.JavaMail.zimbra@ip-paris.fr>
+ <Y7Xyp6sQaAqi8qzw@krava>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y7Xyp6sQaAqi8qzw@krava>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+On Wed, Jan 04, 2023 at 10:42:02PM +0100, Jiri Olsa wrote:
+> On Wed, Jan 04, 2023 at 04:24:27PM +0100, Victor Laforet wrote:
+> > Ok thanks. As I understand, tp_btf/+ probes (specifically tp_btf/sched_switch that I need) cannot be sleepable? It is then not possible to read user space memory from the bpf code?
+> 
+> yes, only fentry/fexit/fmod_ret, lsm, and kprobe/uprobe programs can be sleepable
+> 
+> you could use kprobe.. I was able to hook to finish_task_switch with kprobe,
+> which gives you the next process (as current) and previous process in first
+> argument
+> 
+> # bpftrace -e 'kprobe:finish_task_switch.isra.0 { printf("%d:%d\n", cpu, pid) }' | head
+> Attaching 1 probe...
+> 1:0
+> 1:4579
+> 1:3189
+> 1:4579
+> 0:40
+> 0:430
+> 3:4581
+> 3:0
+> 
+> but perhaps there's better function to hook, check around the sched_swith tracepoint call
 
-Preparation for implementing HW metadata kfuncs. No functional change.
+ugh, actually you can't sleep under schedule.. so I don't think you can
+reliably read user memory from there
 
-Cc: Saeed Mahameed <saeedm@nvidia.com>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: David Ahern <dsahern@gmail.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Willem de Bruijn <willemb@google.com>
-Cc: Jesper Dangaard Brouer <brouer@redhat.com>
-Cc: Anatoly Burakov <anatoly.burakov@intel.com>
-Cc: Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc: Magnus Karlsson <magnus.karlsson@gmail.com>
-Cc: Maryam Tahhan <mtahhan@redhat.com>
-Cc: xdp-hints@xdp-project.net
-Cc: netdev@vger.kernel.org
-Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
----
- drivers/net/ethernet/mellanox/mlx5/core/en.h  |  1 +
- .../net/ethernet/mellanox/mlx5/core/en/xdp.c  |  3 +-
- .../net/ethernet/mellanox/mlx5/core/en/xdp.h  |  6 +-
- .../ethernet/mellanox/mlx5/core/en/xsk/rx.c   | 25 +++++----
- .../net/ethernet/mellanox/mlx5/core/en_rx.c   | 56 +++++++++----------
- 5 files changed, 49 insertions(+), 42 deletions(-)
+jirka
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en.h b/drivers/net/eth=
-ernet/mellanox/mlx5/core/en.h
-index 2d77fb8a8a01..af663978d1b4 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-@@ -469,6 +469,7 @@ struct mlx5e_txqsq {
- union mlx5e_alloc_unit {
- 	struct page *page;
- 	struct xdp_buff *xsk;
-+	struct mlx5e_xdp_buff *mxbuf;
- };
-=20
- /* XDP packets can be transmitted in different ways. On completion, we nee=
-d to
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net=
-/ethernet/mellanox/mlx5/core/en/xdp.c
-index 20507ef2f956..31bb6806bf5d 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-@@ -158,8 +158,9 @@ mlx5e_xmit_xdp_buff(struct mlx5e_xdpsq *sq, struct mlx5=
-e_rq *rq,
-=20
- /* returns true if packet was consumed by xdp */
- bool mlx5e_xdp_handle(struct mlx5e_rq *rq, struct page *page,
--		      struct bpf_prog *prog, struct xdp_buff *xdp)
-+		      struct bpf_prog *prog, struct mlx5e_xdp_buff *mxbuf)
- {
-+	struct xdp_buff *xdp =3D &mxbuf->xdp;
- 	u32 act;
- 	int err;
-=20
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.h b/drivers/net=
-/ethernet/mellanox/mlx5/core/en/xdp.h
-index bc2d9034af5b..389818bf6833 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.h
-@@ -44,10 +44,14 @@
- 	(MLX5E_XDP_INLINE_WQE_MAX_DS_CNT * MLX5_SEND_WQE_DS - \
- 	 sizeof(struct mlx5_wqe_inline_seg))
-=20
-+struct mlx5e_xdp_buff {
-+	struct xdp_buff xdp;
-+};
-+
- struct mlx5e_xsk_param;
- int mlx5e_xdp_max_mtu(struct mlx5e_params *params, struct mlx5e_xsk_param =
-*xsk);
- bool mlx5e_xdp_handle(struct mlx5e_rq *rq, struct page *page,
--		      struct bpf_prog *prog, struct xdp_buff *xdp);
-+		      struct bpf_prog *prog, struct mlx5e_xdp_buff *mlctx);
- void mlx5e_xdp_mpwqe_complete(struct mlx5e_xdpsq *sq);
- bool mlx5e_poll_xdpsq_cq(struct mlx5e_cq *cq);
- void mlx5e_free_xdpsq_descs(struct mlx5e_xdpsq *sq);
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/rx.c b/drivers/=
-net/ethernet/mellanox/mlx5/core/en/xsk/rx.c
-index c91b54d9ff27..9cff82d764e3 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/rx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/rx.c
-@@ -22,6 +22,7 @@ int mlx5e_xsk_alloc_rx_mpwqe(struct mlx5e_rq *rq, u16 ix)
- 		goto err;
-=20
- 	BUILD_BUG_ON(sizeof(wi->alloc_units[0]) !=3D sizeof(wi->alloc_units[0].xs=
-k));
-+	XSK_CHECK_PRIV_TYPE(struct mlx5e_xdp_buff);
- 	batch =3D xsk_buff_alloc_batch(rq->xsk_pool, (struct xdp_buff **)wi->allo=
-c_units,
- 				     rq->mpwqe.pages_per_wqe);
-=20
-@@ -233,7 +234,7 @@ struct sk_buff *mlx5e_xsk_skb_from_cqe_mpwrq_linear(str=
-uct mlx5e_rq *rq,
- 						    u32 head_offset,
- 						    u32 page_idx)
- {
--	struct xdp_buff *xdp =3D wi->alloc_units[page_idx].xsk;
-+	struct mlx5e_xdp_buff *mxbuf =3D wi->alloc_units[page_idx].mxbuf;
- 	struct bpf_prog *prog;
-=20
- 	/* Check packet size. Note LRO doesn't use linear SKB */
-@@ -249,9 +250,9 @@ struct sk_buff *mlx5e_xsk_skb_from_cqe_mpwrq_linear(str=
-uct mlx5e_rq *rq,
- 	 */
- 	WARN_ON_ONCE(head_offset);
-=20
--	xsk_buff_set_size(xdp, cqe_bcnt);
--	xsk_buff_dma_sync_for_cpu(xdp, rq->xsk_pool);
--	net_prefetch(xdp->data);
-+	xsk_buff_set_size(&mxbuf->xdp, cqe_bcnt);
-+	xsk_buff_dma_sync_for_cpu(&mxbuf->xdp, rq->xsk_pool);
-+	net_prefetch(mxbuf->xdp.data);
-=20
- 	/* Possible flows:
- 	 * - XDP_REDIRECT to XSKMAP:
-@@ -269,7 +270,7 @@ struct sk_buff *mlx5e_xsk_skb_from_cqe_mpwrq_linear(str=
-uct mlx5e_rq *rq,
- 	 */
-=20
- 	prog =3D rcu_dereference(rq->xdp_prog);
--	if (likely(prog && mlx5e_xdp_handle(rq, NULL, prog, xdp))) {
-+	if (likely(prog && mlx5e_xdp_handle(rq, NULL, prog, mxbuf))) {
- 		if (likely(__test_and_clear_bit(MLX5E_RQ_FLAG_XDP_XMIT, rq->flags)))
- 			__set_bit(page_idx, wi->xdp_xmit_bitmap); /* non-atomic */
- 		return NULL; /* page/packet was consumed by XDP */
-@@ -278,14 +279,14 @@ struct sk_buff *mlx5e_xsk_skb_from_cqe_mpwrq_linear(s=
-truct mlx5e_rq *rq,
- 	/* XDP_PASS: copy the data from the UMEM to a new SKB and reuse the
- 	 * frame. On SKB allocation failure, NULL is returned.
- 	 */
--	return mlx5e_xsk_construct_skb(rq, xdp);
-+	return mlx5e_xsk_construct_skb(rq, &mxbuf->xdp);
- }
-=20
- struct sk_buff *mlx5e_xsk_skb_from_cqe_linear(struct mlx5e_rq *rq,
- 					      struct mlx5e_wqe_frag_info *wi,
- 					      u32 cqe_bcnt)
- {
--	struct xdp_buff *xdp =3D wi->au->xsk;
-+	struct mlx5e_xdp_buff *mxbuf =3D wi->au->mxbuf;
- 	struct bpf_prog *prog;
-=20
- 	/* wi->offset is not used in this function, because xdp->data and the
-@@ -295,17 +296,17 @@ struct sk_buff *mlx5e_xsk_skb_from_cqe_linear(struct =
-mlx5e_rq *rq,
- 	 */
- 	WARN_ON_ONCE(wi->offset);
-=20
--	xsk_buff_set_size(xdp, cqe_bcnt);
--	xsk_buff_dma_sync_for_cpu(xdp, rq->xsk_pool);
--	net_prefetch(xdp->data);
-+	xsk_buff_set_size(&mxbuf->xdp, cqe_bcnt);
-+	xsk_buff_dma_sync_for_cpu(&mxbuf->xdp, rq->xsk_pool);
-+	net_prefetch(mxbuf->xdp.data);
-=20
- 	prog =3D rcu_dereference(rq->xdp_prog);
--	if (likely(prog && mlx5e_xdp_handle(rq, NULL, prog, xdp)))
-+	if (likely(prog && mlx5e_xdp_handle(rq, NULL, prog, mxbuf)))
- 		return NULL; /* page/packet was consumed by XDP */
-=20
- 	/* XDP_PASS: copy the data from the UMEM to a new SKB. The frame reuse
- 	 * will be handled by mlx5e_free_rx_wqe.
- 	 * On SKB allocation failure, NULL is returned.
- 	 */
--	return mlx5e_xsk_construct_skb(rq, xdp);
-+	return mlx5e_xsk_construct_skb(rq, &mxbuf->xdp);
- }
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c b/drivers/net/=
-ethernet/mellanox/mlx5/core/en_rx.c
-index c8820ab22169..c8a2b26de36e 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-@@ -1576,10 +1576,10 @@ struct sk_buff *mlx5e_build_linear_skb(struct mlx5e=
-_rq *rq, void *va,
- }
-=20
- static void mlx5e_fill_xdp_buff(struct mlx5e_rq *rq, void *va, u16 headroo=
-m,
--				u32 len, struct xdp_buff *xdp)
-+				u32 len, struct mlx5e_xdp_buff *mxbuf)
- {
--	xdp_init_buff(xdp, rq->buff.frame0_sz, &rq->xdp_rxq);
--	xdp_prepare_buff(xdp, va, headroom, len, true);
-+	xdp_init_buff(&mxbuf->xdp, rq->buff.frame0_sz, &rq->xdp_rxq);
-+	xdp_prepare_buff(&mxbuf->xdp, va, headroom, len, true);
- }
-=20
- static struct sk_buff *
-@@ -1606,16 +1606,16 @@ mlx5e_skb_from_cqe_linear(struct mlx5e_rq *rq, stru=
-ct mlx5e_wqe_frag_info *wi,
-=20
- 	prog =3D rcu_dereference(rq->xdp_prog);
- 	if (prog) {
--		struct xdp_buff xdp;
-+		struct mlx5e_xdp_buff mxbuf;
-=20
- 		net_prefetchw(va); /* xdp_frame data area */
--		mlx5e_fill_xdp_buff(rq, va, rx_headroom, cqe_bcnt, &xdp);
--		if (mlx5e_xdp_handle(rq, au->page, prog, &xdp))
-+		mlx5e_fill_xdp_buff(rq, va, rx_headroom, cqe_bcnt, &mxbuf);
-+		if (mlx5e_xdp_handle(rq, au->page, prog, &mxbuf))
- 			return NULL; /* page/packet was consumed by XDP */
-=20
--		rx_headroom =3D xdp.data - xdp.data_hard_start;
--		metasize =3D xdp.data - xdp.data_meta;
--		cqe_bcnt =3D xdp.data_end - xdp.data;
-+		rx_headroom =3D mxbuf.xdp.data - mxbuf.xdp.data_hard_start;
-+		metasize =3D mxbuf.xdp.data - mxbuf.xdp.data_meta;
-+		cqe_bcnt =3D mxbuf.xdp.data_end - mxbuf.xdp.data;
- 	}
- 	frag_size =3D MLX5_SKB_FRAG_SZ(rx_headroom + cqe_bcnt);
- 	skb =3D mlx5e_build_linear_skb(rq, va, frag_size, rx_headroom, cqe_bcnt, =
-metasize);
-@@ -1637,9 +1637,9 @@ mlx5e_skb_from_cqe_nonlinear(struct mlx5e_rq *rq, str=
-uct mlx5e_wqe_frag_info *wi
- 	union mlx5e_alloc_unit *au =3D wi->au;
- 	u16 rx_headroom =3D rq->buff.headroom;
- 	struct skb_shared_info *sinfo;
-+	struct mlx5e_xdp_buff mxbuf;
- 	u32 frag_consumed_bytes;
- 	struct bpf_prog *prog;
--	struct xdp_buff xdp;
- 	struct sk_buff *skb;
- 	dma_addr_t addr;
- 	u32 truesize;
-@@ -1654,8 +1654,8 @@ mlx5e_skb_from_cqe_nonlinear(struct mlx5e_rq *rq, str=
-uct mlx5e_wqe_frag_info *wi
- 	net_prefetchw(va); /* xdp_frame data area */
- 	net_prefetch(va + rx_headroom);
-=20
--	mlx5e_fill_xdp_buff(rq, va, rx_headroom, frag_consumed_bytes, &xdp);
--	sinfo =3D xdp_get_shared_info_from_buff(&xdp);
-+	mlx5e_fill_xdp_buff(rq, va, rx_headroom, frag_consumed_bytes, &mxbuf);
-+	sinfo =3D xdp_get_shared_info_from_buff(&mxbuf.xdp);
- 	truesize =3D 0;
-=20
- 	cqe_bcnt -=3D frag_consumed_bytes;
-@@ -1673,13 +1673,13 @@ mlx5e_skb_from_cqe_nonlinear(struct mlx5e_rq *rq, s=
-truct mlx5e_wqe_frag_info *wi
- 		dma_sync_single_for_cpu(rq->pdev, addr + wi->offset,
- 					frag_consumed_bytes, rq->buff.map_dir);
-=20
--		if (!xdp_buff_has_frags(&xdp)) {
-+		if (!xdp_buff_has_frags(&mxbuf.xdp)) {
- 			/* Init on the first fragment to avoid cold cache access
- 			 * when possible.
- 			 */
- 			sinfo->nr_frags =3D 0;
- 			sinfo->xdp_frags_size =3D 0;
--			xdp_buff_set_frags_flag(&xdp);
-+			xdp_buff_set_frags_flag(&mxbuf.xdp);
- 		}
-=20
- 		frag =3D &sinfo->frags[sinfo->nr_frags++];
-@@ -1688,7 +1688,7 @@ mlx5e_skb_from_cqe_nonlinear(struct mlx5e_rq *rq, str=
-uct mlx5e_wqe_frag_info *wi
- 		skb_frag_size_set(frag, frag_consumed_bytes);
-=20
- 		if (page_is_pfmemalloc(au->page))
--			xdp_buff_set_frag_pfmemalloc(&xdp);
-+			xdp_buff_set_frag_pfmemalloc(&mxbuf.xdp);
-=20
- 		sinfo->xdp_frags_size +=3D frag_consumed_bytes;
- 		truesize +=3D frag_info->frag_stride;
-@@ -1701,7 +1701,7 @@ mlx5e_skb_from_cqe_nonlinear(struct mlx5e_rq *rq, str=
-uct mlx5e_wqe_frag_info *wi
- 	au =3D head_wi->au;
-=20
- 	prog =3D rcu_dereference(rq->xdp_prog);
--	if (prog && mlx5e_xdp_handle(rq, au->page, prog, &xdp)) {
-+	if (prog && mlx5e_xdp_handle(rq, au->page, prog, &mxbuf)) {
- 		if (test_bit(MLX5E_RQ_FLAG_XDP_XMIT, rq->flags)) {
- 			int i;
-=20
-@@ -1711,22 +1711,22 @@ mlx5e_skb_from_cqe_nonlinear(struct mlx5e_rq *rq, s=
-truct mlx5e_wqe_frag_info *wi
- 		return NULL; /* page/packet was consumed by XDP */
- 	}
-=20
--	skb =3D mlx5e_build_linear_skb(rq, xdp.data_hard_start, rq->buff.frame0_s=
-z,
--				     xdp.data - xdp.data_hard_start,
--				     xdp.data_end - xdp.data,
--				     xdp.data - xdp.data_meta);
-+	skb =3D mlx5e_build_linear_skb(rq, mxbuf.xdp.data_hard_start, rq->buff.fr=
-ame0_sz,
-+				     mxbuf.xdp.data - mxbuf.xdp.data_hard_start,
-+				     mxbuf.xdp.data_end - mxbuf.xdp.data,
-+				     mxbuf.xdp.data - mxbuf.xdp.data_meta);
- 	if (unlikely(!skb))
- 		return NULL;
-=20
- 	page_ref_inc(au->page);
-=20
--	if (unlikely(xdp_buff_has_frags(&xdp))) {
-+	if (unlikely(xdp_buff_has_frags(&mxbuf.xdp))) {
- 		int i;
-=20
- 		/* sinfo->nr_frags is reset by build_skb, calculate again. */
- 		xdp_update_skb_shared_info(skb, wi - head_wi - 1,
- 					   sinfo->xdp_frags_size, truesize,
--					   xdp_buff_is_frag_pfmemalloc(&xdp));
-+					   xdp_buff_is_frag_pfmemalloc(&mxbuf.xdp));
-=20
- 		for (i =3D 0; i < sinfo->nr_frags; i++) {
- 			skb_frag_t *frag =3D &sinfo->frags[i];
-@@ -2007,19 +2007,19 @@ mlx5e_skb_from_cqe_mpwrq_linear(struct mlx5e_rq *rq=
-, struct mlx5e_mpw_info *wi,
-=20
- 	prog =3D rcu_dereference(rq->xdp_prog);
- 	if (prog) {
--		struct xdp_buff xdp;
-+		struct mlx5e_xdp_buff mxbuf;
-=20
- 		net_prefetchw(va); /* xdp_frame data area */
--		mlx5e_fill_xdp_buff(rq, va, rx_headroom, cqe_bcnt, &xdp);
--		if (mlx5e_xdp_handle(rq, au->page, prog, &xdp)) {
-+		mlx5e_fill_xdp_buff(rq, va, rx_headroom, cqe_bcnt, &mxbuf);
-+		if (mlx5e_xdp_handle(rq, au->page, prog, &mxbuf)) {
- 			if (__test_and_clear_bit(MLX5E_RQ_FLAG_XDP_XMIT, rq->flags))
- 				__set_bit(page_idx, wi->xdp_xmit_bitmap); /* non-atomic */
- 			return NULL; /* page/packet was consumed by XDP */
- 		}
-=20
--		rx_headroom =3D xdp.data - xdp.data_hard_start;
--		metasize =3D xdp.data - xdp.data_meta;
--		cqe_bcnt =3D xdp.data_end - xdp.data;
-+		rx_headroom =3D mxbuf.xdp.data - mxbuf.xdp.data_hard_start;
-+		metasize =3D mxbuf.xdp.data - mxbuf.xdp.data_meta;
-+		cqe_bcnt =3D mxbuf.xdp.data_end - mxbuf.xdp.data;
- 	}
- 	frag_size =3D MLX5_SKB_FRAG_SZ(rx_headroom + cqe_bcnt);
- 	skb =3D mlx5e_build_linear_skb(rq, va, frag_size, rx_headroom, cqe_bcnt, =
-metasize);
---=20
-2.39.0.314.g84b9a713c41-goog
-
+> 
+> jirka
+> 
+> 
+> > 
+> > ----- Mail original -----
+> > De: "Jiri Olsa" <olsajiri@gmail.com>
+> > À: "Victor Laforet" <victor.laforet@ip-paris.fr>
+> > Cc: "Jiri Olsa" <olsajiri@gmail.com>, "Yonghong Song" <yhs@meta.com>, "bpf" <bpf@vger.kernel.org>
+> > Envoyé: Mardi 3 Janvier 2023 09:03:38
+> > Objet: Re: bpf_probe_read_user EFAULT
+> > 
+> > On Mon, Jan 02, 2023 at 11:07:50PM +0100, Victor Laforet wrote:
+> > > Thanks!
+> > > 
+> > > I have tried to use bpf_copy_from_user_task() in place of bpf_probe_read_user() however I cannot seem to run my program. It fails with 'unknown func bpf_copy_from_user_task’.
+> > > If I understood correctly, this function should be in ‘bpf/bpf_helpers.h’?
+> > 
+> > the declaration is in bpf_helper_defs.h, which is included by
+> > bpf_helpers.h, so you need to #include it
+> > 
+> > > 
+> > > Another quick question:
+> > > I have set the bpf program as sleepable using ‘	bpf_program__set_flags(skel, BPF_F_SLEEPABLE);'
+> > > I couldn’t find any other way to do that. Is it the right way to set it sleepable?
+> > 
+> > should work, but you could specify that directly in the program
+> > section name, like SEC("fentry.s/...")
+> > 
+> > and it's just certain program types that can sleep:
+> > 
+> > 	[jolsa@krava bpf]$ grep SEC_SLEEPABLE libbpf.c
+> > 	...
+> >         SEC_DEF("uprobe.s+",            KPROBE, 0, SEC_SLEEPABLE, attach_uprobe),
+> >         SEC_DEF("uretprobe.s+",         KPROBE, 0, SEC_SLEEPABLE, attach_uprobe),
+> >         SEC_DEF("fentry.s+",            TRACING, BPF_TRACE_FENTRY, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_trace),
+> >         SEC_DEF("fmod_ret.s+",          TRACING, BPF_MODIFY_RETURN, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_trace),
+> >         SEC_DEF("fexit.s+",             TRACING, BPF_TRACE_FEXIT, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_trace),
+> >         SEC_DEF("lsm.s+",               LSM, BPF_LSM_MAC, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_lsm),
+> >         SEC_DEF("iter.s+",              TRACING, BPF_TRACE_ITER, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_iter),
+> >         SEC_DEF("syscall",              SYSCALL, 0, SEC_SLEEPABLE),
+> > 
+> > jirka
+> > 
+> > 
+> > > 
+> > > Victor
+> > > On 28 Dec 2022 at 20:41 +0100, Yonghong Song <yhs@meta.com>, wrote:
+> > > >
+> > > >
+> > > > On 12/28/22 6:00 AM, Victor Laforet wrote:
+> > > > > Yes I am sorry I did not mention that the example I sent was a minimal working example. I am filtering the events to select only preempted and events with the right pid as prev.
+> > > > >
+> > > > > Would bpf_copy_from_user_task work better in this setting than bpf_probe_read_user ?
+> > > > > I don’t really understand why bpf_probe_read_user would not work for this use case.
+> > > >
+> > > > Right, bpf_copy_from_user_task() is better than bpf_probe_read_user().
+> > > > You could also use bpf_copy_from_user() if you have target_pid checking.
+> > > >
+> > > > It is possible that the user variable you intended to access is not in
+> > > > memory. In such cases, bpf_probe_read_user() will return EFAULT. But
+> > > > bpf_copy_from_user() and bpf_copy_from_user_task() will go through
+> > > > page fault process to bring the variable to the memory.
+> > > > Also because of this extra work, bpf_copy_from_user() and
+> > > > bpf_copy_from_user_task() only work for sleepable programs.
+> > > >
+> > > > >
+> > > > > Victor
+> > > > >
+> > > > > ----- Mail original -----
+> > > > > De: "Jiri Olsa" <olsajiri@gmail.com>
+> > > > > À: "Victor Laforet" <victor.laforet@ip-paris.fr>
+> > > > > Cc: "bpf" <bpf@vger.kernel.org>
+> > > > > Envoyé: Mardi 27 Décembre 2022 17:00:42
+> > > > > Objet: Re: bpf_probe_read_user EFAULT
+> > > > >
+> > > > > On Tue, Dec 27, 2022 at 03:56:06PM +0100, Victor Laforet wrote:
+> > > > > > Hi all,
+> > > > > >
+> > > > > > I am trying to use bpf_probe_read_user to read a user space value from BPF. The issue is that I am getting -14 (-EFAULT) result from bpf_probe_read_user. I haven’t been able to make this function work reliably. Sometimes I get no error code then it goes back to EFAULT.
+> > > > > >
+> > > > > > I am seeking your help to try and make this code work.
+> > > > > > Thank you!
+> > > > > >
+> > > > > > My goal is to read the variable pid on every bpf event.
+> > > > > > Here is a full example:
+> > > > > > (cat /sys/kernel/debug/tracing/trace_pipe to read the output).
+> > > > > >
+> > > > > > sched_switch.bpf.c
+> > > > > > ```
+> > > > > > #include "vmlinux.h"
+> > > > > > #include <bpf/bpf_helpers.h>
+> > > > > >
+> > > > > > int *input_pid;
+> > > > > >
+> > > > > > char _license[4] SEC("license") = "GPL";
+> > > > > >
+> > > > > > SEC("tp_btf/sched_switch")
+> > > > > > int handle_sched_switch(u64 *ctx)
+> > > > >
+> > > > > you might want to filter for your task, because sched_switch
+> > > > > tracepoint is called for any task scheduler switch
+> > > > >
+> > > > > check BPF_PROG macro in bpf selftests on how to access tp_btf
+> > > > > arguments from context, for sched_switch it's:
+> > > > >
+> > > > > TP_PROTO(bool preempt,
+> > > > > struct task_struct *prev,
+> > > > > struct task_struct *next,
+> > > > > unsigned int prev_state),
+> > > > >
+> > > > > and call the read helper only for prev->pid == 'your app pid',
+> > > > >
+> > > > > there's bpf_copy_from_user_task helper you could use to read
+> > > > > another task's user memory reliably, but it needs to be called
+> > > > > from sleepable probe and you need to have the task pointer
+> > > > >
+> > > > > jirka
+> > > > >
+> > > > > > {
+> > > > > > int pid;
+> > > > > > int err;
+> > > > > >
+> > > > > > err = bpf_probe_read_user(&pid, sizeof(int), (void *)input_pid);
+> > > > > > if (err != 0)
+> > > > > > {
+> > > > > > bpf_printk("Error on bpf_probe_read_user(pid) -> %d.\n", err);
+> > > > > > return 0;
+> > > > > > }
+> > > > > >
+> > > > > > bpf_printk("pid %d.\n", pid);
+> > > > > > return 0;
+> > > > > > }
+> > > > > > ```
+> > > > > >
+> > > > > > sched_switch.c
+> > > > > > ```
+> > > > > > #include <stdio.h>
+> > > > > > #include <unistd.h>
+> > > > > > #include <sys/resource.h>
+> > > > > > #include <bpf/libbpf.h>
+> > > > > > #include "sched_switch.skel.h"
+> > > > > > #include <time.h>
+> > > > > >
+> > > > > > static int libbpf_print_fn(enum libbpf_print_level level, const char *format, va_list args)
+> > > > > > {
+> > > > > > return vfprintf(stderr, format, args);
+> > > > > > }
+> > > > > >
+> > > > > > int main(int argc, char **argv)
+> > > > > > {
+> > > > > > struct sched_switch_bpf *skel;
+> > > > > > int err;
+> > > > > > int pid = getpid();
+> > > > > >
+> > > > > > libbpf_set_print(libbpf_print_fn);
+> > > > > >
+> > > > > > skel = sched_switch_bpf__open();
+> > > > > > if (!skel)
+> > > > > > {
+> > > > > > fprintf(stderr, "Failed to open BPF skeleton\n");
+> > > > > > return 1;
+> > > > > > }
+> > > > > >
+> > > > > > skel->bss->input_pid = &pid;
+> > > > > >
+> > > > > > err = sched_switch_bpf__load(skel);
+> > > > > > if (err)
+> > > > > > {
+> > > > > > fprintf(stderr, "Failed to load and verify BPF skeleton\n");
+> > > > > > goto cleanup;
+> > > > > > }
+> > > > > >
+> > > > > > err = sched_switch_bpf__attach(skel);
+> > > > > > if (err)
+> > > > > > {
+> > > > > > fprintf(stderr, "Failed to attach BPF skeleton\n");
+> > > > > > goto cleanup;
+> > > > > > }
+> > > > > >
+> > > > > > while (1);
+> > > > > >
+> > > > > > cleanup:
+> > > > > > sched_switch_bpf__destroy(skel);
+> > > > > > return -err;
+> > > > > > }
+> > > > > > ```
