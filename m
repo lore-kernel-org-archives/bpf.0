@@ -2,166 +2,142 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C22E0C3DA7D
-	for <bpf@archiver.kernel.org>; Thu,  5 Jan 2023 16:57:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF0B4C3DA7A
+	for <bpf@archiver.kernel.org>; Thu,  5 Jan 2023 17:27:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234601AbjAEQ5m (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 5 Jan 2023 11:57:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44384 "EHLO
+        id S235359AbjAER1d (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 5 Jan 2023 12:27:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbjAEQ5l (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 5 Jan 2023 11:57:41 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F560392FA
-        for <bpf@vger.kernel.org>; Thu,  5 Jan 2023 08:57:40 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id 124so25775620pfy.0
-        for <bpf@vger.kernel.org>; Thu, 05 Jan 2023 08:57:40 -0800 (PST)
+        with ESMTP id S235411AbjAER1B (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 5 Jan 2023 12:27:01 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03CD59F9F
+        for <bpf@vger.kernel.org>; Thu,  5 Jan 2023 09:23:00 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id az7so12411852wrb.5
+        for <bpf@vger.kernel.org>; Thu, 05 Jan 2023 09:23:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=qklyOCxfCUcZboToekn30enOfFtg7jdWSCtxv11/91E=;
-        b=AiwVgqhYbXcvon+g4I18+p2ZxDc2xlVSSlD6YWWeB8L5uI3QVj8A/TzN8w+l51zT2m
-         EqZS6q5EpeAJTVCTTyBmVtRmGOZJZ0xKKb4dc3tTanc2ycrk5BpH/4hq0KLOw+si6JBV
-         H28ZGrCzLw6ZyA4tolPJTHU3EFl5B8L7l0VxY=
+        d=linaro.org; s=google;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XcfKvBPEIZCBpfejnS73x0WwQlLjDoYOq2loLUX6TbU=;
+        b=KwTi/H999k5fva2x4E5wBta5Rx9fvc3JiOCJaif8gKrNStViCRTQIJjqOJ+RkI+kjG
+         bM32qjnNVWALAET3QCG4YDk0O705dgkfl2PfMRQSiKS3cX4asOWiKDNABJ51/Nrp41gg
+         fVGpKaGTnNqm8/+uSoIDeG9rZQpdb8V5uGEBQIBWoxCTWSg+0HNSjXEoy9eXdJgQJ6vC
+         qVPjg/atlKyDzrkoDWHxsykXvOfgYXqolFnE5HF9jwpodI04uIu8Vn6LMa9H71Xeypmf
+         WcIcTR4hfxQ17/9nJ2Xf+ANDx++GsspwhdR256Vf/Fgq9oyh6/wGQuOXh3ZHtAswozK2
+         kajg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qklyOCxfCUcZboToekn30enOfFtg7jdWSCtxv11/91E=;
-        b=5PUTIeLCd/DBdtK2tfNjM0H4viFO4EPq69oSfBA+k0rbw6Q1m6UhwGQJv95nQb125e
-         sNInAW91W16O+8jw3VaKRlDSrY/U50bBIdIBiVz67ZLkyIvYOu8CypfEA41DJ+ySPKpA
-         EGwO6CL+UK9AmDYthGMq5YpFE2Nku3KU03CKmZ49/uEOz+nk4kHKlwDgHyoDJrSzoyaI
-         kuhrWIGK4xP9rbNfG6QTkPpd86mjv1Zgxwp6JXzb8wDinOVYks5FFxd39fTrFQVd8tkb
-         Yxwgl8Ox0zIPAz5BI83cs6oV9CYqbylXPkYuKEA7ngeaOD15EQZ868jvqztddprILtcD
-         hw2A==
-X-Gm-Message-State: AFqh2kquh3xBJ+RhJxraMeCLyId7uH0YZ/Ls/aTHTyUifTB9s+RvsuXp
-        nY7Hj7xldd0bdcXhLv1zqXLTQw==
-X-Google-Smtp-Source: AMrXdXuMNeGVN/9ui5XXdTjmRUvXi3k8EKEyY5mCV5EvSQWxjAogVicLZMkHTQUitTf98cfkChSJ6A==
-X-Received: by 2002:a05:6a00:1906:b0:580:9d4a:4e1c with SMTP id y6-20020a056a00190600b005809d4a4e1cmr56998227pfi.3.1672937859663;
-        Thu, 05 Jan 2023 08:57:39 -0800 (PST)
-Received: from C02YVCJELVCG.dhcp.broadcom.net ([192.19.144.250])
-        by smtp.gmail.com with ESMTPSA id z13-20020aa7948d000000b005765df21e68sm14519513pfk.94.2023.01.05.08.57.35
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XcfKvBPEIZCBpfejnS73x0WwQlLjDoYOq2loLUX6TbU=;
+        b=hEHFi4QkNICgcqHxd8NI6zSDpImRsuPGb7VESLHmmr/7iB0CVZBscdXe8YLGeb480X
+         3omi6bG3GpS+ZLWg9H75UqhIUE9ubwO9ZJcASOgt1IvriISdtSFFo1pG+4ExsCiWRdzW
+         y2UeBoUHhV6Bbtij/kSegd40W8c2dDxwD74ToO7GbuKHmrQbiq8Dmuojcfn2LDyKqzgx
+         fKOqItKTS+ZuTtlbUO6xeuPkZZk+uYJcAwl5ZuOdIlGLOCn2EmCx7f69AEzDNxQDp2KZ
+         XV1pkhWc0ygEQhzlxDHRAf47EJBJspPsLKrDhpI3hsKvkJiPAL3LxPf+m6RydcU6r9zl
+         noBw==
+X-Gm-Message-State: AFqh2ko1lgKeVl5saSHwbEsz6BCKuT3R1xG++3x4Ee1vPOfxSgeDaawv
+        u9NNvmOPd33I7iIYhTWtPptg5A==
+X-Google-Smtp-Source: AMrXdXsVuG3jlXxidmoUuxedWXclZfrZDMaXokX92TAiPz2xuCOg2zd6+8EV0DNZLOtS/hNregUGCw==
+X-Received: by 2002:adf:9dd1:0:b0:242:f3f:28df with SMTP id q17-20020adf9dd1000000b002420f3f28dfmr32911549wre.58.1672939379261;
+        Thu, 05 Jan 2023 09:22:59 -0800 (PST)
+Received: from linaro.org ([2a00:23c5:6809:2201:dca6:3efa:4e3:1e42])
+        by smtp.gmail.com with ESMTPSA id s13-20020adfdb0d000000b002420dba6447sm37871273wri.59.2023.01.05.09.22.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 08:57:39 -0800 (PST)
-From:   Andy Gospodarek <andrew.gospodarek@broadcom.com>
-X-Google-Original-From: Andy Gospodarek <gospo@broadcom.com>
-Date:   Thu, 5 Jan 2023 11:57:32 -0500
-To:     Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
-Cc:     Tariq Toukan <ttoukan.linux@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Andy Gospodarek <andrew.gospodarek@broadcom.com>,
-        ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        hawk@kernel.org, john.fastabend@gmail.com, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        kpsingh@kernel.org, lorenzo.bianconi@redhat.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>, gal@nvidia.com,
-        Saeed Mahameed <saeedm@nvidia.com>, tariqt@nvidia.com
-Subject: Re: [PATCH net-next v2] samples/bpf: fixup some tools to be able to
- support xdp multibuffer
-Message-ID: <Y7cBfE7GpX04EI97@C02YVCJELVCG.dhcp.broadcom.net>
-References: <20220621175402.35327-1-gospo@broadcom.com>
- <40fd78fc-2bb1-8eed-0b64-55cb3db71664@gmail.com>
- <87k0234pd6.fsf@toke.dk>
- <20230103172153.58f231ba@kernel.org>
- <Y7U8aAhdE3TuhtxH@lore-desk>
- <87bkne32ly.fsf@toke.dk>
- <a12de9d9-c022-3b57-0a15-e22cdae210fa@gmail.com>
- <871qo90yxr.fsf@toke.dk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <871qo90yxr.fsf@toke.dk>
+        Thu, 05 Jan 2023 09:22:58 -0800 (PST)
+From:   Mike Leach <mike.leach@linaro.org>
+To:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, acme@kernel.org, irogers@google.com
+Cc:     peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, Mike Leach <mike.leach@linaro.org>
+Subject: [PATCH] perf build: Fix build error when NO_LIBBPF=1
+Date:   Thu,  5 Jan 2023 17:22:43 +0000
+Message-Id: <20230105172243.7238-1-mike.leach@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 04:43:28PM +0100, Toke Høiland-Jørgensen wrote:
-> Tariq Toukan <ttoukan.linux@gmail.com> writes:
-> 
-> > On 04/01/2023 14:28, Toke Høiland-Jørgensen wrote:
-> >> Lorenzo Bianconi <lorenzo@kernel.org> writes:
-> >> 
-> >>>> On Tue, 03 Jan 2023 16:19:49 +0100 Toke Høiland-Jørgensen wrote:
-> >>>>> Hmm, good question! I don't think we've ever explicitly documented any
-> >>>>> assumptions one way or the other. My own mental model has certainly
-> >>>>> always assumed the first frag would continue to be the same size as in
-> >>>>> non-multi-buf packets.
-> >>>>
-> >>>> Interesting! :) My mental model was closer to GRO by frags
-> >>>> so the linear part would have no data, just headers.
-> >>>
-> >>> That is assumption as well.
-> >> 
-> >> Right, okay, so how many headers? Only Ethernet, or all the way up to
-> >> L4 (TCP/UDP)?
-> >> 
-> >> I do seem to recall a discussion around the header/data split for TCP
-> >> specifically, but I think I mentally put that down as "something people
-> >> may way to do at some point in the future", which is why it hasn't made
-> >> it into my own mental model (yet?) :)
-> >> 
-> >> -Toke
-> >> 
-> >
-> > I don't think that all the different GRO layers assume having their 
-> > headers/data in the linear part. IMO they will just perform better if 
-> > these parts are already there. Otherwise, the GRO flow manages, and 
-> > pulls the needed amount into the linear part.
-> > As examples, see calls to gro_pull_from_frag0 in net/core/gro.c, and the 
-> > call to pskb_may_pull() from skb_gro_header_slow().
-> >
-> > This resembles the bpf_xdp_load_bytes() API used here in the xdp prog.
-> 
-> Right, but that is kernel code; what we end up doing with the API here
-> affects how many programs need to make significant changes to work with
-> multibuf, and how many can just set the frags flag and continue working.
-> Which also has a performance impact, see below.
-> 
-> > The context of my questions is that I'm looking for the right memory 
-> > scheme for adding xdp-mb support to mlx5e striding RQ.
-> > In striding RQ, the RX buffer consists of "strides" of a fixed size set 
-> > by pthe driver. An incoming packet is written to the buffer starting from 
-> > the beginning of the next available stride, consuming as much strides as 
-> > needed.
-> >
-> > Due to the need for headroom and tailroom, there's no easy way of 
-> > building the xdp_buf in place (around the packet), so it should go to a 
-> > side buffer.
-> >
-> > By using 0-length linear part in a side buffer, I can address two 
-> > challenging issues: (1) save the in-driver headers memcpy (copy might 
-> > still exist in the xdp program though), and (2) conform to the 
-> > "fragments of the same size" requirement/assumption in xdp-mb. 
-> > Otherwise, if we pull from frag[0] into the linear part, frag[0] becomes 
-> > smaller than the next fragments.
-> 
-> Right, I see.
-> 
-> So my main concern would be that if we "allow" this, the only way to
-> write an interoperable XDP program will be to use bpf_xdp_load_bytes()
-> for every packet access. Which will be slower than DPA, so we may end up
-> inadvertently slowing down all of the XDP ecosystem, because no one is
-> going to bother with writing two versions of their programs. Whereas if
-> you can rely on packet headers always being in the linear part, you can
-> write a lot of the "look at headers and make a decision" type programs
-> using just DPA, and they'll work for multibuf as well.
+Recent updates to perf build result in the following output when cross
+compiling to aarch64, with libelf unavailable, and therefore
+NO_LIBBPF=1 set.
 
-The question I would have is what is really the 'slow down' for
-bpf_xdp_load_bytes() vs DPA?  I know you and Jesper can tell me how many
-instructions each use. :)
+```
+  $make -C tools/perf
 
-Taking a step back...years ago Dave mentioned wanting to make XDP
-programs easy to write and it feels like using these accessor APIs would
-help accomplish that.  If the kernel examples use bpf_xdp_load_bytes()
-accessors everywhere then that would accomplish that.
+  <cut>
 
-> But maybe I'm mistaken and people are just going to use the load_bytes
-> helper anyway because they want to go deeper than whatever "headers" bit
-> we'll end up guaranteeing is in the linear part?
+  Makefile.config:428: No libelf found. Disables 'probe' tool, jvmti
+  and BPF support in 'perf record'. Please install libelf-dev,
+  libelf-devel or elfutils-libelf-devel
+
+  <cut>
+
+  libbpf.c:46:10: fatal error: libelf.h: No such file or directory
+      46 | #include <libelf.h>
+         |          ^~~~~~~~~~
+  compilation terminated.
+
+  ./tools/build/Makefile.build:96: recipe for target
+  '.tools/perf/libbpf/staticobjs/libbpf.o' failed
+
+```
+
+plus one other include error for <gelf.h>
+
+The issue is that the commit noted below adds libbpf to the prepare:
+target but no longer accounts for the NO_LIBBPF define. Additionally
+changing the include directories means that even if the libbpf target
+build is prevented, bpf headers are missing in other parts of the build.
+
+This patch ensures that in the case of NO_LIBBPF=1, the build target is
+changed to a header only target, and the headers are installed, without
+attempting to build the libbpf.a target.
+
+Applies to perf/core
+
+Fixes: 746bd29e348f ("perf build: Use tools/lib headers from install path")
+Signed-off-by: Mike Leach <mike.leach@linaro.org>
+---
+ tools/perf/Makefile.perf | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+index 13e7d26e77f0..ee08ecf469f6 100644
+--- a/tools/perf/Makefile.perf
++++ b/tools/perf/Makefile.perf
+@@ -305,7 +305,11 @@ else
+ endif
+ LIBBPF_DESTDIR = $(LIBBPF_OUTPUT)
+ LIBBPF_INCLUDE = $(LIBBPF_DESTDIR)/include
++ifndef NO_LIBBPF
+ LIBBPF = $(LIBBPF_OUTPUT)/libbpf.a
++else
++LIBBPF = $(LIBBPF_INCLUDE)/bpf/bpf.h
++endif
+ CFLAGS += -I$(LIBBPF_OUTPUT)/include
+ 
+ ifneq ($(OUTPUT),)
+@@ -826,10 +830,16 @@ $(LIBAPI)-clean:
+ 	$(call QUIET_CLEAN, libapi)
+ 	$(Q)$(RM) -r -- $(LIBAPI_OUTPUT)
+ 
++ifndef NO_LIBBPF
+ $(LIBBPF): FORCE | $(LIBBPF_OUTPUT)
+ 	$(Q)$(MAKE) -C $(LIBBPF_DIR) FEATURES_DUMP=$(FEATURE_DUMP_EXPORT) \
+ 		O= OUTPUT=$(LIBBPF_OUTPUT)/ DESTDIR=$(LIBBPF_DESTDIR) prefix= \
+ 		$@ install_headers
++else
++$(LIBBPF): FORCE | $(LIBBPF_OUTPUT)
++	$(Q)$(MAKE) -C $(LIBBPF_DIR) OUTPUT=$(LIBBPF_OUTPUT)/ \
++		DESTDIR=$(LIBBPF_DESTDIR) prefix= install_headers
++endif
+ 
+ $(LIBBPF)-clean:
+ 	$(call QUIET_CLEAN, libbpf)
+-- 
+2.17.1
+
