@@ -2,156 +2,87 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E647C54EBD
-	for <bpf@archiver.kernel.org>; Fri,  6 Jan 2023 10:26:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A9ABC3DA7A
+	for <bpf@archiver.kernel.org>; Fri,  6 Jan 2023 11:40:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbjAFK0y (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 6 Jan 2023 05:26:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60486 "EHLO
+        id S229808AbjAFLkv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 6 Jan 2023 06:40:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233882AbjAFK0B (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 6 Jan 2023 05:26:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B55F6EC95
-        for <bpf@vger.kernel.org>; Fri,  6 Jan 2023 02:24:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673000695;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3H/Euuxq7LIt7GwPww0Ivp2k4XBNQIOZw45JfduHe6c=;
-        b=UwHQD4yZGMW3Wk+Yu1Pd5q5AMMZtQQ67TOk8iqFEc5oI5tnaH27GMdQXmjwcJ8f0tqx03r
-        4aOvO8cRQUGDhv7J/SpykAip4lq7ZJTjJ6mShdRgdY+y0Dx+5eO6qUsozQfOGnyfESaBJ1
-        tmia+T9Ozq5Sej4gSGZ0THXmen8BoF4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-62-VYt_rQIsME2M06_D17bI_w-1; Fri, 06 Jan 2023 05:23:52 -0500
-X-MC-Unique: VYt_rQIsME2M06_D17bI_w-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 617FF1871D94;
-        Fri,  6 Jan 2023 10:23:51 +0000 (UTC)
-Received: from plouf.redhat.com (unknown [10.39.192.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DFD14C15BAD;
-        Fri,  6 Jan 2023 10:23:48 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
+        with ESMTP id S229498AbjAFLkt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 6 Jan 2023 06:40:49 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE47D7148D;
+        Fri,  6 Jan 2023 03:40:47 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id C312F250F6;
+        Fri,  6 Jan 2023 11:40:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1673005244; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=Pq8vo72VlOIQypibTelr8uWjzVpZ26KKZVeqmmbrazM=;
+        b=FKpJpfyRQKcremgQ+4r8TS5oT0mCAMfqVMntXZGxvcxb3S2OUdSCNOSXx0ecUMit01ktWj
+        +ZVLPc2n1jVInQxyXM3B5kN16x49BSUoyAAJabAEC5ODMkE7ia35wdv+dkpHLiSuHHuye4
+        AmuP1HMiQJRxj9Gypf+Va4XQAVMIS8k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1673005244;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=Pq8vo72VlOIQypibTelr8uWjzVpZ26KKZVeqmmbrazM=;
+        b=RkjMr1qzKL+z+wZS5TezVCSDPmKTGuXMnsUbbp3Qap4Ao886wi4xAzu+nkR6aHXWuZzpPX
+        XJA4ui9CY316i6Cw==
+Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        by relay2.suse.de (Postfix) with ESMTP id 606E02C143;
+        Fri,  6 Jan 2023 11:40:44 +0000 (UTC)
+From:   Michal Suchanek <msuchanek@suse.de>
+Cc:     Michal Suchanek <msuchanek@suse.de>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH HID for-next v1 5/9] selftests: hid: prepare tests for HID_BPF API change
-Date:   Fri,  6 Jan 2023 11:23:28 +0100
-Message-Id: <20230106102332.1019632-6-benjamin.tissoires@redhat.com>
-In-Reply-To: <20230106102332.1019632-1-benjamin.tissoires@redhat.com>
-References: <20230106102332.1019632-1-benjamin.tissoires@redhat.com>
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and
+        Tools)), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] bpf_doc: Fix build error with older python versions
+Date:   Fri,  6 Jan 2023 12:40:37 +0100
+Message-Id: <20230106114037.25036-1-msuchanek@suse.de>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We plan on changing the return value of hid_bpf_attach_prog().
-Instead of returning an error code, it will return an fd to a bpf_link.
-This bpf_link is responsible for the binding between the bpf program and
-the hid device.
++ make -j48 -s -C /dev/shm/kbuild/linux.33946/current ARCH=powerpc HOSTCC=gcc CROSS_COMPILE=powerpc64-suse-linux- clean
+TypeError: '_sre.SRE_Match' object is not subscriptable
 
-Add a fallback mechanism to not break bisections by pinning the program
-when we run this test against the non changed kernel.
+Fixes: 8a76145a2ec2 ("bpf: explicitly define BPF_FUNC_xxx integer values")
 
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Signed-off-by: Michal Suchanek <msuchanek@suse.de>
 ---
- tools/testing/selftests/hid/hid_bpf.c | 29 +++++++++++++++++++++++----
- 1 file changed, 25 insertions(+), 4 deletions(-)
+ scripts/bpf_doc.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/hid/hid_bpf.c b/tools/testing/selftests/hid/hid_bpf.c
-index 3b204a15e44b..9a262fe99b32 100644
---- a/tools/testing/selftests/hid/hid_bpf.c
-+++ b/tools/testing/selftests/hid/hid_bpf.c
-@@ -444,13 +444,21 @@ FIXTURE(hid_bpf) {
- 	int hid_id;
- 	pthread_t tid;
- 	struct hid *skel;
-+	int hid_links[3]; /* max number of programs loaded in a single test */
- };
- static void detach_bpf(FIXTURE_DATA(hid_bpf) * self)
- {
-+	int i;
-+
- 	if (self->hidraw_fd)
- 		close(self->hidraw_fd);
- 	self->hidraw_fd = 0;
- 
-+	for (i = 0; i < ARRAY_SIZE(self->hid_links); i++) {
-+		if (self->hid_links[i])
-+			close(self->hid_links[i]);
-+	}
-+
- 	hid__destroy(self->skel);
- 	self->skel = NULL;
- }
-@@ -512,6 +520,9 @@ static void load_programs(const struct test_program programs[],
- 			    .ctx_size_in = sizeof(args),
- 	);
- 
-+	ASSERT_LE(progs_count, ARRAY_SIZE(self->hid_links))
-+		TH_LOG("too many programs are to be loaded");
-+
- 	/* open the bpf file */
- 	self->skel = hid__open();
- 	ASSERT_OK_PTR(self->skel) TEARDOWN_LOG("Error while calling hid__open");
-@@ -543,7 +554,10 @@ static void load_programs(const struct test_program programs[],
- 		args.hid = self->hid_id;
- 		args.insert_head = programs[i].insert_head;
- 		err = bpf_prog_test_run_opts(attach_fd, &tattr);
--		ASSERT_OK(args.retval) TH_LOG("attach_hid(%s): %d", programs[i].name, args.retval);
-+		ASSERT_GE(args.retval, 0)
-+			TH_LOG("attach_hid(%s): %d", programs[i].name, args.retval);
-+
-+		self->hid_links[i] = args.retval;
- 	}
- 
- 	self->hidraw_fd = open_hidraw(self->dev_id);
-@@ -619,10 +633,17 @@ TEST_F(hid_bpf, test_attach_detach)
- 		{ .name = "hid_second_event" },
- 	};
- 	__u8 buf[10] = {0};
--	int err;
-+	int err, link;
- 
- 	LOAD_PROGRAMS(progs);
- 
-+	link = self->hid_links[0];
-+	/* we might not be using the new code path where hid_bpf_attach_prog()
-+	 * returns a link.
-+	 */
-+	if (!link)
-+		link = bpf_program__fd(self->skel->progs.hid_first_event);
-+
- 	/* inject one event */
- 	buf[0] = 1;
- 	buf[1] = 42;
-@@ -640,8 +661,8 @@ TEST_F(hid_bpf, test_attach_detach)
- 
- 	/* pin the first program and immediately unpin it */
- #define PIN_PATH "/sys/fs/bpf/hid_first_event"
--	err = bpf_program__pin(self->skel->progs.hid_first_event, PIN_PATH);
--	ASSERT_OK(err) TH_LOG("error while calling bpf_program__pin");
-+	err = bpf_obj_pin(link, PIN_PATH);
-+	ASSERT_OK(err) TH_LOG("error while calling bpf_obj_pin");
- 	remove(PIN_PATH);
- #undef PIN_PATH
- 	usleep(100000);
+diff --git a/scripts/bpf_doc.py b/scripts/bpf_doc.py
+index e8d90829f23e..38d51e05c7a2 100755
+--- a/scripts/bpf_doc.py
++++ b/scripts/bpf_doc.py
+@@ -271,7 +271,7 @@ class HeaderParser(object):
+             if capture:
+                 fn_defines_str += self.line
+                 helper_name = capture.expand(r'bpf_\1')
+-                self.helper_enum_vals[helper_name] = int(capture[2])
++                self.helper_enum_vals[helper_name] = int(capture.group(2))
+                 self.helper_enum_pos[helper_name] = i
+                 i += 1
+             else:
 -- 
-2.38.1
+2.35.3
 
