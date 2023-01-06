@@ -2,141 +2,248 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16ED5C3DA7A
-	for <bpf@archiver.kernel.org>; Fri,  6 Jan 2023 14:38:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0364C4708D
+	for <bpf@archiver.kernel.org>; Fri,  6 Jan 2023 14:49:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232864AbjAFOiN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 6 Jan 2023 09:38:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42488 "EHLO
+        id S229908AbjAFOtK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 6 Jan 2023 09:49:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjAFOiM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 6 Jan 2023 09:38:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D7980982
-        for <bpf@vger.kernel.org>; Fri,  6 Jan 2023 06:37:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673015848;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=P/zfGuEErfx9YxOb8v5xGvNVY0pRdOYDG3xC/nVLZ30=;
-        b=iCYTWGgyvCIUQvB/PjBAQc+e6y5dpUWeJcy+IqQtr3kHOo+9FOFINC32nTrGZSvGNZ45ME
-        fX5qsBp9UdORYTEbBS0P7uo2A1gl6aBXh2Rch2l5tazWKvXtp0exuhLvKhdhjMiSFDV3h1
-        8QDtbMhQnYQg/7VoeV1nZfA0WxFETFo=
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
- [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-339-BnduoFqTPfeEhTzK38tCEw-1; Fri, 06 Jan 2023 09:37:25 -0500
-X-MC-Unique: BnduoFqTPfeEhTzK38tCEw-1
-Received: by mail-il1-f199.google.com with SMTP id h4-20020a056e021b8400b0030d901a84d9so295954ili.6
-        for <bpf@vger.kernel.org>; Fri, 06 Jan 2023 06:37:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=P/zfGuEErfx9YxOb8v5xGvNVY0pRdOYDG3xC/nVLZ30=;
-        b=f0cfDW2QSFAU8dJIwfibtakhnOq6vxha8I9OoTSWg9IOE+A80SNRYaoA+nz1TGspOB
-         ccoLa7PwCrSZB0pc3MJhJVKzFfcsEo9GaFCW00kRiVMyJy9MGuhfA5JIwZ+a0hQiITmL
-         WXHpKyXmuicZzFFMWDOBwu/P5Y5NLvKGC+vxku0xTY1vAs6Xira29RYddrVJL1B2/jn3
-         APFtuTxBqUwVFyyQbbrVCcWH9nSynQg6YmlFVCbdHF81XsdtSphXn8Cur9VeTt3j+Hv9
-         G+iG10JDOPc31PuCi7vMkf+Uf31DRn1CygiD1deejZWpRMdtqMTjdM2cGfHx3/b5PgjU
-         YFHw==
-X-Gm-Message-State: AFqh2krRkngqYmfK8YAL7FBSyYVD8gXYJ3YBfZ1PqRL3cwGBVcGd3zgH
-        I/f4v79PdGMYPO2Z8v/s6WgmTe9Yl7garlPSRIWWbCnzQFzqm7lzV3P9bAcQJkE1JdxR8PF7LGF
-        dARyRxJrRUuJy4QO/YMsleAE2vaTN
-X-Received: by 2002:a02:54c7:0:b0:38a:757f:dac9 with SMTP id t190-20020a0254c7000000b0038a757fdac9mr4442647jaa.84.1673015844324;
-        Fri, 06 Jan 2023 06:37:24 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvM4bw2Ko76z00L7EjKh+skm8JncjwnAQJE6ihiSkxq86ANz2AZ+mFp90pOVnrlYrhleh2gJGZWL4Ra8my8I3c=
-X-Received: by 2002:a02:54c7:0:b0:38a:757f:dac9 with SMTP id
- t190-20020a0254c7000000b0038a757fdac9mr4442635jaa.84.1673015844043; Fri, 06
- Jan 2023 06:37:24 -0800 (PST)
+        with ESMTP id S230244AbjAFOtH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 6 Jan 2023 09:49:07 -0500
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA202669;
+        Fri,  6 Jan 2023 06:49:05 -0800 (PST)
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1pDnzC-000CSH-FZ; Fri, 06 Jan 2023 15:46:22 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1pDnzB-000KKs-Uf; Fri, 06 Jan 2023 15:46:21 +0100
+Subject: Re: [PATCH bpf-next v4] bpf: Add kernel function call support in
+ 32-bit ARM for EABI
+To:     Yang Jihong <yangjihong1@huawei.com>, ast@kernel.org,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        illusionist.neo@gmail.com, linux@armlinux.org.uk,
+        bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20221220115313.29949-1-yangjihong1@huawei.com>
+Cc:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Florent Revest <revest@chromium.org>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <02a9bfb2-4a75-d56f-4565-6ce5ea5e03c4@iogearbox.net>
+Date:   Fri, 6 Jan 2023 15:46:07 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <20230106102332.1019632-9-benjamin.tissoires@redhat.com> <202301062140.zfdqzE9b-lkp@intel.com>
-In-Reply-To: <202301062140.zfdqzE9b-lkp@intel.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Fri, 6 Jan 2023 15:37:12 +0100
-Message-ID: <CAO-hwJK3RetR9T_=4C+3Fmj-ThNx-3XWgrOJGAL9VebM-PdgLw@mail.gmail.com>
-Subject: Re: [PATCH HID for-next v1 8/9] HID: bpf: clean up entrypoint
-To:     kernel test robot <lkp@intel.com>
-Cc:     Greg KH <greg@kroah.com>, Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20221220115313.29949-1-yangjihong1@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.7/26773/Fri Jan  6 09:48:44 2023)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jan 6, 2023 at 2:42 PM kernel test robot <lkp@intel.com> wrote:
->
-> Hi Benjamin,
->
-> I love your patch! Perhaps something to improve:
->
-> [auto build test WARNING on hid/for-next]
-> [also build test WARNING on next-20230106]
-> [cannot apply to shuah-kselftest/next shuah-kselftest/fixes char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.2-rc2]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Tissoires/selftests-hid-add-vmtest-sh/20230106-182823
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
-> patch link:    https://lore.kernel.org/r/20230106102332.1019632-9-benjamin.tissoires%40redhat.com
-> patch subject: [PATCH HID for-next v1 8/9] HID: bpf: clean up entrypoint
-> config: i386-randconfig-a013
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/46336953b47885c5111b7c1a92403b3d94cf3d41
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Benjamin-Tissoires/selftests-hid-add-vmtest-sh/20230106-182823
->         git checkout 46336953b47885c5111b7c1a92403b3d94cf3d41
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hid/bpf/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
-> >> drivers/hid/bpf/hid_bpf_jmp_table.c:502:6: warning: no previous prototype for function 'call_hid_bpf_prog_put_deferred' [-Wmissing-prototypes]
->    void call_hid_bpf_prog_put_deferred(struct work_struct *work)
->         ^
->    drivers/hid/bpf/hid_bpf_jmp_table.c:502:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    void call_hid_bpf_prog_put_deferred(struct work_struct *work)
->    ^
->    static
->    1 warning generated.
->
->
-> vim +/call_hid_bpf_prog_put_deferred +502 drivers/hid/bpf/hid_bpf_jmp_table.c
->
-> f5c27da4e3c8a2 Benjamin Tissoires 2022-11-03  501
-> 0baef37335dd4d Benjamin Tissoires 2022-11-03 @502  void call_hid_bpf_prog_put_deferred(struct work_struct *work)
-> f5c27da4e3c8a2 Benjamin Tissoires 2022-11-03  503  {
-> ade9207f04dc40 Benjamin Tissoires 2023-01-06  504       /* kept around for patch readability, to be dropped in the next commmit */
-> f5c27da4e3c8a2 Benjamin Tissoires 2022-11-03  505  }
-> f5c27da4e3c8a2 Benjamin Tissoires 2022-11-03  506
->
+On 12/20/22 12:53 PM, Yang Jihong wrote:
+> This patch adds kernel function call support to 32-bit ARM bpf jit for
+> EABI.
+> 
+> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+> ---
+> 
+> Changes since v3:
+>    - Submit patches related to the ARM32 architecture separately.
+> 
+> Changes since v2:
+>    - Remove patches to adjust sk size check for CO_RE in 32-bit arch.
+>    - Add check of kfunc's return value in insn_def_regno.
+>    - Adjust is_reg64 for insn_def_regno.
+>    - The check of CONFIG_AEABI is moved from emit_kfunc_call to
+>      bpf_jit_supports_kfunc_call.
+>    - Fix a comment error in fixup_kfunc_call.
+> 
+>   arch/arm/net/bpf_jit_32.c | 137 ++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 137 insertions(+)
+> 
+> diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
+> index 6a1c9fca5260..ae3a36d909f4 100644
+> --- a/arch/arm/net/bpf_jit_32.c
+> +++ b/arch/arm/net/bpf_jit_32.c
+> @@ -1337,6 +1337,125 @@ static void build_epilogue(struct jit_ctx *ctx)
+>   #endif
+>   }
+>   
+> +/*
+> + * Input parameters of function in 32-bit ARM architecture:
+> + * The first four word-sized parameters passed to a function will be
+> + * transferred in registers R0-R3. Sub-word sized arguments, for example,
+> + * char, will still use a whole register.
+> + * Arguments larger than a word will be passed in multiple registers.
+> + * If more arguments are passed, the fifth and subsequent words will be passed
+> + * on the stack.
+> + *
+> + * The first for args of a function will be considered for
+> + * putting into the 32bit register R1, R2, R3 and R4.
+> + *
+> + * Two 32bit registers are used to pass a 64bit arg.
+> + *
+> + * For example,
+> + * void foo(u32 a, u32 b, u32 c, u32 d, u32 e):
+> + *      u32 a: R0
+> + *      u32 b: R1
+> + *      u32 c: R2
+> + *      u32 d: R3
+> + *      u32 e: stack
+> + *
+> + * void foo(u64 a, u32 b, u32 c, u32 d):
+> + *      u64 a: R0 (lo32) R1 (hi32)
+> + *      u32 b: R2
+> + *      u32 c: R3
+> + *      u32 d: stack
+> + *
+> + * void foo(u32 a, u64 b, u32 c, u32 d):
+> + *       u32 a: R0
+> + *       u64 b: R2 (lo32) R3 (hi32)
+> + *       u32 c: stack
+> + *       u32 d: stack
+> + *
+> + * void foo(u32 a, u32 b, u64 c, u32 d):
+> + *       u32 a: R0
+> + *       u32 b: R1
+> + *       u64 c: R2 (lo32) R3 (hi32)
+> + *       u32 d: stack
+> + *
+> + * void foo(u64 a, u64 b):
+> + *       u64 a: R0 (lo32) R1 (hi32)
+> + *       u64 b: R2 (lo32) R3 (hi32)
+> + *
+> + * The return value will be stored in the R0 (and R1 for 64bit value).
+> + *
+> + * For example,
+> + * u32 foo(u32 a, u32 b, u32 c):
+> + *      return value: R0
+> + *
+> + * u64 foo(u32 a, u32 b, u32 c):
+> + *      return value: R0 (lo32) R1 (hi32)
+> + *
+> + * The above is for AEABI only, OABI does not support this function.
+> + */
+> +static int emit_kfunc_call(const struct bpf_insn *insn, struct jit_ctx *ctx, const u32 func)
+> +{
+> +	int i;
+> +	const struct btf_func_model *fm;
+> +	const s8 *tmp = bpf2a32[TMP_REG_1];
+> +	const u8 arg_regs[] = { ARM_R0, ARM_R1, ARM_R2, ARM_R3 };
+> +	int nr_arg_regs = ARRAY_SIZE(arg_regs);
+> +	int arg_regs_idx = 0, stack_off = 0;
+> +	const s8 *rd;
+> +	s8 rt;
+> +
+> +	fm = bpf_jit_find_kfunc_model(ctx->prog, insn);
+> +	if (!fm)
+> +		return -EINVAL;
+> +
+> +	for (i = 0; i < fm->nr_args; i++) {
+> +		if (fm->arg_size[i] > sizeof(u32)) {
+> +			rd = arm_bpf_get_reg64(bpf2a32[BPF_REG_1 + i], tmp, ctx);
+> +
+> +			if (arg_regs_idx + 1 < nr_arg_regs) {
+> +				/*
+> +				 * AAPCS states:
+> +				 * A double-word sized type is passed in two
+> +				 * consecutive registers (e.g., r0 and r1, or
+> +				 * r2 and r3). The content of the registers is
+> +				 * as if the value had been loaded from memory
+> +				 * representation with a single LDM instruction.
+> +				 */
+> +				if (arg_regs_idx & 1)
+> +					arg_regs_idx++;
+> +
+> +				emit(ARM_MOV_R(arg_regs[arg_regs_idx++], rd[1]), ctx);
+> +				emit(ARM_MOV_R(arg_regs[arg_regs_idx++], rd[0]), ctx);
+> +			} else {
+> +				stack_off = ALIGN(stack_off, STACK_ALIGNMENT);
+> +
+> +				if (__LINUX_ARM_ARCH__ >= 6 ||
+> +				    ctx->cpu_architecture >= CPU_ARCH_ARMv5TE) {
+> +					emit(ARM_STRD_I(rd[1], ARM_SP, stack_off), ctx);
+> +				} else {
+> +					emit(ARM_STR_I(rd[1], ARM_SP, stack_off), ctx);
+> +					emit(ARM_STR_I(rd[0], ARM_SP, stack_off), ctx);
+> +				}
+> +
+> +				stack_off += 8;
+> +			}
+> +		} else {
+> +			rt = arm_bpf_get_reg32(bpf2a32[BPF_REG_1 + i][1], tmp[1], ctx);
+> +
+> +			if (arg_regs_idx  < nr_arg_regs) {
+> +				emit(ARM_MOV_R(arg_regs[arg_regs_idx++], rt), ctx);
+> +			} else {
+> +				emit(ARM_STR_I(rt, ARM_SP, stack_off), ctx);
+> +				stack_off += 4;
+> +			}
+> +		}
+> +	}
+> +
+> +	emit_a32_mov_i(tmp[1], func, ctx);
+> +	emit_blx_r(tmp[1], ctx);
+> +
+> +	return 0;
+> +}
+> +
+>   /*
+>    * Convert an eBPF instruction to native instruction, i.e
+>    * JITs an eBPF instruction.
+> @@ -1603,6 +1722,10 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
+>   	case BPF_LDX | BPF_MEM | BPF_H:
+>   	case BPF_LDX | BPF_MEM | BPF_B:
+>   	case BPF_LDX | BPF_MEM | BPF_DW:
+> +	case BPF_LDX | BPF_PROBE_MEM | BPF_W:
+> +	case BPF_LDX | BPF_PROBE_MEM | BPF_H:
+> +	case BPF_LDX | BPF_PROBE_MEM | BPF_B:
+> +	case BPF_LDX | BPF_PROBE_MEM | BPF_DW:
 
-Oops, this function should have been dropped in 8/9 "HID: bpf: clean
-up entrypoint". It's now dead code. I'll fix it in v2.
+This doesn't look right, why is this part of the patch? It's not kfunc related
+and if you plan to add support for ldx_probe_mem then it should be separated from
+this set. Check out 800834285361 ("bpf, arm64: Add BPF exception tables"), why is
+this not needed for arm32?
 
-Cheers,
-Benjamin
-
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests
+>   		rn = arm_bpf_get_reg32(src_lo, tmp2[1], ctx);
+>   		emit_ldx_r(dst, rn, off, ctx, BPF_SIZE(code));
+>   		break;
+> @@ -1785,6 +1908,16 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
+>   		const s8 *r5 = bpf2a32[BPF_REG_5];
+>   		const u32 func = (u32)__bpf_call_base + (u32)imm;
+>   
+> +		if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
+> +			int err;
+> +
+> +			err = emit_kfunc_call(insn, ctx, func);
+> +
+> +			if (err)
+> +				return err;
+> +			break;
+> +		}
+> +
+>   		emit_a32_mov_r64(true, r0, r1, ctx);
+>   		emit_a32_mov_r64(true, r1, r2, ctx);
+>   		emit_push_r64(r5, ctx);
+> @@ -2022,3 +2155,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>   	return prog;
+>   }
+>   
+> +bool bpf_jit_supports_kfunc_call(void)
+> +{
+> +	return IS_ENABLED(CONFIG_AEABI);
+> +}
+> 
 
