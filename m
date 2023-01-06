@@ -2,40 +2,41 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 854F2C3DA7A
-	for <bpf@archiver.kernel.org>; Fri,  6 Jan 2023 10:24:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61C2AC5479D
+	for <bpf@archiver.kernel.org>; Fri,  6 Jan 2023 10:25:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232547AbjAFKYd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 6 Jan 2023 05:24:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60218 "EHLO
+        id S233976AbjAFKZK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 6 Jan 2023 05:25:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbjAFKYa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 6 Jan 2023 05:24:30 -0500
+        with ESMTP id S233600AbjAFKYg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 6 Jan 2023 05:24:36 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7977969B14
-        for <bpf@vger.kernel.org>; Fri,  6 Jan 2023 02:23:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC026C287
+        for <bpf@vger.kernel.org>; Fri,  6 Jan 2023 02:23:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673000623;
+        s=mimecast20190719; t=1673000633;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Asorenzas+kjlhcMKAW/jVBQ4k5PIZb3mjnBvSPg95E=;
-        b=ClvJYK+Ha7eCgS10gr78/4XQXHflwCuxcaRfVMLrVujLiRHehMhXhnoWdvubHr2vM6LZEY
-        U9HyHLsjGBSzsUd39aLLBnRgWIRQf0mC9LNIB2dzkDb2qNYqGfF+pDQcqezhneCi7wcPhk
-        Ww2zECOBPwZ0FC0CskS2BNIUoLMmveo=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Wf1YklaqcAiXjW3N2/GPx9e6Ol6MPpmodCEeSsCG99s=;
+        b=XqxFZk3MzYekt8Bxl0Ov9amiZLNXqq5vTzsKR0fhElY2Wq7qXo0RWluGcVJSL9WnDzl5zU
+        Iytp4GsIevdm2qwb4Yuu0cIGJLb6YueTPjaiUe95DQDpE3RMmcKrmxoFrYKM21UWrRj+67
+        ZAJolisTUp7DKjc0tTj2hnl4Xslmbqg=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-646-6UQoocw_OkuXf3YWNdbAng-1; Fri, 06 Jan 2023 05:23:40 -0500
-X-MC-Unique: 6UQoocw_OkuXf3YWNdbAng-1
+ us-mta-398-GwZWDMXMPGeajLp47YMaZQ-1; Fri, 06 Jan 2023 05:23:47 -0500
+X-MC-Unique: GwZWDMXMPGeajLp47YMaZQ-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D679B85A588;
-        Fri,  6 Jan 2023 10:23:39 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 721378533DA;
+        Fri,  6 Jan 2023 10:23:46 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.192.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B38FFC15BAD;
-        Fri,  6 Jan 2023 10:23:37 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 80C49C15BAD;
+        Fri,  6 Jan 2023 10:23:44 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -48,9 +49,11 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH HID for-next v1 0/9] HID-BPF LLVM fixes, no more hacks
-Date:   Fri,  6 Jan 2023 11:23:23 +0100
-Message-Id: <20230106102332.1019632-1-benjamin.tissoires@redhat.com>
+Subject: [PATCH HID for-next v1 3/9] selftests: hid: attach/detach 2 bpf programs, not just one
+Date:   Fri,  6 Jan 2023 11:23:26 +0100
+Message-Id: <20230106102332.1019632-4-benjamin.tissoires@redhat.com>
+In-Reply-To: <20230106102332.1019632-1-benjamin.tissoires@redhat.com>
+References: <20230106102332.1019632-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
@@ -58,60 +61,82 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+Add a second BPF program to attach to the device, as the development of
+this feature showed that we also need to ensure we can detach multiple
+programs to a device (hid_bpf_link->index was actually not set initially,
+and this lead to any BPF program not being released except for the first
+one).
 
-So this is the fix for the bug that actually prevented me to integrate
-HID-BPF in v6.2.
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+---
+ tools/testing/selftests/hid/hid_bpf.c   |  8 +++++++-
+ tools/testing/selftests/hid/progs/hid.c | 13 +++++++++++++
+ 2 files changed, 20 insertions(+), 1 deletion(-)
 
-While testing the code base with LLVM, I realized that clang was smarter
-than I expected it to be, and it sometimes inlined a function or not
-depending on the branch. This lead to segfaults because my current code
-in linux-next is messing up the bpf programs refcounts assuming that I
-had enough observability over the kernel.
-
-So I came back to the drawing board and realized that what I was missing
-was exactly a bpf_link, to represent the attachment of a bpf program to
-a HID device. This is the bulk of the series, in patch 6/9.
-
-The other patches are cleanups, tests, and also the addition of the
-vmtests.sh script I run locally, largely inspired by the one in the bpf
-selftests dir. This allows very fast development of HID-BPF, assuming we
-have tests that cover the bugs :)
-
-Cheers,
-Benjamin
-
-
-Benjamin Tissoires (9):
-  selftests: hid: add vmtest.sh
-  selftests: hid: allow to compile hid_bpf with LLVM
-  selftests: hid: attach/detach 2 bpf programs, not just one
-  selftests: hid: ensure the program is correctly pinned
-  selftests: hid: prepare tests for HID_BPF API change
-  HID: bpf: rework how programs are attached and stored in the kernel
-  selftests: hid: enforce new attach API
-  HID: bpf: clean up entrypoint
-  HID: bpf: reorder BPF registration
-
- Documentation/hid/hid-bpf.rst                 |  12 +-
- drivers/hid/bpf/entrypoints/entrypoints.bpf.c |   9 -
- .../hid/bpf/entrypoints/entrypoints.lskel.h   | 188 ++++--------
- drivers/hid/bpf/hid_bpf_dispatch.c            |  28 +-
- drivers/hid/bpf/hid_bpf_dispatch.h            |   3 -
- drivers/hid/bpf/hid_bpf_jmp_table.c           | 116 +++----
- include/linux/hid_bpf.h                       |   7 +
- tools/testing/selftests/hid/.gitignore        |   1 +
- tools/testing/selftests/hid/Makefile          |  10 +-
- tools/testing/selftests/hid/config.common     | 241 +++++++++++++++
- tools/testing/selftests/hid/config.x86_64     |   4 +
- tools/testing/selftests/hid/hid_bpf.c         |  32 +-
- tools/testing/selftests/hid/progs/hid.c       |  13 +
- tools/testing/selftests/hid/vmtest.sh         | 284 ++++++++++++++++++
- 14 files changed, 724 insertions(+), 224 deletions(-)
- create mode 100644 tools/testing/selftests/hid/config.common
- create mode 100644 tools/testing/selftests/hid/config.x86_64
- create mode 100755 tools/testing/selftests/hid/vmtest.sh
-
+diff --git a/tools/testing/selftests/hid/hid_bpf.c b/tools/testing/selftests/hid/hid_bpf.c
+index 6615c26fb5dd..d215bb492eb4 100644
+--- a/tools/testing/selftests/hid/hid_bpf.c
++++ b/tools/testing/selftests/hid/hid_bpf.c
+@@ -616,6 +616,7 @@ TEST_F(hid_bpf, test_attach_detach)
+ {
+ 	const struct test_program progs[] = {
+ 		{ .name = "hid_first_event" },
++		{ .name = "hid_second_event" },
+ 	};
+ 	__u8 buf[10] = {0};
+ 	int err;
+@@ -634,7 +635,10 @@ TEST_F(hid_bpf, test_attach_detach)
+ 	ASSERT_EQ(buf[0], 1);
+ 	ASSERT_EQ(buf[2], 47);
+ 
+-	/* pin the program and immediately unpin it */
++	/* make sure both programs are run */
++	ASSERT_EQ(buf[3], 52);
++
++	/* pin the first program and immediately unpin it */
+ #define PIN_PATH "/sys/fs/bpf/hid_first_event"
+ 	bpf_program__pin(self->skel->progs.hid_first_event, PIN_PATH);
+ 	remove(PIN_PATH);
+@@ -660,6 +664,7 @@ TEST_F(hid_bpf, test_attach_detach)
+ 	ASSERT_EQ(buf[0], 1);
+ 	ASSERT_EQ(buf[1], 47);
+ 	ASSERT_EQ(buf[2], 0);
++	ASSERT_EQ(buf[3], 0);
+ 
+ 	/* re-attach our program */
+ 
+@@ -677,6 +682,7 @@ TEST_F(hid_bpf, test_attach_detach)
+ 	ASSERT_EQ(err, 6) TH_LOG("read_hidraw");
+ 	ASSERT_EQ(buf[0], 1);
+ 	ASSERT_EQ(buf[2], 47);
++	ASSERT_EQ(buf[3], 52);
+ }
+ 
+ /*
+diff --git a/tools/testing/selftests/hid/progs/hid.c b/tools/testing/selftests/hid/progs/hid.c
+index 6a86af0aa545..88c593f753b5 100644
+--- a/tools/testing/selftests/hid/progs/hid.c
++++ b/tools/testing/selftests/hid/progs/hid.c
+@@ -32,6 +32,19 @@ int BPF_PROG(hid_first_event, struct hid_bpf_ctx *hid_ctx)
+ 	return hid_ctx->size;
+ }
+ 
++SEC("?fmod_ret/hid_bpf_device_event")
++int BPF_PROG(hid_second_event, struct hid_bpf_ctx *hid_ctx)
++{
++	__u8 *rw_data = hid_bpf_get_data(hid_ctx, 0 /* offset */, 4 /* size */);
++
++	if (!rw_data)
++		return 0; /* EPERM check */
++
++	rw_data[3] = rw_data[2] + 5;
++
++	return hid_ctx->size;
++}
++
+ SEC("?fmod_ret/hid_bpf_device_event")
+ int BPF_PROG(hid_change_report_id, struct hid_bpf_ctx *hid_ctx)
+ {
 -- 
 2.38.1
 
