@@ -2,149 +2,138 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9181C63705
-	for <bpf@archiver.kernel.org>; Fri,  6 Jan 2023 17:18:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBD01C3DA7A
+	for <bpf@archiver.kernel.org>; Fri,  6 Jan 2023 17:25:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235292AbjAFRRm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 6 Jan 2023 12:17:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52752 "EHLO
+        id S231414AbjAFRZ2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 6 Jan 2023 12:25:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234866AbjAFRRZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 6 Jan 2023 12:17:25 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E97012D20
-        for <bpf@vger.kernel.org>; Fri,  6 Jan 2023 09:17:24 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so2279687pjj.4
-        for <bpf@vger.kernel.org>; Fri, 06 Jan 2023 09:17:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=iRp4+4WzUTu0sjsRvL11pC0x9hSIC9oeB0YwCCx2a5o=;
-        b=EiCDyM+G2Bf1f39te0cfr6LNGqw3Zf5Im1NTIVWTTnaHWCxNw6Ku5m8ojtg+Yk76Y7
-         ImgQmp9M3J64/enIzHeIV+T6Bv7HYn9XDaKpPfjwtFmMGi0fjIHAOA8I2pw97Tdo4hl1
-         39rFzBO1hs2GZ9lXvoeievZO2nj5Lf/wKEdfBx78ADyyk1IJ0g+doG24kfJ8s+knnv5h
-         5NwKHFs7hA+hpalNOgXspmLx80hFLrdy9yirjrITE5DjvelQdvMnuT8k5hTGh5fOFtaD
-         +VoL50iFaKUgeQWUw/syor2mClCKLkXW+kvynzXlQqB16y4slKfRH9C4ML81jY80wxZK
-         5SIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iRp4+4WzUTu0sjsRvL11pC0x9hSIC9oeB0YwCCx2a5o=;
-        b=OD+Kc4ACbKMEq9H98IRnhyoGSfLqmpDFl2sc/5f7GddMTb9Iw6lNtyNojw9t4IsfYB
-         4jHMfZ1SttjjKXIHAk6AO3pJtkkEG7jooobr0n7hy5i9YlNJLtiNZsd757M/ZSQ7Ahr2
-         0RTWxHCxGdOWnZY3qz3vhp/RqxZVQSPsesbQ6Z8wlMTpzwDTrdtRQU5MnGlyjdIm8ABi
-         b38srchQwSq1x4qIhdbFk0U7QaKsgUdzGEpN5vz7czV5V4H8H200Dfi0ZYj8PpAlcmx7
-         wReRrwH82zPbkq6Q3IzIIVLacT2HzHKoSZ/Y6XxZGg6yT5NtUVyf3rXQ7pdyLKwnaaim
-         TXAA==
-X-Gm-Message-State: AFqh2kopfWL3VSm9Wi/3Hno0bOzP4CbQqXn49Yd4+vojZKgaDDmWvTVu
-        qDrrFHqiONMVvxFgBPBNnTaMoTvJfzUAwwMrCCCz2g==
-X-Google-Smtp-Source: AMrXdXvK28jpjpTdbhB8rbD/am+xqGYME/I6MwD4+aF7dljE5VZvVsSSzANXLFUs4x39ERAJXRSXKNTy7nf2zxVjUo0=
-X-Received: by 2002:a17:90b:46d8:b0:226:6523:7849 with SMTP id
- jx24-20020a17090b46d800b0022665237849mr1454699pjb.66.1673025443405; Fri, 06
- Jan 2023 09:17:23 -0800 (PST)
+        with ESMTP id S235695AbjAFRZN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 6 Jan 2023 12:25:13 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA2C7D9D7;
+        Fri,  6 Jan 2023 09:25:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0A133CE1DAF;
+        Fri,  6 Jan 2023 17:25:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAA64C433EF;
+        Fri,  6 Jan 2023 17:25:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673025908;
+        bh=E0AMAcCDFiW3hKyGu+BfqHYfZVwE7Pp21GrhIKvYXUE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sL95n0g4oKqnBJasaQSHf6Zj1FG/nGZ57LvX/UjhNsZp7C1njL8RJU86DSCdnrSuu
+         jnXIJTkHxdDJYXfFXiJ0vbwHvnho0aF66OOwWz7PJC089NC5vk8K/KU7stV218tS/G
+         91l+93BoFP+gENAHDh3rdZNLySKc8ZJhKUee9lQUMENWXRfXEehcuRk2Fsmn2/byQL
+         l1smFR5EZnaeFg/zVylCgdQgG1kAdx7a6oRr8usb0GdyOwNmtyKTDU2frKCaybAUQF
+         Bt1JGPQD1cukLzcJO3OtzQGwjVu/tiukgNXMXSQugLdhFyIaZDXqGsSXovEB9pul31
+         IP9h5sD7wXZVw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 4752C40468; Fri,  6 Jan 2023 14:25:05 -0300 (-03)
+Date:   Fri, 6 Jan 2023 14:25:05 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Mike Leach <mike.leach@linaro.org>
+Cc:     Ian Rogers <irogers@google.com>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org
+Subject: Re: [PATCH v3 1/2] perf build: Properly guard libbpf includes
+Message-ID: <Y7hZccgOiueB31a+@kernel.org>
+References: <20230106151320.619514-1-irogers@google.com>
+ <CAJ9a7ViGE3UJX02oA42A9TSTKsOozPzdHjyL+OSP4J-9dZFqrg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230104215949.529093-1-sdf@google.com> <20230104215949.529093-9-sdf@google.com>
- <42984784-2910-bf5a-93a9-bd4db86a5a50@linux.dev>
-In-Reply-To: <42984784-2910-bf5a-93a9-bd4db86a5a50@linux.dev>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Fri, 6 Jan 2023 09:17:11 -0800
-Message-ID: <CAKH8qBt6pkguqfZLLNBvqr9Qi0HSybCdE53ChizdQcB7RgE73Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 08/17] bpf: Support consuming XDP HW metadata
- from fext programs
-To:     Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, haoluo@google.com, jolsa@kernel.org,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJ9a7ViGE3UJX02oA42A9TSTKsOozPzdHjyL+OSP4J-9dZFqrg@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jan 5, 2023 at 4:57 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
->
-> On 1/4/23 1:59 PM, Stanislav Fomichev wrote:
-> > -int bpf_prog_dev_bound_init(struct bpf_prog *prog, union bpf_attr *attr)
-> > +static int __bpf_prog_dev_bound_init(struct bpf_prog *prog, struct net_device *netdev)
-> >   {
-> >       struct bpf_offload_netdev *ondev;
-> >       struct bpf_prog_offload *offload;
-> >       int err;
+Em Fri, Jan 06, 2023 at 03:28:03PM +0000, Mike Leach escreveu:
+> On Fri, 6 Jan 2023 at 15:13, Ian Rogers <irogers@google.com> wrote:
 > >
-> > -     if (attr->prog_type != BPF_PROG_TYPE_SCHED_CLS &&
-> > -         attr->prog_type != BPF_PROG_TYPE_XDP)
-> > -             return -EINVAL;
-> > -
-> > -     if (attr->prog_flags & ~BPF_F_XDP_DEV_BOUND_ONLY)
-> > +     if (!netdev)
->
-> nit. I think this check is also unnecessary.
->
-> [ ... ]
->
-> > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> > index 191a4312f4b7..2ec2f53eeff6 100644
-> > --- a/kernel/bpf/syscall.c
-> > +++ b/kernel/bpf/syscall.c
-> > @@ -2605,6 +2605,13 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
-> >                       goto free_prog_sec;
-> >       }
+> > Including libbpf header files should be guarded by
+> > HAVE_LIBBPF_SUPPORT. In bpf_counter.h, move the skeleton utilities
+> > under HAVE_BPF_SKEL.
 > >
-> > +     if (type == BPF_PROG_TYPE_EXT && dst_prog &&
-> > +         bpf_prog_is_dev_bound(dst_prog->aux)) {
-> > +             err = bpf_prog_dev_bound_inherit(prog, dst_prog);
-> > +             if (err)
-> > +                     goto free_prog_sec;
-> > +     }
+> > Fixes: d6a735ef3277 ("perf bpf_counter: Move common functions to bpf_counter.h")
+> > Reported-by: Mike Leach <mike.leach@linaro.org>
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+
+Thanks, applied.
+
+- Arnaldo
+
+> > ---
+> >  tools/perf/builtin-trace.c    | 2 ++
+> >  tools/perf/util/bpf_counter.h | 6 ++++++
+> >  2 files changed, 8 insertions(+)
+> >
+> > diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
+> > index 86e06f136f40..d21fe0f32a6d 100644
+> > --- a/tools/perf/builtin-trace.c
+> > +++ b/tools/perf/builtin-trace.c
+> > @@ -16,7 +16,9 @@
+> >
+> >  #include "util/record.h"
+> >  #include <api/fs/tracing_path.h>
+> > +#ifdef HAVE_LIBBPF_SUPPORT
+> >  #include <bpf/bpf.h>
+> > +#endif
+> >  #include "util/bpf_map.h"
+> >  #include "util/rlimit.h"
+> >  #include "builtin.h"
+> > diff --git a/tools/perf/util/bpf_counter.h b/tools/perf/util/bpf_counter.h
+> > index 4dbf26408b69..c6d21c07b14c 100644
+> > --- a/tools/perf/util/bpf_counter.h
+> > +++ b/tools/perf/util/bpf_counter.h
+> > @@ -4,9 +4,12 @@
+> >
+> >  #include <linux/list.h>
+> >  #include <sys/resource.h>
 > > +
-> >       /* find program type: socket_filter vs tracing_filter */
-> >       err = find_prog_type(type, prog);
-> >       if (err < 0)
-> > @@ -3021,6 +3028,12 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
-> >                       goto out_put_prog;
-> >               }
+> > +#ifdef HAVE_LIBBPF_SUPPORT
+> >  #include <bpf/bpf.h>
+> >  #include <bpf/btf.h>
+> >  #include <bpf/libbpf.h>
+> > +#endif
 > >
-> > +             if (bpf_prog_is_dev_bound(prog->aux) &&
-> > +                 !bpf_prog_dev_bound_match(prog, tgt_prog)) {
-> > +                     err = -EINVAL;
-> > +                     goto out_put_prog;
-> > +             }
->
-> This looks good.  One minor comment...
-
-True, fill drop, thanks!
-
+> >  struct evsel;
+> >  struct target;
+> > @@ -87,6 +90,8 @@ static inline void set_max_rlimit(void)
+> >         setrlimit(RLIMIT_MEMLOCK, &rinf);
+> >  }
+> >
+> > +#ifdef HAVE_BPF_SKEL
 > > +
-> >               key = bpf_trampoline_compute_key(tgt_prog, NULL, btf_id);
-> >       }
+> >  static inline __u32 bpf_link_get_id(int fd)
+> >  {
+> >         struct bpf_link_info link_info = { .id = 0, };
+> > @@ -127,5 +132,6 @@ static inline int bperf_trigger_reading(int prog_fd, int cpu)
 > >
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 0d0a49a2c5fd..8c1b1259f30b 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -16531,11 +16531,6 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
-> >       if (tgt_prog) {
-> >               struct bpf_prog_aux *aux = tgt_prog->aux;
+> >         return bpf_prog_test_run_opts(prog_fd, &opts);
+> >  }
+> > +#endif /* HAVE_BPF_SKEL */
 > >
-> > -             if (bpf_prog_is_dev_bound(tgt_prog->aux)) {
-> > -                     bpf_log(log, "Replacing device-bound programs not supported\n");
-> > -                     return -EINVAL;
-> > -             }
->
-> ... can the above "bpf_prog_is_dev_bound(prog->aux) &&..." check in syscall.c be
-> done in the bpf_check_attach_target() here?  Mentally that seems to belong more
-> to bpf_check_attach_target().
+> >  #endif /* __PERF_BPF_COUNTER_H */
+> > --
+> > 2.39.0.314.g84b9a713c41-goog
+> >
+> 
+> 
+> This version builds fine too.
+> 
+> Mike
+> -- 
+> Mike Leach
+> Principal Engineer, ARM Ltd.
+> Manchester Design Centre. UK
 
-Sure, I don't see why not, will try!
+-- 
 
-
-
-> > -
-> >               for (i = 0; i < aux->func_info_cnt; i++)
-> >                       if (aux->func_info[i].type_id == btf_id) {
-> >                               subprog = i;
->
+- Arnaldo
