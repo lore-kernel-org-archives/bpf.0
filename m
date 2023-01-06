@@ -2,41 +2,41 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C68DC5479D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83812C54EF1
 	for <bpf@archiver.kernel.org>; Fri,  6 Jan 2023 10:25:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233422AbjAFKZx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 6 Jan 2023 05:25:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60386 "EHLO
+        id S230490AbjAFKZz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 6 Jan 2023 05:25:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233889AbjAFKY5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S233878AbjAFKY5 (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 6 Jan 2023 05:24:57 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE816C29E
-        for <bpf@vger.kernel.org>; Fri,  6 Jan 2023 02:24:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2812C6C2B2
+        for <bpf@vger.kernel.org>; Fri,  6 Jan 2023 02:24:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673000642;
+        s=mimecast20190719; t=1673000646;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=JAV1mEJ1RePKSiP31eA7Zb3huEWrI68yI1mkY2joYvU=;
-        b=L1fSDT6e8c48YN3vNl1gXaJ5OpUreUB5U1cslTkZMQ53k6wUJF3WN4ey8dmiqFrObhl13U
-        NYvlPXhXR2yDxGHZg67bkgwA/gV0KmeK7vNlet2SlerylLJ9l3tGiSVSRMS1ppJzAhNCkz
-        yvk6LonKo6vXjAa11A6cMNS61rMllfM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=TEHObZijjJUTNDtqqI8JM1N/tfOCpCjHguBWcNndJb4=;
+        b=Uucm/wom+7mdelCvewmqwLwFXc4NPR18jaGg4xmuMYTAYSIdcTcWykum/xM/MCIRXzyoEp
+        fjVaUHJkoND1P7US0TzBLzIRmfr7ot8f7tQTlWurNGjk+kpLCe9C6wlikEHCKZBgXbSeoa
+        RQfwiieQxwPzxsYcwf0yxbviojMkkxA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-354-Wk7HD-MSOPaFh-Au9Y_ciQ-1; Fri, 06 Jan 2023 05:23:56 -0500
-X-MC-Unique: Wk7HD-MSOPaFh-Au9Y_ciQ-1
+ us-mta-568-tWF9Y5jIPEmZn9-cpEBG-g-1; Fri, 06 Jan 2023 05:24:00 -0500
+X-MC-Unique: tWF9Y5jIPEmZn9-cpEBG-g-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C41A21871D9A;
-        Fri,  6 Jan 2023 10:23:55 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4D6D41C05AE7;
+        Fri,  6 Jan 2023 10:24:00 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.192.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D17C5C15BAD;
-        Fri,  6 Jan 2023 10:23:53 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5D6FBC15BAD;
+        Fri,  6 Jan 2023 10:23:58 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -49,9 +49,9 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH HID for-next v1 7/9] selftests: hid: enforce new attach API
-Date:   Fri,  6 Jan 2023 11:23:30 +0100
-Message-Id: <20230106102332.1019632-8-benjamin.tissoires@redhat.com>
+Subject: [PATCH HID for-next v1 9/9] HID: bpf: reorder BPF registration
+Date:   Fri,  6 Jan 2023 11:23:32 +0100
+Message-Id: <20230106102332.1019632-10-benjamin.tissoires@redhat.com>
 In-Reply-To: <20230106102332.1019632-1-benjamin.tissoires@redhat.com>
 References: <20230106102332.1019632-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
@@ -61,31 +61,41 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Now that the new API for hid_bpf_attach_prog() is in place, ensure we
-get an fd when calling this function. And remove the fallback code.
+Given that our initial BPF program is not using any kfuncs anymore,
+we can reorder the initialization to first try to load it and then
+register the kfuncs. This has the advantage of not exporting kfuncs
+when HID-BPF is not working.
 
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 ---
- tools/testing/selftests/hid/hid_bpf.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ drivers/hid/bpf/hid_bpf_dispatch.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/hid/hid_bpf.c b/tools/testing/selftests/hid/hid_bpf.c
-index 9a262fe99b32..2cf96f818f25 100644
---- a/tools/testing/selftests/hid/hid_bpf.c
-+++ b/tools/testing/selftests/hid/hid_bpf.c
-@@ -638,11 +638,7 @@ TEST_F(hid_bpf, test_attach_detach)
- 	LOAD_PROGRAMS(progs);
+diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dispatch.c
+index 26117b4ec016..8a034a555d4c 100644
+--- a/drivers/hid/bpf/hid_bpf_dispatch.c
++++ b/drivers/hid/bpf/hid_bpf_dispatch.c
+@@ -514,15 +514,16 @@ static int __init hid_bpf_init(void)
+ 		return 0;
+ 	}
  
- 	link = self->hid_links[0];
--	/* we might not be using the new code path where hid_bpf_attach_prog()
--	 * returns a link.
--	 */
--	if (!link)
--		link = bpf_program__fd(self->skel->progs.hid_first_event);
-+	ASSERT_GT(link, 0) TH_LOG("HID-BPF link not created");
+-	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &hid_bpf_kfunc_set);
++	err = hid_bpf_preload_skel();
+ 	if (err) {
+-		pr_warn("error while setting HID BPF tracing kfuncs: %d", err);
++		pr_warn("error while preloading HID BPF dispatcher: %d", err);
+ 		return 0;
+ 	}
  
- 	/* inject one event */
- 	buf[0] = 1;
+-	err = hid_bpf_preload_skel();
++	/* register tracing kfuncs after we are sure we can load our preloaded bpf program */
++	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &hid_bpf_kfunc_set);
+ 	if (err) {
+-		pr_warn("error while preloading HID BPF dispatcher: %d", err);
++		pr_warn("error while setting HID BPF tracing kfuncs: %d", err);
+ 		return 0;
+ 	}
+ 
 -- 
 2.38.1
 
