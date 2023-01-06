@@ -2,113 +2,203 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E64B1C54EBE
-	for <bpf@archiver.kernel.org>; Fri,  6 Jan 2023 14:52:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE768C5479D
+	for <bpf@archiver.kernel.org>; Fri,  6 Jan 2023 14:55:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235244AbjAFOvt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 6 Jan 2023 09:51:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49298 "EHLO
+        id S229618AbjAFOzj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 6 Jan 2023 09:55:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235241AbjAFOvV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 6 Jan 2023 09:51:21 -0500
-X-Greylist: delayed 447 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 06 Jan 2023 06:51:19 PST
-Received: from 10.mo545.mail-out.ovh.net (10.mo545.mail-out.ovh.net [87.98.138.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B609392DE
-        for <bpf@vger.kernel.org>; Fri,  6 Jan 2023 06:51:19 -0800 (PST)
-Received: from ex4.mail.ovh.net (unknown [10.111.172.143])
-        by mo545.mail-out.ovh.net (Postfix) with ESMTPS id 943A22579B;
-        Fri,  6 Jan 2023 14:43:48 +0000 (UTC)
-Received: from [192.168.1.125] (37.65.8.229) by DAG10EX1.indiv4.local
- (172.16.2.91) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.16; Fri, 6 Jan
- 2023 15:43:40 +0100
-Message-ID: <8773f286-74ba-4efb-4a94-0c1f91d959bd@naccy.de>
-Date:   Fri, 6 Jan 2023 15:43:39 +0100
+        with ESMTP id S235562AbjAFOzg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 6 Jan 2023 09:55:36 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D22158110B;
+        Fri,  6 Jan 2023 06:55:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 30257CE1D06;
+        Fri,  6 Jan 2023 14:55:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1194BC433EF;
+        Fri,  6 Jan 2023 14:55:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673016932;
+        bh=UyzAwDFj483hUCSJgJwOF1/K5+N5Cz7AuCJePXSb/Ak=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=W++K1xDs78oD3sadQHcJb/VGnRR+TjNwleDAIIMV7LiJ34YG6txNOJKG5XyfFTdOA
+         Rjg4fCFEMjCyP16hwAJ2Ym6dsdRpm/SpW1Jd0SS3VcEkX8R/vZ7lHhEa4tnfSHdsmb
+         r8P8sSxug0TnC9/JJ1vAeZ1hqwWaBE0dPT3O3yj31/vzTVu/kPEHISNgVkCPBenBxf
+         tYUAq6YlgwkdP5uJTn7wZQNIgHy5cFKRB8dXWia6ljjho3zD34S69Su+13AlOBHu8W
+         Z+CZeTH/5LkbRYhbJn9uLzP66wmUqtHuBkJE08VPJxq7z04MUsnlem+/etCUqpfK8h
+         4WAq+21OPTrQA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 9396840468; Fri,  6 Jan 2023 11:55:29 -0300 (-03)
+Date:   Fri, 6 Jan 2023 11:55:29 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Mike Leach <mike.leach@linaro.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, peterz@infradead.org, mingo@redhat.com,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org
+Subject: Re: [PATCH v2 1/2] perf build: Properly guard libbpf includes
+Message-ID: <Y7g2YXNaP0VM+F1o@kernel.org>
+References: <20230106142537.607399-1-irogers@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH bpf-next v3 00/16] bpfilter
-Content-Language: fr
-To:     Florian Westphal <fw@strlen.de>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Dmitrii Banshchikov <me@ubique.spb.ru>,
-        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
-        Kernel Team <kernel-team@meta.com>
-References: <20221224000402.476079-1-qde@naccy.de>
- <20230103114540.GB13151@breakpoint.cc>
-From:   Quentin Deslandes <qde@naccy.de>
-In-Reply-To: <20230103114540.GB13151@breakpoint.cc>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [37.65.8.229]
-X-ClientProxiedBy: CAS11.indiv4.local (172.16.1.11) To DAG10EX1.indiv4.local
- (172.16.2.91)
-X-Ovh-Tracer-Id: 3721662146057268988
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrkedtgdeikecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpefsuhgvnhhtihhnucffvghslhgrnhguvghsuceoqhguvgesnhgrtggthidruggvqeenucggtffrrghtthgvrhhnpeegtefggeegtedtfeefkedvkeefleeiffeludetlefhkeffffejkefhgeeludeftdenucfkphepuddvjedrtddrtddruddpfeejrdeihedrkedrvddvleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehquggvsehnrggttgihrdguvgeqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepfhifsehsthhrlhgvnhdruggvpdhlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdgsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpmhgvsehusghiqhhuvgdrshhpsgdrrhhupdhshhhurghhsehkvghrnhgvlhdrohhrghdpmhihkhholhgrlhesfhgsrdgtohhmpdhprggsvghnihesrhgvughhrghtrdgtohhmpdhkuhgsrgeskhgvrhhnvghlrdhorhhgpdgvughumhgrii
- gvthesghhoohhglhgvrdgtohhmpdgurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhjohhlshgrsehkvghrnhgvlhdrohhrghdphhgrohhluhhosehgohhoghhlvgdrtghomhdpshgufhesghhoohhglhgvrdgtohhmpdhkphhsihhnghhhsehkvghrnhgvlhdrohhrghdpjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdihhhhssehfsgdrtghomhdpshhonhhgsehkvghrnhgvlhdrohhrghdpmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdgrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdgurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprghstheskhgvrhhnvghlrdhorhhgpdhnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpkhgvrhhnvghlqdhtvggrmhesmhgvthgrrdgtohhmpdfovfetjfhoshhtpehmohehgeehpdhmohguvgepshhmthhpohhuth
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230106142537.607399-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Le 03/01/2023 à 12:45, Florian Westphal a écrit :
-> Quentin Deslandes <qde@naccy.de> wrote:
->> The patchset is based on the patches from David S. Miller [1],
->> Daniel Borkmann [2], and Dmitrii Banshchikov [3].
->>
->> Note: I've partially sent this patchset earlier due to a
->> mistake on my side, sorry for then noise.
->>
->> The main goal of the patchset is to prepare bpfilter for
->> iptables' configuration blob parsing and code generation.
->>
->> The patchset introduces data structures and code for matches,
->> targets, rules and tables. Beside that the code generation
->> is introduced.
->>
->> The first version of the code generation supports only "inline"
->> mode - all chains and their rules emit instructions in linear
->> approach.
->>
->> Things that are not implemented yet:
->>    1) The process of switching from the previous BPF programs to the
->>       new set isn't atomic.
+Em Fri, Jan 06, 2023 at 06:25:36AM -0800, Ian Rogers escreveu:
+> Including libbpf header files should be guarded by
+> HAVE_LIBBPF_SUPPORT. In bpf_counter.h, move the skeleton utilities
+> under HAVE_BPF_SKEL.
 > 
-> You can't make this atomic from userspace perspective, the
-> get/setsockopt API of iptables uses a read-modify-write model.
+> Fixes: d6a735ef3277 ("perf bpf_counter: Move common functions to bpf_counter.h")
+> Reported-by: Mike Leach <mike.leach@linaro.org>
+> Signed-off-by: Ian Rogers <irogers@google.com>
 
-This refers to updating the programs from bpfilter's side. It won't
-be atomic from iptables point of view, but currently bpfilter will
-remove the program associated to a table, before installing the new
-one. This means packets received in between those operations are
-not filtered. I assume a better solution is possible.
+Can this be done in a way that reduces patch size?
 
-> Tentatively I'd try to extend libnftnl and generate bpf code there,
-> since its used by both iptables(-nft) and nftables we'd automatically
-> get support for both.
+- Arnaldo
 
-That's one of the option, this could also remain in the kernel
-tree or in a dedicated git repository. I don't know which one would
-be the best, I'm open to suggestions.
+> ---
+>  tools/perf/builtin-trace.c    |  2 +
+>  tools/perf/util/bpf_counter.h | 85 ++++++++++++++++++-----------------
+>  2 files changed, 46 insertions(+), 41 deletions(-)
+> 
+> diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
+> index 86e06f136f40..d21fe0f32a6d 100644
+> --- a/tools/perf/builtin-trace.c
+> +++ b/tools/perf/builtin-trace.c
+> @@ -16,7 +16,9 @@
+>  
+>  #include "util/record.h"
+>  #include <api/fs/tracing_path.h>
+> +#ifdef HAVE_LIBBPF_SUPPORT
+>  #include <bpf/bpf.h>
+> +#endif
+>  #include "util/bpf_map.h"
+>  #include "util/rlimit.h"
+>  #include "builtin.h"
+> diff --git a/tools/perf/util/bpf_counter.h b/tools/perf/util/bpf_counter.h
+> index 4dbf26408b69..9113c8bf5cb0 100644
+> --- a/tools/perf/util/bpf_counter.h
+> +++ b/tools/perf/util/bpf_counter.h
+> @@ -4,9 +4,12 @@
+>  
+>  #include <linux/list.h>
+>  #include <sys/resource.h>
+> +
+> +#ifdef HAVE_LIBBPF_SUPPORT
+>  #include <bpf/bpf.h>
+>  #include <bpf/btf.h>
+>  #include <bpf/libbpf.h>
+> +#endif
+>  
+>  struct evsel;
+>  struct target;
+> @@ -42,6 +45,47 @@ int bpf_counter__read(struct evsel *evsel);
+>  void bpf_counter__destroy(struct evsel *evsel);
+>  int bpf_counter__install_pe(struct evsel *evsel, int cpu_map_idx, int fd);
+>  
+> +static inline __u32 bpf_link_get_id(int fd)
+> +{
+> +	struct bpf_link_info link_info = { .id = 0, };
+> +	__u32 link_info_len = sizeof(link_info);
+> +
+> +	bpf_obj_get_info_by_fd(fd, &link_info, &link_info_len);
+> +	return link_info.id;
+> +}
+> +
+> +static inline __u32 bpf_link_get_prog_id(int fd)
+> +{
+> +	struct bpf_link_info link_info = { .id = 0, };
+> +	__u32 link_info_len = sizeof(link_info);
+> +
+> +	bpf_obj_get_info_by_fd(fd, &link_info, &link_info_len);
+> +	return link_info.prog_id;
+> +}
+> +
+> +static inline __u32 bpf_map_get_id(int fd)
+> +{
+> +	struct bpf_map_info map_info = { .id = 0, };
+> +	__u32 map_info_len = sizeof(map_info);
+> +
+> +	bpf_obj_get_info_by_fd(fd, &map_info, &map_info_len);
+> +	return map_info.id;
+> +}
+> +
+> +/* trigger the leader program on a cpu */
+> +static inline int bperf_trigger_reading(int prog_fd, int cpu)
+> +{
+> +	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
+> +			    .ctx_in = NULL,
+> +			    .ctx_size_in = 0,
+> +			    .flags = BPF_F_TEST_RUN_ON_CPU,
+> +			    .cpu = cpu,
+> +			    .retval = 0,
+> +		);
+> +
+> +	return bpf_prog_test_run_opts(prog_fd, &opts);
+> +}
+> +
+>  #else /* HAVE_BPF_SKEL */
+>  
+>  #include <linux/err.h>
+> @@ -87,45 +131,4 @@ static inline void set_max_rlimit(void)
+>  	setrlimit(RLIMIT_MEMLOCK, &rinf);
+>  }
+>  
+> -static inline __u32 bpf_link_get_id(int fd)
+> -{
+> -	struct bpf_link_info link_info = { .id = 0, };
+> -	__u32 link_info_len = sizeof(link_info);
+> -
+> -	bpf_obj_get_info_by_fd(fd, &link_info, &link_info_len);
+> -	return link_info.id;
+> -}
+> -
+> -static inline __u32 bpf_link_get_prog_id(int fd)
+> -{
+> -	struct bpf_link_info link_info = { .id = 0, };
+> -	__u32 link_info_len = sizeof(link_info);
+> -
+> -	bpf_obj_get_info_by_fd(fd, &link_info, &link_info_len);
+> -	return link_info.prog_id;
+> -}
+> -
+> -static inline __u32 bpf_map_get_id(int fd)
+> -{
+> -	struct bpf_map_info map_info = { .id = 0, };
+> -	__u32 map_info_len = sizeof(map_info);
+> -
+> -	bpf_obj_get_info_by_fd(fd, &map_info, &map_info_len);
+> -	return map_info.id;
+> -}
+> -
+> -/* trigger the leader program on a cpu */
+> -static inline int bperf_trigger_reading(int prog_fd, int cpu)
+> -{
+> -	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
+> -			    .ctx_in = NULL,
+> -			    .ctx_size_in = 0,
+> -			    .flags = BPF_F_TEST_RUN_ON_CPU,
+> -			    .cpu = cpu,
+> -			    .retval = 0,
+> -		);
+> -
+> -	return bpf_prog_test_run_opts(prog_fd, &opts);
+> -}
+> -
+>  #endif /* __PERF_BPF_COUNTER_H */
+> -- 
+> 2.39.0.314.g84b9a713c41-goog
 
-> I was planning to look into "attach bpf progs to raw netfilter hooks"
-> in Q1 2023, once the initial nf-bpf-codegen is merged.
+-- 
 
-Is there any plan to support non raw hooks? That's mainly out
-of curiosity, I don't even know whether that would be a good thing
-or not.
+- Arnaldo
