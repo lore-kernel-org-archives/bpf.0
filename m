@@ -2,102 +2,148 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EE81C54EBD
-	for <bpf@archiver.kernel.org>; Mon,  9 Jan 2023 14:37:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09198C6379F
+	for <bpf@archiver.kernel.org>; Mon,  9 Jan 2023 15:08:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbjAIOh0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 9 Jan 2023 09:37:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60272 "EHLO
+        id S236059AbjAIPIE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 9 Jan 2023 10:08:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjAIOhZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 9 Jan 2023 09:37:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EE717E10
-        for <bpf@vger.kernel.org>; Mon,  9 Jan 2023 06:37:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S235112AbjAIPHb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 9 Jan 2023 10:07:31 -0500
+X-Greylist: delayed 249 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 09 Jan 2023 07:07:29 PST
+Received: from faui40.informatik.uni-erlangen.de (faui40.informatik.uni-erlangen.de [IPv6:2001:638:a000:4134::ffff:40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869DEB8D;
+        Mon,  9 Jan 2023 07:07:29 -0800 (PST)
+Received: from luis-i4.informatik.uni-erlangen.de (i4laptop35.informatik.uni-erlangen.de [10.188.34.202])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6315FB80D6C
-        for <bpf@vger.kernel.org>; Mon,  9 Jan 2023 14:37:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 063A3C433EF;
-        Mon,  9 Jan 2023 14:37:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673275041;
-        bh=XE/PEzVrg9yIYZ3VljbH0cX51kS2FBzumyZK9keXFaw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=PPa5p/OupanJjWXgiVUeSo9TTaI5kPKzMaQ6u1cGf3y4N2nTELPBgIgF1f4IUqdy/
-         R2ijQWOSrkBB2+0J1ZNEQQeELS8xmtEEOmJmW2sUML8t4dZYuUxrlO8NGPqBOL/bGf
-         ZvZb2xnQmQPucpKmelC2tLak4B/AbNt6K11dQyCeUviCHIQtEJfexnyAkWNAtS/uzQ
-         BQf8hz9Q4MCJjfwh/6Z3cK2KXJCxYXCZo81cHNmuKJPNNZFPPQ5Xj4shG/nKSrREFc
-         /0Jgw9rK033GhLJ07vLK7nldYZ4pMexGb+QNxlfYCYRnXUvunN7BbmD058xoi46ae4
-         xoS/qKMCw2DHQ==
-From:   Jiri Olsa <jolsa@kernel.org>
+        (Authenticated sender: gerhorst)
+        by faui40.informatik.uni-erlangen.de (Postfix) with ESMTPSA id 4NrHNs2GvsznkXl;
+        Mon,  9 Jan 2023 16:07:25 +0100 (CET)
+From:   Luis Gerhorst <gerhorst@cs.fau.de>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>
-Subject: [PATCH bpf-next] bpf: Do not allow to load sleepable BPF_TRACE_RAW_TP program
-Date:   Mon,  9 Jan 2023 15:37:16 +0100
-Message-Id: <20230109143716.2332415-1-jolsa@kernel.org>
-X-Mailer: git-send-email 2.39.0
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Piotr Krysiuk <piotras@gmail.com>,
+        Benedict Schlueter <benedict.schlueter@rub.de>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Cc:     Luis Gerhorst <gerhorst@cs.fau.de>,
+        stefan.saecherl@use.startmail.com,
+        Henriette Hofmeier <henriette.hofmeier@rub.de>
+Subject: [PATCH] bpf: Fix pointer-leak due to insufficient speculative store bypass mitigation
+Date:   Mon,  9 Jan 2023 16:05:46 +0100
+Message-Id: <20230109150544.41465-1-gerhorst@cs.fau.de>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <edc95bad-aada-9cfc-ffe2-fa9bb206583c@cs.fau.de>
+References: 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently we allow to load any tracing program as sleepable,
-but BPF_TRACE_RAW_TP can't sleep. Making the check explicit
-for tracing programs attach types, so sleepable BPF_TRACE_RAW_TP
-will fail to load.
+To mitigate Spectre v4, 2039f26f3aca ("bpf: Fix leakage due to
+insufficient speculative store bypass mitigation") inserts lfence
+instructions after 1) initializing a stack slot and 2) spilling a
+pointer to the stack.
 
-Updating the verifier error to mention iter programs as well.
+However, this does not cover cases where a stack slot is first
+initialized with a pointer (subject to sanitization) but then
+overwritten with a scalar (not subject to sanitization because the slot
+was already initialized). In this case, the second write may be subject
+to speculative store bypass (SSB) creating a speculative
+pointer-as-scalar type confusion. This allows the program to
+subsequently leak the numerical pointer value using, for example, a
+branch-based cache side channel.
 
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+To fix this, also sanitize scalars if they write a stack slot that
+previously contained a pointer. Assuming that pointer-spills are only
+generated by LLVM on register-pressure, the performance impact on most
+real-world BPF programs should be small.
+
+The following unprivileged BPF bytecode drafts a minimal exploit and the
+mitigation:
+
+  [...]
+  // r6 = 0 or 1 (skalar, unknown user input)
+  // r7 = accessible ptr for side channel
+  // r10 = frame pointer (fp), to be leaked
+  //
+  r9 = r10 # fp alias to encourage ssb
+  *(u64 *)(r9 - 8) = r10 // fp[-8] = ptr, to be leaked
+  // lfence added here because of pointer spill to stack.
+  //
+  // Ommitted: Dummy bpf_ringbuf_output() here to train alias predictor
+  // for no r9-r10 dependency.
+  //
+  *(u64 *)(r10 - 8) = r6 // fp[-8] = scalar, overwrites ptr
+  // 2039f26f3aca: no lfence added because stack slot was not STACK_INVALID,
+  // store may be subject to SSB
+  //
+  // fix: also add an lfence when the slot contained a ptr
+  //
+  r8 = *(u64 *)(r9 - 8)
+  // r8 = architecturally a scalar, speculatively a ptr
+  //
+  // leak ptr using branch-based cache side channel:
+  r8 &= 1 // choose bit to leak
+  if r8 == 0 goto SLOW // no mispredict
+  // architecturally dead code if input r6 is 0,
+  // only executes speculatively iff ptr bit is 1
+  r8 = *(u64 *)(r7 + 0) # encode bit in cache (0: slow, 1: fast)
+SLOW:
+  [...]
+
+After running this, the program can time the access to *(r7 + 0) to
+determine whether the chosen pointer bit was 0 or 1. Repeat this 64
+times to recover the whole address on amd64.
+
+In summary, sanitization can only be skipped if one scalar is
+overwritten with another scalar. Scalar-confusion due to speculative
+store bypass can not lead to invalid accesses because the pointer bounds
+deducted during verification are enforced using branchless logic. See
+979d63d50c0c ("bpf: prevent out of bounds speculation on pointer
+arithmetic") for details.
+
+Do not make the mitigation depend on
+!env->allow_{uninit_stack,ptr_leaks} because speculative leaks are
+likely unexpected if these were enabled. For example, leaking the
+address to a protected log file may be acceptable while disabling the
+mitigation might unintentionally leak the address into the cached-state
+of a map that is accessible to unprivileged processes.
+
+Fixes: 2039f26f3aca ("bpf: Fix leakage due to insufficient speculative store bypass mitigation")
+Signed-off-by: Luis Gerhorst <gerhorst@cs.fau.de>
+Acked-by: Henriette Hofmeier <henriette.hofmeier@rub.de>
 ---
- kernel/bpf/verifier.c | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+ kernel/bpf/verifier.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index fa4c911603e9..121a64ee841a 100644
+index a5255a0dcbb6..5e3aa4a75bd6 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -16743,6 +16743,18 @@ BTF_ID(func, rcu_read_unlock_strict)
- #endif
- BTF_SET_END(btf_id_deny)
+@@ -3287,7 +3287,8 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
+ 		bool sanitize = reg && is_spillable_regtype(reg->type);
  
-+static int can_be_sleepable(struct bpf_prog *prog)
-+{
-+	if (prog->type == BPF_PROG_TYPE_TRACING) {
-+		return prog->expected_attach_type == BPF_TRACE_FENTRY ||
-+		       prog->expected_attach_type == BPF_TRACE_FEXIT ||
-+		       prog->expected_attach_type == BPF_MODIFY_RETURN ||
-+		       prog->expected_attach_type == BPF_TRACE_ITER;
-+	}
-+	return prog->type == BPF_PROG_TYPE_LSM ||
-+	       prog->type == BPF_PROG_TYPE_KPROBE;
-+}
-+
- static int check_attach_btf_id(struct bpf_verifier_env *env)
- {
- 	struct bpf_prog *prog = env->prog;
-@@ -16761,9 +16773,8 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
- 		return -EINVAL;
- 	}
- 
--	if (prog->aux->sleepable && prog->type != BPF_PROG_TYPE_TRACING &&
--	    prog->type != BPF_PROG_TYPE_LSM && prog->type != BPF_PROG_TYPE_KPROBE) {
--		verbose(env, "Only fentry/fexit/fmod_ret, lsm, and kprobe/uprobe programs can be sleepable\n");
-+	if (prog->aux->sleepable && !can_be_sleepable(prog)) {
-+		verbose(env, "Only fentry/fexit/fmod_ret, lsm, iter and kprobe/uprobe programs can be sleepable\n");
- 		return -EINVAL;
- 	}
- 
+ 		for (i = 0; i < size; i++) {
+-			if (state->stack[spi].slot_type[i] == STACK_INVALID) {
++			u8 type = state->stack[spi].slot_type[i];
++			if (type != STACK_MISC && type != STACK_ZERO) {
+ 				sanitize = true;
+ 				break;
+ 			}
 -- 
-2.39.0
+2.34.1
 
