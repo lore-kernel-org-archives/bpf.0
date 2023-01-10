@@ -2,109 +2,80 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A1A3C46467
-	for <bpf@archiver.kernel.org>; Tue, 10 Jan 2023 21:00:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C6A3C54EBE
+	for <bpf@archiver.kernel.org>; Tue, 10 Jan 2023 22:20:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231553AbjAJVAJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Jan 2023 16:00:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57516 "EHLO
+        id S231645AbjAJWUU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 Jan 2023 17:20:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231948AbjAJVAF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 Jan 2023 16:00:05 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FC65A881;
-        Tue, 10 Jan 2023 13:00:03 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id cf18so25563613ejb.5;
-        Tue, 10 Jan 2023 13:00:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=jMS9tdEfjQspwf8bB3Cerq4FNAfZvZjgP75R58Ynns0=;
-        b=Z8FY3kivlVlJBtxOwHUgE6Tf2kh4W+JhtZmPlhrGGlLT96Y04Xy2O4m35j+6sjAhSt
-         +Bx6W7SUQGTBRxtesvTphf4mdKUQ9z9gbqyGk+i66j7xPgSTaKzr6vSQNLF8driZKIo8
-         8riFjGB+kk9MNalRI+SWj+k3C3OBeFr2K5uXmwMZms4KGiTVNDIMYd1Vo2Xb9xEiBjvB
-         KzPjYvjs1filB9krLsqS8dexzXWE3UnPmz3s+addCGL1IXRQG/fHDUV43SdKIzUcINVS
-         ZX9R8VAKXJWIxVE82neiFllH4W9CTau5Dv5MIs1S3cc0B1QjS5Y0P6jVKqFL6Bh5bxWS
-         HfKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jMS9tdEfjQspwf8bB3Cerq4FNAfZvZjgP75R58Ynns0=;
-        b=EmziFm/WpVkDU/e5nc5pdF+hCUB/YWnMqdxF5QDVILngkjeuk4urW7Q8J38e6l0Feh
-         2MkhddeMEXFx60xw29B6j+u0Jz/psh61SXIn4yDL3dEKySRy2Qt5vouVMM4tB+sVYPbB
-         ozyW17HvaiOI5B5vdzlCAMPRNJwP3emOSVK1J0AL/V39oCJJ3ulG3dyPrmHN+JCW9g61
-         dMfh2U9SJwmZAokxZtL/wxZMm3qmrUbmbEpt+RM89Qgj0Tvj55CbByikpZ9uVldP5b77
-         vy7dulh1PjKP5S4HM4CnxvnM5mJ1BR7FbGsf5BgWgYrDKHBuK2f7MKPi/FVlyIbwxp35
-         h6Uw==
-X-Gm-Message-State: AFqh2krE6pLrevi+n+GdEhUwhQ5dTl0ED7z9mkBzPEb7WqDpL4YwgWIO
-        2yFfKJiBIbiI+0u2g/Po5J0=
-X-Google-Smtp-Source: AMrXdXvo+ftZzz0FVfBjJyIknrQ4EGeQEtHORbQ0JTXvaj3GmUHz++5AoOVaiWa6p19zUWM0HyyCog==
-X-Received: by 2002:a17:906:3451:b0:857:b916:94bd with SMTP id d17-20020a170906345100b00857b91694bdmr2535090ejb.60.1673384401799;
-        Tue, 10 Jan 2023 13:00:01 -0800 (PST)
-Received: from localhost ([185.246.188.67])
-        by smtp.gmail.com with ESMTPSA id w22-20020a1709061f1600b0081bfc79beaesm5360564ejj.75.2023.01.10.13.00.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 13:00:01 -0800 (PST)
-Date:   Tue, 10 Jan 2023 22:59:55 +0200
-From:   Maxim Mikityanskiy <maxtram95@gmail.com>
-To:     Jakub Kicinski <kuba@kernel.org>,
-        Eelco Chaudron <echaudro@redhat.com>,
-        Tariq Toukan <ttoukan.linux@gmail.com>,
-        Tariq Toukan <tariqt@nvidia.com>
-Cc:     Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-        Andy Gospodarek <andrew.gospodarek@broadcom.com>,
-        ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        hawk@kernel.org, john.fastabend@gmail.com, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        kpsingh@kernel.org, lorenzo.bianconi@redhat.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Andy Gospodarek <gospo@broadcom.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>, gal@nvidia.com,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: Re: [PATCH net-next v2] samples/bpf: fixup some tools to be able to
- support xdp multibuffer
-Message-ID: <Y73Ry+nNqOkeZtaj@dragonfly.lan>
-References: <20220621175402.35327-1-gospo@broadcom.com>
- <40fd78fc-2bb1-8eed-0b64-55cb3db71664@gmail.com>
- <87k0234pd6.fsf@toke.dk>
- <20230103172153.58f231ba@kernel.org>
+        with ESMTP id S233014AbjAJWUS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 Jan 2023 17:20:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93285D88A;
+        Tue, 10 Jan 2023 14:20:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 87C4561776;
+        Tue, 10 Jan 2023 22:20:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D2B0FC433F1;
+        Tue, 10 Jan 2023 22:20:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673389216;
+        bh=e2KXMfeCUsy88kY1AtG2SpevSBk1HRL7c3Mu2VWEfGY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=HFQLoDmn4XEv516NOKsHCJxwh7/cGlItfX1uajvCDDQP57VWuEotc/D5ule4EWpDh
+         gI6NtNNxfxz6wxsNjf/dvNDz7A4irC/NTVDG+qLTjZwpK8xhmOyG4M8od9vM1lcw5b
+         ZbJOnnKneXiRENQFTO+lo+g8aO0GAWoH5qKlgh/ZLLde4CjHmwL0B2eMgnLmqTIkFu
+         xxcd4z7wlWdwbLGphV4K+sB1AhiIYCOeEJ54crWrP0HbY7bzgyEDKmszTtg3IR5RJJ
+         prppSsxBuyggkrjuID+2wHy+7keHEbn6RvfgynH8yL80T8GIM1s64FusaMTrBZeBuk
+         C//qfXcw1yrqg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B4ECCE524EE;
+        Tue, 10 Jan 2023 22:20:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230103172153.58f231ba@kernel.org>
+Subject: Re: [PATCH bpf-next] bpftool: Add missing quotes to libbpf bootstrap
+ submake vars
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167338921673.701.12107538921325787327.git-patchwork-notify@kernel.org>
+Date:   Tue, 10 Jan 2023 22:20:16 +0000
+References: <20230110014504.3120711-1-james.hilliard1@gmail.com>
+In-Reply-To: <20230110014504.3120711-1-james.hilliard1@gmail.com>
+To:     James Hilliard <james.hilliard1@gmail.com>
+Cc:     bpf@vger.kernel.org, quentin@isovalent.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 05:21:53PM -0800, Jakub Kicinski wrote:
-> On Tue, 03 Jan 2023 16:19:49 +0100 Toke Høiland-Jørgensen wrote:
-> > Hmm, good question! I don't think we've ever explicitly documented any
-> > assumptions one way or the other. My own mental model has certainly
-> > always assumed the first frag would continue to be the same size as in
-> > non-multi-buf packets.
+Hello:
+
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
+
+On Mon,  9 Jan 2023 18:45:04 -0700 you wrote:
+> When passing compiler variables like CC=$(HOSTCC) to a submake
+> we must ensure the variable is quoted in order to handle cases
+> where $(HOSTCC) may be multiple binaries.
 > 
-> Interesting! :) My mental model was closer to GRO by frags 
-> so the linear part would have no data, just headers.
+> For example when using ccache $HOSTCC may be:
+> "/usr/bin/ccache /usr/bin/gcc"
 > 
-> A random datapoint is that bpf_xdp_adjust_head() seems 
-> to enforce that there is at least ETH_HLEN.
+> [...]
 
-Also bpf_xdp_frags_increase_tail has the following check:
+Here is the summary with links:
+  - [bpf-next] bpftool: Add missing quotes to libbpf bootstrap submake vars
+    https://git.kernel.org/bpf/bpf-next/c/af0e26beaa69
 
-	if (!rxq->frag_size || rxq->frag_size > xdp->frame_sz)
-		return -EOPNOTSUPP;
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-However, I can't seem to find where the `frag_size > frame_sz` part is
-actually used. Maybe this condition can be dropped? Can someone shed
-some light?
 
-BTW, Tariq, we seem to have missed setting frag_size to a non-zero
-value. Could you check that increasing the tail indeed doesn't work on
-fragmented packets on mlx5e? I can send a oneliner to fix that.
