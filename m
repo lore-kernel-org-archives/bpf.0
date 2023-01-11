@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73B95C46467
-	for <bpf@archiver.kernel.org>; Wed, 11 Jan 2023 09:38:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E5C5C46467
+	for <bpf@archiver.kernel.org>; Wed, 11 Jan 2023 09:38:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232396AbjAKJiM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 11 Jan 2023 04:38:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37520 "EHLO
+        id S230262AbjAKJis (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 11 Jan 2023 04:38:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235915AbjAKJhU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 11 Jan 2023 04:37:20 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E115FCA;
-        Wed, 11 Jan 2023 01:36:02 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id bs20so14416648wrb.3;
-        Wed, 11 Jan 2023 01:36:02 -0800 (PST)
+        with ESMTP id S232433AbjAKJhe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 11 Jan 2023 04:37:34 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D49D65E5;
+        Wed, 11 Jan 2023 01:36:23 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id j16-20020a05600c1c1000b003d9ef8c274bso7788569wms.0;
+        Wed, 11 Jan 2023 01:36:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UxYyG1qoCtU6q6CHSuAlYxv5sFnMz8aGPPPyKfwBER4=;
-        b=nBONqyay9jM4gr2b5iDxKwJDUAisqj0iA3GvGwyQpdkSX2P7vr0RpWTGyQP3Om6HPX
-         LL11jfRSGto61N3QkpJzi5ZwqAyAKCT6DyUSc4s4jbBZoeuB7xW6Ar78f9b2eZeHxwP7
-         kUavckTvpBlCsx5StfF5EOAsXrMh+O3UNhANBJ29BUcAmv30bHDaLioVosKsqET5R1DZ
-         jYKBoRUPOMO4pwd2Qh9ZHQGRY2+fJpBzXLrhrcdSor/vLXbYdP6fFe9oi5rQiVmN/z9S
-         L/ycMpqL5pUyQIOILhc0vifdiKg+z7no0UaPY8uq3m+OH7zihayovdz7ERPXNSDGcfqO
-         VDaw==
+        bh=Lh88Wih2wB+fmm6WWcCt9i+CU9gho/zO1g4mEGHovWc=;
+        b=VTMb71NptdFAHE6CZZnT0ImQzLBwY4SmPBG+35Ci4+hKvLsGk0s+la3Rj0BUV7xzG3
+         N9vtNSwyrJwiNHKolJf2ZX1b2pUgyxQuHwL/M+wV9ujLdk/yrtuZ1KYJ+5cErT5Mh7oS
+         gwA7p1phn9DqcOkqLM73ePW0NYmXGrjTOeVIMr0Zv5ZjrOaGw4qY0r0tshRByuckG8LF
+         ++muVJy8h67EG9NxD5f8Z3SvLqKINJDHD9u6ClJoiRpP+0Q20CgXR9rP9/t4avxO+6OL
+         NDOJZLBwuckpxYGJMF8KcZv4hPK6Ts9IFMVkQ9ZoFp2ORXmRE8YSxeDIJYiwel0FqHMx
+         P42Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UxYyG1qoCtU6q6CHSuAlYxv5sFnMz8aGPPPyKfwBER4=;
-        b=v5fU019HEqSp//d0Qi6Y+hVlf3fqKA4oQY2XIFvdkeHO+QQ2EJYXTgciKADlQ6Fj5h
-         iZ76EWT4vfN++tRCFHNgeoiXFIMlSpYERsIZa/u2/ATjCaJD/+XwWX+hf+Ibga57dvN/
-         yv2pCRBUkmztL4urfMA4rsnvnuoC5fd8UgCdXrdEfyYgZFu7GWLU8x/LeobhXxkaUSAR
-         Ohsi+j4RvyvrB5udQ/Q0M0B3hd5+06cYp+sXXj1u04QN10vYkITE05poUz1p4vHsb4EM
-         cXt7cgrWDA5mkY6cDnFSrri6Oy43++VY6AhRbjglmnfDOMuZisQ8qn9ibrHVkIcYKAUI
-         ILPw==
-X-Gm-Message-State: AFqh2kqNwqx26gLv6dz7zKibk3T/wuhmYPA2mYyCFMjMOQjBztrEEsG6
-        84oAli40syPnW9MxwEHOFQo=
-X-Google-Smtp-Source: AMrXdXvpf6lwRDvB/vFvpk6F/GWN5g5V1xRX4cXxhGA89PG+1lsx98G/yhvmtf3qYcanloTW8CzoTg==
-X-Received: by 2002:adf:a1cc:0:b0:2b4:e5e:c0a3 with SMTP id v12-20020adfa1cc000000b002b40e5ec0a3mr6131619wrv.21.1673429760716;
-        Wed, 11 Jan 2023 01:36:00 -0800 (PST)
+        bh=Lh88Wih2wB+fmm6WWcCt9i+CU9gho/zO1g4mEGHovWc=;
+        b=8A3Sq/Rz80sWwhHTP6W+/8ILZs6uauIrhV0YXf2UhzilKGhKZfxz9BX/pKzPNAGrcs
+         5LSP3f2pT21F9TA531YU+mwfeHpkkEaVbYQFb12+8Gc7zBJC6/Ga2uT7xh2W9TkL7GEl
+         +wH4gATR9viDtyWn392OzAz2AAplU0dp6HxoEBBWuXUn2x/jfR143q22Yh4Ns/s/6Nso
+         hsSUnfp/bf2+1+eD373Li8fvQ/9OeqlotQri3d6dUV82139OCAFT7hFvFpxaFlI/h3Qu
+         W/5UFVStWT9UQKbI5DxdLxAscd0bTbArDenHfdYAMIilrbVd1aKGI2wu3k9vA1Is85mD
+         1N9A==
+X-Gm-Message-State: AFqh2koS1/9V7wgvgFST+01MBy3SlPpSEslrpilyct4i9TlVzI/CTSCV
+        NtJ5IUtrIGougC7mmHFifrY=
+X-Google-Smtp-Source: AMrXdXs+xBDYWF/zjYB6erhsJJh7HtfCdPgVgGCmw4B06kPT1ygcP7g5leJG840WQjXqrOTK+tQNPQ==
+X-Received: by 2002:a05:600c:3d95:b0:3d9:78c3:5cb0 with SMTP id bi21-20020a05600c3d9500b003d978c35cb0mr42002935wmb.36.1673429781543;
+        Wed, 11 Jan 2023 01:36:21 -0800 (PST)
 Received: from localhost.localdomain (h-176-10-254-193.A165.priv.bahnhof.se. [176.10.254.193])
-        by smtp.gmail.com with ESMTPSA id c18-20020adffb52000000b0025e86026866sm15553069wrs.0.2023.01.11.01.35.58
+        by smtp.gmail.com with ESMTPSA id c18-20020adffb52000000b0025e86026866sm15553069wrs.0.2023.01.11.01.36.19
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 11 Jan 2023 01:36:00 -0800 (PST)
+        Wed, 11 Jan 2023 01:36:20 -0800 (PST)
 From:   Magnus Karlsson <magnus.karlsson@gmail.com>
 To:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
         daniel@iogearbox.net, netdev@vger.kernel.org,
@@ -57,9 +57,9 @@ To:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
         john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
         haoluo@google.com, jolsa@kernel.org, tirthendu.sarkar@intel.com
 Cc:     jonathan.lemon@gmail.com
-Subject: [PATCH bpf-next v3 01/15] selftests/xsk: print correct payload for packet dump
-Date:   Wed, 11 Jan 2023 10:35:12 +0100
-Message-Id: <20230111093526.11682-2-magnus.karlsson@gmail.com>
+Subject: [PATCH bpf-next v3 12/15] selftests/xsk: add test when some packets are XDP_DROPed
+Date:   Wed, 11 Jan 2023 10:35:23 +0100
+Message-Id: <20230111093526.11682-13-magnus.karlsson@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230111093526.11682-1-magnus.karlsson@gmail.com>
 References: <20230111093526.11682-1-magnus.karlsson@gmail.com>
@@ -71,39 +71,108 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Magnus Karlsson <magnus.karlsson@intel.com>
 
-Print the correct payload when the packet dump option is selected. The
-network to host conversion was forgotten and the payload was
-erronously declared to be an int instead of an unsigned int.
+Add a new test where some of the packets are not passed to the AF_XDP
+socket and instead get a XDP_DROP verdict. This is important as it
+tests the recycling mechanism of the buffer pool. If a packet is not
+sent to the AF_XDP socket, the buffer the packet resides in is instead
+recycled so it can be used again without the round-trip to user
+space. The test introduces a new XDP program that drops every other
+packet.
 
-Fixes: facb7cb2e909 ("selftests/bpf: Xsk selftests - SKB POLL, NOPOLL")
 Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
 Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- tools/testing/selftests/bpf/xskxceiver.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../selftests/bpf/progs/xsk_xdp_progs.c       | 11 +++++++
+ tools/testing/selftests/bpf/xskxceiver.c      | 31 +++++++++++++++++++
+ tools/testing/selftests/bpf/xskxceiver.h      |  1 +
+ 3 files changed, 43 insertions(+)
 
+diff --git a/tools/testing/selftests/bpf/progs/xsk_xdp_progs.c b/tools/testing/selftests/bpf/progs/xsk_xdp_progs.c
+index 698176882ac6..744a01d0e57d 100644
+--- a/tools/testing/selftests/bpf/progs/xsk_xdp_progs.c
++++ b/tools/testing/selftests/bpf/progs/xsk_xdp_progs.c
+@@ -11,9 +11,20 @@ struct {
+ 	__uint(value_size, sizeof(int));
+ } xsk SEC(".maps");
+ 
++static unsigned int idx;
++
+ SEC("xdp") int xsk_def_prog(struct xdp_md *xdp)
+ {
+ 	return bpf_redirect_map(&xsk, 0, XDP_DROP);
+ }
+ 
++SEC("xdp") int xsk_xdp_drop(struct xdp_md *xdp)
++{
++	/* Drop every other packet */
++	if (idx++ % 2)
++		return XDP_DROP;
++
++	return bpf_redirect_map(&xsk, 0, XDP_DROP);
++}
++
+ char _license[] SEC("license") = "GPL";
 diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-index 162d3a516f2c..2ff43b22180f 100644
+index d69100267f70..a33f11b4c598 100644
 --- a/tools/testing/selftests/bpf/xskxceiver.c
 +++ b/tools/testing/selftests/bpf/xskxceiver.c
-@@ -767,7 +767,7 @@ static void pkt_dump(void *pkt, u32 len)
- 	struct ethhdr *ethhdr;
- 	struct udphdr *udphdr;
- 	struct iphdr *iphdr;
--	int payload, i;
-+	u32 payload, i;
+@@ -1646,6 +1646,34 @@ static void testapp_invalid_desc(struct test_spec *test)
+ 	pkt_stream_restore_default(test);
+ }
  
- 	ethhdr = pkt;
- 	iphdr = pkt + sizeof(*ethhdr);
-@@ -792,7 +792,7 @@ static void pkt_dump(void *pkt, u32 len)
- 	fprintf(stdout, "DEBUG>> L4: udp_hdr->src: %d\n", ntohs(udphdr->source));
- 	fprintf(stdout, "DEBUG>> L4: udp_hdr->dst: %d\n", ntohs(udphdr->dest));
- 	/*extract L5 frame */
--	payload = *((uint32_t *)(pkt + PKT_HDR_SIZE));
-+	payload = ntohl(*((u32 *)(pkt + PKT_HDR_SIZE)));
++static void testapp_xdp_drop(struct test_spec *test)
++{
++	struct ifobject *ifobj = test->ifobj_rx;
++	int err;
++
++	test_spec_set_name(test, "XDP_DROP_HALF");
++	xsk_detach_xdp_program(ifobj->ifindex, ifobj->xdp_flags);
++	err = xsk_attach_xdp_program(ifobj->xdp_progs->progs.xsk_xdp_drop, ifobj->ifindex,
++				     ifobj->xdp_flags);
++	if (err) {
++		printf("Error attaching XDP_DROP program\n");
++		test->fail = true;
++		return;
++	}
++
++	pkt_stream_receive_half(test);
++	testapp_validate_traffic(test);
++
++	pkt_stream_restore_default(test);
++	xsk_detach_xdp_program(ifobj->ifindex, ifobj->xdp_flags);
++	err = xsk_attach_xdp_program(ifobj->xdp_progs->progs.xsk_def_prog, ifobj->ifindex,
++				     ifobj->xdp_flags);
++	if (err) {
++		printf("Error restoring default XDP program\n");
++		exit_with_error(-err);
++	}
++}
++
+ static int xsk_load_xdp_programs(struct ifobject *ifobj)
+ {
+ 	ifobj->xdp_progs = xsk_xdp_progs__open_and_load();
+@@ -1796,6 +1824,9 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
+ 	case TEST_TYPE_HEADROOM:
+ 		testapp_headroom(test);
+ 		break;
++	case TEST_TYPE_XDP_DROP_HALF:
++		testapp_xdp_drop(test);
++		break;
+ 	default:
+ 		break;
+ 	}
+diff --git a/tools/testing/selftests/bpf/xskxceiver.h b/tools/testing/selftests/bpf/xskxceiver.h
+index 70b3e5d1d40c..a4daa5134fc0 100644
+--- a/tools/testing/selftests/bpf/xskxceiver.h
++++ b/tools/testing/selftests/bpf/xskxceiver.h
+@@ -87,6 +87,7 @@ enum test_type {
+ 	TEST_TYPE_STATS_RX_FULL,
+ 	TEST_TYPE_STATS_FILL_EMPTY,
+ 	TEST_TYPE_BPF_RES,
++	TEST_TYPE_XDP_DROP_HALF,
+ 	TEST_TYPE_MAX
+ };
  
- 	fprintf(stdout, "DEBUG>> L5: payload: %d\n", payload);
- 	fprintf(stdout, "---------------------------------------\n");
 -- 
 2.34.1
 
