@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A7E4C678D6
-	for <bpf@archiver.kernel.org>; Wed, 11 Jan 2023 09:38:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B783CC54EBE
+	for <bpf@archiver.kernel.org>; Wed, 11 Jan 2023 09:38:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233533AbjAKJiw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S238143AbjAKJiw (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Wed, 11 Jan 2023 04:38:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37536 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236274AbjAKJhY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 11 Jan 2023 04:37:24 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 125FFB1F3;
-        Wed, 11 Jan 2023 01:36:04 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id h16so14401407wrz.12;
-        Wed, 11 Jan 2023 01:36:03 -0800 (PST)
+        with ESMTP id S231797AbjAKJh1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 11 Jan 2023 04:37:27 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60930271F;
+        Wed, 11 Jan 2023 01:36:11 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id az7so14416193wrb.5;
+        Wed, 11 Jan 2023 01:36:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=O23XHz16kQsggrfAT5R5+VpQORNxeVkJc7shnnA68O8=;
-        b=RC3h9zWU6wudCkE5XZlstgBJ4kITywJ/+KVr7ao8SPnXwQwrC5dcz8saLaFfqOleF+
-         Ru6VvjgjcCPeG+fDGdoGjGwp7K6i/BFriz9XsXX0fzAL27UPLurcDP7LpqYHXUP0dRsm
-         48tdKZY4/kCkGJY7SEafrpXS3yC1B2TD5K/NsQOi1LclNlW8frQVuSoQnxat3jOD7hx/
-         Dmf4hrgp3yiJiOKqDaZGElRTO7AESWbixXbdFTF2PZwXc0STGd99CvZXcUArR0wQKYBh
-         +xk0cbi29tX5thHzSuoMY0wIU1RtHT9lYxhO7+Cinf5WhcqSMOfkZJuNG62RVO9bJQGf
-         0FBw==
+        bh=UDCZ3v5xjfPza65hFSrOf+b/rATi2tno/cf7eEa6NwU=;
+        b=Ngi+/FCQ49wfwRA/eGPotA2wlgSv+PH5DpVzVvxwNSW7qlLOrdh2KWUWaQqthYzcr3
+         313js8e27JVU+eKfB3+EgS0Tl+pa91DEDVZTckhz3cFMjmsm5TlQf39bg1ss4OerYI6I
+         VuvB16sPyCx00F1Vkhm3/7kYFD6WZ8K///qdtPgsf/veCKQCWbyvQZqbeQYqTgasGZA+
+         oEbC6qBrTeYAwzdqD3wimXPoV75D49l1SEhFXHYV7SrvcdBVrjpCiVVXcDLcNQEVtXHH
+         GlhJ60HQEeLkWYWsv8iCzecl9qyL6OQmY9E8uScORJd40gmVgQBMMWyOsem36OrYXUEF
+         X6rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=O23XHz16kQsggrfAT5R5+VpQORNxeVkJc7shnnA68O8=;
-        b=x7gk9O9SCpcC7KgFCL0LjE8+wdGVeWHe5lf9XqNQyYRE6AtVEW64FllJVcmonbw2Yp
-         R++6ZMmhAOFTPPONgO4Aj+y4tPKjrABu9lVbb1KQdJsqYOt1/mw8J2x3r/xMDmI0ctY7
-         WQjbu+ybQCnA2GdkisTQ0G6nC9MJ65HxvBt5grIZh04bM2dgWFfxV7ZcnlYF8KUjyCbF
-         85ODn7cQuifnd6QX3ac+Qo+jUr4Ve8bj8ULKsz4/IJkt0L9FyVOjzJl/u9djHd2nqhl7
-         wUbsNmK+kCsvbFZcW+cLjlVIqXE7HLp8Ne8IJkXbSKiPmiD+2l0LS1kkFVzAspHa92Nh
-         smMw==
-X-Gm-Message-State: AFqh2koKs+Smv1v0F/DvKVkY7zpYudHuzPsemcGK7sKWSvMK6VDyXrmj
-        tIC0t/Rz5BYDSD921dOol84=
-X-Google-Smtp-Source: AMrXdXvI4OHX9YsrlTl1lCJYqtXbGjgSow5oE3nLQpcVUTb1Ag8zjLG5ZjruIpYJkrrdgRq5t/LX3g==
-X-Received: by 2002:a05:6000:719:b0:2a4:bff5:6e79 with SMTP id bs25-20020a056000071900b002a4bff56e79mr17190808wrb.67.1673429762520;
-        Wed, 11 Jan 2023 01:36:02 -0800 (PST)
+        bh=UDCZ3v5xjfPza65hFSrOf+b/rATi2tno/cf7eEa6NwU=;
+        b=VNzvY5FWHHXMaKhMyXrwYqRYa8sos2sQYZzMEc7NKreSFZxqFXhWOXf/hkN2oKMKp0
+         Wl/hZP6H4Qt8hV43foMvyviCT/WZTlTE5TZx4HGPETV/SKlXVquy3BzXCNSUkPiWaHBd
+         DKOAAZKjysz0O8sCKBHvNHmsKo+uxr+lbeX34fcWuXU5ruLVAVwQShAmFzFJFLJj3Ij2
+         YzbsnqRyu0OMT5y2jabmVLVh2Fz2JKrgFXQ70PzxO6pz/QW/maL3yhyAkQmPHRqrTsnu
+         rX6yLmgzIIoAJ69EBWxfQaO8jJ5OfmjdDpLwF144iSdIy6abpPytOZla/tvIJWUrHPTW
+         3SMQ==
+X-Gm-Message-State: AFqh2kq7IZB9eWiSmsqvJyDstkocBBMpgq4VB8ITcAN7kcOJqL9pPmHO
+        3T3tBN9KeEAv7g59L+NRruc=
+X-Google-Smtp-Source: AMrXdXvinzLGHJLv+JAVrKanE1y2XIhNmvldV2NJh1wsrVdmQY5Ek3MOciKmuUFzGruK6T7sjXH7aw==
+X-Received: by 2002:adf:f5c6:0:b0:29f:ebd1:6a5 with SMTP id k6-20020adff5c6000000b0029febd106a5mr20281265wrp.14.1673429769841;
+        Wed, 11 Jan 2023 01:36:09 -0800 (PST)
 Received: from localhost.localdomain (h-176-10-254-193.A165.priv.bahnhof.se. [176.10.254.193])
-        by smtp.gmail.com with ESMTPSA id c18-20020adffb52000000b0025e86026866sm15553069wrs.0.2023.01.11.01.36.00
+        by smtp.gmail.com with ESMTPSA id c18-20020adffb52000000b0025e86026866sm15553069wrs.0.2023.01.11.01.36.08
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 11 Jan 2023 01:36:02 -0800 (PST)
+        Wed, 11 Jan 2023 01:36:09 -0800 (PST)
 From:   Magnus Karlsson <magnus.karlsson@gmail.com>
 To:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
         daniel@iogearbox.net, netdev@vger.kernel.org,
@@ -57,9 +57,9 @@ To:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
         john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
         haoluo@google.com, jolsa@kernel.org, tirthendu.sarkar@intel.com
 Cc:     jonathan.lemon@gmail.com
-Subject: [PATCH bpf-next v3 02/15] selftests/xsk: do not close unused file descriptors
-Date:   Wed, 11 Jan 2023 10:35:13 +0100
-Message-Id: <20230111093526.11682-3-magnus.karlsson@gmail.com>
+Subject: [PATCH bpf-next v3 06/15] selftests/xsk: add debug option for creating netdevs
+Date:   Wed, 11 Jan 2023 10:35:17 +0100
+Message-Id: <20230111093526.11682-7-magnus.karlsson@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230111093526.11682-1-magnus.karlsson@gmail.com>
 References: <20230111093526.11682-1-magnus.karlsson@gmail.com>
@@ -71,62 +71,77 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Magnus Karlsson <magnus.karlsson@intel.com>
 
-Do not close descriptors that have never been used. File descriptor
-fields that are not in use are erroneously marked with the number 0,
-which is a valid fd. Mark unused fds with -1 instead and do not close
-these when deleting the socket.
+Add a new option to the test_xsk.sh script that only creates the two
+veth netdevs and the extra namespace, then exits without running any
+tests. The failed test can then be executed in the debugger without
+having to create the netdevs and namespace manually. For ease-of-use,
+the veth netdevs to use are printed so they can be copied into the
+debugger.
+
+Here is an example how to use it:
+
+> sudo ./test_xsk.sh -d
+
+veth10 veth11
+
+> gdb xskxceiver
+
+In gdb:
+
+run -i veth10 -i veth11
+
+And now the test cases can be debugged with gdb.
+
+If you want to debug the test suite on a real NIC in loopback mode,
+there is no need to use this feature as you already know the netdev of
+your NIC.
 
 Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
 Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- tools/testing/selftests/bpf/xsk.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/test_xsk.sh | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/xsk.c b/tools/testing/selftests/bpf/xsk.c
-index 39d349509ba4..5e4a6552ed37 100644
---- a/tools/testing/selftests/bpf/xsk.c
-+++ b/tools/testing/selftests/bpf/xsk.c
-@@ -35,6 +35,8 @@
- #include "xsk.h"
- #include "bpf_util.h"
+diff --git a/tools/testing/selftests/bpf/test_xsk.sh b/tools/testing/selftests/bpf/test_xsk.sh
+index d821fd098504..cb315d85148b 100755
+--- a/tools/testing/selftests/bpf/test_xsk.sh
++++ b/tools/testing/selftests/bpf/test_xsk.sh
+@@ -74,6 +74,9 @@
+ # Run and dump packet contents:
+ #   sudo ./test_xsk.sh -D
+ #
++# Set up veth interfaces and leave them up so xskxceiver can be launched in a debugger:
++#   sudo ./test_xsk.sh -d
++#
+ # Run test suite for physical device in loopback mode
+ #   sudo ./test_xsk.sh -i IFACE
  
-+#define FD_NOT_USED (-1)
+@@ -81,11 +84,12 @@
+ 
+ ETH=""
+ 
+-while getopts "vDi:" flag
++while getopts "vDi:d" flag
+ do
+ 	case "${flag}" in
+ 		v) verbose=1;;
+ 		D) dump_pkts=1;;
++		d) debug=1;;
+ 		i) ETH=${OPTARG};;
+ 	esac
+ done
+@@ -174,6 +178,11 @@ statusList=()
+ 
+ TEST_NAME="XSK_SELFTESTS_${VETH0}_SOFTIRQ"
+ 
++if [[ $debug -eq 1 ]]; then
++    echo "-i" ${VETH0} "-i" ${VETH1},${NS1}
++    exit
++fi
 +
- #ifndef SOL_XDP
-  #define SOL_XDP 283
- #endif
-@@ -583,6 +585,9 @@ static void xsk_delete_bpf_maps(struct xsk_socket *xsk)
- {
- 	struct xsk_ctx *ctx = xsk->ctx;
+ exec_xskxceiver
  
-+	if (ctx->xsks_map_fd == FD_NOT_USED)
-+		return;
-+
- 	bpf_map_delete_elem(ctx->xsks_map_fd, &ctx->queue_id);
- 	close(ctx->xsks_map_fd);
- }
-@@ -941,6 +946,9 @@ static struct xsk_ctx *xsk_create_ctx(struct xsk_socket *xsk,
- 	ctx->umem = umem;
- 	ctx->queue_id = queue_id;
- 	bpf_strlcpy(ctx->ifname, ifname, IFNAMSIZ);
-+	ctx->prog_fd = FD_NOT_USED;
-+	ctx->link_fd = FD_NOT_USED;
-+	ctx->xsks_map_fd = FD_NOT_USED;
- 
- 	ctx->fill = fill;
- 	ctx->comp = comp;
-@@ -1221,8 +1229,9 @@ void xsk_socket__delete(struct xsk_socket *xsk)
- 
- 	if (ctx->refcount == 1) {
- 		xsk_delete_bpf_maps(xsk);
--		close(ctx->prog_fd);
--		if (ctx->has_bpf_link)
-+		if (ctx->prog_fd != FD_NOT_USED)
-+			close(ctx->prog_fd);
-+		if (ctx->has_bpf_link && ctx->link_fd != FD_NOT_USED)
- 			close(ctx->link_fd);
- 	}
- 
+ if [ -z $ETH ]; then
 -- 
 2.34.1
 
