@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1412FC54EBC
-	for <bpf@archiver.kernel.org>; Thu, 12 Jan 2023 16:01:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54DC8C54EBC
+	for <bpf@archiver.kernel.org>; Thu, 12 Jan 2023 16:01:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232615AbjALQBO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Jan 2023 11:01:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42084 "EHLO
+        id S234213AbjALQBQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Jan 2023 11:01:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234755AbjALQAs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 12 Jan 2023 11:00:48 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D46638B
-        for <bpf@vger.kernel.org>; Thu, 12 Jan 2023 07:53:39 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id jr10so9500137qtb.7
-        for <bpf@vger.kernel.org>; Thu, 12 Jan 2023 07:53:39 -0800 (PST)
+        with ESMTP id S235618AbjALQAt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 12 Jan 2023 11:00:49 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B22B63FE
+        for <bpf@vger.kernel.org>; Thu, 12 Jan 2023 07:53:41 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id a25so9627101qto.10
+        for <bpf@vger.kernel.org>; Thu, 12 Jan 2023 07:53:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1PdPmTP/6nNwfuUbfoIGYl12UKrMMnWaGWGE68CKK00=;
-        b=mN5ObGrhWrxMJkdoooArLIKC8XD0Tvow9VTzY+Dt+bM8q/RM6rw039QTNBaDeGeO3W
-         jc5ev4ZPmIqrRhwhGdLdkzTzN8gZKgSqZNiEFBB8OAHgukMGMx+f/InoklehDY6tX4bB
-         CUnIWUqLRKGvCWlsJSI5IP1MkFCBw1ZTcSf2C/sDXTI6RYUmopTDbtNDJP+JyheZzkFf
-         TzLt3sLAhYi+rdZI7qQ1UV42ayBjgKZFUszSk4A+zhvgOxP4u/jn2S3xHtTb2g+P1y58
-         CnyYcLq2SXGRAvEUlWv58eL9NelCvX7CcHE8aby/6geeLc5bxLV+FACVmTuHiL8tHB3/
-         36HA==
+        bh=uihgwx1T6nkcpHBqU4nGrP1KTt8QoN0fwfvzg1wucPQ=;
+        b=YodB935w9n5znFspbhXFeVSzFSE5JsGjdXO3T7QxM4mYUliNC+TPtRxw2JuS3qxGjU
+         I2i8BfBS5PcscctdPUhc//YULRIwAZeg1mS5UNvHjm9u/Zq0t8pH/dyxAZz5micRnLjo
+         e9u6Pz9RSOvxKChnvdrDNq5sufGnV3XuasdTaZw30pseNUm8v1DjX0A8FUR+KM2BkclZ
+         qGgHThyqikGWYyWV81ZlED6FUAeDFbhe+Z7dvttH3V4gRa3OZMZhslzzSITLkPBaTLoy
+         eMSdtv+WJhmL/l2hEXvVt+Aczvbpaz13WvZDnwvZLHETZHye1E7tiOLO2wLcwF+0sVFp
+         wgmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1PdPmTP/6nNwfuUbfoIGYl12UKrMMnWaGWGE68CKK00=;
-        b=NyPQ0r2G5c2h1PxN2Kr/KA0AXpwabFQ1Fq3gPqlLH8z/GFsw0Zyj+AekkH4ewsqDZO
-         IFqz62xMVB8wqFQSgd4E+bJin913vT0cmFauDxUJZOWWJZB/sqrsYLnL4YZLmhZsrRR6
-         4AqcD/kwWzfC5e+giSpm497gBs4qsRX95iPf3T/DobIGTOcqgJaX6x6PcW5k3bovxqha
-         5ehNVNQ+JHoHqRCDx069ywj88Lm6JPhoMBgbzfn9o6T6rzemSiANx2mwsjSR4y9aCntm
-         SbyDs8vt77ZQizcFwUS8jsOKHGp11UX62WWFE9BMeaHAKvGnDAVfMHNpIL2KqxEi95RD
-         JhCA==
-X-Gm-Message-State: AFqh2kqM1/RTrFI+AjpaMSa2hDg6835aAhW61I5k/LbTAMj3dgQNsBOU
-        7UUKaPZL6Cy3ElzbTwuSczywwDLd83Baol4Xn1U=
-X-Google-Smtp-Source: AMrXdXvcvv5QnOw+ucO2xICHIrhkKnumytKrPNexoUtZMl0/bJueZhRxVfPyCqg8K84Xgk088KoBmg==
-X-Received: by 2002:a05:622a:1741:b0:3a8:2716:ac2d with SMTP id l1-20020a05622a174100b003a82716ac2dmr149575319qtk.56.1673538818785;
-        Thu, 12 Jan 2023 07:53:38 -0800 (PST)
+        bh=uihgwx1T6nkcpHBqU4nGrP1KTt8QoN0fwfvzg1wucPQ=;
+        b=r7PX8bakeuap6cvXHIJT7GPt92elV2IAtx+3sLFH8zFv/g8kmrNw6/NCpH2RPgH5Ua
+         nNMVREe26Bqve2jLgIL0DDb0vE4f3RwSzVC3o/vlyh1L6ZTMtLO2H85SKbMxkMTKuMdE
+         GxvppDcG7BuxA5pr0KM4e9VZDN7EYkhp0U2ks4VT5GUXTtzpHdRRMi6kVxBcMgGcca+L
+         jQdvqXWRqWf8OUUV29bRAbMRFVKRgFnBPeyVLPJC1YXTn41RKFcLUiJ75Ec5eY46fqaI
+         lRmWwPJX4cbLF8T6zOBl16MIGQcncFqAuHLjrTujTHRWB2fK+8cAHcYv7kADL1l9080y
+         /97A==
+X-Gm-Message-State: AFqh2kr40Tl7QAdfVx5bjpFwpe/8LvRSpRDFcIwUeBmduqEYb49S3Pgm
+        pc30iIllxVrOZB1uS3FDO6g=
+X-Google-Smtp-Source: AMrXdXs0Up2USZyI0o43Vk0+bBMZSWgXv+eJ2HsxBP+9FPA9u+0LO7bceUcOwMvSq9Zd58JbXWCPBg==
+X-Received: by 2002:a05:622a:5a98:b0:3ab:8c3f:328b with SMTP id fz24-20020a05622a5a9800b003ab8c3f328bmr94053633qtb.4.1673538821529;
+        Thu, 12 Jan 2023 07:53:41 -0800 (PST)
 Received: from vultr.guest ([173.199.122.241])
-        by smtp.gmail.com with ESMTPSA id l17-20020ac848d1000000b003ab43dabfb1sm9280836qtr.55.2023.01.12.07.53.37
+        by smtp.gmail.com with ESMTPSA id l17-20020ac848d1000000b003ab43dabfb1sm9280836qtr.55.2023.01.12.07.53.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 07:53:38 -0800 (PST)
+        Thu, 12 Jan 2023 07:53:40 -0800 (PST)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     42.hyeyoo@gmail.com, vbabka@suse.cz, ast@kernel.org,
         daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
@@ -59,9 +59,9 @@ To:     42.hyeyoo@gmail.com, vbabka@suse.cz, ast@kernel.org,
         iamjoonsoo.kim@lge.com, roman.gushchin@linux.dev
 Cc:     linux-mm@kvack.org, bpf@vger.kernel.org,
         Yafang Shao <laoar.shao@gmail.com>
-Subject: [RFC PATCH bpf-next v2 04/11] mm: slab: introduce ksize_full()
-Date:   Thu, 12 Jan 2023 15:53:19 +0000
-Message-Id: <20230112155326.26902-5-laoar.shao@gmail.com>
+Subject: [RFC PATCH bpf-next v2 06/11] mm: util: introduce kvsize()
+Date:   Thu, 12 Jan 2023 15:53:21 +0000
+Message-Id: <20230112155326.26902-7-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20230112155326.26902-1-laoar.shao@gmail.com>
 References: <20230112155326.26902-1-laoar.shao@gmail.com>
@@ -71,138 +71,69 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When the object is charged to kmemcg, it will alloc extra memory to
-store the kmemcg ownership, so introduce a new helper to include this
-memory size.
-
-The reason we introduce a new helper other than changing the current
-helper ksize() is that the allocation of the kmemcg ownership is a
-nested allocation, which is independent of the original allocation. Some
-user may relays on ksize() to get the layout of this slab, so we'd
-better not changing it.
+Introduce a new help kvsize() to report full size of underlying allocation
+of a kmalloc'ed addr or vmalloc'ed addr.
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- mm/slab.h        |  2 +-
- mm/slab_common.c | 52 ++++++++++++++++++++++++++++++++++++----------------
- mm/slob.c        |  2 +-
- 3 files changed, 38 insertions(+), 18 deletions(-)
+ include/linux/slab.h | 10 ++++++++++
+ mm/util.c            | 15 +++++++++++++++
+ 2 files changed, 25 insertions(+)
 
-diff --git a/mm/slab.h b/mm/slab.h
-index 35e0b3b..e07ae90 100644
---- a/mm/slab.h
-+++ b/mm/slab.h
-@@ -681,7 +681,7 @@ static inline struct kmem_cache *cache_from_obj(struct kmem_cache *s, void *x)
+diff --git a/include/linux/slab.h b/include/linux/slab.h
+index 45af703..740ddf7 100644
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -226,6 +226,15 @@ struct kmem_cache *kmem_cache_create_usercopy(const char *name,
+  */
+ size_t ksize(const void *objp);
  
- #endif /* CONFIG_SLOB */
++/**
++ * ksize_full - Report full size of each accounted objp
++ * @objp: pointer to the object
++ *
++ * The difference between ksize() and ksize_full() is that ksize_full()
++ * includes the extra space which is used to store obj_cgroup membership.
++ */
++size_t ksize_full(const void *objp);
++
+ #ifdef CONFIG_PRINTK
+ bool kmem_valid_obj(void *object);
+ void kmem_dump_obj(void *object);
+@@ -762,6 +771,7 @@ static inline __alloc_size(1, 2) void *kvcalloc(size_t n, size_t size, gfp_t fla
  
--size_t __ksize(const void *objp);
-+size_t ___ksize(const void *objp, bool full);
+ extern void *kvrealloc(const void *p, size_t oldsize, size_t newsize, gfp_t flags)
+ 		      __realloc_size(3);
++extern size_t kvsize(const void *addr);
+ extern void kvfree(const void *addr);
+ extern void kvfree_sensitive(const void *addr, size_t len);
  
- static inline size_t slab_ksize(const struct kmem_cache *s)
- {
-diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 1cba98a..4f1e2bc 100644
---- a/mm/slab_common.c
-+++ b/mm/slab_common.c
-@@ -1021,21 +1021,11 @@ void kfree(const void *object)
- }
- EXPORT_SYMBOL(kfree);
+diff --git a/mm/util.c b/mm/util.c
+index b56c92f..d6be4f94 100644
+--- a/mm/util.c
++++ b/mm/util.c
+@@ -610,6 +610,21 @@ void *kvmalloc_node(size_t size, gfp_t flags, int node)
+ EXPORT_SYMBOL(kvmalloc_node);
  
--/**
-- * __ksize -- Report full size of underlying allocation
-- * @object: pointer to the object
-- *
-- * This should only be used internally to query the true size of allocations.
-- * It is not meant to be a way to discover the usable size of an allocation
-- * after the fact. Instead, use kmalloc_size_roundup(). Using memory beyond
-- * the originally requested allocation size may trigger KASAN, UBSAN_BOUNDS,
-- * and/or FORTIFY_SOURCE.
-- *
-- * Return: size of the actual memory used by @object in bytes
-- */
--size_t __ksize(const void *object)
-+size_t ___ksize(const void *object, bool full)
- {
-+	size_t kmemcg_size = 0;
- 	struct folio *folio;
-+	struct slab *slab;
- 
- 	if (unlikely(object == ZERO_SIZE_PTR))
- 		return 0;
-@@ -1054,7 +1044,27 @@ size_t __ksize(const void *object)
- 	skip_orig_size_check(folio_slab(folio)->slab_cache, object);
- #endif
- 
--	return slab_ksize(folio_slab(folio)->slab_cache);
-+	slab = folio_slab(folio);
-+	if (memcg_kmem_enabled() && full && slab_objcgs(slab))
-+		kmemcg_size = sizeof(struct obj_cgroup *);
-+	return slab_ksize(slab->slab_cache) + kmemcg_size;
+ /**
++ * kvsize() - Report full size of underlying allocation of adddr
++ * @addr: Pointer to kmalloc'ed or vmalloc'ed memory
++ *
++ * kvsize reports full size of underlying allocation of a kmalloc'ed addr
++ * or a vmalloc'ed addr.
++ */
++size_t kvsize(const void *addr)
++{
++	if (is_vmalloc_addr(addr))
++		return vsize(addr);
++
++	return ksize_full(addr);
 +}
 +
 +/**
-+ * __ksize -- Report full size of underlying allocation
-+ * @object: pointer to the object
-+ *
-+ * This should only be used internally to query the true size of allocations.
-+ * It is not meant to be a way to discover the usable size of an allocation
-+ * after the fact. Instead, use kmalloc_size_roundup(). Using memory beyond
-+ * the originally requested allocation size may trigger KASAN, UBSAN_BOUNDS,
-+ * and/or FORTIFY_SOURCE.
-+ *
-+ * Return: size of the actual memory used by @object in bytes
-+ */
-+size_t __ksize(const void *object)
-+{
-+	return ___ksize(object, false);
- }
- 
- void *kmalloc_trace(struct kmem_cache *s, gfp_t gfpflags, size_t size)
-@@ -1428,7 +1438,7 @@ void kfree_sensitive(const void *p)
- }
- EXPORT_SYMBOL(kfree_sensitive);
- 
--size_t ksize(const void *objp)
-+size_t _ksize(const void *objp, bool full)
- {
- 	/*
- 	 * We need to first check that the pointer to the object is valid.
-@@ -1448,10 +1458,20 @@ size_t ksize(const void *objp)
- 	if (unlikely(ZERO_OR_NULL_PTR(objp)) || !kasan_check_byte(objp))
- 		return 0;
- 
--	return kfence_ksize(objp) ?: __ksize(objp);
-+	return kfence_ksize(objp) ?: ___ksize(objp, full);
- }
- EXPORT_SYMBOL(ksize);
- 
-+size_t ksize(const void *objp)
-+{
-+	return _ksize(objp, false);
-+}
-+
-+size_t ksize_full(const void *objp)
-+{
-+	return _ksize(objp, true);
-+}
-+
- /* Tracepoints definitions. */
- EXPORT_TRACEPOINT_SYMBOL(kmalloc);
- EXPORT_TRACEPOINT_SYMBOL(kmem_cache_alloc);
-diff --git a/mm/slob.c b/mm/slob.c
-index fe567fcf..8c46bdc 100644
---- a/mm/slob.c
-+++ b/mm/slob.c
-@@ -579,7 +579,7 @@ size_t kmalloc_size_roundup(size_t size)
- EXPORT_SYMBOL(kmalloc_size_roundup);
- 
- /* can't use ksize for kmem_cache_alloc memory, only kmalloc */
--size_t __ksize(const void *block)
-+size_t ___ksize(const void *block, bool full)
- {
- 	struct folio *folio;
- 	unsigned int align;
+  * kvfree() - Free memory.
+  * @addr: Pointer to allocated memory.
+  *
 -- 
 1.8.3.1
 
