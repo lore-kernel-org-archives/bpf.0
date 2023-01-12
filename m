@@ -2,57 +2,57 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07FF3C5479D
-	for <bpf@archiver.kernel.org>; Thu, 12 Jan 2023 00:32:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F31B5C54EBC
+	for <bpf@archiver.kernel.org>; Thu, 12 Jan 2023 00:33:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232042AbjALAcv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 11 Jan 2023 19:32:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
+        id S235493AbjALAdJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 11 Jan 2023 19:33:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233181AbjALAcr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 11 Jan 2023 19:32:47 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E163B914
-        for <bpf@vger.kernel.org>; Wed, 11 Jan 2023 16:32:40 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id h2-20020a170902f54200b0018e56572a4eso11466124plf.9
-        for <bpf@vger.kernel.org>; Wed, 11 Jan 2023 16:32:40 -0800 (PST)
+        with ESMTP id S231424AbjALAct (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 11 Jan 2023 19:32:49 -0500
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE973BE82
+        for <bpf@vger.kernel.org>; Wed, 11 Jan 2023 16:32:43 -0800 (PST)
+Received: by mail-pg1-x549.google.com with SMTP id e11-20020a63d94b000000b0048988ed9a6cso7334879pgj.1
+        for <bpf@vger.kernel.org>; Wed, 11 Jan 2023 16:32:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=buBagqoWccTs7nUn02HfXynoBJm2YZT4P+lb4bQZ1oQ=;
-        b=cHxU+RZ6qi53dVq34lEjMmlfmTwNpDLOVOJHjxlxlTYSRazXf5w4Ga7rkUqI/VxgOv
-         AMLSNGRvVSBFYWhzWils8419nkYxxHzk2TTMhTMOP8yEbqrUTC2C74zl/ZOoKtX6UUz8
-         lB6vsSSi/4A/jNaxvNxNSrC8kB5P+vlCR0iviY2XrgY1tUwyoM7yp1NRoteJSUJbbvry
-         IhgteKPNdMfN4jlNq+sa/7QhR0RAUwk7SSIcVJLcQXnUPSEzMtDXTe983PpLaz7CNyE9
-         41z0b3hvtbFoF2KPAwjuBd9XgIgp3GPQRKyH1RULaWzNGeT9buLfTODRvhcRQcLKMr9o
-         RKLA==
+        bh=ZJTf6yK66PTh4xGU+u4bgdOr1ZHxp3VLr/GSqGKEDLw=;
+        b=f6b6TZLBkalD6UEi+w3oOLjBRpHF/3xUi8cmHnr10Sd6n8LZy66aaPVRJ7x/XJ/khY
+         TCmtCfn8it8AQXfU/HZhJKiXaIbUkRz+ZAAHFuy8BSnyKDvNR1JlOt9Pnzfc7OvXpwlN
+         UDDsat91b8Lt/p4+C2GxaZpLEe+29POD7CUQ8BElUfrhoTtNRu2J+CJW7vxaXaPXD4Ye
+         k4TUbnTSBRAhYsAfxGRYfxmIA0eB/qXeeKRtPxDP7poJnNxS1IpL36bnxIh7TTltD2jR
+         SUQmgcsKSnwkJNesuQEHP3NCUP06VLL+7GY/zlw9O16ALwtnOymlyLvRtvy6BpQE7B03
+         t/GA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=buBagqoWccTs7nUn02HfXynoBJm2YZT4P+lb4bQZ1oQ=;
-        b=Z+sGSDTBac4RbreSwuVrSzmPGXfI/SqHMN4fuEpgVGkEDGgyXWpiFrKO2hEzsaB+8G
-         03rFUukG1taH6GegkyBDo7sJfuvp/fw26eL58YUrIft5MCDFL+LzHDXL2xOQw0nAy8/2
-         x7f+IIkAA1lCujBHfTlwW4cyNOvdGp5kRMXQprRKRstHYcKWqEioLb8gsBrf+b/hLJ6o
-         RMJ272zwdZ2wGdoecI8h9UfhauMAUkh5gSEMs6wREZb19k2ndAO56HAJNv4KDENvp8XO
-         zll4x4mtsPycoGy7fTuXAWqexfi1Qrrn5PTUI7FiRIkBDzAv3+l271PzV72anb0aVEA3
-         VQAw==
-X-Gm-Message-State: AFqh2koTIQRl6LsHy4vOAe/FS8SUQQOpDIMyjAUBckFPb+bWeUWUNRMU
-        w/B24+UrY5f4QqWt4a73/IU3NEhBSwBMX+7hTGsCk8p6q9Qo/X2ju4W4A97kkDTdkHBtIfe8KKP
-        +5urGs/FaUjBdCZ+40lXxT7xJrpi9+w+vaOunwQcuFR5/rw0aDQ==
-X-Google-Smtp-Source: AMrXdXsKCDUIJNuPfpJ3esBtisfgZhY+JFPI+6BkiJv5kNfGwV88IhJrZ/+bth4Sp+NWBabHpsHDzmU=
+        bh=ZJTf6yK66PTh4xGU+u4bgdOr1ZHxp3VLr/GSqGKEDLw=;
+        b=0VIGzm1ZI0VbF3gbV64VI2osWuRYJCNkjflpTBG+Y0+pXEIXSGITMK5hwolrdhuAC7
+         8zXVZphQYppkzSUqhns6rr/5bG9rSXPxb+oDHdmhPB5ESHxifv+nEcVuR5VH1A0Rvdga
+         FA5UCTsXBtUBa+Ptja09aXDHt87DbLX/WcwT7BQU2wndzsRnSfLkxfd5A4f2CPNorAUU
+         B7OohEGfjJ+jXHPD29oT7niWQ9+IRjJcR79taHrk/c3nNrWJHy4GCW2uQOq+0V0ZXz2f
+         9POCqOzXxKwUAyqNl9Bi4UG2OkTr0FlqYlNDdTOtHwblcVYaxm+vCg8ka8YMekGz9Ql4
+         AHRA==
+X-Gm-Message-State: AFqh2koTzrhNsTPY1Xtjj5E7fLPAnX7ni4Af40smXv6/Uyzto/Ez2yV7
+        V7/+LAjBm7S+ryiGRzpUJeVQthx8NM9HDobL+qLbKP1vCwS7qvy+W93JEw6vgN9Y0IFbfLMDdOf
+        R+J6wfz5MR7c4LxG9hbXxmO9ExaYcA0QM53EEmCdwrlEe8wM4XQ==
+X-Google-Smtp-Source: AMrXdXuDpUTA9fhoYHWiDHvwhU96gYccVSsTz3iFizS8qOArWl09YyLxSwTCKBkIzGvlmzcOSClijts=
 X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a62:3605:0:b0:56b:dbab:5362 with SMTP id
- d5-20020a623605000000b0056bdbab5362mr5480846pfa.47.1673483560221; Wed, 11 Jan
- 2023 16:32:40 -0800 (PST)
-Date:   Wed, 11 Jan 2023 16:32:18 -0800
+ (user=sdf job=sendgmr) by 2002:a17:90a:ad01:b0:228:cf6f:3087 with SMTP id
+ r1-20020a17090aad0100b00228cf6f3087mr699598pjq.53.1673483563361; Wed, 11 Jan
+ 2023 16:32:43 -0800 (PST)
+Date:   Wed, 11 Jan 2023 16:32:20 -0800
 In-Reply-To: <20230112003230.3779451-1-sdf@google.com>
 Mime-Version: 1.0
 References: <20230112003230.3779451-1-sdf@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230112003230.3779451-6-sdf@google.com>
-Subject: [PATCH bpf-next v7 05/17] bpf: Introduce device-bound XDP programs
+Message-ID: <20230112003230.3779451-8-sdf@google.com>
+Subject: [PATCH bpf-next v7 07/17] bpf: XDP metadata RX kfuncs
 From:   Stanislav Fomichev <sdf@google.com>
 To:     bpf@vger.kernel.org
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
@@ -73,10 +73,12 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-New flag BPF_F_XDP_DEV_BOUND_ONLY plus all the infra to have a way
-to associate a netdev with a BPF program at load time.
-
-netdevsim checks are dropped in favor of generic check in dev_xdp_attach.
+Define a new kfunc set (xdp_metadata_kfunc_ids) which implements all possible
+XDP metatada kfuncs. Not all devices have to implement them. If kfunc is not
+supported by the target device, the default implementation is called instead.
+The verifier, at load time, replaces a call to the generic kfunc with a call
+to the per-device one. Per-device kfunc pointers are stored in separate
+struct xdp_metadata_ops.
 
 Cc: John Fastabend <john.fastabend@gmail.com>
 Cc: David Ahern <dsahern@gmail.com>
@@ -92,399 +94,352 @@ Cc: xdp-hints@xdp-project.net
 Cc: netdev@vger.kernel.org
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- drivers/net/netdevsim/bpf.c    |  4 --
- include/linux/bpf.h            | 24 +++++++--
- include/uapi/linux/bpf.h       |  5 ++
- kernel/bpf/core.c              |  4 +-
- kernel/bpf/offload.c           | 95 +++++++++++++++++++++++++---------
- kernel/bpf/syscall.c           |  9 ++--
- net/core/dev.c                 |  5 ++
- tools/include/uapi/linux/bpf.h |  5 ++
- 8 files changed, 113 insertions(+), 38 deletions(-)
+ include/linux/bpf.h       | 17 ++++++++++-
+ include/linux/netdevice.h |  8 +++++
+ include/net/xdp.h         | 21 +++++++++++++
+ kernel/bpf/core.c         |  8 +++++
+ kernel/bpf/offload.c      | 44 +++++++++++++++++++++++++++
+ kernel/bpf/verifier.c     | 25 ++++++++++++++-
+ net/bpf/test_run.c        |  3 ++
+ net/core/xdp.c            | 64 +++++++++++++++++++++++++++++++++++++++
+ 8 files changed, 188 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/netdevsim/bpf.c b/drivers/net/netdevsim/bpf.c
-index 50854265864d..f60eb97e3a62 100644
---- a/drivers/net/netdevsim/bpf.c
-+++ b/drivers/net/netdevsim/bpf.c
-@@ -315,10 +315,6 @@ nsim_setup_prog_hw_checks(struct netdevsim *ns, struct netdev_bpf *bpf)
- 		NSIM_EA(bpf->extack, "xdpoffload of non-bound program");
- 		return -EINVAL;
- 	}
--	if (!bpf_offload_dev_match(bpf->prog, ns->netdev)) {
--		NSIM_EA(bpf->extack, "program bound to different dev");
--		return -EINVAL;
--	}
- 
- 	state = bpf->prog->aux->offload->dev_priv;
- 	if (WARN_ON(strcmp(state->state, "xlated"))) {
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 1bb525c0130e..b97a05bb47be 100644
+index b97a05bb47be..bb26c2e18092 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -1261,7 +1261,8 @@ struct bpf_prog_aux {
- 	enum bpf_prog_type saved_dst_prog_type;
- 	enum bpf_attach_type saved_dst_attach_type;
- 	bool verifier_zext; /* Zero extensions has been inserted by verifier. */
--	bool offload_requested;
-+	bool dev_bound; /* Program is bound to the netdev. */
-+	bool offload_requested; /* Program is bound and offloaded to the netdev. */
- 	bool attach_btf_trace; /* true if attaching to BTF-enabled raw tp */
- 	bool func_proto_unreliable;
- 	bool sleepable;
-@@ -2451,7 +2452,7 @@ void __bpf_free_used_maps(struct bpf_prog_aux *aux,
- bool bpf_prog_get_ok(struct bpf_prog *, enum bpf_prog_type *, bool);
- 
- int bpf_prog_offload_compile(struct bpf_prog *prog);
--void bpf_prog_offload_destroy(struct bpf_prog *prog);
-+void bpf_prog_dev_bound_destroy(struct bpf_prog *prog);
- int bpf_prog_offload_info_fill(struct bpf_prog_info *info,
- 			       struct bpf_prog *prog);
- 
-@@ -2479,7 +2480,13 @@ bool bpf_offload_dev_match(struct bpf_prog *prog, struct net_device *netdev);
+@@ -2480,6 +2480,9 @@ bool bpf_offload_dev_match(struct bpf_prog *prog, struct net_device *netdev);
  void unpriv_ebpf_notify(int new_state);
  
  #if defined(CONFIG_NET) && defined(CONFIG_BPF_SYSCALL)
--int bpf_prog_offload_init(struct bpf_prog *prog, union bpf_attr *attr);
-+int bpf_prog_dev_bound_init(struct bpf_prog *prog, union bpf_attr *attr);
-+void bpf_dev_bound_netdev_unregister(struct net_device *dev);
-+
-+static inline bool bpf_prog_is_dev_bound(const struct bpf_prog_aux *aux)
-+{
-+	return aux->dev_bound;
-+}
++int bpf_dev_bound_kfunc_check(struct bpf_verifier_log *log,
++			      struct bpf_prog_aux *prog_aux);
++void *bpf_dev_bound_resolve_kfunc(struct bpf_prog *prog, u32 func_id);
+ int bpf_prog_dev_bound_init(struct bpf_prog *prog, union bpf_attr *attr);
+ void bpf_dev_bound_netdev_unregister(struct net_device *dev);
  
- static inline bool bpf_prog_is_offloaded(const struct bpf_prog_aux *aux)
- {
-@@ -2507,12 +2514,21 @@ void sock_map_unhash(struct sock *sk);
+@@ -2514,8 +2517,20 @@ void sock_map_unhash(struct sock *sk);
  void sock_map_destroy(struct sock *sk);
  void sock_map_close(struct sock *sk, long timeout);
  #else
--static inline int bpf_prog_offload_init(struct bpf_prog *prog,
-+static inline int bpf_prog_dev_bound_init(struct bpf_prog *prog,
- 					union bpf_attr *attr)
++static inline int bpf_dev_bound_kfunc_check(struct bpf_verifier_log *log,
++					    struct bpf_prog_aux *prog_aux)
++{
++	return -EOPNOTSUPP;
++}
++
++static inline void *bpf_dev_bound_resolve_kfunc(struct bpf_prog *prog,
++						u32 func_id)
++{
++	return NULL;
++}
++
+ static inline int bpf_prog_dev_bound_init(struct bpf_prog *prog,
+-					union bpf_attr *attr)
++					  union bpf_attr *attr)
  {
  	return -EOPNOTSUPP;
  }
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index aad12a179e54..90f2be194bc5 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -74,6 +74,7 @@ struct udp_tunnel_nic_info;
+ struct udp_tunnel_nic;
+ struct bpf_prog;
+ struct xdp_buff;
++struct xdp_md;
  
-+static inline void bpf_dev_bound_netdev_unregister(struct net_device *dev)
-+{
-+}
-+
-+static inline bool bpf_prog_is_dev_bound(const struct bpf_prog_aux *aux)
-+{
-+	return false;
-+}
-+
- static inline bool bpf_prog_is_offloaded(struct bpf_prog_aux *aux)
- {
- 	return false;
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index bc1a3d232ae4..d0b6ac896699 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1156,6 +1156,11 @@ enum bpf_link_type {
-  */
- #define BPF_F_XDP_HAS_FRAGS	(1U << 5)
+ void synchronize_net(void);
+ void netdev_set_default_ethtool_ops(struct net_device *dev,
+@@ -1618,6 +1619,11 @@ struct net_device_ops {
+ 						  bool cycles);
+ };
  
-+/* If BPF_F_XDP_DEV_BOUND_ONLY is used in BPF_PROG_LOAD command, the loaded
-+ * program becomes device-bound but can access XDP metadata.
-+ */
-+#define BPF_F_XDP_DEV_BOUND_ONLY	(1U << 6)
++struct xdp_metadata_ops {
++	int	(*xmo_rx_timestamp)(const struct xdp_md *ctx, u64 *timestamp);
++	int	(*xmo_rx_hash)(const struct xdp_md *ctx, u32 *hash);
++};
 +
- /* link_create.kprobe_multi.flags used in LINK_CREATE command for
-  * BPF_TRACE_KPROBE_MULTI attach type to create return probe.
-  */
+ /**
+  * enum netdev_priv_flags - &struct net_device priv_flags
+  *
+@@ -1801,6 +1807,7 @@ enum netdev_ml_priv_type {
+  *
+  *	@netdev_ops:	Includes several pointers to callbacks,
+  *			if one wants to override the ndo_*() functions
++ *	@xdp_metadata_ops:	Includes pointers to XDP metadata callbacks.
+  *	@ethtool_ops:	Management operations
+  *	@l3mdev_ops:	Layer 3 master device operations
+  *	@ndisc_ops:	Includes callbacks for different IPv6 neighbour
+@@ -2050,6 +2057,7 @@ struct net_device {
+ 	unsigned int		flags;
+ 	unsigned long long	priv_flags;
+ 	const struct net_device_ops *netdev_ops;
++	const struct xdp_metadata_ops *xdp_metadata_ops;
+ 	int			ifindex;
+ 	unsigned short		gflags;
+ 	unsigned short		hard_header_len;
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index 55dbc68bfffc..91292aa13bc0 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -409,4 +409,25 @@ void xdp_attachment_setup(struct xdp_attachment_info *info,
+ 
+ #define DEV_MAP_BULK_SIZE XDP_BULK_QUEUE_SIZE
+ 
++#define XDP_METADATA_KFUNC_xxx	\
++	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_TIMESTAMP, \
++			   bpf_xdp_metadata_rx_timestamp) \
++	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_HASH, \
++			   bpf_xdp_metadata_rx_hash) \
++
++enum {
++#define XDP_METADATA_KFUNC(name, _) name,
++XDP_METADATA_KFUNC_xxx
++#undef XDP_METADATA_KFUNC
++MAX_XDP_METADATA_KFUNC,
++};
++
++#ifdef CONFIG_NET
++u32 bpf_xdp_metadata_kfunc_id(int id);
++bool bpf_dev_bound_kfunc_id(u32 btf_id);
++#else
++static inline u32 bpf_xdp_metadata_kfunc_id(int id) { return 0; }
++static inline bool bpf_dev_bound_kfunc_id(u32 btf_id) { return false; }
++#endif
++
+ #endif /* __LINUX_NET_XDP_H__ */
 diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 515f4f08591c..1cf19da3c128 100644
+index 1cf19da3c128..16da51093aff 100644
 --- a/kernel/bpf/core.c
 +++ b/kernel/bpf/core.c
-@@ -2553,8 +2553,8 @@ static void bpf_prog_free_deferred(struct work_struct *work)
- #endif
- 	bpf_free_used_maps(aux);
- 	bpf_free_used_btfs(aux);
--	if (bpf_prog_is_offloaded(aux))
--		bpf_prog_offload_destroy(aux->prog);
-+	if (bpf_prog_is_dev_bound(aux))
-+		bpf_prog_dev_bound_destroy(aux->prog);
- #ifdef CONFIG_PERF_EVENTS
- 	if (aux->prog->has_callchain_buf)
- 		put_callchain_buffers();
-diff --git a/kernel/bpf/offload.c b/kernel/bpf/offload.c
-index deb06498da0b..f767455ed732 100644
---- a/kernel/bpf/offload.c
-+++ b/kernel/bpf/offload.c
-@@ -41,7 +41,7 @@ struct bpf_offload_dev {
- struct bpf_offload_netdev {
- 	struct rhash_head l;
- 	struct net_device *netdev;
--	struct bpf_offload_dev *offdev;
-+	struct bpf_offload_dev *offdev; /* NULL when bound-only */
- 	struct list_head progs;
- 	struct list_head maps;
- 	struct list_head offdev_netdevs;
-@@ -89,19 +89,17 @@ static int __bpf_offload_dev_netdev_register(struct bpf_offload_dev *offdev,
- 	INIT_LIST_HEAD(&ondev->progs);
- 	INIT_LIST_HEAD(&ondev->maps);
- 
--	down_write(&bpf_devs_lock);
- 	err = rhashtable_insert_fast(&offdevs, &ondev->l, offdevs_params);
- 	if (err) {
- 		netdev_warn(netdev, "failed to register for BPF offload\n");
--		goto err_unlock_free;
-+		goto err_free;
- 	}
- 
--	list_add(&ondev->offdev_netdevs, &offdev->netdevs);
--	up_write(&bpf_devs_lock);
-+	if (offdev)
-+		list_add(&ondev->offdev_netdevs, &offdev->netdevs);
- 	return 0;
- 
--err_unlock_free:
--	up_write(&bpf_devs_lock);
-+err_free:
- 	kfree(ondev);
- 	return err;
- }
-@@ -149,24 +147,26 @@ static void __bpf_map_offload_destroy(struct bpf_offloaded_map *offmap)
- static void __bpf_offload_dev_netdev_unregister(struct bpf_offload_dev *offdev,
- 						struct net_device *netdev)
- {
--	struct bpf_offload_netdev *ondev, *altdev;
-+	struct bpf_offload_netdev *ondev, *altdev = NULL;
- 	struct bpf_offloaded_map *offmap, *mtmp;
- 	struct bpf_prog_offload *offload, *ptmp;
- 
- 	ASSERT_RTNL();
- 
--	down_write(&bpf_devs_lock);
- 	ondev = rhashtable_lookup_fast(&offdevs, &netdev, offdevs_params);
- 	if (WARN_ON(!ondev))
--		goto unlock;
-+		return;
- 
- 	WARN_ON(rhashtable_remove_fast(&offdevs, &ondev->l, offdevs_params));
--	list_del(&ondev->offdev_netdevs);
- 
- 	/* Try to move the objects to another netdev of the device */
--	altdev = list_first_entry_or_null(&offdev->netdevs,
--					  struct bpf_offload_netdev,
--					  offdev_netdevs);
-+	if (offdev) {
-+		list_del(&ondev->offdev_netdevs);
-+		altdev = list_first_entry_or_null(&offdev->netdevs,
-+						  struct bpf_offload_netdev,
-+						  offdev_netdevs);
-+	}
-+
- 	if (altdev) {
- 		list_for_each_entry(offload, &ondev->progs, offloads)
- 			offload->netdev = altdev->netdev;
-@@ -185,11 +185,9 @@ static void __bpf_offload_dev_netdev_unregister(struct bpf_offload_dev *offdev,
- 	WARN_ON(!list_empty(&ondev->progs));
- 	WARN_ON(!list_empty(&ondev->maps));
- 	kfree(ondev);
--unlock:
--	up_write(&bpf_devs_lock);
- }
- 
--int bpf_prog_offload_init(struct bpf_prog *prog, union bpf_attr *attr)
-+int bpf_prog_dev_bound_init(struct bpf_prog *prog, union bpf_attr *attr)
- {
- 	struct bpf_offload_netdev *ondev;
- 	struct bpf_prog_offload *offload;
-@@ -199,7 +197,11 @@ int bpf_prog_offload_init(struct bpf_prog *prog, union bpf_attr *attr)
- 	    attr->prog_type != BPF_PROG_TYPE_XDP)
- 		return -EINVAL;
- 
--	if (attr->prog_flags)
-+	if (attr->prog_flags & ~BPF_F_XDP_DEV_BOUND_ONLY)
-+		return -EINVAL;
-+
-+	if (attr->prog_type == BPF_PROG_TYPE_SCHED_CLS &&
-+	    attr->prog_flags & BPF_F_XDP_DEV_BOUND_ONLY)
- 		return -EINVAL;
- 
- 	offload = kzalloc(sizeof(*offload), GFP_USER);
-@@ -214,11 +216,23 @@ int bpf_prog_offload_init(struct bpf_prog *prog, union bpf_attr *attr)
- 	if (err)
- 		goto err_maybe_put;
- 
-+	prog->aux->offload_requested = !(attr->prog_flags & BPF_F_XDP_DEV_BOUND_ONLY);
-+
- 	down_write(&bpf_devs_lock);
- 	ondev = bpf_offload_find_netdev(offload->netdev);
- 	if (!ondev) {
--		err = -EINVAL;
--		goto err_unlock;
-+		if (bpf_prog_is_offloaded(prog->aux)) {
-+			err = -EINVAL;
-+			goto err_unlock;
-+		}
-+
-+		/* When only binding to the device, explicitly
-+		 * create an entry in the hashtable.
-+		 */
-+		err = __bpf_offload_dev_netdev_register(NULL, offload->netdev);
-+		if (err)
-+			goto err_unlock;
-+		ondev = bpf_offload_find_netdev(offload->netdev);
- 	}
- 	offload->offdev = ondev->offdev;
- 	prog->aux->offload = offload;
-@@ -321,12 +335,25 @@ bpf_prog_offload_remove_insns(struct bpf_verifier_env *env, u32 off, u32 cnt)
- 	up_read(&bpf_devs_lock);
- }
- 
--void bpf_prog_offload_destroy(struct bpf_prog *prog)
-+void bpf_prog_dev_bound_destroy(struct bpf_prog *prog)
- {
-+	struct bpf_offload_netdev *ondev;
-+	struct net_device *netdev;
-+
-+	rtnl_lock();
- 	down_write(&bpf_devs_lock);
--	if (prog->aux->offload)
-+	if (prog->aux->offload) {
-+		list_del_init(&prog->aux->offload->offloads);
-+
-+		netdev = prog->aux->offload->netdev;
- 		__bpf_prog_offload_destroy(prog);
-+
-+		ondev = bpf_offload_find_netdev(netdev);
-+		if (!ondev->offdev && list_empty(&ondev->progs))
-+			__bpf_offload_dev_netdev_unregister(NULL, netdev);
-+	}
- 	up_write(&bpf_devs_lock);
-+	rtnl_unlock();
- }
- 
- static int bpf_prog_offload_translate(struct bpf_prog *prog)
-@@ -621,7 +648,7 @@ static bool __bpf_offload_dev_match(struct bpf_prog *prog,
- 	struct bpf_offload_netdev *ondev1, *ondev2;
- 	struct bpf_prog_offload *offload;
- 
--	if (!bpf_prog_is_offloaded(prog->aux))
-+	if (!bpf_prog_is_dev_bound(prog->aux))
+@@ -2096,6 +2096,14 @@ bool bpf_prog_map_compatible(struct bpf_map *map,
+ 	if (fp->kprobe_override)
  		return false;
  
- 	offload = prog->aux->offload;
-@@ -667,14 +694,21 @@ bool bpf_offload_prog_map_match(struct bpf_prog *prog, struct bpf_map *map)
- int bpf_offload_dev_netdev_register(struct bpf_offload_dev *offdev,
- 				    struct net_device *netdev)
- {
--	return __bpf_offload_dev_netdev_register(offdev, netdev);
-+	int err;
++	/* XDP programs inserted into maps are not guaranteed to run on
++	 * a particular netdev (and can run outside driver context entirely
++	 * in the case of devmap and cpumap). Until device checks
++	 * are implemented, prohibit adding dev-bound programs to program maps.
++	 */
++	if (bpf_prog_is_dev_bound(fp->aux))
++		return false;
 +
-+	down_write(&bpf_devs_lock);
-+	err = __bpf_offload_dev_netdev_register(offdev, netdev);
-+	up_write(&bpf_devs_lock);
-+	return err;
+ 	spin_lock(&map->owner.lock);
+ 	if (!map->owner.type) {
+ 		/* There's no owner yet where we could check for
+diff --git a/kernel/bpf/offload.c b/kernel/bpf/offload.c
+index f767455ed732..3e173c694bbb 100644
+--- a/kernel/bpf/offload.c
++++ b/kernel/bpf/offload.c
+@@ -755,6 +755,50 @@ void bpf_dev_bound_netdev_unregister(struct net_device *dev)
+ 	up_write(&bpf_devs_lock);
  }
- EXPORT_SYMBOL_GPL(bpf_offload_dev_netdev_register);
  
- void bpf_offload_dev_netdev_unregister(struct bpf_offload_dev *offdev,
- 				       struct net_device *netdev)
- {
-+	down_write(&bpf_devs_lock);
- 	__bpf_offload_dev_netdev_unregister(offdev, netdev);
-+	up_write(&bpf_devs_lock);
- }
- EXPORT_SYMBOL_GPL(bpf_offload_dev_netdev_unregister);
- 
-@@ -708,6 +742,19 @@ void *bpf_offload_dev_priv(struct bpf_offload_dev *offdev)
- }
- EXPORT_SYMBOL_GPL(bpf_offload_dev_priv);
- 
-+void bpf_dev_bound_netdev_unregister(struct net_device *dev)
++int bpf_dev_bound_kfunc_check(struct bpf_verifier_log *log,
++			      struct bpf_prog_aux *prog_aux)
 +{
-+	struct bpf_offload_netdev *ondev;
++	if (!bpf_prog_is_dev_bound(prog_aux)) {
++		bpf_log(log, "metadata kfuncs require device-bound program\n");
++		return -EINVAL;
++	}
 +
-+	ASSERT_RTNL();
++	if (bpf_prog_is_offloaded(prog_aux)) {
++		bpf_log(log, "metadata kfuncs can't be offloaded\n");
++		return -EINVAL;
++	}
 +
-+	down_write(&bpf_devs_lock);
-+	ondev = bpf_offload_find_netdev(dev);
-+	if (ondev && !ondev->offdev)
-+		__bpf_offload_dev_netdev_unregister(NULL, ondev->netdev);
-+	up_write(&bpf_devs_lock);
++	return 0;
++}
++
++void *bpf_dev_bound_resolve_kfunc(struct bpf_prog *prog, u32 func_id)
++{
++	const struct xdp_metadata_ops *ops;
++	void *p = NULL;
++
++	/* We don't hold bpf_devs_lock while resolving several
++	 * kfuncs and can race with the unregister_netdevice().
++	 * We rely on bpf_dev_bound_match() check at attach
++	 * to render this program unusable.
++	 */
++	down_read(&bpf_devs_lock);
++	if (!prog->aux->offload)
++		goto out;
++
++	ops = prog->aux->offload->netdev->xdp_metadata_ops;
++	if (!ops)
++		goto out;
++
++	if (func_id == bpf_xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_TIMESTAMP))
++		p = ops->xmo_rx_timestamp;
++	else if (func_id == bpf_xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_HASH))
++		p = ops->xmo_rx_hash;
++out:
++	up_read(&bpf_devs_lock);
++
++	return p;
 +}
 +
  static int __init bpf_offload_init(void)
  {
  	return rhashtable_init(&offdevs, &offdevs_params);
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 5e90b697f908..fdf4ff3d5a7f 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2491,7 +2491,8 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
- 				 BPF_F_TEST_STATE_FREQ |
- 				 BPF_F_SLEEPABLE |
- 				 BPF_F_TEST_RND_HI32 |
--				 BPF_F_XDP_HAS_FRAGS))
-+				 BPF_F_XDP_HAS_FRAGS |
-+				 BPF_F_XDP_DEV_BOUND_ONLY))
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 026a6789e896..4cfba6c340d7 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2189,6 +2189,12 @@ static int add_kfunc_call(struct bpf_verifier_env *env, u32 func_id, s16 offset)
  		return -EINVAL;
- 
- 	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) &&
-@@ -2575,7 +2576,7 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
- 	prog->aux->attach_btf = attach_btf;
- 	prog->aux->attach_btf_id = attr->attach_btf_id;
- 	prog->aux->dst_prog = dst_prog;
--	prog->aux->offload_requested = !!attr->prog_ifindex;
-+	prog->aux->dev_bound = !!attr->prog_ifindex;
- 	prog->aux->sleepable = attr->prog_flags & BPF_F_SLEEPABLE;
- 	prog->aux->xdp_has_frags = attr->prog_flags & BPF_F_XDP_HAS_FRAGS;
- 
-@@ -2598,8 +2599,8 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
- 	atomic64_set(&prog->aux->refcnt, 1);
- 	prog->gpl_compatible = is_gpl ? 1 : 0;
- 
--	if (bpf_prog_is_offloaded(prog->aux)) {
--		err = bpf_prog_offload_init(prog, attr);
-+	if (bpf_prog_is_dev_bound(prog->aux)) {
-+		err = bpf_prog_dev_bound_init(prog, attr);
- 		if (err)
- 			goto free_prog_sec;
  	}
-diff --git a/net/core/dev.c b/net/core/dev.c
-index a37829de6529..e66da626df84 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -9228,6 +9228,10 @@ static int dev_xdp_attach(struct net_device *dev, struct netlink_ext_ack *extack
- 			NL_SET_ERR_MSG(extack, "Using offloaded program without HW_MODE flag is not supported");
- 			return -EINVAL;
- 		}
-+		if (bpf_prog_is_dev_bound(new_prog->aux) && !bpf_offload_dev_match(new_prog, dev)) {
-+			NL_SET_ERR_MSG(extack, "Program bound to different device");
+ 
++	if (bpf_dev_bound_kfunc_id(func_id)) {
++		err = bpf_dev_bound_kfunc_check(&env->log, prog_aux);
++		if (err)
++			return err;
++	}
++
+ 	desc = &tab->descs[tab->nr_descs++];
+ 	desc->func_id = func_id;
+ 	desc->imm = call_imm;
+@@ -15499,12 +15505,25 @@ static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 			    struct bpf_insn *insn_buf, int insn_idx, int *cnt)
+ {
+ 	const struct bpf_kfunc_desc *desc;
++	void *xdp_kfunc;
+ 
+ 	if (!insn->imm) {
+ 		verbose(env, "invalid kernel function call not eliminated in verifier pass\n");
+ 		return -EINVAL;
+ 	}
+ 
++	*cnt = 0;
++
++	if (bpf_dev_bound_kfunc_id(insn->imm)) {
++		xdp_kfunc = bpf_dev_bound_resolve_kfunc(env->prog, insn->imm);
++		if (xdp_kfunc) {
++			insn->imm = BPF_CALL_IMM(xdp_kfunc);
++			return 0;
++		}
++
++		/* fallback to default kfunc when not supported by netdev */
++	}
++
+ 	/* insn->imm has the btf func_id. Replace it with
+ 	 * an address (relative to __bpf_call_base).
+ 	 */
+@@ -15515,7 +15534,6 @@ static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		return -EFAULT;
+ 	}
+ 
+-	*cnt = 0;
+ 	insn->imm = desc->imm;
+ 	if (insn->off)
+ 		return 0;
+@@ -16522,6 +16540,11 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 	if (tgt_prog) {
+ 		struct bpf_prog_aux *aux = tgt_prog->aux;
+ 
++		if (bpf_prog_is_dev_bound(tgt_prog->aux)) {
++			bpf_log(log, "Replacing device-bound programs not supported\n");
 +			return -EINVAL;
 +		}
- 		if (new_prog->expected_attach_type == BPF_XDP_DEVMAP) {
- 			NL_SET_ERR_MSG(extack, "BPF_XDP_DEVMAP programs can not be attached to a device");
- 			return -EINVAL;
-@@ -10830,6 +10834,7 @@ void unregister_netdevice_many_notify(struct list_head *head,
- 		dev_shutdown(dev);
- 
- 		dev_xdp_uninstall(dev);
-+		bpf_dev_bound_netdev_unregister(dev);
- 
- 		netdev_offload_xstats_disable_all(dev);
- 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index bc1a3d232ae4..d0b6ac896699 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1156,6 +1156,11 @@ enum bpf_link_type {
-  */
- #define BPF_F_XDP_HAS_FRAGS	(1U << 5)
- 
-+/* If BPF_F_XDP_DEV_BOUND_ONLY is used in BPF_PROG_LOAD command, the loaded
-+ * program becomes device-bound but can access XDP metadata.
-+ */
-+#define BPF_F_XDP_DEV_BOUND_ONLY	(1U << 6)
 +
- /* link_create.kprobe_multi.flags used in LINK_CREATE command for
-  * BPF_TRACE_KPROBE_MULTI attach type to create return probe.
+ 		for (i = 0; i < aux->func_info_cnt; i++)
+ 			if (aux->func_info[i].type_id == btf_id) {
+ 				subprog = i;
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 2723623429ac..8da0d73b368e 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -1300,6 +1300,9 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 	if (kattr->test.flags & ~BPF_F_TEST_XDP_LIVE_FRAMES)
+ 		return -EINVAL;
+ 
++	if (bpf_prog_is_dev_bound(prog->aux))
++		return -EINVAL;
++
+ 	if (do_live) {
+ 		if (!batch_size)
+ 			batch_size = NAPI_POLL_WEIGHT;
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index 844c9d99dc0e..a5a7ecf6391c 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -4,6 +4,7 @@
+  * Copyright (c) 2017 Jesper Dangaard Brouer, Red Hat Inc.
   */
+ #include <linux/bpf.h>
++#include <linux/btf_ids.h>
+ #include <linux/filter.h>
+ #include <linux/types.h>
+ #include <linux/mm.h>
+@@ -709,3 +710,66 @@ struct xdp_frame *xdpf_clone(struct xdp_frame *xdpf)
+ 
+ 	return nxdpf;
+ }
++
++__diag_push();
++__diag_ignore_all("-Wmissing-prototypes",
++		  "Global functions as their definitions will be in vmlinux BTF");
++
++/**
++ * bpf_xdp_metadata_rx_timestamp - Read XDP frame RX timestamp.
++ * @ctx: XDP context pointer.
++ * @timestamp: Return value pointer.
++ *
++ * Returns 0 on success or ``-errno`` on error.
++ */
++int bpf_xdp_metadata_rx_timestamp(const struct xdp_md *ctx, u64 *timestamp)
++{
++	return -EOPNOTSUPP;
++}
++
++/**
++ * bpf_xdp_metadata_rx_hash - Read XDP frame RX hash.
++ * @ctx: XDP context pointer.
++ * @hash: Return value pointer.
++ *
++ * Returns 0 on success or ``-errno`` on error.
++ */
++int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, u32 *hash)
++{
++	return -EOPNOTSUPP;
++}
++
++__diag_pop();
++
++BTF_SET8_START(xdp_metadata_kfunc_ids)
++#define XDP_METADATA_KFUNC(_, name) BTF_ID_FLAGS(func, name, 0)
++XDP_METADATA_KFUNC_xxx
++#undef XDP_METADATA_KFUNC
++BTF_SET8_END(xdp_metadata_kfunc_ids)
++
++static const struct btf_kfunc_id_set xdp_metadata_kfunc_set = {
++	.owner = THIS_MODULE,
++	.set   = &xdp_metadata_kfunc_ids,
++};
++
++BTF_ID_LIST(xdp_metadata_kfunc_ids_unsorted)
++#define XDP_METADATA_KFUNC(name, str) BTF_ID(func, str)
++XDP_METADATA_KFUNC_xxx
++#undef XDP_METADATA_KFUNC
++
++u32 bpf_xdp_metadata_kfunc_id(int id)
++{
++	/* xdp_metadata_kfunc_ids is sorted and can't be used */
++	return xdp_metadata_kfunc_ids_unsorted[id];
++}
++
++bool bpf_dev_bound_kfunc_id(u32 btf_id)
++{
++	return btf_id_set8_contains(&xdp_metadata_kfunc_ids, btf_id);
++}
++
++static int __init xdp_metadata_init(void)
++{
++	return register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &xdp_metadata_kfunc_set);
++}
++late_initcall(xdp_metadata_init);
 -- 
 2.39.0.314.g84b9a713c41-goog
 
