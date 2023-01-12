@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C587C63797
-	for <bpf@archiver.kernel.org>; Thu, 12 Jan 2023 16:01:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1412FC54EBC
+	for <bpf@archiver.kernel.org>; Thu, 12 Jan 2023 16:01:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232564AbjALQBL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Jan 2023 11:01:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
+        id S232615AbjALQBO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Jan 2023 11:01:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234146AbjALQAn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 12 Jan 2023 11:00:43 -0500
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E5A625C
-        for <bpf@vger.kernel.org>; Thu, 12 Jan 2023 07:53:36 -0800 (PST)
-Received: by mail-qt1-x836.google.com with SMTP id z12so16745106qtv.5
-        for <bpf@vger.kernel.org>; Thu, 12 Jan 2023 07:53:36 -0800 (PST)
+        with ESMTP id S234755AbjALQAs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 12 Jan 2023 11:00:48 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D46638B
+        for <bpf@vger.kernel.org>; Thu, 12 Jan 2023 07:53:39 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id jr10so9500137qtb.7
+        for <bpf@vger.kernel.org>; Thu, 12 Jan 2023 07:53:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0GttG9cGo2fGw7Ie6+QYs6E6KpCITpSOtaS4vLsszc8=;
-        b=Cs86hcYwXW1kyT1Ar3qnL76ZCbnEz0PuLFPljmDEP02SjXoY1Z3RjcF2o1cZcrfit5
-         QsRJZD+pHkF5Lp65YJU8iZVYq4d7OoijI3kadHA/0fI4edzur6B4RGyBR3E4vF662I/j
-         wNEecnuesci1bDHq9WwQtoP5yUf7oWgsfjkZY6J0nUR1rgflYRRAS4sWd2NT04xkGNd1
-         biHCt1RQu1AIGF++m/rRURQXtxdvBzCNjbZDBLpYJd7CRbWoeaX/X1UlYq/ECAWaQ3II
-         //PX23Rf28b9O8k3iB6GI8CVbc4v8x/BmlLTWUreFOpaZbasteZ4LBpLbnySid+akRmc
-         d17g==
+        bh=1PdPmTP/6nNwfuUbfoIGYl12UKrMMnWaGWGE68CKK00=;
+        b=mN5ObGrhWrxMJkdoooArLIKC8XD0Tvow9VTzY+Dt+bM8q/RM6rw039QTNBaDeGeO3W
+         jc5ev4ZPmIqrRhwhGdLdkzTzN8gZKgSqZNiEFBB8OAHgukMGMx+f/InoklehDY6tX4bB
+         CUnIWUqLRKGvCWlsJSI5IP1MkFCBw1ZTcSf2C/sDXTI6RYUmopTDbtNDJP+JyheZzkFf
+         TzLt3sLAhYi+rdZI7qQ1UV42ayBjgKZFUszSk4A+zhvgOxP4u/jn2S3xHtTb2g+P1y58
+         CnyYcLq2SXGRAvEUlWv58eL9NelCvX7CcHE8aby/6geeLc5bxLV+FACVmTuHiL8tHB3/
+         36HA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0GttG9cGo2fGw7Ie6+QYs6E6KpCITpSOtaS4vLsszc8=;
-        b=uji2i+H0XuWauqeu8gnwFLHfy0MrUUV+hoZm6VP8BJ5mgJNhGgI7bE2/YzwqRxwCQe
-         VPZ02dyom8jH7iWMJ0KDKKW5TNWs+6GmJc/sNoHcVLF+WyaSqcGBNuVf823qyB2W8iry
-         2HT05CSQdoXlbBXSUeFbh28pTMCMMArKVuIKyWEc2CD1gbZrjY6S9eII36B/4wJjC+bG
-         TkUu0EC3VNtT5x5ebf9+hgIFLpTV2kXWDGA04dUcOSijtr+ZVCjwegb4k3JfKaOdRmi9
-         tYsr76FN1FaPrTDd2yEytI4k6bEJ3tG5WEcjHP5sy7rpyxMWXHCeimFR0GMcjKuyiNBz
-         xmVg==
-X-Gm-Message-State: AFqh2kr1sLHe39hNFw2p9/AczT85QPPKqdG3RQiU8NFcbcQJrBQ1cErh
-        240ah/ClId2CN/gHdHFghOg=
-X-Google-Smtp-Source: AMrXdXujjvIkIMxOnezoY+bqzXiyRl7Otg+3lH6xNrFMGBGSGIg4NYiYb1pdv7pwlHe5tHHIls2pwQ==
-X-Received: by 2002:ac8:7409:0:b0:3b1:691f:3d7a with SMTP id p9-20020ac87409000000b003b1691f3d7amr5867423qtq.68.1673538815891;
-        Thu, 12 Jan 2023 07:53:35 -0800 (PST)
+        bh=1PdPmTP/6nNwfuUbfoIGYl12UKrMMnWaGWGE68CKK00=;
+        b=NyPQ0r2G5c2h1PxN2Kr/KA0AXpwabFQ1Fq3gPqlLH8z/GFsw0Zyj+AekkH4ewsqDZO
+         IFqz62xMVB8wqFQSgd4E+bJin913vT0cmFauDxUJZOWWJZB/sqrsYLnL4YZLmhZsrRR6
+         4AqcD/kwWzfC5e+giSpm497gBs4qsRX95iPf3T/DobIGTOcqgJaX6x6PcW5k3bovxqha
+         5ehNVNQ+JHoHqRCDx069ywj88Lm6JPhoMBgbzfn9o6T6rzemSiANx2mwsjSR4y9aCntm
+         SbyDs8vt77ZQizcFwUS8jsOKHGp11UX62WWFE9BMeaHAKvGnDAVfMHNpIL2KqxEi95RD
+         JhCA==
+X-Gm-Message-State: AFqh2kqM1/RTrFI+AjpaMSa2hDg6835aAhW61I5k/LbTAMj3dgQNsBOU
+        7UUKaPZL6Cy3ElzbTwuSczywwDLd83Baol4Xn1U=
+X-Google-Smtp-Source: AMrXdXvcvv5QnOw+ucO2xICHIrhkKnumytKrPNexoUtZMl0/bJueZhRxVfPyCqg8K84Xgk088KoBmg==
+X-Received: by 2002:a05:622a:1741:b0:3a8:2716:ac2d with SMTP id l1-20020a05622a174100b003a82716ac2dmr149575319qtk.56.1673538818785;
+        Thu, 12 Jan 2023 07:53:38 -0800 (PST)
 Received: from vultr.guest ([173.199.122.241])
-        by smtp.gmail.com with ESMTPSA id l17-20020ac848d1000000b003ab43dabfb1sm9280836qtr.55.2023.01.12.07.53.34
+        by smtp.gmail.com with ESMTPSA id l17-20020ac848d1000000b003ab43dabfb1sm9280836qtr.55.2023.01.12.07.53.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 07:53:35 -0800 (PST)
+        Thu, 12 Jan 2023 07:53:38 -0800 (PST)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     42.hyeyoo@gmail.com, vbabka@suse.cz, ast@kernel.org,
         daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
@@ -59,9 +59,9 @@ To:     42.hyeyoo@gmail.com, vbabka@suse.cz, ast@kernel.org,
         iamjoonsoo.kim@lge.com, roman.gushchin@linux.dev
 Cc:     linux-mm@kvack.org, bpf@vger.kernel.org,
         Yafang Shao <laoar.shao@gmail.com>
-Subject: [RFC PATCH bpf-next v2 02/11] mm: percpu: introduce percpu_size()
-Date:   Thu, 12 Jan 2023 15:53:17 +0000
-Message-Id: <20230112155326.26902-3-laoar.shao@gmail.com>
+Subject: [RFC PATCH bpf-next v2 04/11] mm: slab: introduce ksize_full()
+Date:   Thu, 12 Jan 2023 15:53:19 +0000
+Message-Id: <20230112155326.26902-5-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20230112155326.26902-1-laoar.shao@gmail.com>
 References: <20230112155326.26902-1-laoar.shao@gmail.com>
@@ -71,72 +71,138 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce a new helper percpu_size() to report full size of underlying
-allocation of a percpu address.
+When the object is charged to kmemcg, it will alloc extra memory to
+store the kmemcg ownership, so introduce a new helper to include this
+memory size.
+
+The reason we introduce a new helper other than changing the current
+helper ksize() is that the allocation of the kmemcg ownership is a
+nested allocation, which is independent of the original allocation. Some
+user may relays on ksize() to get the layout of this slab, so we'd
+better not changing it.
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- include/linux/percpu.h |  1 +
- mm/percpu.c            | 35 +++++++++++++++++++++++++++++++++++
- 2 files changed, 36 insertions(+)
+ mm/slab.h        |  2 +-
+ mm/slab_common.c | 52 ++++++++++++++++++++++++++++++++++++----------------
+ mm/slob.c        |  2 +-
+ 3 files changed, 38 insertions(+), 18 deletions(-)
 
-diff --git a/include/linux/percpu.h b/include/linux/percpu.h
-index 1338ea2..7be4234 100644
---- a/include/linux/percpu.h
-+++ b/include/linux/percpu.h
-@@ -137,5 +137,6 @@ extern int __init pcpu_page_first_chunk(size_t reserved_size,
- 						__alignof__(type))
+diff --git a/mm/slab.h b/mm/slab.h
+index 35e0b3b..e07ae90 100644
+--- a/mm/slab.h
++++ b/mm/slab.h
+@@ -681,7 +681,7 @@ static inline struct kmem_cache *cache_from_obj(struct kmem_cache *s, void *x)
  
- extern unsigned long pcpu_nr_pages(void);
-+extern size_t percpu_size(void __percpu *ptr);
+ #endif /* CONFIG_SLOB */
  
- #endif /* __LINUX_PERCPU_H */
-diff --git a/mm/percpu.c b/mm/percpu.c
-index acd78da..5580688 100644
---- a/mm/percpu.c
-+++ b/mm/percpu.c
-@@ -2302,6 +2302,41 @@ void free_percpu(void __percpu *ptr)
+-size_t __ksize(const void *objp);
++size_t ___ksize(const void *objp, bool full);
+ 
+ static inline size_t slab_ksize(const struct kmem_cache *s)
+ {
+diff --git a/mm/slab_common.c b/mm/slab_common.c
+index 1cba98a..4f1e2bc 100644
+--- a/mm/slab_common.c
++++ b/mm/slab_common.c
+@@ -1021,21 +1021,11 @@ void kfree(const void *object)
  }
- EXPORT_SYMBOL_GPL(free_percpu);
+ EXPORT_SYMBOL(kfree);
  
-+/**
-+ * percpu_size - report full size of underlying allocation of percpu addr
-+ * @ptr: pointer to percpu area
-+ *
-+ * CONTEXT:
-+ * Can be called from atomic context.
-+ */
-+size_t percpu_size(void __percpu *ptr)
-+{
-+	int bit_off, bits, end, off, size;
-+	struct pcpu_chunk *chunk;
-+	unsigned long flags;
-+	void *addr;
-+
-+	if (!ptr)
-+		return 0;
-+
-+	addr = __pcpu_ptr_to_addr(ptr);
-+
-+	spin_lock_irqsave(&pcpu_lock, flags);
-+	chunk = pcpu_chunk_addr_search(addr);
-+	off = addr - chunk->base_addr;
-+	bit_off = off / PCPU_MIN_ALLOC_SIZE;
-+
-+	/* find end index */
-+	end = find_next_bit(chunk->bound_map, pcpu_chunk_map_bits(chunk),
-+			    bit_off + 1);
-+	spin_unlock_irqrestore(&pcpu_lock, flags);
-+
-+	bits = end - bit_off;
-+	size = bits * PCPU_MIN_ALLOC_SIZE;
-+
-+	return pcpu_obj_full_size(size);
+-/**
+- * __ksize -- Report full size of underlying allocation
+- * @object: pointer to the object
+- *
+- * This should only be used internally to query the true size of allocations.
+- * It is not meant to be a way to discover the usable size of an allocation
+- * after the fact. Instead, use kmalloc_size_roundup(). Using memory beyond
+- * the originally requested allocation size may trigger KASAN, UBSAN_BOUNDS,
+- * and/or FORTIFY_SOURCE.
+- *
+- * Return: size of the actual memory used by @object in bytes
+- */
+-size_t __ksize(const void *object)
++size_t ___ksize(const void *object, bool full)
+ {
++	size_t kmemcg_size = 0;
+ 	struct folio *folio;
++	struct slab *slab;
+ 
+ 	if (unlikely(object == ZERO_SIZE_PTR))
+ 		return 0;
+@@ -1054,7 +1044,27 @@ size_t __ksize(const void *object)
+ 	skip_orig_size_check(folio_slab(folio)->slab_cache, object);
+ #endif
+ 
+-	return slab_ksize(folio_slab(folio)->slab_cache);
++	slab = folio_slab(folio);
++	if (memcg_kmem_enabled() && full && slab_objcgs(slab))
++		kmemcg_size = sizeof(struct obj_cgroup *);
++	return slab_ksize(slab->slab_cache) + kmemcg_size;
 +}
 +
- bool __is_kernel_percpu_address(unsigned long addr, unsigned long *can_addr)
++/**
++ * __ksize -- Report full size of underlying allocation
++ * @object: pointer to the object
++ *
++ * This should only be used internally to query the true size of allocations.
++ * It is not meant to be a way to discover the usable size of an allocation
++ * after the fact. Instead, use kmalloc_size_roundup(). Using memory beyond
++ * the originally requested allocation size may trigger KASAN, UBSAN_BOUNDS,
++ * and/or FORTIFY_SOURCE.
++ *
++ * Return: size of the actual memory used by @object in bytes
++ */
++size_t __ksize(const void *object)
++{
++	return ___ksize(object, false);
+ }
+ 
+ void *kmalloc_trace(struct kmem_cache *s, gfp_t gfpflags, size_t size)
+@@ -1428,7 +1438,7 @@ void kfree_sensitive(const void *p)
+ }
+ EXPORT_SYMBOL(kfree_sensitive);
+ 
+-size_t ksize(const void *objp)
++size_t _ksize(const void *objp, bool full)
  {
- #ifdef CONFIG_SMP
+ 	/*
+ 	 * We need to first check that the pointer to the object is valid.
+@@ -1448,10 +1458,20 @@ size_t ksize(const void *objp)
+ 	if (unlikely(ZERO_OR_NULL_PTR(objp)) || !kasan_check_byte(objp))
+ 		return 0;
+ 
+-	return kfence_ksize(objp) ?: __ksize(objp);
++	return kfence_ksize(objp) ?: ___ksize(objp, full);
+ }
+ EXPORT_SYMBOL(ksize);
+ 
++size_t ksize(const void *objp)
++{
++	return _ksize(objp, false);
++}
++
++size_t ksize_full(const void *objp)
++{
++	return _ksize(objp, true);
++}
++
+ /* Tracepoints definitions. */
+ EXPORT_TRACEPOINT_SYMBOL(kmalloc);
+ EXPORT_TRACEPOINT_SYMBOL(kmem_cache_alloc);
+diff --git a/mm/slob.c b/mm/slob.c
+index fe567fcf..8c46bdc 100644
+--- a/mm/slob.c
++++ b/mm/slob.c
+@@ -579,7 +579,7 @@ size_t kmalloc_size_roundup(size_t size)
+ EXPORT_SYMBOL(kmalloc_size_roundup);
+ 
+ /* can't use ksize for kmem_cache_alloc memory, only kmalloc */
+-size_t __ksize(const void *block)
++size_t ___ksize(const void *block, bool full)
+ {
+ 	struct folio *folio;
+ 	unsigned int align;
 -- 
 1.8.3.1
 
