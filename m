@@ -2,52 +2,53 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9A73C61DB3
-	for <bpf@archiver.kernel.org>; Thu, 12 Jan 2023 16:01:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95240C67871
+	for <bpf@archiver.kernel.org>; Thu, 12 Jan 2023 16:01:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229730AbjALQBJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Jan 2023 11:01:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
+        id S232699AbjALQBM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Jan 2023 11:01:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231248AbjALQAm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 12 Jan 2023 11:00:42 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BAE2203B
-        for <bpf@vger.kernel.org>; Thu, 12 Jan 2023 07:53:34 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id jr10so9499890qtb.7
-        for <bpf@vger.kernel.org>; Thu, 12 Jan 2023 07:53:34 -0800 (PST)
+        with ESMTP id S234287AbjALQAo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 12 Jan 2023 11:00:44 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29776262
+        for <bpf@vger.kernel.org>; Thu, 12 Jan 2023 07:53:37 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id a25so9626912qto.10
+        for <bpf@vger.kernel.org>; Thu, 12 Jan 2023 07:53:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+b4oZC4k/u0MuI+eBhb5GDAbvtZlveaanBpbCBZGLuk=;
-        b=gH+YZsuYyNPgyszOqubkRLCS29SIJOB9PrQx1tS+xlG3QyAJ3bLTTWBPampZXiuPqs
-         KTjA5w3a6VtPl+bBdFurqalw8lyuxjz2A4sG9yff/uDc0KPTelAtNFUbVSWtgycVq3QP
-         ETITTnKP1toA9/o1j6NBt8NBf3hWk/pPK+Xbs3dnttA7wutvGvRjhvoiBOFTxKUyinsL
-         ZQzRD5nVGXI+QwkacI52G8jp09+KNKkVBdoJQKTHBZ+Ba0gFhaMYPjze8kqNsDHZdRaS
-         z2pSWMd+FbmGdTAJDgAgYGgXPSczYqXuIialaR265GI33BGLZMCQYdpezEEJ7gEamKHw
-         leqA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mVUzU5Lm9v4TwCr8MR19Sbma13E60mByaOAa7yrtf24=;
+        b=ALz+sfZNfS4qifRdKVjJ8liTZOnDRU+va/zE0oxhTHHmiy4uVJp/MTYMO3s8HKBBX7
+         kfY7l06ClrnXzuJ7SwOeoV5XP8m4rE/PpAwk2M/ze8SKWK3++rl0/fpfL9a1+7NncPo/
+         SsTYC3AIuXIEEPnYcGdNOIgGgXh6MnLjg7cFUrFJw3+s5Pzcdcwez0u3SEm8SWfVa8SI
+         lV3T8Y6TP2pAb72E04aXg+cxHgxvtBaUv2MNbXhHDcG968NZCThz/0JKKSqupM5LkS5s
+         bzBoNfaoCpdlDpOHwABYaSzg706CqymnvMJ07sqq4vcd/D+PIpKMKMaWwx7WypE2pfis
+         NrUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+b4oZC4k/u0MuI+eBhb5GDAbvtZlveaanBpbCBZGLuk=;
-        b=hiS5Ejc4L5wkmlaBi/Mi3aQ8/7Qb8rMs2yvQkJVgGtWybh48JKqA19ukdGk6WWcNkB
-         nvQg6bkg0NYQ20PdavCkgduKCS/b8H6c5ixbpwI5povW7gfxJgjoaMyawUYGPV9azHzi
-         Er++FadDiEP44MIZMmJrngKGRju5x54gXsxOdU0rbse9Rq4cAqWdj/25tfvDR4yxMgVh
-         dxLrzwcDbrK3irG+z4JL9qTs3jCvJguF0R+WivPeggldeWUic8wW+2X2i1ewq1coqqeB
-         P6h5XFGiGyD3gDf2BKKdpG0xslpqww/thhUsAPSMLnYQMfy2sEj+t6+KZrx3zOtAdeHY
-         uItQ==
-X-Gm-Message-State: AFqh2krM7vbg7ocLI7EBnnFDxXd4Ss8kjhLS8gIEva/MkDRvcq0mcKAt
-        Zv5VGuVsKg2FvCN7QgYCJI0=
-X-Google-Smtp-Source: AMrXdXtGvY5tQVEkBtICluE5ihHdcXFG1vx0FJ6hV+iSciT1RQdYmWKrihwzvymSMNTVc073jfMhtA==
-X-Received: by 2002:a05:622a:1f10:b0:3a9:7782:fd7f with SMTP id ca16-20020a05622a1f1000b003a97782fd7fmr105567367qtb.21.1673538813262;
-        Thu, 12 Jan 2023 07:53:33 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mVUzU5Lm9v4TwCr8MR19Sbma13E60mByaOAa7yrtf24=;
+        b=UMkJtSaGFuo+57DS5ovt76zX/TXD9k/3qgQfvy3huzEMTn0TEpCFw+goNP1qHj8NBH
+         Kfzw+Gh2k1ZgijNrAxmEa6yzjT3RZt8lD6ONrJnEdeyWg0k5Ybqum7sRNYiW8iuGo4AA
+         CdDwNQDLv1N5m4awem+/q69m/fAitheSFa8S272Ww+Q4zfXeasjDm1fMBsO9ItFP4oMe
+         RU4oJCwudrnaH239y8HkDwqOe986orYyrxdIfFwghGs3KyRlrIysBP+7B42lk/hOWi8n
+         EiITgsZwoFbaKqCyghTnH+NLwYCuHE6gfVMgAneNmI09arAqKpyDT0j7FwHIG/PY5sFg
+         QRXQ==
+X-Gm-Message-State: AFqh2koWbA2s60ND0ZzScro8+hsKG1/c+HuWEEq92qXd614h2XRQERzq
+        Y4RMX6uMaFob4oKzotS0ss4=
+X-Google-Smtp-Source: AMrXdXsF0qX10TMukl4qhalYqOJc8cvWNp4i4Otvd5G6MW0t1u1Ue6UiuE5Z2o4FUsT/NSZGV/wCPQ==
+X-Received: by 2002:ac8:6c7:0:b0:3a7:f424:d1bb with SMTP id j7-20020ac806c7000000b003a7f424d1bbmr14664614qth.21.1673538817402;
+        Thu, 12 Jan 2023 07:53:37 -0800 (PST)
 Received: from vultr.guest ([173.199.122.241])
-        by smtp.gmail.com with ESMTPSA id l17-20020ac848d1000000b003ab43dabfb1sm9280836qtr.55.2023.01.12.07.53.31
+        by smtp.gmail.com with ESMTPSA id l17-20020ac848d1000000b003ab43dabfb1sm9280836qtr.55.2023.01.12.07.53.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 07:53:32 -0800 (PST)
+        Thu, 12 Jan 2023 07:53:36 -0800 (PST)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     42.hyeyoo@gmail.com, vbabka@suse.cz, ast@kernel.org,
         daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
@@ -58,162 +59,86 @@ To:     42.hyeyoo@gmail.com, vbabka@suse.cz, ast@kernel.org,
         iamjoonsoo.kim@lge.com, roman.gushchin@linux.dev
 Cc:     linux-mm@kvack.org, bpf@vger.kernel.org,
         Yafang Shao <laoar.shao@gmail.com>
-Subject: [RFC PATCH bpf-next v2 00/11] mm, bpf: Add BPF into /proc/meminfo 
-Date:   Thu, 12 Jan 2023 15:53:15 +0000
-Message-Id: <20230112155326.26902-1-laoar.shao@gmail.com>
+Subject: [RFC PATCH bpf-next v2 03/11] mm: slab: rename obj_full_size()
+Date:   Thu, 12 Jan 2023 15:53:18 +0000
+Message-Id: <20230112155326.26902-4-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20230112155326.26902-1-laoar.shao@gmail.com>
+References: <20230112155326.26902-1-laoar.shao@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently there's no way to get BPF memory usage, while we can only
-estimate the usage by bpftool or memcg, both of which are not reliable.
+The helper obj_full_size() is a little misleading, because it is only
+valid when kmemcg is enabled. Meanwhile it is only used when kmemcg is
+enabled currently, so we just need to rename it to a more meaningful name.
 
-- bpftool
-  `bpftool {map,prog} show` can show us the memlock of each map and
-  prog, but the memlock is vary from the real memory size. The memlock
-  of a bpf object is approximately
-  `round_up(key_size + value_size, 8) * max_entries`,
-  so 1) it can't apply to the non-preallocated bpf map which may
-  increase or decrease the real memory size dynamically. 2) the element
-  size of some bpf map is not `key_size + value_size`, for example the
-  element size of htab is
-  `sizeof(struct htab_elem) + round_up(key_size, 8) + round_up(value_size, 8)`
-  That said the differece between these two values may be very great if
-  the key_size and value_size is small. For example in my verifaction,
-  the size of memlock and real memory of a preallocated hash map are,
+Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+Cc: Roman Gushchin <roman.gushchin@linux.dev>
+---
+ mm/slab.h | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
-  $ grep BPF /proc/meminfo
-  BPF:                 350 kB  <<< the size of preallocated memalloc pool
-
-  (create hash map)
-
-  $ bpftool map show
-  41549: hash  name count_map  flags 0x0
-        key 4B  value 4B  max_entries 1048576  memlock 8388608B
-
-  $ grep BPF /proc/meminfo
-  BPF:               82284 kB
+diff --git a/mm/slab.h b/mm/slab.h
+index 7cc4329..35e0b3b 100644
+--- a/mm/slab.h
++++ b/mm/slab.h
+@@ -467,7 +467,10 @@ static inline void memcg_free_slab_cgroups(struct slab *slab)
+ 	slab->memcg_data = 0;
+ }
  
-  So the real memory size is $((82284 - 350)) which is 81934 kB 
-  while the memlock is only 8192 kB. 
-
-- memcg  
-  With memcg we only know that the BPF memory usage is less than
-  memory.kmem.usage_in_bytes (or memory.current in v2). Furthermore, we
-  only know that the BPF memory usage is less than $MemTotal if the BPF
-  object is charged into root memcg :)
-
-So we need a way to get the BPF memory usage especially there will be
-more and more bpf programs running on the production environment. The
-memory usage of BPF memory is not trivial, which deserves a new item in
-/proc/meminfo.
-
-There're some ways to calculate the BPF memory usage. They all have pros
-and cons.
-
-- Option 1: Annotate BPF memory allocation only
-  It is how I implemented in RFC v1. You can look into the detail and
-  discussion on it via the link below[1]. 
-  - pros
-    We only need to annotate the BPF memory allocation, and then we can
-    find these allocated memory in the free path automatically. So it is
-    very easy to use, and we don't need to worry about the stat leak.
-  - cons
-    We must store the information of these allocated memory, in
-    particular the allocated slab objects. So it takes extra memory. If
-    we introduce a new member into struct page or add this member into
-    page_ext, it will take at least 0.2% of the total memory on 64bit
-    system, that is not acceptible.
-    One way to reduce this memory overhead is to introduce dynamic page
-    extension, but it will take great effort and it may not worth it.
-
-- Option 2: Annotate both allocation and free
-  It is similar to how I implemented in an earlier version[2].
-  - pros
-    There's almost no memory overhead.
-  - cons    
-    All the memory allocation and free must use the BPF helpers, but
-    can't use the generic helpers like kfree/vfree/percpu_free. So if
-    the user forget to use the helpers we introduced to allocate or
-    free BPF memory, there will be stat leak.
-    It is not easy to annotate some derferred allocation, in particular
-    the kfree_rcu(). So the user have to use call_rcu() instead of
-    kfree_rcu(). Another risk is that if we introduce other deferred
-    free helpers in the future, this BPF statistic may break easily.
-    
-- Option 3: Calculate the memory size via the pointer
-  It is how I implement in this patchset.    
-  After allocating some BPF memory, we get the full size from the
-  pointer and add it; Before freeing the BPF memory, we get the full
-  size from the pointer and sub it.
-  - pros    
-    No memory overhead.    
-    No code churn in MM core allocation and free path.
-    The impementation is quite clear and easy to maintain.
-  - cons
-    The calculation is not embedded in the MM allocation/free path, so
-    there will be some redundant code to execute to get the size via
-    pointer.    
-    BPF memory allocation and free must use the helpers we introduced,
-    otherwise there will be stat leak.
-
-I perfer the option 3. Its cons can be justified.    
-- bpf_map_free should be paired with bpf_map_alloc, that's reasonable.
-- Regarding the possible extra cpu cycles it may take, the user should
-  not allocate and free memory in the critical path if it is latency
-  sensitive. 
-
-[1]. https://lwn.net/Articles/917647/
-[2]. https://lore.kernel.org/linux-mm/20220921170002.29557-1-laoar.shao@gmail.com/
-
-v1->v2: don't use page_ext (Vlastimil, Hyeonggon)
-
-Yafang Shao (11):
-  mm: percpu: count memcg relevant memory only when kmemcg is enabled
-  mm: percpu: introduce percpu_size()
-  mm: slab: rename obj_full_size()
-  mm: slab: introduce ksize_full()
-  mm: vmalloc: introduce vsize()
-  mm: util: introduce kvsize()
-  bpf: introduce new helpers bpf_ringbuf_pages_{alloc,free}
-  bpf: use bpf_map_kzalloc in arraymap
-  bpf: use bpf_map_kvcalloc in bpf_local_storage
-  bpf: add and use bpf map free helpers
-  bpf: introduce bpf memory statistics
-
- fs/proc/meminfo.c              |   4 ++
- include/linux/bpf.h            | 115 +++++++++++++++++++++++++++++++++++++++--
- include/linux/percpu.h         |   1 +
- include/linux/slab.h           |  10 ++++
- include/linux/vmalloc.h        |  15 ++++++
- kernel/bpf/arraymap.c          |  20 +++----
- kernel/bpf/bpf_cgrp_storage.c  |   2 +-
- kernel/bpf/bpf_inode_storage.c |   2 +-
- kernel/bpf/bpf_local_storage.c |  24 ++++-----
- kernel/bpf/bpf_task_storage.c  |   2 +-
- kernel/bpf/cpumap.c            |  13 +++--
- kernel/bpf/devmap.c            |  10 ++--
- kernel/bpf/hashtab.c           |   8 +--
- kernel/bpf/helpers.c           |   2 +-
- kernel/bpf/local_storage.c     |  12 ++---
- kernel/bpf/lpm_trie.c          |  14 ++---
- kernel/bpf/memalloc.c          |  19 ++++++-
- kernel/bpf/ringbuf.c           |  75 ++++++++++++++++++---------
- kernel/bpf/syscall.c           |  54 ++++++++++++++++++-
- mm/percpu-internal.h           |   4 +-
- mm/percpu.c                    |  35 +++++++++++++
- mm/slab.h                      |  19 ++++---
- mm/slab_common.c               |  52 +++++++++++++------
- mm/slob.c                      |   2 +-
- mm/util.c                      |  15 ++++++
- net/core/bpf_sk_storage.c      |   4 +-
- net/core/sock_map.c            |   2 +-
- net/xdp/xskmap.c               |   2 +-
- 28 files changed, 422 insertions(+), 115 deletions(-)
-
+-static inline size_t obj_full_size(struct kmem_cache *s)
++/*
++ * This helper is only valid when kmemcg isn't disabled.
++ */
++static inline size_t obj_kmemcg_size(struct kmem_cache *s)
+ {
+ 	/*
+ 	 * For each accounted object there is an extra space which is used
+@@ -508,7 +511,7 @@ static inline bool memcg_slab_pre_alloc_hook(struct kmem_cache *s,
+ 			goto out;
+ 	}
+ 
+-	if (obj_cgroup_charge(objcg, flags, objects * obj_full_size(s)))
++	if (obj_cgroup_charge(objcg, flags, objects * obj_kmemcg_size(s)))
+ 		goto out;
+ 
+ 	*objcgp = objcg;
+@@ -537,7 +540,7 @@ static inline void memcg_slab_post_alloc_hook(struct kmem_cache *s,
+ 			if (!slab_objcgs(slab) &&
+ 			    memcg_alloc_slab_cgroups(slab, s, flags,
+ 							 false)) {
+-				obj_cgroup_uncharge(objcg, obj_full_size(s));
++				obj_cgroup_uncharge(objcg, obj_kmemcg_size(s));
+ 				continue;
+ 			}
+ 
+@@ -545,9 +548,9 @@ static inline void memcg_slab_post_alloc_hook(struct kmem_cache *s,
+ 			obj_cgroup_get(objcg);
+ 			slab_objcgs(slab)[off] = objcg;
+ 			mod_objcg_state(objcg, slab_pgdat(slab),
+-					cache_vmstat_idx(s), obj_full_size(s));
++					cache_vmstat_idx(s), obj_kmemcg_size(s));
+ 		} else {
+-			obj_cgroup_uncharge(objcg, obj_full_size(s));
++			obj_cgroup_uncharge(objcg, obj_kmemcg_size(s));
+ 		}
+ 	}
+ 	obj_cgroup_put(objcg);
+@@ -576,9 +579,9 @@ static inline void memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab,
+ 			continue;
+ 
+ 		objcgs[off] = NULL;
+-		obj_cgroup_uncharge(objcg, obj_full_size(s));
++		obj_cgroup_uncharge(objcg, obj_kmemcg_size(s));
+ 		mod_objcg_state(objcg, slab_pgdat(slab), cache_vmstat_idx(s),
+-				-obj_full_size(s));
++				-obj_kmemcg_size(s));
+ 		obj_cgroup_put(objcg);
+ 	}
+ }
 -- 
 1.8.3.1
 
