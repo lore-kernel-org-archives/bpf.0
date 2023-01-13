@@ -2,41 +2,41 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00C14C54EBE
-	for <bpf@archiver.kernel.org>; Fri, 13 Jan 2023 09:13:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 868FFC677F1
+	for <bpf@archiver.kernel.org>; Fri, 13 Jan 2023 09:13:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240794AbjAMJNN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 13 Jan 2023 04:13:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43710 "EHLO
+        id S240314AbjAMJNS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 13 Jan 2023 04:13:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240739AbjAMJMO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 13 Jan 2023 04:12:14 -0500
+        with ESMTP id S240713AbjAMJMQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 13 Jan 2023 04:12:16 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3AA2A46A
-        for <bpf@vger.kernel.org>; Fri, 13 Jan 2023 01:09:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A4EBCBE
+        for <bpf@vger.kernel.org>; Fri, 13 Jan 2023 01:09:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673600993;
+        s=mimecast20190719; t=1673600998;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4Xa6rCBRJrVK1eXRuijrJkoStISh9NdDuUsF0DClMfI=;
-        b=ig0dTtNbGRvQvOr4QNLzWgImphTZBFFSaHoIFgTiKSqAxwYnDinfpW/dPLVmosdnrmt0fp
-        voIG/OZ+VGjPBsjiEM5UKUSNx4Shh5F5vZouzBF4iuZOo/x7hjRIJQft1HsGSNHIusE6Wd
-        iYOeQyaxPD7uLRReR1z7d3Hv3qo9zaw=
+        bh=LVb5mv99X03TkOTGFYsj2OWMkCM3gjV8Eptdveyi1aE=;
+        b=X0SXG3+QUXItCim/Ea1B4BaJeMXCo+1rGHOxDS4DetC169lHeuDOzyapA+mZjQmRqkqBnb
+        n0GU/QUzze1oSe43t3yHe5AgxKbBECffyKHCzHUIbTXZuZi6h5nt5eo+zMffbrM2C5SeUL
+        GQd6dSaU6LcLdwiI7byF+OMutHyZtUY=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-617--Uo7N5OcNxi7SH9osQobYw-1; Fri, 13 Jan 2023 04:09:48 -0500
-X-MC-Unique: -Uo7N5OcNxi7SH9osQobYw-1
+ us-mta-635-0l8PAK4aN0yc464cH5fNOA-1; Fri, 13 Jan 2023 04:09:55 -0500
+X-MC-Unique: 0l8PAK4aN0yc464cH5fNOA-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3215D811E9C;
-        Fri, 13 Jan 2023 09:09:47 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9F55885A588;
+        Fri, 13 Jan 2023 09:09:54 +0000 (UTC)
 Received: from plouf.redhat.com (ovpn-193-50.brq.redhat.com [10.40.193.50])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 035C41121314;
-        Fri, 13 Jan 2023 09:09:44 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6EF401121314;
+        Fri, 13 Jan 2023 09:09:52 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -49,9 +49,9 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH HID for-next v2 3/9] selftests: hid: attach/detach 2 bpf programs, not just one
-Date:   Fri, 13 Jan 2023 10:09:29 +0100
-Message-Id: <20230113090935.1763477-4-benjamin.tissoires@redhat.com>
+Subject: [PATCH HID for-next v2 6/9] HID: bpf: rework how programs are attached and stored in the kernel
+Date:   Fri, 13 Jan 2023 10:09:32 +0100
+Message-Id: <20230113090935.1763477-7-benjamin.tissoires@redhat.com>
 In-Reply-To: <20230113090935.1763477-1-benjamin.tissoires@redhat.com>
 References: <20230113090935.1763477-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
@@ -61,87 +61,352 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a second BPF program to attach to the device, as the development of
-this feature showed that we also need to ensure we can detach multiple
-programs to a device (hid_bpf_link->hid_table_index was actually not set
-initially, and this lead to any BPF program not being released except for
-the first one).
+Previously, HID-BPF was relying on a bpf tracing program to be notified
+when a program was released from userspace. This is error prone, as
+LLVM sometimes inline the function and sometimes not.
+
+So instead of messing up with the bpf prog ref count, we can use the
+bpf_link concept which actually matches exactly what we want:
+- a bpf_link represents the fact that a given program is attached to a
+  given HID device
+- as long as the bpf_link has fd opened (either by the userspace program
+  still being around or by pinning the bpf object in the bpffs), the
+  program stays attached to the HID device
+- once every user has closed the fd, we get called by
+  hid_bpf_link_release() that we no longer have any users, and we can
+  disconnect the program to the device in 2 passes: first atomically clear
+  the bit saying that the link is active, and then calling release_work in
+  a scheduled work item.
+
+This solves entirely the problems of BPF tracing not showing up and is
+definitely cleaner.
 
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
 ---
 
 changes in v2:
-- rewrote commit message s/->index/->hid_table_index/
+- renamed struct hid_bpf_link->index into struct hid_bpf_link->hid_table_index
+- renamed prog_idx into prog_table_idx in __hid_bpf_attach_prog()
 ---
- tools/testing/selftests/hid/hid_bpf.c   |  8 +++++++-
- tools/testing/selftests/hid/progs/hid.c | 13 +++++++++++++
- 2 files changed, 20 insertions(+), 1 deletion(-)
+ Documentation/hid/hid-bpf.rst       |  12 ++-
+ drivers/hid/bpf/hid_bpf_dispatch.c  |  18 ++--
+ drivers/hid/bpf/hid_bpf_jmp_table.c | 126 +++++++++++++++-------------
+ include/linux/hid_bpf.h             |   7 ++
+ 4 files changed, 95 insertions(+), 68 deletions(-)
 
-diff --git a/tools/testing/selftests/hid/hid_bpf.c b/tools/testing/selftests/hid/hid_bpf.c
-index 6615c26fb5dd..d215bb492eb4 100644
---- a/tools/testing/selftests/hid/hid_bpf.c
-+++ b/tools/testing/selftests/hid/hid_bpf.c
-@@ -616,6 +616,7 @@ TEST_F(hid_bpf, test_attach_detach)
+diff --git a/Documentation/hid/hid-bpf.rst b/Documentation/hid/hid-bpf.rst
+index a55f191d49a3..c205f92b7bcc 100644
+--- a/Documentation/hid/hid-bpf.rst
++++ b/Documentation/hid/hid-bpf.rst
+@@ -427,12 +427,22 @@ program first::
+ 	prog_fd = bpf_program__fd(hid_skel->progs.attach_prog);
+ 
+ 	err = bpf_prog_test_run_opts(prog_fd, &tattrs);
+-	return err;
++	if (err)
++		return err;
++
++	return args.retval; /* the fd of the created bpf_link */
+   }
+ 
+ Our userspace program can now listen to notifications on the ring buffer, and
+ is awaken only when the value changes.
+ 
++When the userspace program doesn't need to listen to events anymore, it can just
++close the returned fd from :c:func:`attach_filter`, which will tell the kernel to
++detach the program from the HID device.
++
++Of course, in other use cases, the userspace program can also pin the fd to the
++BPF filesystem through a call to :c:func:`bpf_obj_pin`, as with any bpf_link.
++
+ Controlling the device
+ ----------------------
+ 
+diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dispatch.c
+index 58e608ebf0fa..8d29fd361ab9 100644
+--- a/drivers/hid/bpf/hid_bpf_dispatch.c
++++ b/drivers/hid/bpf/hid_bpf_dispatch.c
+@@ -249,7 +249,9 @@ int hid_bpf_reconnect(struct hid_device *hdev)
+  * @prog_fd: an fd in the user process representing the program to attach
+  * @flags: any logical OR combination of &enum hid_bpf_attach_flags
+  *
+- * @returns %0 on success, an error code otherwise.
++ * @returns an fd of a bpf_link object on success (> %0), an error code otherwise.
++ * Closing this fd will detach the program from the HID device (unless the bpf_link
++ * is pinned to the BPF file system).
+  */
+ /* called from syscall */
+ noinline int
+@@ -257,7 +259,7 @@ hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, __u32 flags)
  {
- 	const struct test_program progs[] = {
- 		{ .name = "hid_first_event" },
-+		{ .name = "hid_second_event" },
- 	};
- 	__u8 buf[10] = {0};
- 	int err;
-@@ -634,7 +635,10 @@ TEST_F(hid_bpf, test_attach_detach)
- 	ASSERT_EQ(buf[0], 1);
- 	ASSERT_EQ(buf[2], 47);
+ 	struct hid_device *hdev;
+ 	struct device *dev;
+-	int err, prog_type = hid_bpf_get_prog_attach_type(prog_fd);
++	int fd, err, prog_type = hid_bpf_get_prog_attach_type(prog_fd);
  
--	/* pin the program and immediately unpin it */
-+	/* make sure both programs are run */
-+	ASSERT_EQ(buf[3], 52);
-+
-+	/* pin the first program and immediately unpin it */
- #define PIN_PATH "/sys/fs/bpf/hid_first_event"
- 	bpf_program__pin(self->skel->progs.hid_first_event, PIN_PATH);
- 	remove(PIN_PATH);
-@@ -660,6 +664,7 @@ TEST_F(hid_bpf, test_attach_detach)
- 	ASSERT_EQ(buf[0], 1);
- 	ASSERT_EQ(buf[1], 47);
- 	ASSERT_EQ(buf[2], 0);
-+	ASSERT_EQ(buf[3], 0);
+ 	if (!hid_bpf_ops)
+ 		return -EINVAL;
+@@ -283,17 +285,19 @@ hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, __u32 flags)
+ 			return err;
+ 	}
  
- 	/* re-attach our program */
+-	err = __hid_bpf_attach_prog(hdev, prog_type, prog_fd, flags);
+-	if (err)
+-		return err;
++	fd = __hid_bpf_attach_prog(hdev, prog_type, prog_fd, flags);
++	if (fd < 0)
++		return fd;
  
-@@ -677,6 +682,7 @@ TEST_F(hid_bpf, test_attach_detach)
- 	ASSERT_EQ(err, 6) TH_LOG("read_hidraw");
- 	ASSERT_EQ(buf[0], 1);
- 	ASSERT_EQ(buf[2], 47);
-+	ASSERT_EQ(buf[3], 52);
+ 	if (prog_type == HID_BPF_PROG_TYPE_RDESC_FIXUP) {
+ 		err = hid_bpf_reconnect(hdev);
+-		if (err)
++		if (err) {
++			close_fd(fd);
+ 			return err;
++		}
+ 	}
+ 
+-	return 0;
++	return fd;
  }
  
- /*
-diff --git a/tools/testing/selftests/hid/progs/hid.c b/tools/testing/selftests/hid/progs/hid.c
-index 6a86af0aa545..88c593f753b5 100644
---- a/tools/testing/selftests/hid/progs/hid.c
-+++ b/tools/testing/selftests/hid/progs/hid.c
-@@ -32,6 +32,19 @@ int BPF_PROG(hid_first_event, struct hid_bpf_ctx *hid_ctx)
- 	return hid_ctx->size;
+ /**
+diff --git a/drivers/hid/bpf/hid_bpf_jmp_table.c b/drivers/hid/bpf/hid_bpf_jmp_table.c
+index 207972b028d9..b7eb5c5e435f 100644
+--- a/drivers/hid/bpf/hid_bpf_jmp_table.c
++++ b/drivers/hid/bpf/hid_bpf_jmp_table.c
+@@ -322,16 +322,6 @@ static int hid_bpf_insert_prog(int prog_fd, struct bpf_prog *prog)
+ 	if (err)
+ 		goto out;
+ 
+-	/*
+-	 * The program has been safely inserted, decrement the reference count
+-	 * so it doesn't interfere with the number of actual user handles.
+-	 * This is safe to do because:
+-	 * - we overrite the put_ptr in the prog fd map
+-	 * - we also have a cleanup function that monitors when a program gets
+-	 *   released and we manually do the cleanup in the prog fd map
+-	 */
+-	bpf_prog_sub(prog, 1);
+-
+ 	/* return the index */
+ 	err = index;
+ 
+@@ -365,14 +355,46 @@ int hid_bpf_get_prog_attach_type(int prog_fd)
+ 	return prog_type;
  }
  
-+SEC("?fmod_ret/hid_bpf_device_event")
-+int BPF_PROG(hid_second_event, struct hid_bpf_ctx *hid_ctx)
++static void hid_bpf_link_release(struct bpf_link *link)
 +{
-+	__u8 *rw_data = hid_bpf_get_data(hid_ctx, 0 /* offset */, 4 /* size */);
++	struct hid_bpf_link *hid_link =
++		container_of(link, struct hid_bpf_link, link);
 +
-+	if (!rw_data)
-+		return 0; /* EPERM check */
-+
-+	rw_data[3] = rw_data[2] + 5;
-+
-+	return hid_ctx->size;
++	__clear_bit(hid_link->hid_table_index, jmp_table.enabled);
++	schedule_work(&release_work);
 +}
 +
- SEC("?fmod_ret/hid_bpf_device_event")
- int BPF_PROG(hid_change_report_id, struct hid_bpf_ctx *hid_ctx)
++static void hid_bpf_link_dealloc(struct bpf_link *link)
++{
++	struct hid_bpf_link *hid_link =
++		container_of(link, struct hid_bpf_link, link);
++
++	kfree(hid_link);
++}
++
++static void hid_bpf_link_show_fdinfo(const struct bpf_link *link,
++					 struct seq_file *seq)
++{
++	seq_printf(seq,
++		   "attach_type:\tHID-BPF\n");
++}
++
++static const struct bpf_link_ops hid_bpf_link_lops = {
++	.release = hid_bpf_link_release,
++	.dealloc = hid_bpf_link_dealloc,
++	.show_fdinfo = hid_bpf_link_show_fdinfo,
++};
++
+ /* called from syscall */
+ noinline int
+ __hid_bpf_attach_prog(struct hid_device *hdev, enum hid_bpf_prog_type prog_type,
+ 		      int prog_fd, __u32 flags)
  {
++	struct bpf_link_primer link_primer;
++	struct hid_bpf_link *link;
+ 	struct bpf_prog *prog = NULL;
+ 	struct hid_bpf_prog_entry *prog_entry;
+-	int cnt, err = -EINVAL, prog_idx = -1;
++	int cnt, err = -EINVAL, prog_table_idx = -1;
+ 
+ 	/* take a ref on the prog itself */
+ 	prog = bpf_prog_get(prog_fd);
+@@ -381,23 +403,32 @@ __hid_bpf_attach_prog(struct hid_device *hdev, enum hid_bpf_prog_type prog_type,
+ 
+ 	mutex_lock(&hid_bpf_attach_lock);
+ 
++	link = kzalloc(sizeof(*link), GFP_USER);
++	if (!link) {
++		err = -ENOMEM;
++		goto err_unlock;
++	}
++
++	bpf_link_init(&link->link, BPF_LINK_TYPE_UNSPEC,
++		      &hid_bpf_link_lops, prog);
++
+ 	/* do not attach too many programs to a given HID device */
+ 	cnt = hid_bpf_program_count(hdev, NULL, prog_type);
+ 	if (cnt < 0) {
+ 		err = cnt;
+-		goto out_unlock;
++		goto err_unlock;
+ 	}
+ 
+ 	if (cnt >= hid_bpf_max_programs(prog_type)) {
+ 		err = -E2BIG;
+-		goto out_unlock;
++		goto err_unlock;
+ 	}
+ 
+-	prog_idx = hid_bpf_insert_prog(prog_fd, prog);
++	prog_table_idx = hid_bpf_insert_prog(prog_fd, prog);
+ 	/* if the jmp table is full, abort */
+-	if (prog_idx < 0) {
+-		err = prog_idx;
+-		goto out_unlock;
++	if (prog_table_idx < 0) {
++		err = prog_table_idx;
++		goto err_unlock;
+ 	}
+ 
+ 	if (flags & HID_BPF_FLAG_INSERT_HEAD) {
+@@ -412,22 +443,32 @@ __hid_bpf_attach_prog(struct hid_device *hdev, enum hid_bpf_prog_type prog_type,
+ 
+ 	/* we steal the ref here */
+ 	prog_entry->prog = prog;
+-	prog_entry->idx = prog_idx;
++	prog_entry->idx = prog_table_idx;
+ 	prog_entry->hdev = hdev;
+ 	prog_entry->type = prog_type;
+ 
+ 	/* finally store the index in the device list */
+ 	err = hid_bpf_populate_hdev(hdev, prog_type);
++	if (err) {
++		hid_bpf_release_prog_at(prog_table_idx);
++		goto err_unlock;
++	}
++
++	link->hid_table_index = prog_table_idx;
++
++	err = bpf_link_prime(&link->link, &link_primer);
+ 	if (err)
+-		hid_bpf_release_prog_at(prog_idx);
++		goto err_unlock;
+ 
+- out_unlock:
+ 	mutex_unlock(&hid_bpf_attach_lock);
+ 
+-	/* we only use prog as a key in the various tables, so we don't need to actually
+-	 * increment the ref count.
+-	 */
++	return bpf_link_settle(&link_primer);
++
++ err_unlock:
++	mutex_unlock(&hid_bpf_attach_lock);
++
+ 	bpf_prog_put(prog);
++	kfree(link);
+ 
+ 	return err;
+ }
+@@ -460,36 +501,10 @@ void __hid_bpf_destroy_device(struct hid_device *hdev)
+ 
+ void call_hid_bpf_prog_put_deferred(struct work_struct *work)
+ {
+-	struct bpf_prog_aux *aux;
+-	struct bpf_prog *prog;
+-	bool found = false;
+-	int i;
+-
+-	aux = container_of(work, struct bpf_prog_aux, work);
+-	prog = aux->prog;
+-
+-	/* we don't need locking here because the entries in the progs table
+-	 * are stable:
+-	 * if there are other users (and the progs entries might change), we
+-	 * would simply not have been called.
+-	 */
+-	for (i = 0; i < HID_BPF_MAX_PROGS; i++) {
+-		if (jmp_table.progs[i] == prog) {
+-			__clear_bit(i, jmp_table.enabled);
+-			found = true;
+-		}
+-	}
+-
+-	if (found)
+-		/* schedule release of all detached progs */
+-		schedule_work(&release_work);
+-}
+-
+-static void hid_bpf_prog_fd_array_put_ptr(void *ptr)
+-{
++	/* kept around for patch readability, to be dropped in the next commmit */
+ }
+ 
+-#define HID_BPF_PROGS_COUNT 2
++#define HID_BPF_PROGS_COUNT 1
+ 
+ static struct bpf_link *links[HID_BPF_PROGS_COUNT];
+ static struct entrypoints_bpf *skel;
+@@ -528,8 +543,6 @@ void hid_bpf_free_links_and_skel(void)
+ 	idx++;									\
+ } while (0)
+ 
+-static struct bpf_map_ops hid_bpf_prog_fd_maps_ops;
+-
+ int hid_bpf_preload_skel(void)
+ {
+ 	int err, idx = 0;
+@@ -548,14 +561,7 @@ int hid_bpf_preload_skel(void)
+ 		goto out;
+ 	}
+ 
+-	/* our jump table is stealing refs, so we should not decrement on removal of elements */
+-	hid_bpf_prog_fd_maps_ops = *jmp_table.map->ops;
+-	hid_bpf_prog_fd_maps_ops.map_fd_put_ptr = hid_bpf_prog_fd_array_put_ptr;
+-
+-	jmp_table.map->ops = &hid_bpf_prog_fd_maps_ops;
+-
+ 	ATTACH_AND_STORE_LINK(hid_tail_call);
+-	ATTACH_AND_STORE_LINK(hid_bpf_prog_put_deferred);
+ 
+ 	return 0;
+ out:
+diff --git a/include/linux/hid_bpf.h b/include/linux/hid_bpf.h
+index 3ca85ab91325..e9afb61e6ee0 100644
+--- a/include/linux/hid_bpf.h
++++ b/include/linux/hid_bpf.h
+@@ -3,6 +3,7 @@
+ #ifndef __HID_BPF_H
+ #define __HID_BPF_H
+ 
++#include <linux/bpf.h>
+ #include <linux/spinlock.h>
+ #include <uapi/linux/hid.h>
+ 
+@@ -138,6 +139,12 @@ struct hid_bpf {
+ 	spinlock_t progs_lock;		/* protects RCU update of progs */
+ };
+ 
++/* specific HID-BPF link when a program is attached to a device */
++struct hid_bpf_link {
++	struct bpf_link link;
++	int hid_table_index;
++};
++
+ #ifdef CONFIG_HID_BPF
+ u8 *dispatch_hid_bpf_device_event(struct hid_device *hid, enum hid_report_type type, u8 *data,
+ 				  u32 *size, int interrupt);
 -- 
 2.38.1
 
