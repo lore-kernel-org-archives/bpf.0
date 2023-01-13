@@ -2,185 +2,97 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E384C61DB3
-	for <bpf@archiver.kernel.org>; Thu, 12 Jan 2023 22:32:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED003C67871
+	for <bpf@archiver.kernel.org>; Fri, 13 Jan 2023 01:53:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232493AbjALWcE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Jan 2023 17:32:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44460 "EHLO
+        id S238392AbjAMBx3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Jan 2023 20:53:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235201AbjALWbf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 12 Jan 2023 17:31:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB85C117D
-        for <bpf@vger.kernel.org>; Thu, 12 Jan 2023 14:30:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673562602;
+        with ESMTP id S240644AbjAMBx1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 12 Jan 2023 20:53:27 -0500
+Received: from out-193.mta0.migadu.com (out-193.mta0.migadu.com [91.218.175.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7583A61445
+        for <bpf@vger.kernel.org>; Thu, 12 Jan 2023 17:53:25 -0800 (PST)
+Message-ID: <7e6d02ea-f9f7-2d09-bf10-ccd41b16a671@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1673574803;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=AmmMTMTkl1SpATAvKbKhhENq0+Dt4nDr+jehSO4eUlc=;
-        b=DXZnzuNfihmqAr9GUGiqoymcbTIuNU19yeQN6ZdQZix/TBB3Xz3RcktDQgkzz2bSGNRC7S
-        2fmY3251VhAvn0QChh4rTQHuqH1hGrTpyB5RnJPymduUum9LW95vUS4qhaI7kucmQcxO1y
-        2ensxCDUhw/sxJJx8FEC1y5mBk0rJ+o=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-478-m5Ti4f-BMKeVUKuj00cNeQ-1; Thu, 12 Jan 2023 17:30:00 -0500
-X-MC-Unique: m5Ti4f-BMKeVUKuj00cNeQ-1
-Received: by mail-ed1-f71.google.com with SMTP id z20-20020a05640240d400b0047028edd264so13391434edb.20
-        for <bpf@vger.kernel.org>; Thu, 12 Jan 2023 14:30:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AmmMTMTkl1SpATAvKbKhhENq0+Dt4nDr+jehSO4eUlc=;
-        b=uu6c5zEyxGkk8bDltlgOfuRB/HDe3ZCAooYf/Y+keT2o9xRrBhUTk6HLM1BOcr1BWB
-         YgK2E48lRidW0TJ9nzsLKFmyzgqWeK3VwwkEmJNjxznDdgoQ9VG8aTf3e70RI0TdHlHJ
-         xISZpI5YSSHGX/oTsP2JWNtCmm+b/yfC97SCbhEYopuncwwc934+IOnxAFbQtrCFq92T
-         T3wcqLUt/P4ObWmo2Fw4+7qDsSZpA74ufdS+9oQSqbuw9NusxfNkgrNIYrddZmp1XHjK
-         b1HHvO1bZJiFIwxn+xlQpPLVwJwcFYdph51ggcIZnGXCVP/7+LSPUkDrC7SwEp3WPFqO
-         wZJw==
-X-Gm-Message-State: AFqh2kp+BDnx7Lan1gnd5pB21BIQZxK9l/1yG6DJSLxXCbL1J4i6PiBh
-        d4jCwRDUXfS+0Bz/dTX7bpe0ieweD2F533i9mZEZ2BqsU2k4kg+X2ZOKjjyLLVqjddWdyyfPxpY
-        Vhp6sQ3hnVCmV
-X-Received: by 2002:a17:906:9f20:b0:84d:43a0:7090 with SMTP id fy32-20020a1709069f2000b0084d43a07090mr15422509ejc.77.1673562599654;
-        Thu, 12 Jan 2023 14:29:59 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsqPdHBhI5sdFZhQI7ZFU9LyJiPErvoKHj1tV1uSh9/yzeA+17qJ9uEVoWX2vLXSimcX2vkQQ==
-X-Received: by 2002:a17:906:9f20:b0:84d:43a0:7090 with SMTP id fy32-20020a1709069f2000b0084d43a07090mr15422479ejc.77.1673562599344;
-        Thu, 12 Jan 2023 14:29:59 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id c10-20020a17090618aa00b0084d14646fd9sm7751190ejf.165.2023.01.12.14.29.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 14:29:58 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 45232900731; Thu, 12 Jan 2023 23:29:58 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Stanislav Fomichev <sdf@google.com>
-Cc:     Tariq Toukan <ttoukan.linux@gmail.com>, bpf@vger.kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, haoluo@google.com,
-        jolsa@kernel.org, Tariq Toukan <tariqt@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        David Ahern <dsahern@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Willem de Bruijn <willemb@google.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Anatoly Burakov <anatoly.burakov@intel.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
-        netdev@vger.kernel.org
-Subject: Re: [xdp-hints] Re: [PATCH bpf-next v7 15/17] net/mlx5e: Introduce
- wrapper for xdp_buff
-In-Reply-To: <CAKH8qBvBsAj0s36=xHKz3XN5Nq1bDcEP1AOsnf9+Sgtm5wWUyQ@mail.gmail.com>
-References: <20230112003230.3779451-1-sdf@google.com>
- <20230112003230.3779451-16-sdf@google.com>
- <a0bac9bd-6772-64d4-8fd5-756ff4d8c2ad@gmail.com>
- <CAKH8qBsUOdRax0m5XM8guudSX_VYpJuMz_mzdMJegDsq4_ezwA@mail.gmail.com>
- <87k01rfojm.fsf@toke.dk> <87h6wvfmfa.fsf@toke.dk>
- <CAKH8qBvBsAj0s36=xHKz3XN5Nq1bDcEP1AOsnf9+Sgtm5wWUyQ@mail.gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Thu, 12 Jan 2023 23:29:58 +0100
-Message-ID: <87edrzfkt5.fsf@toke.dk>
+        bh=33Ku8g/h4myxf2UTWuqY4sRCItNB1UVhMBs8WSvSEuE=;
+        b=mCwR0Vm4mZ1nqSGgqju1K3rW340ihXvH6LXcqGEMqxa2ZXTrepriGReeuYvzoyZICi6plY
+        5yclT87TQ9Gp4XoUk8lUfzLS8Su9YLPqsNKDCkv42PmzoDvZzy1U6JdngVUiKy0pJhI0hH
+        e9ltXYPXk1wv8XXKSGGT4BC2k9Ew0uQ=
+Date:   Thu, 12 Jan 2023 17:53:18 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [bpf-next v5 3/3] bpf: hash map, suppress false lockdep warning
+To:     tong@infragraf.org, Alexei Starovoitov <ast@kernel.org>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Hou Tao <houtao1@huawei.com>, bpf@vger.kernel.org
+References: <20230111092903.92389-1-tong@infragraf.org>
+ <20230111092903.92389-3-tong@infragraf.org>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20230111092903.92389-3-tong@infragraf.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Stanislav Fomichev <sdf@google.com> writes:
+On 1/11/23 1:29 AM, tong@infragraf.org wrote:
+> +	/*
+> +	 * The lock may be taken in both NMI and non-NMI contexts.
+> +	 * There is a false lockdep warning (inconsistent lock state),
+> +	 * if lockdep enabled. The potential deadlock happens when the
+> +	 * lock is contended from the same cpu. map_locked rejects
+> +	 * concurrent access to the same bucket from the same CPU.
+> +	 * When the lock is contended from a remote cpu, we would
+> +	 * like the remote cpu to spin and wait, instead of giving
+> +	 * up immediately. As this gives better throughput. So replacing
+> +	 * the current raw_spin_lock_irqsave() with trylock sacrifices
+> +	 * this performance gain. atomic map_locked is necessary.
+> +	 * lockdep_off is invoked temporarily to fix the false warning.
+> +	 */
+> +	lockdep_off();
+>   	raw_spin_lock_irqsave(&b->raw_lock, flags);
+> -	*pflags = flags;
+> +	lockdep_on();
 
-> On Thu, Jan 12, 2023 at 1:55 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@re=
-dhat.com> wrote:
->>
->> Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com> writes:
->>
->> > Stanislav Fomichev <sdf@google.com> writes:
->> >
->> >> On Thu, Jan 12, 2023 at 12:07 AM Tariq Toukan <ttoukan.linux@gmail.co=
-m> wrote:
->> >>>
->> >>>
->> >>>
->> >>> On 12/01/2023 2:32, Stanislav Fomichev wrote:
->> >>> > From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
->> >>> >
->> >>> > Preparation for implementing HW metadata kfuncs. No functional cha=
-nge.
->> >>> >
->> >>> > Cc: Tariq Toukan <tariqt@nvidia.com>
->> >>> > Cc: Saeed Mahameed <saeedm@nvidia.com>
->> >>> > Cc: John Fastabend <john.fastabend@gmail.com>
->> >>> > Cc: David Ahern <dsahern@gmail.com>
->> >>> > Cc: Martin KaFai Lau <martin.lau@linux.dev>
->> >>> > Cc: Jakub Kicinski <kuba@kernel.org>
->> >>> > Cc: Willem de Bruijn <willemb@google.com>
->> >>> > Cc: Jesper Dangaard Brouer <brouer@redhat.com>
->> >>> > Cc: Anatoly Burakov <anatoly.burakov@intel.com>
->> >>> > Cc: Alexander Lobakin <alexandr.lobakin@intel.com>
->> >>> > Cc: Magnus Karlsson <magnus.karlsson@gmail.com>
->> >>> > Cc: Maryam Tahhan <mtahhan@redhat.com>
->> >>> > Cc: xdp-hints@xdp-project.net
->> >>> > Cc: netdev@vger.kernel.org
->> >>> > Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
->> >>> > Signed-off-by: Stanislav Fomichev <sdf@google.com>
->> >>> > ---
->> >>> >   drivers/net/ethernet/mellanox/mlx5/core/en.h  |  1 +
->> >>> >   .../net/ethernet/mellanox/mlx5/core/en/xdp.c  |  3 +-
->> >>> >   .../net/ethernet/mellanox/mlx5/core/en/xdp.h  |  6 +-
->> >>> >   .../ethernet/mellanox/mlx5/core/en/xsk/rx.c   | 25 ++++----
->> >>> >   .../net/ethernet/mellanox/mlx5/core/en_rx.c   | 58 +++++++++----=
-------
->> >>> >   5 files changed, 50 insertions(+), 43 deletions(-)
->> >>> >
->> >>> > diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en.h b/driver=
-s/net/ethernet/mellanox/mlx5/core/en.h
->> >>> > index 2d77fb8a8a01..af663978d1b4 100644
->> >>> > --- a/drivers/net/ethernet/mellanox/mlx5/core/en.h
->> >>> > +++ b/drivers/net/ethernet/mellanox/mlx5/core/en.h
->> >>> > @@ -469,6 +469,7 @@ struct mlx5e_txqsq {
->> >>> >   union mlx5e_alloc_unit {
->> >>> >       struct page *page;
->> >>> >       struct xdp_buff *xsk;
->> >>> > +     struct mlx5e_xdp_buff *mxbuf;
->> >>>
->> >>> In XSK files below you mix usage of both alloc_units[page_idx].mxbuf=
- and
->> >>> alloc_units[page_idx].xsk, while both fields share the memory of a u=
-nion.
->> >>>
->> >>> As struct mlx5e_xdp_buff wraps struct xdp_buff, I think that you just
->> >>> need to change the existing xsk field type from struct xdp_buff *xsk
->> >>> into struct mlx5e_xdp_buff *xsk and align the usage.
->> >>
->> >> Hmmm, good point. I'm actually not sure how it works currently.
->> >> mlx5e_alloc_unit.mxbuf doesn't seem to be initialized anywhere? Toke,
->> >> am I missing something?
->> >
->> > It's initialised piecemeal in different places; but yeah, we're mixing
->> > things a bit...
->> >
->> >> I'm thinking about something like this:
->
-> Seems more invasive? I don't care much tbf, but what's wrong with
-> keeping 'xdp_buff xsk' member and use it consistently?
+I am not very sure about the lockdep_off/on. Other than the false warning when 
+using the very same htab map by both NMI and non-NMI context, I think the 
+lockdep will still be useful to catch other potential issues. The commit 
+c50eb518e262 ("bpf: Use separate lockdep class for each hashtab") has already 
+solved this false alarm when NMI happens on one map and non-NMI happens on 
+another map.
 
-Yeah, it's more invasive, but it's also more consistent with the non-xsk
-path where every usage of struct xdp_buff is replaced with the wrapping
-struct?
+Alexei, what do you think? May be only land the patch 1 fix for now.
 
-Both will work, I suppose (in fact I think the resulting code will be
-more or less identical), so it's more a matter of which one is easier to
-read and where we put the type-safety-breaking casts.
-
-I can live with either one (just note you'll have to move the
-'mxbuf->rq' initialisation next to the one for mxbuf->cqe for yours, but
-that's probably fine too). Let's see which way Tariq prefers...
-
--Toke
+>   
+> +	*pflags = flags;
+>   	return 0;
+>   }
+>   
+> @@ -172,7 +187,11 @@ static inline void htab_unlock_bucket(const struct bpf_htab *htab,
+>   				      unsigned long flags)
+>   {
+>   	hash = hash & min_t(u32, HASHTAB_MAP_LOCK_MASK, htab->n_buckets - 1);
+> +
+> +	lockdep_off();
+>   	raw_spin_unlock_irqrestore(&b->raw_lock, flags);
+> +	lockdep_on();
+> +
+>   	__this_cpu_dec(*(htab->map_locked[hash]));
+>   	preempt_enable();
+>   }
 
