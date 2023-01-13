@@ -2,22 +2,22 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA510C677F1
-	for <bpf@archiver.kernel.org>; Fri, 13 Jan 2023 08:02:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2001DC54EBE
+	for <bpf@archiver.kernel.org>; Fri, 13 Jan 2023 08:02:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240526AbjAMICY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 13 Jan 2023 03:02:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46234 "EHLO
+        id S240200AbjAMICm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 13 Jan 2023 03:02:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240847AbjAMIBU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 13 Jan 2023 03:01:20 -0500
-Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1AF6B1A1;
-        Fri, 13 Jan 2023 00:00:26 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R401e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=hengqi@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VZU0KKR_1673596821;
-Received: from localhost(mailfrom:hengqi@linux.alibaba.com fp:SMTPD_---0VZU0KKR_1673596821)
+        with ESMTP id S233522AbjAMIBW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 13 Jan 2023 03:01:22 -0500
+Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 229BC6D51C;
+        Fri, 13 Jan 2023 00:00:28 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=hengqi@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VZTope9_1673596824;
+Received: from localhost(mailfrom:hengqi@linux.alibaba.com fp:SMTPD_---0VZTope9_1673596824)
           by smtp.aliyun-inc.com;
-          Fri, 13 Jan 2023 16:00:21 +0800
+          Fri, 13 Jan 2023 16:00:24 +0800
 From:   Heng Qi <hengqi@linux.alibaba.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     Jason Wang <jasowang@redhat.com>,
@@ -30,9 +30,9 @@ Cc:     Jason Wang <jasowang@redhat.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Eric Dumazet <edumazet@google.com>,
         Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Subject: [PATCH net-next v4 05/10] virtio-net: build xdp_buff with multi buffers
-Date:   Fri, 13 Jan 2023 16:00:11 +0800
-Message-Id: <20230113080016.45505-6-hengqi@linux.alibaba.com>
+Subject: [PATCH net-next v4 08/10] virtio-net: build skb from multi-buffer xdp
+Date:   Fri, 13 Jan 2023 16:00:14 +0800
+Message-Id: <20230113080016.45505-9-hengqi@linux.alibaba.com>
 X-Mailer: git-send-email 2.19.1.6.gb485710b
 In-Reply-To: <20230113080016.45505-1-hengqi@linux.alibaba.com>
 References: <20230113080016.45505-1-hengqi@linux.alibaba.com>
@@ -42,178 +42,77 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Support xdp for multi buffer packets in mergeable mode.
-
-Putting the first buffer as the linear part for xdp_buff,
-and the rest of the buffers as non-linear fragments to struct
-skb_shared_info in the tailroom belonging to xdp_buff.
-
-Let 'truesize' return to its literal meaning, that is, when
-xdp is set, it includes the length of headroom and tailroom.
+This converts the xdp_buff directly to a skb, including
+multi-buffer and single buffer xdp. We'll isolate the
+construction of skb based on xdp from page_to_skb().
 
 Signed-off-by: Heng Qi <hengqi@linux.alibaba.com>
 Reviewed-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 Acked-by: Jason Wang <jasowang@redhat.com>
 ---
- drivers/net/virtio_net.c | 108 ++++++++++++++++++++++++++++++++++++---
- 1 file changed, 100 insertions(+), 8 deletions(-)
+ drivers/net/virtio_net.c | 49 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
 diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 6fc5302ca5ff..699e376b8f8b 100644
+index fee9ce31f6c7..87d65b7a5033 100644
 --- a/drivers/net/virtio_net.c
 +++ b/drivers/net/virtio_net.c
-@@ -931,6 +931,91 @@ static struct sk_buff *receive_big(struct net_device *dev,
+@@ -952,6 +952,55 @@ static struct sk_buff *receive_big(struct net_device *dev,
  	return NULL;
  }
  
-+/* TODO: build xdp in big mode */
-+static int virtnet_build_xdp_buff_mrg(struct net_device *dev,
-+				      struct virtnet_info *vi,
-+				      struct receive_queue *rq,
-+				      struct xdp_buff *xdp,
-+				      void *buf,
-+				      unsigned int len,
-+				      unsigned int frame_sz,
-+				      u16 *num_buf,
-+				      unsigned int *xdp_frags_truesize,
-+				      struct virtnet_rq_stats *stats)
++/* Why not use xdp_build_skb_from_frame() ?
++ * XDP core assumes that xdp frags are PAGE_SIZE in length, while in
++ * virtio-net there are 2 points that do not match its requirements:
++ *  1. The size of the prefilled buffer is not fixed before xdp is set.
++ *  2. xdp_build_skb_from_frame() does more checks that we don't need,
++ *     like eth_type_trans() (which virtio-net does in receive_buf()).
++ */
++static struct sk_buff *build_skb_from_xdp_buff(struct net_device *dev,
++					       struct virtnet_info *vi,
++					       struct xdp_buff *xdp,
++					       unsigned int xdp_frags_truesz)
 +{
-+	struct virtio_net_hdr_mrg_rxbuf *hdr = buf;
-+	unsigned int headroom, tailroom, room;
-+	unsigned int truesize, cur_frag_size;
-+	struct skb_shared_info *shinfo;
-+	unsigned int xdp_frags_truesz = 0;
-+	struct page *page;
-+	skb_frag_t *frag;
-+	int offset;
-+	void *ctx;
++	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
++	unsigned int headroom, data_len;
++	struct sk_buff *skb;
++	int metasize;
++	u8 nr_frags;
 +
-+	xdp_init_buff(xdp, frame_sz, &rq->xdp_rxq);
-+	xdp_prepare_buff(xdp, buf - VIRTIO_XDP_HEADROOM,
-+			 VIRTIO_XDP_HEADROOM + vi->hdr_len, len - vi->hdr_len, true);
-+
-+	if (*num_buf > 1) {
-+		/* If we want to build multi-buffer xdp, we need
-+		 * to specify that the flags of xdp_buff have the
-+		 * XDP_FLAGS_HAS_FRAG bit.
-+		 */
-+		if (!xdp_buff_has_frags(xdp))
-+			xdp_buff_set_frags_flag(xdp);
-+
-+		shinfo = xdp_get_shared_info_from_buff(xdp);
-+		shinfo->nr_frags = 0;
-+		shinfo->xdp_frags_size = 0;
++	if (unlikely(xdp->data_end > xdp_data_hard_end(xdp))) {
++		pr_debug("Error building skb as missing reserved tailroom for xdp");
++		return NULL;
 +	}
 +
-+	if ((*num_buf - 1) > MAX_SKB_FRAGS)
-+		return -EINVAL;
++	if (unlikely(xdp_buff_has_frags(xdp)))
++		nr_frags = sinfo->nr_frags;
 +
-+	while ((--*num_buf) >= 1) {
-+		buf = virtqueue_get_buf_ctx(rq->vq, &len, &ctx);
-+		if (unlikely(!buf)) {
-+			pr_debug("%s: rx error: %d buffers out of %d missing\n",
-+				 dev->name, *num_buf,
-+				 virtio16_to_cpu(vi->vdev, hdr->num_buffers));
-+			dev->stats.rx_length_errors++;
-+			return -EINVAL;
-+		}
++	skb = build_skb(xdp->data_hard_start, xdp->frame_sz);
++	if (unlikely(!skb))
++		return NULL;
 +
-+		stats->bytes += len;
-+		page = virt_to_head_page(buf);
-+		offset = buf - page_address(page);
++	headroom = xdp->data - xdp->data_hard_start;
++	data_len = xdp->data_end - xdp->data;
++	skb_reserve(skb, headroom);
++	__skb_put(skb, data_len);
 +
-+		truesize = mergeable_ctx_to_truesize(ctx);
-+		headroom = mergeable_ctx_to_headroom(ctx);
-+		tailroom = headroom ? sizeof(struct skb_shared_info) : 0;
-+		room = SKB_DATA_ALIGN(headroom + tailroom);
++	metasize = xdp->data - xdp->data_meta;
++	metasize = metasize > 0 ? metasize : 0;
++	if (metasize)
++		skb_metadata_set(skb, metasize);
 +
-+		cur_frag_size = truesize;
-+		xdp_frags_truesz += cur_frag_size;
-+		if (unlikely(len > truesize - room || cur_frag_size > PAGE_SIZE)) {
-+			put_page(page);
-+			pr_debug("%s: rx error: len %u exceeds truesize %lu\n",
-+				 dev->name, len, (unsigned long)(truesize - room));
-+			dev->stats.rx_length_errors++;
-+			return -EINVAL;
-+		}
++	if (unlikely(xdp_buff_has_frags(xdp)))
++		xdp_update_skb_shared_info(skb, nr_frags,
++					   sinfo->xdp_frags_size,
++					   xdp_frags_truesz,
++					   xdp_buff_is_frag_pfmemalloc(xdp));
 +
-+		frag = &shinfo->frags[shinfo->nr_frags++];
-+		__skb_frag_set_page(frag, page);
-+		skb_frag_off_set(frag, offset);
-+		skb_frag_size_set(frag, len);
-+		if (page_is_pfmemalloc(page))
-+			xdp_buff_set_frag_pfmemalloc(xdp);
-+
-+		shinfo->xdp_frags_size += len;
-+	}
-+
-+	*xdp_frags_truesize = xdp_frags_truesz;
-+	return 0;
++	return skb;
 +}
 +
- static struct sk_buff *receive_mergeable(struct net_device *dev,
- 					 struct virtnet_info *vi,
- 					 struct receive_queue *rq,
-@@ -949,15 +1034,17 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
- 	unsigned int truesize = mergeable_ctx_to_truesize(ctx);
- 	unsigned int headroom = mergeable_ctx_to_headroom(ctx);
- 	unsigned int metasize = 0;
-+	unsigned int tailroom = headroom ? sizeof(struct skb_shared_info) : 0;
-+	unsigned int room = SKB_DATA_ALIGN(headroom + tailroom);
- 	unsigned int frame_sz;
- 	int err;
- 
- 	head_skb = NULL;
- 	stats->bytes += len - vi->hdr_len;
- 
--	if (unlikely(len > truesize)) {
-+	if (unlikely(len > truesize - room)) {
- 		pr_debug("%s: rx error: len %u exceeds truesize %lu\n",
--			 dev->name, len, (unsigned long)ctx);
-+			 dev->name, len, (unsigned long)(truesize - room));
- 		dev->stats.rx_length_errors++;
- 		goto err_skb;
- 	}
-@@ -983,10 +1070,12 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
- 		if (unlikely(hdr->hdr.gso_type))
- 			goto err_xdp;
- 
--		/* Buffers with headroom use PAGE_SIZE as alloc size,
--		 * see add_recvbuf_mergeable() + get_mergeable_buf_len()
-+		/* Now XDP core assumes frag size is PAGE_SIZE, but buffers
-+		 * with headroom may add hole in truesize, which
-+		 * make their length exceed PAGE_SIZE. So we disabled the
-+		 * hole mechanism for xdp. See add_recvbuf_mergeable().
- 		 */
--		frame_sz = headroom ? PAGE_SIZE : truesize;
-+		frame_sz = truesize;
- 
- 		/* This happens when rx buffer size is underestimated
- 		 * or headroom is not enough because of the buffer
-@@ -1139,9 +1228,12 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
- 		page = virt_to_head_page(buf);
- 
- 		truesize = mergeable_ctx_to_truesize(ctx);
--		if (unlikely(len > truesize)) {
-+		headroom = mergeable_ctx_to_headroom(ctx);
-+		tailroom = headroom ? sizeof(struct skb_shared_info) : 0;
-+		room = SKB_DATA_ALIGN(headroom + tailroom);
-+		if (unlikely(len > truesize - room)) {
- 			pr_debug("%s: rx error: len %u exceeds truesize %lu\n",
--				 dev->name, len, (unsigned long)ctx);
-+				 dev->name, len, (unsigned long)(truesize - room));
- 			dev->stats.rx_length_errors++;
- 			goto err_skb;
- 		}
-@@ -1428,7 +1520,7 @@ static int add_recvbuf_mergeable(struct virtnet_info *vi,
- 	}
- 
- 	sg_init_one(rq->sg, buf, len);
--	ctx = mergeable_len_to_ctx(len, headroom);
-+	ctx = mergeable_len_to_ctx(len + room, headroom);
- 	err = virtqueue_add_inbuf_ctx(rq->vq, rq->sg, 1, buf, ctx, gfp);
- 	if (err < 0)
- 		put_page(virt_to_head_page(buf));
+ /* TODO: build xdp in big mode */
+ static int virtnet_build_xdp_buff_mrg(struct net_device *dev,
+ 				      struct virtnet_info *vi,
 -- 
 2.19.1.6.gb485710b
 
