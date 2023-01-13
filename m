@@ -2,75 +2,123 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F193C54EBE
-	for <bpf@archiver.kernel.org>; Fri, 13 Jan 2023 14:15:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E178C54EBE
+	for <bpf@archiver.kernel.org>; Fri, 13 Jan 2023 14:15:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241595AbjAMOPU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 13 Jan 2023 09:15:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40054 "EHLO
+        id S241723AbjAMOP3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 13 Jan 2023 09:15:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236044AbjAMOOD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 13 Jan 2023 09:14:03 -0500
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3756E0FB
-        for <bpf@vger.kernel.org>; Fri, 13 Jan 2023 06:13:12 -0800 (PST)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-4d19b2686a9so158529247b3.6
-        for <bpf@vger.kernel.org>; Fri, 13 Jan 2023 06:13:12 -0800 (PST)
+        with ESMTP id S234494AbjAMOOF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 13 Jan 2023 09:14:05 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5B86E410
+        for <bpf@vger.kernel.org>; Fri, 13 Jan 2023 06:13:21 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id e3so11977068wru.13
+        for <bpf@vger.kernel.org>; Fri, 13 Jan 2023 06:13:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=76yLym9Pl5i5ZYoGuk3TgA6N8QwIkLpItLvMIbVU+Qw=;
-        b=Bd2oGgvmtvv8m3hvuYRyTPL+ce3647OKK6ub3PnG4oiOuaPdYXKRFbtQe7Y29wMjlq
-         upcNBDlgD7f/VOaDtb+dOXAvGM4PZD+f2HxXcjvIaj8jDDlxA+4O1kFUeB3stEdLZlX4
-         de2HfuoSCxWGhyWQRravhXgsdOaYWGBMwm78TZlMUMQxe+yq5tQH9i8NUjyURdUTeqgW
-         FZADNNYdnXufibf4K80tmQlJskwGt6RjC0IAbMvYxZfTRNLlqMzVQ9iMYZvUnrGe7Y//
-         funDTCKjVbREiBljq1OtetuqvDxWP0aHmev2TmTnxvsb8EbjPkPTuS/TEX8WXoLtdAf8
-         KTjQ==
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=err590LR8LkYoQOEeBoYDEBfiAezl/1jVMvlPjzbkF0=;
+        b=3Ak5tOWoCSbgTi12CjktyaTnX6MmECDFYj5hHdK5+Lu4k0mxZ9/lx86dvA98kbMdBM
+         AP4LOjtku/7aivggaGhMjfknW9PmrfX0Q9D9MgqypbnVDlujcynOg1VRGOqQ5C1m9hMt
+         j/yUOjtlXgqK/bhOeBy1+3X5yDtbKLamYqsWgzFzTS5F92OBHy19zOTsiTwhAoa197Lo
+         DAHNUvIVH02nKpy0rimKmfCCHhFcBW6BdzAMRmr7JjkDTFhcjzDK+S8Nkri6LahNaX3d
+         MoWwesoJ5KbJSje5mYjA8QxKuh4jEyQHaRas9s130LIDUsIS5US8iZhz7arzYq+u3JLL
+         dCIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=76yLym9Pl5i5ZYoGuk3TgA6N8QwIkLpItLvMIbVU+Qw=;
-        b=A0vDCou+tpQ7Ged6xzHxO3U0ZqrLHY9ywTEHbYcTk/5LCyrYopzA7ijlyUvDMu8cCU
-         VXbZM8PyDCMkeRNysboYLNcF8f9GvA7Icfk8s021h0VfVGMkUqctm9Y3PXj3aaKxwoxZ
-         L8NGctbXiHm0IEAJfP9zBQXQF+3y4FMP/DZQguJEDtuoK2E+YeJ6l6HpHe0p1yKUweIS
-         SnIp+KSkzbzp6K9jF1RRiDBi1cNHUqH+p0Vj99oRcePZS9p4NMtX8NDtHmGVh5BB846f
-         Z4imBPnhFeHVJO0u+Wf0Wb5m0zesZB5uMovHlnA1bLQljwtw2WeH0RWMZ4FFru6TsY69
-         ORxg==
-X-Gm-Message-State: AFqh2kos1NTc00s/sCZlvT9TFweBwRtijbNpmta1SYszecwNay3IaiBB
-        ns8o1gn2XIIZwRDacbl6MaiUQuF9d1SZcIUgX0f1bg==
-X-Google-Smtp-Source: AMrXdXuNQmry0hopnvbmjTdDmMUEaKqzdqBPNc6ktLZWN1O0Mw223eC5M9150oRRIscMgWEXxHz+l7j2CVfNFUXBqhk=
-X-Received: by 2002:a0d:dfca:0:b0:4dd:c62f:d65a with SMTP id
- i193-20020a0ddfca000000b004ddc62fd65amr229576ywe.427.1673619191342; Fri, 13
- Jan 2023 06:13:11 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=err590LR8LkYoQOEeBoYDEBfiAezl/1jVMvlPjzbkF0=;
+        b=G5GM+kMbzJEcx5RpMN4AuWM+dgb6OQVNUPUZb05XNbSWj41RJRVLoI4+rnVIkiMF+V
+         OW4GvVLMyqo5ZuFEOarzMF2zzOhFd79VsDsxt0fjssKdTg73R46AL5uxZCvQqO5fPohA
+         5c49nQZAS2+3i/ZeVratyWO0LTly7Bfyx/1g5s+SNMjRmTfv8vPvVP19DHi+U1EZcgsL
+         gaXxL5utOSNcooeEoGbXtmTzQu2CTxMfVhaj5PYdaXtujL2yPM5VjBsijI7KqmYsRlli
+         Je8BEYpxnYZolppWZFt1pvA96rWyc9x9djF3OuQd3XSXSXpeefQbhKQ6TtGajY7IX/lN
+         NTmg==
+X-Gm-Message-State: AFqh2ko43tqsXgZsrV7Kwn3qoUJr2YvFQagEDXAiY1yl/Um7uo7XUbdb
+        hkXoE8J5Ai7GaqTbW4qp+cHyDXGfPNsamn84G1c=
+X-Google-Smtp-Source: AMrXdXsKR+oA3sRqbFHeLIpN8Ue6FdCbdQQMgOQAuNFgaPqPGvSv3rcqrEDdGx8jnC1V1ztK0Wrxxg==
+X-Received: by 2002:a5d:5257:0:b0:2a8:e91d:ad31 with SMTP id k23-20020a5d5257000000b002a8e91dad31mr23784648wrc.62.1673619200771;
+        Fri, 13 Jan 2023 06:13:20 -0800 (PST)
+Received: from [192.168.178.32] ([51.155.200.13])
+        by smtp.gmail.com with ESMTPSA id bj7-20020a0560001e0700b002b6667d3adfsm19108137wrb.80.2023.01.13.06.13.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Jan 2023 06:13:20 -0800 (PST)
+Message-ID: <6bd4e7e8-451f-b5f3-3828-d7db84c0ee15@isovalent.com>
+Date:   Fri, 13 Jan 2023 14:13:19 +0000
 MIME-Version: 1.0
-References: <cover.1673574419.git.william.xuanziyang@huawei.com> <dfd2d8cfdf9111bd129170d4345296f53bee6a67.1673574419.git.william.xuanziyang@huawei.com>
-In-Reply-To: <dfd2d8cfdf9111bd129170d4345296f53bee6a67.1673574419.git.william.xuanziyang@huawei.com>
-From:   Willem de Bruijn <willemb@google.com>
-Date:   Fri, 13 Jan 2023 09:12:34 -0500
-Message-ID: <CA+FuTSdJ+FiuSOaZ_i9STX_RmJAZRwg4MjZkcXPVu_YD0GsZ5Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: add ipip6 and ip6ip decap
- to test_tc_tunnel
-To:     Ziyang Xuan <william.xuanziyang@huawei.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] bpftool: Always disable stack protection for clang
+Content-Language: en-GB
+To:     =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>,
+        bpf@vger.kernel.org
+Cc:     Sam James <sam@gentoo.org>
+References: <74cd9d2e-6052-312a-241e-2b514a75c92c@applied-asynchrony.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <74cd9d2e-6052-312a-241e-2b514a75c92c@applied-asynchrony.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 4:25 AM Ziyang Xuan
-<william.xuanziyang@huawei.com> wrote:
->
-> Add ipip6 and ip6ip decap testcases. Verify that bpf_skb_adjust_room()
-> correctly decapsulate ipip6 and ip6ip tunnel packets.
->
-> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+2023-01-13 14:49 UTC+0100 ~ Holger Hoffstätte
+<holger@applied-asynchrony.com>
+> 
+> When the clang toolchain has stack protection enabled in order to be
+> consistent
+> with gcc - which just happens to be the case on Gentoo - the bpftool build
+> fails:
+> 
+> clang \
+>     -I. \
+>     -I/tmp/portage/dev-util/bpftool-6.0.12/work/linux-6.0/tools/include/uapi/ \
+>     -I/tmp/portage/dev-util/bpftool-6.0.12/work/linux-6.0/tools/bpf/bpftool/bootstrap/libbpf/include \
+>     -g -O2 -Wall -target bpf -c skeleton/pid_iter.bpf.c -o pid_iter.bpf.o
+> clang \
+>     -I. \
+>     -I/tmp/portage/dev-util/bpftool-6.0.12/work/linux-6.0/tools/include/uapi/ \
+>     -I/tmp/portage/dev-util/bpftool-6.0.12/work/linux-6.0/tools/bpf/bpftool/bootstrap/libbpf/include \
+>     -g -O2 -Wall -target bpf -c skeleton/profiler.bpf.c -o profiler.bpf.o
+> skeleton/profiler.bpf.c:40:14: error: A call to built-in function
+> '__stack_chk_fail' is not supported.
+> int BPF_PROG(fentry_XXX)
+>              ^
+> skeleton/profiler.bpf.c:94:14: error: A call to built-in function
+> '__stack_chk_fail' is not supported.
+> int BPF_PROG(fexit_XXX)
+>              ^
+> 2 errors generated.
+> 
+> Since stack-protector makes no sense for the BPF bits just unconditionally
+> disable it.
+> 
+> Bug: https://bugs.gentoo.org/890638
+> Signed-off-by: Holger Hoffstätte <holger@applied-asynchrony.com>
+> 
+> --snip--
+> 
+> diff a/src/Makefile b/src/Makefile
+> --- a/src/Makefile
+> +++ b/src/Makefile
+> @@ -205,7 +205,7 @@ $(OUTPUT)%.bpf.o: skeleton/%.bpf.c
+> $(OUTPUT)vmlinux.h $(LIBBPF_BOOTSTRAP)
+>          -I$(or $(OUTPUT),.) \
+>          -I$(srctree)/include/uapi/ \
+>          -I$(LIBBPF_BOOTSTRAP_INCLUDE) \
+> -        -g -O2 -Wall -target bpf -c $< -o $@
+> +        -g -O2 -Wall -fno-stack-protector -target bpf -c $< -o $@
+>      $(Q)$(LLVM_STRIP) -g $@
+>  
+>  $(OUTPUT)%.skel.h: $(OUTPUT)%.bpf.o $(BPFTOOL_BOOTSTRAP)
 
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+Right, I understand we don't want it when compiling the BPF program from
+the skeleton. Looks good, thank you!
+
+Acked-by: Quentin Monnet <quentin@isovalent.com>
