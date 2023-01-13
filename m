@@ -2,22 +2,22 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0270C54EBE
-	for <bpf@archiver.kernel.org>; Fri, 13 Jan 2023 08:01:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A9D0C54EBE
+	for <bpf@archiver.kernel.org>; Fri, 13 Jan 2023 08:01:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240702AbjAMIBx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 13 Jan 2023 03:01:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48034 "EHLO
+        id S239578AbjAMIB5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 13 Jan 2023 03:01:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240759AbjAMIBP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 13 Jan 2023 03:01:15 -0500
-Received: from out30-6.freemail.mail.aliyun.com (out30-6.freemail.mail.aliyun.com [115.124.30.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 137246DB85;
-        Fri, 13 Jan 2023 00:00:24 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R271e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=hengqi@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VZU0KJz_1673596819;
-Received: from localhost(mailfrom:hengqi@linux.alibaba.com fp:SMTPD_---0VZU0KJz_1673596819)
+        with ESMTP id S239960AbjAMIBR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 13 Jan 2023 03:01:17 -0500
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993316DB8B;
+        Fri, 13 Jan 2023 00:00:25 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=hengqi@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VZU-5H8_1673596818;
+Received: from localhost(mailfrom:hengqi@linux.alibaba.com fp:SMTPD_---0VZU-5H8_1673596818)
           by smtp.aliyun-inc.com;
-          Fri, 13 Jan 2023 16:00:19 +0800
+          Fri, 13 Jan 2023 16:00:18 +0800
 From:   Heng Qi <hengqi@linux.alibaba.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     Jason Wang <jasowang@redhat.com>,
@@ -30,9 +30,9 @@ Cc:     Jason Wang <jasowang@redhat.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Eric Dumazet <edumazet@google.com>,
         Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Subject: [PATCH net-next v4 03/10] virtio-net: set up xdp for multi buffer packets
-Date:   Fri, 13 Jan 2023 16:00:09 +0800
-Message-Id: <20230113080016.45505-4-hengqi@linux.alibaba.com>
+Subject: [PATCH net-next v4 02/10] virtio-net: fix calculation of MTU for single buffer xdp
+Date:   Fri, 13 Jan 2023 16:00:08 +0800
+Message-Id: <20230113080016.45505-3-hengqi@linux.alibaba.com>
 X-Mailer: git-send-email 2.19.1.6.gb485710b
 In-Reply-To: <20230113080016.45505-1-hengqi@linux.alibaba.com>
 References: <20230113080016.45505-1-hengqi@linux.alibaba.com>
@@ -42,33 +42,39 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When the xdp program sets xdp.frags, which means it can process
-multi-buffer packets over larger MTU, so we continue to support xdp.
+When single-buffer xdp is loaded, the size of the buffer filled each time
+is 'sz = (PAGE_SIZE - headroom - tailroom)', which is the maximum packet
+length that the driver allows the device to pass in. Otherwise, the packet
+with a length greater than sz will come in, so num_buf will be greater than
+or equal to 2, and then xdp_linearize_page() will be performed and the
+packet will be dropped because the total length is greater than PAGE_SIZE.
+So the maximum value of MTU for single-buffer xdp is 'max_sz = sz - ETH_HLEN'.
 
 Signed-off-by: Heng Qi <hengqi@linux.alibaba.com>
 Reviewed-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 Acked-by: Jason Wang <jasowang@redhat.com>
 ---
- drivers/net/virtio_net.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+In fact, this is a fix patch belonging to the net branch, which needs
+to be backported to the stable branch.
+
+ drivers/net/virtio_net.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 87226dd8d262..60e199811212 100644
+index 443aa7b8f0ad..87226dd8d262 100644
 --- a/drivers/net/virtio_net.c
 +++ b/drivers/net/virtio_net.c
-@@ -3097,9 +3097,9 @@ static int virtnet_xdp_set(struct net_device *dev, struct bpf_prog *prog,
- 		return -EINVAL;
- 	}
- 
--	if (dev->mtu > max_sz) {
--		NL_SET_ERR_MSG_MOD(extack, "MTU too large to enable XDP");
--		netdev_warn(dev, "XDP requires MTU less than %lu\n", max_sz);
-+	if (prog && !prog->aux->xdp_has_frags && dev->mtu > max_sz) {
-+		NL_SET_ERR_MSG_MOD(extack, "MTU too large to enable XDP without frags");
-+		netdev_warn(dev, "single-buffer XDP requires MTU less than %u\n", max_sz);
- 		return -EINVAL;
- 	}
- 
+@@ -3074,7 +3074,9 @@ static int virtnet_restore_guest_offloads(struct virtnet_info *vi)
+ static int virtnet_xdp_set(struct net_device *dev, struct bpf_prog *prog,
+ 			   struct netlink_ext_ack *extack)
+ {
+-	unsigned long int max_sz = PAGE_SIZE - sizeof(struct padded_vnet_hdr);
++	unsigned int room = SKB_DATA_ALIGN(VIRTIO_XDP_HEADROOM +
++					   sizeof(struct skb_shared_info));
++	unsigned int max_sz = PAGE_SIZE - room - ETH_HLEN;
+ 	struct virtnet_info *vi = netdev_priv(dev);
+ 	struct bpf_prog *old_prog;
+ 	u16 xdp_qp = 0, curr_qp;
 -- 
 2.19.1.6.gb485710b
 
