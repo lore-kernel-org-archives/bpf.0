@@ -2,22 +2,22 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51F5EC677F1
-	for <bpf@archiver.kernel.org>; Sat, 14 Jan 2023 08:22:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D2F3C3DA78
+	for <bpf@archiver.kernel.org>; Sat, 14 Jan 2023 08:23:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbjANIWw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 14 Jan 2023 03:22:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35604 "EHLO
+        id S229812AbjANIW4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 14 Jan 2023 03:22:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjANIWq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 14 Jan 2023 03:22:46 -0500
-Received: from out30-1.freemail.mail.aliyun.com (out30-1.freemail.mail.aliyun.com [115.124.30.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D760C4EF7;
-        Sat, 14 Jan 2023 00:22:41 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R741e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=hengqi@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VZX3LLu_1673684555;
-Received: from localhost(mailfrom:hengqi@linux.alibaba.com fp:SMTPD_---0VZX3LLu_1673684555)
+        with ESMTP id S229840AbjANIWt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 14 Jan 2023 03:22:49 -0500
+Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1721259D0;
+        Sat, 14 Jan 2023 00:22:43 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=hengqi@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VZX.hpr_1673684557;
+Received: from localhost(mailfrom:hengqi@linux.alibaba.com fp:SMTPD_---0VZX.hpr_1673684557)
           by smtp.aliyun-inc.com;
-          Sat, 14 Jan 2023 16:22:36 +0800
+          Sat, 14 Jan 2023 16:22:38 +0800
 From:   Heng Qi <hengqi@linux.alibaba.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     Jason Wang <jasowang@redhat.com>,
@@ -30,9 +30,9 @@ Cc:     Jason Wang <jasowang@redhat.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Eric Dumazet <edumazet@google.com>,
         Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Subject: [PATCH net-next v5 05/10] virtio-net: build xdp_buff with multi buffers
-Date:   Sat, 14 Jan 2023 16:22:24 +0800
-Message-Id: <20230114082229.62143-6-hengqi@linux.alibaba.com>
+Subject: [PATCH net-next v5 07/10] virtio-net: transmit the multi-buffer xdp
+Date:   Sat, 14 Jan 2023 16:22:26 +0800
+Message-Id: <20230114082229.62143-8-hengqi@linux.alibaba.com>
 X-Mailer: git-send-email 2.19.1.6.gb485710b
 In-Reply-To: <20230114082229.62143-1-hengqi@linux.alibaba.com>
 References: <20230114082229.62143-1-hengqi@linux.alibaba.com>
@@ -42,178 +42,69 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Support xdp for multi buffer packets in mergeable mode.
-
-Putting the first buffer as the linear part for xdp_buff,
-and the rest of the buffers as non-linear fragments to struct
-skb_shared_info in the tailroom belonging to xdp_buff.
-
-Let 'truesize' return to its literal meaning, that is, when
-xdp is set, it includes the length of headroom and tailroom.
+This serves as the basis for XDP_TX and XDP_REDIRECT
+to send a multi-buffer xdp_frame.
 
 Signed-off-by: Heng Qi <hengqi@linux.alibaba.com>
 Reviewed-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 Acked-by: Jason Wang <jasowang@redhat.com>
 ---
- drivers/net/virtio_net.c | 108 ++++++++++++++++++++++++++++++++++++---
- 1 file changed, 100 insertions(+), 8 deletions(-)
+ drivers/net/virtio_net.c | 31 ++++++++++++++++++++++++++-----
+ 1 file changed, 26 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 6fc5302ca5ff..699e376b8f8b 100644
+index ab01cf3855bc..fee9ce31f6c7 100644
 --- a/drivers/net/virtio_net.c
 +++ b/drivers/net/virtio_net.c
-@@ -931,6 +931,91 @@ static struct sk_buff *receive_big(struct net_device *dev,
- 	return NULL;
- }
- 
-+/* TODO: build xdp in big mode */
-+static int virtnet_build_xdp_buff_mrg(struct net_device *dev,
-+				      struct virtnet_info *vi,
-+				      struct receive_queue *rq,
-+				      struct xdp_buff *xdp,
-+				      void *buf,
-+				      unsigned int len,
-+				      unsigned int frame_sz,
-+				      u16 *num_buf,
-+				      unsigned int *xdp_frags_truesize,
-+				      struct virtnet_rq_stats *stats)
-+{
-+	struct virtio_net_hdr_mrg_rxbuf *hdr = buf;
-+	unsigned int headroom, tailroom, room;
-+	unsigned int truesize, cur_frag_size;
+@@ -563,22 +563,43 @@ static int __virtnet_xdp_xmit_one(struct virtnet_info *vi,
+ 				   struct xdp_frame *xdpf)
+ {
+ 	struct virtio_net_hdr_mrg_rxbuf *hdr;
+-	int err;
 +	struct skb_shared_info *shinfo;
-+	unsigned int xdp_frags_truesz = 0;
-+	struct page *page;
-+	skb_frag_t *frag;
-+	int offset;
-+	void *ctx;
-+
-+	xdp_init_buff(xdp, frame_sz, &rq->xdp_rxq);
-+	xdp_prepare_buff(xdp, buf - VIRTIO_XDP_HEADROOM,
-+			 VIRTIO_XDP_HEADROOM + vi->hdr_len, len - vi->hdr_len, true);
-+
-+	if (*num_buf > 1) {
-+		/* If we want to build multi-buffer xdp, we need
-+		 * to specify that the flags of xdp_buff have the
-+		 * XDP_FLAGS_HAS_FRAG bit.
-+		 */
-+		if (!xdp_buff_has_frags(xdp))
-+			xdp_buff_set_frags_flag(xdp);
-+
-+		shinfo = xdp_get_shared_info_from_buff(xdp);
-+		shinfo->nr_frags = 0;
-+		shinfo->xdp_frags_size = 0;
++	u8 nr_frags = 0;
++	int err, i;
+ 
+ 	if (unlikely(xdpf->headroom < vi->hdr_len))
+ 		return -EOVERFLOW;
+ 
+-	/* Make room for virtqueue hdr (also change xdpf->headroom?) */
++	if (unlikely(xdp_frame_has_frags(xdpf))) {
++		shinfo = xdp_get_shared_info_from_frame(xdpf);
++		nr_frags = shinfo->nr_frags;
 +	}
 +
-+	if ((*num_buf - 1) > MAX_SKB_FRAGS)
-+		return -EINVAL;
++	/* In wrapping function virtnet_xdp_xmit(), we need to free
++	 * up the pending old buffers, where we need to calculate the
++	 * position of skb_shared_info in xdp_get_frame_len() and
++	 * xdp_return_frame(), which will involve to xdpf->data and
++	 * xdpf->headroom. Therefore, we need to update the value of
++	 * headroom synchronously here.
++	 */
++	xdpf->headroom -= vi->hdr_len;
+ 	xdpf->data -= vi->hdr_len;
+ 	/* Zero header and leave csum up to XDP layers */
+ 	hdr = xdpf->data;
+ 	memset(hdr, 0, vi->hdr_len);
+ 	xdpf->len   += vi->hdr_len;
+ 
+-	sg_init_one(sq->sg, xdpf->data, xdpf->len);
++	sg_init_table(sq->sg, nr_frags + 1);
++	sg_set_buf(sq->sg, xdpf->data, xdpf->len);
++	for (i = 0; i < nr_frags; i++) {
++		skb_frag_t *frag = &shinfo->frags[i];
 +
-+	while ((--*num_buf) >= 1) {
-+		buf = virtqueue_get_buf_ctx(rq->vq, &len, &ctx);
-+		if (unlikely(!buf)) {
-+			pr_debug("%s: rx error: %d buffers out of %d missing\n",
-+				 dev->name, *num_buf,
-+				 virtio16_to_cpu(vi->vdev, hdr->num_buffers));
-+			dev->stats.rx_length_errors++;
-+			return -EINVAL;
-+		}
-+
-+		stats->bytes += len;
-+		page = virt_to_head_page(buf);
-+		offset = buf - page_address(page);
-+
-+		truesize = mergeable_ctx_to_truesize(ctx);
-+		headroom = mergeable_ctx_to_headroom(ctx);
-+		tailroom = headroom ? sizeof(struct skb_shared_info) : 0;
-+		room = SKB_DATA_ALIGN(headroom + tailroom);
-+
-+		cur_frag_size = truesize;
-+		xdp_frags_truesz += cur_frag_size;
-+		if (unlikely(len > truesize - room || cur_frag_size > PAGE_SIZE)) {
-+			put_page(page);
-+			pr_debug("%s: rx error: len %u exceeds truesize %lu\n",
-+				 dev->name, len, (unsigned long)(truesize - room));
-+			dev->stats.rx_length_errors++;
-+			return -EINVAL;
-+		}
-+
-+		frag = &shinfo->frags[shinfo->nr_frags++];
-+		__skb_frag_set_page(frag, page);
-+		skb_frag_off_set(frag, offset);
-+		skb_frag_size_set(frag, len);
-+		if (page_is_pfmemalloc(page))
-+			xdp_buff_set_frag_pfmemalloc(xdp);
-+
-+		shinfo->xdp_frags_size += len;
++		sg_set_page(&sq->sg[i + 1], skb_frag_page(frag),
++			    skb_frag_size(frag), skb_frag_off(frag));
 +	}
-+
-+	*xdp_frags_truesize = xdp_frags_truesz;
-+	return 0;
-+}
-+
- static struct sk_buff *receive_mergeable(struct net_device *dev,
- 					 struct virtnet_info *vi,
- 					 struct receive_queue *rq,
-@@ -949,15 +1034,17 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
- 	unsigned int truesize = mergeable_ctx_to_truesize(ctx);
- 	unsigned int headroom = mergeable_ctx_to_headroom(ctx);
- 	unsigned int metasize = 0;
-+	unsigned int tailroom = headroom ? sizeof(struct skb_shared_info) : 0;
-+	unsigned int room = SKB_DATA_ALIGN(headroom + tailroom);
- 	unsigned int frame_sz;
- 	int err;
  
- 	head_skb = NULL;
- 	stats->bytes += len - vi->hdr_len;
+-	err = virtqueue_add_outbuf(sq->vq, sq->sg, 1, xdp_to_ptr(xdpf),
+-				   GFP_ATOMIC);
++	err = virtqueue_add_outbuf(sq->vq, sq->sg, nr_frags + 1,
++				   xdp_to_ptr(xdpf), GFP_ATOMIC);
+ 	if (unlikely(err))
+ 		return -ENOSPC; /* Caller handle free/refcnt */
  
--	if (unlikely(len > truesize)) {
-+	if (unlikely(len > truesize - room)) {
- 		pr_debug("%s: rx error: len %u exceeds truesize %lu\n",
--			 dev->name, len, (unsigned long)ctx);
-+			 dev->name, len, (unsigned long)(truesize - room));
- 		dev->stats.rx_length_errors++;
- 		goto err_skb;
- 	}
-@@ -983,10 +1070,12 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
- 		if (unlikely(hdr->hdr.gso_type))
- 			goto err_xdp;
- 
--		/* Buffers with headroom use PAGE_SIZE as alloc size,
--		 * see add_recvbuf_mergeable() + get_mergeable_buf_len()
-+		/* Now XDP core assumes frag size is PAGE_SIZE, but buffers
-+		 * with headroom may add hole in truesize, which
-+		 * make their length exceed PAGE_SIZE. So we disabled the
-+		 * hole mechanism for xdp. See add_recvbuf_mergeable().
- 		 */
--		frame_sz = headroom ? PAGE_SIZE : truesize;
-+		frame_sz = truesize;
- 
- 		/* This happens when rx buffer size is underestimated
- 		 * or headroom is not enough because of the buffer
-@@ -1139,9 +1228,12 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
- 		page = virt_to_head_page(buf);
- 
- 		truesize = mergeable_ctx_to_truesize(ctx);
--		if (unlikely(len > truesize)) {
-+		headroom = mergeable_ctx_to_headroom(ctx);
-+		tailroom = headroom ? sizeof(struct skb_shared_info) : 0;
-+		room = SKB_DATA_ALIGN(headroom + tailroom);
-+		if (unlikely(len > truesize - room)) {
- 			pr_debug("%s: rx error: len %u exceeds truesize %lu\n",
--				 dev->name, len, (unsigned long)ctx);
-+				 dev->name, len, (unsigned long)(truesize - room));
- 			dev->stats.rx_length_errors++;
- 			goto err_skb;
- 		}
-@@ -1428,7 +1520,7 @@ static int add_recvbuf_mergeable(struct virtnet_info *vi,
- 	}
- 
- 	sg_init_one(rq->sg, buf, len);
--	ctx = mergeable_len_to_ctx(len, headroom);
-+	ctx = mergeable_len_to_ctx(len + room, headroom);
- 	err = virtqueue_add_inbuf_ctx(rq->vq, rq->sg, 1, buf, ctx, gfp);
- 	if (err < 0)
- 		put_page(virt_to_head_page(buf));
 -- 
 2.19.1.6.gb485710b
 
