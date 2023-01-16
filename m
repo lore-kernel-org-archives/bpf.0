@@ -2,214 +2,108 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D721CC46467
-	for <bpf@archiver.kernel.org>; Mon, 16 Jan 2023 16:34:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EDF4C54EBE
+	for <bpf@archiver.kernel.org>; Mon, 16 Jan 2023 16:35:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233284AbjAPQef (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 16 Jan 2023 11:34:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48542 "EHLO
+        id S233365AbjAPQff (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 16 Jan 2023 11:35:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233338AbjAPQeE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 16 Jan 2023 11:34:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3068C2C658
-        for <bpf@vger.kernel.org>; Mon, 16 Jan 2023 08:21:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673886074;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=K0Ks/O5MxLsx7dVOuXdI3SuIbVqOXisFzieVgmhogRI=;
-        b=Q8Xu3hxmJr5AK7qHlUndX0Kdzsrmwlv1YvZBB4IDcfi8nzp8qAePz9qrgeWgfZkZyIm6yT
-        i3YL1QweQrtZqW3najPW4klIRgbkiJlxFXODP/liDPwpiEnfOr3LbmS7eE6rkIH5mk2L8n
-        J5nQEkK7nh9ZqTKaDJwJvCLT1NeDG4Y=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-7-qpwQlbDDMDK1BfG4U3m93g-1; Mon, 16 Jan 2023 11:21:13 -0500
-X-MC-Unique: qpwQlbDDMDK1BfG4U3m93g-1
-Received: by mail-ed1-f72.google.com with SMTP id g14-20020a056402090e00b0046790cd9082so19657048edz.21
-        for <bpf@vger.kernel.org>; Mon, 16 Jan 2023 08:21:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=K0Ks/O5MxLsx7dVOuXdI3SuIbVqOXisFzieVgmhogRI=;
-        b=Xd/rrkGJMoGHBzpYpasfjD5fcBi0o69+rgPFVSZn8EhinRzYtmPQUHfpEiP04hH1Yt
-         DkmxuR3VmUyrBGbQHTKIWrWo3UCaVA0tfwuc021HpgSeP8IhnWMcXrYkFiRRe/GQDjzX
-         t91rvi5aJ67M6h5nber7REGCQHib00b6Jykz/iTPz2eBv3nR4+fkZI+dC+6FRjKX0Hfo
-         9TEVtdQ9aVG5MWkKYFTD/VZSYksUwFqleLULMFUs1F2C7HljgkuRyJxFjI1KQhHK+/ue
-         I3sey+XTTu9LyeZ6z2c82at3DyMh8B18ry80zMUGx4dFEXE6OqttmJRbBp8MoLPoFo36
-         zP2Q==
-X-Gm-Message-State: AFqh2krkuif1cO0lS1Nf/tQAqDCpsVFBH2/m3tThnE6QBvOkDD9tXoqp
-        utunQ4eDpVV9v/Aa+U2xuQ36t3+edhf1WRd9XYN8v4krFT8MKBC2acBEewvoeFHeXDnX1nGSDM5
-        ktyNKCqDAVtBL
-X-Received: by 2002:a17:907:8744:b0:870:c218:c52b with SMTP id qo4-20020a170907874400b00870c218c52bmr4802611ejc.49.1673886071849;
-        Mon, 16 Jan 2023 08:21:11 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXusJW1wpXGKd2RfJI0OBvJR7rxC9sghj+qTSy+I00SQjty2GnseOf5FnJMCBz0JodKWsq91TA==
-X-Received: by 2002:a17:907:8744:b0:870:c218:c52b with SMTP id qo4-20020a170907874400b00870c218c52bmr4802581ejc.49.1673886071663;
-        Mon, 16 Jan 2023 08:21:11 -0800 (PST)
-Received: from [192.168.41.200] (83-90-141-187-cable.dk.customer.tdc.net. [83.90.141.187])
-        by smtp.gmail.com with ESMTPSA id lb6-20020a170907784600b007ad69e9d34dsm12015790ejc.54.2023.01.16.08.21.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jan 2023 08:21:11 -0800 (PST)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <a5ce7ac4-7901-6146-2c2a-5b4958c14e11@redhat.com>
-Date:   Mon, 16 Jan 2023 17:21:08 +0100
+        with ESMTP id S233373AbjAPQep (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 16 Jan 2023 11:34:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE722A145;
+        Mon, 16 Jan 2023 08:22:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E3FF6104D;
+        Mon, 16 Jan 2023 16:22:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EECE0C433EF;
+        Mon, 16 Jan 2023 16:22:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1673886156;
+        bh=g0qKH8gvQygXxaA0XdDhpfr8FrmKiNbx7fVi2ddaDow=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Rn2yyfuKEgmixZCLctwTKEQyNN7k9vSqR5W8pTbFc6+SoBdswRd9HMVyYxODB6amg
+         JeOXqMu7R7ZrlN05FNlnkpv/8VOyt9OoFldgkrxrQDW7SAxDs0vzCu86iBtE+oCIDO
+         x8xduqfaaD0qPNXpS0vBmLPCq0WGGDHv/O4wsSVE=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, Leo Yan <leo.yan@linaro.org>,
+        Ian Rogers <irogers@google.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        bpf@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 324/658] perf trace: Return error if a system call doesnt exist
+Date:   Mon, 16 Jan 2023 16:46:52 +0100
+Message-Id: <20230116154924.388367360@linuxfoundation.org>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230116154909.645460653@linuxfoundation.org>
+References: <20230116154909.645460653@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Cc:     brouer@redhat.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        haoluo@google.com, jolsa@kernel.org,
-        David Ahern <dsahern@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Willem de Bruijn <willemb@google.com>,
-        Anatoly Burakov <anatoly.burakov@intel.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH bpf-next v7 10/17] veth: Support RX XDP metadata
-Content-Language: en-US
-To:     Stanislav Fomichev <sdf@google.com>, bpf@vger.kernel.org
-References: <20230112003230.3779451-1-sdf@google.com>
- <20230112003230.3779451-11-sdf@google.com>
-In-Reply-To: <20230112003230.3779451-11-sdf@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+From: Leo Yan <leo.yan@linaro.org>
+
+[ Upstream commit d4223e1776c30b2ce8d0e6eaadcbf696e60fca3c ]
+
+When a system call is not detected, the reason is either because the
+system call ID is out of scope or failure to find the corresponding path
+in the sysfs, trace__read_syscall_info() returns zero.  Finally, without
+returning an error value it introduces confusion for the caller.
+
+This patch lets the function trace__read_syscall_info() to return
+-EEXIST when a system call doesn't exist.
+
+Fixes: b8b1033fcaa091d8 ("perf trace: Mark syscall ids that are not allocated to avoid unnecessary error messages")
+Signed-off-by: Leo Yan <leo.yan@linaro.org>
+Acked-by: Ian Rogers <irogers@google.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: bpf@vger.kernel.org
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Link: https://lore.kernel.org/r/20221121075237.127706-3-leo.yan@linaro.org
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/perf/builtin-trace.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
+index a5201de1a191..d333f6c86c98 100644
+--- a/tools/perf/builtin-trace.c
++++ b/tools/perf/builtin-trace.c
+@@ -1511,11 +1511,11 @@ static int trace__read_syscall_info(struct trace *trace, int id)
+ 
+ 	sc = trace->syscalls.table + id;
+ 	if (sc->nonexistent)
+-		return 0;
++		return -EEXIST;
+ 
+ 	if (name == NULL) {
+ 		sc->nonexistent = true;
+-		return 0;
++		return -EEXIST;
+ 	}
+ 
+ 	sc->name = name;
+-- 
+2.35.1
 
 
-On 12/01/2023 01.32, Stanislav Fomichev wrote:
-> The goal is to enable end-to-end testing of the metadata for AF_XDP.
-
-For me the goal with veth goes beyond *testing*.
-
-This patch ignores the xdp_frame case.  I'm not blocking this patch, but
-I'm saying we need to make sure there is a way forward for accessing
-XDP-hints when handling redirected xdp_frame's.
-
-I have two use-cases we should cover (as future work).
-
-(#1) We have customers that want to redirect from physical NIC hardware
-into containers, and then have the veth XDP-prog (selectively) redirect
-into an AF_XDP socket (when matching fastpath packets).  Here they
-(minimum) want access to the XDP hint info on HW checksum.
-
-(#2) Both veth and cpumap can create SKBs based on xdp_frame's.  Here it
-is essential to get HW checksum and HW hash when creating these SKBs
-(else netstack have to do expensive csum calc and parsing in
-flow-dissector).
-
-> Cc: John Fastabend <john.fastabend@gmail.com>
-> Cc: David Ahern <dsahern@gmail.com>
-> Cc: Martin KaFai Lau <martin.lau@linux.dev>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Willem de Bruijn <willemb@google.com>
-> Cc: Jesper Dangaard Brouer <brouer@redhat.com>
-> Cc: Anatoly Burakov <anatoly.burakov@intel.com>
-> Cc: Alexander Lobakin <alexandr.lobakin@intel.com>
-> Cc: Magnus Karlsson <magnus.karlsson@gmail.com>
-> Cc: Maryam Tahhan <mtahhan@redhat.com>
-> Cc: xdp-hints@xdp-project.net
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Stanislav Fomichev <sdf@google.com>
-> ---
->   drivers/net/veth.c | 31 +++++++++++++++++++++++++++++++
->   1 file changed, 31 insertions(+)
-> 
-> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> index 70f50602287a..ba3e05832843 100644
-> --- a/drivers/net/veth.c
-> +++ b/drivers/net/veth.c
-> @@ -118,6 +118,7 @@ static struct {
->   
->   struct veth_xdp_buff {
->   	struct xdp_buff xdp;
-> +	struct sk_buff *skb;
->   };
->   
->   static int veth_get_link_ksettings(struct net_device *dev,
-> @@ -602,6 +603,7 @@ static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
->   
->   		xdp_convert_frame_to_buff(frame, xdp);
->   		xdp->rxq = &rq->xdp_rxq;
-> +		vxbuf.skb = NULL;
->   
->   		act = bpf_prog_run_xdp(xdp_prog, xdp);
->   
-> @@ -823,6 +825,7 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
->   	__skb_push(skb, skb->data - skb_mac_header(skb));
->   	if (veth_convert_skb_to_xdp_buff(rq, xdp, &skb))
->   		goto drop;
-> +	vxbuf.skb = skb;
->   
->   	orig_data = xdp->data;
->   	orig_data_end = xdp->data_end;
-> @@ -1602,6 +1605,28 @@ static int veth_xdp(struct net_device *dev, struct netdev_bpf *xdp)
->   	}
->   }
->   
-> +static int veth_xdp_rx_timestamp(const struct xdp_md *ctx, u64 *timestamp)
-> +{
-> +	struct veth_xdp_buff *_ctx = (void *)ctx;
-> +
-> +	if (!_ctx->skb)
-> +		return -EOPNOTSUPP;
-> +
-> +	*timestamp = skb_hwtstamps(_ctx->skb)->hwtstamp;
-
-The SKB stores this skb_hwtstamps() in skb_shared_info memory area.
-This memory area is actually also available to xdp_frames.  Thus, we
-could store the HW rx_timestamp in same location for redirected
-xdp_frames.  This could make code path sharing possible between SKB vs
-xdp_frame in veth.
-
-This would also make it fast to "transfer" HW rx_timestamp when creating
-an SKB from an xdp_frame, as data is already written in the correct place.
-
-Performance wise the down-side is that skb_shared_info memory area is in
-a separate cacheline.  Thus, when no HW rx_timestamp is available, then
-it is very expensive for a veth XDP bpf-prog to access this, just to get
-a zero back.  Having an xdp_frame->flags bit that knows if HW
-rx_timestamp have been stored, can mitigate this.
-
-
-> +	return 0;
-> +}
-> +
-> +static int veth_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash)
-> +{
-> +	struct veth_xdp_buff *_ctx = (void *)ctx;
-> +
-> +	if (!_ctx->skb)
-> +		return -EOPNOTSUPP;
-
-For xdp_frame case, I'm considering simply storing the u32 RX-hash in
-struct xdp_frame.  This makes it easy to extract for xdp_frame to SKB
-create use-case.
-
-As have been mentioned before, the SKB also requires knowing the RSS
-hash-type.  This HW hash-type actually contains a lot of information,
-that today is lost when reduced to the SKB hash-type.  Due to
-standardization from Microsoft, most HW provide info on (L3) IPv4 or
-IPv6, and on (L4) TCP or UDP (and often SCTP).  Often hardware
-descriptor also provide info on the header length.  Future work in this
-area is exciting as we can speedup parsing of packets in XDP, if we can
-get are more detailed HW info on hash "packet-type".
-
-> +
-> +	*hash = skb_get_hash(_ctx->skb); > +	return 0;
-> +}
-> +
-
---Jesper
 
