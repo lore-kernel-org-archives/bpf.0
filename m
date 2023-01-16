@@ -2,32 +2,32 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EDF4C54EBE
-	for <bpf@archiver.kernel.org>; Mon, 16 Jan 2023 16:35:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1702C46467
+	for <bpf@archiver.kernel.org>; Mon, 16 Jan 2023 16:35:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233365AbjAPQff (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 16 Jan 2023 11:35:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48434 "EHLO
+        id S233473AbjAPQfu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 16 Jan 2023 11:35:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233373AbjAPQep (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 16 Jan 2023 11:34:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE722A145;
-        Mon, 16 Jan 2023 08:22:37 -0800 (PST)
+        with ESMTP id S233437AbjAPQfM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 16 Jan 2023 11:35:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29CAE30B19;
+        Mon, 16 Jan 2023 08:22:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E3FF6104D;
-        Mon, 16 Jan 2023 16:22:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EECE0C433EF;
-        Mon, 16 Jan 2023 16:22:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 56850B8107D;
+        Mon, 16 Jan 2023 16:22:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EE32C433EF;
+        Mon, 16 Jan 2023 16:22:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1673886156;
-        bh=g0qKH8gvQygXxaA0XdDhpfr8FrmKiNbx7fVi2ddaDow=;
+        s=korg; t=1673886175;
+        bh=bcpIxDuQB++Lo7gyPINE1+bnQNi96HkfACVCosJP0D0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Rn2yyfuKEgmixZCLctwTKEQyNN7k9vSqR5W8pTbFc6+SoBdswRd9HMVyYxODB6amg
-         JeOXqMu7R7ZrlN05FNlnkpv/8VOyt9OoFldgkrxrQDW7SAxDs0vzCu86iBtE+oCIDO
-         x8xduqfaaD0qPNXpS0vBmLPCq0WGGDHv/O4wsSVE=
+        b=X1h8GtVO4zxuUWlDiO/HVBUcbATVFtC1GwC0szAOoxMhUTThKUfsBtnHzRYSxi5dF
+         UMhbaN0qDuwLBEp5gbZwIilOS8n4zFOFa0RXZz05Ld7QhJuSSA2Ie5BWGlNlTlRfI6
+         JvewITldHCguuA6HLw1DiCsPjS+jp1rRfKPKoE7s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -41,9 +41,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Arnaldo Carvalho de Melo <acme@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 324/658] perf trace: Return error if a system call doesnt exist
-Date:   Mon, 16 Jan 2023 16:46:52 +0100
-Message-Id: <20230116154924.388367360@linuxfoundation.org>
+Subject: [PATCH 5.4 331/658] perf trace: Handle failure when trace point folder is missed
+Date:   Mon, 16 Jan 2023 16:46:59 +0100
+Message-Id: <20230116154924.694358142@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230116154909.645460653@linuxfoundation.org>
 References: <20230116154909.645460653@linuxfoundation.org>
@@ -57,15 +57,31 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Leo Yan <leo.yan@linaro.org>
 
-[ Upstream commit d4223e1776c30b2ce8d0e6eaadcbf696e60fca3c ]
+[ Upstream commit 03e9a5d8eb552a1bf692a9c8a5ecd50f4e428006 ]
 
-When a system call is not detected, the reason is either because the
-system call ID is out of scope or failure to find the corresponding path
-in the sysfs, trace__read_syscall_info() returns zero.  Finally, without
-returning an error value it introduces confusion for the caller.
+On Arm64 a case is perf tools fails to find the corresponding trace
+point folder for system calls listed in the table 'syscalltbl_arm64',
+e.g. the generated system call table contains "lookup_dcookie" but we
+cannot find out the matched trace point folder for it.
 
-This patch lets the function trace__read_syscall_info() to return
--EEXIST when a system call doesn't exist.
+We need to figure out if there have any issue for the generated system
+call table, on the other hand, we need to handle the case when trace
+point folder is missed under sysfs, this patch sets the flag
+syscall::nonexistent as true and returns the error from
+trace__read_syscall_info().
+
+Another problem is for trace__syscall_info(), it returns two different
+values if a system call doesn't exist: at the first time calling
+trace__syscall_info() it returns NULL when the system call doesn't exist,
+later if call trace__syscall_info() again for the same missed system
+call, it returns pointer of syscall.  trace__syscall_info() checks the
+condition 'syscalls.table[id].name == NULL', but the name will be
+assigned in the first invoking even the system call is not found.
+
+So checking system call's name in trace__syscall_info() is not the right
+thing to do, this patch simply checks flag syscall::nonexistent to make
+decision if a system call exists or not, finally trace__syscall_info()
+returns the consistent result (NULL) if a system call doesn't existed.
 
 Fixes: b8b1033fcaa091d8 ("perf trace: Mark syscall ids that are not allocated to avoid unnecessary error messages")
 Signed-off-by: Leo Yan <leo.yan@linaro.org>
@@ -77,31 +93,53 @@ Cc: Jiri Olsa <jolsa@kernel.org>
 Cc: Mark Rutland <mark.rutland@arm.com>
 Cc: Namhyung Kim <namhyung@kernel.org>
 Cc: Peter Zijlstra <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20221121075237.127706-3-leo.yan@linaro.org
+Link: https://lore.kernel.org/r/20221121075237.127706-4-leo.yan@linaro.org
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/perf/builtin-trace.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/perf/builtin-trace.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
 diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
-index a5201de1a191..d333f6c86c98 100644
+index e41b6ffafbd3..6052eb057821 100644
 --- a/tools/perf/builtin-trace.c
 +++ b/tools/perf/builtin-trace.c
-@@ -1511,11 +1511,11 @@ static int trace__read_syscall_info(struct trace *trace, int id)
- 
- 	sc = trace->syscalls.table + id;
- 	if (sc->nonexistent)
--		return 0;
-+		return -EEXIST;
- 
- 	if (name == NULL) {
- 		sc->nonexistent = true;
--		return 0;
-+		return -EEXIST;
+@@ -1573,13 +1573,19 @@ static int trace__read_syscall_info(struct trace *trace, int id)
+ 		sc->tp_format = trace_event__tp_format("syscalls", tp_name);
  	}
  
- 	sc->name = name;
++	/*
++	 * Fails to read trace point format via sysfs node, so the trace point
++	 * doesn't exist.  Set the 'nonexistent' flag as true.
++	 */
++	if (IS_ERR(sc->tp_format)) {
++		sc->nonexistent = true;
++		return PTR_ERR(sc->tp_format);
++	}
++
+ 	if (syscall__alloc_arg_fmts(sc, IS_ERR(sc->tp_format) ?
+ 					RAW_SYSCALL_ARGS_NUM : sc->tp_format->format.nr_fields))
+ 		return -ENOMEM;
+ 
+-	if (IS_ERR(sc->tp_format))
+-		return PTR_ERR(sc->tp_format);
+-
+ 	sc->args = sc->tp_format->format.fields;
+ 	/*
+ 	 * We need to check and discard the first variable '__syscall_nr'
+@@ -1871,11 +1877,8 @@ static struct syscall *trace__syscall_info(struct trace *trace,
+ 	    (err = trace__read_syscall_info(trace, id)) != 0)
+ 		goto out_cant_read;
+ 
+-	if (trace->syscalls.table[id].name == NULL) {
+-		if (trace->syscalls.table[id].nonexistent)
+-			return NULL;
++	if (trace->syscalls.table && trace->syscalls.table[id].nonexistent)
+ 		goto out_cant_read;
+-	}
+ 
+ 	return &trace->syscalls.table[id];
+ 
 -- 
 2.35.1
 
