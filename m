@@ -2,222 +2,121 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9843CC67871
-	for <bpf@archiver.kernel.org>; Tue, 17 Jan 2023 22:06:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E06CAC00A5A
+	for <bpf@archiver.kernel.org>; Tue, 17 Jan 2023 22:15:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbjAQWGd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 17 Jan 2023 17:06:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48710 "EHLO
+        id S229612AbjAQWPy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 17 Jan 2023 17:15:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbjAQWFh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 17 Jan 2023 17:05:37 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705D53A858
-        for <bpf@vger.kernel.org>; Tue, 17 Jan 2023 12:33:15 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id bj3so30397798pjb.0
-        for <bpf@vger.kernel.org>; Tue, 17 Jan 2023 12:33:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mlmrr+LmPgwagRvDw6ZkuRXoRGz9oMUsyD3oXbejChs=;
-        b=MRJjKilPfgr+ZPCumKxddcm7V4VVsiT6mpCnCuE8nb3e77vnYMwr9KdrpI+NQ8fpUo
-         TmxpbXCur92dnSiGnfayjrL/bbf/Dc5EQXEl7fhe27DtOrtS+1abOe6VzsYw3ukTjH1b
-         8vFdik/6Aa1zPat9RAKlH/zQ0twaRskKejqq6M2Fy9TF9a1CaETxYppOeCiYwfHxeUH3
-         lNzPjrwu6gjPgpUQ/sSZDDKVk6s2OKHzdOEVslwYLQ73GUmH26Lq4LBCfVsEm7oJCpBY
-         7fBGQEjNx8QgLJeWoQYbfBixOobxfseV6VmMRuFn7x17mhfhBl2BL3zNttyU28wj+3Ik
-         wm9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Mlmrr+LmPgwagRvDw6ZkuRXoRGz9oMUsyD3oXbejChs=;
-        b=DZ9Pqaf8NNtIG7UGNn08qmdrdeMNQFxNDHtQN2ahnYtlOKUvP1uRsevH6RFlnh+Xea
-         X2G1ldWwGHXCuuxCynJaAn8l0h6xtmoebusXlpRKz4BuMJMgBrv8neqzQEI9CzTtNZgh
-         Yz5gZfQhnEQYSrquU2+6kmHu2ELr6swgXuObaPeYfuDLdU7xwv8dFC4jOEzp05FbLerv
-         X/HsUP1Bjky5CJraIKq4IOuB+cmB8Sg6+memkSZL9PKNOnDiMcqOkZI3mI/3uorN41Ji
-         G17ADiwLg3QmO4fUy4v2MGbEvTkfwS+HPcPf28pIyG7dEQbowJq0QAWibsRG28lFrdlA
-         cgug==
-X-Gm-Message-State: AFqh2kp/b6LYz0O8zG0BM9/o57dFTRAVu+Edp1VAJN+YLYKDdy3Gt46y
-        6YVeBWzYbMME/GH2OwzakHnCMsylkvM2MSU98V922g==
-X-Google-Smtp-Source: AMrXdXssDknjwW3ny/3IGkPjagEOf8+iy4LKiD9WQEExaRvgg4DU7xHizVGuIhVNaY0ggX/nRj2yT7xUafHNfzjZUvg=
-X-Received: by 2002:a17:902:b181:b0:193:20ba:e04d with SMTP id
- s1-20020a170902b18100b0019320bae04dmr346111plr.93.1673987594634; Tue, 17 Jan
- 2023 12:33:14 -0800 (PST)
+        with ESMTP id S229617AbjAQWP3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 17 Jan 2023 17:15:29 -0500
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6521F305CF
+        for <bpf@vger.kernel.org>; Tue, 17 Jan 2023 13:57:24 -0800 (PST)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout01.posteo.de (Postfix) with ESMTPS id 609A42402BB
+        for <bpf@vger.kernel.org>; Tue, 17 Jan 2023 22:57:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1673992627; bh=zInYKkLSw9bn3+n/iGs+CeQgLnr6GjYNl5HACkZoI/0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=BQvdKAsOHR9CFlkFAlA5z5P32UT7oga+Ud8vqO+Syo+mmqEdaMvPD+GQ4fFfzBtD5
+         mvBydyM6TfdPpj9ml08ePUJ7oMfikm/1ndpEoS4/BidTHyy8DxK/S+yfn0+WBT20Rc
+         tzaFMw7DaLVqMENNw5aPSoMq8j9/46/mpK8Rzeh8LMaIw/P4d+o1lmVb83RsKmW1V0
+         UyzrXl5DZGBNT26tBAr8nz+dfYHRZHSfVcO6HgHrpSdHoYY67IhM7m36Vr6z6yPO+Q
+         1RnKf51BVhlZtC7fUErWBNa8zPFyr6nwRwsrTcQ+HSnQNrrmHFZmxBn5+W7ReJqDWH
+         x7W1FNHW446RQ==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4NxN5p3bzRz9rxD;
+        Tue, 17 Jan 2023 22:57:02 +0100 (CET)
+Date:   Tue, 17 Jan 2023 21:56:58 +0000
+From:   Daniel =?utf-8?Q?M=C3=BCller?= <deso@posteo.net>
+To:     Hao Luo <haoluo@google.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>, kernel-team@meta.com
+Subject: Re: CORE feature request: support checking field type directly
+Message-ID: <20230117215658.xec7cirlfx2z7z2m@muellerd-fedora-PC2BDTX9>
+References: <CA+khW7ju-gewZVNxopBi3Uvhiv8Wb=a-D4gaW3MD-NkUg0WSSg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230112003230.3779451-1-sdf@google.com> <20230112003230.3779451-11-sdf@google.com>
- <a5ce7ac4-7901-6146-2c2a-5b4958c14e11@redhat.com>
-In-Reply-To: <a5ce7ac4-7901-6146-2c2a-5b4958c14e11@redhat.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Tue, 17 Jan 2023 12:33:02 -0800
-Message-ID: <CAKH8qBszqz7Qi=E0=gsF0KDHqw4+QEWYyQvqRyS2_E_UsjNKvw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v7 10/17] veth: Support RX XDP metadata
-To:     Jesper Dangaard Brouer <jbrouer@redhat.com>
-Cc:     bpf@vger.kernel.org, brouer@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, haoluo@google.com, jolsa@kernel.org,
-        David Ahern <dsahern@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Willem de Bruijn <willemb@google.com>,
-        Anatoly Burakov <anatoly.burakov@intel.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+khW7ju-gewZVNxopBi3Uvhiv8Wb=a-D4gaW3MD-NkUg0WSSg@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 8:21 AM Jesper Dangaard Brouer
-<jbrouer@redhat.com> wrote:
->
->
->
-> On 12/01/2023 01.32, Stanislav Fomichev wrote:
-> > The goal is to enable end-to-end testing of the metadata for AF_XDP.
->
-> For me the goal with veth goes beyond *testing*.
->
-> This patch ignores the xdp_frame case.  I'm not blocking this patch, but
-> I'm saying we need to make sure there is a way forward for accessing
-> XDP-hints when handling redirected xdp_frame's.
+Hi Hao,
 
-Sure, let's work towards getting that other part addressed!
+On Thu, Jan 12, 2023 at 02:18:05PM -0800, Hao Luo wrote:
+> Feature request:
+> 
+> To support checking the type of a specific field directly.
+> 
+> Background:
+> 
+> Currently, As far as I know, CORE is able to check a field’s
+> existence, offset, size and signedness, but not the field’s type
+> directly.
 
-> I have two use-cases we should cover (as future work).
->
-> (#1) We have customers that want to redirect from physical NIC hardware
-> into containers, and then have the veth XDP-prog (selectively) redirect
-> into an AF_XDP socket (when matching fastpath packets).  Here they
-> (minimum) want access to the XDP hint info on HW checksum.
->
-> (#2) Both veth and cpumap can create SKBs based on xdp_frame's.  Here it
-> is essential to get HW checksum and HW hash when creating these SKBs
-> (else netstack have to do expensive csum calc and parsing in
-> flow-dissector).
+Are you aware of the TYPE_MATCHES support [0] that was added a while back?
+Specifically, for types to "match" they have to be of the same "kind" (struct
+vs. struct, union vs. union, etc.). That check is done recursively for fields
+from what I recall (please see linked change description or source code for more
+details).
 
-From my PoW, I'd probably have to look into the TX side first (tx
-timestamp) before looking into xdp->skb path. So if somebody on your
-side has cycles, feel free to drive this effort. I'm happy to provide
-reviews/comments/etc. I think we've discussed in the past that this
-will most likely look like another set of "export" kfuncs?
+> There are changes that convert a field from a scalar type to a struct
+> type, without changing the field’s name, offset or size. In that case,
+> it is currently difficult to use CORE to check such changes. For a
+> concrete example,
+> 
+> Commit 94a9717b3c (“locking/rwsem: Make rwsem->owner an atomic_long_t”)
+> 
+> Changed the type of rw_semaphore::owner from tast_struct * to
+> atomic_long_t. In that change, the field name, offset and size remain
+> the same. But the BPF program code used to extract the value is
+> different. For the kernel where the field is a pointer, we can write:
+> 
+> sem->owner
+> 
+> While in the kernel where the field is an atomic, we need to write:
+> 
+> sem->owner.counter.
+> 
+> It would be great to be able to check a field’s type directly.
+> Probably something like:
+> 
+> #include “vmlinux.h”
+> 
+> struct rw_semaphore__old {
+>         struct task_struct *owner;
+> };
+> 
+> struct rw_semaphore__new {
+>         atomic_long_t owner;
+> };
+> 
+> u64 owner;
+> if (bpf_core_field_type_is(sem->owner, struct task_struct *)) {
+>         struct rw_semaphore__old *old = (struct rw_semaphore__old *)sem;
+>         owner = (u64)sem->owner;
+> } else if (bpf_core_field_type_is(sem->owner, atomic_long_t)) {
+>         struct rw_semaphore__new *new = (struct rw_semaphore__new *)sem;
+>         owner = new->owner.counter;
+> }
 
-We can start with extending new
-Documentation/networking/xdp-rx-metadata.rst with a high-level design.
+I haven't tried it out, but from the top of my head, TYPE_MATCHES should be able
+to help with this case. If not, it may be useful for us to understand why it is
+insufficient. Could you share feedback?
 
-> > Cc: John Fastabend <john.fastabend@gmail.com>
-> > Cc: David Ahern <dsahern@gmail.com>
-> > Cc: Martin KaFai Lau <martin.lau@linux.dev>
-> > Cc: Jakub Kicinski <kuba@kernel.org>
-> > Cc: Willem de Bruijn <willemb@google.com>
-> > Cc: Jesper Dangaard Brouer <brouer@redhat.com>
-> > Cc: Anatoly Burakov <anatoly.burakov@intel.com>
-> > Cc: Alexander Lobakin <alexandr.lobakin@intel.com>
-> > Cc: Magnus Karlsson <magnus.karlsson@gmail.com>
-> > Cc: Maryam Tahhan <mtahhan@redhat.com>
-> > Cc: xdp-hints@xdp-project.net
-> > Cc: netdev@vger.kernel.org
-> > Signed-off-by: Stanislav Fomichev <sdf@google.com>
-> > ---
-> >   drivers/net/veth.c | 31 +++++++++++++++++++++++++++++++
-> >   1 file changed, 31 insertions(+)
-> >
-> > diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> > index 70f50602287a..ba3e05832843 100644
-> > --- a/drivers/net/veth.c
-> > +++ b/drivers/net/veth.c
-> > @@ -118,6 +118,7 @@ static struct {
-> >
-> >   struct veth_xdp_buff {
-> >       struct xdp_buff xdp;
-> > +     struct sk_buff *skb;
-> >   };
-> >
-> >   static int veth_get_link_ksettings(struct net_device *dev,
-> > @@ -602,6 +603,7 @@ static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
-> >
-> >               xdp_convert_frame_to_buff(frame, xdp);
-> >               xdp->rxq = &rq->xdp_rxq;
-> > +             vxbuf.skb = NULL;
-> >
-> >               act = bpf_prog_run_xdp(xdp_prog, xdp);
-> >
-> > @@ -823,6 +825,7 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
-> >       __skb_push(skb, skb->data - skb_mac_header(skb));
-> >       if (veth_convert_skb_to_xdp_buff(rq, xdp, &skb))
-> >               goto drop;
-> > +     vxbuf.skb = skb;
-> >
-> >       orig_data = xdp->data;
-> >       orig_data_end = xdp->data_end;
-> > @@ -1602,6 +1605,28 @@ static int veth_xdp(struct net_device *dev, struct netdev_bpf *xdp)
-> >       }
-> >   }
-> >
-> > +static int veth_xdp_rx_timestamp(const struct xdp_md *ctx, u64 *timestamp)
-> > +{
-> > +     struct veth_xdp_buff *_ctx = (void *)ctx;
-> > +
-> > +     if (!_ctx->skb)
-> > +             return -EOPNOTSUPP;
-> > +
-> > +     *timestamp = skb_hwtstamps(_ctx->skb)->hwtstamp;
->
-> The SKB stores this skb_hwtstamps() in skb_shared_info memory area.
-> This memory area is actually also available to xdp_frames.  Thus, we
-> could store the HW rx_timestamp in same location for redirected
-> xdp_frames.  This could make code path sharing possible between SKB vs
-> xdp_frame in veth.
->
-> This would also make it fast to "transfer" HW rx_timestamp when creating
-> an SKB from an xdp_frame, as data is already written in the correct place.
->
-> Performance wise the down-side is that skb_shared_info memory area is in
-> a separate cacheline.  Thus, when no HW rx_timestamp is available, then
-> it is very expensive for a veth XDP bpf-prog to access this, just to get
-> a zero back.  Having an xdp_frame->flags bit that knows if HW
-> rx_timestamp have been stored, can mitigate this.
+Thanks,
+Daniel
 
-That's one way to do it; although I'm not sure about the cases which
-don't use xdp_frame and use stack-allocated xdp_buff.
-
-> > +     return 0;
-> > +}
-> > +
-> > +static int veth_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash)
-> > +{
-> > +     struct veth_xdp_buff *_ctx = (void *)ctx;
-> > +
-> > +     if (!_ctx->skb)
-> > +             return -EOPNOTSUPP;
->
-> For xdp_frame case, I'm considering simply storing the u32 RX-hash in
-> struct xdp_frame.  This makes it easy to extract for xdp_frame to SKB
-> create use-case.
->
-> As have been mentioned before, the SKB also requires knowing the RSS
-> hash-type.  This HW hash-type actually contains a lot of information,
-> that today is lost when reduced to the SKB hash-type.  Due to
-> standardization from Microsoft, most HW provide info on (L3) IPv4 or
-> IPv6, and on (L4) TCP or UDP (and often SCTP).  Often hardware
-> descriptor also provide info on the header length.  Future work in this
-> area is exciting as we can speedup parsing of packets in XDP, if we can
-> get are more detailed HW info on hash "packet-type".
-
-Something like the version we've discussed a while back [0]?
-Seems workable overall if we remove it from the UAPI? (not everyone
-was happy about UAPI parts IIRC)
-
-0: https://lore.kernel.org/bpf/20221115030210.3159213-7-sdf@google.com/
-
-
-> > +
-> > +     *hash = skb_get_hash(_ctx->skb); > +    return 0;
-> > +}
-> > +
->
-> --Jesper
->
+[0]: https://lore.kernel.org/bpf/20220620231713.2143355-5-deso@posteo.net/
