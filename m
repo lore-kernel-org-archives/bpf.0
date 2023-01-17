@@ -2,119 +2,292 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A451C3DA78
-	for <bpf@archiver.kernel.org>; Tue, 17 Jan 2023 20:17:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B9E8C6379F
+	for <bpf@archiver.kernel.org>; Tue, 17 Jan 2023 22:03:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231656AbjAQUQv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 17 Jan 2023 15:16:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49022 "EHLO
+        id S229882AbjAQWDC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 17 Jan 2023 17:03:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233070AbjAQUNQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 17 Jan 2023 15:13:16 -0500
-Received: from out-159.mta0.migadu.com (out-159.mta0.migadu.com [91.218.175.159])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D779193E9
-        for <bpf@vger.kernel.org>; Tue, 17 Jan 2023 11:06:10 -0800 (PST)
-Message-ID: <0c4e8a7f-9891-338e-1308-599f2c2af447@linux.dev>
-Date:   Tue, 17 Jan 2023 11:05:57 -0800
+        with ESMTP id S229750AbjAQWB5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 17 Jan 2023 17:01:57 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4348F3A86B
+        for <bpf@vger.kernel.org>; Tue, 17 Jan 2023 12:33:20 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id x2-20020a17090a46c200b002295ca9855aso52042pjg.2
+        for <bpf@vger.kernel.org>; Tue, 17 Jan 2023 12:33:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xlv20x7rc2LFeLXWCgfj7A8D+eK5VfQcM6xak5NBrHI=;
+        b=A8HZXITwr1t8gOcv/TDVWtSCFBu7YyUKhYOkW6CnEb2M33k8a3Z2YMXnJBARTJ/qd9
+         2bgRfw1DXbl8HO+VYQ+6JQEDXveXkTHjc54I9Y4ZfD3703hAhytKIvbgWx3rcJur3K+0
+         GZp+Wn3orFuxgN6Ysw9OV6BkddjMcfdec6x32QpFSVej4ly0r0uHC9Pd0Y+p8TcCfRa1
+         I+LzMAkxAl0yZkM4GwZ28C+hSbHWhxYShYDo/C3vxE0Nrb/BQxVVJXlbZUeOAOqyV30W
+         4dVDTKfmhT06qr/yR2e1yqDZo1O6UlksagiShSQJKfgLcS8sy1fHSEQvgAqA54WWWEgj
+         TQNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Xlv20x7rc2LFeLXWCgfj7A8D+eK5VfQcM6xak5NBrHI=;
+        b=EG/QZ0/WfapjV6/3i85Zu2x3wG60n1uesTAjT8dw6+ycXCNXIuSlcLB7yyRqgfFUep
+         HIn+5GM9t6AV1wOJaZKOBvriVxIEkp2AIvL7sExYjXxdX+Y2PWjDFk8uCUmFEsIcotbD
+         oIFZaim3eBBw3PNAjHsJ66a69gIpE8BKZDELbmrephV23N9cZsVWtpexmXb/Z96604KY
+         bwMv5ouDfjEZT/9kEzxqsVRD1rj3HIpWjhZeQwZ+t8Q2obOTOTvPCBjep1PUZhI61blK
+         pZ0kBFriYdy+RESWBFsL6hp8FWRW+TeJxbwQ0DPpGWSEasR4UG+O/pgmhAkZ39Xb3GzF
+         xp4A==
+X-Gm-Message-State: AFqh2krOC7B3E0Onu4RyTMLxVnR148CgpdWSZ6+Hn4HUiq2JBg+Zc9jF
+        mvsSPkLkbfVkAReb2sz/4D6iGYP5UCOCMpeAwrJFTQ==
+X-Google-Smtp-Source: AMrXdXs31p2u7HdHURCDmgZUyiEEHOQgVtrLzvGkLz9p2WGBfGTt92nBPq2q2xMgxfh0i8SA4nzOD1q+h8+gor/tVSU=
+X-Received: by 2002:a17:902:c506:b0:194:b553:234d with SMTP id
+ o6-20020a170902c50600b00194b553234dmr76045plx.62.1673987599489; Tue, 17 Jan
+ 2023 12:33:19 -0800 (PST)
 MIME-Version: 1.0
-Subject: Re: Struct_ops Questions
-Content-Language: en-US
-To:     Daniel Rosenberg <drosen@google.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>
-References: <CA+PiJmTMrWq-BGAMZgd317q0sT7tN-6=r3sDbZdb8iVzwPKdsw@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <CA+PiJmTMrWq-BGAMZgd317q0sT7tN-6=r3sDbZdb8iVzwPKdsw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20230112003230.3779451-1-sdf@google.com> <20230112003230.3779451-2-sdf@google.com>
+ <affeb1e3-69e6-9783-0012-6d917972ba30@redhat.com>
+In-Reply-To: <affeb1e3-69e6-9783-0012-6d917972ba30@redhat.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Tue, 17 Jan 2023 12:33:07 -0800
+Message-ID: <CAKH8qBuE5ipcncQ+=su_Ds1EHm5gUMG_od-+eqJHkuiV-Q6RhQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v7 01/17] bpf: Document XDP RX metadata
+To:     Jesper Dangaard Brouer <jbrouer@redhat.com>
+Cc:     bpf@vger.kernel.org, brouer@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, haoluo@google.com, jolsa@kernel.org,
+        David Ahern <dsahern@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Willem de Bruijn <willemb@google.com>,
+        Anatoly Burakov <anatoly.burakov@intel.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Magnus Karlsson <magnus.karlsson@gmail.com>,
+        Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
+        netdev@vger.kernel.org, David Vernet <void@manifault.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 1/13/23 5:05 PM, Daniel Rosenberg wrote:
-> I'm currently working on switching Fuse-BPF over to using struct_ops,
-> and have a few questions.
-> 
-> I noticed that the lifespan of the [name]_struct_op struct passed in
-> reg, and the associated maps have a lifespan that can't be influenced
-> by the subsystem. Fuse-bpf keeps struct ops on an arbitrary number of
-> inodes which will potentially outlive the op structure. My current
-> plan is to have fuse treat unreg similar to if the daemon simply
-> stopped responding, failing all impacted calls with ENOTCONN. I'm
-> currently looking at two approaches.
-> 
-> 1. Copy the struct received in reg, and have a flag to indicate if the
-> structure is live, with unreg just marking it as dead and some RCU
-> style sync to ensure we don't lose the function pointers post check.
-> 2. Maintain an additional struct that points to the reg provided
-> struct. Null out that pointer in unreg, with the same sort of RCU
-> sync.
-> 
-> I'm currently leaning towards 1, but not sure what the best approach
-> is here, or if there should be some way for the subsystem to grab a
-> kref on the maps/struct_op structures. Given the analogue of the FUSE
-> daemon being able to disappear at any given time, I think one of the
-> above options should be enough.
-> 
-> The old fuse-bpf implementation, which had its own program type
-> defined, would use the program fd as an identifier, which allowed it
-> to increment the ref count as needed. That sort of information isn't
-> exposed to the register function, and you can't reach the struct_ops
-> structure from a map fd as is. Either of those would allow us to
-> directly use the map/struct objects without needing to maintain an
-> extra layer of duplicated data. Currently all the register function
-> does is add information to be able to check if the map still exists,
-> which wouldn't be needed if we could just grab a ref.
-> 
-> I'm not sure how to handle Fuse being built as a module. Currently,
-> bpf_struct_ops uses an include file list to define all available
-> struct_ops, along with externs for their bpf_struct_ops structure. If
-> we build fuse as a module, that either would not be available, or
-> would require us to build extra things into the kernel when we make
-> fuse as a module, which sort of seems to defeat the point.
-> 
-> Do we need a module interface here? At the moment I'm messing around
-> with just having the reg/unreg functions implemented within the FUSE
-> module, with all of the verification functions built in on the bpf
-> side. I've got a rough prototype working, but there's some messiness
-> around unloading the module while there are still struct_op programs
-> registered. If you unload and reload the module, the struct_op program
-> will still show up via bpftools, but would be unusable since it would
-> no longer be registered. All of that goes away if we can directly use
-> the map fd as an identifier. That wouldn't be useful for anything that
-> requires extra setup in their reg function of course.
-> 
-> It seems like a fair bit of these issues go away if we allow for a way
-> to grab the specific struct_op structure from the map fd. Would that
-> be a reasonable thing to expose to a module?
+On Mon, Jan 16, 2023 at 5:09 AM Jesper Dangaard Brouer
+<jbrouer@redhat.com> wrote:
+>
+>
+>
+> On 12/01/2023 01.32, Stanislav Fomichev wrote:
+> > Document all current use-cases and assumptions.
+> >
+> > Cc: John Fastabend <john.fastabend@gmail.com>
+> > Cc: David Ahern <dsahern@gmail.com>
+> > Cc: Martin KaFai Lau <martin.lau@linux.dev>
+> > Cc: Jakub Kicinski <kuba@kernel.org>
+> > Cc: Willem de Bruijn <willemb@google.com>
+> > Cc: Jesper Dangaard Brouer <brouer@redhat.com>
+> > Cc: Anatoly Burakov <anatoly.burakov@intel.com>
+> > Cc: Alexander Lobakin <alexandr.lobakin@intel.com>
+> > Cc: Magnus Karlsson <magnus.karlsson@gmail.com>
+> > Cc: Maryam Tahhan <mtahhan@redhat.com>
+> > Cc: xdp-hints@xdp-project.net
+> > Cc: netdev@vger.kernel.org
+> > Acked-by: David Vernet <void@manifault.com>
+> > Signed-off-by: Stanislav Fomichev <sdf@google.com>
+> > ---
+> >   Documentation/networking/index.rst           |   1 +
+> >   Documentation/networking/xdp-rx-metadata.rst | 108 +++++++++++++++++++
+> >   2 files changed, 109 insertions(+)
+> >   create mode 100644 Documentation/networking/xdp-rx-metadata.rst
+> >
+> > diff --git a/Documentation/networking/index.rst b/Documentation/networking/index.rst
+> > index 4f2d1f682a18..4ddcae33c336 100644
+> > --- a/Documentation/networking/index.rst
+> > +++ b/Documentation/networking/index.rst
+> > @@ -120,6 +120,7 @@ Refer to :ref:`netdev-FAQ` for a guide on netdev development process specifics.
+> >      xfrm_proc
+> >      xfrm_sync
+> >      xfrm_sysctl
+> > +   xdp-rx-metadata
+> >
+> >   .. only::  subproject and html
+> >
+> > diff --git a/Documentation/networking/xdp-rx-metadata.rst b/Documentation/networking/xdp-rx-metadata.rst
+> > new file mode 100644
+> > index 000000000000..b6c8c77937c4
+> > --- /dev/null
+> > +++ b/Documentation/networking/xdp-rx-metadata.rst
+> > @@ -0,0 +1,108 @@
+> > +===============
+> > +XDP RX Metadata
+> > +===============
+> > +
+> > +This document describes how an eXpress Data Path (XDP) program can access
+> > +hardware metadata related to a packet using a set of helper functions,
+> > +and how it can pass that metadata on to other consumers.
+> > +
+> > +General Design
+> > +==============
+> > +
+> > +XDP has access to a set of kfuncs to manipulate the metadata in an XDP frame.
+> > +Every device driver that wishes to expose additional packet metadata can
+> > +implement these kfuncs. The set of kfuncs is declared in ``include/net/xdp.h``
+> > +via ``XDP_METADATA_KFUNC_xxx``.
+> > +
+> > +Currently, the following kfuncs are supported. In the future, as more
+> > +metadata is supported, this set will grow:
+> > +
+> > +.. kernel-doc:: net/core/xdp.c
+> > +   :identifiers: bpf_xdp_metadata_rx_timestamp bpf_xdp_metadata_rx_hash
+> > +
+> > +An XDP program can use these kfuncs to read the metadata into stack
+> > +variables for its own consumption. Or, to pass the metadata on to other
+> > +consumers, an XDP program can store it into the metadata area carried
+> > +ahead of the packet.
+> > +
+> > +Not all kfuncs have to be implemented by the device driver; when not
+> > +implemented, the default ones that return ``-EOPNOTSUPP`` will be used.
+> > +
+> > +Within an XDP frame, the metadata layout is as follows::
+>
+> Below diagram describes XDP buff (xdp_buff), but text says 'XDP frame'.
+> So XDP frame isn't referring literally to xdp_frame, which I find
+> slightly confusing.
+> It is likely because I think too much about the code and the different
+> objects, xdp_frame, xdp_buff, xdp_md (xdp ctx seen be bpf-prog).
+>
+> I tried to grep in the (recent added) bpf/xdp docs to see if there is a
+> definition of a XDP "packet" or "frame".  Nothing popped up, except that
+> Documentation/bpf/map_cpumap.rst talks about raw ``xdp_frame`` objects.
+>
+> Perhaps we can improve this doc by calling out xdp_buff here, like:
+>
+>   Within an XDP frame, the metadata layout (accessed via ``xdp_buff``)
+> is as follows::
 
-I think the first question is related to the refcnt of the struct_ops. Whenever 
-a new tcp connection is established, it also needs to bump the refcnt of a (bpf) 
-tcp_congestion_ops. The tcp subsystem currently does a bpf_try_module_get() 
-which then calls bpf_struct_ops_get() if 'owner == BPF_MODULE_OWNER'. 
-bpf_struct_ops_get() will inc the refcnt of the struct_ops.
+Sure, will amend!
 
-Regarding unreg, the st_map->st_ops->unreg() will unregister the struct_ops from 
-the tcp subsystem. The future tcp connection won't be able to find this (bpf) 
-tcp_congestion_ops.
+> > +
+> > +  +----------+-----------------+------+
+> > +  | headroom | custom metadata | data |
+> > +  +----------+-----------------+------+
+> > +             ^                 ^
+> > +             |                 |
+> > +   xdp_buff->data_meta   xdp_buff->data
+> > +
+> > +An XDP program can store individual metadata items into this ``data_meta``
+> > +area in whichever format it chooses. Later consumers of the metadata
+> > +will have to agree on the format by some out of band contract (like for
+> > +the AF_XDP use case, see below).
+> > +
+> > +AF_XDP
+> > +======
+> > +
+> > +:doc:`af_xdp` use-case implies that there is a contract between the BPF
+> > +program that redirects XDP frames into the ``AF_XDP`` socket (``XSK``) and
+> > +the final consumer. Thus the BPF program manually allocates a fixed number of
+> > +bytes out of metadata via ``bpf_xdp_adjust_meta`` and calls a subset
+> > +of kfuncs to populate it. The userspace ``XSK`` consumer computes
+> > +``xsk_umem__get_data() - METADATA_SIZE`` to locate that metadata.
+> > +Note, ``xsk_umem__get_data`` is defined in ``libxdp`` and
+> > +``METADATA_SIZE`` is an application-specific constant.
+>
+> The main problem with AF_XDP and metadata is that, the AF_XDP descriptor
+> doesn't contain any info about the length METADATA_SIZE.
+>
+> The text does says this, but in a very convoluted way.
+> I think this challenge should be more clearly spelled out.
+>
+> (p.s. This was something that XDP-hints via BTF have a proposed solution
+> for)
 
-After unreg(), the existing tcp connections could still hold a refcnt to the 
-already unregistered (bpf) tcp_congestion_ops. The refcnt will eventually be 
-released when all these old connections are closed. This is similar to all other 
-kernel tcp-cc modules (eg. when tcp_dctcp.c is built as a module).  Note that 
-once unreg, the struct_ops will still be shown in 'bpftools struct_ops dump 
-id...' but the status will be in BPF_STRUCT_OPS_STATE_TOBEFREE and it won't be 
-usable by new connection.
+Any suggestions on how to clarify it better? I have two hints:
+1. ``METADATA_SIZE`` is an application-specific constant
+2. note missing ``data_meta`` pointer
 
-Does the above behavior work for FUSE also? If not, how is FUSE different?
+Do you prefer I also add a sentence where I spell it out more
+explicitly? Something like:
 
-I think the next set of question is about when FUSE itself is built as a module. 
-The first is how to register 'struct bpf_struct_ops bpf_fuse_struct_ops'. You 
-are correct that right now it is done during compile time in 
-bpf_struct_ops_types.h. To make FUSE itself built as a module and 
-bpf_fuse_struct_ops defined in the FUSE module, some work is needed in 
-bpf_struct_ops.c to allow registering struct_ops in runtime during module_init. 
-For module reference counting, I think the bpf_fuse_struct_ops should be able to 
-hold one refcnt of the fuse module. Not sure how bpf_fuse_struct_ops looks like 
-and I also don't know how grabbing the map fd will help. It seems you already 
-have something working, so it may be easier to discuss base on that.
+Note, ``xsk_umem__get_data`` is defined in ``libxdp`` and
+``METADATA_SIZE`` is an application-specific constant (``AF_XDP``
+receive descriptor does _not_ explicitly carry the size of the
+metadata).
+
+> > +
+> > +Here is the ``AF_XDP`` consumer layout (note missing ``data_meta`` pointer)::
+>
+> The "note" also hint to this issue.
+
+This seems like an explicit design choice of the AF_XDP? In theory, I
+don't see why we can't have a v2 receive descriptor format where we
+return the size of the metadata?
+
+> > +
+> > +  +----------+-----------------+------+
+> > +  | headroom | custom metadata | data |
+> > +  +----------+-----------------+------+
+> > +                               ^
+> > +                               |
+> > +                        rx_desc->address
+> > +
+> > +XDP_PASS
+> > +========
+> > +
+> > +This is the path where the packets processed by the XDP program are passed
+> > +into the kernel. The kernel creates the ``skb`` out of the ``xdp_buff``
+> > +contents. Currently, every driver has custom kernel code to parse
+> > +the descriptors and populate ``skb`` metadata when doing this ``xdp_buff->skb``
+> > +conversion, and the XDP metadata is not used by the kernel when building
+> > +``skbs``. However, TC-BPF programs can access the XDP metadata area using
+> > +the ``data_meta`` pointer.
+> > +
+> > +In the future, we'd like to support a case where an XDP program
+> > +can override some of the metadata used for building ``skbs``.
+>
+> Happy this is mentioned as future work.
+
+As mentioned in a separate email, if you prefer to focus on that, feel
+free to drive it since I'm gonna look into the TX side first.
+
+> > +
+> > +bpf_redirect_map
+> > +================
+> > +
+> > +``bpf_redirect_map`` can redirect the frame to a different device.
+> > +Some devices (like virtual ethernet links) support running a second XDP
+> > +program after the redirect. However, the final consumer doesn't have
+> > +access to the original hardware descriptor and can't access any of
+> > +the original metadata. The same applies to XDP programs installed
+> > +into devmaps and cpumaps.
+> > +
+> > +This means that for redirected packets only custom metadata is
+> > +currently supported, which has to be prepared by the initial XDP program
+> > +before redirect. If the frame is eventually passed to the kernel, the
+> > +``skb`` created from such a frame won't have any hardware metadata populated
+> > +in its ``skb``. If such a packet is later redirected into an ``XSK``,
+> > +that will also only have access to the custom metadata.
+> > +
+>
+> Good that this is documented, but I hope we can fix/improve this as
+> future work.
+
+Definitely! Hopefully documenting it here acts as a sort-of TODO which
+we can eventually address. Maybe even starting with a section here on
+how it is supposed to work :-)
+
+
+> > +bpf_tail_call
+> > +=============
+> > +
+> > +Adding programs that access metadata kfuncs to the ``BPF_MAP_TYPE_PROG_ARRAY``
+> > +is currently not supported.
+> > +
+> > +Example
+> > +=======
+> > +
+> > +See ``tools/testing/selftests/bpf/progs/xdp_metadata.c`` and
+> > +``tools/testing/selftests/bpf/prog_tests/xdp_metadata.c`` for an example of
+> > +BPF program that handles XDP metadata.
+>
+>
+> --Jesper
+>
