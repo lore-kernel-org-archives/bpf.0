@@ -2,184 +2,123 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86B35C38142
-	for <bpf@archiver.kernel.org>; Tue, 17 Jan 2023 23:29:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E238C00A5A
+	for <bpf@archiver.kernel.org>; Tue, 17 Jan 2023 23:44:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbjAQX3Y (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 17 Jan 2023 18:29:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47724 "EHLO
+        id S230039AbjAQXol (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 17 Jan 2023 18:44:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjAQX2W (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 17 Jan 2023 18:28:22 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2112.outbound.protection.outlook.com [40.107.243.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E496C5899C;
-        Tue, 17 Jan 2023 13:29:31 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HlNz73Iir02yEaspnTK6uxlHckZA3xfbWe4fQl+9rPaijsKkBoYWAajLxurUiVCj9NNDmtFDeNdl0OG98a6Bu0aG3ZEKv3MWGn2iMrQJrr1+rKNxpCN/w77HfZd6aPJkwdKOSgkC9MC5LA6bWltDxSU7mcCrenYiVcD1MLaU8kZt5r2dNlwNOxkSz3XFUGfoKTkzjU1sJ3yCm6gnF8Cyto0T79XYXpk5TnJ5FBUUA/+KNynG7GM7AmUL4ak7pqAwUidLRXbiKm2Px8z9ip+olhp1qcKe8pOUdqaxTUU9KoyKeDo3L8APO73Rr49SPwod87yXkiITUvr/PQ+O2oN3jQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+d4Ua5kqsWYZDxhuG/mfvLDIqFfAShI7keasFNjA0WQ=;
- b=Pm6vkM1dvsf6QZnLivGHdnJ15HUjDYCU0mYccchK48XC+5BQ5DTE8qud8r5sIf2+PeAwaMNqwcZoPxVFLSVuLaa0xtx5sc6Mgek/azJtGhlJoDMtBssWwM5txDPeBDG6V5JWy2eezjo12NVHdbEUkqwvN+26zRtqC8zT8IdRFBwXnL68itKuhKsj3JosOawM7/FP0nen9GcUrXY38XCUj2YnrC91B9KGASTuMJEP9Upl81+PDSLDYPhcVRQhhUIuYpzIMCrx4H63p+t1zt9ULjmOzt4ceixv9TG2+rm9KtME3FBmZ+45JFpdIwytOhH+og4D/hey/DrDoSNYwO1x2g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        with ESMTP id S230117AbjAQXoU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 17 Jan 2023 18:44:20 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799EA70C66
+        for <bpf@vger.kernel.org>; Tue, 17 Jan 2023 14:49:57 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso462700pjt.0
+        for <bpf@vger.kernel.org>; Tue, 17 Jan 2023 14:49:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+d4Ua5kqsWYZDxhuG/mfvLDIqFfAShI7keasFNjA0WQ=;
- b=fFgWP09frz/MaRdTi/Q/L5ST+k+Eoqx2YJP7WRigDHiWZEI5B5m32LoPvZMSXTxprHYqbqifsdnmdvlq2PBVz6BLHJfZgEVzJJVM7M8GpkGIwURUxbCgVxf7Hvo+9Wdzz23fdmBXvjZFUITIpCjo/8t7BQ2y7o9so1u5M3q5MEw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from SJ0PR13MB6037.namprd13.prod.outlook.com (2603:10b6:a03:3e2::9)
- by DM6PR13MB3906.namprd13.prod.outlook.com (2603:10b6:5:2a2::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Tue, 17 Jan
- 2023 21:29:29 +0000
-Received: from SJ0PR13MB6037.namprd13.prod.outlook.com
- ([fe80::a17f:495a:6870:18c0]) by SJ0PR13MB6037.namprd13.prod.outlook.com
- ([fe80::a17f:495a:6870:18c0%9]) with mapi id 15.20.5986.023; Tue, 17 Jan 2023
- 21:29:29 +0000
-Date:   Tue, 17 Jan 2023 22:29:12 +0100
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@corigine.com>
-To:     Lorenzo Bianconi <lorenzo@kernel.org>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, davem@davemloft.net,
-        kuba@kernel.org, hawk@kernel.org, pabeni@redhat.com,
-        edumazet@google.com, toke@redhat.com, memxor@gmail.com,
-        alardam@gmail.com, saeedm@nvidia.com, anthony.l.nguyen@intel.com,
-        gospo@broadcom.com, vladimir.oltean@nxp.com, nbd@nbd.name,
-        john@phrozen.org, leon@kernel.org, simon.horman@corigine.com,
-        aelior@marvell.com, christophe.jaillet@wanadoo.fr,
-        ecree.xilinx@gmail.com, mst@redhat.com, bjorn@kernel.org,
-        magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
-        intel-wired-lan@lists.osuosl.org, lorenzo.bianconi@redhat.com
-Subject: Re: [RFC v2 bpf-next 2/7] drivers: net: turn on XDP features
-Message-ID: <Y8cTKOmCBbMEZK8D@sleipner.dyn.berto.se>
-References: <cover.1673710866.git.lorenzo@kernel.org>
- <b606e729c9baf36a28be246bf0bfa4d21cc097fb.1673710867.git.lorenzo@kernel.org>
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b606e729c9baf36a28be246bf0bfa4d21cc097fb.1673710867.git.lorenzo@kernel.org>
-X-ClientProxiedBy: FR2P281CA0154.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:98::9) To SJ0PR13MB6037.namprd13.prod.outlook.com
- (2603:10b6:a03:3e2::9)
+        d=googlemail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lOZktqMpTUMrIIQ1iYnsdM8Pvql8GU2qMZDngdI8BQA=;
+        b=mYPHRRQAf657D9uDG7xYOVpnjEYoSWFR0Sc00N71017O2/tFlFwGeycJahLak4UkKU
+         oZ3nPP5NHph8zD5lxN2dUdg5DvhSVBm87Tw548yGdvWsTsf9iknntcXoWH5MWC/oJOc3
+         yKZ4norfEEHf8NApmg0k3Qn4dFt8D1/DAkSYotPfVNAuR/XtgFOkJwcRvbQdracw9EJv
+         OiZdZj74aIIU10npf15d8Hv4b0ZdkJvcF4x+cFMDB5FrrfdfxDk3f11Li2rUoHl5/h0O
+         czCCkD8xZ8cXqRi7S7KigG+5nH5t+0oDAdsL/0rKcxxcp2E7xAT5KuGo1Fj2dVhn4Byr
+         homA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lOZktqMpTUMrIIQ1iYnsdM8Pvql8GU2qMZDngdI8BQA=;
+        b=gxDKTK6pODtbrHIzvXURI4qIkyy+ZW/J9IlCR/PgXan96Ow5LQ2mMRYZ2kcBXGvv89
+         nvkQR9NJHGcFgIbXV8d/WGx4z8hoMAbcHFwZIqwzY9DcCOEcd9xwpHs4vlYLQw6JvYtM
+         4tCGFr/4YAOQ5YIPs3IGwYKrF+JLasHdUPDCN3dTmfrzH7J+liIbin3uC5uyXT0R+nZ3
+         eDOZ0HrL1jxEwyOFm56A8vZUJOANZMLWlczpINA+IZxjl1yh3Zsj3ladP4gkhWqMmyP5
+         EaqDSgQG8y5Xr4D8jgXgS41UoMBkH5UkL+Wgts8c/8Hz3DOsMFpnuMDBOiq6YJ0vmgPI
+         kmBQ==
+X-Gm-Message-State: AFqh2kqpMAguv45bnAArLs/hW3502A59KxyRIjmBWSWWTcO5vO14OaFi
+        n6M/fByxs3ub/ByyxwkuXMUEw7mMnag=
+X-Google-Smtp-Source: AMrXdXsj4zVu0ttT+930ZalN1j4Xuq8w/X1TPVWEBTH8byR3mOMB/eZCOfEqcsuOnx5wkzFeE2NGSg==
+X-Received: by 2002:a17:902:e811:b0:194:98ef:a40e with SMTP id u17-20020a170902e81100b0019498efa40emr6381544plg.31.1673995796596;
+        Tue, 17 Jan 2023 14:49:56 -0800 (PST)
+Received: from mariner-vm.. ([131.107.8.65])
+        by smtp.gmail.com with ESMTPSA id l16-20020a170902f69000b00177efb56475sm21692728plg.85.2023.01.17.14.49.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 14:49:56 -0800 (PST)
+From:   dthaler1968@googlemail.com
+To:     bpf@vger.kernel.org
+Cc:     Dave Thaler <dthaler@microsoft.com>
+Subject: [PATCH] bpf, docs: Fix modulo zero, division by zero, overflow, and underflow
+Date:   Tue, 17 Jan 2023 22:49:51 +0000
+Message-Id: <20230117224951.984-1-dthaler1968@googlemail.com>
+X-Mailer: git-send-email 2.33.4
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR13MB6037:EE_|DM6PR13MB3906:EE_
-X-MS-Office365-Filtering-Correlation-Id: afa0a3bd-e151-4006-83d3-08daf8d1ea53
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2h8Sp/t+T0Zd6Klv2vekrxhs56ZIvjPEctYj5wY44s0xF27JIengwKkY6kA8kTA/+Vf8y8LMybwcMkYfRffjZxXobUWMO+xnnz9MXRFcUrrwHaITmajsGw0mfSVRvjHQ3klNkMnOjwOy+D+SAvJvAUZHO4CT7XS+luGw5HLQ85Bu0RtsdCCkaln/Nha7+K6DspUGhsEob1nidgLJtRiNAi0O3S7dikQTCbST3KFcck4f6EYYYsN0bqTz52hkdsNgexJHs9dchW5IphUuBErJSzUDk/iqGjxqcTpUaEkYwltvqfvEfl+Hp1zDeaVVop0vz7I8M4ElFCyjYJ3UFfeQ3e3DFZaED5NuaWVNBtRqvbV1kfVkwiXOyUvJNkv5msl84Tp1VgbgFGF05TF1MaWczwrzM7sfuY5Bu0IW6dPgQ055t0DG7r/VGyxBcam3zQlzFHEO1QaBN1jFwaNdkkaFxg4/gojz4JZ4YVnUIWy89bJC4Igz4Mb+tw4l00ve02ja3WWi558RUX7AfG3xh+Epk/6PN14squK1JY+IOyA8Z2ObUWsMUE117JwuEoEvm28XgAUJF88SvIvWbyV0Ai/VDtqm18ei81UIY62oW+EVrKx06xNJPn6J/QuSqjh7UxvNtPJrzkJpPoDpXKTsj6UHyNghxANmMg89YOluHB3Oud1CnmX9gSBhOO4/L+u+QbPUl81jRb4x16ZsVq8SoETQDw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR13MB6037.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39830400003)(136003)(346002)(366004)(376002)(396003)(451199015)(52116002)(316002)(186003)(6666004)(6512007)(6506007)(53546011)(8676002)(66946007)(9686003)(6486002)(478600001)(26005)(66476007)(66574015)(41300700001)(4326008)(6916009)(5660300002)(7406005)(2906002)(7416002)(8936002)(38350700002)(38100700002)(66556008)(86362001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?yW280c5XlKkMkLBFh1z+5mDPyVm/5Lgmzqx+D9ekb81OOUgNU/zzmBI0LR?=
- =?iso-8859-1?Q?4s50vs131gmccSLvOJBnrl1Y9F4aG5loizarMhfKy8qJpeU+/Y+GqK1tKk?=
- =?iso-8859-1?Q?qjENb1gbenYIIPIfJXvQy/MSOUaM96N2lVyLK1mzfEBdM/iDqGeBICK3fp?=
- =?iso-8859-1?Q?8/HKXhvw0N0WkbAoY8187gTbqwrAem9ZxlhezQED7pbLZjxeopm98VE/YO?=
- =?iso-8859-1?Q?srnh2mREjzsxFc97H5LPQ8Bx5BZ50cZFQv9x70QeZJX0eQFC4hsj5lsUj+?=
- =?iso-8859-1?Q?gv7rkYBFfhitQtWxg/0WFfUzSsO8sYAin45xEx8+l7KNNNGg6kEwE0rRH6?=
- =?iso-8859-1?Q?ppUgbbTO5Gzu/e7/lgd38cld+y/DyeoUN5rCUlUlDuLG8z3xQzW/84XWRv?=
- =?iso-8859-1?Q?Fh4lezfKoB6i256Bt1ku97rirY8nbIcNS/DyF7q1TlOOTtF05V3H7/cKgD?=
- =?iso-8859-1?Q?5tNNLgcyYLRiTAeHuUwD+M8TAD/IhUwR8WwfcAUhwIJrCyH3u4QRKzdbUf?=
- =?iso-8859-1?Q?ESpiMcirPmjnwoQk0KNI2Ri6d7s3lEqHe4bq8doEIqYzDCn0bwcza05rwY?=
- =?iso-8859-1?Q?ZAOufiSQ5gdmjwAKTwWiOjdE1FkhSWI1/rI+L32cTTwqnzXL8AR5u5ZRV2?=
- =?iso-8859-1?Q?Nm2BL03ay5PS8Q+byaxAjSdufTbo9uGelZFiZbrOIYPaNVOBpRGEz5NqLb?=
- =?iso-8859-1?Q?j0CQTrUJpiSYk2xldH4tg0cEJeHEalmH40fZ/gHpqsLcVBN8MN7zz6hHne?=
- =?iso-8859-1?Q?cW9JF+sP1r+l/Jpd8tPZjeZo1CN3EknpJt6RQKqnSe7pfMWz5KNfaAxo6N?=
- =?iso-8859-1?Q?JyVAKa9NeDtAzOvpxb2cxgNyrvLCWyaCvhoioCQcUN/tEmUxdM/KMWKQ3Y?=
- =?iso-8859-1?Q?oFWJgr0c1UKXNXHVqtLxrOcQUxTzklLkUgYwJEjBSXxxvb+bfwBJL+Tzyl?=
- =?iso-8859-1?Q?zEdHaGnOWPU36ElykGxtdCy+p8HzgBpXKkTOIabKs4+C/QuQkgwMbTLk0c?=
- =?iso-8859-1?Q?sEkWjE7NeJXQi88e99iDBafpTOxlPT225646XsBd3T/9cxQg92GqMAHWi3?=
- =?iso-8859-1?Q?5gRUqNDAMbD/uwzmA8S6PbcVm2qQdw5b1wV9GfowC9lyofl8OnOWthdMvI?=
- =?iso-8859-1?Q?kp4pJSHg97AnqEZF4JZo9/m+yQwC+CYV3usa0925qZiPyFYo+BCToc1Hmb?=
- =?iso-8859-1?Q?kniju5dXTlHG9ph0BUymaRhPqKBZwZPMSet4kkjVTHRQ+6y5hwKowBOXuV?=
- =?iso-8859-1?Q?tifUR+TQx2o0jfkzF5ZzU2jrk9tpxjSzV868ZOhnzyKgdu9kOqzlkl413R?=
- =?iso-8859-1?Q?roP5/+X4sgFPBpenEmy89dhh7SuZw2qckAOFOvwNjVcrkszUQ55PSLGJTG?=
- =?iso-8859-1?Q?Ggp2Wpu9ljEQs34mEv2Jk+GRbwVww4aam5AJzc9qSl/ZfbntvevTRUrB6/?=
- =?iso-8859-1?Q?7JPGvWrSb2n63sw5/QB2cEy3y0iPxDicbyQzNnK4Rx8PqbptyIU7HWI46s?=
- =?iso-8859-1?Q?1l3cfIGTT/oj9t/GGsZG576hH3k3ho1N0ynldGzEXZWCCWgLpkbKJsyEQw?=
- =?iso-8859-1?Q?gmQiNetMoV4MGXF75q+s0zC+VIVSYk2dTN80CdVhOUlFVC4j6V3SOlklOm?=
- =?iso-8859-1?Q?heq4z+TWDJlLGBMhqXrFANrXuwDsCEZd6i21tfCVOoXXD3QTzZ3NB9fg?=
- =?iso-8859-1?Q?=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: afa0a3bd-e151-4006-83d3-08daf8d1ea53
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR13MB6037.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2023 21:29:29.2666
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 98Ty6JTyOKrYmhtz5wSYHbEnbXLUbbY9R8elU/xKYKwm5wN65IwgSd/DlcuC1GjQFlpNjpaKvg8gZIEMlbcqu3gKY8+hZI8QuNdQH/nSXzI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR13MB3906
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Lorenzo and Marek,
+From: Dave Thaler <dthaler@microsoft.com>
 
-Thanks for your work.
+Fix modulo zero, division by zero, overflow, and underflow.
+Also clarify how a negative immediate value is used in unsigned division
 
-On 2023-01-14 16:54:32 +0100, Lorenzo Bianconi wrote:
+Changes from last submission: addressed 32-bit comments from
+Daniel and Stanislav.
 
-[...]
+Signed-off-by: Dave Thaler <dthaler@microsoft.com>
+---
+ Documentation/bpf/instruction-set.rst | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-> 
-> Turn 'hw-offload' feature flag on for:
->  - netronome (nfp)
->  - netdevsim.
-
-Is there a definition of the 'hw-offload' written down somewhere? From 
-reading this series I take it is the ability to offload a BPF program?  
-It would also be interesting to read documentation for the other flags 
-added in this series.
-
-[...]
-
-> diff --git a/drivers/net/ethernet/netronome/nfp/nfp_net_common.c 
-> b/drivers/net/ethernet/netronome/nfp/nfp_net_common.c
-> index 18fc9971f1c8..5a8ddeaff74d 100644
-> --- a/drivers/net/ethernet/netronome/nfp/nfp_net_common.c
-> +++ b/drivers/net/ethernet/netronome/nfp/nfp_net_common.c
-> @@ -2529,10 +2529,14 @@ static void nfp_net_netdev_init(struct nfp_net *nn)
->  	netdev->features &= ~NETIF_F_HW_VLAN_STAG_RX;
->  	nn->dp.ctrl &= ~NFP_NET_CFG_CTRL_RXQINQ;
->  
-> +	nn->dp.netdev->xdp_features = NETDEV_XDP_ACT_BASIC |
-> +				      NETDEV_XDP_ACT_HW_OFFLOAD;
-
-If my assumption about the 'hw-offload' flag above is correct I think 
-NETDEV_XDP_ACT_HW_OFFLOAD should be conditioned on that the BPF firmware 
-flavor is in use.
-
-    nn->dp.netdev->xdp_features = NETDEV_XDP_ACT_BASIC;
-
-    if (nn->app->type->id == NFP_APP_BPF_NIC)
-        nn->dp.netdev->xdp_features |= NETDEV_XDP_ACT_HW_OFFLOAD;
-
-> +
->  	/* Finalise the netdev setup */
->  	switch (nn->dp.ops->version) {
->  	case NFP_NFD_VER_NFD3:
->  		netdev->netdev_ops = &nfp_nfd3_netdev_ops;
-> +		nn->dp.netdev->xdp_features |= NETDEV_XDP_ACT_XSK_ZEROCOPY;
->  		break;
->  	case NFP_NFD_VER_NFDK:
->  		netdev->netdev_ops = &nfp_nfdk_netdev_ops;
-
-This is also a wrinkle I would like to understand. Currently NFP support 
-zero-copy on NFD3, but not for offloaded BPF programs. But with the BPF 
-firmware flavor running the device can still support zero-copy for 
-non-offloaded programs.
-
-Is it a problem that the driver advertises support for both 
-hardware-offload _and_ zero-copy at the same time, even if they can't be 
-used together but separately?
-
+diff --git a/Documentation/bpf/instruction-set.rst b/Documentation/bpf/instruction-set.rst
+index e672d5ec6cc..fcd4db45717 100644
+--- a/Documentation/bpf/instruction-set.rst
++++ b/Documentation/bpf/instruction-set.rst
+@@ -99,19 +99,26 @@ code      value  description
+ BPF_ADD   0x00   dst += src
+ BPF_SUB   0x10   dst -= src
+ BPF_MUL   0x20   dst \*= src
+-BPF_DIV   0x30   dst /= src
++BPF_DIV   0x30   dst = (src != 0) ? (dst / src) : 0
+ BPF_OR    0x40   dst \|= src
+ BPF_AND   0x50   dst &= src
+ BPF_LSH   0x60   dst <<= src
+ BPF_RSH   0x70   dst >>= src
+ BPF_NEG   0x80   dst = ~src
+-BPF_MOD   0x90   dst %= src
++BPF_MOD   0x90   dst = (src != 0) ? (dst % src) : dst
+ BPF_XOR   0xa0   dst ^= src
+ BPF_MOV   0xb0   dst = src
+ BPF_ARSH  0xc0   sign extending shift right
+ BPF_END   0xd0   byte swap operations (see `Byte swap instructions`_ below)
+ ========  =====  ==========================================================
+ 
++Underflow and overflow are allowed during arithmetic operations,
++meaning the 64-bit or 32-bit value will wrap.  If
++eBPF program execution would result in division by zero,
++the destination register is instead set to zero.
++If execution would result in modulo by zero,
++the destination register is instead left unchanged.
++
+ ``BPF_ADD | BPF_X | BPF_ALU`` means::
+ 
+   dst_reg = (u32) dst_reg + (u32) src_reg;
+@@ -128,6 +135,11 @@ BPF_END   0xd0   byte swap operations (see `Byte swap instructions`_ below)
+ 
+   dst_reg = dst_reg ^ imm32
+ 
++Also note that the division and modulo operations are unsigned.
++Thus, for `BPF_ALU`, 'imm' is first converted to an unsigned
++32-bit value, whereas for `BPF_ALU64`, 'imm' is first sign extended
++to 64 bits and then converted to an unsigned 64-bit value.  There
++are no instructions for signed division or modulo.
+ 
+ Byte swap instructions
+ ~~~~~~~~~~~~~~~~~~~~~~
 -- 
-Kind Regards,
-Niklas Söderlund
+2.33.4
+
