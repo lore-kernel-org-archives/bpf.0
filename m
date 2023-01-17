@@ -2,129 +2,197 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2147C38147
-	for <bpf@archiver.kernel.org>; Tue, 17 Jan 2023 22:40:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EB95C38142
+	for <bpf@archiver.kernel.org>; Tue, 17 Jan 2023 22:40:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbjAQWkK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 17 Jan 2023 17:40:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37320 "EHLO
+        id S229600AbjAQWkw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 17 Jan 2023 17:40:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjAQWjd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 17 Jan 2023 17:39:33 -0500
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3666F5AB6A
-        for <bpf@vger.kernel.org>; Tue, 17 Jan 2023 14:22:08 -0800 (PST)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id 9A7B3240435
-        for <bpf@vger.kernel.org>; Tue, 17 Jan 2023 23:22:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1673994126; bh=NugUdNmAxkmrBjvc5pW6xtysgvVUKeiaDrAzvrQrsO8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FZQN9LMWGiP7bBQ+Be74ime4sIznbNQw3GmWuLL4dtZjJR04IhsAKBOCqbGk76Rvo
-         DmWgo7+//zqQsQk0xgtAdGOFxzOxwbMVFeUpegargYIcUXpEaaMOCW7tprsAjpFjXh
-         q8mXsmzZL724m+ZLRvHBjW04694VN8/DXRuKpQd8n4dPw3ZwKQklHm83fkDvi9sRIE
-         MlqT73YTRkCczxa+1OU2Y6525ojqgJSgzEKuZkX127gxfopsazsWh2CDX6LCsxwncw
-         b+zmZYmA5HGJ5p2FScrlHlINWdB0bySf9pKpXS5GBLjQ2IAtC7tz0WuIEQYSKXXgx6
-         vWXXpyAC+UyEQ==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4NxNfd6dZkz6tmN;
-        Tue, 17 Jan 2023 23:22:01 +0100 (CET)
-Date:   Tue, 17 Jan 2023 22:21:58 +0000
-From:   Daniel =?utf-8?Q?M=C3=BCller?= <deso@posteo.net>
-To:     Hao Luo <haoluo@google.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>, kernel-team@meta.com
-Subject: Re: CORE feature request: support checking field type directly
-Message-ID: <20230117222158.uyezr5ab72ck5fhv@muellerd-fedora-PC2BDTX9>
-References: <CA+khW7ju-gewZVNxopBi3Uvhiv8Wb=a-D4gaW3MD-NkUg0WSSg@mail.gmail.com>
- <20230117215658.xec7cirlfx2z7z2m@muellerd-fedora-PC2BDTX9>
+        with ESMTP id S229834AbjAQWjz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 17 Jan 2023 17:39:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB7D22DD2
+        for <bpf@vger.kernel.org>; Tue, 17 Jan 2023 14:15:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673993757;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nVCdnSPpgSc0Lut4xjL5N2UTJnAW1T5qJ5v9mxraf2M=;
+        b=Z0jSZfcKa7GOt0cbXWP5pQcSFSLScW2iTK09TAFann4frOugGfZpV8W6OVkCkePACApXeX
+        jFk/YT9MqlXLZTbY+BimQ4W6/XsD5VeQPADl4JsC1TJVa4wDlBFuFZph6UXVx60su+uckU
+        tS3U/5dX7rojwV2vAsjpwj/7zFUmRLY=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-509-axfMPtKbPKSb919lV1l8KA-1; Tue, 17 Jan 2023 17:15:50 -0500
+X-MC-Unique: axfMPtKbPKSb919lV1l8KA-1
+Received: by mail-ed1-f69.google.com with SMTP id f11-20020a056402354b00b0049e18f0076dso4718864edd.15
+        for <bpf@vger.kernel.org>; Tue, 17 Jan 2023 14:15:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nVCdnSPpgSc0Lut4xjL5N2UTJnAW1T5qJ5v9mxraf2M=;
+        b=Vo47o+C6Lr25aARFouy1/YAYSBKjasKWxE2ag16Ic1stwJbGLB4/6QS96iXSmEB1du
+         1dfBtBWZ5stgsanvfJ4NJXWPkqp6OLjtjFCGUAXXPYui1jxUTLDHWP1iS33CcffdLriI
+         WLPJnQmEd81IyHQxrK/mGjov/iXMLBO6lqoXvWrFrlV3+qHEi+Ct39/x054Q7E2wRQqh
+         JKkxwSMLsUz9z5mgOzMcvfnYfHFKWPYEpbX9PGexIxJZB0cKpKaiCry5me1OepqP0O1Y
+         1k6wSKfLb6+qi5Vr2KwTFFEzXSSroupWpryIEOrCCkszihkJb2jrM5QI9WgCPPhubb7S
+         4tQQ==
+X-Gm-Message-State: AFqh2kqWGLIElybaUl/iXjPDaYIjfNqKwOU1KZmc2eUS0tfJetMXXbdG
+        57tHiBepG+J2pnKtLRhQPatMSPEl7SP3bhQkxA3tfhQ9lhjAUdEZiDUizG29gLn69ycqDXQLweN
+        hA1XOx52x1k73
+X-Received: by 2002:a17:907:76c6:b0:877:564a:6fd3 with SMTP id kf6-20020a17090776c600b00877564a6fd3mr182119ejc.21.1673993749157;
+        Tue, 17 Jan 2023 14:15:49 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtct0L+6H586Hqk7KUwB31Uwdc2ltJ7NpPWPm0QfBMU5pi3ouGi3JVmNp1YtMSvhkEzQ5BRBw==
+X-Received: by 2002:a17:907:76c6:b0:877:564a:6fd3 with SMTP id kf6-20020a17090776c600b00877564a6fd3mr182089ejc.21.1673993748801;
+        Tue, 17 Jan 2023 14:15:48 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id r2-20020a17090609c200b007bd28b50305sm13685716eje.200.2023.01.17.14.15.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 14:15:48 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 819879011A9; Tue, 17 Jan 2023 23:15:47 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@corigine.com>
+Cc:     Lorenzo Bianconi <lorenzo@kernel.org>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        hawk@kernel.org, pabeni@redhat.com, edumazet@google.com,
+        memxor@gmail.com, alardam@gmail.com, saeedm@nvidia.com,
+        anthony.l.nguyen@intel.com, gospo@broadcom.com,
+        vladimir.oltean@nxp.com, nbd@nbd.name, john@phrozen.org,
+        leon@kernel.org, simon.horman@corigine.com, aelior@marvell.com,
+        christophe.jaillet@wanadoo.fr, ecree.xilinx@gmail.com,
+        mst@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com,
+        maciej.fijalkowski@intel.com, intel-wired-lan@lists.osuosl.org,
+        lorenzo.bianconi@redhat.com
+Subject: Re: [RFC v2 bpf-next 2/7] drivers: net: turn on XDP features
+In-Reply-To: <Y8cboWSmvoOKxav2@oden.dyn.berto.se>
+References: <cover.1673710866.git.lorenzo@kernel.org>
+ <b606e729c9baf36a28be246bf0bfa4d21cc097fb.1673710867.git.lorenzo@kernel.org>
+ <Y8cTKOmCBbMEZK8D@sleipner.dyn.berto.se> <87y1q0bz6m.fsf@toke.dk>
+ <Y8cboWSmvoOKxav2@oden.dyn.berto.se>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Tue, 17 Jan 2023 23:15:47 +0100
+Message-ID: <87sfg8byek.fsf@toke.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230117215658.xec7cirlfx2z7z2m@muellerd-fedora-PC2BDTX9>
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-I apologize for the response. Somehow Andrii's reply and the entire thread was
-lost on me. Anyway, glad it's working for you.
+Niklas S=C3=B6derlund <niklas.soderlund@corigine.com> writes:
 
-Thanks,
-Daniel
+> Hi Toke,
+>
+> On 2023-01-17 22:58:57 +0100, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+>> Niklas S=C3=B6derlund <niklas.soderlund@corigine.com> writes:
+>>=20
+>> > Hi Lorenzo and Marek,
+>> >
+>> > Thanks for your work.
+>> >
+>> > On 2023-01-14 16:54:32 +0100, Lorenzo Bianconi wrote:
+>> >
+>> > [...]
+>> >
+>> >>=20
+>> >> Turn 'hw-offload' feature flag on for:
+>> >>  - netronome (nfp)
+>> >>  - netdevsim.
+>> >
+>> > Is there a definition of the 'hw-offload' written down somewhere? From=
+=20
+>> > reading this series I take it is the ability to offload a BPF program?=
+=20=20
+>>=20
+>> Yeah, basically this means "allows loading and attaching programs in
+>> XDP_MODE_HW", I suppose :)
+>>=20
+>> > It would also be interesting to read documentation for the other flags=
+=20
+>> > added in this series.
+>>=20
+>> Yup, we should definitely document them :)
+>>=20
+>> > [...]
+>> >
+>> >> diff --git a/drivers/net/ethernet/netronome/nfp/nfp_net_common.c=20
+>> >> b/drivers/net/ethernet/netronome/nfp/nfp_net_common.c
+>> >> index 18fc9971f1c8..5a8ddeaff74d 100644
+>> >> --- a/drivers/net/ethernet/netronome/nfp/nfp_net_common.c
+>> >> +++ b/drivers/net/ethernet/netronome/nfp/nfp_net_common.c
+>> >> @@ -2529,10 +2529,14 @@ static void nfp_net_netdev_init(struct nfp_ne=
+t *nn)
+>> >>  	netdev->features &=3D ~NETIF_F_HW_VLAN_STAG_RX;
+>> >>  	nn->dp.ctrl &=3D ~NFP_NET_CFG_CTRL_RXQINQ;
+>> >>=20=20
+>> >> +	nn->dp.netdev->xdp_features =3D NETDEV_XDP_ACT_BASIC |
+>> >> +				      NETDEV_XDP_ACT_HW_OFFLOAD;
+>> >
+>> > If my assumption about the 'hw-offload' flag above is correct I think=
+=20
+>> > NETDEV_XDP_ACT_HW_OFFLOAD should be conditioned on that the BPF firmwa=
+re=20
+>> > flavor is in use.
+>> >
+>> >     nn->dp.netdev->xdp_features =3D NETDEV_XDP_ACT_BASIC;
+>> >
+>> >     if (nn->app->type->id =3D=3D NFP_APP_BPF_NIC)
+>> >         nn->dp.netdev->xdp_features |=3D NETDEV_XDP_ACT_HW_OFFLOAD;
+>> >
+>> >> +
+>> >>  	/* Finalise the netdev setup */
+>> >>  	switch (nn->dp.ops->version) {
+>> >>  	case NFP_NFD_VER_NFD3:
+>> >>  		netdev->netdev_ops =3D &nfp_nfd3_netdev_ops;
+>> >> +		nn->dp.netdev->xdp_features |=3D NETDEV_XDP_ACT_XSK_ZEROCOPY;
+>> >>  		break;
+>> >>  	case NFP_NFD_VER_NFDK:
+>> >>  		netdev->netdev_ops =3D &nfp_nfdk_netdev_ops;
+>> >
+>> > This is also a wrinkle I would like to understand. Currently NFP suppo=
+rt=20
+>> > zero-copy on NFD3, but not for offloaded BPF programs. But with the BP=
+F=20
+>> > firmware flavor running the device can still support zero-copy for=20
+>> > non-offloaded programs.
+>> >
+>> > Is it a problem that the driver advertises support for both=20
+>> > hardware-offload _and_ zero-copy at the same time, even if they can't =
+be=20
+>> > used together but separately?
+>>=20
+>> Hmm, so the idea with this is to only expose feature flags that are
+>> supported "right now" (you'll note that some of the drivers turn the
+>> REDIRECT_TARGET flag on and off at runtime). Having features that are
+>> "supported but in a different configuration" is one of the points of
+>> user confusion we want to clear up with the explicit flags.
+>>=20
+>> So I guess it depends a little bit what you mean by "can't be used
+>> together"? I believe it's possible to load two programs at the same
+>> time, one in HW mode and one in native (driver) mode, right? In this
+>> case, could the driver mode program use XSK zerocopy while the HW mode
+>> program is also loaded?
+>
+> Exactly, this is my concern. Two programs can be loaded at the same=20
+> time, one in HW mode and one in native mode. The program in native mode=20
+> can use zero-copy at the same time as another program runs in HW mode.
+>
+> But the program running in HW mode can never use zero-copy.
 
-On Tue, Jan 17, 2023 at 09:56:58PM +0000, Daniel Müller wrote:
-> Hi Hao,
-> 
-> On Thu, Jan 12, 2023 at 02:18:05PM -0800, Hao Luo wrote:
-> > Feature request:
-> > 
-> > To support checking the type of a specific field directly.
-> > 
-> > Background:
-> > 
-> > Currently, As far as I know, CORE is able to check a field’s
-> > existence, offset, size and signedness, but not the field’s type
-> > directly.
-> 
-> Are you aware of the TYPE_MATCHES support [0] that was added a while back?
-> Specifically, for types to "match" they have to be of the same "kind" (struct
-> vs. struct, union vs. union, etc.). That check is done recursively for fields
-> from what I recall (please see linked change description or source code for more
-> details).
-> 
-> > There are changes that convert a field from a scalar type to a struct
-> > type, without changing the field’s name, offset or size. In that case,
-> > it is currently difficult to use CORE to check such changes. For a
-> > concrete example,
-> > 
-> > Commit 94a9717b3c (“locking/rwsem: Make rwsem->owner an atomic_long_t”)
-> > 
-> > Changed the type of rw_semaphore::owner from tast_struct * to
-> > atomic_long_t. In that change, the field name, offset and size remain
-> > the same. But the BPF program code used to extract the value is
-> > different. For the kernel where the field is a pointer, we can write:
-> > 
-> > sem->owner
-> > 
-> > While in the kernel where the field is an atomic, we need to write:
-> > 
-> > sem->owner.counter.
-> > 
-> > It would be great to be able to check a field’s type directly.
-> > Probably something like:
-> > 
-> > #include “vmlinux.h”
-> > 
-> > struct rw_semaphore__old {
-> >         struct task_struct *owner;
-> > };
-> > 
-> > struct rw_semaphore__new {
-> >         atomic_long_t owner;
-> > };
-> > 
-> > u64 owner;
-> > if (bpf_core_field_type_is(sem->owner, struct task_struct *)) {
-> >         struct rw_semaphore__old *old = (struct rw_semaphore__old *)sem;
-> >         owner = (u64)sem->owner;
-> > } else if (bpf_core_field_type_is(sem->owner, atomic_long_t)) {
-> >         struct rw_semaphore__new *new = (struct rw_semaphore__new *)sem;
-> >         owner = new->owner.counter;
-> > }
-> 
-> I haven't tried it out, but from the top of my head, TYPE_MATCHES should be able
-> to help with this case. If not, it may be useful for us to understand why it is
-> insufficient. Could you share feedback?
-> 
-> Thanks,
-> Daniel
-> 
-> [0]: https://lore.kernel.org/bpf/20220620231713.2143355-5-deso@posteo.net/
+Hmm, but zero-copy is an AF_XDP feature, and AFAIK offloaded programs
+can't use AF_XDP at all? So the zero-copy "feature" is available on the
+hardware, it's just intrinsic to that feature that it doesn't work on
+offloaded programs?
+
+Which goes back to: yeah, we should document what the feature flags mean :)
+
+-Toke
+
