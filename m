@@ -2,178 +2,280 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB029C00A5A
-	for <bpf@archiver.kernel.org>; Tue, 17 Jan 2023 22:31:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B71FC38147
+	for <bpf@archiver.kernel.org>; Tue, 17 Jan 2023 22:40:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbjAQWbq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 17 Jan 2023 17:31:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
+        id S229469AbjAQWj5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 17 Jan 2023 17:39:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbjAQWbA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 17 Jan 2023 17:31:00 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930712BF1E;
-        Tue, 17 Jan 2023 14:08:18 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id v6so47055885edd.6;
-        Tue, 17 Jan 2023 14:08:18 -0800 (PST)
+        with ESMTP id S229668AbjAQWj2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 17 Jan 2023 17:39:28 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49FA4E510
+        for <bpf@vger.kernel.org>; Tue, 17 Jan 2023 14:20:12 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id i1so9666917pfk.3
+        for <bpf@vger.kernel.org>; Tue, 17 Jan 2023 14:20:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=L6iofbbwZHLgCsKlgr1rNIbEck8OSQGQnY2PcA0tm8E=;
-        b=RfD3OG5eaRLuot2OBFZQHHIQ0bEFoq9pfKVZzo/Ewahcf2cbpeGKTZowv7I3GNKUVa
-         YUGoWK04JmBXW4Mrp6jS1eQiiPLBxcGJZHKf14gRE9d4K2Ow3BVKmd0qxTQPvyjsq+vg
-         rt94uF4eg3M3J3i/dF+UBYxdcc65YMWaDFa7d73K2UnWykOR6FLMlkOEHrsdGfTs0wM/
-         02KA7EIRqR8G114NhqItCGGRJ4hf8pIWPWq9AGyjqnZSBzR6qpWaD8D8vKm9An5T2b4N
-         e7mdlpzjxjgBObflxSlpZhjni1FP+iGVW0yh3y4YDAU/eNbDKqPrhqxrzDV0Jd6pyu1m
-         75yQ==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5cvdHVdjxFASCnqUwFHUSI/UN6ZbudTaNhaBV/yxt1U=;
+        b=lJxua6b8suVcVG9yjfITyLUY8rmZtvVUiYpr4dducRt583YJPOqb09tUaw+9gwWC62
+         Y/phncOpAsi/CF+C95oJaS6ORw5fTu+IwmOJBXFW/M1rfqcJynakm/oRrSkYpu8toxNw
+         DoNJ6DIZT+sGE/JYLFyIBDOqgASJheX60Ne3UHKa88SdN32HQctDLi4QCOaScODf1ve0
+         aAEbpTF6gvLEH3yrdGTYpQl2Dy9dT9o1yZvrajmwrPd+EQmqO7A9ZwnTosLahQDcuYO4
+         F9i0sYxI5FyGG/IkHLYpF6tefJvAtvi0DD28dH5T2z78WKX0wD6ubnWp9KzgqTyqHoBc
+         CjFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L6iofbbwZHLgCsKlgr1rNIbEck8OSQGQnY2PcA0tm8E=;
-        b=qF1QnEM1O1n7cilgJF2Lq1sfYy8C/p8HeWzN3LyAVIA+iBfRYYv5HYBnlfW1j6OhHg
-         G+Czh+PDzS43nfYoehXQkb9Af/YNinWZ42CEfl3Kj5PZ1Yt2jdmd1Se+KduL36ybX7L0
-         hs6qS9qPJ0+L0OdvwUBGbOMz6KJTh36MZ92ZE166Q96mhM1kFOPUT0CtWNWTbakbb59x
-         elvXblAV0h5wlOBPU9PmydpmNuJ9zNaL5auUta1dp/EkrTvJUgeOgp3Tybh11foxquOS
-         9q/kayO+pE9zunydNjjgmurcrvq4s209QifyzzF7SMMZInU893fRz3tQwVOTiz4HRRUY
-         ZbSw==
-X-Gm-Message-State: AFqh2kqkIEVdnWsDSLHLOrfYIwmODzPTPDwqkw5y+x4G3bFzRdd/jUDR
-        YoMq61CTIWfXwFeFHDiHImM=
-X-Google-Smtp-Source: AMrXdXvebIZG5RejqLTEny7PNMVO11/Jdt0IfqvnaZeQq/vDjGif74IcBwgPwECAukq6s87NONNG3Q==
-X-Received: by 2002:aa7:cc8f:0:b0:492:8207:f2ba with SMTP id p15-20020aa7cc8f000000b004928207f2bamr15164877edt.1.1673993297309;
-        Tue, 17 Jan 2023 14:08:17 -0800 (PST)
-Received: from krava ([83.240.63.124])
-        by smtp.gmail.com with ESMTPSA id d2-20020a056402000200b0049e09105705sm3613073edu.62.2023.01.17.14.08.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 14:08:16 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Tue, 17 Jan 2023 23:08:14 +0100
-To:     Ian Rogers <irogers@google.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5cvdHVdjxFASCnqUwFHUSI/UN6ZbudTaNhaBV/yxt1U=;
+        b=LHbVQ0LEEQDBT92sS0dNR7FFinuEYgyDIsICmsMRpo561Fv1XZFa9rZjHx1KwoXu2t
+         +1FWwQaStlhqzy5WGzR0nT9eZGl5vw34xhQPecpaEl/rpu/yDGnuyeIBgiRuweLwCchg
+         hHWrYmwXBjf81S87uR+iLkLT8I3ik11uMzCm5F86/xeu3W8H08s9GAB7i7vhKMxnzZ6J
+         PjhxWlEMk1zGEJY8MPC24KRqGNh/3wiiGS/UvdeMnjky5DkaZgtJAw/aq7RBD47GPUsE
+         NRCMprFxStJxCAaW3DLufr5M+dicURlVkEX4H+E09vdM6U1LQyW/s4bnLTEk8dbJxt6x
+         8n/A==
+X-Gm-Message-State: AFqh2kq4hOuJ1mBrDVtqUB5Bw2YhdQjOkhG1ijiblHwBWQQ/e5Qf8Gi5
+        XoDYVWEobPe+blsIZrq5ez1HG8uSYIcT8ZmcraWxxQ==
+X-Google-Smtp-Source: AMrXdXuDkOQ1xnnuBk8M5HKcopUMlXt+uds6KzUhdCbI2D8Kj2QWbVMYK2HKnZdMb7TjyUEES7hyROCIzQZzZuBBP5Y=
+X-Received: by 2002:a62:4e8e:0:b0:586:4e66:eadd with SMTP id
+ c136-20020a624e8e000000b005864e66eaddmr448422pfb.71.1673994011821; Tue, 17
+ Jan 2023 14:20:11 -0800 (PST)
+MIME-Version: 1.0
+References: <20230117212731.442859-1-toke@redhat.com> <CAKH8qBuvBomTXqNB+a6n_PbJKSNFazrAxEWsVT-=4XfztuJ7dw@mail.gmail.com>
+ <87v8l4byyb.fsf@toke.dk>
+In-Reply-To: <87v8l4byyb.fsf@toke.dk>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Tue, 17 Jan 2023 14:20:00 -0800
+Message-ID: <CAKH8qBs=nEhhy2Qu7CpyAHx6gOaWR25tRF7aopti5-TSuw66HQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2] Documentation/bpf: Add a description of "stable kfuncs"
+To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <martin.lau@linux.dev>,
         Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Connor OBrien <connoro@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] tools/resolve_btfids: Install subcmd headers
-Message-ID: <Y8ccTrSfHi3VRm2h@krava>
-References: <20230116215751.633675-1-irogers@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230116215751.633675-1-irogers@google.com>
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+        David Vernet <void@manifault.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 01:57:50PM -0800, Ian Rogers wrote:
-> Previously tools/lib/subcmd was added to the include path, switch to
-> installing the headers and then including from that directory. This
-> avoids dependencies on headers internal to tools/lib/subcmd. Add the
-> missing subcmd directory to the affected #include.
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
+On Tue, Jan 17, 2023 at 2:04 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
+at.com> wrote:
+>
+> Stanislav Fomichev <sdf@google.com> writes:
+>
+> > On Tue, Jan 17, 2023 at 1:27 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@=
+redhat.com> wrote:
+> >>
+> >> Following up on the discussion at the BPF office hours, this patch add=
+s a
+> >> description of the (new) concept of "stable kfuncs", which are kfuncs =
+that
+> >> offer a "more stable" interface than what we have now, but is still no=
+t
+> >> part of UAPI.
+> >>
+> >> This is mostly meant as a straw man proposal to focus discussions arou=
+nd
+> >> stability guarantees. From the discussion, it seemed clear that there =
+were
+> >> at least some people (myself included) who felt that there needs to be=
+ some
+> >> way to export functionality that we consider "stable" (in the sense of
+> >> "applications can rely on its continuing existence").
+> >>
+> >> One option is to keep BPF helpers as the stable interface and implemen=
+t
+> >> some technical solution for moving functionality from kfuncs to helper=
+s
+> >> once it has stood the test of time and we're comfortable committing to=
+ it
+> >> as a stable API. Another is to freeze the helper definitions, and inst=
+ead
+> >> use kfuncs for this purpose as well, by marking a subset of them as
+> >> "stable" in some way. Or we can do both and have multiple levels of
+> >> "stable", I suppose.
+> >>
+> >> This patch is an attempt to describe what the "stable kfuncs" idea mig=
+ht
+> >> look like, as well as to formulate some criteria for what we mean by
+> >> "stable", and describe an explicit deprecation procedure. Feel free to
+> >> critique any part of this (including rejecting the notion entirely).
+> >>
+> >> Some people mentioned (in the office hours) that should we decide to g=
+o in
+> >> this direction, there's some work that needs to be done in libbpf (and
+> >> probably the kernel too?) to bring the kfunc developer experience up t=
+o par
+> >> with helpers. Things like exporting kfunc definitions to vmlinux.h (to=
+ make
+> >> them discoverable), and having CO-RE support for using them, etc. I ki=
+nda
+> >> consider that orthogonal to what's described here, but I do think we s=
+hould
+> >> fix those issues before implementing the procedures described here.
+> >>
+> >> v2:
+> >> - Incorporate Daniel's changes
+> >>
+> >> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> >> ---
+> >>  Documentation/bpf/kfuncs.rst | 87 +++++++++++++++++++++++++++++++++--=
+-
+> >>  1 file changed, 81 insertions(+), 6 deletions(-)
+> >>
+> >> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.r=
+st
+> >> index 9fd7fb539f85..dd40a4ee35f2 100644
+> >> --- a/Documentation/bpf/kfuncs.rst
+> >> +++ b/Documentation/bpf/kfuncs.rst
+> >> @@ -7,9 +7,9 @@ BPF Kernel Functions (kfuncs)
+> >>
+> >>  BPF Kernel Functions or more commonly known as kfuncs are functions i=
+n the Linux
+> >>  kernel which are exposed for use by BPF programs. Unlike normal BPF h=
+elpers,
+> >> -kfuncs do not have a stable interface and can change from one kernel =
+release to
+> >> -another. Hence, BPF programs need to be updated in response to change=
+s in the
+> >> -kernel.
+> >> +kfuncs by default do not have a stable interface and can change from =
+one kernel
+> >> +release to another. Hence, BPF programs may need to be updated in res=
+ponse to
+> >> +changes in the kernel. See :ref:`BPF_kfunc_stability`.
+> >>
+> >>  2. Defining a kfunc
+> >>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >> @@ -223,14 +223,89 @@ type. An example is shown below::
+> >>          }
+> >>          late_initcall(init_subsystem);
+> >>
+> >> -3. Core kfuncs
+> >> +
+> >> +.. _BPF_kfunc_stability:
+> >> +
+> >> +3. API (in)stability of kfuncs
+> >> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D
+> >> +
+> >> +By default, kfuncs exported to BPF programs are considered a kernel-i=
+nternal
+> >> +interface that can change between kernel versions. This means that BP=
+F programs
+> >> +using kfuncs may need to adapt to changes between kernel versions. In=
+ the
+> >> +extreme case that could also include removal of a kfunc. In other wor=
+ds, kfuncs
+> >> +are _not_ part of the kernel UAPI! Rather, these kfuncs can be though=
+t of as
+> >> +being similar to internal kernel API functions exported using the
+> >
+> > [..]
+> >
+> >> +``EXPORT_SYMBOL_GPL`` macro. All new BPF kernel helper-like functiona=
+lity must
+> >> +initially start out as kfuncs.
+> >
+> > To clarify, as part of this proposal, are we making a decision here
+> > that we ban new helpers going forward?
+>
+> Good question! That is one of the things I'm hoping we can clear up by
+> this discussing. I don't have a strong opinion on the matter myself, as
+> long as there is *some* way to mark a subset of helpers/kfuncs as
+> "stable"...
 
-Acked-by: iri Olsa <jolsa@kernel.org>
+Might be worth it to capitalize in this case to indicate that it's a
+MUST from the RFC world? (or go with SHOULD otherwise).
+I'm fine either way. The only thing that stops me from fully embracing
+MUST is the kfunc requirement on the explicit jit support; I'm not
+sure why it exists and at this point I'm too afraid to ask. But having
+MUST here might give us motivation to address the shortcomings...
 
-jirka
-
-> ---
->  tools/bpf/resolve_btfids/Makefile | 19 ++++++++++++++-----
->  tools/bpf/resolve_btfids/main.c   |  2 +-
->  2 files changed, 15 insertions(+), 6 deletions(-)
-> 
-> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-> index 19a3112e271a..76b737b2560d 100644
-> --- a/tools/bpf/resolve_btfids/Makefile
-> +++ b/tools/bpf/resolve_btfids/Makefile
-> @@ -35,21 +35,29 @@ SUBCMD_SRC := $(srctree)/tools/lib/subcmd/
->  BPFOBJ     := $(OUTPUT)/libbpf/libbpf.a
->  LIBBPF_OUT := $(abspath $(dir $(BPFOBJ)))/
->  SUBCMDOBJ  := $(OUTPUT)/libsubcmd/libsubcmd.a
-> +SUBCMD_OUT := $(abspath $(dir $(SUBCMDOBJ)))/
->  
->  LIBBPF_DESTDIR := $(LIBBPF_OUT)
->  LIBBPF_INCLUDE := $(LIBBPF_DESTDIR)include
->  
-> +SUBCMD_DESTDIR := $(SUBCMD_OUT)
-> +SUBCMD_INCLUDE := $(SUBCMD_DESTDIR)include
-> +
->  BINARY     := $(OUTPUT)/resolve_btfids
->  BINARY_IN  := $(BINARY)-in.o
->  
->  all: $(BINARY)
->  
-> +prepare: $(BPFOBJ) $(SUBCMDOBJ)
-> +
->  $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
->  	$(call msg,MKDIR,,$@)
->  	$(Q)mkdir -p $(@)
->  
->  $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
-> -	$(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(abspath $(dir $@))/ $(abspath $@)
-> +	$(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(SUBCMD_OUT) \
-> +		    DESTDIR=$(SUBCMD_DESTDIR) prefix= \
-> +		    $(abspath $@) install_headers
->  
->  $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUT)
->  	$(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(LIBBPF_OUT)    \
-> @@ -60,14 +68,14 @@ CFLAGS += -g \
->            -I$(srctree)/tools/include \
->            -I$(srctree)/tools/include/uapi \
->            -I$(LIBBPF_INCLUDE) \
-> -          -I$(SUBCMD_SRC)
-> +          -I$(SUBCMD_INCLUDE)
->  
->  LIBS = -lelf -lz
->  
->  export srctree OUTPUT CFLAGS Q
->  include $(srctree)/tools/build/Makefile.include
->  
-> -$(BINARY_IN): $(BPFOBJ) fixdep FORCE | $(OUTPUT)
-> +$(BINARY_IN): fixdep FORCE prepare | $(OUTPUT)
->  	$(Q)$(MAKE) $(build)=resolve_btfids
->  
->  $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
-> @@ -79,7 +87,8 @@ clean_objects := $(wildcard $(OUTPUT)/*.o                \
->                              $(OUTPUT)/.*.o.d             \
->                              $(LIBBPF_OUT)                \
->                              $(LIBBPF_DESTDIR)            \
-> -                            $(OUTPUT)/libsubcmd          \
-> +                            $(SUBCMD_OUT)                \
-> +                            $(SUBCMD_DESTDIR)            \
->                              $(OUTPUT)/resolve_btfids)
->  
->  ifneq ($(clean_objects),)
-> @@ -96,4 +105,4 @@ tags:
->  
->  FORCE:
->  
-> -.PHONY: all FORCE clean tags
-> +.PHONY: all FORCE clean tags prepare
-> diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
-> index 80cd7843c677..77058174082d 100644
-> --- a/tools/bpf/resolve_btfids/main.c
-> +++ b/tools/bpf/resolve_btfids/main.c
-> @@ -75,7 +75,7 @@
->  #include <linux/err.h>
->  #include <bpf/btf.h>
->  #include <bpf/libbpf.h>
-> -#include <parse-options.h>
-> +#include <subcmd/parse-options.h>
->  
->  #define BTF_IDS_SECTION	".BTF_ids"
->  #define BTF_ID		"__BTF_ID__"
-> -- 
-> 2.39.0.314.g84b9a713c41-goog
-> 
+> > (also left some spelling nits below)
+> >
+> >> +
+> >> +3.1 Promotion to "stable" kfuncs
+> >> +--------------------------------
+> >> +
+> >> +While kfuncs are by default considered unstable as described above, s=
+ome kfuncs
+> >> +may warrant a stronger stability guarantee and can be marked as *stab=
+le*. The
+> >> +decision to move a kfunc to *stable* is taken on a case-by-case basis=
+ and must
+> >> +clear a high bar, taking into account the functions' usefulness under
+> >> +longer-term production deployment without any unforeseen API issues o=
+r
+> >> +limitations. In general, it is not expected that every kfunc will tur=
+n into a
+> >> +stable one - think of it as an exception rather than the norm.
+> >> +
+> >> +Those kfuncs which have been promoted to stable are then marked using=
+ the
+> >> +``KF_STABLE`` tag. The process for requesting a kfunc be marked as st=
+able
+> >> +consists of submitting a patch to the bpf@vger.kernel.org mailing lis=
+t adding
+> >> +the ``KF_STABLE`` tag to that kfunc's definition. The patch descripti=
+on must
+> >> +include the rationale for why the kfunc should be promoted to stable,=
+ including
+> >> +references to existing production uses, etc. The patch will be consid=
+ered the
+> >> +same was as any other patch, and ultimately the decision on whether a=
+ kfunc
+> >
+> > nit: most likely s/same was/same way/ here?
+>
+> Yup!
+>
+> >> +should be promoted to stable is taken by the BPF maintainers.
+> >> +
+> >> +Stable kfuncs provide the following stability guarantees:
+> >> +
+> >> +1. Stable kfuncs will not change their function signature or function=
+ality in a
+> >> +   way that may cause incompatibilities for BPF programs calling the =
+function.
+> >> +
+> >> +2. The BPF community will make every reasonable effort to keep stable=
+ kfuncs
+> >> +   around as long as they continue to be useful to real-world BPF app=
+lications.
+> >> +
+> >> +3. Should a stable kfunc turn out to be no longer useful, the BPF com=
+munity may
+> >> +   decide to eventually remove it. In this case, before being removed=
+ that kfunc
+> >> +   will go through a deprecation procedure as outlined below.
+> >> +
+> >> +3.2 Deprecation of kfuncs
+> >> +-------------------------
+> >> +
+> >> +As described above, the community will make every reasonable effort t=
+o keep
+> >> +kfuncs available through future kernel versions once they are marked =
+as stable.
+> >> +However, it may happen case that BPF development moves in an unforese=
+en
+> >
+> > 'may happen case' -> 'may happen in case' ?
+>
+> Think I actually meant to drop 'case' entirely; thanks for spotting!
+>
+> -Toke
+>
