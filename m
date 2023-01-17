@@ -2,209 +2,174 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D955EC3DA78
-	for <bpf@archiver.kernel.org>; Tue, 17 Jan 2023 06:03:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35DF5C3DA78
+	for <bpf@archiver.kernel.org>; Tue, 17 Jan 2023 06:03:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234327AbjAQGDN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 17 Jan 2023 01:03:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50182 "EHLO
+        id S235484AbjAQGDR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 17 Jan 2023 01:03:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234974AbjAQGDD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 17 Jan 2023 01:03:03 -0500
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D020E59E2;
-        Mon, 16 Jan 2023 22:03:02 -0800 (PST)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 30H4L8Jk004689;
-        Mon, 16 Jan 2023 22:02:43 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=gQyfs56l7ZgryXGEEZKuKo+kXVLKzQNv8Er+0Mn5DpU=;
- b=Wek0+7VW2LLZUrgLLrPtgTRgUxuM+WEsJL5GzJk8eJyxsMKAnlV/xefXQc4wTpzNeB87
- RaryXiRsDlMD/fa755D2jEV4hb2Y8tCPk5vCrl/D3Q1WhqZZKfs1uoMRw27xQi0Hq26K
- 4rzHYBGlQMyrtSCJ9vhur8qXN4ZKq73hIvSZ8O84sqk008+ktBuUW2K91phKn2apef0h
- 15PeokDTxq1Ee+7Vl4M4bdWHanZnxmU/4w6McgFv18fJSUuyXEjS3wRIICnkR1l82V+r
- 4r4erxVzc/PD8s3kEjp1hdry0YeLnKJZQz6shGyryXba48zRbF98QzSUdHuGDqKXuetY WQ== 
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2109.outbound.protection.outlook.com [104.47.55.109])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3n3ry4txc2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 Jan 2023 22:02:43 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j3bxebYaMP1NZ5+usTcQ779/FYhspzS8YYZDdP8d2u23tQCkiFGEpvERqBwP5kQJrhTOKeI4kJJKYNcCtWhQav2ve1iuTznjnRa2fwVY1YFs0TFjIk7YJthEo6pxMpoG9L4fegRt+Rcm+GEksZIUvOOgjeDW8/EjUlcDOGzwUFiaH+y0aUdwi3bJwkAMhn3TkNdkAxfdp+17igU+f2lffcjjHDj5vMWtOo5fefUXy+u54TQYyjFInipWpeNYfpZ1+OFIkLzCmtiZ0InS+hdOykUyyXUeGgKf1ThJkJgBvTJTovpFHUYxhaH+OGiNhoHlBMkMslsl3Hh4N1sYOuD71A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gQyfs56l7ZgryXGEEZKuKo+kXVLKzQNv8Er+0Mn5DpU=;
- b=c/hp8dgkeVxqmDhTH2iQf8Q3r1BO7clLcKN2KgeNikZR+P5yg2W3NyaEOoc9z3Aa2e7uenimpT3fWaRzFMJOovZlKrSaQZUHcYYYEomn8FwA0xqSoY+xe1SWEFlehUR6rWVoO4s8N1EWG6jD6C7a0QjtEjSS/VXzbDxrsKdQack88ayyxPBezopkLu9URsXhmcAg3fwl5zt4M5TTONHviOqpgCZGg8+6wpPIoAhBbeLgaha1e1auYGJGccvSm6067psliXHJ63VKc0NOoYJPYuQpvrrYx+6FGNi3Z5xBAnUafuv2Mga2u6RiWBrciN/17cmHa2xuP3VtnPTbwVxK0g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by BLAPR15MB4052.namprd15.prod.outlook.com (2603:10b6:208:276::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Tue, 17 Jan
- 2023 06:02:40 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::3cc9:4d23:d516:59f0]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::3cc9:4d23:d516:59f0%4]) with mapi id 15.20.5986.023; Tue, 17 Jan 2023
- 06:02:40 +0000
-Message-ID: <0d2075a1-74df-96fc-ae42-3c9e10daab2a@meta.com>
-Date:   Mon, 16 Jan 2023 22:02:37 -0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: WARNING in debug_mutex_unlock
-To:     Hao Sun <sunhao.th@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S235357AbjAQGDL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 17 Jan 2023 01:03:11 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25B119692;
+        Mon, 16 Jan 2023 22:03:07 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id i5so6887016oih.11;
+        Mon, 16 Jan 2023 22:03:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ihb6f3DcG5Hd+/8ftrTykA88KTsy1zkvL9YpVq6JHBw=;
+        b=UKCgEoBAzR0/8VkVtzEDvJI7sUSDyMg6H/Nvu8iK/TAmco7fSi+LGMrMhz/42USvhD
+         QeatO+xkqa3zQb+3xK00zEaKfjSoOERtlcdXcga/it3fnUdIiu8mNehKPLvd7OeXjCqh
+         QikaFKgBLEq3TQZJ423yHA3PnFCk/xBjz1WeHT+Lnsnr8o1DRy2oJCqsXC0+ME0K3J/r
+         Ngbx87FZeENYYm0TvlE6BXjb+1NOyaAIjg4N/GxSBjY3ZG6uNIK74X7BVAj4bvPbt0fj
+         yKRzuhKgxRbkuwUi24nxXxuPABSpAAt1Gh/UHSGJBQwP7BPNfA42QQZIHrgf5pXp+85g
+         cKpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ihb6f3DcG5Hd+/8ftrTykA88KTsy1zkvL9YpVq6JHBw=;
+        b=rxvi5ZMU5JfBoex/WwJCXJP0rQ5voGaMEtKWwYRWOqHeMRbI7HbAUAw3xTrRg3yas7
+         XqC0jIdGvGEdoBenoEezFO1i5kuxIu30avkA8FKkyYs09+9giHpnJ+dq81XQctifQ1tK
+         yqzt/ytV0LLK5/NXV82u8B+V9cUN0dPSLEHgkiebYEzfpI4EXt88wlImFu4+lRUwWRb5
+         BWlMRwzWUHanxOFgZURkZpHh+b0Hu7cg6b8NK6gpD95iubZ8n3x6DoFFl370tKxuhzAM
+         +SKKtNzok+1UTzLfDYeY/KlxrmcEnk0c4Vj+YPoc23UDbqWTOfJOnAgsrdMJLNKUKHFl
+         7pFA==
+X-Gm-Message-State: AFqh2koZPQg7U7+ucPOV4I09XIc3lRiAmhl7Zzhr+T8B0srGi/7o+jPk
+        9aH59TwAUQuP/bxk+KH5yQ5LvDOx4QI=
+X-Google-Smtp-Source: AMrXdXtxZaJYuQ6qA024F6G359BvGdgchGsMi61Y96Af/qmrzaXVrkFzZDtE+L28iyDs6QHiwO0RrA==
+X-Received: by 2002:a05:6808:1708:b0:364:7cb7:56ef with SMTP id bc8-20020a056808170800b003647cb756efmr1048598oib.55.1673935387010;
+        Mon, 16 Jan 2023 22:03:07 -0800 (PST)
+Received: from pop-os.attlocal.net ([2600:1700:65a0:ab60:2f2a:7825:8a78:b891])
+        by smtp.gmail.com with ESMTPSA id g21-20020a0568080dd500b00360f68d509csm14060974oic.49.2023.01.16.22.03.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Jan 2023 22:03:06 -0800 (PST)
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     bpf@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20230109074425.12556-1-sunhao.th@gmail.com>
- <be494ee3-864d-1a33-e14d-d27712ab6248@meta.com>
- <C4BBA1C3-C704-49D3-8E13-18875B27FB47@gmail.com>
-Content-Language: en-US
-From:   Yonghong Song <yhs@meta.com>
-In-Reply-To: <C4BBA1C3-C704-49D3-8E13-18875B27FB47@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BYAPR11CA0060.namprd11.prod.outlook.com
- (2603:10b6:a03:80::37) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
+        John Fastabend <john.fastabend@gmail.com>
+Subject: [Patch bpf-next 2/2] bpf: remove a redundant parameter of bpf_prog_free_id()
+Date:   Mon, 16 Jan 2023 22:02:49 -0800
+Message-Id: <20230117060249.912679-3-xiyou.wangcong@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230117060249.912679-1-xiyou.wangcong@gmail.com>
+References: <20230117060249.912679-1-xiyou.wangcong@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|BLAPR15MB4052:EE_
-X-MS-Office365-Filtering-Correlation-Id: 661f91a6-1b24-4958-5571-08daf85070fe
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7d5o3M7RxYfUTeJVDzZxw2TykFrCvXXM1GkYt+TaKvbpOZBlfbSYCWVfVSdeMp48FOYgY1O8P9KIU/HW8akOn4eQGEShb+4QdnknbHaEBx85cITy25m43LWRtETdW4zLuEnoU6FYYD8oaw83pMi2fKjMwAS8SX3855Wa3VE3itF+BfkHH9JoA3jto8b4RTxyS27TBxmdxYiiIdZgwCkB/GyfZJm8QvN3zVIWNj0Up+xS5vD6U4il2YuuUv5qF5fFe8ytUj9XQwpIV4BjCp7HMftxD/jp4tWo545MflrZTsUIcsH1K++rTqzcVkVII03yXxNuAdUG9jtOj4d/wgt5jDFyPx+N3s1KkjUV3GCibZybTN4Cy7UdJiF8FhLZMvpPjt9NGc8AoLJXBZz7tLeQkL8GZ3yQ3kN/LruIu67DmpKuyzylfQhxpxfrq5Jr/7Af0wn8yfA6VvFaM0Z7aeEGE4NBZSA4/NZ6XMZEoEW/cZqfZFvTClpUv5ZUeQm34K+p9UlKefOq95YNp9QKy7SBQE7yCQWwTlfn+zTL+s1yHs/I38HZvSf/vJNl09MZqxwoHbt/xxeH9JLOiy2+vRljit02W109ldUR2aDg/BHgUbIxc9fBskNNQ8Pig8t+H4cKXJwjfBANWZFfraPFn9R9w3BdLTiY33NM81Va8FyxhAAWuDvuUa0OyGDJCYJYmi/wfFUzaI+1BOjSmUXGctBqOmeUAJLNj3cPiwnUp61vzFI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(376002)(396003)(366004)(136003)(451199015)(31686004)(6916009)(2616005)(66946007)(7116003)(41300700001)(66476007)(66556008)(186003)(53546011)(6512007)(8676002)(4326008)(86362001)(31696002)(36756003)(5660300002)(8936002)(54906003)(478600001)(6666004)(83380400001)(6506007)(316002)(7416002)(38100700002)(6486002)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eHF5ZnFDT3A4aVpGQ3Z2cUtuMmJTaXU4ekVnQ1E0R1RLTEtiRkF6NFVoSmNB?=
- =?utf-8?B?elRwNzh3SFRvQzhLUGkyUFNyNUx6eExLSnBjcWZBNlZEc0xDMnRhWmpUQ29S?=
- =?utf-8?B?RWhLbWZoc0duVXpRWUtkNW5ZWU52eTkwR1QvKzhvOUpKK0J3bnR5STRZZTJJ?=
- =?utf-8?B?b1Y1VVRTWHFvc3dLWFI2N2ViYjhvU0dmcFdIelBtdm10U1ZRN0pXcE95M2E3?=
- =?utf-8?B?YmVRYUdvYUhHR1c5aVRyMzdnNmVQN1A4TDUxSTVjam1GUWhGS2xwT2JIUCt3?=
- =?utf-8?B?TGJrU3lzTzhQcEVKaGt3cFgxMUZSUkZJRTZkZ3V3ekk5MlhZd2hydkZROVRD?=
- =?utf-8?B?SGRvVUNUOGJoZFpJSlBOZ3VLK1Ztc0x2S3ZydEJ5RG5qUEdGWndxenMvSDZM?=
- =?utf-8?B?Y1FvbUIzaG5CRFBhemNscWpXK21iTzJJYmhLbzEzLy94WWg4OG0xYVErNmRC?=
- =?utf-8?B?UWhydlFKUUY5N2NJa24wUlA4R3hsUHRLQkp0ZWh3N2ttakgyWlpscFpPSFNh?=
- =?utf-8?B?bzQ4bnhJYnJIYmk5c1pEaGpBQUg2Z2c5MGVMRC91SWU3TG02YWZaQkZNZ29Y?=
- =?utf-8?B?alhYRlBWeityZEVYMEVDMzVscWY3QVJkTzUxcVVSUGx3S3RZR0hBWUhZczJO?=
- =?utf-8?B?c0xxZGYwVFdPd011aithZEZmcFlRVXhmbHM3UmNzR3RmaG9YN1cvTkxuam9w?=
- =?utf-8?B?dEJLV3B5MVJiUlRHaldWZ0R1eDBQUFUrK1FZV2h0MUFWeFFkSU5tWTg0ci9R?=
- =?utf-8?B?dnViN2RTT1RTNjdyUG5SSGlQTzlBZXpRa0dBVnJmT0ZTc0hCcXhoSHBMbEVn?=
- =?utf-8?B?Z2sxT3ViczZtQ2hpUXNhSnVCbE45dHpNYm84WlhnU3Q2MGhCamZxSmFxTmxt?=
- =?utf-8?B?REVPb2lMVitLR0dud0ZWcDBDMkJLSER0NUg3VFZpcXZmbkpWU3RoaytnMEt3?=
- =?utf-8?B?YlJZVEpDcVNWMUZCZjNDUC8rS2pITGtPTmo1SU5PT1NiTklEQ3djWThOWEw4?=
- =?utf-8?B?VG9PNHJ3aW9IcVpiYWVjRXJrcUczZktXRlhQV29iVkFBcE4ydXYwanBHeXZS?=
- =?utf-8?B?VkJFeHl2ZFJtZm5NSmFHRE1lcGwzUHdUWlNIMXJPcWY3d0ZxUWthRnIvRVNG?=
- =?utf-8?B?T1hBejdrTkJET0F4WExhdmw1WnlNcUxKLzJPNDFVcXh5WS8yRGZjQ2dHU2xu?=
- =?utf-8?B?ZEN0RUxlMlNLSlUyWXFOdm1EYU9Mb3dQV0xUU2Mxbkc5R2cvcWhnZHFpZWJh?=
- =?utf-8?B?T0tESUQzbzY4VzRrL3R3OUJaOUhiT1dzS3hGa2FhYlY5YjRFMFcxL2pUM1hJ?=
- =?utf-8?B?MERtcUY0eVdyR3pKS0RvaVNlMTNWaThEZEM4YW1OSVhEMVpqVWd4cDdEY0dD?=
- =?utf-8?B?cWJJTlBEeFREYk5oVlE4NjNLV3NBTk9nRGljWW1ORFdBZWhsS3RYNi9kN3VU?=
- =?utf-8?B?dWtYZ3EwaWdyRzNiczVqNHZaZXorUVdTS1JDYmFGbEtDU3IwYk8wbWlMTENF?=
- =?utf-8?B?TkJvbHZVZVNkYTliMlN6b1FmTlkvUHNxUFlUZ0pDYUJzeC9ITEtQOWYrSWhq?=
- =?utf-8?B?TGJIeVIvM0poSEV0NXFxYnoyd3NXa0U4U2k1QjJ6cmQ2Uk4vWG9PMkNlUk5n?=
- =?utf-8?B?Vmd2U3BQM2g3RkZtazNibndpTkg3cUVBVHpSK3cyY3RNVU5yVmVSVHg2azdl?=
- =?utf-8?B?S0g5dGU4TjFtYVBtTldsNkFLWDNZMk1qekJmY2xzT3drNjJIa0FuczVKR200?=
- =?utf-8?B?NEwydUM0WDdHNUtSWEFUTTVxKzdwZnpmM2NkNWVhY3dYYXM4djk1cVhGZlR5?=
- =?utf-8?B?cURJOTljelhIUFVsSStCQjlyVzE2VkFlcmVwNUQyQkxKM21pUWJHOTFwYjVW?=
- =?utf-8?B?dmpjSVVFWW1zV3A0eEZ1K2ZPQkZwSlVoUUJaZEpSOFpiQ1RlMHdDaytZcENJ?=
- =?utf-8?B?NHJBRC9DSHNOZWVTcExibm80c0g2dEhuUFZoMWNMamFEejRyWk9zZWFRK3dy?=
- =?utf-8?B?T21XRUY2WXBnSGZpeHJyOS9pTk9sZ2NaVmluUFJ3Ynh2Rzd1Q1VVb3JneFd3?=
- =?utf-8?B?MVgzc1NIc1VtOE9pMDdKdWNpNnZ1cFRTQXdVVkx0RmVVZHJGeE15YU1XdVN2?=
- =?utf-8?B?b1h0bmdTWHYwSUtHNDdrUko3bCsxbm5vSVF5SWxaemoxM2lhVU5IQk9CKzVk?=
- =?utf-8?B?ZVE9PQ==?=
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 661f91a6-1b24-4958-5571-08daf85070fe
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2023 06:02:40.5322
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vFEXsHicrphkR5ri5Z2wCziLiORMOw5X1Z17ERMOuiHT1R07f/kzTL/H5ut3PcrH
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR15MB4052
-X-Proofpoint-GUID: b_gkD3GjpBrNOlem4xNhlAG2jvcEGP0g
-X-Proofpoint-ORIG-GUID: b_gkD3GjpBrNOlem4xNhlAG2jvcEGP0g
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-17_01,2023-01-13_02,2022-06-22_01
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+From: Cong Wang <cong.wang@bytedance.com>
 
+The second parameter of bpf_prog_free_id() is always true,
+hence can be just eliminated.
 
-On 1/15/23 6:24 PM, Hao Sun wrote:
-> 
-> 
->> On 13 Jan 2023, at 2:45 PM, Yonghong Song <yhs@meta.com> wrote:
->>
->>
->>
->> On 1/8/23 11:44 PM, Hao Sun wrote:
->>> Hi,
->>> The following warning can be triggered with the C reproducer in
->>> the link. The repro starts 32 threads, each attaches a tracepoint
->>> into `ext4_mark_inode_dirty`. The prog loads the following insns
->>> that simply sends signal to current proc, and then wait.
->>> Seems issues in queued irq_work with `do_bpf_send_signal`, also
->>> I'm wondering what if the task in `send_signal_irq_work` exited,
->>> at the time the callback invoked.
->>
->> Somehow, I cannot reproduce the issue in my qemu environment
->> with below kernel config and C reproducer.
->>
->> But could you try the following patch to see whether it
->> fixed the issue in your environment?
-> 
-> Tested the below patch on my local machine, seems fixed the issue.
-> 
-> Before applying the patch, the reproducer can still trigger the
-> reported issue on a latest bpf-next build; After applying the
-> patch, the warning no longer appears.
-> 
-> The test is conducted on: dfff86f8eb6a (“Merge branch 'samples/bpf:
-> modernize BPF functionality test programs'")
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Signed-off-by: Cong Wang <cong.wang@bytedance.com>
+---
+ include/linux/bpf.h  |  2 +-
+ kernel/bpf/offload.c |  2 +-
+ kernel/bpf/syscall.c | 23 +++++------------------
+ 3 files changed, 7 insertions(+), 20 deletions(-)
 
-Thanks for testing. I will submit a patch shortly with your
-Reported-by and Tested-by.
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 3558c192871c..2c0d2383cea0 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1832,7 +1832,7 @@ void bpf_prog_inc(struct bpf_prog *prog);
+ struct bpf_prog * __must_check bpf_prog_inc_not_zero(struct bpf_prog *prog);
+ void bpf_prog_put(struct bpf_prog *prog);
+ 
+-void bpf_prog_free_id(struct bpf_prog *prog, bool do_idr_lock);
++void bpf_prog_free_id(struct bpf_prog *prog);
+ void bpf_map_free_id(struct bpf_map *map);
+ 
+ struct btf_field *btf_record_find(const struct btf_record *rec,
+diff --git a/kernel/bpf/offload.c b/kernel/bpf/offload.c
+index ae6d5a5c0798..658032e294ed 100644
+--- a/kernel/bpf/offload.c
++++ b/kernel/bpf/offload.c
+@@ -217,7 +217,7 @@ static void __bpf_prog_offload_destroy(struct bpf_prog *prog)
+ 		offload->offdev->ops->destroy(prog);
+ 
+ 	/* Make sure BPF_PROG_GET_NEXT_ID can't find this dead program */
+-	bpf_prog_free_id(prog, true);
++	bpf_prog_free_id(prog);
+ 
+ 	list_del_init(&offload->offloads);
+ 	kfree(offload);
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 1eaa1a18aef7..b56f65328d9c 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -1988,7 +1988,7 @@ static int bpf_prog_alloc_id(struct bpf_prog *prog)
+ 	return id > 0 ? 0 : id;
+ }
+ 
+-void bpf_prog_free_id(struct bpf_prog *prog, bool do_idr_lock)
++void bpf_prog_free_id(struct bpf_prog *prog)
+ {
+ 	unsigned long flags;
+ 
+@@ -2000,18 +2000,10 @@ void bpf_prog_free_id(struct bpf_prog *prog, bool do_idr_lock)
+ 	if (!prog->aux->id)
+ 		return;
+ 
+-	if (do_idr_lock)
+-		spin_lock_irqsave(&prog_idr_lock, flags);
+-	else
+-		__acquire(&prog_idr_lock);
+-
++	spin_lock_irqsave(&prog_idr_lock, flags);
+ 	idr_remove(&prog_idr, prog->aux->id);
+ 	prog->aux->id = 0;
+-
+-	if (do_idr_lock)
+-		spin_unlock_irqrestore(&prog_idr_lock, flags);
+-	else
+-		__release(&prog_idr_lock);
++	spin_unlock_irqrestore(&prog_idr_lock, flags);
+ }
+ 
+ static void __bpf_prog_put_rcu(struct rcu_head *rcu)
+@@ -2057,13 +2049,13 @@ static void bpf_prog_put_deferred(struct work_struct *work)
+ 	__bpf_prog_put_noref(prog, true);
+ }
+ 
+-static void __bpf_prog_put(struct bpf_prog *prog, bool do_idr_lock)
++void bpf_prog_put(struct bpf_prog *prog)
+ {
+ 	struct bpf_prog_aux *aux = prog->aux;
+ 
+ 	if (atomic64_dec_and_test(&aux->refcnt)) {
+ 		/* bpf_prog_free_id() must be called first */
+-		bpf_prog_free_id(prog, do_idr_lock);
++		bpf_prog_free_id(prog);
+ 
+ 		if (in_irq() || irqs_disabled()) {
+ 			INIT_WORK(&aux->work, bpf_prog_put_deferred);
+@@ -2073,11 +2065,6 @@ static void __bpf_prog_put(struct bpf_prog *prog, bool do_idr_lock)
+ 		}
+ 	}
+ }
+-
+-void bpf_prog_put(struct bpf_prog *prog)
+-{
+-	__bpf_prog_put(prog, true);
+-}
+ EXPORT_SYMBOL_GPL(bpf_prog_put);
+ 
+ static int bpf_prog_release(struct inode *inode, struct file *filp)
+-- 
+2.34.1
 
-> 
-> 
->>
->> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
->> index 23ce498bca97..1b26d51caf31 100644
->> --- a/kernel/trace/bpf_trace.c
->> +++ b/kernel/trace/bpf_trace.c
->> @@ -831,6 +831,7 @@ static void do_bpf_send_signal(struct irq_work *entry)
->>
->>         work = container_of(entry, struct send_signal_irq_work, irq_work);
->>         group_send_sig_info(work->sig, SEND_SIG_PRIV, work->task, work->type);
->> +       put_task_struct(work->task);
->> }
->>
->> static int bpf_send_signal_common(u32 sig, enum pid_type type)
->> @@ -862,7 +863,7 @@ static int bpf_send_signal_common(u32 sig, enum pid_type type)
->>                  * to the irq_work. The current task may change when queued
->>                  * irq works get executed.
->>                  */
->> -               work->task = current;
->> +               work->task = get_task_struct(current);
->>                 work->sig = sig;
->>                 work->type = type;
->>                 irq_work_queue(&work->irq_work);
->>
-> 
