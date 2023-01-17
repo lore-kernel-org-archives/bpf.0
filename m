@@ -2,201 +2,120 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6E19C46467
-	for <bpf@archiver.kernel.org>; Tue, 17 Jan 2023 02:45:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE123C63797
+	for <bpf@archiver.kernel.org>; Tue, 17 Jan 2023 04:50:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235744AbjAQCpx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 16 Jan 2023 21:45:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44870 "EHLO
+        id S235199AbjAQEuh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 16 Jan 2023 23:50:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235751AbjAQCp3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 16 Jan 2023 21:45:29 -0500
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA48436B01;
-        Mon, 16 Jan 2023 18:39:39 -0800 (PST)
-Received: by mail-yb1-xb42.google.com with SMTP id 188so32346993ybi.9;
-        Mon, 16 Jan 2023 18:39:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=44hB+akApnLL1+4V33/fJ5lpbLMN3HBa2OFsRs6WaJc=;
-        b=JAq3rv/wML/4aGYx/XJo/ogHrf6Cfhb4h7sShmOtBvThhlj/UpaThqDTsyrMzoy9o0
-         N0IlS44wNEncXmr8l15GdbpuJBR8vXvcM6ujVadrKZiIAAZ36Njt3Hyt5hNh4mU5mTuF
-         Kte38CAJP/wsQN8p7iGhkD3Qrlvp5e/nq3+nqFDWohOmS2lJqWRL7FIkgibZCrAXOzJE
-         s7CmF2D+1rjlXGK6FV5jy2cC/4029texiUZZTYT5V0HTZDIFOOd5yN5ZSNdJnbMmJiM7
-         Ye5+1WsbqQKPyOMAj4Gn7Alg7BPekBEZleF6UO8ySwnfptoGFivPUALAfmjOZwVvekt8
-         115A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=44hB+akApnLL1+4V33/fJ5lpbLMN3HBa2OFsRs6WaJc=;
-        b=nJX8IdewHthbq1vbfziBazFe3LaRq5YsrY4791HCEgLGmD7ykMz60Uv+hRtc3mT8QR
-         iTIKS/YRpCP/oO43FrYwG1N4uKD8uwIBk6dsymEKcWT5pbQglRZT6A7AlayClV+J6bj4
-         gMITzAsqxgh5n2NI1+dFxG/7ICw1G64/HYG0FYjrU0kFPRF7Ftn++5A48Wzj59gWwE48
-         xp/hNDx4gjzaVf8gymxjwVih48Izu10MII4sgpmsA6qGM336SWH5wGipxRHOiQEaHpCc
-         QAaLIQoOxL+GkTvqS5+HO8DdL8lw0eCth9j01tKqbcAM9ngJf88nhFys2dL03t81f8Bj
-         2RVw==
-X-Gm-Message-State: AFqh2kpRYCeJKvwr3g6HjkumshIxcTLP/WpUo/osZyFgNOZNX2XbjyHW
-        ZRyD0o6wQt7agMX1U1PMdLnch+SAw31BTc/WlII=
-X-Google-Smtp-Source: AMrXdXu6GjhsExBKGELUOU/FoLDszB5IoySjFBKDOEbW2n4UTUWnP3HE2VQ4NF/Fv9oikfLsOXhLEBH63Dgfz/7rfRs=
-X-Received: by 2002:a25:8704:0:b0:7d2:e86c:dbd with SMTP id
- a4-20020a258704000000b007d2e86c0dbdmr202665ybl.26.1673923129738; Mon, 16 Jan
- 2023 18:38:49 -0800 (PST)
+        with ESMTP id S235192AbjAQEuf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 16 Jan 2023 23:50:35 -0500
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1156B234FB
+        for <bpf@vger.kernel.org>; Mon, 16 Jan 2023 20:50:29 -0800 (PST)
+X-QQ-mid: bizesmtp82t1673931018twi1c3g3
+Received: from localhost.localdomain ( [1.202.165.115])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 17 Jan 2023 12:50:14 +0800 (CST)
+X-QQ-SSF: 01000000000000709000000A0000000
+X-QQ-FEAT: QityeSR92A2LRM9HbIp6yqtbbENnQhbRc6Lqy6GH6yiTMl5HRRGRVKcS2bdJf
+        Dkximu1JZ/83DtHNYl6Q0qJRfT7fVgBFlYgu5xuB00aeHp2KOnPguk4xldRcZB1E9e4sfiv
+        wcfGrN83o6wDpvS+w/8bXxgZ08tqyI1ZfRulpuCUKTYSG6JMXOgRJi34DnSZocDLX7Z18jM
+        zge5ClwmPZx72OLLSVINiG72FCYWdcV5Cnz0v3M057jpcfWUOHw9BsT2SLUswXhMxn/p85w
+        2sYav/k701dpt0tv0WluNHBgxaDOodCNNpsUdA5Pv49hqXOQgK7uE1oIJksgnu5db3FOpXq
+        lh8cRk82tqE4HrzxusCxpsm8bTWsvFnKTxcVWakXycx03WgRVE=
+X-QQ-GoodBg: 0
+From:   tong@infragraf.org
+To:     bpf@vger.kernel.org
+Cc:     Tonghao Zhang <tong@infragraf.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
+Subject: [bpf-next v1 2/2] bpftool: profile online CPUs instead of possible
+Date:   Tue, 17 Jan 2023 12:49:02 +0800
+Message-Id: <20230117044902.98938-2-tong@infragraf.org>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+In-Reply-To: <20230117044902.98938-1-tong@infragraf.org>
+References: <20230117044902.98938-1-tong@infragraf.org>
 MIME-Version: 1.0
-References: <20230113093427.1666466-1-imagedong@tencent.com>
- <bdca73eb-07e3-2187-c46f-a3f14a9e50a4@oracle.com> <CAEf4BzZ5FNw-j3F8cUpy4knRiM1sqQOOPZnM43Kj8peN9kKQLg@mail.gmail.com>
- <CADxym3YqgvYt71+WhMM4jzp+9uqkNdq3nB9kvBxT=CVM7hwRsA@mail.gmail.com> <76c1acd9-1981-279b-87ff-90860886abc6@oracle.com>
-In-Reply-To: <76c1acd9-1981-279b-87ff-90860886abc6@oracle.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Tue, 17 Jan 2023 10:38:38 +0800
-Message-ID: <CADxym3YOKTMxAcB_=EGpsBwHG6eAmD-vHpc8oqWEw5Hi6_D1wA@mail.gmail.com>
-Subject: Re: [PATCH] libbpf: replace '.' with '_' in legacy kprobe event name
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>, andrii@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:infragraf.org:qybglogicsvr:qybglogicsvr5
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 6:27 PM Alan Maguire <alan.maguire@oracle.com> wrote:
->
-> On 16/01/2023 02:27, Menglong Dong wrote:
-> > Hello,
-> >
-> > On Sat, Jan 14, 2023 at 6:07 AM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> >>
-> >> On Fri, Jan 13, 2023 at 6:13 AM Alan Maguire <alan.maguire@oracle.com> wrote:
-> >>>
-> >>> On 13/01/2023 09:34, menglong8.dong@gmail.com wrote:
-> >>>> From: Menglong Dong <imagedong@tencent.com>
-> >>>>
-> >>>> '.' is not allowed in the event name of kprobe. Therefore, we will get a
-> >>>> EINVAL if the kernel function name has a '.' in legacy kprobe attach
-> >>>> case, such as 'icmp_reply.constprop.0'.
-> >>>>
-> >>>> In order to adapt this case, we need to replace the '.' with other char
-> >>>> in gen_kprobe_legacy_event_name(). And I use '_' for this propose.
-> >>>>
-> >>>> Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> >>>> ---
-> >>>>  tools/lib/bpf/libbpf.c | 7 +++++++
-> >>>>  1 file changed, 7 insertions(+)
-> >>>>
-> >>>> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> >>>> index fdfb1ca34ced..5d6f6675c2f2 100644
-> >>>> --- a/tools/lib/bpf/libbpf.c
-> >>>> +++ b/tools/lib/bpf/libbpf.c
-> >>>> @@ -9994,9 +9994,16 @@ static void gen_kprobe_legacy_event_name(char *buf, size_t buf_sz,
-> >>>>                                        const char *kfunc_name, size_t offset)
-> >>>>  {
-> >>>>       static int index = 0;
-> >>>> +     int i = 0;
-> >>>>
-> >>>>       snprintf(buf, buf_sz, "libbpf_%u_%s_0x%zx_%d", getpid(), kfunc_name, offset,
-> >>>>                __sync_fetch_and_add(&index, 1));
-> >>>> +
-> >>>> +     while (buf[i] != '\0') {
-> >>>> +             if (buf[i] == '.')
-> >>>> +                     buf[i] = '_';
-> >>>> +             i++;
-> >>>> +     }
-> >>>>  }
-> >>>
-> >>> probably more naturally expressed as a for() loop as is done in
-> >>> gen_uprobe_legacy_event_name(), but not a big deal.
-> >>>
-> >>> Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
-> >>
-> >> Applied, but tuned to be exactly the same loop as in
-> >> gen_uprobe_legacy_event_name. Thanks.
-> >>
-> >
-> > Thanks for your modification, it looks much better now!
-> >
-> >>>
-> >>> One issue with the legacy kprobe code is that we don't get test coverage
-> >>> with it on new kernels - I wonder if it would be worth adding a force_legacy
-> >>> option to bpf_kprobe_opts? A separate issue to this change of course, but
-> >>> if we had that we could add some legacy kprobe tests that would run
-> >>> for new kernels as well.
-> >>
-> >> Yep, good idea. If we ever have some bug in the latest greatest kprobe
-> >> implementation, users will have an option to work around that with
-> >> this.
-> >>
-> >> The only thing is that we already have 3 modes: legacy, perf-based
-> >> through ioctl, and bpf_link-based, so I think it should be something
-> >> like
-> >>
-> >> enum kprobe_mode {
-> >>     KPROBE_MODE_DEFAULT = 0, /* latest supported by kernel */
-> >>     KPROBE_MODE_LEGACY,
-> >>     KPROBE_MODE_PERF,
-> >>     KPROBE_MODE_LINK,
-> >> };
-> >>
-> >> LEGACY/PERF/LINK naming should be thought through, just a quick example.
-> >>
-> >> And then just have `enum kprobe_mode mode;` in kprobe_opts, which
-> >> would default to 0 (KPROBE_MODE_DEFAULT).
-> >>
-> >> Would that work?
-> >>
->
-> Looks good - I'd missed the "no BPF link" case, it'd be great to test that too.
->
+From: Tonghao Zhang <tong@infragraf.org>
 
-My mistake, I forgot to add the 'bpf-next' tag :)
+The number of online cpu may be not equal to possible cpu.
+bpftool prog profile, can not create pmu event on possible
+but not online cpu.
 
-> So for legacy mode, we'd force using the legacy codepath, and to simulate the
-> PERF mode where BPF link isn't supported I think we'd need to add to bpf_perf_event_opts
-> so that we could choose the "no bpf link" code path rather than purely relying on the
-> kernel support test.
->
-> This would be nice as it would allow us to test other "pre-BPF link" attach targets
-> too.
->
-> So I think we need add an option to bpf_perf_event_opts for when KPROBE_MODE_PERF is set,
-> such as PE_MODE_PERF or PE_MODE_NO_BPF_LINK.
->
-> All of this would generalize to uprobe too I think; having a perf option makes that
-> straightforward I suspect.
->
-> >
-> > Sounds great, which means I don't have to switch to an older
-> > kernel to test this function for my app.
-> >
-> > BTW, should I do this job, (which is my pleasure), or Alan?
-> >
-> >
->
-> Feel free to take this on if you've got time; I'm trying to get the dwarves patches
-> covering support for .isra functions out as soon as possible so it would probably be
-> a week or so before I get to this. Something like the above combined with updating
-> the attach_probe selftests to run through the various attach modes would be great for
-> testing legacy codepaths on newer kernels. We could perhaps rework the test_attach_probe()
-> function to take an attach mode argument, and add subtests for each attach mode (skipping
-> if it wasn't supported). Thanks!
->
+$ dmidecode -s system-product-name
+PowerEdge R620
+$ cat /sys/devices/system/cpu/online
+0-31
+$ cat /sys/devices/system/cpu/possible
+0-47
 
-Okay, I'll have a try!
+To fix this issue, use online cpu instead of possible, to
+create perf event and other resource.
 
-> Alan
->
-> > Thanks!
-> > Menglong Dong
-> >
-> >>>
-> >>> Alan
-> >>>>
-> >>>>  static int add_kprobe_event_legacy(const char *probe_name, bool retprobe,
-> >>>>
+Signed-off-by: Tonghao Zhang <tong@infragraf.org>
+Cc: Quentin Monnet <quentin@isovalent.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Song Liu <song@kernel.org>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: Stanislav Fomichev <sdf@google.com>
+Cc: Hao Luo <haoluo@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+---
+ tools/bpf/bpftool/prog.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index cfc9fdc1e863..08b352dd799e 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -2056,6 +2056,7 @@ static int profile_parse_metrics(int argc, char **argv)
+ 
+ static void profile_read_values(struct profiler_bpf *obj)
+ {
++	__u32 possible_cpus = libbpf_num_possible_cpus();
+ 	__u32 m, cpu, num_cpu = obj->rodata->num_cpu;
+ 	int reading_map_fd, count_map_fd;
+ 	__u64 counts[num_cpu];
+@@ -2080,7 +2081,7 @@ static void profile_read_values(struct profiler_bpf *obj)
+ 		profile_total_count += counts[cpu];
+ 
+ 	for (m = 0; m < ARRAY_SIZE(metrics); m++) {
+-		struct bpf_perf_event_value values[num_cpu];
++		struct bpf_perf_event_value values[possible_cpus];
+ 
+ 		if (!metrics[m].selected)
+ 			continue;
+@@ -2321,7 +2322,7 @@ static int do_profile(int argc, char **argv)
+ 	if (num_metric <= 0)
+ 		goto out;
+ 
+-	num_cpu = libbpf_num_possible_cpus();
++	num_cpu = libbpf_num_online_cpus();
+ 	if (num_cpu <= 0) {
+ 		p_err("failed to identify number of CPUs");
+ 		goto out;
+-- 
+2.27.0
+
