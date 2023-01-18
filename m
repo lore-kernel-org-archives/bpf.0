@@ -2,109 +2,192 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BECA3C00A5A
-	for <bpf@archiver.kernel.org>; Wed, 18 Jan 2023 02:29:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85BD7C38142
+	for <bpf@archiver.kernel.org>; Wed, 18 Jan 2023 03:08:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbjARC3B (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 17 Jan 2023 21:29:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56010 "EHLO
+        id S229700AbjARDIl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 17 Jan 2023 22:08:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjARC3A (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 17 Jan 2023 21:29:00 -0500
-X-Greylist: delayed 3614 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 17 Jan 2023 18:28:57 PST
-Received: from m126.mail.126.com (m126.mail.126.com [220.181.12.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E29AA47EE8;
-        Tue, 17 Jan 2023 18:28:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=kDukO
-        GUxCUhmiVTpo0WAwM5Sv6NWbvEKkGh0Nqs0F78=; b=c8zU+ous/g1cR/dxhstnG
-        ymyDhwVgZZFNWpvQGwG13ugq+1nOYpWe/2geWhe//LT7NmgQlD4lMxgKtO4PhvZA
-        j0NqCL9B7WpeCOvDTTIyLUeG2EJY4CwkIeUjaELq8Bu9tQgpogncN4UrrKcSP2Nu
-        Fh3o4rt4tf41YN0J2Y3Mkk=
-Received: from localhost.localdomain (unknown [202.112.238.191])
-        by zwqz-smtp-mta-g0-1 (Coremail) with SMTP id _____wBHec9iQ8djSFyfAA--.53903S4;
-        Wed, 18 Jan 2023 08:54:58 +0800 (CST)
-From:   Yi He <clangllvm@126.com>
-To:     yhs@meta.com
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        clangllvm@126.com, daniel@iogearbox.net, haoluo@google.com,
-        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        martin.lau@linux.dev, mhiramat@kernel.org, rostedt@goodmis.org,
-        sdf@google.com, song@kernel.org, yhs@fb.com
-Subject: [PATCH V2] bpf: security enhancement by limiting the offensive eBPF helpers
-Date:   Wed, 18 Jan 2023 08:54:32 +0800
-Message-Id: <20230118005432.634229-1-clangllvm@126.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <f539bfef-c098-5ff0-51ef-bfa8fd0c4661@meta.com>
-References: <f539bfef-c098-5ff0-51ef-bfa8fd0c4661@meta.com>
+        with ESMTP id S229585AbjARDIi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 17 Jan 2023 22:08:38 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB32851C4D
+        for <bpf@vger.kernel.org>; Tue, 17 Jan 2023 19:08:26 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id c3so5322993ljh.1
+        for <bpf@vger.kernel.org>; Tue, 17 Jan 2023 19:08:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lt/NFinXeCqS49IKrVARWuoaPBVffqEh8QE5qsQ5J7g=;
+        b=qac3T4OTJDZNtfrZzrGAd7p2pCJIG17tqjDOBIlEvQlUGcVfcTgEa4G+SPRUg3eXe0
+         EtyqT7RpyQtXEEr566UZ1OaZfDPaVOTnI1pYpSF8rNaIuWW4wKjq0H/xyL75p/TLUUO1
+         hlTKW/aJmyh2RuLHvmZkl3XBHp7PNyAUEVt6c9NLimY3vgwzGsBFfuz3ujEG0UvQnRgl
+         Lf9Y+wW4UHqAAG2nMIWB5EIC04BbmOr11G7m2OOpH9WPGmwvLdbNDc0FQPy9qTRibAX0
+         qSKzmHjdR/s4Azwr107OUWwikRqBI6DgAm6tASaqImWZkl5r0rWW5cAxugAnphhJMLsV
+         q9zA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Lt/NFinXeCqS49IKrVARWuoaPBVffqEh8QE5qsQ5J7g=;
+        b=rA1cvq+tZsjInbpmn9w4bp4e7KZizImlmTWH8QPj1yRZ4ra93OS1OiwOwNnMLW6F8y
+         taECkTSgxzUEi1+NKxc2JTKK8VXHvpEVHoQSHWieuDTdQ/IBDZghx6GxgqwXAAXgwJU8
+         k06sdQEz0WkqEemQe8FZg4l3SNg639Hq2LOs4cndi6btQdj1eybw9ewbXxvpzEQlSAyy
+         PpQX0Rqon2tuklSn1th/prpORaQ/bB823ohJ2Q2qKAxdqi/xFZwcx0paGvxJpN0CBx1d
+         /owam/sn/dCQ7/GrTnGxoTph+mP+J3jhhxZN2Zt0mtXS9bKSfQVx7Opn/BWSjwi2Mb4D
+         UIjQ==
+X-Gm-Message-State: AFqh2krgscNSYMlQMy1gB+ru4mGPss5yh22qCyeoDop+vGLM6vwGznI8
+        ltfX1fPDQYj2zNpdt7tLiiGcAZi3JbFJDPA4QCxj81+4cjo=
+X-Google-Smtp-Source: AMrXdXsm+H5ADlb9ST8q40ikTozor3BacynUUl0x1jOpzLEQchLbHOZYVkp9fPiLqgGIG+5SRebL+FO4J5/JvCYLgSc=
+X-Received: by 2002:a05:651c:886:b0:28b:63e0:b8d5 with SMTP id
+ d6-20020a05651c088600b0028b63e0b8d5mr311533ljq.512.1674011304658; Tue, 17 Jan
+ 2023 19:08:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wBHec9iQ8djSFyfAA--.53903S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7uFykGFy8KFy3JF1kXr1DWrg_yoW8tw43pF
-        WDGF97Ars7JF42grnrJw1xGrWrC3y5WrW7GFWDGw48ZwsrXr4jqr1jkF4I9F1rZrZxGrW3
-        ua129rZ0kF12ga7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRb_-PUUUUU=
-X-Originating-IP: [202.112.238.191]
-X-CM-SenderInfo: xfod0wpooyzqqrswhudrp/1tbiqAP6y1pD-eLLiQAAse
+References: <20230112155326.26902-1-laoar.shao@gmail.com> <CAADnVQJie8jSNxEio9iu6oXBkXyCjCg6h2mHssPv4mDHubWTwA@mail.gmail.com>
+ <CALOAHbAsQ66j77BWC6isTRiKRPgG1Ap2qf6L+wQ+x2SXJt8NjQ@mail.gmail.com> <CAADnVQJGF5Xthpn7D2DgHHvZz8+dnuz2xMi6yoSziuauXO7ncA@mail.gmail.com>
+In-Reply-To: <CAADnVQJGF5Xthpn7D2DgHHvZz8+dnuz2xMi6yoSziuauXO7ncA@mail.gmail.com>
+From:   Yafang Shao <laoar.shao@gmail.com>
+Date:   Wed, 18 Jan 2023 11:07:48 +0800
+Message-ID: <CALOAHbBVRvTkSxLin+9A20Wv0DZWz4epvNTY1jEaCTf7q0qWJA@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next v2 00/11] mm, bpf: Add BPF into /proc/meminfo
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Tejun Heo <tj@kernel.org>, dennis@kernel.org,
+        Chris Lameter <cl@linux.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        linux-mm <linux-mm@kvack.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The bpf_send_singal, bpf_send_singal_thread and bpf_override_return
-is similar to bpf_write_user and can affect userspace processes.
-Thus, these three helpers should also be restricted by security lockdown.
+On Wed, Jan 18, 2023 at 1:25 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Fri, Jan 13, 2023 at 3:53 AM Yafang Shao <laoar.shao@gmail.com> wrote:
+> >
+> > On Fri, Jan 13, 2023 at 5:05 AM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > On Thu, Jan 12, 2023 at 7:53 AM Yafang Shao <laoar.shao@gmail.com> wrote:
+> > > >
+> > > > Currently there's no way to get BPF memory usage, while we can only
+> > > > estimate the usage by bpftool or memcg, both of which are not reliable.
+> > > >
+> > > > - bpftool
+> > > >   `bpftool {map,prog} show` can show us the memlock of each map and
+> > > >   prog, but the memlock is vary from the real memory size. The memlock
+> > > >   of a bpf object is approximately
+> > > >   `round_up(key_size + value_size, 8) * max_entries`,
+> > > >   so 1) it can't apply to the non-preallocated bpf map which may
+> > > >   increase or decrease the real memory size dynamically. 2) the element
+> > > >   size of some bpf map is not `key_size + value_size`, for example the
+> > > >   element size of htab is
+> > > >   `sizeof(struct htab_elem) + round_up(key_size, 8) + round_up(value_size, 8)`
+> > > >   That said the differece between these two values may be very great if
+> > > >   the key_size and value_size is small. For example in my verifaction,
+> > > >   the size of memlock and real memory of a preallocated hash map are,
+> > > >
+> > > >   $ grep BPF /proc/meminfo
+> > > >   BPF:                 350 kB  <<< the size of preallocated memalloc pool
+> > > >
+> > > >   (create hash map)
+> > > >
+> > > >   $ bpftool map show
+> > > >   41549: hash  name count_map  flags 0x0
+> > > >         key 4B  value 4B  max_entries 1048576  memlock 8388608B
+> > > >
+> > > >   $ grep BPF /proc/meminfo
+> > > >   BPF:               82284 kB
+> > > >
+> > > >   So the real memory size is $((82284 - 350)) which is 81934 kB
+> > > >   while the memlock is only 8192 kB.
+> > >
+> > > hashmap with key 4b and value 4b looks artificial to me,
+> > > but since you're concerned with accuracy of bpftool reporting,
+> > > please fix the estimation in bpf_map_memory_footprint().
+> >
+> > I thought bpf_map_memory_footprint() was deprecated, so I didn't try
+> > to fix it before.
+>
+> It's not deprecated. It's trying to be accurate.
+> See bpf_map_value_size().
+> In the past we had to be precise when we calculated the required memory
+> before we allocated and that was causing ongoing maintenance issues.
+> Now bpf_map_memory_footprint() is an estimate for show_fdinfo.
+> It can be made more accurate for this map with corner case key/value sizes.
+>
 
-Signed-off-by: Yi He <clangllvm@126.com>
----
- V1 -> V2: add security lockdown to bpf_send_singal_thread and remove 
-	the unused LOCKDOWN_OFFENSIVE_BPF_MAX.
+Thanks for the clarification.
 
- include/linux/security.h | 2 ++
- kernel/trace/bpf_trace.c | 9 ++++++---
- 2 files changed, 8 insertions(+), 3 deletions(-)
+> > > You're correct that:
+> > >
+> > > > size of some bpf map is not `key_size + value_size`, for example the
+> > > >   element size of htab is
+> > > >   `sizeof(struct htab_elem) + round_up(key_size, 8) + round_up(value_size, 8)`
+> > >
+> > > So just teach bpf_map_memory_footprint() to do this more accurately.
+> > > Add bucket size to it as well.
+> > > Make it even more accurate with prealloc vs not.
+> > > Much simpler change than adding run-time overhead to every alloc/free
+> > > on bpf side.
+> > >
+> >
+> > It seems that we'd better introduce ->memory_footprint for some
+> > specific bpf maps. I will think about it.
+>
+> No. Don't build it into a replica of what we had before.
+> Making existing bpf_map_memory_footprint() more accurate.
+>
 
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 5b67f208f..42420e620 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -123,6 +123,8 @@ enum lockdown_reason {
- 	LOCKDOWN_DEBUGFS,
- 	LOCKDOWN_XMON_WR,
- 	LOCKDOWN_BPF_WRITE_USER,
-+	LOCKDOWN_BPF_SEND_SIGNAL,
-+	LOCKDOWN_BPF_OVERRIDE_RETURN,
- 	LOCKDOWN_DBG_WRITE_KERNEL,
- 	LOCKDOWN_RTAS_ERROR_INJECTION,
- 	LOCKDOWN_INTEGRITY_MAX,
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 3bbd3f0c8..fdb94868d 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1463,9 +1463,11 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_cgrp_storage_delete_proto;
- #endif
- 	case BPF_FUNC_send_signal:
--		return &bpf_send_signal_proto;
-+		return security_locked_down(LOCKDOWN_BPF_SEND_SIGNAL) < 0 ?
-+		       NULL : &bpf_send_signal_proto;
- 	case BPF_FUNC_send_signal_thread:
--		return &bpf_send_signal_thread_proto;
-+		return security_locked_down(LOCKDOWN_BPF_SEND_SIGNAL) < 0 ?
-+		       NULL : &bpf_send_signal_thread_proto;
- 	case BPF_FUNC_perf_event_read_value:
- 		return &bpf_perf_event_read_value_proto;
- 	case BPF_FUNC_get_ns_current_pid_tgid:
-@@ -1531,7 +1533,8 @@ kprobe_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_get_stack_proto;
- #ifdef CONFIG_BPF_KPROBE_OVERRIDE
- 	case BPF_FUNC_override_return:
--		return &bpf_override_return_proto;
-+		return security_locked_down(LOCKDOWN_BPF_OVERRIDE_RETURN) < 0 ?
-+		       NULL : &bpf_override_return_proto;
- #endif
- 	case BPF_FUNC_get_func_ip:
- 		return prog->expected_attach_type == BPF_TRACE_KPROBE_MULTI ?
+I just don't want to add many if-elses or switch-cases into
+bpf_map_memory_footprint(), because I think it is a little ugly.
+Introducing a new map ops could make it more clear.  For example,
+static unsigned long bpf_map_memory_footprint(const struct bpf_map *map)
+{
+    unsigned long size;
+
+    if (map->ops->map_mem_footprint)
+        return map->ops->map_mem_footprint(map);
+
+    size = round_up(map->key_size + bpf_map_value_size(map), 8);
+    return round_up(map->max_entries * size, PAGE_SIZE);
+}
+
+> > > bpf side tracks all of its allocation. There is no need to do that
+> > > in generic mm side.
+> > > Exposing an aggregated single number if /proc/meminfo also looks wrong.
+> >
+> > Do you mean that we shouldn't expose it in /proc/meminfo ?
+>
+> We should not because it helps one particular use case only.
+> Somebody else might want map mem info per container,
+> then somebody would need it per user, etc.
+
+It seems we should show memcg info and user info in bpftool map show.
+
+> bpftool map show | awk
+> solves all those cases without adding new uapi-s.
+
+Makes sense to me.
+
 -- 
-2.25.1
-
+Regards
+Yafang
