@@ -2,117 +2,218 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3CCFC677F1
-	for <bpf@archiver.kernel.org>; Wed, 18 Jan 2023 10:45:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C71DC46467
+	for <bpf@archiver.kernel.org>; Wed, 18 Jan 2023 11:25:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbjARKpf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 Jan 2023 05:45:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37868 "EHLO
+        id S229510AbjARLZS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 Jan 2023 06:25:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjARKnQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 18 Jan 2023 05:43:16 -0500
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B8A676DE;
-        Wed, 18 Jan 2023 01:49:14 -0800 (PST)
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pI544-000GsH-Jt; Wed, 18 Jan 2023 10:49:04 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pI543-000TL6-U9; Wed, 18 Jan 2023 10:49:03 +0100
-Subject: Re: [PATCH V2] bpf: security enhancement by limiting the offensive
- eBPF helpers
-To:     Yi He <clangllvm@126.com>, yhs@meta.com
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org,
-        kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, martin.lau@linux.dev,
-        mhiramat@kernel.org, rostedt@goodmis.org, sdf@google.com,
-        song@kernel.org, yhs@fb.com
-References: <f539bfef-c098-5ff0-51ef-bfa8fd0c4661@meta.com>
- <20230118005432.634229-1-clangllvm@126.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <ef9b8445-b02b-3f6a-a566-587695f322b7@iogearbox.net>
-Date:   Wed, 18 Jan 2023 10:49:03 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        with ESMTP id S230118AbjARLYl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 18 Jan 2023 06:24:41 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FBA53756D
+        for <bpf@vger.kernel.org>; Wed, 18 Jan 2023 02:41:53 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id n7so7400836wrx.5
+        for <bpf@vger.kernel.org>; Wed, 18 Jan 2023 02:41:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/yCBSiBaMnPBt6XCHGYi+xBWbtYNbT5WrPAhRjvrZBc=;
+        b=luTXF2+RWO7DcOokLrdb00iXeYZfn9FivP0lSnbm3PmAWiLKNSlceBha0XzoHpfA8B
+         ojk6ZZ4fcyqTd2UBvcg+4nr5daq1IXuAIYxmBX+8pbbQZKphPT3T/MJ6izB6LxVxQECg
+         0CACVvc85mJa+G+NxZSmXMtzNC+ua6jUdgV+ATeQfM6BIpTaUjO+ZS0+HNI1ZqegTnMo
+         06I5my4OPYe/i9S7rbElPDtOvmDY9Ob7wSRkDRM/JKJlkN0Wrw9+jOJzVTXOAk3L+WGD
+         uEQPTZkhmLHtpSShg66hY2eYqxjeFeTukBtZxbqDyStggGD+C2DXVMHyJuME7f7opc5y
+         mWDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/yCBSiBaMnPBt6XCHGYi+xBWbtYNbT5WrPAhRjvrZBc=;
+        b=8K6GF6Urvr+9rwiVttDyIxvYvYOQrM6azRLn0kItJpL7KSJrdKJbVcMbT19o34PK6I
+         r2NzN/QiRnGxg9OqdY+WhOZdz5J5+N2rA3wPfTC/hTRR4G9zfVipdDXyZHTA9cmkjx3X
+         DVY7S0w632qcB4YhzBgZYVuSo7ErhdmtBVmATwMOiHpLlUGM9wtnUm7h8esntF3W47iV
+         wbPetXlRCsRgcgxCFd4YiRF4juqWDL9ytt8KXdhKVOYZLtFUan2Rjv3yDtw8zJCRRD3A
+         rRPLCkxOH5rH6BXAn0lpEtcL7vgv8MkoDcPOkc4GzsnjcVf/9cbuwZEZXScb6Tcc+hS+
+         hYYQ==
+X-Gm-Message-State: AFqh2kot7I5sqMlxPWP45hJzOvlflz4YQPpnSZq2MWbBYnq/Gldf6faF
+        15GW1zILlIQ01XfPBShu6ydcTQ==
+X-Google-Smtp-Source: AMrXdXvD5Fl1QjN+isToC8Ex3iZlZ3YirqMxmqMyC73NDJu52kWwlSjc/fc0G9cKnMTjoyVDkQbrxQ==
+X-Received: by 2002:adf:f2c4:0:b0:2be:3503:2dcf with SMTP id d4-20020adff2c4000000b002be35032dcfmr663224wrp.44.1674038511936;
+        Wed, 18 Jan 2023 02:41:51 -0800 (PST)
+Received: from [192.168.178.32] ([51.155.200.13])
+        by smtp.gmail.com with ESMTPSA id o7-20020a5d62c7000000b002bbeda3809csm25089432wrv.11.2023.01.18.02.41.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 02:41:51 -0800 (PST)
+Message-ID: <ff7263e3-fcd0-8257-a0ce-f5bf94546d52@isovalent.com>
+Date:   Wed, 18 Jan 2023 10:41:50 +0000
 MIME-Version: 1.0
-In-Reply-To: <20230118005432.634229-1-clangllvm@126.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [bpf-next v1 1/2] libbpf: introduce new API
+ libbpf_num_online_cpus
+Content-Language: en-GB
+To:     tong@infragraf.org, bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
+References: <20230117044902.98938-1-tong@infragraf.org>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <20230117044902.98938-1-tong@infragraf.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.7/26785/Wed Jan 18 09:42:40 2023)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 1/18/23 1:54 AM, Yi He wrote:
-> The bpf_send_singal, bpf_send_singal_thread and bpf_override_return
-> is similar to bpf_write_user and can affect userspace processes.
-> Thus, these three helpers should also be restricted by security lockdown.
+2023-01-17 12:49 UTC+0800 ~ tong@infragraf.org
+> From: Tonghao Zhang <tong@infragraf.org>
 > 
-> Signed-off-by: Yi He <clangllvm@126.com>
+> Adding a new API libbpf_num_online_cpus() that helps user with
+> fetching online CPUs number.
+> 
+> It's useful in system which number of online CPUs is different with
+> possible CPUs.
+> 
+> Signed-off-by: Tonghao Zhang <tong@infragraf.org>
+> Cc: Quentin Monnet <quentin@isovalent.com>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: Andrii Nakryiko <andrii@kernel.org>
+> Cc: Martin KaFai Lau <martin.lau@linux.dev>
+> Cc: Song Liu <song@kernel.org>
+> Cc: Yonghong Song <yhs@fb.com>
+> Cc: John Fastabend <john.fastabend@gmail.com>
+> Cc: KP Singh <kpsingh@kernel.org>
+> Cc: Stanislav Fomichev <sdf@google.com>
+> Cc: Hao Luo <haoluo@google.com>
+> Cc: Jiri Olsa <jolsa@kernel.org>
 > ---
->   V1 -> V2: add security lockdown to bpf_send_singal_thread and remove
-> 	the unused LOCKDOWN_OFFENSIVE_BPF_MAX.
+>  tools/lib/bpf/libbpf.c   | 47 ++++++++++++++++++++++++++++++----------
+>  tools/lib/bpf/libbpf.h   |  7 ++++++
+>  tools/lib/bpf/libbpf.map |  1 +
+>  3 files changed, 43 insertions(+), 12 deletions(-)
 > 
->   include/linux/security.h | 2 ++
->   kernel/trace/bpf_trace.c | 9 ++++++---
->   2 files changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/security.h b/include/linux/security.h
-> index 5b67f208f..42420e620 100644
-> --- a/include/linux/security.h
-> +++ b/include/linux/security.h
-> @@ -123,6 +123,8 @@ enum lockdown_reason {
->   	LOCKDOWN_DEBUGFS,
->   	LOCKDOWN_XMON_WR,
->   	LOCKDOWN_BPF_WRITE_USER,
-> +	LOCKDOWN_BPF_SEND_SIGNAL,
-> +	LOCKDOWN_BPF_OVERRIDE_RETURN,
->   	LOCKDOWN_DBG_WRITE_KERNEL,
->   	LOCKDOWN_RTAS_ERROR_INJECTION,
->   	LOCKDOWN_INTEGRITY_MAX,
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 27d9faa80471..b84904f79ffd 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -12192,30 +12192,53 @@ int parse_cpu_mask_file(const char *fcpu, bool **mask, int *mask_sz)
+>  	return parse_cpu_mask_str(buf, mask, mask_sz);
+>  }
+>  
+> -int libbpf_num_possible_cpus(void)
+> +static int num_cpus(const char *fcpu)
+>  {
+> -	static const char *fcpu = "/sys/devices/system/cpu/possible";
+> -	static int cpus;
+> -	int err, n, i, tmp_cpus;
+> +	int err, n, i, cpus;
+>  	bool *mask;
+>  
+> -	tmp_cpus = READ_ONCE(cpus);
+> -	if (tmp_cpus > 0)
+> -		return tmp_cpus;
+> -
+>  	err = parse_cpu_mask_file(fcpu, &mask, &n);
+>  	if (err)
+>  		return libbpf_err(err);
+>  
+> -	tmp_cpus = 0;
+> +	cpus = 0;
+>  	for (i = 0; i < n; i++) {
+>  		if (mask[i])
+> -			tmp_cpus++;
+> +			cpus++;
+>  	}
+>  	free(mask);
+>  
+> -	WRITE_ONCE(cpus, tmp_cpus);
+> -	return tmp_cpus;
+> +	return cpus;
+> +}
+> +
+> +int libbpf_num_online_cpus(void)
+> +{
+> +	static int online_cpus;
+> +	int cpus;
+> +
+> +	cpus = READ_ONCE(online_cpus);
+> +	if (cpus > 0)
+> +		return cpus;
 
-I'm not applying this.. i) this means by default you effectively remove these
-helpers from existing users in the wild given integrity mode is default for
-secure boot, but also ii) should we lock-down and remove the ability for other
-privileged entities like processes to send signals, seccomp to ret_kill, ptrace,
-etc given they all "can affect userspace processes". For the other one, check
-out already existing FUNCTION_ERROR_INJECTION kernel config.
+The number of online CPUs can change over time, I don't think you can
+READ_ONCE()/WRITE_ONCE().
 
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 3bbd3f0c8..fdb94868d 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -1463,9 +1463,11 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
->   		return &bpf_cgrp_storage_delete_proto;
->   #endif
->   	case BPF_FUNC_send_signal:
-> -		return &bpf_send_signal_proto;
-> +		return security_locked_down(LOCKDOWN_BPF_SEND_SIGNAL) < 0 ?
-> +		       NULL : &bpf_send_signal_proto;
->   	case BPF_FUNC_send_signal_thread:
-> -		return &bpf_send_signal_thread_proto;
-> +		return security_locked_down(LOCKDOWN_BPF_SEND_SIGNAL) < 0 ?
-> +		       NULL : &bpf_send_signal_thread_proto;
->   	case BPF_FUNC_perf_event_read_value:
->   		return &bpf_perf_event_read_value_proto;
->   	case BPF_FUNC_get_ns_current_pid_tgid:
-> @@ -1531,7 +1533,8 @@ kprobe_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
->   		return &bpf_get_stack_proto;
->   #ifdef CONFIG_BPF_KPROBE_OVERRIDE
->   	case BPF_FUNC_override_return:
-> -		return &bpf_override_return_proto;
-> +		return security_locked_down(LOCKDOWN_BPF_OVERRIDE_RETURN) < 0 ?
-> +		       NULL : &bpf_override_return_proto;
->   #endif
->   	case BPF_FUNC_get_func_ip:
->   		return prog->expected_attach_type == BPF_TRACE_KPROBE_MULTI ?
-> 
+> +
+> +	cpus = num_cpus("/sys/devices/system/cpu/online");
+> +
+> +	WRITE_ONCE(online_cpus, cpus);
+> +	return cpus;
+> +}
+> +
+> +int libbpf_num_possible_cpus(void)
+> +{
+> +	static int possible_cpus;
+> +	int cpus;
+> +
+> +	cpus = READ_ONCE(possible_cpus);
+> +	if (cpus > 0)
+> +		return cpus;
+> +
+> +	cpus = num_cpus("/sys/devices/system/cpu/possible");
+> +
+> +	WRITE_ONCE(possible_cpus, cpus);
+> +	return cpus;
+>  }
+>  
+>  static int populate_skeleton_maps(const struct bpf_object *obj,
+> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> index 898db26e42e9..e433575ff865 100644
+> --- a/tools/lib/bpf/libbpf.h
+> +++ b/tools/lib/bpf/libbpf.h
+> @@ -1332,6 +1332,13 @@ LIBBPF_API int libbpf_probe_bpf_helper(enum bpf_prog_type prog_type,
+>   */
+>  LIBBPF_API int libbpf_num_possible_cpus(void);
+>  
+> +/**
+> + * @brief **libbpf_num_online_cpus()** is a helper function to get the
+> + * number of online CPUs that the host kernel supports and expects.
+> + * @return number of online CPUs; or error code on failure
+> + */
+> +LIBBPF_API int libbpf_num_online_cpus(void);
+> +
+>  struct bpf_map_skeleton {
+>  	const char *name;
+>  	struct bpf_map **map;
+> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> index 11c36a3c1a9f..384fb6333f3f 100644
+> --- a/tools/lib/bpf/libbpf.map
+> +++ b/tools/lib/bpf/libbpf.map
+> @@ -381,6 +381,7 @@ LIBBPF_1.1.0 {
+>  		user_ring_buffer__reserve;
+>  		user_ring_buffer__reserve_blocking;
+>  		user_ring_buffer__submit;
+> +		libbpf_num_online_cpus;
+>  } LIBBPF_1.0.0;
 
+Libbpf v1.1.0 has shipped, so this would now go to the 1.2.0 block below.
+
+>  
+>  LIBBPF_1.2.0 {
+
+Thanks, but I'm not sure retrieving the number of online CPUs, without
+the list of those in use, is enough for fixing bpftool profiling
+feature. Please see my answer on the second patch.
+
+Quentin
