@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B1C7C004D4
-	for <bpf@archiver.kernel.org>; Wed, 18 Jan 2023 06:20:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F785C004D4
+	for <bpf@archiver.kernel.org>; Wed, 18 Jan 2023 06:20:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbjARGUJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 Jan 2023 01:20:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53472 "EHLO
+        id S229530AbjARGUM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 Jan 2023 01:20:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjARGSR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 18 Jan 2023 01:18:17 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C7D442D4;
-        Tue, 17 Jan 2023 22:06:03 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id q9so23748273pgq.5;
-        Tue, 17 Jan 2023 22:06:03 -0800 (PST)
+        with ESMTP id S229654AbjARGSW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 18 Jan 2023 01:18:22 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE8A1D921;
+        Tue, 17 Jan 2023 22:06:21 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id d8so3576686pjc.3;
+        Tue, 17 Jan 2023 22:06:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Q4FWYNGqeIRLLvbuHSi4QxIqv+Z+4df4xqBN1sLuHUI=;
-        b=LWvdJAHv1jZf2z/7zujPgBAeAQ9KRsb7GuuOIaayNaFGOHtclEFJNra3G9kr6/uxei
-         zR2Juw7BZwh2ifMPPiDuNeZeXPCA48C1PahDHi7cWjsCw8fBkvm2qfeIw5L5lltkzDFF
-         WYb58icJKGcvZWXpubVZToPAOkDHgyJEr2xn9IP/zyx/kxIb0TLonxdTcmBotQFeeMGR
-         JQhjTOfvONTkw+R2EQ5+xeCiOtjEpdsE3/xy4H4W8R8E5UwLyNrR3JYh4rldqVb+VWEe
-         b1jWcd8/kyha9QadyEQuIu7zIy4uzz/xsHbt8GObU0YbAW2yMi9EnRC+mFAVX7DuiN6f
-         oEDQ==
+        bh=G8Zh73XBwb5RMlMiLWpYbNBMevrlhNdfAXS0S1zywoE=;
+        b=BtwVgukY8p2esH90r+fFnX1sw/xNf3PzZDpleVXeJjNvYBea8dbKTD5knI16ZPYgok
+         oWn2fv24+g5U8shpZzCUvHcGQU/61rPmRCn9+RfJ85ha/rMs3/KosTyQVgV7NtrmyCz9
+         k0NtzMhxCIPQA9rL3f3cKv4MdNW7MzBGeEZf6HWSeogLiXicdsFcOly6Ywmq6L1TuMJG
+         NgEl5ocR60OBqguMRShxpuyN+LS7xyEX+uO4TYUyfI8n92g67XLuUVs/F5eWkkkkilZB
+         V4p+vpsyyHfWexwQcDIf13zJQKJT3g/x0gCQyEZzkJfC/9eLVI6H25KIajRv/tGPCvFH
+         y38w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Q4FWYNGqeIRLLvbuHSi4QxIqv+Z+4df4xqBN1sLuHUI=;
-        b=tSgeZaUOzcqGTPO0151PFgXi2crUWlIySGcLGi50TiLLH9C2ZfQ5AmQ3XTFTPPOUFj
-         7ToHVAqXw3/3wJKGIXudIGsx/GRNb5TFBBoBT4ag4kb55x2Xhu8UH5F0SFrA39pMcVwz
-         M1INgCjrjnwZxK37vPygzj8GyZ7mXMJFVM2uZwY7JQOBbVLXb6VZ7ZeMmustEVb5iXUL
-         X0GQ9QrajGl1pyEj2QPJPk/Ox8PYH3xg221rKbiwkbohYZKfdAng6QOYS6AAvyu9Nt7m
-         KPtQhwQ22+a+NOGpvvKmqCXxdqGrg+WSO6x0q2ullJEWZEbJsYUh3APEMWc6q3LooGBo
-         +wQg==
-X-Gm-Message-State: AFqh2koWr93iWJFmfwks3xGl3mHurvrko9IhDcILICZgCp3Y2M+NzeV7
-        JtpFGKs2+Uo7BHO2mAtatnSlCvXYylA=
-X-Google-Smtp-Source: AMrXdXu4JZ8K4+nwdu5Ql6RmPRpETATz1ehBeMVqW1WRR163R1j1Zq1erJ2q6YP17Z7TMZGGtcXj4w==
-X-Received: by 2002:a62:640f:0:b0:581:f301:23fc with SMTP id y15-20020a62640f000000b00581f30123fcmr24054116pfb.12.1674021962020;
-        Tue, 17 Jan 2023 22:06:02 -0800 (PST)
+        bh=G8Zh73XBwb5RMlMiLWpYbNBMevrlhNdfAXS0S1zywoE=;
+        b=LiCoUyz5/UQtCXdByEOVEyWfTrecc+QWrDluUWQ12AFSt/JzDj5v1X1ChROOfRTbYx
+         Ba5CDXcMR1g4aDdOy1pmmTrqPbzKiJgh+sXJQSXFgLwknloF05RtwRziaq8wDTnCWvim
+         rymU+tCsg695RMyTVR4QdKgozee418FiLakAaA+a/XlQoChgq7gklRL4A+wLqURrS7n0
+         moWjkNtUKh7Y0wCLnQu/ID4BkS9OKGNob0oi2D9TRBcgTm6YHj+hacY2wKDR6wzPpD47
+         6mc1wmRVFlUJgRzA+ctHSK7sMjkRLzKgyfgnjHpoUPrqXUTVi9Foo93R19DHjDXN00+X
+         fzPA==
+X-Gm-Message-State: AFqh2kqIzgMK/HP5IdJIda5uwa+KkN8gnL9xABDqhkCMrliPPHi2MYfM
+        ES1PNz1RwpM2wNxhm/5vy1dMjREWO+A=
+X-Google-Smtp-Source: AMrXdXvkfnz1J7DHVrGh6RTHUkvCSRa6QIx8Z/ooE0eq7g2D+h/j4uU3f32SZT52U2utilzNSaBNRQ==
+X-Received: by 2002:a05:6a20:b925:b0:9d:efbf:8156 with SMTP id fe37-20020a056a20b92500b0009defbf8156mr29465355pzb.31.1674021969212;
+        Tue, 17 Jan 2023 22:06:09 -0800 (PST)
 Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:ff0:3749:9eb3:dfb5:f449])
-        by smtp.gmail.com with ESMTPSA id b126-20020a62cf84000000b00574e84ed847sm10990180pfg.24.2023.01.17.22.06.00
+        by smtp.gmail.com with ESMTPSA id b126-20020a62cf84000000b00574e84ed847sm10990180pfg.24.2023.01.17.22.06.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 22:06:01 -0800 (PST)
+        Tue, 17 Jan 2023 22:06:08 -0800 (PST)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Peter Zijlstra <peterz@infradead.org>,
@@ -59,9 +59,9 @@ Cc:     Mark Rutland <mark.rutland@arm.com>,
         Jiri Olsa <jolsa@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>, Song Liu <song@kernel.org>,
         bpf@vger.kernel.org
-Subject: [PATCH 1/8] perf/core: Save the dynamic parts of sample data size
-Date:   Tue, 17 Jan 2023 22:05:52 -0800
-Message-Id: <20230118060559.615653-2-namhyung@kernel.org>
+Subject: [PATCH 6/8] perf/core: Do not pass header for sample id init
+Date:   Tue, 17 Jan 2023 22:05:57 -0800
+Message-Id: <20230118060559.615653-7-namhyung@kernel.org>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 In-Reply-To: <20230118060559.615653-1-namhyung@kernel.org>
 References: <20230118060559.615653-1-namhyung@kernel.org>
@@ -71,115 +71,69 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The perf sample data can be divided into parts.  The event->header_size
-and event->id_header_size keep the static part of the sample data which
-is determined by the sample_type flags.
-
-But other parts like CALLCHAIN and BRANCH_STACK are changing dynamically
-so it needs to see the actual data.  In preparation of handling repeated
-calls for perf_prepare_sample(), it can save the dynamic size to the
-perf sample data to avoid the duplicate work.
+The only thing it does for header in __perf_event_header__init_id() is
+to update the header size with event->id_header_size.  We can do this
+outside and get rid of the argument for the later change.
 
 Acked-by: Jiri Olsa <jolsa@kernel.org>
 Acked-by: Song Liu <song@kernel.org>
 Tested-by: Jiri Olsa <jolsa@kernel.org>
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- include/linux/perf_event.h |  2 ++
- kernel/events/core.c       | 17 ++++++++++-------
- 2 files changed, 12 insertions(+), 7 deletions(-)
+ kernel/events/core.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index 03949d017ac9..16b980014449 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -1103,6 +1103,7 @@ struct perf_sample_data {
- 	 */
- 	u64				sample_flags;
- 	u64				period;
-+	u64				dyn_size;
- 
- 	/*
- 	 * Fields commonly set by __perf_event_header__init_id(),
-@@ -1158,6 +1159,7 @@ static inline void perf_sample_data_init(struct perf_sample_data *data,
- 	/* remaining struct members initialized in perf_prepare_sample() */
- 	data->sample_flags = PERF_SAMPLE_PERIOD;
- 	data->period = period;
-+	data->dyn_size = 0;
- 
- 	if (addr) {
- 		data->addr = addr;
 diff --git a/kernel/events/core.c b/kernel/events/core.c
-index eacc3702654d..8c8de26f04ab 100644
+index 1384137a90f7..9cc55122188f 100644
 --- a/kernel/events/core.c
 +++ b/kernel/events/core.c
-@@ -7593,7 +7593,7 @@ void perf_prepare_sample(struct perf_event_header *header,
+@@ -7061,14 +7061,12 @@ static void perf_aux_sample_output(struct perf_event *event,
+ 			     PERF_SAMPLE_ID | PERF_SAMPLE_STREAM_ID |	\
+ 			     PERF_SAMPLE_CPU | PERF_SAMPLE_IDENTIFIER)
  
- 		size += data->callchain->nr;
+-static void __perf_event_header__init_id(struct perf_event_header *header,
+-					 struct perf_sample_data *data,
++static void __perf_event_header__init_id(struct perf_sample_data *data,
+ 					 struct perf_event *event,
+ 					 u64 sample_type)
+ {
+ 	data->type = event->attr.sample_type;
+ 	data->sample_flags |= data->type & PERF_SAMPLE_ID_ALL;
+-	header->size += event->id_header_size;
  
--		header->size += size * sizeof(u64);
-+		data->dyn_size += size * sizeof(u64);
- 	}
+ 	if (sample_type & PERF_SAMPLE_TID) {
+ 		/* namespace issues */
+@@ -7095,8 +7093,10 @@ void perf_event_header__init_id(struct perf_event_header *header,
+ 				struct perf_sample_data *data,
+ 				struct perf_event *event)
+ {
+-	if (event->attr.sample_id_all)
+-		__perf_event_header__init_id(header, data, event, event->attr.sample_type);
++	if (event->attr.sample_id_all) {
++		header->size += event->id_header_size;
++		__perf_event_header__init_id(data, event, event->attr.sample_type);
++	}
+ }
  
- 	if (sample_type & PERF_SAMPLE_RAW) {
-@@ -7619,7 +7619,7 @@ void perf_prepare_sample(struct perf_event_header *header,
- 			data->raw = NULL;
- 		}
+ static void __perf_event__output_id_sample(struct perf_output_handle *handle,
+@@ -7584,7 +7584,7 @@ void perf_prepare_sample(struct perf_event_header *header,
+ 	u64 filtered_sample_type;
  
--		header->size += size;
-+		data->dyn_size += size;
- 	}
+ 	header->type = PERF_RECORD_SAMPLE;
+-	header->size = sizeof(*header) + event->header_size;
++	header->size = sizeof(*header) + event->header_size + event->id_header_size;
  
- 	if (sample_type & PERF_SAMPLE_BRANCH_STACK) {
-@@ -7631,7 +7631,7 @@ void perf_prepare_sample(struct perf_event_header *header,
- 			size += data->br_stack->nr
- 			      * sizeof(struct perf_branch_entry);
- 		}
--		header->size += size;
-+		data->dyn_size += size;
- 	}
+ 	header->misc = 0;
+ 	header->misc |= perf_misc_flags(regs);
+@@ -7602,7 +7602,7 @@ void perf_prepare_sample(struct perf_event_header *header,
+ 					   PERF_SAMPLE_REGS_USER);
+ 	filtered_sample_type &= ~data->sample_flags;
  
- 	if (sample_type & (PERF_SAMPLE_REGS_USER | PERF_SAMPLE_STACK_USER))
-@@ -7646,7 +7646,7 @@ void perf_prepare_sample(struct perf_event_header *header,
- 			size += hweight64(mask) * sizeof(u64);
- 		}
+-	__perf_event_header__init_id(header, data, event, filtered_sample_type);
++	__perf_event_header__init_id(data, event, filtered_sample_type);
  
--		header->size += size;
-+		data->dyn_size += size;
- 	}
- 
- 	if (sample_type & PERF_SAMPLE_STACK_USER) {
-@@ -7671,7 +7671,7 @@ void perf_prepare_sample(struct perf_event_header *header,
- 			size += sizeof(u64) + stack_size;
- 
- 		data->stack_user_size = stack_size;
--		header->size += size;
-+		data->dyn_size += size;
- 	}
- 
- 	if (filtered_sample_type & PERF_SAMPLE_WEIGHT_TYPE)
-@@ -7700,7 +7700,7 @@ void perf_prepare_sample(struct perf_event_header *header,
- 			size += hweight64(mask) * sizeof(u64);
- 		}
- 
--		header->size += size;
-+		data->dyn_size += size;
- 	}
- 
- 	if (sample_type & PERF_SAMPLE_PHYS_ADDR &&
-@@ -7745,8 +7745,11 @@ void perf_prepare_sample(struct perf_event_header *header,
- 		size = perf_prepare_sample_aux(event, data, size);
- 
- 		WARN_ON_ONCE(size + header->size > U16_MAX);
--		header->size += size;
-+		data->dyn_size += size + sizeof(u64); /* size above */
- 	}
-+
-+	header->size += data->dyn_size;
-+
- 	/*
- 	 * If you're adding more sample types here, you likely need to do
- 	 * something about the overflowing header::size, like repurpose the
+ 	if (filtered_sample_type & PERF_SAMPLE_IP) {
+ 		data->ip = perf_instruction_pointer(regs);
 -- 
 2.39.0.314.g84b9a713c41-goog
 
