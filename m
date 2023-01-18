@@ -2,197 +2,109 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3D25C38147
-	for <bpf@archiver.kernel.org>; Wed, 18 Jan 2023 00:53:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39524C38142
+	for <bpf@archiver.kernel.org>; Wed, 18 Jan 2023 01:07:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229497AbjARAxg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 17 Jan 2023 19:53:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47618 "EHLO
+        id S229617AbjARBHS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 17 Jan 2023 20:07:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbjARAwk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 17 Jan 2023 19:52:40 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 366EC46082
-        for <bpf@vger.kernel.org>; Tue, 17 Jan 2023 16:41:46 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id v23so30377086plo.1
-        for <bpf@vger.kernel.org>; Tue, 17 Jan 2023 16:41:46 -0800 (PST)
+        with ESMTP id S229752AbjARBGs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 17 Jan 2023 20:06:48 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30CF24B4BD
+        for <bpf@vger.kernel.org>; Tue, 17 Jan 2023 16:55:57 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id s3so22431881pfd.12
+        for <bpf@vger.kernel.org>; Tue, 17 Jan 2023 16:55:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AvtvbFcu8/sAS6/k33PRgFD5NoeFjBVPt56XgLELszI=;
-        b=WTtr0z2OuSCYeljT8HCLh559zud9JHZmB3uz+tXIuMOtx+02M2k0S7UJk1ZUo59qSh
-         yqCLxfgnkGmCUsRqKymyB1q2gzhK+BuQGY36nwUg1eXj2vMaIax7CegD5/cr9EpwpcuQ
-         H3+ReJ5gLNcNewnDQ2CkApdBTZAVwQCF3MSbYdoJ+sNrGydPhT+WuvCk9mPCyFTO53HJ
-         v+1mC5hQ3v7VF+7bFhWnV0HuSI261d+eIdS8R32eA2Nuamp3c6ChRgc4lavXYZpxgXHn
-         EIsD+YZhn2JR6PaV0Q1AF2tiA+eoM+k+evSfxSCbp9dkSwxJ9V1gKwa4q1wUsz9xr6Mm
-         fXeQ==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qsvv2gS4uCvYkqiwZFbM5ckEnt1ocYo1UbmP/627MbI=;
+        b=BdOf/00j+mYl9ytan3wr0CPeAaEHzTTjgZuDZfHZmf882iWqusXpN8mwkYzmeifme7
+         p2VSr4lJudCu1OLaJHxCyBJP7fzVfxJpcg98Ya9pZXAioYdVvO3inA+YSCfERaWkcORr
+         fDaD7hbS/BTo645Z5CdFPfw3xk2VxvTrHIu8dODlD4XyEzLWxbJL578mPO1+gMhq241f
+         mgaCSDenDtmWdYicMM+dtAzL6YW+O909OB21VtxowhqsNEwbmqAV8kxNEESa3higJmgQ
+         oQ6BwPGjlbK6WGROY05WCPOJwbbjYoejAWI1oaJS0dkQ2CrW+o1z3ww2JxbdvRnC4eSq
+         1PtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AvtvbFcu8/sAS6/k33PRgFD5NoeFjBVPt56XgLELszI=;
-        b=CoZU0Ke7n+RR1EOBVVK4I1U5eS0rCpePlUsGalApsj8/7Ze7zy+QaVgqKHQR4GSem5
-         gxzjfzJ3cH1CS9vIa5g/PEgLnogbwH6amZevJhHj5Y/wWULeF1oIo2pkFSVfL0ACMUdN
-         FxHX/q9rD0Q2X/+ie/V5/BEAtHyQscumahxWIhNGSf+CctcgDd1El00vrFt1FLRcF69J
-         WJX/1nfyFQu51xU4HTBGc2airtzi/vfz38TrlAcwmlAkG5QTi1KjD6Q+bL30mMZRN0NA
-         aM2Tx1lDYjPB+arS/xTAu/wCMMT6z+E5Cnl8DTaY4w4qTdFwOAiAktDHBO4pokRruLkU
-         RHCw==
-X-Gm-Message-State: AFqh2kpDQvtUqu81Cuz7xBEovSijz1Rx/cN5sBYxfWv1EHTsZZg5d+nq
-        mDSXILk6dmkc9MK1IthR0/8=
-X-Google-Smtp-Source: AMrXdXv2BFE77ASd9bSk3z5yQZ4T/yMCmOS7vmEHAD20s2BZcbBeshrFgS53N7aYHUlKjZw0EMpntw==
-X-Received: by 2002:a05:6a20:2d12:b0:b6:40ae:823e with SMTP id g18-20020a056a202d1200b000b640ae823emr5371591pzl.5.1674002505587;
-        Tue, 17 Jan 2023 16:41:45 -0800 (PST)
-Received: from MacBook-Pro-6.local ([2620:10d:c090:400::5:194d])
-        by smtp.gmail.com with ESMTPSA id g75-20020a62524e000000b0058c8bdd5eafsm6181451pfb.87.2023.01.17.16.41.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 16:41:44 -0800 (PST)
-Date:   Tue, 17 Jan 2023 16:41:42 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Dave Marchevsky <davemarchevsky@meta.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Qsvv2gS4uCvYkqiwZFbM5ckEnt1ocYo1UbmP/627MbI=;
+        b=CUSLs/Z2Yj7FMXV/Fpj1uhQtKKvIQaVpYXWRYY5ljoJgjdgAX7R0FHCTF6i3O8skSS
+         BsKu50Qx1HlsQMH3vPWGX7ome2PuJH7PhWrni7fd/iinz2xmKn3/cSOEHcRZpRge+VCk
+         Ikruefn3vtX6ZP9XD1ZlYoEL3q4E3+bFLFeXedsvvpJhMFfP4tNlep6C9rqJ5MX4GN5x
+         4QcQWZTzwSgu2vgCc8N4Zz+ktJqi9g4onfbGmgPd0JaVG57XdDMdLtkNe4ZnbuQY3Pon
+         diYUyvYiusnKHECdfFWXMLWv0nsPA6rvWcs6ctIn2dvXWH3opBNy0oB8GJz18BoeHFiW
+         wvEQ==
+X-Gm-Message-State: AFqh2kpgxBNam+eut/dtpIu7aQgT8xJ1RF4QQBVhw2h1hB/LmxgvdIWI
+        F3GIcgi5qFnHaj9ZdYSLsGQH+ms0k3wp8WR6UXWbkw==
+X-Google-Smtp-Source: AMrXdXujCftcG8mO9D9Itp/oAKLrkOaPstzkodGufrTYsR0zFncyDaJ/54JMo1lZK5g8jILC8sXbccmj645nI0jlX6A=
+X-Received: by 2002:a63:d02:0:b0:479:4295:b4e5 with SMTP id
+ c2-20020a630d02000000b004794295b4e5mr330635pgl.252.1674003356321; Tue, 17 Jan
+ 2023 16:55:56 -0800 (PST)
+MIME-Version: 1.0
+References: <CA+khW7ju-gewZVNxopBi3Uvhiv8Wb=a-D4gaW3MD-NkUg0WSSg@mail.gmail.com>
+ <20230117215658.xec7cirlfx2z7z2m@muellerd-fedora-PC2BDTX9> <20230117222158.uyezr5ab72ck5fhv@muellerd-fedora-PC2BDTX9>
+In-Reply-To: <20230117222158.uyezr5ab72ck5fhv@muellerd-fedora-PC2BDTX9>
+From:   Hao Luo <haoluo@google.com>
+Date:   Tue, 17 Jan 2023 16:55:44 -0800
+Message-ID: <CA+khW7gFq3VKEvF7hZXQsLJagz=HMZ4kJwh=QdmFG1pFbq1xRw@mail.gmail.com>
+Subject: Re: CORE feature request: support checking field type directly
+To:     =?UTF-8?Q?Daniel_M=C3=BCller?= <deso@posteo.net>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        David Vernet <void@manifault.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Migrate release_on_unlock logic to
- non-owning ref semantics
-Message-ID: <20230118004142.7dnzg4dgda6l6ilq@MacBook-Pro-6.local>
-References: <20221230010738.45277-1-alexei.starovoitov@gmail.com>
- <CAADnVQ+Ur_Z2j9SEP73BZdYPQrMxzjOWa-45z-cw9zvtANTmCQ@mail.gmail.com>
- <58508fcb-5b0f-5e29-8e2d-3e2d3c77118a@meta.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <58508fcb-5b0f-5e29-8e2d-3e2d3c77118a@meta.com>
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 05:42:39PM -0500, Dave Marchevsky wrote:
-> On 12/29/22 8:13 PM, Alexei Starovoitov wrote:
-> > On Thu, Dec 29, 2022 at 5:07 PM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> >> @@ -11959,7 +11956,10 @@ static int check_ld_imm(struct bpf_verifier_env *env, struct bpf_insn *insn)
-> >>                 dst_reg->type = PTR_TO_MAP_VALUE;
-> >>                 dst_reg->off = aux->map_off;
-> >>                 WARN_ON_ONCE(map->max_entries != 1);
-> >> -               /* We want reg->id to be same (0) as map_value is not distinct */
-> >> +               /* map->id is positive s32. Negative map->id will not collide with env->id_gen.
-> >> +                * This lets us track active_lock state as single u32 instead of pair { map|btf, id }
-> >> +                */
-> >> +               dst_reg->id = -map->id;
-> > 
-> > Here is what I meant in my earlier reply to Dave's patches 1 and 2.
-> > imo this is a simpler implementation of the same logic.
-> > The only tricky part is above bit that is necessary
-> > to use a single u32 in bpf_reg_state to track active_lock.
-> > We can follow up with clean up of active_lock comparison
-> > in other places of the verifier.
-> > Instead of:
-> >                 if (map)
-> >                         cur->active_lock.ptr = map;
-> >                 else
-> >                         cur->active_lock.ptr = btf;
-> >                 cur->active_lock.id = reg->id;
-> > it will be:
-> >   cur->active_lock_id = reg->id;
-> > 
-> > Another cleanup is needed to compare active_lock_id properly
-> > in regsafe().
-> > 
-> > Thoughts?
-> 
-> Before Kumar's commit d0d78c1df9b1d ("bpf: Allow locking bpf_spin_lock global
-> variables"), setting of dst_reg->id in that code path was guarded by "does
-> map val have spin_lock check":
-> 
->   if (btf_record_has_field(map->record, BPF_SPIN_LOCK))
->     dst_reg->id = ++env->id_gen;
-> 
-> Should we do that here as well? Not sure what the implications of overzealous
-> setting of dst_reg->id are.
+Hi Daniel,
 
-That won't work, since for spin_locks in global data that 'id' has to be stable.
-Hence I went with -map->id.
+On Tue, Jan 17, 2023 at 2:22 PM Daniel M=C3=BCller <deso@posteo.net> wrote:
+>
+> I apologize for the response. Somehow Andrii's reply and the entire threa=
+d was
+> lost on me. Anyway, glad it's working for you.
+>
 
-> More generally: I see why doing -map->id will not overlap with env->id_gen
-> in practice. For PTR_TO_BTF_ID, I'm not sure that we'll always have a nonzero
-> reg->id here. check_kfunc_call has
-> 
->   if (reg_may_point_to_spin_lock(&regs[BPF_REG_0]) && !regs[BPF_REG_0].id)
->     regs[BPF_REG_0].id = ++env->id_gen;
+Andrii helped me get it work. TYPE_MATCHES is a solution to my
+problem. Now I have a better understanding on how
+bpf_core_type_matches works.
 
-correct.
+For the record, the following works on my old kernel and new kernels:
 
-> when checking retval, but there's no such equivalent in check_helper_call,
-> which instead does
-> 
->   if (type_may_be_null(regs[BPF_REG_0].type))
->     regs[BPF_REG_0].id = ++env->id_gen;
-> 
-> and similar in a few paths.
-> 
-> Should we ensure that "any PTR_TO_BTF_ID reg that has a spin_lock must
-> have a nonzero id"? If we don't, a helper which returns
-> PTR_TO_BTF_ID w/ spin_lock that isn't MAYBE_NULL will break this whole scheme.
-
-correct. it's not a problem in practice, because there are few helpers
-that return PTR_TO_BTF_ID and none of them point to spin_lock.
-
-> Some future-proofing concerns:
-> 
-> Kumar's commit above mentions this in the summary:
-> 
->   Note that this can be extended in the future to also remember offset
->   used for locking, so that we can introduce multiple bpf_spin_lock fields
->   in the same allocation.
-
-Yeah. I forgot about this 'offset' idea.
-
-> When the above happens we'll need to go back to a struct - or some packed
-> int - to describe "lock identity" anyways.
-
-yeah.
-I was hoping we can represent all of 'active_lock' as a single id,
-but 'offset' is hard to encode into an integer.
-We won't be able to add it in top 32-bits, since the resulting 64-bit 'id'
-would need to go through check_ids(). Even if we extend idmap_scratch to be 64-bit
-it won't be correct. Two different 32-bit IDs are ok to see and the states
-might still be equivalent, but two different 'offset' are not ok.
-The offset in 'old' state and offset in 'cur' state has to be the same for
-states to be equivalent. So the future 'offset' would need to be compared in regsafe()
-manually anyway. Since we'd have to do that there is little point combining
-active_lock.ptr comparison into 32-bit id.
-Sigh.
-
-> IIRC in the long term we wanted to stop overloading reg->id's meaning,
-> with the ideal end state being reg->id used only for "null id" purposes. If so,
-> this is moving us back towards the overloaded state.
-> 
-> Happy to take this over and respin once we're done discussing, unless you
-> want to do it.
-
-Please go ahead.
-Let's scratch my -map->id idea for now.
-Let's go with embedding 'struct bpf_active_lock {void *ptr; u32 id;}' into bpf_reg_state,
-but please make sure that bpf_reg_state grows by 8 bytes only.
-Simply adding bpf_active_lock in btf_id part of it will grow by 16.
-
-Note the other idea you had to keep a pointer to active_lock in bpf_reg_state is
-too dangerous and probably incorrect. That pointer might become dangling after we
-copy_verifier_state. All pointers in bpf_reg_state need to be stable objects.
-The only exception is 'parent' which is very tricky on its own.
-
-Maybe we can do
-struct bpf_active_lock {
-   u32 map_btf_id;  /* instead of void *ptr */
-   u32 id;
+struct rw_semaphore___old {
+        struct task_struct *owner;
 };
-and init map_btf_id with -map->id or btf->id;
-It's guaranteed not to overlap and != 0.
-Don't know whether other pointers will be there. Maybe premature optimization.
+
+struct rw_semaphore___new {
+        atomic_long_t owner;
+};
+
+u64 owner;
+if (bpf_core_type_matches(struct rw_semaphore___old)) { /* owner is
+task_struct pointer */
+        struct rw_semaphore___old *old =3D (struct rw_semaphore___old *)sem=
+;
+        owner =3D (u64)sem->owner;
+} else if (bpf_core_type_matches(struct rw_semaphore___new)) { /*
+owner field is atomic_long_t */
+        struct rw_semaphore___new *new =3D (struct rw_semaphore___new *)sem=
+;
+        owner =3D (u64)new->owner.counter;
+}
+
+Thanks for your response!
+Hao
