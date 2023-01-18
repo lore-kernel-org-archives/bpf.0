@@ -2,204 +2,184 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 738C1C32793
-	for <bpf@archiver.kernel.org>; Wed, 18 Jan 2023 05:39:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B1C7C004D4
+	for <bpf@archiver.kernel.org>; Wed, 18 Jan 2023 06:20:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229449AbjARFjd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 Jan 2023 00:39:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43484 "EHLO
+        id S229484AbjARGUJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 Jan 2023 01:20:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjARFjc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 18 Jan 2023 00:39:32 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1674453565
-        for <bpf@vger.kernel.org>; Tue, 17 Jan 2023 21:39:31 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id vw16so17420257ejc.12
-        for <bpf@vger.kernel.org>; Tue, 17 Jan 2023 21:39:31 -0800 (PST)
+        with ESMTP id S229521AbjARGSR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 18 Jan 2023 01:18:17 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C7D442D4;
+        Tue, 17 Jan 2023 22:06:03 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id q9so23748273pgq.5;
+        Tue, 17 Jan 2023 22:06:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sCkYNjQz0eVYQeRBw5clOPzwavuUa2lDilvlVQo0adk=;
-        b=R6diirM1lvUNsgA39gpKs4Y4vTaMcG3TsP8XXw0chXTsUUeDehamB/6IRhUACT873E
-         9nHXHgqyGH9kEwk2bfaSb27Q0vvkBqI7gyBGuwXGaTN5FKh+8ZGH0QFLsahRjezh/J9y
-         /cAFIzszaPpHpFGm9qRL0zZ8wx9OHIiy/enrz+WnDW0PZOGVT/2G99WZkv85n/LIvuyp
-         LMwkpw5FdZ/MN0meUGBPIwSqbHOONk/vTpiSGTPKIQIJf99XSwkShRYJ+H0eXtkjmrg9
-         zzobkdu+5WoJTGGplWQiVIcWjR0Jzis5VQjfOqJhEjBdUwmAqMIlLdxuYfTwE5Y204pF
-         czXA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q4FWYNGqeIRLLvbuHSi4QxIqv+Z+4df4xqBN1sLuHUI=;
+        b=LWvdJAHv1jZf2z/7zujPgBAeAQ9KRsb7GuuOIaayNaFGOHtclEFJNra3G9kr6/uxei
+         zR2Juw7BZwh2ifMPPiDuNeZeXPCA48C1PahDHi7cWjsCw8fBkvm2qfeIw5L5lltkzDFF
+         WYb58icJKGcvZWXpubVZToPAOkDHgyJEr2xn9IP/zyx/kxIb0TLonxdTcmBotQFeeMGR
+         JQhjTOfvONTkw+R2EQ5+xeCiOtjEpdsE3/xy4H4W8R8E5UwLyNrR3JYh4rldqVb+VWEe
+         b1jWcd8/kyha9QadyEQuIu7zIy4uzz/xsHbt8GObU0YbAW2yMi9EnRC+mFAVX7DuiN6f
+         oEDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sCkYNjQz0eVYQeRBw5clOPzwavuUa2lDilvlVQo0adk=;
-        b=qKcmGEc2t8yi06uP89lJ2qzx0Q4oR1wNdzNTSZu2GtbmqcfYkzmvDcbvPPf0yaiDX7
-         tWPeUj4sf/iutWaHGpUVt59qdfMz6NyMwv8WWrBaICpJWSrMckn7CBigbi4AJBiQKV/0
-         f2gwtNvgqVMln18cHjWHg9PJ6O7NGPwjmxLSSVxQV8gvuDRRNi9E1UP9quzVM6UvGZMN
-         Gb18nEu0TYAfDCGg0vQhK5YPr4yS2/ZRhqyW3fCAW7bRRmOGNv7937xTeMTedkAaL20P
-         SR00tCLUcXYXOjmplPnBp5XtZaiOAWvZk6voDkvIuE+rQRqCKNlZm33osvjPHmQtqPtG
-         Ozsg==
-X-Gm-Message-State: AFqh2kpyo021b0+NadfVFN9NV/Awk6nl2PVqKdYHDprMg5NvrHk8Bxnd
-        rU3zkZ4I7S1W1/xEWHXDYON5oxM/hN1PacxXq5o=
-X-Google-Smtp-Source: AMrXdXvAhe4Hizyfjsf2WGaF+txf7La5oe9VkKVF2FVL/XasSyEHwZfDOMaLPmUFO/dPf9a0cATh/8BEnAYXY621etA=
-X-Received: by 2002:a17:906:40d7:b0:836:e897:648a with SMTP id
- a23-20020a17090640d700b00836e897648amr334327ejk.94.1674020369519; Tue, 17 Jan
- 2023 21:39:29 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Q4FWYNGqeIRLLvbuHSi4QxIqv+Z+4df4xqBN1sLuHUI=;
+        b=tSgeZaUOzcqGTPO0151PFgXi2crUWlIySGcLGi50TiLLH9C2ZfQ5AmQ3XTFTPPOUFj
+         7ToHVAqXw3/3wJKGIXudIGsx/GRNb5TFBBoBT4ag4kb55x2Xhu8UH5F0SFrA39pMcVwz
+         M1INgCjrjnwZxK37vPygzj8GyZ7mXMJFVM2uZwY7JQOBbVLXb6VZ7ZeMmustEVb5iXUL
+         X0GQ9QrajGl1pyEj2QPJPk/Ox8PYH3xg221rKbiwkbohYZKfdAng6QOYS6AAvyu9Nt7m
+         KPtQhwQ22+a+NOGpvvKmqCXxdqGrg+WSO6x0q2ullJEWZEbJsYUh3APEMWc6q3LooGBo
+         +wQg==
+X-Gm-Message-State: AFqh2koWr93iWJFmfwks3xGl3mHurvrko9IhDcILICZgCp3Y2M+NzeV7
+        JtpFGKs2+Uo7BHO2mAtatnSlCvXYylA=
+X-Google-Smtp-Source: AMrXdXu4JZ8K4+nwdu5Ql6RmPRpETATz1ehBeMVqW1WRR163R1j1Zq1erJ2q6YP17Z7TMZGGtcXj4w==
+X-Received: by 2002:a62:640f:0:b0:581:f301:23fc with SMTP id y15-20020a62640f000000b00581f30123fcmr24054116pfb.12.1674021962020;
+        Tue, 17 Jan 2023 22:06:02 -0800 (PST)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:ff0:3749:9eb3:dfb5:f449])
+        by smtp.gmail.com with ESMTPSA id b126-20020a62cf84000000b00574e84ed847sm10990180pfg.24.2023.01.17.22.06.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 22:06:01 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, Song Liu <song@kernel.org>,
+        bpf@vger.kernel.org
+Subject: [PATCH 1/8] perf/core: Save the dynamic parts of sample data size
+Date:   Tue, 17 Jan 2023 22:05:52 -0800
+Message-Id: <20230118060559.615653-2-namhyung@kernel.org>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+In-Reply-To: <20230118060559.615653-1-namhyung@kernel.org>
+References: <20230118060559.615653-1-namhyung@kernel.org>
 MIME-Version: 1.0
-References: <20230112155326.26902-1-laoar.shao@gmail.com> <CAADnVQJie8jSNxEio9iu6oXBkXyCjCg6h2mHssPv4mDHubWTwA@mail.gmail.com>
- <CALOAHbAsQ66j77BWC6isTRiKRPgG1Ap2qf6L+wQ+x2SXJt8NjQ@mail.gmail.com>
- <CAADnVQJGF5Xthpn7D2DgHHvZz8+dnuz2xMi6yoSziuauXO7ncA@mail.gmail.com> <CALOAHbBVRvTkSxLin+9A20Wv0DZWz4epvNTY1jEaCTf7q0qWJA@mail.gmail.com>
-In-Reply-To: <CALOAHbBVRvTkSxLin+9A20Wv0DZWz4epvNTY1jEaCTf7q0qWJA@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 17 Jan 2023 21:39:18 -0800
-Message-ID: <CAADnVQJtSZWe0sjvA3YT2LPHJyUqDuhG1f62x2PTjB4WMeLsJw@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next v2 00/11] mm, bpf: Add BPF into /proc/meminfo
-To:     Yafang Shao <laoar.shao@gmail.com>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Tejun Heo <tj@kernel.org>, dennis@kernel.org,
-        Chris Lameter <cl@linux.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        linux-mm <linux-mm@kvack.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 7:08 PM Yafang Shao <laoar.shao@gmail.com> wrote:
->
-> On Wed, Jan 18, 2023 at 1:25 AM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Fri, Jan 13, 2023 at 3:53 AM Yafang Shao <laoar.shao@gmail.com> wrote:
-> > >
-> > > On Fri, Jan 13, 2023 at 5:05 AM Alexei Starovoitov
-> > > <alexei.starovoitov@gmail.com> wrote:
-> > > >
-> > > > On Thu, Jan 12, 2023 at 7:53 AM Yafang Shao <laoar.shao@gmail.com> wrote:
-> > > > >
-> > > > > Currently there's no way to get BPF memory usage, while we can only
-> > > > > estimate the usage by bpftool or memcg, both of which are not reliable.
-> > > > >
-> > > > > - bpftool
-> > > > >   `bpftool {map,prog} show` can show us the memlock of each map and
-> > > > >   prog, but the memlock is vary from the real memory size. The memlock
-> > > > >   of a bpf object is approximately
-> > > > >   `round_up(key_size + value_size, 8) * max_entries`,
-> > > > >   so 1) it can't apply to the non-preallocated bpf map which may
-> > > > >   increase or decrease the real memory size dynamically. 2) the element
-> > > > >   size of some bpf map is not `key_size + value_size`, for example the
-> > > > >   element size of htab is
-> > > > >   `sizeof(struct htab_elem) + round_up(key_size, 8) + round_up(value_size, 8)`
-> > > > >   That said the differece between these two values may be very great if
-> > > > >   the key_size and value_size is small. For example in my verifaction,
-> > > > >   the size of memlock and real memory of a preallocated hash map are,
-> > > > >
-> > > > >   $ grep BPF /proc/meminfo
-> > > > >   BPF:                 350 kB  <<< the size of preallocated memalloc pool
-> > > > >
-> > > > >   (create hash map)
-> > > > >
-> > > > >   $ bpftool map show
-> > > > >   41549: hash  name count_map  flags 0x0
-> > > > >         key 4B  value 4B  max_entries 1048576  memlock 8388608B
-> > > > >
-> > > > >   $ grep BPF /proc/meminfo
-> > > > >   BPF:               82284 kB
-> > > > >
-> > > > >   So the real memory size is $((82284 - 350)) which is 81934 kB
-> > > > >   while the memlock is only 8192 kB.
-> > > >
-> > > > hashmap with key 4b and value 4b looks artificial to me,
-> > > > but since you're concerned with accuracy of bpftool reporting,
-> > > > please fix the estimation in bpf_map_memory_footprint().
-> > >
-> > > I thought bpf_map_memory_footprint() was deprecated, so I didn't try
-> > > to fix it before.
-> >
-> > It's not deprecated. It's trying to be accurate.
-> > See bpf_map_value_size().
-> > In the past we had to be precise when we calculated the required memory
-> > before we allocated and that was causing ongoing maintenance issues.
-> > Now bpf_map_memory_footprint() is an estimate for show_fdinfo.
-> > It can be made more accurate for this map with corner case key/value sizes.
-> >
->
-> Thanks for the clarification.
->
-> > > > You're correct that:
-> > > >
-> > > > > size of some bpf map is not `key_size + value_size`, for example the
-> > > > >   element size of htab is
-> > > > >   `sizeof(struct htab_elem) + round_up(key_size, 8) + round_up(value_size, 8)`
-> > > >
-> > > > So just teach bpf_map_memory_footprint() to do this more accurately.
-> > > > Add bucket size to it as well.
-> > > > Make it even more accurate with prealloc vs not.
-> > > > Much simpler change than adding run-time overhead to every alloc/free
-> > > > on bpf side.
-> > > >
-> > >
-> > > It seems that we'd better introduce ->memory_footprint for some
-> > > specific bpf maps. I will think about it.
-> >
-> > No. Don't build it into a replica of what we had before.
-> > Making existing bpf_map_memory_footprint() more accurate.
-> >
->
-> I just don't want to add many if-elses or switch-cases into
-> bpf_map_memory_footprint(), because I think it is a little ugly.
-> Introducing a new map ops could make it more clear.  For example,
-> static unsigned long bpf_map_memory_footprint(const struct bpf_map *map)
-> {
->     unsigned long size;
->
->     if (map->ops->map_mem_footprint)
->         return map->ops->map_mem_footprint(map);
->
->     size = round_up(map->key_size + bpf_map_value_size(map), 8);
->     return round_up(map->max_entries * size, PAGE_SIZE);
-> }
+The perf sample data can be divided into parts.  The event->header_size
+and event->id_header_size keep the static part of the sample data which
+is determined by the sample_type flags.
 
-It is also ugly, because bpf_map_value_size() already has if-stmt.
-I prefer to keep all estimates in one place.
-There is no need to be 100% accurate.
-With a callback devs will start thinking that this is somehow
-a requirement to report precise memory.
+But other parts like CALLCHAIN and BRANCH_STACK are changing dynamically
+so it needs to see the actual data.  In preparation of handling repeated
+calls for perf_prepare_sample(), it can save the dynamic size to the
+perf sample data to avoid the duplicate work.
 
-> > > > bpf side tracks all of its allocation. There is no need to do that
-> > > > in generic mm side.
-> > > > Exposing an aggregated single number if /proc/meminfo also looks wrong.
-> > >
-> > > Do you mean that we shouldn't expose it in /proc/meminfo ?
-> >
-> > We should not because it helps one particular use case only.
-> > Somebody else might want map mem info per container,
-> > then somebody would need it per user, etc.
->
-> It seems we should show memcg info and user info in bpftool map show.
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+Acked-by: Song Liu <song@kernel.org>
+Tested-by: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ include/linux/perf_event.h |  2 ++
+ kernel/events/core.c       | 17 ++++++++++-------
+ 2 files changed, 12 insertions(+), 7 deletions(-)
 
-Show memcg info? What do you have in mind?
+diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+index 03949d017ac9..16b980014449 100644
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -1103,6 +1103,7 @@ struct perf_sample_data {
+ 	 */
+ 	u64				sample_flags;
+ 	u64				period;
++	u64				dyn_size;
+ 
+ 	/*
+ 	 * Fields commonly set by __perf_event_header__init_id(),
+@@ -1158,6 +1159,7 @@ static inline void perf_sample_data_init(struct perf_sample_data *data,
+ 	/* remaining struct members initialized in perf_prepare_sample() */
+ 	data->sample_flags = PERF_SAMPLE_PERIOD;
+ 	data->period = period;
++	data->dyn_size = 0;
+ 
+ 	if (addr) {
+ 		data->addr = addr;
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index eacc3702654d..8c8de26f04ab 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -7593,7 +7593,7 @@ void perf_prepare_sample(struct perf_event_header *header,
+ 
+ 		size += data->callchain->nr;
+ 
+-		header->size += size * sizeof(u64);
++		data->dyn_size += size * sizeof(u64);
+ 	}
+ 
+ 	if (sample_type & PERF_SAMPLE_RAW) {
+@@ -7619,7 +7619,7 @@ void perf_prepare_sample(struct perf_event_header *header,
+ 			data->raw = NULL;
+ 		}
+ 
+-		header->size += size;
++		data->dyn_size += size;
+ 	}
+ 
+ 	if (sample_type & PERF_SAMPLE_BRANCH_STACK) {
+@@ -7631,7 +7631,7 @@ void perf_prepare_sample(struct perf_event_header *header,
+ 			size += data->br_stack->nr
+ 			      * sizeof(struct perf_branch_entry);
+ 		}
+-		header->size += size;
++		data->dyn_size += size;
+ 	}
+ 
+ 	if (sample_type & (PERF_SAMPLE_REGS_USER | PERF_SAMPLE_STACK_USER))
+@@ -7646,7 +7646,7 @@ void perf_prepare_sample(struct perf_event_header *header,
+ 			size += hweight64(mask) * sizeof(u64);
+ 		}
+ 
+-		header->size += size;
++		data->dyn_size += size;
+ 	}
+ 
+ 	if (sample_type & PERF_SAMPLE_STACK_USER) {
+@@ -7671,7 +7671,7 @@ void perf_prepare_sample(struct perf_event_header *header,
+ 			size += sizeof(u64) + stack_size;
+ 
+ 		data->stack_user_size = stack_size;
+-		header->size += size;
++		data->dyn_size += size;
+ 	}
+ 
+ 	if (filtered_sample_type & PERF_SAMPLE_WEIGHT_TYPE)
+@@ -7700,7 +7700,7 @@ void perf_prepare_sample(struct perf_event_header *header,
+ 			size += hweight64(mask) * sizeof(u64);
+ 		}
+ 
+-		header->size += size;
++		data->dyn_size += size;
+ 	}
+ 
+ 	if (sample_type & PERF_SAMPLE_PHYS_ADDR &&
+@@ -7745,8 +7745,11 @@ void perf_prepare_sample(struct perf_event_header *header,
+ 		size = perf_prepare_sample_aux(event, data, size);
+ 
+ 		WARN_ON_ONCE(size + header->size > U16_MAX);
+-		header->size += size;
++		data->dyn_size += size + sizeof(u64); /* size above */
+ 	}
++
++	header->size += data->dyn_size;
++
+ 	/*
+ 	 * If you're adding more sample types here, you likely need to do
+ 	 * something about the overflowing header::size, like repurpose the
+-- 
+2.39.0.314.g84b9a713c41-goog
 
-The user info is often useless. We're printing it in bpftool prog show
-and some folks suggested to remove it because it always prints 'uid 0'
-Notice we use bpf iterators in both bpftool prog/map show
-that prints the process that created the map.
-That is much more useful than 'user id'.
-In bpftool we can add 'verbosity' flag and print more things.
-There is also json output.
-And, of course, nothing stops you from having your own prog/map stats
-collectors.
