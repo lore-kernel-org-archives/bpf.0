@@ -2,425 +2,213 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 525E7C004D4
-	for <bpf@archiver.kernel.org>; Thu, 19 Jan 2023 22:34:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C079CC46467
+	for <bpf@archiver.kernel.org>; Thu, 19 Jan 2023 22:34:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbjASWeX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Jan 2023 17:34:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
+        id S230495AbjASWeb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Jan 2023 17:34:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbjASWc0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 Jan 2023 17:32:26 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77381AA5D6
-        for <bpf@vger.kernel.org>; Thu, 19 Jan 2023 14:16:04 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id l15-20020a170902f68f00b001948ddc7cddso2061994plg.2
-        for <bpf@vger.kernel.org>; Thu, 19 Jan 2023 14:16:04 -0800 (PST)
+        with ESMTP id S230328AbjASWc1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 Jan 2023 17:32:27 -0500
+Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58285A9582
+        for <bpf@vger.kernel.org>; Thu, 19 Jan 2023 14:16:06 -0800 (PST)
+Received: by mail-oi1-x244.google.com with SMTP id s66so2921491oib.7
+        for <bpf@vger.kernel.org>; Thu, 19 Jan 2023 14:16:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pQrBcvoL0XLWujgKm/eXCsJNB2211jxLnyCv3C4j3Bk=;
-        b=gcByxiP88YmwgjLiQqFVEd5VDemsLZg5YFyBclXJkSFCKFe7rJnw9K5ITKfrIVPNCk
-         5yFAT2slgU7c5Vg+GgLUgGuHk35ks9ysWVuatBSoDHWa7esi8MYSe6ZfHHakFMouZTMT
-         Ry6bwl7weT9GoBqulLeH/TkOhjbrs14K2/G69rDK7uQMcpZ75ujPEzEKBTZYtdPJzymJ
-         X8sOgq3ylzW47NixQrX1pDne0FncPfxp/uMZeixXrKQjWwRGzSL2FW8UL7WUzjXE8w4A
-         iGafJYwnFfPofYPsBNCTy0iml0kUCgc56dSXzyi8ah+saG+HqCoIOvXir3nsH2/uBfhQ
-         81zQ==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8H7u7i1b64pfLBM6/c3Xt4SYFbHcEBvm9DKOGfWUdSo=;
+        b=fWdDMtkkaxCpZIp8MpM8kny/pDsnCFFDq6p2YbnlKANDVhoJ5D0VE5G50mBQDdC6Vy
+         DB+Yf3l2nYizGaIhjrw4t3agpBAcwhcxcL9+uf93uJSL0C7Yv885/knevAmPCiBQbY8b
+         BF47JAY7b1BlxuBMEQIKbh3OgUbMneOYfqsmrIggeiuxhc+KHrUQ9KfzObEXYlvLqS1+
+         15XborFaD1Q4KEY+YkfLuSOtGHeQhPZfy3zIrCR2/y0eunMAo6U87Ld6G+EkZVjqDJ1K
+         BgRpTTY7+aUWec3FVtGBCFnqCgOanHKLoSmq8zXPMzhdISUUC0UCMBNcn3ZVLIQ4sIcd
+         Koig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=pQrBcvoL0XLWujgKm/eXCsJNB2211jxLnyCv3C4j3Bk=;
-        b=mLApc4DQEolstkpZ4ocV5vufp+s+Y6z0pzreL4ZYUHovdiS9TPxC8RKiNEBe5z7wO3
-         4tO6azEq20qMPE6Dj2W2r17pS44td316IO5KIwUwaer7MGR3oTT00Dcdf/X8ydqqw6nW
-         bjCoZZs1/eZ393WWaOpXHGr/YL5vmJPdS6Aq70bs6mP2Dn2/bydVEYnBJi4zm+JrPsW4
-         9cEyNtOxysZMfrozRZbN0zBvcHDNYu2ygg6mEdKU1TGi1IkzR0STy95VglHTJsTyCQAJ
-         v9TJ1iKvo+yIZF967B0Vrrk2J96F/Ol84Vv0LBxXD/RTrI15hcUCbBi2xhUVPvmdCER+
-         qFqQ==
-X-Gm-Message-State: AFqh2kqYVhY1meG+3Tc28imbn+Yar9xD46pNqEcosVXXLd1MDJPgEhw8
-        6Km8j2P1gJgOwe8LPH5zKgikNjRrPUEHR+xfBZI6Kx+PKFL/3oDzE+iJMh9kfmNJloO3MXB6Fox
-        IA2JqHkJ5h4qbAXcKvYDftGIq6i2uoxdGLtKtPNmjfB+ymWoJkw==
-X-Google-Smtp-Source: AMrXdXuRz534DtmJE8jM9nn10nH+2ntqQbuT1publnud6N5ddAC1SryNgvXR88irzCzwT//Ru0opQAU=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a17:902:c10d:b0:189:97e9:c8e with SMTP id
- 13-20020a170902c10d00b0018997e90c8emr1122795pli.63.1674166563625; Thu, 19 Jan
- 2023 14:16:03 -0800 (PST)
-Date:   Thu, 19 Jan 2023 14:15:34 -0800
-In-Reply-To: <20230119221536.3349901-1-sdf@google.com>
-Mime-Version: 1.0
-References: <20230119221536.3349901-1-sdf@google.com>
-X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
-Message-ID: <20230119221536.3349901-16-sdf@google.com>
-Subject: [PATCH bpf-next v8 15/17] net/mlx5e: Introduce wrapper for xdp_buff
-From:   Stanislav Fomichev <sdf@google.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org,
-        "=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?=" <toke@redhat.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        David Ahern <dsahern@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Willem de Bruijn <willemb@google.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Anatoly Burakov <anatoly.burakov@intel.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
-        netdev@vger.kernel.org
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8H7u7i1b64pfLBM6/c3Xt4SYFbHcEBvm9DKOGfWUdSo=;
+        b=60lIsjahFEbX9JmZnbd16TIzg8Z3o50FVB5LTeBGuq7Te7ZqVwOnbOuLAMoJw+t+Mp
+         kxslpi4QS07J53kiRA2r2xr5RVgCxZEd16z84GyxmV7iLJiApPob/XR3bSvLe3DjkaSW
+         zpgPQzEajMJBdC5FX+rnjqcRppKvQikAWFHsAOVb/e4k7Ml9RiuesoAlyr9L2lIw8I/8
+         KGe+tFzv16ud0tlyhDrZRdsKoWkVhGkGoIj+EDmCKbDZhcFlPEHy56x6vZmv9SwEbbsi
+         Fm6FNGYcm+ZrigQDapd9xApqK88FCRcXhReDjCk8ArQuQ4BUKOZRcObVucuBcdglHO6H
+         qLfQ==
+X-Gm-Message-State: AFqh2krI5YyeRmM60pMdIpb8FJI/67xT9ZaKrtGF5kgyyXJ8PhBL6U/S
+        mrEbwJDgyKa8UkwackHMpFnWym9XzfwuhT9wfkoiDMjh
+X-Google-Smtp-Source: AMrXdXug8MeDXzDzsWsMxx0WJkXTJ89CIAPE0kLqvDZih+w/ed76f5pOl2sITz3RKe5QBN+1BIogpKpJ9vT78JlHQK4=
+X-Received: by 2002:a05:6808:3a91:b0:364:c0a5:1fcf with SMTP id
+ fb17-20020a0568083a9100b00364c0a51fcfmr674020oib.58.1674166565454; Thu, 19
+ Jan 2023 14:16:05 -0800 (PST)
+MIME-Version: 1.0
+References: <20230119021442.1465269-1-memxor@gmail.com> <20230119021442.1465269-4-memxor@gmail.com>
+ <CAJnrk1ZSP=1s91=RYgto9TbniMH9u=4fPdf6BkOueS3RE6LF5w@mail.gmail.com>
+In-Reply-To: <CAJnrk1ZSP=1s91=RYgto9TbniMH9u=4fPdf6BkOueS3RE6LF5w@mail.gmail.com>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Fri, 20 Jan 2023 03:45:29 +0530
+Message-ID: <CAP01T74N3eWg-F1x-X52pPpeM=Y+bDWMnRreCbhbpBftSgSpAA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 03/11] bpf: Fix partial dynptr stack slot reads/writes
+To:     Joanne Koong <joannelkoong@gmail.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@kernel.org>,
+        David Vernet <void@manifault.com>,
+        Eduard Zingerman <eddyz87@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+On Fri, 20 Jan 2023 at 03:36, Joanne Koong <joannelkoong@gmail.com> wrote:
+>
+> On Wed, Jan 18, 2023 at 6:14 PM Kumar Kartikeya Dwivedi
+> <memxor@gmail.com> wrote:
+> >
+> > Currently, while reads are disallowed for dynptr stack slots, writes are
+> > not. Reads don't work from both direct access and helpers, while writes
+> > do work in both cases, but have the effect of overwriting the slot_type.
+> >
+> > While this is fine, handling for a few edge cases is missing. Firstly,
+> > a user can overwrite the stack slots of dynptr partially.
+> >
+> > Consider the following layout:
+> > spi: [d][d][?]
+> >       2  1  0
+> >
+> > First slot is at spi 2, second at spi 1.
+> > Now, do a write of 1 to 8 bytes for spi 1.
+> >
+> > This will essentially either write STACK_MISC for all slot_types or
+> > STACK_MISC and STACK_ZERO (in case of size < BPF_REG_SIZE partial write
+> > of zeroes). The end result is that slot is scrubbed.
+> >
+> > Now, the layout is:
+> > spi: [d][m][?]
+> >       2  1  0
+> >
+> > Suppose if user initializes spi = 1 as dynptr.
+> > We get:
+> > spi: [d][d][d]
+> >       2  1  0
+> >
+> > But this time, both spi 2 and spi 1 have first_slot = true.
+> >
+> > Now, when passing spi 2 to dynptr helper, it will consider it as
+> > initialized as it does not check whether second slot has first_slot ==
+> > false. And spi 1 should already work as normal.
+> >
+> > This effectively replaced size + offset of first dynptr, hence allowing
+> > invalid OOB reads and writes.
+> >
+> > Make a few changes to protect against this:
+> > When writing to PTR_TO_STACK using BPF insns, when we touch spi of a
+> > STACK_DYNPTR type, mark both first and second slot (regardless of which
+> > slot we touch) as STACK_INVALID. Reads are already prevented.
+> >
+> > Second, prevent writing to stack memory from helpers if the range may
+> > contain any STACK_DYNPTR slots. Reads are already prevented.
+> >
+> > For helpers, we cannot allow it to destroy dynptrs from the writes as
+> > depending on arguments, helper may take uninit_mem and dynptr both at
+> > the same time. This would mean that helper may write to uninit_mem
+> > before it reads the dynptr, which would be bad.
+> >
+> > PTR_TO_MEM: [?????dd]
+> >
+> > Depending on the code inside the helper, it may end up overwriting the
+> > dynptr contents first and then read those as the dynptr argument.
+> >
+> > Verifier would only simulate destruction when it does byte by byte
+> > access simulation in check_helper_call for meta.access_size, and
+> > fail to catch this case, as it happens after argument checks.
+> >
+> > The same would need to be done for any other non-trivial objects created
+> > on the stack in the future, such as bpf_list_head on stack, or
+> > bpf_rb_root on stack.
+> >
+> > A common misunderstanding in the current code is that MEM_UNINIT means
+> > writes, but note that writes may also be performed even without
+> > MEM_UNINIT in case of helpers, in that case the code after handling meta
+> > && meta->raw_mode will complain when it sees STACK_DYNPTR. So that
+> > invalid read case also covers writes to potential STACK_DYNPTR slots.
+> > The only loophole was in case of meta->raw_mode which simulated writes
+> > through instructions which could overwrite them.
+> >
+> > A future series sequenced after this will focus on the clean up of
+> > helper access checks and bugs around that.
+> >
+> > Fixes: 97e03f521050 ("bpf: Add verifier support for dynptrs")
+> > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> > ---
+> >  kernel/bpf/verifier.c                         | 102 ++++++++++++++++++
+> >  .../testing/selftests/bpf/progs/dynptr_fail.c |   6 +-
+> >  2 files changed, 105 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index eeb6f1b2bd60..09c09d9bfd89 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -769,6 +769,8 @@ static void mark_dynptr_cb_reg(struct bpf_reg_state *reg,
+> >         __mark_dynptr_reg(reg, type, true);
+> >  }
+> >
+> > +static int destroy_if_dynptr_stack_slot(struct bpf_verifier_env *env,
+> > +                                       struct bpf_func_state *state, int spi);
+> >
+> >  static int mark_stack_slots_dynptr(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+> >                                    enum bpf_arg_type arg_type, int insn_idx)
+> > @@ -863,6 +865,69 @@ static int unmark_stack_slots_dynptr(struct bpf_verifier_env *env, struct bpf_re
+> >         return 0;
+> >  }
+> >
+> > +static void __mark_reg_unknown(const struct bpf_verifier_env *env,
+> > +                              struct bpf_reg_state *reg);
+> > +
+> > +static int destroy_if_dynptr_stack_slot(struct bpf_verifier_env *env,
+> > +                                       struct bpf_func_state *state, int spi)
+> > +{
+> > +       int i;
+> > +
+> > +       /* We always ensure that STACK_DYNPTR is never set partially,
+> > +        * hence just checking for slot_type[0] is enough. This is
+> > +        * different for STACK_SPILL, where it may be only set for
+> > +        * 1 byte, so code has to use is_spilled_reg.
+> > +        */
+> > +       if (state->stack[spi].slot_type[0] != STACK_DYNPTR)
+> > +               return 0;
+> > +
+> > +       /* Reposition spi to first slot */
+> > +       if (!state->stack[spi].spilled_ptr.dynptr.first_slot)
+> > +               spi = spi + 1;
+> > +
+> > +       if (dynptr_type_refcounted(state->stack[spi].spilled_ptr.dynptr.type)) {
+> > +               verbose(env, "cannot overwrite referenced dynptr\n");
+> > +               return -EINVAL;
+> > +       }
+> > +
+> > +       mark_stack_slot_scratched(env, spi);
+> > +       mark_stack_slot_scratched(env, spi - 1);
+> > +
+> > +       /* Writing partially to one dynptr stack slot destroys both. */
+> > +       for (i = 0; i < BPF_REG_SIZE; i++) {
+> > +               state->stack[spi].slot_type[i] = STACK_INVALID;
+> > +               state->stack[spi - 1].slot_type[i] = STACK_INVALID;
+> > +       }
+> > +
+> > +       /* Invalidate any slices associated with this dynptr */
+> > +       if (dynptr_type_refcounted(state->stack[spi].spilled_ptr.dynptr.type)) {
+>
+> We'll never get here because referenced dynptrs can't be overwritten
+> (we check this above and return -EINVAL if dynptr_type_refcounted() is
+> true).
+> I think we should invalidate any slices associated with non-referenced
+> dynptrs as well.
 
-Preparation for implementing HW metadata kfuncs. No functional change.
-
-Cc: Tariq Toukan <tariqt@nvidia.com>
-Cc: Saeed Mahameed <saeedm@nvidia.com>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: David Ahern <dsahern@gmail.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Willem de Bruijn <willemb@google.com>
-Cc: Jesper Dangaard Brouer <brouer@redhat.com>
-Cc: Anatoly Burakov <anatoly.burakov@intel.com>
-Cc: Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc: Magnus Karlsson <magnus.karlsson@gmail.com>
-Cc: Maryam Tahhan <mtahhan@redhat.com>
-Cc: xdp-hints@xdp-project.net
-Cc: netdev@vger.kernel.org
-Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
----
- .../net/ethernet/mellanox/mlx5/core/en/xdp.c  |  3 +-
- .../net/ethernet/mellanox/mlx5/core/en/xdp.h  |  6 +-
- .../ethernet/mellanox/mlx5/core/en/xsk/rx.c   | 33 +++++++----
- .../net/ethernet/mellanox/mlx5/core/en_rx.c   | 58 +++++++++----------
- 4 files changed, 57 insertions(+), 43 deletions(-)
-
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net=
-/ethernet/mellanox/mlx5/core/en/xdp.c
-index 20507ef2f956..31bb6806bf5d 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-@@ -158,8 +158,9 @@ mlx5e_xmit_xdp_buff(struct mlx5e_xdpsq *sq, struct mlx5=
-e_rq *rq,
-=20
- /* returns true if packet was consumed by xdp */
- bool mlx5e_xdp_handle(struct mlx5e_rq *rq, struct page *page,
--		      struct bpf_prog *prog, struct xdp_buff *xdp)
-+		      struct bpf_prog *prog, struct mlx5e_xdp_buff *mxbuf)
- {
-+	struct xdp_buff *xdp =3D &mxbuf->xdp;
- 	u32 act;
- 	int err;
-=20
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.h b/drivers/net=
-/ethernet/mellanox/mlx5/core/en/xdp.h
-index bc2d9034af5b..389818bf6833 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.h
-@@ -44,10 +44,14 @@
- 	(MLX5E_XDP_INLINE_WQE_MAX_DS_CNT * MLX5_SEND_WQE_DS - \
- 	 sizeof(struct mlx5_wqe_inline_seg))
-=20
-+struct mlx5e_xdp_buff {
-+	struct xdp_buff xdp;
-+};
-+
- struct mlx5e_xsk_param;
- int mlx5e_xdp_max_mtu(struct mlx5e_params *params, struct mlx5e_xsk_param =
-*xsk);
- bool mlx5e_xdp_handle(struct mlx5e_rq *rq, struct page *page,
--		      struct bpf_prog *prog, struct xdp_buff *xdp);
-+		      struct bpf_prog *prog, struct mlx5e_xdp_buff *mlctx);
- void mlx5e_xdp_mpwqe_complete(struct mlx5e_xdpsq *sq);
- bool mlx5e_poll_xdpsq_cq(struct mlx5e_cq *cq);
- void mlx5e_free_xdpsq_descs(struct mlx5e_xdpsq *sq);
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/rx.c b/drivers/=
-net/ethernet/mellanox/mlx5/core/en/xsk/rx.c
-index c91b54d9ff27..08d4e5c30b40 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/rx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/rx.c
-@@ -8,6 +8,14 @@
-=20
- /* RX data path */
-=20
-+static struct mlx5e_xdp_buff *xsk_buff_to_mxbuf(struct xdp_buff *xdp)
-+{
-+	/* mlx5e_xdp_buff shares its layout with xdp_buff_xsk
-+	 * and private mlx5e_xdp_buff fields fall into xdp_buff_xsk->cb
-+	 */
-+	return (struct mlx5e_xdp_buff *)xdp;
-+}
-+
- int mlx5e_xsk_alloc_rx_mpwqe(struct mlx5e_rq *rq, u16 ix)
- {
- 	struct mlx5e_mpw_info *wi =3D mlx5e_get_mpw_info(rq, ix);
-@@ -22,6 +30,7 @@ int mlx5e_xsk_alloc_rx_mpwqe(struct mlx5e_rq *rq, u16 ix)
- 		goto err;
-=20
- 	BUILD_BUG_ON(sizeof(wi->alloc_units[0]) !=3D sizeof(wi->alloc_units[0].xs=
-k));
-+	XSK_CHECK_PRIV_TYPE(struct mlx5e_xdp_buff);
- 	batch =3D xsk_buff_alloc_batch(rq->xsk_pool, (struct xdp_buff **)wi->allo=
-c_units,
- 				     rq->mpwqe.pages_per_wqe);
-=20
-@@ -233,7 +242,7 @@ struct sk_buff *mlx5e_xsk_skb_from_cqe_mpwrq_linear(str=
-uct mlx5e_rq *rq,
- 						    u32 head_offset,
- 						    u32 page_idx)
- {
--	struct xdp_buff *xdp =3D wi->alloc_units[page_idx].xsk;
-+	struct mlx5e_xdp_buff *mxbuf =3D xsk_buff_to_mxbuf(wi->alloc_units[page_i=
-dx].xsk);
- 	struct bpf_prog *prog;
-=20
- 	/* Check packet size. Note LRO doesn't use linear SKB */
-@@ -249,9 +258,9 @@ struct sk_buff *mlx5e_xsk_skb_from_cqe_mpwrq_linear(str=
-uct mlx5e_rq *rq,
- 	 */
- 	WARN_ON_ONCE(head_offset);
-=20
--	xsk_buff_set_size(xdp, cqe_bcnt);
--	xsk_buff_dma_sync_for_cpu(xdp, rq->xsk_pool);
--	net_prefetch(xdp->data);
-+	xsk_buff_set_size(&mxbuf->xdp, cqe_bcnt);
-+	xsk_buff_dma_sync_for_cpu(&mxbuf->xdp, rq->xsk_pool);
-+	net_prefetch(mxbuf->xdp.data);
-=20
- 	/* Possible flows:
- 	 * - XDP_REDIRECT to XSKMAP:
-@@ -269,7 +278,7 @@ struct sk_buff *mlx5e_xsk_skb_from_cqe_mpwrq_linear(str=
-uct mlx5e_rq *rq,
- 	 */
-=20
- 	prog =3D rcu_dereference(rq->xdp_prog);
--	if (likely(prog && mlx5e_xdp_handle(rq, NULL, prog, xdp))) {
-+	if (likely(prog && mlx5e_xdp_handle(rq, NULL, prog, mxbuf))) {
- 		if (likely(__test_and_clear_bit(MLX5E_RQ_FLAG_XDP_XMIT, rq->flags)))
- 			__set_bit(page_idx, wi->xdp_xmit_bitmap); /* non-atomic */
- 		return NULL; /* page/packet was consumed by XDP */
-@@ -278,14 +287,14 @@ struct sk_buff *mlx5e_xsk_skb_from_cqe_mpwrq_linear(s=
-truct mlx5e_rq *rq,
- 	/* XDP_PASS: copy the data from the UMEM to a new SKB and reuse the
- 	 * frame. On SKB allocation failure, NULL is returned.
- 	 */
--	return mlx5e_xsk_construct_skb(rq, xdp);
-+	return mlx5e_xsk_construct_skb(rq, &mxbuf->xdp);
- }
-=20
- struct sk_buff *mlx5e_xsk_skb_from_cqe_linear(struct mlx5e_rq *rq,
- 					      struct mlx5e_wqe_frag_info *wi,
- 					      u32 cqe_bcnt)
- {
--	struct xdp_buff *xdp =3D wi->au->xsk;
-+	struct mlx5e_xdp_buff *mxbuf =3D xsk_buff_to_mxbuf(wi->au->xsk);
- 	struct bpf_prog *prog;
-=20
- 	/* wi->offset is not used in this function, because xdp->data and the
-@@ -295,17 +304,17 @@ struct sk_buff *mlx5e_xsk_skb_from_cqe_linear(struct =
-mlx5e_rq *rq,
- 	 */
- 	WARN_ON_ONCE(wi->offset);
-=20
--	xsk_buff_set_size(xdp, cqe_bcnt);
--	xsk_buff_dma_sync_for_cpu(xdp, rq->xsk_pool);
--	net_prefetch(xdp->data);
-+	xsk_buff_set_size(&mxbuf->xdp, cqe_bcnt);
-+	xsk_buff_dma_sync_for_cpu(&mxbuf->xdp, rq->xsk_pool);
-+	net_prefetch(mxbuf->xdp.data);
-=20
- 	prog =3D rcu_dereference(rq->xdp_prog);
--	if (likely(prog && mlx5e_xdp_handle(rq, NULL, prog, xdp)))
-+	if (likely(prog && mlx5e_xdp_handle(rq, NULL, prog, mxbuf)))
- 		return NULL; /* page/packet was consumed by XDP */
-=20
- 	/* XDP_PASS: copy the data from the UMEM to a new SKB. The frame reuse
- 	 * will be handled by mlx5e_free_rx_wqe.
- 	 * On SKB allocation failure, NULL is returned.
- 	 */
--	return mlx5e_xsk_construct_skb(rq, xdp);
-+	return mlx5e_xsk_construct_skb(rq, &mxbuf->xdp);
- }
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c b/drivers/net/=
-ethernet/mellanox/mlx5/core/en_rx.c
-index c8820ab22169..c6810ca75530 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-@@ -1575,11 +1575,11 @@ struct sk_buff *mlx5e_build_linear_skb(struct mlx5e=
-_rq *rq, void *va,
- 	return skb;
- }
-=20
--static void mlx5e_fill_xdp_buff(struct mlx5e_rq *rq, void *va, u16 headroo=
-m,
--				u32 len, struct xdp_buff *xdp)
-+static void mlx5e_fill_mxbuf(struct mlx5e_rq *rq, void *va, u16 headroom,
-+			     u32 len, struct mlx5e_xdp_buff *mxbuf)
- {
--	xdp_init_buff(xdp, rq->buff.frame0_sz, &rq->xdp_rxq);
--	xdp_prepare_buff(xdp, va, headroom, len, true);
-+	xdp_init_buff(&mxbuf->xdp, rq->buff.frame0_sz, &rq->xdp_rxq);
-+	xdp_prepare_buff(&mxbuf->xdp, va, headroom, len, true);
- }
-=20
- static struct sk_buff *
-@@ -1606,16 +1606,16 @@ mlx5e_skb_from_cqe_linear(struct mlx5e_rq *rq, stru=
-ct mlx5e_wqe_frag_info *wi,
-=20
- 	prog =3D rcu_dereference(rq->xdp_prog);
- 	if (prog) {
--		struct xdp_buff xdp;
-+		struct mlx5e_xdp_buff mxbuf;
-=20
- 		net_prefetchw(va); /* xdp_frame data area */
--		mlx5e_fill_xdp_buff(rq, va, rx_headroom, cqe_bcnt, &xdp);
--		if (mlx5e_xdp_handle(rq, au->page, prog, &xdp))
-+		mlx5e_fill_mxbuf(rq, va, rx_headroom, cqe_bcnt, &mxbuf);
-+		if (mlx5e_xdp_handle(rq, au->page, prog, &mxbuf))
- 			return NULL; /* page/packet was consumed by XDP */
-=20
--		rx_headroom =3D xdp.data - xdp.data_hard_start;
--		metasize =3D xdp.data - xdp.data_meta;
--		cqe_bcnt =3D xdp.data_end - xdp.data;
-+		rx_headroom =3D mxbuf.xdp.data - mxbuf.xdp.data_hard_start;
-+		metasize =3D mxbuf.xdp.data - mxbuf.xdp.data_meta;
-+		cqe_bcnt =3D mxbuf.xdp.data_end - mxbuf.xdp.data;
- 	}
- 	frag_size =3D MLX5_SKB_FRAG_SZ(rx_headroom + cqe_bcnt);
- 	skb =3D mlx5e_build_linear_skb(rq, va, frag_size, rx_headroom, cqe_bcnt, =
-metasize);
-@@ -1637,9 +1637,9 @@ mlx5e_skb_from_cqe_nonlinear(struct mlx5e_rq *rq, str=
-uct mlx5e_wqe_frag_info *wi
- 	union mlx5e_alloc_unit *au =3D wi->au;
- 	u16 rx_headroom =3D rq->buff.headroom;
- 	struct skb_shared_info *sinfo;
-+	struct mlx5e_xdp_buff mxbuf;
- 	u32 frag_consumed_bytes;
- 	struct bpf_prog *prog;
--	struct xdp_buff xdp;
- 	struct sk_buff *skb;
- 	dma_addr_t addr;
- 	u32 truesize;
-@@ -1654,8 +1654,8 @@ mlx5e_skb_from_cqe_nonlinear(struct mlx5e_rq *rq, str=
-uct mlx5e_wqe_frag_info *wi
- 	net_prefetchw(va); /* xdp_frame data area */
- 	net_prefetch(va + rx_headroom);
-=20
--	mlx5e_fill_xdp_buff(rq, va, rx_headroom, frag_consumed_bytes, &xdp);
--	sinfo =3D xdp_get_shared_info_from_buff(&xdp);
-+	mlx5e_fill_mxbuf(rq, va, rx_headroom, frag_consumed_bytes, &mxbuf);
-+	sinfo =3D xdp_get_shared_info_from_buff(&mxbuf.xdp);
- 	truesize =3D 0;
-=20
- 	cqe_bcnt -=3D frag_consumed_bytes;
-@@ -1673,13 +1673,13 @@ mlx5e_skb_from_cqe_nonlinear(struct mlx5e_rq *rq, s=
-truct mlx5e_wqe_frag_info *wi
- 		dma_sync_single_for_cpu(rq->pdev, addr + wi->offset,
- 					frag_consumed_bytes, rq->buff.map_dir);
-=20
--		if (!xdp_buff_has_frags(&xdp)) {
-+		if (!xdp_buff_has_frags(&mxbuf.xdp)) {
- 			/* Init on the first fragment to avoid cold cache access
- 			 * when possible.
- 			 */
- 			sinfo->nr_frags =3D 0;
- 			sinfo->xdp_frags_size =3D 0;
--			xdp_buff_set_frags_flag(&xdp);
-+			xdp_buff_set_frags_flag(&mxbuf.xdp);
- 		}
-=20
- 		frag =3D &sinfo->frags[sinfo->nr_frags++];
-@@ -1688,7 +1688,7 @@ mlx5e_skb_from_cqe_nonlinear(struct mlx5e_rq *rq, str=
-uct mlx5e_wqe_frag_info *wi
- 		skb_frag_size_set(frag, frag_consumed_bytes);
-=20
- 		if (page_is_pfmemalloc(au->page))
--			xdp_buff_set_frag_pfmemalloc(&xdp);
-+			xdp_buff_set_frag_pfmemalloc(&mxbuf.xdp);
-=20
- 		sinfo->xdp_frags_size +=3D frag_consumed_bytes;
- 		truesize +=3D frag_info->frag_stride;
-@@ -1701,7 +1701,7 @@ mlx5e_skb_from_cqe_nonlinear(struct mlx5e_rq *rq, str=
-uct mlx5e_wqe_frag_info *wi
- 	au =3D head_wi->au;
-=20
- 	prog =3D rcu_dereference(rq->xdp_prog);
--	if (prog && mlx5e_xdp_handle(rq, au->page, prog, &xdp)) {
-+	if (prog && mlx5e_xdp_handle(rq, au->page, prog, &mxbuf)) {
- 		if (test_bit(MLX5E_RQ_FLAG_XDP_XMIT, rq->flags)) {
- 			int i;
-=20
-@@ -1711,22 +1711,22 @@ mlx5e_skb_from_cqe_nonlinear(struct mlx5e_rq *rq, s=
-truct mlx5e_wqe_frag_info *wi
- 		return NULL; /* page/packet was consumed by XDP */
- 	}
-=20
--	skb =3D mlx5e_build_linear_skb(rq, xdp.data_hard_start, rq->buff.frame0_s=
-z,
--				     xdp.data - xdp.data_hard_start,
--				     xdp.data_end - xdp.data,
--				     xdp.data - xdp.data_meta);
-+	skb =3D mlx5e_build_linear_skb(rq, mxbuf.xdp.data_hard_start, rq->buff.fr=
-ame0_sz,
-+				     mxbuf.xdp.data - mxbuf.xdp.data_hard_start,
-+				     mxbuf.xdp.data_end - mxbuf.xdp.data,
-+				     mxbuf.xdp.data - mxbuf.xdp.data_meta);
- 	if (unlikely(!skb))
- 		return NULL;
-=20
- 	page_ref_inc(au->page);
-=20
--	if (unlikely(xdp_buff_has_frags(&xdp))) {
-+	if (unlikely(xdp_buff_has_frags(&mxbuf.xdp))) {
- 		int i;
-=20
- 		/* sinfo->nr_frags is reset by build_skb, calculate again. */
- 		xdp_update_skb_shared_info(skb, wi - head_wi - 1,
- 					   sinfo->xdp_frags_size, truesize,
--					   xdp_buff_is_frag_pfmemalloc(&xdp));
-+					   xdp_buff_is_frag_pfmemalloc(&mxbuf.xdp));
-=20
- 		for (i =3D 0; i < sinfo->nr_frags; i++) {
- 			skb_frag_t *frag =3D &sinfo->frags[i];
-@@ -2007,19 +2007,19 @@ mlx5e_skb_from_cqe_mpwrq_linear(struct mlx5e_rq *rq=
-, struct mlx5e_mpw_info *wi,
-=20
- 	prog =3D rcu_dereference(rq->xdp_prog);
- 	if (prog) {
--		struct xdp_buff xdp;
-+		struct mlx5e_xdp_buff mxbuf;
-=20
- 		net_prefetchw(va); /* xdp_frame data area */
--		mlx5e_fill_xdp_buff(rq, va, rx_headroom, cqe_bcnt, &xdp);
--		if (mlx5e_xdp_handle(rq, au->page, prog, &xdp)) {
-+		mlx5e_fill_mxbuf(rq, va, rx_headroom, cqe_bcnt, &mxbuf);
-+		if (mlx5e_xdp_handle(rq, au->page, prog, &mxbuf)) {
- 			if (__test_and_clear_bit(MLX5E_RQ_FLAG_XDP_XMIT, rq->flags))
- 				__set_bit(page_idx, wi->xdp_xmit_bitmap); /* non-atomic */
- 			return NULL; /* page/packet was consumed by XDP */
- 		}
-=20
--		rx_headroom =3D xdp.data - xdp.data_hard_start;
--		metasize =3D xdp.data - xdp.data_meta;
--		cqe_bcnt =3D xdp.data_end - xdp.data;
-+		rx_headroom =3D mxbuf.xdp.data - mxbuf.xdp.data_hard_start;
-+		metasize =3D mxbuf.xdp.data - mxbuf.xdp.data_meta;
-+		cqe_bcnt =3D mxbuf.xdp.data_end - mxbuf.xdp.data;
- 	}
- 	frag_size =3D MLX5_SKB_FRAG_SZ(rx_headroom + cqe_bcnt);
- 	skb =3D mlx5e_build_linear_skb(rq, va, frag_size, rx_headroom, cqe_bcnt, =
-metasize);
---=20
-2.39.0.246.g2a6d74b583-goog
-
+Ah, right. Will fix, and I'll add a test for this to ensure slices are
+invalidated in v3.
