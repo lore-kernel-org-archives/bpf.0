@@ -2,52 +2,52 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9736C38159
-	for <bpf@archiver.kernel.org>; Thu, 19 Jan 2023 02:50:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C83D5C677F1
+	for <bpf@archiver.kernel.org>; Thu, 19 Jan 2023 02:50:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbjASCuV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 Jan 2023 21:50:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55162 "EHLO
+        id S229837AbjASCuW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 Jan 2023 21:50:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbjASCuV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S229886AbjASCuV (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 18 Jan 2023 21:50:21 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CAC56843F
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E091CF4B
         for <bpf@vger.kernel.org>; Wed, 18 Jan 2023 18:50:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EA8BDB81FB9
+        by ams.source.kernel.org (Postfix) with ESMTPS id D0178B8200E
         for <bpf@vger.kernel.org>; Thu, 19 Jan 2023 02:50:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7DC56C43392;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 73302C433D2;
         Thu, 19 Jan 2023 02:50:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1674096617;
-        bh=dIfInEvsIcErG3Q5nii6nM1aW9WWVrK4CQ7O+fiv6vE=;
+        bh=0aWtTbIR4PCahbtDfr/N6XWpiryukyaEVm/d/3Ku0nM=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=c4ZYdnCBZjRukBzRFViY0l0xgniNV5nX72gzKpHaDU/+IFAdpKQMff3ClIYzZdZJs
-         VIHojP2CeFcBAR4jKeYqqY6MxYtRsDJt8n7tK7NgPnX+bfm9J3vJ1fauWg9kHBUabi
-         UuYcF6jGTUs2od0Vgjqi7DJEaQP7zYDe6v5hTncCYCBQXjWt7/DwJ3GX2GncW0YAVs
-         uGFeKIvbtFtWrkzy+xFywu/yEagHeRlZoUN6cpBCzMc4Z0yZDbTDbScaQvSRuqo+TP
-         9lXSv4gyvIyZvuIbLv1C3iBTa71pc/FG3Nh0ucdZiJZWubWQuuRVHj+Af8TOJB2gSv
-         190axuSa5cNMg==
+        b=CKJzbGVncnzYGcU6uaiRxcFi3B1XsI5ZWulsxO6vIfCxQNb9eza5s2dc579vJYZYz
+         ujR6wkCG0pQCe5y/tYc4QO8IeE6/lH+wCl9DBmsnHtEml6S+2xKtRYVqEj2Sc4/AiY
+         qlaPqsnoQqbGuOQLBG2itIv8+6EyG9bplF4iwAIwwt5ANXEdzDJTARXqRxSuJLXzm3
+         gd90bv6JU3Go1QQQ1vjHlAhNmoWY/oes2bv6iwz9Y6TP9L1ThPTtLPzfOxlfGIaNE4
+         dk8twU4sSY1O7Frnvj9u4Tdfz88h79lGQj96/o8pj9AsLhRraew20IT+AvKGS/ZLdX
+         AgP+8BVLCJNWg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5E4C7E54D2B;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 55E2FC3959E;
         Thu, 19 Jan 2023 02:50:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf] bpf: Fix off-by-one error in bpf_mem_cache_idx()
+Subject: Re: [PATCH bpf] bpf: Fix a possible task gone issue with
+ bpf_send_signal[_thread]() helpers
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167409661738.25196.11510955578505781676.git-patchwork-notify@kernel.org>
+Message-Id: <167409661734.25196.8208865085416522489.git-patchwork-notify@kernel.org>
 Date:   Thu, 19 Jan 2023 02:50:17 +0000
-References: <20230118084630.3750680-1-houtao@huaweicloud.com>
-In-Reply-To: <20230118084630.3750680-1-houtao@huaweicloud.com>
-To:     Hou Tao <houtao@huaweicloud.com>
-Cc:     bpf@vger.kernel.org, martin.lau@linux.dev, andrii@kernel.org,
-        song@kernel.org, haoluo@google.com, yhs@fb.com, ast@kernel.org,
-        daniel@iogearbox.net, kpsingh@kernel.org, sdf@google.com,
-        jolsa@kernel.org, john.fastabend@gmail.com, houtao1@huawei.com
+References: <20230118204815.3331855-1-yhs@fb.com>
+In-Reply-To: <20230118204815.3331855-1-yhs@fb.com>
+To:     Yonghong Song <yhs@fb.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, kernel-team@fb.com, martin.lau@kernel.org,
+        sunhao.th@gmail.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
@@ -57,20 +57,20 @@ Hello:
 This patch was applied to bpf/bpf.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Wed, 18 Jan 2023 16:46:30 +0800 you wrote:
-> From: Hou Tao <houtao1@huawei.com>
-> 
-> According to the definition of sizes[NUM_CACHES], when the size passed
-> to bpf_mem_cache_size() is 256, it should return 6 instead 7.
-> 
-> Fixes: 7c8199e24fa0 ("bpf: Introduce any context BPF specific memory allocator.")
-> Signed-off-by: Hou Tao <houtao1@huawei.com>
+On Wed, 18 Jan 2023 12:48:15 -0800 you wrote:
+> In current bpf_send_signal() and bpf_send_signal_thread() helper
+> implementation, irq_work is used to handle nmi context. Hao Sun
+> reported in [1] that the current task at the entry of the helper
+> might be gone during irq_work callback processing. To fix the issue,
+> a reference is acquired for the current task before enqueuing into
+> the irq_work so that the queued task is still available during
+> irq_work callback processing.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf] bpf: Fix off-by-one error in bpf_mem_cache_idx()
-    https://git.kernel.org/bpf/bpf/c/36024d023d13
+  - [bpf] bpf: Fix a possible task gone issue with bpf_send_signal[_thread]() helpers
+    https://git.kernel.org/bpf/bpf/c/bdb7fdb0aca8
 
 You are awesome, thank you!
 -- 
