@@ -2,57 +2,57 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28875C678D6
-	for <bpf@archiver.kernel.org>; Thu, 19 Jan 2023 22:32:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3074C004D4
+	for <bpf@archiver.kernel.org>; Thu, 19 Jan 2023 22:32:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbjASWcn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Jan 2023 17:32:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33024 "EHLO
+        id S230023AbjASWcp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Jan 2023 17:32:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbjASWcI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 Jan 2023 17:32:08 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709D5AA5CF
-        for <bpf@vger.kernel.org>; Thu, 19 Jan 2023 14:15:40 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-4fa63c84621so31249157b3.20
-        for <bpf@vger.kernel.org>; Thu, 19 Jan 2023 14:15:40 -0800 (PST)
+        with ESMTP id S230049AbjASWcJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 Jan 2023 17:32:09 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77313AA5E1
+        for <bpf@vger.kernel.org>; Thu, 19 Jan 2023 14:15:43 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id i16-20020a17090332d000b00194a7b146b2so2074455plr.20
+        for <bpf@vger.kernel.org>; Thu, 19 Jan 2023 14:15:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WqkHn4f0/GKzOk6tgm+fz56hvPkrZ3hzKvvIPQn7yIk=;
-        b=sE0+jeRh5nsa7BeD7DBfXx126J+IFMi+/+BmOPXUgyTGcNamYD/3X83LhH27PSqeRB
-         vo12orSIl+YcslA+Rh0TC+J/E1VMUX6rie1BEOlD4XjpCO339Bf85IUR9WTVf7yhfLUL
-         OnH+VwhcrWky7nSc8AGHfavF8vUpd1ELSUt/vi6NuxBHzZc4TuLUzIUASPuszHHvmLLE
-         Me8XeBa8E+rPs4Tu2mF79Dw5K3cg+OEFdtxaJwAEpWp6H9v7OgVQQjIsKcqMuiRxgbqE
-         nGwJ4Q6Wxsx4WrM/ibhGibOorZt6wNpknUucKGucbhsLzUDPt8QeeA8sP5E+9KtxVc9F
-         Re3w==
+        bh=EluN9RAO3/5jehFBTCxE9iis6r5nEDoqZCY8f6MRQ0c=;
+        b=coDhL6VYgQSzRwgHAqJRrcjjR8MX6QQyphmjRgVcyygMt6NhH6yY97M8+f8YP9/BHW
+         8qQJmSQHHMvWcLu568tFBGwDIEcvka642kOTYOWyTJxjaFBeaBdDCcJOKsnJ/d0VCXON
+         gK0StuznNmVH0Sf4PWHymM7P+S5DwA7psoHSmhMh8HSmGJrWT27Py+Pepa8l/HR2JIpw
+         orYUe19thSdjXIjpSYEo//2tEM83aZFGdW+h/1+TIVksYa5z1UDfXRrehozFDxF9wqvl
+         I1DOIqSzmrSM9wCdAmZO3dO/TxpVpqMKssL1FFsvCpnjsTOA3Ck6PeqpzwNFKLBgJ9VX
+         v5jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WqkHn4f0/GKzOk6tgm+fz56hvPkrZ3hzKvvIPQn7yIk=;
-        b=X3l4ncL9X+Ov1pm9cITu8b/LPpaLcQi7wli3nETQcoQmd/g/1/nWBQuIEGcO2ZAhcH
-         f9ElWwWr0T0PvpjSyPkMKXIGMKamct54dmjmtXkpDisIklCxTX4ld688lV6uqPSIAayU
-         JkxtA1Nl3/5VDTuvWsEcSrw79X7CntPXoHCug1+95RrQh0Oe68UXx6tqurB2K1ZfN46y
-         xUC28stojw7jvVcdcnWh545RFqWZNcgey1TJuYa5Z2h0GyI3g7iUZrkLvNu/q60MfSmR
-         yBziQreJ+J/7cOzqprWFXs4S1Lfim30OnY8WuuWRrEyHs3F36G6KWo9NDw3wDZho79at
-         4VcQ==
-X-Gm-Message-State: AFqh2kqr3Yd5XOqRVg3RcchWiw4nGmvwU5XDm3XujR/xxvXlwiu41L7W
-        EMuw3zFukqt/ulc3reRiqKdg5VV6mCKnT/zUKQT7AVB2gAzACYlQRwWPV7fu2T/sqw7TDZW4WYA
-        Nif76ZQj2N0ACEonuuykXB8i9Gz/rJ/AgSTHS9rJfRlrXLAG5gQ==
-X-Google-Smtp-Source: AMrXdXvZ/86VHHr4hp+xEXZa3ctak3v2rFjJNmXi4ECTEIjKSSNqSRtCcwkGZ28I5vOYwXPXY9ql/Ik=
+        bh=EluN9RAO3/5jehFBTCxE9iis6r5nEDoqZCY8f6MRQ0c=;
+        b=itOU1Umjvgsvd6lfmKov+jXQ9DTYpx5ual32MYVmJN4w8dzMx4csuf4NMpXpVb6khO
+         bj86SpUdmd2y/n6tZNzuw4AmRBcwsoB84k0lbPXEd7EW50V11N2ZcBOUfW0kqRuYt0b7
+         eAGO1CqsYh1UyiGJmRnw0cv72v/iuU0btqf+iDDdbN8W6bfMZDd1Rj/i4Sj+ucHg0pSO
+         UvBfCinuI/GuqM/0jP0SqAdxXQnTXA6OVF1ZX8pIkdfmf6MFVNf9QgoRcrd64EadUnNm
+         eUnWtTAd+Tgea3ZuL4q6U7K8n95dqSxLMq/f1/E5MCUtf7GQRRFT1YuCY9sgtZ4biiYM
+         jzQQ==
+X-Gm-Message-State: AFqh2kquY0j+bws96hIgHT3B3b+YTA8ztqhyMeaxWWl/chk275Zxpg80
+        +Je4EP+QcSYHZHq/UVANYFWHtOnZ4aZEucHnYnlAt/QHREA0pSdJOCluEBhwuhq3lDTVc7OK7pu
+        m3W/CAgztkgy9DXgRC3mu5sHF11K3GEdw/hgSCTYEXuQ0sqAAGA==
+X-Google-Smtp-Source: AMrXdXudGjQpd7lEynyR7gDEllPV9Fnd2xvrdsgsu/+ujzvVVHCfLARJibeKxsIHtr/nzz7/x3VIEoY=
 X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a25:3f06:0:b0:7d1:87e:1713 with SMTP id
- m6-20020a253f06000000b007d1087e1713mr1414033yba.102.1674166539291; Thu, 19
- Jan 2023 14:15:39 -0800 (PST)
-Date:   Thu, 19 Jan 2023 14:15:20 -0800
+ (user=sdf job=sendgmr) by 2002:a17:902:f7d6:b0:192:b0a0:788f with SMTP id
+ h22-20020a170902f7d600b00192b0a0788fmr1136821plw.51.1674166542678; Thu, 19
+ Jan 2023 14:15:42 -0800 (PST)
+Date:   Thu, 19 Jan 2023 14:15:22 -0800
 In-Reply-To: <20230119221536.3349901-1-sdf@google.com>
 Mime-Version: 1.0
 References: <20230119221536.3349901-1-sdf@google.com>
 X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
-Message-ID: <20230119221536.3349901-2-sdf@google.com>
-Subject: [PATCH bpf-next v8 01/17] bpf: Document XDP RX metadata
+Message-ID: <20230119221536.3349901-4-sdf@google.com>
+Subject: [PATCH bpf-next v8 03/17] bpf: Move offload initialization into late_initcall
 From:   Stanislav Fomichev <sdf@google.com>
 To:     bpf@vger.kernel.org
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
@@ -67,13 +67,13 @@ Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         Alexander Lobakin <alexandr.lobakin@intel.com>,
         Magnus Karlsson <magnus.karlsson@gmail.com>,
         Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
-        netdev@vger.kernel.org, David Vernet <void@manifault.com>
+        netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Document all current use-cases and assumptions.
+So we don't have to initialize it manually from several paths.
 
 Cc: John Fastabend <john.fastabend@gmail.com>
 Cc: David Ahern <dsahern@gmail.com>
@@ -87,142 +87,62 @@ Cc: Magnus Karlsson <magnus.karlsson@gmail.com>
 Cc: Maryam Tahhan <mtahhan@redhat.com>
 Cc: xdp-hints@xdp-project.net
 Cc: netdev@vger.kernel.org
-Acked-by: David Vernet <void@manifault.com>
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- Documentation/networking/index.rst           |   1 +
- Documentation/networking/xdp-rx-metadata.rst | 110 +++++++++++++++++++
- 2 files changed, 111 insertions(+)
- create mode 100644 Documentation/networking/xdp-rx-metadata.rst
+ kernel/bpf/offload.c | 22 +++++++---------------
+ 1 file changed, 7 insertions(+), 15 deletions(-)
 
-diff --git a/Documentation/networking/index.rst b/Documentation/networking/index.rst
-index 4f2d1f682a18..4ddcae33c336 100644
---- a/Documentation/networking/index.rst
-+++ b/Documentation/networking/index.rst
-@@ -120,6 +120,7 @@ Refer to :ref:`netdev-FAQ` for a guide on netdev development process specifics.
-    xfrm_proc
-    xfrm_sync
-    xfrm_sysctl
-+   xdp-rx-metadata
+diff --git a/kernel/bpf/offload.c b/kernel/bpf/offload.c
+index f5769a8ecbee..621e8738f304 100644
+--- a/kernel/bpf/offload.c
++++ b/kernel/bpf/offload.c
+@@ -56,7 +56,6 @@ static const struct rhashtable_params offdevs_params = {
+ };
  
- .. only::  subproject and html
+ static struct rhashtable offdevs;
+-static bool offdevs_inited;
  
-diff --git a/Documentation/networking/xdp-rx-metadata.rst b/Documentation/networking/xdp-rx-metadata.rst
-new file mode 100644
-index 000000000000..aac63fc2d08b
---- /dev/null
-+++ b/Documentation/networking/xdp-rx-metadata.rst
-@@ -0,0 +1,110 @@
-+===============
-+XDP RX Metadata
-+===============
+ static int bpf_dev_offload_check(struct net_device *netdev)
+ {
+@@ -72,8 +71,6 @@ bpf_offload_find_netdev(struct net_device *netdev)
+ {
+ 	lockdep_assert_held(&bpf_devs_lock);
+ 
+-	if (!offdevs_inited)
+-		return NULL;
+ 	return rhashtable_lookup_fast(&offdevs, &netdev, offdevs_params);
+ }
+ 
+@@ -673,18 +670,6 @@ struct bpf_offload_dev *
+ bpf_offload_dev_create(const struct bpf_prog_offload_ops *ops, void *priv)
+ {
+ 	struct bpf_offload_dev *offdev;
+-	int err;
+-
+-	down_write(&bpf_devs_lock);
+-	if (!offdevs_inited) {
+-		err = rhashtable_init(&offdevs, &offdevs_params);
+-		if (err) {
+-			up_write(&bpf_devs_lock);
+-			return ERR_PTR(err);
+-		}
+-		offdevs_inited = true;
+-	}
+-	up_write(&bpf_devs_lock);
+ 
+ 	offdev = kzalloc(sizeof(*offdev), GFP_KERNEL);
+ 	if (!offdev)
+@@ -710,3 +695,10 @@ void *bpf_offload_dev_priv(struct bpf_offload_dev *offdev)
+ 	return offdev->priv;
+ }
+ EXPORT_SYMBOL_GPL(bpf_offload_dev_priv);
 +
-+This document describes how an eXpress Data Path (XDP) program can access
-+hardware metadata related to a packet using a set of helper functions,
-+and how it can pass that metadata on to other consumers.
++static int __init bpf_offload_init(void)
++{
++	return rhashtable_init(&offdevs, &offdevs_params);
++}
 +
-+General Design
-+==============
-+
-+XDP has access to a set of kfuncs to manipulate the metadata in an XDP frame.
-+Every device driver that wishes to expose additional packet metadata can
-+implement these kfuncs. The set of kfuncs is declared in ``include/net/xdp.h``
-+via ``XDP_METADATA_KFUNC_xxx``.
-+
-+Currently, the following kfuncs are supported. In the future, as more
-+metadata is supported, this set will grow:
-+
-+.. kernel-doc:: net/core/xdp.c
-+   :identifiers: bpf_xdp_metadata_rx_timestamp bpf_xdp_metadata_rx_hash
-+
-+An XDP program can use these kfuncs to read the metadata into stack
-+variables for its own consumption. Or, to pass the metadata on to other
-+consumers, an XDP program can store it into the metadata area carried
-+ahead of the packet.
-+
-+Not all kfuncs have to be implemented by the device driver; when not
-+implemented, the default ones that return ``-EOPNOTSUPP`` will be used.
-+
-+Within an XDP frame, the metadata layout (accessed via ``xdp_buff``) is
-+as follows::
-+
-+  +----------+-----------------+------+
-+  | headroom | custom metadata | data |
-+  +----------+-----------------+------+
-+             ^                 ^
-+             |                 |
-+   xdp_buff->data_meta   xdp_buff->data
-+
-+An XDP program can store individual metadata items into this ``data_meta``
-+area in whichever format it chooses. Later consumers of the metadata
-+will have to agree on the format by some out of band contract (like for
-+the AF_XDP use case, see below).
-+
-+AF_XDP
-+======
-+
-+:doc:`af_xdp` use-case implies that there is a contract between the BPF
-+program that redirects XDP frames into the ``AF_XDP`` socket (``XSK``) and
-+the final consumer. Thus the BPF program manually allocates a fixed number of
-+bytes out of metadata via ``bpf_xdp_adjust_meta`` and calls a subset
-+of kfuncs to populate it. The userspace ``XSK`` consumer computes
-+``xsk_umem__get_data() - METADATA_SIZE`` to locate that metadata.
-+Note, ``xsk_umem__get_data`` is defined in ``libxdp`` and
-+``METADATA_SIZE`` is an application-specific constant (``AF_XDP`` receive
-+descriptor does _not_ explicitly carry the size of the metadata).
-+
-+Here is the ``AF_XDP`` consumer layout (note missing ``data_meta`` pointer)::
-+
-+  +----------+-----------------+------+
-+  | headroom | custom metadata | data |
-+  +----------+-----------------+------+
-+                               ^
-+                               |
-+                        rx_desc->address
-+
-+XDP_PASS
-+========
-+
-+This is the path where the packets processed by the XDP program are passed
-+into the kernel. The kernel creates the ``skb`` out of the ``xdp_buff``
-+contents. Currently, every driver has custom kernel code to parse
-+the descriptors and populate ``skb`` metadata when doing this ``xdp_buff->skb``
-+conversion, and the XDP metadata is not used by the kernel when building
-+``skbs``. However, TC-BPF programs can access the XDP metadata area using
-+the ``data_meta`` pointer.
-+
-+In the future, we'd like to support a case where an XDP program
-+can override some of the metadata used for building ``skbs``.
-+
-+bpf_redirect_map
-+================
-+
-+``bpf_redirect_map`` can redirect the frame to a different device.
-+Some devices (like virtual ethernet links) support running a second XDP
-+program after the redirect. However, the final consumer doesn't have
-+access to the original hardware descriptor and can't access any of
-+the original metadata. The same applies to XDP programs installed
-+into devmaps and cpumaps.
-+
-+This means that for redirected packets only custom metadata is
-+currently supported, which has to be prepared by the initial XDP program
-+before redirect. If the frame is eventually passed to the kernel, the
-+``skb`` created from such a frame won't have any hardware metadata populated
-+in its ``skb``. If such a packet is later redirected into an ``XSK``,
-+that will also only have access to the custom metadata.
-+
-+bpf_tail_call
-+=============
-+
-+Adding programs that access metadata kfuncs to the ``BPF_MAP_TYPE_PROG_ARRAY``
-+is currently not supported.
-+
-+Example
-+=======
-+
-+See ``tools/testing/selftests/bpf/progs/xdp_metadata.c`` and
-+``tools/testing/selftests/bpf/prog_tests/xdp_metadata.c`` for an example of
-+BPF program that handles XDP metadata.
++late_initcall(bpf_offload_init);
 -- 
 2.39.0.246.g2a6d74b583-goog
 
