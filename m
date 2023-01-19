@@ -2,128 +2,90 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41503C38159
-	for <bpf@archiver.kernel.org>; Fri, 20 Jan 2023 05:28:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FAA2C46467
+	for <bpf@archiver.kernel.org>; Fri, 20 Jan 2023 05:29:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231277AbjATF24 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Jan 2023 00:28:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57904 "EHLO
+        id S231508AbjATF3P (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Jan 2023 00:29:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbjATF23 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Jan 2023 00:28:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF5930E0;
-        Thu, 19 Jan 2023 21:23:28 -0800 (PST)
+        with ESMTP id S231429AbjATF2e (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Jan 2023 00:28:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3556C12C;
+        Thu, 19 Jan 2023 21:23:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BDE02B8229F;
-        Fri, 20 Jan 2023 00:08:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49799C433EF;
-        Fri, 20 Jan 2023 00:08:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AEC50B82314;
+        Thu, 19 Jan 2023 16:23:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0136FC433EF;
+        Thu, 19 Jan 2023 16:23:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674173309;
-        bh=3KzjNLNPNLSIodWpCueB2WhRu6smQFH2gkFhC5biMYc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=RSfl6Q9tDytFkXobVl4OA/1Ff1T9CF13+Ki50UlIzp77vhoHMu3itDxiA6m66qu4+
-         YCoHiO7gRFl7dqWNLuOePxhnPFwNJfEaJaoZQsRNh6OHSbSI3dyPhfcMhWDRuX5sCh
-         IL1IlQrT2ylc2j5LxoxL0LohI1Y9qW3WFxDv3Efksh+mK/UjVD3e/WCUnfuJ3ICHZt
-         5N5EpNMTghU7PW39WUTHs1MuGOuzDaDDrjvCL97I60eC3q54HzFImdOKQ5whaXkV40
-         mEfjGLQ2QbXOHSQp4w0nT3oThZUmicloHIa5oC6eWZEJksXUCU3NafU77E/WMtIWKH
-         Fx+9sOo5AWSUw==
-From:   KP Singh <kpsingh@kernel.org>
-To:     linux-security-module@vger.kernel.org, bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, jackmanb@google.com,
-        renauld@google.com, paul@paul-moore.com, casey@schaufler-ca.com,
-        song@kernel.org, revest@chromium.org, keescook@chromium.org
-Subject: [PATCH RESEND bpf-next 0/4] Reduce overhead of LSMs with static calls
-Date:   Fri, 20 Jan 2023 01:08:14 +0100
-Message-Id: <20230120000818.1324170-1-kpsingh@kernel.org>
-X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
+        s=k20201202; t=1674145432;
+        bh=4iyv9ZQaCHKEyaKr1myAy/HD5rxKaeF7tIvs7Vo9l5g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Yn+ibebTUCXrBtlNavVLGTmp1RaMMMoJowna/FiWXuMtMkj8PaX8N2PzBD8B9CK0f
+         Rc5Bu7TN1e88zoRuGUGNXfD9UrcX9fMNW0iw4MtonoEZShhp4J57AUMvXjylhXy4ko
+         P9MQM8OfRBnFbJpPTaHs3s5ZGGZND/uGNP+rQzsutl4/xW59yOuZfTNusX+PttL4LR
+         qUxdrJZHDnGe2H1Z615rL22ewBSVVQBAWQwrjjnzvnygDf7qZ1zUV+BoyQPnf/tq/F
+         HogZbHDvRSNRUMymsgLrSKvgJDjkquzT8prtjpcwA1jwzKACs7Mk+O5jkfXT6j9y+H
+         6PTU8I72qZymQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 20F6E405BE; Thu, 19 Jan 2023 13:23:47 -0300 (-03)
+Date:   Thu, 19 Jan 2023 13:23:47 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Andrii Nakryiko <andrii@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v1] perf llvm: Fix inadvertent file creation
+Message-ID: <Y8luk2xVZFQusPUd@kernel.org>
+References: <20230105082609.344538-1-irogers@google.com>
+ <CAP-5=fUCJEyrZ+bx6oMGmFm5wuF71uheM=7VD9ynjAD_TNZ78w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP-5=fUCJEyrZ+bx6oMGmFm5wuF71uheM=7VD9ynjAD_TNZ78w@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-# Background
+Em Thu, Jan 19, 2023 at 07:57:19AM -0800, Ian Rogers escreveu:
+> On Thu, Jan 5, 2023 at 12:26 AM Ian Rogers <irogers@google.com> wrote:
+> >
+> > The LLVM template is first echo-ed into command_out and then
+> > command_out executed. The echo surrounds the template with double
+> > quotes, however, the template itself may contain quotes. This is
+> > generally innocuous but in tools/perf/tests/bpf-script-test-prologue.c
+> > we see:
+> > ...
+> > SEC("func=null_lseek file->f_mode offset orig")
+> > ...
+> > where the first double quote ends the double quote of the echo, then
+> > the > redirects output into a file called f_mode.
+> >
+> > To avoid this inadvertent behavior substitute redirects and similar
+> > characters to be ASCII control codes, then substitute the output in
+> > the echo back again.
+> >
+> > Fixes: 5eab5a7ee032 ("perf llvm: Display eBPF compiling command in debug output")
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> 
+> Ping. Not really a BPF/LLVM fix, it is just doing some string
+> manipulation to avoid shell interpretation in the context of making
+> BPF/LLVM.
 
-LSM hooks (callbacks) are currently invoked as indirect function calls. These
-callbacks are registered into a linked list at boot time as the order of the
-LSMs can be configured on the kernel command line with the "lsm=" command line
-parameter.
+Thanks, applied.
 
-Indirect function calls have a high overhead due to retpoline mitigation for
-various speculative execution attacks.
-
-Retpolines remain relevant even with newer generation CPUs as recently
-discovered speculative attacks, like Spectre BHB need Retpolines to mitigate
-against branch history injection and still need to be used in combination with
-newer mitigation features like eIBRS.
-
-This overhead is especially significant for the "bpf" LSM which allows the user
-to implement LSM functionality with eBPF program. In order to facilitate this
-the "bpf" LSM provides a default callback for all LSM hooks. When enabled,
-the "bpf" LSM incurs an unnecessary / avoidable indirect call. This is
-especially bad in OS hot paths (e.g. in the networking stack).
-This overhead prevents the adoption of bpf LSM on performance critical
-systems, and also, in general, slows down all LSMs.
-
-Since we know the address of the enabled LSM callbacks at compile time and only
-the order is determined at boot time, the LSM framework can allocate static
-calls for each of the possible LSM callbacks and these calls can be updated once
-the order is determined at boot.
-
-This series is a respin of the RFC proposed by Paul Renauld (renauld@google.com)
-and Brendan Jackman (jackmanb@google.com) [1]
-
-# Performance improvement
-
-With this patch-set some syscalls with lots of LSM hooks in their path
-benefitted at an average of ~3%. Here are the results of the relevant Unixbench
-system benchmarks with BPF LSM and a major LSM (in this case apparmor) enabled
-with and without the series.
-
-Benchmark                                               Delta(%): (+ is better)
-===============================================================================
-Execl Throughput                                             +2.9015
-File Write 1024 bufsize 2000 maxblocks                       +5.4196
-Pipe Throughput                                              +7.7434
-Pipe-based Context Switching                                 +3.5118
-Process Creation                                             +0.3552
-Shell Scripts (1 concurrent)                                 +1.7106
-System Call Overhead                                         +3.0067
-System Benchmarks Index Score (Partial Only):                +3.1809
-
-In the best case, some syscalls like eventfd_create benefitted to about ~10%.
-The full analysis can be viewed at https://kpsingh.ch/lsm-perf
-
-[1] https://lore.kernel.org/linux-security-module/20200820164753.3256899-1-jackmanb@chromium.org/
-
-KP Singh (4):
-  kernel: Add helper macros for loop unrolling
-  security: Generate a header with the count of enabled LSMs
-  security: Replace indirect LSM hook calls with static calls
-  bpf: Only enable BPF LSM hooks when an LSM program is attached
-
- include/linux/bpf.h              |   1 +
- include/linux/bpf_lsm.h          |   1 +
- include/linux/lsm_hooks.h        |  94 +++++++++++--
- include/linux/unroll.h           |  35 +++++
- kernel/bpf/trampoline.c          |  29 ++++-
- scripts/Makefile                 |   1 +
- scripts/security/.gitignore      |   1 +
- scripts/security/Makefile        |   4 +
- scripts/security/gen_lsm_count.c |  57 ++++++++
- security/Makefile                |  11 ++
- security/bpf/hooks.c             |  26 +++-
- security/security.c              | 217 ++++++++++++++++++++-----------
- 12 files changed, 386 insertions(+), 91 deletions(-)
- create mode 100644 include/linux/unroll.h
- create mode 100644 scripts/security/.gitignore
- create mode 100644 scripts/security/Makefile
- create mode 100644 scripts/security/gen_lsm_count.c
-
--- 
-2.39.0.246.g2a6d74b583-goog
+- Arnaldo
 
