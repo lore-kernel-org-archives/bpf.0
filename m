@@ -2,82 +2,79 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D9FCC677F1
-	for <bpf@archiver.kernel.org>; Thu, 19 Jan 2023 02:44:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9736C38159
+	for <bpf@archiver.kernel.org>; Thu, 19 Jan 2023 02:50:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjASCoI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 Jan 2023 21:44:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52674 "EHLO
+        id S229988AbjASCuV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 Jan 2023 21:50:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbjASCnw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 18 Jan 2023 21:43:52 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C5D6CCC3
-        for <bpf@vger.kernel.org>; Wed, 18 Jan 2023 18:43:51 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id v13so1166051eda.11
-        for <bpf@vger.kernel.org>; Wed, 18 Jan 2023 18:43:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QiDNlSaoi7mrYBR24sYJ3Gb7J5bSPSGiilOnQNME2EI=;
-        b=n/1XiVB0W2gjgu3hdoPMWx2EXvswhkejynnIyfUgE9oSl4oMzTHows5NLdGE47FlaS
-         kbvmUR33yIKCL//SJsuYZH8g1dBXVmwRH8sJ/QfjUNdMWU2OsW+dpEJ8q7+DgUlzB8dr
-         6USVgoKoVK0ydCx/1csXnX6tG8oY4k44ChqffCVA17hZ9+byBbMuQQJtFV2CSHwcDrCR
-         xZ/r0twWn4b+hfwKpgzrhaSjrYIIaNzZ1TXvFfNgYTZlcc+Dem3F/j5PQjFKEFtqpa2b
-         tFqdvW4KqlWRzzgyWiT+9vwa4Ex00VhxWe6lw1hVfkwLwi1UuHkgrFNjhi7LDwnPziKP
-         nEdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QiDNlSaoi7mrYBR24sYJ3Gb7J5bSPSGiilOnQNME2EI=;
-        b=cZ4KLPJalsrHPtXA0cva37eMSkzQYaiBZcLLAtgrLlMbUGYSFwpTYrIZ61nqhztWHS
-         /4ynhKP/ChK+7rPAGjnhMRgJKQrfn/UkYFzCkSjYawsplbE/wRbnZL1dLyFe/o5r8ib1
-         e0dKL0rRD3KQbcmtvNFKeJK4Uq/Hy/poApyVVxPpgL6C5C7toYoQTXP38gprfUpFLw5o
-         UF8Ta01rMCByhvJJMd/YTuXJXE2RHsGJoLwwcHIpu3pGpua3jPznbpyqeG72CDg9oG+K
-         hNgI6M70zy7cOjEfOdcz7P8PZSCAUII1WEMv+cClov5dmaiFXHX1cWPOGu+7f6JJHcXT
-         kkdw==
-X-Gm-Message-State: AFqh2ko6NUzVWBueKtLvtH0lMNURfnYxuCWWehVnoidOQ0mKEn3A5sOs
-        7Jw9sCCm6dM7IkDjOf3kEy2z8Femb1bfCqQlfVU=
-X-Google-Smtp-Source: AMrXdXvPWmxZD2Sp6Sgx2SaHetDDdYPw8NK1L2qOrbDsPIpho/YT7GlG9ykMzp9RgAlow6rrj/SPuNosasTpzgY+OfI=
-X-Received: by 2002:aa7:d718:0:b0:49d:c012:3f32 with SMTP id
- t24-20020aa7d718000000b0049dc0123f32mr1300963edq.173.1674096230351; Wed, 18
- Jan 2023 18:43:50 -0800 (PST)
+        with ESMTP id S229837AbjASCuV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 18 Jan 2023 21:50:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CAC56843F
+        for <bpf@vger.kernel.org>; Wed, 18 Jan 2023 18:50:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EA8BDB81FB9
+        for <bpf@vger.kernel.org>; Thu, 19 Jan 2023 02:50:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7DC56C43392;
+        Thu, 19 Jan 2023 02:50:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674096617;
+        bh=dIfInEvsIcErG3Q5nii6nM1aW9WWVrK4CQ7O+fiv6vE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=c4ZYdnCBZjRukBzRFViY0l0xgniNV5nX72gzKpHaDU/+IFAdpKQMff3ClIYzZdZJs
+         VIHojP2CeFcBAR4jKeYqqY6MxYtRsDJt8n7tK7NgPnX+bfm9J3vJ1fauWg9kHBUabi
+         UuYcF6jGTUs2od0Vgjqi7DJEaQP7zYDe6v5hTncCYCBQXjWt7/DwJ3GX2GncW0YAVs
+         uGFeKIvbtFtWrkzy+xFywu/yEagHeRlZoUN6cpBCzMc4Z0yZDbTDbScaQvSRuqo+TP
+         9lXSv4gyvIyZvuIbLv1C3iBTa71pc/FG3Nh0ucdZiJZWubWQuuRVHj+Af8TOJB2gSv
+         190axuSa5cNMg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5E4C7E54D2B;
+        Thu, 19 Jan 2023 02:50:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230118084630.3750680-1-houtao@huaweicloud.com> <5592d49e-5a8a-158a-093f-158ecca80cdb@meta.com>
-In-Reply-To: <5592d49e-5a8a-158a-093f-158ecca80cdb@meta.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 18 Jan 2023 18:43:38 -0800
-Message-ID: <CAADnVQL9okYjd1eUXwJoMhu69rdFZMb82-aCymfCDqR_6iEfRw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Subject: Re: [PATCH bpf] bpf: Fix off-by-one error in bpf_mem_cache_idx()
-To:     Yonghong Song <yhs@meta.com>
-Cc:     Hou Tao <houtao@huaweicloud.com>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Hao Luo <haoluo@google.com>,
-        Yonghong Song <yhs@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Hou Tao <houtao1@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167409661738.25196.11510955578505781676.git-patchwork-notify@kernel.org>
+Date:   Thu, 19 Jan 2023 02:50:17 +0000
+References: <20230118084630.3750680-1-houtao@huaweicloud.com>
+In-Reply-To: <20230118084630.3750680-1-houtao@huaweicloud.com>
+To:     Hou Tao <houtao@huaweicloud.com>
+Cc:     bpf@vger.kernel.org, martin.lau@linux.dev, andrii@kernel.org,
+        song@kernel.org, haoluo@google.com, yhs@fb.com, ast@kernel.org,
+        daniel@iogearbox.net, kpsingh@kernel.org, sdf@google.com,
+        jolsa@kernel.org, john.fastabend@gmail.com, houtao1@huawei.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 9:58 AM Yonghong Song <yhs@meta.com> wrote:
->
-> >
-> > -     return fls(size - 1) - 1;
-> > +     return fls(size - 1) - 2;
+Hello:
 
-Wow. Thanks.
-Not sure how I missed it and why the tests didn't catch it.
-test_maps goes through many key/value sizes.
+This patch was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-Applied.
+On Wed, 18 Jan 2023 16:46:30 +0800 you wrote:
+> From: Hou Tao <houtao1@huawei.com>
+> 
+> According to the definition of sizes[NUM_CACHES], when the size passed
+> to bpf_mem_cache_size() is 256, it should return 6 instead 7.
+> 
+> Fixes: 7c8199e24fa0 ("bpf: Introduce any context BPF specific memory allocator.")
+> Signed-off-by: Hou Tao <houtao1@huawei.com>
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf] bpf: Fix off-by-one error in bpf_mem_cache_idx()
+    https://git.kernel.org/bpf/bpf/c/36024d023d13
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
