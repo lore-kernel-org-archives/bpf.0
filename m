@@ -2,139 +2,83 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAD0CC38159
-	for <bpf@archiver.kernel.org>; Fri, 20 Jan 2023 05:11:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B899DC38159
+	for <bpf@archiver.kernel.org>; Fri, 20 Jan 2023 05:11:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbjATFLA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Jan 2023 00:11:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42438 "EHLO
+        id S231218AbjATFLq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Jan 2023 00:11:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231172AbjATFKq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Jan 2023 00:10:46 -0500
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5636A80BA4;
-        Thu, 19 Jan 2023 20:58:37 -0800 (PST)
-Received: by mail-pg1-x543.google.com with SMTP id 7so3281413pga.1;
-        Thu, 19 Jan 2023 20:58:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HzzXUnHTmpWWQPG59F1wwVsrnIyCIw61BupAxQyJSRI=;
-        b=XlMVGlWmbXFC4EGyZYr6w/6gn9tiEHouHtEfFMYEblbEPz8mfgM98o82W6rUe9xFIE
-         NMW/o4YkPyD8QuswSHA7Jo43STK+AdpjSkFBIkV88zCEuEit53fiKj7lAUp0W/3fZcd9
-         ClCL685nyt2y6O0WOPH+EgOqT+qVlAC6W5WgcpTxXnNYDNGWw+ztTXzmyklzvycsi+mO
-         B2hydSgfIRIHv+lO/fTS0ghOkCPF8y5auQiDTvnNnqss34GwQ9ZGvurRMkkgB07BxiBY
-         7/g9FzQ5HCWtiWY4JogyyOeu9cTLm/5cpWt3J83PR/DmXgU9xurpMXqclee9GCsRpk0z
-         5MVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HzzXUnHTmpWWQPG59F1wwVsrnIyCIw61BupAxQyJSRI=;
-        b=6gWZjl2qwpwUP+a/a+iK3vB1Id4RoWYTO4Sy5aGG3eBMg7s9edVZpisg1359lSHCZ1
-         f1pWlL+Hqd3OLYRpKibyJN0Vimiyk4o1ouPkKyX3cxmFgHFvkvo+d9g06Grb2ONPmuZO
-         NlYMpnM5dP4YxdGdj+VzOgu7DEbdNeaPrhtMpIcueaCWmelOhsft10CJCtrEFg6+jy1o
-         hbabsTHQVi43IoVj3y8BQMzBn3sYIpdDWfsDeJP5+ubaKpb3mHc/uiqdB0JJVWkM+TO3
-         mXOxxnu/bqTq9uLXiPwgeL9vZ8U+7ekB1R6RFCvzTRLC1L1ifYM1JH4Mtd+lMYcnZg/R
-         kO2g==
-X-Gm-Message-State: AFqh2kpImfjogIjMgdsgkIQTExo0K+Nm+MVp3S1AExGvFEMavdUHTAbZ
-        nuTzZLzZ2MH9NE/ZNWUyzWo=
-X-Google-Smtp-Source: AMrXdXuE0pUroe2ay/b/UQIYy0GzKBtrp0BNmCQllpLGRlB9bmI60JSEGPaDdhzvul10S8MMAVDmsQ==
-X-Received: by 2002:a05:6a00:44cc:b0:58a:fdc8:92bf with SMTP id cv12-20020a056a0044cc00b0058afdc892bfmr13731244pfb.2.1674190699429;
-        Thu, 19 Jan 2023 20:58:19 -0800 (PST)
-Received: from localhost ([2405:201:6014:dae3:7dbb:8857:7c39:bb2a])
-        by smtp.gmail.com with ESMTPSA id k18-20020a628412000000b0058103f45d9esm21717738pfd.82.2023.01.19.20.58.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 20:58:19 -0800 (PST)
-Date:   Fri, 20 Jan 2023 10:28:15 +0530
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To:     David Vernet <void@manifault.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@meta.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com, tj@kernel.org
-Subject: Re: [PATCH bpf-next 2/8] bpf: Allow trusted args to walk struct when
- checking BTF IDs
-Message-ID: <20230120045815.4b7dc6obdt4uzy6a@apollo>
-References: <20230119235833.2948341-1-void@manifault.com>
- <20230119235833.2948341-3-void@manifault.com>
+        with ESMTP id S229986AbjATFLM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Jan 2023 00:11:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2861AC4EBA;
+        Thu, 19 Jan 2023 20:59:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B02EB822A0;
+        Thu, 19 Jan 2023 12:30:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CCD51C4339C;
+        Thu, 19 Jan 2023 12:30:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674131417;
+        bh=GitxTquGUz+90VYNOoAP7q1QmDkYeScw0cxKs7yRW4U=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=O7fVvQeiTDj21s2oqJ+41PiuLyMXhkHbi4QHHnqZYOv/lBUdYG8GuWW5vp03P0N8A
+         Xbm6pOxD0iefwCdxgukVpNc1zjlaEd1XdYVSZewfs3/X9yneYtyviNbhjOWAr/JFe9
+         h0fe9syUgaKb4TS2mm7nS5jc6077AOtSd4D9pkleuwE9hPVS0QBqw0JVOOiEyuIYOK
+         ERI3clNSch3l2qKO7TlD8rua9olSt9kufc+rlgeu8IQR8rPzwNmwZyRf5C8lb6brYo
+         sM2zAznoB/DseXJ7CxLkxsozguhaWiLr9QlZtA9mOdVu5+uvhhW+A2MgxAfzMn5VH8
+         40D0+ggGIQLRQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B9100E54D27;
+        Thu, 19 Jan 2023 12:30:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230119235833.2948341-3-void@manifault.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCHv4 net-next] selftests/net: mv bpf/nat6to4.c to net folder
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167413141775.31602.12927403453986476278.git-patchwork-notify@kernel.org>
+Date:   Thu, 19 Jan 2023 12:30:17 +0000
+References: <20230118020927.3971864-1-liuhangbin@gmail.com>
+In-Reply-To: <20230118020927.3971864-1-liuhangbin@gmail.com>
+To:     Hangbin Liu <liuhangbin@gmail.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, shuah@kernel.org, dsahern@kernel.org,
+        lina.wang@mediatek.com, dietschc@csp.edu, bpf@vger.kernel.org,
+        maze@google.com, bjorn@rivosinc.com, bjorn@kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 05:28:27AM IST, David Vernet wrote:
-> When validating BTF types for KF_TRUSTED_ARGS kfuncs, the verifier
-> currently enforces that the top-level type must match when calling
-> the kfunc. In other words, the verifier does not allow the BPF program
-> to pass a bitwise equivalent struct, despite it being functionally safe.
-> For example, if you have the following type:
->
-> struct  nf_conn___init {
-> 	struct nf_conn ct;
-> };
->
-> It would be safe to pass a struct nf_conn___init to a kfunc expecting a
-> struct nf_conn.
+Hello:
 
-Just running bpf_nf selftest would have shown this is false.
+This patch was applied to netdev/net-next.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-> Being able to do this will be useful for certain types
-> of kfunc / kptrs enabled by BPF. For example, in a follow-on patch, a
-> series of kfuncs will be added which allow programs to do bitwise
-> queries on cpumasks that are either allocated by the program (in which
-> case they'll be a 'struct bpf_cpumask' type that wraps a cpumask_t as
-> its first element), or a cpumask that was allocated by the main kernel
-> (in which case it will just be a straight cpumask_t, as in
->  task->cpus_ptr).
->
-> Having the two types of cpumasks allows us to distinguish between the
-> two for when a cpumask is read-only vs. mutatable. A struct bpf_cpumask
-> can be mutated by e.g. bpf_cpumask_clear(), whereas a regular cpumask_t
-> cannot be. On the other hand, a struct bpf_cpumask can of course be
-> queried in the exact same manner as a cpumask_t, with e.g.
-> bpf_cpumask_test_cpu().
->
-> If we were to enforce that top level types match, then a user that's
-> passing a struct bpf_cpumask to a read-only cpumask_t argument would
-> have to cast with something like bpf_cast_to_kern_ctx() (which itself
-> would need to be updated to expect the alias, and currently it only
-> accommodates a single alias per prog type). Additionally, not specifying
-> KF_TRUSTED_ARGS is not an option, as some kfuncs take one argument as a
-> struct bpf_cpumask *, and another as a struct cpumask *
-> (i.e. cpumask_t).
->
-> In order to enable this, this patch relaxes the constraint that a
-> KF_TRUSTED_ARGS kfunc must have strict type matching. In order to
-> try and be conservative and match existing behavior / expectations, this
-> patch also enforces strict type checking for acquire kfuncs. We were
-> already enforcing it for release kfuncs, so this should also improve the
-> consistency of the semantics for kfuncs.
->
+On Wed, 18 Jan 2023 10:09:27 +0800 you wrote:
+> There are some issues with the bpf/nat6to4.c building.
+> 
+> 1. It use TEST_CUSTOM_PROGS, which will add the nat6to4.o to
+>    kselftest-list file and run by common run_tests.
+> 2. When building the test via `make -C tools/testing/selftests/
+>    TARGETS="net"`, the nat6to4.o will be build in selftests/net/bpf/
+>    folder. But in test udpgro_frglist.sh it refers to ../bpf/nat6to4.o.
+>    The correct path should be ./bpf/nat6to4.o.
+> 3. If building the test via `make -C tools/testing/selftests/ TARGETS="net"
+>    install`. The nat6to4.o will be installed to kselftest_install/net/
+>    folder. Then the udpgro_frglist.sh should refer to ./nat6to4.o.
+> 
+> [...]
 
-What you want is to simply follow type at off = 0 (but still enforce the off = 0
-requirement). This is something which is currently done for bpf_sk_release (for
-struct sk_common) in check_reg_type, but it is not safe in general to just open
-this up for all cases. I suggest encoding this particular requirement in the
-argument, and simply using triple underscore variant of the type for the special
-'read_only' requirement. This will allow you to use same type in your BPF C
-program, while allowing verifier to see them as two different types in kfunc
-parameters. Then just relax type following for the particular argument so that
-one can pass cpumask_t___ro to kfunc expecting cpumask_t (but only at off = 0,
-it just visits first member after failing match on top level type). off = 0
-check is still necessary.
+Here is the summary with links:
+  - [PATCHv4,net-next] selftests/net: mv bpf/nat6to4.c to net folder
+    https://git.kernel.org/netdev/net-next/c/3c107f36db06
 
-So offset checks still need to be according to OBJ_RELEASE but you can relax
-strict_type_match bool for the particular arg when calling btf_struct_ids_match.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-All code in your tests will then deal with a cpumask_t type only, including in
-kfunc declarations. Same as bpf_nf selftests which don't cast from/to
-nf_conn___init and only deal with nf_conn pointers even though semantics differ
-depending on how it is used and passed around. Overall more convenient and
-simple to use.
+
