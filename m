@@ -2,79 +2,86 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED2E6C678D6
-	for <bpf@archiver.kernel.org>; Fri, 20 Jan 2023 05:34:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99E4CC46467
+	for <bpf@archiver.kernel.org>; Fri, 20 Jan 2023 05:36:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231558AbjATFee (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Jan 2023 00:34:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41012 "EHLO
+        id S230481AbjATFgy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Jan 2023 00:36:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231388AbjATFeL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Jan 2023 00:34:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C9672C16
-        for <bpf@vger.kernel.org>; Thu, 19 Jan 2023 21:30:01 -0800 (PST)
+        with ESMTP id S230253AbjATFgh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Jan 2023 00:36:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3CF6A319
+        for <bpf@vger.kernel.org>; Thu, 19 Jan 2023 21:33:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EA01EB8278D
-        for <bpf@vger.kernel.org>; Thu, 19 Jan 2023 23:30:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 83C1BC433F1;
-        Thu, 19 Jan 2023 23:30:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D9BB5B8248E
+        for <bpf@vger.kernel.org>; Thu, 19 Jan 2023 14:13:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7138BC433D2;
+        Thu, 19 Jan 2023 14:13:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674171017;
-        bh=9ylwBSE9zBvlG4CIZqxjHSe+fYRrl1j595516h+sdc8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=HdU3OpPnDdIBJInX0XFWorljEMemzDu50eHPrcS/w5N+KWplaRGT3aW7aOFm5MQGK
-         qXTtGV/FlZuZY6HFHb/bgzmqo22A2nwcOBzqIJEgLM1M9CHg+a/RZosN2Ms8Hs8cSu
-         0E8sIvp5Nug1xhwwVSENwKoRjhln4rE9FgKh/kDmGWvmlf3o7hjutHi383Z1cvzT2f
-         X5zXP35pQVCs4wv3EeaANPQrDwz5CZSrExDSpf4YsMxPGusId3HAAaeBAvFCmIdiOI
-         Ho70yQfa207+zUUbXkkNDdLXnMSqFlizgFRdaoxrXWr+fBbsJU6n4FUQnlqjymVLaN
-         5C4vLE04wOPCw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6232EC39563;
-        Thu, 19 Jan 2023 23:30:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1674137617;
+        bh=wdgWMlRC8fN5MqUQAppUmBygLdghwkSWAmHknN8Juuc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Ahy6GF5wZVRwtJNOmXEV0CP6bfLWXMDGG2w/Fhv6NQjwvyuTiizbXq2drc8yAsD5s
+         M5pwsdZV2KAgVMP236H7fmsOjthQNFLmJwhCbcBE5Mb2yWp1KT6o7JFUOoxowM0cFt
+         pkXV3gIa2G7jg+2SOvfnI6UGq2c3vW/6dGwcouFz+Z3a8Tf0g3z2H+lbZwyh6foOGa
+         pD7KIiO3fyNLfeg6fow575VerSxLsg2hZXeNL5f2avQKFM5SOZRoFyEgy/B0dNR7Fh
+         exG7q9IEPjeT+FkSGxHK2iulzZOOMJS2BhQNnbsRjqhn7d97n8EOdNhxQYBHjSrPdG
+         VGSdbU0VpPQNw==
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>
+Subject: [PATCH bpf] bpf: Add missing btf_put to register_btf_id_dtor_kfuncs
+Date:   Thu, 19 Jan 2023 15:13:31 +0100
+Message-Id: <20230119141331.962281-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 0/2] bpf: Fix to preserve reg parent/live fields
- when copying range info
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167417101739.14186.1975937279783014146.git-patchwork-notify@kernel.org>
-Date:   Thu, 19 Jan 2023 23:30:17 +0000
-References: <20230106142214.1040390-1-eddyz87@gmail.com>
-In-Reply-To: <20230106142214.1040390-1-eddyz87@gmail.com>
-To:     Eduard Zingerman <eddyz87@gmail.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net, kernel-team@fb.com, yhs@fb.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+We take the BTF reference before we register dtors and we need
+to put it back when it's done.
 
-This series was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+We probably won't se a problem with kernel BTF, but module BTF
+would stay loaded (because of the extra ref) even when its module
+is removed.
 
-On Fri,  6 Jan 2023 16:22:12 +0200 you wrote:
-> Struct bpf_reg_state is copied directly in several places including:
-> - check_stack_write_fixed_off() (via save_register_state());
-> - check_stack_read_fixed_off();
-> - find_equal_scalars().
-> 
-> However, a literal copy of this struct also copies the following fields:
-> 
-> [...]
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Fixes: 5ce937d613a4 ("bpf: Populate pairs of btf_id and destructor kfunc in btf")
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+ kernel/bpf/btf.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Here is the summary with links:
-  - [bpf-next,v2,1/2] bpf: Fix to preserve reg parent/live fields when copying range info
-    https://git.kernel.org/bpf/bpf/c/71f656a50176
-  - [bpf-next,v2,2/2] selftests/bpf: Verify copy_register_state() preserves parent/live fields
-    https://git.kernel.org/bpf/bpf/c/b9fa9bc83929
-
-You are awesome, thank you!
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index f7dd8af06413..b7017cae6fd1 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -7782,9 +7782,9 @@ int register_btf_id_dtor_kfuncs(const struct btf_id_dtor_kfunc *dtors, u32 add_c
+ 
+ 	sort(tab->dtors, tab->cnt, sizeof(tab->dtors[0]), btf_id_cmp_func, NULL);
+ 
+-	return 0;
+ end:
+-	btf_free_dtor_kfunc_tab(btf);
++	if (ret)
++		btf_free_dtor_kfunc_tab(btf);
+ 	btf_put(btf);
+ 	return ret;
+ }
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.39.0
 
