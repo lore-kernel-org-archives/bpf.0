@@ -2,132 +2,194 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 127D7C6379F
-	for <bpf@archiver.kernel.org>; Thu, 19 Jan 2023 23:00:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD584C678D6
+	for <bpf@archiver.kernel.org>; Thu, 19 Jan 2023 23:14:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbjASXA0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Jan 2023 18:00:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
+        id S231169AbjASXOL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Jan 2023 18:14:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230032AbjASW7f (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 Jan 2023 17:59:35 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79FF80880
-        for <bpf@vger.kernel.org>; Thu, 19 Jan 2023 14:49:42 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id p188so4568613yba.5
-        for <bpf@vger.kernel.org>; Thu, 19 Jan 2023 14:49:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FlAb+Zgh5/sk9ReAScRsbR41OhhLXHC48gJ1DzwtyJ4=;
-        b=P70fMnEXAaQjoxMRk2gA1oNPnZK48a1pb/qrFC499rh0pq1Lqn2K8YI2KkD7G0BWX0
-         LZFYTIQ2igbJuKZsplw5sx18lWCHpiLFkNvtfKRhPXhtygiV+4PCWC3Xo2vFrLD3BbUD
-         q3654iZqcDlDduY8OkmEZU9V293ADcLk3ZpBS1vHv0WmXc5Hsvrjly5pOLZ1VQsPGK3M
-         U8Xb97iMWs+OBx1wV4TGLVphcs8quyXUKJxFcZko10JAwIhACA4an5XIFeFJC49UmEiO
-         UwKCR60wb4TsPnmuoKTaKyIAy/nvpmvplQEhJaIkSytfL+HyxzfEb4HU2voaGOGBppAE
-         PqeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FlAb+Zgh5/sk9ReAScRsbR41OhhLXHC48gJ1DzwtyJ4=;
-        b=s0BTlkzfKX+Bs9E/cGwocOWppR6HK1ytvPpZY5dg+cDfLSAcZm658USuBehAoo0dCj
-         3zvD0Y/CFLdUFkcAsgmlBg1OCjDS9zpr3rm1HtW3ilahAoDHlPAfrA8PiDAQ3Ahf9PUu
-         xZW37uWPB2VMoPqpJwwbptjOelNkWfVHG3UO7FKifc+hlcN7UiwalPoQmzB0nSchF2Jl
-         T2loS6nE/LVgI03i7ulXMtlT3i61bIaK4Dwe+ZsWLQHD0Yv2BjwELLEJ9pdENEKBLfIg
-         OetGC8T5JR58C3Ts8l2xROr6G861Qz7FnmutdkUJ0nPOPwe3KGykkYQu5njXMGT3F0Bn
-         5mPQ==
-X-Gm-Message-State: AFqh2kqsQCivaRUJTLKXi7Xht/vQC0+rTEfDVAkR9Yr90EvCUz24168v
-        Rx7itjgrQF13hq2WAjMpaM6102YLSkkocRLjNgw=
-X-Google-Smtp-Source: AMrXdXsevhVVWvEIiLRccAZHLM8M7a5kGfqgy80DgwavLLADT+ZNPOdX7pnJWwrvImG2cgupOqAFjnLPLEYYkUz3iSw=
-X-Received: by 2002:a25:4dd7:0:b0:727:e539:452f with SMTP id
- a206-20020a254dd7000000b00727e539452fmr1462772ybb.552.1674168582212; Thu, 19
- Jan 2023 14:49:42 -0800 (PST)
+        with ESMTP id S231178AbjASXNb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 Jan 2023 18:13:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6AA5BB9;
+        Thu, 19 Jan 2023 15:10:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 097A761CEB;
+        Thu, 19 Jan 2023 23:10:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CA82C43392;
+        Thu, 19 Jan 2023 23:10:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674169845;
+        bh=hc+zSS6UN7/G+UWGJaA93YRrvGjaJMf/t5FWQ/bg9VE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=bjsZBJmizHCvJgwlmNokNYxSyHU01LMXcd7WQWlNqRK2t7Mqpd4o6kzErdvDwZK+0
+         ECoFT6rXetUkRVDeiWL2/ehqsqxgZE31/q6IoRihE50x0iHi71+kKk1Maz1dgU+Z48
+         t+VgSU6VFw4VI3Mbfrcgk2Um8pK0o7ZIfrCQh6unrK7H9tHkdjvs6KQrIu+g9FUPiY
+         m2EKA03ERBktiq8W84UjZG7emv8zWR1aQUR9C3bqK9TdODE2SfmXXZIH6E9eMxwgxk
+         y/yzcDbKShH9hsHtAwKVqKrLjmci2Dy/PqmBCKuwL8S5H6DxuYj3EqnaPFzw1jiqkn
+         j1ZehgtkTM0gQ==
+From:   KP Singh <kpsingh@kernel.org>
+To:     linux-security-module@vger.kernel.org, bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, jackmanb@google.com,
+        renauld@google.com, paul@paul-moore.com, casey@schaufler-ca.com,
+        song@kernel.org, revest@chromium.org, keescook@chromium.org,
+        KP Singh <kpsingh@kernel.org>
+Subject: [PATCH bpf-next 2/4] security: Generate a header with the count of enabled LSMs
+Date:   Fri, 20 Jan 2023 00:10:31 +0100
+Message-Id: <20230119231033.1307221-3-kpsingh@kernel.org>
+X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
+In-Reply-To: <20230119231033.1307221-1-kpsingh@kernel.org>
+References: <20230119231033.1307221-1-kpsingh@kernel.org>
 MIME-Version: 1.0
-References: <20230119021442.1465269-1-memxor@gmail.com> <20230119021442.1465269-10-memxor@gmail.com>
-In-Reply-To: <20230119021442.1465269-10-memxor@gmail.com>
-From:   Joanne Koong <joannelkoong@gmail.com>
-Date:   Thu, 19 Jan 2023 14:49:31 -0800
-Message-ID: <CAJnrk1a9wTzo+hbkY9ivb8xCU6NTvbum7XAnWhn2ugSOBqRnOA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 09/11] selftests/bpf: Add dynptr var_off tests
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        David Vernet <void@manifault.com>,
-        Eduard Zingerman <eddyz87@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 6:15 PM Kumar Kartikeya Dwivedi
-<memxor@gmail.com> wrote:
->
-> Ensure that variable offset is handled correctly, and verifier takes
-> both fixed and variable part into account. Also ensures that only
-> constant var_off is allowed.
->
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> ---
->  .../testing/selftests/bpf/progs/dynptr_fail.c | 40 +++++++++++++++++++
->  1 file changed, 40 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-> index 023b3c36bc78..063d351f327a 100644
-> --- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
-> +++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-> @@ -794,3 +794,43 @@ int dynptr_pruning_type_confusion(struct __sk_buff *ctx)
->         );
->         return 0;
->  }
-> +
-> +SEC("?tc")
-> +__failure __msg("dynptr has to be at the constant offset") __log_level(2)
-> +int dynptr_var_off_overwrite(struct __sk_buff *ctx)
-> +{
-> +       asm volatile (
-> +               "r9 = 16;"
-> +               "*(u32 *)(r10 - 4) = r9;"
-> +               "r8 = *(u32 *)(r10 - 4);"
-> +               "if r8 >= 0 goto vjmp1;"
-> +               "r0 = 1;"
-> +               "exit;"
-> +       "vjmp1:"
-> +               "if r8 <= 16 goto vjmp2;"
-> +               "r0 = 1;"
-> +               "exit;"
-> +       "vjmp2:"
-> +               "r8 &= 16;"
-> +               "r1 = %[ringbuf] ll;"
-> +               "r2 = 8;"
-> +               "r3 = 0;"
-> +               "r4 = r10;"
-> +               "r4 += -32;"
-> +               "r4 += r8;"
-> +               "call %[bpf_ringbuf_reserve_dynptr];"
-> +               "r9 = 0xeB9F;"
-> +               "*(u64 *)(r10 - 16) = r9;"
-> +               "r1 = r10;"
-> +               "r1 += -32;"
-> +               "r1 += r8;"
-> +               "r2 = 0;"
-> +               "call %[bpf_ringbuf_discard_dynptr];"
-> +               :
-> +               : __imm(bpf_ringbuf_reserve_dynptr),
-> +                 __imm(bpf_ringbuf_discard_dynptr),
-> +                 __imm_addr(ringbuf)
-> +               : __clobber_all
-> +       );
-> +       return 0;
-> +}
+The header defines a MAX_LSM_COUNT constant which is used in a
+subsequent patch to generate the static calls for each LSM hook which
+are named using preprocessor token pasting. Since token pasting does not
+work with arithmetic expressions, generate a simple lsm_count.h header
+which represents the subset of LSMs that can be enabled on a given
+kernel based on the config.
 
-Thanks for adding these series of tests. From a readibility
-perspective, are we able to simulate these tests in C instead of
-assembly?
-> --
-> 2.39.1
->
+While one can generate static calls for all the possible LSMs that the
+kernel has, this is actually wasteful as most kernels only enable a
+handful of LSMs.
+
+Signed-off-by: KP Singh <kpsingh@kernel.org>
+---
+ scripts/Makefile                 |  1 +
+ scripts/security/.gitignore      |  1 +
+ scripts/security/Makefile        |  4 +++
+ scripts/security/gen_lsm_count.c | 57 ++++++++++++++++++++++++++++++++
+ security/Makefile                | 11 ++++++
+ 5 files changed, 74 insertions(+)
+ create mode 100644 scripts/security/.gitignore
+ create mode 100644 scripts/security/Makefile
+ create mode 100644 scripts/security/gen_lsm_count.c
+
+diff --git a/scripts/Makefile b/scripts/Makefile
+index 1575af84d557..9712249c0fb3 100644
+--- a/scripts/Makefile
++++ b/scripts/Makefile
+@@ -41,6 +41,7 @@ targets += module.lds
+ subdir-$(CONFIG_GCC_PLUGINS) += gcc-plugins
+ subdir-$(CONFIG_MODVERSIONS) += genksyms
+ subdir-$(CONFIG_SECURITY_SELINUX) += selinux
++subdir-$(CONFIG_SECURITY) += security
+ 
+ # Let clean descend into subdirs
+ subdir-	+= basic dtc gdb kconfig mod
+diff --git a/scripts/security/.gitignore b/scripts/security/.gitignore
+new file mode 100644
+index 000000000000..684af16735f1
+--- /dev/null
++++ b/scripts/security/.gitignore
+@@ -0,0 +1 @@
++gen_lsm_count
+diff --git a/scripts/security/Makefile b/scripts/security/Makefile
+new file mode 100644
+index 000000000000..05f7e4109052
+--- /dev/null
++++ b/scripts/security/Makefile
+@@ -0,0 +1,4 @@
++# SPDX-License-Identifier: GPL-2.0
++hostprogs-always-y += gen_lsm_count
++HOST_EXTRACFLAGS += \
++	-I$(srctree)/include/uapi -I$(srctree)/include
+diff --git a/scripts/security/gen_lsm_count.c b/scripts/security/gen_lsm_count.c
+new file mode 100644
+index 000000000000..a9a227724d84
+--- /dev/null
++++ b/scripts/security/gen_lsm_count.c
+@@ -0,0 +1,57 @@
++// SPDX-License-Identifier: GPL-2.0
++
++/* NOTE: we really do want to use the kernel headers here */
++#define __EXPORTED_HEADERS__
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <unistd.h>
++#include <string.h>
++#include <errno.h>
++#include <ctype.h>
++
++#include <linux/kconfig.h>
++
++#define GEN_MAX_LSM_COUNT (				\
++	/* Capabilities */				\
++	IS_ENABLED(CONFIG_SECURITY) +			\
++	IS_ENABLED(CONFIG_SECURITY_SELINUX) +		\
++	IS_ENABLED(CONFIG_SECURITY_SMACK) +		\
++	IS_ENABLED(CONFIG_SECURITY_TOMOYO) +		\
++	IS_ENABLED(CONFIG_SECURITY_APPARMOR) +		\
++	IS_ENABLED(CONFIG_SECURITY_YAMA) +		\
++	IS_ENABLED(CONFIG_SECURITY_LOADPIN) +		\
++	IS_ENABLED(CONFIG_SECURITY_SAFESETID) +		\
++	IS_ENABLED(CONFIG_SECURITY_LOCKDOWN_LSM) + 	\
++	IS_ENABLED(CONFIG_BPF_LSM) + \
++	IS_ENABLED(CONFIG_SECURITY_LANDLOCK))
++
++const char *progname;
++
++static void usage(void)
++{
++	printf("usage: %s lsm_count.h\n", progname);
++	exit(1);
++}
++
++int main(int argc, char *argv[])
++{
++	FILE *fout;
++
++	progname = argv[0];
++
++	if (argc < 2)
++		usage();
++
++	fout = fopen(argv[1], "w");
++	if (!fout) {
++		fprintf(stderr, "Could not open %s for writing:  %s\n",
++			argv[1], strerror(errno));
++		exit(2);
++	}
++
++	fprintf(fout, "#ifndef _LSM_COUNT_H_\n#define _LSM_COUNT_H_\n\n");
++	fprintf(fout, "\n#define MAX_LSM_COUNT %d\n", GEN_MAX_LSM_COUNT);
++	fprintf(fout, "#endif /* _LSM_COUNT_H_ */\n");
++	exit(0);
++}
+diff --git a/security/Makefile b/security/Makefile
+index 18121f8f85cd..7a47174831f4 100644
+--- a/security/Makefile
++++ b/security/Makefile
+@@ -3,6 +3,7 @@
+ # Makefile for the kernel security code
+ #
+ 
++gen := include/generated
+ obj-$(CONFIG_KEYS)			+= keys/
+ 
+ # always enable default capabilities
+@@ -27,3 +28,13 @@ obj-$(CONFIG_SECURITY_LANDLOCK)		+= landlock/
+ 
+ # Object integrity file lists
+ obj-$(CONFIG_INTEGRITY)			+= integrity/
++
++$(addprefix $(obj)/,$(obj-y)): $(gen)/lsm_count.h
++
++quiet_cmd_lsm_count = GEN     ${gen}/lsm_count.h
++      cmd_lsm_count = scripts/security/gen_lsm_count ${gen}/lsm_count.h
++
++targets += lsm_count.h
++
++${gen}/lsm_count.h: FORCE
++	$(call if_changed,lsm_count)
+-- 
+2.39.0.246.g2a6d74b583-goog
+
