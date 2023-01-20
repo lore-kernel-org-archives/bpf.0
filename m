@@ -2,55 +2,55 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF949C38159
-	for <bpf@archiver.kernel.org>; Fri, 20 Jan 2023 14:11:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D8E9C38A23
+	for <bpf@archiver.kernel.org>; Fri, 20 Jan 2023 14:11:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230406AbjATOLo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Jan 2023 09:11:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37686 "EHLO
+        id S230423AbjATOLp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Jan 2023 09:11:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230206AbjATOLN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S230355AbjATOLN (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 20 Jan 2023 09:11:13 -0500
-Received: from fx408.security-mail.net (smtpout140.security-mail.net [85.31.212.148])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60BF1BCE2B
-        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 06:10:36 -0800 (PST)
-Received: from localhost (fx408.security-mail.net [127.0.0.1])
-        by fx408.security-mail.net (Postfix) with ESMTP id 43EDD322B95
-        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 15:10:32 +0100 (CET)
+Received: from fx601.security-mail.net (smtpout140.security-mail.net [85.31.212.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ACAAC63AC
+        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 06:10:35 -0800 (PST)
+Received: from localhost (fx601.security-mail.net [127.0.0.1])
+        by fx601.security-mail.net (Postfix) with ESMTP id 144113495F3
+        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 15:10:33 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
-        s=sec-sig-email; t=1674223832;
-        bh=Rr9QfC52jxWXt9/L6/0rXr58eBV1kbp/PCidEQ6niXo=;
+        s=sec-sig-email; t=1674223833;
+        bh=vEPzE4UPjrP9RfuxZKlBQyPh+DKkjOR0sWjN6rJGm/I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=a2gvWIDYicwURek2prNsBHdw/qrKpGsVqft9DPlPFrgjW2HCGVFrGzmP4Gz6op5xz
-         Nko1t3KK5BB/nraj3gB03N9S37TcvUpjJxkHcoZYU1QO9inUkrBkXM+uQLE1rIifYt
-         l1HfenLWwY7FwN+G0mYN8aw90/b3ggrEQNcegqj8=
-Received: from fx408 (fx408.security-mail.net [127.0.0.1]) by
- fx408.security-mail.net (Postfix) with ESMTP id 06ADB322B21; Fri, 20 Jan
+        b=j+nepYnkPB3bEmDAI3/P4GgKvamOIR+RPMUGVlhutO01+sL6OP2EGqPM/SeyCpU81
+         L4VPcpAJJu3/To42lPlwc7GKLXsqGJPuXp5GIiLTmSWCEkSXxnx18jlkPER8pkUw02
+         /YQfwGtuLPfsinT1GeNUf3YC0GD7AEoPNJ+aJArI=
+Received: from fx601 (fx601.security-mail.net [127.0.0.1]) by
+ fx601.security-mail.net (Postfix) with ESMTP id BAA51349492; Fri, 20 Jan
  2023 15:10:32 +0100 (CET)
 Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
- fx408.security-mail.net (Postfix) with ESMTPS id 2F716322939; Fri, 20 Jan
- 2023 15:10:30 +0100 (CET)
+ fx601.security-mail.net (Postfix) with ESMTPS id C5E7D3493C7; Fri, 20 Jan
+ 2023 15:10:31 +0100 (CET)
 Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
- zimbra2.kalray.eu (Postfix) with ESMTPS id DEDF827E0442; Fri, 20 Jan 2023
- 15:10:29 +0100 (CET)
+ zimbra2.kalray.eu (Postfix) with ESMTPS id 362F127E0437; Fri, 20 Jan 2023
+ 15:10:31 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
- (Postfix) with ESMTP id BA21327E043E; Fri, 20 Jan 2023 15:10:29 +0100 (CET)
+ (Postfix) with ESMTP id 193EE27E043D; Fri, 20 Jan 2023 15:10:31 +0100 (CET)
 Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
  (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
- IVLBnrnY8q7M; Fri, 20 Jan 2023 15:10:29 +0100 (CET)
+ jvSzDkK8KBKa; Fri, 20 Jan 2023 15:10:31 +0100 (CET)
 Received: from junon.lin.mbt.kalray.eu (unknown [192.168.37.161]) by
- zimbra2.kalray.eu (Postfix) with ESMTPSA id 3038927E0439; Fri, 20 Jan 2023
- 15:10:29 +0100 (CET)
+ zimbra2.kalray.eu (Postfix) with ESMTPSA id 984F727E043A; Fri, 20 Jan 2023
+ 15:10:30 +0100 (CET)
 X-Virus-Scanned: E-securemail
-Secumail-id: <8eb9.63caa0d6.2d305.0>
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu BA21327E043E
+Secumail-id: <1837e.63caa0d7.737ff.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 193EE27E043D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
- s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1674223829;
- bh=VF1oksnoaKlh4VeYXhJaqi0lsOke2F/Yys7H8lI9zVo=;
+ s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1674223831;
+ bh=DmzWtNbu9q/4tdr0s78bdEDa3viNBQUf7Z5t+96KI4s=;
  h=From:To:Date:Message-Id:MIME-Version;
- b=py7k0YutOlZqWwMG5lZJu6/TDyjQJDv+WqktPHeaionlMv9JDM0vUt7RyUtwuAvEc
- BAaiO7pdNQhE8prp3XxiJKJo9FO4waSZpPdSMO2dSvz3s8gvb8ZkIDzBvXuiXEwQxt
- BrrCzIEAI8NSGikf8xD35M5SllBU3r29he3vWp5M=
+ b=fu0N7x6nnMzNoJzaoFf7v+P0ip4/vd3WETP3kcNxOV8lUW4FUEgIHhlGEaapCaaWz
+ trFOuxwdKHhTQMjErede9J063YUB4llfkDR1AlG/RnHltlp+dT86cwzYEgc4+IcIMU
+ vO/Z00O1Gtxz1AmibpXGVXxbhTaqAPWZbIWrCzPw=
 From:   Yann Sionneau <ysionneau@kalray.eu>
 To:     Arnd Bergmann <arnd@arndb.de>, Jonathan Corbet <corbet@lwn.net>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -114,9 +114,9 @@ Cc:     Benjamin Mugnier <mugnier.benjamin@gmail.com>,
         devicetree@vger.kernel.org, linux-mm@kvack.org,
         linux-arch@vger.kernel.org, linux-audit@redhat.com,
         linux-riscv@lists.infradead.org, bpf@vger.kernel.org
-Subject: [RFC PATCH v2 11/31] kvx: Add atomic/locking headers
-Date:   Fri, 20 Jan 2023 15:09:42 +0100
-Message-ID: <20230120141002.2442-12-ysionneau@kalray.eu>
+Subject: [RFC PATCH v2 14/31] kvx: Add exception/interrupt handling
+Date:   Fri, 20 Jan 2023 15:09:45 +0100
+Message-ID: <20230120141002.2442-15-ysionneau@kalray.eu>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230120141002.2442-1-ysionneau@kalray.eu>
 References: <20230120141002.2442-1-ysionneau@kalray.eu>
@@ -128,506 +128,924 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add common headers (atomic, bitops, barrier and locking) for basic
-kvx support.
+Add the exception and interrupt handling machanism for basic kvx
+support.
 
 Co-developed-by: Clement Leger <clement@clement-leger.fr>
 Signed-off-by: Clement Leger <clement@clement-leger.fr>
-Co-developed-by: Jules Maselbas <jmaselbas@kalray.eu>
-Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
+Co-developed-by: Guillaume Thouvenin <gthouvenin@kalray.eu>
+Signed-off-by: Guillaume Thouvenin <gthouvenin@kalray.eu>
 Co-developed-by: Julian Vetter <jvetter@kalray.eu>
 Signed-off-by: Julian Vetter <jvetter@kalray.eu>
-Co-developed-by: Julien Villette <jvillette@kalray.eu>
-Signed-off-by: Julien Villette <jvillette@kalray.eu>
+Co-developed-by: Luc Michel <lmichel@kalray.eu>
+Signed-off-by: Luc Michel <lmichel@kalray.eu>
+Co-developed-by: Marius Gligor <mgligor@kalray.eu>
+Signed-off-by: Marius Gligor <mgligor@kalray.eu>
 Co-developed-by: Yann Sionneau <ysionneau@kalray.eu>
 Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
 ---
 
 Notes:
     V1 -> V2:
-     - use {READ,WRITE}_ONCE for arch_atomic64_{read,set}
-     - use asm-generic/bitops/atomic.h instead of __test_and_*_bit
-     - removed duplicated includes
-     - rewrite xchg and cmpxchg in C using builtins for acswap insn
+     - removed ipi.h headers and driver (moved into ipi driver patch)
 
- arch/kvx/include/asm/atomic.h  | 104 ++++++++++++++++++++
- arch/kvx/include/asm/barrier.h |  15 +++
- arch/kvx/include/asm/bitops.h  | 115 ++++++++++++++++++++++
- arch/kvx/include/asm/bitrev.h  |  32 +++++++
- arch/kvx/include/asm/cmpxchg.h | 170 +++++++++++++++++++++++++++++++++
- 5 files changed, 436 insertions(+)
- create mode 100644 arch/kvx/include/asm/atomic.h
- create mode 100644 arch/kvx/include/asm/barrier.h
- create mode 100644 arch/kvx/include/asm/bitops.h
- create mode 100644 arch/kvx/include/asm/bitrev.h
- create mode 100644 arch/kvx/include/asm/cmpxchg.h
+ arch/kvx/include/asm/break_hook.h |  69 +++++++++
+ arch/kvx/include/asm/bug.h        |  67 ++++++++
+ arch/kvx/include/asm/dame.h       |  31 ++++
+ arch/kvx/include/asm/hardirq.h    |  14 ++
+ arch/kvx/include/asm/hw_irq.h     |  14 ++
+ arch/kvx/include/asm/irqflags.h   |  58 +++++++
+ arch/kvx/include/asm/stacktrace.h |  44 ++++++
+ arch/kvx/include/asm/traps.h      |  76 ++++++++++
+ arch/kvx/kernel/dame_handler.c    | 113 ++++++++++++++
+ arch/kvx/kernel/irq.c             |  78 ++++++++++
+ arch/kvx/kernel/traps.c           | 243 ++++++++++++++++++++++++++++++
+ 11 files changed, 807 insertions(+)
+ create mode 100644 arch/kvx/include/asm/break_hook.h
+ create mode 100644 arch/kvx/include/asm/bug.h
+ create mode 100644 arch/kvx/include/asm/dame.h
+ create mode 100644 arch/kvx/include/asm/hardirq.h
+ create mode 100644 arch/kvx/include/asm/hw_irq.h
+ create mode 100644 arch/kvx/include/asm/irqflags.h
+ create mode 100644 arch/kvx/include/asm/stacktrace.h
+ create mode 100644 arch/kvx/include/asm/traps.h
+ create mode 100644 arch/kvx/kernel/dame_handler.c
+ create mode 100644 arch/kvx/kernel/irq.c
+ create mode 100644 arch/kvx/kernel/traps.c
 
-diff --git a/arch/kvx/include/asm/atomic.h b/arch/kvx/include/asm/atomic.h
+diff --git a/arch/kvx/include/asm/break_hook.h b/arch/kvx/include/asm/break_hook.h
 new file mode 100644
-index 000000000000..bea3d70785b1
+index 000000000000..333b2c440c81
 --- /dev/null
-+++ b/arch/kvx/include/asm/atomic.h
-@@ -0,0 +1,104 @@
++++ b/arch/kvx/include/asm/break_hook.h
+@@ -0,0 +1,69 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
 + * Copyright (C) 2017-2023 Kalray Inc.
 + * Author(s): Clement Leger
 + */
 +
-+#ifndef _ASM_KVX_ATOMIC_H
-+#define _ASM_KVX_ATOMIC_H
++#ifndef __ASM_KVX_BREAK_HOOK_H_
++#define __ASM_KVX_BREAK_HOOK_H_
 +
 +#include <linux/types.h>
 +
-+#include <asm/cmpxchg.h>
++#include <asm/sfr_defs.h>
++#include <asm/insns_defs.h>
 +
-+#define ATOMIC64_INIT(i)     { (i) }
-+
-+#define arch_atomic64_cmpxchg(v, old, new) (arch_cmpxchg(&((v)->counter), old, new))
-+#define arch_atomic64_xchg(v, new) (arch_xchg(&((v)->counter), new))
-+
-+static inline long arch_atomic64_read(const atomic64_t *v)
-+{
-+	return READ_ONCE(v->counter);
-+}
-+
-+static inline void arch_atomic64_set(atomic64_t *v, long i)
-+{
-+	WRITE_ONCE(v->counter, i);
-+}
-+
-+#define ATOMIC64_RETURN_OP(op, c_op)					\
-+static inline long arch_atomic64_##op##_return(long i, atomic64_t *v)	\
-+{									\
-+	long new, old, ret;						\
-+									\
-+	do {								\
-+		old = v->counter;					\
-+		new = old c_op i;					\
-+		ret = arch_cmpxchg(&v->counter, old, new);		\
-+	} while (ret != old);						\
-+									\
-+	return new;							\
-+}
-+
-+#define ATOMIC64_OP(op, c_op)						\
-+static inline void arch_atomic64_##op(long i, atomic64_t *v)		\
-+{									\
-+	long new, old, ret;						\
-+									\
-+	do {								\
-+		old = v->counter;					\
-+		new = old c_op i;					\
-+		ret = arch_cmpxchg(&v->counter, old, new);		\
-+	} while (ret != old);						\
-+}
-+
-+#define ATOMIC64_FETCH_OP(op, c_op)					\
-+static inline long arch_atomic64_fetch_##op(long i, atomic64_t *v)	\
-+{									\
-+	long new, old, ret;						\
-+									\
-+	do {								\
-+		old = v->counter;					\
-+		new = old c_op i;					\
-+		ret = arch_cmpxchg(&v->counter, old, new);		\
-+	} while (ret != old);						\
-+									\
-+	return old;							\
-+}
-+
-+#define ATOMIC64_OPS(op, c_op)						\
-+	ATOMIC64_OP(op, c_op)						\
-+	ATOMIC64_RETURN_OP(op, c_op)					\
-+	ATOMIC64_FETCH_OP(op, c_op)
-+
-+ATOMIC64_OPS(and, &)
-+ATOMIC64_OPS(or, |)
-+ATOMIC64_OPS(xor, ^)
-+ATOMIC64_OPS(add, +)
-+ATOMIC64_OPS(sub, -)
-+
-+#undef ATOMIC64_OPS
-+#undef ATOMIC64_FETCH_OP
-+#undef ATOMIC64_OP
-+
-+static inline int arch_atomic_add_return(int i, atomic_t *v)
-+{
-+	int new, old, ret;
-+
-+	do {
-+		old = v->counter;
-+		new = old + i;
-+		ret = arch_cmpxchg(&v->counter, old, new);
-+	} while (ret != old);
-+
-+	return new;
-+}
-+
-+static inline int arch_atomic_sub_return(int i, atomic_t *v)
-+{
-+	return arch_atomic_add_return(-i, v);
-+}
-+
-+#include <asm-generic/atomic.h>
-+
-+#endif	/* _ASM_KVX_ATOMIC_H */
-diff --git a/arch/kvx/include/asm/barrier.h b/arch/kvx/include/asm/barrier.h
-new file mode 100644
-index 000000000000..371f1c70746d
---- /dev/null
-+++ b/arch/kvx/include/asm/barrier.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
++ * The following macros define the different causes of break:
++ * We use the `set $vsfr0 = $rXX` instruction which will raise a trap into the
++ * debugger. The trapping instruction is read and decoded to extract the source
++ * register number. The source register number is used to differentiate the
++ * trap cause.
 + */
-+
-+#ifndef _ASM_KVX_BARRIER_H
-+#define _ASM_KVX_BARRIER_H
-+
-+/* fence is sufficient to guarantee write ordering */
-+#define mb()	__builtin_kvx_fence()
-+
-+#include <asm-generic/barrier.h>
-+
-+#endif /* _ASM_KVX_BARRIER_H */
-diff --git a/arch/kvx/include/asm/bitops.h b/arch/kvx/include/asm/bitops.h
-new file mode 100644
-index 000000000000..c643f4765059
---- /dev/null
-+++ b/arch/kvx/include/asm/bitops.h
-@@ -0,0 +1,115 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ *            Yann Sionneau
-+ */
-+
-+#ifndef _ASM_KVX_BITOPS_H
-+#define _ASM_KVX_BITOPS_H
-+
-+#ifdef __KERNEL__
-+
-+#ifndef _LINUX_BITOPS_H
-+#error only <linux/bitops.h> can be included directly
-+#endif
-+
-+#include <asm/cmpxchg.h>
-+
-+static inline int fls(int x)
-+{
-+	return 32 - __builtin_kvx_clzw(x);
-+}
-+
-+static inline int fls64(__u64 x)
-+{
-+	return 64 - __builtin_kvx_clzd(x);
-+}
++#define BREAK_CAUSE_BUG		KVX_REG_R1
++#define BREAK_CAUSE_KGDB_DYN	KVX_REG_R2
++#define BREAK_CAUSE_KGDB_COMP	KVX_REG_R3
++#define BREAK_CAUSE_BKPT	KVX_REG_R63
 +
 +/**
-+ * __ffs - find first set bit in word
-+ * @word: The word to search
-+ *
-+ * Undefined if no set bit exists, so code should check against 0 first.
++ * enum break_ret - Break return value
++ * @BREAK_HOOK_HANDLED: Hook handled successfully
++ * @BREAK_HOOK_ERROR: Hook was not handled
 + */
-+static inline unsigned long __ffs(unsigned long word)
-+{
-+	return __builtin_kvx_ctzd(word);
-+}
++enum break_ret {
++	BREAK_HOOK_HANDLED = 0,
++	BREAK_HOOK_ERROR = 1,
++};
++
++/*
++ * The following macro assembles a `set` instruction targeting $vsfr0
++ * using the source register whose number is __id.
++ */
++#define KVX_BREAK_INSN(__id) \
++	KVX_INSN_SET_SYLLABLE_0(KVX_INSN_PARALLEL_EOB, KVX_SFR_VSFR0, __id)
++
++#define KVX_BREAK_INSN_SIZE (KVX_INSN_SET_SIZE * KVX_INSN_SYLLABLE_WIDTH)
++
++struct pt_regs;
 +
 +/**
-+ * __fls - find last set bit in word
-+ * @word: The word to search
-+ *
-+ * Undefined if no set bit exists, so code should check against 0 first.
++ * struct break_hook - Break hook description
++ * @node: List node
++ * @handler: handler called when break matches this hook
++ * @imm: Immediate value expected for break insn
++ * @mode: Hook mode (user/kernel)
 + */
-+static inline unsigned long __fls(unsigned long word)
-+{
-+	return 63 - __builtin_kvx_clzd(word);
-+}
++struct break_hook {
++	struct list_head node;
++	int (*handler)(struct break_hook *brk_hook, struct pt_regs *regs);
++	u8 id;
++	u8 mode;
++};
 +
++void kvx_skip_break_insn(struct pt_regs *regs);
 +
-+/**
-+ * ffs - find first set bit in word
-+ * @x: the word to search
-+ *
-+ * This is defined the same way as the libc and compiler builtin ffs
-+ * routines, therefore differs in spirit from the other bitops.
-+ *
-+ * ffs(value) returns 0 if value is 0 or the position of the first
-+ * set bit if value is nonzero. The first (least significant) bit
-+ * is at position 1.
-+ */
-+static inline int ffs(int x)
-+{
-+	if (!x)
-+		return 0;
-+	return __builtin_kvx_ctzw(x) + 1;
-+}
++void break_hook_register(struct break_hook *brk_hook);
++void break_hook_unregister(struct break_hook *brk_hook);
 +
-+static inline unsigned int __arch_hweight32(unsigned int w)
-+{
-+	unsigned int count;
++int break_hook_handler(u64 es, struct pt_regs *regs);
 +
-+	asm volatile ("cbsw %0 = %1\n\t;;"
-+	: "=r" (count)
-+	: "r" (w));
-+
-+	return count;
-+}
-+
-+static inline unsigned int __arch_hweight64(__u64 w)
-+{
-+	unsigned int count;
-+
-+	asm volatile ("cbsd %0 = %1\n\t;;"
-+	: "=r" (count)
-+	: "r" (w));
-+
-+	return count;
-+}
-+
-+static inline unsigned int __arch_hweight16(unsigned int w)
-+{
-+	return __arch_hweight32(w & 0xffff);
-+}
-+
-+static inline unsigned int __arch_hweight8(unsigned int w)
-+{
-+	return __arch_hweight32(w & 0xff);
-+}
-+
-+#include <asm-generic/bitops/ffz.h>
-+
-+#include <asm-generic/bitops/sched.h>
-+#include <asm-generic/bitops/const_hweight.h>
-+
-+#include <asm-generic/bitops/atomic.h>
-+#include <asm-generic/bitops/non-atomic.h>
-+#include <asm-generic/bitops/lock.h>
-+#include <asm-generic/bitops/le.h>
-+#include <asm-generic/bitops/ext2-atomic.h>
-+
-+#endif
-+
-+#endif
-diff --git a/arch/kvx/include/asm/bitrev.h b/arch/kvx/include/asm/bitrev.h
++#endif /* __ASM_KVX_BREAK_HOOK_H_ */
+diff --git a/arch/kvx/include/asm/bug.h b/arch/kvx/include/asm/bug.h
 new file mode 100644
-index 000000000000..79865081905a
+index 000000000000..62f556b00d5a
 --- /dev/null
-+++ b/arch/kvx/include/asm/bitrev.h
-@@ -0,0 +1,32 @@
++++ b/arch/kvx/include/asm/bug.h
+@@ -0,0 +1,67 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
 + * Copyright (C) 2017-2023 Kalray Inc.
 + * Author(s): Clement Leger
 + */
 +
-+#ifndef _ASM_KVX_BITREV_H
-+#define _ASM_KVX_BITREV_H
++#ifndef _ASM_KVX_BUG_H
++#define _ASM_KVX_BUG_H
 +
-+#include <linux/swab.h>
-+
-+/* Bit reversal constant for matrix multiply */
-+#define BIT_REVERSE 0x0102040810204080ULL
-+
-+static __always_inline __attribute_const__ u32 __arch_bitrev32(u32 x)
-+{
-+	/* Reverse all bits for each bytes and then byte-reverse the 32 LSB */
-+	return swab32(__builtin_kvx_sbmm8(BIT_REVERSE, x));
-+}
-+
-+static __always_inline __attribute_const__ u16 __arch_bitrev16(u16 x)
-+{
-+	/* Reverse all bits for each bytes and then byte-reverse the 16 LSB */
-+	return swab16(__builtin_kvx_sbmm8(BIT_REVERSE, x));
-+}
-+
-+static __always_inline __attribute_const__ u8 __arch_bitrev8(u8 x)
-+{
-+	return __builtin_kvx_sbmm8(BIT_REVERSE, x);
-+}
-+
-+#endif
-diff --git a/arch/kvx/include/asm/cmpxchg.h b/arch/kvx/include/asm/cmpxchg.h
-new file mode 100644
-index 000000000000..51ccb83757cc
---- /dev/null
-+++ b/arch/kvx/include/asm/cmpxchg.h
-@@ -0,0 +1,170 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ *            Yann Sionneau
-+ *            Jules Maselbas
-+ */
-+
-+#ifndef _ASM_KVX_CMPXCHG_H
-+#define _ASM_KVX_CMPXCHG_H
-+
-+#include <linux/bits.h>
++#include <linux/compiler.h>
++#include <linux/const.h>
 +#include <linux/types.h>
-+#include <linux/align.h>
-+#include <linux/build_bug.h>
 +
++#include <asm/break_hook.h>
++
++#ifdef CONFIG_GENERIC_BUG
++
++#define BUG_INSN	KVX_BREAK_INSN(BREAK_CAUSE_BUG)
++
++#define __BUG_ENTRY_ADDR	".dword 1b"
++
++#ifdef CONFIG_DEBUG_BUGVERBOSE
++#define __BUG_ENTRY_LAST_MEMBER		flags
++#define __BUG_ENTRY			\
++	__BUG_ENTRY_ADDR "\n\t"		\
++	".dword %0\n\t"			\
++	".short %1\n\t"
++#else
++#define __BUG_ENTRY_LAST_MEMBER		file
++#define __BUG_ENTRY			\
++	__BUG_ENTRY_ADDR "\n\t"
++#endif
++
++#define BUG()							\
++do {								\
++	__asm__ __volatile__ (					\
++		"1:\n\t"					\
++			".word " __stringify(BUG_INSN) "\n"	\
++			".pushsection __bug_table,\"a\"\n\t"	\
++		"2:\n\t"					\
++			__BUG_ENTRY				\
++			".fill 1, %2, 0\n\t"			\
++			".popsection"				\
++		:						\
++		: "i" (__FILE__), "i" (__LINE__),		\
++		  "i" (sizeof(struct bug_entry) -		\
++		  offsetof(struct bug_entry, __BUG_ENTRY_LAST_MEMBER))); \
++	unreachable();						\
++} while (0)
++
++#else /* CONFIG_GENERIC_BUG */
++#define BUG()								\
++do {									\
++	__asm__ __volatile__ (".word " __stringify(BUG_INSN) "\n");	\
++	unreachable();							\
++} while (0)
++#endif /* CONFIG_GENERIC_BUG */
++
++#define HAVE_ARCH_BUG
++
++struct pt_regs;
++
++void die(struct pt_regs *regs, unsigned long ea, const char *str);
++
++#include <asm-generic/bug.h>
++
++#endif /* _ASM_KVX_BUG_H */
+diff --git a/arch/kvx/include/asm/dame.h b/arch/kvx/include/asm/dame.h
+new file mode 100644
+index 000000000000..8befd767bbee
+--- /dev/null
++++ b/arch/kvx/include/asm/dame.h
+@@ -0,0 +1,31 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
-+ * On kvx, we have a boolean compare and swap which means that the operation
-+ * returns only the success of operation.
-+ * If operation succeed, this is simple, we just need to return the provided
-+ * old value. However, if it fails, we need to load the value to return it for
-+ * the caller. If the loaded value is different from the "old" provided by the
-+ * caller, we can return it since it will means it failed.
-+ * However, if for some reason the value we read is equal to the old value
-+ * provided by the caller, we can't simply return it or the caller will think it
-+ * succeeded. So if the value we read is the same as the "old" provided by
-+ * the caller, we try again until either we succeed or we fail with a different
-+ * value than the provided one.
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
 + */
 +
-+static inline unsigned int __cmpxchg_u32(unsigned int old, unsigned int new,
-+					 volatile unsigned int *ptr)
++#ifndef _ASM_KVX_DAME_H
++#define _ASM_KVX_DAME_H
++
++#include <asm/sfr.h>
++#include <asm/ptrace.h>
++
++static inline void dame_irq_check(struct pt_regs *regs)
 +{
-+	unsigned int exp = old;
++#ifdef CONFIG_SECURE_DAME_HANDLING
++	unsigned long ilr;
++	/* If we are returning to the kernel, no need to check for DAME */
++	if (!user_mode(regs))
++		return;
 +
-+	__builtin_kvx_fence();
-+	while (exp == old) {
-+		if (__builtin_kvx_acswapw((void *)ptr, new, exp))
-+			break; /* acswap succeed */
-+		exp = *ptr;
-+	}
++	/* Else, make sure we do a barrier to trig any pending DAME IRQ */
++	__builtin_kvx_barrier();
 +
-+	return exp;
++	/* Check if we triggered a DAME */
++	ilr = kvx_sfr_get(ILR);
++	if (ilr & KVX_SFR_ILR_IT16_MASK)
++		panic("DAME error encountered while in kernel !!!!\n");
++#endif
 +}
 +
-+static inline unsigned long __cmpxchg_u64(unsigned long old, unsigned long new,
-+					  volatile unsigned long *ptr)
-+{
-+	unsigned long exp = old;
-+
-+	__builtin_kvx_fence();
-+	while (exp == old) {
-+		if (__builtin_kvx_acswapd((void *)ptr, new, exp))
-+			break; /* acswap succeed */
-+		exp = *ptr;
-+	}
-+
-+	return exp;
-+}
-+
-+extern unsigned long __cmpxchg_called_with_bad_pointer(void)
-+	__compiletime_error("Bad argument size for cmpxchg");
-+
-+static __always_inline unsigned long __cmpxchg(unsigned long old,
-+					       unsigned long new,
-+					       volatile void *ptr, int size)
-+{
-+	switch (size) {
-+	case 4:
-+		return __cmpxchg_u32(old, new, ptr);
-+	case 8:
-+		return __cmpxchg_u64(old, new, ptr);
-+	default:
-+		return __cmpxchg_called_with_bad_pointer();
-+	}
-+}
-+
-+#define arch_cmpxchg(ptr, old, new)					\
-+	((__typeof__(*(ptr))) __cmpxchg(				\
-+		(unsigned long)(old), (unsigned long)(new),		\
-+		(ptr), sizeof(*(ptr))))
-+
++#endif /* _ASM_KVX_DAME_H */
+diff --git a/arch/kvx/include/asm/hardirq.h b/arch/kvx/include/asm/hardirq.h
+new file mode 100644
+index 000000000000..f82630f7e4e2
+--- /dev/null
++++ b/arch/kvx/include/asm/hardirq.h
+@@ -0,0 +1,14 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
-+ * In order to optimize xchg for 16 byte, we can use insf/extfs if we know the
-+ * bounds. This way, we only take one more bundle than standard xchg.
-+ * We simply do a read modify acswap on a 32 bit word.
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
 + */
 +
-+#define __kvx_insf(org, val, start, stop) __asm__ __volatile__(	\
-+		"insf %[_org] = %[_val], %[_stop], %[_start]\n\t;;"	\
-+		: [_org]"+r"(org)					\
-+		: [_val]"r"(val), [_stop]"i"(stop), [_start]"i"(start))
++#ifndef _ASM_KVX_HARDIRQ_H
++#define _ASM_KVX_HARDIRQ_H
 +
-+#define __kvx_extfz(out, val, start, stop) __asm__ __volatile__(	\
-+		"extfz %[_out] = %[_val], %[_stop], %[_start]\n\t;;"	\
-+		: [_out]"=r"(out)					\
-+		: [_val]"r"(val), [_stop]"i"(stop), [_start]"i"(start))
++#define __ARCH_IRQ_EXIT_IRQS_DISABLED 1
 +
-+/* Needed for generic qspinlock implementation */
-+static inline unsigned int __xchg_u16(unsigned int old, unsigned int new,
-+				      volatile unsigned int *ptr)
++#include <asm-generic/hardirq.h>
++
++#endif /* _ASM_KVX_HARDIRQ_H */
+diff --git a/arch/kvx/include/asm/hw_irq.h b/arch/kvx/include/asm/hw_irq.h
+new file mode 100644
+index 000000000000..f073dba3b1c5
+--- /dev/null
++++ b/arch/kvx/include/asm/hw_irq.h
+@@ -0,0 +1,14 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * derived from arch/mips/include/asm/ide.h
++ *
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ */
++
++#ifndef _ASM_KVX_HW_IRQ_H
++#define _ASM_KVX_HW_IRQ_H
++
++void kvx_init_core_irq(void);
++
++#endif	/* _ASM_KVX_HW_IRQ_H */
+diff --git a/arch/kvx/include/asm/irqflags.h b/arch/kvx/include/asm/irqflags.h
+new file mode 100644
+index 000000000000..681c890b3fcd
+--- /dev/null
++++ b/arch/kvx/include/asm/irqflags.h
+@@ -0,0 +1,58 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ */
++
++#ifndef _ASM_KVX_IRQFLAGS_H
++#define _ASM_KVX_IRQFLAGS_H
++
++#include <linux/types.h>
++
++#include <asm/sfr.h>
++
++static inline notrace unsigned long arch_local_save_flags(void)
 +{
-+	unsigned int off = ((unsigned long)ptr) % sizeof(unsigned int);
-+	unsigned int val;
++	return kvx_sfr_get(PS) & (1 << KVX_SFR_PS_IE_SHIFT);
++}
 +
-+	ptr = PTR_ALIGN_DOWN(ptr, sizeof(unsigned int));
-+	__builtin_kvx_fence();
-+	do {
-+		old = *ptr;
-+		val = old;
-+		if (off == 0)
-+			__kvx_insf(val, new, 0, 15);
-+		else
-+			__kvx_insf(val, new, 16, 31);
-+	} while (!__builtin_kvx_acswapw((void *)ptr, val, old));
++static inline notrace unsigned long arch_local_irq_save(void)
++{
++	unsigned long flags = arch_local_save_flags();
 +
-+	if (off == 0)
-+		__kvx_extfz(old, old, 0, 15);
++	kvx_sfr_set_field(PS, IE, 0);
++
++	return flags;
++}
++
++static inline notrace void arch_local_irq_restore(unsigned long flags)
++{
++	/* If flags are set, interrupt are enabled), set the IE bit */
++	if (flags)
++		kvx_sfr_set_field(PS, IE, 1);
 +	else
-+		__kvx_extfz(old, old, 16, 31);
-+
-+	return old;
++		kvx_sfr_set_field(PS, IE, 0);
 +}
 +
-+static inline unsigned int __xchg_u32(unsigned int old, unsigned int new,
-+				      volatile unsigned int *ptr)
++static inline notrace void arch_local_irq_enable(void)
 +{
-+	__builtin_kvx_fence();
-+	do
-+		old = *ptr;
-+	while (!__builtin_kvx_acswapw((void *)ptr, new, old));
-+
-+	return old;
++	kvx_sfr_set_field(PS, IE, 1);
 +}
 +
-+static inline unsigned long __xchg_u64(unsigned long old, unsigned long new,
-+				       volatile unsigned long *ptr)
++static inline notrace void arch_local_irq_disable(void)
 +{
-+	__builtin_kvx_fence();
-+	do
-+		old = *ptr;
-+	while (!__builtin_kvx_acswapd((void *)ptr, new, old));
-+
-+	return old;
++	kvx_sfr_set_field(PS, IE, 0);
 +}
 +
-+extern unsigned long __xchg_called_with_bad_pointer(void)
-+	__compiletime_error("Bad argument size for xchg");
-+
-+static __always_inline unsigned long __xchg(unsigned long val,
-+					    volatile void *ptr, int size)
++static inline notrace bool arch_irqs_disabled_flags(unsigned long flags)
 +{
-+	switch (size) {
-+	case 2:
-+		return __xchg_u16(0, val, ptr);
-+	case 4:
-+		return __xchg_u32(0, val, ptr);
-+	case 8:
-+		return __xchg_u64(0, val, ptr);
-+	default:
-+		return __xchg_called_with_bad_pointer();
-+	}
++	return (flags & (1 << KVX_SFR_PS_IE_SHIFT)) == 0;
 +}
 +
-+#define arch_xchg(ptr, val)						\
-+	((__typeof__(*(ptr))) __xchg(					\
-+		(unsigned long)(val),					\
-+		(ptr), sizeof(*(ptr))))
++static inline notrace bool arch_irqs_disabled(void)
++{
++	return arch_irqs_disabled_flags(kvx_sfr_get(PS));
++}
++
++
++#endif	/* _ASM_KVX_IRQFLAGS_H */
+diff --git a/arch/kvx/include/asm/stacktrace.h b/arch/kvx/include/asm/stacktrace.h
+new file mode 100644
+index 000000000000..0feed6bd4424
+--- /dev/null
++++ b/arch/kvx/include/asm/stacktrace.h
+@@ -0,0 +1,44 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ */
++
++#ifndef _ASM_KVX_STACKTRACE_H
++#define _ASM_KVX_STACKTRACE_H
++
++#include <linux/sched/task_stack.h>
++
++/**
++ * Structure of a frame on the stack
++ */
++struct stackframe {
++	unsigned long fp;	/* Next frame pointer */
++	unsigned long ra;	/* Return address */
++};
++
++static inline bool on_task_stack(struct task_struct *tsk, unsigned long sp)
++{
++	unsigned long low = (unsigned long) task_stack_page(tsk);
++	unsigned long high = low + THREAD_SIZE;
++
++	if (sp < low || sp >= high)
++		return false;
++
++	return true;
++}
++
++void show_stacktrace(struct task_struct *task, struct pt_regs *regs);
++
++
++void walk_stackframe(struct task_struct *task, struct stackframe *frame,
++			     bool (*fn)(unsigned long, void *), void *arg);
++
++static inline void start_stackframe(struct stackframe *frame,
++				    unsigned long fp,
++				    unsigned long pc)
++{
++	frame->fp = fp;
++	frame->ra = pc;
++}
++#endif /* _ASM_KVX_STACKTRACE_H */
+diff --git a/arch/kvx/include/asm/traps.h b/arch/kvx/include/asm/traps.h
+new file mode 100644
+index 000000000000..77a663968135
+--- /dev/null
++++ b/arch/kvx/include/asm/traps.h
+@@ -0,0 +1,76 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ *            Guillaume Thouvenin
++ *            Marius Gligor
++ */
++
++#ifndef _ASM_KVX_TRAPS_H
++#define _ASM_KVX_TRAPS_H
++
++#include <asm/sfr.h>
++
++#define KVX_TRAP_RESET          0x0
++#define KVX_TRAP_OPCODE         0x1
++#define KVX_TRAP_PRIVILEGE      0x2
++#define KVX_TRAP_DMISALIGN      0x3
++#define KVX_TRAP_PSYSERROR      0x4
++#define KVX_TRAP_DSYSERROR      0x5
++#define KVX_TRAP_PDECCERROR     0x6
++#define KVX_TRAP_DDECCERROR     0x7
++#define KVX_TRAP_PPARERROR      0x8
++#define KVX_TRAP_DPARERROR      0x9
++#define KVX_TRAP_PSECERROR      0xA
++#define KVX_TRAP_DSECERROR      0xB
++#define KVX_TRAP_NOMAPPING      0xC
++#define KVX_TRAP_PROTECTION     0xD
++#define KVX_TRAP_WRITETOCLEAN   0xE
++#define KVX_TRAP_ATOMICTOCLEAN  0xF
++#define KVX_TRAP_TPAR           0x10
++#define KVX_TRAP_DOUBLE_ECC     0x11
++#define KVX_TRAP_VSFR           0x12
++#define KVX_TRAP_PL_OVERFLOW    0x13
++
++#define KVX_TRAP_COUNT          0x14
++
++#define KVX_TRAP_SFRI_NOT_BCU	0
++#define KVX_TRAP_SFRI_GET	1
++#define KVX_TRAP_SFRI_IGET	2
++#define KVX_TRAP_SFRI_SET	4
++#define KVX_TRAP_SFRI_WFXL	5
++#define KVX_TRAP_SFRI_WFXM	6
++#define KVX_TRAP_SFRI_RSWAP	7
++
++/* Access type on memory trap */
++#define KVX_TRAP_RWX_FETCH	1
++#define KVX_TRAP_RWX_WRITE	2
++#define KVX_TRAP_RWX_READ	4
++#define KVX_TRAP_RWX_ATOMIC	6
++
++#ifndef __ASSEMBLY__
++
++typedef void (*trap_handler_func) (uint64_t es, uint64_t ea,
++				   struct pt_regs *regs);
++
++#define trap_cause(__es) kvx_sfr_field_val(__es, ES, HTC)
++
++#define trap_sfri(__es) \
++	kvx_sfr_field_val((__es), ES, SFRI)
++
++#define trap_gprp(__es) \
++	kvx_sfr_field_val((__es), ES, GPRP)
++
++#define trap_sfrp(__es) \
++	kvx_sfr_field_val((__es), ES, SFRP)
++
++#ifdef CONFIG_MMU
++extern void do_page_fault(uint64_t es, uint64_t ea, struct pt_regs *regs);
++extern void do_writetoclean(uint64_t es, uint64_t ea, struct pt_regs *regs);
++#endif
++
++void user_do_sig(struct pt_regs *regs, int signo, int code, unsigned long addr);
++
++#endif /* __ASSEMBLY__ */
 +
 +#endif
+diff --git a/arch/kvx/kernel/dame_handler.c b/arch/kvx/kernel/dame_handler.c
+new file mode 100644
+index 000000000000..ce190bee8211
+--- /dev/null
++++ b/arch/kvx/kernel/dame_handler.c
+@@ -0,0 +1,113 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ */
++
++#include <linux/of.h>
++#include <linux/bug.h>
++#include <linux/init.h>
++#include <linux/of_irq.h>
++#include <linux/hardirq.h>
++#include <linux/irqchip.h>
++#include <linux/irqdomain.h>
++#include <linux/interrupt.h>
++#include <linux/cpuhotplug.h>
++#include <linux/sched/signal.h>
++
++static unsigned int kvx_dame_irq;
++
++static const char *error_str[KVX_SFR_ES_ITI_WIDTH] = {
++	"PSE",
++	"PILSY",
++	"PILDE",
++	"PILPA",
++	"DSE",
++	"DILSY",
++	"DILDE",
++	"DILPA",
++	"DDEE",
++	"DSYE"
++};
++
++static irqreturn_t dame_irq_handler(int irq, void *dev_id)
++{
++	int bit;
++	struct pt_regs *regs = get_irq_regs();
++	unsigned long error_status = kvx_sfr_field_val(regs->es, ES, ITI);
++
++	if (error_status) {
++		pr_err("Memory Error:\n");
++		for_each_set_bit(bit, &error_status, KVX_SFR_ES_ITI_WIDTH)
++			pr_err("- %s\n", error_str[bit]);
++	}
++
++	/*
++	 * If the DAME happened in user mode, we can handle it properly
++	 * by killing the user process.
++	 * Otherwise, if we are in kernel, we are fried...
++	 */
++	if (user_mode(regs))
++		force_sig_fault(SIGBUS, BUS_ADRERR, (void __user *) NULL);
++	else
++		die(regs, 0, "DAME error encountered while in kernel !!!!\n");
++
++	return IRQ_HANDLED;
++}
++
++static int kvx_dame_starting_cpu(unsigned int cpu)
++{
++	enable_percpu_irq(kvx_dame_irq, IRQ_TYPE_NONE);
++
++	return 0;
++}
++
++static int kvx_dame_dying_cpu(unsigned int cpu)
++{
++	disable_percpu_irq(kvx_dame_irq);
++
++	return 0;
++}
++
++static int __init dame_handler_init(void)
++{
++	struct device_node *dame_node;
++	int ret;
++
++	dame_node = of_find_compatible_node(NULL, NULL,
++					    "kalray,kvx-dame-handler");
++	if (!dame_node) {
++		pr_err("Failed to find dame handler device tree node\n");
++		return -ENODEV;
++	}
++
++	kvx_dame_irq = irq_of_parse_and_map(dame_node, 0);
++	of_node_put(dame_node);
++
++	if (!kvx_dame_irq) {
++		pr_err("Failed to parse dame irq\n");
++		return -ENODEV;
++	}
++
++	ret = request_percpu_irq(kvx_dame_irq, dame_irq_handler, "dame",
++				 &kvx_dame_irq);
++	if (ret) {
++		pr_err("Failed to request dame irq\n");
++		return -ENODEV;
++	}
++
++	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
++				"kvx/dame_handler:online",
++				kvx_dame_starting_cpu,
++				kvx_dame_dying_cpu);
++	if (ret <= 0) {
++		pr_err("Failed to setup cpuhp\n");
++		return ret;
++	}
++
++	pr_info("DAME handler registered\n");
++
++	return 0;
++}
++
++core_initcall(dame_handler_init);
+diff --git a/arch/kvx/kernel/irq.c b/arch/kvx/kernel/irq.c
+new file mode 100644
+index 000000000000..5d7c8cfba1dd
+--- /dev/null
++++ b/arch/kvx/kernel/irq.c
+@@ -0,0 +1,78 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ */
++
++#include <linux/irqdomain.h>
++#include <linux/irqflags.h>
++#include <linux/hardirq.h>
++#include <linux/irqchip.h>
++#include <linux/bitops.h>
++#include <linux/init.h>
++
++#include <asm/dame.h>
++
++#define IT_MASK(__it) (KVX_SFR_ILL_ ## __it ## _MASK)
++#define IT_LEVEL(__it, __level) \
++	(__level##ULL << KVX_SFR_ILL_ ## __it ## _SHIFT)
++
++void do_IRQ(unsigned long hwirq_mask, struct pt_regs *regs)
++{
++	struct pt_regs *old_regs = set_irq_regs(regs);
++	int irq;
++	unsigned int hwirq;
++
++	trace_hardirqs_off();
++
++	irq_enter();
++
++	while (hwirq_mask) {
++		hwirq = __ffs(hwirq_mask);
++		irq = irq_find_mapping(NULL, hwirq);
++		generic_handle_irq(irq);
++		hwirq_mask &= ~BIT_ULL(hwirq);
++	}
++
++	irq_exit();
++	set_irq_regs(old_regs);
++
++	dame_irq_check(regs);
++}
++
++/*
++ * Early Hardware specific Interrupt setup
++ * -Called very early (start_kernel -> setup_arch -> setup_processor)
++ * -Needed for each CPU
++ */
++void kvx_init_core_irq(void)
++{
++	/*
++	 * On KVX, Kernel only care about the following IT:
++	 * - IT0: Timer 0
++	 * - IT2: Watchdog
++	 * - IT4: APIC IT 1
++	 * - IT24: IPI
++	 */
++	uint64_t mask = IT_MASK(IT0) | IT_MASK(IT2) | IT_MASK(IT4) |
++			IT_MASK(IT24);
++
++	/*
++	 * Specific priorities for ITs:
++	 * - Watchdog has the highest priority: 3
++	 * - Timer has priority 2
++	 * - APIC entries have lowest priority: 1
++	 */
++	uint64_t value = IT_LEVEL(IT0, 0x2) | IT_LEVEL(IT2, 0x3) |
++			IT_LEVEL(IT4, 0x1) | IT_LEVEL(IT24, 0x1);
++
++	kvx_sfr_set_mask(ILL, mask, value);
++
++	/* Set core level to 0 */
++	kvx_sfr_set_field(PS, IL, 0);
++}
++
++void __init init_IRQ(void)
++{
++	irqchip_init();
++}
+diff --git a/arch/kvx/kernel/traps.c b/arch/kvx/kernel/traps.c
+new file mode 100644
+index 000000000000..3a1706b666c2
+--- /dev/null
++++ b/arch/kvx/kernel/traps.c
+@@ -0,0 +1,243 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ *            Guillaume Thouvenin
++ *            Marius Gligor
++ */
++
++#include <linux/context_tracking.h>
++#include <linux/sched/task_stack.h>
++#include <linux/sched/debug.h>
++#include <linux/irqflags.h>
++#include <linux/uaccess.h>
++#include <linux/kdebug.h>
++#include <linux/module.h>
++#include <linux/printk.h>
++#include <linux/init.h>
++#include <linux/ptrace.h>
++
++#include <asm/dame.h>
++#include <asm/traps.h>
++#include <asm/ptrace.h>
++#include <asm/break_hook.h>
++#include <asm/stacktrace.h>
++
++int show_unhandled_signals = 1;
++
++static DEFINE_SPINLOCK(die_lock);
++
++static trap_handler_func trap_handler_table[KVX_TRAP_COUNT] = { NULL };
++
++/* Trap names associated to the trap numbers */
++static const char * const trap_name[] = {
++	"RESET",
++	"OPCODE",
++	"PRIVILEGE",
++	"DMISALIGN",
++	"PSYSERROR",
++	"DSYSERROR",
++	"PDECCERROR",
++	"DDECCERROR",
++	"PPARERROR",
++	"DPARERROR",
++	"PSECERROR",
++	"DSECERROR",
++	/* MMU related traps */
++	"NOMAPPING",
++	"PROTECTION",
++	"WRITETOCLEAN",
++	"ATOMICTOCLEAN",
++	"TPAR",
++	"DOUBLE_ECC",
++	"VSFR",
++	"PL_OVERFLOW"
++};
++
++void die(struct pt_regs *regs, unsigned long ea, const char *str)
++{
++	static int die_counter;
++	int ret;
++
++	oops_enter();
++
++	spin_lock_irq(&die_lock);
++	console_verbose();
++	bust_spinlocks(1);
++
++	pr_emerg("%s [#%d]\n", str, ++die_counter);
++	print_modules();
++	show_regs(regs);
++
++	if (!user_mode(regs))
++		show_stacktrace(NULL, regs);
++
++	ret = notify_die(DIE_OOPS, str, regs, ea, 0, SIGSEGV);
++
++	bust_spinlocks(0);
++	add_taint(TAINT_DIE, LOCKDEP_NOW_UNRELIABLE);
++	spin_unlock_irq(&die_lock);
++	oops_exit();
++
++	if (in_interrupt())
++		panic("Fatal exception in interrupt");
++	if (panic_on_oops)
++		panic("Fatal exception");
++	if (ret != NOTIFY_STOP)
++		make_task_dead(SIGSEGV);
++}
++
++void user_do_sig(struct pt_regs *regs, int signo, int code, unsigned long addr)
++{
++	struct task_struct *tsk = current;
++
++	if (show_unhandled_signals && unhandled_signal(tsk, signo)
++	    && printk_ratelimit()) {
++		pr_info("%s[%d]: unhandled signal %d code 0x%x at 0x%lx",
++			tsk->comm, task_pid_nr(tsk), signo, code, addr);
++		print_vma_addr(KERN_CONT " in ", instruction_pointer(regs));
++		pr_cont("\n");
++		show_regs(regs);
++	}
++	if (signo == SIGKILL) {
++		force_sig(signo);
++		return;
++	}
++	force_sig_fault(signo, code, (void __user *) addr);
++}
++
++static void panic_or_kill(uint64_t es, uint64_t ea, struct pt_regs *regs,
++			  int signo, int sigcode)
++{
++	if (user_mode(regs)) {
++		user_do_sig(regs, signo, sigcode, ea);
++		return;
++	}
++
++	pr_alert(CUT_HERE "ERROR: TRAP %s received at 0x%.16llx\n",
++	      trap_name[trap_cause(es)], regs->spc);
++	die(regs, ea, "Oops");
++	make_task_dead(SIGKILL);
++}
++
++int is_valid_bugaddr(unsigned long pc)
++{
++	/*
++	 * Since the bug was reported, this means that the break hook handling
++	 * already check the faulting instruction so there is no need for
++	 * additionnal check here. This is a BUG for sure.
++	 */
++	return 1;
++}
++
++static int bug_break_handler(struct break_hook *brk_hook, struct pt_regs *regs)
++{
++	enum bug_trap_type type;
++
++	type = report_bug(regs->spc, regs);
++	switch (type) {
++	case BUG_TRAP_TYPE_NONE:
++		return BREAK_HOOK_ERROR;
++	case BUG_TRAP_TYPE_WARN:
++		break;
++	case BUG_TRAP_TYPE_BUG:
++		die(regs, regs->spc, "Kernel BUG");
++		break;
++	}
++
++	/* Skip over break insn if we survived ! */
++	kvx_skip_break_insn(regs);
++
++	return BREAK_HOOK_HANDLED;
++}
++
++static struct break_hook bug_break_hook = {
++	.handler = bug_break_handler,
++	.id = BREAK_CAUSE_BUG,
++	.mode = MODE_KERNEL,
++};
++
++#define GEN_TRAP_HANDLER(__name, __sig, __code) \
++static void __name ## _trap_handler(uint64_t es, uint64_t ea, \
++				 struct pt_regs *regs) \
++{ \
++	panic_or_kill(es, ea, regs, __sig, __code); \
++}
++
++GEN_TRAP_HANDLER(default, SIGKILL, SI_KERNEL);
++GEN_TRAP_HANDLER(privilege, SIGILL, ILL_PRVREG);
++GEN_TRAP_HANDLER(dmisalign, SIGBUS, BUS_ADRALN);
++GEN_TRAP_HANDLER(syserror, SIGBUS, BUS_ADRERR);
++GEN_TRAP_HANDLER(opcode, SIGILL, ILL_ILLOPC);
++
++static void register_trap_handler(unsigned int trap_nb, trap_handler_func fn)
++{
++
++	if (trap_nb >= KVX_TRAP_COUNT || fn == NULL)
++		panic("Failed to register handler #%d\n", trap_nb);
++
++	trap_handler_table[trap_nb] = fn;
++}
++
++static void do_vsfr_fault(uint64_t es, uint64_t ea, struct pt_regs *regs)
++{
++	if (break_hook_handler(es, regs) == BREAK_HOOK_HANDLED)
++		return;
++
++	panic_or_kill(es, ea, regs, SIGILL, ILL_PRVREG);
++}
++
++void __init trap_init(void)
++{
++	int i;
++
++	break_hook_register(&bug_break_hook);
++
++	for (i = 0; i < KVX_TRAP_COUNT; i++)
++		register_trap_handler(i, default_trap_handler);
++#ifdef CONFIG_MMU
++	register_trap_handler(KVX_TRAP_NOMAPPING, do_page_fault);
++	register_trap_handler(KVX_TRAP_PROTECTION, do_page_fault);
++	register_trap_handler(KVX_TRAP_WRITETOCLEAN, do_writetoclean);
++#endif
++
++	register_trap_handler(KVX_TRAP_PSYSERROR, syserror_trap_handler);
++	register_trap_handler(KVX_TRAP_DSYSERROR, syserror_trap_handler);
++	register_trap_handler(KVX_TRAP_PRIVILEGE, privilege_trap_handler);
++	register_trap_handler(KVX_TRAP_OPCODE, opcode_trap_handler);
++	register_trap_handler(KVX_TRAP_DMISALIGN, dmisalign_trap_handler);
++	register_trap_handler(KVX_TRAP_VSFR, do_vsfr_fault);
++}
++
++/**
++ * trap_handler - trap handler called by _trap_handler routine in trap_handler.S
++ * This handler will redirect to other trap handlers if present
++ * If not then it will do a generic action
++ * @es: Exception Syndrome register value
++ * @ea: Exception Address register
++ * @regs: pointer to registers saved when trapping
++ */
++void trap_handler(uint64_t es, uint64_t ea, struct pt_regs *regs)
++{
++	enum ctx_state prev_state = exception_enter();
++	int htc = trap_cause(es);
++	trap_handler_func trap_func = trap_handler_table[htc];
++
++	trace_hardirqs_off();
++
++	/* Normal traps number should and must be between 0 and 15 included */
++	if (unlikely(htc >= KVX_TRAP_COUNT)) {
++		pr_err("Invalid trap %d !\n", htc);
++		goto done;
++	}
++
++	/* If irqs were enabled in the preempted context, reenable them */
++	if (regs->sps & KVX_SFR_PS_IE_MASK)
++		local_irq_enable();
++
++	trap_func(es, ea, regs);
++
++done:
++	dame_irq_check(regs);
++	exception_exit(prev_state);
++}
 -- 
 2.37.2
 
