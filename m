@@ -2,143 +2,128 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4944C46467
-	for <bpf@archiver.kernel.org>; Fri, 20 Jan 2023 05:28:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41503C38159
+	for <bpf@archiver.kernel.org>; Fri, 20 Jan 2023 05:28:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231417AbjATF2d (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Jan 2023 00:28:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56134 "EHLO
+        id S231277AbjATF24 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Jan 2023 00:28:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbjATF1z (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Jan 2023 00:27:55 -0500
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC13C4ABCB;
-        Thu, 19 Jan 2023 21:23:16 -0800 (PST)
-Received: by mail-qv1-f46.google.com with SMTP id i12so3155144qvs.2;
-        Thu, 19 Jan 2023 21:23:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WHPXPC0BMX6sTs60Cw/eJV++Bo/jj1HUB4gDhIXLxjc=;
-        b=y4e+82k89Fc9lHpt69n0XF2PVgrSWKz4iSysAmiFBjXAWNIwZ6ZDOrgFU1l3C6pX/e
-         ejyOkToUJgTqnCpL0/Jp5SltSjB/9CVELfvStOi3GADnprDlGWognv3bchIg3cA6+5tc
-         c6WWb7E1TODMGzWn4Xe75VLPrJp1XJ0YHG48+Pqi85kY1oxY/KX7c12gIHjzZcn1TAYd
-         aDbWPI9MOzwdsHj7HBjqvyjMsbwQD/sWGueLMQ0QpnjKzdpJxf+I2WxCa9RqiPlFHo2I
-         sOAtOdZ9cmFem+N6aIEMIWxi7K3s2JfFz6PKavMDFgc/2Ctc/T4+/L3y9BtyKACjVQzk
-         8yVw==
-X-Gm-Message-State: AFqh2kovqd1LIbmQwv0MDJZtwSXeuFfyyvC8CKrwOzA/Ln7gdUJf7mlW
-        UVvpLyILrZijtEDCcLZUpX3olUEQA/aE2qFR
-X-Google-Smtp-Source: AMrXdXur3UYcJqIQnvqtkk3dTTuzhe2hJHvV5HBY+uFXJ94Y7/MAi18vNtaPzwOYQmt0O7aAgg7AcQ==
-X-Received: by 2002:a0c:e042:0:b0:4c7:6119:a7fc with SMTP id y2-20020a0ce042000000b004c76119a7fcmr49954520qvk.40.1674192195045;
-        Thu, 19 Jan 2023 21:23:15 -0800 (PST)
-Received: from maniforge.lan ([2620:10d:c091:480::1:2fc9])
-        by smtp.gmail.com with ESMTPSA id l14-20020a05620a28ce00b007062139ecb3sm13990130qkp.95.2023.01.19.21.23.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 21:23:14 -0800 (PST)
-Date:   Thu, 19 Jan 2023 23:23:18 -0600
-From:   David Vernet <void@manifault.com>
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@meta.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com, tj@kernel.org
-Subject: Re: [PATCH bpf-next 2/8] bpf: Allow trusted args to walk struct when
- checking BTF IDs
-Message-ID: <Y8olRi9SjcyNtam0@maniforge.lan>
-References: <20230119235833.2948341-1-void@manifault.com>
- <20230119235833.2948341-3-void@manifault.com>
- <20230120045815.4b7dc6obdt4uzy6a@apollo>
+        with ESMTP id S229949AbjATF23 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Jan 2023 00:28:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF5930E0;
+        Thu, 19 Jan 2023 21:23:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BDE02B8229F;
+        Fri, 20 Jan 2023 00:08:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49799C433EF;
+        Fri, 20 Jan 2023 00:08:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674173309;
+        bh=3KzjNLNPNLSIodWpCueB2WhRu6smQFH2gkFhC5biMYc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RSfl6Q9tDytFkXobVl4OA/1Ff1T9CF13+Ki50UlIzp77vhoHMu3itDxiA6m66qu4+
+         YCoHiO7gRFl7dqWNLuOePxhnPFwNJfEaJaoZQsRNh6OHSbSI3dyPhfcMhWDRuX5sCh
+         IL1IlQrT2ylc2j5LxoxL0LohI1Y9qW3WFxDv3Efksh+mK/UjVD3e/WCUnfuJ3ICHZt
+         5N5EpNMTghU7PW39WUTHs1MuGOuzDaDDrjvCL97I60eC3q54HzFImdOKQ5whaXkV40
+         mEfjGLQ2QbXOHSQp4w0nT3oThZUmicloHIa5oC6eWZEJksXUCU3NafU77E/WMtIWKH
+         Fx+9sOo5AWSUw==
+From:   KP Singh <kpsingh@kernel.org>
+To:     linux-security-module@vger.kernel.org, bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, jackmanb@google.com,
+        renauld@google.com, paul@paul-moore.com, casey@schaufler-ca.com,
+        song@kernel.org, revest@chromium.org, keescook@chromium.org
+Subject: [PATCH RESEND bpf-next 0/4] Reduce overhead of LSMs with static calls
+Date:   Fri, 20 Jan 2023 01:08:14 +0100
+Message-Id: <20230120000818.1324170-1-kpsingh@kernel.org>
+X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230120045815.4b7dc6obdt4uzy6a@apollo>
-User-Agent: Mutt/2.2.9 (2022-11-12)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 10:28:15AM +0530, Kumar Kartikeya Dwivedi wrote:
-> On Fri, Jan 20, 2023 at 05:28:27AM IST, David Vernet wrote:
-> > When validating BTF types for KF_TRUSTED_ARGS kfuncs, the verifier
-> > currently enforces that the top-level type must match when calling
-> > the kfunc. In other words, the verifier does not allow the BPF program
-> > to pass a bitwise equivalent struct, despite it being functionally safe.
-> > For example, if you have the following type:
-> >
-> > struct  nf_conn___init {
-> > 	struct nf_conn ct;
-> > };
-> >
-> > It would be safe to pass a struct nf_conn___init to a kfunc expecting a
-> > struct nf_conn.
-> 
-> Just running bpf_nf selftest would have shown this is false.
+# Background
 
-And I feel silly, because I did run them, and could have sworn they
-passed...looking now at the change_status_after_alloc testcase I see
-you're of course correct. Very poor example, thank you for pointing it
-out.
+LSM hooks (callbacks) are currently invoked as indirect function calls. These
+callbacks are registered into a linked list at boot time as the order of the
+LSMs can be configured on the kernel command line with the "lsm=" command line
+parameter.
 
-> 
-> > Being able to do this will be useful for certain types
-> > of kfunc / kptrs enabled by BPF. For example, in a follow-on patch, a
-> > series of kfuncs will be added which allow programs to do bitwise
-> > queries on cpumasks that are either allocated by the program (in which
-> > case they'll be a 'struct bpf_cpumask' type that wraps a cpumask_t as
-> > its first element), or a cpumask that was allocated by the main kernel
-> > (in which case it will just be a straight cpumask_t, as in
-> >  task->cpus_ptr).
-> >
-> > Having the two types of cpumasks allows us to distinguish between the
-> > two for when a cpumask is read-only vs. mutatable. A struct bpf_cpumask
-> > can be mutated by e.g. bpf_cpumask_clear(), whereas a regular cpumask_t
-> > cannot be. On the other hand, a struct bpf_cpumask can of course be
-> > queried in the exact same manner as a cpumask_t, with e.g.
-> > bpf_cpumask_test_cpu().
-> >
-> > If we were to enforce that top level types match, then a user that's
-> > passing a struct bpf_cpumask to a read-only cpumask_t argument would
-> > have to cast with something like bpf_cast_to_kern_ctx() (which itself
-> > would need to be updated to expect the alias, and currently it only
-> > accommodates a single alias per prog type). Additionally, not specifying
-> > KF_TRUSTED_ARGS is not an option, as some kfuncs take one argument as a
-> > struct bpf_cpumask *, and another as a struct cpumask *
-> > (i.e. cpumask_t).
-> >
-> > In order to enable this, this patch relaxes the constraint that a
-> > KF_TRUSTED_ARGS kfunc must have strict type matching. In order to
-> > try and be conservative and match existing behavior / expectations, this
-> > patch also enforces strict type checking for acquire kfuncs. We were
-> > already enforcing it for release kfuncs, so this should also improve the
-> > consistency of the semantics for kfuncs.
-> >
-> 
-> What you want is to simply follow type at off = 0 (but still enforce the off = 0
-> requirement). This is something which is currently done for bpf_sk_release (for
-> struct sk_common) in check_reg_type, but it is not safe in general to just open
-> this up for all cases. I suggest encoding this particular requirement in the
-> argument, and simply using triple underscore variant of the type for the special
-> 'read_only' requirement. This will allow you to use same type in your BPF C
-> program, while allowing verifier to see them as two different types in kfunc
-> parameters. Then just relax type following for the particular argument so that
-> one can pass cpumask_t___ro to kfunc expecting cpumask_t (but only at off = 0,
-> it just visits first member after failing match on top level type). off = 0
-> check is still necessary.
+Indirect function calls have a high overhead due to retpoline mitigation for
+various speculative execution attacks.
 
-Sigh, yeah, another ___ workaround but I agree it's probably the best we
-can do for now, and in general seems pretty useful. Obviously preferable
-to this patch which just doesn't work. Alexei, are you OK with this? If
-so, I'll take this approach for v2.
+Retpolines remain relevant even with newer generation CPUs as recently
+discovered speculative attacks, like Spectre BHB need Retpolines to mitigate
+against branch history injection and still need to be used in combination with
+newer mitigation features like eIBRS.
 
-> 
-> So offset checks still need to be according to OBJ_RELEASE but you can relax
-> strict_type_match bool for the particular arg when calling btf_struct_ids_match.
-> 
-> All code in your tests will then deal with a cpumask_t type only, including in
-> kfunc declarations. Same as bpf_nf selftests which don't cast from/to
-> nf_conn___init and only deal with nf_conn pointers even though semantics differ
-> depending on how it is used and passed around. Overall more convenient and
-> simple to use.
+This overhead is especially significant for the "bpf" LSM which allows the user
+to implement LSM functionality with eBPF program. In order to facilitate this
+the "bpf" LSM provides a default callback for all LSM hooks. When enabled,
+the "bpf" LSM incurs an unnecessary / avoidable indirect call. This is
+especially bad in OS hot paths (e.g. in the networking stack).
+This overhead prevents the adoption of bpf LSM on performance critical
+systems, and also, in general, slows down all LSMs.
+
+Since we know the address of the enabled LSM callbacks at compile time and only
+the order is determined at boot time, the LSM framework can allocate static
+calls for each of the possible LSM callbacks and these calls can be updated once
+the order is determined at boot.
+
+This series is a respin of the RFC proposed by Paul Renauld (renauld@google.com)
+and Brendan Jackman (jackmanb@google.com) [1]
+
+# Performance improvement
+
+With this patch-set some syscalls with lots of LSM hooks in their path
+benefitted at an average of ~3%. Here are the results of the relevant Unixbench
+system benchmarks with BPF LSM and a major LSM (in this case apparmor) enabled
+with and without the series.
+
+Benchmark                                               Delta(%): (+ is better)
+===============================================================================
+Execl Throughput                                             +2.9015
+File Write 1024 bufsize 2000 maxblocks                       +5.4196
+Pipe Throughput                                              +7.7434
+Pipe-based Context Switching                                 +3.5118
+Process Creation                                             +0.3552
+Shell Scripts (1 concurrent)                                 +1.7106
+System Call Overhead                                         +3.0067
+System Benchmarks Index Score (Partial Only):                +3.1809
+
+In the best case, some syscalls like eventfd_create benefitted to about ~10%.
+The full analysis can be viewed at https://kpsingh.ch/lsm-perf
+
+[1] https://lore.kernel.org/linux-security-module/20200820164753.3256899-1-jackmanb@chromium.org/
+
+KP Singh (4):
+  kernel: Add helper macros for loop unrolling
+  security: Generate a header with the count of enabled LSMs
+  security: Replace indirect LSM hook calls with static calls
+  bpf: Only enable BPF LSM hooks when an LSM program is attached
+
+ include/linux/bpf.h              |   1 +
+ include/linux/bpf_lsm.h          |   1 +
+ include/linux/lsm_hooks.h        |  94 +++++++++++--
+ include/linux/unroll.h           |  35 +++++
+ kernel/bpf/trampoline.c          |  29 ++++-
+ scripts/Makefile                 |   1 +
+ scripts/security/.gitignore      |   1 +
+ scripts/security/Makefile        |   4 +
+ scripts/security/gen_lsm_count.c |  57 ++++++++
+ security/Makefile                |  11 ++
+ security/bpf/hooks.c             |  26 +++-
+ security/security.c              | 217 ++++++++++++++++++++-----------
+ 12 files changed, 386 insertions(+), 91 deletions(-)
+ create mode 100644 include/linux/unroll.h
+ create mode 100644 scripts/security/.gitignore
+ create mode 100644 scripts/security/Makefile
+ create mode 100644 scripts/security/gen_lsm_count.c
+
+-- 
+2.39.0.246.g2a6d74b583-goog
+
