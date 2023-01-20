@@ -2,55 +2,55 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6F44C05027
-	for <bpf@archiver.kernel.org>; Fri, 20 Jan 2023 14:30:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63CC5C27C7C
+	for <bpf@archiver.kernel.org>; Fri, 20 Jan 2023 14:35:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjATOaq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Jan 2023 09:30:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33726 "EHLO
+        id S230476AbjATOfR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Jan 2023 09:35:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjATOap (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Jan 2023 09:30:45 -0500
+        with ESMTP id S229770AbjATOfO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Jan 2023 09:35:14 -0500
 Received: from fx601.security-mail.net (smtpout140.security-mail.net [85.31.212.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0EF72C36
-        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 06:30:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB3373EEB
+        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 06:35:03 -0800 (PST)
 Received: from localhost (fx601.security-mail.net [127.0.0.1])
-        by fx601.security-mail.net (Postfix) with ESMTP id 5C1593498D3
-        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 15:20:46 +0100 (CET)
+        by fx601.security-mail.net (Postfix) with ESMTP id 96B0E349826
+        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 15:20:45 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
-        s=sec-sig-email; t=1674224446;
-        bh=EHbGeTQPzFxRydvAjCAKTJptA7pNhkmTqYf6aPqpaxA=;
+        s=sec-sig-email; t=1674224445;
+        bh=ZFm4jn2qVc3XxQ8bbXqM98MO1bH7PPorSUVJmGe9zIQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=wJmnhHllX2nCsMbym/2Ldf4QDA0SfvPV+yw6NU+qeu7wmFEDK4K38YGz89n3hxZyQ
-         vdINqSTmq8IOWezZXRFzPZZgVT9jwL17EfTaVkqKHdBXhlwkvlET3a2DwJUVk7/A+w
-         OtQLLUHnZlUtPcSq29A63CTEd/6jPjvkHF3rZ7vw=
+        b=NRRvyDRZ5VwOwVQfZDqU+46NQRlyLDL0W3bsNHuZTtmWfvdYPbnL8A8JWp8oPd0br
+         xkajvWR64O8gXlZ1cyBHGFf5LFUuYo1EbpRau8jt+s5Y6qvQmdt2CzKHwmAwdyUODQ
+         QR27+dNxyo6iaIgN6wpI2ZaqsOcbK47b8FxkLvYg=
 Received: from fx601 (fx601.security-mail.net [127.0.0.1]) by
- fx601.security-mail.net (Postfix) with ESMTP id BEEDF349869; Fri, 20 Jan
+ fx601.security-mail.net (Postfix) with ESMTP id 2A6A73493C7; Fri, 20 Jan
  2023 15:20:45 +0100 (CET)
 Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
- fx601.security-mail.net (Postfix) with ESMTPS id 1F87634967F; Fri, 20 Jan
+ fx601.security-mail.net (Postfix) with ESMTPS id 33F923496B9; Fri, 20 Jan
  2023 15:20:44 +0100 (CET)
 Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
- zimbra2.kalray.eu (Postfix) with ESMTPS id 7BC3F27E0481; Fri, 20 Jan 2023
- 15:10:39 +0100 (CET)
+ zimbra2.kalray.eu (Postfix) with ESMTPS id 74EE327E045E; Fri, 20 Jan 2023
+ 15:10:38 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
- (Postfix) with ESMTP id 62F6427E047C; Fri, 20 Jan 2023 15:10:39 +0100 (CET)
+ (Postfix) with ESMTP id 5882427E0463; Fri, 20 Jan 2023 15:10:38 +0100 (CET)
 Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
  (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
- efK8YWmnYQbb; Fri, 20 Jan 2023 15:10:39 +0100 (CET)
+ D11lu3OG-umz; Fri, 20 Jan 2023 15:10:38 +0100 (CET)
 Received: from junon.lin.mbt.kalray.eu (unknown [192.168.37.161]) by
- zimbra2.kalray.eu (Postfix) with ESMTPSA id C9CA227E0474; Fri, 20 Jan 2023
- 15:10:38 +0100 (CET)
+ zimbra2.kalray.eu (Postfix) with ESMTPSA id DE5A427E0458; Fri, 20 Jan 2023
+ 15:10:37 +0100 (CET)
 X-Virus-Scanned: E-securemail
-Secumail-id: <5b1f.63caa33c.1c743.0>
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 62F6427E047C
+Secumail-id: <62f4.63caa33c.3169e.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 5882427E0463
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
- s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1674223839;
- bh=5C/8QjxVUf/DelpGCfD/Pp9BdUc2vZv56uJsfxSlXPA=;
+ s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1674223838;
+ bh=r0jAYvZMgDHNmtYPIBemAGb6cgybEgHcmW3NkzN/0Bc=;
  h=From:To:Date:Message-Id:MIME-Version;
- b=P6BtAyPM/IrloLG30cdWTPBhk6bnzZeuu0JK6hHT1AvSOjTEjV23l2HTVSkWp3YOM
- JxhQxnIr6MpJR9Ve5OwsqaqYSpuYPPXnuoM+q+2xD3d01z+Z0ef6cKxQqGtJg6OcUa
- Z5LRxJhk4HSsThMlK536n8tiuxt0/9UzyH8L0fvI=
+ b=JKNRyzm7+8sxXJUhLzONaUXzidzmY7QHybfABV02MMeEolEK1l0P/zyCPivr0qi3X
+ cMk6eiWHc8wcM/3mwaZc92PFr6HmcHLhtp6SGUL9n/464kv1zJak07VGMurb1BFNSB
+ JEfwZjhbgtlfk55C9aauCac0b4/oyWiVvpTX7xMY=
 From:   Yann Sionneau <ysionneau@kalray.eu>
 To:     Arnd Bergmann <arnd@arndb.de>, Jonathan Corbet <corbet@lwn.net>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -114,9 +114,9 @@ Cc:     Benjamin Mugnier <mugnier.benjamin@gmail.com>,
         devicetree@vger.kernel.org, linux-mm@kvack.org,
         linux-arch@vger.kernel.org, linux-audit@redhat.com,
         linux-riscv@lists.infradead.org, bpf@vger.kernel.org
-Subject: [RFC PATCH v2 31/31] kvx: Add IPI driver
-Date:   Fri, 20 Jan 2023 15:10:02 +0100
-Message-ID: <20230120141002.2442-32-ysionneau@kalray.eu>
+Subject: [RFC PATCH v2 29/31] kvx: Add support for cpuinfo
+Date:   Fri, 20 Jan 2023 15:10:00 +0100
+Message-ID: <20230120141002.2442-30-ysionneau@kalray.eu>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230120141002.2442-1-ysionneau@kalray.eu>
 References: <20230120141002.2442-1-ysionneau@kalray.eu>
@@ -128,12 +128,7 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jules Maselbas <jmaselbas@kalray.eu>
-
-The Inter-Processor Interrupt Controller (IPI) provides a fast
-synchronization mechanism to the software. It exposes eight independent
-set of registers that can be use to notify each processor in the cluster.
-test
+Add support for cpuinfo on kvx arch.
 
 Co-developed-by: Clement Leger <clement@clement-leger.fr>
 Signed-off-by: Clement Leger <clement@clement-leger.fr>
@@ -141,167 +136,119 @@ Co-developed-by: Guillaume Thouvenin <gthouvenin@kalray.eu>
 Signed-off-by: Guillaume Thouvenin <gthouvenin@kalray.eu>
 Co-developed-by: Julian Vetter <jvetter@kalray.eu>
 Signed-off-by: Julian Vetter <jvetter@kalray.eu>
-Co-developed-by: Luc Michel <lmichel@kalray.eu>
-Signed-off-by: Luc Michel <lmichel@kalray.eu>
 Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
 Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
 ---
 
 Notes:
-    V1 -> V2: new patch
+    V1 -> V2: no changes
 
- arch/kvx/include/asm/ipi.h |  16 ++++++
- arch/kvx/platform/Makefile |   1 +
- arch/kvx/platform/ipi.c    | 108 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 125 insertions(+)
- create mode 100644 arch/kvx/include/asm/ipi.h
- create mode 100644 arch/kvx/platform/ipi.c
+ arch/kvx/kernel/cpuinfo.c | 96 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 96 insertions(+)
+ create mode 100644 arch/kvx/kernel/cpuinfo.c
 
-diff --git a/arch/kvx/include/asm/ipi.h b/arch/kvx/include/asm/ipi.h
+diff --git a/arch/kvx/kernel/cpuinfo.c b/arch/kvx/kernel/cpuinfo.c
 new file mode 100644
-index 000000000000..137407a075e6
+index 000000000000..f44c46c1e4ba
 --- /dev/null
-+++ b/arch/kvx/include/asm/ipi.h
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2017-2023 Kalray Inc.
-+ * Author(s): Clement Leger
-+ */
-+
-+#ifndef _ASM_KVX_IPI_H
-+#define _ASM_KVX_IPI_H
-+
-+#include <linux/irqreturn.h>
-+
-+int kvx_ipi_ctrl_probe(irqreturn_t (*ipi_irq_handler)(int, void *));
-+
-+void kvx_ipi_send(const struct cpumask *mask);
-+
-+#endif /* _ASM_KVX_IPI_H */
-diff --git a/arch/kvx/platform/Makefile b/arch/kvx/platform/Makefile
-index c7d0abb15c27..27f0914e0de5 100644
---- a/arch/kvx/platform/Makefile
-+++ b/arch/kvx/platform/Makefile
-@@ -4,3 +4,4 @@
- #
- 
- obj-$(CONFIG_SMP) += pwr_ctrl.o
-+obj-$(CONFIG_SMP) += ipi.o
-diff --git a/arch/kvx/platform/ipi.c b/arch/kvx/platform/ipi.c
-new file mode 100644
-index 000000000000..a471039b1643
---- /dev/null
-+++ b/arch/kvx/platform/ipi.c
-@@ -0,0 +1,108 @@
++++ b/arch/kvx/kernel/cpuinfo.c
+@@ -0,0 +1,96 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (C) 2017-2023 Kalray Inc.
 + * Author(s): Clement Leger
-+ *            Luc Michel
++ *            Guillaume Thouvenin
 + */
 +
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++#include <linux/seq_file.h>
++#include <linux/delay.h>
++#include <linux/clk.h>
++#include <linux/cpu.h>
++#include <linux/of.h>
 +
-+#include <linux/io.h>
-+#include <linux/slab.h>
-+#include <linux/types.h>
-+#include <linux/module.h>
-+#include <linux/of_irq.h>
-+#include <linux/cpumask.h>
-+#include <linux/interrupt.h>
-+#include <linux/cpuhotplug.h>
-+#include <linux/of_address.h>
-+#include <linux/of_platform.h>
++unsigned long elf_hwcap __read_mostly;
 +
-+#define IPI_INTERRUPT_OFFSET	0x0
-+#define IPI_MASK_OFFSET		0x20
++static int show_cpuinfo(struct seq_file *m, void *v)
++{
++	int cpu_num = *(unsigned int *)v;
++	struct cpuinfo_kvx *n = per_cpu_ptr(&cpu_info, cpu_num);
 +
-+/*
-+ * IPI controller can signal RM and PE0 -> 15
-+ * In order to restrict that to the PE, write the corresponding mask
-+ */
-+#define KVX_IPI_CPU_MASK	(~0xFFFF)
++	seq_printf(m, "processor\t: %d\nvendor_id\t: Kalray\n", cpu_num);
 +
-+struct kvx_ipi_ctrl {
-+	void __iomem *regs;
-+	unsigned int ipi_irq;
++	seq_printf(m,
++		   "copro enabled\t: %s\n"
++		   "arch revision\t: %d\n"
++		   "uarch revision\t: %d\n",
++		   n->copro_enable ? "yes" : "no",
++		   n->arch_rev,
++		   n->uarch_rev);
++
++	seq_printf(m,
++		   "bogomips\t: %lu.%02lu\n"
++		   "cpu MHz\t\t: %llu.%03llu\n\n",
++		   (loops_per_jiffy * HZ) / 500000,
++		   ((loops_per_jiffy * HZ) / 5000) % 100,
++		   n->freq / 1000000, (n->freq / 10000) % 100);
++
++	return 0;
++}
++
++static void *c_start(struct seq_file *m, loff_t *pos)
++{
++	if (*pos == 0)
++		*pos = cpumask_first(cpu_online_mask);
++	if (*pos >= num_online_cpus())
++		return NULL;
++
++	return pos;
++}
++
++static void *c_next(struct seq_file *m, void *v, loff_t *pos)
++{
++	*pos = cpumask_next(*pos, cpu_online_mask);
++
++	return c_start(m, pos);
++}
++
++static void c_stop(struct seq_file *m, void *v)
++{
++}
++
++const struct seq_operations cpuinfo_op = {
++	.start = c_start,
++	.next = c_next,
++	.stop = c_stop,
++	.show = show_cpuinfo,
 +};
 +
-+static struct kvx_ipi_ctrl kvx_ipi_controller;
-+
-+/**
-+ * @kvx_pwr_ctrl_cpu_poweron Wakeup a cpu
-+ *
-+ * cpu: cpu to wakeup
-+ */
-+void kvx_ipi_send(const struct cpumask *mask)
++static int __init setup_cpuinfo(void)
 +{
-+	const unsigned long *maskb = cpumask_bits(mask);
++	int cpu;
++	struct clk *clk;
++	unsigned long cpu_freq = 1000000000;
++	struct device_node *node = of_get_cpu_node(0, NULL);
 +
-+	WARN_ON(*maskb & KVX_IPI_CPU_MASK);
-+	writel(*maskb, kvx_ipi_controller.regs + IPI_INTERRUPT_OFFSET);
-+}
++	clk = of_clk_get(node, 0);
++	if (IS_ERR(clk)) {
++		printk(KERN_WARNING
++		       "Device tree missing CPU 'clock' parameter. Assuming frequency is 1GHZ");
++		goto setup_cpu_freq;
++	}
 +
-+static int kvx_ipi_starting_cpu(unsigned int cpu)
-+{
-+	enable_percpu_irq(kvx_ipi_controller.ipi_irq, IRQ_TYPE_NONE);
++	cpu_freq = clk_get_rate(clk);
++
++	clk_put(clk);
++
++setup_cpu_freq:
++	of_node_put(node);
++
++	for_each_possible_cpu(cpu)
++		per_cpu_ptr(&cpu_info, cpu)->freq = cpu_freq;
 +
 +	return 0;
 +}
 +
-+static int kvx_ipi_dying_cpu(unsigned int cpu)
-+{
-+	disable_percpu_irq(kvx_ipi_controller.ipi_irq);
-+
-+	return 0;
-+}
-+
-+int __init kvx_ipi_ctrl_probe(irqreturn_t (*ipi_irq_handler)(int, void *))
-+{
-+	struct device_node *np;
-+	int ret;
-+	unsigned int ipi_irq;
-+	void __iomem *ipi_base;
-+
-+	np = of_find_compatible_node(NULL, NULL, "kalray,kvx-ipi-ctrl");
-+	BUG_ON(!np);
-+
-+	ipi_base = of_iomap(np, 0);
-+	BUG_ON(!ipi_base);
-+
-+	kvx_ipi_controller.regs = ipi_base;
-+
-+	/* Init mask for interrupts to PE0 -> PE15 */
-+	writel(KVX_IPI_CPU_MASK, kvx_ipi_controller.regs + IPI_MASK_OFFSET);
-+
-+	ipi_irq = irq_of_parse_and_map(np, 0);
-+	of_node_put(np);
-+	if (!ipi_irq) {
-+		pr_err("Failed to parse irq: %d\n", ipi_irq);
-+		return -EINVAL;
-+	}
-+
-+	ret = request_percpu_irq(ipi_irq, ipi_irq_handler,
-+						"kvx_ipi", &kvx_ipi_controller);
-+	if (ret) {
-+		pr_err("can't register interrupt %d (%d)\n",
-+						ipi_irq, ret);
-+		return ret;
-+	}
-+	kvx_ipi_controller.ipi_irq = ipi_irq;
-+
-+	ret = cpuhp_setup_state(CPUHP_AP_IRQ_KVX_STARTING,
-+				"kvx/ipi:online",
-+				kvx_ipi_starting_cpu,
-+				kvx_ipi_dying_cpu);
-+	if (ret < 0) {
-+		pr_err("Failed to setup hotplug state");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
++late_initcall(setup_cpuinfo);
 -- 
 2.37.2
 
