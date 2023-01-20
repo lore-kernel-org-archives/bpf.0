@@ -2,39 +2,37 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7057CC38159
-	for <bpf@archiver.kernel.org>; Fri, 20 Jan 2023 20:10:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D9B5C25B50
+	for <bpf@archiver.kernel.org>; Fri, 20 Jan 2023 20:10:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjATUKN convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 20 Jan 2023 15:10:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54278 "EHLO
+        id S229630AbjATUKO convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 20 Jan 2023 15:10:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbjATUKM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Jan 2023 15:10:12 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0042BAF33
-        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 12:10:09 -0800 (PST)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30KDitfm030730
-        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 12:10:09 -0800
+        with ESMTP id S229602AbjATUKO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Jan 2023 15:10:14 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07E0B2D36
+        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 12:10:11 -0800 (PST)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30KJBOWq021199
+        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 12:10:11 -0800
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3n6tvvna5m-2
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3n80w0r9ng-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 12:10:08 -0800
-Received: from twshared22340.15.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 12:10:11 -0800
+Received: from twshared19053.17.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Fri, 20 Jan 2023 12:10:07 -0800
+ 15.1.2375.34; Fri, 20 Jan 2023 12:10:10 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id DFBB525B4B237; Fri, 20 Jan 2023 12:10:04 -0800 (PST)
+        id AC44325B4B181; Fri, 20 Jan 2023 12:09:56 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH v2 bpf-next 24/25] selftests/bpf: add 6-argument syscall tracing test
-Date:   Fri, 20 Jan 2023 12:09:13 -0800
-Message-ID: <20230120200914.3008030-25-andrii@kernel.org>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH v2 bpf-next 20/25] libbpf: define sparc syscall regs spec in bpf_tracing.h
+Date:   Fri, 20 Jan 2023 12:09:09 -0800
+Message-ID: <20230120200914.3008030-21-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230120200914.3008030-1-andrii@kernel.org>
 References: <20230120200914.3008030-1-andrii@kernel.org>
@@ -42,8 +40,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: vC-Krt58bK0ULmyVecfkM2nNHvvcMVh8
-X-Proofpoint-GUID: vC-Krt58bK0ULmyVecfkM2nNHvvcMVh8
+X-Proofpoint-GUID: H8qa9F-0Zm7qczv0pIuoI-IbcawpqOs9
+X-Proofpoint-ORIG-GUID: H8qa9F-0Zm7qczv0pIuoI-IbcawpqOs9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
  definitions=2023-01-20_10,2023-01-20_01,2022-06-22_01
@@ -51,104 +49,32 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Turns out splice() is one of the syscalls that's using current maximum
-number of arguments (six). This is perfect for testing, so extend
-bpf_syscall_macro selftest to also trace splice() syscall, using
-BPF_KSYSCALL() macro. This makes sure all the syscall argument register
-definitions are correct.
+Define explicit table of registers used for syscall argument passing.
 
-Tested-by: Alan Maguire <alan.maguire@oracle.com> # arm64
-Tested-by: Ilya Leoshkevich <iii@linux.ibm.com> # s390x
-Suggested-by: Ilya Leoshkevich <iii@linux.ibm.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- .../bpf/prog_tests/test_bpf_syscall_macro.c   | 17 ++++++++++++
- .../selftests/bpf/progs/bpf_syscall_macro.c   | 26 +++++++++++++++++++
- 2 files changed, 43 insertions(+)
+ tools/lib/bpf/bpf_tracing.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_bpf_syscall_macro.c b/tools/testing/selftests/bpf/prog_tests/test_bpf_syscall_macro.c
-index c381faaae741..2900c5e9a016 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_bpf_syscall_macro.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_bpf_syscall_macro.c
-@@ -1,5 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright 2022 Sony Group Corporation */
-+#define _GNU_SOURCE
-+#include <fcntl.h>
- #include <sys/prctl.h>
- #include <test_progs.h>
- #include "bpf_syscall_macro.skel.h"
-@@ -13,6 +15,8 @@ void test_bpf_syscall_macro(void)
- 	unsigned long exp_arg3 = 13;
- 	unsigned long exp_arg4 = 14;
- 	unsigned long exp_arg5 = 15;
-+	loff_t off_in, off_out;
-+	ssize_t r;
- 
- 	/* check whether it can open program */
- 	skel = bpf_syscall_macro__open();
-@@ -33,6 +37,7 @@ void test_bpf_syscall_macro(void)
- 
- 	/* check whether args of syscall are copied correctly */
- 	prctl(exp_arg1, exp_arg2, exp_arg3, exp_arg4, exp_arg5);
+diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
+index b3647c4a6c0c..a2db267a6bce 100644
+--- a/tools/lib/bpf/bpf_tracing.h
++++ b/tools/lib/bpf/bpf_tracing.h
+@@ -325,6 +325,14 @@ struct pt_regs___arm64 {
+ #define __PT_PARM4_REG u_regs[UREG_I3]
+ #define __PT_PARM5_REG u_regs[UREG_I4]
+ #define __PT_PARM6_REG u_regs[UREG_I5]
 +
- #if defined(__aarch64__) || defined(__s390__)
- 	ASSERT_NEQ(skel->bss->arg1, exp_arg1, "syscall_arg1");
- #else
-@@ -68,6 +73,18 @@ void test_bpf_syscall_macro(void)
- 	ASSERT_EQ(skel->bss->arg4_syscall, exp_arg4, "BPF_KPROBE_SYSCALL_arg4");
- 	ASSERT_EQ(skel->bss->arg5_syscall, exp_arg5, "BPF_KPROBE_SYSCALL_arg5");
- 
-+	r = splice(-42, &off_in, 42, &off_out, 0x12340000, SPLICE_F_NONBLOCK);
-+	err = -errno;
-+	ASSERT_EQ(r, -1, "splice_res");
-+	ASSERT_EQ(err, -EBADF, "splice_err");
++#define __PT_PARM1_SYSCALL_REG __PT_PARM1_REG
++#define __PT_PARM2_SYSCALL_REG __PT_PARM2_REG
++#define __PT_PARM3_SYSCALL_REG __PT_PARM3_REG
++#define __PT_PARM4_SYSCALL_REG __PT_PARM4_REG
++#define __PT_PARM5_SYSCALL_REG __PT_PARM5_REG
++#define __PT_PARM6_SYSCALL_REG __PT_PARM6_REG
 +
-+	ASSERT_EQ(skel->bss->splice_fd_in, -42, "splice_arg1");
-+	ASSERT_EQ(skel->bss->splice_off_in, (__u64)&off_in, "splice_arg2");
-+	ASSERT_EQ(skel->bss->splice_fd_out, 42, "splice_arg3");
-+	ASSERT_EQ(skel->bss->splice_off_out, (__u64)&off_out, "splice_arg4");
-+	ASSERT_EQ(skel->bss->splice_len, 0x12340000, "splice_arg5");
-+	ASSERT_EQ(skel->bss->splice_flags, SPLICE_F_NONBLOCK, "splice_arg6");
-+
- cleanup:
- 	bpf_syscall_macro__destroy(skel);
- }
-diff --git a/tools/testing/selftests/bpf/progs/bpf_syscall_macro.c b/tools/testing/selftests/bpf/progs/bpf_syscall_macro.c
-index e1e11897e99b..1a476d8ed354 100644
---- a/tools/testing/selftests/bpf/progs/bpf_syscall_macro.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_syscall_macro.c
-@@ -81,4 +81,30 @@ int BPF_KSYSCALL(prctl_enter, int option, unsigned long arg2,
- 	return 0;
- }
- 
-+__u64 splice_fd_in;
-+__u64 splice_off_in;
-+__u64 splice_fd_out;
-+__u64 splice_off_out;
-+__u64 splice_len;
-+__u64 splice_flags;
-+
-+SEC("ksyscall/splice")
-+int BPF_KSYSCALL(splice_enter, int fd_in, loff_t *off_in, int fd_out,
-+		 loff_t *off_out, size_t len, unsigned int flags)
-+{
-+	pid_t pid = bpf_get_current_pid_tgid() >> 32;
-+
-+	if (pid != filter_pid)
-+		return 0;
-+
-+	splice_fd_in = fd_in;
-+	splice_off_in = (__u64)off_in;
-+	splice_fd_out = fd_out;
-+	splice_off_out = (__u64)off_out;
-+	splice_len = len;
-+	splice_flags = flags;
-+
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
+ #define __PT_RET_REG u_regs[UREG_I7]
+ #define __PT_FP_REG __unsupported__
+ #define __PT_RC_REG u_regs[UREG_I0]
 -- 
 2.30.2
 
