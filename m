@@ -2,48 +2,48 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 266A2C27C7C
-	for <bpf@archiver.kernel.org>; Fri, 20 Jan 2023 14:36:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65B3AC05027
+	for <bpf@archiver.kernel.org>; Fri, 20 Jan 2023 14:36:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231266AbjATOgX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Jan 2023 09:36:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39174 "EHLO
+        id S229928AbjATOg4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Jan 2023 09:36:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231232AbjATOgD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Jan 2023 09:36:03 -0500
+        with ESMTP id S231298AbjATOgF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Jan 2023 09:36:05 -0500
 Received: from fx306.security-mail.net (smtpout30.security-mail.net [85.31.212.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E934D05DA
-        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 06:35:21 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00317CE894
+        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 06:35:29 -0800 (PST)
 Received: from localhost (fx306.security-mail.net [127.0.0.1])
-        by fx306.security-mail.net (Postfix) with ESMTP id 4B8BD35CEF6
-        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 15:20:46 +0100 (CET)
+        by fx306.security-mail.net (Postfix) with ESMTP id C597635CDC0
+        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 15:20:45 +0100 (CET)
 Received: from fx306 (fx306.security-mail.net [127.0.0.1]) by
- fx306.security-mail.net (Postfix) with ESMTP id 9AA5535CD7A; Fri, 20 Jan
+ fx306.security-mail.net (Postfix) with ESMTP id 8BE2E35CD5B; Fri, 20 Jan
  2023 15:20:45 +0100 (CET)
 Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
- fx306.security-mail.net (Postfix) with ESMTPS id 1B27135CCDC; Fri, 20 Jan
+ fx306.security-mail.net (Postfix) with ESMTPS id 1398E35CC96; Fri, 20 Jan
  2023 15:20:45 +0100 (CET)
 Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
- zimbra2.kalray.eu (Postfix) with ESMTPS id EF33327E047D; Fri, 20 Jan 2023
- 15:10:38 +0100 (CET)
+ zimbra2.kalray.eu (Postfix) with ESMTPS id E7FE727E044F; Fri, 20 Jan 2023
+ 15:10:34 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
- (Postfix) with ESMTP id D247E27E047C; Fri, 20 Jan 2023 15:10:38 +0100 (CET)
+ (Postfix) with ESMTP id CFF1027E0444; Fri, 20 Jan 2023 15:10:34 +0100 (CET)
 Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
  (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
- N5fxZltrUQUh; Fri, 20 Jan 2023 15:10:38 +0100 (CET)
+ OVJ7A2wZo_Fk; Fri, 20 Jan 2023 15:10:34 +0100 (CET)
 Received: from junon.lin.mbt.kalray.eu (unknown [192.168.37.161]) by
- zimbra2.kalray.eu (Postfix) with ESMTPSA id 5595327E0470; Fri, 20 Jan 2023
- 15:10:38 +0100 (CET)
+ zimbra2.kalray.eu (Postfix) with ESMTPSA id 4201627E043A; Fri, 20 Jan 2023
+ 15:10:34 +0100 (CET)
 X-Virus-Scanned: E-securemail
-Secumail-id: <2818.63caa33d.1a14f.0>
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu D247E27E047C
+Secumail-id: <218f.63caa33d.dde8.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu CFF1027E0444
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
- s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1674223838;
- bh=Ulssifik/xqyxmseDcDCHWF7GqQfVZORENj6s4m7VYQ=;
+ s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1674223834;
+ bh=6QcC/grprLfAmpT4NvKC+2P+bFPaJgpCrUBOCq0uMCs=;
  h=From:To:Date:Message-Id:MIME-Version;
- b=c8htp1BmJN/ZqK2lC0okl9ZdmRBJrjLE0Xevwykd2j/+m7QLb63Zikx4OnmEIuo/W
- Di1UTV3iLdZyWQAIqMw8TerInA0DmSfQOa9dBTr2kbyPxrpdc6nurhUYWTcgOQZdlP
- MXGfL9njI9tpJ5KB86FGEG7jmsXmQo3UTpfRPdc0=
+ b=Jsz1BDnzwLSgp1uP0SbgkLnVB9cUPgoFlKGT+0670XEFz3RHZCUP0NGX7/aoACy4s
+ I9XN+NfDX+cpKzWEgijweRzCfuAVc1E5u2WzV3GPCUDW92Nh/OWH32rzft1y5rw49a
+ bdhVe13SPEPF+/n/GPVITHkAbagdA8H2JMOmHuSo=
 From:   Yann Sionneau <ysionneau@kalray.eu>
 To:     Arnd Bergmann <arnd@arndb.de>, Jonathan Corbet <corbet@lwn.net>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -107,9 +107,9 @@ Cc:     Benjamin Mugnier <mugnier.benjamin@gmail.com>,
         devicetree@vger.kernel.org, linux-mm@kvack.org,
         linux-arch@vger.kernel.org, linux-audit@redhat.com,
         linux-riscv@lists.infradead.org, bpf@vger.kernel.org
-Subject: [RFC PATCH v2 30/31] kvx: Add power controller driver
-Date:   Fri, 20 Jan 2023 15:10:01 +0100
-Message-ID: <20230120141002.2442-31-ysionneau@kalray.eu>
+Subject: [RFC PATCH v2 22/31] kvx: Add signal handling support
+Date:   Fri, 20 Jan 2023 15:09:53 +0100
+Message-ID: <20230120141002.2442-23-ysionneau@kalray.eu>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230120141002.2442-1-ysionneau@kalray.eu>
 References: <20230120141002.2442-1-ysionneau@kalray.eu>
@@ -121,193 +121,415 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jules Maselbas <jmaselbas@kalray.eu>
-
-The Power Controller (pwr-ctrl) control cores reset and wake-up
-procedure.
+Add sigcontext definition and signal handling support for kvx.
 
 Co-developed-by: Clement Leger <clement@clement-leger.fr>
 Signed-off-by: Clement Leger <clement@clement-leger.fr>
+Co-developed-by: Jules Maselbas <jmaselbas@kalray.eu>
+Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
 Co-developed-by: Julian Vetter <jvetter@kalray.eu>
 Signed-off-by: Julian Vetter <jvetter@kalray.eu>
-Co-developed-by: Louis Morhet <lmorhet@kalray.eu>
-Signed-off-by: Louis Morhet <lmorhet@kalray.eu>
-Co-developed-by: Marius Gligor <mgligor@kalray.eu>
-Signed-off-by: Marius Gligor <mgligor@kalray.eu>
-Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
+Co-developed-by: Yann Sionneau <ysionneau@kalray.eu>
 Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
 ---
 
 Notes:
-    V1 -> V2: new patch
+    V1 -> V2:
+     - use read_thread_flags() as suggested by Mark Rutland
 
- arch/kvx/include/asm/pwr_ctrl.h | 45 ++++++++++++++++
- arch/kvx/platform/Makefile      |  6 +++
- arch/kvx/platform/pwr_ctrl.c    | 91 +++++++++++++++++++++++++++++++++
- 3 files changed, 142 insertions(+)
- create mode 100644 arch/kvx/include/asm/pwr_ctrl.h
- create mode 100644 arch/kvx/platform/Makefile
- create mode 100644 arch/kvx/platform/pwr_ctrl.c
+ arch/kvx/include/uapi/asm/sigcontext.h |  16 ++
+ arch/kvx/kernel/signal.c               | 265 +++++++++++++++++++++++++
+ arch/kvx/kernel/vdso.c                 |  87 ++++++++
+ 3 files changed, 368 insertions(+)
+ create mode 100644 arch/kvx/include/uapi/asm/sigcontext.h
+ create mode 100644 arch/kvx/kernel/signal.c
+ create mode 100644 arch/kvx/kernel/vdso.c
 
-diff --git a/arch/kvx/include/asm/pwr_ctrl.h b/arch/kvx/include/asm/pwr_ctrl.h
+diff --git a/arch/kvx/include/uapi/asm/sigcontext.h b/arch/kvx/include/uapi/asm/sigcontext.h
 new file mode 100644
-index 000000000000..25f403ba935a
+index 000000000000..97ab4f78152a
 --- /dev/null
-+++ b/arch/kvx/include/asm/pwr_ctrl.h
-@@ -0,0 +1,45 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
++++ b/arch/kvx/include/uapi/asm/sigcontext.h
+@@ -0,0 +1,16 @@
++/* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
 +/*
 + * Copyright (C) 2017-2023 Kalray Inc.
 + * Author(s): Clement Leger
-+ *            Marius Gligor
 + */
 +
-+#ifndef _ASM_KVX_PWR_CTRL_H
-+#define _ASM_KVX_PWR_CTRL_H
++#ifndef _UAPI_ASM_KVX_SIGCONTEXT_H
++#define _UAPI_ASM_KVX_SIGCONTEXT_H
 +
-+#ifndef __ASSEMBLY__
++#include <asm/ptrace.h>
 +
-+int kvx_pwr_ctrl_probe(void);
++struct sigcontext {
++	struct user_pt_regs sc_regs;
++};
 +
-+void kvx_pwr_ctrl_cpu_poweron(unsigned int cpu);
-+
-+#endif
-+
-+/* Power controller vector register definitions */
-+#define KVX_PWR_CTRL_VEC_OFFSET 0x1000
-+#define KVX_PWR_CTRL_VEC_WUP_SET_OFFSET     0x10
-+#define KVX_PWR_CTRL_VEC_WUP_CLEAR_OFFSET     0x20
-+
-+/* Power controller PE reset PC register definitions */
-+#define KVX_PWR_CTRL_RESET_PC_OFFSET               0x2000
-+
-+/* Power controller global register definitions */
-+#define KVX_PWR_CTRL_GLOBAL_OFFSET 0x4040
-+
-+#define KVX_PWR_CTRL_GLOBAL_SET_OFFSET     0x10
-+#define KVX_PWR_CTRL_GLOBAL_SET_PE_EN_SHIFT           0x1
-+
-+#define PWR_CTRL_WUP_SET_OFFSET  \
-+		(KVX_PWR_CTRL_VEC_OFFSET + \
-+		 KVX_PWR_CTRL_VEC_WUP_SET_OFFSET)
-+
-+#define PWR_CTRL_WUP_CLEAR_OFFSET  \
-+		(KVX_PWR_CTRL_VEC_OFFSET + \
-+		 KVX_PWR_CTRL_VEC_WUP_CLEAR_OFFSET)
-+
-+#define PWR_CTRL_GLOBAL_CONFIG_OFFSET \
-+		(KVX_PWR_CTRL_GLOBAL_OFFSET + \
-+		 KVX_PWR_CTRL_GLOBAL_SET_OFFSET)
-+
-+#endif /* _ASM_KVX_PWR_CTRL_H */
-diff --git a/arch/kvx/platform/Makefile b/arch/kvx/platform/Makefile
++#endif	/* _UAPI_ASM_KVX_SIGCONTEXT_H */
+diff --git a/arch/kvx/kernel/signal.c b/arch/kvx/kernel/signal.c
 new file mode 100644
-index 000000000000..c7d0abb15c27
+index 000000000000..5bd63d14f43e
 --- /dev/null
-+++ b/arch/kvx/platform/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Copyright (C) 2018-2023 Kalray Inc.
-+#
-+
-+obj-$(CONFIG_SMP) += pwr_ctrl.o
-diff --git a/arch/kvx/platform/pwr_ctrl.c b/arch/kvx/platform/pwr_ctrl.c
-new file mode 100644
-index 000000000000..ee35d04845ae
---- /dev/null
-+++ b/arch/kvx/platform/pwr_ctrl.c
-@@ -0,0 +1,91 @@
++++ b/arch/kvx/kernel/signal.c
+@@ -0,0 +1,265 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (C) 2017-2023 Kalray Inc.
 + * Author(s): Clement Leger
 + */
 +
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++#include <linux/bug.h>
++#include <linux/syscalls.h>
 +
-+#include <linux/io.h>
-+#include <linux/slab.h>
-+#include <linux/types.h>
-+#include <linux/module.h>
-+#include <linux/of_address.h>
-+#include <linux/of_platform.h>
++#include <asm/ucontext.h>
++#include <asm/processor.h>
++#include <asm/cacheflush.h>
++#include <linux/resume_user_mode.h>
 +
-+#include <asm/pwr_ctrl.h>
-+#include <asm/symbols.h>
-+
-+struct kvx_pwr_ctrl {
-+	void __iomem *regs;
++struct rt_sigframe {
++	struct siginfo info;
++	struct ucontext uc;
 +};
 +
-+static struct kvx_pwr_ctrl kvx_pwr_controller;
-+
-+/**
-+ * kvx_pwr_ctrl_cpu_poweron() - Wakeup a cpu
-+ * @cpu: cpu to wakeup
-+ */
-+void kvx_pwr_ctrl_cpu_poweron(unsigned int cpu)
++int __init setup_syscall_sigreturn_page(void *sigpage_addr)
 +{
-+	/* Set PE boot address */
-+	writeq((unsigned long long)kvx_start,
-+			kvx_pwr_controller.regs + KVX_PWR_CTRL_RESET_PC_OFFSET);
-+	/* Wake up processor ! */
-+	writeq(1ULL << cpu,
-+	       kvx_pwr_controller.regs + PWR_CTRL_WUP_SET_OFFSET);
-+	/* Then clear wakeup to allow processor to sleep */
-+	writeq(1ULL << cpu,
-+	       kvx_pwr_controller.regs + PWR_CTRL_WUP_CLEAR_OFFSET);
-+}
++	unsigned int frame_size = (uintptr_t) &user_scall_rt_sigreturn_end -
++				  (uintptr_t) &user_scall_rt_sigreturn;
 +
-+static struct device_node * __init get_pwr_ctrl_node(void)
-+{
-+	const phandle *ph;
-+	struct device_node *cpu;
-+	struct device_node *node;
++	/* Copy the sigreturn scall implementation */
++	memcpy(sigpage_addr, &user_scall_rt_sigreturn, frame_size);
 +
-+	cpu = of_get_cpu_node(raw_smp_processor_id(), NULL);
-+	if (!cpu) {
-+		pr_err("Failed to get CPU node\n");
-+		return NULL;
-+	}
-+
-+	ph = of_get_property(cpu, "power-controller", NULL);
-+	if (!ph) {
-+		pr_err("Failed to get power-controller phandle\n");
-+		return NULL;
-+	}
-+
-+	node = of_find_node_by_phandle(be32_to_cpup(ph));
-+	if (!node) {
-+		pr_err("Failed to get power-controller node\n");
-+		return NULL;
-+	}
-+
-+	return node;
-+}
-+
-+int __init kvx_pwr_ctrl_probe(void)
-+{
-+	struct device_node *ctrl;
-+
-+	ctrl = get_pwr_ctrl_node();
-+	if (!ctrl) {
-+		pr_err("Failed to get power controller node\n");
-+		return -EINVAL;
-+	}
-+
-+	if (!of_device_is_compatible(ctrl, "kalray,kvx-pwr-ctrl")) {
-+		pr_err("Failed to get power controller node\n");
-+		return -EINVAL;
-+	}
-+
-+	kvx_pwr_controller.regs = of_iomap(ctrl, 0);
-+	if (!kvx_pwr_controller.regs) {
-+		pr_err("Failed ioremap\n");
-+		return -EINVAL;
-+	}
++	flush_icache_range((unsigned long) sigpage_addr,
++			   (unsigned long) sigpage_addr + frame_size);
 +
 +	return 0;
++}
++
++static long restore_sigcontext(struct pt_regs *regs,
++			       struct sigcontext __user *sc)
++{
++	long err;
++
++	/* sc_regs is structured the same as the start of pt_regs */
++	err = __copy_from_user(regs, &sc->sc_regs, sizeof(sc->sc_regs));
++
++	return err;
++}
++
++long _sys_rt_sigreturn(void)
++{
++	struct pt_regs *regs = current_pt_regs();
++	struct rt_sigframe __user *frame;
++	struct task_struct *task;
++	sigset_t set;
++
++	current->restart_block.fn = do_no_restart_syscall;
++
++	frame = (struct rt_sigframe __user *) user_stack_pointer(regs);
++
++	/*
++	 * Stack is not aligned but should be !
++	 * User probably did some malicious things.
++	 */
++	if (user_stack_pointer(regs) & STACK_ALIGN_MASK)
++		goto badframe;
++
++	if (!access_ok(frame, sizeof(*frame)))
++		goto badframe;
++
++	/* Restore sigmask */
++	if (__copy_from_user(&set, &frame->uc.uc_sigmask, sizeof(set)))
++		goto badframe;
++
++	set_current_blocked(&set);
++
++	if (restore_sigcontext(regs, &frame->uc.uc_mcontext))
++		goto badframe;
++
++	if (restore_altstack(&frame->uc.uc_stack))
++		goto badframe;
++
++	return regs->r0;
++
++badframe:
++	task = current;
++	if (show_unhandled_signals) {
++		pr_info_ratelimited(
++			"%s[%d]: bad frame in %s: frame=%p pc=%p sp=%p\n",
++			task->comm, task_pid_nr(task), __func__,
++			frame, (void *) instruction_pointer(regs),
++			(void *) user_stack_pointer(regs));
++	}
++	force_sig(SIGSEGV);
++	return 0;
++}
++
++
++static long setup_sigcontext(struct rt_sigframe __user *frame,
++			     struct pt_regs *regs)
++{
++	struct sigcontext __user *sc = &frame->uc.uc_mcontext;
++	long err;
++
++	/* sc_regs is structured the same as the start of pt_regs */
++	err = __copy_to_user(&sc->sc_regs, regs, sizeof(sc->sc_regs));
++
++	return err;
++}
++
++static inline void __user *get_sigframe(struct ksignal *ksig,
++					struct pt_regs *regs, size_t framesize)
++{
++	unsigned long sp;
++	/* Default to using normal stack */
++	sp = regs->sp;
++
++	/*
++	 * If we are on the alternate signal stack and would overflow it, don't.
++	 * Return an always-bogus address instead so we will die with SIGSEGV.
++	 */
++	if (on_sig_stack(sp) && !likely(on_sig_stack(sp - framesize)))
++		return (void __user __force *)(-1UL);
++
++	/* This is the X/Open sanctioned signal stack switching. */
++	sp = sigsp(sp, ksig) - framesize;
++
++	/* Align the stack frame on 16bytes */
++	sp &= ~STACK_ALIGN_MASK;
++
++	return (void __user *)sp;
++}
++
++/* TODO: Use VDSO when ready ! */
++static int setup_rt_frame(struct ksignal *ksig, sigset_t *set,
++			  struct pt_regs *regs)
++{
++	unsigned long sigpage = current->mm->context.sigpage;
++	struct rt_sigframe __user *frame;
++	long err = 0;
++
++	frame = get_sigframe(ksig, regs, sizeof(*frame));
++	if (!access_ok(frame, sizeof(*frame)))
++		return -EFAULT;
++
++	err |= copy_siginfo_to_user(&frame->info, &ksig->info);
++
++	/* Create the ucontext. */
++	err |= __put_user(0, &frame->uc.uc_flags);
++	err |= __put_user(NULL, &frame->uc.uc_link);
++	err |= __save_altstack(&frame->uc.uc_stack, user_stack_pointer(regs));
++	err |= setup_sigcontext(frame, regs);
++	err |= __copy_to_user(&frame->uc.uc_sigmask, set, sizeof(*set));
++	if (err)
++		return -EFAULT;
++
++	/*
++	 * When returning from the handler, we want to jump to the
++	 * sigpage which will execute the sigreturn scall.
++	 */
++	regs->ra = sigpage;
++	/* Return to signal handler */
++	regs->spc = (unsigned long)ksig->ka.sa.sa_handler;
++	regs->sp = (unsigned long) frame;
++
++	/* Parameters for signal handler */
++	regs->r0 = ksig->sig;                     /* r0: signal number */
++	regs->r1 = (unsigned long)(&frame->info); /* r1: siginfo pointer */
++	regs->r2 = (unsigned long)(&frame->uc);   /* r2: ucontext pointer */
++
++	return 0;
++}
++
++static void handle_signal(struct ksignal *ksig, struct pt_regs *regs)
++{
++	sigset_t *oldset = sigmask_to_save();
++	int ret;
++
++	/* Are we from a system call? */
++	if (in_syscall(regs)) {
++		/* If so, check system call restarting.. */
++		switch (regs->r0) {
++		case -ERESTART_RESTARTBLOCK:
++		case -ERESTARTNOHAND:
++			regs->r0 = -EINTR;
++			break;
++		case -ERESTARTSYS:
++			if (!(ksig->ka.sa.sa_flags & SA_RESTART)) {
++				regs->r0 = -EINTR;
++				break;
++			}
++			fallthrough;
++		case -ERESTARTNOINTR:
++			regs->r0 = regs->orig_r0;
++			regs->spc -= 0x4;
++			break;
++		}
++	}
++
++	ret = setup_rt_frame(ksig, oldset, regs);
++
++	signal_setup_done(ret, ksig, 0);
++}
++
++asmlinkage void do_signal(struct pt_regs *regs)
++{
++	struct ksignal ksig;
++
++	if (get_signal(&ksig)) {
++		handle_signal(&ksig, regs);
++		return;
++	}
++
++	/* Are we from a system call? */
++	if (in_syscall(regs)) {
++		/*
++		 * If we are here, this means there is no handler
++		 * present and we must restart the syscall.
++		 */
++		switch (regs->r0) {
++		case -ERESTART_RESTARTBLOCK:
++			/* Modify the syscall number in order to restart it */
++			regs->r6 = __NR_restart_syscall;
++			fallthrough;
++		case -ERESTARTNOHAND:
++		case -ERESTARTSYS:
++		case -ERESTARTNOINTR:
++			/* We are restarting the syscall */
++			regs->r0 = regs->orig_r0;
++			/*
++			 * scall instruction isn't bundled with anything else,
++			 * so we can just revert the spc to restart the syscall.
++			 */
++			regs->spc -= 0x4;
++			break;
++		}
++	}
++
++	/*
++	 * If there's no signal to deliver, we just put the saved sigmask
++	 * back.
++	 */
++	restore_saved_sigmask();
++}
++
++
++asmlinkage void do_work_pending(struct pt_regs *regs,
++				unsigned long thread_flags)
++{
++	/* We are called with IRQs disabled */
++	trace_hardirqs_off();
++
++	do {
++		if (thread_flags & _TIF_NEED_RESCHED) {
++			schedule();
++		} else {
++			local_irq_enable();
++			if (thread_flags & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL))
++				do_signal(regs);
++
++			if (thread_flags & _TIF_NOTIFY_RESUME) {
++				clear_thread_flag(TIF_NOTIFY_RESUME);
++				resume_user_mode_work(regs);
++			}
++		}
++		local_irq_disable();
++		thread_flags = read_thread_flags();
++	} while (thread_flags & _TIF_WORK_MASK);
++}
++
+diff --git a/arch/kvx/kernel/vdso.c b/arch/kvx/kernel/vdso.c
+new file mode 100644
+index 000000000000..1515de15eb31
+--- /dev/null
++++ b/arch/kvx/kernel/vdso.c
+@@ -0,0 +1,87 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ */
++
++#include <linux/mm.h>
++#include <linux/vmalloc.h>
++#include <linux/binfmts.h>
++
++#include <asm/syscall.h>
++
++static struct page *signal_page;
++
++static int __init init_sigreturn(void)
++{
++	struct page *sigpage;
++	void *mapped_sigpage;
++	int err;
++
++	sigpage = alloc_page(GFP_KERNEL);
++	if (!sigpage)
++		panic("Cannot allocate sigreturn page");
++
++	mapped_sigpage = vmap(&sigpage, 1, 0, PAGE_KERNEL);
++	if (!mapped_sigpage)
++		panic("Cannot map sigreturn page");
++
++	clear_page(mapped_sigpage);
++
++	err = setup_syscall_sigreturn_page(mapped_sigpage);
++	if (err)
++		panic("Cannot set signal return syscall, err: %x.", err);
++
++	vunmap(mapped_sigpage);
++
++	signal_page = sigpage;
++
++	return 0;
++}
++arch_initcall(init_sigreturn);
++
++static int sigpage_mremap(const struct vm_special_mapping *sm,
++		struct vm_area_struct *new_vma)
++{
++	current->mm->context.sigpage = new_vma->vm_start;
++	return 0;
++}
++
++static const struct vm_special_mapping sigpage_mapping = {
++	.name = "[sigpage]",
++	.pages = &signal_page,
++	.mremap = sigpage_mremap,
++};
++
++int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
++{
++	int ret = 0;
++	unsigned long addr;
++	struct mm_struct *mm = current->mm;
++	struct vm_area_struct *vma;
++
++	mmap_write_lock(mm);
++
++	addr = get_unmapped_area(NULL, STACK_TOP, PAGE_SIZE, 0, 0);
++	if (IS_ERR_VALUE(addr)) {
++		ret = addr;
++		goto up_fail;
++	}
++
++	vma = _install_special_mapping(
++			mm,
++			addr,
++			PAGE_SIZE,
++			VM_READ|VM_EXEC|VM_MAYREAD|VM_MAYEXEC,
++			&sigpage_mapping);
++	if (IS_ERR(vma)) {
++		ret = PTR_ERR(vma);
++		goto up_fail;
++	}
++
++	mm->context.sigpage = addr;
++
++up_fail:
++	mmap_write_unlock(mm);
++	return ret;
 +}
 -- 
 2.37.2
