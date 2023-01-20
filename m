@@ -2,50 +2,45 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44CFBC38142
-	for <bpf@archiver.kernel.org>; Fri, 20 Jan 2023 02:36:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19D11C46467
+	for <bpf@archiver.kernel.org>; Fri, 20 Jan 2023 03:39:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229475AbjATCg5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Jan 2023 21:36:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42834 "EHLO
+        id S229540AbjATDj0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Jan 2023 22:39:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbjATCgx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 Jan 2023 21:36:53 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5FEA95A9;
-        Thu, 19 Jan 2023 18:36:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674182201; x=1705718201;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iGWWwcn5Zq4NGOFaYg6XxN+FdKm8ZS4nDFi/IbIcAdo=;
-  b=ce5+uctqD4rlC3KHM8oSX8wkjCShEdwdH87dLREM6U9S6vdik9TnKsJY
-   WowXsemUyKL0Ibp5tYNDcv54oApp/EB7e3VvN9opBUihlvpGiV90rAxP1
-   f1BbjZH5HsLkLKLlrJJ8vpEuZhWGE2BZoarbb4RWu0TjWs8RplXA7QNUx
-   zuSbwktDgH1lf6xnG9kusbVain4wXmj1719EJOtwwAXQac2heykG4PHjP
-   ruM5q6Xy3B3JtpnI4YYtCW+zUHRVQy8B4iaKY5sS5tTvhpkWrjFPuBSZa
-   96YY5ZUBDET+L3rM971CQk662YBfJcXTauviuta4VOviDA4xqzgiBdWWX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="323183413"
-X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
-   d="scan'208";a="323183413"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 18:36:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="802919918"
-X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
-   d="scan'208";a="802919918"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 19 Jan 2023 18:36:36 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pIhGd-00026W-0p;
-        Fri, 20 Jan 2023 02:36:35 +0000
-Date:   Fri, 20 Jan 2023 10:36:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Vernet <void@manifault.com>, bpf@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, ast@kernel.org,
+        with ESMTP id S229437AbjATDj0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 Jan 2023 22:39:26 -0500
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE25EA2597;
+        Thu, 19 Jan 2023 19:39:24 -0800 (PST)
+Received: by mail-qv1-f51.google.com with SMTP id t7so3021221qvv.3;
+        Thu, 19 Jan 2023 19:39:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=s2/u49MGkiTdhDi/wUNzsd0MzL5LPWw1jXjelpgTNjQ=;
+        b=LqWpHgtRjt1PgS+l1vW3ehG2VBjAVE2gZb12OBPSyQ/TgGD+TLc01r06TLQ7D4e+lF
+         MdRHsP+X3iB3C9PT+9NxRiQntVwsRdLH98DdxHmeCqub5iSDfOq82BhqtYwEnG4NGssh
+         YqEbsD2/1wpoGueP5AKnDPIf5z3hdUKMavhzSXRDwntrmTTayxLvmrI/M1Tf8Jpmmdm0
+         IyVKbxhDoT1KhbnUBoHOoBDFKHiUrXe83h8p07DbAxUaF5cl2GEElBkq1Hp0ePgqQhsp
+         qLCNlUZhz+g74uiAiUIxcMsNq/F2a0zUyGUSVipEU6ExvcwpL/hMTEwKnyG/xJsQqalb
+         ct1A==
+X-Gm-Message-State: AFqh2kqdFZJuqR3B82ye79DRUV9u5kciMZwmtaImL1XVB2PpNz0kCvoy
+        Sujc8noYS2xr2YFNaTpu8jY=
+X-Google-Smtp-Source: AMrXdXtmeyvC2AGHjJRQX0twXoVPRG4rYfCl/1AY5U+LOqUUu/GWx4y4szZt8bMWeJmZBfYOTxOL8Q==
+X-Received: by 2002:a05:6214:5d8d:b0:531:e636:e236 with SMTP id mf13-20020a0562145d8d00b00531e636e236mr18587890qvb.28.1674185963926;
+        Thu, 19 Jan 2023 19:39:23 -0800 (PST)
+Received: from maniforge.lan ([2620:10d:c091:480::1:2fc9])
+        by smtp.gmail.com with ESMTPSA id s1-20020a05620a0bc100b006fa4ac86bfbsm25132205qki.55.2023.01.19.19.39.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 19:39:23 -0800 (PST)
+Date:   Thu, 19 Jan 2023 21:39:27 -0600
+From:   David Vernet <void@manifault.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     bpf@vger.kernel.org, oe-kbuild-all@lists.linux.dev, ast@kernel.org,
         daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
         song@kernel.org, yhs@meta.com, john.fastabend@gmail.com,
         kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
@@ -53,294 +48,60 @@ Cc:     oe-kbuild-all@lists.linux.dev, ast@kernel.org,
         kernel-team@meta.com, tj@kernel.org
 Subject: Re: [PATCH bpf-next 4/8] bpf: Enable cpumasks to be queried and used
  as kptrs
-Message-ID: <202301201053.OKCBdOsh-lkp@intel.com>
+Message-ID: <Y8oM7xxNqNDDHUpT@maniforge.lan>
 References: <20230119235833.2948341-5-void@manifault.com>
+ <202301201053.OKCBdOsh-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230119235833.2948341-5-void@manifault.com>
+In-Reply-To: <202301201053.OKCBdOsh-lkp@intel.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi David,
+On Fri, Jan 20, 2023 at 10:36:24AM +0800, kernel test robot wrote:
+> Hi David,
+> 
+> Thank you for the patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on bpf-next/master]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/David-Vernet/bpf-Enable-annotating-trusted-nested-pointers/20230120-080139
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+> patch link:    https://lore.kernel.org/r/20230119235833.2948341-5-void%40manifault.com
+> patch subject: [PATCH bpf-next 4/8] bpf: Enable cpumasks to be queried and used as kptrs
+> config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230120/202301201053.OKCBdOsh-lkp@intel.com/config)
+> compiler: sparc64-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/11541205c58f2226e5ffbc5967317469d65efac6
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review David-Vernet/bpf-Enable-annotating-trusted-nested-pointers/20230120-080139
+>         git checkout 11541205c58f2226e5ffbc5967317469d65efac6
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash kernel/bpf/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> kernel/bpf/cpumask.c:38:21: warning: no previous prototype for 'bpf_cpumask_create' [-Wmissing-prototypes]
+>       38 | struct bpf_cpumask *bpf_cpumask_create(void)
 
-Thank you for the patch! Perhaps something to improve:
+Sorry, also forgot to do the __diag() dance described in [0]. I'll
+include that fix in v2.
 
-[auto build test WARNING on bpf-next/master]
+[0]: https://docs.kernel.org/bpf/kfuncs.html#creating-a-wrapper-kfunc
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Vernet/bpf-Enable-annotating-trusted-nested-pointers/20230120-080139
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20230119235833.2948341-5-void%40manifault.com
-patch subject: [PATCH bpf-next 4/8] bpf: Enable cpumasks to be queried and used as kptrs
-config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230120/202301201053.OKCBdOsh-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/11541205c58f2226e5ffbc5967317469d65efac6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review David-Vernet/bpf-Enable-annotating-trusted-nested-pointers/20230120-080139
-        git checkout 11541205c58f2226e5ffbc5967317469d65efac6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash kernel/bpf/
+This is also reminding me to send out the v2 for [1]. I'll do that
+after I take care of another few small things I've been putting off.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+[1]: https://lore.kernel.org/lkml/20230106195130.1216841-3-void@manifault.com/T/
 
-All warnings (new ones prefixed by >>):
-
->> kernel/bpf/cpumask.c:38:21: warning: no previous prototype for 'bpf_cpumask_create' [-Wmissing-prototypes]
-      38 | struct bpf_cpumask *bpf_cpumask_create(void)
-         |                     ^~~~~~~~~~~~~~~~~~
->> kernel/bpf/cpumask.c:52:21: warning: no previous prototype for 'bpf_cpumask_acquire' [-Wmissing-prototypes]
-      52 | struct bpf_cpumask *bpf_cpumask_acquire(struct bpf_cpumask *cpumask)
-         |                     ^~~~~~~~~~~~~~~~~~~
->> kernel/bpf/cpumask.c:58:21: warning: no previous prototype for 'bpf_cpumask_kptr_get' [-Wmissing-prototypes]
-      58 | struct bpf_cpumask *bpf_cpumask_kptr_get(struct bpf_cpumask **cpumaskp)
-         |                     ^~~~~~~~~~~~~~~~~~~~
->> kernel/bpf/cpumask.c:76:6: warning: no previous prototype for 'bpf_cpumask_release' [-Wmissing-prototypes]
-      76 | void bpf_cpumask_release(struct bpf_cpumask *cpumask)
-         |      ^~~~~~~~~~~~~~~~~~~
->> kernel/bpf/cpumask.c:88:5: warning: no previous prototype for 'bpf_cpumask_first' [-Wmissing-prototypes]
-      88 | u32 bpf_cpumask_first(const struct cpumask *cpumask)
-         |     ^~~~~~~~~~~~~~~~~
->> kernel/bpf/cpumask.c:93:5: warning: no previous prototype for 'bpf_cpumask_first_zero' [-Wmissing-prototypes]
-      93 | u32 bpf_cpumask_first_zero(const struct cpumask *cpumask)
-         |     ^~~~~~~~~~~~~~~~~~~~~~
->> kernel/bpf/cpumask.c:98:6: warning: no previous prototype for 'bpf_cpumask_set_cpu' [-Wmissing-prototypes]
-      98 | void bpf_cpumask_set_cpu(u32 cpu, struct bpf_cpumask *cpumask)
-         |      ^~~~~~~~~~~~~~~~~~~
->> kernel/bpf/cpumask.c:106:6: warning: no previous prototype for 'bpf_cpumask_clear_cpu' [-Wmissing-prototypes]
-     106 | void bpf_cpumask_clear_cpu(u32 cpu, struct bpf_cpumask *cpumask)
-         |      ^~~~~~~~~~~~~~~~~~~~~
->> kernel/bpf/cpumask.c:114:6: warning: no previous prototype for 'bpf_cpumask_test_cpu' [-Wmissing-prototypes]
-     114 | bool bpf_cpumask_test_cpu(u32 cpu, const struct cpumask *cpumask)
-         |      ^~~~~~~~~~~~~~~~~~~~
->> kernel/bpf/cpumask.c:122:6: warning: no previous prototype for 'bpf_cpumask_test_and_set_cpu' [-Wmissing-prototypes]
-     122 | bool bpf_cpumask_test_and_set_cpu(u32 cpu, struct bpf_cpumask *cpumask)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> kernel/bpf/cpumask.c:130:6: warning: no previous prototype for 'bpf_cpumask_test_and_clear_cpu' [-Wmissing-prototypes]
-     130 | bool bpf_cpumask_test_and_clear_cpu(u32 cpu, struct bpf_cpumask *cpumask)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> kernel/bpf/cpumask.c:138:6: warning: no previous prototype for 'bpf_cpumask_setall' [-Wmissing-prototypes]
-     138 | void bpf_cpumask_setall(struct bpf_cpumask *cpumask)
-         |      ^~~~~~~~~~~~~~~~~~
->> kernel/bpf/cpumask.c:143:6: warning: no previous prototype for 'bpf_cpumask_clear' [-Wmissing-prototypes]
-     143 | void bpf_cpumask_clear(struct bpf_cpumask *cpumask)
-         |      ^~~~~~~~~~~~~~~~~
->> kernel/bpf/cpumask.c:148:6: warning: no previous prototype for 'bpf_cpumask_and' [-Wmissing-prototypes]
-     148 | bool bpf_cpumask_and(struct bpf_cpumask *dst,
-         |      ^~~~~~~~~~~~~~~
->> kernel/bpf/cpumask.c:155:6: warning: no previous prototype for 'bpf_cpumask_or' [-Wmissing-prototypes]
-     155 | void bpf_cpumask_or(struct bpf_cpumask *dst,
-         |      ^~~~~~~~~~~~~~
->> kernel/bpf/cpumask.c:162:6: warning: no previous prototype for 'bpf_cpumask_xor' [-Wmissing-prototypes]
-     162 | void bpf_cpumask_xor(struct bpf_cpumask *dst,
-         |      ^~~~~~~~~~~~~~~
->> kernel/bpf/cpumask.c:169:6: warning: no previous prototype for 'bpf_cpumask_equal' [-Wmissing-prototypes]
-     169 | bool bpf_cpumask_equal(const struct cpumask *src1, const struct cpumask *src2)
-         |      ^~~~~~~~~~~~~~~~~
->> kernel/bpf/cpumask.c:174:6: warning: no previous prototype for 'bpf_cpumask_intersects' [-Wmissing-prototypes]
-     174 | bool bpf_cpumask_intersects(const struct cpumask *src1, const struct cpumask *src2)
-         |      ^~~~~~~~~~~~~~~~~~~~~~
->> kernel/bpf/cpumask.c:179:6: warning: no previous prototype for 'bpf_cpumask_subset' [-Wmissing-prototypes]
-     179 | bool bpf_cpumask_subset(const struct cpumask *src1, const struct cpumask *src2)
-         |      ^~~~~~~~~~~~~~~~~~
->> kernel/bpf/cpumask.c:184:6: warning: no previous prototype for 'bpf_cpumask_empty' [-Wmissing-prototypes]
-     184 | bool bpf_cpumask_empty(const struct cpumask *cpumask)
-         |      ^~~~~~~~~~~~~~~~~
-   kernel/bpf/cpumask.c:189:6: warning: no previous prototype for 'bpf_cpumask_full' [-Wmissing-prototypes]
-     189 | bool bpf_cpumask_full(const struct cpumask *cpumask)
-         |      ^~~~~~~~~~~~~~~~
-   kernel/bpf/cpumask.c:194:6: warning: no previous prototype for 'bpf_cpumask_copy' [-Wmissing-prototypes]
-     194 | void bpf_cpumask_copy(struct bpf_cpumask *dst, const struct cpumask *src)
-         |      ^~~~~~~~~~~~~~~~
-   kernel/bpf/cpumask.c:199:5: warning: no previous prototype for 'bpf_cpumask_any' [-Wmissing-prototypes]
-     199 | u32 bpf_cpumask_any(const struct cpumask *cpumask)
-         |     ^~~~~~~~~~~~~~~
-   kernel/bpf/cpumask.c:204:5: warning: no previous prototype for 'bpf_cpumask_any_and' [-Wmissing-prototypes]
-     204 | u32 bpf_cpumask_any_and(const struct cpumask *src1, const struct cpumask *src2)
-         |     ^~~~~~~~~~~~~~~~~~~
-
-
-vim +/bpf_cpumask_create +38 kernel/bpf/cpumask.c
-
-    37	
-  > 38	struct bpf_cpumask *bpf_cpumask_create(void)
-    39	{
-    40		struct bpf_cpumask *cpumask;
-    41	
-    42		cpumask = bpf_mem_alloc(&bpf_cpumask_ma, sizeof(*cpumask));
-    43		if (!cpumask)
-    44			return NULL;
-    45	
-    46		memset(cpumask, 0, sizeof(*cpumask));
-    47		refcount_set(&cpumask->usage, 1);
-    48	
-    49		return cpumask;
-    50	}
-    51	
-  > 52	struct bpf_cpumask *bpf_cpumask_acquire(struct bpf_cpumask *cpumask)
-    53	{
-    54		refcount_inc(&cpumask->usage);
-    55		return cpumask;
-    56	}
-    57	
-  > 58	struct bpf_cpumask *bpf_cpumask_kptr_get(struct bpf_cpumask **cpumaskp)
-    59	{
-    60		struct bpf_cpumask *cpumask;
-    61	
-    62		/* The BPF memory allocator frees memory backing its caches in an RCU
-    63		 * callback. Thus, we can safely use RCU to ensure that the cpumask is
-    64		 * safe to read.
-    65		 */
-    66		rcu_read_lock();
-    67	
-    68		cpumask = READ_ONCE(*cpumaskp);
-    69		if (cpumask && !refcount_inc_not_zero(&cpumask->usage))
-    70			cpumask = NULL;
-    71	
-    72		rcu_read_unlock();
-    73		return cpumask;
-    74	}
-    75	
-  > 76	void bpf_cpumask_release(struct bpf_cpumask *cpumask)
-    77	{
-    78		if (!cpumask)
-    79			return;
-    80	
-    81		if (refcount_dec_and_test(&cpumask->usage)) {
-    82			migrate_disable();
-    83			bpf_mem_free(&bpf_cpumask_ma, cpumask);
-    84			migrate_enable();
-    85		}
-    86	}
-    87	
-  > 88	u32 bpf_cpumask_first(const struct cpumask *cpumask)
-    89	{
-    90		return cpumask_first(cpumask);
-    91	}
-    92	
-  > 93	u32 bpf_cpumask_first_zero(const struct cpumask *cpumask)
-    94	{
-    95		return cpumask_first_zero(cpumask);
-    96	}
-    97	
-  > 98	void bpf_cpumask_set_cpu(u32 cpu, struct bpf_cpumask *cpumask)
-    99	{
-   100		if (!cpu_valid(cpu))
-   101			return;
-   102	
-   103		cpumask_set_cpu(cpu, (struct cpumask *)cpumask);
-   104	}
-   105	
- > 106	void bpf_cpumask_clear_cpu(u32 cpu, struct bpf_cpumask *cpumask)
-   107	{
-   108		if (!cpu_valid(cpu))
-   109			return;
-   110	
-   111		cpumask_clear_cpu(cpu, (struct cpumask *)cpumask);
-   112	}
-   113	
- > 114	bool bpf_cpumask_test_cpu(u32 cpu, const struct cpumask *cpumask)
-   115	{
-   116		if (!cpu_valid(cpu))
-   117			return false;
-   118	
-   119		return cpumask_test_cpu(cpu, (struct cpumask *)cpumask);
-   120	}
-   121	
- > 122	bool bpf_cpumask_test_and_set_cpu(u32 cpu, struct bpf_cpumask *cpumask)
-   123	{
-   124		if (!cpu_valid(cpu))
-   125			return false;
-   126	
-   127		return cpumask_test_and_set_cpu(cpu, (struct cpumask *)cpumask);
-   128	}
-   129	
- > 130	bool bpf_cpumask_test_and_clear_cpu(u32 cpu, struct bpf_cpumask *cpumask)
-   131	{
-   132		if (!cpu_valid(cpu))
-   133			return false;
-   134	
-   135		return cpumask_test_and_clear_cpu(cpu, (struct cpumask *)cpumask);
-   136	}
-   137	
- > 138	void bpf_cpumask_setall(struct bpf_cpumask *cpumask)
-   139	{
-   140		cpumask_setall((struct cpumask *)cpumask);
-   141	}
-   142	
- > 143	void bpf_cpumask_clear(struct bpf_cpumask *cpumask)
-   144	{
-   145		cpumask_clear((struct cpumask *)cpumask);
-   146	}
-   147	
- > 148	bool bpf_cpumask_and(struct bpf_cpumask *dst,
-   149			     const struct cpumask *src1,
-   150			     const struct cpumask *src2)
-   151	{
-   152		return cpumask_and((struct cpumask *)dst, src1, src2);
-   153	}
-   154	
- > 155	void bpf_cpumask_or(struct bpf_cpumask *dst,
-   156			    const struct cpumask *src1,
-   157			    const struct cpumask *src2)
-   158	{
-   159		cpumask_or((struct cpumask *)dst, src1, src2);
-   160	}
-   161	
- > 162	void bpf_cpumask_xor(struct bpf_cpumask *dst,
-   163			     const struct cpumask *src1,
-   164			     const struct cpumask *src2)
-   165	{
-   166		cpumask_xor((struct cpumask *)dst, src1, src2);
-   167	}
-   168	
- > 169	bool bpf_cpumask_equal(const struct cpumask *src1, const struct cpumask *src2)
-   170	{
-   171		return cpumask_equal(src1, src2);
-   172	}
-   173	
- > 174	bool bpf_cpumask_intersects(const struct cpumask *src1, const struct cpumask *src2)
-   175	{
-   176		return cpumask_intersects(src1, src2);
-   177	}
-   178	
- > 179	bool bpf_cpumask_subset(const struct cpumask *src1, const struct cpumask *src2)
-   180	{
-   181		return cpumask_subset(src1, src2);
-   182	}
-   183	
- > 184	bool bpf_cpumask_empty(const struct cpumask *cpumask)
-   185	{
-   186		return cpumask_empty(cpumask);
-   187	}
-   188	
- > 189	bool bpf_cpumask_full(const struct cpumask *cpumask)
-   190	{
-   191		return cpumask_full(cpumask);
-   192	}
-   193	
- > 194	void bpf_cpumask_copy(struct bpf_cpumask *dst, const struct cpumask *src)
-   195	{
-   196		cpumask_copy((struct cpumask *)dst, src);
-   197	}
-   198	
- > 199	u32 bpf_cpumask_any(const struct cpumask *cpumask)
-   200	{
-   201		return cpumask_any(cpumask);
-   202	}
-   203	
- > 204	u32 bpf_cpumask_any_and(const struct cpumask *src1, const struct cpumask *src2)
-   205	{
-   206		return cpumask_any_and(src1, src2);
-   207	}
-   208	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks,
+David
