@@ -2,79 +2,130 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3121C25B50
-	for <bpf@archiver.kernel.org>; Fri, 20 Jan 2023 20:10:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C0E3C25B50
+	for <bpf@archiver.kernel.org>; Fri, 20 Jan 2023 20:12:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbjATUKV convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 20 Jan 2023 15:10:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54592 "EHLO
+        id S230190AbjATUM4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Jan 2023 15:12:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbjATUKU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Jan 2023 15:10:20 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23FBBCE2F
-        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 12:10:16 -0800 (PST)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30K8NM1h002948
-        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 12:10:16 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3n73nut1tp-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 12:10:16 -0800
-Received: from twshared18509.43.prn1.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Fri, 20 Jan 2023 12:09:54 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 7CE7725B4B167; Fri, 20 Jan 2023 12:09:48 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v2 bpf-next 16/25] libbpf: define arm syscall regs spec in bpf_tracing.h
-Date:   Fri, 20 Jan 2023 12:09:05 -0800
-Message-ID: <20230120200914.3008030-17-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230120200914.3008030-1-andrii@kernel.org>
-References: <20230120200914.3008030-1-andrii@kernel.org>
+        with ESMTP id S230167AbjATUMz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Jan 2023 15:12:55 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0714CFD02
+        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 12:12:26 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id c10-20020a05600c0a4a00b003db0636ff84so4526467wmq.0
+        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 12:12:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2CXoT+7bD2FQOsPsa6Nm9x3leNHttFwc0jUiST/FDec=;
+        b=jYVfOpBwMOY714CycyIDi5phhr+sGl8XFKrtrwoKPI8/cF2qPGeKF7HFnSjRs9sF2G
+         vSAkkju1qImtBph0Ru2ydl1lS6ZBAkJSmVHkbU/eETfHDGoIg2PREqxP37e7ShjfFOPG
+         i+MYM1vTmo88i37YM+hyUi5/TrYugRkdRbKRdM+Ya9YI1x5zqKUGoKcKSB1ihSIq4wvV
+         MPHw9PyRXOm6uu6VDE8okQkgGKPuVfRxbTghwDdAO/XYgNIvy99+1CvpraRPydIuRHJt
+         dtVo8oho0c66c2zWLK7tLu1WfzkjR9SMzZZtnFMGlL3olxmeiXQzHVvpsdakhtfkmkbj
+         58Hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2CXoT+7bD2FQOsPsa6Nm9x3leNHttFwc0jUiST/FDec=;
+        b=0o5ULF/wsmQ+BFKPa131zaZUYFA9RmiSPvaBGmFulBO2aP4bc4ke2FkjJajHZJPjmG
+         VCFy4cCeDOgrHSY9oSR6nCdQAi8JKsGXG6TSntydSF+StOOxHrCVi4TYH8H7mMIhiRSp
+         OuPmDHvxB2iQJpxFyj+gxvb0xoyAj9v46F1s06WKThIWVjJJti8ONCusCBWuOD7lhHUe
+         e61SMf6GCAGbXEb7JyzTl1S4ktOrrh1FJ/GM6g69WHAYS9evEnrDjX8jhidRnaRcMqdD
+         fDwsuzrQPKOU8wBRPKzxYoUPnjAwEmnCETe6K0g0uwIewC1lXipBOXH4GUHHJFybMAxX
+         M2wg==
+X-Gm-Message-State: AFqh2kqsukp8wWg9c6mmdRfe0eBXkFLQrvrJMPQIeW2RhN5J+MuN0w34
+        0PUdhow6TAfK4ZWqkKievEUz9oPeD0sRjg==
+X-Google-Smtp-Source: AMrXdXt9spc3ed6XX0v36+wnwgpldLEnjdXbePpeGPxvGzCLI4xzHXhDIo6NrWCBOQQrJefwC7mgmw==
+X-Received: by 2002:a05:600c:4a27:b0:3db:3ef:2369 with SMTP id c39-20020a05600c4a2700b003db03ef2369mr15670901wmp.40.1674245544573;
+        Fri, 20 Jan 2023 12:12:24 -0800 (PST)
+Received: from localhost.localdomain ([2a02:3035:413:205e:4a24:a1a0:2076:6b5c])
+        by smtp.gmail.com with ESMTPSA id f14-20020a05600c154e00b003daff80f16esm4711645wmg.27.2023.01.20.12.12.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 12:12:21 -0800 (PST)
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+To:     Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev
+Cc:     Sedat Dilek <sedat.dilek@gmail.com>, Yonghong Song <yhs@meta.com>
+Subject: [PATCH] dwarf_loader: Sync with LINUX_ELFNOTE_LTO_INFO macro from kernel
+Date:   Fri, 20 Jan 2023 21:12:03 +0100
+Message-Id: <20230120201203.10785-1-sedat.dilek@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: XMYPKuvQ_LmFv757RfHSQj8ova3G_vcA
-X-Proofpoint-GUID: XMYPKuvQ_LmFv757RfHSQj8ova3G_vcA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-20_10,2023-01-20_01,2022-06-22_01
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Define explicit table of registers used for syscall argument passing.
+As long as I am using CONFIG_DEBUG_INFO_BTF=y with LLVM/Clang
+I have noticed the below macros where defined unconsistently.
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+See here pahole latest Git...
+
+[ pahole:dwarf_loader ]
+
+/* Match the define in linux:include/linux/elfnote.h */
+#define LINUX_ELFNOTE_BUILD_LTO                0x101
+
+...and latest Linus v6.2-rc4+ Git:
+
+[ linux:include/linux/elfnote-lto.h ]
+
+#define LINUX_ELFNOTE_LTO_INFO         0x101
+
+Yonghong Song says:
+> Ya, LINUX_ELFNOTE_BUILD_LTO is initially proposed macro name but later
+> the formal kernel patch used LINUX_ELFNOTE_LTO_INFO. Could you submit
+> a pahole for this so it is consistent with kernel? Thanks!
+
+Fix this by syncing the pahole macro with the one from linux-kernel.
+
+Suggested-by: Yonghong Song <yhs@meta.com>
+Signed-off-by: Sedat Dilek <sedat.dilek@gmail.com>
 ---
- tools/lib/bpf/bpf_tracing.h | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ dwarf_loader.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
-index b63d538eb5f5..edd85a0ab612 100644
---- a/tools/lib/bpf/bpf_tracing.h
-+++ b/tools/lib/bpf/bpf_tracing.h
-@@ -199,6 +199,14 @@ struct pt_regs___s390 {
- #define __PT_PARM2_REG uregs[1]
- #define __PT_PARM3_REG uregs[2]
- #define __PT_PARM4_REG uregs[3]
-+
-+#define __PT_PARM1_SYSCALL_REG __PT_PARM1_REG
-+#define __PT_PARM2_SYSCALL_REG __PT_PARM2_REG
-+#define __PT_PARM3_SYSCALL_REG __PT_PARM3_REG
-+#define __PT_PARM4_SYSCALL_REG __PT_PARM4_REG
-+#define __PT_PARM6_SYSCALL_REG uregs[5]
-+#define __PT_PARM7_SYSCALL_REG uregs[6]
-+
- #define __PT_RET_REG uregs[14]
- #define __PT_FP_REG uregs[11]	/* Works only with CONFIG_FRAME_POINTER */
- #define __PT_RC_REG uregs[0]
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index 5a74035c5708..96ce5db4f5bc 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -2808,8 +2808,8 @@ static int __cus__load_debug_types(struct conf_load *conf, Dwfl_Module *mod, Dwa
+ 	return 0;
+ }
+ 
+-/* Match the define in linux:include/linux/elfnote.h */
+-#define LINUX_ELFNOTE_BUILD_LTO		0x101
++/* Match the define in linux:include/linux/elfnote-lto.h */
++#define LINUX_ELFNOTE_LTO_INFO		0x101
+ 
+ static bool cus__merging_cu(Dwarf *dw, Elf *elf)
+ {
+@@ -2827,7 +2827,7 @@ static bool cus__merging_cu(Dwarf *dw, Elf *elf)
+ 			size_t name_off, desc_off, offset = 0;
+ 			GElf_Nhdr hdr;
+ 			while ((offset = gelf_getnote(data, offset, &hdr, &name_off, &desc_off)) != 0) {
+-				if (hdr.n_type != LINUX_ELFNOTE_BUILD_LTO)
++				if (hdr.n_type != LINUX_ELFNOTE_LTO_INFO)
+ 					continue;
+ 
+ 				/* owner is Linux */
 -- 
-2.30.2
+2.39.0
 
