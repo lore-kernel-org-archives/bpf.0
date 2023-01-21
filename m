@@ -2,460 +2,311 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB134C05027
-	for <bpf@archiver.kernel.org>; Sat, 21 Jan 2023 00:26:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 918F2C05027
+	for <bpf@archiver.kernel.org>; Sat, 21 Jan 2023 00:26:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbjAUA0A (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Jan 2023 19:26:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36928 "EHLO
+        id S229542AbjAUA0t (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Jan 2023 19:26:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbjAUA0A (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Jan 2023 19:26:00 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9731421D
-        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 16:25:22 -0800 (PST)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30KMuivp014370
-        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 16:24:29 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=facebook; bh=GGcHHzhUAPQXs8Rj7cxvgIFWeGBy7PNVz2TCRl0tdj0=;
- b=MGpfKEm0/tH4G8kdrNK2Ys+fbIDMWnr6zX1EINIpvNmgQdf8wQqGfVrPPFNekte8d4zJ
- tfBF6YkydWjbppmVSDOP8s8+Dk8zI0LuzG5Eeaoq58K1YaDMiAf0EHVdo3AoXKt4dWUc
- HxyrcDVrVtiGuDrKuaN0rdzLxaQEdAnHIV8= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3n6tvvpngr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 16:24:29 -0800
-Received: from twshared22340.15.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Fri, 20 Jan 2023 16:24:28 -0800
-Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
-        id 613F014F495E4; Fri, 20 Jan 2023 16:24:18 -0800 (PST)
-From:   Dave Marchevsky <davemarchevsky@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        with ESMTP id S230310AbjAUAY7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Jan 2023 19:24:59 -0500
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C90C13DA
+        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 16:24:21 -0800 (PST)
+Received: by mail-pj1-x1043.google.com with SMTP id b10so7100260pjo.1
+        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 16:24:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2H/54ZqUIjU3VYoXRIgXxyEiI8YMEx+pUQ0BaawvGCY=;
+        b=iOFVvDBKnQJSkUi+dAHuhUyrKgrH0YBL0gekJv0qfcKQPMSFSbg9Vc0zQ5AdAhBUqM
+         deUzxo5xP4Fy3TBCiq5jKTHeYtLkKHJz9TQRrd3fEfjQLCMvB3EO+h6YnSgKk9P2hiZX
+         GDsRE0NKvcRfecFquU7hy/xSGjHJrDxoHxdQfeeF9p37bJfAdcp4howypukHq3dXbfkj
+         1Dj6BaVXY2+UHCI6YyZaBe+Gv+3YhTPX3Lv/lp174pmsxq3LGku3sleVDkTc42bUgos0
+         Px0wir+Ji5oKzEogl4MnjD1y+dQocQb0jeRLE9ZURqOlOlgXtEGSjO7RLBZcLHB8fXUC
+         YMdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2H/54ZqUIjU3VYoXRIgXxyEiI8YMEx+pUQ0BaawvGCY=;
+        b=6wwTTmFiTOy54nJjqU8bPKbP7/F+GAAmnY4jELpSTWsBIe8Z7entfw3xcWpEkV2wtx
+         zauihQrbwrKHcgKGs36ne/X72ebGd+yio3sndMYxLi2YGybDfZw9KQ6JcWaMCah6x4GB
+         MEuGO1moOVOWoQ3Yn7eKqzlsCn4FK8EMZTXrO6GZAvvpLHeE8i7pMiBKUSOKPjzrT5nl
+         Y78AKlxkUVwxdceLtk2PzVVlKjRD8FY/MW+9+tO0lq+U0xUnKTQftC4GbctLW3ZteL5U
+         aXBZ/349bh7jo+T6iBgCSgCAhMmztwQlMa6SCyVxtiTUWAJcLPalL52/zd24qRCJJgOO
+         nsmQ==
+X-Gm-Message-State: AFqh2kp80zDrGX314EgVMY+4hKvQTMklhuQ32KlKHvWQcvELJQJ+zK3t
+        Z9pr43D7rv/L7HCW68gOoi5VOxaakOM=
+X-Google-Smtp-Source: AMrXdXvQdFOM7pHzBq8FoHpSvdfXZ2EB4E5bSjY3WKkx/lRg4oDk9nhAoLxoe96Fruw5G+M90zvV+w==
+X-Received: by 2002:a17:902:8c94:b0:193:ab5:39c7 with SMTP id t20-20020a1709028c9400b001930ab539c7mr17171468plo.11.1674260575973;
+        Fri, 20 Jan 2023 16:22:55 -0800 (PST)
+Received: from localhost ([2405:201:6014:dae3:7dbb:8857:7c39:bb2a])
+        by smtp.gmail.com with ESMTPSA id i11-20020a17090332cb00b001949c0d7a33sm9585695plr.7.2023.01.20.16.22.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 16:22:55 -0800 (PST)
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Kernel Team <kernel-team@fb.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [PATCH bpf-next] bpf: Refactor release_regno searching logic
-Date:   Fri, 20 Jan 2023 16:24:17 -0800
-Message-ID: <20230121002417.1684602-1-davemarchevsky@fb.com>
-X-Mailer: git-send-email 2.30.2
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: i-BLJi7Xircxim4hoFzUUlJSdqGFYqb3
-X-Proofpoint-GUID: i-BLJi7Xircxim4hoFzUUlJSdqGFYqb3
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@kernel.org>
+Subject: [PATCH bpf-next v5 03/12] bpf: Fix partial dynptr stack slot reads/writes
+Date:   Sat, 21 Jan 2023 05:52:32 +0530
+Message-Id: <20230121002241.2113993-4-memxor@gmail.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230121002241.2113993-1-memxor@gmail.com>
+References: <20230121002241.2113993-1-memxor@gmail.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-20_13,2023-01-20_01,2022-06-22_01
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8936; i=memxor@gmail.com; h=from:subject; bh=88XPzRu2Z9EO4iSWHshfPh1pJZo++IffnWh/36lilyY=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBjyzAjDrwrMkcLcpOoo/SrtdbpZSaCSGvVeLRH4RUd 8HAwUXWJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCY8swIwAKCRBM4MiGSL8RyhnKEA CTRy7imY7aMKqthGbXj4MxfEnR2ZdK1SrX/D8wn65kZTltEWlJWqM9dLjuNNYDFws3gE+1RcFn5x2y bmbhy9nQxbzBDiOUdG6kMxst74YRoA2jYb0EwJ1JgvCa9RiAWOouYc8Eg87DdzHFsmO0mWgM6vxnWA 2xD/gx8GrQ2ifdlPJnuJaYsjorrkG4/Ot8us9m6GIchhwmT4LcsarWNVIBLXRPnxQc5j1Gb12+Jbge fLlBgMZ4GHhJK/nqeJLLozL/3ANXc7IGaeiYkvHME68cYD23a6Fg9PruiXWC5PCaTK7jSKlbz5F2ms YPUClaYE7tsN/ApNbG7sbz6FAToZ5oqxyvtGpO5q/tEyFsupopCDRNOTv317TnrELm6SN6N8OARMsj cZsV0Ec2Hi8tg/U+l0kBKzJIaPCOjoiVtS0fbn2qI8RjBZR/x3wRoHeu2tycOzoaoXzOEj99I8zebF uDq/VRvS6U6mmVCPTy4tXWJ0cpGsTTLidj1hC6Mk4twnpGKPTqeKxYtPPPDbKs0RGjexPRLzhsvrr5 ETiyXTlr9u+Jzoz9tCFS/wrY6lj7+aCRxlpr9mMbgwOHSPTeosoAHEY4XieUC6gcra0uopR1A7vjVa tJdbj4DPqHtgN17lhK0DChFUa/vK/G5KnpAA4qTVQ2Q2ZtWdwLk/MVlLGITQ==
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Kfuncs marked KF_RELEASE indicate that they release some
-previously-acquired arg. The verifier assumes that such a function will
-only have one arg reg w/ ref_obj_id set, and that that arg is the one to
-be released. Multiple kfunc arg regs have ref_obj_id set is considered
-an invalid state.
+Currently, while reads are disallowed for dynptr stack slots, writes are
+not. Reads don't work from both direct access and helpers, while writes
+do work in both cases, but have the effect of overwriting the slot_type.
 
-For helpers, OBJ_RELEASE is used to tag a particular arg in the function
-proto, not the function itself. The arg with OBJ_RELEASE type tag is the
-arg that the helper will release. There can only be one such tagged arg.
-When verifying arg regs, multiple helper arg regs w/ ref_obj_id set is
-also considered an invalid state.
+While this is fine, handling for a few edge cases is missing. Firstly,
+a user can overwrite the stack slots of dynptr partially.
 
-Currently the ref_obj_id and OBJ_RELEASE searching is done in the code
-that examines each individual arg (check_func_arg for helpers and
-check_kfunc_args inner loop for kfuncs). This patch pulls out this
-searching to occur before individual arg type handling, resulting in a
-cleaner separation of logic and shared logic between kfuncs and helpers.
+Consider the following layout:
+spi: [d][d][?]
+      2  1  0
 
-Two new helper functions are added:
-  * args_find_ref_obj_id_regno
-    * For helpers and kfuncs. Searches through arg regs to find
-      ref_obj_id reg and returns its regno.
+First slot is at spi 2, second at spi 1.
+Now, do a write of 1 to 8 bytes for spi 1.
 
-  * helper_proto_find_release_arg_regno
-    * For helpers only. Searches through fn proto args to find the
-      OBJ_RELEASE arg and returns the corresponding regno.
+This will essentially either write STACK_MISC for all slot_types or
+STACK_MISC and STACK_ZERO (in case of size < BPF_REG_SIZE partial write
+of zeroes). The end result is that slot is scrubbed.
 
-The refactoring strives to keep failure logic and error messages
-unchanged. However, because the release arg searching is now done before
-any arg-specific type checking, verifier states that are invalid due to
-both invalid release arg state _and_ some type- or helper-specific
-checking logic might see the release arg-related error message first,
-when previously verification would fail for the other reason.
+Now, the layout is:
+spi: [d][m][?]
+      2  1  0
 
-Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
+Suppose if user initializes spi = 1 as dynptr.
+We get:
+spi: [d][d][d]
+      2  1  0
+
+But this time, both spi 2 and spi 1 have first_slot = true.
+
+Now, when passing spi 2 to dynptr helper, it will consider it as
+initialized as it does not check whether second slot has first_slot ==
+false. And spi 1 should already work as normal.
+
+This effectively replaced size + offset of first dynptr, hence allowing
+invalid OOB reads and writes.
+
+Make a few changes to protect against this:
+When writing to PTR_TO_STACK using BPF insns, when we touch spi of a
+STACK_DYNPTR type, mark both first and second slot (regardless of which
+slot we touch) as STACK_INVALID. Reads are already prevented.
+
+Second, prevent writing	to stack memory from helpers if the range may
+contain any STACK_DYNPTR slots. Reads are already prevented.
+
+For helpers, we cannot allow it to destroy dynptrs from the writes as
+depending on arguments, helper may take uninit_mem and dynptr both at
+the same time. This would mean that helper may write to uninit_mem
+before it reads the dynptr, which would be bad.
+
+PTR_TO_MEM: [?????dd]
+
+Depending on the code inside the helper, it may end up overwriting the
+dynptr contents first and then read those as the dynptr argument.
+
+Verifier would only simulate destruction when it does byte by byte
+access simulation in check_helper_call for meta.access_size, and
+fail to catch this case, as it happens after argument checks.
+
+The same would need to be done for any other non-trivial objects created
+on the stack in the future, such as bpf_list_head on stack, or
+bpf_rb_root on stack.
+
+A common misunderstanding in the current code is that MEM_UNINIT means
+writes, but note that writes may also be performed even without
+MEM_UNINIT in case of helpers, in that case the code after handling meta
+&& meta->raw_mode will complain when it sees STACK_DYNPTR. So that
+invalid read case also covers writes to potential STACK_DYNPTR slots.
+The only loophole was in case of meta->raw_mode which simulated writes
+through instructions which could overwrite them.
+
+A future series sequenced after this will focus on the clean up of
+helper access checks and bugs around that.
+
+Fixes: 97e03f521050 ("bpf: Add verifier support for dynptrs")
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
-This patch appeared in a rbtree series, but is no longer necessary for
-that work. Regardless, it's independently useful as it pulls out some
-logic common to kfunc and helper verification. The rbtree version added
-some additional functionality, while this patch doesn't, so it's not
-marked as a v2 of that patch.
-
-Regardless, including changelog as there was some feedback on that patch
-which is addressed here.
-
-v0 -> v1: https://lore.kernel.org/bpf/20221217082506.1570898-2-davemarchevs=
-ky@fb.com/
- * Remove allow_multi from args_find_ref_obj_id_regno, no need to
-   support multiple ref_obj_id arg regs
- * No need to use temp variable 'i' to count nargs (David)
- * Proper formatting of function-level comments on newly-added helpers (Dav=
-id)
-
- kernel/bpf/verifier.c | 218 +++++++++++++++++++++++++++++-------------
- 1 file changed, 150 insertions(+), 68 deletions(-)
+ kernel/bpf/verifier.c                         | 88 +++++++++++++++++++
+ .../testing/selftests/bpf/progs/dynptr_fail.c |  6 +-
+ 2 files changed, 91 insertions(+), 3 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ca7db2ce70b9..99b76202c3b6 100644
+index 76afdbea425a..5c7f29ca94ec 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -6418,49 +6418,6 @@ static int check_func_arg(struct bpf_verifier_env *e=
-nv, u32 arg,
- 		return err;
-=20
- skip_type_check:
--	if (arg_type_is_release(arg_type)) {
--		if (arg_type_is_dynptr(arg_type)) {
--			struct bpf_func_state *state =3D func(env, reg);
--			int spi;
--
--			/* Only dynptr created on stack can be released, thus
--			 * the get_spi and stack state checks for spilled_ptr
--			 * should only be done before process_dynptr_func for
--			 * PTR_TO_STACK.
--			 */
--			if (reg->type =3D=3D PTR_TO_STACK) {
--				spi =3D get_spi(reg->off);
--				if (!is_spi_bounds_valid(state, spi, BPF_DYNPTR_NR_SLOTS) ||
--				    !state->stack[spi].spilled_ptr.ref_obj_id) {
--					verbose(env, "arg %d is an unacquired reference\n", regno);
--					return -EINVAL;
--				}
--			} else {
--				verbose(env, "cannot release unowned const bpf_dynptr\n");
--				return -EINVAL;
--			}
--		} else if (!reg->ref_obj_id && !register_is_null(reg)) {
--			verbose(env, "R%d must be referenced when passed to release function\n",
--				regno);
--			return -EINVAL;
--		}
--		if (meta->release_regno) {
--			verbose(env, "verifier internal error: more than one release argument\n=
-");
--			return -EFAULT;
--		}
--		meta->release_regno =3D regno;
--	}
--
--	if (reg->ref_obj_id) {
--		if (meta->ref_obj_id) {
--			verbose(env, "verifier internal error: more than one arg with ref_obj_i=
-d R%d %u %u\n",
--				regno, reg->ref_obj_id,
--				meta->ref_obj_id);
--			return -EFAULT;
--		}
--		meta->ref_obj_id =3D reg->ref_obj_id;
--	}
--
- 	switch (base_type(arg_type)) {
- 	case ARG_CONST_MAP_PTR:
- 		/* bpf_map_xxx(map_ptr) call: remember that map_ptr */
-@@ -6571,6 +6528,27 @@ static int check_func_arg(struct bpf_verifier_env *e=
-nv, u32 arg,
- 		err =3D check_mem_size_reg(env, reg, regno, true, meta);
- 		break;
- 	case ARG_PTR_TO_DYNPTR:
-+		if (meta->release_regno =3D=3D regno) {
-+			struct bpf_func_state *state =3D func(env, reg);
-+			int spi;
-+
-+			/* Only dynptr created on stack can be released, thus
-+			 * the get_spi and stack state checks for spilled_ptr
-+			 * should only be done before process_dynptr_func for
-+			 * PTR_TO_STACK.
-+			 */
-+			if (reg->type =3D=3D PTR_TO_STACK) {
-+				spi =3D get_spi(reg->off);
-+				if (!is_spi_bounds_valid(state, spi, BPF_DYNPTR_NR_SLOTS) ||
-+				    !state->stack[spi].spilled_ptr.ref_obj_id) {
-+					verbose(env, "arg %d is an unacquired reference\n", regno);
-+					return -EINVAL;
-+				}
-+			} else {
-+				verbose(env, "cannot release unowned const bpf_dynptr\n");
-+				return -EINVAL;
-+			}
-+		}
- 		err =3D process_dynptr_func(env, regno, arg_type, meta);
- 		if (err)
- 			return err;
-@@ -7706,10 +7684,91 @@ static void update_loop_inline_state(struct bpf_ver=
-ifier_env *env, u32 subprogno
- 				 state->callback_subprogno =3D=3D subprogno);
+@@ -769,6 +769,8 @@ static void mark_dynptr_cb_reg(struct bpf_reg_state *reg,
+ 	__mark_dynptr_reg(reg, type, true);
  }
-=20
-+/**
-+ * args_find_ref_obj_id_regno() - Find regno that should become meta->ref_=
-obj_id
-+ * @env: Verifier env
-+ * @regs: Regs to search for ref_obj_id
-+ * @nargs: Number of arg regs to search
-+ *
-+ * Call arg meta's ref_obj_id is used to either:
-+ * * For release funcs, keep track of ref that needs to be released
-+ * * For other funcs, keep track of ref that needs to be propagated to ret=
-val
-+ *
-+ * Find the arg regno with nonzero ref_obj_id
-+ *
-+ * Return:
-+ * * On success, regno that should become meta->ref_obj_id (regno > 0 since
-+ *   BPF_REG_1 is first arg
-+ * * 0 if no arg had ref_obj_id set
-+ * * -err if some invalid arg reg state
-+ */
-+static int args_find_ref_obj_id_regno(struct bpf_verifier_env *env, struct=
- bpf_reg_state *regs,
-+				      u32 nargs)
+ 
++static int destroy_if_dynptr_stack_slot(struct bpf_verifier_env *env,
++				        struct bpf_func_state *state, int spi);
+ 
+ static int mark_stack_slots_dynptr(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+ 				   enum bpf_arg_type arg_type, int insn_idx)
+@@ -863,6 +865,55 @@ static int unmark_stack_slots_dynptr(struct bpf_verifier_env *env, struct bpf_re
+ 	return 0;
+ }
+ 
++static void __mark_reg_unknown(const struct bpf_verifier_env *env,
++			       struct bpf_reg_state *reg);
++
++static int destroy_if_dynptr_stack_slot(struct bpf_verifier_env *env,
++				        struct bpf_func_state *state, int spi)
 +{
-+	struct bpf_reg_state *reg;
-+	u32 i, regno, found_regno =3D 0;
++	int i;
 +
-+	for (i =3D 0; i < nargs; i++) {
-+		regno =3D i + BPF_REG_1;
-+		reg =3D &regs[regno];
++	/* We always ensure that STACK_DYNPTR is never set partially,
++	 * hence just checking for slot_type[0] is enough. This is
++	 * different for STACK_SPILL, where it may be only set for
++	 * 1 byte, so code has to use is_spilled_reg.
++	 */
++	if (state->stack[spi].slot_type[0] != STACK_DYNPTR)
++		return 0;
 +
-+		if (!reg->ref_obj_id)
-+			continue;
++	/* Reposition spi to first slot */
++	if (!state->stack[spi].spilled_ptr.dynptr.first_slot)
++		spi = spi + 1;
 +
-+		if (found_regno) {
-+			verbose(env, "verifier internal error: more than one arg with ref_obj_i=
-d R%d %u %u\n",
-+				regno, reg->ref_obj_id, regs[found_regno].ref_obj_id);
-+			return -EFAULT;
-+		}
-+
-+		found_regno =3D regno;
-+	}
-+
-+	return found_regno;
-+}
-+
-+/**
-+ * helper_proto_find_release_arg_regno() - Find OBJ_RELEASE arg in func pr=
-oto
-+ * @env: Verifier env
-+ * @fn: Func proto to search for OBJ_RELEASE
-+ * @nargs: Number of arg specs to search
-+ *
-+ * For helpers, to determine which arg reg should be released, loop through
-+ * func proto arg specification to find arg with OBJ_RELEASE
-+ *
-+ * Return:
-+ * * On success, regno of single OBJ_RELEASE arg
-+ * * 0 if no arg in the proto was OBJ_RELEASE
-+ * * -err if some invalid func proto state
-+ */
-+static int helper_proto_find_release_arg_regno(struct bpf_verifier_env *en=
-v,
-+					       const struct bpf_func_proto *fn, u32 nargs)
-+{
-+	enum bpf_arg_type arg_type;
-+	int i, release_regno =3D 0;
-+
-+	for (i =3D 0; i < nargs; i++) {
-+		arg_type =3D fn->arg_type[i];
-+
-+		if (!arg_type_is_release(arg_type))
-+			continue;
-+
-+		if (release_regno) {
-+			verbose(env, "verifier internal error: more than one release argument\n=
-");
-+			return -EFAULT;
-+		}
-+
-+		release_regno =3D i + BPF_REG_1;
-+	}
-+
-+	return release_regno;
-+}
-+
- static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn=
- *insn,
- 			     int *insn_idx_p)
- {
- 	enum bpf_prog_type prog_type =3D resolve_prog_type(env->prog);
-+	int i, err, func_id, nargs, release_regno, ref_regno;
- 	const struct bpf_func_proto *fn =3D NULL;
- 	enum bpf_return_type ret_type;
- 	enum bpf_type_flag ret_flag;
-@@ -7717,7 +7776,6 @@ static int check_helper_call(struct bpf_verifier_env =
-*env, struct bpf_insn *insn
- 	struct bpf_call_arg_meta meta;
- 	int insn_idx =3D *insn_idx_p;
- 	bool changes_data;
--	int i, err, func_id;
-=20
- 	/* find function prototype */
- 	func_id =3D insn->imm;
-@@ -7781,8 +7839,37 @@ static int check_helper_call(struct bpf_verifier_env=
- *env, struct bpf_insn *insn
- 	}
-=20
- 	meta.func_id =3D func_id;
-+	regs =3D cur_regs(env);
-+
-+	/* find actual arg count */
-+	for (nargs =3D 0; nargs < MAX_BPF_FUNC_REG_ARGS; nargs++)
-+		if (fn->arg_type[i] =3D=3D ARG_DONTCARE)
-+			break;
-+
-+	release_regno =3D helper_proto_find_release_arg_regno(env, fn, nargs);
-+	if (release_regno < 0)
-+		return release_regno;
-+
-+	ref_regno =3D args_find_ref_obj_id_regno(env, regs, nargs);
-+	if (ref_regno < 0)
-+		return ref_regno;
-+	else if (ref_regno > 0)
-+		meta.ref_obj_id =3D regs[ref_regno].ref_obj_id;
-+
-+	if (release_regno > 0) {
-+		if (!regs[release_regno].ref_obj_id &&
-+		    !register_is_null(&regs[release_regno]) &&
-+		    !arg_type_is_dynptr(fn->arg_type[release_regno - BPF_REG_1])) {
-+			verbose(env, "R%d must be referenced when passed to release function\n",
-+				release_regno);
-+			return -EINVAL;
-+		}
-+
-+		meta.release_regno =3D release_regno;
-+	}
-+
- 	/* check args */
--	for (i =3D 0; i < MAX_BPF_FUNC_REG_ARGS; i++) {
-+	for (i =3D 0; i < nargs; i++) {
- 		err =3D check_func_arg(env, i, &meta, fn);
- 		if (err)
- 			return err;
-@@ -7806,8 +7893,6 @@ static int check_helper_call(struct bpf_verifier_env =
-*env, struct bpf_insn *insn
- 			return err;
- 	}
-=20
--	regs =3D cur_regs(env);
--
- 	/* This can only be set for PTR_TO_STACK, as CONST_PTR_TO_DYNPTR cannot
- 	 * be reinitialized by any dynptr helper. Hence, mark_stack_slots_dynptr
- 	 * is safe to do directly.
-@@ -8803,10 +8888,11 @@ static int process_kf_arg_ptr_to_list_node(struct b=
-pf_verifier_env *env,
- static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc=
-_call_arg_meta *meta)
- {
- 	const char *func_name =3D meta->func_name, *ref_tname;
-+	struct bpf_reg_state *regs =3D cur_regs(env);
- 	const struct btf *btf =3D meta->btf;
- 	const struct btf_param *args;
-+	int ret, ref_regno;
- 	u32 i, nargs;
--	int ret;
-=20
- 	args =3D (const struct btf_param *)(meta->func_proto + 1);
- 	nargs =3D btf_type_vlen(meta->func_proto);
-@@ -8816,17 +8902,31 @@ static int check_kfunc_args(struct bpf_verifier_env=
- *env, struct bpf_kfunc_call_
- 		return -EINVAL;
- 	}
-=20
-+	ref_regno =3D args_find_ref_obj_id_regno(env, cur_regs(env), nargs);
-+	if (ref_regno < 0) {
-+		return ref_regno;
-+	} else if (!ref_regno && is_kfunc_release(meta)) {
-+		verbose(env, "release kernel function %s expects refcounted PTR_TO_BTF_I=
-D\n",
-+			func_name);
++	if (dynptr_type_refcounted(state->stack[spi].spilled_ptr.dynptr.type)) {
++		verbose(env, "cannot overwrite referenced dynptr\n");
 +		return -EINVAL;
 +	}
 +
-+	meta->ref_obj_id =3D regs[ref_regno].ref_obj_id;
-+	if (is_kfunc_release(meta))
-+		meta->release_regno =3D ref_regno;
++	mark_stack_slot_scratched(env, spi);
++	mark_stack_slot_scratched(env, spi - 1);
 +
- 	/* Check that BTF function arguments match actual types that the
- 	 * verifier sees.
- 	 */
- 	for (i =3D 0; i < nargs; i++) {
--		struct bpf_reg_state *regs =3D cur_regs(env), *reg =3D &regs[i + 1];
- 		const struct btf_type *t, *ref_t, *resolve_ret;
- 		enum bpf_arg_type arg_type =3D ARG_DONTCARE;
- 		u32 regno =3D i + 1, ref_id, type_size;
- 		bool is_ret_buf_sz =3D false;
-+		struct bpf_reg_state *reg;
- 		int kf_arg_type;
-=20
-+		reg =3D &regs[regno];
- 		t =3D btf_type_skip_modifiers(btf, args[i].type, NULL);
-=20
- 		if (is_kfunc_arg_ignore(btf, &args[i]))
-@@ -8883,18 +8983,6 @@ static int check_kfunc_args(struct bpf_verifier_env =
-*env, struct bpf_kfunc_call_
- 			return -EINVAL;
- 		}
-=20
--		if (reg->ref_obj_id) {
--			if (is_kfunc_release(meta) && meta->ref_obj_id) {
--				verbose(env, "verifier internal error: more than one arg with ref_obj_=
-id R%d %u %u\n",
--					regno, reg->ref_obj_id,
--					meta->ref_obj_id);
--				return -EFAULT;
--			}
--			meta->ref_obj_id =3D reg->ref_obj_id;
--			if (is_kfunc_release(meta))
--				meta->release_regno =3D regno;
--		}
--
- 		ref_t =3D btf_type_skip_modifiers(btf, t->type, &ref_id);
- 		ref_tname =3D btf_name_by_offset(btf, ref_t->name_off);
-=20
-@@ -8937,7 +9025,7 @@ static int check_kfunc_args(struct bpf_verifier_env *=
-env, struct bpf_kfunc_call_
- 			return -EFAULT;
- 		}
-=20
--		if (is_kfunc_release(meta) && reg->ref_obj_id)
-+		if (is_kfunc_release(meta) && regno =3D=3D meta->release_regno)
- 			arg_type |=3D OBJ_RELEASE;
- 		ret =3D check_func_arg_reg_off(env, reg, regno, arg_type);
- 		if (ret < 0)
-@@ -9057,12 +9145,6 @@ static int check_kfunc_args(struct bpf_verifier_env =
-*env, struct bpf_kfunc_call_
- 		}
++	/* Writing partially to one dynptr stack slot destroys both. */
++	for (i = 0; i < BPF_REG_SIZE; i++) {
++		state->stack[spi].slot_type[i] = STACK_INVALID;
++		state->stack[spi - 1].slot_type[i] = STACK_INVALID;
++	}
++
++	/* TODO: Invalidate any slices associated with this dynptr */
++
++	/* Do not release reference state, we are destroying dynptr on stack,
++	 * not using some helper to release it. Just reset register.
++	 */
++	__mark_reg_not_init(env, &state->stack[spi].spilled_ptr);
++	__mark_reg_not_init(env, &state->stack[spi - 1].spilled_ptr);
++
++	/* Same reason as unmark_stack_slots_dynptr above */
++	state->stack[spi].spilled_ptr.live |= REG_LIVE_WRITTEN;
++	state->stack[spi - 1].spilled_ptr.live |= REG_LIVE_WRITTEN;
++
++	return 0;
++}
++
+ static bool is_dynptr_reg_valid_uninit(struct bpf_verifier_env *env, struct bpf_reg_state *reg)
+ {
+ 	struct bpf_func_state *state = func(env, reg);
+@@ -3391,6 +3442,10 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
+ 			env->insn_aux_data[insn_idx].sanitize_stack_spill = true;
  	}
-=20
--	if (is_kfunc_release(meta) && !meta->release_regno) {
--		verbose(env, "release kernel function %s expects refcounted PTR_TO_BTF_I=
-D\n",
--			func_name);
--		return -EINVAL;
--	}
--
- 	return 0;
- }
-=20
---=20
-2.30.2
+ 
++	err = destroy_if_dynptr_stack_slot(env, state, spi);
++	if (err)
++		return err;
++
+ 	mark_stack_slot_scratched(env, spi);
+ 	if (reg && !(off % BPF_REG_SIZE) && register_is_bounded(reg) &&
+ 	    !register_is_null(reg) && env->bpf_capable) {
+@@ -3504,6 +3559,14 @@ static int check_stack_write_var_off(struct bpf_verifier_env *env,
+ 	if (err)
+ 		return err;
+ 
++	for (i = min_off; i < max_off; i++) {
++		int spi;
++
++		spi = __get_spi(i);
++		err = destroy_if_dynptr_stack_slot(env, state, spi);
++		if (err)
++			return err;
++	}
+ 
+ 	/* Variable offset writes destroy any spilled pointers in range. */
+ 	for (i = min_off; i < max_off; i++) {
+@@ -5531,6 +5594,31 @@ static int check_stack_range_initialized(
+ 	}
+ 
+ 	if (meta && meta->raw_mode) {
++		/* Ensure we won't be overwriting dynptrs when simulating byte
++		 * by byte access in check_helper_call using meta.access_size.
++		 * This would be a problem if we have a helper in the future
++		 * which takes:
++		 *
++		 *	helper(uninit_mem, len, dynptr)
++		 *
++		 * Now, uninint_mem may overlap with dynptr pointer. Hence, it
++		 * may end up writing to dynptr itself when touching memory from
++		 * arg 1. This can be relaxed on a case by case basis for known
++		 * safe cases, but reject due to the possibilitiy of aliasing by
++		 * default.
++		 */
++		for (i = min_off; i < max_off + access_size; i++) {
++			int stack_off = -i - 1;
++
++			spi = __get_spi(i);
++			/* raw_mode may write past allocated_stack */
++			if (state->allocated_stack <= stack_off)
++				continue;
++			if (state->stack[spi].slot_type[stack_off % BPF_REG_SIZE] == STACK_DYNPTR) {
++				verbose(env, "potential write to dynptr at off=%d disallowed\n", i);
++				return -EACCES;
++			}
++		}
+ 		meta->access_size = access_size;
+ 		meta->regno = regno;
+ 		return 0;
+diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+index 02d57b95cf6e..9dc3f23a8270 100644
+--- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
++++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+@@ -420,7 +420,7 @@ int invalid_write1(void *ctx)
+  * offset
+  */
+ SEC("?raw_tp")
+-__failure __msg("Expected an initialized dynptr as arg #3")
++__failure __msg("cannot overwrite referenced dynptr")
+ int invalid_write2(void *ctx)
+ {
+ 	struct bpf_dynptr ptr;
+@@ -444,7 +444,7 @@ int invalid_write2(void *ctx)
+  * non-const offset
+  */
+ SEC("?raw_tp")
+-__failure __msg("Expected an initialized dynptr as arg #1")
++__failure __msg("cannot overwrite referenced dynptr")
+ int invalid_write3(void *ctx)
+ {
+ 	struct bpf_dynptr ptr;
+@@ -476,7 +476,7 @@ static int invalid_write4_callback(__u32 index, void *data)
+  * be invalidated as a dynptr
+  */
+ SEC("?raw_tp")
+-__failure __msg("arg 1 is an unacquired reference")
++__failure __msg("cannot overwrite referenced dynptr")
+ int invalid_write4(void *ctx)
+ {
+ 	struct bpf_dynptr ptr;
+-- 
+2.39.1
 
