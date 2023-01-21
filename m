@@ -2,98 +2,92 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CCEA0C05027
-	for <bpf@archiver.kernel.org>; Sat, 21 Jan 2023 02:11:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0120C05027
+	for <bpf@archiver.kernel.org>; Sat, 21 Jan 2023 02:57:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229448AbjAUCLD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Jan 2023 21:11:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51860 "EHLO
+        id S229494AbjAUC53 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Jan 2023 21:57:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjAUCLD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Jan 2023 21:11:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949F071365
-        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 18:10:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BD1362168
-        for <bpf@vger.kernel.org>; Sat, 21 Jan 2023 02:10:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CC0CDC4339B;
-        Sat, 21 Jan 2023 02:10:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674267018;
-        bh=vA0nhGLSdzpG31+1rBAMbiy1E6sr43hLWZevThtNJ9Y=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=DbqhzbyEdBi08huXO8IVL0xjHtQz0UlfP7k6yByMCY0EGdtVu6MeTPDul8mB7mF5R
-         19pHu6HtRBsb4W2uj+bwTQx9/GVmWRycdfY77h3kSR+iDbte6pFM1Q2Jqu6u5wyVYC
-         fcueUADL8YPJ5i2G3shRZMEFrjvYD6AkrxOBEOFuH2ca1L3AJpzqmqUvy7Pm0pr6fa
-         /42zuCHuJ3pXqFYm4UnyTlfTEnKStkhAfUDi9HjGBZx5fBcn4bnIspkVWybkAw1yy3
-         qdfvXtGRqKyUDmJ6Rhema0QpSr7l7fJKeSnzjw5LROHGsxAFEiUuixD8tZP+ozJYH3
-         D868qAQXJHPBg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AE458C04E34;
-        Sat, 21 Jan 2023 02:10:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229379AbjAUC53 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Jan 2023 21:57:29 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFD16AC91
+        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 18:57:28 -0800 (PST)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30KNmeOF012368
+        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 18:57:28 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=s2048-2021-q4;
+ bh=Zhn9xNVwKO2PPFy243h0rJy1V/FGtGTYjCYHqV53EQo=;
+ b=BrfO8SVnjbVznyUk7l+53UTFcC5fwPX5gAOxdWoDc04B3+vcm1Q3fMEocpDeDPgBACNk
+ 4oQz7X1yfpOMYS1kxZimndAk36cuSpPRJP4/X8xw+jgo4eT36AXDQNvCrErBFmzyULic
+ hr7oGq96nCGhlM3oYn7fC8DxXMidN3WIVRmb21zfAMZam0rv3fa/m/ZAhUrJGldgte4O
+ Jb/EMwEA8vXDVdpnvzdnNHm7h7iPt+/IEy1zeb5lcMU/TJeYcjbVtKANC0XcKO0VMSi5
+ OubuA1mU4iTkAD/Wz5zcdXxYanHypq2YtoGhP+A0ukvVm4xjCl5TanmEGeNkphqd7MWC ZA== 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3n702vmvqk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 20 Jan 2023 18:57:28 -0800
+Received: from twshared19053.17.frc2.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Fri, 20 Jan 2023 18:57:27 -0800
+Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
+        id 8CA3531A6231; Fri, 20 Jan 2023 18:57:18 -0800 (PST)
+From:   Kui-Feng Lee <kuifeng@meta.com>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <andrii@kernel.org>,
+        <song@kernel.org>, <kernel-team@meta.com>
+CC:     Kui-Feng Lee <kuifeng@meta.com>
+Subject: [PATCH bpf-next 1/2] bpf: Check the protocol of a sock to agree the calls to bpf_setsockopt().
+Date:   Fri, 20 Jan 2023 18:57:15 -0800
+Message-ID: <20230121025716.3039933-2-kuifeng@meta.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230121025716.3039933-1-kuifeng@meta.com>
+References: <20230121025716.3039933-1-kuifeng@meta.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v5 00/12] Dynptr fixes
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167426701870.27266.12568567569882447280.git-patchwork-notify@kernel.org>
-Date:   Sat, 21 Jan 2023 02:10:18 +0000
-References: <20230121002241.2113993-1-memxor@gmail.com>
-In-Reply-To: <20230121002241.2113993-1-memxor@gmail.com>
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net, martin.lau@kernel.org
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: Oa8j4A314Dgwkz2LrYizQfbwROBgBpN5
+X-Proofpoint-ORIG-GUID: Oa8j4A314Dgwkz2LrYizQfbwROBgBpN5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-20_13,2023-01-20_01,2022-06-22_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+Resolve an issue when calling sol_tcp_sockopt() on a socket with ktls
+enabled. Prior to this patch, sol_tcp_sockopt() would only allow calls
+if the function pointer of setsockopt of the socket was set to
+tcp_setsockopt(). However, any socket with ktls enabled would have its
+function pointer set to tls_setsockopt(). To resolve this issue, the
+patch adds a check of the protocol of the linux socket and allows
+bpf_setsockopt() to be called if ktls is initialized on the linux
+socket. This ensures that calls to sol_tcp_sockopt() will succeed on
+sockets with ktls enabled.
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
+---
+ net/core/filter.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Sat, 21 Jan 2023 05:52:29 +0530 you wrote:
-> This is part 2 of https://lore.kernel.org/bpf/20221018135920.726360-1-memxor@gmail.com.
-> 
-> Changelog:
-> ----------
-> v4 -> v5
-> v5: https://lore.kernel.org/bpf/20230120070355.1983560-1-memxor@gmail.com
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,v5,01/12] bpf: Fix state pruning for STACK_DYNPTR stack slots
-    https://git.kernel.org/bpf/bpf-next/c/d6fefa1105da
-  - [bpf-next,v5,02/12] bpf: Fix missing var_off check for ARG_PTR_TO_DYNPTR
-    https://git.kernel.org/bpf/bpf-next/c/79168a669d81
-  - [bpf-next,v5,03/12] bpf: Fix partial dynptr stack slot reads/writes
-    https://git.kernel.org/bpf/bpf-next/c/ef8fc7a07c0e
-  - [bpf-next,v5,04/12] bpf: Invalidate slices on destruction of dynptrs on stack
-    https://git.kernel.org/bpf/bpf-next/c/f8064ab90d66
-  - [bpf-next,v5,05/12] bpf: Allow reinitializing unreferenced dynptr stack slots
-    https://git.kernel.org/bpf/bpf-next/c/379d4ba831cf
-  - [bpf-next,v5,06/12] bpf: Combine dynptr_get_spi and is_spi_bounds_valid
-    https://git.kernel.org/bpf/bpf-next/c/f5b625e5f8bb
-  - [bpf-next,v5,07/12] bpf: Avoid recomputing spi in process_dynptr_func
-    https://git.kernel.org/bpf/bpf-next/c/1ee72bcbe48d
-  - [bpf-next,v5,08/12] selftests/bpf: convenience macro for use with 'asm volatile' blocks
-    https://git.kernel.org/bpf/bpf-next/c/91b875a5e43b
-  - [bpf-next,v5,09/12] selftests/bpf: Add dynptr pruning tests
-    https://git.kernel.org/bpf/bpf-next/c/f4d24edf1b92
-  - [bpf-next,v5,10/12] selftests/bpf: Add dynptr var_off tests
-    https://git.kernel.org/bpf/bpf-next/c/ef4810135396
-  - [bpf-next,v5,11/12] selftests/bpf: Add dynptr partial slot overwrite tests
-    https://git.kernel.org/bpf/bpf-next/c/011edc8e49b8
-  - [bpf-next,v5,12/12] selftests/bpf: Add dynptr helper tests
-    https://git.kernel.org/bpf/bpf-next/c/ae8e354c497a
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+diff --git a/net/core/filter.c b/net/core/filter.c
+index b4547a2c02f4..890384cbdeb2 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -5204,7 +5204,7 @@ static int sol_tcp_sockopt(struct sock *sk, int opt=
+name,
+ 			   char *optval, int *optlen,
+ 			   bool getopt)
+ {
+-	if (sk->sk_prot->setsockopt !=3D tcp_setsockopt)
++	if (sk->sk_protocol !=3D IPPROTO_TCP)
+ 		return -EINVAL;
+=20
+ 	switch (optname) {
+--=20
+2.30.2
 
