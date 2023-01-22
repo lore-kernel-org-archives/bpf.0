@@ -2,116 +2,155 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40D37C38142
-	for <bpf@archiver.kernel.org>; Sun, 22 Jan 2023 20:21:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DF31C25B4E
+	for <bpf@archiver.kernel.org>; Sun, 22 Jan 2023 21:26:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbjAVUVp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 22 Jan 2023 15:21:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
+        id S230006AbjAVV0P (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 22 Jan 2023 16:26:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbjAVUVl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 22 Jan 2023 15:21:41 -0500
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726B715CA2;
-        Sun, 22 Jan 2023 12:21:24 -0800 (PST)
-Received: from [192.168.0.2] (ip5f5ae93c.dynamic.kabel-deutschland.de [95.90.233.60])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 6E30F61CC457B;
-        Sun, 22 Jan 2023 21:21:21 +0100 (CET)
-Message-ID: <1bb796f9-b2dd-1c96-831a-34585770d80d@molgen.mpg.de>
-Date:   Sun, 22 Jan 2023 21:21:20 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [Intel-wired-lan] [PATCH net] ixgbe: allow to increase MTU to
- some extent with XDP enalbed
-Content-Language: en-US
-To:     Jason Xing <kerneljasonxing@gmail.com>
-Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, richardcochran@gmail.com, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.co,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, bpf@vger.kernel.org,
-        Jason Xing <kernelxing@tencent.com>
-References: <20230121085521.9566-1-kerneljasonxing@gmail.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20230121085521.9566-1-kerneljasonxing@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S229971AbjAVV0O (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 22 Jan 2023 16:26:14 -0500
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966C21350B
+        for <bpf@vger.kernel.org>; Sun, 22 Jan 2023 13:26:11 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id F1DA85C008E;
+        Sun, 22 Jan 2023 16:26:08 -0500 (EST)
+Received: from imap42 ([10.202.2.92])
+  by compute1.internal (MEProxy); Sun, 22 Jan 2023 16:26:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1674422768; x=1674509168; bh=Fo6mBFrWR1
+        3canRuCwb1uAwn+xRoql2kUKT/KiEqy8o=; b=U+Gw0TO/wO7B/DTwTSTxPuEbLz
+        Pcqh4KRqtNX1IBUSbxtnZnW92g5Kwut9MbTL7ZoCz1re22ZKBLttX5DkLuXXgNcL
+        2csxW1+SGLMGtPOA8+xDD3lL28Xt6pA3tqSv14539ZqG96Xte0ZnhT8L6DztKuph
+        Fdi9M+FPV6GKYwwlRExpqPjGXQGl0rMjM0fdDHlMInU393DJry+q9jVakRvWxPgj
+        b1NmMknNAEo4HVyHPzE0h0tkTBatQuicmM64KS3XVhinZzpJ+aiDILANVkkGlAoC
+        BZfwsrfF5c73H9s4Yr7LudgNoTvhyj+l9kJEYiWWi971Qo3apiHFil2Bh+OA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674422768; x=1674509168; bh=Fo6mBFrWR13canRuCwb1uAwn+xRo
+        ql2kUKT/KiEqy8o=; b=QTA/GGFMhLjkl/efyRn6zFS1B17G4lz2VzHLCNuo47JF
+        3yjt8nvH/0PuqyP5oQareVRnp2Bxr07zWhD4yV4q5NxDftK/KlxUbV/fCviWR7b5
+        lRTwZyqfhbG3wiluVR8KQDPG0XJXMsuRENsR/GTEYtsJ1M7IK6knMA8JTl/ScR/D
+        5bAVZGW+KwBQrSruUH8SVqjpud8YV9gziumJ9gdGuYcnKeWyena3+/vwIckLcW9T
+        RsKlwV1Xhvs6SB8URhNwsoBr/rbvbCxDnZOuQMFQnT44mmDXsEh3lpeGGPhDeCdY
+        rnqG96IHR/OLnQUpQHhsu7tQ+cT7XBnq/vxOLz/7Rw==
+X-ME-Sender: <xms:8KnNYxDAOanF94QXsREDqSBYCgCcBmeafbWF5fKAbHeKkPd0ReBFtg>
+    <xme:8KnNY_hC2yYyFYaT-_BXlcnvD824pvjIrdlRA9SCeJCNTyC5nSkkPbDICkJb5Dani
+    Ug6QhW8-J_Vma8YaQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudduiedgudehvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdefhedmnecujfgurhepof
+    gfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfffgrnhhivghlucgi
+    uhdfuceougiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhephffhgedtke
+    duheekueejfefgkeejffegtdekveeifedvjeffheejkeduiedugedtnecuffhomhgrihhn
+    pehkrghllhhshihmshdurdhsrghspdhkrghllhhshihmshdvrdhsrghspdhkrghllhhshi
+    hmshefrdhsrghsnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
+    rhhomhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:8KnNY8mrhk14U0az0YfQUxMNyQB4g7qwvJDEsngY2zrtN5g7GCH3nQ>
+    <xmx:8KnNY7wm3fDWyH2VBsHqBdBx7YY1cE-JQVY9aMkSuXmzHiREp56Ygg>
+    <xmx:8KnNY2Qqiji-n0O4KExDaWCzs7URu38O53WT_0VT6aM9dF3bOZU61A>
+    <xmx:8KnNY9Pcd1b1umZ5FLAy8u7VmL0fDd_M9IafADcnIHhbZkTU4vHAFQ>
+Feedback-ID: i6a694271:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id AB590BC0078; Sun, 22 Jan 2023 16:26:08 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <cf0f4f1f-b2b4-40e8-bc51-ef1e1771e1e2@app.fastmail.com>
+In-Reply-To: <57830c30-cd77-40cf-9cd1-3bb608aa602e@app.fastmail.com>
+References: <57830c30-cd77-40cf-9cd1-3bb608aa602e@app.fastmail.com>
+Date:   Sun, 22 Jan 2023 14:25:47 -0700
+From:   "Daniel Xu" <dxu@dxuuu.xyz>
+To:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Cc:     "Arnaldo Carvalho de Melo" <acme@kernel.org>
+Subject: Re: Kernel build fail with 'btf_encoder__encode: btf__dedup failed!'
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Dear Jason,
+On Sun, Jan 22, 2023, at 10:48 AM, Daniel Xu wrote:
+> Hi,
+>
+> I'm getting the following error during build:
+>
+>         $ ./tools/testing/selftests/bpf/vmtest.sh -j30
+>         [...]
+>           BTF     .btf.vmlinux.bin.o
+>         btf_encoder__encode: btf__dedup failed!
+>         Failed to encode BTF
+>           LD      .tmp_vmlinux.kallsyms1
+>           NM      .tmp_vmlinux.kallsyms1.syms
+>           KSYMS   .tmp_vmlinux.kallsyms1.S
+>           AS      .tmp_vmlinux.kallsyms1.S
+>           LD      .tmp_vmlinux.kallsyms2
+>           NM      .tmp_vmlinux.kallsyms2.syms
+>           KSYMS   .tmp_vmlinux.kallsyms2.S
+>           AS      .tmp_vmlinux.kallsyms2.S
+>           LD      .tmp_vmlinux.kallsyms3
+>           NM      .tmp_vmlinux.kallsyms3.syms
+>           KSYMS   .tmp_vmlinux.kallsyms3.S
+>           AS      .tmp_vmlinux.kallsyms3.S
+>           LD      vmlinux
+>           BTFIDS  vmlinux
+>         FAILED: load BTF from vmlinux: No such file or directory
+>         make[1]: *** [scripts/Makefile.vmlinux:35: vmlinux] Error 255
+>         make[1]: *** Deleting file 'vmlinux'
+>         make: *** [Makefile:1264: vmlinux] Error 2
+>
+> This happens on both bpf-next/master (84150795a49) and 6.2-rc5
+> (2241ab53cb).
+>
+> I've also tried arch linux pahole 1:1.24+r29+g02d67c5-1 as well as
+> upstream pahole on master (02d67c5176) and upstream pahole on
+> next (2ca56f4c6f659).
+>
+> Of the above 6 combinations, I think I've tried all of them (maybe
+> missing 1 or 2).
+>
+> Looks like GCC got updated recently on my machine, so perhaps
+> it's related?
+>
+>         CONFIG_CC_VERSION_TEXT="gcc (GCC) 12.2.1 20230111"
+>
+> I'll try some debugging, but just wanted to report it first.
+>
+> Thanks,
+> Daniel
 
+Applying the following diff:
 
-Thank you for your patch.
+diff --git a/src/btf.c b/src/btf.c
+index ae1520f..8a2fa36 100644
+--- a/src/btf.c
++++ b/src/btf.c
+@@ -4576,8 +4576,11 @@ static int btf_dedup_ref_type(struct btf_dedup *d, __u32 type_id)
+        int ref_type_id;
+        long h;
 
-Am 21.01.23 um 09:55 schrieb Jason Xing:
-> From: Jason Xing <kernelxing@tencent.com>
+-       if (d->map[type_id] == BTF_IN_PROGRESS_ID)
++       if (d->map[type_id] == BTF_IN_PROGRESS_ID) {
++               struct btf_type *t = btf_type_by_id(d->btf, type_id);
++               pr_warn("eloop type_id=%d, kind=%d, type=%d\n", type_id, btf_kind(t), t->type);
+                return -ELOOP;
++       }
+        if (d->map[type_id] <= BTF_MAX_NR_TYPES)
+                return resolve_type_id(d, type_id);
 
-There is a small typo in the summary: ena*bl*ed
+Yields:
 
-> I encountered one case where I cannot increase the MTU size with XDP
-> enabled if the server is equipped with IXGBE card, which happened on
-> thousands of servers. I noticed it was prohibited from 2017[1] and
+          BTF     .btf.vmlinux.bin.o
+        libbpf: eloop type_id=2, kind=10, type=2
+        btf_encoder__encode: btf__dedup failed!
+        Failed to encode BTF
 
-That’s included since Linux 4.19-rc1.
+So it's a CONST pointing to itself?
 
-> added size checks[2] if allowed soon after the previous patch.
-> 
-> Interesting part goes like this:
-> 1) Changing MTU directly from 1500 (default value) to 2000 doesn't
-> work because the driver finds out that 'new_frame_size >
-> ixgbe_rx_bufsz(ring)' in ixgbe_change_mtu() function.
-> 2) However, if we change MTU to 1501 then change from 1501 to 2000, it
-> does work, because the driver sets __IXGBE_RX_3K_BUFFER when MTU size
-> is converted to 1501, which later size check policy allows.
-> 
-> The default MTU value for most servers is 1500 which cannot be adjusted
-> directly to the value larger than IXGBE_MAX_2K_FRAME_BUILD_SKB (1534 or
-> 1536) if it loads XDP.
-> 
-> After I do a quick study on the manner of i40E driver allowing two kinds
-> of buffer size (one is 2048 while another is 3072) to support XDP mode in
-> i40e_max_xdp_frame_size(), I believe the default MTU size is possibly not
-> satisfied in XDP mode when IXGBE driver is in use, we sometimes need to
-> insert a new header, say, vxlan header. So setting the 3K-buffer flag
-> could solve the issue.
-
-What card did you test with exactly?
-
-> [1] commit 38b7e7f8ae82 ("ixgbe: Do not allow LRO or MTU change with XDP")
-> [2] commit fabf1bce103a ("ixgbe: Prevent unsupported configurations with
-> XDP")
-
-I’d say to not break the line in references.
-
-> Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> ---
->   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-> index ab8370c413f3..dc016582f91e 100644
-> --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-> +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-> @@ -4313,6 +4313,9 @@ static void ixgbe_set_rx_buffer_len(struct ixgbe_adapter *adapter)
->   		if (IXGBE_2K_TOO_SMALL_WITH_PADDING ||
->   		    (max_frame > (ETH_FRAME_LEN + ETH_FCS_LEN)))
->   			set_bit(__IXGBE_RX_3K_BUFFER, &rx_ring->state);
-> +
-> +		if (ixgbe_enabled_xdp_adapter(adapter))
-> +			set_bit(__IXGBE_RX_3K_BUFFER, &rx_ring->state);
->   #endif
->   	}
->   }
-
-
-Kind regards,
-
-Paul
+I'm somewhat out of ideas here.
