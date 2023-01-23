@@ -2,114 +2,164 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7719EC38142
-	for <bpf@archiver.kernel.org>; Sun, 22 Jan 2023 23:00:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 989A1C54EAA
+	for <bpf@archiver.kernel.org>; Mon, 23 Jan 2023 01:54:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbjAVXAb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 22 Jan 2023 18:00:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46122 "EHLO
+        id S229990AbjAWByH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 22 Jan 2023 20:54:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbjAVXA1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 22 Jan 2023 18:00:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E6618ABD;
-        Sun, 22 Jan 2023 15:00:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 572C060CA4;
-        Sun, 22 Jan 2023 23:00:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D740C433D2;
-        Sun, 22 Jan 2023 23:00:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674428423;
-        bh=uUTTKSl1nNDXWYdwLpdwmCAKDhgMF5jWMT+kNzvGmBU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J9n6ZPcCE7LMUifswqqagkI5taZpNjcsdxbFCMsbw4XO8ML5XDkrJ+DDueR4fidEN
-         m76zqLzFvYY0QYLgkM8LM57myy66VkbdzZID7/fUEflBjEE8+E6so6dElqvIA//aHB
-         QWPmVPsgLZ02+v5+2hi/wDYXeztv8vtHCr1t6/en8G/ZaZZImWaD+4Za4W7TGhxqlp
-         qOSe99EL6/COC7JyoSXyjPfMRm+n43t3lo+TsOIOJQhNy3CDISGPXqUwot9ufQnFtV
-         BNFAP4cwrs9xcjNRUWQrn2/QVSKgzfsJQNTLD9MNb0LavDCkwUhy4z9vaO7YVljat0
-         rDkjhzseHAIFQ==
-Date:   Sun, 22 Jan 2023 18:45:56 +0100
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Marek Majtyka <alardam@gmail.com>,
-        Saeed Mahameed <saeedm@nvidia.com>, anthony.l.nguyen@intel.com,
-        Andy Gospodarek <gospo@broadcom.com>, vladimir.oltean@nxp.com,
-        Felix Fietkau <nbd@nbd.name>, john@phrozen.org,
-        leon@kernel.org, Simon Horman <simon.horman@corigine.com>,
-        Ariel Elior <aelior@marvell.com>,
-        christophe.jaillet@wanadoo.fr, ecree.xilinx@gmail.com,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
-        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
-        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@corigine.com>
-Subject: Re: [PATCH bpf-next 1/7] netdev-genl: create a simple family for
- netdev stuff
-Message-ID: <Y812VL/IJ5fjrDqI@lore-desk>
-References: <cover.1674234430.git.lorenzo@kernel.org>
- <272fa19f57de2d14e9666b4cd9b1ae8a61a94807.1674234430.git.lorenzo@kernel.org>
- <CAADnVQLHsV2Y-UiDkEnhwnfvgRxGN4OY8mwi_p-a01WUTdDBNw@mail.gmail.com>
+        with ESMTP id S229817AbjAWByH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 22 Jan 2023 20:54:07 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DD0C16B;
+        Sun, 22 Jan 2023 17:54:06 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id s3so12932383edd.4;
+        Sun, 22 Jan 2023 17:54:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l5z4Hd0Qs9SFsDBYXanxTnEoLsdmIZ6VAYEjeE+ksHI=;
+        b=P5gYeWZzJ8Apxca/oufOTx2EM0Y6R+dRr06gyzXSYyx3MnrVBl1t2/Lw4IMiuifRN/
+         YeneYV3iPCNnV49Fva/f21B5syoeuDJbm8JA27wI6a7miPEoR1gJwaRSLi3qIey5e2Df
+         QgQIiTgEgzbJpqH3NIA9wSzLqTa5AtbIAUEksSp7I9tEbmKCRdN7baxc3d3ekZ4vXea4
+         XWmi1cdz0S6VKn8t+o1d/xPTWC6GJgAae4jDzDQe9IYZV1MHcKn3Vu2id6swfjev4c4T
+         YTapkFdOggFMS0wDPmVYpSjliz9CF2IP//VkZhR1CcVMTtFiAWeV4nWeucLicFRE2wfL
+         E7+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l5z4Hd0Qs9SFsDBYXanxTnEoLsdmIZ6VAYEjeE+ksHI=;
+        b=UIbMrS1YSkwHtkhUbzQi02gfH0Dq91iojpwlAB00MFpVYbpZalJEYOR5Cv3SwqTp6q
+         lIWSwJaUF1GJN6IeThlctC1MKCue6HxBL9ickYhGVNkTzjI0STiHFe4eCyghmKE8syow
+         2k+CaFjZmFlfa3UdtpAyZ/OKBQmbC9/bmWGek39iOrsrknoxsISrhIg35X9v8tNf9i4s
+         A3kHgk5RoKT6zYfert0fmYUX2H6MaqV+WTxrjMcc9k1pIvu9R2l9RQHFqPaRfFZQFpKA
+         Jsq2pX/V2Hcr6oZHeErfcqa9XA6FHmXD4Y5HeITt6ruhgPxbRdYXPo8kEH5upzkpC0JR
+         3wGA==
+X-Gm-Message-State: AFqh2koS8iR251Ub/iRP7ckF81b9gXG08AM9AEMuzg1xpgp9k+ppUgJY
+        FAl6rj+GtuAvVnEXm1ttmf2cdcLQwxYIcxsyLsA=
+X-Google-Smtp-Source: AMrXdXskOC8lBwF/BL0baqLazqE0xc0riXJdq8ydWpJRRmiXrhRFTGNGSbpZ+7vKrvzzNMoiSpYu0Wnukjswy3VTYmc=
+X-Received: by 2002:a05:6402:28a4:b0:485:2bdf:ca28 with SMTP id
+ eg36-20020a05640228a400b004852bdfca28mr3299131edb.251.1674438844563; Sun, 22
+ Jan 2023 17:54:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="JG/nnC/faKMKtE/K"
-Content-Disposition: inline
-In-Reply-To: <CAADnVQLHsV2Y-UiDkEnhwnfvgRxGN4OY8mwi_p-a01WUTdDBNw@mail.gmail.com>
+References: <20230121085521.9566-1-kerneljasonxing@gmail.com> <1bb796f9-b2dd-1c96-831a-34585770d80d@molgen.mpg.de>
+In-Reply-To: <1bb796f9-b2dd-1c96-831a-34585770d80d@molgen.mpg.de>
+From:   Jason Xing <kerneljasonxing@gmail.com>
+Date:   Mon, 23 Jan 2023 09:53:28 +0800
+Message-ID: <CAL+tcoDyeG8oLspkrdjwJX3=ZmcDD7JY63s=F3cmzaEsXNOveA@mail.gmail.com>
+Subject: Re: [Intel-wired-lan] [PATCH net] ixgbe: allow to increase MTU to
+ some extent with XDP enalbed
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, richardcochran@gmail.com, ast@kernel.org,
+        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.co,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, bpf@vger.kernel.org,
+        Jason Xing <kernelxing@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+On Mon, Jan 23, 2023 at 4:21 AM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
+>
+> Dear Jason,
+>
+>
+> Thank you for your patch.
 
---JG/nnC/faKMKtE/K
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hello Paul,
 
-On Jan 20, Alexei Starovoitov wrote:
-> On Fri, Jan 20, 2023 at 9:17 AM Lorenzo Bianconi <lorenzo@kernel.org> wro=
-te:
+Thanks for the review.
+
+>
+> Am 21.01.23 um 09:55 schrieb Jason Xing:
+> > From: Jason Xing <kernelxing@tencent.com>
+>
+> There is a small typo in the summary: ena*bl*ed
+>
+
+Sure it is. That's my fault.
+
+> > I encountered one case where I cannot increase the MTU size with XDP
+> > enabled if the server is equipped with IXGBE card, which happened on
+> > thousands of servers. I noticed it was prohibited from 2017[1] and
+>
+> That=E2=80=99s included since Linux 4.19-rc1.
+>
+> > added size checks[2] if allowed soon after the previous patch.
+> >
+> > Interesting part goes like this:
+> > 1) Changing MTU directly from 1500 (default value) to 2000 doesn't
+> > work because the driver finds out that 'new_frame_size >
+> > ixgbe_rx_bufsz(ring)' in ixgbe_change_mtu() function.
+> > 2) However, if we change MTU to 1501 then change from 1501 to 2000, it
+> > does work, because the driver sets __IXGBE_RX_3K_BUFFER when MTU size
+> > is converted to 1501, which later size check policy allows.
+> >
+> > The default MTU value for most servers is 1500 which cannot be adjusted
+> > directly to the value larger than IXGBE_MAX_2K_FRAME_BUILD_SKB (1534 or
+> > 1536) if it loads XDP.
+> >
+> > After I do a quick study on the manner of i40E driver allowing two kind=
+s
+> > of buffer size (one is 2048 while another is 3072) to support XDP mode =
+in
+> > i40e_max_xdp_frame_size(), I believe the default MTU size is possibly n=
+ot
+> > satisfied in XDP mode when IXGBE driver is in use, we sometimes need to
+> > insert a new header, say, vxlan header. So setting the 3K-buffer flag
+> > could solve the issue.
+>
+> What card did you test with exactly?
+>
+
+It is the IXGBE driver that has such an issue.  The I40E driver I
+mentioned here is only for contrast. It's not that proper from my
+point of view if the IXGBE driver cannot directly adjust to 2000. Thus
+I would like more reviews and suggestions.
+
+Thanks,
+Jason
+
+> > [1] commit 38b7e7f8ae82 ("ixgbe: Do not allow LRO or MTU change with XD=
+P")
+> > [2] commit fabf1bce103a ("ixgbe: Prevent unsupported configurations wit=
+h
+> > XDP")
+>
+> I=E2=80=99d say to not break the line in references.
+>
+> > Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> > ---
+> >   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 3 +++
+> >   1 file changed, 3 insertions(+)
+> >
+> > diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/ne=
+t/ethernet/intel/ixgbe/ixgbe_main.c
+> > index ab8370c413f3..dc016582f91e 100644
+> > --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+> > +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+> > @@ -4313,6 +4313,9 @@ static void ixgbe_set_rx_buffer_len(struct ixgbe_=
+adapter *adapter)
+> >               if (IXGBE_2K_TOO_SMALL_WITH_PADDING ||
+> >                   (max_frame > (ETH_FRAME_LEN + ETH_FCS_LEN)))
+> >                       set_bit(__IXGBE_RX_3K_BUFFER, &rx_ring->state);
 > > +
-> > +#define NETDEV_XDP_ACT_BASIC           (NETDEV_XDP_ACT_DROP |  \
-> > +                                        NETDEV_XDP_ACT_PASS |  \
-> > +                                        NETDEV_XDP_ACT_TX |    \
-> > +                                        NETDEV_XDP_ACT_ABORTED)
->=20
-> Why split it into 4?
-> Is there a driver that does a subset?
-
-nope, at least all drivers support NETDEV_XDP_ACT_BASIC. I guess we can squ=
-ash
-them and just add  NETDEV_XDP_ACT_BASIC.
-
-Regards,
-Lorenzo
-
---JG/nnC/faKMKtE/K
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCY812VAAKCRA6cBh0uS2t
-rPuwAP4i5puJyPSRIVKHOHLlPm0UaUEMqwzRZgndVwm2OXUAiQEAo1TMBEHHjutT
-scfxZ8+YzP8HXj5bjef2m6Sb7jPt7w0=
-=XpP9
------END PGP SIGNATURE-----
-
---JG/nnC/faKMKtE/K--
+> > +             if (ixgbe_enabled_xdp_adapter(adapter))
+> > +                     set_bit(__IXGBE_RX_3K_BUFFER, &rx_ring->state);
+> >   #endif
+> >       }
+> >   }
+>
+>
+> Kind regards,
+>
+> Paul
