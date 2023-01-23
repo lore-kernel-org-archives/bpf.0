@@ -2,83 +2,120 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DB45C05027
-	for <bpf@archiver.kernel.org>; Mon, 23 Jan 2023 21:01:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90870C25B50
+	for <bpf@archiver.kernel.org>; Mon, 23 Jan 2023 21:11:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231752AbjAWVBi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 23 Jan 2023 16:01:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34964 "EHLO
+        id S233002AbjAWVLi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 23 Jan 2023 16:11:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232326AbjAWVBe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 23 Jan 2023 16:01:34 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0D97EF3
-        for <bpf@vger.kernel.org>; Mon, 23 Jan 2023 13:01:20 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id a184so9810699pfa.9
-        for <bpf@vger.kernel.org>; Mon, 23 Jan 2023 13:01:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bd7o2UMmddkZne8X5PwGLBEuvMIib1DaoXugXil87f0=;
-        b=apkgIAHulnPAYoGM/ZboHnSFsPZgmTCF7vwBDEG1hcOo7IzqiAv7TQCOdSSEbPVpXi
-         ICIC8n4/B9ib7Tx/CitG89uNOdjy78PJSxSp/qXpFlb8a6CpOHU9s1PCYjMgbUARNT6r
-         iLNWsVCTHrGLDec3sNP4dOvM+9bIhi0wdh49JcF61rVk+MGUbEHxZXW5kkaqiDEFdgZ1
-         OAk/F86EhDLicb6glvYgYoUccWdeHJBIqEXRPQszc+TvuMPJ06+pWkFC34mSSeEfR5Y1
-         5MpgyoLti5tkE431tIcTXShIZ9WeTApvbkHJCWLO2YtxEbeyfQeapKaPaeIEUv4RxNp+
-         T7jA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bd7o2UMmddkZne8X5PwGLBEuvMIib1DaoXugXil87f0=;
-        b=PqS3xuUDD9xVRUqXHGptYqPgEjJ9XbIX5myl0EebDi6NVtsWNJ8nxsMFibHvdg3roy
-         DEcUoKYr5cVBp+k/tWGs4MnAGFkpW2GPX9TWfK7jfVENRbTLRjK2kBwdrnZrZE0gg/WZ
-         WCF8nI07V1971b4ecojltUPH5gJ1a4ehGk2ELCaA7O6n4mArdIeLH1R2p1r+VEcAh85K
-         VirfBdRJ1wYUnfkh7jLza3dogudwmoE3+Y7Z7uBVIaUsgrRtPyJ+JoOaxOGRgRpAsFXz
-         aQ78og7aPFuM7ja01FJdpXL9f0jL5O4FtUDxBn2z6SeE7ZN0VGCSI5ZwzdG+aSGetzyF
-         O2Gg==
-X-Gm-Message-State: AFqh2ko2bMW793kKmhSsI4CIcK4Tsx+XPUkmRuTQNioKXBWAMzRiHPsC
-        J/cNiHgZedp+p8CltxUoJLOwvSwgcoWhmRdwCYo=
-X-Google-Smtp-Source: AMrXdXtdP7XvuBkkOoCRUPhMd1d+grDnKMSgWYxGuHqHnrcZUe8gHH7U3JzzW7OHMWK4+sfZJ4sCN09NdtVvVgaOVzk=
-X-Received: by 2002:a05:6a00:f91:b0:58b:a1bd:6aae with SMTP id
- ct17-20020a056a000f9100b0058ba1bd6aaemr2495023pfb.25.1674507672072; Mon, 23
- Jan 2023 13:01:12 -0800 (PST)
+        with ESMTP id S232967AbjAWVLh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 23 Jan 2023 16:11:37 -0500
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F083C22;
+        Mon, 23 Jan 2023 13:11:35 -0800 (PST)
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1pK3Z6-000H7X-2M; Mon, 23 Jan 2023 21:37:16 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1pK3Z5-000Tjt-Gf; Mon, 23 Jan 2023 21:37:15 +0100
+Subject: Re: [PATCH v3 1/2] tools/resolve_btfids: Install subcmd headers
+To:     Ian Rogers <irogers@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Connor OBrien <connoro@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230119183118.126387-1-irogers@google.com>
+ <20230119183118.126387-2-irogers@google.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <c022261e-bff4-8aea-0d71-f8683b6ad449@iogearbox.net>
+Date:   Mon, 23 Jan 2023 21:37:14 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <CAMy7=ZW27JeWd-o7dYaXob2BC+qKRqRqpihiN9viTqq1+Eib-g@mail.gmail.com>
- <878rhty100.fsf@cloudflare.com> <CAMy7=ZVLUpeHM4A_aZ5XT-CYEM8_uj8y=GRcPT89Bf5=jtS+og@mail.gmail.com>
- <08dce08f-eb4b-d911-28e8-686ca3a85d4e@meta.com> <CAMy7=ZWPc279vnKK6L1fssp5h7cb6cqS9_EuMNbfVBg_ixmTrQ@mail.gmail.com>
- <3a87b859-d7c9-2dfd-b659-cd3192a67003@linux.dev>
-In-Reply-To: <3a87b859-d7c9-2dfd-b659-cd3192a67003@linux.dev>
-From:   Yaniv Agman <yanivagman@gmail.com>
-Date:   Mon, 23 Jan 2023 23:01:01 +0200
-Message-ID: <CAMy7=ZWi35SKj9rcKwj0eyH+xY8ZBgiX_vpF=mydxFDahK6trg@mail.gmail.com>
-Subject: Re: Are BPF programs preemptible?
-To:     Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     Jakub Sitnicki <jakub@cloudflare.com>, bpf <bpf@vger.kernel.org>,
-        Yonghong Song <yhs@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230119183118.126387-2-irogers@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.7/26790/Mon Jan 23 09:31:32 2023)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-=E2=80=AB=D7=91=D7=AA=D7=90=D7=A8=D7=99=D7=9A =D7=99=D7=95=D7=9D =D7=91=D7=
-=B3, 23 =D7=91=D7=99=D7=A0=D7=95=D7=B3 2023 =D7=91-22:06 =D7=9E=D7=90=D7=AA=
- =E2=80=AAMartin KaFai Lau=E2=80=AC=E2=80=8F
-<=E2=80=AAmartin.lau@linux.dev=E2=80=AC=E2=80=8F>:=E2=80=AC
->
-> On 1/23/23 9:32 AM, Yaniv Agman wrote:
-> >>> interrupted the first one. But even then, I will need to find a way t=
-o
-> >>> know if my program currently interrupts the run of another program -
-> >>> is there a way to do that?
-> May be a percpu atomic counter to see if the bpf prog has been re-entered=
- on the
-> same cpu.
+On 1/19/23 7:31 PM, Ian Rogers wrote:
+> Previously tools/lib/subcmd was added to the include path, switch to
+> installing the headers and then including from that directory. This
+> avoids dependencies on headers internal to tools/lib/subcmd. Add the
+> missing subcmd directory to the affected #include.
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>   tools/bpf/resolve_btfids/Makefile | 19 ++++++++++++++-----
+>   tools/bpf/resolve_btfids/main.c   |  2 +-
+>   2 files changed, 15 insertions(+), 6 deletions(-)
+> 
+> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+> index 19a3112e271a..76b737b2560d 100644
+> --- a/tools/bpf/resolve_btfids/Makefile
+> +++ b/tools/bpf/resolve_btfids/Makefile
+> @@ -35,21 +35,29 @@ SUBCMD_SRC := $(srctree)/tools/lib/subcmd/
+>   BPFOBJ     := $(OUTPUT)/libbpf/libbpf.a
+>   LIBBPF_OUT := $(abspath $(dir $(BPFOBJ)))/
+>   SUBCMDOBJ  := $(OUTPUT)/libsubcmd/libsubcmd.a
+> +SUBCMD_OUT := $(abspath $(dir $(SUBCMDOBJ)))/
+>   
+>   LIBBPF_DESTDIR := $(LIBBPF_OUT)
+>   LIBBPF_INCLUDE := $(LIBBPF_DESTDIR)include
+>   
+> +SUBCMD_DESTDIR := $(SUBCMD_OUT)
+> +SUBCMD_INCLUDE := $(SUBCMD_DESTDIR)include
+> +
+>   BINARY     := $(OUTPUT)/resolve_btfids
+>   BINARY_IN  := $(BINARY)-in.o
+>   
+>   all: $(BINARY)
+>   
+> +prepare: $(BPFOBJ) $(SUBCMDOBJ)
+> +
+>   $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
+>   	$(call msg,MKDIR,,$@)
+>   	$(Q)mkdir -p $(@)
+>   
+>   $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
+> -	$(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(abspath $(dir $@))/ $(abspath $@)
+> +	$(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(SUBCMD_OUT) \
+> +		    DESTDIR=$(SUBCMD_DESTDIR) prefix= \
+> +		    $(abspath $@) install_headers
+>   
+>   $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUT)
+>   	$(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(LIBBPF_OUT)    \
+> @@ -60,14 +68,14 @@ CFLAGS += -g \
+>             -I$(srctree)/tools/include \
+>             -I$(srctree)/tools/include/uapi \
+>             -I$(LIBBPF_INCLUDE) \
+> -          -I$(SUBCMD_SRC)
+> +          -I$(SUBCMD_INCLUDE)
+>   
+>   LIBS = -lelf -lz
+>   
 
-Not sure I understand how this will help. If I want to save local
-program data on a percpu map and I see that the counter is bigger then
-zero, should I ignore the event?
+This series needs a rebase against bpf-next, given it results in merge conflict
+e.g. see commit 0e43662e61f2 ("tools/resolve_btfids: Use pkg-config to locate
+libelf") from Dec 15th.
+
+Thanks,
+Daniel
