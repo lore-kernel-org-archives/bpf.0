@@ -2,85 +2,78 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C5D5C05027
-	for <bpf@archiver.kernel.org>; Mon, 23 Jan 2023 20:45:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62C2DC05027
+	for <bpf@archiver.kernel.org>; Mon, 23 Jan 2023 21:01:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231468AbjAWUpa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 23 Jan 2023 15:45:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46478 "EHLO
+        id S231565AbjAWVBA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 23 Jan 2023 16:01:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231751AbjAWUpO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 23 Jan 2023 15:45:14 -0500
-Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782DE4C25
-        for <bpf@vger.kernel.org>; Mon, 23 Jan 2023 12:45:13 -0800 (PST)
-Received: by devvm15675.prn0.facebook.com (Postfix, from userid 115148)
-        id CA96B46DC8DA; Mon, 23 Jan 2023 12:27:31 -0800 (PST)
-From:   Joanne Koong <joannelkoong@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        roberto.sassu@huawei.com, void@manifault.com,
-        Joanne Koong <joannelkoong@gmail.com>
-Subject: [PATCH v1 bpf-next 2/2] selftests/bpf: Clean up dynptr prog_tests
-Date:   Mon, 23 Jan 2023 12:26:48 -0800
-Message-Id: <20230123202648.1800946-2-joannelkoong@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230123202648.1800946-1-joannelkoong@gmail.com>
-References: <20230123202648.1800946-1-joannelkoong@gmail.com>
+        with ESMTP id S232688AbjAWVA7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 23 Jan 2023 16:00:59 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DE63802C;
+        Mon, 23 Jan 2023 13:00:36 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 91BA34E5;
+        Mon, 23 Jan 2023 21:00:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 91BA34E5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1674507618; bh=kQU2tIJdB9rnhbfeq1gp/o1R3R4HSKI0cgbamerZ2IU=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=HpgEiaVY8ku4QGhapK3c0YKHIxh225fuM3q4Bdb3X9cze0iTSLyR/H34YvqKa12ao
+         Cav7pdLKFM+xSZSiwgyFaotU1JunnfrHMRJRV4ySVwjYvk1jS2Hjo11oWgo8ZqGtpL
+         s8z3VZnCdyN+ghwYaB6NfaUCjfuKTCg9BKgTxFkp6oXc0HNTibtAZrLLSk1YNioh6V
+         1sZJvveoGKhElYs31uc90sRvBD9GR+3dh3X0lbovLol1mT7BYkpdyfXcU8Hx4y7vAA
+         rR9LpV1PnZ0Ba6QyZsIKgegP7Heg3OIXxhDWC9MgMYptH25aVVjqI2skFCxlo9kWGu
+         vLCJ96Ro9zdbQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        David Vernet <void@manifault.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@meta.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, memxor@gmail.com
+Subject: Re: [PATCH bpf-next v2 3/3] bpf: Use BPF_KFUNC macro at all kfunc
+ definitions
+In-Reply-To: <ebff2166-8a70-af62-b859-6b5c6b008b36@iogearbox.net>
+References: <20230123171506.71995-1-void@manifault.com>
+ <20230123171506.71995-4-void@manifault.com>
+ <20230123183305.2mgoxgw4ca3sfk24@macbook-pro-6.dhcp.thefacebook.com>
+ <Y87We/92xiv5/+g+@maniforge.lan>
+ <20230123185434.ybfhrmbootcnjuoj@macbook-pro-6.dhcp.thefacebook.com>
+ <ebff2166-8a70-af62-b859-6b5c6b008b36@iogearbox.net>
+Date:   Mon, 23 Jan 2023 14:00:17 -0700
+Message-ID: <87o7qphspq.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Clean up prog_tests/dynptr.c by removing the unneeded "expected_err_msg"
-in the dynptr_tests struct, which is a remnant from converting the fail
-tests cases to use the generic verification tester.
+Daniel Borkmann <daniel@iogearbox.net> writes:
 
-Signed-off-by: Joanne Koong <joannelkoong@gmail.com>
----
- .../testing/selftests/bpf/prog_tests/dynptr.c  | 18 +++++++-----------
- 1 file changed, 7 insertions(+), 11 deletions(-)
+> Did you look into making this similar to the EXPORT_SYMBOL() infra? If possible
+> that would look much more natural to developers, e.g. :
+>
+> struct nf_conn *
+> bpf_skb_ct_lookup(struct __sk_buff *skb_ctx, struct bpf_sock_tuple *bpf_tuple,
+>   		  u32 tuple__sz, struct bpf_ct_opts *opts, u32 opts__sz)
+> {
+> 	[...]
+> }
+>
+> EXPORT_BPF_KFUNC(bpf_skb_ct_lookup);
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/dynptr.c b/tools/test=
-ing/selftests/bpf/prog_tests/dynptr.c
-index 7faaf6d9e0d4..b99264ec0d9c 100644
---- a/tools/testing/selftests/bpf/prog_tests/dynptr.c
-+++ b/tools/testing/selftests/bpf/prog_tests/dynptr.c
-@@ -5,14 +5,10 @@
- #include "dynptr_fail.skel.h"
- #include "dynptr_success.skel.h"
-=20
--static struct {
--	const char *prog_name;
--	const char *expected_err_msg;
--} dynptr_tests[] =3D {
--	/* success cases */
--	{"test_read_write", NULL},
--	{"test_data_slice", NULL},
--	{"test_ringbuf", NULL},
-+static const char * const success_tests[] =3D {
-+	"test_read_write",
-+	"test_data_slice",
-+	"test_ringbuf",
- };
-=20
- static void verify_success(const char *prog_name)
-@@ -53,11 +49,11 @@ void test_dynptr(void)
- {
- 	int i;
-=20
--	for (i =3D 0; i < ARRAY_SIZE(dynptr_tests); i++) {
--		if (!test__start_subtest(dynptr_tests[i].prog_name))
-+	for (i =3D 0; i < ARRAY_SIZE(success_tests); i++) {
-+		if (!test__start_subtest(success_tests[i]))
- 			continue;
-=20
--		verify_success(dynptr_tests[i].prog_name);
-+		verify_success(success_tests[i]);
- 	}
-=20
- 	RUN_TESTS(dynptr_fail);
---=20
-2.30.2
+That was my question too; it's a similar functionality that would be
+nice to express in a similar way.  Even better, if possible, might be to
+fold it into BTF_ID_FLAGS, which I might then rename to EXPORT_KFUNC()
+or some such ... :)
 
+Thanks,
+
+jon
