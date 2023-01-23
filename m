@@ -2,60 +2,60 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30139C05027
-	for <bpf@archiver.kernel.org>; Mon, 23 Jan 2023 14:52:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E1D6C54E94
+	for <bpf@archiver.kernel.org>; Mon, 23 Jan 2023 14:52:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231983AbjAWOwP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 23 Jan 2023 09:52:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55748 "EHLO
+        id S231984AbjAWOwQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 23 Jan 2023 09:52:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231981AbjAWOwO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 23 Jan 2023 09:52:14 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C471DB8F
-        for <bpf@vger.kernel.org>; Mon, 23 Jan 2023 06:52:12 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id e19-20020a05600c439300b003db1cac0c1fso9297338wmn.5
-        for <bpf@vger.kernel.org>; Mon, 23 Jan 2023 06:52:12 -0800 (PST)
+        with ESMTP id S231775AbjAWOwP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 23 Jan 2023 09:52:15 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3BDE1DB8F
+        for <bpf@vger.kernel.org>; Mon, 23 Jan 2023 06:52:14 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id q10-20020a1cf30a000000b003db0edfdb74so4469454wmq.1
+        for <bpf@vger.kernel.org>; Mon, 23 Jan 2023 06:52:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VZtwewBw0jZc1V/EXdclfT0bgMz05ZvL7GcUmamn1B8=;
-        b=paXOBuUfqUX+uJLiw30B6kLCUPM4yxm9yuqI8+i4WoC1E6QaR5eyvPFInuLYveT4cm
-         WXmDvYmzuRZ13R3XU7VpZTbB+Wun2CIS0hKCLepIhE3e0WPwNDMa2GPOts8pRI54GRdB
-         vIBp470yrkq+JK3etgUlYYAw6IKsVdfSRG5q9jttLqpEYFqtLaELX3NuFETeQivlJZA0
-         OxRT5pAGL7tZjNyY4ZqyOkRkzMAiZUL5FzMmWR81SxKOsD1jai37mYP2UhBQSqX7W6Dh
-         3vYRIUhn6gv+S0H9y6t99pqP/Hyg8rCBQVXc1QrQ69SOoSulgYNLMG6ox0R0AViBjPkg
-         qVXg==
+        bh=WNkqEIwHTvn3hwJGCd8FxWiXUHPri3PBAlA0TPJRr3s=;
+        b=jy5zehtW7P1TstsTHbcLTR3gCzsDqMHSvmFx+gTIxRyQ3fH9fCagRLXy4PU+zyW+ae
+         fU/fPqz6ZZETLp+ZG/Aq4An0MliI8TsULaMI2gUrs3ABNFaqsxfLEXj/dEwcpxV9uJ0j
+         9ZIRsQgY9HI2EKtuiVxMvMUCiZp1RspjFYbtAGVgYiwYNterybjkOfehGCuc0dNFcOpt
+         pzQ9NI4qiWDx2C/c8V5FWD4TzRzsJ1HQZIGVSUnkCQJpbFScX8l2lF0uAjR6rnh+SXFn
+         Lk3WnXdKDwIzO6+2g/xQOgRGRywbM2htpTTowwAVkUG97ESbvJPjJH7bCUxOANAUj+dh
+         3jEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VZtwewBw0jZc1V/EXdclfT0bgMz05ZvL7GcUmamn1B8=;
-        b=HmqGyqnjse1M/jmn62DI8FtlxS4o1AFYFXbzqB4HqtgMzes19EfLg7aedR+1DsglAD
-         cb5vkzba/r+Kb/q30Uh9TcdchqrxcOTOJWP6HPgh7ZWphtv9xVLMq+yocqz1+EDIIzZF
-         HLNO9O/Bv8u7qYGv24CFxmNNpGgP4+M63VHE/+fuabB8T4/4FTVb7UQKTK1NKfWdj1qD
-         aOCn3pvKvz106VjVxZHcGC9kEEZcnPYCNAOkbB6NvByGe7HsLKOCzR7BenZKzAyv/prT
-         Gv1EpUjlpCxP8zk9zOZoDpAzldgZ62I0gc9fJCcdz0WicH1tgkP9lNnjMZdrk9Rtlueu
-         8Rsw==
-X-Gm-Message-State: AFqh2kq4VxA43MVqLETu2/vUS91iZPXyNKSLKbGxixyqT8IKVtICooxt
-        K8fk/sikNqmhIRKqrckY5gKBJ9qq8M0=
-X-Google-Smtp-Source: AMrXdXusBEDuNpkjzH4RnXfbGI4FuR4lnpdTqHnp+W4YaQq7EOjj2AoCbv/tqbNyX+T+lpcS/V+BXw==
-X-Received: by 2002:a05:600c:34ce:b0:3db:25f:be9e with SMTP id d14-20020a05600c34ce00b003db025fbe9emr24388099wmq.33.1674485531027;
-        Mon, 23 Jan 2023 06:52:11 -0800 (PST)
+        bh=WNkqEIwHTvn3hwJGCd8FxWiXUHPri3PBAlA0TPJRr3s=;
+        b=nuv6ezUZTQk00sifOV1Jfd0mBoZ7NbSeHpn/v1ADgvRk8+GhjFij1iumq+J8NpH9Db
+         X2S+4Nee9kJ6Rc6Pe4SBzl2zJ2MF8yaX90TKHokFT3zj/CP6YQttEKxN6OBIpXzqWbUk
+         qOvmCk99HDhih88sIU3Knam5yqS2uZgXw+BBGshgFCTLCsZa+ztusHpBwtHIyZvyENik
+         7nJIMFDkIu84sxYrs/TybkSobFwC5c4Zx9hiGu4EbWb71Gq2T5Iu/CIwzz++qpZSzFkC
+         0nWKCv/MwjNjqynV9l7yNUavBThqON8/SWRBfi6HIUF/gBYd1C93Z2Dr9T5lliG3HTIm
+         4qAQ==
+X-Gm-Message-State: AFqh2kplvAmdIvzhYTS1ruGFyApvC37pkWFx14/k/JSbSPVCQaWRbYsI
+        69Eroq04Ga/mQFSI4YB3kx9aWqYAQhc=
+X-Google-Smtp-Source: AMrXdXu627OFmK84+AewYvjfzQB/hlP6n+VpaSypsJoycZugIn5NOerN+jX5oeb09WTYCiUOfMIIlQ==
+X-Received: by 2002:a05:600c:c0c:b0:3db:1caf:1044 with SMTP id fm12-20020a05600c0c0c00b003db1caf1044mr18169921wmb.13.1674485532975;
+        Mon, 23 Jan 2023 06:52:12 -0800 (PST)
 Received: from pluto.. (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id c7-20020a05600c0a4700b003d1e1f421bfsm11999649wmq.10.2023.01.23.06.52.10
+        by smtp.gmail.com with ESMTPSA id c7-20020a05600c0a4700b003d1e1f421bfsm11999649wmq.10.2023.01.23.06.52.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 06:52:10 -0800 (PST)
+        Mon, 23 Jan 2023 06:52:12 -0800 (PST)
 From:   Eduard Zingerman <eddyz87@gmail.com>
 To:     bpf@vger.kernel.org, ast@kernel.org
 Cc:     andrii@kernel.org, daniel@iogearbox.net, kernel-team@fb.com,
         yhs@fb.com, Eduard Zingerman <eddyz87@gmail.com>
-Subject: [RFC bpf-next 1/5] selftests/bpf: support custom per-test flags and multiple expected messages
-Date:   Mon, 23 Jan 2023 16:51:44 +0200
-Message-Id: <20230123145148.2791939-2-eddyz87@gmail.com>
+Subject: [RFC bpf-next 3/5] selftests/bpf: generate boilerplate code for test_loader-based tests
+Date:   Mon, 23 Jan 2023 16:51:46 +0200
+Message-Id: <20230123145148.2791939-4-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230123145148.2791939-1-eddyz87@gmail.com>
 References: <20230123145148.2791939-1-eddyz87@gmail.com>
@@ -65,175 +65,120 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Andrii Nakryiko <andrii@kernel.org>
+Automatically generate boilerplate code necessary to run tests that
+use test_loader.c.
 
-Extend __flag attribute by allowing to specify one of the following:
- * BPF_F_STRICT_ALIGNMENT
- * BPF_F_ANY_ALIGNMENT
- * BPF_F_TEST_RND_HI32
- * BPF_F_TEST_STATE_FREQ
- * BPF_F_SLEEPABLE
- * BPF_F_XDP_HAS_FRAGS
- * Some numeric value
+Adds a target 'prog_tests/test_loader_auto_wrappers.c' as part of
+rulesets for 'test_progs' and 'test_progs-no_alu32'. The content of
+this C file is generated by make and has the following structure:
 
-Extend __msg attribute by allowing to specify multiple exepcted messages.
-All messages are expected to be present in the verifier log in the
-order of application.
+  #include <test_progs.h>
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-[ Eduard: added commit message, formatting ]
+  #include "some_test_1.skel.h"
+  #include "some_test_2.skel.h"
+  ...
+
+  void test_some_test_1(void) { RUN_TESTS(some_test_1); }
+  void test_some_test_2(void) { RUN_TESTS(some_test_2); }
+  ...
+
+Here RUN_TESTS is a macro defined in test_progs.h, it expands to a
+code that uses test_loader.c:test_loader__run_subtests() function to
+load tests specified by appropriate skel.h.
+
+In order to get the list of tests included in
+'test_loader_auto_wrappers.c' the generation script looks for
+'progs/*.c' files that contain a special comment:
+
+  /* Use test_loader marker */
+
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- tools/testing/selftests/bpf/test_loader.c | 69 ++++++++++++++++++++---
- tools/testing/selftests/bpf/test_progs.h  |  1 +
- 2 files changed, 61 insertions(+), 9 deletions(-)
+ tools/testing/selftests/bpf/Makefile          | 34 +++++++++++++++++++
+ .../selftests/bpf/prog_tests/.gitignore       |  1 +
+ 2 files changed, 35 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
-index 679efb3aa785..bf41390157bf 100644
---- a/tools/testing/selftests/bpf/test_loader.c
-+++ b/tools/testing/selftests/bpf/test_loader.c
-@@ -13,12 +13,15 @@
- #define TEST_TAG_EXPECT_SUCCESS "comment:test_expect_success"
- #define TEST_TAG_EXPECT_MSG_PFX "comment:test_expect_msg="
- #define TEST_TAG_LOG_LEVEL_PFX "comment:test_log_level="
-+#define TEST_TAG_PROG_FLAGS_PFX "comment:test_prog_flags="
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 26e66f9a0977..66ba2941677c 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -398,6 +398,11 @@ TRUNNER_OUTPUT := $(OUTPUT)$(if $2,/)$2
+ TRUNNER_BINARY := $1$(if $2,-)$2
+ TRUNNER_TEST_OBJS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.test.o,	\
+ 				 $$(notdir $$(wildcard $(TRUNNER_TESTS_DIR)/*.c)))
++ifneq ($(TRUNNER_TEST_LOADER_AUTO_WRAPPERS),)
++TRUNNER_TEST_OBJS := $$(filter-out $$(TRUNNER_OUTPUT)/test_loader_auto_wrappers.test.o, \
++				   $$(TRUNNER_TEST_OBJS))
++TRUNNER_TEST_OBJS += $$(TRUNNER_OUTPUT)/test_loader_auto_wrappers.test.o
++endif
+ TRUNNER_EXTRA_OBJS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.o,		\
+ 				 $$(filter %.c,$(TRUNNER_EXTRA_SOURCES)))
+ TRUNNER_EXTRA_HDRS := $$(filter %.h,$(TRUNNER_EXTRA_SOURCES))
+@@ -482,6 +487,32 @@ $(TRUNNER_TESTS_HDR): $(TRUNNER_TESTS_DIR)/*.c
+ 		 ) > $$@)
+ endif
  
- struct test_spec {
- 	const char *name;
- 	bool expect_failure;
--	const char *expect_msg;
-+	const char **expect_msgs;
-+	size_t expect_msg_cnt;
- 	int log_level;
-+	int prog_flags;
- };
- 
- static int tester_init(struct test_loader *tester)
-@@ -67,7 +70,8 @@ static int parse_test_spec(struct test_loader *tester,
- 
- 	for (i = 1; i < btf__type_cnt(btf); i++) {
- 		const struct btf_type *t;
--		const char *s;
-+		const char *s, *val;
-+		char *e;
- 
- 		t = btf__type_by_id(btf, i);
- 		if (!btf_is_decl_tag(t))
-@@ -82,14 +86,48 @@ static int parse_test_spec(struct test_loader *tester,
- 		} else if (strcmp(s, TEST_TAG_EXPECT_SUCCESS) == 0) {
- 			spec->expect_failure = false;
- 		} else if (str_has_pfx(s, TEST_TAG_EXPECT_MSG_PFX)) {
--			spec->expect_msg = s + sizeof(TEST_TAG_EXPECT_MSG_PFX) - 1;
-+			void *tmp;
-+			const char **msg;
++ifneq ($(TRUNNER_TEST_LOADER_AUTO_WRAPPERS),)
++ifeq ($($(TRUNNER_TESTS_DIR)-test-loader-auto-wrappers-c),)
++$(TRUNNER_TESTS_DIR)-test-loader-auto-wrappers-c := y
++$(TRUNNER_TESTS_DIR)/test_loader_auto_wrappers.c: $(TRUNNER_BPF_PROGS_DIR)/*.c
++	$$(call msg,GEN-TEST,$(TRUNNER_BINARY),$$@)
++	$$(shell (echo '/* Generated source, do not edit */';			\
++		  tests=$$$$(grep --null -lF '/* Use test_loader marker */'	\
++				$$(TRUNNER_BPF_PROGS_DIR)/*.c			\
++				| xargs -0 -I {} basename {} .c);		\
++		  echo "#include <test_progs.h>";				\
++		  echo "";							\
++		  for case in $$$$tests;					\
++		  do								\
++			echo "#include \"$$$$case.skel.h\"";			\
++		  done;								\
++		  echo "";							\
++		  for case in $$$$tests;					\
++		  do								\
++			printf	"void %-50s { %-50s }\n"			\
++				"test_$$$$case(void)"				\
++				"RUN_TESTS($$$$case);";				\
++		  done) > $$@)
++$(TRUNNER_TESTS_HDR): $(TRUNNER_TESTS_DIR)/test_loader_auto_wrappers.c
++endif
++endif # TRUNNER_TEST_LOADER_AUTO_WRAPPERS
 +
-+			tmp = realloc(spec->expect_msgs,
-+				      (1 + spec->expect_msg_cnt) * sizeof(void *));
-+			if (!tmp) {
-+				ASSERT_FAIL("failed to realloc memory for messages\n");
-+				return -ENOMEM;
-+			}
-+			spec->expect_msgs = tmp;
-+			msg = &spec->expect_msgs[spec->expect_msg_cnt++];
-+			*msg = s + sizeof(TEST_TAG_EXPECT_MSG_PFX) - 1;
- 		} else if (str_has_pfx(s, TEST_TAG_LOG_LEVEL_PFX)) {
-+			val = s + sizeof(TEST_TAG_LOG_LEVEL_PFX) - 1;
- 			errno = 0;
--			spec->log_level = strtol(s + sizeof(TEST_TAG_LOG_LEVEL_PFX) - 1, NULL, 0);
--			if (errno) {
-+			spec->log_level = strtol(val, &e, 0);
-+			if (errno || e[0] != '\0') {
- 				ASSERT_FAIL("failed to parse test log level from '%s'", s);
- 				return -EINVAL;
- 			}
-+		} else if (str_has_pfx(s, TEST_TAG_PROG_FLAGS_PFX)) {
-+			val = s + sizeof(TEST_TAG_PROG_FLAGS_PFX) - 1;
-+			if (strcmp(val, "BPF_F_STRICT_ALIGNMENT") == 0) {
-+				spec->prog_flags |= BPF_F_STRICT_ALIGNMENT;
-+			} else if (strcmp(val, "BPF_F_ANY_ALIGNMENT") == 0) {
-+				spec->prog_flags |= BPF_F_ANY_ALIGNMENT;
-+			} else if (strcmp(val, "BPF_F_TEST_RND_HI32") == 0) {
-+				spec->prog_flags |= BPF_F_TEST_RND_HI32;
-+			} else if (strcmp(val, "BPF_F_TEST_STATE_FREQ") == 0) {
-+				spec->prog_flags |= BPF_F_TEST_STATE_FREQ;
-+			} else if (strcmp(val, "BPF_F_SLEEPABLE") == 0) {
-+				spec->prog_flags |= BPF_F_SLEEPABLE;
-+			} else if (strcmp(val, "BPF_F_XDP_HAS_FRAGS") == 0) {
-+				spec->prog_flags |= BPF_F_XDP_HAS_FRAGS;
-+			} else /* assume numeric value */ {
-+				errno = 0;
-+				spec->prog_flags |= strtol(val, &e, 0);
-+				if (errno || e[0] != '\0') {
-+					ASSERT_FAIL("failed to parse test prog flags from '%s'", s);
-+					return -EINVAL;
-+				}
-+			}
- 		}
- 	}
+ # compile individual test files
+ # Note: we cd into output directory to ensure embedded BPF object is found
+ $(TRUNNER_TEST_OBJS): $(TRUNNER_OUTPUT)/%.test.o:			\
+@@ -537,6 +568,7 @@ TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read $(OUTPUT)/bpf_testmod.ko	\
+ 		       verify_sig_setup.sh				\
+ 		       $(wildcard progs/btf_dump_test_case_*.c)		\
+ 		       $(wildcard progs/*.bpf.o)
++TRUNNER_TEST_LOADER_AUTO_WRAPPERS := t
+ TRUNNER_BPF_BUILD_RULE := CLANG_BPF_BUILD_RULE
+ TRUNNER_BPF_CFLAGS := $(BPF_CFLAGS) $(CLANG_CFLAGS) -DENABLE_ATOMICS_TESTS
+ $(eval $(call DEFINE_TEST_RUNNER,test_progs))
+@@ -560,6 +592,7 @@ TRUNNER_EXTRA_SOURCES := test_maps.c
+ TRUNNER_EXTRA_FILES :=
+ TRUNNER_BPF_BUILD_RULE := $$(error no BPF objects should be built)
+ TRUNNER_BPF_CFLAGS :=
++TRUNNER_TEST_LOADER_AUTO_WRAPPERS :=
+ $(eval $(call DEFINE_TEST_RUNNER,test_maps))
  
-@@ -101,7 +139,7 @@ static void prepare_case(struct test_loader *tester,
- 			 struct bpf_object *obj,
- 			 struct bpf_program *prog)
- {
--	int min_log_level = 0;
-+	int min_log_level = 0, prog_flags;
+ # Define test_verifier test runner.
+@@ -625,6 +658,7 @@ $(OUTPUT)/veristat: $(OUTPUT)/veristat.o
  
- 	if (env.verbosity > VERBOSE_NONE)
- 		min_log_level = 1;
-@@ -119,7 +157,11 @@ static void prepare_case(struct test_loader *tester,
- 	else
- 		bpf_program__set_log_level(prog, spec->log_level);
- 
-+	prog_flags = bpf_program__flags(prog);
-+	bpf_program__set_flags(prog, prog_flags | spec->prog_flags);
-+
- 	tester->log_buf[0] = '\0';
-+	tester->next_match_pos = 0;
- }
- 
- static void emit_verifier_log(const char *log_buf, bool force)
-@@ -135,17 +177,26 @@ static void validate_case(struct test_loader *tester,
- 			  struct bpf_program *prog,
- 			  int load_err)
- {
--	if (spec->expect_msg) {
-+	int i, j;
-+
-+	for (i = 0; i < spec->expect_msg_cnt; i++) {
- 		char *match;
-+		const char *expect_msg;
-+
-+		expect_msg = spec->expect_msgs[i];
- 
--		match = strstr(tester->log_buf, spec->expect_msg);
-+		match = strstr(tester->log_buf + tester->next_match_pos, expect_msg);
- 		if (!ASSERT_OK_PTR(match, "expect_msg")) {
- 			/* if we are in verbose mode, we've already emitted log */
- 			if (env.verbosity == VERBOSE_NONE)
- 				emit_verifier_log(tester->log_buf, true /*force*/);
--			fprintf(stderr, "EXPECTED MSG: '%s'\n", spec->expect_msg);
-+			for (j = 0; j < i; j++)
-+				fprintf(stderr, "MATCHED  MSG: '%s'\n", spec->expect_msgs[j]);
-+			fprintf(stderr, "EXPECTED MSG: '%s'\n", expect_msg);
- 			return;
- 		}
-+
-+		tester->next_match_pos = match - tester->log_buf + strlen(expect_msg);
- 	}
- }
- 
-diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
-index 3f058dfadbaf..9af80704f20a 100644
---- a/tools/testing/selftests/bpf/test_progs.h
-+++ b/tools/testing/selftests/bpf/test_progs.h
-@@ -410,6 +410,7 @@ int write_sysctl(const char *sysctl, const char *value);
- struct test_loader {
- 	char *log_buf;
- 	size_t log_buf_sz;
-+	size_t next_match_pos;
- 
- 	struct bpf_object *obj;
- };
+ EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)	\
+ 	prog_tests/tests.h map_tests/tests.h verifier/tests.h		\
++	prog_tests/test_loader_auto_wrappers.c				\
+ 	feature bpftool							\
+ 	$(addprefix $(OUTPUT)/,*.o *.skel.h *.lskel.h *.subskel.h	\
+ 			       no_alu32 bpf_gcc bpf_testmod.ko		\
+diff --git a/tools/testing/selftests/bpf/prog_tests/.gitignore b/tools/testing/selftests/bpf/prog_tests/.gitignore
+index 89c4a3d37544..6a937c1cd78d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/.gitignore
++++ b/tools/testing/selftests/bpf/prog_tests/.gitignore
+@@ -1,2 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ tests.h
++test_loader_auto_wrappers.c
 -- 
 2.39.0
 
