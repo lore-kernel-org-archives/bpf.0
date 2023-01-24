@@ -2,92 +2,102 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0230C54EB4
-	for <bpf@archiver.kernel.org>; Tue, 24 Jan 2023 18:13:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 097F9C54E94
+	for <bpf@archiver.kernel.org>; Tue, 24 Jan 2023 18:26:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229451AbjAXSNI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 24 Jan 2023 13:13:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58516 "EHLO
+        id S231749AbjAXS0I (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 24 Jan 2023 13:26:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232618AbjAXSNF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 24 Jan 2023 13:13:05 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED3B18A9C
-        for <bpf@vger.kernel.org>; Tue, 24 Jan 2023 10:13:05 -0800 (PST)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30OE2YSq011818
-        for <bpf@vger.kernel.org>; Tue, 24 Jan 2023 10:13:05 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=Zhn9xNVwKO2PPFy243h0rJy1V/FGtGTYjCYHqV53EQo=;
- b=Q3KdmdnE8WRPlWFYRWcKsHA8rEiNn+MQ2ARnaglxXWa2RRXh02gS3NOUxcgNqFR2AoYY
- 46/AoEY75xLagnrk1P9vcW3tXdt83kqdUBDcvLhU0QwsfUDWAyOYqxNiV1MLQeoH3axC
- 9n5z3V5LL1MOmben5ihFRUR2xFjFBHjBD+QDqb1Q+Sx9CzyvliKKUqS4bSiBAH3I7hdK
- MHuX1mIc/eZOQeLPb1m4Uv0pZnKND4HCxVfJKFi6urRlgYLIoJ7lI5Bhcq+iBaJG9l8t
- Vokwfs+gT8GDaQWsQmduUjdlwaQrICsDU29oZC3SyMSBNP284xUu5lcWFDYoa6TLsZos nw== 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3na4dubyst-10
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 24 Jan 2023 10:13:04 -0800
-Received: from twshared16996.15.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Tue, 24 Jan 2023 10:13:01 -0800
-Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
-        id 6265F3645D8C; Tue, 24 Jan 2023 10:12:50 -0800 (PST)
-From:   Kui-Feng Lee <kuifeng@meta.com>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <martin.lau@linux.dev>,
-        <song@kernel.org>, <kernel-team@meta.com>
-CC:     Kui-Feng Lee <kuifeng@meta.com>
-Subject: [PATCH bpf-next v2 1/2] bpf: Check the protocol of a sock to agree the calls to bpf_setsockopt().
-Date:   Tue, 24 Jan 2023 10:12:19 -0800
-Message-ID: <20230124181220.2871611-2-kuifeng@meta.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230124181220.2871611-1-kuifeng@meta.com>
-References: <20230124181220.2871611-1-kuifeng@meta.com>
+        with ESMTP id S229503AbjAXS0H (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 24 Jan 2023 13:26:07 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEAB54B4AF
+        for <bpf@vger.kernel.org>; Tue, 24 Jan 2023 10:26:03 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id a18so3022355plm.2
+        for <bpf@vger.kernel.org>; Tue, 24 Jan 2023 10:26:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=e/0mhQjUX3YGT74X00F8z++e1kC7KtXcE8nvjwTMUBw=;
+        b=BsUQ1hllhvS6HJrLSXD7+MzcNynbgKQg8PwmHl+xYCATUVwS3kp+oACR4ntufcFLXb
+         v6HkcZHDdZjE9Z9HGHnugoNzS38J9+8X6sVLsZJoTYWKtRQfzwrTDZ4qv2hUtVDWJW6D
+         yTZ5WdCyMTjTD47xPG2ASxlJqS+MyNEdZmZVAaH0wfnDDYP34h2cG5xOoHy/TSkVvS7A
+         B3KNdH02o/H0ISP8uEhMysxk/0yke8lvtUNlIfipL94HC4p63lVVw2T1DEQUBxWdwVNt
+         82s6YZUDLz/XXAqUx7MvzaXZ4WAsQ498WHsM/LLiiHVWJf6AJNTLTVcNYS8kP6fde/wi
+         bhiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=e/0mhQjUX3YGT74X00F8z++e1kC7KtXcE8nvjwTMUBw=;
+        b=xbk1EBFFz3HL1XcdBRfc6d9XBnRcWeV/arjSaGxxdnP/jvbMOxnSTxg4PbgUTXsZ08
+         d0xdNbjVK2Tj+M9HT/A6n0O4hLiqPp0XuP0h1jAtr2wjI7BQ/HZhmkfShpmFST1b/t7B
+         GIABggVXDtTfr/+RPZQ+UEr9HBmvIzJUXjMIY/4Dx8viKgQ6rEqMv00Iu3z9JVkk2Vgy
+         eWT7oC2OBosGcKsJOPPu/E7l292uOI0BZeLWPmfPnbs6MaQ0dzlGDFK7vvjBr9guAZcz
+         S7Jfyy9OpLWIOmCh5xG1TlL9WmiKGiJlfIHUC3VFdUi0LWRIW4YWJHdULOGBktVkTaiV
+         0+2g==
+X-Gm-Message-State: AFqh2kqfdc1VQ4rkinay41H+eeRrzndrUwD2K6eRj98Ani8M6bBhs+XO
+        GdKuMTzpL49wXoivc9ExkBi2Ed+Oj/K7gA==
+X-Google-Smtp-Source: AMrXdXvOSfRburI4w7KdIV5UHVnOos3psQ4pMuIPXXELpPJlsCTLWRgG3rUAGatRkN5E1Q2xQtw06Q==
+X-Received: by 2002:a17:90b:3842:b0:22b:b3df:d970 with SMTP id nl2-20020a17090b384200b0022bb3dfd970mr17640745pjb.44.1674584763138;
+        Tue, 24 Jan 2023 10:26:03 -0800 (PST)
+Received: from ?IPV6:2620:10d:c085:21c8::13fb? ([2620:10d:c090:400::5:69a5])
+        by smtp.gmail.com with ESMTPSA id h8-20020a17090a054800b00226463cd239sm8736278pjf.15.2023.01.24.10.26.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 10:26:02 -0800 (PST)
+Message-ID: <296fcfac-9acd-9462-871c-b450fd140fa3@gmail.com>
+Date:   Tue, 24 Jan 2023 10:26:00 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: UJa1Yb8qw2N81HNFhsADQmEXRdXfD1hg
-X-Proofpoint-GUID: UJa1Yb8qw2N81HNFhsADQmEXRdXfD1hg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-24_13,2023-01-24_01,2022-06-22_01
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: Is fentry/fexit support possible with an external BTF?
+Content-Language: en-US
+To:     Jason Ling <jasonling@google.com>, bpf@vger.kernel.org
+References: <CAHBbfcUkr6fTm2X9GNsFNqV75fTG=aBQXFx_8Ayk+4hk7heB-g@mail.gmail.com>
+From:   Kui-Feng Lee <sinquersw@gmail.com>
+In-Reply-To: <CAHBbfcUkr6fTm2X9GNsFNqV75fTG=aBQXFx_8Ayk+4hk7heB-g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Resolve an issue when calling sol_tcp_sockopt() on a socket with ktls
-enabled. Prior to this patch, sol_tcp_sockopt() would only allow calls
-if the function pointer of setsockopt of the socket was set to
-tcp_setsockopt(). However, any socket with ktls enabled would have its
-function pointer set to tls_setsockopt(). To resolve this issue, the
-patch adds a check of the protocol of the linux socket and allows
-bpf_setsockopt() to be called if ktls is initialized on the linux
-socket. This ensures that calls to sol_tcp_sockopt() will succeed on
-sockets with ktls enabled.
+On 1/23/23 16:21, Jason Ling wrote:
+> Some context:
+>
+> The devices I am interested in have a small kernel partition (~16MB).
+> Building the kernel with CONFIG_DEBUG_INFO_BTF=y increases the kernel
+> size by about ~1.7M.
+> So I've tried to use an external BTF (generating my own vmlinux BTF
+> and placing it on a more spacious partition) but it seems like my
+> eBPFs that attach to fexit hooks now fail loading. According to some
+> comments in libbpf this seems to be expected.
+>
+> e.g an eBPF program that looks like this
+>
+> SEC("fexit/ksys_unshare")
+> int BPF_PROG(handle_exit, unsigned long unshare_flags, int rv) {
+> }
+>
+> fails the loading process.
+>
+>
+> My guess is that there is additional debug/BTF information beyond what
+> is available in vmlinux BTF that gets linked into vmlinuz and without
+> this information the attaching to certain hooks fail.
 
-Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
----
- net/core/filter.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+IIRC, the verifier running in the kernel also needs BTF to verify the code.
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index b4547a2c02f4..890384cbdeb2 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -5204,7 +5204,7 @@ static int sol_tcp_sockopt(struct sock *sk, int opt=
-name,
- 			   char *optval, int *optlen,
- 			   bool getopt)
- {
--	if (sk->sk_prot->setsockopt !=3D tcp_setsockopt)
-+	if (sk->sk_protocol !=3D IPPROTO_TCP)
- 		return -EINVAL;
-=20
- 	switch (optname) {
---=20
-2.30.2
+That means you need a way to load BTF to kernel manually as well.
 
+
+>
+> So my question is:
+>
+> is there a way to achieve my goal of using a kernel that has been
+> built with CONFIG_DEBUG_INFO_BTF=n and still be able to use
+> fentry/fexit type hooks?
