@@ -2,102 +2,266 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 097F9C54E94
-	for <bpf@archiver.kernel.org>; Tue, 24 Jan 2023 18:26:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26744C54E94
+	for <bpf@archiver.kernel.org>; Tue, 24 Jan 2023 18:48:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231749AbjAXS0I (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 24 Jan 2023 13:26:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36908 "EHLO
+        id S233927AbjAXSsx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 24 Jan 2023 13:48:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjAXS0H (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 24 Jan 2023 13:26:07 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEAB54B4AF
-        for <bpf@vger.kernel.org>; Tue, 24 Jan 2023 10:26:03 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id a18so3022355plm.2
-        for <bpf@vger.kernel.org>; Tue, 24 Jan 2023 10:26:03 -0800 (PST)
+        with ESMTP id S233689AbjAXSsw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 24 Jan 2023 13:48:52 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C197E2BEED
+        for <bpf@vger.kernel.org>; Tue, 24 Jan 2023 10:48:51 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id s24-20020a17090aa11800b00229fef3ac5dso5687926pjp.5
+        for <bpf@vger.kernel.org>; Tue, 24 Jan 2023 10:48:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=e/0mhQjUX3YGT74X00F8z++e1kC7KtXcE8nvjwTMUBw=;
-        b=BsUQ1hllhvS6HJrLSXD7+MzcNynbgKQg8PwmHl+xYCATUVwS3kp+oACR4ntufcFLXb
-         v6HkcZHDdZjE9Z9HGHnugoNzS38J9+8X6sVLsZJoTYWKtRQfzwrTDZ4qv2hUtVDWJW6D
-         yTZ5WdCyMTjTD47xPG2ASxlJqS+MyNEdZmZVAaH0wfnDDYP34h2cG5xOoHy/TSkVvS7A
-         B3KNdH02o/H0ISP8uEhMysxk/0yke8lvtUNlIfipL94HC4p63lVVw2T1DEQUBxWdwVNt
-         82s6YZUDLz/XXAqUx7MvzaXZ4WAsQ498WHsM/LLiiHVWJf6AJNTLTVcNYS8kP6fde/wi
-         bhiQ==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eJ9fHNI2bifYxES5qUmgRME8xH96EaZ2Dunhd4XnTao=;
+        b=L/7Y+NwB+jJPHXW7xEgDH/Jnx/MMVgmCXk/1P/mNUcDV+MVS2Ti397L/3gJlxNpUV1
+         zLhNmwaIj898y7EZpCGYPq/wplH5vF9TQV6qRHtvBG+93NwGzbnv+V97vMYKHdHJdRj6
+         hzDeAI3USTaASuj7uVRQomJh2kLMoqUVlavtAgmQqiX7TzJnJfcvklm0KShAQNvOJynT
+         Mzylywa+t+nrsm3OC+9fueASjKE+nK6knZU2Fp/yboLaISEZZZMTlCCMHgTHQfw81jh3
+         UNCKAHFRSmhi/X42/23Qx2ZnJE4WI9KZRrOcydNTv1wuOvqPWXjlSe6OSS3JvJsKudRe
+         5EBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e/0mhQjUX3YGT74X00F8z++e1kC7KtXcE8nvjwTMUBw=;
-        b=xbk1EBFFz3HL1XcdBRfc6d9XBnRcWeV/arjSaGxxdnP/jvbMOxnSTxg4PbgUTXsZ08
-         d0xdNbjVK2Tj+M9HT/A6n0O4hLiqPp0XuP0h1jAtr2wjI7BQ/HZhmkfShpmFST1b/t7B
-         GIABggVXDtTfr/+RPZQ+UEr9HBmvIzJUXjMIY/4Dx8viKgQ6rEqMv00Iu3z9JVkk2Vgy
-         eWT7oC2OBosGcKsJOPPu/E7l292uOI0BZeLWPmfPnbs6MaQ0dzlGDFK7vvjBr9guAZcz
-         S7Jfyy9OpLWIOmCh5xG1TlL9WmiKGiJlfIHUC3VFdUi0LWRIW4YWJHdULOGBktVkTaiV
-         0+2g==
-X-Gm-Message-State: AFqh2kqfdc1VQ4rkinay41H+eeRrzndrUwD2K6eRj98Ani8M6bBhs+XO
-        GdKuMTzpL49wXoivc9ExkBi2Ed+Oj/K7gA==
-X-Google-Smtp-Source: AMrXdXvOSfRburI4w7KdIV5UHVnOos3psQ4pMuIPXXELpPJlsCTLWRgG3rUAGatRkN5E1Q2xQtw06Q==
-X-Received: by 2002:a17:90b:3842:b0:22b:b3df:d970 with SMTP id nl2-20020a17090b384200b0022bb3dfd970mr17640745pjb.44.1674584763138;
-        Tue, 24 Jan 2023 10:26:03 -0800 (PST)
-Received: from ?IPV6:2620:10d:c085:21c8::13fb? ([2620:10d:c090:400::5:69a5])
-        by smtp.gmail.com with ESMTPSA id h8-20020a17090a054800b00226463cd239sm8736278pjf.15.2023.01.24.10.26.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 10:26:02 -0800 (PST)
-Message-ID: <296fcfac-9acd-9462-871c-b450fd140fa3@gmail.com>
-Date:   Tue, 24 Jan 2023 10:26:00 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: Is fentry/fexit support possible with an external BTF?
-Content-Language: en-US
-To:     Jason Ling <jasonling@google.com>, bpf@vger.kernel.org
-References: <CAHBbfcUkr6fTm2X9GNsFNqV75fTG=aBQXFx_8Ayk+4hk7heB-g@mail.gmail.com>
-From:   Kui-Feng Lee <sinquersw@gmail.com>
-In-Reply-To: <CAHBbfcUkr6fTm2X9GNsFNqV75fTG=aBQXFx_8Ayk+4hk7heB-g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eJ9fHNI2bifYxES5qUmgRME8xH96EaZ2Dunhd4XnTao=;
+        b=5YbFWpCqLGamZPjjJUpzmHQEAqneOyhJNZt4eKbsG0PzTuB+CCj2sT+EdyR3RrqsDS
+         VaYa7RgUNPsTxvl8kEd1KrFpH3eTbmScz95cXGQhnPC8CJHNMDfui/hTH2R3ulC5yAdU
+         H6MP6mplXhj6obPvjrNE7iSXl/WrrIyYfwbNiTJjS6YnUW0nCI4FDxveuOAeJLGH6STj
+         wKRdlYZNO61YS8KWKfW/9n5THz4h20KpFf8w3F6lTv6w7Q3kazCnPh8SqHP/CoLTmtNX
+         NicCeGYsFCJ5afbyWAXboWF8egzHNFtWPjw7cd+u+cRtQC8Z91OktQABkJpEhUm/MU/V
+         doJA==
+X-Gm-Message-State: AFqh2kr9ak9b9MUABhqNBpGQ2fPQT0bwmkuT54eMs+HlxEFWiUXpRG80
+        +a38HTOIbcloc03lXCXLYZbQHZU=
+X-Google-Smtp-Source: AMrXdXvYdye/snDN4tbW6TMN6VSZTjwGnXWqimnUH2dO5ZcGbE2uRqspfWjPkihUQB7DWrCIQhLF9/0=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a17:902:9a41:b0:195:eb15:6ee1 with SMTP id
+ x1-20020a1709029a4100b00195eb156ee1mr1794642plv.23.1674586131050; Tue, 24 Jan
+ 2023 10:48:51 -0800 (PST)
+Date:   Tue, 24 Jan 2023 10:48:49 -0800
+In-Reply-To: <CAKH8qBvK-tJxQwBsUvQZ39KyhyAbd76H1xhdzmzeKbbN5Hzq7Q@mail.gmail.com>
+Mime-Version: 1.0
+References: <20230119221536.3349901-1-sdf@google.com> <20230119221536.3349901-18-sdf@google.com>
+ <71be95ee-b522-b3db-105a-0f25d8dc52cb@redhat.com> <CAKH8qBvK-tJxQwBsUvQZ39KyhyAbd76H1xhdzmzeKbbN5Hzq7Q@mail.gmail.com>
+Message-ID: <Y9AoEcjb+MET41NB@google.com>
+Subject: Re: [PATCH bpf-next v8 17/17] selftests/bpf: Simple program to dump
+ XDP RX metadata
+From:   sdf@google.com
+To:     Jesper Dangaard Brouer <jbrouer@redhat.com>
+Cc:     bpf@vger.kernel.org, brouer@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, haoluo@google.com, jolsa@kernel.org,
+        David Ahern <dsahern@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Willem de Bruijn <willemb@google.com>,
+        Anatoly Burakov <anatoly.burakov@intel.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Magnus Karlsson <magnus.karlsson@gmail.com>,
+        Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
+        netdev@vger.kernel.org,
+        "Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?=" <toke@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 1/23/23 16:21, Jason Ling wrote:
-> Some context:
->
-> The devices I am interested in have a small kernel partition (~16MB).
-> Building the kernel with CONFIG_DEBUG_INFO_BTF=y increases the kernel
-> size by about ~1.7M.
-> So I've tried to use an external BTF (generating my own vmlinux BTF
-> and placing it on a more spacious partition) but it seems like my
-> eBPFs that attach to fexit hooks now fail loading. According to some
-> comments in libbpf this seems to be expected.
->
-> e.g an eBPF program that looks like this
->
-> SEC("fexit/ksys_unshare")
-> int BPF_PROG(handle_exit, unsigned long unshare_flags, int rv) {
-> }
->
-> fails the loading process.
->
->
-> My guess is that there is additional debug/BTF information beyond what
-> is available in vmlinux BTF that gets linked into vmlinuz and without
-> this information the attaching to certain hooks fail.
+On 01/24, Stanislav Fomichev wrote:
+> On Tue, Jan 24, 2023 at 7:26 AM Jesper Dangaard Brouer
+> <jbrouer@redhat.com> wrote:
+> >
+> >
+> > Testing this on mlx5 and I'm not getting the RX-timestamp.
+> > See command details below.
 
-IIRC, the verifier running in the kernel also needs BTF to verify the code.
+> CC'ed Toke since I've never tested mlx5 myself.
+> I was pretty close to getting the setup late last week, let me try to
+> see whether it's ready or not.
 
-That means you need a way to load BTF to kernel manually as well.
+> > On 19/01/2023 23.15, Stanislav Fomichev wrote:
+> > > To be used for verification of driver implementations. Note that
+> > > the skb path is gone from the series, but I'm still keeping the
+> > > implementation for any possible future work.
+> > >
+> > > $ xdp_hw_metadata <ifname>
+> >
+> > sudo ./xdp_hw_metadata mlx5p1
+> >
+> > Output:
+> > [...cut ...]
+> > open bpf program...
+> > load bpf program...
+> > prepare skb endpoint...
+> > XXX timestamping_enable(): setsockopt(SO_TIMESTAMPING) ret:0
+> > prepare xsk map...
+> > map[0] = 3
+> > map[1] = 4
+> > map[2] = 5
+> > map[3] = 6
+> > map[4] = 7
+> > map[5] = 8
+> > attach bpf program...
+> > poll: 0 (0)
+> > poll: 0 (0)
+> > poll: 0 (0)
+> > poll: 1 (0)
+> > xsk_ring_cons__peek: 1
+> > 0x1821788: rx_desc[0]->addr=100000000008000 addr=8100 comp_addr=8000
+> > rx_timestamp: 0
+> > rx_hash: 2773355807
+> > 0x1821788: complete idx=8 addr=8000
+> > poll: 0 (0)
+> >
+> > The trace_pipe:
+> >
+> > $ sudo cat /sys/kernel/debug/tracing/trace_pipe
+> >            <idle>-0       [005] ..s2.  2722.884762: bpf_trace_printk:
+> > forwarding UDP:9091 to AF_XDP
+> >            <idle>-0       [005] ..s2.  2722.884771: bpf_trace_printk:
+> > populated rx_hash with 2773355807
+> >
+> >
+> > > On the other machine:
+> > >
+> > > $ echo -n xdp | nc -u -q1 <target> 9091 # for AF_XDP
+> >
+> > Fixing the source-port to see if RX-hash remains the same.
+> >
+> >   $ echo xdp | nc --source-port=2000 --udp 198.18.1.1 9091
+> >
+> > > $ echo -n skb | nc -u -q1 <target> 9092 # for skb
+> > >
+> > > Sample output:
+> > >
+> > >    # xdp
+> > >    xsk_ring_cons__peek: 1
+> > >    0x19f9090: rx_desc[0]->addr=100000000008000 addr=8100  
+> comp_addr=8000
+> > >    rx_timestamp_supported: 1
+> > >    rx_timestamp: 1667850075063948829
+> > >    0x19f9090: complete idx=8 addr=8000
+> >
+> > xsk_ring_cons__peek: 1
+> > 0x1821788: rx_desc[0]->addr=100000000008000 addr=8100 comp_addr=8000
+> > rx_timestamp: 0
+> > rx_hash: 2773355807
+> > 0x1821788: complete idx=8 addr=8000
+> >
+> > It doesn't look like hardware RX-timestamps are getting enabled.
+> >
+> > [... cut to relevant code ...]
+> >
+> > > diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c  
+> b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+> > > new file mode 100644
+> > > index 000000000000..0008f0f239e8
+> > > --- /dev/null
+> > > +++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+> > > @@ -0,0 +1,403 @@
+> > [...]
+> >
+> > > +static void timestamping_enable(int fd, int val)
+> > > +{
+> > > +     int ret;
+> > > +
+> > > +     ret = setsockopt(fd, SOL_SOCKET, SO_TIMESTAMPING, &val,  
+> sizeof(val));
+> > > +     if (ret < 0)
+> > > +             error(-1, errno, "setsockopt(SO_TIMESTAMPING)");
+> > > +}
+> > > +
+> > > +int main(int argc, char *argv[])
+> > > +{
+> > [...]
+> >
+> > > +     printf("prepare skb endpoint...\n");
+> > > +     server_fd = start_server(AF_INET6, SOCK_DGRAM, NULL, 9092,  
+> 1000);
+> > > +     if (server_fd < 0)
+> > > +             error(-1, errno, "start_server");
+> > > +     timestamping_enable(server_fd,
+> > > +                         SOF_TIMESTAMPING_SOFTWARE |
+> > > +                         SOF_TIMESTAMPING_RAW_HARDWARE);
+> > > +
+> >
+> > I don't think this timestamping_enable() with these flags are enough to
+> > enable hardware timestamping.
+
+Yeah, agreed, looks like that's the issue. timestamping_enable() has
+been used for the xdp->skb path that I've eventually removed from the
+series, so it's mostly a noop here..
+
+Maybe you can try the following before I send a proper patch?
+
+diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c  
+b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+index 0008f0f239e8..dceddb17fbc9 100644
+--- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
++++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+@@ -24,6 +24,7 @@
+  #include <linux/net_tstamp.h>
+  #include <linux/udp.h>
+  #include <linux/sockios.h>
++#include <linux/net_tstamp.h>
+  #include <sys/mman.h>
+  #include <net/if.h>
+  #include <poll.h>
+@@ -278,13 +279,37 @@ static int rxq_num(const char *ifname)
+
+  	ret = ioctl(fd, SIOCETHTOOL, &ifr);
+  	if (ret < 0)
+-		error(-1, errno, "socket");
++		error(-1, errno, "ioctl(SIOCETHTOOL)");
+
+  	close(fd);
+
+  	return ch.rx_count + ch.combined_count;
+  }
+
++static void hwtstamp_enable(const char *ifname)
++{
++	struct hwtstamp_config cfg = {
++		.rx_filter = HWTSTAMP_FILTER_ALL,
++
++	};
++
++	struct ifreq ifr = {
++		.ifr_data = (void *)&cfg,
++	};
++	strcpy(ifr.ifr_name, ifname);
++	int fd, ret;
++
++	fd = socket(AF_UNIX, SOCK_DGRAM, 0);
++	if (fd < 0)
++		error(-1, errno, "socket");
++
++	ret = ioctl(fd, SIOCSHWTSTAMP, &ifr);
++	if (ret < 0)
++		error(-1, errno, "ioctl(SIOCSHWTSTAMP)");
++
++	close(fd);
++}
++
+  static void cleanup(void)
+  {
+  	LIBBPF_OPTS(bpf_xdp_attach_opts, opts);
+@@ -341,6 +366,8 @@ int main(int argc, char *argv[])
+
+  	printf("rxq: %d\n", rxq);
+
++	hwtstamp_enable(ifname);
++
+  	rx_xsk = malloc(sizeof(struct xsk) * rxq);
+  	if (!rx_xsk)
+  		error(-1, ENOMEM, "malloc");
 
 
->
-> So my question is:
->
-> is there a way to achieve my goal of using a kernel that has been
-> built with CONFIG_DEBUG_INFO_BTF=n and still be able to use
-> fentry/fexit type hooks?
+> > --Jesper
+> >
