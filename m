@@ -2,76 +2,152 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51354C25B4E
-	for <bpf@archiver.kernel.org>; Tue, 24 Jan 2023 15:50:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94792C25B4E
+	for <bpf@archiver.kernel.org>; Tue, 24 Jan 2023 16:01:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234762AbjAXPuY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 24 Jan 2023 10:50:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58834 "EHLO
+        id S233286AbjAXQBX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 24 Jan 2023 11:01:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233061AbjAXPuX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 24 Jan 2023 10:50:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352993644A
-        for <bpf@vger.kernel.org>; Tue, 24 Jan 2023 07:50:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4728B812A3
-        for <bpf@vger.kernel.org>; Tue, 24 Jan 2023 15:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 89B74C433EF;
-        Tue, 24 Jan 2023 15:50:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674575416;
-        bh=LxanxgVPjsmMFVwZfLM97HQ7hl17SCVZO/E7FbFt3BA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=fFlEesZJumu5nC0FN2B619i40/DCtKfNEOsXoQtB9bP76OafDT+t06TaqPtOnFM6N
-         HwF52Upt5IvuNnBUtfDJwepC28TTJ8nl7Gndvtnc6sDXD71hv4Ysvk5lz7vjsj1jGs
-         PiekOPexY7BFhA1NmoeD5qnr7mQb6zettokhoQZz0CETRpWmySviMmTnCaeD5Os/Rr
-         pgUSyKwj/VFBBZWaih3F0znv6Z37W/GIbUpnv5nSKzPNN8dm/wYTFjDCk5JB2R5qE/
-         soKERRe7UtRcQR4khmRr9IXh4SzWKw6W27RCuP0bMGp/+FEpfXKwgqDWd1JusQ2gld
-         PliZP/J3VrANQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7719AE21EE1;
-        Tue, 24 Jan 2023 15:50:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] bpf, docs: Fix modulo zero, division by zero, overflow,
- and underflow
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167457541648.32518.13253373517166801828.git-patchwork-notify@kernel.org>
-Date:   Tue, 24 Jan 2023 15:50:16 +0000
-References: <20230124001218.827-1-dthaler1968@googlemail.com>
-In-Reply-To: <20230124001218.827-1-dthaler1968@googlemail.com>
-To:     None <dthaler1968@googlemail.com>
-Cc:     bpf@vger.kernel.org, dthaler@microsoft.com
+        with ESMTP id S232517AbjAXQBW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 24 Jan 2023 11:01:22 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B80BD6593
+        for <bpf@vger.kernel.org>; Tue, 24 Jan 2023 08:01:21 -0800 (PST)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30ODI0vT002753;
+        Tue, 24 Jan 2023 13:45:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2022-7-12;
+ bh=gLdns4UREkod8woqBJzvjA41jZKQBiHxJ02pdsQWhmk=;
+ b=LqyOC/fgHty8wKwhluikGzbZCz+medHLFiJmvKdCbtq66J2k109BfK/PwKv6NJ44o9xs
+ H8/ECw+butNMK1mRoEvyiChn2vaPmDTJe0hWI7FsF75Dk70T1HbITBoN4FHUt2mjw+jI
+ rnGLxs1dzacr6Vo01wwGiLU17AN+8vNCiK6K7+qYXOWimxvrLIIm6EBWolgA8wB03dvR
+ v23z0mMy3y88Tln7W574UmuBKoWiGpI2HNP8x1E7UtQTb04MjlM2AwKtYGGGCunwTyiA
+ HESiHNJDozJONfVLFrcaU+IgCRk+uQQ7ulsm0p7yezuM4e68XOO84q+7ZrFEXAPH1s/5 Dg== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n883c5bua-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 24 Jan 2023 13:45:37 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30OBmnFv021016;
+        Tue, 24 Jan 2023 13:45:36 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3n86gbr5h5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 24 Jan 2023 13:45:36 +0000
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30ODjZ3p037951;
+        Tue, 24 Jan 2023 13:45:35 GMT
+Received: from myrouter.uk.oracle.com (dhcp-10-175-161-98.vpn.oracle.com [10.175.161.98])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3n86gbr5fj-1;
+        Tue, 24 Jan 2023 13:45:35 +0000
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     acme@kernel.org, yhs@fb.com, ast@kernel.org, olsajiri@gmail.com,
+        timo@incline.eu
+Cc:     daniel@iogearbox.net, andrii@kernel.org, songliubraving@fb.com,
+        john.fastabend@gmail.com, kpsingh@chromium.org, sdf@google.com,
+        haoluo@google.com, martin.lau@kernel.org, bpf@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH dwarves 0/5] dwarves: support encoding of optimized-out parameters, removal of inconsistent static functions
+Date:   Tue, 24 Jan 2023 13:45:26 +0000
+Message-Id: <1674567931-26458-1-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-23_12,2023-01-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 spamscore=0
+ bulkscore=0 mlxlogscore=999 malwarescore=0 adultscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301240125
+X-Proofpoint-ORIG-GUID: sRMDQOS05guglMfjH2UMgl0fO7zd2-f3
+X-Proofpoint-GUID: sRMDQOS05guglMfjH2UMgl0fO7zd2-f3
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+At optimization level -O2 or higher in gcc, static functions may be
+optimized such that they have suffixes like .isra.0, .constprop.0 etc.
+These represent
 
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+- constant propagation (.constprop.0);
+- interprocedural scalar replacement of aggregates, removal of
+  unused parameters and replacement of parameters passed by
+  reference by parameters passed by value (.isra.0)
 
-On Tue, 24 Jan 2023 00:12:18 +0000 you wrote:
-> From: Dave Thaler <dthaler@microsoft.com>
-> 
-> Fix modulo zero, division by zero, overflow, and underflow.
-> Also clarify how a negative immediate value is used in unsigned division
-> 
-> Changes from last submission: addressed comments from Daniel.
-> 
-> [...]
+See [1] for details.
 
-Here is the summary with links:
-  - bpf, docs: Fix modulo zero, division by zero, overflow, and underflow
-    https://git.kernel.org/bpf/bpf-next/c/0eb9d19e2201
+Currently BTF encoding does not handle such optimized functions
+that get renamed with a "." suffix such as ".isra.0", ".constprop.0".
+This is safer because such suffixes can often indicate parameters have
+been optimized out.  This series addresses this by matching a
+function to a suffixed version ("foo" matching "foo.isra.0") while
+ensuring that the function signature does not contain optimized-out
+parameters.  Note that if the function is found ("foo") it will
+be preferred, only falling back to "foo.isra.0" if lookup of the
+function fails.  Addition to BTF is skipped if the function has
+optimized-out parameters, since the expected function signature
+will not match. BTF encoding does not include the "."-suffix to
+be consistent with DWARF. In addition, the kernel currently does
+not allow a "." suffix in a BTF function name.
 
-You are awesome, thank you!
+A problem with this approach however is that BTF carries out the
+encoding process in parallel across multiple CUs, and sometimes
+a function has optimized-out parameters in one CU but not others;
+we see this for NF_HOOK.constprop.0 for example.  So in order to
+determine if the function has optimized-out parameters in any
+CU, its addition is not carried out until we have processed all
+CUs and are about to merge BTF.  At this point we know if any
+such optimizations have occurred.  Patches 1-4 handle the
+optimized-out parameter identification and matching "."-suffixed
+functions with the original function to facilitate BTF
+encoding.
+
+Patch 5 addresses a related problem - it is entirely possible
+for a static function of the same name to exist in different
+CUs with different function signatures.  Because BTF does not
+currently encode any information that would help disambiguate
+which BTF function specification matches which static function
+(in the case of multiple different function signatures), it is
+best to eliminate such functions from BTF for now.  The same
+mechanism that is used to compare static "."-suffixed functions
+is re-used for the static function comparison.  A superficial
+comparison of number of parameters/parameter names is done to
+see if such representations are consistent, and if inconsistent
+prototypes are observed, the function is flagged for exclusion
+from BTF.
+
+When these methods are combined - the additive encoding of
+"."-suffixed functions and the subtractive elimination of
+functions with inconsistent parameters - we see a small overall
+increase in the number of functions in vmlinux BTF, from
+49538 to 50083.  It turns out that the inconsistent prototype
+checking will actually eliminate some of the suffix matches
+also, for cases where the DWARF representation of a function
+differs across CUs, but not via the abstract origin late DWARF
+references showing optimized-out parameters that we check
+for in patch 1.
+
+[1] https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html
+
+Alan Maguire (5):
+  dwarves: help dwarf loader spot functions with optimized-out
+    parameters
+  btf_encoder: refactor function addition into dedicated
+    btf_encoder__add_func
+  btf_encoder: child encoders should have a reference to parent encoder
+  btf_encoder: represent "."-suffixed optimized functions (".isra.0") in
+    BTF
+  btf_encoder: skip BTF encoding of static functions with inconsistent
+    prototypes
+
+ btf_encoder.c  | 357 +++++++++++++++++++++++++++++++++++++++++++++++++--------
+ btf_encoder.h  |   2 +-
+ dwarf_loader.c |  76 +++++++++++-
+ dwarves.h      |   5 +-
+ pahole.c       |   7 +-
+ 5 files changed, 390 insertions(+), 57 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+1.8.3.1
 
