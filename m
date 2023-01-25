@@ -2,864 +2,211 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2E1FC61D97
-	for <bpf@archiver.kernel.org>; Wed, 25 Jan 2023 14:40:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F518C27C76
+	for <bpf@archiver.kernel.org>; Wed, 25 Jan 2023 14:59:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235830AbjAYOkr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 25 Jan 2023 09:40:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43826 "EHLO
+        id S235247AbjAYO7F (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 25 Jan 2023 09:59:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235933AbjAYOkk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 25 Jan 2023 09:40:40 -0500
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D8559542;
-        Wed, 25 Jan 2023 06:40:00 -0800 (PST)
-Received: by mail-qv1-xf31.google.com with SMTP id i12so14207412qvs.2;
-        Wed, 25 Jan 2023 06:40:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KKBqw2OdiMQ9DCYkiOEuuvAHSFUjQGGQO6BfwZV4SX8=;
-        b=e2K1s+Hj43/tjh4HfaAM9gXsBaDQXRCOdifhaZq0JAYUS8TghuzKqsHzKtX8j3T5JA
-         m+3ynlGj789kiJeZsrvIHUVH+5Zmay4x9+KpQw+Ayi8CziRSoRiPS3M0qhoMrLQlE38e
-         62N5lXuJw3UkBcWuyfm0N6brjPSVJxA1Jo8t2oabMJ4+s6xMLwMiSMlgX9qo8bEDRbcs
-         Khk4JuEU4OPs39Xw0c4jB01H4GBdZmt3qAoFDO1VcIIj9v9Satg2GzgjXWdsGiuEQF0j
-         FY3C5t5WU+3GSeexQaXXsIpIvbpmpvTngQJovTlpOoUrQmKB8/3pk81+QkBEm3VJ/xwQ
-         NHTg==
-X-Gm-Message-State: AFqh2kq86UCulMp3M21HWUh+PM02jFJqlTavZxlgSZ4Avbn9Wi6duu6v
-        PsZJqt9fZlf2gnaDVy48BDQsrIU9sWrdgivr
-X-Google-Smtp-Source: AMrXdXuqzblwBj4HRNic/6LPIOhQbqAP2u0OGSfgYwltbwAp2oOyKwIl1PhuC5+UCkwWvRUv9JPbiw==
-X-Received: by 2002:a05:6214:3483:b0:532:3bcd:2c84 with SMTP id mr3-20020a056214348300b005323bcd2c84mr52788483qvb.32.1674657506114;
-        Wed, 25 Jan 2023 06:38:26 -0800 (PST)
-Received: from localhost ([24.1.27.177])
-        by smtp.gmail.com with ESMTPSA id 198-20020a3705cf000000b006fed58fc1a3sm3450056qkf.119.2023.01.25.06.38.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 06:38:25 -0800 (PST)
-From:   David Vernet <void@manifault.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@meta.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, tj@kernel.org, memxor@gmail.com
-Subject: [PATCH bpf-next v3 5/7] bpf/docs: Document cpumask kfuncs in a new file
-Date:   Wed, 25 Jan 2023 08:38:14 -0600
-Message-Id: <20230125143816.721952-6-void@manifault.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230125143816.721952-1-void@manifault.com>
-References: <20230125143816.721952-1-void@manifault.com>
+        with ESMTP id S233235AbjAYO7E (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 25 Jan 2023 09:59:04 -0500
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2074.outbound.protection.outlook.com [40.107.13.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7F62CFC9;
+        Wed, 25 Jan 2023 06:59:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=d7hUtfigmJ9liYndAXuVD1qEX6xFwzkx7HQvcTCcEOzpN2DN7e2I3XXJQQQrH4Lx6+jFZLuCr6Bqmg2oDRZU/Ggnu2QlcgdoInYuikdhVlUdH2RAq3/q5wJCyzEZ9ccVtPZP04dc9znVnaJkmi4EW6UJsvEqJqRmP3gVw5lf6k/P0OtLtSo1iCfSxY+vUSYc358SxED/LCW8+wCstprYu+I5OZQ+lzHK/5ZKk4OjHx5HJl6kO/amVMKiIhNhwOVLOkRfo6t1VrqcT2Qa5XHMaQwyLkfSjg4TPyCEH8sOqIWq0ksH7tLAXQ11sr2p2Tz4FYKV8F05mAGrDVxXI6Iz+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FUgYT9b0WX1CbjFmmAbAO1YxCnIMElcV9VzCCCTphXw=;
+ b=PBBZtGqBnuq5EoSckRMYrO4B7VHRHPa5H1uwG0z9k5orEUZRFl7G85hPjl0EmnXS+EkFZV5dXmlImyanEVQEkwyWon8P1p9LiBLxs9Ffp9/eUT2t5RMEG/55Z2Eb1sfEMyP3uCpapnRvIFEMXXbqgWL3zyIwmwBqfisAaHjJLApv6jNxUlaswahBecC4REdVa81b+pSvITg7/5b7qwrBJNFGzPWOjaV9jhhroxL1sjvPg+ukl6E3SILIlXDWWo1Ns+IPvijfuxpw2CGOHjlcetWvYHvfiuZqwfu0G2PkgIqRybuKJQYwW/u9F4vqTu4TLVAr2xpLbEs6I17jHnwnGQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FUgYT9b0WX1CbjFmmAbAO1YxCnIMElcV9VzCCCTphXw=;
+ b=FlUXPwib0WOU47ffB7G96uuKpBXwaJS2VLkajHicMMEOtPdi+8mlpPc27++gV8Fbi7agTSVR6xFIFRoy/dbLYQeXQO9hE750g2DeESiIB4dMuz58OkXE3W9CfyF/NOQ9E4kAa97i6AJcO41iksriMkJfSDqLN7upWI/+GVhR4m8=
+Received: from VI1PR04MB5807.eurprd04.prod.outlook.com (2603:10a6:803:ec::21)
+ by VI1PR04MB6878.eurprd04.prod.outlook.com (2603:10a6:803:12f::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Wed, 25 Jan
+ 2023 14:58:57 +0000
+Received: from VI1PR04MB5807.eurprd04.prod.outlook.com
+ ([fe80::471d:5b0f:363c:5d60]) by VI1PR04MB5807.eurprd04.prod.outlook.com
+ ([fe80::471d:5b0f:363c:5d60%5]) with mapi id 15.20.6002.033; Wed, 25 Jan 2023
+ 14:58:56 +0000
+From:   Camelia Alexandra Groza <camelia.groza@nxp.com>
+To:     Magnus Karlsson <magnus.karlsson@gmail.com>,
+        "magnus.karlsson@intel.com" <magnus.karlsson@intel.com>,
+        "bjorn@kernel.org" <bjorn@kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "jonathan.lemon@gmail.com" <jonathan.lemon@gmail.com>,
+        "maciej.fijalkowski@intel.com" <maciej.fijalkowski@intel.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "toke@redhat.com" <toke@redhat.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "aelior@marvell.com" <aelior@marvell.com>,
+        "manishc@marvell.com" <manishc@marvell.com>,
+        "horatiu.vultur@microchip.com" <horatiu.vultur@microchip.com>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        "mst@redhat.com" <mst@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Madalin Bucur <madalin.bucur@nxp.com>
+CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Subject: RE: [PATCH net v2 4/5] dpaa_eth: execute xdp_do_flush() before
+ napi_complete_done()
+Thread-Topic: [PATCH net v2 4/5] dpaa_eth: execute xdp_do_flush() before
+ napi_complete_done()
+Thread-Index: AQHZMJGNeUJQ6yAy/ESOIYM3G1Q81K6vOQ3w
+Date:   Wed, 25 Jan 2023 14:58:56 +0000
+Message-ID: <VI1PR04MB58072AA61FA976FE67EA0511F2CE9@VI1PR04MB5807.eurprd04.prod.outlook.com>
+References: <20230125074901.2737-1-magnus.karlsson@gmail.com>
+ <20230125074901.2737-5-magnus.karlsson@gmail.com>
+In-Reply-To: <20230125074901.2737-5-magnus.karlsson@gmail.com>
+Accept-Language: en-GB, ro-RO, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: VI1PR04MB5807:EE_|VI1PR04MB6878:EE_
+x-ms-office365-filtering-correlation-id: 8da85ece-82b7-450e-8602-08dafee4aefb
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: c/koBWgb/f/faGcGy2/j7HwgrklTPTvOXaFhc71R60BT5DHcN1Pl+WO8ySZUUfxXbCZxOvvRtYolzAjW8+ZFgkC1SILMSb6SmA5JSocBBOs/7/5RvmY98V29GbthqmGaKyZhF7urimBSdasOL1kiGU8IhS/SOWN4IWkOcAaAOBxCbDgtdBIB0NeYqBmYNsf1S3cQQFhQ1atcZ/621W/rD0OnDYYzAX8SJCkFARIZsluqDJSFCPppXnA+uWzm05IG8nri3TOUg/RyBor59vc1x2gr7W3b9vqRt4vJZaPp2eUanvGhToT5g8+Z+3XL8KDceU31JzliCKdY8jEIDbzkFm4h4gWQtD7CUF9Pv9LZ63ss6A+dLuigN1afFLL+T6pXALJAeIkXVq3OlPItBXj+/vZJRCcY9vL2+Si6ZVJ2t6xHed7t6tgkvE6xHiDWBs4bA2VyU9JLyqr82r8it6tk/t+V76QGxTIpCHDDo0aRVwZID3lQ+6fqpJWDyRZneSHyxoBlRPEV+2utKuIfzmnO9jJsHDqgQCd4hw+AHEXua1AxhcbHe3wPQO718iFgh0NvZQCnbAp92NBg6h2fo0pstO7bBR9Od+PyoMAcQlNpYqWCxa14Zh3q7Z60Mtd0ID3eemmleuzPJhPY9U71T1NROlxw8lOQtA1q2GYGI8Aw3XOmMPeK+v6e0QCkRbBRci6tUEmkoxI6+Bw3CHCjV6rvSl+BGsxs2yBByGAfAHK0i2SxrWALgZlwh0iahDONW7BQNJK4lVlgAf9oQkSexGD5+Yq49ys22RS1gGGflVMU9XM=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5807.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(366004)(39860400002)(376002)(396003)(136003)(451199018)(5660300002)(86362001)(33656002)(83380400001)(122000001)(186003)(66574015)(478600001)(316002)(110136005)(66946007)(6506007)(53546011)(8676002)(64756008)(26005)(71200400001)(38070700005)(76116006)(966005)(66476007)(6636002)(66556008)(7696005)(2906002)(7416002)(921005)(38100700002)(55016003)(55236004)(9686003)(66446008)(8936002)(52536014)(4326008)(41300700001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?Gb3TsOKk5Dz9WvpKi2avxvaKoUHvVX85oyivTZZjwyuzSHwLWNMGiGUnFo?=
+ =?iso-8859-1?Q?zwBojkL5uOAt3NpRXDCM94VHInULt7QdL3GgK/dWeyiYf2LFzd9w70dKLg?=
+ =?iso-8859-1?Q?A7XG9TO4fdJe5QQLouxAz0jDdAjItgZ8Oz88hl3NFaEg7rTtIbkDwY44uH?=
+ =?iso-8859-1?Q?S2Czchg/ap+stzSAeXZ3+zhIzJFamZhoNGQeUNhdcoWRHyhbowLDHnUvvr?=
+ =?iso-8859-1?Q?/85cUtp1vs2/88CW3bWUKwaRPYPv7OxBsF4zmEtGfNyKgAFZiQ+hjB9/nY?=
+ =?iso-8859-1?Q?wewCMvLWORy/jAHMO3HGMAR4R+winiuYKOs9v4kPphMoYNXXVYjoxbp6VV?=
+ =?iso-8859-1?Q?Kr4FIEX7GVQDZibr43x8vX66SyFNnWewcuw57HP0ZTKCgAzAscRsp5G/cj?=
+ =?iso-8859-1?Q?FFAhGHayX8H6EtHCcKy8Ec0QXINFjU2MeNIeBc220BlNhF3gOO4uhA6FAk?=
+ =?iso-8859-1?Q?kNn5hCB+4uGaxW4YoDpK0pUSuwAU+zJpszQU3unxrInBhZu7UjffXt0TY1?=
+ =?iso-8859-1?Q?UN5ElyqUj8wDSRFlpMWHMQzuaXbwGIvQaoxn8UtP03WnzQod1MyNCK7yzf?=
+ =?iso-8859-1?Q?5z4rFFjvoouS/x4m6hM6HSfVKn4GCetUwteaOiuKw0EToz82xh8Pi5eFJm?=
+ =?iso-8859-1?Q?RCO84MHzuPAXquhlYuMT/S1aJjBDWuCyfvjH5ON1RmBGeVmx0mSG2Y9q+V?=
+ =?iso-8859-1?Q?ssKKM3ey7nNfE+aIBBDSwrRdC00aGKqqML9dAnj5UAeBl1X253xRfQ1ZXS?=
+ =?iso-8859-1?Q?68yZTDuhukGoFeIqJPVxqjfDB6MYV6mAub8z+3FEKrB/yhaH8de2813y4N?=
+ =?iso-8859-1?Q?OCQkYZHpDn9oaKOVUDoBlOqP/i6AnNqg5RcGaCuHsRE3sYE3nmQ/L9HHfM?=
+ =?iso-8859-1?Q?rgCDyNDzCr0LHC982waI+P6po9rmeKAQbv7JOgoScZo6q8JnZc6dmaThdu?=
+ =?iso-8859-1?Q?uU3VaT42CIrWXTNb7flzrRJKLAdiJ8jb9eV51/D4GE5xC5u8bJTVMjXD64?=
+ =?iso-8859-1?Q?Jo0NIDbp7iuDVDal2Y0txR10SYPf/KcmxWwZNS2DgSNgFNTXw2zT964mxS?=
+ =?iso-8859-1?Q?jygCzGn6pMakNYJVkj8seVCpU6zi5Y0gLCjjVJesb2+OBX5C8GgCo6nKmG?=
+ =?iso-8859-1?Q?vf0RVvQaGhI1LLTVt7myvnl/15Ux0RE+vStawjPRLQlxB+4DneiK90x/1C?=
+ =?iso-8859-1?Q?dpxfMYsOMsqQBnUMkuZ00g5QHR04JKUqsAM/2vpPiE4oqc2H8pZwwuK5Ie?=
+ =?iso-8859-1?Q?30X08CnsyAK2nFoSDVXZcO1ASiubFuZaEsWnD+0BAX6KtSerRIxHL496l7?=
+ =?iso-8859-1?Q?ff/ViR4n/DdoPu+mfzEgBBXt4Mn/Ep43pPGKWcBAEUfIKlHrPjbM3QRV+i?=
+ =?iso-8859-1?Q?5T309Ylnb99I2v+Z3y+6DokuEzMx1Fwg2ddhalHEBW8+gSyWVWqEoMZqIs?=
+ =?iso-8859-1?Q?MoFHEcStL94M7FmP2us+REscX5dNUZcduuNlctSMGTPO+igCEpHkcFfWPS?=
+ =?iso-8859-1?Q?PozqtAsBVEtdmKNUOHsojRjFWV3Q4R7BRM0s9+pwP/jPO98YlaTABZFbet?=
+ =?iso-8859-1?Q?mQfe2GZRO4W2QgokK21lHjoOLgsVmUH+woRMaItS/PV62rEk+0GOO4rKm6?=
+ =?iso-8859-1?Q?SW40LZsh9aXlO5uZnv0GNEu8vPr7wegWah?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5807.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8da85ece-82b7-450e-8602-08dafee4aefb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jan 2023 14:58:56.7908
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Hr1YsK/tlS2UWDpX4WuUn22hyUMIPkAa6k7LPkfr70JI7evveG3uMDKJLqRdkGvP31RJPxpRACAzQi3S1nbtmg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6878
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Now that we've added a series of new cpumask kfuncs, we should document
-them so users can easily use them. This patch adds a new cpumasks.rst
-file to document them.
+> -----Original Message-----
+> From: Magnus Karlsson <magnus.karlsson@gmail.com>
+> Sent: Wednesday, January 25, 2023 9:49
+> To: magnus.karlsson@intel.com; bjorn@kernel.org; ast@kernel.org;
+> daniel@iogearbox.net; netdev@vger.kernel.org;
+> jonathan.lemon@gmail.com; maciej.fijalkowski@intel.com;
+> kuba@kernel.org; toke@redhat.com; pabeni@redhat.com;
+> davem@davemloft.net; aelior@marvell.com; manishc@marvell.com;
+> horatiu.vultur@microchip.com; UNGLinuxDriver@microchip.com;
+> mst@redhat.com; jasowang@redhat.com; Ioana Ciornei
+> <ioana.ciornei@nxp.com>; Madalin Bucur <madalin.bucur@nxp.com>
+> Cc: bpf@vger.kernel.org
+> Subject: [PATCH net v2 4/5] dpaa_eth: execute xdp_do_flush() before
+> napi_complete_done()
+>=20
+> From: Magnus Karlsson <magnus.karlsson@intel.com>
+>=20
+> Make sure that xdp_do_flush() is always executed before
+> napi_complete_done(). This is important for two reasons. First, a
+> redirect to an XSKMAP assumes that a call to xdp_do_redirect() from
+> napi context X on CPU Y will be followed by a xdp_do_flush() from the
+> same napi context and CPU. This is not guaranteed if the
+> napi_complete_done() is executed before xdp_do_flush(), as it tells
+> the napi logic that it is fine to schedule napi context X on another
+> CPU. Details from a production system triggering this bug using the
+> veth driver can be found following the first link below.
+>=20
+> The second reason is that the XDP_REDIRECT logic in itself relies on
+> being inside a single NAPI instance through to the xdp_do_flush() call
+> for RCU protection of all in-kernel data structures. Details can be
+> found in the second link below.
+>=20
+> Fixes: a1e031ffb422 ("dpaa_eth: add XDP_REDIRECT support")
+> Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+> Acked-by: Toke H=F8iland-J=F8rgensen <toke@redhat.com>
+> Link: https://lore.kernel.org/r/20221220185903.1105011-1-sbohrer@cloudfla=
+re.com
+> Link: https://lore.kernel.org/all/20210624160609.292325-1-toke@redhat.com=
+/
+> ---
 
-Signed-off-by: David Vernet <void@manifault.com>
----
- Documentation/bpf/cpumasks.rst | 393 +++++++++++++++++++++++++++++++++
- Documentation/bpf/index.rst    |   1 +
- Documentation/bpf/kfuncs.rst   |  11 +
- kernel/bpf/cpumask.c           | 208 +++++++++++++++++
- 4 files changed, 613 insertions(+)
- create mode 100644 Documentation/bpf/cpumasks.rst
+Acked-by: Camelia Groza <camelia.groza@nxp.com>
 
-diff --git a/Documentation/bpf/cpumasks.rst b/Documentation/bpf/cpumasks.rst
-new file mode 100644
-index 000000000000..24bef9cbbeee
---- /dev/null
-+++ b/Documentation/bpf/cpumasks.rst
-@@ -0,0 +1,393 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+.. _cpumasks-header-label:
-+
-+==================
-+BPF cpumask kfuncs
-+==================
-+
-+1. Introduction
-+===============
-+
-+``struct cpumask`` is a bitmap data structure in the kernel whose indices
-+reflect the CPUs on the system. Commonly, cpumasks are used to track which CPUs
-+a task is affinitized to, but they can also be used to e.g. track which cores
-+are associated with a scheduling domain, which cores on a machine are idle,
-+etc.
-+
-+BPF provides programs with a set of :ref:`kfuncs-header-label` that can be
-+used to allocate, mutate, query, and free cpumasks.
-+
-+2. BPF cpumask objects
-+======================
-+
-+There are two different types of cpumasks that can be used by BPF programs.
-+
-+2.1 ``struct bpf_cpumask *``
-+----------------------------
-+
-+``struct bpf_cpumask *`` is a cpumask that is allocated by BPF, on behalf of a
-+BPF program, and whose lifecycle is entirely controlled by BPF. These cpumasks
-+are RCU-protected, can be mutated, can be used as kptrs, and can be safely cast
-+to a ``struct cpumask *``.
-+
-+2.1.1 ``struct bpf_cpumask *`` lifecycle
-+----------------------------------------
-+
-+A ``struct bpf_cpumask *`` is allocated, acquired, and released, using the
-+following functions:
-+
-+.. kernel-doc:: kernel/bpf/cpumask.c
-+  :identifiers: bpf_cpumask_create
-+
-+.. kernel-doc:: kernel/bpf/cpumask.c
-+  :identifiers: bpf_cpumask_acquire
-+
-+.. kernel-doc:: kernel/bpf/cpumask.c
-+  :identifiers: bpf_cpumask_release
-+
-+For example:
-+
-+.. code-block:: c
-+
-+        struct cpumask_map_value {
-+                struct bpf_cpumask __kptr_ref * cpumask;
-+        };
-+
-+        struct array_map {
-+                __uint(type, BPF_MAP_TYPE_ARRAY);
-+                __type(key, int);
-+                __type(value, struct cpumask_map_value);
-+                __uint(max_entries, 65536);
-+        } cpumask_map SEC(".maps");
-+
-+        static int cpumask_map_insert(struct bpf_cpumask *mask, u32 pid)
-+        {
-+                struct cpumask_map_value local, *v;
-+                long status;
-+                struct bpf_cpumask *old;
-+                u32 key = pid;
-+
-+                local.cpumask = NULL;
-+                status = bpf_map_update_elem(&cpumask_map, &key, &local, 0);
-+                if (status) {
-+                        bpf_cpumask_release(mask);
-+                        return status;
-+                }
-+
-+                v = bpf_map_lookup_elem(&cpumask_map, &key);
-+                if (!v) {
-+                        bpf_cpumask_release(mask);
-+                        return -ENOENT;
-+                }
-+
-+                old = bpf_kptr_xchg(&v->cpumask, mask);
-+                if (old)
-+                        bpf_cpumask_release(old);
-+
-+                return 0;
-+        }
-+
-+        /**
-+         * A sample tracepoint showing how a task's cpumask can be queried and
-+         * recorded as a kptr.
-+         */
-+        SEC("tp_btf/task_newtask")
-+        int BPF_PROG(record_task_cpumask, struct task_struct *task, u64 clone_flags)
-+        {
-+                struct bpf_cpumask *cpumask;
-+                int ret;
-+
-+                cpumask = bpf_cpumask_create();
-+                if (!cpumask)
-+                        return -ENOMEM;
-+
-+                if (!bpf_cpumask_full(task->cpus_ptr))
-+                        bpf_printk("task %s has CPU affinity", task->comm);
-+
-+                bpf_cpumask_copy(cpumask, task->cpus_ptr);
-+                return cpumask_map_insert(cpumask, task->pid);
-+        }
-+
-+----
-+
-+2.1.1 ``struct bpf_cpumask *`` as kptrs
-+---------------------------------------
-+
-+As mentioned and illustrated above, these ``struct bpf_cpumask *`` objects can
-+also be stored in a map and used as kptrs. If a ``struct bpf_cpumask *`` is in
-+a map, the reference can be removed from the map with bpf_kptr_xchg(), or
-+opportunistically acquired with bpf_cpumask_kptr_get():
-+
-+.. kernel-doc:: kernel/bpf/cpumask.c
-+  :identifiers: bpf_cpumask_kptr_get
-+
-+Here is an example of a ``struct bpf_cpumask *`` being retrieved from a map:
-+
-+.. code-block:: c
-+
-+	/* struct containing the struct bpf_cpumask kptr which is stored in the map. */
-+	struct cpumasks_kfunc_map_value {
-+		struct bpf_cpumask __kptr_ref * bpf_cpumask;
-+	};
-+
-+	/* The map containing struct cpumasks_kfunc_map_value entries. */
-+	struct {
-+		__uint(type, BPF_MAP_TYPE_ARRAY);
-+		__type(key, int);
-+		__type(value, struct cpumasks_kfunc_map_value);
-+		__uint(max_entries, 1);
-+	} cpumasks_kfunc_map SEC(".maps");
-+
-+	/* ... */
-+
-+	/**
-+	 * A simple example tracepoint program showing how a
-+	 * struct bpf_cpumask * kptr that is stored in a map can
-+	 * be acquired using the bpf_cpumask_kptr_get() kfunc.
-+	 */
-+	SEC("tp_btf/cgroup_mkdir")
-+	int BPF_PROG(cgrp_ancestor_example, struct cgroup *cgrp, const char *path)
-+	{
-+		struct bpf_cpumask *kptr;
-+		struct cpumasks_kfunc_map_value *v;
-+		u32 key = 0;
-+
-+		/* Assume a bpf_cpumask * kptr was previously stored in the map. */
-+		v = bpf_map_lookup_elem(&cpumasks_kfunc_map, &key);
-+		if (!v)
-+			return -ENOENT;
-+
-+		/* Acquire a reference to the bpf_cpumask * kptr that's already stored in the map. */
-+		kptr = bpf_cpumask_kptr_get(&v->cpumask);
-+		if (!kptr)
-+			/* If no bpf_cpumask was present in the map, it's because
-+			 * we're racing with another CPU that removed it with
-+			 * bpf_kptr_xchg() between the bpf_map_lookup_elem()
-+			 * above, and our call to bpf_cpumask_kptr_get().
-+			 * bpf_cpumask_kptr_get() internally safely handles this
-+			 * race, and will return NULL if the cpumask is no longer
-+			 * present in the map by the time we invoke the kfunc.
-+			 */
-+			return -EBUSY;
-+
-+		/* Free the reference we just took above. Note that the
-+		 * original struct bpf_cpumask * kptr is still in the map. It will
-+		 * be freed either at a later time if another context deletes
-+		 * it from the map, or automatically by the BPF subsystem if
-+		 * it's still present when the map is destroyed.
-+		 */
-+		bpf_cpumask_release(kptr);
-+
-+		return 0;
-+	}
-+
-+----
-+
-+2.2 ``struct cpumask``
-+----------------------
-+
-+``struct cpumask`` is the object that actually contains the cpumask bitmap
-+being queried, mutated, etc. A ``struct bpf_cpumask`` wraps a ``struct
-+cpumask``, which is why it's safe to cast it as such (note however that it is
-+**not** safe to cast a ``struct cpumask *`` to a ``struct bpf_cpumask *``, and
-+the verifier will reject any program that tries to do so).
-+
-+As we'll see below, any kfunc that mutates its cpumask argument will take a
-+``struct bpf_cpumask *`` as that argument. Any argument that simply queries the
-+cpumask will instead take a ``struct cpumask *``.
-+
-+3. cpumask kfuncs
-+=================
-+
-+Above, we described the kfuncs that can be used to allocate, acquire, release,
-+etc a ``struct bpf_cpumask *``. This section of the document will describe the
-+kfuncs for mutating and querying cpumasks.
-+
-+3.1 Mutating cpumasks
-+---------------------
-+
-+Some cpumask kfuncs are "read-only" in that they don't mutate any of their
-+arguments, whereas others mutate at least one argument (which means that the
-+argument must be a ``struct bpf_cpumask *``, as described above).
-+
-+This section will describe all of the cpumask kfuncs which mutate at least one
-+argument. :ref:`cpumasks-querying-label` below describes the read-only kfuncs.
-+
-+3.1.1 Setting and clearing CPUs
-+-------------------------------
-+
-+bpf_cpumask_set_cpu() and bpf_cpumask_clear_cpu() can be used to set and clear
-+a CPU in a ``struct bpf_cpumask`` respectively:
-+
-+.. kernel-doc:: kernel/bpf/cpumask.c
-+   :identifiers: bpf_cpumask_set_cpu bpf_cpumask_clear_cpu
-+
-+These kfuncs are pretty straightforward, and can be used, for example, as
-+follows:
-+
-+.. code-block:: c
-+
-+        /**
-+         * A sample tracepoint showing how a cpumask can be queried.
-+         */
-+        SEC("tp_btf/task_newtask")
-+        int BPF_PROG(test_set_clear_cpu, struct task_struct *task, u64 clone_flags)
-+        {
-+                struct bpf_cpumask *cpumask;
-+
-+                cpumask = bpf_cpumask_create();
-+                if (!cpumask)
-+                        return -ENOMEM;
-+
-+                bpf_cpumask_set_cpu(0, cpumask);
-+                if (!bpf_cpumask_test_cpu(0, cast(cpumask)))
-+                        /* Should never happen. */
-+                        goto release_exit;
-+
-+                bpf_cpumask_clear_cpu(0, cpumask);
-+                if (bpf_cpumask_test_cpu(0, cast(cpumask)))
-+                        /* Should never happen. */
-+                        goto release_exit;
-+
-+                /* struct cpumask * pointers such as task->cpus_ptr can also be queried. */
-+                if (bpf_cpumask_test_cpu(0, task->cpus_ptr))
-+                        bpf_printk("task %s can use CPU %d", task->comm, 0);
-+
-+        release_exit:
-+                bpf_cpumask_release(cpumask);
-+                return 0;
-+        }
-+
-+----
-+
-+bpf_cpumask_test_and_set_cpu() and bpf_cpumask_test_and_clear_cpu() are
-+complementary kfuncs that allow callers to atomically test and set (or clear)
-+CPUs:
-+
-+.. kernel-doc:: kernel/bpf/cpumask.c
-+   :identifiers: bpf_cpumask_test_and_set_cpu bpf_cpumask_test_and_clear_cpu
-+
-+----
-+
-+We can also set and clear entire ``struct bpf_cpumask *`` objects in one
-+operation using bpf_cpumask_setall() and bpf_cpumask_clear():
-+
-+.. kernel-doc:: kernel/bpf/cpumask.c
-+   :identifiers: bpf_cpumask_setall bpf_cpumask_clear
-+
-+3.1.2 Operations between cpumasks
-+---------------------------------
-+
-+In addition to setting and clearing individual CPUs in a single cpumask,
-+callers can also perform bitwise operations between multiple cpumasks using
-+bpf_cpumask_and(), bpf_cpumask_or(), and bpf_cpumask_xor():
-+
-+.. kernel-doc:: kernel/bpf/cpumask.c
-+   :identifiers: bpf_cpumask_and bpf_cpumask_or bpf_cpumask_xor
-+
-+The following is an example of how they may be used. Note that some of the
-+kfuncs shown in this example will be covered in more detail below.
-+
-+.. code-block:: c
-+
-+        /**
-+         * A sample tracepoint showing how a cpumask can be mutated using
-+           bitwise operators (and queried).
-+         */
-+        SEC("tp_btf/task_newtask")
-+        int BPF_PROG(test_and_or_xor, struct task_struct *task, u64 clone_flags)
-+        {
-+                struct bpf_cpumask *mask1, *mask2, *dst1, *dst2;
-+
-+                mask1 = bpf_cpumask_create();
-+                if (!mask1)
-+                        return -ENOMEM;
-+
-+                mask2 = bpf_cpumask_create();
-+                if (!mask2) {
-+                        bpf_cpumask_release(mask1);
-+                        return -ENOMEM;
-+                }
-+
-+                // ...Safely create the other two masks... */
-+
-+                bpf_cpumask_set_cpu(0, mask1);
-+                bpf_cpumask_set_cpu(1, mask2);
-+                bpf_cpumask_and(dst1, (const struct cpumask *)mask1, (const struct cpumask *)mask2);
-+                if (!bpf_cpumask_empty((const struct cpumask *)dst1))
-+                        /* Should never happen. */
-+                        goto release_exit;
-+
-+                bpf_cpumask_or(dst1, (const struct cpumask *)mask1, (const struct cpumask *)mask2);
-+                if (!bpf_cpumask_test_cpu(0, (const struct cpumask *)dst1))
-+                        /* Should never happen. */
-+                        goto release_exit;
-+
-+                if (!bpf_cpumask_test_cpu(1, (const struct cpumask *)dst1))
-+                        /* Should never happen. */
-+                        goto release_exit;
-+
-+                bpf_cpumask_xor(dst2, (const struct cpumask *)mask1, (const struct cpumask *)mask2);
-+                if (!bpf_cpumask_equal((const struct cpumask *)dst1,
-+                                       (const struct cpumask *)dst2))
-+                        /* Should never happen. */
-+                        goto release_exit;
-+
-+         release_exit:
-+                bpf_cpumask_release(mask1);
-+                bpf_cpumask_release(mask2);
-+                bpf_cpumask_release(dst1);
-+                bpf_cpumask_release(dst2);
-+                return 0;
-+        }
-+
-+----
-+
-+The contents of an entire cpumask may be copied to another using
-+bpf_cpumask_copy():
-+
-+.. kernel-doc:: kernel/bpf/cpumask.c
-+   :identifiers: bpf_cpumask_copy
-+
-+----
-+
-+.. _cpumasks-querying-label:
-+
-+3.2 Querying cpumasks
-+---------------------
-+
-+In addition to the above kfuncs, there is also a set of read-only kfuncs that
-+can be used to query the contents of cpumasks.
-+
-+.. kernel-doc:: kernel/bpf/cpumask.c
-+   :identifiers: bpf_cpumask_first bpf_cpumask_first_zero bpf_cpumask_test_cpu
-+
-+.. kernel-doc:: kernel/bpf/cpumask.c
-+   :identifiers: bpf_cpumask_equal bpf_cpumask_intersects bpf_cpumask_subset
-+                 bpf_cpumask_empty bpf_cpumask_full
-+
-+.. kernel-doc:: kernel/bpf/cpumask.c
-+   :identifiers: bpf_cpumask_any bpf_cpumask_any_and
-+
-+----
-+
-+Some example usages of these querying kfuncs were shown above. We will not
-+replicate those exmaples here. Note, however, that all of the aforementioned
-+kfuncs are tested in `tools/testing/selftests/bpf/progs/cpumask_success.c`_, so
-+please take a look there if you're looking for more examples of how they can be
-+used.
-+
-+.. _tools/testing/selftests/bpf/progs/cpumask_success.c:
-+   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/tools/testing/selftests/bpf/progs/cpumask_success.c
-+
-+
-+4. Adding BPF cpumask kfuncs
-+============================
-+
-+The set of supported BPF cpumask kfuncs are not (yet) a 1-1 match with the
-+cpumask operations in include/linux/cpumask.h. Any of those cpumask operations
-+could easily be encapsulated in a new kfunc if and when required. If you'd like
-+to support a new cpumask operation, please feel free to submit a patch. If you
-+do add a new cpumask kfunc, please document it here, and add any relevant
-+selftest testcases to the cpumask selftest suite.
-diff --git a/Documentation/bpf/index.rst b/Documentation/bpf/index.rst
-index b81533d8b061..dbb39e8f9889 100644
---- a/Documentation/bpf/index.rst
-+++ b/Documentation/bpf/index.rst
-@@ -20,6 +20,7 @@ that goes into great technical depth about the BPF Architecture.
-    syscall_api
-    helpers
-    kfuncs
-+   cpumasks
-    programs
-    maps
-    bpf_prog_run
-diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-index 9fd7fb539f85..a74f9e74087b 100644
---- a/Documentation/bpf/kfuncs.rst
-+++ b/Documentation/bpf/kfuncs.rst
-@@ -1,3 +1,7 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+.. _kfuncs-header-label:
-+
- =============================
- BPF Kernel Functions (kfuncs)
- =============================
-@@ -420,3 +424,10 @@ the verifier. bpf_cgroup_ancestor() can be used as follows:
- 		bpf_cgroup_release(parent);
- 		return 0;
- 	}
-+
-+3.3 struct cpumask * kfuncs
-+---------------------------
-+
-+BPF provides a set of kfuncs that can be used to query, allocate, mutate, and
-+destroy struct cpumask * objects. Please refer to :ref:`cpumasks-header-label`
-+for more details.
-diff --git a/kernel/bpf/cpumask.c b/kernel/bpf/cpumask.c
-index 409ae2447a9b..25355a0a367a 100644
---- a/kernel/bpf/cpumask.c
-+++ b/kernel/bpf/cpumask.c
-@@ -38,6 +38,16 @@ __diag_push();
- __diag_ignore_all("-Wmissing-prototypes",
- 		  "Global kfuncs as their definitions will be in BTF");
- 
-+/**
-+ * bpf_cpumask_create() - Create a mutable BPF cpumask.
-+ *
-+ * Allocates a cpumask that can be queried, mutated, acquired, and released by
-+ * a BPF program. The cpumask returned by this function must either be embedded
-+ * in a map as a kptr, or freed with bpf_cpumask_release().
-+ *
-+ * bpf_cpumask_create() allocates memory using the BPF memory allocator, and
-+ * will not block. It may return NULL if no memory is available.
-+ */
- struct bpf_cpumask *bpf_cpumask_create(void)
- {
- 	struct bpf_cpumask *cpumask;
-@@ -52,12 +62,31 @@ struct bpf_cpumask *bpf_cpumask_create(void)
- 	return cpumask;
- }
- 
-+/**
-+ * bpf_cpumask_acquire() - Acquire a reference to a BPF cpumask.
-+ * @cpumask: The BPF cpumask being acquired. The cpumask must be a trusted
-+ *	     pointer.
-+ *
-+ * Acquires a reference to a BPF cpumask. The cpumask returned by this function
-+ * must either be embedded in a map as a kptr, or freed with
-+ * bpf_cpumask_release().
-+ */
- struct bpf_cpumask *bpf_cpumask_acquire(struct bpf_cpumask *cpumask)
- {
- 	refcount_inc(&cpumask->usage);
- 	return cpumask;
- }
- 
-+/**
-+ * bpf_cpumask_kptr_get() - Attempt to acquire a reference to a BPF cpumask
-+ *			    stored in a map.
-+ * @cpumaskp: A pointer to a BPF cpumask map value.
-+ *
-+ * Attempts to acquire a reference to a BPF cpumask stored in a map value. The
-+ * cpumask returned by this function must either be embedded in a map as a
-+ * kptr, or freed with bpf_cpumask_release(). This function may return NULL if
-+ * no BPF cpumask was found in the specified map value.
-+ */
- struct bpf_cpumask *bpf_cpumask_kptr_get(struct bpf_cpumask **cpumaskp)
- {
- 	struct bpf_cpumask *cpumask;
-@@ -76,6 +105,14 @@ struct bpf_cpumask *bpf_cpumask_kptr_get(struct bpf_cpumask **cpumaskp)
- 	return cpumask;
- }
- 
-+/**
-+ * bpf_cpumask_release() - Release a previously acquired BPF cpumask.
-+ * @cpumask: The cpumask being released.
-+ *
-+ * Releases a previously acquired reference to a BPF cpumask. When the final
-+ * reference of the BPF cpumask has been released, it is subsequently freed in
-+ * an RCU callback in the BPF memory allocator.
-+ */
- void bpf_cpumask_release(struct bpf_cpumask *cpumask)
- {
- 	if (!cpumask)
-@@ -88,16 +125,36 @@ void bpf_cpumask_release(struct bpf_cpumask *cpumask)
- 	}
- }
- 
-+/**
-+ * bpf_cpumask_first() - Get the index of the first nonzero bit in the cpumask.
-+ * @cpumask: The cpumask being queried.
-+ *
-+ * Find the index of the first nonzero bit of the cpumask. A struct bpf_cpumask
-+ * pointer may be safely passed to this function.
-+ */
- u32 bpf_cpumask_first(const struct cpumask *cpumask)
- {
- 	return cpumask_first(cpumask);
- }
- 
-+/**
-+ * bpf_cpumask_first_zero() - Get the index of the first unset bit in the
-+ *			      cpumask.
-+ * @cpumask: The cpumask being queried.
-+ *
-+ * Find the index of the first unset bit of the cpumask. A struct bpf_cpumask
-+ * pointer may be safely passed to this function.
-+ */
- u32 bpf_cpumask_first_zero(const struct cpumask *cpumask)
- {
- 	return cpumask_first_zero(cpumask);
- }
- 
-+/**
-+ * bpf_cpumask_set_cpu() - Set a bit for a CPU in a BPF cpumask.
-+ * @cpu: The CPU to be set in the cpumask.
-+ * @cpumask: The BPF cpumask in which a bit is being set.
-+ */
- void bpf_cpumask_set_cpu(u32 cpu, struct bpf_cpumask *cpumask)
- {
- 	if (!cpu_valid(cpu))
-@@ -106,6 +163,11 @@ void bpf_cpumask_set_cpu(u32 cpu, struct bpf_cpumask *cpumask)
- 	cpumask_set_cpu(cpu, (struct cpumask *)cpumask);
- }
- 
-+/**
-+ * bpf_cpumask_clear_cpu() - Clear a bit for a CPU in a BPF cpumask.
-+ * @cpu: The CPU to be cleared from the cpumask.
-+ * @cpumask: The BPF cpumask in which a bit is being cleared.
-+ */
- void bpf_cpumask_clear_cpu(u32 cpu, struct bpf_cpumask *cpumask)
- {
- 	if (!cpu_valid(cpu))
-@@ -114,6 +176,15 @@ void bpf_cpumask_clear_cpu(u32 cpu, struct bpf_cpumask *cpumask)
- 	cpumask_clear_cpu(cpu, (struct cpumask *)cpumask);
- }
- 
-+/**
-+ * bpf_cpumask_test_cpu() - Test whether a CPU is set in a cpumask.
-+ * @cpu: The CPU being queried for.
-+ * @cpumask: The cpumask being queried for containing a CPU.
-+ *
-+ * Return:
-+ * * true  - @cpu is set in the cpumask
-+ * * false - @cpu was not set in the cpumask, or @cpu is an invalid cpu.
-+ */
- bool bpf_cpumask_test_cpu(u32 cpu, const struct cpumask *cpumask)
- {
- 	if (!cpu_valid(cpu))
-@@ -122,6 +193,15 @@ bool bpf_cpumask_test_cpu(u32 cpu, const struct cpumask *cpumask)
- 	return cpumask_test_cpu(cpu, (struct cpumask *)cpumask);
- }
- 
-+/**
-+ * bpf_cpumask_test_and_set_cpu() - Atomically test and set a CPU in a BPF cpumask.
-+ * @cpu: The CPU being set and queried for.
-+ * @cpumask: The BPF cpumask being set and queried for containing a CPU.
-+ *
-+ * Return:
-+ * * true  - @cpu is set in the cpumask
-+ * * false - @cpu was not set in the cpumask, or @cpu is invalid.
-+ */
- bool bpf_cpumask_test_and_set_cpu(u32 cpu, struct bpf_cpumask *cpumask)
- {
- 	if (!cpu_valid(cpu))
-@@ -130,6 +210,16 @@ bool bpf_cpumask_test_and_set_cpu(u32 cpu, struct bpf_cpumask *cpumask)
- 	return cpumask_test_and_set_cpu(cpu, (struct cpumask *)cpumask);
- }
- 
-+/**
-+ * bpf_cpumask_test_and_clear_cpu() - Atomically test and clear a CPU in a BPF
-+ *				      cpumask.
-+ * @cpu: The CPU being cleared and queried for.
-+ * @cpumask: The BPF cpumask being cleared and queried for containing a CPU.
-+ *
-+ * Return:
-+ * * true  - @cpu is set in the cpumask
-+ * * false - @cpu was not set in the cpumask, or @cpu is invalid.
-+ */
- bool bpf_cpumask_test_and_clear_cpu(u32 cpu, struct bpf_cpumask *cpumask)
- {
- 	if (!cpu_valid(cpu))
-@@ -138,16 +228,36 @@ bool bpf_cpumask_test_and_clear_cpu(u32 cpu, struct bpf_cpumask *cpumask)
- 	return cpumask_test_and_clear_cpu(cpu, (struct cpumask *)cpumask);
- }
- 
-+/**
-+ * bpf_cpumask_setall() - Set all of the bits in a BPF cpumask.
-+ * @cpumask: The BPF cpumask having all of its bits set.
-+ */
- void bpf_cpumask_setall(struct bpf_cpumask *cpumask)
- {
- 	cpumask_setall((struct cpumask *)cpumask);
- }
- 
-+/**
-+ * bpf_cpumask_clear() - Clear all of the bits in a BPF cpumask.
-+ * @cpumask: The BPF cpumask being cleared.
-+ */
- void bpf_cpumask_clear(struct bpf_cpumask *cpumask)
- {
- 	cpumask_clear((struct cpumask *)cpumask);
- }
- 
-+/**
-+ * bpf_cpumask_and() - AND two cpumasks and store the result.
-+ * @dst: The BPF cpumask where the result is being stored.
-+ * @src1: The first input.
-+ * @src2: The second input.
-+ *
-+ * Return:
-+ * * true  - @dst has at least one bit set following the operation
-+ * * false - @dst is empty following the operation
-+ *
-+ * struct bpf_cpumask pointers may be safely passed to @src1 and @src2.
-+ */
- bool bpf_cpumask_and(struct bpf_cpumask *dst,
- 		     const struct cpumask *src1,
- 		     const struct cpumask *src2)
-@@ -155,6 +265,14 @@ bool bpf_cpumask_and(struct bpf_cpumask *dst,
- 	return cpumask_and((struct cpumask *)dst, src1, src2);
- }
- 
-+/**
-+ * bpf_cpumask_or() - OR two cpumasks and store the result.
-+ * @dst: The BPF cpumask where the result is being stored.
-+ * @src1: The first input.
-+ * @src2: The second input.
-+ *
-+ * struct bpf_cpumask pointers may be safely passed to @src1 and @src2.
-+ */
- void bpf_cpumask_or(struct bpf_cpumask *dst,
- 		    const struct cpumask *src1,
- 		    const struct cpumask *src2)
-@@ -162,6 +280,14 @@ void bpf_cpumask_or(struct bpf_cpumask *dst,
- 	cpumask_or((struct cpumask *)dst, src1, src2);
- }
- 
-+/**
-+ * bpf_cpumask_xor() - XOR two cpumasks and store the result.
-+ * @dst: The BPF cpumask where the result is being stored.
-+ * @src1: The first input.
-+ * @src2: The second input.
-+ *
-+ * struct bpf_cpumask pointers may be safely passed to @src1 and @src2.
-+ */
- void bpf_cpumask_xor(struct bpf_cpumask *dst,
- 		     const struct cpumask *src1,
- 		     const struct cpumask *src2)
-@@ -169,41 +295,123 @@ void bpf_cpumask_xor(struct bpf_cpumask *dst,
- 	cpumask_xor((struct cpumask *)dst, src1, src2);
- }
- 
-+/**
-+ * bpf_cpumask_equal() - Check two cpumasks for equality.
-+ * @src1: The first input.
-+ * @src2: The second input.
-+ *
-+ * Return:
-+ * * true   - @src1 and @src2 have the same bits set.
-+ * * false  - @src1 and @src2 differ in at least one bit.
-+ *
-+ * struct bpf_cpumask pointers may be safely passed to @src1 and @src2.
-+ */
- bool bpf_cpumask_equal(const struct cpumask *src1, const struct cpumask *src2)
- {
- 	return cpumask_equal(src1, src2);
- }
- 
-+/**
-+ * bpf_cpumask_intersects() - Check two cpumasks for overlap.
-+ * @src1: The first input.
-+ * @src2: The second input.
-+ *
-+ * Return:
-+ * * true   - @src1 and @src2 have at least one of the same bits set.
-+ * * false  - @src1 and @src2 don't have any of the same bits set.
-+ *
-+ * struct bpf_cpumask pointers may be safely passed to @src1 and @src2.
-+ */
- bool bpf_cpumask_intersects(const struct cpumask *src1, const struct cpumask *src2)
- {
- 	return cpumask_intersects(src1, src2);
- }
- 
-+/**
-+ * bpf_cpumask_subset() - Check if a cpumask is a subset of another.
-+ * @src1: The first cpumask being checked as a subset.
-+ * @src2: The second cpumask being checked as a superset.
-+ *
-+ * Return:
-+ * * true   - All of the bits of @src1 are set in @src2.
-+ * * false  - At least one bit in @src1 is not set in @src2.
-+ *
-+ * struct bpf_cpumask pointers may be safely passed to @src1 and @src2.
-+ */
- bool bpf_cpumask_subset(const struct cpumask *src1, const struct cpumask *src2)
- {
- 	return cpumask_subset(src1, src2);
- }
- 
-+/**
-+ * bpf_cpumask_empty() - Check if a cpumask is empty.
-+ * @cpumask: The cpumask being checked.
-+ *
-+ * Return:
-+ * * true   - None of the bits in @cpumask are set.
-+ * * false  - At least one bit in @cpumask is set.
-+ *
-+ * A struct bpf_cpumask pointer may be safely passed to @cpumask.
-+ */
- bool bpf_cpumask_empty(const struct cpumask *cpumask)
- {
- 	return cpumask_empty(cpumask);
- }
- 
-+/**
-+ * bpf_cpumask_full() - Check if a cpumask has all bits set.
-+ * @cpumask: The cpumask being checked.
-+ *
-+ * Return:
-+ * * true   - All of the bits in @cpumask are set.
-+ * * false  - At least one bit in @cpumask is cleared.
-+ *
-+ * A struct bpf_cpumask pointer may be safely passed to @cpumask.
-+ */
- bool bpf_cpumask_full(const struct cpumask *cpumask)
- {
- 	return cpumask_full(cpumask);
- }
- 
-+/**
-+ * bpf_cpumask_copy() - Copy the contents of a cpumask into a BPF cpumask.
-+ * @dst: The BPF cpumask being copied into.
-+ * @src: The cpumask being copied.
-+ *
-+ * A struct bpf_cpumask pointer may be safely passed to @src.
-+ */
- void bpf_cpumask_copy(struct bpf_cpumask *dst, const struct cpumask *src)
- {
- 	cpumask_copy((struct cpumask *)dst, src);
- }
- 
-+/**
-+ * bpf_cpumask_any() - Return a random set CPU from a cpumask.
-+ * @cpumask: The cpumask being queried.
-+ *
-+ * Return:
-+ * * A random set bit within [0, num_cpus) if at least one bit is set.
-+ * * >= num_cpus if no bit is set.
-+ *
-+ * A struct bpf_cpumask pointer may be safely passed to @src.
-+ */
- u32 bpf_cpumask_any(const struct cpumask *cpumask)
- {
- 	return cpumask_any(cpumask);
- }
- 
-+/**
-+ * bpf_cpumask_any_and() - Return a random set CPU from the AND of two
-+ *			   cpumasks.
-+ * @src1: The first cpumask.
-+ * @src2: The second cpumask.
-+ *
-+ * Return:
-+ * * A random set bit within [0, num_cpus) if at least one bit is set.
-+ * * >= num_cpus if no bit is set.
-+ *
-+ * struct bpf_cpumask pointers may be safely passed to @src1 and @src2.
-+ */
- u32 bpf_cpumask_any_and(const struct cpumask *src1, const struct cpumask *src2)
- {
- 	return cpumask_any_and(src1, src2);
--- 
-2.39.0
+Thanks!
+
+>  drivers/net/ethernet/freescale/dpaa/dpaa_eth.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
+> b/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
+> index 3f8032947d86..027fff9f7db0 100644
+> --- a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
+> +++ b/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
+> @@ -2410,6 +2410,9 @@ static int dpaa_eth_poll(struct napi_struct *napi, =
+int
+> budget)
+>=20
+>  	cleaned =3D qman_p_poll_dqrr(np->p, budget);
+>=20
+> +	if (np->xdp_act & XDP_REDIRECT)
+> +		xdp_do_flush();
+> +
+>  	if (cleaned < budget) {
+>  		napi_complete_done(napi, cleaned);
+>  		qman_p_irqsource_add(np->p, QM_PIRQ_DQRI);
+> @@ -2417,9 +2420,6 @@ static int dpaa_eth_poll(struct napi_struct *napi, =
+int
+> budget)
+>  		qman_p_irqsource_add(np->p, QM_PIRQ_DQRI);
+>  	}
+>=20
+> -	if (np->xdp_act & XDP_REDIRECT)
+> -		xdp_do_flush();
+> -
+>  	return cleaned;
+>  }
+>=20
+> --
+> 2.34.1
 
