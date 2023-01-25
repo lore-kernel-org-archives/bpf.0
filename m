@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23286C54E94
-	for <bpf@archiver.kernel.org>; Wed, 25 Jan 2023 07:49:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B2D7C27C76
+	for <bpf@archiver.kernel.org>; Wed, 25 Jan 2023 07:49:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233434AbjAYHtT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 25 Jan 2023 02:49:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
+        id S234988AbjAYHtY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 25 Jan 2023 02:49:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234420AbjAYHtR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 25 Jan 2023 02:49:17 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1574943B;
-        Tue, 24 Jan 2023 23:49:16 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id g10so13088162wmo.1;
-        Tue, 24 Jan 2023 23:49:16 -0800 (PST)
+        with ESMTP id S234420AbjAYHtW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 25 Jan 2023 02:49:22 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A3C4A1D7;
+        Tue, 24 Jan 2023 23:49:21 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id j17so13107029wms.0;
+        Tue, 24 Jan 2023 23:49:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6aa1jo3Gm6IQD13Q3su+lnnZXPzXg/tUFIWCE6r8QJU=;
-        b=iSgK2/Pi9HJwCbrRBVMur6oVbbvyIHBYBsY+Itbzsm+nk2ohtDmfjbzkTQyPszr4v/
-         QKHifA7gFr91fFiE0ypCeRngWzYhZzSptXo1Z8RXA27vsr2jcR7yaC96UKnO7NL7ZxfK
-         68amlVNJAomthjAq+aB/CQAe14ga/9qNTqm59HQeKO1r+TM2z5zgPlTSNgmxkfdRql6/
-         VM/HhXO5IEPXr0u3/a4Xnk9GuUMOAXqq5AjUf9ck3LtpxYi5s2Lw4hAjmwZi13xUcmY0
-         db1yP0be3RoeomcU92fzXkhef5N6yOkMnmAEJ5mvDgexoBKrmWfR6tGtETrRII6NWW+N
-         4uHQ==
+        bh=0wAglRLnbjA0GGYZd+Aa3Wz2YLS4ZzTlHhnzDb35wOY=;
+        b=gFSKzeU5MBc7Jjp8JqZwhCje/VmhWMFRYBmMFP61AqJAbghIFyMHYYJ/uWmfn9rxa0
+         adQBxiNWRUz70ySJp+xYrDx4NO+UZHbKIYm4jpdmKQFlWWHBMQqd1xeCNAnx8kqSvzB7
+         jF0UvBuRaH1gkz0Pvx5brUInnmTTpbT+IN4UuO8duD9Iu+fnFAT0tO9TmHWwRU8XTb8g
+         aXFKUyCxxs/2SCx7j35HLjd4FTT+miNGblqXGDDToqFFVch1Q5PTV3EACDeBiib2e4ep
+         m6cgs37yg5Xs+yt3+C4uZ06KUvYvIFgI4kIlx2WfI1iS0Hn1M/QF4+A+AYd0w8/9Kf7N
+         KNww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6aa1jo3Gm6IQD13Q3su+lnnZXPzXg/tUFIWCE6r8QJU=;
-        b=dl97JX3456NbZychXH+yregooxNpE46P5bbi/BeT3rUbK8qIgCIbZ3JCBCXXOG52lM
-         oJ92hP5jht8sxmyMsMxdMP2hz35PvUJEATwniAtHEdNZyHKI+yhw8IY/Jgmz0lvTqUOj
-         XxvPvM/4znBEa+4VxOoPlNK4UGzlWxH5c9MnWxPil6UMzbNe9ymaWnhJJMzyG4IvCmD5
-         x+5wBWEaXq9vGus6crek6b3Fit/+En1lnbfeWeBxlheELyI1W4Al3Owxj4GDN6KVruks
-         kTAiZYvCk2TgKi0W+wsE/0PpAt7YLNw4LCACfm6N70sd6Wtc0Qlavdhe0179wkh8VN5Q
-         ByHQ==
-X-Gm-Message-State: AFqh2kp/Vz9NMHaAqEWRoLyu5MLWGuA8jK/tcp7rUlyP/Kme3xtVuocU
-        MrFMojSPvBC9HhdWXcUvofY=
-X-Google-Smtp-Source: AMrXdXt+oFJn5hWkI9BLdUFy9INfrqJo3BZQbOAvYIZSrp9vV9fGYOWE9iv9hwshiA3FYcnew163vQ==
-X-Received: by 2002:a05:600c:920:b0:3da:22a6:7b6b with SMTP id m32-20020a05600c092000b003da22a67b6bmr30971526wmp.13.1674632955251;
-        Tue, 24 Jan 2023 23:49:15 -0800 (PST)
+        bh=0wAglRLnbjA0GGYZd+Aa3Wz2YLS4ZzTlHhnzDb35wOY=;
+        b=SbSeYeSsaMA0ludrB7fb3+FMf6sx0Jl0Uifz2+HGwpGvQhNGC0iW0P6jvR3uNtxdlp
+         xYbaAsS4IjRO0EdeuYowc3TmBFFlhQWiUOKEN3/DvbuFrXsdCYzp8tKOdUlHkMJWJcGW
+         UAwenv9Ce1dmwm3rB1zxT28ogr7f1CniaNU1CUuGhsgrgf8Ja+13bChUE+p7FluqfI9t
+         2ng98QoTr6CF7hNaPLrTG/2InWoXZPfajHmmY5JNbANdzaG1xopRj1PCDKCvwxREuyDT
+         BeLXJKtrKML8QF9D+00HRZU+PYhzdPq/z8ZSERM6sxY4PGlq+7w6gvWxuHolAdUHMp99
+         k1aw==
+X-Gm-Message-State: AFqh2kqpcymLoIIr8dEYO+vykR5Qk6F98Bw75/HRyRaXa+36u1BI8cBC
+        +EELDG+pIYQJdmn/CnMt8E8=
+X-Google-Smtp-Source: AMrXdXvL2NOvrRkDpOrzbG9gYDVxdt0ZEqgut4lt6hzDdZyC39SJAIByD5LYIga/xz1SxgDIy6X0tQ==
+X-Received: by 2002:a05:600c:2d0b:b0:3da:fcf0:a31d with SMTP id x11-20020a05600c2d0b00b003dafcf0a31dmr30803951wmf.22.1674632959324;
+        Tue, 24 Jan 2023 23:49:19 -0800 (PST)
 Received: from localhost.localdomain (h-176-10-254-193.A165.priv.bahnhof.se. [176.10.254.193])
-        by smtp.gmail.com with ESMTPSA id n13-20020a05600c500d00b003db2b81660esm1032051wmr.21.2023.01.24.23.49.13
+        by smtp.gmail.com with ESMTPSA id n13-20020a05600c500d00b003db2b81660esm1032051wmr.21.2023.01.24.23.49.17
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 24 Jan 2023 23:49:14 -0800 (PST)
+        Tue, 24 Jan 2023 23:49:18 -0800 (PST)
 From:   Magnus Karlsson <magnus.karlsson@gmail.com>
 To:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
         daniel@iogearbox.net, netdev@vger.kernel.org,
@@ -58,10 +58,10 @@ To:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
         horatiu.vultur@microchip.com, UNGLinuxDriver@microchip.com,
         mst@redhat.com, jasowang@redhat.com, ioana.ciornei@nxp.com,
         madalin.bucur@nxp.com
-Cc:     bpf@vger.kernel.org, Steen Hegelund <Steen.Hegelund@microchip.com>
-Subject: [PATCH net v2 2/5] lan966x: execute xdp_do_flush() before napi_complete_done()
-Date:   Wed, 25 Jan 2023 08:48:58 +0100
-Message-Id: <20230125074901.2737-3-magnus.karlsson@gmail.com>
+Cc:     bpf@vger.kernel.org
+Subject: [PATCH net v2 4/5] dpaa_eth: execute xdp_do_flush() before napi_complete_done()
+Date:   Wed, 25 Jan 2023 08:49:00 +0100
+Message-Id: <20230125074901.2737-5-magnus.karlsson@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230125074901.2737-1-magnus.karlsson@gmail.com>
 References: <20230125074901.2737-1-magnus.karlsson@gmail.com>
@@ -89,34 +89,37 @@ being inside a single NAPI instance through to the xdp_do_flush() call
 for RCU protection of all in-kernel data structures. Details can be
 found in the second link below.
 
-Fixes: a825b611c7c1 ("net: lan966x: Add support for XDP_REDIRECT")
+Fixes: a1e031ffb422 ("dpaa_eth: add XDP_REDIRECT support")
 Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
 Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Acked-by: Steen Hegelund <Steen.Hegelund@microchip.com>
 Link: https://lore.kernel.org/r/20221220185903.1105011-1-sbohrer@cloudflare.com
 Link: https://lore.kernel.org/all/20210624160609.292325-1-toke@redhat.com/
 ---
- drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c | 6 +++---
+ drivers/net/ethernet/freescale/dpaa/dpaa_eth.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-index 5314c064ceae..55b484b10562 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-@@ -608,12 +608,12 @@ static int lan966x_fdma_napi_poll(struct napi_struct *napi, int weight)
- 		lan966x_fdma_rx_reload(rx);
+diff --git a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c b/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
+index 3f8032947d86..027fff9f7db0 100644
+--- a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
++++ b/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
+@@ -2410,6 +2410,9 @@ static int dpaa_eth_poll(struct napi_struct *napi, int budget)
+ 
+ 	cleaned = qman_p_poll_dqrr(np->p, budget);
+ 
++	if (np->xdp_act & XDP_REDIRECT)
++		xdp_do_flush();
++
+ 	if (cleaned < budget) {
+ 		napi_complete_done(napi, cleaned);
+ 		qman_p_irqsource_add(np->p, QM_PIRQ_DQRI);
+@@ -2417,9 +2420,6 @@ static int dpaa_eth_poll(struct napi_struct *napi, int budget)
+ 		qman_p_irqsource_add(np->p, QM_PIRQ_DQRI);
  	}
  
--	if (counter < weight && napi_complete_done(napi, counter))
--		lan_wr(0xff, lan966x, FDMA_INTR_DB_ENA);
+-	if (np->xdp_act & XDP_REDIRECT)
+-		xdp_do_flush();
 -
- 	if (redirect)
- 		xdp_do_flush();
- 
-+	if (counter < weight && napi_complete_done(napi, counter))
-+		lan_wr(0xff, lan966x, FDMA_INTR_DB_ENA);
-+
- 	return counter;
+ 	return cleaned;
  }
  
 -- 
