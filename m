@@ -2,121 +2,150 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09881C27C76
-	for <bpf@archiver.kernel.org>; Wed, 25 Jan 2023 18:20:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CE51C61D97
+	for <bpf@archiver.kernel.org>; Wed, 25 Jan 2023 18:28:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235768AbjAYSUD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 25 Jan 2023 13:20:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49914 "EHLO
+        id S235281AbjAYS2a (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 25 Jan 2023 13:28:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235867AbjAYSUC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 25 Jan 2023 13:20:02 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1086599A5
-        for <bpf@vger.kernel.org>; Wed, 25 Jan 2023 10:19:35 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id b24-20020a17090a551800b0022beefa7a23so2899057pji.5
-        for <bpf@vger.kernel.org>; Wed, 25 Jan 2023 10:19:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FHDIQ17x0FKZERks8siHaHXfudVAMekwp7ddsPtQJYQ=;
-        b=FW3hV+adtqGfiWJzZcQnn6CEnRpetZEF1D5Ico3gErx3Nk/fAUBBFvn2j2bjHJolGX
-         xDs3h3ZXgJkHNNxlx0MsKAoeejX6Tni4+WnjMzei88yZcF7Em+x4UQMEGpsEHasiSo0k
-         jvtomXNx1Kg7OkeWwgJJTkqe1e/gBS4IANH9545PjA0E3OtNCxs6GGMb8mROw5Uxj5Z0
-         S6dbj3PTyx4KCo1tyJnlbxEAsM/h0/K4Va078SoOr5DvH9Db/eqV5ffthAgy0Vh6a7Tt
-         8ab0hjbaUKHlT08BiH7HZDVo+q2m2fQTe8GHCt4m2vU/hjzJbKYNlf2LQ/rh6LmYzSJV
-         38gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FHDIQ17x0FKZERks8siHaHXfudVAMekwp7ddsPtQJYQ=;
-        b=nl0+fwdyoZ/i6qVuy60/W2xb5pdOYx9bHwOIKX4GTN8zMGJqgudBCU710ZfXsViUR+
-         1+ic3IeUuBUgancBFC8KWmhyy+KbRAX2cMNboQguE6FV6ZlryG4c36S26F0DJuJU1X/v
-         O4jSCz2gkA7maC9pnRdRmih7PIvZOLzx450YjUQrvjAZqiCBHo9Nt7cWa5zvvQsg/fLP
-         H7ZwNI5I7OPgaGKmQE9oxBld2gM8lcuojk3hrxMtFUEuaWdADIv4lq3SE8fIpZiNTSkc
-         NqkAGN22Zcwhd9/QcDWaK7QmAh/Prh5iRupggw0Ar3S0KBf9+4y9igD64YE9FSjwJ9H3
-         zOxQ==
-X-Gm-Message-State: AFqh2kr7dwCDnsPx5ZBltYf19DN2M2yRtz1xwnd3xkMA8pcSnmQVlzvF
-        zqV2rZ/PAv//jer7FsWmUCFFF0tRADp7pg==
-X-Google-Smtp-Source: AMrXdXudBivwhqnkCqBPkML/mMSUrUeTcSCx1fOMPJuj979sftArvrP5zScH7x437rm2m6D5LCBdFQ==
-X-Received: by 2002:a17:902:ce82:b0:194:84ef:5f9c with SMTP id f2-20020a170902ce8200b0019484ef5f9cmr62111889plg.29.1674670775368;
-        Wed, 25 Jan 2023 10:19:35 -0800 (PST)
-Received: from ?IPV6:2620:10d:c085:21c8::1204? ([2620:10d:c090:400::5:5918])
-        by smtp.gmail.com with ESMTPSA id 19-20020a170902c15300b00195f249e688sm3938699plj.248.2023.01.25.10.19.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jan 2023 10:19:35 -0800 (PST)
-Message-ID: <12c03601-f301-2df2-78d5-c0a243322e74@gmail.com>
-Date:   Wed, 25 Jan 2023 10:19:29 -0800
+        with ESMTP id S229953AbjAYS23 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 25 Jan 2023 13:28:29 -0500
+Received: from fx409.security-mail.net (smtpout140.security-mail.net [85.31.212.149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA4013DFB
+        for <bpf@vger.kernel.org>; Wed, 25 Jan 2023 10:28:25 -0800 (PST)
+Received: from localhost (fx409.security-mail.net [127.0.0.1])
+        by fx409.security-mail.net (Postfix) with ESMTP id 631343493C9
+        for <bpf@vger.kernel.org>; Wed, 25 Jan 2023 19:28:23 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
+        s=sec-sig-email; t=1674671303;
+        bh=VkZlMx/sz061Cm6YfPqH8mfzLS3IhHFJZRhlNITSu+c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=PgYGGINfgdlge6AJuhvcxeUH6V0qclH7r/w0zv6MkFIIQyoW7OeQf49pR+PV9NV8p
+         fmlbHY2+Czp6L7ta7EUF/GbRH7PuBhBb899yvjM+2Df0hJO4Fc0FQaeYABlP0TUwps
+         UDIcw6zHlNZBkl1Vkr8vv3SWe5LXy8V23EIzkm1M=
+Received: from fx409 (fx409.security-mail.net [127.0.0.1]) by
+ fx409.security-mail.net (Postfix) with ESMTP id 1C7343493AE; Wed, 25 Jan
+ 2023 19:28:23 +0100 (CET)
+Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
+ fx409.security-mail.net (Postfix) with ESMTPS id 23501349405; Wed, 25 Jan
+ 2023 19:28:22 +0100 (CET)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPS id DD3A827E0493; Wed, 25 Jan 2023
+ 19:28:21 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
+ (Postfix) with ESMTP id BBF0027E0491; Wed, 25 Jan 2023 19:28:21 +0100 (CET)
+Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
+ (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
+ G_ghmxyD1iYT; Wed, 25 Jan 2023 19:28:21 +0100 (CET)
+Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPSA id 4BBCB27E0461; Wed, 25 Jan 2023
+ 19:28:21 +0100 (CET)
+X-Virus-Scanned: E-securemail
+Secumail-id: <d944.63d174c6.208cc.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu BBF0027E0491
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+ s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1674671301;
+ bh=VkZlMx/sz061Cm6YfPqH8mfzLS3IhHFJZRhlNITSu+c=;
+ h=Date:From:To:Message-ID:MIME-Version;
+ b=N3SEBnibRaD53LXAAbH/OUxooZ7n0SvOBr0+syTYe+WDdImAFJ/mdTgLKfIxv6LJf
+ I5CIDXC/mDxLizitRLdE+s3wz2ripLYND6B2KWw3ej4vQLa/Hu4ztfFI0ZHqW9QVVJ
+ 8DSlKZjshZ0JVrBB2b7nAJJF8/TFydx8Kexe3QIU=
+Date:   Wed, 25 Jan 2023 19:28:20 +0100
+From:   Jules Maselbas <jmaselbas@kalray.eu>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Yann Sionneau <ysionneau@kalray.eu>, Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nick Piggin <npiggin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Guillaume Thouvenin <gthouvenin@kalray.eu>,
+        Clement Leger <clement@clement-leger.fr>,
+        Vincent Chardon <vincent.chardon@elsys-design.com>,
+        Marc =?utf-8?b?UG91bGhpw6hz?= <dkm@kataplop.net>,
+        Julian Vetter <jvetter@kalray.eu>,
+        Samuel Jones <sjones@kalray.eu>,
+        Ashley Lesdalons <alesdalons@kalray.eu>,
+        Thomas Costis <tcostis@kalray.eu>,
+        Marius Gligor <mgligor@kalray.eu>,
+        Jonathan Borne <jborne@kalray.eu>,
+        Julien Villette <jvillette@kalray.eu>,
+        Luc Michel <lmichel@kalray.eu>,
+        Louis Morhet <lmorhet@kalray.eu>,
+        Julien Hascoet <jhascoet@kalray.eu>,
+        Jean-Christophe Pince <jcpince@gmail.com>,
+        Guillaume Missonnier <gmissonnier@kalray.eu>,
+        Alex Michon <amichon@kalray.eu>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <git@xen0n.name>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        John Garry <john.garry@huawei.com>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        Bharat Bhushan <bbhushan2@marvell.com>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Atish Patra <atishp@atishpatra.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Qi Liu <liuqi115@huawei.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-audit@redhat.com,
+        linux-riscv@lists.infradead.org, bpf@vger.kernel.org
+Subject: Re: [RFC PATCH v2 01/31] Documentation: kvx: Add basic
+ documentation
+Message-ID: <20230125182820.GD5952@tellis.lin.mbt.kalray.eu>
+References: <20230120141002.2442-1-ysionneau@kalray.eu>
+ <20230120141002.2442-2-ysionneau@kalray.eu> <Y8z7v53A/UDKFd7j@debian.me>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Calls bpf_setsockopt() on
- a ktls enabled socket.
-Content-Language: en-US
-To:     Martin KaFai Lau <martin.lau@linux.dev>,
-        Kui-Feng Lee <kuifeng@meta.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, song@kernel.org,
-        kernel-team@meta.com
-References: <20230124181220.2871611-1-kuifeng@meta.com>
- <20230124181220.2871611-3-kuifeng@meta.com>
- <41aec8de-1425-aaf7-0a2a-eac849e83eff@linux.dev>
-From:   Kui-Feng Lee <sinquersw@gmail.com>
-In-Reply-To: <41aec8de-1425-aaf7-0a2a-eac849e83eff@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Disposition: inline
+In-Reply-To: <Y8z7v53A/UDKFd7j@debian.me>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
+X-ALTERMIMEV2_out: done
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Hi Bagas,
 
-On 1/25/23 10:09, Martin KaFai Lau wrote:
-> On 1/24/23 10:12 AM, Kui-Feng Lee wrote: index 
-> 9523333b8905..027d95755f9f 100644
-.... skip ....
->> --- a/tools/testing/selftests/bpf/progs/setget_sockopt.c
->> +++ b/tools/testing/selftests/bpf/progs/setget_sockopt.c
->> @@ -6,6 +6,8 @@
->>   #include <bpf/bpf_core_read.h>
->>   #include <bpf/bpf_helpers.h>
->>   #include <bpf/bpf_tracing.h>
->> +#define BPF_PROG_TEST_TCP_HDR_OPTIONS
->> +#include "test_tcp_hdr_options.h"
->
-> Instead of having dependency on another test's header,
->
->>     #ifndef ARRAY_SIZE
->>   #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
->> @@ -22,6 +24,7 @@ int nr_active;
->>   int nr_connect;
->>   int nr_binddev;
->>   int nr_socket_post_create;
->> +int nr_fin_wait1;
->>     struct sockopt_test {
->>       int opt;
->> @@ -386,6 +389,11 @@ int skops_sockopt(struct bpf_sock_ops *skops)
->>           nr_passive += !(bpf_test_sockopt(skops, sk) ||
->>                   test_tcp_maxseg(skops, sk) ||
->>                   test_tcp_saved_syn(skops, sk));
->> +        set_hdr_cb_flags(skops, BPF_SOCK_OPS_STATE_CB_FLAG);
->
-> how about directly doing this:
->                 bpf_sock_ops_cb_flags_set(skops,
-> skops->bpf_sock_ops_cb_flags |
-> BPF_SOCK_OPS_STATE_CB_FLAG);
+Thanks for taking your time and effort to improve the documentation.
+We not only need to clean the documention syntax and wording but also
+its content. I am tempted to apply all your proposed changes first and
+then work on improving and correcting the documentation.
+
+However I am not very sure on how to integrate your changes and give
+proper contribution attributions. Any insights on this would be greatly
+appreciated.
+
+Thanks
+-- Jules
 
 
-Sure! It makes sense.
 
 
->
->> +        break;
->> +    case BPF_SOCK_OPS_STATE_CB:
->> +        if (skops->args[1] == BPF_TCP_CLOSE_WAIT)
->> +            nr_fin_wait1 += !bpf_test_sockopt(skops, sk);
->>           break;
->>       }
->
+
