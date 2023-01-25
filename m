@@ -2,35 +2,35 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB8B2C38142
-	for <bpf@archiver.kernel.org>; Wed, 25 Jan 2023 00:35:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43955C61DA0
+	for <bpf@archiver.kernel.org>; Wed, 25 Jan 2023 00:35:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234225AbjAYAfG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 24 Jan 2023 19:35:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46860 "EHLO
+        id S234227AbjAYAfH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 24 Jan 2023 19:35:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235015AbjAYAe4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 24 Jan 2023 19:34:56 -0500
+        with ESMTP id S232166AbjAYAeo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 24 Jan 2023 19:34:44 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03529521DE;
-        Tue, 24 Jan 2023 16:34:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429234C0DF;
+        Tue, 24 Jan 2023 16:34:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9331DB811C1;
-        Wed, 25 Jan 2023 00:34:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3B2DC4339B;
-        Wed, 25 Jan 2023 00:34:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 81E80B8171A;
+        Wed, 25 Jan 2023 00:34:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7DFBC433EF;
+        Wed, 25 Jan 2023 00:34:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674606880;
-        bh=VCGnWFr95SwwAJ+v2VcqnBX0uqgPPRwmMsbFoP0le3k=;
+        s=k20201202; t=1674606872;
+        bh=tqt63W4/ppHlBc3KeKnD2U8NW+JmcPevPhzb7J2+gJU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IHxs1RQ8H91C77Kof8fjiUY+MTA/fyRE85EC/wzr1JYT0auJULNL3V8ZozDL8xB9j
-         96hXwCqm9R3cX0ghYm/MqvlbfzDg8DT6tmDw9hCuFwH5Pq/qoUcRxyUQQevTjKNCns
-         UHQx5dJvq0tQ9cDKlFdkHXyagq8LTY/hCgkSfk5B9jxgIP3M0pGZx9u3dl5PdVHWkJ
-         maxX4in/Eg/EF4e326uPXbMd+VfOvb5uqJHX2vo/EszaTrntxUilBvot8u5Pkl5Gpl
-         /d/KiJ53pV3/ilGZhnWqk3XURCO7r5vvLQtJxNmlp5qMK6s/AcTifJeROwWJ+qVCr3
-         qirjTXqHVhTwg==
+        b=jJ6Hv5dm5dCmxTDbkmm+Mg7tyKZx959QGBlNi8FGN5FUHtUYkpW59Bzojpu2C/I/K
+         0i5FJa9IFxmbnYEF5olxl/4ebfFGyphxRTi8E7fHLaS4dz9V1VXC69RBGquiDH2lAH
+         /TcAxAQrmI2qkP0n2df8vKr5Ec7X+jMQuFSKZ5ncHoebVRwGX8ZK0J7C8SBnLfxskK
+         yR1EfKoUF4H0ormoNwzpr5f/m6jtRScRdFY9dYHPMKc/c70Hup3AxTS/E+NotY+u30
+         N0mMwuar1apZJ9AXMa2aPMI039gLvuanV0nYEu+oQI7fMUHrCfrYFJX7XcCkKeRpFd
+         qvw9aWDiGMcvw==
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
@@ -44,9 +44,9 @@ Cc:     netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
         mst@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com,
         maciej.fijalkowski@intel.com, intel-wired-lan@lists.osuosl.org,
         lorenzo.bianconi@redhat.com, martin.lau@linux.dev
-Subject: [PATCH v2 bpf-next 7/8] selftests/bpf: add test for bpf_xdp_query xdp-features support
-Date:   Wed, 25 Jan 2023 01:33:27 +0100
-Message-Id: <a60e73ce6334030d29765125ccda17ace814ada5.1674606198.git.lorenzo@kernel.org>
+Subject: [PATCH v2 bpf-next 5/8] libbpf: add API to get XDP/XSK supported features
+Date:   Wed, 25 Jan 2023 01:33:25 +0100
+Message-Id: <8d60ebff3538f4ccfec66da0a7743e9a6f14d2ad.1674606198.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <cover.1674606193.git.lorenzo@kernel.org>
 References: <cover.1674606193.git.lorenzo@kernel.org>
@@ -56,97 +56,218 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce a self-test to verify libbpf bpf_xdp_query capability to dump
-the xdp-features supported by the device (lo and veth in this case).
+Extend bpf_xdp_query routine in order to get XDP/XSK supported features
+of netdev over route netlink interface.
+Extend libbpf netlink implementation in order to support netlink_generic
+protocol.
 
+Co-developed-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Co-developed-by: Marek Majtyka <alardam@gmail.com>
+Signed-off-by: Marek Majtyka <alardam@gmail.com>
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- .../bpf/prog_tests/xdp_do_redirect.c          | 27 ++++++++++++++++++-
- .../selftests/bpf/prog_tests/xdp_info.c       |  8 ++++++
- 2 files changed, 34 insertions(+), 1 deletion(-)
+ tools/lib/bpf/libbpf.h  |  3 +-
+ tools/lib/bpf/netlink.c | 99 +++++++++++++++++++++++++++++++++++++++++
+ tools/lib/bpf/nlattr.h  | 12 +++++
+ 3 files changed, 113 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-index a50971c6cf4a..e15fb3f0306c 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-@@ -4,10 +4,12 @@
- #include <net/if.h>
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 898db26e42e9..29cb7040fa77 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -982,9 +982,10 @@ struct bpf_xdp_query_opts {
+ 	__u32 hw_prog_id;	/* output */
+ 	__u32 skb_prog_id;	/* output */
+ 	__u8 attach_mode;	/* output */
++	__u64 fflags;		/* output */
+ 	size_t :0;
+ };
+-#define bpf_xdp_query_opts__last_field attach_mode
++#define bpf_xdp_query_opts__last_field fflags
+ 
+ LIBBPF_API int bpf_xdp_attach(int ifindex, int prog_fd, __u32 flags,
+ 			      const struct bpf_xdp_attach_opts *opts);
+diff --git a/tools/lib/bpf/netlink.c b/tools/lib/bpf/netlink.c
+index d2468a04a6c3..674e4d61e67e 100644
+--- a/tools/lib/bpf/netlink.c
++++ b/tools/lib/bpf/netlink.c
+@@ -9,6 +9,7 @@
  #include <linux/if_ether.h>
- #include <linux/if_packet.h>
-+#include <linux/if_link.h>
- #include <linux/ipv6.h>
- #include <linux/in6.h>
- #include <linux/udp.h>
- #include <bpf/bpf_endian.h>
-+#include <uapi/linux/netdev.h>
- #include "test_xdp_do_redirect.skel.h"
+ #include <linux/pkt_cls.h>
+ #include <linux/rtnetlink.h>
++#include <linux/netdev.h>
+ #include <sys/socket.h>
+ #include <errno.h>
+ #include <time.h>
+@@ -39,6 +40,12 @@ struct xdp_id_md {
+ 	int ifindex;
+ 	__u32 flags;
+ 	struct xdp_link_info info;
++	__u64 fflags;
++};
++
++struct xdp_features_md {
++	int ifindex;
++	__u64 flags;
+ };
  
- #define SYS(fmt, ...)						\
-@@ -92,7 +94,7 @@ void test_xdp_do_redirect(void)
- 	struct test_xdp_do_redirect *skel = NULL;
- 	struct nstoken *nstoken = NULL;
- 	struct bpf_link *link;
--
-+	LIBBPF_OPTS(bpf_xdp_query_opts, query_opts);
- 	struct xdp_md ctx_in = { .data = sizeof(__u32),
- 				 .data_end = sizeof(data) };
- 	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
-@@ -153,6 +155,29 @@ void test_xdp_do_redirect(void)
- 	    !ASSERT_NEQ(ifindex_dst, 0, "ifindex_dst"))
- 		goto out;
+ static int libbpf_netlink_open(__u32 *nl_pid, int proto)
+@@ -238,6 +245,43 @@ static int libbpf_netlink_send_recv(struct libbpf_nla_req *req,
+ 	return ret;
+ }
  
-+	/* Check xdp features supported by veth driver */
-+	err = bpf_xdp_query(ifindex_src, XDP_FLAGS_DRV_MODE, &query_opts);
-+	if (!ASSERT_OK(err, "veth_src bpf_xdp_query"))
-+		goto out;
++static int parse_genl_family_id(struct nlmsghdr *nh, libbpf_dump_nlmsg_t fn,
++				void *cookie)
++{
++	struct genlmsghdr *gnl = NLMSG_DATA(nh);
++	struct nlattr *na = (struct nlattr *)((void *)gnl + GENL_HDRLEN);
++	struct nlattr *tb[CTRL_ATTR_FAMILY_ID + 1];
++	__u16 *id = cookie;
 +
-+	if (!ASSERT_EQ(query_opts.fflags,
-+		       NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT |
-+		       NETDEV_XDP_ACT_NDO_XMIT | NETDEV_XDP_ACT_RX_SG |
-+		       NETDEV_XDP_ACT_NDO_XMIT_SG,
-+		       "veth_src query_opts.fflags"))
-+		goto out;
++	libbpf_nla_parse(tb, CTRL_ATTR_FAMILY_ID, na,
++			 NLMSG_PAYLOAD(nh, sizeof(*gnl)), NULL);
++	if (!tb[CTRL_ATTR_FAMILY_ID])
++		return NL_CONT;
 +
-+	err = bpf_xdp_query(ifindex_dst, XDP_FLAGS_DRV_MODE, &query_opts);
-+	if (!ASSERT_OK(err, "veth_dst bpf_xdp_query"))
-+		goto out;
++	*id = libbpf_nla_getattr_u16(tb[CTRL_ATTR_FAMILY_ID]);
++	return NL_DONE;
++}
 +
-+	if (!ASSERT_EQ(query_opts.fflags,
-+		       NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT |
-+		       NETDEV_XDP_ACT_NDO_XMIT | NETDEV_XDP_ACT_RX_SG |
-+		       NETDEV_XDP_ACT_NDO_XMIT_SG,
-+		       "veth_dst query_opts.fflags"))
-+		goto out;
++static int libbpf_netlink_resolve_genl_family_id(const char *name,
++						 __u16 len, __u16 *id)
++{
++	struct libbpf_nla_req req = {
++		.nh.nlmsg_len	= NLMSG_LENGTH(GENL_HDRLEN),
++		.nh.nlmsg_type	= GENL_ID_CTRL,
++		.nh.nlmsg_flags	= NLM_F_REQUEST,
++		.gnl.cmd	= CTRL_CMD_GETFAMILY,
++		.gnl.version	= 2,
++	};
++	int err;
 +
- 	memcpy(skel->rodata->expect_dst, &pkt_udp.eth.h_dest, ETH_ALEN);
- 	skel->rodata->ifindex_out = ifindex_src; /* redirect back to the same iface */
- 	skel->rodata->ifindex_in = ifindex_src;
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_info.c b/tools/testing/selftests/bpf/prog_tests/xdp_info.c
-index cd3aa340e65e..8397468a9e74 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_info.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_info.c
-@@ -8,6 +8,7 @@ void serial_test_xdp_info(void)
++	err = nlattr_add(&req, CTRL_ATTR_FAMILY_NAME, name, len);
++	if (err < 0)
++		return err;
++
++	return libbpf_netlink_send_recv(&req, NETLINK_GENERIC,
++					parse_genl_family_id, NULL, id);
++}
++
+ static int __bpf_set_link_xdp_fd_replace(int ifindex, int fd, int old_fd,
+ 					 __u32 flags)
  {
- 	__u32 len = sizeof(struct bpf_prog_info), duration = 0, prog_id;
- 	const char *file = "./xdp_dummy.bpf.o";
-+	LIBBPF_OPTS(bpf_xdp_query_opts, opts);
- 	struct bpf_prog_info info = {};
- 	struct bpf_object *obj;
- 	int err, prog_fd;
-@@ -61,6 +62,13 @@ void serial_test_xdp_info(void)
- 	if (CHECK(prog_id, "prog_id_drv", "unexpected prog_id=%u\n", prog_id))
- 		goto out;
+@@ -357,6 +401,29 @@ static int get_xdp_info(void *cookie, void *msg, struct nlattr **tb)
+ 	return 0;
+ }
  
-+	/* Check xdp features supported by lo device */
-+	opts.fflags = ~0;
-+	err = bpf_xdp_query(IFINDEX_LO, XDP_FLAGS_DRV_MODE, &opts);
-+	if (!ASSERT_OK(err, "bpf_xdp_query"))
-+		goto out;
++static int parse_xdp_features(struct nlmsghdr *nh, libbpf_dump_nlmsg_t fn,
++			      void *cookie)
++{
++	struct genlmsghdr *gnl = NLMSG_DATA(nh);
++	struct nlattr *na = (struct nlattr *)((void *)gnl + GENL_HDRLEN);
++	struct nlattr *tb[NETDEV_CMD_MAX + 1];
++	struct xdp_features_md *md = cookie;
++	__u32 ifindex;
 +
-+	ASSERT_EQ(opts.fflags, 0, "opts.fflags");
- out:
- 	bpf_xdp_detach(IFINDEX_LO, 0, NULL);
- out_close:
++	libbpf_nla_parse(tb, NETDEV_CMD_MAX, na,
++			 NLMSG_PAYLOAD(nh, sizeof(*gnl)), NULL);
++
++	if (!tb[NETDEV_A_DEV_IFINDEX] || !tb[NETDEV_A_DEV_XDP_FEATURES])
++		return NL_CONT;
++
++	ifindex = libbpf_nla_getattr_u32(tb[NETDEV_A_DEV_IFINDEX]);
++	if (ifindex != md->ifindex)
++		return NL_CONT;
++
++	md->flags = libbpf_nla_getattr_u64(tb[NETDEV_A_DEV_XDP_FEATURES]);
++	return NL_DONE;
++}
++
+ int bpf_xdp_query(int ifindex, int xdp_flags, struct bpf_xdp_query_opts *opts)
+ {
+ 	struct libbpf_nla_req req = {
+@@ -393,6 +460,38 @@ int bpf_xdp_query(int ifindex, int xdp_flags, struct bpf_xdp_query_opts *opts)
+ 	OPTS_SET(opts, skb_prog_id, xdp_id.info.skb_prog_id);
+ 	OPTS_SET(opts, attach_mode, xdp_id.info.attach_mode);
+ 
++	if (OPTS_HAS(opts, fflags)) {
++		struct xdp_features_md md = {
++			.ifindex = ifindex,
++		};
++		__u16 id;
++
++		err = libbpf_netlink_resolve_genl_family_id("netdev",
++							    sizeof("netdev"),
++							    &id);
++		if (err < 0)
++			return libbpf_err(err);
++
++		memset(&req, 0, sizeof(req));
++		req.nh.nlmsg_len = NLMSG_LENGTH(GENL_HDRLEN);
++		req.nh.nlmsg_flags = NLM_F_REQUEST;
++		req.nh.nlmsg_type = id;
++		req.gnl.cmd = NETDEV_CMD_DEV_GET;
++		req.gnl.version = 2;
++
++		err = nlattr_add(&req, NETDEV_A_DEV_IFINDEX, &ifindex,
++				 sizeof(ifindex));
++		if (err < 0)
++			return err;
++
++		err = libbpf_netlink_send_recv(&req, NETLINK_GENERIC,
++					       parse_xdp_features, NULL, &md);
++		if (err)
++			return libbpf_err(err);
++
++		opts->fflags = md.flags;
++	}
++
+ 	return 0;
+ }
+ 
+diff --git a/tools/lib/bpf/nlattr.h b/tools/lib/bpf/nlattr.h
+index 4d15ae2ff812..d92d1c1de700 100644
+--- a/tools/lib/bpf/nlattr.h
++++ b/tools/lib/bpf/nlattr.h
+@@ -14,6 +14,7 @@
+ #include <errno.h>
+ #include <linux/netlink.h>
+ #include <linux/rtnetlink.h>
++#include <linux/genetlink.h>
+ 
+ /* avoid multiple definition of netlink features */
+ #define __LINUX_NETLINK_H
+@@ -58,6 +59,7 @@ struct libbpf_nla_req {
+ 	union {
+ 		struct ifinfomsg ifinfo;
+ 		struct tcmsg tc;
++		struct genlmsghdr gnl;
+ 	};
+ 	char buf[128];
+ };
+@@ -89,11 +91,21 @@ static inline uint8_t libbpf_nla_getattr_u8(const struct nlattr *nla)
+ 	return *(uint8_t *)libbpf_nla_data(nla);
+ }
+ 
++static inline uint16_t libbpf_nla_getattr_u16(const struct nlattr *nla)
++{
++	return *(uint16_t *)libbpf_nla_data(nla);
++}
++
+ static inline uint32_t libbpf_nla_getattr_u32(const struct nlattr *nla)
+ {
+ 	return *(uint32_t *)libbpf_nla_data(nla);
+ }
+ 
++static inline uint64_t libbpf_nla_getattr_u64(const struct nlattr *nla)
++{
++	return *(uint64_t *)libbpf_nla_data(nla);
++}
++
+ static inline const char *libbpf_nla_getattr_str(const struct nlattr *nla)
+ {
+ 	return (const char *)libbpf_nla_data(nla);
 -- 
 2.39.1
 
