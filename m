@@ -2,202 +2,165 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9D6BC27C76
-	for <bpf@archiver.kernel.org>; Wed, 25 Jan 2023 10:13:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1EB0C27C76
+	for <bpf@archiver.kernel.org>; Wed, 25 Jan 2023 10:32:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235123AbjAYKNV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 25 Jan 2023 05:13:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51728 "EHLO
+        id S232306AbjAYKcn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 25 Jan 2023 05:32:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235018AbjAYKNU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 25 Jan 2023 05:13:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A036CEF8E
-        for <bpf@vger.kernel.org>; Wed, 25 Jan 2023 02:12:33 -0800 (PST)
+        with ESMTP id S234873AbjAYKcn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 25 Jan 2023 05:32:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0922646D41
+        for <bpf@vger.kernel.org>; Wed, 25 Jan 2023 02:31:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674641552;
+        s=mimecast20190719; t=1674642706;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=39uUoxo0wfRAwahgj1y7dgLynrBafUqvtoFkUK46E0w=;
-        b=SSk6mGWAxgp6g0Nr8Hp0FDXUZBrQxchEiwZ3Uh5gQQyUBbn9pG7p3/enUB8uhGDBs67Czy
-        HaBOBsri6N/VuvQnQRJf8l5crtCdIwj7mWdxy1FNuLnsy8YWF/NLN6pTGb+JDLdeUlc8AS
-        KjLi7+kbwCZNdJOhtHdt0QpDyg+EHd8=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-383-hdmydESoPmCK8oJCnum15A-1; Wed, 25 Jan 2023 05:12:31 -0500
-X-MC-Unique: hdmydESoPmCK8oJCnum15A-1
-Received: by mail-ed1-f72.google.com with SMTP id b15-20020a056402350f00b0049e42713e2bso12488113edd.0
-        for <bpf@vger.kernel.org>; Wed, 25 Jan 2023 02:12:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=39uUoxo0wfRAwahgj1y7dgLynrBafUqvtoFkUK46E0w=;
-        b=3lohvL/Zxpkral7xCs7A4Resj2BEJqYcQYDES5f7zg7NArvWvpwG3jNHJ3Rw3Sw/g5
-         MocLA8jDISFdYHuPpNScY3rxlUDy4px9e99g0muNNORgM4aTtxFMNGg/JoPshf0MJh0H
-         OeJZhkrwnBuTF72m0xMzq4l7+nQB7AF7gUfLzMhfHePbiluVqKRl5MrJWXc+VMTlVqCg
-         AiHadOZRBfBpjsdiKgnBDvVXXACOEwfF4sC4tBq9VhbsWxagqi4s56Lpo7oPv0aHrHKX
-         t5pJddZOEdyKtHaqmBYPSvOPG5Xoy1bDBQXgztWNUc6/L8DHMX8HeXZqIwaxmUxCYCYQ
-         jG1w==
-X-Gm-Message-State: AFqh2kpfKJKwDMObYzIlywoBkh6E1syk6x0tbk1r+nf30oSJjNljY+cJ
-        BJHlzXsHcUpL8qX1WwnI1jJGVQ5R6EKNujF4UtcOccAw4HhkWVhf/WkaHW2BmjzP2y4G62Qk2gz
-        NgKJXxQb34gTd
-X-Received: by 2002:a05:6402:4019:b0:467:c3cb:49aa with SMTP id d25-20020a056402401900b00467c3cb49aamr39111446eda.4.1674641550378;
-        Wed, 25 Jan 2023 02:12:30 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsVVXP8jouC5bDivbcMNoye/GXXOZe7JAjOCC0dE5q1ukSbNqOwTCdV8EhiTmYy6uLAjflwGQ==
-X-Received: by 2002:a05:6402:4019:b0:467:c3cb:49aa with SMTP id d25-20020a056402401900b00467c3cb49aamr39111405eda.4.1674641550076;
-        Wed, 25 Jan 2023 02:12:30 -0800 (PST)
-Received: from [192.168.41.200] (83-90-141-187-cable.dk.customer.tdc.net. [83.90.141.187])
-        by smtp.gmail.com with ESMTPSA id p8-20020a170906a00800b0084d3bf4498csm2185594ejy.140.2023.01.25.02.12.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jan 2023 02:12:29 -0800 (PST)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <5b849f25-3e2e-0a9a-01c2-6f1fa483cd57@redhat.com>
-Date:   Wed, 25 Jan 2023 11:12:26 +0100
+        bh=mJltFoGI9s6num9RbN58QBIE5PAujW0hunBQvAsl920=;
+        b=bXNJ3AAFZeWQdTsHuQxtzqLOKnVXzYXrNebZM8DQ1EEJtxGdhWxDpnwHzEacO3na0aXmah
+        pjJA443PIXy1FRDTmY1AbGhw67uHwiR1xevMgjRuTp8Exb0PEtn+9vlj4ubin68slFi4Ma
+        PNF5X4gUSBrsugxCQcHVhU2P1P7PWWs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-642-svIb9T4jMzy7JX5MSFka0Q-1; Wed, 25 Jan 2023 05:31:35 -0500
+X-MC-Unique: svIb9T4jMzy7JX5MSFka0Q-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A5E53858F0E;
+        Wed, 25 Jan 2023 10:31:34 +0000 (UTC)
+Received: from samus.usersys.redhat.com (unknown [10.43.17.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E95E251FF;
+        Wed, 25 Jan 2023 10:31:32 +0000 (UTC)
+Date:   Wed, 25 Jan 2023 11:31:30 +0100
+From:   Artem Savkov <asavkov@redhat.com>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>
+Subject: Re: [PATCH bpf-next 1/5] selftests/bpf: Move kfunc exports to
+ bpf_testmod/bpf_testmod_kfunc.h
+Message-ID: <Y9EFAqdLED3TT43M@samus.usersys.redhat.com>
+Mail-Followup-To: Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>
+References: <20230124143626.250719-1-jolsa@kernel.org>
+ <20230124143626.250719-2-jolsa@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Cc:     brouer@redhat.com, netdev@vger.kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, davem@davemloft.net,
-        kuba@kernel.org, hawk@kernel.org, pabeni@redhat.com,
-        edumazet@google.com, toke@redhat.com, memxor@gmail.com,
-        alardam@gmail.com, saeedm@nvidia.com, anthony.l.nguyen@intel.com,
-        gospo@broadcom.com, vladimir.oltean@nxp.com, nbd@nbd.name,
-        john@phrozen.org, leon@kernel.org, simon.horman@corigine.com,
-        aelior@marvell.com, christophe.jaillet@wanadoo.fr,
-        ecree.xilinx@gmail.com, mst@redhat.com, bjorn@kernel.org,
-        magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
-        intel-wired-lan@lists.osuosl.org, lorenzo.bianconi@redhat.com,
-        martin.lau@linux.dev
-Subject: Re: [PATCH v2 bpf-next 1/8] netdev-genl: create a simple family for
- netdev stuff
-Content-Language: en-US
-To:     Lorenzo Bianconi <lorenzo@kernel.org>, bpf@vger.kernel.org
-References: <cover.1674606193.git.lorenzo@kernel.org>
- <b420eea0f362daa127448a5647a801d1ae9cb6dd.1674606196.git.lorenzo@kernel.org>
-In-Reply-To: <b420eea0f362daa127448a5647a801d1ae9cb6dd.1674606196.git.lorenzo@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230124143626.250719-2-jolsa@kernel.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-
-On 25/01/2023 01.33, Lorenzo Bianconi wrote:
-> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-> index 90f2be194bc5..2cbe9a6ede76 100644
-> --- a/include/linux/netdevice.h
-> +++ b/include/linux/netdevice.h
-> @@ -47,6 +47,7 @@
->   #include <uapi/linux/netdevice.h>
->   #include <uapi/linux/if_bonding.h>
->   #include <uapi/linux/pkt_cls.h>
-> +#include <uapi/linux/netdev.h>
->   #include <linux/hashtable.h>
->   #include <linux/rbtree.h>
->   #include <net/net_trackers.h>
-> @@ -2055,6 +2056,7 @@ struct net_device {
->   
->   	/* Read-mostly cache-line for fast-path access */
->   	unsigned int		flags;
-> +	xdp_features_t		xdp_features;
-
-Nice you found a 4 bytes hole to place the u32 xdp_features member in
-and in a "Read-mostly cache-line for fast-path access" that is good :-)
-(Added my pahole output for reference below)
-
-Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
-
->   	unsigned long long	priv_flags;
->   	const struct net_device_ops *netdev_ops;
->   	const struct xdp_metadata_ops *xdp_metadata_ops;
-> @@ -2839,6 +2841,7 @@ enum netdev_cmd {
->   	NETDEV_OFFLOAD_XSTATS_DISABLE,
->   	NETDEV_OFFLOAD_XSTATS_REPORT_USED,
->   	NETDEV_OFFLOAD_XSTATS_REPORT_DELTA,
-> +	NETDEV_XDP_FEAT_CHANGE,
->   };
->   const char *netdev_cmd_to_name(enum netdev_cmd cmd);
->   
-> diff --git a/include/net/xdp.h b/include/net/xdp.h
-> index 91292aa13bc0..8d1c86914f4c 100644
-> --- a/include/net/xdp.h
-> +++ b/include/net/xdp.h
-> @@ -7,6 +7,7 @@
->   #define __LINUX_NET_XDP_H__
->   
->   #include <linux/skbuff.h> /* skb_shared_info */
-> +#include <uapi/linux/netdev.h>
->   
->   /**
->    * DOC: XDP RX-queue information
-> @@ -43,6 +44,8 @@ enum xdp_mem_type {
->   	MEM_TYPE_MAX,
->   };
->   
-> +typedef u32 xdp_features_t;
+On Tue, Jan 24, 2023 at 03:36:22PM +0100, Jiri Olsa wrote:
+> Move all kfunc exports into separate header file and include it
+> in tests that need it.
+> 
+> We will move all test kfuncs into bpf_testmod in following change,
+> so it's convenient to have declarations in single place.
+> 
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  .../bpf/bpf_testmod/bpf_testmod_kfunc.h       | 89 +++++++++++++++++++
+>  tools/testing/selftests/bpf/progs/cb_refs.c   |  1 +
+>  .../selftests/bpf/progs/jit_probe_mem.c       |  3 +-
+>  .../bpf/progs/kfunc_call_destructive.c        |  3 +-
+>  .../selftests/bpf/progs/kfunc_call_fail.c     |  9 +-
+>  .../selftests/bpf/progs/kfunc_call_race.c     |  3 +-
+>  .../selftests/bpf/progs/kfunc_call_test.c     | 15 +---
+>  .../bpf/progs/kfunc_call_test_subprog.c       | 17 +++-
+>  tools/testing/selftests/bpf/progs/map_kptr.c  |  1 +
+>  .../selftests/bpf/progs/map_kptr_fail.c       |  1 +
+>  10 files changed, 111 insertions(+), 31 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h
+> 
+> diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h
+> new file mode 100644
+> index 000000000000..41d4f8543a25
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h
+> @@ -0,0 +1,89 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
 > +
->   /* XDP flags for ndo_xdp_xmit */
->   #define XDP_XMIT_FLUSH		(1U << 0)	/* doorbell signal consumer */
->   #define XDP_XMIT_FLAGS_MASK	XDP_XMIT_FLUSH
+> +#ifndef _BPF_TESTMOD_KFUNC_H
+> +#define _BPF_TESTMOD_KFUNC_H
+> +
+> +#ifndef __ksym
+> +#define __ksym __attribute__((section(".ksyms")))
+> +#endif
 
+...
 
---Jesper
+> +extern void bpf_kfunc_call_test_pass_ctx(struct __sk_buff *skb) __ksym;
+> +extern void bpf_kfunc_call_test_pass1(struct prog_test_pass1 *p) __ksym;
+> +extern void bpf_kfunc_call_test_pass2(struct prog_test_pass2 *p) __ksym;
+> +extern void bpf_kfunc_call_test_mem_len_fail2(__u64 *mem, int len) __ksym;
+> +
+> +extern void bpf_kfunc_call_test_destructive(void) __ksym;
+> +
+> +#endif /* _BPF_TESTMOD_KFUNC_H */
 
-On 64 bit arch partial output from:
-   pahole -C net_device net/core/skbuff.o
+This is missing bpf_kfunc_call_test_kptr_get() prototype, the function is
+moved with the rest in the 5th patch.
 
-struct net_device {
-         char                       name[16];             /*     0    16 */
-         struct netdev_name_node *  name_node;            /*    16     8 */
-         struct dev_ifalias *       ifalias;              /*    24     8 */
-         long unsigned int          mem_end;              /*    32     8 */
-         long unsigned int          mem_start;            /*    40     8 */
-         long unsigned int          base_addr;            /*    48     8 */
-         long unsigned int          state;                /*    56     8 */
-         /* --- cacheline 1 boundary (64 bytes) --- */
-         struct list_head           dev_list;             /*    64    16 */
-         struct list_head           napi_list;            /*    80    16 */
-         struct list_head           unreg_list;           /*    96    16 */
-         struct list_head           close_list;           /*   112    16 */
-         /* --- cacheline 2 boundary (128 bytes) --- */
-         struct list_head           ptype_all;            /*   128    16 */
-         struct list_head           ptype_specific;       /*   144    16 */
-         struct {
-                 struct list_head   upper;                /*   160    16 */
-                 struct list_head   lower;                /*   176    16 */
-         } adj_list;                                      /*   160    32 */
-         /* --- cacheline 3 boundary (192 bytes) --- */
-         unsigned int               flags;                /*   192     4 */
+> diff --git a/tools/testing/selftests/bpf/progs/cb_refs.c b/tools/testing/selftests/bpf/progs/cb_refs.c
+> index 7653df1bc787..b905833dc9d3 100644
+> --- a/tools/testing/selftests/bpf/progs/cb_refs.c
+> +++ b/tools/testing/selftests/bpf/progs/cb_refs.c
+> @@ -2,6 +2,7 @@
+>  #include <vmlinux.h>
+>  #include <bpf/bpf_tracing.h>
+>  #include <bpf/bpf_helpers.h>
+> +#include "bpf_testmod/bpf_testmod_kfunc.h"
+>  
+>  struct map_value {
+>  	struct prog_test_ref_kfunc __kptr_ref *ptr;
+> diff --git a/tools/testing/selftests/bpf/progs/map_kptr.c b/tools/testing/selftests/bpf/progs/map_kptr.c
+> index eb8217803493..753305c22c2f 100644
+> --- a/tools/testing/selftests/bpf/progs/map_kptr.c
+> +++ b/tools/testing/selftests/bpf/progs/map_kptr.c
+> @@ -2,6 +2,7 @@
+>  #include <vmlinux.h>
+>  #include <bpf/bpf_tracing.h>
+>  #include <bpf/bpf_helpers.h>
+> +#include "bpf_testmod/bpf_testmod_kfunc.h"
+>  
+>  struct map_value {
+>  	struct prog_test_ref_kfunc __kptr *unref_ptr;
+> diff --git a/tools/testing/selftests/bpf/progs/map_kptr_fail.c b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+> index 760e41e1a632..3b5076d951df 100644
+> --- a/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+> +++ b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+> @@ -4,6 +4,7 @@
+>  #include <bpf/bpf_helpers.h>
+>  #include <bpf/bpf_core_read.h>
+>  #include "bpf_misc.h"
+> +#include "bpf_testmod/bpf_testmod_kfunc.h"
+>  
+>  struct map_value {
+>  	char buf[8];
 
-         /* XXX 4 bytes hole, try to pack */
+These three are missing old prototype removal.
 
-         long long unsigned int     priv_flags;           /*   200     8 */
-         const struct net_device_ops  * netdev_ops;       /*   208     8 */
-         const struct xdp_metadata_ops  * xdp_metadata_ops; /*   216 
-8 */
-         int                        ifindex;              /*   224     4 */
-         short unsigned int         gflags;               /*   228     2 */
-         short unsigned int         hard_header_len;      /*   230     2 */
-         unsigned int               mtu;                  /*   232     4 */
-         short unsigned int         needed_headroom;      /*   236     2 */
-         short unsigned int         needed_tailroom;      /*   238     2 */
-         netdev_features_t          features;             /*   240     8 */
-         netdev_features_t          hw_features;          /*   248     8 */
-         /* --- cacheline 4 boundary (256 bytes) --- */
-         netdev_features_t          wanted_features;      /*   256     8 */
-         netdev_features_t          vlan_features;        /*   264     8 */
-         netdev_features_t          hw_enc_features;      /*   272     8 */
-         netdev_features_t          mpls_features;        /*   280     8 */
-         netdev_features_t          gso_partial_features; /*   288     8 */
-         unsigned int               min_mtu;              /*   296     4 */
-         unsigned int               max_mtu;              /*   300     4 */
-         short unsigned int         type;                 /*   304     2 */
-         unsigned char              min_header_len;       /*   306     1 */
-         unsigned char              name_assign_type;     /*   307     1 */
+-- 
+ Artem
 
