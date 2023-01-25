@@ -2,41 +2,41 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5B05C54EAA
-	for <bpf@archiver.kernel.org>; Wed, 25 Jan 2023 14:40:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4F8AC54E94
+	for <bpf@archiver.kernel.org>; Wed, 25 Jan 2023 14:40:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235862AbjAYOkR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 25 Jan 2023 09:40:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43394 "EHLO
+        id S235856AbjAYOkS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 25 Jan 2023 09:40:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235852AbjAYOkN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 25 Jan 2023 09:40:13 -0500
-Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DFB8AD26;
-        Wed, 25 Jan 2023 06:39:43 -0800 (PST)
-Received: by mail-vk1-f178.google.com with SMTP id bs10so808241vkb.3;
-        Wed, 25 Jan 2023 06:39:43 -0800 (PST)
+        with ESMTP id S235823AbjAYOkP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 25 Jan 2023 09:40:15 -0500
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40163EFC7;
+        Wed, 25 Jan 2023 06:39:49 -0800 (PST)
+Received: by mail-qt1-f173.google.com with SMTP id jr19so14821868qtb.7;
+        Wed, 25 Jan 2023 06:39:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aTz9rWTHtKZ1MdagbfZKTdu+fe8rzlCpxSijJtcJzkk=;
-        b=sOx2rbh4oRY0P4EHsc5JL1CJiYSdmewGbIH4RolKwqTNje3tWC3ZDz29yxj0l9U6hP
-         MHOlhyJOk3d5RW8NUzwqs+jVskxr6S3cKGaarjsC8zKNPgxeyxVs+GYbexdeoKqb3Pcw
-         PBh2BqH3Sa2eU6W8leuiiAnKpS/zCfN92j9evmPKvxZvo8+uDwkus/AoHUFesJ9F+u37
-         mWlaUBakN0S9Uf/0dQj+O8DNyXTAMiwRUFai7KMmacMvTRkdAR7GdiGfLsPwN3XbFFDT
-         xl8uogURJh/mL2w7Dh9Z6PZ4nvPOZSUIZ9qw8MHC2WO+OUdwi6zWjmMbagDl+v6FvBNi
-         RFCw==
-X-Gm-Message-State: AO0yUKVpNTca5jDxzNeZNxjZ99hL0c22t+787sV1+6KT6izOwv9A17EA
-        W16ERvZkDNt4UwfJpZ8SKAHOlNWVGM/r0jHv
-X-Google-Smtp-Source: AK7set/gkd3DVIrE6Rsx4XnhoZWQZgWwqmAMrmHL5F3BTvWzk9h4MYMvW3FAlzh2jbQEJt+oUK5IHw==
-X-Received: by 2002:a05:6122:1690:b0:3e3:44e3:3d97 with SMTP id 16-20020a056122169000b003e344e33d97mr2713395vkl.14.1674657498506;
-        Wed, 25 Jan 2023 06:38:18 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=szLEwMFPNAUcOlQXjDN9W13GrrQRzdrtWVVmponsE0I=;
+        b=PB6zy6orVVPREfnzUn1bv3m3NYBC7VCIuDDo7CqTISrVOnfcpRbNZTGoaeqZRUIfoh
+         aWCC7oCTeYj6LYLNUitlcBX+ADgPJdWG4FIR+3gGMBTQwnqqeHkyAzrgwA62NsIeakzO
+         ZOFCulGW7VuTr3+TpE7T/L2iDblx/fp21dyb8u5i6NLTHlMloxUQ0gfS5teO54Pz5yWI
+         lXnixeMSf1FKTKhsWzJvVhJsbCwscAGcPq5vxXJiclzk8Yu8XSl/JBLmYPmqmOBSFg6n
+         qbpWEapF8o6XsAIMGFbHZ/CsiliyXDWf1onKytMooKy9RRWiyCgbTtScWOD6WwMSY/ep
+         aWjA==
+X-Gm-Message-State: AFqh2krVfQBoifLScdd98KpNySOiDRaokcnkaQ6u8xz0C1VOIU9ZAxL/
+        gtiFmRWIuvgR22YllMc3lqiRY3MX9xTVkPcN
+X-Google-Smtp-Source: AMrXdXuiWHJm8P9vMDHMQY3cN05eJWw7PaAeuGrH2nTjNOvX9g2ZxAwsJHxeTvzrivgFNdlF23Sr9g==
+X-Received: by 2002:ac8:4896:0:b0:3a5:24ac:a175 with SMTP id i22-20020ac84896000000b003a524aca175mr49324483qtq.56.1674657507682;
+        Wed, 25 Jan 2023 06:38:27 -0800 (PST)
 Received: from localhost ([24.1.27.177])
-        by smtp.gmail.com with ESMTPSA id e127-20020a376985000000b006f9ddaaf01esm3537783qkc.102.2023.01.25.06.38.17
+        by smtp.gmail.com with ESMTPSA id k8-20020ac80208000000b003b1546ee6absm3370089qtg.11.2023.01.25.06.38.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 06:38:18 -0800 (PST)
+        Wed, 25 Jan 2023 06:38:27 -0800 (PST)
 From:   David Vernet <void@manifault.com>
 To:     bpf@vger.kernel.org
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
@@ -44,92 +44,68 @@ Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
         haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
         kernel-team@meta.com, tj@kernel.org, memxor@gmail.com
-Subject: [PATCH bpf-next v3 0/7] Enable cpumasks to be used as kptrs
-Date:   Wed, 25 Jan 2023 08:38:09 -0600
-Message-Id: <20230125143816.721952-1-void@manifault.com>
+Subject: [PATCH bpf-next v3 6/7] bpf/docs: Document how nested trusted fields may be defined
+Date:   Wed, 25 Jan 2023 08:38:15 -0600
+Message-Id: <20230125143816.721952-7-void@manifault.com>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230125143816.721952-1-void@manifault.com>
+References: <20230125143816.721952-1-void@manifault.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This is part 3 of https://lore.kernel.org/all/20230119235833.2948341-1-void@manifault.com/
+A prior change defined a new BTF_TYPE_SAFE_NESTED macro in the verifier
+which allows developers to specify when a pointee field in a struct type
+should inherit its parent pointer's trusted status. This patch updates
+the kfuncs documentation to specify this macro and how it can be used.
 
-Part 2: https://lore.kernel.org/bpf/20230120192523.3650503-1-void@manifault.com/
+Signed-off-by: David Vernet <void@manifault.com>
+---
+ Documentation/bpf/kfuncs.rst | 22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
 
-This series is based off of commit b613d335a743 ("bpf: Allow trusted
-args to walk struct when checking BTF IDs").
-
-Changelog:
-----------
-v2 -> v3:
-- Rebase onto master (commit described above). Only conflict that
-  required resolution was updating the task_kfunc selftest suite error
-  message location.
-- Put copyright onto one line in kernel/bpf/cpumask.c.
-- Remove now-unneeded pid-checking logic from
-  progs/nested_trust_success.c.
-- Fix a couple of small grammatical typos in documentation.
-
-v1 -> v2:
-- Put back 'static' keyword in bpf_find_btf_id()
-  (kernel test robot <lkp@intel.com>)
-- Surround cpumask kfuncs in __diag() blocks to avoid no-prototype build
-  warnings (kernel test robot <lkp@intel.com>)
-- Enable ___init suffixes to a type definition to signal that a type is
-  a nocast alias of another type. That is, that when passed to a kfunc
-  that expects one of the two types, the verifier will reject the other
-  even if they're equivalent according to the C standard (Kumar and
-  Alexei)
-- Reject NULL for all trusted args, not just PTR_TO_MEM (Kumar)
-- Reject both NULL and PTR_MAYBE_NULL for all trusted args (Kumar and
-  Alexei )
-- Improve examples given in cpumask documentation (Alexei)
-- Use __success macro for nested_trust test (Alexei)
-- Fix comment typo in struct bpf_cpumask comment header.
-- Fix another example in the bpf_cpumask doc examples.
-- Add documentation for ___init suffix change mentioned above.
-
-
-David Vernet (7):
-  bpf: Disallow NULLable pointers for trusted kfuncs
-  bpf: Enable cpumasks to be queried and used as kptrs
-  selftests/bpf: Add nested trust selftests suite
-  selftests/bpf: Add selftest suite for cpumask kfuncs
-  bpf/docs: Document cpumask kfuncs in a new file
-  bpf/docs: Document how nested trusted fields may be defined
-  bpf/docs: Document the nocast aliasing behavior of ___init
-
- Documentation/bpf/cpumasks.rst                | 393 +++++++++++++++
- Documentation/bpf/index.rst                   |   1 +
- Documentation/bpf/kfuncs.rst                  |  76 ++-
- kernel/bpf/Makefile                           |   1 +
- kernel/bpf/cpumask.c                          | 476 ++++++++++++++++++
- kernel/bpf/verifier.c                         |   6 +
- tools/testing/selftests/bpf/DENYLIST.s390x    |   2 +
- .../selftests/bpf/prog_tests/cgrp_kfunc.c     |   4 +-
- .../selftests/bpf/prog_tests/cpumask.c        |  74 +++
- .../selftests/bpf/prog_tests/nested_trust.c   |  12 +
- .../selftests/bpf/progs/cpumask_common.h      | 114 +++++
- .../selftests/bpf/progs/cpumask_failure.c     | 126 +++++
- .../selftests/bpf/progs/cpumask_success.c     | 426 ++++++++++++++++
- .../selftests/bpf/progs/nested_trust_common.h |  12 +
- .../bpf/progs/nested_trust_failure.c          |  33 ++
- .../bpf/progs/nested_trust_success.c          |  19 +
- .../selftests/bpf/progs/task_kfunc_failure.c  |   4 +-
- 17 files changed, 1774 insertions(+), 5 deletions(-)
- create mode 100644 Documentation/bpf/cpumasks.rst
- create mode 100644 kernel/bpf/cpumask.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/cpumask.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/nested_trust.c
- create mode 100644 tools/testing/selftests/bpf/progs/cpumask_common.h
- create mode 100644 tools/testing/selftests/bpf/progs/cpumask_failure.c
- create mode 100644 tools/testing/selftests/bpf/progs/cpumask_success.c
- create mode 100644 tools/testing/selftests/bpf/progs/nested_trust_common.h
- create mode 100644 tools/testing/selftests/bpf/progs/nested_trust_failure.c
- create mode 100644 tools/testing/selftests/bpf/progs/nested_trust_success.c
-
+diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+index a74f9e74087b..560f4ede3a9f 100644
+--- a/Documentation/bpf/kfuncs.rst
++++ b/Documentation/bpf/kfuncs.rst
+@@ -167,7 +167,8 @@ KF_ACQUIRE and KF_RET_NULL flags.
+ The KF_TRUSTED_ARGS flag is used for kfuncs taking pointer arguments. It
+ indicates that the all pointer arguments are valid, and that all pointers to
+ BTF objects have been passed in their unmodified form (that is, at a zero
+-offset, and without having been obtained from walking another pointer).
++offset, and without having been obtained from walking another pointer, with one
++exception described below).
+ 
+ There are two types of pointers to kernel objects which are considered "valid":
+ 
+@@ -180,6 +181,25 @@ KF_TRUSTED_ARGS kfuncs, and may have a non-zero offset.
+ The definition of "valid" pointers is subject to change at any time, and has
+ absolutely no ABI stability guarantees.
+ 
++As mentioned above, a nested pointer obtained from walking a trusted pointer is
++no longer trusted, with one exception. If a struct type has a field that is
++guaranteed to be valid as long as its parent pointer is trusted, the
++``BTF_TYPE_SAFE_NESTED`` macro can be used to express that to the verifier as
++follows:
++
++.. code-block:: c
++
++	BTF_TYPE_SAFE_NESTED(struct task_struct) {
++		const cpumask_t *cpus_ptr;
++	};
++
++In other words, you must:
++
++1. Wrap the trusted pointer type in the ``BTF_TYPE_SAFE_NESTED`` macro.
++
++2. Specify the type and name of the trusted nested field. This field must match
++   the field in the original type definition exactly.
++
+ 2.4.6 KF_SLEEPABLE flag
+ -----------------------
+ 
 -- 
 2.39.0
 
