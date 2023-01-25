@@ -2,111 +2,87 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B559EC27C76
-	for <bpf@archiver.kernel.org>; Wed, 25 Jan 2023 03:27:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED98CC54E94
+	for <bpf@archiver.kernel.org>; Wed, 25 Jan 2023 03:49:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbjAYD1C (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 24 Jan 2023 22:27:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44924 "EHLO
+        id S230251AbjAYDty (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 24 Jan 2023 22:49:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjAYD1B (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 24 Jan 2023 22:27:01 -0500
-X-Greylist: delayed 1876 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 24 Jan 2023 19:26:57 PST
-Received: from mx08-001d1705.pphosted.com (mx08-001d1705.pphosted.com [185.183.30.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF123029A
-        for <bpf@vger.kernel.org>; Tue, 24 Jan 2023 19:26:56 -0800 (PST)
-Received: from pps.filterd (m0209319.ppops.net [127.0.0.1])
-        by mx08-001d1705.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30P2Xb8n015763;
-        Wed, 25 Jan 2023 02:55:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sony.com; h=from : to : cc :
- subject : date : message-id; s=S1;
- bh=ihB5xbHp/4HwELF4X4XmY4SLG4KmzU0UMkRDlBD9y9M=;
- b=QYgOYryyfgQenHF7dZaWptKxthHR3JMPjsGdbXJO4BT20BWSCPNI5oZlirNDSGW76fFD
- dgbR8lh7YZ9Him5bW37mVafwdLgFDriewgn76BVPWv8aRmKol+c/TyfRBMH6mbh+QVvP
- bmu0dMQHcw5lg4rijXK/9CRe/3HNq3uKFd/sZQd3yngX5fSzoSsyNCoff9n6zowbF/wL
- uzT62tiZ2Ahwbh/FjeL/jV7ih6npsGjPkBpdzM5vG9/uSwNMxtMrtMYyzoDMYV/w2cZc
- SW37cvrHEFux3K5BCbRjlrwHsej3yG4nvpoMlJAIRVgG6CLhl/31MOaxpocUylZ6QUFi ow== 
-Received: from usculxsnt02v.am.sony.com ([160.33.194.233])
-        by mx08-001d1705.pphosted.com (PPS) with ESMTPS id 3n88esuw8a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 25 Jan 2023 02:55:37 +0000
-Received: from pps.filterd (USCULXSNT02v.am.sony.com [127.0.0.1])
-        by USCULXSNT02v.am.sony.com (8.17.1.5/8.17.1.5) with ESMTP id 30P2eo6s007962;
-        Wed, 25 Jan 2023 02:55:36 GMT
-Received: from usculxsnt11v.am.sony.com ([146.215.230.185])
-        by USCULXSNT02v.am.sony.com (PPS) with ESMTPS id 3n87ag0wrr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 02:55:36 +0000
-Received: from pps.filterd (USCULXSNT11v.am.sony.com [127.0.0.1])
-        by USCULXSNT11v.am.sony.com (8.17.1.5/8.17.1.5) with ESMTP id 30P2Cug0005966;
-        Wed, 25 Jan 2023 02:55:35 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by USCULXSNT11v.am.sony.com (PPS) with ESMTPS id 3n87ag6u31-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 25 Jan 2023 02:55:35 +0000
-Received: from USCULXSNT11v.am.sony.com (USCULXSNT11v.am.sony.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30P2tZmg016567;
-        Wed, 25 Jan 2023 02:55:35 GMT
-Received: from prime ([10.10.10.214])
-        by USCULXSNT11v.am.sony.com (PPS) with ESMTP id 3n87ag6u2x-1;
-        Wed, 25 Jan 2023 02:55:35 +0000
-From:   Chethan Suresh <chethan.suresh@sony.com>
-To:     quentin@isovalent.com, bpf@vger.kernel.org
-Cc:     Chethan Suresh <chethan.suresh@sony.com>,
-        Kenta Tada <Kenta.Tada@sony.com>
-Subject: [PATCH bpf-next] bpftool: disable bpfilter kernel config checks
-Date:   Wed, 25 Jan 2023 08:25:16 +0530
-Message-Id: <20230125025516.5603-1-chethan.suresh@sony.com>
-X-Mailer: git-send-email 2.17.1
-X-Sony-BusinessRelay-GUID: hW0QjAZb957YrjxdjTzn-3kTF0TAdveU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-24_17,2023-01-24_01,2022-06-22_01
-X-Sony-EdgeRelay-GUID: BCsyuaEtORwIYXTADJFxbwyiXmoa4a_v
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-24_17,2023-01-24_01,2022-06-22_01
-X-Proofpoint-GUID: F_A55EWvso6C-X6zT7TBAzi3n8kZYpJw
-X-Proofpoint-ORIG-GUID: F_A55EWvso6C-X6zT7TBAzi3n8kZYpJw
-X-Sony-Outbound-GUID: F_A55EWvso6C-X6zT7TBAzi3n8kZYpJw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-24_17,2023-01-24_01,2022-06-22_01
+        with ESMTP id S229953AbjAYDtx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 24 Jan 2023 22:49:53 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197E9485BF
+        for <bpf@vger.kernel.org>; Tue, 24 Jan 2023 19:49:52 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id az20so44345948ejc.1
+        for <bpf@vger.kernel.org>; Tue, 24 Jan 2023 19:49:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DCBbFCrXdwZZbPrnppBRBm0p31YxMzGRRqmSle342gI=;
+        b=QqC4mD5w712vbxJ+aslqK/iy+OkS6ZcISF5ayN8ioFRtzw01a6qw5xYT1PWKrt1x4f
+         9ufUusA1+mcqwW4vYxgv6WXrktnvQnzmWiqeMh1NcaxzwOpaN2PwtWjX36QTnYOw7mfc
+         Eod6hzKoUjxKdOHfGF7p2Lcx++HG5T8rpZFUqlDA7mejrY9FOeYSCXQT5rkQOxkqJlVN
+         FevSYZNjVU8lShtB6LbHHGw9ntmEllaeLEnVQ8NZBGu5v+mm5zvj/OqJWkOKm+qqcQIQ
+         hTvb3xMkfsxkuP1YJBiLTW/+6HDKTdAYI/NhD0VOZn3E3A/J0HRdMSK+xlmKzWjUVnXW
+         k/8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DCBbFCrXdwZZbPrnppBRBm0p31YxMzGRRqmSle342gI=;
+        b=LK+JumYpZFXUzbXiVjcg3cMFScBsu+OIZa+932DDOtyAmzdB9nm0o7riXjWxvdPA1L
+         cw9Ep/8+ZP5fAw0o0fqgj56NHFPmB8+xDL4rt+R5hXbqIXMhfAUXJG3LoEhpQfnqwud3
+         QhYKk8EfTSf7XK5DwzJpo9sR5sQz4EnHyCZ75q1yLyfgmkQ5Th35gKw+kbWkgIwpWVXK
+         keDJc0fWDVW7voymHa9Eeam1Ku9vmBuuh6t5vZTLwRFVup048yNpn4x+S66VJGaZ9n2X
+         tPvelAQ7hNTXf/RLQKbrOseQa879SldJgu5+EgxSk2fynYXonbEvhB0/bZyTvxgkpqVU
+         Nn1A==
+X-Gm-Message-State: AFqh2kpEk9oOiZ8p0Ag+f69x2xGrPZKJYMDx0BTFtBgIg2iJ/DqUg7eU
+        Xl9iIn8EHy20aE1V0uPbGS2hHtBuXMDK7ZWS12k=
+X-Google-Smtp-Source: AMrXdXtIZguddUDp83CT+MXiFrvW/WZhXtCPYiDevAsWavGEarnzWKY7hg8H1KaVk7LmBTRAbDtatJqoU3HPtxq+v5Q=
+X-Received: by 2002:a17:906:5a94:b0:84d:3b9a:e2b3 with SMTP id
+ l20-20020a1709065a9400b0084d3b9ae2b3mr2736306ejq.318.1674618590458; Tue, 24
+ Jan 2023 19:49:50 -0800 (PST)
+MIME-Version: 1.0
+References: <20230124143626.250719-1-jolsa@kernel.org>
+In-Reply-To: <20230124143626.250719-1-jolsa@kernel.org>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 24 Jan 2023 19:49:38 -0800
+Message-ID: <CAADnVQLpk2-fcjgkOssuaT82Pdtu1KzgnxjHXiBV1TJzYXjtWQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/5] bpf: Move kernel test kfuncs into bpf_testmod
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We've experienced similar issues about bpfilter like below:
-https://github.com/moby/moby/issues/43755
-https://lore.kernel.org/bpf/CAADnVQJ5MxGkq=ng214aYoH-NmZ1gjoS=ZTY1eU-Fag4RwZjdg@mail.gmail.com/
+On Tue, Jan 24, 2023 at 6:36 AM Jiri Olsa <jolsa@kernel.org> wrote:
+>
+> hi,
+> I noticed several times in discussions that we should move test kfuncs
+> into kernel module, now perhaps even more pressing with all the kfunc
+> effort. This patchset moves all the test kfuncs into bpf_testmod.
+>
+> I added bpf_testmod/bpf_testmod_kfunc.h header that is shared between
+> bpf_testmod kernel module and BPF programs, which brings some difficulties
+> with __ksym define. But I'm not sure having separate headers for BPF
+> programs and for kernel module would be better.
 
-Considering the current development status of bpfilter,
-disable bpfilter kernel config checks in bpftool feature.
-For production system, we should disable both
-CONFIG_BPFILTER and CONFIG_BPFILTER_UMH for now.
-Or can be enabled as some tools depend on bpfilter.
-
-Signed-off-by: Chethan Suresh <chethan.suresh@sony.com>
-Signed-off-by: Kenta Tada <Kenta.Tada@sony.com>
----
- tools/bpf/bpftool/feature.c | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
-index 36cf0f1517c9..c6087bbc6613 100644
---- a/tools/bpf/bpftool/feature.c
-+++ b/tools/bpf/bpftool/feature.c
-@@ -426,10 +426,6 @@ static void probe_kernel_image_config(const char *define_prefix)
- 		{ "CONFIG_BPF_STREAM_PARSER", },
- 		/* xt_bpf module for passing BPF programs to netfilter  */
- 		{ "CONFIG_NETFILTER_XT_MATCH_BPF", },
--		/* bpfilter back-end for iptables */
--		{ "CONFIG_BPFILTER", },
--		/* bpftilter module with "user mode helper" */
--		{ "CONFIG_BPFILTER_UMH", },
- 
- 		/* test_bpf module for BPF tests */
- 		{ "CONFIG_TEST_BPF", },
--- 
-2.17.1
-
+This part looks fine and overall it's great.
+Thanks a lot for working on this.
+But see failing tests.
+test_progs-no_alu32 -t cb_refs
+is consistently failing.
+Also it seems it introduces instability into other tests.
+BPF CI isn't happy.
