@@ -2,54 +2,54 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5123C61D97
-	for <bpf@archiver.kernel.org>; Wed, 25 Jan 2023 21:40:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08A75C54EED
+	for <bpf@archiver.kernel.org>; Wed, 25 Jan 2023 21:40:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234138AbjAYVkA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 25 Jan 2023 16:40:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37444 "EHLO
+        id S235943AbjAYVkB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 25 Jan 2023 16:40:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236823AbjAYVjy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S236757AbjAYVjy (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 25 Jan 2023 16:39:54 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D967212F32
-        for <bpf@vger.kernel.org>; Wed, 25 Jan 2023 13:39:46 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PKLdoo018448;
-        Wed, 25 Jan 2023 21:39:34 GMT
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101DC47EC9
+        for <bpf@vger.kernel.org>; Wed, 25 Jan 2023 13:39:49 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PKLdGc031899;
+        Wed, 25 Jan 2023 21:39:37 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=0u+BnyBJK2qRJhNlHyQreFL29EgKxssp0valZO/SyCc=;
- b=i6pVoDgDOQ1lRw0t8WqXqyhlWfOIT2kMkPW1yaCx5WImzC0B8ZIwqi5AoFYMkYViE+hf
- GQZj86FWS12SAJdnL+VuOTrk9/knFcAPEg9vvjVXwznQg3l1ETkF85QC9GE0ZwTAUdWf
- XlpVDU0qfogsDaaxtA/SzYd1idw6OFwdE3C4BXc9+zQSZx9f/1U5/M8wjgQJsX27xYs7
- keX0a8Pxyus757+QwPMjXErT/NXvIcK83101zqwct5i24VbnQNnDaVTUI/TTvfUkKhAZ
- qmYWF2nhYGyUdge4x1um5LTO3RyiLmtYfxMYTIDcobPoLPVX0b8u5GpAigf1qjmAIQ5z Hg== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nb6c2awef-1
+ bh=QlsN8AQYhSjXsgsdW18FPRNDRMxSJxlHr4Jl3d3wlvI=;
+ b=IpwJbWZezLIzKQHs4N/8tMUmxlM3jt6OsDNHLbvyhNosKvtwnvfNDXFUHBYIBr2aAk6o
+ F6QFU5EPubF7W37QWZsVxxy/75RxGX08AvFYeOYgCgrZzB3rR5jWNjHEueCM5ud2ML+s
+ 98xJH8Td2QaWVQVXWi5V/xR8IavA2rXG3EIKTinfox4YQjYkH4E2mPt9QZP/MC2iC/1N
+ +vTtAdKhpHioRDGhu4o9g0i+nFU3VQV1yYNW1nyktATCvLG/1yYq32lWfGZBfO3Da3hL
+ 1+hnRmB0DEHCdGyC8lFO8fZ0kseGut8+Y/UpPL8myz2ccMVmHnTJu2w+sT6Fqw3e2bxw 6A== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3na9vd4acu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 21:39:36 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30PIIWnC019104;
+        Wed, 25 Jan 2023 21:39:34 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3n87p6nm0m-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Wed, 25 Jan 2023 21:39:34 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30PEQXLI031243;
-        Wed, 25 Jan 2023 21:39:32 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3n87p6c285-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 21:39:32 +0000
 Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30PLdSV532571746
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30PLdVrY49349102
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 25 Jan 2023 21:39:28 GMT
+        Wed, 25 Jan 2023 21:39:31 GMT
 Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CB97F20043;
-        Wed, 25 Jan 2023 21:39:28 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 7892B2004D;
+        Wed, 25 Jan 2023 21:39:31 +0000 (GMT)
 Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9922320040;
-        Wed, 25 Jan 2023 21:39:28 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 451DD20043;
+        Wed, 25 Jan 2023 21:39:31 +0000 (GMT)
 Received: from heavy.boeblingen.de.ibm.com (unknown [9.155.209.149])
         by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 25 Jan 2023 21:39:28 +0000 (GMT)
+        Wed, 25 Jan 2023 21:39:31 +0000 (GMT)
 From:   Ilya Leoshkevich <iii@linux.ibm.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -57,127 +57,204 @@ To:     Alexei Starovoitov <ast@kernel.org>,
 Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next 17/24] libbpf: Read usdt arg spec with bpf_probe_read_kernel()
-Date:   Wed, 25 Jan 2023 22:38:10 +0100
-Message-Id: <20230125213817.1424447-18-iii@linux.ibm.com>
+Subject: [PATCH bpf-next 20/24] s390/bpf: Implement bpf_arch_text_poke()
+Date:   Wed, 25 Jan 2023 22:38:13 +0100
+Message-Id: <20230125213817.1424447-21-iii@linux.ibm.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230125213817.1424447-1-iii@linux.ibm.com>
 References: <20230125213817.1424447-1-iii@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: GjeeFwA_YxnAHnUkeM5lKuMlPNXsRpXz
-X-Proofpoint-ORIG-GUID: GjeeFwA_YxnAHnUkeM5lKuMlPNXsRpXz
+X-Proofpoint-GUID: dl4xDkI-CzLSbKLrgTA6jh2uLoFj05DR
+X-Proofpoint-ORIG-GUID: dl4xDkI-CzLSbKLrgTA6jh2uLoFj05DR
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
  definitions=2023-01-25_13,2023-01-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
- mlxscore=0 priorityscore=1501 phishscore=0 bulkscore=0 mlxlogscore=999
- malwarescore=0 spamscore=0 adultscore=0 lowpriorityscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301250193
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 phishscore=0 mlxlogscore=999 clxscore=1015 spamscore=0
+ adultscore=0 priorityscore=1501 malwarescore=0 bulkscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301250193
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Loading programs that use bpf_usdt_arg() on s390x fails with:
+bpf_arch_text_poke() is used to hotpatch eBPF programs and trampolines.
+s390x has a very strict hotpatching restriction: the only thing that is
+allowed to be hotpatched is conditional branch mask.
 
-    ; switch (arg_spec->arg_type) {
-    139: (61) r1 = *(u32 *)(r2 +8)
-    R2 unbounded memory access, make sure to bounds check any such access
+Take the same approach as commit de5012b41e5c ("s390/ftrace: implement
+hotpatching"): create a conditional jump to a "plt", which loads the
+target address from memory and jumps to it; then first patch this
+address, and then the mask.
 
-The bound checks seem to be already in place in the C code, and maybe
-it's even possible to add extra bogus checks to placate LLVM or the
-verifier. Take a simpler approach and just use a helper.
+Trampolines (introduced in the next patch) respect the ftrace calling
+convention: the return address is in %r0, and %r1 is clobbered. With
+that in mind, bpf_arch_text_poke() does not differentiate between jumps
+and calls.
+
+However, there is a simple optimization for jumps (for the epilogue_ip
+case): if a jump already points to the destination, then there is no
+"plt" and we can just flip the mask.
+
+For simplicity, the "plt" template is defined in assembly, and its size
+is used to define C arrays. There doesn't seem to be a way to convey
+this size to C as a constant, so it's hardcoded and double-checked
+during runtime.
 
 Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 ---
- tools/lib/bpf/usdt.bpf.h | 33 ++++++++++++++++++---------------
- 1 file changed, 18 insertions(+), 15 deletions(-)
+ arch/s390/net/bpf_jit_comp.c | 97 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 97 insertions(+)
 
-diff --git a/tools/lib/bpf/usdt.bpf.h b/tools/lib/bpf/usdt.bpf.h
-index fdfd235e52c4..ddfa2521ab67 100644
---- a/tools/lib/bpf/usdt.bpf.h
-+++ b/tools/lib/bpf/usdt.bpf.h
-@@ -116,7 +116,7 @@ __weak __hidden
- int bpf_usdt_arg(struct pt_regs *ctx, __u64 arg_num, long *res)
- {
- 	struct __bpf_usdt_spec *spec;
--	struct __bpf_usdt_arg_spec *arg_spec;
-+	struct __bpf_usdt_arg_spec arg_spec;
- 	unsigned long val;
- 	int err, spec_id;
+diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
+index 8400a06c926e..c72eb3fc1f98 100644
+--- a/arch/s390/net/bpf_jit_comp.c
++++ b/arch/s390/net/bpf_jit_comp.c
+@@ -30,6 +30,7 @@
+ #include <asm/facility.h>
+ #include <asm/nospec-branch.h>
+ #include <asm/set_memory.h>
++#include <asm/text-patching.h>
+ #include "bpf_jit.h"
  
-@@ -133,21 +133,24 @@ int bpf_usdt_arg(struct pt_regs *ctx, __u64 arg_num, long *res)
- 	if (arg_num >= BPF_USDT_MAX_ARG_CNT || arg_num >= spec->arg_cnt)
- 		return -ENOENT;
+ struct bpf_jit {
+@@ -50,6 +51,8 @@ struct bpf_jit {
+ 	int r14_thunk_ip;	/* Address of expoline thunk for 'br %r14' */
+ 	int tail_call_start;	/* Tail call start offset */
+ 	int excnt;		/* Number of exception table entries */
++	int prologue_plt_ret;	/* Return address for prologue hotpatch PLT */
++	int prologue_plt;	/* Start of prologue hotpatch PLT */
+ };
  
--	arg_spec = &spec->args[arg_num];
--	switch (arg_spec->arg_type) {
-+	err = bpf_probe_read_kernel(&arg_spec, sizeof(arg_spec), &spec->args[arg_num]);
-+	if (err)
-+		return err;
-+
-+	switch (arg_spec.arg_type) {
- 	case BPF_USDT_ARG_CONST:
- 		/* Arg is just a constant ("-4@$-9" in USDT arg spec).
--		 * value is recorded in arg_spec->val_off directly.
-+		 * value is recorded in arg_spec.val_off directly.
- 		 */
--		val = arg_spec->val_off;
-+		val = arg_spec.val_off;
- 		break;
- 	case BPF_USDT_ARG_REG:
- 		/* Arg is in a register (e.g, "8@%rax" in USDT arg spec),
- 		 * so we read the contents of that register directly from
- 		 * struct pt_regs. To keep things simple user-space parts
--		 * record offsetof(struct pt_regs, <regname>) in arg_spec->reg_off.
-+		 * record offsetof(struct pt_regs, <regname>) in arg_spec.reg_off.
- 		 */
--		err = bpf_probe_read_kernel(&val, sizeof(val), (void *)ctx + arg_spec->reg_off);
-+		err = bpf_probe_read_kernel(&val, sizeof(val), (void *)ctx + arg_spec.reg_off);
- 		if (err)
- 			return err;
- 		break;
-@@ -155,18 +158,18 @@ int bpf_usdt_arg(struct pt_regs *ctx, __u64 arg_num, long *res)
- 		/* Arg is in memory addressed by register, plus some offset
- 		 * (e.g., "-4@-1204(%rbp)" in USDT arg spec). Register is
- 		 * identified like with BPF_USDT_ARG_REG case, and the offset
--		 * is in arg_spec->val_off. We first fetch register contents
-+		 * is in arg_spec.val_off. We first fetch register contents
- 		 * from pt_regs, then do another user-space probe read to
- 		 * fetch argument value itself.
- 		 */
--		err = bpf_probe_read_kernel(&val, sizeof(val), (void *)ctx + arg_spec->reg_off);
-+		err = bpf_probe_read_kernel(&val, sizeof(val), (void *)ctx + arg_spec.reg_off);
- 		if (err)
- 			return err;
--		err = bpf_probe_read_user(&val, sizeof(val), (void *)val + arg_spec->val_off);
-+		err = bpf_probe_read_user(&val, sizeof(val), (void *)val + arg_spec.val_off);
- 		if (err)
- 			return err;
- #if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
--		val >>= arg_spec->arg_bitshift;
-+		val >>= arg_spec.arg_bitshift;
- #endif
- 		break;
- 	default:
-@@ -177,11 +180,11 @@ int bpf_usdt_arg(struct pt_regs *ctx, __u64 arg_num, long *res)
- 	 * necessary upper arg_bitshift bits, with sign extension if argument
- 	 * is signed
- 	 */
--	val <<= arg_spec->arg_bitshift;
--	if (arg_spec->arg_signed)
--		val = ((long)val) >> arg_spec->arg_bitshift;
-+	val <<= arg_spec.arg_bitshift;
-+	if (arg_spec.arg_signed)
-+		val = ((long)val) >> arg_spec.arg_bitshift;
- 	else
--		val = val >> arg_spec->arg_bitshift;
-+		val = val >> arg_spec.arg_bitshift;
- 	*res = val;
- 	return 0;
+ #define SEEN_MEM	BIT(0)		/* use mem[] for temporary storage */
+@@ -506,6 +509,36 @@ static void bpf_skip(struct bpf_jit *jit, int size)
+ 	}
  }
+ 
++/*
++ * PLT for hotpatchable calls. The calling convention is the same as for the
++ * ftrace hotpatch trampolines: %r0 is return address, %r1 is clobbered.
++ */
++extern const char bpf_plt[];
++extern const char bpf_plt_ret[];
++extern const char bpf_plt_target[];
++extern const char bpf_plt_end[];
++#define BPF_PLT_SIZE 32
++asm(
++	".pushsection .rodata\n"
++	"	.align 8\n"
++	"bpf_plt:\n"
++	"	lgrl %r0,bpf_plt_ret\n"
++	"	lgrl %r1,bpf_plt_target\n"
++	"	br %r1\n"
++	"	.align 8\n"
++	"bpf_plt_ret: .quad 0\n"
++	"bpf_plt_target: .quad 0\n"
++	"bpf_plt_end:\n"
++	"	.popsection\n"
++);
++
++static void bpf_jit_plt(void *plt, void *ret, void *target)
++{
++	memcpy(plt, bpf_plt, BPF_PLT_SIZE);
++	*(void **)((char *)plt + (bpf_plt_ret - bpf_plt)) = ret;
++	*(void **)((char *)plt + (bpf_plt_target - bpf_plt)) = target;
++}
++
+ /*
+  * Emit function prologue
+  *
+@@ -514,6 +547,11 @@ static void bpf_skip(struct bpf_jit *jit, int size)
+  */
+ static void bpf_jit_prologue(struct bpf_jit *jit, u32 stack_depth)
+ {
++	/* No-op for hotpatching */
++	/* brcl 0,prologue_plt */
++	EMIT6_PCREL_RILC(0xc0040000, 0, jit->prologue_plt);
++	jit->prologue_plt_ret = jit->prg;
++
+ 	if (jit->seen & SEEN_TAIL_CALL) {
+ 		/* xc STK_OFF_TCCNT(4,%r15),STK_OFF_TCCNT(%r15) */
+ 		_EMIT6(0xd703f000 | STK_OFF_TCCNT, 0xf000 | STK_OFF_TCCNT);
+@@ -589,6 +627,13 @@ static void bpf_jit_epilogue(struct bpf_jit *jit, u32 stack_depth)
+ 		/* br %r1 */
+ 		_EMIT2(0x07f1);
+ 	}
++
++	jit->prg = ALIGN(jit->prg, 8);
++	jit->prologue_plt = jit->prg;
++	if (jit->prg_buf)
++		bpf_jit_plt(jit->prg_buf + jit->prg,
++			    jit->prg_buf + jit->prologue_plt_ret, NULL);
++	jit->prg += BPF_PLT_SIZE;
+ }
+ 
+ static int get_probe_mem_regno(const u8 *insn)
+@@ -1776,6 +1821,9 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ 	struct bpf_jit jit;
+ 	int pass;
+ 
++	if (WARN_ON_ONCE(bpf_plt_end - bpf_plt != BPF_PLT_SIZE))
++		return orig_fp;
++
+ 	if (!fp->jit_requested)
+ 		return orig_fp;
+ 
+@@ -1867,3 +1915,52 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ 					   tmp : orig_fp);
+ 	return fp;
+ }
++
++int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
++		       void *old_addr, void *new_addr)
++{
++	struct {
++		u16 opc;
++		s32 disp;
++	} __packed insn;
++	char expected_plt[BPF_PLT_SIZE];
++	char current_plt[BPF_PLT_SIZE];
++	char *plt;
++	int err;
++
++	/* Verify the branch to be patched. */
++	err = copy_from_kernel_nofault(&insn, ip, sizeof(insn));
++	if (err < 0)
++		return err;
++	if (insn.opc != (0xc004 | (old_addr ? 0xf0 : 0)))
++		return -EINVAL;
++
++	if (t == BPF_MOD_JUMP &&
++	    insn.disp == ((char *)new_addr - (char *)ip) >> 1) {
++		/*
++		 * The branch already points to the destination,
++		 * there is no PLT.
++		 */
++	} else {
++		/* Verify the PLT. */
++		plt = (char *)ip + (insn.disp << 1);
++		err = copy_from_kernel_nofault(current_plt, plt, BPF_PLT_SIZE);
++		if (err < 0)
++			return err;
++		bpf_jit_plt(expected_plt, (char *)ip + 6, old_addr);
++		if (memcmp(current_plt, expected_plt, BPF_PLT_SIZE))
++			return -EINVAL;
++		/* Adjust the call address. */
++		s390_kernel_write(plt + (bpf_plt_target - bpf_plt),
++				  &new_addr, sizeof(void *));
++	}
++
++	/* Adjust the mask of the branch. */
++	insn.opc = 0xc004 | (new_addr ? 0xf0 : 0);
++	s390_kernel_write((char *)ip + 1, (char *)&insn.opc + 1, 1);
++
++	/* Make the new code visible to the other CPUs. */
++	text_poke_sync_lock();
++
++	return 0;
++}
 -- 
 2.39.1
 
