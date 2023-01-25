@@ -2,35 +2,35 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3BC4C54EED
-	for <bpf@archiver.kernel.org>; Wed, 25 Jan 2023 00:34:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0CA6C54E94
+	for <bpf@archiver.kernel.org>; Wed, 25 Jan 2023 00:35:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234647AbjAYAen (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 24 Jan 2023 19:34:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46518 "EHLO
+        id S233417AbjAYAfF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 24 Jan 2023 19:35:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232166AbjAYAee (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 24 Jan 2023 19:34:34 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13FC4B89B;
-        Tue, 24 Jan 2023 16:34:31 -0800 (PST)
+        with ESMTP id S235011AbjAYAe4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 24 Jan 2023 19:34:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92131521D9;
+        Tue, 24 Jan 2023 16:34:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0DEEACE1D2D;
-        Wed, 25 Jan 2023 00:34:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0408C4339B;
-        Wed, 25 Jan 2023 00:34:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DDA61B8171E;
+        Wed, 25 Jan 2023 00:34:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FD92C433D2;
+        Wed, 25 Jan 2023 00:34:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674606868;
-        bh=frQ6wryTRsgHtvKmNSpqoCYSBl1MocigbxPElIXBFRE=;
+        s=k20201202; t=1674606876;
+        bh=xxZVhx3StcgNnFongN1nNXK6YLKdcHChYY3E1jGyTAc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WJFdJpMybT+M3He/FFocdxJMknu3OLGPbhGnpbpu0SzL0JPdI0pV1scwI7cvusypa
-         OS6sllk/6d9zOHHckPzXzvWBaN/f25b/Ssi2b5zVIAT8USlXQ4QDS9zHoFR/S06rE9
-         NlPkd0JJJO3L9v7gcp8N6fSwX8H+iXoTOTaIlNkQeA9Fq1Trj4xTZ3dY08+7hi+kVj
-         DFt3dgxddJgL8B5M6/7zWVlDCUrPaakuzhxZmncWAhO92ZqI2NPeJhlHod9YGixmpQ
-         vCVMy/S1Y5MTBGHw7tYOnav+lSucgaCQQcDiamsorIGRRcge9GqzkRZyTzphTB3TxK
-         kKCFidzjUVDLQ==
+        b=epYawzDE2xpezUbg9rjd2tkpWE3xGtgUzEdUTLHsSInZ/J6RAJbPf7/Kklfqt+GjR
+         9IvCvgCT7cadqdBEtCtIfGBp3duJEtTYez52Wd1ioM+ltXYV36bijhCulv5uuKnqGV
+         jONfdJZ/v3iawlN5dG7rKHSghndkWAY/frn+pXvSfLgYFUvgYpaif3pS/iL3NAu3kb
+         PLl1DCGwZwWzezEYdv52KCdt0chHMYZD2OtiobFlzVV0LxMKtAyzrWshhqyjNp7odf
+         BBAvwjJ7mtAW+mBovdKqGWbX/6jjEoXmdSvhzko2NyedcfuXLNo1znO+coVwGIdYka
+         4/ti4w8BjGahg==
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
@@ -44,9 +44,9 @@ Cc:     netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
         mst@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com,
         maciej.fijalkowski@intel.com, intel-wired-lan@lists.osuosl.org,
         lorenzo.bianconi@redhat.com, martin.lau@linux.dev
-Subject: [PATCH v2 bpf-next 4/8] libbpf: add the capability to specify netlink proto in libbpf_netlink_send_recv
-Date:   Wed, 25 Jan 2023 01:33:24 +0100
-Message-Id: <0b0350a0a0657f5d98d92f0ee37ffd79b9403d66.1674606198.git.lorenzo@kernel.org>
+Subject: [PATCH v2 bpf-next 6/8] bpf: devmap: check XDP features in __xdp_enqueue routine
+Date:   Wed, 25 Jan 2023 01:33:26 +0100
+Message-Id: <46f49d11939557aee7315bc23589cf261c19b494.1674606198.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <cover.1674606193.git.lorenzo@kernel.org>
 References: <cover.1674606193.git.lorenzo@kernel.org>
@@ -56,109 +56,79 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This is a preliminary patch in order to introduce netlink_generic
-protocol support to libbpf.
+Check if the destination device implements ndo_xdp_xmit callback relying
+on NETDEV_XDP_ACT_NDO_XMIT flags. Moreover, check if the destination device
+supports XDP non-linear frame in __xdp_enqueue and is_valid_dst routines.
+This patch allows to perform XDP_REDIRECT on non-linear XDP buffers.
 
+Co-developed-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- tools/lib/bpf/netlink.c | 22 ++++++++++++----------
- 1 file changed, 12 insertions(+), 10 deletions(-)
+ kernel/bpf/devmap.c | 16 +++++++++++++---
+ net/core/filter.c   | 13 +++++--------
+ 2 files changed, 18 insertions(+), 11 deletions(-)
 
-diff --git a/tools/lib/bpf/netlink.c b/tools/lib/bpf/netlink.c
-index 35104580870c..d2468a04a6c3 100644
---- a/tools/lib/bpf/netlink.c
-+++ b/tools/lib/bpf/netlink.c
-@@ -41,7 +41,7 @@ struct xdp_id_md {
- 	struct xdp_link_info info;
- };
- 
--static int libbpf_netlink_open(__u32 *nl_pid)
-+static int libbpf_netlink_open(__u32 *nl_pid, int proto)
+diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
+index d01e4c55b376..2675fefc6cb6 100644
+--- a/kernel/bpf/devmap.c
++++ b/kernel/bpf/devmap.c
+@@ -474,7 +474,11 @@ static inline int __xdp_enqueue(struct net_device *dev, struct xdp_frame *xdpf,
  {
- 	struct sockaddr_nl sa;
- 	socklen_t addrlen;
-@@ -51,7 +51,7 @@ static int libbpf_netlink_open(__u32 *nl_pid)
- 	memset(&sa, 0, sizeof(sa));
- 	sa.nl_family = AF_NETLINK;
+ 	int err;
  
--	sock = socket(AF_NETLINK, SOCK_RAW | SOCK_CLOEXEC, NETLINK_ROUTE);
-+	sock = socket(AF_NETLINK, SOCK_RAW | SOCK_CLOEXEC, proto);
- 	if (sock < 0)
- 		return -errno;
+-	if (!dev->netdev_ops->ndo_xdp_xmit)
++	if (!(dev->xdp_features & NETDEV_XDP_ACT_NDO_XMIT))
++		return -EOPNOTSUPP;
++
++	if (unlikely(!(dev->xdp_features & NETDEV_XDP_ACT_NDO_XMIT_SG) &&
++		     xdp_frame_has_frags(xdpf)))
+ 		return -EOPNOTSUPP;
  
-@@ -212,14 +212,14 @@ static int libbpf_netlink_recv(int sock, __u32 nl_pid, int seq,
- }
+ 	err = xdp_ok_fwd_dev(dev, xdp_get_frame_len(xdpf));
+@@ -532,8 +536,14 @@ int dev_map_enqueue(struct bpf_dtab_netdev *dst, struct xdp_frame *xdpf,
  
- static int libbpf_netlink_send_recv(struct libbpf_nla_req *req,
--				    __dump_nlmsg_t parse_msg,
-+				    int proto, __dump_nlmsg_t parse_msg,
- 				    libbpf_dump_nlmsg_t parse_attr,
- 				    void *cookie)
+ static bool is_valid_dst(struct bpf_dtab_netdev *obj, struct xdp_frame *xdpf)
  {
- 	__u32 nl_pid = 0;
- 	int sock, ret;
+-	if (!obj ||
+-	    !obj->dev->netdev_ops->ndo_xdp_xmit)
++	if (!obj)
++		return false;
++
++	if (!(obj->dev->xdp_features & NETDEV_XDP_ACT_NDO_XMIT))
++		return false;
++
++	if (unlikely(!(obj->dev->xdp_features & NETDEV_XDP_ACT_NDO_XMIT_SG) &&
++		     xdp_frame_has_frags(xdpf)))
+ 		return false;
  
--	sock = libbpf_netlink_open(&nl_pid);
-+	sock = libbpf_netlink_open(&nl_pid, proto);
- 	if (sock < 0)
- 		return sock;
+ 	if (xdp_ok_fwd_dev(obj->dev, xdp_get_frame_len(xdpf)))
+diff --git a/net/core/filter.c b/net/core/filter.c
+index ed08dbf10338..aeebe21a7eff 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -4314,16 +4314,13 @@ int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
+ 	struct bpf_redirect_info *ri = this_cpu_ptr(&bpf_redirect_info);
+ 	enum bpf_map_type map_type = ri->map_type;
  
-@@ -271,7 +271,7 @@ static int __bpf_set_link_xdp_fd_replace(int ifindex, int fd, int old_fd,
- 	}
- 	nlattr_end_nested(&req, nla);
+-	/* XDP_REDIRECT is not fully supported yet for xdp frags since
+-	 * not all XDP capable drivers can map non-linear xdp_frame in
+-	 * ndo_xdp_xmit.
+-	 */
+-	if (unlikely(xdp_buff_has_frags(xdp) &&
+-		     map_type != BPF_MAP_TYPE_CPUMAP))
+-		return -EOPNOTSUPP;
++	if (map_type == BPF_MAP_TYPE_XSKMAP) {
++		/* XDP_REDIRECT is not supported AF_XDP yet. */
++		if (unlikely(xdp_buff_has_frags(xdp)))
++			return -EOPNOTSUPP;
  
--	return libbpf_netlink_send_recv(&req, NULL, NULL, NULL);
-+	return libbpf_netlink_send_recv(&req, NETLINK_ROUTE, NULL, NULL, NULL);
- }
+-	if (map_type == BPF_MAP_TYPE_XSKMAP)
+ 		return __xdp_do_redirect_xsk(ri, dev, xdp, xdp_prog);
++	}
  
- int bpf_xdp_attach(int ifindex, int prog_fd, __u32 flags, const struct bpf_xdp_attach_opts *opts)
-@@ -382,7 +382,7 @@ int bpf_xdp_query(int ifindex, int xdp_flags, struct bpf_xdp_query_opts *opts)
- 	xdp_id.ifindex = ifindex;
- 	xdp_id.flags = xdp_flags;
- 
--	err = libbpf_netlink_send_recv(&req, __dump_link_nlmsg,
-+	err = libbpf_netlink_send_recv(&req, NETLINK_ROUTE, __dump_link_nlmsg,
- 				       get_xdp_info, &xdp_id);
- 	if (err)
- 		return libbpf_err(err);
-@@ -493,7 +493,7 @@ static int tc_qdisc_modify(struct bpf_tc_hook *hook, int cmd, int flags)
- 	if (ret < 0)
- 		return ret;
- 
--	return libbpf_netlink_send_recv(&req, NULL, NULL, NULL);
-+	return libbpf_netlink_send_recv(&req, NETLINK_ROUTE, NULL, NULL, NULL);
- }
- 
- static int tc_qdisc_create_excl(struct bpf_tc_hook *hook)
-@@ -673,7 +673,8 @@ int bpf_tc_attach(const struct bpf_tc_hook *hook, struct bpf_tc_opts *opts)
- 
- 	info.opts = opts;
- 
--	ret = libbpf_netlink_send_recv(&req, get_tc_info, NULL, &info);
-+	ret = libbpf_netlink_send_recv(&req, NETLINK_ROUTE, get_tc_info, NULL,
-+				       &info);
- 	if (ret < 0)
- 		return libbpf_err(ret);
- 	if (!info.processed)
-@@ -739,7 +740,7 @@ static int __bpf_tc_detach(const struct bpf_tc_hook *hook,
- 			return ret;
- 	}
- 
--	return libbpf_netlink_send_recv(&req, NULL, NULL, NULL);
-+	return libbpf_netlink_send_recv(&req, NETLINK_ROUTE, NULL, NULL, NULL);
- }
- 
- int bpf_tc_detach(const struct bpf_tc_hook *hook,
-@@ -804,7 +805,8 @@ int bpf_tc_query(const struct bpf_tc_hook *hook, struct bpf_tc_opts *opts)
- 
- 	info.opts = opts;
- 
--	ret = libbpf_netlink_send_recv(&req, get_tc_info, NULL, &info);
-+	ret = libbpf_netlink_send_recv(&req, NETLINK_ROUTE, get_tc_info, NULL,
-+				       &info);
- 	if (ret < 0)
- 		return libbpf_err(ret);
- 	if (!info.processed)
+ 	return __xdp_do_redirect_frame(ri, dev, xdp_convert_buff_to_frame(xdp),
+ 				       xdp_prog);
 -- 
 2.39.1
 
