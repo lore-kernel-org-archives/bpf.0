@@ -2,54 +2,54 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41FADC27C76
-	for <bpf@archiver.kernel.org>; Wed, 25 Jan 2023 21:39:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E071FC54E94
+	for <bpf@archiver.kernel.org>; Wed, 25 Jan 2023 21:39:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236749AbjAYVj0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 25 Jan 2023 16:39:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36654 "EHLO
+        id S235890AbjAYVjw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 25 Jan 2023 16:39:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236576AbjAYVjW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 25 Jan 2023 16:39:22 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5CE04A238
-        for <bpf@vger.kernel.org>; Wed, 25 Jan 2023 13:39:18 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PKLiAf023826;
-        Wed, 25 Jan 2023 21:39:04 GMT
+        with ESMTP id S236639AbjAYVjp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 25 Jan 2023 16:39:45 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82D112CFE5
+        for <bpf@vger.kernel.org>; Wed, 25 Jan 2023 13:39:37 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PKLexW012833;
+        Wed, 25 Jan 2023 21:39:25 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=99dBY6Aa5hLZjVVESF+rPzBBKcaqqgSzJYOryoCA8Zk=;
- b=mD1TlfOOshBP8AsWB9rCzvG3aVcQ1kV0ptl7fuumQC9nRHoc4YWytstSLmDEdVBxdMWk
- xiw8ws7g8NIWACImso88+2ILckxdQxfnkZo4FFhaY2bXfvLGn1B7R3a60Ly0PPhW5cwW
- ok6zKgA92UDwTD4/Tp9iyHOpw5fOXG8GADcZmxG+kCGv6yXdm31+s9d2LMl0wt0b8iZB
- rGkJcJoaDnr30lNDrKke86AN6ah+hommfbwCJsQSlWKq5U5s3s6rZMFnw6d4l/UwERm8
- Khgj3S1GhRdClLgOxMYVcyG2kFAaVENY+uIQNPQMi3YSOU7Uc44pkUgiVyEBw1qzpFuo AA== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nb7pp8577-1
+ bh=9QO2kgJPDXTBG02++KmJ7OJrpP6gPSNuoZ28LW6gv7U=;
+ b=GoWWPluUlZC/nhoDNtHvQ335uWgaWQLJ2DIQHp31bWEVGKIZJgiATQc7/UOGFbwW4LVa
+ 8LwTRTXCgwmpwXR+tTBDc5Avg+i5NCQrjWEO0KwO5dKmseVULK5oze1HvHyJFc78e9xv
+ J2hP8byPqZ+hWcTq8A3CdaCDbAI7pu8XoL5hk8XvV5t1UReaRthjZDckGnqNcU6sJH9m
+ BdA2Ebos8uE+LKMtUyjFbvyRJHLi66MEL5c2Zwtvcg0MRz/4WEgn7WtgVMjBa8ZFzEQx
+ dPJLYWTx4Y407hQpwDNxKE8t8AUvs6nCeoaH/fazUi8nR5JKLlHg5B0v3HBWwHTnpz3q Sg== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nac21at3e-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 21:39:04 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30PADUDg031519;
-        Wed, 25 Jan 2023 21:39:02 GMT
+        Wed, 25 Jan 2023 21:39:25 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30PLFKfI011514;
+        Wed, 25 Jan 2023 21:39:23 GMT
 Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3n87p6c2hu-1
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3n87p6nm0h-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 21:39:02 +0000
+        Wed, 25 Jan 2023 21:39:23 +0000
 Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30PLcw5Z44695834
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30PLdJUe50463196
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 25 Jan 2023 21:38:58 GMT
+        Wed, 25 Jan 2023 21:39:19 GMT
 Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AB95120040;
-        Wed, 25 Jan 2023 21:38:58 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 91BA62004B;
+        Wed, 25 Jan 2023 21:39:19 +0000 (GMT)
 Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6EA3020043;
-        Wed, 25 Jan 2023 21:38:58 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 5547E20043;
+        Wed, 25 Jan 2023 21:39:19 +0000 (GMT)
 Received: from heavy.boeblingen.de.ibm.com (unknown [9.155.209.149])
         by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 25 Jan 2023 21:38:58 +0000 (GMT)
+        Wed, 25 Jan 2023 21:39:19 +0000 (GMT)
 From:   Ilya Leoshkevich <iii@linux.ibm.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -57,50 +57,54 @@ To:     Alexei Starovoitov <ast@kernel.org>,
 Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next 05/24] selftests/bpf: Fix kfree_skb on s390x
-Date:   Wed, 25 Jan 2023 22:37:58 +0100
-Message-Id: <20230125213817.1424447-6-iii@linux.ibm.com>
+Subject: [PATCH bpf-next 09/24] selftests/bpf: Fix xdp_do_redirect on s390x
+Date:   Wed, 25 Jan 2023 22:38:02 +0100
+Message-Id: <20230125213817.1424447-10-iii@linux.ibm.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230125213817.1424447-1-iii@linux.ibm.com>
 References: <20230125213817.1424447-1-iii@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: b6Op1WcY9a6IlcUvcEYY11mZceRRxTx3
-X-Proofpoint-GUID: b6Op1WcY9a6IlcUvcEYY11mZceRRxTx3
+X-Proofpoint-GUID: Wbalzd2o7cAitUHm7Xsl2hrvYjX3Sb7O
+X-Proofpoint-ORIG-GUID: Wbalzd2o7cAitUHm7Xsl2hrvYjX3Sb7O
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
  definitions=2023-01-25_13,2023-01-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- phishscore=0 adultscore=0 malwarescore=0 mlxlogscore=990 suspectscore=0
- mlxscore=0 priorityscore=1501 lowpriorityscore=0 bulkscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301250193
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
+ malwarescore=0 mlxscore=0 priorityscore=1501 spamscore=0 clxscore=1015
+ impostorscore=0 mlxlogscore=999 lowpriorityscore=0 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301250193
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-h_proto is big-endian; use htons() in order to make comparison work on
-both little- and big-endian machines.
+s390x cache line size is 256 bytes, so skb_shared_info must be aligned
+on a much larger boundary than for x86. This makes the maximum packet
+size smaller.
 
 Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 ---
- tools/testing/selftests/bpf/prog_tests/kfree_skb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/kfree_skb.c b/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
-index 73579370bfbd..c07991544a78 100644
---- a/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
-@@ -36,7 +36,7 @@ static void on_sample(void *ctx, int cpu, void *data, __u32 size)
- 		  "cb32_0 %x != %x\n",
- 		  meta->cb32_0, cb.cb32[0]))
- 		return;
--	if (CHECK(pkt_v6->eth.h_proto != 0xdd86, "check_eth",
-+	if (CHECK(pkt_v6->eth.h_proto != htons(ETH_P_IPV6), "check_eth",
- 		  "h_proto %x\n", pkt_v6->eth.h_proto))
- 		return;
- 	if (CHECK(pkt_v6->iph.nexthdr != 6, "check_ip",
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
+index a50971c6cf4a..ac70e871d62f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
+@@ -65,7 +65,11 @@ static int attach_tc_prog(struct bpf_tc_hook *hook, int fd)
+ /* The maximum permissible size is: PAGE_SIZE - sizeof(struct xdp_page_head) -
+  * sizeof(struct skb_shared_info) - XDP_PACKET_HEADROOM = 3368 bytes
+  */
++#if defined(__s390x__)
++#define MAX_PKT_SIZE 3176
++#else
+ #define MAX_PKT_SIZE 3368
++#endif
+ static void test_max_pkt_size(int fd)
+ {
+ 	char data[MAX_PKT_SIZE + 1] = {};
 -- 
 2.39.1
 
