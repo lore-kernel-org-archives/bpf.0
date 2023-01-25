@@ -2,64 +2,92 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13368C54EED
-	for <bpf@archiver.kernel.org>; Tue, 24 Jan 2023 23:18:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26B9FC38142
+	for <bpf@archiver.kernel.org>; Wed, 25 Jan 2023 00:03:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbjAXXST (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 24 Jan 2023 18:18:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60442 "EHLO
+        id S229740AbjAYADG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 24 Jan 2023 19:03:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbjAXXST (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 24 Jan 2023 18:18:19 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D647303DA
-        for <bpf@vger.kernel.org>; Tue, 24 Jan 2023 15:18:18 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id t16so16294830ybk.2
-        for <bpf@vger.kernel.org>; Tue, 24 Jan 2023 15:18:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TjUuPxJorTm0S1nPSw7d6DNUWqTJizpz/YvXGGYX3vc=;
-        b=KF4tcIK0gbw+vY2lR8xRj+5d+XAJoS0vaSZzxt+m+1JprNDoqVwchWg9BQzpwQvD6Y
-         hL2F1Fe3+sZJiUD1PpfdC8xtZCwmhwEln0QXjALlLyRkDmqEb+7+nzBs8YHQjRyQpR8b
-         NREFUAmVQrZw969/ZAuLt12MctkHKUFnMJUa0O0A1ia/3O3iDvlyy03w4kd5quuoSaV0
-         sb9EsYmvgNzAFU8jLl7Hw9JjbuAUUt3bGLsq86K1sdVMK3bhfCEDk7XFeIXoQpZK4947
-         vwkcFQx+wzMLMtwJQmjMqDILy3BCSs6AGM8KLKDXxeuUEjOfefwWmsSjJ26lILpZ2tnj
-         nDeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TjUuPxJorTm0S1nPSw7d6DNUWqTJizpz/YvXGGYX3vc=;
-        b=Q1wRKfJ9ppYqCPb2cluR8B2FfQ843azQxog/Y7oUSylO8UCu6YvegNN/bXcTmmIPl2
-         BwNXziHR0OqLu7drqT6JF+iohc9ngQ8lm+QD+boJ8kovM/8bZis1/3OJnv1uCVaDdotC
-         K1zTPeuqe3q3QV2fVqTKX5K2fw4pNWN0XwPB0v2voa5MXUHe1ksZIFfYs0L3h5v2tKXi
-         4zqjahM9gDQVytcFlLBBs4pqTH328Px6+3d36jfmO/hqjZ/NxsYzH4j8ODR1+WHkmtky
-         V/5nZGHR6Fvx93DWEm9FwLRYqr3VNVFGTBHUJXgr1xHaZmGt+SMpZgHTMlymqPsqky+8
-         uDEg==
-X-Gm-Message-State: AO0yUKVJKvIFBUMM1dWzpjcR0myjA3W//mF1Nsbz1xUuJK4//DHVeCMM
-        Cc29xS3hYOujAI9bFl1ujKo+B77bcvAm9mYww/xzbA==
-X-Google-Smtp-Source: AK7set/XvOUtuc3O6j/Z9MgQksHGSCV2XTyLVVrv1BztmRO6RuoPUE/8oEMDJ9CGLPktm/vmyCE/abzPN4XgK0R7XNc=
-X-Received: by 2002:a25:320c:0:b0:80b:5988:203e with SMTP id
- y12-20020a25320c000000b0080b5988203emr483335yby.52.1674602297335; Tue, 24 Jan
- 2023 15:18:17 -0800 (PST)
+        with ESMTP id S229546AbjAYADE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 24 Jan 2023 19:03:04 -0500
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812A1A24D
+        for <bpf@vger.kernel.org>; Tue, 24 Jan 2023 16:03:03 -0800 (PST)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 30ONlFI9011678
+        for <bpf@vger.kernel.org>; Tue, 24 Jan 2023 16:03:02 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=s2048-2021-q4;
+ bh=ysSPhKxrjQmu5RhTV0uXRUs1TJyZk7E70FHICmqYEwM=;
+ b=Yb1LPdIRdIfb4ZTX3RcUM7JxM72wyiVC+bp5txAH54P1vOicAXOZeCAXG/yQvgl2B5RC
+ kmpdK7hHqJNI9yb6/FwCNUxatyKLzNNdOuOH2X9d2gE3qyGJDw71Ya20rXNgQr+qiEQp
+ 8rvRHCzn2Qt8ITQcw2/NAt2X1g56OHlBkbejIhmzlPtgzqnwc47oecbuEemByO477FjE
+ TW9ojnGZzX0+h2us7IAWAurr0y2j8tzH7PoVUKn+2ussWhV5Gn7zCy8Z1HB0rqwHwZ+w
+ AZQngDEshMQ38yH40JJj5N1dCEHpjJcBofub5Iz1ngI7bokQgoeQaJ/qijHk+nEbr+Or Hg== 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3namjj20h8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 24 Jan 2023 16:03:02 -0800
+Received: from twshared25383.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Tue, 24 Jan 2023 16:03:01 -0800
+Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
+        id C449B36A0256; Tue, 24 Jan 2023 16:02:57 -0800 (PST)
+From:   Kui-Feng Lee <kuifeng@meta.com>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <martin.lau@linux.dev>,
+        <song@kernel.org>, <kernel-team@meta.com>
+CC:     Kui-Feng Lee <kuifeng@meta.com>
+Subject: [PATCH bpf-next] bpf: Fix the kernel crash caused by bpf_setsockopt().
+Date:   Tue, 24 Jan 2023 16:02:44 -0800
+Message-ID: <20230125000244.1109228-1-kuifeng@meta.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <CAHBbfcUkr6fTm2X9GNsFNqV75fTG=aBQXFx_8Ayk+4hk7heB-g@mail.gmail.com>
- <296fcfac-9acd-9462-871c-b450fd140fa3@gmail.com> <7f2372c1-73c9-cd8a-c0e8-30d3fef8c23e@oracle.com>
-In-Reply-To: <7f2372c1-73c9-cd8a-c0e8-30d3fef8c23e@oracle.com>
-From:   Jason Ling <jasonling@google.com>
-Date:   Tue, 24 Jan 2023 15:17:41 -0800
-Message-ID: <CAHBbfcVwOQQsARw7qTTJ_xjnH_H7fs0a2nP0_rhn3ixtBYZtdA@mail.gmail.com>
-Subject: Re: Is fentry/fexit support possible with an external BTF?
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     Kui-Feng Lee <sinquersw@gmail.com>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: Swnc17yYH0rI0VbPfkZnQYTcFcclMZmm
+X-Proofpoint-GUID: Swnc17yYH0rI0VbPfkZnQYTcFcclMZmm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-24_17,2023-01-24_01,2022-06-22_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
->Would it help in this environment if vmlinux BTF was in a module?
+The kernel crash was caused by a BPF program attached to the
+"lsm_cgroup/socket_sock_rcv_skb" hook, which performed a call to
+`bpf_setsockopt()` in order to set the TCP_NODELAY flag. This flag
+causes the kernel to flush the outgoing queue of a socket, and this
+hook can be triggered during a softirq. The issue was that in certain
+circumstances, when `tcp_write_xmit()` was called to flush the queue,
+it would also allow BH (bottom-half) to run. This could lead to our
+program attempting to flush the same socket recursively, which caused
+a `skbuf` to be unlinked twice.
 
-Yes, that would fix our issues as we place our modules on a separate partition.
+The patch fixes this issue by ensuring that a BPF program attached to
+the "lsm_cgroup/socket_sock_rcv_skb" hook is not allowed to call
+`bpf_setsockopt()`.
+
+Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
+---
+ kernel/bpf/bpf_lsm.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+index a4a41ee3e80b..e14c822f8911 100644
+--- a/kernel/bpf/bpf_lsm.c
++++ b/kernel/bpf/bpf_lsm.c
+@@ -51,7 +51,6 @@ BTF_SET_END(bpf_lsm_current_hooks)
+  */
+ BTF_SET_START(bpf_lsm_locked_sockopt_hooks)
+ #ifdef CONFIG_SECURITY_NETWORK
+-BTF_ID(func, bpf_lsm_socket_sock_rcv_skb)
+ BTF_ID(func, bpf_lsm_sock_graft)
+ BTF_ID(func, bpf_lsm_inet_csk_clone)
+ BTF_ID(func, bpf_lsm_inet_conn_established)
+--=20
+2.30.2
+
