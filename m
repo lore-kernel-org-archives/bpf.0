@@ -2,135 +2,88 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01DE4C54EAA
-	for <bpf@archiver.kernel.org>; Thu, 26 Jan 2023 23:29:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24970C05027
+	for <bpf@archiver.kernel.org>; Thu, 26 Jan 2023 23:36:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231785AbjAZX3r (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 26 Jan 2023 18:29:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43908 "EHLO
+        id S233004AbjAZXgY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 26 Jan 2023 18:36:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbjAZX3q (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 26 Jan 2023 18:29:46 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBEA36474
-        for <bpf@vger.kernel.org>; Thu, 26 Jan 2023 15:29:45 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so4308925wma.1
-        for <bpf@vger.kernel.org>; Thu, 26 Jan 2023 15:29:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=5HrUn5I9qfKZcMopHe92od24/2jGYkZVupsVLPzvQP4=;
-        b=qA8hP4xJYb/OhZahIzuKeZIiLiF0ZiyBq1zEUpkPZtCNENsLOMKZAo8PEcHYNbmeIR
-         6Iz0duuycDaEtDv9kmVZkWd2I6WjmO/8kh/ZkxdZ8W2EMEbSk6shRHw7riAIH6uMZtS+
-         UuMnpOADf7glZuN6WLQJQbx1aKQKCHppvnPaV1JPMM4MDyHC3Iy3c/VrkxZMSLwN/gJm
-         VDG8f5zNcHRSSlfS6G3vE6FeZFNmt4MloJDdHfGBJJQwjmbs8mPuF9bnUlbYQWdE+VEA
-         g5QmcvhQ80PLd3eRoQKslTcJz5HqhYjPBH3M8hab3gnDSVDWBcDka77E41jziWgYY8yg
-         XgJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5HrUn5I9qfKZcMopHe92od24/2jGYkZVupsVLPzvQP4=;
-        b=GRO0OX3mFsS7l+95HVDCWF0OCLMg6uvBZNYF3Biia363rK9wNgbQpThE6KK+ICbZN4
-         abQSpPPe1/Rh8XVGBxl94FlLRMR1HrONLnIK7eOItAD4n5SISKoG3sG8LcGhSUli9XlP
-         cDv5a5FDJ384AumrsYHar53W0k1Q3YrdwWX/H5jOEuYuwjLNLP4l0YH2RdF93ZN4PkSM
-         hK4Mz1nlSnFYriBphqRZKmaFkV4GCPOxXQoEq4WnfqDQWqVpQ6OUQf7Bn3r07B17PDRB
-         GKcpFTPDPE45o74IVPdC1ttNMGiMDWRiObLILAdJ7xaykjb2KprvCfiDUbpl4BJfoVYg
-         k+LQ==
-X-Gm-Message-State: AFqh2kqKWGF9E9XUc3DD+1Z8Qm6e3gvaZ0OmVtctCQzW+QvoNpDMtfM1
-        jkLSfEv8o05w4yDtlHrl9Iw=
-X-Google-Smtp-Source: AMrXdXvx7rlYM6U8PpkQgC2CDkPlC7dPZplT020aKfJcIRzjOR3vUa0I3wNso6h40foNb7NjK8qo9g==
-X-Received: by 2002:a7b:c5cb:0:b0:3da:fac4:7da3 with SMTP id n11-20020a7bc5cb000000b003dafac47da3mr36704765wmk.36.1674775783865;
-        Thu, 26 Jan 2023 15:29:43 -0800 (PST)
-Received: from [192.168.1.113] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id v6-20020a05600c444600b003db09692364sm6778139wmn.11.2023.01.26.15.29.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 15:29:43 -0800 (PST)
-Message-ID: <aff79e80ef4ae0751f82de42b761b6f27355db1a.camel@gmail.com>
-Subject: Re: [RFC bpf-next 3/5] selftests/bpf: generate boilerplate code for
- test_loader-based tests
-From:   Eduard Zingerman <eddyz87@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net, kernel-team@fb.com, yhs@fb.com
-Date:   Fri, 27 Jan 2023 01:29:42 +0200
-In-Reply-To: <CAEf4BzaKe3HMmYKvYKarcb7SKvd2Uurd22U5tLjE0RyNMgpSAg@mail.gmail.com>
-References: <20230123145148.2791939-1-eddyz87@gmail.com>
-         <20230123145148.2791939-4-eddyz87@gmail.com>
-         <CAEf4BzaKe3HMmYKvYKarcb7SKvd2Uurd22U5tLjE0RyNMgpSAg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        with ESMTP id S232256AbjAZXgY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 26 Jan 2023 18:36:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787446E8D;
+        Thu, 26 Jan 2023 15:36:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 041E96195A;
+        Thu, 26 Jan 2023 23:36:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16495C433D2;
+        Thu, 26 Jan 2023 23:36:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674776182;
+        bh=cPm84o+nqzhJbSBqPDEbZFcbpmAeNiCQxfVc3mt7rG4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QrjlmhB6v5onaZjVqbMBM45Us0L3cXsqVmsgBoIDhc6a9HlZHJgLJWH48U/hHSzGH
+         HgggOzLMH60CHzHFmXpBfTt51FlHEk+Evohw34AKXIg3tgYo9QiEaVA21fbFHzkrkk
+         +JMgeXsNneLEhE12xmMhP8KijseB5Hwvw0hrT3WttIXzTXwRNwq2mfUvdRGu6aiOGV
+         DYW0N9okYjznn6/QrSZRNYjvGZ1YjwcaqZ2JwzLoc3sbAb/3457LJvcB4Gsy8BDTCU
+         Yi3DlRGSv3XTk0urUoNanI4msEkGMhQQ0zFQG8esAhqnFYNWxvyTq8GmwxqBnEjvFa
+         KHuiixcUH3xtA==
+Date:   Thu, 26 Jan 2023 15:36:21 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Andrei Gherzan <andrei.gherzan@canonical.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Hangbin Liu <liuhangbin@gmail.com>
+Subject: Re: [PATCH v2 1/2] selftests: net: Fix missing nat6to4.o when
+ running udpgro_frglist.sh
+Message-ID: <20230126153621.7503a73e@kernel.org>
+In-Reply-To: <Y9JPiA11CHNOMibr@qwirkle>
+References: <20230125211350.113855-1-andrei.gherzan@canonical.com>
+        <20230125230843.6ea157b1@kernel.org>
+        <Y9JPiA11CHNOMibr@qwirkle>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 2023-01-25 at 17:43 -0800, Andrii Nakryiko wrote:
-> On Mon, Jan 23, 2023 at 6:52 AM Eduard Zingerman <eddyz87@gmail.com> wrot=
-e:
-> >=20
-> > Automatically generate boilerplate code necessary to run tests that
-> > use test_loader.c.
-> >=20
-> > Adds a target 'prog_tests/test_loader_auto_wrappers.c' as part of
-> > rulesets for 'test_progs' and 'test_progs-no_alu32'. The content of
-> > this C file is generated by make and has the following structure:
-> >=20
-> >   #include <test_progs.h>
-> >=20
-> >   #include "some_test_1.skel.h"
-> >   #include "some_test_2.skel.h"
-> >   ...
-> >=20
-> >   void test_some_test_1(void) { RUN_TESTS(some_test_1); }
-> >   void test_some_test_2(void) { RUN_TESTS(some_test_2); }
-> >   ...
-> >=20
-> > Here RUN_TESTS is a macro defined in test_progs.h, it expands to a
-> > code that uses test_loader.c:test_loader__run_subtests() function to
-> > load tests specified by appropriate skel.h.
-> >=20
-> > In order to get the list of tests included in
-> > 'test_loader_auto_wrappers.c' the generation script looks for
-> > 'progs/*.c' files that contain a special comment:
-> >=20
-> >   /* Use test_loader marker */
-> >=20
-> > Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
-> > ---
->=20
-> It feels like this is a bit of an overkill, tbh. There are
->=20
-> $ ls verifier/*.c | wc -l
-> 94
->=20
-> files. We can move each migrated set of tests from verifier/xxx.c to
-> progs/verifier_xxx.c. And then just have just manually maintained
-> prog_tests/verifier.c file where for each converted test we have one
-> #include and one void test_some_test_1(void) { RUN_TESTS(some_test_1);
-> }.
->=20
-> It sometimes would useful to add some extra debugging printfs in such
-> a file, so having it auto generated would be actually an
-> inconvenience. And that on top of further Makefile complication.
->=20
-> For initial conversion we can auto-generate this file, of course. And
-> then for each migrated file adding 2 lines manually doesn't seem like
-> a big deal?
+On Thu, 26 Jan 2023 10:01:44 +0000 Andrei Gherzan wrote:
+> On 23/01/25 11:08PM, Jakub Kicinski wrote:
+> > On Wed, 25 Jan 2023 21:13:49 +0000 Andrei Gherzan wrote:  
+> > > The udpgro_frglist.sh uses nat6to4.o which is tested for existence in
+> > > bpf/nat6to4.o (relative to the script). This is where the object is
+> > > compiled. Even so, the script attempts to use it as part of tc with a
+> > > different path (../bpf/nat6to4.o). As a consequence, this fails the script:  
+> > 
+> > Is this a recent regression? Can you add a Fixes tag?  
+> 
+> This issue seems to be included from the beginning (edae34a3ed92). I can't say
+> why this was not seen before upstream but on our side, this test was disabled
+> internally due to lack of CC support in BPF programs. This was fixed in the
+> meanwhile in 837a3d66d698 (selftests: net: Add cross-compilation support for
+> BPF programs) and we found this issue while trying to reenable the test.
+> 
+> So if you think that is reasonable, I could add a Fixes tag for the initial 
+> script commit edae34a3ed92 (selftests net: add UDP GRO fraglist + bpf
+> self-tests) and push a v3.
 
-Ok, I'll remove the makefile changes.
+We have queued commit 3c107f36db06 ("selftests/net: mv bpf/nat6to4.c 
+to net folder") in net-next, I think that should fix it, too?
 
->=20
->=20
->=20
-> >  tools/testing/selftests/bpf/Makefile          | 34 +++++++++++++++++++
-> >  .../selftests/bpf/prog_tests/.gitignore       |  1 +
-> >  2 files changed, 35 insertions(+)
-> >=20
->=20
-> [...]
+> > What tree did you base this patch on? Doesn't seem to apply  
+> 
+> The patches were done on top of
+> git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git, the master
+> branch - 948ef7bb70c4 (Merge tag 'modules-6.2-rc6' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux). There is another
+> merge that happened in the meanwhile but the rebase works without issues. I can
+> send a rebased v3 if needed.
 
+Could you try linux-next or net-next ?
