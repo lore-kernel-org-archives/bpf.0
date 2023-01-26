@@ -2,172 +2,97 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 700D1C05027
-	for <bpf@archiver.kernel.org>; Thu, 26 Jan 2023 19:07:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A0A3C05027
+	for <bpf@archiver.kernel.org>; Thu, 26 Jan 2023 19:11:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232089AbjAZTHE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 26 Jan 2023 14:07:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50000 "EHLO
+        id S232465AbjAZTLX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 26 Jan 2023 14:11:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232067AbjAZTHD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 26 Jan 2023 14:07:03 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4B268127
-        for <bpf@vger.kernel.org>; Thu, 26 Jan 2023 11:06:58 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id y11so2780642edd.6
-        for <bpf@vger.kernel.org>; Thu, 26 Jan 2023 11:06:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=iZElPXdMYwPZ4E7gzFtx/or71zbeqUWt2WDfoqyW/JE=;
-        b=Ka0H3/9+y/0781CTVSDEZd3g1JacTR4Vc6CYqe2z81ARq0cusz1yuwa8f/e/eJXtU+
-         UUSmgb1gz4e7CV2x/nteBZwsQnWy7Dd+YtwoQyIHfSdfFK10A9Ry9BC2YcZd07bqJRb+
-         xd45/8OKRahJJQNCBc+m3gAiDik4oncgP2KIziB3aTMQJPlUskIVTLRWqwRuOOeq0L/v
-         zJ3LRek/lYVyyV6IGKxKjVHYm24rI4qBxGIhdneZPJzyHJW0Srr5r7Zf2OMlbILscy/z
-         bDtQZSg/9Q/dlnSPM6I/1I9Dvj1w/ojMPPvomZq7FLeAxeBigYiG8IJuT6eFZgEazKCc
-         8x3g==
+        with ESMTP id S232456AbjAZTLW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 26 Jan 2023 14:11:22 -0500
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63664530DA
+        for <bpf@vger.kernel.org>; Thu, 26 Jan 2023 11:11:21 -0800 (PST)
+Received: by mail-qt1-f172.google.com with SMTP id d3so2125444qte.8
+        for <bpf@vger.kernel.org>; Thu, 26 Jan 2023 11:11:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=user-agent:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=iZElPXdMYwPZ4E7gzFtx/or71zbeqUWt2WDfoqyW/JE=;
-        b=BSF2c0UbBCbYsmL1eagwlfs8ue8aEZ5/aSPhQ0grqE9jIE4chMqSu9FvRWGenmE9bG
-         MTceGKDYMHmUqzywTt5UJLg3CNjKOXOLhNv8+/OxZn50elOfr8SE2+zQ3psAMBVQefaP
-         U9OVyTIyJB//PkicKYjAHgj+gTs5HR+sdNCHuFZVGdtlt/hFQM/u62W5tK6klpb2Qtk/
-         oa5pi9X+GFnYFM9FH07DpeJGzDa1EUaLg1QMn6OEsv/sX3osfSxH/mfoZrKLfn63RJZy
-         sLoSuCFujFUGVt9+9SN9UlIJc7tzYnLu3NXC+z61u2cYaL43CWamw1GOSML4vjh6VDGq
-         EgtQ==
-X-Gm-Message-State: AO0yUKW4Hk8PH2hp4YXzmJpzPMwTTaP7c7+3wjaKhPZdprAbPo+ttQD9
-        F6mILmTyC+u63cvcLGVQn9Y5kQ+HLVB3CYgW3Gfnfg8q
-X-Google-Smtp-Source: AK7set+VHYZLeLrGDaQKGmWAlLg3S5Pb7hyPf7QrTFg+bU6WMKhfTPl3nS9jn/BVz1Cf63IDmCMc/LV4YGl0yWHMWv4=
-X-Received: by 2002:a05:6402:510d:b0:4a0:cfed:1a47 with SMTP id
- m13-20020a056402510d00b004a0cfed1a47mr1187466edd.18.1674760016892; Thu, 26
- Jan 2023 11:06:56 -0800 (PST)
+        bh=YPC7prdPv0OHN7WMGWduIDlO0POg0o2A2WbqJmpehA8=;
+        b=PwQyAN5HoEmY4yK9YC7IBVSy4/gGWPAJ/878JUdQ/aICHDiB3obt3/H1g7oKMpzg+c
+         ptOtbjF25ZTroE/2+SlIfB5dRW5f7H/FHtUOnA2/q9JGIPeLyvle5Sq3u3c+J7KtN+FS
+         YkhiU1S4qpiU3O8LSnQ3HTX4y/GeIRw29+HZrPmtSmyHlx4+8Q/Nd7yxXmpD4E5SpdT2
+         DAb3lRhRImYw9y/bZTUGon90bhe3mcEqEa16PBl90gyk+W/rbbm/2QgBChish+8+Trx7
+         7R4d4vFxkcTY8F5j6YVo/vqhfUaAnj8NcOTAiLxMKfQ20GwdowG1tTpF2TjJMJc/Fyvg
+         H7jQ==
+X-Gm-Message-State: AO0yUKWScIcfNFhAIJRb9N2bJ89uGviI4Wx6pjdoXVNNl3WYavqr3A6C
+        6VOt+hKKP9BQtefugWoVosNBrXh+JLSuwA==
+X-Google-Smtp-Source: AK7set+isViHh5qAZns7K3NPtG/U2ufqQGwkH0uWIkhEKR4rgTkTBpbvXLJoy52ernhcZR/6OWG9NQ==
+X-Received: by 2002:ac8:5ad0:0:b0:3b6:8ad1:3be9 with SMTP id d16-20020ac85ad0000000b003b68ad13be9mr13526388qtd.32.1674760280255;
+        Thu, 26 Jan 2023 11:11:20 -0800 (PST)
+Received: from maniforge ([2620:10d:c091:480::1:78c2])
+        by smtp.gmail.com with ESMTPSA id b19-20020a05620a119300b00706b42c0842sm1401598qkk.49.2023.01.26.11.11.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 11:11:19 -0800 (PST)
+Date:   Thu, 26 Jan 2023 13:11:17 -0600
+From:   David Vernet <void@manifault.com>
+To:     lsf-pc@lists.linux-foundation.org
+Cc:     bpf@vger.kernel.org
+Subject: Mapping local-storage maps into user space
+Message-ID: <Y9LQVU2uz9SzYARP@maniforge>
 MIME-Version: 1.0
-References: <20230125213817.1424447-1-iii@linux.ibm.com> <20230125213817.1424447-23-iii@linux.ibm.com>
- <CAEf4BzbaNhFw77bECCxf7cKenBTTe6YvMHbm+XiMQbqgukyW8Q@mail.gmail.com> <56b6677c73903638b88f331d6e074c595bd489b9.camel@linux.ibm.com>
-In-Reply-To: <56b6677c73903638b88f331d6e074c595bd489b9.camel@linux.ibm.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 26 Jan 2023 11:06:45 -0800
-Message-ID: <CAEf4BzZO637m4vXNJ3MNb9R+diuJyx4Ck-zbYof5YHPOrApDYA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 22/24] s390/bpf: Implement arch_prepare_bpf_trampoline()
-To:     Ilya Leoshkevich <iii@linux.ibm.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/2.2.9 (2022-11-12)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 6:30 AM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
->
-> On Wed, 2023-01-25 at 17:15 -0800, Andrii Nakryiko wrote:
-> > On Wed, Jan 25, 2023 at 1:39 PM Ilya Leoshkevich <iii@linux.ibm.com>
-> > wrote:
-> > >
-> > > arch_prepare_bpf_trampoline() is used for direct attachment of eBPF
-> > > programs to various places, bypassing kprobes. It's responsible for
-> > > calling a number of eBPF programs before, instead and/or after
-> > > whatever they are attached to.
-> > >
-> > > Add a s390x implementation, paying attention to the following:
-> > >
-> > > - Reuse the existing JIT infrastructure, where possible.
-> > > - Like the existing JIT, prefer making multiple passes instead of
-> > >   backpatching. Currently 2 passes is enough. If literal pool is
-> > >   introduced, this needs to be raised to 3. However, at the moment
-> > >   adding literal pool only makes the code larger. If branch
-> > >   shortening is introduced, the number of passes needs to be
-> > >   increased even further.
-> > > - Support both regular and ftrace calling conventions, depending on
-> > >   the trampoline flags.
-> > > - Use expolines for indirect calls.
-> > > - Handle the mismatch between the eBPF and the s390x ABIs.
-> > > - Sign-extend fmod_ret return values.
-> > >
-> > > invoke_bpf_prog() produces about 120 bytes; it might be possible to
-> > > slightly optimize this, but reaching 50 bytes, like on x86_64,
-> > > looks
-> > > unrealistic: just loading cookie, __bpf_prog_enter, bpf_func,
-> > > insnsi
-> > > and __bpf_prog_exit as literals already takes at least 5 * 12 = 60
-> > > bytes, and we can't use relative addressing for most of them.
-> > > Therefore, lower BPF_MAX_TRAMP_LINKS on s390x.
-> > >
-> > > Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
-> > > ---
-> > >  arch/s390/net/bpf_jit_comp.c | 535
-> > > +++++++++++++++++++++++++++++++++--
-> > >  include/linux/bpf.h          |   4 +
-> > >  2 files changed, 517 insertions(+), 22 deletions(-)
-> > >
-> >
-> > [...]
-> >
-> > > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> > > index cf89504c8dda..52ff43bbf996 100644
-> > > --- a/include/linux/bpf.h
-> > > +++ b/include/linux/bpf.h
-> > > @@ -943,7 +943,11 @@ struct btf_func_model {
-> > >  /* Each call __bpf_prog_enter + call bpf_func + call
-> > > __bpf_prog_exit is ~50
-> > >   * bytes on x86.
-> > >   */
-> > > +#if defined(__s390x__)
-> > > +#define BPF_MAX_TRAMP_LINKS 27
-> > > +#else
-> > >  #define BPF_MAX_TRAMP_LINKS 38
-> > > +#endif
-> >
-> > if we turn this into enum definition, then on selftests side we can
-> > just discover this from vmlinux BTF, instead of hard-coding
-> > arch-specific constants. Thoughts?
->
-> This seems to work. I can replace 3/24 and 4/24 with that in v2.
-> Some random notes:
->
-> - It doesn't seem to be possible to #include "vlinux.h" into tests,
->   so one has to go through the btf__load_vmlinux_btf() dance and
->   allocate the fd arrays dynamically.
+Hi everyone,
 
-yes, you can't include vmlinux.h into user-space code, of course. And
-yes it's true about needing to use btf__load_vmlinux_btf().
+Another proposal from me for LSF/MM/BPF, and the last one for the time
+being. I'd like to discuss enabling local-storage maps (e.g.
+BPF_MAP_TYPE_TASK_STORAGE and BPF_MAP_TYPE_CGRP_STORAGE) to be r/o
+mapped directly into user space. This would allow for quick lookups of
+per-object state from user space, similar to how we allow it for
+BPF_MAP_TYPE_ARRAY, without having to do something like either of the
+following:
 
-But I didn't get what you are saying about fd arrays, tbh. Can you
-please elaborate?
+- Allocating a statically sized BPF_MAP_TYPE_ARRAY which is >= the # of
+  possible local-storage elements, which is likely wasteful in terms of
+  memory, and which isn't easy to iterate over.
 
->
-> - One has to give this enum an otherwise unnecessary name, so that
->   it's easy to find. This doesn't seem like a big deal though:
->
-> enum bpf_max_tramp_links {
+- Use something like https://docs.kernel.org/bpf/bpf_iterators.html to
+  iterate over tasks or cgroups, and collect information for each which
+  is then dumped to user space. This would probably work, but it's not
+  terribly performant in that it requires copying memory, trapping into
+  the kernel, and full iteration even when it's only necessary to look
+  up e.g. a single element.
 
-not really, you can keep it anonymous enum. We do that in
-include/uapi/linux/bpf.h for a lot of constants
+Designing and implementing this would be pretty non-trivial. We'd have
+to probably do a few things:
 
-> #if defined(__s390x__)
->         BPF_MAX_TRAMP_LINKS = 27,
-> #else
->         BPF_MAX_TRAMP_LINKS = 38,
-> #endif
-> };
->
-> - An alternative might be to expose this via /proc, since the users
->   might be interested in it too.
+1. Write an allocator that dynamically allocates statically sized
+   local-storage entries for local-storage maps, and populates them into
+   pages which are mapped into user space.
 
-I'd say let's not, there is no need, having it in BTF is more than
-enough for testing purposes
+2. Come up with some idr-like mechanism for mapping a local-storage
+   object to an index into the mapping. For example, mapping a task with
+   global pid 12345 to BPF_MAP_TYPE_TASK_STORAGE index 5, and providing
+   ergonomic and safe ways to update these entries in the kernel and
+   communicate them to user space.
 
->
-> > >
-> > >  struct bpf_tramp_links {
-> > >         struct bpf_tramp_link *links[BPF_MAX_TRAMP_LINKS];
-> > > --
-> > > 2.39.1
-> > >
->
+3. Related to point 1 above, come up with some way to dynamically extend
+   the user space mapping as more local-storage elements are added. We
+   could potentially reserve a statically sized VA range and map all
+   unused VA pages to the zero page, or instead possibly just leave them
+   unmapped until they're actually needed.
+
+There are a lot of open questions, but I think it could be very useful
+if we can make it work. Let me know what you all think.
+
+Thanks,
+David
