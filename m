@@ -2,54 +2,54 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B93DC61DA7
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29153C61DB3
 	for <bpf@archiver.kernel.org>; Sat, 28 Jan 2023 00:07:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232440AbjA1AH4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 27 Jan 2023 19:07:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56444 "EHLO
+        id S231700AbjA1AH5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 27 Jan 2023 19:07:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232458AbjA1AHp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 27 Jan 2023 19:07:45 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D3C8CC44
-        for <bpf@vger.kernel.org>; Fri, 27 Jan 2023 16:07:35 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30RNBpf9024195;
-        Sat, 28 Jan 2023 00:07:23 GMT
+        with ESMTP id S232463AbjA1AHr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 27 Jan 2023 19:07:47 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACDF87364
+        for <bpf@vger.kernel.org>; Fri, 27 Jan 2023 16:07:38 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30RNka24030622;
+        Sat, 28 Jan 2023 00:07:26 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=zLhExAGTjmYgLnrClILYWrfaw6ENY+V4HZ5U4Ls1yCU=;
- b=JvDmW4mptXew/iYH61GvR45N4tEJXQ1gc3b9HxH1ufSwekr8AVh0nmrFqLYi5c4svlvF
- HWYETayv8JBylvSDrOxZ64WlYmb+oGuaHcJZ9QiVT/u8GAgwsTTdWhsRznUIdtRCDxZQ
- x4RsWvwcg8zN1+lxiBPPm/FcifSNJVFMP/KrSSts/BJsKkCMrahbPNWlCHCpqzerduQA
- ivMEVA0Hk1tu88TBQ1O12f2T3acTa30jxg7am6quqHWIg9H2lj5BQjt2MHayR+yF9psJ
- 6A7iRtWj12KQXxb4dFFossPstGwQdkbvK39TS6KAUUGq1wRpgJ5mPvtRqXWj8J/FwJCk 8A== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ncr2nrxmt-1
+ bh=wte91ah/ySaLEvyiNZJ1+ouxlfe9epTohVsN+gvJIBQ=;
+ b=p0CN0P+IJL/8H2Lrz3X8P5n5zoRDC+YAc8CZtAmTRIrMcWx3lSh/ghlJYcdTRbTWXhba
+ hsnW6+VB5RslesQRI7ck6TM1qZpvEG8Y/i8tVuXpRDMdBFnmEnHLxcHlB943mpsL9iX6
+ M0FirYGyreWEE99g4gNAIv/Q+EYmHEwnskXH7pSgG4kZyXz8sFyGXmwMoD4Dg2VOaIfR
+ rkQ0DUMMMv8gW3NEmfXud3hEZrksDcTcrwGIOtKrIFMf75ih4ZPEssnqdSnoWq+N0WUf
+ EKoo1M4sGwTUNdB4Pl6eMnsyVUQ+DT7rsoWIEypAq17jN/6LCm0MCYAB8M57FdKc49HU eA== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ncm3teccq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 28 Jan 2023 00:07:25 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30RLiA2u010363;
+        Sat, 28 Jan 2023 00:07:23 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3n87afdvaj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Sat, 28 Jan 2023 00:07:23 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30RLM1Pt010790;
-        Sat, 28 Jan 2023 00:07:20 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3n87p6r4e4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 28 Jan 2023 00:07:20 +0000
 Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30S07HWY21299800
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30S07KJn52888016
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 28 Jan 2023 00:07:17 GMT
+        Sat, 28 Jan 2023 00:07:20 GMT
 Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5FA262004B;
-        Sat, 28 Jan 2023 00:07:17 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 1BCE92004B;
+        Sat, 28 Jan 2023 00:07:20 +0000 (GMT)
 Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D276720040;
-        Sat, 28 Jan 2023 00:07:16 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 999DB20040;
+        Sat, 28 Jan 2023 00:07:19 +0000 (GMT)
 Received: from heavy.ibmuc.com (unknown [9.179.11.57])
         by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Sat, 28 Jan 2023 00:07:16 +0000 (GMT)
+        Sat, 28 Jan 2023 00:07:19 +0000 (GMT)
 From:   Ilya Leoshkevich <iii@linux.ibm.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -58,51 +58,68 @@ Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Alexander Gordeev <agordeev@linux.ibm.com>,
         Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next v2 19/31] selftests/bpf: Fix xdp_synproxy/tc on s390x
-Date:   Sat, 28 Jan 2023 01:06:38 +0100
-Message-Id: <20230128000650.1516334-20-iii@linux.ibm.com>
+Subject: [PATCH bpf-next v2 22/31] libbpf: Fix unbounded memory access in bpf_usdt_arg()
+Date:   Sat, 28 Jan 2023 01:06:41 +0100
+Message-Id: <20230128000650.1516334-23-iii@linux.ibm.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230128000650.1516334-1-iii@linux.ibm.com>
 References: <20230128000650.1516334-1-iii@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 59FNtmk_CsgJ7ro_KnE72_4_S5oqIfee
-X-Proofpoint-ORIG-GUID: 59FNtmk_CsgJ7ro_KnE72_4_S5oqIfee
+X-Proofpoint-GUID: 9oHgrp4819khjZ4upZvYRJlqUwF0wnZv
+X-Proofpoint-ORIG-GUID: 9oHgrp4819khjZ4upZvYRJlqUwF0wnZv
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-27_15,2023-01-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
- malwarescore=0 suspectscore=0 priorityscore=1501 phishscore=0
- impostorscore=0 bulkscore=0 adultscore=0 clxscore=1015 lowpriorityscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301270220
+ definitions=2023-01-27_14,2023-01-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ mlxscore=0 clxscore=1015 priorityscore=1501 lowpriorityscore=0
+ phishscore=0 impostorscore=0 mlxlogscore=872 bulkscore=0 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301270216
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use the correct datatype for the values map values; currently the test
-works by accident, since on little-endian machines it is sometimes
-acceptable to access u64 as u32.
+Loading programs that use bpf_usdt_arg() on s390x fails with:
+
+    ; if (arg_num >= BPF_USDT_MAX_ARG_CNT || arg_num >= spec->arg_cnt)
+    128: (79) r1 = *(u64 *)(r10 -24)      ; frame1: R1_w=scalar(umax=4294967295,var_off=(0x0; 0xffffffff)) R10=fp0
+    129: (25) if r1 > 0xb goto pc+83      ; frame1: R1_w=scalar(umax=11,var_off=(0x0; 0xf))
+    ...
+    ; arg_spec = &spec->args[arg_num];
+    135: (79) r1 = *(u64 *)(r10 -24)      ; frame1: R1_w=scalar(umax=4294967295,var_off=(0x0; 0xffffffff)) R10=fp0
+    ...
+    ; switch (arg_spec->arg_type) {
+    139: (61) r1 = *(u32 *)(r2 +8)
+    R2 unbounded memory access, make sure to bounds check any such access
+
+The reason is that, even though the C code enforces that
+arg_num < BPF_USDT_MAX_ARG_CNT, the verifier cannot propagate this
+constraint to the arg_spec assignment yet. Help it by forcing r1 back
+to stack after comparison.
 
 Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 ---
- tools/testing/selftests/bpf/progs/xdp_synproxy_kern.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/lib/bpf/usdt.bpf.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/xdp_synproxy_kern.c b/tools/testing/selftests/bpf/progs/xdp_synproxy_kern.c
-index 736686e903f6..07d786329105 100644
---- a/tools/testing/selftests/bpf/progs/xdp_synproxy_kern.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_synproxy_kern.c
-@@ -310,7 +310,7 @@ static __always_inline void values_get_tcpipopts(__u16 *mss, __u8 *wscale,
- static __always_inline void values_inc_synacks(void)
- {
- 	__u32 key = 1;
--	__u32 *value;
-+	__u64 *value;
+diff --git a/tools/lib/bpf/usdt.bpf.h b/tools/lib/bpf/usdt.bpf.h
+index fdfd235e52c4..0bd4c135acc2 100644
+--- a/tools/lib/bpf/usdt.bpf.h
++++ b/tools/lib/bpf/usdt.bpf.h
+@@ -130,7 +130,10 @@ int bpf_usdt_arg(struct pt_regs *ctx, __u64 arg_num, long *res)
+ 	if (!spec)
+ 		return -ESRCH;
  
- 	value = bpf_map_lookup_elem(&values, &key);
- 	if (value)
+-	if (arg_num >= BPF_USDT_MAX_ARG_CNT || arg_num >= spec->arg_cnt)
++	if (arg_num >= BPF_USDT_MAX_ARG_CNT)
++		return -ENOENT;
++	barrier_var(arg_num);
++	if (arg_num >= spec->arg_cnt)
+ 		return -ENOENT;
+ 
+ 	arg_spec = &spec->args[arg_num];
 -- 
 2.39.1
 
