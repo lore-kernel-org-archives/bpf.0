@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2026BC54EAA
-	for <bpf@archiver.kernel.org>; Sat, 28 Jan 2023 00:17:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCFDAC636BD
+	for <bpf@archiver.kernel.org>; Sat, 28 Jan 2023 00:17:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbjA1AQ7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 27 Jan 2023 19:16:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35404 "EHLO
+        id S230230AbjA1ARA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 27 Jan 2023 19:17:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbjA1AQ6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 27 Jan 2023 19:16:58 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2507B7A4;
-        Fri, 27 Jan 2023 16:16:55 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id m11so6171348pji.0;
-        Fri, 27 Jan 2023 16:16:55 -0800 (PST)
+        with ESMTP id S229797AbjA1AQ7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 27 Jan 2023 19:16:59 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F977B40C;
+        Fri, 27 Jan 2023 16:16:58 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id j5so6123002pjn.5;
+        Fri, 27 Jan 2023 16:16:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NRDQhCBgwfQ8yY1Xopw2z/Bq7Rk/zYbqVVbUajPCRmc=;
-        b=HEyk5w2j6vHmfk6U3e54rbxPo0XdVCGax0gdOXrMmcBFEr7jOeghdI4JZjsBD/fn/9
-         0vLWDAJL8v2JVkkB/4Gwdh2xQFq72LArOXYolPZY4vATmx+unpg26DDP0pI2UZKvq4pZ
-         KcsQehsz96z9mgjyGi9eUPy7GjNu/l+5JEx236MuzTUw4CRLKRx2HacMvBN5wF3X+nTo
-         KIdwQz87pEzvgZmWNpHwzUYcGK4h2kjUPtIlgBHMLMjJ17veWIk7BM15Bfq/v2ARrtyt
-         XARx7wl/l80SY1t6sXp95juEPQIMr+n+EA7WWUl4pK6Q2G9kCZeUwXfW7AOzA83JU++l
-         1+Mg==
+        bh=Rv/Uvu6EIXemVLIIVSqALTZG9BUUBydUSWzFLjEsx9Q=;
+        b=LKnAW9kbk6fSzGjKiTmZQwsTmnSrS+oZ9BtMVJkwkeOpm9dgSgoKqp8mDg7qin9Owz
+         iwNZ/3tU2uAJfzTsBa9p97wcSufjZ6NeizVN/nRD4LsRCyX6592NaWhKMUHZzFQ2g8AU
+         NMEEf08EBE3300salRJMVuYj73w27QqZySqFazJKi3/4ekFmx8hUv0hgRYOQ8HXi9DvI
+         w2aWyGkWqqv8Bazn89LJQnZsv8Rv2cl2lW1FMmL6OWO1SS/h9Jmr9I4BXIOoSU+47MY4
+         g7gJb9UQIMRf4syiLmlC8Xeg+H8YTyf4w6XM9ruwmOs+CQ4Am/+JuRpygMaQQhhAHIt3
+         GsTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=NRDQhCBgwfQ8yY1Xopw2z/Bq7Rk/zYbqVVbUajPCRmc=;
-        b=p72bLxDtuqnkn+zAMEfDuof39IikDSmHeK0vmWaD1dESOwF5Jq8MfwuhsGyDIO2nKk
-         l9PG/iCw11WfQ15QeAVA2/anCz/er+XyL3kVq85QB1h/rpkhK5BvMAWHUNMtgvCYyedH
-         XXhOOKTkplz1i3QmhgZRQm1VUtc67XaDDSncKGTIuVX9IIjECUz1MkxLQYVtIMYKxU7l
-         t50sIuT/gpsgO2YNWU3ezWq2cVuaNxkNNBMjMU830H1ohgvEOGaL52koVQ54jDmA0Gj5
-         hoKcPi/vF8Acynt9UBEtOnfa6iprwCQoBUZcYyMFShVe8aPntcjN5mI/fhdXe333/e/d
-         PV8w==
-X-Gm-Message-State: AFqh2kqyloJoWCxKZhWV1YXAgRwhpzRi+/LphvmUqP+VYcINpl17/9fl
-        RGyQAC/mZz3q+6hKd7xMh0c=
-X-Google-Smtp-Source: AMrXdXsIKi0/c3/RChakxDcLuJFeuklhKik4NKkq0YUhv58lgWGV9adQo0XALxAkUUa3eQrkcQDQGQ==
-X-Received: by 2002:a17:90b:3b45:b0:22b:b6c5:fa7e with SMTP id ot5-20020a17090b3b4500b0022bb6c5fa7emr29048413pjb.35.1674865014368;
-        Fri, 27 Jan 2023 16:16:54 -0800 (PST)
+        bh=Rv/Uvu6EIXemVLIIVSqALTZG9BUUBydUSWzFLjEsx9Q=;
+        b=ZFJRna3KHbswrl1Yw32voTkCtBT6/5jvv8U5ShwnQYGohwJtN03eNhGz0k7W83wxkh
+         ilnLfOiSk+sY6vrjenDUnx2ZTWXaGjMwE69LV29cP2O1D/dIxkaZE2L4mEi6BB6iOeJj
+         eGw/drcISIXbCzG+oHqdgp9aVdTO6kWiM1rUgD/g++L99mIXI6DgSyrgVvViMciuesQY
+         1zVaxSFucYlaD5uzlqiKaAiZ1KZ5cqi4cam+1/SUxgemh4iSr2hjMOan95wMHjRWbU/5
+         8KB02DAqqLBVPmwgwl2zAbUUP6MFNi+VsHtabQORT0xKuAPV1urak5utiOa6ClZ2YGLy
+         zcrQ==
+X-Gm-Message-State: AFqh2kopRg419zEkmrl3/TCz3NC0F78hueN0JP79+W7642Iqaf1+5iij
+        G+ITm4k7iAKszkXo90YFCnU=
+X-Google-Smtp-Source: AMrXdXuDbEZYk/r9/lUgsj4m90FAYld3xbjORnaamrPrJgOOCV49qdsiTYysJnM5Msc/44bwjcJh2A==
+X-Received: by 2002:a17:902:9b97:b0:194:a1f6:65ae with SMTP id y23-20020a1709029b9700b00194a1f665aemr37365357plp.12.1674865017926;
+        Fri, 27 Jan 2023 16:16:57 -0800 (PST)
 Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id k9-20020a17090a3cc900b0022bee492a5dsm5503602pjd.23.2023.01.27.16.16.53
+        by smtp.gmail.com with ESMTPSA id b7-20020a170902d50700b0017f74cab9eesm3428123plg.128.2023.01.27.16.16.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 16:16:54 -0800 (PST)
+        Fri, 27 Jan 2023 16:16:57 -0800 (PST)
 Sender: Tejun Heo <htejun@gmail.com>
 From:   Tejun Heo <tj@kernel.org>
 To:     torvalds@linux-foundation.org, mingo@redhat.com,
@@ -62,9 +62,9 @@ To:     torvalds@linux-foundation.org, mingo@redhat.com,
         dschatzberg@meta.com, dskarlat@cs.cmu.edu, riel@surriel.com
 Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
         kernel-team@meta.com, Tejun Heo <tj@kernel.org>
-Subject: [PATCH 01/30] cgroup: Implement cgroup_show_cftypes()
-Date:   Fri, 27 Jan 2023 14:16:10 -1000
-Message-Id: <20230128001639.3510083-2-tj@kernel.org>
+Subject: [PATCH 03/30] sched: Restructure sched_class order sanity checks in sched_init()
+Date:   Fri, 27 Jan 2023 14:16:12 -1000
+Message-Id: <20230128001639.3510083-4-tj@kernel.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230128001639.3510083-1-tj@kernel.org>
 References: <20230128001639.3510083-1-tj@kernel.org>
@@ -74,208 +74,40 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Implement cgroup_show_cftypes() which shows and hides all cgroup files
-associated with the specified set of cgroup file types. CFTYPE_HIDDEN flag
-is added so that files can be created hidden from the get-go.
-
-cgroup_show_cftypes() can be used whether the cftypes are added or not. It
-also combines with cgroup_show_file() so that a given file is visible iff
-both its cftype and cfile are visible.
-
-This will be used by a new sched_class to selectively show and hide CPU
-controller interface files depending on whether they're supported.
+Currently, sched_init() checks that the sched_class'es are in the expected
+order by testing each adjacency which is a bit brittle and makes it
+cumbersome to add optional sched_class'es. Instead, let's verify whether
+they're in the expected order using sched_class_above() which is what
+matters.
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
 Reviewed-by: David Vernet <dvernet@meta.com>
-Acked-by: Josh Don <joshdon@google.com>
-Acked-by: Hao Luo <haoluo@google.com>
-Acked-by: Barret Rhoden <brho@google.com>
 ---
- include/linux/cgroup-defs.h |  8 +++
- include/linux/cgroup.h      |  1 +
- kernel/cgroup/cgroup.c      | 97 ++++++++++++++++++++++++++++++++++---
- 3 files changed, 99 insertions(+), 7 deletions(-)
+ kernel/sched/core.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
-index 8a0d5466c7be..8af1e7d487cb 100644
---- a/include/linux/cgroup-defs.h
-+++ b/include/linux/cgroup-defs.h
-@@ -127,12 +127,18 @@ enum {
- 	CFTYPE_WORLD_WRITABLE	= (1 << 4),	/* (DON'T USE FOR NEW FILES) S_IWUGO */
- 	CFTYPE_DEBUG		= (1 << 5),	/* create when cgroup_debug */
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index bfc3312f305a..65f21f8bf738 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -9721,12 +9721,12 @@ void __init sched_init(void)
+ 	int i;
  
-+	CFTYPE_HIDDEN		= (1 << 6),	/* file type hidden, see cgroup_show_cftypes() */
-+
- 	/* internal flags, do not use outside cgroup core proper */
- 	__CFTYPE_ONLY_ON_DFL	= (1 << 16),	/* only on default hierarchy */
- 	__CFTYPE_NOT_ON_DFL	= (1 << 17),	/* not on default hierarchy */
- 	__CFTYPE_ADDED		= (1 << 18),
- };
+ 	/* Make sure the linker didn't screw up */
+-	BUG_ON(&idle_sched_class != &fair_sched_class + 1 ||
+-	       &fair_sched_class != &rt_sched_class + 1 ||
+-	       &rt_sched_class   != &dl_sched_class + 1);
+ #ifdef CONFIG_SMP
+-	BUG_ON(&dl_sched_class != &stop_sched_class + 1);
++	BUG_ON(!sched_class_above(&stop_sched_class, &dl_sched_class));
+ #endif
++	BUG_ON(!sched_class_above(&dl_sched_class, &rt_sched_class));
++	BUG_ON(!sched_class_above(&rt_sched_class, &fair_sched_class));
++	BUG_ON(!sched_class_above(&fair_sched_class, &idle_sched_class));
  
-+enum cfile_flags {
-+	CFILE_HIDDEN		= (1 << 0),	/* file instance hidden */
-+};
-+
- /*
-  * cgroup_file is the handle for a file instance created in a cgroup which
-  * is used, for example, to generate file changed notifications.  This can
-@@ -140,7 +146,9 @@ enum {
-  */
- struct cgroup_file {
- 	/* do not access any fields from outside cgroup core */
-+	struct cftype *cft;
- 	struct kernfs_node *kn;
-+	unsigned int flags;
- 	unsigned long notified_at;
- 	struct timer_list notify_timer;
- };
-diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
-index 3410aecffdb4..a8c6982c2c24 100644
---- a/include/linux/cgroup.h
-+++ b/include/linux/cgroup.h
-@@ -115,6 +115,7 @@ int cgroup_transfer_tasks(struct cgroup *to, struct cgroup *from);
- int cgroup_add_dfl_cftypes(struct cgroup_subsys *ss, struct cftype *cfts);
- int cgroup_add_legacy_cftypes(struct cgroup_subsys *ss, struct cftype *cfts);
- int cgroup_rm_cftypes(struct cftype *cfts);
-+void cgroup_show_cftype(struct cftype *cft, bool show);
- void cgroup_file_notify(struct cgroup_file *cfile);
- void cgroup_file_show(struct cgroup_file *cfile, bool show);
+ 	wait_bit_init();
  
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index c099cf3fa02d..27bafb2732c5 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -4196,10 +4196,13 @@ static int cgroup_add_file(struct cgroup_subsys_state *css, struct cgroup *cgrp,
- 		return ret;
- 	}
- 
-+	kernfs_show(kn, !(cft->flags & CFTYPE_HIDDEN));
-+
- 	if (cft->file_offset) {
- 		struct cgroup_file *cfile = (void *)css + cft->file_offset;
- 
- 		timer_setup(&cfile->notify_timer, cgroup_file_notify_timer, 0);
-+		cfile->cft = cft;
- 
- 		spin_lock_irq(&cgroup_file_kn_lock);
- 		cfile->kn = kn;
-@@ -4478,6 +4481,24 @@ void cgroup_file_notify(struct cgroup_file *cfile)
- 	spin_unlock_irqrestore(&cgroup_file_kn_lock, flags);
- }
- 
-+static struct kernfs_node *cfile_kn_get(struct cgroup_file *cfile)
-+{
-+	struct kernfs_node *kn;
-+
-+	spin_lock_irq(&cgroup_file_kn_lock);
-+	kn = cfile->kn;
-+	kernfs_get(kn);
-+	spin_unlock_irq(&cgroup_file_kn_lock);
-+
-+	return kn;
-+}
-+
-+static bool cfile_visible(struct cgroup_file *cfile)
-+{
-+	return !(cfile->cft->flags & CFTYPE_HIDDEN) &&
-+		!(cfile->flags & CFILE_HIDDEN);
-+}
-+
- /**
-  * cgroup_file_show - show or hide a hidden cgroup file
-  * @cfile: target cgroup_file obtained by setting cftype->file_offset
-@@ -4487,15 +4508,20 @@ void cgroup_file_show(struct cgroup_file *cfile, bool show)
- {
- 	struct kernfs_node *kn;
- 
--	spin_lock_irq(&cgroup_file_kn_lock);
--	kn = cfile->kn;
--	kernfs_get(kn);
--	spin_unlock_irq(&cgroup_file_kn_lock);
-+	mutex_lock(&cgroup_mutex);
- 
--	if (kn)
--		kernfs_show(kn, show);
-+	if (show)
-+		cfile->flags &= ~CFILE_HIDDEN;
-+	else
-+		cfile->flags |= CFILE_HIDDEN;
- 
--	kernfs_put(kn);
-+	kn = cfile_kn_get(cfile);
-+	if (kn) {
-+		kernfs_show(kn, cfile_visible(cfile));
-+		kernfs_put(kn);
-+	}
-+
-+	mutex_unlock(&cgroup_mutex);
- }
- 
- /**
-@@ -5509,6 +5535,63 @@ static void offline_css(struct cgroup_subsys_state *css)
- 	wake_up_all(&css->cgroup->offline_waitq);
- }
- 
-+/**
-+ * cgroup_show_cftype - show or hide a cgroup file type
-+ * @cft: cftype to show or hide
-+ * @show: whether to show or hide
-+ *
-+ * Sets %CFTYPE_HIDDEN and shows/hides the matching files according to @show.
-+ * @cft may or may not be added at the time of this call. After hiding, it's
-+ * guaranteed that there are no in-flight operations on the hidden files.
-+ */
-+void cgroup_show_cftype(struct cftype *cft, bool show)
-+{
-+	struct cgroup_subsys *ss = cft->ss;
-+	struct cgroup *root = ss ? &ss->root->cgrp : &cgrp_dfl_root.cgrp;
-+	struct cgroup_subsys_state *css;
-+
-+	mutex_lock(&cgroup_mutex);
-+
-+	if (show)
-+		cft->flags &= ~CFTYPE_HIDDEN;
-+	else
-+		cft->flags |= CFTYPE_HIDDEN;
-+
-+	if (!(cft->flags & __CFTYPE_ADDED))
-+		goto out_unlock;
-+
-+	css_for_each_descendant_pre(css, cgroup_css(root, ss)) {
-+		struct cgroup *cgrp = css->cgroup;
-+		struct kernfs_node *kn;
-+
-+		if (!(css->flags & CSS_VISIBLE))
-+			continue;
-+
-+		if (cft->file_offset) {
-+			struct cgroup_file *cfile =
-+				(void *)css + cft->file_offset;
-+
-+			kn = cfile_kn_get(cfile);
-+			if (kn) {
-+				kernfs_show(kn, cfile_visible(cfile));
-+				kernfs_put(kn);
-+			}
-+		} else {
-+			char buf[CGROUP_FILE_NAME_MAX];
-+
-+			kn = kernfs_find_and_get(cgrp->kn,
-+					cgroup_file_name(cgrp, cft, buf));
-+			if (kn) {
-+				kernfs_show(kn, show);
-+				kernfs_put(kn);
-+			}
-+		}
-+	}
-+
-+out_unlock:
-+	mutex_unlock(&cgroup_mutex);
-+}
-+
- /**
-  * css_create - create a cgroup_subsys_state
-  * @cgrp: the cgroup new css will be associated with
 -- 
 2.39.1
 
