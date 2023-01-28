@@ -2,54 +2,54 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F7D3C61DA7
-	for <bpf@archiver.kernel.org>; Sat, 28 Jan 2023 00:07:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4ACDFC61DB3
+	for <bpf@archiver.kernel.org>; Sat, 28 Jan 2023 00:07:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232400AbjA1AHu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 27 Jan 2023 19:07:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56042 "EHLO
+        id S232288AbjA1AHv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 27 Jan 2023 19:07:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232296AbjA1AHl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 27 Jan 2023 19:07:41 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3AC8B79A
-        for <bpf@vger.kernel.org>; Fri, 27 Jan 2023 16:07:31 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30RNBv0O024305;
-        Sat, 28 Jan 2023 00:07:17 GMT
+        with ESMTP id S232603AbjA1AHn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 27 Jan 2023 19:07:43 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F9208B05C
+        for <bpf@vger.kernel.org>; Fri, 27 Jan 2023 16:07:34 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30S00wUG030156;
+        Sat, 28 Jan 2023 00:07:21 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=MxXWFt5QkQWLJaI7ce/kbTTACtOrubWdkbC/C3TDJyE=;
- b=nal9wq0VjaFeGe0gMtsDKLtPAurBnP+KSEKDvJfaZeeE1RC+PG8gjWwoibeEvWhpHrf/
- 9Ft3emVyNBw8VfMyYFr534Hc8L4xIgKb+9s3Q811sbQpqsNoJWqH6qXT9nCycWn3i9qZ
- 3RDYmxLesgOeaR3D3ab2RIBonJAC0Xq7Nup8y53P4VSeO3WEPK2cxu0DFwWrocdCeMkO
- EzrkHnM9xYoR0ycpfqDAUtC4ikt8/hPtDxUwQAE69t1ES4gAVMwc6ZTgIxszqNc6fTHz
- iqipBhfGYohBC30YX2l9XcVxO0Th+Wf0j40JKlu7Su5IzIpklkCjOs5eq/JcESAlzwWh Cg== 
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ncr2nrxjb-1
+ bh=X6f/wlmFkENOuQG3GEYGo84Jk40JRrhBKHDJLOsZGZ0=;
+ b=BdSd91dzDNdZLQWhgr3ZVBAkhBr0Gigrkl2XAZlJcUrRioWjOJmt+UgngOle9razGtrA
+ q6Je/n+ufj+fzIxECmZkjvIghKTHDQKi3Q6F0ixbdrx+K4rS+Njlcysrc7j++5XY8vV0
+ pkTaHvYi2y8Y4uu83eA52gQ1eBxR3A/rh/rJ65f2/1Nyh5y72ePhu2OC8gyg7rlXtSXZ
+ 7roHj3mOAU2g2Eq8xrAtoOs6Elg1DThxY+b9X50stBO/MfyIzPYEeFR8TVhSrSyhUa3L
+ nrCLo5n72x3baKZiqjyyaTCOG4Usp2Vz/oM3bks6MvEyUhIYggutkAcTms5vSgwBSLdS pA== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ncrsx03f5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 28 Jan 2023 00:07:17 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30RA2IgH010179;
-        Sat, 28 Jan 2023 00:07:15 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3n87afdvaf-1
+        Sat, 28 Jan 2023 00:07:21 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30RKAMgw027572;
+        Sat, 28 Jan 2023 00:07:19 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3n87p6g5jn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 28 Jan 2023 00:07:15 +0000
+        Sat, 28 Jan 2023 00:07:19 +0000
 Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30S07BE742074474
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30S07GGa36897046
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 28 Jan 2023 00:07:11 GMT
+        Sat, 28 Jan 2023 00:07:16 GMT
 Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 95DC120043;
-        Sat, 28 Jan 2023 00:07:11 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 5952120043;
+        Sat, 28 Jan 2023 00:07:16 +0000 (GMT)
 Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2177620040;
-        Sat, 28 Jan 2023 00:07:11 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id D947820040;
+        Sat, 28 Jan 2023 00:07:15 +0000 (GMT)
 Received: from heavy.ibmuc.com (unknown [9.179.11.57])
         by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Sat, 28 Jan 2023 00:07:11 +0000 (GMT)
+        Sat, 28 Jan 2023 00:07:15 +0000 (GMT)
 From:   Ilya Leoshkevich <iii@linux.ibm.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -58,75 +58,99 @@ Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Alexander Gordeev <agordeev@linux.ibm.com>,
         Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next v2 13/31] selftests/bpf: Increase SIZEOF_BPF_LOCAL_STORAGE_ELEM on s390x
-Date:   Sat, 28 Jan 2023 01:06:32 +0100
-Message-Id: <20230128000650.1516334-14-iii@linux.ibm.com>
+Subject: [PATCH bpf-next v2 18/31] selftests/bpf: Fix sk_assign on s390x
+Date:   Sat, 28 Jan 2023 01:06:37 +0100
+Message-Id: <20230128000650.1516334-19-iii@linux.ibm.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230128000650.1516334-1-iii@linux.ibm.com>
 References: <20230128000650.1516334-1-iii@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: HT7wjGy_59HLe2XFciH5a8aQPyJqukbM
-X-Proofpoint-ORIG-GUID: HT7wjGy_59HLe2XFciH5a8aQPyJqukbM
+X-Proofpoint-GUID: 5rKbdP0PqBDnbtMzuXX9pdol7Z8KXKld
+X-Proofpoint-ORIG-GUID: 5rKbdP0PqBDnbtMzuXX9pdol7Z8KXKld
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-27_15,2023-01-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=520 mlxscore=0
- malwarescore=0 suspectscore=0 priorityscore=1501 phishscore=0
- impostorscore=0 bulkscore=0 adultscore=0 clxscore=1015 lowpriorityscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301270220
+ definitions=2023-01-27_14,2023-01-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
+ lowpriorityscore=0 phishscore=0 adultscore=0 spamscore=0 impostorscore=0
+ mlxscore=0 clxscore=1015 suspectscore=0 priorityscore=1501 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301270216
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-sizeof(struct bpf_local_storage_elem) is 512 on s390x:
+sk_assign is failing on an s390x machine running Debian "bookworm" for
+2 reasons: legacy server_map definition and uninitialized addrlen in
+recvfrom() call.
 
-    struct bpf_local_storage_elem {
-            struct hlist_node          map_node;             /*     0    16 */
-            struct hlist_node          snode;                /*    16    16 */
-            struct bpf_local_storage * local_storage;        /*    32     8 */
-            struct callback_head       rcu __attribute__((__aligned__(8))); /*    40    16 */
-
-            /* XXX 200 bytes hole, try to pack */
-
-            /* --- cacheline 1 boundary (256 bytes) --- */
-            struct bpf_local_storage_data sdata __attribute__((__aligned__(256))); /*   256     8 */
-
-            /* size: 512, cachelines: 2, members: 5 */
-            /* sum members: 64, holes: 1, sum holes: 200 */
-            /* padding: 248 */
-            /* forced alignments: 2, forced holes: 1, sum forced holes: 200 */
-    } __attribute__((__aligned__(256)));
-
-As the existing comment suggests, use a larger number in order to be
-future-proof.
+Fix by upgrading the server_map definition and dropping addrlen
+(recvfrom() allows NULL values for src_addr and addrlen).
 
 Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 ---
- tools/testing/selftests/bpf/netcnt_common.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ .../selftests/bpf/prog_tests/sk_assign.c      |  5 +---
+ .../selftests/bpf/progs/test_sk_assign.c      | 24 +++++--------------
+ 2 files changed, 7 insertions(+), 22 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/netcnt_common.h b/tools/testing/selftests/bpf/netcnt_common.h
-index 0ab1c88041cd..2d4a58e4e39c 100644
---- a/tools/testing/selftests/bpf/netcnt_common.h
-+++ b/tools/testing/selftests/bpf/netcnt_common.h
-@@ -8,11 +8,11 @@
+diff --git a/tools/testing/selftests/bpf/prog_tests/sk_assign.c b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
+index 3e190ed63976..ba99dce1db0d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sk_assign.c
++++ b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
+@@ -129,15 +129,12 @@ get_port(int fd)
+ static ssize_t
+ rcv_msg(int srv_client, int type)
+ {
+-	struct sockaddr_storage ss;
+ 	char buf[BUFSIZ];
+-	socklen_t slen;
  
- /* sizeof(struct bpf_local_storage_elem):
-  *
-- * It really is about 128 bytes on x86_64, but allocate more to account for
-- * possible layout changes, different architectures, etc.
-+ * It is about 128 bytes on x86_64 and 512 bytes on s390x, but allocate more to
-+ * account for possible layout changes, different architectures, etc.
-  * The kernel will wrap up to PAGE_SIZE internally anyway.
-  */
--#define SIZEOF_BPF_LOCAL_STORAGE_ELEM		256
-+#define SIZEOF_BPF_LOCAL_STORAGE_ELEM		768
+ 	if (type == SOCK_STREAM)
+ 		return read(srv_client, &buf, sizeof(buf));
+ 	else
+-		return recvfrom(srv_client, &buf, sizeof(buf), 0,
+-				(struct sockaddr *)&ss, &slen);
++		return recvfrom(srv_client, &buf, sizeof(buf), 0, NULL, NULL);
+ }
  
- /* Try to estimate kernel's BPF_LOCAL_STORAGE_MAX_VALUE_SIZE: */
- #define BPF_LOCAL_STORAGE_MAX_VALUE_SIZE	(0xFFFF - \
+ static int
+diff --git a/tools/testing/selftests/bpf/progs/test_sk_assign.c b/tools/testing/selftests/bpf/progs/test_sk_assign.c
+index 98c6493d9b91..13ba4dd2d19f 100644
+--- a/tools/testing/selftests/bpf/progs/test_sk_assign.c
++++ b/tools/testing/selftests/bpf/progs/test_sk_assign.c
+@@ -16,25 +16,13 @@
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_endian.h>
+ 
+-/* Pin map under /sys/fs/bpf/tc/globals/<map name> */
+-#define PIN_GLOBAL_NS 2
+-
+-/* Must match struct bpf_elf_map layout from iproute2 */
+ struct {
+-	__u32 type;
+-	__u32 size_key;
+-	__u32 size_value;
+-	__u32 max_elem;
+-	__u32 flags;
+-	__u32 id;
+-	__u32 pinning;
+-} server_map SEC("maps") = {
+-	.type = BPF_MAP_TYPE_SOCKMAP,
+-	.size_key = sizeof(int),
+-	.size_value  = sizeof(__u64),
+-	.max_elem = 1,
+-	.pinning = PIN_GLOBAL_NS,
+-};
++	__uint(type, BPF_MAP_TYPE_SOCKMAP);
++	__type(key, int);
++	__type(value, __u64);
++	__uint(pinning, LIBBPF_PIN_BY_NAME);
++	__uint(max_entries, 1);
++} server_map SEC(".maps");
+ 
+ char _license[] SEC("license") = "GPL";
+ 
 -- 
 2.39.1
 
