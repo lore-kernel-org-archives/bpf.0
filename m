@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 139FDC54EAA
-	for <bpf@archiver.kernel.org>; Sat, 28 Jan 2023 00:18:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D1FAC38142
+	for <bpf@archiver.kernel.org>; Sat, 28 Jan 2023 00:18:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232696AbjA1ASP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 27 Jan 2023 19:18:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36802 "EHLO
+        id S232786AbjA1AS0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 27 Jan 2023 19:18:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232925AbjA1ARj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 27 Jan 2023 19:17:39 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1468CE10;
-        Fri, 27 Jan 2023 16:17:14 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id x2-20020a17090a46c200b002295ca9855aso10221895pjg.2;
-        Fri, 27 Jan 2023 16:17:14 -0800 (PST)
+        with ESMTP id S232778AbjA1AR5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 27 Jan 2023 19:17:57 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D851C8CC4A;
+        Fri, 27 Jan 2023 16:17:20 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id be8so6561006plb.7;
+        Fri, 27 Jan 2023 16:17:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=x4vCYz2beF9ROB0r0Gl728SjZFvQ7n/iXYiikxbP3n0=;
-        b=KMhhq72veYUOFqhd6X9qf2fdXBypP80XYIye0ym74+A1efyLRprDjbFCGLRTe3a7cD
-         xVC2XedgeNnW+6aSCq2G/WYSQoBvy1R3rmZXeqlH5xhFvgopOwkz1p2sk3HuTyeidPHk
-         Dc9Z+h02bNBmCTsIDRpx2zSDuIxZyd45dIM5eZSk2jHQqGqpMaJBS7SY4bAKW1aogMkj
-         3x9qXHfMO0uD48aA5JjjHjZZ8Ytzyfh+J8bAn/XD1HgUsEAYOQ+NUueJl2Mb1yUmmtgG
-         08ZGj1x8FBVaXEME1WCsOXDelo6qzusu0n4JVjvMmgjoQeiP5NpnNfT9TrIa3Y7QRjj8
-         iJ6A==
+        bh=wECB+kv9zmbuEsGDrXMjNkxOFX+6xuQqOVDwucXIlds=;
+        b=jNoXXkGxSM+6YWVkc9Dt3d7uFesca5+fVGhkhaDuDvKXiOvs7lOj6qfm2IxpYO1pGl
+         iRXines4P7kAb6S7AewwaZPmyo5N3/AIdGxbLulvd1oJQQoVc2cAfs3QN8Eo3Oh+UHus
+         bGEaCRKONAEFKN1jBnDypZmzzhCnsPsU3RfNKJdHgpapKL+3R9bmZmd2gh4vzxKjQb41
+         5og991aR31OxVY/DOL0iVdiFetUSoL7oC6opdXUNgfRp3Ji4yvMVIc5O4b0NPkipNPSb
+         pg/EOiVs7LC2QfuYgfK9SLJSU2vJ9XPAQU+YBAiFOHSjYbpG1KrC/7WXAwJy8RB3CDdz
+         HD3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=x4vCYz2beF9ROB0r0Gl728SjZFvQ7n/iXYiikxbP3n0=;
-        b=JjYphUW9xY04v6VqdU4lZS2OIyg5FORJoBhpHSwycbvMGgvZVtMtXbfpk1dGp7EOAR
-         LvXnOVzkaKCtUhgqF+W5gKVl3zXsCoj/uo77ugqMR1oUQgxii1/SSJkKB+wPNSbWEqCj
-         XPiCJboRWn3M6qUAweJADkqN9D7GyPxXkuQs3+Ex4J/aizNZCTKg1XMqlgup4gJ7MvXl
-         qkyPGCVntLLJmFvVf1lhJob+yyXIoRP1F3Kj3r9eS4ccTTDHgLosvN4OllRakMcSgOGv
-         3F9Lg5L7SfAd6jdmlo0K2lT2wSMHEs28BYztqdyhhkNFbjdWJSFnDmA8zP/EsnGjR/jU
-         4vRw==
-X-Gm-Message-State: AO0yUKX24ZmlfKoEk8PqUQjDLGV0GShY8mONDQmfaQzkjeqTKrtUXbwa
-        bxoeb0+wAqgXuhm0fUeVe2c=
-X-Google-Smtp-Source: AK7set+1KkQ49qWAPCdlYzUfto+yptNFQcWCZcuL3237VUu+irbxCAkxlpR2j4y7/KqSGarYPg1rMA==
-X-Received: by 2002:a17:902:c406:b0:196:e8e:cd28 with SMTP id k6-20020a170902c40600b001960e8ecd28mr21121116plk.15.1674865033944;
-        Fri, 27 Jan 2023 16:17:13 -0800 (PST)
+        bh=wECB+kv9zmbuEsGDrXMjNkxOFX+6xuQqOVDwucXIlds=;
+        b=4EzHcKlCKvXqkKS2OuHNTlO9zuSlO++9LZ9UtyRY7CFSzHntJl2CepOuppq+67gksR
+         8OdzTCWFsAV1yn3ytzcmykl0O8z1KE0DlWgOFH7HgstWDMjE7xxZ2+kL73GRLjR6ycE7
+         SsQwW+LsseiMy6LMT39bjb2A+2ONeX4UAPe1PJ6UYk2N/GbGpvw8QCNi1PGWmuQfUA56
+         hqGZngB2Yt19vk7VuFJAcNMWSAqifc+svfOiciSe9BY4U587zTnwO/2mcPvkw9dsfYoy
+         kKGgxUDn6n26R8kClmwtJpfO5eUz8cWfZl9ap+5Ukjp+FRaPi6ZPwaR2iTwWsjo92DwA
+         81eg==
+X-Gm-Message-State: AFqh2koVUPowjovX6lsceh/ZQLCGlNeQ0mpWTdYtlatJb2e4b5OuOF/H
+        a/l7mLVo+5OC7PpbqN+vTd8=
+X-Google-Smtp-Source: AMrXdXsNaHzO+J5iBJWnXXCJfT+FiSmHPvvbQwE3Elh1mIzfrn+xJrCkPJKQtNwFS/yAjY+yoObe9g==
+X-Received: by 2002:a05:6a20:8f0f:b0:b8:5515:9004 with SMTP id b15-20020a056a208f0f00b000b855159004mr55584650pzk.8.1674865039784;
+        Fri, 27 Jan 2023 16:17:19 -0800 (PST)
 Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id r20-20020a170902be1400b00192a8b35fa3sm3413297pls.122.2023.01.27.16.17.13
+        by smtp.gmail.com with ESMTPSA id q13-20020a17090a304d00b0022908f1398dsm3270995pjl.32.2023.01.27.16.17.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 16:17:13 -0800 (PST)
+        Fri, 27 Jan 2023 16:17:19 -0800 (PST)
 Sender: Tejun Heo <htejun@gmail.com>
 From:   Tejun Heo <tj@kernel.org>
 To:     torvalds@linux-foundation.org, mingo@redhat.com,
@@ -62,9 +62,9 @@ To:     torvalds@linux-foundation.org, mingo@redhat.com,
         dschatzberg@meta.com, dskarlat@cs.cmu.edu, riel@surriel.com
 Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
         kernel-team@meta.com, Tejun Heo <tj@kernel.org>
-Subject: [PATCH 12/30] sched_ext: Add boilerplate for extensible scheduler class
-Date:   Fri, 27 Jan 2023 14:16:21 -1000
-Message-Id: <20230128001639.3510083-13-tj@kernel.org>
+Subject: [PATCH 15/30] sched_ext: Add sysrq-S which disables the BPF scheduler
+Date:   Fri, 27 Jan 2023 14:16:24 -1000
+Message-Id: <20230128001639.3510083-16-tj@kernel.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230128001639.3510083-1-tj@kernel.org>
 References: <20230128001639.3510083-1-tj@kernel.org>
@@ -74,12 +74,7 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This adds dummy implementations of sched_ext interfaces which interact with
-the scheduler core and hook them in the correct places. As they're all
-dummies, this doesn't cause any behavior changes. This is split out to help
-reviewing.
-
-v2: balance_scx_on_up() dropped. This will be handled in sched_ext proper.
+This enables the admin to abort the BPF scheduler and revert to CFS anytime.
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
 Reviewed-by: David Vernet <dvernet@meta.com>
@@ -87,223 +82,93 @@ Acked-by: Josh Don <joshdon@google.com>
 Acked-by: Hao Luo <haoluo@google.com>
 Acked-by: Barret Rhoden <brho@google.com>
 ---
- include/linux/sched/ext.h | 12 ++++++++++++
- kernel/fork.c             |  2 ++
- kernel/sched/core.c       | 32 ++++++++++++++++++++++++--------
- kernel/sched/ext.h        | 24 ++++++++++++++++++++++++
- kernel/sched/idle.c       |  2 ++
- kernel/sched/sched.h      |  2 ++
- 6 files changed, 66 insertions(+), 8 deletions(-)
- create mode 100644 include/linux/sched/ext.h
- create mode 100644 kernel/sched/ext.h
+ drivers/tty/sysrq.c         |  1 +
+ include/linux/sched/ext.h   |  1 +
+ kernel/sched/build_policy.c |  1 +
+ kernel/sched/ext.c          | 20 ++++++++++++++++++++
+ 4 files changed, 23 insertions(+)
 
+diff --git a/drivers/tty/sysrq.c b/drivers/tty/sysrq.c
+index b6e70c5cfa17..ddfcdb6aecd7 100644
+--- a/drivers/tty/sysrq.c
++++ b/drivers/tty/sysrq.c
+@@ -520,6 +520,7 @@ static const struct sysrq_key_op *sysrq_key_table[62] = {
+ 	NULL,				/* P */
+ 	NULL,				/* Q */
+ 	NULL,				/* R */
++	/* S: May be registered by sched_ext for resetting */
+ 	NULL,				/* S */
+ 	NULL,				/* T */
+ 	NULL,				/* U */
 diff --git a/include/linux/sched/ext.h b/include/linux/sched/ext.h
-new file mode 100644
-index 000000000000..a05dfcf533b0
---- /dev/null
+index 8894b6a9977d..988d1e30e26c 100644
+--- a/include/linux/sched/ext.h
 +++ b/include/linux/sched/ext.h
-@@ -0,0 +1,12 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_SCHED_EXT_H
-+#define _LINUX_SCHED_EXT_H
-+
-+#ifdef CONFIG_SCHED_CLASS_EXT
-+#error "NOT IMPLEMENTED YET"
-+#else	/* !CONFIG_SCHED_CLASS_EXT */
-+
-+static inline void sched_ext_free(struct task_struct *p) {}
-+
-+#endif	/* CONFIG_SCHED_CLASS_EXT */
-+#endif	/* _LINUX_SCHED_EXT_H */
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 184c622b5513..f5aad7fa6350 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -23,6 +23,7 @@
- #include <linux/sched/task.h>
- #include <linux/sched/task_stack.h>
- #include <linux/sched/cputime.h>
-+#include <linux/sched/ext.h>
- #include <linux/seq_file.h>
- #include <linux/rtmutex.h>
- #include <linux/init.h>
-@@ -846,6 +847,7 @@ void __put_task_struct(struct task_struct *tsk)
- 	WARN_ON(refcount_read(&tsk->usage));
- 	WARN_ON(tsk == current);
+@@ -55,6 +55,7 @@ enum scx_exit_type {
+ 	SCX_EXIT_DONE,
  
-+	sched_ext_free(tsk);
- 	io_uring_free(tsk);
- 	cgroup_free(tsk);
- 	task_numa_free(tsk, true);
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 6447f10ecd44..6058042dcc3d 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -4623,6 +4623,8 @@ late_initcall(sched_core_sysctl_init);
-  */
- int sched_fork(unsigned long clone_flags, struct task_struct *p)
- {
-+	int ret;
+ 	SCX_EXIT_UNREG = 64,	/* BPF unregistration */
++	SCX_EXIT_SYSRQ,		/* requested by 'S' sysrq */
+ 
+ 	SCX_EXIT_ERROR = 1024,	/* runtime error, error msg contains details */
+ 	SCX_EXIT_ERROR_BPF,	/* ERROR but triggered through scx_bpf_error() */
+diff --git a/kernel/sched/build_policy.c b/kernel/sched/build_policy.c
+index 4c658b21f603..005025f55bea 100644
+--- a/kernel/sched/build_policy.c
++++ b/kernel/sched/build_policy.c
+@@ -28,6 +28,7 @@
+ #include <linux/suspend.h>
+ #include <linux/tsacct_kern.h>
+ #include <linux/vtime.h>
++#include <linux/sysrq.h>
+ #include <linux/percpu-rwsem.h>
+ 
+ #include <uapi/linux/sched/types.h>
+diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
+index 38786d36a356..ebbf3f3c1cf7 100644
+--- a/kernel/sched/ext.c
++++ b/kernel/sched/ext.c
+@@ -1881,6 +1881,9 @@ static void scx_ops_disable_workfn(struct kthread_work *work)
+ 	case SCX_EXIT_UNREG:
+ 		reason = "BPF scheduler unregistered";
+ 		break;
++	case SCX_EXIT_SYSRQ:
++		reason = "disabled by sysrq-S";
++		break;
+ 	case SCX_EXIT_ERROR:
+ 		reason = "runtime error";
+ 		break;
+@@ -2490,6 +2493,21 @@ struct bpf_struct_ops bpf_sched_ext_ops = {
+ 	.name = "sched_ext_ops",
+ };
+ 
++static void sysrq_handle_sched_ext_reset(int key)
++{
++	if (scx_ops_helper)
++		scx_ops_disable(SCX_EXIT_SYSRQ);
++	else
++		pr_info("sched_ext: BPF scheduler not yet used\n");
++}
 +
- 	__sched_fork(clone_flags, p);
- 	/*
- 	 * We mark the process as NEW here. This guarantees that
-@@ -4659,12 +4661,16 @@ int sched_fork(unsigned long clone_flags, struct task_struct *p)
- 		p->sched_reset_on_fork = 0;
++static const struct sysrq_key_op sysrq_sched_ext_reset_op = {
++	.handler	= sysrq_handle_sched_ext_reset,
++	.help_msg	= "reset-sched-ext(S)",
++	.action_msg	= "Disable sched_ext and revert all tasks to CFS",
++	.enable_mask	= SYSRQ_ENABLE_RTNICE,
++};
++
+ void __init init_sched_ext_class(void)
+ {
+ 	int cpu;
+@@ -2513,6 +2531,8 @@ void __init init_sched_ext_class(void)
+ 
+ 		init_dsq(&rq->scx.local_dsq, SCX_DSQ_LOCAL);
  	}
- 
--	if (dl_prio(p->prio))
--		return -EAGAIN;
--	else if (rt_prio(p->prio))
-+	scx_pre_fork(p);
 +
-+	if (dl_prio(p->prio)) {
-+		ret = -EAGAIN;
-+		goto out_cancel;
-+	} else if (rt_prio(p->prio)) {
- 		p->sched_class = &rt_sched_class;
--	else
-+	} else {
- 		p->sched_class = &fair_sched_class;
-+	}
- 
- 	init_entity_runnable_average(&p->se);
- 
-@@ -4682,6 +4688,10 @@ int sched_fork(unsigned long clone_flags, struct task_struct *p)
- 	RB_CLEAR_NODE(&p->pushable_dl_tasks);
- #endif
- 	return 0;
-+
-+out_cancel:
-+	scx_cancel_fork(p);
-+	return ret;
++	register_sysrq_key('S', &sysrq_sched_ext_reset_op);
  }
  
- int sched_cgroup_fork(struct task_struct *p, struct kernel_clone_args *kargs)
-@@ -4712,16 +4722,18 @@ int sched_cgroup_fork(struct task_struct *p, struct kernel_clone_args *kargs)
- 		p->sched_class->task_fork(p);
- 	raw_spin_unlock_irqrestore(&p->pi_lock, flags);
  
--	return 0;
-+	return scx_fork(p);
- }
- 
- void sched_cancel_fork(struct task_struct *p)
- {
-+	scx_cancel_fork(p);
- }
- 
- void sched_post_fork(struct task_struct *p)
- {
- 	uclamp_post_fork(p);
-+	scx_post_fork(p);
- }
- 
- unsigned long to_ratio(u64 period, u64 runtime)
-@@ -5868,7 +5880,7 @@ static void put_prev_task_balance(struct rq *rq, struct task_struct *prev,
- 	 * We can terminate the balance pass as soon as we know there is
- 	 * a runnable task of @class priority or higher.
- 	 */
--	for_class_range(class, prev->sched_class, &idle_sched_class) {
-+	for_balance_class_range(class, prev->sched_class, &idle_sched_class) {
- 		if (class->balance(rq, prev, rf))
- 			break;
- 	}
-@@ -5886,6 +5898,9 @@ __pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
- 	const struct sched_class *class;
- 	struct task_struct *p;
- 
-+	if (scx_enabled())
-+		goto restart;
-+
- 	/*
- 	 * Optimization: we know that if all tasks are in the fair class we can
- 	 * call that function directly, but only if the @prev task wasn't of a
-@@ -5911,7 +5926,7 @@ __pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
- restart:
- 	put_prev_task_balance(rq, prev, rf);
- 
--	for_each_class(class) {
-+	for_each_active_class(class) {
- 		p = class->pick_next_task(rq);
- 		if (p)
- 			return p;
-@@ -5944,7 +5959,7 @@ static inline struct task_struct *pick_task(struct rq *rq)
- 	const struct sched_class *class;
- 	struct task_struct *p;
- 
--	for_each_class(class) {
-+	for_each_active_class(class) {
- 		p = class->pick_task(rq);
- 		if (p)
- 			return p;
-@@ -9880,6 +9895,7 @@ void __init sched_init(void)
- 	balance_push_set(smp_processor_id(), false);
- #endif
- 	init_sched_fair_class();
-+	init_sched_ext_class();
- 
- 	psi_init();
- 
-diff --git a/kernel/sched/ext.h b/kernel/sched/ext.h
-new file mode 100644
-index 000000000000..6a93c4825339
---- /dev/null
-+++ b/kernel/sched/ext.h
-@@ -0,0 +1,24 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifdef CONFIG_SCHED_CLASS_EXT
-+#error "NOT IMPLEMENTED YET"
-+#else	/* CONFIG_SCHED_CLASS_EXT */
-+
-+#define scx_enabled()		false
-+
-+static inline void scx_pre_fork(struct task_struct *p) {}
-+static inline int scx_fork(struct task_struct *p) { return 0; }
-+static inline void scx_post_fork(struct task_struct *p) {}
-+static inline void scx_cancel_fork(struct task_struct *p) {}
-+static inline void init_sched_ext_class(void) {}
-+
-+#define for_each_active_class		for_each_class
-+#define for_balance_class_range		for_class_range
-+
-+#endif	/* CONFIG_SCHED_CLASS_EXT */
-+
-+#if defined(CONFIG_SCHED_CLASS_EXT) && defined(CONFIG_SMP)
-+#error "NOT IMPLEMENTED YET"
-+#else
-+static inline void scx_update_idle(struct rq *rq, bool idle) {}
-+#endif
-diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
-index f26ab2675f7d..86bc5832bdc4 100644
---- a/kernel/sched/idle.c
-+++ b/kernel/sched/idle.c
-@@ -428,11 +428,13 @@ static void check_preempt_curr_idle(struct rq *rq, struct task_struct *p, int fl
- 
- static void put_prev_task_idle(struct rq *rq, struct task_struct *prev)
- {
-+	scx_update_idle(rq, false);
- }
- 
- static void set_next_task_idle(struct rq *rq, struct task_struct *next, bool first)
- {
- 	update_idle_core(rq);
-+	scx_update_idle(rq, true);
- 	schedstat_inc(rq->sched_goidle);
- }
- 
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 91b6fed6aa93..d57d17d8ea6b 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -3366,4 +3366,6 @@ enum cpu_cftype_id {
- extern struct cftype cpu_cftypes[CPU_CFTYPE_CNT + 1];
- #endif /* CONFIG_CGROUP_SCHED */
- 
-+#include "ext.h"
-+
- #endif /* _KERNEL_SCHED_SCHED_H */
 -- 
 2.39.1
 
