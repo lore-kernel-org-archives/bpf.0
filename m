@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 496ADC61DA7
-	for <bpf@archiver.kernel.org>; Sat, 28 Jan 2023 00:18:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1343C38142
+	for <bpf@archiver.kernel.org>; Sat, 28 Jan 2023 00:19:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231616AbjA1ASb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 27 Jan 2023 19:18:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36750 "EHLO
+        id S232910AbjA1ATK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 27 Jan 2023 19:19:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232793AbjA1AR7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 27 Jan 2023 19:17:59 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355FC8D087;
-        Fri, 27 Jan 2023 16:17:20 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id 36so4232960pgp.10;
-        Fri, 27 Jan 2023 16:17:20 -0800 (PST)
+        with ESMTP id S231599AbjA1ASF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 27 Jan 2023 19:18:05 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BD87CCB2;
+        Fri, 27 Jan 2023 16:17:29 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id v23so6592297plo.1;
+        Fri, 27 Jan 2023 16:17:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Rmc1QkfbcYCP0+1/1Bfxt/7PlyeNBnS/QuLPrVV9hic=;
-        b=bdG8VGv+409qnqOmS1aQHWHih8JWgNqQbDmJl2N2SVl+9QJtrLc2QGYJw+DOp/pRIZ
-         HgVfL/9dluCmu0oPP0BOPTfhHzIONFHNl1SI1HIgks06yp3otjyyKc8bLtvXn8VPrn62
-         Ry+eKrtqbWfR1TMmfHhUd5u0gXbXzTRq+0VmNzcSCuJa33N0EtWf7PAuFKCW5+SJiv23
-         XGTNZimnHAjrhk14TN0exZ85OuVlHKLvVVuM2wMMIcfPSDJKpsfKZuQdrZa6vMECKk61
-         vId2McbecBJN7HKMg1TB9kujyApk8Bp+PlRNNAOF8+T3pDI1VQzAazkp8hC14HP32e0W
-         bU2g==
+        bh=ShvHxKSvwBj/EM2eUFVCPEUd79aoyWNar7Xjs0gX+VI=;
+        b=MuYrxfRzqS0pNVRRpV6OUWON+D10yphHLf19wJqYr5KSpGjYaD7O5cprW7ajyjeVFN
+         tQMacVNywpwmpbKLCji1IQCJRex1Uiw+naRWsuC5f0y9L+/XmCI6c0nqWWZ/hCNeAWgM
+         zUuWxB89+17IGS7ZIdAc0f/+xO7uJywuvecWmIxBEbAmMUZyzTwLZTYjP1RFVj0gOJRW
+         kb/XnhGlEo40cwnk3CTmGIsFswRlXuUX4Ud9hdFYXSANljlEDEDbpKSq2GcA0V2EZoth
+         d9/GQ4TCQJtTSSmDMwWO/jJ/YGZTS34995+yMepDcjFiCdv8IYfmvJp+AI1smh9FdJTI
+         snug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Rmc1QkfbcYCP0+1/1Bfxt/7PlyeNBnS/QuLPrVV9hic=;
-        b=egY+8X8iap3jDMZDZ9bZqBY7IIqmr0Q7yzhhxA7EOD7MGlNUfhnstiId93q2jts51/
-         Ns+BWvMHWxb6OM5p/MVxgUZZl4ST1J/f2CZ3hWm3UCZJsCJtzrS0IpLEOIyoINotB9Tt
-         kkZNiSCS/uB0ZAARqX/9iaRS6D++GsUWIa/PvrYlrobyEMIJY24T/clLV2jUFoZAVvhF
-         QbIFCSyF1AU2iFMLGjMgSt4rdb5cmKmp0QDEapy7O0Y5mdL7eaIWg0c0pccKisQWoxMU
-         4vND0YK0oNfaLsBuLpM/CkxWrKpggm8YTnQxhN55TgpLETFZmbBfQRgML/5hjtE2T2Ro
-         +XVg==
-X-Gm-Message-State: AO0yUKVjaMJyQJy3yHvLOKSS3rB9olwn1dj6pojAXVl7+7OElRuAzSze
-        FUu5F55v8JpvFPObBr5+lJc=
-X-Google-Smtp-Source: AK7set+nkG1XzbGdK9dhdNlR7ii/0SAfHenLlRzvzK9Nxqnd5tQrYsu79ISOo+oNxOG3wodaDX9Yfg==
-X-Received: by 2002:a05:6a00:420f:b0:590:7623:9c6f with SMTP id cd15-20020a056a00420f00b0059076239c6fmr231418pfb.34.1674865037937;
-        Fri, 27 Jan 2023 16:17:17 -0800 (PST)
+        bh=ShvHxKSvwBj/EM2eUFVCPEUd79aoyWNar7Xjs0gX+VI=;
+        b=279AxleBl9TwTPs64vh2ql5Y8Rm8ZxRs5tHihwBAkKtkEpydMjEWslAkIfbbKxqQBI
+         RW0MKVWWez6QdjvAVVq9uryEe8hnttSX4mU7viQ9p0jVriDJDSVot0JyDwjGwx+EyIzO
+         tkgYD1EUayBvXzGeSt4Se9dl7vJu+M9etbYdDtKMTmdUw33V2qwbytE4QgZ0egNrUn51
+         GqsnO0w2cti8hC6DHOd5fG4rTonvKVmZD1XAi1C+aodC1bfRbIQKHbHU9ls9g8oU0SF0
+         qnBaYzh+kgVo1XnT/A+G59Il80czHnAEZKYnh9J6uqgNf/TGojUfaqXgcMTc4H4uSxVI
+         ZL+Q==
+X-Gm-Message-State: AFqh2krSChEI+f3lHijewj6xxLVxOUwHr8ZcXsA0REvYZublukMW5wg8
+        zNEfzYOsyRk+F3QJZM8nQy+3aOk/GBw=
+X-Google-Smtp-Source: AMrXdXuNjRdTROrVaUoV6b/cdf05Ut3DAhXyG5LeIlrQ1jLVvddFEMs+Jyyr4yO4XJrE0DYohpIpzg==
+X-Received: by 2002:a17:902:b213:b0:189:e3d0:daf8 with SMTP id t19-20020a170902b21300b00189e3d0daf8mr39278315plr.55.1674865041676;
+        Fri, 27 Jan 2023 16:17:21 -0800 (PST)
 Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id o23-20020aa79797000000b00580978caca7sm3202480pfp.45.2023.01.27.16.17.17
+        by smtp.gmail.com with ESMTPSA id k14-20020a170902ce0e00b0018c990ce7fesm3378804plg.239.2023.01.27.16.17.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 16:17:17 -0800 (PST)
+        Fri, 27 Jan 2023 16:17:21 -0800 (PST)
 Sender: Tejun Heo <htejun@gmail.com>
 From:   Tejun Heo <tj@kernel.org>
 To:     torvalds@linux-foundation.org, mingo@redhat.com,
@@ -61,10 +61,11 @@ To:     torvalds@linux-foundation.org, mingo@redhat.com,
         derkling@google.com, haoluo@google.com, dvernet@meta.com,
         dschatzberg@meta.com, dskarlat@cs.cmu.edu, riel@surriel.com
 Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        kernel-team@meta.com, Tejun Heo <tj@kernel.org>
-Subject: [PATCH 14/30] sched_ext: Add scx_example_dummy and scx_example_qmap example schedulers
-Date:   Fri, 27 Jan 2023 14:16:23 -1000
-Message-Id: <20230128001639.3510083-15-tj@kernel.org>
+        kernel-team@meta.com, Tejun Heo <tj@kernel.org>,
+        Julia Lawall <julia.lawall@inria.fr>
+Subject: [PATCH 16/30] sched_ext: Implement runnable task stall watchdog
+Date:   Fri, 27 Jan 2023 14:16:25 -1000
+Message-Id: <20230128001639.3510083-17-tj@kernel.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230128001639.3510083-1-tj@kernel.org>
 References: <20230128001639.3510083-1-tj@kernel.org>
@@ -74,945 +75,582 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add two simple example BPF schedulers - dummy and qmap.
+From: David Vernet <dvernet@meta.com>
 
-* dummy: In terms of scheduling, it behaves identical to not having any
-  operation implemented at all. The two operations it implements are only to
-  improve visibility and exit handling. On certain homogeneous
-  configurations, this actually can perform pretty well.
+The most common and critical way that a BPF scheduler can misbehave is by
+failing to run runnable tasks for too long. This patch implements a
+watchdog.
 
-* qmap: A fixed five level priority scheduler to demonstrate queueing PIDs
-  on BPF maps for scheduling. While not very practical, this is useful as a
-  simple example and will be used to demonstrate different features.
+* All tasks record when they become runnable.
 
-v2: Updated with the generic BPF cpumask helpers.
+* A watchdog work periodically scans all runnable tasks. If any task has
+  stayed runnable for too long, the BPF scheduler is aborted.
 
+* scheduler_tick() monitors whether the watchdog itself is stuck. If so, the
+  BPF scheduler is aborted.
+
+Because the watchdog only scans the tasks which are currently runnable and
+usually very infrequently, the overhead should be negligible.
+scx_example_qmap is updated so that it can be told to stall user and/or
+kernel tasks.
+
+A detected task stall looks like the following:
+
+ sched_ext: BPF scheduler "qmap" errored, disabling
+ sched_ext: runnable task stall (dbus-daemon[953] failed to run for 6.478s)
+    scx_check_timeout_workfn+0x10e/0x1b0
+    process_one_work+0x287/0x560
+    worker_thread+0x234/0x420
+    kthread+0xe9/0x100
+    ret_from_fork+0x1f/0x30
+
+A detected watchdog stall:
+
+ sched_ext: BPF scheduler "qmap" errored, disabling
+ sched_ext: runnable task stall (watchdog failed to check in for 5.001s)
+    scheduler_tick+0x2eb/0x340
+    update_process_times+0x7a/0x90
+    tick_sched_timer+0xd8/0x130
+    __hrtimer_run_queues+0x178/0x3b0
+    hrtimer_interrupt+0xfc/0x390
+    __sysvec_apic_timer_interrupt+0xb7/0x2b0
+    sysvec_apic_timer_interrupt+0x90/0xb0
+    asm_sysvec_apic_timer_interrupt+0x1b/0x20
+    default_idle+0x14/0x20
+    arch_cpu_idle+0xf/0x20
+    default_idle_call+0x50/0x90
+    do_idle+0xe8/0x240
+    cpu_startup_entry+0x1d/0x20
+    kernel_init+0x0/0x190
+    start_kernel+0x0/0x392
+    start_kernel+0x324/0x392
+    x86_64_start_reservations+0x2a/0x2c
+    x86_64_start_kernel+0x104/0x109
+    secondary_startup_64_no_verify+0xce/0xdb
+
+Note that this patch exposes scx_ops_error[_type]() in kernel/sched/ext.h to
+inline scx_notify_sched_tick().
+
+v2: Julia Lawall noticed that the watchdog code was mixing msecs and
+    jiffies. Fix by using jiffies for everything.
+
+Signed-off-by: David Vernet <dvernet@meta.com>
+Reviewed-by: Tejun Heo <tj@kernel.org>
 Signed-off-by: Tejun Heo <tj@kernel.org>
-Reviewed-by: David Vernet <dvernet@meta.com>
 Acked-by: Josh Don <joshdon@google.com>
 Acked-by: Hao Luo <haoluo@google.com>
 Acked-by: Barret Rhoden <brho@google.com>
+Cc: Julia Lawall <julia.lawall@inria.fr>
 ---
- tools/sched_ext/.gitignore              |   5 +
- tools/sched_ext/Makefile                | 188 +++++++++++++++++++
- tools/sched_ext/gnu/stubs.h             |   1 +
- tools/sched_ext/scx_common.bpf.h        | 131 +++++++++++++
- tools/sched_ext/scx_example_dummy.bpf.c |  56 ++++++
- tools/sched_ext/scx_example_dummy.c     |  93 +++++++++
- tools/sched_ext/scx_example_qmap.bpf.c  | 238 ++++++++++++++++++++++++
- tools/sched_ext/scx_example_qmap.c      |  84 +++++++++
- tools/sched_ext/user_exit_info.h        |  50 +++++
- 9 files changed, 846 insertions(+)
- create mode 100644 tools/sched_ext/.gitignore
- create mode 100644 tools/sched_ext/Makefile
- create mode 100644 tools/sched_ext/gnu/stubs.h
- create mode 100644 tools/sched_ext/scx_common.bpf.h
- create mode 100644 tools/sched_ext/scx_example_dummy.bpf.c
- create mode 100644 tools/sched_ext/scx_example_dummy.c
- create mode 100644 tools/sched_ext/scx_example_qmap.bpf.c
- create mode 100644 tools/sched_ext/scx_example_qmap.c
- create mode 100644 tools/sched_ext/user_exit_info.h
+ include/linux/sched/ext.h              |  13 +++
+ init/init_task.c                       |   2 +
+ kernel/sched/core.c                    |   3 +
+ kernel/sched/ext.c                     | 128 +++++++++++++++++++++++--
+ kernel/sched/ext.h                     |  25 +++++
+ kernel/sched/sched.h                   |   1 +
+ tools/sched_ext/scx_example_qmap.bpf.c |  12 +++
+ tools/sched_ext/scx_example_qmap.c     |  14 ++-
+ 8 files changed, 186 insertions(+), 12 deletions(-)
 
-diff --git a/tools/sched_ext/.gitignore b/tools/sched_ext/.gitignore
-new file mode 100644
-index 000000000000..6734f7fd9324
---- /dev/null
-+++ b/tools/sched_ext/.gitignore
-@@ -0,0 +1,5 @@
-+scx_example_dummy
-+scx_example_qmap
-+*.skel.h
-+*.subskel.h
-+/tools/
-diff --git a/tools/sched_ext/Makefile b/tools/sched_ext/Makefile
-new file mode 100644
-index 000000000000..926b0a36c221
---- /dev/null
-+++ b/tools/sched_ext/Makefile
-@@ -0,0 +1,188 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
-+include ../build/Build.include
-+include ../scripts/Makefile.arch
-+include ../scripts/Makefile.include
-+
-+ifneq ($(LLVM),)
-+ifneq ($(filter %/,$(LLVM)),)
-+LLVM_PREFIX := $(LLVM)
-+else ifneq ($(filter -%,$(LLVM)),)
-+LLVM_SUFFIX := $(LLVM)
-+endif
-+
-+CLANG_TARGET_FLAGS_arm          := arm-linux-gnueabi
-+CLANG_TARGET_FLAGS_arm64        := aarch64-linux-gnu
-+CLANG_TARGET_FLAGS_hexagon      := hexagon-linux-musl
-+CLANG_TARGET_FLAGS_m68k         := m68k-linux-gnu
-+CLANG_TARGET_FLAGS_mips         := mipsel-linux-gnu
-+CLANG_TARGET_FLAGS_powerpc      := powerpc64le-linux-gnu
-+CLANG_TARGET_FLAGS_riscv        := riscv64-linux-gnu
-+CLANG_TARGET_FLAGS_s390         := s390x-linux-gnu
-+CLANG_TARGET_FLAGS_x86          := x86_64-linux-gnu
-+CLANG_TARGET_FLAGS              := $(CLANG_TARGET_FLAGS_$(ARCH))
-+
-+ifeq ($(CROSS_COMPILE),)
-+ifeq ($(CLANG_TARGET_FLAGS),)
-+$(error Specify CROSS_COMPILE or add '--target=' option to lib.mk
-+else
-+CLANG_FLAGS     += --target=$(CLANG_TARGET_FLAGS)
-+endif # CLANG_TARGET_FLAGS
-+else
-+CLANG_FLAGS     += --target=$(notdir $(CROSS_COMPILE:%-=%))
-+endif # CROSS_COMPILE
-+
-+CC := $(LLVM_PREFIX)clang$(LLVM_SUFFIX) $(CLANG_FLAGS) -fintegrated-as
-+else
-+CC := $(CROSS_COMPILE)gcc
-+endif # LLVM
-+
-+CURDIR := $(abspath .)
-+TOOLSDIR := $(abspath ..)
-+LIBDIR := $(TOOLSDIR)/lib
-+BPFDIR := $(LIBDIR)/bpf
-+TOOLSINCDIR := $(TOOLSDIR)/include
-+BPFTOOLDIR := $(TOOLSDIR)/bpf/bpftool
-+APIDIR := $(TOOLSINCDIR)/uapi
-+GENDIR := $(abspath ../../include/generated)
-+GENHDR := $(GENDIR)/autoconf.h
-+
-+SCRATCH_DIR := $(CURDIR)/tools
-+BUILD_DIR := $(SCRATCH_DIR)/build
-+INCLUDE_DIR := $(SCRATCH_DIR)/include
-+BPFOBJ_DIR := $(BUILD_DIR)/libbpf
-+BPFOBJ := $(BPFOBJ_DIR)/libbpf.a
-+ifneq ($(CROSS_COMPILE),)
-+HOST_BUILD_DIR		:= $(BUILD_DIR)/host
-+HOST_SCRATCH_DIR	:= host-tools
-+HOST_INCLUDE_DIR	:= $(HOST_SCRATCH_DIR)/include
-+else
-+HOST_BUILD_DIR		:= $(BUILD_DIR)
-+HOST_SCRATCH_DIR	:= $(SCRATCH_DIR)
-+HOST_INCLUDE_DIR	:= $(INCLUDE_DIR)
-+endif
-+HOST_BPFOBJ := $(HOST_BUILD_DIR)/libbpf/libbpf.a
-+RESOLVE_BTFIDS := $(HOST_BUILD_DIR)/resolve_btfids/resolve_btfids
-+DEFAULT_BPFTOOL := $(HOST_SCRATCH_DIR)/sbin/bpftool
-+
-+VMLINUX_BTF_PATHS ?= $(if $(O),$(O)/vmlinux)					\
-+		     $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)		\
-+		     ../../vmlinux						\
-+		     /sys/kernel/btf/vmlinux					\
-+		     /boot/vmlinux-$(shell uname -r)
-+VMLINUX_BTF ?= $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS))))
-+ifeq ($(VMLINUX_BTF),)
-+$(error Cannot find a vmlinux for VMLINUX_BTF at any of "$(VMLINUX_BTF_PATHS)")
-+endif
-+
-+BPFTOOL ?= $(DEFAULT_BPFTOOL)
-+
-+ifneq ($(wildcard $(GENHDR)),)
-+  GENFLAGS := -DHAVE_GENHDR
-+endif
-+
-+CFLAGS += -g -O2 -rdynamic -pthread -Wall -Werror $(GENFLAGS)			\
-+	  -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)				\
-+	  -I$(TOOLSINCDIR) -I$(APIDIR)
-+
-+# Silence some warnings when compiled with clang
-+ifneq ($(LLVM),)
-+CFLAGS += -Wno-unused-command-line-argument
-+endif
-+
-+LDFLAGS = -lelf -lz -lpthread
-+
-+IS_LITTLE_ENDIAN = $(shell $(CC) -dM -E - </dev/null |				\
-+			grep 'define __BYTE_ORDER__ __ORDER_LITTLE_ENDIAN__')
-+
-+# Get Clang's default includes on this system, as opposed to those seen by
-+# '-target bpf'. This fixes "missing" files on some architectures/distros,
-+# such as asm/byteorder.h, asm/socket.h, asm/sockios.h, sys/cdefs.h etc.
-+#
-+# Use '-idirafter': Don't interfere with include mechanics except where the
-+# build would have failed anyways.
-+define get_sys_includes
-+$(shell $(1) -v -E - </dev/null 2>&1 \
-+	| sed -n '/<...> search starts here:/,/End of search list./{ s| \(/.*\)|-idirafter \1|p }') \
-+$(shell $(1) -dM -E - </dev/null | grep '__riscv_xlen ' | awk '{printf("-D__riscv_xlen=%d -D__BITS_PER_LONG=%d", $$3, $$3)}')
-+endef
-+
-+BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH)					\
-+	     $(if $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)		\
-+	     -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)				\
-+	     -I../../include							\
-+	     $(call get_sys_includes,$(CLANG))					\
-+	     -Wno-compare-distinct-pointer-types				\
-+	     -O2 -mcpu=v3
-+
-+all: scx_example_dummy scx_example_qmap
-+
-+# sort removes libbpf duplicates when not cross-building
-+MAKE_DIRS := $(sort $(BUILD_DIR)/libbpf $(HOST_BUILD_DIR)/libbpf		\
-+	       $(HOST_BUILD_DIR)/bpftool $(HOST_BUILD_DIR)/resolve_btfids	\
-+	       $(INCLUDE_DIR))
-+
-+$(MAKE_DIRS):
-+	$(call msg,MKDIR,,$@)
-+	$(Q)mkdir -p $@
-+
-+$(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)			\
-+	   $(APIDIR)/linux/bpf.h						\
-+	   | $(BUILD_DIR)/libbpf
-+	$(Q)$(MAKE) $(submake_extras) -C $(BPFDIR) OUTPUT=$(BUILD_DIR)/libbpf/	\
-+		    EXTRA_CFLAGS='-g -O0 -fPIC'					\
-+		    DESTDIR=$(SCRATCH_DIR) prefix= all install_headers
-+
-+$(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)	\
-+		    $(HOST_BPFOBJ) | $(HOST_BUILD_DIR)/bpftool
-+	$(Q)$(MAKE) $(submake_extras)  -C $(BPFTOOLDIR)				\
-+		    ARCH= CROSS_COMPILE= CC=$(HOSTCC) LD=$(HOSTLD)		\
-+		    EXTRA_CFLAGS='-g -O0'					\
-+		    OUTPUT=$(HOST_BUILD_DIR)/bpftool/				\
-+		    LIBBPF_OUTPUT=$(HOST_BUILD_DIR)/libbpf/			\
-+		    LIBBPF_DESTDIR=$(HOST_SCRATCH_DIR)/				\
-+		    prefix= DESTDIR=$(HOST_SCRATCH_DIR)/ install-bin
-+
-+$(INCLUDE_DIR)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL) | $(INCLUDE_DIR)
-+ifeq ($(VMLINUX_H),)
-+	$(call msg,GEN,,$@)
-+	$(Q)$(BPFTOOL) btf dump file $(VMLINUX_BTF) format c > $@
-+else
-+	$(call msg,CP,,$@)
-+	$(Q)cp "$(VMLINUX_H)" $@
-+endif
-+
-+%.bpf.o: %.bpf.c $(INCLUDE_DIR)/vmlinux.h scx_common.bpf.h user_exit_info.h	\
-+	| $(BPFOBJ)
-+	$(call msg,CLNG-BPF,,$@)
-+	$(Q)$(CLANG) $(BPF_CFLAGS) -target bpf -c $< -o $@
-+
-+%.skel.h: %.bpf.o $(BPFTOOL)
-+	$(call msg,GEN-SKEL,,$@)
-+	$(Q)$(BPFTOOL) gen object $(<:.o=.linked1.o) $<
-+	$(Q)$(BPFTOOL) gen object $(<:.o=.linked2.o) $(<:.o=.linked1.o)
-+	$(Q)$(BPFTOOL) gen object $(<:.o=.linked3.o) $(<:.o=.linked2.o)
-+	$(Q)diff $(<:.o=.linked2.o) $(<:.o=.linked3.o)
-+	$(Q)$(BPFTOOL) gen skeleton $(<:.o=.linked3.o) name $(<:.bpf.o=) > $@
-+	$(Q)$(BPFTOOL) gen subskeleton $(<:.o=.linked3.o) name $(<:.bpf.o=) > $(@:.skel.h=.subskel.h)
-+
-+scx_example_dummy: scx_example_dummy.c scx_example_dummy.skel.h user_exit_info.h
-+	$(CC) $(CFLAGS) -c $< -o $@.o
-+	$(CC) -o $@ $@.o $(HOST_BPFOBJ) $(LDFLAGS)
-+
-+scx_example_qmap: scx_example_qmap.c scx_example_qmap.skel.h user_exit_info.h
-+	$(CC) $(CFLAGS) -c $< -o $@.o
-+	$(CC) -o $@ $@.o $(HOST_BPFOBJ) $(LDFLAGS)
-+
-+clean:
-+	rm -rf $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)
-+	rm -f *.o *.bpf.o *.skel.h *.subskel.h
-+	rm -f scx_example_dummy scx_example_qmap
-+
-+.PHONY: all clean
-+
-+# delete failed targets
-+.DELETE_ON_ERROR:
-+
-+# keep intermediate (.skel.h, .bpf.o, etc) targets
-+.SECONDARY:
-diff --git a/tools/sched_ext/gnu/stubs.h b/tools/sched_ext/gnu/stubs.h
-new file mode 100644
-index 000000000000..719225b16626
---- /dev/null
-+++ b/tools/sched_ext/gnu/stubs.h
-@@ -0,0 +1 @@
-+/* dummy .h to trick /usr/include/features.h to work with 'clang -target bpf' */
-diff --git a/tools/sched_ext/scx_common.bpf.h b/tools/sched_ext/scx_common.bpf.h
-new file mode 100644
-index 000000000000..b40a4fc6a159
---- /dev/null
-+++ b/tools/sched_ext/scx_common.bpf.h
-@@ -0,0 +1,131 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
-+ * Copyright (c) 2022 Tejun Heo <tj@kernel.org>
-+ * Copyright (c) 2022 David Vernet <dvernet@meta.com>
-+ */
-+#ifndef __SCHED_EXT_COMMON_BPF_H
-+#define __SCHED_EXT_COMMON_BPF_H
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <linux/errno.h>
-+#include "user_exit_info.h"
-+
-+/*
-+ * Earlier versions of clang/pahole lost upper 32bits in 64bit enums which can
-+ * lead to really confusing misbehaviors. Let's trigger a build failure.
-+ */
-+static inline void ___vmlinux_h_sanity_check___(void)
-+{
-+	_Static_assert(SCX_DSQ_FLAG_BUILTIN,
-+		       "bpftool generated vmlinux.h is missing high bits for 64bit enums, upgrade clang and pahole");
-+}
-+
-+void scx_bpf_error_bstr(char *fmt, unsigned long long *data, u32 data_len) __ksym;
-+
-+static inline __attribute__((format(printf, 1, 2)))
-+void ___scx_bpf_error_format_checker(const char *fmt, ...) {}
-+
-+/*
-+ * scx_bpf_error() wraps the scx_bpf_error_bstr() kfunc with variadic arguments
-+ * instead of an array of u64. Note that __param[] must have at least one
-+ * element to keep the verifier happy.
-+ */
-+#define scx_bpf_error(fmt, args...)						\
-+({										\
-+	static char ___fmt[] = fmt;						\
-+	unsigned long long ___param[___bpf_narg(args) ?: 1] = {};		\
-+										\
-+	_Pragma("GCC diagnostic push")						\
-+	_Pragma("GCC diagnostic ignored \"-Wint-conversion\"")			\
-+	___bpf_fill(___param, args);						\
-+	_Pragma("GCC diagnostic pop")						\
-+										\
-+	scx_bpf_error_bstr(___fmt, ___param, sizeof(___param));			\
-+										\
-+	___scx_bpf_error_format_checker(fmt, ##args);				\
-+})
-+
-+/* BPF core task / cgroup kfunc helpers */
-+struct task_struct *bpf_task_from_pid(s32 pid) __ksym;
-+struct task_struct *bpf_task_acquire(struct task_struct *p) __ksym;
-+void bpf_task_release(struct task_struct *p) __ksym;
-+
-+/* BPF core cpumask kfuncs */
-+struct bpf_cpumask *bpf_cpumask_create(void) __ksym;
-+struct bpf_cpumask *bpf_cpumask_acquire(struct bpf_cpumask *cpumask) __ksym;
-+struct bpf_cpumask *bpf_cpumask_kptr_get(struct bpf_cpumask **map_value) __ksym;
-+void bpf_cpumask_release(struct bpf_cpumask *cpumask) __ksym;
-+bool bpf_cpumask_test_cpu(u32 cpu, const struct cpumask *cpumask) __ksym;
-+void bpf_cpumask_set_cpu(u32 cpu, struct bpf_cpumask *cpumask) __ksym;
-+void bpf_cpumask_clear_cpu(u32 cpu, struct bpf_cpumask *cpumask) __ksym;
-+void bpf_cpumask_copy(struct bpf_cpumask *dst, const struct cpumask *src) __ksym;
-+bool bpf_cpumask_and(struct bpf_cpumask *dst, const struct cpumask *src1,
-+		     const struct cpumask *src2) __ksym;
-+u32 bpf_cpumask_first(const struct cpumask *cpumask) __ksym;
-+
-+s32 scx_bpf_create_dsq(u64 dsq_id, s32 node) __ksym;
-+bool scx_bpf_consume(u64 dsq_id) __ksym;
-+u32 scx_bpf_dispatch_nr_slots(void) __ksym;
-+void scx_bpf_dispatch(struct task_struct *p, u64 dsq_id, u64 slice, u64 enq_flags) __ksym;
-+s32 scx_bpf_dsq_nr_queued(u64 dsq_id) __ksym;
-+bool scx_bpf_test_and_clear_cpu_idle(s32 cpu) __ksym;
-+s32 scx_bpf_pick_idle_cpu(const cpumask_t *cpus_allowed) __ksym;
-+const struct cpumask *scx_bpf_get_idle_percpu_cpumask(void) __ksym;
-+const struct cpumask *scx_bpf_get_idle_smt_cpumask(void) __ksym;
-+void scx_bpf_put_idle_cpumask(const struct cpumask *cpumask) __ksym;
-+void scx_bpf_destroy_dsq(u64 dsq_id) __ksym;
-+bool scx_bpf_task_running(const struct task_struct *p) __ksym;
-+s32 scx_bpf_task_cpu(const struct task_struct *p) __ksym;
-+
-+#define PF_KTHREAD			0x00200000	/* I am a kernel thread */
-+#define PF_EXITING			0x00000004
-+#define CLOCK_MONOTONIC			1
-+
-+#define BPF_STRUCT_OPS(name, args...)						\
-+SEC("struct_ops/"#name)								\
-+BPF_PROG(name, ##args)
-+
-+#define BPF_STRUCT_OPS_SLEEPABLE(name, args...)					\
-+SEC("struct_ops.s/"#name)							\
-+BPF_PROG(name, ##args)
-+
-+/**
-+ * MEMBER_VPTR - Obtain the verified pointer to a struct or array member
-+ * @base: struct or array to index
-+ * @member: dereferenced member (e.g. ->field, [idx0][idx1], ...)
-+ *
-+ * The verifier often gets confused by the instruction sequence the compiler
-+ * generates for indexing struct fields or arrays. This macro forces the
-+ * compiler to generate a code sequence which first calculates the byte offset,
-+ * checks it against the struct or array size and add that byte offset to
-+ * generate the pointer to the member to help the verifier.
-+ *
-+ * Ideally, we want to abort if the calculated offset is out-of-bounds. However,
-+ * BPF currently doesn't support abort, so evaluate to NULL instead. The caller
-+ * must check for NULL and take appropriate action to appease the verifier. To
-+ * avoid confusing the verifier, it's best to check for NULL and dereference
-+ * immediately.
-+ *
-+ *	vptr = MEMBER_VPTR(my_array, [i][j]);
-+ *	if (!vptr)
-+ *		return error;
-+ *	*vptr = new_value;
-+ */
-+#define MEMBER_VPTR(base, member) (typeof(base member) *)({			\
-+	u64 __base = (u64)base;							\
-+	u64 __addr = (u64)&(base member) - __base;				\
-+	asm volatile (								\
-+		"if %0 <= %[max] goto +2\n"					\
-+		"%0 = 0\n"							\
-+		"goto +1\n"							\
-+		"%0 += %1\n"							\
-+		: "+r"(__addr)							\
-+		: "r"(__base),							\
-+		  [max]"i"(sizeof(base) - sizeof(base member)));		\
-+	__addr;									\
-+})
-+
-+#endif	/* __SCHED_EXT_COMMON_BPF_H */
-diff --git a/tools/sched_ext/scx_example_dummy.bpf.c b/tools/sched_ext/scx_example_dummy.bpf.c
-new file mode 100644
-index 000000000000..ac7b490b5a39
---- /dev/null
-+++ b/tools/sched_ext/scx_example_dummy.bpf.c
-@@ -0,0 +1,56 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * A minimal dummy scheduler.
-+ *
-+ * In terms of scheduling, this behaves the same as not specifying any ops at
-+ * all - a global FIFO. The only things it adds are the following niceties:
-+ *
-+ * - Statistics tracking how many are queued to local and global dsq's.
-+ * - Termination notification for userspace.
-+ *
-+ * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
-+ * Copyright (c) 2022 Tejun Heo <tj@kernel.org>
-+ * Copyright (c) 2022 David Vernet <dvernet@meta.com>
-+ */
-+#include "scx_common.bpf.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct user_exit_info uei;
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
-+	__uint(key_size, sizeof(u32));
-+	__uint(value_size, sizeof(u64));
-+	__uint(max_entries, 2);			/* [local, global] */
-+} stats SEC(".maps");
-+
-+static void stat_inc(u32 idx)
-+{
-+	u64 *cnt_p = bpf_map_lookup_elem(&stats, &idx);
-+	if (cnt_p)
-+		(*cnt_p)++;
-+}
-+
-+void BPF_STRUCT_OPS(dummy_enqueue, struct task_struct *p, u64 enq_flags)
-+{
-+	if (enq_flags & SCX_ENQ_LOCAL) {
-+		stat_inc(0);
-+		scx_bpf_dispatch(p, SCX_DSQ_LOCAL, SCX_SLICE_DFL, enq_flags);
-+	} else {
-+		stat_inc(1);
-+		scx_bpf_dispatch(p, SCX_DSQ_GLOBAL, SCX_SLICE_DFL, enq_flags);
-+	}
-+}
-+
-+void BPF_STRUCT_OPS(dummy_exit, struct scx_exit_info *ei)
-+{
-+	uei_record(&uei, ei);
-+}
-+
-+SEC(".struct_ops")
-+struct sched_ext_ops dummy_ops = {
-+	.enqueue		= (void *)dummy_enqueue,
-+	.exit			= (void *)dummy_exit,
-+	.name			= "dummy",
-+};
-diff --git a/tools/sched_ext/scx_example_dummy.c b/tools/sched_ext/scx_example_dummy.c
-new file mode 100644
-index 000000000000..72881c881830
---- /dev/null
-+++ b/tools/sched_ext/scx_example_dummy.c
-@@ -0,0 +1,93 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
-+ * Copyright (c) 2022 Tejun Heo <tj@kernel.org>
-+ * Copyright (c) 2022 David Vernet <dvernet@meta.com>
-+ */
-+#define _GNU_SOURCE
-+#include <stdio.h>
-+#include <unistd.h>
-+#include <signal.h>
-+#include <assert.h>
-+#include <libgen.h>
-+#include <bpf/bpf.h>
-+#include "user_exit_info.h"
-+#include "scx_example_dummy.skel.h"
-+
-+const char help_fmt[] =
-+"A minimal dummy sched_ext scheduler.\n"
-+"\n"
-+"See the top-level comment in .bpf.c for more details.\n"
-+"\n"
-+"Usage: %s\n"
-+"\n"
-+"  -h            Display this help and exit\n";
-+
-+static volatile int exit_req;
-+
-+static void sigint_handler(int dummy)
-+{
-+	exit_req = 1;
-+}
-+
-+static void read_stats(struct scx_example_dummy *skel, u64 *stats)
-+{
-+	int nr_cpus = libbpf_num_possible_cpus();
-+	u64 cnts[2][nr_cpus];
-+	u32 idx;
-+
-+	memset(stats, 0, sizeof(stats[0]) * 2);
-+
-+	for (idx = 0; idx < 2; idx++) {
-+		int ret, cpu;
-+
-+		ret = bpf_map_lookup_elem(bpf_map__fd(skel->maps.stats),
-+					  &idx, cnts[idx]);
-+		if (ret < 0)
-+			continue;
-+		for (cpu = 0; cpu < nr_cpus; cpu++)
-+			stats[idx] += cnts[idx][cpu];
-+	}
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	struct scx_example_dummy *skel;
-+	struct bpf_link *link;
-+	u32 opt;
-+
-+	signal(SIGINT, sigint_handler);
-+	signal(SIGTERM, sigint_handler);
-+
-+	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
-+
-+	skel = scx_example_dummy__open();
-+	assert(skel);
-+
-+	while ((opt = getopt(argc, argv, "h")) != -1) {
-+		switch (opt) {
-+		default:
-+			fprintf(stderr, help_fmt, basename(argv[0]));
-+			return opt != 'h';
-+		}
-+	}
-+
-+	assert(!scx_example_dummy__load(skel));
-+
-+	link = bpf_map__attach_struct_ops(skel->maps.dummy_ops);
-+	assert(link);
-+
-+	while (!exit_req && !uei_exited(&skel->bss->uei)) {
-+		u64 stats[2];
-+
-+		read_stats(skel, stats);
-+		printf("local=%lu global=%lu\n", stats[0], stats[1]);
-+		fflush(stdout);
-+		sleep(1);
-+	}
-+
-+	bpf_link__destroy(link);
-+	uei_print(&skel->bss->uei);
-+	scx_example_dummy__destroy(skel);
-+	return 0;
-+}
-diff --git a/tools/sched_ext/scx_example_qmap.bpf.c b/tools/sched_ext/scx_example_qmap.bpf.c
-new file mode 100644
-index 000000000000..06a07c834b42
---- /dev/null
-+++ b/tools/sched_ext/scx_example_qmap.bpf.c
-@@ -0,0 +1,238 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * A simple five-level FIFO queue scheduler.
-+ *
-+ * There are five FIFOs implemented using BPF_MAP_TYPE_QUEUE. A task gets
-+ * assigned to one depending on its compound weight. Each CPU round robins
-+ * through the FIFOs and dispatches more from FIFOs with higher indices - 1 from
-+ * queue0, 2 from queue1, 4 from queue2 and so on.
-+ *
-+ * This scheduler demonstrates:
-+ *
-+ * - BPF-side queueing using PIDs.
-+ * - Sleepable per-task storage allocation using ops.prep_enable().
-+ *
-+ * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
-+ * Copyright (c) 2022 Tejun Heo <tj@kernel.org>
-+ * Copyright (c) 2022 David Vernet <dvernet@meta.com>
-+ */
-+#include "scx_common.bpf.h"
-+#include <linux/sched/prio.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+const volatile u64 slice_ns = SCX_SLICE_DFL;
-+
-+u32 test_error_cnt;
-+
-+struct user_exit_info uei;
-+
-+struct qmap {
-+	__uint(type, BPF_MAP_TYPE_QUEUE);
-+	__uint(max_entries, 4096);
-+	__type(value, u32);
-+} queue0 SEC(".maps"),
-+  queue1 SEC(".maps"),
-+  queue2 SEC(".maps"),
-+  queue3 SEC(".maps"),
-+  queue4 SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
-+	__uint(max_entries, 5);
-+	__type(key, int);
-+	__array(values, struct qmap);
-+} queue_arr SEC(".maps") = {
-+	.values = {
-+		[0] = &queue0,
-+		[1] = &queue1,
-+		[2] = &queue2,
-+		[3] = &queue3,
-+		[4] = &queue4,
-+	},
-+};
-+
-+/* Per-task scheduling context */
-+struct task_ctx {
-+	bool	force_local;	/* Dispatch directly to local_dsq */
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_TASK_STORAGE);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, int);
-+	__type(value, struct task_ctx);
-+} task_ctx_stor SEC(".maps");
-+
-+/* Per-cpu dispatch index and remaining count */
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
-+	__uint(max_entries, 2);
-+	__type(key, u32);
-+	__type(value, u64);
-+} dispatch_idx_cnt SEC(".maps");
-+
-+/* Statistics */
-+unsigned long nr_enqueued, nr_dispatched, nr_dequeued;
-+
-+s32 BPF_STRUCT_OPS(qmap_select_cpu, struct task_struct *p,
-+		   s32 prev_cpu, u64 wake_flags)
-+{
-+	struct task_ctx *tctx;
-+	s32 cpu;
-+
-+	tctx = bpf_task_storage_get(&task_ctx_stor, p, 0, 0);
-+	if (!tctx) {
-+		scx_bpf_error("task_ctx lookup failed");
-+		return -ESRCH;
-+	}
-+
-+	if (p->nr_cpus_allowed == 1 ||
-+	    scx_bpf_test_and_clear_cpu_idle(prev_cpu)) {
-+		tctx->force_local = true;
-+		return prev_cpu;
-+	}
-+
-+	cpu = scx_bpf_pick_idle_cpu(p->cpus_ptr);
-+	if (cpu >= 0)
-+		return cpu;
-+
-+	return prev_cpu;
-+}
-+
-+static int weight_to_idx(u32 weight)
-+{
-+	/* Coarsely map the compound weight to a FIFO. */
-+	if (weight <= 25)
-+		return 0;
-+	else if (weight <= 50)
-+		return 1;
-+	else if (weight < 200)
-+		return 2;
-+	else if (weight < 400)
-+		return 3;
-+	else
-+		return 4;
-+}
-+
-+void BPF_STRUCT_OPS(qmap_enqueue, struct task_struct *p, u64 enq_flags)
-+{
-+	struct task_ctx *tctx;
-+	u32 pid = p->pid;
-+	int idx = weight_to_idx(p->scx.weight);
-+	void *ring;
-+
-+	if (test_error_cnt && !--test_error_cnt)
-+		scx_bpf_error("test triggering error");
-+
-+	tctx = bpf_task_storage_get(&task_ctx_stor, p, 0, 0);
-+	if (!tctx) {
-+		scx_bpf_error("task_ctx lookup failed");
-+		return;
-+	}
-+
-+	/* Is select_cpu() is telling us to enqueue locally? */
-+	if (tctx->force_local) {
-+		tctx->force_local = false;
-+		scx_bpf_dispatch(p, SCX_DSQ_LOCAL, slice_ns, enq_flags);
-+		return;
-+	}
-+
-+	ring = bpf_map_lookup_elem(&queue_arr, &idx);
-+	if (!ring) {
-+		scx_bpf_error("failed to find ring %d", idx);
-+		return;
-+	}
-+
-+	/* Queue on the selected FIFO. If the FIFO overflows, punt to global. */
-+	if (bpf_map_push_elem(ring, &pid, 0)) {
-+		scx_bpf_dispatch(p, SCX_DSQ_GLOBAL, slice_ns, enq_flags);
-+		return;
-+	}
-+
-+	__sync_fetch_and_add(&nr_enqueued, 1);
-+}
-+
-+/*
-+ * The BPF queue map doesn't support removal and sched_ext can handle spurious
-+ * dispatches. qmap_dequeue() is only used to collect statistics.
-+ */
-+void BPF_STRUCT_OPS(qmap_dequeue, struct task_struct *p, u64 deq_flags)
-+{
-+	__sync_fetch_and_add(&nr_dequeued, 1);
-+}
-+
-+void BPF_STRUCT_OPS(qmap_dispatch, s32 cpu, struct task_struct *prev)
-+{
-+	u32 zero = 0, one = 1;
-+	u64 *idx = bpf_map_lookup_elem(&dispatch_idx_cnt, &zero);
-+	u64 *cnt = bpf_map_lookup_elem(&dispatch_idx_cnt, &one);
-+	void *fifo;
-+	s32 pid;
-+	int i;
-+
-+	if (!idx || !cnt) {
-+		scx_bpf_error("failed to lookup idx[%p], cnt[%p]", idx, cnt);
-+		return;
-+	}
-+
-+	for (i = 0; i < 5; i++) {
-+		/* Advance the dispatch cursor and pick the fifo. */
-+		if (!*cnt) {
-+			*idx = (*idx + 1) % 5;
-+			*cnt = 1 << *idx;
-+		}
-+		(*cnt)--;
-+
-+		fifo = bpf_map_lookup_elem(&queue_arr, idx);
-+		if (!fifo) {
-+			scx_bpf_error("failed to find ring %llu", *idx);
-+			return;
-+		}
-+
-+		/* Dispatch or advance. */
-+		if (!bpf_map_pop_elem(fifo, &pid)) {
-+			struct task_struct *p;
-+
-+			p = bpf_task_from_pid(pid);
-+			if (p) {
-+				__sync_fetch_and_add(&nr_dispatched, 1);
-+				scx_bpf_dispatch(p, SCX_DSQ_GLOBAL, slice_ns, 0);
-+				bpf_task_release(p);
-+				return;
-+			}
-+		}
-+
-+		*cnt = 0;
-+	}
-+}
-+
-+s32 BPF_STRUCT_OPS(qmap_prep_enable, struct task_struct *p,
-+		   struct scx_enable_args *args)
-+{
-+	/*
-+	 * @p is new. Let's ensure that its task_ctx is available. We can sleep
-+	 * in this function and the following will automatically use GFP_KERNEL.
+diff --git a/include/linux/sched/ext.h b/include/linux/sched/ext.h
+index 988d1e30e26c..474a8c0a0b12 100644
+--- a/include/linux/sched/ext.h
++++ b/include/linux/sched/ext.h
+@@ -59,6 +59,7 @@ enum scx_exit_type {
+ 
+ 	SCX_EXIT_ERROR = 1024,	/* runtime error, error msg contains details */
+ 	SCX_EXIT_ERROR_BPF,	/* ERROR but triggered through scx_bpf_error() */
++	SCX_EXIT_ERROR_STALL,	/* watchdog detected stalled runnable tasks */
+ };
+ 
+ /*
+@@ -307,6 +308,15 @@ struct sched_ext_ops {
+ 	 */
+ 	u64 flags;
+ 
++	/**
++	 * timeout_ms - The maximum amount of time, in milliseconds, that a
++	 * runnable task should be able to wait before being scheduled. The
++	 * maximum timeout may not exceed the default timeout of 30 seconds.
++	 *
++	 * Defaults to the maximum allowed timeout value of 30 seconds.
 +	 */
-+	if (bpf_task_storage_get(&task_ctx_stor, p, 0,
-+				 BPF_LOCAL_STORAGE_GET_F_CREATE))
-+		return 0;
-+	else
-+		return -ENOMEM;
-+}
++	u32 timeout_ms;
 +
-+void BPF_STRUCT_OPS(qmap_exit, struct scx_exit_info *ei)
-+{
-+	uei_record(&uei, ei);
-+}
-+
-+SEC(".struct_ops")
-+struct sched_ext_ops qmap_ops = {
-+	.select_cpu		= (void *)qmap_select_cpu,
-+	.enqueue		= (void *)qmap_enqueue,
-+	.dequeue		= (void *)qmap_dequeue,
-+	.dispatch		= (void *)qmap_dispatch,
-+	.prep_enable		= (void *)qmap_prep_enable,
-+	.exit			= (void *)qmap_exit,
-+	.name			= "qmap",
-+};
-diff --git a/tools/sched_ext/scx_example_qmap.c b/tools/sched_ext/scx_example_qmap.c
-new file mode 100644
-index 000000000000..c6c74641a182
---- /dev/null
-+++ b/tools/sched_ext/scx_example_qmap.c
-@@ -0,0 +1,84 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
+ 	/**
+ 	 * name - BPF scheduler's name
+ 	 *
+@@ -340,6 +350,7 @@ enum scx_ent_flags {
+ 	SCX_TASK_OPS_PREPPED	= 1 << 3, /* prepared for BPF scheduler enable */
+ 	SCX_TASK_OPS_ENABLED	= 1 << 4, /* task has BPF scheduler enabled */
+ 
++	SCX_TASK_WATCHDOG_RESET = 1 << 5, /* task watchdog counter should be reset */
+ 	SCX_TASK_DEQD_FOR_SLEEP	= 1 << 6, /* last dequeue was for SLEEP */
+ 
+ 	SCX_TASK_CURSOR		= 1 << 7, /* iteration cursor, not a task */
+@@ -369,12 +380,14 @@ enum scx_kf_mask {
+ struct sched_ext_entity {
+ 	struct scx_dispatch_q	*dsq;
+ 	struct list_head	dsq_node;
++	struct list_head	watchdog_node;
+ 	u32			flags;		/* protected by rq lock */
+ 	u32			weight;
+ 	s32			sticky_cpu;
+ 	s32			holding_cpu;
+ 	u32			kf_mask;	/* see scx_kf_mask above */
+ 	atomic64_t		ops_state;
++	unsigned long		runnable_at;
+ 
+ 	/* BPF scheduler modifiable fields */
+ 
+diff --git a/init/init_task.c b/init/init_task.c
+index bdbc663107bf..913194aab623 100644
+--- a/init/init_task.c
++++ b/init/init_task.c
+@@ -106,9 +106,11 @@ struct task_struct init_task
+ #ifdef CONFIG_SCHED_CLASS_EXT
+ 	.scx		= {
+ 		.dsq_node	= LIST_HEAD_INIT(init_task.scx.dsq_node),
++		.watchdog_node	= LIST_HEAD_INIT(init_task.scx.watchdog_node),
+ 		.sticky_cpu	= -1,
+ 		.holding_cpu	= -1,
+ 		.ops_state	= ATOMIC_INIT(0),
++		.runnable_at	= INITIAL_JIFFIES,
+ 		.slice		= SCX_SLICE_DFL,
+ 	},
+ #endif
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 804aa291b837..3f177c161c1e 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -4424,12 +4424,14 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
+ #ifdef CONFIG_SCHED_CLASS_EXT
+ 	p->scx.dsq		= NULL;
+ 	INIT_LIST_HEAD(&p->scx.dsq_node);
++	INIT_LIST_HEAD(&p->scx.watchdog_node);
+ 	p->scx.flags		= 0;
+ 	p->scx.weight		= 0;
+ 	p->scx.sticky_cpu	= -1;
+ 	p->scx.holding_cpu	= -1;
+ 	p->scx.kf_mask		= 0;
+ 	atomic64_set(&p->scx.ops_state, 0);
++	p->scx.runnable_at	= INITIAL_JIFFIES;
+ 	p->scx.slice		= SCX_SLICE_DFL;
+ #endif
+ 
+@@ -5584,6 +5586,7 @@ void scheduler_tick(void)
+ 	if (sched_feat(LATENCY_WARN) && resched_latency)
+ 		resched_latency_warn(cpu, resched_latency);
+ 
++	scx_notify_sched_tick();
+ 	perf_event_task_tick();
+ 
+ #ifdef CONFIG_SMP
+diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
+index ebbf3f3c1cf7..1af74ea8ed42 100644
+--- a/kernel/sched/ext.c
++++ b/kernel/sched/ext.c
+@@ -9,6 +9,7 @@
+ enum scx_internal_consts {
+ 	SCX_NR_ONLINE_OPS	= SCX_OP_IDX(init),
+ 	SCX_DSP_DFL_MAX_BATCH	= 32,
++	SCX_WATCHDOG_MAX_TIMEOUT = 30 * HZ,
+ };
+ 
+ enum scx_ops_enable_state {
+@@ -87,6 +88,23 @@ static struct scx_exit_info scx_exit_info;
+ 
+ static atomic64_t scx_nr_rejected = ATOMIC64_INIT(0);
+ 
 +/*
-+ * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
-+ * Copyright (c) 2022 Tejun Heo <tj@kernel.org>
-+ * Copyright (c) 2022 David Vernet <dvernet@meta.com>
++ * The maximum amount of time in jiffies that a task may be runnable without
++ * being scheduled on a CPU. If this timeout is exceeded, it will trigger
++ * scx_ops_error().
 + */
-+#define _GNU_SOURCE
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <signal.h>
-+#include <assert.h>
-+#include <libgen.h>
-+#include <bpf/bpf.h>
-+#include "user_exit_info.h"
-+#include "scx_example_qmap.skel.h"
++unsigned long scx_watchdog_timeout;
 +
-+const char help_fmt[] =
-+"A simple five-level FIFO queue sched_ext scheduler.\n"
-+"\n"
-+"See the top-level comment in .bpf.c for more details.\n"
-+"\n"
-+"Usage: %s [-s SLICE_US] [-e COUNT]\n"
-+"\n"
-+"  -s SLICE_US   Override slice duration\n"
-+"  -e COUNT      Trigger scx_bpf_error() after COUNT enqueues\n"
-+"  -h            Display this help and exit\n";
++/*
++ * The last time the delayed work was run. This delayed work relies on
++ * ksoftirqd being able to run to service timer interrupts, so it's possible
++ * that this work itself could get wedged. To account for this, we check that
++ * it's not stalled in the timer tick, and trigger an error if it is.
++ */
++unsigned long scx_watchdog_timestamp = INITIAL_JIFFIES;
 +
-+static volatile int exit_req;
++static struct delayed_work scx_watchdog_work;
 +
-+static void sigint_handler(int dummy)
+ /* idle tracking */
+ #ifdef CONFIG_SMP
+ #ifdef CONFIG_CPUMASK_OFFSTACK
+@@ -146,10 +164,6 @@ static DEFINE_PER_CPU(struct scx_dsp_ctx, scx_dsp_ctx);
+ 
+ void scx_bpf_dispatch(struct task_struct *p, u64 dsq_id, u64 slice,
+ 		      u64 enq_flags);
+-__printf(2, 3) static void scx_ops_error_type(enum scx_exit_type type,
+-					      const char *fmt, ...);
+-#define scx_ops_error(fmt, args...)						\
+-	scx_ops_error_type(SCX_EXIT_ERROR, fmt, ##args)
+ 
+ struct scx_task_iter {
+ 	struct sched_ext_entity		cursor;
+@@ -668,6 +682,27 @@ static void do_enqueue_task(struct rq *rq, struct task_struct *p, u64 enq_flags,
+ 	dispatch_enqueue(&scx_dsq_global, p, enq_flags);
+ }
+ 
++static bool watchdog_task_watched(const struct task_struct *p)
 +{
-+	exit_req = 1;
++	return !list_empty(&p->scx.watchdog_node);
 +}
 +
-+int main(int argc, char **argv)
++static void watchdog_watch_task(struct rq *rq, struct task_struct *p)
 +{
-+	struct scx_example_qmap *skel;
-+	struct bpf_link *link;
-+	int opt;
++	lockdep_assert_rq_held(rq);
++	if (p->scx.flags & SCX_TASK_WATCHDOG_RESET)
++		p->scx.runnable_at = jiffies;
++	p->scx.flags &= ~SCX_TASK_WATCHDOG_RESET;
++	list_add_tail(&p->scx.watchdog_node, &rq->scx.watchdog_list);
++}
 +
-+	signal(SIGINT, sigint_handler);
-+	signal(SIGTERM, sigint_handler);
++static void watchdog_unwatch_task(struct task_struct *p, bool reset_timeout)
++{
++	list_del_init(&p->scx.watchdog_node);
++	if (reset_timeout)
++		p->scx.flags |= SCX_TASK_WATCHDOG_RESET;
++}
 +
-+	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
+ static void enqueue_task_scx(struct rq *rq, struct task_struct *p, int enq_flags)
+ {
+ 	int sticky_cpu = p->scx.sticky_cpu;
+@@ -684,9 +719,12 @@ static void enqueue_task_scx(struct rq *rq, struct task_struct *p, int enq_flags
+ 	if (unlikely(enq_flags & ENQUEUE_RESTORE) && task_current(rq, p))
+ 		sticky_cpu = cpu_of(rq);
+ 
+-	if (p->scx.flags & SCX_TASK_QUEUED)
++	if (p->scx.flags & SCX_TASK_QUEUED) {
++		WARN_ON_ONCE(!watchdog_task_watched(p));
+ 		return;
++	}
+ 
++	watchdog_watch_task(rq, p);
+ 	p->scx.flags |= SCX_TASK_QUEUED;
+ 	rq->scx.nr_running++;
+ 	add_nr_running(rq, 1);
+@@ -698,6 +736,8 @@ static void ops_dequeue(struct task_struct *p, u64 deq_flags)
+ {
+ 	u64 opss;
+ 
++	watchdog_unwatch_task(p, false);
 +
-+	skel = scx_example_qmap__open();
-+	assert(skel);
+ 	/* acquire ensures that we see the preceding updates on QUEUED */
+ 	opss = atomic64_read_acquire(&p->scx.ops_state);
+ 
+@@ -742,8 +782,10 @@ static void dequeue_task_scx(struct rq *rq, struct task_struct *p, int deq_flags
+ {
+ 	struct scx_rq *scx_rq = &rq->scx;
+ 
+-	if (!(p->scx.flags & SCX_TASK_QUEUED))
++	if (!(p->scx.flags & SCX_TASK_QUEUED)) {
++		WARN_ON_ONCE(watchdog_task_watched(p));
+ 		return;
++	}
+ 
+ 	ops_dequeue(p, deq_flags);
+ 
+@@ -1256,6 +1298,8 @@ static void set_next_task_scx(struct rq *rq, struct task_struct *p, bool first)
+ 	}
+ 
+ 	p->se.exec_start = rq_clock_task(rq);
 +
-+	while ((opt = getopt(argc, argv, "hs:e:tTd:")) != -1) {
-+		switch (opt) {
-+		case 's':
-+			skel->rodata->slice_ns = strtoull(optarg, NULL, 0) * 1000;
++	watchdog_unwatch_task(p, true);
+ }
+ 
+ static void put_prev_task_scx(struct rq *rq, struct task_struct *p)
+@@ -1299,11 +1343,14 @@ static void put_prev_task_scx(struct rq *rq, struct task_struct *p)
+ 	 */
+ 	if (p->scx.flags & SCX_TASK_BAL_KEEP) {
+ 		p->scx.flags &= ~SCX_TASK_BAL_KEEP;
++		watchdog_watch_task(rq, p);
+ 		dispatch_enqueue(&rq->scx.local_dsq, p, SCX_ENQ_HEAD);
+ 		return;
+ 	}
+ 
+ 	if (p->scx.flags & SCX_TASK_QUEUED) {
++		watchdog_watch_task(rq, p);
++
+ 		/*
+ 		 * If @p has slice left and balance_scx() didn't tag it for
+ 		 * keeping, @p is getting preempted by a higher priority
+@@ -1530,6 +1577,49 @@ static void reset_idle_masks(void) {}
+ 
+ #endif /* CONFIG_SMP */
+ 
++static bool check_rq_for_timeouts(struct rq *rq)
++{
++	struct task_struct *p;
++	struct rq_flags rf;
++	bool timed_out = false;
++
++	rq_lock_irqsave(rq, &rf);
++	list_for_each_entry(p, &rq->scx.watchdog_list, scx.watchdog_node) {
++		unsigned long last_runnable = p->scx.runnable_at;
++
++		if (unlikely(time_after(jiffies,
++					last_runnable + scx_watchdog_timeout))) {
++			u32 dur_ms = jiffies_to_msecs(jiffies - last_runnable);
++
++			scx_ops_error_type(SCX_EXIT_ERROR_STALL,
++					   "%s[%d] failed to run for %u.%03us",
++					   p->comm, p->pid,
++					   dur_ms / 1000, dur_ms % 1000);
++			timed_out = true;
 +			break;
-+		case 'e':
-+			skel->bss->test_error_cnt = strtoull(optarg, NULL, 0);
-+			break;
-+		default:
-+			fprintf(stderr, help_fmt, basename(argv[0]));
-+			return opt != 'h';
 +		}
 +	}
++	rq_unlock_irqrestore(rq, &rf);
 +
-+	assert(!scx_example_qmap__load(skel));
++	return timed_out;
++}
 +
-+	link = bpf_map__attach_struct_ops(skel->maps.qmap_ops);
-+	assert(link);
++static void scx_watchdog_workfn(struct work_struct *work)
++{
++	int cpu;
 +
-+	while (!exit_req && !uei_exited(&skel->bss->uei)) {
-+		long nr_enqueued = skel->bss->nr_enqueued;
-+		long nr_dispatched = skel->bss->nr_dispatched;
++	scx_watchdog_timestamp = jiffies;
 +
-+		printf("enq=%lu, dsp=%lu, delta=%ld, deq=%lu\n",
-+		       nr_enqueued, nr_dispatched, nr_enqueued - nr_dispatched,
-+		       skel->bss->nr_dequeued);
-+		fflush(stdout);
-+		sleep(1);
++	for_each_online_cpu(cpu) {
++		if (unlikely(check_rq_for_timeouts(cpu_rq(cpu))))
++			break;
++
++		cond_resched();
++	}
++	queue_delayed_work(system_unbound_wq, to_delayed_work(work),
++			   scx_watchdog_timeout / 2);
++}
++
+ static void task_tick_scx(struct rq *rq, struct task_struct *curr, int queued)
+ {
+ 	update_curr_scx(rq);
+@@ -1561,7 +1651,7 @@ static int scx_ops_prepare_task(struct task_struct *p, struct task_group *tg)
+ 		}
+ 	}
+ 
+-	p->scx.flags |= SCX_TASK_OPS_PREPPED;
++	p->scx.flags |= (SCX_TASK_OPS_PREPPED | SCX_TASK_WATCHDOG_RESET);
+ 	return 0;
+ }
+ 
+@@ -1877,6 +1967,8 @@ static void scx_ops_disable_workfn(struct kthread_work *work)
+ 			break;
+ 	}
+ 
++	cancel_delayed_work_sync(&scx_watchdog_work);
++
+ 	switch (type) {
+ 	case SCX_EXIT_UNREG:
+ 		reason = "BPF scheduler unregistered";
+@@ -1890,6 +1982,9 @@ static void scx_ops_disable_workfn(struct kthread_work *work)
+ 	case SCX_EXIT_ERROR_BPF:
+ 		reason = "scx_bpf_error";
+ 		break;
++	case SCX_EXIT_ERROR_STALL:
++		reason = "runnable task stall";
++		break;
+ 	default:
+ 		reason = "<UNKNOWN>";
+ 	}
+@@ -2074,8 +2169,8 @@ static void scx_ops_error_irq_workfn(struct irq_work *irq_work)
+ 
+ static DEFINE_IRQ_WORK(scx_ops_error_irq_work, scx_ops_error_irq_workfn);
+ 
+-__printf(2, 3) static void scx_ops_error_type(enum scx_exit_type type,
+-					      const char *fmt, ...)
++__printf(2, 3) void scx_ops_error_type(enum scx_exit_type type,
++				       const char *fmt, ...)
+ {
+ 	struct scx_exit_info *ei = &scx_exit_info;
+ 	int none = SCX_EXIT_NONE;
+@@ -2174,6 +2269,14 @@ static int scx_ops_enable(struct sched_ext_ops *ops)
+ 		goto err_disable;
+ 	}
+ 
++	scx_watchdog_timeout = SCX_WATCHDOG_MAX_TIMEOUT;
++	if (ops->timeout_ms)
++		scx_watchdog_timeout = msecs_to_jiffies(ops->timeout_ms);
++
++	scx_watchdog_timestamp = jiffies;
++	queue_delayed_work(system_unbound_wq, &scx_watchdog_work,
++			   scx_watchdog_timeout / 2);
++
+ 	/*
+ 	 * Lock out forks before opening the floodgate so that they don't wander
+ 	 * into the operations prematurely.
+@@ -2433,6 +2536,11 @@ static int bpf_scx_init_member(const struct btf_type *t,
+ 		if (ret == 0)
+ 			return -EINVAL;
+ 		return 1;
++	case offsetof(struct sched_ext_ops, timeout_ms):
++		if (*(u32 *)(udata + moff) > SCX_WATCHDOG_MAX_TIMEOUT)
++			return -E2BIG;
++		ops->timeout_ms = *(u32 *)(udata + moff);
++		return 1;
+ 	}
+ 
+ 	return 0;
+@@ -2530,9 +2638,11 @@ void __init init_sched_ext_class(void)
+ 		struct rq *rq = cpu_rq(cpu);
+ 
+ 		init_dsq(&rq->scx.local_dsq, SCX_DSQ_LOCAL);
++		INIT_LIST_HEAD(&rq->scx.watchdog_list);
+ 	}
+ 
+ 	register_sysrq_key('S', &sysrq_sched_ext_reset_op);
++	INIT_DELAYED_WORK(&scx_watchdog_work, scx_watchdog_workfn);
+ }
+ 
+ 
+diff --git a/kernel/sched/ext.h b/kernel/sched/ext.h
+index f8d5682deacf..7dfa7b888487 100644
+--- a/kernel/sched/ext.h
++++ b/kernel/sched/ext.h
+@@ -56,6 +56,8 @@ enum scx_deq_flags {
+ extern const struct sched_class ext_sched_class;
+ extern const struct bpf_verifier_ops bpf_sched_ext_verifier_ops;
+ extern const struct file_operations sched_ext_fops;
++extern unsigned long scx_watchdog_timeout;
++extern unsigned long scx_watchdog_timestamp;
+ 
+ DECLARE_STATIC_KEY_FALSE(__scx_ops_enabled);
+ #define scx_enabled()		static_branch_unlikely(&__scx_ops_enabled)
+@@ -67,6 +69,28 @@ void scx_post_fork(struct task_struct *p);
+ void scx_cancel_fork(struct task_struct *p);
+ void init_sched_ext_class(void);
+ 
++__printf(2, 3) void scx_ops_error_type(enum scx_exit_type type,
++				       const char *fmt, ...);
++#define scx_ops_error(fmt, args...)						\
++	scx_ops_error_type(SCX_EXIT_ERROR, fmt, ##args)
++
++static inline void scx_notify_sched_tick(void)
++{
++	unsigned long last_check;
++
++	if (!scx_enabled())
++		return;
++
++	last_check = scx_watchdog_timestamp;
++	if (unlikely(time_after(jiffies, last_check + scx_watchdog_timeout))) {
++		u32 dur_ms = jiffies_to_msecs(jiffies - last_check);
++
++		scx_ops_error_type(SCX_EXIT_ERROR_STALL,
++				   "watchdog failed to check in for %u.%03us",
++				   dur_ms / 1000, dur_ms % 1000);
++	}
++}
++
+ static inline const struct sched_class *next_active_class(const struct sched_class *class)
+ {
+ 	class++;
+@@ -98,6 +122,7 @@ static inline int scx_fork(struct task_struct *p) { return 0; }
+ static inline void scx_post_fork(struct task_struct *p) {}
+ static inline void scx_cancel_fork(struct task_struct *p) {}
+ static inline void init_sched_ext_class(void) {}
++static inline void scx_notify_sched_tick(void) {}
+ 
+ #define for_each_active_class		for_each_class
+ #define for_balance_class_range		for_class_range
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 7778f4ce6b5b..112c2f127c95 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -687,6 +687,7 @@ struct cfs_rq {
+ #ifdef CONFIG_SCHED_CLASS_EXT
+ struct scx_rq {
+ 	struct scx_dispatch_q	local_dsq;
++	struct list_head	watchdog_list;
+ 	u64			ops_qseq;
+ 	u32			nr_running;
+ };
+diff --git a/tools/sched_ext/scx_example_qmap.bpf.c b/tools/sched_ext/scx_example_qmap.bpf.c
+index 06a07c834b42..b22b8d82846e 100644
+--- a/tools/sched_ext/scx_example_qmap.bpf.c
++++ b/tools/sched_ext/scx_example_qmap.bpf.c
+@@ -22,6 +22,8 @@
+ char _license[] SEC("license") = "GPL";
+ 
+ const volatile u64 slice_ns = SCX_SLICE_DFL;
++const volatile u32 stall_user_nth;
++const volatile u32 stall_kernel_nth;
+ 
+ u32 test_error_cnt;
+ 
+@@ -117,11 +119,20 @@ static int weight_to_idx(u32 weight)
+ 
+ void BPF_STRUCT_OPS(qmap_enqueue, struct task_struct *p, u64 enq_flags)
+ {
++	static u32 user_cnt, kernel_cnt;
+ 	struct task_ctx *tctx;
+ 	u32 pid = p->pid;
+ 	int idx = weight_to_idx(p->scx.weight);
+ 	void *ring;
+ 
++	if (p->flags & PF_KTHREAD) {
++		if (stall_kernel_nth && !(++kernel_cnt % stall_kernel_nth))
++			return;
++	} else {
++		if (stall_user_nth && !(++user_cnt % stall_user_nth))
++			return;
 +	}
 +
-+	bpf_link__destroy(link);
-+	uei_print(&skel->bss->uei);
-+	scx_example_qmap__destroy(skel);
-+	return 0;
-+}
-diff --git a/tools/sched_ext/user_exit_info.h b/tools/sched_ext/user_exit_info.h
-new file mode 100644
-index 000000000000..e701ef0e0b86
---- /dev/null
-+++ b/tools/sched_ext/user_exit_info.h
-@@ -0,0 +1,50 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Define struct user_exit_info which is shared between BPF and userspace parts
-+ * to communicate exit status and other information.
-+ *
-+ * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
-+ * Copyright (c) 2022 Tejun Heo <tj@kernel.org>
-+ * Copyright (c) 2022 David Vernet <dvernet@meta.com>
-+ */
-+#ifndef __USER_EXIT_INFO_H
-+#define __USER_EXIT_INFO_H
-+
-+struct user_exit_info {
-+	int		type;
-+	char		reason[128];
-+	char		msg[1024];
-+};
-+
-+#ifdef __bpf__
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_core_read.h>
-+
-+static inline void uei_record(struct user_exit_info *uei,
-+			      const struct scx_exit_info *ei)
-+{
-+	bpf_probe_read_kernel_str(uei->reason, sizeof(uei->reason), ei->reason);
-+	bpf_probe_read_kernel_str(uei->msg, sizeof(uei->msg), ei->msg);
-+	/* use __sync to force memory barrier */
-+	__sync_val_compare_and_swap(&uei->type, uei->type, ei->type);
-+}
-+
-+#else	/* !__bpf__ */
-+
-+static inline bool uei_exited(struct user_exit_info *uei)
-+{
-+	/* use __sync to force memory barrier */
-+	return __sync_val_compare_and_swap(&uei->type, -1, -1);
-+}
-+
-+static inline void uei_print(const struct user_exit_info *uei)
-+{
-+	fprintf(stderr, "EXIT: %s", uei->reason);
-+	if (uei->msg[0] != '\0')
-+		fprintf(stderr, " (%s)", uei->msg);
-+	fputs("\n", stderr);
-+}
-+
-+#endif	/* __bpf__ */
-+#endif	/* __USER_EXIT_INFO_H */
+ 	if (test_error_cnt && !--test_error_cnt)
+ 		scx_bpf_error("test triggering error");
+ 
+@@ -234,5 +245,6 @@ struct sched_ext_ops qmap_ops = {
+ 	.dispatch		= (void *)qmap_dispatch,
+ 	.prep_enable		= (void *)qmap_prep_enable,
+ 	.exit			= (void *)qmap_exit,
++	.timeout_ms		= 5000U,
+ 	.name			= "qmap",
+ };
+diff --git a/tools/sched_ext/scx_example_qmap.c b/tools/sched_ext/scx_example_qmap.c
+index c6c74641a182..dd490a146b1a 100644
+--- a/tools/sched_ext/scx_example_qmap.c
++++ b/tools/sched_ext/scx_example_qmap.c
+@@ -20,10 +20,12 @@ const char help_fmt[] =
+ "\n"
+ "See the top-level comment in .bpf.c for more details.\n"
+ "\n"
+-"Usage: %s [-s SLICE_US] [-e COUNT]\n"
++"Usage: %s [-s SLICE_US] [-e COUNT] [-t COUNT] [-T COUNT]\n"
+ "\n"
+ "  -s SLICE_US   Override slice duration\n"
+ "  -e COUNT      Trigger scx_bpf_error() after COUNT enqueues\n"
++"  -t COUNT      Stall every COUNT'th user thread\n"
++"  -T COUNT      Stall every COUNT'th kernel thread\n"
+ "  -h            Display this help and exit\n";
+ 
+ static volatile int exit_req;
+@@ -47,13 +49,19 @@ int main(int argc, char **argv)
+ 	skel = scx_example_qmap__open();
+ 	assert(skel);
+ 
+-	while ((opt = getopt(argc, argv, "hs:e:tTd:")) != -1) {
++	while ((opt = getopt(argc, argv, "hs:e:t:T:d:")) != -1) {
+ 		switch (opt) {
+ 		case 's':
+ 			skel->rodata->slice_ns = strtoull(optarg, NULL, 0) * 1000;
+ 			break;
+ 		case 'e':
+-			skel->bss->test_error_cnt = strtoull(optarg, NULL, 0);
++			skel->bss->test_error_cnt = strtoul(optarg, NULL, 0);
++			break;
++		case 't':
++			skel->rodata->stall_user_nth = strtoul(optarg, NULL, 0);
++			break;
++		case 'T':
++			skel->rodata->stall_kernel_nth = strtoul(optarg, NULL, 0);
+ 			break;
+ 		default:
+ 			fprintf(stderr, help_fmt, basename(argv[0]));
 -- 
 2.39.1
 
