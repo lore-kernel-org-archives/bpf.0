@@ -2,226 +2,106 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CEE3C38142
-	for <bpf@archiver.kernel.org>; Sat, 28 Jan 2023 00:31:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EC35C38142
+	for <bpf@archiver.kernel.org>; Sat, 28 Jan 2023 00:33:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232777AbjA1Abb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 27 Jan 2023 19:31:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51078 "EHLO
+        id S232975AbjA1Adg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 27 Jan 2023 19:33:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232559AbjA1Ab1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 27 Jan 2023 19:31:27 -0500
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C8F7A93
-        for <bpf@vger.kernel.org>; Fri, 27 Jan 2023 16:31:07 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id C0A6D320094B;
-        Fri, 27 Jan 2023 19:23:30 -0500 (EST)
-Received: from imap42 ([10.202.2.92])
-  by compute1.internal (MEProxy); Fri, 27 Jan 2023 19:23:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1674865410; x=1674951810; bh=XkwRqtsAcS
-        RGNliBPzGdjn6EE4bshUlyrh0HYCfx8BA=; b=R5m0FJ1q8J09R/0wLGYTgp33lq
-        WS82+r+wsZQx7iF8UGDEsMHXdTJT9B0kFvWGBh9oOEbE+xgUogNrz3Yf3Gl8owcE
-        v31Q3wCHKM09h8XWmLdTrpEburHzGUukre0JOBYYTL8ioYxegj5LSdDc3KZE9a1u
-        Lf+j2OztDNFSwytb9M4VmsZpaqYgHT1memwUS5K07iHY4V0fxleKcUNKTCR5fw/7
-        z2B9PHd+bhJYNDpCE84gZl6gmQjR1Ipb64GhnZH6NcoYlIbxR0iF6U0PyQSFYJqV
-        zydVZLAQ8qymuvm6dpoYpVNBtT9S4vZd4Qa+7tdspcmD5YAmutUbXTjVDlwA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674865410; x=1674951810; bh=XkwRqtsAcSRGNliBPzGdjn6EE4bs
-        hUlyrh0HYCfx8BA=; b=ZkcdGbYL+jaYkdyApEEOuxRzCcJdv/MMrE06OG069zBk
-        rcLFjuEKuE5hulKvVBm3SiBt4089x7fY/MiW7algppaPcjnVD56NW/YBJtWghoup
-        DgKHIqd6VF5nogUm2VBtOpjegBaMEHsanK/hTSv+oyzHOb+4GvOrM1JVuwmleD3O
-        2LUaLyf09TTA3+UjJaiYKkOWisMn06yzTb7Eqv5a5efXpcYdFG2XRlywUoJSx4US
-        bkqZP41TWtvceFrreobVLMaDZgieYCK3rAg81ohArkiK4qLg/f5TCKQX3L1C2i5U
-        3uGfniEu0uCVAVxPH//CB+g0XM9urewD4M2ETCCTMg==
-X-ME-Sender: <xms:AmvUY-i4YAf489t7Z7CDZEZ8v9GPcqRDaBPojxyZD1ydu-AWImnPpQ>
-    <xme:AmvUY_BGJfiA-y577xs2fnIdR477EhHmVHgS3HzGK4jkFKIO8ZfmezzKnT1W2N7vN
-    Yb7DgNqaY5h7ED9iQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvjedgvdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdlfeehmdenucfjughrpefofgggkfgjfhffhffvvefutgesthdtredt
-    reertdenucfhrhhomhepfdffrghnihgvlhcuighufdcuoegugihusegugihuuhhurdighi
-    iiqeenucggtffrrghtthgvrhhnpeetleffffehgfeigfetleeuteehfeetleduudffleet
-    vdfgudejjedvhfejgfduveenucffohhmrghinhepkhgrlhhlshihmhhsuddrshgrshdpkh
-    grlhhlshihmhhsvddrshgrshdpkhgrlhhlshihmhhsfedrshgrshdpvhhmthgvshhtrdhs
-    hhdpugiguhhuuhdrgiihiienucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmh
-    grihhlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:AmvUY2EsO6JNbtQs4TcgCKPFDd2NGvQhxFmH_9S8eiqA4pfIR1t7uw>
-    <xmx:AmvUY3R3YImr7fID_0rIoLuemPV2_XOVU0P9LCygznDZ1qamaw0dZw>
-    <xmx:AmvUY7zYmBxvH2ZwRHzXp_09aoRyy8qcFJGmVxqhgryhbmTmBKCU5g>
-    <xmx:AmvUY0p9uwo-eCcMumt4HAO5dWtYiYFsgQO-60glNQRhgoJab1gU7g>
-Feedback-ID: i6a694271:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 2397FBC0078; Fri, 27 Jan 2023 19:23:30 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <ff12051b-e8f9-44d7-a8ea-5fa7094375e6@app.fastmail.com>
-In-Reply-To: <070e7661-8b19-417f-8e16-8ccc34d6c7bc@app.fastmail.com>
-References: <57830c30-cd77-40cf-9cd1-3bb608aa602e@app.fastmail.com>
- <Y85AHdWw/l8d1Gsp@krava>
- <0fbad67e-c359-47c3-8c10-faa003e6519f@app.fastmail.com>
- <bb569967-d33a-7252-964b-a36501b3366a@gmail.com> <Y9RlpyV5JPz/hk1K@krava>
- <070e7661-8b19-417f-8e16-8ccc34d6c7bc@app.fastmail.com>
-Date:   Fri, 27 Jan 2023 17:23:08 -0700
-From:   "Daniel Xu" <dxu@dxuuu.xyz>
-To:     "Jiri Olsa" <olsajiri@gmail.com>,
-        "Alexandre Peixoto Ferreira" <alexandref75@gmail.com>
-Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "Arnaldo Carvalho de Melo" <acme@kernel.org>
-Subject: Re: Kernel build fail with 'btf_encoder__encode: btf__dedup failed!'
-Content-Type: text/plain
+        with ESMTP id S229702AbjA1Adf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 27 Jan 2023 19:33:35 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EB61C320
+        for <bpf@vger.kernel.org>; Fri, 27 Jan 2023 16:33:33 -0800 (PST)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30RNuQob009006;
+        Sat, 28 Jan 2023 00:33:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=99dBY6Aa5hLZjVVESF+rPzBBKcaqqgSzJYOryoCA8Zk=;
+ b=DqCGTj4MPmPzi/GLy7sAQhwDAMrKycwyPziEmSITuiLXj95ppCy5qLivmjms8r1icfAi
+ BM+wtpM2hUKmF6uBf7B9Aw5O0mBz0k39HBEvR3A9vbA+xBkjipOswt3dpduxVDSeJnok
+ d0LnKjbdg4+U+CWJik4wCgF3xNJP4r1hC9j8bIPiv68nHpJJcS7ZxYqAYOk/MZ/9pLU1
+ rJiT2mnGvFFQXJ03xipHX/m36wCKGvjpcfbJ3xZvieYhf74wbwlRCqzo/nYxJizL7KI1
+ J9ARcm2Npl72aE0J2495kUhF6f5GenYCdOKakhM4vq97MVhgP4U4fzQSpV25YX5z0FhC Cw== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ncrqernqs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 28 Jan 2023 00:33:19 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30R4DrR1006823;
+        Sat, 28 Jan 2023 00:07:08 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3n87p6dufy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 28 Jan 2023 00:07:07 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30S074a443385184
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 28 Jan 2023 00:07:04 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 742CB2004B;
+        Sat, 28 Jan 2023 00:07:04 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E9F3520040;
+        Sat, 28 Jan 2023 00:07:03 +0000 (GMT)
+Received: from heavy.ibmuc.com (unknown [9.179.11.57])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Sat, 28 Jan 2023 00:07:03 +0000 (GMT)
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>
+Subject: [PATCH bpf-next v2 06/31] selftests/bpf: Fix kfree_skb on s390x
+Date:   Sat, 28 Jan 2023 01:06:25 +0100
+Message-Id: <20230128000650.1516334-7-iii@linux.ibm.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230128000650.1516334-1-iii@linux.ibm.com>
+References: <20230128000650.1516334-1-iii@linux.ibm.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: gtWzE0XmAP407ArJY6LAcO8I2mmlZV9a
+X-Proofpoint-GUID: gtWzE0XmAP407ArJY6LAcO8I2mmlZV9a
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-27_15,2023-01-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=976 phishscore=0
+ clxscore=1015 adultscore=0 spamscore=0 mlxscore=0 impostorscore=0
+ bulkscore=0 suspectscore=0 priorityscore=1501 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301280003
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jan 27, 2023, at 5:21 PM, Daniel Xu wrote:
-> Hi Jiri & Alexandre,
->
-> On Fri, Jan 27, 2023, at 5:00 PM, Jiri Olsa wrote:
->> On Fri, Jan 27, 2023 at 04:28:54PM -0600, Alexandre Peixoto Ferreira wrote:
->>> 
->>> 
->>> On 1/24/23 00:13, Daniel Xu wrote:
->>> > Hi Jiri,
->>> > 
->>> > On Mon, Jan 23, 2023, at 1:06 AM, Jiri Olsa wrote:
->>> > > On Sun, Jan 22, 2023 at 10:48:44AM -0700, Daniel Xu wrote:
->>> > > > Hi,
->>> > > > 
->>> > > > I'm getting the following error during build:
->>> > > > 
->>> > > >          $ ./tools/testing/selftests/bpf/vmtest.sh -j30
->>> > > >          [...]
->>> > > >            BTF     .btf.vmlinux.bin.o
->>> > > >          btf_encoder__encode: btf__dedup failed!
->>> > > >          Failed to encode BTF
->>> > > >            LD      .tmp_vmlinux.kallsyms1
->>> > > >            NM      .tmp_vmlinux.kallsyms1.syms
->>> > > >            KSYMS   .tmp_vmlinux.kallsyms1.S
->>> > > >            AS      .tmp_vmlinux.kallsyms1.S
->>> > > >            LD      .tmp_vmlinux.kallsyms2
->>> > > >            NM      .tmp_vmlinux.kallsyms2.syms
->>> > > >            KSYMS   .tmp_vmlinux.kallsyms2.S
->>> > > >            AS      .tmp_vmlinux.kallsyms2.S
->>> > > >            LD      .tmp_vmlinux.kallsyms3
->>> > > >            NM      .tmp_vmlinux.kallsyms3.syms
->>> > > >            KSYMS   .tmp_vmlinux.kallsyms3.S
->>> > > >            AS      .tmp_vmlinux.kallsyms3.S
->>> > > >            LD      vmlinux
->>> > > >            BTFIDS  vmlinux
->>> > > >          FAILED: load BTF from vmlinux: No such file or directory
->>> > > >          make[1]: *** [scripts/Makefile.vmlinux:35: vmlinux] Error 255
->>> > > >          make[1]: *** Deleting file 'vmlinux'
->>> > > >          make: *** [Makefile:1264: vmlinux] Error 2
->>> > > > 
->>> > > > This happens on both bpf-next/master (84150795a49) and 6.2-rc5
->>> > > > (2241ab53cb).
->>> > > > 
->>> > > > I've also tried arch linux pahole 1:1.24+r29+g02d67c5-1 as well as
->>> > > > upstream pahole on master (02d67c5176) and upstream pahole on
->>> > > > next (2ca56f4c6f659).
->>> > > > 
->>> > > > Of the above 6 combinations, I think I've tried all of them (maybe
->>> > > > missing 1 or 2).
->>> > > > 
->>> > > > Looks like GCC got updated recently on my machine, so perhaps
->>> > > > it's related?
->>> > > > 
->>> > > >          CONFIG_CC_VERSION_TEXT="gcc (GCC) 12.2.1 20230111"
->>> > > > 
->>> > > > I'll try some debugging, but just wanted to report it first.
->>> > > hi,
->>> > > I can't reproduce that.. can you reproduce it outside vmtest.sh?
->>> > > 
->>> > > there will be lot of output with patch below, but could contain
->>> > > some more error output
->>> > Thanks for the hints. Doing a regular build outside of vmtest.sh
->>> > seems to work ok. So maybe it's a difference in the build config.
->>> > 
->>> > I'll put a little more time into debugging to see if it goes anywhere.
->>> > But I'll have to get back to the regularly scheduled programming
->>> > soon.
->>> 6.2-rc5 compiles correctly when CONFIG_X86_KERNEL_IBT is commented but fails
->>> in pahole when CONFIG_X86_KERNEL_IBT is set.
->>
->> could you plese attach your config and the build error?
->> I can't reproduce that
->
-> I've confirmed that CONFIG_X86_KERNEL_IBT=n fixes my issue as well.
->
-> Here is the config that produces my originally reported error:
-> https://pastes.dxuuu.xyz/wlg9tb
->
-> Thanks,
-> Daniel
+h_proto is big-endian; use htons() in order to make comparison work on
+both little- and big-endian machines.
 
-Here's a patch that helps for me. Not sure if you want to apply this or fix
-the root cause in bpftool.
-
+Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 ---
+ tools/testing/selftests/bpf/prog_tests/kfree_skb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-From 3dc50f3dd45767cb8c3b32c1510c7064f20f80c1 Mon Sep 17 00:00:00 2001
-Message-Id: <3dc50f3dd45767cb8c3b32c1510c7064f20f80c1.1674865319.git.dxu@dxuuu.xyz>
-From: Daniel Xu <dxu@dxuuu.xyz>
-Date: Fri, 27 Jan 2023 17:17:32 -0700
-Subject: [PATCH] bpf, selftests: Disable CONFIG_X86_KERNEL_IBT for vmtest.sh
-
-CONFIG_X86_KERNEL_IBT=y was causing the following compile error:
-
-          BTF     .btf.vmlinux.bin.o
-        btf_encoder__encode: btf__dedup failed!
-        Failed to encode BTF
-          LD      .tmp_vmlinux.kallsyms1
-          NM      .tmp_vmlinux.kallsyms1.syms
-          KSYMS   .tmp_vmlinux.kallsyms1.S
-          AS      .tmp_vmlinux.kallsyms1.S
-          LD      .tmp_vmlinux.kallsyms2
-          NM      .tmp_vmlinux.kallsyms2.syms
-          KSYMS   .tmp_vmlinux.kallsyms2.S
-          AS      .tmp_vmlinux.kallsyms2.S
-          LD      .tmp_vmlinux.kallsyms3
-          NM      .tmp_vmlinux.kallsyms3.syms
-          KSYMS   .tmp_vmlinux.kallsyms3.S
-          AS      .tmp_vmlinux.kallsyms3.S
-          LD      vmlinux
-          BTFIDS  vmlinux
-        libbpf: failed to find '.BTF' ELF section in vmlinux
-        FAILED: load BTF from vmlinux: No data available
-        make[1]: *** [scripts/Makefile.vmlinux:34: vmlinux] Error 255
-        make[1]: *** Deleting file 'vmlinux'
-        make: *** [Makefile:1252: vmlinux] Error 2
-
-Disable for vmtests as we do not really need the extra security measures
-there.
-
-I suspect this was recently triggered by
-4fd5f70ce14d ("x86/Kconfig: Enable kernel IBT by default").
-
-Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
----
- tools/testing/selftests/bpf/config.x86_64 | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/testing/selftests/bpf/config.x86_64 b/tools/testing/selftests/bpf/config.x86_64
-index dd97d61d325c..3026b1282cc7 100644
---- a/tools/testing/selftests/bpf/config.x86_64
-+++ b/tools/testing/selftests/bpf/config.x86_64
-@@ -237,6 +237,7 @@ CONFIG_VIRTIO_PCI=y
- CONFIG_VLAN_8021Q=y
- CONFIG_X86_ACPI_CPUFREQ=y
- CONFIG_X86_CPUID=y
-+CONFIG_X86_KERNEL_IBT=n
- CONFIG_X86_MSR=y
- CONFIG_X86_POWERNOW_K8=y
- CONFIG_XDP_SOCKETS_DIAG=y
---
+diff --git a/tools/testing/selftests/bpf/prog_tests/kfree_skb.c b/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
+index 73579370bfbd..c07991544a78 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
++++ b/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
+@@ -36,7 +36,7 @@ static void on_sample(void *ctx, int cpu, void *data, __u32 size)
+ 		  "cb32_0 %x != %x\n",
+ 		  meta->cb32_0, cb.cb32[0]))
+ 		return;
+-	if (CHECK(pkt_v6->eth.h_proto != 0xdd86, "check_eth",
++	if (CHECK(pkt_v6->eth.h_proto != htons(ETH_P_IPV6), "check_eth",
+ 		  "h_proto %x\n", pkt_v6->eth.h_proto))
+ 		return;
+ 	if (CHECK(pkt_v6->iph.nexthdr != 6, "check_ip",
+-- 
 2.39.1
+
