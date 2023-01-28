@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C951FC61DA7
-	for <bpf@archiver.kernel.org>; Sat, 28 Jan 2023 00:17:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 824A1C61DB3
+	for <bpf@archiver.kernel.org>; Sat, 28 Jan 2023 00:17:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbjA1ARA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 27 Jan 2023 19:17:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35406 "EHLO
+        id S232233AbjA1ARO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 27 Jan 2023 19:17:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbjA1AQ6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 27 Jan 2023 19:16:58 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0686B7B7AB;
-        Fri, 27 Jan 2023 16:16:57 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id jl3so6559138plb.8;
-        Fri, 27 Jan 2023 16:16:57 -0800 (PST)
+        with ESMTP id S230085AbjA1ARD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 27 Jan 2023 19:17:03 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608227D994;
+        Fri, 27 Jan 2023 16:17:02 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id g23so6538810plq.12;
+        Fri, 27 Jan 2023 16:17:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5HZHa2gfgb8Zdv7r+/ewKzMZze1+sOuN4ROxBuKn10I=;
-        b=oRm5jPJmF1orSuU6GpR3idM02s3W6ElgPvwDSf2lltreMkjLb/3Sgr50VP7R/jdPRN
-         PvN3JBXyxwmGjKaxW/CeVDP3nUcreH6E8YoF4IB3J4G5CcAnIYQE0E3G0vRAwcc3wDFP
-         9YAQwYy44mVrtJUwrVoeEWkjDqSgr6gE/dFAUhd6ZrstS9AjdpMq0eNxXbORByeOupBV
-         GC1BxvTR0+SJN81Bfdej575HL+ogpDqYdq4b614q0+JxQLOgoGdlLqRs1yGv4CnOAzLN
-         gbZ+SA4W2OIW0IWXedtw0nqcsfc11ViQO5x+2VDVQO6zOUvBRDvTXa/2lJg7ly7DylqF
-         LFug==
+        bh=tFJCGyWZiDUG3qGifcKWzgbjT+7GhVFjmLYX9EINejM=;
+        b=oL6aQNP9ZmNgM9+EnsT3Bygs83aNPidgbX/vKqfC9WVA7tE+BsP0EBMFXjvKtcxY7+
+         CrZ8XbEZQ8Qh7XLQiMATkbcj1PEGWDH0TdNA26OiAaH1C2uhxQ1l5cBKSC0z8Bz8g5ae
+         0PaGjUzn/YapB5X6+jacBo5QvOqxR0bxcMOwLuGbKM2Vs0I+4XGv4W8twq5Jidv08GqG
+         gmbZPvRbVx/Wa6W7DS19D5TsHcDlhHBs4wlzcEcDbfD1zF+dLJQ1KLQDdnzlTFa+e4N/
+         /iFeudWGZizIbF5PQCqGEQzxCA6Ttx2l95Ak0yPDu4AW33Hkptmp6IcTUlWinc3EcYP0
+         bB3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=5HZHa2gfgb8Zdv7r+/ewKzMZze1+sOuN4ROxBuKn10I=;
-        b=QItGYIASmyYqW0vgpwmHXgzFN5EMyqjJ2BdZRjEQVrWRUlA757Y7/hscanqwfk7QyJ
-         AyYpgUYuSPrbEhrsbXmgM8d4DcDRR9JJK1BtaLuuRxcI7xDcZ8LxK8Lp6zKYin6cnpoX
-         1iGFqAMfeKe1JB3rM7FHaqsbCcTVZZH4kAOFW467C0A0WY01sgfZmLuxylch7UAoktg0
-         RTA2+LSO/n/bFusUWDAnaWpYGg2m2fXOP6+vnfa0SjCeFc1gS67gWBEIWYnTIpfVcPTV
-         KzEqxDy4x6lTY6WJNziDBxlKQag5d3o18g2RnfwvcEM3xcxNZ7ghmE7wWLrCfvq3WaVM
-         +GxQ==
-X-Gm-Message-State: AFqh2kqb0epwLLvXUJV/njleIl0JmZHOZuc9LzwSpw5ty4IlJ9GM5cM/
-        aEgyFSp/LU7H8jFxwLQjVis=
-X-Google-Smtp-Source: AMrXdXuyiQZEq7CqpXBJcagQRn6iM9Ne999pZx2vj4xpBgm0SxZ8p9N4d6qwVOG5yeUPbl0KSD9PPg==
-X-Received: by 2002:a17:90b:4a0c:b0:22a:3c8:9d1 with SMTP id kk12-20020a17090b4a0c00b0022a03c809d1mr31829210pjb.32.1674865016153;
-        Fri, 27 Jan 2023 16:16:56 -0800 (PST)
+        bh=tFJCGyWZiDUG3qGifcKWzgbjT+7GhVFjmLYX9EINejM=;
+        b=HDaO2lqsjfunTYFoV28sjr28UUDz4Jmar+derNmLC5ll8FQ14U/A0ZouzUHd5PPEWL
+         r/wKeo82OV4Ic5pyy5Lt6eGA5826z7R5xqS9aRDZIW/WcYCfvkBH5Cu4aIWlhiwoVo9C
+         bi9102iyWnfrEEWcRrtoPfuoRabRcWJHzA3dXBB0SpK1RCgdwTtOlfiZ5JijA3UJjcUc
+         Vl2yK+m2KHdoLWkpg2O6ANAHjnNHGcl0wQTb2qEcYu9Y5I9NqU0TOnr+YgOcnp/Bbpyt
+         kHMHMm70vK5WqVP5jknBhwE58aVX6KszIamaSus3L+Ea/u/as1Xj5MZAM4V3da4f/oIG
+         bTwA==
+X-Gm-Message-State: AO0yUKXd+GPLng1ixKu5q3x0YkoU6/K8wIWSkYYDFFzfu/fwLGJqqDZ4
+        MpX+Sd9CPmg6Rk4MBNeHrRc=
+X-Google-Smtp-Source: AK7set8M6exx7EB8VUhHYDOI0L/aBM+C9Mwb/QU489KTVCkyAT1LOYmGWw3whLCvaRTB65e3zwxDHg==
+X-Received: by 2002:a17:90b:4d0e:b0:22c:4220:6ff2 with SMTP id mw14-20020a17090b4d0e00b0022c42206ff2mr5549209pjb.18.1674865021628;
+        Fri, 27 Jan 2023 16:17:01 -0800 (PST)
 Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id gn17-20020a17090ac79100b0022bfc79c71bsm3247317pjb.50.2023.01.27.16.16.55
+        by smtp.gmail.com with ESMTPSA id x34-20020a17090a6c2500b0022bfcf5d297sm5695710pjj.9.2023.01.27.16.17.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 16:16:55 -0800 (PST)
+        Fri, 27 Jan 2023 16:17:01 -0800 (PST)
 Sender: Tejun Heo <htejun@gmail.com>
 From:   Tejun Heo <tj@kernel.org>
 To:     torvalds@linux-foundation.org, mingo@redhat.com,
@@ -62,9 +62,9 @@ To:     torvalds@linux-foundation.org, mingo@redhat.com,
         dschatzberg@meta.com, dskarlat@cs.cmu.edu, riel@surriel.com
 Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
         kernel-team@meta.com, Tejun Heo <tj@kernel.org>
-Subject: [PATCH 02/30] sched: Encapsulate task attribute change sequence into a helper macro
-Date:   Fri, 27 Jan 2023 14:16:11 -1000
-Message-Id: <20230128001639.3510083-3-tj@kernel.org>
+Subject: [PATCH 05/30] sched: Add sched_class->reweight_task()
+Date:   Fri, 27 Jan 2023 14:16:14 -1000
+Message-Id: <20230128001639.3510083-6-tj@kernel.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230128001639.3510083-1-tj@kernel.org>
 References: <20230128001639.3510083-1-tj@kernel.org>
@@ -74,417 +74,88 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-A task needs to be dequeued and put before an attribute change and then
-restored afterwards. This is currently open-coded in multiple places. This
-patch encapsulates the preparation and restoration sequences into
-SCHED_CHANGE_BLOCK which allows the actual attribute changes to be put
-inside its nested block. While the conversions are generally
-straightforward, there are some subtleties:
+Currently, during a task weight change, sched core directly calls
+reweight_task() defined in fair.c if @p is on CFS. Let's make it a proper
+sched_class operation instead. CFS's reweight_task() is renamed to
+reweight_task_fair() and now called through sched_class.
 
-* If a variable is specified for the flags argument, it can be modified from
-  inside the block body to allow using a different flags value for
-  re-enqueueing. This is used by rt_mutex_setprio() and
-  __sched_setscheduler().
+While it turns a direct call into an indirect one, set_load_weight() isn't
+called from a hot path and this change shouldn't cause any noticeable
+difference. This will be used to implement reweight_task for a new BPF
+extensible sched_class so that it can keep its cached task weight
+up-to-date.
 
-* __sched_setscheduler() used to only set ENQUEUE_HEAD if the task is
-  queued. After the conversion, it sets the flag whether the task is queued
-  or not. This doesn't cause any behavioral differences and is simpler than
-  accessing the internal state of the helper.
-
-* In a similar vein, sched_move_task() tests task_current() again after the
-  change block instead of carrying over the test result from inside the
-  change block.
-
-This patch is adopted from Peter Zijlstra's draft patch linked below. The
-changes are:
-
-* Call fini explicitly from for() instead of using the __cleanup__
-  attribute.
-
-* Allow the queue flag variable to be modified directly so that the user
-  doesn't have to poke into sched_change_guard struct. Also, in the original
-  patch, rt_mutex_setprio() was incorrectly updating its queue_flag instead
-  of cg.flags.
-
-* Some cosmetic changes.
+This will be used by a new sched_class to track weight changes.
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
-Original-patch-by: Peter Zijlstra <peterz@infradead.org>
-Link: https://lore.kernel.org/all/20220330162228.GH14330@worktop.programming.kicks-ass.net/T/#u
 Reviewed-by: David Vernet <dvernet@meta.com>
+Acked-by: Josh Don <joshdon@google.com>
+Acked-by: Hao Luo <haoluo@google.com>
+Acked-by: Barret Rhoden <brho@google.com>
 ---
- kernel/sched/core.c | 260 ++++++++++++++++++++++----------------------
- 1 file changed, 130 insertions(+), 130 deletions(-)
+ kernel/sched/core.c  | 4 ++--
+ kernel/sched/fair.c  | 3 ++-
+ kernel/sched/sched.h | 4 ++--
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
 diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 25b582b6ee5f..bfc3312f305a 100644
+index 49b3d8ce84ca..ce27ed857975 100644
 --- a/kernel/sched/core.c
 +++ b/kernel/sched/core.c
-@@ -2094,6 +2094,76 @@ void deactivate_task(struct rq *rq, struct task_struct *p, int flags)
- 	dequeue_task(rq, p, flags);
+@@ -1275,8 +1275,8 @@ static void set_load_weight(struct task_struct *p, bool update_load)
+ 	 * SCHED_OTHER tasks have to update their load when changing their
+ 	 * weight
+ 	 */
+-	if (update_load && p->sched_class == &fair_sched_class) {
+-		reweight_task(p, prio);
++	if (update_load && p->sched_class->reweight_task) {
++		p->sched_class->reweight_task(task_rq(p), p, prio);
+ 	} else {
+ 		load->weight = scale_load(sched_prio_to_weight[prio]);
+ 		load->inv_weight = sched_prio_to_wmult[prio];
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index c36aa54ae071..fbedf99ed953 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -3342,7 +3342,7 @@ static void reweight_entity(struct cfs_rq *cfs_rq, struct sched_entity *se,
+ 
  }
  
-+struct sched_change_guard {
-+	struct task_struct	*p;
-+	struct rq		*rq;
-+	bool			queued;
-+	bool			running;
-+	bool			done;
-+};
-+
-+static struct sched_change_guard
-+sched_change_guard_init(struct rq *rq, struct task_struct *p, int flags)
-+{
-+	struct sched_change_guard cg = {
-+		.rq = rq,
-+		.p = p,
-+		.queued = task_on_rq_queued(p),
-+		.running = task_current(rq, p),
-+	};
-+
-+	if (cg.queued) {
-+		/*
-+		 * __kthread_bind() may call this on blocked tasks without
-+		 * holding rq->lock through __do_set_cpus_allowed(). Assert @rq
-+		 * locked iff @p is queued.
-+		 */
-+		lockdep_assert_rq_held(rq);
-+		dequeue_task(rq, p, flags);
-+	}
-+	if (cg.running)
-+		put_prev_task(rq, p);
-+
-+	return cg;
-+}
-+
-+static void sched_change_guard_fini(struct sched_change_guard *cg, int flags)
-+{
-+	if (cg->queued)
-+		enqueue_task(cg->rq, cg->p, flags | ENQUEUE_NOCLOCK);
-+	if (cg->running)
-+		set_next_task(cg->rq, cg->p);
-+	cg->done = true;
-+}
-+
-+/**
-+ * SCHED_CHANGE_BLOCK - Nested block for task attribute updates
-+ * @__rq: Runqueue the target task belongs to
-+ * @__p: Target task
-+ * @__flags: DEQUEUE/ENQUEUE_* flags
-+ *
-+ * A task may need to be dequeued and put_prev_task'd for attribute updates and
-+ * set_next_task'd and re-enqueued afterwards. This helper defines a nested
-+ * block which automatically handles these preparation and cleanup operations.
-+ *
-+ *  SCHED_CHANGE_BLOCK(rq, p, DEQUEUE_SAVE | DEQUEUE_NOCLOCK) {
-+ *	  update_attribute(p);
-+ *        ...
-+ *  }
-+ *
-+ * If @__flags is a variable, the variable may be updated in the block body and
-+ * the updated value will be used when re-enqueueing @p.
-+ *
-+ * If %DEQUEUE_NOCLOCK is specified, the caller is responsible for calling
-+ * update_rq_clock() beforehand. Otherwise, the rq clock is automatically
-+ * updated iff the task needs to be dequeued and re-enqueued. Only the former
-+ * case guarantees that the rq clock is up-to-date inside and after the block.
-+ */
-+#define SCHED_CHANGE_BLOCK(__rq, __p, __flags)					\
-+	for (struct sched_change_guard __cg =					\
-+			sched_change_guard_init(__rq, __p, __flags);		\
-+	     !__cg.done; sched_change_guard_fini(&__cg, __flags))
-+
- static inline int __normal_prio(int policy, int rt_prio, int nice)
+-void reweight_task(struct task_struct *p, int prio)
++static void reweight_task_fair(struct rq *rq, struct task_struct *p, int prio)
  {
- 	int prio;
-@@ -2552,7 +2622,6 @@ static void
- __do_set_cpus_allowed(struct task_struct *p, struct affinity_context *ctx)
- {
- 	struct rq *rq = task_rq(p);
--	bool queued, running;
+ 	struct sched_entity *se = &p->se;
+ 	struct cfs_rq *cfs_rq = cfs_rq_of(se);
+@@ -12413,6 +12413,7 @@ DEFINE_SCHED_CLASS(fair) = {
+ 	.task_tick		= task_tick_fair,
+ 	.task_fork		= task_fork_fair,
  
- 	/*
- 	 * This here violates the locking rules for affinity, since we're only
-@@ -2571,26 +2640,9 @@ __do_set_cpus_allowed(struct task_struct *p, struct affinity_context *ctx)
- 	else
- 		lockdep_assert_held(&p->pi_lock);
++	.reweight_task		= reweight_task_fair,
+ 	.prio_changed		= prio_changed_fair,
+ 	.switched_from		= switched_from_fair,
+ 	.switched_to		= switched_to_fair,
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 771f8ddb7053..070603f00470 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -2208,6 +2208,8 @@ struct sched_class {
+ 	 */
+ 	void (*switched_from)(struct rq *this_rq, struct task_struct *task);
+ 	void (*switched_to)  (struct rq *this_rq, struct task_struct *task);
++	void (*reweight_task)(struct rq *this_rq, struct task_struct *task,
++			      int newprio);
+ 	void (*prio_changed) (struct rq *this_rq, struct task_struct *task,
+ 			      int oldprio);
  
--	queued = task_on_rq_queued(p);
--	running = task_current(rq, p);
+@@ -2360,8 +2362,6 @@ extern void init_sched_dl_class(void);
+ extern void init_sched_rt_class(void);
+ extern void init_sched_fair_class(void);
+ 
+-extern void reweight_task(struct task_struct *p, int prio);
 -
--	if (queued) {
--		/*
--		 * Because __kthread_bind() calls this on blocked tasks without
--		 * holding rq->lock.
--		 */
--		lockdep_assert_rq_held(rq);
--		dequeue_task(rq, p, DEQUEUE_SAVE | DEQUEUE_NOCLOCK);
-+	SCHED_CHANGE_BLOCK(rq, p, DEQUEUE_SAVE | DEQUEUE_NOCLOCK) {
-+		p->sched_class->set_cpus_allowed(p, ctx);
- 	}
--	if (running)
--		put_prev_task(rq, p);
--
--	p->sched_class->set_cpus_allowed(p, ctx);
--
--	if (queued)
--		enqueue_task(rq, p, ENQUEUE_RESTORE | ENQUEUE_NOCLOCK);
--	if (running)
--		set_next_task(rq, p);
- }
+ extern void resched_curr(struct rq *rq);
+ extern void resched_cpu(int cpu);
  
- /*
-@@ -6922,7 +6974,7 @@ static inline int rt_effective_prio(struct task_struct *p, int prio)
-  */
- void rt_mutex_setprio(struct task_struct *p, struct task_struct *pi_task)
- {
--	int prio, oldprio, queued, running, queue_flag =
-+	int prio, oldprio, queue_flag =
- 		DEQUEUE_SAVE | DEQUEUE_MOVE | DEQUEUE_NOCLOCK;
- 	const struct sched_class *prev_class;
- 	struct rq_flags rf;
-@@ -6982,49 +7034,39 @@ void rt_mutex_setprio(struct task_struct *p, struct task_struct *pi_task)
- 		queue_flag &= ~DEQUEUE_MOVE;
- 
- 	prev_class = p->sched_class;
--	queued = task_on_rq_queued(p);
--	running = task_current(rq, p);
--	if (queued)
--		dequeue_task(rq, p, queue_flag);
--	if (running)
--		put_prev_task(rq, p);
--
--	/*
--	 * Boosting condition are:
--	 * 1. -rt task is running and holds mutex A
--	 *      --> -dl task blocks on mutex A
--	 *
--	 * 2. -dl task is running and holds mutex A
--	 *      --> -dl task blocks on mutex A and could preempt the
--	 *          running task
--	 */
--	if (dl_prio(prio)) {
--		if (!dl_prio(p->normal_prio) ||
--		    (pi_task && dl_prio(pi_task->prio) &&
--		     dl_entity_preempt(&pi_task->dl, &p->dl))) {
--			p->dl.pi_se = pi_task->dl.pi_se;
--			queue_flag |= ENQUEUE_REPLENISH;
-+	SCHED_CHANGE_BLOCK(rq, p, queue_flag) {
-+		/*
-+		 * Boosting condition are:
-+		 * 1. -rt task is running and holds mutex A
-+		 *      --> -dl task blocks on mutex A
-+		 *
-+		 * 2. -dl task is running and holds mutex A
-+		 *      --> -dl task blocks on mutex A and could preempt the
-+		 *          running task
-+		 */
-+		if (dl_prio(prio)) {
-+			if (!dl_prio(p->normal_prio) ||
-+			    (pi_task && dl_prio(pi_task->prio) &&
-+			     dl_entity_preempt(&pi_task->dl, &p->dl))) {
-+				p->dl.pi_se = pi_task->dl.pi_se;
-+				queue_flag |= ENQUEUE_REPLENISH;
-+			} else {
-+				p->dl.pi_se = &p->dl;
-+			}
-+		} else if (rt_prio(prio)) {
-+			if (dl_prio(oldprio))
-+				p->dl.pi_se = &p->dl;
-+			if (oldprio < prio)
-+				queue_flag |= ENQUEUE_HEAD;
- 		} else {
--			p->dl.pi_se = &p->dl;
-+			if (dl_prio(oldprio))
-+				p->dl.pi_se = &p->dl;
-+			if (rt_prio(oldprio))
-+				p->rt.timeout = 0;
- 		}
--	} else if (rt_prio(prio)) {
--		if (dl_prio(oldprio))
--			p->dl.pi_se = &p->dl;
--		if (oldprio < prio)
--			queue_flag |= ENQUEUE_HEAD;
--	} else {
--		if (dl_prio(oldprio))
--			p->dl.pi_se = &p->dl;
--		if (rt_prio(oldprio))
--			p->rt.timeout = 0;
--	}
--
--	__setscheduler_prio(p, prio);
- 
--	if (queued)
--		enqueue_task(rq, p, queue_flag);
--	if (running)
--		set_next_task(rq, p);
-+		__setscheduler_prio(p, prio);
-+	}
- 
- 	check_class_changed(rq, p, prev_class, oldprio);
- out_unlock:
-@@ -7046,7 +7088,6 @@ static inline int rt_effective_prio(struct task_struct *p, int prio)
- 
- void set_user_nice(struct task_struct *p, long nice)
- {
--	bool queued, running;
- 	int old_prio;
- 	struct rq_flags rf;
- 	struct rq *rq;
-@@ -7070,22 +7111,13 @@ void set_user_nice(struct task_struct *p, long nice)
- 		p->static_prio = NICE_TO_PRIO(nice);
- 		goto out_unlock;
- 	}
--	queued = task_on_rq_queued(p);
--	running = task_current(rq, p);
--	if (queued)
--		dequeue_task(rq, p, DEQUEUE_SAVE | DEQUEUE_NOCLOCK);
--	if (running)
--		put_prev_task(rq, p);
--
--	p->static_prio = NICE_TO_PRIO(nice);
--	set_load_weight(p, true);
--	old_prio = p->prio;
--	p->prio = effective_prio(p);
- 
--	if (queued)
--		enqueue_task(rq, p, ENQUEUE_RESTORE | ENQUEUE_NOCLOCK);
--	if (running)
--		set_next_task(rq, p);
-+	SCHED_CHANGE_BLOCK(rq, p, DEQUEUE_SAVE | DEQUEUE_NOCLOCK) {
-+		p->static_prio = NICE_TO_PRIO(nice);
-+		set_load_weight(p, true);
-+		old_prio = p->prio;
-+		p->prio = effective_prio(p);
-+	}
- 
- 	/*
- 	 * If the task increased its priority or is running and
-@@ -7469,7 +7501,7 @@ static int __sched_setscheduler(struct task_struct *p,
- 				bool user, bool pi)
- {
- 	int oldpolicy = -1, policy = attr->sched_policy;
--	int retval, oldprio, newprio, queued, running;
-+	int retval, oldprio, newprio;
- 	const struct sched_class *prev_class;
- 	struct balance_callback *head;
- 	struct rq_flags rf;
-@@ -7634,33 +7666,22 @@ static int __sched_setscheduler(struct task_struct *p,
- 			queue_flags &= ~DEQUEUE_MOVE;
- 	}
- 
--	queued = task_on_rq_queued(p);
--	running = task_current(rq, p);
--	if (queued)
--		dequeue_task(rq, p, queue_flags);
--	if (running)
--		put_prev_task(rq, p);
--
--	prev_class = p->sched_class;
-+	SCHED_CHANGE_BLOCK(rq, p, queue_flags) {
-+		prev_class = p->sched_class;
- 
--	if (!(attr->sched_flags & SCHED_FLAG_KEEP_PARAMS)) {
--		__setscheduler_params(p, attr);
--		__setscheduler_prio(p, newprio);
--	}
--	__setscheduler_uclamp(p, attr);
-+		if (!(attr->sched_flags & SCHED_FLAG_KEEP_PARAMS)) {
-+			__setscheduler_params(p, attr);
-+			__setscheduler_prio(p, newprio);
-+		}
-+		__setscheduler_uclamp(p, attr);
- 
--	if (queued) {
- 		/*
- 		 * We enqueue to tail when the priority of a task is
- 		 * increased (user space view).
- 		 */
- 		if (oldprio < p->prio)
- 			queue_flags |= ENQUEUE_HEAD;
--
--		enqueue_task(rq, p, queue_flags);
- 	}
--	if (running)
--		set_next_task(rq, p);
- 
- 	check_class_changed(rq, p, prev_class, oldprio);
- 
-@@ -9177,25 +9198,15 @@ int migrate_task_to(struct task_struct *p, int target_cpu)
-  */
- void sched_setnuma(struct task_struct *p, int nid)
- {
--	bool queued, running;
- 	struct rq_flags rf;
- 	struct rq *rq;
- 
- 	rq = task_rq_lock(p, &rf);
--	queued = task_on_rq_queued(p);
--	running = task_current(rq, p);
- 
--	if (queued)
--		dequeue_task(rq, p, DEQUEUE_SAVE);
--	if (running)
--		put_prev_task(rq, p);
--
--	p->numa_preferred_nid = nid;
-+	SCHED_CHANGE_BLOCK(rq, p, DEQUEUE_SAVE) {
-+		p->numa_preferred_nid = nid;
-+	}
- 
--	if (queued)
--		enqueue_task(rq, p, ENQUEUE_RESTORE | ENQUEUE_NOCLOCK);
--	if (running)
--		set_next_task(rq, p);
- 	task_rq_unlock(rq, p, &rf);
- }
- #endif /* CONFIG_NUMA_BALANCING */
-@@ -10287,35 +10298,24 @@ static void sched_change_group(struct task_struct *tsk)
-  */
- void sched_move_task(struct task_struct *tsk)
- {
--	int queued, running, queue_flags =
--		DEQUEUE_SAVE | DEQUEUE_MOVE | DEQUEUE_NOCLOCK;
- 	struct rq_flags rf;
- 	struct rq *rq;
- 
- 	rq = task_rq_lock(tsk, &rf);
- 	update_rq_clock(rq);
- 
--	running = task_current(rq, tsk);
--	queued = task_on_rq_queued(tsk);
--
--	if (queued)
--		dequeue_task(rq, tsk, queue_flags);
--	if (running)
--		put_prev_task(rq, tsk);
--
--	sched_change_group(tsk);
-+	SCHED_CHANGE_BLOCK(rq, tsk,
-+			   DEQUEUE_SAVE | DEQUEUE_MOVE | DEQUEUE_NOCLOCK) {
-+		sched_change_group(tsk);
-+	}
- 
--	if (queued)
--		enqueue_task(rq, tsk, queue_flags);
--	if (running) {
--		set_next_task(rq, tsk);
--		/*
--		 * After changing group, the running task may have joined a
--		 * throttled one but it's still the running task. Trigger a
--		 * resched to make sure that task can still run.
--		 */
-+	/*
-+	 * After changing group, the running task may have joined a throttled
-+	 * one but it's still the running task. Trigger a resched to make sure
-+	 * that task can still run.
-+	 */
-+	if (task_current(rq, tsk))
- 		resched_curr(rq);
--	}
- 
- 	task_rq_unlock(rq, tsk, &rf);
- }
 -- 
 2.39.1
 
