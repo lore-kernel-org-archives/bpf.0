@@ -2,161 +2,186 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05228C61D97
-	for <bpf@archiver.kernel.org>; Sun, 29 Jan 2023 18:48:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69CCBC61D97
+	for <bpf@archiver.kernel.org>; Sun, 29 Jan 2023 19:05:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjA2Ssj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 29 Jan 2023 13:48:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49428 "EHLO
+        id S235114AbjA2TFc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 29 Jan 2023 14:05:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjA2Ssf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 29 Jan 2023 13:48:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176BD1F4BA;
-        Sun, 29 Jan 2023 10:48:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A4010B80CBB;
-        Sun, 29 Jan 2023 18:48:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA412C433D2;
-        Sun, 29 Jan 2023 18:48:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675018085;
-        bh=wqWSHpwy3MUpVmsntNqQHtsxLsPh+QcU+TX0EB5Z+4c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Nz1tZKtoo2WWyX7mMEDJ0juSHAcoJaOdpTBcbcWkG+P8/FhbZM+UEhpuuleS+FLUd
-         4OzJ1t+ZdgzDeJ+nJ4yDp/amMYIlrdWBGOEzygjP42g2g245qB9D3YSX7Pbdh7NvOW
-         5G4KuVbsuWWQ0KnKKM0iPK/t2i+ekATc7EwjAmIiuv6cHg1mOiOx/9Ws+QUbW+Wz9U
-         iOyZMdtrQfBGEEPLquar3kg/yHDyqjMVltQbV/uB/96KSSE2RytjjXyE4kAIQ1je0/
-         KSX1gPVLOhpWEHgNY+q/tEpVTXmBZVKNPWb4FJ1+jipdegmwISU77c+1qKZg14IB+2
-         gkfbLrJHYVGKg==
-Date:   Sun, 29 Jan 2023 19:48:01 +0100
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S229769AbjA2TFb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 29 Jan 2023 14:05:31 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEED76B2
+        for <bpf@vger.kernel.org>; Sun, 29 Jan 2023 11:05:30 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30TDL1xV004392;
+        Sun, 29 Jan 2023 19:05:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=Ek4/IGZiWm5oQVUeYiD5UlAicrnJMSF15nHo+Xh0oOg=;
+ b=R9Mrg1V+mj3Jq6xKUWfqRw6Up/CoJ0r9T/YvTgmFlBYpaSUBvM7/lbi0dMHKa0tXzezH
+ +3rp6yyLYbvnIJfeflYT2iTRXIXnhajp0KmJLxY8Bl2Af7yjtRDlSncZEvAFKoWY+k4y
+ zn14BJL//KBbeJ0ngS8IsZjdZm83xNk4ewGXLZ8cdyjpzWv8+ctMBlQ/3C48WQUlrZ2m
+ +eIoCniZHkhTK6xwnLqJONOEEuY2oV1W/aGo74s9BPAMCI+TmopqCfIzNuVbUQbh8bEM
+ ZfKiS2W+1PUzcDlNxOklSAOui2Nn45sb2v1hFBpkM8QqyKhiFiVKUoiFNmCMGl5Q9VYL oA== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nddfc5eg1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 29 Jan 2023 19:05:16 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30T4vhG1026871;
+        Sun, 29 Jan 2023 19:05:14 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3ncvs7hd4d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 29 Jan 2023 19:05:14 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30TJ5Alb48628052
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 29 Jan 2023 19:05:10 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C051F2004B;
+        Sun, 29 Jan 2023 19:05:10 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 36F8220040;
+        Sun, 29 Jan 2023 19:05:10 +0000 (GMT)
+Received: from heavy.ibmuc.com (unknown [9.179.11.57])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Sun, 29 Jan 2023 19:05:10 +0000 (GMT)
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Marek Majtyka <alardam@gmail.com>,
-        Saeed Mahameed <saeedm@nvidia.com>, anthony.l.nguyen@intel.com,
-        Andy Gospodarek <gospo@broadcom.com>, vladimir.oltean@nxp.com,
-        Felix Fietkau <nbd@nbd.name>, john@phrozen.org,
-        Leon Romanovsky <leon@kernel.org>,
-        Simon Horman <simon.horman@corigine.com>,
-        Ariel Elior <aelior@marvell.com>,
-        christophe.jaillet@wanadoo.fr, ecree.xilinx@gmail.com,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
-        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
-        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Stanislav Fomichev <sdf@google.com>
-Subject: Re: [PATCH v4 bpf-next 8/8] selftests/bpf: introduce XDP compliance
- test tool
-Message-ID: <Y9a/YWBBU/cjofIr@lore-desk>
-References: <cover.1674913191.git.lorenzo@kernel.org>
- <a7eaa7e3e4c0a7e70f68c32314a7f75c9bba4465.1674913191.git.lorenzo@kernel.org>
- <CAADnVQJhdxM6eqvxRZ7JjxEc+fDG5CwnV_FAGs+H+djNye0e=w@mail.gmail.com>
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>
+Subject: [PATCH bpf-next v3 6/8] s390/bpf: Implement bpf_jit_supports_kfunc_call()
+Date:   Sun, 29 Jan 2023 20:04:59 +0100
+Message-Id: <20230129190501.1624747-7-iii@linux.ibm.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230129190501.1624747-1-iii@linux.ibm.com>
+References: <20230129190501.1624747-1-iii@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Nx0wHPKtgW7QyJuF"
-Content-Disposition: inline
-In-Reply-To: <CAADnVQJhdxM6eqvxRZ7JjxEc+fDG5CwnV_FAGs+H+djNye0e=w@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: STJBjH4hsX0OMuMm20UYEZDkkmr-RO2d
+X-Proofpoint-GUID: STJBjH4hsX0OMuMm20UYEZDkkmr-RO2d
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-29_10,2023-01-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ priorityscore=1501 adultscore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0
+ suspectscore=0 mlxlogscore=999 phishscore=0 malwarescore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301290189
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Implement calling kernel functions from eBPF. In general, the eBPF ABI
+is fairly close to that of s390x, with one important difference: on
+s390x callers should sign-extend signed arguments. Handle that by using
+information returned by bpf_jit_find_kfunc_model().
 
---Nx0wHPKtgW7QyJuF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Here is an example of how sign extensions works. Suppose we need to
+call the following function from BPF:
 
-On Jan 28, Alexei Starovoitov wrote:
-> On Sat, Jan 28, 2023 at 6:07 AM Lorenzo Bianconi <lorenzo@kernel.org> wro=
-te:
-> > diff --git a/tools/testing/selftests/bpf/xdp_features.h b/tools/testing=
-/selftests/bpf/xdp_features.h
-> > new file mode 100644
-> > index 000000000000..28d7614c4f02
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/xdp_features.h
-> > @@ -0,0 +1,33 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +
-> > +/* test commands */
-> > +enum test_commands {
-> > +       CMD_STOP,               /* CMD */
-> > +       CMD_START,              /* CMD + xdp feature */
-> > +       CMD_ECHO,               /* CMD */
-> > +       CMD_ACK,                /* CMD + data */
-> > +       CMD_GET_XDP_CAP,        /* CMD */
-> > +       CMD_GET_STATS,          /* CMD */
-> > +};
-> > +
-> > +#define DUT_CTRL_PORT  12345
-> > +#define DUT_ECHO_PORT  12346
-> > +
-> > +struct tlv_hdr {
-> > +       __be16 type;
-> > +       __be16 len;
-> > +       __be32 data[];
-> > +};
-> > +
-> > +enum {
-> > +       XDP_FEATURE_ABORTED,
-> > +       XDP_FEATURE_DROP,
-> > +       XDP_FEATURE_PASS,
-> > +       XDP_FEATURE_TX,
-> > +       XDP_FEATURE_REDIRECT,
-> > +       XDP_FEATURE_NDO_XMIT,
-> > +       XDP_FEATURE_XSK_ZEROCOPY,
-> > +       XDP_FEATURE_HW_OFFLOAD,
-> > +       XDP_FEATURE_RX_SG,
-> > +       XDP_FEATURE_NDO_XMIT_SG,
-> > +};
->=20
-> This doesn't match the kernel.
-> How did you test this?
-> What should be the way to prevent such mistakes in the future?
+    ; long noinline bpf_kfunc_call_test4(signed char a, short b, int c,
+long d)
+    0000000000936a78 <bpf_kfunc_call_test4>:
+    936a78:       c0 04 00 00 00 00       jgnop bpf_kfunc_call_test4
+    ;     return (long)a + (long)b + (long)c + d;
+    936a7e:       b9 08 00 45             agr     %r4,%r5
+    936a82:       b9 08 00 43             agr     %r4,%r3
+    936a86:       b9 08 00 24             agr     %r2,%r4
+    936a8a:       c0 f4 00 1e 3b 27       jg      <__s390_indirect_jump_r14>
 
-Hi Alexei,
+As per the s390x ABI, bpf_kfunc_call_test4() has the right to assume
+that a, b and c are sign-extended by the caller, which results in using
+64-bit additions (agr) without any additional conversions. Without sign
+extension we would have the following on the JITed code side:
 
-I added the XDP_FEATURE_* enum above since the XDP compliance test tool nee=
-ds
-to differentiate between actions in NETDEV_XDP_ACT_BASIC (e.g XDP_TX and
-XDP_PASS or XDP_REDIRECT are handled differently in the ebpf programs insta=
-lled
-on the tester and DUT devices). However, combining netdev_xdp_act and xdp_a=
-ction
-enum definitions, I think we can keep this logic in xdp_feature userspace p=
-art
-and we can get rid of the XDP_FEATURE_* enum above.
-I will fix it in v5.
+    ; tmp = bpf_kfunc_call_test4(-3, -30, -200, -1000);
+    ;        5:       b4 10 00 00 ff ff ff fd w1 = -3
+    0x3ff7fdcdad4:       llilf   %r2,0xfffffffd
+    ;        6:       b4 20 00 00 ff ff ff e2 w2 = -30
+    0x3ff7fdcdada:       llilf   %r3,0xffffffe2
+    ;        7:       b4 30 00 00 ff ff ff 38 w3 = -200
+    0x3ff7fdcdae0:       llilf   %r4,0xffffff38
+    ;       8:       b7 40 00 00 ff ff fc 18 r4 = -1000
+    0x3ff7fdcdae6:       lgfi    %r5,-1000
+    0x3ff7fdcdaec:       mvc     64(4,%r15),160(%r15)
+    0x3ff7fdcdaf2:       lgrl    %r1,bpf_kfunc_call_test4@GOT
+    0x3ff7fdcdaf8:       brasl   %r14,__s390_indirect_jump_r1
 
-Regards,
-Lorenzo
+This first 3 llilfs are 32-bit loads, that need to be sign-extended
+to 64 bits.
 
---Nx0wHPKtgW7QyJuF
-Content-Type: application/pgp-signature; name="signature.asc"
+Note: at the moment bpf_jit_find_kfunc_model() does not seem to play
+nicely with XDP metadata functions: add_kfunc_call() adds an "abstract"
+bpf_*() version to kfunc_btf_tab, but then fixup_kfunc_call() puts the
+concrete version into insn->imm, which bpf_jit_find_kfunc_model() cannot
+find. But this seems to be a common code problem.
 
------BEGIN PGP SIGNATURE-----
+Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+---
+ arch/s390/net/bpf_jit_comp.c | 25 +++++++++++++++++++++++--
+ 1 file changed, 23 insertions(+), 2 deletions(-)
 
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCY9a/YQAKCRA6cBh0uS2t
-rA0MAQD14qKZyBuuTUx+gcvcXc9dncuAjpGH/LEYEmvcdZpjPgD/evMoa3V8P0ut
-zGEhB25aPtnf/qiDteYI2cvq8czggAw=
-=A3gE
------END PGP SIGNATURE-----
+diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
+index b84c7ddb758a..d0846ba818ee 100644
+--- a/arch/s390/net/bpf_jit_comp.c
++++ b/arch/s390/net/bpf_jit_comp.c
+@@ -1401,9 +1401,10 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
+ 	 */
+ 	case BPF_JMP | BPF_CALL:
+ 	{
+-		u64 func;
++		const struct btf_func_model *m;
+ 		bool func_addr_fixed;
+-		int ret;
++		int j, ret;
++		u64 func;
+ 
+ 		ret = bpf_jit_get_func_addr(fp, insn, extra_pass,
+ 					    &func, &func_addr_fixed);
+@@ -1425,6 +1426,21 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
+ 		/* mvc STK_OFF_TCCNT(4,%r15),N(%r15) */
+ 		_EMIT6(0xd203f000 | STK_OFF_TCCNT,
+ 		       0xf000 | (STK_OFF_TCCNT + STK_OFF + stack_depth));
++
++		/* Sign-extend the kfunc arguments. */
++		if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
++			m = bpf_jit_find_kfunc_model(fp, insn);
++			if (!m)
++				return -1;
++
++			for (j = 0; j < m->nr_args; j++) {
++				if (sign_extend(jit, BPF_REG_1 + j,
++						m->arg_size[j],
++						m->arg_flags[j]))
++					return -1;
++			}
++		}
++
+ 		/* lgrl %w1,func */
+ 		EMIT6_PCREL_RILB(0xc4080000, REG_W1, _EMIT_CONST_U64(func));
+ 		/* %r1() */
+@@ -1980,6 +1996,11 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ 	return fp;
+ }
+ 
++bool bpf_jit_supports_kfunc_call(void)
++{
++	return true;
++}
++
+ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
+ 		       void *old_addr, void *new_addr)
+ {
+-- 
+2.39.1
 
---Nx0wHPKtgW7QyJuF--
