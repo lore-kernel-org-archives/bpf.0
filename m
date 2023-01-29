@@ -2,723 +2,1053 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D4A0C636CD
-	for <bpf@archiver.kernel.org>; Sun, 29 Jan 2023 19:05:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6D25C54EED
+	for <bpf@archiver.kernel.org>; Sun, 29 Jan 2023 23:39:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231794AbjA2TFk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 29 Jan 2023 14:05:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55776 "EHLO
+        id S230220AbjA2Xjh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 29 Jan 2023 18:39:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235156AbjA2TFi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 29 Jan 2023 14:05:38 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A17CF1F5DA
-        for <bpf@vger.kernel.org>; Sun, 29 Jan 2023 11:05:34 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30TDO3lX016093;
-        Sun, 29 Jan 2023 19:05:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=vD4f/H1BtqA18k70P8TezOfq5pAPORuTJ+OSf8s2Ttc=;
- b=PH4ZTDj0MAoIvjHhmZ7ASVxhMCJcJSIIJoDyBeQPpMAWjAjiGyriHJ8Bte4BdVEgdgbt
- r9IS7uLkfgXr3oH9Rnk1dgSMGr4lIZ/B2+mzgwx4E843ykEBQRLXhW1PZ1A6iD6tgHOS
- VSVG/qGwrmt27jGnWot08sQFcYQNj5w8h2qXv0dc38vIkFoyqMZ6ZfiujVNORrcIbneb
- lMwGn+HM5ObU+KFSSfyCPNLUVs/XFXrPCiJsrU5fIcgM0ogzfK8d2GmIdE/tu8/OPhiD
- QjSeH9J6vleFxlArF63dTHNdFVbS1u4ULdQWKZ2o7PiEq8S22jXdtqS0QSt4ShxRHG3I aw== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nddhpdfnj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 29 Jan 2023 19:05:15 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30TCY37m006905;
-        Sun, 29 Jan 2023 19:05:13 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3ncvt7h0j7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 29 Jan 2023 19:05:12 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30TJ59tL47579588
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 29 Jan 2023 19:05:09 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E08FC20040;
-        Sun, 29 Jan 2023 19:05:08 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4862F20043;
-        Sun, 29 Jan 2023 19:05:08 +0000 (GMT)
-Received: from heavy.ibmuc.com (unknown [9.179.11.57])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Sun, 29 Jan 2023 19:05:08 +0000 (GMT)
-From:   Ilya Leoshkevich <iii@linux.ibm.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next v3 4/8] s390/bpf: Implement arch_prepare_bpf_trampoline()
-Date:   Sun, 29 Jan 2023 20:04:57 +0100
-Message-Id: <20230129190501.1624747-5-iii@linux.ibm.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230129190501.1624747-1-iii@linux.ibm.com>
-References: <20230129190501.1624747-1-iii@linux.ibm.com>
+        with ESMTP id S234659AbjA2Xjg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 29 Jan 2023 18:39:36 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37FB27AAF;
+        Sun, 29 Jan 2023 15:39:33 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id cl23-20020a17090af69700b0022c745bfdc3so2916884pjb.3;
+        Sun, 29 Jan 2023 15:39:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=L/H4g3x9t1/lMRdKT+p8a80l+Taf9julAjtZKdD3JXI=;
+        b=XOu9KnGqrhxPS9SmGfQf+Sqs3OWeBCFX7hNSd6TkLTAF6gp22AZiROnPapEOUvbngW
+         zL+5sGp8hoI7CHI3Um83ezS5dIdFHHL1JLZOwYayolwS7eDFcoI8g+Cf75mL0E4Ex1kY
+         lqRIc1wwN47Zma2nhRrV5WH+iCVyyDTNUpuvIJVX28E84d6yp72gGL5+/ASK10qDxqRZ
+         YaRvf2sVYlRJ2+KJ8S4fWHwnhYliNmloGM3XbBSFrHvZEv/aP7+7oDXeathvYLUdcOUD
+         dkr5bINc/40Kq09b5HWGHC1cs7TNJe1zW8GIEKfvrS2gXMX1teEaSrnhTDtvtpwifrmH
+         e+gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=L/H4g3x9t1/lMRdKT+p8a80l+Taf9julAjtZKdD3JXI=;
+        b=D1VewDGs9MvcWJ/Q2v+lYe9o2gkLSMEBysKXsDE2A2k+tZBdpKQUo6BlGw4lWQ7eSa
+         U/7dAfNKucoIblgxexLxoV01zWGLaialev7lHgF6ejnzxFbIo9SC+zWV5Kh4M8JJCqh9
+         LzDupbtrJt/At6jyXL2y5h82jAQsTtCKZM9Jc+tZvrLxWF0Cc/U0BPNLP6WyMs34vX86
+         fmFjM0YZKwpfYHUoCRR7yuQxoFcbIcVMlsmJl9pWtUmZpwTUygwgr7r3vG5WQ9TW7Qlr
+         ZMVjnvW23Ej5uuRDjTChfOq29OIktxHvzNxziY4rowDM9jtJGZrDDV6kUcaqQt4LgeiC
+         +wXg==
+X-Gm-Message-State: AO0yUKW7paaogwzeeFrXosFRdiTP8HzN21WZISpJa6xUV3vDpUNmN6bL
+        jEeuG6VB9nIWeohouGvsVWTlGF/BIz8=
+X-Google-Smtp-Source: AK7set81YjslKnNZaZHB7cdJlzfRcWggANhrbXhiwU1hNqTG21Tpq33ov9mu2Da/awe5d5+JZP6YBA==
+X-Received: by 2002:a17:90b:3b50:b0:22b:e71d:f258 with SMTP id ot16-20020a17090b3b5000b0022be71df258mr24012120pjb.37.1675035571793;
+        Sun, 29 Jan 2023 15:39:31 -0800 (PST)
+Received: from MacBook-Pro-6.local ([2620:10d:c090:400::5:9e5c])
+        by smtp.gmail.com with ESMTPSA id a16-20020a656550000000b0049f77341db3sm5626229pgw.42.2023.01.29.15.39.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Jan 2023 15:39:31 -0800 (PST)
+Date:   Sun, 29 Jan 2023 15:39:28 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Joanne Koong <joannelkoong@gmail.com>
+Cc:     bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@kernel.org, ast@kernel.org, netdev@vger.kernel.org,
+        memxor@gmail.com, kernel-team@fb.com
+Subject: Re: [PATCH v9 bpf-next 3/5] bpf: Add skb dynptrs
+Message-ID: <20230129233928.f3wf6dd6ep75w4vz@MacBook-Pro-6.local>
+References: <20230127191703.3864860-1-joannelkoong@gmail.com>
+ <20230127191703.3864860-4-joannelkoong@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: u8YImZYedVLae4GyQ6lRqCCulGwW2rcB
-X-Proofpoint-GUID: u8YImZYedVLae4GyQ6lRqCCulGwW2rcB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-29_10,2023-01-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=999 lowpriorityscore=0 suspectscore=0 priorityscore=1501
- spamscore=0 impostorscore=0 mlxscore=0 adultscore=0 clxscore=1015
- phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301290189
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230127191703.3864860-4-joannelkoong@gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-arch_prepare_bpf_trampoline() is used for direct attachment of eBPF
-programs to various places, bypassing kprobes. It's responsible for
-calling a number of eBPF programs before, instead and/or after
-whatever they are attached to.
+On Fri, Jan 27, 2023 at 11:17:01AM -0800, Joanne Koong wrote:
+> Add skb dynptrs, which are dynptrs whose underlying pointer points
+> to a skb. The dynptr acts on skb data. skb dynptrs have two main
+> benefits. One is that they allow operations on sizes that are not
+> statically known at compile-time (eg variable-sized accesses).
+> Another is that parsing the packet data through dynptrs (instead of
+> through direct access of skb->data and skb->data_end) can be more
+> ergonomic and less brittle (eg does not need manual if checking for
+> being within bounds of data_end).
+> 
+> For bpf prog types that don't support writes on skb data, the dynptr is
+> read-only (bpf_dynptr_write() will return an error and bpf_dynptr_data()
+> will return a data slice that is read-only where any writes to it will
+> be rejected by the verifier).
+> 
+> For reads and writes through the bpf_dynptr_read() and bpf_dynptr_write()
+> interfaces, reading and writing from/to data in the head as well as from/to
+> non-linear paged buffers is supported. For data slices (through the
+> bpf_dynptr_data() interface), if the data is in a paged buffer, the user
+> must first call bpf_skb_pull_data() to pull the data into the linear
+> portion.
 
-Add a s390x implementation, paying attention to the following:
+Looks like there is an assumption in parts of this patch that
+linear part of skb is always writeable. That's not the case.
+See if (ops->gen_prologue || env->seen_direct_write) in convert_ctx_accesses().
+For TC progs it calls bpf_unclone_prologue() which adds hidden
+bpf_skb_pull_data() in the beginning of the prog to make it writeable.
 
-- Reuse the existing JIT infrastructure, where possible.
-- Like the existing JIT, prefer making multiple passes instead of
-  backpatching. Currently 2 passes is enough. If literal pool is
-  introduced, this needs to be raised to 3. However, at the moment
-  adding literal pool only makes the code larger. If branch
-  shortening is introduced, the number of passes needs to be
-  increased even further.
-- Support both regular and ftrace calling conventions, depending on
-  the trampoline flags.
-- Use expolines for indirect calls.
-- Handle the mismatch between the eBPF and the s390x ABIs.
-- Sign-extend fmod_ret return values.
+> Any bpf_dynptr_write() automatically invalidates any prior data slices
+> to the skb dynptr. This is because a bpf_dynptr_write() may be writing
+> to data in a paged buffer, so it will need to pull the buffer first into
+> the head. The reason it needs to be pulled instead of writing directly to
+> the paged buffers is because they may be cloned (only the head of the skb
+> is by default uncloned). As such, any bpf_dynptr_write() will
+> automatically have its prior data slices invalidated, even if the write
+> is to data in the skb head (the verifier has no way of differentiating
+> whether the write is to the head or paged buffers during program load
+> time). 
 
-invoke_bpf_prog() produces about 120 bytes; it might be possible to
-slightly optimize this, but reaching 50 bytes, like on x86_64, looks
-unrealistic: just loading cookie, __bpf_prog_enter, bpf_func, insnsi
-and __bpf_prog_exit as literals already takes at least 5 * 12 = 60
-bytes, and we can't use relative addressing for most of them.
-Therefore, lower BPF_MAX_TRAMP_LINKS on s390x.
+Could you explain the workflow how bpf_dynptr_write() invalidates other
+pkt pointers ?
+I expected bpf_dynptr_write() to be in bpf_helper_changes_pkt_data().
+Looks like bpf_dynptr_write() calls bpf_skb_store_bytes() underneath,
+but that doesn't help the verifier.
 
-Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
----
- arch/s390/net/bpf_jit_comp.c | 542 +++++++++++++++++++++++++++++++++--
- include/linux/bpf.h          |   4 +
- 2 files changed, 524 insertions(+), 22 deletions(-)
+> Please note as well that any other helper calls that change the
+> underlying packet buffer (eg bpf_skb_pull_data()) invalidates any data
+> slices of the skb dynptr as well. The stack trace for this is
+> check_helper_call() -> clear_all_pkt_pointers() ->
+> __clear_all_pkt_pointers() -> mark_reg_unknown().
 
-diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
-index c72eb3fc1f98..3fe082d5328d 100644
---- a/arch/s390/net/bpf_jit_comp.c
-+++ b/arch/s390/net/bpf_jit_comp.c
-@@ -71,6 +71,10 @@ struct bpf_jit {
- #define REG_0		REG_W0			/* Register 0 */
- #define REG_1		REG_W1			/* Register 1 */
- #define REG_2		BPF_REG_1		/* Register 2 */
-+#define REG_3		BPF_REG_2		/* Register 3 */
-+#define REG_4		BPF_REG_3		/* Register 4 */
-+#define REG_7		BPF_REG_6		/* Register 7 */
-+#define REG_8		BPF_REG_7		/* Register 8 */
- #define REG_14		BPF_REG_0		/* Register 14 */
- 
- /*
-@@ -595,6 +599,43 @@ static void bpf_jit_prologue(struct bpf_jit *jit, u32 stack_depth)
- 	}
- }
- 
-+/*
-+ * Emit an expoline for a jump that follows
-+ */
-+static void emit_expoline(struct bpf_jit *jit)
-+{
-+	/* exrl %r0,.+10 */
-+	EMIT6_PCREL_RIL(0xc6000000, jit->prg + 10);
-+	/* j . */
-+	EMIT4_PCREL(0xa7f40000, 0);
-+}
-+
-+/*
-+ * Emit __s390_indirect_jump_r1 thunk if necessary
-+ */
-+static void emit_r1_thunk(struct bpf_jit *jit)
-+{
-+	if (nospec_uses_trampoline()) {
-+		jit->r1_thunk_ip = jit->prg;
-+		emit_expoline(jit);
-+		/* br %r1 */
-+		_EMIT2(0x07f1);
-+	}
-+}
-+
-+/*
-+ * Call r1 either directly or via __s390_indirect_jump_r1 thunk
-+ */
-+static void call_r1(struct bpf_jit *jit)
-+{
-+	if (nospec_uses_trampoline())
-+		/* brasl %r14,__s390_indirect_jump_r1 */
-+		EMIT6_PCREL_RILB(0xc0050000, REG_14, jit->r1_thunk_ip);
-+	else
-+		/* basr %r14,%r1 */
-+		EMIT2(0x0d00, REG_14, REG_1);
-+}
-+
- /*
-  * Function epilogue
-  */
-@@ -608,25 +649,13 @@ static void bpf_jit_epilogue(struct bpf_jit *jit, u32 stack_depth)
- 	if (nospec_uses_trampoline()) {
- 		jit->r14_thunk_ip = jit->prg;
- 		/* Generate __s390_indirect_jump_r14 thunk */
--		/* exrl %r0,.+10 */
--		EMIT6_PCREL_RIL(0xc6000000, jit->prg + 10);
--		/* j . */
--		EMIT4_PCREL(0xa7f40000, 0);
-+		emit_expoline(jit);
- 	}
- 	/* br %r14 */
- 	_EMIT2(0x07fe);
- 
--	if ((nospec_uses_trampoline()) &&
--	    (is_first_pass(jit) || (jit->seen & SEEN_FUNC))) {
--		jit->r1_thunk_ip = jit->prg;
--		/* Generate __s390_indirect_jump_r1 thunk */
--		/* exrl %r0,.+10 */
--		EMIT6_PCREL_RIL(0xc6000000, jit->prg + 10);
--		/* j . */
--		EMIT4_PCREL(0xa7f40000, 0);
--		/* br %r1 */
--		_EMIT2(0x07f1);
--	}
-+	if (is_first_pass(jit) || (jit->seen & SEEN_FUNC))
-+		emit_r1_thunk(jit);
- 
- 	jit->prg = ALIGN(jit->prg, 8);
- 	jit->prologue_plt = jit->prg;
-@@ -707,6 +736,34 @@ static int bpf_jit_probe_mem(struct bpf_jit *jit, struct bpf_prog *fp,
- 	return 0;
- }
- 
-+/*
-+ * Sign-extend the register if necessary
-+ */
-+static int sign_extend(struct bpf_jit *jit, int r, u8 size, u8 flags)
-+{
-+	if (!(flags & BTF_FMODEL_SIGNED_ARG))
-+		return 0;
-+
-+	switch (size) {
-+	case 1:
-+		/* lgbr %r,%r */
-+		EMIT4(0xb9060000, r, r);
-+		return 0;
-+	case 2:
-+		/* lghr %r,%r */
-+		EMIT4(0xb9070000, r, r);
-+		return 0;
-+	case 4:
-+		/* lgfr %r,%r */
-+		EMIT4(0xb9140000, r, r);
-+		return 0;
-+	case 8:
-+		return 0;
-+	default:
-+		return -1;
-+	}
-+}
-+
- /*
-  * Compile one eBPF instruction into s390x code
-  *
-@@ -1355,13 +1412,8 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
- 		jit->seen |= SEEN_FUNC;
- 		/* lgrl %w1,func */
- 		EMIT6_PCREL_RILB(0xc4080000, REG_W1, _EMIT_CONST_U64(func));
--		if (nospec_uses_trampoline()) {
--			/* brasl %r14,__s390_indirect_jump_r1 */
--			EMIT6_PCREL_RILB(0xc0050000, REG_14, jit->r1_thunk_ip);
--		} else {
--			/* basr %r14,%w1 */
--			EMIT2(0x0d00, REG_14, REG_W1);
--		}
-+		/* %r1() */
-+		call_r1(jit);
- 		/* lgr %b0,%r2: load return value into %b0 */
- 		EMIT4(0xb9040000, BPF_REG_0, REG_2);
- 		break;
-@@ -1964,3 +2016,449 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
- 
- 	return 0;
- }
-+
-+struct bpf_tramp_jit {
-+	struct bpf_jit common;
-+	int orig_stack_args_off;/* Offset of arguments placed on stack by the
-+				 * func_addr's original caller
-+				 */
-+	int stack_size;		/* Trampoline stack size */
-+	int stack_args_off;	/* Offset of stack arguments for calling
-+				 * func_addr, has to be at the top
-+				 */
-+	int reg_args_off;	/* Offset of register arguments for calling
-+				 * func_addr
-+				 */
-+	int ip_off;		/* For bpf_get_func_ip(), has to be at
-+				 * (ctx - 16)
-+				 */
-+	int arg_cnt_off;	/* For bpf_get_func_arg_cnt(), has to be at
-+				 * (ctx - 8)
-+				 */
-+	int bpf_args_off;	/* Offset of BPF_PROG context, which consists
-+				 * of BPF arguments followed by return value
-+				 */
-+	int retval_off;		/* Offset of return value (see above) */
-+	int r7_r8_off;		/* Offset of saved %r7 and %r8, which are used
-+				 * for __bpf_prog_enter() return value and
-+				 * func_addr respectively
-+				 */
-+	int r14_off;		/* Offset of saved %r14 */
-+	int run_ctx_off;	/* Offset of struct bpf_tramp_run_ctx */
-+	int do_fexit;		/* do_fexit: label */
-+};
-+
-+static void load_imm64(struct bpf_jit *jit, int dst_reg, u64 val)
-+{
-+	/* llihf %dst_reg,val_hi */
-+	EMIT6_IMM(0xc00e0000, dst_reg, (val >> 32));
-+	/* oilf %rdst_reg,val_lo */
-+	EMIT6_IMM(0xc00d0000, dst_reg, val);
-+}
-+
-+static int invoke_bpf_prog(struct bpf_tramp_jit *tjit,
-+			   const struct btf_func_model *m,
-+			   struct bpf_tramp_link *tlink, bool save_ret)
-+{
-+	struct bpf_jit *jit = &tjit->common;
-+	int cookie_off = tjit->run_ctx_off +
-+			 offsetof(struct bpf_tramp_run_ctx, bpf_cookie);
-+	struct bpf_prog *p = tlink->link.prog;
-+	int patch;
-+
-+	/*
-+	 * run_ctx.cookie = tlink->cookie;
-+	 */
-+
-+	/* %r0 = tlink->cookie */
-+	load_imm64(jit, REG_W0, tlink->cookie);
-+	/* stg %r0,cookie_off(%r15) */
-+	EMIT6_DISP_LH(0xe3000000, 0x0024, REG_W0, REG_0, REG_15, cookie_off);
-+
-+	/*
-+	 * if ((start = __bpf_prog_enter(p, &run_ctx)) == 0)
-+	 *         goto skip;
-+	 */
-+
-+	/* %r1 = __bpf_prog_enter */
-+	load_imm64(jit, REG_1, (u64)bpf_trampoline_enter(p));
-+	/* %r2 = p */
-+	load_imm64(jit, REG_2, (u64)p);
-+	/* la %r3,run_ctx_off(%r15) */
-+	EMIT4_DISP(0x41000000, REG_3, REG_15, tjit->run_ctx_off);
-+	/* %r1() */
-+	call_r1(jit);
-+	/* ltgr %r7,%r2 */
-+	EMIT4(0xb9020000, REG_7, REG_2);
-+	/* brcl 8,skip */
-+	patch = jit->prg;
-+	EMIT6_PCREL_RILC(0xc0040000, 8, 0);
-+
-+	/*
-+	 * retval = bpf_func(args, p->insnsi);
-+	 */
-+
-+	/* %r1 = p->bpf_func */
-+	load_imm64(jit, REG_1, (u64)p->bpf_func);
-+	/* la %r2,bpf_args_off(%r15) */
-+	EMIT4_DISP(0x41000000, REG_2, REG_15, tjit->bpf_args_off);
-+	/* %r3 = p->insnsi */
-+	if (!p->jited)
-+		load_imm64(jit, REG_3, (u64)p->insnsi);
-+	/* %r1() */
-+	call_r1(jit);
-+	/* stg %r2,retval_off(%r15) */
-+	if (save_ret) {
-+		if (sign_extend(jit, REG_2, m->ret_size, m->ret_flags))
-+			return -1;
-+		EMIT6_DISP_LH(0xe3000000, 0x0024, REG_2, REG_0, REG_15,
-+			      tjit->retval_off);
-+	}
-+
-+	/* skip: */
-+	if (jit->prg_buf)
-+		*(u32 *)&jit->prg_buf[patch + 2] = (jit->prg - patch) >> 1;
-+
-+	/*
-+	 * __bpf_prog_exit(p, start, &run_ctx);
-+	 */
-+
-+	/* %r1 = __bpf_prog_exit */
-+	load_imm64(jit, REG_1, (u64)bpf_trampoline_exit(p));
-+	/* %r2 = p */
-+	load_imm64(jit, REG_2, (u64)p);
-+	/* lgr %r3,%r7 */
-+	EMIT4(0xb9040000, REG_3, REG_7);
-+	/* la %r4,run_ctx_off(%r15) */
-+	EMIT4_DISP(0x41000000, REG_4, REG_15, tjit->run_ctx_off);
-+	/* %r1() */
-+	call_r1(jit);
-+
-+	return 0;
-+}
-+
-+static int alloc_stack(struct bpf_tramp_jit *tjit, size_t size)
-+{
-+	int stack_offset = tjit->stack_size;
-+
-+	tjit->stack_size += size;
-+	return stack_offset;
-+}
-+
-+/* ABI uses %r2 - %r6 for parameter passing. */
-+#define MAX_NR_REG_ARGS 5
-+
-+/* The "L" field of the "mvc" instruction is 8 bits. */
-+#define MAX_MVC_SIZE 256
-+#define MAX_NR_STACK_ARGS (MAX_MVC_SIZE / sizeof(u64))
-+
-+/* -mfentry generates a 6-byte nop on s390x. */
-+#define S390X_PATCH_SIZE 6
-+
-+static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
-+					 struct bpf_tramp_jit *tjit,
-+					 const struct btf_func_model *m,
-+					 u32 flags,
-+					 struct bpf_tramp_links *tlinks,
-+					 void *func_addr)
-+{
-+	struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
-+	struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
-+	struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
-+	int nr_bpf_args, nr_reg_args, nr_stack_args;
-+	struct bpf_jit *jit = &tjit->common;
-+	int arg, bpf_arg_off;
-+	int i, j;
-+
-+	/* Support as many stack arguments as "mvc" instruction can handle. */
-+	nr_reg_args = min_t(int, m->nr_args, MAX_NR_REG_ARGS);
-+	nr_stack_args = m->nr_args - nr_reg_args;
-+	if (nr_stack_args > MAX_NR_STACK_ARGS)
-+		return -ENOTSUPP;
-+
-+	/* Return to %r14, since func_addr and %r0 are not available. */
-+	if (!func_addr && !(flags & BPF_TRAMP_F_ORIG_STACK))
-+		flags |= BPF_TRAMP_F_SKIP_FRAME;
-+
-+	/*
-+	 * Compute how many arguments we need to pass to BPF programs.
-+	 * BPF ABI mirrors that of x86_64: arguments that are 16 bytes or
-+	 * smaller are packed into 1 or 2 registers; larger arguments are
-+	 * passed via pointers.
-+	 * In s390x ABI, arguments that are 8 bytes or smaller are packed into
-+	 * a register; larger arguments are passed via pointers.
-+	 * We need to deal with this difference.
-+	 */
-+	nr_bpf_args = 0;
-+	for (i = 0; i < m->nr_args; i++) {
-+		if (m->arg_size[i] <= 8)
-+			nr_bpf_args += 1;
-+		else if (m->arg_size[i] <= 16)
-+			nr_bpf_args += 2;
-+		else
-+			return -ENOTSUPP;
-+	}
-+
-+	/*
-+	 * Calculate the stack layout.
-+	 */
-+
-+	/* Reserve STACK_FRAME_OVERHEAD bytes for the callees. */
-+	tjit->stack_size = STACK_FRAME_OVERHEAD;
-+	tjit->stack_args_off = alloc_stack(tjit, nr_stack_args * sizeof(u64));
-+	tjit->reg_args_off = alloc_stack(tjit, nr_reg_args * sizeof(u64));
-+	tjit->ip_off = alloc_stack(tjit, sizeof(u64));
-+	tjit->arg_cnt_off = alloc_stack(tjit, sizeof(u64));
-+	tjit->bpf_args_off = alloc_stack(tjit, nr_bpf_args * sizeof(u64));
-+	tjit->retval_off = alloc_stack(tjit, sizeof(u64));
-+	tjit->r7_r8_off = alloc_stack(tjit, 2 * sizeof(u64));
-+	tjit->r14_off = alloc_stack(tjit, sizeof(u64));
-+	tjit->run_ctx_off = alloc_stack(tjit,
-+					sizeof(struct bpf_tramp_run_ctx));
-+	/* The caller has already reserved STACK_FRAME_OVERHEAD bytes. */
-+	tjit->stack_size -= STACK_FRAME_OVERHEAD;
-+	tjit->orig_stack_args_off = tjit->stack_size + STACK_FRAME_OVERHEAD;
-+
-+	/* aghi %r15,-stack_size */
-+	EMIT4_IMM(0xa70b0000, REG_15, -tjit->stack_size);
-+	/* stmg %r2,%rN,fwd_reg_args_off(%r15) */
-+	if (nr_reg_args)
-+		EMIT6_DISP_LH(0xeb000000, 0x0024, REG_2,
-+			      REG_2 + (nr_reg_args - 1), REG_15,
-+			      tjit->reg_args_off);
-+	for (i = 0, j = 0; i < m->nr_args; i++) {
-+		if (i < MAX_NR_REG_ARGS)
-+			arg = REG_2 + i;
-+		else
-+			arg = tjit->orig_stack_args_off +
-+			      (i - MAX_NR_REG_ARGS) * sizeof(u64);
-+		bpf_arg_off = tjit->bpf_args_off + j * sizeof(u64);
-+		if (m->arg_size[i] <= 8) {
-+			if (i < MAX_NR_REG_ARGS)
-+				/* stg %arg,bpf_arg_off(%r15) */
-+				EMIT6_DISP_LH(0xe3000000, 0x0024, arg,
-+					      REG_0, REG_15, bpf_arg_off);
-+			else
-+				/* mvc bpf_arg_off(8,%r15),arg(%r15) */
-+				_EMIT6(0xd207f000 | bpf_arg_off,
-+				       0xf000 | arg);
-+			j += 1;
-+		} else {
-+			if (i < MAX_NR_REG_ARGS) {
-+				/* mvc bpf_arg_off(16,%r15),0(%arg) */
-+				_EMIT6(0xd20ff000 | bpf_arg_off,
-+				       reg2hex[arg] << 12);
-+			} else {
-+				/* lg %r1,arg(%r15) */
-+				EMIT6_DISP_LH(0xe3000000, 0x0004, REG_1, REG_0,
-+					      REG_15, arg);
-+				/* mvc bpf_arg_off(16,%r15),0(%r1) */
-+				_EMIT6(0xd20ff000 | bpf_arg_off, 0x1000);
-+			}
-+			j += 2;
-+		}
-+	}
-+	/* stmg %r7,%r8,r7_r8_off(%r15) */
-+	EMIT6_DISP_LH(0xeb000000, 0x0024, REG_7, REG_8, REG_15,
-+		      tjit->r7_r8_off);
-+	/* stg %r14,r14_off(%r15) */
-+	EMIT6_DISP_LH(0xe3000000, 0x0024, REG_14, REG_0, REG_15, tjit->r14_off);
-+
-+	if (flags & BPF_TRAMP_F_ORIG_STACK) {
-+		/*
-+		 * The ftrace trampoline puts the return address (which is the
-+		 * address of the original function + S390X_PATCH_SIZE) into
-+		 * %r0; see ftrace_shared_hotpatch_trampoline_br and
-+		 * ftrace_init_nop() for details.
-+		 */
-+
-+		/* lgr %r8,%r0 */
-+		EMIT4(0xb9040000, REG_8, REG_0);
-+	} else {
-+		/* %r8 = func_addr + S390X_PATCH_SIZE */
-+		load_imm64(jit, REG_8, (u64)func_addr + S390X_PATCH_SIZE);
-+	}
-+
-+	/*
-+	 * ip = func_addr;
-+	 * arg_cnt = m->nr_args;
-+	 */
-+
-+	if (flags & BPF_TRAMP_F_IP_ARG) {
-+		/* %r0 = func_addr */
-+		load_imm64(jit, REG_0, (u64)func_addr);
-+		/* stg %r0,ip_off(%r15) */
-+		EMIT6_DISP_LH(0xe3000000, 0x0024, REG_0, REG_0, REG_15,
-+			      tjit->ip_off);
-+	}
-+	/* lghi %r0,nr_bpf_args */
-+	EMIT4_IMM(0xa7090000, REG_0, nr_bpf_args);
-+	/* stg %r0,arg_cnt_off(%r15) */
-+	EMIT6_DISP_LH(0xe3000000, 0x0024, REG_0, REG_0, REG_15,
-+		      tjit->arg_cnt_off);
-+
-+	if (flags & BPF_TRAMP_F_CALL_ORIG) {
-+		/*
-+		 * __bpf_tramp_enter(im);
-+		 */
-+
-+		/* %r1 = __bpf_tramp_enter */
-+		load_imm64(jit, REG_1, (u64)__bpf_tramp_enter);
-+		/* %r2 = im */
-+		load_imm64(jit, REG_2, (u64)im);
-+		/* %r1() */
-+		call_r1(jit);
-+	}
-+
-+	for (i = 0; i < fentry->nr_links; i++)
-+		if (invoke_bpf_prog(tjit, m, fentry->links[i],
-+				    flags & BPF_TRAMP_F_RET_FENTRY_RET))
-+			return -EINVAL;
-+
-+	if (fmod_ret->nr_links) {
-+		/*
-+		 * retval = 0;
-+		 */
-+
-+		/* xc retval_off(8,%r15),retval_off(%r15) */
-+		_EMIT6(0xd707f000 | tjit->retval_off,
-+		       0xf000 | tjit->retval_off);
-+
-+		for (i = 0; i < fmod_ret->nr_links; i++) {
-+			if (invoke_bpf_prog(tjit, m, fmod_ret->links[i], true))
-+				return -EINVAL;
-+
-+			/*
-+			 * if (retval)
-+			 *         goto do_fexit;
-+			 */
-+
-+			/* ltg %r0,retval_off(%r15) */
-+			EMIT6_DISP_LH(0xe3000000, 0x0002, REG_0, REG_0, REG_15,
-+				      tjit->retval_off);
-+			/* brcl 7,do_fexit */
-+			EMIT6_PCREL_RILC(0xc0040000, 7, tjit->do_fexit);
-+		}
-+	}
-+
-+	if (flags & BPF_TRAMP_F_CALL_ORIG) {
-+		/*
-+		 * retval = func_addr(args);
-+		 */
-+
-+		/* lmg %r2,%rN,reg_args_off(%r15) */
-+		if (nr_reg_args)
-+			EMIT6_DISP_LH(0xeb000000, 0x0004, REG_2,
-+				      REG_2 + (nr_reg_args - 1), REG_15,
-+				      tjit->reg_args_off);
-+		/* mvc stack_args_off(N,%r15),orig_stack_args_off(%r15) */
-+		if (nr_stack_args)
-+			_EMIT6(0xd200f000 |
-+				       (nr_stack_args * sizeof(u64) - 1) << 16 |
-+				       tjit->stack_args_off,
-+			       0xf000 | tjit->orig_stack_args_off);
-+		/* lgr %r1,%r8 */
-+		EMIT4(0xb9040000, REG_1, REG_8);
-+		/* %r1() */
-+		call_r1(jit);
-+		/* stg %r2,retval_off(%r15) */
-+		EMIT6_DISP_LH(0xe3000000, 0x0024, REG_2, REG_0, REG_15,
-+			      tjit->retval_off);
-+
-+		im->ip_after_call = jit->prg_buf + jit->prg;
-+
-+		/*
-+		 * The following nop will be patched by bpf_tramp_image_put().
-+		 */
-+
-+		/* brcl 0,im->ip_epilogue */
-+		EMIT6_PCREL_RILC(0xc0040000, 0, (u64)im->ip_epilogue);
-+	}
-+
-+	/* do_fexit: */
-+	tjit->do_fexit = jit->prg;
-+	for (i = 0; i < fexit->nr_links; i++)
-+		if (invoke_bpf_prog(tjit, m, fexit->links[i], false))
-+			return -EINVAL;
-+
-+	if (flags & BPF_TRAMP_F_CALL_ORIG) {
-+		im->ip_epilogue = jit->prg_buf + jit->prg;
-+
-+		/*
-+		 * __bpf_tramp_exit(im);
-+		 */
-+
-+		/* %r1 = __bpf_tramp_exit */
-+		load_imm64(jit, REG_1, (u64)__bpf_tramp_exit);
-+		/* %r2 = im */
-+		load_imm64(jit, REG_2, (u64)im);
-+		/* %r1() */
-+		call_r1(jit);
-+	}
-+
-+	/* lmg %r2,%rN,reg_args_off(%r15) */
-+	if ((flags & BPF_TRAMP_F_RESTORE_REGS) && nr_reg_args)
-+		EMIT6_DISP_LH(0xeb000000, 0x0004, REG_2,
-+			      REG_2 + (nr_reg_args - 1), REG_15,
-+			      tjit->reg_args_off);
-+	/* lgr %r1,%r8 */
-+	if (!(flags & BPF_TRAMP_F_SKIP_FRAME))
-+		EMIT4(0xb9040000, REG_1, REG_8);
-+	/* lmg %r7,%r8,r7_r8_off(%r15) */
-+	EMIT6_DISP_LH(0xeb000000, 0x0004, REG_7, REG_8, REG_15,
-+		      tjit->r7_r8_off);
-+	/* lg %r14,r14_off(%r15) */
-+	EMIT6_DISP_LH(0xe3000000, 0x0004, REG_14, REG_0, REG_15, tjit->r14_off);
-+	/* lg %r2,retval_off(%r15) */
-+	if (flags & (BPF_TRAMP_F_CALL_ORIG | BPF_TRAMP_F_RET_FENTRY_RET))
-+		EMIT6_DISP_LH(0xe3000000, 0x0004, REG_2, REG_0, REG_15,
-+			      tjit->retval_off);
-+	/* aghi %r15,stack_size */
-+	EMIT4_IMM(0xa70b0000, REG_15, tjit->stack_size);
-+	/* Emit an expoline for the following indirect jump. */
-+	if (nospec_uses_trampoline())
-+		emit_expoline(jit);
-+	if (flags & BPF_TRAMP_F_SKIP_FRAME)
-+		/* br %r14 */
-+		_EMIT2(0x07fe);
-+	else
-+		/* br %r1 */
-+		_EMIT2(0x07f1);
-+
-+	emit_r1_thunk(jit);
-+
-+	return 0;
-+}
-+
-+int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image,
-+				void *image_end, const struct btf_func_model *m,
-+				u32 flags, struct bpf_tramp_links *tlinks,
-+				void *func_addr)
-+{
-+	struct bpf_tramp_jit tjit;
-+	int ret;
-+	int i;
-+
-+	for (i = 0; i < 2; i++) {
-+		if (i == 0) {
-+			/* Compute offsets, check whether the code fits. */
-+			memset(&tjit, 0, sizeof(tjit));
-+		} else {
-+			/* Generate the code. */
-+			tjit.common.prg = 0;
-+			tjit.common.prg_buf = image;
-+		}
-+		ret = __arch_prepare_bpf_trampoline(im, &tjit, m, flags,
-+						    tlinks, func_addr);
-+		if (ret < 0)
-+			return ret;
-+		if (tjit.common.prg > (char *)image_end - (char *)image)
-+			/*
-+			 * Use the same error code as for exceeding
-+			 * BPF_MAX_TRAMP_LINKS.
-+			 */
-+			return -E2BIG;
-+	}
-+
-+	return ret;
-+}
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index c411c6bb86c4..e11db75094d0 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -944,7 +944,11 @@ struct btf_func_model {
-  * bytes on x86.
-  */
- enum {
-+#if defined(__s390x__)
-+	BPF_MAX_TRAMP_LINKS = 27,
-+#else
- 	BPF_MAX_TRAMP_LINKS = 38,
-+#endif
- };
- 
- struct bpf_tramp_links {
--- 
-2.39.1
+__clear_all_pkt_pointers isn't present in the tree. Typo ?
 
+> 
+> For examples of how skb dynptrs can be used, please see the attached
+> selftests.
+> 
+> Signed-off-by: Joanne Koong <joannelkoong@gmail.com>
+> ---
+>  include/linux/bpf.h            |  82 +++++++++------
+>  include/linux/filter.h         |  18 ++++
+>  include/uapi/linux/bpf.h       |  37 +++++--
+>  kernel/bpf/btf.c               |  18 ++++
+>  kernel/bpf/helpers.c           |  95 ++++++++++++++---
+>  kernel/bpf/verifier.c          | 185 ++++++++++++++++++++++++++-------
+>  net/core/filter.c              |  60 ++++++++++-
+>  tools/include/uapi/linux/bpf.h |  37 +++++--
+>  8 files changed, 432 insertions(+), 100 deletions(-)
+> 
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 14a0264fac57..1ac061b64582 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -575,11 +575,14 @@ enum bpf_type_flag {
+>  	/* MEM is tagged with rcu and memory access needs rcu_read_lock protection. */
+>  	MEM_RCU			= BIT(13 + BPF_BASE_TYPE_BITS),
+>  
+> +	/* DYNPTR points to sk_buff */
+> +	DYNPTR_TYPE_SKB		= BIT(14 + BPF_BASE_TYPE_BITS),
+> +
+>  	__BPF_TYPE_FLAG_MAX,
+>  	__BPF_TYPE_LAST_FLAG	= __BPF_TYPE_FLAG_MAX - 1,
+>  };
+>  
+> -#define DYNPTR_TYPE_FLAG_MASK	(DYNPTR_TYPE_LOCAL | DYNPTR_TYPE_RINGBUF)
+> +#define DYNPTR_TYPE_FLAG_MASK	(DYNPTR_TYPE_LOCAL | DYNPTR_TYPE_RINGBUF | DYNPTR_TYPE_SKB)
+>  
+>  /* Max number of base types. */
+>  #define BPF_BASE_TYPE_LIMIT	(1UL << BPF_BASE_TYPE_BITS)
+> @@ -1082,6 +1085,35 @@ static __always_inline __nocfi unsigned int bpf_dispatcher_nop_func(
+>  	return bpf_func(ctx, insnsi);
+>  }
+>  
+> +/* the implementation of the opaque uapi struct bpf_dynptr */
+> +struct bpf_dynptr_kern {
+> +	void *data;
+> +	/* Size represents the number of usable bytes of dynptr data.
+> +	 * If for example the offset is at 4 for a local dynptr whose data is
+> +	 * of type u64, the number of usable bytes is 4.
+> +	 *
+> +	 * The upper 8 bits are reserved. It is as follows:
+> +	 * Bits 0 - 23 = size
+> +	 * Bits 24 - 30 = dynptr type
+> +	 * Bit 31 = whether dynptr is read-only
+> +	 */
+> +	u32 size;
+> +	u32 offset;
+> +} __aligned(8);
+> +
+> +enum bpf_dynptr_type {
+> +	BPF_DYNPTR_TYPE_INVALID,
+> +	/* Points to memory that is local to the bpf program */
+> +	BPF_DYNPTR_TYPE_LOCAL,
+> +	/* Underlying data is a ringbuf record */
+> +	BPF_DYNPTR_TYPE_RINGBUF,
+> +	/* Underlying data is a sk_buff */
+> +	BPF_DYNPTR_TYPE_SKB,
+> +};
+> +
+> +int bpf_dynptr_check_size(u32 size);
+> +u32 bpf_dynptr_get_size(const struct bpf_dynptr_kern *ptr);
+> +
+>  #ifdef CONFIG_BPF_JIT
+>  int bpf_trampoline_link_prog(struct bpf_tramp_link *link, struct bpf_trampoline *tr);
+>  int bpf_trampoline_unlink_prog(struct bpf_tramp_link *link, struct bpf_trampoline *tr);
+> @@ -2216,6 +2248,11 @@ static inline bool has_current_bpf_ctx(void)
+>  }
+>  
+>  void notrace bpf_prog_inc_misses_counter(struct bpf_prog *prog);
+> +
+> +void bpf_dynptr_init(struct bpf_dynptr_kern *ptr, void *data,
+> +		     enum bpf_dynptr_type type, u32 offset, u32 size);
+> +void bpf_dynptr_set_null(struct bpf_dynptr_kern *ptr);
+> +void bpf_dynptr_set_rdonly(struct bpf_dynptr_kern *ptr);
+>  #else /* !CONFIG_BPF_SYSCALL */
+>  static inline struct bpf_prog *bpf_prog_get(u32 ufd)
+>  {
+> @@ -2445,6 +2482,19 @@ static inline void bpf_prog_inc_misses_counter(struct bpf_prog *prog)
+>  static inline void bpf_cgrp_storage_free(struct cgroup *cgroup)
+>  {
+>  }
+> +
+> +static inline void bpf_dynptr_init(struct bpf_dynptr_kern *ptr, void *data,
+> +				   enum bpf_dynptr_type type, u32 offset, u32 size)
+> +{
+> +}
+> +
+> +static inline void bpf_dynptr_set_null(struct bpf_dynptr_kern *ptr)
+> +{
+> +}
+> +
+> +static inline void bpf_dynptr_set_rdonly(struct bpf_dynptr_kern *ptr)
+> +{
+> +}
+>  #endif /* CONFIG_BPF_SYSCALL */
+>  
+>  void __bpf_free_used_btfs(struct bpf_prog_aux *aux,
+> @@ -2863,36 +2913,6 @@ int bpf_bprintf_prepare(char *fmt, u32 fmt_size, const u64 *raw_args,
+>  			u32 num_args, struct bpf_bprintf_data *data);
+>  void bpf_bprintf_cleanup(struct bpf_bprintf_data *data);
+>  
+> -/* the implementation of the opaque uapi struct bpf_dynptr */
+> -struct bpf_dynptr_kern {
+> -	void *data;
+> -	/* Size represents the number of usable bytes of dynptr data.
+> -	 * If for example the offset is at 4 for a local dynptr whose data is
+> -	 * of type u64, the number of usable bytes is 4.
+> -	 *
+> -	 * The upper 8 bits are reserved. It is as follows:
+> -	 * Bits 0 - 23 = size
+> -	 * Bits 24 - 30 = dynptr type
+> -	 * Bit 31 = whether dynptr is read-only
+> -	 */
+> -	u32 size;
+> -	u32 offset;
+> -} __aligned(8);
+> -
+> -enum bpf_dynptr_type {
+> -	BPF_DYNPTR_TYPE_INVALID,
+> -	/* Points to memory that is local to the bpf program */
+> -	BPF_DYNPTR_TYPE_LOCAL,
+> -	/* Underlying data is a kernel-produced ringbuf record */
+> -	BPF_DYNPTR_TYPE_RINGBUF,
+> -};
+> -
+> -void bpf_dynptr_init(struct bpf_dynptr_kern *ptr, void *data,
+> -		     enum bpf_dynptr_type type, u32 offset, u32 size);
+> -void bpf_dynptr_set_null(struct bpf_dynptr_kern *ptr);
+> -int bpf_dynptr_check_size(u32 size);
+> -u32 bpf_dynptr_get_size(const struct bpf_dynptr_kern *ptr);
+> -
+>  #ifdef CONFIG_BPF_LSM
+>  void bpf_cgroup_atype_get(u32 attach_btf_id, int cgroup_atype);
+>  void bpf_cgroup_atype_put(int cgroup_atype);
+> diff --git a/include/linux/filter.h b/include/linux/filter.h
+> index ccc4a4a58c72..c87d13954d89 100644
+> --- a/include/linux/filter.h
+> +++ b/include/linux/filter.h
+> @@ -1541,4 +1541,22 @@ static __always_inline int __bpf_xdp_redirect_map(struct bpf_map *map, u64 index
+>  	return XDP_REDIRECT;
+>  }
+>  
+> +#ifdef CONFIG_NET
+> +int __bpf_skb_load_bytes(const struct sk_buff *skb, u32 offset, void *to, u32 len);
+> +int __bpf_skb_store_bytes(struct sk_buff *skb, u32 offset, const void *from,
+> +			  u32 len, u64 flags);
+> +#else /* CONFIG_NET */
+> +static inline int __bpf_skb_load_bytes(const struct sk_buff *skb, u32 offset,
+> +				       void *to, u32 len)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static inline int __bpf_skb_store_bytes(struct sk_buff *skb, u32 offset,
+> +					const void *from, u32 len, u64 flags)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +#endif /* CONFIG_NET */
+> +
+>  #endif /* __LINUX_FILTER_H__ */
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index ba0f0cfb5e42..f6910392d339 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -5320,22 +5320,45 @@ union bpf_attr {
+>   *	Description
+>   *		Write *len* bytes from *src* into *dst*, starting from *offset*
+>   *		into *dst*.
+> - *		*flags* is currently unused.
+> + *
+> + *		*flags* must be 0 except for skb-type dynptrs.
+> + *
+> + *		For skb-type dynptrs:
+> + *		    *  All data slices of the dynptr are automatically
+> + *		       invalidated after **bpf_dynptr_write**\ (). If you wish to
+> + *		       avoid this, please perform the write using direct data slices
+> + *		       instead.
+> + *
+> + *		    *  For *flags*, please see the flags accepted by
+> + *		       **bpf_skb_store_bytes**\ ().
+>   *	Return
+>   *		0 on success, -E2BIG if *offset* + *len* exceeds the length
+>   *		of *dst*'s data, -EINVAL if *dst* is an invalid dynptr or if *dst*
+> - *		is a read-only dynptr or if *flags* is not 0.
+> + *		is a read-only dynptr or if *flags* is not correct. For skb-type dynptrs,
+> + *		other errors correspond to errors returned by **bpf_skb_store_bytes**\ ().
+>   *
+>   * void *bpf_dynptr_data(const struct bpf_dynptr *ptr, u32 offset, u32 len)
+>   *	Description
+>   *		Get a pointer to the underlying dynptr data.
+>   *
+>   *		*len* must be a statically known value. The returned data slice
+> - *		is invalidated whenever the dynptr is invalidated.
+> - *	Return
+> - *		Pointer to the underlying dynptr data, NULL if the dynptr is
+> - *		read-only, if the dynptr is invalid, or if the offset and length
+> - *		is out of bounds.
+> + *		is invalidated whenever the dynptr is invalidated. Please note
+> + *		that if the dynptr is read-only, then the returned data slice will
+> + *		be read-only.
+> + *
+> + *		For skb-type dynptrs:
+> + *		    * If *offset* + *len* extends into the skb's paged buffers,
+> + *		      the user should manually pull the skb with **bpf_skb_pull_data**\ ()
+> + *		      and try again.
+> + *
+> + *		    * The data slice is automatically invalidated anytime
+> + *		      **bpf_dynptr_write**\ () or a helper call that changes
+> + *		      the underlying packet buffer (eg **bpf_skb_pull_data**\ ())
+> + *		      is called.
+> + *	Return
+> + *		Pointer to the underlying dynptr data, NULL if the dynptr is invalid,
+> + *		or if the offset and length is out of bounds or in a paged buffer for
+> + *		skb-type dynptrs.
+>   *
+>   * s64 bpf_tcp_raw_gen_syncookie_ipv4(struct iphdr *iph, struct tcphdr *th, u32 th_len)
+>   *	Description
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index b4da17688c65..35d0780f2eb9 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -207,6 +207,11 @@ enum btf_kfunc_hook {
+>  	BTF_KFUNC_HOOK_TRACING,
+>  	BTF_KFUNC_HOOK_SYSCALL,
+>  	BTF_KFUNC_HOOK_FMODRET,
+> +	BTF_KFUNC_HOOK_CGROUP_SKB,
+> +	BTF_KFUNC_HOOK_SCHED_ACT,
+> +	BTF_KFUNC_HOOK_SK_SKB,
+> +	BTF_KFUNC_HOOK_SOCKET_FILTER,
+> +	BTF_KFUNC_HOOK_LWT,
+>  	BTF_KFUNC_HOOK_MAX,
+>  };
+>  
+> @@ -7609,6 +7614,19 @@ static int bpf_prog_type_to_kfunc_hook(enum bpf_prog_type prog_type)
+>  		return BTF_KFUNC_HOOK_TRACING;
+>  	case BPF_PROG_TYPE_SYSCALL:
+>  		return BTF_KFUNC_HOOK_SYSCALL;
+> +	case BPF_PROG_TYPE_CGROUP_SKB:
+> +		return BTF_KFUNC_HOOK_CGROUP_SKB;
+> +	case BPF_PROG_TYPE_SCHED_ACT:
+> +		return BTF_KFUNC_HOOK_SCHED_ACT;
+> +	case BPF_PROG_TYPE_SK_SKB:
+> +		return BTF_KFUNC_HOOK_SK_SKB;
+> +	case BPF_PROG_TYPE_SOCKET_FILTER:
+> +		return BTF_KFUNC_HOOK_SOCKET_FILTER;
+> +	case BPF_PROG_TYPE_LWT_OUT:
+> +	case BPF_PROG_TYPE_LWT_IN:
+> +	case BPF_PROG_TYPE_LWT_XMIT:
+> +	case BPF_PROG_TYPE_LWT_SEG6LOCAL:
+> +		return BTF_KFUNC_HOOK_LWT;
+>  	default:
+>  		return BTF_KFUNC_HOOK_MAX;
+>  	}
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 458db2db2f81..a79d522b3a26 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -1420,11 +1420,21 @@ static bool bpf_dynptr_is_rdonly(const struct bpf_dynptr_kern *ptr)
+>  	return ptr->size & DYNPTR_RDONLY_BIT;
+>  }
+>  
+> +void bpf_dynptr_set_rdonly(struct bpf_dynptr_kern *ptr)
+> +{
+> +	ptr->size |= DYNPTR_RDONLY_BIT;
+> +}
+> +
+>  static void bpf_dynptr_set_type(struct bpf_dynptr_kern *ptr, enum bpf_dynptr_type type)
+>  {
+>  	ptr->size |= type << DYNPTR_TYPE_SHIFT;
+>  }
+>  
+> +static enum bpf_dynptr_type bpf_dynptr_get_type(const struct bpf_dynptr_kern *ptr)
+> +{
+> +	return (ptr->size & ~(DYNPTR_RDONLY_BIT)) >> DYNPTR_TYPE_SHIFT;
+> +}
+> +
+>  u32 bpf_dynptr_get_size(const struct bpf_dynptr_kern *ptr)
+>  {
+>  	return ptr->size & DYNPTR_SIZE_MASK;
+> @@ -1497,6 +1507,7 @@ static const struct bpf_func_proto bpf_dynptr_from_mem_proto = {
+>  BPF_CALL_5(bpf_dynptr_read, void *, dst, u32, len, const struct bpf_dynptr_kern *, src,
+>  	   u32, offset, u64, flags)
+>  {
+> +	enum bpf_dynptr_type type;
+>  	int err;
+>  
+>  	if (!src->data || flags)
+> @@ -1506,13 +1517,23 @@ BPF_CALL_5(bpf_dynptr_read, void *, dst, u32, len, const struct bpf_dynptr_kern
+>  	if (err)
+>  		return err;
+>  
+> -	/* Source and destination may possibly overlap, hence use memmove to
+> -	 * copy the data. E.g. bpf_dynptr_from_mem may create two dynptr
+> -	 * pointing to overlapping PTR_TO_MAP_VALUE regions.
+> -	 */
+> -	memmove(dst, src->data + src->offset + offset, len);
+> +	type = bpf_dynptr_get_type(src);
+>  
+> -	return 0;
+> +	switch (type) {
+> +	case BPF_DYNPTR_TYPE_LOCAL:
+> +	case BPF_DYNPTR_TYPE_RINGBUF:
+> +		/* Source and destination may possibly overlap, hence use memmove to
+> +		 * copy the data. E.g. bpf_dynptr_from_mem may create two dynptr
+> +		 * pointing to overlapping PTR_TO_MAP_VALUE regions.
+> +		 */
+> +		memmove(dst, src->data + src->offset + offset, len);
+> +		return 0;
+> +	case BPF_DYNPTR_TYPE_SKB:
+> +		return __bpf_skb_load_bytes(src->data, src->offset + offset, dst, len);
+> +	default:
+> +		WARN_ONCE(true, "bpf_dynptr_read: unknown dynptr type %d\n", type);
+> +		return -EFAULT;
+> +	}
+>  }
+>  
+>  static const struct bpf_func_proto bpf_dynptr_read_proto = {
+> @@ -1529,22 +1550,36 @@ static const struct bpf_func_proto bpf_dynptr_read_proto = {
+>  BPF_CALL_5(bpf_dynptr_write, const struct bpf_dynptr_kern *, dst, u32, offset, void *, src,
+>  	   u32, len, u64, flags)
+>  {
+> +	enum bpf_dynptr_type type;
+>  	int err;
+>  
+> -	if (!dst->data || flags || bpf_dynptr_is_rdonly(dst))
+> +	if (!dst->data || bpf_dynptr_is_rdonly(dst))
+>  		return -EINVAL;
+>  
+>  	err = bpf_dynptr_check_off_len(dst, offset, len);
+>  	if (err)
+>  		return err;
+>  
+> -	/* Source and destination may possibly overlap, hence use memmove to
+> -	 * copy the data. E.g. bpf_dynptr_from_mem may create two dynptr
+> -	 * pointing to overlapping PTR_TO_MAP_VALUE regions.
+> -	 */
+> -	memmove(dst->data + dst->offset + offset, src, len);
+> +	type = bpf_dynptr_get_type(dst);
+>  
+> -	return 0;
+> +	switch (type) {
+> +	case BPF_DYNPTR_TYPE_LOCAL:
+> +	case BPF_DYNPTR_TYPE_RINGBUF:
+> +		if (flags)
+> +			return -EINVAL;
+> +		/* Source and destination may possibly overlap, hence use memmove to
+> +		 * copy the data. E.g. bpf_dynptr_from_mem may create two dynptr
+> +		 * pointing to overlapping PTR_TO_MAP_VALUE regions.
+> +		 */
+> +		memmove(dst->data + dst->offset + offset, src, len);
+> +		return 0;
+> +	case BPF_DYNPTR_TYPE_SKB:
+> +		return __bpf_skb_store_bytes(dst->data, dst->offset + offset, src, len,
+> +					     flags);
+> +	default:
+> +		WARN_ONCE(true, "bpf_dynptr_write: unknown dynptr type %d\n", type);
+> +		return -EFAULT;
+> +	}
+>  }
+>  
+>  static const struct bpf_func_proto bpf_dynptr_write_proto = {
+> @@ -1560,6 +1595,8 @@ static const struct bpf_func_proto bpf_dynptr_write_proto = {
+>  
+>  BPF_CALL_3(bpf_dynptr_data, const struct bpf_dynptr_kern *, ptr, u32, offset, u32, len)
+>  {
+> +	enum bpf_dynptr_type type;
+> +	void *data;
+>  	int err;
+>  
+>  	if (!ptr->data)
+> @@ -1569,10 +1606,36 @@ BPF_CALL_3(bpf_dynptr_data, const struct bpf_dynptr_kern *, ptr, u32, offset, u3
+>  	if (err)
+>  		return 0;
+>  
+> -	if (bpf_dynptr_is_rdonly(ptr))
+> -		return 0;
+> +	type = bpf_dynptr_get_type(ptr);
+> +
+> +	switch (type) {
+> +	case BPF_DYNPTR_TYPE_LOCAL:
+> +	case BPF_DYNPTR_TYPE_RINGBUF:
+> +		if (bpf_dynptr_is_rdonly(ptr))
+> +			return 0;
+> +
+> +		data = ptr->data;
+> +		break;
+> +	case BPF_DYNPTR_TYPE_SKB:
+> +	{
+> +		struct sk_buff *skb = ptr->data;
+>  
+> -	return (unsigned long)(ptr->data + ptr->offset + offset);
+> +		/* if the data is paged, the caller needs to pull it first */
+> +		if (ptr->offset + offset + len > skb_headlen(skb))
+> +			return 0;
+> +
+> +		/* Depending on the prog type, the data slice will be either
+> +		 * read-writable or read-only. The verifier will enforce that
+> +		 * any writes to read-only data slices are rejected
+> +		 */
+> +		data = skb->data;
+> +		break;
+> +	}
+> +	default:
+> +		WARN_ONCE(true, "bpf_dynptr_data: unknown dynptr type %d\n", type);
+> +		return 0;
+> +	}
+> +	return (unsigned long)(data + ptr->offset + offset);
+>  }
+>  
+>  static const struct bpf_func_proto bpf_dynptr_data_proto = {
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 853ab671be0b..3b022abc34e3 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -741,6 +741,8 @@ static enum bpf_dynptr_type arg_to_dynptr_type(enum bpf_arg_type arg_type)
+>  		return BPF_DYNPTR_TYPE_LOCAL;
+>  	case DYNPTR_TYPE_RINGBUF:
+>  		return BPF_DYNPTR_TYPE_RINGBUF;
+> +	case DYNPTR_TYPE_SKB:
+> +		return BPF_DYNPTR_TYPE_SKB;
+>  	default:
+>  		return BPF_DYNPTR_TYPE_INVALID;
+>  	}
+> @@ -1625,6 +1627,12 @@ static bool reg_is_pkt_pointer_any(const struct bpf_reg_state *reg)
+>  	       reg->type == PTR_TO_PACKET_END;
+>  }
+>  
+> +static bool reg_is_dynptr_slice_pkt(const struct bpf_reg_state *reg)
+> +{
+> +	return base_type(reg->type) == PTR_TO_MEM &&
+> +		reg->type & DYNPTR_TYPE_SKB;
+> +}
+> +
+>  /* Unmodified PTR_TO_PACKET[_META,_END] register from ctx access. */
+>  static bool reg_is_init_pkt_pointer(const struct bpf_reg_state *reg,
+>  				    enum bpf_reg_type which)
+> @@ -6148,7 +6156,7 @@ static int process_kptr_func(struct bpf_verifier_env *env, int regno,
+>   * type, and declare it as 'const struct bpf_dynptr *' in their prototype.
+>   */
+>  int process_dynptr_func(struct bpf_verifier_env *env, int regno, int insn_idx,
+> -			enum bpf_arg_type arg_type)
+> +			enum bpf_arg_type arg_type, int func_id)
+>  {
+>  	struct bpf_reg_state *regs = cur_regs(env), *reg = &regs[regno];
+>  	int err;
+> @@ -6233,6 +6241,9 @@ int process_dynptr_func(struct bpf_verifier_env *env, int regno, int insn_idx,
+>  			case DYNPTR_TYPE_RINGBUF:
+>  				err_extra = "ringbuf";
+>  				break;
+> +			case DYNPTR_TYPE_SKB:
+> +				err_extra = "skb ";
+> +				break;
+>  			default:
+>  				err_extra = "<unknown>";
+>  				break;
+> @@ -6581,6 +6592,28 @@ int check_func_arg_reg_off(struct bpf_verifier_env *env,
+>  	}
+>  }
+>  
+> +static struct bpf_reg_state *get_dynptr_arg_reg(struct bpf_verifier_env *env,
+> +						const struct bpf_func_proto *fn,
+> +						struct bpf_reg_state *regs)
+> +{
+> +	struct bpf_reg_state *state = NULL;
+> +	int i;
+> +
+> +	for (i = 0; i < MAX_BPF_FUNC_REG_ARGS; i++)
+> +		if (arg_type_is_dynptr(fn->arg_type[i])) {
+> +			if (state) {
+> +				verbose(env, "verifier internal error: multiple dynptr args\n");
+> +				return NULL;
+> +			}
+> +			state = &regs[BPF_REG_1 + i];
+> +		}
+> +
+> +	if (!state)
+> +		verbose(env, "verifier internal error: no dynptr arg found\n");
+> +
+> +	return state;
+> +}
+
+Looks like refactoring is mixed with new features.
+Moving struct bpf_dynptr_kern to a different place and factoring out get_dynptr_arg_reg()
+could have been a separate patch to make it easier to review.
+
+> +
+>  static int dynptr_id(struct bpf_verifier_env *env, struct bpf_reg_state *reg)
+>  {
+>  	struct bpf_func_state *state = func(env, reg);
+> @@ -6607,6 +6640,24 @@ static int dynptr_ref_obj_id(struct bpf_verifier_env *env, struct bpf_reg_state
+>  	return state->stack[spi].spilled_ptr.ref_obj_id;
+>  }
+>  
+> +static enum bpf_dynptr_type dynptr_get_type(struct bpf_verifier_env *env,
+> +					    struct bpf_reg_state *reg)
+> +{
+> +	struct bpf_func_state *state = func(env, reg);
+> +	int spi;
+> +
+> +	if (reg->type == CONST_PTR_TO_DYNPTR)
+> +		return reg->dynptr.type;
+> +
+> +	spi = __get_spi(reg->off);
+> +	if (spi < 0) {
+> +		verbose(env, "verifier internal error: invalid spi when querying dynptr type\n");
+> +		return BPF_DYNPTR_TYPE_INVALID;
+> +	}
+> +
+> +	return state->stack[spi].spilled_ptr.dynptr.type;
+> +}
+> +
+>  static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+>  			  struct bpf_call_arg_meta *meta,
+>  			  const struct bpf_func_proto *fn,
+> @@ -6819,7 +6870,7 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+>  		err = check_mem_size_reg(env, reg, regno, true, meta);
+>  		break;
+>  	case ARG_PTR_TO_DYNPTR:
+> -		err = process_dynptr_func(env, regno, insn_idx, arg_type);
+> +		err = process_dynptr_func(env, regno, insn_idx, arg_type, meta->func_id);
+>  		if (err)
+>  			return err;
+>  		break;
+> @@ -7267,6 +7318,9 @@ static int check_func_proto(const struct bpf_func_proto *fn, int func_id)
+>  
+>  /* Packet data might have moved, any old PTR_TO_PACKET[_META,_END]
+>   * are now invalid, so turn them into unknown SCALAR_VALUE.
+> + *
+> + * This also applies to dynptr slices belonging to skb dynptrs,
+> + * since these slices point to packet data.
+>   */
+>  static void clear_all_pkt_pointers(struct bpf_verifier_env *env)
+>  {
+> @@ -7274,7 +7328,7 @@ static void clear_all_pkt_pointers(struct bpf_verifier_env *env)
+>  	struct bpf_reg_state *reg;
+>  
+>  	bpf_for_each_reg_in_vstate(env->cur_state, state, reg, ({
+> -		if (reg_is_pkt_pointer_any(reg))
+> +		if (reg_is_pkt_pointer_any(reg) || reg_is_dynptr_slice_pkt(reg))
+>  			__mark_reg_unknown(env, reg);
+>  	}));
+>  }
+> @@ -7958,6 +8012,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+>  			     int *insn_idx_p)
+>  {
+>  	enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
+> +	enum bpf_dynptr_type dynptr_type = BPF_DYNPTR_TYPE_INVALID;
+>  	const struct bpf_func_proto *fn = NULL;
+>  	enum bpf_return_type ret_type;
+>  	enum bpf_type_flag ret_flag;
+> @@ -8140,43 +8195,61 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+>  		}
+>  		break;
+>  	case BPF_FUNC_dynptr_data:
+> -		for (i = 0; i < MAX_BPF_FUNC_REG_ARGS; i++) {
+> -			if (arg_type_is_dynptr(fn->arg_type[i])) {
+> -				struct bpf_reg_state *reg = &regs[BPF_REG_1 + i];
+> -				int id, ref_obj_id;
+> -
+> -				if (meta.dynptr_id) {
+> -					verbose(env, "verifier internal error: meta.dynptr_id already set\n");
+> -					return -EFAULT;
+> -				}
+> +	{
+> +		struct bpf_reg_state *reg;
+> +		int id, ref_obj_id;
+>  
+> -				if (meta.ref_obj_id) {
+> -					verbose(env, "verifier internal error: meta.ref_obj_id already set\n");
+> -					return -EFAULT;
+> -				}
+> +		reg = get_dynptr_arg_reg(env, fn, regs);
+> +		if (!reg)
+> +			return -EFAULT;
+>  
+> -				id = dynptr_id(env, reg);
+> -				if (id < 0) {
+> -					verbose(env, "verifier internal error: failed to obtain dynptr id\n");
+> -					return id;
+> -				}
+> +		if (meta.dynptr_id) {
+> +			verbose(env, "verifier internal error: meta.dynptr_id already set\n");
+> +			return -EFAULT;
+> +		}
+> +		if (meta.ref_obj_id) {
+> +			verbose(env, "verifier internal error: meta.ref_obj_id already set\n");
+> +			return -EFAULT;
+> +		}
+>  
+> -				ref_obj_id = dynptr_ref_obj_id(env, reg);
+> -				if (ref_obj_id < 0) {
+> -					verbose(env, "verifier internal error: failed to obtain dynptr ref_obj_id\n");
+> -					return ref_obj_id;
+> -				}
+> +		id = dynptr_id(env, reg);
+> +		if (id < 0) {
+> +			verbose(env, "verifier internal error: failed to obtain dynptr id\n");
+> +			return id;
+> +		}
+>  
+> -				meta.dynptr_id = id;
+> -				meta.ref_obj_id = ref_obj_id;
+> -				break;
+> -			}
+> +		ref_obj_id = dynptr_ref_obj_id(env, reg);
+> +		if (ref_obj_id < 0) {
+> +			verbose(env, "verifier internal error: failed to obtain dynptr ref_obj_id\n");
+> +			return ref_obj_id;
+>  		}
+> -		if (i == MAX_BPF_FUNC_REG_ARGS) {
+> -			verbose(env, "verifier internal error: no dynptr in bpf_dynptr_data()\n");
+> +
+> +		meta.dynptr_id = id;
+> +		meta.ref_obj_id = ref_obj_id;
+> +
+> +		dynptr_type = dynptr_get_type(env, reg);
+> +		if (dynptr_type == BPF_DYNPTR_TYPE_INVALID)
+>  			return -EFAULT;
+> -		}
+> +
+>  		break;
+> +	}
+> +	case BPF_FUNC_dynptr_write:
+> +	{
+> +		struct bpf_reg_state *reg;
+> +
+> +		reg = get_dynptr_arg_reg(env, fn, regs);
+> +		if (!reg)
+> +			return -EFAULT;
+> +
+> +		dynptr_type = dynptr_get_type(env, reg);
+> +		if (dynptr_type == BPF_DYNPTR_TYPE_INVALID)
+> +			return -EFAULT;
+> +
+> +		if (dynptr_type == BPF_DYNPTR_TYPE_SKB)
+> +			changes_data = true;
+> +
+> +		break;
+> +	}
+>  	case BPF_FUNC_user_ringbuf_drain:
+>  		err = __check_func_call(env, insn, insn_idx_p, meta.subprogno,
+>  					set_user_ringbuf_callback_state);
+> @@ -8243,6 +8316,28 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+>  		mark_reg_known_zero(env, regs, BPF_REG_0);
+>  		regs[BPF_REG_0].type = PTR_TO_MEM | ret_flag;
+>  		regs[BPF_REG_0].mem_size = meta.mem_size;
+> +		if (func_id == BPF_FUNC_dynptr_data &&
+> +		    dynptr_type == BPF_DYNPTR_TYPE_SKB) {
+> +			bool seen_direct_write = env->seen_direct_write;
+> +
+> +			regs[BPF_REG_0].type |= DYNPTR_TYPE_SKB;
+> +			if (!may_access_direct_pkt_data(env, NULL, BPF_WRITE))
+> +				regs[BPF_REG_0].type |= MEM_RDONLY;
+> +			else
+> +				/*
+> +				 * Calling may_access_direct_pkt_data() will set
+> +				 * env->seen_direct_write to true if the skb is
+> +				 * writable. As an optimization, we can ignore
+> +				 * setting env->seen_direct_write.
+> +				 *
+> +				 * env->seen_direct_write is used by skb
+> +				 * programs to determine whether the skb's page
+> +				 * buffers should be cloned. Since data slice
+> +				 * writes would only be to the head, we can skip
+> +				 * this.
+> +				 */
+> +				env->seen_direct_write = seen_direct_write;
+
+This looks incorrect. skb head might not be writeable.
+
+> +		}
+>  		break;
+>  	case RET_PTR_TO_MEM_OR_BTF_ID:
+>  	{
+> @@ -8649,6 +8744,7 @@ enum special_kfunc_type {
+>  	KF_bpf_list_pop_back,
+>  	KF_bpf_cast_to_kern_ctx,
+>  	KF_bpf_rdonly_cast,
+> +	KF_bpf_dynptr_from_skb,
+>  	KF_bpf_rcu_read_lock,
+>  	KF_bpf_rcu_read_unlock,
+>  };
+> @@ -8662,6 +8758,7 @@ BTF_ID(func, bpf_list_pop_front)
+>  BTF_ID(func, bpf_list_pop_back)
+>  BTF_ID(func, bpf_cast_to_kern_ctx)
+>  BTF_ID(func, bpf_rdonly_cast)
+> +BTF_ID(func, bpf_dynptr_from_skb)
+>  BTF_SET_END(special_kfunc_set)
+>  
+>  BTF_ID_LIST(special_kfunc_list)
+> @@ -8673,6 +8770,7 @@ BTF_ID(func, bpf_list_pop_front)
+>  BTF_ID(func, bpf_list_pop_back)
+>  BTF_ID(func, bpf_cast_to_kern_ctx)
+>  BTF_ID(func, bpf_rdonly_cast)
+> +BTF_ID(func, bpf_dynptr_from_skb)
+>  BTF_ID(func, bpf_rcu_read_lock)
+>  BTF_ID(func, bpf_rcu_read_unlock)
+>  
+> @@ -9263,17 +9361,26 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+>  				return ret;
+>  			break;
+>  		case KF_ARG_PTR_TO_DYNPTR:
+> +		{
+> +			enum bpf_arg_type dynptr_arg_type = ARG_PTR_TO_DYNPTR;
+> +
+>  			if (reg->type != PTR_TO_STACK &&
+>  			    reg->type != CONST_PTR_TO_DYNPTR) {
+>  				verbose(env, "arg#%d expected pointer to stack or dynptr_ptr\n", i);
+>  				return -EINVAL;
+>  			}
+>  
+> -			ret = process_dynptr_func(env, regno, insn_idx,
+> -						  ARG_PTR_TO_DYNPTR | MEM_RDONLY);
+> +			if (meta->func_id == special_kfunc_list[KF_bpf_dynptr_from_skb])
+> +				dynptr_arg_type |= MEM_UNINIT | DYNPTR_TYPE_SKB;
+> +			else
+> +				dynptr_arg_type |= MEM_RDONLY;
+> +
+> +			ret = process_dynptr_func(env, regno, insn_idx, dynptr_arg_type,
+> +						  meta->func_id);
+>  			if (ret < 0)
+>  				return ret;
+>  			break;
+> +		}
+>  		case KF_ARG_PTR_TO_LIST_HEAD:
+>  			if (reg->type != PTR_TO_MAP_VALUE &&
+>  			    reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
+> @@ -15857,6 +15964,14 @@ static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>  		   desc->func_id == special_kfunc_list[KF_bpf_rdonly_cast]) {
+>  		insn_buf[0] = BPF_MOV64_REG(BPF_REG_0, BPF_REG_1);
+>  		*cnt = 1;
+> +	} else if (desc->func_id == special_kfunc_list[KF_bpf_dynptr_from_skb]) {
+> +		bool is_rdonly = !may_access_direct_pkt_data(env, NULL, BPF_WRITE);
+> +		struct bpf_insn addr[2] = { BPF_LD_IMM64(BPF_REG_4, is_rdonly) };
+
+Why use 16-byte insn to pass boolean in R4 ?
+Single 8-byte MOV would do.
+
+> +
+> +		insn_buf[0] = addr[0];
+> +		insn_buf[1] = addr[1];
+> +		insn_buf[2] = *insn;
+> +		*cnt = 3;
+>  	}
+>  	return 0;
+>  }
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 6da78b3d381e..ddb47126071a 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -1684,8 +1684,8 @@ static inline void bpf_pull_mac_rcsum(struct sk_buff *skb)
+>  		skb_postpull_rcsum(skb, skb_mac_header(skb), skb->mac_len);
+>  }
+>  
+> -BPF_CALL_5(bpf_skb_store_bytes, struct sk_buff *, skb, u32, offset,
+> -	   const void *, from, u32, len, u64, flags)
+> +int __bpf_skb_store_bytes(struct sk_buff *skb, u32 offset, const void *from,
+> +			  u32 len, u64 flags)
+
+This change is just to be able to call __bpf_skb_store_bytes() ?
+If so, it's unnecessary.
+See:
+BPF_CALL_4(sk_reuseport_load_bytes,
+           const struct sk_reuseport_kern *, reuse_kern, u32, offset,
+           void *, to, u32, len)
+{
+        return ____bpf_skb_load_bytes(reuse_kern->skb, offset, to, len);
+}
+
+>  {
+>  	void *ptr;
+>  
+> @@ -1710,6 +1710,12 @@ BPF_CALL_5(bpf_skb_store_bytes, struct sk_buff *, skb, u32, offset,
+>  	return 0;
+>  }
+>  
+> +BPF_CALL_5(bpf_skb_store_bytes, struct sk_buff *, skb, u32, offset,
+> +	   const void *, from, u32, len, u64, flags)
+> +{
+> +	return __bpf_skb_store_bytes(skb, offset, from, len, flags);
+> +}
+> +
+>  static const struct bpf_func_proto bpf_skb_store_bytes_proto = {
+>  	.func		= bpf_skb_store_bytes,
+>  	.gpl_only	= false,
+> @@ -1721,8 +1727,7 @@ static const struct bpf_func_proto bpf_skb_store_bytes_proto = {
+>  	.arg5_type	= ARG_ANYTHING,
+>  };
+>  
+> -BPF_CALL_4(bpf_skb_load_bytes, const struct sk_buff *, skb, u32, offset,
+> -	   void *, to, u32, len)
+> +int __bpf_skb_load_bytes(const struct sk_buff *skb, u32 offset, void *to, u32 len)
+>  {
+>  	void *ptr;
+>  
+> @@ -1741,6 +1746,12 @@ BPF_CALL_4(bpf_skb_load_bytes, const struct sk_buff *, skb, u32, offset,
+>  	return -EFAULT;
+>  }
+>  
+> +BPF_CALL_4(bpf_skb_load_bytes, const struct sk_buff *, skb, u32, offset,
+> +	   void *, to, u32, len)
+> +{
+> +	return __bpf_skb_load_bytes(skb, offset, to, len);
+> +}
+> +
+>  static const struct bpf_func_proto bpf_skb_load_bytes_proto = {
+>  	.func		= bpf_skb_load_bytes,
+>  	.gpl_only	= false,
+> @@ -1852,6 +1863,22 @@ static const struct bpf_func_proto bpf_skb_pull_data_proto = {
+>  	.arg2_type	= ARG_ANYTHING,
+>  };
+>  
+> +int bpf_dynptr_from_skb(struct sk_buff *skb, u64 flags,
+> +			struct bpf_dynptr_kern *ptr, int is_rdonly)
+
+It probably needs
+__diag_ignore_all("-Wmissing-prototypes",
+like other kfuncs to suppress build warn.
+
+> +{
+> +	if (flags) {
+> +		bpf_dynptr_set_null(ptr);
+> +		return -EINVAL;
+> +	}
+> +
+> +	bpf_dynptr_init(ptr, skb, BPF_DYNPTR_TYPE_SKB, 0, skb->len);
+> +
+> +	if (is_rdonly)
+> +		bpf_dynptr_set_rdonly(ptr);
+> +
+> +	return 0;
+> +}
+> +
+>  BPF_CALL_1(bpf_sk_fullsock, struct sock *, sk)
+>  {
+>  	return sk_fullsock(sk) ? (unsigned long)sk : (unsigned long)NULL;
+> @@ -11607,3 +11634,28 @@ bpf_sk_base_func_proto(enum bpf_func_id func_id)
+>  
+>  	return func;
+>  }
+> +
+> +BTF_SET8_START(bpf_kfunc_check_set_skb)
+> +BTF_ID_FLAGS(func, bpf_dynptr_from_skb)
+> +BTF_SET8_END(bpf_kfunc_check_set_skb)
+> +
+> +static const struct btf_kfunc_id_set bpf_kfunc_set_skb = {
+> +	.owner = THIS_MODULE,
+> +	.set = &bpf_kfunc_check_set_skb,
+> +};
+> +
+> +static int __init bpf_kfunc_init(void)
+> +{
+> +	int ret;
+> +
+> +	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_kfunc_set_skb);
+> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_ACT, &bpf_kfunc_set_skb);
+> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SK_SKB, &bpf_kfunc_set_skb);
+> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SOCKET_FILTER, &bpf_kfunc_set_skb);
+> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_CGROUP_SKB, &bpf_kfunc_set_skb);
+> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_LWT_OUT, &bpf_kfunc_set_skb);
+> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_LWT_IN, &bpf_kfunc_set_skb);
+> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_LWT_XMIT, &bpf_kfunc_set_skb);
+> +	return ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_LWT_SEG6LOCAL, &bpf_kfunc_set_skb);
+> +}
+> +late_initcall(bpf_kfunc_init);
+> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+> index 7f024ac22edd..6b58e5a75fc5 100644
+> --- a/tools/include/uapi/linux/bpf.h
+> +++ b/tools/include/uapi/linux/bpf.h
+> @@ -5320,22 +5320,45 @@ union bpf_attr {
+>   *	Description
+>   *		Write *len* bytes from *src* into *dst*, starting from *offset*
+>   *		into *dst*.
+> - *		*flags* is currently unused.
+> + *
+> + *		*flags* must be 0 except for skb-type dynptrs.
+> + *
+> + *		For skb-type dynptrs:
+> + *		    *  All data slices of the dynptr are automatically
+> + *		       invalidated after **bpf_dynptr_write**\ (). If you wish to
+> + *		       avoid this, please perform the write using direct data slices
+> + *		       instead.
+> + *
+> + *		    *  For *flags*, please see the flags accepted by
+> + *		       **bpf_skb_store_bytes**\ ().
+>   *	Return
+>   *		0 on success, -E2BIG if *offset* + *len* exceeds the length
+>   *		of *dst*'s data, -EINVAL if *dst* is an invalid dynptr or if *dst*
+> - *		is a read-only dynptr or if *flags* is not 0.
+> + *		is a read-only dynptr or if *flags* is not correct. For skb-type dynptrs,
+> + *		other errors correspond to errors returned by **bpf_skb_store_bytes**\ ().
+>   *
+>   * void *bpf_dynptr_data(const struct bpf_dynptr *ptr, u32 offset, u32 len)
+>   *	Description
+>   *		Get a pointer to the underlying dynptr data.
+>   *
+>   *		*len* must be a statically known value. The returned data slice
+> - *		is invalidated whenever the dynptr is invalidated.
+> - *	Return
+> - *		Pointer to the underlying dynptr data, NULL if the dynptr is
+> - *		read-only, if the dynptr is invalid, or if the offset and length
+> - *		is out of bounds.
+> + *		is invalidated whenever the dynptr is invalidated. Please note
+> + *		that if the dynptr is read-only, then the returned data slice will
+> + *		be read-only.
+> + *
+> + *		For skb-type dynptrs:
+> + *		    * If *offset* + *len* extends into the skb's paged buffers,
+> + *		      the user should manually pull the skb with **bpf_skb_pull_data**\ ()
+> + *		      and try again.
+> + *
+> + *		    * The data slice is automatically invalidated anytime
+> + *		      **bpf_dynptr_write**\ () or a helper call that changes
+> + *		      the underlying packet buffer (eg **bpf_skb_pull_data**\ ())
+> + *		      is called.
+> + *	Return
+> + *		Pointer to the underlying dynptr data, NULL if the dynptr is invalid,
+> + *		or if the offset and length is out of bounds or in a paged buffer for
+> + *		skb-type dynptrs.
+>   *
+>   * s64 bpf_tcp_raw_gen_syncookie_ipv4(struct iphdr *iph, struct tcphdr *th, u32 th_len)
+>   *	Description
+> -- 
+> 2.30.2
+> 
