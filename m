@@ -2,185 +2,179 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E6BEC54EAA
-	for <bpf@archiver.kernel.org>; Mon, 30 Jan 2023 22:05:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93476C636CD
+	for <bpf@archiver.kernel.org>; Mon, 30 Jan 2023 22:05:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbjA3WE7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S229550AbjA3WE7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Mon, 30 Jan 2023 17:04:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49998 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbjA3WEs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 30 Jan 2023 17:04:48 -0500
-Received: from out-159.mta0.migadu.com (out-159.mta0.migadu.com [91.218.175.159])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32FFF38B76
-        for <bpf@vger.kernel.org>; Mon, 30 Jan 2023 14:04:23 -0800 (PST)
-Message-ID: <5715ea83-c4aa-c884-ab95-3d5e630cad05@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1675116261;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hzXgITO6Sgy0WWxMEqer8fWo1UpMG1cjijjAJkT2HZE=;
-        b=giIKQyTqsZF3Mzs7oLjM8VoRqPKTISRDT77uvthK/qG/5NKRifRfQs+9srDod5V7HdXL82
-        Zk5u+b83KFNS9seyxiHv1gFahcYqUEYnOo2aUac5CsCVRZ8hBLrMqn6NyCcoE47upc2lw+
-        zDEi5kvMAb3o4o+PxHKE4wr6UGTjSys=
-Date:   Mon, 30 Jan 2023 14:04:08 -0800
+        with ESMTP id S230322AbjA3WEt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 30 Jan 2023 17:04:49 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC18F2FCEF
+        for <bpf@vger.kernel.org>; Mon, 30 Jan 2023 14:04:35 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id j29-20020a05600c1c1d00b003dc52fed235so3705508wms.1
+        for <bpf@vger.kernel.org>; Mon, 30 Jan 2023 14:04:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3g4atxfx7e+KCYDM9aRV+o7t4dz+VqTx/sSUN8fU4Gw=;
+        b=YMgDMteQq40BVcIzmP5We/9nv8bJ+UUZXBv8wNDIs/2Mvq3fM5N3qN3Q7ZWdJBOA4T
+         PZ0tfb5wV9GDIi1Kn39Nlo9sSpVmgFEIZ899ObqwFUSvvMT2l8ESmWiyqUjMLKMkHWOQ
+         xYgxC7o0NwjVVdwisURcEPHm38ga7NPwb3hLk0e3LdSla+oTCS+TMvmZlemmE/3Fqh0V
+         3WBqsVTRz0tPlUhcBzs6TMn2o4Ti8zdkKBXpJj4IZkcRiGbbHM48E2kExAojgwJzyGLI
+         r6iCnmDwuh1OZMuJbVc1ixjWU065aVhVSUaqbXTI0oo58HJh5Uxc/n1zX7l/Y1eTpfWr
+         Qq8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3g4atxfx7e+KCYDM9aRV+o7t4dz+VqTx/sSUN8fU4Gw=;
+        b=NGphh3ccrDxXbnOycB8nxqsJoapyYfG7fB/+qgBn6EaBkovBhcSAZ9NETzGiEEk73T
+         b38eCcxElYr2oU/NvCshKFixLxTkacikwordTBNjMhOBC3XvUtppsQn8/jlMH2JPaDrU
+         mslrWN9iwKBBS2cIZfzIHmUWL5l2TPeYjMitlPmaxYgclWjjo+mZgnqiBwouuN/terc3
+         J8kvIOl087Da6Jb5JuwVrykd10lmyz8Qd/Rwb1fmqTLKBFHrUuy1u5aPD2dMjTvNxskN
+         Pa8cPGrD7rznBN+jTznhWYmhox7rmZRDoZHhSOWI/ZDkHHvPFV8IXmX28a8pi2+AhNLy
+         zYWg==
+X-Gm-Message-State: AFqh2krbdg3ojdil0qcClHcVjRxipds1l8ZlJsUe699px4fdiDbX3qSP
+        DPPiawSyGpTOofkOTILdt2a22LkOhb2XhgE/
+X-Google-Smtp-Source: AMrXdXto3jhZzy2CpL0a28gj3+KDOQqG8/42QtCxQfJvJ7oetHBmfG5jCvygSERAvbUVC1GI6Wm9mA==
+X-Received: by 2002:a05:6402:49:b0:49e:33ce:144d with SMTP id f9-20020a056402004900b0049e33ce144dmr134879113edu.37.1675116263690;
+        Mon, 30 Jan 2023 14:04:23 -0800 (PST)
+Received: from krava ([83.240.61.48])
+        by smtp.gmail.com with ESMTPSA id r23-20020aa7c157000000b0049e1f167956sm3689662edp.9.2023.01.30.14.04.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 14:04:23 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Mon, 30 Jan 2023 23:04:20 +0100
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     acme@kernel.org, yhs@fb.com, ast@kernel.org, olsajiri@gmail.com,
+        eddyz87@gmail.com, sinquersw@gmail.com, timo@incline.eu,
+        daniel@iogearbox.net, andrii@kernel.org, songliubraving@fb.com,
+        john.fastabend@gmail.com, kpsingh@chromium.org, sdf@google.com,
+        haoluo@google.com, martin.lau@kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v2 dwarves 3/5] btf_encoder: rework btf_encoders__*() API
+ to allow traversal of encoders
+Message-ID: <Y9g+5LlDrOjqS5ES@krava>
+References: <1675088985-20300-1-git-send-email-alan.maguire@oracle.com>
+ <1675088985-20300-4-git-send-email-alan.maguire@oracle.com>
 MIME-Version: 1.0
-Subject: Re: [PATCH v9 bpf-next 3/5] bpf: Add skb dynptrs
-Content-Language: en-US
-To:     Joanne Koong <joannelkoong@gmail.com>
-Cc:     daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
-        ast@kernel.org, netdev@vger.kernel.org, memxor@gmail.com,
-        kernel-team@fb.com, bpf@vger.kernel.org
-References: <20230127191703.3864860-1-joannelkoong@gmail.com>
- <20230127191703.3864860-4-joannelkoong@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20230127191703.3864860-4-joannelkoong@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1675088985-20300-4-git-send-email-alan.maguire@oracle.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 1/27/23 11:17 AM, Joanne Koong wrote:
-> @@ -8243,6 +8316,28 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
->   		mark_reg_known_zero(env, regs, BPF_REG_0);
->   		regs[BPF_REG_0].type = PTR_TO_MEM | ret_flag;
->   		regs[BPF_REG_0].mem_size = meta.mem_size;
-> +		if (func_id == BPF_FUNC_dynptr_data &&
-> +		    dynptr_type == BPF_DYNPTR_TYPE_SKB) {
-> +			bool seen_direct_write = env->seen_direct_write;
+On Mon, Jan 30, 2023 at 02:29:43PM +0000, Alan Maguire wrote:
+> To coordinate across multiple encoders at collection time, there
+> will be a need to access the set of encoders.  Rework the unused
+> btf_encoders__*() API to facilitate this.
+> 
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
+>  btf_encoder.c | 30 ++++++++++++++++++++++--------
+>  btf_encoder.h |  6 ------
+>  2 files changed, 22 insertions(+), 14 deletions(-)
+> 
+> diff --git a/btf_encoder.c b/btf_encoder.c
+> index 44f1905..e20b628 100644
+> --- a/btf_encoder.c
+> +++ b/btf_encoder.c
+> @@ -30,6 +30,7 @@
+>  
+>  #include <errno.h>
+>  #include <stdint.h>
+> +#include <pthread.h>
+>  
+>  struct elf_function {
+>  	const char	*name;
+> @@ -79,21 +80,32 @@ struct btf_encoder {
+>  	} functions;
+>  };
+>  
+> -void btf_encoders__add(struct list_head *encoders, struct btf_encoder *encoder)
+> -{
+> -	list_add_tail(&encoder->node, encoders);
+> -}
+> +static LIST_HEAD(encoders);
+> +static pthread_mutex_t encoders__lock = PTHREAD_MUTEX_INITIALIZER;
+>  
+> -struct btf_encoder *btf_encoders__first(struct list_head *encoders)
+> +/* mutex only needed for add/delete, as this can happen in multiple encoding
+> + * threads.  Traversal of the list is currently confined to thread collection.
+> + */
+> +static void btf_encoders__add(struct btf_encoder *encoder)
+>  {
+> -	return list_first_entry(encoders, struct btf_encoder, node);
+> +	pthread_mutex_lock(&encoders__lock);
+> +	list_add_tail(&encoder->node, &encoders);
+> +	pthread_mutex_unlock(&encoders__lock);
+>  }
+>  
+> -struct btf_encoder *btf_encoders__next(struct btf_encoder *encoder)
+> +#define btf_encoders__for_each_encoder(encoder)		\
+> +	list_for_each_entry(encoder, &encoders, node)
 > +
-> +			regs[BPF_REG_0].type |= DYNPTR_TYPE_SKB;
-> +			if (!may_access_direct_pkt_data(env, NULL, BPF_WRITE))
-> +				regs[BPF_REG_0].type |= MEM_RDONLY;
-> +			else
-> +				/*
-> +				 * Calling may_access_direct_pkt_data() will set
-> +				 * env->seen_direct_write to true if the skb is
-> +				 * writable. As an optimization, we can ignore
-> +				 * setting env->seen_direct_write.
-> +				 *
-> +				 * env->seen_direct_write is used by skb
-> +				 * programs to determine whether the skb's page
-> +				 * buffers should be cloned. Since data slice
-> +				 * writes would only be to the head, we can skip
-> +				 * this.
-> +				 */
-> +				env->seen_direct_write = seen_direct_write;
-> +		}
-
-[ ... ]
-
-> @@ -9263,17 +9361,26 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
->   				return ret;
->   			break;
->   		case KF_ARG_PTR_TO_DYNPTR:
-> +		{
-> +			enum bpf_arg_type dynptr_arg_type = ARG_PTR_TO_DYNPTR;
+> +static void btf_encoders__delete(struct btf_encoder *encoder)
+>  {
+> -	return list_next_entry(encoder, node);
+> +	pthread_mutex_lock(&encoders__lock);
+> +	list_del(&encoder->node);
+> +	pthread_mutex_unlock(&encoders__lock);
+>  }
+>  
+> +#define btf_encoders__for_each_encoder(encoder)			\
+> +	list_for_each_entry(encoder, &encoders, node)
 > +
->   			if (reg->type != PTR_TO_STACK &&
->   			    reg->type != CONST_PTR_TO_DYNPTR) {
->   				verbose(env, "arg#%d expected pointer to stack or dynptr_ptr\n", i);
->   				return -EINVAL;
->   			}
->   
-> -			ret = process_dynptr_func(env, regno, insn_idx,
-> -						  ARG_PTR_TO_DYNPTR | MEM_RDONLY);
-> +			if (meta->func_id == special_kfunc_list[KF_bpf_dynptr_from_skb])
-> +				dynptr_arg_type |= MEM_UNINIT | DYNPTR_TYPE_SKB;
-> +			else
-> +				dynptr_arg_type |= MEM_RDONLY;
-> +
-> +			ret = process_dynptr_func(env, regno, insn_idx, dynptr_arg_type,
-> +						  meta->func_id);
->   			if (ret < 0)
->   				return ret;
->   			break;
-> +		}
->   		case KF_ARG_PTR_TO_LIST_HEAD:
->   			if (reg->type != PTR_TO_MAP_VALUE &&
->   			    reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
-> @@ -15857,6 +15964,14 @@ static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->   		   desc->func_id == special_kfunc_list[KF_bpf_rdonly_cast]) {
->   		insn_buf[0] = BPF_MOV64_REG(BPF_REG_0, BPF_REG_1);
->   		*cnt = 1;
-> +	} else if (desc->func_id == special_kfunc_list[KF_bpf_dynptr_from_skb]) {
-> +		bool is_rdonly = !may_access_direct_pkt_data(env, NULL, BPF_WRITE);
 
-Does it need to restore the env->seen_direct_write here also?
+there's extra btf_encoders__for_each_encoder define
 
-It seems this 'seen_direct_write' saving/restoring is needed now because 
-'may_access_direct_pkt_data(BPF_WRITE)' is not only called when it is actually 
-writing the packet. Some refactoring can help to avoid issue like this.
+hum I'm scratching my head how this compile, probably because it's identical
 
-While at 'seen_direct_write', Alexei has also pointed out that the verifier 
-needs to track whether the (packet) 'slice' returned by bpf_dynptr_data() has 
-been written. It should be tracked in 'seen_direct_write'. Take a look at how 
-reg_is_pkt_pointer() and may_access_direct_pkt_data() are done in 
-check_mem_access(). iirc, this reg_is_pkt_pointer() part got loss somewhere in 
-v5 (or v4?) when bpf_dynptr_data() was changed to return register typed 
-PTR_TO_MEM instead of PTR_TO_PACKET.
+jirka
 
 
-[ ... ]
-
-> +int bpf_dynptr_from_skb(struct sk_buff *skb, u64 flags,
-> +			struct bpf_dynptr_kern *ptr, int is_rdonly)
-
-hmm... this exposed kfunc takes "int is_rdonly".
-
-What if the bpf prog calls it like bpf_dynptr_from_skb(..., false) in some hook 
-that is not writable to packet?
-
-> +{
-> +	if (flags) {
-> +		bpf_dynptr_set_null(ptr);
-> +		return -EINVAL;
-> +	}
-> +
-> +	bpf_dynptr_init(ptr, skb, BPF_DYNPTR_TYPE_SKB, 0, skb->len);
-> +
-> +	if (is_rdonly)
-> +		bpf_dynptr_set_rdonly(ptr);
-> +
-> +	return 0;
-> +}
-> +
->   BPF_CALL_1(bpf_sk_fullsock, struct sock *, sk)
->   {
->   	return sk_fullsock(sk) ? (unsigned long)sk : (unsigned long)NULL;
-> @@ -11607,3 +11634,28 @@ bpf_sk_base_func_proto(enum bpf_func_id func_id)
->   
->   	return func;
->   }
-> +
-> +BTF_SET8_START(bpf_kfunc_check_set_skb)
-> +BTF_ID_FLAGS(func, bpf_dynptr_from_skb)
-> +BTF_SET8_END(bpf_kfunc_check_set_skb)
-> +
-> +static const struct btf_kfunc_id_set bpf_kfunc_set_skb = {
-> +	.owner = THIS_MODULE,
-> +	.set = &bpf_kfunc_check_set_skb,
-> +};
-> +
-> +static int __init bpf_kfunc_init(void)
-> +{
-> +	int ret;
-> +
-> +	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_kfunc_set_skb);
-> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_ACT, &bpf_kfunc_set_skb);
-> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SK_SKB, &bpf_kfunc_set_skb);
-> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SOCKET_FILTER, &bpf_kfunc_set_skb);
-> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_CGROUP_SKB, &bpf_kfunc_set_skb);
-> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_LWT_OUT, &bpf_kfunc_set_skb);
-> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_LWT_IN, &bpf_kfunc_set_skb);
-> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_LWT_XMIT, &bpf_kfunc_set_skb);
-> +	return ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_LWT_SEG6LOCAL, &bpf_kfunc_set_skb);
-> +}
-> +late_initcall(bpf_kfunc_init);
-
-
+>  #define PERCPU_SECTION ".data..percpu"
+>  
+>  /*
+> @@ -1505,6 +1517,7 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, const char *detached_filenam
+>  
+>  		if (encoder->verbose)
+>  			printf("File %s:\n", cu->filename);
+> +		btf_encoders__add(encoder);
+>  	}
+>  out:
+>  	return encoder;
+> @@ -1519,6 +1532,7 @@ void btf_encoder__delete(struct btf_encoder *encoder)
+>  	if (encoder == NULL)
+>  		return;
+>  
+> +	btf_encoders__delete(encoder);
+>  	__gobuffer__delete(&encoder->percpu_secinfo);
+>  	zfree(&encoder->filename);
+>  	btf__free(encoder->btf);
+> diff --git a/btf_encoder.h b/btf_encoder.h
+> index a65120c..34516bb 100644
+> --- a/btf_encoder.h
+> +++ b/btf_encoder.h
+> @@ -23,12 +23,6 @@ int btf_encoder__encode(struct btf_encoder *encoder);
+>  
+>  int btf_encoder__encode_cu(struct btf_encoder *encoder, struct cu *cu, struct conf_load *conf_load);
+>  
+> -void btf_encoders__add(struct list_head *encoders, struct btf_encoder *encoder);
+> -
+> -struct btf_encoder *btf_encoders__first(struct list_head *encoders);
+> -
+> -struct btf_encoder *btf_encoders__next(struct btf_encoder *encoder);
+> -
+>  struct btf *btf_encoder__btf(struct btf_encoder *encoder);
+>  
+>  int btf_encoder__add_encoder(struct btf_encoder *encoder, struct btf_encoder *other);
+> -- 
+> 1.8.3.1
+> 
