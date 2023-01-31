@@ -2,130 +2,210 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7458CC38142
-	for <bpf@archiver.kernel.org>; Tue, 31 Jan 2023 14:51:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A09AC636CC
+	for <bpf@archiver.kernel.org>; Tue, 31 Jan 2023 15:19:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjAaOvc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 31 Jan 2023 09:51:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49386 "EHLO
+        id S233169AbjAaPSl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 31 Jan 2023 10:18:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232158AbjAaOv3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 31 Jan 2023 09:51:29 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C23E4F857
-        for <bpf@vger.kernel.org>; Tue, 31 Jan 2023 06:51:27 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id d14so14440861wrr.9
-        for <bpf@vger.kernel.org>; Tue, 31 Jan 2023 06:51:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bx3zmtgQK4UmDMiyLf28lfPRm+xvG7oqsH0MhvB8Gmg=;
-        b=htRSyR2hMjgXGGnS+PMV0pEuLajt2q9+he8EoX2iITm3H7vFPQYlAh6FXQZpL4a+fe
-         SR/czmJjagAwP5qJIsQwFfX5sjWP8+eVUmPLTpM8mJeSrBhPvAr5XhICYDy9DcKHFKaM
-         Jc5HrsIprNYK8X+jzuQJaZ9TUDRtWftZQPz54b6an55nXAnOaVM5po+HxODVfDhiywci
-         PSlGdWLw/VftYLBj1lwwYAa8+HCO+du+CUx5O1Kv6qrA59mkHcUtksDkfC3LW5o/Vckk
-         g1WpZjRZauUuAqPF6Ts9BHFWtRXh6AMIko/9SJclBk4RaBnHVIzPV5XDig9meggXFyEp
-         QHVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bx3zmtgQK4UmDMiyLf28lfPRm+xvG7oqsH0MhvB8Gmg=;
-        b=Tw+btEd6W6vIqEGYrdBi1LsD7BKuQaTQu9U7xTO9sSaFdnFV7lRXhEEW2FuisVnmYK
-         lP1vh3vYqm65xU321OowIlM9Y3/OrVnoU5PH9r4QgmWjGK5VSx/x8Q7Wzn/wKovn2zQU
-         hFp7Nx7z0cYdu1SAYgi7U+NuCuAAb2XzpyuRQGmmvbeqlapEIKG1embtOdjE8X0lYvyF
-         4qkbBGY8nujG7PV0bF+u0/gePOKiH0eqVZRH9f9fwdGsHXUCQ2Cf7wiR9/wvy5YTZLEE
-         8Z1NjcVSHOs9Qpt5bpXQWFUcPOOrQj5GurersGjWtIzHE6AWFkZEHtYDep/U5+JtSWmR
-         1dog==
-X-Gm-Message-State: AO0yUKXFAJSwOY2PLtbyUlIK59ojDGg9CXtx1tquDwsuthgVl0FBSLvf
-        lYrUJWvvck2IC/w/VPBvD8DUxw==
-X-Google-Smtp-Source: AK7set828w387aysuRJkUwRnA05l/lxnMsqOWRm8uQVy41QtADxEbjOQlN4JlnaIOP38wZr84WTPDQ==
-X-Received: by 2002:a5d:410f:0:b0:2bf:d940:29bb with SMTP id l15-20020a5d410f000000b002bfd94029bbmr12544677wrp.6.1675176685706;
-        Tue, 31 Jan 2023 06:51:25 -0800 (PST)
-Received: from ?IPV6:2a02:8011:e80c:0:2c35:6e47:db1a:a1d2? ([2a02:8011:e80c:0:2c35:6e47:db1a:a1d2])
-        by smtp.gmail.com with ESMTPSA id n6-20020adff086000000b002bdbead763csm15398144wro.95.2023.01.31.06.51.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 06:51:25 -0800 (PST)
-Message-ID: <61a43d5d-4f36-ffb7-2f75-3cb0cea1d05b@isovalent.com>
-Date:   Tue, 31 Jan 2023 14:51:24 +0000
+        with ESMTP id S233171AbjAaPSR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 31 Jan 2023 10:18:17 -0500
+Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998BF45BEA;
+        Tue, 31 Jan 2023 07:16:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1675178186;
+        bh=ef9Tt/UsbJRvNjzO4j1FZEBc8SF5MQJAlbohpOz9LEI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mfaZkS72+7A/jP2ZUGIQ8OiWNGvRhGmszDMYeYUPQup65pFCOaflsUVm9zc1yPYij
+         WcEjgefJvQldTY9xUXbCx7DTvd9NDnpkH69xV/wBdNdjFN5Q0G5JHvhmgkIyxupkHe
+         krREaYFVi0pd9775S+4YVrpgkYqY/R5O+agZN0EWfKZv/JG6VS9u/v0oPnbUZs1bEl
+         phVt25kx3PLFoJGEH0BKLMF3P2eZBVSu3NsRmGBnh6Z0JA8NX/6ov/QXomrfiDJVYr
+         udsOGn3rdavNiiBhjsn7jTvIhkT1xWivwkI9MwMSheUPXbLfcANp7uivetdt+hyLul
+         4zUZVoqCSSI9A==
+Received: from [172.16.0.188] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4P5pY55k65zhyZ;
+        Tue, 31 Jan 2023 10:16:25 -0500 (EST)
+Message-ID: <edad4f4d-f19e-34dc-06f5-7d30fd5d058f@efficios.com>
+Date:   Tue, 31 Jan 2023 10:17:05 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Typo in the man7 bpf-helpers page
-Content-Language: en-GB
-To:     Zexuan Luo <spacewanderlzx@gmail.com>
-Cc:     Alejandro Colomar <alx.manpages@gmail.com>,
-        bpf <bpf@vger.kernel.org>, linux-man@vger.kernel.org,
-        Alejandro Colomar <alx@kernel.org>
-References: <CAADJU1032g+sNGN9AZKeVuMzZywXZ0BWpm3592XcGJdp4goCUQ@mail.gmail.com>
- <991b275a-4a44-a870-24e6-d6683bf69589@gmail.com>
- <877b57f5-77ba-805b-ed5f-57e47fa83b16@gmail.com>
- <195ea485-1449-7ed8-5184-d00cf7e0dd5b@isovalent.com>
- <CAADJU11ei7KAv1c=f1Gj5TzipS9+yenEfDffznfftej14ESZkg@mail.gmail.com>
-From:   Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <CAADJU11ei7KAv1c=f1Gj5TzipS9+yenEfDffznfftej14ESZkg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+ Thunderbird/102.6.0
+Subject: Re: [PATCH bpf-next 1/2] selftests: bpf: Fix incorrect kernel headers
+ search path
+Content-Language: en-US
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        bpf <bpf@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        stable <stable@vger.kernel.org>
+References: <20230130183549.85471-1-mathieu.desnoyers@efficios.com>
+ <CAADnVQLve5je3GKesCjn5HhuxgOe2u1OX7GQnx-58dsuUFWbZQ@mail.gmail.com>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <CAADnVQLve5je3GKesCjn5HhuxgOe2u1OX7GQnx-58dsuUFWbZQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-2023-01-31 22:36 UTC+0800 ~ Zexuan Luo <spacewanderlzx@gmail.com>
-> My bad!
+On 2023-01-30 16:03, Alexei Starovoitov wrote:
+> On Mon, Jan 30, 2023 at 10:36 AM Mathieu Desnoyers
+> <mathieu.desnoyers@efficios.com> wrote:
+>>
+>> Use $(KHDR_INCLUDES) as lookup path for kernel headers. This prevents
+>> building against kernel headers from the build environment in scenarios
+>> where kernel headers are installed into a specific output directory
+>> (O=...).
+>>
+>> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+>> Cc: <bpf@vger.kernel.org>
+>> Cc: Shuah Khan <shuah@kernel.org>
+>> Cc: linux-kselftest@vger.kernel.org
+>> Cc: Ingo Molnar <mingo@redhat.com>
+>> Cc: Alexei Starovoitov <ast@kernel.org>
+>> Cc: Daniel Borkmann <daniel@iogearbox.net>
+>> Cc: Andrii Nakryiko <andrii@kernel.org>
+>> Cc: Martin KaFai Lau <martin.lau@linux.dev>
+>> Cc: Song Liu <song@kernel.org>
+>> Cc: Yonghong Song <yhs@fb.com>
+>> Cc: John Fastabend <john.fastabend@gmail.com>
+>> Cc: KP Singh <kpsingh@kernel.org>
+>> Cc: Stanislav Fomichev <sdf@google.com>
+>> Cc: Hao Luo <haoluo@google.com>
+>> Cc: Jiri Olsa <jolsa@kernel.org>
+>> Cc: Mykola Lysenko <mykolal@fb.com>
+>> Cc: <stable@vger.kernel.org>    [5.18+]
+>> ---
+>>   tools/testing/selftests/bpf/Makefile | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+>> index c22c43bbee19..6998c816afef 100644
+>> --- a/tools/testing/selftests/bpf/Makefile
+>> +++ b/tools/testing/selftests/bpf/Makefile
+>> @@ -327,7 +327,7 @@ endif
+>>   CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
+>>   BPF_CFLAGS = -g -Werror -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN)          \
+>>               -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)                   \
+>> -            -I$(abspath $(OUTPUT)/../usr/include)
+>> +            $(KHDR_INCLUDES)
 > 
->> No, I don't think there is anything wrong with that. I suppose you mean
-> bpf_get_socket_cookie_sock_(ad
-> dr|ops) (the functions you mentioned don't
-> exist), but the four variants of the helper just have the same name, and
-> take different objects for their context.
+> It breaks the build:
+> https://github.com/kernel-patches/bpf/actions/runs/4047075637/jobs/6960655246
 > 
-> Yes! I made a mistake in the function names in the first email. Thank
-> you for pointing that out.
-> 
-> I am an eBPF newbie and I am learning it currently. AFAIK, language C
-> doesn't support function overriding via different parameters.
-> So how do these four functions co-exist?
+> make[1]: *** No rule to make target '/linux/bpf.h', needed by
+> '/tmp/work/bpf/bpf/tools/testing/selftests/bpf/bpf-helpers.rst'. Stop.
 
-User space header file knows only about a single
-bpf_get_socket_cookie(), which takes a "void *". See:
-https://github.com/libbpf/libbpf/blob/v1.1.0/src/bpf_helper_defs.h#L1154
+I finally figured out why I did not catch it in my own testing: it appears
+that the bpf selftest is special: it's not built when issuing "make" from
+tools/testing/selftests/. Perhaps that's also why Shuah did not see any
+issues with my bpf patches:
 
-It compiles into the eBPF insruction "call 46", where 46 is the number
-associated to these helpers. When your program loads, the verifier finds
-out, depending on program type, what function should be called for that
-number (see e.g. tc_cls_act_func_proto() in net/core/filter.c, where
-BPF_FUNC_get_socket_cookie (46) returns &bpf_get_socket_cookie_proto,
-whereas sock_addr_func_proto(), applied to programs of different types,
-will return &bpf_get_socket_cookie_sock_addr_proto instead).
+tools/testing/selftests/Makefile:
 
-> 
-> Some naive search in the kernel code leads me to:
-> https://elixir.bootlin.com/linux/v6.2-rc6/source/net/core/filter.c#L4919
-> ```
-> static const struct bpf_func_proto bpf_get_socket_cookie_sock_addr_proto = {
->     .func        = bpf_get_socket_cookie_sock_addr,
->     .gpl_only    = false,
->     .ret_type    = RET_INTEGER,
->     .arg1_type    = ARG_PTR_TO_CTX,
-> };
-> ```
-> 
-> https://elixir.bootlin.com/linux/v6.2-rc6/source/net/core/filter.c#L4955
-> ```
-> static const struct bpf_func_proto bpf_get_socket_cookie_sock_ops_proto = {
->         .func           = bpf_get_socket_cookie_sock_ops,
->         .gpl_only       = false,
->         .ret_type       = RET_INTEGER,
->         .arg1_type      = ARG_PTR_TO_CTX,
-> };
-> ```
-> 
-> It seems that the function definitions are quite real...
+# User can optionally provide a TARGETS skiplist.  By default we skip
+# BPF since it has cutting edge build time dependencies which require
+# more effort to install.
+SKIP_TARGETS ?= bpf
 
-Yes, but "bpf_get_socket_cookie_addr" (from your message) !=
-"bpf_get_socket_cookie_sock_addr".
+It appears that the baseline bpf selftest on v6.2-rc6 does not build on
+my system:
 
-Quentin
+   CLNG-BPF [test_maps] test_bpf_nf.bpf.o
+progs/test_bpf_nf.c:156:7: error: no member named 'mark' in 'struct nf_conn'
+                 ct->mark = 77;
+                 ~~  ^
+progs/test_bpf_nf.c:160:42: error: use of undeclared identifier 'NF_NAT_MANIP_SRC'
+                 bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
+                                                        ^
+progs/test_bpf_nf.c:163:42: error: use of undeclared identifier 'NF_NAT_MANIP_DST'
+                 bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
+                                                        ^
+progs/test_bpf_nf.c:187:38: error: no member named 'mark' in 'struct nf_conn'
+                                 test_insert_lookup_mark = ct_lk->mark;
+                                                           ~~~~~  ^
+progs/test_bpf_nf.c:189:12: error: use of undeclared identifier 'IPS_CONFIRMED'
+                                                      IPS_CONFIRMED | IPS_SEEN_REPLY);
+                                                      ^
+progs/test_bpf_nf.c:189:28: error: use of undeclared identifier 'IPS_SEEN_REPLY'
+                                                      IPS_CONFIRMED | IPS_SEEN_REPLY);
+                                                                      ^
+progs/test_bpf_nf.c:209:11: error: no member named 'mark' in 'struct nf_conn'
+                 if (ct->mark == 42) {
+                     ~~  ^
+progs/test_bpf_nf.c:210:8: error: no member named 'mark' in 'struct nf_conn'
+                         ct->mark++;
+                         ~~  ^
+progs/test_bpf_nf.c:211:33: error: no member named 'mark' in 'struct nf_conn'
+                         test_exist_lookup_mark = ct->mark;
+                                                  ~~  ^
+9 errors generated.
+
+Based on this:
+https://lore.kernel.org/bpf/37649bee-5eb3-93a2-ac57-56eb375ef8cd@iogearbox.net/
+
+It appears that NF_CONNTRACK_MARK should be set to =y. Perhaps it should be
+detected at selftest build time and skipped rather than failing to build ? It
+appears to be a case where a user-space selftest depends on internal kernel data
+structures:
+
+Ref. include/net/netfilter/nf_conntrack.h:struct nf_conn
+
+After setting this config option, it fails at:
+
+   GEN-SKEL [test_progs] test_kfunc_dynptr_param.skel.h
+libbpf: sec '?lsm.s/bpf': corrupted program 'not_ptr_to_stack', offset 48, size 0
+Error: failed to open BPF object file: Invalid argument
+make: *** [Makefile:546: /home/efficios/git/linux/tools/testing/selftests/bpf/test_kfunc_dynptr_param.skel.h] Error 234
+make: *** Deleting file '/home/efficios/git/linux/tools/testing/selftests/bpf/test_kfunc_dynptr_param.skel.h'
+
+Based on this issue: https://github.com/libbpf/libbpf-bootstrap/issues/12 it appears
+that bpf selftests are only meant to be used against a set of pre-specified kernel configurations.
+README.rst confirms that. So let's use tools/testing/selftests/bpf/config.x86_64
+with make olddefconfig for my kernel build then. It would have been less unexpected for the
+bpf selftests to report incorrect or missing kernel config options rather than limiting the
+supported set to specific configuration files provided by the bpf selftests. This limits
+the testing coverage to very few kernel configurations.
+
+It still does not work. I need to explicitly enable BPF_SYSCALL=y which is not present in
+the bpf selftests config.x86_64. Then I can explicitly reenable DEBUG_INFO_BTF=y. It appears
+that config.x86_64 is outdated in the bpf selftests. It also misses NF_CONNTRACK_MARK=y.
+So let's assume that config.x86_64 is outdated and broken and go with
+tools/testing/selftests/bpf/config followed by make olddefconfig.
+
+No more luck, this time the bpf kernel config misses the DEBUG_KERNEL=y, which is needed
+for DEBUG_INFO and DEBUG_INFO_BTF.
+
+Now it's:
+
+   CLANG   /home/efficios/git/linux/tools/testing/selftests/bpf/tools/build/bpftool/profiler.bpf.o
+skeleton/profiler.bpf.c:18:21: error: invalid application of 'sizeof' to an incomplete type 'struct bpf_perf_event_value'
+         __uint(value_size, sizeof(struct bpf_perf_event_value));
+[...]
+
+And that's where I give up. Has anyone else succeeded in building bpf selftests locally ?
+
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
+
