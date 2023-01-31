@@ -2,163 +2,125 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B789C61DA4
-	for <bpf@archiver.kernel.org>; Tue, 31 Jan 2023 00:56:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D4D2C54EAA
+	for <bpf@archiver.kernel.org>; Tue, 31 Jan 2023 01:04:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbjAaA4C (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 30 Jan 2023 19:56:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38160 "EHLO
+        id S229623AbjAaBE2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 30 Jan 2023 20:04:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjAaA4C (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 30 Jan 2023 19:56:02 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070DF1A970;
-        Mon, 30 Jan 2023 16:56:01 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id m199so16293273ybm.4;
-        Mon, 30 Jan 2023 16:56:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lEFaJKhXjrErP+zmYUVJ/zWHlc8u+DY9fzBbyUntHWw=;
-        b=SuIR5EIcsbJWrL57m7FV3dlcDHEIkUL1SJizMfdWifbaor2yiZ+7XMXRbz5/RrZl3T
-         ZRsZ39cYilG+3Qvxx10M7q3p/NwUR72Rifhv70kCTolYYEhuJ+CtTUJWhg7fjwJ/7IHp
-         XP8IIRobalcgKPBdH/6BUWu6smW5B0DT0yKZtMWtlIU1gM5vCrIbiI6LlYzQwriXg9vc
-         6W3RVUeGnFfZODFmyWRsH8RhEJ19Vcne2ipjChhU9HDh4EjMSCClhu5iBhJSqlPjRicA
-         fYHhNxliyCXPwZErpGoE71Z78wgoh6Ix4gMudrlvVosww/3/od5WbF+40TehZl0wAnzf
-         3URQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lEFaJKhXjrErP+zmYUVJ/zWHlc8u+DY9fzBbyUntHWw=;
-        b=4hpEyn2/voh6ED7MJlLyZGJTFDLbNOs3/Oiti7cZvenR4cFVXmm7YmUXMB1tziLWYP
-         zJfp9edcAmF7n9w1zbsou+u23zVAwF+yw7oCOAtJtsYnT4C7GEKSBDIap8cGFAMLo6QV
-         ZGi1Y92pJ+gZB/gdqKoLLy1NSgo51c0tkpCSVJa5HWC2hw00gPIE8FfKTgctmSI3O07K
-         JIXQP6PbPgu3IUBWjg5Rxm6kOV12NYF9hV93APBNbSYQId9TGsLeiIqXBnGrzustysnD
-         Ygrp5kWy3uqMKWXgd7jxtHSxJV+5FNyTIjRfdf5SvC2WusYc1Jnv1z10GPGRuDTqwnbi
-         meUg==
-X-Gm-Message-State: AFqh2krrqAXOotqNQKJiNMrYnvFEuYYIk/mb2KyhcU3BEvQ9rWbUFz2/
-        4lrRyFORxjx3Ciln26Z7RuLT3lxYdKg5X3cO2F0=
-X-Google-Smtp-Source: AMrXdXv5XESCldkipkZ2Yl/fsKJLqvrX9Q4/7hczCiCt+yAdmnrkMzh+IoJeT23TncR6MqMKO6Li1lg2ZA4ZZL4/AW0=
-X-Received: by 2002:a25:7e81:0:b0:7e5:ecf1:ebde with SMTP id
- z123-20020a257e81000000b007e5ecf1ebdemr4209284ybc.375.1675126560249; Mon, 30
- Jan 2023 16:56:00 -0800 (PST)
+        with ESMTP id S230031AbjAaBE1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 30 Jan 2023 20:04:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EDC530284
+        for <bpf@vger.kernel.org>; Mon, 30 Jan 2023 17:04:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 073B0B81717
+        for <bpf@vger.kernel.org>; Tue, 31 Jan 2023 01:04:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87014C433EF;
+        Tue, 31 Jan 2023 01:04:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675127058;
+        bh=5cDq8WSVc1jyBRVJl/cWqEA7FAya/qIn0sdtMnLCQT8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fU+MWvsJieilLEArzsFX6nnsc+DuqHhej0X+aj+OMPZljDXs7K7W3w5PrUnmqkTev
+         ylE/WszOI9Svl6WQRYeDZBxNCUOuuiXmcane2OWHliuSApW6McdV5WnopEw1S+ukok
+         6zNoxN5qrzX7t5l1qxkf8bnhPkVDabaDpbTRpJgHf39O9SUcR3HAYE4FEyLYZY0OZt
+         3uvV/9BJCxjvp/opbijJWV+zew5chTvJto9nIm5BVuX6CaAFvpBRJKpWQKkrqWXNeR
+         +rDhLVhrLrZSESn34/4No1d2s4E1H/BqhxjOL9k6iSkzjk+7o52P60KX6W/a0EgyC+
+         I2Djc4lHitQDw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 01891405BE; Mon, 30 Jan 2023 22:04:15 -0300 (-03)
+Date:   Mon, 30 Jan 2023 22:04:15 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     yhs@fb.com, ast@kernel.org, olsajiri@gmail.com, eddyz87@gmail.com,
+        sinquersw@gmail.com, timo@incline.eu, daniel@iogearbox.net,
+        andrii@kernel.org, songliubraving@fb.com, john.fastabend@gmail.com,
+        kpsingh@chromium.org, sdf@google.com, haoluo@google.com,
+        martin.lau@kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v2 dwarves 1/5] dwarves: help dwarf loader spot functions
+ with optimized-out parameters
+Message-ID: <Y9hpD0un8d/b+Hb+@kernel.org>
+References: <1675088985-20300-1-git-send-email-alan.maguire@oracle.com>
+ <1675088985-20300-2-git-send-email-alan.maguire@oracle.com>
+ <Y9gOGZ20aSgsYtPP@kernel.org>
+ <Y9gkS6dcXO4HWovW@kernel.org>
+ <Y9gnQSUvJQ6WRx8y@kernel.org>
+ <561b2e18-40b3-e04f-d72e-6007e91fd37c@oracle.com>
+ <Y9hf7cgqt6BHt2dH@kernel.org>
 MIME-Version: 1.0
-References: <20230127191703.3864860-1-joannelkoong@gmail.com>
- <20230127191703.3864860-4-joannelkoong@gmail.com> <CAEf4BzYK2JOtChh4VNTg4L9-u9kay3zzG8X6GqTkak22E37wig@mail.gmail.com>
-In-Reply-To: <CAEf4BzYK2JOtChh4VNTg4L9-u9kay3zzG8X6GqTkak22E37wig@mail.gmail.com>
-From:   Joanne Koong <joannelkoong@gmail.com>
-Date:   Mon, 30 Jan 2023 16:55:49 -0800
-Message-ID: <CAJnrk1YEN+9dn4DKQQKAQGR4RU9HVVrVD2A3O7chet4tC6OG5A@mail.gmail.com>
-Subject: Re: [PATCH v9 bpf-next 3/5] bpf: Add skb dynptrs
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@kernel.org, ast@kernel.org, netdev@vger.kernel.org,
-        memxor@gmail.com, kernel-team@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9hf7cgqt6BHt2dH@kernel.org>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 4:48 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Fri, Jan 27, 2023 at 11:18 AM Joanne Koong <joannelkoong@gmail.com> wrote:
-> >
-> > Add skb dynptrs, which are dynptrs whose underlying pointer points
-> > to a skb. The dynptr acts on skb data. skb dynptrs have two main
-> > benefits. One is that they allow operations on sizes that are not
-> > statically known at compile-time (eg variable-sized accesses).
-> > Another is that parsing the packet data through dynptrs (instead of
-> > through direct access of skb->data and skb->data_end) can be more
-> > ergonomic and less brittle (eg does not need manual if checking for
-> > being within bounds of data_end).
-> >
-> > For bpf prog types that don't support writes on skb data, the dynptr is
-> > read-only (bpf_dynptr_write() will return an error and bpf_dynptr_data()
-> > will return a data slice that is read-only where any writes to it will
-> > be rejected by the verifier).
-> >
-> > For reads and writes through the bpf_dynptr_read() and bpf_dynptr_write()
-> > interfaces, reading and writing from/to data in the head as well as from/to
-> > non-linear paged buffers is supported. For data slices (through the
-> > bpf_dynptr_data() interface), if the data is in a paged buffer, the user
-> > must first call bpf_skb_pull_data() to pull the data into the linear
-> > portion.
-> >
-> > Any bpf_dynptr_write() automatically invalidates any prior data slices
-> > to the skb dynptr. This is because a bpf_dynptr_write() may be writing
-> > to data in a paged buffer, so it will need to pull the buffer first into
-> > the head. The reason it needs to be pulled instead of writing directly to
-> > the paged buffers is because they may be cloned (only the head of the skb
-> > is by default uncloned). As such, any bpf_dynptr_write() will
-> > automatically have its prior data slices invalidated, even if the write
-> > is to data in the skb head (the verifier has no way of differentiating
-> > whether the write is to the head or paged buffers during program load
-> > time). Please note as well that any other helper calls that change the
-> > underlying packet buffer (eg bpf_skb_pull_data()) invalidates any data
-> > slices of the skb dynptr as well. The stack trace for this is
-> > check_helper_call() -> clear_all_pkt_pointers() ->
-> > __clear_all_pkt_pointers() -> mark_reg_unknown().
-> >
-> > For examples of how skb dynptrs can be used, please see the attached
-> > selftests.
-> >
-> > Signed-off-by: Joanne Koong <joannelkoong@gmail.com>
-> > ---
-> >  include/linux/bpf.h            |  82 +++++++++------
-> >  include/linux/filter.h         |  18 ++++
-> >  include/uapi/linux/bpf.h       |  37 +++++--
-> >  kernel/bpf/btf.c               |  18 ++++
-> >  kernel/bpf/helpers.c           |  95 ++++++++++++++---
-> >  kernel/bpf/verifier.c          | 185 ++++++++++++++++++++++++++-------
-> >  net/core/filter.c              |  60 ++++++++++-
-> >  tools/include/uapi/linux/bpf.h |  37 +++++--
-> >  8 files changed, 432 insertions(+), 100 deletions(-)
-> >
->
-> [...]
->
-> >  static const struct bpf_func_proto bpf_dynptr_write_proto = {
-> > @@ -1560,6 +1595,8 @@ static const struct bpf_func_proto bpf_dynptr_write_proto = {
-> >
-> >  BPF_CALL_3(bpf_dynptr_data, const struct bpf_dynptr_kern *, ptr, u32, offset, u32, len)
-> >  {
-> > +       enum bpf_dynptr_type type;
-> > +       void *data;
-> >         int err;
-> >
-> >         if (!ptr->data)
-> > @@ -1569,10 +1606,36 @@ BPF_CALL_3(bpf_dynptr_data, const struct bpf_dynptr_kern *, ptr, u32, offset, u3
-> >         if (err)
-> >                 return 0;
-> >
-> > -       if (bpf_dynptr_is_rdonly(ptr))
-> > -               return 0;
-> > +       type = bpf_dynptr_get_type(ptr);
-> > +
-> > +       switch (type) {
-> > +       case BPF_DYNPTR_TYPE_LOCAL:
-> > +       case BPF_DYNPTR_TYPE_RINGBUF:
-> > +               if (bpf_dynptr_is_rdonly(ptr))
-> > +                       return 0;
->
-> will something break if we return ptr->data for read-only LOCAL/RINGBUF dynptr?
+Em Mon, Jan 30, 2023 at 09:25:17PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Mon, Jan 30, 2023 at 10:37:56PM +0000, Alan Maguire escreveu:
+> > On 30/01/2023 20:23, Arnaldo Carvalho de Melo wrote:
+> > > Em Mon, Jan 30, 2023 at 05:10:51PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > >> +++ b/dwarves.h
+> > >> @@ -262,6 +262,7 @@ struct cu {
+> > >>  	uint8_t		 has_addr_info:1;
+> > >>  	uint8_t		 uses_global_strings:1;
+> > >>  	uint8_t		 little_endian:1;
+> > >> +	uint8_t		 nr_register_params;
+> > >>  	uint16_t	 language;
+> > >>  	unsigned long	 nr_inline_expansions;
+> > >>  	size_t		 size_inline_expansions;
+> > > 
+>  
+> > Thanks for this, never thought of cross-builds to be honest!
+> 
+> > Tested just now on x86_64 and aarch64 at my end, just ran
+> > into one small thing on one system; turns out EM_RISCV isn't
+> > defined if using a very old elf.h; below works around this
+> > (dwarves otherwise builds fine on this system).
+> 
+> Ok, will add it and will test with containers for older distros too.
 
-There will be nothing guarding against direct writes into read-only
-LOCAL/RINGBUF dynptrs if we return ptr->data. For skb type dynptrs,
-it's guarded by the ptr->data return pointer being marked as
-MEM_RDONLY in the verifier if the skb is non-writable.
+Its on the 'next' branch, so that it gets tested in the libbpf github
+repo at:
 
->
+https://github.com/libbpf/libbpf/actions/workflows/pahole.yml
+
+It failed yesterday and today due to problems with the installation of
+llvm, probably tomorrow it'll be back working as I saw some
+notifications floating by.
+
+I added the conditional EM_RISCV definition as well as removed the dup
+iterator that Jiri noticed.
+
+Thanks,
+
+- Arnaldo
+ 
+> > diff --git a/dwarf_loader.c b/dwarf_loader.c
+> > index dba2d37..47a3bc2 100644
+> > --- a/dwarf_loader.c
+> > +++ b/dwarf_loader.c
+> > @@ -992,6 +992,11 @@ static struct class_member *class_member__new(Dwarf_Die *die, struct cu *c
+> >         return member;
+> >  }
+> >  
+> > +/* for older elf.h */
+> > +#ifndef EM_RISCV
+> > +#define EM_RISCV       243
+> > +#endif
 > > +
-> > +               data = ptr->data;
-> > +               break;
-> > +       case BPF_DYNPTR_TYPE_SKB:
-> > +       {
-> > +               struct sk_buff *skb = ptr->data;
-> >
->
-> [...]
+> >  /* How many function parameters are passed via registers?  Used below in
+> >   * determining if an argument has been optimized out or if it is simply
+> >   * an argument > cu__nr_register_params().  Making cu__nr_register_params()
+> 
+> -- 
+> 
+> - Arnaldo
+
+-- 
+
+- Arnaldo
