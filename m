@@ -2,140 +2,106 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D7BFC05027
-	for <bpf@archiver.kernel.org>; Wed,  1 Feb 2023 17:31:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBC74C64EC5
+	for <bpf@archiver.kernel.org>; Wed,  1 Feb 2023 17:34:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbjBARbd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 Feb 2023 12:31:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54206 "EHLO
+        id S231808AbjBARem (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 1 Feb 2023 12:34:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232171AbjBARbE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 1 Feb 2023 12:31:04 -0500
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A577D6E6;
-        Wed,  1 Feb 2023 09:30:29 -0800 (PST)
-Received: by mail-qt1-f177.google.com with SMTP id w3so9107243qts.7;
-        Wed, 01 Feb 2023 09:30:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JmYeQHTJJ+BqQ7/b7CPgYScTbqD+a3RMWdPSk3vQJO0=;
-        b=MmDkjk4x0O1mFCGQ5y0jlCWvOuYkG2A+r8uJWrlrtug56o2iwKOxSOPHtWsev4WXp4
-         O/WkPMqdgIip0/qg6V/OlkbK3jPO8S/PSPDcy2UQWXKd3HtxNWfrV7BP6H4kiYKzFp/s
-         z4+XxpZWGtsRyuHflkJIj9D1SZOd/sjhYuMFy36m+aCRNT1mZxd7f2DhMldIljRGyi2R
-         CeWvAxHGRLsxeRCeWAT4gp5eobPJBzGXMYHf8NVEp4zBcQ7clRF5lYSHdQFJic062LOH
-         HIynKwG/Wi2K+o2QAxy70LWg/ksiQ9SUYLLglEjINLAyIEzP5punx4tOPSOPVcguoaxG
-         0gJQ==
-X-Gm-Message-State: AO0yUKVgRD9IdzCXIRsd/O8+xTbZ88eAEtpzBQfajkRFTNIAqENdwaYr
-        kDooO9x5DeWR6zUXaUkM/9xCZYEAu6H/szTA
-X-Google-Smtp-Source: AK7set9R1ochULuyhQOux1zSB/fGIvwkoteQCt+LiG7zEs9wow6ZJY1dgXpM4b/09rOU/o6DQAOYoA==
-X-Received: by 2002:a05:622a:507:b0:3b6:302d:714 with SMTP id l7-20020a05622a050700b003b6302d0714mr5002056qtx.4.1675272627840;
-        Wed, 01 Feb 2023 09:30:27 -0800 (PST)
-Received: from localhost ([2620:10d:c091:480::1:1971])
-        by smtp.gmail.com with ESMTPSA id bs18-20020ac86f12000000b003b8558eabd0sm7688598qtb.23.2023.02.01.09.30.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 09:30:27 -0800 (PST)
-From:   David Vernet <void@manifault.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@meta.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, corbet@lwn.net, hch@infradead.org,
-        acme@kernel.org, alan.maguire@oracle.com
-Subject: [PATCH bpf-next v3 4/4] selftests/bpf: Add testcase for static kfunc with unused arg
-Date:   Wed,  1 Feb 2023 11:30:16 -0600
-Message-Id: <20230201173016.342758-5-void@manifault.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230201173016.342758-1-void@manifault.com>
-References: <20230201173016.342758-1-void@manifault.com>
+        with ESMTP id S231974AbjBARei (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 1 Feb 2023 12:34:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5E813525
+        for <bpf@vger.kernel.org>; Wed,  1 Feb 2023 09:33:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675272755;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PM+cJWN8nqTtyXDobjfXnOOJBoI+UmCw0CJPEQIXEpA=;
+        b=FxaJtQfSNTnRFjtxZgi5uleTKClH09nbfdZHo+3tNKTvGs6NfCaaeHz57g9+EPeZC8yNB0
+        +aYmvyDmzYv0aXXzKWMtUnxasM6L098Bkgras+zPiStAJFye/PgMdTocO7DmWC/Z3cQhd+
+        n0ITRxxQ0fGU8JeNuEdo9MXJFpxZt5I=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-121-lsa-gwieOzaUruCJ6FDLnw-1; Wed, 01 Feb 2023 12:32:16 -0500
+X-MC-Unique: lsa-gwieOzaUruCJ6FDLnw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AA804281DE77;
+        Wed,  1 Feb 2023 17:32:06 +0000 (UTC)
+Received: from firesoul.localdomain (ovpn-208-9.brq.redhat.com [10.40.208.9])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 65EF12166B33;
+        Wed,  1 Feb 2023 17:32:06 +0000 (UTC)
+Received: from [192.168.42.3] (localhost [IPv6:::1])
+        by firesoul.localdomain (Postfix) with ESMTP id 726083000061C;
+        Wed,  1 Feb 2023 18:32:05 +0100 (CET)
+Subject: [PATCH bpf-next V2 4/4] selftests/bpf: xdp_hw_metadata use strncpy
+ for ifname
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     bpf@vger.kernel.org, Stanislav Fomichev <sdf@google.com>
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
+        martin.lau@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, dsahern@gmail.com,
+        willemb@google.com, void@manifault.com, kuba@kernel.org,
+        xdp-hints@xdp-project.net
+Date:   Wed, 01 Feb 2023 18:32:05 +0100
+Message-ID: <167527272543.937063.16993147790832546209.stgit@firesoul>
+In-Reply-To: <167527267453.937063.6000918625343592629.stgit@firesoul>
+References: <167527267453.937063.6000918625343592629.stgit@firesoul>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-kfuncs are allowed to be static, or not use one or more of their
-arguments. For example, bpf_xdp_metadata_rx_hash() in net/core/xdp.c is
-meant to be implemented by drivers, with the default implementation just
-returning -EOPNOTSUPP. As described in [0], such kfuncs can have their
-arguments elided, which can cause BTF encoding to be skipped. The new
-__bpf_kfunc macro should address this, and this patch adds a selftest
-which verifies that a static kfunc with at least one unused argument can
-still be encoded and invoked by a BPF program.
+The ifname char pointer is taken directly from the command line
+as input and the string is copied directly into struct ifreq
+via strcpy. This makes it easy to corrupt other members of ifreq
+and generally do stack overflows.
 
-Signed-off-by: David Vernet <void@manifault.com>
+Most often the ioctl will fail with:
+ ./xdp_hw_metadata: ioctl(SIOCETHTOOL): Bad address
+
+As people will likely copy-paste code for getting NIC queue
+channels (rxq_num) and enabling HW timestamping (hwtstamp_ioctl)
+lets make this code a bit more secure by using strncpy.
+
+Fixes: 297a3f124155 ("selftests/bpf: Simple program to dump XDP RX metadata")
+Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 ---
- net/bpf/test_run.c                                  |  6 ++++++
- tools/testing/selftests/bpf/prog_tests/kfunc_call.c |  1 +
- tools/testing/selftests/bpf/progs/kfunc_call_test.c | 11 +++++++++++
- 3 files changed, 18 insertions(+)
+ tools/testing/selftests/bpf/xdp_hw_metadata.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index af9827c4b351..e6f773d12045 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -741,6 +741,11 @@ __bpf_kfunc void bpf_kfunc_call_test_destructive(void)
- {
- }
+diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+index 58fde35abad7..2a66bd3f2c9f 100644
+--- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
++++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+@@ -270,7 +270,7 @@ static int rxq_num(const char *ifname)
+ 	struct ifreq ifr = {
+ 		.ifr_data = (void *)&ch,
+ 	};
+-	strcpy(ifr.ifr_name, ifname);
++	strncpy(ifr.ifr_name, ifname, IF_NAMESIZE - 1);
+ 	int fd, ret;
  
-+__bpf_kfunc static u32 bpf_kfunc_call_test_static_unused_arg(u32 arg, u32 unused)
-+{
-+	return arg;
-+}
-+
- __diag_pop();
+ 	fd = socket(AF_UNIX, SOCK_DGRAM, 0);
+@@ -291,7 +291,7 @@ static void hwtstamp_ioctl(int op, const char *ifname, struct hwtstamp_config *c
+ 	struct ifreq ifr = {
+ 		.ifr_data = (void *)cfg,
+ 	};
+-	strcpy(ifr.ifr_name, ifname);
++	strncpy(ifr.ifr_name, ifname, IF_NAMESIZE - 1);
+ 	int fd, ret;
  
- BTF_SET8_START(bpf_test_modify_return_ids)
-@@ -779,6 +784,7 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_fail1)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_fail2)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_ref, KF_TRUSTED_ARGS)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_destructive, KF_DESTRUCTIVE)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test_static_unused_arg)
- BTF_SET8_END(test_sk_check_kfunc_ids)
- 
- static void *bpf_test_init(const union bpf_attr *kattr, u32 user_size,
-diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-index bb4cd82a788a..a543742cd7bd 100644
---- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-@@ -77,6 +77,7 @@ static struct kfunc_test_params kfunc_tests[] = {
- 	TC_TEST(kfunc_call_test_get_mem, 42),
- 	SYSCALL_TEST(kfunc_syscall_test, 0),
- 	SYSCALL_NULL_CTX_TEST(kfunc_syscall_test_null, 0),
-+	TC_TEST(kfunc_call_test_static_unused_arg, 0),
- };
- 
- struct syscall_test_args {
-diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test.c b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-index d91c58d06d38..7daa8f5720b9 100644
---- a/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-+++ b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-@@ -17,6 +17,7 @@ extern void bpf_kfunc_call_test_mem_len_pass1(void *mem, int len) __ksym;
- extern void bpf_kfunc_call_test_mem_len_fail2(__u64 *mem, int len) __ksym;
- extern int *bpf_kfunc_call_test_get_rdwr_mem(struct prog_test_ref_kfunc *p, const int rdwr_buf_size) __ksym;
- extern int *bpf_kfunc_call_test_get_rdonly_mem(struct prog_test_ref_kfunc *p, const int rdonly_buf_size) __ksym;
-+extern u32 bpf_kfunc_call_test_static_unused_arg(u32 arg, u32 unused) __ksym;
- 
- SEC("tc")
- int kfunc_call_test4(struct __sk_buff *skb)
-@@ -181,4 +182,14 @@ int kfunc_call_test_get_mem(struct __sk_buff *skb)
- 	return ret;
- }
- 
-+SEC("tc")
-+int kfunc_call_test_static_unused_arg(struct __sk_buff *skb)
-+{
-+
-+	u32 expected = 5, actual;
-+
-+	actual = bpf_kfunc_call_test_static_unused_arg(expected, 0xdeadbeef);
-+	return actual != expected ? -1 : 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.39.0
+ 	fd = socket(AF_UNIX, SOCK_DGRAM, 0);
+
 
