@@ -2,156 +2,95 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B613FC636CD
-	for <bpf@archiver.kernel.org>; Wed,  1 Feb 2023 12:26:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40746C636CD
+	for <bpf@archiver.kernel.org>; Wed,  1 Feb 2023 12:36:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231915AbjBAM0X (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 Feb 2023 07:26:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44672 "EHLO
+        id S232006AbjBAMgp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 1 Feb 2023 07:36:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231302AbjBAM0W (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 1 Feb 2023 07:26:22 -0500
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D60C44BCC
-        for <bpf@vger.kernel.org>; Wed,  1 Feb 2023 04:26:20 -0800 (PST)
-X-QQ-mid: bizesmtp67t1675254362tvp9a3of
-Received: from localhost.localdomain ( [1.202.165.115])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 01 Feb 2023 20:25:59 +0800 (CST)
-X-QQ-SSF: 0100000000000080B000000A0000000
-X-QQ-FEAT: LE7C6P2vL8S0m5t6Gy4nCViug1qPYf2ThzWBxv7NSzNQbgdEgQtRbqGJAI9nO
-        D/dAQaaVflCwz1KHpN2NZvk2THxMN/MNQ0ZjP0HoDJokx/JMQJh1jDXbWSTExqAmkMDrryH
-        gN9kBep1kTcjN7g1VmKf6rMEjcWXxp+1rot6uPehK2I5jjDiY0OoBvLOia3AGU6y1SBPzbH
-        j9o7VE4vqR4b+BxBRqBz3XvOZlEU7Ey9fq07vuuXFr2CfXq6Rku090b7NOTBRl+HJ8Kghzt
-        v+MnCaCaC60JSlRsLUsXEJ7SJ2z1y5UMyZkRvOTsdmgSEZ4i/QD53I6mJ1JEAG3x2nLa6JC
-        O0RsGZjv9HyQSqD9km4eCcK226Jx6gGFHkWTHADTFovJ/E8cMZ9qlZdrsdelQ==
-X-QQ-GoodBg: 0
-From:   tong@infragraf.org
-To:     bpf@vger.kernel.org, quentin@isovalent.com
-Cc:     Tonghao Zhang <tong@infragraf.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S230444AbjBAMgo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 1 Feb 2023 07:36:44 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 104CD5B5B2;
+        Wed,  1 Feb 2023 04:36:40 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8BxUvDXXNpjXHkLAA--.23879S3;
+        Wed, 01 Feb 2023 20:36:39 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxOL3WXNpjUXImAA--.10032S3;
+        Wed, 01 Feb 2023 20:36:39 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
-Subject: [bpf-next v2] bpftool: profile online CPUs instead of possible
-Date:   Wed,  1 Feb 2023 20:24:04 +0800
-Message-Id: <20230201122404.4256-1-tong@infragraf.org>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:infragraf.org:qybglogicsvr:qybglogicsvr5
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next 1/4] bpf: Add new macro BPF_ALU32 and BPF_JMP64
+Date:   Wed,  1 Feb 2023 20:36:35 +0800
+Message-Id: <1675254998-4951-2-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+In-Reply-To: <1675254998-4951-1-git-send-email-yangtiezhu@loongson.cn>
+References: <1675254998-4951-1-git-send-email-yangtiezhu@loongson.cn>
+X-CM-TRANSID: AQAAf8AxOL3WXNpjUXImAA--.10032S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7Kw1xGF17Cw48tw1xXFWDurg_yoW8Xr4kpF
+        s3Xr47Ar4DWFWfuryxu3ySq3sxX3yUCr1rKayYg34jkF43t34xXFs0g3ZFvryfXr4kXa1a
+        q3429rW5W340qr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b7xYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JF0_JFyl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AI
+        xVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64
+        kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVW8JVWxJwAm
+        72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I
+        0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
+        GVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
+        0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0
+        rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r
+        4UYxBIdaVFxhVjvjDU0xZFpf9x07jnAwxUUUUU=
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Tonghao Zhang <tong@infragraf.org>
+In the current code, BPF_ALU means BPF_ALU32, but BPF_JMP means BPF_JMP64,
+it is a little confusing at the first glance, add new macro BPF_ALU32 and
+BPF_JMP64, then we can replace the ambiguos macro BPF_ALU and BPF_JMP with
+new macro BPF_ALU32 and BPF_JMP64 step by step, BPF_ALU and BPF_JMP can be
+removed from the uapi header file in some day.
 
-The number of online cpu may be not equal to possible cpu.
-bpftool prog profile, can not create pmu event on possible
-but on online cpu.
-
-$ dmidecode -s system-product-name
-PowerEdge R620
-$ cat /sys/devices/system/cpu/online
-0-31
-$ cat /sys/devices/system/cpu/possible
-0-47
-
-BTW, we can disable CPU dynamically:
-$ echo 0 > /sys/devices/system/cpu/cpuX/online
-
-If CPU is offline, perf_event_open will return ENODEV.
-To fix this issue, check the value returned and skip
-offline CPU.
-
-Signed-off-by: Tonghao Zhang <tong@infragraf.org>
-Cc: Quentin Monnet <quentin@isovalent.com>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Song Liu <song@kernel.org>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: KP Singh <kpsingh@kernel.org>
-Cc: Stanislav Fomichev <sdf@google.com>
-Cc: Hao Luo <haoluo@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
-v1:
-https://patchwork.kernel.org/project/netdevbpf/patch/20230117044902.98938-1-tong@infragraf.org/
-https://patchwork.kernel.org/project/netdevbpf/patch/20230117044902.98938-2-tong@infragraf.org/
----
- tools/bpf/bpftool/prog.c | 36 ++++++++++++++++++++++++++++--------
- 1 file changed, 28 insertions(+), 8 deletions(-)
+ include/uapi/linux/bpf.h       | 2 ++
+ tools/include/uapi/linux/bpf.h | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index cfc9fdc1e863..f48067cb0496 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -2233,10 +2233,36 @@ static void profile_close_perf_events(struct profiler_bpf *obj)
- 	profile_perf_event_cnt = 0;
- }
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index ba0f0cf..a118c43 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -15,6 +15,8 @@
  
-+static int profile_open_perf_event(int mid, int cpu, int map_fd)
-+{
-+	int pmu_fd;
-+
-+	pmu_fd = syscall(__NR_perf_event_open, &metrics[mid].attr,
-+			 -1/*pid*/, cpu, -1/*group_fd*/, 0);
-+	if (pmu_fd < 0) {
-+		if (errno == ENODEV) {
-+			p_info("cpu %d may be offline, skip %s metric profiling.",
-+				cpu, metrics[mid].name);
-+			profile_perf_event_cnt++;
-+			return 0;
-+		}
-+		return -1;
-+	}
-+
-+	if (bpf_map_update_elem(map_fd,
-+				&profile_perf_event_cnt,
-+				&pmu_fd, BPF_ANY) ||
-+	    ioctl(pmu_fd, PERF_EVENT_IOC_ENABLE, 0))
-+		return -1;
-+
-+	profile_perf_events[profile_perf_event_cnt++] = pmu_fd;
-+	return 0;
-+}
-+
- static int profile_open_perf_events(struct profiler_bpf *obj)
- {
- 	unsigned int cpu, m;
--	int map_fd, pmu_fd;
-+	int map_fd;
+ /* instruction classes */
+ #define BPF_JMP32	0x06	/* jmp mode in word width */
++#define BPF_JMP64	0x05	/* jmp mode in double word width */
++#define BPF_ALU32	0x04	/* alu mode in word width */
+ #define BPF_ALU64	0x07	/* alu mode in double word width */
  
- 	profile_perf_events = calloc(
- 		sizeof(int), obj->rodata->num_cpu * obj->rodata->num_metric);
-@@ -2255,17 +2281,11 @@ static int profile_open_perf_events(struct profiler_bpf *obj)
- 		if (!metrics[m].selected)
- 			continue;
- 		for (cpu = 0; cpu < obj->rodata->num_cpu; cpu++) {
--			pmu_fd = syscall(__NR_perf_event_open, &metrics[m].attr,
--					 -1/*pid*/, cpu, -1/*group_fd*/, 0);
--			if (pmu_fd < 0 ||
--			    bpf_map_update_elem(map_fd, &profile_perf_event_cnt,
--						&pmu_fd, BPF_ANY) ||
--			    ioctl(pmu_fd, PERF_EVENT_IOC_ENABLE, 0)) {
-+			if (profile_open_perf_event(m, cpu, map_fd)) {
- 				p_err("failed to create event %s on cpu %d",
- 				      metrics[m].name, cpu);
- 				return -1;
- 			}
--			profile_perf_events[profile_perf_event_cnt++] = pmu_fd;
- 		}
- 	}
- 	return 0;
+ /* ld/ldx fields */
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 7f024ac..014b449 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -15,6 +15,8 @@
+ 
+ /* instruction classes */
+ #define BPF_JMP32	0x06	/* jmp mode in word width */
++#define BPF_JMP64	0x05	/* jmp mode in double word width */
++#define BPF_ALU32	0x04	/* alu mode in word width */
+ #define BPF_ALU64	0x07	/* alu mode in double word width */
+ 
+ /* ld/ldx fields */
 -- 
-2.27.0
+2.1.0
 
