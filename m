@@ -2,140 +2,164 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BABEBC61DA4
-	for <bpf@archiver.kernel.org>; Thu,  2 Feb 2023 10:52:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2337C61DA4
+	for <bpf@archiver.kernel.org>; Thu,  2 Feb 2023 10:55:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231791AbjBBKwH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Feb 2023 05:52:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52504 "EHLO
+        id S230036AbjBBKzp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Feb 2023 05:55:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232822AbjBBKwD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Feb 2023 05:52:03 -0500
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAEC8A7EA;
-        Thu,  2 Feb 2023 02:51:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=Z9tFqTf2Ygy2QKomIll6AMhCHGv+ELQEI5/5r7xbC98=; b=B7BCJJTSa/NJ20xZKC4ZGqFelI
-        hh0+teQkrP82TPAepMGQtXBKSjSPAemWCh1aSnHNq0X0y4UaIn9iah2oOAxc1TOM2Excq27JpmOCa
-        NNPSEkUB2cLwst1l3kYB/v2kMN9MWj0zrEZOaAV5FRxomHpUweq8IM6+qzhLPANSbjTGWfRzV+z2u
-        8OkiMKuBTSqxWjqJ3j4jX8t2jILK1iUkwtgDlUrO6apJKSfr6k/MGZpdZqtCfLBPQNSnAwRu2uoUg
-        +towGE9bBCbv2LxMS9tWJrzgs9Y4xdTbZe0M0wrclnj6KEIGG8XI80LbjHd1i3j5wiA7okmjr6ClC
-        6RuAx+3g==;
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pNXAg-000EyE-56; Thu, 02 Feb 2023 11:50:26 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pNXAf-000O2J-Ci; Thu, 02 Feb 2023 11:50:25 +0100
-Subject: Re: [PATCH 0/8] Add ftrace direct call for arm64
-To:     Xu Kuohai <xukuohai@huawei.com>,
-        Florent Revest <revest@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-Cc:     catalin.marinas@arm.com, will@kernel.org, rostedt@goodmis.org,
-        mhiramat@kernel.org, mark.rutland@arm.com, ast@kernel.org,
-        andrii@kernel.org, kpsingh@kernel.org, jolsa@kernel.org,
-        xukuohai@huaweicloud.com
-References: <20230201163420.1579014-1-revest@chromium.org>
- <85af713d-00fe-b113-1331-1a44480c016f@huawei.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <eacfbd23-da92-3572-7f57-3de425117c8a@iogearbox.net>
-Date:   Thu, 2 Feb 2023 11:50:24 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        with ESMTP id S230169AbjBBKzp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Feb 2023 05:55:45 -0500
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D022687;
+        Thu,  2 Feb 2023 02:55:39 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=hengqi@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0Vakpwi2_1675335336;
+Received: from 30.221.147.171(mailfrom:hengqi@linux.alibaba.com fp:SMTPD_---0Vakpwi2_1675335336)
+          by smtp.aliyun-inc.com;
+          Thu, 02 Feb 2023 18:55:37 +0800
+Message-ID: <cf4a37f7-c9b0-c780-8709-79045e627129@linux.alibaba.com>
+Date:   Thu, 2 Feb 2023 18:55:34 +0800
 MIME-Version: 1.0
-In-Reply-To: <85af713d-00fe-b113-1331-1a44480c016f@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0)
+ Gecko/20100101 Thunderbird/109.0
+Subject: Re: [PATCH net-next v2] virtio-net: fix possible unsigned integer
+ overflow
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+References: <20230131085004.98687-1-hengqi@linux.alibaba.com>
+ <20230202030550-mutt-send-email-mst@kernel.org>
+ <f510df2b-25fd-6c88-d796-3e6f6ef6799e@linux.alibaba.com>
+ <20230202031609-mutt-send-email-mst@kernel.org>
+ <e321e1f2-10b8-3308-88d5-d4dd6cabc2b6@linux.alibaba.com>
+ <20230202052930-mutt-send-email-mst@kernel.org>
+From:   Heng Qi <hengqi@linux.alibaba.com>
+In-Reply-To: <20230202052930-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.7/26800/Thu Feb  2 09:47:56 2023)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2/2/23 9:36 AM, Xu Kuohai wrote:
-> On 2/2/2023 12:34 AM, Florent Revest wrote:
->> This series adds ftrace direct call support to arm64.
->> This makes BPF tracing programs (fentry/fexit/fmod_ret/lsm) work on arm64.
->>
->> It is meant to apply on top of the arm64 tree which contains Mark Rutland's
->> series on CALL_OPS [1] under the for-next/ftrace tag.
->> > The first three patches consolidate the two existing ftrace APIs for registering
->> direct calls. They are split to make the reviewers lives easier but if it'd be a
->> preferred style, I'd be happy to squash them in the next revision.
->> Currently, there is both a _ftrace_direct and _ftrace_direct_multi API. Apart
->> from samples and selftests, there are no users of the _ftrace_direct API left
->> in-tree so this deletes it and renames the _ftrace_direct_multi API to
->> _ftrace_direct for simplicity.
->>
->> The main benefit of this refactoring is that, with the API that's left, an
->> ftrace_ops backing a direct call will only ever point to one direct call. We can
->> therefore store the direct called trampoline address in the ops (patch 4) and
->> look it up from the ftrace trampoline on arm64 (patch 7) in the case when the
->> destination would be out of reach of a BL instruction at the ftrace callsite.
->> (in this case, ftrace_caller acts as a lightweight intermediary trampoline)
->>
->> This series has been tested on both arm64 and x86_64 with:
->> 1- CONFIG_FTRACE_SELFTEST (cf: patch 6)
->> 2- samples/ftrace/*.ko (cf: patch 8)
->> 3- tools/testing/selftests/bpf/test_progs (both -t lsm and -t fentry_fexit)
 
-Thanks a ton for working on this!
 
-> so it's time to update DENYLIST.aarch64 to unblock tests that failed due to lack of direct call.
+在 2023/2/2 下午6:31, Michael S. Tsirkin 写道:
+> On Thu, Feb 02, 2023 at 05:07:04PM +0800, Heng Qi wrote:
+>>
+>> 在 2023/2/2 下午4:16, Michael S. Tsirkin 写道:
+>>> On Thu, Feb 02, 2023 at 04:14:51PM +0800, Heng Qi wrote:
+>>>> 在 2023/2/2 下午4:07, Michael S. Tsirkin 写道:
+>>>>> On Tue, Jan 31, 2023 at 04:50:04PM +0800, Heng Qi wrote:
+>>>>>> When the single-buffer xdp is loaded and after xdp_linearize_page()
+>>>>>> is called, *num_buf becomes 0 and (*num_buf - 1) may overflow into
+>>>>>> a large integer in virtnet_build_xdp_buff_mrg(), resulting in
+>>>>>> unexpected packet dropping.
+>>>>>>
+>>>>>> Fixes: ef75cb51f139 ("virtio-net: build xdp_buff with multi buffers")
+>>>>>> Signed-off-by: Heng Qi <hengqi@linux.alibaba.com>
+>>>>>> Reviewed-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+>>>>>> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+>>>>>> ---
+>>>>>> v1->v2:
+>>>>>> - Change the type of num_buf from unsigned int to int. @Michael S . Tsirkin
+>>>>>> - Some cleaner codes. @Michael S . Tsirkin
+>>>>>>
+>>>>>>     drivers/net/virtio_net.c | 15 +++++++++------
+>>>>>>     1 file changed, 9 insertions(+), 6 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+>>>>>> index aaa6fe9b214a..8102861785a2 100644
+>>>>>> --- a/drivers/net/virtio_net.c
+>>>>>> +++ b/drivers/net/virtio_net.c
+>>>>>> @@ -716,7 +716,7 @@ static unsigned int virtnet_get_headroom(struct virtnet_info *vi)
+>>>>>>      * have enough headroom.
+>>>>>>      */
+>>>>>>     static struct page *xdp_linearize_page(struct receive_queue *rq,
+>>>>>> -				       u16 *num_buf,
+>>>>>> +				       int *num_buf,
+>>>>>>     				       struct page *p,
+>>>>>>     				       int offset,
+>>>>>>     				       int page_off,
+>>>>>> @@ -816,7 +816,7 @@ static struct sk_buff *receive_small(struct net_device *dev,
+>>>>>>     		if (unlikely(xdp_headroom < virtnet_get_headroom(vi))) {
+>>>>>>     			int offset = buf - page_address(page) + header_offset;
+>>>>>>     			unsigned int tlen = len + vi->hdr_len;
+>>>>>> -			u16 num_buf = 1;
+>>>>>> +			int num_buf = 1;
+>>>>>>     			xdp_headroom = virtnet_get_headroom(vi);
+>>>>>>     			header_offset = VIRTNET_RX_PAD + xdp_headroom;
+>>>>>> @@ -989,7 +989,7 @@ static int virtnet_build_xdp_buff_mrg(struct net_device *dev,
+>>>>>>     				      void *buf,
+>>>>>>     				      unsigned int len,
+>>>>>>     				      unsigned int frame_sz,
+>>>>>> -				      u16 *num_buf,
+>>>>>> +				      int *num_buf,
+>>>>>>     				      unsigned int *xdp_frags_truesize,
+>>>>>>     				      struct virtnet_rq_stats *stats)
+>>>>>>     {
+>>>>>> @@ -1007,6 +1007,9 @@ static int virtnet_build_xdp_buff_mrg(struct net_device *dev,
+>>>>>>     	xdp_prepare_buff(xdp, buf - VIRTIO_XDP_HEADROOM,
+>>>>>>     			 VIRTIO_XDP_HEADROOM + vi->hdr_len, len - vi->hdr_len, true);
+>>>>>> +	if (!*num_buf)
+>>>>>> +		return 0;
+>>>>>> +
+>>>>>>     	if (*num_buf > 1) {
+>>>>>>     		/* If we want to build multi-buffer xdp, we need
+>>>>>>     		 * to specify that the flags of xdp_buff have the
+>>>>> Ouch. Why is this here? Merged so pls remove by a follow up patch, the
+>>>>> rest of the code handles 0 fine. I'm not sure this introduces a bug by
+>>>>> we don't want spaghetti code.
+>>>> Yes it would work without this, but I was keeping this because I wanted it
+>>>> to handle 0 early and exit early.
+>>>>
+>>>> Do you want to remove this?
+>>>>
+>>>> Thanks.
+>>> why do you want to exit early?
+>> If num_buf is 0, we don't need to judge the subsequent process, because the
+>> latter process
+>> is used to build multi-buffer xdp, but this fix solves the possible problems
+>> of single-buffer xdp.
+>>
+>> Thanks.
+> An optimization then? As any optimization I'd like to see some numbers.
+>
+> Should have been documented as such not as part of a bugfix.
 
-+1, with regards to logistics, if possible it might be nice to eventually gets
-this into a feature branch on arm64 tree, then we could pull it too from there
-for bpf-next and hash out the BPF CI bits for arm64 in the meantime.
+Sure, I'm going to remove this with a follow-up patch.😁
 
->> This follows up on prior art by Xu Kuohai [2].
->> The implementation here is totally different but the fix for ftrace selftests
->> (patch 6) is a trivial rebase of a patch originally by Xu so I kept his
->> authorship and trailers untouched on that patch, I hope that's ok. >
-> 
-> that's ok for me, thanks.
-> 
->> 1: https://lore.kernel.org/all/20230123134603.1064407-1-mark.rutland@arm.com/
->> 2: https://lore.kernel.org/bpf/20220913162732.163631-1-xukuohai@huaweicloud.com/
->>
->> Florent Revest (7):
->>    ftrace: Replace uses of _ftrace_direct APIs with _ftrace_direct_multi
->>    ftrace: Remove the legacy _ftrace_direct API
->>    ftrace: Rename _ftrace_direct_multi APIs to _ftrace_direct APIs
->>    ftrace: Store direct called addresses in their ops
->>    ftrace: Make DIRECT_CALLS work WITH_ARGS and !WITH_REGS
->>    arm64: ftrace: Add direct call support
->>    arm64: ftrace: Add direct called trampoline samples support
->>
->> Xu Kuohai (1):
->>    ftrace: Fix dead loop caused by direct call in ftrace selftest
->>
->>   arch/arm64/Kconfig                          |   4 +
->>   arch/arm64/include/asm/ftrace.h             |  24 ++
->>   arch/arm64/kernel/asm-offsets.c             |   6 +
->>   arch/arm64/kernel/entry-ftrace.S            |  70 +++-
->>   arch/arm64/kernel/ftrace.c                  |  36 +-
->>   include/linux/ftrace.h                      |  51 +--
->>   kernel/bpf/trampoline.c                     |  14 +-
->>   kernel/trace/Kconfig                        |   2 +-
->>   kernel/trace/ftrace.c                       | 433 +-------------------
->>   kernel/trace/trace_selftest.c               |  14 +-
->>   samples/Kconfig                             |   2 +-
->>   samples/ftrace/ftrace-direct-modify.c       |  41 +-
->>   samples/ftrace/ftrace-direct-multi-modify.c |  44 +-
->>   samples/ftrace/ftrace-direct-multi.c        |  28 +-
->>   samples/ftrace/ftrace-direct-too.c          |  35 +-
->>   samples/ftrace/ftrace-direct.c              |  33 +-
->>   16 files changed, 333 insertions(+), 504 deletions(-)
->>
-> 
+Thanks.
+
+>
+>>>>>> @@ -1020,10 +1023,10 @@ static int virtnet_build_xdp_buff_mrg(struct net_device *dev,
+>>>>>>     		shinfo->xdp_frags_size = 0;
+>>>>>>     	}
+>>>>>> -	if ((*num_buf - 1) > MAX_SKB_FRAGS)
+>>>>>> +	if (*num_buf > MAX_SKB_FRAGS + 1)
+>>>>>>     		return -EINVAL;
+>>>>>> -	while ((--*num_buf) >= 1) {
+>>>>>> +	while (--*num_buf > 0) {
+>>>>>>     		buf = virtqueue_get_buf_ctx(rq->vq, &len, &ctx);
+>>>>>>     		if (unlikely(!buf)) {
+>>>>>>     			pr_debug("%s: rx error: %d buffers out of %d missing\n",
+>>>>>> @@ -1076,7 +1079,7 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+>>>>>>     					 struct virtnet_rq_stats *stats)
+>>>>>>     {
+>>>>>>     	struct virtio_net_hdr_mrg_rxbuf *hdr = buf;
+>>>>>> -	u16 num_buf = virtio16_to_cpu(vi->vdev, hdr->num_buffers);
+>>>>>> +	int num_buf = virtio16_to_cpu(vi->vdev, hdr->num_buffers);
+>>>>>>     	struct page *page = virt_to_head_page(buf);
+>>>>>>     	int offset = buf - page_address(page);
+>>>>>>     	struct sk_buff *head_skb, *curr_skb;
+>>>>>> -- 
+>>>>>> 2.19.1.6.gb485710b
 
