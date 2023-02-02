@@ -2,22 +2,22 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3C58C05027
-	for <bpf@archiver.kernel.org>; Thu,  2 Feb 2023 11:01:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24CB6C636D6
+	for <bpf@archiver.kernel.org>; Thu,  2 Feb 2023 11:01:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbjBBLBe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Feb 2023 06:01:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58490 "EHLO
+        id S231896AbjBBLBf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Feb 2023 06:01:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232265AbjBBLBW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Feb 2023 06:01:22 -0500
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418058717B;
-        Thu,  2 Feb 2023 03:01:14 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R691e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VakkM2a_1675335669;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VakkM2a_1675335669)
+        with ESMTP id S232607AbjBBLBX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Feb 2023 06:01:23 -0500
+Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED43387D2A;
+        Thu,  2 Feb 2023 03:01:16 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VakpyCA_1675335671;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VakpyCA_1675335671)
           by smtp.aliyun-inc.com;
-          Thu, 02 Feb 2023 19:01:10 +0800
+          Thu, 02 Feb 2023 19:01:12 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     netdev@vger.kernel.org
 Cc:     "David S. Miller" <davem@davemloft.net>,
@@ -39,9 +39,9 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         Kuniyuki Iwashima <kuniyu@amazon.com>,
         Petr Machata <petrm@nvidia.com>,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: [PATCH 09/33] xsk: xsk_buff_pool add callback for dma_sync
-Date:   Thu,  2 Feb 2023 19:00:34 +0800
-Message-Id: <20230202110058.130695-10-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH 11/33] virtio_net: rename free_old_xmit_skbs to free_old_xmit
+Date:   Thu,  2 Feb 2023 19:00:36 +0800
+Message-Id: <20230202110058.130695-12-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20230202110058.130695-1-xuanzhuo@linux.alibaba.com>
 References: <20230202110058.130695-1-xuanzhuo@linux.alibaba.com>
@@ -52,86 +52,64 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use callback to implement dma sync to simplify subsequent support for
-virtio dma sync.
+Since free_old_xmit_skbs not only deals with skb, but also xdp frame and
+subsequent added xsk, so change the name of this function to
+free_old_xmit.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- include/net/xsk_buff_pool.h |  6 ++++++
- net/xdp/xsk_buff_pool.c     | 24 ++++++++++++++++++++----
- 2 files changed, 26 insertions(+), 4 deletions(-)
+ drivers/net/virtio_net.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
-index 3e952e569418..53b681120354 100644
---- a/include/net/xsk_buff_pool.h
-+++ b/include/net/xsk_buff_pool.h
-@@ -75,6 +75,12 @@ struct xsk_buff_pool {
- 	u32 chunk_size;
- 	u32 chunk_shift;
- 	u32 frame_len;
-+	void (*dma_sync_for_cpu)(struct device *dev, dma_addr_t addr,
-+				 unsigned long offset, size_t size,
-+				 enum dma_data_direction dir);
-+	void (*dma_sync_for_device)(struct device *dev, dma_addr_t addr,
-+				    unsigned long offset, size_t size,
-+				    enum dma_data_direction dir);
- 	u8 cached_need_wakeup;
- 	bool uses_need_wakeup;
- 	bool dma_need_sync;
-diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-index ed6c71826d31..78e325e195fa 100644
---- a/net/xdp/xsk_buff_pool.c
-+++ b/net/xdp/xsk_buff_pool.c
-@@ -403,6 +403,20 @@ static int xp_init_dma_info(struct xsk_buff_pool *pool, struct xsk_dma_map *dma_
- 	return 0;
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index 0f0036b1514d..bc7b9ccb325a 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -1714,7 +1714,7 @@ static int virtnet_receive(struct receive_queue *rq, int budget,
+ 	return stats.packets;
  }
  
-+static void dma_sync_for_cpu(struct device *dev, dma_addr_t addr,
-+			     unsigned long offset, size_t size,
-+			     enum dma_data_direction dir)
-+{
-+	dma_sync_single_range_for_cpu(dev, addr, offset, size, dir);
-+}
-+
-+static void dma_sync_for_device(struct device *dev, dma_addr_t addr,
-+				unsigned long offset, size_t size,
-+				enum dma_data_direction dir)
-+{
-+	dma_sync_single_range_for_device(dev, addr, offset, size, dir);
-+}
-+
- int xp_dma_map(struct xsk_buff_pool *pool, struct device *dev,
- 	       unsigned long attrs, struct page **pages, u32 nr_pages)
+-static void free_old_xmit_skbs(struct send_queue *sq, bool in_napi)
++static void free_old_xmit(struct send_queue *sq, bool in_napi)
  {
-@@ -421,6 +435,9 @@ int xp_dma_map(struct xsk_buff_pool *pool, struct device *dev,
- 		return 0;
- 	}
+ 	unsigned int len;
+ 	unsigned int packets = 0;
+@@ -1778,7 +1778,7 @@ static void virtnet_poll_cleantx(struct receive_queue *rq)
  
-+	pool->dma_sync_for_cpu = dma_sync_for_cpu;
-+	pool->dma_sync_for_device = dma_sync_for_device;
-+
- 	dma_map = xp_create_dma_map(dev, pool->netdev, nr_pages, pool->umem);
- 	if (!dma_map)
- 		return -ENOMEM;
-@@ -667,15 +684,14 @@ EXPORT_SYMBOL(xp_raw_get_dma);
+ 		do {
+ 			virtqueue_disable_cb(sq->vq);
+-			free_old_xmit_skbs(sq, true);
++			free_old_xmit(sq, true);
+ 		} while (unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
  
- void xp_dma_sync_for_cpu_slow(struct xdp_buff_xsk *xskb)
- {
--	dma_sync_single_range_for_cpu(xskb->pool->dev, xskb->dma, 0,
--				      xskb->pool->frame_len, DMA_BIDIRECTIONAL);
-+	xskb->pool->dma_sync_for_cpu(xskb->pool->dev, xskb->dma, 0,
-+				     xskb->pool->frame_len, DMA_BIDIRECTIONAL);
- }
- EXPORT_SYMBOL(xp_dma_sync_for_cpu_slow);
+ 		if (sq->vq->num_free >= 2 + MAX_SKB_FRAGS)
+@@ -1870,7 +1870,7 @@ static int virtnet_poll_tx(struct napi_struct *napi, int budget)
+ 	txq = netdev_get_tx_queue(vi->dev, index);
+ 	__netif_tx_lock(txq, raw_smp_processor_id());
+ 	virtqueue_disable_cb(sq->vq);
+-	free_old_xmit_skbs(sq, true);
++	free_old_xmit(sq, true);
  
- void xp_dma_sync_for_device_slow(struct xsk_buff_pool *pool, dma_addr_t dma,
- 				 size_t size)
- {
--	dma_sync_single_range_for_device(pool->dev, dma, 0,
--					 size, DMA_BIDIRECTIONAL);
-+	pool->dma_sync_for_device(pool->dev, dma, 0, size, DMA_BIDIRECTIONAL);
- }
- EXPORT_SYMBOL(xp_dma_sync_for_device_slow);
+ 	if (sq->vq->num_free >= 2 + MAX_SKB_FRAGS)
+ 		netif_tx_wake_queue(txq);
+@@ -1960,7 +1960,7 @@ static netdev_tx_t start_xmit(struct sk_buff *skb, struct net_device *dev)
+ 		if (use_napi)
+ 			virtqueue_disable_cb(sq->vq);
+ 
+-		free_old_xmit_skbs(sq, false);
++		free_old_xmit(sq, false);
+ 
+ 	} while (use_napi && kick &&
+ 	       unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
+@@ -2006,7 +2006,7 @@ static netdev_tx_t start_xmit(struct sk_buff *skb, struct net_device *dev)
+ 				virtqueue_napi_schedule(&sq->napi, sq->vq);
+ 		} else if (unlikely(!virtqueue_enable_cb_delayed(sq->vq))) {
+ 			/* More just got used, free them then recheck. */
+-			free_old_xmit_skbs(sq, false);
++			free_old_xmit(sq, false);
+ 			if (sq->vq->num_free >= 2+MAX_SKB_FRAGS) {
+ 				netif_start_subqueue(dev, qnum);
+ 				virtqueue_disable_cb(sq->vq);
 -- 
 2.32.0.3.g01195cf9f
 
