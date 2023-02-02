@@ -2,123 +2,131 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2A9CC61DA4
-	for <bpf@archiver.kernel.org>; Thu,  2 Feb 2023 04:54:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10A57C05027
+	for <bpf@archiver.kernel.org>; Thu,  2 Feb 2023 05:01:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbjBBEyX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 Feb 2023 23:54:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42994 "EHLO
+        id S231544AbjBBFBm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Feb 2023 00:01:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjBBEyW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 1 Feb 2023 23:54:22 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101C56227B
-        for <bpf@vger.kernel.org>; Wed,  1 Feb 2023 20:54:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675313658; x=1706849658;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RxuR55X3AAe0WSdLaoBJfLJjrnmzU1QVMffDdTPAznE=;
-  b=X68OklCD/kntxnH99wDre/Uiax3bFaSI+glH3OMHnoOTW7CzeW5Yx2sZ
-   vkrPbCPXw5oqr7Cmlmdk7q5Uv1dPCYzwNLUFm3MNvcHMmbzxBosrdtb/o
-   +KKVxuvm/aX+ealVvienl0O2f0l8gNRhMPttTIPZI2dltsdmOe+elAT8E
-   rDsxKPKw4vj3+N4fgtJKz3Nl56nxIuIhmH6sPpus5Y6shjg0y1XHIWzVy
-   zSawECtYsPmdbg0roJlRWGzUQQ0k69WVg8hcmUHIJlJz4e5j0GINjGhoX
-   EE12bJWaNZc6JcvROdWVfGNG6LEOztWAL4KfpgJ8E5mcTKMwysBqgKtDt
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="390741308"
-X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
-   d="scan'208";a="390741308"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 20:54:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="658584547"
-X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
-   d="scan'208";a="658584547"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 01 Feb 2023 20:54:10 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pNRbu-0006AE-0N;
-        Thu, 02 Feb 2023 04:54:10 +0000
-Date:   Thu, 2 Feb 2023 12:53:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yafang Shao <laoar.shao@gmail.com>, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, tj@kernel.org, dennis@kernel.org, cl@linux.com,
-        akpm@linux-foundation.org, penberg@kernel.org, rientjes@google.com,
-        iamjoonsoo.kim@lge.com, roman.gushchin@linux.dev,
-        42.hyeyoo@gmail.com, vbabka@suse.cz, urezki@gmail.com
-Cc:     oe-kbuild-all@lists.linux.dev, linux-mm@kvack.org,
-        bpf@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
-Subject: Re: [PATCH bpf-next 6/7] bpf: introduce bpf_mem_alloc_size()
-Message-ID: <202302021258.By6JZK71-lkp@intel.com>
-References: <20230202014158.19616-7-laoar.shao@gmail.com>
+        with ESMTP id S231717AbjBBFBa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Feb 2023 00:01:30 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2057.outbound.protection.outlook.com [40.107.220.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98CE9762;
+        Wed,  1 Feb 2023 21:01:13 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hJhoV1cBJPnoK+FZsMN2gbkudKaQwKpoyE0mLiAjH8N4KNe38yhuBS4WJqSxeRMsgHyMmpp5A28jFdsjhKQizxDx+tZq/YARGs/cCtE8Do7frUMxnfYl2DXMaNbhqWC2hb8ueQE6Q5fLvnhvlsnVs/UBZ6QNZPdsDWrSSZJJ5dCFk9E5jog7zhkzlQHUqMtl73KReGFnWEwnoN4RyuQEWFK3A3DSa+L3QOGiYXUrvwTvDzVxRjFGvidYb+A1JAUQtpZAifnphR6MD1VOaofuYBf8akk2FSWrexYbF5Eyk50O+Z2+j0oecppdNrwSqF/QJmGCnHYuMQS5uAJz8h8CQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZSerDRDYu7C0LTnbh4GWzDDDhHgoKlloW/f/fAH1lmY=;
+ b=M77KWS1sS9VomifxhpHw1jKkvQApjqwRTMA7U+Mg1X2MfiVtZHhu9+W0Pe/AqfneLoai28QnW2JX64jhYjHEUQv4YMWXqPpFt9NLgdD+RTw47/wcYqBvfWOFzm4Dlw257RR69ph45Khr74vihjjkaZHRnDPl9nG5G6hpg9UC8qCfloQqOQeRftEfY6Gdw0p4DmzEINT66jxWTsM7ZhS6xwg8gO9hg4HVVCq4mbvHl0S5cCZSqh1YxxhrqT0fxW75kzffMZHGYLZdessTp4YDxqTuRvuQfdu/N0RnLBvQ+cUHDSrXSJ79oUX9Lzvdo9/QYWz1CSZGGQ1baib8uCbwSg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZSerDRDYu7C0LTnbh4GWzDDDhHgoKlloW/f/fAH1lmY=;
+ b=umpUHJY2/0zq98hIMd63cQVjJSPf1/+xf3SuPgi0V2Nck2aqk4aLP1XmdSahKtWYWm8Ek3S6Fbe8bFP+ZubEBw/V0hJOmVGiEMqjMcWPmzPfKeq/sZlgN4SfpjlgPwnIN99C5RjIDDUp2ruP49Y0h6OWRhFMBaBGIxMYYxjG7TnF8R7cqn6ew0Giz9HDxwegw6LjlYbhCKvMtvX2kqsBaz72UgvNwiHgjduQUaHBzQDB/MEpYh02sjzr+4D1pIlI3YnLAoxEnE9jS273csq6D61LDoRCr6gm3YiHQZbv9gNiBj53ROaLMACllf4AZquFYEAogWKbitEsJrXkj/d6vQ==
+Received: from DS7PR06CA0032.namprd06.prod.outlook.com (2603:10b6:8:54::17) by
+ LV2PR12MB5944.namprd12.prod.outlook.com (2603:10b6:408:14f::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.25; Thu, 2 Feb
+ 2023 05:01:11 +0000
+Received: from DM6NAM11FT060.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:54:cafe::11) by DS7PR06CA0032.outlook.office365.com
+ (2603:10b6:8:54::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.25 via Frontend
+ Transport; Thu, 2 Feb 2023 05:01:11 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DM6NAM11FT060.mail.protection.outlook.com (10.13.173.63) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6064.25 via Frontend Transport; Thu, 2 Feb 2023 05:01:11 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 1 Feb 2023
+ 21:01:00 -0800
+Received: from sw-mtx-036.mtx.labs.mlnx (10.126.231.37) by
+ rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 1 Feb 2023 21:00:58 -0800
+From:   Parav Pandit <parav@nvidia.com>
+To:     <mst@redhat.com>, <jasowang@redhat.com>, <davem@davemloft.net>,
+        <kuba@kernel.org>, <netdev@vger.kernel.org>
+CC:     <edumazet@google.com>, <pabeni@redhat.com>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <hawk@kernel.org>,
+        <virtualization@lists.linux-foundation.org>, <bpf@vger.kernel.org>,
+        "Parav Pandit" <parav@nvidia.com>
+Subject: [PATCH 1/2] virtio-net: Keep stop() to follow mirror sequence of open()
+Date:   Thu, 2 Feb 2023 07:00:37 +0200
+Message-ID: <20230202050038.3187-2-parav@nvidia.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20230202050038.3187-1-parav@nvidia.com>
+References: <20230202050038.3187-1-parav@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230202014158.19616-7-laoar.shao@gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.126.231.37]
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT060:EE_|LV2PR12MB5944:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4da7354a-96ad-4375-b385-08db04da80f2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +iljATCJdZdcN7mukaC2Af2ELd9E+kvFo8zRB9VeWWH/fzoyQJZ8yfm71uj9u2xwQ4SyPsvl5VwlB/oOEBN/QlGiBC3diSGFWOlIaLrNKbSfOTbWf/rtILe2huf1vRIj1CtKcAoYdPMMnQ8eRs8rCUBfZ0GPzlWWZFfQuAe6yuvWnOZ/1bi0paGXye/416bv99e1sEJO6RNgkQ7DvHpJMN+QYe6UZdSXLbhGwP+p2+PHOYP/Mw/wVaVMfTjpZjicNbqOwvMcDBEZGHPswsKifLbtBkeOB+62E1cbmOc1JRD3Wi75k8ARXOu4acEPdm+AwYVBsB32heehJbYyc7BZDMiIRxSrddsDGx9TZg8c9FniL+l19hdL05j0VudRYZhnoK6KhTz7BE0zXi7jKtaeyvcLdUBv36x61AFqXQ2C34Jugl4g+/RM9j/GA3Ju//N7tq6tmkm9rWhTnkIsbIxH3idklS3myMEMcbvfTN8sBTkHo5x0bFja7AuQ0klIcT7jWG4z5D6K+CRH4Y1PsaBckrt1LY9UFqpmQpxipDj6ExFjR7/OUhMRYJxWbTc5PrIJyfykuqORych+G85VbbLavnPOaIAz3TOm5BzihZWlFI07gjiRzIBh9OcUD1m/mN8G+rSQ9ya+4md5Nbv3RimhDmHqabB2M5ryM3bjg1NZaOYwt7jAKASb+7mRgE/6tM3XfX/0ZEJ0PV0I7t5wZ+PyEA==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(39860400002)(396003)(346002)(451199018)(40470700004)(36840700001)(46966006)(2906002)(4326008)(41300700001)(8676002)(70586007)(70206006)(7416002)(8936002)(5660300002)(4744005)(82740400003)(7636003)(40460700003)(36860700001)(107886003)(6666004)(478600001)(40480700001)(2616005)(356005)(186003)(16526019)(1076003)(82310400005)(36756003)(86362001)(26005)(316002)(83380400001)(54906003)(110136005)(426003)(336012)(47076005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2023 05:01:11.4421
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4da7354a-96ad-4375-b385-08db04da80f2
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT060.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5944
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Yafang,
+Cited commit in fixes tag frees rxq xdp info while RQ NAPI is
+still enabled and packet processing may be ongoing.
 
-Thank you for the patch! Perhaps something to improve:
+Follow the mirror sequence of open() in the stop() callback.
+This ensures that when rxq info is unregistered, no rx
+packet processing is ongoing.
 
-[auto build test WARNING on bpf-next/master]
+Fixes: 754b8a21a96d ("virtio_net: setup xdp_rxq_info")
+Signed-off-by: Parav Pandit <parav@nvidia.com>
+---
+ drivers/net/virtio_net.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yafang-Shao/mm-percpu-fix-incorrect-size-in-pcpu_obj_full_size/20230202-094352
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20230202014158.19616-7-laoar.shao%40gmail.com
-patch subject: [PATCH bpf-next 6/7] bpf: introduce bpf_mem_alloc_size()
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230202/202302021258.By6JZK71-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/996f3e2ac4dca054396d0f37ffe8ddb97fc4212f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yafang-Shao/mm-percpu-fix-incorrect-size-in-pcpu_obj_full_size/20230202-094352
-        git checkout 996f3e2ac4dca054396d0f37ffe8ddb97fc4212f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash kernel/bpf/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> kernel/bpf/memalloc.c:227:15: warning: no previous prototype for 'bpf_mem_cache_size' [-Wmissing-prototypes]
-     227 | unsigned long bpf_mem_cache_size(struct bpf_mem_cache *c, void *obj)
-         |               ^~~~~~~~~~~~~~~~~~
-
-
-vim +/bpf_mem_cache_size +227 kernel/bpf/memalloc.c
-
-   226	
- > 227	unsigned long bpf_mem_cache_size(struct bpf_mem_cache *c, void *obj)
-   228	{
-   229		unsigned long size;
-   230	
-   231		if (!obj)
-   232			return 0;
-   233	
-   234		if (c->percpu_size) {
-   235			size = percpu_size(((void **)obj)[1]);
-   236			size += ksize(obj);
-   237			return size;
-   238		}
-   239	
-   240		return ksize(obj);
-   241	}
-   242	
-
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index 7e1a98430190..b7d0b54c3bb0 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -2279,8 +2279,8 @@ static int virtnet_close(struct net_device *dev)
+ 	cancel_delayed_work_sync(&vi->refill);
+ 
+ 	for (i = 0; i < vi->max_queue_pairs; i++) {
+-		xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
+ 		napi_disable(&vi->rq[i].napi);
++		xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
+ 		virtnet_napi_tx_disable(&vi->sq[i].napi);
+ 	}
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.26.2
+
