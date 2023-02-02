@@ -2,22 +2,22 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC904C05027
-	for <bpf@archiver.kernel.org>; Thu,  2 Feb 2023 11:01:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBBC6C636D3
+	for <bpf@archiver.kernel.org>; Thu,  2 Feb 2023 11:01:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232609AbjBBLBo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Feb 2023 06:01:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58502 "EHLO
+        id S231208AbjBBLBp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Feb 2023 06:01:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232651AbjBBLBY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S232644AbjBBLBY (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 2 Feb 2023 06:01:24 -0500
-Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E025188985;
-        Thu,  2 Feb 2023 03:01:21 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VakfX1j_1675335675;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VakfX1j_1675335675)
+Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF92885E3;
+        Thu,  2 Feb 2023 03:01:18 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VakpyCS_1675335673;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VakpyCS_1675335673)
           by smtp.aliyun-inc.com;
-          Thu, 02 Feb 2023 19:01:15 +0800
+          Thu, 02 Feb 2023 19:01:13 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     netdev@vger.kernel.org
 Cc:     "David S. Miller" <davem@davemloft.net>,
@@ -39,9 +39,9 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         Kuniyuki Iwashima <kuniyu@amazon.com>,
         Petr Machata <petrm@nvidia.com>,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: [PATCH 14/33] virtio_net: independent directory
-Date:   Thu,  2 Feb 2023 19:00:39 +0800
-Message-Id: <20230202110058.130695-15-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH 12/33] virtio_net: unify the code for recycling the xmit ptr
+Date:   Thu,  2 Feb 2023 19:00:37 +0800
+Message-Id: <20230202110058.130695-13-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20230202110058.130695-1-xuanzhuo@linux.alibaba.com>
 References: <20230202110058.130695-1-xuanzhuo@linux.alibaba.com>
@@ -52,103 +52,144 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Create a separate directory for virtio-net. AF_XDP support will be added
-later, then a separate xsk.c file will be added, so we should create a
-directory for virtio-net.
+There are two completely similar and independent implementations. This
+is inconvenient for the subsequent addition of new types. So extract a
+function from this piece of code and call this function uniformly to
+recover old xmit ptr.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- MAINTAINERS                                 |  2 +-
- drivers/net/Kconfig                         |  8 +-------
- drivers/net/Makefile                        |  2 +-
- drivers/net/virtio/Kconfig                  | 11 +++++++++++
- drivers/net/virtio/Makefile                 |  8 ++++++++
- drivers/net/{virtio_net.c => virtio/main.c} |  0
- 6 files changed, 22 insertions(+), 9 deletions(-)
- create mode 100644 drivers/net/virtio/Kconfig
- create mode 100644 drivers/net/virtio/Makefile
- rename drivers/net/{virtio_net.c => virtio/main.c} (100%)
+ drivers/net/virtio_net.c | 76 +++++++++++++++++-----------------------
+ 1 file changed, 33 insertions(+), 43 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8cdba0580cb8..4f2bb7013768 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -22052,7 +22052,7 @@ F:	Documentation/ABI/testing/sysfs-class-vduse
- F:	Documentation/devicetree/bindings/virtio/
- F:	drivers/block/virtio_blk.c
- F:	drivers/crypto/virtio/
--F:	drivers/net/virtio_net.c
-+F:	drivers/net/virtio/
- F:	drivers/vdpa/
- F:	drivers/virtio/
- F:	include/linux/vdpa.h
-diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
-index 950a09f021dd..825a091c902a 100644
---- a/drivers/net/Kconfig
-+++ b/drivers/net/Kconfig
-@@ -408,13 +408,7 @@ config VETH
- 	  When one end receives the packet it appears on its pair and vice
- 	  versa.
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index bc7b9ccb325a..058ec6ca7cfc 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -318,6 +318,30 @@ static struct xdp_frame *ptr_to_xdp(void *ptr)
+ 	return (struct xdp_frame *)((unsigned long)ptr & ~VIRTIO_XDP_FLAG);
+ }
  
--config VIRTIO_NET
--	tristate "Virtio network driver"
--	depends on VIRTIO
--	select NET_FAILOVER
--	help
--	  This is the virtual network driver for virtio.  It can be used with
--	  QEMU based VMMs (like KVM or Xen).  Say Y or M.
-+source "drivers/net/virtio/Kconfig"
++static void __free_old_xmit(struct send_queue *sq, bool in_napi,
++			    struct virtnet_sq_stats *stats)
++{
++	unsigned int len;
++	void *ptr;
++
++	while ((ptr = virtqueue_get_buf(sq->vq, &len)) != NULL) {
++		if (!is_xdp_frame(ptr)) {
++			struct sk_buff *skb = ptr;
++
++			pr_debug("Sent skb %p\n", skb);
++
++			stats->bytes += skb->len;
++			napi_consume_skb(skb, in_napi);
++		} else {
++			struct xdp_frame *frame = ptr_to_xdp(ptr);
++
++			stats->bytes += xdp_get_frame_len(frame);
++			xdp_return_frame(frame);
++		}
++		stats->packets++;
++	}
++}
++
+ /* Converting between virtqueue no. and kernel tx/rx queue no.
+  * 0:rx0 1:tx0 2:rx1 3:tx1 ... 2N:rxN 2N+1:txN 2N+2:cvq
+  */
+@@ -635,15 +659,12 @@ static int virtnet_xdp_xmit(struct net_device *dev,
+ 			    int n, struct xdp_frame **frames, u32 flags)
+ {
+ 	struct virtnet_info *vi = netdev_priv(dev);
++	struct virtnet_sq_stats stats = {};
+ 	struct receive_queue *rq = vi->rq;
+ 	struct bpf_prog *xdp_prog;
+ 	struct send_queue *sq;
+-	unsigned int len;
+-	int packets = 0;
+-	int bytes = 0;
+ 	int nxmit = 0;
+ 	int kicks = 0;
+-	void *ptr;
+ 	int ret;
+ 	int i;
  
- config NLMON
- 	tristate "Virtual netlink monitoring device"
-diff --git a/drivers/net/Makefile b/drivers/net/Makefile
-index e26f98f897c5..47537dd0f120 100644
---- a/drivers/net/Makefile
-+++ b/drivers/net/Makefile
-@@ -31,7 +31,7 @@ obj-$(CONFIG_NET_TEAM) += team/
- obj-$(CONFIG_TUN) += tun.o
- obj-$(CONFIG_TAP) += tap.o
- obj-$(CONFIG_VETH) += veth.o
--obj-$(CONFIG_VIRTIO_NET) += virtio_net.o
-+obj-$(CONFIG_VIRTIO_NET) += virtio/
- obj-$(CONFIG_VXLAN) += vxlan/
- obj-$(CONFIG_GENEVE) += geneve.o
- obj-$(CONFIG_BAREUDP) += bareudp.o
-diff --git a/drivers/net/virtio/Kconfig b/drivers/net/virtio/Kconfig
-new file mode 100644
-index 000000000000..9bc2a2fc6c3e
---- /dev/null
-+++ b/drivers/net/virtio/Kconfig
-@@ -0,0 +1,11 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# virtio-net device configuration
-+#
-+config VIRTIO_NET
-+	tristate "Virtio network driver"
-+	depends on VIRTIO
-+	select NET_FAILOVER
-+	help
-+	  This is the virtual network driver for virtio.  It can be used with
-+	  QEMU based VMMs (like KVM or Xen).  Say Y or M.
-diff --git a/drivers/net/virtio/Makefile b/drivers/net/virtio/Makefile
-new file mode 100644
-index 000000000000..15ed7c97fd4f
---- /dev/null
-+++ b/drivers/net/virtio/Makefile
-@@ -0,0 +1,8 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Makefile for the virtio network device drivers.
-+#
-+
-+obj-$(CONFIG_VIRTIO_NET) += virtio_net.o
-+
-+virtio_net-y := main.o
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio/main.c
-similarity index 100%
-rename from drivers/net/virtio_net.c
-rename to drivers/net/virtio/main.c
+@@ -662,20 +683,7 @@ static int virtnet_xdp_xmit(struct net_device *dev,
+ 	}
+ 
+ 	/* Free up any pending old buffers before queueing new ones. */
+-	while ((ptr = virtqueue_get_buf(sq->vq, &len)) != NULL) {
+-		if (likely(is_xdp_frame(ptr))) {
+-			struct xdp_frame *frame = ptr_to_xdp(ptr);
+-
+-			bytes += xdp_get_frame_len(frame);
+-			xdp_return_frame(frame);
+-		} else {
+-			struct sk_buff *skb = ptr;
+-
+-			bytes += skb->len;
+-			napi_consume_skb(skb, false);
+-		}
+-		packets++;
+-	}
++	__free_old_xmit(sq, false, &stats);
+ 
+ 	for (i = 0; i < n; i++) {
+ 		struct xdp_frame *xdpf = frames[i];
+@@ -692,8 +700,8 @@ static int virtnet_xdp_xmit(struct net_device *dev,
+ 	}
+ out:
+ 	u64_stats_update_begin(&sq->stats.syncp);
+-	sq->stats.bytes += bytes;
+-	sq->stats.packets += packets;
++	sq->stats.bytes += stats.bytes;
++	sq->stats.packets += stats.packets;
+ 	sq->stats.xdp_tx += n;
+ 	sq->stats.xdp_tx_drops += n - nxmit;
+ 	sq->stats.kicks += kicks;
+@@ -1716,37 +1724,19 @@ static int virtnet_receive(struct receive_queue *rq, int budget,
+ 
+ static void free_old_xmit(struct send_queue *sq, bool in_napi)
+ {
+-	unsigned int len;
+-	unsigned int packets = 0;
+-	unsigned int bytes = 0;
+-	void *ptr;
++	struct virtnet_sq_stats stats = {};
+ 
+-	while ((ptr = virtqueue_get_buf(sq->vq, &len)) != NULL) {
+-		if (likely(!is_xdp_frame(ptr))) {
+-			struct sk_buff *skb = ptr;
+-
+-			pr_debug("Sent skb %p\n", skb);
+-
+-			bytes += skb->len;
+-			napi_consume_skb(skb, in_napi);
+-		} else {
+-			struct xdp_frame *frame = ptr_to_xdp(ptr);
+-
+-			bytes += xdp_get_frame_len(frame);
+-			xdp_return_frame(frame);
+-		}
+-		packets++;
+-	}
++	__free_old_xmit(sq, in_napi, &stats);
+ 
+ 	/* Avoid overhead when no packets have been processed
+ 	 * happens when called speculatively from start_xmit.
+ 	 */
+-	if (!packets)
++	if (!stats.packets)
+ 		return;
+ 
+ 	u64_stats_update_begin(&sq->stats.syncp);
+-	sq->stats.bytes += bytes;
+-	sq->stats.packets += packets;
++	sq->stats.bytes += stats.bytes;
++	sq->stats.packets += stats.packets;
+ 	u64_stats_update_end(&sq->stats.syncp);
+ }
+ 
 -- 
 2.32.0.3.g01195cf9f
 
