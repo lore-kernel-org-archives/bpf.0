@@ -2,111 +2,81 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BCAF8C61DA4
-	for <bpf@archiver.kernel.org>; Thu,  2 Feb 2023 06:26:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 894D2C61DA4
+	for <bpf@archiver.kernel.org>; Thu,  2 Feb 2023 06:31:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231357AbjBBG0M (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Feb 2023 01:26:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59582 "EHLO
+        id S230487AbjBBGbf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Feb 2023 01:31:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbjBBG0L (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Feb 2023 01:26:11 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B68244B0
-        for <bpf@vger.kernel.org>; Wed,  1 Feb 2023 22:26:09 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id j29-20020a05600c1c1d00b003dc52fed235so537304wms.1
-        for <bpf@vger.kernel.org>; Wed, 01 Feb 2023 22:26:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=CMLCNaae3i76rjj2IAaEmT8qW6vZI37Z/4JXfn9a9ZM=;
-        b=ETCSalYO/Dd9vpv0RuUgZO04cKnFMFlvaaS0RHueXo9QmyrCcVJO5sf+Ywo5Oh5iFw
-         wTd7qxeN3oBffM3P39Tmq8mlAZIiYN/90XKEMoHwwnfjklaqkkly6p6dooQy1dMrKK6N
-         pMxL0+1omMl0JwDW1XKVJzG1QZO2H9BBHqVbJl4Q1G9xosoEzDpTgj1cuQjypoKYMjVe
-         ePGyCO1QrGWROj8dQh4/7X2ic9iO/ZOcVNpNZ0QygPJJEZgU8dgUDRU0bXcwuwjFYpAy
-         e5lUwzNXxqivyexa7YFP31D+ZnDxMva6ya7U597pRujAeGUkJcFU5to39WJLo0gQdMZh
-         8CXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CMLCNaae3i76rjj2IAaEmT8qW6vZI37Z/4JXfn9a9ZM=;
-        b=0nLCZEjrXrBj2OkUmH3vEKpHH3HMCX67ppGf/iMl7nunJt9mSW/H9w6LLSa17280EH
-         eepZN+hly1SAamluLP0nE0uGD5E6ZvINAPjTfZe8/wwd45KZ57JrAn4fyj+bM7qhKd2X
-         zqCyg2s7O4OtYIM6QAN1xglLZJXR48kcd4Zu82vSVzNw0MFltJP79zyHZylSlrbuCZjY
-         +vTVfZuzOpmvpY9dC1yURYC130AUbpzb8cgYFcUM9BaJ77iGzVvgHA27jC6ePBeHlQ+u
-         eRywJJo9/UkXXlvXdW4M4KIl7L94owVvIbJptgMKGlHRiGkzNy5TD9xhO0ADuFfe8zuq
-         60hw==
-X-Gm-Message-State: AO0yUKU/fLL8S5cGHXw7ogjKyiyjVHzR5q/XZgZXi3Mb2OvFHAuoAtbT
-        x0pJXfvaC4sRYDCFA6g6KaWbxpSyqZk=
-X-Google-Smtp-Source: AK7set/uqKKyp/ZKs2P81GQVlF6bp5/DGVXeRsiUalrBor/LornRqLkZipm2jgMPays0xRqg6gGfIA==
-X-Received: by 2002:a05:600c:4586:b0:3de:e447:8025 with SMTP id r6-20020a05600c458600b003dee4478025mr4141961wmo.21.1675319167576;
-        Wed, 01 Feb 2023 22:26:07 -0800 (PST)
-Received: from localhost.localdomain ([87.68.177.114])
-        by smtp.gmail.com with ESMTPSA id k27-20020a05600c081b00b003de77597f16sm3577672wmp.21.2023.02.01.22.26.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 22:26:07 -0800 (PST)
-From:   Jon Doron <arilou@gmail.com>
-To:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org
-Cc:     Jon Doron <jond@wiz.io>
-Subject: [PATCH bpf-next v2] libbpf: Add wakeup_events to creation options
-Date:   Thu,  2 Feb 2023 08:25:49 +0200
-Message-Id: <20230202062549.632425-1-arilou@gmail.com>
-X-Mailer: git-send-email 2.39.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S229602AbjBBGbe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Feb 2023 01:31:34 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D9447E685;
+        Wed,  1 Feb 2023 22:31:30 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8BxLuvBWNtjkSgMAA--.24557S3;
+        Thu, 02 Feb 2023 14:31:29 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axvr6_WNtjUScnAA--.16445S3;
+        Thu, 02 Feb 2023 14:31:28 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next 1/2] tools/bpf: Use tab instead of white spaces to sync bpf.h
+Date:   Thu,  2 Feb 2023 14:31:25 +0800
+Message-Id: <1675319486-27744-2-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+In-Reply-To: <1675319486-27744-1-git-send-email-yangtiezhu@loongson.cn>
+References: <1675319486-27744-1-git-send-email-yangtiezhu@loongson.cn>
+X-CM-TRANSID: AQAAf8Axvr6_WNtjUScnAA--.16445S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvdXoWrZFykXw4xKry8Aw4fCrWrAFb_yoWfCFcEk3
+        43Cw4xGryDury7Xw17uan8Zrn5t34fA34v9F1rtr17CFy3Zw45K34kAF97Gw4Y93ZrGr4k
+        tF13urW0qrsxWjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        87kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
+        AFIxvE14AKwVWUGVWUXwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
+        6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
+        xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS
+        0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0V
+        AKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1l
+        Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s
+        026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
+        JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
+        v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xva
+        j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
+        W8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8vD73UUUUU==
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jon Doron <jond@wiz.io>
+Just silence the following build warning:
 
-Add option to set when the perf buffer should wake up, by default the
-perf buffer becomes signaled for every event that is being pushed to it.
+Warning: Kernel ABI header at 'tools/include/uapi/linux/bpf.h' differs from latest version at 'include/uapi/linux/bpf.h'
 
-In case of a high throughput of events it will be more efficient to wake
-up only once you have X events ready to be read.
-
-So your application can wakeup once and drain the entire perf buffer.
-
-Signed-off-by: Jon Doron <jond@wiz.io>
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- tools/lib/bpf/libbpf.c | 4 ++--
- tools/lib/bpf/libbpf.h | 3 ++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ tools/include/uapi/linux/bpf.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index eed5cec6f510..6b30ff13922b 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -11719,8 +11719,8 @@ struct perf_buffer *perf_buffer__new(int map_fd, size_t page_cnt,
- 	attr.config = PERF_COUNT_SW_BPF_OUTPUT;
- 	attr.type = PERF_TYPE_SOFTWARE;
- 	attr.sample_type = PERF_SAMPLE_RAW;
--	attr.sample_period = 1;
--	attr.wakeup_events = 1;
-+	attr.sample_period = OPTS_GET(opts, wakeup_events, 1);
-+	attr.wakeup_events = OPTS_GET(opts, wakeup_events, 1);
- 
- 	p.attr = &attr;
- 	p.sample_cb = sample_cb;
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 8777ff21ea1d..e83c0a915dc7 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -1246,8 +1246,9 @@ typedef void (*perf_buffer_lost_fn)(void *ctx, int cpu, __u64 cnt);
- /* common use perf buffer options */
- struct perf_buffer_opts {
- 	size_t sz;
-+	__u32 wakeup_events;
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 7f024ac..ba0f0cf 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -5817,8 +5817,8 @@ enum {
+ 	BPF_F_ADJ_ROOM_ENCAP_L4_UDP	= (1ULL << 4),
+ 	BPF_F_ADJ_ROOM_NO_CSUM_RESET	= (1ULL << 5),
+ 	BPF_F_ADJ_ROOM_ENCAP_L2_ETH	= (1ULL << 6),
+-	BPF_F_ADJ_ROOM_DECAP_L3_IPV4    = (1ULL << 7),
+-	BPF_F_ADJ_ROOM_DECAP_L3_IPV6    = (1ULL << 8),
++	BPF_F_ADJ_ROOM_DECAP_L3_IPV4	= (1ULL << 7),
++	BPF_F_ADJ_ROOM_DECAP_L3_IPV6	= (1ULL << 8),
  };
--#define perf_buffer_opts__last_field sz
-+#define perf_buffer_opts__last_field wakeup_events
  
- /**
-  * @brief **perf_buffer__new()** creates BPF perfbuf manager for a specified
+ enum {
 -- 
-2.39.1
+2.1.0
 
