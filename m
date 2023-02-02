@@ -2,22 +2,22 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 655D0C05027
-	for <bpf@archiver.kernel.org>; Thu,  2 Feb 2023 11:01:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A91E7C61DA4
+	for <bpf@archiver.kernel.org>; Thu,  2 Feb 2023 11:01:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232484AbjBBLBi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Feb 2023 06:01:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58510 "EHLO
+        id S232505AbjBBLBj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Feb 2023 06:01:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232613AbjBBLBX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S232504AbjBBLBX (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 2 Feb 2023 06:01:23 -0500
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00DE6885E4;
-        Thu,  2 Feb 2023 03:01:18 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VakkM4._1675335674;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VakkM4._1675335674)
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC02B8717A;
+        Thu,  2 Feb 2023 03:01:16 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R301e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VakkM2s_1675335670;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VakkM2s_1675335670)
           by smtp.aliyun-inc.com;
-          Thu, 02 Feb 2023 19:01:14 +0800
+          Thu, 02 Feb 2023 19:01:11 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     netdev@vger.kernel.org
 Cc:     "David S. Miller" <davem@davemloft.net>,
@@ -39,9 +39,9 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         Kuniyuki Iwashima <kuniyu@amazon.com>,
         Petr Machata <petrm@nvidia.com>,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: [PATCH 13/33] virtio_net: virtnet_poll_tx support rescheduled
-Date:   Thu,  2 Feb 2023 19:00:38 +0800
-Message-Id: <20230202110058.130695-14-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH 10/33] xsk: support virtio DMA map
+Date:   Thu,  2 Feb 2023 19:00:35 +0800
+Message-Id: <20230202110058.130695-11-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20230202110058.130695-1-xuanzhuo@linux.alibaba.com>
 References: <20230202110058.130695-1-xuanzhuo@linux.alibaba.com>
@@ -52,46 +52,118 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-virtnet_poll_tx() support to return budget when busy to be rescheduled.
-
-When retval < budget, napi_poll() in dev.c will exit directly. And
-virtqueue_napi_complete() will be called to close napi.
-
-When retval == budget, the napi_poll() in dev.c will re-add napi to the
-queue.
-
-The purpose of this patch is to support xsk xmit in virtio_poll_tx() for
-subsequent patch.
+When device is a virtio device, use virtio's DMA interface.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- drivers/net/virtio_net.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ net/xdp/xsk_buff_pool.c | 59 +++++++++++++++++++++++++++++++----------
+ 1 file changed, 45 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 058ec6ca7cfc..eb7f00194b5c 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -1848,6 +1848,7 @@ static int virtnet_poll_tx(struct napi_struct *napi, int budget)
- 	struct virtnet_info *vi = sq->vq->vdev->priv;
- 	unsigned int index = vq2txq(sq->vq);
- 	struct netdev_queue *txq;
-+	int busy = 0;
- 	int opaque;
- 	bool done;
+diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+index 78e325e195fa..e2785aca8396 100644
+--- a/net/xdp/xsk_buff_pool.c
++++ b/net/xdp/xsk_buff_pool.c
+@@ -3,6 +3,7 @@
+ #include <net/xsk_buff_pool.h>
+ #include <net/xdp_sock.h>
+ #include <net/xdp_sock_drv.h>
++#include <linux/virtio.h>
  
-@@ -1865,6 +1866,11 @@ static int virtnet_poll_tx(struct napi_struct *napi, int budget)
- 	if (sq->vq->num_free >= 2 + MAX_SKB_FRAGS)
- 		netif_tx_wake_queue(txq);
+ #include "xsk_queue.h"
+ #include "xdp_umem.h"
+@@ -334,8 +335,12 @@ static void __xp_dma_unmap(struct xsk_dma_map *dma_map, unsigned long attrs)
+ 		dma = &dma_map->dma_pages[i];
+ 		if (*dma) {
+ 			*dma &= ~XSK_NEXT_PG_CONTIG_MASK;
+-			dma_unmap_page_attrs(dma_map->dev, *dma, PAGE_SIZE,
+-					     DMA_BIDIRECTIONAL, attrs);
++			if (is_virtio_device(dma_map->dev))
++				virtio_dma_unmap(dma_map->dev, *dma, PAGE_SIZE,
++						 DMA_BIDIRECTIONAL);
++			else
++				dma_unmap_page_attrs(dma_map->dev, *dma, PAGE_SIZE,
++						     DMA_BIDIRECTIONAL, attrs);
+ 			*dma = 0;
+ 		}
+ 	}
+@@ -435,22 +440,40 @@ int xp_dma_map(struct xsk_buff_pool *pool, struct device *dev,
+ 		return 0;
+ 	}
  
-+	if (busy) {
-+		__netif_tx_unlock(txq);
-+		return budget;
-+	}
+-	pool->dma_sync_for_cpu = dma_sync_for_cpu;
+-	pool->dma_sync_for_device = dma_sync_for_device;
++	if (is_virtio_device(dev)) {
++		pool->dma_sync_for_cpu = virtio_dma_sync_signle_range_for_cpu;
++		pool->dma_sync_for_device = virtio_dma_sync_signle_range_for_device;
 +
- 	opaque = virtqueue_enable_cb_prepare(sq->vq);
++	} else {
++		pool->dma_sync_for_cpu = dma_sync_for_cpu;
++		pool->dma_sync_for_device = dma_sync_for_device;
++	}
  
- 	done = napi_complete_done(napi, 0);
+ 	dma_map = xp_create_dma_map(dev, pool->netdev, nr_pages, pool->umem);
+ 	if (!dma_map)
+ 		return -ENOMEM;
+ 
+ 	for (i = 0; i < dma_map->dma_pages_cnt; i++) {
+-		dma = dma_map_page_attrs(dev, pages[i], 0, PAGE_SIZE,
+-					 DMA_BIDIRECTIONAL, attrs);
+-		if (dma_mapping_error(dev, dma)) {
+-			__xp_dma_unmap(dma_map, attrs);
+-			return -ENOMEM;
++		if (is_virtio_device(dev)) {
++			dma = virtio_dma_map_page(dev, pages[i], 0, PAGE_SIZE,
++						  DMA_BIDIRECTIONAL);
++
++			if (virtio_dma_mapping_error(dev, dma))
++				goto err;
++
++			if (virtio_dma_need_sync(dev, dma))
++				dma_map->dma_need_sync = true;
++
++		} else {
++			dma = dma_map_page_attrs(dev, pages[i], 0, PAGE_SIZE,
++						 DMA_BIDIRECTIONAL, attrs);
++
++			if (dma_mapping_error(dev, dma))
++				goto err;
++
++			if (dma_need_sync(dev, dma))
++				dma_map->dma_need_sync = true;
+ 		}
+-		if (dma_need_sync(dev, dma))
+-			dma_map->dma_need_sync = true;
+ 		dma_map->dma_pages[i] = dma;
+ 	}
+ 
+@@ -464,6 +487,9 @@ int xp_dma_map(struct xsk_buff_pool *pool, struct device *dev,
+ 	}
+ 
+ 	return 0;
++err:
++	__xp_dma_unmap(dma_map, attrs);
++	return -ENOMEM;
+ }
+ EXPORT_SYMBOL(xp_dma_map);
+ 
+@@ -546,9 +572,14 @@ struct xdp_buff *xp_alloc(struct xsk_buff_pool *pool)
+ 	xskb->xdp.data_meta = xskb->xdp.data;
+ 
+ 	if (pool->dma_need_sync) {
+-		dma_sync_single_range_for_device(pool->dev, xskb->dma, 0,
+-						 pool->frame_len,
+-						 DMA_BIDIRECTIONAL);
++		if (is_virtio_device(pool->dev))
++			virtio_dma_sync_signle_range_for_device(pool->dev, xskb->dma, 0,
++								pool->frame_len,
++								DMA_BIDIRECTIONAL);
++		else
++			dma_sync_single_range_for_device(pool->dev, xskb->dma, 0,
++							 pool->frame_len,
++							 DMA_BIDIRECTIONAL);
+ 	}
+ 	return &xskb->xdp;
+ }
 -- 
 2.32.0.3.g01195cf9f
 
