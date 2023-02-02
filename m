@@ -2,22 +2,22 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DED2C636D3
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC53EC636D6
 	for <bpf@archiver.kernel.org>; Thu,  2 Feb 2023 11:02:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232245AbjBBLCF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Feb 2023 06:02:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58462 "EHLO
+        id S232313AbjBBLCG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Feb 2023 06:02:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232265AbjBBLBn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Feb 2023 06:01:43 -0500
-Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE63087598;
-        Thu,  2 Feb 2023 03:01:33 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0Vaksab1_1675335688;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vaksab1_1675335688)
+        with ESMTP id S231737AbjBBLBm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Feb 2023 06:01:42 -0500
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02AC2885D3;
+        Thu,  2 Feb 2023 03:01:31 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R851e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VakpyGG_1675335686;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VakpyGG_1675335686)
           by smtp.aliyun-inc.com;
-          Thu, 02 Feb 2023 19:01:29 +0800
+          Thu, 02 Feb 2023 19:01:26 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     netdev@vger.kernel.org
 Cc:     "David S. Miller" <davem@davemloft.net>,
@@ -39,9 +39,9 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         Kuniyuki Iwashima <kuniyu@amazon.com>,
         Petr Machata <petrm@nvidia.com>,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: [PATCH 26/33] virtio_net: virtnet_sq_free_unused_buf() check xsk buffer
-Date:   Thu,  2 Feb 2023 19:00:51 +0800
-Message-Id: <20230202110058.130695-27-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH 24/33] virtio_net: xsk: stop disable tx napi
+Date:   Thu,  2 Feb 2023 19:00:49 +0800
+Message-Id: <20230202110058.130695-25-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20230202110058.130695-1-xuanzhuo@linux.alibaba.com>
 References: <20230202110058.130695-1-xuanzhuo@linux.alibaba.com>
@@ -52,32 +52,35 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-virtnet_sq_free_unused_buf() check xsk buffer.
+Since xsk's TX queue is consumed by TX NAPI, if sq is bound to xsk, then
+we must stop tx napi from being disabled.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- drivers/net/virtio/main.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/net/virtio/main.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/virtio/main.c b/drivers/net/virtio/main.c
-index 232cf151abff..ced9a37f706b 100644
+index ed79e750bc6c..232cf151abff 100644
 --- a/drivers/net/virtio/main.c
 +++ b/drivers/net/virtio/main.c
-@@ -3285,10 +3285,12 @@ static void free_receive_page_frags(struct virtnet_info *vi)
+@@ -2728,8 +2728,15 @@ static int virtnet_set_coalesce(struct net_device *dev,
+ 		return ret;
  
- static void virtnet_sq_free_unused_buf(struct virtqueue *vq, void *buf)
- {
--	if (!is_xdp_frame(buf))
-+	if (is_skb_ptr(buf))
- 		dev_kfree_skb(buf);
--	else
-+	else if (is_xdp_frame(buf))
- 		xdp_return_frame(ptr_to_xdp(buf));
+ 	if (update_napi) {
+-		for (i = 0; i < vi->max_queue_pairs; i++)
++		for (i = 0; i < vi->max_queue_pairs; i++) {
++			/* xsk xmit depend on the tx napi. So if xsk is active,
++			 * prevent modifications to tx napi.
++			 */
++			if (rtnl_dereference(vi->sq[i].xsk.pool))
++				continue;
 +
-+	/* xsk buffer do not need handle. */
- }
+ 			vi->sq[i].napi.weight = napi_weight;
++		}
+ 	}
  
- void virtnet_rq_free_unused_buf(struct virtqueue *vq, void *buf)
+ 	return ret;
 -- 
 2.32.0.3.g01195cf9f
 
