@@ -2,88 +2,84 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD0B2C05027
-	for <bpf@archiver.kernel.org>; Thu,  2 Feb 2023 14:10:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD645C05027
+	for <bpf@archiver.kernel.org>; Thu,  2 Feb 2023 14:12:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjBBOKu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Feb 2023 09:10:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56718 "EHLO
+        id S230375AbjBBOM1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Feb 2023 09:12:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjBBOKu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Feb 2023 09:10:50 -0500
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5125489F84
-        for <bpf@vger.kernel.org>; Thu,  2 Feb 2023 06:10:49 -0800 (PST)
-Received: by mail-qt1-x836.google.com with SMTP id m26so1873842qtp.9
-        for <bpf@vger.kernel.org>; Thu, 02 Feb 2023 06:10:49 -0800 (PST)
+        with ESMTP id S231748AbjBBOMZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Feb 2023 09:12:25 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489229039F
+        for <bpf@vger.kernel.org>; Thu,  2 Feb 2023 06:12:02 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id k8-20020a05600c1c8800b003dc57ea0dfeso3844218wms.0
+        for <bpf@vger.kernel.org>; Thu, 02 Feb 2023 06:12:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hv+a3eL6VMETyn2zLBDdt445PHXLpn20V13XQB5xq10=;
-        b=HGdxufHzZVlMVMI9/MGyDJkL80VDfNXdts11g+nmFAnOX6qlAMPhqsFEiZpK30mzDW
-         ljbuR2FEFDchqCMBBRegn4qnoy96SyO2cnFHxqgK12+VF8AD+8tWuP4i5YmXu4a7g/4a
-         AYUb96EC8oywhOQzoG+uOykNSfVeHa8N2PzptN4SO89sbIGMJ/O6pdIhDD5fV+uswFjS
-         yQt5r+tyo2LOGe92oO+LyJE/cQTY4fWbgN8LINV6/nOIoVjPl4tIb8n8uUXkhqsWfjRE
-         EkoONFJ6mPx6pkHlTfY4zw9zTh71APYPB1WLg9s2aT/jkWtPrf73MoRhBjrAHXy5uy1/
-         QcEA==
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wYyOEBkWxvJgd7OA0mHmSipy8L3OkjsbmgHHm82YhW0=;
+        b=bdGjE5sLdnOc6Oph7Fu5WKF8YQBumY/CplyMSDyibTVkzifBMBAF4t0t9bwmHMeMAk
+         Xi/ClA59CBMc2zx3ZNWcgE3Is4SAYnIvwbsjFIfd+w2DYdkW1WZ0GQo0ZhqxI7vpXpMx
+         Iz1pvJ6lB6KUQ//GUPZ4h8j5rlZm1WwDYgE2QcQqLwoYU9nIiQ2E8TzuFMxsAMkyHeBB
+         iF7JwkwGUUMILibzxhRFce7T5GFaA9z5cbZzvd6HOfqvG/Fn+hPh0OBPo+mSjMtdnrAS
+         mBOgw7lOTUzNLvz5B5t+omjEdyP/TZsxXZxEhqh5SfjdzBTYLYi5D4LuwMr8CtJfvfBx
+         Gl8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hv+a3eL6VMETyn2zLBDdt445PHXLpn20V13XQB5xq10=;
-        b=e5KjCOY3b8kGeK87iy4VrmQEx2NC5E6BXpRkRy+yN7vOYScEUyDjMXLIuk1myFCCNy
-         skLYV/5c6INYkjDsINmIPZPNVsRQilu+SBwaGcGnUtx+Qdj+ncmlw0miESXWvvMc5l1A
-         87tcp9Z58pWIBUad+D2FMWzBCq8OIlntOzbl7q8ZhyrQc5H191bv4TQS/1LwcBkcqDF8
-         zfZB53j6B6pUj+SFImhdL7Fx6cxogVakRXbyrW/mbhz/1klmSqUwENw8kYSr80U0aspG
-         bv1ix2EsLCqurMOu3MfHbXqIBaFvK71aoeXI41d2H6trbKKRXHUIPXHzIRgsYV6NNOXb
-         0Xmg==
-X-Gm-Message-State: AO0yUKWnYt/zyrhzLO5n4CDbi4WVuEr/IbAubCv84T2Q9CLr3KYVKAzb
-        pjPj4E2Nv7g0o0VVslpbm0XXhImzw5iiMWVSDBw=
-X-Google-Smtp-Source: AK7set+0homhPVsR1sbYpFkZ+BOMFucfGPKRPiIRZgDvjCblx9Sjiwfby/+L3GDADodOAu3MaUjmnB0q66F5XM39Zj8=
-X-Received: by 2002:ac8:5fd2:0:b0:3b9:b148:b734 with SMTP id
- k18-20020ac85fd2000000b003b9b148b734mr803830qta.65.1675347048416; Thu, 02 Feb
- 2023 06:10:48 -0800 (PST)
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wYyOEBkWxvJgd7OA0mHmSipy8L3OkjsbmgHHm82YhW0=;
+        b=jEV/Q1YvQ+8qUb9fJRny2YfT5xRAAqLkWzqKlonfhvyiyjoGCl5nkaCwozNDSVLJS8
+         BWAyWj2lIEeXn5dNMKsDX5kx7AEf5vj8FffKhYaosBqMf76bBL1rVahBNEHBNYwXhs20
+         OUc7T1+R/OYSpa8Kg9gxRxSGO6TZKvMn7lFvbTmmC5stEbHXTMaOvXxCB/CMyZOZoklJ
+         2EG7PpnUI31jgeyT2l5zXBbyR9zIN9xHALshh4A5QWq9A4Z4y3HHtQ5a3mHGqCG42zsR
+         5ojbRg/rtz68QQ9aPEQ9/2vpgJvJM21OI9pNsGDpmA0XhKDOhv5t1OIFBagZk9p1Gyq1
+         xtRA==
+X-Gm-Message-State: AO0yUKXWr6XN7Yd/JQrOGhGK6V1LRvTQTAV4CvZVfwARCbFElxxk9Y5r
+        86lpWtyZyMJt3HQxYSlr4B8=
+X-Google-Smtp-Source: AK7set+zSyZNVRZQRM0q4yC/hS/4n26A7XCmP+izQDcox8cLmbNIht0sFpUycREH/rnwBU7E2D2xRA==
+X-Received: by 2002:a05:600c:1c1c:b0:3df:9858:c02f with SMTP id j28-20020a05600c1c1c00b003df9858c02fmr2058801wms.4.1675347120607;
+        Thu, 02 Feb 2023 06:12:00 -0800 (PST)
+Received: from [192.168.1.122] (cpc159313-cmbg20-2-0-cust161.5-4.cable.virginm.net. [82.0.78.162])
+        by smtp.gmail.com with ESMTPSA id o9-20020a05600c4fc900b003dc1300eab0sm5449470wmq.33.2023.02.02.06.11.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 06:12:00 -0800 (PST)
+Subject: Re: [PATCH bpf-next v4 1/1] docs/bpf: Add description of register
+ liveness tracking algorithm
+To:     Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
+        ast@kernel.org
+Cc:     andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+        kernel-team@fb.com, yhs@fb.com
+References: <20230202125713.821931-1-eddyz87@gmail.com>
+ <20230202125713.821931-2-eddyz87@gmail.com>
+From:   Edward Cree <ecree.xilinx@gmail.com>
+Message-ID: <26b33f08-4e59-5107-42ff-cb7a3af59318@gmail.com>
+Date:   Thu, 2 Feb 2023 14:11:58 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20230202014158.19616-1-laoar.shao@gmail.com> <20230202014158.19616-4-laoar.shao@gmail.com>
- <Y9uPORBkVlMZFzk3@infradead.org>
-In-Reply-To: <Y9uPORBkVlMZFzk3@infradead.org>
-From:   Yafang Shao <laoar.shao@gmail.com>
-Date:   Thu, 2 Feb 2023 22:10:12 +0800
-Message-ID: <CALOAHbBttv8YEFkqQkpeHnJ8kDAmxHPnK1DEv_ZNOvnK9=BGWw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 3/7] mm: vmalloc: introduce vsize()
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, tj@kernel.org,
-        dennis@kernel.org, cl@linux.com, akpm@linux-foundation.org,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com, vbabka@suse.cz,
-        urezki@gmail.com, linux-mm@kvack.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20230202125713.821931-2-eddyz87@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 6:23 PM Christoph Hellwig <hch@infradead.org> wrote:
->
-> On Thu, Feb 02, 2023 at 01:41:54AM +0000, Yafang Shao wrote:
-> > Introduce a helper to report full size of underlying allocation of a
-> > vmalloc'ed address.
->
-> What is the use case for it?
+On 02/02/2023 12:57, Eduard Zingerman wrote:
+> This is a followup for [1], adds an overview for the register liveness
+> tracking, covers the following points:
+> - why register liveness tracking is useful;
+> - how register parentage chains are constructed;
+> - how liveness marks are applied using the parentage chains.
+> 
+> [1] https://lore.kernel.org/bpf/CAADnVQKs2i1iuZ5SUGuJtxWVfGYR9kDgYKhq3rNV+kBLQCu7rA@mail.gmail.com/
+> 
+> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 
-The use case is in patch #4 and patch #7, to get the bpf memory usage
-from the pointers.
-#4: https://lore.kernel.org/bpf/20230202014158.19616-5-laoar.shao@gmail.com/T/#u
-#7: https://lore.kernel.org/bpf/20230202014158.19616-8-laoar.shao@gmail.com/T/#u
-
-I forgot to Cc you the full patchset. Sorry about that.
-The full patchset is at
-https://lore.kernel.org/bpf/20230202014158.19616-1-laoar.shao@gmail.com/
-
--- 
-Regards
-Yafang
+Reviewed-by: Edward Cree <ecree.xilinx@gmail.com>
