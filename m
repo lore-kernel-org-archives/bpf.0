@@ -2,271 +2,159 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02F21C64EC5
-	for <bpf@archiver.kernel.org>; Thu,  2 Feb 2023 16:31:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D17EC636D4
+	for <bpf@archiver.kernel.org>; Thu,  2 Feb 2023 16:33:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232130AbjBBQbM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Feb 2023 11:31:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42296 "EHLO
+        id S231501AbjBBQd2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Feb 2023 11:33:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231916AbjBBQbK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Feb 2023 11:31:10 -0500
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554C862789;
-        Thu,  2 Feb 2023 08:31:06 -0800 (PST)
-Received: by mail-qt1-f178.google.com with SMTP id cr22so2418906qtb.10;
-        Thu, 02 Feb 2023 08:31:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xAzqbHE+iWrsUYd8xYPAq/NyJVv2xNEV+Y51Rz1mxl0=;
-        b=foH4Q/ep6DPxQB5l6AU94G67mu/LNDa1jrM9wP6oddKtQyBl/WJU3VRizvpY5bYsxG
-         aUk8Ag1Js7bvOwmyoM/eUAX56ljG50QEqzJSLR0EdBfcR6ZpRZt+nDUHSj18bPv6Nhgz
-         ERKNGz3TBv6BFJTn0WAHdaD7dcX8/+dLvygAWsLHXTyyQ6wPUBxnnwSa1QCzdMROOvHc
-         DGL0xNc6LoNvqO6UeLe7TcvNQtBLUNQ26XYclfo3kExOsIOlJm5Lo7MWIiC1jKrbL58G
-         ykyBYVXwqiFvlzANVgE8TNKSGZmLTFzM4YARh6+WLq8AP76Ri69h7LSWLMi6MOzLJPIk
-         f90g==
-X-Gm-Message-State: AO0yUKVuznwdQDHIFrsSv0IB9fKxk+Qebce43IGq1kp4nWTf5qrj7L78
-        6AIkFiC/XyMzXzWoU0yDwVuVcWYQD+bEV8Q8
-X-Google-Smtp-Source: AK7set89nLuw97bQ9C4nlkqFm5e6dFyP37rWPzhkipOrmHcJ18YL5ogxSsFCiDN+YIk5t1+/0TcVrA==
-X-Received: by 2002:ac8:7f16:0:b0:3b8:6a20:675e with SMTP id f22-20020ac87f16000000b003b86a20675emr13031700qtk.29.1675355464915;
-        Thu, 02 Feb 2023 08:31:04 -0800 (PST)
-Received: from localhost ([24.1.27.177])
-        by smtp.gmail.com with ESMTPSA id z15-20020ac8430f000000b003b646a99aa6sm7484055qtm.77.2023.02.02.08.31.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 08:31:04 -0800 (PST)
-From:   David Vernet <void@manifault.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@meta.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, toke@redhat.com, brouer@redhat.com,
-        corbet@lwn.net, linux-doc@vger.kernel.org
-Subject: [PATCH bpf-next 1/3] bpf/docs: Document kfunc lifecycle / stability expectations
-Date:   Thu,  2 Feb 2023 10:30:54 -0600
-Message-Id: <20230202163056.658641-2-void@manifault.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230202163056.658641-1-void@manifault.com>
-References: <20230202163056.658641-1-void@manifault.com>
+        with ESMTP id S229608AbjBBQd1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Feb 2023 11:33:27 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2067.outbound.protection.outlook.com [40.107.237.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1932130EAE;
+        Thu,  2 Feb 2023 08:33:24 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RicvLdrYgYUKTJoMggd0MOt99JR7P1MYEnqPa0+EtWyPhBrhGQQaH43lL5TRnfx8MbZW1Oyu5Hh2G0SHpiVWXmxki/Cmod1sx43XpH9Knhhiuhg2vFImZfDsDSasob0sg7jmLoVmxawZv0rpg4835QF1YNyh0jNkhPMkMA0h8jYTPyCnA/gWYdOf0SgySzrPsDTsSJRfYDqqJp7bsIJr93srIpKx82L1cOkzISW3w6zX3cHCeP4v1eDSVzUXwqVShUD49jmZCx5TQsNZkwFKFLsi+ZM0/yhmaOBlDzw9vLHtzLNYyOVtzchTwvGJCoRYUtmc6Te9qx6kESJg/V1Gew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ha8j796OoobE2thJXlS+G5NE86llZjUZ01Naf3gJdzo=;
+ b=ITZy52OujPtlfcv0KKWNYNeG3sWedvZmWioWTJXgCfKWLZNbT8fBWuZgegrsxOGn588ShYi62pClMmTxrMexPqHYusVtcmrmC3DOWC50B8mxaCM1McohkpYBBAQiRfHQA2A3swIycHMUZmAmCr+/cg5IeKn+LyBy1z29vn8Epg/2aoM5O4Ls0tBeW+cU1fODlM2rp7Hx3Mn88qeXGy7aBKraAJL3etbbx4Jx7GZ2uFjQKAwmUqI16gB8/TVt6LTut29IR7jpetd/SF+TFZhbzGeEcbo4g5HpodeKttaQB+MZY5xht7mNUEoPCXLb8f6OaPn5lpdNJ52qgcUADaLzrA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ha8j796OoobE2thJXlS+G5NE86llZjUZ01Naf3gJdzo=;
+ b=DDeJ/jCKoHBAJ/y1p5qhh8e3r7l1JxhigYzrrfYkTjJPDqBGYtx9+A+X3c0MCpLtPvigUfx06JY7ULRDItuc4By5KhRMoiuzuNPiKAQdr/7Qhybyq1MZA4SIfrqtCXx8yrjgOjR7JaAtnJUOq9s5kNAT24J6AiwX/+/eCcX9eR3oBd/hZAHt439pqEt3S6hqnbsK1i0zykAFDrb7LTfXNMyMjMh2s1ciH+bsv+vU4nTEIhIgVvnb32zmtxjwIfGHFPNj8/3rjk0ZYGo3qFxzf28VITPaw0WVvfOqHxp04VWs46+6C1sYRR9KBfnVuICkQWinsgn3DYa9krCTz3E51g==
+Received: from PH0PR12MB5481.namprd12.prod.outlook.com (2603:10b6:510:d4::15)
+ by PH8PR12MB7277.namprd12.prod.outlook.com (2603:10b6:510:223::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27; Thu, 2 Feb
+ 2023 16:33:22 +0000
+Received: from PH0PR12MB5481.namprd12.prod.outlook.com
+ ([fe80::a891:beb7:5440:3f0]) by PH0PR12MB5481.namprd12.prod.outlook.com
+ ([fe80::a891:beb7:5440:3f0%4]) with mapi id 15.20.6064.025; Thu, 2 Feb 2023
+ 16:33:22 +0000
+From:   Parav Pandit <parav@nvidia.com>
+To:     Jiri Pirko <jiri@resnulli.us>
+CC:     "mst@redhat.com" <mst@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "hawk@kernel.org" <hawk@kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Subject: RE: [PATCH 2/2] virtio-net: Maintain reverse cleanup order
+Thread-Topic: [PATCH 2/2] virtio-net: Maintain reverse cleanup order
+Thread-Index: AQHZNsNmqB1HoihArUa+/kiDXzADNK67lZ4AgAAtS/CAAAqjgIAADMvw
+Date:   Thu, 2 Feb 2023 16:33:21 +0000
+Message-ID: <PH0PR12MB5481F75D8D5D5B5DD9010798DCD69@PH0PR12MB5481.namprd12.prod.outlook.com>
+References: <20230202050038.3187-1-parav@nvidia.com>
+ <20230202050038.3187-3-parav@nvidia.com> <Y9ur9B6CDIwThMN6@nanopsycho>
+ <PH0PR12MB5481C0C7E46B5DFF85178792DCD69@PH0PR12MB5481.namprd12.prod.outlook.com>
+ <Y9va33VLJ/eRPUbW@nanopsycho>
+In-Reply-To: <Y9va33VLJ/eRPUbW@nanopsycho>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR12MB5481:EE_|PH8PR12MB7277:EE_
+x-ms-office365-filtering-correlation-id: 5d2772a0-e414-44d4-80a0-08db053b3309
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: W3lBCh6AfOe+DZZrTB9IK2LhWyQiKPypx1NoUBSTWOlF803Rv+zHFr9qNeaeXnC0p8h6oDYTXNMVfIFZjWufrjwyWil8i9Y4qCy0MZVlfPyj/qJRwXPkWJrPSYNUnZBy+GmTPyRSrfx/HFt/iO5FWZ49hdtR2THTrUDkqCdZPvNkf2J/GvATZJz2zUA57bADESPdLGdtBB9CVxD92hKTmmVeFPLeCpI28vdzGOTBLy6tF0edkjw7o/+d3mOqqcK4McH8dLmYxBwK2XKGlkynlceHvZq8IoBv3btnGD1IEJQtPH8CnhYibbqDTp8s+bsyodUq+c2CHjPIc+WxCCX6QbN8P2mDBAF0BTd0CdvQE92MJU1G26a7jfd2mwIJbvSOBRP1IcwjCa1vmH0wdjebUcGg5E2xuAkFuyCB99zC0eC1/WBBX2Wlf3/RklmijeqwSBV5TMtqUCncwcBOWJmc2cBnz1c6/ZVDUuML1TOEEU6sJwEViKoIsF4c35g7KHV1PPz5C/Jou6L5tlJXbPBm4tLIwnOEFuNK5eMLagKPtBjnIX7plt/yRm0LrZOnJWyoMMEqne1JbmEsHJtEd9Lcb6J7Qsjjz2Ci/ELnPEc4eXDBz6SY7+Jb778mSLdnG7ttHu+zMlU2pSpxKouJ0717tA4MN2asI/6jxAA3S5LFZ8Xo7XhkfV5SjbieKS/NxBXnp2x5HaC0uGW8+iIkjPK7MQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR12MB5481.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(39860400002)(396003)(366004)(376002)(136003)(451199018)(26005)(186003)(86362001)(9686003)(6506007)(38070700005)(33656002)(478600001)(38100700002)(7696005)(122000001)(71200400001)(2906002)(7416002)(55016003)(5660300002)(52536014)(8936002)(41300700001)(66446008)(66556008)(66476007)(66946007)(76116006)(8676002)(6916009)(4326008)(64756008)(54906003)(316002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?RZvFtBnBpSMmYgwlvm0xzICBnjDd0a9+DW8iIH2nQxiWuAxx/xbWzvxhVAVW?=
+ =?us-ascii?Q?M/WPqjuKIG2/+yLbEQCDBmdgNFe8g1ghm7OnbP9zAHHhlb+Tqns5ed9UWoUD?=
+ =?us-ascii?Q?9pC1zHBtUfW5q4Wdq0ywuHrb0sCSZegHOpGGRVFaklW70gAfatPLSZqBMh1I?=
+ =?us-ascii?Q?wloR32X3zaGmRuge/De9MZdFSXijylMvA41FRIYnN23Js9q7OQI9x8d82kGh?=
+ =?us-ascii?Q?cp4CQoMiRjq76FQtxw0qe4czz1MQrCKDQec8V3ZdR1UDe8RhYKCeTFpve0oD?=
+ =?us-ascii?Q?kUtn7ZfDCOFkFZVMKAMaxX5goJwO/CtGrCLGqhxWPq/rfemWbenFzc4hykvc?=
+ =?us-ascii?Q?6uVudZKd5B5M8bd/zdXfPzMg9ANx+j1tHoRHeL+JL6faMecEjb/Lh7CbpYT9?=
+ =?us-ascii?Q?U6Uao14/6bKWzcEeLBegXqQbb3z+SDcW+RVgPZc5pWw8V9L1ULyms68W8IXP?=
+ =?us-ascii?Q?eK3afmiZzb1eXfX/cmmPznUsRzL9B5Z2VxfxajxpgZoBK/epe0H+QNjAdK43?=
+ =?us-ascii?Q?7NuSxL0Vgr7WiQy905IYRt60P61pRmUKJy24xkqk9vIHuKrHCtctlreILSwN?=
+ =?us-ascii?Q?YFGeCojPXXbyzPaibrVuJULFMLKgSVLw8zqJpkZ7C8b+WmfbFiXmwDMen7Sw?=
+ =?us-ascii?Q?djFyI7kKBzQgrUTHu7LgWDwicVOtbKVM748OBTWNCcKfYT4T5vmG6+iOq+Pe?=
+ =?us-ascii?Q?op8yDJ5TcJ7D1X7bP9eS4pyaPDFo6wxqzM7WlZUR4GkFxwQfqYh+8oB0K9s7?=
+ =?us-ascii?Q?OSUBifs/IbXIsDX+0dLgITwA9GIH9EoznF/r13NMfZxJlDl/r2PaKiQJtHP5?=
+ =?us-ascii?Q?XtFhU9KzKwIMJFT+PHE4IvrROYU1D1vMDOD0naTNeHF1cs0CPSPLIIyOJgoY?=
+ =?us-ascii?Q?9+FhvMdCit4QPWfHIKhc5Q5ufd149tPXdmiHI0cCOtwM7Nd87NDbRXqY2g8z?=
+ =?us-ascii?Q?npg7jhrjO2/hk1dgdKnq2hZb+vf+w/YyX3urSKokhlCkkqRm78Q7ukJGg8Si?=
+ =?us-ascii?Q?MiP8obiFrPcWJS9EV2voBhAIfQZpGe1ksHgzD9iIM4bpNNrLXu3cGH+etka/?=
+ =?us-ascii?Q?ThKeKqHwevgtPXGiHA7C/z2u4oBRiG9H77ueyW0sDLiorIt4lTFgU5qZZvMa?=
+ =?us-ascii?Q?DvKsCOIVKxy1PPktkRCN9coAD6OK6un6Yqf2yxioA8f9s/PRAVdPQbEz/uGV?=
+ =?us-ascii?Q?HLnF1ju2Dr2MbvMIOYpqEmZ5VKla/wI3HaflEErpKf9OZhah68v3xPEn+pOm?=
+ =?us-ascii?Q?HyfBMh/ebdZtqwNlCyJBGPkpWGwnOslf6Zc/9SzG3/THWAJ51C8mFO666y5H?=
+ =?us-ascii?Q?ijn0sDckFguQHpEPc0t5yNhbenNI1d39iMt0QuM3K4CgB+6xxpbBOHwGwuBE?=
+ =?us-ascii?Q?KDHowXHC0TqVb/Oq7I5Ke7PH4dCKs8rak1MSFQn2zrCTKg4rkBAy+T/+F3xq?=
+ =?us-ascii?Q?nLVVNfl2npac1jxXTRBMvyFuesfpZS3w9MgEUvNZnKxUefbjoAK+4/iNdfqD?=
+ =?us-ascii?Q?3lvUyT7V0zgw34ctHy1s/zPggNm2F8qSVOKxOUcZcX+C8+Oi4DY7cpyXeFYB?=
+ =?us-ascii?Q?s4k2cLQ548yZuKINH/M=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR12MB5481.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5d2772a0-e414-44d4-80a0-08db053b3309
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Feb 2023 16:33:22.0058
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: O0Y8gj3eDZ8EfIS+pN8jZSs9epHDcGNNGOC7v3UDckqDCFXt1Z8dhwvB88q3zLMnKspuBj7HOGkhge28OiAKzA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7277
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-BPF kernel <-> kernel API stability has been discussed at length over
-the last several weeks and months. Now that we've largely aligned over
-kfuncs being the way forward, and BPF helpers being considered frozen,
-it's time to document the expectations for kfunc lifecycles and
-stability so that everyone (BPF users, kfunc developers, and
-maintainers) are all aligned, and have a crystal-clear understanding of
-the expectations surrounding kfuncs.
 
-To do that, this patch adds that documentation to the main kfuncs
-documentation page via a new 'kfunc lifecycle expectations' section. The
-patch describes how decisions are made in the kernel regarding whether
-to include, keep, deprecate, or change / remove a kfunc. As described
-very overtly in the patch itself, but likely worth highlighting here:
+> From: Jiri Pirko <jiri@resnulli.us>
+> Sent: Thursday, February 2, 2023 10:47 AM
+>=20
+> Thu, Feb 02, 2023 at 04:10:56PM CET, parav@nvidia.com wrote:
+> >
+> >> From: Jiri Pirko <jiri@resnulli.us>
+> >> Sent: Thursday, February 2, 2023 7:26 AM
+> >>
+> >> Thu, Feb 02, 2023 at 06:00:38AM CET, parav@nvidia.com wrote:
+> >> >To easily audit the code, better to keep the device stop() sequence
+> >> >to be mirror of the device open() sequence.
+> >> >
+> >> >Signed-off-by: Parav Pandit <parav@nvidia.com>
+> >>
+> >> Reviewed-by: Jiri Pirko <jiri@nvidia.com>
+> >>
+> >> If this is not fixing bug (which I believe is the case), you should
+> >> target it to net- next ([patch net-next] ..).
+> >>
+> >Yes. Right. First one was fix for net-rc, second was for net-next. And 2=
+nd
+> depends on the first to avoid merge conflicts.
+> >So, I was unsure how to handle it.
+> >Can you please suggest?
+>=20
+> 1) Send the fix to -net
+> 2) Wait until -net is merged into -net-next
+> 3) Send the second patch to -net-next
 
-"kfunc stability" does not mean, nor ever will mean, "BPF APIs may block
-development elsewhere in the kernel".
+Got it. Thanks.
 
-Rather, the intention and expectation is for kfuncs to be treated like
-EXPORT_SYMBOL_GPL symbols in the kernel. The goal is for kfuncs to be a
-safe and valuable option for maintainers and kfunc developers to extend
-the kernel, without tying anyone's hands, or imposing any kind of
-restrictions on maintainers in the same way that UAPI changes do.
-
-In addition to the 'kfunc lifecycle expectations' section, this patch
-also adds documentation for a new KF_DEPRECATED kfunc flag which kfunc
-authors or maintainers can choose to add to kfuncs if and when they
-decide to deprecate them. Note that as described in the patch itself, a
-kfunc need not be deprecated before being changed or removed -- this
-flag is simply provided as an available deprecation mechanism for those
-that want to provide a deprecation story / timeline to their users.
-When necessary, kfuncs may be changed or removed to accommodate changes
-elsewhere in the kernel without any deprecation at all.
-
-A subsequent patch will add KF_DEPRECATED to <linux/btf.h>.
-
-Signed-off-by: David Vernet <void@manifault.com>
----
- Documentation/bpf/kfuncs.rst | 125 +++++++++++++++++++++++++++++++++--
- 1 file changed, 120 insertions(+), 5 deletions(-)
-
-diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-index 0bd07b39c2a4..e8452868827e 100644
---- a/Documentation/bpf/kfuncs.rst
-+++ b/Documentation/bpf/kfuncs.rst
-@@ -13,7 +13,7 @@ BPF Kernel Functions or more commonly known as kfuncs are functions in the Linux
- kernel which are exposed for use by BPF programs. Unlike normal BPF helpers,
- kfuncs do not have a stable interface and can change from one kernel release to
- another. Hence, BPF programs need to be updated in response to changes in the
--kernel.
-+kernel. See :ref:`BPF_kfunc_lifecycle_expectations` for more information.
- 
- 2. Defining a kfunc
- ===================
-@@ -238,6 +238,32 @@ single argument which must be a trusted argument or a MEM_RCU pointer.
- The argument may have reference count of 0 and the kfunc must take this
- into consideration.
- 
-+.. _KF_deprecated_flag:
-+
-+2.4.9 KF_DEPRECATED flag
-+------------------------
-+
-+The KF_DEPRECATED flag is used for kfuncs which are expected to be changed or
-+removed in a subsequent kernel release. Deprecated kfuncs may be removed at any
-+time, though if possible (and when applicable), developers are encouraged to
-+provide users with a deprecation window to ease the burden of migrating off of
-+the kfunc.
-+
-+A kfunc that is marked with KF_DEPRECATED should also have any relevant
-+information captured in its kernel doc. Such information typically includes the
-+kfunc's expected remaining lifespan, a recommendation for new functionality
-+that can replace it if any is available, and possibly a rationale for why it is
-+being removed.
-+
-+Note that while on some occasions, a KF_DEPRECATED kfunc may continue to be
-+supported and have its KF_DEPRECATED flag removed, it is likely to be far more
-+difficult to remove a KF_DEPRECATED flag after it's been added than it is to
-+prevent it from being added in the first place. As described in
-+:ref:`BPF_kfunc_lifecycle_expectations`, users that rely on specific kfuncs are
-+highly encouraged to make their use-cases known as early as possible, and
-+participate in upstream discussions regarding whether to keep, change,
-+deprecate, or remove those kfuncs if and when such discussions occur.
-+
- 2.5 Registering the kfuncs
- --------------------------
- 
-@@ -304,14 +330,103 @@ In order to accommodate such requirements, the verifier will enforce strict
- PTR_TO_BTF_ID type matching if two types have the exact same name, with one
- being suffixed with ``___init``.
- 
--3. Core kfuncs
-+.. _BPF_kfunc_lifecycle_expectations:
-+
-+3. kfunc lifecycle expectations
-+===============================
-+
-+Just as with kernel symbols exported with EXPORT_SYMBOL_GPL, kfuncs could be
-+changed at any time by a maintainer of the subsystem they're defined in when
-+deemed necessary. However, like any other change to the kernel, maintainers
-+will not change or remove a kfunc without having some justification. Whether or
-+not they'll choose to change a kfunc will ultimately depend on a variety of
-+factors, such as how widely used the kfunc is, how long the kfunc has been in
-+the kernel, whether an alternative kfunc exists, what the norm is in terms of
-+stability for the subsystem in question, and of course what the technical cost
-+is of continuing to support the kfunc.
-+
-+There are several implications of this:
-+
-+a) A kfunc will never have any hard stability guarantees. BPF APIs cannot and
-+   will not ever hard-block a change in the kernel purely for stability
-+   reasons. In other words, kfuncs have the exact same stability guarantees as
-+   any other kernel API, such as those provided by EXPORT_SYMBOL_GPL, though
-+   with perhaps less burden than EXPORT_SYMBOL_GPL changes thanks to BPF CO-RE.
-+
-+   That being said, kfuncs are features that are meant to solve problems and
-+   provide value to users. The decision of whether to change or remove a kfunc
-+   is a multivariate technical decision that is made on a case-by-case basis,
-+   and which is informed by data points such as those mentioned above. It is
-+   expected that a kfunc being removed or changed with no warning will not be a
-+   common occurrence or take place without sound justification, but it is a
-+   possibility that must be accepted if one is to use kfuncs.
-+
-+b) kfuncs that are widely used or have been in the kernel for a long time will
-+   be more difficult to justify being changed or removed by a maintainer. Said
-+   in a different way, kfuncs that are known to have a lot of users and provide
-+   significant value provide stronger incentives for maintainers to invest the
-+   time and complexity in supporting them. It is therefore important for
-+   developers using kfuncs in their BPF programs to demonstrate how and why
-+   those kfuncs are being used, and to participate in discussions regarding
-+   those kfuncs when they occur upstream.
-+
-+c) Because many BPF programs are not upstreamed as part of the kernel tree, it
-+   is often not possible to change them in-place when a kfunc changes, as it is
-+   for e.g. an upstreamed module being updated in place when an
-+   EXPORT_SYMBOL_GPL symbol is changed. Distributions that bundle BPF programs
-+   that use kfuncs must therefore ensure that those BPF programs are linking
-+   against the kfuncs that are supported by the kernel version being used for
-+   any given release. Additionally, BPF developers are encouraged to upstream
-+   their BPF programs so they can enjoy the same benefits as upstreamed
-+   modules, and avoid code churn.
-+
-+3.1 kfunc deprecation
-+---------------------
-+
-+As described above, while sometimes a maintainer may find that a kfunc must be
-+changed or removed immediately to accommodate some changes in their subsystem,
-+other kfuncs may be able to accommodate a longer and more measured deprecation
-+process. For example, if a new kfunc comes along which provides superior
-+functionality to an existing kfunc, the existing kfunc may be deprecated for
-+some period of time to allow users to migrate their BPF programs to use the new
-+one. Or, if a kfunc has no known users, a decision may be made to remove the
-+kfunc (without providing an alternative API) after some deprecation period
-+period so as to provide users with a window to notify the kfunc maintainer if
-+it turns out that the kfunc is actually being used.
-+
-+kfuncs being deprecated (rather than changed or removed with no warning) is
-+expected to be the common case, and as described in :ref:`KF_deprecated_flag`,
-+the kfunc framework provides the KF_DEPRECATED flag to kfunc developers to
-+signal to users that a kfunc has been deprecated. Once a kfunc has been marked
-+with KF_DEPRECATED, the following procedure is followed for removal:
-+
-+1. Any relevant information for deprecated kfuncs is documented in the kfunc's
-+   kernel docs. This documentation will typically include the kfunc's expected
-+   remaining lifespan,  a recommendation for new functionality that can replace
-+   the usage of the deprecated function (or an explanation as to why no such
-+   replacement exists), etc.
-+
-+2. The deprecated kfunc is kept in the kernel for some period of time after it
-+   was first marked as deprecated. This time period will be chosen on a
-+   case-by-case basis, and will typically depend on how widespread the use of
-+   the kfunc is, how long it has been in the kernel, and how hard it is to move
-+   to alternatives. This deprecation time period is "best effort", and as
-+   described :ref:`above<BPF_kfunc_lifecycle_expectations>`, circumstances may
-+   sometimes dictate that the kfunc be removed before the full intended
-+   deprecation period has elapsed.
-+
-+3. After the deprecation period, or sometimes earlier if necessary, the kfunc
-+   will be removed. At this point, BPF programs calling the kfunc will be
-+   rejected by the verifier.
-+
-+4. Core kfuncs
- ==============
- 
- The BPF subsystem provides a number of "core" kfuncs that are potentially
- applicable to a wide variety of different possible use cases and programs.
- Those kfuncs are documented here.
- 
--3.1 struct task_struct * kfuncs
-+4.1 struct task_struct * kfuncs
- -------------------------------
- 
- There are a number of kfuncs that allow ``struct task_struct *`` objects to be
-@@ -387,7 +502,7 @@ Here is an example of it being used:
- 		return 0;
- 	}
- 
--3.2 struct cgroup * kfuncs
-+4.2 struct cgroup * kfuncs
- --------------------------
- 
- ``struct cgroup *`` objects also have acquire and release functions:
-@@ -502,7 +617,7 @@ the verifier. bpf_cgroup_ancestor() can be used as follows:
- 		return 0;
- 	}
- 
--3.3 struct cpumask * kfuncs
-+4.3 struct cpumask * kfuncs
- ---------------------------
- 
- BPF provides a set of kfuncs that can be used to query, allocate, mutate, and
--- 
-2.39.0
-
+Dave, Jakub,
+Please drop this series.
+I am sending one by one to net and net-next.
