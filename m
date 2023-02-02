@@ -2,137 +2,139 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29CE3C05027
-	for <bpf@archiver.kernel.org>; Thu,  2 Feb 2023 14:12:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 178D3C61DA4
+	for <bpf@archiver.kernel.org>; Thu,  2 Feb 2023 14:29:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbjBBOMm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Feb 2023 09:12:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58408 "EHLO
+        id S232094AbjBBO3j (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Feb 2023 09:29:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231748AbjBBOMl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Feb 2023 09:12:41 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED33903B2
-        for <bpf@vger.kernel.org>; Thu,  2 Feb 2023 06:12:18 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id m26so1878850qtp.9
-        for <bpf@vger.kernel.org>; Thu, 02 Feb 2023 06:12:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8lKwPpkPDxwm1VBqDHuuHVHYFGb1CHGpldcsBIhtkdM=;
-        b=fN/lac7S0hEha5x8ywniY7iRYMzhonZYyA0EvuvEBq5QbCZHEPgZsn7N4hiR5LgeaO
-         Jh1fkkK4eKeZKgNa2tMvfn6N0q4W+SCCRrKMyDuJpUUIVYH+luyi/t+uEtsaoQ6RidvS
-         beRW6DCDMqRhXeoLebx7wyoBwmlzf/++Rcl1TcoypuidOIior69I1RwPavAz1vBRIXLS
-         y2jK89CaBkav/OtELC5vP2FOEgvZvhV4asMXSwWK5UNyYghmj2vBPaGB6gvBXYtfl5l7
-         78ctZVTOxPjqXUT9T0nMxcfk97joBOH5rjcet4q9urTUosSkzmy+bs3WZs+6xHIYkT1r
-         ej+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8lKwPpkPDxwm1VBqDHuuHVHYFGb1CHGpldcsBIhtkdM=;
-        b=5JSdhRFYWxyaB5XsYJdh2x9FixNia7AD3HAv3rXPKFMx/ZAOoVG3ltVB4OFrwGUO2I
-         xMnWOEa0IYnh24Bo3kU17Qjx8jrtM31D6V2xMfHluZD9teC6JsMkEPtVtcV0IgpH7Oag
-         NEmcdvYuBX98PZJA8ZRhGHsMob6KsXWHbxoG/3ugbJFjU6xQ+sP4rciZfxya1fxCjomf
-         q3YsZjBBWmmc1jqXmrzCEaFq1FsF1JkacZ79McXtLJB/qIUjJbzTco7vEotQOowHYqCi
-         IXEqQJCFH+ow+AjeG08d0SqTTyI6hBoAFrpZmmWIyEgql7KSZimL6Y56MbucmgnPXob9
-         880w==
-X-Gm-Message-State: AO0yUKUiTlO7Vr/whaTBK0AvdA3sMLEnUEudHBltqfjQ3nA2l1v5ywI4
-        /bn3I2PeoNPAdzCW/tiXpIYmzHNkqDnxHu6t8Lo=
-X-Google-Smtp-Source: AK7set9k5XCQtHVBDhmS2cTjynxpRw3/UekFOEHwWW/291ryl6hyF+HTz1I4NTG83hwQ78BYzyTyhDxsbXw/IdAbDg8=
-X-Received: by 2002:a05:622a:1ba9:b0:3b4:6444:546b with SMTP id
- bp41-20020a05622a1ba900b003b46444546bmr581897qtb.295.1675347132004; Thu, 02
- Feb 2023 06:12:12 -0800 (PST)
-MIME-Version: 1.0
-References: <20230202014158.19616-7-laoar.shao@gmail.com> <202302021258.By6JZK71-lkp@intel.com>
-In-Reply-To: <202302021258.By6JZK71-lkp@intel.com>
-From:   Yafang Shao <laoar.shao@gmail.com>
-Date:   Thu, 2 Feb 2023 22:11:36 +0800
-Message-ID: <CALOAHbDFtsL5BPDPt8XnHyfEzTRH3xz3=i42YUn43uo+H5hhxA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 6/7] bpf: introduce bpf_mem_alloc_size()
-To:     kernel test robot <lkp@intel.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, tj@kernel.org,
-        dennis@kernel.org, cl@linux.com, akpm@linux-foundation.org,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com, vbabka@suse.cz,
-        urezki@gmail.com, oe-kbuild-all@lists.linux.dev,
-        linux-mm@kvack.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S229593AbjBBO3j (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Feb 2023 09:29:39 -0500
+X-Greylist: delayed 611 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Feb 2023 06:29:37 PST
+Received: from sym2.noone.org (sym.noone.org [IPv6:2a01:4f8:120:4161::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BAE65B98
+        for <bpf@vger.kernel.org>; Thu,  2 Feb 2023 06:29:37 -0800 (PST)
+Received: by sym2.noone.org (Postfix, from userid 1002)
+        id 4P71BK5CrJzvjfm; Thu,  2 Feb 2023 15:19:21 +0100 (CET)
+From:   Tobias Klauser <tklauser@distanz.ch>
+To:     bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>
+Subject: [PATCH bpf-next] bpf: Drop always true do_idr_lock parameter to bpf_map_free_id
+Date:   Thu,  2 Feb 2023 15:19:21 +0100
+Message-Id: <20230202141921.4424-1-tklauser@distanz.ch>
+X-Mailer: git-send-email 2.11.0
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 12:54 PM kernel test robot <lkp@intel.com> wrote:
->
-> Hi Yafang,
->
-> Thank you for the patch! Perhaps something to improve:
->
-> [auto build test WARNING on bpf-next/master]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Yafang-Shao/mm-percpu-fix-incorrect-size-in-pcpu_obj_full_size/20230202-094352
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-> patch link:    https://lore.kernel.org/r/20230202014158.19616-7-laoar.shao%40gmail.com
-> patch subject: [PATCH bpf-next 6/7] bpf: introduce bpf_mem_alloc_size()
-> config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230202/202302021258.By6JZK71-lkp@intel.com/config)
-> compiler: m68k-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/996f3e2ac4dca054396d0f37ffe8ddb97fc4212f
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Yafang-Shao/mm-percpu-fix-incorrect-size-in-pcpu_obj_full_size/20230202-094352
->         git checkout 996f3e2ac4dca054396d0f37ffe8ddb97fc4212f
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash kernel/bpf/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
-> >> kernel/bpf/memalloc.c:227:15: warning: no previous prototype for 'bpf_mem_cache_size' [-Wmissing-prototypes]
->      227 | unsigned long bpf_mem_cache_size(struct bpf_mem_cache *c, void *obj)
->          |               ^~~~~~~~~~~~~~~~~~
+The do_idr_lock parameter to bpf_map_free_id was introduced by commit
+bd5f5f4ecb78 ("bpf: Add BPF_MAP_GET_FD_BY_ID"). However, all callers set
+do_idr_lock = true since commit 1e0bd5a091e5 ("bpf: Switch bpf_map ref
+counter to atomic64_t so bpf_map_inc() never fails").
 
-Should be defined with 'static'.
-Thanks for the report. Will update it in the next version.
+While at it also inline __bpf_map_put into its only caller bpf_map_put
+now that do_idr_lock can be dropped from its signature.
 
->
->
-> vim +/bpf_mem_cache_size +227 kernel/bpf/memalloc.c
->
->    226
->  > 227  unsigned long bpf_mem_cache_size(struct bpf_mem_cache *c, void *obj)
->    228  {
->    229          unsigned long size;
->    230
->    231          if (!obj)
->    232                  return 0;
->    233
->    234          if (c->percpu_size) {
->    235                  size = percpu_size(((void **)obj)[1]);
->    236                  size += ksize(obj);
->    237                  return size;
->    238          }
->    239
->    240          return ksize(obj);
->    241  }
->    242
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests
+Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
+---
+ include/linux/bpf.h  |  2 +-
+ kernel/bpf/offload.c |  2 +-
+ kernel/bpf/syscall.c | 23 ++++++-----------------
+ 3 files changed, 8 insertions(+), 19 deletions(-)
 
-
-
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index e11db75094d0..35c18a98c21a 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1846,7 +1846,7 @@ struct bpf_prog * __must_check bpf_prog_inc_not_zero(struct bpf_prog *prog);
+ void bpf_prog_put(struct bpf_prog *prog);
+ 
+ void bpf_prog_free_id(struct bpf_prog *prog);
+-void bpf_map_free_id(struct bpf_map *map, bool do_idr_lock);
++void bpf_map_free_id(struct bpf_map *map);
+ 
+ struct btf_field *btf_record_find(const struct btf_record *rec,
+ 				  u32 offset, enum btf_field_type type);
+diff --git a/kernel/bpf/offload.c b/kernel/bpf/offload.c
+index 88aae38fde66..0c85e06f7ea7 100644
+--- a/kernel/bpf/offload.c
++++ b/kernel/bpf/offload.c
+@@ -136,7 +136,7 @@ static void __bpf_map_offload_destroy(struct bpf_offloaded_map *offmap)
+ {
+ 	WARN_ON(bpf_map_offload_ndo(offmap, BPF_OFFLOAD_MAP_FREE));
+ 	/* Make sure BPF_MAP_GET_NEXT_ID can't find this dead map */
+-	bpf_map_free_id(&offmap->map, true);
++	bpf_map_free_id(&offmap->map);
+ 	list_del_init(&offmap->offloads);
+ 	offmap->netdev = NULL;
+ }
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 99417b387547..bcc97613de76 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -390,7 +390,7 @@ static int bpf_map_alloc_id(struct bpf_map *map)
+ 	return id > 0 ? 0 : id;
+ }
+ 
+-void bpf_map_free_id(struct bpf_map *map, bool do_idr_lock)
++void bpf_map_free_id(struct bpf_map *map)
+ {
+ 	unsigned long flags;
+ 
+@@ -402,18 +402,12 @@ void bpf_map_free_id(struct bpf_map *map, bool do_idr_lock)
+ 	if (!map->id)
+ 		return;
+ 
+-	if (do_idr_lock)
+-		spin_lock_irqsave(&map_idr_lock, flags);
+-	else
+-		__acquire(&map_idr_lock);
++	spin_lock_irqsave(&map_idr_lock, flags);
+ 
+ 	idr_remove(&map_idr, map->id);
+ 	map->id = 0;
+ 
+-	if (do_idr_lock)
+-		spin_unlock_irqrestore(&map_idr_lock, flags);
+-	else
+-		__release(&map_idr_lock);
++	spin_unlock_irqrestore(&map_idr_lock, flags);
+ }
+ 
+ #ifdef CONFIG_MEMCG_KMEM
+@@ -706,13 +700,13 @@ static void bpf_map_put_uref(struct bpf_map *map)
+ }
+ 
+ /* decrement map refcnt and schedule it for freeing via workqueue
+- * (unrelying map implementation ops->map_free() might sleep)
++ * (underlying map implementation ops->map_free() might sleep)
+  */
+-static void __bpf_map_put(struct bpf_map *map, bool do_idr_lock)
++void bpf_map_put(struct bpf_map *map)
+ {
+ 	if (atomic64_dec_and_test(&map->refcnt)) {
+ 		/* bpf_map_free_id() must be called first */
+-		bpf_map_free_id(map, do_idr_lock);
++		bpf_map_free_id(map);
+ 		btf_put(map->btf);
+ 		INIT_WORK(&map->work, bpf_map_free_deferred);
+ 		/* Avoid spawning kworkers, since they all might contend
+@@ -721,11 +715,6 @@ static void __bpf_map_put(struct bpf_map *map, bool do_idr_lock)
+ 		queue_work(system_unbound_wq, &map->work);
+ 	}
+ }
+-
+-void bpf_map_put(struct bpf_map *map)
+-{
+-	__bpf_map_put(map, true);
+-}
+ EXPORT_SYMBOL_GPL(bpf_map_put);
+ 
+ void bpf_map_put_with_uref(struct bpf_map *map)
 -- 
-Regards
-Yafang
+2.39.1
+
