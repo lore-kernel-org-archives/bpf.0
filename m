@@ -2,22 +2,22 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 825EEC64EC5
-	for <bpf@archiver.kernel.org>; Thu,  2 Feb 2023 11:02:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82FEFC6379F
+	for <bpf@archiver.kernel.org>; Thu,  2 Feb 2023 11:02:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232820AbjBBLB6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Feb 2023 06:01:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58610 "EHLO
+        id S231789AbjBBLB7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Feb 2023 06:01:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232273AbjBBLBb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S232130AbjBBLBb (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 2 Feb 2023 06:01:31 -0500
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5988717A;
-        Thu,  2 Feb 2023 03:01:28 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VakkM6u_1675335682;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VakkM6u_1675335682)
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7808717B;
+        Thu,  2 Feb 2023 03:01:29 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VakkM7N_1675335684;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VakkM7N_1675335684)
           by smtp.aliyun-inc.com;
-          Thu, 02 Feb 2023 19:01:23 +0800
+          Thu, 02 Feb 2023 19:01:25 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     netdev@vger.kernel.org
 Cc:     "David S. Miller" <davem@davemloft.net>,
@@ -39,9 +39,9 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         Kuniyuki Iwashima <kuniyu@amazon.com>,
         Petr Machata <petrm@nvidia.com>,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: [PATCH 21/33] virtio_net: xsk: introduce virtnet_xsk_pool_enable()
-Date:   Thu,  2 Feb 2023 19:00:46 +0800
-Message-Id: <20230202110058.130695-22-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH 23/33] virtio_net: xsk: support xsk setup
+Date:   Thu,  2 Feb 2023 19:00:48 +0800
+Message-Id: <20230202110058.130695-24-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20230202110058.130695-1-xuanzhuo@linux.alibaba.com>
 References: <20230202110058.130695-1-xuanzhuo@linux.alibaba.com>
@@ -52,87 +52,73 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce virtnet_xsk_pool_enable() for xsk setup.
+support xsk XDP_SETUP_XSK_POOL.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- drivers/net/virtio/xsk.c | 59 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
+ drivers/net/virtio/main.c       | 2 ++
+ drivers/net/virtio/virtio_net.h | 2 ++
+ drivers/net/virtio/xsk.c        | 9 +++++++++
+ drivers/net/virtio/xsk.h        | 7 +++++++
+ 4 files changed, 20 insertions(+)
+ create mode 100644 drivers/net/virtio/xsk.h
 
+diff --git a/drivers/net/virtio/main.c b/drivers/net/virtio/main.c
+index 0ee23468b795..ed79e750bc6c 100644
+--- a/drivers/net/virtio/main.c
++++ b/drivers/net/virtio/main.c
+@@ -3094,6 +3094,8 @@ static int virtnet_xdp(struct net_device *dev, struct netdev_bpf *xdp)
+ 	switch (xdp->command) {
+ 	case XDP_SETUP_PROG:
+ 		return virtnet_xdp_set(dev, xdp->prog, xdp->extack);
++	case XDP_SETUP_XSK_POOL:
++		return virtnet_xsk_pool_setup(dev, xdp);
+ 	default:
+ 		return -EINVAL;
+ 	}
+diff --git a/drivers/net/virtio/virtio_net.h b/drivers/net/virtio/virtio_net.h
+index 4a7633714802..a12d85624fe9 100644
+--- a/drivers/net/virtio/virtio_net.h
++++ b/drivers/net/virtio/virtio_net.h
+@@ -248,6 +248,8 @@ static inline void virtqueue_napi_schedule(struct napi_struct *napi,
+ 	}
+ }
+ 
++#include "xsk.h"
++
+ static inline bool is_xdp_frame(void *ptr)
+ {
+ 	return (unsigned long)ptr & VIRTIO_XDP_FLAG;
 diff --git a/drivers/net/virtio/xsk.c b/drivers/net/virtio/xsk.c
-index e01ff2abea11..a7e8005233d2 100644
+index 18c0c6e4d501..b96af38a2608 100644
 --- a/drivers/net/virtio/xsk.c
 +++ b/drivers/net/virtio/xsk.c
-@@ -5,6 +5,8 @@
+@@ -142,3 +142,12 @@ static int virtnet_xsk_pool_disable(struct net_device *dev, u16 qid)
  
- #include "virtio_net.h"
- 
-+static struct virtio_net_hdr_mrg_rxbuf xsk_hdr;
-+
- static int virtnet_rq_bind_xsk_pool(struct virtnet_info *vi, struct receive_queue *rq,
- 				    struct xsk_buff_pool *pool, struct net_device *dev)
- {
-@@ -54,3 +56,60 @@ static int virtnet_rq_bind_xsk_pool(struct virtnet_info *vi, struct receive_queu
- 
- 	return err;
+ 	return err1 | err2;
  }
 +
-+static int virtnet_xsk_pool_enable(struct net_device *dev,
-+				   struct xsk_buff_pool *pool,
-+				   u16 qid)
++int virtnet_xsk_pool_setup(struct net_device *dev, struct netdev_bpf *xdp)
 +{
-+	struct virtnet_info *vi = netdev_priv(dev);
-+	struct receive_queue *rq;
-+	struct send_queue *sq;
-+	int err;
-+
-+	if (qid >= vi->curr_queue_pairs)
-+		return -EINVAL;
-+
-+	sq = &vi->sq[qid];
-+	rq = &vi->rq[qid];
-+
-+	/* xsk zerocopy depend on the tx napi.
-+	 *
-+	 * All xsk packets are actually consumed and sent out from the xsk tx
-+	 * queue under the tx napi mechanism.
-+	 */
-+	if (!sq->napi.weight)
-+		return -EPERM;
-+
-+	/* In big_packets mode, xdp cannot work, so there is no need to
-+	 * initialize xsk of rq.
-+	 */
-+	if (vi->big_packets && !vi->mergeable_rx_bufs)
-+		return -ENOENT;
-+
-+	sq->xsk.hdr_dma_address = virtio_dma_map(&vi->vdev->dev, &xsk_hdr,
-+						 vi->hdr_len, DMA_TO_DEVICE);
-+	if (virtio_dma_mapping_error(&vi->vdev->dev, sq->xsk.hdr_dma_address))
-+		return -ENOMEM;
-+
-+	err = xsk_pool_dma_map(pool, &vi->vdev->dev, 0);
-+	if (err)
-+		goto err_xsk_map;
-+
-+	err = virtnet_rq_bind_xsk_pool(vi, rq, pool, dev);
-+	if (err)
-+		goto err_rxq;
-+
-+	/* Here is already protected by rtnl_lock, so rcu_assign_pointer
-+	 * is safe.
-+	 */
-+	rcu_assign_pointer(sq->xsk.pool, pool);
-+
-+	return 0;
-+
-+err_rxq:
-+	xsk_pool_dma_unmap(pool, 0);
-+err_xsk_map:
-+	virtio_dma_unmap(&vi->vdev->dev, sq->xsk.hdr_dma_address, vi->hdr_len,
-+			 DMA_TO_DEVICE);
-+	return err;
++	if (xdp->xsk.pool)
++		return virtnet_xsk_pool_enable(dev, xdp->xsk.pool,
++					       xdp->xsk.queue_id);
++	else
++		return virtnet_xsk_pool_disable(dev, xdp->xsk.queue_id);
 +}
+diff --git a/drivers/net/virtio/xsk.h b/drivers/net/virtio/xsk.h
+new file mode 100644
+index 000000000000..1918285c310c
+--- /dev/null
++++ b/drivers/net/virtio/xsk.h
+@@ -0,0 +1,7 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++
++#ifndef __XSK_H__
++#define __XSK_H__
++
++int virtnet_xsk_pool_setup(struct net_device *dev, struct netdev_bpf *xdp);
++#endif
 -- 
 2.32.0.3.g01195cf9f
 
