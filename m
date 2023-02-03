@@ -2,25 +2,25 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D84FCC61DA4
-	for <bpf@archiver.kernel.org>; Fri,  3 Feb 2023 09:09:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE077C61DA4
+	for <bpf@archiver.kernel.org>; Fri,  3 Feb 2023 09:10:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232533AbjBCJJh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 3 Feb 2023 04:09:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
+        id S231782AbjBCJKP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 3 Feb 2023 04:10:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232580AbjBCJJd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 3 Feb 2023 04:09:33 -0500
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C5F93AD5;
-        Fri,  3 Feb 2023 01:09:29 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VaoDXEV_1675415365;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VaoDXEV_1675415365)
+        with ESMTP id S231478AbjBCJKO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 3 Feb 2023 04:10:14 -0500
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF6A1F5C7;
+        Fri,  3 Feb 2023 01:10:13 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R441e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VaoJ8D9_1675415407;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VaoJ8D9_1675415407)
           by smtp.aliyun-inc.com;
-          Fri, 03 Feb 2023 17:09:26 +0800
-Message-ID: <1675415352.3250086-8-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH 06/33] virtio_ring: introduce virtqueue_reset()
-Date:   Fri, 3 Feb 2023 17:09:12 +0800
+          Fri, 03 Feb 2023 17:10:08 +0800
+Message-ID: <1675415396.0715356-9-xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH 00/33] virtio-net: support AF_XDP zero copy
+Date:   Fri, 3 Feb 2023 17:09:56 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     "Michael S. Tsirkin" <mst@redhat.com>
 Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
@@ -42,116 +42,132 @@ Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
         Petr Machata <petrm@nvidia.com>,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
 References: <20230202110058.130695-1-xuanzhuo@linux.alibaba.com>
- <20230202110058.130695-7-xuanzhuo@linux.alibaba.com>
- <20230203040041-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20230203040041-mutt-send-email-mst@kernel.org>
+ <20230202060757-mutt-send-email-mst@kernel.org>
+ <1675338247.0108669-1-xuanzhuo@linux.alibaba.com>
+ <20230203040739-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20230203040739-mutt-send-email-mst@kernel.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 3 Feb 2023 04:05:38 -0500, "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> On Thu, Feb 02, 2023 at 07:00:31PM +0800, Xuan Zhuo wrote:
-> > Introduce virtqueue_reset() to release all buffer inside vq.
+On Fri, 3 Feb 2023 04:08:31 -0500, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+> On Thu, Feb 02, 2023 at 07:44:07PM +0800, Xuan Zhuo wrote:
+> > On Thu, 2 Feb 2023 06:08:30 -0500, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+> > > On Thu, Feb 02, 2023 at 07:00:25PM +0800, Xuan Zhuo wrote:
+> > > > XDP socket(AF_XDP) is an excellent bypass kernel network framework. The zero
+> > > > copy feature of xsk (XDP socket) needs to be supported by the driver. The
+> > > > performance of zero copy is very good.
+> > >
+> > > Great! Any numbers to share?
 > >
-> > Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> > ---
-> >  drivers/virtio/virtio_ring.c | 50 ++++++++++++++++++++++++++++++++++++
-> >  include/linux/virtio.h       |  2 ++
-> >  2 files changed, 52 insertions(+)
+> > RESEND. Last mail has some email format error.
 > >
-> > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> > index e32046fd15a5..7dfce7001f9f 100644
-> > --- a/drivers/virtio/virtio_ring.c
-> > +++ b/drivers/virtio/virtio_ring.c
-> > @@ -2735,6 +2735,56 @@ int virtqueue_resize(struct virtqueue *_vq, u32 num,
-> >  }
-> >  EXPORT_SYMBOL_GPL(virtqueue_resize);
+> > ENV: Qemu with vhost.
 > >
-> > +/**
-> > + * virtqueue_reset - reset the vring of vq
+> >                    vhost cpu | Guest APP CPU |Guest Softirq CPU | PPS
+> > -----------------------------|---------------|------------------|------------
+> > xmit by sockperf:     90%    |   100%        |                  |  318967
+> > xmit by xsk:          100%   |   30%         |   33%            | 1192064
+> > recv by sockperf:     100%   |   68%         |   100%           |  692288
+> > recv by xsk:          100%   |   33%         |   43%            |  771670
+> >
+> > Thanks.
 >
-> ..., detach and recycle all unused buffers
->
-> 	after all this is why we are doing this reset, right?
->
-> > + * @_vq: the struct virtqueue we're talking about.
-> > + * @recycle: callback for recycle the useless buffer
->
-> not useless :) unused:
->
-> 	callback to recycle unused buffers
+> Impressive, thanks a lot for this work!
+> Pls remember to retest and include up to date numbers on
+> subsequent versions.
 
 
-I agree. Will fix.
+OK.
 
 Thanks.
 
+
 >
-> I know we have the same confusion in virtqueue_resize, I will fix
-> that.
->
-> > + *
-> > + * Caller must ensure we don't call this with other virtqueue operations
-> > + * at the same time (except where noted).
-> > + *
-> > + * Returns zero or a negative error.
-> > + * 0: success.
-> > + * -EBUSY: Failed to sync with device, vq may not work properly
-> > + * -ENOENT: Transport or device not supported
-> > + * -EPERM: Operation not permitted
-> > + */
-> > +int virtqueue_reset(struct virtqueue *_vq,
-> > +		    void (*recycle)(struct virtqueue *vq, void *buf))
-> > +{
-> > +	struct vring_virtqueue *vq = to_vvq(_vq);
-> > +	struct virtio_device *vdev = vq->vq.vdev;
-> > +	void *buf;
-> > +	int err;
-> > +
-> > +	if (!vq->we_own_ring)
-> > +		return -EPERM;
-> > +
-> > +	if (!vdev->config->disable_vq_and_reset)
-> > +		return -ENOENT;
-> > +
-> > +	if (!vdev->config->enable_vq_after_reset)
-> > +		return -ENOENT;
-> > +
-> > +	err = vdev->config->disable_vq_and_reset(_vq);
-> > +	if (err)
-> > +		return err;
-> > +
-> > +	while ((buf = virtqueue_detach_unused_buf(_vq)) != NULL)
-> > +		recycle(_vq, buf);
-> > +
-> > +	if (vq->packed_ring)
-> > +		virtqueue_reinit_packed(vq);
-> > +	else
-> > +		virtqueue_reinit_split(vq);
-> > +
-> > +	if (vdev->config->enable_vq_after_reset(_vq))
-> > +		return -EBUSY;
-> > +
-> > +	return 0;
-> > +}
-> > +EXPORT_SYMBOL_GPL(virtqueue_reset);
-> > +
-> >  /* Only available for split ring */
-> >  struct virtqueue *vring_new_virtqueue(unsigned int index,
-> >  				      unsigned int num,
-> > diff --git a/include/linux/virtio.h b/include/linux/virtio.h
-> > index 3ebb346ebb7c..3ca2edb1aef3 100644
-> > --- a/include/linux/virtio.h
-> > +++ b/include/linux/virtio.h
-> > @@ -105,6 +105,8 @@ dma_addr_t virtqueue_get_used_addr(struct virtqueue *vq);
 > >
-> >  int virtqueue_resize(struct virtqueue *vq, u32 num,
-> >  		     void (*recycle)(struct virtqueue *vq, void *buf));
-> > +int virtqueue_reset(struct virtqueue *vq,
-> > +		    void (*recycle)(struct virtqueue *vq, void *buf));
-> >
-> >  /**
-> >   * struct virtio_device - representation of a device using virtio
-> > --
-> > 2.32.0.3.g01195cf9f
+> > >
+> > > > mlx5 and intel ixgbe already support
+> > > > this feature, This patch set allows virtio-net to support xsk's zerocopy xmit
+> > > > feature.
+> > > >
+> > > > Virtio-net did not support per-queue reset, so it was impossible to support XDP
+> > > > Socket Zerocopy. At present, we have completed the work of Virtio Spec and
+> > > > Kernel in Per-Queue Reset. It is time for Virtio-Net to complete the support for
+> > > > the XDP Socket Zerocopy.
+> > > >
+> > > > Virtio-net can not increase the queue at will, so xsk shares the queue with
+> > > > kernel.
+> > > >
+> > > > On the other hand, Virtio-Net does not support generate interrupt manually, so
+> > > > when we wakeup tx xmit, we used some tips. If the CPU run by TX NAPI last time
+> > > > is other CPUs, use IPI to wake up NAPI on the remote CPU. If it is also the
+> > > > local CPU, then we wake up sofrirqd.
+> > > >
+> > > > Please review.
+> > > >
+> > > > Thanks.
+> > > >
+> > > >
+> > > > Xuan Zhuo (33):
+> > > >   virtio_ring: virtqueue_add() support premapped
+> > > >   virtio_ring: split: virtqueue_add_split() support premapped
+> > > >   virtio_ring: packed: virtqueue_add_packed() support premapped
+> > > >   virtio_ring: introduce virtqueue_add_outbuf_premapped()
+> > > >   virtio_ring: introduce virtqueue_add_inbuf_premapped()
+> > > >   virtio_ring: introduce virtqueue_reset()
+> > > >   virtio_ring: add api virtio_dma_map() for advance dma
+> > > >   virtio_ring: introduce dma sync api for virtio
+> > > >   xsk: xsk_buff_pool add callback for dma_sync
+> > > >   xsk: support virtio DMA map
+> > > >   virtio_net: rename free_old_xmit_skbs to free_old_xmit
+> > > >   virtio_net: unify the code for recycling the xmit ptr
+> > > >   virtio_net: virtnet_poll_tx support rescheduled
+> > > >   virtio_net: independent directory
+> > > >   virtio_net: move to virtio_net.h
+> > > >   virtio_net: introduce virtnet_xdp_handler() to seprate the logic of
+> > > >     run xdp
+> > > >   virtio_net: receive_small() use virtnet_xdp_handler()
+> > > >   virtio_net: receive_merageable() use virtnet_xdp_handler()
+> > > >   virtio_net: introduce virtnet_tx_reset()
+> > > >   virtio_net: xsk: introduce virtnet_rq_bind_xsk_pool()
+> > > >   virtio_net: xsk: introduce virtnet_xsk_pool_enable()
+> > > >   virtio_net: xsk: introduce xsk disable
+> > > >   virtio_net: xsk: support xsk setup
+> > > >   virtio_net: xsk: stop disable tx napi
+> > > >   virtio_net: xsk: __free_old_xmit distinguishes xsk buffer
+> > > >   virtio_net: virtnet_sq_free_unused_buf() check xsk buffer
+> > > >   virtio_net: virtnet_rq_free_unused_buf() check xsk buffer
+> > > >   net: introduce napi_tx_raise()
+> > > >   virtio_net: xsk: tx: support tx
+> > > >   virtio_net: xsk: tx: support wakeup
+> > > >   virtio_net: xsk: tx: auto wakeup when free old xmit
+> > > >   virtio_net: xsk: rx: introduce add_recvbuf_xsk()
+> > > >   virtio_net: xsk: rx: introduce receive_xsk() to recv xsk buffer
+> > > >
+> > > >  MAINTAINERS                                 |   2 +-
+> > > >  drivers/net/Kconfig                         |   8 +-
+> > > >  drivers/net/Makefile                        |   2 +-
+> > > >  drivers/net/virtio/Kconfig                  |  11 +
+> > > >  drivers/net/virtio/Makefile                 |   8 +
+> > > >  drivers/net/{virtio_net.c => virtio/main.c} | 564 +++++++-------------
+> > > >  drivers/net/virtio/virtio_net.h             | 317 +++++++++++
+> > > >  drivers/net/virtio/xsk.c                    | 524 ++++++++++++++++++
+> > > >  drivers/net/virtio/xsk.h                    |  33 ++
+> > > >  drivers/virtio/virtio_ring.c                | 376 +++++++++++--
+> > > >  include/linux/netdevice.h                   |   7 +
+> > > >  include/linux/virtio.h                      |  29 +
+> > > >  include/net/xsk_buff_pool.h                 |   6 +
+> > > >  net/core/dev.c                              |  11 +
+> > > >  net/xdp/xsk_buff_pool.c                     |  79 ++-
+> > > >  15 files changed, 1541 insertions(+), 436 deletions(-)
+> > > >  create mode 100644 drivers/net/virtio/Kconfig
+> > > >  create mode 100644 drivers/net/virtio/Makefile
+> > > >  rename drivers/net/{virtio_net.c => virtio/main.c} (92%)
+> > > >  create mode 100644 drivers/net/virtio/virtio_net.h
+> > > >  create mode 100644 drivers/net/virtio/xsk.c
+> > > >  create mode 100644 drivers/net/virtio/xsk.h
+> > > >
+> > > > --
+> > > > 2.32.0.3.g01195cf9f
+> > >
 >
