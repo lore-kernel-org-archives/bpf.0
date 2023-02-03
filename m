@@ -2,69 +2,35 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20B37C636CC
-	for <bpf@archiver.kernel.org>; Fri,  3 Feb 2023 08:56:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02DFBC61DA4
+	for <bpf@archiver.kernel.org>; Fri,  3 Feb 2023 08:57:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbjBCI4R (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 3 Feb 2023 03:56:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
+        id S231459AbjBCI5X (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 3 Feb 2023 03:57:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231766AbjBCI4R (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 3 Feb 2023 03:56:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1499759984
-        for <bpf@vger.kernel.org>; Fri,  3 Feb 2023 00:55:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675414534;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NTRIC3PmgkbexfvmdzDVVE1snyz3cb/Iuh5EyQX83nQ=;
-        b=jPV6qUVRenyBcu0IiIvzUl+BrJ+CEyaXNxkZoaqFt0efOH9QI7Se1YZEOgFOh+J971i179
-        aJjMSa2IVqU1PXk1Bqpd5DYWqcCGuAUzta/NlD5Y34tHrVq+1s+wPPO6acR+0WkpKgb3hK
-        i2oka8Yg89wKjIHo/v9dG7rf/0B4o6A=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-53-VNw7P1UnPAmSanJ5r0wlgw-1; Fri, 03 Feb 2023 03:55:33 -0500
-X-MC-Unique: VNw7P1UnPAmSanJ5r0wlgw-1
-Received: by mail-ej1-f71.google.com with SMTP id m21-20020a1709060d9500b0088ca6c7af4cso3468336eji.21
-        for <bpf@vger.kernel.org>; Fri, 03 Feb 2023 00:55:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NTRIC3PmgkbexfvmdzDVVE1snyz3cb/Iuh5EyQX83nQ=;
-        b=TUhXUmcBJmF/EHDI2BqCcD1ld6Shvekp0BC5K4zwg7vhfTY6VrVx9p6fy8vJSR3ZvR
-         7cLRW1lxsO5826ZKZ48jVUOcdSU/g5tN7UtyL58Gt+qGLfOTllXE2VtErs5Whz64Op/N
-         mN7C7DmA2W1fmD65DrjV1uwMsgnux1vrWVorvUs5C+RibgeGuA2LUs5N6S7e+lnYAcAU
-         U8AwwGyWTaU0FIgYHoKEB6i0DZQKnURkUrjPCigZ+jVl/rCpLEt+VDlOx1OLTiDhZNv4
-         IXEIT7NCMm6LcEgA1t8+qPuVTgMUzAxbJxpsBmEB0f5BlLvktAfngOneTAz1RQWgtPC4
-         xSag==
-X-Gm-Message-State: AO0yUKWYTiypfXB9BK3ikqo84Ksg0VEgIVM1knrw0Tb2iv8Lqbc8UPlf
-        KNsLq5t/pvpCwZSQ3PbI3GIYogIqljLKzGHnlnzgo1a3JqriKto80QKV8gfPBt8rnio55hkdBhu
-        0ulDCFGxlnZZQ
-X-Received: by 2002:a05:6402:34cc:b0:4a0:e0a3:3adc with SMTP id w12-20020a05640234cc00b004a0e0a33adcmr9869172edc.7.1675414531908;
-        Fri, 03 Feb 2023 00:55:31 -0800 (PST)
-X-Google-Smtp-Source: AK7set+sA6ogVU1Whhi9IYFxyCPIOl3snDc0rUMN+CbivbyTZZKBNsts0SpPLVa3etlWkhkgN6ftWA==
-X-Received: by 2002:a05:6402:34cc:b0:4a0:e0a3:3adc with SMTP id w12-20020a05640234cc00b004a0e0a33adcmr9869158edc.7.1675414531740;
-        Fri, 03 Feb 2023 00:55:31 -0800 (PST)
-Received: from redhat.com ([2.52.156.122])
-        by smtp.gmail.com with ESMTPSA id h40-20020a0564020ea800b004a245d70f17sm792571eda.54.2023.02.03.00.55.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 00:55:30 -0800 (PST)
-Date:   Fri, 3 Feb 2023 03:55:26 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        with ESMTP id S232320AbjBCI5T (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 3 Feb 2023 03:57:19 -0500
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B5E98B7F7;
+        Fri,  3 Feb 2023 00:57:17 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0Vao5dz6_1675414632;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vao5dz6_1675414632)
+          by smtp.aliyun-inc.com;
+          Fri, 03 Feb 2023 16:57:12 +0800
+Message-ID: <1675414568.1205437-5-xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH 32/33] virtio_net: xsk: rx: introduce add_recvbuf_xsk()
+Date:   Fri, 3 Feb 2023 16:56:08 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc:     <netdev@vger.kernel.org>, "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
         Jason Wang <jasowang@redhat.com>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+        =?utf-8?b?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
         Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
         Jonathan Lemon <jonathan.lemon@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -74,130 +40,120 @@ Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
         Menglong Dong <imagedong@tencent.com>,
         Kuniyuki Iwashima <kuniyu@amazon.com>,
         Petr Machata <petrm@nvidia.com>,
-        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 16/33] virtio_net: introduce virtnet_xdp_handler() to
- seprate the logic of run xdp
-Message-ID: <20230203035416-mutt-send-email-mst@kernel.org>
+        <virtualization@lists.linux-foundation.org>, <bpf@vger.kernel.org>
 References: <20230202110058.130695-1-xuanzhuo@linux.alibaba.com>
- <20230202110058.130695-17-xuanzhuo@linux.alibaba.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230202110058.130695-17-xuanzhuo@linux.alibaba.com>
+ <20230202110058.130695-33-xuanzhuo@linux.alibaba.com>
+ <Y9zJS+ugeY9qEMt9@boxer>
+In-Reply-To: <Y9zJS+ugeY9qEMt9@boxer>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 07:00:41PM +0800, Xuan Zhuo wrote:
-> At present, we have two long similar logic to perform XDP Progs. And in
-> the implementation of XSK, we will have this need.
-> 
-> Therefore, this PATCH separates the code of executing XDP, which is
-> conducive to later maintenance and facilitates subsequent XSK for reuse.
-> 
-> Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+On Fri, 3 Feb 2023 09:43:55 +0100, Maciej Fijalkowski <maciej.fijalkowski@intel.com> wrote:
+> On Thu, Feb 02, 2023 at 07:00:57PM +0800, Xuan Zhuo wrote:
+> > Implement the logic of filling vq with XSK buffer.
+> >
+> > Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+> > ---
+> >  drivers/net/virtio/main.c | 11 +++++++++++
+> >  drivers/net/virtio/xsk.c  | 26 ++++++++++++++++++++++++++
+> >  drivers/net/virtio/xsk.h  |  2 ++
+> >  3 files changed, 39 insertions(+)
+> >
+> > diff --git a/drivers/net/virtio/main.c b/drivers/net/virtio/main.c
+> > index 7259b27f5cba..2aff0eee35d3 100644
+> > --- a/drivers/net/virtio/main.c
+> > +++ b/drivers/net/virtio/main.c
+> > @@ -1352,10 +1352,20 @@ static int add_recvbuf_mergeable(struct virtnet_info *vi,
+> >   */
+> >  bool try_fill_recv(struct virtnet_info *vi, struct receive_queue *rq, gfp_t gfp)
+> >  {
+> > +	struct xsk_buff_pool *pool;
+> >  	int err;
+> >  	bool oom;
+> >
+> >  	do {
+> > +		rcu_read_lock();
+> > +		pool = rcu_dereference(rq->xsk.pool);
+> > +		if (pool) {
+> > +			err = add_recvbuf_xsk(vi, rq, pool, gfp);
+> > +			rcu_read_unlock();
+> > +			goto check;
+> > +		}
+> > +		rcu_read_unlock();
+> > +
+> >  		if (vi->mergeable_rx_bufs)
+> >  			err = add_recvbuf_mergeable(vi, rq, gfp);
+> >  		else if (vi->big_packets)
+> > @@ -1363,6 +1373,7 @@ bool try_fill_recv(struct virtnet_info *vi, struct receive_queue *rq, gfp_t gfp)
+> >  		else
+> >  			err = add_recvbuf_small(vi, rq, gfp);
+> >
+> > +check:
+> >  		oom = err == -ENOMEM;
+> >  		if (err)
+> >  			break;
+> > diff --git a/drivers/net/virtio/xsk.c b/drivers/net/virtio/xsk.c
+> > index 043b0bf2a5d7..a5e88f919c46 100644
+> > --- a/drivers/net/virtio/xsk.c
+> > +++ b/drivers/net/virtio/xsk.c
+> > @@ -37,6 +37,32 @@ static void virtnet_xsk_check_queue(struct send_queue *sq)
+> >  		netif_stop_subqueue(dev, qnum);
+> >  }
+> >
+> > +int add_recvbuf_xsk(struct virtnet_info *vi, struct receive_queue *rq,
+> > +		    struct xsk_buff_pool *pool, gfp_t gfp)
+> > +{
+> > +	struct xdp_buff *xdp;
+> > +	dma_addr_t addr;
+> > +	u32 len;
+> > +	int err;
+> > +
+> > +	xdp = xsk_buff_alloc(pool);
+>
+> same question as on tx side -anything stopped you from using batch API -
+> xsk_buff_alloc_batch() ?
 
-So you first add a new function then move users over.
-This means that it's hard during review to make sure
-nothing is lost in translation.
-Do the refactoring in a single patch instead.
+Will fix.
 
-> ---
->  drivers/net/virtio/main.c       | 53 +++++++++++++++++++++++++++++++++
->  drivers/net/virtio/virtio_net.h | 11 +++++++
->  2 files changed, 64 insertions(+)
-> 
-> diff --git a/drivers/net/virtio/main.c b/drivers/net/virtio/main.c
-> index 5683cb576474..9d4b84b23ef7 100644
-> --- a/drivers/net/virtio/main.c
-> +++ b/drivers/net/virtio/main.c
-> @@ -478,6 +478,59 @@ static int virtnet_xdp_xmit(struct net_device *dev,
->  	return ret;
->  }
->  
-> +int virtnet_xdp_handler(struct bpf_prog *xdp_prog, struct xdp_buff *xdp,
-> +			struct net_device *dev,
-> +			unsigned int *xdp_xmit,
-> +			struct virtnet_rq_stats *stats)
-> +{
-> +	struct xdp_frame *xdpf;
-> +	int err;
-> +	u32 act;
-> +
-> +	act = bpf_prog_run_xdp(xdp_prog, xdp);
-> +	stats->xdp_packets++;
-> +
-> +	switch (act) {
-> +	case XDP_PASS:
-> +		return VIRTNET_XDP_RES_PASS;
-> +
-> +	case XDP_TX:
-> +		stats->xdp_tx++;
-> +		xdpf = xdp_convert_buff_to_frame(xdp);
-> +		if (unlikely(!xdpf))
-> +			return VIRTNET_XDP_RES_DROP;
-> +
-> +		err = virtnet_xdp_xmit(dev, 1, &xdpf, 0);
-> +		if (unlikely(!err)) {
-> +			xdp_return_frame_rx_napi(xdpf);
-> +		} else if (unlikely(err < 0)) {
-> +			trace_xdp_exception(dev, xdp_prog, act);
-> +			return VIRTNET_XDP_RES_DROP;
-> +		}
-> +
-> +		*xdp_xmit |= VIRTIO_XDP_TX;
-> +		return VIRTNET_XDP_RES_CONSUMED;
-> +
-> +	case XDP_REDIRECT:
-> +		stats->xdp_redirects++;
-> +		err = xdp_do_redirect(dev, xdp, xdp_prog);
-> +		if (err)
-> +			return VIRTNET_XDP_RES_DROP;
-> +
-> +		*xdp_xmit |= VIRTIO_XDP_REDIR;
-> +		return VIRTNET_XDP_RES_CONSUMED;
-> +
-> +	default:
-> +		bpf_warn_invalid_xdp_action(dev, xdp_prog, act);
-> +		fallthrough;
-> +	case XDP_ABORTED:
-> +		trace_xdp_exception(dev, xdp_prog, act);
-> +		fallthrough;
-> +	case XDP_DROP:
-> +		return VIRTNET_XDP_RES_DROP;
-> +	}
-> +}
-> +
->  static unsigned int virtnet_get_headroom(struct virtnet_info *vi)
->  {
->  	return vi->xdp_enabled ? VIRTIO_XDP_HEADROOM : 0;
-> diff --git a/drivers/net/virtio/virtio_net.h b/drivers/net/virtio/virtio_net.h
-> index 8bf31429ae28..af3e7e817f9e 100644
-> --- a/drivers/net/virtio/virtio_net.h
-> +++ b/drivers/net/virtio/virtio_net.h
-> @@ -22,6 +22,12 @@
->  #include <net/net_failover.h>
->  #include <net/xdp_sock_drv.h>
->  
-> +enum {
-> +	VIRTNET_XDP_RES_PASS,
-> +	VIRTNET_XDP_RES_DROP,
-> +	VIRTNET_XDP_RES_CONSUMED,
-> +};
-> +
->  #define VIRTIO_XDP_FLAG	BIT(0)
->  
->  struct virtnet_info {
-> @@ -262,4 +268,9 @@ static void __free_old_xmit(struct send_queue *sq, bool in_napi,
->  		stats->packets++;
->  	}
->  }
-> +
-> +int virtnet_xdp_handler(struct bpf_prog *xdp_prog, struct xdp_buff *xdp,
-> +			struct net_device *dev,
-> +			unsigned int *xdp_xmit,
-> +			struct virtnet_rq_stats *stats);
->  #endif
-> -- 
-> 2.32.0.3.g01195cf9f
+You should know that when I write the earliest version, there is no these APIs.  ^_^
 
+Thanks.
+
+
+
+>
+> > +	if (!xdp)
+> > +		return -ENOMEM;
+> > +
+> > +	/* use the part of XDP_PACKET_HEADROOM as the virtnet hdr space */
+> > +	addr = xsk_buff_xdp_get_dma(xdp) - vi->hdr_len;
+> > +	len = xsk_pool_get_rx_frame_size(pool) + vi->hdr_len;
+> > +
+> > +	sg_init_table(rq->sg, 1);
+> > +	sg_fill_dma(rq->sg, addr, len);
+> > +
+> > +	err = virtqueue_add_inbuf_premapped(rq->vq, rq->sg, 1, xdp, gfp);
+> > +	if (err)
+> > +		xsk_buff_free(xdp);
+> > +
+> > +	return err;
+> > +}
+> > +
+> >  static int virtnet_xsk_xmit_one(struct send_queue *sq,
+> >  				struct xsk_buff_pool *pool,
+> >  				struct xdp_desc *desc)
+> > diff --git a/drivers/net/virtio/xsk.h b/drivers/net/virtio/xsk.h
+> > index f90c28972d72..5549143ef118 100644
+> > --- a/drivers/net/virtio/xsk.h
+> > +++ b/drivers/net/virtio/xsk.h
+> > @@ -24,4 +24,6 @@ int virtnet_xsk_pool_setup(struct net_device *dev, struct netdev_bpf *xdp);
+> >  bool virtnet_xsk_xmit(struct send_queue *sq, struct xsk_buff_pool *pool,
+> >  		      int budget);
+> >  int virtnet_xsk_wakeup(struct net_device *dev, u32 qid, u32 flag);
+> > +int add_recvbuf_xsk(struct virtnet_info *vi, struct receive_queue *rq,
+> > +		    struct xsk_buff_pool *pool, gfp_t gfp);
+> >  #endif
+> > --
+> > 2.32.0.3.g01195cf9f
+> >
