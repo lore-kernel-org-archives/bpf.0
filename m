@@ -2,125 +2,91 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB1BDC61DA4
-	for <bpf@archiver.kernel.org>; Mon,  6 Feb 2023 13:35:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C00A6C636D4
+	for <bpf@archiver.kernel.org>; Mon,  6 Feb 2023 15:42:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbjBFNf5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 6 Feb 2023 08:35:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41200 "EHLO
+        id S229692AbjBFPmC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 6 Feb 2023 10:42:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjBFNf4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 6 Feb 2023 08:35:56 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4945C104
-        for <bpf@vger.kernel.org>; Mon,  6 Feb 2023 05:35:55 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id z13so1214599wmp.2
-        for <bpf@vger.kernel.org>; Mon, 06 Feb 2023 05:35:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aqfjyzqFb4ymT7jvttdq8kUZtil4InYTkivB788ERSA=;
-        b=S/fWuNmmPHpOUTCLuYcoGyYQHiJKSIZg8j08ezDxYAIKFD5FoOhmp5+G8T2VInzkCX
-         QSADvmX67eSirhoAzm2h01kKyle0z8m1xr6zfGA1B35ACB7y1Suc1C0L6Ru7MODKhkDN
-         ttfg8Af+HscIbC0cV5uXsFCYBldektDpC66MxZvrVlG2YpmL6aWny7pWETAG+txoEdEe
-         so8Gk8kYp99qz3lNKobQ8BWDYwTR/3rxQTz8f8Q2sYEcdU5UPw3kLw10x4g1atqirmwh
-         mF+LmJkrB3ioF7ojDlTm5DboyAjPzQaevGpjwYKBZoo4jK6vBIxNgsP0htvE89Ev22vW
-         PZZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aqfjyzqFb4ymT7jvttdq8kUZtil4InYTkivB788ERSA=;
-        b=TV1P+8YO2hIOtaeEWeobr+1KsNZ7tNRyX3vjuGqyZpzI8B/XXOc6FkSbmkqRbJwyLM
-         ZgGn5kPrD4ZKYAVQi1lbKm/bX05AmaYuPCYE/TZUPh8v6kSSprA2YO0LIr3izmW5UFfr
-         y2KO9GGrsdJtxHWUFfwJ/XT3rsm7nPm79e1bRAP60l8XWXkE5bAA9u7A7LiQwscec3F9
-         RCHliEJt8+jgfFCONafA42pfmECEHuuYPWbzzrO9oGfNRrn0pvF6Qirf+KxWTN0+SOS2
-         TlhmsV7bj+/CSBOCh/mN5oQD+OmIbuY37UuoqOHChXtq6Dz7OsZptsZIDheBfj56burm
-         mP1A==
-X-Gm-Message-State: AO0yUKWbPudmpPCzTs1KE/yCc9ktas2GsYiqHmsW9/dqE4PvLsXr1Y20
-        J2SOL2XyX60IUJqRIxRQxnGOmhn9RF4=
-X-Google-Smtp-Source: AK7set/XrrCo5Q/woB19XyYCSBE3Mq2LndAkXrKfvzau1wYVD5kJBcBjX1VekctLvEPPy9pZsVPTPw==
-X-Received: by 2002:a05:600c:3847:b0:3df:fff4:5f6f with SMTP id s7-20020a05600c384700b003dffff45f6fmr4410616wmr.36.1675690553553;
-        Mon, 06 Feb 2023 05:35:53 -0800 (PST)
-Received: from localhost.localdomain ([87.68.177.114])
-        by smtp.gmail.com with ESMTPSA id u2-20020a7bc042000000b003dd8feea827sm15837670wmc.4.2023.02.06.05.35.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 05:35:53 -0800 (PST)
-From:   Jon Doron <arilou@gmail.com>
-To:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org
-Cc:     Jon Doron <jond@wiz.io>
-Subject: [PATCH bpf-next v3] libbpf: Add sample_period to creation options
-Date:   Mon,  6 Feb 2023 15:35:32 +0200
-Message-Id: <20230206133532.2973474-1-arilou@gmail.com>
-X-Mailer: git-send-email 2.39.1
+        with ESMTP id S229716AbjBFPlq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 6 Feb 2023 10:41:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06922B29E;
+        Mon,  6 Feb 2023 07:40:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 30D06B8120F;
+        Mon,  6 Feb 2023 15:39:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC0AFC433D2;
+        Mon,  6 Feb 2023 15:38:57 +0000 (UTC)
+Date:   Mon, 6 Feb 2023 10:38:28 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     lsf-pc@lists.linux-foundation.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org, Ross Zwisler <zwisler@google.com>,
+        "Jose E. Marchesi" <jose.marchesi@oracle.com>
+Subject: [LSF/MM/BPF TOPIC]  sframe: An orc like stack unwinder for the
+ kernel to get a user space stacktrace
+Message-ID: <20230206103828.6efcb28f@rorschach.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jon Doron <jond@wiz.io>
 
-Add option to set when the perf buffer should wake up, by default the
-perf buffer becomes signaled for every event that is being pushed to it.
+Title: sframe: An orc like stack unwinder for the kernel to get a user space stacktrace 
 
-In case of a high throughput of events it will be more efficient to wake
-up only once you have X events ready to be read.
+Due to performance reasons, most applications do not enable frame
+pointers (although Fedora has announced that they have done so[1]
+Although, some of the maintainers that did, would prefer another
+solution[2]) Thus getting a reliable user space stack trace for
+profiling or tracing can be difficult. One method that perf uses, is to
+grab a large section of the user space stack and save it into the ring
+buffer, and then use dwarf to later parse this information. This is
+slow and wastes a lot of ring buffer real-estate leading to lost events.
 
-So your application can wakeup once and drain the entire perf buffer.
+It also requires post processing and after the trace to find where
+these locations exist (the kernel can at least figure out where in the
+file the addresses are by using the proc/$$/maps data).
 
-Signed-off-by: Jon Doron <jond@wiz.io>
----
- tools/lib/bpf/libbpf.c | 9 +++++++--
- tools/lib/bpf/libbpf.h | 3 ++-
- 2 files changed, 9 insertions(+), 3 deletions(-)
+With the a new sframe section that has been introduced by binutils[3],
+this will allow the kernel to get an accurate stack trace from user
+space. This may even be extended to allow for symbol lookup from user
+space as well.
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index eed5cec6f510..cd0bce5482b2 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -11710,17 +11710,22 @@ struct perf_buffer *perf_buffer__new(int map_fd, size_t page_cnt,
- 	const size_t attr_sz = sizeof(struct perf_event_attr);
- 	struct perf_buffer_params p = {};
- 	struct perf_event_attr attr;
-+	__u32 sample_period;
- 
- 	if (!OPTS_VALID(opts, perf_buffer_opts))
- 		return libbpf_err_ptr(-EINVAL);
- 
-+	sample_period = OPTS_GET(opts, sample_period, 1);
-+	if (!sample_period)
-+		sample_period = 1;
-+
- 	memset(&attr, 0, attr_sz);
- 	attr.size = attr_sz;
- 	attr.config = PERF_COUNT_SW_BPF_OUTPUT;
- 	attr.type = PERF_TYPE_SOFTWARE;
- 	attr.sample_type = PERF_SAMPLE_RAW;
--	attr.sample_period = 1;
--	attr.wakeup_events = 1;
-+	attr.sample_period = sample_period;
-+	attr.wakeup_events = sample_period;
- 
- 	p.attr = &attr;
- 	p.sample_cb = sample_cb;
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 8777ff21ea1d..5d3b75a5acde 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -1246,8 +1246,9 @@ typedef void (*perf_buffer_lost_fn)(void *ctx, int cpu, __u64 cnt);
- /* common use perf buffer options */
- struct perf_buffer_opts {
- 	size_t sz;
-+	__u32 sample_period;
- };
--#define perf_buffer_opts__last_field sz
-+#define perf_buffer_opts__last_field sample_period
- 
- /**
-  * @brief **perf_buffer__new()** creates BPF perfbuf manager for a specified
--- 
-2.39.1
+The idea is the following:
 
+1. On exec (binfmt_elf.c) the kernel could see that an sframe section
+exists in the kernel and flag the task struct, and record some
+information of where it exists.
+
+2. perf/ftrace/bpf in any context (NMI, interrupt, etc) wants to take a
+user space stack trace and would request one. This will set a flag in
+the task struct to go the ptrace path before entering back into user
+space. A callback function would need to be registered to handle this
+as well.
+
+3. On the ptrace path (where it's guaranteed to be back into normal
+context and is allowed to fault) it would read the sframe section to
+extract the stack trace (and possibly another section to retrieve a
+symbol table if necessary). It would then call a list of callback
+functions that were added by perf/ftrace/bpf with the stack trace and
+allow them to record it.
+
+We would probably need a system call of some kind to allow the dynamic
+linker to notify the kernel of sframe sections that exist in libraries
+that are loaded after the initial exec as well.
+
+I'd like to discuss the above ideas about getting this implemented.
+
+-- Steve
+
+
+[1] https://lwn.net/Articles/919940/
+[2] https://social.kernel.org/notice/ARHY3JdFu2WMYDb888
+[3] https://www.phoronix.com/news/GNU-Binutils-SFrame
