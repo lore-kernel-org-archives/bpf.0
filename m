@@ -2,115 +2,166 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C50BC05027
-	for <bpf@archiver.kernel.org>; Mon,  6 Feb 2023 17:49:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1488C63797
+	for <bpf@archiver.kernel.org>; Mon,  6 Feb 2023 17:52:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbjBFRtR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 6 Feb 2023 12:49:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48302 "EHLO
+        id S230059AbjBFRwc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 6 Feb 2023 12:52:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbjBFRtQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 6 Feb 2023 12:49:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C11BF1CF41;
-        Mon,  6 Feb 2023 09:49:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D29D60FC6;
-        Mon,  6 Feb 2023 17:49:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6C15C4339B;
-        Mon,  6 Feb 2023 17:49:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675705752;
-        bh=Q6U8O/+O8ktOW5TwrWzmYYWFhoc5mnoVra9PevbBKu4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=kToAHsCE73O3vI265cOKmjo7Hp/5wz+aPNK6vuMejLSCRc4y7p04MigexbGCOzvac
-         aZ6T3vCpEbS4FpA+jAT63YzdSVOeVxNTN2oVBgt7Egzm0PQ0lon4MzjwP4u8Qa2MxT
-         WYJbAWaGaZVpBtB0R/M5HbEFPn9Nr3I66zQMSan2GVc/8Qb1BxL/uMxZxWzmlWkUgi
-         /Zxe7RdH9F5JmB7hM5MUF8LEqlJdei0oQms5dgizdfLtwRT4mo6/7Gp9fJuVQwUIb6
-         OE6CUhZbkjSUYDxVpTxrUAryhCLB/Dk0mKE4KWXWVP5wq/F/XuMoq1HoJQK+yEEmdj
-         80g9YiK8ZRq5A==
-Received: by mail-lf1-f43.google.com with SMTP id j17so18788394lfr.3;
-        Mon, 06 Feb 2023 09:49:12 -0800 (PST)
-X-Gm-Message-State: AO0yUKWKP/v0uQ9hN99o+tJSCi23QZYX3sg19XiH5rx8QCpK1lHxXFwK
-        cR/a7PgBaI6x862ZaB3qICFmfmuwwrpT8LXuxLo=
-X-Google-Smtp-Source: AK7set/MtMP/TeNFMAuG8UTa7R5RNt6agX9+RtocVxWMfng3xHZhRy8VqYERZK7W4TnN0fCfFPEXBBhwUbOmJOft32Y=
-X-Received: by 2002:a05:6512:31b:b0:4d5:82bb:c06d with SMTP id
- t27-20020a056512031b00b004d582bbc06dmr4922983lfp.256.1675705750725; Mon, 06
- Feb 2023 09:49:10 -0800 (PST)
+        with ESMTP id S229677AbjBFRwb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 6 Feb 2023 12:52:31 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752D1FF22
+        for <bpf@vger.kernel.org>; Mon,  6 Feb 2023 09:52:29 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id e10-20020a17090a630a00b0022bedd66e6dso15952741pjj.1
+        for <bpf@vger.kernel.org>; Mon, 06 Feb 2023 09:52:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0zyweaVyiMqk4LHuNuzEqryLINLpiUARVWRIcVZa2lw=;
+        b=Jl2YisgLdiqvhpCBOAhNrDu+USOFqPUBAMNQALaN99jC4eqrKpnaVmcdgUI9YgMhb/
+         aE/stlsmeWlkXNJCUgbhkxMsUGClClfb5Za1b31fmi9dZq5NiRNcFC+H03SQxvVd9olz
+         6zKxlpOrHVApTG9OGfoVYx1cN4JgH1yIzdH2ihtigTJub8FlVQAVQI3Eqpx5BEJmJ62a
+         Q13DT/0Jp/lo3RTQISNRzwHFfVUvbugZv01Ym/FHDtp8zIwrNctMRrK33b4DmNrxhwk7
+         ckLCC8si+AltsVqaM3L7xo2IK1ms8CzckQpKM7hj7gdPYMDUlJLr+KBfbjCccSVpOsAC
+         qLmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0zyweaVyiMqk4LHuNuzEqryLINLpiUARVWRIcVZa2lw=;
+        b=pVcLF/GRxo6IWl/zJ8ioxz5JJLGj3+yc4DHHCCpOzrU9Ygpg5B7M1K9peMoiXvkm+y
+         7FC7DlB/9FTFzfl0RP8gvqBKiXWhphx/RrNxanfc24VQS47sjslJScOVHqiC+1OoRGt3
+         bXuTFWaSkCusztJWjGwQ6/HZu/dm33CFJLh7P5r6ZYYvpHZ6CaMMF39/KbRINcEfSyXr
+         MPRFqRCJK1351HN9vE/WdySI7Bk92WHxmOm7Leg/2U2hKvIn5xQIZC7x8JmiM45wJD9w
+         Yiipv0yu+G3gWSu0prp5PdEq2/7Z95JdL3NV+vPU82H9bki/8BrhTciM5ztDlNkPIguG
+         dCGQ==
+X-Gm-Message-State: AO0yUKX3VK6k+bwIacGxQYZHL71+NKgb2DPqk+4Ayp/Kz6oLLfi3yTFr
+        nSqBq/MqJ6woaES1VEPGEERD4X4t9cv47+jGDXDQaA==
+X-Google-Smtp-Source: AK7set9V9OdoqOHwLvVsBSh6xMOnS76j0J/EJOguL3f2UWTtjvPiP0ISRA9SUhs+FJhcH6k42DfkTHAvGrK64PYZUa8=
+X-Received: by 2002:a17:902:c215:b0:199:26b1:17a7 with SMTP id
+ 21-20020a170902c21500b0019926b117a7mr326393pll.10.1675705948668; Mon, 06 Feb
+ 2023 09:52:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20230120000818.1324170-1-kpsingh@kernel.org> <20230120000818.1324170-4-kpsingh@kernel.org>
- <202301192004.777AEFFE@keescook> <CACYkzJ75nYnunhcAaE-20p9YHLzVynUEAA+uK1tmGeOWA83MjA@mail.gmail.com>
- <db1fed31-0283-5401-cf55-d18a98ca33ae@schaufler-ca.com>
-In-Reply-To: <db1fed31-0283-5401-cf55-d18a98ca33ae@schaufler-ca.com>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 6 Feb 2023 09:48:56 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW4C8NU15mjetX8Ucp3R66xEgOGS6udiaauUtPg06Si93Q@mail.gmail.com>
-Message-ID: <CAPhsuW4C8NU15mjetX8Ucp3R66xEgOGS6udiaauUtPg06Si93Q@mail.gmail.com>
-Subject: Re: [PATCH RESEND bpf-next 3/4] security: Replace indirect LSM hook
- calls with static calls
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     KP Singh <kpsingh@kernel.org>, Kees Cook <keescook@chromium.org>,
-        linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, jackmanb@google.com,
-        renauld@google.com, paul@paul-moore.com, revest@chromium.org
+References: <20230204183241.never.481-kees@kernel.org>
+In-Reply-To: <20230204183241.never.481-kees@kernel.org>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Mon, 6 Feb 2023 09:52:17 -0800
+Message-ID: <CAKH8qBvqLeR3Wsbpb-v=EUY=Bw0jCP2OAaBn4tOqGmA1AqBZbA@mail.gmail.com>
+Subject: Re: [PATCH] bpf: Replace bpf_lpm_trie_key 0-length array with
+ flexible array
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Haowen Bai <baihaowen@meizu.com>, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Feb 6, 2023 at 8:29 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
+On Sat, Feb 4, 2023 at 10:32 AM Kees Cook <keescook@chromium.org> wrote:
 >
-> On 2/6/2023 5:04 AM, KP Singh wrote:
-> > On Fri, Jan 20, 2023 at 5:36 AM Kees Cook <keescook@chromium.org> wrote:
-> >> On Fri, Jan 20, 2023 at 01:08:17AM +0100, KP Singh wrote:
-> >>> The indirect calls are not really needed as one knows the addresses of
-> > [...]
-> >
-> >>> +/*
-> >>> + * Define static calls and static keys for each LSM hook.
-> >>> + */
-> >>> +
-> >>> +#define DEFINE_LSM_STATIC_CALL(NUM, NAME, RET, ...)                  \
-> >>> +     DEFINE_STATIC_CALL_NULL(LSM_STATIC_CALL(NAME, NUM),             \
-> >>> +                             *((RET(*)(__VA_ARGS__))NULL));          \
-> >>> +     DEFINE_STATIC_KEY_FALSE(SECURITY_HOOK_ENABLED_KEY(NAME, NUM));
-> >> Hm, another place where we would benefit from having separated logic for
-> >> "is it built?" and "is it enabled by default?" and we could use
-> >> DEFINE_STATIC_KEY_MAYBE(). But, since we don't, I think we need to use
-> >> DEFINE_STATIC_KEY_TRUE() here or else won't all the calls be
-> >> out-of-line? (i.e. the default compiled state will be NOPs?) If we're
-> >> trying to optimize for having LSMs, I think we should default to inline
-> >> calls. (The machine code in the commit log seems to indicate that they
-> >> are out of line -- it uses jumps.)
-> >>
-> > I should have added it in the commit description, actually we are
-> > optimizing for "hot paths are less likely to have LSM hooks enabled"
-> > (eg. socket_sendmsg).
+> Replace deprecated 0-length array in struct bpf_lpm_trie_key with
+> flexible array. Found with GCC 13:
 >
-> How did you come to that conclusion? Where is there a correlation between
-> "hot path" and "less likely to be enabled"?
+> ../kernel/bpf/lpm_trie.c:207:51: warning: array subscript i is outside array bounds of 'const __u8[0]' {aka 'const unsigned char[]'} [-Warray-bounds=]
+>   207 |                                        *(__be16 *)&key->data[i]);
+>       |                                                   ^~~~~~~~~~~~~
+> ../include/uapi/linux/swab.h:102:54: note: in definition of macro '__swab16'
+>   102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+>       |                                                      ^
+> ../include/linux/byteorder/generic.h:97:21: note: in expansion of macro '__be16_to_cpu'
+>    97 | #define be16_to_cpu __be16_to_cpu
+>       |                     ^~~~~~~~~~~~~
+> ../kernel/bpf/lpm_trie.c:206:28: note: in expansion of macro 'be16_to_cpu'
+>   206 |                 u16 diff = be16_to_cpu(*(__be16 *)&node->data[i]
+> ^
+>       |                            ^~~~~~~~~~~
+> In file included from ../include/linux/bpf.h:7:
+> ../include/uapi/linux/bpf.h:82:17: note: while referencing 'data'
+>    82 |         __u8    data[0];        /* Arbitrary size */
+>       |                 ^~~~
+>
+> This includes fixing the selftest which was incorrectly using a
+> variable length struct as a header, identified earlier[1]. Avoid this
+> by just explicitly including the prefixlen member instead of struct
+> bpf_lpm_trie_key.
+>
+> [1] https://lore.kernel.org/all/202206281009.4332AA33@keescook/
+>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: Andrii Nakryiko <andrii@kernel.org>
+> Cc: Martin KaFai Lau <martin.lau@linux.dev>
+> Cc: Song Liu <song@kernel.org>
+> Cc: Yonghong Song <yhs@fb.com>
+> Cc: John Fastabend <john.fastabend@gmail.com>
+> Cc: KP Singh <kpsingh@kernel.org>
+> Cc: Stanislav Fomichev <sdf@google.com>
+> Cc: Hao Luo <haoluo@google.com>
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Cc: Mykola Lysenko <mykolal@fb.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Haowen Bai <baihaowen@meizu.com>
+> Cc: bpf@vger.kernel.org
+> Cc: linux-kselftest@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  include/uapi/linux/bpf.h                         | 2 +-
+>  tools/testing/selftests/bpf/progs/map_ptr_kern.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index ba0f0cfb5e42..5930bc5c7e2c 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -79,7 +79,7 @@ struct bpf_insn {
+>  /* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
+>  struct bpf_lpm_trie_key {
+>         __u32   prefixlen;      /* up to 32 for AF_INET, 128 for AF_INET6 */
+> -       __u8    data[0];        /* Arbitrary size */
+> +       __u8    data[];         /* Arbitrary size */
+>  };
 
-I could echo KP's reasoning here. AFAICT, the correlation is that LSMs on
-hot path will give more performance overhead. In our use cases (Meta),
-we are very careful with "small" performance hits. 0.25% is significant
-overhead; 1% overhead will not fly without very good reasons (Do we
-have to do this? Are there any other alternatives?). If it is possible to
-achieve similar security on a different hook, we will not enable the hook on
-the hot path. For example, we may not enable socket_sendmsg, but try
-to disallow opening such sockets instead.
+That's a UAPI change, can we do it? The safest option is probably just
+to remove this field if it's causing any problems (and not do the
+map_ptr_kern.c change below).
+The usual use-case (at least that's what we do) is to define some new
+struct over it:
+
+struct my_key {
+  struct bpf_lpm_trie_key prefix;
+  int a, b, c;
+};
+
+So I really doubt that the 'data' is ever touched by any programs at all..
 
 >
-> >  But I do see that there are LSMs that have these
-> > enabled. Maybe we can put this behind a config option, possibly
-> > depending on CONFIG_EXPERT?
+>  struct bpf_cgroup_storage_key {
+> diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+> index db388f593d0a..543012deb349 100644
+> --- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+> +++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+> @@ -311,7 +311,7 @@ struct lpm_trie {
+>  } __attribute__((preserve_access_index));
 >
-> Help me, as the maintainer of one of those LSMs, understand why that would
-> be a good idea.
-
-IIUC, this is also from performance concerns. We would like to manage
-the complexity at compile time for performance benefits.
-
-Thanks,
-Song
+>  struct lpm_key {
+> -       struct bpf_lpm_trie_key trie_key;
+> +       __u32 prefixlen;
+>         __u32 data;
+>  };
+> --
+> 2.34.1
+>
