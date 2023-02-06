@@ -2,134 +2,74 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AB23C636D6
-	for <bpf@archiver.kernel.org>; Mon,  6 Feb 2023 11:53:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59B62C61DA4
+	for <bpf@archiver.kernel.org>; Mon,  6 Feb 2023 12:33:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbjBFLxY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 6 Feb 2023 06:53:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33734 "EHLO
+        id S229764AbjBFMdn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 6 Feb 2023 07:33:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjBFLxX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 6 Feb 2023 06:53:23 -0500
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F4612F29
-        for <bpf@vger.kernel.org>; Mon,  6 Feb 2023 03:53:22 -0800 (PST)
-Received: by mail-qv1-xf2b.google.com with SMTP id b7so2796382qvo.6
-        for <bpf@vger.kernel.org>; Mon, 06 Feb 2023 03:53:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WpOlzlgprXcBwzGCC3ZZLrYR97mq4YuOjOiXOKGzquY=;
-        b=jTk8Ff7B/f0cUIwybEahiD0B53JzmMiPAESl+iqnoN2oJbQUsoCKwyFUdfntCHN1Tq
-         RKlSnBIWljYqtCMddu1MfamKAz50vJAh4XxRBgY6BLzVwvXy0BZltifH5NDUAwrcl+1a
-         KOXJ8QtvVSVAtVBxRkDYLajTGYd4JKe40twh0FJcVD+atIriki0tSUDbVVn3620UflNc
-         hGAOXRWZCwOi6kStCYUyUk96yTb6EsU3cbXdAR/ccLyzZAGiGqJLjNJ8benii3BiIk80
-         14Y7N7Vx589pYhsJ6hE4wILwW3aMUXk62LftPQNX4cEjpSYyMabRCOKqX6CPoDnFe3i5
-         TH2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WpOlzlgprXcBwzGCC3ZZLrYR97mq4YuOjOiXOKGzquY=;
-        b=v//qwUG9Wwz4sRrce/B0ABzSXHzYxayNOdkOS20Hasq9ux/5nfA5FqPs3aEcFxFrTH
-         qtNGqewdbsIJZ0A+8R+gNLOWEvL4tgdTaPc+k8ffVxW/2TzOylJbRkesgzBErXSwX10m
-         tcH4iZcZucoRCOVsRxiKgwh31djXHJ6lOI12ZvRLfRkS9e/X8MT+F+vJZcYp3eE4I1pZ
-         Ful4z4esibU9jMIEQ8E8rcNrGTSAATR+2cgDH28wLUm71kIMR09wzgdyjNLBNjqRTpMS
-         fnUVuFzrXuzdTrENBojGdwG9A5WcnVwN005Tt84hyK0qiHAEbdeqYcQ4N5VpEi81YqXK
-         YdwQ==
-X-Gm-Message-State: AO0yUKVu9rcnZSQCzcAqEsemY6y2FWWg5iAUBihYnf3NizY132rKCFg/
-        kTP1yhg4ACI8pEcOx4+43hq8U8DMN7w+yWmLt0VtT3oF6k8S7w==
-X-Google-Smtp-Source: AK7set/qqvbkHL+8abukp/KqPpIpfPhfODhJgn087gy4RZ1tmJw+8wgEKfnzxP7KHhivFpyDl9AZY5So/eb0/7ex3SA=
-X-Received: by 2002:a0c:f40f:0:b0:56a:eed2:704f with SMTP id
- h15-20020a0cf40f000000b0056aeed2704fmr540110qvl.5.1675684401966; Mon, 06 Feb
- 2023 03:53:21 -0800 (PST)
+        with ESMTP id S229556AbjBFMdm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 6 Feb 2023 07:33:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882F91F5C7;
+        Mon,  6 Feb 2023 04:33:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 23E1960EC6;
+        Mon,  6 Feb 2023 12:33:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 335ACC4339C;
+        Mon,  6 Feb 2023 12:33:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675686819;
+        bh=5WVlaS3/zFQwln7s9uVxC5sIfgIbVY6ccLu0N5dICE8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KV84+dekaKRQvIz4BSu62j6V8e16X1/TA8v1DQedtN3m+3V0lWSudVmFJ8JqWK3Qa
+         0+rOwzIPeQg9k6sFUbCCOBL4QrrgJKtuepbUVCE5zlzLXe4YO0677JDoO2NkA5u24M
+         vjj5TwbRlHPnAnxc1W0nwm1WgzM280SkMnJfLJPsy0Ho6HASfty2RrOAZBNC0ySqp+
+         RCnJIOyK1ULgeiR4RPLOCo5BEjA/3GM1ggOhmDft9u1Jyaf2nc+/jDCivn3d88PY02
+         ghdMgkrpj9iqSn+mwSxj5/ntywtiKilnMI6S5vb6N9O3Kz80z+kjDJ+XxbOeo/8tyz
+         F0DHcAPzHm4+A==
+From:   Lorenzo Bianconi <lorenzo@kernel.org>
+To:     bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, edumazet@google.com,
+        lorenzo.bianconi@redhat.com, sfr@canb.auug.org.au
+Subject: [PATCH bpf-next] net: add missing xdp_features description
+Date:   Mon,  6 Feb 2023 11:34:40 +0100
+Message-Id: <bec12badf6eea84c426bb51f1eb249b2e8c6a421.1675679509.git.lorenzo@kernel.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-References: <20230202014158.19616-1-laoar.shao@gmail.com> <20230202014158.19616-8-laoar.shao@gmail.com>
- <Y+AqPJSBnAN830p3@pop-os.localdomain>
-In-Reply-To: <Y+AqPJSBnAN830p3@pop-os.localdomain>
-From:   Yafang Shao <laoar.shao@gmail.com>
-Date:   Mon, 6 Feb 2023 19:52:45 +0800
-Message-ID: <CALOAHbAT46+joi2Px2c9ACmtkZ6OPjf64uBpCB9ABF7CPzW19g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 7/7] bpf: hashtab memory usage
-To:     Cong Wang <xiyou.wangcong@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, tj@kernel.org,
-        dennis@kernel.org, cl@linux.com, akpm@linux-foundation.org,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com, vbabka@suse.cz,
-        urezki@gmail.com, linux-mm@kvack.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Feb 6, 2023 at 6:14 AM Cong Wang <xiyou.wangcong@gmail.com> wrote:
->
-> On Thu, Feb 02, 2023 at 01:41:58AM +0000, Yafang Shao wrote:
-> > Get htab memory usage from the htab pointers we have allocated. Some
-> > small pointers are ignored as their size are quite small compared with
-> > the total size.
-> >
-> > The result as follows,
-> > - before this change
-> > 1: hash  name count_map  flags 0x0  <<<< prealloc
-> >         key 16B  value 24B  max_entries 1048576  memlock 41943040B
-> > 2: hash  name count_map  flags 0x1  <<<< non prealloc, fully set
-> >         key 16B  value 24B  max_entries 1048576  memlock 41943040B
-> > 3: hash  name count_map  flags 0x1  <<<< non prealloc, non set
-> >         key 16B  value 24B  max_entries 1048576  memlock 41943040B
-> >
-> > The memlock is always a fixed number whatever it is preallocated or
-> > not, and whatever the allocated elements number is.
-> >
-> > - after this change
-> > 1: hash  name count_map  flags 0x0  <<<< prealloc
-> >         key 16B  value 24B  max_entries 1048576  memlock 109064464B
-> > 2: hash  name count_map  flags 0x1  <<<< non prealloc, fully set
-> >         key 16B  value 24B  max_entries 1048576  memlock 117464320B
-> > 3: hash  name count_map  flags 0x1  <<<< non prealloc, non set
-> >         key 16B  value 24B  max_entries 1048576  memlock 16797952B
-> >
-> > The memlock now is hashtab actually allocated.
-> >
-> > At worst, the difference can be 10x, for example,
-> > - before this change
-> > 4: hash  name count_map  flags 0x0
-> >         key 4B  value 4B  max_entries 1048576  memlock 8388608B
-> >
-> > - after this change
-> > 4: hash  name count_map  flags 0x0
-> >         key 4B  value 4B  max_entries 1048576  memlock 83898640B
-> >
-> > Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-> > ---
-> >  kernel/bpf/hashtab.c | 80 +++++++++++++++++++++++++++++++++++++++++++++++++++-
->
-> What about other maps like regular array map?
->
+Add missing xdp_features field description in the struct net_device
+documentation. This patch fix the following warning:
 
-I haven't finished the work to support all bpf maps.
+./include/linux/netdevice.h:2375: warning: Function parameter or member 'xdp_features' not described in 'net_device'
 
-Most of the maps have fixed entries, so we can get the usage directly
-from an map pointer or get the element size and then calculate it, for
-example,
-- arraymap usage
-  size = kvsize(array);
-- percpu arraymap usage
-  size = kvsize(array);
-  size += percpu_size(array->pptrs[0]) * array->map.max_entries;
+Fixes: d3d854fd6a1d ("netdev-genl: create a simple family for netdev stuff")
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+---
+ include/linux/netdevice.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-But there's special case like cgroup_storage, the max_entries of which
-is 0, for example,
-122: cgroup_storage  flags 0x0
-        key 16B  value 8B  max_entries 0  memlock 0B
-
-For this case, we should calculate the count of entries first.
-
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 0f7967591288..645787259172 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -1819,6 +1819,7 @@ enum netdev_ml_priv_type {
+  *			of Layer 2 headers.
+  *
+  *	@flags:		Interface flags (a la BSD)
++*	@xdp_features:	XDP capability supported by the device
+  *	@priv_flags:	Like 'flags' but invisible to userspace,
+  *			see if.h for the definitions
+  *	@gflags:	Global flags ( kept as legacy )
 -- 
-Regards
-Yafang
+2.39.1
+
