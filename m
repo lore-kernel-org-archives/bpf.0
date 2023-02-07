@@ -2,54 +2,54 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 820D5C636CC
-	for <bpf@archiver.kernel.org>; Tue,  7 Feb 2023 21:51:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69675C636D3
+	for <bpf@archiver.kernel.org>; Tue,  7 Feb 2023 21:51:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbjBGVub (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Feb 2023 16:50:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
+        id S229512AbjBGVvE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Feb 2023 16:51:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbjBGVuW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Feb 2023 16:50:22 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D000D9EF4;
-        Tue,  7 Feb 2023 13:50:21 -0800 (PST)
+        with ESMTP id S229563AbjBGVuv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Feb 2023 16:50:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA199EF4
+        for <bpf@vger.kernel.org>; Tue,  7 Feb 2023 13:50:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B4348CE1DDE;
-        Tue,  7 Feb 2023 21:50:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BE525C4339B;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3548FB81AD0
+        for <bpf@vger.kernel.org>; Tue,  7 Feb 2023 21:50:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CA631C433D2;
         Tue,  7 Feb 2023 21:50:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1675806617;
-        bh=KTTbZ5BnYJb/zfCqW8eyLI+b2ugGmk6RjmJzPv8XacE=;
+        bh=UwTtZ7MZarnOsAM6+r8ScvT3rU282hvu4yK6wZ6ZkVc=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=cNPpcBVPq243DhnW7RJOpsoIWgWbgk4+lrGddYl+tPD2LXaqXww7JrwP4NP6wTDtB
-         jcE/aZkZNynV9A0Xhir4MZGWovUxFmiX86uOERt1jFfG0+DgDUx4lHNUzFSpqnBxUp
-         /9u292SO+B/Gs8A8H/3NqY0zM9H8TCErHXPBiwfO2dw7WViqS8w+00XtbNZqYmWbUC
-         AOOnnyUIaNLlM5fS7/EiCAG45eY28i2/0c11LqX+wzKd0k5Qe/EAl4+ehX89bhhg5k
-         NF94vJ7Q+c8474uVvy2QoeCIwSN7ZwN+7ELMHY+fVHMfrf3EOhnane7bRkUnlMQq0Q
-         PtNeuMdaz07vw==
+        b=Vpin4+4jkEvINr7YvhRku8VeC80UQZUYv8vkYl2eKEkVQm2NGbYxL3f6s1Vjusm0e
+         602pyRYRReOSfb9fyDudvgykM2GHvCF6LsWcaugN5I4LLAuAScL+sOuIUI/zshcqcL
+         5H/Q0qvbtAVKQoASKRBARX8SWbeYUM6BDRlAE8WZoJmLFsCPU9ymkLwioC7kjjpvQt
+         M+aaNawA0sDLZQaWYLZ9YDWfVoEEKAvJLIhvhfSzZsaoCnZw4TUlEqfmAxVLGx4PWa
+         i5xS4KId/Clkca0FvWHo6R95Wl0gawjXzZm+VsPUZFOeMiYix8sEWSJDzXJlmxbmet
+         FcejQNpy5+EDw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A5E81E21ECB;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AF02EE55EFD;
         Tue,  7 Feb 2023 21:50:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v1] tools/resolve_btfids: Tidy HOST_OVERRIDES
+Subject: Re: [PATCH bpf-next] tools/resolve_btfids: Compile resolve_btfids as host
+ program
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167580661767.11027.16226467160781330499.git-patchwork-notify@kernel.org>
+Message-Id: <167580661771.11027.13109053225318741637.git-patchwork-notify@kernel.org>
 Date:   Tue, 07 Feb 2023 21:50:17 +0000
-References: <20230202224253.40283-1-irogers@google.com>
-In-Reply-To: <20230202224253.40283-1-irogers@google.com>
-To:     Ian Rogers <irogers@google.com>
+References: <20230202112839.1131892-1-jolsa@kernel.org>
+In-Reply-To: <20230202112839.1131892-1-jolsa@kernel.org>
+To:     Jiri Olsa <jolsa@kernel.org>
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, connoro@google.com,
-        nathan@kernel.org, memxor@gmail.com, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        irogers@google.com, nathan@kernel.org, bpf@vger.kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@chromium.org, sdf@google.com,
+        haoluo@google.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
@@ -59,20 +59,23 @@ Hello:
 This patch was applied to bpf/bpf-next.git (master)
 by Daniel Borkmann <daniel@iogearbox.net>:
 
-On Thu,  2 Feb 2023 14:42:53 -0800 you wrote:
-> Don't set EXTRA_CFLAGS to HOSTCFLAGS, ensure CROSS_COMPILE isn't
-> passed through.
+On Thu,  2 Feb 2023 12:28:39 +0100 you wrote:
+> Making resolve_btfids to be compiled as host program so
+> we can avoid cross compile issues as reported by Nathan.
 > 
-> This patch is based on top of:
-> https://lore.kernel.org/bpf/20230202112839.1131892-1-jolsa@kernel.org/
+> Also we no longer need HOST_OVERRIDES for BINARY target,
+> just for 'prepare' targets.
 > 
-> Signed-off-by: Ian Rogers <irogers@google.com>
+> Cc: Ian Rogers <irogers@google.com>
+> Fixes: 13e07691a16f ("tools/resolve_btfids: Alter how HOSTCC is forced")
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 > 
 > [...]
 
 Here is the summary with links:
-  - [v1] tools/resolve_btfids: Tidy HOST_OVERRIDES
-    https://git.kernel.org/bpf/bpf-next/c/e0975ab92f24
+  - [bpf-next] tools/resolve_btfids: Compile resolve_btfids as host program
+    https://git.kernel.org/bpf/bpf-next/c/56a2df7615fa
 
 You are awesome, thank you!
 -- 
