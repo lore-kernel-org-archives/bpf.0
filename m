@@ -2,45 +2,52 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0597C61DA4
-	for <bpf@archiver.kernel.org>; Thu,  9 Feb 2023 17:54:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 307B9C636D7
+	for <bpf@archiver.kernel.org>; Thu,  9 Feb 2023 18:00:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbjBIRyZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Feb 2023 12:54:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42446 "EHLO
+        id S229935AbjBISAU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Feb 2023 13:00:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjBIRyZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Feb 2023 12:54:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA551E2B2;
-        Thu,  9 Feb 2023 09:54:24 -0800 (PST)
+        with ESMTP id S229622AbjBISAT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Feb 2023 13:00:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD5B2823C;
+        Thu,  9 Feb 2023 10:00:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE9C861B76;
-        Thu,  9 Feb 2023 17:54:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 171F3C433D2;
-        Thu,  9 Feb 2023 17:54:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D11E3B8227E;
+        Thu,  9 Feb 2023 18:00:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BDADC433EF;
+        Thu,  9 Feb 2023 18:00:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675965263;
-        bh=00nM44/MoPM42oJ0uTdNy3wFm7tJkujEAFNU2YBUoIs=;
+        s=k20201202; t=1675965612;
+        bh=hvb5u5PHA2QiRpKZ5qQF2hvV3sPOEQyZONS2dGB6vRw=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UheZwYHByqjlrnLQ7okcHNYY0m8BeJXW/D984OazYqHYChijl7F//VAkXzhVNVQiY
-         uIqbDPv4qUefMnsfGsL4cxy2cAWhl/hX7MBZA7o7tWyzg7sglPaG065ODfKY/gMXge
-         Jao++gUq2oO4DfUC3grPczUR62c4fzrAKv7llaCbYB1QFrONyYqqGEqCVUhJ5QxHcs
-         xZ88dT9Fo9vc0STGxLxf+vjOuPnUx8zKQOuizOD91ih3ENsDqBLqYau/MHTFOU9Drb
-         vxXXomLiGnQIXF4xnwSyO17pe409Ssm58IRQPKq3xbRv89wJwV9o100wFWiae3Ow8T
-         kiOqZ1nAWnPJw==
-Date:   Thu, 9 Feb 2023 09:54:22 -0800
+        b=DdM/JSMjjA9+W3xJZSCp4m5ffoWk4/ZOnd9JYKjUTyTKvWoE/dwsuxcaQDLFvAg71
+         HNfCBFOdDk+f+YmM+BEZMZEn8V18b7uE8+hLV5hx7tWCgirOWWcDJyLa07kCl7blgN
+         le/SFapCaEtywrfihYn1sMQIakrHg1l1gHqCxUHs4dxCxrziHNivBDG/RHZWPJBda/
+         +rdSNWYpHRh7BAbrZqWPqnwoEnlusXTUqfjgLOw2N9RNY8iZex6g8YeV0bZR7y+0kN
+         yUUBMaB8l58pzOynP6eHno/UXhnEq1L1D/pWgo62fXD+0mTKWw8Pe/h2aku4nx2P8e
+         POnBnT6e3wzfA==
+Date:   Thu, 9 Feb 2023 10:00:10 -0800
 From:   Jakub Kicinski <kuba@kernel.org>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org, pabeni@redhat.com,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH net-next] net: skbuff: drop the word head from skb cache
-Message-ID: <20230209095422.56bcda65@kernel.org>
-In-Reply-To: <CANn89iK2r54xfcoUT18MXTQ72mR8vVzoUyHLcBx8-7QibtsVCQ@mail.gmail.com>
-References: <20230209060642.115752-1-kuba@kernel.org>
-        <CANn89iK2r54xfcoUT18MXTQ72mR8vVzoUyHLcBx8-7QibtsVCQ@mail.gmail.com>
+To:     Tony Nguyen <anthony.l.nguyen@intel.com>
+Cc:     "Zaremba, Larysa" <larysa.zaremba@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "intel-wired-lan@osuosl.org" <intel-wired-lan@osuosl.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "Lobakin, Alexandr" <alexandr.lobakin@intel.com>,
+        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>
+Subject: Re: [PATCH net] ice: xsk: Fix cleaning of XDP_TX frames
+Message-ID: <20230209100010.4a1f634c@kernel.org>
+In-Reply-To: <a2af75b3-3dc2-0e83-558f-2b9a4ccfe5c7@intel.com>
+References: <20230209160130.1779890-1-larysa.zaremba@intel.com>
+        <a2af75b3-3dc2-0e83-558f-2b9a4ccfe5c7@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
@@ -48,11 +55,9 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 9 Feb 2023 10:17:17 +0100 Eric Dumazet wrote:
-> Lets not rename 'struct sk_buff' :)
+On Thu, 9 Feb 2023 09:20:27 -0800 Tony Nguyen wrote:
+> Since it's been tested and reviewed, did you want to take this directly?
 > 
-> (Packets are not necessarily tied to a socket)
+> Acked-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 
-That made me giggle :)
-But I may move the structures to a separate header from the inline
-helpers one day to make rebuilds faster..
+Sure thing! Already missed today's PR tho.. :(
