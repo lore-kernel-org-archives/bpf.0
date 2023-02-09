@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF26BC6379F
-	for <bpf@archiver.kernel.org>; Thu,  9 Feb 2023 17:42:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1AD9C636D6
+	for <bpf@archiver.kernel.org>; Thu,  9 Feb 2023 17:42:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbjBIRmM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Feb 2023 12:42:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33614 "EHLO
+        id S229853AbjBIRmP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Feb 2023 12:42:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbjBIRmM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Feb 2023 12:42:12 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81A85ACFB
-        for <bpf@vger.kernel.org>; Thu,  9 Feb 2023 09:42:07 -0800 (PST)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 319H5sBa025691
-        for <bpf@vger.kernel.org>; Thu, 9 Feb 2023 09:42:07 -0800
+        with ESMTP id S229999AbjBIRmO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Feb 2023 12:42:14 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE3A5BA59
+        for <bpf@vger.kernel.org>; Thu,  9 Feb 2023 09:42:13 -0800 (PST)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 319H1XuL032759
+        for <bpf@vger.kernel.org>; Thu, 9 Feb 2023 09:42:13 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=M0WgfFeUqIjZhLU5NdtcL8coyaxGGEBrlNGnc7mSicY=;
- b=a2ykjPTIaEH32EMW+wKyDjysg9H15Yrn8fzOk7rDiMV2ZY9VEQ7a+ThWD6whIycRylKx
- fFfH4isIw6c6oy4yANOOh1Ki3pJuuiJlZH3wI6HE1y3VLOKY7auSCWpD8u4+RvxiXw/F
- xa7k3esburWborxSqrkwDrK13Il2NbSuOno= 
+ bh=7ATm6JfAR+S5SXxVkJfg032u8RVOybbIe1tCuuUaHuo=;
+ b=AMaANG3nLrsiM7f62XlF3eLjqZOMBsiMzH6rEESWEHb9fs1LVvbpmEgbbq1i5Pftzny0
+ TaqdZ4jDpTmGmk+65Hms5zlB25TBwtbMYd0nZW1Kr4r+wcvuj2DQHjUWvffYwWCECwh6
+ zUG/WjYmDtJhNw2yiUSmXlwfY4D2naDHq4o= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3nmqy2w1va-2
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3nmc0etc0w-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 09 Feb 2023 09:42:07 -0800
-Received: from twshared9608.03.ash7.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 09 Feb 2023 09:42:12 -0800
+Received: from twshared43869.37.frc1.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 9 Feb 2023 09:42:04 -0800
+ 15.1.2507.17; Thu, 9 Feb 2023 09:42:12 -0800
 Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
-        id 8EFBB16905FEA; Thu,  9 Feb 2023 09:41:49 -0800 (PST)
+        id 8F01D16906042; Thu,  9 Feb 2023 09:42:09 -0800 (PST)
 From:   Dave Marchevsky <davemarchevsky@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -43,9 +43,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Kumar Kartikeya Dwivedi <memxor@gmail.com>,
         Tejun Heo <tj@kernel.org>,
         Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [PATCH v4 bpf-next 03/11] selftests/bpf: Update linked_list tests for non-owning ref semantics
-Date:   Thu, 9 Feb 2023 09:41:36 -0800
-Message-ID: <20230209174144.3280955-4-davemarchevsky@fb.com>
+Subject: [PATCH v4 bpf-next 08/11] bpf: Special verifier handling for bpf_rbtree_{remove, first}
+Date:   Thu, 9 Feb 2023 09:41:41 -0800
+Message-ID: <20230209174144.3280955-9-davemarchevsky@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230209174144.3280955-1-davemarchevsky@fb.com>
 References: <20230209174144.3280955-1-davemarchevsky@fb.com>
@@ -53,8 +53,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: kh0hVCw7FbDgYcpLKTzsvteF7iar8cVr
-X-Proofpoint-ORIG-GUID: kh0hVCw7FbDgYcpLKTzsvteF7iar8cVr
+X-Proofpoint-GUID: GmjgpWFv18LLqcyFq4nHcpKucOzt10_5
+X-Proofpoint-ORIG-GUID: GmjgpWFv18LLqcyFq4nHcpKucOzt10_5
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
  definitions=2023-02-09_13,2023-02-09_03,2023-02-09_01
@@ -62,210 +62,103 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Current linked_list semantics for release_on_unlock node refs are almost
-exactly the same as newly-introduced "non-owning reference" concept. The
-only difference: writes to a release_on_unlock node ref are not allowed,
-while writes to non-owning reference pointees are.
+Newly-added bpf_rbtree_{remove,first} kfuncs have some special properties
+that require handling in the verifier:
 
-As a result the linked_list "write after push" failure tests are no
-longer scenarios that should fail.
+  * both bpf_rbtree_remove and bpf_rbtree_first return the type containin=
+g
+    the bpf_rb_node field, with the offset set to that field's offset,
+    instead of a struct bpf_rb_node *
+    * mark_reg_graph_node helper added in previous patch generalizes
+      this logic, use it
 
-The test##_missing_lock_##op and test##_incorrect_lock_##op
-macro-generated failure tests need to have a valid node argument in
-order to have the same error output as before. Otherwise verification
-will fail early and the expected error output won't be seen.
+  * bpf_rbtree_remove's node input is a node that's been inserted
+    in the tree - a non-owning reference.
 
-Some other tests have minor changes in error output, but fail for the
-same reason.
+  * bpf_rbtree_remove must invalidate non-owning references in order to
+    avoid aliasing issue. Use previously-added
+    invalidate_non_owning_refs helper to mark this function as a
+    non-owning ref invalidation point.
+
+  * Unlike other functions, which convert one of their input arg regs to
+    non-owning reference, bpf_rbtree_first takes no arguments and just
+    returns a non-owning reference (possibly null)
+    * For now verifier logic for this is special-cased instead of
+      adding new kfunc flag.
+
+This patch, along with the previous one, complete special verifier
+handling for all rbtree API functions added in this series.
 
 Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
 ---
- .../selftests/bpf/prog_tests/linked_list.c    |   6 +-
- .../testing/selftests/bpf/progs/linked_list.c |   2 +-
- .../selftests/bpf/progs/linked_list_fail.c    | 100 +++++++++++-------
- 3 files changed, 65 insertions(+), 43 deletions(-)
+ kernel/bpf/verifier.c | 29 +++++++++++++++++++++++------
+ 1 file changed, 23 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/linked_list.c b/tools=
-/testing/selftests/bpf/prog_tests/linked_list.c
-index 9a7d4c47af63..0a0fdaec98bd 100644
---- a/tools/testing/selftests/bpf/prog_tests/linked_list.c
-+++ b/tools/testing/selftests/bpf/prog_tests/linked_list.c
-@@ -78,12 +78,10 @@ static struct {
- 	{ "direct_write_head", "direct access to bpf_list_head is disallowed" }=
-,
- 	{ "direct_read_node", "direct access to bpf_list_node is disallowed" },
- 	{ "direct_write_node", "direct access to bpf_list_node is disallowed" }=
-,
--	{ "write_after_push_front", "only read is supported" },
--	{ "write_after_push_back", "only read is supported" },
- 	{ "use_after_unlock_push_front", "invalid mem access 'scalar'" },
- 	{ "use_after_unlock_push_back", "invalid mem access 'scalar'" },
--	{ "double_push_front", "arg#1 expected pointer to allocated object" },
--	{ "double_push_back", "arg#1 expected pointer to allocated object" },
-+	{ "double_push_front", "allocated object must be referenced" },
-+	{ "double_push_back", "allocated object must be referenced" },
- 	{ "no_node_value_type", "bpf_list_node not found at offset=3D0" },
- 	{ "incorrect_value_type",
- 	  "operation on bpf_list_head expects arg#1 bpf_list_node at offset=3D0=
- in struct foo, "
-diff --git a/tools/testing/selftests/bpf/progs/linked_list.c b/tools/test=
-ing/selftests/bpf/progs/linked_list.c
-index 4ad88da5cda2..4fa4a9b01bde 100644
---- a/tools/testing/selftests/bpf/progs/linked_list.c
-+++ b/tools/testing/selftests/bpf/progs/linked_list.c
-@@ -260,7 +260,7 @@ int test_list_push_pop_multiple(struct bpf_spin_lock =
-*lock, struct bpf_list_head
- {
- 	int ret;
-=20
--	ret =3D list_push_pop_multiple(lock ,head, false);
-+	ret =3D list_push_pop_multiple(lock, head, false);
- 	if (ret)
- 		return ret;
- 	return list_push_pop_multiple(lock, head, true);
-diff --git a/tools/testing/selftests/bpf/progs/linked_list_fail.c b/tools=
-/testing/selftests/bpf/progs/linked_list_fail.c
-index 1d9017240e19..69cdc07cba13 100644
---- a/tools/testing/selftests/bpf/progs/linked_list_fail.c
-+++ b/tools/testing/selftests/bpf/progs/linked_list_fail.c
-@@ -54,28 +54,44 @@
- 		return 0;                                   \
- 	}
-=20
--CHECK(kptr, push_front, &f->head);
--CHECK(kptr, push_back, &f->head);
- CHECK(kptr, pop_front, &f->head);
- CHECK(kptr, pop_back, &f->head);
-=20
--CHECK(global, push_front, &ghead);
--CHECK(global, push_back, &ghead);
- CHECK(global, pop_front, &ghead);
- CHECK(global, pop_back, &ghead);
-=20
--CHECK(map, push_front, &v->head);
--CHECK(map, push_back, &v->head);
- CHECK(map, pop_front, &v->head);
- CHECK(map, pop_back, &v->head);
-=20
--CHECK(inner_map, push_front, &iv->head);
--CHECK(inner_map, push_back, &iv->head);
- CHECK(inner_map, pop_front, &iv->head);
- CHECK(inner_map, pop_back, &iv->head);
-=20
- #undef CHECK
-=20
-+#define CHECK(test, op, hexpr, nexpr)					\
-+	SEC("?tc")							\
-+	int test##_missing_lock_##op(void *ctx)				\
-+	{								\
-+		INIT;							\
-+		void (*p)(void *, void *) =3D (void *)&bpf_list_##op;	\
-+		p(hexpr, nexpr);					\
-+		return 0;						\
-+	}
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 842f8b98c9b4..269853c632f3 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -9670,10 +9670,20 @@ static int check_kfunc_args(struct bpf_verifier_e=
+nv *env, struct bpf_kfunc_call_
+ 				verbose(env, "arg#%d expected pointer to allocated object\n", i);
+ 				return -EINVAL;
+ 			}
+-			if (!reg->ref_obj_id) {
++			if (meta->func_id =3D=3D special_kfunc_list[KF_bpf_rbtree_remove]) {
++				if (reg->ref_obj_id) {
++					verbose(env, "rbtree_remove node input must be non-owning ref\n");
++					return -EINVAL;
++				}
++				if (in_rbtree_lock_required_cb(env)) {
++					verbose(env, "rbtree_remove not allowed in rbtree cb\n");
++					return -EINVAL;
++				}
++			} else if (!reg->ref_obj_id) {
+ 				verbose(env, "allocated object must be referenced\n");
+ 				return -EINVAL;
+ 			}
 +
-+CHECK(kptr, push_front, &f->head, b);
-+CHECK(kptr, push_back, &f->head, b);
-+
-+CHECK(global, push_front, &ghead, f);
-+CHECK(global, push_back, &ghead, f);
-+
-+CHECK(map, push_front, &v->head, f);
-+CHECK(map, push_back, &v->head, f);
-+
-+CHECK(inner_map, push_front, &iv->head, f);
-+CHECK(inner_map, push_back, &iv->head, f);
-+
-+#undef CHECK
-+
- #define CHECK(test, op, lexpr, hexpr)                       \
- 	SEC("?tc")                                          \
- 	int test##_incorrect_lock_##op(void *ctx)           \
-@@ -108,11 +124,47 @@ CHECK(inner_map, pop_back, &iv->head);
- 	CHECK(inner_map_global, op, &iv->lock, &ghead);        \
- 	CHECK(inner_map_map, op, &iv->lock, &v->head);
+ 			ret =3D process_kf_arg_ptr_to_rbtree_node(env, reg, regno, meta);
+ 			if (ret < 0)
+ 				return ret;
+@@ -9924,11 +9934,12 @@ static int check_kfunc_call(struct bpf_verifier_e=
+nv *env, struct bpf_insn *insn,
+ 				   meta.func_id =3D=3D special_kfunc_list[KF_bpf_list_pop_back]) {
+ 				struct btf_field *field =3D meta.arg_list_head.field;
 =20
--CHECK_OP(push_front);
--CHECK_OP(push_back);
- CHECK_OP(pop_front);
- CHECK_OP(pop_back);
-=20
-+#undef CHECK
-+#undef CHECK_OP
+-				mark_reg_known_zero(env, regs, BPF_REG_0);
+-				regs[BPF_REG_0].type =3D PTR_TO_BTF_ID | MEM_ALLOC;
+-				regs[BPF_REG_0].btf =3D field->graph_root.btf;
+-				regs[BPF_REG_0].btf_id =3D field->graph_root.value_btf_id;
+-				regs[BPF_REG_0].off =3D field->graph_root.node_offset;
++				mark_reg_graph_node(regs, BPF_REG_0, &field->graph_root);
++			} else if (meta.func_id =3D=3D special_kfunc_list[KF_bpf_rbtree_remov=
+e] ||
++				   meta.func_id =3D=3D special_kfunc_list[KF_bpf_rbtree_first]) {
++				struct btf_field *field =3D meta.arg_rbtree_root.field;
 +
-+#define CHECK(test, op, lexpr, hexpr, nexpr)				\
-+	SEC("?tc")							\
-+	int test##_incorrect_lock_##op(void *ctx)			\
-+	{								\
-+		INIT;							\
-+		void (*p)(void *, void*) =3D (void *)&bpf_list_##op;	\
-+		bpf_spin_lock(lexpr);					\
-+		p(hexpr, nexpr);					\
-+		return 0;						\
-+	}
++				mark_reg_graph_node(regs, BPF_REG_0, &field->graph_root);
+ 			} else if (meta.func_id =3D=3D special_kfunc_list[KF_bpf_cast_to_kern=
+_ctx]) {
+ 				mark_reg_known_zero(env, regs, BPF_REG_0);
+ 				regs[BPF_REG_0].type =3D PTR_TO_BTF_ID | PTR_TRUSTED;
+@@ -9994,7 +10005,13 @@ static int check_kfunc_call(struct bpf_verifier_e=
+nv *env, struct bpf_insn *insn,
+ 			if (is_kfunc_ret_null(&meta))
+ 				regs[BPF_REG_0].id =3D id;
+ 			regs[BPF_REG_0].ref_obj_id =3D id;
++		} else if (meta.func_id =3D=3D special_kfunc_list[KF_bpf_rbtree_first]=
+) {
++			ref_set_non_owning_lock(env, &regs[BPF_REG_0]);
+ 		}
 +
-+#define CHECK_OP(op)							\
-+	CHECK(kptr_kptr, op, &f1->lock, &f2->head, b);			\
-+	CHECK(kptr_global, op, &f1->lock, &ghead, f);			\
-+	CHECK(kptr_map, op, &f1->lock, &v->head, f);			\
-+	CHECK(kptr_inner_map, op, &f1->lock, &iv->head, f);		\
-+									\
-+	CHECK(global_global, op, &glock2, &ghead, f);			\
-+	CHECK(global_kptr, op, &glock, &f1->head, b);			\
-+	CHECK(global_map, op, &glock, &v->head, f);			\
-+	CHECK(global_inner_map, op, &glock, &iv->head, f);		\
-+									\
-+	CHECK(map_map, op, &v->lock, &v2->head, f);			\
-+	CHECK(map_kptr, op, &v->lock, &f2->head, b);			\
-+	CHECK(map_global, op, &v->lock, &ghead, f);			\
-+	CHECK(map_inner_map, op, &v->lock, &iv->head, f);		\
-+									\
-+	CHECK(inner_map_inner_map, op, &iv->lock, &iv2->head, f);	\
-+	CHECK(inner_map_kptr, op, &iv->lock, &f2->head, b);		\
-+	CHECK(inner_map_global, op, &iv->lock, &ghead, f);		\
-+	CHECK(inner_map_map, op, &iv->lock, &v->head, f);
++		if (meta.func_id =3D=3D special_kfunc_list[KF_bpf_rbtree_remove])
++			invalidate_non_owning_refs(env);
 +
-+CHECK_OP(push_front);
-+CHECK_OP(push_back);
-+
- #undef CHECK
- #undef CHECK_OP
- #undef INIT
-@@ -303,34 +355,6 @@ int direct_write_node(void *ctx)
- 	return 0;
- }
-=20
--static __always_inline
--int write_after_op(void (*push_op)(void *head, void *node))
--{
--	struct foo *f;
--
--	f =3D bpf_obj_new(typeof(*f));
--	if (!f)
--		return 0;
--	bpf_spin_lock(&glock);
--	push_op(&ghead, &f->node);
--	f->data =3D 42;
--	bpf_spin_unlock(&glock);
--
--	return 0;
--}
--
--SEC("?tc")
--int write_after_push_front(void *ctx)
--{
--	return write_after_op((void *)bpf_list_push_front);
--}
--
--SEC("?tc")
--int write_after_push_back(void *ctx)
--{
--	return write_after_op((void *)bpf_list_push_back);
--}
--
- static __always_inline
- int use_after_unlock(void (*op)(void *head, void *node))
- {
+ 		if (reg_may_point_to_spin_lock(&regs[BPF_REG_0]) && !regs[BPF_REG_0].i=
+d)
+ 			regs[BPF_REG_0].id =3D ++env->id_gen;
+ 	} /* else { add_kfunc_call() ensures it is btf_type_is_void(t) } */
 --=20
 2.30.2
 
