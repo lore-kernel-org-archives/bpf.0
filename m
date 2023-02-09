@@ -2,57 +2,57 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19A6AC05027
-	for <bpf@archiver.kernel.org>; Thu,  9 Feb 2023 01:00:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FE00C05027
+	for <bpf@archiver.kernel.org>; Thu,  9 Feb 2023 01:03:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230424AbjBIBAf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 8 Feb 2023 20:00:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41518 "EHLO
+        id S230475AbjBIBDf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Feb 2023 20:03:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbjBIBAa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 8 Feb 2023 20:00:30 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86FDD23136
-        for <bpf@vger.kernel.org>; Wed,  8 Feb 2023 17:00:29 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id dr8so1923752ejc.12
-        for <bpf@vger.kernel.org>; Wed, 08 Feb 2023 17:00:29 -0800 (PST)
+        with ESMTP id S230465AbjBIBDe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 8 Feb 2023 20:03:34 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE9A12851
+        for <bpf@vger.kernel.org>; Wed,  8 Feb 2023 17:03:33 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id r3so689400edq.13
+        for <bpf@vger.kernel.org>; Wed, 08 Feb 2023 17:03:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=50m0VllkfU/uIUgFLJrSeqgXpiIv+NJozcf4RIsJp5k=;
-        b=SduBwBJlAQ0izfNEPj+53ORAfcndrJYAZ3AtuKZ8KpzCT/mAdH3IGNEZR6/35M6CRk
-         wipBrsNXFiU6Ww+xW1rSTafbbY7Negrs3EY+S6xFO/Y/fy/1moHe9g09JDSvhzLL+zgz
-         2QTlhbimCTJlOG8thS/R9DD0cmz/WpZdjnZS4jke6KFztElJJiqg+mP/IGl9QlEZ04Lp
-         Hc1Nq7Rn3QblD+jSv9Ml90WSLgiclP5+E0Ds2LZhp8PY1wXEWuCvdP21JLlJlJiBopU1
-         PPOAjQJDNiTc/c38J5Q/XIzJq3cB0AIQCdYIjBj1JT656+x/hMqGw9ADn+vtCDeOe2qG
-         cQOg==
+        bh=KGIT0L6AEvodw795ztROXOhTSxLUeDrFPXprGfxUA9M=;
+        b=QhZg7l2BYMFzG/6vwCgFPGcQE5hijY0AcRpyFFyCt8strqMqwLiIF5iKv8K9rWdnjL
+         i+BRCiVPoqYw99JLPcZM5VKz2My/TJ5y5XTQDBdBMW7Z5ZZmMeV4ujshUnlUuhmCi9ob
+         St6V0vPtBBpEMHWwctwh8dsukDYbx/YYgyIlRdaoEmbi3cEWLhsshe1xZn5C+ba2OCVN
+         eisNWIlzznbLumiOAnKHBo5RLKCtlxK48hpWyZTutnrfR1URYfn0Ftmp4VLbvvWTJp+g
+         UorpwfXz214s5NW1FcysAAIXj7TTjYE8CqjfxL/CoijVly6a9PROhdXYq9+KxCmCiZFe
+         EO4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=50m0VllkfU/uIUgFLJrSeqgXpiIv+NJozcf4RIsJp5k=;
-        b=QVh5zz9KJ81jEzoKFMOZ8Vi0QiIlpV1lDhnghJvLsboqN3UZ5jneNnFklNfjIpmlHs
-         jqOtk2CEX0BI5qjJpg5n338Y4N2+kuURR6/T0MDpvr6nSLQwWnkgCCplELX/pry0hFC+
-         Y3lTHs93zcAdFdod3C7fNyndxp68z/JycpnOabMQF9JRy8JMCkykeIKAdKzJmXBJ0VRB
-         uFw+O9dczab4fBzvc+wVoRsK0sdrIpu3dYpdH5MfJXWV0YfOCt7EwNkPAHgs4p7K48mC
-         B7aROTER76Oqsif9aYQkN+1aJsgnO5lLDyx9jwDhLhHD8tsBPs4T19w8UkDuQ5RWAw3L
-         zHXA==
-X-Gm-Message-State: AO0yUKUrkCf/2Cpmtl9F57rsYuAYkgXTQKmN0XKPp9+CMeYS33xrjQgE
-        59F3ADvLobv3lBIVpmAhNXslGp85NvThj2f1y4k=
-X-Google-Smtp-Source: AK7set9GbP745CFubdQ6vbq1+J5o4iMZhasfXGNkSjHoR2ArY9xYkuPUJd4gkYfzKOGHkDzbj8FtEcJxFQsQ4I+Q8lM=
-X-Received: by 2002:a17:906:aec1:b0:889:8f1a:a153 with SMTP id
- me1-20020a170906aec100b008898f1aa153mr123517ejb.15.1675904427995; Wed, 08 Feb
- 2023 17:00:27 -0800 (PST)
+        bh=KGIT0L6AEvodw795ztROXOhTSxLUeDrFPXprGfxUA9M=;
+        b=Ioy6BWKW1Kr/6RAXhrTH1EWFAhLyajbhnHH5z/2YwqAyL8nc4XNTCezlb+N40L8r5T
+         3MKoi/YeIEGoexuLqQsqQkENEXC5k0eJF7do7XXy52420+raK1SvEU2dpTED7Hjtz0Gt
+         Yzh1ph3Y9qobRu9r0cMbV5dKEhIZHiUhTLG/eaUT5NLOnGOs31jqug8nrHTsgc/XxI80
+         xoqbjAq5VP7u3SfWVkFHKINC0echSgKHm23+By0KvNs2Rv+AsMUZLPfZaGfBPzqUrNyN
+         gNAo0I8Voc+OWFWnbFu98dUlVYEyjrggWYSi0oCrWPQx1Ul0THgalPkgjMlglWtd1x/l
+         rI8w==
+X-Gm-Message-State: AO0yUKXBMbKwI5J5KGup/PW5iXbhn3eT9AB18IzunA+JsZs3YTOCOGL/
+        L4OXIL4fdQdgoEMM+ekZ4r+ZlRDp/hpWu0ptVzc=
+X-Google-Smtp-Source: AK7set879pzCfNCVP40ZBnY8zj9ZnqT/0Gv1+xE8STMmtsiBTm9QPH1FZA8nv/f3phwrxB9Ko8dqDSe9ZXz8qY342fI=
+X-Received: by 2002:a50:9f43:0:b0:4ab:1712:b268 with SMTP id
+ b61-20020a509f43000000b004ab1712b268mr294060edf.5.1675904612380; Wed, 08 Feb
+ 2023 17:03:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20230208205642.270567-1-iii@linux.ibm.com> <20230208205642.270567-3-iii@linux.ibm.com>
-In-Reply-To: <20230208205642.270567-3-iii@linux.ibm.com>
+References: <20230208205642.270567-1-iii@linux.ibm.com> <20230208205642.270567-5-iii@linux.ibm.com>
+In-Reply-To: <20230208205642.270567-5-iii@linux.ibm.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 8 Feb 2023 17:00:16 -0800
-Message-ID: <CAEf4BzaUXnjbye9LU2xhUqpNak0dbDA1FK4fbTrcs4DOXEtUqQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/9] tools: runqslower: Add EXTRA_CFLAGS and
- EXTRA_LDFLAGS support
+Date:   Wed, 8 Feb 2023 17:03:20 -0800
+Message-ID: <CAEf4BzbWjs7N=cQF2PYXKeDG2dB8JKrV0Jw=i_rvVxm4Kv02Aw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 4/9] selftests/bpf: Forward SAN_CFLAGS and
+ SAN_LDFLAGS to runqslower and libbpf
 To:     Ilya Leoshkevich <iii@linux.ibm.com>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -67,34 +67,46 @@ X-Mailing-List: bpf@vger.kernel.org
 
 On Wed, Feb 8, 2023 at 12:57 PM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
 >
-> This makes it possible to add sanitizer flags.
+> To get useful results from the Memory Sanitizer, all code running in a
+> process needs to be instrumented. When building tests with other
+> sanitizers, it's not strictly necessary, but is also helpful.
+> So make sure runqslower and libbpf are compiled with SAN_CFLAGS and
+> linked with SAN_LDFLAGS.
 >
 > Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 > ---
->  tools/bpf/runqslower/Makefile | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  tools/testing/selftests/bpf/Makefile | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 >
-> diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefile
-> index 8b3d87b82b7a..4ff4eed6c01d 100644
-> --- a/tools/bpf/runqslower/Makefile
-> +++ b/tools/bpf/runqslower/Makefile
-> @@ -13,6 +13,12 @@ BPF_DESTDIR := $(BPFOBJ_OUTPUT)
->  BPF_INCLUDE := $(BPF_DESTDIR)/include
->  INCLUDES := -I$(OUTPUT) -I$(BPF_INCLUDE) -I$(abspath ../../include/uapi)
->  CFLAGS := -g -Wall $(CLANG_CROSS_FLAGS)
-> +ifneq ($(EXTRA_CFLAGS),)
-> +CFLAGS += $(EXTRA_CFLAGS)
-> +endif
-> +ifneq ($(EXTRA_LDFLAGS),)
-> +LDFLAGS += $(EXTRA_LDFLAGS)
-> +endif
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 9b5786ac676e..c4b5c44cdee2 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -215,7 +215,9 @@ $(OUTPUT)/runqslower: $(BPFOBJ) | $(DEFAULT_BPFTOOL) $(RUNQSLOWER_OUTPUT)
+>                     OUTPUT=$(RUNQSLOWER_OUTPUT) VMLINUX_BTF=$(VMLINUX_BTF)     \
+>                     BPFTOOL_OUTPUT=$(HOST_BUILD_DIR)/bpftool/                  \
+>                     BPFOBJ_OUTPUT=$(BUILD_DIR)/libbpf                          \
+> -                   BPFOBJ=$(BPFOBJ) BPF_INCLUDE=$(INCLUDE_DIR) &&             \
+> +                   BPFOBJ=$(BPFOBJ) BPF_INCLUDE=$(INCLUDE_DIR)                \
+> +                   EXTRA_CFLAGS='-g -O0 $(SAN_CFLAGS)'                        \
+> +                   EXTRA_LDFLAGS='$(SAN_LDFLAGS)' &&                          \
+>                     cp $(RUNQSLOWER_OUTPUT)runqslower $@
 >
 
-can't we do this unconditionally? If those variables are not defined,
-Makefile will substitute empty string, no?
+I wouldn't do it for runqslower, we just make sure that it compiles,
+we don't really run it at all. No need to complicate its build, IMO.
 
->  # Try to detect best kernel BTF source
->  KERNEL_REL := $(shell uname -r)
+>  TEST_GEN_PROGS_EXTENDED += $(DEFAULT_BPFTOOL)
+> @@ -272,7 +274,8 @@ $(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)                 \
+>            $(APIDIR)/linux/bpf.h                                               \
+>            | $(BUILD_DIR)/libbpf
+>         $(Q)$(MAKE) $(submake_extras) -C $(BPFDIR) OUTPUT=$(BUILD_DIR)/libbpf/ \
+> -                   EXTRA_CFLAGS='-g -O0'                                      \
+> +                   EXTRA_CFLAGS='-g -O0 $(SAN_CFLAGS)'                        \
+> +                   EXTRA_LDFLAGS='$(SAN_LDFLAGS)'                             \
+>                     DESTDIR=$(SCRATCH_DIR) prefix= all install_headers
+>
+>  ifneq ($(BPFOBJ),$(HOST_BPFOBJ))
 > --
 > 2.39.1
 >
