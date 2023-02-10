@@ -2,54 +2,54 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3066C61DA4
-	for <bpf@archiver.kernel.org>; Fri, 10 Feb 2023 00:13:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C238C05027
+	for <bpf@archiver.kernel.org>; Fri, 10 Feb 2023 00:13:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbjBJANA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Feb 2023 19:13:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43100 "EHLO
+        id S229809AbjBJANC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Feb 2023 19:13:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbjBJAM7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Feb 2023 19:12:59 -0500
+        with ESMTP id S229772AbjBJANB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Feb 2023 19:13:01 -0500
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3D65DC3F
-        for <bpf@vger.kernel.org>; Thu,  9 Feb 2023 16:12:58 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 319NftYI029645;
-        Fri, 10 Feb 2023 00:12:44 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7524A5DC3F
+        for <bpf@vger.kernel.org>; Thu,  9 Feb 2023 16:13:00 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31A0CS3Y008282;
+        Fri, 10 Feb 2023 00:12:48 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=zLf5pdxQOXdmqzTFhgclQM/YYwXeaMLO71r6cu5ljls=;
- b=IU7drUkeXGPZal7vA39RO6cd1NXHOHkUbusmcrKBlmT5ET/52lLPFwSKUdY6WmDhZaWO
- Qe4K6t7M2ZFuT2MoTuWWA/xdHUfGo+gKuc5tWY2wDq8BhF8L1il4TbKYRhupTgcOSxaY
- OeZApyIocknJYS5iWjcJ47fJ49JZZ8F17Q1SMwAQslpQjJOHPfbyOkyuq0q2uOwNt8kU
- SZW9uwoVUETmB3CS6kORFOQ9UeaerXz0LwnVT9aLJ3B7PvPnLrRsnFFsqsTJhxb9TpXJ
- 3iqIkNs7OfDmhu6TgITZXo2ePvOK10txkeIfFQkOoYISpWC8SlWVyps+1dA/gUQzFB1w QQ== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nnaqu0yau-1
+ bh=9OQyfb7woPZ7jr98J9khbsaZXv5wkfJxbuqUaAF/Noo=;
+ b=aZ4OA8T9vC3YO9J4NmZL6GgGom1WbkqOGrCxR8bcx5IJ5mVvhwqBBbI+8AmtZjbwOAqE
+ jhacDh8/lyvmXyij6JMNwXK9aHd4iRnMS8vQrB+Hqln9v+7Z8aNKBxTJGAMmk53EhXeD
+ gR5+44DQnkxcF89150JXQA8Umr0OYJZxojGXXtW/RULC3igq+00dfo9Sn+k+omQYPrgu
+ P+f71bV+7kyqAH5zlj2N3RPf9A3E/OGqu5RYu7IP5ZjfF8b8baBGxvuEtn+ozw/XGuMu
+ 9Y8D8JEi7Qk+wz8g30FNwYkrzUX/7RgfoDZd/birlcABtkbc2bVmJbhNnE/rSkJCkiTr jA== 
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nnb61804v-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 00:12:44 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 319CkNqZ023807;
-        Fri, 10 Feb 2023 00:12:42 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3nhf06xt68-1
+        Fri, 10 Feb 2023 00:12:47 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3193QDiQ005626;
+        Fri, 10 Feb 2023 00:12:45 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3nhf06vugk-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 00:12:42 +0000
+        Fri, 10 Feb 2023 00:12:45 +0000
 Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31A0CcQG47251938
+        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31A0CfpO43450812
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Feb 2023 00:12:38 GMT
+        Fri, 10 Feb 2023 00:12:41 GMT
 Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 805DA20043;
-        Fri, 10 Feb 2023 00:12:38 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id B463D20040;
+        Fri, 10 Feb 2023 00:12:41 +0000 (GMT)
 Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EF0E520040;
-        Fri, 10 Feb 2023 00:12:37 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 2B14520043;
+        Fri, 10 Feb 2023 00:12:41 +0000 (GMT)
 Received: from heavy.ibmuc.com (unknown [9.171.74.186])
         by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Feb 2023 00:12:37 +0000 (GMT)
+        Fri, 10 Feb 2023 00:12:41 +0000 (GMT)
 From:   Ilya Leoshkevich <iii@linux.ibm.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -58,113 +58,104 @@ Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Alexander Gordeev <agordeev@linux.ibm.com>,
         Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next v2 08/16] libbpf: Introduce bpf_{btf,link,map,prog}_get_info_by_fd()
-Date:   Fri, 10 Feb 2023 01:12:02 +0100
-Message-Id: <20230210001210.395194-9-iii@linux.ibm.com>
+Subject: [PATCH bpf-next v2 11/16] perf: Use bpf_{btf,link,map,prog}_get_info_by_fd()
+Date:   Fri, 10 Feb 2023 01:12:05 +0100
+Message-Id: <20230210001210.395194-12-iii@linux.ibm.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230210001210.395194-1-iii@linux.ibm.com>
 References: <20230210001210.395194-1-iii@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 7zM4ZWEZ4dJSX_s1HKbGWmKKC7qrMx3P
-X-Proofpoint-ORIG-GUID: 7zM4ZWEZ4dJSX_s1HKbGWmKKC7qrMx3P
+X-Proofpoint-GUID: aStpojPLgTC8_OPN8ikpN9sqc9YN9F3J
+X-Proofpoint-ORIG-GUID: aStpojPLgTC8_OPN8ikpN9sqc9YN9F3J
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-09_15,2023-02-09_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- lowpriorityscore=0 impostorscore=0 mlxscore=0 clxscore=1015
- mlxlogscore=999 adultscore=0 spamscore=0 priorityscore=1501 malwarescore=0
- phishscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2302090217
+ definitions=2023-02-09_16,2023-02-09_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 priorityscore=1501 clxscore=1015 adultscore=0
+ mlxlogscore=999 malwarescore=0 lowpriorityscore=0 mlxscore=0 bulkscore=0
+ spamscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302090217
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-These are type-safe wrappers around bpf_obj_get_info_by_fd(). They
-found one problem in selftests, and are also useful for adding
-Memory Sanitizer annotations.
+Use the new type-safe wrappers around bpf_obj_get_info_by_fd().
 
 Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 ---
- tools/lib/bpf/bpf.c      | 24 ++++++++++++++++++++++++
- tools/lib/bpf/bpf.h      | 13 +++++++++++++
- tools/lib/bpf/libbpf.map |  5 +++++
- 3 files changed, 42 insertions(+)
+ tools/perf/util/bpf-utils.c   | 4 ++--
+ tools/perf/util/bpf_counter.c | 2 +-
+ tools/perf/util/bpf_counter.h | 6 +++---
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 9aff98f42a3d..b562019271fe 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -1044,6 +1044,30 @@ int bpf_obj_get_info_by_fd(int bpf_fd, void *info, __u32 *info_len)
- 	return libbpf_err_errno(err);
+diff --git a/tools/perf/util/bpf-utils.c b/tools/perf/util/bpf-utils.c
+index 80b1d2b3729b..a4154199f56c 100644
+--- a/tools/perf/util/bpf-utils.c
++++ b/tools/perf/util/bpf-utils.c
+@@ -121,7 +121,7 @@ get_bpf_prog_info_linear(int fd, __u64 arrays)
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	/* step 1: get array dimensions */
+-	err = bpf_obj_get_info_by_fd(fd, &info, &info_len);
++	err = bpf_prog_get_info_by_fd(fd, &info, &info_len);
+ 	if (err) {
+ 		pr_debug("can't get prog info: %s", strerror(errno));
+ 		return ERR_PTR(-EFAULT);
+@@ -183,7 +183,7 @@ get_bpf_prog_info_linear(int fd, __u64 arrays)
+ 	}
+ 
+ 	/* step 5: call syscall again to get required arrays */
+-	err = bpf_obj_get_info_by_fd(fd, &info_linear->info, &info_len);
++	err = bpf_prog_get_info_by_fd(fd, &info_linear->info, &info_len);
+ 	if (err) {
+ 		pr_debug("can't get prog info: %s", strerror(errno));
+ 		free(info_linear);
+diff --git a/tools/perf/util/bpf_counter.c b/tools/perf/util/bpf_counter.c
+index eeee899fcf34..5826a1073cf6 100644
+--- a/tools/perf/util/bpf_counter.c
++++ b/tools/perf/util/bpf_counter.c
+@@ -304,7 +304,7 @@ static bool bperf_attr_map_compatible(int attr_map_fd)
+ 	__u32 map_info_len = sizeof(map_info);
+ 	int err;
+ 
+-	err = bpf_obj_get_info_by_fd(attr_map_fd, &map_info, &map_info_len);
++	err = bpf_map_get_info_by_fd(attr_map_fd, &map_info, &map_info_len);
+ 
+ 	if (err)
+ 		return false;
+diff --git a/tools/perf/util/bpf_counter.h b/tools/perf/util/bpf_counter.h
+index c6d21c07b14c..c071e9444395 100644
+--- a/tools/perf/util/bpf_counter.h
++++ b/tools/perf/util/bpf_counter.h
+@@ -97,7 +97,7 @@ static inline __u32 bpf_link_get_id(int fd)
+ 	struct bpf_link_info link_info = { .id = 0, };
+ 	__u32 link_info_len = sizeof(link_info);
+ 
+-	bpf_obj_get_info_by_fd(fd, &link_info, &link_info_len);
++	bpf_link_get_info_by_fd(fd, &link_info, &link_info_len);
+ 	return link_info.id;
  }
  
-+int bpf_prog_get_info_by_fd(int prog_fd, struct bpf_prog_info *info,
-+			    __u32 *info_len)
-+{
-+	return bpf_obj_get_info_by_fd(prog_fd, info, info_len);
-+}
-+
-+int bpf_map_get_info_by_fd(int map_fd, struct bpf_map_info *info,
-+			   __u32 *info_len)
-+{
-+	return bpf_obj_get_info_by_fd(map_fd, info, info_len);
-+}
-+
-+int bpf_btf_get_info_by_fd(int btf_fd, struct bpf_btf_info *info,
-+			   __u32 *info_len)
-+{
-+	return bpf_obj_get_info_by_fd(btf_fd, info, info_len);
-+}
-+
-+int bpf_link_get_info_by_fd(int link_fd, struct bpf_link_info *info,
-+			    __u32 *info_len)
-+{
-+	return bpf_obj_get_info_by_fd(link_fd, info, info_len);
-+}
-+
- int bpf_raw_tracepoint_open(const char *name, int prog_fd)
- {
- 	const size_t attr_sz = offsetofend(union bpf_attr, raw_tracepoint);
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 7468978d3c27..9f698088c9bc 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -386,6 +386,19 @@ LIBBPF_API int bpf_link_get_fd_by_id(__u32 id);
- LIBBPF_API int bpf_link_get_fd_by_id_opts(__u32 id,
- 				const struct bpf_get_fd_by_id_opts *opts);
- LIBBPF_API int bpf_obj_get_info_by_fd(int bpf_fd, void *info, __u32 *info_len);
-+/* Type-safe variants of bpf_obj_get_info_by_fd(). The callers still needs to
-+ * pass info_len, which should normally be
-+ * sizeof(struct bpf_{prog,map,btf,link}_info), in order to be compatible with
-+ * different libbpf and kernel versions.
-+ */
-+LIBBPF_API int bpf_prog_get_info_by_fd(int prog_fd, struct bpf_prog_info *info,
-+				       __u32 *info_len);
-+LIBBPF_API int bpf_map_get_info_by_fd(int map_fd, struct bpf_map_info *info,
-+				      __u32 *info_len);
-+LIBBPF_API int bpf_btf_get_info_by_fd(int btf_fd, struct bpf_btf_info *info,
-+				      __u32 *info_len);
-+LIBBPF_API int bpf_link_get_info_by_fd(int link_fd, struct bpf_link_info *info,
-+				       __u32 *info_len);
+@@ -106,7 +106,7 @@ static inline __u32 bpf_link_get_prog_id(int fd)
+ 	struct bpf_link_info link_info = { .id = 0, };
+ 	__u32 link_info_len = sizeof(link_info);
  
- struct bpf_prog_query_opts {
- 	size_t sz; /* size of this struct for forward/backward compatibility */
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 11c36a3c1a9f..50dde1f6521e 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -384,4 +384,9 @@ LIBBPF_1.1.0 {
- } LIBBPF_1.0.0;
+-	bpf_obj_get_info_by_fd(fd, &link_info, &link_info_len);
++	bpf_link_get_info_by_fd(fd, &link_info, &link_info_len);
+ 	return link_info.prog_id;
+ }
  
- LIBBPF_1.2.0 {
-+	global:
-+		bpf_btf_get_info_by_fd;
-+		bpf_link_get_info_by_fd;
-+		bpf_map_get_info_by_fd;
-+		bpf_prog_get_info_by_fd;
- } LIBBPF_1.1.0;
+@@ -115,7 +115,7 @@ static inline __u32 bpf_map_get_id(int fd)
+ 	struct bpf_map_info map_info = { .id = 0, };
+ 	__u32 map_info_len = sizeof(map_info);
+ 
+-	bpf_obj_get_info_by_fd(fd, &map_info, &map_info_len);
++	bpf_map_get_info_by_fd(fd, &map_info, &map_info_len);
+ 	return map_info.id;
+ }
+ 
 -- 
 2.39.1
 
