@@ -2,1008 +2,242 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD53DC05027
-	for <bpf@archiver.kernel.org>; Fri, 10 Feb 2023 00:13:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05E51C05027
+	for <bpf@archiver.kernel.org>; Fri, 10 Feb 2023 01:45:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbjBJANY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Feb 2023 19:13:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43416 "EHLO
+        id S229677AbjBJBp4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Feb 2023 20:45:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbjBJANS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Feb 2023 19:13:18 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCDC5C49F
-        for <bpf@vger.kernel.org>; Thu,  9 Feb 2023 16:13:09 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 319NsFvf001974;
-        Fri, 10 Feb 2023 00:12:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=qPOkdEXxLRscKOLlsdPRxjwxikRWyYsxJqvYw4KIrM8=;
- b=dzhanct8QOuMPYKouKkXTyYCzijhiIFwlUX1WZA4M081TYkoc4ej4/61hSbmZe7+n9aQ
- d7U3fQmO9ZLklqaNfvIO0DhsLU4CTadfy+19fnXVz7otHOhvCnrXF8X8hnz1+FhajcTJ
- I10PyMGsC9pWz8uU+MOP7AmhRXaGMwGyMnMl+kvKt8iY4tXhII0vFjr3HteWbEV7Dlb5
- qjTQD1LcHiAJM28W1vDJpdZDiJWb8bzPfuVtLFLA3/ALZTegyf7y/87RBbTOwTxrsY2C
- TMK8Mv4zps47PJDEJlC8revgzwaJkiSrWI1M0ztEmYuTwjhdu9MPA1ns9wB/LLK4uUVK 4A== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nnawergcx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 00:12:50 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 319NbWnf026034;
-        Fri, 10 Feb 2023 00:12:48 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3nhf06vuwp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 00:12:47 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31A0Ci3k44564930
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Feb 2023 00:12:44 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DAEE520043;
-        Fri, 10 Feb 2023 00:12:43 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2F65E20040;
-        Fri, 10 Feb 2023 00:12:43 +0000 (GMT)
-Received: from heavy.ibmuc.com (unknown [9.171.74.186])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Feb 2023 00:12:43 +0000 (GMT)
-From:   Ilya Leoshkevich <iii@linux.ibm.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S229596AbjBJBpz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Feb 2023 20:45:55 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A46036A735
+        for <bpf@vger.kernel.org>; Thu,  9 Feb 2023 17:45:54 -0800 (PST)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 319N49jK019097;
+        Fri, 10 Feb 2023 01:45:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : in-reply-to : references : date : message-id : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=EC6xdvFxiQzYL1SPObskAKED/snW+aGlir2lugWIZVU=;
+ b=WsdqC63nkleSViwDMeZPEwwxeh1U9NF9FII4msL41WpXqUozlbt47q61p2B9GIe3TIFk
+ 64twoex8IGC0IgaMgGFwuEA3zTjGYppOYVTGHgmuB7nq8Do4JVf8cZN2Nab4wYlIvqGF
+ 2BaH9jafrL9hHANng556ZqSj32mw7KkuLwtpABGJ576NwwiYPghBHRBiIRDZB+klLjdm
+ LmhpWm5LX4eZTFs5tdQLf5WEt94xRjmkfgzPEiHQ2g0oZElAlskqT//YVhreF7rIrjo9
+ z9684+fno9GIMBjizRjk17sQRIuRppXT/W6le6h4BBHwhPrWwEU22cOSJE5+8fEgz5Kn Jg== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3nhdsdv7w1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Feb 2023 01:45:33 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 319NsvQa036019;
+        Fri, 10 Feb 2023 01:45:33 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2100.outbound.protection.outlook.com [104.47.70.100])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3nhdtg0er4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Feb 2023 01:45:33 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HspE7xxuWnM1rYTDUVPb8AL949Jpmp/0vLObozH9yMHHkzQNizZylxbcnd+jY1HjKsQIzYSpkZbHkcNm+2qXeXaA5noIQ367vnZv89rh+JzwcSipk6fU0VNpipICkV+6RfwPdnLpid+v7jgLI8QRhA323N+u3S4ZRYDaEmHHt/+HIXNoxbbyRlPiXBvxj60O4u3M48XyPQYBhqKG9XVrbk1CFG9+OdwD1FyGu5o+YrF31JuvHTSDinylbvvdBH/D97iX9Oq5Lc+eE+QlB2Iz6qY7nRqUHrwt40qnN4Wj3j6cwnzcLyUaOgc2Kh1WsKC33tQF+gYENzEAEHyZs4QpYw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EC6xdvFxiQzYL1SPObskAKED/snW+aGlir2lugWIZVU=;
+ b=T9rdCK65H/08lBdTXY2+GV6mhX6vVfJQRyozCkwsKODtyA08zgF3jPWlDC8mMR34i9eHN2dhYrKJ9AjsaXtR67ZSL6rIqTfPUeN0Iqg8lMgKJKb2sbI7TqYzzNKpOK+DEckGD0gSeqCbhx2mQ+3osRjLiZ0t4Dg0F6bIpB844K16pZITVmNsl8f2HjXVuAqR04S4nT6I6Ia6UPem3igaSBCR7WGSK8T9eIQKZuvD2IMPWmdp7UGUenYMSzo/2HASxgB+GIoZXZvw6EThU1ZzZQFKGt+F0SrJD2UEHa1rPH6yPqX8EUOMAdz6LPROpTANqI9NSSFwhvx9ZBovJFstwA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EC6xdvFxiQzYL1SPObskAKED/snW+aGlir2lugWIZVU=;
+ b=P3VFG4WTiiC1wWQBtvsw8c2J++Q89xrv8xKcwawInpbT9mUynDh07V9gMUq4dKRdxNk78rOBt2WSh9i9PK778zwjXMy25fw6oNIGJqs4I22DCQvSDmjISoZXD3EDyLP6CYjGZdZLBT5M7FSKZvedHG2uvC6OXC7DGm4fzrgRMMA=
+Received: from BYAPR10MB2888.namprd10.prod.outlook.com (2603:10b6:a03:88::32)
+ by CH0PR10MB5177.namprd10.prod.outlook.com (2603:10b6:610:df::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.19; Fri, 10 Feb
+ 2023 01:45:31 +0000
+Received: from BYAPR10MB2888.namprd10.prod.outlook.com
+ ([fe80::3cd3:9bef:83f:5a85]) by BYAPR10MB2888.namprd10.prod.outlook.com
+ ([fe80::3cd3:9bef:83f:5a85%7]) with mapi id 15.20.6086.011; Fri, 10 Feb 2023
+ 01:45:30 +0000
+From:   "Jose E. Marchesi" <jose.marchesi@oracle.com>
+To:     Yonghong Song <yhs@meta.com>
+Cc:     alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next v2 13/16] selftests/bpf: Use bpf_{btf,link,map,prog}_get_info_by_fd()
-Date:   Fri, 10 Feb 2023 01:12:07 +0100
-Message-Id: <20230210001210.395194-14-iii@linux.ibm.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230210001210.395194-1-iii@linux.ibm.com>
-References: <20230210001210.395194-1-iii@linux.ibm.com>
+        Andrii Nakryiko <andrii@kernel.org>,
+        David Faust <david.faust@oracle.com>,
+        James Hilliard <james.hilliard1@gmail.com>,
+        bpf <bpf@vger.kernel.org>, Martin KaFai Lau <kafai@fb.com>
+Subject: Re: bpf: Propose some new instructions for -mcpu=v4
+In-Reply-To: <87fsbe8l8n.fsf@oracle.com> (Jose E. Marchesi's message of "Fri,
+        10 Feb 2023 00:36:24 +0100")
+References: <01515302-c37d-2ee5-c950-2f556a4caad0@meta.com>
+        <87fsbe8l8n.fsf@oracle.com>
+Date:   Fri, 10 Feb 2023 02:45:25 +0100
+Message-ID: <87357e8f9m.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+Content-Type: text/plain
+X-ClientProxiedBy: LO2P265CA0461.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:a2::17) To BYAPR10MB2888.namprd10.prod.outlook.com
+ (2603:10b6:a03:88::32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: aog4gFvQS6opzOZ6N4032QOD4hHkLQHp
-X-Proofpoint-GUID: aog4gFvQS6opzOZ6N4032QOD4hHkLQHp
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR10MB2888:EE_|CH0PR10MB5177:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5d19a57d-e07e-4786-2b66-08db0b087df8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qrcMXLlZsBJSLBqTvUCbuDMegvPPZhWQilED3lUAoHIRqMnN8DoPc6aEZgJ+jUOFKOON7M3rWWmoKI5NDhn0j6ikdPgwURjQzdX+S88UU+36sSmsnmuJleK38iOegSddqz0d/K9uzTiouEYmFBdpCAIesU2L6mZzCc4d4jhVB9iofwrCjRYXWc3rteRl8ZswSeEG8W5YG6oA4IdUECXxoEUPGcdo+VBTjN2Sw5z8eVclYEEddhY0gmWLr3emsEe8998eDz5UhSwrqtv+TNJKJLoad5AE6jxxRqcL89fPwomNpKr9kfVGjyDUQJHWKy4phuz/EWfdLiIHEYxw+v0LOr5Sm6FvpKADJY/u45PNzLzOGuaQuKoVoZP0i1nD76KEgeUDDWsK8rr5XE6C//95k7thol4CTUPQ6OXJJfmom0pDJ+BEcQBpr0jGgUiR76f8zg3/m5FyMb9GrISimwgXvfI5T4VblOB8m+8VZ1aCFb6HV7tNrpIEkmmJ569AwKBiHf0RcjO2jIqlbemaXgtI5B0S0Oo9V1gnq/0779aNNo+YjX8piAuJCzC1lC+xJo+1k/9yDBS1sCcJ8GRkcsPc+RkGFISue8KcgGWKi+4mhY5pvX+OWswyzBxcvS4CkvvlMh0PGuuLvm8wb/klz9p1LQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB2888.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(346002)(376002)(39860400002)(396003)(136003)(451199018)(2616005)(2906002)(8936002)(4326008)(6916009)(8676002)(66476007)(36756003)(5660300002)(86362001)(66556008)(66946007)(54906003)(41300700001)(83380400001)(316002)(6486002)(478600001)(186003)(26005)(6512007)(6506007)(38100700002)(6666004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uY16thT7bLqoVl7X7swFQjwPfXNkTaPZeitF6aFcRcV+M7TrMKtDqvejzwUa?=
+ =?us-ascii?Q?HOZ/BiRiYiv6qcF0jgIqzuuQ17k0IpQplWJttf98/0TvNfF/AwzJNF6FX4l0?=
+ =?us-ascii?Q?qdH79cE7BovB4htnD1jW0x63cXqiqNzq+lfn1liEK2TT7Gx4d0YxbR18Qwl9?=
+ =?us-ascii?Q?6TzZ9dISsFP9mD3euJs0ttvSJPfXWVfSOXMZkb4S42AdUq4kVRaOisbxoS2H?=
+ =?us-ascii?Q?m2nXy8yisNNjdNjzDLDwX4Ystrf7rcglZQ1e96VMFcJRsEqQghX9xVHBmjHJ?=
+ =?us-ascii?Q?IPTDB6qt0BqWMoPbC2hPitJ0P2u6hixFBAgu2yymqVjTRSaTs/+b4WSQ4IPJ?=
+ =?us-ascii?Q?uDaIdVC+VQ8t0lIf4VDm+8NJIRLcsl/X0vYPpeSs/DY+DGdGTXxhm/kYWB87?=
+ =?us-ascii?Q?I2qABq7BcTQnZg1EO5v6r0kC2TjbVDkSknLNRjzL37PrmTfj/e3TXuOaB9bw?=
+ =?us-ascii?Q?+IfIy4tBxWuHJUTzmGr4lKWhkhOwQ3l5FLNsycpXrV4EzcX7fePnV3do5Y3k?=
+ =?us-ascii?Q?d8BrWldv24Mzx6XzWUAH2NVLzBMRkYrQeUEdktHXZhEo8poyY3BFCMKzX/YL?=
+ =?us-ascii?Q?1BKCt/iqENY6iKDSM1DthyEQPm1BLvMPG0PRl6ARfW1Yvq48Uem9+66d1I76?=
+ =?us-ascii?Q?sETKB2S4bay/4f1M7K8E/iYtydZkDL49z5vzyrqce3pPGXukkts+dfGnkJbF?=
+ =?us-ascii?Q?1JLErCKXLhDGh7WB7LhQ9TWkr4tcXENyr4qicnPg7437f11x7AKrf+yUl40+?=
+ =?us-ascii?Q?5rE2hIBBIK7ivnPrnwOtyGGIR+Yeor/2h+onqfGQd3+Z+H526sh1rN6rJphb?=
+ =?us-ascii?Q?9Gtb7CczbhFYhBJPjGZLa1nV7AEENLOjgIImYWhRJfo1PqKMq8LNVoJ418re?=
+ =?us-ascii?Q?xsGsyL2Zvp264AZq6u19yRacCyWf3vLR+u7gigpARjYcxATq9txEZQknCeLh?=
+ =?us-ascii?Q?E+bW5RkbJj9/pdAiCMgj+Opz7Gttmjr+2w6ZyTlqG+hM0aD7CgoWDPL4RwJE?=
+ =?us-ascii?Q?s4R/wDUKzI5hPcGxEco9K9iywMIcgylEeJbaHvoyO8CAl6xtoKgQSF/ymukM?=
+ =?us-ascii?Q?issrNOSsp9sNgzCBPtMzFYxXAhDt0wq2ZIslu2rNAeMdG7jI+GVR2FjHeYJ7?=
+ =?us-ascii?Q?uvz8xBgC5/8M75osq0/Zn2uNvut31Moxnhu/iXHYaWGqQtVX/zV7GE9DQy3p?=
+ =?us-ascii?Q?hVrW7qQCZl0hM/rf6XUuWMrkZhjSqoVmI+XLbh331QWHBNVDdd0u5UPzPqOJ?=
+ =?us-ascii?Q?ffj+xAHAuOgn192ZKiWRoOz+c9gSJh+yWM4w6Yqihr6m8WljPl6ZJDBKPtMp?=
+ =?us-ascii?Q?auR+kVaedAzPzLMXCNM2IVDfbVE+py7sHBylXZbXYMhjMgVY3UFkt3DXDIUp?=
+ =?us-ascii?Q?DtG+UBzpMWI9YRNm5q/3WBWYl/qhf6gw9RRmMJr4O/eTq3L5lQKy7D78Zgvs?=
+ =?us-ascii?Q?bd/NbOLe4c8aJI/N3YWo0BJu0IfDY44PMcE8nX06hL2S2adOD8ero2//bZ/t?=
+ =?us-ascii?Q?03jMmj1cuRet/UfsXebholIU91DeLcWJOKBjBtsA35CVZL1CS8ex6PXw1PNP?=
+ =?us-ascii?Q?CWIGEef3x47Sekjf3cpXq/6Nf3NnEONv8wymoHEVtJi4Sjk1H44tA6eMkzXK?=
+ =?us-ascii?Q?YQ=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: AKs8IPWR3nYUmMXhYFrT81/sobqAsBZCPIqZYx/gz0L66RgLTmTNyDgd8kWjwo+av4jEz+qMFCe8wSE4bXvUU4QF2mWvDYpn+n+1L8bS1tl24hmkK9cIcBzzLUawYAKrhND7yk+3vGccALYm41KBOcoy3DjH2NYcp/dv2T0PbfGhjXKv+B3SGbCl+bqfC0sRkHQAI+pB1VaSUy4v8X2RjXIO1+oN67FwaYJkcAt/vfRtUedOl6dWe+TuJCpcdVrCUgrDfBqs2Kw4/n2mclP3ebURM8dHd/dCs2Ec9XvNy68xkGBStXq8gKvqFzPisDj/jdWvJNKUQ4qJgmGO+hobjFnR7xFJUjMdUbUsF2l+LrikB7gBmzn3ggErz+FhJCTWwdrlyHYLghe2SmTP61gKRoavlUR6Wu/zKvnDBijLQ1TnaxEtATS325qqSDWDbG3cdtreXCjT9eczDiC7TdTvLf97OifAFrl2Tr0negPtk6gqXja+0FP9ekOz+OIgcaayj4TMOFFhO+dhpeECi70JemCeKCIjgEnCUfTbkpEkSptbYkTdAzqpUk1E17bDAibepntToWDyBKggEoesBtvcLOk/n39mUX9dpkU/Mges64TAkcxZ0HRPV8FRmtRxcUN2VyWGPgeKICTHwMm6u4W8ELBnnhiqnKaFzePLlbAAr/29otSD8l25inqalHWyocpPyokQtALO8NnbOcqAdhKWf+F7LdAYVg+wjfpXwFAugjGoHyGQqkvcPSWc1TRJxwIArcJaiZA39bVjjDacqMoNoyVPNC0JMVoeHQFrj+tNgqxN1FvY6N4BYykFfHpr55aRw8bIkiiCCcm33gVyQMLKYmC8JKx+/t7dbI/rg5MPhMQe7EfZN340mMwbBE4F1ymaTzIGBtg1AtEYy0LbSQW/rQ==
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5d19a57d-e07e-4786-2b66-08db0b087df8
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB2888.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2023 01:45:30.7241
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LK5NhHhZeFVOWM62LHid9VBMcg//67q6OHV7nhE8tjrkzlg8WTn8nejRh4XIkwaVD7AQRy5rY45Q2z5/TIMrdTvvsJ+3VkWCWfdngwPf11c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB5177
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-09_15,2023-02-09_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
- adultscore=0 suspectscore=0 phishscore=0 impostorscore=0 spamscore=0
- priorityscore=1501 clxscore=1015 lowpriorityscore=0 mlxscore=0
- mlxlogscore=928 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302090217
+ definitions=2023-02-09_17,2023-02-09_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 adultscore=0
+ malwarescore=0 mlxscore=0 phishscore=0 spamscore=0 mlxlogscore=575
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302100014
+X-Proofpoint-ORIG-GUID: oeeP1RTXuFc5XCtOmTx_qXbhh3HjYaL4
+X-Proofpoint-GUID: oeeP1RTXuFc5XCtOmTx_qXbhh3HjYaL4
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use the new type-safe wrappers around bpf_obj_get_info_by_fd().
-Fix a prog/map mixup in prog_holds_map().
 
-Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
----
- .../bpf/map_tests/map_in_map_batch_ops.c      |  2 +-
- .../selftests/bpf/prog_tests/bpf_iter.c       |  8 +++----
- .../selftests/bpf/prog_tests/bpf_obj_id.c     | 20 ++++++++--------
- tools/testing/selftests/bpf/prog_tests/btf.c  | 24 +++++++++----------
- .../selftests/bpf/prog_tests/btf_map_in_map.c |  2 +-
- .../selftests/bpf/prog_tests/check_mtu.c      |  2 +-
- .../selftests/bpf/prog_tests/enable_stats.c   |  2 +-
- .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  | 14 +++++------
- .../bpf/prog_tests/flow_dissector_reattach.c  | 10 ++++----
- .../bpf/prog_tests/libbpf_get_fd_by_id_opts.c |  4 ++--
- .../selftests/bpf/prog_tests/lsm_cgroup.c     |  3 ++-
- .../selftests/bpf/prog_tests/metadata.c       |  8 +++----
- tools/testing/selftests/bpf/prog_tests/mmap.c |  2 +-
- .../selftests/bpf/prog_tests/perf_link.c      |  2 +-
- .../selftests/bpf/prog_tests/pinning.c        |  2 +-
- .../selftests/bpf/prog_tests/prog_run_opts.c  |  2 +-
- .../selftests/bpf/prog_tests/recursion.c      |  4 ++--
- .../selftests/bpf/prog_tests/sockmap_basic.c  |  6 ++---
- .../bpf/prog_tests/task_local_storage.c       |  8 +++----
- .../testing/selftests/bpf/prog_tests/tc_bpf.c |  4 ++--
- .../bpf/prog_tests/tp_attach_query.c          |  5 ++--
- .../bpf/prog_tests/unpriv_bpf_disabled.c      |  8 +++----
- .../selftests/bpf/prog_tests/verif_stats.c    |  5 ++--
- .../selftests/bpf/prog_tests/xdp_attach.c     |  4 ++--
- .../bpf/prog_tests/xdp_cpumap_attach.c        |  8 +++----
- .../bpf/prog_tests/xdp_devmap_attach.c        |  8 +++----
- .../selftests/bpf/prog_tests/xdp_info.c       |  2 +-
- .../selftests/bpf/prog_tests/xdp_link.c       | 10 ++++----
- tools/testing/selftests/bpf/test_maps.c       |  2 +-
- .../selftests/bpf/test_skb_cgroup_id_user.c   |  2 +-
- .../bpf/test_tcp_check_syncookie_user.c       |  2 +-
- tools/testing/selftests/bpf/test_verifier.c   |  8 +++----
- tools/testing/selftests/bpf/testing_helpers.c |  2 +-
- tools/testing/selftests/bpf/xdp_synproxy.c    | 15 +++++++-----
- 34 files changed, 109 insertions(+), 101 deletions(-)
+> Hi Yonghong.
+> Thanks for the proposal!
+>
+>> SDIV/SMOD (signed div and mod)
+>> ==============================
+>>
+>> bpf already has unsigned DIV and MOD. They are encoded as
+>>
+>>   insn    code(4 bits)     source(1 bit)     instruction class(3 bit)
+>>   off(16 bits)
+>>   DIV     0x3              0/1               BPF_ALU/BPF_ALU64          0
+>>   MOD     0x9              0/1               BPF_ALU/BPF_ALU64          0
+>>
+>> The current 'code' field only has two value left, 0xe and 0xf.
+>> gcc used these two values (0xe and 0xf) for SDIV and SMOD.
+>> But using these two values takes up all 'code' space and makes
+>> future extension hard.
+>>
+>> Here, I propose to encode SDIV/SMOD like below:
+>>
+>>   insn    code(4 bits)     source(1 bit)     instruction class(3 bit)
+>>   off(16 bits)
+>>   DIV     0x3              0/1               BPF_ALU/BPF_ALU64          1
+>>   MOD     0x9              0/1               BPF_ALU/BPF_ALU64          1
+>>
+>> Basically, we reuse the same 'code' value but changing 'off' from 0 to 1
+>> to indicate signed div/mod.
+>
+> I have a general concern about using instruction operands to encode
+> opcodes (in this case, 'off').
+>
+> At the moment we have two BPF instruction formats:
+>
+>  - The 64-bit instructions:
+>
+>     code:8 regs:8 offset:16 imm:32
+>
+>  - The 128-bit instructions:
+>
+>     code:8 regs:8 offset:16 imm:32 unused:32 imm:32 
+>
+> Of these, `code', `regs' and `unused' are what is commonly known as
+> instruction fields.  These are typically used for register numbers,
+> flags, and opcodes.
+>
+> On the other hand, offset, imm32 and imm:32:::imm:32 are instruction
+> operands (the later is non-contiguous and conforms the 64-bit operand in
+> the 128-bit instruction).
+>
+> The main difference between these is that the bytes conforming
+> instruction operands are themselves impacted by endianness, on top on
+> the endianness effect on the whole instruction.  (The weird endian-flip
+> in the two nibbles of `regs' is unfortunate, but I guess there is
+> nothing we can do about it at this point and I count them as
+> non-operands.)
+>
+> If you use an instruction operand (such as `offset') in order to act as
+> an opcode, you incur in two inconveniences:
+>
+> 1) In effect you have "moving" opcodes that depend on the endianness.
+>    The opcode for signed-operation will be 0x1 in big-endian BPF, but
+>    0x8000 in little-endian bpf.
+>
+> 2) You lose the ability of easily adding more complementary opcodes in
+>    these 16 bits in the future, in case you ever need them.
+>
+> As far as I have seen in other architectures, the usual way of doing
+> this is to add an additional instruction format, in this case for the
+> class of arithmetic instructions, where the bits dedicated to the unused
+> operand (offset) becomes a new opcodes field:
+>
+>   - 32-bit arithmetic instructions:
+>
+>     code:8 regs:8 code2:16 imm:32
+>
+> Where code2 is now an additional field (not an operand) that provides
+> extra additional opcode space for this particular class of instructions.
+> This can be divided in a 1-bit field to signify "signed" and the rest
+> reserved for future use:
+>
+>    opcode2 ::= unused(15) signed(1)
 
-diff --git a/tools/testing/selftests/bpf/map_tests/map_in_map_batch_ops.c b/tools/testing/selftests/bpf/map_tests/map_in_map_batch_ops.c
-index f472d28ad11a..16f1671e4bde 100644
---- a/tools/testing/selftests/bpf/map_tests/map_in_map_batch_ops.c
-+++ b/tools/testing/selftests/bpf/map_tests/map_in_map_batch_ops.c
-@@ -18,7 +18,7 @@ static __u32 get_map_id_from_fd(int map_fd)
- 	uint32_t info_len = sizeof(map_info);
- 	int ret;
- 
--	ret = bpf_obj_get_info_by_fd(map_fd, &map_info, &info_len);
-+	ret = bpf_map_get_info_by_fd(map_fd, &map_info, &info_len);
- 	CHECK(ret < 0, "Finding map info failed", "error:%s\n",
- 	      strerror(errno));
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-index 3af6450763e9..1f02168103dd 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-@@ -195,8 +195,8 @@ static void check_bpf_link_info(const struct bpf_program *prog)
- 		return;
- 
- 	info_len = sizeof(info);
--	err = bpf_obj_get_info_by_fd(bpf_link__fd(link), &info, &info_len);
--	ASSERT_OK(err, "bpf_obj_get_info_by_fd");
-+	err = bpf_link_get_info_by_fd(bpf_link__fd(link), &info, &info_len);
-+	ASSERT_OK(err, "bpf_link_get_info_by_fd");
- 	ASSERT_EQ(info.iter.task.tid, getpid(), "check_task_tid");
- 
- 	bpf_link__destroy(link);
-@@ -684,13 +684,13 @@ static void test_overflow(bool test_e2big_overflow, bool ret1)
- 
- 	/* setup filtering map_id in bpf program */
- 	map_info_len = sizeof(map_info);
--	err = bpf_obj_get_info_by_fd(map1_fd, &map_info, &map_info_len);
-+	err = bpf_map_get_info_by_fd(map1_fd, &map_info, &map_info_len);
- 	if (CHECK(err, "get_map_info", "get map info failed: %s\n",
- 		  strerror(errno)))
- 		goto free_map2;
- 	skel->bss->map1_id = map_info.id;
- 
--	err = bpf_obj_get_info_by_fd(map2_fd, &map_info, &map_info_len);
-+	err = bpf_map_get_info_by_fd(map2_fd, &map_info, &map_info_len);
- 	if (CHECK(err, "get_map_info", "get map info failed: %s\n",
- 		  strerror(errno)))
- 		goto free_map2;
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_obj_id.c b/tools/testing/selftests/bpf/prog_tests/bpf_obj_id.c
-index e1c1e521cca2..675b90b15280 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_obj_id.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_obj_id.c
-@@ -44,7 +44,7 @@ void serial_test_bpf_obj_id(void)
- 	CHECK(err >= 0 || errno != ENOENT,
- 	      "get-fd-by-notexist-link-id", "err %d errno %d\n", err, errno);
- 
--	/* Check bpf_obj_get_info_by_fd() */
-+	/* Check bpf_map_get_info_by_fd() */
- 	bzero(zeros, sizeof(zeros));
- 	for (i = 0; i < nr_iters; i++) {
- 		now = time(NULL);
-@@ -79,7 +79,7 @@ void serial_test_bpf_obj_id(void)
- 		/* Check getting map info */
- 		info_len = sizeof(struct bpf_map_info) * 2;
- 		bzero(&map_infos[i], info_len);
--		err = bpf_obj_get_info_by_fd(map_fds[i], &map_infos[i],
-+		err = bpf_map_get_info_by_fd(map_fds[i], &map_infos[i],
- 					     &info_len);
- 		if (CHECK(err ||
- 			  map_infos[i].type != BPF_MAP_TYPE_ARRAY ||
-@@ -118,8 +118,8 @@ void serial_test_bpf_obj_id(void)
- 		err = clock_gettime(CLOCK_BOOTTIME, &boot_time_ts);
- 		if (CHECK_FAIL(err))
- 			goto done;
--		err = bpf_obj_get_info_by_fd(prog_fds[i], &prog_infos[i],
--					     &info_len);
-+		err = bpf_prog_get_info_by_fd(prog_fds[i], &prog_infos[i],
-+					      &info_len);
- 		load_time = (real_time_ts.tv_sec - boot_time_ts.tv_sec)
- 			+ (prog_infos[i].load_time / nsec_per_sec);
- 		if (CHECK(err ||
-@@ -161,8 +161,8 @@ void serial_test_bpf_obj_id(void)
- 		bzero(&link_infos[i], info_len);
- 		link_infos[i].raw_tracepoint.tp_name = ptr_to_u64(&tp_name);
- 		link_infos[i].raw_tracepoint.tp_name_len = sizeof(tp_name);
--		err = bpf_obj_get_info_by_fd(bpf_link__fd(links[i]),
--					     &link_infos[i], &info_len);
-+		err = bpf_link_get_info_by_fd(bpf_link__fd(links[i]),
-+					      &link_infos[i], &info_len);
- 		if (CHECK(err ||
- 			  link_infos[i].type != BPF_LINK_TYPE_RAW_TRACEPOINT ||
- 			  link_infos[i].prog_id != prog_infos[i].id ||
-@@ -217,7 +217,7 @@ void serial_test_bpf_obj_id(void)
- 		 * prog_info.map_ids = NULL
- 		 */
- 		prog_info.nr_map_ids = 1;
--		err = bpf_obj_get_info_by_fd(prog_fd, &prog_info, &info_len);
-+		err = bpf_prog_get_info_by_fd(prog_fd, &prog_info, &info_len);
- 		if (CHECK(!err || errno != EFAULT,
- 			  "get-prog-fd-bad-nr-map-ids", "err %d errno %d(%d)",
- 			  err, errno, EFAULT))
-@@ -228,7 +228,7 @@ void serial_test_bpf_obj_id(void)
- 		saved_map_id = *(int *)((long)prog_infos[i].map_ids);
- 		prog_info.map_ids = prog_infos[i].map_ids;
- 		prog_info.nr_map_ids = 2;
--		err = bpf_obj_get_info_by_fd(prog_fd, &prog_info, &info_len);
-+		err = bpf_prog_get_info_by_fd(prog_fd, &prog_info, &info_len);
- 		prog_infos[i].jited_prog_insns = 0;
- 		prog_infos[i].xlated_prog_insns = 0;
- 		CHECK(err || info_len != sizeof(struct bpf_prog_info) ||
-@@ -277,7 +277,7 @@ void serial_test_bpf_obj_id(void)
- 		if (CHECK_FAIL(err))
- 			goto done;
- 
--		err = bpf_obj_get_info_by_fd(map_fd, &map_info, &info_len);
-+		err = bpf_map_get_info_by_fd(map_fd, &map_info, &info_len);
- 		CHECK(err || info_len != sizeof(struct bpf_map_info) ||
- 		      memcmp(&map_info, &map_infos[i], info_len) ||
- 		      array_value != array_magic_value,
-@@ -322,7 +322,7 @@ void serial_test_bpf_obj_id(void)
- 
- 		nr_id_found++;
- 
--		err = bpf_obj_get_info_by_fd(link_fd, &link_info, &info_len);
-+		err = bpf_link_get_info_by_fd(link_fd, &link_info, &info_len);
- 		cmp_res = memcmp(&link_info, &link_infos[i],
- 				offsetof(struct bpf_link_info, raw_tracepoint));
- 		CHECK(err || info_len != sizeof(link_info) || cmp_res,
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
-index de1b5b9eb93a..cbb600be943d 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf.c
-@@ -4422,7 +4422,7 @@ static int test_big_btf_info(unsigned int test_num)
- 	info->btf = ptr_to_u64(user_btf);
- 	info->btf_size = raw_btf_size;
- 
--	err = bpf_obj_get_info_by_fd(btf_fd, info, &info_len);
-+	err = bpf_btf_get_info_by_fd(btf_fd, info, &info_len);
- 	if (CHECK(!err, "!err")) {
- 		err = -1;
- 		goto done;
-@@ -4435,7 +4435,7 @@ static int test_big_btf_info(unsigned int test_num)
- 	 * to userspace.
- 	 */
- 	info_garbage.garbage = 0;
--	err = bpf_obj_get_info_by_fd(btf_fd, info, &info_len);
-+	err = bpf_btf_get_info_by_fd(btf_fd, info, &info_len);
- 	if (CHECK(err || info_len != sizeof(*info),
- 		  "err:%d errno:%d info_len:%u sizeof(*info):%zu",
- 		  err, errno, info_len, sizeof(*info))) {
-@@ -4499,7 +4499,7 @@ static int test_btf_id(unsigned int test_num)
- 
- 	/* Test BPF_OBJ_GET_INFO_BY_ID on btf_id */
- 	info_len = sizeof(info[0]);
--	err = bpf_obj_get_info_by_fd(btf_fd[0], &info[0], &info_len);
-+	err = bpf_btf_get_info_by_fd(btf_fd[0], &info[0], &info_len);
- 	if (CHECK(err, "errno:%d", errno)) {
- 		err = -1;
- 		goto done;
-@@ -4512,7 +4512,7 @@ static int test_btf_id(unsigned int test_num)
- 	}
- 
- 	ret = 0;
--	err = bpf_obj_get_info_by_fd(btf_fd[1], &info[1], &info_len);
-+	err = bpf_btf_get_info_by_fd(btf_fd[1], &info[1], &info_len);
- 	if (CHECK(err || info[0].id != info[1].id ||
- 		  info[0].btf_size != info[1].btf_size ||
- 		  (ret = memcmp(user_btf[0], user_btf[1], info[0].btf_size)),
-@@ -4535,7 +4535,7 @@ static int test_btf_id(unsigned int test_num)
- 	}
- 
- 	info_len = sizeof(map_info);
--	err = bpf_obj_get_info_by_fd(map_fd, &map_info, &info_len);
-+	err = bpf_map_get_info_by_fd(map_fd, &map_info, &info_len);
- 	if (CHECK(err || map_info.btf_id != info[0].id ||
- 		  map_info.btf_key_type_id != 1 || map_info.btf_value_type_id != 2,
- 		  "err:%d errno:%d info.id:%u btf_id:%u btf_key_type_id:%u btf_value_type_id:%u",
-@@ -4638,7 +4638,7 @@ static void do_test_get_info(unsigned int test_num)
- 	info.btf_size = user_btf_size;
- 
- 	ret = 0;
--	err = bpf_obj_get_info_by_fd(btf_fd, &info, &info_len);
-+	err = bpf_btf_get_info_by_fd(btf_fd, &info, &info_len);
- 	if (CHECK(err || !info.id || info_len != sizeof(info) ||
- 		  info.btf_size != raw_btf_size ||
- 		  (ret = memcmp(raw_btf, user_btf, expected_nbytes)),
-@@ -4755,7 +4755,7 @@ static void do_test_file(unsigned int test_num)
- 
- 	/* get necessary program info */
- 	info_len = sizeof(struct bpf_prog_info);
--	err = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
-+	err = bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
- 
- 	if (CHECK(err < 0, "invalid get info (1st) errno:%d", errno)) {
- 		fprintf(stderr, "%s\n", btf_log_buf);
-@@ -4787,7 +4787,7 @@ static void do_test_file(unsigned int test_num)
- 	info.func_info_rec_size = rec_size;
- 	info.func_info = ptr_to_u64(func_info);
- 
--	err = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
-+	err = bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
- 
- 	if (CHECK(err < 0, "invalid get info (2nd) errno:%d", errno)) {
- 		fprintf(stderr, "%s\n", btf_log_buf);
-@@ -6405,7 +6405,7 @@ static int test_get_finfo(const struct prog_info_raw_test *test,
- 
- 	/* get necessary lens */
- 	info_len = sizeof(struct bpf_prog_info);
--	err = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
-+	err = bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
- 	if (CHECK(err < 0, "invalid get info (1st) errno:%d", errno)) {
- 		fprintf(stderr, "%s\n", btf_log_buf);
- 		return -1;
-@@ -6435,7 +6435,7 @@ static int test_get_finfo(const struct prog_info_raw_test *test,
- 	info.nr_func_info = nr_func_info;
- 	info.func_info_rec_size = rec_size;
- 	info.func_info = ptr_to_u64(func_info);
--	err = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
-+	err = bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
- 	if (CHECK(err < 0, "invalid get info (2nd) errno:%d", errno)) {
- 		fprintf(stderr, "%s\n", btf_log_buf);
- 		err = -1;
-@@ -6499,7 +6499,7 @@ static int test_get_linfo(const struct prog_info_raw_test *test,
- 	nr_jited_func_lens = nr_jited_ksyms;
- 
- 	info_len = sizeof(struct bpf_prog_info);
--	err = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
-+	err = bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
- 	if (CHECK(err < 0, "err:%d errno:%d", err, errno)) {
- 		err = -1;
- 		goto done;
-@@ -6573,7 +6573,7 @@ static int test_get_linfo(const struct prog_info_raw_test *test,
- 		info.jited_func_lens = ptr_to_u64(jited_func_lens);
- 	}
- 
--	err = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
-+	err = bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
- 
- 	/*
- 	 * Only recheck the info.*line_info* fields.
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c b/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
-index eb90a6b8850d..a8b53b8736f0 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
-@@ -14,7 +14,7 @@ static __u32 bpf_map_id(struct bpf_map *map)
- 	int err;
- 
- 	memset(&info, 0, info_len);
--	err = bpf_obj_get_info_by_fd(bpf_map__fd(map), &info, &info_len);
-+	err = bpf_map_get_info_by_fd(bpf_map__fd(map), &info, &info_len);
- 	if (err)
- 		return 0;
- 	return info.id;
-diff --git a/tools/testing/selftests/bpf/prog_tests/check_mtu.c b/tools/testing/selftests/bpf/prog_tests/check_mtu.c
-index 12f4395f18b3..5338d2ea0460 100644
---- a/tools/testing/selftests/bpf/prog_tests/check_mtu.c
-+++ b/tools/testing/selftests/bpf/prog_tests/check_mtu.c
-@@ -59,7 +59,7 @@ static void test_check_mtu_xdp_attach(void)
- 
- 	memset(&link_info, 0, sizeof(link_info));
- 	fd = bpf_link__fd(link);
--	err = bpf_obj_get_info_by_fd(fd, &link_info, &link_info_len);
-+	err = bpf_link_get_info_by_fd(fd, &link_info, &link_info_len);
- 	if (CHECK(err, "link_info", "failed: %d\n", err))
- 		goto out;
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/enable_stats.c b/tools/testing/selftests/bpf/prog_tests/enable_stats.c
-index 2cb2085917e7..75f85d0fe74a 100644
---- a/tools/testing/selftests/bpf/prog_tests/enable_stats.c
-+++ b/tools/testing/selftests/bpf/prog_tests/enable_stats.c
-@@ -28,7 +28,7 @@ void test_enable_stats(void)
- 
- 	prog_fd = bpf_program__fd(skel->progs.test_enable_stats);
- 	memset(&info, 0, info_len);
--	err = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
-+	err = bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
- 	if (CHECK(err, "get_prog_info",
- 		  "failed to get bpf_prog_info for fd %d\n", prog_fd))
- 		goto cleanup;
-diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-index 20f5fa0fcec9..8ec73fdfcdab 100644
---- a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-@@ -79,7 +79,7 @@ static void test_fexit_bpf2bpf_common(const char *obj_file,
- 		return;
- 
- 	info_len = sizeof(prog_info);
--	err = bpf_obj_get_info_by_fd(tgt_fd, &prog_info, &info_len);
-+	err = bpf_prog_get_info_by_fd(tgt_fd, &prog_info, &info_len);
- 	if (!ASSERT_OK(err, "tgt_fd_get_info"))
- 		goto close_prog;
- 
-@@ -136,8 +136,8 @@ static void test_fexit_bpf2bpf_common(const char *obj_file,
- 
- 		info_len = sizeof(link_info);
- 		memset(&link_info, 0, sizeof(link_info));
--		err = bpf_obj_get_info_by_fd(bpf_link__fd(link[i]),
--					     &link_info, &info_len);
-+		err = bpf_link_get_info_by_fd(bpf_link__fd(link[i]),
-+					      &link_info, &info_len);
- 		ASSERT_OK(err, "link_fd_get_info");
- 		ASSERT_EQ(link_info.tracing.attach_type,
- 			  bpf_program__expected_attach_type(prog[i]),
-@@ -417,7 +417,7 @@ static int find_prog_btf_id(const char *name, __u32 attach_prog_fd)
- 	struct btf *btf;
- 	int ret;
- 
--	ret = bpf_obj_get_info_by_fd(attach_prog_fd, &info, &info_len);
-+	ret = bpf_prog_get_info_by_fd(attach_prog_fd, &info, &info_len);
- 	if (ret)
- 		return ret;
- 
-@@ -483,12 +483,12 @@ static void test_fentry_to_cgroup_bpf(void)
- 	if (!ASSERT_GE(fentry_fd, 0, "load_fentry"))
- 		goto cleanup;
- 
--	/* Make sure bpf_obj_get_info_by_fd works correctly when attaching
-+	/* Make sure bpf_prog_get_info_by_fd works correctly when attaching
- 	 * to another BPF program.
- 	 */
- 
--	ASSERT_OK(bpf_obj_get_info_by_fd(fentry_fd, &info, &info_len),
--		  "bpf_obj_get_info_by_fd");
-+	ASSERT_OK(bpf_prog_get_info_by_fd(fentry_fd, &info, &info_len),
-+		  "bpf_prog_get_info_by_fd");
- 
- 	ASSERT_EQ(info.btf_id, 0, "info.btf_id");
- 	ASSERT_EQ(info.attach_btf_id, btf_id, "info.attach_btf_id");
-diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector_reattach.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector_reattach.c
-index 7c79462d2702..9333f7346d15 100644
---- a/tools/testing/selftests/bpf/prog_tests/flow_dissector_reattach.c
-+++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector_reattach.c
-@@ -60,9 +60,9 @@ static __u32 query_prog_id(int prog)
- 	__u32 info_len = sizeof(info);
- 	int err;
- 
--	err = bpf_obj_get_info_by_fd(prog, &info, &info_len);
-+	err = bpf_prog_get_info_by_fd(prog, &info, &info_len);
- 	if (CHECK_FAIL(err || info_len != sizeof(info))) {
--		perror("bpf_obj_get_info_by_fd");
-+		perror("bpf_prog_get_info_by_fd");
- 		return 0;
- 	}
- 
-@@ -497,7 +497,7 @@ static void test_link_get_info(int netns, int prog1, int prog2)
- 	}
- 
- 	info_len = sizeof(info);
--	err = bpf_obj_get_info_by_fd(link, &info, &info_len);
-+	err = bpf_link_get_info_by_fd(link, &info, &info_len);
- 	if (CHECK_FAIL(err)) {
- 		perror("bpf_obj_get_info");
- 		goto out_unlink;
-@@ -521,7 +521,7 @@ static void test_link_get_info(int netns, int prog1, int prog2)
- 
- 	link_id = info.id;
- 	info_len = sizeof(info);
--	err = bpf_obj_get_info_by_fd(link, &info, &info_len);
-+	err = bpf_link_get_info_by_fd(link, &info, &info_len);
- 	if (CHECK_FAIL(err)) {
- 		perror("bpf_obj_get_info");
- 		goto out_unlink;
-@@ -546,7 +546,7 @@ static void test_link_get_info(int netns, int prog1, int prog2)
- 	netns = -1;
- 
- 	info_len = sizeof(info);
--	err = bpf_obj_get_info_by_fd(link, &info, &info_len);
-+	err = bpf_link_get_info_by_fd(link, &info, &info_len);
- 	if (CHECK_FAIL(err)) {
- 		perror("bpf_obj_get_info");
- 		goto out_unlink;
-diff --git a/tools/testing/selftests/bpf/prog_tests/libbpf_get_fd_by_id_opts.c b/tools/testing/selftests/bpf/prog_tests/libbpf_get_fd_by_id_opts.c
-index 25e5dfa9c315..a3f238f51d05 100644
---- a/tools/testing/selftests/bpf/prog_tests/libbpf_get_fd_by_id_opts.c
-+++ b/tools/testing/selftests/bpf/prog_tests/libbpf_get_fd_by_id_opts.c
-@@ -29,9 +29,9 @@ void test_libbpf_get_fd_by_id_opts(void)
- 	if (!ASSERT_OK(ret, "test_libbpf_get_fd_by_id_opts__attach"))
- 		goto close_prog;
- 
--	ret = bpf_obj_get_info_by_fd(bpf_map__fd(skel->maps.data_input),
-+	ret = bpf_map_get_info_by_fd(bpf_map__fd(skel->maps.data_input),
- 				     &info_m, &len);
--	if (!ASSERT_OK(ret, "bpf_obj_get_info_by_fd"))
-+	if (!ASSERT_OK(ret, "bpf_map_get_info_by_fd"))
- 		goto close_prog;
- 
- 	fd = bpf_map_get_fd_by_id(info_m.id);
-diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-index f117bfef68a1..130a3b21e467 100644
---- a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-+++ b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-@@ -47,7 +47,8 @@ static __u32 query_prog_cnt(int cgroup_fd, const char *attach_func)
- 
- 		fd = bpf_prog_get_fd_by_id(p.prog_ids[i]);
- 		ASSERT_GE(fd, 0, "prog_get_fd_by_id");
--		ASSERT_OK(bpf_obj_get_info_by_fd(fd, &info, &info_len), "prog_info_by_fd");
-+		ASSERT_OK(bpf_prog_get_info_by_fd(fd, &info, &info_len),
-+			  "prog_info_by_fd");
- 		close(fd);
- 
- 		if (info.attach_btf_id ==
-diff --git a/tools/testing/selftests/bpf/prog_tests/metadata.c b/tools/testing/selftests/bpf/prog_tests/metadata.c
-index 2c53eade88e3..8b67dfc10f5c 100644
---- a/tools/testing/selftests/bpf/prog_tests/metadata.c
-+++ b/tools/testing/selftests/bpf/prog_tests/metadata.c
-@@ -16,7 +16,7 @@ static int duration;
- static int prog_holds_map(int prog_fd, int map_fd)
- {
- 	struct bpf_prog_info prog_info = {};
--	struct bpf_prog_info map_info = {};
-+	struct bpf_map_info map_info = {};
- 	__u32 prog_info_len;
- 	__u32 map_info_len;
- 	__u32 *map_ids;
-@@ -25,12 +25,12 @@ static int prog_holds_map(int prog_fd, int map_fd)
- 	int i;
- 
- 	map_info_len = sizeof(map_info);
--	ret = bpf_obj_get_info_by_fd(map_fd, &map_info, &map_info_len);
-+	ret = bpf_map_get_info_by_fd(map_fd, &map_info, &map_info_len);
- 	if (ret)
- 		return -errno;
- 
- 	prog_info_len = sizeof(prog_info);
--	ret = bpf_obj_get_info_by_fd(prog_fd, &prog_info, &prog_info_len);
-+	ret = bpf_prog_get_info_by_fd(prog_fd, &prog_info, &prog_info_len);
- 	if (ret)
- 		return -errno;
- 
-@@ -44,7 +44,7 @@ static int prog_holds_map(int prog_fd, int map_fd)
- 	prog_info.map_ids = ptr_to_u64(map_ids);
- 	prog_info_len = sizeof(prog_info);
- 
--	ret = bpf_obj_get_info_by_fd(prog_fd, &prog_info, &prog_info_len);
-+	ret = bpf_prog_get_info_by_fd(prog_fd, &prog_info, &prog_info_len);
- 	if (ret) {
- 		ret = -errno;
- 		goto free_map_ids;
-diff --git a/tools/testing/selftests/bpf/prog_tests/mmap.c b/tools/testing/selftests/bpf/prog_tests/mmap.c
-index 37b002ca1167..a271d5a0f7ab 100644
---- a/tools/testing/selftests/bpf/prog_tests/mmap.c
-+++ b/tools/testing/selftests/bpf/prog_tests/mmap.c
-@@ -64,7 +64,7 @@ void test_mmap(void)
- 
- 	/* get map's ID */
- 	memset(&map_info, 0, map_info_sz);
--	err = bpf_obj_get_info_by_fd(data_map_fd, &map_info, &map_info_sz);
-+	err = bpf_map_get_info_by_fd(data_map_fd, &map_info, &map_info_sz);
- 	if (CHECK(err, "map_get_info", "failed %d\n", errno))
- 		goto cleanup;
- 	data_map_id = map_info.id;
-diff --git a/tools/testing/selftests/bpf/prog_tests/perf_link.c b/tools/testing/selftests/bpf/prog_tests/perf_link.c
-index 224eba6fef2e..3a25f1c743a1 100644
---- a/tools/testing/selftests/bpf/prog_tests/perf_link.c
-+++ b/tools/testing/selftests/bpf/prog_tests/perf_link.c
-@@ -54,7 +54,7 @@ void serial_test_perf_link(void)
- 		goto cleanup;
- 
- 	memset(&info, 0, sizeof(info));
--	err = bpf_obj_get_info_by_fd(link_fd, &info, &info_len);
-+	err = bpf_link_get_info_by_fd(link_fd, &info, &info_len);
- 	if (!ASSERT_OK(err, "link_get_info"))
- 		goto cleanup;
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/pinning.c b/tools/testing/selftests/bpf/prog_tests/pinning.c
-index d95cee5867b7..c799a3c5ad1f 100644
---- a/tools/testing/selftests/bpf/prog_tests/pinning.c
-+++ b/tools/testing/selftests/bpf/prog_tests/pinning.c
-@@ -18,7 +18,7 @@ __u32 get_map_id(struct bpf_object *obj, const char *name)
- 	if (CHECK(!map, "find map", "NULL map"))
- 		return 0;
- 
--	err = bpf_obj_get_info_by_fd(bpf_map__fd(map),
-+	err = bpf_map_get_info_by_fd(bpf_map__fd(map),
- 				     &map_info, &map_info_len);
- 	CHECK(err, "get map info", "err %d errno %d", err, errno);
- 	return map_info.id;
-diff --git a/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c b/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c
-index 1ccd2bdf8fa8..01f1d1b6715a 100644
---- a/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c
-+++ b/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c
-@@ -12,7 +12,7 @@ static void check_run_cnt(int prog_fd, __u64 run_cnt)
- 	__u32 info_len = sizeof(info);
- 	int err;
- 
--	err = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
-+	err = bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
- 	if (CHECK(err, "get_prog_info", "failed to get bpf_prog_info for fd %d\n", prog_fd))
- 		return;
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/recursion.c b/tools/testing/selftests/bpf/prog_tests/recursion.c
-index f3af2627b599..23552d3e3365 100644
---- a/tools/testing/selftests/bpf/prog_tests/recursion.c
-+++ b/tools/testing/selftests/bpf/prog_tests/recursion.c
-@@ -31,8 +31,8 @@ void test_recursion(void)
- 	bpf_map_delete_elem(bpf_map__fd(skel->maps.hash2), &key);
- 	ASSERT_EQ(skel->bss->pass2, 2, "pass2 == 2");
- 
--	err = bpf_obj_get_info_by_fd(bpf_program__fd(skel->progs.on_delete),
--				     &prog_info, &prog_info_len);
-+	err = bpf_prog_get_info_by_fd(bpf_program__fd(skel->progs.on_delete),
-+				      &prog_info, &prog_info_len);
- 	if (!ASSERT_OK(err, "get_prog_info"))
- 		goto out;
- 	ASSERT_EQ(prog_info.recursion_misses, 2, "recursion_misses");
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index 0aa088900699..0ce25a967481 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -299,9 +299,9 @@ static __u32 query_prog_id(int prog_fd)
- 	__u32 info_len = sizeof(info);
- 	int err;
- 
--	err = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
--	if (!ASSERT_OK(err, "bpf_obj_get_info_by_fd") ||
--	    !ASSERT_EQ(info_len, sizeof(info), "bpf_obj_get_info_by_fd"))
-+	err = bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
-+	if (!ASSERT_OK(err, "bpf_prog_get_info_by_fd") ||
-+	    !ASSERT_EQ(info_len, sizeof(info), "bpf_prog_get_info_by_fd"))
- 		return 0;
- 
- 	return info.id;
-diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
-index a176bd75a748..ea8537c54413 100644
---- a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
-+++ b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
-@@ -119,19 +119,19 @@ static void test_recursion(void)
- 
- 	prog_fd = bpf_program__fd(skel->progs.on_lookup);
- 	memset(&info, 0, sizeof(info));
--	err = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
-+	err = bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
- 	ASSERT_OK(err, "get prog info");
- 	ASSERT_GT(info.recursion_misses, 0, "on_lookup prog recursion");
- 
- 	prog_fd = bpf_program__fd(skel->progs.on_update);
- 	memset(&info, 0, sizeof(info));
--	err = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
-+	err = bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
- 	ASSERT_OK(err, "get prog info");
- 	ASSERT_EQ(info.recursion_misses, 0, "on_update prog recursion");
- 
- 	prog_fd = bpf_program__fd(skel->progs.on_enter);
- 	memset(&info, 0, sizeof(info));
--	err = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
-+	err = bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
- 	ASSERT_OK(err, "get prog info");
- 	ASSERT_EQ(info.recursion_misses, 0, "on_enter prog recursion");
- 
-@@ -221,7 +221,7 @@ static void test_nodeadlock(void)
- 
- 	info_len = sizeof(info);
- 	prog_fd = bpf_program__fd(skel->progs.socket_post_create);
--	err = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
-+	err = bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
- 	ASSERT_OK(err, "get prog info");
- 	ASSERT_EQ(info.recursion_misses, 0, "prog recursion");
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tc_bpf.c b/tools/testing/selftests/bpf/prog_tests/tc_bpf.c
-index 4a505a5adf4d..e873766276d1 100644
---- a/tools/testing/selftests/bpf/prog_tests/tc_bpf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tc_bpf.c
-@@ -29,8 +29,8 @@ static int test_tc_bpf_basic(const struct bpf_tc_hook *hook, int fd)
- 	__u32 info_len = sizeof(info);
- 	int ret;
- 
--	ret = bpf_obj_get_info_by_fd(fd, &info, &info_len);
--	if (!ASSERT_OK(ret, "bpf_obj_get_info_by_fd"))
-+	ret = bpf_prog_get_info_by_fd(fd, &info, &info_len);
-+	if (!ASSERT_OK(ret, "bpf_prog_get_info_by_fd"))
- 		return ret;
- 
- 	ret = bpf_tc_attach(hook, &opts);
-diff --git a/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c b/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
-index a479080533db..770fcc3bb1ba 100644
---- a/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
-@@ -45,8 +45,9 @@ void serial_test_tp_attach_query(void)
- 		prog_info.xlated_prog_len = 0;
- 		prog_info.nr_map_ids = 0;
- 		info_len = sizeof(prog_info);
--		err = bpf_obj_get_info_by_fd(prog_fd[i], &prog_info, &info_len);
--		if (CHECK(err, "bpf_obj_get_info_by_fd", "err %d errno %d\n",
-+		err = bpf_prog_get_info_by_fd(prog_fd[i], &prog_info,
-+					      &info_len);
-+		if (CHECK(err, "bpf_prog_get_info_by_fd", "err %d errno %d\n",
- 			  err, errno))
- 			goto cleanup1;
- 		saved_prog_ids[i] = prog_info.id;
-diff --git a/tools/testing/selftests/bpf/prog_tests/unpriv_bpf_disabled.c b/tools/testing/selftests/bpf/prog_tests/unpriv_bpf_disabled.c
-index 1ed3cc2092db..8383a99f610f 100644
---- a/tools/testing/selftests/bpf/prog_tests/unpriv_bpf_disabled.c
-+++ b/tools/testing/selftests/bpf/prog_tests/unpriv_bpf_disabled.c
-@@ -179,7 +179,7 @@ static void test_unpriv_bpf_disabled_negative(struct test_unpriv_bpf_disabled *s
- 	ASSERT_EQ(bpf_prog_get_next_id(prog_id, &next), -EPERM, "prog_get_next_id_fails");
- 	ASSERT_EQ(bpf_prog_get_next_id(0, &next), -EPERM, "prog_get_next_id_fails");
- 
--	if (ASSERT_OK(bpf_obj_get_info_by_fd(map_fds[0], &map_info, &map_info_len),
-+	if (ASSERT_OK(bpf_map_get_info_by_fd(map_fds[0], &map_info, &map_info_len),
- 		      "obj_get_info_by_fd")) {
- 		ASSERT_EQ(bpf_map_get_fd_by_id(map_info.id), -EPERM, "map_get_fd_by_id_fails");
- 		ASSERT_EQ(bpf_map_get_next_id(map_info.id, &next), -EPERM,
-@@ -187,8 +187,8 @@ static void test_unpriv_bpf_disabled_negative(struct test_unpriv_bpf_disabled *s
- 	}
- 	ASSERT_EQ(bpf_map_get_next_id(0, &next), -EPERM, "map_get_next_id_fails");
- 
--	if (ASSERT_OK(bpf_obj_get_info_by_fd(bpf_link__fd(skel->links.sys_nanosleep_enter),
--					     &link_info, &link_info_len),
-+	if (ASSERT_OK(bpf_link_get_info_by_fd(bpf_link__fd(skel->links.sys_nanosleep_enter),
-+					      &link_info, &link_info_len),
- 		      "obj_get_info_by_fd")) {
- 		ASSERT_EQ(bpf_link_get_fd_by_id(link_info.id), -EPERM, "link_get_fd_by_id_fails");
- 		ASSERT_EQ(bpf_link_get_next_id(link_info.id, &next), -EPERM,
-@@ -269,7 +269,7 @@ void test_unpriv_bpf_disabled(void)
- 	}
- 
- 	prog_fd = bpf_program__fd(skel->progs.sys_nanosleep_enter);
--	ASSERT_OK(bpf_obj_get_info_by_fd(prog_fd, &prog_info, &prog_info_len),
-+	ASSERT_OK(bpf_prog_get_info_by_fd(prog_fd, &prog_info, &prog_info_len),
- 		  "obj_get_info_by_fd");
- 	prog_id = prog_info.id;
- 	ASSERT_GT(prog_id, 0, "valid_prog_id");
-diff --git a/tools/testing/selftests/bpf/prog_tests/verif_stats.c b/tools/testing/selftests/bpf/prog_tests/verif_stats.c
-index a47e7c0e1ffd..af4b95f57ac1 100644
---- a/tools/testing/selftests/bpf/prog_tests/verif_stats.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verif_stats.c
-@@ -16,8 +16,9 @@ void test_verif_stats(void)
- 	if (!ASSERT_OK_PTR(skel, "trace_vprintk__open_and_load"))
- 		goto cleanup;
- 
--	err = bpf_obj_get_info_by_fd(skel->progs.sys_enter.prog_fd, &info, &len);
--	if (!ASSERT_OK(err, "bpf_obj_get_info_by_fd"))
-+	err = bpf_prog_get_info_by_fd(skel->progs.sys_enter.prog_fd,
-+				      &info, &len);
-+	if (!ASSERT_OK(err, "bpf_prog_get_info_by_fd"))
- 		goto cleanup;
- 
- 	if (!ASSERT_GT(info.verified_insns, 0, "verified_insns"))
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_attach.c
-index 062fbc8c8e5e..d4cd9f873c14 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_attach.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_attach.c
-@@ -18,7 +18,7 @@ void serial_test_xdp_attach(void)
- 	err = bpf_prog_test_load(file, BPF_PROG_TYPE_XDP, &obj1, &fd1);
- 	if (CHECK_FAIL(err))
- 		return;
--	err = bpf_obj_get_info_by_fd(fd1, &info, &len);
-+	err = bpf_prog_get_info_by_fd(fd1, &info, &len);
- 	if (CHECK_FAIL(err))
- 		goto out_1;
- 	id1 = info.id;
-@@ -28,7 +28,7 @@ void serial_test_xdp_attach(void)
- 		goto out_1;
- 
- 	memset(&info, 0, sizeof(info));
--	err = bpf_obj_get_info_by_fd(fd2, &info, &len);
-+	err = bpf_prog_get_info_by_fd(fd2, &info, &len);
- 	if (CHECK_FAIL(err))
- 		goto out_2;
- 	id2 = info.id;
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
-index f775a1613833..481626a875d1 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
-@@ -33,8 +33,8 @@ static void test_xdp_with_cpumap_helpers(void)
- 
- 	prog_fd = bpf_program__fd(skel->progs.xdp_dummy_cm);
- 	map_fd = bpf_map__fd(skel->maps.cpu_map);
--	err = bpf_obj_get_info_by_fd(prog_fd, &info, &len);
--	if (!ASSERT_OK(err, "bpf_obj_get_info_by_fd"))
-+	err = bpf_prog_get_info_by_fd(prog_fd, &info, &len);
-+	if (!ASSERT_OK(err, "bpf_prog_get_info_by_fd"))
- 		goto out_close;
- 
- 	val.bpf_prog.fd = prog_fd;
-@@ -85,8 +85,8 @@ static void test_xdp_with_cpumap_frags_helpers(void)
- 
- 	frags_prog_fd = bpf_program__fd(skel->progs.xdp_dummy_cm_frags);
- 	map_fd = bpf_map__fd(skel->maps.cpu_map);
--	err = bpf_obj_get_info_by_fd(frags_prog_fd, &info, &len);
--	if (!ASSERT_OK(err, "bpf_obj_get_info_by_fd"))
-+	err = bpf_prog_get_info_by_fd(frags_prog_fd, &info, &len);
-+	if (!ASSERT_OK(err, "bpf_prog_get_info_by_fd"))
- 		goto out_close;
- 
- 	val.bpf_prog.fd = frags_prog_fd;
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
-index ead40016c324..ce6812558287 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
-@@ -35,8 +35,8 @@ static void test_xdp_with_devmap_helpers(void)
- 
- 	dm_fd = bpf_program__fd(skel->progs.xdp_dummy_dm);
- 	map_fd = bpf_map__fd(skel->maps.dm_ports);
--	err = bpf_obj_get_info_by_fd(dm_fd, &info, &len);
--	if (!ASSERT_OK(err, "bpf_obj_get_info_by_fd"))
-+	err = bpf_prog_get_info_by_fd(dm_fd, &info, &len);
-+	if (!ASSERT_OK(err, "bpf_prog_get_info_by_fd"))
- 		goto out_close;
- 
- 	val.bpf_prog.fd = dm_fd;
-@@ -98,8 +98,8 @@ static void test_xdp_with_devmap_frags_helpers(void)
- 
- 	dm_fd_frags = bpf_program__fd(skel->progs.xdp_dummy_dm_frags);
- 	map_fd = bpf_map__fd(skel->maps.dm_ports);
--	err = bpf_obj_get_info_by_fd(dm_fd_frags, &info, &len);
--	if (!ASSERT_OK(err, "bpf_obj_get_info_by_fd"))
-+	err = bpf_prog_get_info_by_fd(dm_fd_frags, &info, &len);
-+	if (!ASSERT_OK(err, "bpf_prog_get_info_by_fd"))
- 		goto out_close;
- 
- 	val.bpf_prog.fd = dm_fd_frags;
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_info.c b/tools/testing/selftests/bpf/prog_tests/xdp_info.c
-index 286c21ecdc65..1dbddcab87a8 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_info.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_info.c
-@@ -34,7 +34,7 @@ void serial_test_xdp_info(void)
- 	if (CHECK_FAIL(err))
- 		return;
- 
--	err = bpf_obj_get_info_by_fd(prog_fd, &info, &len);
-+	err = bpf_prog_get_info_by_fd(prog_fd, &info, &len);
- 	if (CHECK(err, "get_prog_info", "errno=%d\n", errno))
- 		goto out_close;
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_link.c b/tools/testing/selftests/bpf/prog_tests/xdp_link.c
-index 3e9d5c5521f0..e7e9f3c22edf 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_link.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_link.c
-@@ -29,13 +29,13 @@ void serial_test_xdp_link(void)
- 	prog_fd2 = bpf_program__fd(skel2->progs.xdp_handler);
- 
- 	memset(&prog_info, 0, sizeof(prog_info));
--	err = bpf_obj_get_info_by_fd(prog_fd1, &prog_info, &prog_info_len);
-+	err = bpf_prog_get_info_by_fd(prog_fd1, &prog_info, &prog_info_len);
- 	if (!ASSERT_OK(err, "fd_info1"))
- 		goto cleanup;
- 	id1 = prog_info.id;
- 
- 	memset(&prog_info, 0, sizeof(prog_info));
--	err = bpf_obj_get_info_by_fd(prog_fd2, &prog_info, &prog_info_len);
-+	err = bpf_prog_get_info_by_fd(prog_fd2, &prog_info, &prog_info_len);
- 	if (!ASSERT_OK(err, "fd_info2"))
- 		goto cleanup;
- 	id2 = prog_info.id;
-@@ -119,7 +119,8 @@ void serial_test_xdp_link(void)
- 		goto cleanup;
- 
- 	memset(&link_info, 0, sizeof(link_info));
--	err = bpf_obj_get_info_by_fd(bpf_link__fd(link), &link_info, &link_info_len);
-+	err = bpf_link_get_info_by_fd(bpf_link__fd(link),
-+				      &link_info, &link_info_len);
- 	if (!ASSERT_OK(err, "link_info"))
- 		goto cleanup;
- 
-@@ -137,7 +138,8 @@ void serial_test_xdp_link(void)
- 		goto cleanup;
- 
- 	memset(&link_info, 0, sizeof(link_info));
--	err = bpf_obj_get_info_by_fd(bpf_link__fd(link), &link_info, &link_info_len);
-+	err = bpf_link_get_info_by_fd(bpf_link__fd(link),
-+				      &link_info, &link_info_len);
- 
- 	ASSERT_OK(err, "link_info");
- 	ASSERT_EQ(link_info.prog_id, id1, "link_prog_id");
-diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
-index b73152822aa2..7fc00e423e4d 100644
---- a/tools/testing/selftests/bpf/test_maps.c
-+++ b/tools/testing/selftests/bpf/test_maps.c
-@@ -1275,7 +1275,7 @@ static void test_map_in_map(void)
- 			goto out_map_in_map;
- 		}
- 
--		err = bpf_obj_get_info_by_fd(fd, &info, &len);
-+		err = bpf_map_get_info_by_fd(fd, &info, &len);
- 		if (err) {
- 			printf("Failed to get map info by fd %d: %d", fd,
- 			       errno);
-diff --git a/tools/testing/selftests/bpf/test_skb_cgroup_id_user.c b/tools/testing/selftests/bpf/test_skb_cgroup_id_user.c
-index 3256de30f563..ed518d075d1d 100644
---- a/tools/testing/selftests/bpf/test_skb_cgroup_id_user.c
-+++ b/tools/testing/selftests/bpf/test_skb_cgroup_id_user.c
-@@ -93,7 +93,7 @@ int get_map_fd_by_prog_id(int prog_id)
- 	info.nr_map_ids = 1;
- 	info.map_ids = (__u64) (unsigned long) map_ids;
- 
--	if (bpf_obj_get_info_by_fd(prog_fd, &info, &info_len)) {
-+	if (bpf_prog_get_info_by_fd(prog_fd, &info, &info_len)) {
- 		log_err("Failed to get info by prog fd %d", prog_fd);
- 		goto err;
- 	}
-diff --git a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c b/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
-index 5c8ef062f760..32df93747095 100644
---- a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
-+++ b/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
-@@ -96,7 +96,7 @@ static int get_map_fd_by_prog_id(int prog_id, bool *xdp)
- 	info.nr_map_ids = 1;
- 	info.map_ids = (__u64)(unsigned long)map_ids;
- 
--	if (bpf_obj_get_info_by_fd(prog_fd, &info, &info_len)) {
-+	if (bpf_prog_get_info_by_fd(prog_fd, &info, &info_len)) {
- 		log_err("Failed to get info by prog fd %d", prog_fd);
- 		goto err;
- 	}
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index 887c49dc5abd..8b9949bb833d 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -1239,8 +1239,8 @@ static int get_xlated_program(int fd_prog, struct bpf_insn **buf, int *cnt)
- 	__u32 xlated_prog_len;
- 	__u32 buf_element_size = sizeof(struct bpf_insn);
- 
--	if (bpf_obj_get_info_by_fd(fd_prog, &info, &info_len)) {
--		perror("bpf_obj_get_info_by_fd failed");
-+	if (bpf_prog_get_info_by_fd(fd_prog, &info, &info_len)) {
-+		perror("bpf_prog_get_info_by_fd failed");
- 		return -1;
- 	}
- 
-@@ -1261,8 +1261,8 @@ static int get_xlated_program(int fd_prog, struct bpf_insn **buf, int *cnt)
- 	bzero(&info, sizeof(info));
- 	info.xlated_prog_len = xlated_prog_len;
- 	info.xlated_prog_insns = (__u64)(unsigned long)*buf;
--	if (bpf_obj_get_info_by_fd(fd_prog, &info, &info_len)) {
--		perror("second bpf_obj_get_info_by_fd failed");
-+	if (bpf_prog_get_info_by_fd(fd_prog, &info, &info_len)) {
-+		perror("second bpf_prog_get_info_by_fd failed");
- 		goto out_free_buf;
- 	}
- 
-diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testing/selftests/bpf/testing_helpers.c
-index 9695318e8132..6c44153755e6 100644
---- a/tools/testing/selftests/bpf/testing_helpers.c
-+++ b/tools/testing/selftests/bpf/testing_helpers.c
-@@ -164,7 +164,7 @@ __u32 link_info_prog_id(const struct bpf_link *link, struct bpf_link_info *info)
- 	int err;
- 
- 	memset(info, 0, sizeof(*info));
--	err = bpf_obj_get_info_by_fd(bpf_link__fd(link), info, &info_len);
-+	err = bpf_link_get_info_by_fd(bpf_link__fd(link), info, &info_len);
- 	if (err) {
- 		printf("failed to get link info: %d\n", -errno);
- 		return 0;
-diff --git a/tools/testing/selftests/bpf/xdp_synproxy.c b/tools/testing/selftests/bpf/xdp_synproxy.c
-index 6dbe0b745198..ce68c342b56f 100644
---- a/tools/testing/selftests/bpf/xdp_synproxy.c
-+++ b/tools/testing/selftests/bpf/xdp_synproxy.c
-@@ -217,9 +217,10 @@ static int syncookie_attach(const char *argv0, unsigned int ifindex, bool tc)
- 
- 	prog_fd = bpf_program__fd(prog);
- 
--	err = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
-+	err = bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
- 	if (err < 0) {
--		fprintf(stderr, "Error: bpf_obj_get_info_by_fd: %s\n", strerror(-err));
-+		fprintf(stderr, "Error: bpf_prog_get_info_by_fd: %s\n",
-+			strerror(-err));
- 		goto out;
- 	}
- 	attached_tc = tc;
-@@ -292,9 +293,10 @@ static int syncookie_open_bpf_maps(__u32 prog_id, int *values_map_fd, int *ports
- 	};
- 	info_len = sizeof(prog_info);
- 
--	err = bpf_obj_get_info_by_fd(prog_fd, &prog_info, &info_len);
-+	err = bpf_prog_get_info_by_fd(prog_fd, &prog_info, &info_len);
- 	if (err != 0) {
--		fprintf(stderr, "Error: bpf_obj_get_info_by_fd: %s\n", strerror(-err));
-+		fprintf(stderr, "Error: bpf_prog_get_info_by_fd: %s\n",
-+			strerror(-err));
- 		goto out;
- 	}
- 
-@@ -317,9 +319,10 @@ static int syncookie_open_bpf_maps(__u32 prog_id, int *values_map_fd, int *ports
- 		map_fd = err;
- 
- 		info_len = sizeof(map_info);
--		err = bpf_obj_get_info_by_fd(map_fd, &map_info, &info_len);
-+		err = bpf_map_get_info_by_fd(map_fd, &map_info, &info_len);
- 		if (err != 0) {
--			fprintf(stderr, "Error: bpf_obj_get_info_by_fd: %s\n", strerror(-err));
-+			fprintf(stderr, "Error: bpf_map_get_info_by_fd: %s\n",
-+				strerror(-err));
- 			close(map_fd);
- 			goto err_close_map_fds;
- 		}
--- 
-2.39.1
+Actually this would be just for DIV/MOD instructions, so the new format
+should only apply to them.  The new format would be something like:
 
+  - 64-bit ALU/ALU64 div/mod instructions (code=3,9):
+
+    code:8 regs:8 unused:15 signed:1 imm:32
+
+And for the rest of the ALU and ALU64 instructions
+(code=0,1,2,4,5,6,7,8,a,b,c,d):
+
+  - 64-bit ALU/ALU64 instructions:
+
+    code:8 regs:8 unused:16 imm:32
