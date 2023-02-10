@@ -2,54 +2,54 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BF50C636D3
-	for <bpf@archiver.kernel.org>; Fri, 10 Feb 2023 00:13:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71216C61DA4
+	for <bpf@archiver.kernel.org>; Fri, 10 Feb 2023 00:13:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbjBJANK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Feb 2023 19:13:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43312 "EHLO
+        id S229798AbjBJANL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Feb 2023 19:13:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbjBJANI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Feb 2023 19:13:08 -0500
+        with ESMTP id S229691AbjBJANJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Feb 2023 19:13:09 -0500
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF675EA0A
-        for <bpf@vger.kernel.org>; Thu,  9 Feb 2023 16:13:06 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 319NmfX1015474;
-        Fri, 10 Feb 2023 00:12:53 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573DE5DC3F
+        for <bpf@vger.kernel.org>; Thu,  9 Feb 2023 16:13:07 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31A0BpkF001356;
+        Fri, 10 Feb 2023 00:12:52 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=zkwKmj/jc8+NbTxLZY8iY9Mf3+Z25OFdx7Xu0pkhO70=;
- b=KjLj7LvTq0tYbNgNpO2rmNqzhPd16ugQbLqbuPRX5Ssy0OfBUzf5yL4UM/eSJ+Wv5w9l
- qxBrV2hlfqme/baYiBFtYv/CNvy5t+qmjg9GJddjHyo4vHlufr7yiI32Hc03mR+xO/mM
- giFD08ZcygRPcmopC2WdpHpWljQQ3C681IQYLeXvrouibvtm4VaBlPObcmbjGyZb12gz
- XuCCELq32uks7zkyS15XxIekEv01XAMT9TzikovH+EI07cpr05b+/HoDDPTwhOvKUD7r
- O1bZDvL+eoQ0vYAMXI22geT2YHsDaMOeopTve8dsn3lRIbDIcKUfvdmCB0otFOTR6HPN vA== 
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nnau4gvkr-1
+ bh=zEzFX0aXMQUgMyNiK6Y1RQxy8zjjmTmc70qNuw2oo28=;
+ b=tewNtpEJwGe/72uPKVkTQdqGK7s8DTbMylM/2QLtytxCfPaombmGEoYMssGzhafnzwgi
+ OMleguaL9uoTuAnEiInLScqJsFCIhqPaZX5NxDBRgWOdkxq2r+UuwEgRuRvQE4c/Tn1+
+ WK3Y8st77goedUqzEXRQQVb4+Ma6hoyZXm2++RsqxwITCoro4n8ohiPnzAzUcS/l9fjI
+ SfvuEADf/qKLA2KBmdRFuOz8Rwbho9IE+7UOpDuJj5jNkvLmJNiR5+LbyY4c/PTZTBVk
+ WR8IeaiZlU2QXAv0xJwtpqg4H4mHKuomda7XaJXqxvrN6zEkPLEWrOJRqwFE0eJbpB+8 wQ== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nnb60g0h2-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 00:12:53 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 319Dk428017584;
-        Fri, 10 Feb 2023 00:12:50 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3nhemfmvcr-1
+        Fri, 10 Feb 2023 00:12:51 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 319HLM0u024540;
+        Fri, 10 Feb 2023 00:12:49 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3nhf06muew-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 00:12:50 +0000
+        Fri, 10 Feb 2023 00:12:48 +0000
 Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31A0Cl8u22348328
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31A0CinM44564932
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Feb 2023 00:12:47 GMT
+        Fri, 10 Feb 2023 00:12:45 GMT
 Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1753A2004E;
-        Fri, 10 Feb 2023 00:12:47 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id DF16E20043;
+        Fri, 10 Feb 2023 00:12:44 +0000 (GMT)
 Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 861082004B;
-        Fri, 10 Feb 2023 00:12:46 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 520FE20040;
+        Fri, 10 Feb 2023 00:12:44 +0000 (GMT)
 Received: from heavy.ibmuc.com (unknown [9.171.74.186])
         by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Feb 2023 00:12:46 +0000 (GMT)
+        Fri, 10 Feb 2023 00:12:44 +0000 (GMT)
 From:   Ilya Leoshkevich <iii@linux.ibm.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -58,131 +58,88 @@ Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Alexander Gordeev <agordeev@linux.ibm.com>,
         Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next v2 16/16] selftests/bpf: Add MSan annotations
-Date:   Fri, 10 Feb 2023 01:12:10 +0100
-Message-Id: <20230210001210.395194-17-iii@linux.ibm.com>
+Subject: [PATCH bpf-next v2 14/16] libbpf: Factor out is_percpu_bpf_map_type()
+Date:   Fri, 10 Feb 2023 01:12:08 +0100
+Message-Id: <20230210001210.395194-15-iii@linux.ibm.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230210001210.395194-1-iii@linux.ibm.com>
 References: <20230210001210.395194-1-iii@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: um40w2HD2M0e_JYT4SfE1Qdummih8mvi
-X-Proofpoint-GUID: um40w2HD2M0e_JYT4SfE1Qdummih8mvi
+X-Proofpoint-GUID: wSR6uamRUDT8mGJJ5FWbhbzPoM8UJCVu
+X-Proofpoint-ORIG-GUID: wSR6uamRUDT8mGJJ5FWbhbzPoM8UJCVu
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
  definitions=2023-02-09_16,2023-02-09_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
- priorityscore=1501 phishscore=0 lowpriorityscore=0 bulkscore=0
- adultscore=0 malwarescore=0 impostorscore=0 spamscore=0 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ suspectscore=0 bulkscore=0 adultscore=0 lowpriorityscore=0 phishscore=0
+ priorityscore=1501 mlxscore=0 impostorscore=0 clxscore=1015
+ mlxlogscore=940 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2212070000 definitions=main-2302090217
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-eBPF selftests produce a few false positives with MSan. 3 of them have
-to do with sending uninitalized data via a socket. Another one is
-PERF_EVENT_IOC_QUERY_BPF, which is not known to MSan. Silence all of
-them using libbpf_mark_mem_written().
+This will be useful for unpoisoning map values for Memory Sanitizer.
 
 Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 ---
- tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c      | 3 +++
- tools/testing/selftests/bpf/prog_tests/send_signal.c     | 2 ++
- tools/testing/selftests/bpf/prog_tests/tp_attach_query.c | 4 ++++
- tools/testing/selftests/bpf/prog_tests/xdp_bonding.c     | 3 +++
- 4 files changed, 12 insertions(+)
+ tools/lib/bpf/libbpf.c          | 11 ++---------
+ tools/lib/bpf/libbpf_internal.h |  8 ++++++++
+ 2 files changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-index e980188d4124..c75a3357cd06 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-@@ -4,6 +4,7 @@
- #include <linux/err.h>
- #include <netinet/tcp.h>
- #include <test_progs.h>
-+#include <bpf/libbpf_internal.h>
- #include "network_helpers.h"
- #include "bpf_dctcp.skel.h"
- #include "bpf_cubic.skel.h"
-@@ -39,6 +40,8 @@ static void *server(void *arg)
- 	ssize_t nr_sent = 0, bytes = 0;
- 	char batch[1500];
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 05c4db355f28..2d47a8e4f7e4 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -9432,11 +9432,7 @@ static int validate_map_op(const struct bpf_map *map, size_t key_sz,
+ 	if (!check_value_sz)
+ 		return 0;
  
-+	libbpf_mark_mem_written(batch, sizeof(batch));
+-	switch (map->def.type) {
+-	case BPF_MAP_TYPE_PERCPU_ARRAY:
+-	case BPF_MAP_TYPE_PERCPU_HASH:
+-	case BPF_MAP_TYPE_LRU_PERCPU_HASH:
+-	case BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE: {
++	if (is_percpu_bpf_map_type(map->def.type)) {
+ 		int num_cpu = libbpf_num_possible_cpus();
+ 		size_t elem_sz = roundup(map->def.value_size, 8);
+ 
+@@ -9445,15 +9441,12 @@ static int validate_map_op(const struct bpf_map *map, size_t key_sz,
+ 				map->name, value_sz, num_cpu, elem_sz, num_cpu * elem_sz);
+ 			return -EINVAL;
+ 		}
+-		break;
+-	}
+-	default:
++	} else {
+ 		if (map->def.value_size != value_sz) {
+ 			pr_warn("map '%s': unexpected value size %zu provided, expected %u\n",
+ 				map->name, value_sz, map->def.value_size);
+ 			return -EINVAL;
+ 		}
+-		break;
+ 	}
+ 	return 0;
+ }
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index fbaf68335394..d6098b9c9e8e 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -577,4 +577,12 @@ static inline bool is_pow_of_2(size_t x)
+ #define PROG_LOAD_ATTEMPTS 5
+ int sys_bpf_prog_load(union bpf_attr *attr, unsigned int size, int attempts);
+ 
++static inline bool is_percpu_bpf_map_type(__u32 type)
++{
++	return type == BPF_MAP_TYPE_PERCPU_HASH ||
++	       type == BPF_MAP_TYPE_LRU_PERCPU_HASH ||
++	       type == BPF_MAP_TYPE_PERCPU_ARRAY ||
++	       type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE;
++}
 +
- 	fd = accept(lfd, NULL, NULL);
- 	while (fd == -1) {
- 		if (errno == EINTR)
-diff --git a/tools/testing/selftests/bpf/prog_tests/send_signal.c b/tools/testing/selftests/bpf/prog_tests/send_signal.c
-index d63a20fbed33..11e91fc7a67f 100644
---- a/tools/testing/selftests/bpf/prog_tests/send_signal.c
-+++ b/tools/testing/selftests/bpf/prog_tests/send_signal.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <bpf/libbpf_internal.h>
- #include <sys/time.h>
- #include <sys/resource.h>
- #include "test_send_signal_kern.skel.h"
-@@ -58,6 +59,7 @@ static void test_send_signal_common(struct perf_event_attr *attr,
- 		ASSERT_OK(setpriority(PRIO_PROCESS, 0, -20), "setpriority");
- 
- 		/* notify parent signal handler is installed */
-+		libbpf_mark_mem_written(buf, 1);
- 		ASSERT_EQ(write(pipe_c2p[1], buf, 1), 1, "pipe_write");
- 
- 		/* make sure parent enabled bpf program to send_signal */
-diff --git a/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c b/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
-index 770fcc3bb1ba..727898e905fe 100644
---- a/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <bpf/libbpf_internal.h>
- 
- void serial_test_tp_attach_query(void)
- {
-@@ -66,6 +67,7 @@ void serial_test_tp_attach_query(void)
- 		if (i == 0) {
- 			/* check NULL prog array query */
- 			query->ids_len = num_progs;
-+			libbpf_mark_var_written(query->prog_cnt);
- 			err = ioctl(pmu_fd[i], PERF_EVENT_IOC_QUERY_BPF, query);
- 			if (CHECK(err || query->prog_cnt != 0,
- 				  "perf_event_ioc_query_bpf",
-@@ -115,6 +117,8 @@ void serial_test_tp_attach_query(void)
- 			  "err %d errno %d query->prog_cnt %u\n",
- 			  err, errno, query->prog_cnt))
- 			goto cleanup3;
-+		libbpf_mark_mem_written(query->ids,
-+					query->ids_len * sizeof(__u32));
- 		for (j = 0; j < i + 1; j++)
- 			if (CHECK(saved_prog_ids[j] != query->ids[j],
- 				  "perf_event_ioc_query_bpf",
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-index 5e3a26b15ec6..e6334f254675 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-@@ -14,6 +14,7 @@
- #include <net/if.h>
- #include <linux/if_link.h>
- #include "test_progs.h"
-+#include "bpf/libbpf_internal.h"
- #include "network_helpers.h"
- #include <linux/if_bonding.h>
- #include <linux/limits.h>
-@@ -224,6 +225,8 @@ static int send_udp_packets(int vary_dst_ip)
- 	int i, s = -1;
- 	int ifindex;
- 
-+	libbpf_mark_mem_written(buf, sizeof(buf));
-+
- 	s = socket(AF_PACKET, SOCK_RAW, IPPROTO_RAW);
- 	if (!ASSERT_GE(s, 0, "socket"))
- 		goto err;
+ #endif /* __LIBBPF_LIBBPF_INTERNAL_H */
 -- 
 2.39.1
 
