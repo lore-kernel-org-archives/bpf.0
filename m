@@ -2,192 +2,111 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E1FBC05027
-	for <bpf@archiver.kernel.org>; Fri, 10 Feb 2023 09:52:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EEBCC636CD
+	for <bpf@archiver.kernel.org>; Fri, 10 Feb 2023 10:36:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231538AbjBJJwf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Feb 2023 04:52:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46350 "EHLO
+        id S231515AbjBJKgx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Feb 2023 05:36:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231405AbjBJJwf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 10 Feb 2023 04:52:35 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA06E8A5D;
-        Fri, 10 Feb 2023 01:52:33 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id jg8so14304150ejc.6;
-        Fri, 10 Feb 2023 01:52:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kU2UMSdVf6ATg2sdzEwIyGZLq0FY+uJF2CLbcEvZ/Gg=;
-        b=MCBeOKGH9aSNHAdUJpAsDjpVN0CkK+o96HXDfN68uXXdXNs4X9LJe1l4iud926JjD0
-         llaww1wsoZNX+aMgljfw0Y98kfEwzFcIdNQJehoRkP80uGDi9dN+0ovOh3SdfOqxxb23
-         wmnPfDHIDQ2fUVTH98TeO4uEOGPNzyNoQfzDUuUTxfQApJa02OAK02hYZOgFedWj8XKB
-         +YjIcnNUNuSAYtLa+lLQaQs/oRJ88TgGR8f47X5bi9bi7bTz6/Rfzb2e0WIj7Yqp/KZV
-         Z3Z/RSxhOKWxdXwD0o0Idruxu5s1JP+SCCzm2P/URUMzcHUHxvkcZcijcDWV7i74hRmX
-         Oq1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kU2UMSdVf6ATg2sdzEwIyGZLq0FY+uJF2CLbcEvZ/Gg=;
-        b=wXXZxf+4sZ0EjFGsHcTXHG+hz1o7lZG22fNQkY9wZKgmQISAA6rkrN2I3E2JraccO4
-         CkNQssJegm7Edr76H7s/da9XNb2Fi8KI8XmrHsYypdkEPoMO7FtcClLf0gZeLszJ9BrQ
-         1nzRk9dxMbV/gvHrMmLfyw1GZMHya0bUcRz3gAHrBlenT0leFukv9DquZ3/8n1cAwMfZ
-         MhjykGzPIDie/rj12mIpvlXVFWF34FRlTtjB3QmYXhAkcrSvFRWlA4B2MfB0FFahhdG9
-         RUtc8SmV0+qB6NMuvkoLy8c2isMn23tY1Zn4YSlvEb+0uOhOsEjt7Q3Ak1yug9AGqDMc
-         p9wQ==
-X-Gm-Message-State: AO0yUKXynwqFZckuePMskmRCJGgrr29DhJ+7zexoBWVBovDBtnJfgoHZ
-        Vw7aomE0ExglFuMYpm7dXHC+IGeAWuKJCVPE1kY=
-X-Google-Smtp-Source: AK7set9OBqhHTYvltqTQkSQcNeaU3sDaS3zqSnOalhCYu1ZVdEmhXWNE0bb1PLTNY8YrM3ZCFgvgiyQ648nFXN3mM3o=
-X-Received: by 2002:a17:906:2cc4:b0:887:2895:d26e with SMTP id
- r4-20020a1709062cc400b008872895d26emr1149540ejr.4.1676022752346; Fri, 10 Feb
- 2023 01:52:32 -0800 (PST)
-MIME-Version: 1.0
-References: <20230210021232.108211-1-xuanzhuo@linux.alibaba.com>
-In-Reply-To: <20230210021232.108211-1-xuanzhuo@linux.alibaba.com>
-From:   Magnus Karlsson <magnus.karlsson@gmail.com>
-Date:   Fri, 10 Feb 2023 10:52:20 +0100
-Message-ID: <CAJ8uoz0EqC81hJRw=3dj6vE99Y6+Y6daN3ugrSWhAUzrgYUT1Q@mail.gmail.com>
-Subject: Re: [PATCH net-next v1] xsk: support use vaddr as ring
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc:     netdev@vger.kernel.org,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S232185AbjBJKgn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 10 Feb 2023 05:36:43 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04CD970710
+        for <bpf@vger.kernel.org>; Fri, 10 Feb 2023 02:36:34 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31AARdw6018289;
+        Fri, 10 Feb 2023 10:36:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=pQstbAouq9GJCTzY/z/pRkpBFCWT5KhnxtDW3/gdxuA=;
+ b=EIXpgjPA0lschTnVAr9sy4W5Ctd8ltpBTRPjO4a1605mWQsrJdzymdZgc4zHF7jnhYGe
+ dq6JGflADadt/LoLGRSGEkc/hWt7XqyB9jBKAZCXXpzsgnCg4J8yAVHM4rKWCUt9VkWs
+ EgdAlryZMgBLP77b7BSyf5RDM8dRi7bp0yz+0C2g//DqaoqE/q3EXDZvD8hl/HNe/DaX
+ s0WmlrliznHe6kkz67kKOHs7WaQRjSeHJXR7zKB7yXrhcqbiqu2lrneRhnxMB4Gz/NWQ
+ BF8Wi1UOlIP2X8dZLHje2dqzhP6YymZTUfJlgRPtFqT3jQ37s7FKvBNYmzrUbEGY6erH fg== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nnm6m8gsh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Feb 2023 10:36:18 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31A6deF3023803;
+        Fri, 10 Feb 2023 10:36:10 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3nhf06ybcm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Feb 2023 10:36:10 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31AAa6MB46072242
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Feb 2023 10:36:06 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9AD362004F;
+        Fri, 10 Feb 2023 10:36:06 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1F3C820043;
+        Fri, 10 Feb 2023 10:36:06 +0000 (GMT)
+Received: from [9.171.85.225] (unknown [9.171.85.225])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 10 Feb 2023 10:36:06 +0000 (GMT)
+Message-ID: <e14fa2680a3a37d8ed369ea8014aa70ceaa3bbb8.camel@linux.ibm.com>
+Subject: Re: [PATCH bpf-next v2 10/16] bpftool: Use
+ bpf_{btf,link,map,prog}_get_info_by_fd()
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Date:   Fri, 10 Feb 2023 11:36:05 +0100
+In-Reply-To: <20230210001210.395194-11-iii@linux.ibm.com>
+References: <20230210001210.395194-1-iii@linux.ibm.com>
+         <20230210001210.395194-11-iii@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: EllxJ5RI75aLBx9eUIuVgM6zwz6870gh
+X-Proofpoint-GUID: EllxJ5RI75aLBx9eUIuVgM6zwz6870gh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-10_05,2023-02-09_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 impostorscore=0 bulkscore=0 spamscore=0 mlxscore=0
+ malwarescore=0 phishscore=0 suspectscore=0 lowpriorityscore=0
+ mlxlogscore=999 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2302100088
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 10 Feb 2023 at 03:14, Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
->
-> When we try to start AF_XDP on some machines with long running time, due
-> to the machine's memory fragmentation problem, there is no sufficient
-> continuous physical memory that will cause the start failure.
->
-> After AF_XDP fails to apply for continuous physical memory, this patch
-> tries to use vmalloc() to allocate memory to solve this problem.
->
-> Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202302091850.0HBmsDAq-lkp@intel.com
+On Fri, 2023-02-10 at 01:12 +0100, Ilya Leoshkevich wrote:
+> Use the new type-safe wrappers around bpf_obj_get_info_by_fd().
+> lease enter the commit message for your changes. Lines starting
+
+Not sure what happened here, but this line needs to go.
+I'll fix this in v3 if we decide to keep this patch.
+
+> Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 > ---
->  net/xdp/xsk.c       |  8 +++++---
->  net/xdp/xsk_queue.c | 21 +++++++++++++++------
->  net/xdp/xsk_queue.h |  1 +
->  3 files changed, 21 insertions(+), 9 deletions(-)
->
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 9f0561b67c12..33db57548ee3 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-> @@ -1296,7 +1296,6 @@ static int xsk_mmap(struct file *file, struct socket *sock,
->         struct xdp_sock *xs = xdp_sk(sock->sk);
->         struct xsk_queue *q = NULL;
->         unsigned long pfn;
-> -       struct page *qpg;
->
->         if (READ_ONCE(xs->state) != XSK_READY)
->                 return -EBUSY;
-> @@ -1319,10 +1318,13 @@ static int xsk_mmap(struct file *file, struct socket *sock,
->
->         /* Matches the smp_wmb() in xsk_init_queue */
->         smp_rmb();
-> -       qpg = virt_to_head_page(q->ring);
-> -       if (size > page_size(qpg))
-> +
-> +       if (PAGE_ALIGN(q->ring_size) < size)
->                 return -EINVAL;
->
-> +       if (is_vmalloc_addr(q->ring))
-> +               return remap_vmalloc_range(vma, q->ring, 0);
-> +
->         pfn = virt_to_phys(q->ring) >> PAGE_SHIFT;
->         return remap_pfn_range(vma, vma->vm_start, pfn,
->                                size, vma->vm_page_prot);
-> diff --git a/net/xdp/xsk_queue.c b/net/xdp/xsk_queue.c
-> index 6cf9586e5027..7b03102d1672 100644
-> --- a/net/xdp/xsk_queue.c
-> +++ b/net/xdp/xsk_queue.c
-> @@ -7,6 +7,7 @@
->  #include <linux/slab.h>
->  #include <linux/overflow.h>
->  #include <net/xdp_sock_drv.h>
-> +#include <linux/vmalloc.h>
->
->  #include "xsk_queue.h"
->
-> @@ -37,14 +38,18 @@ struct xsk_queue *xskq_create(u32 nentries, bool umem_queue)
->                     __GFP_COMP  | __GFP_NORETRY;
->         size = xskq_get_ring_size(q, umem_queue);
->
-> +       q->ring_size = size;
->         q->ring = (struct xdp_ring *)__get_free_pages(gfp_flags,
->                                                       get_order(size));
-> -       if (!q->ring) {
-> -               kfree(q);
-> -               return NULL;
-> -       }
-> +       if (q->ring)
-> +               return q;
-> +
-> +       q->ring = (struct xdp_ring *)vmalloc_user(size);
-> +       if (q->ring)
-> +               return q;
+> =C2=A0tools/bpf/bpftool/btf.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=
+ 13 ++++++++-----
+> =C2=A0tools/bpf/bpftool/btf_dumper.c |=C2=A0 4 ++--
+> =C2=A0tools/bpf/bpftool/cgroup.c=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 4 ++--
+> =C2=A0tools/bpf/bpftool/common.c=C2=A0=C2=A0=C2=A0=C2=A0 | 13 +++++++----=
+--
+> =C2=A0tools/bpf/bpftool/link.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=
+=A0 4 ++--
+> =C2=A0tools/bpf/bpftool/main.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=
+=A0 3 ++-
+> =C2=A0tools/bpf/bpftool/map.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=
+=C2=A0 8 ++++----
+> =C2=A0tools/bpf/bpftool/prog.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 24 +=
+++++++++++++-----------
+> =C2=A0tools/bpf/bpftool/struct_ops.c |=C2=A0 6 +++---
+> =C2=A09 files changed, 43 insertions(+), 36 deletions(-)
 
-Thanks for bringing this to attention. Interesting to see how hard it
-gets after a while to find consecutive memory since this is not a
-large area.
-
-I am wondering if it would be better to remove the __get_free_pages()
-and just go for vmalloc_user. There is no particular reason here for
-allocating consecutive physical pages for the ring. Does anyone see
-any problem with removing this? If not, please just remove
-__get_free_pages(), test it, and post a v2.
-
-> -       return q;
-> +       kfree(q);
-> +       return NULL;
->  }
->
->  void xskq_destroy(struct xsk_queue *q)
-> @@ -52,6 +57,10 @@ void xskq_destroy(struct xsk_queue *q)
->         if (!q)
->                 return;
->
-> -       page_frag_free(q->ring);
-> +       if (is_vmalloc_addr(q->ring))
-> +               vfree(q->ring);
-> +       else
-> +               page_frag_free(q->ring);
-> +
->         kfree(q);
->  }
-> diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
-> index c6fb6b763658..35922b8b92a8 100644
-> --- a/net/xdp/xsk_queue.h
-> +++ b/net/xdp/xsk_queue.h
-> @@ -45,6 +45,7 @@ struct xsk_queue {
->         struct xdp_ring *ring;
->         u64 invalid_descs;
->         u64 queue_empty_descs;
-> +       size_t ring_size;
->  };
->
->  /* The structure of the shared state of the rings are a simple
-> --
-> 2.32.0.3.g01195cf9f
->
+[...]
