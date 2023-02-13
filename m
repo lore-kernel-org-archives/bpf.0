@@ -2,112 +2,171 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0385C64ED6
-	for <bpf@archiver.kernel.org>; Mon, 13 Feb 2023 19:05:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 050EEC636D4
+	for <bpf@archiver.kernel.org>; Mon, 13 Feb 2023 19:05:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbjBMTFZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Feb 2023 14:05:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40342 "EHLO
+        id S229769AbjBMTFj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Feb 2023 14:05:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbjBMTFU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 13 Feb 2023 14:05:20 -0500
+        with ESMTP id S230237AbjBMTF2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 13 Feb 2023 14:05:28 -0500
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0209D658B;
-        Mon, 13 Feb 2023 11:05:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C7C21A3E;
+        Mon, 13 Feb 2023 11:05:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676315101; x=1707851101;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=vduEa+aiPXYPGE8wexexfc+l1PDUMEyrG/6ljt4OTtQ=;
-  b=enb0DCmL/isuENiqBUlAYX32GkRM9hbGD3ZS0w0GM+Btih304XFQpR3B
-   1QejjXXUTyXdQP+E82qnoVpSM7AIe57b7CDMyq4DHkd5vAa8mC1v1fpWG
-   iag1hqlg08CfcTVjwC4row4SKcHtknrbeDK50dxGZajm8BsZCbL29zbBm
-   0m1ltABfF8kR6rDaMh1Aj3wwjtuZfuBoPC9eHbtjOAMbGjSOixKnSpEsj
-   Bu0hg/oKnphiXIoKPVRoYkx4MavbOAVtpFyDnqJuensdLEgK/DQ1u6A7X
-   BqGAy640j4NRvDMGkBxDv/Hhvpr5nowKByJ/4ioEw0DhyCWxUjyEqcPkk
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="332281387"
+  t=1676315115; x=1707851115;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=P7FjsWu3MVGBk9JhbCvWu8kJATCkxSj6ISwNnsFzxxU=;
+  b=As36deJbTbxEzdMakPvo9B5YybP34RvQpHwlVPofaoSEp4werWcRwYGO
+   f+nnTeaHNHYrZCNBZ4kSKCb+y43p4WxUFnWg7qQr01wJj+k/Prz3IrF8Q
+   W4d4F18PVCVQhoulhn/zJcjnFPw3gMxltj/8HmnTm2mRZqb8yikpZOwJL
+   oTW4YpDCQi3TmmYNpyy3J40WqpEO81vDSG6lkXaV2fCZSGaCy5aT6+M/8
+   8mSwGR8ZC+oyJMT3yU2sQ/hsrHC0gDKlx52+kQxCvah+DH/WbucdXtFVV
+   j1dGjIzG5rbqWiQMG36l7qidBu7OQoVjpV/vynhlCmWMRJqQ17FIoYSh6
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="332281407"
 X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="332281387"
+   d="scan'208";a="332281407"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 11:03:32 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="670928942"
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 11:03:35 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="670929001"
 X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="670928942"
+   d="scan'208";a="670929001"
 Received: from paamrpdk12-s2600bpb.aw.intel.com ([10.228.151.145])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 11:03:31 -0800
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 11:03:34 -0800
 From:   Tirthendu Sarkar <tirthendu.sarkar@intel.com>
 To:     intel-wired-lan@lists.osuosl.org
 Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         magnus.karlsson@intel.com, maciej.fijalkowski@intel.com
-Subject: [PATCH intel-next v2 0/8] i40e: support XDP multi-buffer
-Date:   Tue, 14 Feb 2023 00:18:20 +0530
-Message-Id: <20230213184828.39404-1-tirthendu.sarkar@intel.com>
+Subject: [PATCH intel-next v2 4/8] i40e: Change size to truesize when using i40e_rx_buffer_flip()
+Date:   Tue, 14 Feb 2023 00:18:24 +0530
+Message-Id: <20230213184828.39404-5-tirthendu.sarkar@intel.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230213184828.39404-1-tirthendu.sarkar@intel.com>
+References: <20230213184828.39404-1-tirthendu.sarkar@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patchset adds multi-buffer support for XDP. Tx side already has
-support for multi-buffer. This patchset focuses on Rx side. The last
-patch contains actual multi-buffer changes while the previous ones are
-preparatory patches.
+Truesize is now passed directly to i40e_rx_buffer_flip() instead of size
+so that it does not need to recalculate truesize from size using
+i40e_rx_frame_truesize() before adjusting page offset.
 
-On receiving the first buffer of a packet, xdp_buff is built and its
-subsequent buffers are added to it as frags. While 'next_to_clean' keeps
-pointing to the first descriptor, the newly introduced 'next_to_process'
-keeps track of every descriptor for the packet. 
+With these change the function can now be used during skb building and
+adding frags. In later patches it will also be easier for adjusting
+page offsets for multi-buffers.
 
-On receiving EOP buffer the XDP program is called and appropriate action
-is taken (building skb for XDP_PASS, reusing page for XDP_DROP, adjusting
-page offsets for XDP_{REDIRECT,TX}).
+Signed-off-by: Tirthendu Sarkar <tirthendu.sarkar@intel.com>
+---
+ drivers/net/ethernet/intel/i40e/i40e_txrx.c | 54 ++++++++-------------
+ 1 file changed, 19 insertions(+), 35 deletions(-)
 
-The patchset also streamlines page offset adjustments for buffer reuse
-to make it easier to post process the rx_buffers after running XDP prog.
-
-With this patchset there does not seem to be any performance degradation
-for XDP_PASS and some improvement (~1% for XDP_TX, ~5% for XDP_DROP) when
-measured using xdp_rxq_info program from samples/bpf/ for 64B packets.
-
-Changelog:
-    v1 -> v2:
-    - Instead of building xdp_buff on eop now it is built incrementally.
-    - xdp_buff is now added to i40e_ring struct for preserving across
-      napi calls. [Alexander Duyck]
-    - Post XDP program rx_buffer processing has been simplified.
-    - Rx buffer allocation pull out is reverted to avoid performance 
-      issues for smaller ring sizes and now done when at least half of
-      the ring has been cleaned. With v1 there was ~75% drop for
-      XDP_PASS with the smallest ring size of 64 which is mitigated by
-      v2 [Alexander Duyck]
-    - Instead of retrying skb allocation on previous failure now the
-      packet is dropped. [Maciej]
-    - Simplified page offset adjustments by using xdp->frame_sz instead
-      of recalculating truesize. [Maciej]
-    - Change i40e_trace() to use xdp instead of skb [Maciej]
-    - Reserve tailroom for legacy-rx [Maciej]
-    - Centralize max frame size calculation
-
-Tirthendu Sarkar (8):
-  i40e: consolidate maximum frame size calculation for vsi
-  i40e: change Rx buffer size for legacy-rx to support XDP multi-buffer
-  i40e: add pre-xdp page_count in rx_buffer
-  i40e: Change size to truesize when using i40e_rx_buffer_flip()
-  i40e: use frame_sz instead of recalculating truesize for building skb
-  i40e: introduce next_to_process to i40e_ring
-  i40e: add xdp_buff to i40e_ring struct
-  i40e: add support for XDP multi-buffer Rx
-
- drivers/net/ethernet/intel/i40e/i40e_main.c  |  75 ++--
- drivers/net/ethernet/intel/i40e/i40e_trace.h |  20 +-
- drivers/net/ethernet/intel/i40e/i40e_txrx.c  | 426 +++++++++++--------
- drivers/net/ethernet/intel/i40e/i40e_txrx.h  |  21 +-
- 4 files changed, 311 insertions(+), 231 deletions(-)
-
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.c b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
+index a7fba294a8f4..019abd7273a2 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_txrx.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
+@@ -2018,6 +2018,21 @@ static bool i40e_can_reuse_rx_page(struct i40e_rx_buffer *rx_buffer,
+ 	return true;
+ }
+ 
++/**
++ * i40e_rx_buffer_flip - adjusted rx_buffer to point to an unused region
++ * @rx_buffer: Rx buffer to adjust
++ * @size: Size of adjustment
++ **/
++static void i40e_rx_buffer_flip(struct i40e_rx_buffer *rx_buffer,
++				unsigned int truesize)
++{
++#if (PAGE_SIZE < 8192)
++	rx_buffer->page_offset ^= truesize;
++#else
++	rx_buffer->page_offset += truesize;
++#endif
++}
++
+ /**
+  * i40e_add_rx_frag - Add contents of Rx buffer to sk_buff
+  * @rx_ring: rx descriptor ring to transact packets on
+@@ -2045,11 +2060,7 @@ static void i40e_add_rx_frag(struct i40e_ring *rx_ring,
+ 			rx_buffer->page_offset, size, truesize);
+ 
+ 	/* page is being used so we must update the page offset */
+-#if (PAGE_SIZE < 8192)
+-	rx_buffer->page_offset ^= truesize;
+-#else
+-	rx_buffer->page_offset += truesize;
+-#endif
++	i40e_rx_buffer_flip(rx_buffer, truesize);
+ }
+ 
+ /**
+@@ -2154,11 +2165,7 @@ static struct sk_buff *i40e_construct_skb(struct i40e_ring *rx_ring,
+ 				size, truesize);
+ 
+ 		/* buffer is used by skb, update page_offset */
+-#if (PAGE_SIZE < 8192)
+-		rx_buffer->page_offset ^= truesize;
+-#else
+-		rx_buffer->page_offset += truesize;
+-#endif
++		i40e_rx_buffer_flip(rx_buffer, truesize);
+ 	} else {
+ 		/* buffer is unused, reset bias back to rx_buffer */
+ 		rx_buffer->pagecnt_bias++;
+@@ -2209,11 +2216,7 @@ static struct sk_buff *i40e_build_skb(struct i40e_ring *rx_ring,
+ 		skb_metadata_set(skb, metasize);
+ 
+ 	/* buffer is used by skb, update page_offset */
+-#if (PAGE_SIZE < 8192)
+-	rx_buffer->page_offset ^= truesize;
+-#else
+-	rx_buffer->page_offset += truesize;
+-#endif
++	i40e_rx_buffer_flip(rx_buffer, truesize);
+ 
+ 	return skb;
+ }
+@@ -2326,25 +2329,6 @@ static int i40e_run_xdp(struct i40e_ring *rx_ring, struct xdp_buff *xdp, struct
+ 	return result;
+ }
+ 
+-/**
+- * i40e_rx_buffer_flip - adjusted rx_buffer to point to an unused region
+- * @rx_ring: Rx ring
+- * @rx_buffer: Rx buffer to adjust
+- * @size: Size of adjustment
+- **/
+-static void i40e_rx_buffer_flip(struct i40e_ring *rx_ring,
+-				struct i40e_rx_buffer *rx_buffer,
+-				unsigned int size)
+-{
+-	unsigned int truesize = i40e_rx_frame_truesize(rx_ring, size);
+-
+-#if (PAGE_SIZE < 8192)
+-	rx_buffer->page_offset ^= truesize;
+-#else
+-	rx_buffer->page_offset += truesize;
+-#endif
+-}
+-
+ /**
+  * i40e_xdp_ring_update_tail - Updates the XDP Tx ring tail register
+  * @xdp_ring: XDP Tx ring
+@@ -2513,7 +2497,7 @@ static int i40e_clean_rx_irq(struct i40e_ring *rx_ring, int budget,
+ 		if (xdp_res) {
+ 			if (xdp_res & (I40E_XDP_TX | I40E_XDP_REDIR)) {
+ 				xdp_xmit |= xdp_res;
+-				i40e_rx_buffer_flip(rx_ring, rx_buffer, size);
++				i40e_rx_buffer_flip(rx_buffer, xdp.frame_sz);
+ 			} else {
+ 				rx_buffer->pagecnt_bias++;
+ 			}
 -- 
 2.34.1
 
