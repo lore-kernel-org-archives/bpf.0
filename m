@@ -2,47 +2,47 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E0ABC05027
-	for <bpf@archiver.kernel.org>; Tue, 14 Feb 2023 22:17:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B1D4C61DA4
+	for <bpf@archiver.kernel.org>; Tue, 14 Feb 2023 22:17:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233117AbjBNWRn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Feb 2023 17:17:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35760 "EHLO
+        id S233439AbjBNWRm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Feb 2023 17:17:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231915AbjBNWRk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S233117AbjBNWRk (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 14 Feb 2023 17:17:40 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7C42940F
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C3C29421
         for <bpf@vger.kernel.org>; Tue, 14 Feb 2023 14:17:39 -0800 (PST)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31EGtsdt003823
-        for <bpf@vger.kernel.org>; Tue, 14 Feb 2023 14:17:38 -0800
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31EGsFvZ002403
+        for <bpf@vger.kernel.org>; Tue, 14 Feb 2023 14:17:39 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=f5T8By2TUrPsxXWbHFjJt1n7y6lgBGuS5AvjRAO0cus=;
- b=GLIH4H9Sz5GcPC0XEnQZGsgO2icGbdc5FJgC2GN91TgLka/6N89QxToFUkFWR3tKVhoT
- FztfudD1l+APkjbMT6USrGlDUSA2Va3wCfijWtka/bIORHutpF4VrwmfF+5m/reQ47Zs
- U0rGDeKPnaWsdSYDAjROIH9zAlIkIMy/INhqYVi9DM3ZKk8PBlZ7iWuWLD3qIZKzZ9Ln
- LHmVvemOweWc2LT1Lg92XXNsx3Jg8yDYcNvBGFdhCJhpIJ1oTv/UJO8aCx8Jkk4Pbegv
- ElxLn2reYA1HP3oE+h2WqT8Go8QSDGh8+Fj7BL0StZN+KST6nxIUKSekn2hjIfB+nAim og== 
+ bh=9A29MS7ibyRcmxp0j3ms/aE0/zyiiR+NBIu7cPq8jdE=;
+ b=AJpoy5g8TZITMRYWMabrqZtFHAELoXptGz8WtZL7QHRAOsf/U1iwd1efpL7BVPM7FPvI
+ F/e+qhxQ8dWiP3VJZfiNdZCBZVAJgG2lhDlI4yMYJJKe3YftI4IYEvfRU4B857ho3mQb
+ hMeStAGhZH6EEVRUbCCjE1z5nzzKaMFkTldrF+1gpvcKvDyvxjoy3aeO5JXd5w07kMWG
+ UhiVDsVK7gNAKrfvznvpfaKqzoGfw9zvjT8VCguaov13Y5XaJUOiQ5BiW/sX+ys7GEfT
+ F6mQCC30AXD6+kdJbmfLrPhh1BYjWV6iepaCj7LW31MFFBHmIR5oxFxfGd82jJ06wXbL 1g== 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3nr5yddgu7-2
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3nrc3b39t9-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 14 Feb 2023 14:17:38 -0800
-Received: from twshared26225.38.frc1.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 14 Feb 2023 14:17:39 -0800
+Received: from twshared26225.38.frc1.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Tue, 14 Feb 2023 14:17:36 -0800
+ 15.1.2507.17; Tue, 14 Feb 2023 14:17:38 -0800
 Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
-        id 92E6F5143081; Tue, 14 Feb 2023 14:17:20 -0800 (PST)
+        id 2709F51430AE; Tue, 14 Feb 2023 14:17:23 -0800 (PST)
 From:   Kui-Feng Lee <kuifeng@meta.com>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <martin.lau@linux.dev>,
         <song@kernel.org>, <kernel-team@meta.com>, <andrii@kernel.org>
 CC:     Kui-Feng Lee <kuifeng@meta.com>
-Subject: [PATCH bpf-next 2/7] net: Update an existing TCP congestion control algorithm.
-Date:   Tue, 14 Feb 2023 14:17:13 -0800
-Message-ID: <20230214221718.503964-3-kuifeng@meta.com>
+Subject: [PATCH bpf-next 7/7] selftests/bpf: Test switching TCP Congestion Control algorithms.
+Date:   Tue, 14 Feb 2023 14:17:18 -0800
+Message-ID: <20230214221718.503964-8-kuifeng@meta.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230214221718.503964-1-kuifeng@meta.com>
 References: <20230214221718.503964-1-kuifeng@meta.com>
@@ -50,8 +50,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: ltS-Y-puiKV6IXGRK7u1b9ZT_pVdA6N7
-X-Proofpoint-GUID: ltS-Y-puiKV6IXGRK7u1b9ZT_pVdA6N7
+X-Proofpoint-ORIG-GUID: 091AthmQkyYwx-ALEmDBuAdqY7LOW124
+X-Proofpoint-GUID: 091AthmQkyYwx-ALEmDBuAdqY7LOW124
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
  definitions=2023-02-14_15,2023-02-14_01,2023-02-09_01
@@ -59,143 +59,172 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This feature lets you immediately transition to another congestion
-control algorithm or implementation with the same name.  Once a name
-is updated, new connections will apply this new algorithm.
+Create a pair of sockets that utilize the congestion control algorithm
+under a particular name. Then switch up this congestion control
+algorithm to another implementation and check whether newly created
+connections using the same cc name now run the new implementation.
 
 Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
 ---
- include/linux/bpf.h            |  1 +
- include/net/tcp.h              |  2 ++
- net/bpf/bpf_dummy_struct_ops.c |  6 ++++++
- net/ipv4/bpf_tcp_ca.c          |  6 ++++++
- net/ipv4/tcp_cong.c            | 39 ++++++++++++++++++++++++++++++++++
- 5 files changed, 54 insertions(+)
+ .../selftests/bpf/prog_tests/bpf_tcp_ca.c     | 48 ++++++++++++
+ .../selftests/bpf/progs/tcp_ca_update.c       | 75 +++++++++++++++++++
+ 2 files changed, 123 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/tcp_ca_update.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 13683584b071..5fe39f56a760 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1450,6 +1450,7 @@ struct bpf_struct_ops {
- 			   void *kdata, const void *udata);
- 	int (*reg)(void *kdata);
- 	void (*unreg)(void *kdata);
-+	int (*update)(void *kdata, void *old_kdata);
- 	const struct btf_type *type;
- 	const struct btf_type *value_type;
- 	const char *name;
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index db9f828e9d1e..239cc0e2639c 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -1117,6 +1117,8 @@ struct tcp_congestion_ops {
-=20
- int tcp_register_congestion_control(struct tcp_congestion_ops *type);
- void tcp_unregister_congestion_control(struct tcp_congestion_ops *type);
-+int tcp_update_congestion_control(struct tcp_congestion_ops *type,
-+				  struct tcp_congestion_ops *old_type);
-=20
- void tcp_assign_congestion_control(struct sock *sk);
- void tcp_init_congestion_control(struct sock *sk);
-diff --git a/net/bpf/bpf_dummy_struct_ops.c b/net/bpf/bpf_dummy_struct_op=
-s.c
-index ff4f89a2b02a..158f14e240d0 100644
---- a/net/bpf/bpf_dummy_struct_ops.c
-+++ b/net/bpf/bpf_dummy_struct_ops.c
-@@ -222,12 +222,18 @@ static void bpf_dummy_unreg(void *kdata)
- {
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c b/tools/=
+testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
+index e980188d4124..89477e4c9a24 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
+@@ -8,6 +8,7 @@
+ #include "bpf_dctcp.skel.h"
+ #include "bpf_cubic.skel.h"
+ #include "bpf_tcp_nogpl.skel.h"
++#include "tcp_ca_update.skel.h"
+ #include "bpf_dctcp_release.skel.h"
+ #include "tcp_ca_write_sk_pacing.skel.h"
+ #include "tcp_ca_incompl_cong_ops.skel.h"
+@@ -381,6 +382,51 @@ static void test_unsupp_cong_op(void)
+ 	libbpf_set_print(old_print_fn);
  }
 =20
-+static int bpf_dummy_update(void *kdata, void *old_kdata)
++static void test_update_ca(void)
 +{
-+	return -EOPNOTSUPP;
-+}
++	struct tcp_ca_update *skel;
++	struct bpf_link *link;
++	int saved_ca1_cnt;
++	int err;
 +
- struct bpf_struct_ops bpf_bpf_dummy_ops =3D {
- 	.verifier_ops =3D &bpf_dummy_verifier_ops,
- 	.init =3D bpf_dummy_init,
- 	.check_member =3D bpf_dummy_ops_check_member,
- 	.init_member =3D bpf_dummy_init_member,
- 	.reg =3D bpf_dummy_reg,
-+	.update =3D bpf_dummy_update,
- 	.unreg =3D bpf_dummy_unreg,
- 	.name =3D "bpf_dummy_ops",
- };
-diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
-index 13fc0c185cd9..66ce5fadfe42 100644
---- a/net/ipv4/bpf_tcp_ca.c
-+++ b/net/ipv4/bpf_tcp_ca.c
-@@ -266,10 +266,16 @@ static void bpf_tcp_ca_unreg(void *kdata)
- 	tcp_unregister_congestion_control(kdata);
- }
-=20
-+static int bpf_tcp_ca_update(void *kdata, void *old_kdata)
-+{
-+	return tcp_update_congestion_control(kdata, old_kdata);
-+}
++	skel =3D tcp_ca_update__open();
++	if (!ASSERT_OK_PTR(skel, "open"))
++		return;
 +
- struct bpf_struct_ops bpf_tcp_congestion_ops =3D {
- 	.verifier_ops =3D &bpf_tcp_ca_verifier_ops,
- 	.reg =3D bpf_tcp_ca_reg,
- 	.unreg =3D bpf_tcp_ca_unreg,
-+	.update =3D bpf_tcp_ca_update,
- 	.check_member =3D bpf_tcp_ca_check_member,
- 	.init_member =3D bpf_tcp_ca_init_member,
- 	.init =3D bpf_tcp_ca_init,
-diff --git a/net/ipv4/tcp_cong.c b/net/ipv4/tcp_cong.c
-index db8b4b488c31..22fd7c12360e 100644
---- a/net/ipv4/tcp_cong.c
-+++ b/net/ipv4/tcp_cong.c
-@@ -130,6 +130,45 @@ void tcp_unregister_congestion_control(struct tcp_co=
-ngestion_ops *ca)
- }
- EXPORT_SYMBOL_GPL(tcp_unregister_congestion_control);
-=20
-+/* Replace a registered old ca with a new one.
-+ *
-+ * The new ca must have the same name as the old one, that has been
-+ * registered.
-+ */
-+int tcp_update_congestion_control(struct tcp_congestion_ops *ca, struct =
-tcp_congestion_ops *old_ca)
-+{
-+	struct tcp_congestion_ops *existing;
-+	int ret =3D 0;
++	err =3D bpf_map__set_map_flags(skel->maps.ca_update_1,
++				     bpf_map__map_flags(skel->maps.ca_update_1) | BPF_F_LINK);
++	if (!ASSERT_OK(err, "set_map_flags_1"))
++		return;
 +
-+	/* all algorithms must implement these */
-+	if (!ca->ssthresh || !ca->undo_cwnd ||
-+	    !(ca->cong_avoid || ca->cong_control)) {
-+		pr_err("%s does not implement required ops\n", old_ca->name);
-+		return -EINVAL;
++	err =3D bpf_map__set_map_flags(skel->maps.ca_update_2,
++				     bpf_map__map_flags(skel->maps.ca_update_2) | BPF_F_LINK);
++	if (!ASSERT_OK(err, "set_map_flags_2"))
++		return;
++
++	err =3D tcp_ca_update__load(skel);
++	if (!ASSERT_OK(err, "load")) {
++		tcp_ca_update__destroy(skel);
++		return;
 +	}
 +
-+	ca->key =3D jhash(ca->name, sizeof(ca->name), strlen(ca->name));
++	link =3D bpf_map__attach_struct_ops(skel->maps.ca_update_1);
++	ASSERT_OK_PTR(link, "attach_struct_ops");
 +
-+	spin_lock(&tcp_cong_list_lock);
-+	existing =3D tcp_ca_find_key(ca->key);
-+	if (ca->key =3D=3D TCP_CA_UNSPEC || !existing || strcmp(existing->name,=
- ca->name)) {
-+		pr_notice("%s not registered or non-unique key\n",
-+			  ca->name);
-+		ret =3D -EINVAL;
-+	} else if (existing !=3D old_ca) {
-+		pr_notice("invalid old congestion control algorithm to replace\n");
-+		ret =3D -EINVAL;
-+	} else {
-+		list_del_rcu(&existing->list);
-+		list_add_tail_rcu(&ca->list, &tcp_cong_list);
-+		pr_debug("%s updated\n", ca->name);
-+	}
-+	spin_unlock(&tcp_cong_list_lock);
++	do_test("tcp_ca_update", NULL);
++	saved_ca1_cnt =3D skel->bss->ca1_cnt;
++	ASSERT_GT(saved_ca1_cnt, 0, "ca1_ca1_cnt");
 +
-+	return ret;
++	err =3D bpf_link__update_struct_ops(link, skel->maps.ca_update_2);
++	ASSERT_OK(err, "update_struct_ops");
++
++	do_test("tcp_ca_update", NULL);
++	ASSERT_EQ(skel->bss->ca1_cnt, saved_ca1_cnt, "ca2_ca1_cnt");
++	ASSERT_GT(skel->bss->ca2_cnt, 0, "ca2_ca2_cnt");
++
++	bpf_link__destroy(link);
++	tcp_ca_update__destroy(skel);
 +}
-+EXPORT_SYMBOL_GPL(tcp_update_congestion_control);
 +
- u32 tcp_ca_get_key_by_name(struct net *net, const char *name, bool *ecn_=
-ca)
+ void test_bpf_tcp_ca(void)
  {
- 	const struct tcp_congestion_ops *ca;
+ 	if (test__start_subtest("dctcp"))
+@@ -399,4 +445,6 @@ void test_bpf_tcp_ca(void)
+ 		test_incompl_cong_ops();
+ 	if (test__start_subtest("unsupp_cong_op"))
+ 		test_unsupp_cong_op();
++	if (test__start_subtest("update_ca"))
++		test_update_ca();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/tcp_ca_update.c b/tools/te=
+sting/selftests/bpf/progs/tcp_ca_update.c
+new file mode 100644
+index 000000000000..cf51fe54ac01
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/tcp_ca_update.c
+@@ -0,0 +1,75 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include "vmlinux.h"
++
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++char _license[] SEC("license") =3D "GPL";
++
++int ca1_cnt =3D 0;
++int ca2_cnt =3D 0;
++
++#define USEC_PER_SEC 1000000UL
++
++#define min(a, b) ((a) < (b) ? (a) : (b))
++
++static inline struct tcp_sock *tcp_sk(const struct sock *sk)
++{
++	return (struct tcp_sock *)sk;
++}
++
++SEC("struct_ops/ca_update_init")
++void BPF_PROG(ca_update_init, struct sock *sk)
++{
++#ifdef ENABLE_ATOMICS_TESTS
++	__sync_bool_compare_and_swap(&sk->sk_pacing_status, SK_PACING_NONE,
++				     SK_PACING_NEEDED);
++#else
++	sk->sk_pacing_status =3D SK_PACING_NEEDED;
++#endif
++}
++
++SEC("struct_ops/ca_update_1_cong_control")
++void BPF_PROG(ca_update_1_cong_control, struct sock *sk,
++	      const struct rate_sample *rs)
++{
++	ca1_cnt++;
++}
++
++SEC("struct_ops/ca_update_2_cong_control")
++void BPF_PROG(ca_update_2_cong_control, struct sock *sk,
++	      const struct rate_sample *rs)
++{
++	ca2_cnt++;
++}
++
++SEC("struct_ops/ca_update_ssthresh")
++__u32 BPF_PROG(ca_update_ssthresh, struct sock *sk)
++{
++	return tcp_sk(sk)->snd_ssthresh;
++}
++
++SEC("struct_ops/ca_update_undo_cwnd")
++__u32 BPF_PROG(ca_update_undo_cwnd, struct sock *sk)
++{
++	return tcp_sk(sk)->snd_cwnd;
++}
++
++SEC(".struct_ops")
++struct tcp_congestion_ops ca_update_1 =3D {
++	.init =3D (void *)ca_update_init,
++	.cong_control =3D (void *)ca_update_1_cong_control,
++	.ssthresh =3D (void *)ca_update_ssthresh,
++	.undo_cwnd =3D (void *)ca_update_undo_cwnd,
++	.name =3D "tcp_ca_update",
++};
++
++SEC(".struct_ops")
++struct tcp_congestion_ops ca_update_2 =3D {
++	.init =3D (void *)ca_update_init,
++	.cong_control =3D (void *)ca_update_2_cong_control,
++	.ssthresh =3D (void *)ca_update_ssthresh,
++	.undo_cwnd =3D (void *)ca_update_undo_cwnd,
++	.name =3D "tcp_ca_update",
++};
 --=20
 2.30.2
 
