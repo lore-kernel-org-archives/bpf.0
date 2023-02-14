@@ -2,116 +2,130 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC64DC64EC7
-	for <bpf@archiver.kernel.org>; Tue, 14 Feb 2023 23:21:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72FECC61DA4
+	for <bpf@archiver.kernel.org>; Tue, 14 Feb 2023 23:51:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230212AbjBNXVE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Feb 2023 18:21:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49254 "EHLO
+        id S229660AbjBNXvG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Feb 2023 18:51:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232056AbjBNXVB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Feb 2023 18:21:01 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5BD30E95
-        for <bpf@vger.kernel.org>; Tue, 14 Feb 2023 15:21:00 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id l37-20020a05600c1d2500b003dfe46a9801so294257wms.0
-        for <bpf@vger.kernel.org>; Tue, 14 Feb 2023 15:21:00 -0800 (PST)
+        with ESMTP id S230411AbjBNXu5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Feb 2023 18:50:57 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46DDF28D3E;
+        Tue, 14 Feb 2023 15:50:56 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id k13so18714254plg.0;
+        Tue, 14 Feb 2023 15:50:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LuAKa6tuXX+2xublR81dUwnlNZg1dDcmp7dUGtQdU6o=;
-        b=Ih4Qc31KYK8uH2IsTNdYNG55jcUepyBcBOA0DEzkrbs7iEwMdGdZiJtwv5qwoPtE5o
-         9izt/6PXwo/uxhxZz5hJyeKaPdarwN2Pn0i0r7b9tiLXz8mspQWbT/HCkLFXn0nEGTfu
-         nWIgY6UBEbhTgt4WjKbPMIwTSjRy5u0eRVq+pqA8p3nDmCH7hF+WGAw75SaAPX4t9XH3
-         gjc+fCxGTVyAyAZJhhK7gjfEjD9StnPSQUBe35tltVdtnyc2L7+kpO1Jag1d7s87JUI1
-         VkNFupoCO3AYFSjndTJ2c/62PnSjHsSh8oG1rPpC/zaMQsItAqIF5rjvfRB2UuwYRkTy
-         RKGA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6qa9d0wjdZSzWDoohRD0RmplfddG8vBXNpncs00Cr04=;
+        b=SSxDj+KYdwBbryAwpgvo3l9UngPoJA0w2EiDdxuvABtsldg5bjsPVWyKfI3hAR+hXN
+         89ff6npUjQdzSSRukhbPkmQFgbApMstApL1e/SjCzjXJ6d37JkQjXSm6fSJmKQKLTiVg
+         4WAB3KbgYCfFY5Tiy+AOAXfs8gj9FSdPevVuOQ034zRbHL1RJLKTWQXqJPDQ6RZRLY8V
+         73xVoaoQ2qf9jneoYwucmYRAMB3aDhTEV2Hw4qlgyNWhSrjIpberOPw/g5Pd8xCWLl6e
+         POKZEavlwkin/X5xPs5J7uNOLe3cTn2LunFCCKqypM2MRnWeeS1fnfwMBxZULBbIPmWD
+         pXSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LuAKa6tuXX+2xublR81dUwnlNZg1dDcmp7dUGtQdU6o=;
-        b=oCNbGoC3fvjEqW3zRnArsu3XuJrChauIcXAYm5W9Bca04GDNxKffe6NauQKKxzFDJ8
-         7IqaN5l22BS6YrgXopvEJ4uk7S3zadpCP/7XrOuu2TrZqmLAoqj+iJ5JI0rlwPAAHxak
-         H8RWS0zIQ6UtjSjtevh2H9DXWsUeW25BZfEYUYttUv7li4b5IW2CzGYZ/vgf0XMAqDfE
-         Cjnqwut0Lj+gFMTS0KM/whn21dfa9eQItNdPqh+j7QEyz3c+zb32IvJGAJV4EMQIXnbz
-         V/qPprtVUGtV51YOGW1FRp+RBAU6xoxWIyCP9jzdXqLzSPXAt7s/BVI++RTcMjT3kMBA
-         SpDg==
-X-Gm-Message-State: AO0yUKXd0VvNJjlwWdX2ZlI5VE+8tXCUjfWSERPj7qcIXIEMJEy8OVev
-        kEaFY2sDi0QiWY6d5v0pdLammkuuTdYsaA==
-X-Google-Smtp-Source: AK7set/CKzQ71go1j6J3orV9As6wB1/4siy/kbfrACrpf28XZ48so8cgZYbqWR9KwQ57XkBqMSC7fw==
-X-Received: by 2002:a05:600c:30d2:b0:3e0:c4b:18f5 with SMTP id h18-20020a05600c30d200b003e00c4b18f5mr417027wmn.5.1676416858725;
-        Tue, 14 Feb 2023 15:20:58 -0800 (PST)
-Received: from bigfoot.. (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id hg6-20020a05600c538600b003b47b80cec3sm168515wmb.42.2023.02.14.15.20.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 15:20:58 -0800 (PST)
-From:   Eduard Zingerman <eddyz87@gmail.com>
-To:     bpf@vger.kernel.org, ast@kernel.org
-Cc:     andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
-        kernel-team@fb.com, yhs@fb.com, jose.marchesi@oracle.com,
-        Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v2 3/4] bpf: BPF_ST with variable offset should preserve STACK_ZERO marks
-Date:   Wed, 15 Feb 2023 01:20:29 +0200
-Message-Id: <20230214232030.1502829-4-eddyz87@gmail.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230214232030.1502829-1-eddyz87@gmail.com>
-References: <20230214232030.1502829-1-eddyz87@gmail.com>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6qa9d0wjdZSzWDoohRD0RmplfddG8vBXNpncs00Cr04=;
+        b=NPMsAVpxptU+C3Z1DYO1Dt+gtXy6VcdCb+SkcwxXL1WwJD8smRtFM9zLwUtSi8jc2X
+         9yDaqfSwUvJb4rIMSCkopkN813ilhFQdfux0RwVA2MQ+5eF2SUw/TKNitSufLzyXCiqN
+         dlE0FKv+m3zgupsT3j8Bg2FqwrhJ8/XvmiCVgV4dNlGgbVunV46Dic6KFXa0vBmpDI8+
+         lCKzd69yGPIZEuYPW+yPkun3bbqKSJZZb6AWbQCe4NzhPkxSwI82ADSePE3JKiSEkGSR
+         CPBBkfhDFI52ehY6ldxYmEPZ3+n8iAEsUbqOQJZoavMKzsjPfk76xZ4aRJwhvX2HYGCn
+         YW7A==
+X-Gm-Message-State: AO0yUKUCz6nfb6mNG9HTX6x5k6XzGeqvOYbRo8+juYoBNIonLA1YQh+S
+        jgOCIjktRDFRQnTQPnK9YFw=
+X-Google-Smtp-Source: AK7set8d/EqhdvJoFoynH7bAAXhCIVO2YlPCyDY64PxYjOPOWwZtGFItpnQx3AhT+m8yzyo+a+abxA==
+X-Received: by 2002:a17:90b:4b41:b0:233:ebd4:301c with SMTP id mi1-20020a17090b4b4100b00233ebd4301cmr754343pjb.1.1676418655478;
+        Tue, 14 Feb 2023 15:50:55 -0800 (PST)
+Received: from localhost.localdomain ([2620:10d:c090:400::5:d0de])
+        by smtp.gmail.com with ESMTPSA id kn14-20020a17090b480e00b00233d6547000sm87198pjb.54.2023.02.14.15.50.53
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 14 Feb 2023 15:50:55 -0800 (PST)
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     davem@davemloft.net
+Cc:     daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
+        memxor@gmail.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        kernel-team@fb.com
+Subject: [PATCH bpf-next] selftests/bpf: Fix map_kptr test.
+Date:   Tue, 14 Feb 2023 15:50:51 -0800
+Message-Id: <20230214235051.22938-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-BPF_STX instruction preserves STACK_ZERO marks for variable offset
-writes in situations like below:
+From: Alexei Starovoitov <ast@kernel.org>
 
-  *(u64*)(r10 - 8) = 0   ; STACK_ZERO marks for fp[-8]
-  r0 = random(-7, -1)    ; some random number in range of [-7, -1]
-  r0 += r10              ; r0 is now a variable offset pointer to stack
-  r1 = 0
-  *(u8*)(r0) = r1        ; BPF_STX writing zero, STACK_ZERO mark for
-                         ; fp[-8] is preserved
+The compiler is optimizing out majority of unref_ptr read/writes, so the test
+wasn't testing much. For example, one could delete '__kptr' tag from
+'struct prog_test_ref_kfunc __kptr *unref_ptr;' and the test would still "pass".
 
-This commit updates verifier.c:check_stack_write_var_off() to process
-BPF_ST in a similar manner, e.g. the following example:
+Convert it to volatile stores. Confirmed by comparing bpf asm before/after.
 
-  *(u64*)(r10 - 8) = 0   ; STACK_ZERO marks for fp[-8]
-  r0 = random(-7, -1)    ; some random number in range of [-7, -1]
-  r0 += r10              ; r0 is now variable offset pointer to stack
-  *(u8*)(r0) = 0         ; BPF_ST writing zero, STACK_ZERO mark for
-                         ; fp[-8] is preserved
-
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+Fixes: 2cbc469a6fc3 ("selftests/bpf: Add C tests for kptr")
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/verifier.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/progs/map_kptr.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index c28afae60874..272563a0b770 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3631,6 +3631,7 @@ static int check_stack_write_var_off(struct bpf_verifier_env *env,
- 	int min_off, max_off;
- 	int i, err;
- 	struct bpf_reg_state *ptr_reg = NULL, *value_reg = NULL;
-+	struct bpf_insn *insn = &env->prog->insnsi[insn_idx];
- 	bool writing_zero = false;
- 	/* set if the fact that we're writing a zero is used to let any
- 	 * stack slots remain STACK_ZERO
-@@ -3643,7 +3644,8 @@ static int check_stack_write_var_off(struct bpf_verifier_env *env,
- 	max_off = ptr_reg->smax_value + off + size;
- 	if (value_regno >= 0)
- 		value_reg = &cur->regs[value_regno];
--	if (value_reg && register_is_null(value_reg))
-+	if ((value_reg && register_is_null(value_reg)) ||
-+	    (!value_reg && is_bpf_st_mem(insn) && insn->imm == 0))
- 		writing_zero = true;
+diff --git a/tools/testing/selftests/bpf/progs/map_kptr.c b/tools/testing/selftests/bpf/progs/map_kptr.c
+index eb8217803493..228ec45365a8 100644
+--- a/tools/testing/selftests/bpf/progs/map_kptr.c
++++ b/tools/testing/selftests/bpf/progs/map_kptr.c
+@@ -62,21 +62,23 @@ extern struct prog_test_ref_kfunc *
+ bpf_kfunc_call_test_kptr_get(struct prog_test_ref_kfunc **p, int a, int b) __ksym;
+ extern void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p) __ksym;
  
- 	err = grow_stack_state(state, round_up(-min_off, BPF_REG_SIZE));
++#define WRITE_ONCE(x, val) ((*(volatile typeof(x) *) &(x)) = (val))
++
+ static void test_kptr_unref(struct map_value *v)
+ {
+ 	struct prog_test_ref_kfunc *p;
+ 
+ 	p = v->unref_ptr;
+ 	/* store untrusted_ptr_or_null_ */
+-	v->unref_ptr = p;
++	WRITE_ONCE(v->unref_ptr, p);
+ 	if (!p)
+ 		return;
+ 	if (p->a + p->b > 100)
+ 		return;
+ 	/* store untrusted_ptr_ */
+-	v->unref_ptr = p;
++	WRITE_ONCE(v->unref_ptr, p);
+ 	/* store NULL */
+-	v->unref_ptr = NULL;
++	WRITE_ONCE(v->unref_ptr, NULL);
+ }
+ 
+ static void test_kptr_ref(struct map_value *v)
+@@ -85,7 +87,7 @@ static void test_kptr_ref(struct map_value *v)
+ 
+ 	p = v->ref_ptr;
+ 	/* store ptr_or_null_ */
+-	v->unref_ptr = p;
++	WRITE_ONCE(v->unref_ptr, p);
+ 	if (!p)
+ 		return;
+ 	if (p->a + p->b > 100)
+@@ -99,7 +101,7 @@ static void test_kptr_ref(struct map_value *v)
+ 		return;
+ 	}
+ 	/* store ptr_ */
+-	v->unref_ptr = p;
++	WRITE_ONCE(v->unref_ptr, p);
+ 	bpf_kfunc_call_test_release(p);
+ 
+ 	p = bpf_kfunc_call_test_acquire(&(unsigned long){0});
 -- 
-2.39.1
+2.30.2
 
