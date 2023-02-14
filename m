@@ -2,80 +2,90 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7356FC61DA4
-	for <bpf@archiver.kernel.org>; Tue, 14 Feb 2023 18:52:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1723C64EC7
+	for <bpf@archiver.kernel.org>; Tue, 14 Feb 2023 18:52:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232171AbjBNSwZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Feb 2023 13:52:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45832 "EHLO
+        id S229808AbjBNSw1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Feb 2023 13:52:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbjBNSwY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Feb 2023 13:52:24 -0500
+        with ESMTP id S233135AbjBNSw0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Feb 2023 13:52:26 -0500
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0796A65;
-        Tue, 14 Feb 2023 10:52:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF1E6A65;
+        Tue, 14 Feb 2023 10:52:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676400744; x=1707936744;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=TwKXloFTMv0mpCZYsinPeWhooTMYzzGCQwRknxpBWOA=;
-  b=Ww3fzjQ7tYT/6mX9kOi8lG6PuxcmbRMet7/Cbxa9gmZn1woSaReZEnNc
-   cuVcaQtqcroI7tOWopkOxc6ovlpCcia8oqCqiMe4jBBSg994HXSvfAU+9
-   Am4InHkV4ro8geOvzJd44LF/LO1BD/7eJWF1AspP5Wjz87S/ACEmuG494
-   5gy1yja82cnnJwmCXFU2O7g/UmjbXoAyYxvSWl4afphAV8uk3u1HLS7g5
-   Rwt0OGm6XlQJ7d0CoGIJ1Vri3/yAUuKqcTfqSb9hcr9OO3k4U68DoSHc/
-   q7U/sFcxOHIzm/XdxeqzQcLuCF/CRuDYFNMhgkxukpobcoQOr5r5ePbZV
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="329866032"
+  t=1676400745; x=1707936745;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=RXbhKY5wFfwHhh+TFY5YqxV+80c2QkNRiBo1yEzaKIk=;
+  b=B9pH457mJGS/dnfKvLnKzAdmFGw/rd9wZ4Wj1BM3y0mBEg+OcbhBgTYB
+   DS6oQwSUGz9JU8uuNtoVLXX+17g6ZbG1PjeGnfi0R1A+d/kVjPfarhILI
+   xz7uxKkyCC2k5fbuCJR5SIen9fokKf5e6gXMyxheOyVLh7G7GCAMch5+Y
+   bwrhLnPZl/Ds7k19I237o30ZHe6/FeWQu2UIXQu4qCkBwdIG9N5gEbzoO
+   pZuflH2eNUG7SWHZL8sh+XW3ozDTBK+YpPRjWQ/Jqvi/sHXkG6bhJ/wG2
+   ZHzm2kDtz2RaUazzcIzxaia7L3vBtBxQbd4hknBIn3gXhN+39bW5eLooi
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="329866056"
 X-IronPort-AV: E=Sophos;i="5.97,297,1669104000"; 
-   d="scan'208";a="329866032"
+   d="scan'208";a="329866056"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 10:52:23 -0800
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 10:52:24 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="619159892"
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="619159899"
 X-IronPort-AV: E=Sophos;i="5.97,297,1669104000"; 
-   d="scan'208";a="619159892"
+   d="scan'208";a="619159899"
 Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
   by orsmga003.jf.intel.com with ESMTP; 14 Feb 2023 10:52:23 -0800
 From:   Tony Nguyen <anthony.l.nguyen@intel.com>
 To:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
         edumazet@google.com
-Cc:     Tony Nguyen <anthony.l.nguyen@intel.com>, netdev@vger.kernel.org,
-        maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
-        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-        john.fastabend@gmail.com, bpf@vger.kernel.org, bjorn@kernel.org
-Subject: [PATCH net 0/3][pull request] Intel Wired LAN Driver Updates 2023-02-14 (ixgbe, i40e)
-Date:   Tue, 14 Feb 2023 10:51:43 -0800
-Message-Id: <20230214185146.1305819-1-anthony.l.nguyen@intel.com>
+Cc:     Jason Xing <kernelxing@tencent.com>, netdev@vger.kernel.org,
+        anthony.l.nguyen@intel.com, maciej.fijalkowski@intel.com,
+        magnus.karlsson@intel.com, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com, bpf@vger.kernel.org,
+        bjorn@kernel.org, Alexander Duyck <alexanderduyck@fb.com>,
+        Chandan Kumar Rout <chandanx.rout@intel.com>
+Subject: [PATCH net 2/3] i40e: add double of VLAN header when computing the max MTU
+Date:   Tue, 14 Feb 2023 10:51:45 -0800
+Message-Id: <20230214185146.1305819-3-anthony.l.nguyen@intel.com>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20230214185146.1305819-1-anthony.l.nguyen@intel.com>
+References: <20230214185146.1305819-1-anthony.l.nguyen@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series contains updates to ixgbe and i40e drivers.
+From: Jason Xing <kernelxing@tencent.com>
 
-Jason Xing corrects comparison of frame sizes for setting MTU with XDP on
-ixgbe and adjusts frame size to account for a second VLAN header on ixgbe
-and i40e.
+Include the second VLAN HLEN into account when computing the maximum
+MTU size as other drivers do.
 
-The following are changes since commit 05d7623a892a9da62da0e714428e38f09e4a64d8:
-  net: stmmac: Restrict warning on disabling DMA store and fwd mode
-and are available in the git repository at:
-  git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue 10GbE
+Fixes: 0c8493d90b6b ("i40e: add XDP support for pass and drop actions")
+Signed-off-by: Jason Xing <kernelxing@tencent.com>
+Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
+Tested-by: Chandan Kumar Rout <chandanx.rout@intel.com> (A Contingent Worker at Intel)
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+---
+ drivers/net/ethernet/intel/i40e/i40e_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Jason Xing (3):
-  ixgbe: allow to increase MTU to 3K with XDP enabled
-  i40e: add double of VLAN header when computing the max MTU
-  ixgbe: add double of VLAN header when computing the max MTU
-
- drivers/net/ethernet/intel/i40e/i40e_main.c   |  2 +-
- drivers/net/ethernet/intel/ixgbe/ixgbe.h      |  2 ++
- drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 28 +++++++++++--------
- 3 files changed, 20 insertions(+), 12 deletions(-)
-
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
+index 4626d2a1af91..52eec0a50492 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_main.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
+@@ -2921,7 +2921,7 @@ static int i40e_change_mtu(struct net_device *netdev, int new_mtu)
+ 	struct i40e_pf *pf = vsi->back;
+ 
+ 	if (i40e_enabled_xdp_vsi(vsi)) {
+-		int frame_size = new_mtu + ETH_HLEN + ETH_FCS_LEN + VLAN_HLEN;
++		int frame_size = new_mtu + I40E_PACKET_HDR_PAD;
+ 
+ 		if (frame_size > i40e_max_xdp_frame_size(vsi))
+ 			return -EINVAL;
 -- 
 2.38.1
 
