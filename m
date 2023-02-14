@@ -2,54 +2,54 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42993C05027
-	for <bpf@archiver.kernel.org>; Tue, 14 Feb 2023 23:12:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37B81C64EC7
+	for <bpf@archiver.kernel.org>; Tue, 14 Feb 2023 23:12:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232865AbjBNXM4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Feb 2023 18:12:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44906 "EHLO
+        id S232871AbjBNXM5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Feb 2023 18:12:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232871AbjBNXMx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Feb 2023 18:12:53 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6368130F4
-        for <bpf@vger.kernel.org>; Tue, 14 Feb 2023 15:12:50 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31EMiEug028183;
-        Tue, 14 Feb 2023 23:12:34 GMT
+        with ESMTP id S232862AbjBNXM4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Feb 2023 18:12:56 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5E5A26F
+        for <bpf@vger.kernel.org>; Tue, 14 Feb 2023 15:12:53 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31EMplxu010452;
+        Tue, 14 Feb 2023 23:12:39 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=Z1vwq9xyomRMupCJJ4wVUTjfUj1eR9Ypp3M3RwxV4aQ=;
- b=tE6vOqwX7VmO0RKcYc0fLIuCha2jw0QnFXsLzLqOj2JWay+ebjMicEU930TmZgtgfUjT
- m9E8g846iB5OesfrBdUfktUxmtPEC2BUUaIg8UXQlAAFA5tCghJIZ1X+1ZFNDTsgn6tn
- YuQ/az5X5bZnjqJ+A1ERgqDuUJlbu8Hbrz6tWFnHM5vYp9DiEHt5rP+NF0cdm68Zh59p
- QqAsExfcIrYkMA5rcFIYok959hignhoxsnZv+x+lufTmAM9Mx5MOaI6X32ee3UGLeDql
- tUhKGAgueOXSxedKYYDAWVUmAfw4KwbH8hkny1z0hzAGm+FONMuWTIOAqC8AjOcEoGMJ LQ== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nrkbprjbh-1
+ bh=hIZa3GdgiesmkkLViFk1lUVpEduzQoPEU8xith61XtM=;
+ b=KKpVho+fps9AtzNFMHK2EFBws8AT8G+vr5+927WECPkid+QcnbcUa3uiVOSSiRo3ogm3
+ 14GalG16UvUOXFNgvSU7m7wi2JU2ZwHHL/GjQfIz2vqy0qHnW2E82+qh+SzmySZkNsif
+ uqVSFcUj+9diaQBWk3V5w9o+4s+7wxPkaaTY8lcKfMrdrCMd5QzQn5nwCRxiThhjGwaV
+ YP3xTprIrmT6YWXQ6BG/ihorGH4r74yOwUEvZ6AjJuhNt7cKAO0G9y4E/y7nsAw0bQRh
+ GoN91U0qklBDF9icajxmFev//Ryo00JjamtW8zHgJNvKV6kXraUmQSzjP9hl50C5zPrh pA== 
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nrkferftm-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 23:12:34 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31EK2O7q010915;
-        Tue, 14 Feb 2023 23:12:31 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3np2n6vnj1-1
+        Tue, 14 Feb 2023 23:12:38 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31E69hpN027597;
+        Tue, 14 Feb 2023 23:12:36 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3np2n6kefr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 23:12:31 +0000
+        Tue, 14 Feb 2023 23:12:36 +0000
 Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31ENCReH20316624
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31ENCWwo25035236
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Feb 2023 23:12:27 GMT
+        Tue, 14 Feb 2023 23:12:32 GMT
 Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8B1352004B;
-        Tue, 14 Feb 2023 23:12:27 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 69EEA2004B;
+        Tue, 14 Feb 2023 23:12:32 +0000 (GMT)
 Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 056A220040;
-        Tue, 14 Feb 2023 23:12:27 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id D728220043;
+        Tue, 14 Feb 2023 23:12:31 +0000 (GMT)
 Received: from heavy.lan (unknown [9.171.53.135])
         by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 14 Feb 2023 23:12:26 +0000 (GMT)
+        Tue, 14 Feb 2023 23:12:31 +0000 (GMT)
 From:   Ilya Leoshkevich <iii@linux.ibm.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -58,409 +58,415 @@ Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Alexander Gordeev <agordeev@linux.ibm.com>,
         Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next v3 3/8] bpftool: Use bpf_{btf,link,map,prog}_get_info_by_fd()
-Date:   Wed, 15 Feb 2023 00:12:16 +0100
-Message-Id: <20230214231221.249277-4-iii@linux.ibm.com>
+Subject: [PATCH bpf-next v3 7/8] libbpf: Add MSan annotations
+Date:   Wed, 15 Feb 2023 00:12:20 +0100
+Message-Id: <20230214231221.249277-8-iii@linux.ibm.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230214231221.249277-1-iii@linux.ibm.com>
 References: <20230214231221.249277-1-iii@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: L_WRIgYIxkZLSFvk5K3RKDVAhRfWYUBx
-X-Proofpoint-ORIG-GUID: L_WRIgYIxkZLSFvk5K3RKDVAhRfWYUBx
+X-Proofpoint-GUID: SLTuCRVRdNNgWtnZI2tkwwJgaLQ0-ULV
+X-Proofpoint-ORIG-GUID: SLTuCRVRdNNgWtnZI2tkwwJgaLQ0-ULV
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
  definitions=2023-02-14_15,2023-02-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- lowpriorityscore=0 mlxlogscore=999 priorityscore=1501 adultscore=0
- suspectscore=0 mlxscore=0 malwarescore=0 impostorscore=0 spamscore=0
- bulkscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=865 spamscore=0
+ malwarescore=0 suspectscore=0 priorityscore=1501 lowpriorityscore=0
+ phishscore=0 bulkscore=0 impostorscore=0 clxscore=1015 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2212070000 definitions=main-2302140198
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use the new type-safe wrappers around bpf_obj_get_info_by_fd().
+MSan runs into a few false positives in libbpf. They all come from the
+fact that MSan does not know anything about the bpf syscall,
+particularly, what it writes to.
 
-Split the bpf_obj_get_info_by_fd() call in build_btf_type_table() in
-two, since knowing the type helps with the Memory Sanitizer.
-
-Improve map_parse_fd_and_info() type safety by using
-struct bpf_map_info * instead of void * for info.
+Add __libbpf_mark_mem_written() function to mark memory modified by the
+bpf syscall, and a few convenience wrappers. Use the abstract name (it
+could be e.g. libbpf_msan_unpoison()), because it can be used for
+Valgrind in the future as well.
 
 Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 ---
- tools/bpf/bpftool/btf.c        | 13 ++++++++-----
- tools/bpf/bpftool/btf_dumper.c |  4 ++--
- tools/bpf/bpftool/cgroup.c     |  4 ++--
- tools/bpf/bpftool/common.c     | 13 +++++++------
- tools/bpf/bpftool/link.c       |  4 ++--
- tools/bpf/bpftool/main.h       |  3 ++-
- tools/bpf/bpftool/map.c        |  8 ++++----
- tools/bpf/bpftool/prog.c       | 22 +++++++++++-----------
- tools/bpf/bpftool/struct_ops.c |  6 +++---
- 9 files changed, 41 insertions(+), 36 deletions(-)
+ tools/lib/bpf/bpf.c             | 161 ++++++++++++++++++++++++++++++--
+ tools/lib/bpf/btf.c             |   1 +
+ tools/lib/bpf/libbpf.c          |   1 +
+ tools/lib/bpf/libbpf_internal.h |  38 ++++++++
+ 4 files changed, 194 insertions(+), 7 deletions(-)
 
-diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-index 352290ba7b29..91fcb75babe3 100644
---- a/tools/bpf/bpftool/btf.c
-+++ b/tools/bpf/bpftool/btf.c
-@@ -537,7 +537,7 @@ static bool btf_is_kernel_module(__u32 btf_id)
- 	len = sizeof(btf_info);
- 	btf_info.name = ptr_to_u64(btf_name);
- 	btf_info.name_len = sizeof(btf_name);
--	err = bpf_obj_get_info_by_fd(btf_fd, &btf_info, &len);
-+	err = bpf_btf_get_info_by_fd(btf_fd, &btf_info, &len);
- 	close(btf_fd);
- 	if (err) {
- 		p_err("can't get BTF (ID %u) object info: %s", btf_id, strerror(errno));
-@@ -606,7 +606,7 @@ static int do_dump(int argc, char **argv)
- 		if (fd < 0)
- 			return -1;
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index b562019271fe..8440d38c781c 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -69,6 +69,11 @@ static inline __u64 ptr_to_u64(const void *ptr)
+ 	return (__u64) (unsigned long) ptr;
+ }
  
--		err = bpf_obj_get_info_by_fd(fd, &info, &len);
-+		err = bpf_prog_get_info_by_fd(fd, &info, &len);
- 		if (err) {
- 			p_err("can't get prog info: %s", strerror(errno));
- 			goto done;
-@@ -789,7 +789,10 @@ build_btf_type_table(struct hashmap *tab, enum bpf_obj_type type,
- 		}
++static inline void *u64_to_ptr(__u64 val)
++{
++	return (void *) (unsigned long) val;
++}
++
+ static inline int sys_bpf(enum bpf_cmd cmd, union bpf_attr *attr,
+ 			  unsigned int size)
+ {
+@@ -92,6 +97,8 @@ int sys_bpf_prog_load(union bpf_attr *attr, unsigned int size, int attempts)
+ 		fd = sys_bpf_fd(BPF_PROG_LOAD, attr, size);
+ 	} while (fd < 0 && errno == EAGAIN && --attempts > 0);
  
- 		memset(info, 0, *len);
--		err = bpf_obj_get_info_by_fd(fd, info, len);
-+		if (type == BPF_OBJ_PROG)
-+			err = bpf_prog_get_info_by_fd(fd, info, len);
-+		else
-+			err = bpf_map_get_info_by_fd(fd, info, len);
- 		close(fd);
- 		if (err) {
- 			p_err("can't get %s info: %s", names[type],
-@@ -931,7 +934,7 @@ show_btf(int fd, struct hashmap *btf_prog_table,
- 	int err;
- 
- 	memset(&info, 0, sizeof(info));
--	err = bpf_obj_get_info_by_fd(fd, &info, &len);
-+	err = bpf_btf_get_info_by_fd(fd, &info, &len);
- 	if (err) {
- 		p_err("can't get BTF object info: %s", strerror(errno));
- 		return -1;
-@@ -943,7 +946,7 @@ show_btf(int fd, struct hashmap *btf_prog_table,
- 		info.name = ptr_to_u64(name);
- 		len = sizeof(info);
- 
--		err = bpf_obj_get_info_by_fd(fd, &info, &len);
-+		err = bpf_btf_get_info_by_fd(fd, &info, &len);
- 		if (err) {
- 			p_err("can't get BTF object info: %s", strerror(errno));
- 			return -1;
-diff --git a/tools/bpf/bpftool/btf_dumper.c b/tools/bpf/bpftool/btf_dumper.c
-index eda71fdfe95a..e7f6ec3a8f35 100644
---- a/tools/bpf/bpftool/btf_dumper.c
-+++ b/tools/bpf/bpftool/btf_dumper.c
-@@ -57,7 +57,7 @@ static int dump_prog_id_as_func_ptr(const struct btf_dumper *d,
- 	if (prog_fd < 0)
- 		goto print;
- 
--	err = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
-+	err = bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
- 	if (err)
- 		goto print;
- 
-@@ -70,7 +70,7 @@ static int dump_prog_id_as_func_ptr(const struct btf_dumper *d,
- 	info.func_info_rec_size = finfo_rec_size;
- 	info.func_info = ptr_to_u64(&finfo);
- 
--	err = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
-+	err = bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
- 	if (err)
- 		goto print;
- 
-diff --git a/tools/bpf/bpftool/cgroup.c b/tools/bpf/bpftool/cgroup.c
-index b46a998d8f8d..ac846b0805b4 100644
---- a/tools/bpf/bpftool/cgroup.c
-+++ b/tools/bpf/bpftool/cgroup.c
-@@ -82,7 +82,7 @@ static void guess_vmlinux_btf_id(__u32 attach_btf_obj_id)
- 	if (fd < 0)
- 		return;
- 
--	err = bpf_obj_get_info_by_fd(fd, &btf_info, &btf_len);
-+	err = bpf_btf_get_info_by_fd(fd, &btf_info, &btf_len);
- 	if (err)
- 		goto out;
- 
-@@ -108,7 +108,7 @@ static int show_bpf_prog(int id, enum bpf_attach_type attach_type,
- 	if (prog_fd < 0)
- 		return -1;
- 
--	if (bpf_obj_get_info_by_fd(prog_fd, &info, &info_len)) {
-+	if (bpf_prog_get_info_by_fd(prog_fd, &info, &info_len)) {
- 		close(prog_fd);
- 		return -1;
- 	}
-diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
-index 620032042576..5a73ccf14332 100644
---- a/tools/bpf/bpftool/common.c
-+++ b/tools/bpf/bpftool/common.c
-@@ -353,7 +353,7 @@ void get_prog_full_name(const struct bpf_prog_info *prog_info, int prog_fd,
- 		info.func_info_rec_size = sizeof(finfo);
- 	info.func_info = ptr_to_u64(&finfo);
- 
--	if (bpf_obj_get_info_by_fd(prog_fd, &info, &info_len))
-+	if (bpf_prog_get_info_by_fd(prog_fd, &info, &info_len))
- 		goto copy_name;
- 
- 	prog_btf = btf__load_from_kernel_by_id(info.btf_id);
-@@ -488,7 +488,7 @@ static int do_build_table_cb(const char *fpath, const struct stat *sb,
- 		goto out_close;
- 
- 	memset(&pinned_info, 0, sizeof(pinned_info));
--	if (bpf_obj_get_info_by_fd(fd, &pinned_info, &len))
-+	if (bpf_prog_get_info_by_fd(fd, &pinned_info, &len))
- 		goto out_close;
- 
- 	path = strdup(fpath);
-@@ -756,7 +756,7 @@ static int prog_fd_by_nametag(void *nametag, int **fds, bool tag)
- 			goto err_close_fds;
- 		}
- 
--		err = bpf_obj_get_info_by_fd(fd, &info, &len);
-+		err = bpf_prog_get_info_by_fd(fd, &info, &len);
- 		if (err) {
- 			p_err("can't get prog info (%u): %s",
- 			      id, strerror(errno));
-@@ -916,7 +916,7 @@ static int map_fd_by_name(char *name, int **fds)
- 			goto err_close_fds;
- 		}
- 
--		err = bpf_obj_get_info_by_fd(fd, &info, &len);
-+		err = bpf_map_get_info_by_fd(fd, &info, &len);
- 		if (err) {
- 			p_err("can't get map info (%u): %s",
- 			      id, strerror(errno));
-@@ -1026,7 +1026,8 @@ int map_parse_fd(int *argc, char ***argv)
++	libbpf_mark_mem_written(u64_to_ptr(attr->log_buf), attr->log_size);
++
  	return fd;
  }
  
--int map_parse_fd_and_info(int *argc, char ***argv, void *info, __u32 *info_len)
-+int map_parse_fd_and_info(int *argc, char ***argv, struct bpf_map_info *info,
-+			  __u32 *info_len)
+@@ -395,6 +402,26 @@ int bpf_map_update_elem(int fd, const void *key, const void *value,
+ 	return libbpf_err_errno(ret);
+ }
+ 
++/* Tell memory checkers that the given value of the given map is initialized. */
++static void libbpf_mark_map_value_written(int fd, void *value)
++{
++#ifdef HAVE_LIBBPF_MARK_MEM_WRITTEN
++	struct bpf_map_info info;
++	__u32 info_len;
++	size_t size;
++	int err;
++
++	info_len = sizeof(info);
++	err = bpf_map_get_info_by_fd(fd, &info, &info_len);
++	if (!err) {
++		size = info.value_size;
++		if (is_percpu_bpf_map_type(info.type))
++			size = roundup(size, 8) * libbpf_num_possible_cpus();
++		libbpf_mark_mem_written(value, size);
++	}
++#endif
++}
++
+ int bpf_map_lookup_elem(int fd, const void *key, void *value)
  {
- 	int err;
- 	int fd;
-@@ -1035,7 +1036,7 @@ int map_parse_fd_and_info(int *argc, char ***argv, void *info, __u32 *info_len)
- 	if (fd < 0)
- 		return -1;
+ 	const size_t attr_sz = offsetofend(union bpf_attr, flags);
+@@ -407,6 +434,8 @@ int bpf_map_lookup_elem(int fd, const void *key, void *value)
+ 	attr.value = ptr_to_u64(value);
  
--	err = bpf_obj_get_info_by_fd(fd, info, info_len);
-+	err = bpf_map_get_info_by_fd(fd, info, info_len);
- 	if (err) {
- 		p_err("can't get map info: %s", strerror(errno));
- 		close(fd);
-diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
-index 6f4cfe01cad4..f985b79cca27 100644
---- a/tools/bpf/bpftool/link.c
-+++ b/tools/bpf/bpftool/link.c
-@@ -145,7 +145,7 @@ static int get_prog_info(int prog_id, struct bpf_prog_info *info)
- 		return prog_fd;
+ 	ret = sys_bpf(BPF_MAP_LOOKUP_ELEM, &attr, attr_sz);
++	if (!ret)
++		libbpf_mark_map_value_written(fd, value);
+ 	return libbpf_err_errno(ret);
+ }
  
- 	memset(info, 0, sizeof(*info));
--	err = bpf_obj_get_info_by_fd(prog_fd, info, &len);
-+	err = bpf_prog_get_info_by_fd(prog_fd, info, &len);
- 	if (err)
- 		p_err("can't get prog info: %s", strerror(errno));
- 	close(prog_fd);
-@@ -327,7 +327,7 @@ static int do_show_link(int fd)
+@@ -423,6 +452,8 @@ int bpf_map_lookup_elem_flags(int fd, const void *key, void *value, __u64 flags)
+ 	attr.flags = flags;
  
- 	memset(&info, 0, sizeof(info));
- again:
--	err = bpf_obj_get_info_by_fd(fd, &info, &len);
-+	err = bpf_link_get_info_by_fd(fd, &info, &len);
- 	if (err) {
- 		p_err("can't get link info: %s",
- 		      strerror(errno));
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index a84224b6a604..0ef373cef4c7 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -168,7 +168,8 @@ int prog_parse_fd(int *argc, char ***argv);
- int prog_parse_fds(int *argc, char ***argv, int **fds);
- int map_parse_fd(int *argc, char ***argv);
- int map_parse_fds(int *argc, char ***argv, int **fds);
--int map_parse_fd_and_info(int *argc, char ***argv, void *info, __u32 *info_len);
-+int map_parse_fd_and_info(int *argc, char ***argv, struct bpf_map_info *info,
-+			  __u32 *info_len);
+ 	ret = sys_bpf(BPF_MAP_LOOKUP_ELEM, &attr, attr_sz);
++	if (!ret)
++		libbpf_mark_map_value_written(fd, value);
+ 	return libbpf_err_errno(ret);
+ }
  
- struct bpf_prog_linfo;
- #if defined(HAVE_LLVM_SUPPORT) || defined(HAVE_LIBBFD_SUPPORT)
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index 88911d3aa2d9..aaeb8939e137 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -638,7 +638,7 @@ static int do_show_subset(int argc, char **argv)
- 	if (json_output && nb_fds > 1)
- 		jsonw_start_array(json_wtr);	/* root array */
- 	for (i = 0; i < nb_fds; i++) {
--		err = bpf_obj_get_info_by_fd(fds[i], &info, &len);
-+		err = bpf_map_get_info_by_fd(fds[i], &info, &len);
- 		if (err) {
- 			p_err("can't get map info: %s",
- 			      strerror(errno));
-@@ -708,7 +708,7 @@ static int do_show(int argc, char **argv)
- 			break;
- 		}
+@@ -438,6 +469,8 @@ int bpf_map_lookup_and_delete_elem(int fd, const void *key, void *value)
+ 	attr.value = ptr_to_u64(value);
  
--		err = bpf_obj_get_info_by_fd(fd, &info, &len);
-+		err = bpf_map_get_info_by_fd(fd, &info, &len);
- 		if (err) {
- 			p_err("can't get map info: %s", strerror(errno));
- 			close(fd);
-@@ -764,7 +764,7 @@ static int maps_have_btf(int *fds, int nb_fds)
- 	int err, i;
+ 	ret = sys_bpf(BPF_MAP_LOOKUP_AND_DELETE_ELEM, &attr, attr_sz);
++	if (!ret)
++		libbpf_mark_map_value_written(fd, value);
+ 	return libbpf_err_errno(ret);
+ }
  
- 	for (i = 0; i < nb_fds; i++) {
--		err = bpf_obj_get_info_by_fd(fds[i], &info, &len);
-+		err = bpf_map_get_info_by_fd(fds[i], &info, &len);
- 		if (err) {
- 			p_err("can't get map info: %s", strerror(errno));
- 			return -1;
-@@ -925,7 +925,7 @@ static int do_dump(int argc, char **argv)
- 	if (wtr && nb_fds > 1)
- 		jsonw_start_array(wtr);	/* root array */
- 	for (i = 0; i < nb_fds; i++) {
--		if (bpf_obj_get_info_by_fd(fds[i], &info, &len)) {
-+		if (bpf_map_get_info_by_fd(fds[i], &info, &len)) {
- 			p_err("can't get map info: %s", strerror(errno));
- 			break;
- 		}
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index e87738dbffc1..afbe3ec342c8 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -198,7 +198,7 @@ static void show_prog_maps(int fd, __u32 num_maps)
- 	info.nr_map_ids = num_maps;
- 	info.map_ids = ptr_to_u64(map_ids);
+@@ -454,6 +487,8 @@ int bpf_map_lookup_and_delete_elem_flags(int fd, const void *key, void *value, _
+ 	attr.flags = flags;
  
--	err = bpf_obj_get_info_by_fd(fd, &info, &len);
-+	err = bpf_prog_get_info_by_fd(fd, &info, &len);
- 	if (err || !info.nr_map_ids)
- 		return;
+ 	ret = sys_bpf(BPF_MAP_LOOKUP_AND_DELETE_ELEM, &attr, attr_sz);
++	if (!ret)
++		libbpf_mark_map_value_written(fd, value);
+ 	return libbpf_err_errno(ret);
+ }
  
-@@ -231,7 +231,7 @@ static void *find_metadata(int prog_fd, struct bpf_map_info *map_info)
+@@ -823,10 +858,12 @@ int bpf_prog_query_opts(int target_fd,
+ {
+ 	const size_t attr_sz = offsetofend(union bpf_attr, query);
+ 	union bpf_attr attr;
++	__u32 *prog_ids;
+ 	int ret;
  
- 	memset(&prog_info, 0, sizeof(prog_info));
- 	prog_info_len = sizeof(prog_info);
--	ret = bpf_obj_get_info_by_fd(prog_fd, &prog_info, &prog_info_len);
-+	ret = bpf_prog_get_info_by_fd(prog_fd, &prog_info, &prog_info_len);
- 	if (ret)
- 		return NULL;
+ 	if (!OPTS_VALID(opts, bpf_prog_query_opts))
+ 		return libbpf_err(-EINVAL);
++	prog_ids = OPTS_GET(opts, prog_ids, NULL);
  
-@@ -248,7 +248,7 @@ static void *find_metadata(int prog_fd, struct bpf_map_info *map_info)
- 	prog_info.map_ids = ptr_to_u64(map_ids);
- 	prog_info_len = sizeof(prog_info);
+ 	memset(&attr, 0, attr_sz);
  
--	ret = bpf_obj_get_info_by_fd(prog_fd, &prog_info, &prog_info_len);
-+	ret = bpf_prog_get_info_by_fd(prog_fd, &prog_info, &prog_info_len);
- 	if (ret)
- 		goto free_map_ids;
+@@ -834,11 +871,15 @@ int bpf_prog_query_opts(int target_fd,
+ 	attr.query.attach_type	= type;
+ 	attr.query.query_flags	= OPTS_GET(opts, query_flags, 0);
+ 	attr.query.prog_cnt	= OPTS_GET(opts, prog_cnt, 0);
+-	attr.query.prog_ids	= ptr_to_u64(OPTS_GET(opts, prog_ids, NULL));
++	attr.query.prog_ids	= ptr_to_u64(prog_ids);
+ 	attr.query.prog_attach_flags = ptr_to_u64(OPTS_GET(opts, prog_attach_flags, NULL));
  
-@@ -259,7 +259,7 @@ static void *find_metadata(int prog_fd, struct bpf_map_info *map_info)
+ 	ret = sys_bpf(BPF_PROG_QUERY, &attr, attr_sz);
  
- 		memset(map_info, 0, sizeof(*map_info));
- 		map_info_len = sizeof(*map_info);
--		ret = bpf_obj_get_info_by_fd(map_fd, map_info, &map_info_len);
-+		ret = bpf_map_get_info_by_fd(map_fd, map_info, &map_info_len);
- 		if (ret < 0) {
- 			close(map_fd);
- 			goto free_map_ids;
-@@ -580,7 +580,7 @@ static int show_prog(int fd)
- 	__u32 len = sizeof(info);
- 	int err;
++	libbpf_mark_mem_written_if(prog_ids,
++				   attr.query.prog_cnt * sizeof(*prog_ids),
++				   !ret);
++
+ 	OPTS_SET(opts, attach_flags, attr.query.attach_flags);
+ 	OPTS_SET(opts, prog_cnt, attr.query.prog_cnt);
  
--	err = bpf_obj_get_info_by_fd(fd, &info, &len);
-+	err = bpf_prog_get_info_by_fd(fd, &info, &len);
- 	if (err) {
- 		p_err("can't get prog info: %s", strerror(errno));
- 		return -1;
-@@ -949,7 +949,7 @@ static int do_dump(int argc, char **argv)
- 	for (i = 0; i < nb_fds; i++) {
- 		memset(&info, 0, sizeof(info));
+@@ -868,10 +909,14 @@ int bpf_prog_test_run_opts(int prog_fd, struct bpf_test_run_opts *opts)
+ {
+ 	const size_t attr_sz = offsetofend(union bpf_attr, test);
+ 	union bpf_attr attr;
++	void *data_out;
++	void *ctx_out;
+ 	int ret;
  
--		err = bpf_obj_get_info_by_fd(fds[i], &info, &info_len);
-+		err = bpf_prog_get_info_by_fd(fds[i], &info, &info_len);
- 		if (err) {
- 			p_err("can't get prog info: %s", strerror(errno));
- 			break;
-@@ -961,7 +961,7 @@ static int do_dump(int argc, char **argv)
- 			break;
- 		}
+ 	if (!OPTS_VALID(opts, bpf_test_run_opts))
+ 		return libbpf_err(-EINVAL);
++	data_out = OPTS_GET(opts, data_out, NULL);
++	ctx_out = OPTS_GET(opts, ctx_out, NULL);
  
--		err = bpf_obj_get_info_by_fd(fds[i], &info, &info_len);
-+		err = bpf_prog_get_info_by_fd(fds[i], &info, &info_len);
- 		if (err) {
- 			p_err("can't get prog info: %s", strerror(errno));
- 			break;
-@@ -2170,9 +2170,9 @@ static char *profile_target_name(int tgt_fd)
- 	char *name = NULL;
- 	int err;
+ 	memset(&attr, 0, attr_sz);
+ 	attr.test.prog_fd = prog_fd;
+@@ -885,12 +930,15 @@ int bpf_prog_test_run_opts(int prog_fd, struct bpf_test_run_opts *opts)
+ 	attr.test.data_size_in = OPTS_GET(opts, data_size_in, 0);
+ 	attr.test.data_size_out = OPTS_GET(opts, data_size_out, 0);
+ 	attr.test.ctx_in = ptr_to_u64(OPTS_GET(opts, ctx_in, NULL));
+-	attr.test.ctx_out = ptr_to_u64(OPTS_GET(opts, ctx_out, NULL));
++	attr.test.ctx_out = ptr_to_u64(ctx_out);
+ 	attr.test.data_in = ptr_to_u64(OPTS_GET(opts, data_in, NULL));
+-	attr.test.data_out = ptr_to_u64(OPTS_GET(opts, data_out, NULL));
++	attr.test.data_out = ptr_to_u64(data_out);
  
--	err = bpf_obj_get_info_by_fd(tgt_fd, &info, &info_len);
-+	err = bpf_prog_get_info_by_fd(tgt_fd, &info, &info_len);
- 	if (err) {
--		p_err("failed to bpf_obj_get_info_by_fd for prog FD %d", tgt_fd);
-+		p_err("failed to get info for prog FD %d", tgt_fd);
- 		goto out;
+ 	ret = sys_bpf(BPF_PROG_TEST_RUN, &attr, attr_sz);
+ 
++	libbpf_mark_mem_written_if(data_out, attr.test.data_size_out, !ret);
++	libbpf_mark_mem_written_if(ctx_out, attr.test.ctx_size_out, !ret);
++
+ 	OPTS_SET(opts, data_size_out, attr.test.data_size_out);
+ 	OPTS_SET(opts, ctx_size_out, attr.test.ctx_size_out);
+ 	OPTS_SET(opts, duration, attr.test.duration);
+@@ -1039,15 +1087,100 @@ int bpf_obj_get_info_by_fd(int bpf_fd, void *info, __u32 *info_len)
+ 	attr.info.info = ptr_to_u64(info);
+ 
+ 	err = sys_bpf(BPF_OBJ_GET_INFO_BY_FD, &attr, attr_sz);
+-	if (!err)
++	if (!err) {
+ 		*info_len = attr.info.info_len;
++		libbpf_mark_mem_written(info, attr.info.info_len);
++	}
+ 	return libbpf_err_errno(err);
+ }
+ 
++/* Helper macros for telling memory checkers that an array pointed to by
++ * a struct bpf_{btf,link,map,prog}_info member is initialized. Before doing
++ * that, they make sure that kernel has provided the respective member.
++ */
++
++/* Handle arrays with a certain element size. */
++#define __MARK_INFO_ARRAY_WRITTEN(ptr, nr, elem_size) do {		       \
++	if (info_len >= offsetofend(typeof(*info), ptr) &&		       \
++	    info_len >= offsetofend(typeof(*info), nr) &&		       \
++	    info->ptr)							       \
++		libbpf_mark_mem_written(u64_to_ptr(info->ptr),		       \
++					info->nr * elem_size);		       \
++} while (0)
++
++/* Handle arrays with a certain element type. */
++#define MARK_INFO_ARRAY_WRITTEN(ptr, nr, type)				       \
++	__MARK_INFO_ARRAY_WRITTEN(ptr, nr, sizeof(type))
++
++/* Handle arrays with element size defined by a struct member. */
++#define MARK_INFO_REC_ARRAY_WRITTEN(ptr, nr, rec_size) do {		       \
++	if (info_len >= offsetofend(typeof(*info), rec_size))		       \
++		__MARK_INFO_ARRAY_WRITTEN(ptr, nr, info->rec_size);	       \
++} while (0)
++
++/* Handle null-terminated strings. */
++#define MARK_INFO_STR_WRITTEN(ptr, nr) do {				       \
++	if (info_len >= offsetofend(typeof(*info), ptr) &&		       \
++	    info_len >= offsetofend(typeof(*info), nr) &&		       \
++	    info->ptr)							       \
++		libbpf_mark_mem_written(u64_to_ptr(info->ptr),		       \
++					info->nr + 1);			       \
++} while (0)
++
++/* Helper functions for telling memory checkers that arrays pointed to by
++ * bpf_{btf,link,map,prog}_info members are initialized.
++ */
++
++static void mark_prog_info_written(struct bpf_prog_info *info, __u32 info_len)
++{
++	MARK_INFO_ARRAY_WRITTEN(map_ids, nr_map_ids, __u32);
++	MARK_INFO_ARRAY_WRITTEN(jited_ksyms, nr_jited_ksyms, __u64);
++	MARK_INFO_ARRAY_WRITTEN(jited_func_lens, nr_jited_func_lens, __u32);
++	MARK_INFO_REC_ARRAY_WRITTEN(func_info, nr_func_info,
++				    func_info_rec_size);
++	MARK_INFO_REC_ARRAY_WRITTEN(line_info, nr_line_info,
++				    line_info_rec_size);
++	MARK_INFO_REC_ARRAY_WRITTEN(jited_line_info, nr_jited_line_info,
++				    jited_line_info_rec_size);
++	MARK_INFO_ARRAY_WRITTEN(prog_tags, nr_prog_tags, __u8[BPF_TAG_SIZE]);
++}
++
++static void mark_btf_info_written(struct bpf_btf_info *info, __u32 info_len)
++{
++	MARK_INFO_ARRAY_WRITTEN(btf, btf_size, __u8);
++	MARK_INFO_STR_WRITTEN(name, name_len);
++}
++
++static void mark_link_info_written(struct bpf_link_info *info, __u32 info_len)
++{
++	switch (info->type) {
++	case BPF_LINK_TYPE_RAW_TRACEPOINT:
++		MARK_INFO_STR_WRITTEN(raw_tracepoint.tp_name,
++				      raw_tracepoint.tp_name_len);
++		break;
++	case BPF_LINK_TYPE_ITER:
++		MARK_INFO_STR_WRITTEN(iter.target_name, iter.target_name_len);
++		break;
++	default:
++		break;
++	}
++}
++
++#undef MARK_INFO_STR_WRITTEN
++#undef MARK_INFO_REC_ARRAY_WRITTEN
++#undef MARK_INFO_ARRAY_WRITTEN
++#undef __MARK_INFO_ARRAY_WRITTEN
++
+ int bpf_prog_get_info_by_fd(int prog_fd, struct bpf_prog_info *info,
+ 			    __u32 *info_len)
+ {
+-	return bpf_obj_get_info_by_fd(prog_fd, info, info_len);
++	int err;
++
++	err = bpf_obj_get_info_by_fd(prog_fd, info, info_len);
++	if (!err)
++		mark_prog_info_written(info, *info_len);
++
++	return err;
+ }
+ 
+ int bpf_map_get_info_by_fd(int map_fd, struct bpf_map_info *info,
+@@ -1059,13 +1192,25 @@ int bpf_map_get_info_by_fd(int map_fd, struct bpf_map_info *info,
+ int bpf_btf_get_info_by_fd(int btf_fd, struct bpf_btf_info *info,
+ 			   __u32 *info_len)
+ {
+-	return bpf_obj_get_info_by_fd(btf_fd, info, info_len);
++	int err;
++
++	err = bpf_obj_get_info_by_fd(btf_fd, info, info_len);
++	if (!err)
++		mark_btf_info_written(info, *info_len);
++
++	return err;
+ }
+ 
+ int bpf_link_get_info_by_fd(int link_fd, struct bpf_link_info *info,
+ 			    __u32 *info_len)
+ {
+-	return bpf_obj_get_info_by_fd(link_fd, info, info_len);
++	int err;
++
++	err = bpf_obj_get_info_by_fd(link_fd, info, info_len);
++	if (!err)
++		mark_link_info_written(info, *info_len);
++
++	return err;
+ }
+ 
+ int bpf_raw_tracepoint_open(const char *name, int prog_fd)
+@@ -1127,6 +1272,7 @@ int bpf_btf_load(const void *btf_data, size_t btf_size, const struct bpf_btf_loa
+ 		attr.btf_log_level = 1;
+ 		fd = sys_bpf_fd(BPF_BTF_LOAD, &attr, attr_sz);
+ 	}
++	libbpf_mark_mem_written(log_buf, attr.btf_log_size);
+ 	return libbpf_err_errno(fd);
+ }
+ 
+@@ -1146,6 +1292,7 @@ int bpf_task_fd_query(int pid, int fd, __u32 flags, char *buf, __u32 *buf_len,
+ 	attr.task_fd_query.buf_len = *buf_len;
+ 
+ 	err = sys_bpf(BPF_TASK_FD_QUERY, &attr, attr_sz);
++	libbpf_mark_mem_written_if(buf, attr.task_fd_query.buf_len + 1, !err);
+ 
+ 	*buf_len = attr.task_fd_query.buf_len;
+ 	*prog_id = attr.task_fd_query.prog_id;
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index 9181d36118d2..6535a758a530 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -1388,6 +1388,7 @@ struct btf *btf_get_from_fd(int btf_fd, struct btf *base_btf)
+ 		goto exit_free;
  	}
  
-@@ -2183,7 +2183,7 @@ static char *profile_target_name(int tgt_fd)
++	libbpf_mark_mem_written(ptr, btf_info.btf_size);
+ 	btf = btf_new(ptr, btf_info.btf_size, base_btf);
  
- 	func_info_rec_size = info.func_info_rec_size;
- 	if (info.nr_func_info == 0) {
--		p_err("bpf_obj_get_info_by_fd for prog FD %d found 0 func_info", tgt_fd);
-+		p_err("found 0 func_info for prog FD %d", tgt_fd);
- 		goto out;
- 	}
- 
-@@ -2192,7 +2192,7 @@ static char *profile_target_name(int tgt_fd)
- 	info.func_info_rec_size = func_info_rec_size;
- 	info.func_info = ptr_to_u64(&func_info);
- 
--	err = bpf_obj_get_info_by_fd(tgt_fd, &info, &info_len);
-+	err = bpf_prog_get_info_by_fd(tgt_fd, &info, &info_len);
- 	if (err) {
- 		p_err("failed to get func_info for prog FD %d", tgt_fd);
- 		goto out;
-diff --git a/tools/bpf/bpftool/struct_ops.c b/tools/bpf/bpftool/struct_ops.c
-index 903b80ff4e9a..b389f4830e11 100644
---- a/tools/bpf/bpftool/struct_ops.c
-+++ b/tools/bpf/bpftool/struct_ops.c
-@@ -151,7 +151,7 @@ static int get_next_struct_ops_map(const char *name, int *res_fd,
- 			return -1;
+ exit_free:
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 2d47a8e4f7e4..9a12dd773e49 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -5443,6 +5443,7 @@ static int load_module_btfs(struct bpf_object *obj)
+ 			pr_warn("failed to get BTF object #%d info: %d\n", id, err);
+ 			goto err_out;
  		}
++		libbpf_mark_mem_written(name, info.name_len + 1);
  
--		err = bpf_obj_get_info_by_fd(fd, info, &info_len);
-+		err = bpf_map_get_info_by_fd(fd, info, &info_len);
- 		if (err) {
- 			p_err("can't get map info: %s", strerror(errno));
- 			close(fd);
-@@ -262,7 +262,7 @@ static struct res do_one_id(const char *id_str, work_func func, void *data,
- 		goto done;
- 	}
+ 		/* ignore non-module BTFs */
+ 		if (!info.kernel_btf || strcmp(name, "vmlinux") == 0) {
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index d6098b9c9e8e..5caf38300280 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -585,4 +585,42 @@ static inline bool is_percpu_bpf_map_type(__u32 type)
+ 	       type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE;
+ }
  
--	if (bpf_obj_get_info_by_fd(fd, info, &info_len)) {
-+	if (bpf_map_get_info_by_fd(fd, info, &info_len)) {
- 		p_err("can't get map info: %s", strerror(errno));
- 		res.nr_errs++;
- 		goto done;
-@@ -522,7 +522,7 @@ static int do_register(int argc, char **argv)
- 		bpf_link__disconnect(link);
- 		bpf_link__destroy(link);
- 
--		if (!bpf_obj_get_info_by_fd(bpf_map__fd(map), &info,
-+		if (!bpf_map_get_info_by_fd(bpf_map__fd(map), &info,
- 					    &info_len))
- 			p_info("Registered %s %s id %u",
- 			       get_kern_struct_ops_name(&info),
++/* Check whether the code is compiled with the Memory Sanitizer. This needs to
++ * be two #if statements: if they are combined into one and __has_feature is
++ * not defined, then its usage will generate a syntax error.
++ */
++#if defined(__has_feature)
++#if __has_feature(memory_sanitizer)
++#define LIBBPF_MSAN
++#endif
++#endif
++
++/* __libbpf_mark_mem_written(): tell memory checkers that a certain address
++ * range should be treated as initialized. Currently supports Memory Sanitizer;
++ * Valgrind support can be added in the future.
++ */
++#ifdef LIBBPF_MSAN
++#define HAVE_LIBBPF_MARK_MEM_WRITTEN
++#include <sanitizer/msan_interface.h>
++#define __libbpf_mark_mem_written __msan_unpoison
++#else
++static inline void __libbpf_mark_mem_written(void *s, size_t n) {}
++#endif
++
++/* Convenience wrappers around __libbpf_mark_mem_written(). */
++
++static inline void libbpf_mark_mem_written(void *s, size_t n)
++{
++	if (s && n)
++		__libbpf_mark_mem_written(s, n);
++}
++
++static inline void libbpf_mark_mem_written_if(void *s, size_t n, bool c)
++{
++	if (c)
++		libbpf_mark_mem_written(s, n);
++}
++
++#define libbpf_mark_var_written(v) libbpf_mark_mem_written(&(v), sizeof(v))
++
+ #endif /* __LIBBPF_LIBBPF_INTERNAL_H */
 -- 
 2.39.1
 
