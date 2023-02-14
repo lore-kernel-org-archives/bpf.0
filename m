@@ -2,84 +2,209 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E04DFC61DA4
-	for <bpf@archiver.kernel.org>; Tue, 14 Feb 2023 22:36:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D5C9C61DA4
+	for <bpf@archiver.kernel.org>; Tue, 14 Feb 2023 23:12:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230400AbjBNWgM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Feb 2023 17:36:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
+        id S232833AbjBNXMz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Feb 2023 18:12:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbjBNWgM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Feb 2023 17:36:12 -0500
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED29A2CFDA;
-        Tue, 14 Feb 2023 14:36:09 -0800 (PST)
-Received: by mail-qt1-f171.google.com with SMTP id w3so19983655qts.7;
-        Tue, 14 Feb 2023 14:36:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+vGjUQ59EfGjLqRgg6jS2wqMF93HXolMygmoqFHWJzw=;
-        b=oQu5B+v1eMRgdn3j6apmgf1z+RPgELsORHLpuzfxxMYZsDU1KTd4YSJdc9Ul59k+vQ
-         +ihfsbeeanIFN8N3THgo35PxWMrsK5ZH27w9z5dxYsYJ9mN96JpzlUdrvmZ8mSruKwDd
-         ivdpl/u9xapUHs0+xy1dDxXJo1orQjosH9vHPnZK1+hEmdOabxP4zvIL9wIvmjph4zbd
-         uU91kvhVFfbNlNgIoIyuL39PvQyjkCJjdJZMuy8J97kLZew0OBah5UEYe6sviDH/eR2a
-         kZndjJzqGuZuVZsj782TpYqQmt/LdMJrCuoPhwtxlvUdoyHhclGN2IJlP2UyG4inSM9e
-         pYSA==
-X-Gm-Message-State: AO0yUKXdW/rPSkyMxQ8YhiYP5s9WGThCzuje1k4Z0T1oXFctezPUjgx5
-        byT5HxrKdolxRoHNMkOs+1y7XWaQYai4BrSR
-X-Google-Smtp-Source: AK7set+o4nIe77K7DFKKg4pLzvRk33gV29eRVzn9xTJrN7IUeNWnYgfmYSeun9uI66NQ87HI413Vkw==
-X-Received: by 2002:ac8:7943:0:b0:3b9:bc8c:c208 with SMTP id r3-20020ac87943000000b003b9bc8cc208mr1788350qtt.19.1676414168677;
-        Tue, 14 Feb 2023 14:36:08 -0800 (PST)
-Received: from localhost ([24.1.27.177])
-        by smtp.gmail.com with ESMTPSA id x129-20020a376387000000b006bb82221013sm12831205qkb.0.2023.02.14.14.36.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 14:36:07 -0800 (PST)
-From:   David Vernet <void@manifault.com>
-To:     bpf@vger.kernel.org, bpf@ietf.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@meta.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, dthaler@microsoft.com
-Subject: [PATCH bpf-next] bpf, docs: Add myself to BPF docs MAINTAINERS entry
-Date:   Tue, 14 Feb 2023 16:35:53 -0600
-Message-Id: <20230214223553.78353-1-void@manifault.com>
-X-Mailer: git-send-email 2.39.0
+        with ESMTP id S232862AbjBNXMx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Feb 2023 18:12:53 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74892101
+        for <bpf@vger.kernel.org>; Tue, 14 Feb 2023 15:12:49 -0800 (PST)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31ENCUch028634;
+        Tue, 14 Feb 2023 23:12:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=SYi+mooL0fsDmQlBoEmoSrOgPVc2PSOJR0jd4wVvubw=;
+ b=ob8laOnlPPwvIq6Ct1o6GM/3CIi40Vg7m27Wre+qYqCB63vweYh/OWy3SZwnIILtfWzP
+ DMf6uQSbW1HOhxyeJcjxZJFf7Lo6ecjXSNVaStMHZ4X7NNh9LoEfl9vj3xq7mE78SctM
+ dVMhLSv2hqKIm6OkCm4KuCMwY/svblC8q2Zng/c78g90E348BEQEqBz27CrK2de1zxiu
+ KUHVjBUm/00KEUHOdxW+ByREZbzFT9E4gFevFxgIohAyp5zSbO0mO18Qt1GTJuAAegSM
+ 2wk5AReaATGK7NGUgM37osSJN2/i3o2zsOKZcZICilMP0ooTts5OMQjPN59eADPZQTtz DQ== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nrkrur05t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 23:12:34 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31EJCbdq011341;
+        Tue, 14 Feb 2023 23:12:32 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3np2n6vnj2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 23:12:32 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31ENCSsx46727644
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Feb 2023 23:12:28 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B712D20043;
+        Tue, 14 Feb 2023 23:12:28 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 304E720040;
+        Tue, 14 Feb 2023 23:12:28 +0000 (GMT)
+Received: from heavy.lan (unknown [9.171.53.135])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 14 Feb 2023 23:12:28 +0000 (GMT)
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>
+Subject: [PATCH bpf-next v3 4/8] samples/bpf: Use bpf_{btf,link,map,prog}_get_info_by_fd()
+Date:   Wed, 15 Feb 2023 00:12:17 +0100
+Message-Id: <20230214231221.249277-5-iii@linux.ibm.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230214231221.249277-1-iii@linux.ibm.com>
+References: <20230214231221.249277-1-iii@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: pxqpigOOk_wn3v1pJj2Jpu9IPT74eg4p
+X-Proofpoint-GUID: pxqpigOOk_wn3v1pJj2Jpu9IPT74eg4p
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-14_15,2023-02-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ impostorscore=0 spamscore=0 phishscore=0 priorityscore=1501
+ lowpriorityscore=0 bulkscore=0 malwarescore=0 mlxscore=0 mlxlogscore=999
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302140198
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In commit 7e2a9ebe8126 ("docs, bpf: Ensure IETF's BPF mailing list gets
-copied for ISA doc changes"), a new MAINTAINERS entry was added for any
-BPF IETF documentation updates for the ongoing standardization process.
-I've been making it a point to try and review as many BPF documentation
-patches as possible, and have made a committment to Alexei to
-consistently review BPF standardization patches going forward. This
-patch adds my name as a reviewer to the MAINTAINERS entry for the
-standardization effort.
+Use the new type-safe wrappers around bpf_obj_get_info_by_fd().
 
-Signed-off-by: David Vernet <void@manifault.com>
+Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ samples/bpf/test_map_in_map_user.c  | 2 +-
+ samples/bpf/xdp1_user.c             | 2 +-
+ samples/bpf/xdp_adjust_tail_user.c  | 2 +-
+ samples/bpf/xdp_fwd_user.c          | 4 ++--
+ samples/bpf/xdp_redirect_cpu_user.c | 4 ++--
+ samples/bpf/xdp_rxq_info_user.c     | 2 +-
+ samples/bpf/xdp_sample_pkts_user.c  | 2 +-
+ samples/bpf/xdp_tx_iptunnel_user.c  | 2 +-
+ 8 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e5e8a37d8b68..a416be19f8db 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4024,6 +4024,7 @@ S:	Maintained
- F:	tools/testing/selftests/bpf/
+diff --git a/samples/bpf/test_map_in_map_user.c b/samples/bpf/test_map_in_map_user.c
+index 9e79df4071f5..55dca43f3723 100644
+--- a/samples/bpf/test_map_in_map_user.c
++++ b/samples/bpf/test_map_in_map_user.c
+@@ -38,7 +38,7 @@ static void check_map_id(int inner_map_fd, int map_in_map_fd, uint32_t key)
+ 	uint32_t info_len = sizeof(info);
+ 	int ret, id;
  
- BPF [DOCUMENTATION] (Related to Standardization)
-+R:	David Vernet <void@manifault.com>
- L:	bpf@vger.kernel.org
- L:	bpf@ietf.org
- S:	Maintained
+-	ret = bpf_obj_get_info_by_fd(inner_map_fd, &info, &info_len);
++	ret = bpf_map_get_info_by_fd(inner_map_fd, &info, &info_len);
+ 	assert(!ret);
+ 
+ 	ret = bpf_map_lookup_elem(map_in_map_fd, &key, &id);
+diff --git a/samples/bpf/xdp1_user.c b/samples/bpf/xdp1_user.c
+index 281dc964de8d..f05e797013e9 100644
+--- a/samples/bpf/xdp1_user.c
++++ b/samples/bpf/xdp1_user.c
+@@ -153,7 +153,7 @@ int main(int argc, char **argv)
+ 		return 1;
+ 	}
+ 
+-	err = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
++	err = bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
+ 	if (err) {
+ 		printf("can't get prog info - %s\n", strerror(errno));
+ 		return err;
+diff --git a/samples/bpf/xdp_adjust_tail_user.c b/samples/bpf/xdp_adjust_tail_user.c
+index 167646077c8f..e9426bd65420 100644
+--- a/samples/bpf/xdp_adjust_tail_user.c
++++ b/samples/bpf/xdp_adjust_tail_user.c
+@@ -184,7 +184,7 @@ int main(int argc, char **argv)
+ 		return 1;
+ 	}
+ 
+-	err = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
++	err = bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
+ 	if (err) {
+ 		printf("can't get prog info - %s\n", strerror(errno));
+ 		return 1;
+diff --git a/samples/bpf/xdp_fwd_user.c b/samples/bpf/xdp_fwd_user.c
+index 84f57f1209ce..193b3b79b31f 100644
+--- a/samples/bpf/xdp_fwd_user.c
++++ b/samples/bpf/xdp_fwd_user.c
+@@ -76,9 +76,9 @@ static int do_detach(int ifindex, const char *ifname, const char *app_name)
+ 		return prog_fd;
+ 	}
+ 
+-	err = bpf_obj_get_info_by_fd(prog_fd, &prog_info, &info_len);
++	err = bpf_prog_get_info_by_fd(prog_fd, &prog_info, &info_len);
+ 	if (err) {
+-		printf("ERROR: bpf_obj_get_info_by_fd failed (%s)\n",
++		printf("ERROR: bpf_prog_get_info_by_fd failed (%s)\n",
+ 		       strerror(errno));
+ 		goto close_out;
+ 	}
+diff --git a/samples/bpf/xdp_redirect_cpu_user.c b/samples/bpf/xdp_redirect_cpu_user.c
+index a12381c37d2b..e1458405e2ba 100644
+--- a/samples/bpf/xdp_redirect_cpu_user.c
++++ b/samples/bpf/xdp_redirect_cpu_user.c
+@@ -494,9 +494,9 @@ int main(int argc, char **argv)
+ 		goto end_cpu;
+ 	}
+ 
+-	ret = bpf_obj_get_info_by_fd(bpf_map__fd(skel->maps.cpu_map), &info, &infosz);
++	ret = bpf_map_get_info_by_fd(bpf_map__fd(skel->maps.cpu_map), &info, &infosz);
+ 	if (ret < 0) {
+-		fprintf(stderr, "Failed bpf_obj_get_info_by_fd for cpumap: %s\n",
++		fprintf(stderr, "Failed bpf_map_get_info_by_fd for cpumap: %s\n",
+ 			strerror(errno));
+ 		goto end_cpu;
+ 	}
+diff --git a/samples/bpf/xdp_rxq_info_user.c b/samples/bpf/xdp_rxq_info_user.c
+index 08f5331d2b00..b95e0ef61f06 100644
+--- a/samples/bpf/xdp_rxq_info_user.c
++++ b/samples/bpf/xdp_rxq_info_user.c
+@@ -602,7 +602,7 @@ int main(int argc, char **argv)
+ 		return EXIT_FAIL_XDP;
+ 	}
+ 
+-	err = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
++	err = bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
+ 	if (err) {
+ 		printf("can't get prog info - %s\n", strerror(errno));
+ 		return err;
+diff --git a/samples/bpf/xdp_sample_pkts_user.c b/samples/bpf/xdp_sample_pkts_user.c
+index 7df7163239ac..e39d7f654f30 100644
+--- a/samples/bpf/xdp_sample_pkts_user.c
++++ b/samples/bpf/xdp_sample_pkts_user.c
+@@ -35,7 +35,7 @@ static int do_attach(int idx, int fd, const char *name)
+ 		return err;
+ 	}
+ 
+-	err = bpf_obj_get_info_by_fd(fd, &info, &info_len);
++	err = bpf_prog_get_info_by_fd(fd, &info, &info_len);
+ 	if (err) {
+ 		printf("can't get prog info - %s\n", strerror(errno));
+ 		return err;
+diff --git a/samples/bpf/xdp_tx_iptunnel_user.c b/samples/bpf/xdp_tx_iptunnel_user.c
+index 307baef6861a..7e4b2f7108a6 100644
+--- a/samples/bpf/xdp_tx_iptunnel_user.c
++++ b/samples/bpf/xdp_tx_iptunnel_user.c
+@@ -295,7 +295,7 @@ int main(int argc, char **argv)
+ 		return 1;
+ 	}
+ 
+-	err = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
++	err = bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
+ 	if (err) {
+ 		printf("can't get prog info - %s\n", strerror(errno));
+ 		return err;
 -- 
-2.39.0
+2.39.1
 
