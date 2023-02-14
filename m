@@ -2,151 +2,89 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2754C05027
-	for <bpf@archiver.kernel.org>; Tue, 14 Feb 2023 22:17:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89D65C05027
+	for <bpf@archiver.kernel.org>; Tue, 14 Feb 2023 22:22:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233473AbjBNWRz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Feb 2023 17:17:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36378 "EHLO
+        id S229519AbjBNWWI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Feb 2023 17:22:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233427AbjBNWRy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Feb 2023 17:17:54 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 725C459CA
-        for <bpf@vger.kernel.org>; Tue, 14 Feb 2023 14:17:51 -0800 (PST)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31ELLGI0025849
-        for <bpf@vger.kernel.org>; Tue, 14 Feb 2023 14:17:50 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=z++okg8JoArGPUzPBJfCEpx4xcZ1y/UpeXPFBnid/zc=;
- b=aT5f6ASPJuYqEIoxXeLJ536G+ye2hlecPVwMmbNp/L4E7YC01KZeKuCn9JHIt2keH5lz
- z/EfhKY+fQgTfNjXAl5RvdcZml7dfaBMP+yTK+iwv/sEK4gr19+1fcB1H5K5Nv4cI/w1
- FOg0CuU5FurCsc4r52z7KCi1lzyOqtUL0B7/DUjrhcNUBi0jYCPzbJmt6ZSNn2cGKPPU
- 0HCFRRm4WmA7Jib3us+3UqqSuz+Zmcb/6+YVhZLo3a1u2nNZ4iGaW3qzmUxrZv9wyAGz
- 9hM5+ahhtUPK4ltmNDdWDxadaEFEl/YtICv88PPhRCMWhrynLJFwqFiG8GKyhdja12fX qw== 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3nqyqmy381-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 14 Feb 2023 14:17:50 -0800
-Received: from twshared25383.14.frc2.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Tue, 14 Feb 2023 14:17:44 -0800
-Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
-        id E84B551430AC; Tue, 14 Feb 2023 14:17:23 -0800 (PST)
-From:   Kui-Feng Lee <kuifeng@meta.com>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <martin.lau@linux.dev>,
-        <song@kernel.org>, <kernel-team@meta.com>, <andrii@kernel.org>
-CC:     Kui-Feng Lee <kuifeng@meta.com>
-Subject: [PATCH bpf-next 6/7] libbpf: Update a bpf_link with another struct_ops.
-Date:   Tue, 14 Feb 2023 14:17:17 -0800
-Message-ID: <20230214221718.503964-7-kuifeng@meta.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230214221718.503964-1-kuifeng@meta.com>
-References: <20230214221718.503964-1-kuifeng@meta.com>
+        with ESMTP id S229461AbjBNWWG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Feb 2023 17:22:06 -0500
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9202213C
+        for <bpf@vger.kernel.org>; Tue, 14 Feb 2023 14:22:05 -0800 (PST)
+Received: by mail-qt1-f171.google.com with SMTP id f10so19979347qtv.1
+        for <bpf@vger.kernel.org>; Tue, 14 Feb 2023 14:22:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yaedcf9hUrBivvZ+vAGaSsYmZvWZ5iF+NSYORDx5tE4=;
+        b=emCLtGsjg6ixUn4inpFHiEVfGzF+P+ETk9AOv1m6kqga5ni5HFpmN7sEPuHcYjsRs3
+         ddSmKsSVOikagmB8jWsK9l3gQu8bk0Ah6b63zaf9lLGrg/FE4blKMk1Z9HXzzpbaHiN0
+         eS3CwF93bIceNdb+w8Om7Zzb4BeIJB8nJlRRnAaKb+3flVsEd+8OnnY19a8GL/MfHBrV
+         /dChy9AzM+PE5H9AGaZASzpFJmXuu/dhZfFHgsuXmfi7bincPQBq5a8KPuxm6T/KA2j7
+         eRALddhnKF7pJhaKkI+DbGs6dHaFMt0eea6DSQIwO34EMImpr7pIQibjTYfmpjZOy6aN
+         skpg==
+X-Gm-Message-State: AO0yUKXhdEi08RtizOBDYZuB6+7VXl0dcrqgeaamwJ5/qolNIGhRfB/M
+        3ke8W1GHftIiCOKsN0IA/Us=
+X-Google-Smtp-Source: AK7set80j4cQpNpi5DXL7wzBJJG6en/4T+cumdAmP7psdFnv/Fkzry1rn7WEKy4VRuZZ2X44imDahg==
+X-Received: by 2002:ac8:5a08:0:b0:3b9:b450:61f6 with SMTP id n8-20020ac85a08000000b003b9b45061f6mr7602648qta.62.1676413324696;
+        Tue, 14 Feb 2023 14:22:04 -0800 (PST)
+Received: from maniforge ([24.1.27.177])
+        by smtp.gmail.com with ESMTPSA id d10-20020ac800ca000000b003b0b903720esm12052429qtg.13.2023.02.14.14.22.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 14:22:04 -0800 (PST)
+Date:   Tue, 14 Feb 2023 16:22:01 -0600
+From:   David Vernet <void@manifault.com>
+To:     hackathon@ietf.org
+Cc:     bpf@ietf.org, ast@kernel.org, mykolal@meta.com, bpf@vger.kernel.org
+Subject: Re: BPF Hackathon project
+Message-ID: <Y+wJibgVRJg+8kNW@maniforge>
+References: <Y+wFfL/ZB1aIPFTl@maniforge>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: EtPEfETvgWnk4dVpKW9nv90eqTE1cxXj
-X-Proofpoint-ORIG-GUID: EtPEfETvgWnk4dVpKW9nv90eqTE1cxXj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-14_15,2023-02-14_01,2023-02-09_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+wFfL/ZB1aIPFTl@maniforge>
+User-Agent: Mutt/2.2.9 (2022-11-12)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce bpf_link__update_struct_ops(), which will allow you to
-effortlessly transition the struct_ops map of any given bpf_link into
-an alternative.
+On Tue, Feb 14, 2023 at 04:04:44PM -0600, David Vernet wrote:
+> Hello,
+> 
+> I just added a new BPF hackathon project for IETF 116:
 
-Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
----
- tools/lib/bpf/libbpf.c   | 35 +++++++++++++++++++++++++++++++++++
- tools/lib/bpf/libbpf.h   |  1 +
- tools/lib/bpf/libbpf.map |  1 +
- 3 files changed, 37 insertions(+)
+Given that Daniel and Alexei recently added a MAINTAINERS entry for the
+BPF documentation and standardization effort in [0], let's add bpf@vger
+to the cc list.
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 1eff6a03ddd9..6f7c72e312d4 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -11524,6 +11524,41 @@ struct bpf_link *bpf_map__attach_struct_ops(cons=
-t struct bpf_map *map)
- 	return &link->link;
- }
-=20
-+/*
-+ * Swap the back struct_ops of a link with a new struct_ops map.
-+ */
-+int bpf_link__update_struct_ops(struct bpf_link *link, const struct bpf_=
-map *map)
-+{
-+	struct bpf_link_struct_ops_map *st_ops_link;
-+	int err, fd;
-+
-+	if (!bpf_map__is_struct_ops(map) || map->fd =3D=3D -1)
-+		return -EINVAL;
-+
-+	/* Ensure the type of a link is correct */
-+	if (link->detach !=3D bpf_link__detach_struct_ops)
-+		return -EINVAL;
-+
-+	err =3D bpf_map__update_vdata(map);
-+	if (err) {
-+		err =3D -errno;
-+		free(link);
-+		return err;
-+	}
-+
-+	fd =3D bpf_link_update(link->fd, map->fd, NULL);
-+	if (fd < 0) {
-+		err =3D -errno;
-+		free(link);
-+		return err;
-+	}
-+
-+	st_ops_link =3D container_of(link, struct bpf_link_struct_ops_map, link=
-);
-+	st_ops_link->map_fd =3D map->fd;
-+
-+	return 0;
-+}
-+
- typedef enum bpf_perf_event_ret (*bpf_perf_event_print_t)(struct perf_ev=
-ent_header *hdr,
- 							  void *private_data);
-=20
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 2efd80f6f7b9..dd25cd6759d4 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -695,6 +695,7 @@ bpf_program__attach_freplace(const struct bpf_program=
- *prog,
- struct bpf_map;
-=20
- LIBBPF_API struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_=
-map *map);
-+LIBBPF_API int bpf_link__update_struct_ops(struct bpf_link *link, const =
-struct bpf_map *map);
-=20
- struct bpf_iter_attach_opts {
- 	size_t sz; /* size of this struct for forward/backward compatibility */
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 11c36a3c1a9f..ca6993c744b6 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -373,6 +373,7 @@ LIBBPF_1.1.0 {
- 	global:
- 		bpf_btf_get_fd_by_id_opts;
- 		bpf_link_get_fd_by_id_opts;
-+		bpf_link__update_struct_ops;
- 		bpf_map_get_fd_by_id_opts;
- 		bpf_prog_get_fd_by_id_opts;
- 		user_ring_buffer__discard;
---=20
-2.30.2
+[0]: https://lore.kernel.org/all/57619c0dd8e354d82bf38745f99405e3babdc970.1676068387.git.daniel@iogearbox.net/
 
+> 
+> **BPF***
+> - Champion(s)
+>   - David Vernet (void@manifault.com)
+>   - Alexei Starovoitov (ast@kernel.org)
+>   - Mykola Lysenko (mykolal@meta.com)
+> - Project info
+>   - Learn about [BPF](https://ebpf.io/what-is-ebpf/) and/or
+>     [Sched Ext](https://lwn.net/Articles/922405/) by writing BPF
+>     programs, creating custom Linux schedulers in BPF, and even
+>     contributing to the BPF codebase itself.
+>   - Add [BPF documentation]
+>     (https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/tree/Documentation/bpf)
+>     to the upstream Linux kernel tree in support of BPF standardization
+>     through IETF. Newcomers to Linux and BPF are welcome.
+>   - Write custom schedulers in BPF, using the new Sched Ext feature
+>     currently being [discussed upstream]
+>     https://lore.kernel.org/bpf/20230128001639.3510083-1-tj@kernel.org/).
+> 
+> As stated in the description above, the project will be championed by
+> myself, Alexei, and Mykola. If anyone has thoughts, feedback, or
+> questions, please feel free to reach out to us!
+> 
+> - David
