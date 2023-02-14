@@ -2,119 +2,103 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04800C05027
-	for <bpf@archiver.kernel.org>; Tue, 14 Feb 2023 21:44:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35ACEC61DA4
+	for <bpf@archiver.kernel.org>; Tue, 14 Feb 2023 22:00:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbjBNVod (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Feb 2023 16:44:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39228 "EHLO
+        id S233027AbjBNWAW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Feb 2023 17:00:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231796AbjBNVoc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Feb 2023 16:44:32 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8E029E3F
-        for <bpf@vger.kernel.org>; Tue, 14 Feb 2023 13:44:29 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31EK7G84027903;
-        Tue, 14 Feb 2023 21:28:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=/TwE0xZTKVZhkLdn4VycvoR+rgkqvMSLbvJPjaxKFoM=;
- b=DdPVGQaPOgEjQ9csEeW4Naypc3LfKnp4omsZeRfyaFqozNVZ4V52muOX5xAXl0MU792L
- FFqDY1+jDxh08HWOa63kb2Zn3shu2gOJFyXbJTxisIdT8tm5uv415ScnbpexrnMusVO5
- jBNvzhmo6qaPhHpVbGaI/lVaenDkdtZpd/7rVpQA80YZa5kdaBQPjjGW6xJVuSwjrtDw
- 9vlDZOt2BGmpvge53ENA1geltSpTa7z6S58VEna+21YTrAPX3PoMCQA5QBYnbFClM9dv
- id6QutqjOLeEBhUAUONX9E6RYbnKCtDq84fA5zQPFdkAPahNhGGPTZL3XAwGE9ns1l8/ xg== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nrh2c2frw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 21:28:18 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31E0I7H4031205;
-        Tue, 14 Feb 2023 21:28:16 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3np2n6bam1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 21:28:16 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31ELSCQG52756768
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Feb 2023 21:28:12 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 619E02004B;
-        Tue, 14 Feb 2023 21:28:12 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B08C720043;
-        Tue, 14 Feb 2023 21:28:11 +0000 (GMT)
-Received: from heavy.lan (unknown [9.171.47.108])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 14 Feb 2023 21:28:11 +0000 (GMT)
-From:   Ilya Leoshkevich <iii@linux.ibm.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH RFC bpf-next 0/1] bpf: Support 64-bit pointers to kfuncs
-Date:   Tue, 14 Feb 2023 22:28:08 +0100
-Message-Id: <20230214212809.242632-1-iii@linux.ibm.com>
-X-Mailer: git-send-email 2.39.1
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ZKNIFbIDyZWwIedzeRpwzxRX9CZjYOpy
-X-Proofpoint-ORIG-GUID: ZKNIFbIDyZWwIedzeRpwzxRX9CZjYOpy
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        with ESMTP id S233043AbjBNWAV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Feb 2023 17:00:21 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678B483F2
+        for <bpf@vger.kernel.org>; Tue, 14 Feb 2023 14:00:20 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id ml19so43730279ejb.0
+        for <bpf@vger.kernel.org>; Tue, 14 Feb 2023 14:00:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AS/0qup7BcnqbUG2luaOwtrCXv59oK9htcoBV4r8xhk=;
+        b=CPFRjqqmsqDcbGjNXJl+hyJ3nJ1+gJwkgqLE/r9Oa0+2b/Pq6ryT+HzxwVrAjSC7tn
+         l8DOfFd2ns53htL/HteSdqvDWJSbs4ZqMGhxQQAstX5yomzt9oCirNOl8cckMGt+rOuU
+         ZFQnDyKFjjyiG104YyRQMcn+d8ae0PCBpFHFi3J0jcfuLupQLFmHgyyslq3XQ/AfEStI
+         DuVMzlDMtJiAdjhk8VMmOf+jhYU/B4I36Ald4qYjp4WRsp3KHniadgLoSMu4ufmXe4A5
+         QBBGfmU8YQEyLGp/AYn4jUl80Dja5RHhr5ZJhvoWzPqCaU/TWivqr3eZGCzX7V3zd2nZ
+         Q2Sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AS/0qup7BcnqbUG2luaOwtrCXv59oK9htcoBV4r8xhk=;
+        b=d+s6xMG3UcOKzhC256jEQvKmSagHriqqq4C1TF7nyfifQV08RrE5h7hOFe5rbS4Ohv
+         XXKRVk1uqqT/gWcrmZH096/bq5tAJs0kPWaJxRC9ubD/ktke5YmhMge3DHI4Ns2zU5jd
+         ILj022cJmD4uJGYskKKnnb0Ehpn0UiErQ+MRKFgpylbq+I39C/cAUM5elGT8HQ4nsRnH
+         ERSD1o0que3Rf9a1tLQnJIuqHN1tg2zbAz6yA3Rq1+gEDLELQAqpqv4s6jLEwZsl3Nnu
+         eCXmtF9nJp/gZt6yU0rhFrX6Bzu3fpa9Cd/HhX3raz0NGTf6vwNjMwIHIsPkohsQPtRb
+         UxvA==
+X-Gm-Message-State: AO0yUKWpUmISSkOY8iemFDyID3PSBTT/5kv8dZH9lKAYjh6D9x/dz9SC
+        z32UoojvEL7kCpApTTJvAi9pxqHcVAKoSF8EwAA2eQO2x4qNDJJoLMA=
+X-Google-Smtp-Source: AK7set89M7AOPuCjBIeu+wc2JMUNVAVkDPYq97Ui/xG09ktGeDqyVQiNbMANXkSQy4uXVk9NH1q6GETMwj4pk/vF0GI=
+X-Received: by 2002:a17:907:2cd2:b0:895:58be:963 with SMTP id
+ hg18-20020a1709072cd200b0089558be0963mr4318ejc.3.1676412018747; Tue, 14 Feb
+ 2023 14:00:18 -0800 (PST)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-14_15,2023-02-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 clxscore=1011 impostorscore=0 mlxscore=0 adultscore=0
- mlxlogscore=990 suspectscore=0 bulkscore=0 phishscore=0 malwarescore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302140182
+References: <20230212092715.1422619-4-davemarchevsky@fb.com>
+ <202302121936.t36vlAFG-lkp@intel.com> <d04d33ff-0f8f-2bbd-3a67-9b8b813a799b@meta.com>
+ <CAKwvOdketskm5z25aPRY7OsBOZe2kzvXV-i9RDTbwcLpZSAT0A@mail.gmail.com>
+ <CAADnVQ+qJMAugDDQXaerRbh0g4QdRygMZ_0UVmXViR2aJ4OLDQ@mail.gmail.com>
+ <CABCJKucDXNeGCdD6uT7phYhpm+OgYm19EkfCNMB9AJ66k4NcvQ@mail.gmail.com> <Y+tupCQ/X38AlvY0@hirez.programming.kicks-ass.net>
+In-Reply-To: <Y+tupCQ/X38AlvY0@hirez.programming.kicks-ass.net>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Tue, 14 Feb 2023 13:59:41 -0800
+Message-ID: <CABCJKuc1iqHjg9ERVXMHO00rOqaNGM=d7xTvB4f6fTM4J4-nTA@mail.gmail.com>
+Subject: Re: [PATCH v5 bpf-next 3/9] bpf: Add bpf_rbtree_{add,remove,first} kfuncs
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Dave Marchevsky <davemarchevsky@meta.com>,
+        kernel test robot <lkp@intel.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        bpf <bpf@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        oe-kbuild-all@lists.linux.dev, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Kernel Team <kernel-team@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Tejun Heo <tj@kernel.org>, Kees Cook <keescook@chromium.org>,
+        Joao Moreira <joao@overdrivepizza.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+On Tue, Feb 14, 2023 at 7:36 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> The other case, which you allude to I think, is control transfer to the
+> JIT'ed code which is currently __nocfi annotated. I've only briefly
+> thought about how to change this, but basically it would entail the JIT
+> emitting the correct prefix bytes and setting the entry point at +16.
+>
+> Given the JIT will only run after we've selected kCFI/FineIBT it knows
+> which form to pick from and can emit the right prefix. Then if we remove
+> the __nocfi annotation from the call into JIT'ed code, everything should
+> work.
+>
+> None of this should be exceptionally hard, but I've not had time to
+> actually do much about it yet.
 
-This is the first attempt to solve the problems outlined in [1, 2, 3].
-The main problem is that kfuncs in modules do not fit into bpf_insn.imm
-on s390x; the secondary problem is that there is a conflict between
-"abstract" XDP metadata function BTF ids and their "concrete"
-addresses.
+The dispatcher path shouldn't be terribly hard to fix, but when I
+looked into this briefly half a year ago and ran BPF self-tests with
+CFI enabled, I found a few more places that indirectly call jitted
+code (or trampolines) using a different function pointer type:
 
-The proposed solution is to keep fkunc BTF ids in bpf_insn.imm, and put
-the addresses into bpf_kfunc_desc, which does not have size
-restrictions.
+https://github.com/ClangBuiltLinux/linux/issues/1727
 
-Jiri and I discussed putting them into bpf_insn_aux_data, but at the
-very beginning of the implementation it became clear that this struct
-is freed at the end of verification and is not available during JITing.
+For some of these, determining the correct type didn't look all that
+simple, but then again, I'm not super familiar with BPF internals.
 
-I regtested this only on s390x, where it does not regress anything. If
-this approach is fine (especially w.r.t. dev-bound kfuncs), I can check
-the other arches.
-
-[1] https://lore.kernel.org/bpf/Y9%2FyrKZkBK6yzXp+@krava/
-[2] https://lore.kernel.org/bpf/20230128000650.1516334-1-iii@linux.ibm.com/
-[3] https://lore.kernel.org/bpf/20230128000650.1516334-32-iii@linux.ibm.com/
-
-Best regards,
-Ilya
-
-Ilya Leoshkevich (1):
-  bpf: Support 64-bit pointers to kfuncs
-
- include/linux/bpf.h   |  2 ++
- kernel/bpf/core.c     | 23 ++++++++++---
- kernel/bpf/verifier.c | 79 +++++++++++++------------------------------
- 3 files changed, 45 insertions(+), 59 deletions(-)
-
--- 
-2.39.1
-
+Sami
