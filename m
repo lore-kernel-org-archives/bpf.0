@@ -2,36 +2,27 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71886C6379F
-	for <bpf@archiver.kernel.org>; Wed, 15 Feb 2023 07:23:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D943C636D4
+	for <bpf@archiver.kernel.org>; Wed, 15 Feb 2023 07:53:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231645AbjBOHXJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Feb 2023 02:23:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51024 "EHLO
+        id S233736AbjBOHxR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Feb 2023 02:53:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjBOHXJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 15 Feb 2023 02:23:09 -0500
-Received: from out-73.mta0.migadu.com (out-73.mta0.migadu.com [IPv6:2001:41d0:1004:224b::49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2058229147
-        for <bpf@vger.kernel.org>; Tue, 14 Feb 2023 23:23:07 -0800 (PST)
-Message-ID: <2b1ddc4c-9905-899a-a903-e66a6e8b4d58@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1676445784;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IFiqL85OMFiRUxyY50Wh6JnMy06nSoBtvKZlaWOzJak=;
-        b=pTC20R3V5mXzsnvFhHTGaTwPyiELMUxm6Mfwm3iPy68yN/RrB9lJC0T0YY6r2v9x8ElQWP
-        EufUsXqckHqPffgzaKEk75vD0XQvzBfuZZpIOgreayX00NYDnc6uF/kkX9r6xcJl26CTG+
-        uyr6OB/smMlXzz6oqzKgNM9jRCE6ydU=
-Date:   Tue, 14 Feb 2023 23:22:56 -0800
-MIME-Version: 1.0
-Subject: Re: [RFC PATCH bpf-next 0/6] bpf: Handle reuse in bpf memory alloc
-Content-Language: en-US
-To:     Hou Tao <houtao@huaweicloud.com>
-Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Yonghong Song <yhs@meta.com>, bpf <bpf@vger.kernel.org>,
+        with ESMTP id S233500AbjBOHxQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 15 Feb 2023 02:53:16 -0500
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2BC29E18
+        for <bpf@vger.kernel.org>; Tue, 14 Feb 2023 23:53:15 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PGr0k177xz4f3l1p
+        for <bpf@vger.kernel.org>; Wed, 15 Feb 2023 15:53:10 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP4 (Coremail) with SMTP id gCh0CgCX_7Jjj+xjJrigDg--.18949S5;
+        Wed, 15 Feb 2023 15:53:12 +0800 (CST)
+From:   Hou Tao <houtao@huaweicloud.com>
+To:     bpf@vger.kernel.org
+Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
         Andrii Nakryiko <andrii@kernel.org>,
         Song Liu <song@kernel.org>, Hao Luo <haoluo@google.com>,
         Yonghong Song <yhs@fb.com>,
@@ -41,87 +32,138 @@ Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
         Stanislav Fomichev <sdf@google.com>,
         Jiri Olsa <jolsa@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        Hou Tao <houtao1@huawei.com>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-References: <20221230041151.1231169-1-houtao@huaweicloud.com>
- <20230101012629.nmpofewtlgdutqpe@macbook-pro-6.dhcp.thefacebook.com>
- <e5f502b5-ea71-8b96-3874-75e0e5a4932f@meta.com>
- <e96bc8c0-50fb-d6be-a86d-581c8a86232c@huaweicloud.com>
- <b9467cf4-38a7-9af6-0c1c-383f423b26eb@meta.com>
- <1d97a5c0-d1fb-a625-8e8d-25ef799ee9e2@huaweicloud.com>
- <e205d4a3-a885-93c7-5d02-2e9fd87348e8@meta.com>
- <CAADnVQLCWdN-Rw7BBxqErUdxBGOMNq39NkM3XJ=O=saG08yVgw@mail.gmail.com>
- <20230210163258.phekigglpquitq33@apollo>
- <CAADnVQLVi7CcW9ci62Dps4mxCEqHOYvYJ-Fant-0kSy0vPZ3AA@mail.gmail.com>
- <bf936f22-f8b7-c4a3-41a1-c3f2f115e67a@huaweicloud.com>
- <CAADnVQKecUqGF-gLFS5Wiz7_E-cHOkp7NPCUK0woHUmJG6hEuA@mail.gmail.com>
- <CAADnVQJzS9MQKS2EqrdxO7rVLyjUYD6OG-Yefak62-JRNcheZg@mail.gmail.com>
- <6d48c284-42eb-9688-4259-79b7f096e294@linux.dev>
- <7fef4ece-0982-cb43-ed39-e73791436355@huaweicloud.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <7fef4ece-0982-cb43-ed39-e73791436355@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        houtao1@huawei.com
+Subject: [PATCH bpf-next 1/2] bpf: Zeroing allocated object from slab in bpf memory allocator
+Date:   Wed, 15 Feb 2023 16:21:31 +0800
+Message-Id: <20230215082132.3856544-2-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20230215082132.3856544-1-houtao@huaweicloud.com>
+References: <20230215082132.3856544-1-houtao@huaweicloud.com>
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-CM-TRANSID: gCh0CgCX_7Jjj+xjJrigDg--.18949S5
+X-Coremail-Antispam: 1UD129KBjvJXoWxZF13Gr1kWF47WFyfKFWkCrg_yoWrGF4xpF
+        ZxWr4UGr48ZFs7A390qws3Cay7Awn3Ww1UKa98K34Yvr1Sqr9rWw1kJFyaqFy3Cr4vyF4r
+        tFZ293yFy3yUu37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUB0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
+        A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+        6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+        Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+        Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64
+        vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+        jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2I
+        x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK
+        8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
+        0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2mL9UUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2/14/23 8:02 PM, Hou Tao wrote:
->> For local storage, when its owner (sk/task/inode/cgrp) is going away, the
->> memory can be reused immediately. No rcu gp is needed.
-> Now it seems it will wait for RCU GP and i think it is still necessary, because
-> when the process exits, other processes may still access the local storage
-> through pidfd or task_struct of the exited process.
+From: Hou Tao <houtao1@huawei.com>
 
-When its owner (sk/task/cgrp...) is going away, its owner has reached refcnt 0 
-and will be kfree immediately next. eg. bpf_sk_storage_free is called just 
-before the sk is about to be kfree. No bpf prog should have a hold on this sk. 
-The same should go for the task.
+Currently the freed element in bpf memory allocator may be immediately
+reused, for htab map the reuse will reinitialize special fields in map
+value (e.g., bpf_spin_lock), but lookup procedure may still access
+these special fields, and it may lead to hard-lockup as shown below:
 
-The current rcu gp waiting during bpf_{sk,task,cgrp...}_storage_free is because 
-the racing with the map destruction bpf_local_storage_map_free().
+ NMI backtrace for cpu 16
+ CPU: 16 PID: 2574 Comm: htab.bin Tainted: G             L     6.1.0+ #1
+ Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+ RIP: 0010:queued_spin_lock_slowpath+0x283/0x2c0
+ ......
+ Call Trace:
+  <TASK>
+  copy_map_value_locked+0xb7/0x170
+  bpf_map_copy_value+0x113/0x3c0
+  __sys_bpf+0x1c67/0x2780
+  __x64_sys_bpf+0x1c/0x20
+  do_syscall_64+0x30/0x60
+  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+ ......
+  </TASK>
 
->>
->> The local storage delete case (eg. bpf_sk_storage_delete) is the only one that
->> needs to be freed by tasks_trace gp because another bpf prog (reader) may be
->> under the rcu_read_lock_trace(). I think the idea (BPF_REUSE_AFTER_RCU_GP) on
->> allowing reuse after vanilla rcu gp and free (if needed) after tasks_trace gp
->> can be extended to the local storage delete case. I think we can extend the
->> assumption that "sleepable progs (reader) can use explicit bpf_rcu_read_lock()
->> when they want to avoid uaf" to bpf_{sk,task,inode,cgrp}_storage_get() also.
->>
-> It seems bpf_rcu_read_lock() & bpf_rcu_read_unlock() will be used to protect not
-> only bpf_task_storage_get(), but also the dereferences of the returned local
-> storage ptr, right ? I think qp-trie may also need this.
+For htab map, just like the preallocated case, these is no need to
+initialize these special fields in map value again once these fields
+have been initialized. For preallocated htab map, these fields are
+initialized through __GFP_ZERO in bpf_map_area_alloc(), so do the
+similar thing for non-preallocated htab in bpf memory allocator. And
+there is no need to use __GFP_ZERO for per-cpu bpf memory allocator,
+because __alloc_percpu_gfp() does it implicitly.
 
-I think bpf_rcu_read_lock() is primarily for bpf prog.
+Fixes: 0fd7c5d43339 ("bpf: Optimize call_rcu in non-preallocated hash map.")
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ include/linux/bpf.h   | 7 +++++++
+ kernel/bpf/hashtab.c  | 4 ++--
+ kernel/bpf/memalloc.c | 2 +-
+ 3 files changed, 10 insertions(+), 3 deletions(-)
 
-The bpf_{sk,task,...}_storage_get() internal is easier to handle and probably 
-will need to do its own rcu_read_lock() instead of depending on the bpf prog 
-doing the bpf_rcu_read_lock() because the bpf prog may decide uaf is fine.
-
->> I also need the GFP_ZERO in bpf_mem_alloc, so will work on the GFP_ZERO and
->> the BPF_REUSE_AFTER_RCU_GP idea.  Probably will get the GFP_ZERO out first.
-> I will continue work on this patchset for GFP_ZERO and reuse flag. Do you mean
-> that you want to work together to implement BPF_REUSE_AFTER_RCU_GP ? How do we
-> cooperate together to accomplish that ?
-Please submit the GFP_ZERO patch first. Kumar and I can use it immediately.
-
-I have been hacking to make bpf's memalloc safe for the 
-bpf_{sk,task,cgrp..}_storage_delete() and this safe-on-reuse piece still need 
-works. The whole thing is getting pretty long, so my current plan is to put the 
-safe-on-reuse piece aside for now, focus back on the immediate goal and make the 
-common case deadlock free first. Meaning the 
-bpf_*_storage_get(BPF_*_STORAGE_GET_F_CREATE) and the bpf_*_storage_free() will 
-use the bpf_mem_cache_{alloc,free}. The bpf_*_storage_delete() will stay as-is 
-to go through the call_rcu_tasks_trace() for now since delete is not the common 
-use case.
-
-In parallel, if you can post the BPF_REUSE_AFTER_RCU_GP, we can discuss based on 
-your work. That should speed up the progress. If I finished the immediate goal 
-for local storage and this piece is still pending, I will ping you first.  Thoughts?
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index be34f7deb6c3..520b238abd5a 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -363,6 +363,13 @@ static inline void bpf_obj_init(const struct btf_field_offs *foffs, void *obj)
+ 		memset(obj + foffs->field_off[i], 0, foffs->field_sz[i]);
+ }
+ 
++/* 'dst' must be a temporary buffer and should not point to memory that is being
++ * used in parallel by a bpf program or bpf syscall, otherwise the access from
++ * the bpf program or bpf syscall may be corrupted by the reinitialization,
++ * leading to weird problems. Even 'dst' is newly-allocated from bpf memory
++ * allocator, it is still possible for 'dst' to be used in parallel by a bpf
++ * program or bpf syscall.
++ */
+ static inline void check_and_init_map_value(struct bpf_map *map, void *dst)
+ {
+ 	bpf_obj_init(map->field_offs, dst);
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index 66bded144377..5dfcb5ad0d06 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -1004,8 +1004,6 @@ static struct htab_elem *alloc_htab_elem(struct bpf_htab *htab, void *key,
+ 			l_new = ERR_PTR(-ENOMEM);
+ 			goto dec_count;
+ 		}
+-		check_and_init_map_value(&htab->map,
+-					 l_new->key + round_up(key_size, 8));
+ 	}
+ 
+ 	memcpy(l_new->key, key, key_size);
+@@ -1592,6 +1590,7 @@ static int __htab_map_lookup_and_delete_elem(struct bpf_map *map, void *key,
+ 			else
+ 				copy_map_value(map, value, l->key +
+ 					       roundup_key_size);
++			/* Zeroing special fields in the temp buffer */
+ 			check_and_init_map_value(map, value);
+ 		}
+ 
+@@ -1792,6 +1791,7 @@ __htab_map_lookup_and_delete_batch(struct bpf_map *map,
+ 						      true);
+ 			else
+ 				copy_map_value(map, dst_val, value);
++			/* Zeroing special fields in the temp buffer */
+ 			check_and_init_map_value(map, dst_val);
+ 		}
+ 		if (do_delete) {
+diff --git a/kernel/bpf/memalloc.c b/kernel/bpf/memalloc.c
+index 490d03a4581a..5fcdacbb8439 100644
+--- a/kernel/bpf/memalloc.c
++++ b/kernel/bpf/memalloc.c
+@@ -143,7 +143,7 @@ static void *__alloc(struct bpf_mem_cache *c, int node)
+ 		return obj;
+ 	}
+ 
+-	return kmalloc_node(c->unit_size, flags, node);
++	return kmalloc_node(c->unit_size, flags | __GFP_ZERO, node);
+ }
+ 
+ static struct mem_cgroup *get_memcg(const struct bpf_mem_cache *c)
+-- 
+2.29.2
 
