@@ -2,88 +2,214 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEA73C636D4
-	for <bpf@archiver.kernel.org>; Wed, 15 Feb 2023 23:50:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A898C636D4
+	for <bpf@archiver.kernel.org>; Wed, 15 Feb 2023 23:59:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbjBOXuU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Feb 2023 18:50:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46752 "EHLO
+        id S229593AbjBOX76 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Feb 2023 18:59:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjBOXuU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 15 Feb 2023 18:50:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE0E2E80D
-        for <bpf@vger.kernel.org>; Wed, 15 Feb 2023 15:50:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E1BBE61E01
-        for <bpf@vger.kernel.org>; Wed, 15 Feb 2023 23:50:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3ED7DC4339B;
-        Wed, 15 Feb 2023 23:50:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676505018;
-        bh=dn2QSdXrOPxJRh9Gjwe+YTuXbXcBmO8scispptu4Vog=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=igSyMIBbdjBdYEOVTrd3+zoIfh72+vBVOo9sq3fTIyFLxeNAhmwDQwruss/J2OpRE
-         F80gqG9S/8BivFz5b0IaSm97nVDXU544pkVUZZLtvR/ECXTZw/gqFcgCpr0/Ol45iC
-         hndVzVTrpcZpyMJA0YPoaGCBDggSxLiks3h3YIhIVTToYxk/1LZWx3T7p+zB+/nK3V
-         6pFeNx/Gtci1CjVrR8E+1vXU2X+blz88Joun2tl03wCh3eFlOwWh7NYYtHfbbB4NBH
-         clXOK6U/6hGOFRNxjUfq+psrIKTUdH3Og1PAmeFCTZyucVeRmIlWnZFvCdwtaa+AnB
-         Ah1/L1Fw4Tk/g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 24AF4C41676;
-        Wed, 15 Feb 2023 23:50:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229520AbjBOX75 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 15 Feb 2023 18:59:57 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109EE2367F
+        for <bpf@vger.kernel.org>; Wed, 15 Feb 2023 15:59:56 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31FLg1nN008732;
+        Wed, 15 Feb 2023 23:59:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=Qvc5ozM8xfc7Ya/Av7zWfDzNpbUAaG22bSROTRmmpsI=;
+ b=chljCmZIEIzqRtsIaaWHjpSngkCy4kUofTgYXR5OmQeXN7ShLv3L2EKGsh9VrHG0buwe
+ TOHKNS0YPJBeBwH95y8CpI5LB9DpIpgHmEX+d0t/yI5paB6ac9q+npy1IGemmVXGflu9
+ BRYUnlc+aVimLLEGseQKD6tkJZZTnhQoPFtLTnfb2vaWAHnay/V0oVE6StO2wiXhv3AA
+ 8kCYCEJPA4lAAlZKejT8YQ2b6bXA5ENquV6eRj5PGPdNWeo8LDfkHtfPWlWEP19M5BXC
+ qIS3a2CNvK+pxWDr3rMTuOLIcuhPzAZWRWsQDt4HaFHSueyBqzQfGq/leT+uEgyCOSeA fg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ns7hjaeny-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Feb 2023 23:59:42 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31FNva8F011830;
+        Wed, 15 Feb 2023 23:59:42 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ns7hjaene-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Feb 2023 23:59:42 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31FC7bbo010915;
+        Wed, 15 Feb 2023 23:59:39 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3np2n6wypj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Feb 2023 23:59:39 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31FNxaN122151756
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 15 Feb 2023 23:59:36 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2648520040;
+        Wed, 15 Feb 2023 23:59:36 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7DC632004B;
+        Wed, 15 Feb 2023 23:59:35 +0000 (GMT)
+Received: from heavy.boeblingen.de.ibm.com (unknown [9.179.4.133])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 15 Feb 2023 23:59:35 +0000 (GMT)
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>
+Subject: [PATCH RFC bpf-next v2 1/4] bpf: Introduce BPF_HELPER_CALL
+Date:   Thu, 16 Feb 2023 00:59:28 +0100
+Message-Id: <20230215235931.380197-2-iii@linux.ibm.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230215235931.380197-1-iii@linux.ibm.com>
+References: <20230215235931.380197-1-iii@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next 0/2] Use __GFP_ZERO in bpf memory allocator
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167650501814.26864.1394037113331993225.git-patchwork-notify@kernel.org>
-Date:   Wed, 15 Feb 2023 23:50:18 +0000
-References: <20230215082132.3856544-1-houtao@huaweicloud.com>
-In-Reply-To: <20230215082132.3856544-1-houtao@huaweicloud.com>
-To:     Hou Tao <houtao@huaweicloud.com>
-Cc:     bpf@vger.kernel.org, martin.lau@linux.dev, andrii@kernel.org,
-        song@kernel.org, haoluo@google.com, yhs@fb.com, ast@kernel.org,
-        daniel@iogearbox.net, kpsingh@kernel.org, sdf@google.com,
-        jolsa@kernel.org, john.fastabend@gmail.com, memxor@gmail.com,
-        houtao1@huawei.com
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: VmBEpwveHbCAFOIB6jxuKVkyvMdgXWVU
+X-Proofpoint-GUID: 52utQUk9D1nT88fEmtq8mMTQ0TLdCLKc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-15_14,2023-02-15_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 mlxscore=0 mlxlogscore=999 priorityscore=1501
+ phishscore=0 malwarescore=0 suspectscore=0 adultscore=0 clxscore=1015
+ spamscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302150200
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+Make the code more readable by introducing a symbolic constant
+instead of using 0.
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Suggested-by: Stanislav Fomichev <sdf@google.com>
+Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+---
+ include/uapi/linux/bpf.h       |  4 ++++
+ kernel/bpf/disasm.c            |  2 +-
+ kernel/bpf/verifier.c          | 12 +++++++-----
+ tools/include/linux/filter.h   |  2 +-
+ tools/include/uapi/linux/bpf.h |  4 ++++
+ 5 files changed, 17 insertions(+), 7 deletions(-)
 
-On Wed, 15 Feb 2023 16:21:30 +0800 you wrote:
-> From: Hou Tao <houtao1@huawei.com>
-> 
-> Hi,
-> 
-> The patchset tries to fix the hard-up problem found when checking how htab
-> handles element reuse in bpf memory allocator. The immediate reuse of
-> freed elements will reinitialize special fields (e.g., bpf_spin_lock) in
-> htab map value and it may corrupt lookup procedure with BFP_F_LOCK flag
-> which acquires bpf-spin-lock during value copying, and lead to hard-lock
-> as shown in patch #2. Patch #1 fixes it by using __GFP_ZERO when allocating
-> the object from slab and the behavior is similar with the preallocated
-> hash-table case. Please see individual patches for more details. And comments
-> are always welcome.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,1/2] bpf: Zeroing allocated object from slab in bpf memory allocator
-    https://git.kernel.org/bpf/bpf-next/c/997849c4b969
-  - [bpf-next,2/2] selftests/bpf: Add test case for element reuse in htab map
-    https://git.kernel.org/bpf/bpf-next/c/f88da2d46cc9
-
-You are awesome, thank you!
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 1503f61336b6..37f7588d5b2f 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -1211,6 +1211,10 @@ enum bpf_link_type {
+  */
+ #define BPF_PSEUDO_FUNC		4
+ 
++/* when bpf_call->src_reg == BPF_HELPER_CALL, bpf_call->imm == index of a bpf
++ * helper function (see ___BPF_FUNC_MAPPER below for a full list)
++ */
++#define BPF_HELPER_CALL		0
+ /* when bpf_call->src_reg == BPF_PSEUDO_CALL, bpf_call->imm == pc-relative
+  * offset to another bpf function
+  */
+diff --git a/kernel/bpf/disasm.c b/kernel/bpf/disasm.c
+index 7b4afb7d96db..c11d9b5a45a9 100644
+--- a/kernel/bpf/disasm.c
++++ b/kernel/bpf/disasm.c
+@@ -19,7 +19,7 @@ static const char *__func_get_name(const struct bpf_insn_cbs *cbs,
+ {
+ 	BUILD_BUG_ON(ARRAY_SIZE(func_id_str) != __BPF_FUNC_MAX_ID);
+ 
+-	if (!insn->src_reg &&
++	if (insn->src_reg == BPF_HELPER_CALL &&
+ 	    insn->imm >= 0 && insn->imm < __BPF_FUNC_MAX_ID &&
+ 	    func_id_str[insn->imm])
+ 		return func_id_str[insn->imm];
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 272563a0b770..427525fc3791 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2947,7 +2947,8 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx,
+ 			/* BPF helpers that invoke callback subprogs are
+ 			 * equivalent to BPF_PSEUDO_CALL above
+ 			 */
+-			if (insn->src_reg == 0 && is_callback_calling_function(insn->imm))
++			if (insn->src_reg == BPF_HELPER_CALL &&
++			    is_callback_calling_function(insn->imm))
+ 				return -ENOTSUPP;
+ 			/* kfunc with imm==0 is invalid and fixup_kfunc_call will
+ 			 * catch this error later. Make backtracking conservative
+@@ -7522,7 +7523,7 @@ static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 	}
+ 
+ 	if (insn->code == (BPF_JMP | BPF_CALL) &&
+-	    insn->src_reg == 0 &&
++	    insn->src_reg == BPF_HELPER_CALL &&
+ 	    insn->imm == BPF_FUNC_timer_set_callback) {
+ 		struct bpf_verifier_state *async_cb;
+ 
+@@ -14730,7 +14731,7 @@ static int do_check(struct bpf_verifier_env *env)
+ 				if (BPF_SRC(insn->code) != BPF_K ||
+ 				    (insn->src_reg != BPF_PSEUDO_KFUNC_CALL
+ 				     && insn->off != 0) ||
+-				    (insn->src_reg != BPF_REG_0 &&
++				    (insn->src_reg != BPF_HELPER_CALL &&
+ 				     insn->src_reg != BPF_PSEUDO_CALL &&
+ 				     insn->src_reg != BPF_PSEUDO_KFUNC_CALL) ||
+ 				    insn->dst_reg != BPF_REG_0 ||
+@@ -14740,7 +14741,8 @@ static int do_check(struct bpf_verifier_env *env)
+ 				}
+ 
+ 				if (env->cur_state->active_lock.ptr) {
+-					if ((insn->src_reg == BPF_REG_0 && insn->imm != BPF_FUNC_spin_unlock) ||
++					if ((insn->src_reg == BPF_HELPER_CALL &&
++					     insn->imm != BPF_FUNC_spin_unlock) ||
+ 					    (insn->src_reg == BPF_PSEUDO_CALL) ||
+ 					    (insn->src_reg == BPF_PSEUDO_KFUNC_CALL &&
+ 					     (insn->off != 0 || !is_bpf_graph_api_kfunc(insn->imm)))) {
+@@ -16933,7 +16935,7 @@ static struct bpf_prog *inline_bpf_loop(struct bpf_verifier_env *env,
+ static bool is_bpf_loop_call(struct bpf_insn *insn)
+ {
+ 	return insn->code == (BPF_JMP | BPF_CALL) &&
+-		insn->src_reg == 0 &&
++		insn->src_reg == BPF_HELPER_CALL &&
+ 		insn->imm == BPF_FUNC_loop;
+ }
+ 
+diff --git a/tools/include/linux/filter.h b/tools/include/linux/filter.h
+index 736bdeccdfe4..78dc208c8d88 100644
+--- a/tools/include/linux/filter.h
++++ b/tools/include/linux/filter.h
+@@ -261,7 +261,7 @@
+ 	((struct bpf_insn) {					\
+ 		.code  = BPF_JMP | BPF_CALL,			\
+ 		.dst_reg = 0,					\
+-		.src_reg = 0,					\
++		.src_reg = BPF_HELPER_CALL,			\
+ 		.off   = 0,					\
+ 		.imm   = ((FUNC) - BPF_FUNC_unspec) })
+ 
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 1503f61336b6..37f7588d5b2f 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -1211,6 +1211,10 @@ enum bpf_link_type {
+  */
+ #define BPF_PSEUDO_FUNC		4
+ 
++/* when bpf_call->src_reg == BPF_HELPER_CALL, bpf_call->imm == index of a bpf
++ * helper function (see ___BPF_FUNC_MAPPER below for a full list)
++ */
++#define BPF_HELPER_CALL		0
+ /* when bpf_call->src_reg == BPF_PSEUDO_CALL, bpf_call->imm == pc-relative
+  * offset to another bpf function
+  */
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.39.1
 
