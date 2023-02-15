@@ -2,183 +2,323 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8F46C636D4
-	for <bpf@archiver.kernel.org>; Wed, 15 Feb 2023 18:19:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3AA9C636D4
+	for <bpf@archiver.kernel.org>; Wed, 15 Feb 2023 18:29:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjBOSTF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Feb 2023 13:19:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41086 "EHLO
+        id S229520AbjBOS3Z (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Feb 2023 13:29:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbjBOSTE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 15 Feb 2023 13:19:04 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BAA11B;
-        Wed, 15 Feb 2023 10:19:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676485144; x=1708021144;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=4NP67ITDa8J/HzqaDgyutLOm22Ev+iB5wxteQCZ3tTY=;
-  b=gRfbiATP0PbQ5cJ9z4RXQI8C9ntUuea0jwz2D7ZJWdqkIzJ8WFRbaP9E
-   HGDfVF3KsVu9l2wZMQHdkrz5WLQ3u+lp+1HQObR3FPp0S7cj7qQrTYeF8
-   57WAsizUl50sZrybNPjDn6Cqv97gMyFgPes35l1H59isANO2qCyES/m0I
-   rPNHHPv/aJ/C5FlLdEcoeoTbd0nBmEAY/Cd1VaohZFAgOFs4TJt+3YRyY
-   CEnlxBbQWb+JfYBzQ1WF1U/kLCCh8xPKOtOeqkyhrOm+bgTaOI2NLBJ64
-   mKlydNiONtEYZhudeXd1Jeis2nQgae2ofvmwLO73Je7OC4YpFcU6Zu018
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="319545779"
-X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
-   d="scan'208";a="319545779"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP; 15 Feb 2023 10:13:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="793647964"
-X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
-   d="scan'208";a="793647964"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga004.jf.intel.com with ESMTP; 15 Feb 2023 10:13:23 -0800
-Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 15 Feb 2023 10:13:22 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Wed, 15 Feb 2023 10:13:22 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.105)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Wed, 15 Feb 2023 10:12:42 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TO8WRnCG1yHkYOzDrdiNw6x/LO9iI7GbtlBoXrdtU/ZEt0JAzK1ZdLk53PenKN9NxvIiL4ky0kGJ6KsD5Ih1nIrRNrnF6G1HkzlEcg5l975EiISLRWltfNUQiW5tD51VY9uyP7OOGrUcXQ/IAJ3wvxEtG8MTo07gqxayLKfCQfSn2d5W5rrTe98mxqZuz70Mo3rgE+9I8G1OSqXJVE4eHDnIolCsYkr8t8WnjUVBFiaFNMBKNKVDrgihmIuCm7dmCpOSMEOtPfhkScc/dn1W95pmedWTmZyiahQicqeePUk7+mWl55oXi/ChXlQwcMExX5JCZdd++JGYj9hB0D50ow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eOmHv1I0WPexMR+kMS3bPj25Fzln0U+hjWN8rMEKlzY=;
- b=VeU2pkPGpA7sOLvWlOnGyGjZb/sv6E59Dk9KXXnrn9HLBkSW/7XFmXNykLgF+J49dSnFp8T0Dcm9jN/rs3GQtoriBOGfKW2/+oHuR1HCSzMc0FP55WCkloxZ2qgco4KvzEvxQq4F6NpxyIPB0+yA4Cu53GANCbWevkre+M/SHPh0HoSrshl7i113OEHIsI8EHbt5fxOMB4M29qZm5xAgiztUHGRKTi0iXztc4wYjyri+e+lEQXI3Grv5HxcaKwNkmorEDyc07lkNKuOnV5jQMW3fXvDODePIVyQabEJPxxbVAhNig0znBRvTjgLUpg0k/noeU0IO1ozb2y0vOhcZ9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
- by SJ0PR11MB5792.namprd11.prod.outlook.com (2603:10b6:a03:425::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Wed, 15 Feb
- 2023 18:12:41 +0000
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::3ff6:ca60:f9fe:6934]) by DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::3ff6:ca60:f9fe:6934%4]) with mapi id 15.20.6086.026; Wed, 15 Feb 2023
- 18:12:41 +0000
-Message-ID: <447ea90f-bd4c-6200-4c56-8eefec7050e2@intel.com>
-Date:   Wed, 15 Feb 2023 19:11:20 +0100
+        with ESMTP id S229505AbjBOS3Y (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 15 Feb 2023 13:29:24 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED754302B2
+        for <bpf@vger.kernel.org>; Wed, 15 Feb 2023 10:29:22 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id d8-20020a17090ad98800b002344fa17c8bso2688804pjv.5
+        for <bpf@vger.kernel.org>; Wed, 15 Feb 2023 10:29:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fVsJ39VnxDwrhik889XH3a9xOkpZaoMPt/PYHBZPPhk=;
+        b=LjtI5EPHXnop/cpI6aCTW8UZTZmA7ja00nzFYG3UQMQJfmOnxDNyyeOHcF9SNTYjCR
+         5U/vMJxdtCDZUW9URw9GJMQ7grOtyWzyu9i3kmAd4OPEt3H3cS+XNlAz/srECQw3Uj7P
+         JzvlO1/XVQX+WygsQt11ZP08mnJF0msGbD5wSb9+yxQtBUrq/bwgICTHMG75bhnh6ltn
+         D0nwEd1z4P6M1rBQvZ0QZdVpPEThQEU6TsN9Y7ysuHtz8pNF+zjNlWSkZlI3s+jzC712
+         b9+QOfsQGKes0mTQNYozM9C2jyykJSI7594wr8idhZfGOajSCdlF00Tm1hJUdsJS51t8
+         MRGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fVsJ39VnxDwrhik889XH3a9xOkpZaoMPt/PYHBZPPhk=;
+        b=xO+x2gJzxsQU1C+Dfzf9J+gcNliuzDIFbVZgiDh/N9HhuzRicVn6nzQsA64ykK2zzy
+         T+2hxMYRLCST5QqUYf99azm67550WcIdgXcg7k1atkqW+KmObaOHeVn3RC6DhyFCHNFu
+         8byriTGCxwiVrJrzEXmwyKi68DimATk2O7u1/AQPPD6ojiiceJDTeCVv1w1X3y53dhw5
+         0uJtw/monT1SORBctx8c2yyuBygunbdl026LilfxszkYVYwvfzFiEjCEgP//o0arD4BJ
+         7uiDAE64toama+/0PncFf+MEnDb9GGXROBeFwSVYqyy6E1MN7bwpaAnYK+5ulk4lLjTq
+         VGww==
+X-Gm-Message-State: AO0yUKWl48IZtrjPT3OuFA/AmV3U+X39qjRQwREjpisIYCvZXV8tMqDk
+        hWVMn2SC8vuAAJzi3CpciTQ=
+X-Google-Smtp-Source: AK7set/d3J1iB6g1Kq4RNwT8+mtOSUnAVLm/5aQzFPWc1AaI+JxHY/qA3Po223PWiR1lLbAuW9gaLw==
+X-Received: by 2002:a17:902:db0b:b0:19a:7622:23e5 with SMTP id m11-20020a170902db0b00b0019a762223e5mr4308901plx.4.1676485762340;
+        Wed, 15 Feb 2023 10:29:22 -0800 (PST)
+Received: from ?IPV6:2620:10d:c085:21e8::1452? ([2620:10d:c090:400::5:1af8])
+        by smtp.gmail.com with ESMTPSA id y5-20020a170902d64500b00198ef76ce8dsm7019116plh.72.2023.02.15.10.29.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Feb 2023 10:29:21 -0800 (PST)
+Message-ID: <0af75eed-8ced-8590-bc12-0b7545545fdb@gmail.com>
+Date:   Wed, 15 Feb 2023 10:29:19 -0800
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v3 bpf] bpf, test_run: fix &xdp_frame misplacement for
- LIVE_FRAMES
+Subject: Re: [PATCH bpf-next 3/7] bpf: Register and unregister a struct_ops by
+ their bpf_links.
 Content-Language: en-US
-To:     Martin KaFai Lau <martin.lau@linux.dev>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        Song Liu <song@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, <bpf@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230215152141.3753548-1-aleksander.lobakin@intel.com>
- <7629c295-fc74-41fe-fd2e-28fe3a6e0846@linux.dev>
-From:   Alexander Lobakin <aleksander.lobakin@intel.com>
-In-Reply-To: <7629c295-fc74-41fe-fd2e-28fe3a6e0846@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+To:     Stanislav Fomichev <sdf@google.com>,
+        Kui-Feng Lee <kuifeng@meta.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, kernel-team@meta.com, andrii@kernel.org
+References: <20230214221718.503964-1-kuifeng@meta.com>
+ <20230214221718.503964-4-kuifeng@meta.com> <Y+xJJLAhPBzboOvo@google.com>
+From:   Kui-Feng Lee <sinquersw@gmail.com>
+In-Reply-To: <Y+xJJLAhPBzboOvo@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: LO0P123CA0012.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:354::20) To DM6PR11MB3625.namprd11.prod.outlook.com
- (2603:10b6:5:13a::21)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|SJ0PR11MB5792:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7e43902f-3c8d-4be0-7f2c-08db0f803a20
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0hMCcc+F9reE7HJTxQMoZWbXrRCGpDrW/EzVqlprLzmqjKr/OSBeBQK0CoYkZTmeME1C9wlNlTmQrtCp61Wk2o6GvnUwOfo6x48qUbGDSi3IojF93Y2X9HgyiDGndX75Q0Q5NKZH92qfV8M5cNPeEL0kmE17JLAuWGogYPyxnrxNB/OGrJLHaSbDzFCM5Ivy7Yb1dT4RCBADPOE3TXgyh/iFNAxLfvafmdgR7s8g9HKpdNZCfeatvaN/3v8JqIh/kkA+qRuINO63mmbRaesJOKNzauEg5Cl2LJWQeyHkbSr4PxRMOwSE9omFQ4C5lTxjLsvpqUPsBkut0Xm+8nI+Cef/HTuA3qp8hc9u/Cf52S7DejZzGLNX3ROJofz+YzJ7ra1jSoOAtpl3h02bBn7AUjFjYwS8ChsLeVU4ba3I5JNIC89fhkMZRI5xMj8MKXk1cVDYiiuHRYV+aHqG8ZuvpSejcF06Qh1U19pHJl5z0THmTWo8SoUAhbNsoK/sWxYfhGwM/z7mnXML6HZM/+QA6AA7fzZY3a/4EbosBYQ01Hi6jbbXW/cANrb7iSAag/ZI/TDAm4HievZs/zFVkqF7qjlyUu3GQt/t/i7sYA8PQpvk3oUhYcmIfuh5TzV19bJcTBmY9roVa6nZzD7JL/7mu/kTMgavEgh9Jf+z2WvBg7LHDQGgQ6d9dvlepSosQFHk4sKoQRiH2ksh2f/jZBCk703s7dBneaRMjl8Ce2MHFjw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(396003)(346002)(366004)(376002)(136003)(451199018)(31686004)(36756003)(31696002)(86362001)(66556008)(4744005)(66946007)(5660300002)(8676002)(66476007)(4326008)(41300700001)(7416002)(2906002)(8936002)(82960400001)(38100700002)(316002)(966005)(478600001)(6486002)(2616005)(6916009)(54906003)(6506007)(186003)(6512007)(26005)(6666004)(53546011)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YzRwL1FHU0JJaUJmdjM3NVdyTGRQWEVzOWMzYVJnMGZKVkJqWHo4b2Q0bmth?=
- =?utf-8?B?eWJPai9ualFoYlloMlRUNXZnSUJibkptZkRrZ3ZWVWNwc08wbVJXb21NZ1ZO?=
- =?utf-8?B?MmtTQk1vQk1LaEczWGM3UmJEa1VwTGtlSmtJWkxNbXppVHN2YURRUGRWRm1Q?=
- =?utf-8?B?TGlsWFVOWThSQ1F3LytpOGJoanE5MnpWQjZWSzZ1eUcyMWsxN1d2MHFLMytr?=
- =?utf-8?B?VDk1bnJCUlRQS1hMQ01JaWlXMW9WMHo2ZFBES2F3ZEtISGdvaE4wTGpvY3Zi?=
- =?utf-8?B?STJvWHJyN0M1UDU3blA1SUJyL3ZrNk9NbVVqWGZCWmtrcHBQcEJwRW9rMlc1?=
- =?utf-8?B?TkJEaTBsNUk4R2o2S2VEQjlCN3puSlI2RFByalJLbFd1N0dyN1dkMEpiZmxj?=
- =?utf-8?B?WlV4WkJPT0FCaWZpWHRnKzJJdmZ3M0N5SnFNSjRKUmhMdXZudUtwRVF5b1hz?=
- =?utf-8?B?dThIeW1DRzhGWkJXR3FCOHFXTlNLQVNnWGtjNXN5ZzlJb3A3alptUFozTURH?=
- =?utf-8?B?U1FGdkJNc3FGa1lTMjlsZ3NuRUtUTFBkbXBOeVFLazRNeEZYWXMvejAvc0E4?=
- =?utf-8?B?RUNrZ09KVjFSWENGcklNbGZpSTI5eFB2UWh2bGg4b0RyUUhLUXpBR3lSTGpV?=
- =?utf-8?B?ZGlwZWl3VThZSWRJWjZxR1EyWEQwVDUwNjR3bEVPaEtjdXhnQXpZVDV6b1pT?=
- =?utf-8?B?ekwwY0loaGRnYjhPb2ZlQ0tnenNlSzFMVlRvQndpWGFCdklTbytrbUpCZXh3?=
- =?utf-8?B?ZVBZdGoya0JJaEJnOEEzSXB2SFY3Q3hITE43YXV1Y2JzM1IzbnRzV01mTTR2?=
- =?utf-8?B?d3VSS1NxU3VQRWk4QWVUQWY0eE9nd2VNb09qT1hWSER1QTlQL1JuRjV3TE0v?=
- =?utf-8?B?djgyRWVENi9SaXR3VEwzclpsWEhWeVk4R0JkYUpjWFVmTWcwQnBRWDloWUFx?=
- =?utf-8?B?VE1pNEdSOUNsR05FQXRUK1UzZjVNaUw2aFB1MlRVTDNsUTRVcUZGaDkvS2Ny?=
- =?utf-8?B?VHNmb1N3NDNqUGl1Qzhad3ptZGJ4R3lucWdjeTU5SCtGb0w4V242b0lNelR2?=
- =?utf-8?B?cXNGbzROUGZoYkhrYnpRSUt1VE1KMDZpeEtzelc2bGIvaGtHWEV0RjlSS2dv?=
- =?utf-8?B?anFYaGM5dmFZdlBxSXVBVHdzb3U4STVURDZzR3FIdVhRcHJxcUVYVThmSU9O?=
- =?utf-8?B?VFZadjNpOFNrSkZQMTlWMFV6elN0US8zR0dQY245c1U5UjlSdEYzOWRqaWRT?=
- =?utf-8?B?R0EwS0U3QmxKc242QVppVFZwMXBIaWRqbG8zUmVuMTVLVTJLb01NWkc2bUhm?=
- =?utf-8?B?Nyt2aDRXdk9CZFA2YWhYWEVrOHVlQmdicTEwZW1KM3lSdzNXbEFET2tUNjBD?=
- =?utf-8?B?ZEZEUVg2Zzh5dVlaYWhlRGxWNGJXeTNCN1pwcHc2bWJzS052dkxoblVSRUpp?=
- =?utf-8?B?SDFNTkdRTmIxR0svSGhuMW9sYytLbHZra1I3aEhRcXRkSHc4bkhGaDQyS2x0?=
- =?utf-8?B?NFpxeHliOU1JNDRDdWNqazNQZUNRNlVUcHpHUW4yWXBxODR6ZlNpZDR6T3Rt?=
- =?utf-8?B?NVFkclZodlpKRmN2WHNPZXNQUldrZmM0Q1hFTGRkMVZncVdUckdGK1ZMMHZz?=
- =?utf-8?B?R0JXWVN5YWVvN01IYTFwS0d6cm43WWM3ZUpzZkdkQWxma0xOVGltekRlMGdm?=
- =?utf-8?B?cEt3MWdlNVJxaENsd3dHRjNvbnorUHBqdkZzbmw3bFRDclZ4aFZjUkp6a0h6?=
- =?utf-8?B?UGZZU2xtb0tETkZoa1QzSDhkaFZvM0d1MFlVV2VNeUN4VEZBNXh1eEErQWZk?=
- =?utf-8?B?TnhoczdWSnpyT3I2aDBrUC9rSFc1UklQRjJqYTgzNGczYnNjYkZQR3VTSVps?=
- =?utf-8?B?VU9pbGZOV0pwN05DbGJoWEVVbGZKQVBySEorSjZpU2JYdjBBUElyV0ZnMFVL?=
- =?utf-8?B?SDhpU214MU8rekhKRlVmNjJ4K2QvY1FvVnpkTzQvWU1lK2ExZC9nTVhBOVFi?=
- =?utf-8?B?ekJJVzczWGV5SmRnMHBrZjhuMjNOU2UyUzhXQXdJL3JPRnNxVzArdCtqUzBQ?=
- =?utf-8?B?YlVUdE5GakhzS09iSW1wSmQxMWVzY2V6b3lCejdOVFBrTEJvdTVnaWorTXFp?=
- =?utf-8?B?ZUxOQVVqNmhHOG5Qcy9MZzJnN3VWZThPZ0hrYnNvc2JKeTFRY0FmN21VYXg4?=
- =?utf-8?Q?ldsuw0nj81FGtYFSPi6pOYg=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7e43902f-3c8d-4be0-7f2c-08db0f803a20
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2023 18:12:41.0527
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1fXNwm5AHy8QmuT6Ej/5wgbeEyZlnleigeiea2/xZA7fTxiGKXGjS6mxKBKUdaxhmbbU5Pi6E8bkJk3V3AoaEuOLUzoDdz5NN9NQbD7xJf8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5792
-X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Martin Kafai Lau <martin.lau@linux.dev>
-Date: Wed, 15 Feb 2023 10:04:51 -0800
 
-> On 2/15/23 7:21 AM, Alexander Lobakin wrote:
->>   /* The maximum permissible size is: PAGE_SIZE - sizeof(struct
->> xdp_page_head) -
->> - * sizeof(struct skb_shared_info) - XDP_PACKET_HEADROOM = 3368 bytes
->> + * sizeof(struct skb_shared_info) - XDP_PACKET_HEADROOM = 3408 bytes
->>    */
->> -#define MAX_PKT_SIZE 3368
->> +#define MAX_PKT_SIZE 3408
-> 
-> s390 has a different cache line size:
-> 
-> https://lore.kernel.org/all/20230128000650.1516334-11-iii@linux.ibm.com/
-> 
-> The above s390 fix is in bpf-next. It is better to target this patch for
-> bpf-next also such that the CI can test it in s390.
-> 
+On 2/14/23 18:53, Stanislav Fomichev wrote:
+> On 02/14, Kui-Feng Lee wrote:
+>> Registration via bpf_links ensures a uniform behavior, just like other
+>> BPF programs.  BPF struct_ops were registered/unregistered when
+>> updating/deleting their values.  Only the maps of struct_ops having
+>> the BPF_F_LINK flag are allowed to back a bpf_link.
+>
+>> Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
+>> ---
+>>   include/uapi/linux/bpf.h       |  3 ++
+>>   kernel/bpf/bpf_struct_ops.c    | 59 +++++++++++++++++++++++++++++++---
+>>   tools/include/uapi/linux/bpf.h |  3 ++
+>>   3 files changed, 61 insertions(+), 4 deletions(-)
+>
+>> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+>> index 1e6cdd0f355d..48d8b3058aa1 100644
+>> --- a/include/uapi/linux/bpf.h
+>> +++ b/include/uapi/linux/bpf.h
+>> @@ -1267,6 +1267,9 @@ enum {
+>
+>>   /* Create a map that is suitable to be an inner map with dynamic 
+>> max entries */
+>>       BPF_F_INNER_MAP        = (1U << 12),
+>> +
+>> +/* Create a map that will be registered/unregesitered by the backed 
+>> bpf_link */
+>> +    BPF_F_LINK        = (1U << 13),
+>>   };
+>
+>>   /* Flags for BPF_PROG_QUERY. */
+>> diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
+>> index 621c8e24481a..d16ca06cf09a 100644
+>> --- a/kernel/bpf/bpf_struct_ops.c
+>> +++ b/kernel/bpf/bpf_struct_ops.c
+>> @@ -390,7 +390,7 @@ static int bpf_struct_ops_map_update_elem(struct 
+>> bpf_map *map, void *key,
+>
+>>       mutex_lock(&st_map->lock);
+>
+>> -    if (kvalue->state != BPF_STRUCT_OPS_STATE_INIT) {
+>> +    if (kvalue->state != BPF_STRUCT_OPS_STATE_INIT || 
+>> refcount_read(&kvalue->refcnt)) {
+>>           err = -EBUSY;
+>>           goto unlock;
+>>       }
+>> @@ -491,6 +491,12 @@ static int bpf_struct_ops_map_update_elem(struct 
+>> bpf_map *map, void *key,
+>>           *(unsigned long *)(udata + moff) = prog->aux->id;
+>>       }
+>
+>> +    if (st_map->map.map_flags & BPF_F_LINK) {
+>> +        /* Let bpf_link handle registration & unregistration. */
+>> +        smp_store_release(&kvalue->state, BPF_STRUCT_OPS_STATE_INUSE);
+>> +        goto unlock;
+>> +    }
+>> +
+>>       refcount_set(&kvalue->refcnt, 1);
+>>       bpf_map_inc(map);
+>
+>
+> [..]
+>
+>> @@ -522,6 +528,7 @@ static int bpf_struct_ops_map_update_elem(struct 
+>> bpf_map *map, void *key,
+>>       kfree(tlinks);
+>>       mutex_unlock(&st_map->lock);
+>>       return err;
+>> +
+>>   }
+>
+>>   static int bpf_struct_ops_map_delete_elem(struct bpf_map *map, void 
+>> *key)
+>
+> Seems like a left over hunk?
 
-Oh, thanks for letting me know! Will do in a bit.
 
-Thanks,
-Olek
+You are right.  I will remove it.
+
+
+>
+>> @@ -535,6 +542,8 @@ static int bpf_struct_ops_map_delete_elem(struct 
+>> bpf_map *map, void *key)
+>>                    BPF_STRUCT_OPS_STATE_TOBEFREE);
+>>       switch (prev_state) {
+>>       case BPF_STRUCT_OPS_STATE_INUSE:
+>> +        if (st_map->map.map_flags & BPF_F_LINK)
+>> +            return 0;
+>> st_map->st_ops->unreg(&st_map->kvalue.data);
+>>           if (refcount_dec_and_test(&st_map->kvalue.refcnt))
+>>               bpf_map_put(map);
+>> @@ -585,7 +594,7 @@ static void bpf_struct_ops_map_free(struct 
+>> bpf_map *map)
+>>   static int bpf_struct_ops_map_alloc_check(union bpf_attr *attr)
+>>   {
+>>       if (attr->key_size != sizeof(unsigned int) || attr->max_entries 
+>> != 1 ||
+>> -        attr->map_flags || !attr->btf_vmlinux_value_type_id)
+>> +        (attr->map_flags & ~BPF_F_LINK) || 
+>> !attr->btf_vmlinux_value_type_id)
+>>           return -EINVAL;
+>>       return 0;
+>>   }
+>> @@ -638,6 +647,8 @@ static struct bpf_map 
+>> *bpf_struct_ops_map_alloc(union bpf_attr *attr)
+>>       set_vm_flush_reset_perms(st_map->image);
+>>       bpf_map_init_from_attr(map, attr);
+>
+>
+> [..]
+>
+>> +    map->map_flags |= attr->map_flags & BPF_F_LINK;
+>
+> You seem to have the following check above:
+>
+> if (.... (attr->map_flags & ~BPF_F_LINK) ...) return -EINVAL;
+>
+> And here you do:
+>
+> map->map_flags |= attr->map_flags & BPF_F_LINK;
+>
+> So maybe we can simplify to:
+> map->map_flags |= attr->map_flags;
+>
+> ?
+
+Great catch!
+
+
+>
+>> +
+>>       return map;
+>>   }
+>
+>> @@ -699,10 +710,25 @@ void bpf_struct_ops_put(const void *kdata)
+>>       }
+>>   }
+>
+>> +static void bpf_struct_ops_kvalue_put(struct bpf_struct_ops_value 
+>> *kvalue)
+>> +{
+>> +    struct bpf_struct_ops_map *st_map;
+>> +
+>> +    if (refcount_dec_and_test(&kvalue->refcnt)) {
+>> +        st_map = container_of(kvalue, struct bpf_struct_ops_map,
+>> +                      kvalue);
+>> +        bpf_map_put(&st_map->map);
+>> +    }
+>> +}
+>> +
+>>   static void bpf_struct_ops_map_link_release(struct bpf_link *link)
+>>   {
+>> +    struct bpf_struct_ops_map *st_map;
+>> +
+>>       if (link->map) {
+>> -        bpf_map_put(link->map);
+>> +        st_map = (struct bpf_struct_ops_map *)link->map;
+>> + st_map->st_ops->unreg(&st_map->kvalue.data);
+>> +        bpf_struct_ops_kvalue_put(&st_map->kvalue);
+>>           link->map = NULL;
+>>       }
+>>   }
+>> @@ -735,13 +761,15 @@ static const struct bpf_link_ops 
+>> bpf_struct_ops_map_lops = {
+>
+>>   int link_create_struct_ops_map(union bpf_attr *attr, bpfptr_t uattr)
+>>   {
+>> +    struct bpf_struct_ops_map *st_map;
+>>       struct bpf_link_primer link_primer;
+>> +    struct bpf_struct_ops_value *kvalue;
+>>       struct bpf_map *map;
+>>       struct bpf_link *link = NULL;
+>>       int err;
+>
+>>       map = bpf_map_get(attr->link_create.prog_fd);
+>> -    if (map->map_type != BPF_MAP_TYPE_STRUCT_OPS)
+>> +    if (map->map_type != BPF_MAP_TYPE_STRUCT_OPS || !(map->map_flags 
+>> & BPF_F_LINK))
+>>           return -EINVAL;
+>
+>>       link = kzalloc(sizeof(*link), GFP_USER);
+>> @@ -752,6 +780,29 @@ int link_create_struct_ops_map(union bpf_attr 
+>> *attr, bpfptr_t uattr)
+>>       bpf_link_init(link, BPF_LINK_TYPE_STRUCT_OPS, 
+>> &bpf_struct_ops_map_lops, NULL);
+>>       link->map = map;
+>
+>
+> [..]
+>
+>> +    if (map->map_flags & BPF_F_LINK) {
+>
+> We seem to bail out above when we don't have BPF_F_LINK flags above?
+>
+> if (map->map_type != BPF_MAP_TYPE_STRUCT_OPS || !(map->map_flags & 
+> BPF_F_LINK))
+>     return -EINVAL;
+>
+> So why check this 'if (map->map_flags & BPF_F_LINK)' condition here?
+
+
+You are right! This check is not necessary anymore.
+
+
+>
+>
+>> +        st_map = (struct bpf_struct_ops_map *)map;
+>> +        kvalue = (struct bpf_struct_ops_value *)&st_map->kvalue;
+>> +
+>> +        if (kvalue->state != BPF_STRUCT_OPS_STATE_INUSE ||
+>> +            refcount_read(&kvalue->refcnt) != 0) {
+>> +            err = -EINVAL;
+>> +            goto err_out;
+>> +        }
+>> +
+>> +        refcount_set(&kvalue->refcnt, 1);
+>> +
+>> +        set_memory_rox((long)st_map->image, 1);
+>> +        err = st_map->st_ops->reg(kvalue->data);
+>> +        if (err) {
+>> +            refcount_set(&kvalue->refcnt, 0);
+>> +
+>> +            set_memory_nx((long)st_map->image, 1);
+>> +            set_memory_rw((long)st_map->image, 1);
+>> +            goto err_out;
+>> +        }
+>> +    }
+>> +
+>>       err = bpf_link_prime(link, &link_primer);
+>>       if (err)
+>>           goto err_out;
+>> diff --git a/tools/include/uapi/linux/bpf.h 
+>> b/tools/include/uapi/linux/bpf.h
+>> index 1e6cdd0f355d..48d8b3058aa1 100644
+>> --- a/tools/include/uapi/linux/bpf.h
+>> +++ b/tools/include/uapi/linux/bpf.h
+>> @@ -1267,6 +1267,9 @@ enum {
+>
+>>   /* Create a map that is suitable to be an inner map with dynamic 
+>> max entries */
+>>       BPF_F_INNER_MAP        = (1U << 12),
+>> +
+>> +/* Create a map that will be registered/unregesitered by the backed 
+>> bpf_link */
+>> +    BPF_F_LINK        = (1U << 13),
+>>   };
+>
+>>   /* Flags for BPF_PROG_QUERY. */
+>> -- 
+>> 2.30.2
+>
