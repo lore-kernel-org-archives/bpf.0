@@ -2,110 +2,83 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F126C6FD18
-	for <bpf@archiver.kernel.org>; Wed, 15 Feb 2023 12:33:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF9E8C64EC7
+	for <bpf@archiver.kernel.org>; Wed, 15 Feb 2023 12:43:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233443AbjBOMdJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Feb 2023 07:33:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49782 "EHLO
+        id S231193AbjBOMnK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Feb 2023 07:43:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230492AbjBOMdG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 15 Feb 2023 07:33:06 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797803669C;
-        Wed, 15 Feb 2023 04:33:05 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id be8so20085885plb.7;
-        Wed, 15 Feb 2023 04:33:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1IsC8ng/nt0IIOs5zLEhvzEjLU5ZtX7trPinF9wC4HY=;
-        b=XpjVcbaAfAVK6cvQGU8LDsYr96rqAbvOVHsTzUlNZqTf6q6zEyEXhHiraiEGhgr6a4
-         f8PSxKnB5I5nSqeED5HwnD7OFwqfdrbjru1pzgA0SzLob3RBUE/f22Sks3NVtY7if7PN
-         LCvI/3Ug6wKAf5ihUKtvqERBxvgW0eFHx3n4iWOtDrliTYYvaiuQYFmpRef3q/+t4wNV
-         ylIQA66PF8DlHMoCTeXnJq2RXyqBXBIdto+B4MZTSP0prH6tT3sY7OJbLUFZvsXPWr1Y
-         v+F/zLqf9Wla01E4HQtZ0lJncCLgOB5vT41JeiqEeDxKpEg2gNRFNh2Qp8XWYf/FcDYB
-         DhnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1IsC8ng/nt0IIOs5zLEhvzEjLU5ZtX7trPinF9wC4HY=;
-        b=c80ieYSvL+YEUhXOWq3d6zH0kD/EVGzJPWFzpEBWxYtpSv6kXYSnT8v3d2mx7vTA06
-         +60bWUlNzURoyK8rIRnlr3r5U98dRXLIZM/mK8rNEw2RwO8DifU1Q/5UK6Ts3TqwMWy0
-         e5WJSGd02xtB8jTnPcPPgA3kq2ry45ALTL1wLfPmEiY6NAdn+k9sAXvm9RUlkvvQ9u8m
-         65UJkWkskLTuUp/jPyoIK8Xm+QWSYXOqEJ46u0NOiyHedaBkQFULpHBLloZDHH5nHiMj
-         W99fkZ65Uizzc19CiQbL7XyueCunjggZcp82hpeC5NbvjEpz4aQIDMV6U/JGIs64gqkf
-         1pYQ==
-X-Gm-Message-State: AO0yUKWp1rdIK4h95rQlPGLWZJEkiuJnbnLYwtYU9Qxj9zojxDBZMJsq
-        oPSfVM3zfK2+cEJ2Un8WBKQ=
-X-Google-Smtp-Source: AK7set9sYhrmqIc2PoBdRatAonL/QL6fPII6/8bPAa4/6SESq5JoJ9lV3XsruwM0w5/4COASa9t/rQ==
-X-Received: by 2002:a05:6a20:e688:b0:b8:78dd:5fa2 with SMTP id mz8-20020a056a20e68800b000b878dd5fa2mr1533864pzb.52.1676464384335;
-        Wed, 15 Feb 2023 04:33:04 -0800 (PST)
-Received: from debian.me (subs03-180-214-233-93.three.co.id. [180.214.233.93])
-        by smtp.gmail.com with ESMTPSA id u9-20020a63a909000000b004790eb3fee1sm10219535pge.90.2023.02.15.04.33.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 04:33:03 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 70F8C1055EA; Wed, 15 Feb 2023 19:32:58 +0700 (WIB)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Linux Documentation <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Power Management <linux-pm@vger.kernel.org>,
-        Linux BPF Development <bpf@vger.kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Huang Rui <ray.huang@amd.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
+        with ESMTP id S233681AbjBOMnJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 15 Feb 2023 07:43:09 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77666311CD;
+        Wed, 15 Feb 2023 04:43:08 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PGyRF73j9z4x7w;
+        Wed, 15 Feb 2023 23:43:05 +1100 (AEDT)
+From:   Michael Ellerman <patch-notifications@ellerman.id.au>
+To:     Nicholas Piggin <npiggin@gmail.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
         Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Perry Yuan <perry.yuan@amd.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Wyes Karny <wyes.karny@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        oe-kbuild-all@lists.linux.dev
-Subject: [PATCH 0/3] Documentation fixes for next-20230215
-Date:   Wed, 15 Feb 2023 19:32:50 +0700
-Message-Id: <20230215123253.41552-1-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.39.1
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yonghong Song <yhs@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, Jiri Olsa <jolsa@kernel.org>,
+        linux-kernel@vger.kernel.org, Hao Luo <haoluo@google.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
+        KP Singh <kpsingh@kernel.org>, Song Liu <song@kernel.org>
+In-Reply-To: <4fd69ef7945518c3e27f96b95046a5c1468d35bf.1675245773.git.christophe.leroy@csgroup.eu>
+References: <4fd69ef7945518c3e27f96b95046a5c1468d35bf.1675245773.git.christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH v2 1/9] powerpc: Remove __kernel_text_address() in show_instructions()
+Message-Id: <167646484231.1421441.4745112349089639781.b4-ty@ellerman.id.au>
+Date:   Wed, 15 Feb 2023 23:40:42 +1100
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=832; i=bagasdotme@gmail.com; h=from:subject; bh=/OLtDi2ZSSHFwhtEVzxXuHzhqWiXCRsIhg/ssojQQRs=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDMlvLry90P20YdMKq8sTi8OPLpn7s4x/y//U2uoXJT6mT/YV O+236ChlYRDjYpAVU2SZlMjXdHqXkciF9rWOMHNYmUCGMHBxCsBEUsQZ/md7dP5oNzG4fMz6/uOM62 vmpoTuMGs48nJlW+dHNekTttKMDPsNG7c8vf/mur7iF6c7rXpXuT311luYpmws56mVXf17GRMA
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Here are fixes for documentation (htmldocs) warnings as reported for
-next-20230215. The changelog below should be self-explanatory.
+On Wed, 1 Feb 2023 11:04:23 +0100, Christophe Leroy wrote:
+> That test was introducted in 2006 by
+> commit 00ae36de49cc ("[POWERPC] Better check in show_instructions").
+> At that time, there was no BPF progs.
+> 
+> As seen in message of commit 89d21e259a94 ("powerpc/bpf/32: Fix Oops
+> on tail call tests"), when a page fault occurs in test_bpf.ko for
+> instance, the code is dumped as XXXXXXXXs. Allthough
+> __kernel_text_address() checks is_bpf_text_address(), it seems it is
+> not enough.
+> 
+> [...]
 
-Each patch can be applied separately by respective maintainers.
+Applied to powerpc/next.
 
-Bagas Sanjaya (3):
-  Documentation: hw-vuln: Wrap mitigate_smt_rsb example in literal code
-    block
-  Documentation: bpf: Add missing line break separator in node_data
-    struct code block
-  Documentation: amd-pstate: disambiguate user space sections
+[1/9] powerpc: Remove __kernel_text_address() in show_instructions()
+      https://git.kernel.org/powerpc/c/d9ab6da64fd15608c9feb20d769d8df1a32fe212
+[2/9] powerpc/bpf/32: No need to zeroise r4 when not doing tail call
+      https://git.kernel.org/powerpc/c/6376ed8feca829039d31a208216b958f0e439d87
+[3/9] powerpc/bpf/32: Only set a stack frame when necessary
+      https://git.kernel.org/powerpc/c/d084dcf256bc4565b4b1af9b00297ac7b51c7049
+[4/9] powerpc/bpf/32: BPF prog is never called with more than one arg
+      https://git.kernel.org/powerpc/c/7dd0e2848764306d7a70943b97584ffdc7754708
+[5/9] powerpc/bpf: Perform complete extra passes to update addresses
+      https://git.kernel.org/powerpc/c/85e031154c7c14edee0705532a9ffc8a2fe591d0
+[6/9] powerpc/bpf: Only pad length-variable code at initial pass
+      https://git.kernel.org/powerpc/c/d3921cbb6cd663193cecf04f0b170a30c6d0e390
+[7/9] powerpc/bpf/32: Optimise some particular const operations
+      https://git.kernel.org/powerpc/c/8616045fe785229b53a24b8698631826298d1500
+[8/9] powerpc/bpf/32: introduce a second source register for ALU operations
+      https://git.kernel.org/powerpc/c/c88da29b4d2ce8d0070646b8f99729e9b355a4bf
+[9/9] powerpc/bpf/32: perform three operands ALU operations
+      https://git.kernel.org/powerpc/c/19daf0aef84f33bde9c742ed41b4ded567b8dfbf
 
- Documentation/admin-guide/hw-vuln/cross-thread-rsb.rst | 3 ++-
- Documentation/admin-guide/pm/amd-pstate.rst            | 8 ++++----
- Documentation/bpf/graph_ds_impl.rst                    | 1 +
- 3 files changed, 7 insertions(+), 5 deletions(-)
-
-
-base-commit: 9d9019bcea1aac7eed64a1a4966282b6b7b141c8
--- 
-An old man doll... just what I always wanted! - Clara
-
+cheers
