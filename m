@@ -2,100 +2,82 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69D9CC636CC
-	for <bpf@archiver.kernel.org>; Wed, 15 Feb 2023 16:47:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E25A0C636CC
+	for <bpf@archiver.kernel.org>; Wed, 15 Feb 2023 16:50:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbjBOQrv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Feb 2023 11:47:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56452 "EHLO
+        id S229813AbjBOQuY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Feb 2023 11:50:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjBOQru (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 15 Feb 2023 11:47:50 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4B01F5E1
-        for <bpf@vger.kernel.org>; Wed, 15 Feb 2023 08:47:47 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id f18-20020a7bcd12000000b003e206711347so1046536wmj.0
-        for <bpf@vger.kernel.org>; Wed, 15 Feb 2023 08:47:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fWHjfdnMXLnQeONF9Y7BIQMZus7HNyosrdlc0gUe7+g=;
-        b=J/jK7AjKWop+Rl0aFS17ZsocQqSdyG1w5Ph6rCrHVj4dfmwrZUj8WVXY9XDg7gZMrA
-         vQoxexjnBVZU3MSWcWeLbtkg2EZd+EK5hpBv70HKajGab90wUbTNbtZ4/GxnC+G+f+EG
-         zOl45XKkBDDTN2JXq1NTuwEWpb1h3RC5w+bug=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fWHjfdnMXLnQeONF9Y7BIQMZus7HNyosrdlc0gUe7+g=;
-        b=qwt1r4pCVNvKQ9X80ml5RjESCSKl76I8lCZrypp6k8tLshTKKTUy+BPsZSO5nCNj4Y
-         Gm6yQfm59h9YCevt2bJeb3V6SWvousYmUAdwGkbPoLSYv70vm4txaN0yqwcCDCpw5a3S
-         OCLlFsErtGHqUZzGAuvrU/PZkiyH60yto91ndDh5Z3av0WHpG5zicS3+AKtvciRQxAXI
-         L4pjyW12Q5yZTcVsHowQ+Tndhu6u8341I+jHKB7uJGhLb+3YoBIqeedKBTKbEepCp1Qx
-         eZObl1q+4QLclbjWToAIjZ2DYL27BtcXhJ6KVny4t2vvVNvD+Q1OnoigxnJ3s7fJw1w2
-         r9+w==
-X-Gm-Message-State: AO0yUKUQ0Tc0a6TGk3ymMHLL+ielSPY1hyq6+GiffZ9K4K7rnk2rm84E
-        dy1vo96SfEWTk/M1j/m6aoOBNk2e5Is+gCVg
-X-Google-Smtp-Source: AK7set+MohFiDvkgUEA4Wr16OZCzBJtedjE0Hptcz9oaS3aTwTVVgZk8Ofwc7gmlHvDYCR8plie/NA==
-X-Received: by 2002:a05:600c:4747:b0:3dc:4042:5c21 with SMTP id w7-20020a05600c474700b003dc40425c21mr2562744wmo.6.1676479666061;
-        Wed, 15 Feb 2023 08:47:46 -0800 (PST)
-Received: from localhost ([2620:10d:c092:500::4:270c])
-        by smtp.gmail.com with ESMTPSA id he8-20020a05600c540800b003e208cec49bsm566397wmb.3.2023.02.15.08.47.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 08:47:45 -0800 (PST)
-Date:   Wed, 15 Feb 2023 16:47:44 +0000
-From:   Chris Down <chris@chrisdown.name>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     mcgrof@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-        trix@redhat.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        llvm@lists.linux.dev, Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] module: Remove the unused function within
-Message-ID: <Y+0MsMomkcDBdjNI@chrisdown.name>
-References: <20230210064243.116335-1-jiapeng.chong@linux.alibaba.com>
+        with ESMTP id S229678AbjBOQuW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 15 Feb 2023 11:50:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FD349747;
+        Wed, 15 Feb 2023 08:50:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EBAEB61CED;
+        Wed, 15 Feb 2023 16:50:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 52076C4339E;
+        Wed, 15 Feb 2023 16:50:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676479817;
+        bh=Ppg5Lw0syIaOQbx7tKQT6J+9i/+U/v5NnOvPAfvJ8xE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=S4oGPt1wk8hTblliNjEUQP8rIKGwTdyIQS7lZ29BlBXGIlXQwHujXk2Ye1h3Gl7H7
+         hOPi4q05VdQ8MQNFwTHOCMYf7LT/XbWF/vDgpQyxKV5KvRjF1HsXMh6+71ZALKl3DP
+         lfnKjMEwzIZgU3VmKI3Ou3Y33dCg54Lj0LTj06TdL4m0B0B1EizKLk3lyF5UT0P+wl
+         1fxIa/ZoPDtWtvn+52Ez5D1sXaizs0azo/2BvqFPXvOU7RByGu8BknPJOVLnEBdn1/
+         66xqBhkLzQPmW0vyVmhNdy7cgA+UVsANxfETVQ76s32BL5y4kfC3dkUn/xDPuEmP4e
+         HB46uLqCV9DSw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3A42FE29F41;
+        Wed, 15 Feb 2023 16:50:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230210064243.116335-1-jiapeng.chong@linux.alibaba.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] bpf, docs: Add myself to BPF docs MAINTAINERS entry
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167647981723.6958.10599726108070077422.git-patchwork-notify@kernel.org>
+Date:   Wed, 15 Feb 2023 16:50:17 +0000
+References: <20230214223553.78353-1-void@manifault.com>
+In-Reply-To: <20230214223553.78353-1-void@manifault.com>
+To:     David Vernet <void@manifault.com>
+Cc:     bpf@vger.kernel.org, bpf@ietf.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@meta.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, dthaler@microsoft.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Jiapeng Chong writes:
->The function within is defined in the main.c file, but not called
->elsewhere, so remove this unused function.
+Hello:
 
-Huh? It's used by __module_text_address(), no?
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
->kernel/module/main.c:3007:19: warning: unused function 'within'.
->
->Reported-by: Abaci Robot <abaci@linux.alibaba.com>
->Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4035
->Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
->---
-> kernel/module/main.c | 5 -----
-> 1 file changed, 5 deletions(-)
->
->diff --git a/kernel/module/main.c b/kernel/module/main.c
->index c598f11e7016..062065568b40 100644
->--- a/kernel/module/main.c
->+++ b/kernel/module/main.c
->@@ -3004,11 +3004,6 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
-> 	return load_module(&info, uargs, flags);
-> }
->
->-static inline int within(unsigned long addr, void *start, unsigned long size)
->-{
->-	return ((void *)addr >= start && (void *)addr < start + size);
->-}
->-
-> /* Keep in sync with MODULE_FLAGS_BUF_SIZE !!! */
-> char *module_flags(struct module *mod, char *buf, bool show_state)
-> {
->-- 
->2.20.1.7.g153144c
->
+On Tue, 14 Feb 2023 16:35:53 -0600 you wrote:
+> In commit 7e2a9ebe8126 ("docs, bpf: Ensure IETF's BPF mailing list gets
+> copied for ISA doc changes"), a new MAINTAINERS entry was added for any
+> BPF IETF documentation updates for the ongoing standardization process.
+> I've been making it a point to try and review as many BPF documentation
+> patches as possible, and have made a committment to Alexei to
+> consistently review BPF standardization patches going forward. This
+> patch adds my name as a reviewer to the MAINTAINERS entry for the
+> standardization effort.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next] bpf, docs: Add myself to BPF docs MAINTAINERS entry
+    https://git.kernel.org/bpf/bpf-next/c/213aacb8a27b
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
