@@ -2,28 +2,28 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BEE6C636D7
-	for <bpf@archiver.kernel.org>; Thu, 16 Feb 2023 22:56:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39A65C636CC
+	for <bpf@archiver.kernel.org>; Thu, 16 Feb 2023 22:56:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbjBPW4X (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Feb 2023 17:56:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49710 "EHLO
+        id S229538AbjBPW4Z (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Feb 2023 17:56:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbjBPW4T (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Feb 2023 17:56:19 -0500
+        with ESMTP id S229670AbjBPW4X (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Feb 2023 17:56:23 -0500
 Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C2838EA8
-        for <bpf@vger.kernel.org>; Thu, 16 Feb 2023 14:56:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9236B48E3D
+        for <bpf@vger.kernel.org>; Thu, 16 Feb 2023 14:56:21 -0800 (PST)
 Received: by devvm15675.prn0.facebook.com (Postfix, from userid 115148)
-        id D91ED6A5C84A; Thu, 16 Feb 2023 14:56:08 -0800 (PST)
+        id 17C176A5C837; Thu, 16 Feb 2023 14:56:07 -0800 (PST)
 From:   Joanne Koong <joannelkoong@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     martin.lau@kernel.org, andrii@kernel.org, memxor@gmail.com,
         ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
         kernel-team@fb.com, Joanne Koong <joannelkoong@gmail.com>
-Subject: [PATCH v10 bpf-next 5/9] bpf: Refactor verifier dynptr into get_dynptr_arg_reg
-Date:   Thu, 16 Feb 2023 14:55:20 -0800
-Message-Id: <20230216225524.1192789-6-joannelkoong@gmail.com>
+Subject: [PATCH v10 bpf-next 3/9] bpf: Allow initializing dynptrs in kfuncs
+Date:   Thu, 16 Feb 2023 14:55:18 -0800
+Message-Id: <20230216225524.1192789-4-joannelkoong@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230216225524.1192789-1-joannelkoong@gmail.com>
 References: <20230216225524.1192789-1-joannelkoong@gmail.com>
@@ -33,134 +33,199 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This commit refactors the logic for determining which register in a
-function is the dynptr into "get_dynptr_arg_reg". This will be used
-in the future when the dynptr reg for BPF_FUNC_dynptr_write will need
-to be obtained in order to support writes for skb dynptrs.
+This change allows kfuncs to take in an uninitialized dynptr as a
+parameter. Before this change, only helper functions could successfully
+use uninitialized dynptrs. This change moves the memory access check
+(including stack state growing and slot marking) into
+process_dynptr_func(), which both helpers and kfuncs call into.
 
 Signed-off-by: Joanne Koong <joannelkoong@gmail.com>
 ---
- kernel/bpf/verifier.c | 80 +++++++++++++++++++++++++++----------------
- 1 file changed, 50 insertions(+), 30 deletions(-)
+ kernel/bpf/verifier.c | 67 ++++++++++++++-----------------------------
+ 1 file changed, 22 insertions(+), 45 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index de99fa02b8d8..babc82e93ae6 100644
+index 23a7749e8463..de99fa02b8d8 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -6664,6 +6664,28 @@ int check_func_arg_reg_off(struct bpf_verifier_env=
- *env,
+@@ -268,7 +268,6 @@ struct bpf_call_arg_meta {
+ 	u32 ret_btf_id;
+ 	u32 subprogno;
+ 	struct btf_field *kptr_field;
+-	u8 uninit_dynptr_regno;
+ };
+=20
+ struct btf *btf_vmlinux;
+@@ -6216,10 +6215,11 @@ static int process_kptr_func(struct bpf_verifier_=
+env *env, int regno,
+  * Helpers which do not mutate the bpf_dynptr set MEM_RDONLY in their ar=
+gument
+  * type, and declare it as 'const struct bpf_dynptr *' in their prototyp=
+e.
+  */
+-int process_dynptr_func(struct bpf_verifier_env *env, int regno,
+-			enum bpf_arg_type arg_type, struct bpf_call_arg_meta *meta)
++int process_dynptr_func(struct bpf_verifier_env *env, int regno, int ins=
+n_idx,
++			enum bpf_arg_type arg_type)
+ {
+ 	struct bpf_reg_state *regs =3D cur_regs(env), *reg =3D &regs[regno];
++	int err;
+=20
+ 	/* MEM_UNINIT and MEM_RDONLY are exclusive, when applied to an
+ 	 * ARG_PTR_TO_DYNPTR (or ARG_PTR_TO_DYNPTR | DYNPTR_TYPE_*):
+@@ -6245,23 +6245,23 @@ int process_dynptr_func(struct bpf_verifier_env *=
+env, int regno,
+ 	 *		 to.
+ 	 */
+ 	if (arg_type & MEM_UNINIT) {
++		int i;
++
+ 		if (!is_dynptr_reg_valid_uninit(env, reg)) {
+ 			verbose(env, "Dynptr has to be an uninitialized dynptr\n");
+ 			return -EINVAL;
+ 		}
+=20
+-		/* We only support one dynptr being uninitialized at the moment,
+-		 * which is sufficient for the helper functions we have right now.
+-		 */
+-		if (meta->uninit_dynptr_regno) {
+-			verbose(env, "verifier internal error: multiple uninitialized dynptr =
+args\n");
+-			return -EFAULT;
++		/* we write BPF_DW bits (8 bytes) at a time */
++		for (i =3D 0; i < BPF_DYNPTR_SIZE; i +=3D 8) {
++			err =3D check_mem_access(env, insn_idx, regno,
++					       i, BPF_DW, BPF_WRITE, -1, false);
++			if (err)
++				return err;
+ 		}
+=20
+-		meta->uninit_dynptr_regno =3D regno;
++		err =3D mark_stack_slots_dynptr(env, reg, arg_type, insn_idx);
+ 	} else /* MEM_RDONLY and None case from above */ {
+-		int err;
+-
+ 		/* For the reg->type =3D=3D PTR_TO_STACK case, bpf_dynptr is never con=
+st */
+ 		if (reg->type =3D=3D CONST_PTR_TO_DYNPTR && !(arg_type & MEM_RDONLY)) =
+{
+ 			verbose(env, "cannot pass pointer to const bpf_dynptr, the helper mut=
+ates it\n");
+@@ -6297,10 +6297,8 @@ int process_dynptr_func(struct bpf_verifier_env *e=
+nv, int regno,
+ 		}
+=20
+ 		err =3D mark_dynptr_read(env, reg);
+-		if (err)
+-			return err;
  	}
+-	return 0;
++	return err;
  }
 =20
-+static struct bpf_reg_state *get_dynptr_arg_reg(struct bpf_verifier_env =
-*env,
-+						const struct bpf_func_proto *fn,
-+						struct bpf_reg_state *regs)
-+{
-+	struct bpf_reg_state *state =3D NULL;
-+	int i;
-+
-+	for (i =3D 0; i < MAX_BPF_FUNC_REG_ARGS; i++)
-+		if (arg_type_is_dynptr(fn->arg_type[i])) {
-+			if (state) {
-+				verbose(env, "verifier internal error: multiple dynptr args\n");
-+				return NULL;
-+			}
-+			state =3D &regs[BPF_REG_1 + i];
-+		}
-+
-+	if (!state)
-+		verbose(env, "verifier internal error: no dynptr arg found\n");
-+
-+	return state;
-+}
-+
- static int dynptr_id(struct bpf_verifier_env *env, struct bpf_reg_state =
-*reg)
+ static bool arg_type_is_mem_size(enum bpf_arg_type type)
+@@ -6694,7 +6692,8 @@ static int dynptr_ref_obj_id(struct bpf_verifier_en=
+v *env, struct bpf_reg_state
+=20
+ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 			  struct bpf_call_arg_meta *meta,
+-			  const struct bpf_func_proto *fn)
++			  const struct bpf_func_proto *fn,
++			  int insn_idx)
  {
- 	struct bpf_func_state *state =3D func(env, reg);
-@@ -8305,43 +8327,41 @@ static int check_helper_call(struct bpf_verifier_=
-env *env, struct bpf_insn *insn
- 		}
+ 	u32 regno =3D BPF_REG_1 + arg;
+ 	struct bpf_reg_state *regs =3D cur_regs(env), *reg =3D &regs[regno];
+@@ -6907,7 +6906,7 @@ static int check_func_arg(struct bpf_verifier_env *=
+env, u32 arg,
+ 		err =3D check_mem_size_reg(env, reg, regno, true, meta);
  		break;
- 	case BPF_FUNC_dynptr_data:
--		for (i =3D 0; i < MAX_BPF_FUNC_REG_ARGS; i++) {
--			if (arg_type_is_dynptr(fn->arg_type[i])) {
--				struct bpf_reg_state *reg =3D &regs[BPF_REG_1 + i];
--				int id, ref_obj_id;
--
--				if (meta.dynptr_id) {
--					verbose(env, "verifier internal error: meta.dynptr_id already set\n=
-");
--					return -EFAULT;
--				}
--
--				if (meta.ref_obj_id) {
--					verbose(env, "verifier internal error: meta.ref_obj_id already set\=
-n");
--					return -EFAULT;
--				}
-+	{
-+		struct bpf_reg_state *reg;
-+		int id, ref_obj_id;
-=20
--				id =3D dynptr_id(env, reg);
--				if (id < 0) {
--					verbose(env, "verifier internal error: failed to obtain dynptr id\n=
-");
--					return id;
--				}
-+		reg =3D get_dynptr_arg_reg(env, fn, regs);
-+		if (!reg)
-+			return -EFAULT;
-=20
--				ref_obj_id =3D dynptr_ref_obj_id(env, reg);
--				if (ref_obj_id < 0) {
--					verbose(env, "verifier internal error: failed to obtain dynptr ref_=
-obj_id\n");
--					return ref_obj_id;
--				}
-=20
--				meta.dynptr_id =3D id;
--				meta.ref_obj_id =3D ref_obj_id;
--				break;
--			}
-+		if (meta.dynptr_id) {
-+			verbose(env, "verifier internal error: meta.dynptr_id already set\n")=
-;
-+			return -EFAULT;
- 		}
--		if (i =3D=3D MAX_BPF_FUNC_REG_ARGS) {
--			verbose(env, "verifier internal error: no dynptr in bpf_dynptr_data()=
-\n");
-+		if (meta.ref_obj_id) {
-+			verbose(env, "verifier internal error: meta.ref_obj_id already set\n"=
-);
- 			return -EFAULT;
- 		}
-+
-+		id =3D dynptr_id(env, reg);
-+		if (id < 0) {
-+			verbose(env, "verifier internal error: failed to obtain dynptr id\n")=
-;
-+			return id;
-+		}
-+
-+		ref_obj_id =3D dynptr_ref_obj_id(env, reg);
-+		if (ref_obj_id < 0) {
-+			verbose(env, "verifier internal error: failed to obtain dynptr ref_ob=
-j_id\n");
-+			return ref_obj_id;
-+		}
-+
-+		meta.dynptr_id =3D id;
-+		meta.ref_obj_id =3D ref_obj_id;
-+
+ 	case ARG_PTR_TO_DYNPTR:
+-		err =3D process_dynptr_func(env, regno, arg_type, meta);
++		err =3D process_dynptr_func(env, regno, insn_idx, arg_type);
+ 		if (err)
+ 			return err;
  		break;
-+	}
- 	case BPF_FUNC_user_ringbuf_drain:
- 		err =3D __check_func_call(env, insn, insn_idx_p, meta.subprogno,
- 					set_user_ringbuf_callback_state);
+@@ -8197,7 +8196,7 @@ static int check_helper_call(struct bpf_verifier_en=
+v *env, struct bpf_insn *insn
+ 	meta.func_id =3D func_id;
+ 	/* check args */
+ 	for (i =3D 0; i < MAX_BPF_FUNC_REG_ARGS; i++) {
+-		err =3D check_func_arg(env, i, &meta, fn);
++		err =3D check_func_arg(env, i, &meta, fn, insn_idx);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -8222,30 +8221,6 @@ static int check_helper_call(struct bpf_verifier_e=
+nv *env, struct bpf_insn *insn
+=20
+ 	regs =3D cur_regs(env);
+=20
+-	/* This can only be set for PTR_TO_STACK, as CONST_PTR_TO_DYNPTR cannot
+-	 * be reinitialized by any dynptr helper. Hence, mark_stack_slots_dynpt=
+r
+-	 * is safe to do directly.
+-	 */
+-	if (meta.uninit_dynptr_regno) {
+-		if (regs[meta.uninit_dynptr_regno].type =3D=3D CONST_PTR_TO_DYNPTR) {
+-			verbose(env, "verifier internal error: CONST_PTR_TO_DYNPTR cannot be =
+initialized\n");
+-			return -EFAULT;
+-		}
+-		/* we write BPF_DW bits (8 bytes) at a time */
+-		for (i =3D 0; i < BPF_DYNPTR_SIZE; i +=3D 8) {
+-			err =3D check_mem_access(env, insn_idx, meta.uninit_dynptr_regno,
+-					       i, BPF_DW, BPF_WRITE, -1, false);
+-			if (err)
+-				return err;
+-		}
+-
+-		err =3D mark_stack_slots_dynptr(env, &regs[meta.uninit_dynptr_regno],
+-					      fn->arg_type[meta.uninit_dynptr_regno - BPF_REG_1],
+-					      insn_idx);
+-		if (err)
+-			return err;
+-	}
+-
+ 	if (meta.release_regno) {
+ 		err =3D -EINVAL;
+ 		/* This can only be set for PTR_TO_STACK, as CONST_PTR_TO_DYNPTR canno=
+t
+@@ -9455,7 +9430,8 @@ static int process_kf_arg_ptr_to_rbtree_node(struct=
+ bpf_verifier_env *env,
+ 						  &meta->arg_rbtree_root.field);
+ }
+=20
+-static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfu=
+nc_call_arg_meta *meta)
++static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfu=
+nc_call_arg_meta *meta,
++			    int insn_idx)
+ {
+ 	const char *func_name =3D meta->func_name, *ref_tname;
+ 	const struct btf *btf =3D meta->btf;
+@@ -9652,7 +9628,8 @@ static int check_kfunc_args(struct bpf_verifier_env=
+ *env, struct bpf_kfunc_call_
+ 				return -EINVAL;
+ 			}
+=20
+-			ret =3D process_dynptr_func(env, regno, ARG_PTR_TO_DYNPTR | MEM_RDONL=
+Y, NULL);
++			ret =3D process_dynptr_func(env, regno, insn_idx,
++						  ARG_PTR_TO_DYNPTR | MEM_RDONLY);
+ 			if (ret < 0)
+ 				return ret;
+ 			break;
+@@ -9860,7 +9837,7 @@ static int check_kfunc_call(struct bpf_verifier_env=
+ *env, struct bpf_insn *insn,
+ 	}
+=20
+ 	/* Check the arguments */
+-	err =3D check_kfunc_args(env, &meta);
++	err =3D check_kfunc_args(env, &meta, insn_idx);
+ 	if (err < 0)
+ 		return err;
+ 	/* In case of release function, we get register number of refcounted
 --=20
 2.30.2
 
