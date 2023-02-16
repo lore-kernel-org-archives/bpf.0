@@ -2,29 +2,27 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83233C636D4
-	for <bpf@archiver.kernel.org>; Thu, 16 Feb 2023 02:17:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA76AC636D4
+	for <bpf@archiver.kernel.org>; Thu, 16 Feb 2023 02:20:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjBPCRD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Feb 2023 21:17:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36024 "EHLO
+        id S229520AbjBPCUH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Feb 2023 21:20:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjBPCRC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 15 Feb 2023 21:17:02 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89026274BA
-        for <bpf@vger.kernel.org>; Wed, 15 Feb 2023 18:17:00 -0800 (PST)
-Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PHJNs6P70zFqSL;
-        Thu, 16 Feb 2023 10:12:13 +0800 (CST)
-Received: from [10.174.176.117] (10.174.176.117) by
- dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 16 Feb 2023 10:16:28 +0800
-Subject: Re: [PATCH bpf-next] bpf: Only allocate one bpf_mem_cache for
- bpf_cpumask_ma
-To:     Hou Tao <houtao@huaweicloud.com>, <bpf@vger.kernel.org>
-CC:     Martin KaFai Lau <martin.lau@linux.dev>,
+        with ESMTP id S229489AbjBPCUH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 15 Feb 2023 21:20:07 -0500
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA852A17F
+        for <bpf@vger.kernel.org>; Wed, 15 Feb 2023 18:20:04 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PHJYq1ryWz4f3m6k
+        for <bpf@vger.kernel.org>; Thu, 16 Feb 2023 10:19:59 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP4 (Coremail) with SMTP id gCh0CgBH_rHMku1j6onSDg--.19120S4;
+        Thu, 16 Feb 2023 10:19:57 +0800 (CST)
+From:   Hou Tao <houtao@huaweicloud.com>
+To:     bpf@vger.kernel.org
+Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
         Andrii Nakryiko <andrii@kernel.org>,
         Song Liu <song@kernel.org>, Hao Luo <haoluo@google.com>,
         Yonghong Song <yhs@fb.com>,
@@ -34,89 +32,100 @@ CC:     Martin KaFai Lau <martin.lau@linux.dev>,
         Stanislav Fomichev <sdf@google.com>,
         Jiri Olsa <jolsa@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
-        David Vernet <void@manifault.com>
-References: <20230216024134.2094999-1-houtao@huaweicloud.com>
-From:   Hou Tao <houtao1@huawei.com>
-Message-ID: <7736864d-af8d-4f74-086b-0ec125aae2a6@huawei.com>
-Date:   Thu, 16 Feb 2023 10:16:27 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        David Vernet <void@manifault.com>, houtao1@huawei.com
+Subject: [PATCH bpf-next v2] bpf: Only allocate one bpf_mem_cache for bpf_cpumask_ma
+Date:   Thu, 16 Feb 2023 10:48:21 +0800
+Message-Id: <20230216024821.2202916-1-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-In-Reply-To: <20230216024134.2094999-1-houtao@huaweicloud.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.176.117]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500025.china.huawei.com (7.185.36.35)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgBH_rHMku1j6onSDg--.19120S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxAw4xAw43AryrZry3Ar13Arb_yoW5XFyUpF
+        4xJrW0krWDtF4kGw47X3WxAa45G34vgwn2ka4UWry5uFyfuw4kGF4DXFW7XFn09rWDCayx
+        Ar9Ygr409ryUJ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkIb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
+        IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
+        z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUbPEf5UUUUU==
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Sorry, please disregard this patch. I forgot to fix the typo in it. Will resend.
+From: Hou Tao <houtao1@huawei.com>
 
-On 2/16/2023 10:41 AM, Hou Tao wrote:
-> From: Hou Tao <houtao1@huawei.com>
->
-> The size of bpf_cpumask is fixed, so there is no need to allocate many
-> bpf_mem_caches for bpf_cpumask_ma, just one bpf_mem_cache is enough.
-> Also add comments for bpf_mem_alloc_init() in bpf_mem_alloc.h to prevent
-> future miuse.
->
-> Signed-off-by: Hou Tao <houtao1@huawei.com>
-> ---
->  include/linux/bpf_mem_alloc.h | 7 +++++++
->  kernel/bpf/cpumask.c          | 6 +++---
->  2 files changed, 10 insertions(+), 3 deletions(-)
->
-> diff --git a/include/linux/bpf_mem_alloc.h b/include/linux/bpf_mem_alloc.h
-> index 3e164b8efaa9..a7104af61ab4 100644
-> --- a/include/linux/bpf_mem_alloc.h
-> +++ b/include/linux/bpf_mem_alloc.h
-> @@ -14,6 +14,13 @@ struct bpf_mem_alloc {
->  	struct work_struct work;
->  };
->  
-> +/* 'size != 0' is for bpf_mem_alloc which manages fixed-size objects.
-> + * Alloc and free are done with bpf_mem_cache_{alloc,free}().
-> + *
-> + * 'size = 0' is for bpf_mem_alloc which manages many fixed-size objects.
-> + * Alloc and free are done with bpf_mem_{alloc,free}() and the size of
-> + * the returned object is given by the size argument of bpf_mem_alloc().
-> + */
->  int bpf_mem_alloc_init(struct bpf_mem_alloc *ma, int size, bool percpu);
->  void bpf_mem_alloc_destroy(struct bpf_mem_alloc *ma);
->  
-> diff --git a/kernel/bpf/cpumask.c b/kernel/bpf/cpumask.c
-> index 52b981512a35..711434b556fb 100644
-> --- a/kernel/bpf/cpumask.c
-> +++ b/kernel/bpf/cpumask.c
-> @@ -55,7 +55,7 @@ __bpf_kfunc struct bpf_cpumask *bpf_cpumask_create(void)
->  	/* cpumask must be the first element so struct bpf_cpumask be cast to struct cpumask. */
->  	BUILD_BUG_ON(offsetof(struct bpf_cpumask, cpumask) != 0);
->  
-> -	cpumask = bpf_mem_alloc(&bpf_cpumask_ma, sizeof(*cpumask));
-> +	cpumask = bpf_mem_cache_alloc(&bpf_cpumask_ma);
->  	if (!cpumask)
->  		return NULL;
->  
-> @@ -123,7 +123,7 @@ __bpf_kfunc void bpf_cpumask_release(struct bpf_cpumask *cpumask)
->  
->  	if (refcount_dec_and_test(&cpumask->usage)) {
->  		migrate_disable();
-> -		bpf_mem_free(&bpf_cpumask_ma, cpumask);
-> +		bpf_mem_cache_free(&bpf_cpumask_ma, cpumask);
->  		migrate_enable();
->  	}
->  }
-> @@ -468,7 +468,7 @@ static int __init cpumask_kfunc_init(void)
->  		},
->  	};
->  
-> -	ret = bpf_mem_alloc_init(&bpf_cpumask_ma, 0, false);
-> +	ret = bpf_mem_alloc_init(&bpf_cpumask_ma, sieof(struct bpf_cpumask), false);
->  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &cpumask_kfunc_set);
->  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &cpumask_kfunc_set);
->  	return  ret ?: register_btf_id_dtor_kfuncs(cpumask_dtors,
+The size of bpf_cpumask is fixed, so there is no need to allocate many
+bpf_mem_caches for bpf_cpumask_ma, just one bpf_mem_cache is enough.
+Also add comments for bpf_mem_alloc_init() in bpf_mem_alloc.h to prevent
+future miuse.
+
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+v2: fix typo (forget to regenerate the patch after testing)
+v1: https://lore.kernel.org/bpf/7736864d-af8d-4f74-086b-0ec125aae2a6@huawei.com/T/#t
+
+ include/linux/bpf_mem_alloc.h | 7 +++++++
+ kernel/bpf/cpumask.c          | 6 +++---
+ 2 files changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/bpf_mem_alloc.h b/include/linux/bpf_mem_alloc.h
+index 3e164b8efaa9..a7104af61ab4 100644
+--- a/include/linux/bpf_mem_alloc.h
++++ b/include/linux/bpf_mem_alloc.h
+@@ -14,6 +14,13 @@ struct bpf_mem_alloc {
+ 	struct work_struct work;
+ };
+ 
++/* 'size != 0' is for bpf_mem_alloc which manages fixed-size objects.
++ * Alloc and free are done with bpf_mem_cache_{alloc,free}().
++ *
++ * 'size = 0' is for bpf_mem_alloc which manages many fixed-size objects.
++ * Alloc and free are done with bpf_mem_{alloc,free}() and the size of
++ * the returned object is given by the size argument of bpf_mem_alloc().
++ */
+ int bpf_mem_alloc_init(struct bpf_mem_alloc *ma, int size, bool percpu);
+ void bpf_mem_alloc_destroy(struct bpf_mem_alloc *ma);
+ 
+diff --git a/kernel/bpf/cpumask.c b/kernel/bpf/cpumask.c
+index 52b981512a35..2b3fbbfebdc5 100644
+--- a/kernel/bpf/cpumask.c
++++ b/kernel/bpf/cpumask.c
+@@ -55,7 +55,7 @@ __bpf_kfunc struct bpf_cpumask *bpf_cpumask_create(void)
+ 	/* cpumask must be the first element so struct bpf_cpumask be cast to struct cpumask. */
+ 	BUILD_BUG_ON(offsetof(struct bpf_cpumask, cpumask) != 0);
+ 
+-	cpumask = bpf_mem_alloc(&bpf_cpumask_ma, sizeof(*cpumask));
++	cpumask = bpf_mem_cache_alloc(&bpf_cpumask_ma);
+ 	if (!cpumask)
+ 		return NULL;
+ 
+@@ -123,7 +123,7 @@ __bpf_kfunc void bpf_cpumask_release(struct bpf_cpumask *cpumask)
+ 
+ 	if (refcount_dec_and_test(&cpumask->usage)) {
+ 		migrate_disable();
+-		bpf_mem_free(&bpf_cpumask_ma, cpumask);
++		bpf_mem_cache_free(&bpf_cpumask_ma, cpumask);
+ 		migrate_enable();
+ 	}
+ }
+@@ -468,7 +468,7 @@ static int __init cpumask_kfunc_init(void)
+ 		},
+ 	};
+ 
+-	ret = bpf_mem_alloc_init(&bpf_cpumask_ma, 0, false);
++	ret = bpf_mem_alloc_init(&bpf_cpumask_ma, sizeof(struct bpf_cpumask), false);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &cpumask_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &cpumask_kfunc_set);
+ 	return  ret ?: register_btf_id_dtor_kfuncs(cpumask_dtors,
+-- 
+2.29.2
 
