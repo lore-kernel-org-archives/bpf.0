@@ -2,196 +2,153 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BC06C64EC4
-	for <bpf@archiver.kernel.org>; Thu, 16 Feb 2023 12:12:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70DD2C636CC
+	for <bpf@archiver.kernel.org>; Thu, 16 Feb 2023 12:28:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjBPMM0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Feb 2023 07:12:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
+        id S229538AbjBPM2x (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Feb 2023 07:28:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjBPMMZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Feb 2023 07:12:25 -0500
-Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBAF56483;
-        Thu, 16 Feb 2023 04:12:22 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xiaoguang.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0Vbof6OJ_1676549539;
-Received: from 30.221.150.53(mailfrom:xiaoguang.wang@linux.alibaba.com fp:SMTPD_---0Vbof6OJ_1676549539)
-          by smtp.aliyun-inc.com;
-          Thu, 16 Feb 2023 20:12:20 +0800
-Message-ID: <54043113-e524-6ca2-ce77-08d45099aff2@linux.alibaba.com>
-Date:   Thu, 16 Feb 2023 20:12:18 +0800
+        with ESMTP id S229501AbjBPM2w (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Feb 2023 07:28:52 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752552202E;
+        Thu, 16 Feb 2023 04:28:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676550531; x=1708086531;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=gzSkb7Yln6um4SZcuaIYR/kVFncxRVh2mAf2hPXjHuM=;
+  b=Y/Dx5YxWqoM34ifLkcl7lIu1ea37V4P1TRxapaL2M/xbAtymOarnz/s1
+   B1IXfC/isbLrhY5vrdT4NrKxBHIiv2o8MUakvlTv4ZyYJLhtf6Oukgxro
+   bV7PT8Y6j34gn3OcT/4ouyyRRB8mddCD9W0Tfi95NM2FkoMkEcFqi+NL5
+   L2iooJjKcBrfU7M/AU/f6uUTyglYT5F7Wbemj+R9oxXkJdnd0Ar/H6F7n
+   YI7Ss1/zCdHsR90WURydDFyfpJ6t1vfer7eZaY32GdWc+kDu/jVNR43Wh
+   egrBOKKyTI4keHwIi/DCUwoUd3Q97TLysosZY+f8Ro3lL2g9N+AXAWZTY
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="311334087"
+X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
+   d="scan'208";a="311334087"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 04:28:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="619972846"
+X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
+   d="scan'208";a="619972846"
+Received: from boxer.igk.intel.com ([10.102.20.173])
+  by orsmga003.jf.intel.com with ESMTP; 16 Feb 2023 04:28:49 -0800
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     intel-wired-lan@lists.osuosl.org
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        anthony.l.nguyen@intel.com, magnus.karlsson@intel.com,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: [PATCH intel-net] ice: xsk: disable txq irq before flushing hw
+Date:   Thu, 16 Feb 2023 13:28:39 +0100
+Message-Id: <20230216122839.6878-1-maciej.fijalkowski@intel.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [RFC 3/3] ublk_drv: add ebpf support
-Content-Language: en-US
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     linux-block@vger.kernel.org, io-uring@vger.kernel.org,
-        bpf@vger.kernel.org, axboe@kernel.dk, asml.silence@gmail.com,
-        ZiyangZhang@linux.alibaba.com
-References: <20230215004122.28917-1-xiaoguang.wang@linux.alibaba.com>
- <20230215004122.28917-4-xiaoguang.wang@linux.alibaba.com>
- <Y+3lOn04pdFtdGbr@T590>
-From:   Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
-In-Reply-To: <Y+3lOn04pdFtdGbr@T590>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-hello,
+ice_qp_dis() intends to stop a given queue pair that is a target of xsk
+pool attach/detach. One of the steps is to disable interrupts on these
+queues. It currently is broken in a way that txq irq is turned off
+*after* HW flush which in turn takes no effect.
 
-> On Wed, Feb 15, 2023 at 08:41:22AM +0800, Xiaoguang Wang wrote:
->> Currenly only one bpf_ublk_queue_sqe() ebpf is added, ublksrv target
->> can use this helper to write ebpf prog to support ublk kernel & usersapce
->> zero copy, please see ublksrv test codes for more info.
->>
->>  	 */
->> +	if ((req_op(req) == REQ_OP_WRITE) && ub->io_prep_prog)
->> +		return rq_bytes;
-> Can you explain a bit why READ isn't supported? Because WRITE zero
-> copy is supposed to be supported easily with splice based approach,
-> and I am more interested in READ zc actually.
-No special reason, READ op can also be supported. I'll
-add this support in patch set v2.
-For this RFC patch set, I just tried to show the idea, so
-I must admit that current codes are not mature enough :)
+ice_qp_dis():
+-> ice_qvec_dis_irq()
+--> disable rxq irq
+--> flush hw
+-> ice_vsi_stop_tx_ring()
+-->disable txq irq
 
->
->> +
->>  	if (req_op(req) != REQ_OP_WRITE && req_op(req) != REQ_OP_FLUSH)
->>  		return rq_bytes;
->>  
->> @@ -860,6 +921,89 @@ static void ublk_queue_cmd(struct ublk_queue *ubq, struct request *rq)
->>  	}
->>  }
->>  
->>
->> +	kbuf->bvec = bvec;
->> +	rq_for_each_bvec(tmp, rq, rq_iter) {
->> +		*bvec = tmp;
->> +		bvec++;
->> +	}
->> +
->> +	kbuf->count = blk_rq_bytes(rq);
->> +	kbuf->nr_bvecs = nr_bvec;
->> +	data->kbuf = kbuf;
->> +	return 0;
-> bio/req bvec table is immutable, so here you can pass its reference
-> to kbuf directly.
-Yeah, thanks.
+Below splat can be triggered by following steps:
+- start xdpsock WITHOUT loading xdp prog
+- run xdp_rxq_info with XDP_TX action on this interface
+- start traffic
+- terminate xdpsock
 
->
->> +}
->> +
->> +static int ublk_run_bpf_prog(struct ublk_queue *ubq, struct request *rq)
->> +{
->> +	int err;
->> +	struct ublk_device *ub = ubq->dev;
->> +	struct bpf_prog *prog = ub->io_prep_prog;
->> +	struct ublk_io_bpf_ctx *bpf_ctx;
->> +
->> +	if (!prog)
->> +		return 0;
->> +
->> +	bpf_ctx = kmalloc(sizeof(struct ublk_io_bpf_ctx), GFP_NOIO);
->> +	if (!bpf_ctx)
->> +		return -EIO;
->> +
->> +	err = ublk_init_uring_kbuf(rq);
->> +	if (err < 0) {
->> +		kfree(bpf_ctx);
->> +		return -EIO;
->> +	}
->> +	bpf_ctx->ub = ub;
->> +	bpf_ctx->ctx.q_id = ubq->q_id;
->> +	bpf_ctx->ctx.tag = rq->tag;
->> +	bpf_ctx->ctx.op = req_op(rq);
->> +	bpf_ctx->ctx.nr_sectors = blk_rq_sectors(rq);
->> +	bpf_ctx->ctx.start_sector = blk_rq_pos(rq);
-> The above is for setting up target io parameter, which is supposed
-> to be from userspace, cause it is result of user space logic. If
-> these parameters are from kernel, the whole logic has to be done
-> in io_prep_prog.
-Yeah, it's designed that io_prep_prog implements user space
-io logic.
+[  256.312485] BUG: kernel NULL pointer dereference, address: 0000000000000018
+[  256.319560] #PF: supervisor read access in kernel mode
+[  256.324775] #PF: error_code(0x0000) - not-present page
+[  256.329994] PGD 0 P4D 0
+[  256.332574] Oops: 0000 [#1] PREEMPT SMP NOPTI
+[  256.337006] CPU: 3 PID: 32 Comm: ksoftirqd/3 Tainted: G           OE      6.2.0-rc5+ #51
+[  256.345218] Hardware name: Intel Corporation S2600WFT/S2600WFT, BIOS SE5C620.86B.02.01.0008.031920191559 03/19/2019
+[  256.355807] RIP: 0010:ice_clean_rx_irq_zc+0x9c/0x7d0 [ice]
+[  256.361423] Code: b7 8f 8a 00 00 00 66 39 ca 0f 84 f1 04 00 00 49 8b 47 40 4c 8b 24 d0 41 0f b7 45 04 66 25 ff 3f 66 89 04 24 0f 84 85 02 00 00 <49> 8b 44 24 18 0f b7 14 24 48 05 00 01 00 00 49 89 04 24 49 89 44
+[  256.380463] RSP: 0018:ffffc900088bfd20 EFLAGS: 00010206
+[  256.385765] RAX: 000000000000003c RBX: 0000000000000035 RCX: 000000000000067f
+[  256.393012] RDX: 0000000000000775 RSI: 0000000000000000 RDI: ffff8881deb3ac80
+[  256.400256] RBP: 000000000000003c R08: ffff889847982710 R09: 0000000000010000
+[  256.407500] R10: ffffffff82c060c0 R11: 0000000000000004 R12: 0000000000000000
+[  256.414746] R13: ffff88811165eea0 R14: ffffc9000d255000 R15: ffff888119b37600
+[  256.421990] FS:  0000000000000000(0000) GS:ffff8897e0cc0000(0000) knlGS:0000000000000000
+[  256.430207] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  256.436036] CR2: 0000000000000018 CR3: 0000000005c0a006 CR4: 00000000007706e0
+[  256.443283] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[  256.450527] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[  256.457770] PKRU: 55555554
+[  256.460529] Call Trace:
+[  256.463015]  <TASK>
+[  256.465157]  ? ice_xmit_zc+0x6e/0x150 [ice]
+[  256.469437]  ice_napi_poll+0x46d/0x680 [ice]
+[  256.473815]  ? _raw_spin_unlock_irqrestore+0x1b/0x40
+[  256.478863]  __napi_poll+0x29/0x160
+[  256.482409]  net_rx_action+0x136/0x260
+[  256.486222]  __do_softirq+0xe8/0x2e5
+[  256.489853]  ? smpboot_thread_fn+0x2c/0x270
+[  256.494108]  run_ksoftirqd+0x2a/0x50
+[  256.497747]  smpboot_thread_fn+0x1c1/0x270
+[  256.501907]  ? __pfx_smpboot_thread_fn+0x10/0x10
+[  256.506594]  kthread+0xea/0x120
+[  256.509785]  ? __pfx_kthread+0x10/0x10
+[  256.513597]  ret_from_fork+0x29/0x50
+[  256.517238]  </TASK>
 
->
->> +	bpf_prog_run_pin_on_cpu(prog, bpf_ctx);
->> +
->> +	init_task_work(&bpf_ctx->work, ublk_bpf_io_submit_fn);
->> +	if (task_work_add(ubq->ubq_daemon, &bpf_ctx->work, TWA_SIGNAL_NO_IPI))
->> +		kfree(bpf_ctx);
-> task_work_add() is only available in case of ublk builtin.
-Yeah, I'm thinking how to work around it.
+In fact, irqs were not disabled and napi managed to be scheduled and run
+while xsk_pool pointer was still valid, but SW ring of xdp_buff pointers
+was already freed.
 
->
->> +	return 0;
->> +}
->> +
->>  static blk_status_t ublk_queue_rq(struct blk_mq_hw_ctx *hctx,
->>  		const struct blk_mq_queue_data *bd)
->>  {
->> @@ -872,6 +1016,9 @@ static blk_status_t ublk_queue_rq(struct blk_mq_hw_ctx *hctx,
->>  	if (unlikely(res != BLK_STS_OK))
->>  		return BLK_STS_IOERR;
->>  
->> +	/* Currently just for test. */
->> +	ublk_run_bpf_prog(ubq, rq);
-> Can you explain the above comment a bit? When is the io_prep_prog called
-> in the non-test version? Or can you post the non-test version in list
-> for review.
-Forgot to delete stale comments, sorry. I'm writing v2 patch set,
+To fix this, call ice_qvec_dis_irq() after ice_vsi_stop_tx_ring(). Also
+while at it, remove redundant ice_clean_rx_ring() call - this is handled
+in ice_qp_clean_rings().
 
-> Here it is the key for understanding the whole idea, especially when
-> is io_prep_prog called finally? How to pass parameters to io_prep_prog?
-Let me explain more about the design:
-io_prep_prog has two types of parameters:
-1) its call argument: struct ublk_bpf_ctx, see ublk.bpf.c.
-ublk_bpf_ctx will describe one kernel io requests about
-its op, qid, sectors info. io_prep_prog uses these info to
-map target io.
-2) ebpf map structure, user space daemon can use map
-structure to pass much information from user space to
-io_prep_prog, which will help it to initialize target io if necessary.
+Fixes: 2d4238f55697 ("ice: Add support for AF_XDP")
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+---
+ drivers/net/ethernet/intel/ice/ice_xsk.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-io_prep_prog is called when ublk_queue_rq() is called, this bpf
-prog will initialize one or more sqes according to user logic, and
-io_prep_prog will put these sqes in an ebpf map structure, then
-execute a task_work_add() to notify ubq_daemon to execute
-io_submit_prog. Note, we can not call io_uring_submit_sqe()
-in task context that calls ublk_queue_rq(), that context does not
-have io_uring instance owned by ubq_daemon.
-Later ubq_daemon will call io_submit_prog to submit sqes.
-
->
-> Given it is ebpf prog, I don't think any userspace parameter can be
-> passed to io_prep_prog when submitting IO, that means all user logic has
-> to be done inside io_prep_prog? If yes, not sure if it is one good way,
-> cause ebpf prog is very limited programming environment, but the user
-> logic could be as complicated as using btree to map io, or communicating
-> with remote machine for figuring out the mapping. Loop is just the
-> simplest direct mapping.
-Currently, we can use ebpf map structure to pass user space
-parameter to io_prep_prog. Also I agree with you that complicated
-logic maybe hard to be implemented in ebpf prog, hope ebpf
-community will improve this situation gradually.
-
-For userspace target implementations I met so far, they just use
-userspace block device solutions to visit distributed filesystem,
-involves socket programming and have simple map io logic. We
-can prepare socket fd in ebpf map structure, and these map io
-logic should be easily implemented in ebpf prog, though I don't
-apply this ebpf method to our internal business yet.
-
-Thanks for review.
-
-Regards,
-Xiaoguang Wang
-
->
->
-> Thanks, 
-> Ming
+diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
+index 917c75e530ca..6b8aeaa32d0b 100644
+--- a/drivers/net/ethernet/intel/ice/ice_xsk.c
++++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
+@@ -184,8 +184,6 @@ static int ice_qp_dis(struct ice_vsi *vsi, u16 q_idx)
+ 	}
+ 	netif_tx_stop_queue(netdev_get_tx_queue(vsi->netdev, q_idx));
+ 
+-	ice_qvec_dis_irq(vsi, rx_ring, q_vector);
+-
+ 	ice_fill_txq_meta(vsi, tx_ring, &txq_meta);
+ 	err = ice_vsi_stop_tx_ring(vsi, ICE_NO_RESET, 0, tx_ring, &txq_meta);
+ 	if (err)
+@@ -200,10 +198,11 @@ static int ice_qp_dis(struct ice_vsi *vsi, u16 q_idx)
+ 		if (err)
+ 			return err;
+ 	}
++	ice_qvec_dis_irq(vsi, rx_ring, q_vector);
++
+ 	err = ice_vsi_ctrl_one_rx_ring(vsi, false, q_idx, true);
+ 	if (err)
+ 		return err;
+-	ice_clean_rx_ring(rx_ring);
+ 
+ 	ice_qvec_toggle_napi(vsi, q_vector, false);
+ 	ice_qp_clean_rings(vsi, q_idx);
+-- 
+2.34.1
 
