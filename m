@@ -2,28 +2,28 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE556C64EC4
-	for <bpf@archiver.kernel.org>; Thu, 16 Feb 2023 22:56:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A561C61DA4
+	for <bpf@archiver.kernel.org>; Thu, 16 Feb 2023 22:56:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbjBPW4T (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Feb 2023 17:56:19 -0500
+        id S229678AbjBPW4X (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Feb 2023 17:56:23 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBPW4S (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Feb 2023 17:56:18 -0500
+        with ESMTP id S229566AbjBPW4T (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Feb 2023 17:56:19 -0500
 Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA75938EA8
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD2F439BBC
         for <bpf@vger.kernel.org>; Thu, 16 Feb 2023 14:56:17 -0800 (PST)
 Received: by devvm15675.prn0.facebook.com (Postfix, from userid 115148)
-        id 57FCB6A5C815; Thu, 16 Feb 2023 14:56:05 -0800 (PST)
+        id 126A46A5C83E; Thu, 16 Feb 2023 14:56:08 -0800 (PST)
 From:   Joanne Koong <joannelkoong@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     martin.lau@kernel.org, andrii@kernel.org, memxor@gmail.com,
         ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
         kernel-team@fb.com, Joanne Koong <joannelkoong@gmail.com>
-Subject: [PATCH v10 bpf-next 1/9] bpf: Support "sk_buff" and "xdp_buff" as valid kfunc arg types
-Date:   Thu, 16 Feb 2023 14:55:16 -0800
-Message-Id: <20230216225524.1192789-2-joannelkoong@gmail.com>
+Subject: [PATCH v10 bpf-next 4/9] bpf: Define no-ops for externally called bpf dynptr functions
+Date:   Thu, 16 Feb 2023 14:55:19 -0800
+Message-Id: <20230216225524.1192789-5-joannelkoong@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230216225524.1192789-1-joannelkoong@gmail.com>
 References: <20230216225524.1192789-1-joannelkoong@gmail.com>
@@ -33,40 +33,132 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The bpf mirror of the in-kernel sk_buff and xdp_buff data structures are
-__sk_buff and xdp_md. Currently, when we pass in the program ctx to a
-kfunc where the program ctx is a skb or xdp buffer, we reject the
-program if the in-kernel definition is sk_buff/xdp_buff instead of
-__sk_buff/xdp_md.
+Some bpf dynptr functions will be called from places where
+if CONFIG_BPF_SYSCALL is not set, then the dynptr function is
+undefined. For example, when skb type dynptrs are added in the
+next commit, dynptr functions are called from net/core/filter.c
 
-This change allows "sk_buff <--> __sk_buff" and "xdp_buff <--> xdp_md"
-to be recognized as valid matches. The user program may pass in their
-program ctx as a __sk_buff or xdp_md, and the in-kernel definition
-of the kfunc may define this arg as a sk_buff or xdp_buff.
+This patch defines no-op implementations of these dynptr functions
+so that they do not break compilation by being an undefined reference.
 
 Signed-off-by: Joanne Koong <joannelkoong@gmail.com>
 ---
- kernel/bpf/btf.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ include/linux/bpf.h | 75 +++++++++++++++++++++++++++------------------
+ 1 file changed, 45 insertions(+), 30 deletions(-)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 6582735ef1fc..ae321c358699 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -5675,6 +5675,10 @@ btf_get_prog_ctx_type(struct bpf_verifier_log *log=
-, const struct btf *btf,
- 		bpf_log(log, "Please fix kernel include/linux/bpf_types.h\n");
- 		return NULL;
- 	}
-+	if (strcmp(ctx_tname, "__sk_buff") =3D=3D 0 && strcmp(tname, "sk_buff")=
- =3D=3D 0)
-+		return ctx_type;
-+	if (strcmp(ctx_tname, "xdp_md") =3D=3D 0 && strcmp(tname, "xdp_buff") =3D=
-=3D 0)
-+		return ctx_type;
- 	/* only compare that prog's ctx type name is the same as
- 	 * kernel expects. No need to compare field by field.
- 	 * It's ok for bpf prog to do:
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 520b238abd5a..296841a31749 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1124,6 +1124,33 @@ static __always_inline __nocfi unsigned int bpf_di=
+spatcher_nop_func(
+ 	return bpf_func(ctx, insnsi);
+ }
+=20
++/* the implementation of the opaque uapi struct bpf_dynptr */
++struct bpf_dynptr_kern {
++	void *data;
++	/* Size represents the number of usable bytes of dynptr data.
++	 * If for example the offset is at 4 for a local dynptr whose data is
++	 * of type u64, the number of usable bytes is 4.
++	 *
++	 * The upper 8 bits are reserved. It is as follows:
++	 * Bits 0 - 23 =3D size
++	 * Bits 24 - 30 =3D dynptr type
++	 * Bit 31 =3D whether dynptr is read-only
++	 */
++	u32 size;
++	u32 offset;
++} __aligned(8);
++
++enum bpf_dynptr_type {
++	BPF_DYNPTR_TYPE_INVALID,
++	/* Points to memory that is local to the bpf program */
++	BPF_DYNPTR_TYPE_LOCAL,
++	/* Underlying data is a ringbuf record */
++	BPF_DYNPTR_TYPE_RINGBUF,
++};
++
++int bpf_dynptr_check_size(u32 size);
++u32 bpf_dynptr_get_size(const struct bpf_dynptr_kern *ptr);
++
+ #ifdef CONFIG_BPF_JIT
+ int bpf_trampoline_link_prog(struct bpf_tramp_link *link, struct bpf_tra=
+mpoline *tr);
+ int bpf_trampoline_unlink_prog(struct bpf_tramp_link *link, struct bpf_t=
+rampoline *tr);
+@@ -2266,6 +2293,11 @@ static inline bool has_current_bpf_ctx(void)
+ }
+=20
+ void notrace bpf_prog_inc_misses_counter(struct bpf_prog *prog);
++
++void bpf_dynptr_init(struct bpf_dynptr_kern *ptr, void *data,
++		     enum bpf_dynptr_type type, u32 offset, u32 size);
++void bpf_dynptr_set_null(struct bpf_dynptr_kern *ptr);
++void bpf_dynptr_set_rdonly(struct bpf_dynptr_kern *ptr);
+ #else /* !CONFIG_BPF_SYSCALL */
+ static inline struct bpf_prog *bpf_prog_get(u32 ufd)
+ {
+@@ -2495,6 +2527,19 @@ static inline void bpf_prog_inc_misses_counter(str=
+uct bpf_prog *prog)
+ static inline void bpf_cgrp_storage_free(struct cgroup *cgroup)
+ {
+ }
++
++static inline void bpf_dynptr_init(struct bpf_dynptr_kern *ptr, void *da=
+ta,
++				   enum bpf_dynptr_type type, u32 offset, u32 size)
++{
++}
++
++static inline void bpf_dynptr_set_null(struct bpf_dynptr_kern *ptr)
++{
++}
++
++static inline void bpf_dynptr_set_rdonly(struct bpf_dynptr_kern *ptr)
++{
++}
+ #endif /* CONFIG_BPF_SYSCALL */
+=20
+ void __bpf_free_used_btfs(struct bpf_prog_aux *aux,
+@@ -2913,36 +2958,6 @@ int bpf_bprintf_prepare(char *fmt, u32 fmt_size, c=
+onst u64 *raw_args,
+ 			u32 num_args, struct bpf_bprintf_data *data);
+ void bpf_bprintf_cleanup(struct bpf_bprintf_data *data);
+=20
+-/* the implementation of the opaque uapi struct bpf_dynptr */
+-struct bpf_dynptr_kern {
+-	void *data;
+-	/* Size represents the number of usable bytes of dynptr data.
+-	 * If for example the offset is at 4 for a local dynptr whose data is
+-	 * of type u64, the number of usable bytes is 4.
+-	 *
+-	 * The upper 8 bits are reserved. It is as follows:
+-	 * Bits 0 - 23 =3D size
+-	 * Bits 24 - 30 =3D dynptr type
+-	 * Bit 31 =3D whether dynptr is read-only
+-	 */
+-	u32 size;
+-	u32 offset;
+-} __aligned(8);
+-
+-enum bpf_dynptr_type {
+-	BPF_DYNPTR_TYPE_INVALID,
+-	/* Points to memory that is local to the bpf program */
+-	BPF_DYNPTR_TYPE_LOCAL,
+-	/* Underlying data is a kernel-produced ringbuf record */
+-	BPF_DYNPTR_TYPE_RINGBUF,
+-};
+-
+-void bpf_dynptr_init(struct bpf_dynptr_kern *ptr, void *data,
+-		     enum bpf_dynptr_type type, u32 offset, u32 size);
+-void bpf_dynptr_set_null(struct bpf_dynptr_kern *ptr);
+-int bpf_dynptr_check_size(u32 size);
+-u32 bpf_dynptr_get_size(const struct bpf_dynptr_kern *ptr);
+-
+ #ifdef CONFIG_BPF_LSM
+ void bpf_cgroup_atype_get(u32 attach_btf_id, int cgroup_atype);
+ void bpf_cgroup_atype_put(int cgroup_atype);
 --=20
 2.30.2
 
