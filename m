@@ -2,127 +2,318 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48AC9C636D6
-	for <bpf@archiver.kernel.org>; Sat, 18 Feb 2023 01:30:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4242C05027
+	for <bpf@archiver.kernel.org>; Sat, 18 Feb 2023 02:21:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbjBRBav (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Feb 2023 20:30:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40332 "EHLO
+        id S229445AbjBRCVX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Feb 2023 21:21:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjBRBav (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 17 Feb 2023 20:30:51 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C3C5A3B4;
-        Fri, 17 Feb 2023 17:30:48 -0800 (PST)
-Received: from kwepemi500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PJWKJ6L6rznW8X;
-        Sat, 18 Feb 2023 09:28:20 +0800 (CST)
-Received: from [10.67.109.184] (10.67.109.184) by
- kwepemi500020.china.huawei.com (7.221.188.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Sat, 18 Feb 2023 09:30:44 +0800
-Message-ID: <3c9d2ff9-46b3-1587-e0c0-e3931118fb01@huawei.com>
-Date:   Sat, 18 Feb 2023 09:30:44 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH bpf-next v1 0/4] Support bpf trampoline for RV64
-Content-Language: en-US
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Pu Lehui <pulehui@huaweicloud.com>, <bpf@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Luke Nelson <luke.r.nels@gmail.com>,
-        Xi Wang <xi.wang@gmail.com>
-References: <20230215135205.1411105-1-pulehui@huaweicloud.com>
- <8735763pcu.fsf@all.your.base.are.belong.to.us>
- <091287c6-5121-58e5-b1b2-76277d2f1b1a@iogearbox.net>
-From:   Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <091287c6-5121-58e5-b1b2-76277d2f1b1a@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.109.184]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500020.china.huawei.com (7.221.188.8)
-X-CFilter-Loop: Reflected
+        with ESMTP id S229509AbjBRCVW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 17 Feb 2023 21:21:22 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FAAA3C798
+        for <bpf@vger.kernel.org>; Fri, 17 Feb 2023 18:20:45 -0800 (PST)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31HLiK5m018685;
+        Fri, 17 Feb 2023 23:10:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=corp-2022-7-12;
+ bh=uY8A8Ab5OqP4T84k6W+KiL6WAXHM5fpgmFvE3b+ePcY=;
+ b=hk5l3gn2ML3ZnDWhttAWGnr/GpChq8tKXvGZERQjSQZHd6nHgZz3g+ugZi/DSd3Hkkyh
+ m200tV9ihOMst9814r3v7yqiuoZf7TwrEzkYwHULRWJwE9W26kPci6qqV1uK/pi7sSH6
+ G4JGJDHgBsm8lVkLEDxQSc1nw2i5VCT1f8HTGiAsjiamhGMf2FDOYCQxLdNIw8YDMC1S
+ Ko82eEeoG1ghREtuOtt0iWIQcBtbEspJvVl/fCe4JOHiLuQqyw2PMpuq2+rsCuCcEUJn
+ cjmDbKetOOco39D4/uoOfCv9CqgOe3Eu4IL8w5V6GyPsSWfaJjfvOemR6u+7d+FF6ot7 bQ== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3np32cq6gd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Feb 2023 23:10:43 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31HN5A2o015370;
+        Fri, 17 Feb 2023 23:10:42 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3np1fas7tb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Feb 2023 23:10:42 +0000
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31HNAcmM007180;
+        Fri, 17 Feb 2023 23:10:42 GMT
+Received: from myrouter.uk.oracle.com (dhcp-10-175-171-27.vpn.oracle.com [10.175.171.27])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3np1fas7py-2;
+        Fri, 17 Feb 2023 23:10:42 +0000
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     acme@kernel.org, olsajiri@gmail.com, ast@kernel.org
+Cc:     daniel@iogearbox.net, andrii@kernel.org, yhs@fb.com,
+        eddyz87@gmail.com, sinquersw@gmail.com, timo@incline.eu,
+        songliubraving@fb.com, john.fastabend@gmail.com,
+        kpsingh@chromium.org, sdf@google.com, haoluo@google.com,
+        martin.lau@kernel.org, bpf@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [RFC dwarves 1/4] dwarf_loader: mark functions that do not use expected registers for params
+Date:   Fri, 17 Feb 2023 23:10:30 +0000
+Message-Id: <1676675433-10583-2-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1676675433-10583-1-git-send-email-alan.maguire@oracle.com>
+References: <1676675433-10583-1-git-send-email-alan.maguire@oracle.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-17_15,2023-02-17_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0
+ suspectscore=0 mlxscore=0 spamscore=0 mlxlogscore=999 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302170202
+X-Proofpoint-GUID: xN6WLC0LCcZdoiohrSsbL3kRaDYxvtFV
+X-Proofpoint-ORIG-GUID: xN6WLC0LCcZdoiohrSsbL3kRaDYxvtFV
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Calling conventions dictate which registers are used for
+function parameters.
 
+When a function is optimized however, we need to ensure that
+the non-optimized parameters do not violate expectations about
+register use as this would violate expectations for tracing.
+At CU initialization, create a mapping from parameter index
+to expected DW_OP_reg, and use it to validate parameters
+match with expectations.  A parameter which is passed via
+the stack, as a constant, or uses an unexpected register,
+violates these expectations and it (and the associated
+function) are marked as having unexpected register mapping.
 
-On 2023/2/18 4:49, Daniel Borkmann wrote:
-> On 2/16/23 10:56 AM, Björn Töpel wrote:
->> Pu Lehui <pulehui@huaweicloud.com> writes:
->>
->>> BPF trampoline is the critical infrastructure of the bpf
->>> subsystem, acting as a mediator between kernel functions
->>> and BPF programs. Numerous important features, such as
->>> using ebpf program for zero overhead kernel introspection,
->>> rely on this key component. We can't wait to support bpf
->>> trampoline on RV64. Since RV64 does not support ftrace
->>> direct call yet, the current RV64 bpf trampoline is only
->>> used in bpf context.
->>>
->>> As most of riscv cpu support unaligned memory accesses,
->>> we temporarily use patch [1] to facilitate testing. The
->>> test results are as follow, and test_verifier with no
->>> new failure ceses.
->>>
->>> - fexit_bpf2bpf:OK
->>> - dummy_st_ops:OK
->>> - xdp_bpf2bpf:OK
->>>
->>> [1] 
->>> https://lore.kernel.org/linux-riscv/20210916130855.4054926-2-chenhuang5@huawei.com/
->>>
->>> v1:
->>> - Remove the logic of bpf_arch_text_poke supported for
->>>    kernel functions. (Kuohai and Björn)
->>> - Extend patch_text for multiple instructions. (Björn)
->>> - Fix OOB issue when image too big. (Björn)
->>
->> This series is ready to go in as is.
-> 
-> Ok.
-> 
->> @Palmer I'd like to take this series via the bpf-next tree (as usual),
->> but note that there are some non-BPF changes as well, related to text
->> poking.
->>
->> @Lehui I'd like to see two follow-up patches:
->>
->> 1. Enable kfunc for RV64, by adding:
->>   | bool bpf_jit_supports_kfunc_call(void)
->>   | {
->>   |         return true;
->>   | }
->>
->> 2. Remove the checkpatch warning on patch 4:
->>   | WARNING: kfree(NULL) is safe and this check is probably not required
->>   | #313: FILE: arch/riscv/net/bpf_jit_comp64.c:984:
->>   | +    if (branches_off)
->>   | +        kfree(branches_off);
->>
->>
->> For the series:
->>
->> Tested-by: Björn Töpel <bjorn@rivosinc.com>
->> Acked-by: Björn Töpel <bjorn@rivosinc.com>
-> 
-> Thanks, I fixed up issue 2 and cleaned up the commit msgs while applying.
-> For issue 1, pls send a follow-up.
+Note though that there is as exception here that needs to
+be handled; when a (typedef) struct is passed as a parameter,
+it can use multiple registers so will throw off later register
+expectations.  Exempt functions that have unexpected
+register usage _and_ struct parameters (examples are found
+in the "tracing_struct" test).
 
-Thank you both, will handle this.
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ dwarf_loader.c | 109 ++++++++++++++++++++++++++++++++++++++++++++++---
+ dwarves.h      |   5 +++
+ 2 files changed, 109 insertions(+), 5 deletions(-)
+
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index acdb68d..014e130 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -1022,6 +1022,51 @@ static int arch__nr_register_params(const GElf_Ehdr *ehdr)
+ 	return 0;
+ }
+ 
++/* map from parameter index (0 for first, ...) to expected DW_OP_reg.
++ * This will allow us to identify cases where optimized-out parameters
++ * interfere with expectations about register contents on function
++ * entry.
++ */
++static void arch__set_register_params(const GElf_Ehdr *ehdr, struct cu *cu)
++{
++	memset(cu->register_params, -1, sizeof(cu->register_params));
++
++	switch (ehdr->e_machine) {
++	case EM_S390:
++		/* https://github.com/IBM/s390x-abi/releases/download/v1.6/lzsabi_s390x.pdf */
++		cu->register_params[0] = DW_OP_reg2;	// %r2
++		cu->register_params[1] = DW_OP_reg3;	// %r3
++		cu->register_params[2] = DW_OP_reg4;	// %r4
++		cu->register_params[3] = DW_OP_reg5;	// %r5
++		cu->register_params[4] = DW_OP_reg6;	// %r6
++		return;
++	case EM_X86_64:
++		/* //en.wikipedia.org/wiki/X86_calling_conventions#System_V_AMD64_ABI */
++		cu->register_params[0] = DW_OP_reg5;	// %rdi
++		cu->register_params[1] = DW_OP_reg4;	// %rsi
++		cu->register_params[2] = DW_OP_reg1;	// %rdx
++		cu->register_params[3] = DW_OP_reg2;	// %rcx
++		cu->register_params[4] = DW_OP_reg8;	// %r8
++		cu->register_params[5] = DW_OP_reg9;	// %r9
++		return;
++	case EM_ARM:
++		/* https://github.com/ARM-software/abi-aa/blob/main/aapcs32/aapcs32.rst#machine-registers */
++	case EM_AARCH64:
++		/* https://github.com/ARM-software/abi-aa/blob/main/aapcs64/aapcs64.rst#machine-registers */
++		cu->register_params[0] = DW_OP_reg0;
++		cu->register_params[1] = DW_OP_reg1;
++		cu->register_params[2] = DW_OP_reg2;
++		cu->register_params[3] = DW_OP_reg3;
++		cu->register_params[4] = DW_OP_reg4;
++		cu->register_params[5] = DW_OP_reg5;
++		cu->register_params[6] = DW_OP_reg6;
++		cu->register_params[7] = DW_OP_reg7;
++		return;
++	default:
++		return;
++	}
++}
++
+ static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
+ 					struct conf_load *conf, int param_idx)
+ {
+@@ -1075,18 +1120,28 @@ static struct parameter *parameter__new(Dwarf_Die *die, struct cu *cu,
+ 		if (parm->has_loc &&
+ 		    attr_location(die, &loc.expr, &loc.exprlen) == 0 &&
+ 			loc.exprlen != 0) {
++			int expected_reg = cu->register_params[param_idx];
+ 			Dwarf_Op *expr = loc.expr;
+ 
+ 			switch (expr->atom) {
+ 			case DW_OP_reg0 ... DW_OP_reg31:
++				/* mark parameters that use an unexpected
++				 * register to hold a parameter; these will
++				 * be problematic for users of BTF as they
++				 * violate expectations about register
++				 * contents.
++				 */
++				if (expected_reg >= 0 && expected_reg != expr->atom)
++					parm->unexpected_reg = 1;
++				break;
+ 			case DW_OP_breg0 ... DW_OP_breg31:
+ 				break;
+ 			default:
+-				parm->optimized = 1;
++				parm->unexpected_reg = 1;
+ 				break;
+ 			}
+ 		} else if (has_const_value) {
+-			parm->optimized = 1;
++			parm->unexpected_reg = 1;
+ 		}
+ 	}
+ 
+@@ -2302,13 +2357,17 @@ static void ftype__recode_dwarf_types(struct tag *tag, struct cu *cu)
+ 			pos->tag.type = dtype->tag->type;
+ 			/* share location information between parameter and
+ 			 * abstract origin; if neither have location, we will
+-			 * mark the parameter as optimized out.
++			 * mark the parameter as optimized out.  Also share
++			 * info regarding unexpected register use for
++			 * parameters.
+ 			 */
+ 			if (pos->has_loc)
+ 				opos->has_loc = pos->has_loc;
+ 
+ 			if (pos->optimized)
+ 				opos->optimized = pos->optimized;
++			if (pos->unexpected_reg)
++				opos->unexpected_reg = pos->unexpected_reg;
+ 			continue;
+ 		}
+ 
+@@ -2584,6 +2643,27 @@ out:
+ 	return 0;
+ }
+ 
++static bool param__is_struct(struct cu *cu, struct tag *tag)
++{
++	const struct dwarf_tag *dtag = tag->priv;
++	struct dwarf_tag *dtype = dwarf_cu__find_type_by_ref(cu->priv, &dtag->type);
++	struct tag *type;
++
++	if (!dtype)
++		return false;
++	type = dtype->tag;
++
++	switch (type->tag) {
++	case DW_TAG_structure_type:
++		return true;
++	case DW_TAG_typedef:
++		/* handle "typedef struct" */
++		return param__is_struct(cu, type);
++	default:
++		return false;
++	}
++}
++
+ static int cu__resolve_func_ret_types_optimized(struct cu *cu)
+ {
+ 	struct ptr_table *pt = &cu->functions_table;
+@@ -2593,6 +2673,7 @@ static int cu__resolve_func_ret_types_optimized(struct cu *cu)
+ 		struct tag *tag = pt->entries[i];
+ 		struct parameter *pos;
+ 		struct function *fn = tag__function(tag);
++		bool has_unexpected_reg = false, has_struct_param = false;
+ 
+ 		/* mark function as optimized if parameter is, or
+ 		 * if parameter does not have a location; at this
+@@ -2600,12 +2681,29 @@ static int cu__resolve_func_ret_types_optimized(struct cu *cu)
+ 		 * abstract origins for cases where a parameter
+ 		 * location is not stored in the original function
+ 		 * parameter tag.
++		 *
++		 * Also mark functions which, due to optimization,
++		 * use an unexpected register for a parameter.
++		 * Exception is functions which have a struct
++		 * as a parameter, as multiple registers may
++		 * be used to represent it, throwing off register
++		 * to parameter mapping.
+ 		 */
+ 		ftype__for_each_parameter(&fn->proto, pos) {
+-			if (pos->optimized || !pos->has_loc) {
++			if (pos->optimized || !pos->has_loc)
+ 				fn->proto.optimized_parms = 1;
+-				break;
++
++			if (pos->unexpected_reg)
++				has_unexpected_reg = true;
++		}
++		if (has_unexpected_reg) {
++			ftype__for_each_parameter(&fn->proto, pos) {
++				has_struct_param = param__is_struct(cu, &pos->tag);
++				if (has_struct_param)
++					break;
+ 			}
++			if (!has_struct_param)
++				fn->proto.unexpected_reg = 1;
+ 		}
+ 
+ 		if (tag == NULL || tag->type != 0)
+@@ -2917,6 +3015,7 @@ static int cu__set_common(struct cu *cu, struct conf_load *conf,
+ 
+ 	cu->little_endian = ehdr.e_ident[EI_DATA] == ELFDATA2LSB;
+ 	cu->nr_register_params = arch__nr_register_params(&ehdr);
++	arch__set_register_params(&ehdr, cu);
+ 	return 0;
+ }
+ 
+diff --git a/dwarves.h b/dwarves.h
+index 24a1909..5074cf8 100644
+--- a/dwarves.h
++++ b/dwarves.h
+@@ -234,6 +234,8 @@ struct debug_fmt_ops {
+ 	bool		   has_alignment_info;
+ };
+ 
++#define ARCH_MAX_REGISTER_PARAMS	8
++
+ /*
+  * unspecified_type: If this CU has a DW_TAG_unspecified_type, as BTF doesn't have a representation for this
+  * 		     and thus we need to check functions returning this to convert it to void.
+@@ -265,6 +267,7 @@ struct cu {
+ 	uint8_t		 uses_global_strings:1;
+ 	uint8_t		 little_endian:1;
+ 	uint8_t		 nr_register_params;
++	int		 register_params[ARCH_MAX_REGISTER_PARAMS];
+ 	uint16_t	 language;
+ 	unsigned long	 nr_inline_expansions;
+ 	size_t		 size_inline_expansions;
+@@ -812,6 +815,7 @@ struct parameter {
+ 	struct tag tag;
+ 	const char *name;
+ 	uint8_t optimized:1;
++	uint8_t unexpected_reg:1;
+ 	uint8_t has_loc:1;
+ };
+ 
+@@ -834,6 +838,7 @@ struct ftype {
+ 	uint16_t	 nr_parms;
+ 	uint8_t		 unspec_parms:1; /* just one bit is needed */
+ 	uint8_t		 optimized_parms:1;
++	uint8_t		 unexpected_reg:1;
+ 	uint8_t		 processed:1;
+ 	uint8_t		 inconsistent_proto:1;
+ };
+-- 
+2.31.1
+
