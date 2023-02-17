@@ -2,190 +2,100 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65420C636D6
-	for <bpf@archiver.kernel.org>; Sat, 18 Feb 2023 01:11:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76E7EC636D6
+	for <bpf@archiver.kernel.org>; Sat, 18 Feb 2023 01:14:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbjBRBLL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Feb 2023 20:11:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58128 "EHLO
+        id S229508AbjBRBOC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Feb 2023 20:14:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjBRBLJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 17 Feb 2023 20:11:09 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57271457E9
-        for <bpf@vger.kernel.org>; Fri, 17 Feb 2023 17:11:08 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id co2so10204254edb.13
-        for <bpf@vger.kernel.org>; Fri, 17 Feb 2023 17:11:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VOu1dyQE8U4lY27wC/YGtk+CrLBDaxyC0YMbqWYGens=;
-        b=I0ncZ2B7oCstbiS5TnIXtmyYrik7nuvuo5tVzL6/lvY4F5J0Ur6S623CrCDuLkgE2Q
-         DX+ushCw4V1WB1NbqEpZlUpuMUbUhEwbXS8sgfLgBO1cUN8HeCfhi/XH7hOsSHOy9g13
-         mqp7bGyN3lNkrHjE6kVJOsULfAfENtt+9bvcEkSu+AClru6TozRcqNtJqstgFRMjxnDf
-         uaY2oPLJdR0GKidT4j3x9QtyLbUANaRz4159E4444tNZ+qCAdvK3+m8NwiH3EgUVT8xY
-         PQSvxgJVV6D2pRaMKB+y2GKwSFA21oJ01j5ElcRYvFnrB3jrx/F8x9CK9jWR59xFWDEh
-         UZ8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VOu1dyQE8U4lY27wC/YGtk+CrLBDaxyC0YMbqWYGens=;
-        b=5G0uXYFkhlJg7uDFECIfzXNjboAMtPZnJnWkrChcKEEHuCxnAIXsTTlPWMrmSLDur1
-         ACd3hlqn7W8hO/8ZQmjb6hfVO61cHjIqlIEi1MHwOzHheB6NdFoxgMrWt2uS3W9+dveL
-         hSfAvPdQRiYBFwr3pDimmwE7e6pIv1INEfNpf0krL/qcaF6YCEOEUt0aY0czFT3dlWJO
-         aMyAumdHLMj7BvOD1Y6EKxPVHp6vUCVayIZxXXnwLuhacqmBZmfhHEV87/rH6aKo1YFG
-         nJwJwFqbPMMOGQ9xqDdptuEGsMgg6YzQWFHkv0WC62y06zCMestpIhduvTKQVx0+aozH
-         HAvQ==
-X-Gm-Message-State: AO0yUKVT+wc6suC2TINVlZhaPvqfj+gw7iRbV3B8DwotLRpuV6eCHGJV
-        WUpZ59mvUvI1LZNMN2vVJqqpA8SkA33uZb76rwl8HZycDLM=
-X-Google-Smtp-Source: AK7set+l5oFltV1D/YTsuKDXEGS5iGiqtewJ84fwBj/o2NDGonchTdN2xoBwfiGbjNsULZ+clTTJNBC9+NZNGrQHoSg=
-X-Received: by 2002:a17:906:f88f:b0:8b0:7e1d:f6fa with SMTP id
- lg15-20020a170906f88f00b008b07e1df6famr1182300ejb.15.1676682666825; Fri, 17
- Feb 2023 17:11:06 -0800 (PST)
-MIME-Version: 1.0
-References: <20230214221718.503964-1-kuifeng@meta.com> <20230214221718.503964-7-kuifeng@meta.com>
- <CAEf4BzaKRd2jif4XeKJ1s8Dfpp-wQyTTbXpF-Not6A5kpOGYqQ@mail.gmail.com> <e3c8beb3-5ff7-9de2-b4a8-3b23a111198f@gmail.com>
-In-Reply-To: <e3c8beb3-5ff7-9de2-b4a8-3b23a111198f@gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 17 Feb 2023 17:10:54 -0800
-Message-ID: <CAEf4Bzap2F1E09Lw8fv+akZ8_RymuxzCTCO1O4yi7rqaqkPGeQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 6/7] libbpf: Update a bpf_link with another struct_ops.
-To:     Kui-Feng Lee <sinquersw@gmail.com>
-Cc:     Kui-Feng Lee <kuifeng@meta.com>, bpf@vger.kernel.org,
-        ast@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        kernel-team@meta.com, andrii@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S229886AbjBRBOB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 17 Feb 2023 20:14:01 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56EB2528C
+        for <bpf@vger.kernel.org>; Fri, 17 Feb 2023 17:14:00 -0800 (PST)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31HLi03l018446;
+        Fri, 17 Feb 2023 23:10:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=corp-2022-7-12;
+ bh=yRDXjG5zXZIfSywz3VUYN2RB/0AGt373rA0mlbi4pw4=;
+ b=Z14tk2b3XJ1FHbjpQjz4dVg7ZMPN1szZY7dFFKfpxPGHZqTM5sOo5q/h1oJgw28726+T
+ sbFG/GYOjTakXclJ0bDL00OnoohKM3ZwvD1gdRi5+73+pEwcYQZw40iFkGN8Xdgx85TW
+ UElOSJJumZS/7OwfqRAmEfoa3TXbTU9A+DgGjGPemro9sOvpyQtgd/N0+D9PdG+OjVTe
+ qp1dpAN16MUyldUNaSdpS9l8q/yQ8qA5TfKiLD6RKRqZ17lXWlEdG3cfduNI1fSninIL
+ NXR/QN4wx3j7NkXjYy5dWBEGMxGpxufV6jGUkCx5TbNjqpre5mnws+swvIYBwNF1amqh RA== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3np32cq6gh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Feb 2023 23:10:50 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31HMXlwm015276;
+        Fri, 17 Feb 2023 23:10:49 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3np1fas7x2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Feb 2023 23:10:49 +0000
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31HNAcmQ007180;
+        Fri, 17 Feb 2023 23:10:48 GMT
+Received: from myrouter.uk.oracle.com (dhcp-10-175-171-27.vpn.oracle.com [10.175.171.27])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3np1fas7py-4;
+        Fri, 17 Feb 2023 23:10:48 +0000
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     acme@kernel.org, olsajiri@gmail.com, ast@kernel.org
+Cc:     daniel@iogearbox.net, andrii@kernel.org, yhs@fb.com,
+        eddyz87@gmail.com, sinquersw@gmail.com, timo@incline.eu,
+        songliubraving@fb.com, john.fastabend@gmail.com,
+        kpsingh@chromium.org, sdf@google.com, haoluo@google.com,
+        martin.lau@kernel.org, bpf@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [RFC dwarves 3/4] pahole: update descriptions for btf_gen_optimized, skip_encoding_btf_inconsistent_proto
+Date:   Fri, 17 Feb 2023 23:10:32 +0000
+Message-Id: <1676675433-10583-4-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1676675433-10583-1-git-send-email-alan.maguire@oracle.com>
+References: <1676675433-10583-1-git-send-email-alan.maguire@oracle.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-17_15,2023-02-17_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0
+ suspectscore=0 mlxscore=0 spamscore=0 mlxlogscore=999 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302170202
+X-Proofpoint-GUID: N1GyGaoV5T8AfQriBSSD89jObxswHRxs
+X-Proofpoint-ORIG-GUID: N1GyGaoV5T8AfQriBSSD89jObxswHRxs
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 4:22 PM Kui-Feng Lee <sinquersw@gmail.com> wrote:
->
->
->
-> On 2/16/23 14:48, Andrii Nakryiko wrote:
-> > On Tue, Feb 14, 2023 at 2:17 PM Kui-Feng Lee <kuifeng@meta.com> wrote:
-> >>
-> >> Introduce bpf_link__update_struct_ops(), which will allow you to
-> >> effortlessly transition the struct_ops map of any given bpf_link into
-> >> an alternative.
-> >>
-> >> Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
-> >> ---
-> >>   tools/lib/bpf/libbpf.c   | 35 +++++++++++++++++++++++++++++++++++
-> >>   tools/lib/bpf/libbpf.h   |  1 +
-> >>   tools/lib/bpf/libbpf.map |  1 +
-> >>   3 files changed, 37 insertions(+)
-> >>
-> >> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> >> index 1eff6a03ddd9..6f7c72e312d4 100644
-> >> --- a/tools/lib/bpf/libbpf.c
-> >> +++ b/tools/lib/bpf/libbpf.c
-> >> @@ -11524,6 +11524,41 @@ struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map)
-> >>          return &link->link;
-> >>   }
-> >>
-> >> +/*
-> >> + * Swap the back struct_ops of a link with a new struct_ops map.
-> >> + */
-> >> +int bpf_link__update_struct_ops(struct bpf_link *link, const struct bpf_map *map)
-> >
-> > we have bpf_link__update_program(), and so the generic counterpart for
-> > map-based links would be bpf_link__update_map(). Let's call it that.
-> > And it shouldn't probably assume so much struct_ops specific things.
->
-> Sure
->
-> >
-> >> +{
-> >> +       struct bpf_link_struct_ops_map *st_ops_link;
-> >> +       int err, fd;
-> >> +
-> >> +       if (!bpf_map__is_struct_ops(map) || map->fd == -1)
-> >> +               return -EINVAL;
-> >> +
-> >> +       /* Ensure the type of a link is correct */
-> >> +       if (link->detach != bpf_link__detach_struct_ops)
-> >> +               return -EINVAL;
-> >> +
-> >> +       err = bpf_map__update_vdata(map);
-> >
-> > it's a bit weird we do this at attach time, not when bpf_map is
-> > actually instantiated. Should we move this map contents initialization
-> > to bpf_object__load() phase? Same for bpf_map__attach_struct_ops().
-> > What do we lose by doing it after all the BPF programs are loaded in
-> > load phase?
->
-> With the current behavior (w/o links), a struct_ops will be registered
-> when updating its value.  If we move bpf_map__update_vdata() to
-> bpf_object__load(), a congestion control algorithm will be activated at
-> the moment loading it before attaching it.  However, we should activate
-> an algorithm at attach time.
->
+Semantics are changed such that we do not skip for optimized-out parameters,
+rather unexpected register use.
 
-Of course. But I was thinking to move `bpf_map_update_elem(map->fd,
-&zero, st_ops->kern_vdata, 0);` part out of bpf_map__update_vdata()
-and make update_vdata() just prepare st_ops->kern_vdata only.
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ pahole.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
->
-> >
-> >> +       if (err) {
-> >> +               err = -errno;
-> >> +               free(link);
-> >> +               return err;
-> >> +       }
-> >> +
-> >> +       fd = bpf_link_update(link->fd, map->fd, NULL);
-> >> +       if (fd < 0) {
-> >> +               err = -errno;
-> >> +               free(link);
-> >> +               return err;
-> >> +       }
-> >> +
-> >> +       st_ops_link = container_of(link, struct bpf_link_struct_ops_map, link);
-> >> +       st_ops_link->map_fd = map->fd;
-> >> +
-> >> +       return 0;
-> >> +}
-> >> +
-> >>   typedef enum bpf_perf_event_ret (*bpf_perf_event_print_t)(struct perf_event_header *hdr,
-> >>                                                            void *private_data);
-> >>
-> >> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> >> index 2efd80f6f7b9..dd25cd6759d4 100644
-> >> --- a/tools/lib/bpf/libbpf.h
-> >> +++ b/tools/lib/bpf/libbpf.h
-> >> @@ -695,6 +695,7 @@ bpf_program__attach_freplace(const struct bpf_program *prog,
-> >>   struct bpf_map;
-> >>
-> >>   LIBBPF_API struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map);
-> >> +LIBBPF_API int bpf_link__update_struct_ops(struct bpf_link *link, const struct bpf_map *map);
-> >
-> > let's rename to bpf_link__update_map() and put it next to
-> > bpf_link__update_program() in libbpf.h
-> >
-> >>
-> >>   struct bpf_iter_attach_opts {
-> >>          size_t sz; /* size of this struct for forward/backward compatibility */
-> >> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> >> index 11c36a3c1a9f..ca6993c744b6 100644
-> >> --- a/tools/lib/bpf/libbpf.map
-> >> +++ b/tools/lib/bpf/libbpf.map
-> >> @@ -373,6 +373,7 @@ LIBBPF_1.1.0 {
-> >>          global:
-> >>                  bpf_btf_get_fd_by_id_opts;
-> >>                  bpf_link_get_fd_by_id_opts;
-> >> +               bpf_link__update_struct_ops;
-> >>                  bpf_map_get_fd_by_id_opts;
-> >>                  bpf_prog_get_fd_by_id_opts;
-> >>                  user_ring_buffer__discard;
-> >
-> > we are in LIBBPF_1.2.0 already, please move
-> >
-> >
-> >> --
-> >> 2.30.2
-> >>
+diff --git a/pahole.c b/pahole.c
+index 53dfb07..6fc4ed6 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -1647,12 +1647,12 @@ static const struct argp_option pahole__options[] = {
+ 	{
+ 		.name = "btf_gen_optimized",
+ 		.key  = ARGP_btf_gen_optimized,
+-		.doc  = "Generate BTF for functions with optimization-related suffixes (.isra, .constprop).  BTF will only be generated if a function does not optimize out parameters."
++		.doc  = "Generate BTF for functions with optimization-related suffixes (.isra, .constprop)."
+ 	},
+ 	{
+ 		.name = "skip_encoding_btf_inconsistent_proto",
+ 		.key = ARGP_skip_encoding_btf_inconsistent_proto,
+-		.doc = "Skip functions that have multiple inconsistent function prototypes sharing the same name, or have optimized-out parameters."
++		.doc = "Skip functions that have multiple inconsistent function prototypes sharing the same name, or that use unexpected registers for parameter values."
+ 	},
+ 	{
+ 		.name = NULL,
+-- 
+2.31.1
+
