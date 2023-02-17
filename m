@@ -2,186 +2,162 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A811DC05027
-	for <bpf@archiver.kernel.org>; Sat, 18 Feb 2023 00:23:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A73EC05027
+	for <bpf@archiver.kernel.org>; Sat, 18 Feb 2023 00:38:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbjBRAXa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Feb 2023 19:23:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39326 "EHLO
+        id S230098AbjBRAiQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Feb 2023 19:38:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjBRAXa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 17 Feb 2023 19:23:30 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF70A67830
-        for <bpf@vger.kernel.org>; Fri, 17 Feb 2023 16:23:28 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id ml23-20020a17090b361700b00234463de251so2998613pjb.3
-        for <bpf@vger.kernel.org>; Fri, 17 Feb 2023 16:23:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=J4fxRCSv+KJyGYriQ4w2jEoV2/PLz28LUQCJuDMXopo=;
-        b=PIFQjw3Tzhv2jt1zmIYMiK9KOKmbjBJIbchfGKGfGeBNj654iVwcgK+EmgyM18uN48
-         zZEx1qZDo5BaZZ9/fZh/qqYixQSjNlx5D5dGLLdBWDqYMDYZpFgGlFSbAARixDZL3op9
-         qkhS5Y3uBvTDMDNgf9SgrpRqvFYmGeqV22VNPCUyxfSvzz2bABJSvU5GZtFGNZ5rhpYU
-         aGfJX8K2leXtiG9KJmTvZrHP2UxhYVe6kaxLle75QI3n5aJKOW8utAYr165g61oEkSa9
-         nUD2WD/Rg3Zhs8RWZSDNgnvx0gJn9B0Cba0LfvucA+yc9Ns73yicFLm5gVQvbPCqUXva
-         m3uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J4fxRCSv+KJyGYriQ4w2jEoV2/PLz28LUQCJuDMXopo=;
-        b=PJp0g4OwncefsWWDSR4vJwGGEaEedvlTj8H7kvP1pQ3rN6ukkJxmzz8e8rXeFAZ28t
-         hRBjRVBMrs/m5Z7XXsaHQRNzPMB2jqRft2f2hlqmNYPxry0TgkE/xgK+ZdnRBSOtyV7U
-         j+w5GvSzoSAnPVOU66xmL3k7UAFpffZ4Osub99mKkG/AN9RmFMWAhlMULKwRhBvJZHZS
-         QLsB2HIY/Ygf/TEGA8EScGNLTIqau3TVLzQkBxzfUzW68jR10w/cEV3JjIxevxalHfWU
-         8UwiNefAI9kPKoSWT+rvYzKr6JrQv9fIoKh5u7am9j0gabJ8sllZvqcqSqd/7gtlPJmt
-         XFDA==
-X-Gm-Message-State: AO0yUKXjaFJr98nrHHncTW4djeZ1qIYUF10GjlzYMnIHPlsdhxdZogDx
-        0fUCTWUfV1CBMTg6g2Yl1uM=
-X-Google-Smtp-Source: AK7set/vCHYCMf0B/hswavkSDPymCJlIzG1YYlT4TXaI7HVQRX2oqCq7DBqtX7eHypqE+MYedvGy6A==
-X-Received: by 2002:a17:903:790:b0:19a:a4f3:6d4c with SMTP id kn16-20020a170903079000b0019aa4f36d4cmr1533370plb.67.1676679808305;
-        Fri, 17 Feb 2023 16:23:28 -0800 (PST)
-Received: from ?IPV6:2620:10d:c085:21cf::1210? ([2620:10d:c090:400::5:2cec])
-        by smtp.gmail.com with ESMTPSA id t6-20020a1709027fc600b0019719f752c5sm3664240plb.59.2023.02.17.16.23.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Feb 2023 16:23:27 -0800 (PST)
-Message-ID: <1e94cca4-2ec4-68d2-c0c8-73c7f2e4ecb1@gmail.com>
-Date:   Fri, 17 Feb 2023 16:23:25 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH bpf-next 7/7] selftests/bpf: Test switching TCP Congestion
- Control algorithms.
-Content-Language: en-US, en-ZW
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Kui-Feng Lee <kuifeng@meta.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, kernel-team@meta.com, andrii@kernel.org
-References: <20230214221718.503964-1-kuifeng@meta.com>
- <20230214221718.503964-8-kuifeng@meta.com>
- <CAEf4BzbNtdRv089KMi+NS_VQq=ijbVAMt5nh8wWw5s2=sv6K5w@mail.gmail.com>
-From:   Kui-Feng Lee <sinquersw@gmail.com>
-In-Reply-To: <CAEf4BzbNtdRv089KMi+NS_VQq=ijbVAMt5nh8wWw5s2=sv6K5w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        with ESMTP id S229842AbjBRAiP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 17 Feb 2023 19:38:15 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D148A4E
+        for <bpf@vger.kernel.org>; Fri, 17 Feb 2023 16:37:51 -0800 (PST)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31HLhkA6007323;
+        Fri, 17 Feb 2023 23:10:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=corp-2022-7-12;
+ bh=cbK5M5lYnO/a8UFDUfv/NH5Hb2iCgjkQZ7Hs+joTXps=;
+ b=PMshrNJS7pX+nUQ8aiA2hmCCxUbSPRwhWRklU2mRQI+oKkCPFkDQ7sRGUUzCisW6TKmZ
+ AYNwzoIgMusQOlawF3uI1iJ7DY1uPTQ2IF7qZ9VLNJSzFsgg8eIVhl7eUPeZ7Jp104mi
+ AKYN33KrlA9koksKasaJN8GZulIWs3hCtiFGtZuTH+3pA0Fmagdl8P3i3NQz5nmHFPAK
+ XaZ4ZKcVfTopRxSdCw5ubXpcPeJDiJqaUWtW2TKwZ9/J+R24bOz/mZ8iyLSgSYSMnYog
+ 56ACjmfjuvC3HV+Vjj989Umy3UvmseIGGCPS8wtsI7cHV8cDwgEmH7CaWUi/D/ss5OC4 9Q== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3np2mtq56f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Feb 2023 23:10:46 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31HKo4vp015379;
+        Fri, 17 Feb 2023 23:10:46 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3np1fas7v6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Feb 2023 23:10:46 +0000
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31HNAcmO007180;
+        Fri, 17 Feb 2023 23:10:45 GMT
+Received: from myrouter.uk.oracle.com (dhcp-10-175-171-27.vpn.oracle.com [10.175.171.27])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3np1fas7py-3;
+        Fri, 17 Feb 2023 23:10:45 +0000
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     acme@kernel.org, olsajiri@gmail.com, ast@kernel.org
+Cc:     daniel@iogearbox.net, andrii@kernel.org, yhs@fb.com,
+        eddyz87@gmail.com, sinquersw@gmail.com, timo@incline.eu,
+        songliubraving@fb.com, john.fastabend@gmail.com,
+        kpsingh@chromium.org, sdf@google.com, haoluo@google.com,
+        martin.lau@kernel.org, bpf@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [RFC dwarves 2/4] btf_encoder: exclude functions with unexpected param register use not optimizations
+Date:   Fri, 17 Feb 2023 23:10:31 +0000
+Message-Id: <1676675433-10583-3-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1676675433-10583-1-git-send-email-alan.maguire@oracle.com>
+References: <1676675433-10583-1-git-send-email-alan.maguire@oracle.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-17_15,2023-02-17_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0
+ suspectscore=0 mlxscore=0 spamscore=0 mlxlogscore=999 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302170202
+X-Proofpoint-GUID: LdwKI-w56sQFASbRGq9OwGsfD75K3wFm
+X-Proofpoint-ORIG-GUID: LdwKI-w56sQFASbRGq9OwGsfD75K3wFm
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+A key problem with the existing approach of excluding functions
+with optimized-out parameters is that it does not distinguish
+between cases where a parameter was passed but not used versus
+cases where a parameter is not passed or used.  The latter
+is the only problematic case as for the former case, the
+expected register states at function call time are as
+they would be absent optimization.  Ideally call-site analysis
+could tell us what actually happens when a function is called,
+but in practice we use a different method to exclude functions
+from BTF representation.  If a function clearly violates the
+calling-convention expectations, where such a violation
+means "parameter X does not use the expected register
+as specified in calling conventions", it is excluded.
 
+Note that we continue to mark functions which have optimized-out
+parameters as this is good to know, but only actively exclude
+functions with unexpected register usage for parameters or
+multiple inconsistent function prototypes.
 
-On 2/16/23 14:50, Andrii Nakryiko wrote:
-> On Tue, Feb 14, 2023 at 2:17 PM Kui-Feng Lee <kuifeng@meta.com> wrote:
->>
->> Create a pair of sockets that utilize the congestion control algorithm
->> under a particular name. Then switch up this congestion control
->> algorithm to another implementation and check whether newly created
->> connections using the same cc name now run the new implementation.
->>
->> Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
->> ---
->>   .../selftests/bpf/prog_tests/bpf_tcp_ca.c     | 48 ++++++++++++
->>   .../selftests/bpf/progs/tcp_ca_update.c       | 75 +++++++++++++++++++
->>   2 files changed, 123 insertions(+)
->>   create mode 100644 tools/testing/selftests/bpf/progs/tcp_ca_update.c
->>
-> 
-> [...]
-> 
->> diff --git a/tools/testing/selftests/bpf/progs/tcp_ca_update.c b/tools/testing/selftests/bpf/progs/tcp_ca_update.c
->> new file mode 100644
->> index 000000000000..cf51fe54ac01
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/progs/tcp_ca_update.c
->> @@ -0,0 +1,75 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +
->> +#include "vmlinux.h"
->> +
->> +#include <bpf/bpf_helpers.h>
->> +#include <bpf/bpf_tracing.h>
->> +
->> +char _license[] SEC("license") = "GPL";
->> +
->> +int ca1_cnt = 0;
->> +int ca2_cnt = 0;
->> +
->> +#define USEC_PER_SEC 1000000UL
->> +
->> +#define min(a, b) ((a) < (b) ? (a) : (b))
->> +
->> +static inline struct tcp_sock *tcp_sk(const struct sock *sk)
->> +{
->> +       return (struct tcp_sock *)sk;
->> +}
->> +
->> +SEC("struct_ops/ca_update_init")
->> +void BPF_PROG(ca_update_init, struct sock *sk)
->> +{
->> +#ifdef ENABLE_ATOMICS_TESTS
-> 
-> it's been 2 years since atomics were added to Clang, I think it's fine
-> to just assume atomic operations are supported and not do the
-> ENABLE_ATOMICS_TEST (and I'd clean up ENABLE_ATOMICS_TESTS now as
-> well)
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ btf_encoder.c | 24 +++++++++++++++++-------
+ 1 file changed, 17 insertions(+), 7 deletions(-)
 
-Sure!
+diff --git a/btf_encoder.c b/btf_encoder.c
+index ea5b47b..da776f4 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -871,14 +871,16 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
+ 
+ 		/* If saving and we find an existing entry, we want to merge
+ 		 * observations across both functions, checking that the
+-		 * "seen optimized parameters" and "inconsistent prototype"
+-		 * status is reflected in the func entry.
++		 * "seen optimized parameters", "inconsistent prototype"
++		 * and "unexpected register" status is reflected in the
++		 * the func entry.
+ 		 * If the entry is new, record encoder state required
+ 		 * to add the local function later (encoder + type_id_off)
+ 		 * such that we can add the function later.
+ 		 */
+ 		existing->proto.optimized_parms |= fn->proto.optimized_parms;
+-		if (!existing->proto.optimized_parms && !existing->proto.inconsistent_proto &&
++		existing->proto.unexpected_reg |= fn->proto.unexpected_reg;
++		if (!existing->proto.unexpected_reg && !existing->proto.inconsistent_proto &&
+ 		     !funcs__match(encoder, func, fn))
+ 			existing->proto.inconsistent_proto = 1;
+ 	} else {
+@@ -940,20 +942,26 @@ static void btf_encoder__add_saved_funcs(struct btf_encoder *encoder)
+ 			if (!other_fn)
+ 				continue;
+ 			fn->proto.optimized_parms |= other_fn->proto.optimized_parms;
++			fn->proto.unexpected_reg |= other_fn->proto.unexpected_reg;
+ 			if (other_fn->proto.inconsistent_proto)
+ 				fn->proto.inconsistent_proto = 1;
+-			if (!fn->proto.optimized_parms && !fn->proto.inconsistent_proto &&
++			if (!fn->proto.unexpected_reg && !fn->proto.inconsistent_proto &&
+ 			    !funcs__match(encoder, func, other_fn))
+ 				fn->proto.inconsistent_proto = 1;
+ 			other_fn->proto.processed = 1;
+ 		}
+-		if (fn->proto.optimized_parms || fn->proto.inconsistent_proto) {
++		/* do not exclude functions with optimized-out parameters; they
++		 * may still be _called_ with the right parameter values, they
++		 * just do not _use_ them.  Only exclude functions with
++		 * unexpected register use or multiple inconsistent prototypes.
++		 */
++		if (fn->proto.unexpected_reg || fn->proto.inconsistent_proto) {
+ 			if (encoder->verbose) {
+ 				const char *name = function__name(fn);
+ 
+ 				printf("skipping addition of '%s'(%s) due to %s\n",
+ 				       name, fn->alias ?: name,
+-				       fn->proto.optimized_parms ? "optimized-out parameters" :
++				       fn->proto.unexpected_reg ? "unexpected register used for parameter" :
+ 								   "multiple inconsistent function prototypes");
+ 			}
+ 		} else {
+@@ -1856,7 +1864,9 @@ int btf_encoder__encode_cu(struct btf_encoder *encoder, struct cu *cu, struct co
+ 						printf("matched function '%s' with '%s'%s\n",
+ 						       name, func->name,
+ 						       fn->proto.optimized_parms ?
+-						       ", has optimized-out parameters" : "");
++						       ", has optimized-out parameters" :
++						       fn->proto.unexpected_reg ? ", has unexpected register use by params" :
++						       "");
+ 					fn->alias = func->name;
+ 				}
+ 			}
+-- 
+2.31.1
 
-> 
->> +       __sync_bool_compare_and_swap(&sk->sk_pacing_status, SK_PACING_NONE,
->> +                                    SK_PACING_NEEDED);
->> +#else
->> +       sk->sk_pacing_status = SK_PACING_NEEDED;
->> +#endif
->> +}
->> +
->> +SEC("struct_ops/ca_update_1_cong_control")
->> +void BPF_PROG(ca_update_1_cong_control, struct sock *sk,
->> +             const struct rate_sample *rs)
->> +{
->> +       ca1_cnt++;
->> +}
->> +
->> +SEC("struct_ops/ca_update_2_cong_control")
->> +void BPF_PROG(ca_update_2_cong_control, struct sock *sk,
->> +             const struct rate_sample *rs)
->> +{
->> +       ca2_cnt++;
->> +}
->> +
->> +SEC("struct_ops/ca_update_ssthresh")
->> +__u32 BPF_PROG(ca_update_ssthresh, struct sock *sk)
->> +{
->> +       return tcp_sk(sk)->snd_ssthresh;
->> +}
->> +
->> +SEC("struct_ops/ca_update_undo_cwnd")
->> +__u32 BPF_PROG(ca_update_undo_cwnd, struct sock *sk)
->> +{
->> +       return tcp_sk(sk)->snd_cwnd;
->> +}
->> +
->> +SEC(".struct_ops")
->> +struct tcp_congestion_ops ca_update_1 = {
->> +       .init = (void *)ca_update_init,
->> +       .cong_control = (void *)ca_update_1_cong_control,
->> +       .ssthresh = (void *)ca_update_ssthresh,
->> +       .undo_cwnd = (void *)ca_update_undo_cwnd,
->> +       .name = "tcp_ca_update",
->> +};
->> +
->> +SEC(".struct_ops")
->> +struct tcp_congestion_ops ca_update_2 = {
->> +       .init = (void *)ca_update_init,
->> +       .cong_control = (void *)ca_update_2_cong_control,
->> +       .ssthresh = (void *)ca_update_ssthresh,
->> +       .undo_cwnd = (void *)ca_update_undo_cwnd,
->> +       .name = "tcp_ca_update",
->> +};
->> --
->> 2.30.2
->>
