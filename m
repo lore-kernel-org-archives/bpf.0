@@ -2,282 +2,170 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4156C61DA4
-	for <bpf@archiver.kernel.org>; Fri, 17 Feb 2023 00:42:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C816C636CC
+	for <bpf@archiver.kernel.org>; Fri, 17 Feb 2023 00:55:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbjBQAmL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Feb 2023 19:42:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51856 "EHLO
+        id S229534AbjBQAzo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Feb 2023 19:55:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbjBQAmJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Feb 2023 19:42:09 -0500
-Received: from out-217.mta1.migadu.com (out-217.mta1.migadu.com [IPv6:2001:41d0:203:375::d9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CAD58282
-        for <bpf@vger.kernel.org>; Thu, 16 Feb 2023 16:42:07 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1676594525;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=d8JlGmWjaBW0PigtuTiH40RnVXnYnrh8/QivQsx3kI4=;
-        b=Gr4U53zZB3RXRhewa759uwkwABCMrE+oE55+024/OC6rqX8oIcJ/JxOp1JCJQ7GCxs+vAY
-        M0XEqRrATtl0/uyP8uIqH3bGfdobJfGiANf63Pox3TcxBB3cSqkgglrldhKtY5ysSL6Mcs
-        81eBNpT0ZGMkjD44rpL/iQdOUeL3lwE=
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-To:     bpf@vger.kernel.org
-Cc:     'Alexei Starovoitov ' <ast@kernel.org>,
-        'Andrii Nakryiko ' <andrii@kernel.org>,
-        'Daniel Borkmann ' <daniel@iogearbox.net>,
-        netdev@vger.kernel.org, kernel-team@meta.com
-Subject: [PATCH bpf-next 4/4] selftests/bpf: Add bpf_fib_lookup test
-Date:   Thu, 16 Feb 2023 16:41:50 -0800
-Message-Id: <20230217004150.2980689-5-martin.lau@linux.dev>
-In-Reply-To: <20230217004150.2980689-1-martin.lau@linux.dev>
-References: <20230217004150.2980689-1-martin.lau@linux.dev>
+        with ESMTP id S229508AbjBQAzn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Feb 2023 19:55:43 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC4F658F
+        for <bpf@vger.kernel.org>; Thu, 16 Feb 2023 16:55:42 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id n20so9785688edy.0
+        for <bpf@vger.kernel.org>; Thu, 16 Feb 2023 16:55:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MzoZgRnKchj+jGPOZqz411qiXWXQ0hOZqxeGhxmQMLU=;
+        b=h2RSzojhViGDd2QAWIQSJCqt4PJnr2JxIdfp1Wb4ka868dQVmgaDVtBcZR6oqbMMd+
+         lrLwsuhWd9NQAWc94UTr8mgQhUFSpN/EmVx0UiXC/N+PWAs22g2HdgQSgLnd3NOe1O/E
+         LuMDJeCIksFjBMz+faEIbwg5gh3ipFDsMOAOYV9P4bqF9YTAWjX9aNiydb1Xl9HvQpGA
+         pmMVXx8U16haDAaZCF34DRGXLmUpto6gmKcq1IrMDMIM4Pg4TGi7+Zre0vnfCn2ePrui
+         sJMBU374MJ/tmAcBVzddkEDiw4Za9GTo01yqIE09rrh6v+obUGHu5wLGYC11lX/Dq7tK
+         G2NA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MzoZgRnKchj+jGPOZqz411qiXWXQ0hOZqxeGhxmQMLU=;
+        b=XJUxltk0tBznPTcB0SzULy2+ZZnXG6Wjh9dVXELogYR8R+XJ0TpsDf4eA+p3JVsagC
+         QI/kJP+MT2ulN7La9qsY2QwtRA8ZYjJRdN4NXbWlTEpBXgOTKdnrJpNubbY/l0KJ/U58
+         Uu2O7/nEuhTeOpoBlo6AeSsT/l0wJsyl4nlwQ/6hRsoDX1xrinEmfYn1cG/QVo8e+Ky4
+         ZWWGl2Ezw6xlGNP9t0IwFK0TiKps8TT+5SS6W/y0HEBvU3fYc0OzH0vycB077j0/9w5Q
+         njd1vByJPHU5iQIk38nwFBGChrT+FmQlHBLzxOF+JAoBdikUoVLTgpqQSKHjZpVllRJA
+         9aZA==
+X-Gm-Message-State: AO0yUKVe+GOQyzeWbI9Quidqfr5UMRwTPiL/VS5/O21NgaY/gUZ4pGvT
+        VDokJHiomNnB4QJiJOrJS9s7tvhP5gcv2/ywXGc=
+X-Google-Smtp-Source: AK7set9TjHzm32C4LhaH/wZ2d+zSNFxsfvoXsY7qepvOoqQ7E+fj334ge3fw/POlCzMGY+4Dxmo/5LWSeCECV7q8ZEQ=
+X-Received: by 2002:a50:a695:0:b0:4ac:b626:378e with SMTP id
+ e21-20020a50a695000000b004acb626378emr4043728edc.5.1676595341026; Thu, 16 Feb
+ 2023 16:55:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20230216183606.2483834-1-eddyz87@gmail.com> <20230216183606.2483834-3-eddyz87@gmail.com>
+In-Reply-To: <20230216183606.2483834-3-eddyz87@gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 16 Feb 2023 16:55:29 -0800
+Message-ID: <CAEf4BzYPAE8EhgeGZWuUG5kjvxd8n5c1Qy_PCJveVYQ8=Fuipg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Tests for uninitialized stack reads
+To:     Eduard Zingerman <eddyz87@gmail.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com,
+        yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Martin KaFai Lau <martin.lau@kernel.org>
+On Thu, Feb 16, 2023 at 10:36 AM Eduard Zingerman <eddyz87@gmail.com> wrote:
+>
+> Two testcases to make sure that stack reads from uninitialized
+> locations are accepted by verifier when executed in privileged mode:
+> - read from a fixed offset;
+> - read from a variable offset.
+>
+> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+> ---
+>  .../selftests/bpf/prog_tests/uninit_stack.c   |  9 +++
+>  .../selftests/bpf/progs/uninit_stack.c        | 55 +++++++++++++++++++
+>  2 files changed, 64 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/uninit_stack.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/uninit_stack.c
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/uninit_stack.c b/tools/testing/selftests/bpf/prog_tests/uninit_stack.c
+> new file mode 100644
+> index 000000000000..e64c71948491
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/uninit_stack.c
+> @@ -0,0 +1,9 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <test_progs.h>
+> +#include "uninit_stack.skel.h"
+> +
+> +void test_uninit_stack(void)
+> +{
+> +       RUN_TESTS(uninit_stack);
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/uninit_stack.c b/tools/testing/selftests/bpf/progs/uninit_stack.c
+> new file mode 100644
+> index 000000000000..20ff6a22c906
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/uninit_stack.c
+> @@ -0,0 +1,55 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <linux/bpf.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include "bpf_misc.h"
+> +
+> +/* Read an uninitialized value from stack at a fixed offset */
+> +SEC("socket")
+> +__naked int read_uninit_stack_fixed_off(void *ctx)
+> +{
+> +       asm volatile ("                         \
+> +               // force stack depth to be 128  \
+> +               *(u64*)(r10 - 128) = r1;        \
+> +               r1 = *(u8 *)(r10 - 8 );         \
+> +               r1 = *(u8 *)(r10 - 11);         \
+> +               r1 = *(u8 *)(r10 - 13);         \
+> +               r1 = *(u8 *)(r10 - 15);         \
+> +               r1 = *(u16*)(r10 - 16);         \
+> +               r1 = *(u32*)(r10 - 32);         \
+> +               r1 = *(u64*)(r10 - 64);         \
+> +               // read from a spill of a wrong size, it is a separate  \
+> +               // branch in check_stack_read_fixed_off()               \
+> +               *(u32*)(r10 - 72) = r1;         \
+> +               r1 = *(u64*)(r10 - 72);         \
+> +               r0 = 0;                         \
+> +               exit;                           \
 
-This patch tests the bpf_fib_lookup helper when looking up
-a neigh in NUD_FAILED and NUD_STALE state. It also adds test
-for the new BPF_FIB_LOOKUP_SKIP_NEIGH flag.
+would it be better to
 
-Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
----
- .../selftests/bpf/prog_tests/fib_lookup.c     | 187 ++++++++++++++++++
- .../testing/selftests/bpf/progs/fib_lookup.c  |  22 +++
- 2 files changed, 209 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/fib_lookup.c
- create mode 100644 tools/testing/selftests/bpf/progs/fib_lookup.c
+r0 = *(u64*)(r10 - 72);
+exit;
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fib_lookup.c b/tools/testing/selftests/bpf/prog_tests/fib_lookup.c
-new file mode 100644
-index 000000000000..61ccddccf485
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/fib_lookup.c
-@@ -0,0 +1,187 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Meta Platforms, Inc. and affiliates. */
-+
-+#include <sys/types.h>
-+#include <net/if.h>
-+
-+#include "test_progs.h"
-+#include "network_helpers.h"
-+#include "fib_lookup.skel.h"
-+
-+#define SYS(fmt, ...)						\
-+	({							\
-+		char cmd[1024];					\
-+		snprintf(cmd, sizeof(cmd), fmt, ##__VA_ARGS__);	\
-+		if (!ASSERT_OK(system(cmd), cmd))		\
-+			goto fail;				\
-+	})
-+
-+#define NS_TEST			"fib_lookup_ns"
-+#define IPV6_IFACE_ADDR		"face::face"
-+#define IPV6_NUD_FAILED_ADDR	"face::1"
-+#define IPV6_NUD_STALE_ADDR	"face::2"
-+#define IPV4_IFACE_ADDR		"10.0.0.254"
-+#define IPV4_NUD_FAILED_ADDR	"10.0.0.1"
-+#define IPV4_NUD_STALE_ADDR	"10.0.0.2"
-+#define DMAC			"11:11:11:11:11:11"
-+#define DMAC_INIT { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, }
-+
-+struct fib_lookup_test {
-+	const char *desc;
-+	const char *daddr;
-+	int expected_ret;
-+	int lookup_flags;
-+	__u8 dmac[6];
-+};
-+
-+static const struct fib_lookup_test tests[] = {
-+	{ .desc = "IPv6 failed neigh",
-+	  .daddr = IPV6_NUD_FAILED_ADDR, .expected_ret = BPF_FIB_LKUP_RET_NO_NEIGH, },
-+	{ .desc = "IPv6 stale neigh",
-+	  .daddr = IPV6_NUD_STALE_ADDR, .expected_ret = BPF_FIB_LKUP_RET_SUCCESS,
-+	  .dmac = DMAC_INIT, },
-+	{ .desc = "IPv6 skip neigh",
-+	  .daddr = IPV6_NUD_FAILED_ADDR, .expected_ret = BPF_FIB_LKUP_RET_SUCCESS,
-+	  .lookup_flags = BPF_FIB_LOOKUP_SKIP_NEIGH, },
-+	{ .desc = "IPv4 failed neigh",
-+	  .daddr = IPV4_NUD_FAILED_ADDR, .expected_ret = BPF_FIB_LKUP_RET_NO_NEIGH, },
-+	{ .desc = "IPv4 stale neigh",
-+	  .daddr = IPV4_NUD_STALE_ADDR, .expected_ret = BPF_FIB_LKUP_RET_SUCCESS,
-+	  .dmac = DMAC_INIT, },
-+	{ .desc = "IPv4 skip neigh",
-+	  .daddr = IPV4_NUD_FAILED_ADDR, .expected_ret = BPF_FIB_LKUP_RET_SUCCESS,
-+	  .lookup_flags = BPF_FIB_LOOKUP_SKIP_NEIGH, },
-+};
-+
-+static int ifindex;
-+
-+static int setup_netns(void)
-+{
-+	int err;
-+
-+	SYS("ip link add veth1 type veth peer name veth2");
-+	SYS("ip link set dev veth1 up");
-+
-+	SYS("ip addr add %s/64 dev veth1 nodad", IPV6_IFACE_ADDR);
-+	SYS("ip neigh add %s dev veth1 nud failed", IPV6_NUD_FAILED_ADDR);
-+	SYS("ip neigh add %s dev veth1 lladdr %s nud stale", IPV6_NUD_STALE_ADDR, DMAC);
-+
-+	SYS("ip addr add %s/24 dev veth1 nodad", IPV4_IFACE_ADDR);
-+	SYS("ip neigh add %s dev veth1 nud failed", IPV4_NUD_FAILED_ADDR);
-+	SYS("ip neigh add %s dev veth1 lladdr %s nud stale", IPV4_NUD_STALE_ADDR, DMAC);
-+
-+	err = write_sysctl("/proc/sys/net/ipv4/conf/veth1/forwarding", "1");
-+	if (!ASSERT_OK(err, "write_sysctl(net.ipv4.conf.veth1.forwarding)"))
-+		goto fail;
-+
-+	err = write_sysctl("/proc/sys/net/ipv6/conf/veth1/forwarding", "1");
-+	if (!ASSERT_OK(err, "write_sysctl(net.ipv6.conf.veth1.forwarding)"))
-+		goto fail;
-+
-+	return 0;
-+fail:
-+	return -1;
-+}
-+
-+static int set_lookup_params(struct bpf_fib_lookup *params, const char *daddr)
-+{
-+	int ret;
-+
-+	memset(params, 0, sizeof(*params));
-+
-+	params->l4_protocol = IPPROTO_TCP;
-+	params->ifindex = ifindex;
-+
-+	if (inet_pton(AF_INET6, daddr, params->ipv6_dst) == 1) {
-+		params->family = AF_INET6;
-+		ret = inet_pton(AF_INET6, IPV6_IFACE_ADDR, params->ipv6_src);
-+		if (!ASSERT_EQ(ret, 1, "inet_pton(IPV6_IFACE_ADDR)"))
-+			return -1;
-+		return 0;
-+	}
-+
-+	ret = inet_pton(AF_INET, daddr, &params->ipv4_dst);
-+	if (!ASSERT_EQ(ret, 1, "convert IP[46] address"))
-+		return -1;
-+	params->family = AF_INET;
-+	ret = inet_pton(AF_INET, IPV4_IFACE_ADDR, &params->ipv4_src);
-+	if (!ASSERT_EQ(ret, 1, "inet_pton(IPV4_IFACE_ADDR)"))
-+		return -1;
-+
-+	return 0;
-+}
-+
-+static void mac_str(char *b, const __u8 *mac)
-+{
-+	sprintf(b, "%02X:%02X:%02X:%02X:%02X:%02X",
-+		mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
-+}
-+
-+void test_fib_lookup(void)
-+{
-+	struct bpf_fib_lookup *fib_params;
-+	struct nstoken *nstoken = NULL;
-+	struct __sk_buff skb = { };
-+	struct fib_lookup *skel;
-+	int prog_fd, err, ret, i;
-+
-+	/* The test does not use the skb->data, so
-+	 * use pkt_v6 for both v6 and v4 test.
-+	 */
-+	LIBBPF_OPTS(bpf_test_run_opts, run_opts,
-+		    .data_in = &pkt_v6,
-+		    .data_size_in = sizeof(pkt_v6),
-+		    .ctx_in = &skb,
-+		    .ctx_size_in = sizeof(skb),
-+	);
-+
-+	skel = fib_lookup__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel open_and_load"))
-+		return;
-+	prog_fd = bpf_program__fd(skel->progs.fib_lookup);
-+
-+	SYS("ip netns add %s", NS_TEST);
-+
-+	nstoken = open_netns(NS_TEST);
-+	if (!ASSERT_OK_PTR(nstoken, "open_netns"))
-+		goto fail;
-+
-+	if (setup_netns())
-+		goto fail;
-+
-+	ifindex = if_nametoindex("veth1");
-+	skb.ifindex = ifindex;
-+	fib_params = &skel->bss->fib_params;
-+
-+	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-+		printf("Testing %s\n", tests[i].desc);
-+
-+		if (set_lookup_params(fib_params, tests[i].daddr))
-+			continue;
-+		skel->bss->fib_lookup_ret = -1;
-+		skel->bss->lookup_flags = BPF_FIB_LOOKUP_OUTPUT |
-+			tests[i].lookup_flags;
-+
-+		err = bpf_prog_test_run_opts(prog_fd, &run_opts);
-+		if (!ASSERT_OK(err, "bpf_prog_test_run_opts"))
-+			continue;
-+
-+		ASSERT_EQ(tests[i].expected_ret, skel->bss->fib_lookup_ret,
-+			  "fib_lookup_ret");
-+
-+		ret = memcmp(tests[i].dmac, fib_params->dmac, sizeof(tests[i].dmac));
-+		if (!ASSERT_EQ(ret, 0, "dmac not match")) {
-+			char expected[18], actual[18];
-+
-+			mac_str(expected, tests[i].dmac);
-+			mac_str(actual, fib_params->dmac);
-+			printf("dmac expected %s actual %s\n", expected, actual);
-+		}
-+	}
-+
-+fail:
-+	if (nstoken)
-+		close_netns(nstoken);
-+	system("ip netns del " NS_TEST " &> /dev/null");
-+	fib_lookup__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/fib_lookup.c b/tools/testing/selftests/bpf/progs/fib_lookup.c
-new file mode 100644
-index 000000000000..c4514dd58c62
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/fib_lookup.c
-@@ -0,0 +1,22 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Meta Platforms, Inc. and affiliates. */
-+
-+#include <linux/types.h>
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_tracing_net.h"
-+
-+struct bpf_fib_lookup fib_params = {};
-+int fib_lookup_ret = 0;
-+int lookup_flags = 0;
-+
-+SEC("tc")
-+int fib_lookup(struct __sk_buff *skb)
-+{
-+	fib_lookup_ret = bpf_fib_lookup(skb, &fib_params, sizeof(fib_params),
-+					lookup_flags);
-+
-+	return TC_ACT_SHOT;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.30.2
+to make sure that in the future verifier doesn't smartly optimize out
+unused reads?
 
+
+Either way, looks good to me:
+
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+
+> +"
+> +                     ::: __clobber_all);
+> +}
+> +
+> +/* Read an uninitialized value from stack at a variable offset */
+> +SEC("socket")
+> +__naked int read_uninit_stack_var_off(void *ctx)
+> +{
+> +       asm volatile ("                         \
+> +               call %[bpf_get_prandom_u32];    \
+> +               // force stack depth to be 64   \
+> +               *(u64*)(r10 - 64) = r0;         \
+> +               r0 = -r0;                       \
+> +               // give r0 a range [-31, -1]    \
+> +               if r0 s<= -32 goto exit_%=;     \
+> +               if r0 s>= 0 goto exit_%=;       \
+> +               // access stack using r0        \
+> +               r1 = r10;                       \
+> +               r1 += r0;                       \
+> +               r2 = *(u8*)(r1 + 0);            \
+> +exit_%=:       r0 = 0;                         \
+> +               exit;                           \
+> +"
+> +                     :
+> +                     : __imm(bpf_get_prandom_u32)
+> +                     : __clobber_all);
+> +}
+> +
+> +char _license[] SEC("license") = "GPL";
+> --
+> 2.39.1
+>
