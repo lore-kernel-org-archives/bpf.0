@@ -2,211 +2,92 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCAD3C61DA4
-	for <bpf@archiver.kernel.org>; Fri, 17 Feb 2023 00:56:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F089BC636D7
+	for <bpf@archiver.kernel.org>; Fri, 17 Feb 2023 01:00:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbjBQA4C (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Feb 2023 19:56:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34714 "EHLO
+        id S229553AbjBQBAV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Feb 2023 20:00:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbjBQA4A (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Feb 2023 19:56:00 -0500
-Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28215193FB
-        for <bpf@vger.kernel.org>; Thu, 16 Feb 2023 16:55:59 -0800 (PST)
-Received: by devvm15675.prn0.facebook.com (Postfix, from userid 115148)
-        id 9E14E6A86322; Thu, 16 Feb 2023 16:55:46 -0800 (PST)
-From:   Joanne Koong <joannelkoong@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     martin.lau@kernel.org, andrii@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, kernel-team@fb.com,
-        Joanne Koong <joannelkoong@gmail.com>
-Subject: [PATCH v1 bpf-next] bpf: Tidy up verifier checking
-Date:   Thu, 16 Feb 2023 16:54:51 -0800
-Message-Id: <20230217005451.2438147-1-joannelkoong@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S229460AbjBQBAU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Feb 2023 20:00:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4068548E2B;
+        Thu, 16 Feb 2023 17:00:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0F5C6123D;
+        Fri, 17 Feb 2023 01:00:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 17458C4339B;
+        Fri, 17 Feb 2023 01:00:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676595619;
+        bh=8w5Cvm+JJNB9gVAPmcED8ftOX539Epn1aCKmjUjpJ0k=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Hnl+ICGSiR0iNbNJhH8p8PznwUzvCb9WTtsz5jslMrN/tKJeaFepMys1z9L5Ivw8u
+         xCLDXZy0CR/qrs6r745FRfMZx9ReJppe4zXyQvvI0QwkUGERZYTL8gQ5RuTiT9jxtN
+         SBC4E8r0jdQ4sE/nPN5/S5K0sjIJCALT/VGLtqfJPitaIvM0cWLRPcoG9w4+njz/tS
+         H6egi0/bCcTKTeC1pOhjLkTolHM4rh8W3oO7jbnu/zlRX+Pci5WU3v06fZw9iSfcqd
+         vl/XSRpCZRr8PWWANt2ZCCCERCOxZsph/c9+/f1vKxsrRZB4DNMMVuvFCP8tAMTwn3
+         ztN54Pu/FoUcA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DE20BE68D2E;
+        Fri, 17 Feb 2023 01:00:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] Fix typos in selftest/bpf files
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167659561890.14337.623959612136351580.git-patchwork-notify@kernel.org>
+Date:   Fri, 17 Feb 2023 01:00:18 +0000
+References: <20230216085537.519062-1-awkrail01@gmail.com>
+In-Reply-To: <20230216085537.519062-1-awkrail01@gmail.com>
+To:     Taichi Nishimura <awkrail01@gmail.com>
+Cc:     andrii@kernel.org, mykolal@fb.com, ast@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        shuah@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        hawk@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+        trix@redhat.com, iii@linux.ibm.com, ytcoode@gmail.com,
+        deso@posteo.net, memxor@gmail.com, joannelkoong@gmail.com,
+        rdunlap@infradead.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, llvm@lists.linux.dev
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This change refactors check_mem_access() to check against the base type o=
-f
-the register, and uses switch case checking instead of if / else if
-checks. This change also uses the existing clear_called_saved_regs()
-function for resetting caller saved regs in check_helper_call().
+Hello:
 
-Signed-off-by: Joanne Koong <joannelkoong@gmail.com>
----
- kernel/bpf/verifier.c | 67 +++++++++++++++++++++++++++++--------------
- 1 file changed, 46 insertions(+), 21 deletions(-)
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 272563a0b770..b40165be2943 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -5317,7 +5317,8 @@ static int check_mem_access(struct bpf_verifier_env=
- *env, int insn_idx, u32 regn
- 	/* for access checks, reg->off is just part of off */
- 	off +=3D reg->off;
-=20
--	if (reg->type =3D=3D PTR_TO_MAP_KEY) {
-+	switch (base_type(reg->type)) {
-+	case PTR_TO_MAP_KEY:
- 		if (t =3D=3D BPF_WRITE) {
- 			verbose(env, "write to change key R%d not allowed\n", regno);
- 			return -EACCES;
-@@ -5329,7 +5330,10 @@ static int check_mem_access(struct bpf_verifier_en=
-v *env, int insn_idx, u32 regn
- 			return err;
- 		if (value_regno >=3D 0)
- 			mark_reg_unknown(env, regs, value_regno);
--	} else if (reg->type =3D=3D PTR_TO_MAP_VALUE) {
-+
-+		break;
-+	case PTR_TO_MAP_VALUE:
-+	{
- 		struct btf_field *kptr_field =3D NULL;
-=20
- 		if (t =3D=3D BPF_WRITE && value_regno >=3D 0 &&
-@@ -5369,7 +5373,10 @@ static int check_mem_access(struct bpf_verifier_en=
-v *env, int insn_idx, u32 regn
- 				mark_reg_unknown(env, regs, value_regno);
- 			}
- 		}
--	} else if (base_type(reg->type) =3D=3D PTR_TO_MEM) {
-+		break;
-+	}
-+	case PTR_TO_MEM:
-+	{
- 		bool rdonly_mem =3D type_is_rdonly_mem(reg->type);
-=20
- 		if (type_may_be_null(reg->type)) {
-@@ -5394,7 +5401,10 @@ static int check_mem_access(struct bpf_verifier_en=
-v *env, int insn_idx, u32 regn
- 					      reg->mem_size, false);
- 		if (!err && value_regno >=3D 0 && (t =3D=3D BPF_READ || rdonly_mem))
- 			mark_reg_unknown(env, regs, value_regno);
--	} else if (reg->type =3D=3D PTR_TO_CTX) {
-+		break;
-+	}
-+	case PTR_TO_CTX:
-+	{
- 		enum bpf_reg_type reg_type =3D SCALAR_VALUE;
- 		struct btf *btf =3D NULL;
- 		u32 btf_id =3D 0;
-@@ -5438,8 +5448,9 @@ static int check_mem_access(struct bpf_verifier_env=
- *env, int insn_idx, u32 regn
- 			}
- 			regs[value_regno].type =3D reg_type;
- 		}
--
--	} else if (reg->type =3D=3D PTR_TO_STACK) {
-+		break;
-+	}
-+	case PTR_TO_STACK:
- 		/* Basic bounds checks. */
- 		err =3D check_stack_access_within_bounds(env, regno, off, size, ACCESS=
-_DIRECT, t);
- 		if (err)
-@@ -5456,7 +5467,9 @@ static int check_mem_access(struct bpf_verifier_env=
- *env, int insn_idx, u32 regn
- 		else
- 			err =3D check_stack_write(env, regno, off, size,
- 						value_regno, insn_idx);
--	} else if (reg_is_pkt_pointer(reg)) {
-+		break;
-+	case PTR_TO_PACKET:
-+	case PTR_TO_PACKET_META:
- 		if (t =3D=3D BPF_WRITE && !may_access_direct_pkt_data(env, NULL, t)) {
- 			verbose(env, "cannot write into packet\n");
- 			return -EACCES;
-@@ -5470,7 +5483,8 @@ static int check_mem_access(struct bpf_verifier_env=
- *env, int insn_idx, u32 regn
- 		err =3D check_packet_access(env, regno, off, size, false);
- 		if (!err && t =3D=3D BPF_READ && value_regno >=3D 0)
- 			mark_reg_unknown(env, regs, value_regno);
--	} else if (reg->type =3D=3D PTR_TO_FLOW_KEYS) {
-+		break;
-+	case PTR_TO_FLOW_KEYS:
- 		if (t =3D=3D BPF_WRITE && value_regno >=3D 0 &&
- 		    is_pointer_value(env, value_regno)) {
- 			verbose(env, "R%d leaks addr into flow keys\n",
-@@ -5481,7 +5495,11 @@ static int check_mem_access(struct bpf_verifier_en=
-v *env, int insn_idx, u32 regn
- 		err =3D check_flow_keys_access(env, off, size);
- 		if (!err && t =3D=3D BPF_READ && value_regno >=3D 0)
- 			mark_reg_unknown(env, regs, value_regno);
--	} else if (type_is_sk_pointer(reg->type)) {
-+		break;
-+	case PTR_TO_SOCKET:
-+	case PTR_TO_SOCK_COMMON:
-+	case PTR_TO_TCP_SOCK:
-+	case PTR_TO_XDP_SOCK:
- 		if (t =3D=3D BPF_WRITE) {
- 			verbose(env, "R%d cannot write into %s\n",
- 				regno, reg_type_str(env, reg->type));
-@@ -5490,18 +5508,18 @@ static int check_mem_access(struct bpf_verifier_e=
-nv *env, int insn_idx, u32 regn
- 		err =3D check_sock_access(env, insn_idx, regno, off, size, t);
- 		if (!err && value_regno >=3D 0)
- 			mark_reg_unknown(env, regs, value_regno);
--	} else if (reg->type =3D=3D PTR_TO_TP_BUFFER) {
-+		break;
-+	case PTR_TO_TP_BUFFER:
- 		err =3D check_tp_buffer_access(env, reg, regno, off, size);
- 		if (!err && t =3D=3D BPF_READ && value_regno >=3D 0)
- 			mark_reg_unknown(env, regs, value_regno);
--	} else if (base_type(reg->type) =3D=3D PTR_TO_BTF_ID &&
--		   !type_may_be_null(reg->type)) {
--		err =3D check_ptr_to_btf_access(env, regs, regno, off, size, t,
--					      value_regno);
--	} else if (reg->type =3D=3D CONST_PTR_TO_MAP) {
-+		break;
-+	case CONST_PTR_TO_MAP:
- 		err =3D check_ptr_to_map_access(env, regs, regno, off, size, t,
- 					      value_regno);
--	} else if (base_type(reg->type) =3D=3D PTR_TO_BUF) {
-+		break;
-+	case PTR_TO_BUF:
-+	{
- 		bool rdonly_mem =3D type_is_rdonly_mem(reg->type);
- 		u32 *max_access;
-=20
-@@ -5521,7 +5539,17 @@ static int check_mem_access(struct bpf_verifier_en=
-v *env, int insn_idx, u32 regn
-=20
- 		if (!err && value_regno >=3D 0 && (rdonly_mem || t =3D=3D BPF_READ))
- 			mark_reg_unknown(env, regs, value_regno);
--	} else {
-+		break;
-+	}
-+	case PTR_TO_BTF_ID:
-+		if (!type_may_be_null(reg->type)) {
-+			err =3D check_ptr_to_btf_access(env, regs, regno, off, size, t,
-+						      value_regno);
-+			break;
-+		} else {
-+			fallthrough;
-+		}
-+	default:
- 		verbose(env, "R%d invalid mem access '%s'\n", regno,
- 			reg_type_str(env, reg->type));
- 		return -EACCES;
-@@ -8377,10 +8405,7 @@ static int check_helper_call(struct bpf_verifier_e=
-nv *env, struct bpf_insn *insn
- 		return err;
-=20
- 	/* reset caller saved regs */
--	for (i =3D 0; i < CALLER_SAVED_REGS; i++) {
--		mark_reg_not_init(env, regs, caller_saved[i]);
--		check_reg_arg(env, caller_saved[i], DST_OP_NO_MARK);
--	}
-+	clear_caller_saved_regs(env, regs);
-=20
- 	/* helper call returns 64-bit value. */
- 	regs[BPF_REG_0].subreg_def =3D DEF_NOT_SUBREG;
---=20
-2.30.2
+On Thu, 16 Feb 2023 17:55:37 +0900 you wrote:
+> Run spell checker on files in selftest/bpf and fixed typos.
+> 
+> Signed-off-by: Taichi Nishimura <awkrail01@gmail.com>
+> ---
+>  tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c  | 2 +-
+>  tools/testing/selftests/bpf/prog_tests/trampoline_count.c   | 2 +-
+>  .../testing/selftests/bpf/progs/btf_dump_test_case_syntax.c | 2 +-
+>  tools/testing/selftests/bpf/progs/dynptr_fail.c             | 2 +-
+>  tools/testing/selftests/bpf/progs/strobemeta.h              | 2 +-
+>  tools/testing/selftests/bpf/progs/test_cls_redirect.c       | 6 +++---
+>  tools/testing/selftests/bpf/progs/test_subprogs.c           | 2 +-
+>  tools/testing/selftests/bpf/progs/test_xdp_vlan.c           | 2 +-
+>  tools/testing/selftests/bpf/test_cpp.cpp                    | 2 +-
+>  tools/testing/selftests/bpf/veristat.c                      | 4 ++--
+>  10 files changed, 13 insertions(+), 13 deletions(-)
+
+Here is the summary with links:
+  - [bpf-next] Fix typos in selftest/bpf files
+    https://git.kernel.org/bpf/bpf-next/c/df71a42cc37a
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
