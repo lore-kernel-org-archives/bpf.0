@@ -2,196 +2,133 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1918C636D6
-	for <bpf@archiver.kernel.org>; Fri, 17 Feb 2023 19:19:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9202C05027
+	for <bpf@archiver.kernel.org>; Fri, 17 Feb 2023 19:29:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbjBQTT3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Feb 2023 14:19:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
+        id S229672AbjBQT3s (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Feb 2023 14:29:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBQTT2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 17 Feb 2023 14:19:28 -0500
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D92153EDD
-        for <bpf@vger.kernel.org>; Fri, 17 Feb 2023 11:19:27 -0800 (PST)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id F3FC02403A0
-        for <bpf@vger.kernel.org>; Fri, 17 Feb 2023 20:19:25 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1676661566; bh=2t67PsuTcPgzpG0pzQcMjBQLDyw7ECrjL94jpIL4Cpg=;
-        h=From:To:Subject:Date:From;
-        b=LtHGAVk3OAjcoKfvGfAxZV+z07CJZYuILjZUgfNml9LtlV7EA1TUm9ldpn/u4KuP/
-         V9p9GQK5suZcrDZHxS6oKZ20oGuL5DR8BnQfCMkeuppFz+VcUQ2xL+RWvGM4Tlfz5M
-         MVwNDA+tB0PzE8ibTqoVXtl1qmke7tMMnuxrSKMsDYbLgbj+k7NiUzNg0DtTJ4/6dM
-         gMXzjc9hORqIguDGtAq+U1HZIgcQJbdOwAxoZmz9PJbtUbwS+umdrBzR6VI8HPKrG8
-         SPVCC2GL9x9gU4yPbhZQt0BQ8kqMDwhvoRJWYCwwHa2qbvLEukmwEuwDneXanNDORB
-         WwUMue2AI1s/Q==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4PJM7c5w87z9rxH;
-        Fri, 17 Feb 2023 20:19:24 +0100 (CET)
-From:   =?UTF-8?q?Daniel=20M=C3=BCller?= <deso@posteo.net>
-To:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com
-Subject: [PATCH bpf-next 3/3] libbpf: Add support for attaching uprobes to shared objects in APKs
-Date:   Fri, 17 Feb 2023 19:19:08 +0000
-Message-Id: <20230217191908.1000004-4-deso@posteo.net>
-In-Reply-To: <20230217191908.1000004-1-deso@posteo.net>
-References: <20230217191908.1000004-1-deso@posteo.net>
+        with ESMTP id S229463AbjBQT3r (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 17 Feb 2023 14:29:47 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0FC2FCFE;
+        Fri, 17 Feb 2023 11:29:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676662186; x=1708198186;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=CEnd+qF+2FYATu7ckoPg+BqcjVuV/8rQiz89geC2aUg=;
+  b=FjvpsHW+ff01Di+U9BLIEGEeVIYF0nKvn7715uIthVpiUE0OMy6ZTg+a
+   hzkgciYkcviyYZZbogcZeow7qTRpXpv60NnDB+Mt09sZKDvRAKskOBzRx
+   RgfIBVRsqbz+EMCOwGGNW6sEwTsTm35AGefUvIzf8gWZCqvhPzwjnUoFF
+   tLBFMbskMRn0+K57RmqfFZA6B0PPsmoVBUSEQubrqqdZJRTHFD2kZwkiT
+   NxwaKFJfMbX4fjlvf4QvUuBjVlSUecGromgiLzc+HVb04XcZZ+fX7BCkS
+   K2hQ/Fwseqld79PhxPOwYsAIpMchjBtY4zbXMClEHgTUOdZ+kZvzFKKN4
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="394550033"
+X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
+   d="scan'208";a="394550033"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 11:29:46 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="701013375"
+X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
+   d="scan'208";a="701013375"
+Received: from unknown (HELO paamrpdk12-S2600BPB.aw.intel.com) ([10.228.151.145])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 11:29:45 -0800
+From:   Tirthendu Sarkar <tirthendu.sarkar@intel.com>
+To:     intel-wired-lan@lists.osuosl.org
+Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
+        tirthendu.sarkar@intel.com
+Subject: [PATCH intel-next v6 0/8] i40e: support XDP multi-buffer
+Date:   Sat, 18 Feb 2023 00:45:07 +0530
+Message-Id: <20230217191515.166819-1-tirthendu.sarkar@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This change adds support for attaching uprobes to shared objects located
-in APKs, which is relevant for Android systems where various libraries
-may reside in APKs. To make that happen, we extend the syntax for the
-"binary path" argument to attach to with that supported by various
-Android tools:
-  <archive>!/<binary-in-archive>
+This patchset adds multi-buffer support for XDP. Tx side already has
+support for multi-buffer. This patchset focuses on Rx side. The last
+patch contains actual multi-buffer changes while the previous ones are
+preparatory patches.
 
-For example:
-  /system/app/test-app/test-app.apk!/lib/arm64-v8a/libc++_shared.so
+On receiving the first buffer of a packet, xdp_buff is built and its
+subsequent buffers are added to it as frags. While 'next_to_clean' keeps
+pointing to the first descriptor, the newly introduced 'next_to_process'
+keeps track of every descriptor for the packet. 
 
-APKs need to be specified via full path, i.e., we do not attempt to
-resolve mere file names by searching system directories.
+On receiving EOP buffer the XDP program is called and appropriate action
+is taken (building skb for XDP_PASS, reusing page for XDP_DROP, adjusting
+page offsets for XDP_{REDIRECT,TX}).
 
-We cannot currently test this functionality end-to-end in an automated
-fashion, because it relies on an Android system being present, but there
-is no support for that in CI. I have tested the functionality manually,
-by creating a libbpf program containing a uretprobe, attaching it to a
-function inside a shared object inside an APK, and verifying the sanity
-of the returned values.
+The patchset also streamlines page offset adjustments for buffer reuse
+to make it easier to post process the rx_buffers after running XDP prog.
 
-Signed-off-by: Daniel Müller <deso@posteo.net>
----
- tools/lib/bpf/libbpf.c | 84 ++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 80 insertions(+), 4 deletions(-)
+With this patchset there does not seem to be any performance degradation
+for XDP_PASS and some improvement (~1% for XDP_TX, ~5% for XDP_DROP) when
+measured using xdp_rxq_info program from samples/bpf/ for 64B packets.
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index a474f49..79ab85f 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -53,6 +53,7 @@
- #include "libbpf_internal.h"
- #include "hashmap.h"
- #include "bpf_gen_internal.h"
-+#include "zip.h"
+Changelog:
+    v5 -> v6:
+    - Rebased on top of next-queue commit ce45ffb815e8 ("i40e: add double
+      of VLAN header when computing the max MTU")
+
+    v4 -> v5:
+    - Change s/size/truesize [Tony]
+    - Rebased on top of commit 9dd6e53ef63d ("i40e: check vsi type before
+      setting xdp_features flag") [Lorenzo]
+    - Changed size of on stack variable to u32 from u16.
+
+    v3 -> v4:
+    - Added non-linear XDP buffer support to xdp_features. [Maciej]
+    - Removed double space. [Maciej]
+
+    v2 -> v3:
+    - Fixed buffer cleanup for single buffer packets on skb alloc
+      failure.
+    - Better naming of cleanup function.
+    - Stop incrementing nr_frags for overflowing packets.
  
- #ifndef BPF_FS_MAGIC
- #define BPF_FS_MAGIC		0xcafe4a11
-@@ -10702,6 +10703,60 @@ static long elf_find_func_offset_from_elf_file(const char *binary_path, const ch
- 	return ret;
- }
- 
-+/* Find offset of function name in archive specified by path. Currently
-+ * supported are .zip files that do not compress their contents (as used on
-+ * Android in the form of APKs, for example).  "file_name" is the name of the
-+ * ELF file inside the archive.  "func_name" matches symbol name or name@@LIB
-+ * for library functions.
-+ */
-+static long elf_find_func_offset_from_archive(const char *archive_path, const char *file_name,
-+					      const char *func_name)
-+{
-+	struct zip_archive *archive;
-+	struct zip_entry entry;
-+	long ret = -ENOENT;
-+	Elf *elf;
-+
-+	archive = zip_archive_open(archive_path);
-+	if (!archive) {
-+		pr_warn("failed to open %s\n", archive_path);
-+		return -LIBBPF_ERRNO__FORMAT;
-+	}
-+
-+	if (zip_archive_find_entry(archive, file_name, &entry)) {
-+		pr_warn("zip: could not find archive member %s in %s\n", file_name, archive_path);
-+		ret = -LIBBPF_ERRNO__FORMAT;
-+		goto out;
-+	}
-+
-+	if (entry.compression) {
-+		pr_warn("zip: entry %s of %s is compressed and cannot be handled\n", file_name,
-+			archive_path);
-+		ret = -LIBBPF_ERRNO__FORMAT;
-+		goto out;
-+	}
-+
-+	elf = elf_memory((void *)entry.data, entry.data_length);
-+	if (!elf) {
-+		pr_warn("elf: could not read elf file %s from %s: %s\n", file_name, archive_path,
-+			elf_errmsg(-1));
-+		ret = -LIBBPF_ERRNO__FORMAT;
-+		goto out;
-+	}
-+
-+	ret = elf_find_func_offset(elf, file_name, func_name);
-+	if (ret > 0) {
-+		ret += entry.data_offset;
-+		pr_debug("elf: symbol address match for '%s' in '%s': 0x%lx\n", func_name,
-+			 archive_path, ret);
-+	}
-+	elf_end(elf);
-+
-+out:
-+	zip_archive_close(archive);
-+	return ret;
-+}
-+
- static const char *arch_specific_lib_paths(void)
- {
- 	/*
-@@ -10789,6 +10844,9 @@ bpf_program__attach_uprobe_opts(const struct bpf_program *prog, pid_t pid,
- {
- 	DECLARE_LIBBPF_OPTS(bpf_perf_event_opts, pe_opts);
- 	char errmsg[STRERR_BUFSIZE], *legacy_probe = NULL;
-+	const char *archive_path = NULL;
-+	const char *archive_sep = NULL;
-+	char full_archive_path[PATH_MAX];
- 	char full_binary_path[PATH_MAX];
- 	struct bpf_link *link;
- 	size_t ref_ctr_off;
-@@ -10806,9 +10864,21 @@ bpf_program__attach_uprobe_opts(const struct bpf_program *prog, pid_t pid,
- 	if (!binary_path)
- 		return libbpf_err_ptr(-EINVAL);
- 
--	if (!strchr(binary_path, '/')) {
--		err = resolve_full_path(binary_path, full_binary_path,
--					sizeof(full_binary_path));
-+	/* Check if "binary_path" refers to an archive. */
-+	archive_sep = strstr(binary_path, "!/");
-+	if (archive_sep) {
-+		if (archive_sep - binary_path >= sizeof(full_archive_path)) {
-+			return libbpf_err_ptr(-EINVAL);
-+		}
-+
-+		strncpy(full_archive_path, binary_path, archive_sep - binary_path);
-+		full_archive_path[archive_sep - binary_path] = 0;
-+		archive_path = full_archive_path;
-+
-+		strcpy(full_binary_path, archive_sep + 2);
-+		binary_path = full_binary_path;
-+	} else if (!strchr(binary_path, '/')) {
-+		err = resolve_full_path(binary_path, full_binary_path, sizeof(full_binary_path));
- 		if (err) {
- 			pr_warn("prog '%s': failed to resolve full path for '%s': %d\n",
- 				prog->name, binary_path, err);
-@@ -10820,7 +10890,13 @@ bpf_program__attach_uprobe_opts(const struct bpf_program *prog, pid_t pid,
- 	if (func_name) {
- 		long sym_off;
- 
--		sym_off = elf_find_func_offset_from_elf_file(binary_path, func_name);
-+		if (archive_path) {
-+			sym_off = elf_find_func_offset_from_archive(archive_path, binary_path,
-+								    func_name);
-+			binary_path = archive_path;
-+		} else {
-+			sym_off = elf_find_func_offset_from_elf_file(binary_path, func_name);
-+		}
- 		if (sym_off < 0)
- 			return libbpf_err_ptr(sym_off);
- 		func_offset += sym_off;
+    v1 -> v2:
+    - Instead of building xdp_buff on eop now it is built incrementally.
+    - xdp_buff is now added to i40e_ring struct for preserving across
+      napi calls. [Alexander Duyck]
+    - Post XDP program rx_buffer processing has been simplified.
+    - Rx buffer allocation pull out is reverted to avoid performance 
+      issues for smaller ring sizes and now done when at least half of
+      the ring has been cleaned. With v1 there was ~75% drop for
+      XDP_PASS with the smallest ring size of 64 which is mitigated by
+      v2 [Alexander Duyck]
+    - Instead of retrying skb allocation on previous failure now the
+      packet is dropped. [Maciej]
+    - Simplified page offset adjustments by using xdp->frame_sz instead
+      of recalculating truesize. [Maciej]
+    - Change i40e_trace() to use xdp instead of skb [Maciej]
+    - Reserve tailroom for legacy-rx [Maciej]
+    - Centralize max frame size calculation
+
+Tirthendu Sarkar (8):
+  i40e: consolidate maximum frame size calculation for vsi
+  i40e: change Rx buffer size for legacy-rx to support XDP multi-buffer
+  i40e: add pre-xdp page_count in rx_buffer
+  i40e: Change size to truesize when using i40e_rx_buffer_flip()
+  i40e: use frame_sz instead of recalculating truesize for building skb
+  i40e: introduce next_to_process to i40e_ring
+  i40e: add xdp_buff to i40e_ring struct
+  i40e: add support for XDP multi-buffer Rx
+
+ drivers/net/ethernet/intel/i40e/i40e_main.c  |  78 ++--
+ drivers/net/ethernet/intel/i40e/i40e_trace.h |  20 +-
+ drivers/net/ethernet/intel/i40e/i40e_txrx.c  | 420 +++++++++++--------
+ drivers/net/ethernet/intel/i40e/i40e_txrx.h  |  21 +-
+ 4 files changed, 307 insertions(+), 232 deletions(-)
+
 -- 
-2.30.2
+2.34.1
 
