@@ -2,162 +2,286 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A73EC05027
-	for <bpf@archiver.kernel.org>; Sat, 18 Feb 2023 00:38:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFD63C05027
+	for <bpf@archiver.kernel.org>; Sat, 18 Feb 2023 00:41:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbjBRAiQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Feb 2023 19:38:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56782 "EHLO
+        id S229507AbjBRAlf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Feb 2023 19:41:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbjBRAiP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 17 Feb 2023 19:38:15 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D148A4E
-        for <bpf@vger.kernel.org>; Fri, 17 Feb 2023 16:37:51 -0800 (PST)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31HLhkA6007323;
-        Fri, 17 Feb 2023 23:10:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2022-7-12;
- bh=cbK5M5lYnO/a8UFDUfv/NH5Hb2iCgjkQZ7Hs+joTXps=;
- b=PMshrNJS7pX+nUQ8aiA2hmCCxUbSPRwhWRklU2mRQI+oKkCPFkDQ7sRGUUzCisW6TKmZ
- AYNwzoIgMusQOlawF3uI1iJ7DY1uPTQ2IF7qZ9VLNJSzFsgg8eIVhl7eUPeZ7Jp104mi
- AKYN33KrlA9koksKasaJN8GZulIWs3hCtiFGtZuTH+3pA0Fmagdl8P3i3NQz5nmHFPAK
- XaZ4ZKcVfTopRxSdCw5ubXpcPeJDiJqaUWtW2TKwZ9/J+R24bOz/mZ8iyLSgSYSMnYog
- 56ACjmfjuvC3HV+Vjj989Umy3UvmseIGGCPS8wtsI7cHV8cDwgEmH7CaWUi/D/ss5OC4 9Q== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3np2mtq56f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Feb 2023 23:10:46 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31HKo4vp015379;
-        Fri, 17 Feb 2023 23:10:46 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3np1fas7v6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Feb 2023 23:10:46 +0000
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31HNAcmO007180;
-        Fri, 17 Feb 2023 23:10:45 GMT
-Received: from myrouter.uk.oracle.com (dhcp-10-175-171-27.vpn.oracle.com [10.175.171.27])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3np1fas7py-3;
-        Fri, 17 Feb 2023 23:10:45 +0000
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     acme@kernel.org, olsajiri@gmail.com, ast@kernel.org
-Cc:     daniel@iogearbox.net, andrii@kernel.org, yhs@fb.com,
-        eddyz87@gmail.com, sinquersw@gmail.com, timo@incline.eu,
-        songliubraving@fb.com, john.fastabend@gmail.com,
-        kpsingh@chromium.org, sdf@google.com, haoluo@google.com,
-        martin.lau@kernel.org, bpf@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [RFC dwarves 2/4] btf_encoder: exclude functions with unexpected param register use not optimizations
-Date:   Fri, 17 Feb 2023 23:10:31 +0000
-Message-Id: <1676675433-10583-3-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1676675433-10583-1-git-send-email-alan.maguire@oracle.com>
-References: <1676675433-10583-1-git-send-email-alan.maguire@oracle.com>
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-17_15,2023-02-17_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0
- suspectscore=0 mlxscore=0 spamscore=0 mlxlogscore=999 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302170202
-X-Proofpoint-GUID: LdwKI-w56sQFASbRGq9OwGsfD75K3wFm
-X-Proofpoint-ORIG-GUID: LdwKI-w56sQFASbRGq9OwGsfD75K3wFm
+        with ESMTP id S229536AbjBRAle (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 17 Feb 2023 19:41:34 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B88186D25A
+        for <bpf@vger.kernel.org>; Fri, 17 Feb 2023 16:40:52 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id y14so2655715ljq.10
+        for <bpf@vger.kernel.org>; Fri, 17 Feb 2023 16:40:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0/Z1W0wEvuLo9yl4c/axSNeczppuJsAbTfAQ5W0V+7s=;
+        b=N00ka4wUzf+PRKX6zYwkpB6cHSu40vJ8MRD7qaqTqw5/b1mpergWasK6pLiaZ4i8ns
+         VbdCeIzze8cipxDcLXUvGuI/mo+c+j2/vCXb5WT+sA34QQIv4rKmamf1u4c4lOGviGIM
+         eLTcWz8tya/s4kurL8g28pn7xiEx86LMqPuLlRu+kqLGGIIyILNgvKBbUik/o3h6hzp3
+         h7j5kBPjbBkyblKQQBP8hh2v5VJ15tixbTAhp62jihFJKMFSpFhfsN9DJ6FpQmOav9NC
+         lsUJOoCs4lqE74BUEVik9BOKad4A2YsrPHcG1JLSUNnysUnjhdizZtucmzoV3vLt1RCA
+         TJMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0/Z1W0wEvuLo9yl4c/axSNeczppuJsAbTfAQ5W0V+7s=;
+        b=YxcQD6AXo7ePJx1Zw33OsTH22dhKFWVFkiSjLDofQZN730blQcYsFUv8CgvARVdsj9
+         D1cib04BeTMAsivOaMebGriNFt1hh1sIucGT93ZedHxBm1Rob01TISCu42yILjK9tMb9
+         S3nO6LkYlrHrn1JY+J33fooqiencB8Jw0ozrkQYNxnjKB8fxaTxmcd2Ru7Yk3HIZu9j6
+         yiXHzMUJ9Ioq7mF6V6SoapFc330xD4rVzC+ly9NWLdVvLmYZSC6q/LXuVX/TM/cvYigP
+         olQSqbeiFpjUvXC5tqrq4+rm+R19X6+PZxzrK9N10WMMzDOhiRi5QTGZsTjKHt1amikF
+         3aXQ==
+X-Gm-Message-State: AO0yUKVLMjj4Jj8idrzZtxTEf5RtuChhhBEb5QV4e1p6BWqfsX3Ig6Ah
+        myIDLrMXdDsF7X8rnE5kpMHOy2//U++gKk7nmgg+VrlonyU=
+X-Google-Smtp-Source: AK7set9kNpSTb7rS+JyknwjBM4CL01+6yyG8NhhNMSnKCm8eU0I9ErVk4hSZWvVP1Xj/0dhu5fLI4sxA/Q7ajrpazJA=
+X-Received: by 2002:a05:6402:3890:b0:4ab:1f1b:95a1 with SMTP id
+ fd16-20020a056402389000b004ab1f1b95a1mr5406889edb.0.1676680338051; Fri, 17
+ Feb 2023 16:32:18 -0800 (PST)
+MIME-Version: 1.0
+References: <20230217191908.1000004-1-deso@posteo.net> <20230217191908.1000004-4-deso@posteo.net>
+In-Reply-To: <20230217191908.1000004-4-deso@posteo.net>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 17 Feb 2023 16:32:05 -0800
+Message-ID: <CAEf4BzasONdYA6JPvF=pAjBW9hotVw34itVG3AoGRJV5pjERBA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/3] libbpf: Add support for attaching uprobes to
+ shared objects in APKs
+To:     =?UTF-8?Q?Daniel_M=C3=BCller?= <deso@posteo.net>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-A key problem with the existing approach of excluding functions
-with optimized-out parameters is that it does not distinguish
-between cases where a parameter was passed but not used versus
-cases where a parameter is not passed or used.  The latter
-is the only problematic case as for the former case, the
-expected register states at function call time are as
-they would be absent optimization.  Ideally call-site analysis
-could tell us what actually happens when a function is called,
-but in practice we use a different method to exclude functions
-from BTF representation.  If a function clearly violates the
-calling-convention expectations, where such a violation
-means "parameter X does not use the expected register
-as specified in calling conventions", it is excluded.
+On Fri, Feb 17, 2023 at 11:19 AM Daniel M=C3=BCller <deso@posteo.net> wrote=
+:
+>
+> This change adds support for attaching uprobes to shared objects located
+> in APKs, which is relevant for Android systems where various libraries
 
-Note that we continue to mark functions which have optimized-out
-parameters as this is good to know, but only actively exclude
-functions with unexpected register usage for parameters or
-multiple inconsistent function prototypes.
+Is there a good link with description of APK that we can record
+somewhere in the comments for future us?
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- btf_encoder.c | 24 +++++++++++++++++-------
- 1 file changed, 17 insertions(+), 7 deletions(-)
+Also, does .apk contains only shared libraries, or it could be also
+just a binary?
 
-diff --git a/btf_encoder.c b/btf_encoder.c
-index ea5b47b..da776f4 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -871,14 +871,16 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
- 
- 		/* If saving and we find an existing entry, we want to merge
- 		 * observations across both functions, checking that the
--		 * "seen optimized parameters" and "inconsistent prototype"
--		 * status is reflected in the func entry.
-+		 * "seen optimized parameters", "inconsistent prototype"
-+		 * and "unexpected register" status is reflected in the
-+		 * the func entry.
- 		 * If the entry is new, record encoder state required
- 		 * to add the local function later (encoder + type_id_off)
- 		 * such that we can add the function later.
- 		 */
- 		existing->proto.optimized_parms |= fn->proto.optimized_parms;
--		if (!existing->proto.optimized_parms && !existing->proto.inconsistent_proto &&
-+		existing->proto.unexpected_reg |= fn->proto.unexpected_reg;
-+		if (!existing->proto.unexpected_reg && !existing->proto.inconsistent_proto &&
- 		     !funcs__match(encoder, func, fn))
- 			existing->proto.inconsistent_proto = 1;
- 	} else {
-@@ -940,20 +942,26 @@ static void btf_encoder__add_saved_funcs(struct btf_encoder *encoder)
- 			if (!other_fn)
- 				continue;
- 			fn->proto.optimized_parms |= other_fn->proto.optimized_parms;
-+			fn->proto.unexpected_reg |= other_fn->proto.unexpected_reg;
- 			if (other_fn->proto.inconsistent_proto)
- 				fn->proto.inconsistent_proto = 1;
--			if (!fn->proto.optimized_parms && !fn->proto.inconsistent_proto &&
-+			if (!fn->proto.unexpected_reg && !fn->proto.inconsistent_proto &&
- 			    !funcs__match(encoder, func, other_fn))
- 				fn->proto.inconsistent_proto = 1;
- 			other_fn->proto.processed = 1;
- 		}
--		if (fn->proto.optimized_parms || fn->proto.inconsistent_proto) {
-+		/* do not exclude functions with optimized-out parameters; they
-+		 * may still be _called_ with the right parameter values, they
-+		 * just do not _use_ them.  Only exclude functions with
-+		 * unexpected register use or multiple inconsistent prototypes.
-+		 */
-+		if (fn->proto.unexpected_reg || fn->proto.inconsistent_proto) {
- 			if (encoder->verbose) {
- 				const char *name = function__name(fn);
- 
- 				printf("skipping addition of '%s'(%s) due to %s\n",
- 				       name, fn->alias ?: name,
--				       fn->proto.optimized_parms ? "optimized-out parameters" :
-+				       fn->proto.unexpected_reg ? "unexpected register used for parameter" :
- 								   "multiple inconsistent function prototypes");
- 			}
- 		} else {
-@@ -1856,7 +1864,9 @@ int btf_encoder__encode_cu(struct btf_encoder *encoder, struct cu *cu, struct co
- 						printf("matched function '%s' with '%s'%s\n",
- 						       name, func->name,
- 						       fn->proto.optimized_parms ?
--						       ", has optimized-out parameters" : "");
-+						       ", has optimized-out parameters" :
-+						       fn->proto.unexpected_reg ? ", has unexpected register use by params" :
-+						       "");
- 					fn->alias = func->name;
- 				}
- 			}
--- 
-2.31.1
+> may reside in APKs. To make that happen, we extend the syntax for the
+> "binary path" argument to attach to with that supported by various
+> Android tools:
+>   <archive>!/<binary-in-archive>
+>
+> For example:
+>   /system/app/test-app/test-app.apk!/lib/arm64-v8a/libc++_shared.so
+>
+> APKs need to be specified via full path, i.e., we do not attempt to
+> resolve mere file names by searching system directories.
 
+mere?
+
+>
+> We cannot currently test this functionality end-to-end in an automated
+> fashion, because it relies on an Android system being present, but there
+> is no support for that in CI. I have tested the functionality manually,
+> by creating a libbpf program containing a uretprobe, attaching it to a
+> function inside a shared object inside an APK, and verifying the sanity
+> of the returned values.
+>
+> Signed-off-by: Daniel M=C3=BCller <deso@posteo.net>
+> ---
+>  tools/lib/bpf/libbpf.c | 84 ++++++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 80 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index a474f49..79ab85f 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -53,6 +53,7 @@
+>  #include "libbpf_internal.h"
+>  #include "hashmap.h"
+>  #include "bpf_gen_internal.h"
+> +#include "zip.h"
+>
+>  #ifndef BPF_FS_MAGIC
+>  #define BPF_FS_MAGIC           0xcafe4a11
+> @@ -10702,6 +10703,60 @@ static long elf_find_func_offset_from_elf_file(c=
+onst char *binary_path, const ch
+>         return ret;
+>  }
+>
+> +/* Find offset of function name in archive specified by path. Currently
+> + * supported are .zip files that do not compress their contents (as used=
+ on
+> + * Android in the form of APKs, for example).  "file_name" is the name o=
+f the
+> + * ELF file inside the archive.  "func_name" matches symbol name or name=
+@@LIB
+> + * for library functions.
+
+These double spaces after dot were not intended, let's not add more.
+
+> + */
+> +static long elf_find_func_offset_from_archive(const char *archive_path, =
+const char *file_name,
+> +                                             const char *func_name)
+> +{
+> +       struct zip_archive *archive;
+> +       struct zip_entry entry;
+> +       long ret =3D -ENOENT;
+> +       Elf *elf;
+> +
+> +       archive =3D zip_archive_open(archive_path);
+> +       if (!archive) {
+> +               pr_warn("failed to open %s\n", archive_path);
+
+add "zip: " prefix?
+
+> +               return -LIBBPF_ERRNO__FORMAT;
+> +       }
+> +
+> +       if (zip_archive_find_entry(archive, file_name, &entry)) {
+> +               pr_warn("zip: could not find archive member %s in %s\n", =
+file_name, archive_path);
+> +               ret =3D -LIBBPF_ERRNO__FORMAT;
+> +               goto out;
+> +       }
+> +
+> +       if (entry.compression) {
+> +               pr_warn("zip: entry %s of %s is compressed and cannot be =
+handled\n", file_name,
+> +                       archive_path);
+> +               ret =3D -LIBBPF_ERRNO__FORMAT;
+> +               goto out;
+> +       }
+> +
+> +       elf =3D elf_memory((void *)entry.data, entry.data_length);
+> +       if (!elf) {
+> +               pr_warn("elf: could not read elf file %s from %s: %s\n", =
+file_name, archive_path,
+
+I kind of like preserving the "archive/path!/file/path" consistently
+through error messages when referring to file within APK, WDYT?
+
+> +                       elf_errmsg(-1));
+> +               ret =3D -LIBBPF_ERRNO__FORMAT;
+> +               goto out;
+> +       }
+> +
+> +       ret =3D elf_find_func_offset(elf, file_name, func_name);
+> +       if (ret > 0) {
+> +               ret +=3D entry.data_offset;
+> +               pr_debug("elf: symbol address match for '%s' in '%s': 0x%=
+lx\n", func_name,
+> +                        archive_path, ret);
+
+so for debugging I feel like we'll want to know both entry.data_offset
+and original ELF offset, let's report all three offset (including the
+final calculated one)?
+
+> +       }
+> +       elf_end(elf);
+> +
+> +out:
+> +       zip_archive_close(archive);
+> +       return ret;
+> +}
+> +
+>  static const char *arch_specific_lib_paths(void)
+>  {
+>         /*
+> @@ -10789,6 +10844,9 @@ bpf_program__attach_uprobe_opts(const struct bpf_=
+program *prog, pid_t pid,
+>  {
+>         DECLARE_LIBBPF_OPTS(bpf_perf_event_opts, pe_opts);
+>         char errmsg[STRERR_BUFSIZE], *legacy_probe =3D NULL;
+> +       const char *archive_path =3D NULL;
+> +       const char *archive_sep =3D NULL;
+
+nit: combine on a single line?
+
+> +       char full_archive_path[PATH_MAX];
+>         char full_binary_path[PATH_MAX];
+>         struct bpf_link *link;
+>         size_t ref_ctr_off;
+> @@ -10806,9 +10864,21 @@ bpf_program__attach_uprobe_opts(const struct bpf=
+_program *prog, pid_t pid,
+>         if (!binary_path)
+>                 return libbpf_err_ptr(-EINVAL);
+>
+> -       if (!strchr(binary_path, '/')) {
+> -               err =3D resolve_full_path(binary_path, full_binary_path,
+> -                                       sizeof(full_binary_path));
+> +       /* Check if "binary_path" refers to an archive. */
+> +       archive_sep =3D strstr(binary_path, "!/");
+> +       if (archive_sep) {
+> +               if (archive_sep - binary_path >=3D sizeof(full_archive_pa=
+th)) {
+
+very unlikely to happen, I wouldn't bother checking, especially that
+strncpy will just truncate and make us fail anyways
+
+> +                       return libbpf_err_ptr(-EINVAL);
+> +               }
+> +
+> +               strncpy(full_archive_path, binary_path, archive_sep - bin=
+ary_path);
+
+let's use saner libbpf_strlcpy() instead of strncpy, we stopped using
+strncpy relatively recently
+
+> +               full_archive_path[archive_sep - binary_path] =3D 0;
+
+strlcpy makes sure the resulting string is zero-terminated.
+
+But note that full_archive_path[0] is not guaranteed to be zero, so
+strncpy/strlcpy might preserve some garbage in front. Let's make sure
+full_archive_path[0] =3D '\0'; before manipulating that buffer
+
+> +               archive_path =3D full_archive_path;
+> +
+> +               strcpy(full_binary_path, archive_sep + 2);
+> +               binary_path =3D full_binary_path;
+
+no need to copy, just `binary_path =3D archive_sep + 2;`? And thus we
+can reuse full_binary_path buffer for archive path (we can rename it
+to be more generic "full_path" name or something)
+
+> +       } else if (!strchr(binary_path, '/')) {
+> +               err =3D resolve_full_path(binary_path, full_binary_path, =
+sizeof(full_binary_path));
+>                 if (err) {
+>                         pr_warn("prog '%s': failed to resolve full path f=
+or '%s': %d\n",
+>                                 prog->name, binary_path, err);
+> @@ -10820,7 +10890,13 @@ bpf_program__attach_uprobe_opts(const struct bpf=
+_program *prog, pid_t pid,
+>         if (func_name) {
+>                 long sym_off;
+>
+> -               sym_off =3D elf_find_func_offset_from_elf_file(binary_pat=
+h, func_name);
+> +               if (archive_path) {
+> +                       sym_off =3D elf_find_func_offset_from_archive(arc=
+hive_path, binary_path,
+> +                                                                   func_=
+name);
+> +                       binary_path =3D archive_path;
+> +               } else {
+> +                       sym_off =3D elf_find_func_offset_from_elf_file(bi=
+nary_path, func_name);
+> +               }
+>                 if (sym_off < 0)
+>                         return libbpf_err_ptr(sym_off);
+>                 func_offset +=3D sym_off;
+> --
+> 2.30.2
+>
