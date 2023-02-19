@@ -2,144 +2,150 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10CA6C61DA4
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 807B5C64EC4
 	for <bpf@archiver.kernel.org>; Sun, 19 Feb 2023 15:53:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbjBSPxA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 19 Feb 2023 10:53:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43938 "EHLO
+        id S230146AbjBSPxB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 19 Feb 2023 10:53:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbjBSPw6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 19 Feb 2023 10:52:58 -0500
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172B346A3
-        for <bpf@vger.kernel.org>; Sun, 19 Feb 2023 07:52:57 -0800 (PST)
-Received: by mail-ed1-x543.google.com with SMTP id ec23so2812256edb.1
-        for <bpf@vger.kernel.org>; Sun, 19 Feb 2023 07:52:57 -0800 (PST)
+        with ESMTP id S230173AbjBSPxA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 19 Feb 2023 10:53:00 -0500
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D817EF8
+        for <bpf@vger.kernel.org>; Sun, 19 Feb 2023 07:52:58 -0800 (PST)
+Received: by mail-ed1-x542.google.com with SMTP id ek25so2801950edb.7
+        for <bpf@vger.kernel.org>; Sun, 19 Feb 2023 07:52:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=D/1so9i3HBYkTX95EWj7UWd4gR62OCbsarRt0LHkNFw=;
-        b=S/z7EYh8pjP8qKoa4uixIseuCZo84G+Z4w2hpMQLnIO+jLyd6QfXsAasNB+veyo3nq
-         3rVL35V6IrQVRj+OtBqFlQ1FpqXlITxX1i5+igcERZdk3/5YbD5Mru7x3XzYUq16K4Jg
-         jiZcLSgGGhh60yyMC2S3VOorXruyoDNsUDcb5QKO3UnLqARt1VRASzh+Z+aj3fjBXtdx
-         vXwSroLg1+22rTAQ2hU6rkOQuygNGAdxIzbaVUO4oJ9X+biJOiTpEzKQ3HL4Gtp1+0jk
-         KCxPaVFaYplNu5f1I9tiYh8cZtNn029dFPPnRae2/AUo+bzvNNw7Kg5pkBjHlEq1Y9bg
-         o16g==
+        bh=1gjATKTPjeef4UxhZLE+OVD3fftepy3M/KUpIRkKPPE=;
+        b=g00tRZJ0/d0UGGZoHGw7+f7RjEZhEaelfXjKPE9IXnWveIDEAjscu7F+x7kFnLepf9
+         psK9eqqwa3dSaqSCMHwoUTsbq8ZVmuCfW3zTJTMe2GSPlwExkglfht/GE20T1HTgxy9R
+         FwnSU+kVhNsxsxDk1etakUtGKzp5YOg9y9NG+qg3yeSmPwMEb+VnBBTBqBUwXIrnyVkf
+         g45207gmKSNeMN5G4xPOic1D0wG4DKDxDyCxTj9sewtuVEOE6QMT7XULmPs2CaQEndOz
+         MSeoEmMtJUpt6nKhOd3H0IP1AwQb5VGri/uI5wMO6H5eBZWEebEZEhYr39umpGmjc3qz
+         3vVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=D/1so9i3HBYkTX95EWj7UWd4gR62OCbsarRt0LHkNFw=;
-        b=5FEuLFpXlbI25e6N0OjlAHMCkcq90XE9oPqe3apo2MSRfQGcMzAQzEKfRp2n8oBZNv
-         17xCtWtWmp9/gPEJOdpgCdL8opNqapbNsLc5emZkvLHNBwxhnPXPwCjDblB+nfGym32A
-         3ZzFRAaLajkQmT5RX8uHdEqJiE7saKfVwkp8F2n7y6yBorG7DPI1JOA+4mRXGZ6IOiso
-         qwcxWAORLbHQduG/MUt6hhE0ww6N/QKZUvk3+dOrGONTXs+mA4/Tq5OlkoMQcEiDGf8S
-         HVLQkmxJqYCcOjaZ0cFNjtHSASjkfLywAh2EY7pxJC5Up+KETFUYpcnTUJ7OaZq4l6Zy
-         BO9w==
-X-Gm-Message-State: AO0yUKWfh/n5C6iODRP+wqzRY+tIpRTk4wGtaIbF0tzrJYIhh9bsdLJ6
-        EnKTWG/3jtNeizutjj712j1sbcAclZDe4g==
-X-Google-Smtp-Source: AK7set+qnTEBr9ffYkb0sxhyIgtmA7CXgbd4MNZKyBoz+tkg0zo23f3EjPvN6Bx2IWsH2TJHcJf+9w==
-X-Received: by 2002:a17:907:2da2:b0:889:33ca:70c6 with SMTP id gt34-20020a1709072da200b0088933ca70c6mr11462725ejc.2.1676821975187;
-        Sun, 19 Feb 2023 07:52:55 -0800 (PST)
+        bh=1gjATKTPjeef4UxhZLE+OVD3fftepy3M/KUpIRkKPPE=;
+        b=t6tOvDqxm+Md/N0FUWbtvXwaaFcdGz5S1KdmylY/bo4BygdQ3OJMASYuRR66c+KCQz
+         JWlnulEMhcIoeDYvQFRyf9C/bPSkAtDrnu1Y42IrWZridviyHfwmN2cUm8Kxt4NsDUz9
+         ncK1yH6OA39JgLokJyAncVJLtJUMsWPDchBqgA97K09atn+4tEIkCATySpl5XDvfgHSk
+         ZMV7lHvmjPN8AVlNljEwKNborl16/Xsvou1hBtx7ExlqO0lYJjAVC7X1jO6CBc0ykeLt
+         jL2Stbj/vOpVsOT0WsbvNroq8wxMErQZ8o9wl6a5Hn99mnWjrXAQ6RM2R21MBEUHo1Fz
+         uuYQ==
+X-Gm-Message-State: AO0yUKWRxmsFg3U5vJDQx6pfqoY5dzT1DxfJQllZEYgb1m4xIIyvY0L6
+        mYe1zsUeIE+5mJUgBHHiVuiISE3oGcrHLw==
+X-Google-Smtp-Source: AK7set/u7MO5NrXNupA9p+qTIRldZEG7CsD3tfEqtgio2Djkevm2jOne6vNDiFDQmopPv3Kbsg8s9A==
+X-Received: by 2002:a17:906:f55:b0:8b1:315c:be04 with SMTP id h21-20020a1709060f5500b008b1315cbe04mr5398774ejj.27.1676821977635;
+        Sun, 19 Feb 2023 07:52:57 -0800 (PST)
 Received: from localhost ([2001:620:618:580:2:80b3:0:8d0])
-        by smtp.gmail.com with ESMTPSA id fx11-20020a170906b74b00b008bc8ad41646sm2092397ejb.157.2023.02.19.07.52.54
+        by smtp.gmail.com with ESMTPSA id k3-20020a50ce43000000b004acbecf091esm947446edj.17.2023.02.19.07.52.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Feb 2023 07:52:54 -0800 (PST)
+        Sun, 19 Feb 2023 07:52:57 -0800 (PST)
 From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To:     bpf@vger.kernel.org
-Cc:     Martin KaFai Lau <martin.lau@kernel.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@kernel.org>,
+        KP Singh <kpsingh@kernel.org>,
         Dave Marchevsky <davemarchevsky@meta.com>,
         David Vernet <void@manifault.com>
-Subject: [PATCH bpf-next v1 3/7] bpf: Annotate data races in bpf_local_storage
-Date:   Sun, 19 Feb 2023 16:52:45 +0100
-Message-Id: <20230219155249.1755998-4-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 5/7] bpf: Fix check_reg_type for PTR_TO_BTF_ID
+Date:   Sun, 19 Feb 2023 16:52:47 +0100
+Message-Id: <20230219155249.1755998-6-memxor@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230219155249.1755998-1-memxor@gmail.com>
 References: <20230219155249.1755998-1-memxor@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2660; i=memxor@gmail.com; h=from:subject; bh=s/dXuZ/+okm2ypKP+JtyKlFMQDFsjWGusg00Wy+v0v8=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBj8kUe1zJfouqHU/2z1yOGqj668QLam336h9BlxOhO 1KWys3uJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCY/JFHgAKCRBM4MiGSL8RymSlD/ kB782p3N22XxbPysej6CQdL9T8Iw4N1U2Yo2cx8B2endI7W4MeSuu1uct55udrvgZ0lpepJMTYAj0V 89s6dcM3WvjxvvsWHpSAUvsVikMg1p+nWba67gW0g7athpxlkcazYeAsSOeX0roSLxMhP06Tx7mKFs 3Ow9uyIgv2iD5EndyUAP2XH7E9Xlgxx95EkpMYGJXnAFRXmYmmjvLBuyYKyny+3GKQM0Z7mE9mB4Nr jT8+gFAFlTPpQavyv9esGnX3bmhiuda7vLQTWfoSF3qW5uWVnSTTC1r6tBwiAhaUrO7GLobuZi7oN8 Oyx7Fum+XlqCdDUsPTMXcdgl2LEyTx4haOej0+1LwOJ3OqAAKOD7FEM3h0b/AIpl3fxMgmmXyM8few IBYKCK/rRVzbozj2ntjtAfv4jUVPDFbQektmuHAyJBSw4osunWRJmPh0kwjyeomQ39Ilv/wol8kKHh DXEtMl8bC/diPUqF4938m+O1iSViWisGPrO6pbSVdebibyA1bQjrKBU2nLWICOAWUUZmeMa4aZViym //xaUJJY9tyZZeSFWEljxrt6gnJGxSQ0p+qXjRgipZcj4FvBaOOZS229YiS6wqzKB6YyXwTMPdoKHZ v2B4mSIzw4QK8DV1FGNJtKl/ZXm6DsAywKZ8tGB/9O+D8M/OganminEED/Aw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2598; i=memxor@gmail.com; h=from:subject; bh=Lqdy/IKzOnseTIegz0Zq4nxx9kSW/9SvKf/gr8GzPMU=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBj8kUewXAfDptv4JkR1DmGQNTV3abjCUocDju4yb7q Apnj8QeJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCY/JFHgAKCRBM4MiGSL8RyqL2D/ oDFwrfV9bvglckONid0Jpv4yTmNkPU48blpV7vYoMMaXzMVE+xNcoEQ9+BohIsLY7a4cp9JWpsBa5Q z3cHfIJjgZnTjBmTa8zMun1wZ72YJuBqVspfBRan4KJAvKOoQ16SGaqS+tDvqj7I7BHCCEmv30kzB9 6rgmH6P8NxHo84bnHfOGhcLmJeIp426A0EjuTgalnOIrhSu8iIhjh3b9eSCmNCtHTe26GEcTurPOWY U76x8t48fH5ZpDkt5vQoxFKaXY4dEr/dm++RaUzKPXyRFTiI3BFQtfmqJzHpqAUNutORBEfjhTGNAI WBbC6eKWtRGB+iDXgRTF2+1xyv2ZydgJbk+azzROUqCv5oao8eYyFgFVwg9787Z9ZHFAoKcIuWySW8 bcqpQ6QL43vmcyNPkBjfkZ18qveLhx8sCgTF8+Xta79rjoWI3aGoeLc4K6dUh13Ime2bzLhionywJN FknrW4tCTx7gHKPeVNRsmkUTLwI5JyZr+Ehj8q8ODIqXbYXTTl9GKDLvm51neunXD5K7/HGXQHdY1B XZA5CUD0Fz4hastaOtaOcmdYOIVkTKZ93ZLqaXsRpxuQubggBmzaTDS/50jba07Ye81ZqRURQJ3or3 kwez35Xv+AROOxSn95VxrNAzXIkpv4FyGLftMvFLWw8D96x/Pzv08tUzgFsw==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-There are a few cases where hlist_node is checked to be unhashed without
-holding the lock protecting its modification. In this case, one must use
-hlist_unhashed_lockless to avoid load tearing and KCSAN reports. Fix
-this by using lockless variant in places not protected by the lock.
+The current code does type matching for the case where reg->type is
+PTR_TO_BTF_ID or has the PTR_TRUSTED flag. However, this only needs to
+occur for non-MEM_ALLOC and non-MEM_PERCPU cases, but will include both
+as per the current code.
 
-Since this is not prompted by any actual KCSAN reports but only from
-code review, I have not included a fixes tag.
+The MEM_ALLOC case with or without PTR_TRUSTED needs to be handled
+specially by the code for type_is_alloc case, while MEM_PERCPU case must
+be ignored. Hence, to restore correct behavior and for clarity,
+explicitly list out the handled PTR_TO_BTF_ID types which should be
+handled for each case using a switch statement.
 
-Cc: Martin KaFai Lau <martin.lau@kernel.org>
-Cc: KP Singh <kpsingh@kernel.org>
+Helpers currently only take:
+	PTR_TO_BTF_ID
+	PTR_TO_BTF_ID | PTR_TRUSTED
+	PTR_TO_BTF_ID | MEM_RCU
+	PTR_TO_BTF_ID | MEM_ALLOC
+	PTR_TO_BTF_ID | MEM_PERCPU
+	PTR_TO_BTF_ID | MEM_PERCPU | PTR_TRUSTED
+
+This fix was also described (for the MEM_ALLOC case) in [0].
+
+  [0]: https://lore.kernel.org/bpf/20221121160657.h6z7xuvedybp5y7s@apollo
+
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/bpf_local_storage.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ kernel/bpf/verifier.c | 23 ++++++++++++++++++++---
+ 1 file changed, 20 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
-index 4521d53d7d4d..6b9039460968 100644
---- a/kernel/bpf/bpf_local_storage.c
-+++ b/kernel/bpf/bpf_local_storage.c
-@@ -51,11 +51,21 @@ owner_storage(struct bpf_local_storage_map *smap, void *owner)
- 	return map->ops->map_owner_storage_ptr(owner);
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 6837657b46bf..8dbd20735e92 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6522,7 +6522,14 @@ static int check_reg_type(struct bpf_verifier_env *env, u32 regno,
+ 	return -EACCES;
+ 
+ found:
+-	if (reg->type == PTR_TO_BTF_ID || reg->type & PTR_TRUSTED) {
++	if (base_type(reg->type) != PTR_TO_BTF_ID)
++		return 0;
++
++	switch ((int)reg->type) {
++	case PTR_TO_BTF_ID:
++	case PTR_TO_BTF_ID | PTR_TRUSTED:
++	case PTR_TO_BTF_ID | MEM_RCU:
++	{
+ 		/* For bpf_sk_release, it needs to match against first member
+ 		 * 'struct sock_common', hence make an exception for it. This
+ 		 * allows bpf_sk_release to work for multiple socket types.
+@@ -6558,13 +6565,23 @@ static int check_reg_type(struct bpf_verifier_env *env, u32 regno,
+ 				return -EACCES;
+ 			}
+ 		}
+-	} else if (type_is_alloc(reg->type)) {
++		break;
++	}
++	case PTR_TO_BTF_ID | MEM_ALLOC:
+ 		if (meta->func_id != BPF_FUNC_spin_lock && meta->func_id != BPF_FUNC_spin_unlock) {
+ 			verbose(env, "verifier internal error: unimplemented handling of MEM_ALLOC\n");
+ 			return -EFAULT;
+ 		}
++		/* Handled by helper specific checks */
++		break;
++	case PTR_TO_BTF_ID | MEM_PERCPU:
++	case PTR_TO_BTF_ID | MEM_PERCPU | PTR_TRUSTED:
++		/* Handled by helper specific checks */
++		break;
++	default:
++		verbose(env, "verifier internal error: invalid PTR_TO_BTF_ID register for type match\n");
++		return -EFAULT;
+ 	}
+-
+ 	return 0;
  }
  
-+static bool selem_linked_to_storage_lockless(const struct bpf_local_storage_elem *selem)
-+{
-+	return !hlist_unhashed_lockless(&selem->snode);
-+}
-+
- static bool selem_linked_to_storage(const struct bpf_local_storage_elem *selem)
- {
- 	return !hlist_unhashed(&selem->snode);
- }
- 
-+static bool selem_linked_to_map_lockless(const struct bpf_local_storage_elem *selem)
-+{
-+	return !hlist_unhashed_lockless(&selem->map_node);
-+}
-+
- static bool selem_linked_to_map(const struct bpf_local_storage_elem *selem)
- {
- 	return !hlist_unhashed(&selem->map_node);
-@@ -182,7 +192,7 @@ static void __bpf_selem_unlink_storage(struct bpf_local_storage_elem *selem,
- 	bool free_local_storage = false;
- 	unsigned long flags;
- 
--	if (unlikely(!selem_linked_to_storage(selem)))
-+	if (unlikely(!selem_linked_to_storage_lockless(selem)))
- 		/* selem has already been unlinked from sk */
- 		return;
- 
-@@ -216,7 +226,7 @@ void bpf_selem_unlink_map(struct bpf_local_storage_elem *selem)
- 	struct bpf_local_storage_map_bucket *b;
- 	unsigned long flags;
- 
--	if (unlikely(!selem_linked_to_map(selem)))
-+	if (unlikely(!selem_linked_to_map_lockless(selem)))
- 		/* selem has already be unlinked from smap */
- 		return;
- 
-@@ -428,7 +438,7 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
- 		err = check_flags(old_sdata, map_flags);
- 		if (err)
- 			return ERR_PTR(err);
--		if (old_sdata && selem_linked_to_storage(SELEM(old_sdata))) {
-+		if (old_sdata && selem_linked_to_storage_lockless(SELEM(old_sdata))) {
- 			copy_map_value_locked(&smap->map, old_sdata->data,
- 					      value, false);
- 			return old_sdata;
 -- 
 2.39.2
 
