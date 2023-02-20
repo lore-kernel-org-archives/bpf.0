@@ -2,24 +2,24 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04951C636CC
-	for <bpf@archiver.kernel.org>; Mon, 20 Feb 2023 07:11:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31CEAC05027
+	for <bpf@archiver.kernel.org>; Mon, 20 Feb 2023 08:29:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbjBTHLM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 20 Feb 2023 02:11:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51770 "EHLO
+        id S230349AbjBTI3p (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 20 Feb 2023 03:29:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231302AbjBTHLK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 20 Feb 2023 02:11:10 -0500
+        with ESMTP id S230223AbjBTI3o (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 20 Feb 2023 03:29:44 -0500
 Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46145659B;
-        Sun, 19 Feb 2023 23:11:01 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PKtqg6Zrsz4f3wRq;
-        Mon, 20 Feb 2023 15:10:55 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF7BBBB3;
+        Mon, 20 Feb 2023 00:29:42 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PKwZT1nwjz4f41V5;
+        Mon, 20 Feb 2023 16:29:37 +0800 (CST)
 Received: from localhost.localdomain (unknown [10.67.175.61])
-        by APP2 (Coremail) with SMTP id Syh0CgCHd+UAHfNjs3eqDw--.52533S2;
-        Mon, 20 Feb 2023 15:10:57 +0800 (CST)
+        by APP1 (Coremail) with SMTP id cCh0CgD3YSxyL_NjSWbkDg--.11659S2;
+        Mon, 20 Feb 2023 16:29:39 +0800 (CST)
 From:   Pu Lehui <pulehui@huaweicloud.com>
 To:     bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
         linux-kernel@vger.kernel.org
@@ -35,18 +35,18 @@ Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
         Pu Lehui <pulehui@huawei.com>,
         Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH bpf-next] riscv, bpf: Add kfunc support for RV64
-Date:   Mon, 20 Feb 2023 15:13:21 +0800
-Message-Id: <20230220071321.2906034-1-pulehui@huaweicloud.com>
+Subject: [PATCH bpf-next v2] riscv, bpf: Add kfunc support for RV64
+Date:   Mon, 20 Feb 2023 16:32:03 +0800
+Message-Id: <20230220083203.2988238-1-pulehui@huaweicloud.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgCHd+UAHfNjs3eqDw--.52533S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrury3GFyxXrW7try3Jry7KFg_yoW3GFg_ur
-        1xJa4xW3y5JF48XF1j9F4fArykGws3CFykXrn2vryjk3Z8WF15ta4kKryUX347Zr1YvrZr
-        urn5Ja9aqw42qjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbxAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+X-CM-TRANSID: cCh0CgD3YSxyL_NjSWbkDg--.11659S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrury3GFyxXrW7try3GFWUtwb_yoW3uFg_ur
+        1xJa4Iq3y5Ja18JF4DuF4fArykCws3GFykXw1xZryjy3ZxWFn8ta4kKryjqry7Zr1YyrW7
+        Xrn5Ja9aqw42qjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbxkFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
         6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
         A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
         6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
@@ -56,14 +56,16 @@ X-Coremail-Antispam: 1UD129KBjvdXoWrury3GFyxXrW7try3Jry7KFg_yoW3GFg_ur
         n2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
         0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wryl
         IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
-        AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v2
-        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0J
-        UQvtAUUUUU=
+        AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_
+        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUb
+        QVy7UUUUU==
 X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
+
+From: Pu Lehui <pulehui@huawei.com>
 
 As another important missing piece of RV64 JIT, kfunc allow bpf programs
 call kernel functions. For now, RV64 is sufficient to enable it.
@@ -71,6 +73,9 @@ call kernel functions. For now, RV64 is sufficient to enable it.
 Suggested-by: Björn Töpel <bjorn@rivosinc.com>
 Signed-off-by: Pu Lehui <pulehui@huawei.com>
 ---
+v2:
+- Fix email address mismatch.
+ 
  arch/riscv/net/bpf_jit_comp64.c | 5 +++++
  1 file changed, 5 insertions(+)
 
