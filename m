@@ -2,263 +2,271 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14803C636CC
-	for <bpf@archiver.kernel.org>; Mon, 20 Feb 2023 08:49:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49EDEC636CC
+	for <bpf@archiver.kernel.org>; Mon, 20 Feb 2023 10:44:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231325AbjBTIs6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 20 Feb 2023 03:48:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32818 "EHLO
+        id S231634AbjBTKoB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 20 Feb 2023 05:44:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231295AbjBTIsa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 20 Feb 2023 03:48:30 -0500
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CD66EAC;
-        Mon, 20 Feb 2023 00:48:28 -0800 (PST)
-Received: by mail-pg1-x543.google.com with SMTP id t1so11686pgi.2;
-        Mon, 20 Feb 2023 00:48:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SLxhF1Vcq3GMM6HBucXQZ50MR4RWeTxfqHBKQ6buE0A=;
-        b=I4J9EXZYCSGkDr83/Pnd9GkqXLe6mpiAjVHt/Xg5CNf6Iew5Vq+8bdlh9MSxlNFCfL
-         FJgq/oEfkFE5ShI1P1i6q7CjwEJ7Jr80FJGibk7nufetPWazxGHkYPvZVJNPpYV9sPBu
-         3+NRaQbcNew13+CgZgqOexZLRbZfRfCLPzq8snB+vkUUOjqrjH0fpqye7WPBD5GO3RR7
-         cslsrK96Fcf7QeJd7MYBwVJQevbAz2lGorMkC62FFZw06dDBOIbvC3Cqr1iz0hsMIG/g
-         TNDSEPySQoT7Y7Nat3bf8dYtyU0BbpEGd/Rf/bx+ZO9dlIEySGbQ7t+EjtwX3rVHPRAm
-         WZ6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SLxhF1Vcq3GMM6HBucXQZ50MR4RWeTxfqHBKQ6buE0A=;
-        b=2b3c/0JyeQalfyg1SnOH5NVVauoDBEccBDK1ZP3ltaj2yoAXQzVRB0QCwh1LRmLupj
-         9Vc4VqRks+OlBhc92KEvqbj+SErVEG8oKSxp3LSJWGJrbBcomjY7QUpkj836MBj88IrY
-         STWRi5ch8M22i0GL1gz+4CUjGblxx/9hhFjERIVcihxvrz5+iLq+9FPW50PRQyTLI1Rr
-         buOifKiRz+WShqxrqxR4FPAvCx0R06IJhTmSH7cRgYEnrkavUSmv7TgAWUz6r4tjf4mx
-         kvQ0RJ7RyVHMkWa2xwG2V8oTjsGQt0qxWexCBB6qe8TkKef68xDoJ2hLQztPqIdziasQ
-         fWOg==
-X-Gm-Message-State: AO0yUKVRkVJr/FKdEstvm41hunEYSPtzmdPxfvMVRY4MfMjcVoBT9Ak1
-        4emPvD7qnmkCY0u9BnbxHp4=
-X-Google-Smtp-Source: AK7set91QE5NSsmHRUBpcvHf8sBpNsssH9L+Z8hFG1PjtFZzD9pqJ4oii0pl6ckbnnWU+ZOP+b+cLQ==
-X-Received: by 2002:a62:7957:0:b0:5a9:b4b4:6911 with SMTP id u84-20020a627957000000b005a9b4b46911mr3238651pfc.25.1676882907991;
-        Mon, 20 Feb 2023 00:48:27 -0800 (PST)
-Received: from localhost.localdomain ([203.205.141.21])
-        by smtp.gmail.com with ESMTPSA id n11-20020a62e50b000000b00586fbbdf6e4sm7136378pff.34.2023.02.20.00.48.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 00:48:27 -0800 (PST)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     andrii.nakryiko@gmail.com, alan.maguire@oracle.com
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
-Subject: [PATCH bpf-next v2 1/3] libbpf: add support to set kprobe/uprobe attach mode
-Date:   Mon, 20 Feb 2023 16:47:09 +0800
-Message-Id: <20230220084711.261642-2-imagedong@tencent.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230220084711.261642-1-imagedong@tencent.com>
-References: <20230220084711.261642-1-imagedong@tencent.com>
+        with ESMTP id S230291AbjBTKoA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 20 Feb 2023 05:44:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02B27DAA
+        for <bpf@vger.kernel.org>; Mon, 20 Feb 2023 02:43:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676889794;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yiGTXiOnDo3DDhZo5sp1H11rvplZauq21p2nGCYzBr0=;
+        b=bls4pltgGfAMUF3mPppCjEKQuGQqBnykL6SxtY51riM5EdocyfDDUhXg83uZqMZKZY8Dg8
+        yqucAgVFwDvc8TLuIm7gBd9HnxOkUuaSLuHIOgnhRnQE8snh3Z8/3wbC8+tyyXSHoZ7YUI
+        PHmwVsg8IdNaR4NBYWGpx7ybHnqP4Uk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-433-joAYK53wOF6k5KEX7A_rFQ-1; Mon, 20 Feb 2023 05:43:09 -0500
+X-MC-Unique: joAYK53wOF6k5KEX7A_rFQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9EF96811E6E;
+        Mon, 20 Feb 2023 10:43:08 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.45.224.56])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6F35C2166B26;
+        Mon, 20 Feb 2023 10:43:05 +0000 (UTC)
+From:   Viktor Malik <vmalik@redhat.com>
+To:     bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Viktor Malik <vmalik@redhat.com>
+Subject: [PATCH bpf-next v7 1/2] bpf: Fix attaching fentry/fexit/fmod_ret/lsm to modules
+Date:   Mon, 20 Feb 2023 11:42:52 +0100
+Message-Id: <ea9d4a1d140a78b2216f41020375fda604107162.1676888953.git.vmalik@redhat.com>
+In-Reply-To: <cover.1676888953.git.vmalik@redhat.com>
+References: <cover.1676888953.git.vmalik@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+This resolves two problems with attachment of fentry/fexit/fmod_ret/lsm
+to functions located in modules:
 
-By default, libbpf will attach the kprobe/uprobe eBPF program in the
-latest mode that supported by kernel. In this patch, we add the support
-to let users manually attach kprobe/uprobe in legacy or perf mode.
+1. The verifier tries to find the address to attach to in kallsyms. This
+   is always done by searching the entire kallsyms, not respecting the
+   module in which the function is located. Such approach causes an
+   incorrect attachment address to be computed if the function to attach
+   to is shadowed by a function of the same name located earlier in
+   kallsyms.
 
-There are 3 mode that supported by the kernel to attach kprobe/uprobe:
+2. If the address to attach to is located in a module, the module
+   reference is only acquired in register_fentry. If the module is
+   unloaded between the place where the address is found
+   (bpf_check_attach_target in the verifier) and register_fentry, it is
+   possible that another module is loaded to the same address which may
+   lead to potential errors.
 
-  LEGACY: create perf event in legacy way and don't use bpf_link
-  PERF: create perf event with perf_event_open() and don't use bpf_link
-  LINK: create perf event with perf_event_open() and use bpf_link
+Since the attachment must contain the BTF of the program to attach to,
+we extract the module from it and search for the function address in the
+correct module (resolving problem no. 1). Then, the module reference is
+taken directly in bpf_check_attach_target and stored in the bpf program
+(in bpf_prog_aux). The reference is only released when the program is
+unloaded (resolving problem no. 2).
 
-Users now can manually choose the mode with
-bpf_program__attach_uprobe_opts()/bpf_program__attach_kprobe_opts().
-
-Link: https://lore.kernel.org/bpf/20230113093427.1666466-1-imagedong@tencent.com/
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
+Signed-off-by: Viktor Malik <vmalik@redhat.com>
 ---
-v2:
-- rename no_link to force_ioctl_attach
-- rename probe_mode to probe_attach_mode
-- add more doc for probe_attach_mode
-- return -ENOTSUP when necessray in bpf_program__attach_uprobe_opts and
-  bpf_program__attach_kprobe_opts
----
- tools/lib/bpf/libbpf.c | 42 +++++++++++++++++++++++++++++++++++++++++-
- tools/lib/bpf/libbpf.h | 31 ++++++++++++++++++++++++++++---
- 2 files changed, 69 insertions(+), 4 deletions(-)
+ include/linux/bpf.h      |  2 ++
+ kernel/bpf/syscall.c     |  6 ++++++
+ kernel/bpf/trampoline.c  | 27 ---------------------------
+ kernel/bpf/verifier.c    | 14 +++++++++++++-
+ kernel/module/internal.h |  5 +++++
+ 5 files changed, 26 insertions(+), 28 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 35a698eb825d..724ee5fab839 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -9747,7 +9747,7 @@ struct bpf_link *bpf_program__attach_perf_event_opts(const struct bpf_program *p
- 	link->link.dealloc = &bpf_link_perf_dealloc;
- 	link->perf_event_fd = pfd;
- 
--	if (kernel_supports(prog->obj, FEAT_PERF_LINK)) {
-+	if (kernel_supports(prog->obj, FEAT_PERF_LINK) && !opts->force_ioctl_attach) {
- 		DECLARE_LIBBPF_OPTS(bpf_link_create_opts, link_opts,
- 			.perf_event.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0));
- 
-@@ -10106,6 +10106,7 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
- 				const struct bpf_kprobe_opts *opts)
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 4385418118f6..00066b4d5758 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1058,6 +1058,7 @@ struct bpf_trampoline {
+ struct bpf_attach_target_info {
+ 	struct btf_func_model fmodel;
+ 	long tgt_addr;
++	struct module *tgt_mod;
+ 	const char *tgt_name;
+ 	const struct btf_type *tgt_type;
+ };
+@@ -1330,6 +1331,7 @@ struct bpf_prog_aux {
+ 	 * main prog always has linfo_idx == 0
+ 	 */
+ 	u32 linfo_idx;
++	struct module *mod;
+ 	u32 num_exentries;
+ 	struct exception_table_entry *extable;
+ 	union {
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index cda8d00f3762..32609b362cda 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2039,6 +2039,7 @@ static void __bpf_prog_put_noref(struct bpf_prog *prog, bool deferred)
  {
- 	DECLARE_LIBBPF_OPTS(bpf_perf_event_opts, pe_opts);
-+	enum probe_attach_mode attach_mode;
- 	char errmsg[STRERR_BUFSIZE];
- 	char *legacy_probe = NULL;
- 	struct bpf_link *link;
-@@ -10116,11 +10117,30 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
- 	if (!OPTS_VALID(opts, bpf_kprobe_opts))
- 		return libbpf_err_ptr(-EINVAL);
+ 	bpf_prog_kallsyms_del_all(prog);
+ 	btf_put(prog->aux->btf);
++	module_put(prog->aux->mod);
+ 	kvfree(prog->aux->jited_linfo);
+ 	kvfree(prog->aux->linfo);
+ 	kfree(prog->aux->kfunc_tab);
+@@ -3085,6 +3086,11 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
+ 		if (err)
+ 			goto out_unlock;
  
-+	attach_mode = OPTS_GET(opts, attach_mode, PROBE_ATTACH_MODE_DEFAULT);
- 	retprobe = OPTS_GET(opts, retprobe, false);
- 	offset = OPTS_GET(opts, offset, 0);
- 	pe_opts.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
- 
- 	legacy = determine_kprobe_perf_type() < 0;
-+	switch (attach_mode) {
-+	case PROBE_ATTACH_MODE_LEGACY:
-+		legacy = true;
-+		pe_opts.force_ioctl_attach = true;
-+		break;
-+	case PROBE_ATTACH_MODE_PERF:
-+		if (legacy)
-+			return libbpf_err_ptr(-ENOTSUP);
-+		pe_opts.force_ioctl_attach = true;
-+		break;
-+	case PROBE_ATTACH_MODE_LINK:
-+		if (!kernel_supports(prog->obj, FEAT_PERF_LINK))
-+			return libbpf_err_ptr(-ENOTSUP);
-+		break;
-+	default:
-+		break;
-+	}
++		if (tgt_info.tgt_mod) {
++			module_put(prog->aux->mod);
++			prog->aux->mod = tgt_info.tgt_mod;
++		}
 +
- 	if (!legacy) {
- 		pfd = perf_event_open_probe(false /* uprobe */, retprobe,
- 					    func_name, offset,
-@@ -10774,6 +10794,7 @@ bpf_program__attach_uprobe_opts(const struct bpf_program *prog, pid_t pid,
- {
- 	DECLARE_LIBBPF_OPTS(bpf_perf_event_opts, pe_opts);
- 	char errmsg[STRERR_BUFSIZE], *legacy_probe = NULL;
-+	enum probe_attach_mode attach_mode;
- 	char full_binary_path[PATH_MAX];
- 	struct bpf_link *link;
- 	size_t ref_ctr_off;
-@@ -10784,6 +10805,7 @@ bpf_program__attach_uprobe_opts(const struct bpf_program *prog, pid_t pid,
- 	if (!OPTS_VALID(opts, bpf_uprobe_opts))
- 		return libbpf_err_ptr(-EINVAL);
+ 		tr = bpf_trampoline_get(key, &tgt_info);
+ 		if (!tr) {
+ 			err = -ENOMEM;
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index d0ed7d6f5eec..ebb20bf252c7 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -172,26 +172,6 @@ static struct bpf_trampoline *bpf_trampoline_lookup(u64 key)
+ 	return tr;
+ }
  
-+	attach_mode = OPTS_GET(opts, attach_mode, PROBE_ATTACH_MODE_DEFAULT);
- 	retprobe = OPTS_GET(opts, retprobe, false);
- 	ref_ctr_off = OPTS_GET(opts, ref_ctr_offset, 0);
- 	pe_opts.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
-@@ -10812,6 +10834,24 @@ bpf_program__attach_uprobe_opts(const struct bpf_program *prog, pid_t pid,
+-static int bpf_trampoline_module_get(struct bpf_trampoline *tr)
+-{
+-	struct module *mod;
+-	int err = 0;
+-
+-	preempt_disable();
+-	mod = __module_text_address((unsigned long) tr->func.addr);
+-	if (mod && !try_module_get(mod))
+-		err = -ENOENT;
+-	preempt_enable();
+-	tr->mod = mod;
+-	return err;
+-}
+-
+-static void bpf_trampoline_module_put(struct bpf_trampoline *tr)
+-{
+-	module_put(tr->mod);
+-	tr->mod = NULL;
+-}
+-
+ static int unregister_fentry(struct bpf_trampoline *tr, void *old_addr)
+ {
+ 	void *ip = tr->func.addr;
+@@ -202,8 +182,6 @@ static int unregister_fentry(struct bpf_trampoline *tr, void *old_addr)
+ 	else
+ 		ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, old_addr, NULL);
+ 
+-	if (!ret)
+-		bpf_trampoline_module_put(tr);
+ 	return ret;
+ }
+ 
+@@ -238,9 +216,6 @@ static int register_fentry(struct bpf_trampoline *tr, void *new_addr)
+ 		tr->func.ftrace_managed = true;
  	}
  
- 	legacy = determine_uprobe_perf_type() < 0;
-+	switch (attach_mode) {
-+	case PROBE_ATTACH_MODE_LEGACY:
-+		legacy = true;
-+		pe_opts.force_ioctl_attach = true;
-+		break;
-+	case PROBE_ATTACH_MODE_PERF:
-+		if (legacy)
-+			return libbpf_err_ptr(-ENOTSUP);
-+		pe_opts.force_ioctl_attach = true;
-+		break;
-+	case PROBE_ATTACH_MODE_LINK:
-+		if (!kernel_supports(prog->obj, FEAT_PERF_LINK))
-+			return libbpf_err_ptr(-ENOTSUP);
-+		break;
-+	default:
-+		break;
-+	}
-+
- 	if (!legacy) {
- 		pfd = perf_event_open_probe(true /* uprobe */, retprobe, binary_path,
- 					    func_offset, pid, ref_ctr_off);
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 2efd80f6f7b9..ef8f68da42f9 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -451,8 +451,11 @@ struct bpf_perf_event_opts {
- 	size_t sz;
- 	/* custom user-provided value fetchable through bpf_get_attach_cookie() */
- 	__u64 bpf_cookie;
-+	/* don't use bpf_link when attach eBPF program */
-+	bool force_ioctl_attach;
-+	size_t :0;
- };
--#define bpf_perf_event_opts__last_field bpf_cookie
-+#define bpf_perf_event_opts__last_field force_ioctl_attach
+-	if (bpf_trampoline_module_get(tr))
+-		return -ENOENT;
+-
+ 	if (tr->func.ftrace_managed) {
+ 		ftrace_set_filter_ip(tr->fops, (unsigned long)ip, 0, 1);
+ 		ret = register_ftrace_direct_multi(tr->fops, (long)new_addr);
+@@ -248,8 +223,6 @@ static int register_fentry(struct bpf_trampoline *tr, void *new_addr)
+ 		ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, NULL, new_addr);
+ 	}
  
- LIBBPF_API struct bpf_link *
- bpf_program__attach_perf_event(const struct bpf_program *prog, int pfd);
-@@ -461,6 +464,24 @@ LIBBPF_API struct bpf_link *
- bpf_program__attach_perf_event_opts(const struct bpf_program *prog, int pfd,
- 				    const struct bpf_perf_event_opts *opts);
+-	if (ret)
+-		bpf_trampoline_module_put(tr);
+ 	return ret;
+ }
  
-+
-+/**
-+ * enum probe_attach_mode - the mode to attach kprobe/uprobe
-+ *
-+ * force libbpf to attach kprobe/uprobe in specific mode, -ENOTSUP will
-+ * be returned if it is not supported by the kernel.
-+ */
-+enum probe_attach_mode {
-+	/* attach probe in latest supported mode by kernel */
-+	PROBE_ATTACH_MODE_DEFAULT = 0,
-+	/* attach probe in legacy mode */
-+	PROBE_ATTACH_MODE_LEGACY,
-+	/* create perf event with perf_event_open() syscall */
-+	PROBE_ATTACH_MODE_PERF,
-+	/* attach probe with bpf_link */
-+	PROBE_ATTACH_MODE_LINK,
-+};
-+
- struct bpf_kprobe_opts {
- 	/* size of this struct, for forward/backward compatiblity */
- 	size_t sz;
-@@ -470,9 +491,11 @@ struct bpf_kprobe_opts {
- 	size_t offset;
- 	/* kprobe is return probe */
- 	bool retprobe;
-+	/* kprobe attach mode */
-+	enum probe_attach_mode attach_mode;
- 	size_t :0;
- };
--#define bpf_kprobe_opts__last_field retprobe
-+#define bpf_kprobe_opts__last_field attach_mode
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 388245e8826e..6da830df3ea5 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -24,6 +24,7 @@
+ #include <linux/bpf_lsm.h>
+ #include <linux/btf_ids.h>
+ #include <linux/poison.h>
++#include "../module/internal.h"
  
- LIBBPF_API struct bpf_link *
- bpf_program__attach_kprobe(const struct bpf_program *prog, bool retprobe,
-@@ -570,9 +593,11 @@ struct bpf_uprobe_opts {
- 	 * binary_path.
- 	 */
- 	const char *func_name;
-+	/* uprobe attach mode */
-+	enum probe_attach_mode attach_mode;
- 	size_t :0;
- };
--#define bpf_uprobe_opts__last_field func_name
-+#define bpf_uprobe_opts__last_field attach_mode
+ #include "disasm.h"
  
- /**
-  * @brief **bpf_program__attach_uprobe()** attaches a BPF program
+@@ -16868,6 +16869,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 	const char *tname;
+ 	struct btf *btf;
+ 	long addr = 0;
++	struct module *mod = NULL;
+ 
+ 	if (!btf_id) {
+ 		bpf_log(log, "Tracing programs must provide btf_id\n");
+@@ -17041,7 +17043,15 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 			else
+ 				addr = (long) tgt_prog->aux->func[subprog]->bpf_func;
+ 		} else {
+-			addr = kallsyms_lookup_name(tname);
++			if (btf_is_module(btf)) {
++				mod = btf_try_get_module(btf);
++				if (mod)
++					addr = find_kallsyms_symbol_value(mod, tname);
++				else
++					addr = 0;
++			} else {
++				addr = kallsyms_lookup_name(tname);
++			}
+ 			if (!addr) {
+ 				bpf_log(log,
+ 					"The address of function %s cannot be found\n",
+@@ -17105,6 +17115,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 	tgt_info->tgt_addr = addr;
+ 	tgt_info->tgt_name = tname;
+ 	tgt_info->tgt_type = t;
++	tgt_info->tgt_mod = mod;
+ 	return 0;
+ }
+ 
+@@ -17184,6 +17195,7 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+ 	/* store info about the attachment target that will be used later */
+ 	prog->aux->attach_func_proto = tgt_info.tgt_type;
+ 	prog->aux->attach_func_name = tgt_info.tgt_name;
++	prog->aux->mod = tgt_info.tgt_mod;
+ 
+ 	if (tgt_prog) {
+ 		prog->aux->saved_dst_prog_type = tgt_prog->type;
+diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+index 2e2bf236f558..5cb103a46018 100644
+--- a/kernel/module/internal.h
++++ b/kernel/module/internal.h
+@@ -256,6 +256,11 @@ static inline bool sect_empty(const Elf_Shdr *sect)
+ static inline void init_build_id(struct module *mod, const struct load_info *info) { }
+ static inline void layout_symtab(struct module *mod, struct load_info *info) { }
+ static inline void add_kallsyms(struct module *mod, const struct load_info *info) { }
++static inline unsigned long find_kallsyms_symbol_value(struct module *mod
++						       const char *name)
++{
++	return 0;
++}
+ #endif /* CONFIG_KALLSYMS */
+ 
+ #ifdef CONFIG_SYSFS
 -- 
-2.39.0
+2.39.1
 
