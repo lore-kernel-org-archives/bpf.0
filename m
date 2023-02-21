@@ -2,141 +2,136 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76DD9C636D7
-	for <bpf@archiver.kernel.org>; Tue, 21 Feb 2023 15:29:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18A09C636D7
+	for <bpf@archiver.kernel.org>; Tue, 21 Feb 2023 15:47:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233925AbjBUP35 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 21 Feb 2023 10:29:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
+        id S233313AbjBUPr2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 21 Feb 2023 10:47:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234351AbjBUP34 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 21 Feb 2023 10:29:56 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5490B2A9A3
-        for <bpf@vger.kernel.org>; Tue, 21 Feb 2023 07:29:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676993395; x=1708529395;
-  h=message-id:date:mime-version:subject:from:to:references:
-   in-reply-to:content-transfer-encoding;
-  bh=gg/fLoMvT9rzE2Xe65hBqcu3xFlMrqPfcKbfkrA3HKI=;
-  b=JEgJnVzFFgFZuIuTx+1s1/bKY4RcCEl9P7769HgseYGcxNLheBApRmCu
-   v/pS9CEQdWSTHdjePDHwJn8ei5e6jguuJsXZsE5z6JIJIRC2HK4JieXPA
-   5UKkCd3LIobWnWUfqRkhWYZjrcmkJAnb7BB3Dp+Ms8xnZ+tYmk9K74TVH
-   NqX9hXo0wqaHd+R3EGg2bqsiyH6Ze07nI0zI2b0KKWXKYqMnshYYiMtx2
-   Xl20skbz/9/xEKwn8FPKQ+fmcF5uZNNP08ZEj0pAs2mYtkUIZAz14c9Ww
-   dbznT72im+PtjeLv+bCom0T1ukJI4I7wUfqHKVNdiyU9VEYRdoNMtoXvu
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="316381323"
-X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="316381323"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 07:17:57 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="704066373"
-X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="704066373"
-Received: from tveit-mobl.ger.corp.intel.com (HELO [10.249.39.132]) ([10.249.39.132])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 07:17:53 -0800
-Message-ID: <b2cf88bf-c137-8278-d20d-bb8a0eda5fd8@linux.intel.com>
-Date:   Tue, 21 Feb 2023 17:17:51 +0200
+        with ESMTP id S230115AbjBUPr2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 21 Feb 2023 10:47:28 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4FA265B2;
+        Tue, 21 Feb 2023 07:47:27 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id x10so18135015edd.13;
+        Tue, 21 Feb 2023 07:47:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=scM9oYCSR1ND5NiwNb6ID5TUnyh6Ib6071WzOSOrsT4=;
+        b=d0B6JhmUt4j5p3PHPLbXlteRY5kSw721PyQ1UDfSQYlq0razfwkmUCEPG544F9j4SF
+         ZjBazQTGkCMhVyF/bp1NcvTD1EmyKaIVpJkSbZqIEcGsSGXLFqVvFOPWV9BKElhqOrnN
+         CpytSaVygN02dpjIfbr6KZJBAn3P1InfeSYO9aETjq2eIgIiPWJ1/Ai3W39WmHNIgNnI
+         juJE6vv+YXo+r4ewJrFbOnbSBhFXaVbKAob0vxjmw+uhxidsxxacg5zK+uaY9TMXwRbr
+         fIs5HR3yFLofEc9sk8R4fqfFmOY/Wn/FG4+d5aQ/9YBkEoqk5G+si4QaEGwxFNn/Twk0
+         YG6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=scM9oYCSR1ND5NiwNb6ID5TUnyh6Ib6071WzOSOrsT4=;
+        b=2XciQtcJySXy5LOiLEHpASVygKRy8GsVDmunABmqiTJPpDcaPD3F71bzD5z2SfZcS4
+         G48Qqgm/FEQICYjkVJ5KnWUevycLCk12lcRnHhDzYpWsf/V1pTvaUFshNINtkseekYNA
+         JWCmolIe12Gir9rXHwFKVAdO/xiLaT50mzTnMliv2cjLYupHHn61F6Na35yO1saov3dZ
+         UuMWvyDB4XFdEefAe9pPOBmj0xZsIT7DJng+eFIAXkQEel1IX8ZYNDL3abZHPIR+fAya
+         Z1uKrjnK+M6b4wTrLWcboeR8KGKT/Pk6AzXKGZxSEZFW7ML86QxXcU/dOCSD3olYkbfA
+         4uxA==
+X-Gm-Message-State: AO0yUKUp9E/WFO4crMYMwablsQfCjQKgB1fhh7/d5D7DvKAQPKgWnOje
+        W9cIIjUTM4LQxO1l6HnEbxbpy5A87NLZDluW4ec=
+X-Google-Smtp-Source: AK7set9hq6lHx/3D/Eckys2B7FbwUbl4sjrwQyeG1UCSJlPURRvP/Mqbbu+8eLZrnD9uJ7HJEJJZ1Q8g4zlgrUZSIGw=
+X-Received: by 2002:a17:907:1dda:b0:878:b86b:de15 with SMTP id
+ og26-20020a1709071dda00b00878b86bde15mr6383597ejc.11.1676994445630; Tue, 21
+ Feb 2023 07:47:25 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] bpf: Add support for absolute value BPF timers
-Content-Language: en-US
-From:   Tero Kristo <tero.kristo@linux.intel.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        bpf@vger.kernel.org
-References: <20230221144803.2216876-1-tero.kristo@linux.intel.com>
-In-Reply-To: <20230221144803.2216876-1-tero.kristo@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20230221110344.82818-1-kerneljasonxing@gmail.com>
+ <48429c16fdaee59867df5ef487e73d4b1bf099af.camel@redhat.com>
+ <CAL+tcoD8PzL4khHq44z27qSHHGkcC4YUa91E3h+ki7O0u3SshQ@mail.gmail.com> <aaf3d11ea5b247ab03d117dadae682fe2180d38a.camel@redhat.com>
+In-Reply-To: <aaf3d11ea5b247ab03d117dadae682fe2180d38a.camel@redhat.com>
+From:   Jason Xing <kerneljasonxing@gmail.com>
+Date:   Tue, 21 Feb 2023 23:46:49 +0800
+Message-ID: <CAL+tcoBZFFwOnUqzcDtSsNyfPgHENAOv0bPcvncxuMPwCn40+Q@mail.gmail.com>
+Subject: Re: [PATCH net] udp: fix memory schedule error
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     willemdebruijn.kernel@gmail.com, davem@davemloft.net,
+        dsahern@kernel.org, edumazet@google.com, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
-
-Please ignore this, I added a broken mailing list to CC.
-
-Re-sending in a bit.
-
--Tero
-
-On 21/02/2023 16:48, Tero Kristo wrote:
-> Add a new flag BPF_F_TIMER_ABS that can be passed to bpf_timer_start()
-> to start an absolute value timer instead of the default relative value.
-> This makes the timer expire at an exact point in time, instead of a time
-> with latencies and jitter induced by both the BPF and timer subsystems.
-> This is useful e.g. in certain time sensitive profiling cases, where we
-> need a timer to expire at an exact point in time.
+On Tue, Feb 21, 2023 at 10:46 PM Paolo Abeni <pabeni@redhat.com> wrote:
 >
-> Signed-off-by: Tero Kristo <tero.kristo@linux.intel.com>
-> ---
->   include/uapi/linux/bpf.h | 15 +++++++++++++++
->   kernel/bpf/helpers.c     | 11 +++++++++--
->   2 files changed, 24 insertions(+), 2 deletions(-)
+> On Tue, 2023-02-21 at 21:39 +0800, Jason Xing wrote:
+> > On Tue, Feb 21, 2023 at 8:27 PM Paolo Abeni <pabeni@redhat.com> wrote:
+> > >
+> > > On Tue, 2023-02-21 at 19:03 +0800, Jason Xing wrote:
+> > > > From: Jason Xing <kernelxing@tencent.com>
+> > > >
+> > > > Quoting from the commit 7c80b038d23e ("net: fix sk_wmem_schedule()
+> > > > and sk_rmem_schedule() errors"):
+> > > >
+> > > > "If sk->sk_forward_alloc is 150000, and we need to schedule 150001 bytes,
+> > > > we want to allocate 1 byte more (rounded up to one page),
+> > > > instead of 150001"
+> > >
+> > > I'm wondering if this would cause measurable (even small) performance
+> > > regression? Specifically under high packet rate, with BH and user-space
+> > > processing happening on different CPUs.
+> > >
+> > > Could you please provide the relevant performance figures?
+> >
+> > Sure, I've done some basic tests on my machine as below.
+> >
+> > Environment: 16 cpus, 60G memory
+> > Server: run "iperf3 -s -p [port]" command and start 500 processes.
+> > Client: run "iperf3 -u -c 127.0.0.1 -p [port]" command and start 500 processes.
 >
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index 464ca3f01fe7..7f5b71847984 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -4951,6 +4951,12 @@ union bpf_attr {
->    *		different maps if key/value layout matches across maps.
->    *		Every bpf_timer_set_callback() can have different callback_fn.
->    *
-> + *		*flags* can be one of:
-> + *
-> + *		**BPF_F_TIMER_ABS**
-> + *			Start the timer in absolute expire value instead of the
-> + *			default relative one.
-> + *
->    *	Return
->    *		0 on success.
->    *		**-EINVAL** if *timer* was not initialized with bpf_timer_init() earlier
-> @@ -7050,4 +7056,13 @@ struct bpf_core_relo {
->   	enum bpf_core_relo_kind kind;
->   };
->   
-> +/*
-> + * Flags to control bpf_timer_start() behaviour.
-> + *     - BPF_F_TIMER_ABS: Timeout passed is absolute time, by default it is
-> + *       relative to current time.
-> + */
-> +enum {
-> +	BPF_F_TIMER_ABS = (1ULL << 0),
-> +};
-> +
->   #endif /* _UAPI__LINUX_BPF_H__ */
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index af30c6cbd65d..924849d89828 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -1253,10 +1253,11 @@ BPF_CALL_3(bpf_timer_start, struct bpf_timer_kern *, timer, u64, nsecs, u64, fla
->   {
->   	struct bpf_hrtimer *t;
->   	int ret = 0;
-> +	enum hrtimer_mode mode;
->   
->   	if (in_nmi())
->   		return -EOPNOTSUPP;
-> -	if (flags)
-> +	if (flags > BPF_F_TIMER_ABS)
->   		return -EINVAL;
->   	__bpf_spin_lock_irqsave(&timer->lock);
->   	t = timer->timer;
-> @@ -1264,7 +1265,13 @@ BPF_CALL_3(bpf_timer_start, struct bpf_timer_kern *, timer, u64, nsecs, u64, fla
->   		ret = -EINVAL;
->   		goto out;
->   	}
-> -	hrtimer_start(&t->timer, ns_to_ktime(nsecs), HRTIMER_MODE_REL_SOFT);
-> +
-> +	if (flags & BPF_F_TIMER_ABS)
-> +		mode = HRTIMER_MODE_ABS_SOFT;
-> +	else
-> +		mode = HRTIMER_MODE_REL_SOFT;
-> +
-> +	hrtimer_start(&t->timer, ns_to_ktime(nsecs), mode);
->   out:
->   	__bpf_spin_unlock_irqrestore(&timer->lock);
->   	return ret;
+> Just for the records, with the above command each process will send
+> pkts at 1mbs - not very relevant performance wise.
+>
+> Instead you could do:
+>
+
+> taskset 0x2 iperf -s &
+> iperf -u -c 127.0.0.1 -b 0 -l 64
+>
+
+Thanks for your guidance.
+
+Here're some numbers according to what you suggested, which I tested
+several times.
+----------|IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s
+Before: lo 411073.41 411073.41  36932.38  36932.38
+After:   lo 410308.73 410308.73  36863.81  36863.81
+
+Above is one of many results which does not mean that the original
+code absolutely outperforms.
+The output is not that constant and stable, I think.
+
+Please help me review those numbers.
+
+>
+> > In theory, I have no clue about why it could cause some regression?
+> > Maybe the memory allocation is not that enough compared to the
+> > original code?
+>
+> As Eric noted, for UDP traffic, due to the expected average packet
+> size, sk_forward_alloc is touched quite frequently, both with and
+> without this patch, so there is little chance it will have any
+> performance impact.
+
+Well, I see.
+
+Thanks,
+Jason
+
+>
+> Cheers,
+>
+> Paolo
+>
