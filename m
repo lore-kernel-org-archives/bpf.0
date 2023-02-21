@@ -2,162 +2,131 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3516C636D7
-	for <bpf@archiver.kernel.org>; Tue, 21 Feb 2023 15:17:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75A15C636D7
+	for <bpf@archiver.kernel.org>; Tue, 21 Feb 2023 15:21:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233287AbjBUPRU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 21 Feb 2023 10:17:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39544 "EHLO
+        id S233109AbjBUPVN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 21 Feb 2023 10:21:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233175AbjBUPRU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 21 Feb 2023 10:17:20 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7D32A9AE
-        for <bpf@vger.kernel.org>; Tue, 21 Feb 2023 07:17:18 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id b12so18552446edd.4
-        for <bpf@vger.kernel.org>; Tue, 21 Feb 2023 07:17:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BirKcUPaoEZP4j3IE8EVYnH1uKMvuZFg7dvD3Be4BDU=;
-        b=fI34mOjC6DMmYRHuupmT4xgPvMSnXy5IkyWG1U55l2KUgx/qF5Is6F5gjmT8Il+W2V
-         kW32M4Q5iwjio7Cb+m/w001JYVhBr3h0nCxVGDhio0sFMnkk188LZ0pORg4h55rARU3Q
-         Jj8kJWDJnrXCNPiZVZ7EeVyQ4af89Qwa6obm+a5nbKpkZgKuSmvycW7XbB+UUcbVUtTM
-         Dg+d3e7Bg4mIV31LDBn+C09GxfwqNnG0xgkrZVOi4rV6iIwh6doUq8dvmMpfGv3/JhEO
-         JFCPaQpkJs6f7lIp2gXhnDP5+SsalxgIS3kCQ5QuuD8vXBLJ30JjwGkIdDUFSjLWafCw
-         nwXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BirKcUPaoEZP4j3IE8EVYnH1uKMvuZFg7dvD3Be4BDU=;
-        b=eR6albL0QgJc8WeTk0T+lwzZnLynnXB3c1hzbVIxjxKOrWUDEHA4DXvu3yKuXN4xQH
-         yUOZ0bswEBQUbYyHK+5dpRvkEoKqn2t0aTvTW/wUVcJE8fsW+vGVKvsa7OAld34QelTa
-         6tDOHwJltIRYGmXGHB7MbAsXN9CBBA+5R2gB6xjT5TjmY9aFw+Y3p8x0cHlq0BBlZjiS
-         Miw8dBJK2UKQ+AGc8lCxpUnoiyTA2Qun19AFP5BijawEV3eRaIvINpd8qxFLygS5MExo
-         uhu+itBvp58Nr17mw8L+RRIrNux5Eu2OeLXaruJqXjOvm7YZiKFXCfJAnn7fisLMb/Om
-         6/qg==
-X-Gm-Message-State: AO0yUKXNOMi69vDMQKA/kZZjT3CGClHkAi08897OLxavWP7HQnHsxdhU
-        aRD/rWQ6ToeDYzxdfnWGHL4=
-X-Google-Smtp-Source: AK7set9yjD9uS05uGrq/seHm8QtQLUcjbbI467I2nGuySn3mJavYipO9qlDTfnSOdeTI3lkrA+1v/w==
-X-Received: by 2002:a17:906:261b:b0:8aa:c105:f0bf with SMTP id h27-20020a170906261b00b008aac105f0bfmr13459538ejc.17.1676992637271;
-        Tue, 21 Feb 2023 07:17:17 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id g13-20020a056402090d00b004acbda55f6bsm1374576edz.27.2023.02.21.07.17.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 07:17:16 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Tue, 21 Feb 2023 16:17:14 +0100
-To:     Viktor Malik <vmalik@redhat.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: Re: [PATCH bpf-next v7 1/2] bpf: Fix attaching
- fentry/fexit/fmod_ret/lsm to modules
-Message-ID: <Y/TgeuA579/zzikg@krava>
-References: <cover.1676888953.git.vmalik@redhat.com>
- <ea9d4a1d140a78b2216f41020375fda604107162.1676888953.git.vmalik@redhat.com>
+        with ESMTP id S232317AbjBUPVM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 21 Feb 2023 10:21:12 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE81B25BB2;
+        Tue, 21 Feb 2023 07:21:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676992867; x=1708528867;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ywd+JZNDR2jmJtryHqa+ea9UJUbbLZv/MDZRRFcw54g=;
+  b=dxLcN/234cAl+auZPbD4F53/zzKQqX2RwvzGH3XjBoHnxHIuV/ZJD+G9
+   pV3XSU6zIdKn4NGP+QWZ3ilP2rVWOj0hXC5nvdEgQuzTuEGlWZdV8V9nu
+   vvH4nsxR0COVEFoV/YvyMuMs2bjDNO3ACPDoa/iMaYbo8q/BlpGyUicx5
+   nYDuyvVwxLi/iwB/PdoEMeXvHA2R++UBuCwVOjtop9r3P0zhNlrCI6OCI
+   yfDPpgGBAnWLfXJW250sDFbaEOeTnSDX+oOJrDaW9Epza6nN5TB7bbSHR
+   HOdssc62h76YD/wc+JJSHy3rfob3NJLGsgSXaGydWiv0IMi3vmyhVgFub
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="334020034"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="334020034"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 07:18:51 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="814529284"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="814529284"
+Received: from tveit-mobl.ger.corp.intel.com (HELO tkristo-desk.bb.dnainternet.fi) ([10.249.39.132])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 07:18:48 -0800
+From:   Tero Kristo <tero.kristo@linux.intel.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        bpf@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [RESEND PATCH] bpf: Add support for absolute value BPF timers
+Date:   Tue, 21 Feb 2023 17:18:46 +0200
+Message-Id: <20230221151846.2218217-1-tero.kristo@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ea9d4a1d140a78b2216f41020375fda604107162.1676888953.git.vmalik@redhat.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 11:42:52AM +0100, Viktor Malik wrote:
+Add a new flag BPF_F_TIMER_ABS that can be passed to bpf_timer_start()
+to start an absolute value timer instead of the default relative value.
+This makes the timer expire at an exact point in time, instead of a time
+with latencies and jitter induced by both the BPF and timer subsystems.
+This is useful e.g. in certain time sensitive profiling cases, where we
+need a timer to expire at an exact point in time.
 
-SNIP
+Signed-off-by: Tero Kristo <tero.kristo@linux.intel.com>
+---
+ include/uapi/linux/bpf.h | 15 +++++++++++++++
+ kernel/bpf/helpers.c     | 11 +++++++++--
+ 2 files changed, 24 insertions(+), 2 deletions(-)
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 388245e8826e..6da830df3ea5 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -24,6 +24,7 @@
->  #include <linux/bpf_lsm.h>
->  #include <linux/btf_ids.h>
->  #include <linux/poison.h>
-> +#include "../module/internal.h"
->  
->  #include "disasm.h"
->  
-> @@ -16868,6 +16869,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
->  	const char *tname;
->  	struct btf *btf;
->  	long addr = 0;
-> +	struct module *mod = NULL;
->  
->  	if (!btf_id) {
->  		bpf_log(log, "Tracing programs must provide btf_id\n");
-> @@ -17041,7 +17043,15 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
->  			else
->  				addr = (long) tgt_prog->aux->func[subprog]->bpf_func;
->  		} else {
-> -			addr = kallsyms_lookup_name(tname);
-> +			if (btf_is_module(btf)) {
-> +				mod = btf_try_get_module(btf);
-> +				if (mod)
-> +					addr = find_kallsyms_symbol_value(mod, tname);
-> +				else
-> +					addr = 0;
-> +			} else {
-> +				addr = kallsyms_lookup_name(tname);
-> +			}
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 464ca3f01fe7..7f5b71847984 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -4951,6 +4951,12 @@ union bpf_attr {
+  *		different maps if key/value layout matches across maps.
+  *		Every bpf_timer_set_callback() can have different callback_fn.
+  *
++ *		*flags* can be one of:
++ *
++ *		**BPF_F_TIMER_ABS**
++ *			Start the timer in absolute expire value instead of the
++ *			default relative one.
++ *
+  *	Return
+  *		0 on success.
+  *		**-EINVAL** if *timer* was not initialized with bpf_timer_init() earlier
+@@ -7050,4 +7056,13 @@ struct bpf_core_relo {
+ 	enum bpf_core_relo_kind kind;
+ };
+ 
++/*
++ * Flags to control bpf_timer_start() behaviour.
++ *     - BPF_F_TIMER_ABS: Timeout passed is absolute time, by default it is
++ *       relative to current time.
++ */
++enum {
++	BPF_F_TIMER_ABS = (1ULL << 0),
++};
++
+ #endif /* _UAPI__LINUX_BPF_H__ */
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index af30c6cbd65d..924849d89828 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1253,10 +1253,11 @@ BPF_CALL_3(bpf_timer_start, struct bpf_timer_kern *, timer, u64, nsecs, u64, fla
+ {
+ 	struct bpf_hrtimer *t;
+ 	int ret = 0;
++	enum hrtimer_mode mode;
+ 
+ 	if (in_nmi())
+ 		return -EOPNOTSUPP;
+-	if (flags)
++	if (flags > BPF_F_TIMER_ABS)
+ 		return -EINVAL;
+ 	__bpf_spin_lock_irqsave(&timer->lock);
+ 	t = timer->timer;
+@@ -1264,7 +1265,13 @@ BPF_CALL_3(bpf_timer_start, struct bpf_timer_kern *, timer, u64, nsecs, u64, fla
+ 		ret = -EINVAL;
+ 		goto out;
+ 	}
+-	hrtimer_start(&t->timer, ns_to_ktime(nsecs), HRTIMER_MODE_REL_SOFT);
++
++	if (flags & BPF_F_TIMER_ABS)
++		mode = HRTIMER_MODE_ABS_SOFT;
++	else
++		mode = HRTIMER_MODE_REL_SOFT;
++
++	hrtimer_start(&t->timer, ns_to_ktime(nsecs), mode);
+ out:
+ 	__bpf_spin_unlock_irqrestore(&timer->lock);
+ 	return ret;
+-- 
+2.25.1
 
-there are some error paths below this point which I think we could
-hit also for module id/address, so we need to put the mod ref
-
-also there's bpf_trampoline_link_cgroup_shim caller of
-bpf_check_attach_target, but I'm not sure that could endup with
-id/address in module code
-
-jirka
-
->  			if (!addr) {
->  				bpf_log(log,
->  					"The address of function %s cannot be found\n",
-> @@ -17105,6 +17115,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
->  	tgt_info->tgt_addr = addr;
->  	tgt_info->tgt_name = tname;
->  	tgt_info->tgt_type = t;
-> +	tgt_info->tgt_mod = mod;
->  	return 0;
->  }
->  
-> @@ -17184,6 +17195,7 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
->  	/* store info about the attachment target that will be used later */
->  	prog->aux->attach_func_proto = tgt_info.tgt_type;
->  	prog->aux->attach_func_name = tgt_info.tgt_name;
-> +	prog->aux->mod = tgt_info.tgt_mod;
->  
->  	if (tgt_prog) {
->  		prog->aux->saved_dst_prog_type = tgt_prog->type;
-> diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-> index 2e2bf236f558..5cb103a46018 100644
-> --- a/kernel/module/internal.h
-> +++ b/kernel/module/internal.h
-> @@ -256,6 +256,11 @@ static inline bool sect_empty(const Elf_Shdr *sect)
->  static inline void init_build_id(struct module *mod, const struct load_info *info) { }
->  static inline void layout_symtab(struct module *mod, struct load_info *info) { }
->  static inline void add_kallsyms(struct module *mod, const struct load_info *info) { }
-> +static inline unsigned long find_kallsyms_symbol_value(struct module *mod
-> +						       const char *name)
-> +{
-> +	return 0;
-> +}
->  #endif /* CONFIG_KALLSYMS */
->  
->  #ifdef CONFIG_SYSFS
-> -- 
-> 2.39.1
-> 
