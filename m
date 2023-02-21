@@ -2,136 +2,133 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18A09C636D7
-	for <bpf@archiver.kernel.org>; Tue, 21 Feb 2023 15:47:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A700C636D7
+	for <bpf@archiver.kernel.org>; Tue, 21 Feb 2023 15:49:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233313AbjBUPr2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 21 Feb 2023 10:47:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44672 "EHLO
+        id S234719AbjBUPtP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 21 Feb 2023 10:49:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbjBUPr2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 21 Feb 2023 10:47:28 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4FA265B2;
-        Tue, 21 Feb 2023 07:47:27 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id x10so18135015edd.13;
-        Tue, 21 Feb 2023 07:47:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=scM9oYCSR1ND5NiwNb6ID5TUnyh6Ib6071WzOSOrsT4=;
-        b=d0B6JhmUt4j5p3PHPLbXlteRY5kSw721PyQ1UDfSQYlq0razfwkmUCEPG544F9j4SF
-         ZjBazQTGkCMhVyF/bp1NcvTD1EmyKaIVpJkSbZqIEcGsSGXLFqVvFOPWV9BKElhqOrnN
-         CpytSaVygN02dpjIfbr6KZJBAn3P1InfeSYO9aETjq2eIgIiPWJ1/Ai3W39WmHNIgNnI
-         juJE6vv+YXo+r4ewJrFbOnbSBhFXaVbKAob0vxjmw+uhxidsxxacg5zK+uaY9TMXwRbr
-         fIs5HR3yFLofEc9sk8R4fqfFmOY/Wn/FG4+d5aQ/9YBkEoqk5G+si4QaEGwxFNn/Twk0
-         YG6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=scM9oYCSR1ND5NiwNb6ID5TUnyh6Ib6071WzOSOrsT4=;
-        b=2XciQtcJySXy5LOiLEHpASVygKRy8GsVDmunABmqiTJPpDcaPD3F71bzD5z2SfZcS4
-         G48Qqgm/FEQICYjkVJ5KnWUevycLCk12lcRnHhDzYpWsf/V1pTvaUFshNINtkseekYNA
-         JWCmolIe12Gir9rXHwFKVAdO/xiLaT50mzTnMliv2cjLYupHHn61F6Na35yO1saov3dZ
-         UuMWvyDB4XFdEefAe9pPOBmj0xZsIT7DJng+eFIAXkQEel1IX8ZYNDL3abZHPIR+fAya
-         Z1uKrjnK+M6b4wTrLWcboeR8KGKT/Pk6AzXKGZxSEZFW7ML86QxXcU/dOCSD3olYkbfA
-         4uxA==
-X-Gm-Message-State: AO0yUKUp9E/WFO4crMYMwablsQfCjQKgB1fhh7/d5D7DvKAQPKgWnOje
-        W9cIIjUTM4LQxO1l6HnEbxbpy5A87NLZDluW4ec=
-X-Google-Smtp-Source: AK7set9hq6lHx/3D/Eckys2B7FbwUbl4sjrwQyeG1UCSJlPURRvP/Mqbbu+8eLZrnD9uJ7HJEJJZ1Q8g4zlgrUZSIGw=
-X-Received: by 2002:a17:907:1dda:b0:878:b86b:de15 with SMTP id
- og26-20020a1709071dda00b00878b86bde15mr6383597ejc.11.1676994445630; Tue, 21
- Feb 2023 07:47:25 -0800 (PST)
-MIME-Version: 1.0
-References: <20230221110344.82818-1-kerneljasonxing@gmail.com>
- <48429c16fdaee59867df5ef487e73d4b1bf099af.camel@redhat.com>
- <CAL+tcoD8PzL4khHq44z27qSHHGkcC4YUa91E3h+ki7O0u3SshQ@mail.gmail.com> <aaf3d11ea5b247ab03d117dadae682fe2180d38a.camel@redhat.com>
-In-Reply-To: <aaf3d11ea5b247ab03d117dadae682fe2180d38a.camel@redhat.com>
-From:   Jason Xing <kerneljasonxing@gmail.com>
-Date:   Tue, 21 Feb 2023 23:46:49 +0800
-Message-ID: <CAL+tcoBZFFwOnUqzcDtSsNyfPgHENAOv0bPcvncxuMPwCn40+Q@mail.gmail.com>
-Subject: Re: [PATCH net] udp: fix memory schedule error
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     willemdebruijn.kernel@gmail.com, davem@davemloft.net,
-        dsahern@kernel.org, edumazet@google.com, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S230115AbjBUPtP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 21 Feb 2023 10:49:15 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E1C23309
+        for <bpf@vger.kernel.org>; Tue, 21 Feb 2023 07:49:14 -0800 (PST)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31LDg3Am016180;
+        Tue, 21 Feb 2023 15:48:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=corp-2022-7-12;
+ bh=YzNkA86FMIi5Lnanj3X8pW+hsNT7m0FSJtEZJAYKJ+U=;
+ b=cz/A/KmZI+9D5nDkS/TqDliy4VcxrhkAgDPRL6OvDaY1+mefOrGN1/tViiH8Cw31pJ2f
+ 7xOYHVHFtEDGF6T/sXZyXklRWO7cOl1mLy5CfhkzYNh3sHnXS7mmJcIQK2uCOr6mjxfr
+ 1LBkBNfIvcMw8PkHyL/1k9FfYhoo9MwFOM9pt4YHQw4WlLLXA8RKLiHbob0qv7HNQqyD
+ 4aY55P+nn4uF9irNjxJjwtt2YPFC1V9uA1g15dfGS08eJql8z28K0jOYJWP0WlJerjiX
+ R8x8i8zGngnOIDRuTaMtFEqiAIoRPAkX1Y61ehsGAwOhoAt1ib+VPvfmjiIupqnnFVo6 wA== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ntp9tnhj8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Feb 2023 15:48:54 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31LFVwiW040888;
+        Tue, 21 Feb 2023 15:48:53 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3ntn458xx0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Feb 2023 15:48:53 +0000
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31LFmmpE007236;
+        Tue, 21 Feb 2023 15:48:52 GMT
+Received: from myrouter.uk.oracle.com (dhcp-10-175-204-58.vpn.oracle.com [10.175.204.58])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3ntn458xqw-2;
+        Tue, 21 Feb 2023 15:48:52 +0000
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     acme@kernel.org
+Cc:     ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+        eddyz87@gmail.com, haoluo@google.com, jolsa@kernel.org,
+        john.fastabend@gmail.com, kpsingh@chromium.org,
+        sinquersw@gmail.com, martin.lau@kernel.org, songliubraving@fb.com,
+        sdf@google.com, timo@incline.eu, yhs@fb.com, bpf@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [RFC dwarves 1/3] dwarf_loader: fix detection of struct parameters
+Date:   Tue, 21 Feb 2023 15:48:40 +0000
+Message-Id: <1676994522-1557-2-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1676994522-1557-1-git-send-email-alan.maguire@oracle.com>
+References: <1676994522-1557-1-git-send-email-alan.maguire@oracle.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-21_08,2023-02-20_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0
+ mlxlogscore=999 bulkscore=0 mlxscore=0 adultscore=0 suspectscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302210131
+X-Proofpoint-GUID: Sc597oGMIPr5DMX3QFhsAaZhpAZfTSV_
+X-Proofpoint-ORIG-GUID: Sc597oGMIPr5DMX3QFhsAaZhpAZfTSV_
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 10:46 PM Paolo Abeni <pabeni@redhat.com> wrote:
->
-> On Tue, 2023-02-21 at 21:39 +0800, Jason Xing wrote:
-> > On Tue, Feb 21, 2023 at 8:27 PM Paolo Abeni <pabeni@redhat.com> wrote:
-> > >
-> > > On Tue, 2023-02-21 at 19:03 +0800, Jason Xing wrote:
-> > > > From: Jason Xing <kernelxing@tencent.com>
-> > > >
-> > > > Quoting from the commit 7c80b038d23e ("net: fix sk_wmem_schedule()
-> > > > and sk_rmem_schedule() errors"):
-> > > >
-> > > > "If sk->sk_forward_alloc is 150000, and we need to schedule 150001 bytes,
-> > > > we want to allocate 1 byte more (rounded up to one page),
-> > > > instead of 150001"
-> > >
-> > > I'm wondering if this would cause measurable (even small) performance
-> > > regression? Specifically under high packet rate, with BH and user-space
-> > > processing happening on different CPUs.
-> > >
-> > > Could you please provide the relevant performance figures?
-> >
-> > Sure, I've done some basic tests on my machine as below.
-> >
-> > Environment: 16 cpus, 60G memory
-> > Server: run "iperf3 -s -p [port]" command and start 500 processes.
-> > Client: run "iperf3 -u -c 127.0.0.1 -p [port]" command and start 500 processes.
->
-> Just for the records, with the above command each process will send
-> pkts at 1mbs - not very relevant performance wise.
->
-> Instead you could do:
->
+In some cases, param__is_struct() was failing to notice that
+a parameter was a struct.  The first was where a parameter
+was a const struct; the second was where the type information
+was in the original subroutine information, and additional
+parameters that referred to it via abstract origin did not
+also specify type information.  We combine information
+about type, name etc in ftype__recode_dwarf_types(), but
+since we share the tag->type (rather than the dwarf tag),
+param__is_struct() was failing to handle this case as
+it represents parameters like this:
 
-> taskset 0x2 iperf -s &
-> iperf -u -c 127.0.0.1 -b 0 -l 64
->
+    <7e0f7d4>   DW_AT_sibling     : <0x7e0f924>
+ <2><7e0f7d8>: Abbrev Number: 7 (DW_TAG_formal_parameter)
+    <7e0f7d9>   DW_AT_abstract_origin: <0x7e0dc80>
+    <7e0f7dd>   DW_AT_location    : 0x2797488 (location list)
+    <7e0f7e1>   DW_AT_GNU_locviews: 0x2797484
+ <2><7e0f7e5>: Abbrev Number: 7 (DW_TAG_formal_parameter)
+    <7e0f7e6>   DW_AT_abstract_origin: <0x7e0dc8b>
+    <7e0f7ea>   DW_AT_location    : 0x27974ca (location list)
+    <7e0f7ee>   DW_AT_GNU_locviews: 0x27974c8
 
-Thanks for your guidance.
+...which do not specify a type and did not use the tag->type
+information.
 
-Here're some numbers according to what you suggested, which I tested
-several times.
-----------|IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s
-Before: lo 411073.41 411073.41  36932.38  36932.38
-After:   lo 410308.73 410308.73  36863.81  36863.81
+Fix param__is_struct() to use cu__type(cu, tag->type)
+to look up type information, and to handle the const case.
 
-Above is one of many results which does not mean that the original
-code absolutely outperforms.
-The output is not that constant and stable, I think.
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ dwarf_loader.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-Please help me review those numbers.
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index 014e130..73e3670 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -2645,19 +2645,17 @@ out:
+ 
+ static bool param__is_struct(struct cu *cu, struct tag *tag)
+ {
+-	const struct dwarf_tag *dtag = tag->priv;
+-	struct dwarf_tag *dtype = dwarf_cu__find_type_by_ref(cu->priv, &dtag->type);
+-	struct tag *type;
++	struct tag *type = cu__type(cu, tag->type);
+ 
+-	if (!dtype)
++	if (!type)
+ 		return false;
+-	type = dtype->tag;
+ 
+ 	switch (type->tag) {
+ 	case DW_TAG_structure_type:
+ 		return true;
++	case DW_TAG_const_type:
+ 	case DW_TAG_typedef:
+-		/* handle "typedef struct" */
++		/* handle "typedef struct", const parameter */
+ 		return param__is_struct(cu, type);
+ 	default:
+ 		return false;
+-- 
+2.31.1
 
->
-> > In theory, I have no clue about why it could cause some regression?
-> > Maybe the memory allocation is not that enough compared to the
-> > original code?
->
-> As Eric noted, for UDP traffic, due to the expected average packet
-> size, sk_forward_alloc is touched quite frequently, both with and
-> without this patch, so there is little chance it will have any
-> performance impact.
-
-Well, I see.
-
-Thanks,
-Jason
-
->
-> Cheers,
->
-> Paolo
->
