@@ -2,97 +2,93 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56C8CC636D6
-	for <bpf@archiver.kernel.org>; Wed, 22 Feb 2023 11:55:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BAD8C678D5
+	for <bpf@archiver.kernel.org>; Wed, 22 Feb 2023 13:26:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbjBVLz1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Feb 2023 06:55:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43292 "EHLO
+        id S231707AbjBVN0N (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Feb 2023 08:26:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231341AbjBVLz0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 Feb 2023 06:55:26 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 349612822E;
-        Wed, 22 Feb 2023 03:55:22 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8DxUOWpAvZj8ZEDAA--.1698S3;
-        Wed, 22 Feb 2023 19:55:21 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx2r2nAvZjar04AA--.38065S5;
-        Wed, 22 Feb 2023 19:55:21 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 3/3] selftests/bpf: Check __ARCH_WANT_SET_GET_RLIMIT before syscall(__NR_getrlimit)
-Date:   Wed, 22 Feb 2023 19:55:08 +0800
-Message-Id: <1677066908-15224-4-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1677066908-15224-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1677066908-15224-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf8Cx2r2nAvZjar04AA--.38065S5
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7KF4kJw15ArW8ury3tw47Jwb_yoW8Aw17pa
-        yrJa4Utr1SyF17tw10krW7ZryfJrs7ZFWFkF48Jr95Zw1DXa9aqryIgF4YgrsxKrZaqrsY
-        v348Kas7Zr4UA37anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b7AYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AI
-        xVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64
-        kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv67AKxVWxJVW8Jr1l
-        Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s
-        026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
-        JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
-        v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
-        j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
-        W8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8jZX5UUUUU==
+        with ESMTP id S229673AbjBVN0M (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Feb 2023 08:26:12 -0500
+Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52983B645;
+        Wed, 22 Feb 2023 05:25:43 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=xiaoguang.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VcGxflu_1677072336;
+Received: from localhost(mailfrom:xiaoguang.wang@linux.alibaba.com fp:SMTPD_---0VcGxflu_1677072336)
+          by smtp.aliyun-inc.com;
+          Wed, 22 Feb 2023 21:25:37 +0800
+From:   Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+To:     linux-block@vger.kernel.org, io-uring@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     ming.lei@redhat.com, axboe@kernel.dk, asml.silence@gmail.com,
+        ZiyangZhang@linux.alibaba.com
+Subject: [RFC v2 3/4] io_uring: introduce IORING_URING_CMD_UNLOCK flag
+Date:   Wed, 22 Feb 2023 21:25:33 +0800
+Message-Id: <20230222132534.114574-4-xiaoguang.wang@linux.alibaba.com>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20230222132534.114574-1-xiaoguang.wang@linux.alibaba.com>
+References: <20230222132534.114574-1-xiaoguang.wang@linux.alibaba.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-__NR_getrlimit is defined only if __ARCH_WANT_SET_GET_RLIMIT is defined:
+task_work_cb and its child functions may call io_uring_submit_sqe()
+in io_uring_cmd's callback, so to avoid ctx->uring_lock deadlock,
+introduce IORING_URING_CMD_UNLOCK to unlock uring_lock temporarily
+in io_uring_cmd_work().
 
-  #ifdef __ARCH_WANT_SET_GET_RLIMIT
-  /* getrlimit and setrlimit are superseded with prlimit64 */
-  #define __NR_getrlimit 163
-  ...
-  #endif
-
-Some archs do not define __ARCH_WANT_SET_GET_RLIMIT, it should check
-__ARCH_WANT_SET_GET_RLIMIT before syscall(__NR_getrlimit) to fix the
-following build error:
-
-    TEST-OBJ [test_progs] user_ringbuf.test.o
-  tools/testing/selftests/bpf/prog_tests/user_ringbuf.c: In function 'kick_kernel_cb':
-  tools/testing/selftests/bpf/prog_tests/user_ringbuf.c:593:17: error: '__NR_getrlimit' undeclared (first use in this function)
-    593 |         syscall(__NR_getrlimit);
-        |                 ^~~~~~~~~~~~~~
-  tools/testing/selftests/bpf/prog_tests/user_ringbuf.c:593:17: note: each undeclared identifier is reported only once for each function it appears in
-  make: *** [Makefile:573: tools/testing/selftests/bpf/user_ringbuf.test.o] Error 1
-  make: Leaving directory 'tools/testing/selftests/bpf'
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Signed-off-by: Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
 ---
- tools/testing/selftests/bpf/prog_tests/user_ringbuf.c | 2 ++
- 1 file changed, 2 insertions(+)
+ include/uapi/linux/io_uring.h | 5 +++++
+ io_uring/uring_cmd.c          | 6 +++++-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c b/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
-index 3a13e10..0550307 100644
---- a/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
-@@ -590,7 +590,9 @@ static void *kick_kernel_cb(void *arg)
- 	/* Kick the kernel, causing it to drain the ring buffer and then wake
- 	 * up the test thread waiting on epoll.
- 	 */
-+#ifdef __ARCH_WANT_SET_GET_RLIMIT
- 	syscall(__NR_getrlimit);
-+#endif
+diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
+index 2780bce62faf..45ea8c35d251 100644
+--- a/include/uapi/linux/io_uring.h
++++ b/include/uapi/linux/io_uring.h
+@@ -232,8 +232,13 @@ enum io_uring_op {
+  * sqe->uring_cmd_flags
+  * IORING_URING_CMD_FIXED	use registered buffer; pass this flag
+  *				along with setting sqe->buf_index.
++ *
++ * IORING_URING_CMD_UNLOCK	Notify io_uring_cmd's task_work_cb to
++ *				unlock uring_lock, some ->uring_cmd()
++ *				implementations need it.
+  */
+ #define IORING_URING_CMD_FIXED	(1U << 0)
++#define IORING_URING_CMD_UNLOCK	(1U << 1)
  
- 	return NULL;
+ 
+ /*
+diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+index 446a189b78b0..11488a702832 100644
+--- a/io_uring/uring_cmd.c
++++ b/io_uring/uring_cmd.c
+@@ -16,7 +16,11 @@ static void io_uring_cmd_work(struct io_kiocb *req, bool *locked)
+ {
+ 	struct io_uring_cmd *ioucmd = io_kiocb_to_cmd(req, struct io_uring_cmd);
+ 
++	if ((req->flags & IORING_URING_CMD_UNLOCK) && *locked)
++		mutex_unlock(&(req->ctx->uring_lock));
+ 	ioucmd->task_work_cb(ioucmd);
++	if ((req->flags & IORING_URING_CMD_UNLOCK) && *locked)
++		mutex_lock(&(req->ctx->uring_lock));
  }
+ 
+ void io_uring_cmd_complete_in_task(struct io_uring_cmd *ioucmd,
+@@ -82,7 +86,7 @@ int io_uring_cmd_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 		return -EINVAL;
+ 
+ 	ioucmd->flags = READ_ONCE(sqe->uring_cmd_flags);
+-	if (ioucmd->flags & ~IORING_URING_CMD_FIXED)
++	if (ioucmd->flags & ~(IORING_URING_CMD_FIXED | IORING_URING_CMD_UNLOCK))
+ 		return -EINVAL;
+ 
+ 	if (ioucmd->flags & IORING_URING_CMD_FIXED) {
 -- 
-2.1.0
+2.31.1
 
