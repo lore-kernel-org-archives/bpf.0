@@ -2,29 +2,29 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67998C61DA4
-	for <bpf@archiver.kernel.org>; Wed, 22 Feb 2023 06:08:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 660BFC64EC4
+	for <bpf@archiver.kernel.org>; Wed, 22 Feb 2023 06:08:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbjBVGIi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Feb 2023 01:08:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60684 "EHLO
+        id S230493AbjBVGIr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Feb 2023 01:08:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbjBVGIg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S229586AbjBVGIg (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 22 Feb 2023 01:08:36 -0500
 Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BDEE23648
-        for <bpf@vger.kernel.org>; Tue, 21 Feb 2023 22:08:33 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E07F190
+        for <bpf@vger.kernel.org>; Tue, 21 Feb 2023 22:08:35 -0800 (PST)
 Received: by devvm20151.prn0.facebook.com (Postfix, from userid 115148)
-        id 17041F67CF0; Tue, 21 Feb 2023 22:08:23 -0800 (PST)
+        id 3BD35F67D18; Tue, 21 Feb 2023 22:08:26 -0800 (PST)
 From:   Joanne Koong <joannelkoong@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     martin.lau@kernel.org, andrii@kernel.org, ast@kernel.org,
         memxor@gmail.com, daniel@iogearbox.net, netdev@vger.kernel.org,
         kernel-team@fb.com, toke@kernel.org,
-        Joanne Koong <joannelkoong@gmail.com>
-Subject: [PATCH v11 bpf-next 02/10] bpf: Refactor process_dynptr_func
-Date:   Tue, 21 Feb 2023 22:07:39 -0800
-Message-Id: <20230222060747.2562549-3-joannelkoong@gmail.com>
+        Joanne Koong <joannekoong@gmail.com>
+Subject: [PATCH v11 bpf-next 06/10] bpf: Add __uninit kfunc annotation
+Date:   Tue, 21 Feb 2023 22:07:43 -0800
+Message-Id: <20230222060747.2562549-7-joannelkoong@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230222060747.2562549-1-joannelkoong@gmail.com>
 References: <20230222060747.2562549-1-joannelkoong@gmail.com>
@@ -34,162 +34,105 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This change cleans up process_dynptr_func's flow to be more intuitive
-and updates some comments with more context.
+From: Joanne Koong <joannekoong@gmail.com>
 
-Signed-off-by: Joanne Koong <joannelkoong@gmail.com>
+This patch adds __uninit as a kfunc annotation.
+
+This will be useful for scenarios such as for example in dynptrs,
+indicating whether the dynptr should be checked by the verifier as an
+initialized or an uninitialized dynptr.
+
+Without this annotation, the alternative would be needing to hard-code
+in the verifier the specific kfunc to indicate that arg should be
+treated as an uninitialized arg.
+
+Signed-off-by: Joanne Koong <joannekoong@gmail.com>
 ---
- include/linux/bpf_verifier.h |  3 --
- kernel/bpf/verifier.c        | 58 ++++++++++++++++++------------------
- 2 files changed, 29 insertions(+), 32 deletions(-)
+ Documentation/bpf/kfuncs.rst | 17 +++++++++++++++++
+ kernel/bpf/verifier.c        | 18 ++++++++++++++++--
+ 2 files changed, 33 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index cf1bb1cf4a7b..b26ff2a8f63b 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -616,9 +616,6 @@ int check_func_arg_reg_off(struct bpf_verifier_env *e=
-nv,
- 			   enum bpf_arg_type arg_type);
- int check_mem_reg(struct bpf_verifier_env *env, struct bpf_reg_state *re=
-g,
- 		   u32 regno, u32 mem_size);
--struct bpf_call_arg_meta;
--int process_dynptr_func(struct bpf_verifier_env *env, int regno,
--			enum bpf_arg_type arg_type, struct bpf_call_arg_meta *meta);
+diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+index ca96ef3f6896..bbdb6ca6cadb 100644
+--- a/Documentation/bpf/kfuncs.rst
++++ b/Documentation/bpf/kfuncs.rst
+@@ -100,6 +100,23 @@ Hence, whenever a constant scalar argument is accept=
+ed by a kfunc which is not a
+ size parameter, and the value of the constant matters for program safety=
+, __k
+ suffix should be used.
 =20
- /* this lives here instead of in bpf.h because it needs to dereference t=
-gt_prog */
- static inline u64 bpf_trampoline_compute_key(const struct bpf_prog *tgt_=
-prog,
++2.2.2 __uninit Annotation
++--------------------
++
++This annotation is used to indicate that the argument will be treated as
++uninitialized.
++
++An example is given below::
++
++        __bpf_kfunc int bpf_dynptr_from_skb(..., struct bpf_dynptr_kern =
+*ptr__uninit)
++        {
++        ...
++        }
++
++Here, the dynptr will be treated as an uninitialized dynptr. Without thi=
+s
++annotation, the verifier will reject the program if the dynptr passed in=
+ is
++not initialized.
++
+ .. _BPF_kfunc_nodef:
+=20
+ 2.3 Using an existing kernel function
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 272563a0b770..23a7749e8463 100644
+index babc82e93ae6..df4506c5e5f2 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -955,39 +955,49 @@ static int destroy_if_dynptr_stack_slot(struct bpf_=
-verifier_env *env,
- 	return 0;
+@@ -8706,6 +8706,11 @@ static bool is_kfunc_arg_alloc_obj(const struct bt=
+f *btf, const struct btf_param
+ 	return __kfunc_param_match_suffix(btf, arg, "__alloc");
  }
 =20
--static bool is_dynptr_reg_valid_uninit(struct bpf_verifier_env *env, str=
-uct bpf_reg_state *reg,
--				       int spi)
-+static bool is_dynptr_reg_valid_uninit(struct bpf_verifier_env *env, str=
-uct bpf_reg_state *reg)
- {
-+	int spi;
++static bool is_kfunc_arg_uninit(const struct btf *btf, const struct btf_=
+param *arg)
++{
++	return __kfunc_param_match_suffix(btf, arg, "__uninit");
++}
 +
- 	if (reg->type =3D=3D CONST_PTR_TO_DYNPTR)
- 		return false;
-=20
--	/* For -ERANGE (i.e. spi not falling into allocated stack slots), we
--	 * will do check_mem_access to check and update stack bounds later, so
--	 * return true for that case.
-+	spi =3D dynptr_get_spi(env, reg);
+ static bool is_kfunc_arg_scalar_with_name(const struct btf *btf,
+ 					  const struct btf_param *arg,
+ 					  const char *name)
+@@ -9642,17 +9647,26 @@ static int check_kfunc_args(struct bpf_verifier_e=
+nv *env, struct bpf_kfunc_call_
+ 				return ret;
+ 			break;
+ 		case KF_ARG_PTR_TO_DYNPTR:
++		{
++			enum bpf_arg_type dynptr_arg_type =3D ARG_PTR_TO_DYNPTR;
 +
-+	/* -ERANGE (i.e. spi not falling into allocated stack slots) isn't an
-+	 * error because this just means the stack state hasn't been updated ye=
-t.
-+	 * We will do check_mem_access to check and update stack bounds later.
- 	 */
--	if (spi < 0)
--		return spi =3D=3D -ERANGE;
--	/* We allow overwriting existing unreferenced STACK_DYNPTR slots, see
--	 * mark_stack_slots_dynptr which calls destroy_if_dynptr_stack_slot to
--	 * ensure dynptr objects at the slots we are touching are completely
--	 * destructed before we reinitialize them for a new one. For referenced
--	 * ones, destroy_if_dynptr_stack_slot returns an error early instead of
--	 * delaying it until the end where the user will get "Unreleased
-+	if (spi < 0 && spi !=3D -ERANGE)
-+		return false;
+ 			if (reg->type !=3D PTR_TO_STACK &&
+ 			    reg->type !=3D CONST_PTR_TO_DYNPTR) {
+ 				verbose(env, "arg#%d expected pointer to stack or dynptr_ptr\n", i);
+ 				return -EINVAL;
+ 			}
+=20
+-			ret =3D process_dynptr_func(env, regno, insn_idx,
+-						  ARG_PTR_TO_DYNPTR | MEM_RDONLY);
++			if (reg->type =3D=3D CONST_PTR_TO_DYNPTR)
++				dynptr_arg_type |=3D MEM_RDONLY;
 +
-+	/* We don't need to check if the stack slots are marked by previous
-+	 * dynptr initializations because we allow overwriting existing unrefer=
-enced
-+	 * STACK_DYNPTR slots, see mark_stack_slots_dynptr which calls
-+	 * destroy_if_dynptr_stack_slot to ensure dynptr objects at the slots w=
-e are
-+	 * touching are completely destructed before we reinitialize them for a=
- new
-+	 * one. For referenced ones, destroy_if_dynptr_stack_slot returns an er=
-ror early
-+	 * instead of delaying it until the end where the user will get "Unrele=
-ased
- 	 * reference" error.
- 	 */
- 	return true;
- }
-=20
--static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env, struc=
-t bpf_reg_state *reg,
--				     int spi)
-+static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env, struc=
-t bpf_reg_state *reg)
- {
- 	struct bpf_func_state *state =3D func(env, reg);
--	int i;
-+	int i, spi;
-=20
--	/* This already represents first slot of initialized bpf_dynptr */
-+	/* This already represents first slot of initialized bpf_dynptr.
-+	 *
-+	 * CONST_PTR_TO_DYNPTR already has fixed and var_off as 0 due to
-+	 * check_func_arg_reg_off's logic, so we don't need to check its
-+	 * offset and alignment.
-+	 */
- 	if (reg->type =3D=3D CONST_PTR_TO_DYNPTR)
- 		return true;
-=20
-+	spi =3D dynptr_get_spi(env, reg);
- 	if (spi < 0)
- 		return false;
- 	if (!state->stack[spi].spilled_ptr.dynptr.first_slot)
-@@ -6210,7 +6220,6 @@ int process_dynptr_func(struct bpf_verifier_env *en=
-v, int regno,
- 			enum bpf_arg_type arg_type, struct bpf_call_arg_meta *meta)
- {
- 	struct bpf_reg_state *regs =3D cur_regs(env), *reg =3D &regs[regno];
--	int spi =3D 0;
-=20
- 	/* MEM_UNINIT and MEM_RDONLY are exclusive, when applied to an
- 	 * ARG_PTR_TO_DYNPTR (or ARG_PTR_TO_DYNPTR | DYNPTR_TYPE_*):
-@@ -6219,15 +6228,6 @@ int process_dynptr_func(struct bpf_verifier_env *e=
-nv, int regno,
- 		verbose(env, "verifier internal error: misconfigured dynptr helper typ=
-e flags\n");
- 		return -EFAULT;
- 	}
--	/* CONST_PTR_TO_DYNPTR already has fixed and var_off as 0 due to
--	 * check_func_arg_reg_off's logic. We only need to check offset
--	 * and its alignment for PTR_TO_STACK.
--	 */
--	if (reg->type =3D=3D PTR_TO_STACK) {
--		spi =3D dynptr_get_spi(env, reg);
--		if (spi < 0 && spi !=3D -ERANGE)
--			return spi;
--	}
-=20
- 	/*  MEM_UNINIT - Points to memory that is an appropriate candidate for
- 	 *		 constructing a mutable bpf_dynptr object.
-@@ -6245,7 +6245,7 @@ int process_dynptr_func(struct bpf_verifier_env *en=
-v, int regno,
- 	 *		 to.
- 	 */
- 	if (arg_type & MEM_UNINIT) {
--		if (!is_dynptr_reg_valid_uninit(env, reg, spi)) {
-+		if (!is_dynptr_reg_valid_uninit(env, reg)) {
- 			verbose(env, "Dynptr has to be an uninitialized dynptr\n");
- 			return -EINVAL;
- 		}
-@@ -6268,7 +6268,7 @@ int process_dynptr_func(struct bpf_verifier_env *en=
-v, int regno,
- 			return -EINVAL;
- 		}
-=20
--		if (!is_dynptr_reg_valid_init(env, reg, spi)) {
-+		if (!is_dynptr_reg_valid_init(env, reg)) {
- 			verbose(env,
- 				"Expected an initialized dynptr as arg #%d\n",
- 				regno);
++			if (is_kfunc_arg_uninit(btf, &args[i]))
++				dynptr_arg_type |=3D MEM_UNINIT;
++
++			ret =3D process_dynptr_func(env, regno, insn_idx, dynptr_arg_type);
+ 			if (ret < 0)
+ 				return ret;
+ 			break;
++		}
+ 		case KF_ARG_PTR_TO_LIST_HEAD:
+ 			if (reg->type !=3D PTR_TO_MAP_VALUE &&
+ 			    reg->type !=3D (PTR_TO_BTF_ID | MEM_ALLOC)) {
 --=20
 2.30.2
 
