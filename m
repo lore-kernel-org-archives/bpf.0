@@ -2,129 +2,133 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87DFAC6379F
-	for <bpf@archiver.kernel.org>; Wed, 22 Feb 2023 23:02:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4868C636D6
+	for <bpf@archiver.kernel.org>; Wed, 22 Feb 2023 23:11:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232586AbjBVXCc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Feb 2023 18:02:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
+        id S229604AbjBVXLJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Feb 2023 18:11:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233117AbjBVXBz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 Feb 2023 18:01:55 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3DB474F1;
-        Wed, 22 Feb 2023 15:01:54 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id p5so5015400pgh.11;
-        Wed, 22 Feb 2023 15:01:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7w5v6HDDIJM40WcjLFww/rgpyST+M1urWgPilPWBon8=;
-        b=YQ5wHmi8qisFfdU/P7pajLC17qKNsBusu4tx8BKHw1MgBV8pqOWkvPqhfO9Elwof30
-         G0wAxMBquNFoXLr0ZLCDpyDZxAzdhk6yhj+t/7r5AK78AEQwN5e5wNZc6Mh5l0q3lu1x
-         e5jmksxSksTDOAgw8U4YZmoZ8/5oX9HwMn/C7N0gNd1lJtcaXraM9Es9UkvX5Mo0zqq2
-         YMLBU0ULesrvTHvBqig9YC8WJRgvoQJ+fHYIS61t8V4GYr/9CsS4YfFhvy8Vz2vFlwCQ
-         cYIIzFIeeNwTOzFAIZPhADQcJis3sbLgG74+lpdOxkEkq9I6LVgFEeFCOuY/wYy7rUyi
-         HQJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=7w5v6HDDIJM40WcjLFww/rgpyST+M1urWgPilPWBon8=;
-        b=e5NeTBPWtIwt1ZO8+zkyLD/gRP5Qaas5DgTA10559/AFSGeIEjzA6n1D+FkX0FCC9S
-         HIugSTJ1eNSbnRIdp7zRjJzyEahHs9PRkiOst5LLfjbQW8qLzsYijlwGS4PDVoSTBNOW
-         EpBGThp2+Bf0R4jN9F0I3Ke2u2BwEsPOtasq6PFewCmWBu/HG9TblbqWGDy2sh6CMd8Z
-         foXVQkxBJJ1aYgxRaxnqJiyLtXvD8knsRsltuG7ZUZmKz18ez06X5OG9PIn+N7ea3in5
-         4FkiFWAjdzfAo9R7Bo32Dwc7LoP7n+zmY4kxluenOrB73ukfj7a0nCWUm+XNz0bcLrKt
-         dVRQ==
-X-Gm-Message-State: AO0yUKXkptEKVfGWyF207uHTG41DX2ndr5NmYE1JbH2JJbWVICzIu/CI
-        tnwYtXVE0ZsvNgfI7rcwqtE=
-X-Google-Smtp-Source: AK7set+2ns9vUVl6u4tJC3dwYZ0/+HuMiYjCeBZp5p9NTYLMcRVLcZRieOOZtjPcXGJOHIzNdWbVlQ==
-X-Received: by 2002:aa7:9e4b:0:b0:5d6:138f:5596 with SMTP id z11-20020aa79e4b000000b005d6138f5596mr2824208pfq.14.1677106913583;
-        Wed, 22 Feb 2023 15:01:53 -0800 (PST)
-Received: from moohyul.svl.corp.google.com ([2620:15c:2d4:203:8f76:587d:f250:fecf])
-        by smtp.gmail.com with ESMTPSA id s1-20020aa78281000000b005ccbe5346ebsm3895127pfm.163.2023.02.22.15.01.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 15:01:53 -0800 (PST)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Song Liu <song@kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH 6/8] perf bpf filter: Add more weight sample data support
-Date:   Wed, 22 Feb 2023 15:01:39 -0800
-Message-Id: <20230222230141.1729048-7-namhyung@kernel.org>
-X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-In-Reply-To: <20230222230141.1729048-1-namhyung@kernel.org>
-References: <20230222230141.1729048-1-namhyung@kernel.org>
+        with ESMTP id S232166AbjBVXLH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Feb 2023 18:11:07 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C76A433441
+        for <bpf@vger.kernel.org>; Wed, 22 Feb 2023 15:11:04 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31MMGiYI029485;
+        Wed, 22 Feb 2023 22:37:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=PId1MBFavWzoTRttZTIpImTRa/Hpqhm+EJ23QnCjzfo=;
+ b=WswPwmhyYSNsLUcneFK8qxUJX0RBkvi0rBSIKqMcUqXuuEO/pt9J6x1h5m6Koc3vec8o
+ wuK/Ak6w8MNwemerQ4ID6sDhlrz/D1ycTV3gp5W56JNnD442tzXsxyiV6LsC555779Of
+ a/8knnlNMgEi2yJJkXOwx1SIcS2yT9sz7/utCdi8f1x8c4LEEk23p4vxZpgGNZNCdEC5
+ y13/MuKy9ftDJDZGs95RrZjzjodpTC//oCLwxtFBNgEBtG6Ss/7Zk59fsCAnqSxhgwF/
+ Qyr062Yl1K7qnVE6Iraw6mKiKT9oemWHFOzctK81o7d38SY0hY9p6oFEfgMD3JW0cfFM Gw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nwuq2gf1q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 22:37:40 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31MMbaM3005171;
+        Wed, 22 Feb 2023 22:37:40 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nwuq2gf17-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 22:37:39 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31MEpVZF016606;
+        Wed, 22 Feb 2023 22:37:37 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3ntpa6dwrv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Feb 2023 22:37:37 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31MMbXvu34013604
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 Feb 2023 22:37:33 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B8C502004E;
+        Wed, 22 Feb 2023 22:37:33 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0DF8220040;
+        Wed, 22 Feb 2023 22:37:33 +0000 (GMT)
+Received: from heavy.boeblingen.de.ibm.com (unknown [9.171.50.17])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 22 Feb 2023 22:37:32 +0000 (GMT)
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>
+Subject: [PATCH bpf-next v3 12/12] selftests/bpf: Trim DENYLIST.s390x
+Date:   Wed, 22 Feb 2023 23:37:14 +0100
+Message-Id: <20230222223714.80671-13-iii@linux.ibm.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230222223714.80671-1-iii@linux.ibm.com>
+References: <20230222223714.80671-1-iii@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 5WgN1_tLrwbK840FbopR9fIBET9_pS3d
+X-Proofpoint-ORIG-GUID: RjGJ_2tm9SyXcmybhj9H0stPQi-sK5mP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-22_10,2023-02-22_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 clxscore=1015
+ impostorscore=0 lowpriorityscore=0 priorityscore=1501 spamscore=0
+ adultscore=0 phishscore=0 malwarescore=0 mlxscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302220195
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The weight data consists of a couple of fields with the
-PERF_SAMPE_WEIGHT_STRUCT.  Add weight{1,2,3} term to select them
-separately.  Also add their aliases like 'ins_lat', 'p_stage_cyc'
-and 'retire_lat'.
+With commit 1a280f48c0e4 ("s390/kprobes: replace kretprobe with
+rethook") and commit 2213d44e140f ("s390/syscalls: get rid of system
+call alias functions") merged, and kfunc range issues fixed, only two
+known test_progs failures remain on s390x.
 
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 ---
- tools/perf/util/bpf-filter.l                 | 6 ++++++
- tools/perf/util/bpf_skel/sample_filter.bpf.c | 8 ++++++++
- 2 files changed, 14 insertions(+)
+ tools/testing/selftests/bpf/DENYLIST.s390x | 20 --------------------
+ 1 file changed, 20 deletions(-)
 
-diff --git a/tools/perf/util/bpf-filter.l b/tools/perf/util/bpf-filter.l
-index ec12fc4d2ab8..419f923b35c0 100644
---- a/tools/perf/util/bpf-filter.l
-+++ b/tools/perf/util/bpf-filter.l
-@@ -71,6 +71,12 @@ addr		{ return sample(PERF_SAMPLE_ADDR); }
- period		{ return sample(PERF_SAMPLE_PERIOD); }
- txn		{ return sample(PERF_SAMPLE_TRANSACTION); }
- weight		{ return sample(PERF_SAMPLE_WEIGHT); }
-+weight1		{ return sample_part(PERF_SAMPLE_WEIGHT_STRUCT, 1); }
-+weight2		{ return sample_part(PERF_SAMPLE_WEIGHT_STRUCT, 2); }
-+weight3		{ return sample_part(PERF_SAMPLE_WEIGHT_STRUCT, 3); }
-+ins_lat		{ return sample_part(PERF_SAMPLE_WEIGHT_STRUCT, 2); } /* alias for weight2 */
-+p_stage_cyc	{ return sample_part(PERF_SAMPLE_WEIGHT_STRUCT, 3); } /* alias for weight3 */
-+retire_lat	{ return sample_part(PERF_SAMPLE_WEIGHT_STRUCT, 3); } /* alias for weight3 */
- phys_addr	{ return sample(PERF_SAMPLE_PHYS_ADDR); }
- code_pgsz	{ return sample(PERF_SAMPLE_CODE_PAGE_SIZE); }
- data_pgsz	{ return sample(PERF_SAMPLE_DATA_PAGE_SIZE); }
-diff --git a/tools/perf/util/bpf_skel/sample_filter.bpf.c b/tools/perf/util/bpf_skel/sample_filter.bpf.c
-index dddf38c27bb7..d930401c5bfc 100644
---- a/tools/perf/util/bpf_skel/sample_filter.bpf.c
-+++ b/tools/perf/util/bpf_skel/sample_filter.bpf.c
-@@ -54,6 +54,14 @@ static inline __u64 perf_get_sample(struct bpf_perf_event_data_kern *kctx,
- 		return kctx->data->period;
- 	case PERF_SAMPLE_TRANSACTION:
- 		return kctx->data->txn;
-+	case PERF_SAMPLE_WEIGHT_STRUCT:
-+		if (entry->part == 1)
-+			return kctx->data->weight.var1_dw;
-+		if (entry->part == 2)
-+			return kctx->data->weight.var2_w;
-+		if (entry->part == 3)
-+			return kctx->data->weight.var3_w;
-+		/* fall through */
- 	case PERF_SAMPLE_WEIGHT:
- 		return kctx->data->weight.full;
- 	case PERF_SAMPLE_PHYS_ADDR:
+diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x b/tools/testing/selftests/bpf/DENYLIST.s390x
+index b89eb87034e4..a17baf8c6fd7 100644
+--- a/tools/testing/selftests/bpf/DENYLIST.s390x
++++ b/tools/testing/selftests/bpf/DENYLIST.s390x
+@@ -1,24 +1,4 @@
+ # TEMPORARY
+ # Alphabetical order
+-bloom_filter_map                         # failed to find kernel BTF type ID of '__x64_sys_getpgid': -3                (?)
+-bpf_cookie                               # failed to open_and_load program: -524 (trampoline)
+-bpf_loop                                 # attaches to __x64_sys_nanosleep
+-cgrp_local_storage                       # prog_attach unexpected error: -524                                          (trampoline)
+-fexit_sleep                              # fexit_skel_load fexit skeleton failed                                       (trampoline)
+ get_stack_raw_tp                         # user_stack corrupted user stack                                             (no backchain userspace)
+-kprobe_multi_bench_attach                # bpf_program__attach_kprobe_multi_opts unexpected error: -95
+-kprobe_multi_test                        # relies on fentry
+-ksyms_module                             # test_ksyms_module__open_and_load unexpected error: -9                       (?)
+-ksyms_module_libbpf                      # JIT does not support calling kernel function                                (kfunc)
+-ksyms_module_lskel                       # test_ksyms_module_lskel__open_and_load unexpected error: -9                 (?)
+-module_attach                            # skel_attach skeleton attach failed: -524                                    (trampoline)
+-ringbuf                                  # skel_load skeleton load failed                                              (?)
+ stacktrace_build_id                      # compare_map_keys stackid_hmap vs. stackmap err -2 errno 2                   (?)
+-test_lsm                                 # attach unexpected error: -524                                               (trampoline)
+-trace_printk                             # trace_printk__load unexpected error: -2 (errno 2)                           (?)
+-trace_vprintk                            # trace_vprintk__open_and_load unexpected error: -9                           (?)
+-unpriv_bpf_disabled                      # fentry
+-user_ringbuf                             # failed to find kernel BTF type ID of '__s390x_sys_prctl': -3                (?)
+-verif_stats                              # trace_vprintk__open_and_load unexpected error: -9                           (?)
+-xdp_bonding                              # failed to auto-attach program 'trace_on_entry': -524                        (trampoline)
+-xdp_metadata                             # JIT does not support calling kernel function                                (kfunc)
 -- 
-2.39.2.637.g21b0678d19-goog
+2.39.1
 
