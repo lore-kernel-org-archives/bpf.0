@@ -2,54 +2,50 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D341C61DA4
-	for <bpf@archiver.kernel.org>; Wed, 22 Feb 2023 21:10:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06C78C64ED6
+	for <bpf@archiver.kernel.org>; Wed, 22 Feb 2023 21:10:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231515AbjBVVKU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Feb 2023 16:10:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46396 "EHLO
+        id S231896AbjBVVKV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Feb 2023 16:10:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBVVKT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 Feb 2023 16:10:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C858149B8
-        for <bpf@vger.kernel.org>; Wed, 22 Feb 2023 13:10:18 -0800 (PST)
+        with ESMTP id S229448AbjBVVKV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Feb 2023 16:10:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C02149B8;
+        Wed, 22 Feb 2023 13:10:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 290596141D
-        for <bpf@vger.kernel.org>; Wed, 22 Feb 2023 21:10:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8C6D8C433EF;
+        by ams.source.kernel.org (Postfix) with ESMTPS id DCC3EB81895;
+        Wed, 22 Feb 2023 21:10:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 96953C4339C;
         Wed, 22 Feb 2023 21:10:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1677100217;
-        bh=LZsDwK9VnJsxk9KWx590nKqe+VSNm3U+f6aHMGSiauI=;
+        bh=c0aWc426aYJm6s52Obhi7fLq+eANWuURTxgJqffX7eA=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=aG2fkk5PctQU/9e4PZejBnz8iwI2bkTjyIFFAlFZKQdNf4NbBQ8kfMjODxg8qq2fl
-         gs+B4zC9Rd+2wZHJEwAYc6ZWf1AJEPwWS68Man75w3MNygaeb40xpHozwrK564j+8T
-         AovyeL3RAx8qrgMQ/cp7tXH90+6gY3cjFuSHtrXlKyc385T2n9HUIJnGP0aR8Tff65
-         cN0UXXiZ4scTDI4QcNJNXGUJUKklOQ8GNjGKvdSbMjFdKyk+n4+vEo5mYOORItM9fj
-         icnxOZtdZ+uF3gbH9GXramr/k00//j7p47LZElFJVczqg/avp/zjM5er5bN4mP5r3r
-         ecT/qflYOQ8zA==
+        b=jCp+CPqNGruZDN4VPXyE0x6kOwpjVvYeFqZT08eaIVjCzeAYiqknr6ggWQMlFvszA
+         ehl2Xh1Hyt01JcYGgzw1jeTGBIEbRPMq3fTUPskpREsLA+dXs4KS8HXkn/vvQO/3hc
+         8VX1/Ee2oo7ebHykPRrm65bFviMqfipdnUMkrA4Edgz1HmA6KxWt9z+5B66IaoFClO
+         apnb3yECVALx4cZ4kRutVyPbZO6xZHEDMPfPhqmyaKWqZZealPn/xkLTQIPjw67xwU
+         emqX4sWBI8zaPnLmZRb8bHYjIo3S/K6Kc2umGv29jrK8hiF4JjbO2Y85uCxlMfvU1A
+         vnKskLcDLfpGA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7093AC43157;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7BA67C395E5;
         Wed, 22 Feb 2023 21:10:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2] bpf: Only allocate one bpf_mem_cache for
- bpf_cpumask_ma
+Subject: Re: [PATCH bpf-next] selftests/bpf: Remove not used headers
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167710021745.10496.10939138287246960835.git-patchwork-notify@kernel.org>
+Message-Id: <167710021750.10496.4702478918450314201.git-patchwork-notify@kernel.org>
 Date:   Wed, 22 Feb 2023 21:10:17 +0000
-References: <20230216024821.2202916-1-houtao@huaweicloud.com>
-In-Reply-To: <20230216024821.2202916-1-houtao@huaweicloud.com>
-To:     Hou Tao <houtao@huaweicloud.com>
-Cc:     bpf@vger.kernel.org, martin.lau@linux.dev, andrii@kernel.org,
-        song@kernel.org, haoluo@google.com, yhs@fb.com, ast@kernel.org,
-        daniel@iogearbox.net, kpsingh@kernel.org, sdf@google.com,
-        jolsa@kernel.org, john.fastabend@gmail.com, void@manifault.com,
-        houtao1@huawei.com
+References: <1676533861-27508-1-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1676533861-27508-1-git-send-email-yangtiezhu@loongson.cn>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
@@ -59,19 +55,22 @@ Hello:
 This patch was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Thu, 16 Feb 2023 10:48:21 +0800 you wrote:
-> From: Hou Tao <houtao1@huawei.com>
+On Thu, 16 Feb 2023 15:51:01 +0800 you wrote:
+> The following three uapi headers:
 > 
-> The size of bpf_cpumask is fixed, so there is no need to allocate many
-> bpf_mem_caches for bpf_cpumask_ma, just one bpf_mem_cache is enough.
-> Also add comments for bpf_mem_alloc_init() in bpf_mem_alloc.h to prevent
-> future miuse.
+>     tools/arch/arm64/include/uapi/asm/bpf_perf_event.h
+>     tools/arch/s390/include/uapi/asm/bpf_perf_event.h
+>     tools/arch/s390/include/uapi/asm/ptrace.h
+> 
+> were introduced in commit 618e165b2a8e ("selftests/bpf: sync kernel headers
+> and introduce arch support in Makefile"), they are not used any more after
+> commit 720f228e8d31 ("bpf: fix broken BPF selftest build"), so remove them.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v2] bpf: Only allocate one bpf_mem_cache for bpf_cpumask_ma
-    https://git.kernel.org/bpf/bpf-next/c/5d5de3a431d8
+  - [bpf-next] selftests/bpf: Remove not used headers
+    https://git.kernel.org/bpf/bpf-next/c/1f265d2aea0d
 
 You are awesome, thank you!
 -- 
