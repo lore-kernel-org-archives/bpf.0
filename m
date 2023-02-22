@@ -2,54 +2,51 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8334CC64EC7
-	for <bpf@archiver.kernel.org>; Wed, 22 Feb 2023 21:10:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D858C636D6
+	for <bpf@archiver.kernel.org>; Wed, 22 Feb 2023 21:20:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232440AbjBVVKW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Feb 2023 16:10:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46416 "EHLO
+        id S231404AbjBVVUU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Feb 2023 16:20:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231737AbjBVVKV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 Feb 2023 16:10:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FFA1EFF2;
-        Wed, 22 Feb 2023 13:10:20 -0800 (PST)
+        with ESMTP id S229507AbjBVVUT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Feb 2023 16:20:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7A032CD8
+        for <bpf@vger.kernel.org>; Wed, 22 Feb 2023 13:20:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E6F85B81896;
-        Wed, 22 Feb 2023 21:10:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A1FADC4339E;
-        Wed, 22 Feb 2023 21:10:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59F45614F1
+        for <bpf@vger.kernel.org>; Wed, 22 Feb 2023 21:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BAB5AC4339E;
+        Wed, 22 Feb 2023 21:20:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677100217;
-        bh=wCQQEMkM7Jx3pn9FFGosm1zRw8TdEwhVF5bmgBxG7Zw=;
+        s=k20201202; t=1677100817;
+        bh=ML+4B1Miuh2nuX9JzjgVXq99cixHlmuza6vrih+g6Fw=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=YiGkRhzzZ6Y4QBYUP1zV2oy64eR6ubK7rULwLt0ayty2l01r2/S40q2dbINMjz+dp
-         l5PJ/QkEWHWA9o54cMTdNAp68A4fk9PUJm9/NIv2DLqEk8v40w0n6w8sJkraXRP8O2
-         YtfJP3C7Jw5LIgx4d/ucY1OTtBKVoBXPCkpLgT4R5eZb6yizRyrPjU8iYQdB/PGuiy
-         N3ylqMUK21hpc0hi8yIg4VkLdigDDMLWQHVQIXafMGykroJrUyBQPjaS2s3FGbkfxd
-         Hs3iqdoyvCMxvJNZ3Wwq1IuW/i+TqZF9cICWjer+BeWEJAlpAIBBDGLRZhDNcARQz3
-         X2OiXYCWa3bzw==
+        b=oOj/oGAQEex3MfYMsP04VCExd2EnTTSWCkI90I6po2+J80NL6Nh/34V4z3QdBTQ9v
+         4nJklGJFHqUtLrtWOJb5lIJd2+tu8NG6/Z9Hb5YRM8T/sMUfeGhnpXl3ZocqYDfhZX
+         1Go4PJNe/vtBO3WuDQvtv+1iDcWrFh881WM9GXp6jP5tWyvfAKE/JSsyxWQi1BboO/
+         h8TM5lR4HgibgqxN6sRt6nPh74SSJuwtU9vCaDmQngbWDBdBgGfxqjJYqElKC3jeob
+         /QtVlL7x8MYbhf1VZd+fOsRaqLrFe+PQTR+Qqbg8phhjLpQooLJBEHGW6BFI5Z7Pc7
+         qIR0GsNHi67oQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8460EC395DF;
-        Wed, 22 Feb 2023 21:10:17 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 949A7C43157;
+        Wed, 22 Feb 2023 21:20:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix cross compilation with
- CLANG_CROSS_FLAGS
+Subject: Re: [PATCH bpf-next] bpf: Check for helper calls in check_subprogs()
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167710021753.10496.8520957116500555540.git-patchwork-notify@kernel.org>
-Date:   Wed, 22 Feb 2023 21:10:17 +0000
-References: <20230217151832.27784-1-revest@chromium.org>
-In-Reply-To: <20230217151832.27784-1-revest@chromium.org>
-To:     Florent Revest <revest@chromium.org>
-Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        linux-kbuild@vger.kernel.org, andrii@kernel.org, mykolal@fb.com,
-        ast@kernel.org, daniel@iogearbox.net, kpsingh@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com
+Message-Id: <167710081760.15608.16183342834199081723.git-patchwork-notify@kernel.org>
+Date:   Wed, 22 Feb 2023 21:20:17 +0000
+References: <20230220163756.753713-1-iii@linux.ibm.com>
+In-Reply-To: <20230220163756.753713-1-iii@linux.ibm.com>
+To:     Ilya Leoshkevich <iii@linux.ibm.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        bpf@vger.kernel.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, jolsa@kernel.org, sdf@google.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
@@ -59,20 +56,19 @@ Hello:
 This patch was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Fri, 17 Feb 2023 16:18:32 +0100 you wrote:
-> I cross-compile my BPF selftests with the following command:
+On Mon, 20 Feb 2023 17:37:56 +0100 you wrote:
+> The condition src_reg != BPF_PSEUDO_CALL && imm == BPF_FUNC_tail_call
+> may be satisfied by a kfunc call. This would lead to unnecessarily
+> setting has_tail_call. Use src_reg == 0 instead.
 > 
-> CLANG_CROSS_FLAGS="--target=aarch64-linux-gnu --sysroot=/sysroot/" \
->   make LLVM=1 CC=clang CROSS_COMPILE=aarch64-linux-gnu- SRCARCH=arm64
-> 
-> (Note the use of CLANG_CROSS_FLAGS to specify a custom sysroot instead
-> of letting clang use gcc's default sysroot)
-> 
-> [...]
+> Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+> ---
+>  kernel/bpf/verifier.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
 Here is the summary with links:
-  - [bpf-next] selftests/bpf: Fix cross compilation with CLANG_CROSS_FLAGS
-    https://git.kernel.org/bpf/bpf-next/c/b539a287baaa
+  - [bpf-next] bpf: Check for helper calls in check_subprogs()
+    https://git.kernel.org/bpf/bpf-next/c/df2ccc180a2e
 
 You are awesome, thank you!
 -- 
