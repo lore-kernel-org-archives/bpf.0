@@ -2,35 +2,35 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E09D1C64ED6
-	for <bpf@archiver.kernel.org>; Thu, 23 Feb 2023 12:12:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97A02C636D6
+	for <bpf@archiver.kernel.org>; Thu, 23 Feb 2023 12:12:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234201AbjBWMM0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Feb 2023 07:12:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
+        id S234173AbjBWMMg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Feb 2023 07:12:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233897AbjBWMMX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 Feb 2023 07:12:23 -0500
+        with ESMTP id S234208AbjBWMMd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 Feb 2023 07:12:33 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE8030B03;
-        Thu, 23 Feb 2023 04:12:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522821B3;
+        Thu, 23 Feb 2023 04:12:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BDC5E616C3;
-        Thu, 23 Feb 2023 12:11:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79E6AC433D2;
-        Thu, 23 Feb 2023 12:11:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A370616D6;
+        Thu, 23 Feb 2023 12:12:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00E99C433D2;
+        Thu, 23 Feb 2023 12:12:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677154311;
-        bh=tf69zYIBWxJ0Ke0TeASxjm7DirQL5qfZAnwMoKjMDdE=;
+        s=k20201202; t=1677154322;
+        bh=50/Mj+QbzNe5QyiB1d8eS2sMOVZQegFLunYgWaAG5MA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UKwFSpbFN/gJmz8poWh9c+4stsKmoOATtCRgUoSmxt7L+AAKeMFE6PX+J8Mafit/K
-         0/4ymIJgyVY+ULwuyCOwjp1OIYXT1tcFVzeACvmqdFUmhQEenyfYDCHNi7+fG7wZ9i
-         ycJV8tmQ3CqH+JrTpvPnbGsK0QdRlFhrtEA73vJIr8F6EuonyaQL72kfHnbeKgXy1z
-         cPCe8c3tWxCHrzVfc6YHZpLGUMykOeJF0ZMeQjRMYosSUePDMr3ri+F8AjG3k4tplX
-         JjWFjayZ74Qpj/tL97c7yZRw8kjXL2HMdfvAb1cwiQTp9oFLBn8RAJG+pt3UCJ27IA
-         ENKj8QkvHF47g==
+        b=PKnJNa3hp6Ron/jCyIIt6mf6aHpORlhb/p83Y9V7DD7/GTdUyAVKsjg1TQEACj15x
+         Xn5QaFigJJ7HJ/BL/A3qL/T9jPTFm2tIX5y3qEKJHUVEucvaAfHL63DFjFxUsW24Fw
+         2W5ht5WGcyhAeqbc2Hlx/Nsu2Vym+yCg6sjfWZfnbdyjHDfYt7el7EL8+RxKmKHTIl
+         VI614VRcv6+oy3E82kNgD+YtdBuvc9lsjyKrNDyRAjhDBclNruAQA2pxk2NSoA5Oyq
+         FEW0XqmenPq7716isaNuAIeRMmt9W6zKAZNAXWB/RRnVlSJJBZpgl6K78M3N2p880O
+         MrBJmnHEg/uKQ==
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
@@ -39,9 +39,9 @@ Cc:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
         saeedm@nvidia.com, tariqt@nvidia.com, leon@kernel.org,
         shayagr@amazon.com, akiyano@amazon.com, darinzon@amazon.com,
         sgoutham@marvell.com, lorenzo.bianconi@redhat.com, toke@redhat.com
-Subject: [RFC net-next 1/6] tools: ynl: fix render-max for flags definition
-Date:   Thu, 23 Feb 2023 13:11:33 +0100
-Message-Id: <0252b7d3f7af70ce5d9da688bae4f883b8dfa9c7.1677153730.git.lorenzo@kernel.org>
+Subject: [RFC net-next 4/6] net: ena: take into account xdp_features setting tx/rx queues
+Date:   Thu, 23 Feb 2023 13:11:36 +0100
+Message-Id: <848b3fb3f77600846b46e3fee92ce5538afed97f.1677153730.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <cover.1677153730.git.lorenzo@kernel.org>
 References: <cover.1677153730.git.lorenzo@kernel.org>
@@ -51,38 +51,67 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Properly manage render-max property for flags definition type
-introducing mask value and setting it to (last_element << 1) - 1
-instead of adding max value set to last_element + 1
+ena nic allows xdp just if enough hw queues are available for XDP.
+Take into account queues configuration setting xdp_features.
 
-Fixes: be5bea1cc0bf ("net: add basic C code generators for Netlink")
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- tools/net/ynl/ynl-gen-c.py | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/amazon/ena/ena_ethtool.c | 15 ++++++++++++---
+ drivers/net/ethernet/amazon/ena/ena_netdev.c  |  6 ++++--
+ 2 files changed, 16 insertions(+), 5 deletions(-)
 
-diff --git a/tools/net/ynl/ynl-gen-c.py b/tools/net/ynl/ynl-gen-c.py
-index 3942f24b9163..161ae02bee54 100755
---- a/tools/net/ynl/ynl-gen-c.py
-+++ b/tools/net/ynl/ynl-gen-c.py
-@@ -1995,9 +1995,14 @@ def render_uapi(family, cw):
+diff --git a/drivers/net/ethernet/amazon/ena/ena_ethtool.c b/drivers/net/ethernet/amazon/ena/ena_ethtool.c
+index 8da79eedc057..1d4f2f4d10f2 100644
+--- a/drivers/net/ethernet/amazon/ena/ena_ethtool.c
++++ b/drivers/net/ethernet/amazon/ena/ena_ethtool.c
+@@ -850,11 +850,20 @@ static int ena_set_channels(struct net_device *netdev,
+ 	struct ena_adapter *adapter = netdev_priv(netdev);
+ 	u32 count = channels->combined_count;
+ 	/* The check for max value is already done in ethtool */
+-	if (count < ENA_MIN_NUM_IO_QUEUES ||
+-	    (ena_xdp_present(adapter) &&
+-	    !ena_xdp_legal_queue_count(adapter, count)))
++	if (count < ENA_MIN_NUM_IO_QUEUES)
+ 		return -EINVAL;
  
-             if const.get('render-max', False):
-                 cw.nl()
--                max_name = c_upper(name_pfx + 'max')
--                cw.p('__' + max_name + ',')
--                cw.p(max_name + ' = (__' + max_name + ' - 1)')
-+                if const['type'] == 'flags':
-+                    max_name = c_upper(name_pfx + 'mask')
-+                    max_val = f' = {(entry.user_value() << 1) - 1},'
-+                    cw.p(max_name + max_val)
-+                else:
-+                    max_name = c_upper(name_pfx + 'max')
-+                    cw.p('__' + max_name + ',')
-+                    cw.p(max_name + ' = (__' + max_name + ' - 1)')
-             cw.block_end(line=';')
-             cw.nl()
-         elif const['type'] == 'const':
++	if (!ena_xdp_legal_queue_count(adapter, count)) {
++		if (ena_xdp_present(adapter))
++			return -EINVAL;
++
++		xdp_clear_features_flag(netdev);
++	} else {
++		xdp_set_features_flag(netdev,
++				      NETDEV_XDP_ACT_BASIC |
++				      NETDEV_XDP_ACT_REDIRECT);
++	}
++
+ 	return ena_update_queue_count(adapter, count);
+ }
+ 
+diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.c b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+index d3999db7c6a2..cbfe7f977270 100644
+--- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
++++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+@@ -4105,8 +4105,6 @@ static void ena_set_conf_feat_params(struct ena_adapter *adapter,
+ 	/* Set offload features */
+ 	ena_set_dev_offloads(feat, netdev);
+ 
+-	netdev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT;
+-
+ 	adapter->max_mtu = feat->dev_attr.max_mtu;
+ 	netdev->max_mtu = adapter->max_mtu;
+ 	netdev->min_mtu = ENA_MIN_MTU;
+@@ -4393,6 +4391,10 @@ static int ena_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 
+ 	ena_config_debug_area(adapter);
+ 
++	if (ena_xdp_legal_queue_count(adapter, adapter->num_io_queues))
++		netdev->xdp_features = NETDEV_XDP_ACT_BASIC |
++				       NETDEV_XDP_ACT_REDIRECT;
++
+ 	memcpy(adapter->netdev->perm_addr, adapter->mac_addr, netdev->addr_len);
+ 
+ 	netif_carrier_off(netdev);
 -- 
 2.39.2
 
