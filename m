@@ -2,229 +2,108 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26112C636D6
-	for <bpf@archiver.kernel.org>; Thu, 23 Feb 2023 13:22:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5347FC636D6
+	for <bpf@archiver.kernel.org>; Thu, 23 Feb 2023 14:01:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233348AbjBWNWi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Feb 2023 08:22:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54156 "EHLO
+        id S233788AbjBWOB3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Feb 2023 09:01:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232420AbjBWNWh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 Feb 2023 08:22:37 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF1855071
-        for <bpf@vger.kernel.org>; Thu, 23 Feb 2023 05:22:34 -0800 (PST)
-Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PMtt735s8z16NsB;
-        Thu, 23 Feb 2023 21:19:59 +0800 (CST)
-Received: from [10.174.176.117] (10.174.176.117) by
- dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 23 Feb 2023 21:22:29 +0800
-Subject: Re: [PATCH v3] blk-ioprio: Introduce promote-to-rt policy
-To:     Hou Tao <houtao@huaweicloud.com>, <bpf@vger.kernel.org>
-CC:     Martin KaFai Lau <martin.lau@linux.dev>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Hao Luo <haoluo@google.com>,
-        Yonghong Song <yhs@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        David Vernet <void@manifault.com>
-References: <20230223134852.3745349-1-houtao@huaweicloud.com>
-From:   Hou Tao <houtao1@huawei.com>
-Message-ID: <5916b106-b4f2-6a0e-4cb9-a60238d85a52@huawei.com>
-Date:   Thu, 23 Feb 2023 21:22:29 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        with ESMTP id S232906AbjBWOB2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 Feb 2023 09:01:28 -0500
+Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C94F5678A;
+        Thu, 23 Feb 2023 06:01:25 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xiaoguang.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VcKjgr3_1677160881;
+Received: from 30.221.149.207(mailfrom:xiaoguang.wang@linux.alibaba.com fp:SMTPD_---0VcKjgr3_1677160881)
+          by smtp.aliyun-inc.com;
+          Thu, 23 Feb 2023 22:01:22 +0800
+Message-ID: <39303cc0-23d9-c769-94c0-25d3e51ed20f@linux.alibaba.com>
+Date:   Thu, 23 Feb 2023 22:01:21 +0800
 MIME-Version: 1.0
-In-Reply-To: <20230223134852.3745349-1-houtao@huaweicloud.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [RFC v2 4/4] ublk_drv: add ebpf support
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     linux-block@vger.kernel.org, io-uring@vger.kernel.org,
+        bpf <bpf@vger.kernel.org>, Ming Lei <ming.lei@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        ZiyangZhang@linux.alibaba.com
+References: <20230222132534.114574-1-xiaoguang.wang@linux.alibaba.com>
+ <20230222132534.114574-5-xiaoguang.wang@linux.alibaba.com>
+ <CAADnVQ+tqakZWm8P9dLSLKxBJJanxVY3rVbbkzwhSgM2N-S2ow@mail.gmail.com>
 Content-Language: en-US
-X-Originating-IP: [10.174.176.117]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500025.china.huawei.com (7.185.36.35)
-X-CFilter-Loop: Reflected
+From:   Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+In-Reply-To: <CAADnVQ+tqakZWm8P9dLSLKxBJJanxVY3rVbbkzwhSgM2N-S2ow@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Please disregard the patch. I should send it to block mail list instead of bpf
-mail list. Sorry for the noise.
+hi,
 
-On 2/23/2023 9:48 PM, Hou Tao wrote:
-> From: Hou Tao <houtao1@huawei.com>
+> On Wed, Feb 22, 2023 at 5:29 AM Xiaoguang Wang
+> <xiaoguang.wang@linux.alibaba.com> wrote:
+>> Currenly only one bpf_ublk_queue_sqe() ebpf is added, ublksrv target
+>> can use this helper to write ebpf prog to support ublk kernel & usersapce
+>> zero copy, please see ublksrv test codes for more info.
+>>
+>>
+>> +const struct bpf_func_proto ublk_bpf_queue_sqe_proto = {
+>> +       .func = bpf_ublk_queue_sqe,
+>> +       .gpl_only = false,
+>> +       .ret_type = RET_INTEGER,
+>> +       .arg1_type = ARG_ANYTHING,
+>> +       .arg2_type = ARG_ANYTHING,
+>> +       .arg3_type = ARG_ANYTHING,
+>> +       .arg4_type = ARG_ANYTHING,
+>> +};
+> You know that the above is unsafe, right?
+Yes, I know it's not safe, will improve it in next version.
+
 >
-> Since commit a78418e6a04c ("block: Always initialize bio IO priority on
-> submit"), bio->bi_ioprio will never be IOPRIO_CLASS_NONE when calling
-> blkcg_set_ioprio(), so there will be no way to promote the io-priority
-> of one cgroup to IOPRIO_CLASS_RT, because bi_ioprio will always be
-> greater than or equals to IOPRIO_CLASS_RT.
->
-> It seems possible to call blkcg_set_ioprio() first then try to
-> initialize bi_ioprio later in bio_set_ioprio(), but this doesn't work
-> for bio in which bi_ioprio is already initialized (e.g., direct-io), so
-> introduce a new promote-to-rt policy to promote the iopriority of bio to
-> IOPRIO_CLASS_RT if the ioprio is not already RT.
->
-> For none-to-rt policy, although it doesn't work now, but considering
-> that its purpose was also to override the io-priority to RT and allowing
-> for a smoother transition, just keep it and treat it as an alias of
-> the promote-to-rt policy.
->
-> Signed-off-by: Hou Tao <houtao1@huawei.com>
-> Acked-by: Tejun Heo <tj@kernel.org>
-> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-> Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
-> ---
-> v3:
->  * Use 'non-RT' instead of 'no-RT' in document (from Bagas)
->  * Remove repeated sentence in commit message
->  * Add Reviewed-by and Acked-by tags
->  
-> v2: https://lore.kernel.org/linux-block/20230220135428.2632906-1-houtao@huaweicloud.com
->
->  * Simplify the implementation of promote-to-rt (from Bart)
->  * Make none-to-rt to work again by treating it as an alias of
->    the promote-to-rt policy (from Bart & Jan)
->  * fix the style of new content in cgroup-v2.rst (from Bagas)
->  * set the default priority level to 4 instead of 0 for promote-to-rt
->
-> v1: https://lore.kernel.org/linux-block/20230201045227.2203123-1-houtao@huaweicloud.com
->
->  Documentation/admin-guide/cgroup-v2.rst | 42 ++++++++++++++-----------
->  block/blk-ioprio.c                      | 23 ++++++++++++--
->  2 files changed, 44 insertions(+), 21 deletions(-)
->
-> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-> index f67c0829350b..7544ce00e0cb 100644
-> --- a/Documentation/admin-guide/cgroup-v2.rst
-> +++ b/Documentation/admin-guide/cgroup-v2.rst
-> @@ -2024,31 +2024,33 @@ that attribute:
->    no-change
->  	Do not modify the I/O priority class.
->  
-> -  none-to-rt
-> -	For requests that do not have an I/O priority class (NONE),
-> -	change the I/O priority class into RT. Do not modify
-> -	the I/O priority class of other requests.
-> +  promote-to-rt
-> +	For requests that have a non-RT I/O priority class, change it into RT.
-> +	Also change the priority level of these requests to 4. Do not modify
-> +	the I/O priority of requests that have priority class RT.
->  
->    restrict-to-be
->  	For requests that do not have an I/O priority class or that have I/O
-> -	priority class RT, change it into BE. Do not modify the I/O priority
-> -	class of requests that have priority class IDLE.
-> +	priority class RT, change it into BE. Also change the priority level
-> +	of these requests to 0. Do not modify the I/O priority class of
-> +	requests that have priority class IDLE.
->  
->    idle
->  	Change the I/O priority class of all requests into IDLE, the lowest
->  	I/O priority class.
->  
-> +  none-to-rt
-> +	Deprecated. Just an alias for promote-to-rt.
-> +
->  The following numerical values are associated with the I/O priority policies:
->  
-> -+-------------+---+
-> -| no-change   | 0 |
-> -+-------------+---+
-> -| none-to-rt  | 1 |
-> -+-------------+---+
-> -| rt-to-be    | 2 |
-> -+-------------+---+
-> -| all-to-idle | 3 |
-> -+-------------+---+
-> ++----------------+---+
-> +| no-change      | 0 |
-> ++----------------+---+
-> +| rt-to-be       | 2 |
-> ++----------------+---+
-> +| all-to-idle    | 3 |
-> ++----------------+---+
->  
->  The numerical value that corresponds to each I/O priority class is as follows:
->  
-> @@ -2064,9 +2066,13 @@ The numerical value that corresponds to each I/O priority class is as follows:
->  
->  The algorithm to set the I/O priority class for a request is as follows:
->  
-> -- Translate the I/O priority class policy into a number.
-> -- Change the request I/O priority class into the maximum of the I/O priority
-> -  class policy number and the numerical I/O priority class.
-> +- If I/O priority class policy is promote-to-rt, change the request I/O
-> +  priority class to IOPRIO_CLASS_RT and change the request I/O priority
-> +  level to 4.
-> +- If I/O priorityt class is not promote-to-rt, translate the I/O priority
-> +  class policy into a number, then change the request I/O priority class
-> +  into the maximum of the I/O priority class policy number and the numerical
-> +  I/O priority class.
->  
->  PID
->  ---
-> diff --git a/block/blk-ioprio.c b/block/blk-ioprio.c
-> index 055529b9b92b..4051fada01f1 100644
-> --- a/block/blk-ioprio.c
-> +++ b/block/blk-ioprio.c
-> @@ -23,25 +23,28 @@
->  /**
->   * enum prio_policy - I/O priority class policy.
->   * @POLICY_NO_CHANGE: (default) do not modify the I/O priority class.
-> - * @POLICY_NONE_TO_RT: modify IOPRIO_CLASS_NONE into IOPRIO_CLASS_RT.
-> + * @POLICY_PROMOTE_TO_RT: modify no-IOPRIO_CLASS_RT to IOPRIO_CLASS_RT.
->   * @POLICY_RESTRICT_TO_BE: modify IOPRIO_CLASS_NONE and IOPRIO_CLASS_RT into
->   *		IOPRIO_CLASS_BE.
->   * @POLICY_ALL_TO_IDLE: change the I/O priority class into IOPRIO_CLASS_IDLE.
-> + * @POLICY_NONE_TO_RT: an alias for POLICY_PROMOTE_TO_RT.
->   *
->   * See also <linux/ioprio.h>.
->   */
->  enum prio_policy {
->  	POLICY_NO_CHANGE	= 0,
-> -	POLICY_NONE_TO_RT	= 1,
-> +	POLICY_PROMOTE_TO_RT	= 1,
->  	POLICY_RESTRICT_TO_BE	= 2,
->  	POLICY_ALL_TO_IDLE	= 3,
-> +	POLICY_NONE_TO_RT	= 4,
->  };
->  
->  static const char *policy_name[] = {
->  	[POLICY_NO_CHANGE]	= "no-change",
-> -	[POLICY_NONE_TO_RT]	= "none-to-rt",
-> +	[POLICY_PROMOTE_TO_RT]	= "promote-to-rt",
->  	[POLICY_RESTRICT_TO_BE]	= "restrict-to-be",
->  	[POLICY_ALL_TO_IDLE]	= "idle",
-> +	[POLICY_NONE_TO_RT]	= "none-to-rt",
->  };
->  
->  static struct blkcg_policy ioprio_policy;
-> @@ -189,6 +192,20 @@ void blkcg_set_ioprio(struct bio *bio)
->  	if (!blkcg || blkcg->prio_policy == POLICY_NO_CHANGE)
->  		return;
->  
-> +	if (blkcg->prio_policy == POLICY_PROMOTE_TO_RT ||
-> +	    blkcg->prio_policy == POLICY_NONE_TO_RT) {
-> +		/*
-> +		 * For RT threads, the default priority level is 4 because
-> +		 * task_nice is 0. By promoting non-RT io-priority to RT-class
-> +		 * and default level 4, those requests that are already
-> +		 * RT-class but need a higher io-priority can use ioprio_set()
-> +		 * to achieve this.
-> +		 */
-> +		if (IOPRIO_PRIO_CLASS(bio->bi_ioprio) != IOPRIO_CLASS_RT)
-> +			bio->bi_ioprio = IOPRIO_PRIO_VALUE(IOPRIO_CLASS_RT, 4);
-> +		return;
-> +	}
-> +
->  	/*
->  	 * Except for IOPRIO_CLASS_NONE, higher I/O priority numbers
->  	 * correspond to a lower priority. Hence, the max_t() below selects
+>> +
+>>  static const struct bpf_func_proto *
+>>  ublk_bpf_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>>  {
+>> -       return bpf_base_func_proto(func_id);
+>> +       switch (func_id) {
+>> +       case BPF_FUNC_ublk_queue_sqe:
+>> +               return &ublk_bpf_queue_sqe_proto;
+>> +       default:
+>> +               return bpf_base_func_proto(func_id);
+>> +       }
+>>  }
+>>
+>>  static bool ublk_bpf_is_valid_access(int off, int size,
+>> @@ -200,6 +252,23 @@ static bool ublk_bpf_is_valid_access(int off, int size,
+>>                         const struct bpf_prog *prog,
+>>                         struct bpf_insn_access_aux *info)
+>>  {
+>> +       if (off < 0 || off >= sizeof(struct ublk_bpf_ctx))
+>> +               return false;
+>> +       if (off % size != 0)
+>> +               return false;
+>> +
+>> +       switch (off) {
+>> +       case offsetof(struct ublk_bpf_ctx, q_id):
+>> +               return size == sizeof_field(struct ublk_bpf_ctx, q_id);
+>> +       case offsetof(struct ublk_bpf_ctx, tag):
+>> +               return size == sizeof_field(struct ublk_bpf_ctx, tag);
+>> +       case offsetof(struct ublk_bpf_ctx, op):
+>> +               return size == sizeof_field(struct ublk_bpf_ctx, op);
+>> +       case offsetof(struct ublk_bpf_ctx, nr_sectors):
+>> +               return size == sizeof_field(struct ublk_bpf_ctx, nr_sectors);
+>> +       case offsetof(struct ublk_bpf_ctx, start_sector):
+>> +               return size == sizeof_field(struct ublk_bpf_ctx, start_sector);
+>> +       }
+>>         return false;
+> We don't introduce stable 'ctx' anymore.
+> Please see how hid-bpf is doing things.
+ok, will learn it, thanks.
+
+Regards,
+Xiaoguang Wang
 
