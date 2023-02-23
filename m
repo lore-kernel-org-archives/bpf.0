@@ -2,172 +2,172 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED5BFC61DA4
-	for <bpf@archiver.kernel.org>; Thu, 23 Feb 2023 12:43:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EB1AC636D6
+	for <bpf@archiver.kernel.org>; Thu, 23 Feb 2023 13:19:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234137AbjBWMnY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Feb 2023 07:43:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40824 "EHLO
+        id S232985AbjBWNTO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Feb 2023 08:19:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233795AbjBWMnW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 Feb 2023 07:43:22 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AAB054A22
-        for <bpf@vger.kernel.org>; Thu, 23 Feb 2023 04:42:44 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id z5so10713847ljc.8
-        for <bpf@vger.kernel.org>; Thu, 23 Feb 2023 04:42:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Ios/NjoZ5yynLXPIP6elKI2rdAJNcj7bzGMBaqct1zI=;
-        b=KLlD6UHSPvv5RtYeFNpRcHEfy6ncn+wdLsM8xqSCAU8erZxQ8s91h0wsfvfB+i6A0C
-         izSfas8lvsfW5pBnyWZ5W7PQ6hulSNi6I50nH2+Kw/OmJ6Vu2gADIhMjTebrio8jrCYk
-         XrdjuDvxjIL+NciM+jeqV1jvdfgf+kgBN/aAaBqFd0fCbBYtMVaco7ueV5vY9teHjK84
-         o9gw71r7edNDVaTYQAzB43ml86tdPB1+f3eMGzU5Nb47Xd21GWQihm7yTLsriPg9qRho
-         TU8njDuKQymYdbsQNz4wbjqmbUh7AfTGcKXXKD/rLbiQU3raItNqpz97BobwfNwQfV1M
-         oV1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ios/NjoZ5yynLXPIP6elKI2rdAJNcj7bzGMBaqct1zI=;
-        b=1pMKaH1NROmGnIABH6whxAW1jiaXsVYPKyCSZ4oMw+bUAeStyuihqiMya8z+Tg17je
-         6y2TsOMg5q7KoQ86WOuFCWO9VnCvF7rkV2oWGpsuhATc9+kU/QxAlspc8QWuxeRQ+gQu
-         mIFEwIdv7+k9/LXvmsRtmGx4l5L1DmMamrjf+76/lk7m7940KByMOJ8RHWeLgbkxEyze
-         3ChlL6LUX/IlRFplaEN7dhg5xzLl4fWSVrqsMgNmgdSDNL2UdQ6+O/PDD63yyRRsSLUN
-         4SbuP/BSifaQlCxrXGeNa9sqEZAxmFKPRCbu6edy5z8IHT/ucARRn9raIpf2LZ2FbvB6
-         e7Zg==
-X-Gm-Message-State: AO0yUKVcR4vmxl33diXMgs2ZS74Z3pdtZ5O7wYKleY56Vd5rzwDpmusp
-        euojokF5S7If1A7OPmLVBZA=
-X-Google-Smtp-Source: AK7set/WgvtP1Yh+j98BrkoKChpFEUbiR3lqnAfHSxnvWfukNGDGhAfDkzDTHn2oRYJ+LtY7NjE3uQ==
-X-Received: by 2002:a2e:5c01:0:b0:295:94f4:c22c with SMTP id q1-20020a2e5c01000000b0029594f4c22cmr2805231ljb.49.1677156162464;
-        Thu, 23 Feb 2023 04:42:42 -0800 (PST)
-Received: from [192.168.1.94] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id g15-20020a05651c044f00b002935009a49dsm1178533ljg.115.2023.02.23.04.42.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Feb 2023 04:42:41 -0800 (PST)
-Message-ID: <17833347f8cec0e44d856aeafbb1bbe203526237.camel@gmail.com>
-Subject: Re: bpf: Question about odd BPF verifier behaviour
-From:   Eduard Zingerman <eddyz87@gmail.com>
-To:     Matt Bobrowski <mattbobrowski@google.com>
-Cc:     bpf@vger.kernel.org, andrii@kernel.org, acme@redhat.com
-Date:   Thu, 23 Feb 2023 14:42:40 +0200
-In-Reply-To: <Y/czygarUnMnDF9m@google.com>
-References: <Y/P1yxAuV6Wj3A0K@google.com>
-         <e9f7c86ff50b556e08362ebc0b6ce6729a2db7e7.camel@gmail.com>
-         <Y/czygarUnMnDF9m@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        with ESMTP id S234480AbjBWNTN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 Feb 2023 08:19:13 -0500
+Received: from eggs.gnu.org (eggs.gnu.org [IPv6:2001:470:142:3::10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35BB64AFD6
+        for <bpf@vger.kernel.org>; Thu, 23 Feb 2023 05:19:10 -0800 (PST)
+Received: from fencepost.gnu.org ([2001:470:142:3::e])
+        by eggs.gnu.org with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.90_1)
+        (envelope-from <jemarch@gnu.org>)
+        id 1pVBV3-00077r-Mg; Thu, 23 Feb 2023 08:19:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=gnu.org;
+        s=fencepost-gnu-org; h=MIME-Version:Date:References:In-Reply-To:Subject:To:
+        From; bh=Fd7v4Q9SarRbklpd7FFW8IZ21xM2OD+pdu8JV5+3+qc=; b=ebRTcrGgg4zTqd3sQeBy
+        COiEp7kPpxKe/GbbNnlXkXwGKPAkIsqkcJfb6qcJ6i3PGzDGelccttDZNFSI42xb5QWJhCghK+0UU
+        2rnrfQE3Tr4K1rLh++84hOrSdko2ggnCTH81vE2yh1RFGKsMhQMu3WZafzA5DlWbxhoXlUBzJyCyB
+        ymWIe/hRykrQb09HCQIh0WWUdyvmigNmJZptWr/YZjCgl1+93ld2i1BIfnKaLrGFbJvXp78E8t0a0
+        xUeEdTe+AjZjtIRcXSMxk6LgAXJQ2dF8TjwDy2UcS4fvRpbh1gj87vS6gyiIQdRfDcULbfttDFuhX
+        UQmwIeS5u/2kiA==;
+Received: from [141.143.193.75] (helo=termi)
+        by fencepost.gnu.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.90_1)
+        (envelope-from <jemarch@gnu.org>)
+        id 1pVBV2-00087m-B3; Thu, 23 Feb 2023 08:19:05 -0500
+From:   "Jose E. Marchesi" <jemarch@gnu.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     "Jose E. Marchesi" <jose.marchesi@oracle.com>,
+        Dave Thaler <dthaler1968=40googlemail.com@dmarc.ietf.org>,
+        bpf <bpf@vger.kernel.org>, bpf@ietf.org,
+        Dave Thaler <dthaler@microsoft.com>,
+        David Vernet <void@manifault.com>
+Subject: Re: [Bpf] [PATCH bpf-next v2] bpf, docs: Add explanation of endianness
+In-Reply-To: <CAADnVQ+k5HrxJbpi17yeowsP9f92fSbnpSXfndMrZ8r=zhx1mg@mail.gmail.com>
+        (Alexei Starovoitov's message of "Wed, 22 Feb 2023 17:56:43 -0800")
+References: <20230220223742.1347-1-dthaler1968@googlemail.com>
+        <CAADnVQ++hR7Cj3OXGLWpV_=4MnFndq5qS8r5b-YYPC_OB=gjQg@mail.gmail.com>
+        <87ttzdwagy.fsf@oracle.com>
+        <CAADnVQ+k5HrxJbpi17yeowsP9f92fSbnpSXfndMrZ8r=zhx1mg@mail.gmail.com>
+Date:   Thu, 23 Feb 2023 14:18:51 +0100
+Message-ID: <87bklkseo4.fsf@gnu.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 2023-02-23 at 09:37 +0000, Matt Bobrowski wrote:
-[...]
-> LMK whether you need any more information.
->=20
-> /M
 
-Hi Matt,
+> On Wed, Feb 22, 2023 at 3:23 PM Jose E. Marchesi
+> <jose.marchesi@oracle.com> wrote:
+>>
+>>
+>> > On Mon, Feb 20, 2023 at 2:37 PM Dave Thaler
+>> > <dthaler1968=40googlemail.com@dmarc.ietf.org> wrote:
+>> >>
+>> >> From: Dave Thaler <dthaler@microsoft.com>
+>> >>
+>> >> Document the discussion from the email thread on the IETF bpf list,
+>> >> where it was explained that the raw format varies by endianness
+>> >> of the processor.
+>> >>
+>> >> Signed-off-by: Dave Thaler <dthaler@microsoft.com>
+>> >>
+>> >> Acked-by: David Vernet <void@manifault.com>
+>> >> ---
+>> >>
+>> >> V1 -> V2: rebased on top of latest master
+>> >> ---
+>> >>  Documentation/bpf/instruction-set.rst | 16 ++++++++++++++--
+>> >>  1 file changed, 14 insertions(+), 2 deletions(-)
+>> >>
+>> >> diff --git a/Documentation/bpf/instruction-set.rst b/Documentation/bpf/instruction-set.rst
+>> >> index af515de5fc3..1d473f060fa 100644
+>> >> --- a/Documentation/bpf/instruction-set.rst
+>> >> +++ b/Documentation/bpf/instruction-set.rst
+>> >> @@ -38,8 +38,9 @@ eBPF has two instruction encodings:
+>> >>  * the wide instruction encoding, which appends a second 64-bit immediate (i.e.,
+>> >>    constant) value after the basic instruction for a total of 128 bits.
+>> >>
+>> >> -The basic instruction encoding is as follows, where MSB and LSB mean the most significant
+>> >> -bits and least significant bits, respectively:
+>> >> +The basic instruction encoding looks as follows for a little-endian processor,
+>> >> +where MSB and LSB mean the most significant bits and least significant bits,
+>> >> +respectively:
+>> >>
+>> >>  =============  =======  =======  =======  ============
+>> >>  32 bits (MSB)  16 bits  4 bits   4 bits   8 bits (LSB)
+>> >> @@ -63,6 +64,17 @@ imm            offset   src_reg  dst_reg  opcode
+>> >>  **opcode**
+>> >>    operation to perform
+>> >>
+>> >> +and as follows for a big-endian processor:
+>> >> +
+>> >> +=============  =======  ====================  ===============  ============
+>> >> +32 bits (MSB)  16 bits  4 bits                4 bits           8 bits (LSB)
+>> >> +=============  =======  ====================  ===============  ============
+>> >> +immediate      offset   destination register  source register  opcode
+>> >> +=============  =======  ====================  ===============  ============
+>> >
+>> > I've changed it to:
+>> > imm            offset   dst_reg  src_reg  opcode
+>> >
+>> > to match the little endian table,
+>> > but now one of the tables feels wrong.
+>> > The encoding is always done by applying C standard to the struct:
+>> > struct bpf_insn {
+>> >         __u8    code;           /* opcode */
+>> >         __u8    dst_reg:4;      /* dest register */
+>> >         __u8    src_reg:4;      /* source register */
+>> >         __s16   off;            /* signed offset */
+>> >         __s32   imm;            /* signed immediate constant */
+>> > };
+>> > I'm not sure how to express this clearly in the table.
+>>
+>> Perhaps it would be simpler to document how the instruction bytes are
+>> stored (be it in an ELF file or as bytes in a memory buffer to be loaded
+>> into the kernel or some other BPF consumer) as opposed to how the
+>> instructions look like once loaded (as a 64-bit word) by a little-endian
+>> or big-endian kernel?
+>>
+>> Stored little-endian BPF instructions:
+>>
+>>   code src_reg dst_reg off imm
+>>
+>>   foo-le.o:     file format elf64-bpfle
+>>
+>>   0000000000000000 <.text>:
+>>      0:   07 01 00 00 ef be ad de         r1 += 0xdeadbeef
+>>
+>> Stored big-endian BPF instructions:
+>>
+>>   code dst_reg src_reg off imm
+>>
+>>   foo-be.o:     file format elf64-bpfbe
+>>
+>>   0000000000000000 <.text>:
+>>      0:   07 10 00 00 de ad be ef         r1 += 0xdeadbeef
+>>
+>> i.e. in the stored bytes the code always comes first, then the
+>> registers, then the offset, then the immediate, regardless of
+>> endianness.
+>>
+>> This may be easier to understand by implementors looking to generate
+>> and/or consume bytes conforming BPF instructions.
+>
+> +1
+> I like this format more as well.
+> Maybe we can drop the table and use a diagram of a kind ?
+>
+> opcode src dst offset imm          assembly
+> 07     0   1   00 00  ef be ad de  r1 += 0xdeadbeef // little
+> 07     1   0   00 00  de ad be ef  r1 += 0xdeadbeef // big
 
-Unfortunately I can't reproduce the issue.
-Here are the versions of the tools/repos that I use:
+Good idea.  What about something like this:
 
-- kernel (tried both):
-  - https://github.com/torvalds/linux.git
-    a5c95ca18a98 ("Merge tag 'drm-next-2023-02-23' of git://anongit.freedes=
-ktop.org/drm/drm")
-  - https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
-    830b3c68c1fb ("Linux 6.1")
-- config (tried both):
-  - one obtained using your instructions
-  - my small debug config for executing BPF tests ([1])
-- LLVM:
-  https://github.com/llvm/llvm-project.git
-  bc85cf168743 ("[TextAPI] Add support for TBDv5 Files to nm & tapi-diff")
-- pahole:
-  git@github.com:acmel/dwarves.git
-  ef68019 ("pahole: Update man page for options also")
-- libbpf-bootstrap (just followed your instructions):
-  https://github.com/libbpf/libbpf-bootstrap
-  db4f7ad ("cmake: Fix btf header missing in legacy kernel env.")
-- gcc (from my distro):
-  gcc version 11.3.0 (Ubuntu 11.3.0-1ubuntu1~22.04)
-- cat /etc/os-release=20
-  NAME=3D"Linux Mint"
-  VERSION=3D"21.1 (Vera)"
-  ID=3Dlinuxmint
-  ID_LIKE=3D"ubuntu debian"
-  PRETTY_NAME=3D"Linux Mint 21.1"
-  VERSION_ID=3D"21.1"
-  VERSION_CODENAME=3Dvera
-  UBUNTU_CODENAME=3Djammy
+opcode         offset imm          assembly
+       src dst
+07     0   1   00 00  44 33 22 11  r1 += 0x11223344 // little
+       dst src
+07     1   0   00 00  11 22 33 44  r1 += 0x11223344 // big
 
-Could you please copy-paste output of the `fentry` application, I'd
-like to see the log output of the libbpf while it processes
-relocations, e.g. here is what it prints for me:
-
-    # /home/eddy/work/libbpf-bootstrap/examples/c/fentry
-    libbpf: loading object 'fentry_bpf' from buffer
-    libbpf: elf: section(3) lsm.s/bprm_committed_creds, size 136, link 0, f=
-lags 6, type=3D1
-    libbpf: sec 'lsm.s/bprm_committed_creds': found program 'dbg' at insn o=
-ffset 0 (0 bytes), code size 17 insns (136 bytes)
-    libbpf: elf: section(4) license, size 13, link 0, flags 3, type=3D1
-    libbpf: license of fentry_bpf is Dual BSD/GPL
-    libbpf: elf: section(5) .BTF, size 5114, link 0, flags 0, type=3D1
-    libbpf: elf: section(7) .BTF.ext, size 188, link 0, flags 0, type=3D1
-    libbpf: elf: section(10) .symtab, size 96, link 1, flags 0, type=3D2
-    libbpf: looking for externs among 4 symbols...
-    libbpf: collected 0 externs total
-    libbpf: loading kernel BTF '/sys/kernel/btf/vmlinux': 0
-    libbpf: sec 'lsm.s/bprm_committed_creds': found 1 CO-RE relocations
-    libbpf: CO-RE relocating [6] struct linux_binprm: found target candidat=
-e [7241] struct linux_binprm in [vmlinux]
-    libbpf: prog 'dbg': relo #0: <byte_off> [6] struct linux_binprm.file (0=
-:11 @ offset 64)
-    libbpf: prog 'dbg': relo #0: matching candidate #0 <byte_off> [7241] st=
-ruct linux_binprm.file (0:11 @ offset 64)
-    libbpf: prog 'dbg': relo #0: patched insn #10 (LDX/ST/STX) off 64 -> 64
-    Successfully started! Please run `sudo cat /sys/kernel/debug/tracing/tr=
-ace_pipe` to see output of the BPF programs.
-
-Also, could you please compile `veristat` tool as below:
-
-    cd ${kernel}/tools/testing/selftests/bpf
-    make -j16 veristat
-
-And post the output of the following command (from within QEMU):
-
-    ./veristat -l7 -v ${path-to-libbpf-bootstrap-within-vm}/examples/c/.out=
-put/fentry.bpf.o
-
-It should produce the verification log as an output.
-
-The reason I'm asking is that your verification log looks kinda strange:
-
->    ; bpf_ima_file_hash(bprm->file, buf, 64);
->    13: (b7) r3 =3D 64                      ; R3_w=3D64
->    14: (85) call bpf_ima_file_hash#193
->    cannot access ptr member next with moff 0 in struct llist_node with of=
-f 0 size 1
->    R1 is of type file but file is expected
->    processed 15 insns (limit 1000000) max_states_per_insn 0 total_states =
-0 peak_states 0 mark_read 0
-
-I don't understand why it mentions `struct llist_node` here and don't
-have such messages in my log ([2]).
-
-Thanks,
-Eduard
-
-[1] My config for BPF testing
-    https://gist.github.com/eddyz87/aca79692d7bf57cfdd01b283b4304fd8
-[2] Veristat verification log
-    https://gist.github.com/eddyz87/49b211740bf99c426a37a3555b4542a3
-   =20
+I changed the immediate because 0xdeadbeef is negative and it may be
+confusing in the assembly part: strictly it would be r1 += -559038737.
