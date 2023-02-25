@@ -2,127 +2,259 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2C1EC6FA8E
-	for <bpf@archiver.kernel.org>; Sat, 25 Feb 2023 15:40:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EA57C7EE23
+	for <bpf@archiver.kernel.org>; Sat, 25 Feb 2023 15:40:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229496AbjBYPkR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 25 Feb 2023 10:40:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50022 "EHLO
+        id S229529AbjBYPkU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 25 Feb 2023 10:40:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjBYPkQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 25 Feb 2023 10:40:16 -0500
+        with ESMTP id S229482AbjBYPkT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 25 Feb 2023 10:40:19 -0500
 Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4069213D60
-        for <bpf@vger.kernel.org>; Sat, 25 Feb 2023 07:40:15 -0800 (PST)
-Received: by mail-ed1-x541.google.com with SMTP id i34so8836774eda.7
-        for <bpf@vger.kernel.org>; Sat, 25 Feb 2023 07:40:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79B013D60
+        for <bpf@vger.kernel.org>; Sat, 25 Feb 2023 07:40:17 -0800 (PST)
+Received: by mail-ed1-x541.google.com with SMTP id ee7so8937548edb.2
+        for <bpf@vger.kernel.org>; Sat, 25 Feb 2023 07:40:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NEewDrwrbQX9FqqiEV7vA1z3n4smdXdUfbrV2+Vz3p4=;
-        b=g/BoJO5mfULTJfEArYDfuCIFnoVcS4PfZ6Ayy67kUC4c8U355TBjkeiuwbnc6kZz/a
-         U3DfsZmljB4bVoyVwB0OWGj0i99mdYLlfgTANYceuPnvCM+QdOYnXaPhLACIgdkISSCS
-         LjihSpJ/us2sWG4FvRxPUyrRlXMaSVbmmUB4LbaQsHdWwxbLgjnDoKp7LFccloDF63PB
-         lgj2mbULF89e+ShgJlDVBbEvCrWFOMwH11xjEF1vMKFuEFaxGQ54tmvIcMLOuDp9Kza1
-         g6ovV7CJ6yiF69aweLQb8/k8+IYK64ct3Dz7gr5464JxVFItLyS/DYmXq+6/jt4PpLbh
-         Uhng==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=26YHYGhzhMtvy0wI74hWTknpqfsq9gjq9pZ+N8DJ2Ds=;
+        b=qUXlqj7ghgBg+s9E4FVdYsvMop3Z+SVqgbaKEXq4WWoepdpVWhqppEehKC+xXv97D7
+         OvLnOVQLttk0T+5PmXrUcwx+VSmu5Vp7+ThVb0Y4HkBk9vopiAI0pGS3hx+FXWz9wE5G
+         tWrM1j9ClBAXY5gvY37evf3zWLmV06vFBuAcD+9YZoGLMiuy2a1vEh8CRD9/s19ggDUG
+         RMz7ldWkcmzmO9wLti1pfIFoaOB1hewmLT5lYtaRt9ShdGAgYvEzRUZiN2x6d/vzQ3xu
+         JDYdn3we8O7bvPIrgpzsPxuqVZPnyIr8uLPGzhJVqIl8n/BddFZhjeVt5xUaDlUWTc96
+         zHww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NEewDrwrbQX9FqqiEV7vA1z3n4smdXdUfbrV2+Vz3p4=;
-        b=Q7kuoJ7pF1gsZXaXVJS7Fuq14J57jVii0vLQ/ZV2aqv0haLkXee0nCK0JKYC8bxfaG
-         APdCCOKpNFLrL3Nom6O39zxF9Gkz4PJ09XwRULRYUzYSIJUkUFIOZ3OLPHYgdzm+/BgS
-         G1AfksugxPmpR+gfUWV/qEH1qN4+qAnPhnqSoGzyL+NUW/YAOwDfLRl1fCs8wq8s1CAy
-         rnSNO4zFdbuAr4Ind12bghuZonxZwsv0dCfjTaRR75VHb7uV5SfSt/7x1Z8eLI9RHHBH
-         2jooXV2qKoVzCPHz2/StYdMBjZ6tP6lHfCXVdIuLSlKXSzHXNcWLcm1LeCAartpzhs6J
-         E78Q==
-X-Gm-Message-State: AO0yUKWzUq0dh+UJKjmhrkXbjtaUu6e8XlQb9PEPAS83LOq2qHlGBu6Z
-        KL82ay5jLAAXbjEgV14BVNJLJNrjRy6MXg==
-X-Google-Smtp-Source: AK7set+5jcj7G7M2mheQu8OHF/zwWDC3PUoPIs9kHgO4axEemKIqx8Oj516eGeBYf9tP2RXS5YQX2Q==
-X-Received: by 2002:a17:906:d7ac:b0:8b2:3e72:101f with SMTP id pk12-20020a170906d7ac00b008b23e72101fmr30356672ejb.19.1677339613197;
-        Sat, 25 Feb 2023 07:40:13 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=26YHYGhzhMtvy0wI74hWTknpqfsq9gjq9pZ+N8DJ2Ds=;
+        b=cREZXN9udq9DzJ+BZKKqAO5xN6RvbCwUrfJn74SGYIZ8EiHjRJ9KiH6E0HN3rKOAS/
+         88roQcEjPEnEhJ0X2UtwBDlouuObJRC7RZUqj/OpFIPpj+Xr8oicCsx/G4cYQKTAAiZc
+         00YXdauqn03hZG601mGFZJxSl18ELACt5uUUaXULBqiG7VHCtGVnWnzuaYjscnRQsJs3
+         mwjqErVqKmTop3nR+uKTrMlGdwiAYgO/Od7oW5GQGG7QQOZLa1laM1By+MIDmbnR2Q3B
+         7hVCN0DRj4VFhMJpEFKGF+x5uainrF5ZLPflGz4ouk6fw2mtVXJLXzdDc8UXkjIpO11g
+         n8GA==
+X-Gm-Message-State: AO0yUKX0FxuGO7emJ1dXysLjb5V13Q8tJ+0d+hPdR39toZe05964f8t6
+        Vl4CaC3adE93wRqrQ98cKNVqXE3ku/7VNA==
+X-Google-Smtp-Source: AK7set9qGorhHHREy9Q8H7O2MKbnf1N/CvAyqz92UTf0A0gqb7q79VVvd/RseuPv9gC+Wpq8yTqrVQ==
+X-Received: by 2002:a50:fb06:0:b0:4ac:be42:5c66 with SMTP id d6-20020a50fb06000000b004acbe425c66mr18859305edq.11.1677339615879;
+        Sat, 25 Feb 2023 07:40:15 -0800 (PST)
 Received: from localhost ([2001:620:618:580:2:80b3:0:30])
-        by smtp.gmail.com with ESMTPSA id 27-20020a508e1b000000b004aef609f747sm978589edw.3.2023.02.25.07.40.12
+        by smtp.gmail.com with ESMTPSA id b27-20020a50ccdb000000b004aef48a8af7sm978157edj.50.2023.02.25.07.40.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Feb 2023 07:40:12 -0800 (PST)
+        Sat, 25 Feb 2023 07:40:15 -0800 (PST)
 From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+Cc:     Martin KaFai Lau <martin.lau@kernel.org>,
+        KP Singh <kpsingh@kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        KP Singh <kpsingh@kernel.org>,
         Dave Marchevsky <davemarchevsky@meta.com>,
         David Vernet <void@manifault.com>
-Subject: [PATCH bpf-next v3 0/3] Add support for kptrs in more BPF maps
-Date:   Sat, 25 Feb 2023 16:40:07 +0100
-Message-Id: <20230225154010.391965-1-memxor@gmail.com>
+Subject: [PATCH bpf-next v3 2/3] bpf: Support kptrs in local storage maps
+Date:   Sat, 25 Feb 2023 16:40:09 +0100
+Message-Id: <20230225154010.391965-3-memxor@gmail.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230225154010.391965-1-memxor@gmail.com>
+References: <20230225154010.391965-1-memxor@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2434; i=memxor@gmail.com; h=from:subject; bh=1qdm820TDzRoomsmVne756s7EK1TBLIjzzJYYPtb1w8=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBj+itJB9AaxIjZtuqLJrIfTJyH6ubuY57P/uaGWKDJ R5gs2FOJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCY/orSQAKCRBM4MiGSL8RyokxEA C/io9F9x4XM0NMBEEr2gx4pW3PSVras3AswpdrVbRyt4dXc7t9uau45ZTAflXKEFEBLB8koD3BPhhw MiFZlwbZhsmicWTLiHQeqDJ/ul+HVU8tJK6Qf5C9ic2ainpu5cT8e9ZW7nTDrLNwY6UQav+TeQDWG4 PCrHKflup1ozjDUIftyKL/5IHG6gwIe06wW/BXg+EmBE8e72qWFVBm5orNf9ZY70w5bs442U5ieIni a58yTXZaI51Uw1DADjIkQ75NwZDQC4yQvqzH6yCW+Q5DWAfaNCgmLBl5L6XPjQkKK2GTYC3SDRWVse mee1f9x1ZEQGHJ28/fbIV+F7PhJE4nXA55YOCEpZRBss5KQI5k7cWnwq95abQ6ZFbpje9QAHxwPQ1P G9Plx34yMvaEwGtNeGZ7TyVKE9Kl1kdz0aXbyRXgP0bMPSAOQ6FF/Kl6dHUp7GUUDwOqNq+T5e43i3 hFzbroigZ0kgrWpGDxSjo/bOxsYs0mVLQNU8iZIzk0Ik+VquRgUfmGRbdQMEw2RqSDKG/N2MN6MREM 38S/eMxXirBydNNobt24A0sF4JFnnl+FmRZ/KrfqPAnBZE7reIefnJEhlShHXGBHXIcz+wg3h+N1sI kLXVoqFPB/h7kDFtJXsKE7zJlD/n2EArla8ugnHF/kMe3NS+xkT+1WyrDG1g==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7787; i=memxor@gmail.com; h=from:subject; bh=6rZNexUWA0MowrydGJmFUaPGZ3AMN2NlSiMGW5GBv78=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBj+itKpBjzsEWVZYBmRHUQ97KSGShtIJY38quT1RMm tZwLmeSJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCY/orSgAKCRBM4MiGSL8RymNjD/ 9J4FY7YaSLxzJfXeN++OQFb7PoCuI/Um967R0gUkXs0D51NhBOKPS9Kd3ZN8lV4umTRENQ27ZtUFrf /cdnFxlca87HpyoOdtuGmKtGBcE0NqMG27UY8fQyvlADtD5+uVSwZzuHDMc/c1LuQtB3slDFfCFVx6 kXin8R7e25SncD4Xvnz7XthU1UiUSWU+Gx3UcvTrZKZGMOxMwkiQyjqFCBAWHlZRjiofzdIzM5d6cF 47YJ1F7ZI5y54dBcYHoS2Ny0/9TTfpwfe+NqXetqUlQJtofbCmIlq3BUuEvGa969dWbW5XC3DlS778 SIbIN4ajvE8DaadkevhlRUI8hG36LOf98DQ/Y75cWjn7A/01xlo2W8/tpfBhkAalxI9Wtl3ibZq67H f+vqS4K5dWgP4D8UzD/TIQ3ShvoPxMISO+vHgWGVbTkyVnAQDMBGzOFoTpgwxug4Dfc6g2+hxKPLZS 6K1hz5ukwzCl4ixBFIba/eDf1fTSszGGZJp2ibuAF9gxHWZ7bC9gqE7m1gPpZcOCemAjrgeeMKeiNs OiiCjczSvizSoa8uBlfDYGQX2tO/0nvmwKAxR2EyZcGoObnqWe3xOlfN/C/CWK/d9HLCQQV04Wz/m5 h32DkUjpZwL3G29fzL6tbQh4yu8XDjpLOtHsPTdG7NDN+NbLAGUwpAgZuOlA==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This set adds support for kptrs in percpu hashmaps, percpu LRU hashmaps,
-and local storage maps (covering sk, cgrp, task, inode).
+Enable support for kptrs in local storage maps by wiring up the freeing
+of these kptrs from map value. Freeing of bpf_local_storage_map is only
+delayed in case there are special fields, therefore bpf_selem_free_*
+path can also only dereference smap safely in that case. This is
+recorded using a bool utilizing a hole in bpF_local_storage_elem. It
+could have been tagged in the pointer value smap using the lowest bit
+(since alignment > 1), but since there was already a hole I went with
+the simpler option. Only the map structure freeing is delayed using RCU
+barriers, as the buckets aren't used when selem is being freed, so they
+can be freed once all readers of the bucket lists can no longer access
+it.
 
-Tests are expanded to test more existing maps at runtime and also test
-the code path for the local storage maps (which is shared by all
-implementations).
+Cc: Martin KaFai Lau <martin.lau@kernel.org>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: Paul E. McKenney <paulmck@kernel.org>
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ include/linux/bpf_local_storage.h |  6 ++++
+ kernel/bpf/bpf_local_storage.c    | 48 ++++++++++++++++++++++++++++---
+ kernel/bpf/syscall.c              |  6 +++-
+ kernel/bpf/verifier.c             | 12 +++++---
+ 4 files changed, 63 insertions(+), 9 deletions(-)
 
-A question for reviewers is what the position of the BPF runtime should
-be on dealing with reference cycles that can be created by BPF programs
-at runtime using this additional support. For instance, one can store
-the kptr of the task in its own task local storage, creating a cycle
-which prevents destruction of task local storage. Cycles can be formed
-using arbitrarily long kptr ownership chains. Therefore, just preventing
-storage of such kptrs in some maps is not a sufficient solution, and is
-more likely to hurt usability.
-
-There is precedence in existing runtimes which promise memory safety,
-like Rust, where reference cycles and memory leaks are permitted.
-However, traditionally the safety guarantees of BPF have been stronger.
-Thus, more discussion and thought is invited on this topic to ensure we
-cover all usage aspects.
-
-Changelog:
-----------
-v2 -> v3
-v2: https://lore.kernel.org/bpf/20230221200646.2500777-1-memxor@gmail.com/
-
- * Fix a use-after-free bug in local storage patch
- * Fix selftest for aarch64 (don't use fentry/fmod_ret)
- * Wait for RCU Tasks Trace GP along with RCU GP in selftest
-
-v1 -> v2
-v1: https://lore.kernel.org/bpf/20230219155249.1755998-1-memxor@gmail.com
-
- * Simplify selftests, fix a couple of bugs
-
-Kumar Kartikeya Dwivedi (3):
-  bpf: Support kptrs in percpu hashmap and percpu LRU hashmap
-  bpf: Support kptrs in local storage maps
-  selftests/bpf: Add more tests for kptrs in maps
-
- include/linux/bpf_local_storage.h             |   6 +
- kernel/bpf/bpf_local_storage.c                |  48 ++-
- kernel/bpf/hashtab.c                          |  59 +--
- kernel/bpf/syscall.c                          |   8 +-
- kernel/bpf/verifier.c                         |  12 +-
- .../selftests/bpf/prog_tests/map_kptr.c       | 136 +++++--
- tools/testing/selftests/bpf/progs/map_kptr.c  | 344 +++++++++++++++---
- .../selftests/bpf/progs/rcu_tasks_trace_gp.c  |  36 ++
- 8 files changed, 553 insertions(+), 96 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/rcu_tasks_trace_gp.c
-
-
-base-commit: 68bfd65fb98d16239d14719a47cc1582510001de
+diff --git a/include/linux/bpf_local_storage.h b/include/linux/bpf_local_storage.h
+index 6d37a40cd90e..0fe92986412b 100644
+--- a/include/linux/bpf_local_storage.h
++++ b/include/linux/bpf_local_storage.h
+@@ -74,6 +74,12 @@ struct bpf_local_storage_elem {
+ 	struct hlist_node snode;	/* Linked to bpf_local_storage */
+ 	struct bpf_local_storage __rcu *local_storage;
+ 	struct rcu_head rcu;
++	bool can_use_smap; /* Is it safe to access smap in bpf_selem_free_* RCU
++			    * callbacks? bpf_local_storage_map_free only
++			    * executes rcu_barrier when there are special
++			    * fields, this field remembers that to ensure we
++			    * don't access already freed smap in sdata.
++			    */
+ 	/* 8 bytes hole */
+ 	/* The data is stored in another cacheline to minimize
+ 	 * the number of cachelines access during a cache hit.
+diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
+index 58da17ae5124..2bdd722fe293 100644
+--- a/kernel/bpf/bpf_local_storage.c
++++ b/kernel/bpf/bpf_local_storage.c
+@@ -85,6 +85,7 @@ bpf_selem_alloc(struct bpf_local_storage_map *smap, void *owner,
+ 	if (selem) {
+ 		if (value)
+ 			copy_map_value(&smap->map, SDATA(selem)->data, value);
++		/* No need to call check_and_init_map_value as memory is zero init */
+ 		return selem;
+ 	}
+ 
+@@ -113,10 +114,25 @@ static void bpf_selem_free_rcu(struct rcu_head *rcu)
+ 	struct bpf_local_storage_elem *selem;
+ 
+ 	selem = container_of(rcu, struct bpf_local_storage_elem, rcu);
++	/* The can_use_smap bool is set whenever we need to free additional
++	 * fields in selem data before freeing selem. bpf_local_storage_map_free
++	 * only executes rcu_barrier to wait for RCU callbacks when it has
++	 * special fields, hence we can only conditionally dereference smap, as
++	 * by this time the map might have already been freed without waiting
++	 * for our call_rcu callback if it did not have any special fields.
++	 */
++	if (selem->can_use_smap)
++		bpf_obj_free_fields(SDATA(selem)->smap->map.record, SDATA(selem)->data);
++	kfree(selem);
++}
++
++static void bpf_selem_free_tasks_trace_rcu(struct rcu_head *rcu)
++{
++	/* Free directly if Tasks Trace RCU GP also implies RCU GP */
+ 	if (rcu_trace_implies_rcu_gp())
+-		kfree(selem);
++		bpf_selem_free_rcu(rcu);
+ 	else
+-		kfree_rcu(selem, rcu);
++		call_rcu(rcu, bpf_selem_free_rcu);
+ }
+ 
+ /* local_storage->lock must be held and selem->local_storage == local_storage.
+@@ -170,9 +186,9 @@ static bool bpf_selem_unlink_storage_nolock(struct bpf_local_storage *local_stor
+ 		RCU_INIT_POINTER(local_storage->cache[smap->cache_idx], NULL);
+ 
+ 	if (use_trace_rcu)
+-		call_rcu_tasks_trace(&selem->rcu, bpf_selem_free_rcu);
++		call_rcu_tasks_trace(&selem->rcu, bpf_selem_free_tasks_trace_rcu);
+ 	else
+-		kfree_rcu(selem, rcu);
++		call_rcu(&selem->rcu, bpf_selem_free_rcu);
+ 
+ 	return free_local_storage;
+ }
+@@ -240,6 +256,11 @@ void bpf_selem_link_map(struct bpf_local_storage_map *smap,
+ 	RCU_INIT_POINTER(SDATA(selem)->smap, smap);
+ 	hlist_add_head_rcu(&selem->map_node, &b->list);
+ 	raw_spin_unlock_irqrestore(&b->lock, flags);
++
++	/* If our data will have special fields, smap will wait for us to use
++	 * its record in bpf_selem_free_* RCU callbacks before freeing itself.
++	 */
++	selem->can_use_smap = !IS_ERR_OR_NULL(smap->map.record);
+ }
+ 
+ void bpf_selem_unlink(struct bpf_local_storage_elem *selem, bool use_trace_rcu)
+@@ -723,6 +744,25 @@ void bpf_local_storage_map_free(struct bpf_map *map,
+ 	 */
+ 	synchronize_rcu();
+ 
++	/* Only delay freeing of smap, buckets are not needed anymore */
+ 	kvfree(smap->buckets);
++
++	/* When local storage has special fields, callbacks for
++	 * bpf_selem_free_rcu and bpf_selem_free_tasks_trace_rcu will keep using
++	 * the map BTF record, we need to execute an RCU barrier to wait for
++	 * them as the record will be freed right after our map_free callback.
++	 */
++	if (!IS_ERR_OR_NULL(smap->map.record)) {
++		rcu_barrier_tasks_trace();
++		/* We cannot skip rcu_barrier() when rcu_trace_implies_rcu_gp()
++		 * is true, because while call_rcu invocation is skipped in that
++		 * case in bpf_selem_free_tasks_trace_rcu (and all local storage
++		 * maps pass use_trace_rcu = true), there can be call_rcu
++		 * callbacks based on use_trace_rcu = false in the earlier while
++		 * ((selem = ...)) loop or from bpf_local_storage_unlink_nolock
++		 * called from owner's free path.
++		 */
++		rcu_barrier();
++	}
+ 	bpf_map_area_free(smap);
+ }
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index da117a2a83b2..eb50025b03c1 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -1063,7 +1063,11 @@ static int map_check_btf(struct bpf_map *map, const struct btf *btf,
+ 				    map->map_type != BPF_MAP_TYPE_LRU_HASH &&
+ 				    map->map_type != BPF_MAP_TYPE_LRU_PERCPU_HASH &&
+ 				    map->map_type != BPF_MAP_TYPE_ARRAY &&
+-				    map->map_type != BPF_MAP_TYPE_PERCPU_ARRAY) {
++				    map->map_type != BPF_MAP_TYPE_PERCPU_ARRAY &&
++				    map->map_type != BPF_MAP_TYPE_SK_STORAGE &&
++				    map->map_type != BPF_MAP_TYPE_INODE_STORAGE &&
++				    map->map_type != BPF_MAP_TYPE_TASK_STORAGE &&
++				    map->map_type != BPF_MAP_TYPE_CGRP_STORAGE) {
+ 					ret = -EOPNOTSUPP;
+ 					goto free_map_tab;
+ 				}
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 5cb8b623f639..f5e2813e22de 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7151,22 +7151,26 @@ static int check_map_func_compatibility(struct bpf_verifier_env *env,
+ 		break;
+ 	case BPF_MAP_TYPE_SK_STORAGE:
+ 		if (func_id != BPF_FUNC_sk_storage_get &&
+-		    func_id != BPF_FUNC_sk_storage_delete)
++		    func_id != BPF_FUNC_sk_storage_delete &&
++		    func_id != BPF_FUNC_kptr_xchg)
+ 			goto error;
+ 		break;
+ 	case BPF_MAP_TYPE_INODE_STORAGE:
+ 		if (func_id != BPF_FUNC_inode_storage_get &&
+-		    func_id != BPF_FUNC_inode_storage_delete)
++		    func_id != BPF_FUNC_inode_storage_delete &&
++		    func_id != BPF_FUNC_kptr_xchg)
+ 			goto error;
+ 		break;
+ 	case BPF_MAP_TYPE_TASK_STORAGE:
+ 		if (func_id != BPF_FUNC_task_storage_get &&
+-		    func_id != BPF_FUNC_task_storage_delete)
++		    func_id != BPF_FUNC_task_storage_delete &&
++		    func_id != BPF_FUNC_kptr_xchg)
+ 			goto error;
+ 		break;
+ 	case BPF_MAP_TYPE_CGRP_STORAGE:
+ 		if (func_id != BPF_FUNC_cgrp_storage_get &&
+-		    func_id != BPF_FUNC_cgrp_storage_delete)
++		    func_id != BPF_FUNC_cgrp_storage_delete &&
++		    func_id != BPF_FUNC_kptr_xchg)
+ 			goto error;
+ 		break;
+ 	case BPF_MAP_TYPE_BLOOM_FILTER:
 -- 
 2.39.2
 
