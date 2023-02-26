@@ -2,198 +2,206 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DF90C7EE2E
-	for <bpf@archiver.kernel.org>; Sun, 26 Feb 2023 08:51:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23F37C64ED6
+	for <bpf@archiver.kernel.org>; Sun, 26 Feb 2023 08:52:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229504AbjBZIvz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 26 Feb 2023 03:51:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
+        id S229549AbjBZIwC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 26 Feb 2023 03:52:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjBZIvz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 26 Feb 2023 03:51:55 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5813E113F1;
-        Sun, 26 Feb 2023 00:51:52 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id i5so2095767pla.2;
-        Sun, 26 Feb 2023 00:51:52 -0800 (PST)
+        with ESMTP id S229507AbjBZIwA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 26 Feb 2023 03:52:00 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8DAC11655;
+        Sun, 26 Feb 2023 00:51:58 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id x34so3232715pjj.0;
+        Sun, 26 Feb 2023 00:51:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iId5kM56T4q4lSaSsh+X8YPMGiFX5DsYGa42UGupNGE=;
-        b=lHKxgrHo+R/EPL5r4Evx6YILGKB7AlGVrXgtY0Futp8v2teuhw+1qtX1FkJh2jGjFn
-         AhUwxtxOEmKDcGXUCdAmAXpsAmYb4BCQbpsFT6flVETo8mfP5Hx/IIbHZBUC5IeKnaMp
-         yUcOawD1Ee2/wfafPwTyd7MkqO/fAH7yLSaqX+nFdHAnzljIEDsUmPzonqskFyLH38VC
-         l3RMCXxOzeCvvhdQQsu3D2MBa42UXHz+UXZPQ2qY+lbn2pjCqoFgmzUbzmPCIzjSoHSH
-         CSan6IYbpT8jQbRNun/s2UGO72rJ9yjo/eFbB9CYWZn2hPXir2Stthkagx/fTb6uX9fz
-         sfNw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FiOQD6venFBWNf0Z4AQ/wrw3IlSiEPKwiV4MlNJJ/3s=;
+        b=i3BptMSN8Twhn2K1balN381KlVwpMcAbO3KRarvcS8/Tu/lNqcPpQG8Q9wBVWXgP3Q
+         hgKXw5Zpne4xc54WcMzId9W+QZ0dRP8G5I9I9YhcJuIhT8aaeBtJU0SkBs7Y3eVjtdxy
+         LDmMU3hcdzWCKejgPafwHwVj0QrJT+sVAKFmJHRTSCNz/d7ryFBoFA0+Dn2V+gstEt28
+         V7SMu5URgKubGhN+34spJoo6Mt6gyifklzSuFWayowLPcNw3XQ0lE/jar6sqR7pXJ8b5
+         11fn4D/nMUqW70ziVKdoDah2knIYb9JL6GxdP/VorQO4DSzcQOmqMKZhm+9Ffyk9Gjxj
+         PlVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iId5kM56T4q4lSaSsh+X8YPMGiFX5DsYGa42UGupNGE=;
-        b=KTA9KGOBIvdDnhVU+yN8w96814LoW6j/LuGjOclXRlj07RM2kY3NYjRdNXfdKx64R1
-         NSKDNCC06p6inYEdPA3aBa/T0kJ73+xMdE9fVgdorWLPH3ynJea5KlnGVij9+o5Ncy8h
-         JUTMuwLG1Sp8AiaOt0PQ4oAzsST/jcbMSqmGxqiZIGXAO06yZUoWHMwOpscVXvggW4Um
-         vwpLSo7BMOeR/ZY+UYjMnm0txyTFP09+yW/VsMd8ElCId7UABOXAbu0dG0KALv7li7D6
-         QquvBOd3OsscQus89EBXMWifRptVvyqYxaH7E36N7ULvv5mDGChxGmgluJyzC8CdIvd/
-         STGw==
-X-Gm-Message-State: AO0yUKVxdGbhQgqwDmOQmBhgAYmVZwc482jzZMy20p2aMlUQXha33/DN
-        Tpvdt2HUpgf4lfl4wIdv2gmGS2TFmVg=
-X-Google-Smtp-Source: AK7set8mFK6HzjaZfzdwAljioqGZDLBNTWxH0LXy7ZeLpfYW2uFWLkD8+OZdpnO5JcQpBMu/f6H9Rw==
-X-Received: by 2002:a05:6a20:3d81:b0:cc:32aa:8570 with SMTP id s1-20020a056a203d8100b000cc32aa8570mr12933726pzi.14.1677401511476;
-        Sun, 26 Feb 2023 00:51:51 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FiOQD6venFBWNf0Z4AQ/wrw3IlSiEPKwiV4MlNJJ/3s=;
+        b=h+Qb5hpzV8zweFPsDTwmdex+w1ZkbAmEb44rY77B0VN72c8SBh7p1tdbhQeIbChECR
+         TPXnEEVG4y+0YEWBs7UDqETzH38Xuji1r4DFxrlnSjP39LtKnMNVe8RMtaOAtkrWJ7me
+         Y9niFkm5oV4unU9F/qkHvyAHwSdlH0oXndoHLw62jbCo0Uxo93LRp9sb6bRWLuKnHFyb
+         7bBBk4cB7SFbBTv/eEZd14mIJDelMnicC8bGWIStMTlHF8fW6A9I0tm0XLTGXZj1qa+e
+         R/xkTO/kdpTAHPLNBNJtU5BmjqD1ko7y25h2RC0jZFCA0IietaB1zZiJJnOUp25uuSg+
+         UfuA==
+X-Gm-Message-State: AO0yUKVczAtWwO82cq8SgrJ0yLDxMLdcXT9u5IvOVmGIor+VYgqv6CyJ
+        AhhHMrJ0W9YbdCPTGg0+IL4kyXBW1rg=
+X-Google-Smtp-Source: AK7set99dxabQkO8bhQ9TNf+zy46ecnrIxC4c+0L9/7RqNWaX1x3yGiHbn7CccOiYArBvLYiJ7ZxCA==
+X-Received: by 2002:a05:6a21:869d:b0:cb:fe3e:e33 with SMTP id ox29-20020a056a21869d00b000cbfe3e0e33mr10467848pzb.42.1677401518050;
+        Sun, 26 Feb 2023 00:51:58 -0800 (PST)
 Received: from gatsby.corp.tfbnw.net (75-172-126-232.tukw.qwest.net. [75.172.126.232])
-        by smtp.gmail.com with ESMTPSA id s10-20020a62e70a000000b00592591d1634sm2227299pfh.97.2023.02.26.00.51.50
+        by smtp.gmail.com with ESMTPSA id s10-20020a62e70a000000b00592591d1634sm2227299pfh.97.2023.02.26.00.51.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Feb 2023 00:51:51 -0800 (PST)
+        Sun, 26 Feb 2023 00:51:57 -0800 (PST)
 From:   Joanne Koong <joannelkoong@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     martin.lau@kernel.org, andrii@kernel.org, ast@kernel.org,
         memxor@gmail.com, daniel@iogearbox.net, netdev@vger.kernel.org,
         toke@kernel.org, Joanne Koong <joannelkoong@gmail.com>
-Subject: [PATCH v12 bpf-next 00/10] Add skb + xdp dynptrs 
-Date:   Sun, 26 Feb 2023 00:51:10 -0800
-Message-Id: <20230226085120.3907863-1-joannelkoong@gmail.com>
+Subject: [PATCH v12 bpf-next 02/10] bpf: Refactor process_dynptr_func
+Date:   Sun, 26 Feb 2023 00:51:12 -0800
+Message-Id: <20230226085120.3907863-3-joannelkoong@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230226085120.3907863-1-joannelkoong@gmail.com>
+References: <20230226085120.3907863-1-joannelkoong@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patchset is the 2nd in the dynptr series. The 1st can be found here [0].
+This change cleans up process_dynptr_func's flow to be more intuitive
+and updates some comments with more context.
 
-This patchset adds skb and xdp type dynptrs, which have two main benefits for
-packet parsing:
-    * allowing operations on sizes that are not statically known at
-      compile-time (eg variable-sized accesses).
-    * more ergonomic and less brittle iteration through data (eg does not need
-      manual if checking for being within bounds of data_end)
+Signed-off-by: Joanne Koong <joannelkoong@gmail.com>
+---
+ include/linux/bpf_verifier.h |  3 --
+ kernel/bpf/verifier.c        | 58 ++++++++++++++++++------------------
+ 2 files changed, 29 insertions(+), 32 deletions(-)
 
-When comparing the differences in runtime for packet parsing without dynptrs
-vs. with dynptrs, there is no noticeable difference. Patch 9 contains more
-details as well as examples of how to use skb and xdp dynptrs.
-
-[0] https://lore.kernel.org/bpf/20220523210712.3641569-1-joannelkoong@gmail.com/
-
---
-Changelog:
-
-v11 = https://lore.kernel.org/bpf/20230222060747.2562549-1-joannelkoong@gmail.com/
-v11 -> v12:
-    * Change constant mem size checking to use "__szk" kfunc annotation
-      for slices
-    * Use autoloading for success selftests
-
-v10 = https://lore.kernel.org/bpf/20230216225524.1192789-1-joannelkoong@gmail.com/
-v10 -> v11:
-    * Reject bpf_dynptr_slice_rdwr() for non-writable progs at load time
-      instead of runtime
-    * Add additional patch (__uninit kfunc annotation)
-    * Expand on documentation
-    * Add bpf_dynptr_write() calls for persisting writes in tests
-
-v9 = https://lore.kernel.org/bpf/20230127191703.3864860-1-joannelkoong@gmail.com/
-v9 -> v10:
-    * Add bpf_dynptr_slice and bpf_dynptr_slice_rdwr interface
-    * Add some more tests
-    * Split up patchset into more parts to make it easier to review
-
-v8 = https://lore.kernel.org/bpf/20230126233439.3739120-1-joannelkoong@gmail.com/
-v8 -> v9:
-    * Fix dynptr_get_type() to check non-stack dynptrs 
-
-v7 = https://lore.kernel.org/bpf/20221021011510.1890852-1-joannelkoong@gmail.com/
-v7 -> v8:
-    * Change helpers to kfuncs
-    * Add 2 new patches (1/5 and 2/5)
-
-v6 = https://lore.kernel.org/bpf/20220907183129.745846-1-joannelkoong@gmail.com/
-v6 -> v7
-    * Change bpf_dynptr_data() to return read-only data slices if the skb prog
-      is read-only (Martin)
-    * Add test "skb_invalid_write" to test that writes to rd-only data slices
-      are rejected
-
-v5 = https://lore.kernel.org/bpf/20220831183224.3754305-1-joannelkoong@gmail.com/
-v5 -> v6
-    * Address kernel test robot errors by static inlining
-
-v4 = https://lore.kernel.org/bpf/20220822235649.2218031-1-joannelkoong@gmail.com/
-v4 -> v5
-    * Address kernel test robot errors for configs w/out CONFIG_NET set
-    * For data slices, return PTR_TO_MEM instead of PTR_TO_PACKET (Kumar)
-    * Split selftests into subtests (Andrii)
-    * Remove insn patching. Use rdonly and rdwr protos for dynptr skb
-      construction (Andrii)
-    * bpf_dynptr_data() returns NULL for rd-only dynptrs. There will be a
-      separate bpf_dynptr_data_rdonly() added later (Andrii and Kumar)
-
-v3 = https://lore.kernel.org/bpf/20220822193442.657638-1-joannelkoong@gmail.com/
-v3 -> v4
-    * Forgot to commit --amend the kernel test robot error fixups
-
-v2 = https://lore.kernel.org/bpf/20220811230501.2632393-1-joannelkoong@gmail.com/
-v2 -> v3
-    * Fix kernel test robot build test errors
-
-v1 = https://lore.kernel.org/bpf/20220726184706.954822-1-joannelkoong@gmail.com/
-v1 -> v2
-  * Return data slices to rd-only skb dynptrs (Martin)
-  * bpf_dynptr_write allows writes to frags for skb dynptrs, but always
-    invalidates associated data slices (Martin)
-  * Use switch casing instead of ifs (Andrii)
-  * Use 0xFD for experimental kind number in the selftest (Zvi)
-  * Put selftest conversions w/ dynptrs into new files (Alexei)
-  * Add new selftest "test_cls_redirect_dynptr.c"
-
-Joanne Koong (10):
-  bpf: Support "sk_buff" and "xdp_buff" as valid kfunc arg types
-  bpf: Refactor process_dynptr_func
-  bpf: Allow initializing dynptrs in kfuncs
-  bpf: Define no-ops for externally called bpf dynptr functions
-  bpf: Refactor verifier dynptr into get_dynptr_arg_reg
-  bpf: Add __uninit kfunc annotation
-  bpf: Add skb dynptrs
-  bpf: Add xdp dynptrs
-  bpf: Add bpf_dynptr_slice and bpf_dynptr_slice_rdwr
-  selftests/bpf: tests for using dynptrs to parse skb and xdp buffers
-
- Documentation/bpf/kfuncs.rst                  |  17 +
- include/linux/bpf.h                           |  95 +-
- include/linux/bpf_verifier.h                  |   3 -
- include/linux/filter.h                        |  46 +
- include/uapi/linux/bpf.h                      |  18 +-
- kernel/bpf/btf.c                              |  22 +
- kernel/bpf/helpers.c                          | 221 +++-
- kernel/bpf/verifier.c                         | 413 ++++++--
- net/core/filter.c                             | 108 +-
- tools/include/uapi/linux/bpf.h                |  18 +-
- tools/testing/selftests/bpf/bpf_kfuncs.h      |  38 +
- .../selftests/bpf/prog_tests/cls_redirect.c   |  25 +
- .../testing/selftests/bpf/prog_tests/dynptr.c |  74 +-
- .../selftests/bpf/prog_tests/l4lb_all.c       |   2 +
- .../bpf/prog_tests/parse_tcp_hdr_opt.c        |  93 ++
- .../selftests/bpf/prog_tests/xdp_attach.c     |  11 +-
- .../testing/selftests/bpf/progs/dynptr_fail.c | 287 ++++-
- .../selftests/bpf/progs/dynptr_success.c      |  55 +-
- .../bpf/progs/test_cls_redirect_dynptr.c      | 980 ++++++++++++++++++
- .../bpf/progs/test_l4lb_noinline_dynptr.c     | 487 +++++++++
- .../bpf/progs/test_parse_tcp_hdr_opt.c        | 119 +++
- .../bpf/progs/test_parse_tcp_hdr_opt_dynptr.c | 114 ++
- .../selftests/bpf/progs/test_xdp_dynptr.c     | 257 +++++
- .../selftests/bpf/test_tcp_hdr_options.h      |   1 +
- 24 files changed, 3318 insertions(+), 186 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/bpf_kfuncs.h
- create mode 100644 tools/testing/selftests/bpf/prog_tests/parse_tcp_hdr_opt.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_cls_redirect_dynptr.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_l4lb_noinline_dynptr.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_parse_tcp_hdr_opt.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_parse_tcp_hdr_opt_dynptr.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_dynptr.c
-
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index cf1bb1cf4a7b..b26ff2a8f63b 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -616,9 +616,6 @@ int check_func_arg_reg_off(struct bpf_verifier_env *env,
+ 			   enum bpf_arg_type arg_type);
+ int check_mem_reg(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+ 		   u32 regno, u32 mem_size);
+-struct bpf_call_arg_meta;
+-int process_dynptr_func(struct bpf_verifier_env *env, int regno,
+-			enum bpf_arg_type arg_type, struct bpf_call_arg_meta *meta);
+ 
+ /* this lives here instead of in bpf.h because it needs to dereference tgt_prog */
+ static inline u64 bpf_trampoline_compute_key(const struct bpf_prog *tgt_prog,
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 5cb8b623f639..baecccc5fa7a 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -959,39 +959,49 @@ static int destroy_if_dynptr_stack_slot(struct bpf_verifier_env *env,
+ 	return 0;
+ }
+ 
+-static bool is_dynptr_reg_valid_uninit(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+-				       int spi)
++static bool is_dynptr_reg_valid_uninit(struct bpf_verifier_env *env, struct bpf_reg_state *reg)
+ {
++	int spi;
++
+ 	if (reg->type == CONST_PTR_TO_DYNPTR)
+ 		return false;
+ 
+-	/* For -ERANGE (i.e. spi not falling into allocated stack slots), we
+-	 * will do check_mem_access to check and update stack bounds later, so
+-	 * return true for that case.
++	spi = dynptr_get_spi(env, reg);
++
++	/* -ERANGE (i.e. spi not falling into allocated stack slots) isn't an
++	 * error because this just means the stack state hasn't been updated yet.
++	 * We will do check_mem_access to check and update stack bounds later.
+ 	 */
+-	if (spi < 0)
+-		return spi == -ERANGE;
+-	/* We allow overwriting existing unreferenced STACK_DYNPTR slots, see
+-	 * mark_stack_slots_dynptr which calls destroy_if_dynptr_stack_slot to
+-	 * ensure dynptr objects at the slots we are touching are completely
+-	 * destructed before we reinitialize them for a new one. For referenced
+-	 * ones, destroy_if_dynptr_stack_slot returns an error early instead of
+-	 * delaying it until the end where the user will get "Unreleased
++	if (spi < 0 && spi != -ERANGE)
++		return false;
++
++	/* We don't need to check if the stack slots are marked by previous
++	 * dynptr initializations because we allow overwriting existing unreferenced
++	 * STACK_DYNPTR slots, see mark_stack_slots_dynptr which calls
++	 * destroy_if_dynptr_stack_slot to ensure dynptr objects at the slots we are
++	 * touching are completely destructed before we reinitialize them for a new
++	 * one. For referenced ones, destroy_if_dynptr_stack_slot returns an error early
++	 * instead of delaying it until the end where the user will get "Unreleased
+ 	 * reference" error.
+ 	 */
+ 	return true;
+ }
+ 
+-static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+-				     int spi)
++static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env, struct bpf_reg_state *reg)
+ {
+ 	struct bpf_func_state *state = func(env, reg);
+-	int i;
++	int i, spi;
+ 
+-	/* This already represents first slot of initialized bpf_dynptr */
++	/* This already represents first slot of initialized bpf_dynptr.
++	 *
++	 * CONST_PTR_TO_DYNPTR already has fixed and var_off as 0 due to
++	 * check_func_arg_reg_off's logic, so we don't need to check its
++	 * offset and alignment.
++	 */
+ 	if (reg->type == CONST_PTR_TO_DYNPTR)
+ 		return true;
+ 
++	spi = dynptr_get_spi(env, reg);
+ 	if (spi < 0)
+ 		return false;
+ 	if (!state->stack[spi].spilled_ptr.dynptr.first_slot)
+@@ -6219,7 +6229,6 @@ int process_dynptr_func(struct bpf_verifier_env *env, int regno,
+ 			enum bpf_arg_type arg_type, struct bpf_call_arg_meta *meta)
+ {
+ 	struct bpf_reg_state *regs = cur_regs(env), *reg = &regs[regno];
+-	int spi = 0;
+ 
+ 	/* MEM_UNINIT and MEM_RDONLY are exclusive, when applied to an
+ 	 * ARG_PTR_TO_DYNPTR (or ARG_PTR_TO_DYNPTR | DYNPTR_TYPE_*):
+@@ -6228,15 +6237,6 @@ int process_dynptr_func(struct bpf_verifier_env *env, int regno,
+ 		verbose(env, "verifier internal error: misconfigured dynptr helper type flags\n");
+ 		return -EFAULT;
+ 	}
+-	/* CONST_PTR_TO_DYNPTR already has fixed and var_off as 0 due to
+-	 * check_func_arg_reg_off's logic. We only need to check offset
+-	 * and its alignment for PTR_TO_STACK.
+-	 */
+-	if (reg->type == PTR_TO_STACK) {
+-		spi = dynptr_get_spi(env, reg);
+-		if (spi < 0 && spi != -ERANGE)
+-			return spi;
+-	}
+ 
+ 	/*  MEM_UNINIT - Points to memory that is an appropriate candidate for
+ 	 *		 constructing a mutable bpf_dynptr object.
+@@ -6254,7 +6254,7 @@ int process_dynptr_func(struct bpf_verifier_env *env, int regno,
+ 	 *		 to.
+ 	 */
+ 	if (arg_type & MEM_UNINIT) {
+-		if (!is_dynptr_reg_valid_uninit(env, reg, spi)) {
++		if (!is_dynptr_reg_valid_uninit(env, reg)) {
+ 			verbose(env, "Dynptr has to be an uninitialized dynptr\n");
+ 			return -EINVAL;
+ 		}
+@@ -6277,7 +6277,7 @@ int process_dynptr_func(struct bpf_verifier_env *env, int regno,
+ 			return -EINVAL;
+ 		}
+ 
+-		if (!is_dynptr_reg_valid_init(env, reg, spi)) {
++		if (!is_dynptr_reg_valid_init(env, reg)) {
+ 			verbose(env,
+ 				"Expected an initialized dynptr as arg #%d\n",
+ 				regno);
 -- 
 2.34.1
 
