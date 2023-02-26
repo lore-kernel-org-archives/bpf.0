@@ -2,48 +2,45 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 241B6C7EE30
-	for <bpf@archiver.kernel.org>; Sun, 26 Feb 2023 14:51:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7290C64ED6
+	for <bpf@archiver.kernel.org>; Sun, 26 Feb 2023 15:37:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbjBZOvS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 26 Feb 2023 09:51:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
+        id S229540AbjBZPho (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 26 Feb 2023 10:37:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbjBZOuo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 26 Feb 2023 09:50:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6273913DF2;
-        Sun, 26 Feb 2023 06:48:40 -0800 (PST)
+        with ESMTP id S229582AbjBZPhh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 26 Feb 2023 10:37:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EBD01AF;
+        Sun, 26 Feb 2023 07:37:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8EBC160C38;
-        Sun, 26 Feb 2023 14:46:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 742E1C4339E;
-        Sun, 26 Feb 2023 14:46:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF38160B8F;
+        Sun, 26 Feb 2023 14:45:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 174B6C433A1;
+        Sun, 26 Feb 2023 14:45:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677422766;
-        bh=SsLC3DuoRr7IIjgp4V6ByD7OU4nl/phwXVPN1WE/Y/s=;
+        s=k20201202; t=1677422742;
+        bh=Z6cedVlKYTp/sAIk1wKhQqv0dIA+sCn2Q5iMjMWSs4M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DrX8P/PRPoWAvSGoF3qklTkvpRPK4bHdZ2u9A/hlCquD4EfqXic0f9pV36faN2vAx
-         aBZmWtvzECsqOSi329jTBAyaZCMW3fnu36YncTa4t7NUR8g0sN2swjsFwo7WGrxFtj
-         Ck8niKb/APSxvDAGO5D/ybmPnWmmvmticsWafRV0Em5YmpMMACkK4j1xwbfIBcyDNZ
-         H4Q4o3vYcY6Bb/8I5xzUN+2tL1j6LNbGqatTJNoM0bjV8t2XqYvz4LpfDyDLDKnz7r
-         bsqvbFOLxhgF5X+ZjdNZTuTeVr+m7MAjN0UborbrvmKIKM9j/wKJDW4e0VtYchulH9
-         773R9Grat1mow==
+        b=ZFqx4B3pd3X3db+mjQRt+qacq2gJ122YJvDtYkHJ2ZxliRXhsXmdPJ4mxOgz75ogC
+         lwMOZ2k15e/6rV4A7CEUMJ/hzQMrK8M7j6sBIsHIG03CimrIMyulQRNKpvfUQkgpKh
+         Ofls7cEmuSApcZSrNiz/TSKBni0ftO2PEno82zql4MVSi5Az7/pc/7aC+uLaPX8b06
+         KNjO9zXnSwRbIbv9B8e20VyAu1N/5H0oaj/fheBrB9QgYng5TKorMnJ8y3tsBQvuw+
+         57Jzg3QbGbXS/gIejnF5q2zuj1N7e9eywSCuY+XdATg1cgyeezJSJBfhttswUad/QG
+         eWoasmi6YeTgg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        syzbot+5aed6c3aaba661f5b917@syzkaller.appspotmail.com,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-        john.fastabend@gmail.com, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.2 32/53] can: isotp: check CAN address family in isotp_bind()
-Date:   Sun, 26 Feb 2023 09:44:24 -0500
-Message-Id: <20230226144446.824580-32-sashal@kernel.org>
+Cc:     Dave Thaler <dthaler@microsoft.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sasha Levin <sashal@kernel.org>, ast@kernel.org,
+        andrii@kernel.org, corbet@lwn.net, bpf@vger.kernel.org,
+        bpf@ietf.org, linux-doc@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.2 22/53] bpf, docs: Fix modulo zero, division by zero, overflow, and underflow
+Date:   Sun, 26 Feb 2023 09:44:14 -0500
+Message-Id: <20230226144446.824580-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230226144446.824580-1-sashal@kernel.org>
 References: <20230226144446.824580-1-sashal@kernel.org>
@@ -55,45 +52,66 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Oliver Hartkopp <socketcan@hartkopp.net>
+From: Dave Thaler <dthaler@microsoft.com>
 
-[ Upstream commit c6adf659a8ba85913e16a571d5a9bcd17d3d1234 ]
+[ Upstream commit 0eb9d19e2201068260e439a5c96dc85f9f3722a2 ]
 
-Add missing check to block non-AF_CAN binds.
+Fix modulo zero, division by zero, overflow, and underflow. Also clarify how
+a negative immediate value is used in unsigned division.
 
-Syzbot created some code which matched the right sockaddr struct size
-but used AF_XDP (0x2C) instead of AF_CAN (0x1D) in the address family
-field:
-
-bind$xdp(r2, &(0x7f0000000540)={0x2c, 0x0, r4, 0x0, r2}, 0x10)
-                                ^^^^
-This has no funtional impact but the userspace should be notified about
-the wrong address family field content.
-
-Link: https://syzkaller.appspot.com/text?tag=CrashLog&x=11ff9d8c480000
-Reported-by: syzbot+5aed6c3aaba661f5b917@syzkaller.appspotmail.com
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Link: https://lore.kernel.org/all/20230104201844.13168-1-socketcan@hartkopp.net
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Dave Thaler <dthaler@microsoft.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20230124001218.827-1-dthaler1968@googlemail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/can/isotp.c | 3 +++
- 1 file changed, 3 insertions(+)
+ Documentation/bpf/instruction-set.rst | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/net/can/isotp.c b/net/can/isotp.c
-index fc81d77724a13..9bc344851704e 100644
---- a/net/can/isotp.c
-+++ b/net/can/isotp.c
-@@ -1220,6 +1220,9 @@ static int isotp_bind(struct socket *sock, struct sockaddr *uaddr, int len)
- 	if (len < ISOTP_MIN_NAMELEN)
- 		return -EINVAL;
+diff --git a/Documentation/bpf/instruction-set.rst b/Documentation/bpf/instruction-set.rst
+index e672d5ec6cc7b..2d3fe59bd260f 100644
+--- a/Documentation/bpf/instruction-set.rst
++++ b/Documentation/bpf/instruction-set.rst
+@@ -99,19 +99,26 @@ code      value  description
+ BPF_ADD   0x00   dst += src
+ BPF_SUB   0x10   dst -= src
+ BPF_MUL   0x20   dst \*= src
+-BPF_DIV   0x30   dst /= src
++BPF_DIV   0x30   dst = (src != 0) ? (dst / src) : 0
+ BPF_OR    0x40   dst \|= src
+ BPF_AND   0x50   dst &= src
+ BPF_LSH   0x60   dst <<= src
+ BPF_RSH   0x70   dst >>= src
+ BPF_NEG   0x80   dst = ~src
+-BPF_MOD   0x90   dst %= src
++BPF_MOD   0x90   dst = (src != 0) ? (dst % src) : dst
+ BPF_XOR   0xa0   dst ^= src
+ BPF_MOV   0xb0   dst = src
+ BPF_ARSH  0xc0   sign extending shift right
+ BPF_END   0xd0   byte swap operations (see `Byte swap instructions`_ below)
+ ========  =====  ==========================================================
  
-+	if (addr->can_family != AF_CAN)
-+		return -EINVAL;
++Underflow and overflow are allowed during arithmetic operations, meaning
++the 64-bit or 32-bit value will wrap. If eBPF program execution would
++result in division by zero, the destination register is instead set to zero.
++If execution would result in modulo by zero, for ``BPF_ALU64`` the value of
++the destination register is unchanged whereas for ``BPF_ALU`` the upper
++32 bits of the destination register are zeroed.
 +
- 	/* sanitize tx CAN identifier */
- 	if (tx_id & CAN_EFF_FLAG)
- 		tx_id &= (CAN_EFF_FLAG | CAN_EFF_MASK);
+ ``BPF_ADD | BPF_X | BPF_ALU`` means::
+ 
+   dst_reg = (u32) dst_reg + (u32) src_reg;
+@@ -128,6 +135,11 @@ BPF_END   0xd0   byte swap operations (see `Byte swap instructions`_ below)
+ 
+   dst_reg = dst_reg ^ imm32
+ 
++Also note that the division and modulo operations are unsigned. Thus, for
++``BPF_ALU``, 'imm' is first interpreted as an unsigned 32-bit value, whereas
++for ``BPF_ALU64``, 'imm' is first sign extended to 64 bits and the result
++interpreted as an unsigned 64-bit value. There are no instructions for
++signed division or modulo.
+ 
+ Byte swap instructions
+ ~~~~~~~~~~~~~~~~~~~~~~
 -- 
 2.39.0
 
