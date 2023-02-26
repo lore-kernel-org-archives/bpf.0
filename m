@@ -2,35 +2,35 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DFB0BC64ED6
-	for <bpf@archiver.kernel.org>; Sun, 26 Feb 2023 14:47:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D4C0C6FA8E
+	for <bpf@archiver.kernel.org>; Sun, 26 Feb 2023 14:49:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbjBZOrH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 26 Feb 2023 09:47:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43388 "EHLO
+        id S229951AbjBZOtv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 26 Feb 2023 09:49:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbjBZOrF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 26 Feb 2023 09:47:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1B8126C8;
-        Sun, 26 Feb 2023 06:46:29 -0800 (PST)
+        with ESMTP id S229953AbjBZOtN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 26 Feb 2023 09:49:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9195B1FEA;
+        Sun, 26 Feb 2023 06:47:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A13EE60C2D;
-        Sun, 26 Feb 2023 14:45:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1378C433EF;
-        Sun, 26 Feb 2023 14:45:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 17CF3B80BE8;
+        Sun, 26 Feb 2023 14:47:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5B48C433A0;
+        Sun, 26 Feb 2023 14:47:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677422719;
-        bh=CIBDjaRJoMuMfExEyRgKQbnWA1vh/FpEjx1ld84jebs=;
+        s=k20201202; t=1677422842;
+        bh=peWE7c6T0gkLD8MeXmVZAA+YvFj63HxBDgB6XDz+WgE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ByVaD7+suux3+Roipg1g6VtFAZv/AUkxJ9a7gqEJXfP0Ys6/F5atDSkQairiUQLKU
-         1NvwH9p5Qe+lMmHyRRPB5R3qgMWhZuwPfE9mn71x0PZzT6vh9QRfP5gXt/URrh0Amp
-         f6Kh3FmoK83CrtfJvN380tzV2hs3OE+OkyPocLqZM751hqUij06ya1e5S4Ls02C1/p
-         KMutW+PmjAetVA5mON31QNhfOsMGlutrZTFVi+2tUCe1AZdVCHjQ2nVi02jgyYYc5v
-         aiLs9NJD+o9L9MdwFhlxtx0TmCU4LUbNK1MJ/irgI1oEh+kRipBwpjxEuZ3/8jfA0R
-         wzIL1Wly4vfrw==
+        b=VAmIM5VLnJ+vPHd77YAV/xfd+LtXE5BjEMZ4mFI8llMgKet38aKKuCYWy0mhZz5GL
+         48qg5WkCPmvbnw9n1CAsugXpSilMNWrjhfTKbNvJ82wVpxd+CXAWrpvvXHGuVFnmDM
+         tBSZdvRXcb+7oP7mbsNYALtB659Et4kVlsHAsXmlBm2rG1vguQxAsrdk6HirgpseMP
+         2MGpWM3t7u5iw4nGVlCC0aFDRHFrOWvuNNZfwVscThvKW0B6xopfGZuqWDwKsZD7KN
+         CW+k5d9mA9+cPuENgB45ox4/sopevF1s/2i+bFQlWGDOKN52/Nd0gw6kIS7U95ez5d
+         7aFgVex6eeSKg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     =?UTF-8?q?Holger=20Hoffst=C3=A4tte?= 
@@ -40,12 +40,12 @@ Cc:     =?UTF-8?q?Holger=20Hoffst=C3=A4tte?=
         Sasha Levin <sashal@kernel.org>, ast@kernel.org,
         andrii@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
         bpf@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.2 13/53] bpftool: Always disable stack protection for BPF objects
-Date:   Sun, 26 Feb 2023 09:44:05 -0500
-Message-Id: <20230226144446.824580-13-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 13/49] bpftool: Always disable stack protection for BPF objects
+Date:   Sun, 26 Feb 2023 09:46:13 -0500
+Message-Id: <20230226144650.826470-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230226144446.824580-1-sashal@kernel.org>
-References: <20230226144446.824580-1-sashal@kernel.org>
+In-Reply-To: <20230226144650.826470-1-sashal@kernel.org>
+References: <20230226144650.826470-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -97,10 +97,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index f610e184ce02a..270066aff8bf1 100644
+index 4a95c017ad4ce..a3794b3416014 100644
 --- a/tools/bpf/bpftool/Makefile
 +++ b/tools/bpf/bpftool/Makefile
-@@ -215,7 +215,8 @@ $(OUTPUT)%.bpf.o: skeleton/%.bpf.c $(OUTPUT)vmlinux.h $(LIBBPF_BOOTSTRAP)
+@@ -187,7 +187,8 @@ $(OUTPUT)%.bpf.o: skeleton/%.bpf.c $(OUTPUT)vmlinux.h $(LIBBPF_BOOTSTRAP)
  		-I$(or $(OUTPUT),.) \
  		-I$(srctree)/tools/include/uapi/ \
  		-I$(LIBBPF_BOOTSTRAP_INCLUDE) \
