@@ -2,96 +2,98 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6B30C64ED6
-	for <bpf@archiver.kernel.org>; Sun, 26 Feb 2023 22:09:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38F31C64ED8
+	for <bpf@archiver.kernel.org>; Mon, 27 Feb 2023 04:02:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbjBZWJq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 26 Feb 2023 17:09:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57996 "EHLO
+        id S229673AbjB0EC1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 26 Feb 2023 23:02:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjBZWJp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 26 Feb 2023 17:09:45 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C52BD334
-        for <bpf@vger.kernel.org>; Sun, 26 Feb 2023 14:09:43 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id k37so3160058wms.0
-        for <bpf@vger.kernel.org>; Sun, 26 Feb 2023 14:09:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9F6Q4qv0aGwZl4/0HKoqtVCSHTUgp/9NrmhTdo3rp0c=;
-        b=ZZNpYletnTDZobGUMqji31l5JllfTvVe+sA2PthTMflmb79aKK5eEI5uLDgrHzkOlt
-         srStBbXFTaFKwE87beVZlTiWPKcI7C15qltQovAuslKWPyWqsLkZnazAMKeNeaahFtm+
-         8Fbo5OoTYDqM+6RuC/VQBjTpEnrzQn2L95zRqJrHb0W5VMNuCvqTKla2nATW7EhKUkDY
-         1Fgch06nglZD6l5axlzZpqHCbqBzTaBHoP5DiEl41IhGe0w6g/n26KSjaoe3JwqqwXa4
-         2QC/pIXl2sIyPBSBqTXUx5MkTPg+T/mA0MCxC6oaVYjag0ayV+4kQIxkxh5lixaQ4dQQ
-         TArw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9F6Q4qv0aGwZl4/0HKoqtVCSHTUgp/9NrmhTdo3rp0c=;
-        b=VBHnbeMkjQxz3x6/C7agSYAcivDFNx38GwfEvC/0MbwCHqV0YmJF2qXN/vKClcaD5w
-         oNlKJhIMTFRDI7dqCPCRSWG4kBgSHGzrKRS7ve5NHjBTaqc+I7BQ8NaF6c+UCzR8wJxB
-         a9BX2aRHCMyfyrn0kFwZAxBfeo5K8LDrhco/ZT8ybO3eLy/9sUMT6Lglae4f5UZQ+pIH
-         xiq6dwy/+8XY2Im/u+kv7YREXfsisvGvRrbZqJPejv0/wlyiD0Uj1EXA4/yTAgQ0e3oU
-         iri6PvAUplDZtDuILeuMJroOJG6JHVkS8eyujDLxf1TuLr/n3IwU2jTLp33wBwQSXw1Y
-         +9pg==
-X-Gm-Message-State: AO0yUKVE8ggGP1Nw/xZ6cLRhuuj5BXZn/9VzYBEP73SA1CDcgvqoL+6w
-        Ij+7tW5Qq7igP+g0ezHlf1MLaw==
-X-Google-Smtp-Source: AK7set9JMtwxprxeg42jpe0jd+BgkbKcizuYpRssru9YxEFMP/olBGkczJqBJdd/Tn2DyUYtG5IQxw==
-X-Received: by 2002:a05:600c:a694:b0:3da:1f6a:7b36 with SMTP id ip20-20020a05600ca69400b003da1f6a7b36mr19420725wmb.0.1677449382002;
-        Sun, 26 Feb 2023 14:09:42 -0800 (PST)
-Received: from [192.168.1.115] ([185.126.107.38])
-        by smtp.gmail.com with ESMTPSA id i11-20020a05600c354b00b003eb2e685c7dsm8015131wmq.9.2023.02.26.14.09.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Feb 2023 14:09:41 -0800 (PST)
-Message-ID: <8529a744-721e-218d-7a4c-cbb523a1fc1d@linaro.org>
-Date:   Sun, 26 Feb 2023 23:09:40 +0100
+        with ESMTP id S229545AbjB0EC1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 26 Feb 2023 23:02:27 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9022A6191;
+        Sun, 26 Feb 2023 20:02:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=rVCFfG34g/WE/rnUnoiZ4Lna9s5O0AAu7j3OeDnj9L4=; b=DzaQarNAyLZUenxV6//dW/nymU
+        f7svDqPp280gY88hN3PJnfynZDM11JGqfAy8Zv5krCO0hMPzO7fBHEXzv5QFt64FffMZyE8dOVh+E
+        jb+x60/ge5tK1gRhOIxe0eZDW8UQWVYfjwJTcV5HHQprfQ+gAJTH6rlDpS8hST/N/9GRw/UYgGP4i
+        KPDU3vc2ZKhLxWtu1CVoCoT2dfYL20oISnO2LPYse0sAJ/NPk4JzCGSfWVKRTu1SCBbmrdIF7AcVl
+        CG+y3M4panJdjv8CMxusklu+fXR5qmg7mhIK+7i/p3RbYWq8ZiBuGkDcY6ORZkYdWlFX/WzAv69A9
+        EdJ8baGQ==;
+Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pWUiU-008PEf-VI; Mon, 27 Feb 2023 04:02:23 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Pu Lehui <pulehui@huawei.com>,
+        Luke Nelson <luke.r.nels@gmail.com>,
+        Xi Wang <xi.wang@gmail.com>, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH bpf-next] riscv, bpf: fix patch_text implicit declaration
+Date:   Sun, 26 Feb 2023 20:02:21 -0800
+Message-Id: <20230227040221.15442-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH 2/2] MIPS: ebpf jit: Implement R4000 workarounds
-Content-Language: en-US
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
-        johan.almbladh@anyfinetworks.com, paulburton@kernel.org,
-        bpf@vger.kernel.org
-References: <20230222161222.11879-1-jiaxun.yang@flygoat.com>
- <20230222161222.11879-3-jiaxun.yang@flygoat.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230222161222.11879-3-jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 22/2/23 17:12, Jiaxun Yang wrote:
-> For R4000 erratas around multiplication and division instructions,
-> as our use of those instructions are always followed by mflo/mfhi
-> instructions, the only issue we need care is
-> 
-> "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0" Errata 28:
-> "A double-word or a variable shift may give an incorrect result if
-> executed while an integer multiplication is in progress."
-> 
-> We just emit a mfhi $0 to ensure the operation is completed after
-> every multiplication instruction accorading to workaround suggestion
+bpf_jit_comp64.c uses patch_text(), so add it to a local header file
+to prevent the build error:
 
-Typo "according"
+../arch/riscv/net/bpf_jit_comp64.c: In function 'bpf_arch_text_poke':
+../arch/riscv/net/bpf_jit_comp64.c:691:23: error: implicit declaration of function 'patch_text'; did you mean 'path_get'? [-Werror=implicit-function-declaration]
+  691 |                 ret = patch_text(ip, new_insns, ninsns);
+      |                       ^~~~~~~~~~
 
-> in the document.
-> 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
->   arch/mips/Kconfig              | 4 +---
->   arch/mips/net/bpf_jit_comp32.c | 4 ++++
->   arch/mips/net/bpf_jit_comp64.c | 3 +++
->   3 files changed, 8 insertions(+), 3 deletions(-)
+Fixes: 596f2e6f9cf4 ("riscv, bpf: Add bpf_arch_text_poke support for RV64")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/r/202302271000.Aj4nMXbZ-lkp@intel.com
+Cc: Pu Lehui <pulehui@huawei.com>
+Cc: Luke Nelson <luke.r.nels@gmail.com>
+Cc: Xi Wang <xi.wang@gmail.com>
+Cc: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Albert Ou <aou@eecs.berkeley.edu>
+Cc: "Björn Töpel" <bjorn@kernel.org>
+Cc: linux-riscv@lists.infradead.org
+---
+What is the proper path to have this merged soon to stop build
+errors?
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+ arch/riscv/net/bpf_jit.h |    1 +
+ 1 file changed, 1 insertion(+)
 
+diff -- a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
+--- a/arch/riscv/net/bpf_jit.h
++++ b/arch/riscv/net/bpf_jit.h
+@@ -12,6 +12,7 @@
+ #include <linux/bpf.h>
+ #include <linux/filter.h>
+ #include <asm/cacheflush.h>
++#include <asm/patch.h>
+ 
+ static inline bool rvc_enabled(void)
+ {
