@@ -2,129 +2,113 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78370C64ED8
-	for <bpf@archiver.kernel.org>; Mon, 27 Feb 2023 23:02:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0021C64ED9
+	for <bpf@archiver.kernel.org>; Mon, 27 Feb 2023 23:03:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbjB0XCN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Feb 2023 18:02:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49744 "EHLO
+        id S230022AbjB0XDw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Feb 2023 18:03:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbjB0XCL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 27 Feb 2023 18:02:11 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F7225953
-        for <bpf@vger.kernel.org>; Mon, 27 Feb 2023 15:02:09 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 1FE8632009B2;
-        Mon, 27 Feb 2023 18:02:09 -0500 (EST)
-Received: from imap42 ([10.202.2.92])
-  by compute1.internal (MEProxy); Mon, 27 Feb 2023 18:02:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1677538928; x=1677625328; bh=R96LQlv1vR70+5TPDcH/Kwf8wTOl/FYb7u1
-        LEZx6w+I=; b=coDW07OPK3s9BNY3s0xccSPdH+N5LzX3TtkFez2Ty4MwDTcgjs+
-        xDoNhZ1ktshgBCXwALNpTZn+hxzHqvHXyFFtqHjAwaHHVwE+RlDfCCx4nhN9e9hX
-        mnVzf8zul9cv0FzjkrWJrtDCS5ofJdUgy2FmtJgx0FAzDIEUBScMWWAMVvNS0+1E
-        vV7+A2Y24OnmLMpmQNVfirvlTZFMVW35zKLKx7edoHO3Yvxv1ryLVXnDK3Zy8Zx6
-        KI85rJ2H7sOLTZmv0KQ1IUbsXyR5YjKJjaxdTz/DU+Losa3nMCY/jjmjpKCfUVIF
-        0iYVlI1FUFR79z8R5+2XUqXBt9uwvKHXr8g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:message-id:mime-version
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1677538928; x=
-        1677625328; bh=R96LQlv1vR70+5TPDcH/Kwf8wTOl/FYb7u1LEZx6w+I=; b=h
-        rL4jjNipfUtq/h4WSbMF/n1RwI+hJFDLwUrRz+TjbT0H/YEsL0g1xRzeI3DTzp11
-        qqZSnnjvsfu3aLd3K+RtrOtQ1lyK1Qdr6FfBm8gpA6E37QejWFjhRfMhZKY6DQj0
-        41BA/9qnhGLZNEbszwzzjYh1oEL4T6wQBDQk7RgOUMFCKYfK49EC2KYGJ4uok6Gg
-        NVvtN0naP0DMRoyn3VrpVIwCusjtyd+q/9oGb2mB95BFXK6Ki/T9w5ynhf4ASimP
-        8WbCNqMwFz82hsRkZlaTWEjdWDLcW+Zcz0RXe8r2aQTxkvmc+PyU+cW3O/9UqHCA
-        28SnKWoOapnImgJxJRH9Q==
-X-ME-Sender: <xms:cDb9Y-ij0GQjB7mtGjoYKG5qOVAsYDWOstDo11wDGx2tqTJUTzptHw>
-    <xme:cDb9Y_BV7vExWZKpgX5-M5WELHArL6fJTaIV5yK57H3Iw-iaFgXAvoN9kDmeLX4fZ
-    Q5A3fgZswtHp6j1bw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeluddgtdehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlfeehmdenucfjughrpefofg
-    ggkfffhffvvefutgesthdtredtreertdenucfhrhhomhepfdffrghnihgvlhcuighufdcu
-    oegugihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpeeifffgteduheette
-    fhheeiffefffdtleduvefggefhgeehffekjeeuhedugfeiieenucffohhmrghinhepghhi
-    thhhuhgsrdgtohhmpdhruhhnqdhtvghsthhsrdhshhdprhhunhdrshhhpdhvmhhtvghsth
-    drshhhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhep
-    ugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:cDb9Y2GPUHRYbYh7LeqEOixTGfJR_KTs1LgLKWIPk0GDm9y1tz3Dyw>
-    <xmx:cDb9Y3SebXd6cj-vctjV8qrPwfhTlKWi5WvCo5OLCJc97GKOdGLCQQ>
-    <xmx:cDb9Y7xzPD2oJ7JTNyd0lY2jBPrK9ekuTPEEU3aoCzL0W4re8V79EA>
-    <xmx:cDb9Y8tWjSL7cO9WxH8v8xmazDfQwXjwJDEvdS1rIiMA2QqtOTwhXg>
-Feedback-ID: i6a694271:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 525A9BC007C; Mon, 27 Feb 2023 18:02:08 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
-Mime-Version: 1.0
-Message-Id: <f1ea109c-5f07-4734-83f5-12c4252fa5ae@app.fastmail.com>
-Date:   Mon, 27 Feb 2023 16:01:48 -0700
-From:   "Daniel Xu" <dxu@dxuuu.xyz>
-To:     lsf-pc@lists.linux-foundation.org
-Cc:     bpf@vger.kernel.org
-Subject: [LSF/MM/BPF TOPIC] vmtest: Reusable virtual machine testing infrastructure
-Content-Type: text/plain
+        with ESMTP id S229823AbjB0XDv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 27 Feb 2023 18:03:51 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 428AB15177;
+        Mon, 27 Feb 2023 15:03:42 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id m3-20020a17090ade0300b00229eec90a7fso305408pjv.0;
+        Mon, 27 Feb 2023 15:03:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=U5BrsfedqjmcNewid3MjJRJMLrBkItr7J+vimPIv1pY=;
+        b=V/LtQcsdtnwLA3l1X7Sdb/bUYGoRaqPEWOOnRpbxO8W0mqIJ3lp1UgHXkxS9fbVw5i
+         j7aVefIdFw/NOAFs8Xp3RwleoABcucy2UaxE2tV5lYAZ2t7336Xbpe4yGYKtbVgIr7dp
+         Dc2c5Ca7J0BJF5c6VwAJVG/PWen77oiV9IONT+qggSUwAon9zNKvApMJxlJDa1pkAV3q
+         8fOAnaqQGGq1Culmq7DkKUF0ziTmDxko7bhsXj0jXUzwGU98pSiR65easXpMeeF8iQwS
+         wAYY3E6Uox3dZ5fCPxzjrDT32kmSoCWqFb43niD0ith/h6C6bcFGXWglm2uMQerCAdIn
+         7zIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U5BrsfedqjmcNewid3MjJRJMLrBkItr7J+vimPIv1pY=;
+        b=HM7wVjNLvLLQjwirObHUbRfxGLORMRNRt6D8fWs4GLzC9VC1ARspj4xDaflcTQmkme
+         /BzvwJs72F7PkNfwVuJVsIEqKa51OMgzb6b4sZkbVIponUW+QDp2k62dd126LO8tXBqn
+         k/5ZBGkJ/C3YED0s/riiZdlylNwJh7CP/QRQ/YBrIrHKCHiUUX7m6vfrtagRakhtplHp
+         vFtTHShivqD5gbdn53k7QzaZUeGZDYddFAj3M14Ef4B2RREDQRvKYbkfCLxOyJiZSlnS
+         2gShFbreHKP/Akuwn3v6C+EsmsA4cLYWBA2KkmQq1APTQumBXGT39enakaQIFWhzwXNY
+         vptQ==
+X-Gm-Message-State: AO0yUKVAqHwqPUIYm9p8LFn8CoO2w9HJm7Vq6Dh4bwS0F7nYAZtuw7xE
+        70ENL+GLviePOzLGf9ZCa1dZ71qEZkI=
+X-Google-Smtp-Source: AK7set/YQVhyFkanAp+++PRcsHvqrcIDF3t+kktsniJCQQU91v5eweHfCGPjixWj04TDVueYehbweg==
+X-Received: by 2002:a17:902:e741:b0:19c:f1f7:681f with SMTP id p1-20020a170902e74100b0019cf1f7681fmr787393plf.9.1677539021449;
+        Mon, 27 Feb 2023 15:03:41 -0800 (PST)
+Received: from MacBook-Pro-6.local ([2620:10d:c090:400::5:6245])
+        by smtp.gmail.com with ESMTPSA id p12-20020a170902eacc00b0019896d29197sm5082714pld.46.2023.02.27.15.03.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 15:03:40 -0800 (PST)
+Date:   Mon, 27 Feb 2023 15:03:38 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Daniel Xu <dxu@dxuuu.xyz>
+Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 0/8] Support defragmenting IPv(4|6) packets
+ in BPF
+Message-ID: <20230227230338.awdzw57e4uzh4u7n@MacBook-Pro-6.local>
+References: <cover.1677526810.git.dxu@dxuuu.xyz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1677526810.git.dxu@dxuuu.xyz>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-=== Introduction ===
+On Mon, Feb 27, 2023 at 12:51:02PM -0700, Daniel Xu wrote:
+> === Context ===
+> 
+> In the context of a middlebox, fragmented packets are tricky to handle.
+> The full 5-tuple of a packet is often only available in the first
+> fragment which makes enforcing consistent policy difficult. There are
+> really only two stateless options, neither of which are very nice:
+> 
+> 1. Enforce policy on first fragment and accept all subsequent fragments.
+>    This works but may let in certain attacks or allow data exfiltration.
+> 
+> 2. Enforce policy on first fragment and drop all subsequent fragments.
+>    This does not really work b/c some protocols may rely on
+>    fragmentation. For example, DNS may rely on oversized UDP packets for
+>    large responses.
+> 
+> So stateful tracking is the only sane option. RFC 8900 [0] calls this
+> out as well in section 6.3:
+> 
+>     Middleboxes [...] should process IP fragments in a manner that is
+>     consistent with [RFC0791] and [RFC8200]. In many cases, middleboxes
+>     must maintain state in order to achieve this goal.
+> 
+> === BPF related bits ===
+> 
+> However, when policy is enforced through BPF, the prog is run before the
+> kernel reassembles fragmented packets. This leaves BPF developers in a
+> awkward place: implement reassembly (possibly poorly) or use a stateless
+> method as described above.
+> 
+> Fortunately, the kernel has robust support for fragmented IP packets.
+> This patchset wraps the existing defragmentation facilities in kfuncs so
+> that BPF progs running on middleboxes can reassemble fragmented packets
+> before applying policy.
+> 
+> === Patchset details ===
+> 
+> This patchset is (hopefully) relatively straightforward from BPF perspective.
+> One thing I'd like to call out is the skb_copy()ing of the prog skb. I
+> did this to maintain the invariant that the ctx remains valid after prog
+> has run. This is relevant b/c ip_defrag() and ip_check_defrag() may
+> consume the skb if the skb is a fragment.
 
-Testing is paradoxically one of BPF's great strengths as well as one of it's
-current weaknesses. Fortunately, this weakness is not too far from being
-corrected.
-
-BPF_PROG_RUN is somewhat of a double edged sword. On the one hand, you can run
-reproducibly run progs in near-production context. On the other hand, since BPF
-is so deeply intertwined with the running kernel, you must make the kernel you
-run tests on as close to your production kernel as possible to get full testing
-benefits.
-
-This is going to be more of an issue going forward through the growth of kfuncs
-because kfuncs do not possess a stable ABI [5]. Proper testing should be
-encouraged at a community-wide level in order to avoid accidental surprises and
-potential loss of faith in BPF "stability".
-
-Most successful kernel-dependent projects deploy some form of
-virtual-machine-based testing [1][2][3][4] to solve the above issues. However,
-there are two problems with this:
-
-1. VM-based testing is not quite common knowledge yet and remains somewhat of
-   a dark art to successfully implement.
-
-2. Multiple implementations of what is essentially the same thing is somewhat
-   of a drain on resources.
-
-(These are not necessarily bad things -- it is useful and necessary to explore a
-problem space before settling on best practices)
-
-vmtest [0] aims to solve both problems.
-
-=== Goals ===
-
-I'd like to do a short presentation on the design and ideas behind vmtest. I'd
-also like to show a quick demo. It shouldn't take very long. I'll probably
-also share what I'd like to implement next. I don't know what that's going
-to be at time of writing b/c I'm probably going to get to it before LSFMMBPF.
-
-For the rest of the time I'd like to discuss what the community would like to
-see in vmtest. And to hear what it'd take to see adoption from other projects.
-Obviously no one can be required to adopt vmtest but I think it'll save everyone
-a good deal of effort if done correctly.
-
-Thanks,
-Daniel
-
-
-[0]: https://github.com/danobi/vmtest
-[1]: https://github.com/cilium/ebpf/blob/master/run-tests.sh
-[2]: https://github.com/osandov/drgn/tree/main/vmtest
-[3]: https://github.com/libbpf/ci/blob/master/run-qemu/run.sh
-[4]: https://github.com/torvalds/linux/blob/master/tools/testing/selftests/bpf/vmtest.sh
-[5]: https://github.com/torvalds/linux/commit/16c294a6aad86
+Instead of doing all that with extra skb copy can you hook bpf prog after
+the networking stack already handled ip defrag?
+What kind of middle box are you doing? Why does it have to run at TC layer?
