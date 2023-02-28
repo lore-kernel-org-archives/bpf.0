@@ -2,77 +2,66 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E20DC64EC7
-	for <bpf@archiver.kernel.org>; Tue, 28 Feb 2023 16:46:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 642DAC64EC7
+	for <bpf@archiver.kernel.org>; Tue, 28 Feb 2023 16:58:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbjB1QqD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Feb 2023 11:46:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37266 "EHLO
+        id S229540AbjB1Q6M (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Feb 2023 11:58:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjB1QqC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Feb 2023 11:46:02 -0500
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2316034C03;
-        Tue, 28 Feb 2023 08:45:57 -0800 (PST)
-Received: by mail-qv1-f52.google.com with SMTP id nv15so7265796qvb.7;
-        Tue, 28 Feb 2023 08:45:57 -0800 (PST)
+        with ESMTP id S229580AbjB1Q6L (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Feb 2023 11:58:11 -0500
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E203360A6;
+        Tue, 28 Feb 2023 08:57:42 -0800 (PST)
+Received: by mail-qv1-xf31.google.com with SMTP id ks17so7298486qvb.6;
+        Tue, 28 Feb 2023 08:57:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
          :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LYVO48FXas9roeOJnyiiq+0n+H4awkY5GZrrWNRYNF0=;
-        b=2I4bxxqFbFu7q/PsAyTElTZR/eQQlYTjSeyXufZn0ub/sYCjQn0iRIXh8WX+KaaF3A
-         vm1DyVb+Fn1gLU5XA2+Bm1ol/ee80xne4il2oAsutIN0NKO8q9uM3e61Yb5iQhTTtg0p
-         DDto++3ue+bTJNPEKKGU8ndC1zAIlBzfcsj6icTaJlblmxaM1l4GSSU9+6cdeFRaBE6K
-         m3Neg32+Vak6SXAkxydEhk/CGmlotU1DxBxldbXW0g/A4DQ2+Te61klHu65+UyuvDw8J
-         74CPRjCgWg9+VGp8x4NODhOztZJBvCTnXREbDeBsFFD7n+g/1kjSS7TNTtSXCjc7cMd4
-         HLUg==
-X-Gm-Message-State: AO0yUKXsQ7NExMRUtGB7SjKT8XM4y4QjeooDjeVrHalcfowtLI3McKgl
-        s/0GYLHRV6vVku+D5qS6XkA=
-X-Google-Smtp-Source: AK7set+Hs0hpd1ZNKXTBvr7aHFo+ekwRQK23UYef40SCMeUIPBk/GIbSWc3wULRdW0oyhCoeTUVYTg==
-X-Received: by 2002:a05:6214:cad:b0:56b:f47b:1cd2 with SMTP id s13-20020a0562140cad00b0056bf47b1cd2mr7496153qvs.41.1677602756014;
-        Tue, 28 Feb 2023 08:45:56 -0800 (PST)
+        bh=Xi93O+rRn4aRd4H/aiNOFHakc7MP7cPv7/dMUnMwCRE=;
+        b=OZ9QL7iVs5apLmxkwJBLKGWwcjtG/84ZZMDk8n31Xx4lYc4DTGrWt4Ov4YkcbfE8c/
+         jTy1P/JslbA6fpkIxPk5Dx6sxQaT9krYQjCDnvozsJkwFwUKW4dxXMLQI+e/AaSQv6VR
+         SIx0QN914VoUmczSTbcGkWo+Th/0MrFr7pkjljsyVjZBFUA1Nr+FNUolm+Xq6AVdJHw6
+         6a/eOG6qC5yEWUKEsV6WhBUc1GjFRgozTglpgGTEAx/wVRlJ180PqiH8y+DrDzQKVsXb
+         21Igh8/A7IU/wmx3j33zfKbmlBH4oQe1A+Nd3/3xGm2hzs/jSVS+wZCCCdYs46+DWpDk
+         SnpA==
+X-Gm-Message-State: AO0yUKUyt1CkkN8++A/BtBSJ0wUVHKy9dow3vBd6KJmRunGbTvJqA6GG
+        kUP5pby8y94kf9vjk4YowaHV9DEGVxvi9ywm
+X-Google-Smtp-Source: AK7set/gEFAjQcgfZ/eiWt/jHtwc2ppbuYygxK6z4rCCKDWtHnj4jmYn1Se4HaFs1lbhiKUXMZ2Fqw==
+X-Received: by 2002:a05:6214:29e9:b0:56b:fa99:7866 with SMTP id jv9-20020a05621429e900b0056bfa997866mr5927742qvb.7.1677603161327;
+        Tue, 28 Feb 2023 08:52:41 -0800 (PST)
 Received: from maniforge ([2620:10d:c091:480::1:f172])
-        by smtp.gmail.com with ESMTPSA id bl32-20020a05620a1aa000b007423e52f9d2sm7122602qkb.71.2023.02.28.08.45.54
+        by smtp.gmail.com with ESMTPSA id n76-20020a37404f000000b0071aacb2c76asm6962499qka.132.2023.02.28.08.52.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 08:45:55 -0800 (PST)
-Date:   Tue, 28 Feb 2023 10:45:53 -0600
+        Tue, 28 Feb 2023 08:52:40 -0800 (PST)
+Date:   Tue, 28 Feb 2023 10:52:38 -0600
 From:   David Vernet <void@manifault.com>
 To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc:     davem@davemloft.net, daniel@iogearbox.net, andrii@kernel.org,
         martin.lau@kernel.org, davemarchevsky@meta.com, tj@kernel.org,
         memxor@gmail.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
         kernel-team@fb.com
-Subject: Re: [PATCH v3 bpf-next 2/5] bpf: Mark cgroups and dfl_cgrp fields as
- trusted.
-Message-ID: <Y/4vwaGKhZdLPTL3@maniforge>
+Subject: Re: [PATCH v3 bpf-next 4/5] selftests/bpf: Add a test case for
+ kptr_rcu.
+Message-ID: <Y/4xVnKxyB7ovsEF@maniforge>
 References: <20230228040121.94253-1-alexei.starovoitov@gmail.com>
- <20230228040121.94253-3-alexei.starovoitov@gmail.com>
+ <20230228040121.94253-5-alexei.starovoitov@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230228040121.94253-3-alexei.starovoitov@gmail.com>
+In-Reply-To: <20230228040121.94253-5-alexei.starovoitov@gmail.com>
 User-Agent: Mutt/2.2.9 (2022-11-12)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 08:01:18PM -0800, Alexei Starovoitov wrote:
+On Mon, Feb 27, 2023 at 08:01:20PM -0800, Alexei Starovoitov wrote:
 > From: Alexei Starovoitov <ast@kernel.org>
 > 
-> bpf programs sometimes do:
-> bpf_cgrp_storage_get(&map, task->cgroups->dfl_cgrp, ...);
-> It is safe to do, because cgroups->dfl_cgrp pointer is set diring init and
-> never changes. The task->cgroups is also never NULL. It is also set during init
-> and will change when task switches cgroups. For any trusted task pointer
-> dereference of cgroups and dfl_cgrp should yield trusted pointers. The verifier
-> wasn't aware of this. Hence in gcc compiled kernels task->cgroups dereference
-> was producing PTR_TO_BTF_ID without modifiers while in clang compiled kernels
-> the verifier recognizes __rcu tag in cgroups field and produces
-> PTR_TO_BTF_ID | MEM_RCU | MAYBE_NULL.
-> Tag cgroups and dfl_cgrp as trusted to equalize clang and gcc behavior.
-> When GCC supports btf_type_tag such tagging will done directly in the type.
+> Tweak existing map_kptr test to check kptr_rcu.
 > 
 > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
