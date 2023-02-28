@@ -2,101 +2,254 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD426C64ED6
-	for <bpf@archiver.kernel.org>; Tue, 28 Feb 2023 12:03:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 977ADC64EC7
+	for <bpf@archiver.kernel.org>; Tue, 28 Feb 2023 12:28:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbjB1MDH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Feb 2023 07:03:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60326 "EHLO
+        id S231295AbjB1M2Z (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Feb 2023 07:28:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231197AbjB1MDG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Feb 2023 07:03:06 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B290B44A;
-        Tue, 28 Feb 2023 04:03:03 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8AxYeV27f1jVXUGAA--.6664S3;
-        Tue, 28 Feb 2023 20:03:02 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxnb517f1jiuVAAA--.55379S2;
-        Tue, 28 Feb 2023 20:03:02 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S229534AbjB1M2Y (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Feb 2023 07:28:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66CE42CFE5
+        for <bpf@vger.kernel.org>; Tue, 28 Feb 2023 04:27:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677587264;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Xrt2lzeyH43WzQREJXk6sDR/6AJhIDCk1Pq87tSSc2M=;
+        b=cvBsfNPoyfCxgO1Y6dpDoSd1cEjFKFN12Gq9w6/MnwHKW7HyzMM6xjZvLCv4B92ngMN1kr
+        xgPsiQfLArsiaaj3CNgbCc3SeSJxxug96B147H4KGTatFlBZBxSHLJEzr0Fx69ImTXZzPY
+        gqTuaqdfFQUXNPdz9e1yZGY5Yw2FsfA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-52-HDex2ul1PWyzjFmlxaCc0w-1; Tue, 28 Feb 2023 07:27:39 -0500
+X-MC-Unique: HDex2ul1PWyzjFmlxaCc0w-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CF53E857F40;
+        Tue, 28 Feb 2023 12:27:38 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.45.224.210])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1A3B12166B26;
+        Tue, 28 Feb 2023 12:27:35 +0000 (UTC)
+From:   Viktor Malik <vmalik@redhat.com>
+To:     bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v3] selftests/bpf: Set __BITS_PER_LONG if target is bpf for LoongArch
-Date:   Tue, 28 Feb 2023 20:03:01 +0800
-Message-Id: <1677585781-21628-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf8Cxnb517f1jiuVAAA--.55379S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7Aw1UGr13KF48ArWrJF47urg_yoW8uFWDpF
-        yrC342kFW0gFW3Kwn7Ar4j9F1ftwn5Kr4UAFsIg34vqFs8J34xJws7GFykXFnIgrWSkFn8
-        Z3W3Kay3ua18CwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b78YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I2
-        62IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4
-        CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvj
-        eVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxV
-        CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
-        6r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
-        WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG
-        6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_Gr
-        UvcSsGvfC2KfnxnUUI43ZEXa7IU1EksDUUUUU==
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Viktor Malik <vmalik@redhat.com>
+Subject: [PATCH bpf-next v9 2/2] bpf/selftests: Test fentry attachment to shadowed functions
+Date:   Tue, 28 Feb 2023 13:27:25 +0100
+Message-Id: <d86cc73821fb0b80dea86c4def2a4e42843977cd.1677583941.git.vmalik@redhat.com>
+In-Reply-To: <cover.1677583941.git.vmalik@redhat.com>
+References: <cover.1677583941.git.vmalik@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-If target is bpf, there is no __loongarch__ definition, __BITS_PER_LONG
-defaults to 32, __NR_nanosleep is not defined:
+Adds a new test that tries to attach a program to fentry of two
+functions of the same name, one located in vmlinux and the other in
+bpf_testmod.
 
-  #if defined(__ARCH_WANT_TIME32_SYSCALLS) || __BITS_PER_LONG != 32
-  #define __NR_nanosleep 101
-  __SC_3264(__NR_nanosleep, sys_nanosleep_time32, sys_nanosleep)
-  #endif
+To avoid conflicts with existing tests, a new function
+"bpf_fentry_shadow_test" was created both in vmlinux and in bpf_testmod.
 
-Work around this problem, by explicitly setting __BITS_PER_LONG to
-__loongarch_grlen which is defined by compiler as 64 for LA64, then
-__NR_nanosleep can also be defined to fix the following build errors:
+The previous commit fixed a bug which caused this test to fail. The
+verifier would always use the vmlinux function's address as the target
+trampoline address, hence trying to create two trampolines for a single
+address, which is forbidden.
 
-  clang  -g -Werror ... -target bpf -c progs/test_vmlinux.c ...
-  progs/test_vmlinux.c:24:18: error: use of undeclared identifier '__NR_nanosleep'
-          if (args->id != __NR_nanosleep)
-                          ^
-  progs/test_vmlinux.c:42:12: error: use of undeclared identifier '__NR_nanosleep'
-          if (id != __NR_nanosleep)
-                    ^
-  progs/test_vmlinux.c:60:12: error: use of undeclared identifier '__NR_nanosleep'
-          if (id != __NR_nanosleep)
-                    ^
-  3 errors generated.
-
-This is similar with commit 36e70b9b06bf ("selftests, bpf: Fix broken
-riscv build").
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Signed-off-by: Viktor Malik <vmalik@redhat.com>
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 ---
- tools/testing/selftests/bpf/Makefile | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/bpf/test_run.c                            |   5 +
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   |   6 +
+ .../bpf/prog_tests/module_attach_shadow.c     | 128 ++++++++++++++++++
+ 3 files changed, 139 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/module_attach_shadow.c
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index b677dcd..f40606a 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -338,7 +338,8 @@ $(RESOLVE_BTFIDS): $(HOST_BPFOBJ) | $(HOST_BUILD_DIR)/resolve_btfids	\
- define get_sys_includes
- $(shell $(1) $(2) -v -E - </dev/null 2>&1 \
- 	| sed -n '/<...> search starts here:/,/End of search list./{ s| \(/.*\)|-idirafter \1|p }') \
--$(shell $(1) $(2) -dM -E - </dev/null | grep '__riscv_xlen ' | awk '{printf("-D__riscv_xlen=%d -D__BITS_PER_LONG=%d", $$3, $$3)}')
-+$(shell $(1) $(2) -dM -E - </dev/null | grep '__riscv_xlen ' | awk '{printf("-D__riscv_xlen=%d -D__BITS_PER_LONG=%d", $$3, $$3)}') \
-+$(shell $(1) $(2) -dM -E - </dev/null | grep '__loongarch_grlen ' | awk '{printf("-D__BITS_PER_LONG=%d", $$3)}')
- endef
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 6f3d654b3339..aa3a4e6ba701 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -560,6 +560,11 @@ long noinline bpf_kfunc_call_test4(signed char a, short b, int c, long d)
+ 	return (long)a + (long)b + (long)c + d;
+ }
  
- # Determine target endianness.
++int noinline bpf_fentry_shadow_test(int a)
++{
++	return a + 1;
++}
++
+ struct prog_test_member1 {
+ 	int a;
+ };
+diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+index 46500636d8cd..c478b14fdea1 100644
+--- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+@@ -229,6 +229,12 @@ static const struct btf_kfunc_id_set bpf_testmod_kfunc_set = {
+ 	.set   = &bpf_testmod_check_kfunc_ids,
+ };
+ 
++noinline int bpf_fentry_shadow_test(int a)
++{
++	return a + 2;
++}
++EXPORT_SYMBOL_GPL(bpf_fentry_shadow_test);
++
+ extern int bpf_fentry_test1(int a);
+ 
+ static int bpf_testmod_init(void)
+diff --git a/tools/testing/selftests/bpf/prog_tests/module_attach_shadow.c b/tools/testing/selftests/bpf/prog_tests/module_attach_shadow.c
+new file mode 100644
+index 000000000000..c7636e18b1eb
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/module_attach_shadow.c
+@@ -0,0 +1,128 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2022 Red Hat */
++#include <test_progs.h>
++#include <bpf/btf.h>
++#include "bpf/libbpf_internal.h"
++#include "cgroup_helpers.h"
++
++static const char *module_name = "bpf_testmod";
++static const char *symbol_name = "bpf_fentry_shadow_test";
++
++static int get_bpf_testmod_btf_fd(void)
++{
++	struct bpf_btf_info info;
++	char name[64];
++	__u32 id = 0, len;
++	int err, fd;
++
++	while (true) {
++		err = bpf_btf_get_next_id(id, &id);
++		if (err) {
++			log_err("failed to iterate BTF objects");
++			return err;
++		}
++
++		fd = bpf_btf_get_fd_by_id(id);
++		if (fd < 0) {
++			if (errno == ENOENT)
++				continue; /* expected race: BTF was unloaded */
++			err = -errno;
++			log_err("failed to get FD for BTF object #%d", id);
++			return err;
++		}
++
++		len = sizeof(info);
++		memset(&info, 0, sizeof(info));
++		info.name = ptr_to_u64(name);
++		info.name_len = sizeof(name);
++
++		err = bpf_obj_get_info_by_fd(fd, &info, &len);
++		if (err) {
++			err = -errno;
++			log_err("failed to get info for BTF object #%d", id);
++			close(fd);
++			return err;
++		}
++
++		if (strcmp(name, module_name) == 0)
++			return fd;
++
++		close(fd);
++	}
++	return -ENOENT;
++}
++
++void test_module_fentry_shadow(void)
++{
++	struct btf *vmlinux_btf = NULL, *mod_btf = NULL;
++	int err, i;
++	int btf_fd[2] = {};
++	int prog_fd[2] = {};
++	int link_fd[2] = {};
++	__s32 btf_id[2] = {};
++
++	LIBBPF_OPTS(bpf_prog_load_opts, load_opts,
++		.expected_attach_type = BPF_TRACE_FENTRY,
++	);
++
++	const struct bpf_insn trace_program[] = {
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	};
++
++	vmlinux_btf = btf__load_vmlinux_btf();
++	if (!ASSERT_OK_PTR(vmlinux_btf, "load_vmlinux_btf"))
++		return;
++
++	btf_fd[1] = get_bpf_testmod_btf_fd();
++	if (!ASSERT_GE(btf_fd[1], 0, "get_bpf_testmod_btf_fd"))
++		goto out;
++
++	mod_btf = btf_get_from_fd(btf_fd[1], vmlinux_btf);
++	if (!ASSERT_OK_PTR(mod_btf, "btf_get_from_fd"))
++		goto out;
++
++	btf_id[0] = btf__find_by_name_kind(vmlinux_btf, symbol_name, BTF_KIND_FUNC);
++	if (!ASSERT_GT(btf_id[0], 0, "btf_find_by_name"))
++		goto out;
++
++	btf_id[1] = btf__find_by_name_kind(mod_btf, symbol_name, BTF_KIND_FUNC);
++	if (!ASSERT_GT(btf_id[1], 0, "btf_find_by_name"))
++		goto out;
++
++	for (i = 0; i < 2; i++) {
++		load_opts.attach_btf_id = btf_id[i];
++		load_opts.attach_btf_obj_fd = btf_fd[i];
++		prog_fd[i] = bpf_prog_load(BPF_PROG_TYPE_TRACING, NULL, "GPL",
++					   trace_program,
++					   sizeof(trace_program) / sizeof(struct bpf_insn),
++					   &load_opts);
++		if (!ASSERT_GE(prog_fd[i], 0, "bpf_prog_load"))
++			goto out;
++
++		/* If the verifier incorrectly resolves addresses of the
++		 * shadowed functions and uses the same address for both the
++		 * vmlinux and the bpf_testmod functions, this will fail on
++		 * attempting to create two trampolines for the same address,
++		 * which is forbidden.
++		 */
++		link_fd[i] = bpf_link_create(prog_fd[i], 0, BPF_TRACE_FENTRY, NULL);
++		if (!ASSERT_GE(link_fd[i], 0, "bpf_link_create"))
++			goto out;
++	}
++
++	err = bpf_prog_test_run_opts(prog_fd[0], NULL);
++	ASSERT_OK(err, "running test");
++
++out:
++	btf__free(vmlinux_btf);
++	btf__free(mod_btf);
++	for (i = 0; i < 2; i++) {
++		if (btf_fd[i])
++			close(btf_fd[i]);
++		if (prog_fd[i] > 0)
++			close(prog_fd[i]);
++		if (link_fd[i] > 0)
++			close(link_fd[i]);
++	}
++}
 -- 
-2.1.0
+2.39.1
 
