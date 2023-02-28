@@ -2,177 +2,551 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 635EFC64ED6
-	for <bpf@archiver.kernel.org>; Tue, 28 Feb 2023 16:16:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CC0BC64EC7
+	for <bpf@archiver.kernel.org>; Tue, 28 Feb 2023 16:38:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbjB1QQJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Feb 2023 11:16:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
+        id S229527AbjB1Qin (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Feb 2023 11:38:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjB1QQI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Feb 2023 11:16:08 -0500
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F532B613
-        for <bpf@vger.kernel.org>; Tue, 28 Feb 2023 08:16:07 -0800 (PST)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 31SFxBSX016293;
-        Tue, 28 Feb 2023 08:16:02 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=a1o10LyP7kkmourCtQeKSDI/0/9ieXA7G8CA4+vqiWY=;
- b=B82WWNnrZCTGnZ4XBSu6O1a8/U7Z1RAZMp0j9DlNNMWgxPNMUZ1leW5hGnC9EmBrDxrF
- HcAN3Vq2TTi/Kvz/wosUErHXL55L+3IEEjTTEOkZxyamUv9W53QVx/Scd+nvIPCcA0oF
- GiLa8pKLglOwB5pehNK4j7iR/Ct52DjGnlezvOBpKsX6xnzClWZPZLQOWHZAeEaWZtSA
- x2clLAXU9WnJGYZGlRKb8h/itdgBlANG1xPPhEyKCSZD3D8kjE/ZQ1jfQpDj4gQIuxeE
- yj3xnBfJi3MFuJRVb+ENQw4ekcp1Fd0/QlTh5gD/GUemw+EI4k2T7wK8rov/uERfK7Ei BA== 
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2174.outbound.protection.outlook.com [104.47.57.174])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3p1ah7umyu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Feb 2023 08:16:01 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ag9Ih1TDKPHsywc3Qw/X1X2tR/ZJfhq/DboXG7RBKwC8DjV0S1Q/Smr1MleLfud6CMN6m9Rqglwu5Mhzh5gWajHosWR0tQfs78t5kQRbkOTkTBFMKtTIBxRC3yA3RpYiRg28up2K9GIjPYj/pwW/PXQ29jNATRVjIq4di6ZQx4e4ovyQSc/F7qsVmQcRB0+uyW+tSLU4drRNB3ujaMLUxUQJ16F+7oiI/isoD/a7pBD8M5aoGPiC1VPiz9EvycmuPJfV/RouxdIJQON1wLOPsuyt7fYX7mk+H0mzAm/FjPaGRlIYlb64rSUo6NTfvP2IzWKvlb4xmfMBV+QPOTiQDA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=a1o10LyP7kkmourCtQeKSDI/0/9ieXA7G8CA4+vqiWY=;
- b=BdNnRmDhFTdCqm0fsd7ZabrLT9RI2TCAXgtQDcpussQZE31WJi4TVVet9SlozRmHaKP86TwGCNNuLYA2bni5U2KRJ3rumlkja7GKOiYa1zgw+C3y5qxyyzX3DJu1wdaQSv4w0EFUcoKbk/laiPuc8IlfgA3OzarVaYLpKOtfTBLHCvuEMctwhUEQzX+beusyn1zOaukCF+k1tHn0dWH4iZ0o9mAhxIongebB8hr9RP/zEEQPxyosDfN1e2Avq0GXNFH4HBZwzThr6a5SjjOOHiPga+PlQkJr2aZyjJC+U+oOq6gvdTsAa63MjT5sqphvmeC4aIAmrSikqnWhyvnvPg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by MW4PR15MB4476.namprd15.prod.outlook.com (2603:10b6:303:105::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.29; Tue, 28 Feb
- 2023 16:15:59 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::a595:5e4d:d501:dc18]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::a595:5e4d:d501:dc18%4]) with mapi id 15.20.6134.029; Tue, 28 Feb 2023
- 16:15:57 +0000
-Message-ID: <061f1d21-2336-6e49-9090-3da671375e63@meta.com>
-Date:   Tue, 28 Feb 2023 08:15:54 -0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH V5] bpf, docs: Document BPF insn encoding in term of
- stored bytes
-Content-Language: en-US
-To:     "Jose E. Marchesi" <jose.marchesi@oracle.com>,
-        bpf <bpf@vger.kernel.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@ietf.org,
-        Dave Thaler <dthaler@microsoft.com>,
-        David Vernet <void@manifault.com>
-References: <87r0ua7fu8.fsf@oracle.com>
- <d3dab9c1-5bb8-a23f-5ef5-2973ac05a554@meta.com>
- <87h6v6i0da.fsf_-_@oracle.com>
-From:   Yonghong Song <yhs@meta.com>
-In-Reply-To: <87h6v6i0da.fsf_-_@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0273.namprd03.prod.outlook.com
- (2603:10b6:a03:39e::8) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|MW4PR15MB4476:EE_
-X-MS-Office365-Filtering-Correlation-Id: e7fefb9f-a7c7-4d09-41f2-08db19a71340
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yQYTlKfSSwWTGQGqluFW6nih7jO+0oR6n9J6fOPBumcB9c9ovhLxSmbFCfns8zqXuDZ+AV7QmKMys68UEtJXznINEJOs7EW9OOFlTAYxJLQDBdmYF9HNkXZA1MfzyqJLAOMngVbgHg6d8c9jCblAk6lVbVVeSvRITrZ7/5j7rS21XigKZMb+a3aAtzXV0X26NRz3qXnmDKOZcBJ8sCFRnsXPiBVBTJy/ft4CE90ijFIYcf7Jo6CgEVPlLHRa07y5O3u2V7cTmWxHP4dDOBkAO6Z/WQw9/Qlp3g04k1nsFhDWxrPmEjQvnxSnNCHqE1ord5PghzrVqkG/dt4aCjppgg4u1s/mfOnkGWQoYvEp6msVS3/6J02YweouoBvpkQS95W4S/9oJm/Da8DDlg6ofWK41ZjPeI2UYhRj3/UO3+TouUEM92YFQ4hQmYYh7wRADU7Qv9yhwefcHTOBHQH3wOVif3hF0JLqWDBG/4JNoNbP3DFG64EdEih0EXv0v3t0JtzP8U2N7YXnmwxdywCfItFlhBi5EpWwL/2Ih309LFxmIdKeFwB/cPu9J2ZEG3VyrdrjzEJijXOpD/CnXXJO3Lh9pxZeZwoPz+7HhOVy3//pNzBYZYzfdc8b6Nr6uMeMbY3RO9pdYVS4WWzemkcDDtXRUYexALg05A24GKPU3Dj9J0+6iquV8zt7E/rW8ZkLJgfOOC/R6q2tMYLyg+6MGnx9MPiqeTJWtxe0kilO5Id4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(366004)(39860400002)(396003)(376002)(346002)(451199018)(36756003)(31696002)(6666004)(6512007)(6486002)(6506007)(38100700002)(53546011)(186003)(2616005)(110136005)(316002)(41300700001)(54906003)(2906002)(66946007)(4326008)(66476007)(5660300002)(8936002)(478600001)(66556008)(8676002)(83380400001)(86362001)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eDZ2ZjNreW9RcTlYaVBRM1RXclo5UjFCUlpuRkdTb1d5RHdHVmFQWis5UkpZ?=
- =?utf-8?B?dmdOa1BXSGRodU8wQkg4RkVKUnF1aS9rdDA2K1Qxb2xVeWJ5NC9xK2RFd1Vs?=
- =?utf-8?B?OTErdlNkTkl4UmcyYU9YMjFFQVIyOTFRdmF2WVdXWjJDU1JEREptWXUrUnVQ?=
- =?utf-8?B?dGVmV2p4akVETWhUMUVmZUtiZEIrRThrRFFQTHdodmg0eFB4V1ZkMXV1aGR4?=
- =?utf-8?B?U0hBTkgxVHdOTFdtR0k3OW5CVXFnQm1CL1laVFFaT0E1UWEyQ3RzZUVHc1Bm?=
- =?utf-8?B?dVh0WE1ncXU1K2ViR0tsd0x3Uno3Z3B3dEFQTGI0djhJeW5OM3B6cWVBOUNn?=
- =?utf-8?B?NWdYSU5oQlhnMTErQmIvenR6bStzTG1xS3E1amkvMmI1RFlISk90ZFhHZkU0?=
- =?utf-8?B?VDBWcldEeFFWV3ZrRERsTDQ4M1RyaGZmOU9kYWY0QWlVS0l4QU1QV3htb0lh?=
- =?utf-8?B?U3RGWFAzT0oyNlpWSG1NbjFkU1ZTSFduMDJ3ZXoyeEd0T1FaOUR1bWdLNnQx?=
- =?utf-8?B?eG9pRlRpdE5TOGpYVFFLVjVEOExFdG55S09qMVdLeGx1MjlKNjJxeVE0cGox?=
- =?utf-8?B?enZEVDNRUURhczZSNXhwZ2oyMkZ1aStxVWkzR1JnL1lQQ3p2c1V5ZHB1Ynhu?=
- =?utf-8?B?SDlJRzJzcWt6ZEVCK285cUZrU0VuRDMyRjNkTmRPa01qbTR6RVQvYWZaMDIr?=
- =?utf-8?B?S2QwOU4vekhMYkxEV1hYK2QvZk5TUFRSTnVIbEpNMi84VDB5c2h1Yk1xME5M?=
- =?utf-8?B?WndMQ2ZwUXZWT0IvVkM2WE50OG9pcXZnRVdBT3RTS0ROS3BQWDFxOUZqK3dI?=
- =?utf-8?B?dnlmY29wZSs2V1A3RW82QklOU2kzSWtENWNMdlRFTVA2aGZjZHlZY3o4ZkRn?=
- =?utf-8?B?bmUySGl6NDBWSk84KzRmWEhmMG40cGgrUkdWVDdSVzNmWFBBcC9SYmVrUmRY?=
- =?utf-8?B?Ulh3R2R4eCthTUl5WmVucDU3REFrYk1jZFRtWU9PTlpJMFp2eXRGcTFXWm0r?=
- =?utf-8?B?TUVkRlBjMVBYdXBxN3U3VGoyNUdveUV0RmU4bGU0ZTk0ZUFVbWh4WmlzbktV?=
- =?utf-8?B?SVNCbkNqK0NKUis1dkczVStBa21oVXdnWlZHSFB6Rk4rSVY5WjduazJNRE9v?=
- =?utf-8?B?KzhMdkFvQWRvQVZUcnVubTZWMmw1UG9WcCtwR3V5NXRWYUVHUGg5MFpyakg5?=
- =?utf-8?B?SXdseU9lcWNYellOSEg2N1V4QUh1cFNoUUIybVhILy9yOThIQ1cvbkNqeW8x?=
- =?utf-8?B?aXJKQ2JpNDhhVytzZ01UekpHeVNDWlBHOWdPZnFMVGxCS2FNTStsUXdDdFlH?=
- =?utf-8?B?NzhqMTUzL1V4U3hubG1nTkpHMU9Jc1FNMzZRQVl0VDFTTVovUDJ1OUFMbVVl?=
- =?utf-8?B?dGcyUElqZFE3V21QUVpVdTRWd3Y3Yk1NbVoyUU40SUZyVWlscmtxa2k1VkJZ?=
- =?utf-8?B?MmRzVm5qaEZTTWR5TWQwRlpVeEZHWEh2T0dBYUFDd0FIMnNxdHdpbWE5YjV5?=
- =?utf-8?B?ZzR4MVlWNGZQdUVVbVRNb0pEWEMrN3pJZ0ZKc1dWY3BxazFRV0tqSEV3elBH?=
- =?utf-8?B?bk1rKzhoQTBrdFRaSVRuNDVsVndxU2lqZVpYSWdtNEo3Z1FpUFdBM2xjb3ZB?=
- =?utf-8?B?RmhEYXEramxsSTVxVlZKTDlLTTdvUUZOLzVCdi9UaWdBTG5WVS9uaGhGV1Np?=
- =?utf-8?B?R0dhNW5VeW9Cb0kvcGhHYnREU3VLR3htYmIySjk1OEpVZjVXU1BOUTJiU3Fx?=
- =?utf-8?B?R0FJVlZuSnA0MGtUYmZSY2s3NFR5VFNVK1hyWFIvSmQwQ3BGQ2NPVThsb2k3?=
- =?utf-8?B?emxTaE5kb0xSdFN5TjgwV0dXLzFaTmlWMnIwc01PR1VOR2pIQTlhQ3NlMTgx?=
- =?utf-8?B?NFQzSm1mQTNoNXAvSWQvNlVHS1lUOHJMWkdtQnVBbVNjYVVhb1ZlV0N1Z2w5?=
- =?utf-8?B?ZHh6cTd1bGp1R3RyR25DUUlTNERwMGZoRjVSNUx1VThxRmNLL3dITW82MmVp?=
- =?utf-8?B?VWZqOUd3U3JVdEszZHVOT2E2SnNmSUFja005c0Q1Sk5kMXB2K0h4K0xHN2xz?=
- =?utf-8?B?b1BBK3p4Ym5uTEIyQ3RmaTFzeWdodDR2c1ZNVkJwdnZOUFd3bFZyK3IwTFlx?=
- =?utf-8?B?RzZPUkFIWlRTWFVyOTNOQk5NQW1yK1I1UFgwTGE1eHJhMkNqVFY5ZVZXUlFC?=
- =?utf-8?B?U3c9PQ==?=
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e7fefb9f-a7c7-4d09-41f2-08db19a71340
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2023 16:15:57.7361
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mQElEMz0kvrDhRseh0FXqnzadDMAIip6fOu3uHIKBZrS35ogBrLP9Q6RZJd2Ov/J
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR15MB4476
-X-Proofpoint-ORIG-GUID: JGpd9dTIR2fZWF0xWtDI9RcgYGYiM-JM
-X-Proofpoint-GUID: JGpd9dTIR2fZWF0xWtDI9RcgYGYiM-JM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-02-28_13,2023-02-28_03,2023-02-09_01
+        with ESMTP id S229451AbjB1Qim (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Feb 2023 11:38:42 -0500
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200A1EC7C;
+        Tue, 28 Feb 2023 08:38:19 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R391e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=alibuda@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0Vck8984_1677602296;
+Received: from j66a10360.sqa.eu95.tbsite.net(mailfrom:alibuda@linux.alibaba.com fp:SMTPD_---0Vck8984_1677602296)
+          by smtp.aliyun-inc.com;
+          Wed, 01 Mar 2023 00:38:16 +0800
+From:   "D. Wythe" <alibuda@linux.alibaba.com>
+To:     kgraul@linux.ibm.com, wenjia@linux.ibm.com, jaka@linux.ibm.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH bpf-next v4 1/4] net/smc: move smc_sock related structure definition
+Date:   Wed,  1 Mar 2023 00:38:08 +0800
+Message-Id: <1677602291-1666-2-git-send-email-alibuda@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1677602291-1666-1-git-send-email-alibuda@linux.alibaba.com>
+References: <1677602291-1666-1-git-send-email-alibuda@linux.alibaba.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+From: "D. Wythe" <alibuda@linux.alibaba.com>
 
+This patch only try to move the definition of smc_sock and its
+related structure, from et/smc/smc.h to include/net/smc/smc.h.
+In that way can ebpf generate the BTF ID corresponding to our
+structure.
 
-On 2/28/23 1:51 AM, Jose E. Marchesi wrote:
-> 
-> [Changes from V4:
-> - s/regs:16/regs:8 in figure.]
-> 
-> [Changes from V3:
-> - Back to src_reg and dst_reg, since they denote register numbers
->    as opposed to the values stored in these registers.]
-> 
-> [Changes from V2:
-> - Use src and dst consistently in the document.
-> - Use a more graphical depiction of the 128-bit instruction.
-> - Remove `Where:' fragment.
-> - Clarify that unused bits are reserved and shall be zeroed.]
-> 
-> [Changes from V1:
-> - Use rst literal blocks for figures.
-> - Avoid using | in the basic instruction/pseudo instruction figure.
-> - Rebased to today's bpf-next master branch.]
-> 
-> This patch modifies instruction-set.rst so it documents the encoding
-> of BPF instructions in terms of how the bytes are stored (be it in an
-> ELF file or as bytes in a memory buffer to be loaded into the kernel
-> or some other BPF consumer) as opposed to how the instruction looks
-> like once loaded.
-> 
-> This is hopefully easier to understand by implementors looking to
-> generate and/or consume bytes conforming BPF instructions.
-> 
-> The patch also clarifies that the unused bytes in a pseudo-instruction
-> shall be cleared with zeros.
-> 
-> Signed-off-by: Jose E. Marchesi <jose.marchesi@oracle.com>
+Of course, we can also choose to hide the structure and only to
+expose an intermediate structure, but it requires an additional
+transformation. If we need to obtain some information frequently, this
+may cause some performance problems.
 
-Acked-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: D. Wythe <alibuda@linux.alibaba.com>
+---
+ include/net/smc.h | 225 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ net/smc/smc.h     | 224 -----------------------------------------------------
+ 2 files changed, 225 insertions(+), 224 deletions(-)
+
+diff --git a/include/net/smc.h b/include/net/smc.h
+index 597cb93..eccbd37 100644
+--- a/include/net/smc.h
++++ b/include/net/smc.h
+@@ -11,12 +11,17 @@
+ #ifndef _SMC_H
+ #define _SMC_H
+ 
++#include <net/inet_connection_sock.h>
+ #include <linux/device.h>
+ #include <linux/spinlock.h>
+ #include <linux/types.h>
+ #include <linux/wait.h>
+ #include "linux/ism.h"
+ 
++#ifdef ATOMIC64_INIT
++#define KERNEL_HAS_ATOMIC64
++#endif
++
+ struct sock;
+ 
+ #define SMC_MAX_PNETID_LEN	16	/* Max. length of PNET id */
+@@ -90,4 +95,224 @@ struct smcd_dev {
+ 	u8 going_away : 1;
+ };
+ 
++struct smc_wr_rx_hdr {	/* common prefix part of LLC and CDC to demultiplex */
++	union {
++		u8 type;
++#if defined(__BIG_ENDIAN_BITFIELD)
++		struct {
++			u8 llc_version:4,
++			   llc_type:4;
++		};
++#elif defined(__LITTLE_ENDIAN_BITFIELD)
++		struct {
++			u8 llc_type:4,
++			   llc_version:4;
++		};
++#endif
++	};
++} __aligned(1);
++
++struct smc_cdc_conn_state_flags {
++#if defined(__BIG_ENDIAN_BITFIELD)
++	u8	peer_done_writing : 1;	/* Sending done indicator */
++	u8	peer_conn_closed : 1;	/* Peer connection closed indicator */
++	u8	peer_conn_abort : 1;	/* Abnormal close indicator */
++	u8	reserved : 5;
++#elif defined(__LITTLE_ENDIAN_BITFIELD)
++	u8	reserved : 5;
++	u8	peer_conn_abort : 1;
++	u8	peer_conn_closed : 1;
++	u8	peer_done_writing : 1;
++#endif
++};
++
++struct smc_cdc_producer_flags {
++#if defined(__BIG_ENDIAN_BITFIELD)
++	u8	write_blocked : 1;	/* Writing Blocked, no rx buf space */
++	u8	urg_data_pending : 1;	/* Urgent Data Pending */
++	u8	urg_data_present : 1;	/* Urgent Data Present */
++	u8	cons_curs_upd_req : 1;	/* cursor update requested */
++	u8	failover_validation : 1;/* message replay due to failover */
++	u8	reserved : 3;
++#elif defined(__LITTLE_ENDIAN_BITFIELD)
++	u8	reserved : 3;
++	u8	failover_validation : 1;
++	u8	cons_curs_upd_req : 1;
++	u8	urg_data_present : 1;
++	u8	urg_data_pending : 1;
++	u8	write_blocked : 1;
++#endif
++};
++
++/* in host byte order */
++union smc_host_cursor {	/* SMC cursor - an offset in an RMBE */
++	struct {
++		u16	reserved;
++		u16	wrap;		/* window wrap sequence number */
++		u32	count;		/* cursor (= offset) part */
++	};
++#ifdef KERNEL_HAS_ATOMIC64
++	atomic64_t		acurs;	/* for atomic processing */
++#else
++	u64			acurs;	/* for atomic processing */
++#endif
++} __aligned(8);
++
++/* in host byte order, except for flag bitfields in network byte order */
++struct smc_host_cdc_msg {		/* Connection Data Control message */
++	struct smc_wr_rx_hdr		common; /* .type = 0xFE */
++	u8				len;	/* length = 44 */
++	u16				seqno;	/* connection seq # */
++	u32				token;	/* alert_token */
++	union smc_host_cursor		prod;		/* producer cursor */
++	union smc_host_cursor		cons;		/* consumer cursor,
++							 * piggy backed "ack"
++							 */
++	struct smc_cdc_producer_flags	prod_flags;	/* conn. tx/rx status */
++	struct smc_cdc_conn_state_flags	conn_state_flags; /* peer conn. status*/
++	u8				reserved[18];
++} __aligned(8);
++
++enum smc_urg_state {
++	SMC_URG_VALID	= 1,			/* data present */
++	SMC_URG_NOTYET	= 2,			/* data pending */
++	SMC_URG_READ	= 3,			/* data was already read */
++};
++
++struct smc_connection {
++	struct rb_node		alert_node;
++	struct smc_link_group	*lgr;		/* link group of connection */
++	struct smc_link		*lnk;		/* assigned SMC-R link */
++	u32			alert_token_local; /* unique conn. id */
++	u8			peer_rmbe_idx;	/* from tcp handshake */
++	int			peer_rmbe_size;	/* size of peer rx buffer */
++	atomic_t		peer_rmbe_space;/* remaining free bytes in peer
++						 * rmbe
++						 */
++	int			rtoken_idx;	/* idx to peer RMB rkey/addr */
++
++	struct smc_buf_desc	*sndbuf_desc;	/* send buffer descriptor */
++	struct smc_buf_desc	*rmb_desc;	/* RMBE descriptor */
++	int			rmbe_size_short;/* compressed notation */
++	int			rmbe_update_limit;
++						/* lower limit for consumer
++						 * cursor update
++						 */
++
++	struct smc_host_cdc_msg	local_tx_ctrl;	/* host byte order staging
++						 * buffer for CDC msg send
++						 * .prod cf. TCP snd_nxt
++						 * .cons cf. TCP sends ack
++						 */
++	union smc_host_cursor	local_tx_ctrl_fin;
++						/* prod crsr - confirmed by peer
++						 */
++	union smc_host_cursor	tx_curs_prep;	/* tx - prepared data
++						 * snd_max..wmem_alloc
++						 */
++	union smc_host_cursor	tx_curs_sent;	/* tx - sent data
++						 * snd_nxt ?
++						 */
++	union smc_host_cursor	tx_curs_fin;	/* tx - confirmed by peer
++						 * snd-wnd-begin ?
++						 */
++	atomic_t		sndbuf_space;	/* remaining space in sndbuf */
++	u16			tx_cdc_seq;	/* sequence # for CDC send */
++	u16			tx_cdc_seq_fin;	/* sequence # - tx completed */
++	spinlock_t		send_lock;	/* protect wr_sends */
++	atomic_t		cdc_pend_tx_wr; /* number of pending tx CDC wqe
++						 * - inc when post wqe,
++						 * - dec on polled tx cqe
++						 */
++	wait_queue_head_t	cdc_pend_tx_wq; /* wakeup on no cdc_pend_tx_wr*/
++	atomic_t		tx_pushing;     /* nr_threads trying tx push */
++	struct delayed_work	tx_work;	/* retry of smc_cdc_msg_send */
++	u32			tx_off;		/* base offset in peer rmb */
++
++	struct smc_host_cdc_msg	local_rx_ctrl;	/* filled during event_handl.
++						 * .prod cf. TCP rcv_nxt
++						 * .cons cf. TCP snd_una
++						 */
++	union smc_host_cursor	rx_curs_confirmed; /* confirmed to peer
++						    * source of snd_una ?
++						    */
++	union smc_host_cursor	urg_curs;	/* points at urgent byte */
++	enum smc_urg_state	urg_state;
++	bool			urg_tx_pend;	/* urgent data staged */
++	bool			urg_rx_skip_pend;
++						/* indicate urgent oob data
++						 * read, but previous regular
++						 * data still pending
++						 */
++	char			urg_rx_byte;	/* urgent byte */
++	bool			tx_in_release_sock;
++						/* flush pending tx data in
++						 * sock release_cb()
++						 */
++	atomic_t		bytes_to_rcv;	/* arrived data,
++						 * not yet received
++						 */
++	atomic_t		splice_pending;	/* number of spliced bytes
++						 * pending processing
++						 */
++#ifndef KERNEL_HAS_ATOMIC64
++	spinlock_t		acurs_lock;	/* protect cursors */
++#endif
++	struct work_struct	close_work;	/* peer sent some closing */
++	struct work_struct	abort_work;	/* abort the connection */
++	struct tasklet_struct	rx_tsklet;	/* Receiver tasklet for SMC-D */
++	u8			rx_off;		/* receive offset:
++						 * 0 for SMC-R, 32 for SMC-D
++						 */
++	u64			peer_token;	/* SMC-D token of peer */
++	u8			killed : 1;	/* abnormal termination */
++	u8			freed : 1;	/* normal termiation */
++	u8			out_of_sync : 1; /* out of sync with peer */
++};
++
++struct smc_sock {				/* smc sock container */
++	struct sock		sk;
++	struct socket		*clcsock;	/* internal tcp socket */
++	void			(*clcsk_state_change)(struct sock *sk);
++						/* original stat_change fct. */
++	void			(*clcsk_data_ready)(struct sock *sk);
++						/* original data_ready fct. */
++	void			(*clcsk_write_space)(struct sock *sk);
++						/* original write_space fct. */
++	void			(*clcsk_error_report)(struct sock *sk);
++						/* original error_report fct. */
++	struct smc_connection	conn;		/* smc connection */
++	struct smc_sock		*listen_smc;	/* listen parent */
++	struct work_struct	connect_work;	/* handle non-blocking connect*/
++	struct work_struct	tcp_listen_work;/* handle tcp socket accepts */
++	struct work_struct	smc_listen_work;/* prepare new accept socket */
++	struct list_head	accept_q;	/* sockets to be accepted */
++	spinlock_t		accept_q_lock;	/* protects accept_q */
++	bool			limit_smc_hs;	/* put constraint on handshake */
++	bool			use_fallback;	/* fallback to tcp */
++	int			fallback_rsn;	/* reason for fallback */
++	u32			peer_diagnosis; /* decline reason from peer */
++	atomic_t                queued_smc_hs;  /* queued smc handshakes */
++	struct inet_connection_sock_af_ops		af_ops;
++	const struct inet_connection_sock_af_ops	*ori_af_ops;
++						/* original af ops */
++	int			sockopt_defer_accept;
++						/* sockopt TCP_DEFER_ACCEPT
++						 * value
++						 */
++	u8			wait_close_tx_prepared : 1;
++						/* shutdown wr or close
++						 * started, waiting for unsent
++						 * data to be sent
++						 */
++	u8			connect_nonblock : 1;
++						/* non-blocking connect in
++						 * flight
++						 */
++	struct mutex            clcsock_release_lock;
++						/* protects clcsock of a listen
++						 * socket
++						 */
++};
++
+ #endif	/* _SMC_H */
+diff --git a/net/smc/smc.h b/net/smc/smc.h
+index 5ed765e..6f27f40 100644
+--- a/net/smc/smc.h
++++ b/net/smc/smc.h
+@@ -34,10 +34,6 @@
+ extern struct proto smc_proto;
+ extern struct proto smc_proto6;
+ 
+-#ifdef ATOMIC64_INIT
+-#define KERNEL_HAS_ATOMIC64
+-#endif
+-
+ enum smc_state {		/* possible states of an SMC socket */
+ 	SMC_ACTIVE	= 1,
+ 	SMC_INIT	= 2,
+@@ -57,232 +53,12 @@ enum smc_state {		/* possible states of an SMC socket */
+ 
+ struct smc_link_group;
+ 
+-struct smc_wr_rx_hdr {	/* common prefix part of LLC and CDC to demultiplex */
+-	union {
+-		u8 type;
+-#if defined(__BIG_ENDIAN_BITFIELD)
+-		struct {
+-			u8 llc_version:4,
+-			   llc_type:4;
+-		};
+-#elif defined(__LITTLE_ENDIAN_BITFIELD)
+-		struct {
+-			u8 llc_type:4,
+-			   llc_version:4;
+-		};
+-#endif
+-	};
+-} __aligned(1);
+-
+-struct smc_cdc_conn_state_flags {
+-#if defined(__BIG_ENDIAN_BITFIELD)
+-	u8	peer_done_writing : 1;	/* Sending done indicator */
+-	u8	peer_conn_closed : 1;	/* Peer connection closed indicator */
+-	u8	peer_conn_abort : 1;	/* Abnormal close indicator */
+-	u8	reserved : 5;
+-#elif defined(__LITTLE_ENDIAN_BITFIELD)
+-	u8	reserved : 5;
+-	u8	peer_conn_abort : 1;
+-	u8	peer_conn_closed : 1;
+-	u8	peer_done_writing : 1;
+-#endif
+-};
+-
+-struct smc_cdc_producer_flags {
+-#if defined(__BIG_ENDIAN_BITFIELD)
+-	u8	write_blocked : 1;	/* Writing Blocked, no rx buf space */
+-	u8	urg_data_pending : 1;	/* Urgent Data Pending */
+-	u8	urg_data_present : 1;	/* Urgent Data Present */
+-	u8	cons_curs_upd_req : 1;	/* cursor update requested */
+-	u8	failover_validation : 1;/* message replay due to failover */
+-	u8	reserved : 3;
+-#elif defined(__LITTLE_ENDIAN_BITFIELD)
+-	u8	reserved : 3;
+-	u8	failover_validation : 1;
+-	u8	cons_curs_upd_req : 1;
+-	u8	urg_data_present : 1;
+-	u8	urg_data_pending : 1;
+-	u8	write_blocked : 1;
+-#endif
+-};
+-
+-/* in host byte order */
+-union smc_host_cursor {	/* SMC cursor - an offset in an RMBE */
+-	struct {
+-		u16	reserved;
+-		u16	wrap;		/* window wrap sequence number */
+-		u32	count;		/* cursor (= offset) part */
+-	};
+-#ifdef KERNEL_HAS_ATOMIC64
+-	atomic64_t		acurs;	/* for atomic processing */
+-#else
+-	u64			acurs;	/* for atomic processing */
+-#endif
+-} __aligned(8);
+-
+-/* in host byte order, except for flag bitfields in network byte order */
+-struct smc_host_cdc_msg {		/* Connection Data Control message */
+-	struct smc_wr_rx_hdr		common; /* .type = 0xFE */
+-	u8				len;	/* length = 44 */
+-	u16				seqno;	/* connection seq # */
+-	u32				token;	/* alert_token */
+-	union smc_host_cursor		prod;		/* producer cursor */
+-	union smc_host_cursor		cons;		/* consumer cursor,
+-							 * piggy backed "ack"
+-							 */
+-	struct smc_cdc_producer_flags	prod_flags;	/* conn. tx/rx status */
+-	struct smc_cdc_conn_state_flags	conn_state_flags; /* peer conn. status*/
+-	u8				reserved[18];
+-} __aligned(8);
+-
+-enum smc_urg_state {
+-	SMC_URG_VALID	= 1,			/* data present */
+-	SMC_URG_NOTYET	= 2,			/* data pending */
+-	SMC_URG_READ	= 3,			/* data was already read */
+-};
+-
+ struct smc_mark_woken {
+ 	bool woken;
+ 	void *key;
+ 	wait_queue_entry_t wait_entry;
+ };
+ 
+-struct smc_connection {
+-	struct rb_node		alert_node;
+-	struct smc_link_group	*lgr;		/* link group of connection */
+-	struct smc_link		*lnk;		/* assigned SMC-R link */
+-	u32			alert_token_local; /* unique conn. id */
+-	u8			peer_rmbe_idx;	/* from tcp handshake */
+-	int			peer_rmbe_size;	/* size of peer rx buffer */
+-	atomic_t		peer_rmbe_space;/* remaining free bytes in peer
+-						 * rmbe
+-						 */
+-	int			rtoken_idx;	/* idx to peer RMB rkey/addr */
+-
+-	struct smc_buf_desc	*sndbuf_desc;	/* send buffer descriptor */
+-	struct smc_buf_desc	*rmb_desc;	/* RMBE descriptor */
+-	int			rmbe_size_short;/* compressed notation */
+-	int			rmbe_update_limit;
+-						/* lower limit for consumer
+-						 * cursor update
+-						 */
+-
+-	struct smc_host_cdc_msg	local_tx_ctrl;	/* host byte order staging
+-						 * buffer for CDC msg send
+-						 * .prod cf. TCP snd_nxt
+-						 * .cons cf. TCP sends ack
+-						 */
+-	union smc_host_cursor	local_tx_ctrl_fin;
+-						/* prod crsr - confirmed by peer
+-						 */
+-	union smc_host_cursor	tx_curs_prep;	/* tx - prepared data
+-						 * snd_max..wmem_alloc
+-						 */
+-	union smc_host_cursor	tx_curs_sent;	/* tx - sent data
+-						 * snd_nxt ?
+-						 */
+-	union smc_host_cursor	tx_curs_fin;	/* tx - confirmed by peer
+-						 * snd-wnd-begin ?
+-						 */
+-	atomic_t		sndbuf_space;	/* remaining space in sndbuf */
+-	u16			tx_cdc_seq;	/* sequence # for CDC send */
+-	u16			tx_cdc_seq_fin;	/* sequence # - tx completed */
+-	spinlock_t		send_lock;	/* protect wr_sends */
+-	atomic_t		cdc_pend_tx_wr; /* number of pending tx CDC wqe
+-						 * - inc when post wqe,
+-						 * - dec on polled tx cqe
+-						 */
+-	wait_queue_head_t	cdc_pend_tx_wq; /* wakeup on no cdc_pend_tx_wr*/
+-	atomic_t		tx_pushing;     /* nr_threads trying tx push */
+-	struct delayed_work	tx_work;	/* retry of smc_cdc_msg_send */
+-	u32			tx_off;		/* base offset in peer rmb */
+-
+-	struct smc_host_cdc_msg	local_rx_ctrl;	/* filled during event_handl.
+-						 * .prod cf. TCP rcv_nxt
+-						 * .cons cf. TCP snd_una
+-						 */
+-	union smc_host_cursor	rx_curs_confirmed; /* confirmed to peer
+-						    * source of snd_una ?
+-						    */
+-	union smc_host_cursor	urg_curs;	/* points at urgent byte */
+-	enum smc_urg_state	urg_state;
+-	bool			urg_tx_pend;	/* urgent data staged */
+-	bool			urg_rx_skip_pend;
+-						/* indicate urgent oob data
+-						 * read, but previous regular
+-						 * data still pending
+-						 */
+-	char			urg_rx_byte;	/* urgent byte */
+-	bool			tx_in_release_sock;
+-						/* flush pending tx data in
+-						 * sock release_cb()
+-						 */
+-	atomic_t		bytes_to_rcv;	/* arrived data,
+-						 * not yet received
+-						 */
+-	atomic_t		splice_pending;	/* number of spliced bytes
+-						 * pending processing
+-						 */
+-#ifndef KERNEL_HAS_ATOMIC64
+-	spinlock_t		acurs_lock;	/* protect cursors */
+-#endif
+-	struct work_struct	close_work;	/* peer sent some closing */
+-	struct work_struct	abort_work;	/* abort the connection */
+-	struct tasklet_struct	rx_tsklet;	/* Receiver tasklet for SMC-D */
+-	u8			rx_off;		/* receive offset:
+-						 * 0 for SMC-R, 32 for SMC-D
+-						 */
+-	u64			peer_token;	/* SMC-D token of peer */
+-	u8			killed : 1;	/* abnormal termination */
+-	u8			freed : 1;	/* normal termiation */
+-	u8			out_of_sync : 1; /* out of sync with peer */
+-};
+-
+-struct smc_sock {				/* smc sock container */
+-	struct sock		sk;
+-	struct socket		*clcsock;	/* internal tcp socket */
+-	void			(*clcsk_state_change)(struct sock *sk);
+-						/* original stat_change fct. */
+-	void			(*clcsk_data_ready)(struct sock *sk);
+-						/* original data_ready fct. */
+-	void			(*clcsk_write_space)(struct sock *sk);
+-						/* original write_space fct. */
+-	void			(*clcsk_error_report)(struct sock *sk);
+-						/* original error_report fct. */
+-	struct smc_connection	conn;		/* smc connection */
+-	struct smc_sock		*listen_smc;	/* listen parent */
+-	struct work_struct	connect_work;	/* handle non-blocking connect*/
+-	struct work_struct	tcp_listen_work;/* handle tcp socket accepts */
+-	struct work_struct	smc_listen_work;/* prepare new accept socket */
+-	struct list_head	accept_q;	/* sockets to be accepted */
+-	spinlock_t		accept_q_lock;	/* protects accept_q */
+-	bool			limit_smc_hs;	/* put constraint on handshake */
+-	bool			use_fallback;	/* fallback to tcp */
+-	int			fallback_rsn;	/* reason for fallback */
+-	u32			peer_diagnosis; /* decline reason from peer */
+-	atomic_t                queued_smc_hs;  /* queued smc handshakes */
+-	struct inet_connection_sock_af_ops		af_ops;
+-	const struct inet_connection_sock_af_ops	*ori_af_ops;
+-						/* original af ops */
+-	int			sockopt_defer_accept;
+-						/* sockopt TCP_DEFER_ACCEPT
+-						 * value
+-						 */
+-	u8			wait_close_tx_prepared : 1;
+-						/* shutdown wr or close
+-						 * started, waiting for unsent
+-						 * data to be sent
+-						 */
+-	u8			connect_nonblock : 1;
+-						/* non-blocking connect in
+-						 * flight
+-						 */
+-	struct mutex            clcsock_release_lock;
+-						/* protects clcsock of a listen
+-						 * socket
+-						 * */
+-};
+-
+ static inline struct smc_sock *smc_sk(const struct sock *sk)
+ {
+ 	return (struct smc_sock *)sk;
+-- 
+1.8.3.1
+
