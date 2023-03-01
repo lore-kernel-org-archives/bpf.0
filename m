@@ -2,93 +2,133 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31AF4C6FA9D
-	for <bpf@archiver.kernel.org>; Wed,  1 Mar 2023 18:43:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17468C6FA9D
+	for <bpf@archiver.kernel.org>; Wed,  1 Mar 2023 18:58:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbjCASnU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 Mar 2023 13:43:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51448 "EHLO
+        id S229670AbjCAS62 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 1 Mar 2023 13:58:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjCASnU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 1 Mar 2023 13:43:20 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142761A647;
-        Wed,  1 Mar 2023 10:43:19 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id d30so57849336eda.4;
-        Wed, 01 Mar 2023 10:43:18 -0800 (PST)
+        with ESMTP id S229579AbjCAS62 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 1 Mar 2023 13:58:28 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E04115167;
+        Wed,  1 Mar 2023 10:58:27 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id ec43so57963957edb.8;
+        Wed, 01 Mar 2023 10:58:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677696197;
+        d=gmail.com; s=20210112; t=1677697106;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NeBOkrsW3y7Vj5BOWZGuYQDb9cRvWdipWp5l5oMe1Dw=;
-        b=UYPp6L2OHH31SkRLN9/1JN6l4ky4pJlY3zflrwmT8bS7wXotZykhn8IAOAXtaNmUpa
-         ZLyMvZ1PXjtpuHjOhKOovbRF21h9h7ZrRq+EFSqAPPWwBasd0TFRLVbCmVHXzOZNqkfr
-         X6NmnR970m64YtBHM1icA11VohnSxgb/pEv+nBQ5xDW8IvEFKfDeAWieDLKHz/9KVnWn
-         eu75OS+CCUFq0QG9JeOwCmRsR2hjRHt1qcE9gbP2LOm+puj15d0LVw1ugRIQOcjsljvZ
-         MKNblL1Lhe4Gax/SVLn97+Y23Os1zCFlsKSTUSTCY9IqUg0c8UinaIkO73N5cvX8/mO2
-         re9A==
+        bh=VBjCNneDRsPF8dkKpcPzpmUYB01L8NaBTycrTsX7pTc=;
+        b=OmHKGDbM2zn4VITTatvLA41so0i1ivE7z63MuQyZR+gPFHYoO2tcrtxFf54SPQbihy
+         FUYTyeemzOhamVZOir1A8Pm6wQwn+JjlWzFkhooELit7/DR+0qRvQe4zgTHw9bqcjSB3
+         776njY3pfolar3FZiZ+xPnBMyuhhZwMeyLtzlaMPznX1CaLKLPd5GS+18FbHZUODxQCI
+         3ZCBijg/Ne8OBv7X9HHaVYku7yye7s4C7+p1dXEjluuTOnnQx98aJkBZ/8Y8dNISJiTF
+         eaZR07W36HQUaMzMbMZppBthnQ1Zc4iRq8RS2j4r0jBAFj7AHlkKAdX6CVIS6zQnzife
+         BVnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677696197;
+        d=1e100.net; s=20210112; t=1677697106;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NeBOkrsW3y7Vj5BOWZGuYQDb9cRvWdipWp5l5oMe1Dw=;
-        b=FB5d3jboXUZjwT0mtZhxGTZufzkwd0Xn9nm/p/lFeThOmbVgx8DQfma9u4UEWn7YHp
-         ZdXMwAupGdBwofr3JJzMqoELgSbUg8n0ySDDoxwXlbE+bYBYskgL6Syi2mSR1hcehT8Z
-         vbhZ3QD+EozaEzuZpkFmK1nE05X/GIotiJawOPdMn2KmSo3q5IxDnjpV2tXQ7aVKRSju
-         Qq6wt8rqk8VU4E2FbJIjyBZ2SnUqTNVlqFfzq2q48ZKVUy2+F5Q7pruteePBccJt6HWw
-         2DaPbYTHyePrjG9RVXwqeeW7fu8DIcOWb4w405s2GZS7LtLer7AsYbGUlWcrLHsIu4g8
-         Y5Gg==
-X-Gm-Message-State: AO0yUKVX4Khvcz5e8kD4/E8C0Q1ahbTbwLOX6mjjqmklKHnPWSbiv5de
-        D7SvyAbW+HAoftSK3cPxjZfSY0P4EfeiHDAxQ9Q=
-X-Google-Smtp-Source: AK7set9ofmAMqc8kBuhyL5cs0fdSAtiNorCZ8oWvIGdSpFlQFhFd85+Jx7A9dXe+YHZ9PCr95uccB5oEliHgk9sX78M=
-X-Received: by 2002:a50:ab12:0:b0:4bc:7781:5103 with SMTP id
- s18-20020a50ab12000000b004bc77815103mr1589692edc.5.1677696197414; Wed, 01 Mar
- 2023 10:43:17 -0800 (PST)
+        bh=VBjCNneDRsPF8dkKpcPzpmUYB01L8NaBTycrTsX7pTc=;
+        b=kXcaZFrVeT0QHiym7aBgB6jBrMqFmh8deob8z/pHCrPJabtrjabwKXk1hF1euVbqhE
+         R54yzsDo/FqcnUlzbdNU1IeufL1GxdIo2sJnlnVQLEHAWP4kP+lCGQ5XpWKeUeayVc2y
+         p6CxxkdIE35g3XA2q6JY8SShjYhKsK9Xr1VM/fnPZeVJJ8ffVh/hOre0NMuw/uyY4dJQ
+         wUx+N412p4OXQ2vTW85AOW78Kk4yTaIEewG5WzR3WChwkOzghyhiuDcFBNlxtqPHS1Vv
+         NhKD2XRu0lY3+cgUq2y4vCSTdKAgBtjJoD8aBhclEzAaM5LTffJbFSz0zRtUL5L6wzf+
+         sx4A==
+X-Gm-Message-State: AO0yUKUobGCQTrG639n8os1OQftwHMp2k+lS33rgcguRaCyQTDuV6G/D
+        k+EUYd9uKXRL1pwM4E7KEVygTWUj8CpBcuzdis8=
+X-Google-Smtp-Source: AK7set8j4yqn0+EAZiHRN9YqOv3TEcmFoML0hbTACrXVL+onXcGd0XL20Vg0ZbVQgCqb95Hb95a8bk+bCOHSGpP9I+I=
+X-Received: by 2002:a17:906:76d9:b0:8b1:28f6:8ab3 with SMTP id
+ q25-20020a17090676d900b008b128f68ab3mr3840089ejn.15.1677697105632; Wed, 01
+ Mar 2023 10:58:25 -0800 (PST)
 MIME-Version: 1.0
-References: <20230301154953.641654-1-joannelkoong@gmail.com>
- <20230301154953.641654-11-joannelkoong@gmail.com> <CAADnVQJCYcPnutRvjJgShAEokfrXfC4DToPOTJRuyzA1R64mBg@mail.gmail.com>
-In-Reply-To: <CAADnVQJCYcPnutRvjJgShAEokfrXfC4DToPOTJRuyzA1R64mBg@mail.gmail.com>
+References: <20230228202357.2766051-1-eddyz87@gmail.com>
+In-Reply-To: <20230228202357.2766051-1-eddyz87@gmail.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 1 Mar 2023 10:43:05 -0800
-Message-ID: <CAEf4BzaL-o1b51s1Hx_vN9q51Vnp7GBNziYc0ffBfMeQbG5HGQ@mail.gmail.com>
-Subject: Re: [PATCH v13 bpf-next 10/10] selftests/bpf: tests for using dynptrs
- to parse skb and xdp buffers
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Joanne Koong <joannelkoong@gmail.com>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Network Development <netdev@vger.kernel.org>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@kernel.org>
+Date:   Wed, 1 Mar 2023 10:58:13 -0800
+Message-ID: <CAEf4BzaOe7wZPudEO04vOsrXaYrkmmuVfnCYAMbvm2LVaPw3tw@mail.gmail.com>
+Subject: Re: [PATCH dwarves] dwarf_loader: Fix for BTF id drift caused by
+ adding unspecified types
+To:     Eduard Zingerman <eddyz87@gmail.com>
+Cc:     dwarves@vger.kernel.org, arnaldo.melo@gmail.com,
+        bpf@vger.kernel.org, kernel-team@fb.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, yhs@fb.com,
+        KP Singh <kpsingh@kernel.org>,
+        Matt Bobrowski <mattbobrowski@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Mar 1, 2023 at 10:08=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Tue, Feb 28, 2023 at 12:24=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.co=
+m> wrote:
 >
-> On Wed, Mar 1, 2023 at 7:51=E2=80=AFAM Joanne Koong <joannelkoong@gmail.c=
-om> wrote:
-> >
-> > 5) progs/dynptr_success.c
-> >    * Add test case "test_skb_readonly" for testing attempts at writes
-> >      on a prog type with read-only skb ctx.
-> >    * Add "test_dynptr_skb_data" for testing that bpf_dynptr_data isn't
-> >      supported for skb progs.
+> Recent changes to handle unspecified types (see [1]) cause BTF ID drift.
 >
-> I added
-> +dynptr/test_dynptr_skb_data
-> +dynptr/test_skb_readonly
-> to DENYLIST.s390x and applied.
+> Specifically, the intent of commits [2], [3] and [4] is to render
+> references to unspecified types as void type.
+> However, as a consequence:
+> - in `die__process_unit()` call to `cu__add_tag()` allocates `small_id`
+>   for unspecified type tags and adds these tags to `cu->types_table`;
+> - `btf_encoder__encode_tag()` skips generation of BTF entries for
+>   `DW_TAG_unspecified_type` tags.
 >
-> Thank you so much for all the hard work to make it happen.
-> Great milestone!
+> Such logic causes ID drift if unspecified type is not the last type
+> processed for compilation unit. `small_id` of each type following
+> unspecified type in the `cu->types_table` would have its BTF id off by -1=
+.
+> Thus, rendering references established on recode phase invalid.
+>
+> This commit reverts `unspecified_type` id/tag tracking.
+> Instead, the following is done:
+> - `small_id` for unspecified type tags is set to 0, thus reference to
+>   unspecified type tag would render BTF id of a `void` on recode phase;
+> - unspecified type tags are not added to `cu->types_table`.
+>
+> This change also happens to fix issue reported in [5], the gist of
+> that issue is that the field `encoder->unspecified_type` is set but
+> not reset by function `btf_encoder__encode_cu()`. Thus, the following
+> sequence of events might occur when BTF encoding is requested:
+> - CU with unspecified type is processed:
+>   - unspecified type id is 42
+>   - encoder->unspecified_type is set to 42
+> - CU without unspecified type is processed next using the same
+>   `encoder` object:
+>   - some `struct foo` has id 42 in this CU
+>   - the references to `struct foo` are set 0 by function
+>     `btf_encoder__tag_type()`.
+>
+> [1] https://lore.kernel.org/all/Y0R7uu3s%2FimnvPzM@kernel.org/
+> [2] bcc648a10cbc ("btf_encoder: Encode DW_TAG_unspecified_type returning =
+routines as void")
+> [3] cffe5e1f75e1 ("core: Record if a CU has a DW_TAG_unspecified_type")
+> [4] 75e0fe28bb02 ("core: Add DW_TAG_unspecified_type to tag__is_tag_type(=
+) set")
+> [5] https://lore.kernel.org/bpf/Y%2FP1yxAuV6Wj3A0K@google.com/
+>
+> Fixes: bcc648a10cbc ("btf_encoder: Encode DW_TAG_unspecified_type returni=
+ng routines as void")
+> Fixes: 52b25808e44a ("btf_encoder: Store type_id_off, unspecified type in=
+ encoder")
+> Tested-by: KP Singh <kpsingh@kernel.org>
+> Reported-by: Matt Bobrowski <mattbobrowski@google.com>
+> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+> ---
 
-Yep, a lot of iterators work is made much easier thanks to the
-foundations laid by your (Joanne's) dynptr work. Thank you!
+Looks like a sensible approach to me.
+
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+
+>  btf_encoder.c  |  8 --------
+>  dwarf_loader.c | 25 +++++++++++++++++++------
+>  dwarves.h      |  8 --------
+>  3 files changed, 19 insertions(+), 22 deletions(-)
+>
+
+[...]
