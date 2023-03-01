@@ -2,39 +2,41 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8602BC7EE33
-	for <bpf@archiver.kernel.org>; Wed,  1 Mar 2023 21:23:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2470EC7EE30
+	for <bpf@archiver.kernel.org>; Wed,  1 Mar 2023 21:23:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbjCAVXg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 Mar 2023 16:23:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54424 "EHLO
+        id S229544AbjCAVXi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 1 Mar 2023 16:23:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjCAVXN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 1 Mar 2023 16:23:13 -0500
+        with ESMTP id S229632AbjCAVXV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 1 Mar 2023 16:23:21 -0500
 Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF42E3B8
-        for <bpf@vger.kernel.org>; Wed,  1 Mar 2023 13:23:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23814113D9
+        for <bpf@vger.kernel.org>; Wed,  1 Mar 2023 13:23:20 -0800 (PST)
 Received: from submission (posteo.de [185.67.36.169]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id DB815240737
-        for <bpf@vger.kernel.org>; Wed,  1 Mar 2023 22:23:10 +0100 (CET)
+        by mout02.posteo.de (Postfix) with ESMTPS id C87BA240600
+        for <bpf@vger.kernel.org>; Wed,  1 Mar 2023 22:23:18 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1677705790; bh=iDttboEdgHnSnDtpnwAt0+v3oIvqwAVhxo1Hl51B0kw=;
+        t=1677705798; bh=AfJ6rIICgvZyZ9scyDh4GBTSt5hLxSsCK0RjHWIGjYQ=;
         h=From:To:Subject:Date:From;
-        b=CjSZIgSp9/Hf0pWdL7iWNyU+AWQJgBNoJhRy7S3GGUjpBrIyjei/mb2jeab2MwJOJ
-         +48IiapOtWNXkyB/g0v6D4jelGO5edZw/JmGWOS3330Y4cAsux+HG8Q4XUxnxkVTKl
-         +FqiTSYrtiLQA15WpfmRn20fP1exReVWRI16bj9AxS4yXIUlSKD/YW8diA2vdXRNJE
-         9v7Z1iUoN8Tm5atXi2MO5CsqWhGBqwkUb4+izgOdAynVIUkH/ra72Llv5YDKWTFPaK
-         EfLI6GSpNhq+c5FIlALxpPBx29ZgXiyFc7aV5J/Tq0fk6K+0DKFc9tquU2NWQhVsrK
-         SdAvATWxiKllQ==
+        b=OszzislTmdv5JNVBRj/3BC7CvkOmOmYvEXS4ikgcFc4J0QBjwiZq8Ig0bHo/X0L/h
+         1UQBWhvnTVCjz0HGvCjD5mU0iwknseL+6yDPNG9u1cMWdx43Qq5DniQaj8G5VX+Pnz
+         lYCmTOaDBvCjCGwGbl6etwDY51pYNHykbzpPboOf3WY+C2Ku25DVYgzxaS4G/aNrUt
+         9KGaYQXHocdzj9JAU9xDg+ACvvPcDzVIzZszUD/GTWHKqYGNv1+LdxySUWGeB8edTR
+         ITm9ejikOc2ZCtvvb4g0TRdGqEGG/d6uGE+wwtY7mb9I+CkUnbPXqOtfF8/HP3Htyl
+         HJ4a3SSr8pZhQ==
 Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4PRnJt05K6z6trM;
-        Wed,  1 Mar 2023 22:23:09 +0100 (CET)
+        by submission (posteo.de) with ESMTPSA id 4PRnK20v6Mz6tnp;
+        Wed,  1 Mar 2023 22:23:18 +0100 (CET)
 From:   =?UTF-8?q?Daniel=20M=C3=BCller?= <deso@posteo.net>
 To:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
         daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com
-Subject: [PATCH bpf-next v4 0/3] Make uprobe attachment APK aware
-Date:   Wed,  1 Mar 2023 21:23:05 +0000
-Message-Id: <20230301212308.1839139-1-deso@posteo.net>
+Subject: [PATCH bpf-next v4 2/3] libbpf: Introduce elf_find_func_offset_from_file() function
+Date:   Wed,  1 Mar 2023 21:23:07 +0000
+Message-Id: <20230301212308.1839139-3-deso@posteo.net>
+In-Reply-To: <20230301212308.1839139-1-deso@posteo.net>
+References: <20230301212308.1839139-1-deso@posteo.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -42,75 +44,116 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Android, APKs (android packages; zip packages with somewhat
-prescriptive contents) are first class citizens in the system: the
-shared objects contained in them don't exist in unpacked form on the
-file system. Rather, they are mmaped directly from within the archive
-and the archive is also what the kernel is aware of.
+This change splits the elf_find_func_offset() function in two:
+elf_find_func_offset(), which now accepts an already opened Elf object
+instead of a path to a file that is to be opened, as well as
+elf_find_func_offset_from_file(), which opens a binary based on a
+path and then invokes elf_find_func_offset() on the Elf object. Having
+this split in responsibilities will allow us to call
+elf_find_func_offset() from other code paths on Elf objects that did not
+necessarily come from a file on disk.
 
-For users that complicates the process of attaching a uprobe to a
-function contained in a shared object in one such APK: they'd have to
-find the byte offset of said function from the beginning of the archive.
-That is cumbersome to do manually and can be fragile, because various
-changes could invalidate said offset.
+Signed-off-by: Daniel Müller <deso@posteo.net>
+---
+ tools/lib/bpf/libbpf.c | 57 ++++++++++++++++++++++++++----------------
+ 1 file changed, 36 insertions(+), 21 deletions(-)
 
-That is why for uprobes inside ELF files (not inside an APK), commit
-d112c9ce249b ("libbpf: Support function name-based attach uprobes") added
-support for attaching to symbols by name. On Android, that mechanism
-currently does not work, because this logic is not APK aware.
-
-This patch set introduces first class support for attaching uprobes to
-functions inside ELF objects contained in APKs via function names. We
-add support for recognizing the following syntax for a binary path:
-  <archive>!/<binary-in-archive>
-
-  (e.g., /system/app/test-app.apk!/lib/arm64-v8a/libc++.so)
-
-This syntax is common in the Android eco system and used by tools such
-as simpleperf. It is also what is being proposed for bcc [0].
-
-If the user provides such a binary path, we find <binary-in-archive>
-(lib/arm64-v8a/libc++.so in the example) inside of <archive>
-(/system/app/test-app.apk). We perform the regular ELF offset search
-inside the binary and add that to the offset within the archive itself,
-to retrieve the offset at which to attach the uprobe.
-
-[0] https://github.com/iovisor/bcc/pull/4440
-
-Changelog
----------
-v3->v4:
-- use ERR_PTR instead of libbpf_err_ptr() in zip_archive_open()
-- eliminated err variable from elf_find_func_offset_from_archive()
-
-v2->v3:
-- adjusted zip_archive_open() to report errno
-- fixed provided libbpf_strlcpy() buffer size argument
-- adjusted find_cd() to handle errors better
-- use fewer local variables in get_entry_at_offset()
-
-v1->v2:
-- removed unaligned_* types
-- switched to using __u32 and __u16
-- switched to using errno constants instead of hard-coded negative values
-- added another pr_debug() message
-- shortened central_directory_* to cd_*
-- inlined cd_file_header_at_offset() function
-- bunch of syntactical changes
-
-Daniel Müller (3):
-  libbpf: Implement basic zip archive parsing support
-  libbpf: Introduce elf_find_func_offset_from_file() function
-  libbpf: Add support for attaching uprobes to shared objects in APKs
-
- tools/lib/bpf/Build    |   2 +-
- tools/lib/bpf/libbpf.c | 146 ++++++++++++++----
- tools/lib/bpf/zip.c    | 328 +++++++++++++++++++++++++++++++++++++++++
- tools/lib/bpf/zip.h    |  47 ++++++
- 4 files changed, 495 insertions(+), 28 deletions(-)
- create mode 100644 tools/lib/bpf/zip.c
- create mode 100644 tools/lib/bpf/zip.h
-
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 05c4db3..4543e9 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -10531,32 +10531,19 @@ static Elf_Scn *elf_find_next_scn_by_type(Elf *elf, int sh_type, Elf_Scn *scn)
+ 	return NULL;
+ }
+ 
+-/* Find offset of function name in object specified by path.  "name" matches
+- * symbol name or name@@LIB for library functions.
++/* Find offset of function name in the provided ELF object. "binary_path" is
++ * the path to the ELF binary represented by "elf", and only used for error
++ * reporting matters. "name" matches symbol name or name@@LIB for library
++ * functions.
+  */
+-static long elf_find_func_offset(const char *binary_path, const char *name)
++static long elf_find_func_offset(Elf *elf, const char *binary_path, const char *name)
+ {
+-	int fd, i, sh_types[2] = { SHT_DYNSYM, SHT_SYMTAB };
++	int i, sh_types[2] = { SHT_DYNSYM, SHT_SYMTAB };
+ 	bool is_shared_lib, is_name_qualified;
+-	char errmsg[STRERR_BUFSIZE];
+ 	long ret = -ENOENT;
+ 	size_t name_len;
+ 	GElf_Ehdr ehdr;
+-	Elf *elf;
+ 
+-	fd = open(binary_path, O_RDONLY | O_CLOEXEC);
+-	if (fd < 0) {
+-		ret = -errno;
+-		pr_warn("failed to open %s: %s\n", binary_path,
+-			libbpf_strerror_r(ret, errmsg, sizeof(errmsg)));
+-		return ret;
+-	}
+-	elf = elf_begin(fd, ELF_C_READ_MMAP, NULL);
+-	if (!elf) {
+-		pr_warn("elf: could not read elf from %s: %s\n", binary_path, elf_errmsg(-1));
+-		close(fd);
+-		return -LIBBPF_ERRNO__FORMAT;
+-	}
+ 	if (!gelf_getehdr(elf, &ehdr)) {
+ 		pr_warn("elf: failed to get ehdr from %s: %s\n", binary_path, elf_errmsg(-1));
+ 		ret = -LIBBPF_ERRNO__FORMAT;
+@@ -10569,7 +10556,7 @@ static long elf_find_func_offset(const char *binary_path, const char *name)
+ 	/* Does name specify "@@LIB"? */
+ 	is_name_qualified = strstr(name, "@@") != NULL;
+ 
+-	/* Search SHT_DYNSYM, SHT_SYMTAB for symbol.  This search order is used because if
++	/* Search SHT_DYNSYM, SHT_SYMTAB for symbol. This search order is used because if
+ 	 * a binary is stripped, it may only have SHT_DYNSYM, and a fully-statically
+ 	 * linked binary may not have SHT_DYMSYM, so absence of a section should not be
+ 	 * reported as a warning/error.
+@@ -10682,6 +10669,34 @@ static long elf_find_func_offset(const char *binary_path, const char *name)
+ 		}
+ 	}
+ out:
++	return ret;
++}
++
++/* Find offset of function name in ELF object specified by path. "name" matches
++ * symbol name or name@@LIB for library functions.
++ */
++static long elf_find_func_offset_from_file(const char *binary_path, const char *name)
++{
++	char errmsg[STRERR_BUFSIZE];
++	long ret = -ENOENT;
++	Elf *elf;
++	int fd;
++
++	fd = open(binary_path, O_RDONLY | O_CLOEXEC);
++	if (fd < 0) {
++		ret = -errno;
++		pr_warn("failed to open %s: %s\n", binary_path,
++			libbpf_strerror_r(ret, errmsg, sizeof(errmsg)));
++		return ret;
++	}
++	elf = elf_begin(fd, ELF_C_READ_MMAP, NULL);
++	if (!elf) {
++		pr_warn("elf: could not read elf from %s: %s\n", binary_path, elf_errmsg(-1));
++		close(fd);
++		return -LIBBPF_ERRNO__FORMAT;
++	}
++
++	ret = elf_find_func_offset(elf, binary_path, name);
+ 	elf_end(elf);
+ 	close(fd);
+ 	return ret;
+@@ -10805,7 +10820,7 @@ bpf_program__attach_uprobe_opts(const struct bpf_program *prog, pid_t pid,
+ 	if (func_name) {
+ 		long sym_off;
+ 
+-		sym_off = elf_find_func_offset(binary_path, func_name);
++		sym_off = elf_find_func_offset_from_file(binary_path, func_name);
+ 		if (sym_off < 0)
+ 			return libbpf_err_ptr(sym_off);
+ 		func_offset += sym_off;
 -- 
 2.39.2
 
