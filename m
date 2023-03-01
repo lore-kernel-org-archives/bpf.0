@@ -2,119 +2,115 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB0F9C64EC7
-	for <bpf@archiver.kernel.org>; Wed,  1 Mar 2023 02:22:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 016CAC64EC7
+	for <bpf@archiver.kernel.org>; Wed,  1 Mar 2023 02:31:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229445AbjCACWS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Feb 2023 21:22:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39832 "EHLO
+        id S229672AbjCACbP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Feb 2023 21:31:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjCACWR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Feb 2023 21:22:17 -0500
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5406B303F4;
-        Tue, 28 Feb 2023 18:22:13 -0800 (PST)
-Received: by mail-qt1-f171.google.com with SMTP id l18so11773831qtp.1;
-        Tue, 28 Feb 2023 18:22:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677637332;
-        h=user-agent:in-reply-to:content-transfer-encoding
-         :content-disposition:mime-version:references:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OVA9GcIAMygLrpNCImWuPWpSm5WJrmlGiYht+CpNNPY=;
-        b=cxMaDmRzw3XqVJVR0y0yDdfWoie/hYj03AKD3dtZ834oN8HG6e9y8kPGZWZP8xBn6e
-         IoNV5jlUvjNqTOOLYmmMJ3PJmC5wb/gSSwgwdWzCH2i3USnL4d+ic2HWYx7cmzclPiia
-         72gUu/k7trjtObCSaHCgs0ZRH70AxM3o0xXD3gYj4vF4hWctk4PdsByskGRArNScFJnd
-         1S1W82GePu/H+Z6cAXDytcLpM7FOVDUW7ONiH9ak0XXJVwtigtx0LSYpgR0kMvPVxoDj
-         ea3BITUPfJvf3g21nk+GgmgREnrAqnUh8h6B6PvaKD5U1uTzB+/DIUpws7haYmEcemBh
-         524A==
-X-Gm-Message-State: AO0yUKW4OYjamyhaUo6C5XsD30PLBrzDyvM9467a2kULxKPMryfd0Jpb
-        d+exTApxs0w1eiWLRVji1fs=
-X-Google-Smtp-Source: AK7set95hiBwtvAVDdJbc60Wdd/XuGONr+HXUIRRn8jAhJBIf2IObruUhX/5hjTXAKajJ9JRiVRsvg==
-X-Received: by 2002:a05:622a:1751:b0:3bf:cac4:a3a1 with SMTP id l17-20020a05622a175100b003bfcac4a3a1mr8567162qtk.66.1677637332157;
-        Tue, 28 Feb 2023 18:22:12 -0800 (PST)
-Received: from maniforge ([2620:10d:c091:480::1:f172])
-        by smtp.gmail.com with ESMTPSA id p16-20020a05620a15f000b0071d0f1d01easm7853290qkm.57.2023.02.28.18.22.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 18:22:11 -0800 (PST)
-Date:   Tue, 28 Feb 2023 20:22:09 -0600
-From:   David Vernet <void@manifault.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Dave Marchevsky <davemarchevsky@meta.com>,
-        Tejun Heo <tj@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>
-Subject: Re: [PATCH v3 bpf-next 5/5] selftests/bpf: Tweak cgroup kfunc test.
-Message-ID: <Y/620WKXKpNIzHQL@maniforge>
-References: <20230228040121.94253-1-alexei.starovoitov@gmail.com>
- <20230228040121.94253-6-alexei.starovoitov@gmail.com>
- <Y/405fRuemfgdC3l@maniforge>
- <CAADnVQLGweandRXT4dmk71f5MwpebMhmrdTfEkY=wG41AZ7ZAQ@mail.gmail.com>
+        with ESMTP id S229574AbjCACbP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Feb 2023 21:31:15 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8D67D8D
+        for <bpf@vger.kernel.org>; Tue, 28 Feb 2023 18:31:13 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PRJBh409Nz4f3jqW
+        for <bpf@vger.kernel.org>; Wed,  1 Mar 2023 10:31:08 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP4 (Coremail) with SMTP id gCh0CgD3X7PsuP5j9PsOEg--.21322S4;
+        Wed, 01 Mar 2023 10:31:10 +0800 (CST)
+From:   Hou Tao <houtao@huaweicloud.com>
+To:     laoar.shao@gmail.com
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, haoluo@google.com, horenc@vt.edu,
+        john.fastabend@gmail.com, jolsa@kernel.org, kafai@fb.com,
+        kpsingh@kernel.org, sdf@google.com, songliubraving@fb.com,
+        xiyou.wangcong@gmail.com, yhs@fb.com
+Subject: Re: [PATCH bpf-next v3 02/18] bpf: lpm_trie memory usage
+Date:   Wed,  1 Mar 2023 10:59:29 +0800
+Message-Id: <20230301025929.237985-1-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20230227152032.12359-3-laoar.shao@gmail.com>
+References: <20230227152032.12359-3-laoar.shao@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQLGweandRXT4dmk71f5MwpebMhmrdTfEkY=wG41AZ7ZAQ@mail.gmail.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
+X-CM-TRANSID: gCh0CgD3X7PsuP5j9PsOEg--.21322S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7urWrCF4DJr4DKryrKrykZrb_yoW8Ar48pF
+        WFka4kGr40qr47Xwsavws8urZ8Xw1fGw42gas5K34Sy3sIqr9rGFyvgFW7ZrWY9FWUKr45
+        JFn5tryvq3y3uFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
+        IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 04:29:18PM -0800, Alexei Starovoitov wrote:
-> On Tue, Feb 28, 2023 at 9:07 AM David Vernet <void@manifault.com> wrote:
-> > libbpf: prog 'on_lookup': failed to load: -13
-> > libbpf: failed to load object 'cgrp_ls_recursion'
-> > libbpf: failed to load BPF skeleton 'cgrp_ls_recursion': -13
-> > test_recursion:FAIL:skel_open_and_load unexpected error: -13
-> > #43/3    cgrp_local_storage/recursion:FAIL
-> > #43      cgrp_local_storage:FAIL
-> >
-> > All error logs:
-> > test_cgrp_local_storage:PASS:join_cgroup /cgrp_local_storage 0 nsec
-> > libbpf: prog 'on_lookup': BPF program load failed: Permission denied
-> > libbpf: prog 'on_lookup': -- BEGIN PROG LOAD LOG --
-> > reg type unsupported for arg#0 function on_lookup#16
-> > 0: R1=ctx(off=0,imm=0) R10=fp0
-> > ; struct task_struct *task = bpf_get_current_task_btf();
-> > 0: (85) call bpf_get_current_task_btf#158     ; R0_w=trusted_ptr_task_struct(off=0,imm=0)
-> > 1: (bf) r6 = r0                       ; R0_w=trusted_ptr_task_struct(off=0,imm=0) R6_w=trusted_ptr_task_struct(off=0,imm=0)
-> > ; bpf_cgrp_storage_delete(&map_a, task->cgroups->dfl_cgrp);
-> > 2: (79) r1 = *(u64 *)(r6 +2296)       ; R1_w=rcu_ptr_or_null_css_set(off=0,imm=0) R6_w=trusted_ptr_task_struct(off=0,imm=0)
-> > ; bpf_cgrp_storage_delete(&map_a, task->cgroups->dfl_cgrp);
-> > 3: (79) r2 = *(u64 *)(r1 +120)
-> > R1 invalid mem access 'rcu_ptr_or_null_'
+From: Hou Tao <houtao1@huawei.com>
+
+Hi,
+
+> trie_mem_usage() is introduced to calculate the lpm_trie memory usage.
+> Some small memory allocations are ignored. The inner node is also
+> ignored.
 > 
-> This one was tricky :)
-> Turned out btf_nested_type_is_trusted() was able to find
-> 'cgroups' field in gcc compiled kernel and was failing on clang
-> compiled kernel because patch 2 did:
-> BTF_TYPE_SAFE_NESTED(struct task_struct) {
->         const cpumask_t *cpus_ptr;
->         struct css_set *cgroups;
-> };
-> instead of
-> BTF_TYPE_SAFE_NESTED(struct task_struct) {
->         const cpumask_t *cpus_ptr;
->         struct css_set __rcu *cgroups;
-> };
-> The missing tag was causing a miscompare.
+> The result as follows,
+> 
+> - before
+> 10: lpm_trie  flags 0x1
+>         key 8B  value 8B  max_entries 65536  memlock 1048576B
+> 
+> - after
+> 10: lpm_trie  flags 0x1
+>         key 8B  value 8B  max_entries 65536  memlock 2291536B
+> 
+> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+> ---
+>  kernel/bpf/lpm_trie.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
+> index d833496..e0ca08e 100644
+> --- a/kernel/bpf/lpm_trie.c
+> +++ b/kernel/bpf/lpm_trie.c
+> @@ -720,6 +720,16 @@ static int trie_check_btf(const struct bpf_map *map,
+>  	       -EINVAL : 0;
+>  }
+>  
+> +static u64 trie_mem_usage(const struct bpf_map *map)
+> +{
+> +	struct lpm_trie *trie = container_of(map, struct lpm_trie, map);
+> +	u64 elem_size;
+> +
+> +	elem_size = sizeof(struct lpm_trie_node) + trie->data_size +
+> +			    trie->map.value_size;
+> +	return elem_size * trie->n_entries;
+Need to use READ_ONCE(trie->n_entries) because all updates of n_entries are protected by trie->lock and here it is a lockless read.
 
-Ahh, sorry I missed that in review. Once your patch set lands I'll add a
-very loud comment here so that it's not missed in the future.
+> +}
+> +
+>  BTF_ID_LIST_SINGLE(trie_map_btf_ids, struct, lpm_trie)
+>  const struct bpf_map_ops trie_map_ops = {
+>  	.map_meta_equal = bpf_map_meta_equal,
+> @@ -733,5 +743,6 @@ static int trie_check_btf(const struct bpf_map *map,
+>  	.map_update_batch = generic_map_update_batch,
+>  	.map_delete_batch = generic_map_delete_batch,
+>  	.map_check_btf = trie_check_btf,
+> +	.map_mem_usage = trie_mem_usage,
+>  	.map_btf_id = &trie_map_btf_ids[0],
+>  };
+> -- 
+> 1.8.3.1
+> 
 
-> Something to keep in mind.
-> This ugliness will go away once GCC supports btf tag.
-
-Looking forward to that day.
-
-Given that you'll apply that fix to [0] here's my stamp for this patch:
-
-Acked-by: David Vernet <void@manifault.com>
-
-[0]: https://lore.kernel.org/all/20230228040121.94253-3-alexei.starovoitov@gmail.com/
